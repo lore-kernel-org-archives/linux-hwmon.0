@@ -1,70 +1,69 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6294223DE9
-	for <linux-hwmon@vger.kernel.org>; Sun, 22 Mar 2026 16:26:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E055635E95F
+	for <linux-hwmon@vger.kernel.org>; Sun, 22 Mar 2026 16:34:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774196788; cv=none; b=VBP2GnF10ZxsKAuegvYlh6LvCUuWQHmkiJKB0vE7+jiA/HAhPYYJgQqR8198C1AO5XsT9T+76p6RIKe6uhRmlNXa1+vHdsJSHpMHfRVCWBURBefjHQWL7VW1DGgzb1+XyqG8jVfB+E3YUwjgujmmcupEqs/pRjgH8QiEqaP9Gf8=
+	t=1774197254; cv=none; b=fCg8/lczNqmXcHTaBqNqgIiu09sFnLvN9ysz4CDOcmyaeZlIkLHi8o8hKCQc2QCwywVOrEd6W2JLcvCzAC+cUIQ5WVt9+BsnVl8EXqFcUj1gEtzKGyhnkLsjwm6w7c0doFhe5wo9H6ZFpn4qJf0HXM3bmwWZ4O8RGIVfAOXWkRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774196788; c=relaxed/simple;
-	bh=MDw4Q4le01sBWOPiEMDkhHEAdY6ta5EZBJgpWx3GlPs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OjH3ZXbYziYrx3ifpU/CSMfZviovUc0YIDVI/4ri1KAf/pB+IAqhAR4Syr9DHyt2DzVPKaSug9IdPggPUnvTpqfMh/rhemS17WHbPm7SdaTofXORR9d9U1rfwB5AAxojZx+oIuq/jPNUs0UmM8/cHc/lNNONMxHFTkxCjtpS3uM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jr2C+FAC; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1774197254; c=relaxed/simple;
+	bh=qNOYVfI3mbuyG8mqvwWtxFBm24Z6R38Th/RXdzXsfuA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=snm8irU3QeBouy7sb6RyDJ01r0JysqkuvGT5xu9mFEeFU5o/GqKHf3Wz+l7YPDFuFkfXGQ5bZaAqvK/9tqFUdRgreBO4M4PhkkWp3WIBWRs2Zt2o8gch96LKoxSy1MPeUdB12c0aWFjjpnDsFndAVNpb21T2DWsOLDPACUXZ/js=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PhqaOSlk; arc=none smtp.client-ip=74.125.82.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jr2C+FAC"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-486fe2024a9so14146815e9.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 22 Mar 2026 09:26:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PhqaOSlk"
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2c1092cc08cso351790eec.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 22 Mar 2026 09:34:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774196785; x=1774801585; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1774197252; x=1774802052; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bF+t+AJlmrsoFM2ABTlMfmbX6sn3UthH749b4cE0NCk=;
-        b=jr2C+FACfHjzaOOBfkzzTVM1roCYDnQTsiZNpO1D4oy79LMCdXsrjtHZhxr8gW+dHx
-         BqWvQAXYXWjv5iUhRO4GgiRnTV5FzQWVT8eiZtJJwNcAKJ9IrAtADfVAg8p3qY2nr+TV
-         G3BuAODhg8zGUN0Kvlpx3l7QvYfXmUh2XeRDNxET52VAQGOVUxk77gPmADdRSUbXbyd/
-         1W449ffPza4aZbfzad1SiUqRO6st7/mG1HA00o26jVPUZx+c/lM4EgBnMUsMt1jxYslX
-         Hcz0LaJGdAq3s9lGIWMwIqPW7alb72dkaEg8O4TN2djKxlmPQWg4Vr+MONHgP4TAjfGa
-         OPhg==
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZJhZUFgvtgrG9ysLM9vDRCWJf/E4J1jQMl0z9MMFnT4=;
+        b=PhqaOSlkHM+RE+wiRcGmYcKHOI+d8zSSodXcSyitFYa3pDsGkBIgPwLdhlmGGx4+xd
+         Q7aQLEAOFuN6FICWhpNHTaMELE7Lo/juT6soa/v4tEnMt4qczDW7ycu/MglXFh0kJBvX
+         8Gm/VWW/u0EFNkpJAW0EjjIVEutw4hF03zdT35be2rIBcUKldNdXHgTi4XhZnvrG9q+r
+         JO/5mDMnz3ilTveTI/qUN9L2Xe9/8HaFQ8uZYzcDvyY0OKmTnl3V3FEbpxZBu2j09WUc
+         xNE1gP7akUBil8X0ksF4Cqdp8xCV8yXJlBzdrpw8i17wq0NhPdbK64iKWwnBz3UJzCfx
+         XmBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774196785; x=1774801585;
+        d=1e100.net; s=20251104; t=1774197252; x=1774802052;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bF+t+AJlmrsoFM2ABTlMfmbX6sn3UthH749b4cE0NCk=;
-        b=KvMkRc/Y0qbFuc61AmexURvU5tcu97nd6KnnL7mqdDb6P9oVdm95PrAWX2Qi4vRVLN
-         IAZgqlVf3lDK47W1xHN80JZ7ti0mjFJBXgkmOlMfP1AFtEK/tCBiSNvsVb0FBvJ9cPX9
-         4jUOUt6Rpd2fW4vmkPTNBAB2S8r13J9Gmc2RuJ/PGlZkjlfbZb9q2MKAxoQ/R5kLecAo
-         XaX6RwLLNudlxuIS2qhiVIh4Auj4xTTvXhfS6bOOox0tUH4yduwUEY4tFTOjhbG+GI6a
-         j4VNBiTJcTu51G5okgbiFd35ZRpGVes4ZvvZDWtXDv8ClziOpl3qpuyNE7zV5mY/HASE
-         m2yg==
-X-Forwarded-Encrypted: i=1; AJvYcCWoEDg0zdVvnM4sR8GjgVOuOAwl+EFIF9FEB7pf8F3+ixajXJRouBzRlUOH37keX2Kx8EU8jcq3VwKI/Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YykpONGtGUxPr+T+a/q/A3JLBvvc3hyHvj8S77su3Y+wfT7wT1+
-	r6tvxdk2ItdZX+F5BYndAhgnuk4aBJgHFVqvvuI3mMJw5Ixs+irTfA67
-X-Gm-Gg: ATEYQzzys3gzMSgl3sk/7INzf3L/IljR1LnQEvBMKvfaOtkVinjSRFAZMf/SIWVjOi2
-	SqaLzbGYW82zsfHOBNk7xE9C2iDeJENE2/5ZT7ldhqFPjNYMcB4qpg5JIcsiQr1yH6WHtu2O+14
-	PZavx9bqeAT1VmKS6WiBrUvP/y14yfatEBueSlCXHrtR5hnKUJxprQKl3W04pAp5wlZar7VbHMw
-	ZqLFEQDH12hxqyHByjk/glXQjywakITFEaEdIxHhcMXOJ344d/SaRGjgHGcx97kuXco9RSbtAiO
-	noEopMwqrkI4/m8VYxSFLwjMtrpes3ikmSMtySiPWLvd2HQDSo49YC19eT1aJk2xAWW+nLRLGiE
-	ywrtpz73Gz3ce4wj7+NsihPITA7RD4nqPHyf5dFZctUyQv/gNLTjcRHbQYB3PxqYGKBqL0J0hfz
-	3B+WH293utUBhH3eDACyi09hZ02qop1kKo8MSVfQ7Xr7HGH41oCo2RpHpddwII+c+DzpbKNkeP
-X-Received: by 2002:a05:600c:c167:b0:486:fc94:d8f2 with SMTP id 5b1f17b1804b1-486fedbc066mr129097055e9.14.1774196784559;
-        Sun, 22 Mar 2026 09:26:24 -0700 (PDT)
-Received: from flaviu-Aspire-E5-572G.. ([5.15.232.50])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486fe88ef4esm64071655e9.10.2026.03.22.09.26.23
+        bh=ZJhZUFgvtgrG9ysLM9vDRCWJf/E4J1jQMl0z9MMFnT4=;
+        b=cDPVHcvhAyxuJOGpIISMvazYORCexIDL/Oq+QYrBjYpQp8blBVerzk0DwoygWEdMJ2
+         hznuQcULwCTUX6NqHxAqj0zATDt4ru+DDNifRjKi/iuNf5K52RdtbBsQILATwrIt4qQG
+         TQl9Su5fHtjWnbRyiIvkIaiy0hfee1kbWP2+ublGXTAchbvxtdALfP6c6HVtQD9Om1Ea
+         UJ4vvZW/Q5pm2uYQLPdETej4DfUcAo8l1c36rXO2qwjFn0HnICacB4vz6f2XrThk/68p
+         IJnrTfAhZfUusOChjKWOdRoTmJJSGqxU5UjQ40VtZpjmyBVHPV+YoG9U6oo9D/g2SQqn
+         CWZw==
+X-Gm-Message-State: AOJu0YzbhNnUk/DzKROYuRIM7S4jDSfYmX/Xdpoz06n+YZ8ko/fNLMB0
+	OG7TCwjhRzlwSklh4O2twxaWjVQ6EN9A33ynFSrfHlM5Aj2ocNv0fFnrAdNmqw==
+X-Gm-Gg: ATEYQzyp/w4OkWyFeGAxVbnKYOVBH4W2Euerkk1F1eNm/22cNggRmVy3WLnm5rbgos2
+	L8DXaKnQzQmxN4voqB2v4tDIhjw/hdyvy0uzr5+XgNtFX0MBehZcZfpkfBbzHOzws83HNE97ah1
+	KN1e8zcXsQsGspPVxBNSexSQOgWzX5P7U660cFCKm7GgVlV2l0tyj2+/10mbiAu7nD7ma9fWv9M
+	PTPoNry+e6Hf2mWoazCNmJlhdl8o5aQti2PmtABV14RhQSdxvlZbRVEQUz7mug6g8LX8Vf2dWxG
+	YybDIkfOxo0EAjBa3o0U99ZYB2Ks69WYyj751yZVo/FCgFZv8jzfKR4+xjOY0fPRVpdcJwXvtk1
+	o56uO8Hp85O64nt7WsbcR2LjP6dBZ2P6wxCDPORqa/b56PReZluY11JbOgiBXk/d9tfyqUdeHrj
+	lVjM5BzEWodm0ylXoWypq+W9W70B3mcDnoT2sg
+X-Received: by 2002:a05:7300:572a:b0:2be:e4b:60d2 with SMTP id 5a478bee46e88-2c1095a74e0mr4820047eec.4.1774197251549;
+        Sun, 22 Mar 2026 09:34:11 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b2e6c30sm9962808eec.25.2026.03.22.09.34.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Mar 2026 09:26:23 -0700 (PDT)
-From: Flaviu Nistor <flaviu.nistor@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Flaviu Nistor <flaviu.nistor@gmail.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] hwmon: lm75: Add support for label
-Date: Sun, 22 Mar 2026 18:26:16 +0200
-Message-ID: <20260322162616.102229-1-flaviu.nistor@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Sun, 22 Mar 2026 09:34:11 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Sanman Pradhan <psanman@juniper.net>
+Subject: [RFT PATCH] hwmon: (pmbus/core) Protect regulator operations with mutex
+Date: Sun, 22 Mar 2026 09:34:06 -0700
+Message-ID: <20260322163406.1530478-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -73,85 +72,247 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add support for label sysfs attribute similar to other hwmon devices.
-This is particularly useful for systems with multiple sensors on the
-same board, where identifying individual sensors is much easier since
-labels can be defined via device tree.
+The regulator operations pmbus_regulator_get_voltage(),
+pmbus_regulator_set_voltage(), and pmbus_regulator_list_voltage()
+access PMBus registers and shared data but were not protected by
+the update_lock mutex. This could lead to race conditions.
 
-Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
+However, adding mutex protection directly to these functions causes
+a deadlock because pmbus_regulator_notify() (which calls
+regulator_notifier_call_chain()) is often called with the mutex
+already held (e.g., from pmbus_fault_handler()). If a regulator
+callback then calls one of the now-protected voltage functions,
+it will attempt to acquire the same mutex.
+
+Rework pmbus_regulator_notify() to utilize a worker function to
+send notifications outside of the mutex protection. Events are
+stored as atomics in a per-page bitmask and processed by the worker.
+
+Initialize the worker and its associated data during regulator
+registration, and ensure it is cancelled on device removal using
+devm_add_action_or_reset().
+
+While at it, remove the unnecessary include of linux/of.h.
+
+Cc: Sanman Pradhan <psanman@juniper.net>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
-- Drop the binding change since they are not necessary.
-- Implement changes suggested by Guenter Roeck.
-- Link to v1: https://lore.kernel.org/all/20260311105809.107357-2-flaviu.nistor@gmail.com/
+ drivers/hwmon/pmbus/pmbus_core.c | 114 ++++++++++++++++++++++++-------
+ 1 file changed, 89 insertions(+), 25 deletions(-)
 
- drivers/hwmon/lm75.c | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-index eda93a8c23c9..f1a1e5b888f6 100644
---- a/drivers/hwmon/lm75.c
-+++ b/drivers/hwmon/lm75.c
-@@ -108,6 +108,7 @@ static const unsigned short normal_i2c[] = { 0x48, 0x49, 0x4a, 0x4b, 0x4c,
- #define PCT2075_REG_IDLE	0x04
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index be6d05def115..c349ffd6ea21 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -6,6 +6,7 @@
+  * Copyright (c) 2012 Guenter Roeck
+  */
  
- struct lm75_data {
-+	const char *label;
- 	struct regmap			*regmap;
- 	u16				orig_conf;
- 	u8				resolution;	/* In bits, 9 to 16 */
-@@ -363,6 +364,16 @@ static irqreturn_t lm75_alarm_handler(int irq, void *private)
- 	return IRQ_HANDLED;
++#include <linux/atomic.h>
+ #include <linux/debugfs.h>
+ #include <linux/delay.h>
+ #include <linux/dcache.h>
+@@ -21,8 +22,8 @@
+ #include <linux/pmbus.h>
+ #include <linux/regulator/driver.h>
+ #include <linux/regulator/machine.h>
+-#include <linux/of.h>
+ #include <linux/thermal.h>
++#include <linux/workqueue.h>
+ #include "pmbus.h"
+ 
+ /*
+@@ -112,6 +113,11 @@ struct pmbus_data {
+ 
+ 	struct mutex update_lock;
+ 
++#if IS_ENABLED(CONFIG_REGULATOR)
++	atomic_t regulator_events[PMBUS_PAGES];
++	struct work_struct regulator_notify_work;
++#endif
++
+ 	bool has_status_word;		/* device uses STATUS_WORD register */
+ 	int (*read_status)(struct i2c_client *client, int page);
+ 
+@@ -3176,12 +3182,19 @@ static int pmbus_regulator_get_voltage(struct regulator_dev *rdev)
+ 		.class = PSC_VOLTAGE_OUT,
+ 		.convert = true,
+ 	};
++	int ret;
+ 
++	mutex_lock(&data->update_lock);
+ 	s.data = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_READ_VOUT);
+-	if (s.data < 0)
+-		return s.data;
++	if (s.data < 0) {
++		ret = s.data;
++		goto unlock;
++	}
+ 
+-	return (int)pmbus_reg2data(data, &s) * 1000; /* unit is uV */
++	ret = (int)pmbus_reg2data(data, &s) * 1000; /* unit is uV */
++unlock:
++	mutex_unlock(&data->update_lock);
++	return ret;
  }
  
-+static int lm75_read_string(struct device *dev, enum hwmon_sensor_types type,
-+			    u32 attr, int channel, const char **str)
+ static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uv,
+@@ -3198,16 +3211,22 @@ static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uv,
+ 	};
+ 	int val = DIV_ROUND_CLOSEST(min_uv, 1000); /* convert to mV */
+ 	int low, high;
++	int ret;
+ 
+ 	*selector = 0;
+ 
++	mutex_lock(&data->update_lock);
+ 	low = pmbus_regulator_get_low_margin(client, s.page);
+-	if (low < 0)
+-		return low;
++	if (low < 0) {
++		ret = low;
++		goto unlock;
++	}
+ 
+ 	high = pmbus_regulator_get_high_margin(client, s.page);
+-	if (high < 0)
+-		return high;
++	if (high < 0) {
++		ret = high;
++		goto unlock;
++	}
+ 
+ 	/* Make sure we are within margins */
+ 	if (low > val)
+@@ -3217,7 +3236,10 @@ static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uv,
+ 
+ 	val = pmbus_data2reg(data, &s, val);
+ 
+-	return _pmbus_write_word_data(client, s.page, PMBUS_VOUT_COMMAND, (u16)val);
++	ret = _pmbus_write_word_data(client, s.page, PMBUS_VOUT_COMMAND, (u16)val);
++unlock:
++	mutex_unlock(&data->update_lock);
++	return ret;
+ }
+ 
+ static int pmbus_regulator_list_voltage(struct regulator_dev *rdev,
+@@ -3227,6 +3249,7 @@ static int pmbus_regulator_list_voltage(struct regulator_dev *rdev,
+ 	struct i2c_client *client = to_i2c_client(dev->parent);
+ 	struct pmbus_data *data = i2c_get_clientdata(client);
+ 	int val, low, high;
++	int ret;
+ 
+ 	if (data->flags & PMBUS_VOUT_PROTECTED)
+ 		return 0;
+@@ -3239,18 +3262,29 @@ static int pmbus_regulator_list_voltage(struct regulator_dev *rdev,
+ 	val = DIV_ROUND_CLOSEST(rdev->desc->min_uV +
+ 				(rdev->desc->uV_step * selector), 1000); /* convert to mV */
+ 
++	mutex_lock(&data->update_lock);
++
+ 	low = pmbus_regulator_get_low_margin(client, rdev_get_id(rdev));
+-	if (low < 0)
+-		return low;
++	if (low < 0) {
++		ret = low;
++		goto unlock;
++	}
+ 
+ 	high = pmbus_regulator_get_high_margin(client, rdev_get_id(rdev));
+-	if (high < 0)
+-		return high;
++	if (high < 0) {
++		ret = high;
++		goto unlock;
++	}
+ 
+-	if (val >= low && val <= high)
+-		return val * 1000; /* unit is uV */
++	if (val >= low && val <= high) {
++		ret = val * 1000; /* unit is uV */
++		goto unlock;
++	}
+ 
+-	return 0;
++	ret = 0;
++unlock:
++	mutex_unlock(&data->update_lock);
++	return ret;
+ }
+ 
+ const struct regulator_ops pmbus_regulator_ops = {
+@@ -3281,12 +3315,19 @@ int pmbus_regulator_init_cb(struct regulator_dev *rdev,
+ }
+ EXPORT_SYMBOL_NS_GPL(pmbus_regulator_init_cb, "PMBUS");
+ 
++static void pmbus_regulator_notify_work_cancel(void *data)
 +{
-+	struct lm75_data *data = dev_get_drvdata(dev);
++	struct pmbus_data *pdata = data;
 +
-+	*str = data->label;
-+
-+	return 0;
++	cancel_work_sync(&pdata->regulator_notify_work);
 +}
 +
- static int lm75_read(struct device *dev, enum hwmon_sensor_types type,
- 		     u32 attr, int channel, long *val)
+ static int pmbus_regulator_register(struct pmbus_data *data)
  {
-@@ -534,6 +545,9 @@ static umode_t lm75_is_visible(const void *data, enum hwmon_sensor_types type,
- 		switch (attr) {
- 		case hwmon_temp_input:
- 			return 0444;
-+		case hwmon_temp_label:
-+		/* Hide label node if label is not provided */
-+			return config_data->label ? 0444 : 0;
- 		case hwmon_temp_max:
- 		case hwmon_temp_max_hyst:
- 			return 0644;
-@@ -553,13 +567,14 @@ static const struct hwmon_channel_info * const lm75_info[] = {
- 	HWMON_CHANNEL_INFO(chip,
- 			   HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
- 	HWMON_CHANNEL_INFO(temp,
--			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-+			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_MAX | HWMON_T_MAX_HYST |
- 			   HWMON_T_ALARM),
- 	NULL
- };
+ 	struct device *dev = data->dev;
+ 	const struct pmbus_driver_info *info = data->info;
+ 	const struct pmbus_platform_data *pdata = dev_get_platdata(dev);
+-	int i;
++	int i, ret;
  
- static const struct hwmon_ops lm75_hwmon_ops = {
- 	.is_visible = lm75_is_visible,
-+	.read_string = lm75_read_string,
- 	.read = lm75_read,
- 	.write = lm75_write,
- };
-@@ -721,6 +736,9 @@ static int lm75_generic_probe(struct device *dev, const char *name,
- 	/* needed by custom regmap callbacks */
- 	dev_set_drvdata(dev, data);
+ 	data->rdevs = devm_kzalloc(dev, sizeof(struct regulator_dev *) * info->num_regulators,
+ 				   GFP_KERNEL);
+@@ -3310,19 +3351,42 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+ 					     info->reg_desc[i].name);
+ 	}
  
-+	/* Save the connected input label if available */
-+	device_property_read_string(dev, "label", &data->label);
++	INIT_WORK(&data->regulator_notify_work, pmbus_regulator_notify_worker);
 +
- 	data->kind = kind;
- 	data->regmap = regmap;
++	ret = devm_add_action_or_reset(dev, pmbus_regulator_notify_work_cancel, data);
++	if (ret)
++		return ret;
++
+ 	return 0;
+ }
  
++static void pmbus_regulator_notify_worker(struct work_struct *work)
++{
++	struct pmbus_data *data =
++		container_of(work, struct pmbus_data, regulator_notify_work);
++	int i, j;
++
++	for (i = 0; i < data->info->pages; i++) {
++		int event;
++
++		event = atomic_xchg(&data->regulator_events[i], 0);
++		if (!event)
++			continue;
++
++		for (j = 0; j < data->info->num_regulators; j++) {
++			if (i == rdev_get_id(data->rdevs[j])) {
++				regulator_notifier_call_chain(data->rdevs[j],
++							      event, NULL);
++				break;
++			}
++		}
++	}
++}
++
+ static void pmbus_regulator_notify(struct pmbus_data *data, int page, int event)
+ {
+-	int j;
+-
+-	for (j = 0; j < data->info->num_regulators; j++) {
+-		if (page == rdev_get_id(data->rdevs[j])) {
+-			regulator_notifier_call_chain(data->rdevs[j], event, NULL);
+-			break;
+-		}
+-	}
++	atomic_or(event, &data->regulator_events[page]);
++	schedule_work(&data->regulator_notify_work);
+ }
+ #else
+ static int pmbus_regulator_register(struct pmbus_data *data)
 -- 
-2.43.0
+2.45.2
 
