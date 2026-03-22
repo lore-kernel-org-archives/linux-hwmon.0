@@ -1,213 +1,102 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B57C13630AB
-	for <linux-hwmon@vger.kernel.org>; Sun, 22 Mar 2026 14:04:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B383A1A6827
+	for <linux-hwmon@vger.kernel.org>; Sun, 22 Mar 2026 14:05:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774188251; cv=none; b=AvTWY+qCAJRQLPEOWoOQRaBMWL3r21uhyzdg3TV3Xindou9eFWbjp9bDZoFsVNZE0uoRqdsv/+5w3FN4SdSZsEa4R33ShqPAZw5iveZwsdudMHH9IhzD4O932RgB+GG41M3gd7MgYWPRZeNFqe9rz6Uoz/2+7DGLvCBeNXT6SXI=
+	t=1774188320; cv=none; b=GTGufxEwHSLJe8bxOslvShbmFfmW+Xmu2MhAcGTLv1BBpzorVhZaAfYc7xyFOOWmM8nZtBBNr+PM+IPdx0o1GSsmnFKppdHY7DFSQ12T/o22N+9lkmsMSztg2ikfyeCPOH1LTQ/N7jf660KOeAUl6keRamL84am1Rs06TTHYsog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774188251; c=relaxed/simple;
-	bh=kleqhKDJCrtcsDaxAvNfWYSxIZN35cut2v2eKBVNGQo=;
+	s=arc-20240116; t=1774188320; c=relaxed/simple;
+	bh=75vFBkvIoI6vqFqCec6HoQ1w5edWlwyd7ifZT3aBwMI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tGthVP97SPcYoirOyHLSdDXyNQrbQAN0RuAKybHHx4um923nV6xmnFKmRgqsh5/io9DZv1H81hcPtA6Qlqq2XHCaZ1VKbdzvpkRBGGA636PhPDjraTWitPxK1/4eqDd2JX1mCnopgpXaGkjpHum4YNIqhtElxGKiSdO736DjV5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P8j1ML0m; arc=none smtp.client-ip=209.85.216.48
+	 Content-Type:Content-Disposition:In-Reply-To; b=HrHEm7ZZIWoIN5Ql2X61TFejfYQc3O4jbN6zFlTMuMEFl9hNkUs1+CAU2wINsWbfEvuVZqg6Bzmw/sogxi1mDQrjkbGg9c+6M4WNq6nGiXDeLXiZ43eRSkTOc/Z+t5LsWbnOjY4AA26omyLfT49nfwhwkWgfP0XgHASTyVDB8ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ccZwXLYF; arc=none smtp.client-ip=209.85.216.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P8j1ML0m"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-35a04d6aeb0so1570685a91.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 22 Mar 2026 07:04:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ccZwXLYF"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-35a1f3f07ebso958788a91.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 22 Mar 2026 07:05:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774188245; x=1774793045; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Om62ZHYYhsdbwrAecfOZkotql+ByDyTBZl1FPZQRJOY=;
-        b=P8j1ML0mTY0aTnVl4ZaX/sVj+oOaGiZ7PHqF5R3IHE9GcRULClRpNObJ69dFYg0H3Z
-         3xnak2DA8Yq+Q0fFQOiULHWpEB3YZXlrxORc9vVbD2htxVH8wwKYk9LMH6up42455GmZ
-         rv58dOtvcQAYzh0Ihj5Tbe1hQuvBD8yQKF9orVGH1/IB2rS371cOsipgljqCd+BOmg84
-         RsA7tOqTuYtOxQyAFvryUM8kTsIs48p3I6DwkXD7/NeXQxrazMfuRG2MFDBEkN1X6Sut
-         6lCoiSthW/78+E9Jgp5qbFosHCf4zAiAl1CsrgypQWgLhY3Q4DhImrAkIWDCuhpTDoTl
-         vk2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774188245; x=1774793045;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1774188319; x=1774793119; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Om62ZHYYhsdbwrAecfOZkotql+ByDyTBZl1FPZQRJOY=;
-        b=HYXa7iZvvDpF6l4dWOau2HTBwxb4vZmmZcqv9yDnIhfObcibDYn5yDRDOdr1DnJ+lH
-         VeUlMZQZVvWvRwDmwvmmyDWQRRl05js3dYvbQVdhLZdZrnpPK8I+d1ftsDF0313fjiUv
-         sRZGjGHXMxdlgLR3Go3EHOTae6gJKq5yPcgtnG25+sQZTLfO4v7iLTm3xuAxaIn5t39k
-         RsCZVXs/6QcjDIeYJdb37/L6K86MzJg7y6yahlzlYMmp0fdYyom1GPfoyLTeXGtK6LOF
-         oAsXG9WBO6kMfd8Ow33HBENgZCQaIRxXA985xPAZUH10YT6Ymt+BkSEfeOPGZuMEOSsv
-         3PRg==
-X-Gm-Message-State: AOJu0YyMx2PwYBLfNPcrR5tcidh8Ubyda7NYOrkPp4BmTAHp6ToVWYs7
-	1JDR1Jdz9KwWI8RhOz+fsmVTSlHB+kewXuMgjFCpTrgQL1Jczg7FnNbsdSsNaQ==
-X-Gm-Gg: ATEYQzxuOq0lO+GXjyuq8obbFs1N+xqm4b8mJSYPZ57li0c62P3AykDdjvkKjFW/nFS
-	QGvZNJf61gD7EYKdApw9wBq46Gmio8KQF45t6kgq81CWTXnJl7YP4j2W2iwNZLRznpr+SfAN6m4
-	K0h5TBbBRrZ7FnG3BSZLRpi2T4qAkkKS8irHrIlQy3sZIvUyvZRjJp9HX+QFPIDkRL6pPqQcuI6
-	u1lkCwGJWk+jOcChYkLrAMFVjSj2kpvXREJ82Cvhn+7kcuMueZsCtBGv7pFkh0o9sAHc4ybLTPF
-	mRUBzZ7htr8+hBLjlRZpqLyBeuk1rD9OaLepHJQ1lBHKT93oIoIpynesaDNZq/dJxobcmME5A+a
-	HriRbXfVGglgmYTTF2TYtHqBcAKqa/n80/8pnCRUQe55oVB/Xsoh4CW8qqZc6w6x4K8G1bvUhVl
-	GCNtaNHQATb8kny1MDokxpWj7JjepXuLuJGhNf
-X-Received: by 2002:a17:90b:1a91:b0:35b:929f:7e95 with SMTP id 98e67ed59e1d1-35bd2c20675mr7870590a91.4.1774188245437;
-        Sun, 22 Mar 2026 07:04:05 -0700 (PDT)
+        bh=rQv9bwy6YrtfaGlv0e6dudIE6tB2rEu8MW+MPmM6S38=;
+        b=ccZwXLYFriUThKxGtG9kxm+NC6gozl3IHTAQ+/aW6vdp+zCzDcBWLN/KtC1k1JnLIy
+         flpVcljRC/WnSp/xar+rp/8oJpPvuNKJyYnfQxRrXJ8eZ1Y2MeGaEzznne0JxlLJjzB4
+         EvY1EtUmy+nu/lGSY8CK/su/sYm0fa5FZRwHMreBr//Uiy7eNJ2obUZW2az3VNPO8z0R
+         KJGKhs1U0JoKrUibZQauPcHxkIPSpp8xXSnbwWGU0BbfD20c4I5ex6JSwuFS4veYuVbr
+         nd6gymKvZulWj9kO/II5mR6jNxbaeajKUwUGcGSK07vvyBHvXPM4l00T1+ocwaRK5m2u
+         q5jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774188319; x=1774793119;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=rQv9bwy6YrtfaGlv0e6dudIE6tB2rEu8MW+MPmM6S38=;
+        b=DQ5a13xjTJScV4Icx0DneGf1YpsY/1gqRT6tHakFOuK22O71RqoMgvfVBr+ia+hoWY
+         OsEnKPTCQftmyPlzc0DP0NGvtP28VElJAjLez/XYgq8BMR6gzD9vuWnJCK0j3h0drApH
+         AwrrRbblgL0knvuFwO3w9IZTjtGnU5yG1vppIwD3486DTJyHYUZ0ke3p7arrG4Dv9P5G
+         y8Jyd6rhBfIN7br0jMrtlgt08Hmk/L4+hjZFpZOWf5ErgynHherZgBPvJnA5EYX9dIrj
+         zk43FcCFp66oiVGFLaBFmhk9NBvIW/NVoDJRgTeGMsw2qf6XGqD6jAfLi/woROmYWuao
+         T9lw==
+X-Gm-Message-State: AOJu0YwjEf2jMi/Zl5dkX3o93hRdO1UQMAHWbGFIZpae0ryBJUQamxEb
+	lIPEzWpEryfp6875nSjWI4iv52gArNaDNzNTVFOgWmkDr6Bol/Clig4q
+X-Gm-Gg: ATEYQzzG35mWWsDbGu8ZaCPeKjBrAfpRnznIjehxO12YEu84HfgEseDe7fAeCZ7kW3C
+	kxcodcQkByETOXpG4x+e1KF/KjcVFX88WKeCCkJ/StKLv6Vjp6z6eckTGPADeloGC1yrmCXgeVO
+	JGxX2cCeLvZOiPaHWdos35q2vT+OBfSYsUgjJU/CkjgrIksmLTCBg7wmOFrM71M/vese1XBLtbu
+	1MonmDsUCgGhLPhHXJsaFAdL6VgTBOYjI6alIx1PSmRMf58NLTLlH3BJcpsea0NpJcX5zlPJb9F
+	audFoI4pvNDNrQTgvgihtx1gVgmccG95J5cmxM7jz9yB8u5yvG2ZgSCqunxG2qjlc3wK4Giy7c9
+	ba9IxybvXLm0qpPg4gbgqCpWuo+w3NfGHSDE+1Jh6TuoHW9z3yXDSTPmSd4bM9a94Xjyh7+eWgB
+	woXlmHH+OOxwYQoQOWgCJk6hnYQrBWGgk9Uruc
+X-Received: by 2002:a17:90b:17d2:b0:35b:96bb:47b9 with SMTP id 98e67ed59e1d1-35bd2cda6e8mr7878969a91.19.1774188319061;
+        Sun, 22 Mar 2026 07:05:19 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35bc5ff7090sm10184065a91.3.2026.03.22.07.04.04
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35bd3eb46e3sm6605510a91.1.2026.03.22.07.05.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Mar 2026 07:04:04 -0700 (PDT)
+        Sun, 22 Mar 2026 07:05:18 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 22 Mar 2026 07:04:03 -0700
+Date: Sun, 22 Mar 2026 07:05:17 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Denis Pauk <pauk.denis@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	ptscheepers@gmail.com, bugs@bzatek.net
-Subject: Re: [PATCH] hwmon: (nct6775) Add ASUS X870/W480 to WMI monitoring
- list
-Message-ID: <e871cd9f-2f0b-44b6-a693-b3fa4c936d91@roeck-us.net>
-References: <20260322131848.6261-1-pauk.denis@gmail.com>
+To: Markus Hoffmann <markus@thehoffs.at>
+Cc: linux-hwmon@vger.kernel.org, jdelvare@suse.com,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] hwmon: (it87) Add support for IT8689E
+Message-ID: <ae3e4afe-4128-44f1-a101-77ac8674cd0d@roeck-us.net>
+References: <20260320144323.4870-1-markus@thehoffs.at>
+ <20260322103301.18112-1-markus@thehoffs.at>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260322131848.6261-1-pauk.denis@gmail.com>
+In-Reply-To: <20260322103301.18112-1-markus@thehoffs.at>
 
-On Sun, Mar 22, 2026 at 03:18:45PM +0200, Denis Pauk wrote:
-> Boards such as
-> * G15CE,
-> * PRIME X870-P WIFI,
-> * PRIME X870-P,
-> * Pro WS W480-ACE,
-> * ProArt X870E-CREATOR WIFI,
-> * ROG CROSSHAIR X870E APEX,
-> * ROG CROSSHAIR X870E DARK HERO,
-> * ROG CROSSHAIR X870E EXTREME,
-> * ROG CROSSHAIR X870E GLACIAL,
-> * ROG CROSSHAIR X870E HERO BTF,
-> * ROG CROSSHAIR X870E HERO,
-> * ROG STRIX X870-A GAMING WIFI,
-> * ROG STRIX X870-F GAMING WIFI,
-> * ROG STRIX X870-I GAMING WIFI,
-> * ROG STRIX X870E-E GAMING WIFI,
-> * ROG STRIX X870E-E GAMING WIFI7 R2,
-> * TUF GAMING X870-PLUS WIFI,
-> * TUF GAMING X870-PRO WIFI7 W NEO,
-> * TUF GAMING X870E-PLUS WIFI7,
-> * W480/SYS,
-> * X870 AYW GAMING WIFI W,
-> * X870 MAX GAMING WIFI7 W,
-> * X870 MAX GAMING WIFI7
-> have got a nct6775 chip, but by default there's no use of it because of
-> resource conflict with WMI method.
+On Sun, Mar 22, 2026 at 10:33:01AM +0000, Markus Hoffmann wrote:
+> Add support for the ITE IT8689E Super I/O chip. The IT8689E supports
+> newer autopwm, 12mV ADC, 16-bit fans, six fans, six PWM channels,
+> PWM frequency 2, six temperature inputs, AVCC3, temperature offset,
+> and fan on/off control.
 > 
-> Add the boards to the WMI monitoring list.
+> Give it8689 its own GPIO configuration block in it87_find() rather
+> than sharing the it8620/it8628 block. The shared block reads
+> IT87_SIO_PINX2_REG and either marks IN3 as internal AVCC or skips
+> IN9. Because it8689 declares FEAT_AVCC3, IN9 is already marked as
+> always-internal before the GPIO block is reached; applying the PINX2
+> check would either create duplicate AVCC labels on IN3 and IN9 or
+> incorrectly skip IN9.
 > 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-> Tested-by: Tomáš Bžatek <bugs@bzatek.net>
-> Tested-by: Theunis Scheepers <ptscheepers@gmail.com>
+> Also update Documentation/hwmon/it87.rst and drivers/hwmon/Kconfig to
+> document the newly supported chip.
+> 
+> Signed-off-by: Markus Hoffmann <markus@thehoffs.at>
 
 Applied.
 
 Thanks,
 Guenter
-
-> ---
->  drivers/hwmon/nct6775-platform.c | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
-> 
-> diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-> index 555029dfe713..1975399ac440 100644
-> --- a/drivers/hwmon/nct6775-platform.c
-> +++ b/drivers/hwmon/nct6775-platform.c
-> @@ -1159,6 +1159,7 @@ static const char * const asus_wmi_boards[] = {
->  	"Pro A520M-C",
->  	"Pro A520M-C II",
->  	"Pro B550M-C",
-> +	"Pro WS W480-ACE",
->  	"Pro WS X570-ACE",
->  	"ProArt B550-CREATOR",
->  	"ProArt X570-CREATOR WIFI",
-> @@ -1258,6 +1259,7 @@ static const char * const asus_wmi_boards[] = {
->  	"TUF Z390-PRO GAMING",
->  	"TUF Z390M-PRO GAMING",
->  	"TUF Z390M-PRO GAMING (WI-FI)",
-> +	"W480/SYS",
->  	"WS Z390 PRO",
->  	"Z490-GUNDAM (WI-FI)",
->  };
-> @@ -1270,6 +1272,7 @@ static const char * const asus_msi_boards[] = {
->  	"EX-B760M-V5 D4",
->  	"EX-H510M-V3",
->  	"EX-H610M-V3 D4",
-> +	"G15CE",
->  	"G15CF",
->  	"PRIME A620M-A",
->  	"PRIME B560-PLUS",
-> @@ -1320,6 +1323,8 @@ static const char * const asus_msi_boards[] = {
->  	"PRIME X670-P",
->  	"PRIME X670-P WIFI",
->  	"PRIME X670E-PRO WIFI",
-> +	"PRIME X870-P",
-> +	"PRIME X870-P WIFI",
->  	"PRIME Z590-A",
->  	"PRIME Z590-P",
->  	"PRIME Z590-P WIFI",
-> @@ -1362,11 +1367,18 @@ static const char * const asus_msi_boards[] = {
->  	"ProArt B660-CREATOR D4",
->  	"ProArt B760-CREATOR D4",
->  	"ProArt X670E-CREATOR WIFI",
-> +	"ProArt X870E-CREATOR WIFI",
->  	"ProArt Z690-CREATOR WIFI",
->  	"ProArt Z790-CREATOR WIFI",
->  	"ROG CROSSHAIR X670E EXTREME",
->  	"ROG CROSSHAIR X670E GENE",
->  	"ROG CROSSHAIR X670E HERO",
-> +	"ROG CROSSHAIR X870E APEX",
-> +	"ROG CROSSHAIR X870E DARK HERO",
-> +	"ROG CROSSHAIR X870E EXTREME",
-> +	"ROG CROSSHAIR X870E GLACIAL",
-> +	"ROG CROSSHAIR X870E HERO",
-> +	"ROG CROSSHAIR X870E HERO BTF",
->  	"ROG MAXIMUS XIII APEX",
->  	"ROG MAXIMUS XIII EXTREME",
->  	"ROG MAXIMUS XIII EXTREME GLACIAL",
-> @@ -1404,6 +1416,11 @@ static const char * const asus_msi_boards[] = {
->  	"ROG STRIX X670E-E GAMING WIFI",
->  	"ROG STRIX X670E-F GAMING WIFI",
->  	"ROG STRIX X670E-I GAMING WIFI",
-> +	"ROG STRIX X870-A GAMING WIFI",
-> +	"ROG STRIX X870-F GAMING WIFI",
-> +	"ROG STRIX X870-I GAMING WIFI",
-> +	"ROG STRIX X870E-E GAMING WIFI",
-> +	"ROG STRIX X870E-E GAMING WIFI7 R2",
->  	"ROG STRIX X870E-H GAMING WIFI7",
->  	"ROG STRIX Z590-A GAMING WIFI",
->  	"ROG STRIX Z590-A GAMING WIFI II",
-> @@ -1451,6 +1468,9 @@ static const char * const asus_msi_boards[] = {
->  	"TUF GAMING H770-PRO WIFI",
->  	"TUF GAMING X670E-PLUS",
->  	"TUF GAMING X670E-PLUS WIFI",
-> +	"TUF GAMING X870-PLUS WIFI",
-> +	"TUF GAMING X870-PRO WIFI7 W NEO",
-> +	"TUF GAMING X870E-PLUS WIFI7",
->  	"TUF GAMING Z590-PLUS",
->  	"TUF GAMING Z590-PLUS WIFI",
->  	"TUF GAMING Z690-PLUS",
-> @@ -1460,6 +1480,9 @@ static const char * const asus_msi_boards[] = {
->  	"TUF GAMING Z790-PLUS D4",
->  	"TUF GAMING Z790-PLUS WIFI",
->  	"TUF GAMING Z790-PLUS WIFI D4",
-> +	"X870 AYW GAMING WIFI W",
-> +	"X870 MAX GAMING WIFI7",
-> +	"X870 MAX GAMING WIFI7 W",
->  	"Z590 WIFI GUNDAM EDITION",
->  };
->  
