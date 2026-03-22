@@ -1,155 +1,137 @@
 Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F08395474F
-	for <linux-hwmon@vger.kernel.org>; Sun, 22 Mar 2026 14:10:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D063368A6
+	for <linux-hwmon@vger.kernel.org>; Sun, 22 Mar 2026 14:20:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774188605; cv=none; b=V9A50CoXSSPsWoLB6OXRrDwr+qKVx9A852fd1wCdNm9HYN38BhIvJrW3a/4LgJfRsYZd90Hoe1sqRbBKdQZMqaEaugOWlneU6hMvGMfhYbPEyEFbLsJHeFhTNKy0TASwgvK2Ug6gJY+bnoZtjtAt533eddDB3+6QVb3IuKdXFwI=
+	t=1774189245; cv=none; b=tySP2JVyl2fb/IkM1rnHsgHFATWq9+8JyIUJSSMmUhDQDwpdr6PFWd9FIvRW+LBCsPzyjmPjHSEnSVvfX7votFRTYBGlL68KkfOrG9P7/wMGL2xl1DT0GsrhS+jg/TDM+oHLPQ7Zk1FXcyNGYt8Z/F2ZW30fSfvbIsDOQqy8Y5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774188605; c=relaxed/simple;
-	bh=wYM7rFD0Aily77SHukDAbLc20kppynNkynaBv6rhwDg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RfR5oK1VAB50Y7zhxxUTFfStzjoLg0U1eUgVrj0K2lkXY4BffvTgdJ5MWvfkwAGluugz/B7rFKcXS17Ty/X2Py25KfhOVPVepXHIfazNWP96DyYPa+u/HjiZdbyqIm5XUg+uAbTGf4ja58djCv5RvkMGS2zoK1d2ky7B5IRingw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=id6n4njQ; arc=none smtp.client-ip=74.125.82.177
+	s=arc-20240116; t=1774189245; c=relaxed/simple;
+	bh=engp1nQNSX9vhPkXGfLguo1jEktsA/8b3yfVE0qSsgo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UWz2tviWSzM5YeI/ciu4kCNgKLatpWDWCCilLrRbe+uehgGiqwWaiD+fR9AVaD48GUzM4jqMv2OYouRxTCyC8V49Xi+FwVYR6K47afpcrSoUF2nhUYSqzQWSYBdWelFHhKPkfD0hZRwM6dhM9uiOCzDDbNCrcu6brof3nr5ai6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F/9t/5nL; arc=none smtp.client-ip=74.125.82.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="id6n4njQ"
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2b4520f6b32so4237192eec.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 22 Mar 2026 07:10:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F/9t/5nL"
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2c0fa90d47bso1230065eec.0
+        for <linux-hwmon@vger.kernel.org>; Sun, 22 Mar 2026 07:20:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774188603; x=1774793403; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=8mdNj/DvPq3mNb+2oWEDziL/aWG+5kHGL1UMe9SoS10=;
-        b=id6n4njQLlp9vG5PgOzfH6PcgoCnkzCG9N34TNxv3I8ZDdyRbeMF3Sp0OcQk8FVswP
-         TFZM/8yRIXm/8Ec1KPlRpD98z4RrllnKDMgRc5zz/V2jUuVscJypSNMjf9vR4HY42xMn
-         XlfNiC52io+oXIPBK8LSBOjEhNfUC/+dI+9L18leGnANookXrvMCcHrh4HMsZiQx12VR
-         BlGydsWBVGECHHcGbb056I/pwMyT1VrwDvfZ4gr23x2LqGg16EN5+CyRk5nssCYcvIrH
-         KqwyW55OmPoZhlHbf1B5iqIibYpYTKR/9C01P753xdRiojzgifFqwcI3Nm+FEL0rs5Oa
-         7dIw==
+        d=gmail.com; s=20230601; t=1774189243; x=1774794043; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c90GIT6mW0YUjHC07UDbUeOA+0vWgoPqFFOks4qskQg=;
+        b=F/9t/5nL/5wHQ8NRe1Aw8EufQOxkd2ncID66rn/+RlDG00PEXnJzckfb9UJWa5i+Rr
+         r3OQEuK8G46NAXe4FPF25cs2GzHCdsiFcd940v83EtxQB4n1+zKErkrUj9UcAFndq0NY
+         XYga2mPMqfSDKYMo+dE7GCLW40XoYTnUECk6SMJC/sjUToTCD8rG9Fgu7AgXHJA4QrVf
+         5ViQ9uQTn4LfXp3S1SPox9iMuXNM23af7yVMrsAu36yZ08r2EJIwyQ7WpA14EaHokHe+
+         SRI6XQ1J0QIz1O+EnBeGUwRroX+3+ZOIanbzuA6rORqHeDdmsz5bcBilEHwDQNTyK479
+         nZjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774188603; x=1774793403;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8mdNj/DvPq3mNb+2oWEDziL/aWG+5kHGL1UMe9SoS10=;
-        b=JidxJ7+g8GKuOv2ssYAlckQfIbN6aMOrW91bAgKrdlTWXET3BILpDNRddYR7sRDtAB
-         cUGdsXhLV9zocHV595PiZ7sF38J3jvAcskQlYcawULclON+t04j71bmcsY5yC33263KP
-         BPuq+mNjyhCptvSL54iCFN99W2qO1HeWmV3pZDzYVsWvv8lGQZY/fEDCfNHVVt2TlW/r
-         4NEYd3LrwoEVIt7fpUL2therQxU8OC2OiKcZDj4f1naUQmYaR30cJdqwgCKw68jv+qdT
-         vwxA891nZXWluaaITtHe8agiom4KZamOaplV/mUwfBHvuoWH+tJgOLcQXOU/Qsro+ZHh
-         nxew==
-X-Forwarded-Encrypted: i=1; AJvYcCUsnmJaXa/cRIgolPH3EiylqcuJHj3lNMyphXUgDmcsBjMp7DFnTDL20oa07xkvRPUTSTLMMhgAJCNCgw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNaR+PcWmTdNw8M8iw0pQfSXj8OAeRIaz6qKILcUUS0kf/3pzi
-	v71a8/Krt68bSnKjrZcIvLuxqS1wF08e6Fqkx2cs+kPpjWFGmjua5dAm
-X-Gm-Gg: ATEYQzylE+CzGp97w/ZoO88mkCA+eOn1wFiJHhu23rlnGbNB+/bqfcvSZMjN+zQI4n6
-	zRS0GskbpTQ1sm5mJifx/2//DvIFAEtEPksjDTWMqtKGhN6nnx3NKR6sDTxctnN7LK6rUMWCoWK
-	qmUX/sxW0pghc1qZa6V+mCaPJO991h0byCMb7PtTPU9oZu+71qkzpAZEyJ99qIBKi6Ec0QAk147
-	p66fK8Fu7pqorm1WqwsVGyICEqpoD3ojjAJDMpTlnbU471SJ7hJ84EuYgjWXfDtRzqXAuPE3g8s
-	oqrKjE/9zOE/EI7ZDaIWZ+wPLpLYLmWE/yze0Cf61zlsN499vRGKXI4bewwVeLIICCU5Nna/PDX
-	LKsFV+9ZnhKYTvN6KDYFDYiEzxs1eV1h8NKIXbb1LQ3cU3LBS8awy2leaoRDOeaa9slqK4GiDlY
-	9R62+ZrdIJ2aUmLGHjqspOEXH/XyGAkUMyTpTa1OmtLdYI3RIkJcpdLvoT4OHaqKZ9DgF1h4rA
-X-Received: by 2002:a05:7301:6704:b0:2be:ca4:e13f with SMTP id 5a478bee46e88-2c10975fa26mr3701226eec.23.1774188603046;
-        Sun, 22 Mar 2026 07:10:03 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b14cadbsm12025311eec.3.2026.03.22.07.10.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Mar 2026 07:10:01 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774189243; x=1774794043;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=c90GIT6mW0YUjHC07UDbUeOA+0vWgoPqFFOks4qskQg=;
+        b=Mf7e2gsgccrCm/GYYcszimeHTy14+VCFHdfk3Q0U2YysWF7a02+U6Y1qzGog59AOVy
+         4qGPb9niAAjH3nlT+NneIrhBvcYhnxxSXqJUu+MsVYmgRm7ZjHH+/NA9XzbsZhySHyZo
+         I6MYbFm4+a4cjEACMYws1b8eEwCPE/AuhGDs2EvuaSSnxH0T74ziwl3UQaGY4gooEbes
+         pbdIjesckcWYMQJ3sIc0qIfRDd5rW1iKeC+AY1IOfuwZNki+CCobGmzTEWZIeZOhGYkg
+         Ja/smnSuqMfHUhJ6uO4dAyZm/QW/J/q+nBjiWD1IrfYXqpyML6kILjaBQRsS5JXJq2k9
+         JD1g==
+X-Gm-Message-State: AOJu0Yym4sE/Pz4nWTQwW49fOhAwln6RRMoS7DljYKqWrpINe7OxjsyM
+	uFj3aUMXI3Rjml/REsMscLATG7TKdhTPISFvjjq209Dr9zkZVC20GarBXA3xCQ==
+X-Gm-Gg: ATEYQzxduuIS76eZajQ+GtmvpfFm6XEHO2Hn0qQcjMxORy5aDGJFC82RQMqABwNPn4t
+	MAUpM/WUhVQylpIRcss6taKMoqOB+ie2aPXTRc/7LCBPaavoCN1OPvKHiyOJItSVegdHXfwcqaQ
+	FA68gMxlbMqPDXxX4nEHmAfSEl3XZhDwalZn72+tHxZ535cc3tKicOOiEBGSUWWZdM9fr/S5b7y
+	rImBRweXJza/m3QUAj4LjyZuljRxBt3BBfga2uBPVPrC3PLvjC2kRmtglxpxUA20Y/O8FUhUj1Y
+	jRDJHTY780B7mQKww5cu7oC5AIYAEvT5bdU316mr/RLaM4ONYhC61EWIWhsl3mqIHtopKvFu2Vj
+	MBpaQWiiItKImxP5YfDWPcNM/BvoaVEG0NHrZJOBaPA7Lus7wIeZLWSokUU+PdYFwdmDyOzZ37z
+	dN6TIV3gKIw5Sbs9C476NTD+5EM3Vl+4EDC1cKmj8XM2hPUDg=
+X-Received: by 2002:a05:7022:6894:b0:128:cdb7:76e1 with SMTP id a92af1059eb24-12a72326a69mr3242178c88.13.1774189242952;
+        Sun, 22 Mar 2026 07:20:42 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12a734bbb57sm7408905c88.10.2026.03.22.07.20.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Mar 2026 07:20:42 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <67747945-4009-4f56-a931-5057729c199b@roeck-us.net>
-Date: Sun, 22 Mar 2026 07:10:00 -0700
+Date: Sun, 22 Mar 2026 07:20:41 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: "Pradhan, Sanman" <sanman.pradhan@hpe.com>
+Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Sanman Pradhan <psanman@juniper.net>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v3 1/2] hwmon: (pmbus/ina233) Fix error handling and sign
+ extension in shunt voltage read
+Message-ID: <f5221388-a939-4a6e-a00d-c2d8302cca80@roeck-us.net>
+References: <20260319173055.125271-1-sanman.pradhan@hpe.com>
+ <20260319173055.125271-2-sanman.pradhan@hpe.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 0/7] mfd: Add support for NXP MC33978/MC34978 MSDI
-To: Oleksij Rempel <o.rempel@pengutronix.de>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Peter Rosin <peda@axentia.se>, Linus Walleij <linusw@kernel.org>
-Cc: kernel@pengutronix.de, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-gpio@vger.kernel.org, David Jander <david@protonic.nl>
-References: <20260321065146.3918882-1-o.rempel@pengutronix.de>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260321065146.3918882-1-o.rempel@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260319173055.125271-2-sanman.pradhan@hpe.com>
 
-Hi,
-
-On 3/20/26 23:51, Oleksij Rempel wrote:
-> This series adds support for the NXP MC33978/MC34978 Multiple Switch Detection
-> Interface (MSDI) via the MFD framework.
+On Thu, Mar 19, 2026 at 05:31:19PM +0000, Pradhan, Sanman wrote:
+> From: Sanman Pradhan <psanman@juniper.net>
 > 
-> Architecture overview:
-> * mfd: Core driver handling 2-frame pipelined SPI, regulator sequencing, and
->    linear irq_domain. Harvests status bits from SPI MISO MSB.
-> * pinctrl: Exposes 22 physical switch inputs as standard GPIOs. Proxies IRQs to
->    the MFD domain.
-> * hwmon: Exposes thermal limits, VBATP/VDDQ voltage boundaries, and dynamic
->    fault alarms.
-> * mux: Controls the 24-to-1 AMUX routing analog signals (switch voltages,
->    temperature, VBATP) to an external ADC.
+> ina233_read_word_data() reads MFR_READ_VSHUNT via pmbus_read_word_data()
+> but has two issues:
 > 
-Sashiko has a number of concerns with this series. See
+> 1. The return value is not checked for errors before being used in
+>    arithmetic. A negative error code from a failed I2C transaction is
+>    passed directly to DIV_ROUND_CLOSEST(), producing garbage data.
+> 
+> 2. MFR_READ_VSHUNT is a 16-bit two's complement value. Negative shunt
+>    voltages (values with bit 15 set) are treated as large positive
+>    values since pmbus_read_word_data() returns them zero-extended in an
+>    int. This leads to incorrect scaling in the VIN coefficient
+>    conversion.
+> 
+> Fix both issues by adding an error check, casting to s16 for proper
+> sign extension, and clamping the result to a valid non-negative range.
+> The clamp is necessary because read_word_data callbacks must return
+> non-negative values on success (negative values indicate errors to the
+> pmbus core).
+> 
+> Fixes: b64b6cb163f16 ("hwmon: Add driver for TI INA233 Current and Power Monitor")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Sanman Pradhan <psanman@juniper.net>
+> ---
+>  drivers/hwmon/pmbus/ina233.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/ina233.c b/drivers/hwmon/pmbus/ina233.c
+> index dde1e16783943..1f7170372f243 100644
+> --- a/drivers/hwmon/pmbus/ina233.c
+> +++ b/drivers/hwmon/pmbus/ina233.c
+> @@ -67,10 +67,13 @@ static int ina233_read_word_data(struct i2c_client *client, int page,
+>  	switch (reg) {
+>  	case PMBUS_VIRT_READ_VMON:
+>  		ret = pmbus_read_word_data(client, 0, 0xff, MFR_READ_VSHUNT);
+> +		if (ret < 0)
+> +			return ret;
+>  
+>  		/* Adjust returned value to match VIN coefficients */
+>  		/* VIN: 1.25 mV VSHUNT: 2.5 uV LSB */
+> -		ret = DIV_ROUND_CLOSEST(ret * 25, 12500);
+> +		ret = clamp_val(DIV_ROUND_CLOSEST((s16)ret * 25, 12500),
+> +				0, 0x7FFF);
 
-https://sashiko.dev/#/patchset/20260321065146.3918882-1-o.rempel%40pengutronix.de
-
-for details. I did not check the non-hwmon code, but the concerns raised with
-the hwmon patch seem real. Please address.
+The clamp should be to 0xffff, not 0x7fff. That is still a positive return
+value, but does not drop the sign bit (bit 15).
 
 Thanks,
 Guenter
 
+>  		break;
+>  	default:
+>  		ret = -ENODATA;
