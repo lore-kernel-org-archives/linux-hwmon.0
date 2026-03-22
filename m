@@ -1,320 +1,296 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E38411F4C8C
-	for <linux-hwmon@vger.kernel.org>; Sun, 22 Mar 2026 16:51:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC721B7F4;
+	Sun, 22 Mar 2026 16:56:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774198312; cv=none; b=Exz5WdiB/MA+TZzQzFfai+hcHfXI7Xgy2wvPC0G+TU5EFNZ22n86YD5V60rxWHBW3A180liQsAXe8h1Gmiq+FKslBcot7g39PBgPEviQLIjJh8tqBRCBjeMbQDu3FbtFhxOKnuVtJh7phV6I+LoYatDwtNZm8voLRiHUSGxUGrU=
+	t=1774198606; cv=none; b=cDI+d/WLyNECKrE4+ID87lnd12XPR/QAurUrQ7Wd8g8Mf/dDZo3aZnUTJAAJn0J5JMOHAx0apLtTozIdGWgq1CH1J10RFvPth1H6xWLiwyOWmxfC7M2zf5jnl6piZ+xlaoaCAQV9fGtvRpU9eGKUTuS/sc2KdvZPobyjYKfplbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774198312; c=relaxed/simple;
-	bh=GFsJaEZRJsXHJew0m2L8SGuHxoRTuL1UoBeIMY35GcY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ieizmIOM7ClGajQB+UBKpjDclafg6ZdlhsTSZHYmlDbQ5ChIxGGH+Ep9YkWwG2bNR1uYZ4tAxqTmxIctbLRYuAZP75gHs29msFlzwRTB+Z1Ix57tyrNIYggyOAcxovPHutmOSBdB/+djtis7+yUDdp32XQMey3HX5J7RRVTl02E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=goYTqzSa; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774198606; c=relaxed/simple;
+	bh=2Om8Sh6EzFq8cdWMV2yg/VmRtANxX5brcu8b8T0bpJM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N5KH93ba+aq6Z/6Rr1r8Uua7mI/yPAwW/MSH7fj//zBJKZi23cJmvQXHL8DrgLV3b7WEFDmrAFa3K12jAlwYTAb4Bd0Fi2eVGTDrRL/nY0qTznoB2i/eWmtVhzm4UyLo0H2wIqBVitoOqUADjRXcjcB8hnHMNGdc/IqrfELMUZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m8ybOsZt; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="goYTqzSa"
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-c74280e3468so787114a12.3
-        for <linux-hwmon@vger.kernel.org>; Sun, 22 Mar 2026 09:51:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774198310; x=1774803110; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=JhG6AhRZObxC+dghkR1duoQLuJPWu90J8NmBJgQIEYE=;
-        b=goYTqzSakAGS4JrMX1HfZ49lOaGHoFo9D6/uxP7xMhgqDQVnas4fnTGZtC+fsaEVGo
-         Uaew08Vm23KdsNw29imctFqOSgdf9IPyUx8KO5rdR6f3o/LdEsFzGT+rgS5l/SwatdpZ
-         Km0sZrtQ9xNbqZJXjaYFgGCqI7B+bfa6XXDvTgpCgrGZyc9Lgu+97+6ftMa/noPkx39B
-         ++zjpbbxssCXtE80DQEeDvuOClTmWPi3Qo4qu7ONQtgewyXU3jm0ZWl7hUMOjQTK212a
-         hiqFKA1d0Q0WiDuVFi8oybESxmFPx2/y8xlAEjRgL0WN6uxK89NlOUSn5LVqu9aovh5p
-         vVog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774198310; x=1774803110;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JhG6AhRZObxC+dghkR1duoQLuJPWu90J8NmBJgQIEYE=;
-        b=oJc8LSBLonPyiTOUT86nUwW5zwSisH186XLc5Ruva/OdStXy8WO+xP61mQPeJyO7DG
-         XFhz3zgAdaPEqPV7X8aYzva5LmTX/Z6lmwQHhK8wPFYFxgJ/snLNTdIEAy/YUnowghsq
-         XDss4oSVo6+kGA8bvQultFhPzYqa04wV3qX3Qt7HP6uqVYZ1Qn6a1ekk2/GUsSKkcKzT
-         NJLdP8JjJm5ymumcxtFcmkD8AmmLJ/k+rTsrg/xSBHT06Xsmne8Jjui5ztfcPeQMkMpU
-         6yRjcZKSZ1GQ5/K7qcXNYYIfb/n1rAn1v2fbGZ3qEiGzuBiE/HoQFclyRVfxuDYc6RuN
-         hcJg==
-X-Gm-Message-State: AOJu0YxG3ji2Mc9HP49FBeA/6NjhJLJsVY9+QSsxQIZWW51HE8P1NQr7
-	V7nN1ovGNG2zxgI1qeUihvlQN15uMY80luWGcp/mmPooPemA2NJQz5ECB+aiOQ==
-X-Gm-Gg: ATEYQzx/L11KXPqPa6OP+CS5YZz+D67kuRi5SNg3iTC+UDY38a+FKVpreVhq/SIPDvV
-	rvIck5IVHgfR4QYahUjbgJjl2trgrXd/C6gOj/2VjaNoK6Z0VB6wXAZfAGGFHk6wv3CgimKRH7N
-	lieHmIFuXolkJUagEX8fO69HM08s9SBuGgEKZdn8xfdkxG3LGR6LSMtgBy800otF+zrmqnhhfLe
-	/KJh1l9e7yzXs5EZFDrFVhV0ctAnWyvYSMr6E8H9YQmzO4dlBGDv0mR+t0/QBhMEAY0SbNyYnbI
-	0oQtP/m+cEU9mU3cwr5HaVx+6hd0Nj7hmpjkjKnbjjI2pyKMwjGJsCzZTZGaHDnA2hgfZoY1CFk
-	IPxVpZwGRy55IAPxcQheebW+dcDoTHsnPmpqLtrRxV2l+ZEzo7uRFggZZSQwm4XyhR053pcGg7B
-	8vXsQUl9qsRZ5utniu0cVy7IWG5h2u99VbmVah
-X-Received: by 2002:a05:6a21:e081:b0:398:a060:a97b with SMTP id adf61e73a8af0-39bce9b4c26mr8353811637.1.1774198310000;
-        Sun, 22 Mar 2026 09:51:50 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c744aa0bbdcsm5362238a12.32.2026.03.22.09.51.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Mar 2026 09:51:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Sanman Pradhan <psanman@juniper.net>
-Subject: [RFT v2 PATCH] hwmon: (pmbus/core) Protect regulator operations with mutex
-Date: Sun, 22 Mar 2026 09:51:47 -0700
-Message-ID: <20260322165147.1534364-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m8ybOsZt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774198605; x=1805734605;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2Om8Sh6EzFq8cdWMV2yg/VmRtANxX5brcu8b8T0bpJM=;
+  b=m8ybOsZtg0W/6X8OE7SQ0i5W+RbQk3npk8oKWZr2aYKw6qZW6IuuKOwV
+   bw0P1zV+47WMfQIiCl8xN7trfVOBviGV/fcooJu+wUcd474o55qfCZx7y
+   oGAX7ZtoxQtC7X+bptPDl3j7iEpNDpo/Wrho7pZE2SF2Wn7taoaispjx9
+   3XZnCpkb2HR21C9/5uu+hRrCz/pLuhP0GDZP0ZHPmHUlbKUqD2KvjYuv/
+   ocWu2uTgupN+ZGfqlVwTBb8aCPNC8m76xOBL6/G008WCcFiCSGV4iQgLl
+   zrWhTNFMcTXqkH741K3EUFFf8gawUEbZwvQHAqRWigCfVq+diQ7JHozcl
+   g==;
+X-CSE-ConnectionGUID: +2oVaqcwRxKiUx5OP597eQ==
+X-CSE-MsgGUID: EEuUp3MMQbatCoqML8keEA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11737"; a="62771305"
+X-IronPort-AV: E=Sophos;i="6.23,135,1770624000"; 
+   d="scan'208";a="62771305"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2026 09:56:44 -0700
+X-CSE-ConnectionGUID: kskDwVYgRAmOKoWKLWv+rA==
+X-CSE-MsgGUID: cEQ8NYITQa+qKe9qXBtf9A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,135,1770624000"; 
+   d="scan'208";a="221030586"
+Received: from lkp-server02.sh.intel.com (HELO d7fefbca0d04) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 22 Mar 2026 09:56:38 -0700
+Received: from kbuild by d7fefbca0d04 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w4M6J-000000002QH-2gLA;
+	Sun, 22 Mar 2026 16:56:32 +0000
+Date: Mon, 23 Mar 2026 00:55:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Akhil R <akhilrajeev@nvidia.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Frank Li <Frank.Li@nxp.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Fredrik Markstrom <fredrik.markstrom@est.tech>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Thierry Reding <thierry.reding@kernel.org>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	Suresh Mangipudi <smangipudi@nvidia.com>,
+	linux-tegra@vger.kernel.org, linux-i3c@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-acpi@vger.kernel.org, acpica-devel@lists.linux.dev,
+	linux-hwmon@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Akhil R <akhilrajeev@nvidia.com>
+Subject: Re: [PATCH 04/12] i3c: master: Support ACPI enumeration
+Message-ID: <202603230007.WOMwklQ6-lkp@intel.com>
+References: <20260318172820.13771-5-akhilrajeev@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260318172820.13771-5-akhilrajeev@nvidia.com>
 
-The regulator operations pmbus_regulator_get_voltage(),
-pmbus_regulator_set_voltage(), and pmbus_regulator_list_voltage()
-access PMBus registers and shared data but were not protected by
-the update_lock mutex. This could lead to race conditions.
+Hi Akhil,
 
-However, adding mutex protection directly to these functions causes
-a deadlock because pmbus_regulator_notify() (which calls
-regulator_notifier_call_chain()) is often called with the mutex
-already held (e.g., from pmbus_fault_handler()). If a regulator
-callback then calls one of the now-protected voltage functions,
-it will attempt to acquire the same mutex.
+kernel test robot noticed the following build errors:
 
-Rework pmbus_regulator_notify() to utilize a worker function to
-send notifications outside of the mutex protection. Events are
-stored as atomics in a per-page bitmask and processed by the worker.
+[auto build test ERROR on next-20260320]
+[also build test ERROR on linus/master v7.0-rc4]
+[cannot apply to i3c/i3c/next rafael-pm/linux-next rafael-pm/bleeding-edge groeck-staging/hwmon-next v7.0-rc4 v7.0-rc3 v7.0-rc2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Initialize the worker and its associated data during regulator
-registration, and ensure it is cancelled on device removal using
-devm_add_action_or_reset().
+url:    https://github.com/intel-lab-lkp/linux/commits/Akhil-R/dt-bindings-i3c-Add-mipi-i3c-static-method-to-support-SETAASA/20260322-174037
+base:   next-20260320
+patch link:    https://lore.kernel.org/r/20260318172820.13771-5-akhilrajeev%40nvidia.com
+patch subject: [PATCH 04/12] i3c: master: Support ACPI enumeration
+config: sparc-randconfig-002-20260322 (https://download.01.org/0day-ci/archive/20260323/202603230007.WOMwklQ6-lkp@intel.com/config)
+compiler: sparc-linux-gcc (GCC) 15.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260323/202603230007.WOMwklQ6-lkp@intel.com/reproduce)
 
-While at it, remove the unnecessary include of linux/of.h.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603230007.WOMwklQ6-lkp@intel.com/
 
-Cc: Sanman Pradhan <psanman@juniper.net>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-v2: Reorder new code to actually compile (sorry ;-)
+All errors (new ones prefixed by >>):
 
- drivers/hwmon/pmbus/pmbus_core.c | 114 ++++++++++++++++++++++++-------
- 1 file changed, 89 insertions(+), 25 deletions(-)
+   drivers/i3c/master.c: In function 'i3c_master_add_i2c_boardinfo':
+>> drivers/i3c/master.c:2449:23: error: implicit declaration of function 'acpi_dev_get_resources'; did you mean 'acpi_get_event_resources'? [-Wimplicit-function-declaration]
+    2449 |                 ret = acpi_dev_get_resources(adev, &resources,
+         |                       ^~~~~~~~~~~~~~~~~~~~~~
+         |                       acpi_get_event_resources
+>> drivers/i3c/master.c:2455:17: error: implicit declaration of function 'acpi_dev_free_resource_list' [-Wimplicit-function-declaration]
+    2455 |                 acpi_dev_free_resource_list(&resources);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/i3c/master.c: In function 'i3c_master_add_acpi_dev':
+>> drivers/i3c/master.c:2556:9: error: unknown type name 'acpi_bus_address'; did you mean 'acpi_io_address'?
+    2556 |         acpi_bus_address adr;
+         |         ^~~~~~~~~~~~~~~~
+         |         acpi_io_address
+>> drivers/i3c/master.c:2563:14: error: implicit declaration of function 'acpi_has_method'; did you mean 'acpi_has_watchdog'? [-Wimplicit-function-declaration]
+    2563 |         if (!acpi_has_method(adev->handle, "_ADR"))
+         |              ^~~~~~~~~~~~~~~
+         |              acpi_has_watchdog
+>> drivers/i3c/master.c:2563:34: error: invalid use of undefined type 'struct acpi_device'
+    2563 |         if (!acpi_has_method(adev->handle, "_ADR"))
+         |                                  ^~
+>> drivers/i3c/master.c:2566:15: error: implicit declaration of function 'acpi_device_adr'; did you mean 'acpi_device_handle'? [-Wimplicit-function-declaration]
+    2566 |         adr = acpi_device_adr(adev);
+         |               ^~~~~~~~~~~~~~~
+         |               acpi_device_handle
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index be6d05def115..acd255864e88 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -6,6 +6,7 @@
-  * Copyright (c) 2012 Guenter Roeck
-  */
- 
-+#include <linux/atomic.h>
- #include <linux/debugfs.h>
- #include <linux/delay.h>
- #include <linux/dcache.h>
-@@ -21,8 +22,8 @@
- #include <linux/pmbus.h>
- #include <linux/regulator/driver.h>
- #include <linux/regulator/machine.h>
--#include <linux/of.h>
- #include <linux/thermal.h>
-+#include <linux/workqueue.h>
- #include "pmbus.h"
- 
- /*
-@@ -112,6 +113,11 @@ struct pmbus_data {
- 
- 	struct mutex update_lock;
- 
-+#if IS_ENABLED(CONFIG_REGULATOR)
-+	atomic_t regulator_events[PMBUS_PAGES];
-+	struct work_struct regulator_notify_work;
-+#endif
-+
- 	bool has_status_word;		/* device uses STATUS_WORD register */
- 	int (*read_status)(struct i2c_client *client, int page);
- 
-@@ -3176,12 +3182,19 @@ static int pmbus_regulator_get_voltage(struct regulator_dev *rdev)
- 		.class = PSC_VOLTAGE_OUT,
- 		.convert = true,
- 	};
-+	int ret;
- 
-+	mutex_lock(&data->update_lock);
- 	s.data = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_READ_VOUT);
--	if (s.data < 0)
--		return s.data;
-+	if (s.data < 0) {
-+		ret = s.data;
-+		goto unlock;
-+	}
- 
--	return (int)pmbus_reg2data(data, &s) * 1000; /* unit is uV */
-+	ret = (int)pmbus_reg2data(data, &s) * 1000; /* unit is uV */
-+unlock:
-+	mutex_unlock(&data->update_lock);
-+	return ret;
- }
- 
- static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uv,
-@@ -3198,16 +3211,22 @@ static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uv,
- 	};
- 	int val = DIV_ROUND_CLOSEST(min_uv, 1000); /* convert to mV */
- 	int low, high;
-+	int ret;
- 
- 	*selector = 0;
- 
-+	mutex_lock(&data->update_lock);
- 	low = pmbus_regulator_get_low_margin(client, s.page);
--	if (low < 0)
--		return low;
-+	if (low < 0) {
-+		ret = low;
-+		goto unlock;
-+	}
- 
- 	high = pmbus_regulator_get_high_margin(client, s.page);
--	if (high < 0)
--		return high;
-+	if (high < 0) {
-+		ret = high;
-+		goto unlock;
-+	}
- 
- 	/* Make sure we are within margins */
- 	if (low > val)
-@@ -3217,7 +3236,10 @@ static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uv,
- 
- 	val = pmbus_data2reg(data, &s, val);
- 
--	return _pmbus_write_word_data(client, s.page, PMBUS_VOUT_COMMAND, (u16)val);
-+	ret = _pmbus_write_word_data(client, s.page, PMBUS_VOUT_COMMAND, (u16)val);
-+unlock:
-+	mutex_unlock(&data->update_lock);
-+	return ret;
- }
- 
- static int pmbus_regulator_list_voltage(struct regulator_dev *rdev,
-@@ -3227,6 +3249,7 @@ static int pmbus_regulator_list_voltage(struct regulator_dev *rdev,
- 	struct i2c_client *client = to_i2c_client(dev->parent);
- 	struct pmbus_data *data = i2c_get_clientdata(client);
- 	int val, low, high;
-+	int ret;
- 
- 	if (data->flags & PMBUS_VOUT_PROTECTED)
- 		return 0;
-@@ -3239,18 +3262,29 @@ static int pmbus_regulator_list_voltage(struct regulator_dev *rdev,
- 	val = DIV_ROUND_CLOSEST(rdev->desc->min_uV +
- 				(rdev->desc->uV_step * selector), 1000); /* convert to mV */
- 
-+	mutex_lock(&data->update_lock);
-+
- 	low = pmbus_regulator_get_low_margin(client, rdev_get_id(rdev));
--	if (low < 0)
--		return low;
-+	if (low < 0) {
-+		ret = low;
-+		goto unlock;
-+	}
- 
- 	high = pmbus_regulator_get_high_margin(client, rdev_get_id(rdev));
--	if (high < 0)
--		return high;
-+	if (high < 0) {
-+		ret = high;
-+		goto unlock;
-+	}
- 
--	if (val >= low && val <= high)
--		return val * 1000; /* unit is uV */
-+	if (val >= low && val <= high) {
-+		ret = val * 1000; /* unit is uV */
-+		goto unlock;
-+	}
- 
--	return 0;
-+	ret = 0;
-+unlock:
-+	mutex_unlock(&data->update_lock);
-+	return ret;
- }
- 
- const struct regulator_ops pmbus_regulator_ops = {
-@@ -3281,12 +3315,42 @@ int pmbus_regulator_init_cb(struct regulator_dev *rdev,
- }
- EXPORT_SYMBOL_NS_GPL(pmbus_regulator_init_cb, "PMBUS");
- 
-+static void pmbus_regulator_notify_work_cancel(void *data)
-+{
-+	struct pmbus_data *pdata = data;
-+
-+	cancel_work_sync(&pdata->regulator_notify_work);
-+}
-+
-+static void pmbus_regulator_notify_worker(struct work_struct *work)
-+{
-+	struct pmbus_data *data =
-+		container_of(work, struct pmbus_data, regulator_notify_work);
-+	int i, j;
-+
-+	for (i = 0; i < data->info->pages; i++) {
-+		int event;
-+
-+		event = atomic_xchg(&data->regulator_events[i], 0);
-+		if (!event)
-+			continue;
-+
-+		for (j = 0; j < data->info->num_regulators; j++) {
-+			if (i == rdev_get_id(data->rdevs[j])) {
-+				regulator_notifier_call_chain(data->rdevs[j],
-+							      event, NULL);
-+				break;
-+			}
-+		}
-+	}
-+}
-+
- static int pmbus_regulator_register(struct pmbus_data *data)
- {
- 	struct device *dev = data->dev;
- 	const struct pmbus_driver_info *info = data->info;
- 	const struct pmbus_platform_data *pdata = dev_get_platdata(dev);
--	int i;
-+	int i, ret;
- 
- 	data->rdevs = devm_kzalloc(dev, sizeof(struct regulator_dev *) * info->num_regulators,
- 				   GFP_KERNEL);
-@@ -3310,19 +3374,19 @@ static int pmbus_regulator_register(struct pmbus_data *data)
- 					     info->reg_desc[i].name);
- 	}
- 
-+	INIT_WORK(&data->regulator_notify_work, pmbus_regulator_notify_worker);
-+
-+	ret = devm_add_action_or_reset(dev, pmbus_regulator_notify_work_cancel, data);
-+	if (ret)
-+		return ret;
-+
- 	return 0;
- }
- 
- static void pmbus_regulator_notify(struct pmbus_data *data, int page, int event)
- {
--	int j;
--
--	for (j = 0; j < data->info->num_regulators; j++) {
--		if (page == rdev_get_id(data->rdevs[j])) {
--			regulator_notifier_call_chain(data->rdevs[j], event, NULL);
--			break;
--		}
--	}
-+	atomic_or(event, &data->regulator_events[page]);
-+	schedule_work(&data->regulator_notify_work);
- }
- #else
- static int pmbus_regulator_register(struct pmbus_data *data)
+
+vim +2449 drivers/i3c/master.c
+
+  2423	
+  2424	static int
+  2425	i3c_master_add_i2c_boardinfo(struct i3c_master_controller *master,
+  2426				     struct fwnode_handle *fwnode, u32 *reg)
+  2427	{
+  2428		struct i2c_dev_boardinfo *boardinfo;
+  2429		struct device *dev = &master->dev;
+  2430		struct acpi_device *adev;
+  2431		LIST_HEAD(resources);
+  2432		int ret;
+  2433	
+  2434		boardinfo = devm_kzalloc(dev, sizeof(*boardinfo), GFP_KERNEL);
+  2435		if (!boardinfo)
+  2436			return -ENOMEM;
+  2437	
+  2438		if (is_of_node(fwnode)) {
+  2439			ret = of_i2c_get_board_info(dev, to_of_node(fwnode), &boardinfo->base);
+  2440			if (ret)
+  2441				return ret;
+  2442	
+  2443			/* LVR is encoded in reg[2] for Device Tree. */
+  2444			boardinfo->lvr = reg[2];
+  2445		} else if (is_acpi_device_node(fwnode)) {
+  2446			adev = to_acpi_device_node(fwnode);
+  2447			boardinfo->base.fwnode = acpi_fwnode_handle(adev);
+  2448	
+> 2449			ret = acpi_dev_get_resources(adev, &resources,
+  2450						     i3c_acpi_get_i2c_resource, boardinfo);
+  2451	
+  2452			if (ret < 0)
+  2453				return ret;
+  2454	
+> 2455			acpi_dev_free_resource_list(&resources);
+  2456	
+  2457			if (!boardinfo->base.addr)
+  2458				return -ENODEV;
+  2459		} else {
+  2460			return -EINVAL;
+  2461		}
+  2462	
+  2463		/*
+  2464		 * The I3C Specification does not clearly say I2C devices with 10-bit
+  2465		 * address are supported. These devices can't be passed properly through
+  2466		 * DEFSLVS command.
+  2467		 */
+  2468		if (boardinfo->base.flags & I2C_CLIENT_TEN) {
+  2469			dev_err(dev, "I2C device with 10 bit address not supported.");
+  2470			return -EOPNOTSUPP;
+  2471		}
+  2472	
+  2473		list_add_tail(&boardinfo->node, &master->boardinfo.i2c);
+  2474		fwnode_handle_get(fwnode);
+  2475	
+  2476		return 0;
+  2477	}
+  2478	
+  2479	static int
+  2480	i3c_master_add_i3c_boardinfo(struct i3c_master_controller *master,
+  2481				     struct fwnode_handle *fwnode, u32 *reg)
+  2482	{
+  2483		struct i3c_dev_boardinfo *boardinfo;
+  2484		struct device *dev = &master->dev;
+  2485		enum i3c_addr_slot_status addrstatus;
+  2486		u32 init_dyn_addr = 0;
+  2487	
+  2488		boardinfo = devm_kzalloc(dev, sizeof(*boardinfo), GFP_KERNEL);
+  2489		if (!boardinfo)
+  2490			return -ENOMEM;
+  2491	
+  2492		if (reg[0]) {
+  2493			if (reg[0] > I3C_MAX_ADDR)
+  2494				return -EINVAL;
+  2495	
+  2496			addrstatus = i3c_bus_get_addr_slot_status(&master->bus,
+  2497								  reg[0]);
+  2498			if (addrstatus != I3C_ADDR_SLOT_FREE)
+  2499				return -EINVAL;
+  2500		}
+  2501	
+  2502		boardinfo->static_addr = reg[0];
+  2503	
+  2504		if (!fwnode_property_read_u32(fwnode, "assigned-address", &init_dyn_addr)) {
+  2505			if (init_dyn_addr > I3C_MAX_ADDR)
+  2506				return -EINVAL;
+  2507	
+  2508			addrstatus = i3c_bus_get_addr_slot_status(&master->bus,
+  2509								  init_dyn_addr);
+  2510			if (addrstatus != I3C_ADDR_SLOT_FREE)
+  2511				return -EINVAL;
+  2512		}
+  2513	
+  2514		boardinfo->pid = ((u64)reg[1] << 32) | reg[2];
+  2515	
+  2516		if ((boardinfo->pid & GENMASK_ULL(63, 48)) ||
+  2517		    I3C_PID_RND_LOWER_32BITS(boardinfo->pid))
+  2518			return -EINVAL;
+  2519	
+  2520		boardinfo->init_dyn_addr = init_dyn_addr;
+  2521		boardinfo->fwnode = fwnode_handle_get(fwnode);
+  2522		list_add_tail(&boardinfo->node, &master->boardinfo.i3c);
+  2523	
+  2524		return 0;
+  2525	}
+  2526	
+  2527	static int i3c_master_add_of_dev(struct i3c_master_controller *master,
+  2528					 struct fwnode_handle *fwnode)
+  2529	{
+  2530		u32 reg[3];
+  2531		int ret;
+  2532	
+  2533		if (!master)
+  2534			return -EINVAL;
+  2535	
+  2536		ret = fwnode_property_read_u32_array(fwnode, "reg", reg, ARRAY_SIZE(reg));
+  2537		if (ret)
+  2538			return ret;
+  2539	
+  2540		/*
+  2541		 * The manufacturer ID can't be 0. If reg[1] == 0 that means we're
+  2542		 * dealing with an I2C device.
+  2543		 */
+  2544		if (!reg[1])
+  2545			ret = i3c_master_add_i2c_boardinfo(master, fwnode, reg);
+  2546		else
+  2547			ret = i3c_master_add_i3c_boardinfo(master, fwnode, reg);
+  2548	
+  2549		return ret;
+  2550	}
+  2551	
+  2552	static int i3c_master_add_acpi_dev(struct i3c_master_controller *master,
+  2553					   struct fwnode_handle *fwnode)
+  2554	{
+  2555		struct acpi_device *adev = to_acpi_device_node(fwnode);
+> 2556		acpi_bus_address adr;
+  2557		u32 reg[3] = { 0 };
+  2558	
+  2559		/*
+  2560		 * If the ACPI table entry does not have _ADR method, it's an I2C device
+  2561		 * If the ACPI table entry has _ADR method, it's an I3C device
+  2562		 */
+> 2563		if (!acpi_has_method(adev->handle, "_ADR"))
+  2564			return i3c_master_add_i2c_boardinfo(master, fwnode, reg);
+  2565	
+> 2566		adr = acpi_device_adr(adev);
+  2567	
+  2568		/* For I3C devices, _ADR will have the 48 bit PID of the device  */
+  2569		reg[1] = upper_32_bits(adr);
+  2570		reg[2] = lower_32_bits(adr);
+  2571	
+  2572		fwnode_property_read_u32(fwnode, "mipi-i3c-static-address", &reg[0]);
+  2573	
+  2574		return i3c_master_add_i3c_boardinfo(master, fwnode, reg);
+  2575	}
+  2576	
+
 -- 
-2.45.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
