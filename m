@@ -1,540 +1,407 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B3B2D9ECB
-	for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 10:30:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F03A138B7D2
+	for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 10:56:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774261860; cv=none; b=maI+M5IKm26EYON8g6Z7JqIvZKc3JVCyxYjoYod7QYyIoGOybEMgaMo9wc7WkUavcKmrMlJHUnxExMmuRi3jEoHOFxEiOW4FHhXi7L8MsRlUjYF68+107za/BACdug523JqNqEFQqhTuVSQXZQkfTSOn/fxdj/2vMZHFua2w/k4=
+	t=1774263387; cv=none; b=UuP/AgkuCwtCV5XGtI/vghmRvlg8+DQoQNPEfOjtk1NsOA7R5SG/KiOqr5thNbG/wR/pneVuHW81avdot4lLskOTNeKKJySlMwZu2AZzD8LMeUHGHdM/OnIQb1gKCeL736rIzQN08efaLryMTzAYMAzfiM1CTUDZZ1V+PwOHDBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774261860; c=relaxed/simple;
-	bh=9BTalxwlh1Mh2scj8wMZQq0AwVPesNF38J9Sd1pnlqg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=PE1SbjzqMuyEAYxHzw3tGug7SZq9OoFq6ZG2Hk4Y8bRfYJdcL4eWxMWACyYg7wgn7RTZmh+moraiJbLtzoRbUNecEylfF73hl9yzxMqodn/RqmyHEfJqN2GBETdn/poj2YO18RAOpEe1eZwoiYZNLfYe1fncXGpyluNmW4zmVxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yjj71JNm; arc=none smtp.client-ip=209.85.221.51
+	s=arc-20240116; t=1774263387; c=relaxed/simple;
+	bh=exUgN9ozvBVYjXHGO3+D7euoFahbifcZL94tiubUyaA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sNOAidyOP6hP+CZ7yHCQUHpiuq+nGWZYSmpguGXYeGDK8J5NgT7obzwJUCRi/o6o4u5tdiFxDDu6N9JkGJXLCfOgjQ0eNQ3d7bI3i4bsnuLmqI9pMvDcbnoDlNIv1kfuvHT4Vu1StN9O+hOPZjC1H2CFHduTYqnRoJf19OhaPb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AXdVSNhm; arc=none smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yjj71JNm"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-439bcec8613so1761825f8f.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 03:30:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AXdVSNhm"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-439d8dc4ae4so3528038f8f.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 03:56:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774261857; x=1774866657; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=FAUC7EMC761kM0AB4QTI5/vhwcsmLlwu3yojYOSJN0E=;
-        b=Yjj71JNmxi4eJ88Tuv2R58gSrZpe8jl4ICrYgz3NAmse+MNKpirWzEgeYabhCpMxpT
-         /qmsk3RZVsyFTdwFRE1QSeG+yIHZHzIIKR1Y7C5f3pvcqecXSBNW6W90e6LE9jHRdc8G
-         nlI0UVc0k7RDcj8nl8LsyBQq89vtYGOxl6HaSM+wGfXp8raYLM/MmjY3hO/iQJr0vi3u
-         Rs7tRcKy9SEnEQG7O//nr51AC5fv0A/mTut0bH003ralcroYJ5s5G7tKVtGM9aGVT0sR
-         E1CswvIbVeuACp0oTVZTApIEiJ7CsDZR4Gmu8NPBAe7T5/uSvJFhGSAyZRwRqWOMUI+T
-         xtpw==
+        d=gmail.com; s=20230601; t=1774263384; x=1774868184; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qNFMrIb7sOFleg8FVH+dkq3LR2z/UOdSzSRlRZxwf98=;
+        b=AXdVSNhmDsHYq8Fkgp0J8jLGc4BX784n9oyAEG8glk8zPlAuDmcWFSao2rQvc7Z14F
+         sMqHC1dbuimCFYHQ2tnAZ7u96YLnu2q/pmpupqIbqsyzeUBh32aZAZiQTYAuJ1CoPbh9
+         SGx5DKQ16FzlzV3c17vE20cGt1MjTWFoYZSEbw2Wt315VHYVIN8OEgYSqNQLiZn1hmOe
+         A3Agx1BzhORRq8u8iMLCYXjZtKvm0pP++iuB4V6Rv6JcWmmkMgxiRAM0LX1e+jprHZX7
+         OEMuXNQ4rSRLQ1CPbXzG+aKUPq/gxNJKqADadpz8OaMAtfBp8AwwE6hh3MQv3QOVIWOC
+         BANA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774261857; x=1774866657;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FAUC7EMC761kM0AB4QTI5/vhwcsmLlwu3yojYOSJN0E=;
-        b=K7UiJs+2UrewFN5UKrlZDqj4dJTFX2tJxfLZDfo4PKaxEACvDmaLXuMdlaKJGdPRax
-         8cvKvDlhYZB5hqRof12bPOKlljUMyKaJoPx5GxyyTA//rCpHx+jrN5EiQrXws4rrQC+r
-         DDxUweTO76mJcX1pWQavd7inOqjw5uq9IoZSrrh1LYKsN94Sd06G/VH/EpwQEuZw8tE3
-         NFnYvLUWXP8eQZKSWAYeJEjavX09VzKhrTKykOFty+6M1VMg5ZbktXxdLYNIDQ9Sblss
-         NZYKRRlsvnD2zUaFuJU82CzsSjIuPbe/J0sLBqLcQ5Gxs9/je/dfZo9Fg+vPznaxJ+BJ
-         I52w==
-X-Forwarded-Encrypted: i=1; AJvYcCUkfTqf6lLSAGO79Ke2eUyiYy+OTwG3pVhTfZ6Yus5HnBIPsSkdcl8gQJSD5W1EcAbrdzMPEACjpP7buQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMJGcnnETDjs4IxVYXe1Rclnf+MDTJZWR3n38wuxKvd+u7utR4
-	4XNWQxE3r8eDhA/mH4CpPjS0Vd2+h0QBwFkB8pr1cTVADm53Z01cPYWL
-X-Gm-Gg: ATEYQzyWJTWxeFoNIyaY/EbCQC7ejDnn4247o4Ir/GFNTZ/5LSvY6vQmwsJMyVW/jLr
-	HWs9YYkSAr3uew/AxJm+lQ3MysPs5x9dLoHnTk4Zn6u3pCF6dCfJPK4mLlHQDGGu8JzR8ZYL1qJ
-	zo7zDmaR2pV7K6AhtgAjTxV3+JGEWLpd+QVlS9GyA4kHYcBlSZNu8ARHJRgSg1vxxx9j7X0THjz
-	uvSRrVSPwaB5nwoFETWrKRasdssZmbHWuNFr2QEQUNvz4l3Bt+BnFnrrjEozAqUrFhyIuHfRsou
-	shvG94h116aoZ5mjRG0P8KWV7DtmBuYoUMdf+dK77CyqBx/c+cdcqediUJ0hj5lSHz+K12GoT7+
-	N8DK5/wAogvKWulYGtw3qTu8NxlssxKREAoDiX1IGKpJ7W0Ur5uC/UpThD+U3zi4F95jJ4UaSiJ
-	9oy/AD8VAo+2UjdfP6joLr773+ctEFlvo=
-X-Received: by 2002:a05:6000:2601:b0:43b:4352:1bd9 with SMTP id ffacd0b85a97d-43b64290e38mr17288556f8f.48.1774261856543;
-        Mon, 23 Mar 2026 03:30:56 -0700 (PDT)
-Received: from [192.168.1.187] ([148.63.225.166])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b644bd0dcsm27324936f8f.11.2026.03.23.03.30.55
+        d=1e100.net; s=20251104; t=1774263384; x=1774868184;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=qNFMrIb7sOFleg8FVH+dkq3LR2z/UOdSzSRlRZxwf98=;
+        b=l908DMLlEH9fUxenWUlQUtWQspJ2o9uWgYQJjaSsk0ngD+6MnTMgOX0LgOOA9a30Gv
+         A+dynFVY5BBPAhZmhzB0/HYsBUfcrjP0jOPStFNsqJfHgabXgo0mG4FTwlD2SkwSxqK1
+         Tr0zWAqSH9fcs4WyLS5SjJFu2b+PKWqSUndWykEUduGJHhvaQRQtczwypG5yuBtTQAmj
+         +isXbBLUZmI5EinHRMlUl2luGjD2NJFJs+efZxvG40a4PpkajeaTjxxZzxz8M7NVDYXo
+         IhOwgkzbEIux00FC4XwGy/5ks1qe+IWaDZhjxwUZeorwoChrYlQjFJD1UX/1y3UBsWN9
+         hRoQ==
+X-Gm-Message-State: AOJu0Yz8SK/lVy6nLroGImW5oy+RksnG/sR5XSKhuZCReCDNlLqkmcL0
+	OjTyL8lywzfnzScbUd/vt74JDoMY4GGwLLO32icuE5DHCL2C5hECGx2x8uzdWNyW
+X-Gm-Gg: ATEYQzwUx499soLqRhbyTHKbURAIRCcffpYs9DUwYk/En/D2L5/9dJekAuc0GoxNzOQ
+	yqUH9e+H7BDO/I69ONj612eNcJHk1ITwRU0+9RcCcOoSWDT53cfDiY2j7fKnB9uScUJoa6IfLNp
+	6G6zvZgLrpYFKwezpA5JTbzjjk1KWlvZWLy+dn1Cs+GkIRSCZIGSsGIDMOu1ns/t/yWDQnKipqJ
+	2jkL0V9h/eEcSeLescrJlnQhsAt+D99yEN1FVeiwoqzOnv4mzX3QMXJapBDK4qirXZoT4VK61FF
+	ZMkhzYgE5KtafdcwgrS6xRVcu8VOgIKnboZs6pjQpAn93m924jlIGizejblxIxd0YI+w7dUBw5u
+	eoxParlmoLFdjKUAzxsm2UEOzQO5VX9r30WDRSKCLL/DwPkadYeTiqU5ZDbwUOIpx5NM43H9DeT
+	POyZMkN0wGs2UScfenUNssKDxM/8E=
+X-Received: by 2002:a5d:64c6:0:b0:43b:4faf:a496 with SMTP id ffacd0b85a97d-43b64262cfbmr18167584f8f.31.1774263382466;
+        Mon, 23 Mar 2026 03:56:22 -0700 (PDT)
+Received: from sergio-82n7 ([134.255.161.117])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b644bd923sm34027860f8f.12.2026.03.23.03.56.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 03:30:56 -0700 (PDT)
-Message-ID: <77cd7e879a10df791d9d5eb1f16f1654e9904199.camel@gmail.com>
-Subject: Re: [PATCH v7 1/3] dt-bindings: hwmon: Document the LTC4283 Swap
- Controller
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>, nuno.sa@analog.com
-Cc: linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org, Rob Herring
-	 <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	 <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
-	 <skhan@linuxfoundation.org>, Linus Walleij <linusw@kernel.org>, Bartosz
- Golaszewski <brgl@kernel.org>
-Date: Mon, 23 Mar 2026 10:31:42 +0000
-In-Reply-To: <c395fad0-ca24-448a-a77f-ddac1cd9f809@roeck-us.net>
-References: <20260314-ltc4283-support-v7-0-1cda48e93802@analog.com>
-	 <20260314-ltc4283-support-v7-1-1cda48e93802@analog.com>
-	 <c395fad0-ca24-448a-a77f-ddac1cd9f809@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 
+        Mon, 23 Mar 2026 03:56:22 -0700 (PDT)
+From: Sergio Melas <sergiomelas@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	sergiomelas@gmail.com
+Subject: [PATCH v5] hwmon: (yogafan) Add support for Lenovo Yoga/Legion fan monitoring
+Date: Mon, 23 Mar 2026 11:56:12 +0100
+Message-ID: <20260323105612.343381-1-sergiomelas@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <2e692427-592a-4a78-8f6b-547d506de86a@roeck-us.net>
+References: <2e692427-592a-4a78-8f6b-547d506de86a@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon, 2026-03-16 at 08:59 -0700, Guenter Roeck wrote:
-> On Sat, Mar 14, 2026 at 10:52:19AM +0000, Nuno S=C3=A1 via B4 Relay wrote=
-:
-> > From: Nuno S=C3=A1 <nuno.sa@analog.com>
-> >=20
-> > The LTC4283 is a negative voltage hot swap controller that drives an
-> > external N-channel MOSFET to allow a board to be safely inserted and
-> > removed from a live backplane.
-> >=20
-> > Special note for the "adi,vpower-drns-enable" property. It allows to ch=
-oose
-> > between the attenuated MOSFET drain voltage or the attenuated input
-> > voltage at the RTNS pin (effectively choosing between input or output
-> > power). This is a system level decision not really intended to change a=
-t
-> > runtime and hence is being added as a Firmware property.
-> >=20
-> > Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-> > Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
->=20
-> Some AI review feedback inline. Feel free to ignore if wrong, but please =
-let me know
-> to help improve it.
->=20
-> Thanks,
-> Guenter
->=20
-> > ---
-> > =C2=A0.../devicetree/bindings/hwmon/adi,ltc4283.yaml=C2=A0=C2=A0=C2=A0=
-=C2=A0 | 272 +++++++++++++++++++++
-> > =C2=A0MAINTAINERS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 6 +
-> > =C2=A02 files changed, 278 insertions(+)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml
-> > b/Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml
-> > new file mode 100644
-> > index 0000000000000000000000000000000000000000..f82fff1ec7e4407ed63d00f=
-8b1281db459d7221b
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml
-> > @@ -0,0 +1,272 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/hwmon/adi,ltc4283.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: LTC4283 Negative Voltage Hot Swap Controller
-> > +
-> > +maintainers:
-> > +=C2=A0 - Nuno S=C3=A1 <nuno.sa@analog.com>
-> > +
-> > +description: |
-> > +=C2=A0 The LTC4283 negative voltage hot swap controller drives an exte=
-rnal N-channel
-> > +=C2=A0 MOSFET to allow a board to be safely inserted and removed from =
-a live
-> > +=C2=A0 backplane.
-> > +
-> > +=C2=A0 https://www.analog.com/media/en/technical-documentation/data-sh=
-eets/ltc4283.pdf
-> > +
-> > +properties:
-> > +=C2=A0 compatible:
-> > +=C2=A0=C2=A0=C2=A0 enum:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - adi,ltc4283
-> > +
-> > +=C2=A0 reg:
-> > +=C2=A0=C2=A0=C2=A0 maxItems: 1
-> > +
-> > +=C2=A0 adi,rsense-nano-ohms:
-> > +=C2=A0=C2=A0=C2=A0 description: Value of the sense resistor.
-> > +
-> > +=C2=A0 adi,current-limit-sense-microvolt:
-> > +=C2=A0=C2=A0=C2=A0 description:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 The current limit sense voltage of the =
-chip is adjustable between
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 15mV and 30mV in 1mV steps. This effect=
-ively limits the current
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 on the load.
-> > +=C2=A0=C2=A0=C2=A0 minimum: 15000
-> > +=C2=A0=C2=A0=C2=A0 maximum: 30000
-> > +=C2=A0=C2=A0=C2=A0 default: 15000
-> > +
-> > +=C2=A0 adi,current-limit-foldback-factor:
-> > +=C2=A0=C2=A0=C2=A0 description:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Specifies the foldback factor for the c=
-urrent limit. The current limit
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 can be reduced (folded back) to one of =
-four preset levels. The value
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 represents the percentage of the curren=
-t limit sense voltage to use
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 during foldback. A value of 100 means n=
-o foldback.
-> > +=C2=A0=C2=A0=C2=A0 $ref: /schemas/types.yaml#/definitions/uint32
-> > +=C2=A0=C2=A0=C2=A0 enum: [10, 20, 50, 100]
-> > +=C2=A0=C2=A0=C2=A0 default: 100
-> > +
-> > +=C2=A0 adi,cooling-delay-ms:
-> > +=C2=A0=C2=A0=C2=A0 description:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Cooling time to apply after an overcurr=
-ent fault, FET bad or
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 external fault.
-> > +=C2=A0=C2=A0=C2=A0 enum: [512, 1002, 2005, 4100, 8190, 16400, 32800, 6=
-5600]
-> > +=C2=A0=C2=A0=C2=A0 default: 512
-> > +
-> > +=C2=A0 adi,fet-bad-timer-delay-ms:
-> > +=C2=A0=C2=A0=C2=A0 description:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 FET bad timer delay. After a FET bad st=
-atus condition is detected,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 this timer is started. If the condition=
- persists for the
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 specified time, the FET is turned off a=
-nd a fault is logged.
-> > +=C2=A0=C2=A0=C2=A0 enum: [256, 512, 1002, 2005]
-> > +=C2=A0=C2=A0=C2=A0 default: 256
-> > +
-> > +=C2=A0 adi,power-good-reset-on-fet:
-> > +=C2=A0=C2=A0=C2=A0 description:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 If set, resets the power good status wh=
-en the MOSFET is turned off.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Otherwise, it resets when a low output =
-voltage is detected.
-> > +=C2=A0=C2=A0=C2=A0 type: boolean
-> > +
-> > +=C2=A0 adi,fet-turn-off-disable:
-> > +=C2=A0=C2=A0=C2=A0 description:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 If set, the MOSFET is turned off immedi=
-ately when a FET fault is detected.
-> > +=C2=A0=C2=A0=C2=A0 type: boolean
->=20
-> Is there a logic inversion between the property name and its description?
-> The property name uses a -disable suffix, but the description says "If se=
-t,
-> the MOSFET is turned off immediately", which sounds like it is enabling t=
-he
-> behavior rather than disabling it.
+This driver provides fan speed monitoring for modern Lenovo Yoga,
+Legion, and IdeaPad laptops. It interfaces with the Embedded
+Controller (EC) via ACPI to retrieve tachometer data.
 
-Yes. Misleading description. This has -disable because the default is the -=
-enable case which
-indeed is the case when the FET is turned off. Will update the description =
-so that is not
-confusing.
+To address low-resolution sampling in the Lenovo EC firmware, the
+driver implements a Rate-Limited Lag (RLLag) filter using a passive
+discrete-time first-order model. This ensures physical consistency
+of the RPM signal regardless of userspace polling rates.
 
-> > +
-> > +=C2=A0 adi,tmr-pull-down-disable:
-> > +=C2=A0=C2=A0=C2=A0 description: Disables 2uA pull-down current on the =
-TMR pin.
-> > +=C2=A0=C2=A0=C2=A0 type: boolean
-> > +
-> > +=C2=A0 adi,dvdt-inrush-control-disable:
-> > +=C2=A0=C2=A0=C2=A0 description:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Enables dV/dt inrush control during sta=
-rtup. In dV/dt mode, the inrush
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 current is limited by controlling a con=
-stant output voltage ramp rate.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 If not set, the inrush control mechanis=
-m is active current limiting.
-> > +=C2=A0=C2=A0=C2=A0 type: boolean
->=20
-> Does this description contradict the property name?
-> The -disable suffix implies the property turns off the dV/dt inrush contr=
-ol,
-> but the description states that setting the property enables it.
->=20
-> [ Non-AI note: It seems to me that the description contradicts itself.=
-=20
-> =C2=A0 It first says "_Enables_ ...", then it says "If _not_ set, the inr=
-ush control
-> =C2=A0 mechanism is active current limiting" ]
+Signed-off-by: Sergio Melas <sergiomelas@gmail.com>
 
-Yeah same thing as above. I will update this one just by s/Enables/Disables=
-/
+---
+v5:
+  - Fixed 32-bit build failures by using div64_s64 for 64-bit division.
+  - Extracted magic numbers into constants (RPM_UNIT_THRESHOLD, etc.).
+  - Fixed filter stall by ensuring a minimum slew limit (limit = 1).
+  - Refined RPM floor logic to trigger only when hardware reports 0 RPM.
+  - Resolved 255/256 unit-jump bug by adjusting heuristic thresholds.
+  - Rebased on groeck/hwmon-next branch for clean application.
+v4:
+  - Rebased on groeck/hwmon-next branch for clean application.
+  - Corrected alphabetical sorting in Kconfig and Makefile.
+  - Technical Validation & FOPTD Verification:
+    - Implemented RLLag (Rate-Limited Lag) first-order modeling.
+    - Used 10-bit fixed-point math for alpha calculation to avoid 
+      floating point overhead in the kernel.
+    - Added 5000ms filter reset for resume/long-polling sanitation.
+v3:
+  - Added MAINTAINERS entry and full Documentation/hwmon/yogafan.rst.
+  - Fixed integer overflow in filter math.
+  - Added support for secondary fan paths (FA2S) for Legion laptops.
+v2:
+  - Migrated from background worker to passive multirate filtering.
+  - Implemented dt-based scaling to maximize CPU sleep states.
+  - Restricted driver to Lenovo hardware via DMI matching.
+v1:
+  - Initial submission with basic ACPI fan path support.
+---
+ MAINTAINERS             |   6 ++
+ drivers/hwmon/Kconfig   |  11 ++
+ drivers/hwmon/Makefile  |   1 +
+ drivers/hwmon/yogafan.c | 225 ++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 243 insertions(+)
+ create mode 100644 drivers/hwmon/yogafan.c
 
->=20
-> > +
-> > +=C2=A0 adi,fault-log-enable:
-> > +=C2=A0=C2=A0=C2=A0 description:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 If set, enables logging fault registers=
- and ADC data into EEPROM upon a
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 fault.
-> > +=C2=A0=C2=A0=C2=A0 type: boolean
-> > +
-> > +=C2=A0 adi,vpower-drns-enable:
-> > +=C2=A0=C2=A0=C2=A0 description:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 If set, enables the attenuated MOSFET d=
-rain voltage to be monitored. This
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 effectively means that the MOSFET power=
- is monitored. If not set, the
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 attenuated input voltage (and hence inp=
-ut power) is monitored.
-> > +=C2=A0=C2=A0=C2=A0 type: boolean
-> > +
-> > +=C2=A0 adi,external-fault-fet-off-enable:
-> > +=C2=A0=C2=A0=C2=A0 description: Turns MOSFET off following an external=
- fault.
-> > +=C2=A0=C2=A0=C2=A0 type: boolean
-> > +
-> > +=C2=A0 adi,undervoltage-retry-disable:
-> > +=C2=A0=C2=A0=C2=A0 description: Do not retry to turn on the MOSFET aft=
-er an undervoltage fault.
-> > +=C2=A0=C2=A0=C2=A0 type: boolean
-> > +
-> > +=C2=A0 adi,overvoltage-retry-disable:
-> > +=C2=A0=C2=A0=C2=A0 description: Do not retry to turn on the MOSFET aft=
-er an overvoltage fault.
-> > +=C2=A0=C2=A0=C2=A0 type: boolean
-> > +
-> > +=C2=A0 adi,external-fault-retry-enable:
-> > +=C2=A0=C2=A0=C2=A0 description: Retry to turn on the MOSFET retry afte=
-r an external fault.
-> > +=C2=A0=C2=A0=C2=A0 type: boolean
->=20
-> This isn't a bug, but there's a typo in the description where the word
-> "retry" is repeated.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 830c6f076b00..9167f3d4f243 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14873,6 +14873,12 @@ W:	https://linuxtv.org
+ Q:	http://patchwork.linuxtv.org/project/linux-media/list/
+ F:	drivers/media/usb/dvb-usb-v2/lmedm04*
+ 
++LNVYOGAFAN HARDWARE MONITORING DRIVER
++M:	Sergio Melas <sergiomelas@gmail.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	drivers/hwmon/yogafan.c
++
+ LOADPIN SECURITY MODULE
+ M:	Kees Cook <kees@kernel.org>
+ S:	Supported
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 7dd8381ba0d0..5f6f65dea155 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -2653,6 +2653,17 @@ config SENSORS_XGENE
+ 	  If you say yes here you get support for the temperature
+ 	  and power sensors for APM X-Gene SoC.
+ 
++config SENSORS_YOGAFAN
++	tristate "Lenovo Yoga/Legion Fan Hardware Monitoring"
++	depends on ACPI && HWMON
++	help
++	  If you say yes here you get support for fan speed monitoring
++	  on modern Lenovo Yoga and Legion laptops.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called yogafan.
++
++
+ config SENSORS_INTEL_M10_BMC_HWMON
+ 	tristate "Intel MAX10 BMC Hardware Monitoring"
+ 	depends on MFD_INTEL_M10_BMC_CORE
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 556e86d277b1..0fce31b43eb1 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -245,6 +245,7 @@ obj-$(CONFIG_SENSORS_W83L786NG)	+= w83l786ng.o
+ obj-$(CONFIG_SENSORS_WM831X)	+= wm831x-hwmon.o
+ obj-$(CONFIG_SENSORS_WM8350)	+= wm8350-hwmon.o
+ obj-$(CONFIG_SENSORS_XGENE)	+= xgene-hwmon.o
++obj-$(CONFIG_SENSORS_YOGAFAN)	+= yogafan.o
+ 
+ obj-$(CONFIG_SENSORS_OCC)	+= occ/
+ obj-$(CONFIG_SENSORS_PECI)	+= peci/
+diff --git a/drivers/hwmon/yogafan.c b/drivers/hwmon/yogafan.c
+new file mode 100644
+index 000000000000..92158fe47a98
+--- /dev/null
++++ b/drivers/hwmon/yogafan.c
+@@ -0,0 +1,225 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/**
++ * yoga_fan.c - Lenovo Yoga/Legion Fan Hardware Monitoring Driver
++ *
++ * Provides fan speed monitoring for Lenovo Yoga, Legion, and IdeaPad
++ * laptops by interfacing with the Embedded Controller (EC) via ACPI.
++ *
++ * The driver implements a passive discrete-time first-order lag filter
++ * with slew-rate limiting (RLLag). This addresses low-resolution
++ * tachometer sampling in the EC by smoothing RPM readings based on
++ * the time delta (dt) between userspace requests, ensuring physical
++ * consistency without background task overhead or race conditions.
++ * The filter implements multirate filtering with autoreset in case
++ * of large sampling time.
++ *
++ * Copyright (C) 2021-2026 Sergio Melas <sergiomelas@gmail.com>
++ */
++#include <linux/acpi.h>
++#include <linux/dmi.h>
++#include <linux/err.h>
++#include <linux/hwmon.h>
++#include <linux/init.h>
++#include <linux/ktime.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/slab.h>
++/* Driver Configuration Constants */
++#define DRVNAME "yogafan"
++#define MAX_FANS 8
++/* Filter Configuration Constants */
++#define TAU_MS          3000    /* Time constant for the first-order lag (ms) */
++#define MAX_SLEW_RPM_S  100     /* Maximum allowed change in RPM per second */
++#define MAX_SAMPLING    5000    /* Maximum allowed Ts for reset (ms) */
++/* RPM Heuristic and Sanitation Constants */
++#define RPM_UNIT_THRESHOLD 500  /* Values below this treated as units of 100 */
++#define RPM_UNIT_MULT      100  /* Multiplier for low-res EC readings */
++#define RPM_FLOOR_LIMIT    50   /* Snap filtered value to 0 if raw is 0 */
++
++struct yoga_fan_data {
++	const char *active_paths[MAX_FANS];
++	long filtered_val[MAX_FANS];
++	ktime_t last_update[MAX_FANS];
++	int fan_count;
++};
++/**
++ * apply_rllag_filter - Discrete-time filter update (Passive Multirate)
++ * @data: pointer to driver data
++ * @idx: fan index
++ * @raw_rpm: new raw value from ACPI
++ */
++static void apply_rllag_filter(struct yoga_fan_data *data, int idx, long raw_rpm)
++{
++	ktime_t now = ktime_get();
++	s64 dt_ms;
++	long delta, step, limit, alpha;
++	s64 temp_num;
++
++	if (data->last_update[idx] == 0) {
++		data->filtered_val[idx] = raw_rpm;
++		data->last_update[idx] = now;
++		return;
++	}
++	dt_ms = ktime_to_ms(ktime_sub(now, data->last_update[idx]));
++	if (dt_ms > MAX_SAMPLING) {
++		data->filtered_val[idx] = raw_rpm;
++		data->last_update[idx] = now;
++		return;
++	}
++	if (dt_ms < 1)
++		return;
++	delta = raw_rpm - data->filtered_val[idx];
++	/* Use div64_s64 for 32-bit compatibility (Alpha = dt / (Tau + dt)) */
++	temp_num = dt_ms << 10;
++	alpha = (long)div64_s64(temp_num, (s64)(TAU_MS + dt_ms));
++	step = (delta * alpha) >> 10;
++	/* Fix the stall: Ensure limit is at least 1 if delta exists */
++	limit = (MAX_SLEW_RPM_S * (long)dt_ms) / 1000;
++	if (limit == 0 && delta != 0)
++		limit = 1;
++	if (step > limit)
++		step = limit;
++	else if (step < -limit)
++		step = -limit;
++	data->filtered_val[idx] += step;
++	/* Sanitation: Floor logic triggered only when hardware reports 0 */
++	if (data->filtered_val[idx] < RPM_FLOOR_LIMIT && raw_rpm == 0)
++		data->filtered_val[idx] = 0;
++	data->last_update[idx] = now;
++}
++
++static int yoga_fan_read(struct device *dev, enum hwmon_sensor_types type,
++			 u32 attr, int channel, long *val)
++{
++	struct yoga_fan_data *data = dev_get_drvdata(dev);
++	unsigned long long raw_acpi;
++	acpi_status status;
++	long rpm;
++
++	if (type != hwmon_fan || attr != hwmon_fan_input)
++		return -EOPNOTSUPP;
++	status = acpi_evaluate_integer(NULL, (acpi_string)data->active_paths[channel],
++					NULL, &raw_acpi);
++	if (ACPI_FAILURE(status))
++		return -EIO;
++	/* * Heuristic: Convert units-of-100 to raw RPM.
++	 * Most Yoga/Legion ECs return a single byte (0-255).
++	 * We use 500 as a safety threshold to distinguish from raw 16-bit RPM.
++	 */
++	rpm = (long)raw_acpi;
++	if (rpm > 0 && rpm < RPM_UNIT_THRESHOLD)
++		rpm *= RPM_UNIT_MULT;
++	apply_rllag_filter(data, channel, rpm);
++	*val = data->filtered_val[channel];
++	return 0;
++}
++
++static umode_t yoga_fan_is_visible(const void *data, enum hwmon_sensor_types type,
++				   u32 attr, int channel)
++{
++	const struct yoga_fan_data *fan_data = data;
++
++	if (type == hwmon_fan && channel < fan_data->fan_count)
++		return 0444;
++	return 0;
++}
++
++static const struct hwmon_ops yoga_fan_hwmon_ops = {
++	.is_visible = yoga_fan_is_visible,
++	.read = yoga_fan_read,
++};
++
++static const struct hwmon_channel_info *yoga_fan_info[] = {
++	HWMON_CHANNEL_INFO(fan,
++			   HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT,
++			   HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT),
++	NULL
++};
++
++static const struct hwmon_chip_info yoga_fan_chip_info = {
++	.ops = &yoga_fan_hwmon_ops,
++	.info = yoga_fan_info,
++};
++
++static int yoga_fan_probe(struct platform_device *pdev)
++{
++	struct yoga_fan_data *data;
++	struct device *hwmon_dev;
++	acpi_handle handle;
++	int i;
++	static const char * const fan_paths[] = {
++		"\\_SB.PCI0.LPC0.EC0.FANS",  /* Primary Fan (Yoga 14c) */
++		"\\_SB.PCI0.LPC0.EC0.FA2S",  /* Secondary Fan (Legion) */
++		"\\_SB.PCI0.LPC0.EC0.FAN0",  /* IdeaPad / Slim */
++		"\\_SB.PCI0.LPC.EC.FAN0",    /* Legacy */
++		"\\_SB.PCI0.LPC0.EC.FAN0",   /* Alternate */
++	};
++	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++	data->fan_count = 0;
++	for (i = 0; i < ARRAY_SIZE(fan_paths); i++) {
++		if (ACPI_SUCCESS(acpi_get_handle(NULL, (char *)fan_paths[i], &handle))) {
++			data->active_paths[data->fan_count] = fan_paths[i];
++			data->fan_count++;
++			if (data->fan_count >= MAX_FANS)
++				break;
++		}
++	}
++
++	if (data->fan_count == 0)
++		return -ENODEV;
++	platform_set_drvdata(pdev, data);
++	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev, DRVNAME,
++							 data, &yoga_fan_chip_info, NULL);
++	return PTR_ERR_OR_ZERO(hwmon_dev);
++}
++
++static struct platform_driver yoga_fan_driver = {
++	.driver = {
++		.name = DRVNAME,
++	},
++	.probe = yoga_fan_probe,
++};
++
++static struct platform_device *yoga_fan_device;
++
++static const struct dmi_system_id yoga_dmi_table[] __initconst = {
++	{
++		.ident = "Lenovo",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
++		},
++	},
++	{ }
++};
++MODULE_DEVICE_TABLE(dmi, yoga_dmi_table);
++
++static int __init yoga_fan_init(void)
++{
++	int ret;
++
++	if (!dmi_check_system(yoga_dmi_table))
++		return -ENODEV;
++	ret = platform_driver_register(&yoga_fan_driver);
++	if (ret)
++		return ret;
++	yoga_fan_device = platform_device_register_simple(DRVNAME, 0, NULL, 0);
++	if (IS_ERR(yoga_fan_device)) {
++		platform_driver_unregister(&yoga_fan_driver);
++		return PTR_ERR(yoga_fan_device);
++	}
++	return 0;
++}
++
++static void __exit yoga_fan_exit(void)
++{
++	platform_device_unregister(yoga_fan_device);
++	platform_driver_unregister(&yoga_fan_driver);
++}
++
++module_init(yoga_fan_init);
++module_exit(yoga_fan_exit);
++MODULE_AUTHOR("Sergio Melas <sergiomelas@gmail.com>");
++MODULE_DESCRIPTION("Lenovo Yoga/Legion Fan Monitor Driver");
++MODULE_LICENSE("GPL");
+-- 
+2.53.0
 
-ack.
-
->=20
-> > +
-> > +=C2=A0 adi,overcurrent-retries:
-> > +=C2=A0=C2=A0=C2=A0 description: Configures auto-retry following an Ove=
-rcurrent fault.
-> > +=C2=A0=C2=A0=C2=A0 $ref: /schemas/types.yaml#/definitions/string
-> > +=C2=A0=C2=A0=C2=A0 enum: [latch-off, "1", "7", unlimited]
-> > +=C2=A0=C2=A0=C2=A0 default: latch-off
-> > +
-> > +=C2=A0 adi,fet-bad-retries:
-> > +=C2=A0=C2=A0=C2=A0 description:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Configures auto-retry following a FET b=
-ad fault and a consequent MOSFET
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 turn off.
-> > +=C2=A0=C2=A0=C2=A0 $ref: /schemas/types.yaml#/definitions/string
-> > +=C2=A0=C2=A0=C2=A0 enum: [latch-off, "1", "7", unlimited]
-> > +=C2=A0=C2=A0=C2=A0 default: latch-off
-> > +
-> > +=C2=A0 adi,pgio1-func:
-> > +=C2=A0=C2=A0=C2=A0 description: Configures the function of the PGIO1 p=
-in.
-> > +=C2=A0=C2=A0=C2=A0 $ref: /schemas/types.yaml#/definitions/string
-> > +=C2=A0=C2=A0=C2=A0 enum: [inverted_power_good, power_good, gpio]
-> > +=C2=A0=C2=A0=C2=A0 default: inverted_power_good
-> > +
-> > +=C2=A0 adi,pgio2-func:
-> > +=C2=A0=C2=A0=C2=A0 description: Configures the function of the PGIO2 p=
-in.
-> > +=C2=A0=C2=A0=C2=A0 $ref: /schemas/types.yaml#/definitions/string
-> > +=C2=A0=C2=A0=C2=A0 enum: [inverted_power_good, power_good, gpio, activ=
-e_current_limiting]
-> > +=C2=A0=C2=A0=C2=A0 default: inverted_power_good
-> > +
-> > +=C2=A0 adi,pgio3-func:
-> > +=C2=A0=C2=A0=C2=A0 description: Configures the function of the PGIO3 p=
-in.
-> > +=C2=A0=C2=A0=C2=A0 $ref: /schemas/types.yaml#/definitions/string
-> > +=C2=A0=C2=A0=C2=A0 enum: [inverted_power_good_input, power_good_input,=
- gpio]
-> > +=C2=A0=C2=A0=C2=A0 default: inverted_power_good_input
-> > +
-> > +=C2=A0 adi,pgio4-func:
-> > +=C2=A0=C2=A0=C2=A0 description: Configures the function of the PGIO4 p=
-in.
-> > +=C2=A0=C2=A0=C2=A0 $ref: /schemas/types.yaml#/definitions/string
-> > +=C2=A0=C2=A0=C2=A0 enum: [inverted_external_fault, external_fault, gpi=
-o]
-> > +=C2=A0=C2=A0=C2=A0 default: inverted_external_fault
-> > +
-> > +=C2=A0 adi,gpio-on-adio1:
-> > +=C2=A0=C2=A0=C2=A0 description: If set, the ADIO1 pin is used as a GPI=
-O.
-> > +=C2=A0=C2=A0=C2=A0 type: boolean
-> > +
-> > +=C2=A0 adi,gpio-on-adio2:
-> > +=C2=A0=C2=A0=C2=A0 description: If set, the ADIO2 pin is used as a GPI=
-O.
-> > +=C2=A0=C2=A0=C2=A0 type: boolean
-> > +
-> > +=C2=A0 adi,gpio-on-adio3:
-> > +=C2=A0=C2=A0=C2=A0 description: If set, the ADIO3 pin is used as a GPI=
-O.
-> > +=C2=A0=C2=A0=C2=A0 type: boolean
-> > +
-> > +=C2=A0 adi,gpio-on-adio4:
-> > +=C2=A0=C2=A0=C2=A0 description: If set, the ADIO4 pin is used as a GPI=
-O.
-> > +=C2=A0=C2=A0=C2=A0 type: boolean
->=20
-> Does this dependency block force a redundant specification of adi,pgio4-f=
-unc?
-> The default for adi,pgio4-func is inverted_external_fault, which means th=
-e
-> default hardware state already supports external fault features.
-> If a device tree legitimately omits adi,pgio4-func to rely on that defaul=
-t,
-> will it fail schema validation here since the dependencies keyword strict=
-ly
-> checks for the literal presence of properties without injecting defaults?
-
-Fair point. I guess it will fail but the alternative is to not have any con=
-strain at all so
-maybe worth it to be explicit in here?
-
-- Nuno S=C3=A1
-
->=20
-> > +
-> > +=C2=A0 gpio-controller: true
-> > +
-> > +=C2=A0 '#gpio-cells':
-> > +=C2=A0=C2=A0=C2=A0 const: 2
-> > +
-> > +dependencies:
-> > +=C2=A0 adi,gpio-on-adio1:
-> > +=C2=A0=C2=A0=C2=A0 - gpio-controller
-> > +=C2=A0=C2=A0=C2=A0 - '#gpio-cells'
-> > +=C2=A0 adi,gpio-on-adio2:
-> > +=C2=A0=C2=A0=C2=A0 - gpio-controller
-> > +=C2=A0=C2=A0=C2=A0 - '#gpio-cells'
-> > +=C2=A0 adi,gpio-on-adio3:
-> > +=C2=A0=C2=A0=C2=A0 - gpio-controller
-> > +=C2=A0=C2=A0=C2=A0 - '#gpio-cells'
-> > +=C2=A0 adi,gpio-on-adio4:
-> > +=C2=A0=C2=A0=C2=A0 - gpio-controller
-> > +=C2=A0=C2=A0=C2=A0 - '#gpio-cells'
-> > +=C2=A0 adi,external-fault-retry-enable:
-> > +=C2=A0=C2=A0=C2=A0 - adi,pgio4-func
-> > +=C2=A0 adi,external-fault-fet-off-enable:
-> > +=C2=A0=C2=A0=C2=A0 - adi,pgio4-func
-> > +
-> > +required:
-> > +=C2=A0 - compatible
-> > +=C2=A0 - reg
-> > +=C2=A0 - adi,rsense-nano-ohms
-> > +
-> > +allOf:
-> > +=C2=A0 - if:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 properties:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi,pgio1-func:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const: gpio
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 required:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - adi,pgio1-func
-> > +=C2=A0=C2=A0=C2=A0 then:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 required:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - gpio-controller
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - '#gpio-cells'
-> > +
-> > +=C2=A0 - if:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 properties:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi,pgio2-func:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const: gpio
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 required:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - adi,pgio2-func
-> > +=C2=A0=C2=A0=C2=A0 then:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 required:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - gpio-controller
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - '#gpio-cells'
-> > +
-> > +=C2=A0 - if:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 properties:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi,pgio3-func:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const: gpio
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 required:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - adi,pgio3-func
-> > +=C2=A0=C2=A0=C2=A0 then:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 required:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - gpio-controller
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - '#gpio-cells'
-> > +
-> > +=C2=A0 - if:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 properties:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi,pgio4-func:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const: gpio
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 required:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - adi,pgio4-func
-> > +=C2=A0=C2=A0=C2=A0 then:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 properties:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi,external-fault-retry-en=
-able: false
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi,external-fault-fet-off-=
-enable: false
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 required:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - gpio-controller
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - '#gpio-cells'
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +=C2=A0 - |
-> > +=C2=A0=C2=A0=C2=A0 i2c {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #address-cells =3D <1>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #size-cells =3D <0>;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 swap-controller@15 {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 com=
-patible =3D "adi,ltc4283";
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg=
- =3D <0x15>;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi=
-,rsense-nano-ohms =3D <500>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi=
-,current-limit-sense-microvolt =3D <25000>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi=
-,current-limit-foldback-factor =3D <10>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi=
-,cooling-delay-ms =3D <8190>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi=
-,fet-bad-timer-delay-ms =3D <512>;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi=
-,external-fault-fet-off-enable;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi=
-,pgio4-func =3D "external_fault";
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi=
-,gpio-on-adio1;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adi=
-,pgio1-func =3D "gpio";
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 gpi=
-o-controller;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #gp=
-io-cells =3D <2>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
-> > +=C2=A0=C2=A0=C2=A0 };
-> > +...
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 830c6f076b0029f0ff1abee148ad0e1905a60e82..13ae2f3db449e5fd3a7d0fb=
-ac92aabdc01734ba9 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -15141,6 +15141,12 @@ F:	Documentation/devicetree/bindings/hwmon/adi=
-,ltc4282.yaml
-> > =C2=A0F:	Documentation/hwmon/ltc4282.rst
-> > =C2=A0F:	drivers/hwmon/ltc4282.c
-> > =C2=A0
-> > +LTC4283 HARDWARE MONITOR AND GPIO DRIVER
-> > +M:	Nuno S=C3=A1 <nuno.sa@analog.com>
-> > +L:	linux-hwmon@vger.kernel.org
-> > +S:	Supported
-> > +F:	Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml
-> > +
-> > =C2=A0LTC4286 HARDWARE MONITOR DRIVER
-> > =C2=A0M:	Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-> > =C2=A0L:	linux-hwmon@vger.kernel.org
-> >=20
-> > --=20
-> > 2.51.0
-> >=20
-> >=20
-> >=20
