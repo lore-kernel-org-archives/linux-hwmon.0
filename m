@@ -1,134 +1,98 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E171A3CCA13;
-	Mon, 23 Mar 2026 19:33:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C2EF36DA16;
+	Mon, 23 Mar 2026 22:48:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774294423; cv=none; b=Qp7nv7UoDweTpSK+44t5H167FblM2ZMqgsw/Q9kWNfkLXrk96Z9S3tvucltx2RCi0gEkZQu/+KAc0eHyKu9tSVj/GJE4pS3w8JUlNHve0+k/pjS7onXukb1WqKumE9tbE5K3DuIXjWMmUc4rgZ1i7VmA9pxde/AFdCdRf1VBq84=
+	t=1774306112; cv=none; b=ng3IVLwDsSa4l1EcR+quxXzBFhErv01QZylLtlMZ6v0qBaKp3eawowd9gx89xPHDB4ptOO4/3bMCy+wJiXO6Udv5a0Is1VYenNEOJQRHef4/YLaGmhxzPneXvrWWS4UORgB2TVt0eAbuFdHWnFESBknkvS2vHJl6eIjgxukaCG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774294423; c=relaxed/simple;
-	bh=ibmhyDBh7qGc9VbP/g7aL8x8cQeRhvQDZhxo1BaX4DY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cwb37spvmSG4M+Twi20D3gaxw9lRFVL+U0Mvnfd7JJkejSSpuN+U2ywWcm/43coXcNnGRyW+YRv1bY7YCAf9GxgaB8IznqKl6CUC2WSu0oW99T7RYOTZdCt0MjtSfY8iH7086oel7+G0DS/ZfSxWSkVmywTTHnCTON76BLDuVzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u2+c6sjH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774306112; c=relaxed/simple;
+	bh=0d/AQWSZncGkSMd4RQqlpd8/Vh0YIMtfYCgI8TmwZ84=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZHUgy58vASrdOE0zR4w7ryrc89YJl/GZhOnyXDV9nJVYM5clQAIhHZYoKaK+IdwWVx8vgCAG4JXZHzeJG+3BgChPs7d21ckB3WpiLKGXpNhOBAE+iVbYBwbuZZOc3nLcLTZGL1Cz+wbkal0QBIwLeoiiHuaOymMMdLKqsMurovU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KrdjgjFj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u2+c6sjH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AD53C4CEF7;
-	Mon, 23 Mar 2026 19:33:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KrdjgjFj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85922C4CEF7;
+	Mon, 23 Mar 2026 22:48:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774294422;
-	bh=ibmhyDBh7qGc9VbP/g7aL8x8cQeRhvQDZhxo1BaX4DY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=u2+c6sjHtyuUHhhaiR/h4mWp4RVwmui4wImkkzINKbbbf9PqunL2bKf5LlQyow6UX
-	 +3/K2+cMjaszwJ/5y00bUKhThiEekoQz3drS9KE/NieufxoauJjeTppK61Q7c2TOmb
-	 6uYkJ0wkunhEOEUmSQGC59LcrEXtX7pDN1UMr+2BePEJc/jkoQpIMq+k0VKDYGTb0y
-	 9H5ruC/qH6M8VJ+yV+SQj31m7K5vq0hydVPf3Chu9xvBuJhCZ+m/iXEexIQThkrMdY
-	 qGyFFfMzqpwdOuR72lXqt2YRuhZqPqVoTvRKI0Otk2ZMP0zi2+7XH2/Ta4OJnZuf3t
-	 m2n+1wCBhtVPw==
-Date: Mon, 23 Mar 2026 19:33:37 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Anshika Gupta <guptaanshika.ag@gmail.com>
-Cc: linux@roeck-us.net, corbet@lwn.net, skhan@linuxfoundation.org,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, devicetree@vger.kernel.org,
-	lakshaypiplani77@gmail.com
-Subject: Re: [PATCH 1/3] dt-bindings: hwmon: Add support for NXP P3T1084UK
- temperature sensor
-Message-ID: <20260323-guy-chef-4d98fa4f7c1b@spud>
-References: <20260323162252.15508-1-guptaanshika.ag@gmail.com>
+	s=k20201202; t=1774306111;
+	bh=0d/AQWSZncGkSMd4RQqlpd8/Vh0YIMtfYCgI8TmwZ84=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=KrdjgjFjYq5Hes5RJTvcXNXk++HmpbauD72BDmjrDtCEZ7BdWouaCJeiKmV/SwISd
+	 Dcvk+sWaMt+fjmY0tlSFW7td63+yUItn9e1wKkuOmuOfZSxPYDk3II5b5KR+zyVGeK
+	 2Nru46BMVeT5UyA8SHHALTkwRf2RL7GvHHbwBmGUlPlPeiZVY5K27gX/QQNrYS3SiI
+	 2mXc1xdIfYw3nbTuCsKD9wUcxoQjZLT2HRdUxxBNvSXeo+vQxx6/3c3hZDqIOFiDXg
+	 c/m4VcV6PrLX04mQPvhckvaVmY4iInGSubOx58iN980+DAdWec2CYBfvHFun+tv/3U
+	 GimJ6Mo6h16Eg==
+Date: Mon, 23 Mar 2026 15:48:25 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Ivan Vecera <ivecera@redhat.com>, netdev@vger.kernel.org, Arkadiusz
+ Kubalewski <arkadiusz.kubalewski@intel.com>, Jiri Pirko <jiri@resnulli.us>,
+ Prathosh Satish <Prathosh.Satish@microchip.com>, Vadim Fedorenko
+ <vadim.fedorenko@linux.dev>, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, Michal Schmidt <mschmidt@redhat.com>, Petr
+ Oros <poros@redhat.com>, Simon Horman <horms@kernel.org>
+Subject: Re: [PATCH net-next 3/3] dpll: zl3073x: add hwmon support for input
+ reference frequencies
+Message-ID: <20260323154825.1a2320c4@kernel.org>
+In-Reply-To: <7dbb5130-72cf-49d2-bfac-3439deb1b2e3@redhat.com>
+References: <20260320105915.149068-1-ivecera@redhat.com>
+	<20260320105915.149068-4-ivecera@redhat.com>
+	<964752ec-8e6d-444a-aad0-80da3acb2dab@roeck-us.net>
+	<7dbb5130-72cf-49d2-bfac-3439deb1b2e3@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="14hJa/gjYwSAe/Y1"
-Content-Disposition: inline
-In-Reply-To: <20260323162252.15508-1-guptaanshika.ag@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Fri, 20 Mar 2026 14:48:01 +0100 Ivan Vecera wrote:
+> On 3/20/26 1:21 PM, Guenter Roeck wrote:
+> > On 3/20/26 03:59, Ivan Vecera wrote:  
+> >> Expose measured input reference frequencies via the hwmon interface
+> >> using custom sysfs attributes (freqN_input and freqN_label) since
+> >> hwmon has no native frequency sensor type. The frequency values are
+> >> read from the cached measurements updated by the periodic work thread.
+> >>
+> >> Cache the device ready state in struct zl3073x_dev so that
+> >> freq_input_show() can return -ENODATA without an I2C access when
+> >> the device firmware is not configured.
+> >>
+> >> Signed-off-by: Ivan Vecera <ivecera@redhat.com>  
+> > 
+> > "frequency" is not a hardware monitoring attribute. I understand that it is
+> > convenient to report it as one, and that other drivers implement it as 
+> > well,
+> > but that doesn't change that.
+> > 
+> > I understand that the code lives outside the hardware monitoring 
+> > subsystem and is
+> > thus not in control of its maintainers, so you can essentially do 
+> > whatever you want,
+> > even if it is wrong. That doesn't change the fact that it is wrong.
+> > 
+> > However, do _not_ try to add it into the official list of hardware 
+> > monitoring
+> > attributes. I would NACK that.
+> 
+> Understood. I recognize that frequency falls outside the strict scope of
+> hardware monitoring and does not belong in the official hwmon ABI.
+> 
+> I'm using it here as a convenient way to expose these specific driver
+> metrics, but I hear you loud and clear. I will absolutely not propose
+> adding frequency to the official list of hwmon attributes or
+> documentation.
+> 
+> Thank you for your time and for reviewing the patch.
 
---14hJa/gjYwSAe/Y1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Guenter, should this be a debugfs interface, then?
 
-On Mon, Mar 23, 2026 at 09:52:50PM +0530, Anshika Gupta wrote:
-> The P3T1084UK is an NXP digital temperature sensor compatible with the
-> Texas Instruments TMP108 register and protocol specification. This patch
-
-Then why is tmp108 not used as a fallback compatible? Looks from the
-driver patch like it would be suitable.
-
-> extends the existing DT binding for "ti,tmp108" to document the
-> compatible string for P3T1084UK so that the hwmon TMP108 driver can
-> bind to this device.
->=20
-> Signed-off-by: Lakshay Piplani <lakshaypiplani77@gmail.com>
-
-What did Lakshay do? You're author and submitter, but their sign-off is
-here. Are you missing a co-developed-by?
-
-> Signed-off-by: Anshika Gupta <guptaanshika.ag@gmail.com>
-> ---
->  Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml b/Doc=
-umentation/devicetree/bindings/hwmon/ti,tmp108.yaml
-> index 9f6c9f6fa561..47714df5aaff 100644
-> --- a/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml
-> @@ -4,20 +4,21 @@
->  $id: http://devicetree.org/schemas/hwmon/ti,tmp108.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
-> =20
-> -title: TMP108/P3T1035/P3T1085/P3T2030 temperature sensor
-> +title: TMP108/P3T1035/P3T1084/P3T1085/P3T2030 temperature sensor
-> =20
->  maintainers:
->    - Krzysztof Kozlowski <krzk@kernel.org>
-> =20
->  description: |
-> -  The TMP108 or NXP P3T Family (P3T1035, P3T1085 and P3T2030) is a digit=
-al-
-> +  The TMP108 or NXP P3T Family (P3T1035, P3T1084, P3T1085 and P3T2030) i=
-s a digital-
->    output temperature sensor with a dynamically-programmable limit window,
->    and under- and over-temperature alert functions.
-> =20
-> -  NXP P3T Family (P3T1035, P3T1085 and P3T2030) supports I3C.
-> +  NXP P3T Family (P3T1035, P3T1084, P3T1085 and P3T2030) supports I3C.
-> =20
->    Datasheets:
->      https://www.ti.com/product/TMP108
-> +    https://www.nxp.com/docs/en/data-sheet/P3T1084UK.pdf
->      https://www.nxp.com/docs/en/data-sheet/P3T1085UK.pdf
->      https://www.nxp.com/docs/en/data-sheet/P3T1035XUK_P3T2030XUK.pdf
-> =20
-> @@ -28,6 +29,7 @@ properties:
->            - const: nxp,p3t2030
->            - const: nxp,p3t1035
->        - const: nxp,p3t1035
-> +      - const: nxp,p3t1084
->        - const: nxp,p3t1085
->        - const: ti,tmp108
-> =20
-> --=20
-> 2.34.1
->=20
-
---14hJa/gjYwSAe/Y1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCacGVkQAKCRB4tDGHoIJi
-0jVJAQCEpZVyW1tO5Iwwpit8j6ZNQ29BxwF/EM3OhTiJFmPkqQD/QgrmLAeYibSl
-NnGv1iv7+sHZ1/uA3g2fwl2qP2ex6gI=
-=8Ump
------END PGP SIGNATURE-----
-
---14hJa/gjYwSAe/Y1--
+Also an hwmon noob question - isn't it better for the monitoring
+interface to report frequency error / instability in this case
+instead of absolute value? Or do you not know the expected freq?
