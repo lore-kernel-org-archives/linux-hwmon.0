@@ -1,68 +1,67 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746963AEF53
-	for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 14:15:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5329C3AD513
+	for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 14:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774275357; cv=none; b=n4+4cb3ReDnyLJEAJNQ//9+EhJlckLQX1EPVDK/X+Z9l1dE4ZEqlVSmkVBuPX10viHyW3xq3HLXE2c+lJdLuviT6WWbOX4KzsCgYT+gC+xIY+gcCTTkhmJp28705kzwn1ZuphCyAN7MZP/eaFlLSPolGYZmM3IWQlUhsXzmUM5A=
+	t=1774276389; cv=none; b=i/KG0lb4FkDBQ6WBEn1fcRp+5NPrIHWqHoWvxKAPH50FeBqry50wVZsruh8UfScbdBTfZ+hoEHQB5BKCBjbivGA4LDJi7cINwHFnLNtbgRFX0ky9vUewxvit83M6PrqJCAkLR+TZyxXlxHN1nWYTauoej/0YSBfjhJItMG+/urw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774275357; c=relaxed/simple;
-	bh=htqL+8ZGV4xNe9uVip8GiIqy7pwKgpqp40A9l5kLmA8=;
+	s=arc-20240116; t=1774276389; c=relaxed/simple;
+	bh=FUWZG338Lvqw+ZHMyYOjy0LBZ3vZYoG/uj35Q/vhN94=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OAmiZ0I7FogPlOaX376uW4VWwIHR6qQMVc/0R8WsQEU/epgNtthBcdRBVEdnePdTJ7Drl/L02kl4hZ53X8yuX4rtBqizs27AMsafFINVM2nKq0CCcgxtwFbHNyfVw14dTq5KNxAilt4ULcn4Sf5HXJrT8Oulbzpxds/hRWJC0DM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fL4bmE7N; arc=none smtp.client-ip=209.85.215.170
+	 In-Reply-To:Content-Type; b=YH90av/fmN+MiEs80CF+ZM9A6DCUKT67j/S6G3Q2syyBExScbemw3VMjcPh09ug6pOivuvGyI+cJOAa3Z/kKLuZ45M5WXonvqIBYeBRYzbiFg4foiQBU7KitCYev54MByiSmBsQbkbQsRApHYHdo6B/6334FrNmPlXO/BvUa0Xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=amahc5fH; arc=none smtp.client-ip=74.125.82.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fL4bmE7N"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-c742824e1d3so1369505a12.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 07:15:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="amahc5fH"
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-1279eced0b9so3908298c88.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 07:33:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774275356; x=1774880156; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1774276387; x=1774881187; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=iefLiyxyiQGfXrTnw6sp+93st5Cs/wPL5mI4sK1c0Lc=;
-        b=fL4bmE7N+cYkGG2QLqUOyZZsHRJZfGo6AvotakOMeZTTHaBeD6X8rPv84/tk8/Me5o
-         LipVN+99R3V9mucotQrV4TXX+9GgCOsSzK5nBkJg/RAlsMfT8OAFGQUf4+v5UFotpU1i
-         h0ShNqvsjREV5cprElWKk3/Kvj5NbUdPslTIiwjFyVG3CrPM/nurOqNVf70H1oBJ+9SY
-         i+KbnY7TN5FzMmqDUjTTUiKFBidyJLg7dJTkC4gDMOxadHOGM6tJqJUPVJfu9VkdHN5R
-         Z1JswUx/CS1vhSlulu+Lu5veiEPnE6FcHOYG3QNvKxSpBqmcTjuf4e/CQpxA7Dyj9xvH
-         qFUw==
+        bh=iNYejPjdBPqYLtoCLQEnNEXgxoTT0I9CZ1Nfe3G/xyM=;
+        b=amahc5fHDmJqnb7n4fNt74zuTEtzDFexr1hIg5HPXWOSt5Mjb5YLEynkH++s8TsUOc
+         VK678SjLda3kPMG7XflF4l4tayrbGrgOwxCiH9zab63CaTspNKguizmg8B4c9mG0/4pR
+         QfK8thS+vA6IHv4lmWBcBsKDAcXHmHOa4OiCqcAQK+sTXCO+HgorMyK8Im88ZlL5kzO9
+         W/CL89OVc3FFNpaWR6FmvJggbAjRJQrdxfegAp14olgL7KoV0Yu3qNjxAuro9hmdXNlS
+         F8t+qE9HYrbrSdJKEABGERj9vcjseo6u/ak7ou9RsIZVW/spWGYGqgS2FU9B4c7a1eyo
+         f6Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774275356; x=1774880156;
+        d=1e100.net; s=20251104; t=1774276387; x=1774881187;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iefLiyxyiQGfXrTnw6sp+93st5Cs/wPL5mI4sK1c0Lc=;
-        b=lEy4RyayywB2Sxg6UoHb6MbdhvikauhmfQlBFXC351WhnuX0wJIk/XX/yV2Zd5lI03
-         s/QXQjkEWuMp6XG9A1p6opRBvfKOO7EAldnYDXRdkVP3CivHqvHt2lq7FNfrtB8H0MMk
-         hfCfRaa9CFn/LzAZXmFA6AXSoCp7Et1LgRhLIzJsU90RHtEPuW9Y1biVHZbTqkX9MCYb
-         PWwkvsp1PuAxVDtZKbrEmglz+W9s8EgCcwv53QCS1HDywnmz8Ls0PtbGLZ4icTewfCCF
-         muklmmrA/kQuJbWwE52oFLQnoG3TNUmnzFIcs+4TfsUX07Yf/VL/GNT9FAegGbJnOJjC
-         r9Bw==
-X-Forwarded-Encrypted: i=1; AJvYcCWMcPOHzx1JbAXdHmnMXCly7XkL4vZss/zPMlsxAiD5ZeUjFTTcmuCS/IyfCXI91lsqnWS9LvCfxrZUSg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzA+KHW/DKKikeTp92mbNZELoXIY8tvWzomaRRCYVe2tUUs9+DY
-	AoHP2iafPgqxMidMprDT3vmYB0Mmb8ioT0BU4jvdNtAprmycmwMCSlPt
-X-Gm-Gg: ATEYQzwG1vmeQPcaxVzn70DBl0nJLlSJm4a6rN0+KhutL++Cx89DlBORX1unB9cRzmh
-	yT4yinpuq4NqpECGBreK4qOBHoB/JuHord70wJZojTMbYTfsjKYAE9LxzGyY8vdClRaLxrlm/Qa
-	vHl1SUO10hBC2TEGZoXsd17BN/mRa3tc4ykmTeK/NC87vbeR7VBAq8VA5YgMw6MYaKB+f2ae7ch
-	m7z5u50TRZfhy9d4IAD1Hn6ZG4wfENX69i6rLEwddZhqrVFlomm8cuPU2AIcTFOYzJcST7nIVWL
-	qrLAU/s6XvVLGUOTgou/Kx+vdWMcMHtkF2ezI38RblZlzLupxvfi/aUW17WBCYfIl+jxbGAxFGt
-	HM53R9jCD3QyyOOE4Joni5lFq8+xw0g+r0OrpHPJH0P2MLCXC8WRhwHhsufkILaq1taKT2YlXbJ
-	r03HOneyh1gvGgf5QT8vxSSR8GkAzTxbHkXgGjPEy9QF2oJILvPERgmt0IMX/weLFMOx7jUVAkk
-	JL5MXZ4ziM=
-X-Received: by 2002:a17:902:e84b:b0:2ae:c7dc:95a4 with SMTP id d9443c01a7336-2b0827749f5mr115976435ad.20.1774275355708;
-        Mon, 23 Mar 2026 07:15:55 -0700 (PDT)
+        bh=iNYejPjdBPqYLtoCLQEnNEXgxoTT0I9CZ1Nfe3G/xyM=;
+        b=tWLnb6gMYpP/onf57NUgYM2FTcR2HN3lAeycrpnwrkxcc25eaF5Xzkn0L2a+5T2alM
+         s+hdCC7xq2jRrhZmM0FKusLZyqodG10FwQUC5oRpetzMs7un3KVl+n+oRAspvJSe4yfF
+         KewPznrjQeUbDOO8j7rYibGaTI4ihe/ZXrYeYbOQSCvF6NFp03+zK2s3LgCxlbsJwicP
+         /tdPHz4Vrto4gxP8xi0BXikNiROJeiudRskjadsfWIUBRPljRSGPH+Dwo+J/TARZodVl
+         cGNQj9i3GcQZ/mgP1Bb2kvpzkIEUjEey99SJx+EsliBnRVwoCULyI/otRoloX/HMH8vD
+         J0MA==
+X-Forwarded-Encrypted: i=1; AJvYcCUICPDfuRtdSP84NzGXX5kEF0/OpMWTgRpWSq/14vKScyS5ZTRPpESvbCrxPybeFUzpL9WM3tP30hxMTA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFS1B0HS88U8SR0Rrx6yUjqWC9qXs0dpn4KnVqzFkzPp6bk/ez
+	pbkKP8xW/wKWr+YW1x16Ux1uNHkCLWdqPFn1eukXonFS+BbIVL2H9xJm
+X-Gm-Gg: ATEYQzwWVjfrdii74SauzfP0vWFOstvJoDTQ1Fkqu5IP1xqrIYDBeeOEaZ6z38qWKjY
+	fJMa4FSWSUKgAeht5emYH+lrub8ruksRa6dd5iOgMOtFfzg+CA4x0QPgtz/2I8m8B6CxIisssq2
+	9OeTyKYM+EP84AuSKmg8gbEI5HVPz8kbQzIg16FucBWgQw6eB+n1RAYBYYb1J0mWtaawV/Tj6jZ
+	dWr7BJw/0U/3bOcHCR1Q0KNC87IedhIzPYuRBzJdeC5R2pk34WRggeu67Cgq8UlZOGnMQ0TjO+b
+	dNPWmSavV/MaduLKtuqRYwXkmqhVDbGcgnAc48hTyD+jCoZOpoPOYBxREbvdkiGp1TP51HcVHih
+	lAS7tipL33dbIyH47fHre2Jnmqd6jcqHtEEpguwSlaR3m31WOCj7w1P5m+3Za/kMDtuKF3vy7sl
+	k2WYqhy52o3E9lBxs8p6UtUbxPE9qMxbHiAub/8IdTlthdVPzbhB4Dz3W8jE/0zwWHrNHHiuKt
+X-Received: by 2002:a05:7022:e29:b0:128:d20a:2f40 with SMTP id a92af1059eb24-12a7267d0c0mr5552465c88.8.1774276387345;
+        Mon, 23 Mar 2026 07:33:07 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b08368ea1bsm138336495ad.68.2026.03.23.07.15.54
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12a7330d1c5sm8887677c88.0.2026.03.23.07.33.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Mar 2026 07:15:55 -0700 (PDT)
+        Mon, 23 Mar 2026 07:33:06 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <86ec222b-d252-4586-a1cc-2a7a5674e1b4@roeck-us.net>
-Date: Mon, 23 Mar 2026 07:15:53 -0700
+Message-ID: <453dbd6c-c68d-4977-8418-a898008b0fe7@roeck-us.net>
+Date: Mon, 23 Mar 2026 07:33:05 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,15 +69,19 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/6] hwmon/misc: amd-sbi: Move core SBTSI support from
- hwmon to misc
-To: Akshay Gupta <Akshay.Gupta@amd.com>, linux-kernel@vger.kernel.org
-Cc: corbet@lwn.net, skhan@linuxfoundation.org, arnd@arndb.de,
- gregkh@linuxfoundation.org, Prathima.Lk@amd.com,
- naveenkrishna.chatradhi@amd.com, Anand.Umarji@amd.com,
- linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org, kunyi@google.com
-References: <20260323110811.2898997-1-Akshay.Gupta@amd.com>
- <20260323110811.2898997-2-Akshay.Gupta@amd.com>
+Subject: Re: [PATCH v7 1/3] dt-bindings: hwmon: Document the LTC4283 Swap
+ Controller
+To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>, nuno.sa@analog.com
+Cc: linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Linus Walleij <linusw@kernel.org>,
+ Bartosz Golaszewski <brgl@kernel.org>
+References: <20260314-ltc4283-support-v7-0-1cda48e93802@analog.com>
+ <20260314-ltc4283-support-v7-1-1cda48e93802@analog.com>
+ <c395fad0-ca24-448a-a77f-ddac1cd9f809@roeck-us.net>
+ <77cd7e879a10df791d9d5eb1f16f1654e9904199.camel@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -124,29 +127,83 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260323110811.2898997-2-Akshay.Gupta@amd.com>
+In-Reply-To: <77cd7e879a10df791d9d5eb1f16f1654e9904199.camel@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/23/26 04:08, Akshay Gupta wrote:
-> From: Prathima <Prathima.Lk@amd.com>
+[ ...]
+>>> +  adi,pgio1-func:
+>>> +    description: Configures the function of the PGIO1 pin.
+>>> +    $ref: /schemas/types.yaml#/definitions/string
+>>> +    enum: [inverted_power_good, power_good, gpio]
+>>> +    default: inverted_power_good
+>>> +
+>>> +  adi,pgio2-func:
+>>> +    description: Configures the function of the PGIO2 pin.
+>>> +    $ref: /schemas/types.yaml#/definitions/string
+>>> +    enum: [inverted_power_good, power_good, gpio, active_current_limiting]
+>>> +    default: inverted_power_good
+>>> +
+>>> +  adi,pgio3-func:
+>>> +    description: Configures the function of the PGIO3 pin.
+>>> +    $ref: /schemas/types.yaml#/definitions/string
+>>> +    enum: [inverted_power_good_input, power_good_input, gpio]
+>>> +    default: inverted_power_good_input
+>>> +
+>>> +  adi,pgio4-func:
+>>> +    description: Configures the function of the PGIO4 pin.
+>>> +    $ref: /schemas/types.yaml#/definitions/string
+>>> +    enum: [inverted_external_fault, external_fault, gpio]
+>>> +    default: inverted_external_fault
+>>> +
+>>> +  adi,gpio-on-adio1:
+>>> +    description: If set, the ADIO1 pin is used as a GPIO.
+>>> +    type: boolean
+>>> +
+>>> +  adi,gpio-on-adio2:
+>>> +    description: If set, the ADIO2 pin is used as a GPIO.
+>>> +    type: boolean
+>>> +
+>>> +  adi,gpio-on-adio3:
+>>> +    description: If set, the ADIO3 pin is used as a GPIO.
+>>> +    type: boolean
+>>> +
+>>> +  adi,gpio-on-adio4:
+>>> +    description: If set, the ADIO4 pin is used as a GPIO.
+>>> +    type: boolean
+>>
+>> Does this dependency block force a redundant specification of adi,pgio4-func?
+>> The default for adi,pgio4-func is inverted_external_fault, which means the
+>> default hardware state already supports external fault features.
+>> If a device tree legitimately omits adi,pgio4-func to rely on that default,
+>> will it fail schema validation here since the dependencies keyword strictly
+>> checks for the literal presence of properties without injecting defaults?
 > 
-> Move SBTSI core functionality out of the hwmon-only path and into
-> drivers/misc/amd-sbi so it can be reused by non-hwmon consumers.
-> 
-> This split prepares the driver for additional interfaces while keeping
-> hwmon support as an optional layer on top of common SBTSI core logic.
+> Fair point. I guess it will fail but the alternative is to not have any constrain at all so
+> maybe worth it to be explicit in here?
 > 
 
-This moves the driver out of hwmon space into misc/amd-sbi which,
-in my opinion, is completely unnecessary to accomplish the stated goals.
+I don't claim to understand how to define devicetree properties, but
 
-I assume this is to be able to make changes which do not follow
-the hwmon ABI and/or to bypass hwmon subsystem review, similar
-to what has been done by others.
+adi,pgio4-func = <"gpio">
 
-Obviously, I think this is a bad idea. I won't give it a NACK,
-but I won't approve (nor review) it either.
+and
 
+adi,gpio-on-adio4;
+
+seem to be equivalent to me, and omitting the first property (because
+it defaults to inverted_external_fault) would cause the second to fail.
+So either both would be necessary or none. If that is correct, what is
+the point of having the adi,gpio-on-adio4 property in the first place ?
+
+In other words, what is the difference between
+	adi,pgio4-func = <"gpio">;
+	adi,gpio-on-adio4;
+
+and
+	adi,pgio4-func = <"gpio">;
+(with no boolean property) ?
+
+Thanks,
 Guenter
 
