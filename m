@@ -1,72 +1,71 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012028.outbound.protection.outlook.com [52.101.48.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F03A138B7D2
-	for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 10:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774263387; cv=none; b=UuP/AgkuCwtCV5XGtI/vghmRvlg8+DQoQNPEfOjtk1NsOA7R5SG/KiOqr5thNbG/wR/pneVuHW81avdot4lLskOTNeKKJySlMwZu2AZzD8LMeUHGHdM/OnIQb1gKCeL736rIzQN08efaLryMTzAYMAzfiM1CTUDZZ1V+PwOHDBk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774263387; c=relaxed/simple;
-	bh=exUgN9ozvBVYjXHGO3+D7euoFahbifcZL94tiubUyaA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sNOAidyOP6hP+CZ7yHCQUHpiuq+nGWZYSmpguGXYeGDK8J5NgT7obzwJUCRi/o6o4u5tdiFxDDu6N9JkGJXLCfOgjQ0eNQ3d7bI3i4bsnuLmqI9pMvDcbnoDlNIv1kfuvHT4Vu1StN9O+hOPZjC1H2CFHduTYqnRoJf19OhaPb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AXdVSNhm; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330CC39DBE0;
+	Mon, 23 Mar 2026 11:08:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.28
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774264121; cv=fail; b=g5jKcXF8+GfQ9PMUOAfd2+bUZLkty0J4cMCgzG4cifygVg8azBYHGMWgE595O33KlOUPGc5WiObN4Ln8MN08aWyWtiRYkebxcvgaqBJx+a/0dRxy8uPS2YrQ+A8z6/Kkjge/YD4ptkRj5JtgOvHFP/BbABf11HABT/FNsBLTyLI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774264121; c=relaxed/simple;
+	bh=bBfEOox3AOZexR2NTfifuwW5hpIcgfiIsJkKWtCxM/s=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aivTUiB4F6CSZXgAE9cp/8MGsHyQGfTEWHnzC/0fSS4TZKc7PvQh7/rHX127C6/ERsjRW0lPVVID4JG8/zzCROqHWLD2ZDjGizxvNqzcHsLwqJIyKHWaYhtHkAsov0PoIsGY3InMX8d19SRRlzoRLBydUw/v4TF1qajcY7vJVEM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=uA/2N7V0; arc=fail smtp.client-ip=52.101.48.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AXdVSNhm"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-439d8dc4ae4so3528038f8f.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 03:56:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774263384; x=1774868184; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qNFMrIb7sOFleg8FVH+dkq3LR2z/UOdSzSRlRZxwf98=;
-        b=AXdVSNhmDsHYq8Fkgp0J8jLGc4BX784n9oyAEG8glk8zPlAuDmcWFSao2rQvc7Z14F
-         sMqHC1dbuimCFYHQ2tnAZ7u96YLnu2q/pmpupqIbqsyzeUBh32aZAZiQTYAuJ1CoPbh9
-         SGx5DKQ16FzlzV3c17vE20cGt1MjTWFoYZSEbw2Wt315VHYVIN8OEgYSqNQLiZn1hmOe
-         A3Agx1BzhORRq8u8iMLCYXjZtKvm0pP++iuB4V6Rv6JcWmmkMgxiRAM0LX1e+jprHZX7
-         OEMuXNQ4rSRLQ1CPbXzG+aKUPq/gxNJKqADadpz8OaMAtfBp8AwwE6hh3MQv3QOVIWOC
-         BANA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774263384; x=1774868184;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=qNFMrIb7sOFleg8FVH+dkq3LR2z/UOdSzSRlRZxwf98=;
-        b=l908DMLlEH9fUxenWUlQUtWQspJ2o9uWgYQJjaSsk0ngD+6MnTMgOX0LgOOA9a30Gv
-         A+dynFVY5BBPAhZmhzB0/HYsBUfcrjP0jOPStFNsqJfHgabXgo0mG4FTwlD2SkwSxqK1
-         Tr0zWAqSH9fcs4WyLS5SjJFu2b+PKWqSUndWykEUduGJHhvaQRQtczwypG5yuBtTQAmj
-         +isXbBLUZmI5EinHRMlUl2luGjD2NJFJs+efZxvG40a4PpkajeaTjxxZzxz8M7NVDYXo
-         IhOwgkzbEIux00FC4XwGy/5ks1qe+IWaDZhjxwUZeorwoChrYlQjFJD1UX/1y3UBsWN9
-         hRoQ==
-X-Gm-Message-State: AOJu0Yz8SK/lVy6nLroGImW5oy+RksnG/sR5XSKhuZCReCDNlLqkmcL0
-	OjTyL8lywzfnzScbUd/vt74JDoMY4GGwLLO32icuE5DHCL2C5hECGx2x8uzdWNyW
-X-Gm-Gg: ATEYQzwUx499soLqRhbyTHKbURAIRCcffpYs9DUwYk/En/D2L5/9dJekAuc0GoxNzOQ
-	yqUH9e+H7BDO/I69ONj612eNcJHk1ITwRU0+9RcCcOoSWDT53cfDiY2j7fKnB9uScUJoa6IfLNp
-	6G6zvZgLrpYFKwezpA5JTbzjjk1KWlvZWLy+dn1Cs+GkIRSCZIGSsGIDMOu1ns/t/yWDQnKipqJ
-	2jkL0V9h/eEcSeLescrJlnQhsAt+D99yEN1FVeiwoqzOnv4mzX3QMXJapBDK4qirXZoT4VK61FF
-	ZMkhzYgE5KtafdcwgrS6xRVcu8VOgIKnboZs6pjQpAn93m924jlIGizejblxIxd0YI+w7dUBw5u
-	eoxParlmoLFdjKUAzxsm2UEOzQO5VX9r30WDRSKCLL/DwPkadYeTiqU5ZDbwUOIpx5NM43H9DeT
-	POyZMkN0wGs2UScfenUNssKDxM/8E=
-X-Received: by 2002:a5d:64c6:0:b0:43b:4faf:a496 with SMTP id ffacd0b85a97d-43b64262cfbmr18167584f8f.31.1774263382466;
-        Mon, 23 Mar 2026 03:56:22 -0700 (PDT)
-Received: from sergio-82n7 ([134.255.161.117])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b644bd923sm34027860f8f.12.2026.03.23.03.56.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 03:56:22 -0700 (PDT)
-From: Sergio Melas <sergiomelas@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org,
-	sergiomelas@gmail.com
-Subject: [PATCH v5] hwmon: (yogafan) Add support for Lenovo Yoga/Legion fan monitoring
-Date: Mon, 23 Mar 2026 11:56:12 +0100
-Message-ID: <20260323105612.343381-1-sergiomelas@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <2e692427-592a-4a78-8f6b-547d506de86a@roeck-us.net>
-References: <2e692427-592a-4a78-8f6b-547d506de86a@roeck-us.net>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="uA/2N7V0"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Lmbpjo+AcPFDPvhwmBe7mYWLBlUVALZ4p03yf9RV1ald/Bc6qPwQFjFK5G12tBeRd3POGQIzueppLXp8hnWXMEYLGJmcU+gbXmDdUWSv9fY5d1DJAyHxXvNAXfcJSfdY+qQlv7LIVnFkiKNrBsJ5SON8L00ZboL5Z700A8WXzOoduvo2hipXUp0K205wfuqxezvmK36aNBQagk0gxJ6Fvwnmyf9wVXnngAxrkl05JZvBEmKYgQZaRBlK9RARKMb+0ExXM85a2qo/gXJDmK5VkMq1AUdvJR7hVYSQDss/oULbAbkn3UDKf656OStvUBGM6/wIxzeppiQ8U4PtYxUGEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dMXkDL3to6K0bIKqbg1bXf8Y9pSK6Bw0Bkde0wWXXNQ=;
+ b=LP6Blq74fe+gDslPizM5ipj8aMYFWH11e8FlUF0DDUQe5eWpJyPeUySFLDTL+Urx6J/zRD5fqN1MFdKBEPPHA13CYa9vPOMLpblAB7zDQITrVGhVNHSPqWH9EQhhJoWLL5qFgJHOyvbUjGU84Ev0YmrMY4U6kAiwtjSheL0hxxpLrRSsGhxfsC9w4DyCtLnSVRW4Dusf0Wx8IzlSl0fiyhp/H4YvAxittunJxEVVt5PPcaMu/Xlf7dTkzk9Dy2oIoOLuaS/ConXY6CsAz3rRDQ9dpi0QUBizjEzvAlKgCUnZb5slHckzXE1AxRqchtuYEZZgvBRcGJ/ZUL8O5HV6Fg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dMXkDL3to6K0bIKqbg1bXf8Y9pSK6Bw0Bkde0wWXXNQ=;
+ b=uA/2N7V06yIyE2n9PC2kSh+gOlGFHh9YFfTQG1I5odDCiZj/K5wAVRYOt0Al+7BYbwfdKs9tLTC/I9rUZ8R5O5/RVC+jPlrrfRwmzZbv3bjQyy8gYcHJQaNrGbzKZdioMkg6pRlTUx6Y2M8g9r1w0W8Nj4R6YphPJLb6Tmy4DlU=
+Received: from MN2PR08CA0023.namprd08.prod.outlook.com (2603:10b6:208:239::28)
+ by SA3PR12MB7921.namprd12.prod.outlook.com (2603:10b6:806:320::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.9; Mon, 23 Mar
+ 2026 11:08:37 +0000
+Received: from BN2PEPF00004FBF.namprd04.prod.outlook.com
+ (2603:10b6:208:239:cafe::45) by MN2PR08CA0023.outlook.office365.com
+ (2603:10b6:208:239::28) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9723.31 via Frontend Transport; Mon,
+ 23 Mar 2026 11:08:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
+Received: from satlexmb08.amd.com (165.204.84.17) by
+ BN2PEPF00004FBF.mail.protection.outlook.com (10.167.243.185) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9723.19 via Frontend Transport; Mon, 23 Mar 2026 11:08:36 +0000
+Received: from dcsm-trdripper1.amd.com (10.180.168.240) by satlexmb08.amd.com
+ (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Mon, 23 Mar
+ 2026 06:08:32 -0500
+From: Akshay Gupta <Akshay.Gupta@amd.com>
+To: <linux-kernel@vger.kernel.org>
+CC: <corbet@lwn.net>, <skhan@linuxfoundation.org>, <linux@roeck-us.net>,
+	<arnd@arndb.de>, <gregkh@linuxfoundation.org>, <akshay.gupta@amd.com>,
+	<Prathima.Lk@amd.com>, <naveenkrishna.chatradhi@amd.com>,
+	<Anand.Umarji@amd.com>, <linux-doc@vger.kernel.org>,
+	<linux-hwmon@vger.kernel.org>, <kunyi@google.com>, Akshay Gupta
+	<Akshay.Gupta@amd.com>
+Subject: [PATCH v1 0/6] misc: amd-sbi: Refactor SBTSI driver with I3C support and ioctl interface
+Date: Mon, 23 Mar 2026 16:38:05 +0530
+Message-ID: <20260323110811.2898997-1-Akshay.Gupta@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -74,334 +73,114 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: satlexmb07.amd.com (10.181.42.216) To satlexmb08.amd.com
+ (10.181.42.217)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN2PEPF00004FBF:EE_|SA3PR12MB7921:EE_
+X-MS-Office365-Filtering-Correlation-Id: 77ccd610-7d68-4c0f-c45d-08de88cc87e5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|36860700016|376014|1800799024|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	DNmG52uK8gvj6w2Saa6dF91n8T03uyfiJ0IJu9DvKjG605rcfUy2IAqZ7pL4Q1aeCYvKSsqAPPUUmdpXLcF3tJ4S62neGZjI8rppXCyKJCDs/9mTaYjwvwUjSE9pWcdbPces2j0kW+qgfICp7a8HTBM/UfXbUdCMoVEY93dKiLZoXIa+Wer++NOkMRtBwPowM6ObN0ndIf0lKwxA50nzR1nzPk5mPz7qAMbr0nWQiUhpZIWXdzIJJfTWDRypxtpW6DtY6YxGSEBaE5ZvLfCEwtWIDataMOUaTbh4RX5DgqB0XKC/RFkQI/COtQ/UmQhfcSszwqLC4Flvc20Gx1oceMozod1UcPl4E629BZvUP4CiOe8I+9hZhR32rrKv5esGVsmvycb+rNPaV0M8S1p2RaLhCADs75qd6icamYVR3Cb0r2ckw2gt6UCylfGXCZLAuuNyiQNHWUTNE7A2C4ufCDSzSH4daUNS00HLMc1mD3lK8rymQxjzV6fVnZ25JYekTKsnNUTpdo8DCQevvg26ca2tDkrrH67MOQwmf6zWZSx9QhauEfRw3PzhDMsUETXwaUyPodTYHmTiEHQByEaAaGJMCcmEMNGwUD8sreVo+hNndOoN9kOELuPOOfPHVkM6rq9JCwAujTDLjlcxuqLN6hQjy/3EkctTVnKBt303T9QEfvZTGlOABnNuicsctcrRW2O1/swAUQxPk62JuiluVjVULAVj3ACFF9wy39QvL5wGHWFmt3e52eey6xR1mud+ecNCuBWWR1Ev+Vb+uu2tUg==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(36860700016)(376014)(1800799024)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	624zbFgaaohBlzNIwhKVDn2/lrWprxMFHTFGl1KCDTd2BfaJYRFPdjaG1oCPg6O9SplvIPDdMpbVJRtObYKpHaV7E9++2HWLk3Q846Y4EJvhBfcoteWYPxsLXnFLvW8BLSjCfLKZiC+qG5ubrmozmrhIhhaXQKbbaIkRFziKYxQjNzTJ7k+3Ez5QfVvLgLIhjjh9TFZkS9reN+xCwEmOpwAVH3WiKx8XQc2AQ0bExdEjPY3d+rsxK7TH12IG8oRyy2Ka6DdNiPZCTkTu2FjnS2utX7P+fQeG6ox+0Hgh39xfAKR4m7uwYfbfWK7AxRoI1Mh3SkA18TSnZYMn3J0LTlAUqdjWiOrwkyBEyrI7FzDGY7zNKGYYYpjjK6Z4LM3YIp2VqkJEACToKJoC+qjnrykQ2g/TKMa9XS/JxHzPk6KJor0ISMMsUq8WD6802TWm
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2026 11:08:36.7455
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 77ccd610-7d68-4c0f-c45d-08de88cc87e5
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb08.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN2PEPF00004FBF.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB7921
 
-This driver provides fan speed monitoring for modern Lenovo Yoga,
-Legion, and IdeaPad laptops. It interfaces with the Embedded
-Controller (EC) via ACPI to retrieve tachometer data.
+This series refactors the AMD SB-TSI (Side-Band Temperature Sensor
+Interface) driver by moving it from the hwmon subsystem into the
+drivers/misc/amd-sbi framework, alongside the existing SB-RMI driver.
 
-To address low-resolution sampling in the Lenovo EC firmware, the
-driver implements a Rate-Limited Lag (RLLag) filter using a passive
-discrete-time first-order model. This ensures physical consistency
-of the RPM signal regardless of userspace polling rates.
+Background:
+The SB-TSI driver currently lives under drivers/hwmon/sbtsi_temp.c and
+is limited to exposing temperature readings via the hwmon interface.
+As AMD platforms evolve, SB-TSI access is required from multiple
+consumers (hwmon, userspace via ioctl, I3C-attached devices), making
+the hwmon-only placement insufficient.
 
-Signed-off-by: Sergio Melas <sergiomelas@gmail.com>
+This series restructures the driver into a layered design:
 
----
-v5:
-  - Fixed 32-bit build failures by using div64_s64 for 64-bit division.
-  - Extracted magic numbers into constants (RPM_UNIT_THRESHOLD, etc.).
-  - Fixed filter stall by ensuring a minimum slew limit (limit = 1).
-  - Refined RPM floor logic to trigger only when hardware reports 0 RPM.
-  - Resolved 255/256 unit-jump bug by adjusting heuristic thresholds.
-  - Rebased on groeck/hwmon-next branch for clean application.
-v4:
-  - Rebased on groeck/hwmon-next branch for clean application.
-  - Corrected alphabetical sorting in Kconfig and Makefile.
-  - Technical Validation & FOPTD Verification:
-    - Implemented RLLag (Rate-Limited Lag) first-order modeling.
-    - Used 10-bit fixed-point math for alpha calculation to avoid 
-      floating point overhead in the kernel.
-    - Added 5000ms filter reset for resume/long-polling sanitation.
-v3:
-  - Added MAINTAINERS entry and full Documentation/hwmon/yogafan.rst.
-  - Fixed integer overflow in filter math.
-  - Added support for secondary fan paths (FA2S) for Legion laptops.
-v2:
-  - Migrated from background worker to passive multirate filtering.
-  - Implemented dt-based scaling to maximize CPU sleep states.
-  - Restricted driver to Lenovo hardware via DMI matching.
-v1:
-  - Initial submission with basic ACPI fan path support.
----
- MAINTAINERS             |   6 ++
- drivers/hwmon/Kconfig   |  11 ++
- drivers/hwmon/Makefile  |   1 +
- drivers/hwmon/yogafan.c | 225 ++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 243 insertions(+)
- create mode 100644 drivers/hwmon/yogafan.c
+  - tsi-core.c  : core register access and ioctl/miscdevice support
+  - tsi-hwmon.c : hwmon sensor layer built on top of the core
+  - tsi.c       : I2C/I3C probe and glue
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 830c6f076b00..9167f3d4f243 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14873,6 +14873,12 @@ W:	https://linuxtv.org
- Q:	http://patchwork.linuxtv.org/project/linux-media/list/
- F:	drivers/media/usb/dvb-usb-v2/lmedm04*
- 
-+LNVYOGAFAN HARDWARE MONITORING DRIVER
-+M:	Sergio Melas <sergiomelas@gmail.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	drivers/hwmon/yogafan.c
-+
- LOADPIN SECURITY MODULE
- M:	Kees Cook <kees@kernel.org>
- S:	Supported
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 7dd8381ba0d0..5f6f65dea155 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -2653,6 +2653,17 @@ config SENSORS_XGENE
- 	  If you say yes here you get support for the temperature
- 	  and power sensors for APM X-Gene SoC.
- 
-+config SENSORS_YOGAFAN
-+	tristate "Lenovo Yoga/Legion Fan Hardware Monitoring"
-+	depends on ACPI && HWMON
-+	help
-+	  If you say yes here you get support for fan speed monitoring
-+	  on modern Lenovo Yoga and Legion laptops.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called yogafan.
-+
-+
- config SENSORS_INTEL_M10_BMC_HWMON
- 	tristate "Intel MAX10 BMC Hardware Monitoring"
- 	depends on MFD_INTEL_M10_BMC_CORE
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 556e86d277b1..0fce31b43eb1 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -245,6 +245,7 @@ obj-$(CONFIG_SENSORS_W83L786NG)	+= w83l786ng.o
- obj-$(CONFIG_SENSORS_WM831X)	+= wm831x-hwmon.o
- obj-$(CONFIG_SENSORS_WM8350)	+= wm8350-hwmon.o
- obj-$(CONFIG_SENSORS_XGENE)	+= xgene-hwmon.o
-+obj-$(CONFIG_SENSORS_YOGAFAN)	+= yogafan.o
- 
- obj-$(CONFIG_SENSORS_OCC)	+= occ/
- obj-$(CONFIG_SENSORS_PECI)	+= peci/
-diff --git a/drivers/hwmon/yogafan.c b/drivers/hwmon/yogafan.c
-new file mode 100644
-index 000000000000..92158fe47a98
---- /dev/null
-+++ b/drivers/hwmon/yogafan.c
-@@ -0,0 +1,225 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/**
-+ * yoga_fan.c - Lenovo Yoga/Legion Fan Hardware Monitoring Driver
-+ *
-+ * Provides fan speed monitoring for Lenovo Yoga, Legion, and IdeaPad
-+ * laptops by interfacing with the Embedded Controller (EC) via ACPI.
-+ *
-+ * The driver implements a passive discrete-time first-order lag filter
-+ * with slew-rate limiting (RLLag). This addresses low-resolution
-+ * tachometer sampling in the EC by smoothing RPM readings based on
-+ * the time delta (dt) between userspace requests, ensuring physical
-+ * consistency without background task overhead or race conditions.
-+ * The filter implements multirate filtering with autoreset in case
-+ * of large sampling time.
-+ *
-+ * Copyright (C) 2021-2026 Sergio Melas <sergiomelas@gmail.com>
-+ */
-+#include <linux/acpi.h>
-+#include <linux/dmi.h>
-+#include <linux/err.h>
-+#include <linux/hwmon.h>
-+#include <linux/init.h>
-+#include <linux/ktime.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+/* Driver Configuration Constants */
-+#define DRVNAME "yogafan"
-+#define MAX_FANS 8
-+/* Filter Configuration Constants */
-+#define TAU_MS          3000    /* Time constant for the first-order lag (ms) */
-+#define MAX_SLEW_RPM_S  100     /* Maximum allowed change in RPM per second */
-+#define MAX_SAMPLING    5000    /* Maximum allowed Ts for reset (ms) */
-+/* RPM Heuristic and Sanitation Constants */
-+#define RPM_UNIT_THRESHOLD 500  /* Values below this treated as units of 100 */
-+#define RPM_UNIT_MULT      100  /* Multiplier for low-res EC readings */
-+#define RPM_FLOOR_LIMIT    50   /* Snap filtered value to 0 if raw is 0 */
-+
-+struct yoga_fan_data {
-+	const char *active_paths[MAX_FANS];
-+	long filtered_val[MAX_FANS];
-+	ktime_t last_update[MAX_FANS];
-+	int fan_count;
-+};
-+/**
-+ * apply_rllag_filter - Discrete-time filter update (Passive Multirate)
-+ * @data: pointer to driver data
-+ * @idx: fan index
-+ * @raw_rpm: new raw value from ACPI
-+ */
-+static void apply_rllag_filter(struct yoga_fan_data *data, int idx, long raw_rpm)
-+{
-+	ktime_t now = ktime_get();
-+	s64 dt_ms;
-+	long delta, step, limit, alpha;
-+	s64 temp_num;
-+
-+	if (data->last_update[idx] == 0) {
-+		data->filtered_val[idx] = raw_rpm;
-+		data->last_update[idx] = now;
-+		return;
-+	}
-+	dt_ms = ktime_to_ms(ktime_sub(now, data->last_update[idx]));
-+	if (dt_ms > MAX_SAMPLING) {
-+		data->filtered_val[idx] = raw_rpm;
-+		data->last_update[idx] = now;
-+		return;
-+	}
-+	if (dt_ms < 1)
-+		return;
-+	delta = raw_rpm - data->filtered_val[idx];
-+	/* Use div64_s64 for 32-bit compatibility (Alpha = dt / (Tau + dt)) */
-+	temp_num = dt_ms << 10;
-+	alpha = (long)div64_s64(temp_num, (s64)(TAU_MS + dt_ms));
-+	step = (delta * alpha) >> 10;
-+	/* Fix the stall: Ensure limit is at least 1 if delta exists */
-+	limit = (MAX_SLEW_RPM_S * (long)dt_ms) / 1000;
-+	if (limit == 0 && delta != 0)
-+		limit = 1;
-+	if (step > limit)
-+		step = limit;
-+	else if (step < -limit)
-+		step = -limit;
-+	data->filtered_val[idx] += step;
-+	/* Sanitation: Floor logic triggered only when hardware reports 0 */
-+	if (data->filtered_val[idx] < RPM_FLOOR_LIMIT && raw_rpm == 0)
-+		data->filtered_val[idx] = 0;
-+	data->last_update[idx] = now;
-+}
-+
-+static int yoga_fan_read(struct device *dev, enum hwmon_sensor_types type,
-+			 u32 attr, int channel, long *val)
-+{
-+	struct yoga_fan_data *data = dev_get_drvdata(dev);
-+	unsigned long long raw_acpi;
-+	acpi_status status;
-+	long rpm;
-+
-+	if (type != hwmon_fan || attr != hwmon_fan_input)
-+		return -EOPNOTSUPP;
-+	status = acpi_evaluate_integer(NULL, (acpi_string)data->active_paths[channel],
-+					NULL, &raw_acpi);
-+	if (ACPI_FAILURE(status))
-+		return -EIO;
-+	/* * Heuristic: Convert units-of-100 to raw RPM.
-+	 * Most Yoga/Legion ECs return a single byte (0-255).
-+	 * We use 500 as a safety threshold to distinguish from raw 16-bit RPM.
-+	 */
-+	rpm = (long)raw_acpi;
-+	if (rpm > 0 && rpm < RPM_UNIT_THRESHOLD)
-+		rpm *= RPM_UNIT_MULT;
-+	apply_rllag_filter(data, channel, rpm);
-+	*val = data->filtered_val[channel];
-+	return 0;
-+}
-+
-+static umode_t yoga_fan_is_visible(const void *data, enum hwmon_sensor_types type,
-+				   u32 attr, int channel)
-+{
-+	const struct yoga_fan_data *fan_data = data;
-+
-+	if (type == hwmon_fan && channel < fan_data->fan_count)
-+		return 0444;
-+	return 0;
-+}
-+
-+static const struct hwmon_ops yoga_fan_hwmon_ops = {
-+	.is_visible = yoga_fan_is_visible,
-+	.read = yoga_fan_read,
-+};
-+
-+static const struct hwmon_channel_info *yoga_fan_info[] = {
-+	HWMON_CHANNEL_INFO(fan,
-+			   HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT,
-+			   HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT),
-+	NULL
-+};
-+
-+static const struct hwmon_chip_info yoga_fan_chip_info = {
-+	.ops = &yoga_fan_hwmon_ops,
-+	.info = yoga_fan_info,
-+};
-+
-+static int yoga_fan_probe(struct platform_device *pdev)
-+{
-+	struct yoga_fan_data *data;
-+	struct device *hwmon_dev;
-+	acpi_handle handle;
-+	int i;
-+	static const char * const fan_paths[] = {
-+		"\\_SB.PCI0.LPC0.EC0.FANS",  /* Primary Fan (Yoga 14c) */
-+		"\\_SB.PCI0.LPC0.EC0.FA2S",  /* Secondary Fan (Legion) */
-+		"\\_SB.PCI0.LPC0.EC0.FAN0",  /* IdeaPad / Slim */
-+		"\\_SB.PCI0.LPC.EC.FAN0",    /* Legacy */
-+		"\\_SB.PCI0.LPC0.EC.FAN0",   /* Alternate */
-+	};
-+	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+	data->fan_count = 0;
-+	for (i = 0; i < ARRAY_SIZE(fan_paths); i++) {
-+		if (ACPI_SUCCESS(acpi_get_handle(NULL, (char *)fan_paths[i], &handle))) {
-+			data->active_paths[data->fan_count] = fan_paths[i];
-+			data->fan_count++;
-+			if (data->fan_count >= MAX_FANS)
-+				break;
-+		}
-+	}
-+
-+	if (data->fan_count == 0)
-+		return -ENODEV;
-+	platform_set_drvdata(pdev, data);
-+	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev, DRVNAME,
-+							 data, &yoga_fan_chip_info, NULL);
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
-+}
-+
-+static struct platform_driver yoga_fan_driver = {
-+	.driver = {
-+		.name = DRVNAME,
-+	},
-+	.probe = yoga_fan_probe,
-+};
-+
-+static struct platform_device *yoga_fan_device;
-+
-+static const struct dmi_system_id yoga_dmi_table[] __initconst = {
-+	{
-+		.ident = "Lenovo",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+		},
-+	},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(dmi, yoga_dmi_table);
-+
-+static int __init yoga_fan_init(void)
-+{
-+	int ret;
-+
-+	if (!dmi_check_system(yoga_dmi_table))
-+		return -ENODEV;
-+	ret = platform_driver_register(&yoga_fan_driver);
-+	if (ret)
-+		return ret;
-+	yoga_fan_device = platform_device_register_simple(DRVNAME, 0, NULL, 0);
-+	if (IS_ERR(yoga_fan_device)) {
-+		platform_driver_unregister(&yoga_fan_driver);
-+		return PTR_ERR(yoga_fan_device);
-+	}
-+	return 0;
-+}
-+
-+static void __exit yoga_fan_exit(void)
-+{
-+	platform_device_unregister(yoga_fan_device);
-+	platform_driver_unregister(&yoga_fan_driver);
-+}
-+
-+module_init(yoga_fan_init);
-+module_exit(yoga_fan_exit);
-+MODULE_AUTHOR("Sergio Melas <sergiomelas@gmail.com>");
-+MODULE_DESCRIPTION("Lenovo Yoga/Legion Fan Monitor Driver");
-+MODULE_LICENSE("GPL");
+Changes in this series:
+1. Move core SBTSI driver from drivers/hwmon into drivers/misc/amd-sbi,
+   renaming sbtsi_temp.c -> sbtsi.c and wiring it into the amd-sbi
+   Kconfig/Makefile. The hwmon probe entry point is preserved so
+   existing device-tree bindings and hwmon consumers are unaffected.
+
+2. Update the Kconfig entry to explicitly state that the driver targets
+   BMC-side I2C/I3C controllers (ARM/ARM64), avoiding accidental
+   enablement on non-BMC targets.
+
+3. Split the hwmon sensor handling (sysfs attributes, hwmon_chip_info)
+   into tsi-hwmon.c so the core transport layer is not entangled with
+   hwmon internals, making future interface additions cleaner.
+
+4. Extend the driver to support SB-TSI over I3C in addition to I2C.
+   Both buses share the same core read/write path via sbtsi_xfer();
+   the is_i3c flag selects the underlying transport at probe time.
+   Backward compatibility with existing I2C deployments is maintained.
+
+5. Add a miscdevice (/dev/sbtsi-<addr>) and an ioctl interface
+   (SBTSI_IOCTL_REG_XFER_CMD) that allows root userspace to perform
+   SB-TSI register read/write operations through the APML protocol,
+   consistent with the existing SBRMI ioctl interface.
+
+6. Document the new SBTSI miscdevice and its ioctl in
+   Documentation/misc-devices/amd-sbi.rst.
+
+Testing:
+Tested on AMD Genoa/Turin/Venice BMC platforms with both I2C and I3C-attached
+SB-TSI targets. hwmon sysfs attributes (tempX_input, tempX_max, etc.)
+and ioctl register transfers verified against hardware.
+
+Akshay Gupta (1):
+  misc: amd-sbi: Update SBTSI Kconfig to clarify this is BMC driver
+
+Prathima (5):
+  hwmon/misc: amd-sbi: Move core SBTSI support from hwmon to misc
+  misc: amd-sbi: Split SBTSI hwmon sensor handling into a separate
+    entity
+  misc: amd-sbi: Add support for SB-TSI over I3C
+  misc: amd-sbi: Add SBTSI ioctl register transfer interface
+  docs: misc: amd-sbi: Document SBTSI userspace interface
+
+ Documentation/misc-devices/amd-sbi.rst |  18 ++
+ drivers/hwmon/Kconfig                  |  10 -
+ drivers/hwmon/Makefile                 |   1 -
+ drivers/hwmon/sbtsi_temp.c             | 250 -------------------------
+ drivers/misc/amd-sbi/Kconfig           |  24 +++
+ drivers/misc/amd-sbi/Makefile          |   4 +
+ drivers/misc/amd-sbi/tsi-core.c        | 146 +++++++++++++++
+ drivers/misc/amd-sbi/tsi-core.h        |  44 +++++
+ drivers/misc/amd-sbi/tsi-hwmon.c       | 198 ++++++++++++++++++++
+ drivers/misc/amd-sbi/tsi.c             | 162 ++++++++++++++++
+ include/uapi/misc/amd-apml.h           |  23 +++
+ 11 files changed, 619 insertions(+), 261 deletions(-)
+ delete mode 100644 drivers/hwmon/sbtsi_temp.c
+ create mode 100644 drivers/misc/amd-sbi/tsi-core.c
+ create mode 100644 drivers/misc/amd-sbi/tsi-core.h
+ create mode 100644 drivers/misc/amd-sbi/tsi-hwmon.c
+ create mode 100644 drivers/misc/amd-sbi/tsi.c
+
 -- 
-2.53.0
+2.34.1
 
