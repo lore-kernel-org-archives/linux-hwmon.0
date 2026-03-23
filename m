@@ -1,67 +1,67 @@
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CFC1387593
-	for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 14:43:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8DAC238C1B
+	for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 14:45:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774277031; cv=none; b=hR87pq+29kvpsxHMFRv/0PtxqM5505WpWIEybMJnSG2OJeC+l3D3ao6NFIRWvnpvbvoMVTqfalID4Sj9esEPNAmi5PBagushukIyy6y+qnZ7SKRacecLxKY2fOBzt7H58OJPOCpWrztrpDBzTfnLSrD37cSuFu51zAPhy/cw89w=
+	t=1774277142; cv=none; b=HXt6+qjl8E1FMfgAx9ZnXapYL5LNTjoDr17v80HT65ItkqwEBJa97EWLSCVuLFtMVH7/DBEVyn+vCimwBkSSry/vaepEiLu/Q5+A/E94UCKAgrp+7s9pR+79/jlIr+XHb2wRlpg900/DNMKXy4FbMiDRlQ17tyzbk98llfn6cz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774277031; c=relaxed/simple;
-	bh=TjnRYqm+07dz1JIPm25P3R4cWx82uCOBLAu76ZxLyi0=;
+	s=arc-20240116; t=1774277142; c=relaxed/simple;
+	bh=Btw1c2HBNOjynBg9HMKRXHEjIeWm2xGVPfJB65Us2d8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NrzJybUWCc64qMmurTJhe7CIkiSe1rF9Ou7iYvmRqf33Qdo2F8YNe3RqruGEXVutnaAOLpd0LWXhbq0dwCmcOChro2jXG+7lpNRuVWYG27wBgxEyD9D22aB+ekzX9E4v7YNeN/LRUqdv5k1vQVg+K8MmEwwhJwXZOvUF6Vh7KrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TwLMrotW; arc=none smtp.client-ip=74.125.82.53
+	 In-Reply-To:Content-Type; b=qmUnVdqk0w5TArHHind1z+AfM1fFjAnLBHt6hN2orHjQ9f4Ys+6m6lENo0c6YSk2SwA84Fc3N1XFrbuyAbiaao5aw0QGDEgtQeioypOuAwJ+8oHwYxMnOC4MVih7PvDbZFqDDVM0UdI4JrxR1/UtdhcOUX8eMQuZgby9oEyyR8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fqfN0Rh7; arc=none smtp.client-ip=74.125.82.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TwLMrotW"
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-1271257ae53so232309c88.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 07:43:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fqfN0Rh7"
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2c10a2e2cd1so2617222eec.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 07:45:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774277030; x=1774881830; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1774277140; x=1774881940; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mw89EmH8qUZwnDDKLdU6WpDiI5F4oXbKdFeBF7Ff7+U=;
-        b=TwLMrotW3myMLfFGJSG13fjjpfaRDuXSdFuAEUJX/vmi7BR/DKudjNteOmtgvdS5nC
-         PyFsc05VjToM6ue0SIKiiSW7U553IJF65Wj7lHR+O7xEVkMzDKoxHpwPl9qoIo+/1JPT
-         /eRovJ3QszJzi7Cc7ZJOkpe0tdtzbxs0ctsUqDd5edmVYGqQiS3er8Dwjb5VD3dFYAd1
-         GrpzQgnsBdoDR0C/qofAZwOVSgwwnlXtBh9xcZ2LoQW4rFvb4A7EOHTua7PuVvHhUcXR
-         gkCZRK+LK7XlXWMtyLlfOG8fp59QRGbT0S0Owv5guK54x/MIIsVEEe1O2Yx9UPwB32UL
-         nJrg==
+        bh=I+oWMSCKxMSzMwfiT72a6Og/7ntIqLA0/09brtyvtUs=;
+        b=fqfN0Rh7Tb/VxDt08+L2oHEOl/thL5w89e5GssIa/BvSQEZFSWTeXng/1MZUy4pkBi
+         G5RlLDQRSX0OUzfuM8KvBgnFsQB80I6O6F6LS1ppIDkngvsF1UiKZYmpT3SmeXHnBNCm
+         PEPiNKj08J9PTEFlMIx4MiUtO93Ct+QyRmiaTWrxhKglxiH7TS01M+b64nzY2M6LW7CX
+         pQ9Hhq4kMyrv0F/tSVCzYZ8voA0Cgp1KybD1nXgz55FNCwLDDJ6a/6Y7JMqvpsBrnkfS
+         /LBHQrbUOWJozrHUQo1VMIFurfzKGEwvIbfDeO9ywedwhkDDRs0O6/Fou7GsJfmGPZu1
+         fY2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774277030; x=1774881830;
+        d=1e100.net; s=20251104; t=1774277140; x=1774881940;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Mw89EmH8qUZwnDDKLdU6WpDiI5F4oXbKdFeBF7Ff7+U=;
-        b=q7HW2/NqTxXMj0hpt9INlKKN831RBQCE9KUVfjBpDozamRHDMu+rqw8kEt4L38EBtA
-         AJ2CaAKrrlRfk622u94bhL2khsl1H+mcIAKIcAp8p3UlsjTlPAN5y0clqvDXyI1+GzuW
-         ndZtGPtKZoNXHTsIGTyUIxcRNM7geEo6rWT5Tdn/gFO2uuMOmqj5NjgdGJCtlCeia6GZ
-         fwSKxjdlQPkJEFOK+rSMK98OsHORnjDgkcMy3cgZbZz8Ebpi1ps8keJx4DN/lTUrj08F
-         U5k33Q/fXxwX053fDGgL7sRUJXPa+J/r2v7MH9r8EE9u9Nt7LeHoazclYvRMKFh0ujj2
-         drOA==
-X-Forwarded-Encrypted: i=1; AJvYcCW1sHnsWZLfy79jgVJXGPAASf3jWA4WNT/lYnPgeZ/V4e5SXYMqAkxCtSo0C++5z+kcFMhjECLJKJhkJw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyiJsI6dgoOLZjD/VXhjXAM/ZHh+Hkv1gwYH5bgsrVeRt/swf9i
-	DSRJO/s257gqPJrkW2PhUUSKYFJOVeih2X5NP4P/VxRQomBOM21guA9Q
-X-Gm-Gg: ATEYQzwQqO/HiepF5aw2Lkg0+q2xD8k8VzFd7R4rCLzaOijNei8ewVDHbbF/HyoMHby
-	D+2JP5AADFr7cJwgy1/6IHfRFsbixjU4JFCoAg26BtWSIAQEBUwjBi9BFGwsXUWg8hMfjEHXOrh
-	apMZatETKEEUoEHi43KoHvHYAtnGiRsxFIiS3Mod0h1dUwvnqHrpcunjQ4MqHE6Wad7Pbn5QYYZ
-	Rh00lVTpfMC57CdX6Ocn0itBvtCm7phM7h7J8QOHT5Wa91QayDKtVRuPAFB0fwGQOKumVMqXXnH
-	mZPIOgMhv7UwkByDVwaAxPqQlK5X+eCvDsdMcqRclBTQOccwuj5ravtYjAEWEJVDx/9EKWAQjCz
-	cXVXAMYcBLQvLsdDRS102+8eakDKddWJcFokIQBk0J4MA7tYVFRAqeoUkx+qUk1r9OBBK7lKGcp
-	seTpcsz4J6DHyxIEvlfKoV668eHeouQKPZa6f42UT28q7adKmjsT+vz3ejMg1n7rkmYCLbwcf/
-X-Received: by 2002:a05:7022:327:b0:127:5cd6:fa45 with SMTP id a92af1059eb24-12a72684c44mr5788964c88.14.1774277029439;
-        Mon, 23 Mar 2026 07:43:49 -0700 (PDT)
+        bh=I+oWMSCKxMSzMwfiT72a6Og/7ntIqLA0/09brtyvtUs=;
+        b=E7iarR4uGYUpFPLbL5iWxFSecR5YEYHpedORp844X4d16SU2pkZqIra652XjNRdz3n
+         iL2WB6Xs11w2PvSdIe7m6nVpp1OZGYsN7rnnhUfVgUFOME7EjdZRGt6FRhdx5+IRMii5
+         kBv2c0wxV2kL2iCsAjDVBNQcOTJNiJRgg8vxDr2DzoXMOCHOqit26s6XNyKvBKqSvAXS
+         oFH0trLshZwlDP4ODD5htVLDzdYd+oUyTiNXN9/jMV4uw3NjPXx4rPDraHNFu48YNj9r
+         nb/jbc6WoDThDNaeDghHHTp/nR0WTWz7cCQMUfO421XXz3BP4Qvz51ulZJLeR/1VNQO4
+         cvIg==
+X-Forwarded-Encrypted: i=1; AJvYcCUxsiSU+tdnanZ7G4Rl9d0RdaXLTqrxavATd8EaMANxYASxaR0F5//AQdkGRooLlPDcAu8NKWAs4TsClw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxN4yuGHeDVUZSnDVa9TTHoeKVZLxyYMDft65cJDjO5PiaaCpbJ
+	8MOUbOY0hck6BWb20eQw7mZJ6VklWGliJjGItjPjnZ26XkQVVd5KbwGq
+X-Gm-Gg: ATEYQzypIgjcQgqPeOIZjAlEw2Wp2DgZVuj/2t//FFVYp43u7by+B5AjMRCXv/HzHL3
+	FpI6hENNcSKx9djMGlgzSYxrsow+ydkV90sTR46FGSG2FBN4kR8dySbH4ScAZlYEaS6PH4fpz/Q
+	rz7G7L5zI+ChV1e8OxMxsrI8K14SnN0uD2u9I1hARO93NVNsUsTQ94IhNpFLpt7PQaJC0ILpy+y
+	Xp25rA+ytyoo59ge41xmRiF0hbmdCKUfrP4JcLBSj253udGSWU4+ZzRi/EBPtI+g7Yb9KfCdIjs
+	lW/C27HzIvO06YTdHUxkouQ7jf6OfvAVUIgJHAhrmy/IOcIroYDJ9b8+gvMv+hGgUyeNAD8rVK8
+	VJf5wGEx9tvh7w1iobfLu85z/dypstBWfQonMtxIL1G99eeNwHFfFLD0xa0hwJ6mXhVWmThwMw0
+	ZeW7PPBtY/dljpAYs3RH3cyzIuygSQ+2N5A6hbnIGCtQmURbi091OaYOd26sNVDr09zl1SaY+3
+X-Received: by 2002:a05:7300:a883:b0:2c0:fec3:fcff with SMTP id 5a478bee46e88-2c109712ae0mr5271934eec.17.1774277140029;
+        Mon, 23 Mar 2026 07:45:40 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12a733e794esm9375194c88.6.2026.03.23.07.43.48
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b29d28csm15457195eec.19.2026.03.23.07.45.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Mar 2026 07:43:48 -0700 (PDT)
+        Mon, 23 Mar 2026 07:45:39 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <72ba643e-c716-4332-bff0-f9d12add0cc6@roeck-us.net>
-Date: Mon, 23 Mar 2026 07:43:47 -0700
+Message-ID: <696f0e32-5deb-401c-9b98-830c6bfdeca6@roeck-us.net>
+Date: Mon, 23 Mar 2026 07:45:38 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,19 +69,21 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: emc2305: Add
- fan-shutdown-percent property
-To: Daniel Baluta <daniel.baluta@oss.nxp.com>, florin.leotescu@oss.nxp.com,
+Subject: Re: [PATCH v2 6/7] dt-bindings: watchdog: Drop SMARC-sAM67 support
+To: Michael Walle <mwalle@kernel.org>, Nishanth Menon <nm@ti.com>,
+ Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Michael Shych <michaelsh@nvidia.com>,
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: daniel.baluta@nxp.com, viorel.suman@nxp.com,
- linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
- festevam@gmail.com, Florin Leotescu <florin.leotescu@nxp.com>
-References: <20260320152959.1575978-1-florin.leotescu@oss.nxp.com>
- <20260320152959.1575978-2-florin.leotescu@oss.nxp.com>
- <8a8d2991-cd85-4aed-a7ef-a90b0cd10fbd@oss.nxp.com>
+ Conor Dooley <conor+dt@kernel.org>, Srinivas Kandagatla <srini@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, linux-doc@vger.kernel.org,
+ Conor Dooley <conor.dooley@microchip.com>
+References: <20260302122540.1377444-1-mwalle@kernel.org>
+ <20260302122540.1377444-7-mwalle@kernel.org>
+ <f124b200-09e3-4e73-a100-f47007732e8f@roeck-us.net>
+ <DHA13HM1GIJW.1E7XCMY349JX7@kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -127,55 +129,33 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <8a8d2991-cd85-4aed-a7ef-a90b0cd10fbd@oss.nxp.com>
+In-Reply-To: <DHA13HM1GIJW.1E7XCMY349JX7@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 3/23/26 02:10, Daniel Baluta wrote:
-> On 3/20/26 17:29, florin.leotescu@oss.nxp.com wrote:
->> From: Florin Leotescu <florin.leotescu@nxp.com>
+On 3/23/26 01:45, Michael Walle wrote:
+> Hi,
+> 
+> On Mon Mar 2, 2026 at 4:01 PM CET, Guenter Roeck wrote:
+>> On 3/2/26 04:24, Michael Walle wrote:
+>>> I was just informed that this product is discontinued (without being
+>>> ever released to the market). Pull the plug and let's not waste any more
+>>> maintainers time and revert commit 354f31e9d2a3 ("dt-bindings: watchdog:
+>>> Add SMARC-sAM67 support").
+>>>
+>>> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+>>> Signed-off-by: Michael Walle <mwalle@kernel.org>
 >>
->> The EMC2305 fan controller supports multiple independent PWM fan
->> outputs. Some systems require fans to enter a defined safe state
->> during system shutdown or reboot handoff, until firmware or the next
->> boot stage reconfigures the controller.
->>
->> Add an optional "fan-shutdown-percent" property to fan child nodes
->> allowing the shutdown fan speed to be configured per fan output.
->>
->> Signed-off-by: Florin Leotescu <florin.leotescu@nxp.com>
->> ---
->>   .../devicetree/bindings/hwmon/microchip,emc2305.yaml      | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
->> index d3f06ebc19fa..7bcadfab9fc4 100644
->> --- a/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
->> +++ b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
->> @@ -54,6 +54,12 @@ patternProperties:
->>             The fan number used to determine the associated PWM channel.
->>           maxItems: 1
->>   
->> +      fan-shutdown-percent:
->> +        description:
->> +          Fan RPM in percent set during shutdown.
-> AI review suggests to update description to 'Fan speed percent' or 'PWM duty cycle in percent'. This could be an easy update.
-> More important question here is how should we proceed with the following observation:
+>> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 > 
-> "fan-shutdown-percent property is already defined identically in pwm-fan.yaml."
+> Everything expect this patch was picked up. Guenter, do you want to
+> take it, or should it go through the TI SoC queue?
 > 
-> Guenter, should we move it from pwm-fan.yaml to fan-common.yaml and use it here?
-> 
-> Our initial thought was to add have it merged in microchip,emc2305.yaml as it is now
-> 
-> and then factor it out in fan-common.yaml in a later patch.
-> 
-> 
-> What do you think?
-> 
+> Thanks,
+> -michael
 
-Both are fine with me, with slight preference for the second approach.
-Please do whatever gets approval from DT maintainers.
+I am fine with either approach. Wim handles all watchdog subsystem pull requests,
+so we'll need his feedback.
 
 Thanks,
 Guenter
