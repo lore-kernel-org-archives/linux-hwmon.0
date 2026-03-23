@@ -1,216 +1,478 @@
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0681519D092;
-	Mon, 23 Mar 2026 00:24:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.143.35
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774225498; cv=fail; b=edxRohZo5hihnN+A+2mX1rLDh6SXgcbu5rZHR/0tQe51mttQeHMoTmcj+sTki+/CokL6y5TpM9wieYpgoMXumzqSJgcpa8esivamFQtJ6CSYWsk8MEG0Dpr62OOBx7r4kOFIdesKdd7o1NJJ5lZFIddtmTWRJJ0/KbMGJkzzQRc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774225498; c=relaxed/simple;
-	bh=CuO+3czQ5lPpWQ1/f1mYgMC9kVRPaG598RyEb6EWatA=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=QE1HuiJ5j367yxqnKcWYEpjnrADWGn2yHMWjr+Vr5A+MSgyB+i0EziUOMwpj3nSYPQPekLHV0EQle4ELbW9xHReFUOhkxpC44J8+LBhtboVoFflZ5gBXCAqtYiHKCoat9QXMCeN1okrqtDsETJREB5P18bxdqnckmbMCNzVaLDo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=JgT6KXf6; arc=fail smtp.client-ip=148.163.143.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45BDD1EB19B
+	for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 01:38:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774229883; cv=none; b=AEoG3J+AFcKDbcTuMAzNZuvZOBW+bznydNmfYc3sReUDc3qmhbdHdejlsUUrNnuYyhxUFJ8Ym7sl3GnIHWkrNef/TTVGGpXlYONdxnXrO4QntUKAr6HsorG+L5DRhdecklYIDnfTZdfuoZOjZEx+2B5rfqWDtPC3KH4oYqhuiRQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774229883; c=relaxed/simple;
+	bh=OhocoFsXms9La1ijRCAXjDCLorb2RoD8gYvRbcNhJ7Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TNg7wuforMumkJt6S5dXivvO9VgJOdy11cdzmg+JXiJCDKYa8CfIyre9rA/di8XoRH9fwhkDUVQ9vTEnwOlC0xhwb73I4hdfh/wTsy/vIVHLAm9Qdnt1TXc2BtKlZBmBNO44O4P0/Ze6mQvLymsn6zetvd4DrS2fx97QgiaS0aU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MvgTSa+8; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="JgT6KXf6"
-Received: from pps.filterd (m0150244.ppops.net [127.0.0.1])
-	by mx0b-002e3701.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62N02rmY3860456;
-	Mon, 23 Mar 2026 00:24:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pps0720; bh=m4
-	BQ0lJkcXsBqHiJm4yAMPS9AQ3NrDPZ4Hmxeyn+LOw=; b=JgT6KXf6llDE1CLJui
-	Nk1u/BHu1ffXxookYiOC0BGRzXiMRKEK8Ek1p/Uz4e5qMwcdgNodHhxKrcDMog5P
-	oK7JtIZRCVl53US6KYhFSjK9J+tzUFd0mSGutmwc7jV8ge6GULly2BstZ9w5o2Ln
-	r+Qb4pxAq9jlIHkr6CraaQ/q6H20MIem1foAwAe72E+P+Ak0jw2VOCjGsbfGW5Jr
-	r5uR0TrM6DUAe1uBXWQzYzW5wA1R1M57124wzc5Aay+DTecO8Mxcz9wamd2zbCNu
-	cRzSYr1RLpol4JGnIaKog6o+0Qvu7rw4O8KSf/GlQr/LjPxsq21OB64X59Nqpuey
-	JF4w==
-Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 4d28jnnytn-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Mon, 23 Mar 2026 00:24:41 +0000 (GMT)
-Received: from p1wg14923.americas.hpqcorp.net (unknown [10.119.18.111])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by p1lg14880.it.hpe.com (Postfix) with ESMTPS id E64D08014D4;
-	Mon, 23 Mar 2026 00:24:40 +0000 (UTC)
-Received: from p1wg14925.americas.hpqcorp.net (10.119.18.114) by
- p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Sun, 22 Mar 2026 12:24:40 -1200
-Received: from p1wg14920.americas.hpqcorp.net (16.230.19.123) by
- p1wg14925.americas.hpqcorp.net (10.119.18.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17 via Frontend Transport; Sun, 22 Mar 2026 12:24:40 -1200
-Received: from CO1PR07CU001.outbound.protection.outlook.com (192.58.206.35) by
- edge.it.hpe.com (16.230.19.123) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Sun, 22 Mar
- 2026 12:24:40 -1200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=oQQ+wvBsrJdmwlWs/OkPK6aMmag1D0WSwZ4KQEnUk1eFC67COuNl+0odt0tsCJjXn7zQRxoU2VwaBqNjyb+mDwXyeMvnV7KexYZRxDHAPHTAtyHu+bbT3lDxdqPJQtriSpLKp6QKZlgBMdjWtkjPSw49odZGuu1d4ew0iwDJUVOKbqg4PLVom3xcr/WgR+jYNwHOZsEws9nM0JSzQNJ7zvyPY1H86Fvsddd/JhkTPNnioj9fQRdo9xpEYw6vG06NPB7BQ60GwNQc5MEtxbvD/CJ0SQxaY+biaC8VSz00vrJbmesKKalOC00h5JEL7jet9HZ0VRLqOHuIilzSZeusog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m4BQ0lJkcXsBqHiJm4yAMPS9AQ3NrDPZ4Hmxeyn+LOw=;
- b=Azxto7gbiEB8ugxSYNz+u2RFHY4oB9iok8COvA+0wagVsiJz0k2YSIQccd76hs5RxjJnvN4RKC3LiNy9Qnv4x2lVVsQYSkseOrikCjUWEjsqvOp7jYtTVVEBW8EgajekEwCnAbcZxxWn/F5blRR5czSlWsCdXVJhTXdQYA0d1nN9s9b7HTejBpOxrnHTnR48Hs2RlU5FqjdjEl19I2cuzEIzep+ZdQIMANq6xoWjuQ1gWjPnsayDvUE9uo4FTvAG+YPA81X61/jDZdhgWXcT5fLtn90DFvW3OZQHMZypYIrgACAX8Kl/uXky+UyNNjk4YNI7dktqcNKl3PsMKDWNCw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from LV8PR84MB3535.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:408:203::11)
- by CYXPR84MB3741.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:930:dd::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.31; Mon, 23 Mar
- 2026 00:24:37 +0000
-Received: from LV8PR84MB3535.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::fce6:5af1:e04e:caf6]) by LV8PR84MB3535.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::fce6:5af1:e04e:caf6%4]) with mapi id 15.20.9723.022; Mon, 23 Mar 2026
- 00:24:37 +0000
-From: "Pradhan, Sanman" <sanman.pradhan@hpe.com>
-To: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-CC: "linux@roeck-us.net" <linux@roeck-us.net>,
-        "iwona.winiarska@intel.com"
-	<iwona.winiarska@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sanman Pradhan
-	<psanman@juniper.net>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: [PATCH 2/2] hwmon: (peci/cputemp) Fix off-by-one in
- cputemp_is_visible()
-Thread-Topic: [PATCH 2/2] hwmon: (peci/cputemp) Fix off-by-one in
- cputemp_is_visible()
-Thread-Index: AQHcultuj95gZDkUd0KFWC7rPkNKJQ==
-Date: Mon, 23 Mar 2026 00:24:37 +0000
-Message-ID: <20260323002352.93417-3-sanman.pradhan@hpe.com>
-References: <20260323002352.93417-1-sanman.pradhan@hpe.com>
-In-Reply-To: <20260323002352.93417-1-sanman.pradhan@hpe.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: LV8PR84MB3535:EE_|CYXPR84MB3741:EE_
-x-ms-office365-filtering-correlation-id: b7963237-ea5b-43b6-932c-08de8872912a
-x-ld-processed: 105b2061-b669-4b31-92ac-24d304d195dc,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|38070700021|56012099003|18002099003|22082099003;
-x-microsoft-antispam-message-info: KV9LWM513Z77+3yHVzxASydbO3/L5I5gc0KrEyqlwxm5xvWSceHuVU6fa7Xwva8bdklq+yG5G6xWoYtXVgX436eeRzQouvej7o2RUMVjiZlNfJoby53KRUUsbM1Sd1uOddHsBGVmRfW4nHK6zJY4rVcZLwM8oG0UQQNp+3gTwHGw80bfdQ1b79Bc7ZkDF0+wDf8MyfQ/yznXPdTy9uQAE/G0zbtf68wF0GooY+lGu8LWuEJFomCFWUrYVpt7h+ZXmdhIoveJPEW/JclLdjVuaniklTHt2wBjwhWC0ZAizQhuzC0KLpT5xkIeWK9tHfBTquzmQ0RS4hdAtbdER5n6vwD1D11FmDKUtbD4mN8NA8ZR5moDRBODF/YxfZ1nGUTTvU1s4ez5UUyEcYvDDIG4+yyefW/3yAERYYIGkFzZbYu8HIn0a5SvccRuHNVSpnZ/Yzm0YXgFL//ovqUNZIpX/l/l6ZXcNBDp5dywDBVxdDTpyeisGGjG79OlEr2l0G9hu94oiEtb1jZTyrhVvX9V2xi1ASBoeb/QEfjZkVljfe8/MagQZSXHPHGQHFKgGEKmCKxD/0CkLGGBNC37+TmzAoIex5YUYa7rH43F5NHYczadXYNImA25ojEjccpL3IVFZXH/o7y9324F9TKydlTL0/tF6y2o3UHXaT5V1cK9g4cxkC1xpn1i9k81JUbvhhVcPIC60xnjN8oiEyqSFHxr2Y58ZfF5qIKNkCzAGnnZZaElwJBkvm/Kv0B4lywM7e6zA3OL5tYdfqRYRoE4NoVsghZwk8e9ud7VcU0wqQptu8M=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR84MB3535.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700021)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?BKu+mDLou15JNSVJSret1pveNhXmiStp3cViigI27PJMbUbwbLOMjyTaX7?=
- =?iso-8859-1?Q?Pc27rGtU9kVnb6nWXUDRZ7gTArTNo1hjq8bdD5v/LLxPw2uM63/kP7Uw0E?=
- =?iso-8859-1?Q?w+5mMVRUaxffxye8hwPZI/k57mZKHJew7tqTEHunj3iei1CIFz1Uv3hJJq?=
- =?iso-8859-1?Q?uPzK7S4IKifAKLMFe9ZdQkZ+N+EjJPemXYYot7k/NfuFb+par369kgVGwE?=
- =?iso-8859-1?Q?GfGJyV/XkyMxI2D+wGqO0yEw1JEfQNcx1xLK85GfHrtwVZy+4BvLKthfgv?=
- =?iso-8859-1?Q?DrW6McS1A/SfAvhz1FnPM27zYSbeligwu1wWWjQ4JRLLguxe4/q1rneuPv?=
- =?iso-8859-1?Q?Urq501MKLhpaOi9QPUET/20oMJkqMsrbyLxKvoEnvTZjdWcS5d5CIq2M9c?=
- =?iso-8859-1?Q?lLwQ2b+eHm5oMDSMsjsv4uNB6HZbt+lE+STXT/q4DXJC5kIgcWrKc0AvK7?=
- =?iso-8859-1?Q?YSoQgsDp5VA1ld4UIcRdGISA3U4XFIsp03LuTbz7z5vdQipSMblwfnMypU?=
- =?iso-8859-1?Q?/Lpr+5Wzzk6kgG7A/1dS/+kMMH3lQEX+wxXorMvfVk6qKLpC2DtxSnTU+5?=
- =?iso-8859-1?Q?FJutZBjW/ZbIDcgIr752q6+p9zajDnCU8rJ4vh+SgcnYKHq2Fyq81DTQ9i?=
- =?iso-8859-1?Q?KeVo/BwpEz9fVHlrqR8u6eywOxVm4cdUQPIwZV6/e65Ydl55DAgtbLndnI?=
- =?iso-8859-1?Q?26xjN8LSvlfA6cxOf1qZiVq8Gjnfwxc7Z7JoZ6ucW/6b4xUJgmz4e3VsQ5?=
- =?iso-8859-1?Q?Aa6Ps7d5EWu6caVqgDedQv6O6GjALCBdhjwv0Px5bjFkAkTLVqvFkiosc+?=
- =?iso-8859-1?Q?cMmOFJK6NWpIUL5jPZwH+pOxMiTZKxLa7KJj5QwBpv9TJuh6Kro0Jlvq4L?=
- =?iso-8859-1?Q?KWrXbjEASZwyYdA9Nu6tYGFYBo7jbtQJ/46TLRVTglhQswjXESVQYvfYjp?=
- =?iso-8859-1?Q?wHsZh2CIsCjLYKMjLkH1Ph5bZlgfAhOEszQCv6h0OBkZ846A9bXBW+gj05?=
- =?iso-8859-1?Q?AFfGwFj4Gq/HBjnH4invnXqQ4+0WMv6eKvMFvs7vozCX+Fb/ksTs0LX7LB?=
- =?iso-8859-1?Q?N361M3Ow66S8HIWAv3D3zIecT3o9ByBKOiOp+fbnuBOhPDE363OFGNn3ea?=
- =?iso-8859-1?Q?3LhNjF0VxW9HE75g4P9xt1YVL529fK4p2s5NoZ5gOT33drTXqiFokJBD8c?=
- =?iso-8859-1?Q?vsZ1KKMIhCNJ0leuKtyNlC5xuDpAe4+pyn/q/8gL7lV/p6twroFyN7o14c?=
- =?iso-8859-1?Q?4G/rQhpqjWMZzz02PaqRY7iSWhOTc46wmA/RUwjS3EQLuUW23FbrMMqiOP?=
- =?iso-8859-1?Q?rkHYx3mBwS0ZybJ7h4x3nra9ul2tbS52fYLvq6yLfnoN+kwGry3BZB8Dxl?=
- =?iso-8859-1?Q?UBgPOVp1xUi63vuj6GCgpCogU2/JNevUpuoyO95ABQXjovpSphcLDS1z4z?=
- =?iso-8859-1?Q?V4z566+JZ6NrVMUlrJSsTpJlME4xbfmWbsnwfuNNojsP1yB3YnxlG2OQ/v?=
- =?iso-8859-1?Q?o2HJB/hhSmlABJiBA6pLU9JLuDX3UCtnKfsoEtdfNI2BGpT6v0+YZf4eUA?=
- =?iso-8859-1?Q?EuqN2fgW4vZHeG3d1HDJJOTjYxm5U5vnAN71g4p2VlfMrTMhhD7tsWI68A?=
- =?iso-8859-1?Q?puvoLcNIXMYaSD1YVTMru9bZKQQdOolWz0QDXe87zpZ5/aZdCylLRmRTLi?=
- =?iso-8859-1?Q?AikDyLFjx72uvejTZU5RsdqSEaPqzFbt4sFMPIJpY9QkjaKkbV9G4vgqp4?=
- =?iso-8859-1?Q?jufIwh8sC6mASc2SQFzaweujytt7GII4KHP+9WkfuDfq2O?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MvgTSa+8"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2addb31945aso26189915ad.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 22 Mar 2026 18:38:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1774229881; x=1774834681; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=93PAfDcTU0xUnbriiDqlYvDStY5oBDD2nTnV4jzLeBQ=;
+        b=MvgTSa+8xclDGTKGrNTxInGYsXb1qV8nXMXmoyqVHK3e5uoQzCb0hSIrASNdzRlnpd
+         Dw7Ru7cWUT0TLbwAIBAS/BHQyqAK53KMVYjPtoWmf3kbNqBL0eWiVvgXU+Bc20nwWbIm
+         WSlf2CI5hkPcy2814HWHGKL2oO+xvLoFQeojI2DWGQuC7nfwN/kIXbcfMsRwZ6Htwupg
+         gIpL+7AOva/dTt3JIK6rw1Qy2Q3CrSiVOZRJf1r4LI9Tc0yV+bs261/0TmRkqZKUorEO
+         4573e/W6BgXcD4nLUYeC1bMyCCk1qEr5nRSCO+PizVoXTlw1yCneXsSrxbnmUFZYdLnO
+         pYuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774229881; x=1774834681;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=93PAfDcTU0xUnbriiDqlYvDStY5oBDD2nTnV4jzLeBQ=;
+        b=KwWg5A0l04Vp7eB3amepWJWqnxFgkJsQIxVxqaJbvNAPcOUGSibRGpzjykI9CqfZ8m
+         E/yVGvwhM9ptWxzrxpOZMJHrd4eLCP9vYN4NBO1shbKmJKNMM7KZCmw5rf9+OlEno+4W
+         Gha0EVmMJGH+X5i3Lew4U1G/YV+CSA3KRu3vfMD/iY6VJ8QZmwVL8aIjj3TprSzemVWy
+         W0cK2Shk6tmVILwo422rdulknhwNVsd0aPNpkXmwzNUeAtlGs8Eo+I/Ha7M4vqASVOaP
+         VfJ1DJ4XU5OzOgtj6ALcOrivUV1AVien2BEFucqHPD0JsreVujIE3jPoMe6z2XqHjKKd
+         32GA==
+X-Gm-Message-State: AOJu0Yz+bAQ5lZhI+TyzBox5ZgVnaM8FYVx8Z6/yP8NbBiM0ifofTSuO
+	tzr+pneoDOTHA+9bP3vuryBR8FsIfDAyjSQgvJGyvIHSYN/tleZCDk0XdtQhPw==
+X-Gm-Gg: ATEYQzzb05/epMlXCMlNGIgfdgda2p6PaWI2yoB4wZcOsSkePpKtwoz0heVnerIPtoW
+	//sbkFMvC1obzAXLN83LPL9FtLWb3gILqDJ8VC4LXGVZ/Nk78W8tI/gc7yFe9YXDv51SwXPCI9V
+	2RNg1qrJ43rjxCh0Ars1R0o9pBPviEhU5o988SraKBPtoTpaD+h3vHEo0PEj7TN+UtPCPgUowvN
+	ci3/LmrM86KIvX3GUiqTJYKDcG1LpGnftvQJyDRPLcSpW+Dmoi6syhkYI6nkGKnX3AgYaKP4Vuw
+	42gWEbKmtHapYYKcKIWh30Qp4z7pkzP4D7lLvIOiX8y6/RAsZpgvPxK7pDQHcY/vxZKN9H3OV1j
+	Nmc7BnxDqL8XOs9ArXSqeB44p/u1Z+nK6BybJBBD1fMmmBfsIlLsddAM4Z97i1iTHaqg2qtg49u
+	qC+k8B32x1vKdPctH/COWW5buMwohTStcMxdmhA38W6/mQjiA0qxbxaB+6iLCS8YW4EV59OJOM
+X-Received: by 2002:a17:902:f652:b0:2b0:67d9:b362 with SMTP id d9443c01a7336-2b08271b848mr95590895ad.19.1774229880594;
+        Sun, 22 Mar 2026 18:38:00 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b08353e94asm89662015ad.25.2026.03.22.18.37.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Mar 2026 18:37:59 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <2e692427-592a-4a78-8f6b-547d506de86a@roeck-us.net>
+Date: Sun, 22 Mar 2026 18:37:58 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked: obvIAmFuZb6T+c5pc5yAbfJyST8GkW/nlEmblWHSF5VyqZ0iSebXuKByjq2fCm9QXx3FjuY/1me4V6jVMZ10gv3iQjSlCvhx8SAiRC8FmTr0TH1/9Wl0ywsiCvgAnbcKbu+b6BbmS/hi4P9DFxsixkuiF99PhX9ZM3VKvPGpcFF4F0SJf4jENfAdIXxZY0Vby0iVssLXelWPM7bwNjIhLf8QNHAHeLOvq43AJVXPEwVBK/IhFjG5WKkSCUfmdKv76mWR5QfadQGtkTO21WE0EFP2ZnFr8DNqPzaGE1PW4iuPsFLl0oHGEWTE8eFBFfOF2X/65FebngMohIFHW51v4g==
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR84MB3535.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: b7963237-ea5b-43b6-932c-08de8872912a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Mar 2026 00:24:37.6218
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: h2iT5le3GwhRGhDLutb02vlcXsPRNHaNbVO4LaiiTVXeKR3AsUztu09ot8P+RtYECYkE78wHdX+mkRNokq2YdA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYXPR84MB3741
-X-OriginatorOrg: hpe.com
-X-Proofpoint-GUID: FWPRYN5dha0dmI1XemDZImBfCS51lCr_
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzIzMDAwMSBTYWx0ZWRfXxxmnlBimRKhs
- yzmTRldh8VHIlm3fvqt3waAucWvUxuVUygucAXkba6HVNH32knfAFmShVeN2mcj+0iq0jTAkyFe
- I9ih7ThuRSoRh5Aif4Vi6zmw20OKyl5SbeP2ZpBjTSUPAHWiWQrm4knR9DfInyR7v254hkrzT4A
- K3ggif+b3qtGAv5k5stOAnhmJai2dbySYZ2rdGd2xK/awkmyjV7/WDpLq71jguqGyHhIdIJJyrp
- eMdZULNCGyo2+0D7crqZ6lxMtYmV1UX1CzTOxn4YQFQSNcHCgyPkQaaNCq5iL/atQ+fFxii4kYI
- L6WS/i2HJXTjDX4tDnSV4D4TTbWSfZq9HfkttsdAa+kOdChmVSkqUlkLGPX/uiJhe+ReBz817R5
- gSx7XmfA1dJZPXGwKlsQ8TZ0qNG+hm+JU/QW289fi0VNu0TP5q6Avmy6If+ENkHJgK7vvV8Ma3y
- 43hGjdhHh+BTsG9GTrw==
-X-Proofpoint-ORIG-GUID: FWPRYN5dha0dmI1XemDZImBfCS51lCr_
-X-Authority-Analysis: v=2.4 cv=JeWxbEKV c=1 sm=1 tr=0 ts=69c08849 cx=c_pps
- a=A+SOMQ4XYIH4HgQ50p3F5Q==:117 a=A+SOMQ4XYIH4HgQ50p3F5Q==:17
- a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
- a=xqWC_Br6kY4A:10 a=8nJEP1OIZ-IA:10 a=Yq5XynenixoA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=gQcMVamqm3wCPoSYhaRC:22 a=k7r4yCLl9DVLXMiQTbtC:22
- a=OUXY8nFuAAAA:8 a=VwQbUJbxAAAA:8 a=4WRzc9QnOF0kFBEKHOcA:9 a=wPNLvfGTeEIA:10
- a=cAcMbU7R10T-QSRYIcO_:22
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-22_07,2026-03-20_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 bulkscore=0 impostorscore=0 malwarescore=0 phishscore=0
- spamscore=0 priorityscore=1501 suspectscore=0 lowpriorityscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603230001
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: (yogafan) Add support for Lenovo Yoga/Legion fan
+ monitoring
+To: Sergio Melas <sergiomelas@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+References: <20260322203809.44048-1-sergiomelas@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260322203809.44048-1-sergiomelas@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Sanman Pradhan <psanman@juniper.net>=0A=
-=0A=
-cputemp_is_visible() validates the channel index against=0A=
-CPUTEMP_CHANNEL_NUMS, but currently uses '>' instead of '>=3D'.=0A=
-As a result, channel =3D=3D CPUTEMP_CHANNEL_NUMS is not rejected even thoug=
-h=0A=
-valid indices are 0 .. CPUTEMP_CHANNEL_NUMS - 1.=0A=
-=0A=
-Fix the bounds check by using '>=3D' so invalid channel indices are=0A=
-rejected before indexing the core bitmap.=0A=
-=0A=
-Fixes: bf3608f338e9 ("hwmon: peci: Add cputemp driver")=0A=
-Cc: stable@vger.kernel.org=0A=
-Signed-off-by: Sanman Pradhan <psanman@juniper.net>=0A=
----=0A=
- drivers/hwmon/peci/cputemp.c | 2 +-=0A=
- 1 file changed, 1 insertion(+), 1 deletion(-)=0A=
-=0A=
-diff --git a/drivers/hwmon/peci/cputemp.c b/drivers/hwmon/peci/cputemp.c=0A=
-index badec53ff4461..457089c561b40 100644=0A=
---- a/drivers/hwmon/peci/cputemp.c=0A=
-+++ b/drivers/hwmon/peci/cputemp.c=0A=
-@@ -319,7 +319,7 @@ static umode_t cputemp_is_visible(const void *data, enu=
-m hwmon_sensor_types type=0A=
- {=0A=
- 	const struct peci_cputemp *priv =3D data;=0A=
- =0A=
--	if (channel > CPUTEMP_CHANNEL_NUMS)=0A=
-+	if (channel >=3D CPUTEMP_CHANNEL_NUMS)=0A=
- 		return 0;=0A=
- =0A=
- 	if (channel < channel_core)=0A=
--- =0A=
-2.34.1=0A=
-=0A=
+Hi,
+
+On 3/22/26 13:38, Sergio Melas wrote:
+> This driver provides fan speed monitoring for modern Lenovo Yoga,
+> Legion, and IdeaPad laptops. It interfaces with the Embedded
+> Controller (EC) via ACPI to retrieve tachometer data.
+> 
+> To address low-resolution sampling in the Lenovo EC firmware, the
+> driver implements a Rate-Limited Lag (RLLag) filter using a passive
+> discrete-time first-order model. This ensures physical consistency
+> of the RPM signal regardless of userspace polling rates.
+> 
+> Signed-off-by: Sergio Melas <sergiomelas@gmail.com>
+> ---
+> v4:
+
+First of all, please version your patches. You do provide change logs,
+and thanks for that, but the subject should start with [PATCH v4].
+
+Second, Sashiko still reports several problems.
+
+https://sashiko.dev/#/patchset/20260322203809.44048-1-sergiomelas%40gmail.com
+
+As far as I can see they are all real problems. Please address.
+
+Thanks,
+Guenter
+
+> - Rebased on groeck/hwmon-next branch for clean application.
+> - Removed unnecessary blank lines and cleaned code formatting.
+> - Corrected alphabetical sorting in Kconfig and Makefile.
+> - Technical Validation & FOPTD Verification:
+>    - Implemented FOPTD (First Order Plus Time Delay) modeling.
+>    - Used 10-bit fixed-point math for alpha calculation to avoid
+>      floating point overhead in the kernel.
+>    - Added 5000ms filter reset for resume/long-polling sanitation.
+> - Hardware Discovery:
+>    - Confirmed support for paths: FANS, FA2S, FAN0.
+>    - Restricted to LENOVO hardware via DMI matching.
+> ---
+>   MAINTAINERS             |   6 +
+>   drivers/hwmon/Kconfig   |  11 ++
+>   drivers/hwmon/Makefile  |   1 +
+>   drivers/hwmon/yogafan.c | 247 ++++++++++++++++++++++++++++++++++++++++
+>   4 files changed, 265 insertions(+)
+>   create mode 100644 drivers/hwmon/yogafan.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 830c6f076b00..9167f3d4f243 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -14873,6 +14873,12 @@ W:	https://linuxtv.org
+>   Q:	http://patchwork.linuxtv.org/project/linux-media/list/
+>   F:	drivers/media/usb/dvb-usb-v2/lmedm04*
+>   
+> +LNVYOGAFAN HARDWARE MONITORING DRIVER
+> +M:	Sergio Melas <sergiomelas@gmail.com>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/hwmon/yogafan.c
+> +
+>   LOADPIN SECURITY MODULE
+>   M:	Kees Cook <kees@kernel.org>
+>   S:	Supported
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index fb77baeeba27..3bb91623b157 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -2653,6 +2653,17 @@ config SENSORS_XGENE
+>   	  If you say yes here you get support for the temperature
+>   	  and power sensors for APM X-Gene SoC.
+>   
+> +config SENSORS_YOGAFAN
+> +	tristate "Lenovo Yoga/Legion Fan Hardware Monitoring"
+> +	depends on ACPI && HWMON
+> +	help
+> +	  If you say yes here you get support for fan speed monitoring
+> +	  on modern Lenovo Yoga and Legion laptops.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called yogafan.
+> +
+> +
+>   config SENSORS_INTEL_M10_BMC_HWMON
+>   	tristate "Intel MAX10 BMC Hardware Monitoring"
+>   	depends on MFD_INTEL_M10_BMC_CORE
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 556e86d277b1..0fce31b43eb1 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -245,6 +245,7 @@ obj-$(CONFIG_SENSORS_W83L786NG)	+= w83l786ng.o
+>   obj-$(CONFIG_SENSORS_WM831X)	+= wm831x-hwmon.o
+>   obj-$(CONFIG_SENSORS_WM8350)	+= wm8350-hwmon.o
+>   obj-$(CONFIG_SENSORS_XGENE)	+= xgene-hwmon.o
+> +obj-$(CONFIG_SENSORS_YOGAFAN)	+= yogafan.o
+>   
+>   obj-$(CONFIG_SENSORS_OCC)	+= occ/
+>   obj-$(CONFIG_SENSORS_PECI)	+= peci/
+> diff --git a/drivers/hwmon/yogafan.c b/drivers/hwmon/yogafan.c
+> new file mode 100644
+> index 000000000000..10c48fca8387
+> --- /dev/null
+> +++ b/drivers/hwmon/yogafan.c
+> @@ -0,0 +1,247 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/**
+> + * yoga_fan.c - Lenovo Yoga/Legion Fan Hardware Monitoring Driver
+> + *
+> + * Provides fan speed monitoring for Lenovo Yoga, Legion, and IdeaPad
+> + * laptops by interfacing with the Embedded Controller (EC) via ACPI.
+> + *
+> + * The driver implements a passive discrete-time first-order lag filter
+> + * with slew-rate limiting (RLLag). This addresses low-resolution
+> + * tachometer sampling in the EC by smoothing RPM readings based on
+> + * the time delta (dt) between userspace requests, ensuring physical
+> + * consistency without background task overhead or race conditions.
+> + * The filter implements multirate filtering with autoreset in case
+> + * of large sampling time.
+> + *
+> + * Copyright (C) 2021-2026 Sergio Melas <sergiomelas@gmail.com>
+> + */
+> +#include <linux/acpi.h>
+> +#include <linux/dmi.h>
+> +#include <linux/err.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/init.h>
+> +#include <linux/ktime.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +#define DRVNAME "yogafan"
+> +#define MAX_FANS 8
+> +/* Filter Configuration Constants */
+> +#define TAU_MS          3000    /* Time constant for the first-order lag (ms) */
+> +#define MAX_SLEW_RPM_S  100     /* Maximum allowed change in RPM per second */
+> +#define MAX_SAMPLING    5000    /* Maximum allowed Ts for reset */
+> +
+> +struct yoga_fan_data {
+> +	const char *active_paths[MAX_FANS];
+> +	long filtered_val[MAX_FANS];
+> +	ktime_t last_update[MAX_FANS];
+> +	int fan_count;
+> +};
+> +/**
+> + * apply_rllag_filter - Discrete-time filter update (Passive Multirate)
+> + * @data: pointer to driver data
+> + * @idx: fan index
+> + * @raw_rpm: new raw value from ACPI
+> + *
+> + * Implements a Rate-Limited Lag (RLLag) filter using a multirate approach.
+> + * Instead of a fixed-interval heartbeat, the sampling time (Ts) is calculated
+> + * dynamically as the ktime delta between userspace read requests.
+> + *
+> + * This mimics a continuous-time First Order Plus Time Delay (FOPTD) model:
+> + * rpm_k+1 = rpm_k + clamp(step, -limit, limit)
+> + * where:
+> + * step = (alpha * (raw_rpm - rpm_k))
+> + * alpha = 1-exp(-Ts/Tau)
+> + * Applying first order taylor approximation we get:
+> + * alpha = Ts / (Tau + Ts)
+> + * limit = MaxSlew * Ts
+> + *
+> + * This ensures physical consistency of the signal regardless of the
+> + * userspace polling rate.
+> + */
+> +
+> +static void apply_rllag_filter(struct yoga_fan_data *data, int idx, long raw_rpm)
+> +{
+> +	ktime_t now = ktime_get();
+> +	s64 dt_ms;
+> +	long delta, step, limit, alpha;
+> +	/* Initialize on first read to avoid starting from zero */
+> +	if (data->last_update[idx] == 0) {
+> +		data->filtered_val[idx] = raw_rpm;
+> +		data->last_update[idx] = now;
+> +		return;
+> +	}
+> +	dt_ms = ktime_to_ms(ktime_sub(now, data->last_update[idx]));
+> +	/* SANITATION: Reset filter if no reads occurred for MAX_SAMPLING
+> +	 * milliseconds. This prevents massive 'lag_steps' if userspace polling resumes
+> +	 * after a long pause or system suspend.
+> +	 */
+> +	if (dt_ms > MAX_SAMPLING) {
+> +		data->filtered_val[idx] = raw_rpm;
+> +		data->last_update[idx] = now;
+> +		return;
+> +	}
+> +	/* SANITATION: Avoid division by zero or jitter from sub-millisecond reads */
+> +	if (dt_ms < 1)
+> +		return;
+> +	delta = raw_rpm - data->filtered_val[idx];
+> +	/* Alpha = dt / (Tau + dt) using 10-bit fixed point math.
+> +	 * This mimics the physical inertia (FOPTD) of the fan blades.
+> +	 */
+> +	alpha = (dt_ms << 10) / (TAU_MS + dt_ms);
+> +	step = (delta * alpha) >> 10;
+> +	/* Slew Limit = (MaxSlew * dt) / 1000 - Bound the rate of change */
+> +	limit = (MAX_SLEW_RPM_S * (long)dt_ms) / 1000;
+> +	if (step > limit)
+> +		step = limit;
+> +	else if (step < -limit)
+> +		step = -limit;
+> +	data->filtered_val[idx] += step;
+> +
+> +	/* SANITATION: Floor the value to zero if RPM is negligible */
+> +	if (data->filtered_val[idx] < 50)
+> +		data->filtered_val[idx] = 0;
+> +	data->last_update[idx] = now;
+> +}
+> +
+> +static int yoga_fan_read(struct device *dev, enum hwmon_sensor_types type,
+> +			 u32 attr, int channel, long *val)
+> +{
+> +	struct yoga_fan_data *data = dev_get_drvdata(dev);
+> +	unsigned long long raw_acpi;
+> +	acpi_status status;
+> +	long rpm;
+> +
+> +	if (type != hwmon_fan || attr != hwmon_fan_input)
+> +		return -EOPNOTSUPP;
+> +
+> +	/* Implement better casting of status using ACPI typedef */
+> +	status = acpi_evaluate_integer(NULL, (acpi_string)data->active_paths[channel],
+> +					NULL, &raw_acpi);
+> +
+> +	if (ACPI_FAILURE(status))
+> +		return -EIO;
+> +
+> +	/* SANITATION: Lenovo EC typically reports RPM in hundreds for values <= 255.
+> +	 * Values > 255 are treated as raw RPM. This handles different EC firmware styles.
+> +	 */
+> +	rpm = (raw_acpi > 0 && raw_acpi <= 255) ? ((long)raw_acpi * 100) : (long)raw_acpi;
+> +	apply_rllag_filter(data, channel, rpm);
+> +	*val = data->filtered_val[channel];
+> +	return 0;
+> +}
+> +
+> +static umode_t yoga_fan_is_visible(const void *data, enum hwmon_sensor_types type,
+> +				   u32 attr, int channel)
+> +{
+> +	const struct yoga_fan_data *fan_data = data;
+> +
+> +	if (type == hwmon_fan && channel < fan_data->fan_count)
+> +		return 0444;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct hwmon_ops yoga_fan_hwmon_ops = {
+> +	.is_visible = yoga_fan_is_visible,
+> +	.read = yoga_fan_read,
+> +};
+> +
+> +static const struct hwmon_channel_info *yoga_fan_info[] = {
+> +	HWMON_CHANNEL_INFO(fan,
+> +			   HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT,
+> +			   HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_chip_info yoga_fan_chip_info = {
+> +	.ops = &yoga_fan_hwmon_ops,
+> +	.info = yoga_fan_info,
+> +};
+> +
+> +static int yoga_fan_probe(struct platform_device *pdev)
+> +{
+> +	struct yoga_fan_data *data;
+> +	struct device *hwmon_dev;
+> +	acpi_handle handle;
+> +	int i;
+> +	static const char * const fan_paths[] = {
+> +		"\\_SB.PCI0.LPC0.EC0.FANS",  /* Primary Fan (Yoga 14c) */
+> +		"\\_SB.PCI0.LPC0.EC0.FA2S",  /* Secondary Fan (Legion) */
+> +		"\\_SB.PCI0.LPC0.EC0.FAN0",  /* IdeaPad / Slim */
+> +		"\\_SB.PCI0.LPC.EC.FAN0",    /* Legacy */
+> +		"\\_SB.PCI0.LPC0.EC.FAN0",   /* Alternate */
+> +	};
+> +	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +	data->fan_count = 0;
+> +
+> +	/* SANITATION: Verify ACPI path existence before indexing */
+> +	for (i = 0; i < ARRAY_SIZE(fan_paths); i++) {
+> +		if (ACPI_SUCCESS(acpi_get_handle(NULL, (char *)fan_paths[i], &handle))) {
+> +			data->active_paths[data->fan_count] = fan_paths[i];
+> +			data->fan_count++;
+> +
+> +			if (data->fan_count >= MAX_FANS)
+> +				break;
+> +		}
+> +	}
+> +
+> +	if (data->fan_count == 0)
+> +		return -ENODEV;
+> +	/* SANITATION: Anchoring drvdata to avoid NULL returns during unload */
+> +	platform_set_drvdata(pdev, data);
+> +	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev, DRVNAME,
+> +							 data, &yoga_fan_chip_info, NULL);
+> +	return PTR_ERR_OR_ZERO(hwmon_dev);
+> +}
+> +
+> +static struct platform_driver yoga_fan_driver = {
+> +	.driver = {
+> +		.name = DRVNAME,
+> +	},
+> +	.probe = yoga_fan_probe,
+> +};
+> +
+> +static struct platform_device *yoga_fan_device;
+> +
+> +static const struct dmi_system_id yoga_dmi_table[] __initconst = {
+> +	{
+> +		.ident = "Lenovo",
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> +		},
+> +	},
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(dmi, yoga_dmi_table);
+> +
+> +static int __init yoga_fan_init(void)
+> +{
+> +	int ret;
+> +
+> +	if (!dmi_check_system(yoga_dmi_table))
+> +		return -ENODEV;
+> +	ret = platform_driver_register(&yoga_fan_driver);
+> +	if (ret)
+> +		return ret;
+> +	yoga_fan_device = platform_device_register_simple(DRVNAME, 0, NULL, 0);
+> +	if (IS_ERR(yoga_fan_device)) {
+> +		platform_driver_unregister(&yoga_fan_driver);
+> +		return PTR_ERR(yoga_fan_device);
+> +	}
+> +	return 0;
+> +}
+> +
+> +static void __exit yoga_fan_exit(void)
+> +{
+> +	platform_device_unregister(yoga_fan_device);
+> +	platform_driver_unregister(&yoga_fan_driver);
+> +}
+> +
+> +module_init(yoga_fan_init);
+> +module_exit(yoga_fan_exit);
+> +MODULE_AUTHOR("Sergio Melas <sergiomelas@gmail.com>");
+> +MODULE_DESCRIPTION("Lenovo Yoga/Legion Fan Monitor Driver");
+> +MODULE_LICENSE("GPL");
+> 
+> base-commit: be8aad7a8a14151fd471aadf368e1582f91a7817
+
