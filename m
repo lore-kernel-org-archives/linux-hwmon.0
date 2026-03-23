@@ -1,66 +1,66 @@
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB979358369;
-	Mon, 23 Mar 2026 23:34:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.147.86
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A1136DA09;
+	Mon, 23 Mar 2026 23:35:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.143.35
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774308888; cv=fail; b=lzDvwv6uSyMtV695rqowm7whHAuw2F4CAYDxGf8DxRz4tzrSTHsPT07TlK/BN9kjXHBd4n8/DNBpUNJVPDJO7ANrH0nSKP5XikNIaxsGhIPdF0UhgfXJ5LYYA92sT1sA+n772oJP/jLqJV/kKwifu1KVIWE9ZJwrTI9LLjREKl0=
+	t=1774308902; cv=fail; b=iFN+joHY4lMZtEtD2drR7AXhMifnKQng7GwIEIiYL8Ucfr9a4rFgjAx/NdjTRL/SUTyRuVQD1V+It3j0JsHLgj1osUUmRmLfrzqnEftcTGfrNV8pGrJPq69k/QeYU/aD/JLFAZiauPcFXd1A+0Fv3MYEm5AlxrZ2aQ1xHVEbIRY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774308888; c=relaxed/simple;
-	bh=cz35freoPx9YrpUZE3ICY7gE54Nh8J8SlOijm6m/nac=;
+	s=arc-20240116; t=1774308902; c=relaxed/simple;
+	bh=kFemb01h4Yp/YUXM1iHgSw8C1i1yIUjf5DcAgUIsRJ4=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=LfJSvNGWc+vb71OzGkzjWcACgxEL6Y3EwQX3mvms+w3yKnXe727I8SiTw15fd6vBWL5IP4OezgLvv5AaGjbeFZ3cKdrXKdhD/pnusfHM5Dts6P0mBp4dMOUobeLvjWNFXPFUZovaaJBHOdCH21fNWB68Qwz+XKB9lRdU0g9ivwg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=Tb2C/C2P; arc=fail smtp.client-ip=148.163.147.86
+	 Content-Type:MIME-Version; b=G+pyipQ2lAx92gXH6bUaxA+4SK/qlDAyQUcuIG57r8BuoFmAqa4p98G0JP0NP92noLmIghhCDxJKJH7cOJ7RsDhGR261GEUMpMOCjxRCovaa0Fxyc0kQkWUWH2lhgseKIQuL22BIf6hlbJi6cIGV5B/ZdHbCKtQE68T8cwEc1qc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=lTC3SjHy; arc=fail smtp.client-ip=148.163.143.35
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="Tb2C/C2P"
-Received: from pps.filterd (m0148663.ppops.net [127.0.0.1])
-	by mx0a-002e3701.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62NKEWVw4098712;
-	Mon, 23 Mar 2026 23:34:30 GMT
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="lTC3SjHy"
+Received: from pps.filterd (m0150244.ppops.net [127.0.0.1])
+	by mx0b-002e3701.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62NKESWb2864994;
+	Mon, 23 Mar 2026 23:34:46 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pps0720; bh=NZ
-	YfKpLXGgATBHcNX9ItmP1Ai/ap+CKcX0zfe84080A=; b=Tb2C/C2Puc9XoNHyVj
-	NEC2lXN7kK6myLNAoXlOEcCQmV/Ld3d692vQunQ8+bTDEAdkzjd3LvxPv9xwNOG7
-	nLsHCYBRAUNiFxUIHrutERZnXYqw2/3duTgWCOIQFeeVyIFsbrEReC9Q6Oa3vjQT
-	BLKqeHTXP/YLPaUneBmV+nPekO7GzSFQGmAxBegfQCsohuJEAV0lb0l9A8CdQIbs
-	RikvoS2FlmGgSw+2pu6gW+UBBT4Wb8KX+F6vCaxDNzmjxpcAl7MlGhzNJbR8ZAxc
-	/a+Yla0HHTNUGQVipiTecrwoTYFxl5ktvIbNOptmQF53Xik4LXhr2Cyo9KuDtw7w
-	I23A==
+	:message-id:mime-version:references:subject:to; s=pps0720; bh=wG
+	y1eZM2v1xqB9SubDCd/+YhRreLQhBOCiGVwJ3Ou0U=; b=lTC3SjHynZ2s+iObBQ
+	/ZhJKYPPlABt4dp2LdjDfDWA5J3H4rG/L+EDUjV68BrsvvLwHp8SlcWRWU/7AriH
+	4mmIj5273EDvVBZq8tdn7ruYBHXPCrsaOzoVPIC89LkhLryPNbpvZCOJlArohLvK
+	eFAJaxhqZ2qkcUNcCVPa4THcRSPnkxKbimKkN2ASpaW6QtIuSYJzK2sldI88vfZv
+	Ym50M5y4rrpbW/8PePO9Fx9hbf4RH0gdSuDiII0ztXlFhgIMmQu197BE51UKk36l
+	4tyGxJtobv6cxOcySyNSkLLWJel+//UtiCL6NjdJRXDlg5JV1ROgG0M12gl0JX3E
+	w/Bw==
 Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-	by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 4d37nr5cjp-1
+	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 4d34psqu49-1
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Mon, 23 Mar 2026 23:34:29 +0000 (GMT)
-Received: from p1wg14926.americas.hpqcorp.net (unknown [10.119.18.115])
+	Mon, 23 Mar 2026 23:34:46 +0000 (GMT)
+Received: from p1wg14923.americas.hpqcorp.net (unknown [10.119.18.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 5374480163D;
-	Mon, 23 Mar 2026 23:34:29 +0000 (UTC)
-Received: from p1wg14928.americas.hpqcorp.net (10.119.18.116) by
- p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
+	by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 72BDD80163D;
+	Mon, 23 Mar 2026 23:34:45 +0000 (UTC)
+Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
+ p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Mon, 23 Mar 2026 11:34:24 -1200
-Received: from p1wg14928.americas.hpqcorp.net (10.119.18.116) by
- p1wg14928.americas.hpqcorp.net (10.119.18.116) with Microsoft SMTP Server
+ 15.2.2562.17; Mon, 23 Mar 2026 11:33:48 -1200
+Received: from p1wg14923.americas.hpqcorp.net (10.119.18.111) by
+ p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Mon, 23 Mar 2026 11:34:23 -1200
-Received: from P1WG14918.americas.hpqcorp.net (16.230.19.121) by
- p1wg14928.americas.hpqcorp.net (10.119.18.116) with Microsoft SMTP Server
+ 15.2.2562.17; Mon, 23 Mar 2026 11:33:47 -1200
+Received: from p1wg14919.americas.hpqcorp.net (16.230.19.122) by
+ p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17 via Frontend Transport; Mon, 23 Mar 2026 11:34:23 -1200
-Received: from DM5PR08CU004.outbound.protection.outlook.com (192.58.206.35) by
- edge.it.hpe.com (16.230.19.121) with Microsoft SMTP Server (version=TLS1_2,
+ 15.2.2562.17 via Frontend Transport; Mon, 23 Mar 2026 11:33:47 -1200
+Received: from DM5PR08CU004.outbound.protection.outlook.com (192.58.206.38) by
+ edge.it.hpe.com (16.230.19.122) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Mon, 23 Mar
- 2026 23:34:23 +0000
+ 2026 11:33:47 -1200
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=IytYP4HTteIxtRX1rypOObxJVAiVxGiEPuldI5c+fQFHRLkxITJQze0iBM9/PLHOoycnbGLUXi0Oy/U5jkhNEGa5E4N+MBY/Nnf/2hhxG/bjp2tR6WINOSc184uaSn+tQYtNrtRKYkoLOCh+xC86sVnwR8sUlcWvNV3KNACJI1z/pwa4tFlgHySDfEIC0ZC+MYvsRoitY7NeNg5q2m6Le/ouJABVc/elmCKeuSorS74K+m1Lf1w6mGPiDnTv3glmrTKY2b02PCdrzHiRahcrpw1H1W05KB3qhENydKICN1QxD1su3KfRUPO0klM9FxOJJgoYdR8KfIaLyDOKpA3uKA==
+ b=y8pMgrPf7g7G1+8XEio+rSL46EPa3AzAbHodnDHOM5EIrOQ45Z88EMnLw0zow8vjOtpSABALA3Qgfd8+zBVW3zbmZ2hEPyJkLJfh86xG+nC5I7MXif7Cgwo2LzNBGoPd4MxxdM1Z90GTl9dS2pnGLbuOsdg6c1z3XhZLtHj8/xSSjblwu6dT+thpJ2TMqfO2TJ5uHBp6+kSIWdwF0v0Wl+1mgx1vVhsvqO0Vrd3a1dVTOPwsbEJUrt3v4RdrpeMUQIpEaaQIklSSbm6E3R0ZAptKa8Y/o6GcmaKSofDyECBqO0/2x1Jmz243PbdpBIam+7juHlLIup9tNCAxq1Y9oA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NZYfKpLXGgATBHcNX9ItmP1Ai/ap+CKcX0zfe84080A=;
- b=A/7ktFILtONmQvRfUowtbx6CJqEr3IWNEe3Si2KbuzIUeOjNqC9yXzzsAbJE4gty8lBmqLovTyl/HWMOCJcduRWSF+v//wLnNGg4G4jumg9dLuw1MxkudQwsgcF3Otmng8b6wYoToVP5e4XKIkdw0ea1CJYqBFCEviRU28yayaESnlJhh+LwvLYPWjFDHr4NRV3fvB+d3xetYfYs6jvoz//taQAWmGlqPfcfjEsyRWWGCcjqAZhauiU+fyOGzYm1I3vhLsM+TgxQdMelAJRekXP/57DlWBNtGYpnqDtQQ6G3Sg0cM8tTadB+KAkyXYHLrNmmDApS3k0XLJBNkowNnA==
+ bh=wGy1eZM2v1xqB9SubDCd/+YhRreLQhBOCiGVwJ3Ou0U=;
+ b=W3ISJ8J2LcR1z8dbq6MBeHekn95rFOOyHDmVCPhu84/233f66LryGXsXMI1BQdNwSXc/4Zr2GqvZ5lnq57JVeZl4v36WnA34xRBCUvwumzTLWcErKtpfTgAW5W46PP21nlTe4u0zyKh5AlsUmtmQOpdp444P+u53qIuHCSqAlWpqViHTdXGOoWFN21UwX1s2douli7Rmt4WP1HHufivKg/sZaz+DNEmsxcg5wNvU49hbM6f8ymHe1Z8xn37W7ol2e8NWwU569yYy85Ilf5Rp84E0s4SIhtutqCjDvDZ6xvZwAKP9l/+4L9/jay6UrmJ4yvhPV94jTVqpV1E7GAuI9w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
  header.d=hpe.com; arc=none
@@ -68,11 +68,11 @@ Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:610:1cc::7)
  by CH3PR84MB3989.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:610:253::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.31; Mon, 23 Mar
- 2026 23:34:22 +0000
+ 2026 23:33:46 +0000
 Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
  ([fe80::2c54:3534:122f:e74f]) by CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
  ([fe80::2c54:3534:122f:e74f%4]) with mapi id 15.20.9723.030; Mon, 23 Mar 2026
- 23:34:22 +0000
+ 23:33:46 +0000
 From: "Pradhan, Sanman" <sanman.pradhan@hpe.com>
 To: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
 CC: "linux@roeck-us.net" <linux@roeck-us.net>,
@@ -83,13 +83,13 @@ CC: "linux@roeck-us.net" <linux@roeck-us.net>,
         Sanman Pradhan
 	<psanman@juniper.net>,
         "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: [PATCH v2 5/5] hwmon: (pmbus/mp29502) Prevent division by zero from
- hardware register
-Thread-Topic: [PATCH v2 5/5] hwmon: (pmbus/mp29502) Prevent division by zero
- from hardware register
-Thread-Index: AQHcux2TN9q4CS89lEyY6+ECiMK3fA==
-Date: Mon, 23 Mar 2026 23:34:22 +0000
-Message-ID: <20260323233244.201294-6-sanman.pradhan@hpe.com>
+Subject: [PATCH v2 2/5] hwmon: (pmbus) Fix return type truncation in MPS
+ reg2data_linear11()
+Thread-Topic: [PATCH v2 2/5] hwmon: (pmbus) Fix return type truncation in MPS
+ reg2data_linear11()
+Thread-Index: AQHcux1+4HUbx2nZzEqsqwhFDE7Seg==
+Date: Mon, 23 Mar 2026 23:33:45 +0000
+Message-ID: <20260323233244.201294-3-sanman.pradhan@hpe.com>
 References: <20260323233244.201294-1-sanman.pradhan@hpe.com>
 In-Reply-To: <20260323233244.201294-1-sanman.pradhan@hpe.com>
 Accept-Language: en-US
@@ -98,45 +98,45 @@ X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: CH3PR84MB3523:EE_|CH3PR84MB3989:EE_
-x-ms-office365-filtering-correlation-id: 3afed267-6f05-42b7-697b-08de8934b648
+x-ms-office365-filtering-correlation-id: 3bc0fc57-5e95-4932-e1ec-08de8934a0a3
 x-ld-processed: 105b2061-b669-4b31-92ac-24d304d195dc,ExtAddr
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;ARA:13230040|376014|1800799024|366016|38070700021|22082099003|56012099003|18002099003;
-x-microsoft-antispam-message-info: M59vdO+i7137TYtGzcWZu6trDydzHXMHzgg0D+uZOyvE5bCh2TWrwXLfmXb/m7mcmbtJ/STBbtutsLRCXdJXMf0Booj20eigURFsdUG/qX5QS6zWY7XP0SQjlw9xr4nl2WRrgrSEiUJuMSJXCpr9HH0DDKrOliXi4nhzKmOnMOuuG2WOKf9pbME1bbQox1eUz5wlQ0r2TJP94mReCoP0T7fZ8IpM4J6qzUDce95yFyUahiFgGGpDagn5MlqwwAiX+JPsDbIZp14FHoBwmyB51IAHIn06cEfCn5McPizE58tvvgPejsG67DVSRqo8fpruMPyo1gTs8tFdw82c5DUvq9tk1Q9nCA6EFNKLagVCDbJT8CKlD1PX2cKRH9yCF2EKGD1sgbq3opDDJMjMLjzNxUqPy4ZvpywyFrVUmsFP6jb+VBjlI/i2SMvpUyj7c6FCBd+GE3AYRxzZoAk2aVc5qdyREJWJumxN1A3AEu5zlqlwZzHHRYsch8bcyHxfLi15OLPtKNJwDaS91vm5ooDZ6xdUkcZYmeLj/8EGkGMKR0n7UOV2GBan012Ue20e1fEwpUpl9Uhl9PRmY/jqK5x1GT86CQQ0ULpQU3PxupD3PvbkE/+1VdxNn+j64WYSLw8BAjWpDHaQYWaFOkaVRZwS8DoQiHeGb/yLcbM6LcoXwGZSgOkxnshfbQ8pEqC1ycYCmDEcQtwDICNGnFlx557hSnaloMRrEFWPSAVdAXR5S/FiNax1nRL6SWaIPCRv+MBwwXxpPvfNnL5bRN0j2duqXifX6e+5MOSj3krfsgecBX0=
+x-microsoft-antispam-message-info: keV2SzwW23FMRrfFBEyjS4r79bhWSF0DsifkwLrOOUTwA9zTdTq3pR+WGeFI+4cb9Unpu2LlpnAxqkzhfHUk/2KGAN6JHo0abr/OwyJIo8YwlMB8Pg684GKBaAB0BccoIKIF/6s5oxVzC7PgzqcnMhvc3vDtw6dItqb+hG1lRP4L/qJOhaexBPDFM0QgMRQXY0gQ5RqFG3F05vj40BvejWjy2E+JtPItubtXhHad5soYh/kTHuhydNMAnmCLr6UZsVQK8jAvyvovIaLJU3/Mq0TIEfg2l0/NORhwrH+OID2IPNPQuKhf9eB5hjTRLFpDH+4bq4mMRWKU65noGaPH8ELfmCIXjuvK7NQp+dcje36S3vZ/1zPddSTQFAovoXHi6cKlrZzvutQ3Lg/Ky7XoF8LFG3Fx44zMhF1g/yPp0BBnJOfSPhKUvBLMK/Xy5preV2fIr4MHJ+2O95c1kLL4hKW1pHKjlz53hKBtbgkhyRN6EyDYwk7dOoCJ78MOmCt/MCIQe1DFAVQeSFsINDnnjFmTZfRUQlW01HBigi3mhlREIGmUrIbxrr+/mKHt/sddi8huDWPDz0K8bWPLmKfiUj9zMoS+UlQpSC/hH/lKrD9Cv0uBpvT+dzs3Yybi71sHt7hAO15vt2dcJwxE+2EEGz72VAyPWYVnIS+BuE8AM+Oyn9prqg112jfse21zFWAd4D5rZPEpZAxPtCAMC0Y4mStfMP8Vul+Wg0b1yYvz24/lGK7ivNCETQGkX0c10H72Gq61Lz/C6NOvdwLKESeJMvpg0wjJCCJ9p8nptYEbhX0=
 x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700021)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?U2o65m52HU69pBG9CTOG7ETjTTJgjuDY3b0tOkR3elKAbwNKpCKS1cLtD1?=
- =?iso-8859-1?Q?SzRr8gxxB7ZJrslLs4WG+ObSQ2/3eWcD/BZUMp43pAFnXwiIRfV/XZhOPQ?=
- =?iso-8859-1?Q?qJ7suj1m4CYSzgtx8LQjPoRrFyZrPNFlEY/2Xgpv/Em/5M3MIasVzkNemy?=
- =?iso-8859-1?Q?90fp/SG1kUWtbMLxwXm/G+d9LiEiCvoRX8H4bdP59h4kXddkpVe6uNLHOW?=
- =?iso-8859-1?Q?aKqC+eJVIpoTWW+GM2jenRifxVy+8ZNlPtzIhA13RnItZyZN/XyHa28M2Q?=
- =?iso-8859-1?Q?RdLwXq8fyMw9v1RptMbVxbB+2VvxdCoqeTpV0VQOObMNZk2aRJcSz2gtZk?=
- =?iso-8859-1?Q?PuqvKVgBfIWU1MeyX+sD9cCWk+/8T8tCMjK9ysEyMDftteHl49HBatZIeW?=
- =?iso-8859-1?Q?xbT0ry8bHjhSRkMtyu2oyPx7OYs1rSyJUBr5jVUCgHVKgA3FxZ2EeFwULH?=
- =?iso-8859-1?Q?2mvtQRlgX9S3sUVgtGEcqY3PMwfKTWYNpO2WYzjKQ2YHjmCZEcJQAo3/YD?=
- =?iso-8859-1?Q?iu1FaEYj0iXA3CQaUmddEiwr7k3OFYJ67Jc06eHE0e9f83xVufjHasnkdA?=
- =?iso-8859-1?Q?XzFUNp6LRmk9lD8zI3OvZK8wxw+sBIxwwcSIn4Ua/lAWFmYX1yO8i7YYvj?=
- =?iso-8859-1?Q?gt0HVJgjaFsb2Nm4u4oLbPf2+V0wvswy/S1d5g0sxm4UhSGavbZxkOYRNk?=
- =?iso-8859-1?Q?mxnMwhgWlMnZZvXVlzjnUXFHAZ4PUIz2HFEOLi3E9pfyQdkrmWqCHCUT6b?=
- =?iso-8859-1?Q?Is01TrAHMFM4UPdfm6V+hzbBxkcIkLUWqdm8kkDqE9WFv5MircRxOSYM3b?=
- =?iso-8859-1?Q?vsxyQVQ9vrbgQ2VTR7gkvf9aJe1Pqoh5lxaPdnM41sL25FmudEJGMuNSTS?=
- =?iso-8859-1?Q?ztayP8LtxeiOqo02ch2UuH2ZPlBjoEfwPUaKsUISDpyerc39As+qSlE0dc?=
- =?iso-8859-1?Q?qmH0z+zVU5+z3Xz3/s9U0QTpxUHlH3DPbWQ3FOwRV19jNxnmyqOt79mX1Z?=
- =?iso-8859-1?Q?RVCg2F87hL1VCoSSTXiWvQWiSH2AjslfZd3kGJ9LsPtNn7gcG1eofhLY5x?=
- =?iso-8859-1?Q?bm33eflzKRA8yPB4zPVVd2DpZ+z2/o0FVwNb5wTt/zvTGYj8d+VOFuZZ9S?=
- =?iso-8859-1?Q?PbLWC4fqTTqgTnliLRhTIPe23Cve5DImYBS1Se+uau1CorCXETpqOFoqOU?=
- =?iso-8859-1?Q?JacQeI+iLxlsuooOYQ1X2j/gbuLeUfL+IJ5qVh9JcJZYS5sr7RYi8e8Rz1?=
- =?iso-8859-1?Q?ukyty9rJ28IKRfTJGjgxvQDmWAW7WR3yMEzud6ynAhBhz2put/XunR6oQh?=
- =?iso-8859-1?Q?3LIc/UcokWGIjpY3YOQPAOMD7jnTzBG8806L9OVmRvj9eNwOl63Te0Hbns?=
- =?iso-8859-1?Q?xaL43ruX9dXLkhprC5VVsoMlaF97NQP8wUhT8AgbPrFCs0xvSoCEKrRBm4?=
- =?iso-8859-1?Q?pY2wn+cUGYiZL0KVzn8nOjMG4U3heN6GFK1jIkW7SgHftL5fhjGf2hD4jL?=
- =?iso-8859-1?Q?BTrXf4lAmgcSo1jvZ/Y7KPbouxbpoNFssrC4UW4TC6GB3lA9U/rytTqwbs?=
- =?iso-8859-1?Q?lvGNW/jU4Vnf4uemhGgsEkZ6G7gZyqDPQY2AmiKNDGk+WGAked1rctptHH?=
- =?iso-8859-1?Q?gO+vOmlaOFfRW7F19lFXaOULu1nPAe+e9Os+tNhNw2spEfla/dYyie+fdq?=
- =?iso-8859-1?Q?c2+EFl47UA+AUd68u46/R6KlEqn9J4uIJe42TlbCKXTSbUeRJ39bFZ4llu?=
- =?iso-8859-1?Q?U3sCFzqKd/XaagBZxriuk5WcubivDNEbWmxZs9pm/+2u620xAadR2fe1WO?=
- =?iso-8859-1?Q?CJ0ymxy3Nw=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?XsZ4YGDIV/mBVRwNfSSkdMTGkU84pcbqSruSBYpgDDBNCytQDX+hb1O4X/?=
+ =?iso-8859-1?Q?sACKzS6pR2ySu74eJeuR+dqVBLiMAoM9BwB4ew4GnusDJAMr1tIwhib9gG?=
+ =?iso-8859-1?Q?lZXgctjCfPQ3VXvfnZnXHbQnIw2d3q4liAkl1/w7Ea378+aWSSaDahaqiL?=
+ =?iso-8859-1?Q?OLjVHsPMDaDzmXQL5RgxGQWYdW2HyMrCzW7dfUgiejQMiddnfQixzuXHul?=
+ =?iso-8859-1?Q?B0DYIEmiuMnc8anzI3FPSIiVX4We7Plg3+mXRdv/LNakxZH+yQ0UcbYxP5?=
+ =?iso-8859-1?Q?Yytwh2mG38xibYMZtpsVHDbVr7ASq6eGRtFdVZ05q45zqdUYXupdiiGQra?=
+ =?iso-8859-1?Q?XHD7wx+32QKFru4T7H/R7D0A7CAS+1KhC3oErjqbZA2ZOFw+L1uFktrZmD?=
+ =?iso-8859-1?Q?AfrwWjj3eQ0O4DtFPDgZBZmM9UHEYV+Up3tagt/C8Ln6KT8yYSDj9KmFiq?=
+ =?iso-8859-1?Q?nj27HyYKu6Tlei1Czpcu7IFML1qUBWcUJxVRH9drHtVvOBKYYVSHVuktqR?=
+ =?iso-8859-1?Q?El4hcqvXP+a4ZbpWvCCI6vHTmJaV7UtYokUzeIICar8w8aQ05DKw46rMxa?=
+ =?iso-8859-1?Q?fum75GNdYe1jI8H1SVFoLQzVZtlsXQz1JlnX596Sb1hP49U7vuCBj0ab1U?=
+ =?iso-8859-1?Q?5B37m67GJZc3w4Nc0cOE73xo2XBRCX5EKDOH/vgIhuKmSQrAaH7G3PcDQX?=
+ =?iso-8859-1?Q?e+xi9HXNZwvfx74D6Fs7HVYTt9WO/adpSkjplt7NSRLX1dtnkfdCcizFVN?=
+ =?iso-8859-1?Q?Lmo1AhNahoLKdH5YqmFNeS39mcSTY9kiTFpsiNwh6hLx3zCdey5NsjpEyf?=
+ =?iso-8859-1?Q?fbu1b/XKWJ/zKeczWMKFYs93B8FgU2dB+zLtC4nzm/GT9JG8pqC8NjjdBy?=
+ =?iso-8859-1?Q?F8pmkF6nmDxzO5xsfcFv8CiOc6UywNYJmh51nKHPXSce0ca8Iy+1aDUHrg?=
+ =?iso-8859-1?Q?jSAWOZLaiaAWi7ylPKI0ghIFz9XGYrjoCSshNiaO33I3nVAAbKNzwsDGEc?=
+ =?iso-8859-1?Q?c9+Ud4IpGFDsjJc8LASuNVHHwNRsVN2T8ybnwgWLkq+qG8Tmieypp0RYas?=
+ =?iso-8859-1?Q?6HdyiLTNsr7IQkg0jBYdtQzWwd5RLwXFLT7vA/F/UBIGWPySfl8M9Xyb0n?=
+ =?iso-8859-1?Q?JqAw+0K2sZoaquLo3A+Q4EavVnuAwNkLlg5SxQUI6yO5UGdcu5lwh9dgXZ?=
+ =?iso-8859-1?Q?gV7gERD5s+uN6+hyF1ph7M4USeX+0s246K0F3l5CMbJBKeJn6PddUXlkgS?=
+ =?iso-8859-1?Q?zLgg3iWmveIGzdhZsYlxTj9su06lE6YajwoUTH8n3Y5D/htJLrTzbQCMRH?=
+ =?iso-8859-1?Q?K+CAnLvdxrrR3qVmqFF9ud9TV4+nzWaxM0VB56yEZJq9A5gULuqKi5sJpk?=
+ =?iso-8859-1?Q?lR7PcY0k5R6uA+a3JI5rg2VzmayNGQxj4kCEq26+vRIpo4Gj6t+tI2A8TB?=
+ =?iso-8859-1?Q?PjxKUjZhsHEzUtZv/2cauO8aPBTMwZb0v4KropPzowxD9mxjB7ViQbANqU?=
+ =?iso-8859-1?Q?iSVj5WPB8zZJL9s5f7gKprm35J7djpabcj95q7+XelYxaY9kN35LjaV7f+?=
+ =?iso-8859-1?Q?x1dI/WUPertPGSKpnO+iLRC4KIUSN/NvYBU/WWmpwQMExRVIUhzg/ScC5I?=
+ =?iso-8859-1?Q?2ZTT8bBHiS4ePCQPYogRfaGElUC6/mZRH6qBJh888gfHfYuIlWNNRqgoUL?=
+ =?iso-8859-1?Q?XUjRW8ZB+7R8iMRBIHnxe1fY2nZ9IEPxrilxfYs/54YfAbCoSZiGttByVI?=
+ =?iso-8859-1?Q?1uWtcGCAG0tveMn6iIJPQ4gJpwdZ29TiJkuMqmp68s6kKBspYLXefUTikd?=
+ =?iso-8859-1?Q?fZCvdwfRaA=3D=3D?=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
@@ -145,63 +145,64 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked: vfHyXVZughmJXx1a5GkU6kTpdEUTGL7kK1FAqPEbQf8/nzR7G1Zksf06RoNrLLa3urW/YLGJ69N0tAkKKfRWGlzSaVmA3BLvoylEBJMZO7B9rCTsyqzuxnJRhw3nh9nm9iqTE/gtNGK3xGZhPlZwLQWlYmsLCvkejxZasCiN8OEvV7bbzIm+TUyD+GQp8xVST+5teRvUmccvue0aWvvgHgsD6S14Tq+xWLUbRbLPBhWJUtks9wun/6WY28YW3uHA2dF3IAxIG9lUl4JI/ysqPXmg87fkD6UwqtcLzpEzc+fH3PuKE0g5sVujG3nqPFqagKse02sGZJ/Dd5KZCtoC7g==
+X-Exchange-RoutingPolicyChecked: h5gCXwlkKQ9H0nHk4whT6yUVrUK03YGimJftF5cJxEkBIWkH9Zk5FairTRwZLYaZIPhBnaViToRccKbfiHCDqEdfSYeyCAmWqyFweHiqBKA+JYmp/jT/7PTysxNJs+NGdKPsRgUJFl+CRIg/fh+e4lPqaOMqRFHIQu0fr/dUCrP9CFfhz0NCEczwHpqcDGdBJN9c45QKDNDYyOpEOc24BFEExb7Q6alPXXoXyxwXgeer7bDKQLUkNY9muiXMQjnBHiAScF9sT3Y6xxcZT666LonE6fybu3XE6GMXzt5jk5B0JIWnsUxk6klFluOTBPt4nA85D7lgukO42G/J+hc8rw==
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3afed267-6f05-42b7-697b-08de8934b648
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Mar 2026 23:34:22.2571
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3bc0fc57-5e95-4932-e1ec-08de8934a0a3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Mar 2026 23:33:45.9259
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6+ycinU9WYtxSbRUGgvgAPHPbCtRpM/qYOpDH29ynzePe595F8yP5C9BcDLR41w8sCM1C4E0PwZ9ad6FpO8N9g==
+X-MS-Exchange-CrossTenant-userprincipalname: rrqAQq6zqTNVD1ijAS50BYP2F0bQWJOkxNIxClp+HNMK18Xpr+0oSl0NqN4HK8lNrwrSDvby8pknm82yXNjDdA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR84MB3989
 X-OriginatorOrg: hpe.com
-X-Authority-Analysis: v=2.4 cv=Z5rh3XRA c=1 sm=1 tr=0 ts=69c1ce05 cx=c_pps
+X-Proofpoint-ORIG-GUID: jVm--Wcjwj6_l3Vbq_FL2UQze3z3HB-R
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzIzMDE3MyBTYWx0ZWRfX5/1/Okjx1CDs
+ J+7tOSUDt7ElNz7vcLmji+b5WjPBF5hol9YOVve/KKq17Ovq6TMp1gFmnkrkdp4EUkcQRq46/Jx
+ NrWeO/zMnstwwCunihBNQ7/ST7i70Sni222C0ANkYeaBlXi/oO/ymlXOHo08gp87uOzBNkElo1f
+ 8jXUUrPb6Sz+kJfbN4ZNYb0jaEt5hBvRSG6hkXzJszgffB3XrBQpE/hHSjdxyxEScwZKpw4fJGr
+ bF97g6jfSF7Y4PcLEJlq1Gn7kkToDKa103SIQ9oxYkPcLQEIU222TEs6WqzESsAPDmHP8iFGP3P
+ UydLBIb/s0ly/z+uF8Ynr86rYp/Mu0lTeWFvsyKkO8A091AaUH/RG0zijFtD14gyYo19I/oljKK
+ 0BLuSRrfC4n7h9CUfkJBowqSLKUNvxcKhq9vEN81xJ5QLLB+Y3AGDdR63JXJy+9kstJ0nINToss
+ IW/o80GPaUhPvXy95uw==
+X-Proofpoint-GUID: jVm--Wcjwj6_l3Vbq_FL2UQze3z3HB-R
+X-Authority-Analysis: v=2.4 cv=ELYLElZC c=1 sm=1 tr=0 ts=69c1ce16 cx=c_pps
  a=A+SOMQ4XYIH4HgQ50p3F5Q==:117 a=A+SOMQ4XYIH4HgQ50p3F5Q==:17
  a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
  a=xqWC_Br6kY4A:10 a=8nJEP1OIZ-IA:10 a=Yq5XynenixoA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=gQcMVamqm3wCPoSYhaRC:22 a=6_mrDcixewTG61oOsKN3:22
- a=OUXY8nFuAAAA:8 a=VwQbUJbxAAAA:8 a=oWjv0WD8qUs_733JoPwA:9 a=wPNLvfGTeEIA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=gQcMVamqm3wCPoSYhaRC:22 a=k7r4yCLl9DVLXMiQTbtC:22
+ a=OUXY8nFuAAAA:8 a=VwQbUJbxAAAA:8 a=Knx6zecuWxaYfDB9Tz0A:9 a=wPNLvfGTeEIA:10
  a=cAcMbU7R10T-QSRYIcO_:22
-X-Proofpoint-GUID: 9DUOigVu_jJTYHrOrvKhdtWo8dcrt3oR
-X-Proofpoint-ORIG-GUID: 9DUOigVu_jJTYHrOrvKhdtWo8dcrt3oR
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzIzMDE3MyBTYWx0ZWRfXyxA7D4BOV1md
- CVaiV7L0DU1ImKwKoWnH4KbHnETuyo/7my0nfvNxjsHHp1vm7FXGeJXQWVxvZRo35HcWzP5OUHy
- w3LN9AAAZbJ64PRc2a0D59w7fWt2hSOZwVK+7ucvqO/g8NISmbZP+M2itzip78APC4CyMM9S/XD
- UkoKdT4PcXVJmskmXQE4eTmOTQWshAvpqMHQ3F3kkI1OiXLwK31SghJ5LYMe7jrJmHfx+LEHN3G
- c2Saq7CDiQzAPrcum0b4TpCam8SoxntUN/ZRTa6U6I25uQA4jB1UYng5WNBG+3d5n9H6IO+4f8u
- bX6e0tRwfw0eJ4PMbKc4KyQmN9yKh5dvCsbc5EcZGC36NWx2IQ1NVbk0UW28f3KI0ZWjYlUPqYD
- k1/OB/5SeTsTpAl1lMMcJwYQamoO37ngnHez1x+bX76GlZmZ8YXQNdGVXdHDfS5skFDQmtlMFaQ
- s76CguCfPmMqkb8mWtQ==
 X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-23_06,2026-03-23_02,2025-10-01_01
+ definitions=2026-03-23_07,2026-03-23_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 bulkscore=0 impostorscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 phishscore=0 suspectscore=0 priorityscore=1501
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2603050001
- definitions=main-2603230173
+ spamscore=0 suspectscore=0 lowpriorityscore=0 clxscore=1015 malwarescore=0
+ bulkscore=0 adultscore=0 priorityscore=1501 impostorscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603230173
 
 From: Sanman Pradhan <psanman@juniper.net>=0A=
 =0A=
-mp29502_identify_vout_divider() and mp29502_identify_ovp_divider() read=0A=
-divider values from hardware registers (MFR_VOUT_PROT1 bits [11:0] and=0A=
-MFR_SLOPE_CNT_SET bits [9:0]) into data->vout_bottom_div and=0A=
-data->ovp_div respectively. These divisors are used in=0A=
-DIV_ROUND_CLOSEST() calculations across multiple read and write paths:=0A=
-vout_bottom_div feeds the PMBUS_READ_VOUT, PMBUS_READ_POUT, and=0A=
-PMBUS_VOUT_UV_FAULT_LIMIT handlers in addition to the OV-limit helpers,=0A=
-while ovp_div is used in mp29502_read_vout_ov_limit() and=0A=
-mp29502_write_vout_ov_limit(). If the hardware returns zero for either=0A=
-field, a division-by-zero exception occurs at runtime.=0A=
+mp2869_reg2data_linear11() and mp29502_reg2data_linear11() decode=0A=
+a Linear11 PMBus value using signed intermediates but return u16.=0A=
+This can silently truncate negative or oversized results before they=0A=
+are consumed by the driver read_word_data() callback path.=0A=
 =0A=
-Add zero-value guards that return -EINVAL when a divisor is zero,=0A=
-indicating the hardware returned an invalid configuration. This causes=0A=
-probe to fail gracefully rather than crashing with a divide exception.=0A=
+Those helpers feed values later returned through the driver=0A=
+read_word_data() callback path. In that path, negative integers are=0A=
+reserved for errors, so successful decoded values must remain in a=0A=
+non-negative bounded range.=0A=
 =0A=
+Change the helper return type to int and clamp the result to=0A=
+[0, 0xffff]. This makes the bounded result explicit instead of=0A=
+relying on implicit truncation to u16, and keeps the conversion=0A=
+behavior consistent for all helper users.=0A=
+=0A=
+Fixes: a3a2923aaf7f ("hwmon: add MP2869,MP29608,MP29612 and MP29816 series =
+driver")=0A=
 Fixes: 90bad684e9ac ("hwmon: add MP29502 driver")=0A=
 Cc: stable@vger.kernel.org=0A=
 Signed-off-by: Sanman Pradhan <psanman@juniper.net>=0A=
@@ -209,34 +210,56 @@ Signed-off-by: Sanman Pradhan <psanman@juniper.net>=0A=
 v2:=0A=
 - No changes to this patch in this version.=0A=
 ---=0A=
- drivers/hwmon/pmbus/mp29502.c | 4 ++++=0A=
- 1 file changed, 4 insertions(+)=0A=
+ drivers/hwmon/pmbus/mp2869.c  | 4 ++--=0A=
+ drivers/hwmon/pmbus/mp29502.c | 4 ++--=0A=
+ 2 files changed, 4 insertions(+), 4 deletions(-)=0A=
 =0A=
+diff --git a/drivers/hwmon/pmbus/mp2869.c b/drivers/hwmon/pmbus/mp2869.c=0A=
+index 4f8543801298..fc4ce854c9c3 100644=0A=
+--- a/drivers/hwmon/pmbus/mp2869.c=0A=
++++ b/drivers/hwmon/pmbus/mp2869.c=0A=
+@@ -65,7 +65,7 @@ static const int mp2869_iout_sacle[8] =3D {32, 1, 2, 4, 8=
+, 16, 32, 64};=0A=
+ =0A=
+ #define to_mp2869_data(x)	container_of(x, struct mp2869_data, info)=0A=
+ =0A=
+-static u16 mp2869_reg2data_linear11(u16 word)=0A=
++static int mp2869_reg2data_linear11(u16 word)=0A=
+ {=0A=
+ 	s16 exponent;=0A=
+ 	s32 mantissa;=0A=
+@@ -80,7 +80,7 @@ static u16 mp2869_reg2data_linear11(u16 word)=0A=
+ 	else=0A=
+ 		val >>=3D -exponent;=0A=
+ =0A=
+-	return val;=0A=
++	return clamp_val(val, 0, 0xffff);=0A=
+ }=0A=
+ =0A=
+ static int=0A=
 diff --git a/drivers/hwmon/pmbus/mp29502.c b/drivers/hwmon/pmbus/mp29502.c=
 =0A=
-index aef9d957bdf1..bbcf018e5d05 100644=0A=
+index 4556bc8350ae..1457809aa7e4 100644=0A=
 --- a/drivers/hwmon/pmbus/mp29502.c=0A=
 +++ b/drivers/hwmon/pmbus/mp29502.c=0A=
-@@ -134,6 +134,8 @@ mp29502_identify_vout_divider(struct i2c_client *client=
-, struct pmbus_driver_inf=0A=
- 		return ret;=0A=
+@@ -52,7 +52,7 @@ struct mp29502_data {=0A=
  =0A=
- 	data->vout_bottom_div =3D FIELD_GET(GENMASK(11, 0), ret);=0A=
-+	if (!data->vout_bottom_div)=0A=
-+		return -EINVAL;=0A=
+ #define to_mp29502_data(x)	container_of(x, struct mp29502_data, info)=0A=
  =0A=
- 	ret =3D i2c_smbus_read_word_data(client, MFR_VOUT_PROT2);=0A=
- 	if (ret < 0)=0A=
-@@ -160,6 +162,8 @@ mp29502_identify_ovp_divider(struct i2c_client *client,=
- struct pmbus_driver_info=0A=
- 		return ret;=0A=
+-static u16 mp29502_reg2data_linear11(u16 word)=0A=
++static int mp29502_reg2data_linear11(u16 word)=0A=
+ {=0A=
+ 	s16 exponent;=0A=
+ 	s32 mantissa;=0A=
+@@ -67,7 +67,7 @@ static u16 mp29502_reg2data_linear11(u16 word)=0A=
+ 	else=0A=
+ 		val >>=3D -exponent;=0A=
  =0A=
- 	data->ovp_div =3D FIELD_GET(GENMASK(9, 0), ret);=0A=
-+	if (!data->ovp_div)=0A=
-+		return -EINVAL;=0A=
- =0A=
- 	return 0;=0A=
+-	return val;=0A=
++	return clamp_val(val, 0, 0xffff);=0A=
  }=0A=
+ =0A=
+ static int=0A=
 -- =0A=
 2.34.1=0A=
 =0A=
