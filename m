@@ -1,170 +1,152 @@
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013004.outbound.protection.outlook.com [40.107.201.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B35C4399367;
-	Mon, 23 Mar 2026 11:09:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.4
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774264154; cv=fail; b=FBp5cDs9ZhDwy8C52w+5aw3lE5Sl4tCG+KY+KccCuzzMM6VW/5t6DPrryMq/zz2wsRFkbpi5HI5KAnOHZ/f201NE/c4zbgg8CLyokNc+J15uogXT2ZFfIgklK2gAtx3NULMyI6t3X38VhOimsNFeKxjvk46xjw0BUZfe7/sZE0I=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774264154; c=relaxed/simple;
-	bh=nLTY8k/s/mzofaL2s2ylizDcIq7OQbDEq1GQw4pR1Vs=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hXZKB7HQ446ssWQ3ZQLvcHd0VBxqBH+LhuTvHdt8dubogCJ2H0Z3OU6SikhctD+AWi55ttNUyT3VuRaa1UrCjiWtGE93RAQG0sb+qO8VCQH6h5OArj0TP7nMEDa+XMC0+5ZvEnRdAmAnXXEqGPjNkH2RM3cTM2eL+Ioiuo4BnRo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=di43HHSW; arc=fail smtp.client-ip=40.107.201.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746963AEF53
+	for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 14:15:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774275357; cv=none; b=n4+4cb3ReDnyLJEAJNQ//9+EhJlckLQX1EPVDK/X+Z9l1dE4ZEqlVSmkVBuPX10viHyW3xq3HLXE2c+lJdLuviT6WWbOX4KzsCgYT+gC+xIY+gcCTTkhmJp28705kzwn1ZuphCyAN7MZP/eaFlLSPolGYZmM3IWQlUhsXzmUM5A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774275357; c=relaxed/simple;
+	bh=htqL+8ZGV4xNe9uVip8GiIqy7pwKgpqp40A9l5kLmA8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OAmiZ0I7FogPlOaX376uW4VWwIHR6qQMVc/0R8WsQEU/epgNtthBcdRBVEdnePdTJ7Drl/L02kl4hZ53X8yuX4rtBqizs27AMsafFINVM2nKq0CCcgxtwFbHNyfVw14dTq5KNxAilt4ULcn4Sf5HXJrT8Oulbzpxds/hRWJC0DM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fL4bmE7N; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="di43HHSW"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HQYF8EOfpV1x3ducFLTvPMSVgh3csuwsBWD6c1jl125gvBXzBCaRVX1ulSwucNdsuGT9pNSNebmiLQJ2/QwXS/Tba2b3QsXvv8DVMdNMMEOeWm7BwtZvyVj9IhiL0Uk0DdpZEcNJfl+PU0Q/gZ8HYnv6S+J/8fpMSUO+tcmgUB2Qa0EUFR4ubZcn+UFtyRxJjNityjdUN2dnx0XpNycnJJPM82Cx3Sd1AZ+gtC3ZH+kj83QDxbv+9/zYtyzHqm8z3BHXgkdUNBnDzRDl4peJ6+GNo13lp40nPaGWQpVCrbaGRUES/A/Hz4bBlSBgnVDxju9nPmyHphUzZpmE3sPmXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ecelYwyFGdZfl0zRdrDcfqiLd1ould15Q4JP1mj9EVE=;
- b=CAFO806oA+B2qJ4tl0td3sgeB0TU68K8WGEW0p5x/hTY3qGefssbCsukNvjtirSg+2tsl6JGtra0RMk8dtcf0gmTdrEHiGT0PRdOr2nG6Hpv2iVSbFBrqVfrqT4Kky8drnv8aIt4sdUAoU6uGKnWtos++EkKQZ9ol2oZuXlVaiJx5frljNY2pdpGL/xhsM+hj8kjs5rUu2d3AHM8QW9o2r7+ftjSgBV8o/3Kbo9+Yy0N6r2lZA27nnsJpJUVq2EmPdu0h2XLTyFJhWTFfwJtGJgdrDn1Xh0M+LeHvpOOsYoRNV5NmXADBqA6vPDJX2ghIwwLdvMMS1rnYbWIIA4azQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ecelYwyFGdZfl0zRdrDcfqiLd1ould15Q4JP1mj9EVE=;
- b=di43HHSWA5RJCoyrss6xfu4ngt+yu7CtXT3CMRsBooPENxj7I2cTBTKDVrsUorQyjv9Blsnt4EnP1KuN+1o0NwJmDUBb413xeigwZzn30ZRTKH99+cSgKaZ+vs+nU9wLO/C9AhLQTCT98qnEo2CFZgsKc4+weQd0cdkesdP25cs=
-Received: from MN2PR08CA0004.namprd08.prod.outlook.com (2603:10b6:208:239::9)
- by CH1PPF68E8581EB.namprd12.prod.outlook.com (2603:10b6:61f:fc00::611) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.8; Mon, 23 Mar
- 2026 11:09:08 +0000
-Received: from BN2PEPF00004FBC.namprd04.prod.outlook.com
- (2603:10b6:208:239:cafe::95) by MN2PR08CA0004.outlook.office365.com
- (2603:10b6:208:239::9) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9723.31 via Frontend Transport; Mon,
- 23 Mar 2026 11:09:04 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
-Received: from satlexmb08.amd.com (165.204.84.17) by
- BN2PEPF00004FBC.mail.protection.outlook.com (10.167.243.182) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9723.19 via Frontend Transport; Mon, 23 Mar 2026 11:09:06 +0000
-Received: from dcsm-trdripper1.amd.com (10.180.168.240) by satlexmb08.amd.com
- (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Mon, 23 Mar
- 2026 06:09:02 -0500
-From: Akshay Gupta <Akshay.Gupta@amd.com>
-To: <linux-kernel@vger.kernel.org>
-CC: <corbet@lwn.net>, <skhan@linuxfoundation.org>, <linux@roeck-us.net>,
-	<arnd@arndb.de>, <gregkh@linuxfoundation.org>, <akshay.gupta@amd.com>,
-	<Prathima.Lk@amd.com>, <naveenkrishna.chatradhi@amd.com>,
-	<Anand.Umarji@amd.com>, <linux-doc@vger.kernel.org>,
-	<linux-hwmon@vger.kernel.org>, <kunyi@google.com>, Akshay Gupta
-	<Akshay.Gupta@amd.com>
-Subject: [PATCH v1 6/6] docs: misc: amd-sbi: Document SBTSI userspace interface
-Date: Mon, 23 Mar 2026 16:38:11 +0530
-Message-ID: <20260323110811.2898997-7-Akshay.Gupta@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260323110811.2898997-1-Akshay.Gupta@amd.com>
-References: <20260323110811.2898997-1-Akshay.Gupta@amd.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fL4bmE7N"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-c742824e1d3so1369505a12.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 07:15:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1774275356; x=1774880156; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=iefLiyxyiQGfXrTnw6sp+93st5Cs/wPL5mI4sK1c0Lc=;
+        b=fL4bmE7N+cYkGG2QLqUOyZZsHRJZfGo6AvotakOMeZTTHaBeD6X8rPv84/tk8/Me5o
+         LipVN+99R3V9mucotQrV4TXX+9GgCOsSzK5nBkJg/RAlsMfT8OAFGQUf4+v5UFotpU1i
+         h0ShNqvsjREV5cprElWKk3/Kvj5NbUdPslTIiwjFyVG3CrPM/nurOqNVf70H1oBJ+9SY
+         i+KbnY7TN5FzMmqDUjTTUiKFBidyJLg7dJTkC4gDMOxadHOGM6tJqJUPVJfu9VkdHN5R
+         Z1JswUx/CS1vhSlulu+Lu5veiEPnE6FcHOYG3QNvKxSpBqmcTjuf4e/CQpxA7Dyj9xvH
+         qFUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774275356; x=1774880156;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iefLiyxyiQGfXrTnw6sp+93st5Cs/wPL5mI4sK1c0Lc=;
+        b=lEy4RyayywB2Sxg6UoHb6MbdhvikauhmfQlBFXC351WhnuX0wJIk/XX/yV2Zd5lI03
+         s/QXQjkEWuMp6XG9A1p6opRBvfKOO7EAldnYDXRdkVP3CivHqvHt2lq7FNfrtB8H0MMk
+         hfCfRaa9CFn/LzAZXmFA6AXSoCp7Et1LgRhLIzJsU90RHtEPuW9Y1biVHZbTqkX9MCYb
+         PWwkvsp1PuAxVDtZKbrEmglz+W9s8EgCcwv53QCS1HDywnmz8Ls0PtbGLZ4icTewfCCF
+         muklmmrA/kQuJbWwE52oFLQnoG3TNUmnzFIcs+4TfsUX07Yf/VL/GNT9FAegGbJnOJjC
+         r9Bw==
+X-Forwarded-Encrypted: i=1; AJvYcCWMcPOHzx1JbAXdHmnMXCly7XkL4vZss/zPMlsxAiD5ZeUjFTTcmuCS/IyfCXI91lsqnWS9LvCfxrZUSg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzA+KHW/DKKikeTp92mbNZELoXIY8tvWzomaRRCYVe2tUUs9+DY
+	AoHP2iafPgqxMidMprDT3vmYB0Mmb8ioT0BU4jvdNtAprmycmwMCSlPt
+X-Gm-Gg: ATEYQzwG1vmeQPcaxVzn70DBl0nJLlSJm4a6rN0+KhutL++Cx89DlBORX1unB9cRzmh
+	yT4yinpuq4NqpECGBreK4qOBHoB/JuHord70wJZojTMbYTfsjKYAE9LxzGyY8vdClRaLxrlm/Qa
+	vHl1SUO10hBC2TEGZoXsd17BN/mRa3tc4ykmTeK/NC87vbeR7VBAq8VA5YgMw6MYaKB+f2ae7ch
+	m7z5u50TRZfhy9d4IAD1Hn6ZG4wfENX69i6rLEwddZhqrVFlomm8cuPU2AIcTFOYzJcST7nIVWL
+	qrLAU/s6XvVLGUOTgou/Kx+vdWMcMHtkF2ezI38RblZlzLupxvfi/aUW17WBCYfIl+jxbGAxFGt
+	HM53R9jCD3QyyOOE4Joni5lFq8+xw0g+r0OrpHPJH0P2MLCXC8WRhwHhsufkILaq1taKT2YlXbJ
+	r03HOneyh1gvGgf5QT8vxSSR8GkAzTxbHkXgGjPEy9QF2oJILvPERgmt0IMX/weLFMOx7jUVAkk
+	JL5MXZ4ziM=
+X-Received: by 2002:a17:902:e84b:b0:2ae:c7dc:95a4 with SMTP id d9443c01a7336-2b0827749f5mr115976435ad.20.1774275355708;
+        Mon, 23 Mar 2026 07:15:55 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b08368ea1bsm138336495ad.68.2026.03.23.07.15.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Mar 2026 07:15:55 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <86ec222b-d252-4586-a1cc-2a7a5674e1b4@roeck-us.net>
+Date: Mon, 23 Mar 2026 07:15:53 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: satlexmb07.amd.com (10.181.42.216) To satlexmb08.amd.com
- (10.181.42.217)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF00004FBC:EE_|CH1PPF68E8581EB:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4b8f21c4-c6a1-463f-b717-08de88cc999c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|82310400026|376014|36860700016|13003099007|18002099003|56012099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	UNiPf0DnlPFZ5FHQLuzg7Z6plWdTAEMWVEILXAM19CBgL98tVA0fNrUEUuFr7OKI6t7LXAcYW9ZX5jxrj0Ad+E0geE/J05rLyMGwwHZNT1/dOe/p3tyjbe/fNQYgvShwtgsqFBIobOKlSS6kdb9tdWIpovPfSAskn3dGGg8fmETApW1iSbCih6rOmnrt+wtvdJvXCggoflTdb3NkMKAL8V6FZ0ObZzKQEofFW+R/rBEyBV25G2aK67NVBB4BkGEbo4G3Ss9f2rkyvi473qLZ77sYTEpHhZJkfcYMPZDhTsQH/aQgk6aEdc+kkjIbllMFSWnXAKd5aFoX4DT/2f5dVs+3C/5HsxsQUFHYmYycnP5rQFGx1bLiZnYcB/gZfVJdYkpXwB/Hb+Tr75gCmM168DCHTgUzvNYJNOp7bPsZ3W0EQGsW5XGkRZsb0SOEjwzMp5R07p2WMaSf4i9d2xVu7zNSbLK93A/3uABF65nPQk183y9l7x5MtzGAKRv+ca3G3UdmD9pqCQ2EZyMzlgtJdfvpVpKV8k3iLAUHh+6vA7wFobQx9kjNcmsAxgBGiR3HST8HP0Xy5YJIh0jRk3B6d0HjOYxz63fPLXd7Plkt9/JI/+jmIwsvT0V8I9Q+M66dyyoAbVEZSsT/Legc/pt/FT7xyieLb9dunTRi4XDTkbBlR/tl/ARxh5c7wr5R44TJTI37piHDxQGQ+1q4QfEcDeh1/iat2WUWgkUpgbPDanBj0pANzka4ezjfz1RGeet5KFOIqAUAxmJQkD25x/ifmM/IqLkZIHMNTW4fFso7mXU=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(376014)(36860700016)(13003099007)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	LhTawAhz9vYwtzetjavn2yGcPKqwk8sGCLYvykevabQg6v3VYf84dh6gzaqZojjZxRdpQsO7jM7EKPxapwoKs6ZOfOHioWA2yXZIqjRDIDgvuZl/pN2U0rAtzQB8G7RD9rUilgdhQzDoBwGhcV2+m9wekeUPr2+PR5ls6ZQrT5e7tzC6AY5VKqvIfuXISE7ijKF/QYEwfMNOWcGnz29VnktU30jHpjxw92zfY/LT0wU9Kk3CcZoyb4CTjYDMPD4hzXKqbZWti3XtCgbS7h7gR9WG86RH1IHRrsAJtykqm3JG7cMXkQ1sVUWS7QTR4OREGvgstY6pYH5QRIkQ/ctcYj3VnJiERacjoAYa+o3j19Slm/IxduXXpCqX7msAaVG5AxjJIioAcLquSsLey/joCe4xTdRbxeIFpbW3ITOPe8OEf1H+axc3K1s2lcTeV9H4
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2026 11:09:06.4688
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4b8f21c4-c6a1-463f-b717-08de88cc999c
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb08.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN2PEPF00004FBC.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH1PPF68E8581EB
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/6] hwmon/misc: amd-sbi: Move core SBTSI support from
+ hwmon to misc
+To: Akshay Gupta <Akshay.Gupta@amd.com>, linux-kernel@vger.kernel.org
+Cc: corbet@lwn.net, skhan@linuxfoundation.org, arnd@arndb.de,
+ gregkh@linuxfoundation.org, Prathima.Lk@amd.com,
+ naveenkrishna.chatradhi@amd.com, Anand.Umarji@amd.com,
+ linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org, kunyi@google.com
+References: <20260323110811.2898997-1-Akshay.Gupta@amd.com>
+ <20260323110811.2898997-2-Akshay.Gupta@amd.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260323110811.2898997-2-Akshay.Gupta@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Prathima <Prathima.Lk@amd.com>
+On 3/23/26 04:08, Akshay Gupta wrote:
+> From: Prathima <Prathima.Lk@amd.com>
+> 
+> Move SBTSI core functionality out of the hwmon-only path and into
+> drivers/misc/amd-sbi so it can be reused by non-hwmon consumers.
+> 
+> This split prepares the driver for additional interfaces while keeping
+> hwmon support as an optional layer on top of common SBTSI core logic.
+> 
 
-- Document AMD sideband IOCTL description defined
-  for SBTSI and its usage.
-  User space C-APIs are made available by esmi_oob_library [1],
-  which is provided by the E-SMS project [2].
+This moves the driver out of hwmon space into misc/amd-sbi which,
+in my opinion, is completely unnecessary to accomplish the stated goals.
 
-  Link: https://github.com/amd/esmi_oob_library [1]
-  Link: https://www.amd.com/en/developer/e-sms.html [2]
+I assume this is to be able to make changes which do not follow
+the hwmon ABI and/or to bypass hwmon subsystem review, similar
+to what has been done by others.
 
-Reviewed-by: Akshay Gupta <Akshay.Gupta@amd.com>
-Signed-off-by: Prathima <Prathima.Lk@amd.com>
----
- Documentation/misc-devices/amd-sbi.rst | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+Obviously, I think this is a bad idea. I won't give it a NACK,
+but I won't approve (nor review) it either.
 
-diff --git a/Documentation/misc-devices/amd-sbi.rst b/Documentation/misc-devices/amd-sbi.rst
-index f91ddadefe48..ddff3cea8ed1 100644
---- a/Documentation/misc-devices/amd-sbi.rst
-+++ b/Documentation/misc-devices/amd-sbi.rst
-@@ -48,6 +48,20 @@ Access restrictions:
-  * APML Mailbox messages and Register xfer access are read-write,
-  * CPUID and MCA_MSR access is read-only.
- 
-+SBTSI device
-+============
-+
-+apml_sbtsi driver under the drivers/misc/amd-sbi creates miscdevice
-+/dev/sbtsi-* to let user space programs run APML TSI register xfer
-+commands.
-+
-+The driver supports both I2C and I3C transports for SB-TSI targets.
-+The transport is selected by the bus where the device is enumerated.
-+
-+Access restrictions:
-+ * Only root user is allowed to open the file.
-+ * APML TSI Register xfer access is read-write.
-+
- Driver IOCTLs
- =============
- 
-@@ -63,6 +77,9 @@ Driver IOCTLs
- .. c:macro:: SBRMI_IOCTL_REG_XFER_CMD
- .. kernel-doc:: include/uapi/misc/amd-apml.h
-    :doc: SBRMI_IOCTL_REG_XFER_CMD
-+.. c:macro:: SBTSI_IOCTL_REG_XFER_CMD
-+.. kernel-doc:: include/uapi/misc/amd-apml.h
-+   :doc: SBTSI_IOCTL_REG_XFER_CMD
- 
- User-space usage
- ================
-@@ -92,6 +109,7 @@ The following IOCTLs are defined:
- ``#define SBRMI_IOCTL_CPUID_CMD		_IOWR(SB_BASE_IOCTL_NR, 1, struct apml_cpuid_msg)``
- ``#define SBRMI_IOCTL_MCAMSR_CMD	_IOWR(SB_BASE_IOCTL_NR, 2, struct apml_mcamsr_msg)``
- ``#define SBRMI_IOCTL_REG_XFER_CMD	_IOWR(SB_BASE_IOCTL_NR, 3, struct apml_reg_xfer_msg)``
-+``#define SBTSI_IOCTL_REG_XFER_CMD      _IOWR(SB_BASE_IOCTL_NR, 4, struct apml_tsi_xfer_msg)``
- 
- 
- User space C-APIs are made available by esmi_oob_library, hosted at
--- 
-2.34.1
+Guenter
 
