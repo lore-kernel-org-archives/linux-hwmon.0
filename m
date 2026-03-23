@@ -1,67 +1,67 @@
-Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5329C3AD513
-	for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 14:33:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CFC1387593
+	for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 14:43:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774276389; cv=none; b=i/KG0lb4FkDBQ6WBEn1fcRp+5NPrIHWqHoWvxKAPH50FeBqry50wVZsruh8UfScbdBTfZ+hoEHQB5BKCBjbivGA4LDJi7cINwHFnLNtbgRFX0ky9vUewxvit83M6PrqJCAkLR+TZyxXlxHN1nWYTauoej/0YSBfjhJItMG+/urw=
+	t=1774277031; cv=none; b=hR87pq+29kvpsxHMFRv/0PtxqM5505WpWIEybMJnSG2OJeC+l3D3ao6NFIRWvnpvbvoMVTqfalID4Sj9esEPNAmi5PBagushukIyy6y+qnZ7SKRacecLxKY2fOBzt7H58OJPOCpWrztrpDBzTfnLSrD37cSuFu51zAPhy/cw89w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774276389; c=relaxed/simple;
-	bh=FUWZG338Lvqw+ZHMyYOjy0LBZ3vZYoG/uj35Q/vhN94=;
+	s=arc-20240116; t=1774277031; c=relaxed/simple;
+	bh=TjnRYqm+07dz1JIPm25P3R4cWx82uCOBLAu76ZxLyi0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YH90av/fmN+MiEs80CF+ZM9A6DCUKT67j/S6G3Q2syyBExScbemw3VMjcPh09ug6pOivuvGyI+cJOAa3Z/kKLuZ45M5WXonvqIBYeBRYzbiFg4foiQBU7KitCYev54MByiSmBsQbkbQsRApHYHdo6B/6334FrNmPlXO/BvUa0Xk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=amahc5fH; arc=none smtp.client-ip=74.125.82.46
+	 In-Reply-To:Content-Type; b=NrzJybUWCc64qMmurTJhe7CIkiSe1rF9Ou7iYvmRqf33Qdo2F8YNe3RqruGEXVutnaAOLpd0LWXhbq0dwCmcOChro2jXG+7lpNRuVWYG27wBgxEyD9D22aB+ekzX9E4v7YNeN/LRUqdv5k1vQVg+K8MmEwwhJwXZOvUF6Vh7KrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TwLMrotW; arc=none smtp.client-ip=74.125.82.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="amahc5fH"
-Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-1279eced0b9so3908298c88.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 07:33:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TwLMrotW"
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-1271257ae53so232309c88.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 07:43:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774276387; x=1774881187; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1774277030; x=1774881830; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=iNYejPjdBPqYLtoCLQEnNEXgxoTT0I9CZ1Nfe3G/xyM=;
-        b=amahc5fHDmJqnb7n4fNt74zuTEtzDFexr1hIg5HPXWOSt5Mjb5YLEynkH++s8TsUOc
-         VK678SjLda3kPMG7XflF4l4tayrbGrgOwxCiH9zab63CaTspNKguizmg8B4c9mG0/4pR
-         QfK8thS+vA6IHv4lmWBcBsKDAcXHmHOa4OiCqcAQK+sTXCO+HgorMyK8Im88ZlL5kzO9
-         W/CL89OVc3FFNpaWR6FmvJggbAjRJQrdxfegAp14olgL7KoV0Yu3qNjxAuro9hmdXNlS
-         F8t+qE9HYrbrSdJKEABGERj9vcjseo6u/ak7ou9RsIZVW/spWGYGqgS2FU9B4c7a1eyo
-         f6Hw==
+        bh=Mw89EmH8qUZwnDDKLdU6WpDiI5F4oXbKdFeBF7Ff7+U=;
+        b=TwLMrotW3myMLfFGJSG13fjjpfaRDuXSdFuAEUJX/vmi7BR/DKudjNteOmtgvdS5nC
+         PyFsc05VjToM6ue0SIKiiSW7U553IJF65Wj7lHR+O7xEVkMzDKoxHpwPl9qoIo+/1JPT
+         /eRovJ3QszJzi7Cc7ZJOkpe0tdtzbxs0ctsUqDd5edmVYGqQiS3er8Dwjb5VD3dFYAd1
+         GrpzQgnsBdoDR0C/qofAZwOVSgwwnlXtBh9xcZ2LoQW4rFvb4A7EOHTua7PuVvHhUcXR
+         gkCZRK+LK7XlXWMtyLlfOG8fp59QRGbT0S0Owv5guK54x/MIIsVEEe1O2Yx9UPwB32UL
+         nJrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774276387; x=1774881187;
+        d=1e100.net; s=20251104; t=1774277030; x=1774881830;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iNYejPjdBPqYLtoCLQEnNEXgxoTT0I9CZ1Nfe3G/xyM=;
-        b=tWLnb6gMYpP/onf57NUgYM2FTcR2HN3lAeycrpnwrkxcc25eaF5Xzkn0L2a+5T2alM
-         s+hdCC7xq2jRrhZmM0FKusLZyqodG10FwQUC5oRpetzMs7un3KVl+n+oRAspvJSe4yfF
-         KewPznrjQeUbDOO8j7rYibGaTI4ihe/ZXrYeYbOQSCvF6NFp03+zK2s3LgCxlbsJwicP
-         /tdPHz4Vrto4gxP8xi0BXikNiROJeiudRskjadsfWIUBRPljRSGPH+Dwo+J/TARZodVl
-         cGNQj9i3GcQZ/mgP1Bb2kvpzkIEUjEey99SJx+EsliBnRVwoCULyI/otRoloX/HMH8vD
-         J0MA==
-X-Forwarded-Encrypted: i=1; AJvYcCUICPDfuRtdSP84NzGXX5kEF0/OpMWTgRpWSq/14vKScyS5ZTRPpESvbCrxPybeFUzpL9WM3tP30hxMTA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFS1B0HS88U8SR0Rrx6yUjqWC9qXs0dpn4KnVqzFkzPp6bk/ez
-	pbkKP8xW/wKWr+YW1x16Ux1uNHkCLWdqPFn1eukXonFS+BbIVL2H9xJm
-X-Gm-Gg: ATEYQzwWVjfrdii74SauzfP0vWFOstvJoDTQ1Fkqu5IP1xqrIYDBeeOEaZ6z38qWKjY
-	fJMa4FSWSUKgAeht5emYH+lrub8ruksRa6dd5iOgMOtFfzg+CA4x0QPgtz/2I8m8B6CxIisssq2
-	9OeTyKYM+EP84AuSKmg8gbEI5HVPz8kbQzIg16FucBWgQw6eB+n1RAYBYYb1J0mWtaawV/Tj6jZ
-	dWr7BJw/0U/3bOcHCR1Q0KNC87IedhIzPYuRBzJdeC5R2pk34WRggeu67Cgq8UlZOGnMQ0TjO+b
-	dNPWmSavV/MaduLKtuqRYwXkmqhVDbGcgnAc48hTyD+jCoZOpoPOYBxREbvdkiGp1TP51HcVHih
-	lAS7tipL33dbIyH47fHre2Jnmqd6jcqHtEEpguwSlaR3m31WOCj7w1P5m+3Za/kMDtuKF3vy7sl
-	k2WYqhy52o3E9lBxs8p6UtUbxPE9qMxbHiAub/8IdTlthdVPzbhB4Dz3W8jE/0zwWHrNHHiuKt
-X-Received: by 2002:a05:7022:e29:b0:128:d20a:2f40 with SMTP id a92af1059eb24-12a7267d0c0mr5552465c88.8.1774276387345;
-        Mon, 23 Mar 2026 07:33:07 -0700 (PDT)
+        bh=Mw89EmH8qUZwnDDKLdU6WpDiI5F4oXbKdFeBF7Ff7+U=;
+        b=q7HW2/NqTxXMj0hpt9INlKKN831RBQCE9KUVfjBpDozamRHDMu+rqw8kEt4L38EBtA
+         AJ2CaAKrrlRfk622u94bhL2khsl1H+mcIAKIcAp8p3UlsjTlPAN5y0clqvDXyI1+GzuW
+         ndZtGPtKZoNXHTsIGTyUIxcRNM7geEo6rWT5Tdn/gFO2uuMOmqj5NjgdGJCtlCeia6GZ
+         fwSKxjdlQPkJEFOK+rSMK98OsHORnjDgkcMy3cgZbZz8Ebpi1ps8keJx4DN/lTUrj08F
+         U5k33Q/fXxwX053fDGgL7sRUJXPa+J/r2v7MH9r8EE9u9Nt7LeHoazclYvRMKFh0ujj2
+         drOA==
+X-Forwarded-Encrypted: i=1; AJvYcCW1sHnsWZLfy79jgVJXGPAASf3jWA4WNT/lYnPgeZ/V4e5SXYMqAkxCtSo0C++5z+kcFMhjECLJKJhkJw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyiJsI6dgoOLZjD/VXhjXAM/ZHh+Hkv1gwYH5bgsrVeRt/swf9i
+	DSRJO/s257gqPJrkW2PhUUSKYFJOVeih2X5NP4P/VxRQomBOM21guA9Q
+X-Gm-Gg: ATEYQzwQqO/HiepF5aw2Lkg0+q2xD8k8VzFd7R4rCLzaOijNei8ewVDHbbF/HyoMHby
+	D+2JP5AADFr7cJwgy1/6IHfRFsbixjU4JFCoAg26BtWSIAQEBUwjBi9BFGwsXUWg8hMfjEHXOrh
+	apMZatETKEEUoEHi43KoHvHYAtnGiRsxFIiS3Mod0h1dUwvnqHrpcunjQ4MqHE6Wad7Pbn5QYYZ
+	Rh00lVTpfMC57CdX6Ocn0itBvtCm7phM7h7J8QOHT5Wa91QayDKtVRuPAFB0fwGQOKumVMqXXnH
+	mZPIOgMhv7UwkByDVwaAxPqQlK5X+eCvDsdMcqRclBTQOccwuj5ravtYjAEWEJVDx/9EKWAQjCz
+	cXVXAMYcBLQvLsdDRS102+8eakDKddWJcFokIQBk0J4MA7tYVFRAqeoUkx+qUk1r9OBBK7lKGcp
+	seTpcsz4J6DHyxIEvlfKoV668eHeouQKPZa6f42UT28q7adKmjsT+vz3ejMg1n7rkmYCLbwcf/
+X-Received: by 2002:a05:7022:327:b0:127:5cd6:fa45 with SMTP id a92af1059eb24-12a72684c44mr5788964c88.14.1774277029439;
+        Mon, 23 Mar 2026 07:43:49 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12a7330d1c5sm8887677c88.0.2026.03.23.07.33.06
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12a733e794esm9375194c88.6.2026.03.23.07.43.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Mar 2026 07:33:06 -0700 (PDT)
+        Mon, 23 Mar 2026 07:43:48 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <453dbd6c-c68d-4977-8418-a898008b0fe7@roeck-us.net>
-Date: Mon, 23 Mar 2026 07:33:05 -0700
+Message-ID: <72ba643e-c716-4332-bff0-f9d12add0cc6@roeck-us.net>
+Date: Mon, 23 Mar 2026 07:43:47 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,19 +69,19 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 1/3] dt-bindings: hwmon: Document the LTC4283 Swap
- Controller
-To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>, nuno.sa@analog.com
-Cc: linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: emc2305: Add
+ fan-shutdown-percent property
+To: Daniel Baluta <daniel.baluta@oss.nxp.com>, florin.leotescu@oss.nxp.com,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Linus Walleij <linusw@kernel.org>,
- Bartosz Golaszewski <brgl@kernel.org>
-References: <20260314-ltc4283-support-v7-0-1cda48e93802@analog.com>
- <20260314-ltc4283-support-v7-1-1cda48e93802@analog.com>
- <c395fad0-ca24-448a-a77f-ddac1cd9f809@roeck-us.net>
- <77cd7e879a10df791d9d5eb1f16f1654e9904199.camel@gmail.com>
+ Conor Dooley <conor+dt@kernel.org>, Michael Shych <michaelsh@nvidia.com>,
+ linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: daniel.baluta@nxp.com, viorel.suman@nxp.com,
+ linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
+ festevam@gmail.com, Florin Leotescu <florin.leotescu@nxp.com>
+References: <20260320152959.1575978-1-florin.leotescu@oss.nxp.com>
+ <20260320152959.1575978-2-florin.leotescu@oss.nxp.com>
+ <8a8d2991-cd85-4aed-a7ef-a90b0cd10fbd@oss.nxp.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -127,82 +127,55 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <77cd7e879a10df791d9d5eb1f16f1654e9904199.camel@gmail.com>
+In-Reply-To: <8a8d2991-cd85-4aed-a7ef-a90b0cd10fbd@oss.nxp.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-[ ...]
->>> +  adi,pgio1-func:
->>> +    description: Configures the function of the PGIO1 pin.
->>> +    $ref: /schemas/types.yaml#/definitions/string
->>> +    enum: [inverted_power_good, power_good, gpio]
->>> +    default: inverted_power_good
->>> +
->>> +  adi,pgio2-func:
->>> +    description: Configures the function of the PGIO2 pin.
->>> +    $ref: /schemas/types.yaml#/definitions/string
->>> +    enum: [inverted_power_good, power_good, gpio, active_current_limiting]
->>> +    default: inverted_power_good
->>> +
->>> +  adi,pgio3-func:
->>> +    description: Configures the function of the PGIO3 pin.
->>> +    $ref: /schemas/types.yaml#/definitions/string
->>> +    enum: [inverted_power_good_input, power_good_input, gpio]
->>> +    default: inverted_power_good_input
->>> +
->>> +  adi,pgio4-func:
->>> +    description: Configures the function of the PGIO4 pin.
->>> +    $ref: /schemas/types.yaml#/definitions/string
->>> +    enum: [inverted_external_fault, external_fault, gpio]
->>> +    default: inverted_external_fault
->>> +
->>> +  adi,gpio-on-adio1:
->>> +    description: If set, the ADIO1 pin is used as a GPIO.
->>> +    type: boolean
->>> +
->>> +  adi,gpio-on-adio2:
->>> +    description: If set, the ADIO2 pin is used as a GPIO.
->>> +    type: boolean
->>> +
->>> +  adi,gpio-on-adio3:
->>> +    description: If set, the ADIO3 pin is used as a GPIO.
->>> +    type: boolean
->>> +
->>> +  adi,gpio-on-adio4:
->>> +    description: If set, the ADIO4 pin is used as a GPIO.
->>> +    type: boolean
+On 3/23/26 02:10, Daniel Baluta wrote:
+> On 3/20/26 17:29, florin.leotescu@oss.nxp.com wrote:
+>> From: Florin Leotescu <florin.leotescu@nxp.com>
 >>
->> Does this dependency block force a redundant specification of adi,pgio4-func?
->> The default for adi,pgio4-func is inverted_external_fault, which means the
->> default hardware state already supports external fault features.
->> If a device tree legitimately omits adi,pgio4-func to rely on that default,
->> will it fail schema validation here since the dependencies keyword strictly
->> checks for the literal presence of properties without injecting defaults?
+>> The EMC2305 fan controller supports multiple independent PWM fan
+>> outputs. Some systems require fans to enter a defined safe state
+>> during system shutdown or reboot handoff, until firmware or the next
+>> boot stage reconfigures the controller.
+>>
+>> Add an optional "fan-shutdown-percent" property to fan child nodes
+>> allowing the shutdown fan speed to be configured per fan output.
+>>
+>> Signed-off-by: Florin Leotescu <florin.leotescu@nxp.com>
+>> ---
+>>   .../devicetree/bindings/hwmon/microchip,emc2305.yaml      | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+>> index d3f06ebc19fa..7bcadfab9fc4 100644
+>> --- a/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+>> +++ b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+>> @@ -54,6 +54,12 @@ patternProperties:
+>>             The fan number used to determine the associated PWM channel.
+>>           maxItems: 1
+>>   
+>> +      fan-shutdown-percent:
+>> +        description:
+>> +          Fan RPM in percent set during shutdown.
+> AI review suggests to update description to 'Fan speed percent' or 'PWM duty cycle in percent'. This could be an easy update.
+> More important question here is how should we proceed with the following observation:
 > 
-> Fair point. I guess it will fail but the alternative is to not have any constrain at all so
-> maybe worth it to be explicit in here?
+> "fan-shutdown-percent property is already defined identically in pwm-fan.yaml."
+> 
+> Guenter, should we move it from pwm-fan.yaml to fan-common.yaml and use it here?
+> 
+> Our initial thought was to add have it merged in microchip,emc2305.yaml as it is now
+> 
+> and then factor it out in fan-common.yaml in a later patch.
+> 
+> 
+> What do you think?
 > 
 
-I don't claim to understand how to define devicetree properties, but
-
-adi,pgio4-func = <"gpio">
-
-and
-
-adi,gpio-on-adio4;
-
-seem to be equivalent to me, and omitting the first property (because
-it defaults to inverted_external_fault) would cause the second to fail.
-So either both would be necessary or none. If that is correct, what is
-the point of having the adi,gpio-on-adio4 property in the first place ?
-
-In other words, what is the difference between
-	adi,pgio4-func = <"gpio">;
-	adi,gpio-on-adio4;
-
-and
-	adi,pgio4-func = <"gpio">;
-(with no boolean property) ?
+Both are fine with me, with slight preference for the second approach.
+Please do whatever gets approval from DT maintainers.
 
 Thanks,
 Guenter
