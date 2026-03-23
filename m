@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F207217F33;
-	Mon, 23 Mar 2026 07:20:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B9C3217F33;
+	Mon, 23 Mar 2026 07:21:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774250439; cv=none; b=uiFNdubYfWis3Q8IKd3aH/Vd7XZUcW2qwpqllLc1wxSbrgdyg+K3ED0bMb6QhmCkKaBVTXIJXAm35b9EukbDkuAtCWSaG4VhQUa54+khN9CoFZJHW6Z0hk+S8SxIXpU1x4D85kvmQWq+ZzEaPiZDX9JnJD9xJ3r7xxKqURgn3QU=
+	t=1774250503; cv=none; b=sVHJfJPdV//ptHVVA49qXR00g7Y0eFQlsLRavzWWccnQZc5IipgkLwScHzrPhV58oyq/y71hwvK+9vljoSWCOMiYMVuEd+ZMepfU8Ctz3loSLD2yPMo7GDly5vWGiDgoJOk+cmoj786DHUIjkWTGzE6pgje6mYtUdVdpqezwKxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774250439; c=relaxed/simple;
-	bh=j+4gCwDKNt18nYrPJDaOZxG+CXRwN10EMUoXJTiglkQ=;
+	s=arc-20240116; t=1774250503; c=relaxed/simple;
+	bh=khyjY1tcctpAPPohTzhhDC80IQdvHmoPDZVMBa4/bZ8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B7yxRXZr7CPGmswBxfh3Nd3IMHgNbBskr+Q1KANUA0kdP6k0eUxpd98wcZisNlYaZ6ieRJVRwHCkvShll1WleNQegRdzi6tmBaE/S2DUO1IxeEQqQqdb/SxNVByMjUWWv9SEhM6UkWTsdhUyScsCfJoXNedS0m4RVyN0eRt0ZbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QA484GZk; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=Shxpyq8WNkmAbsemll0wfi/l71F2vidYtSAd6x8BkD6ka/LqyoBXuZR+Gvx9nVmQ1nsbevkdk2MgJk2Gu09kbesmHmUgL+KcqQ9yR4cKQ/9NYEn1UzC1xXAanuhneK76Xx8PSJgHo3sp4z0mTtT8v1lNDi6i5xpWGLHd9lmWz1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fvpsta4a; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QA484GZk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95919C4CEF7;
-	Mon, 23 Mar 2026 07:20:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fvpsta4a"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70101C4CEF7;
+	Mon, 23 Mar 2026 07:21:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774250439;
-	bh=j+4gCwDKNt18nYrPJDaOZxG+CXRwN10EMUoXJTiglkQ=;
+	s=k20201202; t=1774250502;
+	bh=khyjY1tcctpAPPohTzhhDC80IQdvHmoPDZVMBa4/bZ8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=QA484GZkXPZaraO56d0yygpwtA9o34pBnD3u3x0MyXXsOOeQnTiENMOGGRHLeaE6G
-	 /wUjib2IEJ/ISzLerCchgWF/JNXOKG3iOUDlyTzejKkephzqrRHINtbRbLA1qNTfIl
-	 RSmcmfT6PVgROWNb7yGZ8KX9DT3gSlC6XBgYoJBpIVKfZHg4CYYlMcEsK90SPHbVxA
-	 nRFhreTzvs5qCzkee/INzYF5lky2yhg5JyQ02MsztdUQ90dXOAKD6qmDd+BDLLtL8P
-	 CZ2NkJSfsN1I0j/tlOfeNIXuq8ptq44+NmNsAtQJRg1YvGk2eojdTtSPn2YPw5JzYd
-	 9TmeBgmimIafw==
-Message-ID: <e199b63c-8137-4cbd-962b-f3dfe13b5739@kernel.org>
-Date: Mon, 23 Mar 2026 08:20:33 +0100
+	b=fvpsta4aIYOMIlRLooU3UD73LSkH808j8tKmlqr7qQ4xEDRZgyTfe7EDyF4mMY34E
+	 bFwoi8RyfFV/ssy1wHkFaBv0UIS3ONpl/TSBJ9OR6yPWjZhkRsLNsgKGfgdjic/VgR
+	 8WB95MlxsROCfj+QFaTlNjyugXkR8KVoLzTxbLW8EYegQ5MTUwh1E+XzSwcTTarLNQ
+	 RaUSPb9Q2sw/bXruZ287S903Ha4k5P0m0MvGidVK4YhK6B0pkwzH1QOvarcfLo8Mv/
+	 g+iEFewv80HKRvFdWdsQo5I2or/Rbm0a/53lbUOI/eZ0GkzvEIF2AS6w27hi+UFzZC
+	 OND1VDihRqFeg==
+Message-ID: <67d44e3a-400c-4b83-94c8-97c0bead0b07@kernel.org>
+Date: Mon, 23 Mar 2026 08:21:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,29 +35,17 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] dt-bindings: hwmon: isl68137: Add compatible
- strings for RAA228942 and RAA228943
-To: Dawei Liu <dawei.liu.jy@renesas.com>
-Cc: "linux@roeck-us.net" <linux@roeck-us.net>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
- "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
- <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "corbet@lwn.net" <corbet@lwn.net>,
- "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
- "geert+renesas@glider.be" <geert+renesas@glider.be>,
- "magnus.damm" <magnus.damm@gmail.com>,
- Grant Peltier <grant.peltier.jg@renesas.com>,
- Linda Xin <linda.xin.jg@renesas.com>,
- "tabreztalks@gmail.com" <tabreztalks@gmail.com>
-References: <20260316053541.3903-1-dawei.liu.jy@renesas.com>
- <20260318021921.75-1-dawei.liu.jy@renesas.com>
- <20260318021921.75-4-dawei.liu.jy@renesas.com>
- <177412601062.18368.450072825684601974.b4-reply@b4>
- <TYWPR01MB11935F24356873C46E02FAB5CD54BA@TYWPR01MB11935.jpnprd01.prod.outlook.com>
+Subject: Re: [PATCH 2/2] dt-bindings: hwmon: isl68137: Add compatible strings
+ for RAA228942 and RAA228943
+To: Dawei Liu <dawei.liu.jy@renesas.com>, linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, corbet@lwn.net, skhan@linuxfoundation.org,
+ geert+renesas@glider.be, magnus.damm@gmail.com,
+ grant.peltier.jg@renesas.com, linda.xin.jg@renesas.com
+References: <20260323032057.953-1-dawei.liu.jy@renesas.com>
+ <20260323032057.953-3-dawei.liu.jy@renesas.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -103,20 +91,23 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <TYWPR01MB11935F24356873C46E02FAB5CD54BA@TYWPR01MB11935.jpnprd01.prod.outlook.com>
+In-Reply-To: <20260323032057.953-3-dawei.liu.jy@renesas.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 23/03/2026 05:22, Dawei Liu wrote:
->> If they are compatible, maybe finally this binding should switch to representing this with fallback?
-> 
-> These chips have different hardware interfaces and
-> feature sets compared to existing family members,
-> requiring separate compatible strings for correct
-> hardware identification.
+On 23/03/2026 04:20, Dawei Liu wrote:
+> RAA228942 and RAA228943 are Renesas digital dual-output
+> 16-phase (X+Y <= 16) PWM controllers with 2-rail non-TC
+> driver configuration. They have different hardware
+> interfaces and feature sets compared to existing
+> family members.
 
-Really? I see that you do not use the different compatible at all and
-they look completely compatible.
+Please wrap commit message according to Linux coding style / submission
+process (neither too early nor over the limit):
+https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
+
+Anyway, same feedback as last time. I responded to your answer but you
+did not give me chance anymore and sent v3.
 
 Best regards,
 Krzysztof
