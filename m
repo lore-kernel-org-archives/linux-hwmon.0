@@ -1,202 +1,127 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45E68175A8A
-	for <linux-hwmon@vger.kernel.org>; Tue, 24 Mar 2026 05:16:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4B1387347;
+	Tue, 24 Mar 2026 08:43:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774329417; cv=none; b=bmqJayi4rbqe/yaPvW4ukgudQw3CysNLefMgZUYxDIq004GBC+EKHIWZ7ef7DPkkW83FSqdsa7m0Jh0Hw9LK3cZGQ/BPLyLPmuK5Lj793G+cfxC9lPnZooTnoNJiIlWboQgi1aAAGDDp5MdiE+Qa4oAOWXCNSPOi+1fViN6EE38=
+	t=1774341830; cv=none; b=HNEnIhdz/KJZsH/yUpH2+Qz9kOSec/rge5pj8FHOuxuHjvw6e7ziJ2L5Zicigy1tsBf8rHwxW50DxYV6JvUeGqR0/TFKSjaCRIiUNvhFGT44uz4TtsSSIZ5YCCju968zyRJkD8STMJRt5g1/+Kn4109RIQ5CCejzT/FjoqhNRj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774329417; c=relaxed/simple;
-	bh=BszpByCS7CcAIr9ZgBtKFXH8ihXMeZwRjFpGHwmVj7k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dhD7XH7Lau1SC3ZA47Zg25b1WNo7OkpZ0LxEhkwyKKgieLaCDGnrwaLDBUGKhEWRmwa8ZSuSRgENQLCCdZn63yzF5hHJrigSR5X0ktaMDBhqCU4O/II88hteEkj41yNoXL4AL0NXphqldmdMwvs0JSYCHIiRHhLqfrF5rY5ncPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m6BIOc3I; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774341830; c=relaxed/simple;
+	bh=TkqOxaoWpSzVTVoCMszA0Z+kvtZQX3PFy9HQxdGNGjE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E0Pglj5nuSve3izOq6u4vRRrkx4oCyCZt9B2hyYXALfD//ohiocCjehJAUeSxxA8gJYmy57uFDGjcr/1E/cijvybvg1n+bb6yssdQ+0Z7GwCmtjgAOIb4Jj8j8/HgTDrs/Y6IaD3Uz84z4VPi3ocldwoTYq8HbLGTCkpdXluwOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JsLYqNY9; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m6BIOc3I"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2a9296b3926so7222635ad.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2026 22:16:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774329416; x=1774934216; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=siZLOBZaThinn9llXhOMnZjDoimSGiTnBVYJVyoCyNM=;
-        b=m6BIOc3IPBIH0F806fDllBBWMk9EWnBrqFSzfjYy4GTof8KFTTQ848yQXFdzlaZ+SX
-         GYqRabbTUrUEfx8F133ENdfXGdN54ZoB95BwQcq0EoONRrM8fZQRDUaTQc+cjIqaGnZP
-         BFeG1N/zY7H5wvRICmairoBBmu5o6g4x8De5x28liwYa93jxsB8bn4vmCY2pjpEoIVyp
-         +ZI+12oXGrxGUKUjK9GsZ6nNZzkHTtNqTwaJroethILOuargDFkT/3+HlK14XR9+Xevi
-         XZh5DMPVPpR3qnIrUzDZXsXFGOpxm+C4ICvhQ9pTSW3FySBTooeTnr/t88mghQ9JxtKh
-         x35g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774329416; x=1774934216;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=siZLOBZaThinn9llXhOMnZjDoimSGiTnBVYJVyoCyNM=;
-        b=dtBCUvqguBWlbLWlAaer/VmixVgXT+IxO0fojJuG3vs1nB97i/8e+48E4iQyPfHeT4
-         49YQXNwuweTo+yVz1htgUz1A7ToJJtCR4rw4W1/HaFgEOKEcM8ekOvdwS9oFJWB6ysyT
-         Cqv6sirebhZ6pceylfMG/RgTZwfmENXtl2rF3aMJUC9rwdmOo8hrKudA/5Avq20yC3+1
-         dYsRInbC31Lgoc/WOlmEeuBZ9fZx7UTt7eeXr1or5tRrM+hSj9qOHcp07UuurTOnwfGR
-         bGQpTi4RLU8HkrFs0bnXPVZ7PoUyHrdItRndIsZRy6jwpo8QmOCQiGvtwnIuXnVFNyOK
-         sy0A==
-X-Forwarded-Encrypted: i=1; AJvYcCW9bj3DZ8ZJZO65Wwu53sjfp59XV29jPpPp+8fzYjS0YUGv8aeY0xfJRye6YfHQjPWhiDupryKfqBEwLQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKjVIpJ+DLWi/lwDFge+X5YrVi8zJTMcNKlWGKSpDYlWAeyuib
-	D639PRG9phKOb+43nGjnX68QtoLxfWyU3yrVFA7FIvKIGpZ5RjVqXyXx
-X-Gm-Gg: ATEYQzxzpLIlM/AaXmrsl/XELtgHoBVeTbeNwLpK283mU1zORBZ8vBqCOgzNac0j+jT
-	y8F8M3J/WohqG+tMRG0crGdPqIBBPh0hP3LwGsLFPj6nPyiDB7Uf9ZSlzRkbbXTJaq6tK0FZIWQ
-	/Lzbi5CvzFLVwr7bUs41sopLpCxv89DBhd3UBx0t7VFoestNwSfGjku0UpCIlz9cnt24th6WaDz
-	jeqRmMkVTiW6D4knuoshRCIx91Le/NRXE/ReNWexn8KL6mqyQj8C6r8fS50YUPsNI0+SxkMrMvy
-	WxajvkDb3AC8DBA8+2M5rN3QEmhLgo6xwI6NHsm4JFtxInjiDJKJIqu+R2isLxvFOwm61MUWltM
-	m2NJEXVD7QfwQE0hA0jyX0qLKyjVMw3/63RrlTIa5lC3U0OsKGFhUnn1Lbgw//FGXslp1zGhHd0
-	Zz5JmPYSW43+w/x0hezuJRqNGK4FgK1sIy+90EhcOeegh/q3DC5jTO9eEsE2F7ilLSdNKpWuvp
-X-Received: by 2002:a17:903:283:b0:2b0:6e8f:8e73 with SMTP id d9443c01a7336-2b0827b53a4mr128912035ad.44.1774329415433;
-        Mon, 23 Mar 2026 22:16:55 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b083516eacsm160924005ad.15.2026.03.23.22.16.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Mar 2026 22:16:54 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <50a1671c-9901-426a-97ed-bf36400fe9a7@roeck-us.net>
-Date: Mon, 23 Mar 2026 22:16:53 -0700
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JsLYqNY9"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id A4F7F1A2FC1;
+	Tue, 24 Mar 2026 08:43:34 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 599636011D;
+	Tue, 24 Mar 2026 08:43:34 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2CFEA10451140;
+	Tue, 24 Mar 2026 09:43:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1774341813; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=a9GmSnOTg+L9j9fwcn1JleBKmOTNp8HFvZV0TGPixu4=;
+	b=JsLYqNY9kShjsTuKaZPhbGfT/ICR9oWxikllMZR0RInparBYg3NQ2sboF2yhX3pe43WwOu
+	dL4caO17TkYCPjOhBTTCIRO2JZUTdc6DyNyAmptComizfOv/DLOTI8U82IO0B7DxUxaa9I
+	/QE/odf0Rv/mppW9R9tDfNN/LUmR8+CiVN2XTWfAA0kGTdDIDdqqHCwmWzWgu1darvYymZ
+	FJFhW47MVOmDV+38vtQp8GoouEg8ozHw2onhk5vPTuhxK1yIcSZhS9R+svIVgGv+1QfCHc
+	/It3k71XZMPjWZvCE1GqE5hvv+l5gLIOQsZ5GTgfbLURRMXytAgl+fvAyUJuVg==
+Date: Tue, 24 Mar 2026 09:43:27 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Akhil R <akhilrajeev@nvidia.com>
+Cc: lkp@intel.com, Frank.Li@nxp.com, acpica-devel@lists.linux.dev,
+	conor+dt@kernel.org, devicetree@vger.kernel.org,
+	ebiggers@kernel.org, fredrik.markstrom@est.tech,
+	jonathanh@nvidia.com, krzk@kernel.org, lenb@kernel.org,
+	linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-tegra@vger.kernel.org, linux@roeck-us.net,
+	llvm@lists.linux.dev, miquel.raynal@bootlin.com,
+	oe-kbuild-all@lists.linux.dev, p.zabel@pengutronix.de,
+	rafael@kernel.org, robert.moore@intel.com, robh@kernel.org,
+	smangipudi@nvidia.com, thierry.reding@kernel.org
+Subject: Re: [PATCH 04/12] i3c: master: Support ACPI enumeration
+Message-ID: <202603240843279c9e8b90@mail.local>
+References: <202603230124.VFt6CPBe-lkp@intel.com>
+ <20260323184207.68515-1-akhilrajeev@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 3/3] dpll: zl3073x: add hwmon support for input
- reference frequencies
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Ivan Vecera <ivecera@redhat.com>, netdev@vger.kernel.org,
- Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
- Jiri Pirko <jiri@resnulli.us>,
- Prathosh Satish <Prathosh.Satish@microchip.com>,
- Vadim Fedorenko <vadim.fedorenko@linux.dev>, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, Michal Schmidt <mschmidt@redhat.com>,
- Petr Oros <poros@redhat.com>, Simon Horman <horms@kernel.org>
-References: <20260320105915.149068-1-ivecera@redhat.com>
- <20260320105915.149068-4-ivecera@redhat.com>
- <964752ec-8e6d-444a-aad0-80da3acb2dab@roeck-us.net>
- <7dbb5130-72cf-49d2-bfac-3439deb1b2e3@redhat.com>
- <20260323154825.1a2320c4@kernel.org>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260323154825.1a2320c4@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260323184207.68515-1-akhilrajeev@nvidia.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On 3/23/26 15:48, Jakub Kicinski wrote:
-> On Fri, 20 Mar 2026 14:48:01 +0100 Ivan Vecera wrote:
->> On 3/20/26 1:21 PM, Guenter Roeck wrote:
->>> On 3/20/26 03:59, Ivan Vecera wrote:
->>>> Expose measured input reference frequencies via the hwmon interface
->>>> using custom sysfs attributes (freqN_input and freqN_label) since
->>>> hwmon has no native frequency sensor type. The frequency values are
->>>> read from the cached measurements updated by the periodic work thread.
->>>>
->>>> Cache the device ready state in struct zl3073x_dev so that
->>>> freq_input_show() can return -ENODATA without an I2C access when
->>>> the device firmware is not configured.
->>>>
->>>> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
->>>
->>> "frequency" is not a hardware monitoring attribute. I understand that it is
->>> convenient to report it as one, and that other drivers implement it as
->>> well,
->>> but that doesn't change that.
->>>
->>> I understand that the code lives outside the hardware monitoring
->>> subsystem and is
->>> thus not in control of its maintainers, so you can essentially do
->>> whatever you want,
->>> even if it is wrong. That doesn't change the fact that it is wrong.
->>>
->>> However, do _not_ try to add it into the official list of hardware
->>> monitoring
->>> attributes. I would NACK that.
->>
->> Understood. I recognize that frequency falls outside the strict scope of
->> hardware monitoring and does not belong in the official hwmon ABI.
->>
->> I'm using it here as a convenient way to expose these specific driver
->> metrics, but I hear you loud and clear. I will absolutely not propose
->> adding frequency to the official list of hwmon attributes or
->> documentation.
->>
->> Thank you for your time and for reviewing the patch.
+On 24/03/2026 00:12:07+0530, Akhil R wrote:
+> On Mon, 23 Mar 2026 01:47:20 +0800, kernel test robot wrote:
+> > kernel test robot noticed the following build errors:
+> > 
+> > [auto build test ERROR on next-20260320]
+> > [also build test ERROR on linus/master v7.0-rc4]
+> > [cannot apply to i3c/i3c/next rafael-pm/linux-next rafael-pm/bleeding-edge groeck-staging/hwmon-next v7.0-rc4 v7.0-rc3 v7.0-rc2]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > 
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Akhil-R/dt-bindings-i3c-Add-mipi-i3c-static-method-to-support-SETAASA/20260322-174037
+> > base:   next-20260320
+> > patch link:    https://lore.kernel.org/r/20260318172820.13771-5-akhilrajeev%40nvidia.com
+> > patch subject: [PATCH 04/12] i3c: master: Support ACPI enumeration
+> > config: sparc-randconfig-002-20260322 (https://download.01.org/0day-ci/archive/20260323/202603230007.WOMwklQ6-lkp@intel.com/config)
+> > compiler: sparc-linux-gcc (GCC) 15.2.0
+> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260323/202603230007.WOMwklQ6-lkp@intel.com/reproduce)
+> > 
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202603230007.WOMwklQ6-lkp@intel.com/
+> > 
+> > All errors (new ones prefixed by >>):
+> > 
+> >    drivers/i3c/master.c: In function 'i3c_master_add_i2c_boardinfo':
+> >>> drivers/i3c/master.c:2449:23: error: implicit declaration of function 'acpi_dev_get_resources'; did you mean 'acpi_get_event_resources'? [-Wimplicit-function-declaration]
+> >     2449 |                 ret = acpi_dev_get_resources(adev, &resources,
+> >          |                       ^~~~~~~~~~~~~~~~~~~~~~
+> >          |                       acpi_get_event_resources
+> >>> drivers/i3c/master.c:2455:17: error: implicit declaration of function 'acpi_dev_free_resource_list' [-Wimplicit-function-declaration]
+> >     2455 |                 acpi_dev_free_resource_list(&resources);
+> >          |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >    drivers/i3c/master.c: In function 'i3c_master_add_acpi_dev':
+> >>> drivers/i3c/master.c:2556:9: error: unknown type name 'acpi_bus_address'; did you mean 'acpi_io_address'?
+> >     2556 |         acpi_bus_address adr;
+> >          |         ^~~~~~~~~~~~~~~~
+> >          |         acpi_io_address
+> >>> drivers/i3c/master.c:2563:14: error: implicit declaration of function 'acpi_has_method'; did you mean 'acpi_has_watchdog'? [-Wimplicit-function-declaration]
+> >     2563 |         if (!acpi_has_method(adev->handle, "_ADR"))
+> >          |              ^~~~~~~~~~~~~~~
+> >          |              acpi_has_watchdog
+> >>> drivers/i3c/master.c:2563:34: error: invalid use of undefined type 'struct acpi_device'
+> >     2563 |         if (!acpi_has_method(adev->handle, "_ADR"))
+> >          |                                  ^~
+> >>> drivers/i3c/master.c:2566:15: error: implicit declaration of function 'acpi_device_adr'; did you mean 'acpi_device_handle'? [-Wimplicit-function-declaration]
+> >     2566 |         adr = acpi_device_adr(adev);
+> >          |               ^~~~~~~~~~~~~~~
+> >          |               acpi_device_handle
 > 
-> Guenter, should this be a debugfs interface, then?
+> #include <linux/acpi.h> is added in PATCH 03/12. The functions' prototypes
+> are present in acpi.h. I think the bot checked this patch individually,
+> or did I miss something?
 > 
 
-There is nothing that prevents the actual (generated ?) frequency to
-be reported as sysfs attribute attached to the chip (spi) driver, if
-it is indeed of interest. If it is of interest for all dpll drivers,
-it could be attached to the dpll device, the chip driver could make it
-available via dpll_device_ops to the dpll subsystem, and the dpll
-subsystem could provide a common API function (such as the existing
-temp_get) and generate a common set of sysfs attributes for all dpll
-devices.
 
-> Also an hwmon noob question - isn't it better for the monitoring
-> interface to report frequency error / instability in this case
-> instead of absolute value? Or do you not know the expected freq?
-> 
-In the hardware monitoring world one would have min/max attributes and
-one or more alarm attributes. I never heard about the idea of reporting
-deviations, and for typical hardware monitoring attributes it does not
-really make sense. What would be a "deviation" of a temperature/
-voltage/current/power/humidity sensor ? Such attributes typically have
-an operational range, and they are allowed and even expected to
-fluctuate within that range.
+#include <acpi/acpi_bus.h> is behind an #ifdef in acpi.h and your code
+is not.
 
-Thanks,
-Guenter
-
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
