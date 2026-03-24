@@ -1,85 +1,68 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749813DF00F
-	for <linux-hwmon@vger.kernel.org>; Tue, 24 Mar 2026 10:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CB723EAC76
+	for <linux-hwmon@vger.kernel.org>; Tue, 24 Mar 2026 11:33:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774349381; cv=none; b=c+HQ8jbnsAYuzkh23Z3HM7uItChjn7oEksqxFdTZq49R74hrD0yXrf3kA59enFtcXzCT8WL3ysn9WEVJn7+nu8wfMM+/UaTM50vccBHTWyvk+WMo6J7CUlz4LMtfLXqqwPeItMhW7FplfwACwoBnvi/H7Lfw1qM+Hek8ymw+wFc=
+	t=1774352017; cv=none; b=TTNaGUf3fjLVGaVpcjAb70p9DWjhLyIc0UG18g7Cm7MSinZNNtSIRlMxdYk/x6nafFG7DsvtfFp+vfCR6LBDeAVb24KkgYbWQoQSHyASjSk443cjFAZlb36/qFUg6Z79YZ3e72vReoNSb0Rx4CBvgK9Hq7HOpBWXu/Gzfd/tZ1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774349381; c=relaxed/simple;
-	bh=bBTJ5cVFY36aRWUdg7XZBVb400xp1s5RUrHzVP9Wi6Q=;
+	s=arc-20240116; t=1774352017; c=relaxed/simple;
+	bh=GrKvDX1ji57i3Sq2Cn23BB9Ti8XkjnCPU1lJqk5WwGs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F7jHG9XonKOxuJv/i+1mg/wDGgPO/joBIbaBD35OCBIQMO1cUqiEBizkvMIU2V3kFn0dGGTFgsB0zz5Q6SAVNgV5A11CYCSPJ0LWU5Zf/tUNu2hBjr+zDy1fpUAoGfFXCqegTHaLk12v0m/gFJ1Fu+adqaB64bGlOFql6Mdy/Fs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RjZiI2zG; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=bHe1qYUb; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 In-Reply-To:Content-Type; b=q3Xv1KaVk9J4h2j+PnqqvT1dbzHVgX2TD0g2ImWky8RcpwSCUr9SMpYFUX1vJj7bsfEN+H1KA6Z8/vejb1/yUGJkKV5PKXgtPh9+bY9y4UxQ2u0qZgF3s/5T0hHceFqHIwM0L8kqgvPzPBQBV5mwsrC3aN9j3YEZa8EmNDdnZGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WhVwMNzZ; arc=none smtp.client-ip=74.125.82.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RjZiI2zG";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="bHe1qYUb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774349379;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sHtTZ1ATMReSeQxj1Xnlx1wjJusDT0LtDKqx9YtxfEA=;
-	b=RjZiI2zG6N8TA7OK9+PguA+Luj1qM1vKkZQEsICw3OWWkVQdUC9eJ+dhHVIZItG2Bth/bH
-	j4NRSZ+DXBShdbX/55oY0QgnrgwLWOdLrQYZwhNau1J1M208Pg7IiHldmXKHYJC3LhaPgy
-	59Li6kzo3aWSTkIKrNOEoPzfwHCAbUk=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-341-VpgqQ_QwPAuT9vIuQx5Wjg-1; Tue, 24 Mar 2026 06:49:36 -0400
-X-MC-Unique: VpgqQ_QwPAuT9vIuQx5Wjg-1
-X-Mimecast-MFC-AGG-ID: VpgqQ_QwPAuT9vIuQx5Wjg_1774349375
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-439cbfcfc21so4592657f8f.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 24 Mar 2026 03:49:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WhVwMNzZ"
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-2c11c43aca0so1885088eec.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 24 Mar 2026 04:33:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774349375; x=1774954175; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sHtTZ1ATMReSeQxj1Xnlx1wjJusDT0LtDKqx9YtxfEA=;
-        b=bHe1qYUb36WuIuL2aFy0yosugG112H/XPt9APf7t47+32MTmu+fnReEkSQZtqlq/Sl
-         gmaZ2HHoELaasDAFLe0Rg4uxjxeDw69ZFBSlf8wyndLrmHC9ky7Xj1X35j1FkPjzH4TU
-         o/AkTvE7GIbexFvldZ3vIBt4bNPqMh4qi7y0ybaEsL5N4y5jsMV8JHa3gnrIEo0uqUut
-         ZSEtuWEfwAMB3dDJ7FTtJtKt+OjFXXsXs/G72F2QU0cYO9VtiE3WsRQcciqasvpE5luK
-         78+5n4JY5tRHgP9aqCgw3beVyUK6DE7BkKTTrF5S1gypkNgLVp5cFplTrKLkyUmpq0db
-         WnQQ==
+        d=gmail.com; s=20251104; t=1774352015; x=1774956815; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=xVLL0DMqhfW1NaHcAuU3NvnXvKaindH3Q3xhBOqsfOM=;
+        b=WhVwMNzZnLBjCHUD6vNNsHzXOJujJt6UyA7DBowpss1RT3MryVHZOk6pmX7DTcEbYC
+         6aml9UTj46KyyjvAIg7LEffFXpFmJvq+lmFFQQXPOUPcPORvNYAdJ9C60IiBBxFdIVXm
+         qL/ViFWm+WDeLMcI6B4oeq9Ly36QGSt3xi2Yh0BEZBy4LUM94Vx09vAaB5Lc/j4Ybtch
+         hOq9cwu6QggPv3r0gVrd66S04a6UGKAzLZH9ua8DpBOzgDKLUtmCXcBpCnNW2WN1ofea
+         Lc+K7kNXVASIKHxnt+MjDgjydlgq5DELV57+jH5aMU8VzlDXTCCJaPt8iAg2fzaQD+7N
+         2zmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774349375; x=1774954175;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sHtTZ1ATMReSeQxj1Xnlx1wjJusDT0LtDKqx9YtxfEA=;
-        b=iXfIDNaaWS03VT/HdqGBbb67j5Y1GQvLHHKe81G3vv3mGXRhixIXFqYrwnA3HoAyUw
-         XFfVhHmwMX8l7JgumLQh7hB68/qv7gkgwYA2gmZ9GU/jh70l9dexLJ/1VRVitjhlVEOm
-         mOluQk15Gnm0yxUm8oMPXFU1hJfOSGKxcxzIRas1YBfwfykce7K8y33H+aFr6Xi8w2EE
-         SxAso6m3EABPtdDZQ1z79JCNATlXD6Il8xzKYMhdp2PN/oufDqE/YhhI9z1BiYBzB0hH
-         5TARDuJ5SCvnZh4U0olfThbvQ+x1PMQ1BP+C1ngDSr9yZMAUkKDsSe92Td/gQeDwxZDT
-         OG8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXkkv+Aqf/gT5pUMdEtsMkd9eVLKnuFUwo3ykEVpzvyrBvQHFJCSlSBlphqIchgNdVbccDPUbJouX/+Rw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4dFmKGsycZ7Zi4ml5ZFZIMpuixXiZN/NHBwhcx6Cz1RNcYIgR
-	t3FVVmx1uFj+kP4nmESuy6izzhD9FX+8f94t0Lm+lQ2REsD7RCgtAjeHde8Lvo0rr8PVAJSpoAP
-	J5Gh91N7RmBbOp6Bpn4N2Jh4tqKwkcNkxzkB7Nx8Z+9CTY0iJL7l4trRJ0I01F7z0
-X-Gm-Gg: ATEYQzwYkZaTMHm+SOcJ47ZuCvoAKdDOfM7WsAGP5/QMCSgVYNj81EV13HR4pXaGPEA
-	8+C1bPzlKWkktHywZUkPHnqqW8TwHaAN8Jqa0+Znv/ZrMZPi6sbWVGQRkH4Ogoc8moArfgQSSt9
-	FcrPgLzlxQsPk5KoHmH+eKOLZW1v6IbAxKOeMvx5gbuc9CCF6XZsJ2Ghm6s2lllnz5bPYVsh5AV
-	cvwFc7HR5SbcZ6WROXjtnTp+qy11Neyw63CvXdXkS+wIXyhSLXPE7HjOmX0YyqiwAexH4ykvlH+
-	hGUOyNdEGhZDCVf6EqvLtHht250b9ezDConiOrH/FsxV3RylFEQ8TVYm3Ik5Sb6BZV083kZKNk6
-	5FfYwauQvv+pOzhJo1a4PgPygcEIvIMcFxvHcakJ/V02NS6vGzCJY05dY
-X-Received: by 2002:a05:6000:1861:b0:43b:4396:6738 with SMTP id ffacd0b85a97d-43b6427b2c2mr24403823f8f.50.1774349374706;
-        Tue, 24 Mar 2026 03:49:34 -0700 (PDT)
-X-Received: by 2002:a05:6000:1861:b0:43b:4396:6738 with SMTP id ffacd0b85a97d-43b6427b2c2mr24403748f8f.50.1774349374089;
-        Tue, 24 Mar 2026 03:49:34 -0700 (PDT)
-Received: from [192.168.88.32] ([212.105.153.60])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b647120a1sm38624039f8f.30.2026.03.24.03.49.32
+        d=1e100.net; s=20251104; t=1774352015; x=1774956815;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xVLL0DMqhfW1NaHcAuU3NvnXvKaindH3Q3xhBOqsfOM=;
+        b=jS+cmVuZbPEP8TN/kUoJIk70K355bJza0s8EjAko92XJ17OsiBf/ePioFa+9FI93oS
+         YPR8qGYDyrjQLjO31+dp5s545n+hc1zbRB8pgQdoruPz7r4Bw5BrJW2rK8kv9AE8D7FE
+         uJhjG6XonSYFljEPu/6NZ016GxY9huAwhYpkQCBV3ApL4VMXEZ0mEWfNmUa7+cUNtNbM
+         ScWQQPqrYcpSjxBtmDb2oJofmF3NFpCK08JHX8HE5oYHW9gxyCahrnQ1/ZgAQJ8kCUjR
+         GhNZq/pO0FVVu+5l47A4BWGU8nw39gw3aZ28+Y5FnNUurk4R5gxIaFxosZTsRz9enFhr
+         FGkw==
+X-Forwarded-Encrypted: i=1; AJvYcCUVMGF5MfQvPXkQAcv07qmFxRZ2lrYN8HPqFPCvdfGchoVDZA11F7El/Ou5Ivr7mtkCaK6U2QsbY7c6xA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYlluYdsBHhwD1E27LHrBnRtWmsPkwliKCdd6ptm045sNNCmOc
+	rG2EHSj3cvDoPomV9ocH0HQbeRy57mabrDa+qDpVIqU7jHU0rEuMc9bp
+X-Gm-Gg: ATEYQzw+TV1Ym4psk3+X00yrvf8Q4GPNTzvznd/UB+2PgZxwJClG1ItIGwHAOpNjuGS
+	NDGWFAIfFewy503DZc8G56ctW1Q6vGP4GqcgksEZIty3IheGngi2fBdaHFEwSYtJ5o4Y59dnlrj
+	t3FO31Fu2xZuzXLWq+PNusUsdjcz1CygH/mFGf9slxEakYPe7izr/vBpC7TWohxkoMd3PFQlAlV
+	RYHVk0ZAF+OjIGg8jThUN+WuFGsnNQoE6UDmis/1jb4sSfidFVlzxWzsWCc5qPMxeDA8Ocut7Ls
+	P3kvJlclUgLujetXKu28tJhN7c5GvNoBx+YUeUq4QGDQkGNFq9LSITyzyenuEakyTqzHclj/I2j
+	9dU9LZaRzIlerblMqiWDe6rTSUIqFOe1h8Ff6RsEninMzew3AWQTNsU/9fz2milPBnOMnxXyX9x
+	DUHKp4ME3DI5b5KC9PG80BqpKRmrEOCK/YcvXtyiBOesDtvU2TPNiwOxJnrrTM2BXKGTEzA2B1S
+	3MNTyL6kOA=
+X-Received: by 2002:a05:7300:2319:b0:2c0:c1e0:2449 with SMTP id 5a478bee46e88-2c14b46f3bdmr1419149eec.2.1774352015053;
+        Tue, 24 Mar 2026 04:33:35 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b2d673asm18181543eec.24.2026.03.24.04.33.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Mar 2026 03:49:33 -0700 (PDT)
-Message-ID: <6f1e98b3-4b86-4b7f-8c91-d8d5721aeb25@redhat.com>
-Date: Tue, 24 Mar 2026 11:49:32 +0100
+        Tue, 24 Mar 2026 04:33:34 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <91e527b8-f753-411b-bdf5-7439edb48c34@roeck-us.net>
+Date: Tue, 24 Mar 2026 04:33:32 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -87,97 +70,118 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 3/3] dpll: zl3073x: add hwmon support for input
- reference frequencies
-To: Ivan Vecera <ivecera@redhat.com>
-Cc: netdev@vger.kernel.org,
- Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
- Jiri Pirko <jiri@resnulli.us>,
- Prathosh Satish <Prathosh.Satish@microchip.com>,
- Vadim Fedorenko <vadim.fedorenko@linux.dev>, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, Michal Schmidt <mschmidt@redhat.com>,
- Petr Oros <poros@redhat.com>, Simon Horman <horms@kernel.org>,
- Guenter Roeck <linux@roeck-us.net>, Jakub Kicinski <kuba@kernel.org>
-References: <20260320105915.149068-1-ivecera@redhat.com>
- <20260320105915.149068-4-ivecera@redhat.com>
- <964752ec-8e6d-444a-aad0-80da3acb2dab@roeck-us.net>
- <7dbb5130-72cf-49d2-bfac-3439deb1b2e3@redhat.com>
- <20260323154825.1a2320c4@kernel.org>
- <50a1671c-9901-426a-97ed-bf36400fe9a7@roeck-us.net>
+Subject: Re: [PATCH v1 1/6] hwmon/misc: amd-sbi: Move core SBTSI support from
+ hwmon to misc
+To: "Gupta, Akshay" <Akshay.Gupta@amd.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc: "corbet@lwn.net" <corbet@lwn.net>,
+ "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+ "arnd@arndb.de" <arnd@arndb.de>,
+ "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "L k, Prathima" <Prathima.Lk@amd.com>,
+ "Chatradhi, Naveen Krishna" <NaveenKrishna.Chatradhi@amd.com>,
+ "Umarji, Anand" <Anand.Umarji@amd.com>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ "kunyi@google.com" <kunyi@google.com>
+References: <20260323110811.2898997-1-Akshay.Gupta@amd.com>
+ <20260323110811.2898997-2-Akshay.Gupta@amd.com>
+ <86ec222b-d252-4586-a1cc-2a7a5674e1b4@roeck-us.net>
+ <d0ed96aa-529d-42fb-a680-917c325998ee@amd.com>
 Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <50a1671c-9901-426a-97ed-bf36400fe9a7@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <d0ed96aa-529d-42fb-a680-917c325998ee@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/24/26 6:16 AM, Guenter Roeck wrote:
-> On 3/23/26 15:48, Jakub Kicinski wrote:
->> On Fri, 20 Mar 2026 14:48:01 +0100 Ivan Vecera wrote:
->>> On 3/20/26 1:21 PM, Guenter Roeck wrote:
->>>> On 3/20/26 03:59, Ivan Vecera wrote:
->>>>> Expose measured input reference frequencies via the hwmon interface
->>>>> using custom sysfs attributes (freqN_input and freqN_label) since
->>>>> hwmon has no native frequency sensor type. The frequency values are
->>>>> read from the cached measurements updated by the periodic work thread.
->>>>>
->>>>> Cache the device ready state in struct zl3073x_dev so that
->>>>> freq_input_show() can return -ENODATA without an I2C access when
->>>>> the device firmware is not configured.
->>>>>
->>>>> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
->>>>
->>>> "frequency" is not a hardware monitoring attribute. I understand that it is
->>>> convenient to report it as one, and that other drivers implement it as
->>>> well,
->>>> but that doesn't change that.
->>>>
->>>> I understand that the code lives outside the hardware monitoring
->>>> subsystem and is
->>>> thus not in control of its maintainers, so you can essentially do
->>>> whatever you want,
->>>> even if it is wrong. That doesn't change the fact that it is wrong.
->>>>
->>>> However, do _not_ try to add it into the official list of hardware
->>>> monitoring
->>>> attributes. I would NACK that.
->>>
->>> Understood. I recognize that frequency falls outside the strict scope of
->>> hardware monitoring and does not belong in the official hwmon ABI.
->>>
->>> I'm using it here as a convenient way to expose these specific driver
->>> metrics, but I hear you loud and clear. I will absolutely not propose
->>> adding frequency to the official list of hwmon attributes or
->>> documentation.
->>>
->>> Thank you for your time and for reviewing the patch.
->>
->> Guenter, should this be a debugfs interface, then?
->>
+On 3/24/26 03:36, Gupta, Akshay wrote:
 > 
-> There is nothing that prevents the actual (generated ?) frequency to
-> be reported as sysfs attribute attached to the chip (spi) driver, if
-> it is indeed of interest. If it is of interest for all dpll drivers,
-> it could be attached to the dpll device, the chip driver could make it
-> available via dpll_device_ops to the dpll subsystem, and the dpll
-> subsystem could provide a common API function (such as the existing
-> temp_get) and generate a common set of sysfs attributes for all dpll
-> devices.
-> 
->> Also an hwmon noob question - isn't it better for the monitoring
->> interface to report frequency error / instability in this case
->> instead of absolute value? Or do you not know the expected freq?
+> On 3/23/2026 7:45 PM, Guenter Roeck wrote:
+>> Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
 >>
-> In the hardware monitoring world one would have min/max attributes and
-> one or more alarm attributes. I never heard about the idea of reporting
-> deviations, and for typical hardware monitoring attributes it does not
-> really make sense. What would be a "deviation" of a temperature/
-> voltage/current/power/humidity sensor ? Such attributes typically have
-> an operational range, and they are allowed and even expected to
-> fluctuate within that range.
+>>
+>> On 3/23/26 04:08, Akshay Gupta wrote:
+>>> From: Prathima <Prathima.Lk@amd.com>
+>>>
+>>> Move SBTSI core functionality out of the hwmon-only path and into
+>>> drivers/misc/amd-sbi so it can be reused by non-hwmon consumers.
+>>>
+>>> This split prepares the driver for additional interfaces while keeping
+>>> hwmon support as an optional layer on top of common SBTSI core logic.
+>>>
+>> This moves the driver out of hwmon space into misc/amd-sbi which,
+>> in my opinion, is completely unnecessary to accomplish the stated goals.
+>>
+>> I assume this is to be able to make changes which do not follow
+>> the hwmon ABI and/or to bypass hwmon subsystem review, similar
+>> to what has been done by others.
+>>
+>> Obviously, I think this is a bad idea. I won't give it a NACK,
+>> but I won't approve (nor review) it either.
+>>
+>> Guenter
+> 
+> Hi Guenter,
+> 
+> Thank you for your quick response.
+> 
+> At present, TSI supports a range of functionalities that cannot be exposed through hwmon. Additionally, a new protocol leveraging the TSI endpoint in hardware has been introduced, which, to our understanding, cannot be accommodated within the hwmon subsystem.
+> 
+> Since we already support the RMI interface via misc/amd-sbi, we believe this remains the appropriate place to continue AMD's out-of-band support.
+> 
+> I will update the commit message and cover letter to clearly articulate the rationale behind this change.
+> 
+> Thank you
+> 
 
-Ivan, my take on all the above is that using the HWmon interface here is
-stretching it too much. I think it would be better to move debugfs
-and/or netlink events.
+That is neither a reason or an argument for moving _hwmon_ part of the code
+out of the hwmon subsystem.
 
-/P
+FWIW, your patch series removes a lot of error handling code. Sashiko has
+a field day with it.
+
+Guenter
 
