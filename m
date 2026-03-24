@@ -1,68 +1,67 @@
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
+Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C0BA21D3F3
-	for <linux-hwmon@vger.kernel.org>; Tue, 24 Mar 2026 20:26:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3EFF24E4D4
+	for <linux-hwmon@vger.kernel.org>; Tue, 24 Mar 2026 20:30:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774383969; cv=none; b=aXl765sdFm4egLGglJtcl4F2vcchLg19bx1pSv9GjJkQrMEg9g7JcUFcES9BnC2uD1IsReTQICIz7W07dDvCMPGB26nxaBYeKO8KpYLETSVYjzw+JziQ547jyFQdtClXhWJfXhGd+sLfhABcWGsO6wfezBgNDFX6ZjlZblKk9KI=
+	t=1774384203; cv=none; b=Mr3bAjlUoHEjlw38pU6snm2YJN4yd4J1YtCf/kaftgLq65Ru3jtW1wyU0M2mt4xIiiYVpSD+moPP0hR26H7weo1nJGYU/pprvVt0gv+i00vAeKRGv8VOqWnSRCBo0/9Z9wyJnkKFpRTu2quAOumGQ3nNHx8bqZSf3SkVUGcp4uU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774383969; c=relaxed/simple;
-	bh=QJx02e1esUy9gJW1YQNb77kDlTkRfUM83i4CUvzs190=;
+	s=arc-20240116; t=1774384203; c=relaxed/simple;
+	bh=+7u65vkEBtv9mhBR3k3Qn//dK+jN0f9NdbLN4Sd1N7c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gQ+vGBW7W3IQYj05uNzTzltlagqLnFwysJ00y7cOVxMMg6Sottxvw6WyU4aSv8rSk+RsYxlsn6F/TW05fs9vVvDBSZVm+uk5XZxsWMvKoAR4pX/fGvvjFD3g9rYE7tMEb54/58mswWwjVlh7Csmh38iWkSTXok1eDP98sEECGbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KTPbyy3h; arc=none smtp.client-ip=74.125.82.176
+	 In-Reply-To:Content-Type; b=M9bEURkQNGNkrN39RBiRzGICYm1O+s6y/8OhIt5UrE7+Ybctgst+4DBm3o9xcszATZh6sEzByz21m2m2CsmuIyxJ6EGmFZpFqQk4apTj5BGpdyFZscJ52uuA4wK2qkc1CetL6Lbxsf1/Bp42Z3LvpKGgdmoG8NzwEKJembgfupE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QhxAxv3u; arc=none smtp.client-ip=74.125.82.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KTPbyy3h"
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2c0bb213b16so10288095eec.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 24 Mar 2026 13:26:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QhxAxv3u"
+Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-128b9b7e3edso10066571c88.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 24 Mar 2026 13:30:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774383966; x=1774988766; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774384201; x=1774989001; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=RZ1Wxr3sJYREjr6ST7LnsI75t/e9jYqLAQDnIMgncm0=;
-        b=KTPbyy3hI/GzMj7DZFx9uw2uvWs5Fm2EaKnmN8dKuvMIUDjgc6Cx84ivU7gxC0FEyD
-         dLyvKf9nHp7ot0arRfxm3lUNrnUtJRks42TGhV75HjMETORdAbfEV4CUeZxvMpS38ZVF
-         E7ruskakYLyuW2se7lWHDDaIw+npsuzRla2JslyFKBrNfr9lck4dV83WmS72utjCevVb
-         MnlDtASQKWNzYD4B9jvWwjoJyt6Y88A9wVlmCwDig1ZlxECSPCpTZsBxKJ5XzFDGEVa/
-         +NR/j62z363ydQ5Eoy6IU3q0bhqf+zvLNsQlpTab5FbykiP58eGrqSVGy3JXuO2jAgWM
-         0QJA==
+        bh=d08ISjwoZCoE4OXtjuAT9Xn3obHp2QwMiiYr2wNzsL0=;
+        b=QhxAxv3u2gEe+2NplL4+0TOxx0c2U5vc6ebP64yBGdkMiyUCGHKlE5HgXB9OSFXK2Q
+         +tHo4hLvHfGP64h1h+81cuT2RHxK4OaAmYloaLK+G1bX0bgbH8OdlnhDFySCMP4oWHiP
+         c35yFXkSqFertK6vjmlpX3VwMWbsC325A/Flml/Gcooh1f54uPNld64Zeg5i/fcz+V0X
+         5APsiwhgjQ2kYmnG02EXC7HDDQ1/Pq6PBOH0vaTANldyrMhj/gcG6Gquw1fCz4qC3Amg
+         fVUhLfm5+n42plgekKpvWm6nr3vs/Yiy7Fvty7xjUPl2fksZR/6qw/jpL+2p4sQZ8/Al
+         nlxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774383966; x=1774988766;
+        d=1e100.net; s=20251104; t=1774384201; x=1774989001;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RZ1Wxr3sJYREjr6ST7LnsI75t/e9jYqLAQDnIMgncm0=;
-        b=MWpr9VhYoRqngiI1llukSqN3QzXJwYpTcZ/k15/fw4+LF2wMA580/s0854XF12tHRi
-         euZ/PYuJkPpxOj/ZJ0Ai41+UEmmK2aFh1QBACY56B+4lgn8RUo2rSRSp8kzGrwGXf8sE
-         WiI/P7sZlsjJPWSBqN7MIr20vzSHg1VkJQREf7h/H6kLQyFSIhQq4wvXD/Xqqwh4+RZV
-         cORKEflBVfUEikHO0S0UKL5gntk0Wsl/e07hY42D1C1NDVb+QaaW4ZktSH9IpiV3oyQ3
-         0U6ztDy4j0mYIAwFraDgEiWsl+fWJtYZSqOpyHcXwRfTddzsSphxo9nbA7yaOd/5PyJe
-         MOEg==
-X-Forwarded-Encrypted: i=1; AJvYcCXuFZ8DZllG2vcDq+qgHfpe+iXuWza/ibYDzXNfKX4RSA44llz2zdOAtVTG7B4o1fRZxakUBdtTxDN9hA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwxQo9jIVaiLEo4kMrIrS4MTjV/O95kY3FIrZa7kAI7OlyacOa
-	L0dKF63jb9xAD7TTjGGbXLzvOiCguTyy49TcoU9U0eSv2ujR6ijCaby6
-X-Gm-Gg: ATEYQzzhwkfoYs9I9fmlJ5OVIB6P2WkNPOwbQf7BX0Ydvn+lM9KCoHnjhY5X4uvYq0J
-	hTX/BqGw4CyU+J3DGr6loDx3pw/bWoPMj2g3eCXj+dbGfNYeUL23iAshwVidmj6pjJd2sTEvxae
-	i3rmrrffyH/U39oQ1F0SalHpayPFXcANcpnw6N/ciCf2z3wwto8zg84cvOO7/3n0GkPMEh20UU0
-	PmC5TjYSq1ILoRN148eupS4pEFZuyhXha35PJx9D16bCO5WZLvt0aNVJeV18CE1DEulvTAfPMqx
-	u6SN7EfKV5e9bkJm8wYo5ZqCd2th2aBHmHi034kBIoSaVDFdCP4mc53Fwd8lFUySZpJJmkGqBBl
-	e7V1FMOcR15NVmKlgRPx7v2GSQZGw0vZ87iw/kJE7iby4d68OaT68PxdGSWyVNwozIYklafRzxt
-	c16apRAq67bU9TdKQ3s6KiBpKM2QOBK4nMgUoOkYyIT8WJH9IfTOnWKoklIKrwglRwPbhjEML/2
-	6hopTzKOTI=
-X-Received: by 2002:a05:7300:cd46:b0:2c1:4a7b:9aea with SMTP id 5a478bee46e88-2c15d3c9644mr417269eec.25.1774383965975;
-        Tue, 24 Mar 2026 13:26:05 -0700 (PDT)
+        bh=d08ISjwoZCoE4OXtjuAT9Xn3obHp2QwMiiYr2wNzsL0=;
+        b=BappeGpnh31QfpzgYko+Q/EbSFu5/U/I5PFEY+7kpdAnloED5+NMrL/4XH8rBkKDML
+         NEdyn5q+EekjbBqe3lJfhhYshYkkWBEgrzGgRjnEgpMvBCTDI0/KKJLC8aG6BHWZ4C5R
+         GavzF+CMnaOUyn4Pufqe12o0HSeOZ6I8rBYwO2CeI+XnMiW+HfOwjqrIM+B/rIAwkmMe
+         AU5uyLwKOQAy6VhC7ZoMsGxTrSSHRsKtHuOhq9UnYlJc0A810HTz1m7sU3Dwh7emYZAq
+         /1JrsXs+dOTkZPpf15TUvLNNiomDYj4enYMPYaTj3EU4xb7+Imfbng9ob5L5TxBqjNjE
+         2U1A==
+X-Forwarded-Encrypted: i=1; AJvYcCUdUV5ImBxK1TVOixTRWOuGGG7chHSUmtZfg7OLUU7wSI+BGqHXK5J9HvuOexsU4/VoUO6YbveJ/iG6Xg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy73lfNkUzrBtYVFfC1tcoEO7oXXuPTdvxXw87gnY57s8/A+Eaa
+	l3vzAVjMctQmcNnV4zx5JTSh0ZkEwPJ6V7qVAnmUqWKPW80ZMlnW9kKV
+X-Gm-Gg: ATEYQzx0BqjeYIQX30nF6BzyU6ociUaIGiro5WIKaQ/IqDYDcMMywSQT+mo42m7ffcW
+	s+NJbozbDeEld2XDvWSITg3KEVTerRzq1uQfI5x6tmhIFyCFT+/nWUPo21iRXvuQxZbalI/AVFv
+	D+V5szLg9/Hz19B6JUFIZui0YMxL6dsLFesonvGhk24+EbJtCUktxV0Bh8xVGnnWpBA5sM/v593
+	6Jd8WH7s0ofY/IZe3cVkFzZBrsHLOn8MIYyx0q6ifONzYTpdvaNk1MezB+vg32EEzyhqbmR3nv/
+	8/0z9zCro7GlRHKt8j+G8CqsUBzBkkcKIY94oR2zM9JTGKq+uHSLXi4ZoVMZKc6DAAXgpeQiQMk
+	6iaZYvBj1Texi6HEU9hQGvDaVYpg2m/D2s1nvHssIoHdxtdms8/JEms1EUEUzqNy5Qx4tBVNPtq
+	he0Y6F2I/GbEQ/GASw0pDrpt9hIsaKB4/aGplyJlXM5C+ht34Hn24pYzQd3sKjckSw1ahLprbo
+X-Received: by 2002:a05:7022:526:b0:125:be41:db5b with SMTP id a92af1059eb24-12a96f200f8mr437728c88.42.1774384200987;
+        Tue, 24 Mar 2026 13:30:00 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b14cadbsm19451142eec.3.2026.03.24.13.26.02
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12a733b4a39sm11652609c88.3.2026.03.24.13.29.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Mar 2026 13:26:03 -0700 (PDT)
+        Tue, 24 Mar 2026 13:30:00 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <78c0defa-a600-45ef-ba8c-741c1e1dbebe@roeck-us.net>
-Date: Tue, 24 Mar 2026 13:26:02 -0700
+Message-ID: <e1eafbdf-8d59-41f8-8f27-949250dcb2e4@roeck-us.net>
+Date: Tue, 24 Mar 2026 13:29:59 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,15 +69,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: adm1177: fix sysfs ABI violation and current unit
- conversion
-To: "Pradhan, Sanman" <sanman.pradhan@hpe.com>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Cc: "Michael.Hennerich@analog.com" <Michael.Hennerich@analog.com>,
- "beniamin.bia@analog.com" <beniamin.bia@analog.com>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Sanman Pradhan <psanman@juniper.net>
-References: <20260324182231.228195-1-sanman.pradhan@hpe.com>
+Subject: Re: [PATCH v3 0/4] hwmon: (sht3x) Add support for GXCAS GXHT30
+To: Zaixiang Xu <zaixiang.xu.dev@gmail.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <1774354869-119736-1-git-send-email-zaixiang.xu.dev@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -124,95 +120,55 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260324182231.228195-1-sanman.pradhan@hpe.com>
+In-Reply-To: <1774354869-119736-1-git-send-email-zaixiang.xu.dev@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/24/26 11:22, Pradhan, Sanman wrote:
-> From: Sanman Pradhan <psanman@juniper.net>
+On 3/24/26 05:21, Zaixiang Xu wrote:
+> This series adds support for the GXCAS GXHT30 humidity and temperature
+> sensor. The GXHT30 is software compatible with the Sensirion SHT30 series.
 > 
-> The adm1177 driver exposes the current alert threshold using
-> hwmon_curr_max_alarm. Per the hwmon sysfs ABI, *_alarm attributes
-> are read-only status flags; the writable threshold should use
-> hwmon_curr_max instead.
+> This series also introduces the missing YAML binding schema for the
+> Sensirion SHT30 family, replacing wildcards with specific model names.
 > 
-> Additionally, the threshold is stored internally in microamps
-> (alert_threshold_ua) but the ABI requires milliamps for currN_max.
-> Convert appropriately on both the read and write paths, and
-> propagate the return value of adm1177_write_alert_thr() which was
-> previously discarded.
-> 
-> Clamp write values to the range the hardware can represent rather
-> than rejecting out-of-range input, and use DIV_ROUND_CLOSEST on the
-> read path to minimise rounding error during the uA-to-mA conversion.
-> 
-> Fixes: 09b08ac9e8d5 ("hwmon: (adm1177) Add ADM1177 Hot Swap Controller and Digital Power Monitor driver")
-> Signed-off-by: Sanman Pradhan <psanman@juniper.net>
 
-AI: https://sashiko.dev/#/patchset/20260324182231.228195-1-sanman.pradhan%40hpe.com
+AI feedback:
 
-Various possible under/overflows.
+https://sashiko.dev/#/patchset/1774354869-119736-1-git-send-email-zaixiang.xu.dev%40gmail.com
+
+I wonder if all those chips should be modeled with fallback for the chips
+with the same functionality. sht3x_of_match in patch 3 looks wrong, though,
+since the sht and the sts chips are _not_ the same and need to be configured
+differently.
 
 Thanks,
 Guenter
 
-> ---
->   drivers/hwmon/adm1177.c | 16 +++++++++-------
->   1 file changed, 9 insertions(+), 7 deletions(-)
+> Changes in v3:
+> - Split driver changes into two patches: one for DT framework and one
+>    for adding GXHT30 (suggested by Guenter Roeck).
+> - Fixed commit message line lengths (suggested by Guenter Roeck).
+> - Removed wildcards 'x' from compatibles, used specific model names,
+>    and renamed the binding file to sensirion,sht30.yaml
+>    (suggested by Conor Dooley).
+> - Added manufacturer website to vendor-prefix patch and included
+>    Acked-by from Conor Dooley.
+> - Fixed missing newline at end of YAML file (reported by kernel test robot).
 > 
-> diff --git a/drivers/hwmon/adm1177.c b/drivers/hwmon/adm1177.c
-> index 8b2c965480e3f..8742b8b5314b6 100644
-> --- a/drivers/hwmon/adm1177.c
-> +++ b/drivers/hwmon/adm1177.c
-> @@ -10,6 +10,7 @@
->   #include <linux/hwmon.h>
->   #include <linux/i2c.h>
->   #include <linux/init.h>
-> +#include <linux/minmax.h>
->   #include <linux/module.h>
->   #include <linux/regulator/consumer.h>
->   
-> @@ -91,8 +92,8 @@ static int adm1177_read(struct device *dev, enum hwmon_sensor_types type,
->   			*val = div_u64((105840000ull * dummy),
->   				       4096 * st->r_sense_uohm);
->   			return 0;
-> -		case hwmon_curr_max_alarm:
-> -			*val = st->alert_threshold_ua;
-> +		case hwmon_curr_max:
-> +			*val = DIV_ROUND_CLOSEST(st->alert_threshold_ua, 1000);
->   			return 0;
->   		default:
->   			return -EOPNOTSUPP;
-> @@ -126,9 +127,10 @@ static int adm1177_write(struct device *dev, enum hwmon_sensor_types type,
->   	switch (type) {
->   	case hwmon_curr:
->   		switch (attr) {
-> -		case hwmon_curr_max_alarm:
-> -			adm1177_write_alert_thr(st, val);
-> -			return 0;
-> +		case hwmon_curr_max:
-> +			val = clamp_val(val, 0,
-> +					div_u64(105840000ULL, st->r_sense_uohm));
-> +			return adm1177_write_alert_thr(st, val * 1000);
->   		default:
->   			return -EOPNOTSUPP;
->   		}
-> @@ -156,7 +158,7 @@ static umode_t adm1177_is_visible(const void *data,
->   			if (st->r_sense_uohm)
->   				return 0444;
->   			return 0;
-> -		case hwmon_curr_max_alarm:
-> +		case hwmon_curr_max:
->   			if (st->r_sense_uohm)
->   				return 0644;
->   			return 0;
-> @@ -170,7 +172,7 @@ static umode_t adm1177_is_visible(const void *data,
->   
->   static const struct hwmon_channel_info * const adm1177_info[] = {
->   	HWMON_CHANNEL_INFO(curr,
-> -			   HWMON_C_INPUT | HWMON_C_MAX_ALARM),
-> +			   HWMON_C_INPUT | HWMON_C_MAX),
->   	HWMON_CHANNEL_INFO(in,
->   			   HWMON_I_INPUT),
->   	NULL
+> Changes in v2:
+> - Fix placeholder "Your Name" in MODULE_AUTHOR.
+> 
+> Zaixiang Xu (4):
+>    dt-bindings: vendor-prefixes: Add GXCAS Technology
+>    dt-bindings: hwmon: Add Sensirion SHT30 series
+>    hwmon: (sht3x) Add devicetree support
+>    hwmon: (sht3x) Add support for GXCAS GXHT30
+> 
+>   Documentation/devicetree/bindings/hwmon/sensirion,sht30.yaml | 44 ++++++++++++++++++++
+>   Documentation/devicetree/bindings/vendor-prefixes.yaml       |  2 +
+>   drivers/hwmon/sht3x.c                                        | 16 +++++++-
+>   3 files changed, 61 insertions(+), 1 deletion(-)
+>   create mode 100644 Documentation/devicetree/bindings/hwmon/sensirion,sht30.yaml
+> 
+> 
 
