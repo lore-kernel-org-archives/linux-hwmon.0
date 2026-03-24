@@ -1,67 +1,68 @@
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CD863EDAD9
-	for <linux-hwmon@vger.kernel.org>; Tue, 24 Mar 2026 11:39:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 162803F075A
+	for <linux-hwmon@vger.kernel.org>; Tue, 24 Mar 2026 12:02:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774352368; cv=none; b=HrspgSMR3uuOGMDzTDR/rios2/1E0QfVfddSbTXMGJR3CROsP8EpsTHOcF4ZwGgn9UReVlaIH/oXungllHLWtddZxnuKxun3pdSt6un4VJJZOTMj/WVUHUCeWfcTdZP4eMv88yYILFji+K3RshFCy+hHFyv+VHkzEjmico4jFXo=
+	t=1774353727; cv=none; b=nspZAOUUev0mxR+IEpiWk5t4Gs8FXbbYZcWpHylkny4AHcxjYUHDWtK+h+anHNs6DhqZzu9SLyr8gLtlCk7FRxu503U/iYJcHfzE4LxgvuORMyW9qEBaRYuQSivthoUanm7eUgZVgzniz5xnxBLLP95Y5SHXTyDEAwaWeFQ6hdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774352368; c=relaxed/simple;
-	bh=PDFPeDWBXH0OF27IClRhT/UuqvQMIEeVEFwye8VKhQ0=;
+	s=arc-20240116; t=1774353727; c=relaxed/simple;
+	bh=EUUQ8XnCoFxZc5Dgh6FndAK97NzbYP6VaYZ7nQS0BCA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mBNjdgIe+1b7OeAUoaE1qmzWjr8c0wVyNjRZpljX0Sdo27Wjdo2QV+Y9m7UzOZno4KTEN1h06PyDZlD2Ifw+UQlNAZTO6/rqh4mmVeag93ijWoSB9xQ9Oran0MV9c8wBg2pJkrLMTLApvHfMnmEDbK4G1Qmj5d5KB4jsQMjShtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bj9TsJqM; arc=none smtp.client-ip=74.125.82.174
+	 In-Reply-To:Content-Type; b=ZmErOAoD+U5jGCkEcQdmnsp12SW11pJL7CYzcbRteA/mitvD7JLTdXUNqIpXYsvpbXk1y82hYiuPlNBjFr5Agzl80VTfJG6ztMAhHwROllTQesbj0S5O2F3QcDa/RbPY30+6WkJ+pBrA+a3GybMEmiP7hHraXc/9bFzsT0DKYgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NJnODxpr; arc=none smtp.client-ip=74.125.82.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bj9TsJqM"
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2c0e3a2605fso101666eec.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 24 Mar 2026 04:39:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NJnODxpr"
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2c0f754e756so1396067eec.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 24 Mar 2026 05:02:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774352364; x=1774957164; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774353722; x=1774958522; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=9oy4ye8U5X50eKcjgSsbe9Ht5UDnG6Y/yDd1Q2SO2EQ=;
-        b=Bj9TsJqMaEnR0blXMZdSSib7emsrmUYJYVaspFHbFVGB9HO5vrp9p72aZ9ojqA/D72
-         DFY95m/PM84jP6dU5VKYrp3Eg5pcj3nvqq5hR5QmljoFOuZGmCshCKRVjw1H7JrD1vwV
-         UlAl6F7zFhxgP96tYkiD6fxmTcMck5d9sXTfEK9A8cfXo4gLy7Wv/10a2r+bY2k2TNYu
-         xoe74GjoAngyTgmugPdgaYpgyNDTUcznnpR9O4+yTxrD6PXn/UCeq3qrSYb7lwW9dGAc
-         zebRGDNbMAP0bQ3Falz2fJ4W+e0cJVzpg2WzYMD8YXbCE9ODDZ01YFta7X302pHMIYLl
-         amag==
+        bh=r7Cvw7CMASLC6B/r3+cukkHse/ycf7d5uQq99RiEAg0=;
+        b=NJnODxpr5gUfK5SIDrxtARgXCMUiWVVaMJIgqPKKPrS10tjFobAlXGQWdfZw3N1Swg
+         veyQnM7vahPwd2K/prXjeg+M+ydTeq6YLDOcZxyHsyeMq3c9JcrIie1jXOI1F2Xlt/NN
+         pmZuaekEfKWHS6tCYcirlzOGbrzrBnT4pjxKAcX2tK5a1ipBhttZ8Q8O7+MVx3c1i4P/
+         HZcZbrJu3YLPtuQB8SG9UDEUNH0pToi+VV0Gu2PAQrTch/Hm/aCalzOzNH6eTIy7Iedv
+         +pHYtxxA//c9/lyt/gVRwzC+Ia+1gO+r81oWCVl0WGAC0KuaCsQ6+fFfXWP1XxLc4zPV
+         y4cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774352364; x=1774957164;
+        d=1e100.net; s=20251104; t=1774353722; x=1774958522;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9oy4ye8U5X50eKcjgSsbe9Ht5UDnG6Y/yDd1Q2SO2EQ=;
-        b=XRYiJHz/XJ9aD4OrQizCBISYves6ax0a1saia32GNV2AayvS2BM0anUZCCM0rLV9hV
-         lhczAENv8ZIWLHpheF+tCDa5KfMuEd6QtFABuyV+Q/aVel+s2jh06IcmJIHuRTt987IL
-         G+3Y8dmcxR5PH63YMVCnMh7wzoQlUKv5cNYLONiENBDyouujVwGfbDT2YujwE6VoWhKh
-         CbxTvX2AGaCQJTTV0j9Ulu3Ni+fOq3xxATsDjVzc9SDR7ekIlO1owS8BQauYZ/pKTpMQ
-         cOXuY4Sj+CnnLBDX4FdEd4MEhIYaHYDYcuPGemUUnXtKzW4zFNslNIekT0C3Yshrzw+E
-         kBqw==
-X-Forwarded-Encrypted: i=1; AJvYcCW9LUZepPwkmE7J0w+ZQu/8AMf8yJ/BLIbcD++T1aKhzjL/T9SRMxJcwoxTsdrUyCOaZxp8SVLQ28HAhQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIJDem5JasXGoweYXLuH3hfbYQLJ9G6piujz3U6t/fTtAb1uJM
-	XWFIZP537s2fFU3hhdElUqp0tlH5BrfjKNAFWaBQH0hU0wHIIDhCKOE+
-X-Gm-Gg: ATEYQzyjPLT1qrl2eJfP4jc31+Y3P8EJOQ5KYsVugaIZGLFsLE3sj9arDzGQB+ipTPV
-	YnXx1fmNQnt2wWEuqLPU+wVzZrrmfJV2lrX14Jae5aH0gWlzyb5JZXPccLpqFA7ZuR5vNoAtXCw
-	mGAL9b6P8OyQPmmn/3KA79vkLMAcegnJk6wllvgulHGT7GLimZ83TbPBwHo//SxgdZ/peZers1p
-	0vZUoQqJcCtzHZc0sXFna4WZJuUCRydx/LUBIMRGCZTBQmObJgm4K7G6TXwONn+WC8fMLimByrp
-	WDHv+r9pT+psBFsOH4oYPePELi3R/BzcChgFtPX5yAdEYAxmxnGRQ8SeO0C/n6UgF3hGhnOQxCF
-	QsYUtXH0W/0WN8/8LJmBDYexGlkEV78KLrC8LIp6oyP+yvmscEZkl+Voyvn5xNHLcY2tl//e9hA
-	TpKySiVr5JKQTU58r+bQ+96zc6I4SszSvHxMk3Dua3uMLaPMRuA9KuziBGoJiO9ZLoMitYSDB3
-X-Received: by 2002:a05:7301:9f06:b0:2c0:da6f:55e0 with SMTP id 5a478bee46e88-2c1097c084cmr8550193eec.27.1774352364093;
-        Tue, 24 Mar 2026 04:39:24 -0700 (PDT)
+        bh=r7Cvw7CMASLC6B/r3+cukkHse/ycf7d5uQq99RiEAg0=;
+        b=dsvOk4UWlFvuYaCTecj9YmUKjnz5WDXddk1Y58ZcBKED65JM/goAMHVmG6j9wbBh36
+         tgooybqWdVIMp7fNIItgqMW94Zcipcaq3yhJFQludbIkSkJtUOSceqsu80ElDSJWkS/M
+         hk84+Huj3eiYflpIcNnecpPUQVvO6FUYF/KXr0EKK05+wTWsQ2AJRcmgZ0GcnTGYWunR
+         w26Ybw0wBiIWY1jknkQuQiuItR+vcH3LVUDE7O1uN/dpYDIRbW5RP3IkVL6+ieRsdcVu
+         xERgaJJ5bdXHotLfiyrjKGCGX6vmCCVbDvR9KLCLj57EmQWAcpolu6ODxuNmvF2QVOm+
+         zCvg==
+X-Forwarded-Encrypted: i=1; AJvYcCVMt1CM0qUJSTLckUgikuDVDUX0oNOwaYXjpSd6IfyszRbdK/u8HtasEl3JpPvn1MWdecfKaMbZo43OMw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YznPUCPB+vZxjyaF1+qj3YED/WF/A719FYsvKE115MDFtBurckV
+	z2zZaTGN+kUzAFwV2XSOqpv8oB1E/UdE9KBZWJ8ZQax2nnYrVpO6Qk7b
+X-Gm-Gg: ATEYQzz5y6UugWhBT+0MmPmnGU/6+JzecvFIZa+bfTpsORj+jyG45Hz/hOKQAWtZov/
+	Ze7Uc8VffQsIKXf5bET/887q9gWBQEENPwFWeWnScG3IpiD/f/btgAaIAf2B3XhzUilrmlnN7fo
+	GOAh7422V0uUnyLUloHsdvL+98z2PGQJ+fgjirFYm0dHRATlyKIuY16xMtjUqw/QZNyh8uM1/NY
+	P996UekqICT+rxjp1lv//Oj1Uu1Z4SeEjhk17oNUmBnHWcjPrB1xp9fGlsICoOcQLiqzgR+GpIL
+	EytxMfkhATeL/wZtUwLcIIuM/01drpkxkE7PsRtFqDZgod9l3ebC9jMIdsF7HdyHy4pXWjbcrbA
+	fYVaAiVb0ZuqVWW6cqe2tOBQ27WGqFiVO43sR+z1uoaO/5WZCvHdJ6V2ys/l6lREIrgrxVgQrqL
+	2bfn01/ihLKFgFxS7usFAbLavm5Odl863zDKmFPeq5gEv0XvzKzalgbRPCWruG00SSWVBvVpazK
+	I4qdA9k3Qg=
+X-Received: by 2002:a05:7300:548:b0:2c0:fd7c:ddf4 with SMTP id 5a478bee46e88-2c109752dd0mr7204385eec.21.1774353721366;
+        Tue, 24 Mar 2026 05:02:01 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b29c74bsm15315133eec.17.2026.03.24.04.39.22
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b31bef1sm18999251eec.26.2026.03.24.05.02.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Mar 2026 04:39:23 -0700 (PDT)
+        Tue, 24 Mar 2026 05:02:00 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f3915b73-0ad9-427d-b89e-5e4e88453a82@roeck-us.net>
-Date: Tue, 24 Mar 2026 04:39:21 -0700
+Message-ID: <77e59d08-841f-40fd-a18e-f57271a395df@roeck-us.net>
+Date: Tue, 24 Mar 2026 05:01:59 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,15 +70,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] docs: hwmon: Update TMP108 documentation for NXP
- P3T1084UK support
+Subject: Re: [PATCH 3/3] hwmon: (tmp108) Add support for NXP P3T1084UK
 To: Anshika Gupta <guptaanshika.ag@gmail.com>, corbet@lwn.net,
  skhan@linuxfoundation.org, linux-hwmon@vger.kernel.org,
  linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org
 Cc: lakshaypiplani77@gmail.com
 References: <20260323162252.15508-1-guptaanshika.ag@gmail.com>
- <20260323162252.15508-2-guptaanshika.ag@gmail.com>
+ <20260323162252.15508-3-guptaanshika.ag@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -123,52 +123,78 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260323162252.15508-2-guptaanshika.ag@gmail.com>
+In-Reply-To: <20260323162252.15508-3-guptaanshika.ag@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 On 3/23/26 09:22, Anshika Gupta wrote:
-> Add references to the NXP P3T1084UK temperature sensor in the TMP108
-> hardware monitoring documentation. The P3T1084UK is compatible with
-> the TMP108 register interface and protocol, and the hwmon driver now
-> supports it. Update the .rst document accordingly to reflect the new
-> compatible device and its expected behavior.
+> The NXP P3T1084UK is a ±0.4°C accurate digital temperature sensor with
+> a 12-bit temperature register, configuration register, and alert
+> functionality over I²C/I3C. Its register interface matches the TMP108
+> programming model, so the existing tmp108 driver can bind it without
+> functional changes.
+> 
+> Add "nxp,p3t1084uk" to the OF match table and "p3t1084" to the I²C
+
+This does not match the code (added "uk").
+
+Also (from Sashiko's review):
+
+The commit message mentions the device supports functionality over I2C/I3C.
+However, the driver's I3C device ID match table doesn't seem to be updated
+for this new device.
+
+Will the driver be able to bind to the device on an I3C bus without an
+entry in p3t1085_i3c_ids?
+
+static const struct i3c_device_id p3t1085_i3c_ids[] = {
+	I3C_DEVICE(0x011B, 0x1529, &tmp108_data),
+	I3C_DEVICE(0x011B, 0x152B, &p3t1035_data),
+	{}
+};
+
+... which is actually also a concern/question for P3T1085. As far as
+I can see from the datasheet, both use 0x1529. This should be mentioned
+somewhere, maybe as comment in p3t1085_i3c_ids.
+
+> device-id table so the driver probes the device via both devicetree and
+> board data.
+> 
+> Datasheet: https://www.nxp.com/part/P3T1084UK
+>             https://www.nxp.com/docs/en/data-sheet/P3T1084UK.pdf
 > 
 > Signed-off-by: Lakshay Piplani <lakshaypiplani77@gmail.com>
 > Signed-off-by: Anshika Gupta <guptaanshika.ag@gmail.com>
+
+Per this sequence, Lakshay would be the author, which is not reflected
+by the e-mail itself. That suggests that Signed-off-by: Lakshay ... might
+not be appropriate.
+
 > ---
->   Documentation/hwmon/tmp108.rst | 7 +++++++
->   1 file changed, 7 insertions(+)
+>   drivers/hwmon/tmp108.c | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
-> diff --git a/Documentation/hwmon/tmp108.rst b/Documentation/hwmon/tmp108.rst
-> index c218ea333dd6..cda280032710 100644
-> --- a/Documentation/hwmon/tmp108.rst
-> +++ b/Documentation/hwmon/tmp108.rst
-> @@ -11,6 +11,13 @@ Supported chips:
+> diff --git a/drivers/hwmon/tmp108.c b/drivers/hwmon/tmp108.c
+> index 3ea5f6485744..db46961a31d3 100644
+> --- a/drivers/hwmon/tmp108.c
+> +++ b/drivers/hwmon/tmp108.c
+> @@ -538,6 +538,7 @@ static DEFINE_SIMPLE_DEV_PM_OPS(tmp108_dev_pm_ops, tmp108_suspend, tmp108_resume
 >   
->       Datasheet: https://www.nxp.com/docs/en/data-sheet/P3T1035XUK_P3T2030XUK.pdf
+>   static const struct i2c_device_id tmp108_i2c_ids[] = {
+>   	{ "p3t1035", (unsigned long)&p3t1035_data },
+> +        { "p3t1084", (unsigned long)&tmp108_data },
+
+Indentation seems off here.
+
+>   	{ "p3t1085", (unsigned long)&tmp108_data },
+>   	{ "tmp108", (unsigned long)&tmp108_data },
+>   	{}
+> @@ -546,6 +547,7 @@ MODULE_DEVICE_TABLE(i2c, tmp108_i2c_ids);
 >   
-> + * NXP P3T1084
-
-Sashiko:
-
-This isn't a bug, but the new bullet point uses a single leading space,
-whereas the surrounding list items use two leading spaces. This inconsistent
-indentation might cause parsing issues when generating the reStructuredText
-documentation.
-
-> +
-> +    Prefix: 'p3t1045'
-> +
-
-P3T1084 or p3t1045 ?
-
-> +    Addresses scanned: none
-> +
-> +    Datasheet: https://www.nxp.com/docs/en/data-sheet/P3T1084UK.pdf
->   
->     * NXP P3T1085
->   
-
-Guenter
+>   static const struct of_device_id tmp108_of_ids[] = {
+>   	{ .compatible = "nxp,p3t1035", .data = &p3t1035_data },
+> +	{ .compatible = "nxp,p3t1084", .data = &tmp108_data },
+>   	{ .compatible = "nxp,p3t1085", .data = &tmp108_data },
+>   	{ .compatible = "ti,tmp108", .data = &tmp108_data },
+>   	{}
 
