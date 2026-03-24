@@ -1,67 +1,66 @@
-Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
+Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4310D3382C8
-	for <linux-hwmon@vger.kernel.org>; Tue, 24 Mar 2026 12:07:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D251A3EF0D4
+	for <linux-hwmon@vger.kernel.org>; Tue, 24 Mar 2026 12:17:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774354071; cv=none; b=ACUsjhc7Ad+zAuP1LF9lJOPVS+G5PurZvF8E8xWKs3emgxPIeztM/8rAGrTeGwYQ+8CHLLAHLyfei5S81LW2e6hjKxMpBc96RZ2HpCjUDE+sewvnzfq299abi+ZwIMpS+pWEl17chDVz/usezDOPMGiguHIiT/tzp/90ryI6+UM=
+	t=1774354648; cv=none; b=i0ok7VIFoMe0JBv5tQhTsdyPudv1qETnZjt4x3swjDb6TYgMkIZtDoGDpW8Ur/G5caxMZeZj3S/cFEfq6Kqkx/KzrtIQLU32pvqdKV5+q/MvXVvsq6bBzlOVDrZEAKoyWk3k3tqR9ReiKxmnpofAb22Z64jcQyG3hd3q2hzsSho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774354071; c=relaxed/simple;
-	bh=EHL8E+Jx89ou6n08IDPBdu6NV+0S9S5LQYQ5JG0FpmA=;
+	s=arc-20240116; t=1774354648; c=relaxed/simple;
+	bh=RSA1wzIlsQcbAGhGfW3NlHkk7EpIqfdHbny7Sl3Vvkc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZcuuvUv0z6k1BF2dAjlFZeqEBo7FS+3PadiEhL3m+xDA59/nnrlLWjafFviIzlQ9eZdGjP460YK9JXhfjFAg5k8aFUkAkkm6mCNPVAif1WJwkvgXqIpPnfV8cjSLecxL2mut7SbaCenM0JLTZAMBjxirbv89p0WikUx/f4S1AOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KaaoS0Ue; arc=none smtp.client-ip=74.125.82.169
+	 In-Reply-To:Content-Type; b=nJjqTbtlcFr3oTIwtCIGWMp8eBig5cMt7QX5RGLVIKpNX0YdD3MAlzALXsY5BmBWPfaTZc2GEedu5ND+0ojA7kpAmHGv2TiN1DScbrNhc2m8c8aFxiJoESCPIqswjIfGEG+gVLZdSXSBRPrGHOIk2YGJG/+t2QF6XMq+fWGYcxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JUWIGonr; arc=none smtp.client-ip=74.125.82.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KaaoS0Ue"
-Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-2b4520f6b32so1384785eec.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 24 Mar 2026 05:07:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JUWIGonr"
+Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-128b9b7e3edso9019202c88.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 24 Mar 2026 05:17:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774354066; x=1774958866; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774354646; x=1774959446; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=1/rsn/lXVCc3yikp+gMBEl35mfBKkCjw13MbKLj88B4=;
-        b=KaaoS0Ue95T2p/4ysIiEQy5z41TCPLP1S/KAXXZ+iFbCQmitNZoLXKFG9H35d6L6az
-         P7WGpfZ2INnG3NAGIm1pBjUyO/aSSTF1Oj/BfpZfppiCEIQ4Mserh9OZLWyTiZ3n9FFU
-         OuSorKs60HR3fviKueZQ0uUy6mXH3Ql3rW3iQgMDU3a0cUf7y48/1C5x8sFkBXR1VNBq
-         nNxeorJ1rE8QxlCfOUIFJ2buKLH+shbdKRVtVMnBn+0eis3fJpxa/r+dNltNh1f8QDmx
-         uNHd5Qmvn7owvnm4ZPNLPdrSXayO3OTq1oIYzNZTRasMfvvKlnZM1MgiUwXXs0XSqEqL
-         e0OQ==
+        bh=JNijY5ztZmuqEJJZfplKk0FmfSOwUkaHhH7zUlg4qL8=;
+        b=JUWIGonrCiLAuTi61ktOQiA/UqXzbMRwq0vAqe7XwkUJy6vhCDsxh2KS+aqpaL9Cly
+         Fb/XRAiY0LcYHC1rMgqbFBcFYlK+mejPj075W5swiLcLAP+WTtzF4ua4ho0lxH1y9LSI
+         G9e84QXyD6KVw6W7aWSFAl920VVpJZ44GAx7KYwxR7nuXHVzf5vURWi+6Qf7XLAlZkqY
+         SaeHqsJnYOB30XxkfviE7hDyZhyauJtXWG2Oa6DQRXOTAMbmWC1+1KByhQwkPDfJVSSe
+         IP1yOQ98ZatUZ2wTF1+tb99ks/ux2vQjNGMDj3Rx+lhjrFVtyemKVxrwQtiMN0rrNbyI
+         LW8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774354066; x=1774958866;
+        d=1e100.net; s=20251104; t=1774354646; x=1774959446;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1/rsn/lXVCc3yikp+gMBEl35mfBKkCjw13MbKLj88B4=;
-        b=gRP5jK4GUs6y4kLt44EXP61/6hLTTua9XTuxHwUk/NVSFJCcmqU1PASqccykQZP/WE
-         3kAaCi9CHcugcb5QmppMaEQyJYK2NhRMJTpCqTOlJa/wmRpf13LTYERoRhDLWfpn4YLR
-         XGJnw3DE5JBp2G3eaP3hYuy8a6Cm7ghamjdtpW3rYNvjQlazcUCPWY2raXd9FjS5Md1j
-         Ootahw3ksfbqm36kVgxtIZIpNSwKk+dCH89uMLhCHSzth4UTX4mhcBexM3hbHXoZzpsQ
-         hwmkVEE61C6eCbY3BXOKQjuoL5KWcN+SB5ZjvRExZx62HigAMBJIBnvjMWkcp2e3FyVk
-         y9Vw==
-X-Forwarded-Encrypted: i=1; AJvYcCX+H653TWSzzxcB03HgPEEiLhQPSt6VVeEldsqvrZHrkrEUjxtlk2L4+IQwxpb0RvevAFvXpTb+SLHNqQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwrMo/+4vSQYJMUGx8rt176nDd3i/7VCf07RmhnShVcqUBqLyVg
-	loQ7zewcDZvqSV1nxj2LH6vVngp2nZXRZMvjGex+fZ54imDw7yxaDie3
-X-Gm-Gg: ATEYQzyEyfdGgrIr4JTDNNlWSLDBaDk7ytanxEK280v6CbjZIUZql16WKlrwfjwxQ4r
-	bqI4e0Hw7CjS9pZ0YF6RZ7en7OtDF+GDKSS06bcM/93T4WFwZ45O+myT5Nk4oRijLlVfnfxXHV3
-	0l20O8oLWAm4WBJ0JOqpoV1tWzbTp6WHZkPmFKr71hAdAcJCsuPDU6/0GImsvVqQW1ZRvogwtGt
-	9X+1oKsgCI+Rzt6YttXXwba3gQYwIGoqxhDtqz+JwuPHNJQiKgyn8z9EqVJKel+H0903N2fmyMM
-	5aZ1eR/7UgJK8oDKbawm9KIdXiDz4MQidyX0ZCdZkiExgDECcv7e/idI1DRQhH59gfn/scEtLS8
-	YKuBmqHhhWQvSE7ksr2q2l258Wm7y4pepAKG0nfmiOvwzbokF5bzeBp7HHMcPZ/LAvUAy+KL69U
-	NZ/m22WBdxlnwu/wEslvsw+dlK2Ut/k47VPNGdObAlGIWFSixPSUOYx/yKpbtC5xy6m+5NwkuO
-X-Received: by 2002:a05:7301:e30:b0:2be:969:75f3 with SMTP id 5a478bee46e88-2c1097ae086mr6341785eec.34.1774354065661;
-        Tue, 24 Mar 2026 05:07:45 -0700 (PDT)
+        bh=JNijY5ztZmuqEJJZfplKk0FmfSOwUkaHhH7zUlg4qL8=;
+        b=qUQ1ECqRpuKnZHmEcAZ2rQQeqFjg7izo2kXcp3NztNtBfdgqNscZaK7D2UpGjkH24H
+         WhPiLIpS04dGH5mW4JVazUqbdfP/mGnDT87w9AWxAHa2KUcQmjOYsMfQRxB8eB7dwxQn
+         g/Bh+HYbuDts8yRR5wBhNlZGgQl5d7Zl0F/IoDncUsHiwhU8YJhopxg0Pn31aCXl4zQe
+         qLVRtNFxlDEI2oHrG2w0cW3ROKBjNldd89kkxZNKsOUgO+AIf8tmq2fbTn9bt7i5x3Vy
+         BCaBhSg3VUIkEZjHRm3iFyXgy1uL8OaWgKd4eflLdmRMjZiDAe/6ueR+1eG65q6wt6Yb
+         iuRw==
+X-Gm-Message-State: AOJu0Yxx6urESbjhmb+G1JxpvCQB1VV3qNE/g8voVLwSbNtoSQ5QBFuf
+	BU+pqlLEfvwn/HVHpfblT0OiT0mekODKa9Fg4pc41DteuoNlZkygiUoz
+X-Gm-Gg: ATEYQzwJm7EuH7+MnSUBntVSJGBZy9OyTBPns8YFt8q8blyGzSUEX6oFe24kw8MXUlW
+	Phk2iCvWb8uFWYu3Q8P/B9KyMd+X00ydmnrAX8trxu7UCfJRPNv1p/I9X7hITOT29B9rw7trOcQ
+	HXHsCT+fD7rN5Ot8edTyqbDujNOBVrXqdIMH2XMmig3gh/2XS1B0vloyIz3AngDOKY2IV5ZF71d
+	/GOCWz1UR/2/CoT1AHoEXF54H6TUY7JaGOaDKgmsBgGg1TYhfBMRv8Lpg/RY2eSqYTpV2XcS55+
+	IlZswbQQhlKMyD5fqaY7WeM8TA8uffi7cGeAjwP6FkrcHcgP3xvKizgbtvGxUNx7Zdim4HgLjVc
+	eOMGAwfaXnljsu1gtjZPyGCfnASR2FpooxWPLWbj24VJ+oc17rHPqVO9qOKl5dBYLiO+qV1725W
+	mnRJ0NWVmJQV1VNhOATfqUDg2ifDRSH4VVbuZyyf9M+IbYXPd0pzFpncX9BrEp/CBXeZKj3rfz
+X-Received: by 2002:a05:7022:6728:b0:123:331d:bdbb with SMTP id a92af1059eb24-12a726daa01mr8170743c88.22.1774354645624;
+        Tue, 24 Mar 2026 05:17:25 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b17d1ddsm14898035eec.11.2026.03.24.05.07.42
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12a733b4a39sm10857113c88.3.2026.03.24.05.17.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Mar 2026 05:07:43 -0700 (PDT)
+        Tue, 24 Mar 2026 05:17:24 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <61770780-add7-4ee7-8139-1f8dcf9d189c@roeck-us.net>
-Date: Tue, 24 Mar 2026 05:07:41 -0700
+Message-ID: <5d771a2a-3c82-4d79-8ccd-a67b9d7461e4@roeck-us.net>
+Date: Tue, 24 Mar 2026 05:17:23 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,14 +68,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] dt-bindings: hwmon: Add support for NXP P3T1084UK
- temperature sensor
-To: Anshika Gupta <guptaanshika.ag@gmail.com>, corbet@lwn.net,
- skhan@linuxfoundation.org, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org
-Cc: lakshaypiplani77@gmail.com
-References: <20260323162252.15508-1-guptaanshika.ag@gmail.com>
+Subject: Re: [PATCH v5] hwmon: (yogafan) Add support for Lenovo Yoga/Legion
+ fan monitoring
+To: Sergio Melas <sergiomelas@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+References: <2e692427-592a-4a78-8f6b-547d506de86a@roeck-us.net>
+ <20260323105612.343381-1-sergiomelas@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -122,69 +119,344 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260323162252.15508-1-guptaanshika.ag@gmail.com>
+In-Reply-To: <20260323105612.343381-1-sergiomelas@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/23/26 09:22, Anshika Gupta wrote:
-> The P3T1084UK is an NXP digital temperature sensor compatible with the
-> Texas Instruments TMP108 register and protocol specification. This patch
-> extends the existing DT binding for "ti,tmp108" to document the
-> compatible string for P3T1084UK so that the hwmon TMP108 driver can
-> bind to this device.
+On 3/23/26 03:56, Sergio Melas wrote:
+> This driver provides fan speed monitoring for modern Lenovo Yoga,
+> Legion, and IdeaPad laptops. It interfaces with the Embedded
+> Controller (EC) via ACPI to retrieve tachometer data.
 > 
-> Signed-off-by: Lakshay Piplani <lakshaypiplani77@gmail.com>
-> Signed-off-by: Anshika Gupta <guptaanshika.ag@gmail.com>
-> ---
->   Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml | 8 +++++---
->   1 file changed, 5 insertions(+), 3 deletions(-)
+> To address low-resolution sampling in the Lenovo EC firmware, the
+> driver implements a Rate-Limited Lag (RLLag) filter using a passive
+> discrete-time first-order model. This ensures physical consistency
+> of the RPM signal regardless of userspace polling rates.
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml
-> index 9f6c9f6fa561..47714df5aaff 100644
-> --- a/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml
-> @@ -4,20 +4,21 @@
->   $id: http://devicetree.org/schemas/hwmon/ti,tmp108.yaml#
->   $schema: http://devicetree.org/meta-schemas/core.yaml#
->   
-> -title: TMP108/P3T1035/P3T1085/P3T2030 temperature sensor
-> +title: TMP108/P3T1035/P3T1084/P3T1085/P3T2030 temperature sensor
->   
->   maintainers:
->     - Krzysztof Kozlowski <krzk@kernel.org>
->   
->   description: |
-> -  The TMP108 or NXP P3T Family (P3T1035, P3T1085 and P3T2030) is a digital-
-> +  The TMP108 or NXP P3T Family (P3T1035, P3T1084, P3T1085 and P3T2030) is a digital-
->     output temperature sensor with a dynamically-programmable limit window,
->     and under- and over-temperature alert functions.
->   
-> -  NXP P3T Family (P3T1035, P3T1085 and P3T2030) supports I3C.
-> +  NXP P3T Family (P3T1035, P3T1084, P3T1085 and P3T2030) supports I3C.
->   
->     Datasheets:
->       https://www.ti.com/product/TMP108
-> +    https://www.nxp.com/docs/en/data-sheet/P3T1084UK.pdf
->       https://www.nxp.com/docs/en/data-sheet/P3T1085UK.pdf
->       https://www.nxp.com/docs/en/data-sheet/P3T1035XUK_P3T2030XUK.pdf
->   
-> @@ -28,6 +29,7 @@ properties:
->             - const: nxp,p3t2030
->             - const: nxp,p3t1035
->         - const: nxp,p3t1035
-> +      - const: nxp,p3t1084
+> Signed-off-by: Sergio Melas <sergiomelas@gmail.com>
+> 
 
-Indentation seems off here.
+Getting close. Here is what Sashiko had to say this time:
 
-Should nxp,p3t1084 be listed as compatible to nxp,p3t1085 instead of
-requiring a code change, similar to nxp,p3t2030 and nxp,p3t1035 ?
-Unless I am missing something, both use the same I3C device provisional
-ID, so I assume they are register compatible.
+https://sashiko.dev/#/patchset/20260323105612.343381-1-sergiomelas%40gmail.com
 
 Thanks,
 Guenter
 
->         - const: nxp,p3t1085
->         - const: ti,tmp108
+> ---
+> v5:
+>    - Fixed 32-bit build failures by using div64_s64 for 64-bit division.
+>    - Extracted magic numbers into constants (RPM_UNIT_THRESHOLD, etc.).
+>    - Fixed filter stall by ensuring a minimum slew limit (limit = 1).
+>    - Refined RPM floor logic to trigger only when hardware reports 0 RPM.
+>    - Resolved 255/256 unit-jump bug by adjusting heuristic thresholds.
+>    - Rebased on groeck/hwmon-next branch for clean application.
+> v4:
+>    - Rebased on groeck/hwmon-next branch for clean application.
+>    - Corrected alphabetical sorting in Kconfig and Makefile.
+>    - Technical Validation & FOPTD Verification:
+>      - Implemented RLLag (Rate-Limited Lag) first-order modeling.
+>      - Used 10-bit fixed-point math for alpha calculation to avoid
+>        floating point overhead in the kernel.
+>      - Added 5000ms filter reset for resume/long-polling sanitation.
+> v3:
+>    - Added MAINTAINERS entry and full Documentation/hwmon/yogafan.rst.
+>    - Fixed integer overflow in filter math.
+>    - Added support for secondary fan paths (FA2S) for Legion laptops.
+> v2:
+>    - Migrated from background worker to passive multirate filtering.
+>    - Implemented dt-based scaling to maximize CPU sleep states.
+>    - Restricted driver to Lenovo hardware via DMI matching.
+> v1:
+>    - Initial submission with basic ACPI fan path support.
+> ---
+>   MAINTAINERS             |   6 ++
+>   drivers/hwmon/Kconfig   |  11 ++
+>   drivers/hwmon/Makefile  |   1 +
+>   drivers/hwmon/yogafan.c | 225 ++++++++++++++++++++++++++++++++++++++++
+>   4 files changed, 243 insertions(+)
+>   create mode 100644 drivers/hwmon/yogafan.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 830c6f076b00..9167f3d4f243 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -14873,6 +14873,12 @@ W:	https://linuxtv.org
+>   Q:	http://patchwork.linuxtv.org/project/linux-media/list/
+>   F:	drivers/media/usb/dvb-usb-v2/lmedm04*
 >   
+> +LNVYOGAFAN HARDWARE MONITORING DRIVER
+> +M:	Sergio Melas <sergiomelas@gmail.com>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/hwmon/yogafan.c
+> +
+>   LOADPIN SECURITY MODULE
+>   M:	Kees Cook <kees@kernel.org>
+>   S:	Supported
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 7dd8381ba0d0..5f6f65dea155 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -2653,6 +2653,17 @@ config SENSORS_XGENE
+>   	  If you say yes here you get support for the temperature
+>   	  and power sensors for APM X-Gene SoC.
+>   
+> +config SENSORS_YOGAFAN
+> +	tristate "Lenovo Yoga/Legion Fan Hardware Monitoring"
+> +	depends on ACPI && HWMON
+> +	help
+> +	  If you say yes here you get support for fan speed monitoring
+> +	  on modern Lenovo Yoga and Legion laptops.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called yogafan.
+> +
+> +
+>   config SENSORS_INTEL_M10_BMC_HWMON
+>   	tristate "Intel MAX10 BMC Hardware Monitoring"
+>   	depends on MFD_INTEL_M10_BMC_CORE
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 556e86d277b1..0fce31b43eb1 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -245,6 +245,7 @@ obj-$(CONFIG_SENSORS_W83L786NG)	+= w83l786ng.o
+>   obj-$(CONFIG_SENSORS_WM831X)	+= wm831x-hwmon.o
+>   obj-$(CONFIG_SENSORS_WM8350)	+= wm8350-hwmon.o
+>   obj-$(CONFIG_SENSORS_XGENE)	+= xgene-hwmon.o
+> +obj-$(CONFIG_SENSORS_YOGAFAN)	+= yogafan.o
+>   
+>   obj-$(CONFIG_SENSORS_OCC)	+= occ/
+>   obj-$(CONFIG_SENSORS_PECI)	+= peci/
+> diff --git a/drivers/hwmon/yogafan.c b/drivers/hwmon/yogafan.c
+> new file mode 100644
+> index 000000000000..92158fe47a98
+> --- /dev/null
+> +++ b/drivers/hwmon/yogafan.c
+> @@ -0,0 +1,225 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/**
+> + * yoga_fan.c - Lenovo Yoga/Legion Fan Hardware Monitoring Driver
+> + *
+> + * Provides fan speed monitoring for Lenovo Yoga, Legion, and IdeaPad
+> + * laptops by interfacing with the Embedded Controller (EC) via ACPI.
+> + *
+> + * The driver implements a passive discrete-time first-order lag filter
+> + * with slew-rate limiting (RLLag). This addresses low-resolution
+> + * tachometer sampling in the EC by smoothing RPM readings based on
+> + * the time delta (dt) between userspace requests, ensuring physical
+> + * consistency without background task overhead or race conditions.
+> + * The filter implements multirate filtering with autoreset in case
+> + * of large sampling time.
+> + *
+> + * Copyright (C) 2021-2026 Sergio Melas <sergiomelas@gmail.com>
+> + */
+> +#include <linux/acpi.h>
+> +#include <linux/dmi.h>
+> +#include <linux/err.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/init.h>
+> +#include <linux/ktime.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +/* Driver Configuration Constants */
+> +#define DRVNAME "yogafan"
+> +#define MAX_FANS 8
+> +/* Filter Configuration Constants */
+> +#define TAU_MS          3000    /* Time constant for the first-order lag (ms) */
+> +#define MAX_SLEW_RPM_S  100     /* Maximum allowed change in RPM per second */
+> +#define MAX_SAMPLING    5000    /* Maximum allowed Ts for reset (ms) */
+> +/* RPM Heuristic and Sanitation Constants */
+> +#define RPM_UNIT_THRESHOLD 500  /* Values below this treated as units of 100 */
+> +#define RPM_UNIT_MULT      100  /* Multiplier for low-res EC readings */
+> +#define RPM_FLOOR_LIMIT    50   /* Snap filtered value to 0 if raw is 0 */
+> +
+> +struct yoga_fan_data {
+> +	const char *active_paths[MAX_FANS];
+> +	long filtered_val[MAX_FANS];
+> +	ktime_t last_update[MAX_FANS];
+> +	int fan_count;
+> +};
+> +/**
+> + * apply_rllag_filter - Discrete-time filter update (Passive Multirate)
+> + * @data: pointer to driver data
+> + * @idx: fan index
+> + * @raw_rpm: new raw value from ACPI
+> + */
+> +static void apply_rllag_filter(struct yoga_fan_data *data, int idx, long raw_rpm)
+> +{
+> +	ktime_t now = ktime_get();
+> +	s64 dt_ms;
+> +	long delta, step, limit, alpha;
+> +	s64 temp_num;
+> +
+> +	if (data->last_update[idx] == 0) {
+> +		data->filtered_val[idx] = raw_rpm;
+> +		data->last_update[idx] = now;
+> +		return;
+> +	}
+> +	dt_ms = ktime_to_ms(ktime_sub(now, data->last_update[idx]));
+> +	if (dt_ms > MAX_SAMPLING) {
+> +		data->filtered_val[idx] = raw_rpm;
+> +		data->last_update[idx] = now;
+> +		return;
+> +	}
+> +	if (dt_ms < 1)
+> +		return;
+> +	delta = raw_rpm - data->filtered_val[idx];
+> +	/* Use div64_s64 for 32-bit compatibility (Alpha = dt / (Tau + dt)) */
+> +	temp_num = dt_ms << 10;
+> +	alpha = (long)div64_s64(temp_num, (s64)(TAU_MS + dt_ms));
+> +	step = (delta * alpha) >> 10;
+> +	/* Fix the stall: Ensure limit is at least 1 if delta exists */
+> +	limit = (MAX_SLEW_RPM_S * (long)dt_ms) / 1000;
+> +	if (limit == 0 && delta != 0)
+> +		limit = 1;
+> +	if (step > limit)
+> +		step = limit;
+> +	else if (step < -limit)
+> +		step = -limit;
+> +	data->filtered_val[idx] += step;
+> +	/* Sanitation: Floor logic triggered only when hardware reports 0 */
+> +	if (data->filtered_val[idx] < RPM_FLOOR_LIMIT && raw_rpm == 0)
+> +		data->filtered_val[idx] = 0;
+> +	data->last_update[idx] = now;
+> +}
+> +
+> +static int yoga_fan_read(struct device *dev, enum hwmon_sensor_types type,
+> +			 u32 attr, int channel, long *val)
+> +{
+> +	struct yoga_fan_data *data = dev_get_drvdata(dev);
+> +	unsigned long long raw_acpi;
+> +	acpi_status status;
+> +	long rpm;
+> +
+> +	if (type != hwmon_fan || attr != hwmon_fan_input)
+> +		return -EOPNOTSUPP;
+> +	status = acpi_evaluate_integer(NULL, (acpi_string)data->active_paths[channel],
+> +					NULL, &raw_acpi);
+> +	if (ACPI_FAILURE(status))
+> +		return -EIO;
+> +	/* * Heuristic: Convert units-of-100 to raw RPM.
+> +	 * Most Yoga/Legion ECs return a single byte (0-255).
+> +	 * We use 500 as a safety threshold to distinguish from raw 16-bit RPM.
+> +	 */
+> +	rpm = (long)raw_acpi;
+> +	if (rpm > 0 && rpm < RPM_UNIT_THRESHOLD)
+> +		rpm *= RPM_UNIT_MULT;
+> +	apply_rllag_filter(data, channel, rpm);
+> +	*val = data->filtered_val[channel];
+> +	return 0;
+> +}
+> +
+> +static umode_t yoga_fan_is_visible(const void *data, enum hwmon_sensor_types type,
+> +				   u32 attr, int channel)
+> +{
+> +	const struct yoga_fan_data *fan_data = data;
+> +
+> +	if (type == hwmon_fan && channel < fan_data->fan_count)
+> +		return 0444;
+> +	return 0;
+> +}
+> +
+> +static const struct hwmon_ops yoga_fan_hwmon_ops = {
+> +	.is_visible = yoga_fan_is_visible,
+> +	.read = yoga_fan_read,
+> +};
+> +
+> +static const struct hwmon_channel_info *yoga_fan_info[] = {
+> +	HWMON_CHANNEL_INFO(fan,
+> +			   HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT,
+> +			   HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_chip_info yoga_fan_chip_info = {
+> +	.ops = &yoga_fan_hwmon_ops,
+> +	.info = yoga_fan_info,
+> +};
+> +
+> +static int yoga_fan_probe(struct platform_device *pdev)
+> +{
+> +	struct yoga_fan_data *data;
+> +	struct device *hwmon_dev;
+> +	acpi_handle handle;
+> +	int i;
+> +	static const char * const fan_paths[] = {
+> +		"\\_SB.PCI0.LPC0.EC0.FANS",  /* Primary Fan (Yoga 14c) */
+> +		"\\_SB.PCI0.LPC0.EC0.FA2S",  /* Secondary Fan (Legion) */
+> +		"\\_SB.PCI0.LPC0.EC0.FAN0",  /* IdeaPad / Slim */
+> +		"\\_SB.PCI0.LPC.EC.FAN0",    /* Legacy */
+> +		"\\_SB.PCI0.LPC0.EC.FAN0",   /* Alternate */
+> +	};
+> +	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +	data->fan_count = 0;
+> +	for (i = 0; i < ARRAY_SIZE(fan_paths); i++) {
+> +		if (ACPI_SUCCESS(acpi_get_handle(NULL, (char *)fan_paths[i], &handle))) {
+> +			data->active_paths[data->fan_count] = fan_paths[i];
+> +			data->fan_count++;
+> +			if (data->fan_count >= MAX_FANS)
+> +				break;
+> +		}
+> +	}
+> +
+> +	if (data->fan_count == 0)
+> +		return -ENODEV;
+> +	platform_set_drvdata(pdev, data);
+> +	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev, DRVNAME,
+> +							 data, &yoga_fan_chip_info, NULL);
+> +	return PTR_ERR_OR_ZERO(hwmon_dev);
+> +}
+> +
+> +static struct platform_driver yoga_fan_driver = {
+> +	.driver = {
+> +		.name = DRVNAME,
+> +	},
+> +	.probe = yoga_fan_probe,
+> +};
+> +
+> +static struct platform_device *yoga_fan_device;
+> +
+> +static const struct dmi_system_id yoga_dmi_table[] __initconst = {
+> +	{
+> +		.ident = "Lenovo",
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> +		},
+> +	},
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(dmi, yoga_dmi_table);
+> +
+> +static int __init yoga_fan_init(void)
+> +{
+> +	int ret;
+> +
+> +	if (!dmi_check_system(yoga_dmi_table))
+> +		return -ENODEV;
+> +	ret = platform_driver_register(&yoga_fan_driver);
+> +	if (ret)
+> +		return ret;
+> +	yoga_fan_device = platform_device_register_simple(DRVNAME, 0, NULL, 0);
+> +	if (IS_ERR(yoga_fan_device)) {
+> +		platform_driver_unregister(&yoga_fan_driver);
+> +		return PTR_ERR(yoga_fan_device);
+> +	}
+> +	return 0;
+> +}
+> +
+> +static void __exit yoga_fan_exit(void)
+> +{
+> +	platform_device_unregister(yoga_fan_device);
+> +	platform_driver_unregister(&yoga_fan_driver);
+> +}
+> +
+> +module_init(yoga_fan_init);
+> +module_exit(yoga_fan_exit);
+> +MODULE_AUTHOR("Sergio Melas <sergiomelas@gmail.com>");
+> +MODULE_DESCRIPTION("Lenovo Yoga/Legion Fan Monitor Driver");
+> +MODULE_LICENSE("GPL");
 
