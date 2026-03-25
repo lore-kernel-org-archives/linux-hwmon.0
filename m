@@ -1,116 +1,105 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F12EB347503
-	for <linux-hwmon@vger.kernel.org>; Wed, 25 Mar 2026 09:08:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 485273B6342;
+	Wed, 25 Mar 2026 10:31:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774429719; cv=none; b=LP8pVrNjnKTuORgR4BuoGVSvYJHOXRwM9jQs1xFV35X8iE9bbXearYmlRSHDU+HegnqIAJDTrDwICOg3uFAVjT5n1I4gBUTk813eVdEBgJrf640h3lKqk/hwxOY40F9+jHF6chI8WiK5+UfzVSTsEHAYLgj6GtHSOCh19HChlNU=
+	t=1774434674; cv=none; b=CjJ5CCYnoqMIrEvR+p6uXFHVL5fCu2FBYo7d1+tMdPZOLuI7G3NmfVtZlA+0WeLtbvcgXwNSNdCLq0TfjmVwCDlB+IUzApVWuuSMOLImy2r3e/7a1vvlbVskPyI3PaJnnrakTA/Kzb50Xy04b77B41S5xdKDKD++q3cdl3Ubvmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774429719; c=relaxed/simple;
-	bh=Y1YDUMJ0n8VY4xi8WORJkohpo3iw+yO1KCBrDnrWWIY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=nWO0w++gMXy8t13FziO/A3osWEV44c20NnnAwkUlWWE7UeARZTt2mZjenXIZRSjN0af48nKzRRP8UF3apxRQC8mWE9VBlzO9tGmLoUHvXR7O1ZeLYqeSZsazCLTajW0x59S767UwNZJrQvc6DP1SgvYU9Oi4sHsRfJaOnWOzu5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NmhtCt7P; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774434674; c=relaxed/simple;
+	bh=oJjXP7xdNnZ/BGIVuhLzu0MfsHL3XvKpMIM3SaBhYfk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oJTOnEZwmqOEOgrZ8ukUv2dAIsqrAxgZbQAuwJSnXdtgzOCzDygyYepIB+NSSGb2wEFB1hTcTGzjBZD96Tp3X+LqnSRtFyQMIL1Bkid8gYoCC6J34vwaQK6wgGvE9OFzu7J5s4ZTjsbKEbtGNzGAyRJIdTGvAOIzuaL7IuhLWPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MNmggxTi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NmhtCt7P"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c6dd5b01e14so829413a12.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Mar 2026 02:08:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774429717; x=1775034517; darn=vger.kernel.org;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=mhWnbpoS9T7pkofCjEvHd+AoIWGTN97nVl4Dsa2uwX8=;
-        b=NmhtCt7Pc5PspekFeEaAdowiZo8TDhKUSVAPUBbfAtU5bM9LAkGSiJc9YhVN4tEbe4
-         WTPkfZsvtfxr97plyASxKzFCsfggVpIf2bXb186YyApoYu9FGpjesJ/0+GkDEll+hXKu
-         l7fPHhZb1++9eZ6Y91IS5Q2pA3/rAYgdgiFN4tTaT3JPezbghKsXpoudAdKyhWOSDUKP
-         ON9J5dtfA1pDa4+r4Rk0p4kr0WoDJpXj0fPqD3L7NS1N2KWR+EhZsVsVXhzMzcslAJ0b
-         Du3HVs1MQRvg9YaN4/I643hNqxpxYe20tG9hvU/K5KFnGSdDqBVeqOugAKiYyybUnImn
-         Ygaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774429717; x=1775034517;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mhWnbpoS9T7pkofCjEvHd+AoIWGTN97nVl4Dsa2uwX8=;
-        b=MKeJ87I15BkwOvmbtkWwCKI2UPJiVtSTjXzx2lYeB/5Fp5bTCfAbNus8ASRPJMPHll
-         cR/rvjPOzjQIYQBB1A8nP/hUL0wpEqKz+JpG6/lRakMuXWzUrBcmVwaWGmlK/wRUcRjf
-         /cVtpR+M42dLD/zUbSGriZ/8ejcxE/zIqh7orQjKkRpMfaCM3AxEax2NksfOTudWuHgp
-         CYQByCT9hU/J4AYwaa+PNrehY8Owhk/ZyiInzoZtd3Z1mrGJdL3rGMKg6iHSOBDC+qp+
-         TN6BQCd4jntU1Te9meUnWTA0FzJFPaq66KtsD90ABKP0JxMTb8DPcw/LqDFloo5FqaTS
-         calg==
-X-Forwarded-Encrypted: i=1; AJvYcCWEc0maxGqIQlcYL23Uks2wqjdMYTlb+WnNoSTggK9BCO3hHMdfjSwyP75+N2XIkzWj8eX5qyQb1kJXag==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWMKNFIItKKTzLPueEehDWYB7jPEvPf+Wsm94NU27whyZ4GvCb
-	8d7GIvGFSnKgfyVVT+tHizZS0DhwoBe5mV0l6URpANde7fkt0gdcARHf
-X-Gm-Gg: ATEYQzyMS/+b3WaIai1f0/lUIQTGeJ4hoVOrvLB5qHbR63Bqgss87KMBKsCco/w1K0p
-	zV+W4kAImCIMsXBH1ITHe5eXQ/9zGBxC0q45jyURlrwKDxAOsiFNSkfK4jzEClTVpUcovEfxK5j
-	bu08p91o+GynVn6xFcFGwiMFeaaEn8/5TWAWAvJQaQjQ+8qtQHEc7H8qkoyec/61qPh1iF3WUYu
-	Rkvh8NJRTwSWPrtMhHsT+ndPQw+lDcP2AP8Zb5YV0rrSCu9Y8yDH6/f2EGfXoiYKgsbp+tQpVDh
-	SaMF1GzUlTEU0zlrYF9aj5hxhy7pjT4Fk/uGQapLq3h3Kllv9lfZk8XrKu5qOwpU6a7yN3+EsSY
-	UzahdUniNXYngE/EKMGRiA1/ETwo8YOGYX61np+Xjrs6yvRRMBaqWPqK29m4XqkVyRiIqvLPJR4
-	9HJf+VGNaFUI1sh73WuvVT0E1vWsrViOITWxKOdtMiVd0+c5KE5JLJ
-X-Received: by 2002:a05:6300:8b0f:b0:398:e30d:da6d with SMTP id adf61e73a8af0-39c4ae4faaemr2929569637.68.1774429717318;
-        Wed, 25 Mar 2026 02:08:37 -0700 (PDT)
-Received: from ubuntu.localdomain ([27.217.83.168])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82b03bc6881sm17476982b3a.22.2026.03.25.02.08.34
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 25 Mar 2026 02:08:37 -0700 (PDT)
-From: Zaixiang Xu <zaixiang.xu.dev@gmail.com>
-To: linux@roeck-us.net
-Cc: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	zaixiang.xu.dev@gmail.com
-Subject: [PATCH v4 4/4] hwmon: (sht3x) Add support for GXCAS GXHT30
-Date: Wed, 25 Mar 2026 17:08:10 +0800
-Message-Id: <1774429690-129139-5-git-send-email-zaixiang.xu.dev@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1774429690-129139-1-git-send-email-zaixiang.xu.dev@gmail.com>
-References: <1774429690-129139-1-git-send-email-zaixiang.xu.dev@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MNmggxTi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68BABC4CEF7;
+	Wed, 25 Mar 2026 10:31:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774434673;
+	bh=oJjXP7xdNnZ/BGIVuhLzu0MfsHL3XvKpMIM3SaBhYfk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MNmggxTin7K/6W/4SAhXxVVhhDmcwZaEhsjbkFJHNe0FYCa7T9o4k6z1t2QuMcGmk
+	 77wUYCQTFU54CIbmC1E+4JnJe/CDzVLutHSsNR3KlBsrlAzWiGVU8lz97OAW7eNgLn
+	 ALBL9WqwNniCGj6bi5utGFCqQ5UN9ep5k6/6yd8ImitK/Xp8jlegDjw45EM29a+j4N
+	 NkpbYmaW3cdXPPUHrBCkfPh+yfzQIXixAyYawvKhvA3/ia8HXrlMRm2a2qebz5JhoG
+	 00Pfy1wr7CgjBofXbGUNLA4uZhJ9yqh+asjiB1txJ98jFVMPlNTrrfibDmL9NQ9Sr9
+	 WARIuC86D6dCw==
+Date: Wed, 25 Mar 2026 11:31:11 +0100
+From: Thierry Reding <thierry.reding@kernel.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Akhil R <akhilrajeev@nvidia.com>, Frank.Li@nxp.com, 
+	acpica-devel@lists.linux.dev, alexandre.belloni@bootlin.com, conor+dt@kernel.org, 
+	devicetree@vger.kernel.org, ebiggers@kernel.org, fredrik.markstrom@est.tech, 
+	jonathanh@nvidia.com, krzk+dt@kernel.org, lenb@kernel.org, linux-acpi@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-tegra@vger.kernel.org, linux@roeck-us.net, miquel.raynal@bootlin.com, 
+	p.zabel@pengutronix.de, rafael@kernel.org, robert.moore@intel.com, robh@kernel.org, 
+	smangipudi@nvidia.com
+Subject: Re: [PATCH 12/12] arm64: defconfig: Enable I3C and SPD5118 hwmon
+Message-ID: <acO4NKPDUayny-I4@orome>
+References: <20260319-nano-manatee-of-vastness-fbafa1@quoll>
+ <20260319170929.14543-1-akhilrajeev@nvidia.com>
+ <67165a1f-9fa3-4853-b530-b1f9d6e4c2cf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="hefw7yhop4kz6jja"
+Content-Disposition: inline
+In-Reply-To: <67165a1f-9fa3-4853-b530-b1f9d6e4c2cf@kernel.org>
 
-Add support for the GXCAS GXHT30 humidity and temperature sensor.
-The GXHT30 is software compatible with the Sensirion SHT30.
 
-Signed-off-by: Zaixiang Xu <zaixiang.xu.dev@gmail.com>
----
- drivers/hwmon/sht3x.c | 3 +++
- 1 file changed, 3 insertions(+)
+--hefw7yhop4kz6jja
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 12/12] arm64: defconfig: Enable I3C and SPD5118 hwmon
+MIME-Version: 1.0
 
-diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
-index f2b1d3b8eb23..1561c0f46f75 100644
---- a/drivers/hwmon/sht3x.c
-+++ b/drivers/hwmon/sht3x.c
-@@ -934,6 +934,7 @@ static const struct i2c_device_id sht3x_ids[] = {
- 	{"sht3x", sht3x},
- 	{"sts3x", sts3x},
- 	{"sht85", sht3x},
-+	{"gxht30", sht3x},
- 	{}
- };
- 
-@@ -942,6 +943,7 @@ MODULE_DEVICE_TABLE(i2c, sht3x_ids);
- static const struct of_device_id sht3x_of_match[] = {
- 	{ .compatible = "sensirion,sht30", .data = (void *)sht3x },
- 	{ .compatible = "sensirion,sts30", .data = (void *)sts3x },
-+	{ .compatible = "gxcas,gxht30", .data = (void *)sht3x },
- 	{ }
- };
- 
-@@ -959,5 +961,6 @@ module_i2c_driver(sht3x_i2c_driver);
- 
- MODULE_AUTHOR("David Frey <david.frey@sensirion.com>");
- MODULE_AUTHOR("Pascal Sachs <pascal.sachs@sensirion.com>");
-+MODULE_AUTHOR("Zaixiang Xu <zaixiang.xu.dev@gmail.com>");
- MODULE_DESCRIPTION("Sensirion SHT3x humidity and temperature sensor driver");
- MODULE_LICENSE("GPL");
--- 
-2.34.1
+On Thu, Mar 19, 2026 at 06:15:14PM +0100, Krzysztof Kozlowski wrote:
+> On 19/03/2026 18:09, Akhil R wrote:
+> > On Thu, 19 Mar 2026 10:40:34 +0100, Krzysztof Kozlowski wrote:
+> >> On Wed, Mar 18, 2026 at 10:57:25PM +0530, Akhil R wrote:
+> >>> Add I3C subsystem support, DesignWare I3C master controller, and
+> >>> SPD5118 hwmon sensor as modules to the defconfig.
+> >>
+> >> Why? If there is no user of that, why would we want it? Your commit msg
+> >> should explain that.
+> >=20
+> > Ack. This is for Tegra410 which has a DesignWare I3C host controller.
+> > I will add this in the commit message.
+>=20
+> Board or products. Not SoCs.
 
+Is this a new requirement? I see a bit of both in defconfig changes.
+Some mention specific products, other mention SoCs. Does this
+requirement apply to DT platforms or also ACPI platforms?
+
+Thierry
+
+--hefw7yhop4kz6jja
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmnDuWsACgkQ3SOs138+
+s6GkJQ/+KHih7KGdwK8LUXDaRizPuwcIwvX5HHc3TOdKw2Gw/XtV+JaoI7c4wtx4
+MvnJjhsHhu4zH+4SMnxqEzTP8jbxcV96L9WhQ+Zfurvs+4X+vZ0KsNXN7H+uTeOB
+UKlf8JumnoVOs74dUSxIy4c9s2XoY/q6W/pBIguuczmMO/uyuUIIV7tiS+IAHVvG
+V+ySkgCNZR+6XH9tyAdN5xTvt7K26KFKoPUgOEXzY7k1gPWCL297YdEoWAfaw0PR
+7DxE9hn9z8DcflEbdkwLwD6z5wfJBgTPvZZgXNheyMv3Spr3lpmAOLFqW6a5QicG
+HllawC3G+ShlLltKAbjxygCX87Wf6fmKKYT40da3GrEkex+GWfDsDYXK5hijGDas
+2nxOZPvXBvQ8aV4Fx4kJHr0GmL6psv8VRVvDT1GWn3clzC7VBOzeMvf7cJBXImMv
+uxr53vBDzVSuLNZbt2ZZu+teJREZG+pM4nxC3jPIgh2t2tXWDtfco9O9qUyJsK2Y
+ibZ4l+p2uBzRu3cD3obBsHjnVLY79XEd6LN9RH6ZXNGn5t6PVHarP2gLW5hx5VI/
+rc++EMVFU2qrO2fe+duASYGyQs+BS4u7u5S9j/jnjEO+Z7kZi4zPk9cnAZEZXSZl
+tWV0O0BCLlbHYHHVrKTMZmT7Ay//JLt0uEEsogX+Cm7vH3z0U6M=
+=cTw6
+-----END PGP SIGNATURE-----
+
+--hefw7yhop4kz6jja--
