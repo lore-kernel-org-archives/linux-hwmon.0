@@ -1,33 +1,49 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B80323C5542;
-	Wed, 25 Mar 2026 11:03:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459DA3CBE99
+	for <linux-hwmon@vger.kernel.org>; Wed, 25 Mar 2026 11:19:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774436625; cv=none; b=MFUPAZykzQwYAIyT3cxNS2Zwe/rz3rNCvbW+PbBIQdEOOuJaVARBLEiTzfRyrCIC5k8gVngsi1I29es3PFWeOoMbzv/9yMdyg8WJ7eeILiAVNmarWMrpK3JcyDhMTv2ah/xMTsPTEpMj6bXPw1CSXl3/X6JpA9HhHsfZYNJ0H+A=
+	t=1774437585; cv=none; b=iFRiHHzj6b114oFqf09vlQ8DGAgKW+mtu8eWLLBuXcCoB3F8biEbE783xTGocngVjWIfEpTcgS4kTFEjFNHBxPm5AfN3uPv3JSLSATEn1HeMEQm4ktCboM93FEjAoPSxC1wbg6f465T66FBzkSJxs0nKmvd48VgDpunDJgXOp1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774436625; c=relaxed/simple;
-	bh=/OTs14n6e4lM+2UQQJLdG1GrLfT2+YR2cma9kWyjbe0=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=qQhLD2QqfAxIRbEqyvyl79YLSDHiOT4KyJYKRKZBGoGDpvznpQ+x2stwpnwj6TXr7zOyQINa9zKl7ePrHuURFDQSnQP6X9txaSfJmerqWmHh0VPJ21aNzL7R2/s6RYp7pyr1pKKwT0NKuzIXp5kuh9m4IRjGtZGsB6DrMJCKU9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BdtkAWcn; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774437585; c=relaxed/simple;
+	bh=XW77TBg68HqucZSDZgf/eZQGswv9nbbrvZ+7GUTE8jo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XaiMd95dvdYwt0rKTXx0mgpdEMYBUXayAXV2bE8vxoK22iBhfGL4hwObIxDIG3C/enf1dXok0Q97wRO7G99RC0x3oLU8B0HdEBZcmPnaV9fPksZTXEXwpN1H2FK2+4eS26AakUlR3dPtL/KJ1XGwtCfVVeT9RiIxdxA5BUbLXzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Yl2JO5Ie; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BdtkAWcn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A877C2BC9E;
-	Wed, 25 Mar 2026 11:03:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774436625;
-	bh=/OTs14n6e4lM+2UQQJLdG1GrLfT2+YR2cma9kWyjbe0=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=BdtkAWcnVv1iui5vIOhjVQeBzxmTUsOApf/pYppOehfw4fCCm23F5mdbILAInpITD
-	 quLa2QHKJcxC5w2CejKLcCjM4Ba+go6RnakxNQCNlg0KVxxLBHRJH9Oxk+RZKDjRil
-	 XDM9eYDhFKTFd/2Z6IyZHONzwLWnWTtWEweNFxcfG3YHZRexjlwXW2N+bg+bylj2nY
-	 oRmWVoU5erBSoCOst/yDMC/dD146ddtMyUI/bclMj+3Nv0DyPd4nwmnNw7O1womYDM
-	 2PNU+D+X+yFqFzWuGc9TaLuzMlpxGm7t/fHLiFr1OofftlP4U6zmzYTGF0OcHf7grZ
-	 5+tmBrG6smRsA==
-Message-ID: <ed3828b9-fd2d-46c1-b486-c5172f61eafa@kernel.org>
-Date: Wed, 25 Mar 2026 12:03:37 +0100
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Yl2JO5Ie"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774437583;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bcu7X20LtGJI1sr0/TMhyNj2XP5fyXzzK13F8Ax+u9g=;
+	b=Yl2JO5Ief4oiQCoDQdT0H6BTO4KWfXOa/uahOuXz7io/Idhrfrt28GDUyP+FVMMqphpmYq
+	KC834+yLXJHwMmytdNGH5U0gwyleOEXP2XQHFsdyVnouBHNdQa5j9zPTWSJ9dNca1L3+5v
+	9lMLT+sBGkrlQMvMRaaqSHthxzIjVmw=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-54-IoCr3ecSPNSQlazJgLUWwg-1; Wed,
+ 25 Mar 2026 07:19:38 -0400
+X-MC-Unique: IoCr3ecSPNSQlazJgLUWwg-1
+X-Mimecast-MFC-AGG-ID: IoCr3ecSPNSQlazJgLUWwg_1774437576
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A028418002C9;
+	Wed, 25 Mar 2026 11:19:35 +0000 (UTC)
+Received: from [10.44.32.254] (unknown [10.44.32.254])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2FAA31955D71;
+	Wed, 25 Mar 2026 11:19:30 +0000 (UTC)
+Message-ID: <9f169bf2-1d1f-4f7f-9f9f-0b90d06673e0@redhat.com>
+Date: Wed, 25 Mar 2026 12:19:29 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,100 +51,73 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 12/12] arm64: defconfig: Enable I3C and SPD5118 hwmon
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Thierry Reding <thierry.reding@kernel.org>
-Cc: Akhil R <akhilrajeev@nvidia.com>, Frank.Li@nxp.com,
- acpica-devel@lists.linux.dev, alexandre.belloni@bootlin.com,
- conor+dt@kernel.org, devicetree@vger.kernel.org, ebiggers@kernel.org,
- fredrik.markstrom@est.tech, jonathanh@nvidia.com, krzk+dt@kernel.org,
- lenb@kernel.org, linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-tegra@vger.kernel.org, linux@roeck-us.net, miquel.raynal@bootlin.com,
- p.zabel@pengutronix.de, rafael@kernel.org, robert.moore@intel.com,
- robh@kernel.org, smangipudi@nvidia.com
-References: <20260319-nano-manatee-of-vastness-fbafa1@quoll>
- <20260319170929.14543-1-akhilrajeev@nvidia.com>
- <67165a1f-9fa3-4853-b530-b1f9d6e4c2cf@kernel.org> <acO4NKPDUayny-I4@orome>
- <6342b6fd-9802-49d9-a269-ecb3b70b4604@kernel.org>
+Subject: Re: [PATCH net-next 3/3] dpll: zl3073x: add hwmon support for input
+ reference frequencies
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+ Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
+ Jiri Pirko <jiri@resnulli.us>,
+ Prathosh Satish <Prathosh.Satish@microchip.com>,
+ Vadim Fedorenko <vadim.fedorenko@linux.dev>, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, Michal Schmidt <mschmidt@redhat.com>,
+ Petr Oros <poros@redhat.com>, Simon Horman <horms@kernel.org>,
+ Guenter Roeck <linux@roeck-us.net>
+References: <20260320105915.149068-1-ivecera@redhat.com>
+ <20260320105915.149068-4-ivecera@redhat.com>
+ <964752ec-8e6d-444a-aad0-80da3acb2dab@roeck-us.net>
+ <7dbb5130-72cf-49d2-bfac-3439deb1b2e3@redhat.com>
+ <20260323154825.1a2320c4@kernel.org>
+ <50a1671c-9901-426a-97ed-bf36400fe9a7@roeck-us.net>
+ <6f1e98b3-4b86-4b7f-8c91-d8d5721aeb25@redhat.com>
+ <8486ce6e-ad2a-493d-b734-b40e8db9213e@redhat.com>
+ <20260324143654.4dcec5a0@kernel.org>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <6342b6fd-9802-49d9-a269-ecb3b70b4604@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+From: Ivan Vecera <ivecera@redhat.com>
+In-Reply-To: <20260324143654.4dcec5a0@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On 25/03/2026 11:59, Krzysztof Kozlowski wrote:
-> On 25/03/2026 11:31, Thierry Reding wrote:
->> On Thu, Mar 19, 2026 at 06:15:14PM +0100, Krzysztof Kozlowski wrote:
->>> On 19/03/2026 18:09, Akhil R wrote:
->>>> On Thu, 19 Mar 2026 10:40:34 +0100, Krzysztof Kozlowski wrote:
->>>>> On Wed, Mar 18, 2026 at 10:57:25PM +0530, Akhil R wrote:
->>>>>> Add I3C subsystem support, DesignWare I3C master controller, and
->>>>>> SPD5118 hwmon sensor as modules to the defconfig.
->>>>>
->>>>> Why? If there is no user of that, why would we want it? Your commit msg
->>>>> should explain that.
->>>>
->>>> Ack. This is for Tegra410 which has a DesignWare I3C host controller.
->>>> I will add this in the commit message.
+
+
+On 3/24/26 10:36 PM, Jakub Kicinski wrote:
+> On Tue, 24 Mar 2026 13:59:19 +0100 Ivan Vecera wrote:
+>>>> In the hardware monitoring world one would have min/max attributes and
+>>>> one or more alarm attributes. I never heard about the idea of reporting
+>>>> deviations, and for typical hardware monitoring attributes it does not
+>>>> really make sense. What would be a "deviation" of a temperature/
+>>>> voltage/current/power/humidity sensor ? Such attributes typically have
+>>>> an operational range, and they are allowed and even expected to
+>>>> fluctuate within that range.
 >>>
->>> Board or products. Not SoCs.
+>>> Ivan, my take on all the above is that using the HWmon interface here is
+>>> stretching it too much. I think it would be better to move debugfs
+>>> and/or netlink events.
 >>
->> Is this a new requirement? I see a bit of both in defconfig changes.
+>> I'd rather avoid debugfs... My proposal is to expose absolute measured
+>> frequency attribute of dpll-pin and follow phase-offset-monitor
+>> functionality:
+>>
+>> So:
+>> * add real-frequency attribute to dpll pin
+>> * add real-frequency-monitor attribute dpll device
+>> * user will be able to enable/disable monitoring by enabling/disabling
+>>     real-frequency-monitor feature (similarly to phase-offset-monitor)
+>>
+>> Thoughts?
 > 
-> Almost every review from me has it for 2-3 years... And it is a known
+> I don't have a strong opinion. IDK where to draw the line between DPLL
+> and "random functionality some devices may have". We have 3 DPLL
+> maintainers, let's see what their majority opinion is..
 
-And I already explained this to *you* 3 years ago:
+I think that line has already been crossed by temperature reporting,
+which has been there since the beginning. Actual frequency measurement
+is, in my opinion, much closer to the DPLL world than temperature 
+reporting. :-)
 
-https://lore.kernel.org/all/ac8f30a7-fc72-9a44-74b3-a69001bfdaaf@linaro.org/
+Anyway, I have the relevant patch-set already prepared, so I can submit
+it if you want to see it.
 
-So how this could be a new requirement *now* if three years ago we had
-exactly same discussion.
+Thanks,
+Ivan
 
-I understand question for the first time, but why this being brought up
-as "why is this a new thing" again?
-
-Best regards,
-Krzysztof
