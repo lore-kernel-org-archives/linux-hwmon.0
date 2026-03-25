@@ -1,625 +1,153 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75259311C36
-	for <linux-hwmon@vger.kernel.org>; Wed, 25 Mar 2026 18:16:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34D1832694F;
+	Wed, 25 Mar 2026 18:20:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774462606; cv=none; b=OG3ilLZN610KSrr42703ULtt/hrEyhYHdjJYIU+jQW53g7/hfBvV8VwNyDgVH66aWFndVXoHtMDWJOollhvl4WZSwNxpP10SmoXkDdEWTLA2NaDjML6ypfXtdQzfGJ+NzrlzxlNzofzZyEPl5N4WZN2EvwxvLrz7FoFDGPRqbOw=
+	t=1774462856; cv=none; b=iKGZRI4XGnoz65FgAmpAMgRWxXYvcVJOmSxJGQTiZCryHBUGIu9r/OB5kk6+rlG/2mM/qW1dqOPgyvy8zzrc0XdmeK5frVNoXhRA7vZuaHdwBYo0SfGT05LSNHJ8By0+yY4D6nxUagQjPyyXaNIZK+UhTFcPfp1fz7iznFSdDIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774462606; c=relaxed/simple;
-	bh=amsDFhXkOkIpGWKMu3CkedApsbhSEXjyNxGXuiR/JlM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GZzyDSbHeO5HmFsGe3OCHY7Du//pw3IHPmwGfih0JQ/96BhnLPvSqwlCFNnSYQI8b1BXSn4vqTECz8e8FBGu9ELPW/5mmfkli95LtglY2D1kisaqc++Awx+L3AFUBB+IjX4o7QspgROIKhhFXJWlEqqYT1hEfp2WBO0s1d+x2jc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V0DWLpKl; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774462856; c=relaxed/simple;
+	bh=oMdhYSES5MvAh1wOam8EQNNBXiL4HAnHqe2eV/eCsJY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dyWm4zMEfd2YQfEAXj6AFbWKt0mkLz1NvHlkaIXotwnjlwzD2JCTZcLswiRx1ACZF7Y+1paNkEbIBQpgA/BJNBB6FQjr9i3gQhT1kMH0r04mqmcNQzdbjKlOgvClci5nS82A7XgheKgtPTzIJYTMdVWNvUL2uerDqtn4VtX4o14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z7RZ8npT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V0DWLpKl"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-35a1d4a095bso46663a91.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Mar 2026 11:16:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774462603; x=1775067403; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1b1dVqC9hhDPndRcYdfgb4O4F+tCXwa9esWn7t9Gbu4=;
-        b=V0DWLpKlo56ED8ObFFxfUzg0keenYGp00yTUpQRK+EalPam2XKyQmG1sGpGXwpqG8k
-         i/nnENukn193xSoSbEhaCuRjlHawTsv+YsuxWjZYffZ0I4qRAeyuZ7igw2LP0CTkH72o
-         Czpb88OudVsQe8haPO9EMohNOj+UnRh/lXuqwQlWs3JX+hwfG6z+FCgsfKFJadMvYW2O
-         q1h9SYxfhfqq5SYG9jj4lIJZQZVqR6Q1b3IJnu1Ao+w55ixQQoaFbCIutGnUjN66g2nl
-         RfEQvY/i6uhKnMf0gwg2i4UbNEdIn9zIOQESdnjQYGPSE05h/DFgkAl33TkGS43NBKjW
-         Rymg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774462603; x=1775067403;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1b1dVqC9hhDPndRcYdfgb4O4F+tCXwa9esWn7t9Gbu4=;
-        b=rQS87uXWdHqK1SyVN57q7f9YwmjFZ4UMTLSbR33KBvz31ewem6TN20dGo3nQxSpbjS
-         qE+YkT5nFE8oEtUKJom0OpPTrVf9AkYrynzwieeMEjKCGxtFfEPckjqMEydxyJaumQE9
-         e45YdEYqtOMBysnEzgQY7PSPNVnQfpVdkRrkBgHNxuZ7PC60lQxTxTbe9Z+5p3XQxmx3
-         0UNQGmaUUVAFPylRSagvHI9GlhJe1sV26qn7cOD6NpLdSXQNriD1IfSW9fWhbsc7ksjw
-         XmaGGilHqqVz2n37dHdl+OsCQOl9qyl9/+2KSTy42OPY7r8nQjf9/odmN10chawz50/S
-         jSoQ==
-X-Gm-Message-State: AOJu0Yz7rAdY7vNctTRF6DmcYjfgd8KcRla9hfzDYEPj3uB+AdrBMVYY
-	xGJGMK9bEg3+y4Kv9tEfPd9U0GEsCmyeC3dC6KT1IDrAZiMETqShn23cKKEjAw==
-X-Gm-Gg: ATEYQzzkiLppytHFFs2jAkzG5Wk16PBFUF6lBLKZbgY2DfwqyAW0G3iVjobeWElyZHE
-	kQ3zv20+mh8Iz5wXoWcO1tNamWfchzQ+xG5EfZlBCrwWMOPlfxrQnbJOM1gm708ChUg8OJDB/Qq
-	Yzwr0q3NE+YfK+mCDrmqr0BklSolGK21nN1q7/qQmeXy95rRD7QfbdzE9yRMGxRzD4KyJeLKHNo
-	o69g+rQkAfI6fNcKef0NNZujyiajFWEEl61o9kqsHjQUyNJfcx7PNvPQQsCS0AdX3bpf1eFgCG4
-	iQyWeFR/t+UZRDuGxRhgwZCXmoU1VuxfGDXI0cZZvmjZazaz3TEn1CcM7x2P8/SgJsqP42s8mQt
-	pMkAQlcUjM5yAYChXoAIjEoNYCeRW85JdlhOE1041Ow9Gm3iKK2iHm2lHocSc2Fldi6MiTXEXp3
-	A26+9xe0sQ9HFbR8iuazgN2O3eqGflV2NrRK8S
-X-Received: by 2002:a17:90b:53c3:b0:35b:92ba:66e4 with SMTP id 98e67ed59e1d1-35c0d12f216mr3836394a91.7.1774462602712;
-        Wed, 25 Mar 2026 11:16:42 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35c1a045860sm500517a91.6.2026.03.25.11.16.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Mar 2026 11:16:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Sanman Pradhan <psanman@juniper.net>,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 5/5] hwmon: (pmbus_core) Use guard() for mutex protection
-Date: Wed, 25 Mar 2026 11:16:31 -0700
-Message-ID: <20260325181631.17259-6-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20260325181631.17259-1-linux@roeck-us.net>
-References: <20260325181631.17259-1-linux@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z7RZ8npT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 634AAC4CEF7;
+	Wed, 25 Mar 2026 18:20:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774462856;
+	bh=oMdhYSES5MvAh1wOam8EQNNBXiL4HAnHqe2eV/eCsJY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Z7RZ8npTmOQn2fjsJYVFhPG6gaG5CVtJMyFOWXNSl0wIr14Vaj4JEPHfOKC2frlZa
+	 kp/wUNV9YJQAeQQgmKiWEadnjJf0YkzRVBeaKiUEow1+TbPoIjwkjebZgP66rQKbX3
+	 qzuSnSskOuVf6AMQyutUVM4eYP966PVrF4GLYVEVOkWG5NcCzM1F63Qoto8UNTID1G
+	 JIUdgPb73L0g1HZ/WOrSktjqckiAyNr4KUTtvsKX2hqQusy0Qv2HViUUX12AzsR2SH
+	 ZK6CDmGHLxqKRVFDhh1oMJM5xsaHsrKwM+0huYQdZ7CoQoE8FEJczk6nG5SmdXoVgk
+	 OCAmdAWZWbeEg==
+Date: Wed, 25 Mar 2026 18:20:52 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Zaixiang Xu <zaixiang.xu.dev@gmail.com>
+Cc: linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/4] dt-bindings: hwmon: Add Sensirion SHT30 series
+Message-ID: <20260325-napping-turmoil-de37168fb072@spud>
+References: <1774429690-129139-1-git-send-email-zaixiang.xu.dev@gmail.com>
+ <1774429690-129139-3-git-send-email-zaixiang.xu.dev@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="JnVEHSX4cpxGm636"
+Content-Disposition: inline
+In-Reply-To: <1774429690-129139-3-git-send-email-zaixiang.xu.dev@gmail.com>
 
-Simplify the code by using guard() and scoped_guard() instead of
-mutex_lock()/mutex_unlock() sequences.
 
-This patch changes semantics for debugfs accesses. Previously, those
-used mutex_lock_interruptible() and not mutex_lock(). This change is
-intentional and should have little if any impact since locks should not
-be held for a significant amount of time and debugfs accesses are less
-critical than sysfs accesses (which never used interruptable locks).
+--JnVEHSX4cpxGm636
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/pmbus/pmbus_core.c | 279 ++++++++++++-------------------
- 1 file changed, 108 insertions(+), 171 deletions(-)
+On Wed, Mar 25, 2026 at 05:08:08PM +0800, Zaixiang Xu wrote:
+> Add YAML devicetree binding schema for Sensirion SHT30 series.
+> Use fallback compatibles for compatible chips and add optional
+> interrupts and vdd-supply properties.
+>=20
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/r/202603212044.BRPaiz86-lkp@intel.com/
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 7150f12d2630..1f5bde83d55b 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -1156,12 +1156,11 @@ static int pmbus_get_boolean(struct i2c_client *client, struct pmbus_boolean *b,
- 	int ret, status;
- 	u16 regval;
- 
--	mutex_lock(&data->update_lock);
-+	guard(pmbus_lock)(client);
-+
- 	status = pmbus_get_status(client, page, reg);
--	if (status < 0) {
--		ret = status;
--		goto unlock;
--	}
-+	if (status < 0)
-+		return status;
- 
- 	if (s1)
- 		pmbus_update_sensor_data(client, s1);
-@@ -1173,7 +1172,7 @@ static int pmbus_get_boolean(struct i2c_client *client, struct pmbus_boolean *b,
- 		if (data->revision >= PMBUS_REV_12) {
- 			ret = _pmbus_write_byte_data(client, page, reg, regval);
- 			if (ret)
--				goto unlock;
-+				return ret;
- 		} else {
- 			pmbus_clear_fault_page(client, page);
- 		}
-@@ -1181,14 +1180,10 @@ static int pmbus_get_boolean(struct i2c_client *client, struct pmbus_boolean *b,
- 	if (s1 && s2) {
- 		s64 v1, v2;
- 
--		if (s1->data < 0) {
--			ret = s1->data;
--			goto unlock;
--		}
--		if (s2->data < 0) {
--			ret = s2->data;
--			goto unlock;
--		}
-+		if (s1->data < 0)
-+			return s1->data;
-+		if (s2->data < 0)
-+			return s2->data;
- 
- 		v1 = pmbus_reg2data(data, s1);
- 		v2 = pmbus_reg2data(data, s2);
-@@ -1196,8 +1191,6 @@ static int pmbus_get_boolean(struct i2c_client *client, struct pmbus_boolean *b,
- 	} else {
- 		ret = !!regval;
- 	}
--unlock:
--	mutex_unlock(&data->update_lock);
- 	return ret;
- }
- 
-@@ -1227,16 +1220,16 @@ static ssize_t pmbus_show_sensor(struct device *dev,
- 	struct i2c_client *client = to_i2c_client(dev->parent);
- 	struct pmbus_sensor *sensor = to_pmbus_sensor(devattr);
- 	struct pmbus_data *data = i2c_get_clientdata(client);
--	ssize_t ret;
-+	s64 val;
- 
--	mutex_lock(&data->update_lock);
--	pmbus_update_sensor_data(client, sensor);
--	if (sensor->data < 0)
--		ret = sensor->data;
--	else
--		ret = sysfs_emit(buf, "%lld\n", pmbus_reg2data(data, sensor));
--	mutex_unlock(&data->update_lock);
--	return ret;
-+	scoped_guard(pmbus_lock, client) {
-+		pmbus_update_sensor_data(client, sensor);
-+		if (sensor->data < 0)
-+			return sensor->data;
-+		val = pmbus_reg2data(data, sensor);
-+	}
-+
-+	return sysfs_emit(buf, "%lld\n", val);
- }
- 
- static ssize_t pmbus_set_sensor(struct device *dev,
-@@ -1246,7 +1239,6 @@ static ssize_t pmbus_set_sensor(struct device *dev,
- 	struct i2c_client *client = to_i2c_client(dev->parent);
- 	struct pmbus_data *data = i2c_get_clientdata(client);
- 	struct pmbus_sensor *sensor = to_pmbus_sensor(devattr);
--	ssize_t rv = count;
- 	s64 val;
- 	int ret;
- 	u16 regval;
-@@ -1254,15 +1246,15 @@ static ssize_t pmbus_set_sensor(struct device *dev,
- 	if (kstrtos64(buf, 10, &val) < 0)
- 		return -EINVAL;
- 
--	mutex_lock(&data->update_lock);
-+	guard(pmbus_lock)(client);
-+
- 	regval = pmbus_data2reg(data, sensor, val);
- 	ret = _pmbus_write_word_data(client, sensor->page, sensor->reg, regval);
- 	if (ret < 0)
--		rv = ret;
--	else
--		sensor->data = -ENODATA;
--	mutex_unlock(&data->update_lock);
--	return rv;
-+		return ret;
-+
-+	sensor->data = -ENODATA;
-+	return count;
- }
- 
- static ssize_t pmbus_show_label(struct device *dev,
-@@ -1364,7 +1356,7 @@ static int pmbus_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
- 	struct pmbus_data *pmbus_data = tdata->pmbus_data;
- 	struct i2c_client *client = to_i2c_client(pmbus_data->dev);
- 	struct device *dev = pmbus_data->hwmon_dev;
--	int ret = 0;
-+	int _temp;
- 
- 	if (!dev) {
- 		/* May not even get to hwmon yet */
-@@ -1372,15 +1364,15 @@ static int pmbus_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
- 		return 0;
- 	}
- 
--	mutex_lock(&pmbus_data->update_lock);
--	pmbus_update_sensor_data(client, sensor);
--	if (sensor->data < 0)
--		ret = sensor->data;
--	else
--		*temp = (int)pmbus_reg2data(pmbus_data, sensor);
--	mutex_unlock(&pmbus_data->update_lock);
-+	scoped_guard(pmbus_lock, client) {
-+		pmbus_update_sensor_data(client, sensor);
-+		if (sensor->data < 0)
-+			return sensor->data;
-+		_temp = (int)pmbus_reg2data(pmbus_data, sensor);
-+	}
- 
--	return ret;
-+	*temp = _temp;
-+	return 0;
- }
- 
- static const struct thermal_zone_device_ops pmbus_thermal_ops = {
-@@ -2412,13 +2404,12 @@ static ssize_t pmbus_show_samples(struct device *dev,
- 	int val;
- 	struct i2c_client *client = to_i2c_client(dev->parent);
- 	struct pmbus_samples_reg *reg = to_samples_reg(devattr);
--	struct pmbus_data *data = i2c_get_clientdata(client);
- 
--	mutex_lock(&data->update_lock);
--	val = _pmbus_read_word_data(client, reg->page, 0xff, reg->attr->reg);
--	mutex_unlock(&data->update_lock);
--	if (val < 0)
--		return val;
-+	scoped_guard(pmbus_lock, client) {
-+		val = _pmbus_read_word_data(client, reg->page, 0xff, reg->attr->reg);
-+		if (val < 0)
-+			return val;
-+	}
- 
- 	return sysfs_emit(buf, "%d\n", val);
- }
-@@ -2431,14 +2422,13 @@ static ssize_t pmbus_set_samples(struct device *dev,
- 	long val;
- 	struct i2c_client *client = to_i2c_client(dev->parent);
- 	struct pmbus_samples_reg *reg = to_samples_reg(devattr);
--	struct pmbus_data *data = i2c_get_clientdata(client);
- 
- 	if (kstrtol(buf, 0, &val) < 0)
- 		return -EINVAL;
- 
--	mutex_lock(&data->update_lock);
-+	guard(pmbus_lock)(client);
-+
- 	ret = _pmbus_write_word_data(client, reg->page, reg->attr->reg, val);
--	mutex_unlock(&data->update_lock);
- 
- 	return ret ? : count;
- }
-@@ -2950,14 +2940,9 @@ static int _pmbus_is_enabled(struct i2c_client *client, u8 page)
- 
- static int __maybe_unused pmbus_is_enabled(struct i2c_client *client, u8 page)
- {
--	struct pmbus_data *data = i2c_get_clientdata(client);
--	int ret;
-+	guard(pmbus_lock)(client);
- 
--	mutex_lock(&data->update_lock);
--	ret = _pmbus_is_enabled(client, page);
--	mutex_unlock(&data->update_lock);
--
--	return ret;
-+	return _pmbus_is_enabled(client, page);
- }
- 
- #define to_dev_attr(_dev_attr) \
-@@ -2987,14 +2972,13 @@ static void pmbus_notify(struct pmbus_data *data, int page, int reg, int flags)
- 	}
- }
- 
--static int _pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags,
-+static int _pmbus_get_flags(struct i2c_client *client, u8 page, unsigned int *flags,
- 			    unsigned int *event, bool notify)
- {
-+	struct pmbus_data *data = i2c_get_clientdata(client);
- 	int i, status;
- 	const struct pmbus_status_category *cat;
- 	const struct pmbus_status_assoc *bit;
--	struct device *dev = data->dev;
--	struct i2c_client *client = to_i2c_client(dev);
- 	int func = data->info->func[page];
- 
- 	*flags = 0;
-@@ -3070,16 +3054,12 @@ static int _pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flag
- 	return 0;
- }
- 
--static int __maybe_unused pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags,
-+static int __maybe_unused pmbus_get_flags(struct i2c_client *client, u8 page, unsigned int *flags,
- 					  unsigned int *event, bool notify)
- {
--	int ret;
-+	guard(pmbus_lock)(client);
- 
--	mutex_lock(&data->update_lock);
--	ret = _pmbus_get_flags(data, page, flags, event, notify);
--	mutex_unlock(&data->update_lock);
--
--	return ret;
-+	return _pmbus_get_flags(client, page, flags, event, notify);
- }
- 
- #if IS_ENABLED(CONFIG_REGULATOR)
-@@ -3095,17 +3075,13 @@ static int _pmbus_regulator_on_off(struct regulator_dev *rdev, bool enable)
- {
- 	struct device *dev = rdev_get_dev(rdev);
- 	struct i2c_client *client = to_i2c_client(dev->parent);
--	struct pmbus_data *data = i2c_get_clientdata(client);
- 	u8 page = rdev_get_id(rdev);
--	int ret;
- 
--	mutex_lock(&data->update_lock);
--	ret = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
--				     PB_OPERATION_CONTROL_ON,
--				     enable ? PB_OPERATION_CONTROL_ON : 0);
--	mutex_unlock(&data->update_lock);
-+	guard(pmbus_lock)(client);
- 
--	return ret;
-+	return pmbus_update_byte_data(client, page, PMBUS_OPERATION,
-+				      PB_OPERATION_CONTROL_ON,
-+				      enable ? PB_OPERATION_CONTROL_ON : 0);
- }
- 
- static int pmbus_regulator_enable(struct regulator_dev *rdev)
-@@ -3122,54 +3098,41 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
- {
- 	struct device *dev = rdev_get_dev(rdev);
- 	struct i2c_client *client = to_i2c_client(dev->parent);
--	struct pmbus_data *data = i2c_get_clientdata(client);
- 	int event;
- 
--	return pmbus_get_flags(data, rdev_get_id(rdev), flags, &event, false);
-+	return pmbus_get_flags(client, rdev_get_id(rdev), flags, &event, false);
- }
- 
- static int pmbus_regulator_get_status(struct regulator_dev *rdev)
- {
- 	struct device *dev = rdev_get_dev(rdev);
- 	struct i2c_client *client = to_i2c_client(dev->parent);
--	struct pmbus_data *data = i2c_get_clientdata(client);
- 	u8 page = rdev_get_id(rdev);
- 	int status, ret;
- 	int event;
- 
--	mutex_lock(&data->update_lock);
--	status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
--	if (status < 0) {
--		ret = status;
--		goto unlock;
--	}
-+	guard(pmbus_lock)(client);
- 
--	if (status & PB_STATUS_OFF) {
--		ret = REGULATOR_STATUS_OFF;
--		goto unlock;
--	}
-+	status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
-+	if (status < 0)
-+		return status;
-+
-+	if (status & PB_STATUS_OFF)
-+		return REGULATOR_STATUS_OFF;
- 
- 	/* If regulator is ON & reports power good then return ON */
--	if (!(status & PB_STATUS_POWER_GOOD_N)) {
--		ret = REGULATOR_STATUS_ON;
--		goto unlock;
--	}
-+	if (!(status & PB_STATUS_POWER_GOOD_N))
-+		return REGULATOR_STATUS_ON;
- 
--	ret = _pmbus_get_flags(data, rdev_get_id(rdev), &status, &event, false);
-+	ret = _pmbus_get_flags(client, rdev_get_id(rdev), &status, &event, false);
- 	if (ret)
--		goto unlock;
-+		return ret;
- 
- 	if (status & (REGULATOR_ERROR_UNDER_VOLTAGE | REGULATOR_ERROR_OVER_CURRENT |
--	   REGULATOR_ERROR_REGULATION_OUT | REGULATOR_ERROR_FAIL | REGULATOR_ERROR_OVER_TEMP)) {
--		ret = REGULATOR_STATUS_ERROR;
--		goto unlock;
--	}
-+	   REGULATOR_ERROR_REGULATION_OUT | REGULATOR_ERROR_FAIL | REGULATOR_ERROR_OVER_TEMP))
-+		return REGULATOR_STATUS_ERROR;
- 
--	ret = REGULATOR_STATUS_UNDEFINED;
--
--unlock:
--	mutex_unlock(&data->update_lock);
--	return ret;
-+	return REGULATOR_STATUS_UNDEFINED;
- }
- 
- static int pmbus_regulator_get_low_margin(struct i2c_client *client, int page)
-@@ -3234,19 +3197,16 @@ static int pmbus_regulator_get_voltage(struct regulator_dev *rdev)
- 		.class = PSC_VOLTAGE_OUT,
- 		.convert = true,
- 	};
--	int ret;
-+	int voltage;
- 
--	mutex_lock(&data->update_lock);
--	s.data = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_READ_VOUT);
--	if (s.data < 0) {
--		ret = s.data;
--		goto unlock;
-+	scoped_guard(pmbus_lock, client) {
-+		s.data = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_READ_VOUT);
-+		if (s.data < 0)
-+			return s.data;
-+		voltage = (int)pmbus_reg2data(data, &s);
- 	}
- 
--	ret = (int)pmbus_reg2data(data, &s) * 1000; /* unit is uV */
--unlock:
--	mutex_unlock(&data->update_lock);
--	return ret;
-+	return voltage * 1000; /* unit is uV */
- }
- 
- static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uv,
-@@ -3263,22 +3223,18 @@ static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uv,
- 	};
- 	int val = DIV_ROUND_CLOSEST(min_uv, 1000); /* convert to mV */
- 	int low, high;
--	int ret;
- 
- 	*selector = 0;
- 
--	mutex_lock(&data->update_lock);
-+	guard(pmbus_lock)(client);
-+
- 	low = pmbus_regulator_get_low_margin(client, s.page);
--	if (low < 0) {
--		ret = low;
--		goto unlock;
--	}
-+	if (low < 0)
-+		return low;
- 
- 	high = pmbus_regulator_get_high_margin(client, s.page);
--	if (high < 0) {
--		ret = high;
--		goto unlock;
--	}
-+	if (high < 0)
-+		return high;
- 
- 	/* Make sure we are within margins */
- 	if (low > val)
-@@ -3288,10 +3244,7 @@ static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uv,
- 
- 	val = pmbus_data2reg(data, &s, val);
- 
--	ret = _pmbus_write_word_data(client, s.page, PMBUS_VOUT_COMMAND, (u16)val);
--unlock:
--	mutex_unlock(&data->update_lock);
--	return ret;
-+	return _pmbus_write_word_data(client, s.page, PMBUS_VOUT_COMMAND, (u16)val);
- }
- 
- static int pmbus_regulator_list_voltage(struct regulator_dev *rdev,
-@@ -3301,7 +3254,6 @@ static int pmbus_regulator_list_voltage(struct regulator_dev *rdev,
- 	struct i2c_client *client = to_i2c_client(dev->parent);
- 	struct pmbus_data *data = i2c_get_clientdata(client);
- 	int val, low, high;
--	int ret;
- 
- 	if (data->flags & PMBUS_VOUT_PROTECTED)
- 		return 0;
-@@ -3314,29 +3266,20 @@ static int pmbus_regulator_list_voltage(struct regulator_dev *rdev,
- 	val = DIV_ROUND_CLOSEST(rdev->desc->min_uV +
- 				(rdev->desc->uV_step * selector), 1000); /* convert to mV */
- 
--	mutex_lock(&data->update_lock);
-+	guard(pmbus_lock)(client);
- 
- 	low = pmbus_regulator_get_low_margin(client, rdev_get_id(rdev));
--	if (low < 0) {
--		ret = low;
--		goto unlock;
--	}
-+	if (low < 0)
-+		return low;
- 
- 	high = pmbus_regulator_get_high_margin(client, rdev_get_id(rdev));
--	if (high < 0) {
--		ret = high;
--		goto unlock;
--	}
-+	if (high < 0)
-+		return high;
- 
--	if (val >= low && val <= high) {
--		ret = val * 1000; /* unit is uV */
--		goto unlock;
--	}
-+	if (val >= low && val <= high)
-+		return val * 1000; /* unit is uV */
- 
--	ret = 0;
--unlock:
--	mutex_unlock(&data->update_lock);
--	return ret;
-+	return 0;
- }
- 
- const struct regulator_ops pmbus_regulator_ops = {
-@@ -3472,16 +3415,16 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
- 	struct i2c_client *client = to_i2c_client(data->dev);
- 	int i, status, event;
- 
--	mutex_lock(&data->update_lock);
-+	guard(pmbus_lock)(client);
-+
- 	for (i = 0; i < data->info->pages; i++) {
--		_pmbus_get_flags(data, i, &status, &event, true);
-+		_pmbus_get_flags(client, i, &status, &event, true);
- 
- 		if (event)
- 			pmbus_regulator_notify(data, i, event);
- 	}
- 
- 	pmbus_clear_faults(client);
--	mutex_unlock(&data->update_lock);
- 
- 	return IRQ_HANDLED;
- }
-@@ -3537,15 +3480,13 @@ static struct dentry *pmbus_debugfs_dir;	/* pmbus debugfs directory */
- 
- static int pmbus_debugfs_get(void *data, u64 *val)
- {
--	int rc;
- 	struct pmbus_debugfs_entry *entry = data;
--	struct pmbus_data *pdata = i2c_get_clientdata(entry->client);
-+	struct i2c_client *client = entry->client;
-+	int rc;
- 
--	rc = mutex_lock_interruptible(&pdata->update_lock);
--	if (rc)
--		return rc;
--	rc = _pmbus_read_byte_data(entry->client, entry->page, entry->reg);
--	mutex_unlock(&pdata->update_lock);
-+	guard(pmbus_lock)(client);
-+
-+	rc = _pmbus_read_byte_data(client, entry->page, entry->reg);
- 	if (rc < 0)
- 		return rc;
- 
-@@ -3558,15 +3499,14 @@ DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops, pmbus_debugfs_get, NULL,
- 
- static int pmbus_debugfs_get_status(void *data, u64 *val)
- {
--	int rc;
- 	struct pmbus_debugfs_entry *entry = data;
--	struct pmbus_data *pdata = i2c_get_clientdata(entry->client);
-+	struct i2c_client *client = entry->client;
-+	struct pmbus_data *pdata = i2c_get_clientdata(client);
-+	int rc;
- 
--	rc = mutex_lock_interruptible(&pdata->update_lock);
--	if (rc)
--		return rc;
--	rc = pdata->read_status(entry->client, entry->page);
--	mutex_unlock(&pdata->update_lock);
-+	guard(pmbus_lock)(client);
-+
-+	rc = pdata->read_status(client, entry->page);
- 	if (rc < 0)
- 		return rc;
- 
-@@ -3582,17 +3522,14 @@ static ssize_t pmbus_debugfs_block_read(struct file *file, char __user *buf,
- {
- 	int rc;
- 	struct pmbus_debugfs_entry *entry = file->private_data;
--	struct pmbus_data *pdata = i2c_get_clientdata(entry->client);
-+	struct i2c_client *client = entry->client;
- 	char data[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
- 
--	rc = mutex_lock_interruptible(&pdata->update_lock);
--	if (rc)
--		return rc;
--	rc = pmbus_read_block_data(entry->client, entry->page, entry->reg,
--				   data);
--	mutex_unlock(&pdata->update_lock);
--	if (rc < 0)
--		return rc;
-+	scoped_guard(pmbus_lock, client) {
-+		rc = pmbus_read_block_data(client, entry->page, entry->reg, data);
-+		if (rc < 0)
-+			return rc;
-+	}
- 
- 	/* Add newline at the end of a read data */
- 	data[rc] = '\n';
--- 
-2.45.2
+The robot did not report that this binding was missing.
+It also told you not to add these tags.
 
+You also ignored my and Krzysztof's reviews.
+
+NAK.
+
+pw-bot: changes-requested
+
+> Signed-off-by: Zaixiang Xu <zaixiang.xu.dev@gmail.com>
+> ---
+>  .../bindings/hwmon/sensirion,sht30.yaml       | 50 +++++++++++++++++++
+>  1 file changed, 50 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/sensirion,sht=
+30.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/sensirion,sht30.yaml=
+ b/Documentation/devicetree/bindings/hwmon/sensirion,sht30.yaml
+> new file mode 100644
+> index 000000000000..1b5ce822b37b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/sensirion,sht30.yaml
+> @@ -0,0 +1,50 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/sensirion,sht30.yaml#
+> +$schema: http://devicetree.org/meta-schema.yaml#
+> +
+> +title: Sensirion SHT30 Humidity and Temperature Sensor
+> +
+> +maintainers:
+> +  - Zaixiang Xu <zaixiang.xu.dev@gmail.com>
+> +
+> +description: |
+> +  The SHT30 series is a family of humidity and temperature sensors by Se=
+nsirion.
+> +  Compatible sensors like the GXCAS GXHT30 are also supported.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - gxcas,gxht30
+> +      - sensirion,sht30
+> +      - sensirion,sht31
+> +      - sensirion,sht35
+> +      - sensirion,sht85
+> +      - sensirion,sts30
+> +      - sensirion,sts31
+> +      - sensirion,sts32
+> +      - sensirion,sts35
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description: I2C address (usually 0x44 or 0x45)
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +
+> +        sensor@44 {
+> +            compatible =3D "gxcas,gxht30";
+> +            reg =3D <0x44>;
+> +        };
+> +    };
+> +
+> --=20
+> 2.34.1
+>=20
+
+--JnVEHSX4cpxGm636
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCacQnhAAKCRB4tDGHoIJi
+0hEpAPsEk7Wo9cQKKWjagPoB+6FaVYgR4sKnBHKTexzWM3DFpgEA6JHc2ooxZl5d
+KGx8hyFJar7aV8GMm3/zdAM5LH+/8Qk=
+=9niK
+-----END PGP SIGNATURE-----
+
+--JnVEHSX4cpxGm636--
