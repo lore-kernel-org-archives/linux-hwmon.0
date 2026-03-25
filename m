@@ -1,195 +1,123 @@
-Received: from TYVP286CU001.outbound.protection.outlook.com (mail-japaneastazon11011052.outbound.protection.outlook.com [52.101.125.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ABCA34FF58;
-	Wed, 25 Mar 2026 09:03:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.125.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774429387; cv=fail; b=pFt+POvv8ISk0mOPljR2gxBgzMrm01q+mKQ9KtfoZKXt0n00CsrqgrxGdwyN0sNcf6i+sL3BtrQH1Pf6Hi+eaa5Y0BeYrKHlmf3bmOQQ3ZeAQFqMlPpYuM8Or8sO7P6TRBxX/j4jr4iuiz1OYmAY+4OSRkvQetiqiso3FYmchZk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774429387; c=relaxed/simple;
-	bh=lbbzWKeHHT18Gq0sjEN+GDRByraHjlCfwl0acbjJUVQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=PE1EhYzTMPwvea4sTNYJ9IKY8WWjAjD6mIZJ110sUs4fFaL0DVOQs+4IPJFY/7gcLe9JnXI34/rsjUcv04WYllcOEj2hrenVrpuwjdwO93Jf2tdkpDiu/JtlAwOTnJRx21RYTEO5yV7Ds78SZ0bzvkTq7HPoMhmfBXQaGfohGXw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b=lTSd9gso; arc=fail smtp.client-ip=52.101.125.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE468347BC1
+	for <linux-hwmon@vger.kernel.org>; Wed, 25 Mar 2026 09:08:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774429707; cv=none; b=ZcUv0fPSVrUFy6i+SBfnqCrderx9MjTpo0s9mBg7qEETDgvGInSt/jVxhmTSO80Q7Zod/xwHyZTt46/ZJULiwVq+wg7+Apepwjz7qTbWbLUnyagJvvK0DdOjh1/38tpva+Vdz3g5MJ0u6Yh2W85BqOyWue2qvaHu+dBpwTjQVWg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774429707; c=relaxed/simple;
+	bh=vFjMqoedNXI3dxHPj9c7YUFENQqetZZML12rAuXgJvE=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=ozeFSjglf5v8+W4IAO91uAAmqWRdb4ADbfWYPBYB642WfD6smnjuHaWg1UC+fRy7fqeofIQZdhSRJXJqVdebZoXqISqq6zvOYsnjqjdiZQJVSnQbWz6Pdkx8R96UvxhmAXy3eMqRZVPSTigzR7a9HhgNc8okThdrN7jdNjNPSGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HEP/TEeS; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="lTSd9gso"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=p1NjZ3RWvMk+2aw4ZIAUv1upaGgtu6vz7aZFUZPtfVQqNFDQMC5D1FeBxlcN/p9mBkgpvc9hbR83/Z1EFSAP8VujBJ+YLLvmZsdZQX1rQfnuGnLkxAUcTj1GiF/Gnv50rUOaw2oD6omh36V6YFhYRPNvfICQJL2DZlrmbt74Ys42TPhABcXras029lpEsUGiACM8rmaT6JS+wqBvjb3wE6BQt4HhceErKQA8uqbGZ4//PF7sdPGqQES4w3UJI+3dw6QxYDOdv9r++GbMfIZecLAVTMRhoLHOPtOVJO3Zpu8Km3cKImOOCmnE3DijxaWxXsjbU3MWhv/sYzVmfWka+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TVp2NU6P3RfgcVJ4NnPU5867NwDURHdPLMvOWMc54xc=;
- b=tjJ6Ne4jNTUCwsrFOCHdhkocAglXH+53alhrD/WQqByyX62JeORY/6nWxCvX3iCbZNhutETCUKIeftyepiKxXcgSQ4m+EIaCoE2srt2ApjeG+hO7suVM71I89F0ISzXxepCBqhuTOG99t+Mx0vGvR2+QZm0mJ6pqUG6OLQZH58GAp/rcvsgk9TeyW9neeuZKw3sz/UooF2enmKRRbtjMLHi9/32OsfJ22YSyHZRWFjvflDD958c/DLip7+bz6wICJbQhWypHeYxgoWwubBVwIi57q0cectrK6ASnlPU8bu3GdkZKHgl7IY28iv4Mi2m1+bYTdusGpon5mfRs18lnGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TVp2NU6P3RfgcVJ4NnPU5867NwDURHdPLMvOWMc54xc=;
- b=lTSd9gsotZCMVOFkuxdplWJtMHoNh9aZvDcTzUB7+fQel5FlSE3xQA76o2QseFhqNfQY5npIgjgT8KK8pN8ESIe4MGx9ywh/GaNf24P7h3sWsFszgo0Mo1L8PaO2mdvQ8G0r6dPeMvnrF9dRAbLmVHALe3Z7nXRcGmhv6HKl35o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-Received: from TYWPR01MB11935.jpnprd01.prod.outlook.com (2603:1096:400:403::9)
- by TYRPR01MB15433.jpnprd01.prod.outlook.com (2603:1096:405:284::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.31; Wed, 25 Mar
- 2026 09:03:03 +0000
-Received: from TYWPR01MB11935.jpnprd01.prod.outlook.com
- ([fe80::dc30:6b24:b7ba:d429]) by TYWPR01MB11935.jpnprd01.prod.outlook.com
- ([fe80::dc30:6b24:b7ba:d429%4]) with mapi id 15.20.9745.019; Wed, 25 Mar 2026
- 09:03:03 +0000
-From: Dawei Liu <dawei.liu.jy@renesas.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Grant Peltier <grant.peltier.jg@renesas.com>,
-	Linda Xin <linda.xin.jg@renesas.com>,
-	Tabrez Ahmed <tabreztalks@gmail.com>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HEP/TEeS"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-8296d553142so1206986b3a.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 25 Mar 2026 02:08:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774429704; x=1775034504; darn=vger.kernel.org;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LvlxsqZ3I4bHXEeUCqqTryq5BgQFW2GJzRWk9m4n5Qk=;
+        b=HEP/TEeSSDhQnyj5ZSA7fFeuHqMRRtT0nYCfPYkHFsiUftN5ld5KO/PTVY2V9k49Jy
+         cD6VckBVKeYBwHgDRNy/FWZ1aR70LjrNhQhwj7o/Xd2eZhcbmP4/kiSmk7r8uoBL5+C1
+         QxXhXoWTCF8SM6ly6Aw/QT3RCiDALuQ54dAsxItr8xSPWtnu54LwjPvvk8llE94um62+
+         tdDi6N2XfmO2EaGHenT5IXtGWR8WZc94pf5EuzUxWUs4L4bIueKvPAATiqleRDwMam2n
+         RoEC+V11Rq/0pt4jrzqdfLYGpU/ORBb7xwnw5pFuhgYGY8++Kb9rkMvAOA5KFRrFMqab
+         i3nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774429704; x=1775034504;
+        h=message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=LvlxsqZ3I4bHXEeUCqqTryq5BgQFW2GJzRWk9m4n5Qk=;
+        b=o2n9nnr5zNTcvLddVKnU7l9+MWP/vqCEgkQgb7Rmp/fTwHLyKmfItkmGQxGU/qANK8
+         3+YEXxcHKuG6U6GkBGFpXaPVXyLvLlHvRRXYpsAAiumV4kDIfdEKXwxGmimgDEC+T4cY
+         WLIY1nKVo5RxrwK4VCr0cGt/bWvK1BetfCdnxawggvGzxsvvQ6Z/y1dciI3+4CsxfE5C
+         VdH0LK4k+9YGTv/sXOcqENHmC3C9k/cuUg1+1Ax+wTA36Fakq2a1Sn+/irELchTK9/Qq
+         YvCKKO3tjaCR2qEfxzw2vIHbl0EGFBezmk4YWB4oxQZCjfPw8LGAS9h/ZumYaxIZPkdx
+         ENyw==
+X-Forwarded-Encrypted: i=1; AJvYcCU1RKdCOWiLrcFHA4xKYwi0AcVvWtPiBTjq4Vmwop5n3YDWZqXwvNmjpA3lJO3JRl4Q2LDMDCCx7xPxug==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSoeoupdfzmzS6P4eNbgoSuKkOZNnDlpoLnmVX0o6K/EcJQtg5
+	g1ZBkfaRb7MkLa4DBGllmhXq+tR+X4zVrsEKBDZ53qUbW70/BjMFmTs3
+X-Gm-Gg: ATEYQzzdYdCiq/pR5pFQ+uZMhsXQBQLGpMO+MUEH8No8Q0Y67gnt8enY0WkO6tsjued
+	bpXEGSur04TDpp0+aj5TC/J/q9s6pg0jGqSOiLtjTIwAOF79uFNUmN/ZpyEDyw/C86tXlWcrgkz
+	w0uAyKGZL+OSY8K1QVFXPvT2ER/r215KMHNUKnt70jlz/GuUTtwiBIa5TfOV8/IjlnfvJYFZPSn
+	FZqSnvZSfGkb8EcLmLJEs76JF+1e9JaodqDciEfM9P+fsC6q4bBGddcPM6/Ej6seLHXzFg+Ld/p
+	uSMMul2R8uwXcE6jQF/9MhefrONS9GZqKmjZBVbCe9AadKrwWFpV8rHkulauZnD5MJWfOx3lWqE
+	Tp9r5s1AQZaB12PR4zUU0cy4qr0OoXdzIz4zs4bT1fT/Ap4CMrZ1pJXeDVyrUdv5l1bi5m1gh5+
+	S+ad3Mre/XLjiKwjSatoA4vVcLbKm6Bre1nchGd/pQGmooaWL4kDipDwlhsYnOmiw=
+X-Received: by 2002:a05:6a00:94fd:b0:82a:7678:36a0 with SMTP id d2e1a72fcca58-82c6de9ee22mr2817719b3a.16.1774429704089;
+        Wed, 25 Mar 2026 02:08:24 -0700 (PDT)
+Received: from ubuntu.localdomain ([27.217.83.168])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82b03bc6881sm17476982b3a.22.2026.03.25.02.08.20
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 25 Mar 2026 02:08:23 -0700 (PDT)
+From: Zaixiang Xu <zaixiang.xu.dev@gmail.com>
+To: linux@roeck-us.net
+Cc: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
 	linux-hwmon@vger.kernel.org,
 	devicetree@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Dawei Liu <dawei.liu.jy@renesas.com>
-Subject: [PATCH v5 2/2] hwmon: (pmbus/isl68137) Add support for Renesas RAA228942 and RAA228943
-Date: Wed, 25 Mar 2026 17:02:08 +0800
-Message-Id: <20260325090208.857-3-dawei.liu.jy@renesas.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260325090208.857-1-dawei.liu.jy@renesas.com>
-References: <20260325090208.857-1-dawei.liu.jy@renesas.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TPYP295CA0027.TWNP295.PROD.OUTLOOK.COM
- (2603:1096:7d0:a::12) To TYWPR01MB11935.jpnprd01.prod.outlook.com
- (2603:1096:400:403::9)
+	zaixiang.xu.dev@gmail.com
+Subject: [PATCH v4 0/4] hwmon: (sht3x) Add support for GXCAS GXHT30
+Date: Wed, 25 Mar 2026 17:08:06 +0800
+Message-Id: <1774429690-129139-1-git-send-email-zaixiang.xu.dev@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYWPR01MB11935:EE_|TYRPR01MB15433:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0a1ec523-d88d-437d-177c-08de8a4d5246
-X-LD-Processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|52116014|7416014|376014|1800799024|366016|38350700014|56012099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	A3B8/U4YaSEkS0qF0j671lfd3iHHHJyfeXi4KUfdXegcoSZA1XnyD1Qv15GstkV73c6SlRtVSlL7SXdlpTQLLWjlljMOgXlzwj2exiLUD6JpjAkHl4VZQsuZbWUBryK7KSxxeZhxqEE1ifbbeEFhiEarpXZ1SdP33mIJcaoeHqGyhgodcYXjHnsC1Mv9UA5vvqDlcqH/SDNmDpVNY27GYejOYn31Ul86UEnUS56hVVRIx2sKtqZttQTgXyTwL6kXgUdcyO0gHB3DXd6bJPSkU5W07QfTlswUxQhkDZjF+ooA0uffSmVcr20U3aG7lOnlE8YU8vR4Nm/+Um2tmXVx+ohGWoA2NFk5sifqp8ktMGZdLr+gkJ5gqwHwnYtHt83w4lvJDFuiMjXz98L5B8UN2VneQG4cxnVHcwoyecwbJgjizG79IrScNDMVkG+fykvyVwGQ2rEcu4eFS48OfDrNVuoQfpjYIiTOt+04K5WYS+xAPVcMk5Qm8dcl0c03AAXWgmRJAAC26423OuGcONdb4/SnrDfUQ4mx3ycPYF9MpEQsTi9eplwoKpOMqrqVViXGAZTOxU/ZsDK3hu1e3cV/tBhoZtwJljwY+xw8vrImHoXKXbgZbUaXNxGt+vsAgDzmle6wir9rwsmgy+0vWfu/Thn09K1ZblghJ4rzXuZvJEVOfQxYEm1f6t9+ZYiv87PoRAZ7Po6Beq7NFIRYcpqiK0FRuy3L1kPer/dKst+tx0I/6h3dZSy144e0uv5zJCBw2qkmbC3SwlQdeKvBn/vWcSD6Wec5qS4twUoeat430SA=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB11935.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(7416014)(376014)(1800799024)(366016)(38350700014)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?0GUw9hxu6N+1Jy/sC0sQI4Nz0xRaSpC9EJZTrXCZ6qF6jvQcpZWRYs3Rd3GR?=
- =?us-ascii?Q?A6X3MbgcnkcLBWeEN35Yn318NxR+/dmUQpJxQT/uc2d0NBx52dOWrNJpq//X?=
- =?us-ascii?Q?0+3hAFSC/tAi0He3EAwaYJELPNamQlkdaUzR9246v+vWX+ukBWe5CqsE+0g0?=
- =?us-ascii?Q?eWnLt3q2AdmGoFnC8YpCycw9T9m+XV1E4zeJSRP7tk+tXRJXHCPsLutmp43u?=
- =?us-ascii?Q?sEXW2dl4VEBwKDVy3EP7gQhITfpyYtBI1LZAHqqbpfsGt8rkQ+csTV3oLvVO?=
- =?us-ascii?Q?0vlscPPjtU3gvPa/3HLtzlHtDZO/EiSZBxlJKSufPOaVHw6EQzVsFw9qXjM0?=
- =?us-ascii?Q?aReUyqeurq1jbSVuBk9jfUOzRdA9E2i2v2hFzR78pgv+/Qb+qeU2qD/FvfxG?=
- =?us-ascii?Q?Lmpv9yZqzvcOvbK1NJcVLQLo0+ce936zqCdAGPxohMTZSf4VZRCTE73N16y1?=
- =?us-ascii?Q?U7uEmYlcZOzkg+jw9UKhoBvwxuSR01cTY40mK1Y+PoFDa3ENBgtajv0STBH1?=
- =?us-ascii?Q?t/w7EXyevAvlGV7m8sUjCeLsghPba9zYd/LJyDhrP6egW4VXLeQysq0bD71w?=
- =?us-ascii?Q?OjBVuBvkZdWOii/5anK0QtsKFrOY2kMYxeI4LRdbPtGj79OM03kgmnOUkhPG?=
- =?us-ascii?Q?FplUEozczmvqq5h4ZLWH6rBSEYwsmECCmF0z3yq/s1qAeTHiSQTFF4UY0sPt?=
- =?us-ascii?Q?FnL1jYyhXUY6I9ySPl6cUtON3UYvX+WxwQvZpQ2bmByhgUMaeNqVBfE/+Ssp?=
- =?us-ascii?Q?1lgZQS/IxsVoGvwUkz+3gZrPHmMnC9u4KMbU+WBVM0B5g1wz4hVZjd8iN0SY?=
- =?us-ascii?Q?WMZ1isiH107GJH18KW22phgQfaq3rc+RNc0PoePSkbej1KNTtNsbr8cAFQgb?=
- =?us-ascii?Q?V+wO3pLQngQZ5r3ZpwcssjCuiNZrQ7im/41tB0Hq4G+lUOpKi0YGj/9DLKxn?=
- =?us-ascii?Q?vAw+8xC3R6WAd8IIFqgM9nCEiZFs7G+aARtwic9S2kdqXiQZqbOProp6bNrq?=
- =?us-ascii?Q?aCxci41ep9DLV3iGZcHteK7JGJsaCl3J7YopEiSAOcojK4sWgH/jTcR9g20C?=
- =?us-ascii?Q?FSgPNAou3j+AyoWs1GM7OyRLDiQv5DBZR6bncupeb+EvGtcPXI6GNIJUKpCA?=
- =?us-ascii?Q?fPccpgAsAiZArDFtKNtnTcgAtTHVO06sm6EJE/JY2/BGjc8degO3KSk+gFc4?=
- =?us-ascii?Q?bZDOxfH/pfO3w8M22lQ+JVSQO2SxopWQ42j+fnQTzOL5hGBhXbwG1QZOBDlN?=
- =?us-ascii?Q?054geV+/wRLlRTsu6pzK9rK+sN026LYqAThQT6UjPbxSz4kukNvWbpvIMvkB?=
- =?us-ascii?Q?6JgnB9QuNLV3ScrrpA/W8DmirICzO3d4Nd7sFooUdwDO+IcOCi4dSCNJHLOM?=
- =?us-ascii?Q?7+BUq2/wTA9OFDon43F0CimiuCShSp4/k8RfvTCUIqxyqVjbKW98cqHFfBKR?=
- =?us-ascii?Q?qrDltqmPreODLqyJqUHTOALAcrqtfHNuhYURShhKOgHqfA4zuMF6yZ6PdFTL?=
- =?us-ascii?Q?Si9LqjzegD3qZ9UUuud1GOJPOJ7FF0thqcnNDw60TZfua9Qb/dWF3iilGkHR?=
- =?us-ascii?Q?L9AXuD/+0bJLS05PHOt34c4DvxZ418/Riy6LiB237Lpw5Z69io54K13UxLyC?=
- =?us-ascii?Q?T347aCh5MbYx67MwddeIcAz18DRK0n593dM0eal1IEznVHXCHVytAEFy/zK4?=
- =?us-ascii?Q?eiis/2cI/j4sV98i08riw0499/Y7llxEg5d6kbGUysfgpf4/O0UQKFRL3aUV?=
- =?us-ascii?Q?tuV66moTFA=3D=3D?=
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0a1ec523-d88d-437d-177c-08de8a4d5246
-X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB11935.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2026 09:03:03.3116
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: U/bAShVXOvYgLZMUYCwHQPVIaTPBneMrTCa5j01vIyP97MxJO0u54uBAyCDE4QEKzwp75bjmp1oHFl3KK/6uFuSQZKOdmZWnhOOhcIbMugg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYRPR01MB15433
 
-Add I2C device IDs for Renesas RAA228942 and RAA228943.
+This series adds support for the GXCAS GXHT30 humidity and temperature 
+sensor. The GXHT30 is software compatible with the Sensirion SHT30 series.
 
-At the Linux PMBus hwmon interface level currently supported by this
-driver, these devices are compatible with the existing 2-rail non-TC
-controllers, so devicetree will use fallback compatibles and no
-dedicated OF match entries are needed.
+This series also introduces the missing YAML binding schema for the
+Sensirion SHT30 family, replacing wildcards with specific model names.
 
-Signed-off-by: Dawei Liu <dawei.liu.jy@renesas.com>
----
- Documentation/hwmon/isl68137.rst | 20 ++++++++++++++++++++
- drivers/hwmon/pmbus/isl68137.c   |  2 ++
- 2 files changed, 22 insertions(+)
+Changes in v4:
+- Use match data (.data) to correctly distinguish between SHT (humidity/
+  temperature) and STS (temperature-only) sensors in the driver, fixing
+  a logic error where STS sensors would report bogus humidity
+  (suggested by Guenter Roeck and AI review).
+- Update YAML bindings to use fallback compatibles for compatible chips
+  and add optional 'interrupts' and 'vdd-supply' properties
+  (suggested by Guenter Roeck and AI review).
+- Simplified of_match_table to only include base models due to the 
+  newly added fallback mechanism.
+- Renamed binding file from sensirion,sht3x.yaml to sensirion,sht30.yaml.
+- Include Conor's Acked-by for the vendor-prefix patch.
 
-diff --git a/Documentation/hwmon/isl68137.rst b/Documentation/hwmon/isl68137.rst
-index e77f582c2..0ce20d091 100644
---- a/Documentation/hwmon/isl68137.rst
-+++ b/Documentation/hwmon/isl68137.rst
-@@ -394,6 +394,26 @@ Supported chips:
- 
-       Provided by Renesas upon request and NDA
- 
-+  * Renesas RAA228942
-+
-+    Prefix: 'raa228942'
-+
-+    Addresses scanned: -
-+
-+    Datasheet:
-+
-+      Provided by Renesas upon request and NDA
-+
-+  * Renesas RAA228943
-+
-+    Prefix: 'raa228943'
-+
-+    Addresses scanned: -
-+
-+    Datasheet:
-+
-+      Provided by Renesas upon request and NDA
-+
-   * Renesas RAA229001
- 
-     Prefix: 'raa229001'
-diff --git a/drivers/hwmon/pmbus/isl68137.c b/drivers/hwmon/pmbus/isl68137.c
-index 3346afdf3..03c9adc0e 100644
---- a/drivers/hwmon/pmbus/isl68137.c
-+++ b/drivers/hwmon/pmbus/isl68137.c
-@@ -432,6 +432,8 @@ static const struct i2c_device_id raa_dmpvr_id[] = {
- 	{"raa228228", raa_dmpvr2_2rail_nontc},
- 	{"raa228244", raa_dmpvr2_2rail_nontc},
- 	{"raa228246", raa_dmpvr2_2rail_nontc},
-+	{"raa228942", raa_dmpvr2_2rail_nontc},
-+	{"raa228943", raa_dmpvr2_2rail_nontc},
- 	{"raa229001", raa_dmpvr2_2rail},
- 	{"raa229004", raa_dmpvr2_2rail},
- 	{"raa229141", raa_dmpvr2_2rail_pmbus},
+Changes in v3:
+- Split driver changes into two patches: one for DT framework and one 
+  for adding GXHT30 (suggested by Guenter Roeck).
+- Fixed commit message line lengths (suggested by Guenter Roeck).
+- Removed wildcards 'x' from compatibles and used specific model names
+  (suggested by Conor Dooley).
+- Added manufacturer website to vendor-prefix patch (suggested by Conor Dooley).
+- Fixed missing newline at end of YAML file (reported by kernel test robot).
+
+Changes in v2:
+- Fix placeholder "Your Name" in MODULE_AUTHOR.
+
+
+Zaixiang Xu (4):
+  dt-bindings: vendor-prefixes: Add GXCAS Technology
+  dt-bindings: hwmon: Add Sensirion SHT30 series
+  hwmon: (sht3x) Add devicetree support
+  hwmon: (sht3x) Add support for GXCAS GXHT30
+
+ .../bindings/hwmon/sensirion,sht30.yaml       | 50 +++++++++++++++++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
+ drivers/hwmon/sht3x.c                         | 16 +++++-
+ 3 files changed, 67 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/sensirion,sht30.yaml
+
 -- 
 2.34.1
 
