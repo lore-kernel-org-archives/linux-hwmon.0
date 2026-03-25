@@ -1,158 +1,171 @@
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013062.outbound.protection.outlook.com [52.101.83.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7461E3C9EFC
-	for <linux-hwmon@vger.kernel.org>; Wed, 25 Mar 2026 14:21:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774448464; cv=none; b=gWUwcbWNHDVq+vJ6zt3mFiPCByj1IMPi+t6KHIGVY5nA1PQOopYuyySIop2JSlnL8nL/FOZ2evTFsz3K3NqahH6nlcHtlD0x+QNT0MR3eC1ixhzkXHGv9P8ncFNUSJiTntcxDElt9iQkpwDaLaHqKVOsj5Oz/AW4EHgAwiTSibE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774448464; c=relaxed/simple;
-	bh=nyIevaqXhT3rwmENRdoKTBDLBj1F8IcBozyA4s/q8FA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WchYGNgk6ZUnQphmEZjRNhZqL/vfnc/h7Lba3lh8+rYZRTt5S3kQcnXgYGI0I2rDBuXMfDyzxQNKLmx4+380GYTkRSlL6gf/yMUqHgJjvDzanoUjN321RFIHGdWYPJnxw3sg6MeOzYHMPSMdBdxEyvJChBdeTiJpx3Q9XBbcFzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=acB6yhhg; arc=none smtp.client-ip=74.125.82.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61B083DFC84;
+	Wed, 25 Mar 2026 15:49:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.62
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774453753; cv=fail; b=bNWk+BhHLy1WwlsPhn+gxLLetowvsOdYImoUnTSalRtwN3NgajtSJrGOyDIkouPzVFop9/bsZjTHmpRfYxdxU67onpIJe/4SJUZoQfuGG8y4Jn/cFqOse5ilZJUrdmIodQe9cAy3p83hJYIS8rJeRu8dIAVKeBUdO9zR/oz7+I8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774453753; c=relaxed/simple;
+	bh=YhIJmB14yMkiTYCUGtyXzfqU+jIAAA3HvaZs+udyWFw=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=rv7FY9sLB11LpTriKYVukEkP7BFXABDVXNsvNqshyKZDqtZ52Q/d1kEAdxxQvEx75nH24cOvCwNUm+PbotRaRMMrxgYPsGGvGG6HKTh4+5HqSnODncRE32NJs7nEstw90sqWtfYB2sYB84oACedbPxu8PrArA4m8am45cVlQl5s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=QHlsqxc8; arc=fail smtp.client-ip=52.101.83.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="acB6yhhg"
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2bdcf5970cdso802120eec.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Mar 2026 07:21:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774448461; x=1775053261; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/S5mOriTguhW1xaEQeXyyeJMvod6MSEvAssopruD0u8=;
-        b=acB6yhhgAJAwkzBErsun6FFDwRd0OT55HQ4LqThv7zpb9chNU8h3IOIm/fN86ElMDD
-         5tNKIYGqiQ1aNzQ1BD0RNyN5E5kTLuwT1Li6LLqWNAhSUbwuwXIqkvXRmVJKfj+nrepP
-         rrcqdpPpFyrkXCVRbo3OSspCs+PNo3rhpXqdIrC1LZFsDba7HIC7R8dEFPje4rmwaQtJ
-         Ox/b1XMP6EZB0CUUic6PyeKUExGZSSlzSWzUoyyEOIV2waD4KrUq7BIka2vUnZ5Fps8Q
-         KBk4KOQrtfLa/ZHFLHriEBi18zpBLq7ouY1+iUeXOjO0jr3/Nxc4BAtRHb+9beHgSlWd
-         xiGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774448461; x=1775053261;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/S5mOriTguhW1xaEQeXyyeJMvod6MSEvAssopruD0u8=;
-        b=UQxmbM5m1xXrbwDFEqNmsEqOL+oSx1KcQ2cwG3c7HqWPZFsKqv4Kn+K0wef/Z5pgnM
-         wFW33iounIY8aN39Z49TdFlgMKW1zNDXJwqooApMaH/IAEj0AQgopUf+Muk95jKz/4Tn
-         M0Kcvmo3TZoumUqAeAQrdSyXC2UkUCIbwKEC3FBMhoMbi8XstjenQTrytHPgSVHMSwBc
-         Vq1rYTJVS0mJ3zNvsIOXmNtpDemB5ZXayDTVTY918Hx7pH559d51HWhYPGsLIoWtmlVd
-         76BOVtPEmGM7ctkFICdz4z0hTAsMqNcOma98PxeydkHLpaLs5IYOSG6DmP4JFJr8vbNH
-         2q4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWrHm7yQvE45URBiybdIgbOHdQARVY1O4DoCh8yuTwvFLhBuMuBBHT2Gsv9XH19Ls2jnOvn5u+XYUBqUg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyynSnKLYb3PoAscrpzSIt+E2cTGDJ2kUrLlJLZuhuiEWtAkEGf
-	HFWH2mTBj3i+6FuKp7mhizPXd3viYshKe3Qx83jvwgDdzLcewlIff5yB
-X-Gm-Gg: ATEYQzw8iJfwdSI851FeuZQJcGhTIg8p6WR3ECQm/m/mcuxc/fuLl2pZlJFoQJc7ANf
-	9QXAzMHN4SryMQ2Bc8ktQF4k6/OnIouln0qGyJmJvINBjeiShe2PdA9/42m96NvgyRt5TCc2ZeD
-	XN+y52RtWdZhlTNnHA0BjlqJOe+30K9kS4rZz5YiPiSAr4vCvAH2OyuVajciHaQcfWLDHZz1kz4
-	SCWTT2ItLzVlANHk8IFQ8VK7n9yZZaoHJSYhjJcEeMsnTGWLXEz8z8g1KD6ZlRnnar79sFRi/fm
-	6zbcHkWoftK479NbJktvuJtTyVEiRpRt52Kk28EFGuJ6TzLv1HZts8GW9fYCzMAQ4nzXawUbnBB
-	C/1e3ZQj6OowTk5WDoBYDssBGZwLnl3feayRZ3FcZbQ1qPStUZS1GNt9fNfA/oY7uRn6KZSi5Ks
-	JxwLsg+pXVn/F3M0iO+M17qfHBozUR2tmM+/F5
-X-Received: by 2002:a05:7300:371e:b0:2c0:b92d:267d with SMTP id 5a478bee46e88-2c14b46dc8emr3673818eec.2.1774448461293;
-        Wed, 25 Mar 2026 07:21:01 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b2d01f7sm17923085eec.23.2026.03.25.07.21.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Mar 2026 07:21:00 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 25 Mar 2026 07:20:59 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Dawei Liu <dawei.liu.jy@renesas.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="QHlsqxc8"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=VhAAfqH9EIqO/EuhqB6jtydXb4oHZuxALW9irvl6WB3pxXv/bTw8dddCkD17pKeL7Akt5jzuGX8YNMLo1I8n9hloqPlSobppHA0mVt3anSde8xFE+R0KFM2AADBzzh3oFTQ/Rlb0SCuPPwphlVhPsItaV0T47nmfje2fl3ZgUK3TRRdPiX3m8kQpsWIUp5vqtqUls4JsPa6IlRsrsuO1mJdHIlKj1j/Pj8CN8/fA0pJBlAfKOxSlhL/q2F9N3hoWhB8Lv6IxpmQqEeKxXzPtwvwov15pFvp1rIM4o2ocxK2Lb3AtsI9KkMITJOLAKIPQi1V3Awn1zF4ZCk3K0kWX0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aYdUOXdqZ9dU0xIZEGtxYqtqBVZlHMpk0VZL/d/aG6M=;
+ b=x+T6/JrM/P1GcTmv0DU3iBDcilaeJTy9M8uupv2UbVzb1JZ+P1b3Z1iv6oVqp0359mSV0XjHk7MjYG1mKd9NAO8qg09QMxgNZZo9Choijaucsh+8XKmGZj1iaXkI0w6llE3H/JVq5k83lnsKe0RF2dZ1S2eiuO/+cBvEWS+01kbDRwd6AD32omHNpLoHFGkvjknivDkFJaCojovwmt1tv7C3IDx2KN7qNQ9cnsSMeRHO7vzeAbvSRnvQwFB41oEHLoDuEpAafbYQk7E5J3moSmCjiF4cRCBAh75p2glqqQqOhOAnalMmVcpnHEXDtpOO/kr77hEHmAjDA+2YLOxcBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aYdUOXdqZ9dU0xIZEGtxYqtqBVZlHMpk0VZL/d/aG6M=;
+ b=QHlsqxc8WWJv2S4bSrw3CzMlX2/dwS+qlJ7hkUmm9ZKN3oMDGFkKuB3aKLFT4xpEhgK3MgGzxzWRH5Uh3Kgzxib86XFLtwhRTcYIR6JnOsa39L0P0vwiWi3eGClhyI1atV3pk1HnZLLp2loYd29AZC8Tka6/evVLKFrY3XBi2c487+bBpAgzc6LT9b5fODtN3ivRcY4HxHyBVmUY9kp1b36kTEy6INT06ef2eh1VEcKZ0ZfmBgFdAVNKtAPEP+3DwACg7MTzY3CANUYR0AloLuW20BMsMEdPdBDbPocGfo8rVEm34VNC1sJOcg3QAxy6Wjoo2ZP/kUugHSMfjjOQpQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU7PR04MB11163.eurprd04.prod.outlook.com (2603:10a6:10:5b3::14)
+ by DBBPR04MB7690.eurprd04.prod.outlook.com (2603:10a6:10:200::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.20; Wed, 25 Mar
+ 2026 15:49:08 +0000
+Received: from DU7PR04MB11163.eurprd04.prod.outlook.com
+ ([fe80::93f5:4ff3:2f4c:183a]) by DU7PR04MB11163.eurprd04.prod.outlook.com
+ ([fe80::93f5:4ff3:2f4c:183a%6]) with mapi id 15.20.9723.030; Wed, 25 Mar 2026
+ 15:49:08 +0000
+From: florin.leotescu@oss.nxp.com
+To: Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Grant Peltier <grant.peltier.jg@renesas.com>,
-	Linda Xin <linda.xin.jg@renesas.com>,
-	Tabrez Ahmed <tabreztalks@gmail.com>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] hwmon: (pmbus/isl68137) Add support for Renesas
- RAA228942 and RAA228943
-Message-ID: <4e5107a3-6fee-42a7-9911-3d50a3557241@roeck-us.net>
-References: <20260325090208.857-1-dawei.liu.jy@renesas.com>
- <20260325090208.857-3-dawei.liu.jy@renesas.com>
+	Michael Shych <michaelsh@nvidia.com>,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: daniel.baluta@nxp.com,
+	viorel.suman@nxp.com,
+	linux-arm-kernel@lists.infradead.org,
+	imx@lists.linux.dev,
+	festevam@gmail.com,
+	Florin Leotescu <florin.leotescu@nxp.com>
+Subject: [PATCH v5 0/2] hwmon: emc2305: Support configurable fan PWM at shutdown
+Date: Wed, 25 Mar 2026 18:04:42 +0200
+Message-Id: <20260325160444.1736866-1-florin.leotescu@oss.nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AS4P191CA0007.EURP191.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d5::7) To DU7PR04MB11163.eurprd04.prod.outlook.com
+ (2603:10a6:10:5b3::14)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260325090208.857-3-dawei.liu.jy@renesas.com>
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU7PR04MB11163:EE_|DBBPR04MB7690:EE_
+X-MS-Office365-Filtering-Correlation-Id: f1b54128-c4a7-4173-1b05-08de8a860cde
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|366016|376014|19092799006|1800799024|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	iOI15vqXFzVvpI4iQYQhOHBsnVihmYYNG0/kSg635G9tiK5QLlSyYfxkrBn0haPhFIC1ZTsnSyBIIdSnSzEsfdLEho6d/3LI0sTUC2Feli/szHBBYhp2RUJzLPNIMFG+cz2I3EdwqMi4YiUDyjPnYzMFPjQTPJvAXqSb4QgHjHZ0FiSuRnczXlA8rbhw8bD+oSd7zjFpvHhZtZbhRSZro3OdbEzlIW8xXHAmVrhReFGHJ85r4fZtc1EBp4FdN3g0BQWBOl2WMzSQSe5bybe5I83erv3li0NToIlZRvz8PkO+masEOB6S3Z350c8QXq1/yD12adibjDtrc/aNITwjE71Hqyw0ZFG7o31O4LhLDbZZPd7nb0uGFtDM9bEoorIZbriAoq7ZaMX2s979zaJ9oDWLIjoBfO7bOgV34F2y8RmSJ/mhKaJB/mEb4xTR06R0YLTPrUSbkqvDsRiriF4AZuQNtD4MDnE0tovVc3cviEwY2vPdhBHhYLDWNzAIgsetQngoOqOqZSZoVhYM/9fMzqQmfxNYNd9GUIHqt1ZzGxgVuDKhH7X7ngGZtc8DdW6d2SoeibL3xtw1PmhJ1dnRLT5FD+Za7/rabNOViG40te1IZI3Vuis16cr8hxAK2l23Sj1JDD3aiUhNBNr8cItM8ydpfwspX4PknuGv12VXa+dy1P5CxsHB2gBGohi1h/8/IbO3ORxnWkxapA6YRdsG8ElAjE6tlapqJxTtsWGai/c=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU7PR04MB11163.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(376014)(19092799006)(1800799024)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?iso-8859-1?Q?YYcNW2ZddIwAyLVtwRpV7jwavuPlTZv+9VADpbGGBOiva+nfj1V5+17m9A?=
+ =?iso-8859-1?Q?6DC9jkzOjz9OILWg0LI9LhbKmKugV4de/U23YdFQ26MK/qfIK7EgBNjNvC?=
+ =?iso-8859-1?Q?7ST+0wbDKpXDIJut0HHMQlxudiGeBbHtZk+ey67+LZIrXnDglBcp6zFlj6?=
+ =?iso-8859-1?Q?gaPLFgQynlrIxSb0imaxkgGFdsIBNeNE+fPAjC3D2igvQe5a/0+SVUkQ4H?=
+ =?iso-8859-1?Q?U2w98Fm5ZyDwB+SGG/uMNjBynq4z0NY9pz0l9EYexIda3ovndJRUNW+l4U?=
+ =?iso-8859-1?Q?YWTrfuma/uhFUnrlQiKp+F82eUkYOr1H6hd9C9YwEuPNkQAiJNj1PP3BvT?=
+ =?iso-8859-1?Q?ro9OEYuB/Ai1vP7pFlvppFFrkW6wbziDCs5lipPWtF1/2ts6jq9LH95DHk?=
+ =?iso-8859-1?Q?vfG8wO0POgWYrbl9qCVkfuOgypxQ25qGKF/T0OM7vkPF4GloLgXXJfQVwI?=
+ =?iso-8859-1?Q?4L1oVVO1kYrIVeFZhrhCLe/yEwgXMrc8HHgLjG2oznxamKguYPkE1jbVvi?=
+ =?iso-8859-1?Q?FFROVWctEZaHZ4pl2BABSkdlKfimdUioiz/ZM4XPNa4qdx02DlyhJDjLMH?=
+ =?iso-8859-1?Q?RWWAYeJ41oZS37E0Qt4qTgLvfafNIHuHFPdghyq+bPftp8pZZw8b7DXoId?=
+ =?iso-8859-1?Q?Bf87CntbfmR6y/CCrWhex0eFXmea1uh50osk2Qx5irpod/38eF0Yjar03M?=
+ =?iso-8859-1?Q?927Tmcd55fY+awWZ8kkiWi/Qz6X3R6T2vPIcPg5H6JfRNGLzAxP93v6quz?=
+ =?iso-8859-1?Q?y1RV8dl/GCPDCIc4GAcjrQbKsWQDkHWiDW0Ohz1EzBAI9YYaTqkgBZqULh?=
+ =?iso-8859-1?Q?NECwxm2iNGHAFwoyqyIPkSZ7a6kZD6zRb9/tUykQEDlw6SJcBlueFwWb2A?=
+ =?iso-8859-1?Q?Sz/ilMRnFtWCFUPSprYqLaNQ+T05nVaGOvBrJ+/j32gbJY5xK/T3Bj/CGg?=
+ =?iso-8859-1?Q?vHc4q0WD6lcLeQPxPdJegIEeybtHV68ykp1utMKx8fqRJ3n25plchDLjzO?=
+ =?iso-8859-1?Q?Q+t0EA7b9fDcOTcSWouWMdqf3oieLk5wbAjRPWIcb+XxSR626Dui/vf0xY?=
+ =?iso-8859-1?Q?m4KtR0FVpg02i0n/WA4xsJxU6IhuHOJ8XZ8kOqQh72gaLk5nNb73LeBAmT?=
+ =?iso-8859-1?Q?QIgD3TQraVXHh8zxbuhOwtFm8PyCbQMRW8hoigQ1XZ/s2yokJjQMyCRuNl?=
+ =?iso-8859-1?Q?gd+mrJ9yDbupM1rABjPbdclWJO36bK2I9r1NHVRGyHTL5adhMwcQqzRd0C?=
+ =?iso-8859-1?Q?hCVCrQK/FpaNH8qgCQ1BH97pLp/NQU5VYkB12+j4068hdiE6v+qSU1dAEr?=
+ =?iso-8859-1?Q?NHLoZx5a6eLSos/NjJnDACM8lqYvdNxObG/Z+aFpbv48RBWS4281vhwv/8?=
+ =?iso-8859-1?Q?SlXXwZSpiP8xilQlyzI1yM1c9/Df+Ns797j+Sxf7x47lyVkXfMOV7HhSbg?=
+ =?iso-8859-1?Q?5E0WeR87X50FVw2cxl4DBbsJAjJWBGY/klToPJVSq0zz7Y8BuMrA7SXOwD?=
+ =?iso-8859-1?Q?ha4WxLnXFXoAwElY85UzbDitmsBbPl+WvMN1UuqH5JdtIL+AzJK+6VVH2c?=
+ =?iso-8859-1?Q?5HgpQASM4NOI857b5LpIiPK/USNTHTAzUTfUl2scVgnEt2TYM35lpd6m00?=
+ =?iso-8859-1?Q?gBlnrGiGCnKqnN2c1ktKwN/dXW3tMwW61d7PTrKH3BoOxobk/foD1BwuJo?=
+ =?iso-8859-1?Q?PYhC7PkI6WpOEyYFhDg4vcFr2WZ4VHb8gMTRqJS9FLojckEVRjroIzY4qX?=
+ =?iso-8859-1?Q?c6iLOlxrMQ+nwfSJz/KuXg+XNV1JJNXXVaFJgVO3UjEyToaSBzJ5jBQ45J?=
+ =?iso-8859-1?Q?3BCQZ+/dww=3D=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1b54128-c4a7-4173-1b05-08de8a860cde
+X-MS-Exchange-CrossTenant-AuthSource: DU7PR04MB11163.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2026 15:49:08.3220
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HJLE9lffT7wgLGRiI8avy0HilekhkZ/ykjTVUopE7BROcoHXZSpbmakjqNVAcTvQLARonLxZRDwc036LFdls5w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7690
 
-On Wed, Mar 25, 2026 at 05:02:08PM +0800, Dawei Liu wrote:
-> Add I2C device IDs for Renesas RAA228942 and RAA228943.
-> 
-> At the Linux PMBus hwmon interface level currently supported by this
-> driver, these devices are compatible with the existing 2-rail non-TC
-> controllers, so devicetree will use fallback compatibles and no
-> dedicated OF match entries are needed.
-> 
-> Signed-off-by: Dawei Liu <dawei.liu.jy@renesas.com>
+From: Florin Leotescu <florin.leotescu@nxp.com>
 
-Applied.
+This series adds support for configuring the fan PWM duty cycle applied
+during system shutdown for the EMC2305 fan controller.
 
-Sorry for the v4 noise. Upside of AI reviews is that it finds lots
-of issues. Downside is that I now get flooded with lots of patch
-revisions. Still, I very much appreciate and prefer to get both.
+Some platforms require fans to transition to a predefined safe state
+during shutdown or reboot handoff until firmware or the next boot stage
+reconfigures the controller.
 
-Thanks,
-Guenter
+The new optional Device Tree property "fan-shutdown-percent" allows the
+shutdown PWM duty cycle to be configured per fan output.
 
-> ---
->  Documentation/hwmon/isl68137.rst | 20 ++++++++++++++++++++
->  drivers/hwmon/pmbus/isl68137.c   |  2 ++
->  2 files changed, 22 insertions(+)
-> 
-> diff --git a/Documentation/hwmon/isl68137.rst b/Documentation/hwmon/isl68137.rst
-> index e77f582c2..0ce20d091 100644
-> --- a/Documentation/hwmon/isl68137.rst
-> +++ b/Documentation/hwmon/isl68137.rst
-> @@ -394,6 +394,26 @@ Supported chips:
->  
->        Provided by Renesas upon request and NDA
->  
-> +  * Renesas RAA228942
-> +
-> +    Prefix: 'raa228942'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet:
-> +
-> +      Provided by Renesas upon request and NDA
-> +
-> +  * Renesas RAA228943
-> +
-> +    Prefix: 'raa228943'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet:
-> +
-> +      Provided by Renesas upon request and NDA
-> +
->    * Renesas RAA229001
->  
->      Prefix: 'raa229001'
-> diff --git a/drivers/hwmon/pmbus/isl68137.c b/drivers/hwmon/pmbus/isl68137.c
-> index 3346afdf3..03c9adc0e 100644
-> --- a/drivers/hwmon/pmbus/isl68137.c
-> +++ b/drivers/hwmon/pmbus/isl68137.c
-> @@ -432,6 +432,8 @@ static const struct i2c_device_id raa_dmpvr_id[] = {
->  	{"raa228228", raa_dmpvr2_2rail_nontc},
->  	{"raa228244", raa_dmpvr2_2rail_nontc},
->  	{"raa228246", raa_dmpvr2_2rail_nontc},
-> +	{"raa228942", raa_dmpvr2_2rail_nontc},
-> +	{"raa228943", raa_dmpvr2_2rail_nontc},
->  	{"raa229001", raa_dmpvr2_2rail},
->  	{"raa229004", raa_dmpvr2_2rail},
->  	{"raa229141", raa_dmpvr2_2rail_pmbus},
+Changes in v5:
+- Add fan channel index bound check after reg property read 
+  to prevent out-of-bounds access.
+- Refine fan-shutdown-percent description.
+Changes in v4:
+- Initialize pwm_shudown array to EMC2305_PWM_SHUTDOWN_UNSET in probe,
+  to avoid treating unconfigured channels as valid and written 0
+  during shutdown
+Changes in v3:
+- Rebased on current upstream
+- Dropped already upstreamed of_node_put(child) fix
+Changes in v2:
+- Address feedback from Guenter Roeck
+- Make shutdown behavior configurable via Device Tree
+- Add optional fan-shutdown-percent property
+- Apply shutdown PWM only for channels defining the property
+
+Florin Leotescu (2):
+  dt-bindings: hwmon: emc2305: Add fan-shutdown-percent property
+  hwmon: emc2305: Support configurable fan PWM at shutdown
+
+ .../bindings/hwmon/microchip,emc2305.yaml     |  8 ++++
+ drivers/hwmon/emc2305.c                       | 41 +++++++++++++++++++
+ 2 files changed, 49 insertions(+)
+
+-- 
+2.34.1
+
