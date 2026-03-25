@@ -1,195 +1,366 @@
-Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11011011.outbound.protection.outlook.com [40.107.74.11])
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F8572ED843;
-	Wed, 25 Mar 2026 04:18:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 979D81DEFE0;
+	Wed, 25 Mar 2026 05:13:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.143.35
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774412283; cv=fail; b=o6rptdfFwCMR8F4A3P0ktJBlfcXM5uoqA4GNUq2DIle4sQE5gvP25KohPKlO+yJauHd4LppjJo5hXOWRF8xWPo9Gmkm7ihPg/vAtDGX9cqIzWUST8L1eLYdQRBv5jlVIlkFkNmUbL9ffJvSyPFqJ0c/FMssvzkv9T4t09dwZYEg=
+	t=1774415618; cv=fail; b=AeAwvu0VuoUOrbV+RhGWlvD6md/pRgz28ulQRbxT1YWDR2yQV2tuk111jjrJm5aRKBB1+gR+bDmxcuksYY22fYNKazdx3+Ae6ZbzJkUT+L3mS2cvv8QGE+IAKYlVJN4BaZkQyFzXs0QipE6Lk//hprMSrJ2qAY76MwgWy2KL31k=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774412283; c=relaxed/simple;
-	bh=lbbzWKeHHT18Gq0sjEN+GDRByraHjlCfwl0acbjJUVQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GoKpsTr8lxxbOpo1dl0sYOxNFo+/UDZJOqge+14/rVefzjeaJsLfcSpWwA7lnC4ugsSqxYlwrUyPlxIbrN8StGX8pzipPfyVWYSuMLzIReLG8YTmeHlVY03zf5M/n/wgMlF2vC3fYoIO/i763qHbTFwQVPaquYR1/+4FVcLx0c0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b=CSaa5cGQ; arc=fail smtp.client-ip=40.107.74.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
+	s=arc-20240116; t=1774415618; c=relaxed/simple;
+	bh=sTBAQLvB/8VZGoLlvApmnDpkMir5St41aXSD5KECuUE=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=cjzlpMxaNcfjhPu3MN9gK757RNMC/w33NijqmdE5qV+1DR1irYzeoyZvtADAWov+BUFxWviLuyGPIoIq8xg5AorBByDRP/g5IIPAA3FQLsfjFSlSTPdsUNLKeHupY6EcNrgutmvc4EmztjeAOaP/Q5O4YlSbDdyY6/7WfAlQ05I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=btj/+TY6; arc=fail smtp.client-ip=148.163.143.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="CSaa5cGQ"
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="btj/+TY6"
+Received: from pps.filterd (m0134424.ppops.net [127.0.0.1])
+	by mx0b-002e3701.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62OMDFAc2890142;
+	Wed, 25 Mar 2026 05:13:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pps0720; bh=MX+BgGbSD7iEcAwuh1RWbPZV
+	C+YOwTzWGhxv2j4mJxo=; b=btj/+TY6DaCESFIRnU7lLcxa/Lti9TNSPOjB1dCX
+	KDGX8PbdgY4aw/xfHczb/mqFZ8+abIRGGeapXFog/v5kf/zf/OMOVm9hUfAJo6pz
+	bkEMmHm2Pyr2J7BV1YIgrO7BQqCqhVmuvxH8jXgWL98Kmt2eK3kQxLs8Tr0siBJk
+	HPNOaTjYsrAaq7eC2Sz5vVNESwJGBQThOZvRWui37dRU5fzJyfQ4CbYh8KNywnOI
+	D0mvBFpLY//pCl0mIXX9NKk2bF/KZ1p4h+X9zSitdUZl57hNfWEelgviFuR2b4pr
+	Alx6NETjkNjwfRJtD9xE+AWuH8SoRQcsFK+seGEHzfXkhA==
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 4d4375ute0-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Wed, 25 Mar 2026 05:13:21 +0000 (GMT)
+Received: from p1wg14923.americas.hpqcorp.net (unknown [10.119.18.111])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 5F96ED1E3;
+	Wed, 25 Mar 2026 05:13:20 +0000 (UTC)
+Received: from p1wg14923.americas.hpqcorp.net (10.119.18.111) by
+ p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17; Tue, 24 Mar 2026 17:13:18 -1200
+Received: from p1wg14921.americas.hpqcorp.net (16.230.19.124) by
+ p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17 via Frontend Transport; Tue, 24 Mar 2026 17:13:18 -1200
+Received: from SN1PR07CU001.outbound.protection.outlook.com (192.58.206.35) by
+ edge.it.hpe.com (16.230.19.124) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Tue, 24 Mar
+ 2026 17:13:18 -1200
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=m2R0A8RpYk8pPoixSzkmljiISW6TjOv0rggICR24x+8/Mr0ONsqtRvF6Z6vwcSApaSpgVYnN0gG0gaC/ZgDaseO/yPGzZKPF9Yn0DOGpZt/JVsDQHukGtPkbfIHuzw2XI5Zp8Vn0GDWsICfUWCNRFXY1Zqj6uPtIv156tPfFz+6JEoba87eggJJIIYL4iz+BKxsADEJqc/ejrx7NWEkAkzYhJ276KTcbU4hzx3eAPGc0Xr/RcI+/rqYEJIJBpl8U9bqlBPGC7eOtk7F+nn8O63sS4Wc5poF5C/8rMmpU3u9QE+SPeP0lDPRdvMlCeY8b5FbFxlYqIUSvRZOvZJ3Ikw==
+ b=R87X0t97e0tgFUWK08b2F4Er3+Hx2owRQdPha00ZbNMkIEjvppcFZwNhg6qlOkYe3kg5Z6OjGSKPEAUsoXVn6a3iB5DDg5tQy/QV45294QKSmjVn1cP0b0K/VgmgI8Db5esgfT+7+9x5FsJlAx03sfUaxq5kd/ML+PBeJYW95zl4wUSc6ObtTS2W14DdWpSSSJR2aq1RPtYqgrpXOyEudYNbcQ+ucoTAla16TNiMIL4ygR3UA5erJXPXsOn/Aanblixv0lExSd7p6mn4annqEGX2JOnNLEqCag2qTce9EwDoCEd1WqQiNf8cIyTeEU2K0jqgpCUahNf14/NHRMy3cw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TVp2NU6P3RfgcVJ4NnPU5867NwDURHdPLMvOWMc54xc=;
- b=NBMpZgksz8vPIYLJFb60iTgOuX3UV2FbAErJSjJhksrsTllj3vDDI39mQ/Niqnmpu8vhZV1P8BTHg5nPoSRBqrNfLZ4Xpt5c8kJtTifXU6Cr3lSDjsEv8hntN92GV/oj40dzeRDeVv0I6MwLtS8shRwkFVPmzaL0iXGOxWohR+nVn5UnxmAkpsSkK6WbINTq5jPuvrfmG1eTBnImy2VVq6yyJZx+4krufqR4C2qs9LWppCdNu/PNWjmAKprzPhai8Mb71vDgY58yA5mLjlvJBQf0qkcXtQ/iyuJThl9lac35hlvXV45SthMJHUFS69fK12ARXQ8WnRmbZd2BKbi3Pg==
+ bh=MX+BgGbSD7iEcAwuh1RWbPZVC+YOwTzWGhxv2j4mJxo=;
+ b=Hl408a3CqWJztYiMck25VMiHnxATMieSSLnl1ZcI83vWWeKyTf0XbNYvyhmgN1hHyxyWiFfGPe3a8QM9wmPQZTDjU/0Vrh6xTkRPhSS3blm68y7r56KhLvciMO2qLVgOBRpn8HL2OKCqOtSxvd10Wq58WEPqkeeucaMaLqMtUE02aIIrvwZH4QLHwxy8NAFBCM9Sw/aEl9bhyaiPN7rxMZu/FuxuNFNwBUrSD7GLijeNbip9uuuh72an73aLFEXZLAxt9zDqUosndLBtwED9COADjgK87ODwqUPaBGdlwjconwL+u1Yd2Aofq29o9lprP1nJkhzZgjkP5t/h2+ZD2A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TVp2NU6P3RfgcVJ4NnPU5867NwDURHdPLMvOWMc54xc=;
- b=CSaa5cGQZW/DkirT6dNSaFG+UrSa/jO87gB6mzlYKHIpsnOMq7P6AjQnCftk3OWsesGtVLIX/c1zg5al3pGlH1ULBVOmbL/U3ZKtLtIPsRrkLAJZW8D2t5lac89PjiWUI0aKjzrvfTO7INV60X7Q02BnrQy2oAgM40lXunr1pNE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-Received: from TYWPR01MB11935.jpnprd01.prod.outlook.com (2603:1096:400:403::9)
- by OSZPR01MB7130.jpnprd01.prod.outlook.com (2603:1096:604:137::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.20; Wed, 25 Mar
- 2026 04:17:58 +0000
-Received: from TYWPR01MB11935.jpnprd01.prod.outlook.com
- ([fe80::dc30:6b24:b7ba:d429]) by TYWPR01MB11935.jpnprd01.prod.outlook.com
- ([fe80::dc30:6b24:b7ba:d429%4]) with mapi id 15.20.9745.019; Wed, 25 Mar 2026
- 04:17:58 +0000
-From: Dawei Liu <dawei.liu.jy@renesas.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Grant Peltier <grant.peltier.jg@renesas.com>,
-	Linda Xin <linda.xin.jg@renesas.com>,
-	Tabrez Ahmed <tabreztalks@gmail.com>,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Dawei Liu <dawei.liu.jy@renesas.com>
-Subject: [PATCH v4 2/2] hwmon: (pmbus/isl68137) Add support for Renesas RAA228942 and RAA228943
-Date: Wed, 25 Mar 2026 12:17:28 +0800
-Message-Id: <20260325041728.68-3-dawei.liu.jy@renesas.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260325041728.68-1-dawei.liu.jy@renesas.com>
-References: <20260325041728.68-1-dawei.liu.jy@renesas.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TP0P295CA0011.TWNP295.PROD.OUTLOOK.COM
- (2603:1096:910:2::17) To TYWPR01MB11935.jpnprd01.prod.outlook.com
- (2603:1096:400:403::9)
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:610:1cc::7)
+ by DM4PR84MB1398.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:49::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9745.20; Wed, 25 Mar 2026 05:13:13 +0000
+Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::2c54:3534:122f:e74f]) by CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::2c54:3534:122f:e74f%4]) with mapi id 15.20.9745.019; Wed, 25 Mar 2026
+ 05:13:06 +0000
+From: "Pradhan, Sanman" <sanman.pradhan@hpe.com>
+To: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+CC: "linux@roeck-us.net" <linux@roeck-us.net>,
+        "Michael.Hennerich@analog.com"
+	<Michael.Hennerich@analog.com>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        Sanman Pradhan <psanman@juniper.net>
+Subject: [PATCH v2] hwmon: (adm1177) fix sysfs ABI violation and current unit
+ conversion
+Thread-Topic: [PATCH v2] hwmon: (adm1177) fix sysfs ABI violation and current
+ unit conversion
+Thread-Index: AQHcvBYQB4hNk5+unU6fyT0Rgf1FYw==
+Date: Wed, 25 Mar 2026 05:13:06 +0000
+Message-ID: <20260325051246.28262-1-sanman.pradhan@hpe.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH3PR84MB3523:EE_|DM4PR84MB1398:EE_
+x-ms-office365-filtering-correlation-id: 55293a2d-84c9-4db7-d51b-08de8a2d32ed
+x-ld-processed: 105b2061-b669-4b31-92ac-24d304d195dc,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|56012099003|18002099003|38070700021;
+x-microsoft-antispam-message-info: DR4b6otj+rYQSEiZlonP5ERytUU8IKR3abxSZJ7fot52a35tWUuB27yKmUKBupdETdHg4fWWTKdKov0A/fXTdWjnFdRBUaMQ7Y/plSE967H46V130VPYTAFkBjXlfvbaHFndNE+mnPOWtvsmJVPHYP+VYETF6qp5+Nhz2ytajCQfN/PS3ySjoG99NgBVt8n5OkxwwT7gmOP1zAHtqu8NHVeNw0z+4hxgmTWfwM6PiRpw0tQsEcUj1SVcNHg5NrRObm6BhNJ1zZglgUpbjsoJfWwik0jcNq2vj5MJtfsjNYGX2+M0z7/W2/Gevjt2i1bf3PCUGDS6RsVEgjO3EcQV8AhzuShJ1f6j2gtFaiChgiDv2MEXH1Xo1mI4sUo7x8spcUIbsPSl23KwVFtQv3Eq1JdbZnTVP0EM/EeTchyrZXm5GZp9sGoy+Xcqtm/ScsnGxTL9NhEV5Rha/v1UP5NX6jlXkNoZ9Bdbw2HnxnwU+AKHIyUwzuxxq8eqBMPWM7DXyOdqMUTtBVQJefHg/NEBka0KgEWyMG+8iNoJKUhxWeoVTy1ogdpYNCt1FFDzN382tVFXd1gWvEkwOLO2+2v/47/yg4G8IgXma30Ts/2JeNr+l8YHgsKaiNXQKT7iMBMQolSSxH61DFvWw5KYTGu+GPiQ0nM7FTVMCZVYjAwfjjzKtuysboCRK1yg4qbH8jqBcH2SHpUXq0n05Z++ofroh2AykIluhOb8MJK+wt9rjDYKR7P63x4BbvlWa47Du4GFsL8248RIdKir8Ze/JJ+Ld9nm8dQgZRcrXg7UU5Qk3Ig=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(56012099003)(18002099003)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?SNyU5UVviXX33c57ANNsZOeMDX6g+HnAcDcV5bjnmQ34DCAdnHvDv+J/AP?=
+ =?iso-8859-1?Q?nqAkDggU4GGCp8Z8n3WznB0pa00S0CjnuF3ASDlTJ25nP1Ew26YBJ6Lopr?=
+ =?iso-8859-1?Q?jSD9VqJeQcnjlbUZkBByiuxKeW1RGdtPCLZ9u4sa3SyijMbTO9HIRLwTVe?=
+ =?iso-8859-1?Q?lJ+gYaqXgYXBTwzQ4a8VQ61NEcc/DaMVxpN0ZYul32A5wwiuX5GgcwGNA8?=
+ =?iso-8859-1?Q?DuSV85PVKSgcCsJrdm61ZCQTxYCWQ6TCBS5KukE/xL4tB1mK/kdzViwit4?=
+ =?iso-8859-1?Q?i/Qwi/TZyD0TikjaWksbESMN1GPLA8hh2DtWuEXAtNBXSHa1YDCTzhgEv8?=
+ =?iso-8859-1?Q?86Zy9eaBIIqeYSqTGxH9E9RsfcdW6t5BR5D8DB6MiPohr4OWt6CtDjKu4N?=
+ =?iso-8859-1?Q?MhozcskZRwOP+MJ9VZHW9jWIs5qcDH+S84TxryJL2mc78Peo6OKCkz/sEf?=
+ =?iso-8859-1?Q?zje7kI2LdeDaZjZGz5/nLGiNV1bfjM9hHU8jQ1X5z+qiaolmgPB/hLeSOX?=
+ =?iso-8859-1?Q?tj2EiLH6+++XY+DiRYOlQrFMYH/Ik7CA/ukHCMxqtlIXFRnAb66Ct4qAyH?=
+ =?iso-8859-1?Q?T7ZJwipANSGtAoWAjDknh3fLq9oRKdjq7LYFV2np0pFK3Z6dgC90ZgfMV1?=
+ =?iso-8859-1?Q?68dR5bDd167cqrF+B6OWVwNUiwrkWnlTx3Z2neDb1wnAdPNAh9l+ard0GJ?=
+ =?iso-8859-1?Q?+c4fUXTd9+H2tnLBpCLvg7Fm33SzIyUca+Ua/KRH3sNNOKdauWEnVbOf6b?=
+ =?iso-8859-1?Q?MRwXVja0VCrpnXpvEhwENPHHjfonM+nTwpFvXvbEj7R3vESXym5uDVQ3Sw?=
+ =?iso-8859-1?Q?YNOLHiWErRzxYWK8mTbuoYBGzwYAl/apKyK/w/WAel0Rc4YwxAeYOpRldk?=
+ =?iso-8859-1?Q?a7ZL2VT21bVlXxzKeUc123WrBqiiqYe2ViDJKyglXDkZlBwMKBQDx6u0BJ?=
+ =?iso-8859-1?Q?S2uurW7vAu8iZ6RDxEWrKtFh9RUBlZbVIFFO18GjQps6qpzZa5MqqT62s+?=
+ =?iso-8859-1?Q?HD2J8D5oQ5D1Yu5Oo05KA4SGDbQ9MFq6duvhfkv5xrzeSwkJNsAluF0mC/?=
+ =?iso-8859-1?Q?4BTmiW9f+G/cO/c4MAJvCPEgLNZC8WINB18r5h+JzSeq+zSeEXYGFFDiuV?=
+ =?iso-8859-1?Q?KAD1lF2cNMKxa9c1i/TEWQosMrqgp+Qal+zGEcsLvkW6QaqibtOkrXHYri?=
+ =?iso-8859-1?Q?m1CSK+iOb0gZwzxOT6vh1zxtXLT4PKHswJr9gfKYpGlpe/auhI9fb+tECt?=
+ =?iso-8859-1?Q?5i3ZFtv/B0BtoYSugYikA7SNIUHxE6bVBDwr7Bn5Ow+NcjFM5JS2k6x4DZ?=
+ =?iso-8859-1?Q?Vaade17JYb8vAmzT7uCKO4jFYxHb1S7s5/DIBoXTzyE/zNF98qGhbN+EP+?=
+ =?iso-8859-1?Q?d6zktStIICVtrWQjL+lTTe7XGZogR+DU2iYGxuNxze4XQYQCHeMaQl13i3?=
+ =?iso-8859-1?Q?IEV1RlUKO2kjlZURmRtVlrV52BsOT7jbMVmZLQ7455mBv/h7JN+4vOTxUL?=
+ =?iso-8859-1?Q?4bX2tETG0LM/sY00ry25KDREVmCKTXQFBkUbZHTprep57P/8og7ORkML+k?=
+ =?iso-8859-1?Q?T53I2bGaPUN9i172/w+tqOHk3cjjAQLFczN5uc94pxZXROYuQ2I6Q2djox?=
+ =?iso-8859-1?Q?QPY2UEI2P1t9LA1Er5DQcu06wR3paWYFIhFT2EtwhUGkAaDh9swUWNrx/9?=
+ =?iso-8859-1?Q?nb4CCkcOcC8VpOgh3hDO8bjVFLKzlGxYjcYJge3jHH5w4BFe9mbyyUaXRG?=
+ =?iso-8859-1?Q?kmn47pw4RBA2/gl50RTbCakabPhlrsLPRh0tImzRS3Nxqs8glycBm3yluy?=
+ =?iso-8859-1?Q?hXM14tEaZw=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYWPR01MB11935:EE_|OSZPR01MB7130:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8ca3c0a3-7fd4-49bd-642e-08de8a257ee4
-X-LD-Processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|52116014|376014|7416014|38350700014|56012099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	FHZ1dGBwuZSpVQ+/uR1Wo4JWTc4YTsAHHtX6RRwG32iAKZgtO98gL/7GCxCrJ7pPJnKT2S/dnFQ47fiWOUUlhH4MBRZrq71QjGxne0N/dA6mNTRO04E7Tep48pmi4Ht4u1z64eSka+yRuSkkCuIq2C47mbMpA93mOMG+GP9sc73FZfUJ53R4uCoTlKPW5J5KbH8+zhTXo4lJcSNocmiBx7+u7gUYT6EjUafH3xU/wKLHPE3qgb+i7nRMtx+m5liwPU499g9RGsimsLqaoOnREy4A2AFUQLyxZR7QIM5ixFoe2jQSI8WpZLnLUJvNP1764RvIQ0ZdTosDLytszI4mX/PM9lyC9v/Zv/A04JdSOLqfH6wXQptPJ2Idp9KstIngpzEc6Vqd0xbbiiNNMmirNURv2gRDioyAJbNrlFLvVC8wJbPuxUfdjeSTe8wPoJJNliGsePFzceBdQe4JhYHkdHlqH27ZxYziiI0Avx2UM9h1pa10JdX5E+rsQXLaBoRODJRmlru1A7KW9ZQByNCrXOTw0/EBe91pX1/gwSh961E1ofmYSpKoqZpopAtdKEgGfH4cJ/+B7d26OifeWTZatjw0dmhGhwNbOdQYF+Bu8ZkQfuACFD6GMpEe04vD2Ty7vDZnT+g8Nfptw8H0B7Qt/PgoE2nhQ4hdndOhdFK5ZQMKpxUQccDqb3nLv6U5pFShV+rCPnSwx2JXFgdXOmUkswM1yOklO9SnvKjzHPefQn4dd0OaW89hjjB//XNmJLGSGBnF/2/R/294beZAbg04e4/y+qT4p0c05JzAB0XXvdM=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB11935.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(376014)(7416014)(38350700014)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?p3FbvWYMBmlU6g1eKnUsmCQxNyHqPPfucfm5so1NiamNXhNyfg41RFzA7uMF?=
- =?us-ascii?Q?wi10+T01Ro8+9jvab9BKOtVy3Xs/5bNUaTsWLYd5J7fCxy82Ff+vNfnvFCm9?=
- =?us-ascii?Q?PPhJSPKSSTHfv87N2aUAOhlAr1+AzhZsImSE9HQDAelF6hiqhO1o9/Pussgg?=
- =?us-ascii?Q?7HzWRirnfyW3ZzWqzw19ckAtTpNf2HkwGAnMJRNLsWx1w3Vp7Wno2wFuhAKF?=
- =?us-ascii?Q?E/LVh7ifzhxIqHveiu5Qyz+h42Zbug9JPYKYrLSQKPYlZ3lVMwKIfA5r5Izy?=
- =?us-ascii?Q?mHs++HRZH9NdFsD3nMK5v1NYShnN7eNJtyk3t6ZTpRL87eu+jO9RFRu2HJBI?=
- =?us-ascii?Q?+NNuwvf+FLAXQVOES0tcKAVE9ePXtrhkNKYSOXG7W/6GKf9khDTaxSUaKbAf?=
- =?us-ascii?Q?sEIqUXp/z0jBAFUkLHmhXqVESVqhbbFv/iZMusKbF4c7iSO0MK2yExnd9eQJ?=
- =?us-ascii?Q?GQDSriZQvSA6TAmKL3qidXnzemW8nDs+NPlgfcpwD+y+CrppdpftpYFPGTYC?=
- =?us-ascii?Q?hipn9RcwSle4kLq12hNJlnpqvtcozRgDJVA9BbISuog33HyTbXMB0Lh1cwvd?=
- =?us-ascii?Q?AktxSnZgFK+MJzEBcBYDmELl140ziyYw6FYE5lksrDhx7aCiXEcTaqIfhi6x?=
- =?us-ascii?Q?q6la1TlPhDZzWt91yN0LXcDSs1t+zkmwvTR5g7eLddGXU86CmWiMfpdEuE2r?=
- =?us-ascii?Q?Ao9FsHowCqWB7jgRNJqgk8IE3mEO5t5jmzAKKyih8VaxrRNSWsm2FLaxpqSr?=
- =?us-ascii?Q?WIaDSWg/fEdiW03BHamIMrFP9D/17m2n9ZbaPJesx/YjtuWH6coy4XRvBjBl?=
- =?us-ascii?Q?oIgmdqBSk4Kq2vDSCTKNQ6iRD7EywTl4BLldjNMrTmGyLfHBFzHChS5oBurf?=
- =?us-ascii?Q?+9K5A58k0UIczXZTDhtDffyjS8qN6I07pltP2oxHLwUb3l7wvx3GRRHUxF9A?=
- =?us-ascii?Q?I+nAYFwmlmwBu0QxknMqIQQUfqo50/FlGg+FAISmzInyRe7kbM9hwelpThjY?=
- =?us-ascii?Q?r0xx1rQgQfTbTwh6aOW45C/XSq4ZmKItSq5tewGSZJBsJGJPDkoKEuHrdkNa?=
- =?us-ascii?Q?JAoOh4umFHzfn2fWdGl3Yg3PgM0XGOYAchc+UuwoQUdGn1bWiq0rtBTHL6FS?=
- =?us-ascii?Q?NefJe9sjhXQpYU+7IoB4FMRmigklqeinHqx45Ixm8EcuRRv5aLurjtG3wQ7l?=
- =?us-ascii?Q?Nw6V4g2F6AYTn1onyVuJjcviCiHNzRi8VnCkWdDDBNZXuKo/FwkCTEOuEP6g?=
- =?us-ascii?Q?fWcW2jv2Bg9JusMJCWRK1CXKNBiLd1CTwYC4xS1m3scY8t0hXg6EC2HlRUWp?=
- =?us-ascii?Q?VGCKAGiSWBh7QyD40/ph9bjjwUNfp6/D+JXsBlFP4wvDilvHkRJk88N9l0Hu?=
- =?us-ascii?Q?604NQTe2fcDNmTA2jCzW1XogtEDnfhd9LqoKgXwwrITzzdsuQ73G0tgD1q6f?=
- =?us-ascii?Q?99QnOeUbfixdvsiaR6e4599PhfMC2KlWK35qpr4CWGt37zLyWXBaFV6KK2+G?=
- =?us-ascii?Q?Nydgq6w5zgeF9maFQZzgeFjmny6ZjhAL+5Do4xqGnZyYGKG3lnCLcfs7TfZu?=
- =?us-ascii?Q?CDa9U+vdU3L2XOoXhTOH6A39jh7QlBIfvQMu8Ef7t0h/fMyUlnZ53jFxpoPP?=
- =?us-ascii?Q?A7cwLS+4p22JXO7NqSlcrJQMEoqnIfqzMU/rvpSS3PPsAUpOANVaYEjhWxc5?=
- =?us-ascii?Q?A8cvzml+jwseak3f2odmMgPoJWqSV4TfpVZf35kEZaMF9UWUbKsi/eQejK5R?=
- =?us-ascii?Q?wgqgQNZV+Q=3D=3D?=
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8ca3c0a3-7fd4-49bd-642e-08de8a257ee4
-X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB11935.jpnprd01.prod.outlook.com
+X-Exchange-RoutingPolicyChecked: f91MNIf+hW/xgBgFnVZA/S91yER3x5xv4fOZwjIse+XUxWaFmseBE0usNblsoPfFHyYXNAfWdaDC+ssCH5WYx3IehD4R5sKIl3fS6EsqbL1XPZQyXnsZgt36wvlYxpRRHJzSg0KwhmqPAKtTKxA8nacTDOCoz5LVT3qhBTUtCj6oOT9DS1HPJ5iqaVGrm67k9VKJp7v3WE2ScCTorFblNCTdecGUoqFwke/U6qM7Zr2eBGfdwxwF+YKlwDdHv81WdFaNtASJAHJEJ4yZyliVwgnseOSLKvQ0puJN477TZERylwpdb7MoVRySiAko0N8F+bL76PSBLolD2o3CEPLz9w==
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2026 04:17:58.2782
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 55293a2d-84c9-4db7-d51b-08de8a2d32ed
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Mar 2026 05:13:06.5290
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aGDKr2850GB2MMz3GSKe4msYmxhX7h3DOcWZV0dOF2w9exw4L2XO4caqyhA6ZujYk08DcEn2L5fxrtzquDyOYAQCzaNLFmTh/IOQqqQv7ws=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZPR01MB7130
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LO/SnDlgnPhBP/5SPBncMWCijOSEm4g4qTrUiv8suHacsjehul1Ja4p3ceSkGiuhLxq1J7G4UxHOmxRolT2EqQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR84MB1398
+X-OriginatorOrg: hpe.com
+X-Proofpoint-ORIG-GUID: iUFjp-GatcqIe3pRA8s4F52XJPblu56Z
+X-Proofpoint-GUID: iUFjp-GatcqIe3pRA8s4F52XJPblu56Z
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzI1MDAzMiBTYWx0ZWRfXwRM8fwsqxQXd
+ T6RCz38QmIh2awq8zdYBVzEHXeBcJulP15mUsqoMtXwzRPgzo835GtYg1WKhymXH6Y54K5+Kdwe
+ VEuBZjlsn8vGi+7plyKWwSMO7h9tPXLDDlIyfeIPuOs1LrqnDC8CIJUEc0mi1Q3Rf4mIPo4YyIT
+ 9ya1B2EcOzG9umLhObbdzTgN3lB2gvWj1Hr4MIRiUHZTWo+NNoBUGjaGr1pChFMSq/Y18sg4kKy
+ taL6Wqf2TKjKfWC36MxzAzr4vxqpfkJL6RAuKHeuK9HLXVahT2+uy83MCBzO69xCZgLEOZ//0nu
+ oHzIPMu8NJwDnmkhYdb33nbR+bkshQlzvtD8t7EUr1qH8dxK97pbsYgBWI3n9d4CGwvPXebg0/j
+ Gj1dgSNAPIYkJB3aPgvYLJuqVbRNJY45oGbsK0/59f8AhVUgGNC8OSd+XmXtA9sxNQUyTxXHBw7
+ bw0FsJYFX7J9PWZ1a1A==
+X-Authority-Analysis: v=2.4 cv=EvXfbCcA c=1 sm=1 tr=0 ts=69c36ef1 cx=c_pps
+ a=5jkVtQsCUlC8zk5UhkBgHg==:117 a=5jkVtQsCUlC8zk5UhkBgHg==:17
+ a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
+ a=xqWC_Br6kY4A:10 a=8nJEP1OIZ-IA:10 a=Yq5XynenixoA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=gQcMVamqm3wCPoSYhaRC:22 a=3haJ9R1Aw3gUfsUHDaCR:22
+ a=OUXY8nFuAAAA:8 a=w74Ln4rD2WEPIE-XTYcA:9 a=wPNLvfGTeEIA:10
+ a=cAcMbU7R10T-QSRYIcO_:22
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-25_02,2026-03-24_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 impostorscore=0 suspectscore=0 priorityscore=1501 malwarescore=0
+ spamscore=0 lowpriorityscore=0 clxscore=1015 adultscore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603250032
 
-Add I2C device IDs for Renesas RAA228942 and RAA228943.
-
-At the Linux PMBus hwmon interface level currently supported by this
-driver, these devices are compatible with the existing 2-rail non-TC
-controllers, so devicetree will use fallback compatibles and no
-dedicated OF match entries are needed.
-
-Signed-off-by: Dawei Liu <dawei.liu.jy@renesas.com>
----
- Documentation/hwmon/isl68137.rst | 20 ++++++++++++++++++++
- drivers/hwmon/pmbus/isl68137.c   |  2 ++
- 2 files changed, 22 insertions(+)
-
-diff --git a/Documentation/hwmon/isl68137.rst b/Documentation/hwmon/isl68137.rst
-index e77f582c2..0ce20d091 100644
---- a/Documentation/hwmon/isl68137.rst
-+++ b/Documentation/hwmon/isl68137.rst
-@@ -394,6 +394,26 @@ Supported chips:
- 
-       Provided by Renesas upon request and NDA
- 
-+  * Renesas RAA228942
-+
-+    Prefix: 'raa228942'
-+
-+    Addresses scanned: -
-+
-+    Datasheet:
-+
-+      Provided by Renesas upon request and NDA
-+
-+  * Renesas RAA228943
-+
-+    Prefix: 'raa228943'
-+
-+    Addresses scanned: -
-+
-+    Datasheet:
-+
-+      Provided by Renesas upon request and NDA
-+
-   * Renesas RAA229001
- 
-     Prefix: 'raa229001'
-diff --git a/drivers/hwmon/pmbus/isl68137.c b/drivers/hwmon/pmbus/isl68137.c
-index 3346afdf3..03c9adc0e 100644
---- a/drivers/hwmon/pmbus/isl68137.c
-+++ b/drivers/hwmon/pmbus/isl68137.c
-@@ -432,6 +432,8 @@ static const struct i2c_device_id raa_dmpvr_id[] = {
- 	{"raa228228", raa_dmpvr2_2rail_nontc},
- 	{"raa228244", raa_dmpvr2_2rail_nontc},
- 	{"raa228246", raa_dmpvr2_2rail_nontc},
-+	{"raa228942", raa_dmpvr2_2rail_nontc},
-+	{"raa228943", raa_dmpvr2_2rail_nontc},
- 	{"raa229001", raa_dmpvr2_2rail},
- 	{"raa229004", raa_dmpvr2_2rail},
- 	{"raa229141", raa_dmpvr2_2rail_pmbus},
--- 
-2.34.1
-
+From: Sanman Pradhan <psanman@juniper.net>=0A=
+=0A=
+The adm1177 driver exposes the current alert threshold through=0A=
+hwmon_curr_max_alarm. This violates the hwmon sysfs ABI, where=0A=
+*_alarm attributes are read-only status flags and writable thresholds=0A=
+must use currN_max.=0A=
+=0A=
+The driver also stores the threshold internally in microamps, while=0A=
+currN_max is defined in milliamps. Convert the threshold accordingly=0A=
+on both the read and write paths.=0A=
+=0A=
+Widen the cached threshold and related calculations to 64 bits so=0A=
+that small shunt resistor values do not cause truncation or overflow.=0A=
+Also use 64-bit arithmetic for the mA/uA conversions, clamp writes=0A=
+to the range the hardware can represent, and propagate failures from=0A=
+adm1177_write_alert_thr() instead of silently ignoring them.=0A=
+=0A=
+Update the hwmon documentation to reflect the attribute rename and=0A=
+the correct units returned by the driver.=0A=
+=0A=
+Fixes: 09b08ac9e8d5 ("hwmon: (adm1177) Add ADM1177 Hot Swap Controller and =
+Digital Power Monitor driver")=0A=
+Signed-off-by: Sanman Pradhan <psanman@juniper.net>=0A=
+---=0A=
+v2:=0A=
+- Widen alert_threshold_ua to u64 throughout; use div_u64() and=0A=
+  (u64) casts to prevent overflow on read, write, and probe paths.=0A=
+- Update Documentation/hwmon/adm1177.rst for the attribute rename=0A=
+  and correct unit descriptions.=0A=
+=0A=
+v1:=0A=
+- Rename hwmon_curr_max_alarm to hwmon_curr_max; add uA-to-mA and=0A=
+  mA-to-uA conversions with clamp_val on write path.=0A=
+- Propagate adm1177_write_alert_thr() return value on sysfs write;=0A=
+  add linux/math64.h and linux/minmax.h includes.=0A=
+---=0A=
+ Documentation/hwmon/adm1177.rst |  8 ++---=0A=
+ drivers/hwmon/adm1177.c         | 54 +++++++++++++++++++--------------=0A=
+ 2 files changed, 35 insertions(+), 27 deletions(-)=0A=
+=0A=
+diff --git a/Documentation/hwmon/adm1177.rst b/Documentation/hwmon/adm1177.=
+rst=0A=
+index 1c85a2af92bf7..375f6d6e03a7d 100644=0A=
+--- a/Documentation/hwmon/adm1177.rst=0A=
++++ b/Documentation/hwmon/adm1177.rst=0A=
+@@ -27,10 +27,10 @@ for details.=0A=
+ Sysfs entries=0A=
+ -------------=0A=
+ =0A=
+-The following attributes are supported. Current maxim attribute=0A=
++The following attributes are supported. Current maximum attribute=0A=
+ is read-write, all other attributes are read-only.=0A=
+ =0A=
+-in0_input		Measured voltage in microvolts.=0A=
++in0_input		Measured voltage in millivolts.=0A=
+ =0A=
+-curr1_input		Measured current in microamperes.=0A=
+-curr1_max_alarm		Overcurrent alarm in microamperes.=0A=
++curr1_input		Measured current in milliamperes.=0A=
++curr1_max		Overcurrent shutdown threshold in milliamperes.=0A=
+diff --git a/drivers/hwmon/adm1177.c b/drivers/hwmon/adm1177.c=0A=
+index 8b2c965480e3f..7888afe8dafd6 100644=0A=
+--- a/drivers/hwmon/adm1177.c=0A=
++++ b/drivers/hwmon/adm1177.c=0A=
+@@ -10,6 +10,8 @@=0A=
+ #include <linux/hwmon.h>=0A=
+ #include <linux/i2c.h>=0A=
+ #include <linux/init.h>=0A=
++#include <linux/math64.h>=0A=
++#include <linux/minmax.h>=0A=
+ #include <linux/module.h>=0A=
+ #include <linux/regulator/consumer.h>=0A=
+ =0A=
+@@ -33,7 +35,7 @@=0A=
+ struct adm1177_state {=0A=
+ 	struct i2c_client	*client;=0A=
+ 	u32			r_sense_uohm;=0A=
+-	u32			alert_threshold_ua;=0A=
++	u64			alert_threshold_ua;=0A=
+ 	bool			vrange_high;=0A=
+ };=0A=
+ =0A=
+@@ -48,7 +50,7 @@ static int adm1177_write_cmd(struct adm1177_state *st, u8=
+ cmd)=0A=
+ }=0A=
+ =0A=
+ static int adm1177_write_alert_thr(struct adm1177_state *st,=0A=
+-				   u32 alert_threshold_ua)=0A=
++				   u64 alert_threshold_ua)=0A=
+ {=0A=
+ 	u64 val;=0A=
+ 	int ret;=0A=
+@@ -91,8 +93,8 @@ static int adm1177_read(struct device *dev, enum hwmon_se=
+nsor_types type,=0A=
+ 			*val =3D div_u64((105840000ull * dummy),=0A=
+ 				       4096 * st->r_sense_uohm);=0A=
+ 			return 0;=0A=
+-		case hwmon_curr_max_alarm:=0A=
+-			*val =3D st->alert_threshold_ua;=0A=
++		case hwmon_curr_max:=0A=
++			*val =3D div_u64(st->alert_threshold_ua, 1000);=0A=
+ 			return 0;=0A=
+ 		default:=0A=
+ 			return -EOPNOTSUPP;=0A=
+@@ -126,9 +128,10 @@ static int adm1177_write(struct device *dev, enum hwmo=
+n_sensor_types type,=0A=
+ 	switch (type) {=0A=
+ 	case hwmon_curr:=0A=
+ 		switch (attr) {=0A=
+-		case hwmon_curr_max_alarm:=0A=
+-			adm1177_write_alert_thr(st, val);=0A=
+-			return 0;=0A=
++		case hwmon_curr_max:=0A=
++			val =3D clamp_val(val, 0,=0A=
++					div_u64(105840000ULL, st->r_sense_uohm));=0A=
++			return adm1177_write_alert_thr(st, (u64)val * 1000);=0A=
+ 		default:=0A=
+ 			return -EOPNOTSUPP;=0A=
+ 		}=0A=
+@@ -156,7 +159,7 @@ static umode_t adm1177_is_visible(const void *data,=0A=
+ 			if (st->r_sense_uohm)=0A=
+ 				return 0444;=0A=
+ 			return 0;=0A=
+-		case hwmon_curr_max_alarm:=0A=
++		case hwmon_curr_max:=0A=
+ 			if (st->r_sense_uohm)=0A=
+ 				return 0644;=0A=
+ 			return 0;=0A=
+@@ -170,7 +173,7 @@ static umode_t adm1177_is_visible(const void *data,=0A=
+ =0A=
+ static const struct hwmon_channel_info * const adm1177_info[] =3D {=0A=
+ 	HWMON_CHANNEL_INFO(curr,=0A=
+-			   HWMON_C_INPUT | HWMON_C_MAX_ALARM),=0A=
++			   HWMON_C_INPUT | HWMON_C_MAX),=0A=
+ 	HWMON_CHANNEL_INFO(in,=0A=
+ 			   HWMON_I_INPUT),=0A=
+ 	NULL=0A=
+@@ -192,7 +195,8 @@ static int adm1177_probe(struct i2c_client *client)=0A=
+ 	struct device *dev =3D &client->dev;=0A=
+ 	struct device *hwmon_dev;=0A=
+ 	struct adm1177_state *st;=0A=
+-	u32 alert_threshold_ua;=0A=
++	u64 alert_threshold_ua;=0A=
++	u32 prop;=0A=
+ 	int ret;=0A=
+ =0A=
+ 	st =3D devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);=0A=
+@@ -208,22 +212,26 @@ static int adm1177_probe(struct i2c_client *client)=
+=0A=
+ 	if (device_property_read_u32(dev, "shunt-resistor-micro-ohms",=0A=
+ 				     &st->r_sense_uohm))=0A=
+ 		st->r_sense_uohm =3D 0;=0A=
+-	if (device_property_read_u32(dev, "adi,shutdown-threshold-microamp",=0A=
+-				     &alert_threshold_ua)) {=0A=
+-		if (st->r_sense_uohm)=0A=
+-			/*=0A=
+-			 * set maximum default value from datasheet based on=0A=
+-			 * shunt-resistor=0A=
+-			 */=0A=
+-			alert_threshold_ua =3D div_u64(105840000000,=0A=
+-						     st->r_sense_uohm);=0A=
+-		else=0A=
+-			alert_threshold_ua =3D 0;=0A=
++	if (!device_property_read_u32(dev, "adi,shutdown-threshold-microamp",=0A=
++				      &prop)) {=0A=
++		alert_threshold_ua =3D prop;=0A=
++	} else if (st->r_sense_uohm) {=0A=
++		/*=0A=
++		 * set maximum default value from datasheet based on=0A=
++		 * shunt-resistor=0A=
++		 */=0A=
++		alert_threshold_ua =3D div_u64(105840000000ULL,=0A=
++					     st->r_sense_uohm);=0A=
++	} else {=0A=
++		alert_threshold_ua =3D 0;=0A=
+ 	}=0A=
+ 	st->vrange_high =3D device_property_read_bool(dev,=0A=
+ 						    "adi,vrange-high-enable");=0A=
+-	if (alert_threshold_ua && st->r_sense_uohm)=0A=
+-		adm1177_write_alert_thr(st, alert_threshold_ua);=0A=
++	if (alert_threshold_ua && st->r_sense_uohm) {=0A=
++		ret =3D adm1177_write_alert_thr(st, alert_threshold_ua);=0A=
++		if (ret)=0A=
++			return ret;=0A=
++	}=0A=
+ =0A=
+ 	ret =3D adm1177_write_cmd(st, ADM1177_CMD_V_CONT |=0A=
+ 				    ADM1177_CMD_I_CONT |=0A=
+-- =0A=
+2.34.1=0A=
+=0A=
