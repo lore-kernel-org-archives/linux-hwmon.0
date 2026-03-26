@@ -1,275 +1,251 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D0DD3ACA57
-	for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 05:52:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9372332A3FD
+	for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 09:30:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774504380; cv=none; b=V0+Gt/maVc3BbaJEEHB7AfwSv6VStYuNCo1SMIn4ccEagWcL0ybXnOLnwZDzAK5ifTQUaQZ4amOTEyM58KUDI6WnVKNgScaslPOh5cGsOeUJKUdaV7FuqJuV4muxd9IwSYM9FNqGcJ8yqXdSepjlR9WsxGLKbjTTDb4eesYU0W0=
+	t=1774517412; cv=none; b=Zfc4a0yTpRl0JCFp+uTLznH0JPzxZPSGkm3zFnkWSnW+CkEraAeQMgoeGi4Wr6kZ4/SbGznogsTSH+0WZRArd0qXp4q8MO273OBXwu7POcMmWDQ/EvqOX88QU26z3IZOaF5aSdq5o0eZIcK2HWBMFdUGgoOn/jU5Ys02kbZhAlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774504380; c=relaxed/simple;
-	bh=0yhZX0DH8A5C35IHXsYkFJYJVmgHMHBij5UNfrFZogE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VozISFjdcqXo+GfUuHDPCL3UvDIm/P2F6wETwMMPsvzFH5u6zXjmyJLrKqMhiZdPys7qzw2t3/UmS0obj7l2meoiqX0fJj9Tk19S3jCyJheqG+cd8R0XmFezEDCTVvvh1l4SxHv6kI/BqPiYK8jDSmYvWoj4Q6X7VTg1xTtAVhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GYdazrn4; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774517412; c=relaxed/simple;
+	bh=W2C1x++8XBe30WtRd6vJrJyhhKrIKxhyMgSBLww+uw0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=DUmfPL2vR0mNIrttWhMROb95cClQaiQEsFSofdubWfngCL2VQEJaoyeIF9sU8KcZ8WbEpTkmJ5dWmB6bIJs5LBWORKHSKaJMBxflexPbIZn7XZCAbv7CMCJqlNWR/HsD9e6HjikcFuM2sP6flWZOY8HfPRQ7LMf7/8NPLk0SXRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ahE75IST; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Q1fOHqwk; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GYdazrn4"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2b042533de1so3122705ad.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Mar 2026 22:52:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ahE75IST";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Q1fOHqwk"
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62Q3a07Q4015126
+	for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 09:30:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=vvx5blX5bqLSk3PHmE+r7s
+	sYlFA8s69Dv8FLw4lsIBg=; b=ahE75ISTE+qITyXyXpnbVZxtgltVxoNIfhV6gj
+	E8Um7RVDncckvmP9/Uk82pge0JzpPV/PttwNU5lffTqy/n9o+jG+lPDagiQbmwC6
+	SmMENz0854Kf/vsP52HPE9fsYxE9leFQ7LDq9x3hYUllmrI/2gWxDXu/kN9gYeHM
+	KQUyVhAFAL+eAbfxyBCNu7E7RulwM1nTuQu2GuC+omCFGsIHbE+nmIRxgwI4LYGY
+	Hfmr3Dr9jdFbSJ9uVbfBVVgFWAsCNDa0v3VMxuB8UaZzoQ9Bkf/wd5gwfn8rSlOC
+	6PQ9zeHQjjH0Ti1FdYZPO1nIxBJyuR2W05rzo1DMAPnZK5qw==
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4d4w1q94f8-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 09:30:10 +0000 (GMT)
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-509070bda13so52586831cf.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 02:30:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774504377; x=1775109177; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=VWC6Bj+K9uxHnGnEONT80OvFfh7DvFkOXxkVna9Jzek=;
-        b=GYdazrn4ygt2QoOPdIY/rjWWDy2+xU8cMhE8YuOuBbJKwPoOx18T/RHtYX/Xs8FaNN
-         cfIWs7QsRkPRD9l9u4OlpNwCy5gCayFhKBOCSEi9qpqxourwVlLQhFDqld93Jz0BjQMf
-         WAH+Czvc57mFcUIh3QxUXNuqWOub5YnN4Cohy7blBGuCpw4Q749AUHq5SJ/NxE7EW3hk
-         3Gncw44QhKqRKxooZ6g8khKiRPoighrTwHmL2jM3fcFSUeJk6eznXhilKljZprVmHKim
-         udvoD8mNH7B9jAjkRaLtCbaiimMHRq1jZHYt6vj6Dm6cjUFhPP+xfm0uIWlegAci/IIj
-         Gjog==
+        d=oss.qualcomm.com; s=google; t=1774517410; x=1775122210; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vvx5blX5bqLSk3PHmE+r7ssYlFA8s69Dv8FLw4lsIBg=;
+        b=Q1fOHqwkmsagXSdYjw5gg4+M32IlOa3JZjR27ssT02cq/CpC7wjW6R0pfPRDRjv7Pr
+         jLxwoRm71512y3sDOjeRKXa/Ct0pvUK96FxLeQiUUwXnbPD/ths5A2u4JdMUHQnmv73K
+         NcvA7AkTCFYZtGZQm+KhCmoCErw27xv9zHn7A4mgRoFK0WTP9KZXLfw0etKBPzgHW7PA
+         kdMkyBHasiYdjS7Yt/UqSm/LiWtPJuoGL9SFmzp0bkWQ6gUV4xd2T91byEGD8pXi3lZM
+         GyZMyq+LegAyiwApB1M2l++0eLXp8r/r2fwUnkY+8N8JGqc52xIRYq80BKUeReLm7rCe
+         RcXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774504377; x=1775109177;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VWC6Bj+K9uxHnGnEONT80OvFfh7DvFkOXxkVna9Jzek=;
-        b=ezw+3Lz3y0M/AawA4lnPSdD3MkBQGg++tnr+kp05qZGaM9TutfFAGfIbViAq2c13NX
-         WprvHly/TypGEAe33UCch6E1jTr85eQRvPcW8GWhNIybqGSvd9yI8lH8Cp50qb8u7xEm
-         5z7zqYF82ayVfV5MVOcRSsOBm2H0rv8ipHTcutrp66Qi69r1afuGe60fPRKjLGw0Sjl+
-         OxzpNoqG/Mh8/uhAVm+XbdURSD56hU3j1FAO6YzPNT69LrY96+rSiIEpkoQaVYE06YVb
-         oH7eA+UQDGWn4QxnbnAH0w+HN7//Way+6QC0meO+H8AYuPxUvY4bcj4oz8Mht4U3HQDt
-         iAYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXbaBOsYphBtzkuYHiWe7EOPzxr2jxg0CmY5pl3crA9CDRu0EXCTc9/Gw22MV/HeUoBBEKBwd6U50rEUA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjrTy82IJwx28QuRuyIqJ4DsatEsc0qvYq1KkXnbZsT1fdIPAA
-	MOINMz+k+xSuQuN5CAfIxv9p78efy0xMtXnrjyds0CRNvKvnyxBRh79tueXGbw==
-X-Gm-Gg: ATEYQzyctt/utKKXwPVCFzXvbgojEUEMoRnDqvUw/9/WTXokXD8z7Hm/fIwN7I3XrEN
-	1Z8Oo2nosIlK+36JZ0cQu2jt6+emmvj7kB9nKEslnYLn9/OGTKh762QLCVmVuPVK4XeYnaJwPJp
-	7wOOBj1nG5k8yd15BcwwLpEgPGlTr7n6XFo+/qNB6vPrJlsrUDdrWBnbDkBL+VQKR5zoFNgTsGW
-	TN1b43s4HUN2Yyhw94U5tsMoMFz30+b1gxhyFcPbxBFGhw3S9ZVqESnzmCrdeOLHYRgDeAz7Bx5
-	p9evbPmAlLwguxCorXjogENxWqPngu+vWjcXWxew/eyTw21t3HW20wNJ67XFH6XpJmaawmdy09H
-	pNsRgS6mEaWT6daqhclV1PhggI7837a/bV6poalgZ3VYL/2i46QkdGWYgU9AQBxJJgPcjph3bYi
-	HbhZoZny97gOP6h/kD3k4hHDPW+JDSUALmRo6TQqkIMDK4PiOvB45aKDw4z91CzYUBsHZD8Skto
-	0QXb0BocAc=
-X-Received: by 2002:a17:90b:3f46:b0:35b:e844:3bd with SMTP id 98e67ed59e1d1-35c0ddf6eabmr5677531a91.31.1774504377493;
-        Wed, 25 Mar 2026 22:52:57 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35c22ce693csm329442a91.14.2026.03.25.22.52.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Mar 2026 22:52:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9648e0ae-8102-4f70-866b-163fbd5050eb@roeck-us.net>
-Date: Wed, 25 Mar 2026 22:52:55 -0700
+        d=1e100.net; s=20251104; t=1774517410; x=1775122210;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vvx5blX5bqLSk3PHmE+r7ssYlFA8s69Dv8FLw4lsIBg=;
+        b=o4MhPUpHZGcOxSxfbrUfeTnsmR6cls/y1kcfXESI5VuQQqwgcgAPfvZ3wJWlU5l55I
+         lInsRGet9mH3wejyakD744IteMOnMQ+hUDsqG1ZwN5R5IjA/8IafNv/2G2evY8f2U10d
+         z8h/FS9nHGTbgDXJHzWMs3uzvgBhxf5vF9LfDQDC7w3XCcFI3rWDwJrbCJovKZixU7fw
+         QLOajbN3FbfNxhaWTA0FaV6W3mBQBl5Q1LW5eivVQyPX9gItA9pimuaCGh13+beJaaAJ
+         R6PrGwMk2L+x98RNssmx7qGHPWPeHSlsIveZ9qI+Syd87Df0WRftmxxeFUKTnjhcaS6Q
+         OShQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVPQwPu5A021Smb+3KqgNzCDjj5Rl3HSMPGG6pLKi8Gs3P9gLG3QkzuPA/+XT+4cR7o5Yc9j2LO1tJdPw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+k+aizOOFUfYhOX0xYpOcnkS7oWM5iKmDZ6SNgJAxSf3kErMV
+	ChHqSLk84P80Dhk6WlDfRzj9XnhMxTg87v5FQRASdFyuMfdhrOUnLrkI25Mv4hG1RC1DUhvS0Oy
+	oV4Ch0L6bHLAYT5g9xRBD9mmD4727EUsOA6FtVOtUsIKJj1j7KyC0dMVlHIC9b2HlSQ==
+X-Gm-Gg: ATEYQzyvH2n3fhVD+mGwQ66xuLhIWVz+zqgwSQZDN0OCJA4gaS/PG2EvroeSQPJRZ0q
+	8Lf+62iA/QU6UuCPOCoBCn0Fk34KA3XwopJjTnOxoHC1HsGJGwj6evXnn9mZiBezq+ePS8vmrGd
+	GEZ7s2L06CUcRggl02+gY2YGevC2YwH6CxqXSLoRkP9jgb46/U8X9d8nqEWn45d6b5XrS1N4Cag
+	fIk/t4JgvPXBPEjFCaSLqX2w6Nyw45S4rh6PlMvUXYhnGBCREzu8WBJYsxKAGEFFL8qucoTU/+p
+	7kI6BXxagcGhmr5qn0h+dEBG641M+FllIAWzpbwdTlL02q/74SvWrfxL0c431ZPAc0jDnhNGTsM
+	3Igl9+igHPj0jzwxNkD44s90hDpAyCyz697YHccGqXZxbopU1K/pY
+X-Received: by 2002:a05:622a:1444:b0:509:2231:977a with SMTP id d75a77b69052e-50b994fa036mr6991251cf.30.1774517409682;
+        Thu, 26 Mar 2026 02:30:09 -0700 (PDT)
+X-Received: by 2002:a05:622a:1444:b0:509:2231:977a with SMTP id d75a77b69052e-50b994fa036mr6990901cf.30.1774517409196;
+        Thu, 26 Mar 2026 02:30:09 -0700 (PDT)
+Received: from brgl-qcom.local ([2a01:cb1d:dc:7e00:92a5:ac13:cd81:9625])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48722c95041sm17521895e9.6.2026.03.26.02.30.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Mar 2026 02:30:08 -0700 (PDT)
+From: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Date: Thu, 26 Mar 2026 10:30:00 +0100
+Subject: [PATCH] hwmon: (ina2xx) drop unused platform data
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/2] hwmon: emc2305: Support configurable fan PWM at
- shutdown
-To: florin.leotescu@oss.nxp.com, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Michael Shych <michaelsh@nvidia.com>,
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: daniel.baluta@nxp.com, viorel.suman@nxp.com,
- linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
- festevam@gmail.com, Florin Leotescu <florin.leotescu@nxp.com>
-References: <20260325160444.1736866-1-florin.leotescu@oss.nxp.com>
- <20260325160444.1736866-3-florin.leotescu@oss.nxp.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260325160444.1736866-3-florin.leotescu@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20260326-drop-ina2xx-pdata-v1-1-c159437bb2df@oss.qualcomm.com>
+X-B4-Tracking: v=1; b=H4sIAJf8xGkC/x3MMQqAMAxA0atIZgM2QoteRRyCjZqlLa1IQby7x
+ fEN/z9QJKsUmLsHstxaNIYG03ewnRwOQfXNQAPZYSSLPseEGphqxeT5YjTWbd7R5BwztC5l2bX
+ +z2V93w+G/Ls3YwAAAA==
+X-Change-ID: 20260326-drop-ina2xx-pdata-167cd72977aa
+To: Guenter Roeck <linux@roeck-us.net>, Jonathan Cameron <jic23@kernel.org>,
+        David Lechner <dlechner@baylibre.com>,
+        =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+        Andy Shevchenko <andy@kernel.org>
+Cc: brgl@kernel.org, linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3617;
+ i=bartosz.golaszewski@oss.qualcomm.com; h=from:subject:message-id;
+ bh=W2C1x++8XBe30WtRd6vJrJyhhKrIKxhyMgSBLww+uw0=;
+ b=owEBbQKS/ZANAwAKAQWdLsv/NoTDAcsmYgBpxPyasN1ep6CO5ixvVDwZhErKffNWeBaLoHjwQ
+ r+Pvw83vB+JAjMEAAEKAB0WIQSR5RMt5bVGHXuiZfwFnS7L/zaEwwUCacT8mgAKCRAFnS7L/zaE
+ ww2QD/9P5p15ZuWOfmngxTgszdXdsGjAHX3Dhp9IUQSyTwZauFlJ1n8kvwEK1pdyrAdEuBlg0oW
+ +DI9efeHq0+7Td2AVkKwRj6ezgyiPL0hT+cd3M9uxjDg5JNdDSQYq1mOWLM7ZGlJq1WxRa+04wP
+ 1EoT093xCegpalWR57o3+ooB/arMr9k1CvrUpwi62m4R5qR7trc3Yp8q/PL+sp4Oov2Aosn3p+s
+ YflqLigrkKY6If/Z/e/iHuN802Uii6vR/O52NPrRY9crpHvGQNt2yG6CP7/v9CXpefGac5evIrU
+ /rH12iwojwODikUYMc3Lo98+J45p1IlHZ5WZwClibACdvT2NLZTrzl0m4VtEuBqXRDrWateiBuX
+ H+0rAV+fiVFdXe47A3IgmiwFACvxVQEd9XLXZMyW7nI3crisjT/ANWWiTlwSXCtyCsfKSj1CZiT
+ 72XBiQERgIwH60azJ2iAjXCI/l7g/Jwh/D9Xg8N+Kn4Z5LzZeGdvq9lK2J01RlBFN1Pep89KiaR
+ NrEzsjwgBIRTFYRDlsVYkNrs4KK0a+u8pDpbEot/vevXwmuQb0ba7tf7CVF2vbY2aPabJVFpHlv
+ BsnZtmoXyZ8D2kwAmqFvX+/7ObPT1Ts2jT9F5yEW4J8abQHt2DHuMe0ppIOLvl3sV5aQlicJEvX
+ ykDt3QfKK79k1qQ==
+X-Developer-Key: i=bartosz.golaszewski@oss.qualcomm.com; a=openpgp;
+ fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
+X-Proofpoint-ORIG-GUID: OwdWCHdWFdPzUU-ocE16SCYvFq0ve9Yn
+X-Authority-Analysis: v=2.4 cv=HvV72kTS c=1 sm=1 tr=0 ts=69c4fca2 cx=c_pps
+ a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=Yq5XynenixoA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=_K5XuSEh1TEqbUxoQ0s3:22 a=EUspDBNiAAAA:8
+ a=pGLkceISAAAA:8 a=iPG-_ETWnEHzmfTtMD8A:9 a=QEXdDO2ut3YA:10
+ a=dawVfQjAaf238kedN5IG:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzI2MDA2OCBTYWx0ZWRfX3abqrny2o5DM
+ k9ll19hXyNFybMs7/3wY16YdreG0d84RzMtflqxOX24wwjccR/R7e/AciiwdHCfo9JoLXcbHb6o
+ kC/DZO/gjKIgEiSEhJdHfH5fTlnLe/KdQX2WNFGSM2A0O+Iq++f2f1glJRKKzrK2QpfIhvKIg9/
+ cn1XLOrn25gl+VgRQg59GxcAqzUqLyqoCo89q+8XkPazHOLYQH9khbvblKSVOFVpskpT+X+9smY
+ pGmxB60GMjBZu3xbEfPkVG/vXW+4HuhwtG7U8vzNu90R/UK/wZs39HQK1UIB8D6jqExmIgwUvin
+ 4tfjeKu1CHKYQGw4mhiKn6z3sxxXZH2YvYKS+2QzOUS5rQWLduLEdBp+hAfpbomgOYleeXJWBQw
+ F1Jx/xoT+hUx2efAl+oV7UJNDcsA/MxjTAuCFdviFH8B/SJwrzMR6YYJ3z+kCjYu0HoTFXImYGW
+ AuFtarwGZNmQ4q9Viwg==
+X-Proofpoint-GUID: OwdWCHdWFdPzUU-ocE16SCYvFq0ve9Yn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-26_02,2026-03-24_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 malwarescore=0 lowpriorityscore=0 bulkscore=0 phishscore=0
+ impostorscore=0 suspectscore=0 priorityscore=1501 adultscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603260068
 
-On 3/25/26 09:04, florin.leotescu@oss.nxp.com wrote:
-> From: Florin Leotescu <florin.leotescu@nxp.com>
-> 
-> Some systems require fans to enter in a defined safe state during system
-> shutdown or reboot handoff.
-> 
-> Add support for the optional Device Tree property "fan-shutdown-percent"
-> to configure the shutdown PWM duty cycle per fan output.
-> 
-> If the property is present for a fan channel, the driver converts the
-> configured percentage value to the corresponding PWM duty cycle and
-> applies it during driver shutdown.
-> 
-> If the property is not present, the fan state remains unchanged.
-> 
-> Signed-off-by: Florin Leotescu <florin.leotescu@nxp.com>
+Nobody defines struct ina2xx_platform_data. Remove platform data support
+from the drivers which still have it (it's effectively dead code) and
+remove the header.
 
-Sashiko has a couple of concerns.
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+---
+ drivers/hwmon/ina209.c               |  9 +--------
+ drivers/iio/adc/ina2xx-adc.c         | 14 ++------------
+ include/linux/platform_data/ina2xx.h | 16 ----------------
+ 3 files changed, 3 insertions(+), 36 deletions(-)
 
-https://sashiko.dev/#/patchset/20260325160444.1736866-1-florin.leotescu%40oss.nxp.com
+diff --git a/drivers/hwmon/ina209.c b/drivers/hwmon/ina209.c
+index bd7b3380d847af4439327f0753745fd832e3e22c..eec529e26d6912ad39924420b4c23d2cb91cc81d 100644
+--- a/drivers/hwmon/ina209.c
++++ b/drivers/hwmon/ina209.c
+@@ -27,8 +27,6 @@
+ #include <linux/hwmon.h>
+ #include <linux/hwmon-sysfs.h>
+ 
+-#include <linux/platform_data/ina2xx.h>
+-
+ /* register definitions */
+ #define INA209_CONFIGURATION		0x00
+ #define INA209_STATUS			0x01
+@@ -487,7 +485,6 @@ static void ina209_restore_conf(struct i2c_client *client,
+ static int ina209_init_client(struct i2c_client *client,
+ 			      struct ina209_data *data)
+ {
+-	struct ina2xx_platform_data *pdata = dev_get_platdata(&client->dev);
+ 	u32 shunt;
+ 	int reg;
+ 
+@@ -501,11 +498,7 @@ static int ina209_init_client(struct i2c_client *client,
+ 		return reg;
+ 	data->config_orig = reg;
+ 
+-	if (pdata) {
+-		if (pdata->shunt_uohms <= 0)
+-			return -EINVAL;
+-		shunt = pdata->shunt_uohms;
+-	} else if (!of_property_read_u32(client->dev.of_node, "shunt-resistor",
++	if (!of_property_read_u32(client->dev.of_node, "shunt-resistor",
+ 					 &shunt)) {
+ 		if (shunt == 0)
+ 			return -EINVAL;
+diff --git a/drivers/iio/adc/ina2xx-adc.c b/drivers/iio/adc/ina2xx-adc.c
+index 857e1b69d6cd4d65d7ebe5de222fe92875eccdcc..c6cded508738f95e5001ebd276edfa07890e217c 100644
+--- a/drivers/iio/adc/ina2xx-adc.c
++++ b/drivers/iio/adc/ina2xx-adc.c
+@@ -33,8 +33,6 @@
+ #include <linux/sched/task.h>
+ #include <linux/util_macros.h>
+ 
+-#include <linux/platform_data/ina2xx.h>
+-
+ /* INA2XX registers definition */
+ #define INA2XX_CONFIG                   0x00
+ #define INA2XX_SHUNT_VOLTAGE            0x01	/* readonly */
+@@ -980,16 +978,8 @@ static int ina2xx_probe(struct i2c_client *client)
+ 
+ 	mutex_init(&chip->state_lock);
+ 
+-	if (of_property_read_u32(client->dev.of_node,
+-				 "shunt-resistor", &val) < 0) {
+-		struct ina2xx_platform_data *pdata =
+-		    dev_get_platdata(&client->dev);
+-
+-		if (pdata)
+-			val = pdata->shunt_uohms;
+-		else
+-			val = INA2XX_RSHUNT_DEFAULT;
+-	}
++	if (of_property_read_u32(client->dev.of_node, "shunt-resistor", &val) < 0)
++		val = INA2XX_RSHUNT_DEFAULT;
+ 
+ 	ret = set_shunt_resistor(chip, val);
+ 	if (ret)
+diff --git a/include/linux/platform_data/ina2xx.h b/include/linux/platform_data/ina2xx.h
+deleted file mode 100644
+index 2aa5ee9a90507e8233bde3cb9be257dda23cd52c..0000000000000000000000000000000000000000
+--- a/include/linux/platform_data/ina2xx.h
++++ /dev/null
+@@ -1,16 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * Driver for Texas Instruments INA219, INA226 power monitor chips
+- *
+- * Copyright (C) 2012 Lothar Felten <lothar.felten@gmail.com>
+- *
+- * For further information, see the Documentation/hwmon/ina2xx.rst file.
+- */
+-
+-/**
+- * struct ina2xx_platform_data - ina2xx info
+- * @shunt_uohms		shunt resistance in microohms
+- */
+-struct ina2xx_platform_data {
+-	long shunt_uohms;
+-};
 
-I don't know about the shutdown problem. If that is real, a lot of drivers
-have the same problem. Don't bother about it right now.
+---
+base-commit: 66ba480978ce390e631e870b740a3406e3eb6b01
+change-id: 20260326-drop-ina2xx-pdata-167cd72977aa
 
-However, the range check should indeed be a separate patch.
-
-Thanks,
-Guenter
-
-> ---
->   drivers/hwmon/emc2305.c | 41 +++++++++++++++++++++++++++++++++++++++++
->   1 file changed, 41 insertions(+)
-> 
-> diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c
-> index 64b213e1451e..722ec1d054f8 100644
-> --- a/drivers/hwmon/emc2305.c
-> +++ b/drivers/hwmon/emc2305.c
-> @@ -32,6 +32,7 @@
->   #define EMC2305_REG_DRIVE_PWM_OUT	0x2b
->   #define EMC2305_OPEN_DRAIN		0x0
->   #define EMC2305_PUSH_PULL		0x1
-> +#define EMC2305_PWM_SHUTDOWN_UNSET      -1
->   
->   #define EMC2305_PWM_DUTY2STATE(duty, max_state, pwm_max) \
->   	DIV_ROUND_CLOSEST((duty) * (max_state), (pwm_max))
-> @@ -104,6 +105,7 @@ struct emc2305_cdev_data {
->    * @pwm_output_mask: PWM output mask
->    * @pwm_polarity_mask: PWM polarity mask
->    * @pwm_separate: separate PWM settings for every channel
-> + * @pwm_shutdown: Set shutdown PWM.
->    * @pwm_min: array of minimum PWM per channel
->    * @pwm_freq: array of PWM frequency per channel
->    * @cdev_data: array of cooling devices data
-> @@ -116,6 +118,7 @@ struct emc2305_data {
->   	u8 pwm_output_mask;
->   	u8 pwm_polarity_mask;
->   	bool pwm_separate;
-> +	s16 pwm_shutdown[EMC2305_PWM_MAX];
->   	u8 pwm_min[EMC2305_PWM_MAX];
->   	u16 pwm_freq[EMC2305_PWM_MAX];
->   	struct emc2305_cdev_data cdev_data[EMC2305_PWM_MAX];
-> @@ -539,6 +542,7 @@ static int emc2305_of_parse_pwm_child(struct device *dev,
->   				      struct device_node *child,
->   				      struct emc2305_data *data)
->   {	u32 ch;
-> +	u32 pwm_shutdown_percent;
->   	int ret;
->   	struct of_phandle_args args;
->   
-> @@ -548,6 +552,12 @@ static int emc2305_of_parse_pwm_child(struct device *dev,
->   		return ret;
->   	}
->   
-> +	if (ch >= EMC2305_PWM_MAX) {
-> +		dev_err(dev, "invalid reg %u of node %pOF (valid range 0-%u)\n", ch, child,
-> +			EMC2305_PWM_MAX - 1);
-> +		return -EINVAL;
-> +	}
-> +
->   	ret = of_parse_phandle_with_args(child, "pwms", "#pwm-cells", 0, &args);
->   
->   	if (ret)
-> @@ -579,6 +589,16 @@ static int emc2305_of_parse_pwm_child(struct device *dev,
->   	}
->   
->   	of_node_put(args.np);
-> +
-> +	ret = of_property_read_u32(child, "fan-shutdown-percent",
-> +				   &pwm_shutdown_percent);
-> +
-  > +	if (!ret) {
-> +		pwm_shutdown_percent = clamp(pwm_shutdown_percent, 0, 100);
-> +		data->pwm_shutdown[ch] =
-> +			DIV_ROUND_CLOSEST(pwm_shutdown_percent * EMC2305_FAN_MAX, 100);
-> +	}
-> +
->   	return 0;
->   }
->   
-> @@ -631,6 +651,9 @@ static int emc2305_probe(struct i2c_client *client)
->   	if (ret)
->   		return ret;
->   
-> +	for (i = 0; i < EMC2305_PWM_MAX; i++)
-> +		data->pwm_shutdown[i] = EMC2305_PWM_SHUTDOWN_UNSET;
-> +
->   	pwm_childs = emc2305_probe_childs_from_dt(dev);
->   
->   	pdata = dev_get_platdata(&client->dev);
-> @@ -714,6 +737,23 @@ static int emc2305_probe(struct i2c_client *client)
->   	return 0;
->   }
->   
-> +static void emc2305_shutdown(struct i2c_client *client)
-> +{
-> +	int i;
-> +	int ret;
-> +	struct emc2305_data *data = i2c_get_clientdata(client);
-> +
-> +	for (i = 0; i < data->pwm_num; i++) {
-> +		if (data->pwm_shutdown[i] != EMC2305_PWM_SHUTDOWN_UNSET) {
-> +			ret = i2c_smbus_write_byte_data(client, EMC2305_REG_FAN_DRIVE(i),
-> +							data->pwm_shutdown[i]);
-> +			if (ret < 0)
-> +				dev_warn(&client->dev,
-> +					 "Failed to set shutdown PWM for ch %d\n", i);
-> +		}
-> +	}
-> +}
-> +
->   static const struct of_device_id of_emc2305_match_table[] = {
->   	{ .compatible = "microchip,emc2305", },
->   	{},
-> @@ -726,6 +766,7 @@ static struct i2c_driver emc2305_driver = {
->   		.of_match_table = of_emc2305_match_table,
->   	},
->   	.probe = emc2305_probe,
-> +	.shutdown = emc2305_shutdown,
->   	.id_table = emc2305_ids,
->   };
->   
+Best regards,
+-- 
+Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 
