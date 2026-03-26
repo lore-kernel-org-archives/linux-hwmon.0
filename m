@@ -1,99 +1,110 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3134D39FCC6;
-	Thu, 26 Mar 2026 18:25:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774549508; cv=none; b=oFL/YLUT0KAci/O0tE+6GxyaBGmNOS8kVsJBkYDcOW1OxYpzsv/oS1D02ALpiOD7eO27fxUHlAGB5Uu/zztaWA3KebQ+UTUBF9Pb4eq/hDp2Kvvmu4FFGADFffq8ZGuwwFp2LJFXXv7cfGAC+Z0FuXDaX3mbTaA7WJ9OqDnzaYw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774549508; c=relaxed/simple;
-	bh=Pbzsb8SVxCcw6tkDUDPIXM8P9aUDWuKvyk+NUid+ElU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VbES4ybRvtT/BQOd708xtF5P/7XLkUGvH0LMhFx+kyYDsrcdZflvhSr3hY7PptZuDXWG0VNnG1qgejZY7lSuWcV/ytwct3F4Bz7qxyKeGMwG/LHxLaJSjZpE/1B3D+cW4RHNNm+hIw+2NxC5G29tjKtb5lk4it+TYtCEeeE7U2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=muVRP6y7; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E32A834F48E;
+	Thu, 26 Mar 2026 19:22:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774552965; cv=pass; b=MQeR7xnldvokTHU8p5b9aXy/WjQDfKxHr2EWHvEAcEc26kTCFhN/1r2Z6zzzpTI7G4ButVPxPPYpvd7OawOEQUdL+L3EGwKuzbG2FnzpIM0hdqXgbQudwY/ahtmuA1b7W4yAXd38CJiBwUzPASdFQf4MSfU+poj/Px3oBx4kgr0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774552965; c=relaxed/simple;
+	bh=HbYZ60qrLzqhafhDhXmS9+prkP2azgHQMIHNCWQ3yjo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=kokM5250jWuTEHUpycBrsc6JL/NLQVDsg+S3loR+H/zKGad8F+kp+xibECMAOJbnHlmpuik8nND3Rh969fstWtsRou+Vm7TARrKeeRWg3gMO99iAMBk7ZO24y4yKXhtp2lzUQviSgRib0mtz0hbJ+MQ9zqmkMmne+D5UuOI714U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe; spf=pass smtp.mailfrom=rong.moe; dkim=pass (2048-bit key) header.d=rong.moe header.i=i@rong.moe header.b=KgDVsZiH; arc=pass smtp.client-ip=136.143.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rong.moe
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="muVRP6y7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774549507; x=1806085507;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Pbzsb8SVxCcw6tkDUDPIXM8P9aUDWuKvyk+NUid+ElU=;
-  b=muVRP6y77ZaMnpQrc19Lwu5za+p99pwMYShivIA6dRMtqWfzldB1hKJS
-   Z4omg6yI3qEu0j2fUmqYxG7OgAmUohrz1o6/drj0EOzVzknXQqo2TOt8/
-   Tkw4LReIvOfhfXQ4/HtLmCL07HofklZc+HU0SF3VbOqjnReo28rn4BsaJ
-   Lsgh5yZ9NMb3Orum5evyDq77VIXimQHRMmDFI3oHjmKSD+5tp6T1MuhQm
-   VZw5EunU1/JE9tYQ7xOKapZ2wwRHwf1c9jgEI/uYziCd6s6Sn0GFQT4M7
-   OPuII0erdi3gAAr5GtI4jtNlDDBj0H9rueygDQDkDTt10UCQnG9W9qDdE
-   g==;
-X-CSE-ConnectionGUID: 4fH/gkLxTNygWQIg6zgFSA==
-X-CSE-MsgGUID: Fs7MPLDyS6ibrjIizWF/yA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11741"; a="75816981"
-X-IronPort-AV: E=Sophos;i="6.23,142,1770624000"; 
-   d="scan'208";a="75816981"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2026 11:25:06 -0700
-X-CSE-ConnectionGUID: Hnc+D/PaRVyk70Nm9Vy33Q==
-X-CSE-MsgGUID: fkOPNCqFTOif2rV1d4ncyw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,142,1770624000"; 
-   d="scan'208";a="224141338"
-Received: from smoticic-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.216])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2026 11:25:04 -0700
-Date: Thu, 26 Mar 2026 20:25:01 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>, brgl@kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-iio@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (ina2xx) drop unused platform data
-Message-ID: <acV5_YSGKtlTa4hP@ashevche-desk.local>
-References: <20260326-drop-ina2xx-pdata-v1-1-c159437bb2df@oss.qualcomm.com>
- <acUJGHrJvWgqHxPw@ashevche-desk.local>
- <b692b3db-75f2-43d0-8b2e-c5a89b8ff5ca@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=rong.moe header.i=i@rong.moe header.b="KgDVsZiH"
+ARC-Seal: i=1; a=rsa-sha256; t=1774552946; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=YDewQ7Eisoq1w7ICnXrDNiGW1xG7q6WKfDNGaduCX7NteTcqc52vfb9G5YZ6gkVRIIe37v62WHKImyFnrfIPqNEIhCtfRWeadndLSu+WnwB2SptZxxV3MvYqUKeqT34Uhdmt6o4eFb+EJs7BlitLLevK8Wuy+9Mxy2N4grwNvHo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1774552946; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=5+utr8pYKvO3ZMksOXxs+qfptcs+4xumv9piq8O1JzY=; 
+	b=bVHElHwmwFkMQfTZ8WpuYN8L8AXULXu+xSejaULizpPNvpfjJzwXuMHR4wBRcCjphsRi6IZD+xRc//0vd8s+xTcFtItmnIQfdUiFr69yD5TpvAUiB81z5SmHl6TvbnMdVk2DaEs7OOmd8DQHxA7HqbyjkSYcO5zH9vz/Srkck2U=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=rong.moe;
+	spf=pass  smtp.mailfrom=i@rong.moe;
+	dmarc=pass header.from=<i@rong.moe>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1774552946;
+	s=zmail2048; d=rong.moe; i=i@rong.moe;
+	h=From:From:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:To:To:Cc:Cc:Reply-To;
+	bh=5+utr8pYKvO3ZMksOXxs+qfptcs+4xumv9piq8O1JzY=;
+	b=KgDVsZiHVKncVMFSI1Y+pNbSyE9f/nZhEJ/QWwb7LBtNJ6Y/qjYnVueTwoiOPRcI
+	HGRZDluJiYNXdkSTvSBA8EEAXKZf6Qk1/L93yH4KEXLtyeNrVBI+e1BPZLwbA0URCfd
+	daj+sB8j7fcZMdwK/K54rHItq0KHbEkgn+yp++/Ltt02fHpWpD4tLChqa/UaQ2XUZE/
+	KSjg5PdgYuIks1k2t3Ih+SJN1TUVm2emwzDfpbd8T7FtGYJBn2O4A4DBHhiiwLRFoGz
+	qUPMJOzcsw8614nXcUfmJV4wELbY35OBRrKc1xwsbHLvYnELF99flxgAARSKYbpxyto
+	9OKayk2Qeg==
+Received: by mx.zohomail.com with SMTPS id 1774552944999543.6591470391733;
+	Thu, 26 Mar 2026 12:22:24 -0700 (PDT)
+From: Rong Zhang <i@rong.moe>
+Subject: [PATCH 0/4] hwmon: Add WITRN USB tester driver
+Date: Fri, 27 Mar 2026 03:19:49 +0800
+Message-Id: <20260327-b4-hwmon-witrn-v1-0-8d2f1896c045@rong.moe>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b692b3db-75f2-43d0-8b2e-c5a89b8ff5ca@roeck-us.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANWGxWkC/yXMwQ5DQBCA4VeROZtkOpTwKuJgdVojsWQXKxHvb
+ tsev8P/n+DFqXiokxOc7Op1thGPNIF+6OxHUF/RwMQFZVyiyXEI02wx6OosdgVXpqKc+EkQo8X
+ JW4/fsGn/9psZpV+/F7iuG0ZJcYNyAAAA
+X-Change-ID: 20260327-b4-hwmon-witrn-a629b9040250
+To: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Rong Zhang <i@rong.moe>
+X-Mailer: b4 0.16-dev-ad80c
+X-ZohoMailClient: External
 
-On Thu, Mar 26, 2026 at 07:12:16AM -0700, Guenter Roeck wrote:
-> On Thu, Mar 26, 2026 at 12:23:20PM +0200, Andy Shevchenko wrote:
-> > On Thu, Mar 26, 2026 at 10:30:00AM +0100, Bartosz Golaszewski wrote:
-> > > Nobody defines struct ina2xx_platform_data. Remove platform data support
-> > > from the drivers which still have it (it's effectively dead code) and
-> > > remove the header.
-> > 
-> > Would be nice to see a follow up to convert to use device properties.
-> > But again, I already asked this Q: why do we have two drivers for the
-> > same part? (Probably not to you, Bart)
-> 
-> Because the person introducing the iio driver claimed that they needed
-> the iio ABI and were unwilling to create a generic hwmon->iio bridge.
+WITRN produces a series of devices to monitor power characteristics of
+USB connections and display those on a on-device display. Most of them
+contain an additional port which exposes the measurements via USB HID.
 
-Okay, but why did we allow that? I fell uncomfortable to bear two drivers
-of the same when the whole idea of the kernel is reduce duplication. Yes,
-I know that there are more cross-subsystem examples that we have IIO vs.
-other subsystem cases (usually in drivers/input), but I believe it was
-historical and for new devices I would like to have a stricter rules. IIO
-hwmon bridge is exactly for that and if it lacks something we rather should
-discuss improving that instead of duplications.
+These devices report sensor values in IEEE-754 float (binary32) format.
+The driver must perform floating-point number to integer conversions to
+provide hwmon channels. Meanwhile, they also report accumulative float
+values, and simple division or multiplication turns them into useful
+hwmon channels.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Patch 1 adds label support for 64-bit energy attributes, as the driver
+needs it.
 
+Patch 2 adds a helper module for floating-point to integer conversions,
+so that the conversion, multification and division methods can be used
+in this driver as well as other drivers (I am also working on another
+USB tester driver that needs it).
+
+Patch 3 adds a barebone HID driver for WITRN K2.
+
+Patch 4 adds hwmon channels and attributes to the driver.
+
+Signed-off-by: Rong Zhang <i@rong.moe>
+---
+Rong Zhang (4):
+      hwmon: Add label support for 64-bit energy attributes
+      hwmon: New helper module for floating-point to integer conversions
+      hwmon: Add barebone HID driver for WITRN
+      hwmon: (witrn) Add monitoring support
+
+ Documentation/hwmon/index.rst |   1 +
+ Documentation/hwmon/witrn.rst |  53 ++++
+ MAINTAINERS                   |   7 +
+ drivers/hwmon/Kconfig         |  14 +
+ drivers/hwmon/Makefile        |   2 +
+ drivers/hwmon/hwmon-fp.c      | 262 ++++++++++++++++
+ drivers/hwmon/hwmon-fp.h      | 212 +++++++++++++
+ drivers/hwmon/hwmon.c         |   1 +
+ drivers/hwmon/witrn.c         | 691 ++++++++++++++++++++++++++++++++++++++++++
+ 9 files changed, 1243 insertions(+)
+---
+base-commit: 0138af2472dfdef0d56fc4697416eaa0ff2589bd
+change-id: 20260327-b4-hwmon-witrn-a629b9040250
+
+Thanks,
+Rong
 
