@@ -1,65 +1,67 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7EAF2DB7BF
-	for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 13:48:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 290882DF144
+	for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 13:48:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774532914; cv=none; b=aSRq/EYYNzeVJ705fWwSBiJNSiUIXZYO3eQ4+mkaWky/uX8kq4buH8cUM4CndGVF+OGK9GRWlzyHZGDHCf3bEZa941ZVDHICyRn9jPN9Q8fHGsJHz7hhrSiF1ccnbCIgj+SNndsm1WKaIaUNdGFYu+nDefc8s89JRoKCfsniFh4=
+	t=1774532915; cv=none; b=DIOUJN6MoNcOzpEykS6fyI2IySoKvczjbXc9Jj8hgzZleth/QwKBWLFXEhafYYI5mOkhymJ9JPLF5ZoiDNIlKDScCPJ9oLomTxQJo3Vuk/P3FE2K5APs9V40rckCF68U//gBR8g/StTLUSrwWpDw2h0Bauu+enIUecdqr3412wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774532914; c=relaxed/simple;
-	bh=fkANkZGrlPyyPf87t+LAjl2jdK/qL0Ex3c77JETrFyE=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=rL5eFXPkWAlP8TA3KWiEbjwMSTB569yjXnyUZ/EGMunZIB94vA6mCm14ZPB+S/touQU3JTPN69zm2l1PG3CaJWkK5Upt6O673KrOQk9LaWk963qicoSFxnLLZDDMs2xMr1SI8IL5CH3zdwos3hSJ4He0jFO4IuvMjMAwXPKG978=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com; spf=pass smtp.mailfrom=inventec.com; dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b=D9MydwTy; arc=none smtp.client-ip=209.85.215.172
+	s=arc-20240116; t=1774532915; c=relaxed/simple;
+	bh=OGjx/rpqLanYJw8wyMx1GZX57lDgWW7QcL/E9ij2zVU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=lJQEoCC5YSiI8txB59U5cVRRweU8oU14gyHtszqJKxbgnmzFaBBW6SPeH6wDY6U2O50M7bjlqFzsAw1iq/CEl5SBbhTNhqXXQ4zDBYmBPHMlGeAMf+pqaSzPD0ndA9i6MKl96K0nw4NGVpXFYJNPjalySEO3ZczggZ+LUVsKDzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com; spf=fail smtp.mailfrom=inventec.com; dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b=WC5VkEcb; arc=none smtp.client-ip=209.85.215.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inventec.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=inventec.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b="D9MydwTy"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c7412b07f22so963255a12.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 06:48:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b="WC5VkEcb"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-c73a12af63cso741198a12.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 06:48:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=inventec.com; s=google; t=1774532910; x=1775137710; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+h3PhzbBEUuFG1BSZSLnovJIQ8tNsqLyZwY5UDDcc4s=;
-        b=D9MydwTyDj2CE8tQxaRsZUKh98sjs4sPVs+L2sS0gqTUJMqgH4Y+p9VXi98IDxlgYX
-         LZBSSUs2dmTDHcaIu+KSBqQPm37TuTfCMLYkLtX8UQocSciitxk2LP+PNPa+khzsCa/T
-         3w5QBva58/2Ve3n4ASw4CrOFhquUDC4kywgytBE4JoCHaCL7FqqQFQqNjlGrfKPnMxlH
-         GKjt/4bMnoBhUw7hYFMEjfkyCpQcU+5BqDi9d0W6CxAicGgGDIi+GIg0x1hgZnKk+M+H
-         w6o5utn6JpvB2wY37V805DoREx1Dd5VtniezougU3BrNA+AKoaOnB27MS/921haMMzS5
-         hJDA==
+        d=inventec.com; s=google; t=1774532912; x=1775137712; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z3ThBxdaxluBFioSVhIDwm332ADtoHWnIdue1Mw0j4g=;
+        b=WC5VkEcb3HIhTvxn/MGV5pyeJeaGr03Vabi9AEBf/90bwlU2pGyvvFofsWb0Y/w3zC
+         wG1f9RgF0JRVYvvqr7UdKig7cH8Cy3QO+BtrsdoOS9/iJOAnxSQc/OycMPDBRgeSrDv4
+         sq3eHhlHkDZ39+omqWy2TSgYBLqTspjMiiOhCc7gsTgdtUgWAoZ8wgc2ZIL+MyvnUINS
+         ZcRmpBVcIpGUAILIaaTnqBt7XJB0SnOZepvDet8v0sJj+jQgwhmszRemQpCsoTGZ+Wm4
+         SetyflaVZCPYybVpSr9FFhTl2zch8iwovNRvvQE1yP3df1eIrTDw8eyOCS5FRMsXmepg
+         4CYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774532910; x=1775137710;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+h3PhzbBEUuFG1BSZSLnovJIQ8tNsqLyZwY5UDDcc4s=;
-        b=mYx+66jiHsgDfCfbPGedWlHpbJIDv4mTAnBXWsxn2d9y3iSBTDU5yCTN+JDk6G+b9J
-         fEBd2dOWW3Fo93DCaSRFMZmbUXE9PyGi+ouoKefIW3BjiRtzHyTshJ8kkHEpx4FIIwKv
-         A94vCAU+iy2SYyqJP2n4rnk4DTH7PkfJ62kofiB++z1zncq7+10OIeTgomOAxWbASLxo
-         Swi1Vz0ZOYooyUxmBs1XZkoghGl9eXmIZ+4cDFwZI5n13qFy+rK2MysDouyHnKkhV+5g
-         6GZGhGFH9nkl9t3gt6ricrSq+tW25DODy/FGW2QaofINzBgEgazRI8YOjEqKsxovAJxW
-         WLZw==
-X-Forwarded-Encrypted: i=1; AJvYcCVa7MmvrIEvPFLcUQPnkZ6YxguqR/jxQtfTz/FlPVrzzNh17a+ggHw9I/GPFh74naMOoS6fRUdyGbKz5g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVJOgtrUhHEkYy+W6fVnk5dCVEwgJ69By3o/lQ63rXWhfeV7J4
-	JXHFTkMghfJd7wFj6hFLT072DbxuPSJ79FP1lne6velK6xwYpYMXDKxUNulya0Ch88s=
-X-Gm-Gg: ATEYQzwiWWNdIMbifhdeDO0f4CimXSr9M15OxAnejrEwTRME5cnXw5+LDdKyFOL/1W+
-	k+eSX5wAaRcaKwgMzPPX6mrQ2IVq3/LB9SmQKCl1VmrLDyQEN6FrUn/h6tmI2XwCIDdT18WjvyQ
-	pap7/wpXim7d1KcLI4aO4KWOhT0gjuNQwEEJlkU8tbXOkDKt76Ufl5eHlmhOWukPO9mslrAQmCp
-	7N9+lz7l1gMNf77khpQQCidjEytt5+P2v6dkuPlDX5xuIE8uaNCWfleN6bPg/bIEPOJulXBL5+W
-	+bR2+adVrqSdryxmbw94S4vXIIxkzX2qzZ7icZ/fn13Cx9GzVekOhVD6fiMxccG9EMHJvBxHh1K
-	zc50uAGpbtn9N8s5TXTp5D+zLD4GgN1+13SmkeQy6KND2dd6/+vERoKwIcmeVBI/xXdyA9/AAJm
-	enVuJpH7W23MHXM/2/KgYbeYovzUky373yUXWJoO4c+PWLGjiGOGB5eKw4o+R20kM=
-X-Received: by 2002:a05:6a21:339e:b0:39c:5952:eab8 with SMTP id adf61e73a8af0-39c735564dcmr1832586637.15.1774532900411;
-        Thu, 26 Mar 2026 06:48:20 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774532912; x=1775137712;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Z3ThBxdaxluBFioSVhIDwm332ADtoHWnIdue1Mw0j4g=;
+        b=C2whmhToQvUbhvzaVx1XKCtcdWvgEiS6EHobOBmwLqZYzjw3gpyq8WeUpw3Zbro8aU
+         /SrNfvWwl/Xaz7crHaN+Ckh9Qkp4iV1SNlCTLx0LofVC1dxcrjq+vDP3XXePDN/qg/c1
+         G8bC5r3VS2WDrtRNItToB9/VupoTLbseK/Tho0nq6P/JRrNDkjK387v2BSwP6rUPGmd/
+         Vc2TieWOimXXSwmipPt6ys6Df2DlbcX9UIeqvWizBCv4NKv9kX9DbBRw9jzEddtNuQ7S
+         Q6uUS3VGN9rVUPOzTiEOFmULS7LKpBAY51CZ482YTX19PVAtus/0VvLUI3h2s9N5RYWJ
+         JXwA==
+X-Forwarded-Encrypted: i=1; AJvYcCX2Ayx9V2BMw/1ZNCRWhiULpH++xfJ1dpdSL3nSsomHbnpLP8xgX1Pr8UBacG518HQFNCACIJua/TWWOA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpUHoAGWE0WXwe8SX3xikiddjY569ehMgVwHSiry3GrIoJj1sI
+	ArIwTsxHYL3JLawmyVGfrv9TmxwwykyqCdlk3irqe7cubuV/AywJUxTdfa7LpQ6tovI=
+X-Gm-Gg: ATEYQzwodlaKarK9AM5iMwW8Z4xGQydcKSL5Xapb2rQaIcaOzVpHSHmwUvInCs/PAL3
+	CdI58NcD6Qmzqzd+90SIsvMimPaOXwUBTfrk7WA5nGwGjTMziK5BxlmnJT6Zw4zBG8na0xpdtL8
+	1Yz6rQFXnfzuWFrHxffKAD6ZG6A0rTn8nkLaIGqEcHK5Q9/R0+Y8U+z9F9u2RlIDoIzeA3FLi0U
+	TeQOo7ko7CsggE/bPVT6zUAMupvOXErJvGZYRr8sye8i8XRqdgOUjFGFrgz8p1EB7h1aAIyfHXT
+	r22EdBXnaCMCuMpoWKLlIyH8vwJ5ritG4b80bqUtKoNYY0kK3taIbc78+Kzu2+aZGmD69mZzRQe
+	36mKVaXhMfTycWOfnfxQUirCXD2L28wHCeTs6WuTn5CX4KYDWWP25iJYOjRhqkTV9BlsJX9kOCP
+	zvbhzVOyw4apZ5YG+G/kDaEvaP0G9MDezQWJ43RdYsArNfSWpHvkpPO3YUmUPVhe4=
+X-Received: by 2002:a05:6a20:431d:b0:398:89b6:1b3d with SMTP id adf61e73a8af0-39c4aab87e8mr8369489637.17.1774532912549;
+        Thu, 26 Mar 2026 06:48:32 -0700 (PDT)
 Received: from [127.0.1.1] (60-248-18-139.hinet-ip.hinet.net. [60.248.18.139])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76737f28d6sm2706683a12.6.2026.03.26.06.48.18
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76737f28d6sm2706683a12.6.2026.03.26.06.48.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Mar 2026 06:48:19 -0700 (PDT)
+        Thu, 26 Mar 2026 06:48:32 -0700 (PDT)
 From: Brian Chiang <chiang.brian@inventec.com>
-Subject: [PATCH v2 0/2] Add support for q50sn12072 and q54sn120a1
-Date: Thu, 26 Mar 2026 13:48:04 +0000
-Message-Id: <20260326-add-support-for-q50sn12072-and-q54sn120a1-v2-0-77bc77eedc76@inventec.com>
+Date: Thu, 26 Mar 2026 13:48:05 +0000
+Subject: [PATCH v2 1/2] dt-bindings: trivial: Add q50sn12072 and q54sn120a1
+ support
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,10 +70,9 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIABQ5xWkC/53NQQ6CMBCF4auQWTumHUWoK+9hWJR2kC5socVGQ
- 7i7lSO4/CaT96+QODpOcK1WiJxdcsEX0KECM2r/YHS2GEhQLRohUVuL6TVNIS44hIhzLZKXJBp
- C7W3heacun8qQUnyxrbRQ9qbIg3vvrXtXPLq0hPjZ01n+rv9UskSB5tQ2vR4Utaa/OZ/ZL2yOJ
- jyh27btC9kKL0nlAAAA
+Message-Id: <20260326-add-support-for-q50sn12072-and-q54sn120a1-v2-1-77bc77eedc76@inventec.com>
+References: <20260326-add-support-for-q50sn12072-and-q54sn120a1-v2-0-77bc77eedc76@inventec.com>
+In-Reply-To: <20260326-add-support-for-q50sn12072-and-q54sn120a1-v2-0-77bc77eedc76@inventec.com>
 To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
@@ -79,62 +80,42 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  Brian Chiang <chiang.brian@inventec.com>, 
  Jack Cheng <cheng.jackhy@inventec.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1774532898; l=2270;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1774532898; l=1150;
  i=chiang.brian@inventec.com; s=20260316; h=from:subject:message-id;
- bh=fkANkZGrlPyyPf87t+LAjl2jdK/qL0Ex3c77JETrFyE=;
- b=QKSSsi0U06Lyy2yupRpEXwso8Uj+nschuIGsT4CNzi11AkUy2lp8bG+pGv4Ri32gd0ouUv0jX
- 8gIek8OSF38BfYKUdxawPHq0WDE2bLCPkOmfkQ8TOCGJ+WO9gTqygKa
+ bh=371ndBFO++Ux/UDUOyIuv35ZzqLJAZsYGZPm32hIp6Q=;
+ b=kzY0BZ4Awp0H0lRYVHYxJA89fVy3ZtAa/yor3kfP09ZJYPDG49MISRxvOsOsKQTaOmTMAVR0E
+ w8LNo1JNziiDOoGJWLt+6k3sBfd5s/yIY5VQ/kI1gPA4WjTEkXCSIz3
 X-Developer-Key: i=chiang.brian@inventec.com; a=ed25519;
  pk=q+NqJYuJbGpA9KS9941D7f+8PVVW+k7DvaGgFykBiUc=
 
-The Q54SN12072 and Q54SN120A1 are high-efficiency, high-density DC-DC power
-module from Delta Power Modules.
+From: Jack Cheng <cheng.jackhy@inventec.com>
 
-The Q54SN12072, quarter brick, single output 12V. This product provides up
-to 1200 watts of output power at 38~60V. The Q54SN12072 offers peak
-efficiency up to 98.3%@54Vin.
+Add support for the Delta Electronics q50sn12072 and q54sn120a1
+1/4 Brick DC/DC Regulated Power Modules.
 
-The Q54SN120A1, quarter brick, single output 12V. This product provides up
-to 1300 watts of output power at 40~60V. The Q54SN120A1 offers peak
-efficiency up to 98.1%@54Vin.
-
-Add support for them to q54sj108a2 driver.
-
-Signed-off-by: Jack Cheng <Cheng.JackHY@inventec.com>
-Co-developed-by: Brian Chiang <chiang.brian@inventec.com>
-Signed-off-by: Brian Chiang <chiang.brian@inventec.com>
-
-Changes in v2:
-- Drop Q50SN12072_DEBUGFS_VOUT_COMMAND debugfs entry
-- Add .format[PSC_VOLTAGE_OUT] = linear explicitly to all three chip
-  entries for consistency
-- Replace hardcoded MFR_MODEL check (ret != 14 || strncmp("Q54SJ108A2"))
-  with a loop over q54sj108a2_id[] using strncasecmp to support all
-  three chip variants dynamically
-- Remove of_device_get_match_data()/i2c_match_id() early chip_id path;
-  derive chip_id exclusively from MFR_MODEL hardware read
-- Remove unused .data fields from of_device_id entries
-- Guard store_default, blackbox_erase, blackbox_set_offset, blackbox_read,
-  and flash_key debugfs entries under psu->chip == q54sj108a2 check
-- Add dev_notice() when configured device name differs from detected model
-- Update MODULE_DESCRIPTION to "PMBus driver for Delta Q54SJ108A2 and
-  compatibles"
-- Fix commit message typo: "Q54SN12072" -> "Q50SN12072"
-- Link to v1: https://lore.kernel.org/r/20250701-add-support-for-q50sn12072-and-q54sn120a1-v1-0-c387baf928cb@inventec.com
-
+Signed-off-by: Jack Cheng <cheng.jackhy@inventec.com>
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 ---
-Jack Cheng (2):
-      dt-bindings: trivial: Add q50sn12072 and q54sn120a1 support
-      hwmon: (pmbus/q54sj108a2) Add support for q50sn12072 and q54sn120a1
+ Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- .../devicetree/bindings/trivial-devices.yaml       |  4 +
- drivers/hwmon/pmbus/q54sj108a2.c                   | 97 +++++++++++++++-------
- 2 files changed, 72 insertions(+), 29 deletions(-)
----
-base-commit: f338e77383789c0cae23ca3d48adcc5e9e137e3c
-change-id: 20250701-add-support-for-q50sn12072-and-q54sn120a1-a9c299e6d81d
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index a482aeadcd44..d4b78154df82 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -96,7 +96,11 @@ properties:
+             # Delta Electronics DPS920AB 920W 54V Power Supply
+           - delta,dps920ab
+             # 1/4 Brick DC/DC Regulated Power Module
++          - delta,q50sn12072
++            # 1/4 Brick DC/DC Regulated Power Module
+           - delta,q54sj108a2
++            # 1/4 Brick DC/DC Regulated Power Module
++          - delta,q54sn120a1
+             # Devantech SRF02 ultrasonic ranger in I2C mode
+           - devantech,srf02
+             # Devantech SRF08 ultrasonic ranger
 
-Best regards,
 -- 
-Brian Chiang <chiang.brian@inventec.com>
+2.43.0
 
