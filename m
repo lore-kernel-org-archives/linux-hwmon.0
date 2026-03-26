@@ -1,78 +1,59 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1288737757A
-	for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 14:12:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 097B73624CA;
+	Thu, 26 Mar 2026 15:05:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774534346; cv=none; b=KQjmJfAVaMCJpkOCdl8aGiKKuQj6T5cL6hXsopsqSYmKP0AUBRwgCL48uFQpRMmzfMc7yRnU8jwd8K7wsVHb88CWWNPVBt01kpAmNOcNyUjD/czvFSEickb6y/RlXH4vJVc1VfBNO6rRWNNUH7Qhr2JRDER5hl74qrR82POJ//g=
+	t=1774537507; cv=none; b=YXLZlrHIQr+D76lWaRArDpyBHYSw+7o2cPLJtwQJgJJzDlWAxAHOD1bP9z5M1ZPkCKeMlAJyn4Rn01vz41w9t5Xh2mp6Q+P8Xkb119H3i+p3cUrR188pc3QlnRrWCZ5iTPwjxex6k3V5tNh0FTT39Q1FY2aTEUjYjAzrN/8bhrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774534346; c=relaxed/simple;
-	bh=6cZ3vxxb0pI4C+y16nBc6h8C4ywhozxBzEV0QFhCG7Q=;
+	s=arc-20240116; t=1774537507; c=relaxed/simple;
+	bh=pM2qPJP0N0ADDCsOppxXwTkoZA/x2DQWuP5hXPmDSj4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TxNKMv6omfVVPVtBFgiAdZrX9BLU6EOo0RO1cBJz4vvAjPD+nh6v5Hx84WJNoqo0sHAfEWpAxUNNPRT3LYAqVba0sV5Xq1t44hUpqSPOLSNiyKjoxRHvi+8Yplk+MTvcxijFj6glUxHOkfkZn8RmkgjyxnoLnMpQEOEQWBZbsKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M8tc/iN/; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=h9fia93GgoAsruzOByEQAfYCXRnKmhrOBIsuwWWICmDuXOYLbGlypAzQmEuuUoGgZQ34ii0tnOvulkqiyr6gGaW1VALylMw/d18Jk4izntaCajzeHI5Mr5iVbQg/xO3GGq0Fv7ctce+jKMW7ezZuUXV/LVWGF5lGqkRMsMH1gYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=abog6Eds; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M8tc/iN/"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-354a18c48b5so991630a91.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 07:12:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774534338; x=1775139138; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WQ6aUbygurrGv5Eht9Bc31IiCSe4V69xfJ6COF2gWAY=;
-        b=M8tc/iN/1hd9TaqDFGlWg8lAGk8OTJ0yXdLCkrtgJxru4UJCBkPwXEogu068iB+jsU
-         cMPpm05JtXVrbfNa3eAjh5gVvqEbjJ4GPORNbA0FXvtxvaC5lJB1KAXrMRRdpnRdSzPF
-         eRgvdI2UcK0w+1AAdG6XhKHQQIAY5er5tKuYFRmj6VZW5FUPGXVSiaYlw8bs97TiSRV1
-         cLneCX5tvpoPH6wSSi8qjITmVbCtvfrGzL2TIzoBQt2LoX6F82Cn79/TJy023VpWv0fY
-         0pIOPR6rDNHqzNBVbtp/5AB8D2s6T1U6fpwXNhRYzooiJ0rDnxRHwdBVc5rp6nm+UO9g
-         1pwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774534338; x=1775139138;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=WQ6aUbygurrGv5Eht9Bc31IiCSe4V69xfJ6COF2gWAY=;
-        b=cQeXepNwehDJxVmjsC/pc6p4QkNVZ8LDdgC02/kU0An30HJz/bsY7aZ2UevTEuREdG
-         eCfwu1iBhXcq8sBHbagkf8rXkZ6tA1G9mA+FLy+oHAQfdVJgA2V7olPBfxHfqza/B86O
-         VExuZgYJpfMjqJusPodwFeAJZfHcrPAdiVcz0Ck2n/ZGUrP54GvESxgpLR5MJNsTJJfG
-         DdC4LHReqS14teVsOZki14aGAWKVUNehJLE05lcNfO+WkJPNFxqb6XtvVppETPsrY5E+
-         ner6VF754Lg5eMGjB7EhyD+uJEdQ6EXHMshjffGnhFgNA/5WT8pkkG1BnPBx/ORo4ULM
-         U+Hg==
-X-Forwarded-Encrypted: i=1; AJvYcCUSITsevQvlG20h3Ai2vdKNCGZCEyBZkzFZHh3i01kfA04w2+MT1UgIkD+yay6gOkH+wFegDuIXNn8dmg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqpytgrXs+wzuPjIRdevBuXJLrSrcfcEbr1afNXqCqDkQXaxb2
-	L42m6JMx5i4quEiVp0rtU2JJhmNnJA14NKsZaoQIUksyS9l7CrvHms6Q
-X-Gm-Gg: ATEYQzzejiD97xc7fctcGadVrinbIuQ7iq+bABuskNSAr0McApVyxyZY0cs5s5OuLn7
-	ZU902qYgBhRPwGwcbm5yiIYpyylp5mPqO6XB4SwvhsSjHl8WgZ8h5hv1OL/Y3PVh9CTBeFVBOlr
-	U9yea+hG/p5OsGCoEMIXWHqK4K1r4KP12GUbCvQviJVJ1Vn1XG8hiXPnlA6dWD6Kl1Zwhuq9BIQ
-	VROk2KRiANePH0rV26sZkuh4qdZZVMbckp9JQnYum1SBrPkL8SOaaAKQsrKB25K1chRhmB9ZY9K
-	o2KzM6Ci13qJtC1SguIw3/e9RXc4TF/VeZwEULoXkdt0gnZsVSJqcQ/iMQ26KlQcUVlQeBE/KEB
-	IhqADwoluvtiDN1s5TsuQbOeX8SXkBBGBaKS5YXmkSFUswVD+yQ5hZA+lm0k8gg5i3RG+y2tfye
-	KoI1WTsilIpgyS/TsQ4DLSnTGYpiWoyrq7S1lE
-X-Received: by 2002:a17:90a:117:b0:35c:f44:c01d with SMTP id 98e67ed59e1d1-35c0f44c0ddmr3937423a91.8.1774534338196;
-        Thu, 26 Mar 2026 07:12:18 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35c22a7b110sm2468500a91.5.2026.03.26.07.12.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Mar 2026 07:12:17 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 26 Mar 2026 07:12:16 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>, brgl@kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-iio@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (ina2xx) drop unused platform data
-Message-ID: <b692b3db-75f2-43d0-8b2e-c5a89b8ff5ca@roeck-us.net>
-References: <20260326-drop-ina2xx-pdata-v1-1-c159437bb2df@oss.qualcomm.com>
- <acUJGHrJvWgqHxPw@ashevche-desk.local>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="abog6Eds"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69651C116C6;
+	Thu, 26 Mar 2026 15:05:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774537506;
+	bh=pM2qPJP0N0ADDCsOppxXwTkoZA/x2DQWuP5hXPmDSj4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=abog6EdsAq6OJFP0NMkHKKgpox06HvO++xGDNqtPH5yVn5RhV0F9JeCLrGrSTOJ3u
+	 OTmLCfzJxb3413mKiR4n0VFIfv93CclcwtzZd+gU0mzRLBTYOPs37wXStTDSqieKb/
+	 awY0n2lRKCZlAdRJFqN4g+ZMLpwEnpT8fXpwyqkJnL5xS0jjIWH+Kesugl2qJIqWxE
+	 WQAl0S5mw7a48J09F+dDl/cedMmCcW7HZ1O+KUmQuxE2EE7tnps9H1N5FNS9Mb/C5f
+	 rtlzzhQEfmh6OLvPkmKnuBYlQJImiSyfPEqrH6uP2CqVfmip+lYA/i+CpmDkmvrETW
+	 UL8QqDqV0upGA==
+Date: Thu, 26 Mar 2026 10:05:03 -0500
+From: Rob Herring <robh@kernel.org>
+To: Conor Dooley <conor@kernel.org>
+Cc: Akhil R <akhilrajeev@nvidia.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Frank Li <Frank.Li@nxp.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Fredrik Markstrom <fredrik.markstrom@est.tech>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Thierry Reding <thierry.reding@kernel.org>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	Suresh Mangipudi <smangipudi@nvidia.com>,
+	linux-tegra@vger.kernel.org, linux-i3c@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-acpi@vger.kernel.org, acpica-devel@lists.linux.dev,
+	linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 01/12] dt-bindings: i3c: Add mipi-i3c-static-method to
+ support SETAASA
+Message-ID: <20260326150503.GA2360967-robh@kernel.org>
+References: <20260318172820.13771-1-akhilrajeev@nvidia.com>
+ <20260318172820.13771-2-akhilrajeev@nvidia.com>
+ <20260318-tweed-herbicide-eb924ef056b8@spud>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -81,19 +62,75 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <acUJGHrJvWgqHxPw@ashevche-desk.local>
+In-Reply-To: <20260318-tweed-herbicide-eb924ef056b8@spud>
 
-On Thu, Mar 26, 2026 at 12:23:20PM +0200, Andy Shevchenko wrote:
-> On Thu, Mar 26, 2026 at 10:30:00AM +0100, Bartosz Golaszewski wrote:
-> > Nobody defines struct ina2xx_platform_data. Remove platform data support
-> > from the drivers which still have it (it's effectively dead code) and
-> > remove the header.
+On Wed, Mar 18, 2026 at 05:31:50PM +0000, Conor Dooley wrote:
+> On Wed, Mar 18, 2026 at 10:57:14PM +0530, Akhil R wrote:
+> > Add the 'mipi-i3c-static-method' property mentioned in the MIPI I3C
+> > Discovery and Configuration Specification [1] to specify which discovery
+> > method an I3C device supports during bus initialization. The property is
+> > a bitmap, where a bit value of 1 indicates support for that method, and 0
+> > indicates lack of support.
+> > Bit 0: SETDASA CCC (Direct)
+> > Bit 1: SETAASA CCC (Broadcast)
+> > Bit 2: Other CCC (vendor / standards extension)
+> > All other bits are reserved.
+> > 
+> > It is specifically needed when an I3C device requires SETAASA for the
+> > address assignment. SETDASA will be supported by default if this property
+> > is absent - which means for now the property just serves as a flag to
+> > enable SETAASA, but keep the property as a bitmap to align with the
+> > specifications.
+> > 
+> > [1] https://www.mipi.org/specifications/disco
+> > 
+> > Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> > ---
+> >  .../devicetree/bindings/i3c/i3c.yaml          | 30 ++++++++++++++++---
+> >  1 file changed, 26 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/i3c/i3c.yaml b/Documentation/devicetree/bindings/i3c/i3c.yaml
+> > index e25fa72fd785..1705d90d4d79 100644
+> > --- a/Documentation/devicetree/bindings/i3c/i3c.yaml
+> > +++ b/Documentation/devicetree/bindings/i3c/i3c.yaml
+> > @@ -31,10 +31,12 @@ properties:
+> >        described in the device tree, which in turn means we have to describe
+> >        I3C devices.
+> >  
+> > -      Another use case for describing an I3C device in the device tree is when
+> > -      this I3C device has a static I2C address and we want to assign it a
+> > -      specific I3C dynamic address before the DAA takes place (so that other
+> > -      devices on the bus can't take this dynamic address).
+> > +      Other use-cases for describing an I3C device in the device tree are:
+> > +      - When the I3C device has a static I2C address and we want to assign
+> > +        it a specific I3C dynamic address before the DAA takes place (so
+> > +        that other devices on the bus can't take this dynamic address).
+> > +      - When the I3C device requires SETAASA for its discovery and uses a
+> > +        pre-defined static address.
+> >  
+> >    "#size-cells":
+> >      const: 0
+> > @@ -147,6 +149,26 @@ patternProperties:
+> >            through SETDASA. If static address is not present, this address is assigned
+> >            through SETNEWDA after assigning a temporary address via ENTDAA.
+> >  
+> > +      mipi-i3c-static-method:
+> > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > +        minimum: 0x1
+> > +        maximum: 0xff
+> > +        default: 1
+> > +        description: |
+> > +          Bitmap describing which methods of Dynamic Address Assignment from a
+> > +          static address are supported by this I3C Target. A bit value of 1
+> > +          indicates support for that method, and 0 indicates lack of support.
 > 
-> Would be nice to see a follow up to convert to use device properties.
-> But again, I already asked this Q: why do we have two drivers for the
-> same part? (Probably not to you, Bart)
+> I really am not keen on properties that are bitmaps, why can't we just
+> use the strings "setdasa", "setaasa" etc?
 
-Because the person introducing the iio driver claimed that they needed
-the iio ABI and were unwilling to create a generic hwmon->iio bridge.
+If this comes from a specification, then I'd tend to just copy it rather 
+than invent our own thing. Obviously if is something structured 
+fundamentally different from how DT is designed, then we wouldn't. But 
+this is just a simple property.
 
-Guenter
+Rob
+
