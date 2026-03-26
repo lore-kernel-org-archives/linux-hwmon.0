@@ -1,74 +1,76 @@
-Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05333399006
-	for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 23:41:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BCDD387353
+	for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 23:43:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774568515; cv=none; b=EcOZXPMNBtF8+MFcVghmDYrFYjTmE5EjLo1MMaA15Fdw1rEHYaFL4OtHnZEzJfwr/RRkTpXfr/vvbX62f8fADksR5N2LpwdoIEQyyTp1d0kp9iuYfrdoID2BuyipiaK9vlBT1yiCp1q/HhAQ7DKw+n4kvXwT3hCDpndQlr8DcNo=
+	t=1774568586; cv=none; b=oDSkrNgku8sUJJBkseBJB6A9bE0m3AocE9fSfPVJtLxL2Vf59uChODLKV/tP72iG+3WDjHNN+zbBEPXLACaNbqf0GmsK/NJe8cokwUhpUOEgZ05iw7HOFMQLxE+l4vspywpwCa9FnLWFdsr9u1+ExAenXDleGtApHmWzikJ+iMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774568515; c=relaxed/simple;
-	bh=wLNVqqkgkjpLh02zN69TDkswZC8LrMPcqkNu3Wz8xeM=;
+	s=arc-20240116; t=1774568586; c=relaxed/simple;
+	bh=vB0ydX+eG4BaRyIca4/G0Hvvsf9bBHfPNfaaxXnWFpE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MI8kQsGBz8tkL+UpFNpJuw+w3qbyMrhSCoW7oNNGoc3gvzgKVQ/wfNBqd96qGDucVkoYCs+MnKRvHPgPGPRpwelIsaljW5iDy+ldVB7W/Olks61M79aigL3wu+eoPANQqmgQbYTwjSsb1XTYM4Yr/ScLXfXWAboXqN5tyJmHXUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TJaR9D3v; arc=none smtp.client-ip=74.125.82.52
+	 Content-Type:Content-Disposition:In-Reply-To; b=S0nw3FmIcSBk9JbNFfTgTF6q3L00nsBB/MDr9931l/fRjD64JKaoRkQHHdezIxZbybRhY84WTGjVgPwOPIGMCgPsrK0F0k/VbzsDX8Vva8ziodEcjiWSXkAbwnz8FMnIdcfEtOLbzxrGl1RcMS6G7bWjTLp3En7+HYAAlynEikY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qbOOF+CW; arc=none smtp.client-ip=74.125.82.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TJaR9D3v"
-Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-12732165d1eso2460499c88.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 16:41:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qbOOF+CW"
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2ba895adfeaso1732377eec.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 16:43:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774568513; x=1775173313; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774568584; x=1775173384; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Fjpw0XE1POB2xyzzpU5ngJZ+3VRiymuSVObA/a0MFa8=;
-        b=TJaR9D3vgjvzvctMZXbb5KB+MLpbdlX9/bZu6FTVStkC7fmIv390squBP5nrPvzYEG
-         iY3hMxSyEpLh4gUoqEQ6Y/48pkIflG4YyJ04Y0jrtYXL4s9aI4bE2CP1M2s0EqkFkKZx
-         HQZKBKva0gehn2GMvKuJmQu6ceYjOt20Vws2Pn5wj5LYBWZCawtp2kvnaK5x6pIgIbZG
-         WH4mDftWTkBMXEmgjW7Ak2vuJGDtQqBVlQ1RCVQ8QJ1EiGb7UtLC0FhRbyl9IO0qvT2t
-         HWYEZrST57BW11udpTcjLItSoa4FL/hc33pZ7Ub17MWRelKYAT1LR3oGn/27nu8R67CC
-         0A8A==
+        bh=b0fq2X7bSFhgpO5BzfqYdwn61zCNsu/ZvDF4WiBUP3U=;
+        b=qbOOF+CWxP36d7mhy1ObfTRR9RJQJHCJL7jYCx3iHKvJn0bPBRT3+UUdeWwDYiGQ4T
+         /6ZQOQQRvkeGUnbb7JR/XJly/9IoriWP4NfKtnRiadYGfJ5rQIlMqymbrf683jNrZGxm
+         s6LkjGsQAI/AnuEyzM38omxi/dGJ6p45CzN6kSoKHs7PxWFywojHodd6n0e/2xE0k8U4
+         AcvGscXJeFrhVpnIpdMCGEA44JOwpEZZHRppe+wCF/fT7IvEkafPdamSVS3LjmEExv/u
+         NCfm4KFupSKb6VVQ3JchfeeI3dfkVcmuSBJaPfew0fMEI1dsaoj+ya2Vi11pHerJPOrx
+         Azrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774568513; x=1775173313;
+        d=1e100.net; s=20251104; t=1774568584; x=1775173384;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Fjpw0XE1POB2xyzzpU5ngJZ+3VRiymuSVObA/a0MFa8=;
-        b=VZW2/ZALOb+L7tFwkKlSv60hcQUmFdFUMpmG8UepD0Tr8e5LKLNIysS9bNMXIdtHNr
-         /uvA+L7iR+pi9vSvUBBrg4Y3I/OoSGhIIrhHo6pMIV9VtM57IyuSu07/HMIdJEKpzRjW
-         GYF76qHq+69TG9do6tnK9eIy3TGTDUqA93vQ84kTCJotlw+kUUGbVEFhezgaVZ0eaNWz
-         d0c3IB+7hJRSk6xNMUkmuFayvNYvUOy726oYqCwbQEbqtmkVO0sThA5/uuyHUbbJCHnx
-         fDYsr+Q3LAKH90335xQIADY2tw8+FmrCbcVZKXybGaQIq6MEa3ZvBBQhtVllhFRPNFu4
-         ladg==
-X-Forwarded-Encrypted: i=1; AJvYcCXTtLQRG3TvCLgTKLISFmD3IlLGTSlR1D4urnENfa99gK7JSjrTH7Jukw7LqwnZ+PrIx5VqMDI8HX3pnQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxwwwmai06XKTGdIWCBny44pVNhc6WT9RkugUBqRxwYL+S3XYyc
-	n6PX99rPLfGxDTi/FzcPjUOoYPlK5jtnLroEWqFTNJdw4qZg+nD9rE7M
-X-Gm-Gg: ATEYQzz9Yks8uiALFaRgfPqUfTRzRryf+6IPWWq7y74W0hXPZeOP2rHRUfJeyaTgS0g
-	ZXfJZZeKV4IN8flBIpPubJAZFXcY843R1+cvlweJDXOir2og9VVFiJV35Q8IuL0JDjJqMJdUhdt
-	ukAKFqCd0KelmSCoE9bTaTcnXchqQ2D4ybyy6VSDfFUrwgf6vIPf8dya4o9RPwZFnvxw9gJmRTT
-	yk/NFIkBHIB9VQvGVwzzCgYSM/6skcFw4ouDuBjpTS8M25yEwvzoYCVqUsQ86wdW7N+zru6zddU
-	rJxaOBbu3S8rKRrqKs4MJWuDFjsaKQCK98Ybv+XNH016xCAjK/Qd/Dzixo79YX75eYZHEAiwW5B
-	zVD+H2Oq5mywy5/qlK5ALcH1kXj5t5/8/k2B1ItBfPXvGgMLHUpkkElh3/6WpsZalCGjyLlmU/C
-	kLcETqseQErh5MvJ3vhhj4OqQSzhd2k+faPObUsXP4yxJbT9A=
-X-Received: by 2002:a05:7022:6706:b0:119:e56b:98b9 with SMTP id a92af1059eb24-12ab28eecc9mr249743c88.32.1774568513055;
-        Thu, 26 Mar 2026 16:41:53 -0700 (PDT)
+        bh=b0fq2X7bSFhgpO5BzfqYdwn61zCNsu/ZvDF4WiBUP3U=;
+        b=GyuYVPoRPoL+TpbYeqC7I0UdrYuqzmrA+dSB7PTXAuECuetIASRNWzYGxVKaNiZoQM
+         QRyhw01XODHxO6LxCI6BkwYRZlZTbWVt5MPhNGHfVJZ9pATDBJ4vWCA+2ROFkk4bcQvO
+         Z6FBAe+RpWtT7iqUmjn9gLVOoSE9eyR2JK8y+xmhZHWhRGlZj6L6L0aXsukUmuOMo3B6
+         fMHMFLkrRcXgQ4CLf0d0+B4DfaBSDU2c0S2mDWwglGhowrV69oG7KUG9z683G2zjpEXi
+         bIeL50N4SdoPymdrAA3EO44QY/2WFOSPQUCly5bn27BctCOtWa55Z+DJv3V2uB7aw/x2
+         EEmA==
+X-Forwarded-Encrypted: i=1; AJvYcCUKmbYHbi4wK2kpak5yNKyR8QPW6SNygS2D8WOU20relOYMSvkgz7IxKSWNyhZ4IJxeAKelawgyvRJSeA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxRygE3Ngtn0BLm7O/YSIqURM7e4tAWmPb9xcP/RzCuLXijDDg
+	8HsKRWSN9klSRzJA5ne4KLOd4ioJmIBX97+V1nylea9yju8JZMXJT6FD
+X-Gm-Gg: ATEYQzzWd/Ps3fS+O7F3QAfPzHDRmnJ3s3zbSl3lvVBuEc8/DZVp6+2ONuy0XrXCC+D
+	RcjdYGj39F1MwnhZwUUHwJhiY974F6xRjEpw1ytOqHdbwbNc6UeiHaagso/OuQxWAlLbKGfX8Q1
+	Wlw/P9lKUmab6g/4nvyzYt6xp9VXOiNTARsTrNc9NjxD+xGzsmqXC8AXJiq5cwIDF2b9Q4PwgGz
+	OWFJMGcvmwdV0QmYFjhjS8xZuXcdbmpNk1VFnbyWw/EZ30XteYvsikZteOgJRVen7k3NaOLpVK1
+	ZQDaXy6HmqF4TFASjhA5CpEZamMz3i8KLZf24eer38NU8QWThKy2ANOB+2lhCUOshE736iNH06o
+	N2OxbYnucowaV3zBEhwuKLD5zDS5TkPp3wROEFyft5Fiq+oGjTodum0tCvQkGwAV15yhYtYe7fS
+	HCcnl0y/HKyufmNHjTdtlGsHowOS6WXLnJQ2eh
+X-Received: by 2002:a05:7300:ac8a:b0:2c1:5134:54d3 with SMTP id 5a478bee46e88-2c185e12907mr311048eec.22.1774568584153;
+        Thu, 26 Mar 2026 16:43:04 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12aa725108csm3846949c88.6.2026.03.26.16.41.52
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c16ec277edsm5333936eec.3.2026.03.26.16.43.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Mar 2026 16:41:52 -0700 (PDT)
+        Thu, 26 Mar 2026 16:43:03 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 26 Mar 2026 16:41:50 -0700
+Date: Thu, 26 Mar 2026 16:43:02 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Rong Zhang <i@rong.moe>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 1/4] hwmon: Add label support for 64-bit energy attributes
-Message-ID: <330ed568-e5c4-4a1b-af18-ae3c79bf16e1@roeck-us.net>
-References: <20260327-b4-hwmon-witrn-v1-0-8d2f1896c045@rong.moe>
- <20260327-b4-hwmon-witrn-v1-1-8d2f1896c045@rong.moe>
+To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Cc: Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>, brgl@kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-iio@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (ina2xx) drop unused platform data
+Message-ID: <5f2226b2-3dbc-4ddf-9ffa-1b8792165753@roeck-us.net>
+References: <20260326-drop-ina2xx-pdata-v1-1-c159437bb2df@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -77,18 +79,16 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260327-b4-hwmon-witrn-v1-1-8d2f1896c045@rong.moe>
+In-Reply-To: <20260326-drop-ina2xx-pdata-v1-1-c159437bb2df@oss.qualcomm.com>
 
-On Fri, Mar 27, 2026 at 03:19:50AM +0800, Rong Zhang wrote:
-> Since commit 0bcd01f757bc ("hwmon: Introduce 64-bit energy attribute
-> support"), devices can report 64-bit energy values by selecting the
-> sensor type "energy64". However, such sensors can't report their labels
-> since is_string_attr() was not updated to match it.
+On Thu, Mar 26, 2026 at 10:30:00AM +0100, Bartosz Golaszewski wrote:
+> Nobody defines struct ina2xx_platform_data. Remove platform data support
+> from the drivers which still have it (it's effectively dead code) and
+> remove the header.
 > 
-> Add label support for 64-bit energy attributes by updating
-> is_string_attr() to match hwmon_energy64 in addition to hwmon_energy.
-> 
-> Signed-off-by: Rong Zhang <i@rong.moe>
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+> Acked-by: Jonathan Cameron <jonathan.cameron@huawei.com>
 
 Applied.
 
