@@ -1,66 +1,67 @@
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
+Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 055B719C542
-	for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 23:49:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9E2B334C28
+	for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 23:55:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774568977; cv=none; b=Yb1pQVkXNGVlskraEJRM2a3t7zfM5QRtXAjbYqto2rW5LGAXagNmiON2THZZ3EBPs48/FzWnLQgakJCCpXpZErVHUdEIGDjqwNMFLsYGRFPbEHrjQXr+J97erZ0R7wgl/QWO5tPX4/lK+1nEN7rIp7gVPkixBtL9vSB3Kcy9XfA=
+	t=1774569343; cv=none; b=QujQyM4VC1/1XiHYTGEZEY88r6B7B3flYPYseeEv80NY3I1MYbiplZNoqRxVD88DBWEBGIueQ1Q82Jx4ts+cdro2FVFqLqO3F+dtCMTdE4VQWCbmOSq1IfaDdwX7CGi1s6Y7xPJ1xBzwIgwH1/2w1xLTRd1gWN2A3fCe0haBNTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774568977; c=relaxed/simple;
-	bh=uGmspR4vNrQNvr3HOt0tgKPG2uwz1AjlwYP0U944fes=;
+	s=arc-20240116; t=1774569343; c=relaxed/simple;
+	bh=4c0N9jmjUp/FlUyQKBEJBqt2Pfyy/uW54mZOCO1DRyI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lGkb3FcxtkAyfXP5OraAa/79uTjxoO3eZD2nl8/argzhJAxs3wTZNoTwTZTJVy61JeSfmxYfhUr/tvhLqkFixqOH++yOlAvzoEQ2/JuYvdWJAwJSLuYxRTjmzdJYjBdwV1oFIu8/CvUpHzkVrvrrnwx2sRRs1Y1ZYLRhM292Fk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S4T5KOJN; arc=none smtp.client-ip=74.125.82.176
+	 In-Reply-To:Content-Type; b=irOMTJVD86gtZc0+krCUTPnRBsi1CdlTQCFsVu5q5HbS+A6c+J9kuzCvED6Ub7JWxbXOmkCyxkSR2rDIHDGdkJXYcMFi+QjZGg3sz9BJ6ugMB+pqBPtEsx+GbgI2lsTcvSr2gqWb6g+A5kDAmR1CSHXBEgf177/Qu+jM0ubrZdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qsuy5b0w; arc=none smtp.client-ip=74.125.82.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S4T5KOJN"
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2bd9a485bd6so2944233eec.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 16:49:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qsuy5b0w"
+Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2c156c4a9efso1755813eec.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 16:55:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774568974; x=1775173774; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774569342; x=1775174142; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=vGvYVB6qrroywI4wxkAFEjT+jivzJm3L/OcASEJMVhM=;
-        b=S4T5KOJNBdd9EeUzrn0UgN8q1vlByEUBz0XfPOVJjpbSAblJMZSVsUJgw4nDzOVOpi
-         vP0amK5dEMSN/yeXgKJESKvaG94RBGn4r5VwxB7Y/bKjVYoqgGcCLfLhhRmQBmDIQHma
-         yrFT7lunJ5uZVw2mWpmAqnOSDMDjKW92voMmBraaYvtGVqiiIcvwlHlWGOtihnqKNnsd
-         h5rXIFSvzuZXMlilg42943YJ2Q1BpkjCvjaA62M2jwHr05a2QKwsHA/GKeYuBRyUbtnU
-         VeGo2dM67CIpY9WzSvWpbNOVb9oo0qdR5k0kYZH/YctpScpb6BtTXafObIIwNLF8P1Am
-         GUCw==
+        bh=1lsvyRSL16W8vx0KqsFHDO1ns0BWTDe35//zRW/vpVU=;
+        b=qsuy5b0weyaP7M+13ZthEmdjJxZSeDEZsZp1x1Nh2rHwXNJXJneKxN2tHFW2BsHN5S
+         26FrnUw2bTvNlqEQYrh7g0mSbxiVWGK0maZ9v+1V6IF+Btjx2WbjK1Mu2calCpo1TDnu
+         bGZwf1o+AmHaNAt3cbAy1eoi6kovWxDpwvN/2rhLplNDN7M9JoN1+h6cARhDwG2U8DHL
+         +KGG14qVkJt/JMhGZwMJsjjgCJQ3I3/yCvydl/z6+xOgAkIpcomsUyrZboCxgeMOWTfj
+         51GO4EzL6ZjmkC7H8D1dZxLTVBa0rd4Y9GjlqHc9S4XRh/yBu3/MHL0zqCGNrpZqhmKl
+         shZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774568974; x=1775173774;
+        d=1e100.net; s=20251104; t=1774569342; x=1775174142;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vGvYVB6qrroywI4wxkAFEjT+jivzJm3L/OcASEJMVhM=;
-        b=OikJMeUhzIN3Bu7lFz+oHoInVIHrHDUjPOjcGb85U6p2PyQop92NEfS3YRh1FPxbuq
-         G0xsyUKGIiIEZqTKj2nlSJF+7EfWmRwyYeodS+AFIGuk6UNpZx2/aU+PIoI2bvmMA6Xs
-         a019tVmF5DMuH33lm4uMOlMTB/Bk4gVYY3fVlWyus3rzYnCM2BS29mf9r6KvKtMndBwD
-         CTyS5XKKWqWkxD76BVQgBr7pxGEU81iBv0mZZH+nmr7F0aRh6iYUDTW7X0GIcSRABOBY
-         mfl0KnyXjNVfkea1sxuxF1+LQDya3jvMiQP/H5sVZ7vKatq09OaHEmo2rij44kYRaVJd
-         leUA==
-X-Gm-Message-State: AOJu0Ywiez9Whny1u9hEueF6KvAMCcPxI9xmaBLl0OcVoUJGUqPPHKuc
-	ryCShvueuEHDXrukop4jw+bGg0Y+u4DIApLljHRfO4Ize412paYRs2mf
-X-Gm-Gg: ATEYQzyTQYe7JYRgE2mV7zkUEliwpgNJGXX27pOCR9qzQ9jjJVVHemMPPpcjoJ8SYc0
-	wEHEJ929MKY+ZMWNGOH+Bvucl9SZqtgSsfSjyfrPlDN3Ech8lVyA79rSQpWHh0TeW/T90vM+VK0
-	Yol5kSoSk5oJOjQ8M6v7/sxk2oEojF8azXU4zhissXPhjn0HqIvLRsz3ydMTPw5FGVPLGbFQZK0
-	GlRVTfrikKwdgwFngq/EjOvl8a6O/X3ksBeIxMg0XiZ4dMfKNbDr/s901ITYikeIqK3uH1N8btY
-	cRQkGD7xwp7CUkrE3pltJ8U5BEjbQsmLXPnab5/KHVFZnIiGJu/DVfxhs6vmzM0rEp7YO0+V7Xg
-	rwvJybprhF2aOO63MZt8Qy8hx8z7R1a77v1a8ffs1WMENFFzsL8Kdcj8sMRNKh0qsOm2ygZREKk
-	n5kiePP8QH0Yx0t4UU4HUmZuFvXLhBI27ch5B3klayUdHkNc+lSh1rdVAWq7Iryx/d1rfCbbio
-X-Received: by 2002:a05:7300:fb8b:b0:2ae:5bde:a5c5 with SMTP id 5a478bee46e88-2c185fac4d3mr319695eec.30.1774568973944;
-        Thu, 26 Mar 2026 16:49:33 -0700 (PDT)
+        bh=1lsvyRSL16W8vx0KqsFHDO1ns0BWTDe35//zRW/vpVU=;
+        b=ifJagcLt8DMO7m+VpzDwkJbhgCEDXy8p08BkPio7+xqfqQkNn6uAOPNYNtYwHyrZ0p
+         cHyazuLtXOorYmm2KUAWNqKzdLi9y7fp0mFP20ameGYew1JYPPclXe1IRd+XYmZHjvtW
+         2+aIDnRPQbN4oTWeHkhomQVjVY4kPfxitTh2z+fBApKYHX4poj1J1zzGpyBE7Ppp1Fzb
+         OKHfCe/4gW73BIxi4QtP8jQ1W6WE1u36KX5YZSxRfabzg9wMWV9bzTgOV12nXED8GbwD
+         2pocmcljZW5Jt0geHU8V92ErmjD4rDR/AK8omkW35tTuBcJKf/l757eBbmR+HKBAwGuB
+         cVcg==
+X-Forwarded-Encrypted: i=1; AJvYcCWk8k1SDQHXXpvaQCeqoNCnr27m8CsH6nzHgsLxmy03DCI/udD1TUlvWAZ1OTuClXHKrOk1b193WPMWPQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+acASg80MK6+xGog3yZ/AKCpABMbxWwcFVEf0FrngHac1xRf1
+	k3ZjSzjUQ0Cgj27ADWbZly+JjnBZ4SjuSR/CD9T3jBmWoK2rWFda0fpm
+X-Gm-Gg: ATEYQzzhguqGsD2KYhVT3yD7fb8I0FQektyhSnPEj1CGIvOVPeGMshrMCO6L6pzV/vK
+	BrFh1QQ2wZhN1arbOnq9+m1C2meuqPfbnD+9vET+6Zbkd5j2okQ13L8HCr2PgFD3Da7BmJqk4if
+	tSbChycRKgrzqv778AxLMVbb93Z1x4ZoQGzoE0bP9qhZhU4NEIb7XGvyfTMulcg204E5z8fDQ9n
+	UMIDpY9v7KsPXzSxwlOxwvIiQitwNU5dY9IxUstmtjz1hcuBbViM3kGaaS9LUh7N7cSQSJxI7LM
+	n6FEayg1Dzu8c+EiYf2XhmwbmW9BdIZjk/toucs9SAzk6WdiUmxw4rp5hFtvqhyW9vhaROJVrY8
+	W0nsUrm6PevL+kKjsitJOCJ2Cm3NGhm6BLE/8+UIKv+pSNS69c6rs8JJzYpgj9yD/TanK/uGJnN
+	VopdiPJ9tARdzXpyoRCJGJZHr0HttLo2CDYyskUXggpaxn7FZCnMWN/NUiBI02pWh5Z091VNoZ
+X-Received: by 2002:a05:7301:6781:b0:2ba:85d6:e777 with SMTP id 5a478bee46e88-2c185d69f40mr273561eec.2.1774569341661;
+        Thu, 26 Mar 2026 16:55:41 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c16ec258c6sm3903961eec.4.2026.03.26.16.49.32
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c16ec49615sm3981228eec.11.2026.03.26.16.55.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Mar 2026 16:49:33 -0700 (PDT)
+        Thu, 26 Mar 2026 16:55:41 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d374b465-0d57-4154-8cba-7b7d1144db1d@roeck-us.net>
-Date: Thu, 26 Mar 2026 16:49:31 -0700
+Message-ID: <ba8848a3-03f0-4113-8db4-d6dd46a57959@roeck-us.net>
+Date: Thu, 26 Mar 2026 16:55:39 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,14 +69,18 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/2] Add support for Texas Instruments INA4230 power
- monitor
-To: Alexey Charkov <alchark@flipper.net>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-References: <20260326-ina4230-v4-0-c1e312c09de7@flipper.net>
+Subject: Re: [PATCH v4 2/4] dt-bindings: hwmon: Add Sensirion SHT30 series
+To: Conor Dooley <conor@kernel.org>
+Cc: Zaixiang Xu <zaixiang.xu.dev@gmail.com>, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Roman Gushchin <kfree@google.com>
+References: <1774429690-129139-1-git-send-email-zaixiang.xu.dev@gmail.com>
+ <1774429690-129139-3-git-send-email-zaixiang.xu.dev@gmail.com>
+ <20260325-napping-turmoil-de37168fb072@spud>
+ <09105b02-3d85-4808-ba0a-f3799787425a@roeck-us.net>
+ <20260326-lullaby-elevator-3a3d25e9a6c0@spud>
+ <20260326-opposing-footsie-33a0deb2ba90@spud>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,114 +126,52 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260326-ina4230-v4-0-c1e312c09de7@flipper.net>
+In-Reply-To: <20260326-opposing-footsie-33a0deb2ba90@spud>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/26/26 12:58, Alexey Charkov wrote:
-> TI INA4230 is a 4-channel power monitor with I2C interface, similar in
-> operation to INA3221 (3-channel) and INA219 (single-channel) but with
-> a different register layout, different alerting mechanism and slightly
-> different support for directly reading calculated current/power/energy
-> values (pre-multiplied by the device itself and needing only to be scaled
-> by the driver depending on its selected LSB unit values).
+On 3/26/26 10:45, Conor Dooley wrote:
+> On Thu, Mar 26, 2026 at 05:42:30PM +0000, Conor Dooley wrote:
+>> On Wed, Mar 25, 2026 at 06:05:22PM -0700, Guenter Roeck wrote:
+>>> On 3/25/26 11:20, Conor Dooley wrote:
+>>>> On Wed, Mar 25, 2026 at 05:08:08PM +0800, Zaixiang Xu wrote:
+>>>>> Add YAML devicetree binding schema for Sensirion SHT30 series.
+>>>>> Use fallback compatibles for compatible chips and add optional
+>>>>> interrupts and vdd-supply properties.
+>>>>>
+>>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>>> Closes: https://lore.kernel.org/r/202603212044.BRPaiz86-lkp@intel.com/
+>>>>
+>>>> The robot did not report that this binding was missing.
+>>>> It also told you not to add these tags.
+>>>>
+>>>> You also ignored my and Krzysztof's reviews.
+>>>>
+>>>> NAK.
+>>>>
+>>>
+>>> Maybe we should just point to AI feedback:
+>>>
+>>> https://sashiko.dev/#/patchset/1774429690-129139-1-git-send-email-zaixiang.xu.dev%40gmail.com
+>>>
+>>> and only get involved after AI does not report any problems.
+>>>
+>>
+>> The presentation of info in that is weird, it creates a pseudo-commit
+>> message, and then goes on to talk about things that the pseudo-commit
+>> message has had culled.
 > 
-> In this initial implementation, the driver supports reading voltage,
-> current, power and energy values, but does not yet support alerts, which
-> can be added separately if needed. Also the overflows during hardware
-> calculations are not yet handled, nor is the support for the device's
-> internal 32-bit energy counter reset.
-> 
-> An example device tree using this binding and driver is available at [1]
-> (not currently upstreamed, as the device in question is in engineering
-> phase and not yet publicly available)
-> 
-> [1] https://github.com/flipperdevices/flipper-linux-kernel/blob/flipper-devel/arch/arm64/boot/dts/rockchip/rk3576-flipper-one-rev-f0b0c1.dts
-> 
-> Signed-off-by: Alexey Charkov <alchark@flipper.net>
+> How good is this LLM stuff at figuring out if previous review feedback
+> has been resolved? Or is it not capable of looking at earlier revisions?
 
-More feedback from Sashiko:
 
-https://sashiko.dev/#/patchset/20260326-ina4230-v4-0-c1e312c09de7%40flipper.net
+Both are interesting questions. For the first one, I had noticed that, but
+to me it seemed that the pseudo-commit message is an attempt to create a concise
+version of the commit message, and I have not seen evidence that the later
+comments did not also apply to the real commit message.
 
-I can not comment on the devicetree feedback, but the driver
-concerns seem real. Please take a look.
+Anyway, copying Roman for feedback on both.
 
 Thanks,
 Guenter
-
-> ---
-> Changes in v4:
-> - Aligned the maximum value of ti,maximum-expected-current-microamp property
->    in the binding with the one expected by the driver (Guenter Roeck)
->    "2147A ought to be enough for anybody (c)"
-> - Actually requested the optional vs-supply regulator in the driver (Guenter Roeck)
-> - Program the ALERT_POL bit according to the value of ti,alert-polarity-active-high
->    even though the alerts themselves are not yet implemented (Guenter Roeck)
-> - Added a check for manually disabled channels in the is_enabled() function to
->    avoid reading invalid data from them (Guenter Roeck)
-> - Dropped support for the single-shot mode as its operation is not clearly
->    documented in the datasheet and there is no pressing need to support it (Guenter Roeck)
-> - NB: AI feedback regarding regmap_noinc_read() producing incorrect byte order on LE
->    hosts is incorrect, as its implementation does a byte-wise read and doesn't care
->    about the regmap value width or endianness flags, so it produces a 4-byte output
->    buffer in the same byte order as the device returns, which is BE in this case
-> - NB: AI feedback regarding fail-path pm_runtime_put_noidle() potentially being
->    unbalanced if the probe loop failed early is technically correct but practically
->    irrelevant, as the driver will simply fail to load, and the usage count won't
->    decrease beyond zero anyway. The alternatives are cumbersome for no real benefit
-> - Link to v3: https://lore.kernel.org/r/20260310-ina4230-v3-0-06ab3a77c570@flipper.net
-> 
-> Changes in v3:
-> - Updated the description of the ti,maximum-expected-current-microamp property
->    in the binding to clarify how it is used, and drop the irrelevant mention of
->    the PMbus (Guenter Roeck)
-> - Use div64_u64() instead of do_div() for the final division in the calibration value
->    calculation to avoid overflows in the denominator (Guenter Roeck)
-> - Avoid overflow while scaling the voltage values on 32-bit platforms (Guenter Roeck)
-> - Use regmap_noinc_read() instead of regmap_raw_read() for reading the energy values
->    to ensure that the regmap / bus driver don't wander off to adjacent registers
->    during the read operation (on INA4230 the whole 32 bits should be read from
->    the same register offset) (Guenter Roeck)
-> - Remove redundant call to ina4230_set_calibration() in the current read path,
->    as the calibration value is already set when enabling the channel and restored
->    across PM changes via regcache_sync() (Guenter Roeck)
-> - Add missing write_enable() function to make hwmon_in_enable writes work as
->    advertised in is_visible() (Guenter Roeck)
-> - Add a check for disabled channels before calling pm_runtime_put_noidle() on them
->    to avoid refcount underflow due to imbalanced get_sync/put_noidle calls (Guenter Roeck)
-> - Dropped unused include of linux/debugfs.h
-> - Add missing return checks on regmap_write() calls
-> - uO -> uOhm in the error message to avoid confusion
-> - Move probe-time calibration after enabling runtime PM to avoid it being reverted
->    by the PM sync
-> - Link to v2: https://lore.kernel.org/r/20260302-ina4230-v2-0-55b49d19d2ab@flipper.net
-> 
-> Changes in v2:
-> - Replace u64/u64 division with do_div() (kernel test robot)
-> - Add an example with ti,maximum-expected-current-microamp property in
->    bindings (Krzysztof Kozlowski)
-> - Include the newly added binding in MAINTAINERS file (Krzysztof Kozlowski)
-> - Use dev_err_probe() where appropriate in the driver (Krzysztof Kozlowski)
-> - Switch to devm_regmap_field_bulk_alloc() instead of an open-coded loop
-> - Add a bounds check for the calculated calibration value,
->    and a corresponding error message
-> - Link to v1: https://lore.kernel.org/r/20260225-ina4230-v1-0-92b1de981d46@flipper.net
-> 
-> ---
-> Alexey Charkov (2):
->        dt-bindings: hwmon: Add TI INA4230 4-channel I2C power monitor
->        hwmon: Add support for TI INA4230 power monitor
-> 
->   .../devicetree/bindings/hwmon/ti,ina4230.yaml      |  134 +++
->   MAINTAINERS                                        |    7 +
->   drivers/hwmon/Kconfig                              |   11 +
->   drivers/hwmon/Makefile                             |    1 +
->   drivers/hwmon/ina4230.c                            | 1032 ++++++++++++++++++++
->   5 files changed, 1185 insertions(+)
-> ---
-> base-commit: 66ba480978ce390e631e870b740a3406e3eb6b01
-> change-id: 20260219-ina4230-74a02409153d
-> 
-> Best regards,
 
