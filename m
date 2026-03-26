@@ -1,68 +1,68 @@
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87BD92D9787
-	for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 01:05:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D0DD3ACA57
+	for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 05:52:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774487126; cv=none; b=ofZ16vOpZp/3zNIHlnIhyiydM7rMSEXBw/PYSMw2T4UoLSXAsnld/Ybv2lfvX1LHtQtWJjO2veNynl2M1wX7usXtr8Qu0QAR8ibw31j+/rfkQVyOezo9gv35aS5MZcORwBIOYNeXIjZ9GgcKd+wZhZ+Xz7pILwoCcAraVx2GKjA=
+	t=1774504380; cv=none; b=V0+Gt/maVc3BbaJEEHB7AfwSv6VStYuNCo1SMIn4ccEagWcL0ybXnOLnwZDzAK5ifTQUaQZ4amOTEyM58KUDI6WnVKNgScaslPOh5cGsOeUJKUdaV7FuqJuV4muxd9IwSYM9FNqGcJ8yqXdSepjlR9WsxGLKbjTTDb4eesYU0W0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774487126; c=relaxed/simple;
-	bh=+mWhncabqWyY3T2HcPLgbIJyR/uo3fZmCp8oxxEjaEY=;
+	s=arc-20240116; t=1774504380; c=relaxed/simple;
+	bh=0yhZX0DH8A5C35IHXsYkFJYJVmgHMHBij5UNfrFZogE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ThhT6SMzp9EbrqeYzo6+Ko7FZR7wX/yST5OQJBFAp+YNzene4iwaqmK0RwVWrqgPpQRFThZ0X31c0jLYPkCKgSR2VcPGx+GL8xkpiRMuCeRR5UDenyV7CjaXB2erUDWHsffyD5ZFyM2BG9zcnvikXlfH9PS3W2Wvuh+EAy8tOgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m93uHEtm; arc=none smtp.client-ip=74.125.82.178
+	 In-Reply-To:Content-Type; b=VozISFjdcqXo+GfUuHDPCL3UvDIm/P2F6wETwMMPsvzFH5u6zXjmyJLrKqMhiZdPys7qzw2t3/UmS0obj7l2meoiqX0fJj9Tk19S3jCyJheqG+cd8R0XmFezEDCTVvvh1l4SxHv6kI/BqPiYK8jDSmYvWoj4Q6X7VTg1xTtAVhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GYdazrn4; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m93uHEtm"
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2c160308a54so1032489eec.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Mar 2026 18:05:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GYdazrn4"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2b042533de1so3122705ad.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 25 Mar 2026 22:52:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774487125; x=1775091925; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774504377; x=1775109177; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=OdGBSEoHUXT6Lvd0T5SefG5fM4+mDZz0Khmf6pUh9sQ=;
-        b=m93uHEtmZ+bS6JihS2r2uRrjQ2vZL3iy6utyVvhmsZHMtDSgqQjEKzaibiiqsvhX6S
-         yPTKZYL5mLFwbTWZkO3yESwpdt1JFQyCIIYNFvRQmwLG91te5bYh3VYPPBDUaK/MwxXE
-         dzLacW8aXUPwUrBFekU1bgPR7HPFkBuoNipcJp3WJrKq8DvHD/EHiMl2JXT+yfRX4UAm
-         23gxvzP4zO5kdAToFyCwRO7SxnN7Wy7nN9kNTnEwHPxwjINbZbd5ZysYyhihn5FPvTwM
-         SsTty1o+Qn0lQc2rKRMUgYvRAjytocWM33doTl3thECERVbd/O3FNiTImMlFNsKx83gh
-         1fZg==
+        bh=VWC6Bj+K9uxHnGnEONT80OvFfh7DvFkOXxkVna9Jzek=;
+        b=GYdazrn4ygt2QoOPdIY/rjWWDy2+xU8cMhE8YuOuBbJKwPoOx18T/RHtYX/Xs8FaNN
+         cfIWs7QsRkPRD9l9u4OlpNwCy5gCayFhKBOCSEi9qpqxourwVlLQhFDqld93Jz0BjQMf
+         WAH+Czvc57mFcUIh3QxUXNuqWOub5YnN4Cohy7blBGuCpw4Q749AUHq5SJ/NxE7EW3hk
+         3Gncw44QhKqRKxooZ6g8khKiRPoighrTwHmL2jM3fcFSUeJk6eznXhilKljZprVmHKim
+         udvoD8mNH7B9jAjkRaLtCbaiimMHRq1jZHYt6vj6Dm6cjUFhPP+xfm0uIWlegAci/IIj
+         Gjog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774487125; x=1775091925;
+        d=1e100.net; s=20251104; t=1774504377; x=1775109177;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OdGBSEoHUXT6Lvd0T5SefG5fM4+mDZz0Khmf6pUh9sQ=;
-        b=cHysxAWNcMaFAopK+zuM7sh5WiqLcuT3tKovcztymOLkc0HF3oVyCAcdBPhi5rZohD
-         N7H9Jg9EMoGWxn4/bQCV/dc3HoFHjrkgUX9XEgHIKyXsS54p9BXgnh1revJB/rORwcP1
-         oalGxLyGRzmyKAbUKD0qd28bRbMT+TjF2ocTpmqEP88Pr8wKx5INXt4eE1tLE+1+ullO
-         EZ0rW+xxvmQ5O70Su8w3F7/HgfHNHnMpXDoAk9DPMNn0672qgRTssnXa7NLAU51Vdv2/
-         hOiwLSKDiJR+abhJg689CylYmP3lSjTfgEzkpRFQiOAFFRy8vonokGu0mX+7em9kpCtw
-         r+9w==
-X-Forwarded-Encrypted: i=1; AJvYcCVWNU+O/B8tlLh8pmoWB4p8ixfyegfzLgoGYioPWvs8Q/sUlETacxrTos3p19e5NZr5tmj/n2L+kLQYBg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxq/xS4Tl6ovBU1H1P157AJovq4dasKYMSsxe0DrWB0MLlj2DaB
-	veEfnW40CsKkQ25WvK+UhmASVVw4WrcePDFbxd2RQcI9xIxD5OWdrWsE
-X-Gm-Gg: ATEYQzxHS7kiZg103WTncb1pxwVuwKsTdP9ixXz6vRM9ljGAWW3XUhAuS8y1+rpdJSL
-	5LJxGrX73EgmhFAa1UMw5W3Om7ggBfQmlI1VN0S32NK2j0R048csPoRn+BsLZIxsjdHnFFbiaVh
-	xrqbePgVgPXF9dVVVxonAI3h4q8v76T5k2kuAprJTOXDTmPk4U2bArQCOLkz+6n0g+fCMlf6sNm
-	+PrLJ2qQmefdJc9uu6IhtYSQwFX+XBpMik0UOJO5HJ8OPrxfTJSqLrL+l10jH45oaE1ItvFtjKO
-	mDjVd9NqESRSbcvDlPy7RH/+VD6u8P6MZdvh1hW93z1bWSdYnJ3GtiSIvzZwvmX1NtS4UZ6XKiB
-	pFmSZHlsUclYvU+jY33X6oD71Wci74a3820POWYPz9PWSoVEImcZiQ3nzp7NooqtZYRncCFx4ee
-	FdrH3HLOmcU3jWI6YozCQg9z4zmRlDebTw8YSiET4sPaZioduWaiig575Ld2X/13f932dljkhYG
-	AYcNM+FIBo=
-X-Received: by 2002:a05:7300:3c05:b0:2c1:69d:a604 with SMTP id 5a478bee46e88-2c15d38118cmr3222314eec.20.1774487124620;
-        Wed, 25 Mar 2026 18:05:24 -0700 (PDT)
+        bh=VWC6Bj+K9uxHnGnEONT80OvFfh7DvFkOXxkVna9Jzek=;
+        b=ezw+3Lz3y0M/AawA4lnPSdD3MkBQGg++tnr+kp05qZGaM9TutfFAGfIbViAq2c13NX
+         WprvHly/TypGEAe33UCch6E1jTr85eQRvPcW8GWhNIybqGSvd9yI8lH8Cp50qb8u7xEm
+         5z7zqYF82ayVfV5MVOcRSsOBm2H0rv8ipHTcutrp66Qi69r1afuGe60fPRKjLGw0Sjl+
+         OxzpNoqG/Mh8/uhAVm+XbdURSD56hU3j1FAO6YzPNT69LrY96+rSiIEpkoQaVYE06YVb
+         oH7eA+UQDGWn4QxnbnAH0w+HN7//Way+6QC0meO+H8AYuPxUvY4bcj4oz8Mht4U3HQDt
+         iAYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXbaBOsYphBtzkuYHiWe7EOPzxr2jxg0CmY5pl3crA9CDRu0EXCTc9/Gw22MV/HeUoBBEKBwd6U50rEUA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjrTy82IJwx28QuRuyIqJ4DsatEsc0qvYq1KkXnbZsT1fdIPAA
+	MOINMz+k+xSuQuN5CAfIxv9p78efy0xMtXnrjyds0CRNvKvnyxBRh79tueXGbw==
+X-Gm-Gg: ATEYQzyctt/utKKXwPVCFzXvbgojEUEMoRnDqvUw/9/WTXokXD8z7Hm/fIwN7I3XrEN
+	1Z8Oo2nosIlK+36JZ0cQu2jt6+emmvj7kB9nKEslnYLn9/OGTKh762QLCVmVuPVK4XeYnaJwPJp
+	7wOOBj1nG5k8yd15BcwwLpEgPGlTr7n6XFo+/qNB6vPrJlsrUDdrWBnbDkBL+VQKR5zoFNgTsGW
+	TN1b43s4HUN2Yyhw94U5tsMoMFz30+b1gxhyFcPbxBFGhw3S9ZVqESnzmCrdeOLHYRgDeAz7Bx5
+	p9evbPmAlLwguxCorXjogENxWqPngu+vWjcXWxew/eyTw21t3HW20wNJ67XFH6XpJmaawmdy09H
+	pNsRgS6mEaWT6daqhclV1PhggI7837a/bV6poalgZ3VYL/2i46QkdGWYgU9AQBxJJgPcjph3bYi
+	HbhZoZny97gOP6h/kD3k4hHDPW+JDSUALmRo6TQqkIMDK4PiOvB45aKDw4z91CzYUBsHZD8Skto
+	0QXb0BocAc=
+X-Received: by 2002:a17:90b:3f46:b0:35b:e844:3bd with SMTP id 98e67ed59e1d1-35c0ddf6eabmr5677531a91.31.1774504377493;
+        Wed, 25 Mar 2026 22:52:57 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c16edd570asm1037271eec.24.2026.03.25.18.05.23
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35c22ce693csm329442a91.14.2026.03.25.22.52.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Mar 2026 18:05:24 -0700 (PDT)
+        Wed, 25 Mar 2026 22:52:57 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <09105b02-3d85-4808-ba0a-f3799787425a@roeck-us.net>
-Date: Wed, 25 Mar 2026 18:05:22 -0700
+Message-ID: <9648e0ae-8102-4f70-866b-163fbd5050eb@roeck-us.net>
+Date: Wed, 25 Mar 2026 22:52:55 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,14 +70,18 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/4] dt-bindings: hwmon: Add Sensirion SHT30 series
-To: Conor Dooley <conor@kernel.org>, Zaixiang Xu <zaixiang.xu.dev@gmail.com>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+Subject: Re: [PATCH v5 2/2] hwmon: emc2305: Support configurable fan PWM at
+ shutdown
+To: florin.leotescu@oss.nxp.com, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Michael Shych <michaelsh@nvidia.com>,
  linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org
-References: <1774429690-129139-1-git-send-email-zaixiang.xu.dev@gmail.com>
- <1774429690-129139-3-git-send-email-zaixiang.xu.dev@gmail.com>
- <20260325-napping-turmoil-de37168fb072@spud>
+Cc: daniel.baluta@nxp.com, viorel.suman@nxp.com,
+ linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
+ festevam@gmail.com, Florin Leotescu <florin.leotescu@nxp.com>
+References: <20260325160444.1736866-1-florin.leotescu@oss.nxp.com>
+ <20260325160444.1736866-3-florin.leotescu@oss.nxp.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -123,100 +127,149 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260325-napping-turmoil-de37168fb072@spud>
+In-Reply-To: <20260325160444.1736866-3-florin.leotescu@oss.nxp.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/25/26 11:20, Conor Dooley wrote:
-> On Wed, Mar 25, 2026 at 05:08:08PM +0800, Zaixiang Xu wrote:
->> Add YAML devicetree binding schema for Sensirion SHT30 series.
->> Use fallback compatibles for compatible chips and add optional
->> interrupts and vdd-supply properties.
->>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Closes: https://lore.kernel.org/r/202603212044.BRPaiz86-lkp@intel.com/
+On 3/25/26 09:04, florin.leotescu@oss.nxp.com wrote:
+> From: Florin Leotescu <florin.leotescu@nxp.com>
 > 
-> The robot did not report that this binding was missing.
-> It also told you not to add these tags.
+> Some systems require fans to enter in a defined safe state during system
+> shutdown or reboot handoff.
 > 
-> You also ignored my and Krzysztof's reviews.
+> Add support for the optional Device Tree property "fan-shutdown-percent"
+> to configure the shutdown PWM duty cycle per fan output.
 > 
-> NAK.
+> If the property is present for a fan channel, the driver converts the
+> configured percentage value to the corresponding PWM duty cycle and
+> applies it during driver shutdown.
 > 
+> If the property is not present, the fan state remains unchanged.
+> 
+> Signed-off-by: Florin Leotescu <florin.leotescu@nxp.com>
 
-Maybe we should just point to AI feedback:
+Sashiko has a couple of concerns.
 
-https://sashiko.dev/#/patchset/1774429690-129139-1-git-send-email-zaixiang.xu.dev%40gmail.com
+https://sashiko.dev/#/patchset/20260325160444.1736866-1-florin.leotescu%40oss.nxp.com
 
-and only get involved after AI does not report any problems.
+I don't know about the shutdown problem. If that is real, a lot of drivers
+have the same problem. Don't bother about it right now.
 
+However, the range check should indeed be a separate patch.
+
+Thanks,
 Guenter
 
-> pw-bot: changes-requested
+> ---
+>   drivers/hwmon/emc2305.c | 41 +++++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 41 insertions(+)
 > 
->> Signed-off-by: Zaixiang Xu <zaixiang.xu.dev@gmail.com>
->> ---
->>   .../bindings/hwmon/sensirion,sht30.yaml       | 50 +++++++++++++++++++
->>   1 file changed, 50 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/hwmon/sensirion,sht30.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/hwmon/sensirion,sht30.yaml b/Documentation/devicetree/bindings/hwmon/sensirion,sht30.yaml
->> new file mode 100644
->> index 000000000000..1b5ce822b37b
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/hwmon/sensirion,sht30.yaml
->> @@ -0,0 +1,50 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/hwmon/sensirion,sht30.yaml#
->> +$schema: http://devicetree.org/meta-schema.yaml#
->> +
->> +title: Sensirion SHT30 Humidity and Temperature Sensor
->> +
->> +maintainers:
->> +  - Zaixiang Xu <zaixiang.xu.dev@gmail.com>
->> +
->> +description: |
->> +  The SHT30 series is a family of humidity and temperature sensors by Sensirion.
->> +  Compatible sensors like the GXCAS GXHT30 are also supported.
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - gxcas,gxht30
->> +      - sensirion,sht30
->> +      - sensirion,sht31
->> +      - sensirion,sht35
->> +      - sensirion,sht85
->> +      - sensirion,sts30
->> +      - sensirion,sts31
->> +      - sensirion,sts32
->> +      - sensirion,sts35
->> +
->> +  reg:
->> +    maxItems: 1
->> +    description: I2C address (usually 0x44 or 0x45)
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    i2c {
->> +        #address-cells = <1>;
->> +        #size-cells = <0>;
->> +
->> +        sensor@44 {
->> +            compatible = "gxcas,gxht30";
->> +            reg = <0x44>;
->> +        };
->> +    };
->> +
->> -- 
->> 2.34.1
->>
+> diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c
+> index 64b213e1451e..722ec1d054f8 100644
+> --- a/drivers/hwmon/emc2305.c
+> +++ b/drivers/hwmon/emc2305.c
+> @@ -32,6 +32,7 @@
+>   #define EMC2305_REG_DRIVE_PWM_OUT	0x2b
+>   #define EMC2305_OPEN_DRAIN		0x0
+>   #define EMC2305_PUSH_PULL		0x1
+> +#define EMC2305_PWM_SHUTDOWN_UNSET      -1
+>   
+>   #define EMC2305_PWM_DUTY2STATE(duty, max_state, pwm_max) \
+>   	DIV_ROUND_CLOSEST((duty) * (max_state), (pwm_max))
+> @@ -104,6 +105,7 @@ struct emc2305_cdev_data {
+>    * @pwm_output_mask: PWM output mask
+>    * @pwm_polarity_mask: PWM polarity mask
+>    * @pwm_separate: separate PWM settings for every channel
+> + * @pwm_shutdown: Set shutdown PWM.
+>    * @pwm_min: array of minimum PWM per channel
+>    * @pwm_freq: array of PWM frequency per channel
+>    * @cdev_data: array of cooling devices data
+> @@ -116,6 +118,7 @@ struct emc2305_data {
+>   	u8 pwm_output_mask;
+>   	u8 pwm_polarity_mask;
+>   	bool pwm_separate;
+> +	s16 pwm_shutdown[EMC2305_PWM_MAX];
+>   	u8 pwm_min[EMC2305_PWM_MAX];
+>   	u16 pwm_freq[EMC2305_PWM_MAX];
+>   	struct emc2305_cdev_data cdev_data[EMC2305_PWM_MAX];
+> @@ -539,6 +542,7 @@ static int emc2305_of_parse_pwm_child(struct device *dev,
+>   				      struct device_node *child,
+>   				      struct emc2305_data *data)
+>   {	u32 ch;
+> +	u32 pwm_shutdown_percent;
+>   	int ret;
+>   	struct of_phandle_args args;
+>   
+> @@ -548,6 +552,12 @@ static int emc2305_of_parse_pwm_child(struct device *dev,
+>   		return ret;
+>   	}
+>   
+> +	if (ch >= EMC2305_PWM_MAX) {
+> +		dev_err(dev, "invalid reg %u of node %pOF (valid range 0-%u)\n", ch, child,
+> +			EMC2305_PWM_MAX - 1);
+> +		return -EINVAL;
+> +	}
+> +
+>   	ret = of_parse_phandle_with_args(child, "pwms", "#pwm-cells", 0, &args);
+>   
+>   	if (ret)
+> @@ -579,6 +589,16 @@ static int emc2305_of_parse_pwm_child(struct device *dev,
+>   	}
+>   
+>   	of_node_put(args.np);
+> +
+> +	ret = of_property_read_u32(child, "fan-shutdown-percent",
+> +				   &pwm_shutdown_percent);
+> +
+  > +	if (!ret) {
+> +		pwm_shutdown_percent = clamp(pwm_shutdown_percent, 0, 100);
+> +		data->pwm_shutdown[ch] =
+> +			DIV_ROUND_CLOSEST(pwm_shutdown_percent * EMC2305_FAN_MAX, 100);
+> +	}
+> +
+>   	return 0;
+>   }
+>   
+> @@ -631,6 +651,9 @@ static int emc2305_probe(struct i2c_client *client)
+>   	if (ret)
+>   		return ret;
+>   
+> +	for (i = 0; i < EMC2305_PWM_MAX; i++)
+> +		data->pwm_shutdown[i] = EMC2305_PWM_SHUTDOWN_UNSET;
+> +
+>   	pwm_childs = emc2305_probe_childs_from_dt(dev);
+>   
+>   	pdata = dev_get_platdata(&client->dev);
+> @@ -714,6 +737,23 @@ static int emc2305_probe(struct i2c_client *client)
+>   	return 0;
+>   }
+>   
+> +static void emc2305_shutdown(struct i2c_client *client)
+> +{
+> +	int i;
+> +	int ret;
+> +	struct emc2305_data *data = i2c_get_clientdata(client);
+> +
+> +	for (i = 0; i < data->pwm_num; i++) {
+> +		if (data->pwm_shutdown[i] != EMC2305_PWM_SHUTDOWN_UNSET) {
+> +			ret = i2c_smbus_write_byte_data(client, EMC2305_REG_FAN_DRIVE(i),
+> +							data->pwm_shutdown[i]);
+> +			if (ret < 0)
+> +				dev_warn(&client->dev,
+> +					 "Failed to set shutdown PWM for ch %d\n", i);
+> +		}
+> +	}
+> +}
+> +
+>   static const struct of_device_id of_emc2305_match_table[] = {
+>   	{ .compatible = "microchip,emc2305", },
+>   	{},
+> @@ -726,6 +766,7 @@ static struct i2c_driver emc2305_driver = {
+>   		.of_match_table = of_emc2305_match_table,
+>   	},
+>   	.probe = emc2305_probe,
+> +	.shutdown = emc2305_shutdown,
+>   	.id_table = emc2305_ids,
+>   };
+>   
 
