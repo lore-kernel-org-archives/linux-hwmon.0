@@ -1,72 +1,72 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22FE82BE642
-	for <linux-hwmon@vger.kernel.org>; Fri, 27 Mar 2026 01:00:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAD4824503F
+	for <linux-hwmon@vger.kernel.org>; Fri, 27 Mar 2026 01:29:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774573253; cv=none; b=UhNMiIMlBS+LttsBiOwAuTQAqroF6igwdrdfjOPH/WpZxOvhv3fSq9EOrNB3IUTsVWKzBm7G1n7ihLGZExtFH/1EWXfoZbCND3GnTPv+UYvta3awbjev2G1pRzWvDJnFEJiZdbJT+fIWkCsLI6F2A1RmMzNRYB2hLhAZgK0tVkQ=
+	t=1774574986; cv=none; b=Tf3Fof9eX4dv1DxG3f3cJqxZ0xa1Jb89YDftQQpRD2eYVYKUex9fX+XQEzjM53RFplRuXFGvb7YWeaqwKtVvx7m71u3D5uEYF5F1zmVy3DlQsWaMhywqXuOgCdGCP8DJ7GD3eLXtqS7fS5KRho7tpbA2P4nPb1HPo+PH965Hdqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774573253; c=relaxed/simple;
-	bh=4YnpyVkwzvhzbAzB0OD3JjmPo81v1asZXDH9JXCTbpo=;
+	s=arc-20240116; t=1774574986; c=relaxed/simple;
+	bh=GclNefxDJR46gRVUowv9jZlkfVN9jUCHJxiJdPE2UFs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=D2derbULTNsB9VKA0ucqx2r0Tu/kDdsO+pw9sz3K5QRxE82C128uYjAB07G5f8C4C6GlNCPEsR4CuWnoHzZ6ur8e6Ydy9wIhI7FZ4xCawOl/yFaYSbDQWdkd2MhcFXnpUPOhS+oKLAJSSh8e7eNsUfiSkQ90NJhkdDw9UYWtBXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kMBQw81W; arc=none smtp.client-ip=209.85.221.41
+	 MIME-Version; b=Zh3f5uVob7bAEC2cerMQcy3dOq37gzXdJ51CwXGgztu+4zw26BQ5DTVyLAr2BmdXsijWVqd7rE1GS02svKjqg38CRWDAFVjFQWyIVsdo6hVi/xTmucuzE7A6lIcCcIwdShbRzE1+xo2Y6lWy94k17EyYP87yspVMhsRuVVx3UNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rDA9TxyK; arc=none smtp.client-ip=209.85.221.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kMBQw81W"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43b95e5b3afso798996f8f.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 18:00:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rDA9TxyK"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-43b98652f05so632700f8f.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2026 18:29:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774573246; x=1775178046; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774574982; x=1775179782; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Dot1XDJv2sH2AtpYJL5bI79f3tW30gAKD/rt95t9aCQ=;
-        b=kMBQw81WEe396YA0SegYB48v9+6DJJ7A9bYqgHSTPbe4ujYHXH14OtcP1fswAUOQ1t
-         t67s1ktJefSRKu37JKGeMYglXKNqzwqyZAW6vTxHO5bRDj4D7qJBMb2hENABDd7AZwXG
-         iJd6dsfmrfemGHqMDyEg9u6Rguc9eSAUSIMJ3sPclwrBSrfG5NO8GcoZXVvoUweqdX75
-         rlXmdfAVc0xYkRt4QTBA1lh1813OZJYmi4sqdew03J6euO1Q1UzdCjxF+qIMfHNgXb+w
-         cer4UyAfmE1bzu/XjVmbCd9DYIdDOC/5ef9HDDzQF6JMN5PR0VLAvLY482mWH37tmBqd
-         ULvA==
+        bh=Zjl+dTjqIKJTtvrsxY59BLjWRmITZUE1kbENHQL+2F4=;
+        b=rDA9TxyKRwxU2qes6spj5g0s/nzJQf+Pc1Bsk/did602eh4bmr9KaRNZXVzdm4DGPt
+         oDF40lfOs0ZiLjr7WUKm0hq0AkTcV3K3Mz8spgbfQhJKN0ovWc+VER/gMeLnah7DF3Xq
+         hFU/LM57zVvhhbdV5lyPRTQmlHqni77gvPHofLDRADOe92DrQfzDejikh1zsEKqPz/yr
+         433lXA8vGY78vjYfM1l/8s4t1qjzAMtr4oc6kpYPkM0oFxzVQkJGtosme+dG78fWf3Bh
+         rxdPgjbGi1piZ3JCyFrjtxmZjxf0OIhSAWqtt2YOBs6ss8K7+nTzWqHCXDJFbomGdAAp
+         vDRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774573246; x=1775178046;
+        d=1e100.net; s=20251104; t=1774574982; x=1775179782;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Dot1XDJv2sH2AtpYJL5bI79f3tW30gAKD/rt95t9aCQ=;
-        b=PVMIrwP0GQ/+EkWvh5lgQjELE7OlIJlcbg8eVxY/7+6DFoOmfAS7HCOr6VQtHSNHpS
-         ehlZlx1f2rUrzM+Nj0cZndrJKGlldDgnqpP7Cc8IRoULN1DZ8lWci6btoDM3mI55ObqH
-         W5ies5hiLlBZtNL4+q/A8zLXSoIeQAiju7MORl4pgYPGrhJ8/Raqs3NY23iZHekrDvPO
-         RAITFH+DNyvu/7wHispMmtpBmF+56aftA5MmM1eTMDNYMEDR45lXW322NfYf53HZMmwa
-         En6zBN0SOAI3GvYy6U6cAKG6DH0J9rfTxI0B/gxCvlOUjtpUedYF8DAnmcQ+fLp4Cqie
-         WfWg==
-X-Forwarded-Encrypted: i=1; AJvYcCX8FzLRNjRylQ3udBQj3Q/Fxn0UuGBw9W0rAxUgY5mw+a67Gz40gkodPovnWrkpGFTqzjFeOZZbu6B8MQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5KIbQHN7YlzojMhHJ594br43gY5BErmHXSFl8a9aXUPFIJ3aE
-	ErU1yJw1szqA2VdIyVhvule0X9n5+U5htxDB0bozKEHx4AAYZela6VY9
-X-Gm-Gg: ATEYQzyWMPKBzTeDY9UoM+mIY5LEtr9q7RdeD7SELLIAu5S1mvqTdNc9d2LvjUNGK/F
-	UwHOhEJFKvfB0+8Rk8nUa2HJ46I7M5NlpBZS4KdqxeHagm7AwPqldpjfQP6FGNkK2I3KSyMXCoA
-	DAroN340WCnle4SfteAuktMuEmn2a/cpk6MdxaJ+0T7FpEhT6xfLxCsSYWQqE4hlLQSVie3R0UP
-	aJNv/fPvjNL+wZXo7ykNxRN0vYOn9hez6dbgPRX86QQQkwhZpxzBlezum1Rutp/cRR6angH16mU
-	o2rgaRWIv/WbrHQYBBwyb2fDOoEov9scfpFPR8okaJ1nKKCZsrPSBG0a/3q8M9IGrou2AjeK+L3
-	KY1mwvCumnaXXR4nHmYXeE8YwLKgi38OvsawiTCEsLsgbAHUEbJACtv24K5RKoHwF5r/U9HylTH
-	DYyeyEoaChhGFvbyv1oALkbpQ2
-X-Received: by 2002:a05:600c:1f11:b0:47d:8479:78d5 with SMTP id 5b1f17b1804b1-48727d5a31emr9773365e9.7.1774573245928;
-        Thu, 26 Mar 2026 18:00:45 -0700 (PDT)
+        bh=Zjl+dTjqIKJTtvrsxY59BLjWRmITZUE1kbENHQL+2F4=;
+        b=sYSJT/yGuSruyyG0tvKuwmyLV0g9WJ+e6yul0N6g2BU9IQwg9Om1VXgReziGvgHqCk
+         LvI+2GsLPqUCgY6D2+mRMXPmQyENaFR3VgHFIPtjyLc8oqWKoL4JCzFHev3A+h3ZHwgv
+         FZL181W5O0DS3mZXzpC17k+YTfJtSd4R87gCIls9pM3wLZmIP0XEn+4/j9et7D1d39/Y
+         x/Gvt0wMLJQrVfVJ/ydrbw3M7nVmH7KzJbmTtuAHqA6JU9vjXCVeM5WSHU8x/XAqE47q
+         cJXuo5nUwTq1nc7cbtHCzMf3ipDimr57Q4/0y+YxTjhkopT5o9zs4YLCRJE34BqnJ6pO
+         u/nw==
+X-Forwarded-Encrypted: i=1; AJvYcCWHCDY0BOegNJgKfaTqrFtd3qiMfvHTYFKE7Z1t+FcggD1SPEC9+4aRmO92bKv8vf9cSA2BSWaQkY0Hew==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHpahb4h67bUzxD6Wn/cyN4PyqCc+6iFAa2618QD4IyBhDxD7h
+	D5TmWH6lhWfgEFpy7RS8JgqJcq8K7Vaq1EQv3L1WWBRN2CotjV3UuXvQ
+X-Gm-Gg: ATEYQzwQxCV2l3o2uQgCyaX/gEk3fwdtMOs7/w6orGw5xSUECvjbsrQvL/JJvfvBk9u
+	+pPyM0QjaM+llr/aSXNo8hSL2zRNTRmADb5K2ARyufPu12gXBcmVAem37EJxqOBAiEaTtxc7CzW
+	JGCHRAm9IxGAJ/OslXc+cX8znM2G/PpOnp62bI4Ogetz3zWPMk/RmeBf1W+wliqQ1EmDC1S8tMQ
+	AYNJLQZJbhxhRozMZoFzNPNFRwgInKGWwv6wtBguJeHzq0AdLPqJS0W6RkTrtwUQkqocePgiT97
+	6shO0AfUGjGZXbJlKy0CVkFuvDaQsRUhhm5lcaZMlLMOb2YdBEhJROpH4IyzAIR1jXwKoovS7MO
+	heKEE228mOCY35f6zAK/32FR6t16myCCBv05yvcQbDW0M9j4NNJ0hFaTtJYasFPvM9Em+1MqAC/
+	pMfm3wvKM3Qf002kpc9mRNcnqi
+X-Received: by 2002:a05:6000:24c4:b0:43b:5762:298f with SMTP id ffacd0b85a97d-43b9ea617e9mr689896f8f.36.1774574982078;
+        Thu, 26 Mar 2026 18:29:42 -0700 (PDT)
 Received: from sergio-82n7 ([49.236.51.240])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48725d9e85fsm11336525e9.1.2026.03.26.18.00.44
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b9194311asm13186655f8f.10.2026.03.26.18.29.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Mar 2026 18:00:45 -0700 (PDT)
+        Thu, 26 Mar 2026 18:29:41 -0700 (PDT)
 From: Sergio Melas <sergiomelas@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: Jean Delvare <jdelvare@suse.com>,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Sergio Melas <sergiomelas@gmail.com>
-Subject: [PATCH v9] hwmon: (yogafan) Add support for Lenovo Yoga/Legion fan monitoring
-Date: Fri, 27 Mar 2026 02:00:03 +0100
-Message-ID: <20260327010004.188449-1-sergiomelas@gmail.com>
+Subject: [PATCH v10] hwmon: (yogafan) Add support for Lenovo Yoga/Legion fan monitoring
+Date: Fri, 27 Mar 2026 02:29:25 +0100
+Message-ID: <20260327012925.266336-1-sergiomelas@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <7ac0d696-327d-4dfe-8ee3-73242255ad32@roeck-us.net>
 References: <7ac0d696-327d-4dfe-8ee3-73242255ad32@roeck-us.net>
@@ -88,7 +88,12 @@ Sorry, you lost me a bit. Isn't that already implemented in v8 ?
 
 V8 had the logic, but V9 adds the extensive database and documentation
 (see yogafan.rst) to guarantee all ACPI paths and 8/16-bit multipliers
-are correctly mapped
+are correctly mapped.
+
+Please disregard the previous v9 submission. It was incorrectly formatted
+as an incremental diff; this version (v9/v10) is a complete standalone 
+patch for clean application. 
+Apologies for the noise.
 
 Signed-off-by: Sergio Melas <sergiomelas@gmail.com>
 
@@ -147,12 +152,12 @@ v1:
 ---
 ---
  Documentation/hwmon/index.rst   |   1 +
- Documentation/hwmon/yogafan.rst | 130 +++++++++++++++
+ Documentation/hwmon/yogafan.rst | 129 +++++++++++++++
  MAINTAINERS                     |   8 +
  drivers/hwmon/Kconfig           |   8 +
  drivers/hwmon/Makefile          |   1 +
  drivers/hwmon/yogafan.c         | 284 ++++++++++++++++++++++++++++++++
- 6 files changed, 432 insertions(+)
+ 6 files changed, 431 insertions(+)
  create mode 100644 Documentation/hwmon/yogafan.rst
  create mode 100644 drivers/hwmon/yogafan.c
 
@@ -168,11 +173,10 @@ index 559c32344cd3..199f35a75282 100644
     zl6100
 diff --git a/Documentation/hwmon/yogafan.rst b/Documentation/hwmon/yogafan.rst
 new file mode 100644
-index 000000000000..bcfc3808ddbf
+index 000000000000..03cc329f6fca
 --- /dev/null
 +++ b/Documentation/hwmon/yogafan.rst
-@@ -0,0 +1,130 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
+@@ -0,0 +1,129 @@
 +===============================================================================================
 +Kernel driver yogafan
 +===============================================================================================
