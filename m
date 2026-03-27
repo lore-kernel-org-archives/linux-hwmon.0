@@ -1,101 +1,137 @@
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6042223C51D
-	for <linux-hwmon@vger.kernel.org>; Fri, 27 Mar 2026 23:30:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5859C3451C1
+	for <linux-hwmon@vger.kernel.org>; Fri, 27 Mar 2026 23:36:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774654237; cv=none; b=YMaUheKvlVBH9jgcUyNQarjMmAQKCwq7EI+NVUzkIbPYH9+ZTUQeTETiwaNOAjaoeRLzRlg01DWdGHi69PlFPpphf/qLYf5TcesgvR2AsTeUfdgjyJeDiGQFezJn53lIdb5lUDxQjPRtkESWzWOWS82hwPJ5WEuN06L5UJIB0LU=
+	t=1774654597; cv=none; b=pyrT/pGNwubshAu6IC3P03rzImNI5wZsmd0Q6P64H3pYyRwvleSspMo9aX7u50WcF8DL2gl8xSxRlRxD1Lt14f5I1A81/yEp/8j9yuP521AGVSqYkmfClUnFM6HuGkv5EBmB1Uoqg9ZWyXR91L8a1KP1WS4d77RYX1urgC9maKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774654237; c=relaxed/simple;
-	bh=1IYh1ehSH5stdfKA+xL39rjCVyvhZ8UPExTRtbfOC34=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cw5mifKrWUPBF21c3vaz0ME/X+/IUp6eDATa96lMrvMRA7lVMs0VUFSeDi3pQiZf0MNRLIXR9LLSj18l3RmR0hBD1aqqEgnRWl/WBOHLoeZ1OgA6kpd/d4RC7hcpMNHPV3vtXxyXpr2HYyYE7RcfNIODdJTRN/5WhUmN2Q30JRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C0par5Um; arc=none smtp.client-ip=74.125.82.174
+	s=arc-20240116; t=1774654597; c=relaxed/simple;
+	bh=udBx5ZF7GmOPHRr66jz8rX3Mg3N9JEKdCh0imJy5Lqk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dRqZelShY9Jy9lG0X3c1a+gx5W23QhWHEaCHAxlJfxLeVBuQNsOJ2b3EpHhs2cHvfQI+Z8iV3VcbyA9CMcf25E36SknNQHLdBclq2g0Zg0oOgFbt1DW0nQdhYRRjGiTLUQzOiTGPx4lrTfeQgSdMM/mGZ8m1OcGOqm3nUmukTt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BtxqaYhf; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C0par5Um"
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2c107ef474fso4870426eec.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 27 Mar 2026 16:30:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BtxqaYhf"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-82985f42664so1600857b3a.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 27 Mar 2026 16:36:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774654235; x=1775259035; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TqMGSTYtPFG2f7/nKCRYdOSWRxj9+go2esmsos15kCk=;
-        b=C0par5UmqwpHrbfyZlxcabmdEvCr2wPULJiGpD6sTieP1MSVpnVZBfGWEa7YKol4zh
-         DQGKVbAYowJLDTIiyptW6weaJbWIWNqSTluQOJjMqdIDTdUyhVko1VYUy/gejvZxuwt0
-         z2QMK3XgbiqcktmmZmS+wYwAniZ6dxSKCRi1jGQpOuduEi6+w3pW/mhcMe8AFawrE0Cb
-         uMpoY9Ma4O5Yj+1NwzzayzY6SuXF5n2Mt2jfJl1FX8SZV1yh2EvO5nqaPOiOQjpI7fHO
-         sH2MH1UblXksdQgyl1Eky+coZeyagRMZDHu0Va1aqp5twxiUFBw6+1GttLdZBclyYNDD
-         Q9Ew==
+        d=gmail.com; s=20251104; t=1774654595; x=1775259395; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=CY2uBIRj86fDTqqweEPg/jdSO62upO/Ysw+X26u/ppY=;
+        b=BtxqaYhfsC+yuYrB1vfRflDmSLBpCqv5XB9MZJcqRMRpzSaQFaOf2Zevlz1uENfe7Z
+         kozfUpc2HZ1VLp4Iksjy6NuuMr9V1eZacZGljHwDLS6lkD2IGD1X6fsFX52qijXQxIZH
+         a9su2bd1YlVFOUf8ggVh4wqyWKTuW4mm/hPzIdrY5Xocl1S21dtOGQ3qIZBz7auTBzF0
+         R5/odwE37e8cPnhgMDs1rJSPoGkPha9ovb6Nwzx6B0AN99Lz/4EUHDxdnXVC/VBpeoIM
+         AWpJBJPIBXB8Na7m6OYsAaTUYRjq+7g39bv8kZVhbYbAh0K1DzXWBWuAWzLSH2YAwml9
+         G4pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774654235; x=1775259035;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TqMGSTYtPFG2f7/nKCRYdOSWRxj9+go2esmsos15kCk=;
-        b=d8lGPHkTkAYoXGEPNhYxefqod/0H4kVRZ49A6FX+5FE5z6Yc5bof0bbEw1WA/hc1ik
-         NogGNA7JuSl0tlSisjIjJIPFK9cxeTN68oBC1OpVMvQRoU5eAa2Gl7mudgYq1dsPoOej
-         OV84zQEOeALKjlIBkp6KA3z7SMjiomP+8UJ5UjSrpIhDS9EgscKSlXWX45qOZpZ8A/vC
-         fCQBzHN12b+BZfOSuqIRm4gXKAs45qQE+IKNEC2aYYrS4XMLSzcr7jOZdersnTm2V+ur
-         9T96NiU1Dq6e1HUi0PjDdxaD9PzTogMlzTC7QJuPU+bif8oPZGRXXKbhVd3E5W++nt09
-         Qezg==
-X-Forwarded-Encrypted: i=1; AJvYcCVcie0ID/hI2VLbpZMw2efwBtkwCHM1TwHCqfAHrvcv2cmvzBQsC0nXfG2XqF5i2SraiEQOirjsrnyEgg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyzZn52GN/b1+ZnNCKajKK/fWmnD342aP4V+k9rUSmp4qllFDr3
-	x3ZMVsp+Wl+/EhWDwWdgOMToIkM48kI/ydlgwn2FJQb8DGeyh1krGK+Q
-X-Gm-Gg: ATEYQzw7dQdj9lgujYtazvvtbE+JJuGf/5YpodIRqExPR4siTcAHvE/xEngewM8r9Rp
-	aws7/QhhCg7NV0buMG+vj/vDU1diH6RgKGtVnkju2SNUFkVJpGAiUxVnlEqDIc8n3rUmnzWAvij
-	tvD0k2jOm0s9O4U2pBlZlS7H21c8xqPyRSE5HwiWFuqmjgQSvfx1yVUWB8+EgpoU59Fh2bZ0eQF
-	izT7tcfyiVQHfvD/60qp/8ET5MTh35Kw7kT4Z+TSw/Vt6KvrTJW7iIeKPmkygAigZFDKRpzqYWs
-	ZWICrwIqJ9oBNKXGN6wuOSLfGqCmtfNzo9C/wsPBz9nfwOc+t2Uq/rUtiSaMxx97PBrAUkUwiTr
-	CScOi+PCFMiqFE09CG9d2pQGJsMC7M9ilu5wv88iNjq4H0ptdByfSvXKmty9cm2ruHtC+9qvvTf
-	4OXwZahoKY/0VUOvCH3eR6b512OWodJJiJhIvg
-X-Received: by 2002:a05:693c:3113:b0:2ba:9381:5c7c with SMTP id 5a478bee46e88-2c185dd3447mr2526692eec.9.1774654235311;
-        Fri, 27 Mar 2026 16:30:35 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774654595; x=1775259395;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CY2uBIRj86fDTqqweEPg/jdSO62upO/Ysw+X26u/ppY=;
+        b=WQEh3MFyCeb01OdSfYfVTa0/kJSLb0a1N0l6Mc8+aNloZZ0KSk4BQ7pTqDK/EwHFJK
+         dT6I3v/l/FQo8oHTf718d+2gJZIMXoUhkYhUlF0jZ7OEZciSS7Zm2A5Kw3DYgd2Pzzv9
+         1HL9uOV1y6CR1ZV0CFmnLTJ1Wm19Jky2slkXIqRYOwfr+ZhVbHueGSpugMLD5RAiHgxo
+         YYNsB5E9QC8BKasDt77GKgPu+00rV3ME3KZoYQMQHentk65RqwbjeS0BeVyjpuXS9DJM
+         TVbCV1Pm/MUB7ghZ4HAwZ1S+TbXi3d5ce5s8FsIazwY61zztJFr6mMznmhprUKDT8Anj
+         uYXA==
+X-Gm-Message-State: AOJu0YwB+Jg9Hu4Zk2plsxN6Ks4O2fMY9gXxao7GocPr/ElHiNalVd00
+	iYnuGWWfsrU8NzJxG1F8EE5czKw6D1+t/1qFuqKb4oiPYkfIRtE74zqp
+X-Gm-Gg: ATEYQzwASrP9HhM9V/H5XHbh1QB1t3nl0CTxa4+W6DLRViz06QMumejdWsVbrg8nDhd
+	cWse1Mb6Nq6SJSb7k8zMEcz3atR97BMkK277PkBEnaSqucq7jWfOUgd9/bgLN1FHaczzka+mILX
+	JIqns84H6Rz7NT7KnJ0XH3CGxck3D1xZ8Dh8/W4iMrmHJuAkGkWWS0Q7HBQ+dkTuObKEw8Dk/9u
+	AA6eVlyFdmMzUcuYc2O7FWSAQLeMGsDa8bF14GuiUIRd4d51tWYB+CxvE+b7C3e4mC+VUL+C0jn
+	UTe3+UlKd2j7OIBcxgB3LM0Fk8a7+LkJF59VWAH+OD8y/nFmItDrARFM32lujhJe4AWziQmen3a
+	N4rF6BKaXB45pgwbHdli8b9lzpqqgpDggcOj41PIUeyiFig0COwAgVOmu0pEY1xZcJI7m8nLq81
+	RbwdCBRAFCcJvqJczw9pNmmuFc+KbtuukaKINY
+X-Received: by 2002:a05:6a20:6a0b:b0:39b:da83:91aa with SMTP id adf61e73a8af0-39c87c095c8mr5188750637.51.1774654595467;
+        Fri, 27 Mar 2026 16:36:35 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c3c6e9bd48sm661935eec.20.2026.03.27.16.30.34
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76917b9b8dsm263670a12.22.2026.03.27.16.36.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2026 16:30:34 -0700 (PDT)
+        Fri, 27 Mar 2026 16:36:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 27 Mar 2026 16:30:33 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Sergio Melas <sergiomelas@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11] hwmon: (yogafan) Add support for Lenovo Yoga/Legion
- fan monitoring
-Message-ID: <7c8dcadb-7e9f-47b3-8bb7-80a0e8412837@roeck-us.net>
-References: <20260327221602.18832-1-sergiomelas@gmail.com>
+Subject: [GIT PULL] hwmon fixes for hwmon-for-v7.0-rc6
+Date: Fri, 27 Mar 2026 16:36:34 -0700
+Message-ID: <20260327233634.4183849-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260327221602.18832-1-sergiomelas@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 27, 2026 at 11:16:02PM +0100, Sergio Melas wrote:
-> This driver provides fan speed monitoring for Lenovo Yoga, Legion, and
-> IdeaPad laptops by interfacing with the Embedded Controller (EC) via ACPI.
-> 
-> To address low-resolution sampling in Lenovo EC firmware, a Rate-Limited
-> Lag (RLLag) filter is implemented. The filter ensures a consistent physical
-> curve regardless of userspace polling frequency.
-> 
-> Hardware identification is performed via DMI-based quirk tables, which
-> map specific ACPI object paths and register widths (8-bit vs 16-bit)
-> deterministically.
-> 
-> Signed-off-by: Sergio Melas <sergiomelas@gmail.com>
+Hi Linus,
 
-Sashiko is happy, and I don't find anything to complain about anymore
-either, so...
+Please pull hwmon fixes for Linux hwmon-for-v7.0-rc6 from signed tag:
 
-Applied.
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v7.0-rc6
 
 Thanks,
 Guenter
+------
+
+The following changes since commit c369299895a591d96745d6492d4888259b004a9e:
+
+  Linux 7.0-rc5 (2026-03-22 14:42:17 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v7.0-rc6
+
+for you to fetch changes up to 754bd2b4a084b90b5e7b630e1f423061a9b9b761:
+
+  hwmon: (pmbus/core) Protect regulator operations with mutex (2026-03-25 13:32:37 -0700)
+
+----------------------------------------------------------------
+hwmon fixes for v7.0-rc6
+
+- PMBus driver fixes
+
+  * Add mutex protection for regulator operations
+
+  * Fix reading from "write-only" attributes
+
+  * Mark lowest/average/highest/rated attributes as read-only
+
+  * isl68137: Add mutex protection for AVS enable sysfs attributes
+
+  * ina233:  Fix error handling and sign extension when reading shunt voltage
+
+- adm1177: Fix sysfs ABI violation and current unit conversion
+
+- peci: Fix off-by-one in cputemp_is_visible(), and crit_hyst returning
+  delta instead of absolute temperature
+
+----------------------------------------------------------------
+Guenter Roeck (3):
+      hwmon: (pmbus) Mark lowest/average/highest/rated attributes as read-only
+      hwmon: (pmbus) Introduce the concept of "write-only" attributes
+      hwmon: (pmbus/core) Protect regulator operations with mutex
+
+Sanman Pradhan (5):
+      hwmon: (pmbus/ina233) Fix error handling and sign extension in shunt voltage read
+      hwmon: (pmbus/isl68137) Add mutex protection for AVS enable sysfs attributes
+      hwmon: (peci/cputemp) Fix crit_hyst returning delta instead of absolute temperature
+      hwmon: (peci/cputemp) Fix off-by-one in cputemp_is_visible()
+      hwmon: (adm1177) fix sysfs ABI violation and current unit conversion
+
+ Documentation/hwmon/adm1177.rst      |   8 +-
+ Documentation/hwmon/peci-cputemp.rst |  10 +-
+ drivers/hwmon/adm1177.c              |  54 +++++-----
+ drivers/hwmon/peci/cputemp.c         |   4 +-
+ drivers/hwmon/pmbus/ina233.c         |   3 +-
+ drivers/hwmon/pmbus/isl68137.c       |  21 +++-
+ drivers/hwmon/pmbus/pmbus_core.c     | 192 ++++++++++++++++++++++++++++-------
+ 7 files changed, 217 insertions(+), 75 deletions(-)
