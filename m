@@ -1,160 +1,384 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42821231832;
-	Fri, 27 Mar 2026 17:06:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 373C5396B8B;
+	Fri, 27 Mar 2026 17:25:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774631218; cv=none; b=jLNnr5d6wVBRd4o1eXLCao/9LfIr0Vg/hiYehbUYv4O/TTh22xtG48n6NEBsUSGsyjN4AOLCb5NlqM1WRq5JKMl1j5TbBlFV0CLCGRUjbW9bQiQ9D8f2CJrJtPIbPDRe1jt+/ths9bPxqUdRjEi4ycamUJSGHMXH9e6Sf5T9u/E=
+	t=1774632329; cv=none; b=TaE1M3x1xSXdiCU7uM4+En1sYZvefHPWnXEsTCjNkknlx3XMt/TFnsnYxV9iLcSy9pp8u+JBIbaaEFln8jpMvPQjoaBJYU4GvmJQSTJL26kEF8fC3VmPa0A14lrkgqXNIgjBknbQPAUw+NkUIHgHFThgBd192PsOiFrTYQQDhwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774631218; c=relaxed/simple;
-	bh=vLL4v8VAXKNthR6L1PD+8yULdWXnKJctvDyolGaUXzQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JMGjpBzNhEQENxes+jhAjmv4gV/rxbvB3freSZGs8CSHEJxLscgrFullQkZtV8hg4YSrlljjhk2mBU9eA0D/d8lqn5rZlUAPAhzN0EZhpwagzgSJ70A3UV7Y+WT9oJZ8/wPZFYMHLZ1NLfMyaF706aieIG03EdcQhjiDrkkZlxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=tkjXcO/2; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1774632329; c=relaxed/simple;
+	bh=kauSUkL5DWH2NieedbIhMMj0WM+ZhJkZ3VUzClxG8Pc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=ihiMqkmvl41Bp2H6dHJxeooAWGRWIVnrYl2duMsmVKpuBioke5h2ytbrX27h1/3HBDTC4aDM1gs3flmXrEmi24TcwPTw0FV7LjnVG2ZDyN0OiFxe5z/gtt2oHUoxsQ4Tp5t+FrLQncIFRS/2yBsB8IF3bHTGUmx93FXmx7MgtEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GAMtYUPf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="tkjXcO/2"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 207484E4282C;
-	Fri, 27 Mar 2026 17:06:50 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id CF91D60268;
-	Fri, 27 Mar 2026 17:06:49 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4EF2D10451ABF;
-	Fri, 27 Mar 2026 18:06:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1774631208; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=Jzs16/Hci7BrDK5k2/QRaN0P7w7nkSMj+Uv+0x67DEo=;
-	b=tkjXcO/2wsgAXL+NYyrzec0vnbi4rC8qkOwkf3LFSG5nJzKMKu2dyWKUPUctv0Pb4OxNiC
-	cXy8c4N/K7xsgsa1wTdmgQSiWIZ8IcflMD5TBzJVrEghDCPi00eMy0NcbcarvwDxd6KZOx
-	x7655TfMh4huEAqwKTYEwnAXgEqbHbjZ1zGwqOaWbhSBMKuH7W4ATUl8Ard9ZmZMcdXur2
-	RCf3YxyK9eIGCIvdKOIfHI4K0SyfgeLYWCtfOxkw+i+AgK1ZGoB8yH9oO9/MoaWnEuTb2L
-	lAILrenKgQCwCx9gEIDL72yUUw/VRdK4GGK1M/cT1od0jD7AhG9M+nIk7juhag==
-Date: Fri, 27 Mar 2026 18:06:42 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Akhil R <akhilrajeev@nvidia.com>
-Cc: Frank.Li@nxp.com, acpica-devel@lists.linux.dev, conor+dt@kernel.org,
-	conor@kernel.org, devicetree@vger.kernel.org, ebiggers@kernel.org,
-	fredrik.markstrom@est.tech, jonathanh@nvidia.com,
-	krzk+dt@kernel.org, lenb@kernel.org, linux-acpi@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-	linux@roeck-us.net, miquel.raynal@bootlin.com,
-	p.zabel@pengutronix.de, rafael@kernel.org, robert.moore@intel.com,
-	robh@kernel.org, smangipudi@nvidia.com, thierry.reding@kernel.org
-Subject: Re: [PATCH 01/12] dt-bindings: i3c: Add mipi-i3c-static-method to
- support SETAASA
-Message-ID: <2026032717064247cc495e@mail.local>
-References: <20260327082721f7e69e6a@mail.local>
- <20260327114204.46556-1-akhilrajeev@nvidia.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GAMtYUPf"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0AB44C2BCB0;
+	Fri, 27 Mar 2026 17:25:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774632329;
+	bh=kauSUkL5DWH2NieedbIhMMj0WM+ZhJkZ3VUzClxG8Pc=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=GAMtYUPfZFkDDiM9dmxRkdLpbCSIO7W9eTimy8BGeREZqWcLSze4sEta8fxjo/97x
+	 YFmewNIglGNXJAA5YKxukrxQ3uHcR71ot68ctAT31lX2hvKLHVP6tA4062tU6bOaf8
+	 YhdQshb3bdf6WUB1nasEdnVV9kmjH5uCkmAzfWfXoLUmlrzSqXkxxis9jfTS4SXkex
+	 RS709NzZr4QRi7kFX5AhYBsQdWpy+j7bslUcOlQcFv5mm/oLzzVGPPpWbBY1FXmeoY
+	 z/y+ghEXovYFLZHgpu2Yzqu4PvqJ8ESpJh7EnqCj+bK8fjIMc0Pmpdzr8DeEQEaueo
+	 16PxIKSH8bGRA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA9F610F285E;
+	Fri, 27 Mar 2026 17:25:28 +0000 (UTC)
+From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
+Date: Fri, 27 Mar 2026 17:26:14 +0000
+Subject: [PATCH v8 1/3] dt-bindings: hwmon: Document the LTC4283 Swap
+ Controller
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260327114204.46556-1-akhilrajeev@nvidia.com>
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260327-ltc4283-support-v8-1-471de255d728@analog.com>
+References: <20260327-ltc4283-support-v8-0-471de255d728@analog.com>
+In-Reply-To: <20260327-ltc4283-support-v8-0-471de255d728@analog.com>
+To: linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-doc@vger.kernel.org
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>
+X-Mailer: b4 0.15.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1774632374; l=9689;
+ i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
+ bh=nUG3fQSB6RK0XKrQQTpaOauUpPjj3stWPtiJ5PLIzaM=;
+ b=q5A2JHUIFVyhg5uS0Ct6IAgsPqAIrbtdlAf/LbQxVYFiXIQo4ysqOaQWZtMMUJbu1lYGY8kvO
+ EQlnTjX8b8HCGdwQNgT8SmuAANGEyjuMQqwQbQOi28GIW6asp2vGxGQ
+X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
+ pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
+X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
+ auth_id=100
+X-Original-From: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
+Reply-To: nuno.sa@analog.com
 
-On 27/03/2026 17:12:04+0530, Akhil R wrote:
-> On Fri, 27 Mar 2026 09:27:21 +0100, Alexandre Belloni wrote:
-> > On 27/03/2026 13:48:58+0530, Akhil R wrote:
-> >> On Thu, 26 Mar 2026 16:44:31 +0100, Alexandre Belloni wrote:
-> >> > On 26/03/2026 10:05:03-0500, Rob Herring wrote:
-> >> >> On Wed, Mar 18, 2026 at 05:31:50PM +0000, Conor Dooley wrote:
-> >> >> > On Wed, Mar 18, 2026 at 10:57:14PM +0530, Akhil R wrote:
-> >> >> > > Add the 'mipi-i3c-static-method' property mentioned in the MIPI I3C
-> >> >> > > Discovery and Configuration Specification [1] to specify which discovery
-> >> >> > > method an I3C device supports during bus initialization. The property is
-> >> >> > > a bitmap, where a bit value of 1 indicates support for that method, and 0
-> >> >> > > indicates lack of support.
-> >> >> > > Bit 0: SETDASA CCC (Direct)
-> >> >> > > Bit 1: SETAASA CCC (Broadcast)
-> >> >> > > Bit 2: Other CCC (vendor / standards extension)
-> >> >> > > All other bits are reserved.
-> >> >> > > 
-> >> >> > > It is specifically needed when an I3C device requires SETAASA for the
-> >> >> > > address assignment. SETDASA will be supported by default if this property
-> >> >> > > is absent - which means for now the property just serves as a flag to
-> >> >> > > enable SETAASA, but keep the property as a bitmap to align with the
-> >> >> > > specifications.
-> >> >> > > 
-> >> >> > > [1] https://www.mipi.org/specifications/disco
-> >> >> > > 
-> >> >> > > Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> >> >> > > ---
-> >> >> > >  .../devicetree/bindings/i3c/i3c.yaml          | 30 ++++++++++++++++---
-> >> >> > >  1 file changed, 26 insertions(+), 4 deletions(-)
-> >> >> > > 
-> >> >> > > diff --git a/Documentation/devicetree/bindings/i3c/i3c.yaml b/Documentation/devicetree/bindings/i3c/i3c.yaml
-> >> >> > > index e25fa72fd785..1705d90d4d79 100644
-> >> >> > > --- a/Documentation/devicetree/bindings/i3c/i3c.yaml
-> >> >> > > +++ b/Documentation/devicetree/bindings/i3c/i3c.yaml
-> >> >> > > @@ -31,10 +31,12 @@ properties:
-> >> >> > >        described in the device tree, which in turn means we have to describe
-> >> >> > >        I3C devices.
-> >> >> > >  
-> >> >> > > -      Another use case for describing an I3C device in the device tree is when
-> >> >> > > -      this I3C device has a static I2C address and we want to assign it a
-> >> >> > > -      specific I3C dynamic address before the DAA takes place (so that other
-> >> >> > > -      devices on the bus can't take this dynamic address).
-> >> >> > > +      Other use-cases for describing an I3C device in the device tree are:
-> >> >> > > +      - When the I3C device has a static I2C address and we want to assign
-> >> >> > > +        it a specific I3C dynamic address before the DAA takes place (so
-> >> >> > > +        that other devices on the bus can't take this dynamic address).
-> >> >> > > +      - When the I3C device requires SETAASA for its discovery and uses a
-> >> >> > > +        pre-defined static address.
-> >> >> > >  
-> >> >> > >    "#size-cells":
-> >> >> > >      const: 0
-> >> >> > > @@ -147,6 +149,26 @@ patternProperties:
-> >> >> > >            through SETDASA. If static address is not present, this address is assigned
-> >> >> > >            through SETNEWDA after assigning a temporary address via ENTDAA.
-> >> >> > >  
-> >> >> > > +      mipi-i3c-static-method:
-> >> >> > > +        $ref: /schemas/types.yaml#/definitions/uint32
-> >> >> > > +        minimum: 0x1
-> >> >> > > +        maximum: 0xff
-> >> >> > > +        default: 1
-> >> >> > > +        description: |
-> >> >> > > +          Bitmap describing which methods of Dynamic Address Assignment from a
-> >> >> > > +          static address are supported by this I3C Target. A bit value of 1
-> >> >> > > +          indicates support for that method, and 0 indicates lack of support.
-> >> >> > 
-> >> >> > I really am not keen on properties that are bitmaps, why can't we just
-> >> >> > use the strings "setdasa", "setaasa" etc?
-> >> >> 
-> >> >> If this comes from a specification, then I'd tend to just copy it rather 
-> >> >> than invent our own thing. Obviously if is something structured 
-> >> >> fundamentally different from how DT is designed, then we wouldn't. But 
-> >> >> this is just a simple property.
-> >> >> 
-> >> > 
-> >> > The issue being that the specification is not public so it is difficult
-> >> > to take any decision.
-> >> 
-> >> There is a public version available in the same link, but you would still
-> >> have to provide them a name and an email ID. The document will be sent to
-> >> the mail ID.
-> >> 
-> > 
-> > The public version only contains one property:
-> > mipi-disco-interface-revision
-> 
-> Could you check once if the below link works?
-> https://www.mipi.org/mipi-disco-for-i3c-download
+From: Nuno Sá <nuno.sa@analog.com>
 
-It works, thanks. The bitfield is fine then.
+The LTC4283 is a negative voltage hot swap controller that drives an
+external N-channel MOSFET to allow a board to be safely inserted and
+removed from a live backplane.
 
-> 
-> Best Regards,
-> Akhil
+Special note for the "adi,vpower-drns-enable" property. It allows to choose
+between the attenuated MOSFET drain voltage or the attenuated input
+voltage at the RTNS pin (effectively choosing between input or output
+power). This is a system level decision not really intended to change at
+runtime and hence is being added as a Firmware property.
+
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Signed-off-by: Nuno Sá <nuno.sa@analog.com>
+---
+ .../devicetree/bindings/hwmon/adi,ltc4283.yaml     | 272 +++++++++++++++++++++
+ MAINTAINERS                                        |   6 +
+ 2 files changed, 278 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml b/Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml
+new file mode 100644
+index 000000000000..05e2132ad4d8
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml
+@@ -0,0 +1,272 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/adi,ltc4283.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: LTC4283 Negative Voltage Hot Swap Controller
++
++maintainers:
++  - Nuno Sá <nuno.sa@analog.com>
++
++description: |
++  The LTC4283 negative voltage hot swap controller drives an external N-channel
++  MOSFET to allow a board to be safely inserted and removed from a live
++  backplane.
++
++  https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4283.pdf
++
++properties:
++  compatible:
++    enum:
++      - adi,ltc4283
++
++  reg:
++    maxItems: 1
++
++  adi,rsense-nano-ohms:
++    description: Value of the sense resistor.
++
++  adi,current-limit-sense-microvolt:
++    description:
++      The current limit sense voltage of the chip is adjustable between
++      15mV and 30mV in 1mV steps. This effectively limits the current
++      on the load.
++    minimum: 15000
++    maximum: 30000
++    default: 15000
++
++  adi,current-limit-foldback-factor:
++    description:
++      Specifies the foldback factor for the current limit. The current limit
++      can be reduced (folded back) to one of four preset levels. The value
++      represents the percentage of the current limit sense voltage to use
++      during foldback. A value of 100 means no foldback.
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [10, 20, 50, 100]
++    default: 100
++
++  adi,cooling-delay-ms:
++    description:
++      Cooling time to apply after an overcurrent fault, FET bad or
++      external fault.
++    enum: [512, 1002, 2005, 4100, 8190, 16400, 32800, 65600]
++    default: 512
++
++  adi,fet-bad-timer-delay-ms:
++    description:
++      FET bad timer delay. After a FET bad status condition is detected,
++      this timer is started. If the condition persists for the
++      specified time, the FET is turned off and a fault is logged.
++    enum: [256, 512, 1002, 2005]
++    default: 256
++
++  adi,power-good-reset-on-fet:
++    description:
++      If set, resets the power good status when the MOSFET is turned off.
++      Otherwise, it resets when a low output voltage is detected.
++    type: boolean
++
++  adi,fet-turn-off-disable:
++    description:
++      If set, the MOSFET is not turned off when a FET fault is detected.
++    type: boolean
++
++  adi,tmr-pull-down-disable:
++    description: Disables 2uA pull-down current on the TMR pin.
++    type: boolean
++
++  adi,dvdt-inrush-control-disable:
++    description:
++      Disables dV/dt inrush control during startup. In dV/dt mode, the inrush
++      current is limited by controlling a constant output voltage ramp rate.
++      When disabled, the inrush control mechanism is active current limiting.
++    type: boolean
++
++  adi,fault-log-enable:
++    description:
++      If set, enables logging fault registers and ADC data into EEPROM upon a
++      fault.
++    type: boolean
++
++  adi,vpower-drns-enable:
++    description:
++      If set, enables the attenuated MOSFET drain voltage to be monitored. This
++      effectively means that the MOSFET power is monitored. If not set, the
++      attenuated input voltage (and hence input power) is monitored.
++    type: boolean
++
++  adi,external-fault-fet-off-enable:
++    description: Turns MOSFET off following an external fault.
++    type: boolean
++
++  adi,undervoltage-retry-disable:
++    description: Do not retry to turn on the MOSFET after an undervoltage fault.
++    type: boolean
++
++  adi,overvoltage-retry-disable:
++    description: Do not retry to turn on the MOSFET after an overvoltage fault.
++    type: boolean
++
++  adi,external-fault-retry-enable:
++    description: Retry to turn on the MOSFET after an external fault.
++    type: boolean
++
++  adi,overcurrent-retries:
++    description: Configures auto-retry following an Overcurrent fault.
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [latch-off, "1", "7", unlimited]
++    default: latch-off
++
++  adi,fet-bad-retries:
++    description:
++      Configures auto-retry following a FET bad fault and a consequent MOSFET
++      turn off.
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [latch-off, "1", "7", unlimited]
++    default: latch-off
++
++  adi,pgio1-func:
++    description: Configures the function of the PGIO1 pin.
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [inverted_power_good, power_good, gpio]
++    default: inverted_power_good
++
++  adi,pgio2-func:
++    description: Configures the function of the PGIO2 pin.
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [inverted_power_good, power_good, gpio, active_current_limiting]
++    default: inverted_power_good
++
++  adi,pgio3-func:
++    description: Configures the function of the PGIO3 pin.
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [inverted_power_good_input, power_good_input, gpio]
++    default: inverted_power_good_input
++
++  adi,pgio4-func:
++    description: Configures the function of the PGIO4 pin.
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [inverted_external_fault, external_fault, gpio]
++    default: inverted_external_fault
++
++  adi,gpio-on-adio1:
++    description: If set, the ADIO1 pin is used as a GPIO.
++    type: boolean
++
++  adi,gpio-on-adio2:
++    description: If set, the ADIO2 pin is used as a GPIO.
++    type: boolean
++
++  adi,gpio-on-adio3:
++    description: If set, the ADIO3 pin is used as a GPIO.
++    type: boolean
++
++  adi,gpio-on-adio4:
++    description: If set, the ADIO4 pin is used as a GPIO.
++    type: boolean
++
++  gpio-controller: true
++
++  '#gpio-cells':
++    const: 2
++
++dependencies:
++  adi,gpio-on-adio1:
++    - gpio-controller
++    - '#gpio-cells'
++  adi,gpio-on-adio2:
++    - gpio-controller
++    - '#gpio-cells'
++  adi,gpio-on-adio3:
++    - gpio-controller
++    - '#gpio-cells'
++  adi,gpio-on-adio4:
++    - gpio-controller
++    - '#gpio-cells'
++  adi,external-fault-retry-enable:
++    - adi,pgio4-func
++  adi,external-fault-fet-off-enable:
++    - adi,pgio4-func
++
++required:
++  - compatible
++  - reg
++  - adi,rsense-nano-ohms
++
++allOf:
++  - if:
++      properties:
++        adi,pgio1-func:
++          const: gpio
++      required:
++        - adi,pgio1-func
++    then:
++      required:
++        - gpio-controller
++        - '#gpio-cells'
++
++  - if:
++      properties:
++        adi,pgio2-func:
++          const: gpio
++      required:
++        - adi,pgio2-func
++    then:
++      required:
++        - gpio-controller
++        - '#gpio-cells'
++
++  - if:
++      properties:
++        adi,pgio3-func:
++          const: gpio
++      required:
++        - adi,pgio3-func
++    then:
++      required:
++        - gpio-controller
++        - '#gpio-cells'
++
++  - if:
++      properties:
++        adi,pgio4-func:
++          const: gpio
++      required:
++        - adi,pgio4-func
++    then:
++      properties:
++        adi,external-fault-retry-enable: false
++        adi,external-fault-fet-off-enable: false
++      required:
++        - gpio-controller
++        - '#gpio-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        swap-controller@15 {
++            compatible = "adi,ltc4283";
++            reg = <0x15>;
++
++            adi,rsense-nano-ohms = <500>;
++            adi,current-limit-sense-microvolt = <25000>;
++            adi,current-limit-foldback-factor = <10>;
++            adi,cooling-delay-ms = <8190>;
++            adi,fet-bad-timer-delay-ms = <512>;
++
++            adi,external-fault-fet-off-enable;
++            adi,pgio4-func = "external_fault";
++
++            adi,gpio-on-adio1;
++            adi,pgio1-func = "gpio";
++            gpio-controller;
++            #gpio-cells = <2>;
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 830c6f076b00..13ae2f3db449 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15141,6 +15141,12 @@ F:	Documentation/devicetree/bindings/hwmon/adi,ltc4282.yaml
+ F:	Documentation/hwmon/ltc4282.rst
+ F:	drivers/hwmon/ltc4282.c
+ 
++LTC4283 HARDWARE MONITOR AND GPIO DRIVER
++M:	Nuno Sá <nuno.sa@analog.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Supported
++F:	Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml
++
+ LTC4286 HARDWARE MONITOR DRIVER
+ M:	Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+ L:	linux-hwmon@vger.kernel.org
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.53.0
+
+
