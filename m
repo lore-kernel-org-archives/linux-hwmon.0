@@ -1,67 +1,41 @@
-Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40FE92853F7
-	for <linux-hwmon@vger.kernel.org>; Fri, 27 Mar 2026 18:01:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B29C13921EA;
+	Fri, 27 Mar 2026 20:43:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774634498; cv=none; b=oLyqDjZgGMl+OJPUAixhXqO9yjNVddwV8rpUiAndmLusZoPq/4rpaf9Bk4UG825lSbWZoEO5KsJup36DRhBl8HoqYSyUtUTc5RHhzypyDBm7QV3jmhvftf3zezhv2QxCcoUqSIjCOA8cBjHf533+Djiohv2/jFpz4w2kdhvL3D4=
+	t=1774644192; cv=none; b=hE39gYByil2cSR0mcGuRKmvcKt3NFTsBJmRo7xTa75eWHL4jnOkg5bs3MEHwqrRS2QRRiXI6ARLRo5E2f88h1off8IMwtAvUI0LpoIeJKbpzAvoi7V6wSEvB2p6Z7+G/eYRvXm/I/OpZi0gcgEvQmuVBMjoD/67xNvT8cmx9bt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774634498; c=relaxed/simple;
-	bh=o3kf/NU6ggA+96hxJ6s6qUz0gKvF8dPlLa9wtBo3yVA=;
+	s=arc-20240116; t=1774644192; c=relaxed/simple;
+	bh=lAskDI7O2EfZVPpVojwq82SKa/kUXbUveaAsopJ0nVw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TctK6QONzULd4jHLazi30x2cq6v4uldeEaH643ZqGReqZJ+HZfNZ9fGfWw5By8fN8GpgAp4YmJLj0HMxM9FYHKRmQZRfU0IUdI7ZSMMpqtnU9JyWewvuKMO3sbpanlregnRkel+hWAwAzzwgUErmnNkxxwxogdVpXjZ7v+/LmD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IqwO9QjB; arc=none smtp.client-ip=74.125.82.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=E1Rhl0F8aRtLINwJohN0slMOTzdEM1oWsd+4jE2jwv0Q9UKKsSWDwB44WPvSMlv9mKByn3keoQst5Tvo2RcMRgsvaeTbOiabGWLEtXO1DdFbs+tkOdzCZ8FnmZboJohebR3mBUHPISlymSBE5m2strI6kneR1/fUK996lX8zzQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=d7wno400; arc=none smtp.client-ip=212.227.17.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IqwO9QjB"
-Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-1271257ae53so2701801c88.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 27 Mar 2026 11:01:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774634496; x=1775239296; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=/K7jFoykzGfK1EXSC26RouoI0qFu1tFlLRSZanIFZiI=;
-        b=IqwO9QjBc4f9eNLny9XWLcRkn2NXBWTkC3oPe1Khl0BhkFAYuciTbj5ihvtxpNQGHf
-         Sg2xJ/2oF3iohkeLMx8gDPG4sOgnEU2MrqGHhD/qAmZw8MbRCrH7dG+LmiaPK9V2X1Zs
-         2uNimzKGBcN8auf+A2jtjOV7Vdl0Zkgj40wD3rCKG4oRJkw9Ha6VG/eXWCsnD6H8CwcN
-         3LiNY+dz0LdukZS33S7QyESQU7FuGLrqPEP67u98Q30yssbJsrNg6mGy71nBEd2Ml0UU
-         5SsMpTS+G3iX4f1Aa6KQPFWbcSFSE7vY2qxhoY9WmOohLmd34LcuLylJNN9Jlgs090zx
-         Rdog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774634496; x=1775239296;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/K7jFoykzGfK1EXSC26RouoI0qFu1tFlLRSZanIFZiI=;
-        b=m5ahkMHPXCKyWG1NnbzwPmOuhcbr1qq42FAhXZiJrwm/tA6cAMeKGLRRIgilBjVyy5
-         J6oNXQTizmSGKwQWmu7At2UgETBxNSkPWiUuI61eQ7AH0+p+/rpFAvIhi62jaky82cr4
-         tDZPcpzvAtNd7fBfItIDmS3vIsUaAVMasO4TdM5cWVmNJrydXikTvPTIXqP7CGIVSv0D
-         g8RlpllB652hnApGnrqL4iSjb+ht3im0ZtJdpsgiPqumZJKx6Dt59hSIRWOp/vY7ITIQ
-         4WgtQR4vMcm9Ja43JQaoSnzPoy1HN/VrXcID8n05GdYCJGh/kcx8PaS5rRuNDIXrQdHW
-         7E1w==
-X-Forwarded-Encrypted: i=1; AJvYcCVG/ZJZ1SN5zOEbA8/JplNDGzPPfiowKuKj4ccutfFq+d9oCSwJPWkzvCNLgXF9V4oBS9K0m+LkxYwvrg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWCpo1p2NKyfrVqn/kaItczsWyE2GD87tIDjB+MRbnGkJ6wtTU
-	VeG8Ls5Ns5HZdhxKgaTpqkYK4YME+WOI1nJJSrtmcLDKA5Yg86lMsOFI
-X-Gm-Gg: ATEYQzyGweTSOfsYM9ntxxN+NuDv8UkhhUC/evKV3m0kE4HqaKxiiQk/rjK7wN6BoQM
-	x2kqikRIY45H2otIV7wbaWsrLcFeCmfslaXu4P7rF/8O+VTvY2aG2zC2PrRFMgVB1GrwR8nwI5x
-	uZX4HEtLZuBXsVcqoZmh+qkS6OQ3OlSv9nf8EZs4TJDv0ub1d4JCw/UypS1sh7+MnBRLogMjDUk
-	Wpi2cIiIw7LuthEuL05IfaWxmqn/JE8xILVOc58FhnvAWsFSnpnan/vx6DcZrj8uvx246OhuHxF
-	+btbt9onYLErBAnNKl67u/Nzy9MJnMl6UmKAFuSNakgeLw2oA5Mm0puerKFYt//QTG70e2DnMJD
-	3WBhuygES7aWS/DLVNbOqceu8Iku5Vi911PlJNANQ56SFFRPQXEsmx6WXelbH12r6pMlOIxG/ix
-	anBdo+nxq+uoWKsdQtnH7B/MNiIrLr5dfBJtsXwBpmDaiCTwR4wCuQ6Sknw8JZCO7wU/LQ7ke0
-X-Received: by 2002:a05:7301:6781:b0:2c0:cd9d:e024 with SMTP id 5a478bee46e88-2c185f37df1mr1902434eec.28.1774634496103;
-        Fri, 27 Mar 2026 11:01:36 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c3c68b249fsm8141eec.19.2026.03.27.11.01.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Mar 2026 11:01:35 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <24b5d629-d980-43e4-960a-c7c1dbacb7b9@roeck-us.net>
-Date: Fri, 27 Mar 2026 11:01:33 -0700
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="d7wno400"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1774644175; x=1775248975; i=w_armin@gmx.de;
+	bh=lAskDI7O2EfZVPpVojwq82SKa/kUXbUveaAsopJ0nVw=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=d7wno400sV0kMcYCVUWU+jbyw8CVeMXflPpdYbwYDszgUX+cofUbmqMkhVGJspQ1
+	 6dsNa60+PEU9jH+ng4DVB1iwbUR5Jno6BgexR1PkOa009RHknQzU0dT47/SGvsXBT
+	 ffxcq7g6icrMkahXBA6/PSBWH6f+t2L46W6x9m5y85m5nh5vyuhXZTY6ka4i4gU61
+	 apKXf5+NZHN1NJMA5otAqO0w8q25Pqu+Hf/DOUAciurDxa7iPcM+lpiBiVcJ0vUg8
+	 NiD6QsJqVN/Ycx5PR+p05UjihF9JX6Uh2gUKlBomR3imZCFQvBL2hu/cvhxDXNCxF
+	 PeVdV7AbgRhFHfGmNQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N3siG-1vNzEU3gYK-00tL38; Fri, 27
+ Mar 2026 21:42:54 +0100
+Message-ID: <963779e0-92b9-45b5-9dc3-aa155f8ad9a6@gmx.de>
+Date: Fri, 27 Mar 2026 21:42:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,143 +43,147 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10] hwmon: (yogafan) Add support for Lenovo Yoga/Legion
- fan monitoring
-To: Sergio Melas <sergiomelas@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <7ac0d696-327d-4dfe-8ee3-73242255ad32@roeck-us.net>
- <20260327012925.266336-1-sergiomelas@gmail.com>
+Subject: Re: [PATCH v3 0/9] Convert most Dell WMI drivers to use the new
+ buffer-based API
+To: Guenter Roeck <linux@roeck-us.net>, Dell.Client.Kernel@dell.com,
+ pali@kernel.org, mjg59@srcf.ucam.org
+Cc: soyer@irl.hu, hansg@kernel.org, ilpo.jarvinen@linux.intel.com,
+ platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, mario.limonciello@amd.com
+References: <20260314175249.16040-1-W_Armin@gmx.de>
+ <502ea01b-e5e1-45a2-b5f8-ad236dc8f006@roeck-us.net>
+ <52dabfaa-cb3c-4c2f-92a0-efaa175bf4be@gmx.de>
+ <d491e41e-5a27-430e-b4b0-35b7e3867995@roeck-us.net>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260327012925.266336-1-sergiomelas@gmail.com>
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <d491e41e-5a27-430e-b4b0-35b7e3867995@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Ogg6G83Vz4h/KBxN4l9Deh5Ak+ysI6u1f/bA8wD6geKnB979zh7
+ ca/cdZaoIMe6CbvmHQS1bmXuR7mKNtxWkQWs2LIoxL3IyVC3S+m5FLG8LJq68M8vxeeuBFM
+ IpaDRYjBH+JgfnyR0Z/zuFq01dOG7i5PJsawKmXHeRezSFU9EGxhxbo2RQ1alMy6RazqXOD
+ A323ZBdbVt6ieIhnEl97w==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:vcPNWVCHLZA=;pQS50goVwyk4ZE7dmclbpMUVm8/
+ 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
 
-Hi Sergio,
+Am 17.03.26 um 21:22 schrieb Guenter Roeck:
+> On 3/17/26 13:11, Armin Wolf wrote:
+>> Am 17.03.26 um 16:52 schrieb Guenter Roeck:
+>>
+>>> On 3/14/26 10:52, Armin Wolf wrote:
+>>>> The new buffer-based WMI API improves the compatibility between
+>>>> different ACPI firmware implementations by performing marshalling/
+>>>> unmarshalling of WMI buffers like the original Windows driver.
+>>>>
+>>>> Convert most Dell WMI drivers to use this new API. This also
+>>>> removes all ACPI-related code from those drivers because the
+>>>> new buffer-based WMI API uses abstract WMI buffer objects instead
+>>>> of ACPI objects.
+>>>>
+>>>> All drivers have been tested on a Dell Inspiron 3505 and appear
+>>>> to work normally.
+>>>>
+>>>> The last three patches contain some misc. cleanups for the WMI
+>>>> driver core itself. The most important change is a fix for modprobe
+>>>> to verify any WMI GUID strings from WMI drivers and convert them
+>>>> to uppercase if necessary. This should fix autoloading for WMI
+>>>> drivers that use WMI GUID strings with lowercase letters.
+>>>>
+>>>
+>>> The series doesn't give hints to maintainers if the patches should be
+>>> applied on a per-subsystem basis (i.e., are independent of each other)
+>>> or if they need to be applied together. I Acked the hwmon patch,=20
+>>> assuming
+>>> that it will be applied through a common branch. If the patches are
+>>> supposed to be applied in subsystem branches, please let me know.
+>>>
+>>> Thanks,
+>>> Guenter=20
+>>
+>> I would prefer if the whole series was applied together on the=20
+>> platform drivers tree.
+>>
+>=20
+> Thanks for the clarification.
+>=20
+> Guenter
+>
 
-On 3/26/26 18:29, Sergio Melas wrote:
-> To address low-resolution sampling in the Lenovo EC firmware, the
-> driver implements a Rate-Limited Lag (RLLag) filter using a passive
-> discrete-time first-order model. This ensures physical consistency
-> of the RPM signal regardless of userspace polling rates.
-> 
-> Concerning youd doubt:
-> Sorry, you lost me a bit. Isn't that already implemented in v8 ?
-> 
-> V8 had the logic, but V9 adds the extensive database and documentation
-> (see yogafan.rst) to guarantee all ACPI paths and 8/16-bit multipliers
-> are correctly mapped.
-> 
-> Please disregard the previous v9 submission. It was incorrectly formatted
-> as an incremental diff; this version (v9/v10) is a complete standalone
-> patch for clean application.
-> Apologies for the noise.
-> 
-
-I didn't realize, but the above is really not an appropriate patch description.
-Please follow Documentation/process/submitting-patches.rst for a more
-appropriate description.
-
-Also, I noticed that you send new versions of your patch as reply to previous
-versions. Please don't do that. Again, please see the guidelines for submitting
-patches.
-
-Additional comments below.
-
-> Signed-off-by: Sergio Melas <sergiomelas@gmail.com>
-> 
-> ---
-[...]
-> +===============================================================================================
-> +LENOVO FAN CONTROLLER: MASTER REFERENCE DATABASE (2026)
-> +===============================================================================================
-> +
-> +MODEL (DMI PN) | FAMILY / SERIES  | EC OFFSET | FULL ACPI OBJECT PATH          | WIDTH  | MULTiplier
-> +-----------------------------------------------------------------------------------------------
-
-I think 0-day complains because the length of the underline string does not match
-the length of the description.
-
-> +82N7           | Yoga 14cACN      | 0x06      | \_SB.PCI0.LPC0.EC0.FANS        |  8-bit | 100
-> +80V2 / 81C3    | Yoga 710/720     | 0x06      | \_SB.PCI0.LPC0.EC0.FAN0        |  8-bit | 100
-> +83E2 / 83DN    | Yoga Pro 7/9     | 0xFE      | \_SB.PCI0.LPC0.EC0.FANS        |  8-bit | 100
-> +82A2 / 82A3    | Yoga Slim 7      | 0x06      | \_SB.PCI0.LPC0.EC0.FANS        |  8-bit | 100
-> +81YM / 82FG    | IdeaPad 5        | 0x06      | \_SB.PCI0.LPC0.EC0.FAN0        |  8-bit | 100
-> +82JW / 82JU    | Legion 5 (AMD)   | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.FANS (Fan1) | 16-bit | 1
-> +82JW / 82JU    | Legion 5 (AMD)   | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.FA2S (Fan2) | 16-bit | 1
-> +82WQ           | Legion 7i (Int)  | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.FANS (Fan1) | 16-bit | 1
-> +82WQ           | Legion 7i (Int)  | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.FA2S (Fan2) | 16-bit | 1
-> +82XV / 83DV    | LOQ 15/16        | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.FANS /FA2S  | 16-bit | 1
-> +83AK           | ThinkBook G6     | 0x06      | \_SB.PCI0.LPC0.EC0.FAN0        |  8-bit | 100
-> +81X1           | Flex 5           | 0x06      | \_SB.PCI0.LPC0.EC0.FAN0        |  8-bit | 100
-> +*Legacy*       | Pre-2020 Models  | 0x06      | \_SB.PCI0.LPC.EC.FAN0          |  8-bit | 100
-
-Since this is known based on the model,
-
-[ ...]
-> +static int yoga_fan_probe(struct platform_device *pdev)
-> +{
-> +	const struct dmi_system_id *dmi_id;
-> +	const struct yogafan_config *cfg;
-> +	struct yoga_fan_data *data;
-> +	struct device *hwmon_dev;
-> +	acpi_handle handle;
-> +	int i;
-> +	static const char * const fan_paths[] = {
-> +		"\\_SB.PCI0.LPC0.EC0.FANS",  /* Primary Fan (Yoga) */
-> +		"\\_SB.PCI0.LPC0.EC0.FA2S",  /* Secondary Fan (Legion / LOQ) */
-> +		"\\_SB.PCI0.LPC0.EC0.FAN0",  /* IdeaPad / Slim / Flex */
-> +		"\\_SB.PCI0.LPC.EC.FAN0",    /* Legacy (pre-2020 models) */
-> +		"\\_SB.PCI0.LPC0.EC.FAN0",   /* Alternate (Certain Slim/Flex) */
-> +	};
-
-Is this table even necessary ? It should be possible to identify the supported ACPI
-object path(s) from the DMI table entry.
+Is there still something to do for getting this series merged?
 
 Thanks,
-Guenter
-
+Armin Wolf
