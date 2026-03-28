@@ -1,119 +1,103 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 409423128B8
-	for <linux-hwmon@vger.kernel.org>; Sat, 28 Mar 2026 14:52:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774709559; cv=pass; b=FST/j7w+oUeTXnqz/YOGhvQyLFF5MOtpwGZ6P3k/rS0aGZq30X3sKCFKOYN0F/RDhYRUxYv5z8Aehp53/qUjv/ou1IKvTeQhZ6Mk7a00o8Zw13G6YJkCRea3z55iXleFvUdK/WYG7NtRhYzACItxWmz6oMzUnwQVWY1yEI2yK28=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774709559; c=relaxed/simple;
-	bh=h+Lh6WueSKM0IITlt4i8GIxkLk0GhJhWIdZQb8oo1tI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MY5tf1pJCY7LZ6Sx8eNi2RauDivO+hTP+3Qh8ZO4tgXWCoVA/+5DeJXApaHr3rdmGexFZdRU654CF1hfZkKHTkbpmxM+5NSaQZIpoJ0LYNPGCa/R26NEBJjrPQp5UUFlnIbYJ/oIQuF5B31Bk5putkAd2XmbDQgBwyUu7e3YVlA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ebYs9By8; arc=pass smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5E812FA0C6
+	for <linux-hwmon@vger.kernel.org>; Sat, 28 Mar 2026 18:20:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774722027; cv=none; b=DisPkwMjRUdzkI7yCj2tvH9H2rJgwToeMuQR+wgmrA7s+0sHJGl4tWa0v2wo+O+tZIKn2cS0IigqYPK8dY96fEJhHw1zrFskTDzfR7+iA+pZVf7Um1eZSjTGkrBY6w2Yo2LccZUF9FheT5dWoudSJGTbnJwkIRXC8ztE1E7BMfE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774722027; c=relaxed/simple;
+	bh=3cuAVWfGPKwOISgT6kDCXaQrrMcgTGcMtitM6erSNEo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oYRN+rv+GgCXQZmKkUQ8i7mOjFSeGwEXZwX8Fh8VL9NwmUDG8XGOlO1rbRbh8Rmi7SUSoqFzhrh5opF3aBnaN/ppLBkyaxFhwvXgBf1PB/coULen8UpZ8ak9sMq8B/73xkpEoCBW9t0ro6awVVTlErmhmAsinZ9DIz8IX/9kXH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h2zHccaA; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ebYs9By8"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-43b87970468so2810355f8f.3
-        for <linux-hwmon@vger.kernel.org>; Sat, 28 Mar 2026 07:52:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774709557; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Tfc7LqiOMqCKsNsgvI9vQacciw0sXmrfIVlfnbClJ8W0G5+ej7EIoBPgMDTyt0QGbE
-         TxZel07hlqzvIGM0md+YLK0i274rkadjPse66o5SuXzxMQ/UtRcJedTgqbPNAbB6Wl/4
-         lM4AOlcScTUdYD5ajPHyQY0XiNUqoAHQvN9H6LRGncMWb9BHwkK3Ctg6fJHn0uSazOtP
-         RlrkABLqcnhQjvJlqH3siYOWDiViuYDTwiuZEkGeNVxtShYi3zTrsvKRPxjZVxierwSC
-         PQt7L0TAr3CGueZoxMIThEZ181hdNlvajpdKvxjZ4Lv+uSvhlQpxs3owEzUXCxTbab9n
-         xcyA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=h+Lh6WueSKM0IITlt4i8GIxkLk0GhJhWIdZQb8oo1tI=;
-        fh=FYBF8/h+ZTnD/DivYZSowrv+uZE6T8bkwWZd1IwUPGM=;
-        b=AaD6soFOqXu+lVS1req9WFbXkzvzombZMTkV7pSix6dQcuafbV2frImfelxAy0wZFh
-         srRdClWpacL91d47XY0LahmUD/uh1NI55sBA79RtcoHHxIApUXgojiIa0UfqtaI5xj1i
-         2wdOGyNHoCYRFA2ckgkEvXr1N7SdGJ974EJW1bG+QAWIN8+kGFldp5xp+xOhEV2PoBNg
-         /KSohy3RCHqMSmnqwus/Ymnknxz+IFHSLWY9bvaKWepCTjhGq4Yn49qLZ2PaGJBqUt9h
-         G1wuoqYn97IgW3lVFG9pWKoEaE/8umgQJxYLNdvOaBCgHFjD8HrNCn2sZxgFr2n5joge
-         zWYA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h2zHccaA"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2ad9516a653so14278715ad.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 28 Mar 2026 11:20:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774709557; x=1775314357; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h+Lh6WueSKM0IITlt4i8GIxkLk0GhJhWIdZQb8oo1tI=;
-        b=ebYs9By8qlNqFQa4BJ/AzCznZd/Gq311U3cVqZQpqj0KnUWy+5qdlOcBUoNTVyQi3l
-         NZ3UXivrnRia59ERE3b7XTNquRO8PUp6SOGUdR02eZ0FN0XdmwOPQksyEuuuN5zNwfOt
-         wRLL/O1LDzl7PGhXiwK69j9cDhahJy7/Fv6CCxQi3PuvNur9Rd8oOsdPddzOR64wszps
-         4WURZkiqZnaNdfb1eK/b3hXabIefdb/bhXXZwyVD0U0whA4q6yKFjahV59xQ49LkHTsl
-         FbOeA32uKnJ9/Ukwrz6fU9aLWy6AS8HFgkccMGcVjCvIhaaPECKW/leDLcBje2PBkUPv
-         tq/A==
+        d=gmail.com; s=20251104; t=1774722025; x=1775326825; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tSLPvbUPYYLr3Q4Z127CizQQ1sGU1Hs1CyeNu6dXEk8=;
+        b=h2zHccaAQnqIrqbnRYe7gS7wpT0rbynvpCdk2X2MIITEjPiGgPGbTzbhWxDAXS2Hwy
+         sMGMR8giB/gPrx86v3r1n6+yLTDkxz68civTkhIxgP+orxHH0VIwczBxcYg3SyZ799r9
+         5MrmttY9Wj4EPIEb5MRyUiiLijgGkjZveK395NOwF0oOUlpBYuaj1a4SfK/NgJvxcNj6
+         VYu/ft+pRfW4Y7uwTWApYdwaAEG1duSVXreQNtD8bbfAmzd7YSYVi6ASNTFDjYp8896M
+         sugY6sJkMS3yAwt1ois+8RBIK1/UVvlzqQuw1Od4iRC3F0M/xyFLr6Uv7ozmfkRh9vsy
+         BUNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774709557; x=1775314357;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=h+Lh6WueSKM0IITlt4i8GIxkLk0GhJhWIdZQb8oo1tI=;
-        b=ozUF1inWpDmqU/KGsJ73qdrXHj0Okyac0QW0M2W/bzVt0BnX2eqpK3hjwXOTKjJE1X
-         e87Q32RpMN/y8o+5Yv9FZ/3Q5q/YwNkDyFmBz0o2vhnxREzeQpfuMlHIbwoQPFTYtSoT
-         L6BWFWTCMnQAhaO03AbTLTzwAc+Rc0/nlZIFMz71xxMTrn1kJ89fpXXTeGULNKcjuqB4
-         V9voPYxly31WxhA287U2MyuasoH+rVhhMV7vo1LAf4OB7FQu5c7tNun09KtNuQYKZROZ
-         MYwzHpW4Vv5Rs082vGap86RccApulKnNQCGy+XE0r+BaUyEM6Kct/5KhS9oMJi93m/uf
-         uf/w==
-X-Forwarded-Encrypted: i=1; AJvYcCVJiCh+UL6AJbMznf/8K9gKVlxDh41mseyA/6ToDANvZ96n6lUmlfpG5GVj3HvDjNVPMShh3EzWlHOLjQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxNR7HkDxif9/hnQViFtd0LLfF+0MsE8Q09lxNZpEaG3AP5JVkk
-	WwbeEgUxjSZMdiHJfmIm2gmBcmbxz0+bXrldrOk7wahiwkDxsz/tuAzG1FHfH9JTtKXTF32Hzja
-	CZ2eo07dnVn/Zhy4xL8Takjaus/wk4xRjZVwpHJ54pw==
-X-Gm-Gg: ATEYQzy77UQLIUeDFeu5UYxqT+3+i6Rng5gbxDa+vDZc9xRXPt1k/QAzAdnuKLX8juN
-	xhY26XVn/8kTStuZI3Gx9uy16W3bStXaKbAbuGtg+8vSA/U2kZLrSAZiWgzPVQMTB8mwEgExVyW
-	i87hYTVK2PiZ+0maobmgCZPM5/7lgyuMO/Y9zjR1TBahHjOpDFUMhaI+nf2QKjs0dIXY/TyPLZO
-	9umVyMhfq1E4673qn30UorET+Uifv0P6AjG269diBmHcaICcBX64B/bVee2HcZbZhiYDBkvvyLK
-	QoI2L14=
-X-Received: by 2002:a05:6512:3b99:b0:5a2:a3c0:ac4c with SMTP id
- 2adb3069b0e04-5a2ab7fa962mr2497612e87.14.1774709030321; Sat, 28 Mar 2026
- 07:43:50 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774722025; x=1775326825;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tSLPvbUPYYLr3Q4Z127CizQQ1sGU1Hs1CyeNu6dXEk8=;
+        b=OSLHXgruyaqCp+6503RBQf+e8yE4UeGqUYzTitydhE748GdQOl+soVXUES0XuakEt0
+         frjiR/bG0hoBBFSLUsf13fCu70LfTlJY7sOKXzEzQEHsMJ2/GnDuvHWk6FM1XhO5UnG2
+         /BKnVUHQKaLxc83I60FPG22UJWJMD+QjhDYjBuLohP7sycSD79yu6HCCaEvSY5NA/msA
+         QoX+2mmXqXnJN/QbKn0+BNh3qgcrQFueAq5Y1Jr1zBuhuRhAWvsDUUliIIGnRCbN8pvn
+         gvoaJKHLTq7ybkBevCV3sBEHgIu8NnRQjN//TFuzME6DOmCAoBBKDicPHozRemekkyJ0
+         9X2Q==
+X-Gm-Message-State: AOJu0YwCskK0z5WIbSfkb3jbHRD/sLiWRaMBebEeGZ7zS+dVr9nY6ks7
+	hZ9PWMPzYxWCiI8qnRhyirWSTlkCeSzhUGSPHdSuZ15z2fKy63HbIz/i
+X-Gm-Gg: ATEYQzzVgS/T4fgopk/3PeIvsYtjN5378ARcVAwiaoe87E38w8EH3ZdDH0ZYjin41se
+	vhKJ+f62itdNy9snxdWe5Pi373mFTS1rP4vhPjFcHeUT4vBTOQb+FieEShvNNLgGHNFy/rswJbO
+	MO7Ca+5Poktl69zuuUv8R+I556GMbWYFlMNRkyV/bU8uOY2m//OXhzN+PkazybeEoGPF981o89P
+	YgOJP5ex5jyE7Pw/HRTMFEZ8jMkYH1wE5bqTOkzyAH7fNMpJB8tL7EEEVuo/2xkvamrie/BFwi1
+	VfVns5mwH0jEUHikBa+Bk4VdcrsYZsyTQbpnj3Xqg3TF0TaXX2NyBwg6RwLpMyiJFK8yxvraujI
+	2QpsqG0eKWaiq7vYkBlvSiwvLCLNRlIOVfa3E73fKgzLTPdmzNDJ0YKnv796MbMBjCyPA40oYxP
+	S349Wxn2kn2SATKCtSQSpXUlx+LkvdnSFr/zaAZalYxWSFC1i2TANW2rKuRL+f0bMOEg==
+X-Received: by 2002:a17:903:2f87:b0:2ae:7f84:79e3 with SMTP id d9443c01a7336-2b0cdc40b8cmr70081005ad.16.1774722025127;
+        Sat, 28 Mar 2026 11:20:25 -0700 (PDT)
+Received: from tabrez-VivoBook-ASUSLaptop-X513UA-KM513UA.. ([115.96.68.45])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2427660c7sm28451665ad.44.2026.03.28.11.20.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 Mar 2026 11:20:24 -0700 (PDT)
+From: Tabrez Ahmed <tabreztalks@gmail.com>
+To: linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	shuah@kernel.org,
+	me@brighamcampbell.com,
+	Tabrez Ahmed <tabreztalks@gmail.com>
+Subject: [PATCH 0/2] hwmon: (ads7871) Fix concurrency and modernize API
+Date: Sat, 28 Mar 2026 23:50:13 +0530
+Message-ID: <20260328182015.220298-1-tabreztalks@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260327221602.18832-1-sergiomelas@gmail.com> <7c8dcadb-7e9f-47b3-8bb7-80a0e8412837@roeck-us.net>
-In-Reply-To: <7c8dcadb-7e9f-47b3-8bb7-80a0e8412837@roeck-us.net>
-From: Sergio Melas <sergiomelas@gmail.com>
-Date: Sat, 28 Mar 2026 15:43:38 +0100
-X-Gm-Features: AQROBzCS59HD-IUx2o4yrkwWUHwcuObTHwAdDmP79uV_3I8VXwq71DVtnK1u1kk
-Message-ID: <CAP8e=s+MDArxzmk2CQ_bbKwj9H6CLDZe_4jxG7wOn2YFxmO4EQ@mail.gmail.com>
-Subject: Re: [PATCH v11] hwmon: (yogafan) Add support for Lenovo Yoga/Legion
- fan monitoring
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sat, Mar 28, 2026 at 12:30=E2=80=AFAM Guenter Roeck <linux@roeck-us.net>=
- wrote:
->
-> Sashiko is happy, and I don't find anything to complain about anymore
-> either, so...
->
-> Applied.
->
-> Thanks,
-> Guenter
+This patch series addresses a concurrency issue in the ads7871 driver and 
+modernizes it to use the current hwmon API.
 
-Hi Guenter,
+Patch 1: Adds a mutex to the driver's private data to serialize SPI 
+transactions. Previously, if userspace read multiple 
+channels concurrently, the driver could overwrite ongoing REG_GAIN_MUX 
+writes before the conversion completed.
 
-That is great news! Thank you very much for your patience and for the
-detailed reviews through all these iterations. It was a great learning
-experience.
-After 30 years of using Linux, seeing my own driver accepted into the mainl=
-ine
-kernel is truly a dream come true.
+Patch 2: Converts the driver to use hwmon_device_register_with_info(). 
+This architectural shift removes boilerplate code and delegates sysfs 
+management to the hwmon core:
+ - Removes manual file creators (SENSOR_DEVICE_ATTR_RO and ads7871_attrs).
+ - Implements ads7871_is_visible() for dynamic permission control.
+ - Replaces the sysfs-specific voltage_show() with a 
+standard ads7871_read() callback.
+ - Defines supported channels via hwmon_channel_info.
 
-Best regards,
-Sergio
+Tabrez Ahmed (2):
+  hwmon: (ads7871) Add mutex to serialize SPI transactions
+  hwmon: (ads7871) Convert to hwmon_device_register_with_info
+
+ drivers/hwmon/ads7871.c | 91 +++++++++++++++++++++++------------------
+ 1 file changed, 52 insertions(+), 39 deletions(-)
+
+-- 
+2.43.0
+
