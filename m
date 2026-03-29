@@ -1,16 +1,16 @@
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CE6E40DFD3
-	for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 09:06:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33DA82ECEA5
+	for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 09:06:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774775182; cv=none; b=QQiCIuPTChaDcbYtQ6O3GQpHh9zLuKijbCl1Z0ujXcg/oed6QUkTKH+tEiaLUVwsIKK7pX+9K5qyVvCFNaGeAXxgW3LqrqP2qcBhPnkwnZE2WNZZzjzCGIgAvKkApJ9wooASQqUrg59QsRmBck/UNhQhZHOiubWgMoVtN/ZcKfI=
+	t=1774775187; cv=none; b=hU4T++kEGnOpdFQJ3ZG6ePmR1klXjwoadwFgmnYpyhgHII7dz+aGwrXffkVjxbNlKJiailM4si0k2IeynF+RcUOW5q32NL0FRXoAlss8UF9XqeoEsZnyMZBon9Sj+lrwBTe34AFZxCbH/VOLx87KhWmLNN7fvI3+KgXA0ZbY++4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774775182; c=relaxed/simple;
-	bh=b3thwzw91Nc7MzipNSn8e9LdwrVtomh8juTx54pUF+A=;
+	s=arc-20240116; t=1774775187; c=relaxed/simple;
+	bh=Dc6be1ReMf0XtYba7yU5owpNbyYAxXLNnVva7u1i93U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HNDv6h9/gZ44fIDBARsSWwrynYYrcLF1GG8H9UdrC2oF7D3OnVQB2cj5P4aY0fZKKVxNY2/HT4BgJMQuj6V2tjf134VcehnPffeZjUlTBqQ+ngr+nFLGfJ+Fj5ld46ZjEGvBjWtPj2twnb8ZtsTtJH+FrhqRf07PIxkbxe1S1yI=
+	 MIME-Version; b=I5jqK09KqdC1shmglV6AhS0n4dDOMDJjNMPUGkMmWINuCn2ZuQcvcoEdilqIaSgP1LZIMGq2oPgeZj59NghZPLiuee3WmjvmD4X2j+ZoRUnGOji+7kXh7gKsa8+/tdOO1Bv3W748gGm6EhklFEilUoxLjzI5cV+GRT6ORbhsecs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -18,16 +18,16 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ore@pengutronix.de>)
-	id 1w6m5s-00018w-0v; Sun, 29 Mar 2026 11:06:04 +0200
+	id 1w6m5s-00018s-0v; Sun, 29 Mar 2026 11:06:04 +0200
 Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac] helo=dude04)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <ore@pengutronix.de>)
-	id 1w6m5r-002gZY-0H;
-	Sun, 29 Mar 2026 11:06:03 +0200
+	id 1w6m5q-002gZT-3A;
+	Sun, 29 Mar 2026 11:06:02 +0200
 Received: from ore by dude04 with local (Exim 4.98.2)
 	(envelope-from <ore@pengutronix.de>)
-	id 1w6m5q-00000002EYW-466x;
+	id 1w6m5q-00000002EXz-3pfC;
 	Sun, 29 Mar 2026 11:06:02 +0200
 From: Oleksij Rempel <o.rempel@pengutronix.de>
 To: Guenter Roeck <linux@roeck-us.net>,
@@ -44,9 +44,9 @@ Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
 	linux-hwmon@vger.kernel.org,
 	linux-gpio@vger.kernel.org,
 	David Jander <david@protonic.nl>
-Subject: [PATCH v8 6/6] mux: add NXP MC33978/MC34978 AMUX driver
-Date: Sun, 29 Mar 2026 11:06:01 +0200
-Message-ID: <20260329090601.532477-7-o.rempel@pengutronix.de>
+Subject: [PATCH v8 3/6] pinctrl: core: Make pin group callbacks optional for pin-only drivers
+Date: Sun, 29 Mar 2026 11:05:58 +0200
+Message-ID: <20260329090601.532477-4-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260329090601.532477-1-o.rempel@pengutronix.de>
 References: <20260329090601.532477-1-o.rempel@pengutronix.de>
@@ -62,227 +62,162 @@ X-SA-Exim-Mail-From: ore@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-Add a mux-control driver for the 24-to-1 analog multiplexer (AMUX)
-embedded in the NXP MC33978/MC34978 Multiple Switch Detection
-Interface (MSDI) devices.
+Currently, the pinctrl core strictly requires all drivers to implement
+.get_groups_count and .get_group_name callbacks in their pinctrl_ops.
 
+However, for simple pinctrl drivers that act purely as GPIO controllers
+and pin-specific configuration proxies, without any concept of muxing or
+pin groups, this strict requirement forces the implementation of dummy
+callbacks just to satisfy pinctrl_check_ops().
+
+Relax this requirement for pin-only drivers by making the group callbacks
+optional when no muxing or group pin configuration support is provided.
+Update the core and debugfs helpers to check for the existence of these
+callbacks before invoking them.
+
+Drivers that provide muxing or group pin configuration operations still
+must implement group enumeration and naming callbacks, and are rejected
+at registration time if they do not.
+
+Suggested-by: Linus Walleij <linusw@kernel.org>
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Reviewed-by: Linus Walleij <linusw@kernel.org>
 ---
 changes v8:
-- no chnages
+- no changes
 changes v7:
-- Simplify the return path and local variable assignment in
-  mc33978_mux_set().
-- Change idle_state to a signed integer to properly handle negative MUX
-  subsystem constants.
-- Default to MUX_IDLE_AS_IS when the "idle-state" device tree property
-  is missing.
-- Explicitly reject MUX_IDLE_DISCONNECT since the hardware does not
-  support disconnecting the multiplexer.
+- no changes
 changes v6:
-- parse optional idle-state property
-- validate idle-state against available AMUX channels
-- lower-case probe error messages
+- Reject drivers in pinctrl_check_ops() that use pmxops or group confops
+  without providing group callbacks.
+- Add <linux/pinctrl/pinconf.h> to core.c.
+- Revert the unnecessary NULL check in pinconf_show_setting(), since
+  group settings are now strictly gated.
+- Keep debugfs group listings tolerant of drivers without group callbacks.
 changes v5:
 - no changes
 changes v4:
-- no changes
+- add Reviewed-by: Linus Walleij ...
 changes v3:
 - no changes
-changes v2:
-- Add missing <linux/err.h> include.
-- Add platform_device_id table
 ---
- drivers/mux/Kconfig       |  14 ++++
- drivers/mux/Makefile      |   2 +
- drivers/mux/mc33978-mux.c | 136 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 152 insertions(+)
- create mode 100644 drivers/mux/mc33978-mux.c
+ drivers/pinctrl/core.c    | 41 ++++++++++++++++++++++++++++++++++-----
+ drivers/pinctrl/pinconf.c |  9 +++++++--
+ 2 files changed, 43 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/mux/Kconfig b/drivers/mux/Kconfig
-index c68132e38138..7532da7e087e 100644
---- a/drivers/mux/Kconfig
-+++ b/drivers/mux/Kconfig
-@@ -45,6 +45,20 @@ config MUX_GPIO
- 	  To compile the driver as a module, choose M here: the module will
- 	  be called mux-gpio.
+diff --git a/drivers/pinctrl/core.c b/drivers/pinctrl/core.c
+index b5e97689589f..19a9a370d7b9 100644
+--- a/drivers/pinctrl/core.c
++++ b/drivers/pinctrl/core.c
+@@ -30,6 +30,7 @@
+ #include <linux/pinctrl/consumer.h>
+ #include <linux/pinctrl/devinfo.h>
+ #include <linux/pinctrl/machine.h>
++#include <linux/pinctrl/pinconf.h>
+ #include <linux/pinctrl/pinctrl.h>
  
-+config MUX_MC33978
-+	tristate "NXP MC33978/MC34978 Analog Multiplexer"
-+	depends on MFD_MC33978
-+	help
-+	  MC33978/MC34978 24-to-1 analog multiplexer (AMUX) driver.
+ #include "core.h"
+@@ -621,8 +622,13 @@ static int pinctrl_generic_group_name_to_selector(struct pinctrl_dev *pctldev,
+ 						  const char *function)
+ {
+ 	const struct pinctrl_ops *ops = pctldev->desc->pctlops;
+-	int ngroups = ops->get_groups_count(pctldev);
+ 	int selector = 0;
++	int ngroups;
 +
-+	  This driver provides mux-control for the analog multiplexer,
-+	  which can route switch voltages, temperature, and battery voltage
-+	  to an external ADC. Typically used with IIO ADC drivers to measure
-+	  analog values from the 22 switch inputs plus temperature and VBATP.
-+
-+	  To compile the driver as a module, choose M here: the module will
-+	  be called mc33978-mux.
-+
- config MUX_MMIO
- 	tristate "MMIO/Regmap register bitfield-controlled Multiplexer"
- 	depends on OF
-diff --git a/drivers/mux/Makefile b/drivers/mux/Makefile
-index 6e9fa47daf56..339c44b4d4f4 100644
---- a/drivers/mux/Makefile
-+++ b/drivers/mux/Makefile
-@@ -7,10 +7,12 @@ mux-core-objs			:= core.o
- mux-adg792a-objs		:= adg792a.o
- mux-adgs1408-objs		:= adgs1408.o
- mux-gpio-objs			:= gpio.o
-+mux-mc33978-objs		:= mc33978-mux.o
- mux-mmio-objs			:= mmio.o
- 
- obj-$(CONFIG_MULTIPLEXER)	+= mux-core.o
- obj-$(CONFIG_MUX_ADG792A)	+= mux-adg792a.o
- obj-$(CONFIG_MUX_ADGS1408)	+= mux-adgs1408.o
- obj-$(CONFIG_MUX_GPIO)		+= mux-gpio.o
-+obj-$(CONFIG_MUX_MC33978)	+= mux-mc33978.o
- obj-$(CONFIG_MUX_MMIO)		+= mux-mmio.o
-diff --git a/drivers/mux/mc33978-mux.c b/drivers/mux/mc33978-mux.c
-new file mode 100644
-index 000000000000..2cc7abc659a8
---- /dev/null
-+++ b/drivers/mux/mc33978-mux.c
-@@ -0,0 +1,136 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (c) 2026 Pengutronix, Oleksij Rempel <kernel@pengutronix.de>
-+/*
-+ * MC33978/MC34978 Analog Multiplexer (AMUX) Driver
-+ *
-+ * This driver provides mux-control for the 24-to-1 analog multiplexer.
-+ * The AMUX routes one of the following signals to the external AMUX pin:
-+ * - Channels 0-13: SG0-SG13 switch voltages
-+ * - Channels 14-21: SP0-SP7 switch voltages
-+ * - Channel 22: Internal temperature diode
-+ * - Channel 23: Battery voltage (VBATP)
-+ *
-+ * Consumer drivers (typically IIO ADC drivers) use the mux-control
-+ * subsystem to select which signal to measure.
-+ *
-+ * Architecture:
-+ * The MC33978 does not have an internal ADC. Instead, it routes analog
-+ * signals to an external AMUX pin that must be connected to an external
-+ * ADC (such as the SoC's internal ADC). The IIO subsystem is responsible
-+ * for coordinating the mux selection and ADC sampling.
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/mux/driver.h>
-+#include <linux/platform_device.h>
-+#include <linux/property.h>
-+#include <linux/regmap.h>
-+
-+#include <linux/mfd/mc33978.h>
-+
-+/* AMUX_CTRL register field definitions */
-+#define MC33978_AMUX_CTRL_MASK	GENMASK(5, 0)	/* 6-bit channel select */
-+
-+struct mc33978_mux_priv {
-+	struct device *dev;
-+	struct regmap *map;
-+};
-+
-+static int mc33978_mux_set(struct mux_control *mux, int state)
-+{
-+	struct mux_chip *mux_chip = mux->chip;
-+	struct mc33978_mux_priv *priv = mux_chip_priv(mux_chip);
-+	int ret;
-+
-+	if (state < 0 || state >= MC33978_NUM_AMUX_CH)
++	if (!ops->get_groups_count || !ops->get_group_name)
 +		return -EINVAL;
 +
-+	ret = regmap_update_bits(priv->map, MC33978_REG_AMUX_CTRL,
-+				 MC33978_AMUX_CTRL_MASK, state);
-+	if (ret)
-+		dev_err(priv->dev, "failed to set AMUX channel %d: %d\n",
-+			state, ret);
++	ngroups = ops->get_groups_count(pctldev);
+ 
+ 	/* See if this pctldev has this group */
+ 	while (selector < ngroups) {
+@@ -737,8 +743,15 @@ int pinctrl_get_group_selector(struct pinctrl_dev *pctldev,
+ 			       const char *pin_group)
+ {
+ 	const struct pinctrl_ops *pctlops = pctldev->desc->pctlops;
+-	unsigned int ngroups = pctlops->get_groups_count(pctldev);
+ 	unsigned int group_selector = 0;
++	unsigned int ngroups;
 +
-+	return ret;
-+}
-+
-+static const struct mux_control_ops mc33978_mux_ops = {
-+	.set = mc33978_mux_set,
-+};
-+
-+static int mc33978_mux_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct mc33978_mux_priv *priv;
-+	struct mux_chip *mux_chip;
-+	struct mux_control *mux;
-+	s32 idle_state;
-+	int ret;
-+
-+	mux_chip = devm_mux_chip_alloc(dev, 1, sizeof(*priv));
-+	if (IS_ERR(mux_chip))
-+		return dev_err_probe(dev, PTR_ERR(mux_chip), "failed to allocate mux chip\n");
-+
-+	/* Borrow the parent's DT node so consumers can find this mux chip */
-+	device_set_node(&mux_chip->dev, dev_fwnode(dev->parent));
-+
-+	priv = mux_chip_priv(mux_chip);
-+	priv->dev = dev;
-+
-+	priv->map = dev_get_regmap(dev->parent, NULL);
-+	if (!priv->map)
-+		return dev_err_probe(dev, -ENODEV, "failed to get parent regmap\n");
-+
-+	mux_chip->ops = &mc33978_mux_ops;
-+
-+	mux = &mux_chip->mux[0];
-+	mux->states = MC33978_NUM_AMUX_CH;
-+
-+	ret = device_property_read_u32(&mux_chip->dev, "idle-state",
-+				       (u32 *)&idle_state);
-+	if (ret < 0 && ret != -EINVAL) {
-+		return dev_err_probe(dev, ret, "failed to parse idle-state\n");
-+	} else if (ret == -EINVAL) {
-+		mux->idle_state = MUX_IDLE_AS_IS;
-+	} else {
-+		if (idle_state == MUX_IDLE_DISCONNECT)
-+			return dev_err_probe(dev, -EINVAL,
-+					     "idle-disconnect not supported by hardware\n");
-+		if (idle_state != MUX_IDLE_AS_IS &&
-+		    (idle_state < 0 || idle_state >= MC33978_NUM_AMUX_CH))
-+			return dev_err_probe(dev, -EINVAL, "invalid idle-state %d\n",
-+					     idle_state);
-+		mux->idle_state = idle_state;
++	if (!pctlops->get_groups_count || !pctlops->get_group_name) {
++		dev_err(pctldev->dev, "does not support pin groups\n");
++		return -EINVAL;
 +	}
 +
-+	ret = devm_mux_chip_register(dev, mux_chip);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to register mux chip\n");
++	ngroups = pctlops->get_groups_count(pctldev);
+ 
+ 	while (group_selector < ngroups) {
+ 		const char *gname = pctlops->get_group_name(pctldev,
+@@ -1769,6 +1782,11 @@ static int pinctrl_groups_show(struct seq_file *s, void *what)
+ 
+ 	mutex_lock(&pctldev->mutex);
+ 
++	if (!ops->get_groups_count || !ops->get_group_name) {
++		mutex_unlock(&pctldev->mutex);
++		return 0;
++	}
 +
-+	platform_set_drvdata(pdev, mux_chip);
+ 	ngroups = ops->get_groups_count(pctldev);
+ 
+ 	seq_puts(s, "registered pin groups:\n");
+@@ -2049,12 +2067,25 @@ static void pinctrl_remove_device_debugfs(struct pinctrl_dev *pctldev)
+ static int pinctrl_check_ops(struct pinctrl_dev *pctldev)
+ {
+ 	const struct pinctrl_ops *ops = pctldev->desc->pctlops;
++	const struct pinconf_ops *confops = pctldev->desc->confops;
++	bool needs_groups = false;
+ 
+-	if (!ops ||
+-	    !ops->get_groups_count ||
+-	    !ops->get_group_name)
++	if (!ops)
+ 		return -EINVAL;
+ 
++	if (pctldev->desc->pmxops)
++		needs_groups = true;
 +
-+	return 0;
-+}
++	if (confops && (confops->pin_config_group_get ||
++			confops->pin_config_group_set))
++		needs_groups = true;
 +
-+static const struct platform_device_id mc33978_mux_id[] = {
-+	{ "mc33978-mux", },
-+	{ "mc34978-mux", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(platform, mc33978_mux_id);
++	if (needs_groups && (!ops->get_groups_count || !ops->get_group_name)) {
++		dev_err(pctldev->dev,
++			"driver needs group callbacks for mux or group config\n");
++		return -EINVAL;
++	}
 +
-+static struct platform_driver mc33978_mux_driver = {
-+	.driver = {
-+		.name = "mc33978-mux",
-+	},
-+	.probe = mc33978_mux_probe,
-+	.id_table = mc33978_mux_id,
-+};
-+module_platform_driver(mc33978_mux_driver);
+ 	return 0;
+ }
+ 
+diff --git a/drivers/pinctrl/pinconf.c b/drivers/pinctrl/pinconf.c
+index dca963633b5d..81686844dfa5 100644
+--- a/drivers/pinctrl/pinconf.c
++++ b/drivers/pinctrl/pinconf.c
+@@ -275,7 +275,7 @@ void pinconf_show_setting(struct seq_file *s,
+ 	case PIN_MAP_TYPE_CONFIGS_GROUP:
+ 		seq_printf(s, "group %s (%d)",
+ 			   pctlops->get_group_name(pctldev,
+-					setting->data.configs.group_or_pin),
++						   setting->data.configs.group_or_pin),
+ 			   setting->data.configs.group_or_pin);
+ 		break;
+ 	default:
+@@ -348,8 +348,13 @@ static int pinconf_groups_show(struct seq_file *s, void *what)
+ {
+ 	struct pinctrl_dev *pctldev = s->private;
+ 	const struct pinctrl_ops *pctlops = pctldev->desc->pctlops;
+-	unsigned int ngroups = pctlops->get_groups_count(pctldev);
+ 	unsigned int selector = 0;
++	unsigned int ngroups;
 +
-+MODULE_AUTHOR("Oleksij Rempel <kernel@pengutronix.de>");
-+MODULE_DESCRIPTION("NXP MC33978/MC34978 Analog Multiplexer Driver");
-+MODULE_LICENSE("GPL");
++	if (!pctlops->get_groups_count || !pctlops->get_group_name)
++		return 0;
++
++	ngroups = pctlops->get_groups_count(pctldev);
+ 
+ 	seq_puts(s, "Pin config settings per pin group\n");
+ 	seq_puts(s, "Format: group (name): configs\n");
 -- 
 2.47.3
 
