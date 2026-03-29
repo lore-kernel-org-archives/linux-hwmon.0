@@ -1,75 +1,55 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 160841CDFCA
-	for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 07:34:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CE6E40DFD3
+	for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 09:06:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774769669; cv=none; b=NP4xQsuuHtQ3eIas0EDYWlTGSXtoobdj4wF4NK7pBngGNOhAYIzi9RvA6LcIGfJgtjdysd4bld8kJmmVgsB7DodNnYeFObaAeguyjIJ6aay808/67IJN54f68xG8WZwKiTraCZT4KIqtgKoM3shBTBoL718U4rJrYCF518utDCQ=
+	t=1774775182; cv=none; b=QQiCIuPTChaDcbYtQ6O3GQpHh9zLuKijbCl1Z0ujXcg/oed6QUkTKH+tEiaLUVwsIKK7pX+9K5qyVvCFNaGeAXxgW3LqrqP2qcBhPnkwnZE2WNZZzjzCGIgAvKkApJ9wooASQqUrg59QsRmBck/UNhQhZHOiubWgMoVtN/ZcKfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774769669; c=relaxed/simple;
-	bh=NyAobdiO3HoTAmrQxiO2Z4htSIRrZQUjNeIAVHrjhRU=;
+	s=arc-20240116; t=1774775182; c=relaxed/simple;
+	bh=b3thwzw91Nc7MzipNSn8e9LdwrVtomh8juTx54pUF+A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qlk7j9YDf7x1jR3EgCXyfIhbLVngSPYUyFDGlUQLYCL04fPkRqbMecpBa2hVTLCYnnmUYx5vLyTO93OWUuOSym6+0qdqCIWIZ7AmF6oHBDHWo7uyOMK3UXr4pI0EwODSVcHmTZAOu4DMNyFS9mJcJI+fDISd8yjcX0I62Mxed2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DzJZgqZD; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DzJZgqZD"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2b2503753efso896045ad.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 00:34:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774769666; x=1775374466; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tYlYgcMRkuhiOsvN/sx11f/ZNBmAfnPjQBSL3BfX7BI=;
-        b=DzJZgqZDv9DEyU7P6B+z9ev+uN5OzjWwTOfwBNG/SO1b46uOcUXIl/S5YLhX3IBsB2
-         6kTcjk+8G61Z6kF1bS+xm8udIySn78i/V5Ia+Tbz48a6/7r+XaEc7GN3tpWQiaBLlodz
-         LLZbcxyo6xtMWTtw1lhnSeROxZl8SRaKiuoZwKYdz3ulfGrt2kZgvYg9NfDz4xQOal1q
-         E6F2/+ktIIkcycuHbZ5FEeg2QGjBuxfMK8UnklekIh9/upTimKzt2sCqidBOsLv/E1KR
-         VzaRGMuPvqo2IqlsO3Sw+9laeyJKULb9+DOF5O5aShYIh8MDkPQbI7dbOEqZPEh0h59+
-         p75g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774769666; x=1775374466;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=tYlYgcMRkuhiOsvN/sx11f/ZNBmAfnPjQBSL3BfX7BI=;
-        b=PiRYQrMT3/U4FYuv03OFHqp352VoXvvYiMYAvE/7e1BwuxCdwKGCNLoymvP0C59EGK
-         qaRq6YzkJsPV1FMUIv2pdM5Z0KU5QxRePtoJqGVNpjyFgebCDXoeXg4MGtlpLhn1mFDp
-         LltVXKdp2KaJFoqrjIwVZ20NCqEhW+0Bkgij/XMpP17v0fsLERbcwusyffAEQe5foOh2
-         WE2U8tPEQwKA+aXJYOJSrFc1SCrfTsj1uJjh8u/NA53i6cYz6Png7qNwQpl6dr3meHPu
-         lPFXFdJmCRnhmRl+1KHoB9UahJTgKxh5DsV9477d6BGQY6Oj08g6WulVMBLp1ezILHs0
-         9QrQ==
-X-Gm-Message-State: AOJu0Yz6F58upgfFFgRDbY1IBEQ6ZPEElXTU0ifGN9ai3gkZ3ORncMsZ
-	lxF07+5btL9OHWvK+cEpRa88iMXdf26jb4b8BVXoreSMLUzyqjRr/PXD
-X-Gm-Gg: ATEYQzy74Y/yhUYJeatESfyH9qcd7SOPYtJ48OGq2RoPoobskze+j6IAKZW0/03mu+b
-	YvhWe/1h1k6W/L4CJxR5K2CgqalfWOofQ2S5kNsXNJo4ixMUCoozN8xcdQHseIdj0cuRYtLxEcp
-	XDUt7I8Ys/+AXV/ApI1M4f63It5ZYZ12svYVswDmAA6KkBp6LMf4CeM1CjDK2dpJtgDWuMnFmPq
-	v1/Yu4MdlhtD/aqEp9d1OV/tYSB/eoAKzINSKAS7DG3WCHWHYcuYm7d1q22aqQRa9AINgBKztbp
-	HNYtT2s+pkX0bXJalTpIq8EIgbAu93zhStpmx4FI1Tb01uh1fh/QRPzEAWchKGBROJRGeTx/7Zv
-	Dzy+Fnbj3L3yqkwQMkzIJM37SAUvWxFWEt6j+vEYBXtxaj4XVMxRI9ZRJdrS5GrIHXIxhjWRWaZ
-	n7gzmRYeT/tRUPiK3/O+NOH3e35Qr6arqQsSgxX4lrCp2J+STFpDnYkhwHBlb3H7jccQ==
-X-Received: by 2002:a17:903:2450:b0:2b0:54dc:63e with SMTP id d9443c01a7336-2b0cdcaa6c1mr91673715ad.33.1774769666309;
-        Sun, 29 Mar 2026 00:34:26 -0700 (PDT)
-Received: from tabrez-VivoBook-ASUSLaptop-X513UA-KM513UA.. ([115.96.68.45])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b24268e7f5sm42266995ad.35.2026.03.29.00.34.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Mar 2026 00:34:25 -0700 (PDT)
-From: Tabrez Ahmed <tabreztalks@gmail.com>
-To: linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org,
+	 MIME-Version; b=HNDv6h9/gZ44fIDBARsSWwrynYYrcLF1GG8H9UdrC2oF7D3OnVQB2cj5P4aY0fZKKVxNY2/HT4BgJMQuj6V2tjf134VcehnPffeZjUlTBqQ+ngr+nFLGfJ+Fj5ld46ZjEGvBjWtPj2twnb8ZtsTtJH+FrhqRf07PIxkbxe1S1yI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1w6m5s-00018w-0v; Sun, 29 Mar 2026 11:06:04 +0200
+Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac] helo=dude04)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1w6m5r-002gZY-0H;
+	Sun, 29 Mar 2026 11:06:03 +0200
+Received: from ore by dude04 with local (Exim 4.98.2)
+	(envelope-from <ore@pengutronix.de>)
+	id 1w6m5q-00000002EYW-466x;
+	Sun, 29 Mar 2026 11:06:02 +0200
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Lee Jones <lee@kernel.org>,
+	Peter Rosin <peda@axentia.se>,
+	Linus Walleij <linusw@kernel.org>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
+	kernel@pengutronix.de,
 	linux-kernel@vger.kernel.org,
-	shuah@kernel.org,
-	me@brighamcampbell.com,
-	Tabrez Ahmed <tabreztalks@gmail.com>
-Subject: [PATCH v2 2/2] hwmon: (ads7871) Use DMA-safe buffer for SPI writes
-Date: Sun, 29 Mar 2026 13:03:52 +0530
-Message-ID: <20260329073352.270451-3-tabreztalks@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260329073352.270451-1-tabreztalks@gmail.com>
-References: <20260329073352.270451-1-tabreztalks@gmail.com>
+	devicetree@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	David Jander <david@protonic.nl>
+Subject: [PATCH v8 6/6] mux: add NXP MC33978/MC34978 AMUX driver
+Date: Sun, 29 Mar 2026 11:06:01 +0200
+Message-ID: <20260329090601.532477-7-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260329090601.532477-1-o.rempel@pengutronix.de>
+References: <20260329090601.532477-1-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -77,126 +57,232 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-The driver currently passes a stack-allocated buffer to spi_write(),
-which is incompatible with DMA on systems with CONFIG_VMAP_STACK
-enabled.
+Add a mux-control driver for the 24-to-1 analog multiplexer (AMUX)
+embedded in the NXP MC33978/MC34978 Multiple Switch Detection
+Interface (MSDI) devices.
 
-Move the transfer buffer into the driver's private data structure
-to ensure it is DMA-safe. Since this shared buffer now requires
-serialization, this change depends on the previous commit which
-migrated the driver to the hwmon 'with_info' API.
-
-While moving the logic, also:
-- Corrected the sign extension for 14-bit data by casting to s16.
-- Scaled the output to millivolts (2500mV full scale
-) to comply with the hwmon ABI.
-
-Signed-off-by: Tabrez Ahmed <tabreztalks@gmail.com>
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- drivers/hwmon/ads7871.c | 36 ++++++++++++++++++++++--------------
- 1 file changed, 22 insertions(+), 14 deletions(-)
+changes v8:
+- no chnages
+changes v7:
+- Simplify the return path and local variable assignment in
+  mc33978_mux_set().
+- Change idle_state to a signed integer to properly handle negative MUX
+  subsystem constants.
+- Default to MUX_IDLE_AS_IS when the "idle-state" device tree property
+  is missing.
+- Explicitly reject MUX_IDLE_DISCONNECT since the hardware does not
+  support disconnecting the multiplexer.
+changes v6:
+- parse optional idle-state property
+- validate idle-state against available AMUX channels
+- lower-case probe error messages
+changes v5:
+- no changes
+changes v4:
+- no changes
+changes v3:
+- no changes
+changes v2:
+- Add missing <linux/err.h> include.
+- Add platform_device_id table
+---
+ drivers/mux/Kconfig       |  14 ++++
+ drivers/mux/Makefile      |   2 +
+ drivers/mux/mc33978-mux.c | 136 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 152 insertions(+)
+ create mode 100644 drivers/mux/mc33978-mux.c
 
-diff --git a/drivers/hwmon/ads7871.c b/drivers/hwmon/ads7871.c
-index 41a1e9bbd4050..cd58c960690f1 100644
---- a/drivers/hwmon/ads7871.c
-+++ b/drivers/hwmon/ads7871.c
-@@ -63,6 +63,7 @@
+diff --git a/drivers/mux/Kconfig b/drivers/mux/Kconfig
+index c68132e38138..7532da7e087e 100644
+--- a/drivers/mux/Kconfig
++++ b/drivers/mux/Kconfig
+@@ -45,6 +45,20 @@ config MUX_GPIO
+ 	  To compile the driver as a module, choose M here: the module will
+ 	  be called mux-gpio.
  
- struct ads7871_data {
- 	struct spi_device *spi;
-+	u8 tx_buf[2] ____cacheline_aligned;
- };
- static umode_t ads7871_is_visible(const void *data,
- 				  enum hwmon_sensor_types type,
-@@ -78,6 +79,7 @@ static int ads7871_read_reg8(struct spi_device *spi, int reg)
- {
- 	int ret;
- 
++config MUX_MC33978
++	tristate "NXP MC33978/MC34978 Analog Multiplexer"
++	depends on MFD_MC33978
++	help
++	  MC33978/MC34978 24-to-1 analog multiplexer (AMUX) driver.
 +
- 	reg = reg | INST_READ_BM;
- 	ret = spi_w8r8(spi, reg);
- 	return ret;
-@@ -92,11 +94,12 @@ static int ads7871_read_reg16(struct spi_device *spi, int reg)
- 	return ret;
- }
- 
--static int ads7871_write_reg8(struct spi_device *spi, int reg, u8 val)
-+static int ads7871_write_reg8(struct ads7871_data *pdata, int reg, u8 val)
- {
--	u8 tmp[2] = {reg, val};
-+	pdata->tx_buf[0] = reg;
-+	pdata->tx_buf[1] = val;
- 
--	return spi_write(spi, tmp, sizeof(tmp));
-+	return spi_write(pdata->spi, pdata->tx_buf, 2);
- }
- 
- static int ads7871_read(struct device *dev, enum hwmon_sensor_types type,
-@@ -115,7 +118,7 @@ static int ads7871_read(struct device *dev, enum hwmon_sensor_types type,
- 	 */
- 	/*MUX_M3_BM forces single ended*/
- 	/*This is also where the gain of the PGA would be set*/
--	ret = ads7871_write_reg8(spi, REG_GAIN_MUX,
-+	ret = ads7871_write_reg8(pdata, REG_GAIN_MUX,
- 				 (MUX_CNV_BM | MUX_M3_BM | channel));
- 	if (ret < 0)
- 		return ret;
-@@ -123,6 +126,7 @@ static int ads7871_read(struct device *dev, enum hwmon_sensor_types type,
- 	ret = ads7871_read_reg8(spi, REG_GAIN_MUX);
- 	if (ret < 0)
- 		return ret;
++	  This driver provides mux-control for the analog multiplexer,
++	  which can route switch voltages, temperature, and battery voltage
++	  to an external ADC. Typically used with IIO ADC drivers to measure
++	  analog values from the 22 switch inputs plus temperature and VBATP.
 +
- 	mux_cnv = ((ret & MUX_CNV_BM) >> MUX_CNV_BV);
- 	/*
- 	 * on 400MHz arm9 platform the conversion
-@@ -142,8 +146,11 @@ static int ads7871_read(struct device *dev, enum hwmon_sensor_types type,
- 		if (raw_val < 0)
- 			return raw_val;
- 
--		/*result in volts*10000 = (val/8192)*2.5*10000*/
--		*val = ((raw_val >> 2) * 25000) / 8192;
-+		/*
-+		 * Use (s16) to ensure the sign bit is preserved during the shift.
-+		 * Report millivolts (2.5V = 2500mV).
-+		 */
-+		*val = ((s16)raw_val >> 2) * 2500 / 8192;
- 		return 0;
- 	}
- 
-@@ -180,11 +187,17 @@ static int ads7871_probe(struct spi_device *spi)
- 	spi->bits_per_word = 8;
- 	spi_setup(spi);
- 
--	ads7871_write_reg8(spi, REG_SER_CONTROL, 0);
--	ads7871_write_reg8(spi, REG_AD_CONTROL, 0);
-+	pdata = devm_kzalloc(dev, sizeof(*pdata), GFP_KERNEL);
-+	if (!pdata)
-+		return -ENOMEM;
++	  To compile the driver as a module, choose M here: the module will
++	  be called mc33978-mux.
 +
-+	pdata->spi = spi;
+ config MUX_MMIO
+ 	tristate "MMIO/Regmap register bitfield-controlled Multiplexer"
+ 	depends on OF
+diff --git a/drivers/mux/Makefile b/drivers/mux/Makefile
+index 6e9fa47daf56..339c44b4d4f4 100644
+--- a/drivers/mux/Makefile
++++ b/drivers/mux/Makefile
+@@ -7,10 +7,12 @@ mux-core-objs			:= core.o
+ mux-adg792a-objs		:= adg792a.o
+ mux-adgs1408-objs		:= adgs1408.o
+ mux-gpio-objs			:= gpio.o
++mux-mc33978-objs		:= mc33978-mux.o
+ mux-mmio-objs			:= mmio.o
+ 
+ obj-$(CONFIG_MULTIPLEXER)	+= mux-core.o
+ obj-$(CONFIG_MUX_ADG792A)	+= mux-adg792a.o
+ obj-$(CONFIG_MUX_ADGS1408)	+= mux-adgs1408.o
+ obj-$(CONFIG_MUX_GPIO)		+= mux-gpio.o
++obj-$(CONFIG_MUX_MC33978)	+= mux-mc33978.o
+ obj-$(CONFIG_MUX_MMIO)		+= mux-mmio.o
+diff --git a/drivers/mux/mc33978-mux.c b/drivers/mux/mc33978-mux.c
+new file mode 100644
+index 000000000000..2cc7abc659a8
+--- /dev/null
++++ b/drivers/mux/mc33978-mux.c
+@@ -0,0 +1,136 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// Copyright (c) 2026 Pengutronix, Oleksij Rempel <kernel@pengutronix.de>
++/*
++ * MC33978/MC34978 Analog Multiplexer (AMUX) Driver
++ *
++ * This driver provides mux-control for the 24-to-1 analog multiplexer.
++ * The AMUX routes one of the following signals to the external AMUX pin:
++ * - Channels 0-13: SG0-SG13 switch voltages
++ * - Channels 14-21: SP0-SP7 switch voltages
++ * - Channel 22: Internal temperature diode
++ * - Channel 23: Battery voltage (VBATP)
++ *
++ * Consumer drivers (typically IIO ADC drivers) use the mux-control
++ * subsystem to select which signal to measure.
++ *
++ * Architecture:
++ * The MC33978 does not have an internal ADC. Instead, it routes analog
++ * signals to an external AMUX pin that must be connected to an external
++ * ADC (such as the SoC's internal ADC). The IIO subsystem is responsible
++ * for coordinating the mux selection and ADC sampling.
++ */
 +
-+	ads7871_write_reg8(pdata, REG_SER_CONTROL, 0);
-+	ads7871_write_reg8(pdata, REG_AD_CONTROL, 0);
- 
- 	val = (OSC_OSCR_BM | OSC_OSCE_BM | OSC_REFE_BM | OSC_BUFE_BM);
--	ads7871_write_reg8(spi, REG_OSC_CONTROL, val);
-+	ads7871_write_reg8(pdata, REG_OSC_CONTROL, val);
- 	ret = ads7871_read_reg8(spi, REG_OSC_CONTROL);
- 
- 	dev_dbg(dev, "REG_OSC_CONTROL write:%x, read:%x\n", val, ret);
-@@ -195,11 +208,6 @@ static int ads7871_probe(struct spi_device *spi)
- 	if (val != ret)
- 		return -ENODEV;
- 
--	pdata = devm_kzalloc(dev, sizeof(struct ads7871_data), GFP_KERNEL);
--	if (!pdata)
--		return -ENOMEM;
--
--	pdata->spi = spi;
- 	hwmon_dev = devm_hwmon_device_register_with_info(dev, spi->modalias,
- 							 pdata,
- 							 &ads7871_chip_info,
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/mux/driver.h>
++#include <linux/platform_device.h>
++#include <linux/property.h>
++#include <linux/regmap.h>
++
++#include <linux/mfd/mc33978.h>
++
++/* AMUX_CTRL register field definitions */
++#define MC33978_AMUX_CTRL_MASK	GENMASK(5, 0)	/* 6-bit channel select */
++
++struct mc33978_mux_priv {
++	struct device *dev;
++	struct regmap *map;
++};
++
++static int mc33978_mux_set(struct mux_control *mux, int state)
++{
++	struct mux_chip *mux_chip = mux->chip;
++	struct mc33978_mux_priv *priv = mux_chip_priv(mux_chip);
++	int ret;
++
++	if (state < 0 || state >= MC33978_NUM_AMUX_CH)
++		return -EINVAL;
++
++	ret = regmap_update_bits(priv->map, MC33978_REG_AMUX_CTRL,
++				 MC33978_AMUX_CTRL_MASK, state);
++	if (ret)
++		dev_err(priv->dev, "failed to set AMUX channel %d: %d\n",
++			state, ret);
++
++	return ret;
++}
++
++static const struct mux_control_ops mc33978_mux_ops = {
++	.set = mc33978_mux_set,
++};
++
++static int mc33978_mux_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct mc33978_mux_priv *priv;
++	struct mux_chip *mux_chip;
++	struct mux_control *mux;
++	s32 idle_state;
++	int ret;
++
++	mux_chip = devm_mux_chip_alloc(dev, 1, sizeof(*priv));
++	if (IS_ERR(mux_chip))
++		return dev_err_probe(dev, PTR_ERR(mux_chip), "failed to allocate mux chip\n");
++
++	/* Borrow the parent's DT node so consumers can find this mux chip */
++	device_set_node(&mux_chip->dev, dev_fwnode(dev->parent));
++
++	priv = mux_chip_priv(mux_chip);
++	priv->dev = dev;
++
++	priv->map = dev_get_regmap(dev->parent, NULL);
++	if (!priv->map)
++		return dev_err_probe(dev, -ENODEV, "failed to get parent regmap\n");
++
++	mux_chip->ops = &mc33978_mux_ops;
++
++	mux = &mux_chip->mux[0];
++	mux->states = MC33978_NUM_AMUX_CH;
++
++	ret = device_property_read_u32(&mux_chip->dev, "idle-state",
++				       (u32 *)&idle_state);
++	if (ret < 0 && ret != -EINVAL) {
++		return dev_err_probe(dev, ret, "failed to parse idle-state\n");
++	} else if (ret == -EINVAL) {
++		mux->idle_state = MUX_IDLE_AS_IS;
++	} else {
++		if (idle_state == MUX_IDLE_DISCONNECT)
++			return dev_err_probe(dev, -EINVAL,
++					     "idle-disconnect not supported by hardware\n");
++		if (idle_state != MUX_IDLE_AS_IS &&
++		    (idle_state < 0 || idle_state >= MC33978_NUM_AMUX_CH))
++			return dev_err_probe(dev, -EINVAL, "invalid idle-state %d\n",
++					     idle_state);
++		mux->idle_state = idle_state;
++	}
++
++	ret = devm_mux_chip_register(dev, mux_chip);
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to register mux chip\n");
++
++	platform_set_drvdata(pdev, mux_chip);
++
++	return 0;
++}
++
++static const struct platform_device_id mc33978_mux_id[] = {
++	{ "mc33978-mux", },
++	{ "mc34978-mux", },
++	{ }
++};
++MODULE_DEVICE_TABLE(platform, mc33978_mux_id);
++
++static struct platform_driver mc33978_mux_driver = {
++	.driver = {
++		.name = "mc33978-mux",
++	},
++	.probe = mc33978_mux_probe,
++	.id_table = mc33978_mux_id,
++};
++module_platform_driver(mc33978_mux_driver);
++
++MODULE_AUTHOR("Oleksij Rempel <kernel@pengutronix.de>");
++MODULE_DESCRIPTION("NXP MC33978/MC34978 Analog Multiplexer Driver");
++MODULE_LICENSE("GPL");
 -- 
-2.43.0
+2.47.3
 
