@@ -1,67 +1,68 @@
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0BE537998F
-	for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 15:34:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CD943815C3
+	for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 16:52:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774798476; cv=none; b=KO6pBwoT184grNtn9wHiL9WXzv6TcJ08TtdXHgLTI73h35GrtNHN+h8xpXSNJcr3gTzSZbuNksmKh5tlxxy5H/7ie/VZv3Z25xcInukKG2DppNye9Ed4pWMC6YGJfk5Ae9d0feFCXzOTidJ9AeihxX4bWUQnM0wZMgJAk2ls4jE=
+	t=1774803128; cv=none; b=VOuNfmJB+vv5fqjP9gyxcLgrISbkR+GWOHz6V2f5yBPeLDDWnW9Bb0Ui5Y9RB89Gb2NgWZa4yIPL7MrB1kd7f7FLK0X1h/Qlbvj+c4GeXrEl/yLvFQKD1VQs306x/42PEK1Z1O7lEjOHqF7nQszHbuI1J8tkHCAQF+VGQgxysYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774798476; c=relaxed/simple;
-	bh=3wtd1IIeCkBJ/XmcMqk04Aty7K0zW5MZcZUzKuiYVt4=;
+	s=arc-20240116; t=1774803128; c=relaxed/simple;
+	bh=QgUkhoCHKdMY4BAB1749UR77ZswHDSxHL9naJcq/fy8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Goci8D8GBOiTaqFv1uDIdIoXtjbzxl9Ep+Ah9pdhTrJTHSir+kf+Tlu8UubXLuiUY00aqhfKMx6n8OrveBI2dTQCa7MbKfPfQhp6b74ACG1S6wZHhr4Ot2NGg9WtvKGKUaX1t+YrXK+CgyeUCyParl5b0sS0+e3IrOW+did4TFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HgNdxzI3; arc=none smtp.client-ip=74.125.82.174
+	 In-Reply-To:Content-Type; b=ZeCayqeZosFhDUoz8juLpmoGB9twPvTdcQo9hiXWBGK3WSOxeQ2jA9P5kYuDM9Ugy3favpUN6jia6PaMLjbosHvtwFgNLHKh9O+r6Is0OmWqc+/5yoB1YOz0XGQUxsPUVkeQIkw+pqVm/nARf6gTgNfPgPxCPP5gMjrYcK1kzz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=osJm/opG; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HgNdxzI3"
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2b6b0500e06so4847821eec.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 08:34:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="osJm/opG"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2aae146b604so22057655ad.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 09:52:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774798474; x=1775403274; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774803126; x=1775407926; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y4jQhTO1UJPiph8NqA2wQY7EhFFaT1IhjZIj6QBNFBo=;
-        b=HgNdxzI3ZeFA0kKwIJoKaLxq9D671m7oQ81dH6FqWbBSBSa5BCHoN7iFOqNOsQDqVM
-         KZSXZIm3bPn0SPowY2T3M2BlDUe6xvW4DHNFaXSuFuQwA2ztIeNbIOq+05Ng/F/+ST7p
-         n0PeK93Stdc3R4qneg2MML7D/p1zoFlI8BF4R1pEfYm2wdkDVBGTyb0ciFVGgOdjcM3f
-         5T65ky4d6I2ZYHMpt3kPskG48Ez4fFMHDPyIw0p5WJAfhYUs0AkYvruGQD1ReBlYgCGs
-         PaoQJtOfX2IKghZvN4NHcOl1zjzP5eM+XW1EhYjtwUjipZiN0044A0TPjVLSIlHU1TDn
-         EGeA==
+        bh=bVG7KEyomhALkFaGSEXjFcWkz3Zg3KUEM/4SaD0Pivc=;
+        b=osJm/opGm3blxaRMHpx71MOmzono/NEhe76Fcj1W9qXnc8CFkUwx+ObnNbMllqR9iq
+         5u+kbjOH2b8hxizFv5mWxT7vH9s3Sw76OR9RzjGPq7OEWM8Yedu9L67pTFDH+4tGXPxA
+         btoMj2gxc5MeqrO5mTwgF3YGJuaMi83j+zLjaSJ8YI2Ugvnw0JFb6IHhLpNeXzK9+nbn
+         LPVNFw5cf+qlGQWG6ydoaOvqx2pvMeYb0PmZqw+N8Dm3TJgQFYJ8n3ORK6T0h1v/rBIn
+         1RiVhziO78ZXaDkg45QX6R0hLd21po3w3tXiYqJJiqBGe4xoyD/EZ+Wfyp1Ds5tBPzve
+         PfnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774798474; x=1775403274;
+        d=1e100.net; s=20251104; t=1774803126; x=1775407926;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Y4jQhTO1UJPiph8NqA2wQY7EhFFaT1IhjZIj6QBNFBo=;
-        b=GJuNVwPSTP9Qcowir3BZkRgU4T9izFj5eQU+ZoUmwzEjAg1Uu6GVZtbV7dok+Ko3D7
-         a4Azz3Bj3ZXJwi7V5ASPRmqCK8WCkx0YBnA2Q/RdWIf7hRIYG0/SYha6LtbKbt0AVZIL
-         VnDkSImaB2WeNdmqtQkdI7LVg8tcwfWEW9RfyUfpbRQaVOhVieWTwa1QMyvRN2XA0+7B
-         9tQBgFfZU0XF15wu7t2ipdB8I2/YOzqnmmYu6sA2Af0K/hS5I58RXdK89cSCvUkKc8+7
-         KIjTgljC5cRPs74kLdxgVNRM+ieUhOh9IsK9u6k//A4u10vh0Ssjzz9ykCjFGuwe23w6
-         732g==
-X-Forwarded-Encrypted: i=1; AJvYcCV7M3nBolHtZPvLnrUCbu+gR4euOiNOrB3kw8GKB8FgVE14CtH1F/C5aGwMQkHrtIvY7TVxw8xgkZE+Lg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGz/zgHzdzdOpxqxpLpkxWjNicyrBVXDy6BF5cWwhBp7mb/np0
-	nhSpbg/em0I4xoff96D+JRA3Spx5rMg6AP3Y6yE5aJ7w7vlbunz50qP6
-X-Gm-Gg: ATEYQzxoFiPhWAJQJS1x7qUd1Iyod1S3zOWtQ6dY04YHFGzMUoCbGdO4LtUebW9JHOS
-	VKc3pMMJPR2jDW9lOWc+k67+jDW2cPeO5+3/oU8KbmKukfhNkWDPYHqsgigG5gtv8J21TvNh7je
-	IYOVCbLcWxVLLck/BLzBHqM5+XS/j5QioLLJdIoxb7Plfd0Cn79eEqptes+LnHqw8TcyNM7fVac
-	ecGhBxYNhDxNMJRDBix5jt+CzQdUmSRUQuRsAT0gNJoj4WK+3oYfWZ96if05113aFhWHyJBAS8R
-	d3/Kh98ixb+IsPfZuyll/uG3M5EB41p49D+GCNGll6f+7krZGM7MlMsqNo7OyC5a1BTnIIpZxo/
-	m2kw9HQkWwcmq+B2wyDIyQS8SfNgGcJqnUyYvmNJSuTwzMxsNYPGPwO2LI3dRckkFqfpq7jeg3X
-	NZ5kxtqiNuIrdkxb9BK+heAuf8aeT5WKu5jUVxymbPAYNS2/viktDPJAV0kIwDnCWYErG84q5g
-X-Received: by 2002:a05:7300:8605:b0:2ba:6978:2b4 with SMTP id 5a478bee46e88-2c185e45bc3mr5584844eec.20.1774798473900;
-        Sun, 29 Mar 2026 08:34:33 -0700 (PDT)
+        bh=bVG7KEyomhALkFaGSEXjFcWkz3Zg3KUEM/4SaD0Pivc=;
+        b=pbp/pLvl09aaWXjccEwMO6oUPC7abHRP9x4GBhYemdCPInfFtTErmLsNOFCTuJYQrp
+         yiUDHD00zR+/RlbAlg7ikSEKZuBmrYhlfvC5wucgv6oI/U75TFP6ravBzmKuXmf0RibG
+         IIChdLXjUk32IfIIbpOQOpqapnJleaZkN2nxo+e6SH07LZUeL8Q9EauPjv6mJIUDAQJY
+         Z8duWypEAn09IkUzfaHquBeUes9hjUzdoBNU4an+Yvb2DP2yoS+5MF2svUAbcJDtCHwC
+         46l5a59oVg7UOizTErxfjdlHuqkU5nVNyNsQ9x4f878FjbhI3Gy7bGD4nTHPKtnzOPU8
+         LT3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWOmMbIUEe8JfnXqMFuqkXlkP/UX7OBTl1jhZL7xNu9Fks01qFEaUK44hAjCYRnxD3+xWBfo/5dXKDW8g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YznflNLJVAxXWHqdECRlii60feXiwFafuT89YzgLUDOjJ48PyBb
+	QmFS2USqu1Ff8fUKecDzZacEUkQcXCvFW0mcSLKOb2j2vewfKEt8Pbnn
+X-Gm-Gg: ATEYQzwUYowStuX6/MmYDqCD4XKnVQyTe9yD+9nWKsrUqV05aH8wPSUMdPmN8hVT/QU
+	DklDicMlKJ2KMFR8Ol/kW8Z8wswXKUeik37Y4WRY/rWrTXwmAVcbi53HETNCw68qW8pe/8GG9w5
+	vwzDnLV2Gm7EsDAFgZX+et1K1o3N/GlOYY6ZmFBOeJl5vDKBDqzeGVcPFlGY4SIP+PZWuMfp9nX
+	1lEteVRnBjoQc/CQvire7rmSQxUGRGWa70sRA6bLajq3tg7DYN/61mzUU151L7DJi9jrALV8u5z
+	TyejzrAxgM1MEMlP+Sd7ydqiBujwCVa8CRRBPOEzCpGco4x6G2qmGGBxAFudP4maBP8nHgHebbq
+	gXoHHpvoA5xrpZaYi1mP1TA6NiZjg6iI4tGCd1N0Sv3aFuuQ9yHMjLRgWymNBuOsIxc17x5UJDR
+	PuTlolSijwJ2rx+e3u9lScnTbKFadPTzwtbyI/9N8P/8tPf/PiQQpDs+5+okWQEp5xTfmgkpJrM
+	tWCDzuTvKg=
+X-Received: by 2002:a17:903:1a86:b0:2b2:4e1a:aff9 with SMTP id d9443c01a7336-2b24e1ab2aemr22705925ad.44.1774803126343;
+        Sun, 29 Mar 2026 09:52:06 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c3c74825a0sm4702738eec.27.2026.03.29.08.34.32
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b242676e13sm55903995ad.28.2026.03.29.09.52.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 Mar 2026 08:34:33 -0700 (PDT)
+        Sun, 29 Mar 2026 09:52:05 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8291919d-c5ea-42ab-b2e5-2dfa16c23698@roeck-us.net>
-Date: Sun, 29 Mar 2026 08:34:31 -0700
+Message-ID: <20a29a60-6848-43cb-be2e-4e63c8602462@roeck-us.net>
+Date: Sun, 29 Mar 2026 09:52:04 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,15 +70,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 0/6] mfd: Add support for NXP MC33978/MC34978 MSDI
-To: Oleksij Rempel <o.rempel@pengutronix.de>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Peter Rosin <peda@axentia.se>, Linus Walleij <linusw@kernel.org>
-Cc: kernel@pengutronix.de, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-gpio@vger.kernel.org, David Jander <david@protonic.nl>
-References: <20260329090601.532477-1-o.rempel@pengutronix.de>
+Subject: Re: [PATCH 0/3] hwmon: (occ) Fix bugs in power sensor, extended
+ sensor, and remove path
+To: "Pradhan, Sanman" <sanman.pradhan@hpe.com>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ Sanman Pradhan <psanman@juniper.net>
+References: <20260326224510.294619-1-sanman.pradhan@hpe.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -123,40 +122,52 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260329090601.532477-1-o.rempel@pengutronix.de>
+In-Reply-To: <20260326224510.294619-1-sanman.pradhan@hpe.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Oleksij,
+Hi,
 
-On 3/29/26 02:05, Oleksij Rempel wrote:
-> changes v7:
-> - drop gpiolib irq fix and make pinctrl more robust against NULL point
->    dereference.
+On 3/26/26 15:45, Pradhan, Sanman wrote:
+> From: Sanman Pradhan <psanman@juniper.net>
 > 
-> This series adds support for the NXP MC33978/MC34978 Multiple Switch Detection
-> Interface (MSDI) via the MFD framework.
+> This series addresses three bugs in the OCC hwmon driver
+> (drivers/hwmon/occ/):
 > 
-> Architecture overview:
-> * mfd: Core driver handling 2-frame pipelined SPI, regulator sequencing, and
->    linear irq_domain. Harvests status bits from SPI MISO MSB.
-> * pinctrl: Exposes 22 physical switch inputs as standard GPIOs. Proxies IRQs to
->    the MFD domain.
-> * hwmon: Exposes thermal limits, VBATP/VDDQ voltage boundaries, and dynamic
->    fault alarms.
-> * mux: Controls the 24-to-1 AMUX routing analog signals (switch voltages,
->    temperature, VBATP) to an external ADC.
+> Patch 1 fixes a possible division by zero in occ_show_power_1()
+> when update_tag is zero. The power_sensor_1 code path divides the
+> accumulator by update_tag without checking for zero.
+> Commit 211186cae14d ("hwmon: (occ) Fix division by zero issue")
+> addressed this for occ_get_powr_avg() used by power_sensor_2
+> and power_sensor_a0, but the separate code path in occ_show_power_1()
+> was not covered. The fix reuses the existing occ_get_powr_avg()
+> helper which already handles the zero-sample case.
 > 
-> Initial pinctrl implementation by David Jander, reworked into this MFD
-> architecture.
+> Patch 2 adds a missing trailing newline in occ_show_extended() for
+> the EXTN_FLAG_SENSOR_ID case.
+> 
+> Patch 3 reorders operations in p9_sbe_occ_remove() so that
+> occ_shutdown() is called before setting ctx->sbe to NULL. The
+> current order creates a window where a concurrent sysfs read
+> could see a NULL sbe pointer before the hwmon device is
+> unregistered.
+> 
+> Sanman Pradhan (3):
+>    hwmon: (occ) Fix division by zero in occ_show_power_1()
+>    hwmon: (occ) Fix missing newline in occ_show_extended()
+>    hwmon: (occ) Fix potential NULL dereference in p9_sbe_occ_remove()
+> 
+>   drivers/hwmon/occ/common.c | 20 ++++++++++----------
+>   drivers/hwmon/occ/p9_sbe.c |  2 +-
+>   2 files changed, 11 insertions(+), 11 deletions(-)
 > 
 
-I Acked the hwmon driver, but Sashiko is still not happy with several of the other
-patches in the series:
+Please check
 
-https://sashiko.dev/#/patchset/20260329090601.532477-1-o.rempel%40pengutronix.de
+https://sashiko.dev/#/patchset/20260326224510.294619-1-sanman.pradhan%40hpe.com
 
-If the remaining issues are false positives, please let Roman and/or me know.
+
+and either address the problems or explain why they do not apply.
 
 Thanks,
 Guenter
