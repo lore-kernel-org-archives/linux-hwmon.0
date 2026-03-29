@@ -1,66 +1,67 @@
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
+Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6C0D233721
-	for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 15:01:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 979BA2AD00
+	for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 15:31:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774796483; cv=none; b=gXdNWxO9t/kAdoZXmBraS5YsxiwF+3TBYGzbOb8HTv1QP1QhIJBvWihieJ6quli/nJC4Vt6nF5x1+XgZ1xm8cm8DKYJIYaCmWmmR9oRv15svg9znuV4pRODzgqzw5SzgHy23KV+Nwfo05yMGMKXsjxb3sCqSZTgYf0KvCwiw1WU=
+	t=1774798309; cv=none; b=p+DDtRmGnpxDzGv2DTRP2lK/ackT0+l0jsNlB7EAntgONEV00CFrTBmAf7zG4NzZ5TBkv+Dubj07cwNvc/esoVPI9TUWpV7XcTe5jNzo3nHJuR+WzJbhtNqBbRKLuaTm5ZSYcQ0s5hENdoSKnWs70/DFfqUCh73EmZGI9tOLvpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774796483; c=relaxed/simple;
-	bh=lejtvJC33p9BC+RwaffBBGR04HATVQb7DJfIZ9KTOQQ=;
+	s=arc-20240116; t=1774798309; c=relaxed/simple;
+	bh=au2eKM8u7aYrDUz5dztDboQXIdUsEbqGrxHSvOHJykw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MOekdp68LX4yW9sHRlMU+tTV+v2cEv04incxZ8I3l8p8rUy5mWM53wk1ZUYd6AQ4omS2Fe/BhqPl2ILdURA+R7mcIAZS3bloNBSMrjlJVRkX46GJoHZZ4gZW/kaapGAeEmQxf6Xzlq2oFCGw7bgChtC4FakdF1rKFuDnwUadT6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gPnp492Y; arc=none smtp.client-ip=74.125.82.173
+	 In-Reply-To:Content-Type; b=sU5JaBpA+M7JbzQYY3JEKgOtkQBgcPLuAy6HJCFWPsmhNLXNMHU920UTrfqE50aADgMMnoXP9EX0UVANTIPQ918Jqa3EEvHkNMcuCSKRkAbqvevPRU+2ha6QWayRAogRySGMaiT6eFsqzTLTJZRorQSR6ZylXmiy9FjvijGPzq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GsdCsXHx; arc=none smtp.client-ip=74.125.82.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gPnp492Y"
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2c17d152c01so2536056eec.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 08:01:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GsdCsXHx"
+Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-12732165d1eso5151911c88.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 08:31:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774796481; x=1775401281; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774798308; x=1775403108; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q3d6tmspJxyJbyp8HTBXeNyse5uUauM5IakWF7IZoW0=;
-        b=gPnp492YD8l7fjX9v7Erl0DjsUv0M9jPuts0BBXRvgH8gyfZnHre7FZNkviTNE9dJB
-         ajGBNpMdgePTHNb/yA1VdnLiKO9OBAMjfpSvnknuulvx6gdMx57SwCPhTWcYILjrWccD
-         DaepUPTYDrQr7/hG4JE4UumRmD3LO3Cteip8yUGSBtCLXt0fviUiC99touAtspRq1Ybh
-         GYA6X0PdI0kH3NaSoiwQZUU2UafDlX2rGuS/JLJoTc6qCChpby+TZ0nBXjSiMP26kZ8P
-         WMlE60fuwUNlfzWBSKu9NGkzKmYu/Uaa89Wej6tuz1ZXud2eOd5geYT2Uf2RJpXnEkCi
-         VNDw==
+        bh=lbC14XtI3H5l+g6ZcwMwWY/fzzcIo7U44X14GI38NY0=;
+        b=GsdCsXHx4pwdN5Idmy/anGLDS5S12R4ZATfmUOvWtYKW0DL3tXfJ81tQm4OB8RQTvi
+         lveg4ibvK2zNWmWgkzYT/bC7Oz1d47L6xvR/khMQtYemp41uyBOUUynWqILvPDmO2ekp
+         STSf+lHLEjgmv60ffQlELBa3ljhcIhFkpFKUB4FNLUwZSOEfbBOtk+MbkwEU9HonjKCQ
+         eCl3tJNSBzztmZftGnvjbPantFqjwIouMOD7ogUZ6JERL4I3U0yX+Xanx9I9LqrQ0yd1
+         GDm0r5yOs184fB1Q68O4GPK3b0Q9l1N9HFedaWVBsKlao8TkD6ZPRBuf+MmuN/1QtVLM
+         Azhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774796481; x=1775401281;
+        d=1e100.net; s=20251104; t=1774798308; x=1775403108;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Q3d6tmspJxyJbyp8HTBXeNyse5uUauM5IakWF7IZoW0=;
-        b=Ggec0mnNb1rENtov3c99txM5sHdET72SXh+YAiC9csBQ52qwEcxO7tgi8BNMTswQ3r
-         0GECBrgAVQkVhiqHXI5ana/7HqX0k/tLPlb6bxQiNGa4e9eSaNoauVj1SJG80kI0spk1
-         BEXCNtrau+J7ppkO8Lj3gKUDBkQalaWUpxNlOT3TU7P3sQmXMo21VNR7cI8R6/b1hHy6
-         y31AaB+1pp7f/VbyKnpn4R46vqXnJOmauQr29oacuCpYC+EZtlxXdPYtYw6WdRYqd776
-         3MQIVmo1w6+JtfOE9DziQiUd92Ju2wcM5dz3c7+a56MI6LAWTuhnImPnyd0b+cf8ke96
-         +7MA==
-X-Gm-Message-State: AOJu0Yzt9P7fuTLzEDJlvyeZ+70qecLZaSZe+QSBKr93Fe1EVdfEkT2c
-	ooZhbsVQ64qC2f6fxgWDUQsbIfgHJmMo1XLILfg242hZoKHJ7D6fZIJE
-X-Gm-Gg: ATEYQzz59tpTPafqfPVHCnR2z1i92X0hxMTtkad4zor4zAlu2LAM6HrA7x1X9erya4k
-	w7y7G+t6et8PCVfeD6UvV0NinuEAfgjRFWHZXp4dUuaGFwcNTaNTTCsZ+9fA6NP5sIjSiHt1vnY
-	CVdcoLRlIq4OFzIw9/6A0hjss6sRJ0CDRfkzhrUiMpEeoPedpqOSSa1pc+t/i0qa0Oc5uKmUy8G
-	ECrcBt0sa3kSEN9L8lJfdOcwBa6zdv+F1REWl7mV+tVZ2EP4lvZcW+OXV4utzz0ZNJHa/9LIJc/
-	SoDalI9rpaB//E29djmhzY7PtoEq2Iv0V8O8GaZYfZ90kezlJogwlb/RRpZHkYX1mtFgb0rzjn8
-	nwsuTyEGDtSpQS/cNtvIzgpkhzCXHMJp7AN2scSxeZ864CxP71bbSk5sOtr53jnosUq38ROT8or
-	MvWH2e3oBEv+uA5Fnx4Fr/iwQJ7p8g4k0b+wZDZHrX5zPdVsDi883fhyq9j78HOBulMalRwr/T
-X-Received: by 2002:a05:7300:ca1:b0:2ba:7617:eeb1 with SMTP id 5a478bee46e88-2c185d53755mr5003930eec.12.1774796480616;
-        Sun, 29 Mar 2026 08:01:20 -0700 (PDT)
+        bh=lbC14XtI3H5l+g6ZcwMwWY/fzzcIo7U44X14GI38NY0=;
+        b=P5RRiZbPIT47J1Kfkn0wLWcvoppKvQW02f+k5uAJjNhYG3z7E+xnTKUBUtKxiMC1wR
+         fBsEfhwVA7zTIY08nBS0TvZGa5B8/JYLSA0iJbo2zhcymQYS6lGVKvmLyCL3Tl6Z/qQg
+         oIhtbTpcuna0OFVKOmuR6+e23t4ClTPfeLnx/Llzr0t6LEvA+BFDv5w8lU4v+JdCA91s
+         NqaApYyLNspPnITZ9dl+ytGQXVLNC0YwTTj7+dDHxqwuHqJTYoccq8nGQZu6fal7zCB1
+         bqarNeLVfhOVa4sg7QMDoSCPGYsEs9t+OP1sHnWm05P4vZFeyzc6+VO3yaiiqUiE29OA
+         6GuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW8u6/cYNYtiuDBG0I4Ze281doX1wcsR/2NlBSvvXPnrTqX3592JpCbM3MTDVIe4Gn1HEAmIXAQl4am6g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzvB6qs3owL/m6bnNB+LGMrwCl2trfoaLTJtXppshlVqJoahY6i
+	lySwKW1sjn58EDd6Osno5hDoPxtpGJS+z08BYer05Lb/N9oBTuD4jftF
+X-Gm-Gg: ATEYQzyJTYhroSm3hAUz5RB6BunD/hAdceEwVfEhOHDQnoQ7eZm+Ab2tVvqA/v0+1hj
+	xw4wXmwAcfkjY2C86qqDbArB/3SP6eIF7LmHsgPG333VHytgKe+XwpCZ8c99Bds/3luDE+iCw+L
+	isIHNw6T58lP67vlTO8PxRU2MtJp2EnIk9Kc6KMhQVz4zNBtZs0hm7YL5Y9GkttPcIBJJNL5Jl6
+	PHrBu25qCG0mDjFsIk4bR77Dz1/cbApgch6hTZ1iriMqMjVj/gN10q/QFDtUgK2gAl1goqxt7GE
+	G//HhTRZiV1l8WcDFUirAhoW/9WwnV/uUGSOAzkErt78KNhfOdqChx2FHpOEPl1L7etFEZ1MDTg
+	SG7fzTBkT1wC1t/+Z2l2dSynfGrL1k13au++cqzTubLAUE5Ht4w2433O0zrbXNMvmtvA0r6NEdq
+	VHTPvlIYZh9gqXzxbz2FtrrQhZfXa7Hj6XWxCflKKRqz5gh0la1PTk6czJuy+p/wZHRAEOAuEG
+X-Received: by 2002:a05:7022:20c:b0:119:e56b:98be with SMTP id a92af1059eb24-12ab28ff327mr4858192c88.37.1774798307626;
+        Sun, 29 Mar 2026 08:31:47 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c3c6e9ca80sm5209141eec.22.2026.03.29.08.01.19
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12ab97ca83bsm4812631c88.2.2026.03.29.08.31.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 Mar 2026 08:01:20 -0700 (PDT)
+        Sun, 29 Mar 2026 08:31:46 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ca7260a7-0dad-4e3d-8807-9e8bfbd15a8e@roeck-us.net>
-Date: Sun, 29 Mar 2026 08:01:18 -0700
+Message-ID: <72b9d96c-59c7-429e-b422-ffec702342e7@roeck-us.net>
+Date: Sun, 29 Mar 2026 08:31:45 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,13 +69,16 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] hwmon: (ads7871) Convert to
- hwmon_device_register_with_info
-To: Tabrez Ahmed <tabreztalks@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- shuah@kernel.org, me@brighamcampbell.com
-References: <20260329073352.270451-1-tabreztalks@gmail.com>
- <20260329073352.270451-2-tabreztalks@gmail.com>
+Subject: Re: [PATCH v8 5/6] hwmon: add NXP MC33978/MC34978 driver
+To: Oleksij Rempel <o.rempel@pengutronix.de>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+ Peter Rosin <peda@axentia.se>, Linus Walleij <linusw@kernel.org>
+Cc: kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-gpio@vger.kernel.org, David Jander <david@protonic.nl>
+References: <20260329090601.532477-1-o.rempel@pengutronix.de>
+ <20260329090601.532477-6-o.rempel@pengutronix.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -120,185 +124,29 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260329073352.270451-2-tabreztalks@gmail.com>
+In-Reply-To: <20260329090601.532477-6-o.rempel@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi,
-
-On 3/29/26 00:33, Tabrez Ahmed wrote:
-> Convert the ads7871 driver from the legacy hwmon_device_register() to the
-> modern hwmon_device_register_with_info() API. This migration simplifies
-> the driver by using the structured hwmon_channel_info approach and
-> prepares the codebase for the transition to a shared DMA-safe buffer.
+On 3/29/26 02:06, Oleksij Rempel wrote:
+> Add hardware monitoring support for the NXP MC33978/MC34978 Multiple
+> Switch Detection Interface (MSDI).
 > 
-
-Please add: "While at it, fix checkpatch violations" since you fixed the
-"empty line after variable declarations" problem.
-
-.. but please fix all of them. See inline.
-
-Thanks,
-Guenter
-
-> Signed-off-by: Tabrez Ahmed <tabreztalks@gmail.com>
-> ---
->   drivers/hwmon/ads7871.c | 76 ++++++++++++++++++++++-------------------
->   1 file changed, 41 insertions(+), 35 deletions(-)
+> The hardware utilizes a clear-on-read FAULT register, but physical
+> faults remain asserted as long as the underlying condition exists. This
+> asserts a global FAULT_STAT bit on the SPI bus. To handle this without
+> trapping the CPU in an interrupt storm, this driver implements the
+> following architecture:
+> - Requests a rising-edge nested IRQ (IRQF_TRIGGER_RISING) from the MFD
+>    core to catch the initial 0 -> 1 transition of the global fault state.
+> - Caches hwmon-specific alarm bits and calculates state edges (XOR) to
+>    isolate alarm transitions from system integrity faults.
+> - Implements a 1Hz delayed workqueue that polls the hardware as long as
+>    any alarm is active. This compensates for the edge-triggered IRQ by
+>    discovering secondary faults that occur without a rising edge, and
+>    detecting when the hardware clears.
 > 
-> diff --git a/drivers/hwmon/ads7871.c b/drivers/hwmon/ads7871.c
-> index 9bfdf9e6bcd77..41a1e9bbd4050 100644
-> --- a/drivers/hwmon/ads7871.c
-> +++ b/drivers/hwmon/ads7871.c
-> @@ -56,7 +56,6 @@
->   #include <linux/init.h>
->   #include <linux/spi/spi.h>
->   #include <linux/hwmon.h>
-> -#include <linux/hwmon-sysfs.h>
->   #include <linux/err.h>
->   #include <linux/delay.h>
->   
-> @@ -65,10 +64,20 @@
->   struct ads7871_data {
->   	struct spi_device *spi;
->   };
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-Add empty line (checkpatch reports that, plus a couple more formatting issues).
-
-> +static umode_t ads7871_is_visible(const void *data,
-> +				  enum hwmon_sensor_types type,
-> +				  u32 attr, int channel)
-> +{
-> +	if (type == hwmon_in && attr == hwmon_in_input)
-> +		return 0444;
-> +
-> +	return 0;
-> +}
->   
->   static int ads7871_read_reg8(struct spi_device *spi, int reg)
->   {
->   	int ret;
-> +
->   	reg = reg | INST_READ_BM;
->   	ret = spi_w8r8(spi, reg);
->   	return ret;
-> @@ -77,6 +86,7 @@ static int ads7871_read_reg8(struct spi_device *spi, int reg)
->   static int ads7871_read_reg16(struct spi_device *spi, int reg)
->   {
->   	int ret;
-> +
->   	reg = reg | INST_READ_BM | INST_16BIT_BM;
->   	ret = spi_w8r16(spi, reg);
->   	return ret;
-> @@ -85,19 +95,20 @@ static int ads7871_read_reg16(struct spi_device *spi, int reg)
->   static int ads7871_write_reg8(struct spi_device *spi, int reg, u8 val)
->   {
->   	u8 tmp[2] = {reg, val};
-> +
->   	return spi_write(spi, tmp, sizeof(tmp));
->   }
->   
-> -static ssize_t voltage_show(struct device *dev, struct device_attribute *da,
-> -			    char *buf)
-> +static int ads7871_read(struct device *dev, enum hwmon_sensor_types type,
-> +			u32 attr, int channel, long *val)
->   {
->   	struct ads7871_data *pdata = dev_get_drvdata(dev);
->   	struct spi_device *spi = pdata->spi;
-> -	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
-> -	int ret, val, i = 0;
-> -	uint8_t channel, mux_cnv;
-> +	int ret, raw_val, i = 0;
-> +	uint8_t mux_cnv;
->   
-> -	channel = attr->index;
-> +	if (type != hwmon_in || attr != hwmon_in_input)
-> +		return -EOPNOTSUPP;
-
-That doesn't hurt but isn't really needed here.
-
->   	/*
->   	 * TODO: add support for conversions
->   	 * other than single ended with a gain of 1
-> @@ -127,39 +138,34 @@ static ssize_t voltage_show(struct device *dev, struct device_attribute *da,
->   	}
->   
->   	if (mux_cnv == 0) {
-> -		val = ads7871_read_reg16(spi, REG_LS_BYTE);
-> -		if (val < 0)
-> -			return val;
-> +		raw_val = ads7871_read_reg16(spi, REG_LS_BYTE);
-> +		if (raw_val < 0)
-> +			return raw_val;
-> +
->   		/*result in volts*10000 = (val/8192)*2.5*10000*/
-> -		val = ((val >> 2) * 25000) / 8192;
-> -		return sysfs_emit(buf, "%d\n", val);
-> +		*val = ((raw_val >> 2) * 25000) / 8192;
-> +		return 0;
-
-Sashiko suggests to make the 16-bit operations endianness safe.
-
-https://sashiko.dev/#/patchset/20260329073352.270451-1-tabreztalks%40gmail.com
-
-Not mandatory, but just in case you have the time ...
-
->   	}
->   
->   	return -ETIMEDOUT;
->   }
->   
-> -static SENSOR_DEVICE_ATTR_RO(in0_input, voltage, 0);
-> -static SENSOR_DEVICE_ATTR_RO(in1_input, voltage, 1);
-> -static SENSOR_DEVICE_ATTR_RO(in2_input, voltage, 2);
-> -static SENSOR_DEVICE_ATTR_RO(in3_input, voltage, 3);
-> -static SENSOR_DEVICE_ATTR_RO(in4_input, voltage, 4);
-> -static SENSOR_DEVICE_ATTR_RO(in5_input, voltage, 5);
-> -static SENSOR_DEVICE_ATTR_RO(in6_input, voltage, 6);
-> -static SENSOR_DEVICE_ATTR_RO(in7_input, voltage, 7);
-> -
-> -static struct attribute *ads7871_attrs[] = {
-> -	&sensor_dev_attr_in0_input.dev_attr.attr,
-> -	&sensor_dev_attr_in1_input.dev_attr.attr,
-> -	&sensor_dev_attr_in2_input.dev_attr.attr,
-> -	&sensor_dev_attr_in3_input.dev_attr.attr,
-> -	&sensor_dev_attr_in4_input.dev_attr.attr,
-> -	&sensor_dev_attr_in5_input.dev_attr.attr,
-> -	&sensor_dev_attr_in6_input.dev_attr.attr,
-> -	&sensor_dev_attr_in7_input.dev_attr.attr,
-> +static const struct hwmon_channel_info * const ads7871_info[] = {
-> +	HWMON_CHANNEL_INFO(in,
-> +		HWMON_I_INPUT, HWMON_I_INPUT, HWMON_I_INPUT, HWMON_I_INPUT,
-> +		HWMON_I_INPUT, HWMON_I_INPUT, HWMON_I_INPUT, HWMON_I_INPUT),
->   	NULL
->   };
->   
-> -ATTRIBUTE_GROUPS(ads7871);
-> +static const struct hwmon_ops ads7871_hwmon_ops = {
-> +	.is_visible = ads7871_is_visible,
-> +	.read = ads7871_read,
-> +};
-> +
-> +static const struct hwmon_chip_info ads7871_chip_info = {
-> +	.ops = &ads7871_hwmon_ops,
-> +	.info = ads7871_info,
-> +};
->   
->   static int ads7871_probe(struct spi_device *spi)
->   {
-> @@ -194,10 +200,10 @@ static int ads7871_probe(struct spi_device *spi)
->   		return -ENOMEM;
->   
->   	pdata->spi = spi;
-> -
-> -	hwmon_dev = devm_hwmon_device_register_with_groups(dev, spi->modalias,
-> -							   pdata,
-> -							   ads7871_groups);
-> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, spi->modalias,
-> +							 pdata,
-> +							 &ads7871_chip_info,
-> +							 NULL);
->   	return PTR_ERR_OR_ZERO(hwmon_dev);
->   }
->   
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
