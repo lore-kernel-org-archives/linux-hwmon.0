@@ -1,67 +1,67 @@
-Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
+Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 979BA2AD00
-	for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 15:31:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0BE537998F
+	for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 15:34:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774798309; cv=none; b=p+DDtRmGnpxDzGv2DTRP2lK/ackT0+l0jsNlB7EAntgONEV00CFrTBmAf7zG4NzZ5TBkv+Dubj07cwNvc/esoVPI9TUWpV7XcTe5jNzo3nHJuR+WzJbhtNqBbRKLuaTm5ZSYcQ0s5hENdoSKnWs70/DFfqUCh73EmZGI9tOLvpk=
+	t=1774798476; cv=none; b=KO6pBwoT184grNtn9wHiL9WXzv6TcJ08TtdXHgLTI73h35GrtNHN+h8xpXSNJcr3gTzSZbuNksmKh5tlxxy5H/7ie/VZv3Z25xcInukKG2DppNye9Ed4pWMC6YGJfk5Ae9d0feFCXzOTidJ9AeihxX4bWUQnM0wZMgJAk2ls4jE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774798309; c=relaxed/simple;
-	bh=au2eKM8u7aYrDUz5dztDboQXIdUsEbqGrxHSvOHJykw=;
+	s=arc-20240116; t=1774798476; c=relaxed/simple;
+	bh=3wtd1IIeCkBJ/XmcMqk04Aty7K0zW5MZcZUzKuiYVt4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sU5JaBpA+M7JbzQYY3JEKgOtkQBgcPLuAy6HJCFWPsmhNLXNMHU920UTrfqE50aADgMMnoXP9EX0UVANTIPQ918Jqa3EEvHkNMcuCSKRkAbqvevPRU+2ha6QWayRAogRySGMaiT6eFsqzTLTJZRorQSR6ZylXmiy9FjvijGPzq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GsdCsXHx; arc=none smtp.client-ip=74.125.82.52
+	 In-Reply-To:Content-Type; b=Goci8D8GBOiTaqFv1uDIdIoXtjbzxl9Ep+Ah9pdhTrJTHSir+kf+Tlu8UubXLuiUY00aqhfKMx6n8OrveBI2dTQCa7MbKfPfQhp6b74ACG1S6wZHhr4Ot2NGg9WtvKGKUaX1t+YrXK+CgyeUCyParl5b0sS0+e3IrOW+did4TFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HgNdxzI3; arc=none smtp.client-ip=74.125.82.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GsdCsXHx"
-Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-12732165d1eso5151911c88.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 08:31:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HgNdxzI3"
+Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2b6b0500e06so4847821eec.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 08:34:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774798308; x=1775403108; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774798474; x=1775403274; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=lbC14XtI3H5l+g6ZcwMwWY/fzzcIo7U44X14GI38NY0=;
-        b=GsdCsXHx4pwdN5Idmy/anGLDS5S12R4ZATfmUOvWtYKW0DL3tXfJ81tQm4OB8RQTvi
-         lveg4ibvK2zNWmWgkzYT/bC7Oz1d47L6xvR/khMQtYemp41uyBOUUynWqILvPDmO2ekp
-         STSf+lHLEjgmv60ffQlELBa3ljhcIhFkpFKUB4FNLUwZSOEfbBOtk+MbkwEU9HonjKCQ
-         eCl3tJNSBzztmZftGnvjbPantFqjwIouMOD7ogUZ6JERL4I3U0yX+Xanx9I9LqrQ0yd1
-         GDm0r5yOs184fB1Q68O4GPK3b0Q9l1N9HFedaWVBsKlao8TkD6ZPRBuf+MmuN/1QtVLM
-         Azhg==
+        bh=Y4jQhTO1UJPiph8NqA2wQY7EhFFaT1IhjZIj6QBNFBo=;
+        b=HgNdxzI3ZeFA0kKwIJoKaLxq9D671m7oQ81dH6FqWbBSBSa5BCHoN7iFOqNOsQDqVM
+         KZSXZIm3bPn0SPowY2T3M2BlDUe6xvW4DHNFaXSuFuQwA2ztIeNbIOq+05Ng/F/+ST7p
+         n0PeK93Stdc3R4qneg2MML7D/p1zoFlI8BF4R1pEfYm2wdkDVBGTyb0ciFVGgOdjcM3f
+         5T65ky4d6I2ZYHMpt3kPskG48Ez4fFMHDPyIw0p5WJAfhYUs0AkYvruGQD1ReBlYgCGs
+         PaoQJtOfX2IKghZvN4NHcOl1zjzP5eM+XW1EhYjtwUjipZiN0044A0TPjVLSIlHU1TDn
+         EGeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774798308; x=1775403108;
+        d=1e100.net; s=20251104; t=1774798474; x=1775403274;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lbC14XtI3H5l+g6ZcwMwWY/fzzcIo7U44X14GI38NY0=;
-        b=P5RRiZbPIT47J1Kfkn0wLWcvoppKvQW02f+k5uAJjNhYG3z7E+xnTKUBUtKxiMC1wR
-         fBsEfhwVA7zTIY08nBS0TvZGa5B8/JYLSA0iJbo2zhcymQYS6lGVKvmLyCL3Tl6Z/qQg
-         oIhtbTpcuna0OFVKOmuR6+e23t4ClTPfeLnx/Llzr0t6LEvA+BFDv5w8lU4v+JdCA91s
-         NqaApYyLNspPnITZ9dl+ytGQXVLNC0YwTTj7+dDHxqwuHqJTYoccq8nGQZu6fal7zCB1
-         bqarNeLVfhOVa4sg7QMDoSCPGYsEs9t+OP1sHnWm05P4vZFeyzc6+VO3yaiiqUiE29OA
-         6GuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW8u6/cYNYtiuDBG0I4Ze281doX1wcsR/2NlBSvvXPnrTqX3592JpCbM3MTDVIe4Gn1HEAmIXAQl4am6g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzvB6qs3owL/m6bnNB+LGMrwCl2trfoaLTJtXppshlVqJoahY6i
-	lySwKW1sjn58EDd6Osno5hDoPxtpGJS+z08BYer05Lb/N9oBTuD4jftF
-X-Gm-Gg: ATEYQzyJTYhroSm3hAUz5RB6BunD/hAdceEwVfEhOHDQnoQ7eZm+Ab2tVvqA/v0+1hj
-	xw4wXmwAcfkjY2C86qqDbArB/3SP6eIF7LmHsgPG333VHytgKe+XwpCZ8c99Bds/3luDE+iCw+L
-	isIHNw6T58lP67vlTO8PxRU2MtJp2EnIk9Kc6KMhQVz4zNBtZs0hm7YL5Y9GkttPcIBJJNL5Jl6
-	PHrBu25qCG0mDjFsIk4bR77Dz1/cbApgch6hTZ1iriMqMjVj/gN10q/QFDtUgK2gAl1goqxt7GE
-	G//HhTRZiV1l8WcDFUirAhoW/9WwnV/uUGSOAzkErt78KNhfOdqChx2FHpOEPl1L7etFEZ1MDTg
-	SG7fzTBkT1wC1t/+Z2l2dSynfGrL1k13au++cqzTubLAUE5Ht4w2433O0zrbXNMvmtvA0r6NEdq
-	VHTPvlIYZh9gqXzxbz2FtrrQhZfXa7Hj6XWxCflKKRqz5gh0la1PTk6czJuy+p/wZHRAEOAuEG
-X-Received: by 2002:a05:7022:20c:b0:119:e56b:98be with SMTP id a92af1059eb24-12ab28ff327mr4858192c88.37.1774798307626;
-        Sun, 29 Mar 2026 08:31:47 -0700 (PDT)
+        bh=Y4jQhTO1UJPiph8NqA2wQY7EhFFaT1IhjZIj6QBNFBo=;
+        b=GJuNVwPSTP9Qcowir3BZkRgU4T9izFj5eQU+ZoUmwzEjAg1Uu6GVZtbV7dok+Ko3D7
+         a4Azz3Bj3ZXJwi7V5ASPRmqCK8WCkx0YBnA2Q/RdWIf7hRIYG0/SYha6LtbKbt0AVZIL
+         VnDkSImaB2WeNdmqtQkdI7LVg8tcwfWEW9RfyUfpbRQaVOhVieWTwa1QMyvRN2XA0+7B
+         9tQBgFfZU0XF15wu7t2ipdB8I2/YOzqnmmYu6sA2Af0K/hS5I58RXdK89cSCvUkKc8+7
+         KIjTgljC5cRPs74kLdxgVNRM+ieUhOh9IsK9u6k//A4u10vh0Ssjzz9ykCjFGuwe23w6
+         732g==
+X-Forwarded-Encrypted: i=1; AJvYcCV7M3nBolHtZPvLnrUCbu+gR4euOiNOrB3kw8GKB8FgVE14CtH1F/C5aGwMQkHrtIvY7TVxw8xgkZE+Lg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGz/zgHzdzdOpxqxpLpkxWjNicyrBVXDy6BF5cWwhBp7mb/np0
+	nhSpbg/em0I4xoff96D+JRA3Spx5rMg6AP3Y6yE5aJ7w7vlbunz50qP6
+X-Gm-Gg: ATEYQzxoFiPhWAJQJS1x7qUd1Iyod1S3zOWtQ6dY04YHFGzMUoCbGdO4LtUebW9JHOS
+	VKc3pMMJPR2jDW9lOWc+k67+jDW2cPeO5+3/oU8KbmKukfhNkWDPYHqsgigG5gtv8J21TvNh7je
+	IYOVCbLcWxVLLck/BLzBHqM5+XS/j5QioLLJdIoxb7Plfd0Cn79eEqptes+LnHqw8TcyNM7fVac
+	ecGhBxYNhDxNMJRDBix5jt+CzQdUmSRUQuRsAT0gNJoj4WK+3oYfWZ96if05113aFhWHyJBAS8R
+	d3/Kh98ixb+IsPfZuyll/uG3M5EB41p49D+GCNGll6f+7krZGM7MlMsqNo7OyC5a1BTnIIpZxo/
+	m2kw9HQkWwcmq+B2wyDIyQS8SfNgGcJqnUyYvmNJSuTwzMxsNYPGPwO2LI3dRckkFqfpq7jeg3X
+	NZ5kxtqiNuIrdkxb9BK+heAuf8aeT5WKu5jUVxymbPAYNS2/viktDPJAV0kIwDnCWYErG84q5g
+X-Received: by 2002:a05:7300:8605:b0:2ba:6978:2b4 with SMTP id 5a478bee46e88-2c185e45bc3mr5584844eec.20.1774798473900;
+        Sun, 29 Mar 2026 08:34:33 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12ab97ca83bsm4812631c88.2.2026.03.29.08.31.45
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c3c74825a0sm4702738eec.27.2026.03.29.08.34.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 Mar 2026 08:31:46 -0700 (PDT)
+        Sun, 29 Mar 2026 08:34:33 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <72b9d96c-59c7-429e-b422-ffec702342e7@roeck-us.net>
-Date: Sun, 29 Mar 2026 08:31:45 -0700
+Message-ID: <8291919d-c5ea-42ab-b2e5-2dfa16c23698@roeck-us.net>
+Date: Sun, 29 Mar 2026 08:34:31 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,7 +69,7 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 5/6] hwmon: add NXP MC33978/MC34978 driver
+Subject: Re: [PATCH v8 0/6] mfd: Add support for NXP MC33978/MC34978 MSDI
 To: Oleksij Rempel <o.rempel@pengutronix.de>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
@@ -78,7 +78,6 @@ Cc: kernel@pengutronix.de, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
  linux-gpio@vger.kernel.org, David Jander <david@protonic.nl>
 References: <20260329090601.532477-1-o.rempel@pengutronix.de>
- <20260329090601.532477-6-o.rempel@pengutronix.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -124,29 +123,41 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260329090601.532477-6-o.rempel@pengutronix.de>
+In-Reply-To: <20260329090601.532477-1-o.rempel@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/29/26 02:06, Oleksij Rempel wrote:
-> Add hardware monitoring support for the NXP MC33978/MC34978 Multiple
-> Switch Detection Interface (MSDI).
-> 
-> The hardware utilizes a clear-on-read FAULT register, but physical
-> faults remain asserted as long as the underlying condition exists. This
-> asserts a global FAULT_STAT bit on the SPI bus. To handle this without
-> trapping the CPU in an interrupt storm, this driver implements the
-> following architecture:
-> - Requests a rising-edge nested IRQ (IRQF_TRIGGER_RISING) from the MFD
->    core to catch the initial 0 -> 1 transition of the global fault state.
-> - Caches hwmon-specific alarm bits and calculates state edges (XOR) to
->    isolate alarm transitions from system integrity faults.
-> - Implements a 1Hz delayed workqueue that polls the hardware as long as
->    any alarm is active. This compensates for the edge-triggered IRQ by
->    discovering secondary faults that occur without a rising edge, and
->    detecting when the hardware clears.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Hi Oleksij,
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+On 3/29/26 02:05, Oleksij Rempel wrote:
+> changes v7:
+> - drop gpiolib irq fix and make pinctrl more robust against NULL point
+>    dereference.
+> 
+> This series adds support for the NXP MC33978/MC34978 Multiple Switch Detection
+> Interface (MSDI) via the MFD framework.
+> 
+> Architecture overview:
+> * mfd: Core driver handling 2-frame pipelined SPI, regulator sequencing, and
+>    linear irq_domain. Harvests status bits from SPI MISO MSB.
+> * pinctrl: Exposes 22 physical switch inputs as standard GPIOs. Proxies IRQs to
+>    the MFD domain.
+> * hwmon: Exposes thermal limits, VBATP/VDDQ voltage boundaries, and dynamic
+>    fault alarms.
+> * mux: Controls the 24-to-1 AMUX routing analog signals (switch voltages,
+>    temperature, VBATP) to an external ADC.
+> 
+> Initial pinctrl implementation by David Jander, reworked into this MFD
+> architecture.
+> 
+
+I Acked the hwmon driver, but Sashiko is still not happy with several of the other
+patches in the series:
+
+https://sashiko.dev/#/patchset/20260329090601.532477-1-o.rempel%40pengutronix.de
+
+If the remaining issues are false positives, please let Roman and/or me know.
+
+Thanks,
+Guenter
 
