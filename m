@@ -1,136 +1,101 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8843429BD90
-	for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 05:56:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49FF31BC2A
+	for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 07:34:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774763815; cv=none; b=e5p4iS3BzpXcEOSKtCqk32tFLsED0FE2zphJ1IMI7z0v3IJF295IQ+x/JgqTc+b5MIZ3d9elNLFdo8fKYWMQSv1yBMN2vO5mL8UTobLTiyFy6c1S15zWKg6BvpFCvoK3c2t2m+x8ehuTy95992jsgsGsqpVtIwpu/1QKi5PHgP0=
+	t=1774769658; cv=none; b=hbGNJNfm68M7VbNKNcbUIBFogds50IdUGsFcnxzjD0W70auwYCKb2Br7LgfOaVpth5TsXRgHTfZzCkLtvmk0hPPn2rbQujAxG+DJY8Q0JHuqL+kyRawmG9oMdr6QxdXgL+wW4sUcnP0NFB6cDNHGNqCEI8T250U5dYZbSG73D1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774763815; c=relaxed/simple;
-	bh=qBV3ETz4r9ysc3UuOuguCm3fT6bSo21r4UODatXRPCA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h1Flfi/C9n0dkAHz94gbUDI87Jy6C48TiqHNYdIAhAHpGZY3z9kscHdX7RfV3PEQg3wUK64VHcsNXTC5Ny7sidKBWBZQYWSRPv5xAwJffOGr0p58TSFKv+OkCHp3YzuGgksKqZHhvN3YHwQEGkdumxyEytn9QDrYiezHmCTjOuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1w6j8G-0007tM-9S; Sun, 29 Mar 2026 07:56:20 +0200
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1w6j8F-002fH8-1i;
-	Sun, 29 Mar 2026 07:56:19 +0200
-Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.98.2)
-	(envelope-from <ore@pengutronix.de>)
-	id 1w6j8F-0000000CR4n-1joR;
-	Sun, 29 Mar 2026 07:56:19 +0200
-Date: Sun, 29 Mar 2026 07:56:19 +0200
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
-	Peter Rosin <peda@axentia.se>, Linus Walleij <linusw@kernel.org>
-Cc: kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-gpio@vger.kernel.org, David Jander <david@protonic.nl>
-Subject: Re: [PATCH v7 0/6] mfd: Add support for NXP MC33978/MC34978 MSDI
-Message-ID: <aci_A1ye2N3g0IIQ@pengutronix.de>
-References: <20260327163450.3287313-1-o.rempel@pengutronix.de>
+	s=arc-20240116; t=1774769658; c=relaxed/simple;
+	bh=QgelfHPL8Pk/5WMJzKtnC2P+KhsxVKPiBXMgmF2yFxY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=I1td+/GdNgZ/Ryqj1IHBKnpdWmYypemkYoqqoVAZlxlcsA1y9TvgD+aGVBt0XILDppMgxXjmb79xrYB5Q/AT7Hcy2g3ssARPLnQFp0pJ2CUClNcQ9NEmYyPXE1eYEmMiZBMeZ/AiNMXowwnimF2NSK2CAkx8zcNKcjdOd432XnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rjq5AkpW; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rjq5AkpW"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2ad4d639db3so15770665ad.0
+        for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 00:34:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774769656; x=1775374456; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WvMZLMSPEFXi2C5Ng6EuAMyDvu2TyckhqWWZFiCQ9H4=;
+        b=Rjq5AkpWNM337g4nZdgx5SeTk7bUDu4+i7Q21QdGVbyt+8efLO/rVi33txA80ja85d
+         f+Kd01H3Uqm/35HLiAbpI//IUUHjujzEsdpSDlK0glg6siYBOupjhLRsKRQeeeR3s0Ql
+         1vg0fGmPkiMz1Re4kdOOVdJkKfEJWvV9HpIv2gJTG9vdSQQXWPB4fVzGSxxZ1O+cMkHy
+         f7lkDpp40/DDx4gT3gMF4s7HRSdxi26FeC71FvmxQAa0QAGhL0Jv3L+lTZU9IcpV/9So
+         Q89lMi5K3Xax4Vgf4tcJOrNFVeOkDGNN+n8BiXris1koQwDVXXbuNvXYthP5RvxVxg5c
+         DRsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774769656; x=1775374456;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WvMZLMSPEFXi2C5Ng6EuAMyDvu2TyckhqWWZFiCQ9H4=;
+        b=CbxbJbQtJV2veFAdbQTeJ/jusSjalBISeHEL1qAMMqoh5aIN6euorYWkq7Ki12U6jZ
+         hT3tL+wFsH7DxRO2PzIlmpToF6JCgTAASDAZY6qBAuFezZFP/0rQT9gfnEvIYOjyH+vy
+         0hMd865jAV0DHYlrWYtdwnmKzqoE+GxXZStMHnGfkseQBC7s5f8kOA3lfxR8cxbsy7as
+         EkzZcqIVrGjU1uc3TqSX/J87ykjICpLuuRVB7vFeRjcBCd08Rmfaan0ff1SApEnWXPVY
+         X2z04MiUkmhNjJYCJYqqLGbq/4S6Vzf2vxqPudchGfoLoUZoMdK0ddKdzxgMHJ7ZZNQ8
+         w+UQ==
+X-Gm-Message-State: AOJu0Ywpy32Eit+JAJlhI8VPQYUCfZG6bSDh2KIoZ90YpArZzTxk+hZo
+	YvkwdrIlWGKpjTO1P/TKUlRrR2gU4vg2L+//0Z/9tbiVysZCGsLR/QNF
+X-Gm-Gg: ATEYQzzpUwqAnZmuSGeox+oKpFJNoS8qGRi8R23ci8dIKlPyAcaBBr1pI+UoYcwlBZq
+	0MiFB96moxhV/9kPS2CJbJJsyHhOIA7DmY5EOomHF3/N+tLaXPs8wdGqN5ASXmh4D+LujxWva6E
+	mcZOPH4kIg+Du+SiCWyTVBjV2XXRRxhXsGYlsBYeemsgQ6xzvQHnmRn4twiywhz+zfvUAD8Gjtv
+	uQW0CjQqhUpMKfn6hVRNrURdYW0Saks4mr8NlHyqetqUJtSOLsvGlKb3bYM7wJeDdlqZy+duNOI
+	DXLlmX7rQ3wB1XeNlPFoaKmk8SoTn1DWxwIzpjbAJhZFeCPlyKgFeoRfPh9dawDwFoJeEBuFtiI
+	gnIlHQ89B617gJsmlQNorkc8MzAId82ol1ztZfGsL7/GF3cNX7/2hHBMswLAKrEmKxb9tshnxav
+	SXYp0ulV1gIp59C/GSSoYJA/3SbmWF02PPGr0/5SkG+BNAWzH82vfk+cBwxmA2I53n5w==
+X-Received: by 2002:a17:902:e78e:b0:2b0:61f8:9f01 with SMTP id d9443c01a7336-2b0cdd21fd8mr94854095ad.44.1774769656444;
+        Sun, 29 Mar 2026 00:34:16 -0700 (PDT)
+Received: from tabrez-VivoBook-ASUSLaptop-X513UA-KM513UA.. ([115.96.68.45])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b24268e7f5sm42266995ad.35.2026.03.29.00.34.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Mar 2026 00:34:16 -0700 (PDT)
+From: Tabrez Ahmed <tabreztalks@gmail.com>
+To: linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	shuah@kernel.org,
+	me@brighamcampbell.com,
+	Tabrez Ahmed <tabreztalks@gmail.com>
+Subject: [PATCH v2 0/2] hwmon: (ads7871) Modernize and fix DMA safety
+Date: Sun, 29 Mar 2026 13:03:50 +0530
+Message-ID: <20260329073352.270451-1-tabreztalks@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260327163450.3287313-1-o.rempel@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 
-Hi all,
+This series modernizes the ads7871 driver by migrating it to the
+hwmon_device_register_with_info API and fixes a DMA safety issue.
 
-There are some valid review points related to the MFD core:
-https://sashiko.dev/#/patchset/20260327163450.3287313-1-o.rempel%40pengutronix.de
+v2:
 
-i'll send a new version.
+    Dropped custom mutex in favor of native hwmon core serialization.
 
-On Fri, Mar 27, 2026 at 05:34:44PM +0100, Oleksij Rempel wrote:
-> changes v7:
-> - drop gpiolib irq fix and make pinctrl more robust against NULL point
->   dereference.
-> 
-> This series adds support for the NXP MC33978/MC34978 Multiple Switch Detection
-> Interface (MSDI) via the MFD framework.
-> 
-> Architecture overview:
-> * mfd: Core driver handling 2-frame pipelined SPI, regulator sequencing, and
->   linear irq_domain. Harvests status bits from SPI MISO MSB.
-> * pinctrl: Exposes 22 physical switch inputs as standard GPIOs. Proxies IRQs to
->   the MFD domain.
-> * hwmon: Exposes thermal limits, VBATP/VDDQ voltage boundaries, and dynamic
->   fault alarms.
-> * mux: Controls the 24-to-1 AMUX routing analog signals (switch voltages,
->   temperature, VBATP) to an external ADC.
-> 
-> Initial pinctrl implementation by David Jander, reworked into this MFD
-> architecture.
-> 
-> Best regards,
-> Oleksij
-> 
-> David Jander (1):
->   pinctrl: add NXP MC33978/MC34978 pinctrl driver
-> 
-> Oleksij Rempel (5):
->   dt-bindings: pinctrl: add NXP MC33978/MC34978 MSDI
->   mfd: add NXP MC33978/MC34978 core driver
->   pinctrl: core: Make pin group callbacks optional for pin-only drivers
->   hwmon: add NXP MC33978/MC34978 driver
->   mux: add NXP MC33978/MC34978 AMUX driver
-> 
->  .../bindings/pinctrl/nxp,mc33978.yaml         | 153 +++
->  drivers/hwmon/Kconfig                         |  10 +
->  drivers/hwmon/Makefile                        |   1 +
->  drivers/hwmon/mc33978-hwmon.c                 | 548 ++++++++++
->  drivers/mfd/Kconfig                           |  15 +
->  drivers/mfd/Makefile                          |   2 +
->  drivers/mfd/mc33978.c                         | 933 ++++++++++++++++++
->  drivers/mux/Kconfig                           |  14 +
->  drivers/mux/Makefile                          |   2 +
->  drivers/mux/mc33978-mux.c                     | 136 +++
->  drivers/pinctrl/Kconfig                       |  14 +
->  drivers/pinctrl/Makefile                      |   1 +
->  drivers/pinctrl/core.c                        |  41 +-
->  drivers/pinctrl/pinconf.c                     |   9 +-
->  drivers/pinctrl/pinctrl-mc33978.c             | 836 ++++++++++++++++
->  include/linux/mfd/mc33978.h                   |  92 ++
->  16 files changed, 2800 insertions(+), 7 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,mc33978.yaml
->  create mode 100644 drivers/hwmon/mc33978-hwmon.c
->  create mode 100644 drivers/mfd/mc33978.c
->  create mode 100644 drivers/mux/mc33978-mux.c
->  create mode 100644 drivers/pinctrl/pinctrl-mc33978.c
->  create mode 100644 include/linux/mfd/mc33978.h
-> 
-> --
-> 2.47.3
-> 
-> 
+    Split API migration and DMA fix into separate, logical patches.
+
+    Corrected output scaling and sign extension to meet hwmon standards.
+
+Compile-tested only due to lack of hardware
+
+Signed-off-by: Tabrez Ahmed <tabreztalks@gmail.com>
+
+Tabrez Ahmed (2):
+  hwmon: (ads7871) Convert to hwmon_device_register_with_info
+  hwmon: (ads7871) Use DMA-safe buffer for SPI writes
+
+ drivers/hwmon/ads7871.c | 110 ++++++++++++++++++++++------------------
+ 1 file changed, 62 insertions(+), 48 deletions(-)
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.43.0
+
