@@ -1,219 +1,187 @@
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DACEF38239A;
-	Sun, 29 Mar 2026 17:10:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.143.35
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774804223; cv=fail; b=BxmizeNWNvfZmwQj4C3LHsJXrwfgslRiODfwy6bRNPkLVdFjT17KLF3tfd/JiNSxveTvsyOep62Zs/BdRzW4Fx9pgim5ElXj/Y+aXs8yo06luYA0UPEaAlggKGsmptnPJat9hES9p119KVlektTX1KpqgruHcB622/6KOdrEenA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774804223; c=relaxed/simple;
-	bh=6c+cA21eOZiuonyYq/4iL2QR6k218QxyDCKGd9pULxI=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=EaDPlbFxHBi8ogrPVrqbiUl1DN4Q2b7ouR9jyzJN7p2YuYkQYbXZalQNO2lORathXl9J2t0aGxrjQh9NDfbga6WabeTM7kEg27MYqhGbSXuQINVsrrTAk0IfnN8BrcKMIpi70EBv2OrjPJt+nsmOfhrCnrl3CR6jsh5fKpYgMbo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=NxictZIs; arc=fail smtp.client-ip=148.163.143.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A7827B32B
+	for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 18:34:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774809287; cv=none; b=rcwENbKXhFI+TLunyBNo4zwuohl95Vfgc7c4EjAOB+qjdSkV57xW6/Yt9k0qM2gdgih+4DgNliOooRekUkYeyfUQM6a8IF2r5m0cDOitCUWmSTkdmnF3MlfAPGhGnorfPnF1f6wH5g16kjeJmYdm6gx9NGIqTu8qAqn5uSd06U8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774809287; c=relaxed/simple;
+	bh=y4xR85L0NltRqGs4WyiqTFwM23gfnOted83u0+5X+Fs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=G/YOsVIMpyiv/h1LB2mt7+6T5RL9xzY1AyDnJA8wN4x8cMe4/uWrVj5LtLabERFQ9hhMc6Ief+wh8gDKfO33sArRJsNhL+YnqKxkkq1MXpUKaG5hznod9PZLlEJpcLxx+8E04MG3crdNz08JBkDHa9w072TuSEoRdavBGWrJdwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hi75ilFU; arc=none smtp.client-ip=74.125.82.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="NxictZIs"
-Received: from pps.filterd (m0134424.ppops.net [127.0.0.1])
-	by mx0b-002e3701.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62TA3LKF2410180;
-	Sun, 29 Mar 2026 17:10:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pps0720; bh=Vk
-	VREVLVPLvYMxqaXwCNZXzV+KVp5ZtEmzMqDBGhzv4=; b=NxictZIsRJZmfCqUqK
-	/Q6UVqi1Pevw0Idu/eoZd12XU5XSOSFblKVi2f9Vb3N8jJun7/uizApASPWK2XZz
-	JwMsvyq0oDjKiaefAbXQX53wF4pTfi3EFq3n7Zh7b3b8u9jeSHmUTPoeKmXdSfIm
-	m4HN0FABoyh5aq95/RlT2tjj/oaXEWl/vnYCao9m7DMP+wN/sVixTTJpv58Ezx8b
-	qLaSDyDtdcwCpgabRDG5h9xPkRf7IYHL4td4LUc1zdbX5Yk5bS237ISKrFhY9Qf6
-	/iIQLn5UjESSfZZtJ1VQptrAAeg5xMVaBBo4YeetFnhrAr52nnsY38Uq3xdmmZUE
-	S2yA==
-Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
-	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 4d716j28y5-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Sun, 29 Mar 2026 17:10:05 +0000 (GMT)
-Received: from p1wg14923.americas.hpqcorp.net (unknown [10.119.18.111])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 4F46CD1E9;
-	Sun, 29 Mar 2026 17:10:05 +0000 (UTC)
-Received: from p1wg14928.americas.hpqcorp.net (10.119.18.116) by
- p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Sun, 29 Mar 2026 05:10:05 -1200
-Received: from p1wg14925.americas.hpqcorp.net (10.119.18.114) by
- p1wg14928.americas.hpqcorp.net (10.119.18.116) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Sun, 29 Mar 2026 05:09:59 -1200
-Received: from p1wg14919.americas.hpqcorp.net (16.230.19.122) by
- p1wg14925.americas.hpqcorp.net (10.119.18.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17 via Frontend Transport; Sun, 29 Mar 2026 05:09:59 -1200
-Received: from DM2PR04CU003.outbound.protection.outlook.com (192.58.206.35) by
- edge.it.hpe.com (16.230.19.122) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Sun, 29 Mar
- 2026 05:09:58 -1200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=dlPNkocwUP7LQQFVdy9NP1GuUCHuWjsnT/KI9/tqhgiVKCXwGjRKhbmhnuIPv/38ZJr3A3XFXS8aIujG4viHtTyn5vBZ1IkQoZ9Ew1u65NBNWCzz/B681bh7aHyTvc2iLjHjDJ+sxnL2CkPRb9m4v5yKjlF2UT5fkxT2XfzwE1II+GArAD+qTwbCcqr6e52jDAmjjg2HT68AqLYM5v+85Bl29NCNpgJCtaR3vAr+s8svTFurngpTkwtSMThklogPUmWArEjW2kfvM8zjXahsYYTFsCttKN5X8jEaeFqGe6h07ATcCGjDfOhrxhY68zY9HxF0NmLfnwPO/vD1golMIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VkVREVLVPLvYMxqaXwCNZXzV+KVp5ZtEmzMqDBGhzv4=;
- b=dTF5dmJ9NHgAIMADgUFbpaicePZ6Zf0SM96dboMCojP6OGfVHFgXYoEGO0xXirVx52XnZ11ZHlKcB9pijoSevgWJc1rnlS4+Jw4pdN5DBmbm7voNFY/Klnt3iYl5e9J+qIsZW08JADqKANGdbP0K3x+fv4h6LyYXXEYYO083VZyeDo+qqQuvi85OVgeD+4VWDi/5FkXLIU4esI/yWj5ON4Dy1xxe61RjDCISl5Bp5GFYffdjX5iwBv6qkw58owj46pB80CMXs3FqHjDGFbCNWMqx/r18+QBPLj0oItC5cyoNgZ5vQV1fxN7w8a/dqo6UGDJy/apWTW2Dsp4jrN3keA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:610:1cc::7)
- by SJ0PR84MB1992.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:a03:436::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.27; Sun, 29 Mar
- 2026 17:09:49 +0000
-Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::2c54:3534:122f:e74f]) by CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::2c54:3534:122f:e74f%4]) with mapi id 15.20.9745.027; Sun, 29 Mar 2026
- 17:09:49 +0000
-From: "Pradhan, Sanman" <sanman.pradhan@hpe.com>
-To: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-CC: "linux@roeck-us.net" <linux@roeck-us.net>,
-        "Delphine_CC_Chiu@Wiwynn.com"
-	<Delphine_CC_Chiu@Wiwynn.com>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        Sanman Pradhan <psanman@juniper.net>
-Subject: [PATCH 3/4] hwmon: (pxe1610) Check return value of page-select write
- in probe
-Thread-Topic: [PATCH 3/4] hwmon: (pxe1610) Check return value of page-select
- write in probe
-Thread-Index: AQHcv57ZqifkkczCREOjPYiI3MPLnw==
-Date: Sun, 29 Mar 2026 17:09:48 +0000
-Message-ID: <20260329170925.34581-4-sanman.pradhan@hpe.com>
-References: <20260329170925.34581-1-sanman.pradhan@hpe.com>
-In-Reply-To: <20260329170925.34581-1-sanman.pradhan@hpe.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH3PR84MB3523:EE_|SJ0PR84MB1992:EE_
-x-ms-office365-filtering-correlation-id: 2eb01e2f-091b-44f2-dbb3-08de8db5fc06
-x-ld-processed: 105b2061-b669-4b31-92ac-24d304d195dc,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|56012099003|22082099003|18002099003|38070700021;
-x-microsoft-antispam-message-info: 01AhYNWrv8OxwIphjnyiAMF4HSEMfdu14iV5LYyudqFD38bx0miyGzHDLSoUvwdXHbrCWVvdpemJuJ4heHZfZZ5ruYID0ARw9keoD8OfYtE4UtPF11+UYHG4wYsc8+FWS03N9OE0RVqffrjt3Vzh075t6t+fjeeULW9Im4soLxLN3CsXWwd0p4v2VpQpnXX0cqMJr3pYshkOeQmgA4YcdmWvEYKmBXixcHJEPp39ktKe2XYmcHBII1B5T5erB3Xg3qS0TsuHi22YAlYhjsRJi8+PEEExoy0JVl56etW2g6Ct1rPxXMxHnSxv3r4PuZpDlRPUm4VHX0gEcTas8AhHWO5m3J97wDpiYefVV/epjJAPtIgbkZdVerworMgwkHrEoTEARVGvWdcTS4M1w4o6blcBvfXt0XujD3fahnMPNMAdAF9Oi+waXmxoTGfg2PgWIeGQPFZMdIDvy/n5AR9t3fDs7riMDBEE2aLXbLsfBTx0Tyv1WQk0fNJm5NY8n3XPqvda1ZajmS3cvjMCGquClsvL+WBGGkygEwJQIi2wYmFTDdMn1zOllRe9f6JVnPqTMx5GfEm7DMTcjGgenHuaHf1xxydICuFSXh7XNfJbiPc+AFwfoIWh96VIPJSHmuY+7AMM3iCBp2JlFc4jHFoYKsqpw2JOya1Mz7kdiQU78Tqf+ISp9EEAPjnGteJMlXbkQz155dNQXAdU8bR4q4pulVm0MG5GctgzIcMdA5fy95QuNS1UxYUvrKl728RUliyLphfr8Yc2u5gq/ROueVo7NpTRz0lrseZlyPJ09QnR8O8=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(56012099003)(22082099003)(18002099003)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?mqNZftjP+bxwdguXQUBZgneAJ1q3oEoQUc9domKxDzSLhPEH2eGf0L8qwB?=
- =?iso-8859-1?Q?ikD4X56Vfu88haOX+VE6QhsOFWa9OU6Qa3kV7svECQ8BC8oxGb41hd3Wjf?=
- =?iso-8859-1?Q?MnZfHBXUhygcj7Yc4uj4Qby5jvXA5oLA2v6cd2a/ag9DCZHYWhCOYvH1M8?=
- =?iso-8859-1?Q?Cbn5VvsuJ1oBeloIt+srMCZLr8trtajBsivBzYIql2n3gNomTWAP5mgoUs?=
- =?iso-8859-1?Q?w8IV+IM52f4Nm+HyHBBhPpKM9rRq2e7uKa3UNg0YVXkBeHroD9QmfB78hC?=
- =?iso-8859-1?Q?U08TOok5vm3V0Ks6PjUyC+xhyuL41FeX9pIKvgrptMv7QyJ/uT+G/yCc5E?=
- =?iso-8859-1?Q?WBxdVLsJONRc1O5NPd7w/pPPtF9dvlgocUz4R1PdiwHFeVC/0GF7FIO4zc?=
- =?iso-8859-1?Q?Ubo1KFcN5S+rOTSLeuwwDkH8lVPVN8YW/Pv6FAkZJXV/sniPZ4LgIAKf4W?=
- =?iso-8859-1?Q?igGXq8y7P9M/CEqvKtAkZPTC6/cBS170uUqI+JAfNDRUrpUuwnQTvA4W7r?=
- =?iso-8859-1?Q?xqMIq8e+xu/V2KeeXOuTvT0uBmq+xyw8ZF1flClWwAHhSLUPcoMHfQ3YJt?=
- =?iso-8859-1?Q?GYKwJHhlD+eJYG+pZfCa7ncipeob4Zn1Lw9W8ZRp6qy4savqCPA0nyWDLS?=
- =?iso-8859-1?Q?u0Np60CIBd+ZH/nHU7eYcI4jQkRAulJhSzJ+UlGiLPnsRqjSOJVrE5lfkS?=
- =?iso-8859-1?Q?HdNAzYCznAVcIYXYvgZ+5B1Wn69w4NbCUzby/lLfgpkDUNUVCYNgeY7clF?=
- =?iso-8859-1?Q?1O5HBHno7fhRY1UXWnuNV/f4I3S6gVuDMr0w1NFHnBGdhzcc2QwQPxaEAV?=
- =?iso-8859-1?Q?3VnnojIsGsOpHTzp4urSkmi0nW/6k7cbwnmgrca0kzWN6LVaMRGyFTTpuH?=
- =?iso-8859-1?Q?rszode1s4sinYDOuGE8DtfgeEa6h3AvAiRDZXK2N/mwBcGU/k9L2FMtk1w?=
- =?iso-8859-1?Q?vcKsJw3YYXW6HTWjmZr7OLGy5BqvS63erkhqeVcgc79OyPV3I3sjxD0s7W?=
- =?iso-8859-1?Q?zP66UKjl3eP2DGkCMoY+mAcx50ifaNDQj59d0uHWj5oq/z82LOCkdI5oAG?=
- =?iso-8859-1?Q?GKISnd/cYbpX4CmwsPB8mle29FwwBLkHs6uUZoGKHQ+Ls9lznq7h38XSwn?=
- =?iso-8859-1?Q?39lBDN3/ayxcPpYARcbELDDrAHLqKzS0IlGFTiFAaGN4UswR3ZoSSSLGaR?=
- =?iso-8859-1?Q?u4NZo0GWmEo/7lSFwmyNjO2PkGm//nrMhK04jrGuPzsC44pM53s5nalSKZ?=
- =?iso-8859-1?Q?KtlLzfZIkFW8C70Q/KDlNKJuxW5mMpIW2RuXrmmZ2o6mDO9w+lFh76MTS3?=
- =?iso-8859-1?Q?jTbIEq5dYmF6egYtTiMKi0PgXIvF+i2Ky0zbXdjH1HNOqQAbErZAiVc3xr?=
- =?iso-8859-1?Q?Vr4ma4qOTianmRvmKcWe5SBRsPBZ6h0Z6tEmLPwjQagM8KuJ1k598m7IdF?=
- =?iso-8859-1?Q?jQ08zvUjpEOCcSvLajpA7hcymETGKLCW20y2bCcbdnEs75x8ZC9ZB4Gygy?=
- =?iso-8859-1?Q?XDzmSEvPSNeJpmJIx5Jhsh7kENM999lfT1vG1SZi75UAxJB/+Txy/K9U8U?=
- =?iso-8859-1?Q?IQLOmy6HU/sfwyeUFutSJ4QCWEVnWZpnshuFwF2Drao6eXVR+WMD2E1Ugx?=
- =?iso-8859-1?Q?9bKdYd++Zg3RZqJNZ6p9sgG3riwezu8cHfPOYcgpSbhA+Wv/gSO/f4IDuM?=
- =?iso-8859-1?Q?V5gSosMOtAwSvV3U9xuETSydOguGXIkHH+Bueqvo3QUtVPuLyAPXSyrVC7?=
- =?iso-8859-1?Q?P49ahAujMr1lC5iny3SDfsXvz5rOl1Gde2M+RopTw1gZkRLO72c4xzFEBi?=
- =?iso-8859-1?Q?+mrXw9GaPQ=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hi75ilFU"
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2c175635a33so2582582eec.0
+        for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 11:34:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774809285; x=1775414085; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=PwfQIOmM/SI0e3i9N5g3IUUoTbPvavo95pVFv1sraXw=;
+        b=hi75ilFUx2fqukWKHU5MlsLWpdE4diuo6bOnEScZYg6tbaW3qn4daoqgIaVeJLHo/w
+         bp+VSIf1kgGkCJmmG5PnGYxkjshamII8kbj4p+hIJN/nSOa+Yt9Gd6VUZc2hqCxHhq5J
+         QaEV0GUZnnZ9sA0Kg+7YaSCHGDg6qSLFLd+lz3VbmdqKkidDUNhWJdbgA8VzxPCp1VCd
+         rkRRt6kZ9g2F4OwTLJog3d+rrBSeYDxZy3JHpKyF+YcKw7itpTVCAo/EcJUN0KqXdvKt
+         spsQKzQ9aoFwkzxpNn0sJy8wH4Cmoe+FrT6Nkc/cBN5Q6kGiwWOBHKYYxcZZ8yus6f6C
+         X+ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774809285; x=1775414085;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PwfQIOmM/SI0e3i9N5g3IUUoTbPvavo95pVFv1sraXw=;
+        b=SIh4VM/f29AAea8YIUAap2FnMoOAjD8fWwESbYP4ah3QxY/bR/GukMGRsIIhb5EZX/
+         NvepA0nj2jzXgz1jCQM63sIjAbxTVn3azWsyjWq6fkrSb390TvctcVWXJ1cbew0g6Our
+         hmMMkrSAlZIaNZ+poJEfkF9Ii7IpV9Y0PuUy4WZ4gHrzVJNwFGfHNcRkjOdcW5qFYz4d
+         Vyj3F/JtO6gxSmjuBb+U8UDhpyguvNHUOy0eTMX+CvrBcr6aKFl1vN5IcbMBMqJEXC+J
+         1L2WXiGSXbVJtOGR7ZS+WboRQZfNkiKgLAjK/7aYGoo/kQ6KybK1IY5jl1pxzI0Yl9wn
+         c+Dg==
+X-Forwarded-Encrypted: i=1; AJvYcCVQJ/g53IxWrWUZfygxlepqwpLA6Jf42piW7zuYBmXutH36LyhAyJsDlj6TBf3koXjOdjUKDGWeNK4MKg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzU3Zw66H3Zx3GpnKWT9jHyxuFYqOgNN18U5XrF0FGdG8CIOICE
+	0P4GtG12YGni3jX3rxLEpAOpbmoxuCXrvT4/Rpwm3U2UFZTcLkl3Gw5u
+X-Gm-Gg: ATEYQzxpkPToG15reT2xMAghzkN+Lk2bYurhUYs7sJCgQkxXqMq9s3ZrZL90QA2NO2J
+	Xabj0XQS5cIC9HzMkYkm+MvAkhqEhX8hXz88GpNfS5GDDrISGgpYEEkh//+flAK0i0mjboQIbRo
+	KylZO1PE+vPF86LTKWpR/HFRU2B0YCJic3smLbEkqfdUWjDUcFj2h3wyCsuBNZUX/BJ2trrKX6U
+	kg2ibAznQE2eoYHGcoIE3my+pxm7Ei2w2LyPoKHiumhie5n0pdZXnLkB2sAWtaVlPqSek87FXJK
+	yT4MH78ZH/0XQNUSAszEG7t6T6ZFeiPMPRogNvSN5Y1HarDZun4tQHpk22N+XPXkSixWYEbaHoR
+	YXTzBLL6BH84NzfQl0nqVCq1mwhBzTs1H/Yt9XNwKTkms6llSuNN9eG48iuWkLJqW1y43KTSnur
+	NHmip+AJrailJA9yUSoT73gy+SAEzfgWtd1x/RXwzM7lpuYuJlqs6RizOKDIRj483KWKDowV9rm
+	PEYItMoz7g=
+X-Received: by 2002:a05:693c:3005:b0:2c1:7793:7bbb with SMTP id 5a478bee46e88-2c185f3905emr5191666eec.27.1774809284596;
+        Sun, 29 Mar 2026 11:34:44 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c3c41c1513sm5229388eec.8.2026.03.29.11.34.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 Mar 2026 11:34:44 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d37357a2-90b0-49fc-8af8-434ebac8ca6b@roeck-us.net>
+Date: Sun, 29 Mar 2026 11:34:42 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked: Re3FnxfuNc21wnjQJmhtZ4B/441wcG94Bx08JgGKHhO3zyPa9OlU7iI+6ek9b6qUmDxa8ws2qZj2FH5qVhwPYCbDcWomPg91g3wRi+V9BHM6Bzmw6P+O9xLZIIl5hO/hSXixO3aqSKJk7zjk7f6gscuUcmMVGs3vaT9aBIMDsw21IwZXu5HKEteF8+GMr0mnFN2x+cDolkH/9cSpKZVscTxDoHUb96QZ+ON1y+wUBVFnzB2U9f3oNKBWN+Ip/ZSEguHloIG9PHcAlA87oUyUR//cBZRjb7DLLXnSrfTlmAfrB59MGyUnplNhP4LchYOxbUzT4sfOMfK4oHvhswzj5A==
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2eb01e2f-091b-44f2-dbb3-08de8db5fc06
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Mar 2026 17:09:48.9797
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: tjP5YhtWsVEkaiSRhwu/dbwGTuM+Apw7DNrmQlbeQYKrJ+P+wN2xzfBv1c5elNvOK9ZpM8rNkuMnlJdfSC3T3w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR84MB1992
-X-OriginatorOrg: hpe.com
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzI5MDEzMyBTYWx0ZWRfXzXHa1zRT4BDv
- Amk8OcPpJD4b0/u5cV5mCnW8p4TjhAfa2u1uHGLqf4h1Vo86YTc9qxMHxtZjzVaLmaA0aR0KV7E
- A4jWe4GeeQFnyTL/CSPiLzMz5wKVjRSaT8E3sKgCnAhbXZSj8ERqbrMOX4pdjt6KRaSEEyU2qZo
- uenQLi1MOKwh6BoKRwoxYJDFU3NGGCKzzDwafYWBn94rXdvdUxRdI8dVwYknefl/GyCC0AOHVZ2
- ECJRsyKKDxlwnN2wsSF19XuWaMVI7Stm408mQDkdc7P+1AIdF3+5dMzuWJsRjekjAV4ls/oQHSq
- ek9IjL1avBj1LaGDhPryVC+J7iQ71ViJ8GBU4OzqvEH9BqpIlhLrmcj8fLvgSz484LxDkw5vFo9
- anQCVGDzeIvZMfUdzqgkXkVq+hhLRZE98IbWfq4T/88CWEA3HRji7D4LWVj0Lr7OQLnMRwjjMuC
- uyCVdcnO6vRCZHIlK6A==
-X-Proofpoint-ORIG-GUID: HLMQMTOpavJ3LMNGRtb1IhDo_J9g0ks8
-X-Authority-Analysis: v=2.4 cv=DIuCIiNb c=1 sm=1 tr=0 ts=69c95cee cx=c_pps
- a=5jkVtQsCUlC8zk5UhkBgHg==:117 a=5jkVtQsCUlC8zk5UhkBgHg==:17
- a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
- a=xqWC_Br6kY4A:10 a=8nJEP1OIZ-IA:10 a=Yq5XynenixoA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=gQcMVamqm3wCPoSYhaRC:22 a=3haJ9R1Aw3gUfsUHDaCR:22
- a=OUXY8nFuAAAA:8 a=I2HXvSVKOc2IUxaNvNYA:9 a=wPNLvfGTeEIA:10
- a=cAcMbU7R10T-QSRYIcO_:22
-X-Proofpoint-GUID: HLMQMTOpavJ3LMNGRtb1IhDo_J9g0ks8
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-29_04,2026-03-28_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1011 adultscore=0 priorityscore=1501 spamscore=0 impostorscore=0
- bulkscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603290133
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/4] hwmon: (tps53679) Fix device ID comparison and
+ printing in tps53676_identify()
+To: "Pradhan, Sanman" <sanman.pradhan@hpe.com>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Cc: "Delphine_CC_Chiu@Wiwynn.com" <Delphine_CC_Chiu@Wiwynn.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ Sanman Pradhan <psanman@juniper.net>
+References: <20260329170925.34581-1-sanman.pradhan@hpe.com>
+ <20260329170925.34581-3-sanman.pradhan@hpe.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260329170925.34581-3-sanman.pradhan@hpe.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Sanman Pradhan <psanman@juniper.net>=0A=
-=0A=
-pxe1610_probe() writes PMBUS_PAGE to select page 0 but does not check=0A=
-the return value. If the write fails, subsequent register reads operate=0A=
-on an indeterminate page, leading to silent misconfiguration.=0A=
-=0A=
-Check the return value and propagate the error using dev_err_probe(),=0A=
-which also handles -EPROBE_DEFER correctly without log spam.=0A=
-=0A=
-Fixes: 28ccdfd11344 ("hwmon: (pmbus) Add Infineon PXE1610 VR driver")=0A=
-Signed-off-by: Sanman Pradhan <psanman@juniper.net>=0A=
----=0A=
- drivers/hwmon/pmbus/pxe1610.c | 5 ++++-=0A=
- 1 file changed, 4 insertions(+), 1 deletion(-)=0A=
-=0A=
-diff --git a/drivers/hwmon/pmbus/pxe1610.c b/drivers/hwmon/pmbus/pxe1610.c=
-=0A=
-index 6a4a978eca7e..24c1f961c766 100644=0A=
---- a/drivers/hwmon/pmbus/pxe1610.c=0A=
-+++ b/drivers/hwmon/pmbus/pxe1610.c=0A=
-@@ -104,7 +104,10 @@ static int pxe1610_probe(struct i2c_client *client)=0A=
- 	 * By default this device doesn't boot to page 0, so set page 0=0A=
- 	 * to access all pmbus registers.=0A=
- 	 */=0A=
--	i2c_smbus_write_byte_data(client, PMBUS_PAGE, 0);=0A=
-+	ret =3D i2c_smbus_write_byte_data(client, PMBUS_PAGE, 0);=0A=
-+	if (ret < 0)=0A=
-+		return dev_err_probe(&client->dev, ret,=0A=
-+				     "Failed to set page 0\n");=0A=
- =0A=
- 	/* Read Manufacturer id */=0A=
- 	ret =3D i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);=0A=
--- =0A=
-2.34.1=0A=
-=0A=
+Hi,
+
+On 3/29/26 10:09, Pradhan, Sanman wrote:
+> From: Sanman Pradhan <psanman@juniper.net>
+> 
+> tps53676_identify() uses strncmp() to compare the device ID buffer
+> against a byte sequence containing embedded non-printable bytes
+> (\x53\x67\x60). strncmp() is semantically wrong for binary data
+> comparison; use memcmp() instead.
+> 
+> Additionally, the buffer from i2c_smbus_read_block_data() is not
+> NUL-terminated, so printing it with "%s" in the error path is
+> undefined behavior and may read past the buffer. Use "%*ph" to
+> hex-dump the actual bytes returned.
+> 
+> Also add a short-read guard: if fewer than 5 bytes are returned,
+> report -EIO (protocol/hardware failure) rather than -ENODEV, since
+> a truncated response is not the same as a wrong device ID.
+> 
+Ah, but we don't know and can not assume that this is a truncated ID.
+It might as well be some other device.
+
+> Fixes: cb3d37b59012 ("hwmon: (pmbus/tps53679) Add support for TI TPS53676")
+> Signed-off-by: Sanman Pradhan <psanman@juniper.net>
+> ---
+>   drivers/hwmon/pmbus/tps53679.c | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
+> index 1a6abc32afe2..d6600502d6b0 100644
+> --- a/drivers/hwmon/pmbus/tps53679.c
+> +++ b/drivers/hwmon/pmbus/tps53679.c
+> @@ -175,8 +175,12 @@ static int tps53676_identify(struct i2c_client *client,
+>   	ret = i2c_smbus_read_block_data(client, PMBUS_IC_DEVICE_ID, buf);
+>   	if (ret < 0)
+>   		return ret;
+> -	if (strncmp("TI\x53\x67\x60", buf, 5)) {
+> -		dev_err(&client->dev, "Unexpected device ID: %s\n", buf);
+> +	if (ret < 5) {
+> +		dev_err(&client->dev, "Short device ID read: %*ph\n", ret, buf);
+> +		return -EIO;
+
+This is not an -EIO: It suggests a different device. Please change the comparison
+to "ret != 0" and return -ENODEV. In other words,
+
+> +	}
+> +	if (memcmp(buf, "TI\x53\x67\x60", 5)) {
+
+Just change the original code. The expected device ID, according to the datasheet,
+is, in hex, "54 49 53 67 60 00", with a terminating 0x00. So, when using memcmp,
+the comparison should be something like
+
+	if (ret != 6 || memcmp(buf, "TI\x53\x67\x60\x00", 6)) {
+
+Thanks,
+Guenter
+
