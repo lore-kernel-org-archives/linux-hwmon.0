@@ -1,174 +1,206 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CD943815C3
-	for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 16:52:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774803128; cv=none; b=VOuNfmJB+vv5fqjP9gyxcLgrISbkR+GWOHz6V2f5yBPeLDDWnW9Bb0Ui5Y9RB89Gb2NgWZa4yIPL7MrB1kd7f7FLK0X1h/Qlbvj+c4GeXrEl/yLvFQKD1VQs306x/42PEK1Z1O7lEjOHqF7nQszHbuI1J8tkHCAQF+VGQgxysYs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774803128; c=relaxed/simple;
-	bh=QgUkhoCHKdMY4BAB1749UR77ZswHDSxHL9naJcq/fy8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZeCayqeZosFhDUoz8juLpmoGB9twPvTdcQo9hiXWBGK3WSOxeQ2jA9P5kYuDM9Ugy3favpUN6jia6PaMLjbosHvtwFgNLHKh9O+r6Is0OmWqc+/5yoB1YOz0XGQUxsPUVkeQIkw+pqVm/nARf6gTgNfPgPxCPP5gMjrYcK1kzz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=osJm/opG; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C83E2BD0B;
+	Sun, 29 Mar 2026 17:10:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.143.35
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774804221; cv=fail; b=Pfb2rFxmBUOnv5bqvpxHYZTGoD2AZOsUL4kBOQFokDHzP0chr6iXqVYFOUpAIsl6kxhQhiYzTDLEekgll5nALO1um24Dje5bodUOwzlnV0aGC8wcxCijqruIpCPLwwZt+9SEDeUXlnv0iKEQJB4bIgJnLs2jkPjv2pAwbg/N0HQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774804221; c=relaxed/simple;
+	bh=8iMm1yrk9tMfewomzs1Nj3rFArsXI7sBMwr+WunwNvw=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=fs2IB13l0GklgUgfIbJlwaKOuPBoPmRlVtWzspJZXFGs+QkQVIDIoZXK8nwwu3VJ+DELW7GQP+xN5TSbUdMSOAbklVRKgI7UIhOxN9nWa8RcDeKI4dD4Vw61451cOhj0k7J3EzkM8ZBAC5h9lHfKM2+eLUZ4pOx8km9/UEiRxA8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=F66UmyQ5; arc=fail smtp.client-ip=148.163.143.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="osJm/opG"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2aae146b604so22057655ad.3
-        for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 09:52:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774803126; x=1775407926; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=bVG7KEyomhALkFaGSEXjFcWkz3Zg3KUEM/4SaD0Pivc=;
-        b=osJm/opGm3blxaRMHpx71MOmzono/NEhe76Fcj1W9qXnc8CFkUwx+ObnNbMllqR9iq
-         5u+kbjOH2b8hxizFv5mWxT7vH9s3Sw76OR9RzjGPq7OEWM8Yedu9L67pTFDH+4tGXPxA
-         btoMj2gxc5MeqrO5mTwgF3YGJuaMi83j+zLjaSJ8YI2Ugvnw0JFb6IHhLpNeXzK9+nbn
-         LPVNFw5cf+qlGQWG6ydoaOvqx2pvMeYb0PmZqw+N8Dm3TJgQFYJ8n3ORK6T0h1v/rBIn
-         1RiVhziO78ZXaDkg45QX6R0hLd21po3w3tXiYqJJiqBGe4xoyD/EZ+Wfyp1Ds5tBPzve
-         PfnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774803126; x=1775407926;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bVG7KEyomhALkFaGSEXjFcWkz3Zg3KUEM/4SaD0Pivc=;
-        b=pbp/pLvl09aaWXjccEwMO6oUPC7abHRP9x4GBhYemdCPInfFtTErmLsNOFCTuJYQrp
-         yiUDHD00zR+/RlbAlg7ikSEKZuBmrYhlfvC5wucgv6oI/U75TFP6ravBzmKuXmf0RibG
-         IIChdLXjUk32IfIIbpOQOpqapnJleaZkN2nxo+e6SH07LZUeL8Q9EauPjv6mJIUDAQJY
-         Z8duWypEAn09IkUzfaHquBeUes9hjUzdoBNU4an+Yvb2DP2yoS+5MF2svUAbcJDtCHwC
-         46l5a59oVg7UOizTErxfjdlHuqkU5nVNyNsQ9x4f878FjbhI3Gy7bGD4nTHPKtnzOPU8
-         LT3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWOmMbIUEe8JfnXqMFuqkXlkP/UX7OBTl1jhZL7xNu9Fks01qFEaUK44hAjCYRnxD3+xWBfo/5dXKDW8g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YznflNLJVAxXWHqdECRlii60feXiwFafuT89YzgLUDOjJ48PyBb
-	QmFS2USqu1Ff8fUKecDzZacEUkQcXCvFW0mcSLKOb2j2vewfKEt8Pbnn
-X-Gm-Gg: ATEYQzwUYowStuX6/MmYDqCD4XKnVQyTe9yD+9nWKsrUqV05aH8wPSUMdPmN8hVT/QU
-	DklDicMlKJ2KMFR8Ol/kW8Z8wswXKUeik37Y4WRY/rWrTXwmAVcbi53HETNCw68qW8pe/8GG9w5
-	vwzDnLV2Gm7EsDAFgZX+et1K1o3N/GlOYY6ZmFBOeJl5vDKBDqzeGVcPFlGY4SIP+PZWuMfp9nX
-	1lEteVRnBjoQc/CQvire7rmSQxUGRGWa70sRA6bLajq3tg7DYN/61mzUU151L7DJi9jrALV8u5z
-	TyejzrAxgM1MEMlP+Sd7ydqiBujwCVa8CRRBPOEzCpGco4x6G2qmGGBxAFudP4maBP8nHgHebbq
-	gXoHHpvoA5xrpZaYi1mP1TA6NiZjg6iI4tGCd1N0Sv3aFuuQ9yHMjLRgWymNBuOsIxc17x5UJDR
-	PuTlolSijwJ2rx+e3u9lScnTbKFadPTzwtbyI/9N8P/8tPf/PiQQpDs+5+okWQEp5xTfmgkpJrM
-	tWCDzuTvKg=
-X-Received: by 2002:a17:903:1a86:b0:2b2:4e1a:aff9 with SMTP id d9443c01a7336-2b24e1ab2aemr22705925ad.44.1774803126343;
-        Sun, 29 Mar 2026 09:52:06 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b242676e13sm55903995ad.28.2026.03.29.09.52.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 Mar 2026 09:52:05 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <20a29a60-6848-43cb-be2e-4e63c8602462@roeck-us.net>
-Date: Sun, 29 Mar 2026 09:52:04 -0700
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="F66UmyQ5"
+Received: from pps.filterd (m0148664.ppops.net [127.0.0.1])
+	by mx0b-002e3701.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62T92f9Q2035861;
+	Sun, 29 Mar 2026 17:09:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pps0720; bh=dCOKexVEMNBGCMfjINCAMo2M
+	JBj+cDNmMxKJTGhKv3A=; b=F66UmyQ5eICFUYspdzjTYGYP/YKwBqstsKh6RcaZ
+	tpjJgm32WNbs8oyJseprqkoTw9cilDQNQwn6cwXANQ+NyYR24G72o5tX3wVh8rUG
+	S8g28gkpJKKbNfT+N17DoJm1YC+fV6IoqVWSPQ23O4KYs6id+zWuDua8zihfITMT
+	Cm5+5byxsa5x9wp/mz5bclCiPuIxB18fwWloRk2Q76CmwanDZ3dW/lrPBlRlHNZ6
+	nlvCs9YVJmwMI758OdVf7bOBUbEiBGUEwdQ6jUdvra7qB+BI1/5sa5NX5G/oGNnn
+	xfvExUyiUxqzA5fnNVZHeWdBQg3XT3mu56vhsxlvbBwfuw==
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 4d6uj0v4ps-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Sun, 29 Mar 2026 17:09:58 +0000 (GMT)
+Received: from p1wg14925.americas.hpqcorp.net (unknown [10.119.18.114])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 9CD28801709;
+	Sun, 29 Mar 2026 17:09:57 +0000 (UTC)
+Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
+ p1wg14925.americas.hpqcorp.net (10.119.18.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17; Sun, 29 Mar 2026 05:09:57 -1200
+Received: from p1wg14919.americas.hpqcorp.net (16.230.19.122) by
+ p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17 via Frontend Transport; Sun, 29 Mar 2026 05:09:57 -1200
+Received: from DM2PR04CU003.outbound.protection.outlook.com (192.58.206.35) by
+ edge.it.hpe.com (16.230.19.122) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Sun, 29 Mar
+ 2026 05:09:39 -1200
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=uQXtba+ar9I+9KisNL6Jwl2E9tL5obG+zRkewIjJcuyKYaMGxjIjCMkhFRgt6gzQ503jWy7T8/TE2hE6ppPl80N91OTdhiU5OLCcX5kisuk+ttgaOneRNJGEhzaKGrnR7xWP/IY9gfV2jG0m3i4o1Ncv+j05Jco5b2ixluVWPnoFqZb3htD4X2yUjepljf7wDbPAUtkCNOuos6JTEzJqEIkXFhwTCRq4ziOJdecdmfn0Rv6ZCM9c2Ao2isAqBFDC/5vUrvhdemdEWuyJ6lU05mlV9Rzh6bIn8j1blJyAxj0h3JzrDkz1NpzrO6I3fORU8lOAkM2hgT4LFwOPWg5OKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dCOKexVEMNBGCMfjINCAMo2MJBj+cDNmMxKJTGhKv3A=;
+ b=GHvSUrmUftU6jyJjevFPSDmfOne3Y8SRn9Oex/080tJghm7TKQBmJxoBVeBtwCk4c/85qlVP4QOfmQ2j4n8JqmJ3P/yB4SsPOcHzFjk+wVXCtTPm3MfE6mgFFanc9qKFEWRio9a7xxgEBsO7kM34y6tgXU97M3XEA4z0lnx8Yn8BKUJqTDL/O46VzlLU+5vLSPT6tmh3Ey4SkhR2mXoE/KcR8zE4aiMGvRL4boQeXiNBPxVYaD7qAXQdc0D0m/CyZYHNAxMhrEaDHMZDniFVP2wsBTydtIFq5OPnRnQtuApY1Q4BLlSaqou5tLGR9XcgKAGDFPK5j+WG2oyyWcUvHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:610:1cc::7)
+ by SJ0PR84MB1992.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:a03:436::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.27; Sun, 29 Mar
+ 2026 17:09:35 +0000
+Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::2c54:3534:122f:e74f]) by CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::2c54:3534:122f:e74f%4]) with mapi id 15.20.9745.027; Sun, 29 Mar 2026
+ 17:09:35 +0000
+From: "Pradhan, Sanman" <sanman.pradhan@hpe.com>
+To: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+CC: "linux@roeck-us.net" <linux@roeck-us.net>,
+        "Delphine_CC_Chiu@Wiwynn.com"
+	<Delphine_CC_Chiu@Wiwynn.com>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        Sanman Pradhan <psanman@juniper.net>
+Subject: [PATCH 0/4] hwmon: PMBus driver bug fixes
+Thread-Topic: [PATCH 0/4] hwmon: PMBus driver bug fixes
+Thread-Index: AQHcv57RThRa/YEEhUGANYmC9kkUXQ==
+Date: Sun, 29 Mar 2026 17:09:34 +0000
+Message-ID: <20260329170925.34581-1-sanman.pradhan@hpe.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH3PR84MB3523:EE_|SJ0PR84MB1992:EE_
+x-ms-office365-filtering-correlation-id: 35328ce0-5c76-4a71-38a3-08de8db5f3bb
+x-ld-processed: 105b2061-b669-4b31-92ac-24d304d195dc,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|56012099003|18002099003|38070700021;
+x-microsoft-antispam-message-info: ezb22LddD4CAJc6s1W009GukpD4Fa/E5d1fMGahUoqggwpKXO4DqD5UgUOFh8xBKRhtcRcE8I1p+cW20UEVomsfYSc7VDI64/OZsX46irofW83aOcIggEYeFNVvHjZ1R0Dv2AGmlEVHWu9FOuulLAFoBK1O8/As456QH69hPIpKrckhagkcdbfVvjP877qJ9h31sLLlJQ48Ao0Xjrio+agYs56+wSHV6OOR7oKDzSNVeIl9Eg2keKSL9gFK76K2Uhi4X3JBcrx1+u4bu4elh94zYTfnFRluWHBBwiIuI9AjiDROj7MZ+O+IrA+quXoTMn8kcJO86nJIMsw5EOtL4PBve/AeU2qBNsQKG2cr+aCxE8qjQXmzGHgUCHc3Rzcthg0V/tK4wTNbEAd8nP+xUCaLfJNC7PQCYU4s4qf24fvVR+cXCU4G/ZDzu0IegHiGg1tx+J1+/MEaxnpDzMYgRjUYpWGUz9FHOCmw1Fj8xxHzH3U2xAeSbgJDgyy6YbK7N77U1T6whNOK9Bed5TZnJuvyJ9FpCUZo7hdgnGlFD/6ogewbeD/rjkJK0TAUfpOJIFyEAABx2CXPfeKLUHFQodEEc9FdfuSjE/j5gU1hPki9kxPpTtT2aqAGaduCeepW6UDfGHVdbVpiOFUruoAsxm9EoccYi86DH2EwKTxnxmE8UbWqOlV2JR0tm7VZmx3+0ZAyDGvgYZ/P8A06KnDuFnGR84J6zVurIyHYgnfmm0bNoXrHDloYa+BSlLrshPSDqTOddtw60vKcEbKzobbIAX0a0t347LXc2rR1fElNBg2I=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(56012099003)(18002099003)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?JApyJxSm+MKZmdvG9YCcy7k0mF83COg/1CPMuEwzS7G0HJlrD+UFnbJcZo?=
+ =?iso-8859-1?Q?sWcuXVYFXRYxL8C5qBjwz4muxvZy1Nml8nuhRaK8TEVlpuSB35NdweRzsz?=
+ =?iso-8859-1?Q?PCX2uiRP9/XK81Bd3ChRDC3DvjAV7pkqZEV2d/maVosawP1VPReUHzW4Lx?=
+ =?iso-8859-1?Q?BzPgsczMiYvgY08+IPY70/gTzg8Nk1dNkYg7Fq4qD5ZOSu9Cqaez8akrLE?=
+ =?iso-8859-1?Q?0L3Lp5fvZKeDkWuCvrZD4/byeQ406Nzs5hrbW3Dhu6H0U7drJUixbzk169?=
+ =?iso-8859-1?Q?HoEH48744GhV68EJF+y3z1CIn1lbapT2ifojqVMh1xcsRsmkI7QBGuTCzu?=
+ =?iso-8859-1?Q?nRz/pSwv8bnt0QUlO711DsH5365YEAsWEabR14qTg7YyJWiqySMVU9QEN7?=
+ =?iso-8859-1?Q?VAyAPzGtyoA7l6HxsZ0znpmIU7dLqO5hItijYpBPwvqlxPLGL2s3ZhATKt?=
+ =?iso-8859-1?Q?V4NsH0ScuXEpjEZfbPo/+T+dCT6xX/47T2aRR/kCi8okr15W6KJHQDdji4?=
+ =?iso-8859-1?Q?caql7VYroBea0k4JHu0oEhjol9oqKkCQoiDwvqqEKdpPrp1gxKaB++nh9W?=
+ =?iso-8859-1?Q?CXbfzKn1huywQIaVJPxwgtN7L2IkLfnFLM/F2eg3ROdFkKUnVTkET5CDul?=
+ =?iso-8859-1?Q?EsdPI8L1YPMstk8jxo1IxQ9CGv7hEind7guJl7viOIIfY3x84rIXlo8PR6?=
+ =?iso-8859-1?Q?Y3bDl6HlLjY3Kg/aHwuF9p6qNChuQMXN2eCtVs2HE0+tdeKYWaAj8dU1ln?=
+ =?iso-8859-1?Q?NmgBsvxHit3alvak/iR6w/PimkSCU1+RAldZ/bawlcIAWhRnA2K2VR7JFL?=
+ =?iso-8859-1?Q?hdCArwaYfEeAyKJfYGGscBOh11wPimyeiNE9NqTcwt6ZBreG6X+j/KTbua?=
+ =?iso-8859-1?Q?BR4Ny5s+YMYWoq4k16A3i1RtvHTPmbQtp5m9J2Oxrzf1f8re8FULKxu6hx?=
+ =?iso-8859-1?Q?8RV8ra/ObOic1KpFg8FRdbw1WGDK3CEsUWdVIRUR56421R3JaGbMmaf5Cf?=
+ =?iso-8859-1?Q?xJIGtr/RMhNa/x+hEs1K9+gjXNBGKVJ78xzgUWHnjrGOTb1XMyHkkbakIc?=
+ =?iso-8859-1?Q?e0MGE+thxjSCWt+UXZSBuZ6mGJpET1iisIg1ObZg8lsE+jcTlIGQF9hvrf?=
+ =?iso-8859-1?Q?Y8A/3zM5N2hWiAXbBr2K/c+UzCVHGShtMHD7lFpsd04HZdFi0D/VadQ5Gz?=
+ =?iso-8859-1?Q?W45ryEaxgB99nik97cq98mAa/p10FwVtSecbo9Ig+XoEP4XfrIPQP8XNaq?=
+ =?iso-8859-1?Q?X/CtNVl22meRidJCtEwiwsd9egnOzmQpMboqsUBHWwkjzbED+Vky/vgRMe?=
+ =?iso-8859-1?Q?tGo6tMdSsHLW8/vOh0Fj47M5ZV77sztrzm7a3B9HDYD7qgGA5SSuBkMsA6?=
+ =?iso-8859-1?Q?KGLBIuEA6FBsFEXQgoF2CgrNTeTRxCERzoRD43poHA5OT1Rc7o2UB66f27?=
+ =?iso-8859-1?Q?48To2+fvRlUKwThQ02FYYaMKWagHQQgv5C6nL8WysDzl64TcB7isbOxOUj?=
+ =?iso-8859-1?Q?t6HqcsxRRqB3PFShDUs7johChpykEiFgR49lTL/paYWOS9rjH6pLLB1PI+?=
+ =?iso-8859-1?Q?dPGFkQmXfDnb/whKzmp8uRU0lOFF3g+x/f1luta1Nd7On2hhsNBaxu4sJL?=
+ =?iso-8859-1?Q?XKTRxBllDr66qNvOxYBz3k/chU0EdU1XcuyezOmO+f7y00a0f2G2W6Gu5L?=
+ =?iso-8859-1?Q?uetNsLs8Wf3zaQgN5wQPyRVxSl3/49HyBARZ5E/t0chn9bw7mh50xE8lCq?=
+ =?iso-8859-1?Q?6n3fxPzS75QcnrMSbVKiy0OtLqr+NA/B8GJ8XELSDayw7q/Ei+ziSGTKTj?=
+ =?iso-8859-1?Q?x8roCrCvUQ=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] hwmon: (occ) Fix bugs in power sensor, extended
- sensor, and remove path
-To: "Pradhan, Sanman" <sanman.pradhan@hpe.com>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Sanman Pradhan <psanman@juniper.net>
-References: <20260326224510.294619-1-sanman.pradhan@hpe.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260326224510.294619-1-sanman.pradhan@hpe.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Exchange-RoutingPolicyChecked: E6peXcCgyi0zf1uD/nxOYpk3W4sAyKBtqts9eQRjXUZXr1VsmVBAqdAWs/97orgwXxH/e2z0yArbDylHw9p84iXUfyFmSj+AHtFkyKO88zDnH7Btd5zygiPjT+JKd2BhPcBfOJRquabbFqaPDbzo06UUFW3K4gLqQWOkACgpI9E0BhyIlSjDebSdxPU2TNY0fPnVAoP9+pT8/95hR2WI9Rm4ppZOiakI1fuuvBLMnEUHEPNQ2zxLxYphGnu86VTS53MrevuJNUo2f2hvEdOc8LOST2J75CZqPk3KKnwcixE/AgASlFx+VEJZCLIlXWeQfNryFJc2xcBvjGCqtoDaSQ==
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35328ce0-5c76-4a71-38a3-08de8db5f3bb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Mar 2026 17:09:35.0461
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: sBiy4CF4uvafkqMFqiPxgYea8qWQ/xkkMhkb2rerl3KMqu+r9rVORUyhEUdX5Jq/DKDVXe/9WEqjklPrMGV3sA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR84MB1992
+X-OriginatorOrg: hpe.com
+X-Proofpoint-ORIG-GUID: UNEASgII5cMesT3lmc5NQuAZpilcknfe
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzI5MDEzMyBTYWx0ZWRfX9127MBYEAxKx
+ TwdcIvlaNISGQXtkKusfZwXDWDvS7hMxHM+WLPr2U3m3PVLI1bRFnrCdwNIqchdvNOeFBwxMfh2
+ EqZGTtgc+znL6QVS825mzK1tgjhJ1pD5raYLTS9q12iHFRs0RCYaOh5jYeUSUChdXRspUE1fhoj
+ Miwxyoaa7LlSYVMBXCnHXRXAjjdwJCla3q5Iwbj4Ji7NI37Z4tGUrolpRUrn6MLX0apl0VLecwL
+ hyHsJ6GkivYIr4fTX/fn/XVqmevgcti5T24MM/9qKBk4KPeiVRgKK7B5hoj1Pj7P4kPnch9Y/Wy
+ 7abaZ575/QK++4fU5Zds1Nov71nLWw+jm8XJ6YasVCkwdc4oSUm8pCHjHpcz1M67fqZpTjZnlED
+ iXEb8eNNo87Wk4njFaZfCsDDMVLkz3gw6W5BiiUoIlnKe/N8WaFqsVbRBrucL5dAtIR1S+zxlos
+ H6f2T8/lFHgDt6vCB4g==
+X-Authority-Analysis: v=2.4 cv=ZMfaWH7b c=1 sm=1 tr=0 ts=69c95ce6 cx=c_pps
+ a=A+SOMQ4XYIH4HgQ50p3F5Q==:117 a=A+SOMQ4XYIH4HgQ50p3F5Q==:17
+ a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
+ a=xqWC_Br6kY4A:10 a=8nJEP1OIZ-IA:10 a=Yq5XynenixoA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=gQcMVamqm3wCPoSYhaRC:22 a=NCWKwCw8Xy9Og0ibBRsL:22
+ a=OUXY8nFuAAAA:8 a=abaf_ieQ-ywuUfrM4xAA:9 a=wPNLvfGTeEIA:10
+ a=cAcMbU7R10T-QSRYIcO_:22
+X-Proofpoint-GUID: UNEASgII5cMesT3lmc5NQuAZpilcknfe
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-29_04,2026-03-28_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 suspectscore=0 bulkscore=0 impostorscore=0 spamscore=0
+ adultscore=0 clxscore=1011 priorityscore=1501 phishscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603290133
 
-Hi,
-
-On 3/26/26 15:45, Pradhan, Sanman wrote:
-> From: Sanman Pradhan <psanman@juniper.net>
-> 
-> This series addresses three bugs in the OCC hwmon driver
-> (drivers/hwmon/occ/):
-> 
-> Patch 1 fixes a possible division by zero in occ_show_power_1()
-> when update_tag is zero. The power_sensor_1 code path divides the
-> accumulator by update_tag without checking for zero.
-> Commit 211186cae14d ("hwmon: (occ) Fix division by zero issue")
-> addressed this for occ_get_powr_avg() used by power_sensor_2
-> and power_sensor_a0, but the separate code path in occ_show_power_1()
-> was not covered. The fix reuses the existing occ_get_powr_avg()
-> helper which already handles the zero-sample case.
-> 
-> Patch 2 adds a missing trailing newline in occ_show_extended() for
-> the EXTN_FLAG_SENSOR_ID case.
-> 
-> Patch 3 reorders operations in p9_sbe_occ_remove() so that
-> occ_shutdown() is called before setting ctx->sbe to NULL. The
-> current order creates a window where a concurrent sysfs read
-> could see a NULL sbe pointer before the hwmon device is
-> unregistered.
-> 
-> Sanman Pradhan (3):
->    hwmon: (occ) Fix division by zero in occ_show_power_1()
->    hwmon: (occ) Fix missing newline in occ_show_extended()
->    hwmon: (occ) Fix potential NULL dereference in p9_sbe_occ_remove()
-> 
->   drivers/hwmon/occ/common.c | 20 ++++++++++----------
->   drivers/hwmon/occ/p9_sbe.c |  2 +-
->   2 files changed, 11 insertions(+), 11 deletions(-)
-> 
-
-Please check
-
-https://sashiko.dev/#/patchset/20260326224510.294619-1-sanman.pradhan%40hpe.com
-
-
-and either address the problems or explain why they do not apply.
-
-Thanks,
-Guenter
-
+From: Sanman Pradhan <psanman@juniper.net>=0A=
+=0A=
+Four bug fixes found during a code audit of drivers/hwmon/pmbus/:=0A=
+=0A=
+ 1. tps53679: Prevent out-of-bounds stack read when block read returns=0A=
+    zero bytes.=0A=
+=0A=
+ 2. tps53679: Use binary-safe comparison and logging for PMBUS_IC_DEVICE_ID=
+;=0A=
+    distinguish short reads (-EIO) from wrong device IDs (-ENODEV).=0A=
+=0A=
+ 3. pxe1610: Propagate page-select write failure instead of silently=0A=
+    proceeding with an indeterminate register page.=0A=
+=0A=
+ 4. ltc4286: Add missing PMBUS namespace import to silence modpost=0A=
+    warnings.=0A=
+=0A=
+Sanman Pradhan (4):=0A=
+  hwmon: (tps53679) Fix array access with zero-length block read=0A=
+  hwmon: (tps53679) Fix device ID comparison and printing in=0A=
+    tps53676_identify()=0A=
+  hwmon: (pxe1610) Check return value of page-select write in probe=0A=
+  hwmon: (ltc4286) Add missing MODULE_IMPORT_NS("PMBUS")=0A=
+=0A=
+ drivers/hwmon/pmbus/ltc4286.c  |  1 +=0A=
+ drivers/hwmon/pmbus/pxe1610.c  |  5 ++++-=0A=
+ drivers/hwmon/pmbus/tps53679.c | 14 +++++++++-----=0A=
+ 3 files changed, 14 insertions(+), 6 deletions(-)=0A=
+=0A=
+-- =0A=
+2.34.1=0A=
+=0A=
