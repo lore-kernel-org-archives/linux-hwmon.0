@@ -1,75 +1,75 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E605037C0F0
-	for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 19:10:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C91C83815E9
+	for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 19:13:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774811444; cv=none; b=YNzTV88ELYRFSCaKYQQ2Su617pNHpXRav5zrgG1/c+HK7yS3NqPlXjcRfnRdUSJRdasdcZWB8nBRbukLhQsuWXqiBUoMTVUmzj1E62Qxr7Z0hSnAzKXqPv7wIYnldud47r/Ay94uhk4bDtU7qv24ewhNfUnlMhfYqkCUCwyi7vI=
+	t=1774811584; cv=none; b=jaHRLavnKm89f4DLMih5X0M5WaFwyKlsLyX5K8+K/tMHpBwf6V+2kG2FtRXbGItKo0IAAOaYx8MsNbazkJXErKC6m3ed5hFhUzfII6KUwmmDCwejKZW5ZVXXCZYn4gx9LlWra9uy7ESSYzgro4fKfOSk5nDfFroicxfYsj4AxXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774811444; c=relaxed/simple;
-	bh=zGldTs5fsGuuz7jAf5l/tWje7BqB4EnVpX18Q2GZmDo=;
+	s=arc-20240116; t=1774811584; c=relaxed/simple;
+	bh=+gtjc7K7Q9IY44WHCSLCf4ByH3kzNJUq4oBtORDPPJk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iweQSqgoH+xwbWOFT/SplTLzP30lHrehNpqGjuOLOydt5A65j/HUBzXneuQ4ldhwW0O2Xz0hDAqtHGYzF3h6DQZYO2yrGvL/avuwiYC1UPdGmictFN+5FDv9FFKn+uSxbgY60Gl/67CyBgR0r4XwkM1S8b35632/xR4swH1VtX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KN/SEyH2; arc=none smtp.client-ip=209.85.216.42
+	 Content-Type:Content-Disposition:In-Reply-To; b=Pv7N6TjbI+ol/aXhb6Nv2kifdrxGumGlo3ojxdj9Zz78B8QAzHr/9mm1ljMXAnI4j8IqJrYEsUIsYDpiwGAg+5JN2K1u3TzoHhp3EIVPZnXDFCBc+Uay+LyY/tfyPHipTzIWgpzk3pFAVqleuE+j3HPd1L6yQqCU0N661KMjRDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PcJ+UmkC; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KN/SEyH2"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3590042fa8eso2471567a91.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 12:10:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PcJ+UmkC"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-82c70e4654eso1567905b3a.2
+        for <linux-hwmon@vger.kernel.org>; Sun, 29 Mar 2026 12:13:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774811442; x=1775416242; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774811583; x=1775416383; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/IEDG0KImXI5R+9pUHBh7bB4VygAWQhG2Ky+eYI3fiI=;
-        b=KN/SEyH2z5M0qvtgcEOVeA7lPkNmBw1QBOgNyYPYri4Uay6/J3NAe46dgliErRGmRD
-         LWeocBPpA+wOYaZgOA9bNKp3qbtumyIOjdTYh8K2kRjWeWtamnvNK9E4CYeDg09PIvzA
-         vZiAQdzkHEjIVu8Oi8DOX79PbK0JvyPrEHIbdDHzmkhBt4gX94zm8MUy5LVRTuoxx/85
-         2qxuWbk55QelMQ5m2THo1pVN6qJTHYwgV9+WsObTNIlAiwU+wj8e2s0PDjBinK/coGnZ
-         81/8tcL/IiL/U95Sic3AxR2Ij4XyqySwLjkP8htzxtGBgpbVl5syKxNY7PfIrlkb1V5i
-         35OQ==
+        bh=QGckwBo/T6rYcFnagiWvk5nb04xfskv1xFoj3AxjaK4=;
+        b=PcJ+UmkCXFc5rWp8VALG5jgNGyJe4OZh8DFGE8UnSIK4spQDxCvlUf8SbTjNUA6f8x
+         N4sFTJdANrmvmaRe3dMzRmiCKkNOhDwProZJVfqmhUX6+HPdq/w0WPlS9JXpKxzPxKTm
+         ghmMHyMiyyeQtTaI6VBD3JBlaN8DaYgZglHPGStHnLJ/kaxqE+p6mjRJeYP8LuFkDR+p
+         RGVvKyx8kHu53HC5hKxNdalv2MPf+rEc+6xH9qy5C2MeDg3yqGfHk6cLelGofbqLiHAF
+         uKpGA2RmeBCwHoMFFw6tSmpqiPzF21JALMCvKZjA1LYqNgZaVViofbQQMYCzSQnbVqxV
+         b/hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774811442; x=1775416242;
+        d=1e100.net; s=20251104; t=1774811583; x=1775416383;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=/IEDG0KImXI5R+9pUHBh7bB4VygAWQhG2Ky+eYI3fiI=;
-        b=V28pntCsFjQ2nAq5m2WfGU+1lozgDrfhzigI7f1Hy+uaQeV6uvDIoNFlwZat7FKbQT
-         +NBQtGuzhv9bjpxVyHjF5wqZIgGLUMnSfYM3uZ64Rc8HSiDjuwoWrhE7pcdR+4euL+wO
-         VqELCF/FxWfCqrZiIlwlwXXvsxIAU/8AAJY0+Mlfs+wxStEFQ1zo2EkmdDXjCRNfdK4Z
-         7EgUFOIBHXg7LtIlJxNTzj2zoe/w8g4DmgDBDst1ys/Ru5g9eHu0yIlOr9ZrANLPOrNQ
-         RPyTcsr0EhnAwm9ILoNHQuMz0fNJH/tX6NHmp3QvFWEEx6a81y9YAgcY44A9isVCFxup
-         acBg==
-X-Gm-Message-State: AOJu0YwhU6Wg9Td9WaLCQsvhs2ng3+H77H5lZPx2haQeAzRlF13a6D68
-	o2VZnkI2vEj80UHE3BvA1GMw+bNd16pdPLYPsL1hS+ITEa4t8A4yuA/r
-X-Gm-Gg: ATEYQzyrP7q2zWE7ZTy9wCnpMZDESNRql6igx7all5Mh5Zo0QhyHHvpewjRRCUO+VTZ
-	kr0OMrFWiNOAtcVhA560/vma2YAGOeSJc4e3/J6GsYJ9NybvYFV0jNXTBHmjtY96buHlAw0DrC6
-	tllbdXaoHl4XSYAKusNUXWpRaTWthaiqHOsiHpvu4MyO7lfiY33azrSk+tdtWe72R614RntCFV/
-	JoIG4EN1re4TpgJZ3BYF1WXut7b1zXVqXb5bHR3Egi2HJRJ8j5lIwtwp71B6Tz12oCnqWWOCt4u
-	0R70qZpRZ+DSvBxJRUQTsqOgPBDxfRu9q5/NKVTLqKLWUY94PHHhcoePrWWzhxcKaPlPoW8uqcJ
-	UIzt92jhzbJVb5BkYyHeUWndrl8eBTQ2QhA4RfNTZ1WcIl5ZBiVMYa9H1in1G3L43vF9X3wb54A
-	XgyFJr39XiiLndCm0xWNPiXLr17yw5cgRHspDi
-X-Received: by 2002:a17:903:3d0f:b0:2b0:49e6:9622 with SMTP id d9443c01a7336-2b0cdcde5ecmr98326255ad.37.1774811442176;
-        Sun, 29 Mar 2026 12:10:42 -0700 (PDT)
+        bh=QGckwBo/T6rYcFnagiWvk5nb04xfskv1xFoj3AxjaK4=;
+        b=LCnHoE5AkdFqUNZBfGJR4mRon8IvDRvS9Vf1G2SPKDmMD/yTAzEidIkf24ow91BYxe
+         VZtGnHGxuxbht42sRuDOz6yldBYniQiXITTy9nBg86w9eqxrl3bO6MNTNPjsfdPocgCy
+         04q3YREzIzQq0k2wcIDMmVcRnIwbZc2NJ8J3SnA5YB83YQ2lU5QD0cIPFfV9Vx/bmj1W
+         aOMCkNo+K6OfeX6O0W6fXsgRxfp6cL7Wcll7s+20IjFpt78VWJBvFTf3Jphk/X5qmXE+
+         XAIusW0yfp2wX5/tEpdxyU/9MJrNlXyrdtg3WzV/o6twk3pqbBIpzAqjw0jOVyBcVicO
+         yxHg==
+X-Gm-Message-State: AOJu0Yyo6y1Qj5nQ4vj7B/Eu5VPcFoNGxzLGZ+RJCvJXzxzaA2+3EYj1
+	ITGZQ01sdzAVJAqX0q7TX/YpPL5C15d//fFA9kWpREQazF3lU0IObehX1NzJ3A==
+X-Gm-Gg: ATEYQzw0FcjFAj84Y1qtxFscyCCmCVTvenw942C4YG6L0QTQXaHHkASm0LrE5b6Wk9U
+	Z9+3xJ+8P1QyYdDKpXdLXIykVFFVmGdhKPwbP0nk6rXA36ZunOcr2vcIs5a7OMn+AopB2wRrh8H
+	2sYAG7qNnDztx0EF9tR45ifNha9mj6htPyKVbGfYEI5pVjCO94A7Bb75XQuKCshDOlEvjMry5NA
+	i3Z97n23G7JeBPYjTyDD07rwnOd8UNNmIZ/R1/0Cmz7RbZAT0ln4feN99IboktJDJObh+SH/Jss
+	Bcqn5mqR39iKrdd2DxVsjw6BL94TjpKSNNJOq+IzTgYfkFkgZQGHM+duEUnWg+4tq6X+O5/xmNi
+	eupRc5hpEdYlEksR9ZWQDvi6jV2A5UPY9DL9lrw/mKGdgIExTw7aAA2z0/XCP+VvXk1SdZ2srg1
+	NO92riZ64uDv+VNRfO3tBjXvGQOfiP8FG9Re0a
+X-Received: by 2002:a05:6a20:3d85:b0:398:a3e5:d04b with SMTP id adf61e73a8af0-39c87a3c1d9mr10836144637.33.1774811582804;
+        Sun, 29 Mar 2026 12:13:02 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b24277fb3asm58534395ad.57.2026.03.29.12.10.41
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c769179e3d3sm4268644a12.15.2026.03.29.12.13.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Mar 2026 12:10:41 -0700 (PDT)
+        Sun, 29 Mar 2026 12:13:02 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 29 Mar 2026 12:10:40 -0700
+Date: Sun, 29 Mar 2026 12:13:01 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: "Pradhan, Sanman" <sanman.pradhan@hpe.com>
 Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
 	"Delphine_CC_Chiu@Wiwynn.com" <Delphine_CC_Chiu@wiwynn.com>,
 	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
 	Sanman Pradhan <psanman@juniper.net>
-Subject: Re: [PATCH 1/4] hwmon: (tps53679) Fix array access with zero-length
- block read
-Message-ID: <2ce7caad-512a-40cd-ac2d-c2abd7198a80@roeck-us.net>
+Subject: Re: [PATCH 3/4] hwmon: (pxe1610) Check return value of page-select
+ write in probe
+Message-ID: <0b1d3ee0-ea20-4224-959c-8423deae7610@roeck-us.net>
 References: <20260329170925.34581-1-sanman.pradhan@hpe.com>
- <20260329170925.34581-2-sanman.pradhan@hpe.com>
+ <20260329170925.34581-4-sanman.pradhan@hpe.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -78,26 +78,22 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260329170925.34581-2-sanman.pradhan@hpe.com>
+In-Reply-To: <20260329170925.34581-4-sanman.pradhan@hpe.com>
 
-On Sun, Mar 29, 2026 at 05:09:40PM +0000, Pradhan, Sanman wrote:
+On Sun, Mar 29, 2026 at 05:09:48PM +0000, Pradhan, Sanman wrote:
 > From: Sanman Pradhan <psanman@juniper.net>
 > 
-> i2c_smbus_read_block_data() can return 0, indicating a zero-length
-> read. When this happens, tps53679_identify_chip() accesses buf[ret - 1]
-> which is buf[-1], reading one byte before the buffer on the stack.
+> pxe1610_probe() writes PMBUS_PAGE to select page 0 but does not check
+> the return value. If the write fails, subsequent register reads operate
+> on an indeterminate page, leading to silent misconfiguration.
 > 
-> Fix by changing the check from "ret < 0" to "ret <= 0", treating a
-> zero-length read as an error (-EIO), which prevents the out-of-bounds
-> array access.
+> Check the return value and propagate the error using dev_err_probe(),
+> which also handles -EPROBE_DEFER correctly without log spam.
 > 
-> Also fix a typo in the adjacent comment: "if present" instead of
-> duplicate "if".
-> 
-> Fixes: 75ca1e5875fe ("hwmon: (pmbus/tps53679) Add support for TPS53685")
+> Fixes: 28ccdfd11344 ("hwmon: (pmbus) Add Infineon PXE1610 VR driver")
 > Signed-off-by: Sanman Pradhan <psanman@juniper.net>
 
-Applied.
+Applied, after fixing the "Fixes" SHA.
 
 Thanks,
 Guenter
