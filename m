@@ -1,67 +1,67 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D86C33C536
-	for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2026 15:14:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4061333D51F
+	for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2026 15:14:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774883676; cv=none; b=atSLzYfOX49G5YnQjXDvi87oERgI1M4BMvSitkuIOFva5SEWchbQYXQJnrDxibpuLBUA62oJoLjRQcJI2oOrs4Q4jhRIAe86KorUFtmh4g2x+aNAaGjisLG5G2wPgsMl+RvxxApFBEcDtjQouvAgn2gQgD55fohcLzV3cV1ahHU=
+	t=1774883678; cv=none; b=l2sDkCTlI3xP/yyfLo0E4+RECrr876dgkHjisPp7PTzJ+8Og7fSuxHPfZ7t13BfxtBXv8+1AZzoBzHFCjwrTCXFUUzgnSq4ZOySW/0pPjatS2Ib4sL7KsTRLCd+IVoERU7Ky84sJZNUYiFw6AHo/wnKbrOPqmPFSKoDitjMHRYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774883676; c=relaxed/simple;
-	bh=MFHGdaWeQdwYwq1z/tlpFsZNA+Rvpo1qMjjaAD5jbE0=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=BIkAwF9BQF9tE/+XK6MYVP1tVxgq6LzWXQTq9y6anJO29l4KbYnFRTbDTWOhYTRFBMMn0o2OHmjDblrzGsS1ymkh8CjgwuSc16qWudm54tgpL6XE5eeRYKIXNOcFWP1evg8jXUz7rN0c5BBDVk5nO5L5ls/1vWsNtbGhSVZnW8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net; spf=pass smtp.mailfrom=flipper.net; dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b=ki3z1kQM; arc=none smtp.client-ip=209.85.128.43
+	s=arc-20240116; t=1774883678; c=relaxed/simple;
+	bh=aBqMH+pXtx2lPFe+U3MCl6hGT84m6NVw6corT3ozweg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=H3ngA5AcRqJv2RuPXD/m7Q+q3drBICKQfEP5825l6DF331n7ITJgSKSga0eO2zcQEWZRfi4PJ2mrsmL3zUthvDJGKiLCmM0q7Y7tsgqQQrQ5U4ayvR4d9mxaasG7F3UziSH7BSDo7FWRB7A2F5tuNKQLU7g3qGFjTwHpeI9O5zU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net; spf=pass smtp.mailfrom=flipper.net; dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b=SKs/5G3q; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flipper.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b="ki3z1kQM"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48540d21f7dso55538835e9.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2026 08:14:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b="SKs/5G3q"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4852a9c6309so39091595e9.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2026 08:14:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flipper.net; s=google; t=1774883673; x=1775488473; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rzFAZvt5pxx46xkdGuHqSP7rsRJaHifBLFVik5CnMGo=;
-        b=ki3z1kQMPX84V+tmyq4x7sQxmawPYK3ea5jxO7XvMBLbSeb1X6z6MdkJDEcZIjGSR3
-         lWkg+kStuU00JepQLPKZ0Pwle+2cPU/A9H9peylwNDfH+tLLZk6fCwZ01Vdi2vixnM8B
-         gGIG+El9o6y3zzaPaaGoIav7Me/oEs3JqJ5a0DqEYBxE3X805dkY0/E0fOOFWoE5FXa8
-         3p/63j+TlLexVS92tJEx9tF8G828ML+k/pcrWkY2xgNFz8ujmVGVvzkM5nZ3CCIDisF/
-         ugoF8t7znF53tBZdZz/VITVIoS7o8uAKa32sYUskJ3aBcJic9J2EHX8Ok99Ck6480+fd
-         JkxQ==
+        d=flipper.net; s=google; t=1774883676; x=1775488476; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IRfYFHiWZcB1WpZ4DmzZn/i3PV8a6Lb6kC4Y3gRyJo0=;
+        b=SKs/5G3qolHkoawLrD0hx/bA3QPJ2CCPAjI8AcfynXOiCSOQyll92DMvipwW6eAJdj
+         au+qysUQOdJPPYi8oOWLwzN6SQ2WN0UrvSpYEGOp5SDfHanHw0czeAgcgaxrioTxkNG/
+         FhqH4GcA3DfnLuRzZiZLmbB2lpoGfStuKkV/MygnmcPnBy2ekG8eS49d71l6An5uyx+l
+         Ai2Lm/N9A4dMfe6VKWEdBrYVXCEmFzYf16PF6DAAOA2xWfGoK79O+kQ3bh0QorX1iA0g
+         4oICdNURk5dI+uaH8+JWpWUxaGqLTGXvbDQ/qNpePgdvhS5Adqes/0Udhq0bKyivAjtP
+         8rEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774883674; x=1775488474;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rzFAZvt5pxx46xkdGuHqSP7rsRJaHifBLFVik5CnMGo=;
-        b=DIza+6erFKTlKRoXF7hO/6bs7ZjOeg6gPTBm+0wSN229gzrzIp7iNhwIkx/wHvTanm
-         edmpAEUI6O1tgSssp6BInU2Rf6nUW4Ay5u6N12+s5p7OqkCkTmY6j/rr5syO4zVaYmzV
-         F5s3/IAYuErak7rXRpJsqCzsRMDFCwsscuUgTZo7KBwseuk3P3HeAMYtirT/uHiXrc87
-         RC0a4Dhs9vkU1sBY2hQ0Kg3qrE6q1MDAa46M14R8eUREvkaALu6FccRQUbBFpHFC3yHA
-         FTdj4XyjR88yUeRin8Wl26bDl2RyvbfL5aUc7hOV/4ifoEA5YcewSzl9HZCj0EI8l4F0
-         feaA==
-X-Gm-Message-State: AOJu0Ywe6+O9MpCszcb4yKOd+LbbYY6On8DkBMbtv59mh+/HR/1KVptL
-	/pEmRXynFrTaBAcQBeZ9EOZmvlt/NqFX5hiwhVGNLXOJ5PsWxswZvfFkbIjzAHpg/8XdGo9xOXq
-	PSNOM
-X-Gm-Gg: ATEYQzwrGwXA6GAlAeMLOwuWpv0JbI6TyAntzwaS3n32o/dZIpQ6/xku9axkIh0qAi1
-	jJa+9eEZNsXAqGv3RRr3HbEPgxif9IcH3MeTqg4xITVuGZYvCR533MnoC4fAHKYsxeCsT/ZvZbG
-	M7oqd8OW+DZ7jpPXM6nDvJB4bFtSN/5s21l5mqLO+zaJXQqJPAC/wkLZLyHVN4o9BEvdGFKzV/d
-	+tM9kJqdSnX4ducUz+K5kKrWHfQACii+jC2DszPYyiQEWxtD3UbaDQpw6ctMi3PVuSDH2dX0TV+
-	EeNk+ADMorNzb8pUkWOp+PGk8Q1oieNvRvwvKA9L4TpEJSmi/uLL0qlM7XggJ+bHezLUsBmaA0X
-	7KHmfFIXf1WSuha/DvvnS+T6TFtF96+lNj0nKBM+ETW+Otfj/r3ochuRAhxiEOQrbxBlqyWlzf3
-	Jhsz3R/WAIIj9R3bYbRwuqK+jIHm3l1biA5HvI90y7AthJwxN6vjeaq255ANJgd6zPLoVrwbIMX
-	0ABDw==
-X-Received: by 2002:a05:600c:8b88:b0:487:219e:416 with SMTP id 5b1f17b1804b1-48727d7f415mr214050575e9.8.1774883673527;
-        Mon, 30 Mar 2026 08:14:33 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774883676; x=1775488476;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=IRfYFHiWZcB1WpZ4DmzZn/i3PV8a6Lb6kC4Y3gRyJo0=;
+        b=VoHwrNkfkZpXkJVDKOxILzqJiBlERln2IdRdloGk5qpZlBzxm0/jRWOyMw4S0N47k+
+         VomqQcEMVBcSIP5qNXlMtP6PCd0N8CJYMoQYmBf39JQNyNbnwluQeieAMdT1WlFMjtZ5
+         aoHGAvU4oPnlcJvIY09BkGosC+LBW/VFnwdPVHetpUGK0o/29gdwxS/Gc32wDlDcgNtf
+         IOv+L6PEiBQoetkQOgAWwWVAMKPY3eWfGuGNXjXzut3TcYeyzlf1jIKArntn0IkWAoKA
+         RgZj7+a8NRImniUduFL3lqGRe80IuHSajY+ShHnZ6X8967MJqsl5xbooZD/MgVVZ5Hx1
+         HVYw==
+X-Gm-Message-State: AOJu0YyDdbWc+v+NTeDmXkM1Wo1i+uUMZVjRSvpt/R23q6JB7jfjyFF9
+	R/+OyYGoaQgYY1MJE/LXWgjQgb/1xuoYpLER6q/2aeHV8SDs5HBekrZhXz98E9e0zF4=
+X-Gm-Gg: ATEYQzyD746SWAx92x0rApCZgWtOpnfPSKKXcESJhRZAyaPNjlF7Gxr53+R6rj8VGvJ
+	GrUo0Ybd2AUqZyN8x2yvcsMPFqEOsewigvqlrSayU7G7g0QOMTrmKVVTyPnM0pnJeE0IubwHQxi
+	MUZwfBnwbLCEsrMEBxpxWY0KTObx4fapiiUm9gXXygqBLhA867UhNDMepCbyLqBCuTTp4WYIDRE
+	sSxgp0bSXULDfCw+xuhZwexifvTwtG4jncS9sUA4kIiSX6TW6VtkwBqt0N60fkxzIRg3MvTZd4f
+	hkdxBVn7RqL9b6OicqkeXfq9/CkLqYbYB4dtCcnF45LqezYfMY1G/U8NK/qQz87agIav0DfFonM
+	3Lak/AfGQVixfvGgA2VEbFSCFkgyzoEGOaAjk/kZVDU+Rnb7yrfKnwznIx6W5I9kXJRAPdgbdNA
+	tvYSuAa14h/NAaAv6GBKSTB62YFSAGyj5KCtK4LqqXq0GhSbbzKJiISqpUGOCJzKOXzcINNex4j
+	LcWAA==
+X-Received: by 2002:a05:600c:4f53:b0:485:9a50:338d with SMTP id 5b1f17b1804b1-48727ee988cmr214094215e9.3.1774883675518;
+        Mon, 30 Mar 2026 08:14:35 -0700 (PDT)
 Received: from alchark-surface.localdomain (bba-86-98-192-109.alshamil.net.ae. [86.98.192.109])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4873cd7d039sm72764705e9.15.2026.03.30.08.14.31
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4873cd7d039sm72764705e9.15.2026.03.30.08.14.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2026 08:14:33 -0700 (PDT)
+        Mon, 30 Mar 2026 08:14:35 -0700 (PDT)
 From: Alexey Charkov <alchark@flipper.net>
-Subject: [PATCH v5 0/2] Add support for Texas Instruments INA4230 power
- monitor
-Date: Mon, 30 Mar 2026 19:14:14 +0400
-Message-Id: <20260330-ina4230-v5-0-eeb322d95b3a@flipper.net>
+Date: Mon, 30 Mar 2026 19:14:15 +0400
+Subject: [PATCH v5 1/2] dt-bindings: hwmon: Add TI INA4230 4-channel I2C
+ power monitor
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,11 +70,9 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAEaTymkC/2XMQQrCMBCF4auUrI3MTJLGuPIe4iJtpjYgbUlLU
- aR3N4pYxeUb5vvvYuQUeRT74i4Sz3GMfZeH2RSibn13ZhlD3oKASiB0MnZekwJptQfS4NCoIPL
- 3kLiJ11fpeMq7jePUp9srPOPz+m6Q+TRmlCAdVRjY7TDo8tBc4jBw2nY8iWdlplUqoFVSlsZU2
- gV0gXz1L9WXRFilyhJKXylvbW0s/Ev9Jalcpc6yRlZINbjA9lcuy/IAJQby8E4BAAA=
-X-Change-ID: 20260219-ina4230-74a02409153d
+Message-Id: <20260330-ina4230-v5-1-eeb322d95b3a@flipper.net>
+References: <20260330-ina4230-v5-0-eeb322d95b3a@flipper.net>
+In-Reply-To: <20260330-ina4230-v5-0-eeb322d95b3a@flipper.net>
 To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>
@@ -82,140 +80,184 @@ Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, Alexey Charkov <alchark@flipper.net>, 
  Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7602; i=alchark@flipper.net;
- h=from:subject:message-id; bh=MFHGdaWeQdwYwq1z/tlpFsZNA+Rvpo1qMjjaAD5jbE0=;
- b=owGbwMvMwCW2adGNfoHIK0sZT6slMWSemuxv9PK95eSmM8n5SU8Yr834vs5lWuGZ5ywRS/L09
- sassuhh7ZjIwiDGxWAppsgy99sS26lGfLN2eXh8hZnDygQyRFqkgQEIWBj4chPzSo10jPRMtQ31
- DA11jHWMGLg4BWCqaxcy/BV5NWPtAuOowO8fO50UN+1IjnOZ4XnhEKf0WY6KW++WyWoy/OFiK4q
- Yv+bOouk58fufRQi+jnqkxrjOznbB64P51fWcvYwA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5469; i=alchark@flipper.net;
+ h=from:subject:message-id; bh=aBqMH+pXtx2lPFe+U3MCl6hGT84m6NVw6corT3ozweg=;
+ b=owGbwMvMwCW2adGNfoHIK0sZT6slMWSemhz+OOS4xt4Lr437+rQ4eRpi3sk36xofyXFtfyh04
+ Hfy9d+SHRNZGMS4GCzFFFnmfltiO9WIb9YuD4+vMHNYmUCGSIs0MAABCwNfbmJeqZGOkZ6ptqGe
+ oaGOsY4RAxenAEz1JE+G/+6Olj90d6ZmpO9pr+vJmrzH/+sTOzGpuu8Mq2MvdLNWXWBkuLL9X/n
+ 2eexrHUS3Hv3x7+rbxbq6y1elOHi1KmzKucn6kR0A
 X-Developer-Key: i=alchark@flipper.net; a=openpgp;
  fpr=9DF6A43D95320E9ABA4848F5B2A2D88F1059D4A5
 
-TI INA4230 is a 4-channel power monitor with I2C interface, similar in
-operation to INA3221 (3-channel) and INA219 (single-channel) but with
-a different register layout, different alerting mechanism and slightly
-different support for directly reading calculated current/power/energy
-values (pre-multiplied by the device itself and needing only to be scaled
-by the driver depending on its selected LSB unit values).
+Add TI INA4230, which is a 48V 4-channel 16-bit I2C-based
+current/voltage/power/energy monitor with alert function.
 
-In this initial implementation, the driver supports reading voltage,
-current, power and energy values, but does not yet support alerts, which
-can be added separately if needed. Also the overflows during hardware
-calculations are not yet handled, nor is the support for the device's
-internal 32-bit energy counter reset.
-
-An example device tree using this binding and driver is available at [1]
-(not currently upstreamed, as the device in question is in engineering
-phase and not yet publicly available)
-
-[1] https://github.com/flipperdevices/flipper-linux-kernel/blob/flipper-devel/arch/arm64/boot/dts/rockchip/rk3576-flipper-one-rev-f0b0c1.dts
-
+Link: https://www.ti.com/product/INA4230
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 Signed-off-by: Alexey Charkov <alchark@flipper.net>
 ---
-Changes in v5:
-- Reworded per-channel subnodes description in the binding for clarity (Sashiko)
-- NB: Sashiko's suggestion to allow interrupts in the binding sounds premature,
-  as the alerts mechanism is not implemented yet and there are no known users
-  to test it. If anyone has hardware with the alert pins wired to an interrupt
-  line - please shout and we can test/extend it together
-- Avoid division by zero when setting the conversion time with all inputs
-  disabled (Sashiko)
-- Added the missed HWMON_I_ENABLE bits (Sashiko)
-- Dropped extra sysfs attributes for reading/writing shunt values, as the
-  implementation was potentially racy and it's unlikely anyone would resolder
-  the shunts on a running system (Sashiko)
-- Skip pm_runtime_put_noidle() for disabled (not just disconnected) channels
-  in remove and probe error path to avoid refcount underflow (Sashiko)
-- Mark CONFIG2 register as volatile, as the reset bits in it are self-clearing
-- NB: Sashiko's inquiry about the update interval being underreported due to
-  not accounting for the number of averaging samples: no, the hardware still
-  reports updates after each channels * (vbus_ct + vsh_ct), but the reported
-  value changes slowly due to the averaging
-- NB: Sashiko's inquiry about regmap_noinc_read(): same as Guenter's AI
-  feedback. No, it doesn't break the byte order, as it uses byte-sized reads
-- NB: Sashiko's inquiry about potential falling of ina->reg_config1 out of sync
-  with the hardware upon failed regmap_write() calls: yes, but it will be
-  written at the next successful write call, so the worst that can happen is
-  the averaging / conversion time can be wrong for a while. And it will return
-  a failed status for the failed write call too, so no big deal.
-- NB: Sashiko's inquiry about reg_config1 not being written out during probe:
-  it is written out when the device is runtime-resumed as the refcount gets
-  incremented during the probe function
-- Link to v4: https://lore.kernel.org/r/20260326-ina4230-v4-0-c1e312c09de7@flipper.net
+ .../devicetree/bindings/hwmon/ti,ina4230.yaml      | 134 +++++++++++++++++++++
+ MAINTAINERS                                        |   6 +
+ 2 files changed, 140 insertions(+)
 
-Changes in v4:
-- Aligned the maximum value of ti,maximum-expected-current-microamp property
-  in the binding with the one expected by the driver (Guenter Roeck)
-  "2147A ought to be enough for anybody (c)"
-- Actually requested the optional vs-supply regulator in the driver (Guenter Roeck)
-- Program the ALERT_POL bit according to the value of ti,alert-polarity-active-high
-  even though the alerts themselves are not yet implemented (Guenter Roeck)
-- Added a check for manually disabled channels in the is_enabled() function to
-  avoid reading invalid data from them (Guenter Roeck)
-- Dropped support for the single-shot mode as its operation is not clearly
-  documented in the datasheet and there is no pressing need to support it (Guenter Roeck)
-- NB: AI feedback regarding regmap_noinc_read() producing incorrect byte order on LE
-  hosts is incorrect, as its implementation does a byte-wise read and doesn't care
-  about the regmap value width or endianness flags, so it produces a 4-byte output
-  buffer in the same byte order as the device returns, which is BE in this case
-- NB: AI feedback regarding fail-path pm_runtime_put_noidle() potentially being
-  unbalanced if the probe loop failed early is technically correct but practically
-  irrelevant, as the driver will simply fail to load, and the usage count won't
-  decrease beyond zero anyway. The alternatives are cumbersome for no real benefit
-- Link to v3: https://lore.kernel.org/r/20260310-ina4230-v3-0-06ab3a77c570@flipper.net
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina4230.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina4230.yaml
+new file mode 100644
+index 000000000000..d9b5f9857249
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/ti,ina4230.yaml
+@@ -0,0 +1,134 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/ti,ina4230.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments INA4230 quad-channel power monitors
++
++maintainers:
++  - Alexey Charkov <alchark@flipper.net>
++
++description: |
++  The INA4230 is a 48V quad-channel 16-bit current, voltage, power and energy
++  monitor with an I2C interface.
++
++  Datasheet:
++    https://www.ti.com/product/INA4230
++
++properties:
++  compatible:
++    enum:
++      - ti,ina4230
++
++  reg:
++    maxItems: 1
++
++  "#address-cells":
++    description: Required only if a child node is present.
++    const: 1
++
++  "#size-cells":
++    description: Required only if a child node is present.
++    const: 0
++
++  vs-supply:
++    description: phandle to the regulator that provides the VS supply typically
++      in range from 1.7 V to 5.5 V.
++
++  ti,alert-polarity-active-high:
++    description: Alert pin is asserted based on the value of Alert polarity Bit
++      of the CONFIG2 register. Default value is 0, for which the alert pin
++      toggles from high to low during faults. When this property is set, the
++      corresponding register bit is set to 1, and the alert pin toggles from
++      low to high during faults.
++    $ref: /schemas/types.yaml#/definitions/flag
++
++patternProperties:
++  "^input@[0-3]$":
++    description: Optional subnodes for four input channels. Each subnode
++      describes one input channel. Input channels default to enabled in the
++      chip. Unless channels are explicitly disabled in device-tree, input
++      channels will be enabled.
++    type: object
++    additionalProperties: false
++    properties:
++      reg:
++        description: Must be 0, 1, 2 or 3, corresponding to the IN1, IN2, IN3
++          or IN4 ports of the INA4230, respectively.
++        enum: [ 0, 1, 2, 3 ]
++
++      label:
++        description: name of the input source
++
++      shunt-resistor-micro-ohms:
++        description: shunt resistor value in micro-Ohm
++
++      ti,maximum-expected-current-microamp:
++        description: |
++          This value indicates the maximum current in microamps that you can
++          expect to measure with ina4230 in your circuit.
++
++          This value will be used to calculate the Current_LSB to maximize the
++          available precision while ensuring your expected maximum current fits
++          within the chip's ADC range. It will also enable built-in shunt gain
++          to increase ADC granularity by a factor of 4 if the provided maximum
++          current / shunt resistance combination does not produce more than
++          20.48 mV drop at the shunt.
++        minimum: 32768
++        maximum: 2147483647
++        default: 32768000
++
++    required:
++      - reg
++
++required:
++  - compatible
++  - reg
++
++allOf:
++  - $ref: hwmon-common.yaml#
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        power-sensor@44 {
++            compatible = "ti,ina4230";
++            reg = <0x44>;
++            vs-supply = <&vdd_3v0>;
++            ti,alert-polarity-active-high;
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            input@0 {
++                reg = <0x0>;
++                /*
++                 * Input channels are enabled by default in the device and so
++                 * to disable, must be explicitly disabled in device-tree.
++                 */
++                status = "disabled";
++            };
++
++            input@1 {
++                reg = <0x1>;
++                shunt-resistor-micro-ohms = <50000>;
++                ti,maximum-expected-current-microamp = <300000>;
++            };
++
++            input@2 {
++                reg = <0x2>;
++                label = "VDD_5V";
++                shunt-resistor-micro-ohms = <10000>;
++                ti,maximum-expected-current-microamp = <5000000>;
++            };
++
++            input@3 {
++                reg = <0x3>;
++            };
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ff935e197c21..acfa0b0585a5 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12574,6 +12574,12 @@ S:	Maintained
+ F:	Documentation/hwmon/ina233.rst
+ F:	drivers/hwmon/pmbus/ina233.c
+ 
++INA4230 HWMON DRIVER
++M:	Alexey Charkov <alchark@flipper.net>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/hwmon/ti,ina4230.yaml
++
+ INDEX OF FURTHER KERNEL DOCUMENTATION
+ M:	Carlos Bilbao <carlos.bilbao@kernel.org>
+ S:	Maintained
 
-Changes in v3:
-- Updated the description of the ti,maximum-expected-current-microamp property
-  in the binding to clarify how it is used, and drop the irrelevant mention of
-  the PMbus (Guenter Roeck)
-- Use div64_u64() instead of do_div() for the final division in the calibration value
-  calculation to avoid overflows in the denominator (Guenter Roeck)
-- Avoid overflow while scaling the voltage values on 32-bit platforms (Guenter Roeck)
-- Use regmap_noinc_read() instead of regmap_raw_read() for reading the energy values
-  to ensure that the regmap / bus driver don't wander off to adjacent registers
-  during the read operation (on INA4230 the whole 32 bits should be read from
-  the same register offset) (Guenter Roeck)
-- Remove redundant call to ina4230_set_calibration() in the current read path,
-  as the calibration value is already set when enabling the channel and restored
-  across PM changes via regcache_sync() (Guenter Roeck)
-- Add missing write_enable() function to make hwmon_in_enable writes work as
-  advertised in is_visible() (Guenter Roeck)
-- Add a check for disabled channels before calling pm_runtime_put_noidle() on them
-  to avoid refcount underflow due to imbalanced get_sync/put_noidle calls (Guenter Roeck)
-- Dropped unused include of linux/debugfs.h
-- Add missing return checks on regmap_write() calls
-- uO -> uOhm in the error message to avoid confusion
-- Move probe-time calibration after enabling runtime PM to avoid it being reverted
-  by the PM sync
-- Link to v2: https://lore.kernel.org/r/20260302-ina4230-v2-0-55b49d19d2ab@flipper.net
-
-Changes in v2:
-- Replace u64/u64 division with do_div() (kernel test robot)
-- Add an example with ti,maximum-expected-current-microamp property in
-  bindings (Krzysztof Kozlowski)
-- Include the newly added binding in MAINTAINERS file (Krzysztof Kozlowski)
-- Use dev_err_probe() where appropriate in the driver (Krzysztof Kozlowski)
-- Switch to devm_regmap_field_bulk_alloc() instead of an open-coded loop
-- Add a bounds check for the calculated calibration value,
-  and a corresponding error message
-- Link to v1: https://lore.kernel.org/r/20260225-ina4230-v1-0-92b1de981d46@flipper.net
-
----
-Alexey Charkov (2):
-      dt-bindings: hwmon: Add TI INA4230 4-channel I2C power monitor
-      hwmon: Add support for TI INA4230 power monitor
-
- .../devicetree/bindings/hwmon/ti,ina4230.yaml      | 134 +++
- MAINTAINERS                                        |   7 +
- drivers/hwmon/Kconfig                              |  11 +
- drivers/hwmon/Makefile                             |   1 +
- drivers/hwmon/ina4230.c                            | 986 +++++++++++++++++++++
- 5 files changed, 1139 insertions(+)
----
-base-commit: 3b058d1aeeeff27a7289529c4944291613b364e9
-change-id: 20260219-ina4230-74a02409153d
-
-Best regards,
 -- 
-Alexey Charkov <alchark@flipper.net>
+2.52.0
 
