@@ -1,215 +1,225 @@
-Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012029.outbound.protection.outlook.com [40.107.209.29])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB3321B192;
-	Mon, 30 Mar 2026 05:27:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.29
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774848435; cv=fail; b=ZAJedfodvKIetTuUEnXZGOYkIRD51VqIQgXhzWxUIt5aBALQfNspj1uGjwxrTFeH8bw9V3Ktw1++6V3jrfXisHULZkO0eUqhDhQxT1H7yZvUkC4UTIxPC/kFV1+Yvgq2PYzt0u+EndcyITXvcWHro/lSkSLBleYPcETxpSUWZ8s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774848435; c=relaxed/simple;
-	bh=U16FbXtpoQjWIhREAszw3cYVlRYkje68m2wrI0UGQ2s=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rNqcxYJhL4V0u4oCRuoyiygdX66UadfoIkuHYm/C7UqzChx8chvzk1crBV3D4UnDFen/2h7bbyzzNxlFPLEolQzrkK+POKPToU6PE9qldqu4lBEVIg/0ASWBUamRfJLu+eFTQqenVstL/7KocYtm08ErNbDQEvkMmcRot3tLhq8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Em/T5LiU; arc=fail smtp.client-ip=40.107.209.29
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8022B3B2FF8
+	for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2026 09:28:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774862898; cv=none; b=FDDN118XMhxiHnnLIjfEXNQf4/PTpjlwGxtloT1y5yTRu8apQIQ44W712XOjcP90EKssQHIlBLPYAWHEoEPiqYX2pTsp7rEdREZP5T+N0guSANT/CqnKZ1ULYAdkgVLBZJ2+ogq3RO+Me16jhSoaz6Z+3VL1OkxW0cdmt/0Fx7g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774862898; c=relaxed/simple;
+	bh=A0pfCojUiGgrrf0Ej5R1kBaQcEv947GaCDZ90NppBa8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kh6shpK7a1QMry5rwRpAymaxuYml0v+Co+rY1vCvqzSZ9BJCFnmo66Yze2REuCjEkF1DgObnaergK58QdR+BQPcg/IZU1zMidsOywZK6MxhGOzN7Qnz+k6E3z6whLDBNJDZnxXgkkYskyXQSKhLJjpgWkWjTOZfPzuD02rtEPyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RqYuHeQ2; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Em/T5LiU"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=U1+zF3o0NDB+ZsauXzu/VKAwmlUH/23igk0Bb4xVXIAYif7DkWtK/Vu6kjOS5Rmr/vm7EhlAWDKk9KFNe7VT/hISdDLVZh1THtBPrxw2BysnSQ/gnSXAWcBln5NjjtYnFtLrMTpnsCX9ZuG0NpVfooqwfw4QnL/cpLsEcDVKowY+qwX6EQF/vfmCfcs+LTtW87mLII7nMjJGSyCxNjp+O/8RaZO0kusAaB5gcrvFoG+aHKa4Z6Q4TMt9/kYxUJTRGjrKfC09tbRIgz7Rlr/p1tPPATLCT7Dt906nR8XAGf4bKCy53ZUil/udB93krL2Fuuu3Cmcf+eazItCDKuLcLQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=T5SAysfwpQelhuj+aCnXbL3FXUDdEA7jD+yOjuzV00A=;
- b=gK7MWOnYBWA4N1jc1gplbeBN9YHNhikceUPUyHt76WU6fP6ToO7PGZ+XTC3N4jGPfo0//Qgw1S7JCcu2g8fM+1WARmbUDHoF2aRV96vNZzg9YzKvIkinggOur8kv60+Kuox3PJE93c71EGoNUQugyoUBlW778pEfTG6hnwkq8k5GVGUP+3Hp/JKlMATufZJkssrqK5ummhYyF3lVZCvYOrJwZkD93uYkX3lWasCLj2HimtbRvE4cC6rNt+RKxHwvt2njW0GHbvlIUYLqT23c+WhBOLIljLt2tC4qKJx4KxMl/SoZzy69G6nr9bz6pDntiiDZNURN8T1bKjS0s2Wdpw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=bootlin.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=T5SAysfwpQelhuj+aCnXbL3FXUDdEA7jD+yOjuzV00A=;
- b=Em/T5LiU2f6Z3I3BS9ANfM/XA5Ag8z4hCR9GANOuSaustxUdlXjLZ4s/CbtXzwBbGmrvn5XfeBK0d5Ns6/f7bVJVyP8ClZw47oeVTHSSg0d+q0yzLDWvrav3OMe6Ml80ZKDIrNZa6yvwuiTs/TMo2sazAus6XB4t1ajiw5kanyheXZERB9Fhdeil+70cdUyMHKVCQo0sgClP2iDPM2VapkvlTn0BJb5hejarYFWS3qeqyeGobVIRoOBm3lHCCHypkJxVnebnoq6Ji0/cZcPTfib2MtGvjyVNv6r8IDPpnFSvQMGMdPLG9oiAt6oX0OqEEQs3Tg2+rFFt9OwbxC4rVw==
-Received: from BLAPR03CA0126.namprd03.prod.outlook.com (2603:10b6:208:32e::11)
- by DM4PR12MB7693.namprd12.prod.outlook.com (2603:10b6:8:103::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.12; Mon, 30 Mar
- 2026 05:27:05 +0000
-Received: from BL6PEPF0001AB75.namprd02.prod.outlook.com
- (2603:10b6:208:32e:cafe::37) by BLAPR03CA0126.outlook.office365.com
- (2603:10b6:208:32e::11) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9745.28 via Frontend Transport; Mon,
- 30 Mar 2026 05:27:05 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- BL6PEPF0001AB75.mail.protection.outlook.com (10.167.242.168) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9745.21 via Frontend Transport; Mon, 30 Mar 2026 05:27:04 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Sun, 29 Mar
- 2026 22:26:53 -0700
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.20; Sun, 29 Mar 2026 22:26:53 -0700
-Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
- Transport; Sun, 29 Mar 2026 22:26:47 -0700
-From: Akhil R <akhilrajeev@nvidia.com>
-To: <alexandre.belloni@bootlin.com>
-CC: <Frank.Li@nxp.com>, <acpica-devel@lists.linux.dev>,
-	<akhilrajeev@nvidia.com>, <conor+dt@kernel.org>, <conor@kernel.org>,
-	<devicetree@vger.kernel.org>, <ebiggers@kernel.org>,
-	<fredrik.markstrom@est.tech>, <jonathanh@nvidia.com>, <krzk+dt@kernel.org>,
-	<lenb@kernel.org>, <linux-acpi@vger.kernel.org>,
-	<linux-hwmon@vger.kernel.org>, <linux-i3c@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-	<linux@roeck-us.net>, <miquel.raynal@bootlin.com>, <p.zabel@pengutronix.de>,
-	<rafael@kernel.org>, <robert.moore@intel.com>, <robh@kernel.org>,
-	<smangipudi@nvidia.com>, <thierry.reding@kernel.org>
-Subject: Re: [PATCH 01/12] dt-bindings: i3c: Add mipi-i3c-static-method to support SETAASA
-Date: Mon, 30 Mar 2026 10:56:46 +0530
-Message-ID: <20260330052646.29412-1-akhilrajeev@nvidia.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <2026032717064247cc495e@mail.local>
-References: <2026032717064247cc495e@mail.local>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RqYuHeQ2"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4852b81c73aso35986625e9.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2026 02:28:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774862895; x=1775467695; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=3zDHIQyb3IezUESO9F09MAim9FoAsOYTRYDFkmxzVFg=;
+        b=RqYuHeQ2zIlSNVIp8Y01sDKtexz5NJFxXDwwOWBCgszHinnN4Z6/AMcNkBLcWbigFn
+         OXY8/eVUs/bkVcNDvMJlHzG5ZHfIIux8kCXkFXJv6CNVckuazEgO6KLX2qe3IYUHsX4c
+         t8gjAvpYHbbyt2MWTK7717BHmVI9u8WhTcMDvNtN7gwhCHKEzoSpvPKa5Ra79xGJWsDg
+         sPAaMwlVl6IaItM3tynUcu6m4jdFSTaWDJ9X+VW4N73b6pp2fo6oEOkdY8utKBA0gM+w
+         x9wWINUCYasrsN1eyIyuy/pxjHHeZz6ACik8eHIMcNsVRucUQO1fAoHUWGSjMi5yDzAX
+         BbFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774862895; x=1775467695;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3zDHIQyb3IezUESO9F09MAim9FoAsOYTRYDFkmxzVFg=;
+        b=FlzXvnkGAMMv3CI86x5sR36kj39Wite7isZAm/GGo/n0y1McDvRWhwbcoxL/fAjj95
+         RtpCypc45smE4Z30QWbaEZ27G+HpkrXygdmg6gfa+Vig3q5sBYH3Ih6rtL/U/eTjH6EL
+         WW+I9lgURKs9v4MGWiX3evN2vF2bhcLoGHzwWZHHQgGurhP7zkkQvBXy3JdR8SSisGDC
+         +F60E37UKJolQ7Kok3jijYrMRqN6K6O0If8VwHNVHsSE4bovCXZY/3QX5EBKeu7fV7Fm
+         VELPndXHGS21TytC4VdzUpOPBGDxxZ9BD1loCSsAap4xLRrRkI1fD6ChSz3rtg+pqzn7
+         yBrw==
+X-Forwarded-Encrypted: i=1; AJvYcCXdW015kO6ARf5zi7GQTCzw01mOKyqgs8vdgmg6XCxjYeIKwtTb485g6kPQ4ZW9gqy2VGHiIEigoSFbGg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwX/NbkrogkgACnNOMqnXcQJdiQZQUdCCRLOQ0NB+bALYeNZoJH
+	Gkgqx84upaCHLzS3bOG/rxZ7OFELdq8otWV8rjJzr46dnde4GAdM+Hh7
+X-Gm-Gg: ATEYQzzq0i1zMXFunxI5bYV94I/BiAzWg+IRpqafp+I9arQHtG5oxQpaWmSUwTMd1Qb
+	Px+Vbzf73+8RvZ/PM8Vl9fk0Djr1/Bw2UvKFcViS5FKohxQjqYCiZBc2o1RndVzpWJE+gtIXl/A
+	TcWPfSqHz/VGIeQpGeesltH1bpbk1WYqF3+tIQP91WPTfwKCWG+vZQe6fCZD2BEQhDmEYSknDqa
+	g5ZEidFr0QurhjL7XiEBCBzkro7FuruZqceOhaCbOU0bfZ2JWlbZDMZsvfKKB5d2gp91G5lE3zu
+	RhRRxvdloBnYDY8jOitSgksHy1WBx2Kz8WenSeC4UK17Mvm//1yG8qlHGSRyBw4fg1lA1RMu47u
+	RPlPWelmq8B/RtRSYn5de9j/hACu2IY/za8Msh0VHmEoHR4voLf/lUiYgyFd4kbKgoRA6Rsdd/G
+	PsOw4nuNpaFTZe
+X-Received: by 2002:a05:600c:83c5:b0:477:7af8:c8ad with SMTP id 5b1f17b1804b1-487280a25c4mr210099595e9.31.1774862894489;
+        Mon, 30 Mar 2026 02:28:14 -0700 (PDT)
+Received: from nsa ([45.94.208.97])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4873ab203e9sm74265215e9.0.2026.03.30.02.28.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2026 02:28:14 -0700 (PDT)
+Date: Mon, 30 Mar 2026 10:28:59 +0100
+From: Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>
+To: Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>
+Cc: linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>
+Subject: Re: [PATCH v8 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap
+ Controller
+Message-ID: <aco5L_6SZIB2DdpF@nsa>
+References: <20260327-ltc4283-support-v8-0-471de255d728@analog.com>
+ <20260327-ltc4283-support-v8-2-471de255d728@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB75:EE_|DM4PR12MB7693:EE_
-X-MS-Office365-Filtering-Correlation-Id: e74e59fc-55ec-47fc-57b1-08de8e1cfa56
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|7416014|36860700016|376014|13003099007|18002099003|56012099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	11C8DZU8OkiOp3sjFlWinkhkP6jF0GUo//z3lqzHINpPjJv2b19VEsYt1Y9+HrVAYeqfBoMahAL2A3YquY/ouoKYk1L3+1WCFtI1YOG9zUtCnD7dq2Y+LYnLMhjumZDyIijaEeorQph0R3vyROwZJn2RG+wt2hdVEEi7plZ4zyI/qydxiR8U5TgZ3HK8eDghxbDbDpBQp4xVsqK73IQF91A9U0HaIQRs2JvCFAowaHU3w+y1y4bjEzsU7WFg9+ZUG6/ik02kV3es0SYdtH7lX7UV7gTqGgNyeDxvRUV1ub7aQc3DKeAfIHuVLDzLnedOb+Td6nCtrLKtZ7MqKdcB53GJoSu0+PD4+bKGk9xzN/JviMxqQRbTquwBiLTjAtC1WkJKzeoKrGvnGyoIBSGNo5Ur4Pm9d4wpWSeLtD/3XEo43LZbbfGkb+7ge/MwflPY6Tga5fW0XUCtyjsLMYoV0GGfb1ErXlZphpqx4ZyOP1dkDsPkPevQgiefIrxp6vjhHx9auneJufimuCFJq2lGeuKYyvlGvqjAt27Te8QHP2vDvE41HcCb3LFSBmyl8wXgfyzG3u9MCp1rlzMUtCiFr7GSGb9odBKA+YhWjoAF2fUoKMi2h9JUw9gkvRebLBoPRpLQusz4f/mCYIbg3kWVhX7O5797Cpnn8Q9XURmoVfYtK/cNBrJlbyn20mVtd0Z0TcY8AEQ+t955J7rtwgDbu507Rj/QWHL4hFA6Z/KN5D7fBgLWy7LSS8LjMpFVn6eTQk6t/1eMXh/qCxG3AB027g==
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(7416014)(36860700016)(376014)(13003099007)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	OuB51rYhEYCgADxWMePgiWvCz+6flTalGpf6cecJGtpji9eRYZMQukIoh/oMZsiKtfDIQU160Wwn4hmGINYDqQ+bbou5S0ENexytO2eS1MAgOWCGe6dufOoU23jN6kO5g5AU/FLlB/ECqH8KJiL4c6hI/VAlyVugLEh5ie+1GgsQyIpAIQh49FdyKtb/CFxwZBvmzQ4elaPOPbKGxPmoXrqRozFyDK3hKOk0ZUWSAjvdoNDmU9jt1Si7cmqioebjOAMOpRFN6lrtK7wL6+UvI6U1Lf8g3dSHC6xot1rPhAAZ5OQCkx69FI4yLCo45X9mvIyB1nkifvU9WmqYnkX9ios6tFEYTM4u6swWg/8cPIKHOyBtb6t4UVBqdkH9rc6f4JmHYz3QdZ2jqYj+oxDGfo6vGj06uWXyDGpc8VYDRsnpnkUGmkznr/1zzb5cvto8
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2026 05:27:04.1457
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e74e59fc-55ec-47fc-57b1-08de8e1cfa56
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF0001AB75.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7693
+In-Reply-To: <20260327-ltc4283-support-v8-2-471de255d728@analog.com>
 
-On Fri, 27 Mar 2026 18:06:42 +0100, Alexandre Belloni wrote:
-> On 27/03/2026 17:12:04+0530, Akhil R wrote:
->> On Fri, 27 Mar 2026 09:27:21 +0100, Alexandre Belloni wrote:
->> > On 27/03/2026 13:48:58+0530, Akhil R wrote:
->> >> On Thu, 26 Mar 2026 16:44:31 +0100, Alexandre Belloni wrote:
->> >> > On 26/03/2026 10:05:03-0500, Rob Herring wrote:
->> >> >> On Wed, Mar 18, 2026 at 05:31:50PM +0000, Conor Dooley wrote:
->> >> >> > On Wed, Mar 18, 2026 at 10:57:14PM +0530, Akhil R wrote:
->> >> >> > > Add the 'mipi-i3c-static-method' property mentioned in the MIPI I3C
->> >> >> > > Discovery and Configuration Specification [1] to specify which discovery
->> >> >> > > method an I3C device supports during bus initialization. The property is
->> >> >> > > a bitmap, where a bit value of 1 indicates support for that method, and 0
->> >> >> > > indicates lack of support.
->> >> >> > > Bit 0: SETDASA CCC (Direct)
->> >> >> > > Bit 1: SETAASA CCC (Broadcast)
->> >> >> > > Bit 2: Other CCC (vendor / standards extension)
->> >> >> > > All other bits are reserved.
->> >> >> > > 
->> >> >> > > It is specifically needed when an I3C device requires SETAASA for the
->> >> >> > > address assignment. SETDASA will be supported by default if this property
->> >> >> > > is absent - which means for now the property just serves as a flag to
->> >> >> > > enable SETAASA, but keep the property as a bitmap to align with the
->> >> >> > > specifications.
->> >> >> > > 
->> >> >> > > [1] https://www.mipi.org/specifications/disco
->> >> >> > > 
->> >> >> > > Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
->> >> >> > > ---
->> >> >> > >  .../devicetree/bindings/i3c/i3c.yaml          | 30 ++++++++++++++++---
->> >> >> > >  1 file changed, 26 insertions(+), 4 deletions(-)
->> >> >> > > 
->> >> >> > > diff --git a/Documentation/devicetree/bindings/i3c/i3c.yaml b/Documentation/devicetree/bindings/i3c/i3c.yaml
->> >> >> > > index e25fa72fd785..1705d90d4d79 100644
->> >> >> > > --- a/Documentation/devicetree/bindings/i3c/i3c.yaml
->> >> >> > > +++ b/Documentation/devicetree/bindings/i3c/i3c.yaml
->> >> >> > > @@ -31,10 +31,12 @@ properties:
->> >> >> > >        described in the device tree, which in turn means we have to describe
->> >> >> > >        I3C devices.
->> >> >> > >  
->> >> >> > > -      Another use case for describing an I3C device in the device tree is when
->> >> >> > > -      this I3C device has a static I2C address and we want to assign it a
->> >> >> > > -      specific I3C dynamic address before the DAA takes place (so that other
->> >> >> > > -      devices on the bus can't take this dynamic address).
->> >> >> > > +      Other use-cases for describing an I3C device in the device tree are:
->> >> >> > > +      - When the I3C device has a static I2C address and we want to assign
->> >> >> > > +        it a specific I3C dynamic address before the DAA takes place (so
->> >> >> > > +        that other devices on the bus can't take this dynamic address).
->> >> >> > > +      - When the I3C device requires SETAASA for its discovery and uses a
->> >> >> > > +        pre-defined static address.
->> >> >> > >  
->> >> >> > >    "#size-cells":
->> >> >> > >      const: 0
->> >> >> > > @@ -147,6 +149,26 @@ patternProperties:
->> >> >> > >            through SETDASA. If static address is not present, this address is assigned
->> >> >> > >            through SETNEWDA after assigning a temporary address via ENTDAA.
->> >> >> > >  
->> >> >> > > +      mipi-i3c-static-method:
->> >> >> > > +        $ref: /schemas/types.yaml#/definitions/uint32
->> >> >> > > +        minimum: 0x1
->> >> >> > > +        maximum: 0xff
->> >> >> > > +        default: 1
->> >> >> > > +        description: |
->> >> >> > > +          Bitmap describing which methods of Dynamic Address Assignment from a
->> >> >> > > +          static address are supported by this I3C Target. A bit value of 1
->> >> >> > > +          indicates support for that method, and 0 indicates lack of support.
->> >> >> > 
->> >> >> > I really am not keen on properties that are bitmaps, why can't we just
->> >> >> > use the strings "setdasa", "setaasa" etc?
->> >> >> 
->> >> >> If this comes from a specification, then I'd tend to just copy it rather 
->> >> >> than invent our own thing. Obviously if is something structured 
->> >> >> fundamentally different from how DT is designed, then we wouldn't. But 
->> >> >> this is just a simple property.
->> >> >> 
->> >> > 
->> >> > The issue being that the specification is not public so it is difficult
->> >> > to take any decision.
->> >> 
->> >> There is a public version available in the same link, but you would still
->> >> have to provide them a name and an email ID. The document will be sent to
->> >> the mail ID.
->> >> 
->> > 
->> > The public version only contains one property:
->> > mipi-disco-interface-revision
->> 
->> Could you check once if the below link works?
->> https://www.mipi.org/mipi-disco-for-i3c-download
+Hi Guenter, Regarding AI review, I think most of the points were
+discussed in previous revisions, but there are two valid.
+
+On Fri, Mar 27, 2026 at 05:26:15PM +0000, Nuno Sá wrote:
+> Support the LTC4283 Hot Swap Controller. The device features programmable
+> current limit with foldback and independently adjustable inrush current to
+> optimize the MOSFET safe operating area (SOA). The SOA timer limits MOSFET
+> temperature rise for reliable protection against overstresses.
 > 
-> It works, thanks. The bitfield is fine then.
+> An I2C interface and onboard ADC allow monitoring of board current,
+> voltage, power, energy, and fault status.
+> 
+> Signed-off-by: Nuno Sá <nuno.sa@analog.com>
+> ---
+>  Documentation/hwmon/index.rst   |    1 +
+>  Documentation/hwmon/ltc4283.rst |  266 ++++++
+>  MAINTAINERS                     |    1 +
+>  drivers/hwmon/Kconfig           |   12 +
+>  drivers/hwmon/Makefile          |    1 +
+>  drivers/hwmon/ltc4283.c         | 1796 +++++++++++++++++++++++++++++++++++++++
+>  6 files changed, 2077 insertions(+)
+>
 
-Thanks for checking. I will update the link in the commit description and
-keep the rest of the patch as is. Hope that sounds good.
+...
 
-Best Regards,
-Akhil
+> +static int ltc4283_read_in_alarm(struct ltc4283_hwmon *st, u32 channel,
+> +				 bool max_alm, long *val)
+> +{
+> +	if (channel == LTC4283_VPWR)
+> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_1,
+> +					  BIT(2 + max_alm), val);
+> +
+> +	if (channel >= LTC4283_CHAN_ADI_1 && channel <= LTC4283_CHAN_ADI_4) {
+> +		u32 bit = (channel - LTC4283_CHAN_ADI_1) * 2;
+> +		/*
+> +		 * Lower channels go to higher bits. We also want to go +1 down
+> +		 * in the min_alarm case.
+> +		 */
+> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_2,
+> +					  BIT(7 - bit - !max_alm), val);
+> +	}
+> +
+> +	if (channel >= LTC4283_CHAN_ADIO_1 && channel <= LTC4283_CHAN_ADIO_4) {
+> +		u32 bit = (channel - LTC4283_CHAN_ADIO_1) * 2;
+> +
+> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_3,
+> +					  BIT(7 - bit - !max_alm), val);
+> +	}
+> +
+> +	if (channel >= LTC4283_CHAN_ADIN12 && channel <= LTC4283_CHAN_ADIN34) {
+> +		u32 bit = (channel - LTC4283_CHAN_ADIN12) * 2;
+> +
+> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_5,
+> +					  BIT(7 - bit - !max_alm), val);
+> +	}
+
+"Will this condition handle the ADIO12 and ADIO34 differential channels?
+It looks like channels 14 and 15 fall through to the default return intended
+for the DRAIN channel. Since reading the alarm implicitly clears the register
+bits, could reading these ADIO alarms unintentionally clear actual DRAIN
+alarms? Should the upper bound be LTC4283_CHAN_ADIO34?"
+
+Good catch and should be:
+
+-       if (channel >= LTC4283_CHAN_ADIN12 && channel <= LTC4283_CHAN_ADIN34) {
++       if (channel >= LTC4283_CHAN_ADIN12 && channel <= LTC4283_CHAN_ADIO34) {
+
+> +
+> +	if (channel == LTC4283_CHAN_DRNS)
+> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_4,
+> +					  BIT(6 + max_alm), val);
+> +
+> +	return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_4, BIT(4 + max_alm),
+> +				  val);
+> +}
+
+...
+
+> +
+> +static int ltc4283_probe(struct i2c_client *client)
+> +{
+> +	struct device *dev = &client->dev, *hwmon;
+> +	struct auxiliary_device *adev;
+> +	struct ltc4283_hwmon *st;
+> +	int ret;
+> +
+> +	st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
+> +	if (!st)
+> +		return -ENOMEM;
+> +
+> +	if (!i2c_check_functionality(client->adapter,
+> +				     I2C_FUNC_SMBUS_BYTE_DATA |
+> +				     I2C_FUNC_SMBUS_WORD_DATA |
+> +				     I2C_FUNC_SMBUS_READ_I2C_BLOCK))
+> +		return -EOPNOTSUPP;
+> +
+> +	st->client = client;
+> +	st->map = devm_regmap_init(dev, &ltc4283_regmap_bus, client,
+> +				   &ltc4283_regmap_config);
+> +	if (IS_ERR(st->map))
+> +		return dev_err_probe(dev, PTR_ERR(st->map),
+> +				     "Failed to create regmap\n");
+> +
+> +	ret = ltc4283_setup(st, dev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	hwmon = devm_hwmon_device_register_with_info(dev, "ltc4283", st,
+> +						     &ltc4283_chip_info, NULL);
+> +
+> +	if (IS_ERR(hwmon))
+> +		return PTR_ERR(hwmon);
+> +
+> +	ltc4283_debugfs_init(st, client);
+> +
+> +	if (!st->gpio_mask)
+> +		return 0;
+> +
+> +	adev = devm_auxiliary_device_create(dev, "gpio", &st->gpio_mask);
+> +	if (!adev)
+> +		return dev_err_probe(dev, -ENODEV, "Failed to add GPIO device\n");
+
+"Does this allow multiple LTC4283 chips to probe successfully?
+Without allocating a unique ID per I2C instance, it seems the first probed
+chip takes the generic name. If a second chip is present, it might attempt
+to register with the exact same name, resulting in a failure in device_add()
+and aborting the probe."
+
+Also looks valid and I suspect is one of those that a quick look will
+find more "offenders". I would purpose:
+
+-       adev = devm_auxiliary_device_create(dev, "gpio", &st->gpio_mask);
++       adev = __devm_auxiliary_device_create(dev, KBUILD_MODNAME, "gpio",
++                                             &st->gpio_mask, client->addr);
+
+If there's nothing else and you agree with the above, is this something
+you can tweak while applying or should I spin a new version?
+
+Thanks!
+- Nuno Sá
+
