@@ -1,66 +1,66 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83604377EA1
-	for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2026 16:07:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D0CA377EC6
+	for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2026 16:25:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774886855; cv=none; b=mXvTNmJFjxtE32Y6hZbieht5Xd3UzYTZ2ONh7CUCkiF+gFIxPgcZAGPu5FQ18lOIJRqTTUwsQD+oN0Oozu0J1Ofgzr3NgrJI9aKJe1i7Hed67xgXeLipiqHdmLphUyyTs6HCl4n5llj48N/5JOoBTDQvw88rkT7aFDPSPeLFdus=
+	t=1774887935; cv=none; b=gNYlwg3pSMVab3NfLI0P4TrNMDIRkyFRWL0eW8F6bkG86aLhkOgGbB6f+2lUZtNp4uH5VN4BHLRjd87CANUF7gH4W8wEK8qSKbo+Prrtq3A75tLLR40+4C1xoxl6wrg+caW94KDI1/qP2jXzlgyCFfmTIX1V25unUvu6zqiof7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774886855; c=relaxed/simple;
-	bh=bG7U93jJf53GxXgWUyzlK9V1bJxy4rRb8t7Xb1QpP7Q=;
+	s=arc-20240116; t=1774887935; c=relaxed/simple;
+	bh=EEy+oWaHG8rzWzzQ/PLp6iS2nvnI2KQAis2/8F6dGSs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FKLTDd8Jk1pZJdvdQlhR6DsbF9PLwFHbt5qgNRkmPIvq6V7lWdNUOJn/fw/GqZO3Wsl/eTrLBTcZiirEu9i0XaJXIlwqZu5x2/hF2Bl3M5cK2ic6GqP2jgzgU02gDpH6vWImj5m5bZnp0n+kmMPxN831I6f3akW53gDKl6Qpl0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BUyRiZa5; arc=none smtp.client-ip=209.85.210.179
+	 In-Reply-To:Content-Type; b=lkC2pBOSXeGnIa3al0GoeN/T+/chbBi87fMzMKM9CINN1xOHlCRH9aQm9srabtY1AeAhIk+u75Rezu6V9WOhKhgKVKaFzwVx8lq+KOZ8f5OBZndVe5iMuo1es+Vmr0/wr121cvz83Mi8cBa8UhV8YoAZ8mVMHiHxA2ynzRfRVXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DejAES9U; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BUyRiZa5"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-82a646c96bdso3775679b3a.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2026 09:07:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DejAES9U"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2b24fdac394so13731345ad.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2026 09:25:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774886854; x=1775491654; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774887934; x=1775492734; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=CoAPxD37anoko/TCW1YUH9YUv+N7gf3al0lJPj7Y+Uo=;
-        b=BUyRiZa5DbvD3B7lKTOjom4qNrl5Kh5ljKeZRNIlhHLWFNOpGg6PlAIQfQJ3Y70HH1
-         rsGMmgXX3YWXK326CWKrwkAi4lZ05Q/I92JUN19TU480tOC/NiKs/Y4iKBIuNtjUOxRY
-         gJgfaNWW8/yICuJZNuhhCK6lZ+2oz+2vCsEx0xrX4esVJj3rKwNjHfmza2QyKg9h4Gfj
-         hoRjK+ba3Ms9YMwf209RgKSvJvvnvuZvfQQ5CjAKP4hMovM3t/HoFMFw0J6lOdqCREXT
-         1raGMcv7s5GyRaGFIqaN1Mzkl+aheLIMwLU7pSe9pNn8DZkXU1wY3JuA6IiOm6neH5yr
-         y4zg==
+        bh=30qgmi/fk4YrrYyUAdUDt/ehh96Nqq21NpCvChGzSYU=;
+        b=DejAES9UvpSRl17UZ2FjDElu7QGhxjNWBw7bbCVRCdYfwEj3qW7KuHQl/fUFuopI6U
+         /ybjWxX60jY+kXFuav+FE8rtlTMyjShuP0GmTeYrfMinZmorPAfC48PMUeCvZk+GEpbh
+         /ZthEkP9vwqRJ830mnN68xLixQxgF+TjnLkoqFxSI6WNdovCQa8lRqSRKMKHoKF+R7xp
+         iZiyHgfblU5EHhjlR1bXU4wBsxt0GVPZb0nk8hCtV/7hcvK3ySBavk4mQZnRsoSbbZpF
+         PI0ppVZnjXdbGtMudQwwQl4BMs8sPF6CP80d6lyO1Dx+Abctp3ZAZIuC7gMTtGnp1opD
+         0HQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774886854; x=1775491654;
+        d=1e100.net; s=20251104; t=1774887934; x=1775492734;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CoAPxD37anoko/TCW1YUH9YUv+N7gf3al0lJPj7Y+Uo=;
-        b=naCG0coHcauGL96wXEK5/Ld938mf5lLS0T4+sFNVyK0XgRaSsmEp0MSmUMAOsywKmy
-         6KXCrKbCkYaH1nTobJCw4EfxaPgHdS8jF9AWQMxQFdS4vpnWGiJhJp3n2WJYJyajJPpR
-         teP3tvrqjNdSpHLQrZkzJ04244SCRHTF6HisdU+d4MGDtOS5pYvk05rqrLA95rzk7kcA
-         3ozkOnj+4/k7nOAd0tko7/p0StUeNZ+/FpuYm2mGIc7Pmxge2FjpIG2rgOHlwNHdg93O
-         AYwXLKAARyutByLoQU+sbFxEK67bn8q3k4RfbAKTzvd2Umbt/iorCzGCMrSlfe3lKjbZ
-         nIug==
-X-Gm-Message-State: AOJu0YwHlzNRZf/k0PPcF4usGzntMDYJlPYvrSxqJdE2/OlSFzW8dXW4
-	7z2xWnEoc8kaiSP8bLGcOwCQA3eqqTvAEoTv6hIGL1fQHgPsUFjDUrq6
-X-Gm-Gg: ATEYQzwns6EjgFxLLN4VLzPSLphQt3oc6K4dJgwIoWH2kjBxx8MoxOcUZFFilnMSW9m
-	u6i3AqcE+jl0a7ys3KOCcv/Icrt9e8Lqmq8eyOzDxAiiXJ4hRQ/06ilgijnPsybFZ8wxOm2XhUu
-	/Dy5WbKwZ/UmNntyvB0cXdfNZKb+jDl6wwMywvshIaKChMBiTedFzsTcVerTwnVUYbcal5ziYGk
-	6+DQWBqbE9Nxf81gFw5RACJuH5D7W5HuCIQx4yHoBpgSU97ltf4sQX+6BjOBhi8QMavmtjTGw1O
-	sCIubMcP3EM9y7zDiy5kU+hM4JqvIIjZtPTxR2YCpfJGAcwuoBUMGEG2jCfF3MzkoFBg5zOYAk6
-	tQeA3+pvy1lot8rsToURficAwR87ikUMSTXVDNHpbN/5coq76EWnAO+FEJAhZ6JokRVSAuUaswz
-	Da7avjZ6gvTKHWjsJo7Cud1xpvC+wHfHb42vFfg2titMLrIdKkMbCiKvY7BygQM1hoOesIk56G
-X-Received: by 2002:a05:6a00:4212:b0:82c:6aee:b21a with SMTP id d2e1a72fcca58-82c95efc9e9mr13106113b3a.45.1774886853736;
-        Mon, 30 Mar 2026 09:07:33 -0700 (PDT)
+        bh=30qgmi/fk4YrrYyUAdUDt/ehh96Nqq21NpCvChGzSYU=;
+        b=nqa7u/Z96kiTHHCJjjmhmB0lDbJdjbYcaWGbvUzXskxpdkSf9J9JoAXnDp72XoapBB
+         R2/dzV/klbNt6I52QaBAgH5iHBQ0/+xjHAIAYMhbdrezKFYRFN5ttX/7IYJvnCic2mS9
+         qz8HI5GYuhAkXz6NqZGHJiz8L5LGTGy3J4FyGyHv1ioDFoU47Lx9AxQtcbB9gMcT67VP
+         Fc0rAtSLjESvhUuZGq+mVdCruNDpt5+ewxthshUh7+OHki5svHXAnMXs0K1iSWHhz2Jj
+         4gWmfPMZxkerIgI8Df8Xb5PwAptXe3f1gsjlrqVgU9GYops/oEjkknJrWA+tukoyu74Z
+         6lfA==
+X-Gm-Message-State: AOJu0Yyt4ETsBNVclC+Fo5ASwPc9qgOc5L71GPrVwEn4oFSy+lttwCLO
+	+n5tPYiafgxQtqIA8ATzMV0qtDqCypZHSctRZ5yzzvQ+IlAj6kj4kBnw
+X-Gm-Gg: ATEYQzzXZ/yx+u+aBJ2k8DC08KaNlPTX6UGXk7CcTRhW406IZyd7/rcMIbcAf7mw7N4
+	QvhDSZA+3RYIlgfr8ametGCUnK9jdHvl3L47I/Uj4UYObE+rJhyVtpx6elG/26C8ZqmA8QW2RsV
+	QvTs3JTmLzXX1Lw3GXEJAtIWE6yPpTFYEPGy3A9TDgUstm61Agouyuzm2CdK+oauFDSi462x72R
+	QltHxHh47vJegwuXnz3Kq+zaVR6b4zO2BVhvshMMhVQuGUeAJitNqieyncW29jegt3fOiTyNLXQ
+	hE/W2fjGE8DR+4GJSc6DvrgVawnvWLdImZn/wjQw92AK8M4rnyaLpsFA7rMg4R7PeKzg9zBax6w
+	XihcGXvwdac4bgSnQUJvBajmhnhGisyCmECe4fTi/QpLwG82J1NTdVdilwcggL0RNgs/7Snr2iK
+	GfZ962XMugbAC8zXBKUGFUfBVBsyHEuE3aW6dz2ISMG8zGm/rFAoAQ1FqnVBocXULSmy/snfsp
+X-Received: by 2002:a17:902:ef44:b0:2b2:58c7:2cd6 with SMTP id d9443c01a7336-2b258c73377mr26088925ad.5.1774887933658;
+        Mon, 30 Mar 2026 09:25:33 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82ca85ef0a9sm7490696b3a.43.2026.03.30.09.07.32
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2427660c7sm84120725ad.44.2026.03.30.09.25.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Mar 2026 09:07:33 -0700 (PDT)
+        Mon, 30 Mar 2026 09:25:33 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <67a5d1c1-a9c5-47fb-a0ec-5b69a991b01e@roeck-us.net>
-Date: Mon, 30 Mar 2026 09:07:32 -0700
+Message-ID: <fd15c1d6-09ec-4553-bd53-2460c71824e3@roeck-us.net>
+Date: Mon, 30 Mar 2026 09:25:31 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,14 +68,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/2] Add support for Texas Instruments INA4230 power
- monitor
-To: Alexey Charkov <alchark@flipper.net>, Rob Herring <robh@kernel.org>,
+Subject: Re: [PATCH 0/2] Add support for Infineon Digital eFuse XDP720
+To: ASHISH YADAV <ashishyadav78@gmail.com>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
 Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-References: <20260330-ina4230-v5-0-eeb322d95b3a@flipper.net>
+ linux-kernel@vger.kernel.org, Ashish Yadav <ashish.yadav@infineon.com>
+References: <20260330102345.37065-1-Ashish.Yadav@infineon.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,42 +119,47 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260330-ina4230-v5-0-eeb322d95b3a@flipper.net>
+In-Reply-To: <20260330102345.37065-1-Ashish.Yadav@infineon.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/30/26 08:14, Alexey Charkov wrote:
-> TI INA4230 is a 4-channel power monitor with I2C interface, similar in
-> operation to INA3221 (3-channel) and INA219 (single-channel) but with
-> a different register layout, different alerting mechanism and slightly
-> different support for directly reading calculated current/power/energy
-> values (pre-multiplied by the device itself and needing only to be scaled
-> by the driver depending on its selected LSB unit values).
-> 
-> In this initial implementation, the driver supports reading voltage,
-> current, power and energy values, but does not yet support alerts, which
-> can be added separately if needed. Also the overflows during hardware
-> calculations are not yet handled, nor is the support for the device's
-> internal 32-bit energy counter reset.
-> 
-> An example device tree using this binding and driver is available at [1]
-> (not currently upstreamed, as the device in question is in engineering
-> phase and not yet publicly available)
-> 
-> [1] https://github.com/flipperdevices/flipper-linux-kernel/blob/flipper-devel/arch/arm64/boot/dts/rockchip/rk3576-flipper-one-rev-f0b0c1.dts
-> 
-> Signed-off-by: Alexey Charkov <alchark@flipper.net>
-> ---
-> Changes in v5:
-> - Reworded per-channel subnodes description in the binding for clarity (Sashiko)
-> - NB: Sashiko's suggestion to allow interrupts in the binding sounds premature,
->    as the alerts mechanism is not implemented yet and there are no known users
->    to test it. If anyone has hardware with the alert pins wired to an interrupt
->    line - please shout and we can test/extend it together
+Hi,
 
-The bindings are supposed to be complete, even if not implemented, so I am not sure
-if the DT maintainers will agree here. We'll see.
+On 3/30/26 03:23, ASHISH YADAV wrote:
+> From: Ashish Yadav <ashish.yadav@infineon.com>
+> 
+> Hi,
+> 
+> These patches add support for Infineon Digital eFuse XDP720.
+> XDP720 provides accurate system telemetry (V, I, P, T) and
+> reports analog current at the IMON pin for post-processing.
+> 
+> The Current and Power measurement depends on the RIMON and GIMON values.
+> Please look into data sheet sections 5.4.2 and 5.4.4 for more details:
+> https://www.infineon.com/assets/row/public/documents/24/49/infineon-xdp720-001-datasheet-en.pdf
+> 
+
+Please address the issues reported in
+
+https://sashiko.dev/#/patchset/20260330102345.37065-1-Ashish.Yadav%40infineon.com
 
 Thanks,
 Guenter
+
+> With Best Regards,
+>   Ashish Yadav
+> 
+> 
+> Ashish Yadav (2):
+>    dt-bindings: hwmon/pmbus: Add Infineon XDP720
+>    hwmon:(pmbus/xdp720) Add support for efuse xdp720
+> 
+>   .../bindings/hwmon/pmbus/infineon,xdp720.yaml |  52 ++++++++
+>   drivers/hwmon/pmbus/Kconfig                   |   9 ++
+>   drivers/hwmon/pmbus/Makefile                  |   1 +
+>   drivers/hwmon/pmbus/xdp720.c                  | 122 ++++++++++++++++++
+>   4 files changed, 184 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp720.yaml
+>   create mode 100644 drivers/hwmon/pmbus/xdp720.c
+> 
 
