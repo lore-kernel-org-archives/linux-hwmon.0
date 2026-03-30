@@ -1,297 +1,221 @@
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB34836AB50
-	for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2026 15:47:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774885658; cv=none; b=MmRDkpzQdQWcR/p6L/JAmwV6pDVQoN5H9PQojxzyZ/P+TrD/YoMTPTVSSWzeBgASyv6cpknn0UD13mExZaQ0DI535VZJeiE7bdwpbmgqmwqb2PypwfYqccn/DrrNbMlBKT2r9FBDBtdtZKRDK57oInMJO0ze3b5ag6Wmatc9BXQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774885658; c=relaxed/simple;
-	bh=3Sjhql64F8YbVSqIIBGW+7FGX7TWmYnn8PcKHPquz2Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ABVyftOITxJYRNAYxIyJL92/b/iS003GJJL04ynbYH9sQurUJ9kMGk56ccMjdixhtPoC1l4sIFU6GVWaise8RKKiXnHuBU1TaC01c9fxf9XZTp0ZoGAGoOD82+U73nhdbLtgIOhMo6WN8h1YmOU+3yGrtcyw3K9rvrc3qa+TnN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ecTpZORG; arc=none smtp.client-ip=74.125.82.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61DEC36E476;
+	Mon, 30 Mar 2026 15:57:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.143.35
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774886222; cv=fail; b=qIJg6186BhWqPGwn7SVdYehafuzKL5JGIOG5m4yB0utbBPLhGDqYZFcG6aDfbn5Nz3sq/QMLiP1qJI0nf4wqCs3lEfzYwGTWcIzJsVIyw8OsL3lPrm5AYcpRaOaArBAvAiHSp9t8hNekhOiux2icgNQ6wPKyfNGg1J1cQBiW9I0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774886222; c=relaxed/simple;
+	bh=aP3Ds8mkFm+PdBFkhCQtZkhZkoOrRAD+Z42/XgNpdG0=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=VxyKgRALw6FWe21h0/vIWEJ17vVF/3c2qfhMNdyePHXAi3sz1PKA9/rQeCSj9i1Ka4jX69XWGnJZ/VqEr36R7yz4cvt6WMRv0/ft/j9Aq8lYMmKlkp8g9zznEGSM4RVW0M75QKfmCh+utnZm30GqvleXns7XyIElsKU+Be2Zt1Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=ekLfcT+/; arc=fail smtp.client-ip=148.163.143.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ecTpZORG"
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2c17446ba8dso2820083eec.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2026 08:47:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774885655; x=1775490455; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=gYnlQZ7209SCOgDIPVCJkyFmKO2sNNpaNQ5iPdvDQ3c=;
-        b=ecTpZORGocf3bFUMlZoFiByqZwJUcV3Ns2cMKcU+yByHFW6hS1prwrkhPy7PooQqix
-         SyiDs0n+HthHqPutzWkbqRYyRBEuyumO5zzC7L+Iu2G9jpHZ+AP72HevmyyXanFt2NGd
-         5A82peFFjt814fhM0iP4Tbxg8sf/84SiU/jXCNIcx1Fb9nhYbPQcnfOpzXflrHGjXh3b
-         npqRMGow4CifE/PxqZuXKmB28+2pJkGj9pRBUrVHW9Lo1GjoWphzHglFHK9KrTQgfQXZ
-         06kMXY9UhkJAAntA63eXfWjkuarOn+wjj8WmcTrMGGUjueFFc79vbyD5+ZZ8axjsGq9E
-         sHPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774885655; x=1775490455;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gYnlQZ7209SCOgDIPVCJkyFmKO2sNNpaNQ5iPdvDQ3c=;
-        b=PCzYJjJ4pT19AYWSlvkuZLXTnqiRdqMd6bq+44FJ9iJLLF+C0hqgU+gkOBUOIEnXbw
-         tDDNbhchj+3QsBDN20qC41gofzWuuVBtqA57Wy+qN+4H++r9WwV6CvORahw6e12Rk5yO
-         D+tnHOW3FjgOSZc+HG6Z7zloxYJaB38lykfTTMNusKGRqO0VFjBHM79hGmgqed4rU+pO
-         hC6l9GTBSCM7KywFaLyaKZDYTDe38+4RTfsQ3Al99iZ0cLob4eTqm4CGnNRkxjrXoOsd
-         pD9W0JjT09oaw9A0Cw0YIRaO2jG4np4Virf+BK6MchSGzLuweI/I0zB2q+G4wT9+2Krx
-         Hc9A==
-X-Forwarded-Encrypted: i=1; AJvYcCXdDW2Dj4u2D0VyEuVuPUrG+0Mur1kTXVLLm3F0SFy3HlnbeyMaRyOpmM3p0XdZ+x2HNTw7ne1bGYog3A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwqauZUQPuUU3kNJHG1y3Zecswg92B1x4Eb8CZFu9NNF+xdpCuT
-	+56Xg5K8eXNUJRHdc4nyUwxzjKp7BOluXar35+avEA7lsP0CeYN4owFutCGWeQ==
-X-Gm-Gg: ATEYQzwL3NA0U64QFar/Yr1jQGH83lO47lAvKyI7SrjrAk8fisJ80PETep80s5EGHIS
-	/+2m35F3c5qfb2sUz3xr7fgH0NAy/bhereYoXqPASeUV5Q/X/aRJA7yycocJWDYquwD9TBHE7Ms
-	FsAd7UimoUJoAGmBIbkaFs+tq3rIMqI3krRHLU6LreZz6ZIyIEe7/WYgdH1ohiGJQa0lsH18Rd7
-	yRsvD2vpcfaMqHBEp5vR7sowewgem43vVyzjb/89sqUcXYIhnTANZykHYDhZNAir79rC/yxDWLo
-	/yr0i6kCrVLLWgWUW6APMoAaibVFSVS97WRUTlWAlkQIoJuqK2oKk0ljcEZVdcnyXo2cyGhr38j
-	6NaeU2dUza+hB2AWEdLpj6DHptIpmPYc2xnee7sh2Wi79nOcyHdd7EATDmVBntTvcArK2ajUa+7
-	JQpuLHwxmppLiHppS2HDM4mVuWkC1JQyQeHGEmgLv0SW2BzxAb6RJc6Rspm92BvFjP0qahlhnDd
-	AGc+zTLvL4=
-X-Received: by 2002:a05:7301:3f0a:b0:2c0:b92d:267d with SMTP id 5a478bee46e88-2c7baf43c8amr43690eec.2.1774885654839;
-        Mon, 30 Mar 2026 08:47:34 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c3c3bda306sm7283956eec.3.2026.03.30.08.47.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Mar 2026 08:47:34 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e0c96f38-6742-4b86-8938-64e4e6063119@roeck-us.net>
-Date: Mon, 30 Mar 2026 08:47:32 -0700
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="ekLfcT+/"
+Received: from pps.filterd (m0134424.ppops.net [127.0.0.1])
+	by mx0b-002e3701.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62UBXRKi1682414;
+	Mon, 30 Mar 2026 15:56:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pps0720; bh=NtfZ7PER66RLhqRKCqjUDS6/
+	kyEOT+3X+APbc08VaGY=; b=ekLfcT+/Cb3RFJZLnqTk9B+zBOKRCm/+QA5dUI5T
+	IdqvAkjZWd9Zk5lEbJdttMxZQBYs59kuk13Qx2lL9O61zBFlWDQYGbNAgXjeCX8D
+	DjRIIdRgy/IMz9n3WGyKsdqxLmrV5gaC8fZEtbpEWwa8RBz8jJm9xToyTpHeCb3r
+	GVdAkHzSTOylryTOmZ6pUpwX0RnCGC/sCOqRmOg2utzFkI9c0KJ8v8m0buqTxkxg
+	TIBByWfwO/SJJcenimDFc79aQk/JXYBzZJUBP2Qrw5n8l7uii4Xx2AgKSMvjtfr4
+	OlRuM1C9x6T8gp81sjBd6CXG9TUs0tmNflFSgTi9ZdJ01A==
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 4d7p9kcm68-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Mon, 30 Mar 2026 15:56:43 +0000 (GMT)
+Received: from p1wg14923.americas.hpqcorp.net (unknown [10.119.18.111])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by p1lg14879.it.hpe.com (Postfix) with ESMTPS id AC7A7D1F5;
+	Mon, 30 Mar 2026 15:56:42 +0000 (UTC)
+Received: from p1wg14923.americas.hpqcorp.net (10.119.18.111) by
+ p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17; Mon, 30 Mar 2026 03:56:42 -1200
+Received: from P1WG14918.americas.hpqcorp.net (16.230.19.121) by
+ p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17 via Frontend Transport; Mon, 30 Mar 2026 03:56:42 -1200
+Received: from DM5PR08CU004.outbound.protection.outlook.com (192.58.206.38) by
+ edge.it.hpe.com (16.230.19.121) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Mon, 30 Mar
+ 2026 15:56:42 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=wamqAIWHpoHwLYEQiupt1NAlUcECHKk3O8ISIeaTFLJ1JPcszrLSCA/JqnA8rf7I7m7iVhMVBLzjShJw4B/MDRNGU0/pay/HoD2G4Y9sSS+3p9wSV2PIvXyoskTxiyGbgNN20L/TyBTKrR/KWL7YwnV3J3mgh/N2o2OQzL+YL0CYhGfnmpGzUXL0s8Bpqkj6S+yBfNf833zZwXuob4Viy3F+PQxZqBsXJOYUCeTiEcXujkqOtJfDJ4YsYcsNio61q776Xf0EdIaRuHWm6wcpC4Blr5X2u1Ig/wLDTwlPHMt4XCbAdwor5upVI/ingJ2c6CsGn1vaLjsiWYb7F9jM8Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NtfZ7PER66RLhqRKCqjUDS6/kyEOT+3X+APbc08VaGY=;
+ b=c812v0JpNJW1xzX6UnSRNAGwkSbgyrNXntOCJ7pc69RBOZMLLi2l7Y/T/4Cl9j/5kxjYwLFPe1QwiOyYLKGKyvvK549GT+oFohNPW7D9B40xSmmcpor1BpRNKl2TnkgbDRbTMkXwwPadugZ47VJjUVhyi6JVS7eShbluMmRLihopLIZbX/Z+97W5ZDlpVR0m/9tYOY5cI84nZR2D8qJ13u2R1b6ZuGMVRLahI2nV+la2y8g7MFTcAMgaPyV5LU+hDWgFsaMc7qaDI3kAaOjwxg0pz8aBPjaWzKEAcUDdi/j/XZGpxJTLaYENnhQuup5gp0P/HlE7AgUA4At4m9V00Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:610:1cc::7)
+ by LV5PR84MB4003.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:408:2f9::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.28; Mon, 30 Mar
+ 2026 15:56:40 +0000
+Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::2c54:3534:122f:e74f]) by CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::2c54:3534:122f:e74f%4]) with mapi id 15.20.9745.027; Mon, 30 Mar 2026
+ 15:56:40 +0000
+From: "Pradhan, Sanman" <sanman.pradhan@hpe.com>
+To: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+CC: "linux@roeck-us.net" <linux@roeck-us.net>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        Sanman Pradhan <psanman@juniper.net>
+Subject: [PATCH v2] hwmon: (tps53679) Fix device ID comparison and printing in
+ tps53676_identify()
+Thread-Topic: [PATCH v2] hwmon: (tps53679) Fix device ID comparison and
+ printing in tps53676_identify()
+Thread-Index: AQHcwF3MEtW6SPNIwUO3uJ/csQrXXA==
+Date: Mon, 30 Mar 2026 15:56:40 +0000
+Message-ID: <20260330155618.77403-1-sanman.pradhan@hpe.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH3PR84MB3523:EE_|LV5PR84MB4003:EE_
+x-ms-office365-filtering-correlation-id: 53980877-ef4a-4f62-e700-08de8e74eeb7
+x-ld-processed: 105b2061-b669-4b31-92ac-24d304d195dc,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|376014|1800799024|56012099003|18002099003|38070700021;
+x-microsoft-antispam-message-info: XVYvY6apZEUbYQg4mQP7m3sDVgeNT6B2G7wnuUJcrkyuq3elIqNmOSfjh6zdyHDA4uRcND9fhvFa2BhYQTK1fSOVXyCCBpSldoMabieu/oqX0V54QPhSmopEJ+rlOQwKqdshvl2QLqcAOrgWWSBp1AsHirbpTk7tCtvXTYezU2yn6EDPeLlJYC99bG+aHnFQwOkgo6Hhh6xm/3Y8FliWCpzoC0WcwhOGLr2hTzR9kZVctM0U2mS4dgJV2NN9cU+I1ukReEAwPbMSvJ6utVOnjtaGRnKRbJdx/sWFb735FVDlbOlEhi18XnWIeuVZaTb2IRpt76HSoqQ4femNfKHS03Mmp3FWCpKwsvqjM8MnGDsE9w/NNsRSrMb2eNDpR9AxQ5fiWbSHVVp/y8p6wVqbK2QMllvr3aIayDLeeA9Ul6/pm1LV2Vu04923pd4tuYZA7g3x2EJUtcaB0VSRmFdGSZ7+iX/bEBLLOpVMGZ/FZWd1zqkv4A8eNBTKy4DvRZMuM+3/3H+964LoASp+Roj0XK+SLMuR/sJi7yO7LXd0PQVsEsI2Hf/xg1mV70q9GrKDWuBPcnmsl8EVjN5IjyceowCB+K0o7gkQQ8W7Yalx0CZ1y4HAHvm0j7IoBbfhDFpzy2dj9uCb4uu9MuKeesflO1jibJZqH1ZjKXSY+CAhlP1gHWKzLVxevS5ArNQKFMjBVKsfg7C3Y3nikwh9JxrsR08etKfaHofPYnuEGbiqb9ZSQd5MhZv8SxqgagoPaonCW2W4uJ78J/y5THaD16yqqFXD23MijU59kQjhYrCPeCI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(56012099003)(18002099003)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?HEh9wrsw4+olS2KxWuyNqLk48JTznU1kf6H7hzYMTaIy2jg0JnNoD5T/MD?=
+ =?iso-8859-1?Q?D7eKv9EteQcArWPi89HGvtlODuksjC+6ZrFNvYz16+lhqv4j1RPxPRfz+h?=
+ =?iso-8859-1?Q?fo4+bpRnvbW42xwJw/4sON5RfSAiWzfjSiZhGlEuVuHFKamGpIlrE9Z1H8?=
+ =?iso-8859-1?Q?ttodcaBphdesSfJPzv++kJOL6kejksXb2wRrjVn3o0ETf73OozYhbOWDF9?=
+ =?iso-8859-1?Q?+mIDkOHaT1FM6SiIiIuzZVwIDO+wlvNaeLXK5F9xOjhBY9f853jW2bZWIc?=
+ =?iso-8859-1?Q?bv8jGqyN8K771az+xjgxroRmTUCs6W+64deKgGpZZsXYOePFg1FTIU9pVO?=
+ =?iso-8859-1?Q?oYu0rnrg2tLTuSRWiIuIPSIv69qOxiFrmZD5aJH5pBj9KnKXdu0WfeZFeB?=
+ =?iso-8859-1?Q?D90hx4vZltIhJoR6J+aJdEHC+ABj7frKrdphUBoqITefnxZl66plk2EvRM?=
+ =?iso-8859-1?Q?BFW3VdHs8czGrg76EYJIWPRiAmKfgbOMRp1y0CtE0qLAaB/ya1shiNnkeI?=
+ =?iso-8859-1?Q?vRmS02+wJow6Q6klWqj5Yh0aj3jqdoUIZOsVL6z5QEjl7U2mDI730+ch6a?=
+ =?iso-8859-1?Q?DoKQvgQQJdxX9mjrLhGexotMzBLpvoMuMRJUZKtCeJ5Z1h/t8nbJ429QFm?=
+ =?iso-8859-1?Q?OSyi9oaHLZe92LGj8dIDAMdQ3JlhVnSl6bN8zhzPObj2iztyTDSLKZc0ew?=
+ =?iso-8859-1?Q?YJkI++GDUZpEH9NLE8Kby4B7w97E7O3GJnojiVdA0OZu8Mi5Q7K1w9FAdQ?=
+ =?iso-8859-1?Q?d5qK6DijhD0sBGOHdUYa05iUmJaih5YouN8FyguBn094CmGSbcgmFXYcJ0?=
+ =?iso-8859-1?Q?NcvdsEn0PnsVZY74UnIdVWmf4YlnzGgxu2rPFlNSi3NQy4BouD/XpCDKWy?=
+ =?iso-8859-1?Q?v6FR5rhyukM23pJHqUhoHhhNAq+tDBoLx5J+bSLyRVVNZvkJyfQLbVQuTV?=
+ =?iso-8859-1?Q?bHMPG6oYi3K4/cVbFuo77HcZlBqBOYR42AHvmgk3O27w9KDXm21AV4n5Vc?=
+ =?iso-8859-1?Q?bei/FdoAAJZjMDCYsSJRhp7sSIS44mVNZN7xdlx2bCAeBv3njkrwWsIupD?=
+ =?iso-8859-1?Q?YZJC6+SSPY8LoxlCE6IPXUm5fff70HeoBY8uLBcGg2M5LGKzX29npapESt?=
+ =?iso-8859-1?Q?1n/mjxMFfSVOQwwWeuTVVFbfgdm6ph7UW0H8XX3lVHuA6VjPccml/b5/ZH?=
+ =?iso-8859-1?Q?Of1e6yxTDTdHbU58Fn7gqo6993LA3ZswJl8WCVa1RmIzLLNQlTUo9qp8CE?=
+ =?iso-8859-1?Q?AFp5Ixo7HLyp2o3wvHBpWB118D+TMEGdYgMJuGOcOJbGHKEwxsxrP45C7v?=
+ =?iso-8859-1?Q?qH1qrFGiewB5EaobvicFb6ZtTs3XB6/dvHG/5St/D/31D1JKVUIIG8x2tk?=
+ =?iso-8859-1?Q?de6Jcq9EkLOOq6+78fe81Ds/otjL84J0SVmhhw9Zt9ZyDiqRbDMxrFbl29?=
+ =?iso-8859-1?Q?KdOy6HUCX0kRIFfEJPKLcsMawFiDw3iL4T1+ne9VxByn3+ZBYtAdNPtMiu?=
+ =?iso-8859-1?Q?D2em7cLmafFTqv5vRDreUk7IEJChMlchAqJ8fmOCFiMNYLdcFk4niHv3RA?=
+ =?iso-8859-1?Q?nFIH+kIq4mk5ZHZfPPLpi53YfFf7L1B8eLmGrVuHPbxh9nyy+Wl7x8Ab0v?=
+ =?iso-8859-1?Q?dCL7gXxJjXy1qE3H/QC6Y7ozdexNt+vIA/x7KCO6qqX7OxlrigVWWyAEEM?=
+ =?iso-8859-1?Q?+A3fYOGY1iFHgNMaUXbuLVFSII27F8HchcDci4fG/uXG1xQ7elRh9Bhqi2?=
+ =?iso-8859-1?Q?xbWoP9RJImJLXoolFOIZ3s2MwJLq+ACMb+TykZAMD5fV/Cxlo9YuYFwtwP?=
+ =?iso-8859-1?Q?FUy5VWpw4Q=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap
- Controller
-To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>,
- =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
-Cc: linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>
-References: <20260327-ltc4283-support-v8-0-471de255d728@analog.com>
- <20260327-ltc4283-support-v8-2-471de255d728@analog.com>
- <aco5L_6SZIB2DdpF@nsa>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <aco5L_6SZIB2DdpF@nsa>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-Exchange-RoutingPolicyChecked: gCdqGd7YVgAhgWmEW/Yd/08pwharJdKZlF2WZk8v9yqjzewtpnVTWVrNPglRuMSIhbOY/u+hcFqEuHsajD63Ro8iA18f7iI5zguXTzW1tZwJQW/hgig2jb1KSAO9m65W6NfhwDleuidbSrVVQek5Qe5r/QmCXG1p+H9ZoSDrvpVNwMGSo0kjnW+vovdTYheE4xjB6O2rRWI8rfuAW3yQu/fHKYwhq4UYXOnp2JXHeY2md3rtCURkvADcuCCOW1Sm4VGEUo1ac4Tv8LI3Ljs3vFtyeCMX4jHDRcI2U9fYtw8/wf3nJhZvz0AjAyGYmfwzQEozvK3ByExSPTW9UIZiJA==
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 53980877-ef4a-4f62-e700-08de8e74eeb7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Mar 2026 15:56:40.5496
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cfqcIYiIdfnT9QKZiej2cu/ruGzIYNwKK9C34/8LK5C3zQkMYa4WwkLTikTM0xYpvoHQA+qWx++hiZ/pCochXQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV5PR84MB4003
+X-OriginatorOrg: hpe.com
+X-Authority-Analysis: v=2.4 cv=FuIIPmrq c=1 sm=1 tr=0 ts=69ca9d3b cx=c_pps
+ a=5jkVtQsCUlC8zk5UhkBgHg==:117 a=5jkVtQsCUlC8zk5UhkBgHg==:17
+ a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
+ a=xqWC_Br6kY4A:10 a=8nJEP1OIZ-IA:10 a=Yq5XynenixoA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=gQcMVamqm3wCPoSYhaRC:22 a=3haJ9R1Aw3gUfsUHDaCR:22
+ a=OUXY8nFuAAAA:8 a=42rAJXLL-PIXKrGuW3UA:9 a=wPNLvfGTeEIA:10
+ a=cAcMbU7R10T-QSRYIcO_:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzMwMDEyNiBTYWx0ZWRfX3cAe9zpUkrxn
+ tgfMlRlS2x+a6Z7XLaEo3wilkdqsELW1xEKeH1LKpZvnBR1czJjPN7m4rv2iMq3xche3+zqEkDP
+ aGATDxh2P4dyNdkeOfpcj06XF9eKDRtmSUHqG+Ghjg7HbYqxVe9w9KVwo8cwXK0A5CEhXRqM4B8
+ 813VzYpPHpxkEuhntfenyGtY/JA85k3rhIne1vBgM8YVB/c0JLn6Z8/bHYVZ8y4eRGxcL5JCMKe
+ z5cGypguo78wmX1MGASkb+RDhtHymO3SE9VcE6+9e3ZKaQfR75/PwsxmQSceIxgi1Eb8xbJdBsm
+ bSRFmYLGWUwjKlbHFsNnuDEb5bNxA8rlWQMe1rGt8Q5tQUULZt3cHqLkvBURpn9rPeMRq7a2fjq
+ hEU0mwCWQFwYI4eRYb6PhPdEkuxQs4Bsw4h5Dne65DnBOJDuMtNpeImpvd688lnb8fxCidI0lE2
+ 5srgRxoiB0Ygxqi3BlQ==
+X-Proofpoint-ORIG-GUID: 0LjPtkTQVUlAdeqkZ-eH18AoSJFN_zMa
+X-Proofpoint-GUID: 0LjPtkTQVUlAdeqkZ-eH18AoSJFN_zMa
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-29_05,2026-03-28_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 clxscore=1015 adultscore=0 bulkscore=0 malwarescore=0
+ suspectscore=0 spamscore=0 priorityscore=1501 impostorscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603300126
 
-On 3/30/26 02:28, Nuno Sá wrote:
-> Hi Guenter, Regarding AI review, I think most of the points were
-> discussed in previous revisions, but there are two valid.
-> 
-> On Fri, Mar 27, 2026 at 05:26:15PM +0000, Nuno Sá wrote:
->> Support the LTC4283 Hot Swap Controller. The device features programmable
->> current limit with foldback and independently adjustable inrush current to
->> optimize the MOSFET safe operating area (SOA). The SOA timer limits MOSFET
->> temperature rise for reliable protection against overstresses.
->>
->> An I2C interface and onboard ADC allow monitoring of board current,
->> voltage, power, energy, and fault status.
->>
->> Signed-off-by: Nuno Sá <nuno.sa@analog.com>
->> ---
->>   Documentation/hwmon/index.rst   |    1 +
->>   Documentation/hwmon/ltc4283.rst |  266 ++++++
->>   MAINTAINERS                     |    1 +
->>   drivers/hwmon/Kconfig           |   12 +
->>   drivers/hwmon/Makefile          |    1 +
->>   drivers/hwmon/ltc4283.c         | 1796 +++++++++++++++++++++++++++++++++++++++
->>   6 files changed, 2077 insertions(+)
->>
-> 
-> ...
-> 
->> +static int ltc4283_read_in_alarm(struct ltc4283_hwmon *st, u32 channel,
->> +				 bool max_alm, long *val)
->> +{
->> +	if (channel == LTC4283_VPWR)
->> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_1,
->> +					  BIT(2 + max_alm), val);
->> +
->> +	if (channel >= LTC4283_CHAN_ADI_1 && channel <= LTC4283_CHAN_ADI_4) {
->> +		u32 bit = (channel - LTC4283_CHAN_ADI_1) * 2;
->> +		/*
->> +		 * Lower channels go to higher bits. We also want to go +1 down
->> +		 * in the min_alarm case.
->> +		 */
->> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_2,
->> +					  BIT(7 - bit - !max_alm), val);
->> +	}
->> +
->> +	if (channel >= LTC4283_CHAN_ADIO_1 && channel <= LTC4283_CHAN_ADIO_4) {
->> +		u32 bit = (channel - LTC4283_CHAN_ADIO_1) * 2;
->> +
->> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_3,
->> +					  BIT(7 - bit - !max_alm), val);
->> +	}
->> +
->> +	if (channel >= LTC4283_CHAN_ADIN12 && channel <= LTC4283_CHAN_ADIN34) {
->> +		u32 bit = (channel - LTC4283_CHAN_ADIN12) * 2;
->> +
->> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_5,
->> +					  BIT(7 - bit - !max_alm), val);
->> +	}
-> 
-> "Will this condition handle the ADIO12 and ADIO34 differential channels?
-> It looks like channels 14 and 15 fall through to the default return intended
-> for the DRAIN channel. Since reading the alarm implicitly clears the register
-> bits, could reading these ADIO alarms unintentionally clear actual DRAIN
-> alarms? Should the upper bound be LTC4283_CHAN_ADIO34?"
-> 
-> Good catch and should be:
-> 
-> -       if (channel >= LTC4283_CHAN_ADIN12 && channel <= LTC4283_CHAN_ADIN34) {
-> +       if (channel >= LTC4283_CHAN_ADIN12 && channel <= LTC4283_CHAN_ADIO34) {
-> 
->> +
->> +	if (channel == LTC4283_CHAN_DRNS)
->> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_4,
->> +					  BIT(6 + max_alm), val);
->> +
->> +	return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_4, BIT(4 + max_alm),
->> +				  val);
->> +}
-> 
-> ...
-> 
->> +
->> +static int ltc4283_probe(struct i2c_client *client)
->> +{
->> +	struct device *dev = &client->dev, *hwmon;
->> +	struct auxiliary_device *adev;
->> +	struct ltc4283_hwmon *st;
->> +	int ret;
->> +
->> +	st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
->> +	if (!st)
->> +		return -ENOMEM;
->> +
->> +	if (!i2c_check_functionality(client->adapter,
->> +				     I2C_FUNC_SMBUS_BYTE_DATA |
->> +				     I2C_FUNC_SMBUS_WORD_DATA |
->> +				     I2C_FUNC_SMBUS_READ_I2C_BLOCK))
->> +		return -EOPNOTSUPP;
->> +
->> +	st->client = client;
->> +	st->map = devm_regmap_init(dev, &ltc4283_regmap_bus, client,
->> +				   &ltc4283_regmap_config);
->> +	if (IS_ERR(st->map))
->> +		return dev_err_probe(dev, PTR_ERR(st->map),
->> +				     "Failed to create regmap\n");
->> +
->> +	ret = ltc4283_setup(st, dev);
->> +	if (ret)
->> +		return ret;
->> +
->> +	hwmon = devm_hwmon_device_register_with_info(dev, "ltc4283", st,
->> +						     &ltc4283_chip_info, NULL);
->> +
->> +	if (IS_ERR(hwmon))
->> +		return PTR_ERR(hwmon);
->> +
->> +	ltc4283_debugfs_init(st, client);
->> +
->> +	if (!st->gpio_mask)
->> +		return 0;
->> +
->> +	adev = devm_auxiliary_device_create(dev, "gpio", &st->gpio_mask);
->> +	if (!adev)
->> +		return dev_err_probe(dev, -ENODEV, "Failed to add GPIO device\n");
-> 
-> "Does this allow multiple LTC4283 chips to probe successfully?
-> Without allocating a unique ID per I2C instance, it seems the first probed
-> chip takes the generic name. If a second chip is present, it might attempt
-> to register with the exact same name, resulting in a failure in device_add()
-> and aborting the probe."
-> 
-> Also looks valid and I suspect is one of those that a quick look will
-> find more "offenders". I would purpose:
-> 
-> -       adev = devm_auxiliary_device_create(dev, "gpio", &st->gpio_mask);
-> +       adev = __devm_auxiliary_device_create(dev, KBUILD_MODNAME, "gpio",
-> +                                             &st->gpio_mask, client->addr);
-> 
-
-That would still fail if there are multiple chips at the same I2C address
-on multiple I2C busses. Check drivers/gpu/drm/bridge/ti-sn65dsi86.c which has
-the same problem.
-
-> If there's nothing else and you agree with the above, is this something
-> you can tweak while applying or should I spin a new version?
-> 
-
-Please respin. Also, regarding the other concerns:
-
-   Can BIT(8) * st->rsense wrap to zero on 32-bit architectures?
-   BIT(8) is a 32-bit unsigned long and st->rsense is a u32. If a user sets a
-   very large sense resistor value via the device tree, the multiplication could
-   wrap to 0, causing a division-by-zero kernel panic. Should the divisor use
-   BIT_ULL(8)?
-
-Unless I am missing something, this _can_ overflow. Try to provide a sense
-resistor value of 1677721600. Yes, it is unreasonable to specify such large
-rsense values, but why not just limit it such that it does not overflow ?
-
-Also, for the overflow concerns, if you are sure they can not happen, I'll
-really need to write the unit test code to make sure that this is indeed
-the case.
-
-Thanks,
-Guenter
-
+From: Sanman Pradhan <psanman@juniper.net>=0A=
+=0A=
+tps53676_identify() uses strncmp() to compare the device ID buffer=0A=
+against a byte sequence containing embedded non-printable bytes=0A=
+(\x53\x67\x60). strncmp() is semantically wrong for binary data=0A=
+comparison; use memcmp() instead.=0A=
+=0A=
+Additionally, the buffer from i2c_smbus_read_block_data() is not=0A=
+NUL-terminated, so printing it with "%s" in the error path is=0A=
+undefined behavior and may read past the buffer. Use "%*ph" to=0A=
+hex-dump the actual bytes returned.=0A=
+=0A=
+Per the datasheet, the expected device ID is the 6-byte sequence=0A=
+54 49 53 67 60 00 ("TI\x53\x67\x60\x00"), so compare all 6 bytes=0A=
+including the trailing NUL.=0A=
+=0A=
+Fixes: cb3d37b59012 ("hwmon: (pmbus/tps53679) Add support for TI TPS53676")=
+=0A=
+Signed-off-by: Sanman Pradhan <psanman@juniper.net>=0A=
+---=0A=
+v2:=0A=
+ - Compare full 6-byte datasheet device ID including trailing NUL=0A=
+ - Return -ENODEV for any mismatch=0A=
+---=0A=
+ drivers/hwmon/pmbus/tps53679.c | 4 ++--=0A=
+ 1 file changed, 2 insertions(+), 2 deletions(-)=0A=
+=0A=
+diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.=
+c=0A=
+index 1a6abc32afe2..94258e8cfd90 100644=0A=
+--- a/drivers/hwmon/pmbus/tps53679.c=0A=
++++ b/drivers/hwmon/pmbus/tps53679.c=0A=
+@@ -175,8 +175,8 @@ static int tps53676_identify(struct i2c_client *client,=
+=0A=
+ 	ret =3D i2c_smbus_read_block_data(client, PMBUS_IC_DEVICE_ID, buf);=0A=
+ 	if (ret < 0)=0A=
+ 		return ret;=0A=
+-	if (strncmp("TI\x53\x67\x60", buf, 5)) {=0A=
+-		dev_err(&client->dev, "Unexpected device ID: %s\n", buf);=0A=
++	if (ret !=3D 6 || memcmp(buf, "TI\x53\x67\x60\x00", 6)) {=0A=
++		dev_err(&client->dev, "Unexpected device ID: %*ph\n", ret, buf);=0A=
+ 		return -ENODEV;=0A=
+ 	}=0A=
+ =0A=
+-- =0A=
+2.34.1=0A=
+=0A=
