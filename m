@@ -1,257 +1,221 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E48833ADB9
-	for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2026 15:14:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D86C33C536
+	for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2026 15:14:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774883661; cv=none; b=jQwbCKGTz8kbbdpNuqjB5M/7TssaQVVvzNgA8doxe90Tz5n7X+mPMq89yV7ou2p0wb8zoVUSuSSPxqKQbAbFvzk9aT8x2zgdLkw7+NqSM6oNBlQS+NvPiD8aRM+G0NeCwf+gKChhtBZSeoSHOJsqtNrCtSRvEBDpvJYQ0LD5kMw=
+	t=1774883676; cv=none; b=atSLzYfOX49G5YnQjXDvi87oERgI1M4BMvSitkuIOFva5SEWchbQYXQJnrDxibpuLBUA62oJoLjRQcJI2oOrs4Q4jhRIAe86KorUFtmh4g2x+aNAaGjisLG5G2wPgsMl+RvxxApFBEcDtjQouvAgn2gQgD55fohcLzV3cV1ahHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774883661; c=relaxed/simple;
-	bh=lo/ii0BqBN4SgFv+hykTH4E7Ddj/l+IvWXv9ocLUoMc=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Y2BOmqFaUGW8PiL/m5aapmJpBTLdEVmTA8nK7vmpGwgvoKCZ9cVLd1P+Xv5lo+X+visfvd2GfW5qj0+TyHtpXsfQAlw+NOckkkN2VpaNRLKpTHp4/tFRyUPB3eARkh8kj2q0Vu+EkAvvefyvos6QmiOcqsWOfQ1WhDIshnW+zSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B+HrpZZh; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774883676; c=relaxed/simple;
+	bh=MFHGdaWeQdwYwq1z/tlpFsZNA+Rvpo1qMjjaAD5jbE0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=BIkAwF9BQF9tE/+XK6MYVP1tVxgq6LzWXQTq9y6anJO29l4KbYnFRTbDTWOhYTRFBMMn0o2OHmjDblrzGsS1ymkh8CjgwuSc16qWudm54tgpL6XE5eeRYKIXNOcFWP1evg8jXUz7rN0c5BBDVk5nO5L5ls/1vWsNtbGhSVZnW8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net; spf=pass smtp.mailfrom=flipper.net; dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b=ki3z1kQM; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flipper.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B+HrpZZh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774883660; x=1806419660;
-  h=date:from:to:cc:subject:message-id;
-  bh=lo/ii0BqBN4SgFv+hykTH4E7Ddj/l+IvWXv9ocLUoMc=;
-  b=B+HrpZZh0AD99pJvUIDR3eItSeVpueMvvnI2PrB3C3c9YB2D5Q9lKOHL
-   h9opTOVrtzCBgUAuAzYk3VnKKrUUucOhGFuW9xzgJ0QTVr1iXCXMVAANq
-   yYg0x1tgNR3ufX8DSxls/ShxNA1UyLN5/5zNhrY3WppHDRgES2GYJwg7C
-   4VWVbspGk7TlS2e5Ha6mUpOF0E1KAkbpfC7t4i1+biOW++eMpw+dWy+N5
-   npVQoTugPI0v0Tl2YwXYfopi9E9ljwlAM427BNWPUJV/G3xDXD/al1H1e
-   MkhvwUSGcnAk+9+T1MtkRRfedo5+z+kcL8DBmFy15vKSF/S0y1q9Es8Am
-   g==;
-X-CSE-ConnectionGUID: a+5cTOjaR3OlzOkbijagWQ==
-X-CSE-MsgGUID: fmR9sFxfS9e51N6Tx3jZ0Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11743"; a="86955559"
-X-IronPort-AV: E=Sophos;i="6.23,150,1770624000"; 
-   d="scan'208";a="86955559"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2026 08:14:19 -0700
-X-CSE-ConnectionGUID: NEx51NQBTkGXQCX4JP95ow==
-X-CSE-MsgGUID: OAgt+wMkTrODtLut8eTpJA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,150,1770624000"; 
-   d="scan'208";a="226065065"
-Received: from lkp-server01.sh.intel.com (HELO 283bf2e1b94a) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 30 Mar 2026 08:14:19 -0700
-Received: from kbuild by 283bf2e1b94a with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w7EJj-000000001FV-2CkS;
-	Mon, 30 Mar 2026 15:14:15 +0000
-Date: Mon, 30 Mar 2026 23:14:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon] BUILD SUCCESS
- a9d2fbd3ad0e6ac588386e699beeccfe7516755f
-Message-ID: <202603302357.cEPUyKIs-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b="ki3z1kQM"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48540d21f7dso55538835e9.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2026 08:14:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=flipper.net; s=google; t=1774883673; x=1775488473; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rzFAZvt5pxx46xkdGuHqSP7rsRJaHifBLFVik5CnMGo=;
+        b=ki3z1kQMPX84V+tmyq4x7sQxmawPYK3ea5jxO7XvMBLbSeb1X6z6MdkJDEcZIjGSR3
+         lWkg+kStuU00JepQLPKZ0Pwle+2cPU/A9H9peylwNDfH+tLLZk6fCwZ01Vdi2vixnM8B
+         gGIG+El9o6y3zzaPaaGoIav7Me/oEs3JqJ5a0DqEYBxE3X805dkY0/E0fOOFWoE5FXa8
+         3p/63j+TlLexVS92tJEx9tF8G828ML+k/pcrWkY2xgNFz8ujmVGVvzkM5nZ3CCIDisF/
+         ugoF8t7znF53tBZdZz/VITVIoS7o8uAKa32sYUskJ3aBcJic9J2EHX8Ok99Ck6480+fd
+         JkxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774883674; x=1775488474;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rzFAZvt5pxx46xkdGuHqSP7rsRJaHifBLFVik5CnMGo=;
+        b=DIza+6erFKTlKRoXF7hO/6bs7ZjOeg6gPTBm+0wSN229gzrzIp7iNhwIkx/wHvTanm
+         edmpAEUI6O1tgSssp6BInU2Rf6nUW4Ay5u6N12+s5p7OqkCkTmY6j/rr5syO4zVaYmzV
+         F5s3/IAYuErak7rXRpJsqCzsRMDFCwsscuUgTZo7KBwseuk3P3HeAMYtirT/uHiXrc87
+         RC0a4Dhs9vkU1sBY2hQ0Kg3qrE6q1MDAa46M14R8eUREvkaALu6FccRQUbBFpHFC3yHA
+         FTdj4XyjR88yUeRin8Wl26bDl2RyvbfL5aUc7hOV/4ifoEA5YcewSzl9HZCj0EI8l4F0
+         feaA==
+X-Gm-Message-State: AOJu0Ywe6+O9MpCszcb4yKOd+LbbYY6On8DkBMbtv59mh+/HR/1KVptL
+	/pEmRXynFrTaBAcQBeZ9EOZmvlt/NqFX5hiwhVGNLXOJ5PsWxswZvfFkbIjzAHpg/8XdGo9xOXq
+	PSNOM
+X-Gm-Gg: ATEYQzwrGwXA6GAlAeMLOwuWpv0JbI6TyAntzwaS3n32o/dZIpQ6/xku9axkIh0qAi1
+	jJa+9eEZNsXAqGv3RRr3HbEPgxif9IcH3MeTqg4xITVuGZYvCR533MnoC4fAHKYsxeCsT/ZvZbG
+	M7oqd8OW+DZ7jpPXM6nDvJB4bFtSN/5s21l5mqLO+zaJXQqJPAC/wkLZLyHVN4o9BEvdGFKzV/d
+	+tM9kJqdSnX4ducUz+K5kKrWHfQACii+jC2DszPYyiQEWxtD3UbaDQpw6ctMi3PVuSDH2dX0TV+
+	EeNk+ADMorNzb8pUkWOp+PGk8Q1oieNvRvwvKA9L4TpEJSmi/uLL0qlM7XggJ+bHezLUsBmaA0X
+	7KHmfFIXf1WSuha/DvvnS+T6TFtF96+lNj0nKBM+ETW+Otfj/r3ochuRAhxiEOQrbxBlqyWlzf3
+	Jhsz3R/WAIIj9R3bYbRwuqK+jIHm3l1biA5HvI90y7AthJwxN6vjeaq255ANJgd6zPLoVrwbIMX
+	0ABDw==
+X-Received: by 2002:a05:600c:8b88:b0:487:219e:416 with SMTP id 5b1f17b1804b1-48727d7f415mr214050575e9.8.1774883673527;
+        Mon, 30 Mar 2026 08:14:33 -0700 (PDT)
+Received: from alchark-surface.localdomain (bba-86-98-192-109.alshamil.net.ae. [86.98.192.109])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4873cd7d039sm72764705e9.15.2026.03.30.08.14.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2026 08:14:33 -0700 (PDT)
+From: Alexey Charkov <alchark@flipper.net>
+Subject: [PATCH v5 0/2] Add support for Texas Instruments INA4230 power
+ monitor
+Date: Mon, 30 Mar 2026 19:14:14 +0400
+Message-Id: <20260330-ina4230-v5-0-eeb322d95b3a@flipper.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEaTymkC/2XMQQrCMBCF4auUrI3MTJLGuPIe4iJtpjYgbUlLU
+ aR3N4pYxeUb5vvvYuQUeRT74i4Sz3GMfZeH2RSibn13ZhlD3oKASiB0MnZekwJptQfS4NCoIPL
+ 3kLiJ11fpeMq7jePUp9srPOPz+m6Q+TRmlCAdVRjY7TDo8tBc4jBw2nY8iWdlplUqoFVSlsZU2
+ gV0gXz1L9WXRFilyhJKXylvbW0s/Ev9Jalcpc6yRlZINbjA9lcuy/IAJQby8E4BAAA=
+X-Change-ID: 20260219-ina4230-74a02409153d
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Alexey Charkov <alchark@flipper.net>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7602; i=alchark@flipper.net;
+ h=from:subject:message-id; bh=MFHGdaWeQdwYwq1z/tlpFsZNA+Rvpo1qMjjaAD5jbE0=;
+ b=owGbwMvMwCW2adGNfoHIK0sZT6slMWSemuxv9PK95eSmM8n5SU8Yr834vs5lWuGZ5ywRS/L09
+ sassuhh7ZjIwiDGxWAppsgy99sS26lGfLN2eXh8hZnDygQyRFqkgQEIWBj4chPzSo10jPRMtQ31
+ DA11jHWMGLg4BWCqaxcy/BV5NWPtAuOowO8fO50UN+1IjnOZ4XnhEKf0WY6KW++WyWoy/OFiK4q
+ Yv+bOouk58fufRQi+jnqkxrjOznbB64P51fWcvYwA
+X-Developer-Key: i=alchark@flipper.net; a=openpgp;
+ fpr=9DF6A43D95320E9ABA4848F5B2A2D88F1059D4A5
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: a9d2fbd3ad0e6ac588386e699beeccfe7516755f  hwmon: (ltc4286) Add missing MODULE_IMPORT_NS("PMBUS")
+TI INA4230 is a 4-channel power monitor with I2C interface, similar in
+operation to INA3221 (3-channel) and INA219 (single-channel) but with
+a different register layout, different alerting mechanism and slightly
+different support for directly reading calculated current/power/energy
+values (pre-multiplied by the device itself and needing only to be scaled
+by the driver depending on its selected LSB unit values).
 
-elapsed time: 762m
+In this initial implementation, the driver supports reading voltage,
+current, power and energy values, but does not yet support alerts, which
+can be added separately if needed. Also the overflows during hardware
+calculations are not yet handled, nor is the support for the device's
+internal 32-bit energy counter reset.
 
-configs tested: 180
-configs skipped: 2
+An example device tree using this binding and driver is available at [1]
+(not currently upstreamed, as the device in question is in engineering
+phase and not yet publicly available)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+[1] https://github.com/flipperdevices/flipper-linux-kernel/blob/flipper-devel/arch/arm64/boot/dts/rockchip/rk3576-flipper-one-rev-f0b0c1.dts
 
-tested configs:
-alpha                             allnoconfig    gcc-15.2.0
-alpha                            allyesconfig    gcc-15.2.0
-alpha                               defconfig    gcc-15.2.0
-arc                              allmodconfig    clang-16
-arc                               allnoconfig    gcc-15.2.0
-arc                              allyesconfig    clang-23
-arc                                 defconfig    gcc-15.2.0
-arc                   randconfig-001-20260330    clang-23
-arc                   randconfig-002-20260330    clang-23
-arm                               allnoconfig    clang-23
-arm                               allnoconfig    gcc-15.2.0
-arm                              allyesconfig    clang-16
-arm                                 defconfig    gcc-15.2.0
-arm                   randconfig-001-20260330    clang-23
-arm                   randconfig-002-20260330    clang-23
-arm                   randconfig-003-20260330    clang-23
-arm                   randconfig-004-20260330    clang-23
-arm64                            allmodconfig    clang-23
-arm64                             allnoconfig    gcc-15.2.0
-arm64                               defconfig    gcc-15.2.0
-arm64                 randconfig-001-20260330    clang-23
-arm64                 randconfig-002-20260330    clang-23
-arm64                 randconfig-003-20260330    clang-23
-arm64                 randconfig-004-20260330    clang-23
-csky                             allmodconfig    gcc-15.2.0
-csky                              allnoconfig    gcc-15.2.0
-csky                                defconfig    gcc-15.2.0
-csky                  randconfig-001-20260330    clang-23
-csky                  randconfig-002-20260330    clang-23
-hexagon                          allmodconfig    gcc-15.2.0
-hexagon                           allnoconfig    clang-23
-hexagon                           allnoconfig    gcc-15.2.0
-hexagon                             defconfig    gcc-15.2.0
-hexagon               randconfig-001-20260330    gcc-11.5.0
-hexagon               randconfig-002-20260330    gcc-11.5.0
-i386                             allmodconfig    clang-20
-i386                              allnoconfig    gcc-14
-i386                              allnoconfig    gcc-15.2.0
-i386                             allyesconfig    clang-20
-i386                             allyesconfig    gcc-14
-i386        buildonly-randconfig-001-20260330    gcc-14
-i386        buildonly-randconfig-002-20260330    gcc-14
-i386        buildonly-randconfig-003-20260330    gcc-14
-i386        buildonly-randconfig-004-20260330    gcc-14
-i386        buildonly-randconfig-005-20260330    gcc-14
-i386        buildonly-randconfig-006-20260330    gcc-14
-i386                                defconfig    gcc-15.2.0
-i386                  randconfig-001-20260330    clang-20
-i386                  randconfig-002-20260330    clang-20
-i386                  randconfig-003-20260330    clang-20
-i386                  randconfig-004-20260330    clang-20
-i386                  randconfig-005-20260330    clang-20
-i386                  randconfig-006-20260330    clang-20
-i386                  randconfig-007-20260330    clang-20
-i386                  randconfig-011-20260330    gcc-14
-i386                  randconfig-012-20260330    gcc-14
-i386                  randconfig-013-20260330    gcc-14
-i386                  randconfig-014-20260330    gcc-14
-i386                  randconfig-015-20260330    gcc-14
-i386                  randconfig-016-20260330    gcc-14
-i386                  randconfig-017-20260330    gcc-14
-loongarch                        allmodconfig    clang-23
-loongarch                         allnoconfig    clang-23
-loongarch                         allnoconfig    gcc-15.2.0
-loongarch                           defconfig    clang-19
-loongarch             randconfig-001-20260330    gcc-11.5.0
-loongarch             randconfig-002-20260330    gcc-11.5.0
-m68k                             allmodconfig    gcc-15.2.0
-m68k                              allnoconfig    gcc-15.2.0
-m68k                             allyesconfig    clang-16
-m68k                                defconfig    clang-19
-m68k                       m5249evb_defconfig    gcc-15.2.0
-microblaze                        allnoconfig    gcc-15.2.0
-microblaze                       allyesconfig    gcc-15.2.0
-microblaze                          defconfig    clang-19
-mips                             allmodconfig    gcc-15.2.0
-mips                              allnoconfig    gcc-15.2.0
-mips                             allyesconfig    gcc-15.2.0
-nios2                            allmodconfig    clang-23
-nios2                             allnoconfig    clang-23
-nios2                             allnoconfig    gcc-11.5.0
-nios2                               defconfig    clang-19
-nios2                 randconfig-001-20260330    gcc-11.5.0
-nios2                 randconfig-002-20260330    gcc-11.5.0
-openrisc                         allmodconfig    clang-23
-openrisc                          allnoconfig    clang-23
-openrisc                          allnoconfig    gcc-15.2.0
-openrisc                            defconfig    gcc-15.2.0
-openrisc                 simple_smp_defconfig    gcc-15.2.0
-parisc                           allmodconfig    gcc-15.2.0
-parisc                            allnoconfig    clang-23
-parisc                            allnoconfig    gcc-15.2.0
-parisc                           allyesconfig    clang-19
-parisc                           allyesconfig    gcc-15.2.0
-parisc                              defconfig    gcc-15.2.0
-parisc                randconfig-001-20260330    gcc-8.5.0
-parisc                randconfig-002-20260330    gcc-8.5.0
-parisc64                            defconfig    clang-19
-powerpc                          allmodconfig    gcc-15.2.0
-powerpc                           allnoconfig    clang-23
-powerpc                           allnoconfig    gcc-15.2.0
-powerpc               randconfig-001-20260330    gcc-8.5.0
-powerpc               randconfig-002-20260330    gcc-8.5.0
-powerpc64             randconfig-001-20260330    gcc-8.5.0
-powerpc64             randconfig-002-20260330    gcc-8.5.0
-riscv                            allmodconfig    clang-23
-riscv                             allnoconfig    clang-23
-riscv                             allnoconfig    gcc-15.2.0
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    gcc-15.2.0
-s390                             allmodconfig    clang-18
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-23
-s390                             allyesconfig    gcc-15.2.0
-s390                                defconfig    gcc-15.2.0
-sh                               allmodconfig    gcc-15.2.0
-sh                                allnoconfig    clang-23
-sh                                allnoconfig    gcc-15.2.0
-sh                               allyesconfig    clang-19
-sh                               allyesconfig    gcc-15.2.0
-sh                                  defconfig    gcc-14
-sparc                             allnoconfig    clang-23
-sparc                             allnoconfig    gcc-15.2.0
-sparc                               defconfig    gcc-15.2.0
-sparc                 randconfig-001-20260330    gcc-12.5.0
-sparc                 randconfig-002-20260330    gcc-12.5.0
-sparc64                          allmodconfig    clang-23
-sparc64                             defconfig    gcc-14
-sparc64               randconfig-001-20260330    gcc-12.5.0
-sparc64               randconfig-002-20260330    gcc-12.5.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-23
-um                               allyesconfig    gcc-15.2.0
-um                                  defconfig    gcc-14
-um                             i386_defconfig    gcc-14
-um                    randconfig-001-20260330    gcc-12.5.0
-um                    randconfig-002-20260330    gcc-12.5.0
-um                           x86_64_defconfig    gcc-14
-x86_64                           allmodconfig    clang-20
-x86_64                            allnoconfig    clang-20
-x86_64                            allnoconfig    clang-23
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20260330    gcc-14
-x86_64      buildonly-randconfig-002-20260330    gcc-14
-x86_64      buildonly-randconfig-003-20260330    gcc-14
-x86_64      buildonly-randconfig-004-20260330    gcc-14
-x86_64      buildonly-randconfig-005-20260330    gcc-14
-x86_64      buildonly-randconfig-006-20260330    gcc-14
-x86_64                              defconfig    gcc-14
-x86_64                                  kexec    clang-20
-x86_64                randconfig-001-20260330    clang-20
-x86_64                randconfig-002-20260330    clang-20
-x86_64                randconfig-003-20260330    clang-20
-x86_64                randconfig-004-20260330    clang-20
-x86_64                randconfig-005-20260330    clang-20
-x86_64                randconfig-006-20260330    clang-20
-x86_64                randconfig-011-20260330    gcc-14
-x86_64                randconfig-012-20260330    gcc-14
-x86_64                randconfig-013-20260330    gcc-14
-x86_64                randconfig-014-20260330    gcc-14
-x86_64                randconfig-015-20260330    gcc-14
-x86_64                randconfig-016-20260330    gcc-14
-x86_64                randconfig-071-20260330    gcc-14
-x86_64                randconfig-072-20260330    gcc-14
-x86_64                randconfig-073-20260330    gcc-14
-x86_64                randconfig-074-20260330    gcc-14
-x86_64                randconfig-075-20260330    gcc-14
-x86_64                randconfig-076-20260330    gcc-14
-x86_64                               rhel-9.4    clang-20
-x86_64                           rhel-9.4-bpf    gcc-14
-x86_64                          rhel-9.4-func    clang-20
-x86_64                    rhel-9.4-kselftests    clang-20
-x86_64                         rhel-9.4-kunit    gcc-14
-x86_64                           rhel-9.4-ltp    gcc-14
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    clang-23
-xtensa                            allnoconfig    gcc-15.2.0
-xtensa                           allyesconfig    clang-23
-xtensa                randconfig-001-20260330    gcc-12.5.0
-xtensa                randconfig-002-20260330    gcc-12.5.0
+Signed-off-by: Alexey Charkov <alchark@flipper.net>
+---
+Changes in v5:
+- Reworded per-channel subnodes description in the binding for clarity (Sashiko)
+- NB: Sashiko's suggestion to allow interrupts in the binding sounds premature,
+  as the alerts mechanism is not implemented yet and there are no known users
+  to test it. If anyone has hardware with the alert pins wired to an interrupt
+  line - please shout and we can test/extend it together
+- Avoid division by zero when setting the conversion time with all inputs
+  disabled (Sashiko)
+- Added the missed HWMON_I_ENABLE bits (Sashiko)
+- Dropped extra sysfs attributes for reading/writing shunt values, as the
+  implementation was potentially racy and it's unlikely anyone would resolder
+  the shunts on a running system (Sashiko)
+- Skip pm_runtime_put_noidle() for disabled (not just disconnected) channels
+  in remove and probe error path to avoid refcount underflow (Sashiko)
+- Mark CONFIG2 register as volatile, as the reset bits in it are self-clearing
+- NB: Sashiko's inquiry about the update interval being underreported due to
+  not accounting for the number of averaging samples: no, the hardware still
+  reports updates after each channels * (vbus_ct + vsh_ct), but the reported
+  value changes slowly due to the averaging
+- NB: Sashiko's inquiry about regmap_noinc_read(): same as Guenter's AI
+  feedback. No, it doesn't break the byte order, as it uses byte-sized reads
+- NB: Sashiko's inquiry about potential falling of ina->reg_config1 out of sync
+  with the hardware upon failed regmap_write() calls: yes, but it will be
+  written at the next successful write call, so the worst that can happen is
+  the averaging / conversion time can be wrong for a while. And it will return
+  a failed status for the failed write call too, so no big deal.
+- NB: Sashiko's inquiry about reg_config1 not being written out during probe:
+  it is written out when the device is runtime-resumed as the refcount gets
+  incremented during the probe function
+- Link to v4: https://lore.kernel.org/r/20260326-ina4230-v4-0-c1e312c09de7@flipper.net
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Changes in v4:
+- Aligned the maximum value of ti,maximum-expected-current-microamp property
+  in the binding with the one expected by the driver (Guenter Roeck)
+  "2147A ought to be enough for anybody (c)"
+- Actually requested the optional vs-supply regulator in the driver (Guenter Roeck)
+- Program the ALERT_POL bit according to the value of ti,alert-polarity-active-high
+  even though the alerts themselves are not yet implemented (Guenter Roeck)
+- Added a check for manually disabled channels in the is_enabled() function to
+  avoid reading invalid data from them (Guenter Roeck)
+- Dropped support for the single-shot mode as its operation is not clearly
+  documented in the datasheet and there is no pressing need to support it (Guenter Roeck)
+- NB: AI feedback regarding regmap_noinc_read() producing incorrect byte order on LE
+  hosts is incorrect, as its implementation does a byte-wise read and doesn't care
+  about the regmap value width or endianness flags, so it produces a 4-byte output
+  buffer in the same byte order as the device returns, which is BE in this case
+- NB: AI feedback regarding fail-path pm_runtime_put_noidle() potentially being
+  unbalanced if the probe loop failed early is technically correct but practically
+  irrelevant, as the driver will simply fail to load, and the usage count won't
+  decrease beyond zero anyway. The alternatives are cumbersome for no real benefit
+- Link to v3: https://lore.kernel.org/r/20260310-ina4230-v3-0-06ab3a77c570@flipper.net
+
+Changes in v3:
+- Updated the description of the ti,maximum-expected-current-microamp property
+  in the binding to clarify how it is used, and drop the irrelevant mention of
+  the PMbus (Guenter Roeck)
+- Use div64_u64() instead of do_div() for the final division in the calibration value
+  calculation to avoid overflows in the denominator (Guenter Roeck)
+- Avoid overflow while scaling the voltage values on 32-bit platforms (Guenter Roeck)
+- Use regmap_noinc_read() instead of regmap_raw_read() for reading the energy values
+  to ensure that the regmap / bus driver don't wander off to adjacent registers
+  during the read operation (on INA4230 the whole 32 bits should be read from
+  the same register offset) (Guenter Roeck)
+- Remove redundant call to ina4230_set_calibration() in the current read path,
+  as the calibration value is already set when enabling the channel and restored
+  across PM changes via regcache_sync() (Guenter Roeck)
+- Add missing write_enable() function to make hwmon_in_enable writes work as
+  advertised in is_visible() (Guenter Roeck)
+- Add a check for disabled channels before calling pm_runtime_put_noidle() on them
+  to avoid refcount underflow due to imbalanced get_sync/put_noidle calls (Guenter Roeck)
+- Dropped unused include of linux/debugfs.h
+- Add missing return checks on regmap_write() calls
+- uO -> uOhm in the error message to avoid confusion
+- Move probe-time calibration after enabling runtime PM to avoid it being reverted
+  by the PM sync
+- Link to v2: https://lore.kernel.org/r/20260302-ina4230-v2-0-55b49d19d2ab@flipper.net
+
+Changes in v2:
+- Replace u64/u64 division with do_div() (kernel test robot)
+- Add an example with ti,maximum-expected-current-microamp property in
+  bindings (Krzysztof Kozlowski)
+- Include the newly added binding in MAINTAINERS file (Krzysztof Kozlowski)
+- Use dev_err_probe() where appropriate in the driver (Krzysztof Kozlowski)
+- Switch to devm_regmap_field_bulk_alloc() instead of an open-coded loop
+- Add a bounds check for the calculated calibration value,
+  and a corresponding error message
+- Link to v1: https://lore.kernel.org/r/20260225-ina4230-v1-0-92b1de981d46@flipper.net
+
+---
+Alexey Charkov (2):
+      dt-bindings: hwmon: Add TI INA4230 4-channel I2C power monitor
+      hwmon: Add support for TI INA4230 power monitor
+
+ .../devicetree/bindings/hwmon/ti,ina4230.yaml      | 134 +++
+ MAINTAINERS                                        |   7 +
+ drivers/hwmon/Kconfig                              |  11 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/ina4230.c                            | 986 +++++++++++++++++++++
+ 5 files changed, 1139 insertions(+)
+---
+base-commit: 3b058d1aeeeff27a7289529c4944291613b364e9
+change-id: 20260219-ina4230-74a02409153d
+
+Best regards,
+-- 
+Alexey Charkov <alchark@flipper.net>
+
