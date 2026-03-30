@@ -1,66 +1,66 @@
-Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
+Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96EBD391E4C
-	for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2026 18:39:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 840D5386425
+	for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2026 18:41:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774895962; cv=none; b=KTIONGeiBRVvvLpZgK+Bh1dXiLcd9PDcCoUJQg1gAHQjCmKEsI28orGsdTFCr6ER2iHI5iV+OiZOYlizbQxeUGGc+WaGnWlLuFHk9lYZ3KNGe4lJn5V86Tj2ocp9kfVqkaOUeXje1ZHIyzPT/Ypchlr6eYvptlajxoMsqj6E3Mw=
+	t=1774896085; cv=none; b=nZxSL/amtNpSszU32D3YqxP/iPLU1net/Q8BUetUux4eybaBxuNuj0v6IBI61cRTYaPOiDLazssbLpQrPDGU46TJAke6of2Ww4f67jAa4B1/iuG4MacgMBunsWQ4vnvyiulirF6SKkYCfpdoym6Ir6RU/ZtmqB430Jg4hm0e/ic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774895962; c=relaxed/simple;
-	bh=KTf4KJL538eZhPAMBYKEg+s8bkdOcZt9FvNDrq+YQFw=;
+	s=arc-20240116; t=1774896085; c=relaxed/simple;
+	bh=XdIRVLXe9KzsQ+ktHrRPxM9W8BGX4NgLlI4u8lXkNGA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L9BT9uXgM3GFCLNVc0aQUeYbvC8Qwh7wNoEpTBEqOI9g1gDzhLPTOE+lyU/NKYQsau+neQh3uTZrzVArXx/DG7utxGsztoQeqUkHfxp99qChgNBkzQ09IWqDaWFrFuV06nzW7a1rTID70d/YQ55s/ZGfbSvuNppZkrv1efsfO+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OUjgvSfa; arc=none smtp.client-ip=74.125.82.51
+	 In-Reply-To:Content-Type; b=cUVuU52zjfgM5JDArvOf+FWll3Q3qpMhGHCnBZnMxqOLoOdFcPR6xSVOmgCU4WOT5LaO4tODglFIlOD+A++5DPocqe8lXx4dDl2VGIEKlJt1B6VUkcHEf1OrYWR7Wz47KHT5BqNqa8ul9I/J7tXOBpewDuZAat2l8P9klDt1UIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K29UcUaX; arc=none smtp.client-ip=74.125.82.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OUjgvSfa"
-Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-127380532eeso289633c88.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2026 11:39:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K29UcUaX"
+Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-128b9b7e3edso272787c88.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2026 11:41:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774895961; x=1775500761; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774896084; x=1775500884; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=uVHdutmIC3AH5O+mHbPt+0s/P6e7UCkLKd1dK/WHDKI=;
-        b=OUjgvSfaNOizaDAJ9CeZIkhVpAdkBhqDQvN4RekVAZcjPyC5q8cCToNkJ7skCjVUAD
-         L9vDqGQeBi921bHX0kj5lZpWKupeeXydvbnMhCBDvmIll8COPY4ulvHx6Q6X7Z3uNHk0
-         gFJTDuwjqx07je4idvVBmLDew8iggJ2J6YzAMENffsV0VZGHBNlrkcHVJteaZRfPY1nV
-         tSb+zt/Ov6eRTU5SUh1lD5I+nDd2S+IZstIo71SDO53fXqUsSd4uHvtK0phVJ+dUH4o2
-         xK4qHgHftXT8/VSF5ZIyQf4f2Yhzzbj7XJF1FKgWaVNUE8itBefgOEFG8MccSbA2bRX7
-         BYBw==
+        bh=Qdux+kJq9nY2jpK8Fz/JECipCcGyaxinKJtsf7bYkL8=;
+        b=K29UcUaX0FvyqW0EycO7KgiVuwm4yXNCKtT0Dolb39RbBOJ73TDK+fWn9/gbjkyoXi
+         7ah8WPlTj8Xh4f5bw8xa6IsprQ1stt8LsXqff3ygEupCCk0ptUNNZxRZprpzJy+RgaAg
+         /KZq56a5cJENuNV4a5VHs3Nd7iBdReHh3e9HxGB58gA83CcU3e+vjq9pvTI1cySdShu6
+         jEIu++xHKN9ls5LRNNPZVJb2cGUlTRNsDHz9w0p8aJjoUfs9XI5BmfetOK0fEVSKDJgJ
+         LIUL4WdYE0nawbr6zHKEoR7wOyoAsm60hxsoVAjw3hkMAHLUYNqhSiGxgzfK44wWzqnl
+         5gMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774895961; x=1775500761;
+        d=1e100.net; s=20251104; t=1774896084; x=1775500884;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uVHdutmIC3AH5O+mHbPt+0s/P6e7UCkLKd1dK/WHDKI=;
-        b=DVZjHIcwiVVGHXxbtGrVnjzTeM2aE3PYgzPk0pmRG6Nrt+9mM8RaWsMXE/Atdu47Vo
-         saxfWU0SJV8C6XEimIEOve9ndOapEZo6foeu6BgOjp7iG1XuvbYFNyl3aLmEFq+wlFgJ
-         zBJByU+UkzB5Rx8PmNiiGHVsV1BHmSiTABKjvbl1Zr4m+f2sJZTqb3JgjyUsYYBg7FiE
-         WlDuIgnIqTxZsTPVwsVq3QBwZF5EBayATXKUPsF2lV+oEioz+Xp2Oe4Y1WxnrQ5GRrnu
-         UUhFjxdzoAKM84jHNHa+kXggBfmqUgtevOZv1wpzfE2hBPOLftxAuAsPT2m/O095Arp+
-         IvCw==
-X-Gm-Message-State: AOJu0YwlLEy6dhvVajEmmQgtGZkr/tFsVSJ8aeT1JmzJkdMMtgHqYvDq
-	ZP6OKhGO3uMrDpBUStPxL261m9fGJHPBBsyXkd7G/9FGGm7481F7eaUz
-X-Gm-Gg: ATEYQzxSvhqNmiJM8+lsgFjXwFLoqb+AM3ZWbmUui7VrveOwi/Vx6/CPIhc4Btn6Gdq
-	czXeARZfHJJNGLr1s1/h7IG4pANbke8XwTGcYWipkShkWkYij4YKHkyYU3aYnBL2ZvjQLA8amnU
-	zdv5FsZ2bGDuerBEjq9XhcNMFhXDFVCqb7HtJenC2jpXSW2uLapJwXArZySWNXcq0huokAFC/fB
-	Gcf2iXpqL4LLBE5H0O13OjUENoP71RlGfaN4IlhlPW52V9bRSOZPpdhQGUnW3SOhN/P7qDR9B/p
-	XkTz8izG/S+NFM60LYwgnMYh+/vaBE0SFtEoXLsAPwQmpfh5a9tuLrpxx8RcB03vWMUKl1zVpqH
-	ZNqZGK0hknuxZEnJQjOLbAUJBzuVI3akfWVQamDlYIFD//JkyaHum/hAroLf3ICxuBCSlYkUG4q
-	Hv/t5qPhBY8BG5uniiWYnDB6CLEb0+i9Xzfm3JgMAAQ30s25Y2iQ6Zz5ALlwl2PNKPZOD2h1YU
-X-Received: by 2002:a05:7022:2207:b0:12a:6902:ddb8 with SMTP id a92af1059eb24-12ab2846679mr8913143c88.4.1774895960606;
-        Mon, 30 Mar 2026 11:39:20 -0700 (PDT)
+        bh=Qdux+kJq9nY2jpK8Fz/JECipCcGyaxinKJtsf7bYkL8=;
+        b=HWzpuvnS6LqT+Kq+1L/oEhng6qZArmFV8LNkunFL9R1kT7gAeXhILl3xNVibiWlqJs
+         rawfqPSuuzvgi7V3uL2qXcQExqT1Enp362M9lI0KaEOYPycAK3hKw9bJkc8UeM1ZHMOc
+         V4pG3mp2gc0a+fIIlGpOmf7oFXas+yEsdNGyp5pj2zXwmb4BEMEIhmUTWGOh/tX4aStj
+         wp4OWHN0qvZEnja0qdosXcf0LDDzmMq7V/Dc8KOxkUiGvlgSOB8Wx7FDr4/6KxvelGQ6
+         /eBpz3cxwOczWes6zZ7CO+4zgI52Ucq0irryhbJ7T7x8Gi9etA+aG78xrckbI1gkS0Fq
+         KleQ==
+X-Gm-Message-State: AOJu0YxZwNaq1clIQg2hBPDdW2OybNgza/7QKkedcvqzFw/JxwUyQRSj
+	2lL9Bb+aQvU09VZxrlf3XJ7Ack6uKtDEpoLJzbXRyz4gDLpZiTLVo8+L
+X-Gm-Gg: ATEYQzzYL/SqFfckqXo+F3X+tjzOgYaPo97v+HE9BpgWBcKuv2frPoDREmSyct3GQMZ
+	v6jkwy/6qS7oINCO/+s7NmYGvlLgVsLz80yFdjJabkBHNH59HfWOcaZSEh5KaRGJWEPcSanof6R
+	eFsVnpIVqZd54fNAXSbftjMG7pGLMe6rRcLIHadlAMi8C+2kTrLxuWhMcdX5lptvvoKrbTyW8Ln
+	kXcifTvjUSUzsJlXHTgoCPYJh300gT76hChzxRPu1W7iopcSF5dfghm7imkNgDCo7YXF9B2TOUe
+	//gafakWqjvo17+vjSCfDun4g8fk+3drAf2seOFYi1DUZJnE3zEqmaVHVYWgnK0zeoVdzRBCjhV
+	i2b8gZYyVS3A6vsHVlzwxOq9xO3FyzMiotJ76BsFBPmj6FAGw8hgJK9EXqApZrfnszTwwwrvz+g
+	+SXbtxwYffod8CGGmfq0m923rz4w9SmEousVxladRRML6SuybJeztinbuQ8bl3tlWmwNXPIaDt
+X-Received: by 2002:a05:693c:2c10:b0:2c7:ea98:da7 with SMTP id 5a478bee46e88-2c7ea982a91mr7634eec.5.1774896083494;
+        Mon, 30 Mar 2026 11:41:23 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12ab97e7a57sm10309602c88.6.2026.03.30.11.39.19
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c3c3bda306sm7736513eec.3.2026.03.30.11.41.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Mar 2026 11:39:20 -0700 (PDT)
+        Mon, 30 Mar 2026 11:41:22 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3d3c7fdc-6e6b-4e39-a39b-76d1d9d9b828@roeck-us.net>
-Date: Mon, 30 Mar 2026 11:39:18 -0700
+Message-ID: <4dd404c1-8d55-493f-ad5f-2aa30ef10b55@roeck-us.net>
+Date: Mon, 30 Mar 2026 11:41:21 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,13 +68,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/2] hwmon: Add support for TI INA4230 power monitor
-To: Alexey Charkov <alchark@flipper.net>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260330-ina4230-v5-0-eeb322d95b3a@flipper.net>
- <20260330-ina4230-v5-2-eeb322d95b3a@flipper.net>
+Subject: Re: [PATCH 0/3] hwmon: (occ) Fix bugs in power sensor, extended
+ sensor, and remove path
+To: "Pradhan, Sanman" <sanman.pradhan@hpe.com>
+Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ Sanman Pradhan <psanman@juniper.net>
+References: <20260326224510.294619-1-sanman.pradhan@hpe.com>
+ <20a29a60-6848-43cb-be2e-4e63c8602462@roeck-us.net>
+ <20260330160105.78279-1-sanman.pradhan@hpe.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -120,50 +122,36 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260330-ina4230-v5-2-eeb322d95b3a@flipper.net>
+In-Reply-To: <20260330160105.78279-1-sanman.pradhan@hpe.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/30/26 08:14, Alexey Charkov wrote:
-> Add a driver for the TI INA4230, a 4-channel power monitor with I2C
-> interface.
+On 3/30/26 09:01, Pradhan, Sanman wrote:
+> From: Sanman Pradhan <psanman@juniper.net>
 > 
-> The driver supports voltage, current, power and energy measurements, but
-> skips the alert functionality in this initial implementation.
+> Thanks, for the review.
 > 
-> Signed-off-by: Alexey Charkov <alchark@flipper.net>
+> The AI feedback seems valid on both counts, but both issues appear to be
+> pre-existing OCC driver problems rather than something introduced by my
+> patch.
+> 
+> occ_shutdown() already holds occ->lock across
+> occ_shutdown_sysfs() and hwmon_device_unregister(), while OCC sysfs
+> callbacks can enter occ_active() / occ_update_response() and take
+> the same lock, so the deadlock concern looks real independent of my
+> reorder in p9_sbe_occ_remove().
+> 
+> Also, the occ_active toggle path appears to have a lifetime problem:
+> activation allocates occ->attrs and occ->group.attrs with
+> devm_kcalloc(), while deactivation unregisters the hwmon device but
+> does not release or reuse those allocations.
+> 
+> Given that, I'll drop patch 3 for now and resend patches 1 and 2
+> separately, then investigate the OCC teardown/activation issues.
+> 
 
-Sashiko report is at
-
-https://sashiko.dev/#/patchset/20260330-ina4230-v5-0-eeb322d95b3a%40flipper.net
-
-Valid concerns, as far as I can see, are:
-
-- There are various overflow issues. Please address, either by making sure that
-   the operations can not overflow, or that all parameters such as the shunt
-   resistor value or the interval are bound such that an overflow can not occur.
-   This includes implicit conversions. For example, the interval passed to
-   ina4230_interval_ms_to_conv_time() is int, but the parameter is actually long.
-   There is not even a signed check, meaning the resulting interval can be pretty
-   much anything.
-
-- power is reported by the chip as unsigned value. Yet, it is converted via type
-   cast to int16_t.
-
-- Please add a comment to the energy reading to confirm that regmap_noinc_read()
-   performs as expected.
-
-- The definition of ina4230_curr_reg[] is wasteful. There is only an entry for
-   hwmon_curr_input. Why specify an unnecessary two-dimensional array ?
-
-- The dummy channel 0 for voltage is not acceptable. Make it 0-based as expected
-   by the ABI. Yes, I know, but that is how the ABI was defined.
-
-
-I can not comment on Saskiko's pm related feedback. PM is and has always been
-a mystery to me, so I just assume that it is WAI and that there are no problems.
-I do assume that you have tested the code thoroughly across suspend/resume cycles
-to make sure that it works as intended.
+Do you plan to make any changes to patch 1 and 2 ? Because if not there
+would be no need to resend, and I can just apply them directly.
 
 Thanks,
 Guenter
