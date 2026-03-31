@@ -1,45 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E2CD21E091;
-	Tue, 31 Mar 2026 15:13:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFAC83DDDD3;
+	Tue, 31 Mar 2026 15:52:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774969988; cv=none; b=mscOuyA6TH+Bh1gFhln28UeKMGrHUGMJj5T3/4GxNE6z7RvLDx7C5pJ2oPtcfj5dSj7VqKH9dX7Ax9j717bfG8SGpyTcqZkEzq970UWk3pNM8UMqZAijL2+yOFJeUCEaSctTf0NIYLMyrpx5pJPC5tL/TZ06Vyh5n5AKGPVy6MI=
+	t=1774972369; cv=none; b=De3LoNHdP0Q2rRASX9ygdDtYOD9mUl5ecjv7fYmUxkkq30NkvsMVOR0qqTAEni+mKhQc1rpNT6FFRO/fw/v2/YxfXgeqRRzOokOp2gYsZMWTBKC9YzJBFYdcR2CMDCT+WPrtUk8EWqHNcnWBqECjlTcjIpSw8KEoze1Zn2KcP2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774969988; c=relaxed/simple;
-	bh=ZpDZtBSDgtUGrlNSHGwf/tgBtVz86+YC4LivAnSFw4c=;
+	s=arc-20240116; t=1774972369; c=relaxed/simple;
+	bh=t7dys0idtZz5iiBj3wpm6z9RBDMS3qpP5+1QDLupV00=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d6VFCS/dK38YKqqujeKd+d1fLpHIKRoI6siJ7+NbKS//664DiVcvOqqsCzJ9PVIG2mpNRPiSKlkKeNr2dlOWFY2i7P6zB1RDcvtLM8XIW+zQdYxubkWkVkV4CBON4Yc8WOyxXnTgnHSnRWn8NNHLEUK6iSiy1Zb8z4PoNSDj/AM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qMWY71RA; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z06x1NdDwM61P8jFzW8EOVb9x0XaFIAHeIc7XW+0lv9qS+FaqqnLLTjhE7LsamUClIf5LPxFVGwFAaIOCea9abVGij8xnIYzEWvWuPVGZr4qZ2mhb5eaE5x0Xs6KahO8QJmOCRu+ppNJ0XgEOJwwR5dIlkudW3V8rk6vXzYVQ6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QpfPxYWB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qMWY71RA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7EF7C19423;
-	Tue, 31 Mar 2026 15:13:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QpfPxYWB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54AC5C19423;
+	Tue, 31 Mar 2026 15:52:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774969988;
-	bh=ZpDZtBSDgtUGrlNSHGwf/tgBtVz86+YC4LivAnSFw4c=;
+	s=k20201202; t=1774972369;
+	bh=t7dys0idtZz5iiBj3wpm6z9RBDMS3qpP5+1QDLupV00=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qMWY71RA3zXNIfMP7aKST+0DX2cnAj72G6kNbSgCMQbie83KyWhO8i23shN5E+uAL
-	 Ubn/STrTVj79ovm++nHfSYOur8xnqbjFbVG3kDP6ELtTLX9YZEnyQQrvm412ySvrHo
-	 PV6Ht+ZGpWg7uJhXy7s8e9HADU55lDOrD0p3mFJIFRee2N/VMeY+kzCpLG4uqnNNhv
-	 QypR3nOuz9ogiwsdpkvlKfB1oC5Uci5EzmN381boQqay6V/sJBRhNhaO7i1RND0gwS
-	 /Xe1OrQtTX2PRiYg4e/TEp406Tm85nYrRRV16V5nzxrvkOSl8M/Qd3rn+Ew7q15hSq
-	 fuGMqVKY/O+WA==
-Date: Tue, 31 Mar 2026 10:13:05 -0500
+	b=QpfPxYWBYJxWlgo8o4HxIoYrbcUvDQ/xXrSJHk3WD1ZxPxG96ghZTQWboTFM9hOt0
+	 ss+ryxHNKyTKRfDPnhCV78vp6eaFC+v1CB3zoZDkRXFMr6RggAOKFnjGSN/Q273ZlD
+	 jU4dEle40OcAGBvnxmVbXYpF2yXzTvphadtD0RaFIAs7jy3vNM/GnNjAYT5VZd5AD4
+	 mPO5ReRANcxqEBT09MXbuaPNX6kloUSUAEpmD4f2MnYGd3RvGYcDVf6LNAzkd/ow0K
+	 ux5AKKI+EhB91FYF6UTOwCxabrP0XUxKrHnjK4DEfM50ywZ8npXvslnkCjDS+f2Lre
+	 OwQSqtN8y22IQ==
+Date: Tue, 31 Mar 2026 10:52:46 -0500
 From: Rob Herring <robh@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
-	Peter Rosin <peda@axentia.se>, Linus Walleij <linusw@kernel.org>,
-	kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-gpio@vger.kernel.org, David Jander <david@protonic.nl>
-Subject: Re: [PATCH v8 0/6] mfd: Add support for NXP MC33978/MC34978 MSDI
-Message-ID: <20260331151305.GA1211848-robh@kernel.org>
-References: <20260329090601.532477-1-o.rempel@pengutronix.de>
- <8291919d-c5ea-42ab-b2e5-2dfa16c23698@roeck-us.net>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Alexey Charkov <alchark@flipper.net>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Subject: Re: [PATCH v5 0/2] Add support for Texas Instruments INA4230 power
+ monitor
+Message-ID: <20260331155246.GA1299761-robh@kernel.org>
+References: <20260330-ina4230-v5-0-eeb322d95b3a@flipper.net>
+ <67a5d1c1-a9c5-47fb-a0ec-5b69a991b01e@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -48,49 +47,45 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8291919d-c5ea-42ab-b2e5-2dfa16c23698@roeck-us.net>
+In-Reply-To: <67a5d1c1-a9c5-47fb-a0ec-5b69a991b01e@roeck-us.net>
 
-On Sun, Mar 29, 2026 at 08:34:31AM -0700, Guenter Roeck wrote:
-> Hi Oleksij,
-> 
-> On 3/29/26 02:05, Oleksij Rempel wrote:
-> > changes v7:
-> > - drop gpiolib irq fix and make pinctrl more robust against NULL point
-> >    dereference.
+On Mon, Mar 30, 2026 at 09:07:32AM -0700, Guenter Roeck wrote:
+> On 3/30/26 08:14, Alexey Charkov wrote:
+> > TI INA4230 is a 4-channel power monitor with I2C interface, similar in
+> > operation to INA3221 (3-channel) and INA219 (single-channel) but with
+> > a different register layout, different alerting mechanism and slightly
+> > different support for directly reading calculated current/power/energy
+> > values (pre-multiplied by the device itself and needing only to be scaled
+> > by the driver depending on its selected LSB unit values).
 > > 
-> > This series adds support for the NXP MC33978/MC34978 Multiple Switch Detection
-> > Interface (MSDI) via the MFD framework.
+> > In this initial implementation, the driver supports reading voltage,
+> > current, power and energy values, but does not yet support alerts, which
+> > can be added separately if needed. Also the overflows during hardware
+> > calculations are not yet handled, nor is the support for the device's
+> > internal 32-bit energy counter reset.
 > > 
-> > Architecture overview:
-> > * mfd: Core driver handling 2-frame pipelined SPI, regulator sequencing, and
-> >    linear irq_domain. Harvests status bits from SPI MISO MSB.
-> > * pinctrl: Exposes 22 physical switch inputs as standard GPIOs. Proxies IRQs to
-> >    the MFD domain.
-> > * hwmon: Exposes thermal limits, VBATP/VDDQ voltage boundaries, and dynamic
-> >    fault alarms.
-> > * mux: Controls the 24-to-1 AMUX routing analog signals (switch voltages,
-> >    temperature, VBATP) to an external ADC.
+> > An example device tree using this binding and driver is available at [1]
+> > (not currently upstreamed, as the device in question is in engineering
+> > phase and not yet publicly available)
 > > 
-> > Initial pinctrl implementation by David Jander, reworked into this MFD
-> > architecture.
+> > [1] https://github.com/flipperdevices/flipper-linux-kernel/blob/flipper-devel/arch/arm64/boot/dts/rockchip/rk3576-flipper-one-rev-f0b0c1.dts
 > > 
+> > Signed-off-by: Alexey Charkov <alchark@flipper.net>
+> > ---
+> > Changes in v5:
+> > - Reworded per-channel subnodes description in the binding for clarity (Sashiko)
+> > - NB: Sashiko's suggestion to allow interrupts in the binding sounds premature,
+> >    as the alerts mechanism is not implemented yet and there are no known users
+> >    to test it. If anyone has hardware with the alert pins wired to an interrupt
+> >    line - please shout and we can test/extend it together
 > 
-> I Acked the hwmon driver, but Sashiko is still not happy with several of the other
-> patches in the series:
-> 
-> https://sashiko.dev/#/patchset/20260329090601.532477-1-o.rempel%40pengutronix.de
-> 
-> If the remaining issues are false positives, please let Roman and/or me know.
+> The bindings are supposed to be complete, even if not implemented, so I am not sure
+> if the DT maintainers will agree here. We'll see.
 
-The binding issue is valid. However, it's an issue with many GPIO 
-controller bindings that's been on my todo to address. Generally, there 
-is only a reference to the provider schema when there's child nodes. 
-Originally, there wheren't child nodes for GPIO, but then we added hog 
-nodes. Changing things probably entails changes to gpio.yaml, so there's 
-really nothing to do on this binding yet.
-
-I really hope this sashiko stuff gains support soon in a form I can 
-review first and email out rather than dropping links into threads. It 
-is not a great workflow as-is.
+Given ti,alert-polarity-active-high is added seems like the interrupt 
+should be too. And the interrupt can specify the polarity, so is that 
+property really needed? There's alway the possibility that you have some 
+inverter on the board too and the interrupt polarity is not enough, but 
+solve that problem when it actually exists.
 
 Rob
