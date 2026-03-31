@@ -1,67 +1,66 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06CC633120E
-	for <linux-hwmon@vger.kernel.org>; Tue, 31 Mar 2026 13:32:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 650904014AB
+	for <linux-hwmon@vger.kernel.org>; Tue, 31 Mar 2026 15:01:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774963925; cv=none; b=DnQvqBZ0NIiWA5HrggyRKJJ3+TGgsDBcSYQgQ+DP6O3O/kHehJf4iqram5oekfXjPXKEDh2QovjWf1jw2n+VyTEDvhMEqn2BjljywVMkt5C8xNSEaIDDh27Gd4H96W36ZKrFdvhT33dJ0E7NkvitrHaCMlAOVv3kTGBWdjEcWCY=
+	t=1774969315; cv=none; b=J4XlgJoC2Inc22sfkjAo3xmCiOLypHK3s03kGgOeWPLrgQXd7Z7iQei3fRhLdhkIsCcILTOrmAfLMZnihh7/nkiCL+OtNb81sERp1K01N01UY86tHLihrETtnuNxSV/6qY3EdCzJ+tHaN9xlQf1yCLT7keg/qh1WDEX8YnWu+ac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774963925; c=relaxed/simple;
-	bh=dkwJd/RXway5nEOu9TRrDtfrsVoJlFdieW2eF9hmTPM=;
+	s=arc-20240116; t=1774969315; c=relaxed/simple;
+	bh=rSYLjCk6IgJkg/whsFLGVYnaLuP+teERQJMM42oT9Ko=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g7QPTisgUteJS18h9xpZbQ+PeM2cCaglfR0nL74XeEVXQWPdgiSf/tY3y7FLKxelOF34q+BXyxpaZr8qD2/oY1lkgTNLr0N4vbXV5bk8gEAAV2rHD3ngrgf09s6f9USXHfkoSdsurjFXuRzmTKHdY98BslOpHZMlvbcetUH9eto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JlqVHIAO; arc=none smtp.client-ip=209.85.214.182
+	 In-Reply-To:Content-Type; b=jBQ9IOPICREskzfEB9iBwoPRR37xFw2AclEHUOBblRGXZ505mIXIJWPFx/UE52IF/8HGRibQQ/fIKr7GK1Ab6kYOSsRY3/vr5OYxtbee4AFb7SqVTxOgiMQC1yuQgzhqZXZgt6VAT5PBonugVT7JrknBMy40hsT+V7gPtvDt7KA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UDL5OCTv; arc=none smtp.client-ip=74.125.82.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JlqVHIAO"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2a9296b3926so37055535ad.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 31 Mar 2026 06:32:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UDL5OCTv"
+Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-2bd9a485bd6so11276317eec.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 31 Mar 2026 08:01:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774963922; x=1775568722; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774969312; x=1775574112; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=HsQ7tsEX1bMlsKuZvXvkHSxJKbLz0c4rqG2pBfziwfs=;
-        b=JlqVHIAObt9W5ugR3cNZsyxGmc8Y/rV6cJy0W4a7ii8mKLS93mWq+d8C+I3kOUp7lm
-         aoPLcGSkXSmvIolSoyNN/OQ9mtGciJOvG5h34a4z5hwM1DoCZfiM6R36QkQblS5mynaL
-         aev+JkwE1Nv5AebjkSrjubeF73XIjI1ZEo3AvL308oEHKtWcZvgLkv2ZBGoA8GEucbG4
-         VLMdCfrIzxpToC3jRF9Gn0nusI55bklA0owpvBnrcL3adt0jek2+E+lCkaRrtfP7674T
-         znHyNEl0GDjhFfdEy58XE3FmiPqivu07/m7GnkKWrF+Srje15FmbahsbJaAB3x5RzcgC
-         WvRw==
+        bh=KM48wfeSc/4p8XXkPbWP3jeOVfxI7DUMwJdlSUh0N8g=;
+        b=UDL5OCTvF0p3cuPkVKJICIX0g4vAfnQfb8lIwEVV2Sev4ADNMDSJ6wtajNzzg/Ich6
+         d38IC6M1qRiQvMzHRSMMS5zU5xMpeRCxmMu0FzSHnQ+mQtT2/A7kKnTs4cWqhuwMyYkg
+         kxBGMjRXNYxM8j4fm3eNQ24riSawT+8zzXuNNEHWbPFQG7yrq9cLjCXi8dkVW3eiLIbn
+         /3vEG+2abbxmNzgktAqA2oYpj0Y36mJTCezLwlYi5QWeZTXDcfPgZSHO0Y/6PS47kbAs
+         39oTpOqZFeAQEft7REsvjr4nh7Ay9dDaQOLhOp67/kyc459HScXjSnmZ2LllFCuYs+Y3
+         6ncg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774963922; x=1775568722;
+        d=1e100.net; s=20251104; t=1774969312; x=1775574112;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HsQ7tsEX1bMlsKuZvXvkHSxJKbLz0c4rqG2pBfziwfs=;
-        b=YZaDJ17WigDyhKrgAVO5y7Aq6WDMnE8WL5gW0U0CfH3gqeKohZvsVoKdjulVWPtfZx
-         HgcV4cAfhs65ZHDPKTV4u1A/HNul5pm62g3z2qxZ/KTgeBUN+fiaJWALXVStYnY/dZrl
-         Qr10ENaF4Y5Ea4eAVeW84lWHO0mzyNOP1x2rF/8JKE0cNK4KVW/wM05+E59Cyel1DC+Y
-         YuaFDhjOfdZT0nyqu/9J+97T2JQiiF93eAeTgl+jwNwTB479c96+x7flwpUzDHzYozzQ
-         vmHTfAV/Shcr3jBIu92/yazJoG7bEEDrTGWl6hrI+a7gvsD1h7bcqdFUhAG77HJZwqi3
-         S1cQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU/zzqbJ1Hgcvv/A84VREKUAW1g3rFQqTPm2Lhg81sqskL3iFa6JMYgilH/NSfdJz7Fm+vWCkSmkL9aEg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9YbvBkWu2kLrU2qqlBqVboS+Jwc2OKF7yaACRaZ0YaU2R7j61
-	JXoTOf7nJ9oLa3/hMBRcJh9XRxSCvXeJYufYTcW/bLiY0mvsumNkUHya
-X-Gm-Gg: ATEYQzyM64iLLHILrnV9J7+syJYR9lgj2YfFnaqKj5Ia6p/hZWs15w9XEy2qDE3I22V
-	I0QDYhCsKPOiLCd8JNH41HODVz7Czay8MtVa89dv64UyHY67ZhFFtGfjSdvNSp4Wnp74D+fw6Ga
-	Kpd93+ZplC1QmdYPJ5FnxaRGSBDUmjTkoiQjaP7+bi7+UBgxNR3/Xx7/AugVXuxEN92hhQDw91e
-	KwAAtNXR8IlOdSXBY5ebtHJJgyptv15JoOLlDcbG1IWh/OJhyw2wRO+F8lwFVo/1cmnhV7wmXGq
-	GCzbmZphFulyQgwROXO4Wh+DwTU6h6UI3n5rPnBcXUdYNhCK2dZKtjRywdmY/HpR9LhRsNvFNHZ
-	s0OBBr6zZYUsUF8Zk/kVJ4/7ymddf/wGM2eaVshw+/n13+wr3IpELH7Jsw0WwBpkVmS83tIYaT8
-	SGuEZMw30wtx4TrWtZwfpi/GxkC/OTeEh95bMccZJOkU3cAMTqUTzdWjKqFBiUCUfLxZQSDTKz
-X-Received: by 2002:a17:902:ef4c:b0:2b0:6b98:59ec with SMTP id d9443c01a7336-2b0cdd3ed8emr167424765ad.34.1774963922192;
-        Tue, 31 Mar 2026 06:32:02 -0700 (PDT)
+        bh=KM48wfeSc/4p8XXkPbWP3jeOVfxI7DUMwJdlSUh0N8g=;
+        b=OQMflOhSWiiB/AT73U1QW37yg6BFmhae/dvBkHI+YjEQKrKToLzzHzek0psdQCALFx
+         rHbd8QqLewJB7TFWCLR/cByZaBVq4xEmmRAJJr/bGIb75UEx7nqoyZDBuTFz3zR6ecNz
+         /LMtGfVqwc13RK8ztrh2iXat0ImoFOFxWr6ZofEylyUSI3+EETLmqmFuE8EE5ZA0V4ok
+         JMh1BdlY8yhmAy8NfjlGE/jomjTl/PT3EnZ6F/Vndhzs929VSTdqVGR7koq9fLOhmbRG
+         lDU90ZDeX0rKAD8hXj/6PadesQsuDevvTLjz7I1oThY+S5Pwb1F07ZvgHf5xZnXSUYE9
+         188g==
+X-Gm-Message-State: AOJu0YwFnwTEGQsPr9EAFN+TyB7GtAdKLR2qLvxfJTXIGQLwE5MWh6x2
+	al2+Ms1cmQZEMarEsLYunRNrXrEOM3cYBBzAXF4A5ancwdCVdbttj9N8
+X-Gm-Gg: ATEYQzzBNjUklLIwxCG6eEC9zatFe1vPEoF8oKOin2YAXzNuviY8u6YKrku9wtb4Bof
+	KZDJwh5LP8B9LFLmXTtQp9OAPMYsDOkMuGab6LkgRn1Yb5EIQRI5c+ERgG7cmWooyPRc/aucUP5
+	bZYmr/NMBsTWwhzxREkdq4pUCnvSYiSxYu60Ajo3JpJwrZy8cqBhf6Vu5J2/Qbvv3zn105Vuyo2
+	hD6iq0eTe7ePTm+np+ZMZUFx2DX5dQlp6nME/4qJzngyG1A+WOOVKaEp5qedfD4RKCyfvkSAihq
+	f7eW0bimFLaeWR1ZLoq+JHf6Jv5nLki+VCVe0O9PyugrYnHaB18vqXq6NEgo4t4O3B3hkruLg1v
+	mQ0kCaEh/exHRt7GJdw/UXkuKUyHbBKpW+lR0aZVaqfDaqAT3tyvEeGWGWhJAmNnN0zT7UTaqzt
+	2GzjOYuI/b9BxbIS4id9oR+nm3Ysr60GnhmUT3/OdNUpCk47hq7lu/UV423QhwnYpX6dxyRASY
+X-Received: by 2002:a05:7300:f28b:b0:2c3:fb9d:cd28 with SMTP id 5a478bee46e88-2c3fb9df488mr4950248eec.10.1774969311623;
+        Tue, 31 Mar 2026 08:01:51 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b24264292asm117475855ad.4.2026.03.31.06.32.00
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c3c7483ffcsm10157464eec.26.2026.03.31.08.01.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Mar 2026 06:32:01 -0700 (PDT)
+        Tue, 31 Mar 2026 08:01:51 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <32c4c4dc-91db-4286-82e5-1d3269c76a74@roeck-us.net>
-Date: Tue, 31 Mar 2026 06:31:59 -0700
+Message-ID: <ca943191-5490-4640-a940-0d325ca90f4f@roeck-us.net>
+Date: Tue, 31 Mar 2026 08:01:49 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,19 +68,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap
- Controller
-To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>
-Cc: =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>
-References: <20260327-ltc4283-support-v8-0-471de255d728@analog.com>
- <20260327-ltc4283-support-v8-2-471de255d728@analog.com>
- <aco5L_6SZIB2DdpF@nsa> <e0c96f38-6742-4b86-8938-64e4e6063119@roeck-us.net>
- <acuLynb1hRFJRcEf@nsa>
+Subject: Re: [PATCH v2] hwmon: (asus-ec-sensors) fix T_Sensor for PRIME
+ X670E-PRO WIFI
+To: Eugene Shalygin <eugene.shalygin@gmail.com>,
+ Corey Hickey <bugfood-ml@fatooh.org>
+Cc: linux-hwmon@vger.kernel.org
+References: <20260330230836.314311-1-bugfood-ml@fatooh.org>
+ <20260331051653.332155-1-bugfood-ml@fatooh.org>
+ <CAB95QASo+qOfFU3tFgowcvyKSyj6Xt+2dE2dDkFV3YrPYWcLbw@mail.gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -127,211 +121,31 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <acuLynb1hRFJRcEf@nsa>
+In-Reply-To: <CAB95QASo+qOfFU3tFgowcvyKSyj6Xt+2dE2dDkFV3YrPYWcLbw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 3/31/26 02:48, Nuno Sá wrote:
-> On Mon, Mar 30, 2026 at 08:47:32AM -0700, Guenter Roeck wrote:
->> On 3/30/26 02:28, Nuno Sá wrote:
->>> Hi Guenter, Regarding AI review, I think most of the points were
->>> discussed in previous revisions, but there are two valid.
->>>
->>> On Fri, Mar 27, 2026 at 05:26:15PM +0000, Nuno Sá wrote:
->>>> Support the LTC4283 Hot Swap Controller. The device features programmable
->>>> current limit with foldback and independently adjustable inrush current to
->>>> optimize the MOSFET safe operating area (SOA). The SOA timer limits MOSFET
->>>> temperature rise for reliable protection against overstresses.
->>>>
->>>> An I2C interface and onboard ADC allow monitoring of board current,
->>>> voltage, power, energy, and fault status.
->>>>
->>>> Signed-off-by: Nuno Sá <nuno.sa@analog.com>
->>>> ---
->>>>    Documentation/hwmon/index.rst   |    1 +
->>>>    Documentation/hwmon/ltc4283.rst |  266 ++++++
->>>>    MAINTAINERS                     |    1 +
->>>>    drivers/hwmon/Kconfig           |   12 +
->>>>    drivers/hwmon/Makefile          |    1 +
->>>>    drivers/hwmon/ltc4283.c         | 1796 +++++++++++++++++++++++++++++++++++++++
->>>>    6 files changed, 2077 insertions(+)
->>>>
->>>
->>> ...
->>>
->>>> +static int ltc4283_read_in_alarm(struct ltc4283_hwmon *st, u32 channel,
->>>> +				 bool max_alm, long *val)
->>>> +{
->>>> +	if (channel == LTC4283_VPWR)
->>>> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_1,
->>>> +					  BIT(2 + max_alm), val);
->>>> +
->>>> +	if (channel >= LTC4283_CHAN_ADI_1 && channel <= LTC4283_CHAN_ADI_4) {
->>>> +		u32 bit = (channel - LTC4283_CHAN_ADI_1) * 2;
->>>> +		/*
->>>> +		 * Lower channels go to higher bits. We also want to go +1 down
->>>> +		 * in the min_alarm case.
->>>> +		 */
->>>> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_2,
->>>> +					  BIT(7 - bit - !max_alm), val);
->>>> +	}
->>>> +
->>>> +	if (channel >= LTC4283_CHAN_ADIO_1 && channel <= LTC4283_CHAN_ADIO_4) {
->>>> +		u32 bit = (channel - LTC4283_CHAN_ADIO_1) * 2;
->>>> +
->>>> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_3,
->>>> +					  BIT(7 - bit - !max_alm), val);
->>>> +	}
->>>> +
->>>> +	if (channel >= LTC4283_CHAN_ADIN12 && channel <= LTC4283_CHAN_ADIN34) {
->>>> +		u32 bit = (channel - LTC4283_CHAN_ADIN12) * 2;
->>>> +
->>>> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_5,
->>>> +					  BIT(7 - bit - !max_alm), val);
->>>> +	}
->>>
->>> "Will this condition handle the ADIO12 and ADIO34 differential channels?
->>> It looks like channels 14 and 15 fall through to the default return intended
->>> for the DRAIN channel. Since reading the alarm implicitly clears the register
->>> bits, could reading these ADIO alarms unintentionally clear actual DRAIN
->>> alarms? Should the upper bound be LTC4283_CHAN_ADIO34?"
->>>
->>> Good catch and should be:
->>>
->>> -       if (channel >= LTC4283_CHAN_ADIN12 && channel <= LTC4283_CHAN_ADIN34) {
->>> +       if (channel >= LTC4283_CHAN_ADIN12 && channel <= LTC4283_CHAN_ADIO34) {
->>>
->>>> +
->>>> +	if (channel == LTC4283_CHAN_DRNS)
->>>> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_4,
->>>> +					  BIT(6 + max_alm), val);
->>>> +
->>>> +	return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_4, BIT(4 + max_alm),
->>>> +				  val);
->>>> +}
->>>
->>> ...
->>>
->>>> +
->>>> +static int ltc4283_probe(struct i2c_client *client)
->>>> +{
->>>> +	struct device *dev = &client->dev, *hwmon;
->>>> +	struct auxiliary_device *adev;
->>>> +	struct ltc4283_hwmon *st;
->>>> +	int ret;
->>>> +
->>>> +	st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
->>>> +	if (!st)
->>>> +		return -ENOMEM;
->>>> +
->>>> +	if (!i2c_check_functionality(client->adapter,
->>>> +				     I2C_FUNC_SMBUS_BYTE_DATA |
->>>> +				     I2C_FUNC_SMBUS_WORD_DATA |
->>>> +				     I2C_FUNC_SMBUS_READ_I2C_BLOCK))
->>>> +		return -EOPNOTSUPP;
->>>> +
->>>> +	st->client = client;
->>>> +	st->map = devm_regmap_init(dev, &ltc4283_regmap_bus, client,
->>>> +				   &ltc4283_regmap_config);
->>>> +	if (IS_ERR(st->map))
->>>> +		return dev_err_probe(dev, PTR_ERR(st->map),
->>>> +				     "Failed to create regmap\n");
->>>> +
->>>> +	ret = ltc4283_setup(st, dev);
->>>> +	if (ret)
->>>> +		return ret;
->>>> +
->>>> +	hwmon = devm_hwmon_device_register_with_info(dev, "ltc4283", st,
->>>> +						     &ltc4283_chip_info, NULL);
->>>> +
->>>> +	if (IS_ERR(hwmon))
->>>> +		return PTR_ERR(hwmon);
->>>> +
->>>> +	ltc4283_debugfs_init(st, client);
->>>> +
->>>> +	if (!st->gpio_mask)
->>>> +		return 0;
->>>> +
->>>> +	adev = devm_auxiliary_device_create(dev, "gpio", &st->gpio_mask);
->>>> +	if (!adev)
->>>> +		return dev_err_probe(dev, -ENODEV, "Failed to add GPIO device\n");
->>>
->>> "Does this allow multiple LTC4283 chips to probe successfully?
->>> Without allocating a unique ID per I2C instance, it seems the first probed
->>> chip takes the generic name. If a second chip is present, it might attempt
->>> to register with the exact same name, resulting in a failure in device_add()
->>> and aborting the probe."
->>>
->>> Also looks valid and I suspect is one of those that a quick look will
->>> find more "offenders". I would purpose:
->>>
->>> -       adev = devm_auxiliary_device_create(dev, "gpio", &st->gpio_mask);
->>> +       adev = __devm_auxiliary_device_create(dev, KBUILD_MODNAME, "gpio",
->>> +                                             &st->gpio_mask, client->addr);
->>>
->>
->> That would still fail if there are multiple chips at the same I2C address
->> on multiple I2C busses. Check drivers/gpu/drm/bridge/ti-sn65dsi86.c which has
->> the same problem.
+On 3/31/26 03:39, Eugene Shalygin wrote:
+> Hi Corey,
 > 
-> I did looked at that one but totally forgot the multiple busses
-> scenario.
+> you are correct, temperature readings for disconnected sensors are
+> negative (-40 or less).
 > 
+> On Tue, 31 Mar 2026 at 07:16, Corey Hickey <bugfood-ml@fatooh.org> wrote:
 >>
->>> If there's nothing else and you agree with the above, is this something
->>> you can tweak while applying or should I spin a new version?
->>>
+>> From: Corey Hickey <bugfood-c@fatooh.org>
 >>
->> Please respin. Also, regarding the other concerns:
->>
->>    Can BIT(8) * st->rsense wrap to zero on 32-bit architectures?
->>    BIT(8) is a 32-bit unsigned long and st->rsense is a u32. If a user sets a
->>    very large sense resistor value via the device tree, the multiplication could
->>    wrap to 0, causing a division-by-zero kernel panic. Should the divisor use
->>    BIT_ULL(8)?
->>
->> Unless I am missing something, this _can_ overflow. Try to provide a sense
->> resistor value of 1677721600. Yes, it is unreasonable to specify such large
->> rsense values, but why not just limit it such that it does not overflow ?
-> 
-> Yes, that's pretty much my reasoning (regarding the unreasonable
-> rsense). I could just make BIT_ULL() and be done with it. I can also
-> also cap rsense to a max value but i'm not 100% what that value would
-> be. Maybe 1 ohm is already more than reasonable. I can also ask internally. Any
-> preference on this one?
+>> +       /*
+>> +        * The address of T_Sensor can vary; only one of the following T_Sensor
+>> +        * addresses will be used, depending on motherboard model.
+>> +        */
+> I don't think we need this comment in a reverse-engineered driver.
 > 
 
-I'd suggest to reject large (unreasonable) values. In this case, rejecting rsense
-values >= 1677721600 should solve the problem.
+Good point. I guess similar comments could be added everywhere and just end up making noise.
 
->>
->> Also, for the overflow concerns, if you are sure they can not happen, I'll
->> really need to write the unit test code to make sure that this is indeed
->> the case.
->>
-> 
-> Hmm, for the val * MILLI case, well it should not happen but given it
-> depends on user input, better if I clamp it before passing the
-> value to ltc4283_write_in_byte(). Yes, we clamp again inside the
-> write_bytes() API but not a big deal.
-> 
-> For the st->power_max is again one of those cases where the values would
-> not make sense (I think - the combination of vsense_max and rsense). Just looking
-> at the code, it can overflow but this one I'm not really sure how we could handle it.
-> Maybe clamp power_max to U8_MAX and have a warning message in ltc4283_read_power_byte() if
-> we overflow long in which case we need a power64 attr?
-> 
-> But even clamping does not make much sense here. The power limit register
-> is 8 bits, so if our design (rsense + vsense_max) overflows that,
-> there's nothing we can do other that erroring out.
-> 
-
-Again, why not just reject unreasonable values such that calculations
-can not overflow ?
-
-In other drivers, the common approach is to reject unreeasonable values if
-provided through devicetree and to clamp them if provided through sysfs.
-I don't see why that would not work here.
+On a side note, this version of the patch was submitted as response to v1, which
+is discouraged. Corey - please don't do that.
 
 Thanks,
 Guenter
