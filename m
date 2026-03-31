@@ -1,60 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C08E3EC2F4;
-	Tue, 31 Mar 2026 09:20:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0165920B810;
+	Tue, 31 Mar 2026 09:44:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774948831; cv=none; b=Yy/yC27+ZjUHquK5I1CDunkbG0MnDeS/ySVdzGzyziRbfUz1MZi5xMO3pPInlBBxA/tBbjy2qFjatY6/z02BzsHIo9PmrJhhRLmdT0c+/ca7IMNTAllBH8cTrTIodusy1CvhxKvAD3IQFVltQERy9ahpyAximRUN+z+il1DJbhQ=
+	t=1774950297; cv=none; b=il6ZALYfh3NyAbVklwTh+gED5FDaUOKe0wu6hKfqvulcZzZMq97vD6ZKEovMbqaHLn0pTrhYQHL3GDTaoAGma5F4srjISs45b09CcBedAMfBFOe8FSzsDmIJLIXIw+48cP5e7dpbM5YyiJZHBMhM31nMX4Tu82PmtyGf/QO14gk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774948831; c=relaxed/simple;
-	bh=U1hTWPEDShf4k0dUlNCYLh55dCggz27q5v+LrCiT3ss=;
+	s=arc-20240116; t=1774950297; c=relaxed/simple;
+	bh=iFHT9Wu2zi74tZqHzvNKUpazcO4RImsrzlv1E0bQZ78=;
 	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=temc27c/r5fR/7tynpjPdWgbqn1f/Ca54e2/nFg/tGhc5QG4m9BdTXcqhUc1sOH/yJl11q1xnz/plzVYJ/lkZeCuF+I1XXOin0AGj/BpPY/nrCzt4ZhKhNPqf3cRZ7EHh+3KlOb7ayi7Y2gcFJCEn3snEFyfrhvsjre1d0mNqx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jfUS05Mq; arc=none smtp.client-ip=192.198.163.19
+	 MIME-Version:Content-Type; b=bGKhNoX1kU1pGc09NYjzzcViEtIv86VKbnxOQwdZPWzOO7WnJlsIywKjPnNCLsLwfJ4s9MP1bpYf5Vbb9R8WWyCtvlYsHplgJ/QLxk0Gc4OMmXvnlGMcGt9qkuL4CBcTGKWeUZr7mJn0aa0cylcD5EdLD4xhvxjHi9gyxq8RUNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DjDMnHbm; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jfUS05Mq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DjDMnHbm"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774948828; x=1806484828;
+  t=1774950296; x=1806486296;
   h=from:date:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=U1hTWPEDShf4k0dUlNCYLh55dCggz27q5v+LrCiT3ss=;
-  b=jfUS05MqbNMOHK4DqXNrjnBGZx/3GF2bADt0stkaKrpTyENXL+woozMq
-   gQfoI8I8XHO3+X79WbvY8DY5qI76bPUtAfFc3K2LUmvsBtY1F+TbPIBsk
-   a+7C2DK9GZeu0kGHOCI0g8LuSF4AQa/v6ZtI+N1McXmbNmzzGZRGhAZ66
-   eazNv+CWUfwtAhj1biG2hxo7qkaA/Zfc8qf/Ba/3rJI3q1njp6VUxLaNo
-   El3LwPXz0sLhxqvRQLfFyKDJ0SsDdz3XVhJ+jPG2aC3hfre7w8Gy7n4N5
-   aRNAPMc1wIoINRRNYKS4+1cNQu2SfPemGbbH9Ou47U52ix8rMwy6H/TV9
-   A==;
-X-CSE-ConnectionGUID: Lt0euiKlQt2o0xs9d2st+Q==
-X-CSE-MsgGUID: 3kONkJzaTIGf20FSKTrllA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11744"; a="74988446"
+  bh=iFHT9Wu2zi74tZqHzvNKUpazcO4RImsrzlv1E0bQZ78=;
+  b=DjDMnHbmqiQkMx+pWx/5iC5DmCGSAhskNGocnaNTvzjhSZ3zp5/fq1x3
+   H/AdDp2o6tTfGFuYZC/mTxVCjZIqX6xcG7CGTHoUW8dyZpEWu8YpPQ3cz
+   2kfuwkgzWfMtnXCpZlDA+2UxqqEz6DtVMtDFwVSakRjUNx1LnV0+owz8H
+   YU6uWBRSzesVawzZJM8+eMusehYs6LIAabj4zPrtTT2RJ8/pjwcMqgaMj
+   ru23wNt4/uKyuCZUOWZgY4sFG0fyYg5n99/dDYmN+lWB5LnzzQJ5+LRdw
+   CmCDG3FwsRd+xROW9aonrvaa6FRvSAWx/B9XU//z1om4Vx2h9iQu372hO
+   w==;
+X-CSE-ConnectionGUID: NyLNjWldR36PCrln30XRIw==
+X-CSE-MsgGUID: ALLbOitMQwKz0gjdbsGlGg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11744"; a="93344723"
 X-IronPort-AV: E=Sophos;i="6.23,151,1770624000"; 
-   d="scan'208";a="74988446"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 02:20:27 -0700
-X-CSE-ConnectionGUID: F1dIu9urQo6eEBPr6Q020Q==
-X-CSE-MsgGUID: JEMf/spjStKGICsPbKpceQ==
+   d="scan'208";a="93344723"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 02:44:55 -0700
+X-CSE-ConnectionGUID: h6QIev9TReqmlvZHTODclQ==
+X-CSE-MsgGUID: xeRSjrIbQa+s2RWWGgrhqg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,151,1770624000"; 
-   d="scan'208";a="226288369"
+   d="scan'208";a="225315334"
 Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.6])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 02:20:24 -0700
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 02:44:51 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Tue, 31 Mar 2026 12:20:18 +0300 (EEST)
+Date: Tue, 31 Mar 2026 12:44:45 +0300 (EEST)
 To: Armin Wolf <W_Armin@gmx.de>
 cc: Dell.Client.Kernel@dell.com, pali@kernel.org, mjg59@srcf.ucam.org, 
     soyer@irl.hu, Hans de Goede <hansg@kernel.org>, 
     platform-driver-x86@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
     linux@roeck-us.net, linux-hwmon@vger.kernel.org, mario.limonciello@amd.com
-Subject: Re: [PATCH v3 4/9] platform/x86: dell-wmi-base: Use new buffer-based
+Subject: Re: [PATCH v3 1/9] platform/x86: dell-descriptor: Use new buffer-based
  WMI API
-In-Reply-To: <20260314175249.16040-5-W_Armin@gmx.de>
-Message-ID: <8ae04cbe-7e94-9cbf-0067-e1150e728e90@linux.intel.com>
-References: <20260314175249.16040-1-W_Armin@gmx.de> <20260314175249.16040-5-W_Armin@gmx.de>
+In-Reply-To: <20260314175249.16040-2-W_Armin@gmx.de>
+Message-ID: <658006e6-bbfe-03b4-f788-8f041adda03d@linux.intel.com>
+References: <20260314175249.16040-1-W_Armin@gmx.de> <20260314175249.16040-2-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -66,172 +66,175 @@ Content-Type: text/plain; charset=US-ASCII
 On Sat, 14 Mar 2026, Armin Wolf wrote:
 
 > Use the new buffer-based WMI API to also support ACPI firmware
-> implementations that do not use ACPI buffers for the event data.
+> implementations that do not use ACPI buffers for the descriptor.
 > 
 > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 > ---
->  drivers/platform/x86/dell/dell-wmi-base.c | 68 ++++++++++++-----------
->  1 file changed, 35 insertions(+), 33 deletions(-)
+>  .../platform/x86/dell/dell-wmi-descriptor.c   | 94 +++++++++----------
+>  1 file changed, 47 insertions(+), 47 deletions(-)
 > 
-> diff --git a/drivers/platform/x86/dell/dell-wmi-base.c b/drivers/platform/x86/dell/dell-wmi-base.c
-> index 4eefbade2f5e..4a7ab9fb3f81 100644
-> --- a/drivers/platform/x86/dell/dell-wmi-base.c
-> +++ b/drivers/platform/x86/dell/dell-wmi-base.c
-> @@ -13,6 +13,7 @@
+> diff --git a/drivers/platform/x86/dell/dell-wmi-descriptor.c b/drivers/platform/x86/dell/dell-wmi-descriptor.c
+> index c2a180202719..fe42eb8bbd79 100644
+> --- a/drivers/platform/x86/dell/dell-wmi-descriptor.c
+> +++ b/drivers/platform/x86/dell/dell-wmi-descriptor.c
+> @@ -7,7 +7,7 @@
 >  
 >  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 >  
+> -#include <linux/acpi.h>
 > +#include <linux/compiler_attributes.h>
->  #include <linux/kernel.h>
+>  #include <linux/list.h>
 >  #include <linux/module.h>
->  #include <linux/init.h>
-> @@ -408,7 +409,8 @@ static void dell_wmi_switch_event(struct input_dev **subdev,
->  	input_sync(*subdev);
->  }
+>  #include <linux/wmi.h>
+> @@ -15,6 +15,24 @@
 >  
-> -static int dell_wmi_process_key(struct wmi_device *wdev, int type, int code, u16 *buffer, int remaining)
-> +static int dell_wmi_process_key(struct wmi_device *wdev, int type, int code, __le16 *buffer,
-> +				int remaining)
+>  #define DELL_WMI_DESCRIPTOR_GUID "8D9DDCBC-A997-11DA-B012-B622A1EF5492"
+>  
+> +/*
+> + * Descriptor buffer is 128 byte long and contains:
+> + *
+> + *       Name             Offset  Length  Value
+> + * Vendor Signature          0       4    "DELL"
+> + * Object Signature          4       4    " WMI"
+> + * WMI Interface Version     8       4    <version>
+> + * WMI buffer length        12       4    <length>
+> + * WMI hotfix number        16       4    <hotfix>
+> + */
+> +struct descriptor {
+> +	char vendor_signature[4];
+> +	char object_signature[4];
+> +	__le32 interface_version;
+> +	__le32 buffer_length;
+> +	__le32 hotfix_number;
+> +} __packed;
+> +
+>  struct descriptor_priv {
+>  	struct list_head list;
+>  	u32 interface_version;
+> @@ -88,76 +106,58 @@ bool dell_wmi_get_hotfix(u32 *hotfix)
+>  }
+>  EXPORT_SYMBOL_GPL(dell_wmi_get_hotfix);
+>  
+> -/*
+> - * Descriptor buffer is 128 byte long and contains:
+> - *
+> - *       Name             Offset  Length  Value
+> - * Vendor Signature          0       4    "DELL"
+> - * Object Signature          4       4    " WMI"
+> - * WMI Interface Version     8       4    <version>
+> - * WMI buffer length        12       4    <length>
+> - * WMI hotfix number        16       4    <hotfix>
+> - */
+> -static int dell_wmi_descriptor_probe(struct wmi_device *wdev,
+> -				     const void *context)
+> +static int dell_wmi_descriptor_probe(struct wmi_device *wdev, const void *context)
 >  {
->  	struct dell_wmi_priv *priv = dev_get_drvdata(&wdev->dev);
->  	const struct key_entry *key;
-> @@ -440,15 +442,15 @@ static int dell_wmi_process_key(struct wmi_device *wdev, int type, int code, u16
->  	} else if (type == 0x0011 && code == 0xe070 && remaining > 0) {
->  		dell_wmi_switch_event(&priv->tabletswitch_dev,
->  				      "Dell tablet mode switch",
-> -				      SW_TABLET_MODE, !buffer[0]);
-> +				      SW_TABLET_MODE, !le16_to_cpu(buffer[0]));
+> -	union acpi_object *obj = NULL;
+>  	struct descriptor_priv *priv;
+> -	u32 *buffer;
+> +	struct wmi_buffer buffer;
+> +	struct descriptor *desc;
+>  	int ret;
+>  
+> -	obj = wmidev_block_query(wdev, 0);
+> -	if (!obj) {
+> -		dev_err(&wdev->dev, "failed to read Dell WMI descriptor\n");
+> -		ret = -EIO;
+> -		goto out;
+> -	}
+> +	ret = wmidev_query_block(wdev, 0, &buffer);
+> +	if (ret < 0)
+> +		return ret;
+>  
+> -	if (obj->type != ACPI_TYPE_BUFFER) {
+> -		dev_err(&wdev->dev, "Dell descriptor has wrong type\n");
+> +	if (buffer.length < sizeof(*desc)) {
 
-__le* comes from types.h which this file already has (but the files in 
-some of the other patches might be lacking it so please check those).
+Hi again,
 
-Should there be some header added for le16_to_cpu()? Probably relevant to 
-some other patches as well.
+Thinking some more of this...
+
+Since many of these drivers will need to do this size check and assign 
+into some variable that is different from the one passed to 
+wmidev_query_block(), would it make sense to move those into generic code? 
+It probably requires a macro so you'd have access to type information.
 
 -- 
  i.
 
->  		return 1;
->  	} else if (type == 0x0012 && code == 0x000c && remaining > 0) {
->  		/* Eprivacy toggle, switch to "on" key entry for on events */
-> -		if (buffer[0] == 2)
-> +		if (le16_to_cpu(buffer[0]) == 2)
->  			key++;
->  		used = 1;
->  	} else if (type == 0x0012 && code == 0x000d && remaining > 0) {
-> -		value = (buffer[2] == 2);
-> +		value = (le16_to_cpu(buffer[2]) == 2);
->  		used = 1;
+> +		dev_err(&wdev->dev,
+> +			"Dell descriptor buffer contains not enough data (%zu)\n",
+> +			buffer.length);
+>  		ret = -EINVAL;
+>  		descriptor_valid = ret;
+>  		goto out;
 >  	}
 >  
-> @@ -457,24 +459,17 @@ static int dell_wmi_process_key(struct wmi_device *wdev, int type, int code, u16
->  	return used;
+> -	/* Although it's not technically a failure, this would lead to
+> -	 * unexpected behavior
+> -	 */
+> -	if (obj->buffer.length != 128) {
+> -		dev_err(&wdev->dev,
+> -			"Dell descriptor buffer has unexpected length (%d)\n",
+> -			obj->buffer.length);
+> -		ret = -EINVAL;
+> +	desc = buffer.data;
+> +
+> +	if (strncmp(desc->vendor_signature, "DELL", sizeof(desc->vendor_signature))) {
+> +		dev_err(&wdev->dev, "Dell descriptor buffer has invalid vendor signature (%4ph)\n",
+> +			desc->vendor_signature);
+> +		ret = -ENOMSG;
+>  		descriptor_valid = ret;
+>  		goto out;
+>  	}
+>  
+> -	buffer = (u32 *)obj->buffer.pointer;
+> -
+> -	if (strncmp(obj->string.pointer, "DELL WMI", 8) != 0) {
+> -		dev_err(&wdev->dev, "Dell descriptor buffer has invalid signature (%8ph)\n",
+> -			buffer);
+> -		ret = -EINVAL;
+> +	if (strncmp(desc->object_signature, " WMI", sizeof(desc->vendor_signature))) {
+> +		dev_err(&wdev->dev, "Dell descriptor buffer has invalid object signature (%4ph)\n",
+> +			desc->object_signature);
+> +		ret = -ENOMSG;
+>  		descriptor_valid = ret;
+>  		goto out;
+>  	}
+>  	descriptor_valid = 0;
+>  
+> -	if (buffer[2] != 0 && buffer[2] != 1)
+> -		dev_warn(&wdev->dev, "Dell descriptor buffer has unknown version (%lu)\n",
+> -			(unsigned long) buffer[2]);
+> -
+> -	priv = devm_kzalloc(&wdev->dev, sizeof(struct descriptor_priv),
+> -	GFP_KERNEL);
+> +	if (le32_to_cpu(desc->interface_version) > 2)
+> +		dev_warn(&wdev->dev, "Dell descriptor buffer has unknown version (%u)\n",
+> +			 le32_to_cpu(desc->interface_version));
+>  
+> +	priv = devm_kzalloc(&wdev->dev, sizeof(*priv), GFP_KERNEL);
+>  	if (!priv) {
+>  		ret = -ENOMEM;
+>  		goto out;
+>  	}
+>  
+> -	priv->interface_version = buffer[2];
+> -	priv->size = buffer[3];
+> -	priv->hotfix = buffer[4];
+> +	priv->interface_version = le32_to_cpu(desc->interface_version);
+> +	priv->size = le32_to_cpu(desc->buffer_length);
+> +	priv->hotfix = le32_to_cpu(desc->hotfix_number);
+>  	ret = 0;
+>  	dev_set_drvdata(&wdev->dev, priv);
+>  	mutex_lock(&list_mutex);
+> @@ -170,7 +170,7 @@ static int dell_wmi_descriptor_probe(struct wmi_device *wdev,
+>  		(unsigned long) priv->hotfix);
+>  
+>  out:
+> -	kfree(obj);
+> +	kfree(buffer.data);
+>  	return ret;
 >  }
 >  
-> -static void dell_wmi_notify(struct wmi_device *wdev,
-> -			    union acpi_object *obj)
-> +static void dell_wmi_notify(struct wmi_device *wdev, const struct wmi_buffer *buffer)
->  {
->  	struct dell_wmi_priv *priv = dev_get_drvdata(&wdev->dev);
-> -	u16 *buffer_entry, *buffer_end;
-> -	acpi_size buffer_size;
-> +	__le16 *buffer_entry, *buffer_end;
-> +	size_t buffer_size;
->  	int len, i;
->  
-> -	if (obj->type != ACPI_TYPE_BUFFER) {
-> -		pr_warn("bad response type %x\n", obj->type);
-> -		return;
-> -	}
-> +	pr_debug("Received WMI event (%*ph)\n", (int)buffer->length, buffer->data);
->  
-> -	pr_debug("Received WMI event (%*ph)\n",
-> -		obj->buffer.length, obj->buffer.pointer);
-> -
-> -	buffer_entry = (u16 *)obj->buffer.pointer;
-> -	buffer_size = obj->buffer.length/2;
-> +	buffer_entry = buffer->data;
-> +	buffer_size = buffer->length / 2;
->  	buffer_end = buffer_entry + buffer_size;
->  
->  	/*
-> @@ -490,12 +485,12 @@ static void dell_wmi_notify(struct wmi_device *wdev,
->  	 * one event on devices with WMI interface version 0.
->  	 */
->  	if (priv->interface_version == 0 && buffer_entry < buffer_end)
-> -		if (buffer_end > buffer_entry + buffer_entry[0] + 1)
-> -			buffer_end = buffer_entry + buffer_entry[0] + 1;
-> +		if (buffer_end > buffer_entry + le16_to_cpu(buffer_entry[0]) + 1)
-> +			buffer_end = buffer_entry + le16_to_cpu(buffer_entry[0]) + 1;
->  
->  	while (buffer_entry < buffer_end) {
->  
-> -		len = buffer_entry[0];
-> +		len = le16_to_cpu(buffer_entry[0]);
->  		if (len == 0)
->  			break;
->  
-> @@ -508,11 +503,11 @@ static void dell_wmi_notify(struct wmi_device *wdev,
->  
->  		pr_debug("Process buffer (%*ph)\n", len*2, buffer_entry);
->  
-> -		switch (buffer_entry[1]) {
-> +		switch (le16_to_cpu(buffer_entry[1])) {
->  		case 0x0000: /* One key pressed or event occurred */
->  			if (len > 2)
-> -				dell_wmi_process_key(wdev, buffer_entry[1],
-> -						     buffer_entry[2],
-> +				dell_wmi_process_key(wdev, le16_to_cpu(buffer_entry[1]),
-> +						     le16_to_cpu(buffer_entry[2]),
->  						     buffer_entry + 3,
->  						     len - 3);
->  			/* Extended data is currently ignored */
-> @@ -520,22 +515,29 @@ static void dell_wmi_notify(struct wmi_device *wdev,
->  		case 0x0010: /* Sequence of keys pressed */
->  		case 0x0011: /* Sequence of events occurred */
->  			for (i = 2; i < len; ++i)
-> -				i += dell_wmi_process_key(wdev, buffer_entry[1],
-> -							  buffer_entry[i],
-> +				i += dell_wmi_process_key(wdev, le16_to_cpu(buffer_entry[1]),
-> +							  le16_to_cpu(buffer_entry[i]),
->  							  buffer_entry + i,
->  							  len - i - 1);
->  			break;
->  		case 0x0012:
-> -			if ((len > 4) && dell_privacy_process_event(buffer_entry[1], buffer_entry[3],
-> -								    buffer_entry[4]))
-> -				/* dell_privacy_process_event has handled the event */;
-> -			else if (len > 2)
-> -				dell_wmi_process_key(wdev, buffer_entry[1], buffer_entry[2],
-> +			if (len > 4) {
-> +				if (dell_privacy_process_event(le16_to_cpu(buffer_entry[1]),
-> +							       le16_to_cpu(buffer_entry[3]),
-> +							       le16_to_cpu(buffer_entry[4])))
-> +					break;
-> +			}
-> +
-> +			/* dell_privacy_process_event has not handled the event */
-> +
-> +			if (len > 2)
-> +				dell_wmi_process_key(wdev, le16_to_cpu(buffer_entry[1]),
-> +						     le16_to_cpu(buffer_entry[2]),
->  						     buffer_entry + 3, len - 3);
-> +
->  			break;
->  		default: /* Unknown event */
-> -			pr_info("Unknown WMI event type 0x%x\n",
-> -				(int)buffer_entry[1]);
-> +			pr_info("Unknown WMI event type 0x%x\n", le16_to_cpu(buffer_entry[1]));
->  			break;
->  		}
->  
-> @@ -821,7 +823,7 @@ static struct wmi_driver dell_wmi_driver = {
->  	.id_table = dell_wmi_id_table,
->  	.probe = dell_wmi_probe,
->  	.remove = dell_wmi_remove,
-> -	.notify = dell_wmi_notify,
-> +	.notify_new = dell_wmi_notify,
->  };
->  
->  static int __init dell_wmi_init(void)
 > 
