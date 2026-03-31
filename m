@@ -1,160 +1,245 @@
-Received: from juniper.fatooh.org (juniper.fatooh.org [173.255.221.30])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B782E413
-	for <linux-hwmon@vger.kernel.org>; Tue, 31 Mar 2026 05:16:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.255.221.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9963B3E557F;
+	Tue, 31 Mar 2026 09:00:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774934215; cv=none; b=UYkT1dIcVQE2vuUHMzzE2YLgdWVuQxNUDzV7ctoEm2yzYrwmo2lMajR2fsjyx0+PEutXajGKcC8T/lV287Qd6FZ21AmGzKV9yqBrAdGxhM7etmfSrR6BdS6T7lk2JQUPLFoQaGMi+DfqW/KKz90qnTcArAvvEbzc6dpsqLFZuW0=
+	t=1774947621; cv=none; b=s5Wq5XuIEDz1fj8PPGY4hFrIcgHsp4q3d8MuqDb0K32Kt7c6e7XKJQnAEhqnZzUtmxIhOTP8cG4fWsgSBNAsyewT0oVC3YkDASOFUyG5fCIZo/awy6lSK/ghv/HPeZ7Jl6Nfc7RQ92V3xti666j1jmrWKSnJltiKvctD7nRmI2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774934215; c=relaxed/simple;
-	bh=jGCQ//PZW8vvSvp0Z+KcNL0bEb5zqVTK49jOl85+gJY=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GUZvqmygyZUZhG2MFZlNi/GIqWCqct8nqGDCCXFCWpojiVTd6rGXvqEw84N8hB4gRypGT1VWECODuXyqWgtJNXF52THhkynDVIKUabL53P22+7Q7LfPb8ueEM2XkkaTYO5OKU5hFqLHW1PLbwRu3novb8iByjtqbATG0IoGETWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fatooh.org; spf=pass smtp.mailfrom=fatooh.org; dkim=pass (1024-bit key) header.d=fatooh.org header.i=@fatooh.org header.b=H22vB+BR; arc=none smtp.client-ip=173.255.221.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fatooh.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fatooh.org
+	s=arc-20240116; t=1774947621; c=relaxed/simple;
+	bh=bsUk8lXey/MgHEGQWHr65TC97aJRgQM4peIDf0AU2N8=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=MG3ELdjCVnMKUe8mdiP9wq1VMT2EtqkvWy/p6FAgBJTLQCGjXcQgoK7ozC+fsFaj39wmjPU3U3YZDb2pGuEpY85QUu/dIA4mlOfg9ExBBSiQ6lRRHH0ZwXsKcpCOijbMJHXoqHlZEZPnk+hH2DWeyJtTJTBx7JsNapiObVKbDAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FZQjtz/r; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fatooh.org header.i=@fatooh.org header.b="H22vB+BR"
-Received: from juniper.fatooh.org (juniper.fatooh.org [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by juniper.fatooh.org (Postfix) with ESMTPS id C853B401B3;
-	Mon, 30 Mar 2026 22:16:53 -0700 (PDT)
-Received: from juniper.fatooh.org (juniper.fatooh.org [127.0.0.1])
-	by juniper.fatooh.org (Postfix) with ESMTP id AC9CE401F4;
-	Mon, 30 Mar 2026 22:16:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=simple; d=fatooh.org; h=from:to
-	:subject:date:message-id:in-reply-to:references:mime-version
-	:content-type:content-transfer-encoding; s=dkim; bh=0G0kjW1xbpK6
-	rMgJ9htPmETZ+Y8=; b=H22vB+BRGg4mCExOwcbY115FBAHWAQiKsO8s+TixI3NZ
-	nIJtXMnw9JRY2XOo2vdkmoP1PxzX//XdO7Ic95b8eGkBC3rkLTrAnYQ2dAiLrW6c
-	5Fupk/+SMBBWoLKScFYpuQsNDZbI3Jkg5Nsp4j+ny18jxQ3rx0zWH1g0lpobw28=
-DomainKey-Signature: a=rsa-sha1; c=simple; d=fatooh.org; h=from:to
-	:subject:date:message-id:in-reply-to:references:mime-version
-	:content-type:content-transfer-encoding; q=dns; s=dkim; b=BO6T13
-	7OjLpRJm4GZLej2664lr875BJApLAcYfDGfmzJ65xHde2tcxXBCV8x4/VCKthFpO
-	PmBz8v9T/3t/r1Y9BjJkyjQaDwO8jnrS7bJH9Jrmpo38y5qumL3qhP+JymaZ2VVQ
-	AFg71Hoxwp1ai62JkR9jQqFCX+RC5dpK2jUVM=
-Received: from bugfood.local (unknown [IPv6:2600:1700:9750:59ef:62cf:84ff:fe62:f2b2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by juniper.fatooh.org (Postfix) with ESMTPSA id 97318401B3;
-	Mon, 30 Mar 2026 22:16:53 -0700 (PDT)
-Received: by bugfood.local (Postfix, from userid 1000)
-	id 0D547C1EF210; Mon, 30 Mar 2026 22:16:53 -0700 (PDT)
-From: Corey Hickey <bugfood-ml@fatooh.org>
-To: Corey Hickey <bugfood-ml@fatooh.org>,
-	Eugene Shalygin <eugene.shalygin@gmail.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH v2] hwmon: (asus-ec-sensors) fix T_Sensor for PRIME X670E-PRO WIFI
-Date: Mon, 30 Mar 2026 22:16:53 -0700
-Message-ID: <20260331051653.332155-1-bugfood-ml@fatooh.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260330230836.314311-1-bugfood-ml@fatooh.org>
-References: <20260330230836.314311-1-bugfood-ml@fatooh.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FZQjtz/r"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774947619; x=1806483619;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=bsUk8lXey/MgHEGQWHr65TC97aJRgQM4peIDf0AU2N8=;
+  b=FZQjtz/rji/pS0I/SQw9Dh3d1v5lcJZRIWczHARuFYYeYrF0QY8mVnQR
+   qbzI9RKEcNebCb3wP0rWHRZ8ul148F/w+eOCeQQmH8x7xiHRNF+jbYdQt
+   p9ThwrNxh822RzcaobLQBt1479UIpIA9BYkAj9TLNEgBaGkGDFb/4AQUY
+   sWMaA0oMk2KsbdYrcHdX39TWgWSamhHlPA57uP+sgH0iLj2A2kbfi6IqC
+   98UofRpGlofuJNFK/J130QaSZsd6zwJY3VWsWWUMAczPwjPQzxS2vv46p
+   J1/fJG/03gMYLJ7WXRiyCWZXege5LXkA/ZaQPkPqRR0riCL1PVsj947TA
+   g==;
+X-CSE-ConnectionGUID: TKu4u1PsT5avZrFsfc6tJg==
+X-CSE-MsgGUID: gj/E4tT7SHKFiNxbvWpV+g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11744"; a="86570072"
+X-IronPort-AV: E=Sophos;i="6.23,151,1770624000"; 
+   d="scan'208";a="86570072"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 02:00:19 -0700
+X-CSE-ConnectionGUID: EPLvlXv8TOi1Io6ktCvWTQ==
+X-CSE-MsgGUID: liLe0mJdRyunrx+/YtWGwg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,151,1770624000"; 
+   d="scan'208";a="225301263"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.6])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 02:00:15 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Tue, 31 Mar 2026 12:00:11 +0300 (EEST)
+To: Armin Wolf <W_Armin@gmx.de>
+cc: Dell.Client.Kernel@dell.com, pali@kernel.org, mjg59@srcf.ucam.org, 
+    soyer@irl.hu, Hans de Goede <hansg@kernel.org>, 
+    platform-driver-x86@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    linux@roeck-us.net, linux-hwmon@vger.kernel.org, mario.limonciello@amd.com
+Subject: Re: [PATCH v3 1/9] platform/x86: dell-descriptor: Use new buffer-based
+ WMI API
+In-Reply-To: <20260314175249.16040-2-W_Armin@gmx.de>
+Message-ID: <0020b3ec-e095-3736-413e-84f08dbcff93@linux.intel.com>
+References: <20260314175249.16040-1-W_Armin@gmx.de> <20260314175249.16040-2-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 
-From: Corey Hickey <bugfood-c@fatooh.org>
+On Sat, 14 Mar 2026, Armin Wolf wrote:
 
-I have attached a temperature sensor (10k thermistor) to my motherboard,
-and the temperature monitoring in the BIOS reports a value for the
-sensor, but the Linux driver reports a constant zero value.
+> Use the new buffer-based WMI API to also support ACPI firmware
+> implementations that do not use ACPI buffers for the descriptor.
+> 
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ---
+>  .../platform/x86/dell/dell-wmi-descriptor.c   | 94 +++++++++----------
+>  1 file changed, 47 insertions(+), 47 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/dell/dell-wmi-descriptor.c b/drivers/platform/x86/dell/dell-wmi-descriptor.c
+> index c2a180202719..fe42eb8bbd79 100644
+> --- a/drivers/platform/x86/dell/dell-wmi-descriptor.c
+> +++ b/drivers/platform/x86/dell/dell-wmi-descriptor.c
+> @@ -7,7 +7,7 @@
+>  
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>  
+> -#include <linux/acpi.h>
+> +#include <linux/compiler_attributes.h>
+>  #include <linux/list.h>
+>  #include <linux/module.h>
+>  #include <linux/wmi.h>
+> @@ -15,6 +15,24 @@
+>  
+>  #define DELL_WMI_DESCRIPTOR_GUID "8D9DDCBC-A997-11DA-B012-B622A1EF5492"
+>  
+> +/*
+> + * Descriptor buffer is 128 byte long and contains:
+> + *
+> + *       Name             Offset  Length  Value
+> + * Vendor Signature          0       4    "DELL"
+> + * Object Signature          4       4    " WMI"
+> + * WMI Interface Version     8       4    <version>
+> + * WMI buffer length        12       4    <length>
+> + * WMI hotfix number        16       4    <hotfix>
+> + */
+> +struct descriptor {
+> +	char vendor_signature[4];
+> +	char object_signature[4];
+> +	__le32 interface_version;
+> +	__le32 buffer_length;
+> +	__le32 hotfix_number;
+> +} __packed;
+> +
+>  struct descriptor_priv {
+>  	struct list_head list;
+>  	u32 interface_version;
+> @@ -88,76 +106,58 @@ bool dell_wmi_get_hotfix(u32 *hotfix)
+>  }
+>  EXPORT_SYMBOL_GPL(dell_wmi_get_hotfix);
+>  
+> -/*
+> - * Descriptor buffer is 128 byte long and contains:
+> - *
+> - *       Name             Offset  Length  Value
+> - * Vendor Signature          0       4    "DELL"
+> - * Object Signature          4       4    " WMI"
+> - * WMI Interface Version     8       4    <version>
+> - * WMI buffer length        12       4    <length>
+> - * WMI hotfix number        16       4    <hotfix>
+> - */
+> -static int dell_wmi_descriptor_probe(struct wmi_device *wdev,
+> -				     const void *context)
+> +static int dell_wmi_descriptor_probe(struct wmi_device *wdev, const void *context)
+>  {
+> -	union acpi_object *obj = NULL;
+>  	struct descriptor_priv *priv;
+> -	u32 *buffer;
+> +	struct wmi_buffer buffer;
+> +	struct descriptor *desc;
+>  	int ret;
+>  
+> -	obj = wmidev_block_query(wdev, 0);
+> -	if (!obj) {
+> -		dev_err(&wdev->dev, "failed to read Dell WMI descriptor\n");
+> -		ret = -EIO;
+> -		goto out;
+> -	}
+> +	ret = wmidev_query_block(wdev, 0, &buffer);
+> +	if (ret < 0)
+> +		return ret;
+>  
+> -	if (obj->type != ACPI_TYPE_BUFFER) {
+> -		dev_err(&wdev->dev, "Dell descriptor has wrong type\n");
+> +	if (buffer.length < sizeof(*desc)) {
+> +		dev_err(&wdev->dev,
+> +			"Dell descriptor buffer contains not enough data (%zu)\n",
 
-    $ sensors asusec-isa-000a | grep T_Sensor
-    T_Sensor:      +0.0°C
+This word order sounds odd to me. I'd say:
 
-By experimentation, I have found that the address in the driver is off
-by one. Some basic checks seem to confirm correct sensor operation at
-address 0x37:
-* sensor disconnected: -62.0°C
-* sensor plugged in, ambient temperature: +22.0°C
-* sensor plugged in, held between my fingers: +30.0°C
-The latter two values match those measured independently via my DMM's
-thermocouple probe (with a precision of 1°C).
+Dell descriptor buffer does not contain ...
 
-The existing address was added in commit f7ac3020036b ("hwmon:
-(asus-ec-sensors) add ROG Crosshair X670E Gene."). The commit message
-specifically mentions T_Sensor validation; assuming that commit was
-indeed correct, then 600-series motherboards are inconsistent in what
-address they use.
+> +			buffer.length);
+>  		ret = -EINVAL;
+>  		descriptor_valid = ret;
+>  		goto out;
+>  	}
+>  
+> -	/* Although it's not technically a failure, this would lead to
+> -	 * unexpected behavior
+> -	 */
+> -	if (obj->buffer.length != 128) {
+> -		dev_err(&wdev->dev,
+> -			"Dell descriptor buffer has unexpected length (%d)\n",
+> -			obj->buffer.length);
+> -		ret = -EINVAL;
+> +	desc = buffer.data;
 
-To fix the "PRIME X670E-PRO WIFI" (0x37) without breaking the "ROG
-Crosshair X670E Gene" (0x36), define an alternate T_SENSOR. The "PRIME
-X670E-PRO WIFI" only has one T_SENSOR documented, so replace the
-original T_SENSOR in the driver rather than specifying an additional
-one.
-* If there are any other boards using 0x37, those can be changed to use
-  SENSOR_TEMP_T_SENSOR_ALT1 instead.
-* If there are any other boards using an entirely different address, an
-  additional alternate T_SENSOR can be defined without altering the
-  naming scheme.
+I think these should be moving towards using __free() so we could remove 
+those gotos to kfree(). This applies to many changes in this series. Some 
+may need a local variable to be introduced (here we've 'desc' already so 
+it's very easy in this case).
 
-For reference, the sensor used is "XSPC Wire Sensor 10k", purchased from
-Amazon.
+I'm fine if you want to do __free() changes in a patch separate from 
+this wmi conversion but we should aim to make these follow best practices 
+so that others pick the preferred patterns more easily.
 
-Link: https://www.amazon.com/dp/B0CR8Q24TK
-Link: https://rog.asus.com/motherboards/rog-crosshair/rog-crosshair-x670e-hero-model/helpdesk_manual/
-Signed-off-by: Corey Hickey <bugfood-c@fatooh.org>
----
- drivers/hwmon/asus-ec-sensors.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+> +	if (strncmp(desc->vendor_signature, "DELL", sizeof(desc->vendor_signature))) {
+> +		dev_err(&wdev->dev, "Dell descriptor buffer has invalid vendor signature (%4ph)\n",
+> +			desc->vendor_signature);
+> +		ret = -ENOMSG;
+>  		descriptor_valid = ret;
+>  		goto out;
+>  	}
+>  
+> -	buffer = (u32 *)obj->buffer.pointer;
+> -
+> -	if (strncmp(obj->string.pointer, "DELL WMI", 8) != 0) {
+> -		dev_err(&wdev->dev, "Dell descriptor buffer has invalid signature (%8ph)\n",
+> -			buffer);
+> -		ret = -EINVAL;
+> +	if (strncmp(desc->object_signature, " WMI", sizeof(desc->vendor_signature))) {
+> +		dev_err(&wdev->dev, "Dell descriptor buffer has invalid object signature (%4ph)\n",
+> +			desc->object_signature);
+> +		ret = -ENOMSG;
+>  		descriptor_valid = ret;
+>  		goto out;
+>  	}
+>  	descriptor_valid = 0;
+>  
+> -	if (buffer[2] != 0 && buffer[2] != 1)
+> -		dev_warn(&wdev->dev, "Dell descriptor buffer has unknown version (%lu)\n",
+> -			(unsigned long) buffer[2]);
+> -
+> -	priv = devm_kzalloc(&wdev->dev, sizeof(struct descriptor_priv),
+> -	GFP_KERNEL);
+> +	if (le32_to_cpu(desc->interface_version) > 2)
+> +		dev_warn(&wdev->dev, "Dell descriptor buffer has unknown version (%u)\n",
+> +			 le32_to_cpu(desc->interface_version));
+>  
+> +	priv = devm_kzalloc(&wdev->dev, sizeof(*priv), GFP_KERNEL);
+>  	if (!priv) {
+>  		ret = -ENOMEM;
+>  		goto out;
+>  	}
+>  
+> -	priv->interface_version = buffer[2];
+> -	priv->size = buffer[3];
+> -	priv->hotfix = buffer[4];
+> +	priv->interface_version = le32_to_cpu(desc->interface_version);
+> +	priv->size = le32_to_cpu(desc->buffer_length);
+> +	priv->hotfix = le32_to_cpu(desc->hotfix_number);
+>  	ret = 0;
+>  	dev_set_drvdata(&wdev->dev, priv);
+>  	mutex_lock(&list_mutex);
+> @@ -170,7 +170,7 @@ static int dell_wmi_descriptor_probe(struct wmi_device *wdev,
+>  		(unsigned long) priv->hotfix);
+>  
+>  out:
+> -	kfree(obj);
+> +	kfree(buffer.data);
+>  	return ret;
+>  }
+>  
+> 
 
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 86f444498650..f5b24a306a0f 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -111,6 +111,8 @@ enum ec_sensors {
- 	ec_sensor_temp_mb,
- 	/* "T_Sensor" temperature sensor reading [℃] */
- 	ec_sensor_temp_t_sensor,
-+	/* like ec_sensor_temp_t_sensor, but at an alternate address [℃] */
-+	ec_sensor_temp_t_sensor_alt1,
- 	/* VRM temperature [℃] */
- 	ec_sensor_temp_vrm,
- 	/* VRM east (right) temperature [℃] */
-@@ -160,6 +162,7 @@ enum ec_sensors {
- #define SENSOR_TEMP_CPU_PACKAGE BIT(ec_sensor_temp_cpu_package)
- #define SENSOR_TEMP_MB BIT(ec_sensor_temp_mb)
- #define SENSOR_TEMP_T_SENSOR BIT(ec_sensor_temp_t_sensor)
-+#define SENSOR_TEMP_T_SENSOR_ALT1 BIT(ec_sensor_temp_t_sensor_alt1)
- #define SENSOR_TEMP_VRM BIT(ec_sensor_temp_vrm)
- #define SENSOR_TEMP_VRME BIT(ec_sensor_temp_vrme)
- #define SENSOR_TEMP_VRMW BIT(ec_sensor_temp_vrmw)
-@@ -277,8 +280,14 @@ static const struct ec_sensor_info sensors_family_amd_600[] = {
- 	EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x32),
- 	[ec_sensor_temp_vrm] =
- 		EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x33),
-+	/*
-+	 * The address of T_Sensor can vary; only one of the following T_Sensor
-+	 * addresses will be used, depending on motherboard model.
-+	 */
- 	[ec_sensor_temp_t_sensor] =
- 		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x36),
-+	[ec_sensor_temp_t_sensor_alt1] =
-+		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x37),
- 	[ec_sensor_fan_cpu_opt] =
- 		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
- 	[ec_sensor_temp_water_in] =
-@@ -519,7 +528,7 @@ static const struct ec_board_info board_info_prime_x570_pro = {
- static const struct ec_board_info board_info_prime_x670e_pro_wifi = {
- 	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
- 		SENSOR_TEMP_MB | SENSOR_TEMP_VRM |
--		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CPU_OPT,
-+		SENSOR_TEMP_T_SENSOR_ALT1 | SENSOR_FAN_CPU_OPT,
- 	.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
- 	.family = family_amd_600_series,
- };
 -- 
-2.51.0
+ i.
 
