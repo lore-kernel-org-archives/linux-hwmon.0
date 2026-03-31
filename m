@@ -1,105 +1,154 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC73F376BE4
-	for <linux-hwmon@vger.kernel.org>; Tue, 31 Mar 2026 18:20:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774981205; cv=pass; b=ikM0RbNUHX5SYO7m9QUqEdISPNh72B2L7WmgGFELyrP6+2/WaCc7WQru1cbi+RPRb/b3gTdlm9XJ+h8Gk8H8yU+tEsXJUtjQDVEvfrGq41++VTDvt3Vu7Gn8uwPFIcFoqQutuS6tF4X2eejyn3ijBXFv3l3eTClrsDBpvYB6YJs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774981205; c=relaxed/simple;
-	bh=a+30APoIORDh8Csq7KzYsvB1GDrzthta36+VO379zXg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sVoCOIdlqFnpYWtxdmuyncOKw0nLUgsoJLLxEA52RUkUpYWa1608xIPX8y+zt1/ZET0kzfTXE+ea0rLivJsOxvvF4q0XAtz6pXWzg4WId8UTCqW/A+c+zvqJMB5fwuABPdWYT8LfwAqYafNIF8PS2IijJ2/RJhfO9Jwc3JezwJ8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sa1+yKxu; arc=pass smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C0F38B13E;
+	Tue, 31 Mar 2026 18:33:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774981989; cv=none; b=BS7TMyuSJ4MYQUUDNCUzEwEL2Ls0pgk7CXMIErsTkkggKb6/r6z9BI2ewPV26sgC1yupstskpkyBFiBPadwoegTLMWz8fc9abIUAORi0O7uopVe1qZQmYjdRS+rQwHzZI2KfVRoqFYzY4tSF8KCGkSUZ0VHIUYadPGm81gYcsLI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774981989; c=relaxed/simple;
+	bh=3ZoheLZ70aCWRH+iMxChQO0wPJvNXhELhlVHg+OVUso=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=PUFOFZnlPNRVqcXUK8du4pBT50L4T0AtZlBaH53QEODTw9rwjRRWEFOt3pFWQBkwluw4awynpYn1XjxrYoWFf+viiQKHmJUkzPfPV1dgQB2IgaTaQUrBStJysiBprhcOR+ZDSftlUu2htEheNJWKqEEVKjpB8VaIEZQfKAlZ66I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qp5Tm5nj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sa1+yKxu"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-35d8e548a05so4093777a91.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 31 Mar 2026 11:20:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774981204; cv=none;
-        d=google.com; s=arc-20240605;
-        b=bIa1IWjdJDChoDej1m5Xyg9ZlqWRK4qINPHx54Qqvr2frhJ8lbs8Xv6IcKpW8Le2hn
-         HxbTUA5qs9AozAnpoixMLF7Wc/h5mznu/2C9TafcmFA/3OOAwgsaBsiSKRigqJHl7p99
-         0pnj+6vLEI1zNLoh53gYm7C5UkXsRgEheSq5NHP8/QSsk+97D9ghOVkRdk+seem8odjQ
-         RnYB2+/fXE59h7KGWUN64zL/9TCzjUySuWlsqQbIFChYLhzQ7ajLeoDjRva0ASbyqS/G
-         E8O78PkiWCBtjAUhT0zxdw0D/9EVQlur99JJ4bjmhPeVtM7QpMrXglAPuwcLLUcwnBkW
-         a7dw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=a+30APoIORDh8Csq7KzYsvB1GDrzthta36+VO379zXg=;
-        fh=mRGY8+t/LyXGZOFCTWWjhx16k5+wCJywNTdMvtCeRwg=;
-        b=Cm8wkWLEjTpdvk/vQdznhdNQ3L77K8tUq1XiTh3ytK8zlOXnFqNTfMmcRx2CWHMlH5
-         xT1dYAmEkMscKozZ5A7HzmqWgVx2AvOe4X6s47OEaAFaRBy2wBkoU/4lKw9/h5ALUxNi
-         tJvJdtzSdcBxKN7TUlFWNCR641KmCDU+xm1j/rAbYsi/U/Wpx4UBINozv0tkUhlKuVMy
-         GkTB3sUSDKbHAWtwS80bzz6sXrDvYJprN/DmO/8bZMXi7i2krPFv5W4b+xadHprHMG4W
-         wjChJ30m/pR0spYCUPF7tg0jrkZXHVNytJmFI8ijARxleNkgbUF0cqOt+Ka4KqZ+V6m+
-         3o/A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774981204; x=1775586004; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=a+30APoIORDh8Csq7KzYsvB1GDrzthta36+VO379zXg=;
-        b=Sa1+yKxuzaQY8xDutBOL16GMEmtT6/6vKl/AkSQaZqgw+D2uxMoiGiTi02nY4EOCg7
-         7u00WXIthusvSuJc0l3MepRCxRLudDWeUxuOxVFdlZ8de1kuZJegb3nRP8K20iA1DkFG
-         6SfKbvrTWMf9sRotUnEd8eZh9wTrM38zZ83ibsbBlgRE3eukN40MeJlMs/W5PQbg6pAD
-         Ee5uXE/u5vUDDORVRZVmvTku66v7Id8y6Bn2wp1aGnpd6p728GF6DGxxgoSGrC7/CKVr
-         iSCjMKyH8amJqOL1DG3cB0GQsF7vDQOjC3yEV9QXkef8SezCHv2HHBdKVhBvgVoBTltM
-         yz7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774981204; x=1775586004;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a+30APoIORDh8Csq7KzYsvB1GDrzthta36+VO379zXg=;
-        b=j7cVE9nsuv238vY4p3cfYe8enQUFPK+HoTPtorriPx8hC9sGM1T3lvtzRoJlZvX4ZA
-         ew8PQGksB+/aHiop+xNO6r8UitLCnSul0CgcOWcNWNuwHkU998oif/7i6HJ06KtqWKLx
-         1T7PCearvI+gGJ7Hz+3gX7TM0Lue/3XLYgf4sM27lf8qTO89OJstp6ev6mgSm/UyYATR
-         bjimzbJgHvAFsPF3Pjp6dKrU8GKh/td76vMeXAWI5kGLjYTqZw1mTjHHGqCRR+wHS0Gn
-         7y9mZPH+VxnFLLJAuOn1tA7Nbpx9IgKM/60ffTibpgvDk6ZPbAGP/7H9uW7ZmGV+hPVP
-         /h6w==
-X-Forwarded-Encrypted: i=1; AJvYcCUTRg5LbUeqIbZLIoif/9Y2HunaGCoL0sC9m9FM4hAAky1IqSrusKmZWDw/ZCDR/clmeFqz9+TJYFpjww==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywe3zcdTsUp3CLBs4nEEhULG7NQmhjDxw/aaJbXGwhVQ9ILDUsx
-	MCsahoLA4ZjULMncJwFKcJUjtCz3a7wBNFeEQyyAmyXeMpX4Dfoc94odK4PQmTqxAY1YbYxj4qW
-	M2wL/duLX0R6U+42PjL9v2ScNUDV0+7e77VjN
-X-Gm-Gg: ATEYQzzkON57vlZ1gM2Gx2TpnJOzlCg0DzxlZUq7TVAT13rmxlKhj5/JC4GmUOuUM9k
-	UVgDZiTcPAYRRtjYzvvTUXt/kX8M2UjBY8ay5uKVOwKVtb0YP069jW9PoBEVRCpWuPt47ibwZvm
-	hH9LEhfPjIIB6jTmsktd7MzOtWHapL2iRdqrHiTgYrnAycW0YxXkaF1Qu5GpCuyPQUKDhCSveib
-	kPGj8yOlm6OetT9IhS0DtQjdLdtkbvLTMV8gqksKUvJfY4Is0R79pzYeAV0vPBhtXTdPinSA9s7
-	SPfDYB/Dx1lIeC7+FheFEj5MxbehU3Ow2jYCFQxq
-X-Received: by 2002:a17:90b:288e:b0:35b:9720:98d0 with SMTP id
- 98e67ed59e1d1-35dc6e7ab9emr369618a91.5.1774981204047; Tue, 31 Mar 2026
- 11:20:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qp5Tm5nj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22E1FC19423;
+	Tue, 31 Mar 2026 18:33:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774981989;
+	bh=3ZoheLZ70aCWRH+iMxChQO0wPJvNXhELhlVHg+OVUso=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=qp5Tm5njZhYexVFvbOMTwdH0kQkuMh4iB3LaxZb7yu3mfH+TggRSEhNLDjYseBM4n
+	 1SGXpEWXAGHraWrNkvmtG1elgxkqtlJ4uOEgGeqJLf1aqG5U4DI807MmHT5V4X+b3E
+	 7ukGAWj/W+fUTL43eCQh5mRjWzDDLQU2f6ZGjvxabG+FRHcVJvVZ5VFcA7KuDfrKQP
+	 PsXLuNrcuhehagm4Na9Z9VxBXL5TqiXg9UnlZejXqf84mVofHQvTwkJGaHhjk5zVaV
+	 oDLblMpr8IQtJhibTO20/T4NBDJe6hWqRbOQuo6Ba0r4vaVQ76QwH51s9qh/tNMgaH
+	 eFBbB1g2MPkbg==
+Date: Tue, 31 Mar 2026 13:32:47 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260331175245.354188-1-bugfood-ml@fatooh.org> <b31eb77c-0106-4163-928f-81e521c286a9@roeck-us.net>
-In-Reply-To: <b31eb77c-0106-4163-928f-81e521c286a9@roeck-us.net>
-From: Eugene Shalygin <eugene.shalygin@gmail.com>
-Date: Tue, 31 Mar 2026 20:19:52 +0200
-X-Gm-Features: AQROBzBcvxE4fMRNXptEMNWVh5M3Iae0PcaafGKA81sZIpky8ktSsXwFDwbjfZk
-Message-ID: <CAB95QARU_8Wu35S3pCQta3L=SM7Z=5ehYZbzxDrSzeuRb3o-FQ@mail.gmail.com>
-Subject: Re: [PATCH v3] hwmon: (asus-ec-sensors) fix T_Sensor for PRIME
- X670E-PRO WIFI
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Corey Hickey <bugfood-ml@fatooh.org>, linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Linus Walleij <linusw@kernel.org>, linux-gpio@vger.kernel.org, 
+ kernel@pengutronix.de, Conor Dooley <conor+dt@kernel.org>, 
+ Peter Rosin <peda@axentia.se>, devicetree@vger.kernel.org, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, David Jander <david@protonic.nl>, 
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ Guenter Roeck <linux@roeck-us.net>, Lee Jones <lee@kernel.org>
+To: Oleksij Rempel <o.rempel@pengutronix.de>
+In-Reply-To: <20260331171612.102018-2-o.rempel@pengutronix.de>
+References: <20260331171612.102018-1-o.rempel@pengutronix.de>
+ <20260331171612.102018-2-o.rempel@pengutronix.de>
+Message-Id: <177498196767.1813355.6423158973907813746.robh@kernel.org>
+Subject: Re: [PATCH v9 1/6] dt-bindings: pinctrl: add NXP MC33978/MC34978
+ MSDI
 
-On Tue, 31 Mar 2026 at 20:08, Guenter Roeck <linux@roeck-us.net> wrote:
 
-> The above text is appropriate for comments after "---", but it is not
-> appropriate for a patch description. Please see "The canonical patch format"
-> in Documentation/process/submitting-patches.rst for information
-> on how to write a patch description.
+On Tue, 31 Mar 2026 19:16:07 +0200, Oleksij Rempel wrote:
+> Add device tree binding documentation for the NXP MC33978 and MC34978
+> Multiple Switch Detection Interface (MSDI) devices.
+> 
+> The MC33978 and MC34978 differ primarily in their operating temperature
+> ranges. While not software-detectable, providing specific compatible
+> strings allows the hwmon subsystem to correctly interpret thermal
+> thresholds and hardware faults.
+> 
+> These ICs monitor up to 22 mechanical switch contacts in automotive and
+> industrial environments. They provide configurable wetting currents to
+> break through contact oxidation and feature extensive hardware
+> protection against thermal overload and voltage transients (load
+> dumps/brown-outs).
+> 
+> The device interfaces via SPI. While it provides multiple functions, its
+> primary hardware purpose is pin/switch control. To accurately represent
+> the hardware as a single physical integrated circuit without unnecessary
+> DT overhead, all functions are flattened into a single pinctrl node:
+> - pinctrl: Exposing the 22 switch inputs (SG/SP pins) as a GPIO controller
+>   and managing their pin configurations.
+> - hwmon: Exposing critical hardware faults (OT, OV, UV) and static
+>   voltage/temperature thresholds.
+> - mux: Controlling the 24-to-1 analog multiplexer to route pin voltages,
+>   internal temperature, or battery voltage to an external SoC ADC.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+> Reviewed-by: Linus Walleij <linusw@kernel.org>
+> ---
+> changes v9:
+> - no changes
+> changes v8:
+> - Update IRQ_TYPE_* macros include path reference in documentation from
+>   interrupt-controller.h to dt-bindings/interrupt-controller/irq.h.
+> - Add bias-disable, drive-open-drain, drive-open-source, and drive-strength
+>   to the list of supported pin configuration properties.
+> changes v7:
+> - no changes
+> changes v6:
+> - add Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+> - add Reviewed-by: Linus Walleij <linusw@kernel.org>
+> changes v5:
+> - Commit Message: Added justification for distinct compatible strings
+>   based on temperature ranges.
+> - Restricted pins property to an explicit enum of valid hardware pins
+> changes v4:
+> - Drop the standalone mfd/nxp,mc33978.yaml schema entirely.
+> - Move the unified device binding to bindings/pinctrl/nxp,mc33978.yaml,
+> - Remove the dedicated child node compatible strings (nxp,mc33978-pinctrl).
+> - Flatten the pinctrl/gpio properties directly into the main SPI device
+>   node.
+> changes v3:
+> - Drop regular expression pattern from pinctrl child node and define
+>   it as a standard property
+> - Reorder required properties list in MFD binding
+> - Remove stray blank line from the MFD binding devicetree example
+> - Replace unevaluatedProperties with additionalProperties in the pinctrl
+>   binding
+> changes v2:
+> - Squashed MFD, pinctrl, hwmon, and mux bindings into a single patch
+> - Removed the empty hwmon child node
+> - Folded the mux-controller node into the parent MFD node
+> - Added vbatp-supply and vddq-supply to the required properties block
+> - Changed the example node name from mc33978@0 to gpio@0
+> - Removed unnecessary literal block scalars (|) from descriptions
+> - Documented SG, SP, and SB pin acronyms in the pinctrl description
+> - Added consumer polarity guidance (GPIO_ACTIVE_LOW/HIGH) for SG/SB
+>   inputs, with a note on output circuit dependency
+> - Updated commit message
+> ---
+>  .../bindings/pinctrl/nxp,mc33978.yaml         | 158 ++++++++++++++++++
+>  1 file changed, 158 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,mc33978.yaml
+> 
 
-And perhaps include the "Fixes:" line?
+My bot found errors running 'make dt_binding_check' on your patch:
 
-Cheers,
-Eugene
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/nxp,mc33978.example.dtb: gpio@0 (nxp,mc33978): $nodename:0: 'gpio@0' does not match '^mux-controller(@.*|-([0-9]|[1-9][0-9]+))?$'
+	from schema $id: http://devicetree.org/schemas/mux/mux-controller.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.kernel.org/project/devicetree/patch/20260331171612.102018-2-o.rempel@pengutronix.de
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
