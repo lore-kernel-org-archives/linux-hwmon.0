@@ -1,154 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from juniper.fatooh.org (juniper.fatooh.org [173.255.221.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C0F38B13E;
-	Tue, 31 Mar 2026 18:33:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 308003A16A3
+	for <linux-hwmon@vger.kernel.org>; Tue, 31 Mar 2026 18:51:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.255.221.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774981989; cv=none; b=BS7TMyuSJ4MYQUUDNCUzEwEL2Ls0pgk7CXMIErsTkkggKb6/r6z9BI2ewPV26sgC1yupstskpkyBFiBPadwoegTLMWz8fc9abIUAORi0O7uopVe1qZQmYjdRS+rQwHzZI2KfVRoqFYzY4tSF8KCGkSUZ0VHIUYadPGm81gYcsLI=
+	t=1774983063; cv=none; b=lFRHvqYSD8ADel0+zp78piA+bW25+YM9BtAsp8QmPnyQfB6E+HKgKaEgZdWvlNblQz0Zb1ldt6n+6eLgkRV2EoJRQVaB/VfpxpXr1f29t6pa9w6t4ZC5acaAhw4PrycInOXv931IRw+zyufaqn5QRTOEORig3qAPyi0x4yVg5so=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774981989; c=relaxed/simple;
-	bh=3ZoheLZ70aCWRH+iMxChQO0wPJvNXhELhlVHg+OVUso=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=PUFOFZnlPNRVqcXUK8du4pBT50L4T0AtZlBaH53QEODTw9rwjRRWEFOt3pFWQBkwluw4awynpYn1XjxrYoWFf+viiQKHmJUkzPfPV1dgQB2IgaTaQUrBStJysiBprhcOR+ZDSftlUu2htEheNJWKqEEVKjpB8VaIEZQfKAlZ66I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qp5Tm5nj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774983063; c=relaxed/simple;
+	bh=v/4WdSNP9aZCN0L17W4ztz4Km/AWVdBtBewlkUfF3lw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=TUU/bqgbzDghSXjAhOodCtX8lnY5LhgtaNL4JeXHD1aVPg6wGb3AmDWT3dKPKq8+omQFgqC4KZEbgjN73LuDKOtGb3+otc2Y7SE9+1HZF3X8HkU57MdpgUVfNwXYTvEuYkJP0YCthR3M3C4hh+55Eid3AOz/64mictIpnAYJUsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fatooh.org; spf=pass smtp.mailfrom=fatooh.org; dkim=pass (1024-bit key) header.d=fatooh.org header.i=@fatooh.org header.b=J5TpfGdd; arc=none smtp.client-ip=173.255.221.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fatooh.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fatooh.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qp5Tm5nj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22E1FC19423;
-	Tue, 31 Mar 2026 18:33:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774981989;
-	bh=3ZoheLZ70aCWRH+iMxChQO0wPJvNXhELhlVHg+OVUso=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=qp5Tm5njZhYexVFvbOMTwdH0kQkuMh4iB3LaxZb7yu3mfH+TggRSEhNLDjYseBM4n
-	 1SGXpEWXAGHraWrNkvmtG1elgxkqtlJ4uOEgGeqJLf1aqG5U4DI807MmHT5V4X+b3E
-	 7ukGAWj/W+fUTL43eCQh5mRjWzDDLQU2f6ZGjvxabG+FRHcVJvVZ5VFcA7KuDfrKQP
-	 PsXLuNrcuhehagm4Na9Z9VxBXL5TqiXg9UnlZejXqf84mVofHQvTwkJGaHhjk5zVaV
-	 oDLblMpr8IQtJhibTO20/T4NBDJe6hWqRbOQuo6Ba0r4vaVQ76QwH51s9qh/tNMgaH
-	 eFBbB1g2MPkbg==
-Date: Tue, 31 Mar 2026 13:32:47 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key) header.d=fatooh.org header.i=@fatooh.org header.b="J5TpfGdd"
+Received: from juniper.fatooh.org (juniper.fatooh.org [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by juniper.fatooh.org (Postfix) with ESMTPS id 47726401F4;
+	Tue, 31 Mar 2026 11:51:00 -0700 (PDT)
+Received: from juniper.fatooh.org (juniper.fatooh.org [127.0.0.1])
+	by juniper.fatooh.org (Postfix) with ESMTP id 2BD0840261;
+	Tue, 31 Mar 2026 11:51:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=simple; d=fatooh.org; h=message-id
+	:date:mime-version:subject:to:references:from:in-reply-to
+	:content-type:content-transfer-encoding; s=dkim; bh=M/WqrY7z5z3s
+	7e4DFKcURtOcYME=; b=J5TpfGddteOKwDgJXgWURVdEWlq57qaW99hLz9uVBUAz
+	pAYehedIDAGNKyTX/gEj9Gt9hROXY6Xa/SY2caOCnXk6SBFvm0sPWSdmbr54yuAf
+	qTes2bGw3GRjYiGANKaHBh05NznTt5G5kFqriNfZPGRkNM93amg/E2nKng6IsF8=
+DomainKey-Signature: a=rsa-sha1; c=simple; d=fatooh.org; h=message-id
+	:date:mime-version:subject:to:references:from:in-reply-to
+	:content-type:content-transfer-encoding; q=dns; s=dkim; b=nihJdy
+	A1vffX8ddPoi9pk63UZRAYmKoYq47CgSQ8RYDuRdno9GaGTwvhRYh1QsZaidNG6R
+	JVIoBeet7dbJRHx6N9j+2aX2pGTexPVABaH1414nP0lpQbzU3K0bOEOkR/dOZwV1
+	7zvrKXclygbdkqjWIGGr8uqtwFyRpK4p5IOr4=
+Received: from [198.18.0.3] (unknown [104.184.153.121])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by juniper.fatooh.org (Postfix) with ESMTPSA id DEC43401F4;
+	Tue, 31 Mar 2026 11:50:59 -0700 (PDT)
+Message-ID: <5c69b240-a96a-4e13-8a38-6e7738f6993b@fatooh.org>
+Date: Tue, 31 Mar 2026 11:50:59 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Linus Walleij <linusw@kernel.org>, linux-gpio@vger.kernel.org, 
- kernel@pengutronix.de, Conor Dooley <conor+dt@kernel.org>, 
- Peter Rosin <peda@axentia.se>, devicetree@vger.kernel.org, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, David Jander <david@protonic.nl>, 
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
- Guenter Roeck <linux@roeck-us.net>, Lee Jones <lee@kernel.org>
-To: Oleksij Rempel <o.rempel@pengutronix.de>
-In-Reply-To: <20260331171612.102018-2-o.rempel@pengutronix.de>
-References: <20260331171612.102018-1-o.rempel@pengutronix.de>
- <20260331171612.102018-2-o.rempel@pengutronix.de>
-Message-Id: <177498196767.1813355.6423158973907813746.robh@kernel.org>
-Subject: Re: [PATCH v9 1/6] dt-bindings: pinctrl: add NXP MC33978/MC34978
- MSDI
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] hwmon: (asus-ec-sensors) fix T_Sensor for PRIME
+ X670E-PRO WIFI
+To: Guenter Roeck <linux@roeck-us.net>,
+ Eugene Shalygin <eugene.shalygin@gmail.com>, linux-hwmon@vger.kernel.org
+References: <20260331175245.354188-1-bugfood-ml@fatooh.org>
+ <b31eb77c-0106-4163-928f-81e521c286a9@roeck-us.net>
+Content-Language: en-US
+From: Corey Hickey <bugfood-ml@fatooh.org>
+In-Reply-To: <b31eb77c-0106-4163-928f-81e521c286a9@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
-On Tue, 31 Mar 2026 19:16:07 +0200, Oleksij Rempel wrote:
-> Add device tree binding documentation for the NXP MC33978 and MC34978
-> Multiple Switch Detection Interface (MSDI) devices.
+On 2026-03-31 11:08, Guenter Roeck wrote:
+> Guess I don't pay close enough attention. Sorry for that.
 > 
-> The MC33978 and MC34978 differ primarily in their operating temperature
-> ranges. While not software-detectable, providing specific compatible
-> strings allows the hwmon subsystem to correctly interpret thermal
-> thresholds and hardware faults.
-> 
-> These ICs monitor up to 22 mechanical switch contacts in automotive and
-> industrial environments. They provide configurable wetting currents to
-> break through contact oxidation and feature extensive hardware
-> protection against thermal overload and voltage transients (load
-> dumps/brown-outs).
-> 
-> The device interfaces via SPI. While it provides multiple functions, its
-> primary hardware purpose is pin/switch control. To accurately represent
-> the hardware as a single physical integrated circuit without unnecessary
-> DT overhead, all functions are flattened into a single pinctrl node:
-> - pinctrl: Exposing the 22 switch inputs (SG/SP pins) as a GPIO controller
->   and managing their pin configurations.
-> - hwmon: Exposing critical hardware faults (OT, OV, UV) and static
->   voltage/temperature thresholds.
-> - mux: Controlling the 24-to-1 analog multiplexer to route pin voltages,
->   internal temperature, or battery voltage to an external SoC ADC.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-> Reviewed-by: Linus Walleij <linusw@kernel.org>
-> ---
-> changes v9:
-> - no changes
-> changes v8:
-> - Update IRQ_TYPE_* macros include path reference in documentation from
->   interrupt-controller.h to dt-bindings/interrupt-controller/irq.h.
-> - Add bias-disable, drive-open-drain, drive-open-source, and drive-strength
->   to the list of supported pin configuration properties.
-> changes v7:
-> - no changes
-> changes v6:
-> - add Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-> - add Reviewed-by: Linus Walleij <linusw@kernel.org>
-> changes v5:
-> - Commit Message: Added justification for distinct compatible strings
->   based on temperature ranges.
-> - Restricted pins property to an explicit enum of valid hardware pins
-> changes v4:
-> - Drop the standalone mfd/nxp,mc33978.yaml schema entirely.
-> - Move the unified device binding to bindings/pinctrl/nxp,mc33978.yaml,
-> - Remove the dedicated child node compatible strings (nxp,mc33978-pinctrl).
-> - Flatten the pinctrl/gpio properties directly into the main SPI device
->   node.
-> changes v3:
-> - Drop regular expression pattern from pinctrl child node and define
->   it as a standard property
-> - Reorder required properties list in MFD binding
-> - Remove stray blank line from the MFD binding devicetree example
-> - Replace unevaluatedProperties with additionalProperties in the pinctrl
->   binding
-> changes v2:
-> - Squashed MFD, pinctrl, hwmon, and mux bindings into a single patch
-> - Removed the empty hwmon child node
-> - Folded the mux-controller node into the parent MFD node
-> - Added vbatp-supply and vddq-supply to the required properties block
-> - Changed the example node name from mc33978@0 to gpio@0
-> - Removed unnecessary literal block scalars (|) from descriptions
-> - Documented SG, SP, and SB pin acronyms in the pinctrl description
-> - Added consumer polarity guidance (GPIO_ACTIVE_LOW/HIGH) for SG/SB
->   inputs, with a note on output circuit dependency
-> - Updated commit message
-> ---
->  .../bindings/pinctrl/nxp,mc33978.yaml         | 158 ++++++++++++++++++
->  1 file changed, 158 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,mc33978.yaml
-> 
+> The above text is appropriate for comments after "---", but it is not
+> appropriate for a patch description. Please see "The canonical patch format"
+> in Documentation/process/submitting-patches.rst for information
+> on how to write a patch description.
 
-My bot found errors running 'make dt_binding_check' on your patch:
+No worries, I don't mind iterating. I'm a bit unclear about what you 
+need me to change, though.
 
-yamllint warnings/errors:
+Is there an issue with the formatting? I sent the message using this 
+command:
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/nxp,mc33978.example.dtb: gpio@0 (nxp,mc33978): $nodename:0: 'gpio@0' does not match '^mux-controller(@.*|-([0-9]|[1-9][0-9]+))?$'
-	from schema $id: http://devicetree.org/schemas/mux/mux-controller.yaml
+git send-email --annotate --suppress-cc=all --to [omitted for brevity] \
+     --from 'Corey Hickey <bugfood-ml@fatooh.org>' --no-chain-reply-to \
+     --envelope-sender bugfood-ml@fatooh.org \
+     --subject-prefix="PATCH v3" @^..@
 
-doc reference errors (make refcheckdocs):
+In my editor, I added the v2 and v3 history after the ---.
 
-See https://patchwork.kernel.org/project/devicetree/patch/20260331171612.102018-2-o.rempel@pengutronix.de
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+Alternatively, are you saying that the commit message is too verbose? 
+The documentation seems to encourage that, even for short changes.
+https://docs.kernel.org/process/submitting-patches.html#describe-your-changes
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+If you want me to write a terse commit message, or cut off the current 
+message starting at e.g. "If there are any other boards using 0x37", 
+please let me know specifically.
 
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Thanks,
+Corey
