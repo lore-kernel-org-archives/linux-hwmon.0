@@ -1,58 +1,59 @@
-Received: from juniper.fatooh.org (juniper.fatooh.org [173.255.221.30])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66A452D3EC1
-	for <linux-hwmon@vger.kernel.org>; Tue, 31 Mar 2026 21:54:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.255.221.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CA8C3B47F0
+	for <linux-hwmon@vger.kernel.org>; Tue, 31 Mar 2026 23:19:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774994059; cv=none; b=RNvdQiq6jJSQ6J56nQ8UlKshcLkr1WYBLvGaHG2VcBwHceZtXnAWhjN/PhAd0yDUBKIFdwz4t+QP0/6IfmHM62G+gtO+knaOlngTB3bsv0Pjs64WFH4TvhcU+8W7wWeR3BqI1qMReMfPCah+vdPgvrOsKK4R3iW65ShCXjGL7jk=
+	t=1774999170; cv=none; b=gPUAJbCIwAMJmy0tgSuSt/KVBBBBTu0pZ8NHYk+YjRGjanWawtoIq3mHgoLKW3NduOi9QqymdSdHcOWIwMwzqZ0epvrl+l/QqK1LyCiMRNI4KUELE250RpsuINZ8Ud4pX5toVaeyycOPdZ9cRuWZzZCLcSzKper/QNi6pPz5Ck8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774994059; c=relaxed/simple;
-	bh=yZxtZWBqdfenSFda9Pc97ZeUxFX3TNjjuLPulpbG7Eo=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=TxbYRsD9Wh8eibJt8M04h1x47XpMVRdKvwLCRNp1yJ/hWZpF8OzyhHymhVbVe5l0Ytk4xV7MwjN98UJt3pWj0PITfrFHJA2ZVDYc+yN1BDgC1rPnRLWn1mFDA/6jqllfJtWZQnrHzTS9Ysn/U31z4vcZas72KjIpwz9a3Cb3N/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fatooh.org; spf=pass smtp.mailfrom=fatooh.org; dkim=pass (1024-bit key) header.d=fatooh.org header.i=@fatooh.org header.b=o+8kh86I; arc=none smtp.client-ip=173.255.221.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fatooh.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fatooh.org
+	s=arc-20240116; t=1774999170; c=relaxed/simple;
+	bh=GgqPIYVqyQe9+Kc37wwDhF1EL0bB4cr0mHKkcc56rmg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JXZ36YwD8GnOShCSzHJMo0Nvua/EEsS4kmlAQ17GnSGzWMe9CnHqZ4H5pPO9fr07bm8GzeyzCjk+SNg4mhW1JFXdSv5pdxWd0w/kvnpFkelCcjJ7hNquEVO3J6XUZXCkUQRPsdbVXX8CDIr0XVXJ7+zk+wouhQIQEQ19YGHlxqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=RZk2oEJ0; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fatooh.org header.i=@fatooh.org header.b="o+8kh86I"
-Received: from juniper.fatooh.org (juniper.fatooh.org [127.0.0.1])
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="RZk2oEJ0"
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by juniper.fatooh.org (Postfix) with ESMTPS id 67FEE401F4;
-	Tue, 31 Mar 2026 14:54:16 -0700 (PDT)
-Received: from juniper.fatooh.org (juniper.fatooh.org [127.0.0.1])
-	by juniper.fatooh.org (Postfix) with ESMTP id 2DF9140261;
-	Tue, 31 Mar 2026 14:54:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=simple; d=fatooh.org; h=from:to
-	:subject:date:message-id:mime-version:content-type
-	:content-transfer-encoding; s=dkim; bh=QXTsAQIfet5GSU6XSgQEulbUP
-	DE=; b=o+8kh86IdzWYz49/f2BHW6uU4NBkNVjQMt+AM2mK0ggrMMaYHjTH0hhOA
-	xs7+OcOILG2kuu4q5GPUE9hfZuQshYZxmnTl6ljAsEwFZZBPX9vpnUfh6J02bRXH
-	bUUo477x5HwS93AgkTUDnd+patK3lQQzGTdpvPJH/WzBLXxoXU=
-DomainKey-Signature: a=rsa-sha1; c=simple; d=fatooh.org; h=from:to
-	:subject:date:message-id:mime-version:content-type
-	:content-transfer-encoding; q=dns; s=dkim; b=NQGqpaxWTQTllSe7a7i
-	C8mJae8tfTgxNiOAxujCmxkgqoYuLaXkCqK747lZQlFmA1QpTxXS2tamJpr+qq5O
-	NakZIXKkxg1zRcP7LdDjAgSnkdM6nDaMdGv1v4OT37wO1j31NOJmWp4IZ4wvhsqm
-	TGt2wXxArwL4p64ALFrVmEW4=
-Received: from bugfood.local (unknown [104.184.153.121])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by juniper.fatooh.org (Postfix) with ESMTPSA id E3258401F4;
-	Tue, 31 Mar 2026 14:54:15 -0700 (PDT)
-Received: by bugfood.local (Postfix, from userid 1000)
-	id E8CC7C1EF214; Tue, 31 Mar 2026 14:54:14 -0700 (PDT)
-From: Corey Hickey <bugfood-ml@fatooh.org>
-To: Corey Hickey <bugfood-ml@fatooh.org>,
-	Eugene Shalygin <eugene.shalygin@gmail.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH v4] hwmon: (asus-ec-sensors) fix T_Sensor for PRIME X670E-PRO WIFI
-Date: Tue, 31 Mar 2026 14:49:06 -0700
-Message-ID: <20260331215414.368785-1-bugfood-ml@fatooh.org>
-X-Mailer: git-send-email 2.51.0
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id D91322C02FF;
+	Wed,  1 Apr 2026 12:19:25 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1774999165;
+	bh=lsLNWw0B00QtyDUa/41kW3siVH8hjuamx6nZ83CO1QY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=RZk2oEJ0NgAX70rc0hpAHYkBXm4yFt2JKtjIfnimPkjeJydCsq6Q5HTG5SWqswu/F
+	 DY4MIALA302kV2WkfhGo0HIEXctECwdw231k2P4ICf0SDmmgYx0P4Pfnz988FE3BXC
+	 s3rtXkTkSCtbi4katEdVogH+YLgi06ZJ8JKI1HrlPAcHgIUTNkgv+Zwk0da8U0RYcW
+	 /EmD157dvkUb4rpvWItGbPrEKSCCjroBG7cH9yaBV97ngfabrxDJlAkhIer9KhWD1H
+	 fUpCBhNBeF086LntGzW9PIEMxwhbuS9/f3WK7hqNDs6lHcGHh+Rauh5FYDKO/+3rRx
+	 7ptI/fL90Ygvg==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B69cc567d0002>; Wed, 01 Apr 2026 12:19:25 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.12])
+	by pat.atlnz.lc (Postfix) with ESMTP id 8C14213EE7A;
+	Wed,  1 Apr 2026 12:19:25 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+	id 861DC280990; Wed,  1 Apr 2026 12:19:25 +1300 (NZDT)
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+To: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	linux@roeck-us.net
+Cc: devicetree@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH 2/2] hwmon: pmbus: Add support for Sony APS-379
+Date: Wed,  1 Apr 2026 12:19:13 +1300
+Message-ID: <20260331231916.94662-3-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260331231916.94662-1-chris.packham@alliedtelesis.co.nz>
+References: <20260331231916.94662-1-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -60,77 +61,260 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=EcprQ+mC c=1 sm=1 tr=0 ts=69cc567d a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=nAkT6b51qpQmUpSyBroA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
-From: Corey Hickey <bugfood-c@fatooh.org>
+Add pmbus support for Sony APS-379 power supplies. There are a few PMBUS
+commands that return data that is undocumented/invalid so these need to
+be rejected with -ENXIO. The READ_VOUT command returns data in linear11
+format instead of linear16 so we need to workaround this.
 
-On the Asus PRIME X670E-PRO WIFI, the driver reports a constant value of
-zero for T_Sensor. On this board, the register for T_Sensor is at a
-diferent address, as found by experimentation and confirmed by
-comparison to an independent temperature reading.
-
-* sensor disconnected: -62.0°C
-* ambient temperature: +22.0°C
-* held between fingers: +30.0°C
-
-Introduce SENSOR_TEMP_T_SENSOR_ALT1 to support the PRIME X670E-PRO WIFI
-without causing a regression for other 600-series boards
-
-Fixes: f7ac3020036b ("hwmon: (asus-ec-sensors) add ROG Crosshair X670E Gene.")
-Signed-off-by: Corey Hickey <bugfood-c@fatooh.org>
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 ---
-v2:
-* Fixed comment format.
+ drivers/hwmon/pmbus/Kconfig   |   6 ++
+ drivers/hwmon/pmbus/Makefile  |   1 +
+ drivers/hwmon/pmbus/aps-379.c | 196 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 203 insertions(+)
+ create mode 100644 drivers/hwmon/pmbus/aps-379.c
 
-v3:
-* Removed comment about T_Sensor address varying.
-* Removed incorrect reference to thermocouple in commit message.
-
-v4:
-* Made commit message much more concise.
-
- drivers/hwmon/asus-ec-sensors.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 86f444498650..adedaf0db10e 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -111,6 +111,8 @@ enum ec_sensors {
- 	ec_sensor_temp_mb,
- 	/* "T_Sensor" temperature sensor reading [℃] */
- 	ec_sensor_temp_t_sensor,
-+	/* like ec_sensor_temp_t_sensor, but at an alternate address [℃] */
-+	ec_sensor_temp_t_sensor_alt1,
- 	/* VRM temperature [℃] */
- 	ec_sensor_temp_vrm,
- 	/* VRM east (right) temperature [℃] */
-@@ -160,6 +162,7 @@ enum ec_sensors {
- #define SENSOR_TEMP_CPU_PACKAGE BIT(ec_sensor_temp_cpu_package)
- #define SENSOR_TEMP_MB BIT(ec_sensor_temp_mb)
- #define SENSOR_TEMP_T_SENSOR BIT(ec_sensor_temp_t_sensor)
-+#define SENSOR_TEMP_T_SENSOR_ALT1 BIT(ec_sensor_temp_t_sensor_alt1)
- #define SENSOR_TEMP_VRM BIT(ec_sensor_temp_vrm)
- #define SENSOR_TEMP_VRME BIT(ec_sensor_temp_vrme)
- #define SENSOR_TEMP_VRMW BIT(ec_sensor_temp_vrmw)
-@@ -279,6 +282,8 @@ static const struct ec_sensor_info sensors_family_amd_600[] = {
- 		EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x33),
- 	[ec_sensor_temp_t_sensor] =
- 		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x36),
-+	[ec_sensor_temp_t_sensor_alt1] =
-+		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x37),
- 	[ec_sensor_fan_cpu_opt] =
- 		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
- 	[ec_sensor_temp_water_in] =
-@@ -519,7 +524,7 @@ static const struct ec_board_info board_info_prime_x570_pro = {
- static const struct ec_board_info board_info_prime_x670e_pro_wifi = {
- 	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
- 		SENSOR_TEMP_MB | SENSOR_TEMP_VRM |
--		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CPU_OPT,
-+		SENSOR_TEMP_T_SENSOR_ALT1 | SENSOR_FAN_CPU_OPT,
- 	.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
- 	.family = family_amd_600_series,
- };
--- 
-2.51.0
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index fc1273abe357..29076921e330 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -77,6 +77,12 @@ config SENSORS_ADP1050_REGULATOR
+ 	  =C2=B5Module regulators that can provide microprocessor power from 54=
+V
+ 	  power distribution architecture.
+=20
++config SENSORS_APS_379
++	tristate "Sony APS-379 Power Supplies"
++	help
++	  If you say yes here you get hardware monitoring support for Sony
++	  APS-379 Power Supplies.
++
+ config SENSORS_BEL_PFE
+ 	tristate "Bel PFE Compatible Power Supplies"
+ 	help
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index d6c86924f887..94f36c7069ec 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -9,6 +9,7 @@ obj-$(CONFIG_SENSORS_ACBEL_FSG032) +=3D acbel-fsg032.o
+ obj-$(CONFIG_SENSORS_ADM1266)	+=3D adm1266.o
+ obj-$(CONFIG_SENSORS_ADM1275)	+=3D adm1275.o
+ obj-$(CONFIG_SENSORS_ADP1050)	+=3D adp1050.o
++obj-$(CONFIG_SENSORS_APS_379)	+=3D aps-379.o
+ obj-$(CONFIG_SENSORS_BEL_PFE)	+=3D bel-pfe.o
+ obj-$(CONFIG_SENSORS_BPA_RS600)	+=3D bpa-rs600.o
+ obj-$(CONFIG_SENSORS_DELTA_AHE50DC_FAN) +=3D delta-ahe50dc-fan.o
+diff --git a/drivers/hwmon/pmbus/aps-379.c b/drivers/hwmon/pmbus/aps-379.=
+c
+new file mode 100644
+index 000000000000..e4c4c2d12bc9
+--- /dev/null
++++ b/drivers/hwmon/pmbus/aps-379.c
+@@ -0,0 +1,196 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Hardware monitoring driver for Sony APS-379 Power Supplies
++ *
++ * Copyright 2026 Allied Telesis Labs
++ */
++
++#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/pmbus.h>
++#include "pmbus.h"
++
++struct aps_379_data {
++	struct pmbus_driver_info info;
++	u8 vout_linear_exponent;
++};
++
++#define to_aps_379_data(x) container_of(x, struct aps_379_data, info)
++
++static const struct i2c_device_id aps_379_id[] =3D {
++	{ "aps-379", 0 },
++	{},
++};
++
++static int aps_379_read_byte_data(struct i2c_client *client, int page, i=
+nt reg)
++{
++	const struct pmbus_driver_info *info =3D pmbus_get_driver_info(client);
++	struct aps_379_data *data =3D to_aps_379_data(info);
++	int ret;
++
++	if (page > 0)
++		return -ENXIO;
++
++	switch (reg) {
++	case PMBUS_VOUT_MODE:
++		/*
++		 * The VOUT format used by the chip is linear11,
++		 * not linear16. Report that VOUT is in linear mode
++		 * and return exponent value extracted while probing
++		 * the chip.
++		 */
++		ret =3D data->vout_linear_exponent;
++		break;
++	default:
++		ret =3D -ENODATA;
++		break;
++	}
++
++	return ret;
++}
++
++/*
++ * The APS-379 uses linear11 format instead of linear16. We've reported =
+the exponent
++ * via the PMBUS_VOUT_MODE so we just return the mantissa here.
++ */
++static int aps_379_read_vout(struct i2c_client *client)
++{
++	int ret;
++	s32 mantissa;
++
++	ret =3D pmbus_read_word_data(client, 0, 0xff, PMBUS_READ_VOUT);
++	if (ret < 0)
++		return ret;
++
++	mantissa =3D ((s16)((ret & 0x7ff) << 5)) >> 5;
++	ret =3D mantissa;
++
++	return ret;
++}
++
++static int aps_379_read_word_data(struct i2c_client *client, int page, i=
+nt phase, int reg)
++{
++	int ret;
++
++	if (page > 0)
++		return -ENXIO;
++
++	switch (reg) {
++	case PMBUS_VOUT_UV_WARN_LIMIT:
++	case PMBUS_VOUT_OV_WARN_LIMIT:
++	case PMBUS_VOUT_UV_FAULT_LIMIT:
++	case PMBUS_VOUT_OV_FAULT_LIMIT:
++	case PMBUS_PIN_OP_WARN_LIMIT:
++	case PMBUS_POUT_OP_WARN_LIMIT:
++	case PMBUS_MFR_IIN_MAX:
++	case PMBUS_MFR_PIN_MAX:
++	case PMBUS_MFR_VOUT_MIN:
++	case PMBUS_MFR_VOUT_MAX:
++	case PMBUS_MFR_IOUT_MAX:
++	case PMBUS_MFR_POUT_MAX:
++	case PMBUS_MFR_MAX_TEMP_1:
++		/* These commands return data but it is invalid/un-documented */
++		ret =3D -ENXIO;
++		break;
++	case PMBUS_READ_VOUT:
++		ret =3D aps_379_read_vout(client);
++		break;
++	default:
++		if (reg >=3D PMBUS_VIRT_BASE)
++			ret =3D -ENXIO;
++		else
++			ret =3D -ENODATA;
++		break;
++	}
++
++	return ret;
++
++}
++
++static struct pmbus_driver_info aps_379_info =3D {
++	.pages =3D 1,
++	.format[PSC_VOLTAGE_OUT] =3D linear,
++	.format[PSC_CURRENT_OUT] =3D linear,
++	.format[PSC_POWER] =3D linear,
++	.format[PSC_TEMPERATURE] =3D linear,
++	.format[PSC_FAN] =3D linear,
++	.func[0] =3D PMBUS_HAVE_VOUT |
++		PMBUS_HAVE_IOUT |
++		PMBUS_HAVE_PIN | PMBUS_HAVE_POUT |
++		PMBUS_HAVE_TEMP |
++		PMBUS_HAVE_FAN12,
++	.read_byte_data =3D aps_379_read_byte_data,
++	.read_word_data =3D aps_379_read_word_data,
++};
++
++static int aps_379_probe(struct i2c_client *client)
++{
++	struct device *dev =3D &client->dev;
++	const struct i2c_device_id *mid;
++	struct pmbus_driver_info *info;
++	struct aps_379_data *data;
++	u8 buf[I2C_SMBUS_BLOCK_MAX + 1];
++	int ret;
++
++	data =3D devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	memcpy(&data->info, &aps_379_info, sizeof(*info));
++	info =3D &data->info;
++
++	if (!i2c_check_functionality(client->adapter,
++				     I2C_FUNC_SMBUS_READ_BYTE_DATA
++				     | I2C_FUNC_SMBUS_READ_WORD_DATA
++				     | I2C_FUNC_SMBUS_READ_BLOCK_DATA))
++		return -ENODEV;
++
++	ret =3D i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
++	if (ret < 0) {
++		dev_err(dev, "Failed to read Manufacturer Model\n");
++		return ret;
++	}
++
++	for (mid =3D aps_379_id; mid->name[0]; mid++) {
++		if (!strncasecmp(buf, mid->name, strlen(mid->name)))
++			break;
++	}
++	if (!mid->name[0]) {
++		buf[ret] =3D '\0';
++		dev_err(dev, "Unsupported Manufacturer Model '%s'\n", buf);
++		return -ENODEV;
++	}
++
++	ret =3D i2c_smbus_read_word_data(client, PMBUS_READ_VOUT);
++	if (ret < 0) {
++		dev_err(dev, "Can't get vout exponent.\n");
++		return ret;
++	}
++	data->vout_linear_exponent =3D (u8)((ret >> 11) & 0x1f);
++
++	return pmbus_do_probe(client, info);
++}
++
++static const struct of_device_id __maybe_unused aps_379_of_match[] =3D {
++	{ .compatible =3D "sony,aps-379" },
++	{},
++};
++MODULE_DEVICE_TABLE(of, aps_379_of_match);
++
++static struct i2c_driver aps_379_driver =3D {
++	.driver =3D {
++		.name =3D "aps-379",
++		.of_match_table =3D of_match_ptr(aps_379_of_match),
++	},
++	.probe =3D aps_379_probe,
++	.id_table =3D aps_379_id,
++};
++
++module_i2c_driver(aps_379_driver);
++
++MODULE_AUTHOR("Chris Packham");
++MODULE_DESCRIPTION("PMBus driver for Sony APS-379");
++MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS("PMBUS");
+--=20
+2.53.0
 
