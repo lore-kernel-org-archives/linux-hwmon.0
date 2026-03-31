@@ -1,280 +1,155 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010028.outbound.protection.outlook.com [40.93.198.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22DD43ECBF9
-	for <linux-hwmon@vger.kernel.org>; Tue, 31 Mar 2026 09:48:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774950481; cv=none; b=OIil09WGFG/wOWM9tPPDaa3I96o339bNrByMnCcUFxUuc5MpyEt6ghyF0n7+m9/zaa//hWQKMccUv0JEESx4NsyXmR7kmzo9sWK6tVzhZNP6vYi7arBia6ZK6c4dhIFA1DPxAkzf9GF08us6ZpaMAgyfCLSPBg/y9LGy43a7mIY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774950481; c=relaxed/simple;
-	bh=enjXq1IaosHLxnBgQhk2lHI8aL7+jqMUWCiR5kNvnlI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s4549poaGNIN9W6AdUwBWqrkacyGROjN4k8CQgjzNXQyFbNkFt6qnECorj/gqbNvF3ko5TdwbPjFn8ogE3F1PxpbUVerULRq2D5vMlQdVEhpdd/88DFcoouneeq6d5HBybmFhhLbh17GZUqXf+SYiHsgqNA8Q0MCd1/O1QbJWAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=adzEQltm; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B44F399345;
+	Tue, 31 Mar 2026 10:09:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.28
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774951777; cv=fail; b=U4D8KRuBNfnbViK0JT3PkQrDmUYzPfotDRRrFyTruwiRt2aKrpTezNtWZkgAkOXykyasj53xm2ZEAWnBY1EpCyWFJTMAB9PHDsNsajtOAk5DB3lQDGAHHa2cFc/yFtQFcB7XZ+deGXavovk5zskGg7WdsAux+5PPyh21pOttirE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774951777; c=relaxed/simple;
+	bh=/Q7VyRE0kz2w0ERqr2gblIsDYOpcA2IW9vANTQE8nLg=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=J5wmrEb6t/8sI6sKdTHRY1pRlBBzhL7jqKrxDEEqKaPVYhCHwrsz6kDAByeDLjtPOLIgNKPH7Uo8Gq1VoTwVU/4xn8RszR0a4Mwbhd27oEVnZAPmCxQlnCQeSmqSoU9i3jfj4DMO3KZ1bpZ42IIHQzd2WYYXkbjvQSy7UqlEo4w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=i3oxRlQ5; arc=fail smtp.client-ip=40.93.198.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="adzEQltm"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4852a9c6309so46179985e9.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 31 Mar 2026 02:47:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774950478; x=1775555278; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=HmEtPoEG1EUMKwQsf4OvvafgJCsYzJUriFfog6MNbws=;
-        b=adzEQltmPRXJzxV64O8v8A+IFV8kFJoXexFbIIoSwvYutmRN9qZaOwWysUZkM+Hpa2
-         NFdcRYQvUnuySWJA5DAtHYaAdoMx5E7FCodw2oF8kgxAdPzzk29snueyyQ79FIARaPl4
-         EEvzQDnvDw8MKn8YhJkvQSVehu0Tkr8OslqT+iLoFWY9JAiIya9UYTaG/kZyE1qYVhJB
-         cp6dLe9D3s6p83aCu/nqnsQ1MeZ2BTjLItlXL+FN7HUNm2NVc5r2V/CjDb3TyGzKf81q
-         vNZNACzlI+r3W7FDtZgVfewB8jfTZRBP767CO+Hk1fOWwdEaFM0ev8oqY0N1P8JG4P70
-         eMRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774950478; x=1775555278;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HmEtPoEG1EUMKwQsf4OvvafgJCsYzJUriFfog6MNbws=;
-        b=UJWKvgXbBQ5IJjJmsGjQZzKfArDdNn2C11ZhdWOwrkrti/ExXC/LQyjjmyD6KCF1UQ
-         u4aN2z/d5HPlf1xAbuk0d8eZ0375zkw//w4cBgUqtA7XYnvKwAlePqS3ITj91jveapbG
-         OBgwWY4URGyDEHHcx1siyTR1e9wzyDWonm7h/E/tWIF9zhzx5314RW9n0LZWuD/sycj3
-         LxZqyxt55YUDfvEhcwx9XRVp2hycYUpGHiQv+m/Ly9mNwUExAPf1sakoj5gedHxaW6fb
-         FjzFvYR4uPrlaE+obtxJvdhj0J2v7gKFu3Vi7ITrZSSWDsUzYmgajKBru+KmVfEvjvPJ
-         +z+A==
-X-Forwarded-Encrypted: i=1; AJvYcCVsXUxG0xkvqWNCmqEAJDE1DKUgWEI0KwuPgkXMjvLvuqsZkHxNABF+xnO/HCw75mZsCEg++68Bvxfjcg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz36QhgQdWwqGwCVOPdPVB6UeuvyTtfrKuqh4EjFskTf0rymeQ5
-	CnWi1kqZpbHPEB/3H/4cxVeirafZzos23UxIZW8GGXh93PFnU5AXRe6E
-X-Gm-Gg: ATEYQzyrEwNDhUIu+k3OA2QdsSvv9nCS5VPuPS36ALlbdSxewwd91NWjcxSO8tgqPkI
-	yCwqudt8gwcB85vMr0eERlD2hTCGmOgpcIV2hzJD8MPaf4l73PKGPLH3/aFhmVUQRp4aU1rlB0t
-	nSSEpxtuA1Z9mSDhW7+nTWqvg99B9GJ2sFomxUclovi/k9pWvJxh23cmqrGPz84KFUvPB053lwu
-	mRMItOi/YDC/HGUKJpWyqe2mBvEpn9wogW2WkbTJjQBH2GCKdaDpvPCQWbcpE1oBKbV8CF9WqV1
-	nEGwvcqeqY7Iga6X74nEP+AYCcFvdg8bw8roc97DRUzwWole1ju5dCwM6CifbrT7+ST+AO+1+p3
-	qc6ccetTKJxFCdhFu/vEoFj0q06u/hO+znksvT4Q90uXbVmUhmHa9MzZj5jqffUUKcA67SmJ8MD
-	T3E/Nh1CUURa9a
-X-Received: by 2002:a05:600c:b95:b0:485:5c6e:8a38 with SMTP id 5b1f17b1804b1-48727f63664mr250648925e9.17.1774950478236;
-        Tue, 31 Mar 2026 02:47:58 -0700 (PDT)
-Received: from nsa ([185.128.9.53])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887aacb8d0sm14105285e9.3.2026.03.31.02.47.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2026 02:47:57 -0700 (PDT)
-Date: Tue, 31 Mar 2026 10:48:43 +0100
-From: Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>, linux-gpio@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, linux-doc@vger.kernel.org, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>
-Subject: Re: [PATCH v8 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap
- Controller
-Message-ID: <acuLynb1hRFJRcEf@nsa>
-References: <20260327-ltc4283-support-v8-0-471de255d728@analog.com>
- <20260327-ltc4283-support-v8-2-471de255d728@analog.com>
- <aco5L_6SZIB2DdpF@nsa>
- <e0c96f38-6742-4b86-8938-64e4e6063119@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="i3oxRlQ5"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Qb48zAQFIXMpKf3cbZoXyNcvHYh4ut0s5sEDVbVdpPMBq8euubYbuNl3KBOXyCdBsyY6FAN/+0soK0ZwkVGMfDKQgkgtUBUShNuUjwrvu0dmP53VkeTPZQdQ6xTdG8K0O8ySpTfrosKrIo7FqWsq/8rbqIwkacNNzarCM/pZ9hob3Fog8RxafZVhJOQ9ikIJf5+4c17Z2pRQp5EmUSQKnDgSzCLU5trPokh+wKNpGQuUn9w+OsM8Nd7H4w5SN+nPgoEcy1EbrjlRt0kQwskodV/5WSXJhOOBnqkOeW5xowJ9fazAVlCtGclR+oeLofAaUaSVFSVuhfjTCc2b5hQTFg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rkzTy732sh6+Kc/GptaD4U1dc5kPwfd1HhpxUZvmFdo=;
+ b=URz4UjvfyeM00mJ4WmE698Cl/zpSXj1B2HlfQGUzJdLw9axw/m35oEo8tnJtC4fN0Zg99TYgFfvs0PzGJH4Ac4uMxf/LK+TMecl1tba9kTdnxQ/gngJIO5GzVi6QQcWUz8eHO2J5ilcH59T9ezGWnvUBsK70sUsLOdBY31LgY/Dc/EhuA1GrHq3WlTA/Qpmbdmvs92rVn2CVkjn3UgcOwj9Sqqm1Guedf6ghlbpaGRdPwZqG83iu4UANoFJlOTJwIRL5NR7cffAZMFyTdLGU/exugbUxJcu3SE8lXevJOs2uYHMe1HMuhWKLVW/D5Wf4AvsspBhQsuz6O1uNMBqVNg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rkzTy732sh6+Kc/GptaD4U1dc5kPwfd1HhpxUZvmFdo=;
+ b=i3oxRlQ5X45WCdGHStooJwcWzz0HzQq2vf+Wl+rZcjbPkfqX9b7d7x7uo1UPZnxfmOIL8orTd2RynKeDRMFqoYU3umZwW7kuV93m87FetdBwOZ9zGcozWEWSOX9dlb7is7eh/QD1ZQgTEeJiP1BNZ/8z5xZ/jmdElCQjrdZh+4DcoL4CXJO83dN24BFiXHsrXEhlKl8kxUl5fKH03H7QXSKUpdlBQwAiPeFmk8heVNIoTIsyF0p0ZAi7hRi+fP7MmwSNdBOTPNGER9bmI8Jj7MGul2+g02s0kFRBVV7/8xwZAFA37FwILSO1+/BnoGt6GGXstfStAfF55OUIL8utnw==
+Received: from MN0PR03CA0009.namprd03.prod.outlook.com (2603:10b6:208:52f::14)
+ by IA1PR12MB6138.namprd12.prod.outlook.com (2603:10b6:208:3ea::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.15; Tue, 31 Mar
+ 2026 10:09:29 +0000
+Received: from BL02EPF0001A104.namprd05.prod.outlook.com
+ (2603:10b6:208:52f::4) by MN0PR03CA0009.outlook.office365.com
+ (2603:10b6:208:52f::14) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9745.29 via Frontend Transport; Tue,
+ 31 Mar 2026 10:09:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BL02EPF0001A104.mail.protection.outlook.com (10.167.241.135) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9745.21 via Frontend Transport; Tue, 31 Mar 2026 10:09:29 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 31 Mar
+ 2026 03:09:13 -0700
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 31 Mar
+ 2026 03:09:12 -0700
+Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.13) by mail.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
+ Transport; Tue, 31 Mar 2026 03:09:05 -0700
+From: Akhil R <akhilrajeev@nvidia.com>
+To: <thierry.reding@kernel.org>
+CC: <Frank.Li@nxp.com>, <acpica-devel@lists.linux.dev>,
+	<akhilrajeev@nvidia.com>, <alexandre.belloni@bootlin.com>,
+	<conor+dt@kernel.org>, <devicetree@vger.kernel.org>, <ebiggers@kernel.org>,
+	<fredrik.markstrom@est.tech>, <jonathanh@nvidia.com>, <krzk@kernel.org>,
+	<lenb@kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-hwmon@vger.kernel.org>, <linux-i3c@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+	<linux@roeck-us.net>, <lkp@intel.com>, <llvm@lists.linux.dev>,
+	<miquel.raynal@bootlin.com>, <oe-kbuild-all@lists.linux.dev>,
+	<p.zabel@pengutronix.de>, <rafael@kernel.org>, <robert.moore@intel.com>,
+	<robh@kernel.org>
+Subject: Re: [PATCH 04/12] i3c: master: Support ACPI enumeration
+Date: Tue, 31 Mar 2026 15:39:04 +0530
+Message-ID: <20260331100904.30932-1-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <acO_PUjS_VG07qcS@orome>
+References: <acO_PUjS_VG07qcS@orome>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e0c96f38-6742-4b86-8938-64e4e6063119@roeck-us.net>
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A104:EE_|IA1PR12MB6138:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0178985a-f202-4647-67ff-08de8f0d98e0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700016|7416014|376014|1800799024|82310400026|22082099003|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	o66Hi730BBYN4PsXul8TRyNJNTRWyLlrDJxFC9jpJpF7I2Ob1qgIhUAHDNEGvPsYARzSEHcnZt092aTt+96hjjiLf7mlmwdaByLY7eBVc2s7T2Jb3YML/tXN2VtIOSDuyPFrW5qflpO2njlIXJ4sG3/MgqydVZks9ZO585NZZMj9DLL+QtPf1/bDdPICX6DwSorO2tXq5683ky8JaoTTGG0eLG8vlnJwbWikQJrLgsSWsHJcUTLuA4j0PEUti6fcMlL/LWmgNtkJ9H3ywb6c5GgMTQTBhKDqQgktXTbWHTABJxrZJVFoogO1v5w9wx8xDQr4UUe1G4xcNpx6nSwBFyuSdzLiRQmrIJkyfKcp1Ah6wPiFNkOIVZwFI3N8vGSwe0k3URYhDh/WbNojFneEHdyJLrpy9p5IApDIcGK+w02TA0WGbXEkocqzOvXz+rsbZ90yEWm1u50syx/JPt5qEVsQZPOdCN27mZDscJ0qB+YYXyQ7l8bLpCf1a8avGzLsUCBZxfvwIo7HVxIcmJMwDUsSwj9VGkbdtcgexWh2OwLec0PmLaX44rsh6cbZLPSofntEpyHq7gzi7uIiYrQQDQAXFlm4hrxfjBKIFIhVgpyA5rVkYAtvnBvJyxQrY4H4YTXhSkXxrAa1mMJSP28QnRXH3P95oWM/Z276ZJZEpentn8QoIoZj8Q5v3AODjYSyjtoUVd+P1qsuud8t/wtGG0NJdKciQUiFcek1g+Rzh8JCB9OIqrSdlieNSjWeRG5PDBUGg76+wRlSBnmq8rFYQA==
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700016)(7416014)(376014)(1800799024)(82310400026)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	xTvS9JM/gPYed1yWoTFxG5DSrVMgL4FXA3s4LiLXzwutjkK9D6irMDTUKWs+M2woxZKj63S8KrY57S+e2Nu8vT2iKwhOwFdJskM8NUywTRSU/0EmyJA33ZILjM91aZLsl2dg2/QMZuzRcMARhBB7BfOHTrikfoeCLkyDb3PSkxUN4nMxHB1U42NQLilTBfnH6q6dVfPOTQ67NOwRGHzdDBVPzo8r+vpzQKMH5V/YV4TZLV1NvNpxOEhtPtdTXkegLDziuJszpEiDrMjehM2iyZPE6wxYmOJzfL6NorQZ1RdI3mbzlf/gvhZl7Ot/pGEcIZqzxKtrq1tO/0Pd/8spLM6pvVrRH7cWUWhqm+j2/lsWxR/F041phU0K6m57TagWXlNA/XAYTjl6nQiwGIHtE1kZ9xzo+FYWjxHcG8TgvB8VuLyV8/WbEr3svc+ga+n2
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2026 10:09:29.3415
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0178985a-f202-4647-67ff-08de8f0d98e0
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL02EPF0001A104.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6138
 
-On Mon, Mar 30, 2026 at 08:47:32AM -0700, Guenter Roeck wrote:
-> On 3/30/26 02:28, Nuno Sá wrote:
-> > Hi Guenter, Regarding AI review, I think most of the points were
-> > discussed in previous revisions, but there are two valid.
-> > 
-> > On Fri, Mar 27, 2026 at 05:26:15PM +0000, Nuno Sá wrote:
-> > > Support the LTC4283 Hot Swap Controller. The device features programmable
-> > > current limit with foldback and independently adjustable inrush current to
-> > > optimize the MOSFET safe operating area (SOA). The SOA timer limits MOSFET
-> > > temperature rise for reliable protection against overstresses.
-> > > 
-> > > An I2C interface and onboard ADC allow monitoring of board current,
-> > > voltage, power, energy, and fault status.
-> > > 
-> > > Signed-off-by: Nuno Sá <nuno.sa@analog.com>
-> > > ---
-> > >   Documentation/hwmon/index.rst   |    1 +
-> > >   Documentation/hwmon/ltc4283.rst |  266 ++++++
-> > >   MAINTAINERS                     |    1 +
-> > >   drivers/hwmon/Kconfig           |   12 +
-> > >   drivers/hwmon/Makefile          |    1 +
-> > >   drivers/hwmon/ltc4283.c         | 1796 +++++++++++++++++++++++++++++++++++++++
-> > >   6 files changed, 2077 insertions(+)
-> > > 
-> > 
-> > ...
-> > 
-> > > +static int ltc4283_read_in_alarm(struct ltc4283_hwmon *st, u32 channel,
-> > > +				 bool max_alm, long *val)
-> > > +{
-> > > +	if (channel == LTC4283_VPWR)
-> > > +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_1,
-> > > +					  BIT(2 + max_alm), val);
-> > > +
-> > > +	if (channel >= LTC4283_CHAN_ADI_1 && channel <= LTC4283_CHAN_ADI_4) {
-> > > +		u32 bit = (channel - LTC4283_CHAN_ADI_1) * 2;
-> > > +		/*
-> > > +		 * Lower channels go to higher bits. We also want to go +1 down
-> > > +		 * in the min_alarm case.
-> > > +		 */
-> > > +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_2,
-> > > +					  BIT(7 - bit - !max_alm), val);
-> > > +	}
-> > > +
-> > > +	if (channel >= LTC4283_CHAN_ADIO_1 && channel <= LTC4283_CHAN_ADIO_4) {
-> > > +		u32 bit = (channel - LTC4283_CHAN_ADIO_1) * 2;
-> > > +
-> > > +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_3,
-> > > +					  BIT(7 - bit - !max_alm), val);
-> > > +	}
-> > > +
-> > > +	if (channel >= LTC4283_CHAN_ADIN12 && channel <= LTC4283_CHAN_ADIN34) {
-> > > +		u32 bit = (channel - LTC4283_CHAN_ADIN12) * 2;
-> > > +
-> > > +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_5,
-> > > +					  BIT(7 - bit - !max_alm), val);
-> > > +	}
-> > 
-> > "Will this condition handle the ADIO12 and ADIO34 differential channels?
-> > It looks like channels 14 and 15 fall through to the default return intended
-> > for the DRAIN channel. Since reading the alarm implicitly clears the register
-> > bits, could reading these ADIO alarms unintentionally clear actual DRAIN
-> > alarms? Should the upper bound be LTC4283_CHAN_ADIO34?"
-> > 
-> > Good catch and should be:
-> > 
-> > -       if (channel >= LTC4283_CHAN_ADIN12 && channel <= LTC4283_CHAN_ADIN34) {
-> > +       if (channel >= LTC4283_CHAN_ADIN12 && channel <= LTC4283_CHAN_ADIO34) {
-> > 
-> > > +
-> > > +	if (channel == LTC4283_CHAN_DRNS)
-> > > +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_4,
-> > > +					  BIT(6 + max_alm), val);
-> > > +
-> > > +	return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_4, BIT(4 + max_alm),
-> > > +				  val);
-> > > +}
-> > 
-> > ...
-> > 
-> > > +
-> > > +static int ltc4283_probe(struct i2c_client *client)
-> > > +{
-> > > +	struct device *dev = &client->dev, *hwmon;
-> > > +	struct auxiliary_device *adev;
-> > > +	struct ltc4283_hwmon *st;
-> > > +	int ret;
-> > > +
-> > > +	st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
-> > > +	if (!st)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	if (!i2c_check_functionality(client->adapter,
-> > > +				     I2C_FUNC_SMBUS_BYTE_DATA |
-> > > +				     I2C_FUNC_SMBUS_WORD_DATA |
-> > > +				     I2C_FUNC_SMBUS_READ_I2C_BLOCK))
-> > > +		return -EOPNOTSUPP;
-> > > +
-> > > +	st->client = client;
-> > > +	st->map = devm_regmap_init(dev, &ltc4283_regmap_bus, client,
-> > > +				   &ltc4283_regmap_config);
-> > > +	if (IS_ERR(st->map))
-> > > +		return dev_err_probe(dev, PTR_ERR(st->map),
-> > > +				     "Failed to create regmap\n");
-> > > +
-> > > +	ret = ltc4283_setup(st, dev);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	hwmon = devm_hwmon_device_register_with_info(dev, "ltc4283", st,
-> > > +						     &ltc4283_chip_info, NULL);
-> > > +
-> > > +	if (IS_ERR(hwmon))
-> > > +		return PTR_ERR(hwmon);
-> > > +
-> > > +	ltc4283_debugfs_init(st, client);
-> > > +
-> > > +	if (!st->gpio_mask)
-> > > +		return 0;
-> > > +
-> > > +	adev = devm_auxiliary_device_create(dev, "gpio", &st->gpio_mask);
-> > > +	if (!adev)
-> > > +		return dev_err_probe(dev, -ENODEV, "Failed to add GPIO device\n");
-> > 
-> > "Does this allow multiple LTC4283 chips to probe successfully?
-> > Without allocating a unique ID per I2C instance, it seems the first probed
-> > chip takes the generic name. If a second chip is present, it might attempt
-> > to register with the exact same name, resulting in a failure in device_add()
-> > and aborting the probe."
-> > 
-> > Also looks valid and I suspect is one of those that a quick look will
-> > find more "offenders". I would purpose:
-> > 
-> > -       adev = devm_auxiliary_device_create(dev, "gpio", &st->gpio_mask);
-> > +       adev = __devm_auxiliary_device_create(dev, KBUILD_MODNAME, "gpio",
-> > +                                             &st->gpio_mask, client->addr);
-> > 
+On Wed, 25 Mar 2026 11:59:12 +0100, Thierry Reding wrote:
+> On Tue, Mar 24, 2026 at 10:52:15PM +0530, Akhil R wrote:
+>> On Tue, 24 Mar 2026 09:43:27 +0100, Alexandre Belloni wrote:
+>> 
+>> ...
+>> 
+>> >> #include <linux/acpi.h> is added in PATCH 03/12. The functions' prototypes
+>> >> are present in acpi.h. I think the bot checked this patch individually,
+>> >> or did I miss something?
+>> >> 
+>> > 
+>> > #include <acpi/acpi_bus.h> is behind an #ifdef in acpi.h and your code
+>> > is not.
+>> 
+>> Thanks for pointing Alexandre and Guenter. I also noticed that we do not
+>> have stub functions for a few of the acpi_* functions in #else.
+>> 
+>> Looks like I will have to guard calls to these functions under
+>> #ifdef CONFIG_ACPI.
 > 
-> That would still fail if there are multiple chips at the same I2C address
-> on multiple I2C busses. Check drivers/gpu/drm/bridge/ti-sn65dsi86.c which has
-> the same problem.
+> Alternatively it might make sense to add the stubs in a separate patch.
+> I don't know if they were purposefully left out or nobody's ever run
+> into the lack of these before.
 
-I did looked at that one but totally forgot the multiple busses
-scenario.
+I looked into this and it turns out to be more involved than expected,
+and requires adding stubs at multiple layers. We may end up either
+sneaking in only what we require or a non-trivial change which may
+involve too many parameters.
 
-> 
-> > If there's nothing else and you agree with the above, is this something
-> > you can tweak while applying or should I spin a new version?
-> > 
-> 
-> Please respin. Also, regarding the other concerns:
-> 
->   Can BIT(8) * st->rsense wrap to zero on 32-bit architectures?
->   BIT(8) is a 32-bit unsigned long and st->rsense is a u32. If a user sets a
->   very large sense resistor value via the device tree, the multiplication could
->   wrap to 0, causing a division-by-zero kernel panic. Should the divisor use
->   BIT_ULL(8)?
-> 
-> Unless I am missing something, this _can_ overflow. Try to provide a sense
-> resistor value of 1677721600. Yes, it is unreasonable to specify such large
-> rsense values, but why not just limit it such that it does not overflow ?
+If you would agree, I will guard the ACPI calls used in this patchset with
+#ifdef CONFIG_ACPI to keep things self-contained. If you think adding the
+stubs is worthwhile, we can take them up as a separate series.
 
-Yes, that's pretty much my reasoning (regarding the unreasonable
-rsense). I could just make BIT_ULL() and be done with it. I can also
-also cap rsense to a max value but i'm not 100% what that value would
-be. Maybe 1 ohm is already more than reasonable. I can also ask internally. Any
-preference on this one?
-
-> 
-> Also, for the overflow concerns, if you are sure they can not happen, I'll
-> really need to write the unit test code to make sure that this is indeed
-> the case.
->
-
-Hmm, for the val * MILLI case, well it should not happen but given it
-depends on user input, better if I clamp it before passing the
-value to ltc4283_write_in_byte(). Yes, we clamp again inside the
-write_bytes() API but not a big deal.
-
-For the st->power_max is again one of those cases where the values would
-not make sense (I think - the combination of vsense_max and rsense). Just looking
-at the code, it can overflow but this one I'm not really sure how we could handle it.
-Maybe clamp power_max to U8_MAX and have a warning message in ltc4283_read_power_byte() if
-we overflow long in which case we need a power64 attr?
-
-But even clamping does not make much sense here. The power limit register
-is 8 bits, so if our design (rsense + vsense_max) overflows that,
-there's nothing we can do other that erroring out.
-
-- Nuno Sá
-
-> Thanks,
-> Guenter
-> 
+Best Regards,
+Akhil
