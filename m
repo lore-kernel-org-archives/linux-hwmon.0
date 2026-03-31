@@ -1,67 +1,66 @@
-Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
+Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 741D83D7D70
-	for <linux-hwmon@vger.kernel.org>; Tue, 31 Mar 2026 21:11:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2962C4418E6
+	for <linux-hwmon@vger.kernel.org>; Tue, 31 Mar 2026 21:41:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774991463; cv=none; b=O70jQ6N/M8cDMHTDfuI0dA9ARZ96ek5/WQhYLhqKc7SkDNfp9MagkRF1KiCiONn+MNFGNT69QFhzoF5jPcvMmbKILZD+aTIMJIyny1r3mNE9dqL0XQ4MEoE/slEwQ330yWxteq7iNIZRgqHS1oXBT6QeOCpoHyWoiUvRtIEdatc=
+	t=1774993299; cv=none; b=orMcfDwtZifPywpcqtROKdQD1h4yiEAIm0XffU8FwWn3xROomas2ubbBYnwMMn82xgRXdwo2/FTxmJqNEKcC1+pnnjo/9m0rdHLSf4pXeGdvdojR2zdYUqfEGxP/6CJxOVlK2YdD7myJoBRMjMIyz2rR2AZZIREBF4TWE4wx7BM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774991463; c=relaxed/simple;
-	bh=Bl6sR5XGs0FaXCQ3DtjWV6I3c7K6Mc9g2segTADwbKI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=qH91ke81M2I4bKNIRifWVFJYtw2u/QUDxY/Lt1DA5J9BTYtcxkYn5o6ksFZcLrqfAi8fGb/aqeT41O15ovmRg03X3pfYX1ES5B9k8t57uAdRXrntOZXWB7WEB8LmWMAjGEWrhVXCDw4dSKEUKF3M4/re7W9VrpxDL38GvuB8zdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oe0BZHH9; arc=none smtp.client-ip=74.125.82.44
+	s=arc-20240116; t=1774993299; c=relaxed/simple;
+	bh=SIPzojMkz2wIKlfTDD94/nLbBVQB7+okLdv8YnjhIXo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NTKbXpUap5YnfR+NeIlmG2N9l/8RfUUDLdTlworV+EP3FvnJ0zpejImMkA72zPabIuGLIO7ir9Y+LRJQqJMjsPw9TP+rlEc4JbqYMl1ddE/lVrArQgivo66C/Y7sy4Sxr0g/NDKKJkwrWqjVbPC6LpP2DoMpgh6fA0i3lSaSrSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QdgQ8rkP; arc=none smtp.client-ip=74.125.82.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oe0BZHH9"
-Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-12a74039dc6so4998929c88.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 31 Mar 2026 14:11:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QdgQ8rkP"
+Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-12a80c36350so6644719c88.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 31 Mar 2026 14:41:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774991460; x=1775596260; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774993296; x=1775598096; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=7iguHOdxDk9w7ZD5hN/a0xi3GQ1KsOxVHLh6zpk0sTA=;
-        b=Oe0BZHH9ti37L6ysqQ+ay9TnwDyZJ4c1q+AvaxKGrq/ALL+irviNEhu0vwSh0k+k8i
-         ZrRrIfee1gbt+mgu1iSzKzjdqPzYnsOWZIEBj3VorMm//4mq7Tx1ga+Ze3K1mXy0l08M
-         n9iYr4dQF69cIgc3vsdzxRcYY//TUPClR42aaf8fbLb1WtaA6TkG+Ce35qHxHzcWDWTe
-         JzG8YPo39EN/L3eLCdeDgT7CFdoYun5xajPo621GA5OXweJ+104s2fWCCasjPiM8Pf/b
-         CIpTCjXiXLYmOYW9AItdyKdMdi4KePGf8BfTV12o9rRqe5rXgFflDVMv1EsJQSeoCYqC
-         QrcQ==
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=u2A9s1tKLohWeE1NJT/Mj0axfNd+LDLEfwiXanMqc3Y=;
+        b=QdgQ8rkPDQYWZA3p2RbsGqPcgDzNuAYu6onuc5fSIcRChP74RFUZT296bALT7rn5Pl
+         SGMcJqMvENs8qKOQCoWRXuHwbPJvVlXLsMiI9uQpNO+9B+KvDM7PfVPBXnsam7lek6YR
+         ivxf/oBl0+koBrhhRlCPu19kQnbJPL2VuKTpTY8cm9hXiUGEV+yjnrOPDGf6nFq9znDa
+         xQdvfzkTDMEgqknmF8Jutd5mZVQ5E/3UzXBua4U+KeTY1WE/6eK6clCIBkWqUMN7+lbl
+         vTaNqck9S7FN5859/THLk1CSxRHo1sJ7texH+YXL3n/r7AKieeacYGH0iIgd3gZRKixM
+         zlTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774991460; x=1775596260;
+        d=1e100.net; s=20251104; t=1774993296; x=1775598096;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=7iguHOdxDk9w7ZD5hN/a0xi3GQ1KsOxVHLh6zpk0sTA=;
-        b=pbRcrnDx26QBrCpa2Ef/Con2dkwVqH667GWPu65/p4Jaif+Qrysj0m/vReZERNw7cz
-         jO2s48gntgBfnzJS3how+yJFmwXbGD0WTQ9AwIYGuFFl9ZtFh59YFmElnBoNgqxP3fhk
-         gZRTW9Vr/SYOlGuYGmjRncK9BBkSt4RM2ne5SSrTdnjCHFLoId9ZKDP5l5uQ/knLvg43
-         ySIAF0+p8MvnBW7GS/hPcRkhR65Ipb8c5y/Uw1qn3l04nLF5/QtmPUfOvCqA6JOu3Gjt
-         1IBzAqk7X8wXuvywOGjVxtRuRLUdE+PgpNDquOdKsi+icTJAD20JSyLvav1XCoE6dDds
-         NJhw==
-X-Forwarded-Encrypted: i=1; AJvYcCX01/MzLfAg256Hcr5cadDogHZj1oYuKiTc3LkLilRTf8DgvasWm7cC+hMdpUG3uAwNXHCfjNrDhucV4A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUC3ABGpy/Rk/gqvrmUKKWgMZbJqCHsdyPxUBK/yH3LC7otMlT
-	eIPm4S3vrxd9NQ86SlCE88zi0oY/TfoIj0AwF4mqhTYR6pEARd1rbwSw31YOlA==
-X-Gm-Gg: ATEYQzxNF2/Kdtp+C72eG6tN+3soVFhMOHpSPr2cIppDIqHcNju3d+Ln74F1MaAF18X
-	fYrN8HW3+rngeJeaCfZV0wn6cb4BBJjP6g5MTSXAxD7tq0zMVk/ozedRz5Pj3pwItW1bkRVqZIc
-	xLY5AtiyOxcBLsh3JtJY2HngykCUxZSECKwC0PSQfVsn83kWdA3xCkW8NscPYsOXUJmGT3PHcHb
-	hX+w6fUTf2Ehbsmx+XwAzJPfAC6vYAggG2Rw8RFCjpixYQbTBZ7B2IPL6DiGpuSimPn5WyEOASW
-	PScse9efWVX5Eod0POi5I+fNrInL1rkEySJkoTF19xXaNfaLRZMBQDhgWBFkVBcJ4RODLXEn5os
-	0QY0bEE85GB//KZ0CaBNeC5W5zbscwtepAldm5GdJsCSiIAFCAyWOaZXhS5zAS9csn0SaVP0D0/
-	XzwUVBFBrqCRGAEIg2AxTXM2bpufTaDR3CTSAIlN0mVfDSrVgse4P/5VS64Az4wGV35mkPpbzq
-X-Received: by 2002:a05:7022:4398:b0:128:cf75:42a3 with SMTP id a92af1059eb24-12be655d406mr550981c88.21.1774991460244;
-        Tue, 31 Mar 2026 14:11:00 -0700 (PDT)
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=u2A9s1tKLohWeE1NJT/Mj0axfNd+LDLEfwiXanMqc3Y=;
+        b=Dk1AwVWVH/yHdyEdU0y8VCufnTWd4m7ADXtOK8zdOg5Va1YyilhS6Zy+UGS7AWLyZk
+         amX2p+hCxajq5p6E96Dv13k4OMqrroQWpfbaGUqONQXSb7r3GQeQi3hZ6HPX4lOefv7n
+         +NuA7lI/VLA0vBpok6tC/+XCvim/9nMRht+cZQe1WrhnPfljF2Jo3ojIGyxO5ONeZzcr
+         tJorEUiw+90N/sh7MZt68UqysuSRzhxHvsWatU3Xt/gr81Wxl3Su115LrsHE4WGqGMW2
+         d6kiUHhzZch4LQwtco+eKliO7Wi+QyUzkhiLABaM2Y+t37BN7/Ys+59pXFV2KOkdlZag
+         EEHQ==
+X-Gm-Message-State: AOJu0YxGUz8rQybnO6xaU4sWxbatWSloEnTJc4y5Cm5d4zncvJ5e+aFT
+	iDZUv8pV0acYcmmX/D7GhAgkXn+NKV1s7KQyrcPszyLbcrNaaM1DMYF4
+X-Gm-Gg: ATEYQzxle2s+g4JgMDzueh84pv4Yx157s32zHN05tAjQTW/HRDNk5SSjV0KBdPmlDAY
+	ujU/s03evrluZHkHtQEwrsQ+Itc6vUxh5tfQKTs9T1C7ZQrYnzctvbl8g+dBKOeDytMVrkNt86X
+	qibeQnQRRiQj40aj+abQr7Tvq3a7QJ3twvkl1gRE1q8GAglMOmF2TiToo/QOk6JkKsjhlgUy7SD
+	7ky6sg8OX6Yt5LTFr8MgvWc24xsjH8AvgImWkGXdnI+Oy/XzE9bqicZDehIOjU0K27fHCrpkIyy
+	mxUFkVzOz6yh7Tag5whb0SUwKpIoMRm6wZCxpcNg78bUK+QEHI3VsiAXtVWrfhL2G3pcdrLNv9w
+	3G5CuPo2wD89kKC0eU6phKrfo0/SSIcpiVifHswN6T9Q0xiy06Zxq/viGoXM8zfd8UVviSmh3E3
+	Tgy6p8VuwAHl0sqBYTsiSA2ZWGJH2/+tdNnEArhyk1AYX/o9xwsuXoh3dAVkKwAVDcLnmBSTJT
+X-Received: by 2002:a05:7301:3d06:b0:2c4:6bbc:1a46 with SMTP id 5a478bee46e88-2c9325b096amr476953eec.17.1774993296049;
+        Tue, 31 Mar 2026 14:41:36 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12ac09e3872sm14258021c88.13.2026.03.31.14.10.59
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c3c747e3fasm10683090eec.24.2026.03.31.14.41.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Mar 2026 14:10:59 -0700 (PDT)
+        Tue, 31 Mar 2026 14:41:35 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a8d30122-1d3e-43b1-9453-322d87db920e@roeck-us.net>
-Date: Tue, 31 Mar 2026 14:10:58 -0700
+Message-ID: <31fb6f19-7f44-4edc-b59f-806a07f097b5@roeck-us.net>
+Date: Tue, 31 Mar 2026 14:41:34 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,13 +68,11 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] hwmon: (asus-ec-sensors) fix T_Sensor for PRIME
- X670E-PRO WIFI
-To: Corey Hickey <bugfood-ml@fatooh.org>,
- Eugene Shalygin <eugene.shalygin@gmail.com>, linux-hwmon@vger.kernel.org
-References: <20260331175245.354188-1-bugfood-ml@fatooh.org>
- <b31eb77c-0106-4163-928f-81e521c286a9@roeck-us.net>
- <5c69b240-a96a-4e13-8a38-6e7738f6993b@fatooh.org>
+Subject: Re: [PATCH] hwmon:tmp102: add support for update interval
+To: Flaviu Nistor <flaviu.nistor@gmail.com>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260331175418.16145-1-flaviu.nistor@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,50 +118,333 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <5c69b240-a96a-4e13-8a38-6e7738f6993b@fatooh.org>
+In-Reply-To: <20260331175418.16145-1-flaviu.nistor@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 3/31/26 11:50, Corey Hickey wrote:
-> On 2026-03-31 11:08, Guenter Roeck wrote:
->> Guess I don't pay close enough attention. Sorry for that.
->>
->> The above text is appropriate for comments after "---", but it is not
->> appropriate for a patch description. Please see "The canonical patch format"
->> in Documentation/process/submitting-patches.rst for information
->> on how to write a patch description.
+Hi,
+
+On 3/31/26 10:54, Flaviu Nistor wrote:
+> Since the sensor supports different sampling intervals via
+> bits CR0 and CR1 from the CONFIG register, add support in
+> order for the conversion rate to be changed from user space.
+> Default is 4 conv/sec.
 > 
-> No worries, I don't mind iterating. I'm a bit unclear about what you need me to change, though.
-> 
+> Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
 
-Asking Google AI: "Convert the following Linux kernel patch description into one that matches the expected format of a patch description."
+The subject line should start with "hwmon: (tmp102) " to match the common
+subject line format used in hwmon drivers.
 
-and passing in your description yields the following:
+Other than that, please check
 
-hwmon: (asus-ec-sensors) Fix T_Sensor address for PRIME X670E-PRO WIFI
+https://sashiko.dev/#/patchset/20260331175418.16145-1-flaviu.nistor%40gmail.com
 
-The PRIME X670E-PRO WIFI reports a constant zero value for the T_Sensor
-because the defined register address is off by one. Experimentation
-confirms that the correct address for this board is 0x37:
+and fix the identified issues.
 
-Sensor disconnected: -62.0°C
-Ambient temperature: +22.0°C
-Finger touch test: +30.0°C
-
-These values match independent measurements from a digital multimeter.
-The current address (0x36) was introduced in commit f7ac3020036b
-("hwmon: (asus-ec-sensors) add ROG Crosshair X670E Gene."). To avoid a
-regression on the Crosshair Gene while fixing the PRIME X670E-PRO,
-introduce SENSOR_TEMP_T_SENSOR_ALT1 at address 0x37.
-
-Update the board definition for the PRIME X670E-PRO WIFI to use the
-alternate address.
-
-Fixes: f7ac3020036b ("hwmon: (asus-ec-sensors) add ROG Crosshair X670E Gene.")
-Signed-off-by: Your Name your.email@example.com
-
-This would be perfectly acceptable.
+Additional comments inline.
 
 Thanks,
 Guenter
+
+> ---
+>   Documentation/hwmon/tmp102.rst |  19 +++-
+>   drivers/hwmon/tmp102.c         | 165 ++++++++++++++++++++++++---------
+>   2 files changed, 139 insertions(+), 45 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/tmp102.rst b/Documentation/hwmon/tmp102.rst
+> index 3c2cb5bab1e9..7ed649ac4cd0 100644
+> --- a/Documentation/hwmon/tmp102.rst
+> +++ b/Documentation/hwmon/tmp102.rst
+> @@ -41,12 +41,25 @@ degree from -40 to +125 C. Resolution of the sensor is 0.0625 degree.  The
+>   operating temperature has a minimum of -55 C and a maximum of +150 C.
+>   
+>   The TMP102 has a programmable update rate that can select between 8, 4, 1, and
+> -0.5 Hz. (Currently the driver only supports the default of 4 Hz).
+> +0.5 Hz.
+>   
+>   The TMP110 and TMP113 are software compatible with TMP102, but have different
+>   accuracy (maximum error) specifications. The TMP110 has an accuracy (maximum error)
+>   of 1.0 degree, TMP113 has an accuracy (maximum error) of 0.3 degree, while TMP102
+>   has an accuracy (maximum error) of 2.0 degree.
+>   
+> -The driver provides the common sysfs-interface for temperatures (see
+> -Documentation/hwmon/sysfs-interface.rst under Temperatures).
+> +sysfs-Interface
+> +---------------
+> +
+> +The following list includes the sysfs attributes that the driver provides, their
+> +permissions and a short description:
+> +
+> +=============================== ======= ========================================
+> +Name                            Perm    Description
+> +=============================== ======= ========================================
+> +temp1_input:                    RO      Temperature input
+> +temp1_label:                    RO      Descriptive name for the sensor
+> +temp1_max:                      RW      Maximum temperature
+> +temp1_max_hyst:                 RW      Maximum hysteresis temperature
+> +update_interval                 RW      Update conversions interval in milliseconds
+> +=============================== ======= ========================================
+
+This will likely trigger a documentation error since the "===" line is expected to
+match the longest text in the table.
+
+
+> diff --git a/drivers/hwmon/tmp102.c b/drivers/hwmon/tmp102.c
+> index 5b10c395a84d..c0805f6271b9 100644
+> --- a/drivers/hwmon/tmp102.c
+> +++ b/drivers/hwmon/tmp102.c
+> @@ -50,11 +50,25 @@
+>   
+>   #define CONVERSION_TIME_MS		35	/* in milli-seconds */
+>   
+> +struct tmp102_params {
+> +	u16 default_sample_time;
+> +	u8 num_sample_times;
+> +	const unsigned int *sample_times;
+> +};
+> +
+>   struct tmp102 {
+>   	const char *label;
+>   	struct regmap *regmap;
+>   	u16 config_orig;
+>   	unsigned long ready_time;
+> +	u16 sample_time;
+> +	const struct tmp102_params *params;
+> +};
+> +
+> +static const struct tmp102_params device_params = {
+> +	.default_sample_time = 125,
+
+Why change the default ?
+
+> +	.num_sample_times = 4,
+> +	.sample_times = (unsigned int []){ 125, 250, 1000, 4000 },
+>   };
+>   
+>   /* convert left adjusted 13-bit TMP102 register value to milliCelsius */
+> @@ -80,58 +94,113 @@ static int tmp102_read_string(struct device *dev, enum hwmon_sensor_types type,
+>   }
+>   
+>   static int tmp102_read(struct device *dev, enum hwmon_sensor_types type,
+> -		       u32 attr, int channel, long *temp)
+> +		       u32 attr, int channel, long *val)
+>   {
+>   	struct tmp102 *tmp102 = dev_get_drvdata(dev);
+>   	unsigned int regval;
+>   	int err, reg;
+>   
+> -	switch (attr) {
+> -	case hwmon_temp_input:
+> -		/* Is it too early to return a conversion ? */
+> -		if (time_before(jiffies, tmp102->ready_time)) {
+> -			dev_dbg(dev, "%s: Conversion not ready yet..\n", __func__);
+> -			return -EAGAIN;
+> +	switch (type) {
+> +	case hwmon_chip:
+
+Please split into separate functions for handling chip and temperature data.
+
+> +		switch (attr) {
+> +		case hwmon_chip_update_interval:
+> +			*val = tmp102->sample_time;
+> +			break;
+> +		default:
+> +			return -EINVAL;
+
+-EOPNOTSUPP
+
+>   		}
+> -		reg = TMP102_TEMP_REG;
+>   		break;
+> -	case hwmon_temp_max_hyst:
+> -		reg = TMP102_TLOW_REG;
+> -		break;
+> -	case hwmon_temp_max:
+> -		reg = TMP102_THIGH_REG;
+> +	case hwmon_temp:
+> +		switch (attr) {
+> +		case hwmon_temp_input:
+> +			/* Is it too early to return a conversion ? */
+> +			if (time_before(jiffies, tmp102->ready_time)) {
+> +				dev_dbg(dev, "%s: Conversion not ready yet..\n", __func__);
+> +				return -EAGAIN;
+> +			}
+> +			reg = TMP102_TEMP_REG;
+> +			break;
+> +		case hwmon_temp_max_hyst:
+> +			reg = TMP102_TLOW_REG;
+> +			break;
+> +		case hwmon_temp_max:
+> +			reg = TMP102_THIGH_REG;
+> +			break;
+> +		default:
+> +			return -EOPNOTSUPP;
+> +		}
+> +		err = regmap_read(tmp102->regmap, reg, &regval);
+> +		if (err < 0)
+> +			return err;
+> +		*val = tmp102_reg_to_mC(regval);
+>   		break;
+>   	default:
+> -		return -EOPNOTSUPP;
+> +		return -EINVAL;
+
+Do not change this.
+
+>   	}
+> +	return 0;
+> +}
+> +
+> +static int tmp102_update_interval(struct device *dev, long val)
+> +{
+> +	struct tmp102 *tmp102 = dev_get_drvdata(dev);
+> +	unsigned int reg;
+> +	u8 index;
+> +	s32 err;
+> +
+> +	index = find_closest(val, tmp102->params->sample_times,
+> +			     (int)tmp102->params->num_sample_times);
+>   
+> -	err = regmap_read(tmp102->regmap, reg, &regval);
+> +	err = regmap_read(tmp102->regmap, TMP102_CONF_REG, &reg);
+> +	if (err < 0)
+> +		return err;
+> +	reg &= ~0x00c0;
+> +	reg |= (3 - index) << 6;
+> +	err = regmap_write(tmp102->regmap, TMP102_CONF_REG, reg);
+>   	if (err < 0)
+>   		return err;
+> -	*temp = tmp102_reg_to_mC(regval);
+> +	tmp102->sample_time = tmp102->params->sample_times[index];
+>   
+>   	return 0;
+>   }
+>   
+> +static int tmp102_write_chip(struct device *dev, u32 attr, long val)
+> +{
+> +	switch (attr) {
+> +	case hwmon_chip_update_interval:
+> +		return tmp102_update_interval(dev, val);
+> +	default:
+> +		return -EINVAL;
+
+-EOPNOTSUPP. This is not an "Invalid Argument" provided by the user.
+
+> +	}
+> +	return 0;
+> +}
+> +
+>   static int tmp102_write(struct device *dev, enum hwmon_sensor_types type,
+> -			u32 attr, int channel, long temp)
+> +			u32 attr, int channel, long val)
+>   {
+>   	struct tmp102 *tmp102 = dev_get_drvdata(dev);
+>   	int reg;
+>   
+> -	switch (attr) {
+> -	case hwmon_temp_max_hyst:
+> -		reg = TMP102_TLOW_REG;
+> -		break;
+> -	case hwmon_temp_max:
+> -		reg = TMP102_THIGH_REG;
+> -		break;
+> +	switch (type) {
+> +	case hwmon_chip:
+> +		return tmp102_write_chip(dev, attr, val);
+> +	case hwmon_temp:
+> +		switch (attr) {
+> +		case hwmon_temp_max_hyst:
+> +			reg = TMP102_TLOW_REG;
+> +			break;
+> +		case hwmon_temp_max:
+> +			reg = TMP102_THIGH_REG;
+> +			break;
+> +		default:
+> +			return -EOPNOTSUPP;
+> +		}
+> +
+> +		val = clamp_val(val, -256000, 255000);
+> +		return regmap_write(tmp102->regmap, reg, tmp102_mC_to_reg(val));
+>   	default:
+> -		return -EOPNOTSUPP;
+> +		return -EINVAL;
+
+Sigh.
+
+>   	}
+> -
+> -	temp = clamp_val(temp, -256000, 255000);
+> -	return regmap_write(tmp102->regmap, reg, tmp102_mC_to_reg(temp));
+> +	return 0;
+>   }
+>   
+>   static umode_t tmp102_is_visible(const void *data, enum hwmon_sensor_types type,
+> @@ -139,27 +208,35 @@ static umode_t tmp102_is_visible(const void *data, enum hwmon_sensor_types type,
+>   {
+>   	const struct tmp102 *tmp102 = data;
+>   
+> -	if (type != hwmon_temp)
+> -		return 0;
+> -
+> -	switch (attr) {
+> -	case hwmon_temp_input:
+> -		return 0444;
+> -	case hwmon_temp_label:
+> -		if (tmp102->label)
+> +	switch (type) {
+> +	case hwmon_chip:
+> +		switch (attr) {
+> +		case hwmon_chip_update_interval:
+> +			return 0644;
+> +		}
+> +		break;
+> +	case hwmon_temp:
+> +		switch (attr) {
+> +		case hwmon_temp_input:
+>   			return 0444;
+> -		return 0;
+> -	case hwmon_temp_max_hyst:
+> -	case hwmon_temp_max:
+> -		return 0644;
+> +		case hwmon_temp_label:
+> +			if (tmp102->label)
+> +				return 0444;
+> +			return 0;
+> +		case hwmon_temp_max_hyst:
+> +		case hwmon_temp_max:
+> +			return 0644;
+
+Please add "default:" to all those case statements.
+
+> +		}
+> +		break;
+>   	default:
+> -		return 0;
+> +		break;
+>   	}
+> +	return 0;
+>   }
+>   
+>   static const struct hwmon_channel_info * const tmp102_info[] = {
+>   	HWMON_CHANNEL_INFO(chip,
+> -			   HWMON_C_REGISTER_TZ),
+> +			   HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
+>   	HWMON_CHANNEL_INFO(temp,
+>   			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_MAX | HWMON_T_MAX_HYST),
+>   	NULL
+> @@ -237,6 +314,10 @@ static int tmp102_probe(struct i2c_client *client)
+>   	if (IS_ERR(tmp102->regmap))
+>   		return PTR_ERR(tmp102->regmap);
+>   
+> +	tmp102->params = &device_params;
+
+Why have "params" in the first place ? I don't see the point unless
+the driver supports more than one chip.
+
+> +
+> +	tmp102->sample_time = tmp102->params->default_sample_time;
+> +
+>   	err = regmap_read(tmp102->regmap, TMP102_CONF_REG, &regval);
+>   	if (err < 0) {
+>   		dev_err(dev, "error reading config register\n");
 
