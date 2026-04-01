@@ -1,736 +1,145 @@
-Received: from FR4P281CU032.outbound.protection.outlook.com (mail-germanywestcentralazon11022104.outbound.protection.outlook.com [40.107.149.104])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B4138B12F;
-	Wed,  1 Apr 2026 11:27:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.149.104
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775042851; cv=fail; b=W4lUxsPlrfm9eY3vfxSe/ob+JF4L6AKBZNFZcpGXmx8j41SaQweeePCMGd7B5iXvPLVhyi3TO6f7l4mxh/GNGQ2PxvVkDZbgC3rK2CZqxZpdwdyyJvA8BHmKaHbhMHZs8i1GLBTiEMDNUN+3x+lfNit3dfmkxHIHZuymRAyqXDU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775042851; c=relaxed/simple;
-	bh=WbOOA59exS1KvbgGW8IOMojx4mh45+yBNaBzJE1XmQ8=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=FHZodHpMUrAZYZxp8k+hUHfhvI2mF99kywJ2nVpxg0KAO4/0/I7pjl6bvw3d5syhYSQcYMYK3kD85+RC0Y6d/Ik1ck2wAPcKac8mhCFeNCfGzJtD0hZ8pRjQqCYMrNhOxqoiJjh2jpiQGDk7H2FA9Ao7zxEGsI7HiS/7isJuzck=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arctic.de; spf=pass smtp.mailfrom=arctic.de; dkim=pass (2048-bit key) header.d=Arctic.de header.i=@Arctic.de header.b=ZVZX7FCn; arc=fail smtp.client-ip=40.107.149.104
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arctic.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arctic.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4452DF128
+	for <linux-hwmon@vger.kernel.org>; Wed,  1 Apr 2026 14:03:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775052236; cv=none; b=hg6tVpuolEviVqyyY4hLNlxucXigoeWi28/QlY1uvihjG9r72qW/wKHBfZfv4tca6erWz8HfEmTrNZwHHZf2crjCQ7QApcKNU2bHVM8gnsw4ZswMSsy42MRqWyVIUiLcg3Bmj6HWOPg4nl4FdMgifB2SQyEkWaAok0ZHDet0FZk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775052236; c=relaxed/simple;
+	bh=SGCI4fsQhkaGTbbP2PJjfRfwzOSjN0Epesr8zDMhWAw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=W6i91+mAScNcjNzAQibSrVYHVnzV1Ep7uWyZWkkwJMRwcYlPpLa+UCnoX5lYSalxAovT3/xkTMYW3uyGJPh7cL8GjH6kL4PUqIwtOS4C2Kd1lHdkD+tE87qaqN9cA4c1WzlHY/xDElTGn/1gA23ewECJjEYoNkHY/uaSzAXUlnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=asorNbkY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Arctic.de header.i=@Arctic.de header.b="ZVZX7FCn"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=A81ZUY6M1nfn0tHIp01l/SLw7zdhBhVpFxdy9GsfYG/RI7xAWwUAAqFzWzreQLuOkIZ3SqsZIkbti3eqxAltiV8bE/LiuGYgS2jI6G0WA1aoYKZfTucVVUGBV6f7tpVKA+o2iQBX83fDr2PtnVA16ZHgpQQmzgRJgEn9jEv8DNJQn9A3OEtuL9WcDHsbK3hZvFjr5KhqUfY4naTAeENhkH+XgzEWeqF3M8oNrDtD8b9aDmJ2PNnRjHScANmaQCxKbm46Rlhm9IPaZQv4t2VDiIikXANAR2z7+c6HTPZ3wjOP+hUn5mImnsytzvPd5wrp4SncsvMMhkKlCswadiQCIg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=X5lv8lf7WeaMADUnrptnkwRCpVjEvQqgoY2EVWlKzvA=;
- b=tQBntogK2jOwV/Iibj7WTQaWAOhVE1Mjbiy2WYri5wpSYmB2TaAZ35pQ30OK8+Lo9oy+cvIVgVL4VRv9dIC7ePcdKhjkqknSMXGE6h8ymK2FG+JgZnxXnyxLzECqtKBSB2pTnLegO/qQdthjx/kKorCE2yB1AOi6225bYybLS4t9obqoEo0KVA72FbxVBc6E5g+ekZlp0jgUM+n4o4mfAj1uIC9oKUv9Gn6aCdI91pP+UVtuRIPhaiesl3ME3YoV0K+1yMjkD4xB7V26n+B+MQX0zZIO/eoj8Il3BA8WGeDZsLU3TPlf0U9FQm2Nq8/JPQ4bqSlQyX98/KfMci0WGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arctic.de; dmarc=pass action=none header.from=arctic.de;
- dkim=pass header.d=arctic.de; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Arctic.de;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=X5lv8lf7WeaMADUnrptnkwRCpVjEvQqgoY2EVWlKzvA=;
- b=ZVZX7FCn3uIgIq/n1RIOcqOC19UVmSpast041mKsvAex8T5ma4FNxusami9kG340zj/OFtX9MgnFVWkXprHgBZfNShZNS27aocv5dJnWIrB4gIlSHiNZVyzJEb6W3ax0TYyX3JJ5CZRnuB3R1eNO82PLKIeF8A/KlI4aVWWeltb5G/YaieQsAEqYzmdBydcPm/lSlGzTDoI2PEPcmjU0p2W467k/YAvc8/QdKPJZMnKg6OsOM36Z5tyGoEGxraTuL/+dVv8kBKCFkoqDGdur08IURYdxSAe6KvTrFDaRVJTYkR68JtfzGWH03VuWt+tCa3Jn5y0eEw+FLbDdvqMnEg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arctic.de;
-Received: from FR6P281MB5900.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:1bf::9)
- by FR5P281MB5287.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:198::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.18; Wed, 1 Apr
- 2026 11:27:23 +0000
-Received: from FR6P281MB5900.DEUP281.PROD.OUTLOOK.COM
- ([fe80::7eba:ac95:a60d:521c]) by FR6P281MB5900.DEUP281.PROD.OUTLOOK.COM
- ([fe80::7eba:ac95:a60d:521c%3]) with mapi id 15.20.9769.014; Wed, 1 Apr 2026
- 11:27:23 +0000
-From: Aureo Serrano de Souza <aureo.serrano@arctic.de>
-To: linux-hwmon@vger.kernel.org
-Cc: linux@roeck-us.net,
-	linux@weissschuh.net,
-	corbet@lwn.net,
-	skhan@linuxfoundation.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Aureo Serrano de Souza <aureo.serrano@arctic.de>
-Subject: [PATCH v6] hwmon: add driver for ARCTIC Fan Controller
-Date: Wed,  1 Apr 2026 19:25:54 +0800
-Message-ID: <20260401112654.60560-1-aureo.serrano@arctic.de>
-X-Mailer: git-send-email 2.43.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: TYCPR01CA0152.jpnprd01.prod.outlook.com
- (2603:1096:400:2b1::6) To FR6P281MB5900.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1bf::9)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="asorNbkY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02DDCC4AF09
+	for <linux-hwmon@vger.kernel.org>; Wed,  1 Apr 2026 14:03:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775052236;
+	bh=SGCI4fsQhkaGTbbP2PJjfRfwzOSjN0Epesr8zDMhWAw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=asorNbkY+VGAHkIDOQa99YcLwbC5VlJmNBrPYqXqTJGN1oUd0asbj4qf9+M+U4dji
+	 g1WC49LyqO1o09pbQsPfZHmGhsJxc4XDTdY7dwqyViQlkxJ16jmS7HD72y7altJn/+
+	 z6QkgZGj7vNZAqib26QzQWKVw69TA15D0gfaW31xNcLY97DPUdREZ/k85Ky3ZKKaxW
+	 FR3j5Q4ffE06mhSTsrrci2g1DuVr5I+t0LIS6hQs1n8xdiv//w3BxX3nYhqLQ8Xslu
+	 ZL0ZcKG24JtXl2+3Ze5IYaoWKW6zjDLVsLReILj8tBHG2d+djIdtoRu9xZE1TvkrKv
+	 JrF/sFENlvEaw==
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-66b2d49ffb0so6865715a12.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 01 Apr 2026 07:03:55 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX3JO0w9ze17Pa53cTkuNcPUVOXFqUB5y/NBV747SE6OovDATTsPnrtlrc6iFaTrwMDjk+9Ssb7R4iNfw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWtTqDAbLbeWasci5kMg5NxNq29EOxaazv1A/mlHXTfHZ5gdVn
+	CwY+cmNDJ0sEONYo8TITbfB7KTLqJvC32U7TsyGbFzgjaaS0knjRDyh9r4cD4D/S335yDv2fPzF
+	ZhreVr0hTAxTOXJJO4CC3LHJdxC5Umg==
+X-Received: by 2002:a05:6402:1470:b0:66b:b6d7:df47 with SMTP id
+ 4fb4d7f45d1cf-66db09e27d7mr2641020a12.13.1775052234501; Wed, 01 Apr 2026
+ 07:03:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: FR6P281MB5900:EE_|FR5P281MB5287:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7b72723e-d68c-4210-4899-08de8fe1a513
-X-MS-Exchange-AtpMessageProperties: SA
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|52116014|366016|55112099003|38350700014|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	5C8jztOWqYqvQrNkro54jd9rjsBknGBOKrBKgLkqlYiMjsf+AsAQvl2vGw7lQ1K3jOm9FhB65SAOgAJnilnbZZkinh9NxjGvRsEp6dPp+9TEWXZx/SWtTOOGcmYjLIOtvmgRJSn6sizQBEBb26daNru0/GBnCOKF4RUBycHl9Jpck2Mp2ZCbZpIsBptEfDcSGMUvl1/D1VwrE5WBSlOGJxCWDAoKXT/cAeA/MfMRZj/6XCUomM3n40OBZ8FgCfD7T+8qENeyvinn6G8msWepgfT3EXRrPnU5zjuOtrMn296j+sHhkzEBgyD/bM9eHkFgzCAPxQ8hDy9NYPTbIwo5AVQjVLsoIMFvPjh5yQtAuBWPdk9tM6iu7UgYjonetMGRfPj9GoUNY69P20K4RwGExNxOMZpmxJnYaHZHS1BTW1l8V/eVsK9Stajzv1GwN0y2e6Sxjv+mxJsyjYGR1xlD6etv2xzs+pr0iXebebGFZyWHMWguUHMqwGpp5VMw/FcuhV12nWANxgY5mg9WkIaeTi19U4Bzibw8X0r71OjvG+0TSN4I3appdlSYzSJemiKpvjpOUoRMBnby6ZuWC1+XD3RiNP+7HgMjcp4yAFPsD7T5id3T3Fd92bN50rmCKKvE0bOXpVKBkSeYqk+pMtxhqUId9J5Ff1O9OmBMVKv9ba7G2XAFYjeN2hHcRAvw589A/XnchDmwSH4heR86S3hW/yiKViZqlTf9oEsx6FC4FuJvDyRNn8eahXLhOa5HT1i6qRqZx4rlHMCHuQBp+Pna7ouws+usXLic8fVXaHM3BvE=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:FR6P281MB5900.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(52116014)(366016)(55112099003)(38350700014)(18002099003)(56012099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VjdYQVlKOHp3ODd2T1VXaE0xVk5QL0lRRmNSVVhoQmhDRmduK202akZpVHo2?=
- =?utf-8?B?U1VxRGVJMXBuV2dRWWZCb2JCSzkyQWM0OHVSV2ZVb0hadzJ0NU91UXRDTlk3?=
- =?utf-8?B?UUY4NWJLZUM5eWpXZklyWFdxY0kxVGVqQXFySitXSlRDbDl6WDQxWE40S0Z3?=
- =?utf-8?B?bnBpcjhBNHBXaTJ6Q01YUjN5WGN1SUowQmxWa0QvcGhYUEJjQWpha0huOVp3?=
- =?utf-8?B?ZlN1Rktid2E0bUZMOGFGanY5ZHNickJiaEpiaXpBbkZLRTNNS0U2ZGRMU1Qr?=
- =?utf-8?B?WnRyaHgrd3lBVUcyRW44TThLWWllU3huaFVXbFFXdTlyKzJ3ZCtTWU5XSndy?=
- =?utf-8?B?Rzk4bSthbXFuOWRYUy82SzZyNjQvUUZUeFpBR01lMk5iOHNONlNXSmhaZ1lS?=
- =?utf-8?B?dmtLaXkzRmNhSHJTRUFPaldDY1RTT3NKMVZFaDVQZ1JrNVZhTjJwY2dOeW9n?=
- =?utf-8?B?dkl6YllCcTV1RUZTa0lLbFhrckNuSFJiRWQ2TE9iS0dGeHNIUk5SVC92YTZJ?=
- =?utf-8?B?cHQ2U0M5UnRqNTZ3RnFsQTRBdTFGbkJPNGpKNDFjM3VJMEZMblhSem9WdGVR?=
- =?utf-8?B?YU83b1l4MWNONXB3N2hBT1JSUVpqaUxXWU5WVTF1QkFEUjhkQkY5QkhHL21l?=
- =?utf-8?B?eW81ZjhnRzI4dERCMkNEa2ltQmR6Z1NwWFlWV2VmTVdFMVFsYjdHcTcrS0li?=
- =?utf-8?B?K2QzNDV6akJPSEFCQjBMS29RWllXQldBNzAvWXh2emR6cjJ5dk9NaW8vSzR1?=
- =?utf-8?B?dlg5elB2bzB6Nzl4YkE0T25tblcvRStzLy9YMHFEaDF4Q3l5QlhhK25JM2RB?=
- =?utf-8?B?V0V1bXovYTRGd1JhelJHT0J5eStZRUVVOVUybDhjNWthTG5GNTNhbnJoYmFS?=
- =?utf-8?B?N05LV1ZxTzJ0RGRwUWVMUWIvWmtWeTYySkNNbWhkaldmRUlocnpjaUJ1V2ZT?=
- =?utf-8?B?dWdxdytITFBwbXZ0MDBaTUFQaDh4QlR6ZVVqM3FqUkN0eXpNMFFmRHN1cnl1?=
- =?utf-8?B?TXdlNFVSYUFzSUVqb3RvUkUvaHozdHM5SHZNN3dtWWlUMkVCWmJRMDQ3YUJP?=
- =?utf-8?B?cWs0VGxaQ1gxQlBaaTFSQnU1M1JBVzRJMjZNajA2MFdNQVlsK1lWKzhmTmtt?=
- =?utf-8?B?TDdQU0NsZXlGWWpMSWJTdmxBb0ZVcXhzMTBPYlIzY2YwOXJpcytSV1UwMHF6?=
- =?utf-8?B?d29lU053ZXBMVmdmVTF3SjBaZUZRRE1aSGNhVTNmSDljQ1N6TWRSUXRMYzBF?=
- =?utf-8?B?U1N6RC9zc0VJSEhrQnJ6ZWZ3MEs4Tm1tV0RoQUNDZXltZlUxQk9MNkNnSHFD?=
- =?utf-8?B?VW5oL1ROV0NURjJkcnVKbzYrZkR3dXlzTTdPYk05Rlpsanljd09QUit4WDMw?=
- =?utf-8?B?THQ4K2wzTlVRWTNaQnZYZVdTSHBkVUt3WnlnMUdNMXBqRElrTTR3NG9mVVRw?=
- =?utf-8?B?WHhwejJwcGdxb2MxSldHYVpyOGRpemM5cjZMZkl3ODNPUTJDS3FMQlI3R1pZ?=
- =?utf-8?B?K0lQU0l3d0YyQ1M4dC9QMEYyQklPMTJVeTVhVlk1dWc5dFd4Yk85anQxSjNn?=
- =?utf-8?B?VHJZRDQyUndKVitEVy93MWxhS0g1d2tweXNKWWZaMnU4d3EzQWdON0F2L2l2?=
- =?utf-8?B?bjN4UmNRZEp1Y201ZGJrN1FscUU2K3hjN1pGSEpTdkdHdHdhZTM4eDFZMWZa?=
- =?utf-8?B?QUhrVDdHdlljS1NoQmQ5ZU9xRndpcFNiZXJLUFZ5YmZaQ2prZVMyQWxkdmVI?=
- =?utf-8?B?WjZJc1pjWUllNjhFMEVMVXVodDVLdU5WdWh3NCtSc0hiSER3QkUrZXhJdnJk?=
- =?utf-8?B?Y082REltMG5ETExENkxkR21PYlNnNWRuK0ZMNnBRdTFwaTBHMHMxaHVtblJl?=
- =?utf-8?B?VlBkMmJzS1dqOWc3cGVFSjM0a29wNnFZRGl6eU01c3Y0WG0zZEI0ZTJqS2s0?=
- =?utf-8?B?WU9TZUk4eWF0YTZ3RDdCck83NVc1OXNRS04zOE5HcHNmdDh4ZVllNVUwaGNo?=
- =?utf-8?B?cDBnV2MvekFNV3pBYTdRK3R1QlF2U0xlMmQ1RFN3ZUNsTFFiWGc2U1pXUUkr?=
- =?utf-8?B?RWpOUDhISm5wRSs3ZjVkMWtVRStPN04rM2g5MjgzeVlsaVNIbWt4ZXpxOXly?=
- =?utf-8?B?K25JYjVsdEQwd1JSeU5aQUpidmZqTzBpUmpIV203T1dLa2NFdTRZWkxVcTNY?=
- =?utf-8?B?N3E0VlFoSkUzRVA0NVJPWUV4K3FpR3BweGFSaHZFSWxHUS8xemNUclZhK09O?=
- =?utf-8?B?R2NLTGQ0TkRpT1JEZGV2MVBjS3hFRTg3N0RwYkxqbDJUZ1h6VWxVV2MwSklZ?=
- =?utf-8?B?NVQ3Ky9RQVphay8rbDBhUUFrT1FLenh6a1BhNmZKWVNCNFZBK25mQT09?=
-X-OriginatorOrg: Arctic.de
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b72723e-d68c-4210-4899-08de8fe1a513
-X-MS-Exchange-CrossTenant-AuthSource: FR6P281MB5900.DEUP281.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2026 11:27:23.6508
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 51cc2c5f-af21-4667-81ec-d88d36e264bb
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: W6DVUZgmTxekAmZ7ZzyPO9pTYAoHX9jGK2KyTipeG8S6nlgo/4kJ8SaqqvmFkhj/hd0XySgj+8v+MMDAXJKDvA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR5P281MB5287
+References: <20260330-ina4230-v5-0-eeb322d95b3a@flipper.net>
+ <67a5d1c1-a9c5-47fb-a0ec-5b69a991b01e@roeck-us.net> <20260331155246.GA1299761-robh@kernel.org>
+ <20872ef8-f68c-4916-a05f-404fd49fff00@roeck-us.net> <CAKTNdwGcXcE25QiBTrZO6akMad+Lny5iPvAAAmUt6x2Hyzu5wg@mail.gmail.com>
+In-Reply-To: <CAKTNdwGcXcE25QiBTrZO6akMad+Lny5iPvAAAmUt6x2Hyzu5wg@mail.gmail.com>
+From: Rob Herring <robh@kernel.org>
+Date: Wed, 1 Apr 2026 09:03:43 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJcqMM1LK1dEFvjRWdOc8g=7+G4VvF-jmzbSJ1ijBB=1A@mail.gmail.com>
+X-Gm-Features: AQROBzBc9EnjuxZ3X3qDBWErhdwoqW9DR-aRGycYdhakIyR-QawFuda4ds96piM
+Message-ID: <CAL_JsqJcqMM1LK1dEFvjRWdOc8g=7+G4VvF-jmzbSJ1ijBB=1A@mail.gmail.com>
+Subject: Re: [PATCH v5 0/2] Add support for Texas Instruments INA4230 power monitor
+To: Alexey Charkov <alchark@flipper.net>
+Cc: Guenter Roeck <linux@roeck-us.net>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add hwmon driver for the ARCTIC Fan Controller, a USB HID device
-(VID 0x3904, PID 0xF001) with 10 fan channels. Exposes fan speed in
-RPM (read-only) and PWM duty cycle (0-255, read/write) via sysfs.
+On Tue, Mar 31, 2026 at 11:46=E2=80=AFAM Alexey Charkov <alchark@flipper.ne=
+t> wrote:
+>
+> On Tue, Mar 31, 2026 at 8:10=E2=80=AFPM Guenter Roeck <linux@roeck-us.net=
+> wrote:
+> >
+> > On 3/31/26 08:52, Rob Herring wrote:
+> > > On Mon, Mar 30, 2026 at 09:07:32AM -0700, Guenter Roeck wrote:
+> > >> On 3/30/26 08:14, Alexey Charkov wrote:
+> > >>> TI INA4230 is a 4-channel power monitor with I2C interface, similar=
+ in
+> > >>> operation to INA3221 (3-channel) and INA219 (single-channel) but wi=
+th
+> > >>> a different register layout, different alerting mechanism and sligh=
+tly
+> > >>> different support for directly reading calculated current/power/ene=
+rgy
+> > >>> values (pre-multiplied by the device itself and needing only to be =
+scaled
+> > >>> by the driver depending on its selected LSB unit values).
+> > >>>
+> > >>> In this initial implementation, the driver supports reading voltage=
+,
+> > >>> current, power and energy values, but does not yet support alerts, =
+which
+> > >>> can be added separately if needed. Also the overflows during hardwa=
+re
+> > >>> calculations are not yet handled, nor is the support for the device=
+'s
+> > >>> internal 32-bit energy counter reset.
+> > >>>
+> > >>> An example device tree using this binding and driver is available a=
+t [1]
+> > >>> (not currently upstreamed, as the device in question is in engineer=
+ing
+> > >>> phase and not yet publicly available)
+> > >>>
+> > >>> [1] https://github.com/flipperdevices/flipper-linux-kernel/blob/fli=
+pper-devel/arch/arm64/boot/dts/rockchip/rk3576-flipper-one-rev-f0b0c1.dts
+> > >>>
+> > >>> Signed-off-by: Alexey Charkov <alchark@flipper.net>
+> > >>> ---
+> > >>> Changes in v5:
+> > >>> - Reworded per-channel subnodes description in the binding for clar=
+ity (Sashiko)
+> > >>> - NB: Sashiko's suggestion to allow interrupts in the binding sound=
+s premature,
+> > >>>     as the alerts mechanism is not implemented yet and there are no=
+ known users
+> > >>>     to test it. If anyone has hardware with the alert pins wired to=
+ an interrupt
+> > >>>     line - please shout and we can test/extend it together
+> > >>
+> > >> The bindings are supposed to be complete, even if not implemented, s=
+o I am not sure
+> > >> if the DT maintainers will agree here. We'll see.
+> > >
+> > > Given ti,alert-polarity-active-high is added seems like the interrupt
+> > > should be too. And the interrupt can specify the polarity, so is that
+> > > property really needed? There's alway the possibility that you have s=
+ome
+> > > inverter on the board too and the interrupt polarity is not enough, b=
+ut
+> > > solve that problem when it actually exists.
+> > >
+> >
+> > The alert pin can be attached to a board interrupt, or (more likely) it=
+ can
+> > be attached to the I2C controller's alert pin. In the latter case there=
+ is
+> > no interrupt property.
+>
+> Alright, I will add the interrupt property and keep the dedicated flag
+> for alert polarity.
+>
+> Following the logic of binding completeness, should I add a flag for
+> the single-shot mode too, even though I dropped that functionality
+> from the driver in one of the prior iterations?
 
-The device pushes IN reports at ~1 Hz containing RPM readings. PWM is
-set via OUT reports; the device applies the new duty cycle and sends
-back a 2-byte ACK (Report ID 0x02). The driver waits up to 1 s for
-the ACK using a completion. Measured device latency: max ~563 ms over
-500 iterations. PWM control is manual-only: the device never changes
-duty cycle autonomously.
+I don't remember what that was exactly, but that sounds like a user
+selection which would be some sysfs or other runtime control rather
+than in DT. Unless the h/w design dictates what mode should be used.
 
-raw_event() may run in hardirq context, so fan_rpm[] is protected by
-a spinlock with irq-save. pwm_duty[] is also protected by this spinlock
-because reset_resume() clears it outside the hwmon core lock. The OUT
-report buffer is built and write_pending is armed under the same lock so
-that no reset_resume() can race with the pwm_duty[] snapshot. priv->buf
-is exclusively accessed by write(), which the hwmon core serializes.
-
-Signed-off-by: Aureo Serrano de Souza <aureo.serrano@arctic.de>
----
-Thanks to Guenter Roeck and Thomas Weißschuh for the reviews.
-
-Changes since v5:
-- arctic_fan_probe(): switch from devm_hwmon_device_register_with_info()
-  to hwmon_device_register_with_info(); store the returned pointer in
-  priv->hwmon_dev for explicit teardown in remove()
-- arctic_fan_remove(): call hwmon_device_unregister(priv->hwmon_dev)
-  before hid_device_io_stop/hid_hw_close/hid_hw_stop; this closes the
-  use-after-free window where a concurrent sysfs write could call
-  hid_hw_output_report() on an already-stopped device; matches the
-  removal pattern used by nzxt-smart2 and aquacomputer_d5next
-- arctic_fan_write(): expand write_pending comment to document the
-  residual theoretical late-ACK race (unfixable without a correlation
-  ID in the device ACK report) and its practical impossibility (observed
-  max ACK latency ~563 ms, timeout 1 s; a delay > 1 s indicates a
-  non-functional device)
-- arctic_fan_reset_resume(), arctic_fan_read(), arctic_fan_write():
-  extend in_report_lock coverage to pwm_duty[]; reset_resume() clears
-  pwm_duty[] outside the hwmon core lock, so all paths that read or
-  write pwm_duty[] now hold in_report_lock to prevent a data race
-  during resume
-- arctic_fan_write(): build the OUT report buffer inside in_report_lock
-  so reset_resume() cannot clear pwm_duty[] between the pwm_duty[]
-  snapshot and the buffer write; this makes the lock coverage complete
-
-Changes since v4:
-- arctic_fan_write(): switch to wait_for_completion_timeout() (non-
-  interruptible); eliminates the signal-interrupted write case of the
-  late-ACK race that write_pending could not fully prevent
-- arctic_fan_write(): guard pwm_duty[channel] commit with
-  ack_status == 0 check; a device error ACK (status 0x01) no longer
-  silently poisons the cached duty used in future OUT reports
-- arctic_fan_probe()/remove(): replace devm_add_action_or_reset() +
-  no-op remove() with explicit hid_device_io_stop/hid_hw_close/
-  hid_hw_stop in remove(); devm_add_action_or_reset() was called after
-  hdev->driver = NULL, causing a NULL deref in hid_hw_close() on unbind
-- add reset_resume callback: device resets PWM to hardware defaults on
-  power loss during suspend; driver now clears cached pwm_duty[] on
-  reset-resume so stale pre-suspend values are not re-sent as if valid
-- Documentation/hwmon/arctic_fan_controller.rst: document suspend/
-  resume behaviour and the updated pwm[1-10] read semantics
-
-Changes since v3:
-- buf[]: upgrade from __aligned(8) to ____cacheline_aligned so the
-  DMA buffer occupies its own cache line, preventing false sharing with
-  adjacent fan_rpm[]/pwm_duty[] fields on non-coherent architectures
-- arctic_fan_write(): add write_pending flag (protected by
-  in_report_lock) so raw_event() delivers ACKs only while a write is
-  in flight
-- arctic_fan_write(): commit pwm_duty[channel] only after the device
-  ACKs the command; a failed or timed-out write no longer leaves a
-  stale value in the cached duty state
-- arctic_fan_probe(): start IO (hid_device_io_start) before registering
-  with hwmon; previously a sysfs write arriving between hwmon
-  registration and io_start could send an OUT report whose ACK would be
-  discarded by the HID core, causing a spurious timeout
-- Documentation/hwmon/arctic_fan_controller.rst: document that cached
-  PWM values start at 0 (hardware state unknown at probe) and that each
-  OUT report carries all 10 channel values
-
-Changes since v2:
-- buf[]: add __aligned(8) for DMA safety
-- ARCTIC_ACK_TIMEOUT_MS: restore 1000 ms; note observed max ~563 ms
-- arctic_fan_parse_report(): replace hwmon_lock/hwmon_unlock with
-  spin_lock_irqsave; hwmon_lock() may sleep and is unsafe when
-  raw_event() runs in hardirq/softirq context
-- arctic_fan_raw_event(): use spin_lock_irqsave for ACK path
-- arctic_fan_write(): use spin_lock_irqsave for completion reinit
-- arctic_fan_write(): clamp val to [0, 255] before u8 cast
-- remove priv->hwmon_dev (no longer needed)
-
-Changes since v1:
-- Use hid_dbg() instead of module_param debug flag
-- Move hid_device_id table adjacent to hid_driver struct
-- Use get_unaligned_le16() for RPM parsing
-- Remove impossible bounds/NULL checks; remove retry loop
-- Add hid_is_usb() guard
-- Do not update pwm_duty from IN reports (device is manual-only)
-- Add completion/ACK mechanism for OUT report acknowledgement
-- Add Documentation/hwmon/arctic_fan_controller.rst and MAINTAINERS
-
-diff --git a/Documentation/hwmon/arctic_fan_controller.rst b/Documentation/hwmon/arctic_fan_controller.rst
-new file mode 100644
-index 0000000000..b5be88ae46
---- /dev/null
-+++ b/Documentation/hwmon/arctic_fan_controller.rst
-@@ -0,0 +1,56 @@
-+.. SPDX-License-Identifier: GPL-2.0-or-later
-+
-+Kernel driver arctic_fan_controller
-+=====================================
-+
-+Supported devices:
-+
-+* ARCTIC Fan Controller (USB HID, VID 0x3904, PID 0xF001)
-+
-+Author: Aureo Serrano de Souza <aureo.serrano@arctic.de>
-+
-+Description
-+-----------
-+
-+This driver provides hwmon support for the ARCTIC Fan Controller, a USB
-+Custom HID device with 10 fan channels. The device sends IN reports about
-+once per second containing current RPM values (bytes 11-30, 10 x uint16 LE).
-+Fan speed control is manual-only: the device does not change PWM
-+autonomously; it only applies a new duty cycle when it receives an OUT
-+report from the host.
-+
-+After the device applies an OUT report, it sends back a 2-byte ACK IN
-+report (Report ID 0x02, byte 1 = 0x00 on success) confirming the command
-+was applied.
-+
-+Usage notes
-+-----------
-+
-+Since it is a USB device, hotplug is supported. The device is autodetected.
-+
-+The device does not support GET_REPORT, so the driver cannot read back the
-+current hardware PWM state at probe time. The cached PWM values (readable
-+via pwm[1-10]) start at 0 and reflect only values that have been
-+successfully written. Because each OUT report carries all 10 channel values,
-+writing a single channel also sends the cached values for all other channels.
-+Users should set all channels to the desired values before relying on the
-+cached state.
-+
-+On system suspend, the device may lose power and reset its PWM channels to
-+hardware defaults. The driver clears its cached duty values on resume so
-+that reads reflect the unknown hardware state rather than stale pre-suspend
-+values. Userspace is responsible for re-applying the desired duty cycles
-+after resume.
-+
-+Sysfs entries
-+-------------
-+
-+================ ==============================================================
-+fan[1-10]_input  Fan speed in RPM (read-only). Updated from IN reports at ~1 Hz.
-+pwm[1-10]        PWM duty cycle (0-255). Write: sends an OUT report setting the
-+                 duty cycle (scaled from 0-255 to 0-100% for the device);
-+                 the cached value is updated only after the device ACKs the
-+                 command with a success status. Read: returns the last
-+                 successfully written value; initialized to 0 at driver load
-+                 and after resume (hardware state unknown).
-+================ ==============================================================
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index b2ca8513cf..c34713040e 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -42,6 +42,7 @@ Hardware Monitoring Kernel Drivers
-    aht10
-    amc6821
-    aquacomputer_d5next
-+   arctic_fan_controller
-    asb100
-    asc7621
-    aspeed-g6-pwm-tach
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 96ea84948d..ec3112bd41 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2053,6 +2053,13 @@ S:	Maintained
- F:	drivers/net/arcnet/
- F:	include/uapi/linux/if_arcnet.h
-
-+ARCTIC FAN CONTROLLER DRIVER
-+M:	Aureo Serrano de Souza <aureo.serrano@arctic.de>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/hwmon/arctic_fan_controller.rst
-+F:	drivers/hwmon/arctic_fan_controller.c
-+
- ARM AND ARM64 SoC SUB-ARCHITECTURES (COMMON PARTS)
- M:	Arnd Bergmann <arnd@arndb.de>
- M:	Krzysztof Kozlowski <krzk@kernel.org>
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 328867242c..6c90a8dd40 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -388,6 +388,18 @@ config SENSORS_APPLESMC
- 	  Say Y here if you have an applicable laptop and want to experience
- 	  the awesome power of applesmc.
-
-+config SENSORS_ARCTIC_FAN_CONTROLLER
-+	tristate "ARCTIC Fan Controller"
-+	depends on USB_HID
-+	help
-+	  If you say yes here you get support for the ARCTIC Fan Controller,
-+	  a USB HID device (VID 0x3904, PID 0xF001) with 10 fan channels.
-+	  The driver exposes fan speed (RPM) and PWM control via the hwmon
-+	  sysfs interface.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called arctic_fan_controller.
-+
- config SENSORS_ARM_SCMI
- 	tristate "ARM SCMI Sensors"
- 	depends on ARM_SCMI_PROTOCOL
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 5833c807c6..ef831c3375 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -49,6 +49,7 @@ obj-$(CONFIG_SENSORS_ADT7475)	+= adt7475.o
- obj-$(CONFIG_SENSORS_AHT10)	+= aht10.o
- obj-$(CONFIG_SENSORS_APPLESMC)	+= applesmc.o
- obj-$(CONFIG_SENSORS_AQUACOMPUTER_D5NEXT) += aquacomputer_d5next.o
-+obj-$(CONFIG_SENSORS_ARCTIC_FAN_CONTROLLER)	+= arctic_fan_controller.o
- obj-$(CONFIG_SENSORS_ARM_SCMI)	+= scmi-hwmon.o
- obj-$(CONFIG_SENSORS_ARM_SCPI)	+= scpi-hwmon.o
- obj-$(CONFIG_SENSORS_AS370)	+= as370-hwmon.o
-diff --git a/drivers/hwmon/arctic_fan_controller.c b/drivers/hwmon/arctic_fan_controller.c
-new file mode 100644
-index 0000000000..2bfb003f01
---- /dev/null
-+++ b/drivers/hwmon/arctic_fan_controller.c
-@@ -0,0 +1,371 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Linux hwmon driver for ARCTIC Fan Controller
-+ *
-+ * USB Custom HID device with 10 fan channels.
-+ * Exposes fan RPM (input) and PWM (0-255) via hwmon. Device pushes IN reports
-+ * at ~1 Hz; no GET_REPORT. OUT reports set PWM duty (bytes 1-10, 0-100%).
-+ * PWM is manual-only: the device does not change duty autonomously, only
-+ * when it receives an OUT report from the host.
-+ */
-+
-+#include <linux/cache.h>
-+#include <linux/completion.h>
-+#include <linux/err.h>
-+#include <linux/hid.h>
-+#include <linux/hwmon.h>
-+#include <linux/jiffies.h>
-+#include <linux/minmax.h>
-+#include <linux/module.h>
-+#include <linux/spinlock.h>
-+#include <linux/string.h>
-+#include <linux/unaligned.h>
-+
-+#define ARCTIC_VID			0x3904
-+#define ARCTIC_PID			0xF001
-+#define ARCTIC_NUM_FANS			10
-+#define ARCTIC_OUTPUT_REPORT_ID		0x01
-+#define ARCTIC_REPORT_LEN		32
-+#define ARCTIC_RPM_OFFSET		11	/* bytes 11-30: 10 x uint16 LE */
-+/* ACK report: device sends Report ID 0x02, 2 bytes (ID + status) after applying OUT report */
-+#define ARCTIC_ACK_REPORT_ID		0x02
-+#define ARCTIC_ACK_REPORT_LEN		2
-+/*
-+ * Time to wait for ACK report after send.
-+ * Measured over 500 iterations: max ~563 ms. Keep 1 s as margin.
-+ */
-+#define ARCTIC_ACK_TIMEOUT_MS		1000
-+
-+struct arctic_fan_data {
-+	struct hid_device *hdev;
-+	struct device *hwmon_dev;	/* stored for explicit unregister in remove() */
-+	spinlock_t in_report_lock;	/* protects fan_rpm, ack_status, write_pending, pwm_duty */
-+	struct completion in_report_received; /* ACK (ID 0x02) received in raw_event */
-+	int ack_status;			/* 0 = OK, negative errno on device error */
-+	bool write_pending;		/* true while an OUT report ACK is in flight */
-+	u32 fan_rpm[ARCTIC_NUM_FANS];
-+	u8 pwm_duty[ARCTIC_NUM_FANS];	/* 0-255 matching sysfs range; converted to 0-100 on send */
-+	/*
-+	 * OUT report buffer. Cache-line aligned so it occupies its own cache
-+	 * line, preventing DMA cache-coherency issues with adjacent fields
-+	 * (fan_rpm[], pwm_duty[]) on non-coherent architectures.
-+	 * Embedded in the devm_kzalloc'd struct so it is heap-allocated and
-+	 * passes usb_hcd_map_urb_for_dma(). Serialized by the hwmon core.
-+	 */
-+	u8 buf[ARCTIC_REPORT_LEN] ____cacheline_aligned;
-+};
-+
-+/*
-+ * Parse RPM values from the periodic status report (10 x uint16 LE at rpm_off).
-+ * pwm_duty is not updated from the report: the device is manual-only, so the
-+ * host cache is the authoritative source for PWM.
-+ * Called from raw_event which may run in IRQ context; must not sleep.
-+ */
-+static void arctic_fan_parse_report(struct arctic_fan_data *priv, u8 *buf,
-+				    int len, int rpm_off)
-+{
-+	unsigned long flags;
-+	int i;
-+
-+	if (len < rpm_off + 20)
-+		return;
-+
-+	spin_lock_irqsave(&priv->in_report_lock, flags);
-+	for (i = 0; i < ARCTIC_NUM_FANS; i++)
-+		priv->fan_rpm[i] = get_unaligned_le16(&buf[rpm_off + i * 2]);
-+	spin_unlock_irqrestore(&priv->in_report_lock, flags);
-+}
-+
-+/*
-+ * raw_event: IN reports.
-+ *
-+ * Status report: Report ID 0x01, 32 bytes:
-+ *   byte 0 = report ID, bytes 1-10 = PWM 0-100%, bytes 11-30 = 10 x RPM uint16 LE.
-+ *   Device pushes these at ~1 Hz; no GET_REPORT.
-+ *
-+ * ACK report: Report ID 0x02, 2 bytes:
-+ *   byte 0 = 0x02, byte 1 = status (0x00 = OK, 0x01 = ERROR).
-+ *   Sent once after accepting and applying an OUT report (ID 0x01).
-+ */
-+static int arctic_fan_raw_event(struct hid_device *hdev,
-+				struct hid_report *report, u8 *data, int size)
-+{
-+	struct arctic_fan_data *priv = hid_get_drvdata(hdev);
-+	unsigned long flags;
-+
-+	hid_dbg(hdev, "arctic_fan: raw_event id=%u size=%d\n", report->id, size);
-+
-+	if (report->id == ARCTIC_ACK_REPORT_ID && size == ARCTIC_ACK_REPORT_LEN) {
-+		spin_lock_irqsave(&priv->in_report_lock, flags);
-+		/*
-+		 * Only deliver if a write is in flight. This prevents a
-+		 * late-arriving ACK from a timed-out write from erroneously
-+		 * satisfying a subsequent write's completion wait.
-+		 */
-+		if (priv->write_pending) {
-+			priv->ack_status = data[1] == 0x00 ? 0 : -EIO;
-+			complete(&priv->in_report_received);
-+		}
-+		spin_unlock_irqrestore(&priv->in_report_lock, flags);
-+		return 0;
-+	}
-+
-+	if (report->id != ARCTIC_OUTPUT_REPORT_ID || size != ARCTIC_REPORT_LEN) {
-+		hid_dbg(hdev, "arctic_fan: raw_event id=%u size=%d ignored\n",
-+			report->id, size);
-+		return 0;
-+	}
-+
-+	arctic_fan_parse_report(priv, data, size, ARCTIC_RPM_OFFSET);
-+	return 0;
-+}
-+
-+static umode_t arctic_fan_is_visible(const void *data,
-+				     enum hwmon_sensor_types type,
-+				     u32 attr, int channel)
-+{
-+	if (type == hwmon_fan && attr == hwmon_fan_input)
-+		return 0444;
-+	if (type == hwmon_pwm && attr == hwmon_pwm_input)
-+		return 0644;
-+	return 0;
-+}
-+
-+static int arctic_fan_read(struct device *dev, enum hwmon_sensor_types type,
-+			   u32 attr, int channel, long *val)
-+{
-+	struct arctic_fan_data *priv = dev_get_drvdata(dev);
-+	unsigned long flags;
-+
-+	if (type == hwmon_fan && attr == hwmon_fan_input) {
-+		spin_lock_irqsave(&priv->in_report_lock, flags);
-+		*val = priv->fan_rpm[channel];
-+		spin_unlock_irqrestore(&priv->in_report_lock, flags);
-+		return 0;
-+	}
-+	if (type == hwmon_pwm && attr == hwmon_pwm_input) {
-+		spin_lock_irqsave(&priv->in_report_lock, flags);
-+		*val = priv->pwm_duty[channel];
-+		spin_unlock_irqrestore(&priv->in_report_lock, flags);
-+		return 0;
-+	}
-+	return -EINVAL;
-+}
-+
-+static int arctic_fan_write(struct device *dev, enum hwmon_sensor_types type,
-+			    u32 attr, int channel, long val)
-+{
-+	struct arctic_fan_data *priv = dev_get_drvdata(dev);
-+	u8 new_duty = (u8)clamp_val(val, 0, 255);
-+	unsigned long flags;
-+	unsigned long t;
-+	int i, ret;
-+
-+	/*
-+	 * Build the buffer and arm write_pending under in_report_lock so that
-+	 * reset_resume() cannot clear pwm_duty[] between the pwm_duty[] read
-+	 * and the buffer write, and raw_event() cannot deliver a stale ACK
-+	 * from a previous write into this write's completion.
-+	 *
-+	 * priv->buf is heap-allocated (embedded in the devm_kzalloc'd struct),
-+	 * satisfying usb_hcd_map_urb_for_dma(). Exclusively accessed by
-+	 * write() which the hwmon core serializes.
-+	 *
-+	 * pwm_duty[channel] is committed only after a positive device ACK so a
-+	 * failed or timed-out write does not corrupt the cached state.
-+	 *
-+	 * Residual theoretical race: if write A times out (write_pending
-+	 * cleared), write B sets write_pending = true, and a late ACK from
-+	 * write A—delayed beyond ARCTIC_ACK_TIMEOUT_MS—arrives during write
-+	 * B's pending window, it would falsely satisfy write B's completion.
-+	 * This cannot be prevented in driver code without protocol support
-+	 * (for example, a correlation ID echoed in the device ACK report).
-+	 * In testing, observed ACK latency stayed below the 1 s timeout
-+	 * (maximum ~563 ms over 500 iterations).
-+	 *
-+	 * The wait is non-interruptible so that a signal cannot cause write()
-+	 * to return early while the OUT report is already in flight; an
-+	 * interruptible early return would create the same late-ACK window
-+	 * without even the timeout guard.
-+	 * Serialized by the hwmon core: only one arctic_fan_write() at a time.
-+	 * Use irqsave to match the IRQ context in which raw_event may run.
-+	 */
-+	spin_lock_irqsave(&priv->in_report_lock, flags);
-+	priv->buf[0] = ARCTIC_OUTPUT_REPORT_ID;
-+	for (i = 0; i < ARCTIC_NUM_FANS; i++) {
-+		u8 d = i == channel ? new_duty : priv->pwm_duty[i];
-+
-+		priv->buf[1 + i] = DIV_ROUND_CLOSEST((unsigned int)d * 100, 255);
-+	}
-+	priv->ack_status = -ETIMEDOUT;
-+	priv->write_pending = true;
-+	reinit_completion(&priv->in_report_received);
-+	spin_unlock_irqrestore(&priv->in_report_lock, flags);
-+
-+	ret = hid_hw_output_report(priv->hdev, priv->buf, ARCTIC_REPORT_LEN);
-+	if (ret < 0) {
-+		spin_lock_irqsave(&priv->in_report_lock, flags);
-+		priv->write_pending = false;
-+		spin_unlock_irqrestore(&priv->in_report_lock, flags);
-+		return ret;
-+	}
-+
-+	t = wait_for_completion_timeout(&priv->in_report_received,
-+					msecs_to_jiffies(ARCTIC_ACK_TIMEOUT_MS));
-+	spin_lock_irqsave(&priv->in_report_lock, flags);
-+	priv->write_pending = false;
-+	/* Commit inside the lock so reset_resume() cannot race with this write */
-+	if (t && priv->ack_status == 0)
-+		priv->pwm_duty[channel] = new_duty;
-+	spin_unlock_irqrestore(&priv->in_report_lock, flags);
-+
-+	if (!t)
-+		return -ETIMEDOUT;
-+	return priv->ack_status; /* 0=OK, -EIO=device error */
-+}
-+
-+static const struct hwmon_ops arctic_fan_ops = {
-+	.is_visible = arctic_fan_is_visible,
-+	.read = arctic_fan_read,
-+	.write = arctic_fan_write,
-+};
-+
-+static const struct hwmon_channel_info *arctic_fan_info[] = {
-+	HWMON_CHANNEL_INFO(fan,
-+			   HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT,
-+			   HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT,
-+			   HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT,
-+			   HWMON_F_INPUT),
-+	HWMON_CHANNEL_INFO(pwm,
-+			   HWMON_PWM_INPUT, HWMON_PWM_INPUT, HWMON_PWM_INPUT,
-+			   HWMON_PWM_INPUT, HWMON_PWM_INPUT, HWMON_PWM_INPUT,
-+			   HWMON_PWM_INPUT, HWMON_PWM_INPUT, HWMON_PWM_INPUT,
-+			   HWMON_PWM_INPUT),
-+	NULL
-+};
-+
-+static const struct hwmon_chip_info arctic_fan_chip_info = {
-+	.ops = &arctic_fan_ops,
-+	.info = arctic_fan_info,
-+};
-+
-+static int arctic_fan_reset_resume(struct hid_device *hdev)
-+{
-+	struct arctic_fan_data *priv = hid_get_drvdata(hdev);
-+	unsigned long flags;
-+
-+	/*
-+	 * The device resets its PWM channels to hardware defaults on power
-+	 * loss during suspend. Clear the cached duty values so they reflect
-+	 * the unknown hardware state, consistent with probe-time behaviour
-+	 * (the device has no GET_REPORT support). Hold in_report_lock so
-+	 * this does not race with a concurrent pwm read or write callback.
-+	 */
-+	spin_lock_irqsave(&priv->in_report_lock, flags);
-+	memset(priv->pwm_duty, 0, sizeof(priv->pwm_duty));
-+	spin_unlock_irqrestore(&priv->in_report_lock, flags);
-+	return 0;
-+}
-+
-+static int arctic_fan_probe(struct hid_device *hdev,
-+			    const struct hid_device_id *id)
-+{
-+	struct arctic_fan_data *priv;
-+	int ret;
-+
-+	if (!hid_is_usb(hdev))
-+		return -ENODEV;
-+
-+	ret = hid_parse(hdev);
-+	if (ret)
-+		return ret;
-+
-+	priv = devm_kzalloc(&hdev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->hdev = hdev;
-+	spin_lock_init(&priv->in_report_lock);
-+	init_completion(&priv->in_report_received);
-+	hid_set_drvdata(hdev, priv);
-+
-+	ret = hid_hw_start(hdev, HID_CONNECT_DRIVER);
-+	if (ret)
-+		return ret;
-+
-+	ret = hid_hw_open(hdev);
-+	if (ret)
-+		goto out_stop;
-+
-+	/*
-+	 * Start IO before registering with hwmon. If IO were started after
-+	 * hwmon registration, a sysfs write arriving in that narrow window
-+	 * would send an OUT report but the ACK could not be delivered (the HID
-+	 * core discards events until io_started), causing a spurious timeout.
-+	 */
-+	hid_device_io_start(hdev);
-+
-+	/*
-+	 * Use the non-devm variant and store the pointer so remove() can
-+	 * call hwmon_device_unregister() before tearing down the HID
-+	 * transport. devm_hwmon_device_register_with_info() would defer
-+	 * unregistration until after remove() returns, leaving a window
-+	 * where a concurrent sysfs write could call hid_hw_output_report()
-+	 * on an already-stopped device (use-after-free).
-+	 */
-+	priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "arctic_fan",
-+							  priv, &arctic_fan_chip_info,
-+							  NULL);
-+	if (IS_ERR(priv->hwmon_dev)) {
-+		ret = PTR_ERR(priv->hwmon_dev);
-+		goto out_close;
-+	}
-+
-+	return 0;
-+
-+out_close:
-+	hid_device_io_stop(hdev);
-+	hid_hw_close(hdev);
-+out_stop:
-+	hid_hw_stop(hdev);
-+	return ret;
-+}
-+
-+static void arctic_fan_remove(struct hid_device *hdev)
-+{
-+	struct arctic_fan_data *priv = hid_get_drvdata(hdev);
-+
-+	/*
-+	 * Unregister hwmon before stopping the HID transport. This removes
-+	 * the sysfs files and waits for any in-progress write() callback to
-+	 * return, so no hwmon op can call hid_hw_output_report() after
-+	 * hid_hw_stop() frees the underlying USB resources.
-+	 * Matches the pattern used by nzxt-smart2 and aquacomputer_d5next.
-+	 */
-+	hwmon_device_unregister(priv->hwmon_dev);
-+	hid_device_io_stop(hdev);
-+	hid_hw_close(hdev);
-+	hid_hw_stop(hdev);
-+}
-+
-+static const struct hid_device_id arctic_fan_id_table[] = {
-+	{ HID_USB_DEVICE(ARCTIC_VID, ARCTIC_PID) },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(hid, arctic_fan_id_table);
-+
-+static struct hid_driver arctic_fan_driver = {
-+	.name = "arctic_fan",
-+	.id_table = arctic_fan_id_table,
-+	.probe = arctic_fan_probe,
-+	.remove = arctic_fan_remove,
-+	.raw_event = arctic_fan_raw_event,
-+	.reset_resume = arctic_fan_reset_resume,
-+};
-+
-+module_hid_driver(arctic_fan_driver);
-+
-+MODULE_AUTHOR("Aureo Serrano de Souza <aureo.serrano@arctic.de>");
-+MODULE_DESCRIPTION("HID hwmon driver for ARCTIC Fan Controller");
-+MODULE_LICENSE("GPL");
+Rob
