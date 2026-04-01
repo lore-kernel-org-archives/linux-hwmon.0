@@ -1,67 +1,67 @@
-Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
+Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7D52517AF
-	for <linux-hwmon@vger.kernel.org>; Wed,  1 Apr 2026 14:45:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3D33AC0ED
+	for <linux-hwmon@vger.kernel.org>; Wed,  1 Apr 2026 14:50:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775054751; cv=none; b=k2NwCY7+o3VSTyk4U6Uc3wwx7a+7+7CZyKm2Ej4Y/Xq+HrKQMSNkQ7geMOeawVZpNCIJo0DZC9j4tLNQSxvNGrxKeoXE1K+yBXDofMu4UF98FTs1syiYwdhDUXsRxidyD+MXwBWGeT9qCikhWV031bBtPHSZ5B8uxvREapYCiWw=
+	t=1775055013; cv=none; b=L9f1c8R1bjKrW/P1bn1CTZK5kE7YEDjrU/+h1OqHSg/P84jIjLbOjGnBPG5FRCn3YIFVYLJUrpfyFF74jcfQ7O4ilrNezKDCAa7vcn1+g8OXCpQYq5BIAE6leWJTyMd6szPkHvcRMmlFhC81/uA/AU0LirYgt3avjkXw5GJzpPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775054751; c=relaxed/simple;
-	bh=38co2cn+cUNZd0qmrzrzcOrY2pIHvWBQ1L9wcBlm0ys=;
+	s=arc-20240116; t=1775055013; c=relaxed/simple;
+	bh=HyPefaPN9C+LsoX1kV04qKd4yLFbTg3iu9tvgw1X/n8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bdkuEtrR5J1+/vmRyPEGYBfHUGZzcDqP7Ufxf3HaO79qiZCKqVBo+ugs4c3DoP2sks56dbSO463PsjG7MVQ2WT2WDEzhsAABdbPc/l/3+k0ysJbLx1Rxo34Et1YGuqhqGQSPyttv5e+f9kzse6hzi83zjmrcH/kUA09KVMYJeck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QOpcJVAl; arc=none smtp.client-ip=74.125.82.169
+	 In-Reply-To:Content-Type; b=uOt7+6PyTCEQrzLbMS1kO0w16T/tAL+l6925LbCbuYogvMbLx06lVyQlsvNreQK/NPCdBjKEsJy4tj7LFAa7qqTL/SAAhW12RZ/ySesz9OE9H+FQsgvj4qGPGd3SF7e6ac5/IiAYNHiwZORTn1Q3d9taiVGwCrF4mf4vWosyg9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gVIw037C; arc=none smtp.client-ip=74.125.82.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QOpcJVAl"
-Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-2ba895adfeaso7533211eec.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 01 Apr 2026 07:45:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gVIw037C"
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-2c54c68db4dso6461660eec.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 01 Apr 2026 07:50:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775054749; x=1775659549; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775055008; x=1775659808; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=3qffD9tOVa2bRYolQkVM4q1e7qHCfE+PGZL7OnfVyOM=;
-        b=QOpcJVAldPGomvXQCX9idN3Nfvd3lvqMpa+DdUhUktMi6k1EX5Y8o6fF6AuoO/UGFR
-         gyp1y4zILva6jDXshXqjBkzxGApLHX795WM16bbKiT6CtQAm+nJRqsOAVC5Xve02aHxn
-         geL8Tcei59z4P+lPfx5MxALCq9zizhp1V8goVO1anDzcWp0N2+v10ztwKXdK9WhHavp6
-         YntqTfP0isxJGe24MfxbEiX75Boj0IQpAVCWP+i/1T3KS5WyE1W3WB69i6q2/mEr+0xv
-         b3g0kJ0lwYriI15CKVtXSyVaEzLtox7A4te7vrHo4QHl59nf6DrJQ7f9bhfg+S5x7nrJ
-         PjeA==
+        bh=adTovVGQXWP2DRbhzwnz90rChnI+nzeVyP76C0UUFdA=;
+        b=gVIw037CWAeMiuJgPyz6XEljtnG5Y6nvkTkZdjj3HYaybBTd4wOmS3Scem1e0AvluJ
+         HhN//KJcP9UQZrxTRg48gT1wEUtfgtln/y0zkjX2CAbWhVYsPe0p/FOgX7wTBD6YzfBg
+         FeMoe4sjIb5qabHDBeTCNWQic4NhtmBAXTDcsrfdIBN6w9WvReYhebCvqV2ECPJTCHRL
+         J8lTUhKBCZOJBuutOTT9GboPTMeR5FUcCdLU/xovwGG32/xuK7gycZuAx1qGj76BDfYB
+         Vjm9nH5fi6CQJo0QUNA14xz56uQluUAm0fkEyb9vc2n8bymatv/dcTILvy5f3akwB+4q
+         aTUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775054749; x=1775659549;
+        d=1e100.net; s=20251104; t=1775055008; x=1775659808;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3qffD9tOVa2bRYolQkVM4q1e7qHCfE+PGZL7OnfVyOM=;
-        b=EHvm0Ahc/bYonnJ3TrZ/plM8Y2s5+eMRKlb3JEDNvXwffXDJ57yR/JfP7fpSAHjc9q
-         mStZ1Z9SKojvNECExVqVeXNhlODbMuT2/m4XsZNJE3etuwzY8cBZpiYL2+P/x1wZsGQU
-         LqabIXHXON7PfwN2vSjrJ+phI/GbMoIYz22W7l3rZm3tE4zeCXGKRUbQECbGqD9+aab6
-         qXCOQni/THFs/tH6xuKy9LvQ2wIU17978H92bThR09V34B8aPpM/RfCCLm3rI/d8hWxh
-         kR7/l4yABt2mZLWNLIJXraqZGtzfwcSoV+BWW5cE/JwyGg9Q8dSQVoZWz0rmazB79st8
-         cJRw==
-X-Forwarded-Encrypted: i=1; AJvYcCXEFuOuZXDMPQwfzLdeZ3PWMpmDMGvDoO5rBwyIOOTBbqLjjfoaXtjSAz6s8pfai4mChqIGLqsxqXkJuQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3YpQ06GS32PLCnNscrB3fJgspGgjx9KK5eOsO0efX3DXYC/nG
-	GyavdGcbLPrWxIdE1hiYmcwmC06ptcqo4RnCgcP0XiMnr/J7UCCneEl7agf7iA==
-X-Gm-Gg: ATEYQzwn93EaXXIuBNajl8ETwARB7O8X5a2L25HPiK5lTGdr2WSQTmOw1rYNNrSUaEl
-	C6rkp6oRPdvTBFecI8xw1c+rovywCZriWpdO7j+OpDng/NfFlJZy5qHqIwftn4MA1rrbkBHXdGb
-	z0hikoGVjMacSVbY3+8TSpjTBkQRZIO58B41OlV6wJOBzCZrRACftet8zgyQF+nXC6jiX+LNI3k
-	qaFq7yUGB1oKUW1c4daeyOepRTlqFOG5BK9vXknhYxFvOMPqCZYkszK5ljEETgkwm2cGygHYlzf
-	faKPCRicGQ7FDAhCNOey/lpwyk/2jFb/6IIZAxuOavJjyf1pYShxpfNoPKXyw0XlYqmzxmZ9/S4
-	ubppa5CNGgKL7T6VnzgvdEW4h07A2sX7gMUv1kRnUX1Zyv8dvoqeGL7iCbtOHUj7gPBIuo3c2eV
-	vnwLp0zrR3EHUdQadILdSx8LmNOM+Rpbrt6zwqG+Ii1lDnAfwYnCUJa0lrZyWlCVfmKiax+KzM
-X-Received: by 2002:a05:7300:80cb:b0:2c7:2c0b:f33f with SMTP id 5a478bee46e88-2c9325b0162mr2284185eec.21.1775054748560;
-        Wed, 01 Apr 2026 07:45:48 -0700 (PDT)
+        bh=adTovVGQXWP2DRbhzwnz90rChnI+nzeVyP76C0UUFdA=;
+        b=Rm0qRaISRrtGe4a7mRbqd3k6skPtfRkKk6fK9h9fcCBnK+4z8EZC5fo0xEyq5fZZfX
+         /jtgNzT6cGdmjqZcgQ2Tvj66eQzdZEj+y3xvkX8FClBBdL2OqRDdBDUHCXDJ+0WAiNUl
+         R/VdrIfJfFxGZPNCC9c0zisqCzrOD2IS896TrrqcuhZnszNEsSqx5W8aNAQSKlz5rqfJ
+         piTTMt6P+EhN7r9AfUhR5eJESWlMRUjdpo1bCh6Qm0Z9HpkpkcclsMWMSSLXOjL3cYAD
+         MAbKL/UJnjrFiUIpei6OTwthjwSjN8A3dmrEn9omuBJZOTy4g0FjEra5GIT4bh/8ED2F
+         af7g==
+X-Forwarded-Encrypted: i=1; AJvYcCWaxOKAjKzFHlvIRwoyCvpcwg5QHeL5hoASC6yEdGPRB34kVfb4HtnXQEnvyOLjyZe9oGUglahTzYDv2g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyPVOkz/UOOZA0zy/nALldr/r4lGADgip9W86+ZFg/2fLIYUpy
+	yrzHVLFhcI6MXwC4sbGZsEUVFM5CN3oexlmVZYvJLEN74KXm8WhnmOqT
+X-Gm-Gg: ATEYQzwWAaCvq9417pUfKClK06eOqfFc2hgyD9mXSTUm0EG47GFbpBQ6cxrjjY94W7k
+	2133FVrVar524dkv7nuLvzvSSbrOndJd4A7UD6OBLaPOk8Y2rr0gAuHV8n/huhVE4wjys4NNe1V
+	43qDnCwMlkpYbJVWkLzVgFUnnUHHodXxJIHl1Vz+Rzb1D6bFAOxIshq0wIhL4Mra+Elmh9nmB7B
+	GmM2Sd7hMyfGKwcpvX2LPEwYeghYZY591n2AgIWjLfsa6In86evKP6k7QYWQWCqi4/uEhEqtN58
+	hO017W5qOM0eut0+CLUnb+IIKx/d/M11/zQvVDfSGbJ/LYgQ6VIzEIEmpJlcOsnsML2DeyXOzrf
+	hyMZNIpmp+rlnqTj6Rc8unPy6J0wexGu3NJ+aLsIUUr0idXYhPv42D8yCIdC/s5EEd8NqIwS93e
+	so2L6lWmAQC4WoawTnFExwQnAeK6cA0ZYmk9XlxcHa20X/eUBvGBt9KlpSuWkUM92TfX2mewZN
+X-Received: by 2002:a05:7300:2213:b0:2c0:becb:7640 with SMTP id 5a478bee46e88-2c931276dd6mr2288123eec.12.1775055008283;
+        Wed, 01 Apr 2026 07:50:08 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c3c79722e0sm13834154eec.31.2026.04.01.07.45.47
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c3c68b272esm12622956eec.15.2026.04.01.07.50.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Apr 2026 07:45:48 -0700 (PDT)
+        Wed, 01 Apr 2026 07:50:07 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <38703f7c-c082-40fb-8ca8-f70e8b8c7d25@roeck-us.net>
-Date: Wed, 1 Apr 2026 07:45:46 -0700
+Message-ID: <9ee56bb2-6f46-49de-bf01-b687bc32393e@roeck-us.net>
+Date: Wed, 1 Apr 2026 07:50:06 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,13 +69,19 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] hwmon: (asus-ec-sensors) fix T_Sensor for PRIME
- X670E-PRO WIFI
-To: Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc: Corey Hickey <bugfood-ml@fatooh.org>, linux-hwmon@vger.kernel.org
-References: <20260331215414.368785-1-bugfood-ml@fatooh.org>
- <6f1e43e0-14c0-40d7-ba43-95ece77d7176@roeck-us.net>
- <CAB95QAS2-K4VADCveRfNCziYiBMJb-P7McQ3EFVznHqHBDx_MQ@mail.gmail.com>
+Subject: Re: [PATCH v5 0/2] Add support for Texas Instruments INA4230 power
+ monitor
+To: Rob Herring <robh@kernel.org>, Alexey Charkov <alchark@flipper.net>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+References: <20260330-ina4230-v5-0-eeb322d95b3a@flipper.net>
+ <67a5d1c1-a9c5-47fb-a0ec-5b69a991b01e@roeck-us.net>
+ <20260331155246.GA1299761-robh@kernel.org>
+ <20872ef8-f68c-4916-a05f-404fd49fff00@roeck-us.net>
+ <CAKTNdwGcXcE25QiBTrZO6akMad+Lny5iPvAAAmUt6x2Hyzu5wg@mail.gmail.com>
+ <CAL_JsqJcqMM1LK1dEFvjRWdOc8g=7+G4VvF-jmzbSJ1ijBB=1A@mail.gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,26 +127,74 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <CAB95QAS2-K4VADCveRfNCziYiBMJb-P7McQ3EFVznHqHBDx_MQ@mail.gmail.com>
+In-Reply-To: <CAL_JsqJcqMM1LK1dEFvjRWdOc8g=7+G4VvF-jmzbSJ1ijBB=1A@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/31/26 22:56, Eugene Shalygin wrote:
-> On Wed, 1 Apr 2026 at 06:35, Guenter Roeck <linux@roeck-us.net> wrote:
+On 4/1/26 07:03, Rob Herring wrote:
+> On Tue, Mar 31, 2026 at 11:46 AM Alexey Charkov <alchark@flipper.net> wrote:
 >>
->>> Fixes: f7ac3020036b ("hwmon: (asus-ec-sensors) add ROG Crosshair X670E Gene.")
->>> Signed-off-by: Corey Hickey <bugfood-c@fatooh.org>
+>> On Tue, Mar 31, 2026 at 8:10 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>>
+>>> On 3/31/26 08:52, Rob Herring wrote:
+>>>> On Mon, Mar 30, 2026 at 09:07:32AM -0700, Guenter Roeck wrote:
+>>>>> On 3/30/26 08:14, Alexey Charkov wrote:
+>>>>>> TI INA4230 is a 4-channel power monitor with I2C interface, similar in
+>>>>>> operation to INA3221 (3-channel) and INA219 (single-channel) but with
+>>>>>> a different register layout, different alerting mechanism and slightly
+>>>>>> different support for directly reading calculated current/power/energy
+>>>>>> values (pre-multiplied by the device itself and needing only to be scaled
+>>>>>> by the driver depending on its selected LSB unit values).
+>>>>>>
+>>>>>> In this initial implementation, the driver supports reading voltage,
+>>>>>> current, power and energy values, but does not yet support alerts, which
+>>>>>> can be added separately if needed. Also the overflows during hardware
+>>>>>> calculations are not yet handled, nor is the support for the device's
+>>>>>> internal 32-bit energy counter reset.
+>>>>>>
+>>>>>> An example device tree using this binding and driver is available at [1]
+>>>>>> (not currently upstreamed, as the device in question is in engineering
+>>>>>> phase and not yet publicly available)
+>>>>>>
+>>>>>> [1] https://github.com/flipperdevices/flipper-linux-kernel/blob/flipper-devel/arch/arm64/boot/dts/rockchip/rk3576-flipper-one-rev-f0b0c1.dts
+>>>>>>
+>>>>>> Signed-off-by: Alexey Charkov <alchark@flipper.net>
+>>>>>> ---
+>>>>>> Changes in v5:
+>>>>>> - Reworded per-channel subnodes description in the binding for clarity (Sashiko)
+>>>>>> - NB: Sashiko's suggestion to allow interrupts in the binding sounds premature,
+>>>>>>      as the alerts mechanism is not implemented yet and there are no known users
+>>>>>>      to test it. If anyone has hardware with the alert pins wired to an interrupt
+>>>>>>      line - please shout and we can test/extend it together
+>>>>>
+>>>>> The bindings are supposed to be complete, even if not implemented, so I am not sure
+>>>>> if the DT maintainers will agree here. We'll see.
+>>>>
+>>>> Given ti,alert-polarity-active-high is added seems like the interrupt
+>>>> should be too. And the interrupt can specify the polarity, so is that
+>>>> property really needed? There's alway the possibility that you have some
+>>>> inverter on the board too and the interrupt polarity is not enough, but
+>>>> solve that problem when it actually exists.
+>>>>
+>>>
+>>> The alert pin can be attached to a board interrupt, or (more likely) it can
+>>> be attached to the I2C controller's alert pin. In the latter case there is
+>>> no interrupt property.
+>>
+>> Alright, I will add the interrupt property and keep the dedicated flag
+>> for alert polarity.
+>>
+>> Following the logic of binding completeness, should I add a flag for
+>> the single-shot mode too, even though I dropped that functionality
+>> from the driver in one of the prior iterations?
 > 
-> Should be:
-> Fixes: e0444758dd1b ("hwmon: (asus-ec-sensors) add PRIME X670E-PRO WIFI")
+> I don't remember what that was exactly, but that sounds like a user
+> selection which would be some sysfs or other runtime control rather
+> than in DT. Unless the h/w design dictates what mode should be used.
 > 
->> Applied.
-> 
-> Maybe it is still possible to amend, please?
-> 
-Yes, I'll do that.
 
-Thanks for the clarification.
+I agree. I can not imagine that to be a hardware design constraint.
 
+Thanks,
 Guenter
 
