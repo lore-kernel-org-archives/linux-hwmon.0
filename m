@@ -1,200 +1,115 @@
-Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
+Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3D33AC0ED
-	for <linux-hwmon@vger.kernel.org>; Wed,  1 Apr 2026 14:50:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3DC0344D8E
+	for <linux-hwmon@vger.kernel.org>; Wed,  1 Apr 2026 15:32:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775055013; cv=none; b=L9f1c8R1bjKrW/P1bn1CTZK5kE7YEDjrU/+h1OqHSg/P84jIjLbOjGnBPG5FRCn3YIFVYLJUrpfyFF74jcfQ7O4ilrNezKDCAa7vcn1+g8OXCpQYq5BIAE6leWJTyMd6szPkHvcRMmlFhC81/uA/AU0LirYgt3avjkXw5GJzpPU=
+	t=1775057571; cv=none; b=AAxY0V3SJy7fkzS9l3/y5YGOU5cYGHr+XpMqBYN1UR45847T8XF1zJDTvRmb4vSpl4RiNOxAm8UbQxWw+nRXeJfI4vpkCq6mM8p2ekym+Morny+eMfyQvyE3zuzUC4rghBseeV+dPzm2pS0A6ht+CP/ghgE21+hYCpnpsTWyHwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775055013; c=relaxed/simple;
-	bh=HyPefaPN9C+LsoX1kV04qKd4yLFbTg3iu9tvgw1X/n8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uOt7+6PyTCEQrzLbMS1kO0w16T/tAL+l6925LbCbuYogvMbLx06lVyQlsvNreQK/NPCdBjKEsJy4tj7LFAa7qqTL/SAAhW12RZ/ySesz9OE9H+FQsgvj4qGPGd3SF7e6ac5/IiAYNHiwZORTn1Q3d9taiVGwCrF4mf4vWosyg9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gVIw037C; arc=none smtp.client-ip=74.125.82.171
+	s=arc-20240116; t=1775057571; c=relaxed/simple;
+	bh=Ai2/x1kqo80rkpEaKRRyykEK4jbPrETJQvivg8Hd8Oc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S8gklb9l4le+hcegIHNtSdCFh7kFKu/5JiUQhC7xeLF9pSqZSuNCDu7lW+4Mhdy3xE/Pr9P0A5HSm3uKOaIzrTEvyrx9LnU25nLMcwYyeZJRXLoDuewCUsEzTey6/HDFGeEe4St7QWM+A2wUSeRAb3LVIjCiF3eF6m9Qk+7sqek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jtXA1g8P; arc=none smtp.client-ip=74.125.82.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gVIw037C"
-Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-2c54c68db4dso6461660eec.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 01 Apr 2026 07:50:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jtXA1g8P"
+Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-12732165d1eso9786445c88.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 01 Apr 2026 08:32:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775055008; x=1775659808; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=adTovVGQXWP2DRbhzwnz90rChnI+nzeVyP76C0UUFdA=;
-        b=gVIw037CWAeMiuJgPyz6XEljtnG5Y6nvkTkZdjj3HYaybBTd4wOmS3Scem1e0AvluJ
-         HhN//KJcP9UQZrxTRg48gT1wEUtfgtln/y0zkjX2CAbWhVYsPe0p/FOgX7wTBD6YzfBg
-         FeMoe4sjIb5qabHDBeTCNWQic4NhtmBAXTDcsrfdIBN6w9WvReYhebCvqV2ECPJTCHRL
-         J8lTUhKBCZOJBuutOTT9GboPTMeR5FUcCdLU/xovwGG32/xuK7gycZuAx1qGj76BDfYB
-         Vjm9nH5fi6CQJo0QUNA14xz56uQluUAm0fkEyb9vc2n8bymatv/dcTILvy5f3akwB+4q
-         aTUw==
+        d=gmail.com; s=20251104; t=1775057570; x=1775662370; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=21I3m8LqYZE/Hogk17E7dwBI5zTNe6gNNbn7uLVQjko=;
+        b=jtXA1g8PoZrrOpDYaeJfsEf5yaA4/fX5+gX9LMPMddB8xYiVKy/T4gkrMrSwSTL1A0
+         8M/08Vcjj/8P0TES6zm/rvrngzfmH5XBA2eOUvWSihKryOXnBmhmiIsgO+ycUkiMtkhi
+         4UbWtCJg/Jw71DcY5lyZqXrfa68ARG0T5fU0kEg8x4SmUrlFIJJWZ8k3vAJdkfiXaUOO
+         NQfyA/n5nCO7PwOGMIpy7X0FgcGWFO2nQwRA/xlMR3fXgNknyDLFp9PRSd4ojrrm7IcC
+         0aDJlJ6KOqke3nsre35iMeqZQnExGw3yf69wsGdgdX4oyFa8AgMSQpIgqlMRumvdapzW
+         eehQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775055008; x=1775659808;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=adTovVGQXWP2DRbhzwnz90rChnI+nzeVyP76C0UUFdA=;
-        b=Rm0qRaISRrtGe4a7mRbqd3k6skPtfRkKk6fK9h9fcCBnK+4z8EZC5fo0xEyq5fZZfX
-         /jtgNzT6cGdmjqZcgQ2Tvj66eQzdZEj+y3xvkX8FClBBdL2OqRDdBDUHCXDJ+0WAiNUl
-         R/VdrIfJfFxGZPNCC9c0zisqCzrOD2IS896TrrqcuhZnszNEsSqx5W8aNAQSKlz5rqfJ
-         piTTMt6P+EhN7r9AfUhR5eJESWlMRUjdpo1bCh6Qm0Z9HpkpkcclsMWMSSLXOjL3cYAD
-         MAbKL/UJnjrFiUIpei6OTwthjwSjN8A3dmrEn9omuBJZOTy4g0FjEra5GIT4bh/8ED2F
-         af7g==
-X-Forwarded-Encrypted: i=1; AJvYcCWaxOKAjKzFHlvIRwoyCvpcwg5QHeL5hoASC6yEdGPRB34kVfb4HtnXQEnvyOLjyZe9oGUglahTzYDv2g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyPVOkz/UOOZA0zy/nALldr/r4lGADgip9W86+ZFg/2fLIYUpy
-	yrzHVLFhcI6MXwC4sbGZsEUVFM5CN3oexlmVZYvJLEN74KXm8WhnmOqT
-X-Gm-Gg: ATEYQzwWAaCvq9417pUfKClK06eOqfFc2hgyD9mXSTUm0EG47GFbpBQ6cxrjjY94W7k
-	2133FVrVar524dkv7nuLvzvSSbrOndJd4A7UD6OBLaPOk8Y2rr0gAuHV8n/huhVE4wjys4NNe1V
-	43qDnCwMlkpYbJVWkLzVgFUnnUHHodXxJIHl1Vz+Rzb1D6bFAOxIshq0wIhL4Mra+Elmh9nmB7B
-	GmM2Sd7hMyfGKwcpvX2LPEwYeghYZY591n2AgIWjLfsa6In86evKP6k7QYWQWCqi4/uEhEqtN58
-	hO017W5qOM0eut0+CLUnb+IIKx/d/M11/zQvVDfSGbJ/LYgQ6VIzEIEmpJlcOsnsML2DeyXOzrf
-	hyMZNIpmp+rlnqTj6Rc8unPy6J0wexGu3NJ+aLsIUUr0idXYhPv42D8yCIdC/s5EEd8NqIwS93e
-	so2L6lWmAQC4WoawTnFExwQnAeK6cA0ZYmk9XlxcHa20X/eUBvGBt9KlpSuWkUM92TfX2mewZN
-X-Received: by 2002:a05:7300:2213:b0:2c0:becb:7640 with SMTP id 5a478bee46e88-2c931276dd6mr2288123eec.12.1775055008283;
-        Wed, 01 Apr 2026 07:50:08 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c3c68b272esm12622956eec.15.2026.04.01.07.50.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Apr 2026 07:50:07 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775057570; x=1775662370;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=21I3m8LqYZE/Hogk17E7dwBI5zTNe6gNNbn7uLVQjko=;
+        b=sXBaGPGdSV0KDzoajA1queBDMl+4B97kqDpgCr8FcDG+dO7DnBEFc3R5gYsNS/JESC
+         lBY62eqdH2o8d43TwL21mQJlylfkF1OrEaFGPrCEJI3GtT8u8fi+raq5Skv5BKOJXKlR
+         ooIEuJmo28LudlfowHkHXEdAox3BiMJZnS/6y8vqKALvZsqX4pyyMsJk2oRefzXooDY0
+         BKiXv7kGPMFvd/YAqbA/9TPx844cD3DnTyYl66DRYBoRCU2Kgly3yN0kx5a0x9/Vt5Es
+         cNAgC5fZpiWUgpekHWE8GYpxwETHGoIhUwfNiuPAGkhg4inoTCHfXyLmlytFG/DoGjki
+         NLRQ==
+X-Gm-Message-State: AOJu0YyndSoSYE5HBiZNMmA7wXWuu0O/gROumRUgq8IQnjH2WKrTTKDs
+	cOHxyvVXzm7q0F8F2fASU/AZJAaVcWRjcqh0u3B9bj1r5tbjEFNEqR17
+X-Gm-Gg: ATEYQzz1Y5kozxvCdR+zWx3nT6unHJkOzG0ckN4sQnCKVqIeiIpiPc/Pe1RFhhri/6D
+	VOc3Vv1Mbu74fin+cuXZP67Tu+QoE8nPXrjgsxNPC0JoUTahqdPDJpOl0VOXtnK0b0AMY6cNQMF
+	OnU66RxE67rPgMKeImJ7XgM+cpLHwHhkVpxLz9S/Ao1yJxYcE7TqRyi0wUgNn4QqDN3ALv3DtEL
+	ECMaghmzRF8T1abNYQMkclLQQoTCly5wY/enp0gE8cMTH/F+7OCmSLlERalH/RA5RrTOYA0kfTn
+	3KWEzqmIy/VsLn5IEANFX8G2CbD7+r1Qo6gs3Ont8OmQFBz8yGx1ypa7R7dTh8D2+aBx5jDUvQC
+	LE+DsNvdI7wIPjQIxfcMjDC/BX2cW3RDp+ThvkTq1uHLk4OJJpnTVLqvQLAgZQuoS/QK/nyQmTE
+	ELhAMuXVhIESOOBVSBS0UENtw0kD4CDMWYDqIk
+X-Received: by 2002:a05:7022:6288:b0:127:15cd:9f52 with SMTP id a92af1059eb24-12be6457e26mr2297000c88.5.1775057569588;
+        Wed, 01 Apr 2026 08:32:49 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12bedd4e4e3sm131752c88.1.2026.04.01.08.32.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2026 08:32:49 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9ee56bb2-6f46-49de-bf01-b687bc32393e@roeck-us.net>
-Date: Wed, 1 Apr 2026 07:50:06 -0700
+Date: Wed, 1 Apr 2026 08:32:48 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Aureo Serrano de Souza <aureo.serrano@arctic.de>
+Cc: linux-hwmon@vger.kernel.org, linux@weissschuh.net, corbet@lwn.net,
+	skhan@linuxfoundation.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6] hwmon: add driver for ARCTIC Fan Controller
+Message-ID: <aae8af5f-a61c-44da-976b-55fd684cbaec@roeck-us.net>
+References: <20260401112654.60560-1-aureo.serrano@arctic.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/2] Add support for Texas Instruments INA4230 power
- monitor
-To: Rob Herring <robh@kernel.org>, Alexey Charkov <alchark@flipper.net>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-References: <20260330-ina4230-v5-0-eeb322d95b3a@flipper.net>
- <67a5d1c1-a9c5-47fb-a0ec-5b69a991b01e@roeck-us.net>
- <20260331155246.GA1299761-robh@kernel.org>
- <20872ef8-f68c-4916-a05f-404fd49fff00@roeck-us.net>
- <CAKTNdwGcXcE25QiBTrZO6akMad+Lny5iPvAAAmUt6x2Hyzu5wg@mail.gmail.com>
- <CAL_JsqJcqMM1LK1dEFvjRWdOc8g=7+G4VvF-jmzbSJ1ijBB=1A@mail.gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <CAL_JsqJcqMM1LK1dEFvjRWdOc8g=7+G4VvF-jmzbSJ1ijBB=1A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260401112654.60560-1-aureo.serrano@arctic.de>
 
-On 4/1/26 07:03, Rob Herring wrote:
-> On Tue, Mar 31, 2026 at 11:46 AM Alexey Charkov <alchark@flipper.net> wrote:
->>
->> On Tue, Mar 31, 2026 at 8:10 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>>
->>> On 3/31/26 08:52, Rob Herring wrote:
->>>> On Mon, Mar 30, 2026 at 09:07:32AM -0700, Guenter Roeck wrote:
->>>>> On 3/30/26 08:14, Alexey Charkov wrote:
->>>>>> TI INA4230 is a 4-channel power monitor with I2C interface, similar in
->>>>>> operation to INA3221 (3-channel) and INA219 (single-channel) but with
->>>>>> a different register layout, different alerting mechanism and slightly
->>>>>> different support for directly reading calculated current/power/energy
->>>>>> values (pre-multiplied by the device itself and needing only to be scaled
->>>>>> by the driver depending on its selected LSB unit values).
->>>>>>
->>>>>> In this initial implementation, the driver supports reading voltage,
->>>>>> current, power and energy values, but does not yet support alerts, which
->>>>>> can be added separately if needed. Also the overflows during hardware
->>>>>> calculations are not yet handled, nor is the support for the device's
->>>>>> internal 32-bit energy counter reset.
->>>>>>
->>>>>> An example device tree using this binding and driver is available at [1]
->>>>>> (not currently upstreamed, as the device in question is in engineering
->>>>>> phase and not yet publicly available)
->>>>>>
->>>>>> [1] https://github.com/flipperdevices/flipper-linux-kernel/blob/flipper-devel/arch/arm64/boot/dts/rockchip/rk3576-flipper-one-rev-f0b0c1.dts
->>>>>>
->>>>>> Signed-off-by: Alexey Charkov <alchark@flipper.net>
->>>>>> ---
->>>>>> Changes in v5:
->>>>>> - Reworded per-channel subnodes description in the binding for clarity (Sashiko)
->>>>>> - NB: Sashiko's suggestion to allow interrupts in the binding sounds premature,
->>>>>>      as the alerts mechanism is not implemented yet and there are no known users
->>>>>>      to test it. If anyone has hardware with the alert pins wired to an interrupt
->>>>>>      line - please shout and we can test/extend it together
->>>>>
->>>>> The bindings are supposed to be complete, even if not implemented, so I am not sure
->>>>> if the DT maintainers will agree here. We'll see.
->>>>
->>>> Given ti,alert-polarity-active-high is added seems like the interrupt
->>>> should be too. And the interrupt can specify the polarity, so is that
->>>> property really needed? There's alway the possibility that you have some
->>>> inverter on the board too and the interrupt polarity is not enough, but
->>>> solve that problem when it actually exists.
->>>>
->>>
->>> The alert pin can be attached to a board interrupt, or (more likely) it can
->>> be attached to the I2C controller's alert pin. In the latter case there is
->>> no interrupt property.
->>
->> Alright, I will add the interrupt property and keep the dedicated flag
->> for alert polarity.
->>
->> Following the logic of binding completeness, should I add a flag for
->> the single-shot mode too, even though I dropped that functionality
->> from the driver in one of the prior iterations?
-> 
-> I don't remember what that was exactly, but that sounds like a user
-> selection which would be some sysfs or other runtime control rather
-> than in DT. Unless the h/w design dictates what mode should be used.
-> 
+Hi,
 
-I agree. I can not imagine that to be a hardware design constraint.
+On Wed, Apr 01, 2026 at 07:25:54PM +0800, Aureo Serrano de Souza wrote:
+> Add hwmon driver for the ARCTIC Fan Controller, a USB HID device
+> (VID 0x3904, PID 0xF001) with 10 fan channels. Exposes fan speed in
+> RPM (read-only) and PWM duty cycle (0-255, read/write) via sysfs.
+> 
+> The device pushes IN reports at ~1 Hz containing RPM readings. PWM is
+> set via OUT reports; the device applies the new duty cycle and sends
+> back a 2-byte ACK (Report ID 0x02). The driver waits up to 1 s for
+> the ACK using a completion. Measured device latency: max ~563 ms over
+> 500 iterations. PWM control is manual-only: the device never changes
+> duty cycle autonomously.
+> 
+> raw_event() may run in hardirq context, so fan_rpm[] is protected by
+> a spinlock with irq-save. pwm_duty[] is also protected by this spinlock
+> because reset_resume() clears it outside the hwmon core lock. The OUT
+> report buffer is built and write_pending is armed under the same lock so
+> that no reset_resume() can race with the pwm_duty[] snapshot. priv->buf
+> is exclusively accessed by write(), which the hwmon core serializes.
+> 
+> Signed-off-by: Aureo Serrano de Souza <aureo.serrano@arctic.de>
+> ---
+
+Looks like the patch is corrupted.
+
+Applying: hwmon: add driver for ARCTIC Fan Controller
+error: corrupt patch at line 587
+error: could not build fake ancestor
+Patch failed at 0001 hwmon: add driver for ARCTIC Fan Controller
+
+I can not figure out what is wrong, but both git and patch report that it is
+corrupted. Please fix and resend.
 
 Thanks,
 Guenter
-
