@@ -1,145 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4452DF128
-	for <linux-hwmon@vger.kernel.org>; Wed,  1 Apr 2026 14:03:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7D52517AF
+	for <linux-hwmon@vger.kernel.org>; Wed,  1 Apr 2026 14:45:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775052236; cv=none; b=hg6tVpuolEviVqyyY4hLNlxucXigoeWi28/QlY1uvihjG9r72qW/wKHBfZfv4tca6erWz8HfEmTrNZwHHZf2crjCQ7QApcKNU2bHVM8gnsw4ZswMSsy42MRqWyVIUiLcg3Bmj6HWOPg4nl4FdMgifB2SQyEkWaAok0ZHDet0FZk=
+	t=1775054751; cv=none; b=k2NwCY7+o3VSTyk4U6Uc3wwx7a+7+7CZyKm2Ej4Y/Xq+HrKQMSNkQ7geMOeawVZpNCIJo0DZC9j4tLNQSxvNGrxKeoXE1K+yBXDofMu4UF98FTs1syiYwdhDUXsRxidyD+MXwBWGeT9qCikhWV031bBtPHSZ5B8uxvREapYCiWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775052236; c=relaxed/simple;
-	bh=SGCI4fsQhkaGTbbP2PJjfRfwzOSjN0Epesr8zDMhWAw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=W6i91+mAScNcjNzAQibSrVYHVnzV1Ep7uWyZWkkwJMRwcYlPpLa+UCnoX5lYSalxAovT3/xkTMYW3uyGJPh7cL8GjH6kL4PUqIwtOS4C2Kd1lHdkD+tE87qaqN9cA4c1WzlHY/xDElTGn/1gA23ewECJjEYoNkHY/uaSzAXUlnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=asorNbkY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775054751; c=relaxed/simple;
+	bh=38co2cn+cUNZd0qmrzrzcOrY2pIHvWBQ1L9wcBlm0ys=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bdkuEtrR5J1+/vmRyPEGYBfHUGZzcDqP7Ufxf3HaO79qiZCKqVBo+ugs4c3DoP2sks56dbSO463PsjG7MVQ2WT2WDEzhsAABdbPc/l/3+k0ysJbLx1Rxo34Et1YGuqhqGQSPyttv5e+f9kzse6hzi83zjmrcH/kUA09KVMYJeck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QOpcJVAl; arc=none smtp.client-ip=74.125.82.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="asorNbkY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02DDCC4AF09
-	for <linux-hwmon@vger.kernel.org>; Wed,  1 Apr 2026 14:03:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775052236;
-	bh=SGCI4fsQhkaGTbbP2PJjfRfwzOSjN0Epesr8zDMhWAw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=asorNbkY+VGAHkIDOQa99YcLwbC5VlJmNBrPYqXqTJGN1oUd0asbj4qf9+M+U4dji
-	 g1WC49LyqO1o09pbQsPfZHmGhsJxc4XDTdY7dwqyViQlkxJ16jmS7HD72y7altJn/+
-	 z6QkgZGj7vNZAqib26QzQWKVw69TA15D0gfaW31xNcLY97DPUdREZ/k85Ky3ZKKaxW
-	 FR3j5Q4ffE06mhSTsrrci2g1DuVr5I+t0LIS6hQs1n8xdiv//w3BxX3nYhqLQ8Xslu
-	 ZL0ZcKG24JtXl2+3Ze5IYaoWKW6zjDLVsLReILj8tBHG2d+djIdtoRu9xZE1TvkrKv
-	 JrF/sFENlvEaw==
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-66b2d49ffb0so6865715a12.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 01 Apr 2026 07:03:55 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX3JO0w9ze17Pa53cTkuNcPUVOXFqUB5y/NBV747SE6OovDATTsPnrtlrc6iFaTrwMDjk+9Ssb7R4iNfw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWtTqDAbLbeWasci5kMg5NxNq29EOxaazv1A/mlHXTfHZ5gdVn
-	CwY+cmNDJ0sEONYo8TITbfB7KTLqJvC32U7TsyGbFzgjaaS0knjRDyh9r4cD4D/S335yDv2fPzF
-	ZhreVr0hTAxTOXJJO4CC3LHJdxC5Umg==
-X-Received: by 2002:a05:6402:1470:b0:66b:b6d7:df47 with SMTP id
- 4fb4d7f45d1cf-66db09e27d7mr2641020a12.13.1775052234501; Wed, 01 Apr 2026
- 07:03:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QOpcJVAl"
+Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-2ba895adfeaso7533211eec.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 01 Apr 2026 07:45:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775054749; x=1775659549; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=3qffD9tOVa2bRYolQkVM4q1e7qHCfE+PGZL7OnfVyOM=;
+        b=QOpcJVAldPGomvXQCX9idN3Nfvd3lvqMpa+DdUhUktMi6k1EX5Y8o6fF6AuoO/UGFR
+         gyp1y4zILva6jDXshXqjBkzxGApLHX795WM16bbKiT6CtQAm+nJRqsOAVC5Xve02aHxn
+         geL8Tcei59z4P+lPfx5MxALCq9zizhp1V8goVO1anDzcWp0N2+v10ztwKXdK9WhHavp6
+         YntqTfP0isxJGe24MfxbEiX75Boj0IQpAVCWP+i/1T3KS5WyE1W3WB69i6q2/mEr+0xv
+         b3g0kJ0lwYriI15CKVtXSyVaEzLtox7A4te7vrHo4QHl59nf6DrJQ7f9bhfg+S5x7nrJ
+         PjeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775054749; x=1775659549;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3qffD9tOVa2bRYolQkVM4q1e7qHCfE+PGZL7OnfVyOM=;
+        b=EHvm0Ahc/bYonnJ3TrZ/plM8Y2s5+eMRKlb3JEDNvXwffXDJ57yR/JfP7fpSAHjc9q
+         mStZ1Z9SKojvNECExVqVeXNhlODbMuT2/m4XsZNJE3etuwzY8cBZpiYL2+P/x1wZsGQU
+         LqabIXHXON7PfwN2vSjrJ+phI/GbMoIYz22W7l3rZm3tE4zeCXGKRUbQECbGqD9+aab6
+         qXCOQni/THFs/tH6xuKy9LvQ2wIU17978H92bThR09V34B8aPpM/RfCCLm3rI/d8hWxh
+         kR7/l4yABt2mZLWNLIJXraqZGtzfwcSoV+BWW5cE/JwyGg9Q8dSQVoZWz0rmazB79st8
+         cJRw==
+X-Forwarded-Encrypted: i=1; AJvYcCXEFuOuZXDMPQwfzLdeZ3PWMpmDMGvDoO5rBwyIOOTBbqLjjfoaXtjSAz6s8pfai4mChqIGLqsxqXkJuQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3YpQ06GS32PLCnNscrB3fJgspGgjx9KK5eOsO0efX3DXYC/nG
+	GyavdGcbLPrWxIdE1hiYmcwmC06ptcqo4RnCgcP0XiMnr/J7UCCneEl7agf7iA==
+X-Gm-Gg: ATEYQzwn93EaXXIuBNajl8ETwARB7O8X5a2L25HPiK5lTGdr2WSQTmOw1rYNNrSUaEl
+	C6rkp6oRPdvTBFecI8xw1c+rovywCZriWpdO7j+OpDng/NfFlJZy5qHqIwftn4MA1rrbkBHXdGb
+	z0hikoGVjMacSVbY3+8TSpjTBkQRZIO58B41OlV6wJOBzCZrRACftet8zgyQF+nXC6jiX+LNI3k
+	qaFq7yUGB1oKUW1c4daeyOepRTlqFOG5BK9vXknhYxFvOMPqCZYkszK5ljEETgkwm2cGygHYlzf
+	faKPCRicGQ7FDAhCNOey/lpwyk/2jFb/6IIZAxuOavJjyf1pYShxpfNoPKXyw0XlYqmzxmZ9/S4
+	ubppa5CNGgKL7T6VnzgvdEW4h07A2sX7gMUv1kRnUX1Zyv8dvoqeGL7iCbtOHUj7gPBIuo3c2eV
+	vnwLp0zrR3EHUdQadILdSx8LmNOM+Rpbrt6zwqG+Ii1lDnAfwYnCUJa0lrZyWlCVfmKiax+KzM
+X-Received: by 2002:a05:7300:80cb:b0:2c7:2c0b:f33f with SMTP id 5a478bee46e88-2c9325b0162mr2284185eec.21.1775054748560;
+        Wed, 01 Apr 2026 07:45:48 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c3c79722e0sm13834154eec.31.2026.04.01.07.45.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Apr 2026 07:45:48 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <38703f7c-c082-40fb-8ca8-f70e8b8c7d25@roeck-us.net>
+Date: Wed, 1 Apr 2026 07:45:46 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260330-ina4230-v5-0-eeb322d95b3a@flipper.net>
- <67a5d1c1-a9c5-47fb-a0ec-5b69a991b01e@roeck-us.net> <20260331155246.GA1299761-robh@kernel.org>
- <20872ef8-f68c-4916-a05f-404fd49fff00@roeck-us.net> <CAKTNdwGcXcE25QiBTrZO6akMad+Lny5iPvAAAmUt6x2Hyzu5wg@mail.gmail.com>
-In-Reply-To: <CAKTNdwGcXcE25QiBTrZO6akMad+Lny5iPvAAAmUt6x2Hyzu5wg@mail.gmail.com>
-From: Rob Herring <robh@kernel.org>
-Date: Wed, 1 Apr 2026 09:03:43 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJcqMM1LK1dEFvjRWdOc8g=7+G4VvF-jmzbSJ1ijBB=1A@mail.gmail.com>
-X-Gm-Features: AQROBzBc9EnjuxZ3X3qDBWErhdwoqW9DR-aRGycYdhakIyR-QawFuda4ds96piM
-Message-ID: <CAL_JsqJcqMM1LK1dEFvjRWdOc8g=7+G4VvF-jmzbSJ1ijBB=1A@mail.gmail.com>
-Subject: Re: [PATCH v5 0/2] Add support for Texas Instruments INA4230 power monitor
-To: Alexey Charkov <alchark@flipper.net>
-Cc: Guenter Roeck <linux@roeck-us.net>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] hwmon: (asus-ec-sensors) fix T_Sensor for PRIME
+ X670E-PRO WIFI
+To: Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc: Corey Hickey <bugfood-ml@fatooh.org>, linux-hwmon@vger.kernel.org
+References: <20260331215414.368785-1-bugfood-ml@fatooh.org>
+ <6f1e43e0-14c0-40d7-ba43-95ece77d7176@roeck-us.net>
+ <CAB95QAS2-K4VADCveRfNCziYiBMJb-P7McQ3EFVznHqHBDx_MQ@mail.gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <CAB95QAS2-K4VADCveRfNCziYiBMJb-P7McQ3EFVznHqHBDx_MQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 31, 2026 at 11:46=E2=80=AFAM Alexey Charkov <alchark@flipper.ne=
-t> wrote:
->
-> On Tue, Mar 31, 2026 at 8:10=E2=80=AFPM Guenter Roeck <linux@roeck-us.net=
-> wrote:
-> >
-> > On 3/31/26 08:52, Rob Herring wrote:
-> > > On Mon, Mar 30, 2026 at 09:07:32AM -0700, Guenter Roeck wrote:
-> > >> On 3/30/26 08:14, Alexey Charkov wrote:
-> > >>> TI INA4230 is a 4-channel power monitor with I2C interface, similar=
- in
-> > >>> operation to INA3221 (3-channel) and INA219 (single-channel) but wi=
-th
-> > >>> a different register layout, different alerting mechanism and sligh=
-tly
-> > >>> different support for directly reading calculated current/power/ene=
-rgy
-> > >>> values (pre-multiplied by the device itself and needing only to be =
-scaled
-> > >>> by the driver depending on its selected LSB unit values).
-> > >>>
-> > >>> In this initial implementation, the driver supports reading voltage=
-,
-> > >>> current, power and energy values, but does not yet support alerts, =
-which
-> > >>> can be added separately if needed. Also the overflows during hardwa=
-re
-> > >>> calculations are not yet handled, nor is the support for the device=
-'s
-> > >>> internal 32-bit energy counter reset.
-> > >>>
-> > >>> An example device tree using this binding and driver is available a=
-t [1]
-> > >>> (not currently upstreamed, as the device in question is in engineer=
-ing
-> > >>> phase and not yet publicly available)
-> > >>>
-> > >>> [1] https://github.com/flipperdevices/flipper-linux-kernel/blob/fli=
-pper-devel/arch/arm64/boot/dts/rockchip/rk3576-flipper-one-rev-f0b0c1.dts
-> > >>>
-> > >>> Signed-off-by: Alexey Charkov <alchark@flipper.net>
-> > >>> ---
-> > >>> Changes in v5:
-> > >>> - Reworded per-channel subnodes description in the binding for clar=
-ity (Sashiko)
-> > >>> - NB: Sashiko's suggestion to allow interrupts in the binding sound=
-s premature,
-> > >>>     as the alerts mechanism is not implemented yet and there are no=
- known users
-> > >>>     to test it. If anyone has hardware with the alert pins wired to=
- an interrupt
-> > >>>     line - please shout and we can test/extend it together
-> > >>
-> > >> The bindings are supposed to be complete, even if not implemented, s=
-o I am not sure
-> > >> if the DT maintainers will agree here. We'll see.
-> > >
-> > > Given ti,alert-polarity-active-high is added seems like the interrupt
-> > > should be too. And the interrupt can specify the polarity, so is that
-> > > property really needed? There's alway the possibility that you have s=
-ome
-> > > inverter on the board too and the interrupt polarity is not enough, b=
-ut
-> > > solve that problem when it actually exists.
-> > >
-> >
-> > The alert pin can be attached to a board interrupt, or (more likely) it=
- can
-> > be attached to the I2C controller's alert pin. In the latter case there=
- is
-> > no interrupt property.
->
-> Alright, I will add the interrupt property and keep the dedicated flag
-> for alert polarity.
->
-> Following the logic of binding completeness, should I add a flag for
-> the single-shot mode too, even though I dropped that functionality
-> from the driver in one of the prior iterations?
+On 3/31/26 22:56, Eugene Shalygin wrote:
+> On Wed, 1 Apr 2026 at 06:35, Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>>> Fixes: f7ac3020036b ("hwmon: (asus-ec-sensors) add ROG Crosshair X670E Gene.")
+>>> Signed-off-by: Corey Hickey <bugfood-c@fatooh.org>
+> 
+> Should be:
+> Fixes: e0444758dd1b ("hwmon: (asus-ec-sensors) add PRIME X670E-PRO WIFI")
+> 
+>> Applied.
+> 
+> Maybe it is still possible to amend, please?
+> 
+Yes, I'll do that.
 
-I don't remember what that was exactly, but that sounds like a user
-selection which would be some sysfs or other runtime control rather
-than in DT. Unless the h/w design dictates what mode should be used.
+Thanks for the clarification.
 
-Rob
+Guenter
+
