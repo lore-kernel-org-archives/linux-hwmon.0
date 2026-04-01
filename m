@@ -1,347 +1,185 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32B0627A462
-	for <linux-hwmon@vger.kernel.org>; Wed,  1 Apr 2026 07:38:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 477693D6CBC;
+	Wed,  1 Apr 2026 10:06:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775029091; cv=none; b=memFbX/tXcoIECZubFZ9g3TYuM9d//gWpufvGgwklG8lb2ng/nG5YSJxbigDUZaGNItalUxCRQRKgT40Rkh/JCDzvkQXu8N0Zijv1k7Ea1wcluyGsWtpoc7K0pmFiaiLdAVMPyPVQp9BA55Dp8hVsmXkNCe3gWqdeVhoSZeeud0=
+	t=1775037996; cv=none; b=G+4STfm4bY8L3pbamkM7JXQCKXam6TBgYYfms4CBZ/Juf01vVK/8Vo16fIXVOpjxLHxS++b/QtOtMAWA3NopSf2dy+I3G848kaz1uixcxVMY4cQq3UzidI/KaU0uwlzP8bQnz9BKf9O4nYgL4PMTLMDnEFOOdwkYryBR1aDqtSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775029091; c=relaxed/simple;
-	bh=cRCNepXcU3YpljHIpxq7D8A7BYC7zIaNISaZN+81A28=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KmK38ki71g+32cS/gAjfSric6DFpQ5/8N2EgQsIhow8sbHfHhj1E+r5pUhGrkrbnx0DI+jSuETxb5tLnUwBBBi3lEa2AO/x5cgii5dwCBy79+/YreiOpWdqfevDy6bAtEugdkwabpBS86BQFtVeN5WwAQU1MZrUNyC1wbiTPZgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com; spf=pass smtp.mailfrom=inventec.com; dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b=SAw+ezxd; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inventec.com
+	s=arc-20240116; t=1775037996; c=relaxed/simple;
+	bh=tTl+LiKdRfM5EY4YgjlkRcZAt+GwZ+qS71q9V2mLXjM=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=Y+pkA7c29qERLEo5iBsrpnoGXxMefitXunMERBFzztA0hPWAVBum5H1p2/ZM+MuScTASmmeJLmsNRoNhYEgObLtGP2nVMJsRYgPnpvjlg1pe4qV3BFzh+pJOXXmyP60bAY0O8V9z+CcBKzpia6HJrYckrV/nQ3yL4XPHBQ7XX1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VPg8w7JQ; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b="SAw+ezxd"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3567e2b4159so4777161a91.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 01 Apr 2026 00:38:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=inventec.com; s=google; t=1775029086; x=1775633886; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=N6WD7XhZT3TK7RM3SA9+0gwCRbhFkp/oQx/7Cq7ZAPA=;
-        b=SAw+ezxdvhvqaCPQ9Nvk7mHJFJgOkAG+j+21pOj1kr2nwfzZdAN6TqM3OprdEmz+1u
-         IqlwrNQvTnIsee5T+VUIJcJ1Yh1D8lkv7DZvrFeFK6vsN6W216uX7AFVoioP79Gm+BcV
-         Hqt2EtPm6NxI9Cb7zHWzi27XO1J/1gWLo4Z/rqRQijpkUU8A+0P6pEm61kttpLipgnHc
-         xd2OuDn5cn3rh3/+21XQUNE/su4f+xKrBYYk1GgNlA2fVK+a8kKjadWSCBdLzypKsckS
-         1Zmd5qyTPes25o6Ulmi1aI32ksNPdyHfVqJJYl5CoVT4dqFd3oPuXMsq4kfsAL07lcb0
-         VyBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775029086; x=1775633886;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N6WD7XhZT3TK7RM3SA9+0gwCRbhFkp/oQx/7Cq7ZAPA=;
-        b=iqtlr4B+Pl/yNPFdQbHExH4hPcO5CdWn2trG2zWqYi5+ZNcu2lXI3UuJwqSjaWIjVO
-         jbSpZEhTN5gVJVrno33QMnpimpJlB267+Q4XTVJJIuxSW3KjfAKOrddEL6RKSaoFPr4p
-         yxFuXeBvyDv0HO3Qku2JYqkgkmP+avZcJZD1IPcphxpnh0UFDfIp2RXFJPqRrFsKB/nc
-         tIjt6CTOsq+0HH7xX8jih1ynQ5wmvgiz7GFXtiT+c6+IwryfZuFmKejubrdBsvjB14ti
-         I3gFfvMKIYpwKB9spNqiYfF4VJpcQvAqBEg0kg5B9QBO0DDpjvGu5gIUP8xzF1Yw9GZE
-         Ovww==
-X-Forwarded-Encrypted: i=1; AJvYcCVrWu9cBnzET7DAcXgLzIS1Jd0OLUel9Q2SaP22qKdC/6pLVp7KuWD995Ks4E5XlY0/W60OTGKoYok1CQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx96r/CrsOCQWazLK55Up6VaFADJo/yciAQNeq77Ary0hCf75qU
-	oJJzpcIW2QzpFL6LZBE6X4mzccCycATtY6e9O1ldl9CfBBLA5x2L1TvPqjnzjhMQo7I=
-X-Gm-Gg: ATEYQzycIZg/lkyWCUALYtWp02rjv6x1pN2El0cXtKmMvFGmbmohQvVQ8IUMxwGYef3
-	1XrmqXAYTBGmWqz/U95Q+UzKw1fzCOUaWSxZJFABP0W7rzs0FMqutf3N98+W/P5Xx9cXWRTY0Mn
-	pTUCZa+PPkjookXgmVejbk/eN6ooxCVbKvQjVRQW2I8dMr+5tP0+OSR0w1IggkCvqROnMj7JEem
-	QHo7Cj0FHk/M5YwkE4Qa+YMkD0jmOAxYR/6RnJDTn2h/4KseFfXYbcGbW4bvGzZ3LQ6TLDuOzpj
-	wcNWKabAq+BrbAcmXAWW4Ydgjad8h7bQA6fC69AyKEPjtnvLD+McvdiDyKWlguMnn3GtYGj0N5b
-	og2Ld3UaKv+ZqDy8D3HxJg+iCjeJJu6u0JKWvHXbdz0OT7kJ5wG03ZoIxmiCTuT4+MjG77sIiyv
-	3NTVFf6eMpxpAjxlUUpCa+KmQrXcIaz5/OOpGYzLtZbxF9YCjQKnHEvhopZfk05BM8RZcz
-X-Received: by 2002:a17:90b:57e7:b0:35b:e591:99d1 with SMTP id 98e67ed59e1d1-35dc6f8a7f5mr2536916a91.29.1775029086417;
-        Wed, 01 Apr 2026 00:38:06 -0700 (PDT)
-Received: from TAO-BU2-SWA-3 (60-250-242-163.hinet-ip.hinet.net. [60.250.242.163])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dbb840a36sm1937737a91.4.2026.04.01.00.38.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2026 00:38:05 -0700 (PDT)
-Date: Wed, 1 Apr 2026 07:38:02 +0000
-From: Brian Chiang <chiang.brian@inventec.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Cheng.JackHY@inventec.com, chiang.brian@inventec.com, 
-	conor+dt@kernel.org, devicetree@vger.kernel.org, krzk+dt@kernel.org, 
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, robh@kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon: (pmbus/q54sj108a2) Add support for
- q50sn12072 and q54sn120a1
-Message-ID: <u32f65hugozpemi2eya22pwwes7oev4k5c4sr3zn47m6di7tgk@o7ossgndlczv>
-References: <20260326-add-support-for-q50sn12072-and-q54sn120a1-v2-0-77bc77eedc76@inventec.com>
- <20260326-add-support-for-q50sn12072-and-q54sn120a1-v2-2-77bc77eedc76@inventec.com>
- <79e3b8f1-f8ba-41af-96d4-b9a1b84ef810@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VPg8w7JQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775037993; x=1806573993;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=tTl+LiKdRfM5EY4YgjlkRcZAt+GwZ+qS71q9V2mLXjM=;
+  b=VPg8w7JQPGbLrR+u1LFaufG4ANbW2fXp/deidoXznr+ebzLSa50dDOLX
+   9X2XHjsdhD+Pg+z7Txkhf2y1eeXlNMIg2RFZ5gyYx+twUkL9QryRb7SzH
+   aPzIlXaYVkfIhB3NRvGEYXg/OB/98p1tNkTtdT4Ng1xl9avlZpFt0QXJx
+   aYusTou0LMkx3oyLk/gEZJq6UodFY140Uo8dGJF19yMhL+B84qQQpoHjt
+   brVY84JsKzqK+b5nnwq+Svh1DvwprF3eObTjZT1giohhr6F6zFWMQVP5j
+   VeOK5U0ErvYLxY0eK0eM9Az20xZ9CP2sACiteJ2JzAUtI8mqLE+3XZhPP
+   w==;
+X-CSE-ConnectionGUID: UwwTSvTDTTeSQFuYa56apQ==
+X-CSE-MsgGUID: czSOpZIkQAO9Ggn5v1M/fA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="93652372"
+X-IronPort-AV: E=Sophos;i="6.23,153,1770624000"; 
+   d="scan'208";a="93652372"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2026 03:06:32 -0700
+X-CSE-ConnectionGUID: FZnUPzJWSGS1KpYZxnj0Vw==
+X-CSE-MsgGUID: PelI1L3GTv65Ih7/V1xtkQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,153,1770624000"; 
+   d="scan'208";a="257121865"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.192])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2026 03:06:27 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Wed, 1 Apr 2026 13:06:24 +0300 (EEST)
+To: Armin Wolf <W_Armin@gmx.de>
+cc: Dell.Client.Kernel@dell.com, pali@kernel.org, mjg59@srcf.ucam.org, 
+    soyer@irl.hu, Hans de Goede <hansg@kernel.org>, 
+    platform-driver-x86@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    linux@roeck-us.net, linux-hwmon@vger.kernel.org, mario.limonciello@amd.com
+Subject: Re: [PATCH v3 1/9] platform/x86: dell-descriptor: Use new buffer-based
+ WMI API
+In-Reply-To: <44633ad0-2b80-40db-9655-e0eddb3fa02a@gmx.de>
+Message-ID: <2446bca3-d524-bb17-11a6-e03bda3d5c6a@linux.intel.com>
+References: <20260314175249.16040-1-W_Armin@gmx.de> <20260314175249.16040-2-W_Armin@gmx.de> <658006e6-bbfe-03b4-f788-8f041adda03d@linux.intel.com> <44633ad0-2b80-40db-9655-e0eddb3fa02a@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <79e3b8f1-f8ba-41af-96d4-b9a1b84ef810@roeck-us.net>
+Content-Type: multipart/mixed; boundary="8323328-336855237-1775037984=:973"
 
-On Thu, Mar 26, 2026 at 09:29:38AM -0700, Guenter Roeck wrote:
->On Thu, Mar 26, 2026 at 01:48:06PM +0000, Brian Chiang wrote:
->> From: Jack Cheng <cheng.jackhy@inventec.com>
->>
->> The Q50SN12072 and Q54SN120A1 are high-efficiency, high-density DC-DC power
->> module from Delta Power Modules.
->>
->> The Q50SN12072, quarter brick, single output 12V. This product provides up
->> to 1200 watts of output power at 38~60V. The Q50SN12072 offers peak
->> efficiency up to 98.3%@54Vin.
->>
->> The Q54SN120A1, quarter brick, single output 12V. This product provides up
->> to 1300 watts of output power at 40~60V. The Q54SN120A1 offers peak
->> efficiency up to 98.1%@54Vin.
->>
->> Add support for them to q54sj108a2 driver.
->>
->> Signed-off-by: Jack Cheng <cheng.jackhy@inventec.com>
->> Co-developed-by: Brian Chiang <chiang.brian@inventec.com>
->> Signed-off-by: Brian Chiang <chiang.brian@inventec.com>
->> ---
->>  drivers/hwmon/pmbus/q54sj108a2.c | 97 ++++++++++++++++++++++++++++------------
->>  1 file changed, 68 insertions(+), 29 deletions(-)
->>
->> diff --git a/drivers/hwmon/pmbus/q54sj108a2.c b/drivers/hwmon/pmbus/q54sj108a2.c
->> index d5d60a9af8c5..cc2b32ad935c 100644
->> --- a/drivers/hwmon/pmbus/q54sj108a2.c
->> +++ b/drivers/hwmon/pmbus/q54sj108a2.c
->> @@ -22,7 +22,9 @@
->>  #define PMBUS_FLASH_KEY_WRITE		0xEC
->>
->>  enum chips {
->> -	q54sj108a2
->> +	q50sn12072,
->> +	q54sj108a2,
->> +	q54sn120a1
->>  };
->>
->>  enum {
->> @@ -55,10 +57,24 @@ struct q54sj108a2_data {
->>  #define to_psu(x, y) container_of((x), struct q54sj108a2_data, debugfs_entries[(y)])
->>
->>  static struct pmbus_driver_info q54sj108a2_info[] = {
->> -	[q54sj108a2] = {
->> +	[q50sn12072] = {
->>  		.pages = 1,
->> +		/* Source : Delta Q50SN12072 */
->> +		.format[PSC_VOLTAGE_OUT] = linear,
->> +		.format[PSC_TEMPERATURE] = linear,
->> +		.format[PSC_VOLTAGE_IN] = linear,
->> +		.format[PSC_CURRENT_OUT] = linear,
->>
->> +		.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
->> +		PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
->> +		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
->> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
->> +		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_POUT,
->> +	},
->> +	[q54sj108a2] = {
->> +		.pages = 1,
->>  		/* Source : Delta Q54SJ108A2 */
->> +		.format[PSC_VOLTAGE_OUT] = linear,
->>  		.format[PSC_TEMPERATURE] = linear,
->>  		.format[PSC_VOLTAGE_IN] = linear,
->>  		.format[PSC_CURRENT_OUT] = linear,
->> @@ -69,6 +85,20 @@ static struct pmbus_driver_info q54sj108a2_info[] = {
->>  		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
->>  		PMBUS_HAVE_STATUS_INPUT,
->>  	},
->> +	[q54sn120a1] = {
->> +		.pages = 1,
->> +		/* Source : Delta Q54SN120A1 */
->> +		.format[PSC_VOLTAGE_OUT] = linear,
->> +		.format[PSC_TEMPERATURE] = linear,
->> +		.format[PSC_VOLTAGE_IN] = linear,
->> +		.format[PSC_CURRENT_OUT] = linear,
->> +
->> +		.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
->> +		PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
->> +		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
->> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
->> +		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_POUT,
->> +	},
->>  };
->>
->>  static ssize_t q54sj108a2_debugfs_read(struct file *file, char __user *buf,
->> @@ -270,7 +300,9 @@ static const struct file_operations q54sj108a2_fops = {
->>  };
->>
->>  static const struct i2c_device_id q54sj108a2_id[] = {
->> +	{ "q50sn12072", q50sn12072 },
->>  	{ "q54sj108a2", q54sj108a2 },
->> +	{ "q54sn120a1", q54sn120a1 },
->>  	{ },
->>  };
->>
->> @@ -280,6 +312,7 @@ static int q54sj108a2_probe(struct i2c_client *client)
->>  {
->>  	struct device *dev = &client->dev;
->>  	u8 buf[I2C_SMBUS_BLOCK_MAX + 1];
->> +	const struct i2c_device_id *mid;
->>  	enum chips chip_id;
->>  	int ret, i;
->>  	struct dentry *debugfs;
->> @@ -292,14 +325,9 @@ static int q54sj108a2_probe(struct i2c_client *client)
->>  				     I2C_FUNC_SMBUS_BLOCK_DATA))
->>  		return -ENODEV;
->>
->> -	if (client->dev.of_node)
->> -		chip_id = (enum chips)(unsigned long)of_device_get_match_data(dev);
->> -	else
->> -		chip_id = i2c_match_id(q54sj108a2_id, client)->driver_data;
->> -
->>  	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
->>  	if (ret < 0) {
->> -		dev_err(&client->dev, "Failed to read Manufacturer ID\n");
->> +		dev_err(dev, "Failed to read Manufacturer ID\n");
->>  		return ret;
->>  	}
->>  	if (ret != 6 || strncmp(buf, "DELTA", 5)) {
->> @@ -308,19 +336,25 @@ static int q54sj108a2_probe(struct i2c_client *client)
->>  		return -ENODEV;
->>  	}
->>
->> -	/*
->> -	 * The chips support reading PMBUS_MFR_MODEL.
->> -	 */
->>  	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
->>  	if (ret < 0) {
->>  		dev_err(dev, "Failed to read Manufacturer Model\n");
->>  		return ret;
->>  	}
->> -	if (ret != 14 || strncmp(buf, "Q54SJ108A2", 10)) {
->> +	for (mid = q54sj108a2_id; mid->name[0]; mid++) {
->> +		if (ret == strlen(mid->name) && !strncasecmp(mid->name, buf, ret))
->> +			break;
->> +	}
->> +	if (!mid->name[0]) {
->>  		buf[ret] = '\0';
->>  		dev_err(dev, "Unsupported Manufacturer Model '%s'\n", buf);
->>  		return -ENODEV;
->>  	}
->
->>From Sashiko feedback:
->
->In the original driver, the PMBUS_MFR_MODEL response length was explicitly
->expected to be 14 bytes (if (ret != 14 || strncmp(buf, "Q54SJ108A2", 10))),
->indicating the hardware returns the 10-character name padded with 4 extra
->bytes. The patch changes the detection logic to loop through supported
->devices and strictly require the returned length to match the device name's
->length exactly (`ret == strlen(mid->name)`). Since `ret` will be 14 for the
->original hardware, and strlen("q54sj108a2") is 10, the condition 14 == 10
->evaluates to false. This causes the loop to exit without matching,
->erroneously printing 'Unsupported Manufacturer Model' and returning -ENODEV.
->This completely breaks driver probing and hardware monitoring for the
->pre-existing Q54SJ108A2 device."
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Thank you for the explanation. Maybe we should simply match the manufacturer
-model and remove the strict length comparison to prevent it from breaking 
-the driver probing. I will add this change in v3.
+--8323328-336855237-1775037984=:973
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
->
->> +	chip_id = mid->driver_data;
->> +
->> +	if (strcmp(client->name, mid->name) != 0)
->> +		dev_notice(dev, "Device mismatch: Configured %s, detected %s\n",
->> +			   client->name, mid->name);
->>
->>  	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_REVISION, buf);
->>  	if (ret < 0) {
->> @@ -341,6 +375,7 @@ static int q54sj108a2_probe(struct i2c_client *client)
->>  	if (!psu)
->>  		return 0;
->>
->> +	psu->chip = chip_id;
->>  	psu->client = client;
->>
->>  	debugfs = pmbus_get_debugfs_dir(client);
->> @@ -359,9 +394,6 @@ static int q54sj108a2_probe(struct i2c_client *client)
->>  	debugfs_create_file("write_protect", 0444, q54sj108a2_dir,
->>  			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_WRITEPROTECT],
->>  			    &q54sj108a2_fops);
->> -	debugfs_create_file("store_default", 0200, q54sj108a2_dir,
->> -			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_STOREDEFAULT],
->> -			    &q54sj108a2_fops);
->>  	debugfs_create_file("vo_ov_response", 0644, q54sj108a2_dir,
->>  			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_VOOV_RESPONSE],
->>  			    &q54sj108a2_fops);
->> @@ -383,27 +415,34 @@ static int q54sj108a2_probe(struct i2c_client *client)
->>  	debugfs_create_file("mfr_location", 0444, q54sj108a2_dir,
->>  			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_MFR_LOCATION],
->>  			    &q54sj108a2_fops);
->> -	debugfs_create_file("blackbox_erase", 0200, q54sj108a2_dir,
->> -			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_ERASE],
->> -			    &q54sj108a2_fops);
->>  	debugfs_create_file("blackbox_read_offset", 0444, q54sj108a2_dir,
->>  			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_READ_OFFSET],
->>  			    &q54sj108a2_fops);
->
->What is the purpose/value of keeping this file outside the if() block ?
+On Tue, 31 Mar 2026, Armin Wolf wrote:
 
-Thank you for catching this. It was an oversight in v2, the 
-`blackbox_read_offset` should have been kept inside of the block.
-I'll add this change in v3.
+> Am 31.03.26 um 11:44 schrieb Ilpo J=C3=A4rvinen:
+>=20
+> > On Sat, 14 Mar 2026, Armin Wolf wrote:
+> >=20
+> > > Use the new buffer-based WMI API to also support ACPI firmware
+> > > implementations that do not use ACPI buffers for the descriptor.
+> > >=20
+> > > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> > > ---
+> > >   .../platform/x86/dell/dell-wmi-descriptor.c   | 94 +++++++++-------=
+---
+> > >   1 file changed, 47 insertions(+), 47 deletions(-)
+> > >=20
+> > > diff --git a/drivers/platform/x86/dell/dell-wmi-descriptor.c
+> > > b/drivers/platform/x86/dell/dell-wmi-descriptor.c
+> > > index c2a180202719..fe42eb8bbd79 100644
+> > > --- a/drivers/platform/x86/dell/dell-wmi-descriptor.c
+> > > +++ b/drivers/platform/x86/dell/dell-wmi-descriptor.c
+> > > @@ -7,7 +7,7 @@
+> > >     #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> > >   -#include <linux/acpi.h>
+> > > +#include <linux/compiler_attributes.h>
+> > >   #include <linux/list.h>
+> > >   #include <linux/module.h>
+> > >   #include <linux/wmi.h>
+> > > @@ -15,6 +15,24 @@
+> > >     #define DELL_WMI_DESCRIPTOR_GUID
+> > > "8D9DDCBC-A997-11DA-B012-B622A1EF5492"
+> > >   +/*
+> > > + * Descriptor buffer is 128 byte long and contains:
+> > > + *
+> > > + *       Name             Offset  Length  Value
+> > > + * Vendor Signature          0       4    "DELL"
+> > > + * Object Signature          4       4    " WMI"
+> > > + * WMI Interface Version     8       4    <version>
+> > > + * WMI buffer length        12       4    <length>
+> > > + * WMI hotfix number        16       4    <hotfix>
+> > > + */
+> > > +struct descriptor {
+> > > +=09char vendor_signature[4];
+> > > +=09char object_signature[4];
+> > > +=09__le32 interface_version;
+> > > +=09__le32 buffer_length;
+> > > +=09__le32 hotfix_number;
+> > > +} __packed;
+> > > +
+> > >   struct descriptor_priv {
+> > >   =09struct list_head list;
+> > >   =09u32 interface_version;
+> > > @@ -88,76 +106,58 @@ bool dell_wmi_get_hotfix(u32 *hotfix)
+> > >   }
+> > >   EXPORT_SYMBOL_GPL(dell_wmi_get_hotfix);
+> > >   -/*
+> > > - * Descriptor buffer is 128 byte long and contains:
+> > > - *
+> > > - *       Name             Offset  Length  Value
+> > > - * Vendor Signature          0       4    "DELL"
+> > > - * Object Signature          4       4    " WMI"
+> > > - * WMI Interface Version     8       4    <version>
+> > > - * WMI buffer length        12       4    <length>
+> > > - * WMI hotfix number        16       4    <hotfix>
+> > > - */
+> > > -static int dell_wmi_descriptor_probe(struct wmi_device *wdev,
+> > > -=09=09=09=09     const void *context)
+> > > +static int dell_wmi_descriptor_probe(struct wmi_device *wdev, const =
+void
+> > > *context)
+> > >   {
+> > > -=09union acpi_object *obj =3D NULL;
+> > >   =09struct descriptor_priv *priv;
+> > > -=09u32 *buffer;
+> > > +=09struct wmi_buffer buffer;
+> > > +=09struct descriptor *desc;
+> > >   =09int ret;
+> > >   -=09obj =3D wmidev_block_query(wdev, 0);
+> > > -=09if (!obj) {
+> > > -=09=09dev_err(&wdev->dev, "failed to read Dell WMI descriptor\n");
+> > > -=09=09ret =3D -EIO;
+> > > -=09=09goto out;
+> > > -=09}
+> > > +=09ret =3D wmidev_query_block(wdev, 0, &buffer);
+> > > +=09if (ret < 0)
+> > > +=09=09return ret;
+> > >   -=09if (obj->type !=3D ACPI_TYPE_BUFFER) {
+> > > -=09=09dev_err(&wdev->dev, "Dell descriptor has wrong type\n");
+> > > +=09if (buffer.length < sizeof(*desc)) {
+> > Hi again,
+> >=20
+> > Thinking some more of this...
+> >=20
+> > Since many of these drivers will need to do this size check and assign
+> > into some variable that is different from the one passed to
+> > wmidev_query_block(), would it make sense to move those into generic co=
+de?
+> > It probably requires a macro so you'd have access to type information.
+>=20
+> You mean something like wmidev_block_query_sized(wdev, instance, size)?
 
->
->> -	debugfs_create_file("blackbox_set_offset", 0200, q54sj108a2_dir,
->> -			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_SET_OFFSET],
->> -			    &q54sj108a2_fops);
->> -	debugfs_create_file("blackbox_read", 0444, q54sj108a2_dir,
->> -			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_READ],
->> -			    &q54sj108a2_fops);
->> -	debugfs_create_file("flash_key", 0444, q54sj108a2_dir,
->> -			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_FLASH_KEY],
->> -			    &q54sj108a2_fops);
->> +	if (psu->chip == q54sj108a2) {
->> +		debugfs_create_file("store_default", 0200, q54sj108a2_dir,
->> +				    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_STOREDEFAULT],
->> +				    &q54sj108a2_fops);
->> +		debugfs_create_file("blackbox_erase", 0200, q54sj108a2_dir,
->> +				    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_ERASE],
->> +				    &q54sj108a2_fops);
->> +		debugfs_create_file("blackbox_set_offset", 0200, q54sj108a2_dir,
->> +				    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_SET_OFFSET],
->> +				    &q54sj108a2_fops);
->> +		debugfs_create_file("blackbox_read", 0444, q54sj108a2_dir,
->> +				    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_READ],
->> +				    &q54sj108a2_fops);
->> +		debugfs_create_file("flash_key", 0444, q54sj108a2_dir,
->> +				    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_FLASH_KEY],
->> +				    &q54sj108a2_fops);
->> +	}
->>
->>  	return 0;
->>  }
->>
->>  static const struct of_device_id q54sj108a2_of_match[] = {
->> -	{ .compatible = "delta,q54sj108a2", .data = (void *)q54sj108a2 },
->> +	{ .compatible = "delta,q50sn12072" },
->> +	{ .compatible = "delta,q54sj108a2" },
->> +	{ .compatible = "delta,q54sn120a1" },
->
->Why drop .data here ?
+So this would return ERR_PTR() as I see no out param given to it?
 
-I would like to drop .data since it was previously consumed by 
-`of_device_get_match_data()`, which has been removed in v2 changes.
+> Personally i see little benefit in having the assignment handled by a mac=
+ro.
 
->
->Thanks,
->Guenter
->
->>  	{ },
->>  };
->>
->> @@ -421,6 +460,6 @@ static struct i2c_driver q54sj108a2_driver = {
->>  module_i2c_driver(q54sj108a2_driver);
->>
->>  MODULE_AUTHOR("Xiao.Ma <xiao.mx.ma@deltaww.com>");
->> -MODULE_DESCRIPTION("PMBus driver for Delta Q54SJ108A2 series modules");
->> +MODULE_DESCRIPTION("PMBus driver for Delta Q54SJ108A2 and compatibles");
->>  MODULE_LICENSE("GPL");
->>  MODULE_IMPORT_NS("PMBUS");
->>
->> --
->> 2.43.0
->>
+I was not so interested in assignment itself but getting the size=20
+information from the output type directly but if you prefer writing=20
+sizeof(*xx), not a big deal to me.
+
+--=20
+ i.
+
+--8323328-336855237-1775037984=:973--
