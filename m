@@ -1,29 +1,29 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FB0D32ED24;
-	Thu,  2 Apr 2026 08:14:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50DE3612F0;
+	Thu,  2 Apr 2026 08:14:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775117692; cv=none; b=qQsh6bFLlFF6luqdOhvmt5beBI77/RZiVsgESoXAc+qauGYCzgrBbUujvdG/3yS5fFURKks4k4yffqpAovxwTbB9jRtxVqDfOkjv42/hRIwAidZLGltNn96TcSEsrn+wbu6mfLk38f4TR65erlvUY7Czuq9wV15CsWrbJkubazo=
+	t=1775117692; cv=none; b=MlvrcJJfVASI7DAEZ3rgHYd9NKnyivyhPm4Gh4jz/JZvN7lUVXzZ69C41Ve8ru7Cxlnjh6ydBlqUGENdILQsp0HkYfS0+vby47IJuUbRUPIuozUKboY8TDEyGFDaP6uhdUdo5uCg2iLEuHP0roRf9tgwgbqN+weyVo2QQNa9PVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1775117692; c=relaxed/simple;
-	bh=dUkkZHYey7BZzpb0fTIQid8SBjXfkS8TzA9BdhO8tFY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=Mc9Rr1M8pi8y7WxJjz4JMcFziKh5OG0gmX4DYnrTL8bzwu08ECqA0chX/aMQtju9ekfk4OC/EukvbHFuh2gMUypRveuexKyZ1AIWrzksLCXC5SnPUYWzKo3k5UbhRtQrmEuknwlbfJPDJKbbbXTyXkn0CZUmI3hAcsWzp72sPC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=OZ/PyqNx; arc=none smtp.client-ip=117.135.210.5
+	bh=2/1IqI0q4fTjZ9UA7RUZLwwfeD75hWqSzKmKTu22cY8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=R9hKuNjenT43xOqTs5i4Q60hOUzSEpBMMD/KCG48iUBl7EsfIqG4Q9vmJXhrJ1dtw9QCMebxTxVCetqzXzn6jFGgpJVwvR5LJAltdfUEgnvVko2oB1Y2jlNGwYEtz/sCyDHimx3/lZ8jC/i2S+JtyWI4W1nxp7SuS2LLeuqjklY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=BC7zz0KN; arc=none smtp.client-ip=117.135.210.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="OZ/PyqNx"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="BC7zz0KN"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id; bh=+v5Xg+kWjmKbK5f
-	EihGrPO5x4iH9HqOpoWxZg+Vd674=; b=OZ/PyqNx93ikLYWnP2WAHx1kbf9ZyFg
-	TQEyMH/+kr5JhxtQSOWwyilLJfxL34+0p8Io72x9VYezB9Inz3hSQ+w41MN3bw8G
-	0AldHEQoqRWW5DklZxHR7YauS3M7V15Af/xVurR6NQcuCynqDYHZxKbGr+GNpu8s
-	3ZVdV6zHsnoM=
+	s=s110527; h=From:To:Subject:Date:Message-Id; bh=20jA2dSc8ur6vcG
+	hh+aP9ExfPksyTfk62oubNqCj24E=; b=BC7zz0KNqEFGcoNvtQBwOpj5T85xYSj
+	8ldwxkKRxi+rcBEpEGZ6V/C8HD3oizLCYBjPtJWCQ3r1RCESikEMqmzKyvOFPLxw
+	NmGCFdhVGFcpeWUEkqhOQEOO1o2s9YKOEwbLGittKFtS0ZY/bho3gIZiR7aE3Wo9
+	1vBqILoE4z6o=
 Received: from localhost.localdomain (unknown [])
-	by gzsmtp5 (Coremail) with SMTP id QCgvCgCX5UBEJc5pC9uuUw--.170S5;
-	Thu, 02 Apr 2026 16:14:04 +0800 (CST)
+	by gzsmtp5 (Coremail) with SMTP id QCgvCgCX5UBEJc5pC9uuUw--.170S10;
+	Thu, 02 Apr 2026 16:14:12 +0800 (CST)
 From: Wenliang Yan <wenliang202407@163.com>
 To: linux@roeck-us.net,
 	Jean Delvare <jdelvare@suse.com>
@@ -34,195 +34,230 @@ Cc: Wenliang Yan <wenliang202407@163.com>,
 	Jonathan Corbet <corbet@lwn.net>,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v7 3/8] hwmon: (ina3221) Pre-calculate current and power LSB
-Date: Thu,  2 Apr 2026 04:13:45 -0400
-Message-Id: <20260402081350.65559-4-wenliang202407@163.com>
+Subject: [PATCH v7 8/8] hwmon: (ina3221) Modify write/read functions for 'in' and 'curr' attribute
+Date: Thu,  2 Apr 2026 04:13:50 -0400
+Message-Id: <20260402081350.65559-9-wenliang202407@163.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20260402081350.65559-1-wenliang202407@163.com>
 References: <20260402081350.65559-1-wenliang202407@163.com>
-X-CM-TRANSID:QCgvCgCX5UBEJc5pC9uuUw--.170S5
-X-Coremail-Antispam: 1Uf129KBjvJXoW3Jr4kGF47WrW3Jw1kur1fCrg_yoW7XF4DpF
-	4rKr1rta40q3WfKa9Ikw4xGF1rtr97Jr42krZrWw1IqFsFkryqk3yrJFyDtFy5Ar15ZF13
-	X3y7tr4Duan2yaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRYLvtUUUUU=
-X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/xtbCvwxqPmnOJUwfBQAA3z
+X-CM-TRANSID:QCgvCgCX5UBEJc5pC9uuUw--.170S10
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Gr4UWFW7tryxXr4ruFWxWFg_yoWxWw18p3
+	y5CFWrtrWjq3WSgrWIkFs8WFn8trWxW3y2yryDK39YvF4UAr909FyrG3Wq9a45Cr93XF4x
+	J3y7trWUua1DtFUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUWCJkUUUUU=
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/xtbC6BRsQGnOJVSv9gAA3f
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-The LSB for current and power can be pre-calculated for data read/write
-operations. The current LSB is determined by the calibration value and
-shunt resistor value, with the calibration value fixed within the driver.
-The power LSB can be derived from the current LSB.
+Modified the relevant read/write functions for 'in' and 'curr' attributes,
+adding support for crit, lcrit, crit_alarm, and lcrit_alarm features.
 
 Signed-off-by: Wenliang Yan <wenliang202407@163.com>
 ---
- drivers/hwmon/ina3221.c | 85 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 85 insertions(+)
+ drivers/hwmon/ina3221.c | 109 +++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 102 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-index 47ef4fe694ea..e99ac5ef4d8a 100644
+index 361d1be979e1..355a32702f33 100644
 --- a/drivers/hwmon/ina3221.c
 +++ b/drivers/hwmon/ina3221.c
-@@ -67,6 +67,7 @@
+@@ -142,6 +142,12 @@ static const u8 limit_regs[] = {
+ 	SQ52210_ALERT_LIMIT3,
+ };
  
- #define INA3221_CONFIG_DEFAULT		0x7127
- #define INA3221_RSHUNT_DEFAULT		10000
-+#define SQ52210_SHUNT_LSB			40000000	/* pV/LSB */
- 
- enum ina3221_fields {
- 	/* Configuration */
-@@ -121,8 +122,16 @@ struct ina3221_input {
- 
- enum ina3221_ids { ina3221, sq52210 };
- 
-+struct ina3221_config {
-+	bool has_current_reg;	/* chip has internal current reg */
-+	bool has_power_reg;		/* chip has internal power reg */
-+	int calibration_value;	/* calculate current_lsb */
-+	int power_lsb_factor;
++static const u8 alert_flag[] = {
++	F_AFF1,
++	F_AFF2,
++	F_AFF3,
 +};
 +
  /**
-  * struct ina3221_data - device specific information
-+ * @config:	Used to store characteristics of different chips
-  * @chip: Chip type identifier
-  * @pm_dev: Device pointer for pm runtime
-  * @regmap: Register map of the device
-@@ -131,9 +140,12 @@ enum ina3221_ids { ina3221, sq52210 };
-  * @reg_config: Register value of INA3221_CONFIG
-  * @summation_shunt_resistor: equivalent shunt resistor value for summation
-  * @summation_channel_control: Value written to SCC field in INA3221_MASK_ENABLE
-+ * @current_lsb_uA: The value of one LSB corresponding to the current register
-+ * @power_lsb_uW: The value of one LSB corresponding to the power register
-  * @single_shot: running in single-shot operating mode
-  */
- struct ina3221_data {
-+	const struct ina3221_config *config;
- 	enum ina3221_ids chip;
- 
- 	struct device *pm_dev;
-@@ -143,10 +155,30 @@ struct ina3221_data {
- 	u32 reg_config;
- 	int summation_shunt_resistor;
- 	u32 summation_channel_control;
-+	long current_lsb_uA;
-+	long power_lsb_uW;
- 
- 	bool single_shot;
- };
- 
-+static const struct ina3221_config ina3221_config[] = {
-+	[ina3221] = {
-+		.has_current_reg = false,
-+		.has_power_reg = false,
-+	},
-+	[sq52210] = {
-+		.has_current_reg = true,
-+		.has_power_reg = true,
+  * struct ina3221_input - channel input source specific information
+  * @label: label of channel input source
+@@ -446,6 +452,42 @@ static int ina3221_read_in(struct device *dev, u32 attr, int channel, long *val)
+ 	case hwmon_in_enable:
+ 		*val = ina3221_is_enabled(ina, channel);
+ 		return 0;
++	case hwmon_in_crit:
++	case hwmon_in_lcrit:
++		/* Only for Bus Voltage */
++		if (channel >= INA3221_NUM_CHANNELS)
++			return -EOPNOTSUPP;
++
++		if (!ina3221_is_enabled(ina, channel))
++			return -ENODATA;
++
++		reg = limit_regs[channel];
++		ret = ina3221_read_value(ina, reg, &regval);
++		if (ret)
++			return ret;
 +		/*
-+		 * With this default value configuration,
-+		 * the following formula can be obtained:
-+		 * Current_LSB = Shunt_LSB / Rshunt
++		 * Scale of bus voltage (mV): LSB is 8mV
 +		 */
-+		.calibration_value = 256,
-+		.power_lsb_factor = 20,
-+	},
-+};
++		*val = regval * 8;
++		return 0;
++	case hwmon_in_crit_alarm:
++	case hwmon_in_lcrit_alarm:
++		/* Only for Bus Voltage */
++		if (channel >= INA3221_NUM_CHANNELS)
++			return -EOPNOTSUPP;
++		/* No actual register read if channel is disabled */
++		if (!ina3221_is_enabled(ina, channel)) {
++			/* Return 0 for alert flags */
++			*val = 0;
++			return 0;
++		}
 +
- static inline bool ina3221_is_enabled(struct ina3221_data *ina, int channel)
- {
- 	/* Summation channel checks shunt resistor values */
-@@ -697,6 +729,25 @@ static const struct hwmon_chip_info ina3221_chip_info = {
++		reg = alert_flag[channel];
++		ret = regmap_field_read(ina->fields[reg], &regval);
++		if (ret)
++			return ret;
++		*val = regval;
++		return 0;
+ 	default:
+ 		return -EOPNOTSUPP;
+ 	}
+@@ -457,8 +499,16 @@ static const u8 ina3221_curr_reg[][INA3221_NUM_CHANNELS + 1] = {
+ 	[hwmon_curr_max] = { INA3221_WARN1, INA3221_WARN2, INA3221_WARN3, 0 },
+ 	[hwmon_curr_crit] = { INA3221_CRIT1, INA3221_CRIT2,
+ 			      INA3221_CRIT3, INA3221_CRIT_SUM },
++	[hwmon_curr_lcrit] = { SQ52210_ALERT_LIMIT1, SQ52210_ALERT_LIMIT2,
++			      SQ52210_ALERT_LIMIT3, 0 },
+ 	[hwmon_curr_max_alarm] = { F_WF1, F_WF2, F_WF3, 0 },
+ 	[hwmon_curr_crit_alarm] = { F_CF1, F_CF2, F_CF3, F_SF },
++	[hwmon_curr_lcrit_alarm] = { F_AFF1, F_AFF2, F_AFF3, 0 },
++};
++static const u8 sq52210_curr_reg[INA3221_NUM_CHANNELS] = {
++	SQ52210_CURRENT1,
++	SQ52210_CURRENT2,
++	SQ52210_CURRENT3
  };
  
- /* Extra attribute groups */
-+
-+/*
-+ * Calculate the value corresponding to one LSB of the current and
-+ * power registers.
-+ * formula : Current_LSB = Shunt_LSB / Rshunt
-+ *           Power_LSB = power_lsb_factor * Current_LSB
-+ */
-+static int ina3221_set_shunt(struct ina3221_data *ina, unsigned long val)
-+{
-+	if (!val || val > SQ52210_SHUNT_LSB)
-+		return -EINVAL;
-+
-+	ina->current_lsb_uA = DIV_ROUND_CLOSEST(SQ52210_SHUNT_LSB, val);
-+	ina->power_lsb_uW = ina->config->power_lsb_factor *
-+			    ina->current_lsb_uA;
-+
-+	return 0;
-+}
-+
- static ssize_t ina3221_shunt_show(struct device *dev,
- 				  struct device_attribute *attr, char *buf)
- {
-@@ -730,6 +781,17 @@ static ssize_t ina3221_shunt_store(struct device *dev,
- 	/* Update summation_shunt_resistor for summation channel */
- 	ina->summation_shunt_resistor = ina3221_summation_shunt_resistor(ina);
+ static int ina3221_read_curr(struct device *dev, u32 attr,
+@@ -467,6 +517,7 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
+ 	struct ina3221_data *ina = dev_get_drvdata(dev);
+ 	struct ina3221_input *input = ina->inputs;
+ 	u8 reg = ina3221_curr_reg[attr][channel];
++	bool has_current_reg = ina->config->has_current_reg;
+ 	int resistance_uo, voltage_nv;
+ 	int regval, ret;
  
-+	/*
-+	 * The current and power registers can only be used when
-+	 * all enabled channels have identical shunt resistors
-+	 */
-+	if (ina->summation_shunt_resistor) {
-+		if (ina->config->has_current_reg) {
-+			ret = ina3221_set_shunt(ina, val);
-+			if (ret < 0)
+@@ -489,10 +540,20 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
+ 			if (ret)
+ 				return ret;
+ 		}
++		if (has_current_reg) {
++			reg = sq52210_curr_reg[channel];
++			ret = ina3221_read_value(ina, reg, &regval);
++			if (ret)
 +				return ret;
++			/* Return current in mA */
++			*val = DIV_U64_ROUND_CLOSEST((u64)regval * (u64)ina->current_lsb_uA, 1000);
++			return 0;
 +		}
+ 
+ 		fallthrough;
+ 	case hwmon_curr_crit:
+ 	case hwmon_curr_max:
++	case hwmon_curr_lcrit:
+ 		if (!resistance_uo)
+ 			return -ENODATA;
+ 
+@@ -507,6 +568,7 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
+ 		return 0;
+ 	case hwmon_curr_crit_alarm:
+ 	case hwmon_curr_max_alarm:
++	case hwmon_curr_lcrit_alarm:
+ 		/* No actual register read if channel is disabled */
+ 		if (!ina3221_is_enabled(ina, channel)) {
+ 			/* Return 0 for alert flags */
+@@ -617,7 +679,9 @@ static int sq52210_alert_limit_write(struct ina3221_data *ina,
+ 		 * For SUL configuration, directly convert it to current
+ 		 * settings implemented in the ina3221_write_curr function.
+ 		 */
+-		return -EOPNOTSUPP;
++		alert_mask = BIT(15 - channel);
++		regval = val;
++		break;
+ 	case SQ52210_ALERT_BOL:
+ 		/* BOL: Bus Over Limit - BIT(12), BIT(11), BIT(10) */
+ 		alert_mask = BIT(12 - item);
+@@ -711,12 +775,18 @@ static int ina3221_write_curr(struct device *dev, u32 attr,
+ 	struct ina3221_input *input = ina->inputs;
+ 	u8 reg = ina3221_curr_reg[attr][channel];
+ 	int resistance_uo, current_ma, voltage_uv;
+-	int regval;
++	int regval, ret;
+ 
+-	if (channel > INA3221_CHANNEL3)
+-		resistance_uo = ina->summation_shunt_resistor;
+-	else
++	if (attr == hwmon_curr_lcrit) {
++		if (channel > INA3221_CHANNEL3)
++			return -EOPNOTSUPP;
+ 		resistance_uo = input[channel].shunt_resistor;
++	} else {
++		if (channel > INA3221_CHANNEL3)
++			resistance_uo = ina->summation_shunt_resistor;
++		else
++			resistance_uo = input[channel].shunt_resistor;
 +	}
- 	return count;
+ 
+ 	if (!resistance_uo)
+ 		return -EOPNOTSUPP;
+@@ -747,7 +817,12 @@ static int ina3221_write_curr(struct device *dev, u32 attr,
+ 	else
+ 		regval = DIV_ROUND_CLOSEST(voltage_uv, 5) & 0xfff8;
+ 
+-	return regmap_write(ina->regmap, reg, regval);
++	if (attr == hwmon_curr_lcrit)
++		ret = sq52210_alert_limit_write(ina, SQ52210_ALERT_SUL, channel, regval);
++	else
++		ret = regmap_write(ina->regmap, reg, regval);
++
++	return ret;
  }
  
-@@ -846,6 +908,7 @@ static int ina3221_probe(struct i2c_client *client)
- 		return -ENOMEM;
+ static int ina3221_write_enable(struct device *dev, int channel, bool enable)
+@@ -798,6 +873,26 @@ static int ina3221_write_enable(struct device *dev, int channel, bool enable)
+ 	return ret;
+ }
  
- 	ina->chip = chip;
-+	ina->config = &ina3221_config[chip];
- 
- 	ina->regmap = devm_regmap_init_i2c(client, &ina3221_regmap_config);
- 	if (IS_ERR(ina->regmap)) {
-@@ -892,6 +955,16 @@ static int ina3221_probe(struct i2c_client *client)
- 			ina->summation_channel_control |= BIT(14 - i);
- 	}
- 
-+	/*
-+	 * The current and power registers can only be used when
-+	 * all enabled channels have identical shunt resistors
-+	 */
-+	if (ina->summation_shunt_resistor) {
-+		ret = ina3221_set_shunt(ina, ina->summation_shunt_resistor);
-+		if (ret < 0)
-+			return ret;
-+	}
++static int ina3221_write_in(struct device *dev, u32 attr, int channel, long val)
++{
++	struct ina3221_data *ina = dev_get_drvdata(dev);
 +
- 	ina->pm_dev = dev;
- 	dev_set_drvdata(dev, ina);
- 
-@@ -1009,6 +1082,18 @@ static int ina3221_resume(struct device *dev)
- 			dev_err(dev, "Unable to control summation channel\n");
- 			return ret;
- 		}
-+		/*
-+		 * The calibration register can only be enabled when all
-+		 * shunt resistor values are identical.
-+		 */
-+		if (ina->config->has_current_reg) {
-+			ret = regmap_write(ina->regmap, SQ52210_CALIBRATION,
-+						ina->config->calibration_value);
-+			if (ret) {
-+				dev_err(dev, "Unable to set calibration value\n");
-+				return ret;
-+			}
-+		}
- 	}
- 
- 	return 0;
++	if (attr == hwmon_in_lcrit || attr == hwmon_in_crit)
++		if (channel >= INA3221_NUM_CHANNELS)
++			return -EOPNOTSUPP;
++
++	switch (attr) {
++	case hwmon_in_lcrit:
++		return sq52210_alert_limit_write(ina, SQ52210_ALERT_BUL, channel, val);
++	case hwmon_in_crit:
++		return sq52210_alert_limit_write(ina, SQ52210_ALERT_BOL, channel, val);
++	case hwmon_in_enable:
++		return ina3221_write_enable(dev, channel, val);
++	default:
++		return 0;
++	}
++}
++
+ static int ina3221_write_power(struct device *dev, u32 attr, int channel, long val)
+ {
+ 	struct ina3221_data *ina = dev_get_drvdata(dev);
+@@ -847,7 +942,7 @@ static int ina3221_write(struct device *dev, enum hwmon_sensor_types type,
+ 		break;
+ 	case hwmon_in:
+ 		/* 0-align channel ID */
+-		ret = ina3221_write_enable(dev, channel - 1, val);
++		ret = ina3221_write_in(dev, attr, channel - 1, val);
+ 		break;
+ 	case hwmon_curr:
+ 		ret = ina3221_write_curr(dev, attr, channel, val);
 -- 
 2.17.1
 
