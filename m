@@ -1,29 +1,29 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CE2B369213;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 663B63AC0DC;
 	Thu,  2 Apr 2026 08:14:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775117696; cv=none; b=exICS5M8FL6HuwGzJZK5BXFV4N6Y1vWlnjdnXeUAFdsYLHWpcay4YfY5KinL8hqfmAg9zTAIwFV3ds4fDvafK3R3SUck62ZYs7EhkWXpKCEU7oKLmCJ1iIp+QqsdgP1eWo/zk+vkJuVfNjNw2U8S36k4DMzcVr/cLH0edPu8Hvo=
+	t=1775117696; cv=none; b=Bnmt1f5ye32O+r2FazSxYc2WE31MkBmRdtVeYJ3rv2BIJTS1Y+sUa860JGoHQu0EgfMQyAC4Ii86JYdx/9XLFkn/FByLoBuJ/HHyjv+VotdCcGHQAWLiAwM5au6Pse9Dg2pPmKeBSyCiPG/HXuElrfondf6UiN3Iv1bSmR4aaBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1775117696; c=relaxed/simple;
-	bh=304TDv5014m7Ux4mfAAfqPq4f5IZIonYDuT/BoqTjzg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=KCQq3iFahxKwNQSBKon0/Xp1OfbGXJZyEPoA3f6P7Dxs3CLLJdRBi7+9Xst5PudOFey5LCr8NiEu/APPlr1809aLLiX11kEDd9Dq3IeUG0LTS5VeBW/YBJ7KJsxc25m5LbkRtFgjAIxLAf/EANI5m7dLDQ8WnAbNziOnrDLjj7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=JS9PDxoy; arc=none smtp.client-ip=220.197.31.4
+	bh=RcMOdqYu5TvuQZDnLP8+QyQF88MjCyHjX3Rp7X4TnG8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=Ki2xWQQHdvN9Adh4L6J7TFAyMqDgP0h52JJ0xoGoGAf0iNCfJe3fXWcOUwSP7BenC8oJgH4mTCnDEq6mzWXRxFrYW9IZcqkDd9GPNVw9T4oKUQC5lnMG0zbE9hQnCjF/swUwE2jxayxIWTMqRqTAIdJCf1dHY2rJlEyOzanOny0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=X4J6STUU; arc=none smtp.client-ip=220.197.31.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="JS9PDxoy"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="X4J6STUU"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id; bh=UmLJgRTsOfEcdmH
-	LfWF0+EFCyL5MwH3DZWpb62HOov8=; b=JS9PDxoyDRtwDDURTa5nAh7bElJSNpo
-	nOOCTTs6Vp9NXxyiw2kjAKcBUOsJEDd49Tn4Hzuiu3DCYTRGqwJ5YvPdd6lEBdhA
-	rezFpdQ+mkvm+ypjKvf9Spk1KttIAdqEtzoQjMvjI1FzWTvr3J6dq8Q70wrlGA58
-	aXtdg/3ez7Nc=
+	s=s110527; h=From:To:Subject:Date:Message-Id; bh=Db6F/i2fxqIf0br
+	PXZ5J4Mm3zRMaUQ9mbqJ+YfLoT7Y=; b=X4J6STUUQB1iFC+CVj2FdCTKo9j8J+r
+	dg7Q/laHs/oPsyNyzdsC+tOSTW5pD48swlN0119QTKvUQ30dKrot+AW2qifzBpAl
+	5IMYI3JstoRxPBP/Bxya7IC2lOvKyy+aUL+QPUN0sRHIDLMXHNClP/ZscCtHmJba
+	gwe9S4pc8k44=
 Received: from localhost.localdomain (unknown [])
-	by gzsmtp5 (Coremail) with SMTP id QCgvCgCX5UBEJc5pC9uuUw--.170S6;
-	Thu, 02 Apr 2026 16:14:05 +0800 (CST)
+	by gzsmtp5 (Coremail) with SMTP id QCgvCgCX5UBEJc5pC9uuUw--.170S8;
+	Thu, 02 Apr 2026 16:14:09 +0800 (CST)
 From: Wenliang Yan <wenliang202407@163.com>
 To: linux@roeck-us.net,
 	Jean Delvare <jdelvare@suse.com>
@@ -34,107 +34,126 @@ Cc: Wenliang Yan <wenliang202407@163.com>,
 	Jonathan Corbet <corbet@lwn.net>,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v7 4/8] hwmon: (ina3221) Support alert configuration
-Date: Thu,  2 Apr 2026 04:13:46 -0400
-Message-Id: <20260402081350.65559-5-wenliang202407@163.com>
+Subject: [PATCH v7 6/8] hwmon: (ina3221) Modify the 'ina3221_read_value' function
+Date: Thu,  2 Apr 2026 04:13:48 -0400
+Message-Id: <20260402081350.65559-7-wenliang202407@163.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20260402081350.65559-1-wenliang202407@163.com>
 References: <20260402081350.65559-1-wenliang202407@163.com>
-X-CM-TRANSID:QCgvCgCX5UBEJc5pC9uuUw--.170S6
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCF48KrWUGrWkCF4furW3KFg_yoW5Ar1kpF
-	4akw1rt3WIqF1Sgws7tan5KFyrt34xGFW2yrnrG34vqFsrJryjqw1kGa4DtFyYyrn5ZFyI
-	qa9rtr4UCanrA3JanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JjaKZJUUUUU=
-X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/xtbCvw1qPmnOJU0fJgAA3Q
+X-CM-TRANSID:QCgvCgCX5UBEJc5pC9uuUw--.170S8
+X-Coremail-Antispam: 1Uf129KBjvJXoWxCF4rJw1UXrW8Jr1ruw1rZwb_yoW5ury7pa
+	4fCF1Fyr17tr1IqwsakFn5GFyrAryxW34jqrnFg3yxZa1UJ3W0gw1ktw4Fvr4rC3Z8ZF1k
+	X3srWw48u3ZrJFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUWRR_UUUUU=
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/xtbC5xJrP2nOJVK53QAA3V
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Add alert configuration for initialization and resume.
+SQ52210 adds power, current, and limit registers. The ina3221_read_value
+function has been refactored to adapt to the new register data reading
+format.
 
 Signed-off-by: Wenliang Yan <wenliang202407@163.com>
 ---
- drivers/hwmon/ina3221.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ drivers/hwmon/ina3221.c | 67 +++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 64 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-index e99ac5ef4d8a..74dd937cc568 100644
+index a39f5f2c486b..06e42512a235 100644
 --- a/drivers/hwmon/ina3221.c
 +++ b/drivers/hwmon/ina3221.c
-@@ -65,6 +65,8 @@
- 
+@@ -66,6 +66,14 @@
  #define INA3221_MASK_ENABLE_SCC_MASK	GENMASK(14, 12)
  
-+#define SQ52210_ALERT_CONFIG_MASK	GENMASK(15, 4)
+ #define SQ52210_ALERT_CONFIG_MASK	GENMASK(15, 4)
++#define SQ52210_MASK_ALERT_CHANNEL1 (BIT(15) | BIT(12) | BIT(9) | BIT(6))
++#define SQ52210_MASK_ALERT_CHANNEL2 (BIT(14) | BIT(11) | BIT(8) | BIT(5))
++#define SQ52210_MASK_ALERT_CHANNEL3 (BIT(13) | BIT(10) | BIT(7) | BIT(4))
 +
++#define SQ52210_ALERT_ALL_SUL_MASK	(BIT(15) | BIT(14) | BIT(13))
++#define SQ52210_ALERT_ALL_BOL_MASK	(BIT(12) | BIT(11) | BIT(10))
++#define SQ52210_ALERT_ALL_BUL_MASK	(BIT(9) | BIT(8) | BIT(7))
++#define SQ52210_ALERT_ALL_POL_MASK	(BIT(6) | BIT(5) | BIT(4))
+ 
  #define INA3221_CONFIG_DEFAULT		0x7127
  #define INA3221_RSHUNT_DEFAULT		10000
- #define SQ52210_SHUNT_LSB			40000000	/* pV/LSB */
-@@ -123,6 +125,7 @@ struct ina3221_input {
- enum ina3221_ids { ina3221, sq52210 };
+@@ -108,6 +116,13 @@ enum ina3221_channels {
+ 	INA3221_NUM_CHANNELS
+ };
  
- struct ina3221_config {
-+	bool has_alerts_add;	/* chip has addtional alert functions */
- 	bool has_current_reg;	/* chip has internal current reg */
- 	bool has_power_reg;		/* chip has internal power reg */
- 	int calibration_value;	/* calculate current_lsb */
-@@ -140,6 +143,7 @@ struct ina3221_config {
-  * @reg_config: Register value of INA3221_CONFIG
-  * @summation_shunt_resistor: equivalent shunt resistor value for summation
-  * @summation_channel_control: Value written to SCC field in INA3221_MASK_ENABLE
-+ * @alert_type_select: Used to store the alert trigger type
-  * @current_lsb_uA: The value of one LSB corresponding to the current register
-  * @power_lsb_uW: The value of one LSB corresponding to the power register
-  * @single_shot: running in single-shot operating mode
-@@ -155,6 +159,7 @@ struct ina3221_data {
- 	u32 reg_config;
- 	int summation_shunt_resistor;
- 	u32 summation_channel_control;
-+	u32 alert_type_select;
- 	long current_lsb_uA;
- 	long power_lsb_uW;
- 
-@@ -163,10 +168,12 @@ struct ina3221_data {
- 
- static const struct ina3221_config ina3221_config[] = {
- 	[ina3221] = {
-+		.has_alerts_add = false,
- 		.has_current_reg = false,
- 		.has_power_reg = false,
- 	},
- 	[sq52210] = {
-+		.has_alerts_add = true,
- 		.has_current_reg = true,
- 		.has_power_reg = true,
- 		/*
-@@ -948,6 +955,10 @@ static int ina3221_probe(struct i2c_client *client)
- 			ina->reg_config &= ~INA3221_CONFIG_CHx_EN(i);
- 	}
- 
-+	/* Initialize alert_type_select */
-+	if (ina->config->has_alerts_add)
-+		ina->alert_type_select = 0;
++enum sq52210_alert_types {
++	SQ52210_ALERT_SUL,
++	SQ52210_ALERT_BOL,
++	SQ52210_ALERT_BUL,
++	SQ52210_ALERT_POL
++};
 +
- 	/* Initialize summation_shunt_resistor for summation channel control */
- 	ina->summation_shunt_resistor = ina3221_summation_shunt_resistor(ina);
- 	for (i = 0; i < INA3221_NUM_CHANNELS; i++) {
-@@ -1096,6 +1107,17 @@ static int ina3221_resume(struct device *dev)
- 		}
- 	}
+ /**
+  * struct ina3221_input - channel input source specific information
+  * @label: label of channel input source
+@@ -284,13 +299,59 @@ static int ina3221_read_value(struct ina3221_data *ina, unsigned int reg,
  
-+	/* Restore alert config register value to hardware */
-+	if (ina->config->has_alerts_add) {
-+		ret = regmap_update_bits(ina->regmap, SQ52210_ALERT_CONFIG,
-+					 SQ52210_ALERT_CONFIG_MASK,
-+					 ina->alert_type_select & SQ52210_ALERT_CONFIG_MASK);
-+		if (ret) {
-+			dev_err(dev, "Unable to select alert type\n");
-+			return ret;
-+		}
+ 	/*
+ 	 * Shunt Voltage Sum register has 14-bit value with 1-bit shift
++	 * Current registers have 15-bit value
++	 * Power registers have 16-bit value
++	 * ALERT_LIMIT registers have 16-bit value with 3-bit shift
+ 	 * Other Shunt Voltage registers have 12 bits with 3-bit shift
+ 	 */
+-	if (reg == INA3221_SHUNT_SUM || reg == INA3221_CRIT_SUM)
++	switch (reg) {
++	case INA3221_SHUNT_SUM:
++	case INA3221_CRIT_SUM:
+ 		*val = sign_extend32(regval >> 1, 14);
+-	else
++		break;
++	case SQ52210_CURRENT1:
++	case SQ52210_CURRENT2:
++	case SQ52210_CURRENT3:
++		*val = sign_extend32(regval, 15);
++		break;
++	case SQ52210_POWER1:
++	case SQ52210_POWER2:
++	case SQ52210_POWER3:
++		*val = regval;
++		break;
++	case INA3221_BUS1:
++	case INA3221_BUS2:
++	case INA3221_BUS3:
++	case INA3221_SHUNT1:
++	case INA3221_SHUNT2:
++	case INA3221_SHUNT3:
++	case INA3221_WARN1:
++	case INA3221_WARN2:
++	case INA3221_WARN3:
++	case INA3221_CRIT1:
++	case INA3221_CRIT2:
++	case INA3221_CRIT3:
+ 		*val = sign_extend32(regval >> 3, 12);
+-
++		break;
++	case SQ52210_ALERT_LIMIT1:
++	case SQ52210_ALERT_LIMIT2:
++	case SQ52210_ALERT_LIMIT3:
++		/*
++		 * This register is a 16-bit register with the lower 3 bits fixed at 0.
++		 * When used to store bus and shunt alert values, shifting is required.
++		 * However, for POL (Power Over Limit), it functions as a 16-bit unsigned
++		 * register where the lower 3 bits being fixed at 0 will result in some
++		 * loss of precision.
++		 */
++		if (ina->alert_type_select & SQ52210_ALERT_ALL_POL_MASK)
++			*val = regval;
++		else
++			*val = sign_extend32(regval >> 3, 12);
++		break;
++	default:
++		*val = 0;
++		return -EOPNOTSUPP;
 +	}
-+
  	return 0;
  }
  
