@@ -1,126 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EAD9325726;
-	Thu,  2 Apr 2026 07:44:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0329F3A3807;
+	Thu,  2 Apr 2026 08:14:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775115848; cv=none; b=WXpfc6U4UUEYWg5n5icjGYN/sGyyB0AaR22k5qcuIsR1ZdsTyA9OX8ikKBOtD3bXt2dnOBF4bUhM9HRx/1GJidOrn7Lu5hg0K9ArV83m5XvWohA1/polLM4LtLgLdfyedUSGm01Qy+2Nq3UIPa1O7oZzy6f7cMpM97B5BQhYd4g=
+	t=1775117692; cv=none; b=jDCAZ4YriAIc3t7273788D1xx/T2+vUTmxm6OuFYSJY/nmoZWgivmNOzJqF862kWCMzeM7ETJEaUnM+lpkBPKA4SY4KYtkd3aKApFFDuoTSJBePu280waqFgOLcZOJjC/ru7GmwHjLXe8o4yWTHJr88IZ47u1XNZmxuXxGZYH/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775115848; c=relaxed/simple;
-	bh=EoUiNgH3RLhJk/rzvHG3W111ug5RQnGLRQHQODHAo28=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KfWqJ/S6EMe5KOiq/ui+c5DqqEx2rpGThrXAYjSToxhlrT5GZuwrHeJ/fUzvRSRLZm30W04yt3IcgW1MhFYPoFrbq++0/1C2XK2YsqyeXbFMkjxRFzJWa/kMgY+GBF3FVdESc1bZZO8BZ1WF4uRzkyCyx4tJ/z36c+T14nGOA2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QwTlG0I2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775117692; c=relaxed/simple;
+	bh=WjsTHLjgxsy+mXRsoUwpiqJQYbq1MnNhmtWxtQbbl8g=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=u7uUjJSH2lvy1HnDKnzwCVld+w9+lfPhZfhJv0cVUTOs7SfQ3VIB2uT+hmkOW2fBtNVwXU1jdxxDs7VKUElVNJVBGdn1jhcPNMMfu6IB9p33ON6IIlio5MKwBRqBPK3+ObvjbB7YJGXliiJcLN6JOtCaa9Qwu++5jh2ThTZGl98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=jfID6u8Q; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QwTlG0I2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E907C19423;
-	Thu,  2 Apr 2026 07:44:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775115847;
-	bh=EoUiNgH3RLhJk/rzvHG3W111ug5RQnGLRQHQODHAo28=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QwTlG0I2ppucR9kfKgc3p8Lzm05Seghu7vyIGxDP3oRRFvrUVgPHYupUibjTAd5X4
-	 IRUi58wVClEe3V61qSxFhyXbA2Gpzn5UPMbYjDBsmyzf4AU7pF5S5nH6uXAYI0VX0l
-	 +pCfVtg/ZRnPWw17owaDUkQQUKxrG67APDnZYECLeoDr96gTWyUEmsGi5udNGoWoAI
-	 wyTzjVZgQjP7BgTn+l3bmQQSdTFMCdw7Uu53LQ3zz9HA2hffd9HLbyWC37Aeh5hxkB
-	 ntBkBu7nmQTkh2/iV6jVl0eceEmgMsZq5bwDiRe6Oj3KDHh1Dz8R1DlIw3Nt98wyKH
-	 zYZwRegHHV5ng==
-Date: Thu, 2 Apr 2026 09:44:05 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: ASHISH YADAV <ashishyadav78@gmail.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Ashish Yadav <ashish.yadav@infineon.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon/pmbus: Add Infineon XDP720
-Message-ID: <20260402-enlightened-analytic-leopard-ddc512@quoll>
-References: <20260401104550.115715-1-Ashish.Yadav@infineon.com>
- <20260401104550.115715-2-Ashish.Yadav@infineon.com>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="jfID6u8Q"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id; bh=MHv2qgvbLAFuri5
+	w6URQ/pAxxfhBNmmanOC7CAD1enM=; b=jfID6u8QVOmLv8SG7jCek4QiIlu1g6v
+	0zhyhxt0P+yCk1McOMMUbeQ7RQApZrdDhz95GKCe+uEkQT4pUigi/1QGmMDDExLB
+	vHM19CoR6bLa0Mz90vYZK93NaCKsJfQxskAmOHfl/i4cQfgK1am3P6bzElOzlHVE
+	AwJy0+P/H05Y=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp5 (Coremail) with SMTP id QCgvCgCX5UBEJc5pC9uuUw--.170S3;
+	Thu, 02 Apr 2026 16:14:01 +0800 (CST)
+From: Wenliang Yan <wenliang202407@163.com>
+To: linux@roeck-us.net,
+	Jean Delvare <jdelvare@suse.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Wenliang Yan <wenliang202407@163.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v7 1/8] dt-bindings: hwmon: ti,ina3221: Add SQ52210
+Date: Thu,  2 Apr 2026 04:13:43 -0400
+Message-Id: <20260402081350.65559-2-wenliang202407@163.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20260402081350.65559-1-wenliang202407@163.com>
+References: <20260402081350.65559-1-wenliang202407@163.com>
+X-CM-TRANSID:QCgvCgCX5UBEJc5pC9uuUw--.170S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Cw4UGFWkZr13Zw43Wr17ZFb_yoW8Xr43pF
+	s3CFyUWrySqr1fZ39rKFsY9F15Jwn7ua12kFnrGw4SqF4DGa4Fq393Kw1qyFn8ArWfXFW7
+	WFWI9r4Fg397Ar7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUgNVkUUUUU=
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/xtbCvwlpPWnOJUkevgAA3J
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260401104550.115715-2-Ashish.Yadav@infineon.com>
 
-On Wed, Apr 01, 2026 at 04:15:49PM +0530, ASHISH YADAV wrote:
-> From: Ashish Yadav <ashish.yadav@infineon.com>
-> 
-> Add documentation for the device tree binding of the XDP720 eFuse.
-> 
-> Signed-off-by: Ashish Yadav <ashish.yadav@infineon.com>
-> ---
-> This patch introduces a YAML schema describing the required and optional
-> properties for the XDP720 eFuse device node. It includes details on the
-> compatible string, register mapping, and rimon-micro-ohms(RIMON).
-> 
-> The RIMON resistance is installed between the Imon pin and the ground
-> reference.
+Add a compatible string for SQ52210, provide brief descriptions for
+both INA3221 and SQ52210, and define the compatibility relationship
+between SQ52210 and INA3221.
+SQ52210 is backward compatible with INA3221.
 
-Why are you adding second commit msg? Hardware description goes to
-commit msg. Redundant parts go to /dev/null.
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+Signed-off-by: Wenliang Yan <wenliang202407@163.com>
+---
+ .../devicetree/bindings/hwmon/ti,ina3221.yaml     | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-
-> ---
->  .../bindings/hwmon/pmbus/infineon,xdp720.yaml | 51 +++++++++++++++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp720.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp720.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp720.yaml
-> new file mode 100644
-> index 000000000000..bbde8ff92ae9
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp720.yaml
-> @@ -0,0 +1,51 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,xdp720.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Infineon XDP720 Digital eFuse Controller
-> +
-> +maintainers:
-> +  - Ashish Yadav <ashish.yadav@infineon.com>
-> +
-> +description: |
-> +  The XDP720 is an eFuse with integrated current sensor and digital
-> +  controller. It provides accurate system telemetry (V, I, P, T) and
-> +  reports analog current at the IMON pin for post-processing.
-> +
-> +  Datasheet:
-> +     https://www.infineon.com/assets/row/public/documents/24/49/infineon-xdp720-001-datasheet-en.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - infineon,xdp720
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  infineon,rimon-micro-ohms:
-> +    description: |
-
-Do not need '|' unless you need to preserve formatting.
-
-> +      The value of the RIMON resistor, in micro ohms, required to enable
-> +      the system overcurrent protection.
-> +
-
-Missing supply
-
-> +required:
-> +  - compatible
-> +  - reg
-
-Here as well, most likely.
-
-Best regards,
-Krzysztof
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
+index 5f10f1207d69..2dd2fd148792 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
+@@ -10,9 +10,22 @@ maintainers:
+   - Jean Delvare <jdelvare@suse.com>
+   - Guenter Roeck <linux@roeck-us.net>
+ 
++description: |
++  The INA3221 is a three-channel, high-side current and bus voltage monitor.
++
++  The Silergy SQ52210 is a power monitor that extends the functionality of
++  the INA3221 by adding additional current registers, power registers, and
++  alert registers. These features are configured internally by the driver
++  and require no board-level device tree configuration.
++
+ properties:
+   compatible:
+-    const: ti,ina3221
++    oneOf:
++      - items:
++          - const: silergy,sq52210
++          - const: ti,ina3221
++      - items:
++          - const: ti,ina3221
+ 
+   reg:
+     maxItems: 1
+-- 
+2.17.1
 
