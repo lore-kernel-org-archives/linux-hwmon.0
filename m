@@ -1,415 +1,177 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010016.outbound.protection.outlook.com [52.101.69.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 994893BE63F
-	for <linux-hwmon@vger.kernel.org>; Thu,  2 Apr 2026 11:06:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775127983; cv=none; b=n2rl1mYIa+taMoJYFE1PWo190HhP/mqjrd66wfZoi1bRS12KqGejNBfeicxczlnvnDL3ramtv/KCI9qIbu9zT4CefACBriRCpBZzM8PFTj7wjtzUYijM+b4PLmR/ljv7qzh32uux+BxXtDPGs12tEUnfbscKQu7nnmP8kFlrp6Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775127983; c=relaxed/simple;
-	bh=Yd/6Pc5loOp6q2Ae4swq/Wc1w/fliWxGIpt5pwIb6ZE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r03g5uiMJQpBKnbcqeB5ZR3Y3G2ZHnjVs1z0EYnkPimA6KpCEhSBP+/wLJDOxM2zyFwrRzd/lnLGOW5uWAhL9XxO5iuXh7JULy1KinVhHj8XygJYiTEpCBjIWINZm28apVWFjC5LwwFfmEHgNzEdxKtJTxYHvh5xcO3I2jt99FQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1w8Fru-0004ZY-BZ; Thu, 02 Apr 2026 13:05:46 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1w8Frs-003MQs-2L;
-	Thu, 02 Apr 2026 13:05:44 +0200
-Received: from pengutronix.de (p4ffb2dc6.dip0.t-ipconnect.de [79.251.45.198])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 57352514511;
-	Thu, 02 Apr 2026 11:05:44 +0000 (UTC)
-Date: Thu, 2 Apr 2026 13:05:43 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: a0282524688@gmail.com
-Cc: tmyu0@nuvoton.com, linusw@kernel.org, brgl@kernel.org, 
-	linux@roeck-us.net, andi.shyti@kernel.org, lee@kernel.org, mailhol@kernel.org, 
-	alexandre.belloni@bootlin.com, wim@linux-watchdog.org, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] mfd: Add Host Interface (HIF) support for Nuvoton
- NCT6694
-Message-ID: <20260402-warping-chameleon-of-prowess-9df780-mkl@pengutronix.de>
-X-AI: stop_reason: "refusal"
-References: <20260402051442.1426672-1-a0282524688@gmail.com>
- <20260402051442.1426672-3-a0282524688@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C72B43C1981;
+	Thu,  2 Apr 2026 12:09:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.16
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775131796; cv=fail; b=c/1neCEnuOm1bNvujgi44slptzkbAbwMqSq4KFhXLn7M+0HnNWSHlWUiBY5F8sjJ03jtk9xqP22qNbIsPTV1OrKDdqqPd5OG5tYedGXyrmhObE9OsOscaQNVYZFMmBxwJ6JoQWoxPi8PTiBlgqcWFtOd6cE0KrGugogBTVBFg38=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775131796; c=relaxed/simple;
+	bh=c298gDNNH7MRt7u+HsqdFLBJ+se1yjINCp5iGms8roc=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=HQ5cm+uXJ4JQ4A94HD6S8VUJUH+80q716ory3B2ATVSafU8WMgYlVeVx/dnfOreVT/ElRZ1rr6GpyYFf+TzsAl9wpaIc3zqstHhfvnvr3HPtAUo9iQCc23Bu4XvUtu+/d5NUIf/TH+4Gnw2emmpbAiXDPSgMQdw7Kow7LEvLd7Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=PZ9Elgoz; arc=fail smtp.client-ip=52.101.69.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="PZ9Elgoz"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=uPqzt+7cAMFbtWCfeG1zHPBfj1rZYUXMX6LrCCTLlcDdvqHwF+uvzr3Tt3vgoeEw3lmdHanmV2Q2QlFeYjivNvJQhuDevCJiU1DeOqL7a7jwW+Qgiu0UcOc5CYD7NwBf9veWnlv7y+u7fjfLMzHab+iVbNtjRUes6MXcHTAyc88krB4MCHsrwLGVYgBTC7sDvvjDboBcA/N9ijyRO2z9ds9MsT01lIiOJr+QYJrSZ/wl8GmO5J1VgiZVSq467PkMmUMtR3365b9nZxwLBAYdomc/rNdTtGO6dLL4ZlyFspqGGB6jnyMcmZJt89/wIxRRPl3UwfVKnIb949aZBbbt2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=y2YXifkFC+3/4Y22+2TCCF8YroMJKfrI7mLTpHW6hYM=;
+ b=d0w8xOWdj9NIUlG4U7fVMopipbOOn4/cctmpk5tKLC87O7CZJZY+11vISkVGvTWZeyED/UO9Sue4MlTPrpde7qV52spOxleYRTpnMJ+8IGKJN+NrEZt8uUriOU6HZPcIwQOFGQ6xO8wQiA9vkDvIDDxZOrBxv8mElHFClDFmU4IgFuxohfqxpIRZzxvJIZGG0zb+CnA5jw00AyOEweHWcdY2+I7b7ahKgYcVVGWjmZ6PI9GG8Ys6G8GT/O6XF57lKhMrrPmNQPGEneJ+6c7d8xBISmmBSurYBzm3kbtTXDfoBvCN3KlRW022hU3HDoRAfYNcMrLyFY5TFfdY5mYAIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=y2YXifkFC+3/4Y22+2TCCF8YroMJKfrI7mLTpHW6hYM=;
+ b=PZ9ElgozJqnIvMdaY0rFM6GP11nZkkOsrfau78e9mdjGwLW0069AJaZS053RGtBaZeb/OGi/fxP/gg/+3DRwc8D9Y+VuYCtvTHvbwKh7hqCQZvvmw33Vbs8O8hSFwmo1f3p31I+bfJ736ZOuMp2BCBWx2TvEgg1yEuMjCxmqektc2DhL0vew6tctelPrUaNwD7PbQCME8nWk9zsJ7PRTcXeCcEDmcPQdviRUWlqrZWBa4KlZmvc/sg4FqbSEUiTjnBs2oH9bYkIoeimt0LZAslxUdC4oOyzgSabYcU02GyzHQj/x3eDlgAK+Lpc1rP9R5c2ldyMW4175c60PRo6/Dw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU7PR04MB11163.eurprd04.prod.outlook.com (2603:10a6:10:5b3::14)
+ by AM8PR04MB7457.eurprd04.prod.outlook.com (2603:10a6:20b:1d9::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.17; Thu, 2 Apr
+ 2026 12:09:49 +0000
+Received: from DU7PR04MB11163.eurprd04.prod.outlook.com
+ ([fe80::93f5:4ff3:2f4c:183a]) by DU7PR04MB11163.eurprd04.prod.outlook.com
+ ([fe80::93f5:4ff3:2f4c:183a%5]) with mapi id 15.20.9769.018; Thu, 2 Apr 2026
+ 12:09:49 +0000
+From: florin.leotescu@oss.nxp.com
+To: Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Shych <michaelsh@nvidia.com>,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: daniel.baluta@nxp.com,
+	viorel.suman@nxp.com,
+	linux-arm-kernel@lists.infradead.org,
+	imx@lists.linux.dev,
+	festevam@gmail.com,
+	Florin Leotescu <florin.leotescu@nxp.com>
+Subject: [PATCH v6 0/3]  hwmon: emc2305: Support configurable fan PWM at shutdown
+Date: Thu,  2 Apr 2026 15:25:11 +0300
+Message-Id: <20260402122514.1811737-1-florin.leotescu@oss.nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR4P281CA0310.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:f6::15) To DU7PR04MB11163.eurprd04.prod.outlook.com
+ (2603:10a6:10:5b3::14)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="eduyjgnvxkh2zrsd"
-Content-Disposition: inline
-In-Reply-To: <20260402051442.1426672-3-a0282524688@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU7PR04MB11163:EE_|AM8PR04MB7457:EE_
+X-MS-Office365-Filtering-Correlation-Id: 04ad7846-1a34-4cfb-a47c-08de90b0bcc5
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|19092799006|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	0RI/9Fw9v3mHVd4nx/xAyV1s1Kp2r2VxDICRZBx4IydeBZkTdCx/e3mep37OfFtF7Zci0wtxrKpR6V/W47WuBzV8wXDMlzA+W+SDL+fVM6+Lj45NiJAW+iiP9aK123XTvCsXmh/Fq5eEnK46qUqDAmnm7mU9kVW502edhtZnim7IvEvI0NwQ4BK6maq0lQSCLSv5Nk6/T17nDr0YFMKRfx38rLNiYBx0KE5RXN3Ykd52EXGxQceKdYPuHfVqKR43CXtnte272il2acTyFL90ugqd4ea00NmhvHBS7Em31Ly458RRnhCDMHC9JD2sbi2TcZ7lWMCQZJNnm5ADdQTGS78SuabEsKFubqxPyNEzkiyDAk7XElz399/OvWZ5qHalt+aH6wYfPk8eZ5a7hgWsBmoivg2gZO7suu7qTk35cES9R/7NnsGYsyb5LYlNWFOP1h7q59SpjXLDbBWE1DHhw0x/YzwnyTJUUV0UkT0G2LTv57mp0nXE2YK73lJQcB+ntz9nLy78NEblox7jP0YAQd/H7Xu0QW4JysBjRtmWB7AS1wwvEQPoPsQaby1MWaOUwTxUoe83adTaGTXO/VRT4XJjf1knBOZmLRovuImmP1PA3DkyOL2fPj36Y3NUKcMQql773n1dOFbjsGbZcntmDKPfZ+8Y5Fq3PwHvLMnQHQskmzqm6wDmAWUC7lQ1NwosvzKjNA9xdZ+zYz3STQ70MZY/XPmq8+GBeh5rBhMfjZw=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU7PR04MB11163.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(19092799006)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?iso-8859-1?Q?MxCycyQvkvw/JCGF9BkhY36ySKNkeHn4MsCbakzkDQ+29rDFWVHgTh32cH?=
+ =?iso-8859-1?Q?B7AKNEbQkFCLR8KoVpDWEEQmnWpc2HGxrQ+udGwiOA4OeZWSnMmbBzbvK+?=
+ =?iso-8859-1?Q?AVccCNC0J3ERjRzWWSrBAdcFFQWq/h7Cg45zgryOrjS56Ub93nCaveeuH+?=
+ =?iso-8859-1?Q?uhuOoPgbvxlD0lspAaDA8LoYrkAIK3HUov70MwhMZiRIg2fg0C7ptv623M?=
+ =?iso-8859-1?Q?gkZOpXGAa9gRTbebu4tLFvLoAES9x8WD1RzQ3ozGNYzqMCsiEW83/ZKAOd?=
+ =?iso-8859-1?Q?rcMrl7C+Iz4ILsv39iYILgZCi6TLamom8j9NKmTL8PmA4tKF2OAhcYVev+?=
+ =?iso-8859-1?Q?zANbwFoy5n+wsyuodhME41N7TwCZVQS8ZRnfmSJ36GB3qmADx49EneGIgl?=
+ =?iso-8859-1?Q?tjq43nKpvH9nDa0WEXv8nghIrxVTECRiSxKKB5WUr66Auk1KKwCIU9tOVu?=
+ =?iso-8859-1?Q?utzT2AVESM7IMg658cDi2lRe+GfNN5tj9KF8VimzGrr0PgoreVt2GPN6fT?=
+ =?iso-8859-1?Q?DEaE0H5iNjIgIpHgS3Vzv8fyDyHNiKxEEhkFGMGAuu31iNHMIYrdnlJ9SQ?=
+ =?iso-8859-1?Q?qci9a0t12t++8Hv+dVNQcXxSs3M5hQ3CZHLozuL0CFKPKpOg/WEUHE/6+d?=
+ =?iso-8859-1?Q?/inscRqR/GuPRRcKkB+qye0D1OeHyUu5D9UojQe+FveGDRIB11tHhI8kUT?=
+ =?iso-8859-1?Q?BtN6ICo4AyJ/ohRzyl0w51tgj2YBpaIF53QqT+W6W/UED5C+3wFc1Vzfeq?=
+ =?iso-8859-1?Q?u/qeQqvMxo/rJZ4ZiJKqy6S2+vKpLzlbqAp2eVJUfGWnmsH5Vjwq6CwhdY?=
+ =?iso-8859-1?Q?lGZEZr2OzR8XqNGNFXyiZsBy/ok9si4/2RyE3pNESw+aMmzaTR8CvjxpAr?=
+ =?iso-8859-1?Q?a3k+N2ECgvTUxa7A/W3dDck173sXPwWAKzMe5JSI680AOMJTYMKDjd404Q?=
+ =?iso-8859-1?Q?LD90bG2nGU2rW0+qtsQSjvNB63uN6qJwchQfyW5ngAeN8RE08bjff+YyhT?=
+ =?iso-8859-1?Q?VAVR53YxMpbg/gh6zdTsFD+Fa5y2+XZv3yupU77dk84qhCpwJn47NV1haL?=
+ =?iso-8859-1?Q?sS56lM+fA9AI/tMaWS09DZoZlXJZY5Dhdn/uXOO3AEMr/fk95TiXQoFzLD?=
+ =?iso-8859-1?Q?x3C0xizgY9TCYEvaihllw/oWJaAY2NDmzqexiMewTwunFCc+w/Ug73Y3JB?=
+ =?iso-8859-1?Q?xH+T6GI/fYOKBgZ44qk6OiwCJwzaAfH+bIm6yUPaxeORjMB23yTdJ2hU86?=
+ =?iso-8859-1?Q?cBs9wY2Dr/Njxkz/A6MCtL9y4Dl72xGMFBG25OG8xnp+xRqD6Tq9YbVw+L?=
+ =?iso-8859-1?Q?ILg8rnlemIcytwI9r2vpRpZokgO5NbxP3FRB/6uQsRZq8UL/it6am+dWb6?=
+ =?iso-8859-1?Q?VbXttRDS1wuD6GwIk9/yhNBlkbrvRoPP8TWlnWM5nm5doIeyODIc0JQddo?=
+ =?iso-8859-1?Q?ATUKwJTgBlkjINgG/kJiJj8HagkFaCbRjPoQvPm/sNoMt4FX+isxDcIrDQ?=
+ =?iso-8859-1?Q?424+fLlJiPZ2vOw8O3Ac6+ttoztv83S/A9Pw/24vogNLNgUaG7gSzDOmqo?=
+ =?iso-8859-1?Q?vYQX7ShN9qTn4/qS+o7Hcd5maCdZl+LT1KGFBh0W9E0Eg0YZuyEfQzJ9ym?=
+ =?iso-8859-1?Q?Me5cqeyz4N8euAXzDFNsVochuytbjaJx9IRl5gIM9Pu9G7TFlVULkzL8aD?=
+ =?iso-8859-1?Q?ixIODn2NDw9pF2R8PkKDc2mlpzB8R+j51DBjhIIvtbcFbEVn4kKCc9Eti0?=
+ =?iso-8859-1?Q?CZMdzkbAGk8H7NPE7LBcFTkhZKUMUypMwx9Dj0IaEeKO7C4iT4uTpBjtgg?=
+ =?iso-8859-1?Q?rwVZXpp0IA=3D=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 04ad7846-1a34-4cfb-a47c-08de90b0bcc5
+X-MS-Exchange-CrossTenant-AuthSource: DU7PR04MB11163.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Apr 2026 12:09:49.1575
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CPfN7JqP3k/BI2kftDUnxl15ndr7EgP3rENfeSrPsWK85UIvw3U5+KiBQ9cg27sy5UvsrOTWPOx8x0uejfKKmQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7457
 
+From: Florin Leotescu <florin.leotescu@nxp.com>
 
---eduyjgnvxkh2zrsd
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v1 2/2] mfd: Add Host Interface (HIF) support for Nuvoton
- NCT6694
-MIME-Version: 1.0
+This series adds support for configuring the fan PWM duty cycle applied
+during system shutdown for the EMC2305 fan controller.
 
-On 02.04.2026 13:14:42, a0282524688@gmail.com wrote:
-> From: Ming Yu <a0282524688@gmail.com>
->
-> The Nuvoton NCT6694 also provides a Host Interface (HIF) via eSPI
-> to the host to access its features.
->
-> Sub-devices can use the common functions nct6694_read_msg() and
-> nct6694_write_msg() to issue a command. They can also request
-> interrupts that will be called when the HIF device triggers a
-> shared memory interrupt.
->
-> To support multiple transports, the driver configuration is
-> updated to allow selecting between the USB and HIF interfaces.
->
-> Signed-off-by: Ming Yu <a0282524688@gmail.com>
-> ---
->  MAINTAINERS                         |   1 +
->  drivers/gpio/gpio-nct6694.c         |   7 -
->  drivers/hwmon/nct6694-hwmon.c       |  21 -
->  drivers/i2c/busses/i2c-nct6694.c    |   7 -
->  drivers/mfd/Kconfig                 |  47 +-
->  drivers/mfd/Makefile                |   3 +-
->  drivers/mfd/nct6694-hif.c           | 649 ++++++++++++++++++++++++++++
->  drivers/mfd/nct6694.c               |  97 +++--
->  drivers/net/can/usb/nct6694_canfd.c |   6 -
->  drivers/rtc/rtc-nct6694.c           |   7 -
->  drivers/watchdog/nct6694_wdt.c      |   7 -
->  include/linux/mfd/nct6694.h         |  51 ++-
->  12 files changed, 787 insertions(+), 116 deletions(-)
->  create mode 100644 drivers/mfd/nct6694-hif.c
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c3fe46d7c4bc..7b6241faa6df 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18899,6 +18899,7 @@ S:	Supported
->  F:	drivers/gpio/gpio-nct6694.c
->  F:	drivers/hwmon/nct6694-hwmon.c
->  F:	drivers/i2c/busses/i2c-nct6694.c
-> +F:	drivers/mfd/nct6694-hif.c
->  F:	drivers/mfd/nct6694.c
->  F:	drivers/net/can/usb/nct6694_canfd.c
->  F:	drivers/rtc/rtc-nct6694.c
-> diff --git a/drivers/gpio/gpio-nct6694.c b/drivers/gpio/gpio-nct6694.c
-> index 3703a61209e6..a279510ece89 100644
-> --- a/drivers/gpio/gpio-nct6694.c
-> +++ b/drivers/gpio/gpio-nct6694.c
-> @@ -12,13 +12,6 @@
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->
-> -/*
-> - * USB command module type for NCT6694 GPIO controller.
-> - * This defines the module type used for communication with the NCT6694
-> - * GPIO controller over the USB interface.
-> - */
-> -#define NCT6694_GPIO_MOD	0xFF
-> -
->  #define NCT6694_GPIO_VER	0x90
->  #define NCT6694_GPIO_VALID	0x110
->  #define NCT6694_GPI_DATA	0x120
-> diff --git a/drivers/hwmon/nct6694-hwmon.c b/drivers/hwmon/nct6694-hwmon.c
-> index 6dcf22ca5018..581451875f2c 100644
-> --- a/drivers/hwmon/nct6694-hwmon.c
-> +++ b/drivers/hwmon/nct6694-hwmon.c
-> @@ -15,13 +15,6 @@
->  #include <linux/platform_device.h>
->  #include <linux/slab.h>
->
-> -/*
-> - * USB command module type for NCT6694 report channel
-> - * This defines the module type used for communication with the NCT6694
-> - * report channel over the USB interface.
-> - */
-> -#define NCT6694_RPT_MOD			0xFF
-> -
->  /* Report channel */
->  /*
->   * The report channel is used to report the status of the hardware monit=
-or
-> @@ -38,13 +31,6 @@
->  #define NCT6694_TIN_STS(x)		(0x6A + (x))
->  #define NCT6694_FIN_STS(x)		(0x6E + (x))
->
-> -/*
-> - * USB command module type for NCT6694 HWMON controller.
-> - * This defines the module type used for communication with the NCT6694
-> - * HWMON controller over the USB interface.
-> - */
-> -#define NCT6694_HWMON_MOD		0x00
-> -
->  /* Command 00h - Hardware Monitor Control */
->  #define NCT6694_HWMON_CONTROL		0x00
->  #define NCT6694_HWMON_CONTROL_SEL	0x00
-> @@ -53,13 +39,6 @@
->  #define NCT6694_HWMON_ALARM		0x02
->  #define NCT6694_HWMON_ALARM_SEL		0x00
->
-> -/*
-> - * USB command module type for NCT6694 PWM controller.
-> - * This defines the module type used for communication with the NCT6694
-> - * PWM controller over the USB interface.
-> - */
-> -#define NCT6694_PWM_MOD			0x01
-> -
->  /* PWM Command - Manual Control */
->  #define NCT6694_PWM_CONTROL		0x01
->  #define NCT6694_PWM_CONTROL_SEL		0x00
-> diff --git a/drivers/i2c/busses/i2c-nct6694.c b/drivers/i2c/busses/i2c-nc=
-t6694.c
-> index 7d8ad997f6d2..7ee209a04d16 100644
-> --- a/drivers/i2c/busses/i2c-nct6694.c
-> +++ b/drivers/i2c/busses/i2c-nct6694.c
-> @@ -11,13 +11,6 @@
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->
-> -/*
-> - * USB command module type for NCT6694 I2C controller.
-> - * This defines the module type used for communication with the NCT6694
-> - * I2C controller over the USB interface.
-> - */
-> -#define NCT6694_I2C_MOD			0x03
-> -
->  /* Command 00h - I2C Deliver */
->  #define NCT6694_I2C_DELIVER		0x00
->  #define NCT6694_I2C_DELIVER_SEL		0x00
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 7192c9d1d268..8a715ec2f79f 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1164,19 +1164,46 @@ config MFD_MENF21BMC
->  	  will be called menf21bmc.
->
->  config MFD_NCT6694
-> -	tristate "Nuvoton NCT6694 support"
-> +	tristate
->  	select MFD_CORE
-> +	help
-> +	  Core MFD support for the Nuvoton NCT6694 peripheral expander.
-> +	  This provides the common APIs and shared structures used by all
-> +	  interfaces (USB, HIF) to access the NCT6694 hardware features
-> +	  such as GPIO, I2C, CAN-FD, Watchdog, ADC, PWM, and RTC.
-> +
-> +	  It is selected automatically by the transport interface drivers.
-> +
-> +config MFD_NCT6694_HIF
-> +	tristate "Nuvoton NCT6694 HIF (eSPI) interface support"
-> +	depends on HAS_IOPORT && ACPI
-> +	select MFD_NCT6694
-> +	select REGMAP_MMIO
-> +	help
-> +	  This enables support for the Nuvoton NCT6694 peripheral expander
-> +	  connected via the Host Interface (HIF) using eSPI transport.
-> +
-> +	  The transport driver uses Super-I/O mapping and shared memory to
-> +	  communicate with the NCT6694 firmware. Enable this option if you
-> +	  are using the NCT6694 over an eSPI interface on an ACPI platform.
-> +
-> +	  To compile this driver as a module, choose M here: the module
-> +	  will be called nct6694-hif.
-> +
-> +config MFD_NCT6694_USB
-> +	tristate "Nuvoton NCT6694 USB interface support"
-> +	select MFD_NCT6694
->  	depends on USB
->  	help
-> -	  This enables support for the Nuvoton USB device NCT6694, which shares
-> -	  peripherals.
-> -	  The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
-> -	  6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
-> -	  PWM, and RTC.
-> -	  This driver provides core APIs to access the NCT6694 hardware
-> -	  monitoring and control features.
-> -	  Additional drivers must be enabled to utilize the specific
-> -	  functionalities of the device.
-> +	  This enables support for the Nuvoton NCT6694 peripheral expander
-> +	  connected via the USB interface.
-> +
-> +	  The transport driver uses USB bulk and interrupt transfers to
-> +	  communicate with the NCT6694 firmware. Enable this option if you
-> +	  are using the NCT6694 via a USB connection.
-> +
-> +	  To compile this driver as a module, choose M here: the module
-> +	  will be called nct6694.
->
->  config MFD_OCELOT
->  	tristate "Microsemi Ocelot External Control Support"
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index e75e8045c28a..4cee9b74978c 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -124,7 +124,8 @@ obj-$(CONFIG_MFD_MC13XXX_I2C)	+=3D mc13xxx-i2c.o
->
->  obj-$(CONFIG_MFD_PF1550)	+=3D pf1550.o
->
-> -obj-$(CONFIG_MFD_NCT6694)	+=3D nct6694.o
-> +obj-$(CONFIG_MFD_NCT6694_HIF)	+=3D nct6694-hif.o
-> +obj-$(CONFIG_MFD_NCT6694_USB)	+=3D nct6694.o
->
->  obj-$(CONFIG_MFD_CORE)		+=3D mfd-core.o
->
-> diff --git a/drivers/mfd/nct6694-hif.c b/drivers/mfd/nct6694-hif.c
-> new file mode 100644
-> index 000000000000..a5953c951eb5
-> --- /dev/null
-> +++ b/drivers/mfd/nct6694-hif.c
-> @@ -0,0 +1,649 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2026 Nuvoton Technology Corp.
-> + *
-> + * Nuvoton NCT6694 host-interface (eSPI) transport driver.
-> + */
-> +
-> +#include <linux/acpi.h>
-> +#include <linux/bits.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/irq.h>
-> +#include <linux/irqdomain.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/mfd/nct6694.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/unaligned.h>
-> +
-> +#define DRVNAME "nct6694-hif"
-> +
-> +#define NCT6694_POLL_INTERVAL_US	10
-> +#define NCT6694_POLL_TIMEOUT_US		10000
-> +
-> +/*
-> + * Super-I/O registers
-> + */
-> +#define SIO_REG_LDSEL		0x07	/* Logical device select */
-> +#define SIO_REG_DEVID		0x20	/* Device ID (2 bytes) */
-> +#define SIO_REG_LD_SHM		0x0F	/* Logical device shared memory control */
-> +
-> +#define SIO_REG_SHM_ENABLE	0x30	/* Enable shared memory */
-> +#define SIO_REG_SHM_BASE_ADDR	0x60	/* Shared memory base address (2 byte=
-s) */
-> +#define SIO_REG_SHM_IRQ_NR	0x70	/* Shared memory interrupt number */
-> +
-> +#define SIO_REG_UNLOCK_KEY	0x87	/* Key to enable Super-I/O */
-> +#define SIO_REG_LOCK_KEY	0xAA	/* Key to disable Super-I/O */
-> +
-> +#define SIO_NCT6694B_ID		0xD029
-> +#define SIO_NCT6694D_ID		0x5832
-> +
-> +/*
-> + * Super-I/O Shared Memory Logical Device registers
-> + */
-> +#define NCT6694_SHM_COFS_STS			0x2E
-> +#define NCT6694_SHM_COFS_STS_COFS4W		BIT(7)
-> +
-> +#define NCT6694_SHM_COFS_CTL2			0x3B
-> +#define NCT6694_SHM_COFS_CTL2_COFS4W_IE		BIT(3)
-> +
-> +#define NCT6694_SHM_INTR_STATUS			0x9C	/* Interrupt status register (4 b=
-ytes) */
-> +
-> +enum nct6694_chips {
-> +	NCT6694B =3D 0,
-> +	NCT6694D,
-> +};
-> +
-> +enum nct6694_module_id {
-> +	NCT6694_GPIO0 =3D 0,
-> +	NCT6694_GPIO1,
-> +	NCT6694_GPIO2,
-> +	NCT6694_GPIO3,
-> +	NCT6694_GPIO4,
-> +	NCT6694_GPIO5,
-> +	NCT6694_GPIO6,
-> +	NCT6694_GPIO7,
-> +	NCT6694_GPIO8,
-> +	NCT6694_GPIO9,
-> +	NCT6694_GPIOA,
-> +	NCT6694_GPIOB,
-> +	NCT6694_GPIOC,
-> +	NCT6694_GPIOD,
-> +	NCT6694_GPIOE,
-> +	NCT6694_GPIOF,
-> +	NCT6694_I2C0,
-> +	NCT6694_I2C1,
-> +	NCT6694_I2C2,
-> +	NCT6694_I2C3,
-> +	NCT6694_I2C4,
-> +	NCT6694_I2C5,
-> +	NCT6694_CAN0,
-> +	NCT6694_CAN1,
-> +};
-> +
-> +struct __packed nct6694_msg {
-> +	struct nct6694_cmd_header cmd_header;
-> +	struct nct6694_response_header response_header;
-> +	unsigned char *data;
-> +};
-> +
-> +struct nct6694_sio_data {
-> +	enum nct6694_chips chip;
-> +	int sioreg;	/* Super-I/O index port */
-> +
-> +	/* Super-I/O access functions */
-> +	int (*sio_enter)(struct nct6694_sio_data *sio_data);
-> +	void (*sio_exit)(struct nct6694_sio_data *sio_data);
-> +	void (*sio_select)(struct nct6694_sio_data *sio_data, int ld);
-> +	int (*sio_inb)(struct nct6694_sio_data *sio_data, int reg);
-> +	int (*sio_inw)(struct nct6694_sio_data *sio_data, int reg);
-> +	void (*sio_outb)(struct nct6694_sio_data *sio_data, int reg, int val);
+Some platforms require fans to transition to a predefined safe state
+during shutdown or reboot handoff until firmware or the next boot stage
+reconfigures the controller.
 
-The signatures of the function look a bit strange. I expect functions
-reading/writing bytes use u8 not int, register offsets should probably
-be an unsigned int.
+The new optional Device Tree property "fan-shutdown-percent" allows the
+shutdown PWM duty cycle to be configured per fan output.
 
-Why do you have pointers to the access functions? Why not use them
-directly?
+Changes in v6:
+- Split fan channel index validation into a separate patch.
+  Validate fan channel index agains the number of available channels.
+- Refine dt-binding commit message to refer to PWM duty cycle
+  instead of fan speed.
+Changes in v5:
+- Add fan channel index bound check after reg property read 
+  to prevent out-of-bounds access.
+- Refine fan-shutdown-percent description.
+Changes in v4:
+- Initialize pwm_shudown array to EMC2305_PWM_SHUTDOWN_UNSET in probe,
+  to avoid treating unconfigured channels as valid and written 0
+  during shutdown
+Changes in v3:
+- Rebased on current upstream
+- Dropped already upstreamed of_node_put(child) fix
+Changes in v2:
+- Address feedback from Guenter Roeck
+- Make shutdown behavior configurable via Device Tree
+- Add optional fan-shutdown-percent property
+- Apply shutdown PWM only for channels defining the property
 
-Marc
+Florin Leotescu (3):
+  hwmon: emc2305: Validate fan channel index
+  dt-bindings: hwmon: emc2305: Add fan-shutdown-percent property
+  hwmon: emc2305: Support configurable fan PWM at shutdown
 
---
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+ .../bindings/hwmon/microchip,emc2305.yaml     |  8 ++++
+ drivers/hwmon/emc2305.c                       | 41 +++++++++++++++++++
+ 2 files changed, 49 insertions(+)
 
---eduyjgnvxkh2zrsd
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.34.1
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSl+MghEFFAdY3pYJLMOmT6rpmt0gUCac5NhQAKCRDMOmT6rpmt
-0iiOAQDPnaCTCz7cHPZcUdH6WW5DKZHAXFfgb03FMRkx/xPipgD/X+mA6FYqehlp
-FMnxD26sUBwZidoKAtEpXxguwwLFGgo=
-=+i7v
------END PGP SIGNATURE-----
-
---eduyjgnvxkh2zrsd--
