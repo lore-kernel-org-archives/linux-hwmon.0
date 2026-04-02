@@ -1,158 +1,264 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA2737AA6C;
-	Thu,  2 Apr 2026 18:33:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 325853B2AA
+	for <linux-hwmon@vger.kernel.org>; Thu,  2 Apr 2026 19:56:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775154835; cv=none; b=PGb9vdopmAUkbi2g4uVxObd/7AqwLvQBijr1MbKeIgyhumWV7D1Y4rFjC1cWG+uP44t17O/KtnnSSL1VDRXHE1YZuT6orexqujrW7bF59rz+w5L7IHXSBdnw2e7FceO2N8MuopLklyxNZK1PCrcb9YkQGphS0eOKf6mvMfUJlP8=
+	t=1775159810; cv=none; b=kBItaRP9G15JFYjp28wLQDiTkhJpArHRI/w2Dyoyqgs3pQCp/rxzHuqf4bfXwuUG5UdXD6wai7lQejw22OTjqvClhwOk/oQt9lhm5pVNCONV6LgJHdDZ2p43vEk9HTQovWka0ueEBs6JnqYZx9okFx9AP67fEzei5GxIOgIADm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775154835; c=relaxed/simple;
-	bh=bmYmOG51HqSlxAN5cRC0QHqdrbletvGjSEocJpU+Vp4=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=D+CrPJrsTFDkekH3vyVU7NGT+NSaASxVmELFl0HCiZaljYZGYTP3Wo6rNuwYB3QV7dUGHq1IKj5DvbXNF1mXgmHmF5qB74Ng23sHRFzzOQ4q/YmwGkno5uuo+7YmEDnKjwf0VAAHDR2xym7xXwQM/gedqGV/ikfdqCyRpkBnmNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ntsgu2OU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775159810; c=relaxed/simple;
+	bh=WzOHrf4nGw8SmWQJmCo2MyB4j6I7+Wjq2lyNSxqkj10=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=NOhIEumm4hoYPM7w0smwFskTXiZhkYCOx3zzq1MSSeLAiisN8w8IbsEnFkp8HRN8nPDuSjebyPJWy8t8Wx5oItici8iL+FoW0fGAO1/COgNs4PraGcGQT2eis31a3271LCODVIDEie/f3eY17AihW2KTQiUwLidB1bYbPnpF/PY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gdqfAMCo; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ntsgu2OU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4C38C116C6;
-	Thu,  2 Apr 2026 18:33:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775154834;
-	bh=bmYmOG51HqSlxAN5cRC0QHqdrbletvGjSEocJpU+Vp4=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=Ntsgu2OUMr96ctuD9Diz5ZtFli09vXi/MLWwuGc9QFUSGmHwaLtNv9CBNVYPfzPW+
-	 HIAgx8dXmDD5eHSvcMN2SXtFC/UIka/mvoDb3ziGZw901mDGkCx6VU358cE9xMC9dj
-	 I6FZJ9t05Oh/D/6WIPgK/ux3hSoJ0BIhw6lj0mEU803vylsVXXReIpUBh28H1hgyBI
-	 VtdmQpW/tcLccmc534M6n9MGrHcrmtDE4Xz7qf0RGphxTpVE22NCSyx5I423iME+iv
-	 l9qZbTN+/78LmSIZNqAKooI5pdrMp0Ij0RzEDKZ2BOHzNS86nKefmB83bhlIemrTya
-	 jAvKPV2Ft1s2w==
-Date: Thu, 02 Apr 2026 13:33:52 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gdqfAMCo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775159808; x=1806695808;
+  h=date:from:to:cc:subject:message-id;
+  bh=WzOHrf4nGw8SmWQJmCo2MyB4j6I7+Wjq2lyNSxqkj10=;
+  b=gdqfAMCoY9cvPMuvpdsUv/sdmXYzFSI+1TNeipkJshTS8guz+yXwExGo
+   R69DEaTqtRZOWAANRiGvo9+YYWRJ3KyUH+glCVu79/scYC/d3fL3gmZAK
+   n7mWE606G1py5F26jc4IA4FX4RJHT/zAFX7u7JB/DktwPSNmpoV4/VGkg
+   Wiup5stle/f4HtP7Pur5mI9eLEWL2saUljRyn9CMiZrtx5nRfCUZWXTlN
+   f3GphPyqi4TNTFfzk+D2zFW/eW0vVoxb3Jl8+n9TzuyQ8j6ddZkPDJcf+
+   lH5LobREEG7mvX+VvmwZ9/fQ2z+/6PLC3Ww8/U2O4idcRJciZmKRvWfm0
+   w==;
+X-CSE-ConnectionGUID: dvK/0u7HTCGJndscxwuEdw==
+X-CSE-MsgGUID: W/HaclTsT+eod0IMYpMxKw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11747"; a="87619990"
+X-IronPort-AV: E=Sophos;i="6.23,156,1770624000"; 
+   d="scan'208";a="87619990"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2026 12:56:47 -0700
+X-CSE-ConnectionGUID: /4PAHnNOSgCRHIoKgCdn/A==
+X-CSE-MsgGUID: jtZKHb/RRjyM7xo67XOJ8A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,156,1770624000"; 
+   d="scan'208";a="250132647"
+Received: from lkp-server01.sh.intel.com (HELO 064ad336901d) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 02 Apr 2026 12:56:46 -0700
+Received: from kbuild by 064ad336901d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w8O9k-000000000OT-0q0p;
+	Thu, 02 Apr 2026 19:56:44 +0000
+Date: Fri, 03 Apr 2026 03:56:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon] BUILD SUCCESS
+ cffff6df669a438ecac506dadd49a53d4475a796
+Message-ID: <202604030332.KeLBpAgf-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: linux-gpio@vger.kernel.org, Lee Jones <lee@kernel.org>, 
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
- Conor Dooley <conor+dt@kernel.org>, kernel@pengutronix.de, 
- David Jander <david@protonic.nl>, Linus Walleij <linusw@kernel.org>, 
- linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>, 
- Peter Rosin <peda@axentia.se>, Krzysztof Kozlowski <krzk+dt@kernel.org>
-To: Oleksij Rempel <o.rempel@pengutronix.de>
-In-Reply-To: <20260402174349.3220518-2-o.rempel@pengutronix.de>
-References: <20260402174349.3220518-1-o.rempel@pengutronix.de>
- <20260402174349.3220518-2-o.rempel@pengutronix.de>
-Message-Id: <177515483295.822679.9865474186198571507.robh@kernel.org>
-Subject: Re: [PATCH v11 1/6] dt-bindings: pinctrl: add NXP MC33978/MC34978
- MSDI
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
+branch HEAD: cffff6df669a438ecac506dadd49a53d4475a796  hwmon: (asus-ec-sensors) Fix T_Sensor for PRIME X670E-PRO WIFI
 
-On Thu, 02 Apr 2026 19:43:44 +0200, Oleksij Rempel wrote:
-> Add device tree binding documentation for the NXP MC33978 and MC34978
-> Multiple Switch Detection Interface (MSDI) devices.
-> 
-> The MC33978 and MC34978 differ primarily in their operating temperature
-> ranges. While not software-detectable, providing specific compatible
-> strings allows the hwmon subsystem to correctly interpret thermal
-> thresholds and hardware faults.
-> 
-> These ICs monitor up to 22 mechanical switch contacts in automotive and
-> industrial environments. They provide configurable wetting currents to
-> break through contact oxidation and feature extensive hardware
-> protection against thermal overload and voltage transients (load
-> dumps/brown-outs).
-> 
-> The device interfaces via SPI. While it provides multiple functions, its
-> primary hardware purpose is pin/switch control. To accurately represent
-> the hardware as a single physical integrated circuit without unnecessary
-> DT overhead, all functions are flattened into a single pinctrl node:
-> - pinctrl: Exposing the 22 switch inputs (SG/SP pins) as a GPIO controller
->   and managing their pin configurations.
-> - hwmon: Exposing critical hardware faults (OT, OV, UV) and static
->   voltage/temperature thresholds.
-> - mux: Controlling the 24-to-1 analog multiplexer to route pin voltages,
->   internal temperature, or battery voltage to an external SoC ADC.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-> Reviewed-by: Linus Walleij <linusw@kernel.org>
-> ---
-> changes v11:
-> - no changes
-> changes v10:
-> - no changes
-> changes v9:
-> - no changes
-> changes v8:
-> - Update IRQ_TYPE_* macros include path reference in documentation from
->   interrupt-controller.h to dt-bindings/interrupt-controller/irq.h.
-> - Add bias-disable, drive-open-drain, drive-open-source, and drive-strength
->   to the list of supported pin configuration properties.
-> changes v7:
-> - no changes
-> changes v6:
-> - add Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-> - add Reviewed-by: Linus Walleij <linusw@kernel.org>
-> changes v5:
-> - Commit Message: Added justification for distinct compatible strings
->   based on temperature ranges.
-> - Restricted pins property to an explicit enum of valid hardware pins
-> changes v4:
-> - Drop the standalone mfd/nxp,mc33978.yaml schema entirely.
-> - Move the unified device binding to bindings/pinctrl/nxp,mc33978.yaml,
-> - Remove the dedicated child node compatible strings (nxp,mc33978-pinctrl).
-> - Flatten the pinctrl/gpio properties directly into the main SPI device
->   node.
-> changes v3:
-> - Drop regular expression pattern from pinctrl child node and define
->   it as a standard property
-> - Reorder required properties list in MFD binding
-> - Remove stray blank line from the MFD binding devicetree example
-> - Replace unevaluatedProperties with additionalProperties in the pinctrl
->   binding
-> changes v2:
-> - Squashed MFD, pinctrl, hwmon, and mux bindings into a single patch
-> - Removed the empty hwmon child node
-> - Folded the mux-controller node into the parent MFD node
-> - Added vbatp-supply and vddq-supply to the required properties block
-> - Changed the example node name from mc33978@0 to gpio@0
-> - Removed unnecessary literal block scalars (|) from descriptions
-> - Documented SG, SP, and SB pin acronyms in the pinctrl description
-> - Added consumer polarity guidance (GPIO_ACTIVE_LOW/HIGH) for SG/SB
->   inputs, with a note on output circuit dependency
-> - Updated commit message
-> ---
->  .../bindings/pinctrl/nxp,mc33978.yaml         | 158 ++++++++++++++++++
->  1 file changed, 158 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,mc33978.yaml
-> 
+elapsed time: 759m
 
-My bot found errors running 'make dt_binding_check' on your patch:
+configs tested: 187
+configs skipped: 2
 
-yamllint warnings/errors:
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/nxp,mc33978.example.dtb: gpio@0 (nxp,mc33978): $nodename:0: 'gpio@0' does not match '^mux-controller(@.*|-([0-9]|[1-9][0-9]+))?$'
-	from schema $id: http://devicetree.org/schemas/mux/mux-controller.yaml
+tested configs:
+alpha                             allnoconfig    gcc-15.2.0
+alpha                            allyesconfig    gcc-15.2.0
+alpha                               defconfig    gcc-15.2.0
+arc                              allmodconfig    clang-16
+arc                               allnoconfig    gcc-15.2.0
+arc                              allyesconfig    clang-23
+arc                                 defconfig    gcc-15.2.0
+arc                   randconfig-001-20260402    gcc-11.5.0
+arc                   randconfig-002-20260402    gcc-11.5.0
+arm                               allnoconfig    gcc-15.2.0
+arm                              allyesconfig    clang-16
+arm                                 defconfig    gcc-15.2.0
+arm                         orion5x_defconfig    clang-23
+arm                   randconfig-001-20260402    gcc-11.5.0
+arm                   randconfig-002-20260402    gcc-11.5.0
+arm                   randconfig-003-20260402    gcc-11.5.0
+arm                   randconfig-004-20260402    gcc-11.5.0
+arm                       spear13xx_defconfig    gcc-15.2.0
+arm64                            allmodconfig    clang-23
+arm64                             allnoconfig    gcc-15.2.0
+arm64                               defconfig    gcc-15.2.0
+arm64                 randconfig-001-20260402    gcc-15.2.0
+arm64                 randconfig-002-20260402    gcc-15.2.0
+arm64                 randconfig-003-20260402    gcc-15.2.0
+arm64                 randconfig-004-20260402    gcc-15.2.0
+csky                             allmodconfig    gcc-15.2.0
+csky                              allnoconfig    gcc-15.2.0
+csky                                defconfig    gcc-15.2.0
+csky                  randconfig-001-20260402    gcc-15.2.0
+csky                  randconfig-002-20260402    gcc-15.2.0
+hexagon                          allmodconfig    gcc-15.2.0
+hexagon                           allnoconfig    gcc-15.2.0
+hexagon                             defconfig    gcc-15.2.0
+hexagon               randconfig-001-20260402    clang-18
+hexagon               randconfig-001-20260402    clang-20
+hexagon               randconfig-001-20260403    clang-23
+hexagon               randconfig-002-20260402    clang-17
+hexagon               randconfig-002-20260402    clang-18
+hexagon               randconfig-002-20260403    clang-23
+i386                             allmodconfig    clang-20
+i386                              allnoconfig    gcc-15.2.0
+i386                             allyesconfig    clang-20
+i386        buildonly-randconfig-001-20260402    clang-20
+i386        buildonly-randconfig-001-20260403    gcc-14
+i386        buildonly-randconfig-002-20260402    clang-20
+i386        buildonly-randconfig-002-20260403    gcc-14
+i386        buildonly-randconfig-003-20260402    clang-20
+i386        buildonly-randconfig-003-20260403    gcc-14
+i386        buildonly-randconfig-004-20260402    clang-20
+i386        buildonly-randconfig-004-20260403    gcc-14
+i386        buildonly-randconfig-005-20260402    clang-20
+i386        buildonly-randconfig-005-20260403    gcc-14
+i386        buildonly-randconfig-006-20260402    clang-20
+i386        buildonly-randconfig-006-20260403    gcc-14
+i386                                defconfig    gcc-15.2.0
+i386                  randconfig-001-20260402    clang-20
+i386                  randconfig-002-20260402    clang-20
+i386                  randconfig-003-20260402    clang-20
+i386                  randconfig-004-20260402    clang-20
+i386                  randconfig-005-20260402    clang-20
+i386                  randconfig-006-20260402    clang-20
+i386                  randconfig-007-20260402    clang-20
+i386                  randconfig-011-20260402    clang-20
+i386                  randconfig-012-20260402    clang-20
+i386                  randconfig-013-20260402    clang-20
+i386                  randconfig-014-20260402    clang-20
+i386                  randconfig-015-20260402    clang-20
+i386                  randconfig-016-20260402    clang-20
+i386                  randconfig-017-20260402    clang-20
+loongarch                        allmodconfig    clang-23
+loongarch                         allnoconfig    gcc-15.2.0
+loongarch                           defconfig    clang-19
+loongarch             randconfig-001-20260402    clang-18
+loongarch             randconfig-001-20260403    clang-23
+loongarch             randconfig-002-20260402    clang-18
+loongarch             randconfig-002-20260402    clang-19
+loongarch             randconfig-002-20260403    clang-23
+m68k                             allmodconfig    gcc-15.2.0
+m68k                              allnoconfig    gcc-15.2.0
+m68k                             allyesconfig    clang-16
+m68k                                defconfig    clang-19
+m68k                        stmark2_defconfig    gcc-15.2.0
+microblaze                        allnoconfig    gcc-15.2.0
+microblaze                       allyesconfig    gcc-15.2.0
+microblaze                          defconfig    clang-19
+mips                             allmodconfig    gcc-15.2.0
+mips                              allnoconfig    gcc-15.2.0
+mips                             allyesconfig    gcc-15.2.0
+nios2                            allmodconfig    clang-23
+nios2                             allnoconfig    clang-23
+nios2                               defconfig    clang-19
+nios2                 randconfig-001-20260402    clang-18
+nios2                 randconfig-001-20260402    gcc-8.5.0
+nios2                 randconfig-001-20260403    clang-23
+nios2                 randconfig-002-20260402    clang-18
+nios2                 randconfig-002-20260402    gcc-11.5.0
+nios2                 randconfig-002-20260403    clang-23
+openrisc                         allmodconfig    clang-23
+openrisc                          allnoconfig    clang-23
+openrisc                            defconfig    gcc-15.2.0
+parisc                           allmodconfig    gcc-15.2.0
+parisc                            allnoconfig    clang-23
+parisc                           allyesconfig    clang-19
+parisc                              defconfig    gcc-15.2.0
+parisc                randconfig-001-20260402    clang-20
+parisc                randconfig-002-20260402    clang-20
+parisc64                            defconfig    clang-19
+powerpc                          allmodconfig    gcc-15.2.0
+powerpc                           allnoconfig    clang-23
+powerpc               randconfig-001-20260402    clang-20
+powerpc               randconfig-002-20260402    clang-20
+powerpc64             randconfig-001-20260402    clang-20
+powerpc64             randconfig-002-20260402    clang-20
+riscv                            allmodconfig    clang-23
+riscv                             allnoconfig    clang-23
+riscv                            allyesconfig    clang-16
+riscv                               defconfig    gcc-15.2.0
+riscv                 randconfig-001-20260402    clang-23
+riscv                 randconfig-002-20260402    clang-23
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-23
+s390                             allyesconfig    gcc-15.2.0
+s390                                defconfig    gcc-15.2.0
+s390                  randconfig-001-20260402    clang-23
+s390                  randconfig-002-20260402    clang-23
+sh                               allmodconfig    gcc-15.2.0
+sh                                allnoconfig    clang-23
+sh                               allyesconfig    clang-19
+sh                                  defconfig    gcc-14
+sh                    randconfig-001-20260402    clang-23
+sh                    randconfig-002-20260402    clang-23
+sparc                             allnoconfig    clang-23
+sparc                               defconfig    gcc-15.2.0
+sparc                 randconfig-001-20260402    gcc-14
+sparc                 randconfig-002-20260402    gcc-14
+sparc64                          allmodconfig    clang-23
+sparc64                             defconfig    gcc-14
+sparc64               randconfig-001-20260402    gcc-14
+sparc64               randconfig-002-20260402    gcc-14
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-23
+um                               allyesconfig    gcc-15.2.0
+um                                  defconfig    gcc-14
+um                             i386_defconfig    gcc-14
+um                    randconfig-001-20260402    gcc-14
+um                    randconfig-002-20260402    gcc-14
+um                           x86_64_defconfig    gcc-14
+x86_64                           allmodconfig    clang-20
+x86_64                            allnoconfig    clang-23
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20260402    clang-20
+x86_64      buildonly-randconfig-002-20260402    clang-20
+x86_64      buildonly-randconfig-003-20260402    clang-20
+x86_64      buildonly-randconfig-004-20260402    clang-20
+x86_64      buildonly-randconfig-005-20260402    clang-20
+x86_64      buildonly-randconfig-006-20260402    clang-20
+x86_64                              defconfig    gcc-14
+x86_64                                  kexec    clang-20
+x86_64                randconfig-001-20260402    gcc-14
+x86_64                randconfig-002-20260402    gcc-14
+x86_64                randconfig-003-20260402    gcc-14
+x86_64                randconfig-004-20260402    gcc-14
+x86_64                randconfig-005-20260402    gcc-14
+x86_64                randconfig-006-20260402    gcc-14
+x86_64                randconfig-011-20260402    clang-20
+x86_64                randconfig-012-20260402    clang-20
+x86_64                randconfig-013-20260402    clang-20
+x86_64                randconfig-014-20260402    clang-20
+x86_64                randconfig-015-20260402    clang-20
+x86_64                randconfig-016-20260402    clang-20
+x86_64                randconfig-071-20260402    clang-20
+x86_64                randconfig-072-20260402    clang-20
+x86_64                randconfig-073-20260402    clang-20
+x86_64                randconfig-074-20260402    clang-20
+x86_64                randconfig-075-20260402    clang-20
+x86_64                randconfig-076-20260402    clang-20
+x86_64                               rhel-9.4    clang-20
+x86_64                           rhel-9.4-bpf    gcc-14
+x86_64                          rhel-9.4-func    clang-20
+x86_64                    rhel-9.4-kselftests    clang-20
+x86_64                         rhel-9.4-kunit    gcc-14
+x86_64                           rhel-9.4-ltp    gcc-14
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    clang-23
+xtensa                           allyesconfig    clang-23
+xtensa                randconfig-001-20260402    gcc-14
+xtensa                randconfig-002-20260402    gcc-14
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.kernel.org/project/devicetree/patch/20260402174349.3220518-2-o.rempel@pengutronix.de
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
