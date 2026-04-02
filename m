@@ -1,98 +1,123 @@
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B31337BBD
-	for <linux-hwmon@vger.kernel.org>; Thu,  2 Apr 2026 02:41:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EFA636CE02
+	for <linux-hwmon@vger.kernel.org>; Thu,  2 Apr 2026 05:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775097673; cv=none; b=PZqFmbzIO3IIl5kafBor9/rVvG79fjqsISDbh3DYPLTRkeYQ7s5zfvOn1Pl7Rj8CnVRX0ZQz3sXZnc0uuatS52WbruLV2/bw/yvfQSJEiwdlOwpVV7ABy8NLCKID9Db5HivrZLurFyrNqHxMoZqvLccpFCBaMnV8CqNKRpQoh88=
+	t=1775106935; cv=none; b=HV6ri9n4zIdLSv1WK87757He/+IWrSdMKmlpa0DFIJYSo3kzRS3qJmL6TDi1HXXJzILV35/NCW1fYyFpZOsLrWwjangv9cq6zY2ShsymVaY6N1xSuB5j/Zx7DzryGrD9PbqaH8byAXO2Ybx7hIDAJZ0vIvdIkKyG3I/PcvdD5BA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775097673; c=relaxed/simple;
-	bh=P7Rfdd3v65WAEECYwDtuZ0ZFYZOyNOp2eobTrOVzuk8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Sp+m3wnMUYOaoDDABrHx1zi4Oix9uAvfYYuenKU8yr2Fw4gCd3OE6StcwKrqoZBANqIGcqSJuDI/3/nJ+7JKoi1HDJvgR5UrDVLcvPCW1O+mQOwN6nqDNEbuqQsi+KFTWnD+phW+jmXVEX0BS1dRlFLRrXZityAtO6j3ZZ2rTZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=K+KmhAzz; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+	s=arc-20240116; t=1775106935; c=relaxed/simple;
+	bh=HVoeiC7t5M0u01gC8ZWrF1ZSdndrYAnSTfQH8ssTUVw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BDukQXCyq0Pb3lJ9cFCmtfrpY5pM15J5L1gCG/5EeIo9fd6mNn0DHRgicA0fL0rAzLXFMU1lUkPbWRQRez4sV9m88SBFKMSEyidEpI5xqd1taMtkOb/Bwfg9wA4CjtOLvVFViU9SnAoyW9qdGMbMPuTMACGQ6039EB95TdDBkyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aexidzYF; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="K+KmhAzz"
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id CCAED2C04EA;
-	Thu,  2 Apr 2026 15:41:07 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1775097667;
-	bh=cUDm2OR8S8mFGHV98b1HoEngmd4f/lQ8mlBFT/AfBWE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=K+KmhAzzW9cHaUvKpNciGiU3fnVa97NM2C31C+aa/et3SKH9eqXCiKhS0BODeFtT1
-	 h6enQHcZ8D5Je96SRkkYyiW5IU+9tZ6vG7r7YVrx1auYn2VzvrFV1zQ+MX7KiNZ/5Z
-	 2OLVS13U525YVXHMoB54CputNFMvkVNRmZzBXMoPQzgIHmB3iTKH1LES32gb0P5DJR
-	 VwlIokuvrcAeq1TRE5XdUsgvvzKXBCnE1b25Oa1aqGlL8N8QnPGUtwSEZtrt5DkaFs
-	 4q9dz8rvkWQE+fuaAfs/DJfE0wljd7r7edPEbxAh+7Nky9226ZowkAy7qDCGOVneBh
-	 /io6j9Q1XoX1g==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B69cdd7430001>; Thu, 02 Apr 2026 15:41:07 +1300
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.12])
-	by pat.atlnz.lc (Postfix) with ESMTP id 7E16C13EE52;
-	Thu,  2 Apr 2026 15:41:07 +1300 (NZDT)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-	id 77E412803E8; Thu,  2 Apr 2026 15:41:07 +1300 (NZDT)
-From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-To: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	linux@roeck-us.net
-Cc: devicetree@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aexidzYF"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-35da2d35eccso263047a91.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 01 Apr 2026 22:15:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775106934; x=1775711734; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9VRhm1iFIbmMSuYjrKLq45KZf5lir66/ZO2vyNWUJDo=;
+        b=aexidzYFvmt3YUxjauyrhjoe8SwDNNMksF916eZytT+OIQSDwv+fk8dut+4JpZJdf1
+         FJ6tzmwntIrY5zt/ua4BlUIpJ2yr7BUK5vLmntaa6lM17aaSw1N65UnXEtmU4wQDChPa
+         Hrp6o2VIXdXnE9X1zAmRB587COYxbWO3Rc6t3wbJcw9ZFYbhRbcLlz/1gfvPVHNJ9jLv
+         jM2tr/bO/UPDAKTx81hkgJrfHdJlbUuBPh0WyDRibWzEJ7MRFDe4JIYLR0neXEaPYw7E
+         VeLIu8Zo/y8OYP0GsN3gtGe2cj7cRi2CVT2rxGPmtrh0yvE2JDztD7sOsKR2AuvM/yjq
+         ENRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775106934; x=1775711734;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9VRhm1iFIbmMSuYjrKLq45KZf5lir66/ZO2vyNWUJDo=;
+        b=oadP2gGuEgRxH7h2OTFkWKrQKi6lnsiASa+YHZKjhfVR0X8L0gR6imFA1BseF/2lG1
+         VxmQ6H+XDBms2EN5Pu2q7JMRLa8o1tSzyKddCcqZmYO0ozOyGA285hjRLyDxhxjv7kuT
+         MsutM9GTJSjarln7+LIZaSgwGPdiB+dB2ZnkAxhyI4sgiaTHL9hbsImv46zlxOLmB7Ty
+         qtj8UwKcj2+VCz84sHDgoyfRyrD3csz+zterDBRLgwWzWEZaBsbPdKse3l7oXTRPUBrX
+         ahTexF5HmuwVKdsX3dz/9sTbPo4qQOCEUzksmMmyaEcYuTAPax0HGAQDRgOXwiEKt+7U
+         wVFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUfLk1+LE+wVhkY/3YlI0b0soUH9pHVYxRq7+A3ssLdVsY6TNJp8pQ2qQAoFDGTrm/4FTgcB/gMu/ZWeQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMVKqTVOVBYzhxqWiaQ0fbNxroEkiZ4Nb7wD8TqYZY7hfEU6G+
+	8gwGS5GF1d96twhksBdd8Sh6EIVwbodnkeuAH94FiERfDlp/xCM5hoVR
+X-Gm-Gg: AeBDieu7bkiTdKNt5V3GnXRv55DGjhcf79krPmA3lx7h8OsklP6DT+1pYnAN7R3WiIg
+	iUInBPzBNfW8E42WhirZgvi1L4NxHQwV1+0/bcWUUdm5xfTr+Pgs9OGJplBCD+LUjcArhLdtYAM
+	KaqQRLfeIQDQQ1yiB359htHtY+JZ0dzT+Ph3EoS9lTJu+PNXKEMDfLhrkPh6wT8gU5g582EHjWf
+	NPkoyou1pJmPnneQSuxPZ2/g4tRApj+TjuJaJMNdCvNxqCS1utNINE4St6zkCYW9Mh+T1Fb7CRt
+	k/mDWDxkYC9rosjDBx2mlXqokEllC5FcMWctgWkneV4Lwn33kt6B3lOblxfBLSPreKK1pW9bcQT
+	UaD9vAhzdSfw5oHaIR8cUxdk/9zdMjzgbCJehOr/0g0RKLypg3CaD8khqDyl0Xop7hrwE3i+Bdk
+	yv84h2WyZ/LBQa7+yZXtX9+s+pnOKCHRnngLLsBBHlRPsOayaYXz36NYliEGY476e2Fg==
+X-Received: by 2002:a17:90a:c110:b0:35b:9c97:3d18 with SMTP id 98e67ed59e1d1-35dc6eae327mr5651672a91.12.1775106933827;
+        Wed, 01 Apr 2026 22:15:33 -0700 (PDT)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dbe93661fsm6902107a91.11.2026.04.01.22.15.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2026 22:15:33 -0700 (PDT)
+From: a0282524688@gmail.com
+To: tmyu0@nuvoton.com,
+	linusw@kernel.org,
+	brgl@kernel.org,
+	linux@roeck-us.net,
+	andi.shyti@kernel.org,
+	lee@kernel.org,
+	mkl@pengutronix.de,
+	mailhol@kernel.org,
+	alexandre.belloni@bootlin.com,
+	wim@linux-watchdog.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v4 1/2] dt-bindings: trivial-devices: Add sony,aps-379
-Date: Thu,  2 Apr 2026 15:40:59 +1300
-Message-ID: <20260402024101.4136697-2-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260402024101.4136697-1-chris.packham@alliedtelesis.co.nz>
-References: <20260402024101.4136697-1-chris.packham@alliedtelesis.co.nz>
+	linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Ming Yu <a0282524688@gmail.com>
+Subject: [PATCH v1 0/2] mfd: nct6694: Refactor transport layer and add HIF (eSPI) support
+Date: Thu,  2 Apr 2026 13:14:40 +0800
+Message-Id: <20260402051442.1426672-1-a0282524688@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=EcprQ+mC c=1 sm=1 tr=0 ts=69cdd743 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=A5OVakUREuEA:10 a=EUspDBNiAAAA:8 a=CbD2gyqqR853AcFyMGIA:9 a=3ZKOabzyN94A:10
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
+Content-Transfer-Encoding: 8bit
 
-Add the compatible string for the sony,aps-379. This is a simple PMBus
-(I2C) device that requires no additional attributes.
+From: Ming Yu <a0282524688@gmail.com>
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
----
+The Nuvoton NCT6694 is a peripheral expander that provides GPIO, I2C,
+CAN-FD, Watchdog, HWMON, PWM, and RTC sub-devices. Currently, the
+driver only supports USB as the host transport interface.
 
-Notes:
-    Changes in v3:
-    - Collect Ack from Krysztof
+This series refactors the NCT6694 MFD core to support multiple transport
+backends and adds a new Host Interface (HIF) transport driver that
+communicates over eSPI using Super-I/O shared memory.
 
- Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+Ming Yu (2):
+  mfd: nct6694: Switch to devm_mfd_add_devices() and drop IDA
+  mfd: Add Host Interface (HIF) support for Nuvoton NCT6694
 
-diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Doc=
-umentation/devicetree/bindings/trivial-devices.yaml
-index a482aeadcd44..0a559beff878 100644
---- a/Documentation/devicetree/bindings/trivial-devices.yaml
-+++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-@@ -430,6 +430,8 @@ properties:
-           - smsc,emc6d103s
-             # Socionext Uniphier SMP control registers
-           - socionext,uniphier-smpctrl
-+            # Sony APS-379 Power Supply
-+          - sony,aps-379
-             # SparkFun Qwiic Joystick (COM-15168) with i2c interface
-           - sparkfun,qwiic-joystick
-             # STMicroelectronics Hot-swap controller stef48h28
---=20
-2.53.0
+ MAINTAINERS                         |   1 +
+ drivers/gpio/gpio-nct6694.c         |  26 +-
+ drivers/hwmon/nct6694-hwmon.c       |  21 -
+ drivers/i2c/busses/i2c-nct6694.c    |  26 +-
+ drivers/mfd/Kconfig                 |  47 +-
+ drivers/mfd/Makefile                |   3 +-
+ drivers/mfd/nct6694-hif.c           | 649 ++++++++++++++++++++++++++++
+ drivers/mfd/nct6694.c               | 180 ++++----
+ drivers/net/can/usb/nct6694_canfd.c |  18 +-
+ drivers/rtc/rtc-nct6694.c           |   7 -
+ drivers/watchdog/nct6694_wdt.c      |  27 +-
+ include/linux/mfd/nct6694.h         |  57 ++-
+ 12 files changed, 829 insertions(+), 233 deletions(-)
+ create mode 100644 drivers/mfd/nct6694-hif.c
+
+-- 
+2.34.1
 
