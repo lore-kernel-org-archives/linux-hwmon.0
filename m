@@ -1,160 +1,415 @@
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB8035E95A
-	for <linux-hwmon@vger.kernel.org>; Thu,  2 Apr 2026 10:38:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 994893BE63F
+	for <linux-hwmon@vger.kernel.org>; Thu,  2 Apr 2026 11:06:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775126308; cv=none; b=Tv/GfVgqmIalId8WpkTptxrqHFMBSMSc3SEBtPVpjQDU6oG3LP5V7Kj57fdG2kCVCzfslNXIjWiJRFJE3wpFmKFUH4kARqrSHOLqD1tOQEoKiao2wqEqK2Viq5op+L6w16GEBOS2xoVHxDCzst2riByy0K8rsdwjWxcA+IizILY=
+	t=1775127983; cv=none; b=n2rl1mYIa+taMoJYFE1PWo190HhP/mqjrd66wfZoi1bRS12KqGejNBfeicxczlnvnDL3ramtv/KCI9qIbu9zT4CefACBriRCpBZzM8PFTj7wjtzUYijM+b4PLmR/ljv7qzh32uux+BxXtDPGs12tEUnfbscKQu7nnmP8kFlrp6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775126308; c=relaxed/simple;
-	bh=AVKjDab6bK6ZsKM8zazG+7m2550/Pk15eEN9/XSkp8c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FTW/xh502/ZwJBgLoaYrSsAwOcp0zJkGHUKtwNPTVLhjkknis4VE/4uNj+Jgluzz/5+om8MZntF1S42zQnhXiFLjvDpWIlq2uFp5kjiSkpZPsCt4O16uEssbh9eOloz/91MCRT0/yBgKct+jOqI8RLzgwfvz4HW0zZn5w5XBR+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ht2E7sZF; arc=none smtp.client-ip=74.125.82.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ht2E7sZF"
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2c7e5f38b37so1047019eec.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 02 Apr 2026 03:38:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775126303; x=1775731103; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=QqamXqtOxzBeur4HdUAmKeC/dpeaPCUYwmBwWWj8JfE=;
-        b=Ht2E7sZFt+97q3Ct3fmkbCQXDpYqsACsotIZFfTwXQC9GSahXW8HlcldOYr6ULlWuM
-         A/SvSZSkjXraL26R0NFfK6nuwmhG2Sipt7ewUonV+CsdL4k87nFHfWWK+TYXYqtdunv+
-         xp16AwZP+ci331cnYP5Q1IvSJTxbl7/BH76oIZGMQ8/dde+qSlG5CPhlNoJVQwIEjTQS
-         mtY24VhjT8CS9bA5756NGzTihwJCUJvnlyXqRfwwecQW2CjDZrbSqT2kFzsMRu4JZBD0
-         +C83qprdSPjqMk0N3/5kB9xxQqJA1ZSZhrqka7huJyRr30dOlPiWmyiKl5/MhUXrzBQV
-         7b1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775126303; x=1775731103;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QqamXqtOxzBeur4HdUAmKeC/dpeaPCUYwmBwWWj8JfE=;
-        b=G/L6gTZRIPdwkeDppwCZPx6RgDvmZ2RjN25pzDhi9kTVZVL1ysIZUZHniMEEwTJbQU
-         7zqOX0FJlG/UniiItvlgnQohNF3zeHnBpHt/w1H96vrg/AkJaQOIp7JxmVi1MbKp6FfD
-         yXvZaM7vJv9GplzH/N3Q7BD07z1TAVf0h6sMPnunhYudY7gY1pNXulfBJ2cc/phsRLZ4
-         /T27wsJJWV9N0CoP8X0AD6QfX22VZUjNkegnXbdaj61VaCg99j9DbgV6+XsQzdb435di
-         IuvKUVWv+g+3zd29hPH3pycPYRBsBQSR/FMrcEo/Cuknk2MxRUGcUuixqV7ZF5pt6LeE
-         mklQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVNYGmXRgZclXawa1/WBJm5kzKh7oTSKCUeUIT93b/nOMPRrIkMK43qlWewGIDmc29UzwGhjVTXNbAkfw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9L2CQGf1RIT66Lc1dcRwfJDRfSnZ/7af88YXZJFG6vOWTQyYR
-	e7ZT+Iw77pLqE2kfs8zECYNr09AxSjQqmW1kgnerPSqVAxQfMBAK0Kwv
-X-Gm-Gg: ATEYQzzHO855zaOI16O/eCSQZQdN1wQoC2diFuabVYqecty6kq3FJ9rSyEDucnALKv4
-	D5+B2dluHixsrjwSYG1P6jLLWa1IeLnc+Ev7FwH6/M8pvHyJFuciJIcaK1g8hJFuEnasyTubRUU
-	25zj7vvifN39ViKN/vNmKcZv3l/DNcrg57o/QzQCOkTwrjl7L9kjYyVgcEKbBsp79J8fBydCmp8
-	PGuBR0XayzJon/zfCSQyNiFj6CpUDNtdSvk0cldwkG0RVzY95JYpe4iSd3yMpw5gKPHwr5cVfBI
-	OMweNJb7aQ0n1IPMSMg+Vw+GKCAUB9yuRCPLMzsCYVxrpLkTDNZ4Gres9nmGFsA4PELpOIHbGUg
-	04wNeoiaz7XWXRDkp9NEbJDKjCD5XU8eHD8q/7vC5dG401reY1EFRsaoly2XIeFPYAsCplP+n5V
-	+CDoXuB3/OcY3BC9tuxunmjHNC/Iz+aHGIaPpPp8gL19SOBs1oJsY64BWtxNM11EIedaUfwOEs
-X-Received: by 2002:a05:7300:a90c:b0:2c1:27c:7598 with SMTP id 5a478bee46e88-2c9330aff2emr3510807eec.30.1775126303009;
-        Thu, 02 Apr 2026 03:38:23 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ca7ce0075fsm2245141eec.24.2026.04.02.03.38.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Apr 2026 03:38:22 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <cce0e8c4-8df3-408c-b3ac-6ede3c4b2cf0@roeck-us.net>
-Date: Thu, 2 Apr 2026 03:38:20 -0700
+	s=arc-20240116; t=1775127983; c=relaxed/simple;
+	bh=Yd/6Pc5loOp6q2Ae4swq/Wc1w/fliWxGIpt5pwIb6ZE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r03g5uiMJQpBKnbcqeB5ZR3Y3G2ZHnjVs1z0EYnkPimA6KpCEhSBP+/wLJDOxM2zyFwrRzd/lnLGOW5uWAhL9XxO5iuXh7JULy1KinVhHj8XygJYiTEpCBjIWINZm28apVWFjC5LwwFfmEHgNzEdxKtJTxYHvh5xcO3I2jt99FQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1w8Fru-0004ZY-BZ; Thu, 02 Apr 2026 13:05:46 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1w8Frs-003MQs-2L;
+	Thu, 02 Apr 2026 13:05:44 +0200
+Received: from pengutronix.de (p4ffb2dc6.dip0.t-ipconnect.de [79.251.45.198])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 57352514511;
+	Thu, 02 Apr 2026 11:05:44 +0000 (UTC)
+Date: Thu, 2 Apr 2026 13:05:43 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: a0282524688@gmail.com
+Cc: tmyu0@nuvoton.com, linusw@kernel.org, brgl@kernel.org, 
+	linux@roeck-us.net, andi.shyti@kernel.org, lee@kernel.org, mailhol@kernel.org, 
+	alexandre.belloni@bootlin.com, wim@linux-watchdog.org, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] mfd: Add Host Interface (HIF) support for Nuvoton
+ NCT6694
+Message-ID: <20260402-warping-chameleon-of-prowess-9df780-mkl@pengutronix.de>
+X-AI: stop_reason: "refusal"
+References: <20260402051442.1426672-1-a0282524688@gmail.com>
+ <20260402051442.1426672-3-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/2] hwmon: pmbus: Sony APS-379
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260402024101.4136697-1-chris.packham@alliedtelesis.co.nz>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAmgrMyQFCSbODQkACgkQyx8mb86fmYGcWRAA
- oRwrk7V8fULqnGGpBIjp7pvR187Yzx+lhMGUHuM5H56TFEqeVwCMLWB2x1YRolYbY4MEFlQg
- VUFcfeW0OknSr1s6wtrtQm0gdkolM8OcCL9ptTHOg1mmXa4YpW8QJiL0AVtbpE9BroeWGl9v
- 2TGILPm9mVp+GmMQgkNeCS7Jonq5f5pDUGumAMguWzMFEg+Imt9wr2YA7aGen7KPSqJeQPpj
- onPKhu7O/KJKkuC50ylxizHzmGx+IUSmOZxN950pZUFvVZH9CwhAAl+NYUtcF5ry/uSYG2U7
- DCvpzqOryJRemKN63qt1bjF6cltsXwxjKOw6CvdjJYA3n6xCWLuJ6yk6CAy1Ukh545NhgBAs
- rGGVkl6TUBi0ixL3EF3RWLa9IMDcHN32r7OBhw6vbul8HqyTFZWY2ksTvlTl+qG3zV6AJuzT
- WdXmbcKN+TdhO5XlxVlbZoCm7ViBj1+PvIFQZCnLAhqSd/DJlhaq8fFXx1dCUPgQDcD+wo65
- qulV/NijfU8bzFfEPgYP/3LP+BSAyFs33y/mdP8kbMxSCjnLEhimQMrSSo/To1Gxp5C97fw5
- 3m1CaMILGKCmfI1B8iA8zd8ib7t1Rg0qCwcAnvsM36SkrID32GfFbv873bNskJCHAISK3Xkz
- qo7IYZmjk/IJGbsiGzxUhvicwkgKE9r7a1rOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAmgrMyQFCSbODQkACgkQyx8mb86fmYHlgg/9
- H5JeDmB4jsreE9Bn621wZk7NMzxy9STxiVKSh8Mq4pb+IDu1RU2iLyetCY1TiJlcxnE362kj
- njrfAdqyPteHM+LU59NtEbGwrfcXdQoh4XdMuPA5ADetPLma3YiRa3VsVkLwpnR7ilgwQw6u
- dycEaOxQ7LUXCs0JaGVVP25Z2hMkHBwx6BlW6EZLNgzGI2rswSZ7SKcsBd1IRHVf0miwIFYy
- j/UEfAFNW+tbtKPNn3xZTLs3quQN7GdYLh+J0XxITpBZaFOpwEKV+VS36pSLnNl0T5wm0E/y
- scPJ0OVY7ly5Vm1nnoH4licaU5Y1nSkFR/j2douI5P7Cj687WuNMC6CcFd6j72kRfxklOqXw
- zvy+2NEcXyziiLXp84130yxAKXfluax9sZhhrhKT6VrD45S6N3HxJpXQ/RY/EX35neH2/F7B
- RgSloce2+zWfpELyS1qRkCUTt1tlGV2p+y2BPfXzrHn2vxvbhEn1QpQ6t+85FKN8YEhJEygJ
- F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
- FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260402024101.4136697-1-chris.packham@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="eduyjgnvxkh2zrsd"
+Content-Disposition: inline
+In-Reply-To: <20260402051442.1426672-3-a0282524688@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-On 4/1/26 19:40, Chris Packham wrote:
-> This series add support for the PMBus hwmon on the Sony
-> APS-379 power supply module. There's some deviations from
-> the PMBus specification that need to be dealt with.
-> 
-> Chris Packham (2):
->    dt-bindings: trivial-devices: Add sony,aps-379
->    hwmon: pmbus: Add support for Sony APS-379
-> 
->   .../devicetree/bindings/trivial-devices.yaml  |   2 +
->   Documentation/hwmon/aps-379.rst               |  58 ++++++
->   Documentation/hwmon/index.rst                 |   1 +
->   drivers/hwmon/pmbus/Kconfig                   |   6 +
->   drivers/hwmon/pmbus/Makefile                  |   1 +
->   drivers/hwmon/pmbus/aps-379.c                 | 178 ++++++++++++++++++
->   6 files changed, 246 insertions(+)
->   create mode 100644 Documentation/hwmon/aps-379.rst
->   create mode 100644 drivers/hwmon/pmbus/aps-379.c
-> 
 
-Sashiko still doesn't like it.
+--eduyjgnvxkh2zrsd
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v1 2/2] mfd: Add Host Interface (HIF) support for Nuvoton
+ NCT6694
+MIME-Version: 1.0
 
-https://sashiko.dev/#/patchset/20260402024101.4136697-1-chris.packham%40alliedtelesis.co.nz
+On 02.04.2026 13:14:42, a0282524688@gmail.com wrote:
+> From: Ming Yu <a0282524688@gmail.com>
+>
+> The Nuvoton NCT6694 also provides a Host Interface (HIF) via eSPI
+> to the host to access its features.
+>
+> Sub-devices can use the common functions nct6694_read_msg() and
+> nct6694_write_msg() to issue a command. They can also request
+> interrupts that will be called when the HIF device triggers a
+> shared memory interrupt.
+>
+> To support multiple transports, the driver configuration is
+> updated to allow selecting between the USB and HIF interfaces.
+>
+> Signed-off-by: Ming Yu <a0282524688@gmail.com>
+> ---
+>  MAINTAINERS                         |   1 +
+>  drivers/gpio/gpio-nct6694.c         |   7 -
+>  drivers/hwmon/nct6694-hwmon.c       |  21 -
+>  drivers/i2c/busses/i2c-nct6694.c    |   7 -
+>  drivers/mfd/Kconfig                 |  47 +-
+>  drivers/mfd/Makefile                |   3 +-
+>  drivers/mfd/nct6694-hif.c           | 649 ++++++++++++++++++++++++++++
+>  drivers/mfd/nct6694.c               |  97 +++--
+>  drivers/net/can/usb/nct6694_canfd.c |   6 -
+>  drivers/rtc/rtc-nct6694.c           |   7 -
+>  drivers/watchdog/nct6694_wdt.c      |   7 -
+>  include/linux/mfd/nct6694.h         |  51 ++-
+>  12 files changed, 787 insertions(+), 116 deletions(-)
+>  create mode 100644 drivers/mfd/nct6694-hif.c
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index c3fe46d7c4bc..7b6241faa6df 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18899,6 +18899,7 @@ S:	Supported
+>  F:	drivers/gpio/gpio-nct6694.c
+>  F:	drivers/hwmon/nct6694-hwmon.c
+>  F:	drivers/i2c/busses/i2c-nct6694.c
+> +F:	drivers/mfd/nct6694-hif.c
+>  F:	drivers/mfd/nct6694.c
+>  F:	drivers/net/can/usb/nct6694_canfd.c
+>  F:	drivers/rtc/rtc-nct6694.c
+> diff --git a/drivers/gpio/gpio-nct6694.c b/drivers/gpio/gpio-nct6694.c
+> index 3703a61209e6..a279510ece89 100644
+> --- a/drivers/gpio/gpio-nct6694.c
+> +++ b/drivers/gpio/gpio-nct6694.c
+> @@ -12,13 +12,6 @@
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+>
+> -/*
+> - * USB command module type for NCT6694 GPIO controller.
+> - * This defines the module type used for communication with the NCT6694
+> - * GPIO controller over the USB interface.
+> - */
+> -#define NCT6694_GPIO_MOD	0xFF
+> -
+>  #define NCT6694_GPIO_VER	0x90
+>  #define NCT6694_GPIO_VALID	0x110
+>  #define NCT6694_GPI_DATA	0x120
+> diff --git a/drivers/hwmon/nct6694-hwmon.c b/drivers/hwmon/nct6694-hwmon.c
+> index 6dcf22ca5018..581451875f2c 100644
+> --- a/drivers/hwmon/nct6694-hwmon.c
+> +++ b/drivers/hwmon/nct6694-hwmon.c
+> @@ -15,13 +15,6 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/slab.h>
+>
+> -/*
+> - * USB command module type for NCT6694 report channel
+> - * This defines the module type used for communication with the NCT6694
+> - * report channel over the USB interface.
+> - */
+> -#define NCT6694_RPT_MOD			0xFF
+> -
+>  /* Report channel */
+>  /*
+>   * The report channel is used to report the status of the hardware monit=
+or
+> @@ -38,13 +31,6 @@
+>  #define NCT6694_TIN_STS(x)		(0x6A + (x))
+>  #define NCT6694_FIN_STS(x)		(0x6E + (x))
+>
+> -/*
+> - * USB command module type for NCT6694 HWMON controller.
+> - * This defines the module type used for communication with the NCT6694
+> - * HWMON controller over the USB interface.
+> - */
+> -#define NCT6694_HWMON_MOD		0x00
+> -
+>  /* Command 00h - Hardware Monitor Control */
+>  #define NCT6694_HWMON_CONTROL		0x00
+>  #define NCT6694_HWMON_CONTROL_SEL	0x00
+> @@ -53,13 +39,6 @@
+>  #define NCT6694_HWMON_ALARM		0x02
+>  #define NCT6694_HWMON_ALARM_SEL		0x00
+>
+> -/*
+> - * USB command module type for NCT6694 PWM controller.
+> - * This defines the module type used for communication with the NCT6694
+> - * PWM controller over the USB interface.
+> - */
+> -#define NCT6694_PWM_MOD			0x01
+> -
+>  /* PWM Command - Manual Control */
+>  #define NCT6694_PWM_CONTROL		0x01
+>  #define NCT6694_PWM_CONTROL_SEL		0x00
+> diff --git a/drivers/i2c/busses/i2c-nct6694.c b/drivers/i2c/busses/i2c-nc=
+t6694.c
+> index 7d8ad997f6d2..7ee209a04d16 100644
+> --- a/drivers/i2c/busses/i2c-nct6694.c
+> +++ b/drivers/i2c/busses/i2c-nct6694.c
+> @@ -11,13 +11,6 @@
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+>
+> -/*
+> - * USB command module type for NCT6694 I2C controller.
+> - * This defines the module type used for communication with the NCT6694
+> - * I2C controller over the USB interface.
+> - */
+> -#define NCT6694_I2C_MOD			0x03
+> -
+>  /* Command 00h - I2C Deliver */
+>  #define NCT6694_I2C_DELIVER		0x00
+>  #define NCT6694_I2C_DELIVER_SEL		0x00
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 7192c9d1d268..8a715ec2f79f 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -1164,19 +1164,46 @@ config MFD_MENF21BMC
+>  	  will be called menf21bmc.
+>
+>  config MFD_NCT6694
+> -	tristate "Nuvoton NCT6694 support"
+> +	tristate
+>  	select MFD_CORE
+> +	help
+> +	  Core MFD support for the Nuvoton NCT6694 peripheral expander.
+> +	  This provides the common APIs and shared structures used by all
+> +	  interfaces (USB, HIF) to access the NCT6694 hardware features
+> +	  such as GPIO, I2C, CAN-FD, Watchdog, ADC, PWM, and RTC.
+> +
+> +	  It is selected automatically by the transport interface drivers.
+> +
+> +config MFD_NCT6694_HIF
+> +	tristate "Nuvoton NCT6694 HIF (eSPI) interface support"
+> +	depends on HAS_IOPORT && ACPI
+> +	select MFD_NCT6694
+> +	select REGMAP_MMIO
+> +	help
+> +	  This enables support for the Nuvoton NCT6694 peripheral expander
+> +	  connected via the Host Interface (HIF) using eSPI transport.
+> +
+> +	  The transport driver uses Super-I/O mapping and shared memory to
+> +	  communicate with the NCT6694 firmware. Enable this option if you
+> +	  are using the NCT6694 over an eSPI interface on an ACPI platform.
+> +
+> +	  To compile this driver as a module, choose M here: the module
+> +	  will be called nct6694-hif.
+> +
+> +config MFD_NCT6694_USB
+> +	tristate "Nuvoton NCT6694 USB interface support"
+> +	select MFD_NCT6694
+>  	depends on USB
+>  	help
+> -	  This enables support for the Nuvoton USB device NCT6694, which shares
+> -	  peripherals.
+> -	  The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
+> -	  6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
+> -	  PWM, and RTC.
+> -	  This driver provides core APIs to access the NCT6694 hardware
+> -	  monitoring and control features.
+> -	  Additional drivers must be enabled to utilize the specific
+> -	  functionalities of the device.
+> +	  This enables support for the Nuvoton NCT6694 peripheral expander
+> +	  connected via the USB interface.
+> +
+> +	  The transport driver uses USB bulk and interrupt transfers to
+> +	  communicate with the NCT6694 firmware. Enable this option if you
+> +	  are using the NCT6694 via a USB connection.
+> +
+> +	  To compile this driver as a module, choose M here: the module
+> +	  will be called nct6694.
+>
+>  config MFD_OCELOT
+>  	tristate "Microsemi Ocelot External Control Support"
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index e75e8045c28a..4cee9b74978c 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -124,7 +124,8 @@ obj-$(CONFIG_MFD_MC13XXX_I2C)	+=3D mc13xxx-i2c.o
+>
+>  obj-$(CONFIG_MFD_PF1550)	+=3D pf1550.o
+>
+> -obj-$(CONFIG_MFD_NCT6694)	+=3D nct6694.o
+> +obj-$(CONFIG_MFD_NCT6694_HIF)	+=3D nct6694-hif.o
+> +obj-$(CONFIG_MFD_NCT6694_USB)	+=3D nct6694.o
+>
+>  obj-$(CONFIG_MFD_CORE)		+=3D mfd-core.o
+>
+> diff --git a/drivers/mfd/nct6694-hif.c b/drivers/mfd/nct6694-hif.c
+> new file mode 100644
+> index 000000000000..a5953c951eb5
+> --- /dev/null
+> +++ b/drivers/mfd/nct6694-hif.c
+> @@ -0,0 +1,649 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2026 Nuvoton Technology Corp.
+> + *
+> + * Nuvoton NCT6694 host-interface (eSPI) transport driver.
+> + */
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/bits.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/io.h>
+> +#include <linux/iopoll.h>
+> +#include <linux/irq.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/mfd/nct6694.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/unaligned.h>
+> +
+> +#define DRVNAME "nct6694-hif"
+> +
+> +#define NCT6694_POLL_INTERVAL_US	10
+> +#define NCT6694_POLL_TIMEOUT_US		10000
+> +
+> +/*
+> + * Super-I/O registers
+> + */
+> +#define SIO_REG_LDSEL		0x07	/* Logical device select */
+> +#define SIO_REG_DEVID		0x20	/* Device ID (2 bytes) */
+> +#define SIO_REG_LD_SHM		0x0F	/* Logical device shared memory control */
+> +
+> +#define SIO_REG_SHM_ENABLE	0x30	/* Enable shared memory */
+> +#define SIO_REG_SHM_BASE_ADDR	0x60	/* Shared memory base address (2 byte=
+s) */
+> +#define SIO_REG_SHM_IRQ_NR	0x70	/* Shared memory interrupt number */
+> +
+> +#define SIO_REG_UNLOCK_KEY	0x87	/* Key to enable Super-I/O */
+> +#define SIO_REG_LOCK_KEY	0xAA	/* Key to disable Super-I/O */
+> +
+> +#define SIO_NCT6694B_ID		0xD029
+> +#define SIO_NCT6694D_ID		0x5832
+> +
+> +/*
+> + * Super-I/O Shared Memory Logical Device registers
+> + */
+> +#define NCT6694_SHM_COFS_STS			0x2E
+> +#define NCT6694_SHM_COFS_STS_COFS4W		BIT(7)
+> +
+> +#define NCT6694_SHM_COFS_CTL2			0x3B
+> +#define NCT6694_SHM_COFS_CTL2_COFS4W_IE		BIT(3)
+> +
+> +#define NCT6694_SHM_INTR_STATUS			0x9C	/* Interrupt status register (4 b=
+ytes) */
+> +
+> +enum nct6694_chips {
+> +	NCT6694B =3D 0,
+> +	NCT6694D,
+> +};
+> +
+> +enum nct6694_module_id {
+> +	NCT6694_GPIO0 =3D 0,
+> +	NCT6694_GPIO1,
+> +	NCT6694_GPIO2,
+> +	NCT6694_GPIO3,
+> +	NCT6694_GPIO4,
+> +	NCT6694_GPIO5,
+> +	NCT6694_GPIO6,
+> +	NCT6694_GPIO7,
+> +	NCT6694_GPIO8,
+> +	NCT6694_GPIO9,
+> +	NCT6694_GPIOA,
+> +	NCT6694_GPIOB,
+> +	NCT6694_GPIOC,
+> +	NCT6694_GPIOD,
+> +	NCT6694_GPIOE,
+> +	NCT6694_GPIOF,
+> +	NCT6694_I2C0,
+> +	NCT6694_I2C1,
+> +	NCT6694_I2C2,
+> +	NCT6694_I2C3,
+> +	NCT6694_I2C4,
+> +	NCT6694_I2C5,
+> +	NCT6694_CAN0,
+> +	NCT6694_CAN1,
+> +};
+> +
+> +struct __packed nct6694_msg {
+> +	struct nct6694_cmd_header cmd_header;
+> +	struct nct6694_response_header response_header;
+> +	unsigned char *data;
+> +};
+> +
+> +struct nct6694_sio_data {
+> +	enum nct6694_chips chip;
+> +	int sioreg;	/* Super-I/O index port */
+> +
+> +	/* Super-I/O access functions */
+> +	int (*sio_enter)(struct nct6694_sio_data *sio_data);
+> +	void (*sio_exit)(struct nct6694_sio_data *sio_data);
+> +	void (*sio_select)(struct nct6694_sio_data *sio_data, int ld);
+> +	int (*sio_inb)(struct nct6694_sio_data *sio_data, int reg);
+> +	int (*sio_inw)(struct nct6694_sio_data *sio_data, int reg);
+> +	void (*sio_outb)(struct nct6694_sio_data *sio_data, int reg, int val);
 
-- Yes, "extracted while probing" is no longer accurate.
-   Maybe add a comment explaining that the exponent is constant.
-   Maybe even use a define ? That would make struct aps_379_data
-   unnecessary.
+The signatures of the function look a bit strange. I expect functions
+reading/writing bytes use u8 not int, register offsets should probably
+be an unsigned int.
 
-- Rejecting virtual registers: Why indeed ? Is there a reason ?
+Why do you have pointers to the access functions? Why not use them
+directly?
 
-Thanks,
-Guenter
+Marc
 
+--
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--eduyjgnvxkh2zrsd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSl+MghEFFAdY3pYJLMOmT6rpmt0gUCac5NhQAKCRDMOmT6rpmt
+0iiOAQDPnaCTCz7cHPZcUdH6WW5DKZHAXFfgb03FMRkx/xPipgD/X+mA6FYqehlp
+FMnxD26sUBwZidoKAtEpXxguwwLFGgo=
+=+i7v
+-----END PGP SIGNATURE-----
+
+--eduyjgnvxkh2zrsd--
