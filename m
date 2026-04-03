@@ -1,326 +1,165 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26DA13C3432
-	for <linux-hwmon@vger.kernel.org>; Fri,  3 Apr 2026 14:07:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18F1A311C35
+	for <linux-hwmon@vger.kernel.org>; Fri,  3 Apr 2026 14:20:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775225225; cv=none; b=rd7J39vd8EoqGP5Gbu52unQ9TkbYs9qjuv7KKht1SPdrklub/gHlGpkPSHTT1xwQVFB94VrX9p5T4iR2hh40hK8yfsGgTa2j0wqUOPVN7tUrwYEau3GgwToAcvTPcrk9NvvgDzEN6RS9fN3WGnfL74FLC2K4W9kGnGkYoxhUX+s=
+	t=1775226010; cv=none; b=RqlOHnrlP66Aq3BVzSEsZ5SdTuPxGGRQAFOjXIBAQV7ZsOr64Izca7kqyIUVDAwqe/P9ulLzNICsfNwgSV1GVSXKjBrflvcPa15Eg9UAm5d2Uuj1DEiUwkPEp4dHaxvFcz1ADIoUrCXcR2uNHUkt6Yn1TNbUTgNElxJu6uyqscI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775225225; c=relaxed/simple;
-	bh=ZaQYLQ79Qi1e/GYAO700zaQe68OP/sNqETSfVAS4jbg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CmLWTA0wbNjtYorR5IRjrALR5NesrNIOmUn67Cf6zZ+XTpzvwqagjZ4gG4YOGUDmWvLUczZ8eJyvS/YeVGXOKBv5mZmL/TBXuq21GbdR9iWmLC5FQCsEc8jLijmPsX6OxypGHeih4RwND5qWW2pvYjYSNPCx/VyEQi2ixgv9rkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DLlddQU4; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1775226010; c=relaxed/simple;
+	bh=q6aLYQi/GSYkWx4zjUOFY+Apoci2erR8dsFPJ01NFzw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RL9mzyktHlbNdd2nEf9x0TE/GbAFzzQJBZpOcLB2rM2hQ8kVTIeL6i32Yxnd7U78QDiE0Sp0nOQ+QCegqewFtL5ipZdwzS+wtlgzWoQyAA94cJgivPGNlC3LsSdojs3xB1+uMnspRDQOy4fqn6IacZJQuBr8B0MOJZRbGailCJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TA9pXmfg; arc=none smtp.client-ip=74.125.82.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DLlddQU4"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4887eca00c4so13349145e9.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 03 Apr 2026 07:07:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TA9pXmfg"
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2c156c4a9efso2319331eec.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 03 Apr 2026 07:20:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775225219; x=1775830019; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KTKG/4DEdSl73iOWcC16gcuOW+Fph4H/Ug8xetwoxhY=;
-        b=DLlddQU4UGBGTZ6+VbxOKgUKJpGtJ7CHADzwp4SNqrWPBOmPwYvTWt6YbbZPVKfG/d
-         Zz0cZUxuENPL5zM22Nuz29HIRRN6ong3nbJNbGuBY8PV1hJzuAN2RuQIzIVRCfLiU/pi
-         vARHeTcEzk7Mr+cyt/POAtii9XuOFRdLxbm0l91OtDhkUqh72dvRboSTNpqhp3GvrGfR
-         nkJp+t9SRyvT1DQ1owI9znbpBS35F0G7MbTFTSKA9ONvi7TDprwYrEHi+2dyxxJHjl1q
-         1QQVnB1B5aQ9THvcGzvseBOqHZvVAe4zufU+ykOoq5LymdggnKiEvxC7kHCuSRhjSxOi
-         4oaw==
+        d=gmail.com; s=20251104; t=1775226008; x=1775830808; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=a5qbe4blEcePCtVOcOKZ0vHUGNI9pEoCsfXF5ttISwc=;
+        b=TA9pXmfgFPoFWJYsIWo83SffdVKcQ3FWeRTvEkKBBG6LrRS+EoDObRtJz1MG8WE4qN
+         4wHeU7LrNGkmfCT8FIHCceywMMdj6/LgDCSEm8MIB3ctrYCxtNP1guJ9iY2lXPp+pOzq
+         BDQBhlwwJi5SB3FF5ShbOyILBSeb79zi+q1/8xraqGRM0mQuSOpkz4hzK9esUo+lBud0
+         fGbjkxpD7uz124eWy9FjuXJelsJq6RsdXgZLngt/VsNUOU+Me/xvwJGes3xr6pbczCoQ
+         83j2bbcwqewST7NGXs7v+kTEHJb2n3Y9SbgGxsdN2kkADqgy9FTNUh7XSRtCx/DkDAit
+         jaGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775225219; x=1775830019;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KTKG/4DEdSl73iOWcC16gcuOW+Fph4H/Ug8xetwoxhY=;
-        b=R4ud0NFdJfKwl722tB02ub5KbSfQVzlTLC6WdSh7R7XRwxsYsMz/mODBQfs2nwKinO
-         lLEZ0iYNiDVsCF19CLtVL3gNzbazQiH7JGouw8arhWFaLe/SbgHQSFSfqLu6/qWbb8Rs
-         PjXVEx/GeuHUxc2DhQfNRm4lzmkYbgx+pmXDBtp98AIwsEKtvCel8ZdTCPhKbd8ALaVG
-         0yQgY1GNLkZkOsDCvN0KKUuJcCJoXkhJlILmy0l7nl4v3CtxTJAgYGq4ybleHajM//Cc
-         l7el0yoOatRCiEekRbCNKX2tGIwnJ7KO/Rx6CrDVm93Qa0Jnx7KjwxDNM5nlBDYobDw+
-         ddlg==
-X-Forwarded-Encrypted: i=1; AJvYcCXtQxfzoRK+xE/DgssPESn+Gt6S/dEAQU1heZCZ3EZPmB1Ncj+3eHcGejhyxw83kz17YrsjEcdjb+OGHQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwStyhJAD6Mfz8s1LwVF0N8G2NZj8RE48R+rLLprE0pGeKAzzVy
-	+WOJ6jeNId+ykwUs4iMlMmFWm3H4uUvKAvBlIEzv6oKQ7t+yTHCGBaRj
-X-Gm-Gg: ATEYQzzt7deWDYQNdfbcn29CjYWVpp/sMSU23yS/+NGVCNvcbvxEV9rl23p/Smdfm9t
-	5KpNvHa+RgGrC3DwA/EGF0XU4UAA2qoKy45q4BLeQy98kGzAOuK0KLSL2n0OjvlrhcLEJCkP7B4
-	cXQYXinvSJXP6ik/iI1cKy/jwaY+RoGfZ3S5OIJnRGX1cc7naixuTZWoZyBgWiv+8dNRjiy7rBp
-	ezEG7t8K8dlAvBjR99BwIojuHwHS9Bz0kZsToGELSLBK7koqmsDiwOQmtBvy+24vZ1qm5gwuIR1
-	FerQJ/yh1co7Ezc1ZbmxvR2TvRgHmqChVK2meA8mOjNYp0bwSG6D6h9PYGImuiwIsbkCBbbTR97
-	DuyreYPhQKwdSD+lYiAOWuZPeR5eX6hRPqoJCEEn2leCEbPaZJBh8+n7Y6dJLgsCyYafe3q9CPz
-	Prv4nn989ne0tgFB/NMWKG8OGFc7ThK4cnQHuIzIiH9lDYwsjiFBa4ga1NFZYLMqYhrgTeGiAxM
-	jMHkhQtsVW4
-X-Received: by 2002:a05:600c:4752:b0:488:7ff5:2c67 with SMTP id 5b1f17b1804b1-4889976ea80mr51847825e9.12.1775225218911;
-        Fri, 03 Apr 2026 07:06:58 -0700 (PDT)
-Received: from flaviu-Aspire-E5-572G.. ([93.122.249.8])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48899d3a4e9sm42069665e9.6.2026.04.03.07.06.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Apr 2026 07:06:58 -0700 (PDT)
-From: Flaviu Nistor <flaviu.nistor@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: Flaviu Nistor <flaviu.nistor@gmail.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3] hwmon: (tmp102) add support for update interval
-Date: Fri,  3 Apr 2026 17:06:54 +0300
-Message-ID: <20260403140654.10368-1-flaviu.nistor@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20251104; t=1775226008; x=1775830808;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a5qbe4blEcePCtVOcOKZ0vHUGNI9pEoCsfXF5ttISwc=;
+        b=rwrHk0MV9ijCQdm+uHfY5v7Es99D5gbUZndz2y7YhbvX/BhfU2Gm78J0r4JT61UdKC
+         4bLXOZo9Jr0cZuWQXOuBUFB3BHJomDPhi6rl0Cyzd2D1ov6G5pgzPt51VLRed8vljyTR
+         LfeReKHRD0AGdwyCDO7WrPMD9NYxfDD+qVbQTOnifyJK9/Q1atTVzTTUWlsiBQlqaw0a
+         oZ4sivmqiJ5fO9mXTiKpo2rkG3FouJsmzQI5JYqKaNozdaXbTHjrHhwNnuvQNFS0HwDz
+         LhDZgst1KSBMpC0DBQ1NRZceykBxJye4VwlHZFA1oAijUygewMax6T8ud1XUhUin4vd2
+         oJRA==
+X-Forwarded-Encrypted: i=1; AJvYcCVpxV8RipOlyAqWsCgIHZPu1XCssJX5tx6J4aYUIeNP7h0xO3+L9GuoxQ82E9vvlOV5HTg4XRq35kMIoA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJ5H8u6qqJ/FsVrM9FFFs82PwfvSHLdwgSYwvFDJE3pxUNzq8f
+	4OFupU9iU4Q+sgK23uDmOltNmkHyJcZKMJefwEEZlMePLfOFy4m+kfDB
+X-Gm-Gg: AeBDiet7O0sz66EnMJYH5xb/1Jv29PNV5h/evfHPUMMNR+9SCQPkUHI0NdjkmwZESYS
+	DpIwTqUMZU0aqPpnbsd0uH2dCLNQe8bp0Ta4cQVOKEXPoE+plLdau0HUNzElX/y+PPtDKeBHf92
+	5SHyXaRlG9y9gAIXRdxWBLxdSPdiiQ9Y6PkIMJI9fQftyNIWWSqWhaqsSiTgfzozBomZvW9tKss
+	j1HYJY4jqDkCmJxOAUcpUgxjrtJcB4Ofng1fJG2oGD6hJQayeywNQDKvONth/HYFaIMQsYDyytK
+	B/NTx5L++/BRu9F90lXgwJnN55SG37Xti0Onn+f1JalNqNeJlYEy4eQz0LqN+t6rrZfB/DSHgpu
+	fAYBr9m2b8ULGOnDGqMfj6EkiP2+tAoAoYkADQOIgYjd6YzAKI3ae8sqDixbGnVseG88iEpylje
+	SYFbtXOMNft/dTw3BdbWCOzI6dqGoY1qMmsARB6i46nE60Lx1SorpQmNECLlbhywCVsD5ywiUl
+X-Received: by 2002:a05:7300:6d05:b0:2ba:a60a:15e6 with SMTP id 5a478bee46e88-2cbfb994665mr1743272eec.16.1775226008020;
+        Fri, 03 Apr 2026 07:20:08 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ca7cf1271asm6588907eec.26.2026.04.03.07.20.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Apr 2026 07:20:07 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <ebdbe040-d673-47b9-a6c9-f0fefc0b771b@roeck-us.net>
+Date: Fri, 3 Apr 2026 07:20:05 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND v1] thermal: core: fix blocking in unregistering
+ zone
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Jiajia Liu <liujiajia@kylinos.cn>
+Cc: Daniel Lezcano <daniel.lezcano@kernel.org>,
+ Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Armin Wolf <w_armin@gmx.de>, linux-hwmon@vger.kernel.org
+References: <20260402022742.17738-1-liujiajia@kylinos.cn>
+ <2432224.ElGaqSPkdT@rafael.j.wysocki>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <2432224.ElGaqSPkdT@rafael.j.wysocki>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Since the sensor supports different sampling intervals via
-bits CR0 and CR1 from the CONFIG register, add support in
-order for the conversion rate to be changed from user space.
-Default is 4 conv/sec.
+On 4/3/26 05:52, Rafael J. Wysocki wrote:
+.[ ... ]
+> It appears to work for me, but I'm not sure if having multiple hwmon class
+> devices with the same value in the name attribute is fine.
 
-Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
----
-Changes in v3:
-- Implement all changes suggested inline by Guenter Roeck.
-- Fixed identified issues from link provided by Guenter Roeck:
-https://sashiko.dev/#/patchset/20260401164701.18456-1-flaviu.nistor%40gmail.com
-- Link to v2: https://lore.kernel.org/all/20260401164701.18456-1-flaviu.nistor@gmail.com/
-Changes in v2:
-- Implement all changes suggested inline by Guenter Roeck.
-- Fixed identified issues from link provided by Guenter Roeck:
-https://sashiko.dev/#/patchset/20260331175418.16145-1-flaviu.nistor%40gmail.com
-- Link to v1: https://lore.kernel.org/all/20260331175418.16145-1-flaviu.nistor@gmail.com/
+Like this ?
 
- Documentation/hwmon/tmp102.rst |  19 ++++-
- drivers/hwmon/tmp102.c         | 128 +++++++++++++++++++++++++++------
- 2 files changed, 123 insertions(+), 24 deletions(-)
+$ cd /sys/class/hwmon
+$ grep . */name
+hwmon0/name:r8169_0_c00:00
+hwmon1/name:nvme
+hwmon2/name:nvme
+hwmon3/name:nct6687
+hwmon4/name:k10temp
+hwmon5/name:spd5118
+hwmon6/name:spd5118
+hwmon7/name:spd5118
+hwmon8/name:spd5118
+hwmon9/name:mt7921_phy0
 
-diff --git a/Documentation/hwmon/tmp102.rst b/Documentation/hwmon/tmp102.rst
-index 3c2cb5bab1e9..425a09a3c9b3 100644
---- a/Documentation/hwmon/tmp102.rst
-+++ b/Documentation/hwmon/tmp102.rst
-@@ -41,12 +41,25 @@ degree from -40 to +125 C. Resolution of the sensor is 0.0625 degree.  The
- operating temperature has a minimum of -55 C and a maximum of +150 C.
- 
- The TMP102 has a programmable update rate that can select between 8, 4, 1, and
--0.5 Hz. (Currently the driver only supports the default of 4 Hz).
-+0.25 Hz.
- 
- The TMP110 and TMP113 are software compatible with TMP102, but have different
- accuracy (maximum error) specifications. The TMP110 has an accuracy (maximum error)
- of 1.0 degree, TMP113 has an accuracy (maximum error) of 0.3 degree, while TMP102
- has an accuracy (maximum error) of 2.0 degree.
- 
--The driver provides the common sysfs-interface for temperatures (see
--Documentation/hwmon/sysfs-interface.rst under Temperatures).
-+sysfs-Interface
-+---------------
-+
-+The following list includes the sysfs attributes that the driver provides, their
-+permissions and a short description:
-+
-+=============================== ======= ===========================================
-+Name                            Perm    Description
-+=============================== ======= ===========================================
-+temp1_input:                    RO      Temperature input
-+temp1_label:                    RO      Descriptive name for the sensor
-+temp1_max:                      RW      Maximum temperature
-+temp1_max_hyst:                 RW      Maximum hysteresis temperature
-+update_interval                 RW      Update conversions interval in milliseconds
-+=============================== ======= ===========================================
-diff --git a/drivers/hwmon/tmp102.c b/drivers/hwmon/tmp102.c
-index 5b10c395a84d..3aa1a3fbeaa9 100644
---- a/drivers/hwmon/tmp102.c
-+++ b/drivers/hwmon/tmp102.c
-@@ -50,11 +50,16 @@
- 
- #define CONVERSION_TIME_MS		35	/* in milli-seconds */
- 
-+#define NUM_SAMPLE_TIMES		4
-+#define DEFAULT_SAMPLE_TIME_MS		250
-+static const unsigned int *sample_times = (const unsigned int []){ 125, 250, 1000, 4000 };
-+
- struct tmp102 {
- 	const char *label;
- 	struct regmap *regmap;
- 	u16 config_orig;
- 	unsigned long ready_time;
-+	u16 sample_time;
- };
- 
- /* convert left adjusted 13-bit TMP102 register value to milliCelsius */
-@@ -79,8 +84,20 @@ static int tmp102_read_string(struct device *dev, enum hwmon_sensor_types type,
- 	return 0;
- }
- 
--static int tmp102_read(struct device *dev, enum hwmon_sensor_types type,
--		       u32 attr, int channel, long *temp)
-+static int tmp102_read_chip(struct device *dev, u32 attr, long *val)
-+{
-+	struct tmp102 *tmp102 = dev_get_drvdata(dev);
-+
-+	switch (attr) {
-+	case hwmon_chip_update_interval:
-+		*val = tmp102->sample_time;
-+		return 0;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int tmp102_read_temp(struct device *dev, u32 attr, long *val)
- {
- 	struct tmp102 *tmp102 = dev_get_drvdata(dev);
- 	unsigned int regval;
-@@ -108,13 +125,54 @@ static int tmp102_read(struct device *dev, enum hwmon_sensor_types type,
- 	err = regmap_read(tmp102->regmap, reg, &regval);
- 	if (err < 0)
- 		return err;
--	*temp = tmp102_reg_to_mC(regval);
-+
-+	*val = tmp102_reg_to_mC(regval);
- 
- 	return 0;
- }
- 
--static int tmp102_write(struct device *dev, enum hwmon_sensor_types type,
--			u32 attr, int channel, long temp)
-+static int tmp102_read(struct device *dev, enum hwmon_sensor_types type,
-+		       u32 attr, int channel, long *val)
-+{
-+	switch (type) {
-+	case hwmon_chip:
-+		return tmp102_read_chip(dev, attr, val);
-+	case hwmon_temp:
-+		return tmp102_read_temp(dev, attr, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int tmp102_update_interval(struct device *dev, long val)
-+{
-+	struct tmp102 *tmp102 = dev_get_drvdata(dev);
-+	u8 index;
-+	s32 err;
-+
-+	index = find_closest(val, sample_times, NUM_SAMPLE_TIMES);
-+
-+	err = regmap_update_bits(tmp102->regmap, TMP102_CONF_REG,
-+				 (TMP102_CONF_CR1 | TMP102_CONF_CR0), (3 - index) << 6);
-+	if (err < 0)
-+		return err;
-+	tmp102->sample_time = sample_times[index];
-+
-+	return 0;
-+}
-+
-+static int tmp102_write_chip(struct device *dev, u32 attr, long val)
-+{
-+	switch (attr) {
-+	case hwmon_chip_update_interval:
-+		return tmp102_update_interval(dev, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+	return 0;
-+}
-+
-+static int tmp102_write_temp(struct device *dev, u32 attr, long val)
- {
- 	struct tmp102 *tmp102 = dev_get_drvdata(dev);
- 	int reg;
-@@ -130,8 +188,22 @@ static int tmp102_write(struct device *dev, enum hwmon_sensor_types type,
- 		return -EOPNOTSUPP;
- 	}
- 
--	temp = clamp_val(temp, -256000, 255000);
--	return regmap_write(tmp102->regmap, reg, tmp102_mC_to_reg(temp));
-+	val = clamp_val(val, -256000, 255000);
-+	return regmap_write(tmp102->regmap, reg, tmp102_mC_to_reg(val));
-+}
-+
-+static int tmp102_write(struct device *dev, enum hwmon_sensor_types type,
-+			u32 attr, int channel, long val)
-+{
-+	switch (type) {
-+	case hwmon_chip:
-+		return tmp102_write_chip(dev, attr, val);
-+	case hwmon_temp:
-+		return tmp102_write_temp(dev, attr, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+	return 0;
- }
- 
- static umode_t tmp102_is_visible(const void *data, enum hwmon_sensor_types type,
-@@ -139,27 +211,39 @@ static umode_t tmp102_is_visible(const void *data, enum hwmon_sensor_types type,
- {
- 	const struct tmp102 *tmp102 = data;
- 
--	if (type != hwmon_temp)
--		return 0;
--
--	switch (attr) {
--	case hwmon_temp_input:
--		return 0444;
--	case hwmon_temp_label:
--		if (tmp102->label)
-+	switch (type) {
-+	case hwmon_chip:
-+		switch (attr) {
-+		case hwmon_chip_update_interval:
-+			return 0644;
-+		default:
-+			break;
-+		}
-+		break;
-+	case hwmon_temp:
-+		switch (attr) {
-+		case hwmon_temp_input:
- 			return 0444;
--		return 0;
--	case hwmon_temp_max_hyst:
--	case hwmon_temp_max:
--		return 0644;
-+		case hwmon_temp_label:
-+			if (tmp102->label)
-+				return 0444;
-+			return 0;
-+		case hwmon_temp_max_hyst:
-+		case hwmon_temp_max:
-+			return 0644;
-+		default:
-+			break;
-+		}
-+		break;
- 	default:
--		return 0;
-+		break;
- 	}
-+	return 0;
- }
- 
- static const struct hwmon_channel_info * const tmp102_info[] = {
- 	HWMON_CHANNEL_INFO(chip,
--			   HWMON_C_REGISTER_TZ),
-+			   HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
- 	HWMON_CHANNEL_INFO(temp,
- 			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_MAX | HWMON_T_MAX_HYST),
- 	NULL
-@@ -237,6 +321,8 @@ static int tmp102_probe(struct i2c_client *client)
- 	if (IS_ERR(tmp102->regmap))
- 		return PTR_ERR(tmp102->regmap);
- 
-+	tmp102->sample_time = DEFAULT_SAMPLE_TIME_MS;
-+
- 	err = regmap_read(tmp102->regmap, TMP102_CONF_REG, &regval);
- 	if (err < 0) {
- 		dev_err(dev, "error reading config register\n");
--- 
-2.34.1
+Names such as "r8169_0_c00:00" and "mt7921_phy0" are actually overkill
+since the "sensors" command makes it
+
+r8169_0_c00:00-mdio-0
+Adapter: MDIO adapter
+temp1:        +36.0°C  (high = +120.0°C)
+
+mt7921_phy0-pci-0d00
+Adapter: PCI adapter
+temp1:        +30.0°C
+
+essentially duplicating the device index.
+
+Thanks,
+Guenter
 
