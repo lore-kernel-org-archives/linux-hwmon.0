@@ -1,106 +1,124 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FBA3350298
-	for <linux-hwmon@vger.kernel.org>; Sat,  4 Apr 2026 07:13:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775286789; cv=pass; b=DlXR1Dh/6Q41iUsfhUT0fsaJIi5itrG3OlS3iSMy4jZY8TZtvgU3G3hwS5jayPxhd7ugWR07G7BIJ9SZCZWCxVenRqkD6EYb9VChrxwHzOxsWpsCMHiRfxTs5LjgN1BFZlyaPzbHgD2hYc2j7fx37BJdYviMjqUhckC1OvuZlZI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775286789; c=relaxed/simple;
-	bh=tr/A5qDD+FzW1NnPRm/+rMKfhCDuEnKfAXwXnOifZpo=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7688521D590
+	for <linux-hwmon@vger.kernel.org>; Sat,  4 Apr 2026 12:58:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775307494; cv=none; b=LrjPD+l0a5P2po7I3mOYwouCLdFXPyrdEMzdxeyLFYnwmuduRsU/sTJSj7Tu7nVzU7RBbuqfnFD5K+HK1EPC9IwEUHhPCRm+IYk/LGKBe+XQy9LxMCujIN5iSRPiunU6MT1K7YFhNo62ecnhM9TJbtsgwM5cBuBc4GfhP7GrpkE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775307494; c=relaxed/simple;
+	bh=qb1B9RSIsZRmgOpwl7sR/AL2txSg76hVfb8PVrg+874=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jPJeP/jMl0IO4mJCvGi3W8bIHjyJhGhD/1MHHMWx52atGHpMqrpvo/bYsuvTYR9myO8azeUckml7ynE8MrmYT/1u5OvPCWjPzTf0KdvDskZdzJzKAwz1cCtu8guF4+sfUkQ+qP3Yb4EYjuXFHJKWIA3vlMISuFSXrHfM7Or8YI0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RRYEruK8; arc=pass smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=AzuDj35Y7wEYb+UtNRo0ARYrew7anvyiHvpE8XmmTwtDnaswaMYdrdMad/BknsFVoimBndEGFj33HYZP/EcaSHYD3zcDVJbQ0f6NqcAIRaEhWNSSx5LOVGqnl59wDAJwypltPgR/wF/xsi8Ctmu5dcErYAV2tih1IDLsi0eESok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OP+WulpT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RRYEruK8"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c76bde70ec9so940358a12.2
-        for <linux-hwmon@vger.kernel.org>; Sat, 04 Apr 2026 00:13:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775286787; cv=none;
-        d=google.com; s=arc-20240605;
-        b=grQ392NQmC1DKylzvG8GKmN0HIW65J9j3blzYAg/vyAGM8uOxCdrNCekif6hGLIQNd
-         1CJfz4D7KyQuqu5d6z7wsEbfQrQK7daAkPHHqXUxt+nUry/fnRJJkSmqkEFw3n3niuXj
-         AiX64KyYH7j2d1Ud8iywNJdY5fzm3XwmCW4+X09gGks6rtKsKrrYPNcccTC++ak1df/u
-         hADlk+fEfLdNG6qGMRjf7pvs5fct2gOvuVZhVrfv5IGC2HYXlKUltxFj9MnhGiEgzRi+
-         HDSQdTXqiRLwMGGW+0eg+j2OP+cvKRdB/O+9kVv+Wgnjk4pQrPvmOVvrQjIEjbm8E5sW
-         hx5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=tr/A5qDD+FzW1NnPRm/+rMKfhCDuEnKfAXwXnOifZpo=;
-        fh=b/5fBuaRhOVJNhqdtenPus5W53b4MUg/vWhp/f3PwA0=;
-        b=i0oBiZDTIvWJhv1unq8J5y4bEB760rmPV0FUztzATVVvellNKUxJa+oFixpnYL5Qah
-         DRxa7lcBli7l5CEoJKB+bDxMUmwqYoHf5wZW54oRywitGdqsK58hRyzlxCwwARsnPdS5
-         evYDWMIBACRcy419sMdA+pmwNTyx5wubu//W/PKPATES9uBRZ6wAlr64fQNj38+O/gL0
-         MaMn0O8OGrmSnfB9gTv+OJaklDVkacXoKBxHUAl0d0jQZOM4Xc2BVig4nRnxA/28LHE4
-         m7KBM8vHi3ca04+iwRNv4KJ4l+cC9zjT7J+O+rh8ewU1357kV85uqSPsuAuyWI2b4QcW
-         VfCQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775286787; x=1775891587; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tr/A5qDD+FzW1NnPRm/+rMKfhCDuEnKfAXwXnOifZpo=;
-        b=RRYEruK80Mn9UPdtb6fLobaLtc7P6xudOldijCLt9ypGQ/toF01tHKnM8YPrLvYjbr
-         LJe8/Lca05vEfcOon+pGEaEM/RxBnOBVc9fkIksJExuJ0GuAJQze/68FKvhiCTosujB9
-         Eo9rKZo5puvE35pVC9ij32mpqPb/lZSaOWCHTVs+iNzPfa3o6AiOvlBDcn+LvTuZspKq
-         UlyI0cNfwY0h21OktprQqQVHBaoDquBQcM0UjFA3Wk97mABRhS/fCVT0iAt5amElgkD8
-         yqEtOZUrBEkNxm7NA1L73QXDnACCa6GTWt0d/3lsE0Y8FeCkfExE3Wwe6mka8k+7BLju
-         se4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775286787; x=1775891587;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tr/A5qDD+FzW1NnPRm/+rMKfhCDuEnKfAXwXnOifZpo=;
-        b=UlqMAyBJ1+Rl35l9cEjmZnGWJyrb8eRmAmQ8Ab9fpIk4Q7FJpI73DZOCLCzfCFwu9q
-         cTTQfZrTHsp08Ptti7+ZsUx8vzPt3WUF/MKkVLx2lmiQ9OlwX6qBFU5vQi3O6DxN3IdV
-         Jta0JbIHg5bghdBH9CxaZehefMKE8gY8H7iE6fhDdXz4/fA/alxyQCwgmScRCZCrqBK7
-         avNi62Gqp0rxiPZSMEMaWA0YtJfB8PWnYJJD1jihHEIZRLLx1JGHWtqb2eW9drO2m8AO
-         9J309u9dVYFHBl+R08XXInnmGdOdpPZlmiQmVVDP3/l59yMM+Sn5C2bJRHZyMz663alx
-         PsHg==
-X-Forwarded-Encrypted: i=1; AJvYcCW2ABfezOxsj8XT/BI3fPAFiu7t2Gkcb/3iQb9vdCFgXiLVwCjEUtM0SBGUlybLzZkAB2BFoLdIgF4zqw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhsY2U3uOTTfjM/ondwG+Mn7hWarSOYIYHr1Sdmauz5CqwGIy1
-	mS2jmI97gGQgfrmrH7ADPzZGte4W6jygeJJjwvpYbjywGuxWYZdR7uwsCyB4JJ8KOvQ56rbt/oA
-	zlmva+E2oDhy2eocLhC55GbbpgsJTALY=
-X-Gm-Gg: AeBDieuTX+oyH4XRrzkrbOUT4BkSe97+DfhjNGE2LqHbwAqj5N2rsW7CPEfOsE6Y/lf
-	VubPGGCtXByMsPLP58mZoBjI24oc664vigTkpBMC20PNh7pWjjBFD5fJXtc4xKvFFHAfzSKDPdB
-	wSYMNYEuB7wsij9eot+xt2gQ8uAW0L9Ze+YGu18qhx8qbj+yiWg7ewtUTOjsIrEKkHLxrD3Jhc5
-	M7Ak39xEZATbQoNwd+j/Vmope/krm2HLJQzRtp9N35Ah7D1Rl17TDoN1zWmGbgvwYAT50kb/cun
-	x6YD+/aR7f60y/+zHNuE1s9KTq3IIUSrHhBgLpSK
-X-Received: by 2002:a17:903:1b2e:b0:2b0:70c8:ccea with SMTP id
- d9443c01a7336-2b2816a64b9mr56570735ad.13.1775286787272; Sat, 04 Apr 2026
- 00:13:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OP+WulpT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A682C2BCB0
+	for <linux-hwmon@vger.kernel.org>; Sat,  4 Apr 2026 12:58:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775307494;
+	bh=qb1B9RSIsZRmgOpwl7sR/AL2txSg76hVfb8PVrg+874=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=OP+WulpT3U8xK2FkGxyelHxEs89m+NqaemctAZHlHQe1bUmdwx+YstEDKWxw6z6uN
+	 J7GDbHWJm1Ivbz+DjRTIrrshS5aUPUAakemDhIpBWf3y8KFlLpjYElVBzRiSPNWTPr
+	 XPZ/lydYLWQd12mrcapLbbUKt7aPC23iDrBMfUrpSWMb+dQE8DN0OzwoXkk2G3ma7F
+	 CQFUpURVJW9PE1nXulKm1ifZzvulh1deS/EXO9WjSF8Y5G3JPaHTpPN0nAM32z0xgK
+	 WyzzrIGBkAUgtd0eBTJlp972IbT6h32CDoIJaMBtJ9WxtjuaHO0050OLqkO48rdZ0a
+	 FMc+Cx07Z0D/A==
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-6823fc5c3faso872795eaf.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 04 Apr 2026 05:58:14 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXZ+Xvr22uOzCq4lKsQIGG8qO+UuUb3toQZAvboKb42HSgjHXxX7oRej3BJw7C4MAVxcctRxtvR9sEmgg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQ6iTWk7e7dwCXKmmlo9sdVd03RBRZXrqNncLZeQ2YK+RJWG0+
+	N5MSSOFBL4go1JwRSsR1BokHRG46KgQMP0/M+AM21LXqC0EKzrUoR1gcKibPYL6o1ReNdDFhHU8
+	Utels6U2h5FjVXR8o9v1W1ErkMg/lV2E=
+X-Received: by 2002:a05:6820:4c0b:b0:67a:1eaf:a912 with SMTP id
+ 006d021491bc7-6821d747f37mr4840489eaf.2.1775307493175; Sat, 04 Apr 2026
+ 05:58:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260403210343.1380437-1-eugene.shalygin@gmail.com> <05e9870a-5d8c-410d-99ed-6ef9470b2ff7@roeck-us.net>
-In-Reply-To: <05e9870a-5d8c-410d-99ed-6ef9470b2ff7@roeck-us.net>
-From: Eugene Shalygin <eugene.shalygin@gmail.com>
-Date: Sat, 4 Apr 2026 09:12:55 +0200
-X-Gm-Features: AQROBzCHZ35tCtoDo8m50DlgqUT0ZTlGMZCktkN4oemYuJIdiiyVf3JJGbg2n5o
-Message-ID: <CAB95QATxrJa0koMq=BCjnXvLHJ5boRBUA+76FwqWJhmhEi-Tqg@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add ROG STRIX B650E-E GAMING WIFI
+References: <20260402022742.17738-1-liujiajia@kylinos.cn> <2432224.ElGaqSPkdT@rafael.j.wysocki>
+ <ebdbe040-d673-47b9-a6c9-f0fefc0b771b@roeck-us.net>
+In-Reply-To: <ebdbe040-d673-47b9-a6c9-f0fefc0b771b@roeck-us.net>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Sat, 4 Apr 2026 14:58:02 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jZPXC5g3KY+trwmV=nXJu74y=0LaQTHaQ_MnqcfPVAGQ@mail.gmail.com>
+X-Gm-Features: AQROBzBRM8xfaBHE3NlZR84-vCS8mGy2S-fIF5qBFgp5h_jRvwXg1DpsNdiWjsc
+Message-ID: <CAJZ5v0jZPXC5g3KY+trwmV=nXJu74y=0LaQTHaQ_MnqcfPVAGQ@mail.gmail.com>
+Subject: Re: [PATCH RESEND v1] thermal: core: fix blocking in unregistering zone
 To: Guenter Roeck <linux@roeck-us.net>
-Cc: Veronika Kossmann <nanodesuu@gmail.com>, Veronika Kossmann <desu.git@rxtx.cx>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Jiajia Liu <liujiajia@kylinos.cn>, 
+	Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Armin Wolf <w_armin@gmx.de>, linux-hwmon@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, 4 Apr 2026 at 06:38, Guenter Roeck <linux@roeck-us.net> wrote:
-> Sashiko has a problem with this patch:
+On Fri, Apr 3, 2026 at 4:20=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> w=
+rote:
+>
+> On 4/3/26 05:52, Rafael J. Wysocki wrote:
+> .[ ... ]
+> > It appears to work for me, but I'm not sure if having multiple hwmon cl=
+ass
+> > devices with the same value in the name attribute is fine.
+>
+> Like this ?
+>
+> $ cd /sys/class/hwmon
+> $ grep . */name
+> hwmon0/name:r8169_0_c00:00
+> hwmon1/name:nvme
+> hwmon2/name:nvme
+> hwmon3/name:nct6687
+> hwmon4/name:k10temp
+> hwmon5/name:spd5118
+> hwmon6/name:spd5118
+> hwmon7/name:spd5118
+> hwmon8/name:spd5118
+> hwmon9/name:mt7921_phy0
 
-I must admit now, that these _SET macros were a bad idea, it turned
-out to be too easy to misread. I'm going to remove them.
+Yes.
 
-Veronika, could you, please, show us the output from sensors with this
-version of the code?
+> Names such as "r8169_0_c00:00" and "mt7921_phy0" are actually overkill
+> since the "sensors" command makes it
+>
+> r8169_0_c00:00-mdio-0
+> Adapter: MDIO adapter
+> temp1:        +36.0=C2=B0C  (high =3D +120.0=C2=B0C)
+>
+> mt7921_phy0-pci-0d00
+> Adapter: PCI adapter
+> temp1:        +30.0=C2=B0C
+>
+> essentially duplicating the device index.
 
-Cheers,
-Eugene
+Well, with the patch posted by me, the output of sensors from a test
+system looks like this:
+
+acpitz-acpi-0
+Adapter: ACPI interface
+temp1:        +16.8=C2=B0C
+
+pch_cannonlake-virtual-0
+Adapter: Virtual device
+temp1:        +33.0=C2=B0C
+
+acpitz-acpi-0
+Adapter: ACPI interface
+temp1:        +27.8=C2=B0C
+
+(some further data excluded), which is kind of confusing (note the
+duplicate acpitz-acpi-0 entries with different values of temp1).
+
+That could be disambiguated by concatenating the thermal zone ID
+(possibly after a '_') to the name.  Or the "temp*" things for thermal
+zones of the same type could carry different numbers.
+
+A less attractive alternative would be to register a special virtual
+device serving as a parent for all hwmon interfaces registered
+automatically for thermal zones.
