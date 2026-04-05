@@ -1,147 +1,73 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FEDD40DFB7
-	for <linux-hwmon@vger.kernel.org>; Sun,  5 Apr 2026 07:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775375824; cv=pass; b=Oa3oayzNfaz06yhpi7nS6WJCdfzqxVzweV7ktetHKZIvacxdctJf1X0NNDs8Ak1kF5Wnp7xVqkuqTWJop7bLxwOQ+lA10K+tiCJmxpwpvVXY2p0rRaLgWP7faCpf8DT7r5ZXmxoZb1AWwvTANKSV4th4kiOjcDxTxKsZCEormrQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775375824; c=relaxed/simple;
-	bh=v2AemCJXh2g6jKN5k/h4VeRyD5TrLOXfx2m6bakC2HE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SCFFZfJY4T5MFjuXmndWb8SCQk9uYlUBLiMdmWTOBILzvGqypQfgycEVJoHicbsJi9FPf3/r1Q0kN3WoKGros8fDOLgIK9J0L9g9SvFwLbHWRwbCmT0TDOEUqi5OGWRPRKAkDliV6G6pH21fJQt4O/6QITkW9JM72DlG5OlaXhg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XTa3uc9v; arc=pass smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XTa3uc9v"
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-59e4989dacdso3458737e87.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 05 Apr 2026 00:57:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775375821; cv=none;
-        d=google.com; s=arc-20240605;
-        b=YQMmlQeXmjrByKpX0B9/uE42lQAEoZSd6vCphIUhRO0P0eNHhRhoDDG7wF9iMpNN2a
-         giAOHwNA1IRiMtrsHLGTRbBu/2+KAzw72Euq6RhCQKAjTnJE/UIiSn1v47vg5nz+eP5N
-         f70+wOwwmsEv86nb8yjcgvhLl4vkwj5Q5dkFyRZZ68cTNG4SsyCu0z7yH4lJkAdhXfcr
-         M8HHe2/zi5QrvhCRLlCwxP+y6PNEQFYLE5p6bBlujOIvBBPAC0yrVvN2EdGKWoXuBaYi
-         y9LnQPTExU5skUdKkFWZ9rWAApdnp4di5mTHg8UMV/GcjYVp+yD8Ly+eF3TZFb0Vcawd
-         dSEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=ZYdxMqlKaHCpmRjoXMMB634HpWZheaFAq9MPMung4LQ=;
-        fh=CcPw2nJFL4WEZc5RE7LyJAFiIr/yR3/Ii4x60eS8R3s=;
-        b=OsRhcy7xqgO3sjkAoXJlgxjwAIL//IpQmPjiX0F7MKC5nIgO/4diR6rQg/v5EQKSSu
-         A91QeN7OPNYnKkhHCP1SqIs26t5uF7bO+D3CjR2YhghynAd53gyB2FyP1Io1tDNb9FqX
-         ie92Y8yQb+R5ASImIoQhbUVN89U0ZCYHOhV3JTukPRuLdfvH/+4F3T2+uqGAXGJT3upX
-         r+Y+xFo8ZAyjUCshuUDw01wb8M7n5lMYHnNeghYMFTJnTAnb9YLaXsJbV7SjjiCJGYSN
-         sPEIZ6J6oGlB4AYc1tXfmP5Ff1nXXJMX/ppmre9m5Vt0yUDXdFoLXptqP04000FGyKpi
-         U7eg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775375821; x=1775980621; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZYdxMqlKaHCpmRjoXMMB634HpWZheaFAq9MPMung4LQ=;
-        b=XTa3uc9vtBhyRRHMP0YhtFVT4HbngcOU5w8jCZrTZnZK95Jz14kXcqfzn61nZw2mqd
-         1U/MnV9q89R/mwM7k7q117bTfsxE7mleojijhFZn1y5tTCa7B5ljMGT1wPScWWh0bQPS
-         w7rfy1Z2C0nSY4U8AiA8e/vyr+j2pZhII98rlHkLbufGdg0GjKuDYs4iTxg74RuPh58U
-         pSXerFs68yUPiWtIE0SF8lJpBM+PymSQprz1+L2GpBkiNGZhWtyekbvdnVZp+MSynD4q
-         g/HTEtSp9XqYyWVBMwX5sRQkubrwo04VM2KYcIcqcRdFtf0HfV0tPBwZp4hXOCiUxDJh
-         6TjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775375821; x=1775980621;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZYdxMqlKaHCpmRjoXMMB634HpWZheaFAq9MPMung4LQ=;
-        b=mShqMZxGgdOamue5IubzLFHrGRCplybj0eAUIFtsmeVgx31GpYdIXa/A+Cjy2uq2CH
-         k4Pb7yuuy0esku9HwJ/ABQLkLOoVzwlfpI6jc9T59sWRKIzelZH3J9uuMNd7/l29DDvw
-         Zso06cespRNngkl/sgXlpdKQFALn0X9GcQ+fLDvFws7RmjSNk/xa6l36/tS4p5Z666nl
-         cdkjvCN3juXzTQ0bkOD3VBf/JTT2nELN76qWecse8Ol/14behL6vcyu75JO42dChyLDH
-         xw2V08i/6YI5uO4qhlp6A1+5MMETRQq2ae9pAPZtLYBgflMRa8IzMJ4CLdPtJbTFHhV3
-         UR0w==
-X-Forwarded-Encrypted: i=1; AJvYcCVwWTsg4SZSqqc1wrViRXKINZ4khpPrKiAC9L+a7CQTDJMY88htvCa/0N/nB82AO8KUWkPY+nZVjEYTQA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKSsNsyHlX6zQA3bZWyk5GyL3rEKCqmh31N1nZEXiouRlUn+eF
-	oYjaEIt78XZtqWnP5COmAllwKVNbmDzJNhgGzg8eZUBKeg3Thy2JkbCT1M9KJcbpWtfvLDsEnNp
-	O77h7E14K8MbmG4MGzD3Y7OGmc13eFQ5fkVMou/zfCBTz
-X-Gm-Gg: AeBDiesNUP3GtHd2vn0KJk3MLMHVIIS8JzgBkCOa9J8Le4kv5dHMwm/jCbWIQm07JVp
-	/LvM4D24n/aQBK+/qTEvAlAMHzxfMYhY+DHXMuE8c+w2FOCQ1by80RWPog/A4wsY3AhVk+5AAKf
-	21zQuQv92i8ZRnGQfkTMJV2yWInG0l2TlSN5mHHie+mGjJSGBXXD1cntfZB28YPZ+7+9G24KHAT
-	3t/u7Rx1M15HLIgF/9Hh92SLSdaFAxSCzgvp66RgOD+Xm4ZUegZx3FilOf3luSBj1zn4wVJNIzS
-	NtkXqaH6pt9rbdAy
-X-Received: by 2002:a05:6512:3f02:b0:5a2:ad98:3685 with SMTP id
- 2adb3069b0e04-5a337588a95mr2616731e87.35.1775375821181; Sun, 05 Apr 2026
- 00:57:01 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C5101D798E;
+	Sun,  5 Apr 2026 08:40:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775378437; cv=none; b=YIvUHpryyLvXFk+hsz4ANmdfCimUcR67B6BrCCvxW38KOa6fWOgvt437fqhWSR21OtaHa1YAucUM0Re36+VjQi0RbMaMvACVqUmbJdem8Ffl/3ZfOy6G8FDPbzlDbiY5wsiOb/l4STiBodQUKsiZ4Q9Us3Dg7XTYmDfPWapTswo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775378437; c=relaxed/simple;
+	bh=abnGoYT4AjXq7czChA7IqaYysxusAYpXp6p3q5ZqE5A=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=l1LU9tTA+J2A2mBPEn3AtaFeRBXQBS6YhdsZKSfA7ouY4s84AK+3XplstctXKXqcd40g/3B3LCzKbuKKa9hm87DfYsKDUjDeIZbG33L+RqsZGcgZ1dcMpOYoUfCuuQZ+uYki191Py6CX0CjPajZuf4ap4kcJdFhXl2QRW/yjeYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 15509b2e30cb11f1aa26b74ffac11d73-20260405
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:87b483bb-bab6-40b9-b95f-58cb45181631,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:e7bac3a,CLOUDID:9d5e493e508edb9da9833d82b4cfaad6,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102|850|898,TC:nil,Content:0|15|50,EDM:-
+	3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,A
+	V:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 15509b2e30cb11f1aa26b74ffac11d73-20260405
+X-User: xiaopei01@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <xiaopei01@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1337628977; Sun, 05 Apr 2026 16:40:21 +0800
+From: Pei Xiao <xiaopei01@kylinos.cn>
+To: cryolitia@uniontech.com,
+	linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Pei Xiao <xiaopei01@kylinos.cn>
+Subject: [PATCH 0/3] cleanups in hwmon gpd-fan
+Date: Sun,  5 Apr 2026 16:40:15 +0800
+Message-Id: <cover.1775378028.git.xiaopei01@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260404164339.119023-1-sergiomelas@gmail.com> <af1725c3-fb25-493a-819b-b25c375c058b@roeck-us.net>
-In-Reply-To: <af1725c3-fb25-493a-819b-b25c375c058b@roeck-us.net>
-From: Sergio Melas <sergiomelas@gmail.com>
-Date: Sun, 5 Apr 2026 09:56:49 +0200
-X-Gm-Features: AQROBzAdqf7gO_cCq5KnSJWNhuFTLCACdrjHVfjjPOC18dM_YkPDl97UlsWlmvg
-Message-ID: <CAP8e=sLeqBMbZSN33DB4F6EP=G+uZLkJyWG43B=B_ws=cbg7hg@mail.gmail.com>
-Subject: Re: [PATCH v14] Subject: [PATCH v14] hwmon: (yogafan) Extend support
- to more Lenovo consumer models
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Guenter,
+hi Maintainer,
 
-Please accept my apologies for the confusion regarding the version
-numbering and the
-inappropriate comments within the code. I am still learning the
-nuances of the upstream
-process and I appreciate your patience and guidance a lot.
+Some cleanups in gpd-fan driver.
+But I have no machine to test this patches, only have compile test.
+Please have a look and test those! 
 
-To clarify the situation:
+Thanks!
 
-1- Do not drop the original series: The initial yogafan driver is
-stable and should
-remain accepted. This new patch is intended as a follow-up expansion to increase
-hardware coverage and refactor the internal physics for the next merge window.
+Pei Xiao (3):
+  hwmon: (gpd-fan): remove global variable gpd_driver_priv
+  hwmon: (gpd-fan): upgrade log level from warn to err for platform
+    device creation failure
+  hwmon: (gpd-fan): rename enum constants to uppercase as per kernel
+    coding style
 
-2- Version numbering: I mistakenly increased the sequence number from
-the original series
-due to my inexperience with the upstream submission process. I realize
-now that my dexterity
-with these procedures is still developing; since the first part of the
-driver is already accepted,
-I understand this expansion should have been treated as a fresh,
-separate patch (v1) rather
-than a continuation of the previous version count.
+ drivers/hwmon/gpd-fan.c | 273 +++++++++++++++++++++-------------------
+ 1 file changed, 147 insertions(+), 126 deletions(-)
 
-3- The code comment: I am deeply sorry for the unprofessional comment
-in the source code.
-It was a misguided internal note used to track my progress on your
-previous feedback regarding
-'ghost fans' and attribute collisions, i forgot to remove it and this
-is unacceptable. I now realize that
-referencing a maintainer in this way is completely inappropriate for
-the kernel source.
-I am truly embarrassed by this oversight and will ensure such personal
-notes never make it into
-a submission again. I will remove it immediately.
+-- 
+2.25.1
 
-My Plan:
-I would like to keep the original driver in the hwmon-next repository.
-I will stop the current V14 sequence.
-After the merge window, I will resubmit this expansion as a fresh v1
-'Part 2' patch, properly formatted
-and with all technical/style corrections addressed.
-
-Does this align with the  procedure you want , or would you prefer a
-different approach?
-
-Thank you for the guidance.
-
-Best regards,
-
-Sergio Melas
