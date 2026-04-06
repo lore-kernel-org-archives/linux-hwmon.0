@@ -1,102 +1,131 @@
-Received: from aws04.crawford.emu.id.au (aws04.crawford.emu.id.au [3.104.176.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1246D7262B;
-	Mon,  6 Apr 2026 06:31:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.104.176.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA82288517
+	for <linux-hwmon@vger.kernel.org>; Mon,  6 Apr 2026 10:17:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775457090; cv=none; b=WhG2zcM4P+KTJhpJgzFBcfsG50GdmVgTuoNawOV5dNlrugLTHQW0XucQK3uef5NnQuAEZlV2cjf5ZAWswGkUfq4X38jHlwYRzQzuL895VlYvByWiBN7SE+m7d5ksac2okmghM/eFngfDTxwVsna3nTCgum9Bm9jipnDzPyQpOx8=
+	t=1775470657; cv=none; b=TvLYNsQpsgokCmrzHGGc06mRnGCFUVdt7H+CPThaAAWfvwHiw5OD23B5/s9HqA0AfYseCPuxCSlJFirb5q1c/FVoW/0Kw5roy4lNOQsu6sShf2DXA5ZFx3Riu/RCPgdKCl7B0SNtbQGQiCCwNdxkjLbLgdftKjVWCsBX0GscdLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775457090; c=relaxed/simple;
-	bh=B1IJln3ANcAhO7YMPlKwGStu3H4o3qAUN1gSGCin3Xw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QHT8eo0i0JYpSr/a6X7pgaXT+yDHHBkGJJ1ETZsb1xNS+KOtryRCq28qwu10/KwDJ2njBzMkIwBSyO+chvM4XAZlby41cCYx9MIDZgrdLfnUxNUfNX7hBExx6wQ8ibS3L5RteKObxVvOGBvbe9x6EfSomazRCvATOsKNnGYbN5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crawford.emu.id.au; spf=pass smtp.mailfrom=crawford.emu.id.au; dkim=pass (2048-bit key) header.d=crawford.emu.id.au header.i=@crawford.emu.id.au header.b=gegsGCUO; arc=none smtp.client-ip=3.104.176.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crawford.emu.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crawford.emu.id.au
+	s=arc-20240116; t=1775470657; c=relaxed/simple;
+	bh=63elwyNmPr3tbn5WCA3hlZKwTsIPJ2+6R496IOmWyC4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HekJSNfnrhSCvE7Xl8rJhSHpLUTN97qsuf4sHvpf+zy6aZApW1KoOAa2PBYG/BpdNbQnP2VQKHBKphDfmaJV02abqqGh5gH9rd4+m+VafODzorq5I2G0ebjRUnP4aFR3szKv0gvbCAM0lgTQ+hkLkoB881Omy6P2dWWGKxZ7bqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NABoEtZR; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crawford.emu.id.au header.i=@crawford.emu.id.au header.b="gegsGCUO"
-Authentication-Results: aws04.crawford.emu.id.au; arc=none smtp.remote-ip="2401:d002:8602:7600:226d:bee3:e34:781f"
-Received: by aws04.crawford.emu.id.au (Postfix) id BFB925AA6C6;
-	Mon, 06 Apr 2026 16:24:11 +1000 (AEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 aws04.crawford.emu.id.au BFB925AA6C6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
-	s=a1; t=1775456652; bh=Yx4r6syyAANXZY8ErzaZ5yAYRqoUc9iIqLifZb3kOTQ=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=gegsGCUOLWQ55ueN/x6eEed7yTcrMlTg6Auix2hl97mMfwEun5pXa5dUEMuxES5Ne
-	 q8TYLvEP0mTxGchT/SWmYXXQECzF8ZdrW7/dfeFuwSa8cyCttrhCdai76oAsy9QaEK
-	 0Crm66lnVP583HMIU5FK9/KSyH6zDSSPj+StIsFmLPwmKfPWesc4Do9HFt9t+/co1g
-	 +aL4tA5SEursgUGq36tcDM4fCBTDHRe9ezfSmd4qMGXlCQdfDGi5KwSBG5kfpilGwA
-	 xwExXpe/kvFSfiU/YNT+8ILys9/uAd7F6b3DTz3GBS3S36BAtnOiTWBUxB2nCjQevO
-	 WK9sqOclrreQQ==
-Message-ID: <697248f496c0871fed950f3a9e16a9cec1cf0148.camel@crawford.emu.id.au>
-Subject: Re: [PATCH v3] hwmon: (it87) Add support for IT8689E
-From: Frank Crawford <frank@crawford.emu.id.au>
-To: Markus Hoffmann <markus@thehoffs.at>, linux-hwmon@vger.kernel.org
-Cc: jdelvare@suse.com, linux@roeck-us.net, linux-kernel@vger.kernel.org
-Date: Mon, 06 Apr 2026 16:24:08 +1000
-In-Reply-To: <20260322103301.18112-1-markus@thehoffs.at>
-References: <20260320144323.4870-1-markus@thehoffs.at>
-	 <20260322103301.18112-1-markus@thehoffs.at>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NABoEtZR"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-35d95017a68so2008726a91.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 06 Apr 2026 03:17:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775470655; x=1776075455; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AoSsEM5O4ac9h2V33FBAbsK6vxbKDf/9prfLiXzD3QI=;
+        b=NABoEtZRw/fl0esP2t2l+j1PxdFoKLiEKJjPONaVxAvUp4O5KfkHz7nVDk3VA6mr8K
+         G9NaFz6hrd/lgLxG5T2SpytOdo6O+hbyPfEGIan93wEPubjU6XGhSH5/1OFLGxu1zBfU
+         eIK+Rcq8ORbRS5F8Liq4UYTxOyCdHFiD/CyvqSBhcNBtoVeIBD9rY0J9t4kkayI85Dxn
+         GBNXjQBLUgxDcaB2pUXE6lcsDo8mwoIdA/HSId8KPtN7moB2W9YD3fgFP+RG/TL/3y0I
+         /W3HLKvUenaQFMKZg7B+rxccwnyJt4AKAvIGrdcgMbCTqVKJBrVn/vpGPX8LNyJeVXaT
+         3UmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775470655; x=1776075455;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AoSsEM5O4ac9h2V33FBAbsK6vxbKDf/9prfLiXzD3QI=;
+        b=KcK9rIoesR51haSdukPSsbg0jyoKLDTg+4T2zVxpbLGpWWnGfseMUA7j83D51Ou7dY
+         G5nholUwsQVAx0wbAbMSpEDF24xZnQXkaOCo17iI9x+TG9UyrQ3dSr2amQJLIibMuIJy
+         WU7pUHvSuCDbIUrotGk75sHfXKvsxh1kmKb/UuzW6fv/mwXas8ERjnUODxEjB92ijsFL
+         HGLjIx4R4KcfchIUzLV7i8D3FhiieQX0KibI44etRk/Q4iGU0sy53hUwW9nt818R/K0+
+         ITpD4b2EhQiCW8XLmXafkZM8/RVHHnmVEBk+EBC0olmnMHF60ot0NzDkBfQYadtFtulU
+         imJg==
+X-Gm-Message-State: AOJu0Yy4OfF2hF4NCObZYvkkRIUdER6savNM9o+pr/zVwA6MzXnQoVRX
+	2rb3SbdQTNnQ5Wr/00k99TWjqzEnfPCBf9GNQyFyeBTkO1DkfDmP3vKd
+X-Gm-Gg: AeBDiev5FirIRSteSR34+o2CaG0AlGA0S4za7XpoxeqfZJlfXZ4K+Vs1y9ON1ujp5T2
+	sRdLo9jWJJMzzWxH1nwoDNiuQisDzpLL1A/nWFZrai/UxL9Aj8VJZt8FualMXcjl08uboCIBz+8
+	Lf7u+RPaWMFtyuXo9TgKw38w9UHRvrQrKF0lYsyBaqz48DP29RCV9VRhrPM+jmvOTtM4bbHTlES
+	ItbPq6ddWl09GPw5mo7kkEyErYrrhS92JwYtAxdaCMWXlcHeqjf+7tkF6tOl2ePkq4HgJGx08sS
+	bjwuQqknnOSRk0dzNAgSmVgNFApOUKzXn+6mWPNySHH5j9g9YZEal+Q4DFTi7o0r8gkYL/bs08P
+	zK2ztq7SSCkzUa97f/sQZewPWn65FAnpWfIZoR3g6o9YFYiM2x/31TZxPnE6dGvspyj4xAMvi3Z
+	ATcnOQgTfNqfs+3fApTSko7L+NgUM9hC2pIqHKf+kR1IaA
+X-Received: by 2002:a17:90b:562d:b0:35b:c900:79a6 with SMTP id 98e67ed59e1d1-35de683ad7bmr11330437a91.4.1775470654643;
+        Mon, 06 Apr 2026 03:17:34 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:c94a:aad7:a860:f869:a68d:92e])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dbe624756sm23332527a91.5.2026.04.06.03.17.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Apr 2026 03:17:34 -0700 (PDT)
+From: ASHISH YADAV <ashishyadav78@gmail.com>
+X-Google-Original-From: ASHISH YADAV <Ashish.Yadav@infineon.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ashish Yadav <ashish.yadav@infineon.com>
+Subject: [PATCH v3 0/2] Add support for Infineon Digital eFuse XDP720
+Date: Mon,  6 Apr 2026 15:46:45 +0530
+Message-Id: <20260406101647.109667-1-Ashish.Yadav@infineon.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Virus-Scanned: clamav-milter 1.4.4 at aws04.crawford.emu.id.au
-X-Virus-Status: Clean
+Content-Transfer-Encoding: 8bit
 
-Markus,
+From: Ashish Yadav <ashish.yadav@infineon.com>
 
-On Sun, 2026-03-22 at 10:33 +0000, Markus Hoffmann wrote:
-> Add support for the ITE IT8689E Super I/O chip. The IT8689E supports
-> newer autopwm, 12mV ADC, 16-bit fans, six fans, six PWM channels,
-> PWM frequency 2, six temperature inputs, AVCC3, temperature offset,
-> and fan on/off control.
 
-Sorry about leaving this until now, I only just noticed the small
-change within the patch set to add fan on/off control.
+Hi,
 
-> Give it8689 its own GPIO configuration block in it87_find() rather
-> than sharing the it8620/it8628 block. The shared block reads
-> IT87_SIO_PINX2_REG and either marks IN3 as internal AVCC or skips
-> IN9. Because it8689 declares FEAT_AVCC3, IN9 is already marked as
-> always-internal before the GPIO block is reached; applying the PINX2
-> check would either create duplicate AVCC labels on IN3 and IN9 or
-> incorrectly skip IN9.
->=20
-> Also update Documentation/hwmon/it87.rst and drivers/hwmon/Kconfig to
-> document the newly supported chip.
->=20
-> Signed-off-by: Markus Hoffmann <markus@thehoffs.at>
-> ---
-> Changes in v3:
-> - Fix AVCC/PINX2 conflict: give it8689 its own GPIO block instead of
-> =C2=A0 sharing the it8620/it8628 block. The shared block applies an
-> =C2=A0 IT87_SIO_PINX2_REG check that is incompatible with FEAT_AVCC3:
-> =C2=A0 it either creates duplicate AVCC labels on IN3 and IN9, or skips
-> =C2=A0 IN9 while its label remains visible. it8622 (also FEAT_AVCC3) is
-> =C2=A0 handled the same way for the same reason.
-> - Add FEAT_TEMP_OFFSET: verified on hardware, temp[1-3]_offset sysfs
-> =C2=A0 attributes respond correctly.
-> - Add FEAT_FANCTL_ONOFF: verified on hardware, writing 0 to
-> =C2=A0 pwm1_enable is accepted.
+These patches add support for Infineon Digital eFuse XDP720.
+XDP720 provides accurate system telemetry (V, I, P, T) and
+reports analog current at the IMON pin for post-processing.
 
-While you say it is accepted, does it actually have any effect?  I'm
-told by someone else playing with this chipset that this feature does
-not really do anything, although it also doesn't cause any operational
-issues.
+The Current and Power measurement depends on the RIMON and GIMON values.
+Please look into data sheet sections 5.4.2 and 5.4.4 for more details:
+https://www.infineon.com/assets/row/public/documents/24/49/infineon-xdp720-001-datasheet-en.pdf
 
-> - Add Documentation/hwmon/it87.rst entry for IT8689E, update the chip
-> =C2=A0 list in the Description section, add IT8689E description paragraph=
-,
-> =C2=A0 and fix the in9 note to also list IT8622E (which also has
-> FEAT_AVCC3).
-> - Add IT8689E to drivers/hwmon/Kconfig help text.
+With Best Regards,
+ Ashish Yadav
+---
 
-Regards
-Frank
+Changes in v3:
+- Link to v2:
+https://lore.kernel.org/all/20260401104550.115715-1-Ashish.Yadav@infineon.com/
+- Fix commit msg, added missing supply info in devicetree binding document.
+https://lore.kernel.org/all/20260402-enlightened-analytic-leopard-ddc512@quoll/
+- Fix .m[PSC_POWER] value issue.The divisor value is 10^15 rather than 10^12.
+https://lore.kernel.org/all/258dd77a-a8d9-4540-a32a-91a3f13c6ed5@roeck-us.net/
+
+Changes in v2:
+- Link to v1:
+https://lore.kernel.org/all/20260330102345.37065-1-Ashish.Yadav@infineon.com/
+- Fix make dt_binding_check issue:
+https://patchwork.kernel.org/project/devicetree/patch/20260330102345.37065-2-Ashish.Yadav@infineon.com/
+- Address reviews comments for infineon,xdp720.yaml, Kconfig, Makefile and xpe720.c:
+https://sashiko.dev/#/patchset/20260330102345.37065-1-Ashish.Yadav%40infineon.com
+  It includes fixing of extra space, non-ASCII characters and use spaces
+  instead of tabs.
+  The xpe720.c driver file update with DIV64_U64_ROUND_CLOSEST() and 
+  MODULE_DEVICE_TABLE() as suggested in review comments.
+
+Ashish Yadav (2):
+  dt-bindings: hwmon/pmbus: Add Infineon XDP720
+  hwmon:(pmbus/xdp720) Add support for efuse xdp720
+
+ .../bindings/hwmon/pmbus/infineon,xdp720.yaml |  59 ++++++++
+ drivers/hwmon/pmbus/Kconfig                   |   9 ++
+ drivers/hwmon/pmbus/Makefile                  |   1 +
+ drivers/hwmon/pmbus/xdp720.c                  | 128 ++++++++++++++++++
+ 4 files changed, 197 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp720.yaml
+ create mode 100644 drivers/hwmon/pmbus/xdp720.c
+
+-- 
+2.39.5
+
