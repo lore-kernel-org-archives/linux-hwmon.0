@@ -1,314 +1,269 @@
-Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D9D43A0E99
-	for <linux-hwmon@vger.kernel.org>; Tue,  7 Apr 2026 10:30:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC5E239FCDB
+	for <linux-hwmon@vger.kernel.org>; Tue,  7 Apr 2026 11:05:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775557832; cv=pass; b=LxLc57oAjV5yU52nn2aCq5AQt9GrmSoZFxkqNBl1eh+UTbcSXyckc43L3m1tQkd9FCHsnsYI7sxR3qwyPnIzYSjx1uPqG1QJloY9zwSQdQxprhw9fRKlMFOCs9DubqLHJoU6MEr35blT7rvtc2ETnyhhCAPy4wUl7S/i1M4KAvU=
+	t=1775559906; cv=pass; b=s2WrLP4XkA3452lnE60T7nOB1R6cVf8PyrY/iAhnGGd92hunFLYvguA9YfQljpX3I5tCsMjLJhDeOLTCAhw3H6HE/s7B6ISiVyarz/9+GOtV91Th0FGbjyAmMAC+D6xy3eqW5/IaTTVdVKkwEiXg48oPBl5JF2aAnBSbhDI8VrY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775557832; c=relaxed/simple;
-	bh=Ba+EPBIXHLX5yi91gfChxyHyKGIt/RO5OcF1N/vWGsQ=;
+	s=arc-20240116; t=1775559906; c=relaxed/simple;
+	bh=X2lhb7WZ9JiIxyS3liRr9wVJ8T8tN41odtpTMaYK0sM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=itlqbRjpt3LnyFpBvaNKskMjCD1unhaU/wzJs/byWLFHq1CEEdO9GR4bU3gND1xcW1/nI7dWd1mZOTIFiANGLkn/fiYjPuDBzPnGKPiMQyaff/OhYp+Df4KSBqxNtUFmVe4P5V1aaoXqRXNjToYAAWa7b9NvOjF89ts7o1AXZjo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OhPqlvBj; arc=pass smtp.client-ip=74.125.82.181
+	 To:Cc:Content-Type; b=LTVQFcLWEMxv5SF/k6guTzdXZMgyOhpwrPUpJ9N/EQR2pmRHigOIghaXsBAv69FnUAihWfL/eFUJhmm50nBz7Z2nWwns9sGJkqlnLhqlZN2FrH4V4Fe8FxvdZosxxFgMXCB/1fDVbfDqjECD5PcBPsS/QwmUGX91Eqk3btD9nmU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J4PD9Jzz; arc=pass smtp.client-ip=209.85.167.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OhPqlvBj"
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2c156c4a9efso6085544eec.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 07 Apr 2026 03:30:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775557830; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J4PD9Jzz"
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5a2c9932781so5044276e87.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 07 Apr 2026 04:05:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775559903; cv=none;
         d=google.com; s=arc-20240605;
-        b=b45YBjNbhDJM6cFnKFfCTwADZuz1AD4bdqQKJOtvfpej/izm36ANGznFEZ7HJnSjaI
-         KN4HmGzxQTZ6Z9YhSivcMJ4T98XVHQVIH1621AErTBdYQOSV/ASWKYIt3m3U/V69spYP
-         Beyw1vGwJXU44mL2M3LuyDxPccpMscEZa+CZqDhgz5Kf3qLZtBmysmXLfJt16Vf/Iq1y
-         OxwJlvMxvmCwvTCbxzitm80djXYvFrCyVqOyZTQtoXakICcKK7TNBvB2R99EDEs61JiI
-         cslth6uzPnrEpZizB3NUvf5G8bUMrmErEGlY5lUExOqFOoYFlVFRMR9jdqMuqSWBdlOC
-         Gr7w==
+        b=J3O9sMJ7MRqgYyH2NWS6za7xW+PtUA+Mny36T2pF73dz71lIX1E688ZwzWLMsCl2yG
+         aTT3FjAlmYb0GyyFILwQ0Cx+uHJMTaakI+0MNPKnCLYOsSTeGWKS1oAyOi5c0Q/TyXYf
+         O5vqoi+cv9y1aSX7jWNOMNdt4w1XRSzSSaSFu75R4M6fUNwC2VMb7lsi6HCOOj0TFN31
+         Dmlds+RXIzb2SLJX9RxYZHj0I0lQ7Sbb8mgrM7ARfWNGTd1d1m1X/1h1OBFf1pWK9inl
+         sW82wOFrU6H/WUykFvP/j+98iu7/78n7KWk6Nlvog7Zohp1si62MhB+qgnMnhdPLjfN5
+         2VpQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=LU59ZAtUrZsopurC7wrRYfVPPQHDPwx0HnnnYqVagoU=;
-        fh=xxOFebF2TsUH9ieMmhUp9RvzdTQPwO8W18LEo6R0vUM=;
-        b=JC5OG1vzjNIw9jWzLyrNRMobr3wnvajrxUzmHFX0ELh9oE4eUN/4laQDkWq58iFrMQ
-         PtLei4KeM4ap+bG+zRkiYlofmLFoJga3+S/hpipT+OGjU0tSWfgRbRfbjWdLZpzayQIS
-         sZfcbAdnGU+ZpURkyKgFbhSiuJIQ+ZJU7ktFLgBsKwpPa3pwi0KE3yq5DmzS/Ah79861
-         KJfOy1mOGNP3QQ0pExaB5+zmt6MfWpp9e7Sey0dUMJVG+tzuUYqbE4QemY4GvNhzCBER
-         A7nIJ/KJ6ObVw2vvQjU0JmCOlyKq7z30NzcT+0jLjgYARaqeJtio+QS6bo2gkqgxPrBB
-         uK2A==;
+        bh=gnkh39HGDOfEu53B37sG9rZrTd6+G3tEl6/Y1gTIgBs=;
+        fh=15T8lpqiIqo+mpxGa8NpWxCw9cG1YeOx/sFuQ0Edu0U=;
+        b=NnqpvUGmNSztUsJM4seh+YKeAjZlkK15vgpjb/xF6Gl9acGzH+7jgNHc/ZIF9Rap5K
+         dhCdT9avZGPJdOsRigklgx79Ucp/H1ojpxzAI9gn2QMrt2IooHElng/OgsE/qtsScK03
+         U1uHXOeksEDTcBZUGKP7mSkm92n88jM23YccoTLtheSD5R4QOSwfDeQzQiCVf2th83Jx
+         ehPktI32X9P/yEdiUis8voWSafI1WyIwGZmLExzFA/lr3XZrQtylW41v8iDBYmQ5rkTm
+         AJGuX0DEjteu0unVXFYNkC1tMRDzKWmbsSlniyAsnC3ZVhLjqQeQUDxOQHzzyqOAwAFp
+         w2xw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775557830; x=1776162630; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775559903; x=1776164703; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LU59ZAtUrZsopurC7wrRYfVPPQHDPwx0HnnnYqVagoU=;
-        b=OhPqlvBjov9tH41oQAt6fX3Pqt0VWiTl7dBBEHS98f1PL5X/aWBMrx5rE/aKiiiIoi
-         IgS1LePj7T+Vq4NKcyERWizj7xY6LnMq7Xo1pGTsCSD5chXG9Y+MaKgBOgNsSfqqLq8h
-         KqbFLhcUpEX5q953l/dTWUUURp9rtP5Bk8uQDwxtYIaT/vxDaCPc8FEYeTRT79b7R1Cn
-         uA7TuKnSQOHg9RqE/i5OR6Qm6vCNY3c6oyX92DMle+tR+RkJh4KfAMMDZzen0fKU4o5+
-         zTluE8ocuABIS1gfmc6p6Jysciamji/cnVZCH2dfsuZE5KPe3dfQJ0r8Gk4s30+eL0Hq
-         LKSA==
+        bh=gnkh39HGDOfEu53B37sG9rZrTd6+G3tEl6/Y1gTIgBs=;
+        b=J4PD9JzzqlCMY7oLbWViRJjmOadiZ3O1tfn4jHuWw8wugbIVv13vkACniYNZZVPYvP
+         kIeLOXUbWoB1QQ1j61QUtvkBF/AnbH1+tERQqVUpPxQvxeJwf8Ty7OMgqGfbdR0lCjF2
+         9CgEqb7A7u0XhOxV4IOa9+YyemNhoBzVrgIokDWB4teVZsHykTTeJeHyQu1wMBMTJfwy
+         vTlaIcp7usz1vlBTrhIVm27VuBv5gaEqP3SwdwrJyNCFM+MK/SgNZmygSodfQc7YR4jy
+         nPdOCs1npyJPcY6vSaDNR0HIscifLpqqwc/N6IbCH4UomlCFQ1k7u6d2Hg/Vfabnc8gO
+         bLXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775557830; x=1776162630;
+        d=1e100.net; s=20251104; t=1775559903; x=1776164703;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=LU59ZAtUrZsopurC7wrRYfVPPQHDPwx0HnnnYqVagoU=;
-        b=BZwvTONpRBaubv/HZyvdIuXMZrgTaYLM3Xd5L/Yc/Budop3YqujyMXRVBbI3zS2iAe
-         xGd+dSqapk+BXRDHik9Ug2ekGxHXWlzPOZ+uqY+CJRfoPOVAAl0qnJOBMMrFUcAi6zN/
-         2eoEJv8jhPzMS34SFFRf5ONx4NB8fvFPR0ahJM1ZqLudFAqieCq6P7qyk0o0Nwkv3VMv
-         V0qRSr/P25x2crA+lyea+zpm3gzmulDoaj7Wu/veau11xJdWr220hj5pjgx+28+0Q5Uj
-         npfvmy0AhYwMo48BuyuoUh+o25RUt1C7/qK08RTln5s+D45SZVewFkTKS2J2BO+DQzAC
-         P6kw==
-X-Gm-Message-State: AOJu0YxFjdCOf+0P0TkcuhKL5xVSQ3YoXUe+AEPbRz9SWswbPpZTygyp
-	flUccmqAtlPVtjoap3YRnawNo6dnymrp7qc6XxSEfpIT6JZDzA311l7Jt5USW5mX5edhjA/L67I
-	kf2E7cOQE7BmPn4o3p8KN9NoVTx8NYAs=
-X-Gm-Gg: AeBDieu6SG4Ma/cqF/x3CRA5HIz2TeGq83ImHNVIOwqhQeilZ/ddHyqgzBCITNWR60H
-	iPOD2H8MuAUrpYvtfPas2EAa48kP+x5RqXywhfAWdXxQxIesrd4h6iNUTYZg9t6itbEUzGQTI0Y
-	Q7x+BIYgUmk8By2aoeLGjPoOMqKGAW107dOvuwLnLJ841T976IfamMr9S6E+oQdZYxVioL/sm7b
-	Wl3WWilIiLmi7m+p2GI3ZotbVF+3AJon03uhuPwP8zukl+sLvITJJ4fvGUZjnIr0iFB1JabCfBf
-	Jn5rbfDo/6TKjnmZlOA=
-X-Received: by 2002:a05:7300:6d23:b0:2a4:3593:466c with SMTP id
- 5a478bee46e88-2cbf9fe2d96mr8206822eec.8.1775557830390; Tue, 07 Apr 2026
- 03:30:30 -0700 (PDT)
+        bh=gnkh39HGDOfEu53B37sG9rZrTd6+G3tEl6/Y1gTIgBs=;
+        b=AInKpBUwePXUieyXjMt9GFrhSiRDyYid5YoZRWW+gNOd/BdPrRNRm/7nfUy71hfTnG
+         Ts9nqst6FsjWfFdbywgq2zoSeX9AYvQbXHHdbUOA1ol1BGevmo73/qXM9GO9gvAmPz5M
+         Q1u2pVSgYM1kDrpmIyPQ+6btYkAJhLSGmSRvO9i5iMmJSVvbJ/zLzKOANPhZXBZ7Givc
+         DlR65zEhS8HXxsMFBL4GMH4A55vKupHH+hTEN42cqKeJL+UOnIXZy4TB53eRJCt9gxH1
+         UsZsyZ+QkeajdTFnsPnbeLzb7mPp/9tgbt9kFx7DenT/KXmVa6UWm1F5mX7sBDnpcurj
+         S+8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUWe7aqLQBTUNfrN+z7FS8vM94s3ZsSoJMtlRR7W6kLZok1C0TpSui6bJCdUWtIHTpe0Km1YLx9BVhqkw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZfWgXq9+ld7/qCmb+zhHBURp0YY+RM9FvI3bxuG4ReF2+myfZ
+	8mHeKkyvWVa0lWp3KRb1accAnfROgLyznwY+4u0KoGT1TcPfS7VGfoFjw0cyS1qTqE8wEpGiVT2
+	CX7xxjl/J+6gTIGdt/Io2NDGcKSso2hg=
+X-Gm-Gg: AeBDieskze2OdYTNDaYB5b8dOL8bC5XP8uYolTNGm/VCzS8I609C0PU5ou9WHitf4E8
+	KwpRbY456t5T6tUGcigKPF2uu+4PcGugOl98iC9rZx+r1IShvscHn1QbjMLFxwVyCiVsQguraBn
+	/StwJljcvdSApslzwV5PSsk+MkRLf8g1YmFo3GR2pVA+EKj1fkGAgn8TRvbiPV/jcx3QENsUp80
+	Qr4RCo4oSUpM5pMZpTeaLOK/43714VvgwRvTLssVT+TZjiDTfmaTOayLqS3vO0yuRhhW/62rP4g
+	3SSCxXAVeg==
+X-Received: by 2002:a05:6512:3b1f:b0:5a2:7d48:8493 with SMTP id
+ 2adb3069b0e04-5a32f7e207fmr4520864e87.12.1775559902286; Tue, 07 Apr 2026
+ 04:05:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260406101647.109667-1-Ashish.Yadav@infineon.com> <20260406101647.109667-3-Ashish.Yadav@infineon.com>
-In-Reply-To: <20260406101647.109667-3-Ashish.Yadav@infineon.com>
-From: ashish yadav <ashishyadav78@gmail.com>
-Date: Tue, 7 Apr 2026 16:00:18 +0530
-X-Gm-Features: AQROBzCqb84kfIhnX1-X0hgBC6HBnxqF1ScBqNXT6675NCDCLNPgDaeYR8SOFQc
-Message-ID: <CAJKbuCYuor3AstSOuzEK_byqwgdkLsaE9Z9k7kfb3WKpyjK4=g@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] hwmon:(pmbus/xdp720) Add support for efuse xdp720
-To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Ashish Yadav <ashish.yadav@infineon.com>
+References: <20260407052317.2097791-1-rdunlap@infradead.org>
+In-Reply-To: <20260407052317.2097791-1-rdunlap@infradead.org>
+From: Sergio Melas <sergiomelas@gmail.com>
+Date: Tue, 7 Apr 2026 13:04:50 +0200
+X-Gm-Features: AQROBzAF7r1sNcMVAm8mUA_sNj8fb_R4VWDPqgICRGiUehNjauki-azP4Z050o0
+Message-ID: <CAP8e=sLQ9HTy1Wu7TMcrae8w9MD7-eC8Wu-4rLSe1hoLF3buBA@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (yogafan) various markup improvements
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>, 
+	linux-hwmon@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Guenter,
+Thank you, Randy.
+ I will incorporate these markup improvements into the next version of
+the patch set.
 
-In this patch, info about vdd-vin-supply is added through
-devm_regulator_get_enable().
-https://lore.kernel.org/all/20260406101647.109667-2-Ashish.Yadav@infineon.c=
-om/
-
-Thanks & Regards
-   Ashish Yadav
-
-On Mon, Apr 6, 2026 at 3:47=E2=80=AFPM ASHISH YADAV <ashishyadav78@gmail.co=
-m> wrote:
+On Tue, Apr 7, 2026 at 7:23=E2=80=AFAM Randy Dunlap <rdunlap@infradead.org>=
+ wrote:
 >
-> From: Ashish Yadav <ashish.yadav@infineon.com>
+> There are several places in yogafan.rst where it appears that lines
+> are meant to be presented on their own but instead they are strung
+> together due to the lack of markups. Fix these issues by:
 >
-> Add the pmbus driver for Infineon XDP720 Digital eFuse Controller.
+> - using bullets where needed
+> - indenting continuation lines of bulleted items
+> - using a table where appropriate
+> - using a literal block where appropriate
 >
-> Signed-off-by: Ashish Yadav <ashish.yadav@infineon.com>
+> Fixes: c67c248ca406 ("hwmon: (yogafan) Add support for Lenovo Yoga/Legion=
+ fan monitoring")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 > ---
-> XDP720 Digital eFuse Controller provides accurate system telemetry
-> (V, I, P, T) and reports analog current at the IMON pin for post-processi=
-ng.
+> Cc: Sergio Melas <sergiomelas@gmail.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Shuah Khan <skhan@linuxfoundation.org>
+> Cc: linux-doc@vger.kernel.org
 >
-> The Current and Power measurement depends on the RIMON and GIMON values.
-> Please look into data sheet sections 5.4.2 and 5.4.4 for more details:
-> https://www.infineon.com/assets/row/public/documents/24/49/infineon-xdp72=
-0-001-datasheet-en.pdf
+>  Documentation/hwmon/yogafan.rst |   55 ++++++++++++++++--------------
+>  1 file changed, 31 insertions(+), 24 deletions(-)
 >
-> The GIMON (microA/A) depends on the 10th bit of TELEMETRY_AVG PMBUS Regis=
-ter.
-> The value of RIMON (kohm) can be provided by the user through device tree=
- using
-> infineon,rimon-micro-ohms  property.
-> ---
->  drivers/hwmon/pmbus/Kconfig  |   9 +++
->  drivers/hwmon/pmbus/Makefile |   1 +
->  drivers/hwmon/pmbus/xdp720.c | 128 +++++++++++++++++++++++++++++++++++
->  3 files changed, 138 insertions(+)
->  create mode 100644 drivers/hwmon/pmbus/xdp720.c
+> --- linux-next-20260406.orig/Documentation/hwmon/yogafan.rst
+> +++ linux-next-20260406/Documentation/hwmon/yogafan.rst
+> @@ -7,8 +7,8 @@ Kernel driver yogafan
+>  Supported chips:
 >
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index fc1273abe357..c419e3ecce90 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -702,6 +702,15 @@ config SENSORS_XDP710
->           This driver can also be built as a module. If so, the module wi=
-ll
->           be called xdp710.
+>    * Lenovo Yoga, Legion, IdeaPad, Slim, Flex, and LOQ Embedded Controlle=
+rs
+> -    Prefix: 'yogafan'
+> -    Addresses: ACPI handle (See Database Below)
+> +  * Prefix: 'yogafan'
+> +  * Addresses: ACPI handle (See Database Below)
 >
-> +config SENSORS_XDP720
-> +       tristate "Infineon XDP720 family"
-> +       help
-> +         If you say yes here you get hardware monitoring support for Inf=
-ineon
-> +         XDP720.
+>  Author: Sergio Melas <sergiomelas@gmail.com>
+>
+> @@ -31,19 +31,21 @@ deterministically via a DMI Product Fami
+>  eliminating the need for runtime heuristics.
+>
+>  1. 8-bit EC Architecture (Multiplier: 100)
 > +
-> +         This driver can also be built as a module. If so, the module wi=
-ll
-> +         be called xdp720.
+>     - **Families:** Yoga, IdeaPad, Slim, Flex.
+>     - **Technical Detail:** These models allocate a single 8-bit register=
+ for
+> -   tachometer data. Since 8-bit fields are limited to a value of 255, th=
+e
+> -   BIOS stores fan speed in units of 100 RPM (e.g., 42 =3D 4200 RPM).
+> +     tachometer data. Since 8-bit fields are limited to a value of 255, =
+the
+> +     BIOS stores fan speed in units of 100 RPM (e.g., 42 =3D 4200 RPM).
+>
+>  2. 16-bit EC Architecture (Multiplier: 1)
 > +
->  config SENSORS_XDPE152
->         tristate "Infineon XDPE152 family"
->         help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index d6c86924f887..1cac7ccae79f 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -68,6 +68,7 @@ obj-$(CONFIG_SENSORS_TPS546D24)       +=3D tps546d24.o
->  obj-$(CONFIG_SENSORS_UCD9000)  +=3D ucd9000.o
->  obj-$(CONFIG_SENSORS_UCD9200)  +=3D ucd9200.o
->  obj-$(CONFIG_SENSORS_XDP710)   +=3D xdp710.o
-> +obj-$(CONFIG_SENSORS_XDP720)   +=3D xdp720.o
->  obj-$(CONFIG_SENSORS_XDPE122)  +=3D xdpe12284.o
->  obj-$(CONFIG_SENSORS_XDPE152)  +=3D xdpe152c4.o
->  obj-$(CONFIG_SENSORS_ZL6100)   +=3D zl6100.o
-> diff --git a/drivers/hwmon/pmbus/xdp720.c b/drivers/hwmon/pmbus/xdp720.c
-> new file mode 100644
-> index 000000000000..8729a771f216
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/xdp720.c
-> @@ -0,0 +1,128 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Hardware monitoring driver for Infineon XDP720 Digital eFuse Controll=
-er
-> + *
-> + * Copyright (c) 2026 Infineon Technologies. All rights reserved.
-> + */
+>     - **Families:** Legion, LOQ.
+>     - **Technical Detail:** High-performance gaming models require greate=
+r
+> -   precision for fans exceeding 6000 RPM. These use a 16-bit word (2 byt=
+es)
+> -   storing the raw RPM value directly.
+> +     precision for fans exceeding 6000 RPM. These use a 16-bit word (2 b=
+ytes)
+> +     storing the raw RPM value directly.
+>
+> -Filter Details:
+> ----------------
+> +Filter Details
+> +--------------
+>
+>  The RLLag filter is a passive discrete-time first-order lag model that e=
+nsures:
+>    - **Smoothing:** Low-resolution step increments are smoothed into 1-RP=
+M increments.
+> @@ -66,8 +68,11 @@ Usage
+>  -----
+>
+>  The driver exposes standard hwmon sysfs attributes:
 > +
-> +#include <linux/i2c.h>
-> +#include <linux/module.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/of_device.h>
-> +#include <linux/bitops.h>
-> +#include <linux/math64.h>
-> +#include "pmbus.h"
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D   =3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>  Attribute         Description
+>  fanX_input        Filtered fan speed in RPM.
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D   =3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+>
+>  Note: If the hardware reports 0 RPM, the filter is bypassed and 0 is rep=
+orted
+> @@ -78,22 +83,24 @@ immediately to ensure the user knows the
+>                   LENOVO FAN CONTROLLER: MASTER REFERENCE DATABASE (2026)
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+>
+> -MODEL (DMI PN) | FAMILY / SERIES  | EC OFFSET | FULL ACPI OBJECT PATH   =
+       | WIDTH  | MULTiplier
+> -------------------------------------------------------------------------=
+----------------------------
+> -82N7           | Yoga 14cACN      | 0x06      | \_SB.PCI0.LPC0.EC0.FANS =
+       |  8-bit | 100
+> -80V2 / 81C3    | Yoga 710/720     | 0x06      | \_SB.PCI0.LPC0.EC0.FAN0 =
+       |  8-bit | 100
+> -83E2 / 83DN    | Yoga Pro 7/9     | 0xFE      | \_SB.PCI0.LPC0.EC0.FANS =
+       |  8-bit | 100
+> -82A2 / 82A3    | Yoga Slim 7      | 0x06      | \_SB.PCI0.LPC0.EC0.FANS =
+       |  8-bit | 100
+> -81YM / 82FG    | IdeaPad 5        | 0x06      | \_SB.PCI0.LPC0.EC0.FAN0 =
+       |  8-bit | 100
+> -82JW / 82JU    | Legion 5 (AMD)   | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.FANS =
+(Fan1) | 16-bit | 1
+> -82JW / 82JU    | Legion 5 (AMD)   | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.FA2S =
+(Fan2) | 16-bit | 1
+> -82WQ           | Legion 7i (Int)  | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.FANS =
+(Fan1) | 16-bit | 1
+> -82WQ           | Legion 7i (Int)  | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.FA2S =
+(Fan2) | 16-bit | 1
+> -82XV / 83DV    | LOQ 15/16        | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.FANS =
+/FA2S  | 16-bit | 1
+> -83AK           | ThinkBook G6     | 0x06      | \_SB.PCI0.LPC0.EC0.FAN0 =
+       |  8-bit | 100
+> -81X1           | Flex 5           | 0x06      | \_SB.PCI0.LPC0.EC0.FAN0 =
+       |  8-bit | 100
+> -*Legacy*       | Pre-2020 Models  | 0x06      | \_SB.PCI0.LPC.EC.FAN0   =
+       |  8-bit | 100
+> -------------------------------------------------------------------------=
+----------------------------
+> +::
 > +
-> +/*
-> + * The IMON resistor required to generate the system overcurrent protect=
-ion.
-> + * Arbitrary default Rimon value: 2k Ohm
-> + */
-> +#define XDP720_DEFAULT_RIMON 2000000000 /* 2k ohm */
-> +#define XDP720_TELEMETRY_AVG 0xE9
-> +
-> +static struct pmbus_driver_info xdp720_info =3D {
-> +       .pages =3D 1,
-> +       .format[PSC_VOLTAGE_IN] =3D direct,
-> +       .format[PSC_VOLTAGE_OUT] =3D direct,
-> +       .format[PSC_CURRENT_OUT] =3D direct,
-> +       .format[PSC_POWER] =3D direct,
-> +       .format[PSC_TEMPERATURE] =3D direct,
-> +
-> +       .m[PSC_VOLTAGE_IN] =3D 4653,
-> +       .b[PSC_VOLTAGE_IN] =3D 0,
-> +       .R[PSC_VOLTAGE_IN] =3D -2,
-> +       .m[PSC_VOLTAGE_OUT] =3D 4653,
-> +       .b[PSC_VOLTAGE_OUT] =3D 0,
-> +       .R[PSC_VOLTAGE_OUT] =3D -2,
-> +       /*
-> +        * Current and Power measurement depends on the RIMON (kOhm) and
-> +        * GIMON(microA/A) values.
-> +        */
-> +       .m[PSC_CURRENT_OUT] =3D 24668,
-> +       .b[PSC_CURRENT_OUT] =3D 0,
-> +       .R[PSC_CURRENT_OUT] =3D -4,
-> +       .m[PSC_POWER] =3D 4486,
-> +       .b[PSC_POWER] =3D 0,
-> +       .R[PSC_POWER] =3D -1,
-> +       .m[PSC_TEMPERATURE] =3D 54,
-> +       .b[PSC_TEMPERATURE] =3D 22521,
-> +       .R[PSC_TEMPERATURE] =3D -1,
-> +
-> +       .func[0] =3D PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_PIN |
-> +                  PMBUS_HAVE_TEMP | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_=
-INPUT |
-> +                  PMBUS_HAVE_STATUS_TEMP,
-> +};
-> +
-> +static int xdp720_probe(struct i2c_client *client)
-> +{
-> +       struct pmbus_driver_info *info;
-> +       int ret;
-> +       u32 rimon;
-> +       int gimon;
-> +
-> +       info =3D devm_kmemdup(&client->dev, &xdp720_info, sizeof(*info),
-> +                           GFP_KERNEL);
-> +       if (!info)
-> +               return -ENOMEM;
-> +
-> +       ret =3D devm_regulator_get_enable(&client->dev, "vdd-vin");
-> +       if (ret)
-> +               return dev_err_probe(&client->dev, ret,
-> +                       "failed to enable vdd-vin supply\n");
-> +
-> +       ret =3D i2c_smbus_read_word_data(client, XDP720_TELEMETRY_AVG);
-> +       if (ret < 0) {
-> +               dev_err(&client->dev, "Can't get TELEMETRY_AVG\n");
-> +               return ret;
-> +       }
-> +
-> +       ret >>=3D 10; /* 10th bit of TELEMETRY_AVG REG for GIMON Value */
-> +       ret &=3D GENMASK(0, 0);
-> +       if (ret =3D=3D 1)
-> +               gimon =3D 18200; /* output gain 18.2 microA/A */
-> +       else
-> +               gimon =3D 9100; /* output gain 9.1 microA/A */
-> +
-> +       if (of_property_read_u32(client->dev.of_node,
-> +                                "infineon,rimon-micro-ohms", &rimon))
-> +               rimon =3D XDP720_DEFAULT_RIMON; /* Default if not set via=
- DT */
-> +       if (rimon =3D=3D 0)
-> +               return -EINVAL;
-> +
-> +       /* Adapt the current and power scale for each instance */
-> +       info->m[PSC_CURRENT_OUT] =3D DIV64_U64_ROUND_CLOSEST((u64)
-> +               info->m[PSC_CURRENT_OUT] * rimon * gimon, 1000000000000UL=
-L);
-> +       info->m[PSC_POWER] =3D DIV64_U64_ROUND_CLOSEST((u64)
-> +               info->m[PSC_POWER] * rimon * gimon, 1000000000000000ULL);
-> +
-> +       return pmbus_do_probe(client, info);
-> +}
-> +
-> +static const struct of_device_id xdp720_of_match[] =3D {
-> +       { .compatible =3D "infineon,xdp720" },
-> +       {}
-> +};
-> +MODULE_DEVICE_TABLE(of, xdp720_of_match);
-> +
-> +static const struct i2c_device_id xdp720_id[] =3D {
-> +       { "xdp720" },
-> +       {}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, xdp720_id);
-> +
-> +static struct i2c_driver xdp720_driver =3D {
-> +       .driver =3D {
-> +                  .name =3D "xdp720",
-> +                  .of_match_table =3D xdp720_of_match,
-> +       },
-> +       .probe =3D xdp720_probe,
-> +       .id_table =3D xdp720_id,
-> +};
-> +
-> +module_i2c_driver(xdp720_driver);
-> +
-> +MODULE_AUTHOR("Ashish Yadav <ashish.yadav@infineon.com>");
-> +MODULE_DESCRIPTION("PMBus driver for Infineon XDP720 Digital eFuse Contr=
-oller");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS("PMBUS");
-> --
-> 2.39.5
+> + MODEL (DMI PN) | FAMILY / SERIES  | EC OFFSET | FULL ACPI OBJECT PATH  =
+        | WIDTH  | MULTiplier
+> + -----------------------------------------------------------------------=
+-----------------------------
+> + 82N7           | Yoga 14cACN      | 0x06      | \_SB.PCI0.LPC0.EC0.FANS=
+        |  8-bit | 100
+> + 80V2 / 81C3    | Yoga 710/720     | 0x06      | \_SB.PCI0.LPC0.EC0.FAN0=
+        |  8-bit | 100
+> + 83E2 / 83DN    | Yoga Pro 7/9     | 0xFE      | \_SB.PCI0.LPC0.EC0.FANS=
+        |  8-bit | 100
+> + 82A2 / 82A3    | Yoga Slim 7      | 0x06      | \_SB.PCI0.LPC0.EC0.FANS=
+        |  8-bit | 100
+> + 81YM / 82FG    | IdeaPad 5        | 0x06      | \_SB.PCI0.LPC0.EC0.FAN0=
+        |  8-bit | 100
+> + 82JW / 82JU    | Legion 5 (AMD)   | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.FANS=
+ (Fan1) | 16-bit | 1
+> + 82JW / 82JU    | Legion 5 (AMD)   | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.FA2S=
+ (Fan2) | 16-bit | 1
+> + 82WQ           | Legion 7i (Int)  | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.FANS=
+ (Fan1) | 16-bit | 1
+> + 82WQ           | Legion 7i (Int)  | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.FA2S=
+ (Fan2) | 16-bit | 1
+> + 82XV / 83DV    | LOQ 15/16        | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.FANS=
+ /FA2S  | 16-bit | 1
+> + 83AK           | ThinkBook G6     | 0x06      | \_SB.PCI0.LPC0.EC0.FAN0=
+        |  8-bit | 100
+> + 81X1           | Flex 5           | 0x06      | \_SB.PCI0.LPC0.EC0.FAN0=
+        |  8-bit | 100
+> + *Legacy*       | Pre-2020 Models  | 0x06      | \_SB.PCI0.LPC.EC.FAN0  =
+        |  8-bit | 100
+> + -----------------------------------------------------------------------=
+-----------------------------
+>
+>  METHODOLOGY & IDENTIFICATION:
 >
