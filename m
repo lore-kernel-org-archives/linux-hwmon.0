@@ -1,86 +1,132 @@
-Received: from mx.rxtx.cx (mx.rxtx.cx [185.235.143.38])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3764B3A3819
-	for <linux-hwmon@vger.kernel.org>; Wed,  8 Apr 2026 20:35:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.235.143.38
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775680538; cv=none; b=Ymvnn43EXbHEYIH6OWPpf7YBbVoUQupnGh4HleHdoPqEdCX+GVRDBupIchvOoHbAb6jJL5iK/NQxtWMxo/YMIbLuLRfZDtEPemNj4CDERRRsSm4jidA65zcRIolNdkZfuoJFiWrfrOfUpz9scO/pTMDcQ3i6oOQyUc7PmttFjmg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775680538; c=relaxed/simple;
-	bh=gYhSxam0uGQhjp3WaLSV8gd2CMxRTxwtVY6EllHvp3g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SQDI+rrbFjvKPAb7fafDGN45YR0x0XSWLQcS+Y4QuW4iDshIk+8inUElTx3kt28tCCyV66ZXnQ47+DJSNgaD5posslvTZi69XU6e1ZD4tdXf4DuMfru5H2tS5JYEJ84CltfZpfFiUPcV+X4thFpCZ0z9reTak38uCWIaEOtuLiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rxtx.cx; spf=none smtp.mailfrom=rxtx.cx; dkim=pass (2048-bit key) header.d=rxtx.cx header.i=@rxtx.cx header.b=I+Xz0C/O; arc=none smtp.client-ip=185.235.143.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rxtx.cx
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=rxtx.cx
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 942BA37C0FA
+	for <linux-hwmon@vger.kernel.org>; Wed,  8 Apr 2026 23:57:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775692647; cv=pass; b=VbxKuy6KsRiUEXPX69YcWlA4OIJRrwaWMo96O2/PvVT1pNmu5qNkTVt03fskD3G5fVPUJUVP0684iXBbcYl+/CvE5geK11LwudIe8F58Q0pPvCGIifZGNxY7GvSJQ2UjKgH4D9P6HA1cxLuaolsGRM+84QfA9oSFnQo/L9YOq04=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775692647; c=relaxed/simple;
+	bh=FSImeD+9EZuioDpwFxvxJHBV1jIaQo/HbiekQn3GNKc=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=YnPJQ8/gWsDOG7zahFjpLrydr4mXYVH4tEdoId8c8r3PqG3/U3b2qu50s2jqk4z0bf1HCLzZ100TB9xmcL77R3g0wNRfr3vGY+9G0N3ztHE4PooOGKhh+SFl7VpenywUEiaSUtHzPTsEqaFwUDcz25Tb3KQBxwNKhD5mLSoaYa0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wa7q5Vss; arc=pass smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rxtx.cx header.i=@rxtx.cx header.b="I+Xz0C/O"
-Received: by mx.rxtx.cx (Postfix, from userid 106)
-	id B788D20613; Wed, 08 Apr 2026 20:29:05 +0000 (UTC)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rxtx.cx; s=s2026;
-	t=1775680144; bh=gYhSxam0uGQhjp3WaLSV8gd2CMxRTxwtVY6EllHvp3g=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=I+Xz0C/OpUzMQsEiu83+3L1Ez7zIQBWa+eBi8TpeeIbFtOXnMIReQ6v3BlbeByouQ
-	 DKPSM3Ms54oTz8nzobWblabFNXgJeiDBLJ6OPgQsNcfV6DTU2Lat+Z6W8PkjJ8QIZ1
-	 j7htNgYeyX8RZsoPFsXs1bL7FJ1xcQ7KbcbHpFDqbO+qT/25ils/FbH74hIY5txrov
-	 59/e/GmTuNkL9HBiUQQUrNw1eKFW5iu633+PY5onOjXcJ5RU2RRRZPcYVRqiU1OIzM
-	 MXEd4gucVxe/Gmwwl2+h/RCn4xjSRLzqEAOJq+Tj5OfhN4kNoQQxWRMuS1vWC2nzy2
-	 h+FEZHQybKS0A==
-Received: from [IPV6:2001:7d0:4d00:2500:10f7:e69b:fe86:ea8] (0ea8-fe86-e69b-10f7-2500-4d00-07d0-2001.sta.estpak.ee [IPv6:2001:7d0:4d00:2500:10f7:e69b:fe86:ea8])
-	by mx.rxtx.cx (Postfix) with ESMTPSA id 6D1D620385;
-	Wed, 08 Apr 2026 20:29:04 +0000 (UTC)
-Message-ID: <25bbdd98-656e-407a-ada7-da2bdacb1aea@rxtx.cx>
-Date: Wed, 8 Apr 2026 23:28:08 +0300
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wa7q5Vss"
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-59e5aa4ca41so267230e87.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 08 Apr 2026 16:57:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775692645; cv=none;
+        d=google.com; s=arc-20240605;
+        b=GvrcklD0y5MO4gIv8j/e2tRYtOS3Ka6aCGWTne1IXktrbwaBB6Nzc/AY9gePvaJGCx
+         f3lc49G6gIGhTxPSfirMEak8H/B/sXl7hAU46VQDAm3f2yftw0lUwpYtWWvxL3qkLLWj
+         K37fCOyZ+HlX/yUCOCkXhyb6Hy8bWsUCYrEEZkesSiOKX9TTArI0j6y8cgHkfug8yJLx
+         ggDLlPPoImcFLCtSCZBlj/Yw3Gt2/e1n7M2iLTFNvEitprVSdOoRHVDs7BPcJZ1LI5n+
+         4LpGIdTBVJbtWhz4MN3/YWPuv2kXvdJhRj4HDnkVG1J02KUaX7AgTBRba8h0Yxe8Oo6T
+         gNNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=FSImeD+9EZuioDpwFxvxJHBV1jIaQo/HbiekQn3GNKc=;
+        fh=vV3aw1K574njOGgmn/CLZ/NNNPvbJCO++hKCwQXGpI4=;
+        b=VyAzp30HnRJYrWWoEZia9iyAMg8akL9uXTaSomkIvShH+zHaeJgQFwsz5QSujxHNm+
+         8MIHOiHuQt+vGAALKp3811u0oJXR547NNrDS9owm/wXF62C0btjIjgQpXNM+ahoIJmua
+         xVH2kzfXFQq+dCEqaH3wWG7MvPLpPseWrEEEvHEjzHZalUQwm707UshsR+AO7wPpbAnz
+         6MVLQoQGJ/oEkDKKzJ+sxKyhQ3FAPyJgYjM+FxdW9RkIHDrIocOxiR568k7WmyR47c6I
+         DATLTxCQ483TDAMBUU1CMhuDVCWxDR4uItMPLRNGhqFyCRU3jrnBntF29YiLor5I399J
+         lT3g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775692645; x=1776297445; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=FSImeD+9EZuioDpwFxvxJHBV1jIaQo/HbiekQn3GNKc=;
+        b=Wa7q5VssR/iQhZjE2QwOdIKe8hVON1ShiRggQ3E1EG+F3mLSK48+F0zPV8CCRujTlW
+         kGf8KEhMTM3md2Ee0TtvtX4oBXaA+lMT0ynvBxmtK1byjM8zLkdRHe74up4DPbUlYlFl
+         P1KqzQr39ClmLL6t4oM+v/yecO5dvnkctw+4hMb7Yj9PBjhOaNL5/Uv/rvkAoHZcFMZg
+         oMPtPoQY0j9lWiq7TR91k4gjmvtfE6K0z7iwn/laVXQBnRVm4Kujhfzhl6+qjb0EVen2
+         9j6vB+PiLuTyL86SHzhjrzbAKAA3tWXjsKQnaxqz6sNnKMGq6AUSY03yIhrEJT2pub2a
+         XAfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775692645; x=1776297445;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FSImeD+9EZuioDpwFxvxJHBV1jIaQo/HbiekQn3GNKc=;
+        b=ZWN5r2To1BgzJGsSWaze0/qXabivs4TLTuaeOGqTQYKYOhfivISMBHPzP9kWXqOLsa
+         s3vLz4Dn3NYYT8zA/gvXjq8m+vHmsTQP1i8bvGVzl32Iu4fT/HlAXlAFblZhwdMPtwXu
+         LkHjMndOoJDfEvk8mMFU33FGg/BoJl/SfitKwF7zRoqP3TjiYpOySBsZcIgHd/48KVhN
+         SuAcHDzl25f8swLW0E2f8TuO0daL5M0VaVjYKf80UA/SNZrwlz4ENVa1DOshEE1oPw86
+         47lryjal79d8Zxw4SjUDSKdJlsP8l4Mnzm4r6V8AcKl5mGP0sBw78wVpk4a1R7oBXr6Q
+         1f6Q==
+X-Gm-Message-State: AOJu0YyPh5cuq3vWStIAASq6QFiTpMjkKmGj1kfWJW243GoHzuVHSARs
+	CUj6HbhBAiRPqz5N//QphN3nUOM31R4r7yeIV1RAipCP1dcDzN7q46iOjWoEN7k9jp/+T/uzFhV
+	XzZ4JiIZ/K6JCSydGsv4qwuKZ8hZfYPo=
+X-Gm-Gg: AeBDies41pMfO2huYzaPoDnLj4tdNgkD/S8MCDCg6HIczs0zPX3W+yXNCfjG0l5oiJL
+	7lswvLlcRPKns6W4zdqde+LXRxtaW3PF/tkv29vHbpWufEJsz2xzeoyFv/NCPdwmuxwLfDHHbl9
+	Ta7LFZn5B/0Vc4ReFC2oLXa1MesWUSRo0GTYIjDpEy6qPTEzdDMpp9qSSxjMr/p+qy8OOZkE4t5
+	rC96GEHGVp4BTD7ULHmsARqKspDjJ7A40nCiNYEwnpEEQ0REdpZmdm8rD+JToYEpGw2PXvPS/8c
+	U9DlO5SvS37Q9L46elA2m0gjUbEwTvyfQQudqL38Nw==
+X-Received: by 2002:a05:6512:3b90:b0:5a0:4344:a519 with SMTP id
+ 2adb3069b0e04-5a33754efdamr7613901e87.4.1775692644404; Wed, 08 Apr 2026
+ 16:57:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Betterbird (Linux)
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add ROG STRIX B650E-E GAMING
- WIFI
-To: Eugene Shalygin <eugene.shalygin@gmail.com>,
- Guenter Roeck <linux@roeck-us.net>
-Cc: Veronika Kossmann <nanodesuu@gmail.com>,
- Veronika Kossmann <desu.git@rxtx.cx>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260403210343.1380437-1-eugene.shalygin@gmail.com>
- <05e9870a-5d8c-410d-99ed-6ef9470b2ff7@roeck-us.net>
- <CAB95QATxrJa0koMq=BCjnXvLHJ5boRBUA+76FwqWJhmhEi-Tqg@mail.gmail.com>
-Content-Language: en-US, et-EE
-From: Veronika Kossmann <nanodesu@rxtx.cx>
-In-Reply-To: <CAB95QATxrJa0koMq=BCjnXvLHJ5boRBUA+76FwqWJhmhEi-Tqg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: Saravanan M <saravananchatgptonly@gmail.com>
+Date: Thu, 9 Apr 2026 05:27:10 +0530
+X-Gm-Features: AQROBzBawmxzOFcEPIsGOzTNYoxlxNoTjEDj20qfIHpmdqfUbdqrbo6pGiDL7Xk
+Message-ID: <CANNcQFEFFBt7rBuaV8gwqWnbsU+fDGHaLJORq4YkkfZ9jhzAOQ@mail.gmail.com>
+Subject: [PATCH] hwmon: asus-ec-sensors: Add ASUS TUF Gaming F17 FX706LI
+To: eugene.shalygin@gmail.com
+Cc: linux-hwmon@vger.kernel.org
+Content-Type: multipart/mixed; boundary="0000000000004ce8b2064efba966"
 
-On 4/4/26 10:12, Eugene Shalygin wrote:
-> On Sat, 4 Apr 2026 at 06:38, Guenter Roeck <linux@roeck-us.net> wrote:
->> Sashiko has a problem with this patch:
-> I must admit now, that these _SET macros were a bad idea, it turned
-> out to be too easy to misread. I'm going to remove them.
->
-> Veronika, could you, please, show us the output from sensors with this
-> version of the code?
->
-> Cheers,
-> Eugene
+--0000000000004ce8b2064efba966
+Content-Type: multipart/alternative; boundary="0000000000004ce8b0064efba964"
 
-Of course:
+--0000000000004ce8b0064efba964
+Content-Type: text/plain; charset="UTF-8"
 
-$sensors asusec-isa-000a
-asusec-isa-000a
-Adapter: ISA adapter
-CPU:          +37.0°C
-Motherboard:  +38.0°C
-VRM:          +51.0°C
+Board: ASUS TUF Gaming F17 FX706LI_FX766LI (DMI: FX706LI)
+Kernel: 6.17.0-20-generic
+Issue: asus_ec_sensors fails with "No such device"
+EC register 0x46 confirmed as fan tachometer via ec_probe monitor
+WMI fan_curve_get_factory_default returns -19 (ENODEV)
 
-These are relevant to actual temperatures.
+--0000000000004ce8b0064efba964
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Best wishes,
+<div dir=3D"ltr">Board: ASUS TUF Gaming F17 FX706LI_FX766LI (DMI: FX706LI)<=
+br>Kernel: 6.17.0-20-generic<br>Issue: asus_ec_sensors fails with &quot;No =
+such device&quot;<br>EC register 0x46 confirmed as fan tachometer via ec_pr=
+obe monitor<br>WMI fan_curve_get_factory_default returns -19 (ENODEV)</div>
 
-Veronika
+--0000000000004ce8b0064efba964--
+--0000000000004ce8b2064efba966
+Content-Type: text/x-patch; charset="US-ASCII"; name="fx706li-fan-support.patch"
+Content-Disposition: attachment; filename="fx706li-fan-support.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_mnqpj40n0>
+X-Attachment-Id: f_mnqpj40n0
 
+LS0tIGFzdXMtZWMtc2Vuc29ycy5jLm9yaWcJMjAyNi0wNC0wOSAwNToyMDowMi44OTY1NzAyMzMg
+KzA1MzAKKysrIGFzdXMtZWMtc2Vuc29ycy5jCTIwMjYtMDQtMDkgMDU6MjY6MDQuMDg5MDQyMDI0
+ICswNTMwCkBAIC03NTcsNiArNzU3LDEyIEBACiAJLmZhbWlseSA9IGZhbWlseV9pbnRlbF83MDBf
+c2VyaWVzLAogfTsKIAorc3RhdGljIGNvbnN0IHN0cnVjdCBlY19ib2FyZF9pbmZvIGJvYXJkX2lu
+Zm9fYXN1c190dWZfZ2FtaW5nX2YxN19meDcwNmxpID0geworCS5zZW5zb3JzID0gU0VOU09SX1RF
+TVBfQ1BVIHwgU0VOU09SX0ZBTl9DUFVfT1BULAorCS5tdXRleF9wYXRoID0gQUNQSV9HTE9CQUxf
+TE9DS19QU0VVRE9fUEFUSCwKKwkuYWNjZXNzX21vZGUgPSBFQ19BQ0NFU1NfTU9ERV9BQ1BJLAor
+fTsKKwogc3RhdGljIGNvbnN0IHN0cnVjdCBlY19ib2FyZF9pbmZvIGJvYXJkX2luZm9fdHVmX2dh
+bWluZ194NjcwZV9wbHVzID0gewogCS5zZW5zb3JzID0gU0VOU09SX1RFTVBfQ1BVIHwgU0VOU09S
+X1RFTVBfQ1BVX1BBQ0tBR0UgfAogCQlTRU5TT1JfVEVNUF9NQiB8IFNFTlNPUl9URU1QX1ZSTSB8
+CkBAIC04ODcsNiArODkzLDkgQEAKIAkJCQkJJmJvYXJkX2luZm9fdHVmX2dhbWluZ194NjcwZV9w
+bHVzKSwKIAlETUlfRVhBQ1RfTUFUQ0hfQVNVU19CT0FSRF9OQU1FKCJUVUYgR0FNSU5HIFg2NzBF
+LVBMVVMgV0lGSSIsCiAJCQkJCSZib2FyZF9pbmZvX3R1Zl9nYW1pbmdfeDY3MGVfcGx1cyksCisJ
+RE1JX0VYQUNUX01BVENIX0FTVVNfQk9BUkRfTkFNRSgiRlg3MDZMSSIsCisJCQkJCSZib2FyZF9p
+bmZvX2FzdXNfdHVmX2dhbWluZ19mMTdfZng3MDZsaSksCisKIAl7fSwKIH07CiAK
+--0000000000004ce8b2064efba966--
