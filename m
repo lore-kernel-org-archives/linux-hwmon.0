@@ -1,67 +1,68 @@
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A05773168E6
-	for <linux-hwmon@vger.kernel.org>; Fri, 10 Apr 2026 16:30:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFCF3E1D07
+	for <linux-hwmon@vger.kernel.org>; Fri, 10 Apr 2026 16:52:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775838650; cv=none; b=IKc9s4nsnmtdbTAcJXhENBV8u+5UuHy43BL2FguyySgeYfNHS0cWcAUAHtXH9namyHXJDkzr8RoVVuCuV5CgZ0tNTL5UO/OCy6R8V7oqzDvX9zJqdqOI5egaB+vg93vqysAxUK2nUm0AGT+/9Ch6vxpfYn0c4uJwwUe+B8IH36Q=
+	t=1775839960; cv=none; b=hv1zhFl+8iwAFZ+lcc4x2Z6U8elN4/8X7td3TWz63NwVrFU2OXYAqcCVdqNpYUOsLzyuJMqhvQyalbBgljpq+fwKZ8r9RuUWvAdrmGSeuKHZdkQbrFc/mH90+OwOk7IbMIDNzUDeHNgNNaNOHxK2poTWTDCShiXCy+c7RsWkHX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775838650; c=relaxed/simple;
-	bh=Undq6STZNqRrbFQaVnW7mDpSSi0KgbNQArRWEWLZ8SU=;
+	s=arc-20240116; t=1775839960; c=relaxed/simple;
+	bh=ZJQ/6STZALeRog1n9zMG3DDRsVZ8lpyVsIt/JnlaSvw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MQFJqP5FbP05IhKsmBzdfmAzl3VmnL7onUTx8YmKLDCtwKg2oFFVoe+U0y+jlo4aCwhhFHAPhVspTjxf5VoimHvVl8oG/sE4QRFZKFZRLobHdGwPXYE+a12vt6iaf+G2arVw1JDOX1vs6riJcZGEyGsjWnT98p5QsdCYJ3f+En4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lVUymMSb; arc=none smtp.client-ip=74.125.82.175
+	 In-Reply-To:Content-Type; b=fdh7dqQ9NwFDFg6yg5Dq8B1Rz8VZuVurQcfps0823uQymjOhbvjiTTVPXIcSHkTPIE4+5uu1KlXBrMD462SCHknLWo1Man5zKy4Ogorx1L59h6QL0YtlObScmrZBPo+xS16cXYrim62tqaZcRXPxK/oGVPBF5E4XnUoWGCNtRVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PapauwYy; arc=none smtp.client-ip=74.125.82.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lVUymMSb"
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2d64c756111so829860eec.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 10 Apr 2026 09:30:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PapauwYy"
+Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2c54c68db4dso3968689eec.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 10 Apr 2026 09:52:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775838649; x=1776443449; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775839957; x=1776444757; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=LhP5b/cZwXBwnnrIhhft7r+i2inPS25UHhwkMigbIjk=;
-        b=lVUymMSbI7zd0dnPGBCiDIwUi+jfULmXXk/2+YZzsxkddheRlWqaG8/wahWB3gwmtZ
-         kel91gzHzrue9UqlZmikwtbp1RJOhAcMwgVRyBb8E/HnBWquLrtxnmMhjY4p0EZPEOH8
-         Mjum/+apCrmvc/hD+V6dCicP75BByXN+PH2WC/gLn4D9lM8ZXVMJT2KoO3kPg0ltlMdi
-         DwKDu3r0jChZaIJn8pwjX4EzVIwaPks92pDdB14ou0dSRHYh1ZslXEerV/JdbuaHSsGr
-         34CEBJmOh+Z1ZOYHs5/MORt/wUCxo/Q9iFj0b5gAi3vKud7TIp0yK3JO9iR0+MD40ZHc
-         +NNA==
+        bh=ipHaH6PMq71U83t6ZzV35VtmOmfjOzg6Hcsr7AXxQVc=;
+        b=PapauwYyxLqqFJUSza64YOmLwwJ7jTneDrwjFmMP2Her3/BGRDB2qVoNsJYF4NT9wB
+         MSa6A84kfJm9T8uRpDdMw5YYPmdvF+6ZditpMjZBgfr5QQDV0azpqEcJZI0OjM0wDZPO
+         2jFhgWWzT4bFEb3A0NiaLqUpSpeR8M5COc7i36YmCrY4qVx2Jhsr1TL05vMw9a9EeE81
+         m5Ir97W4KppWayZ5wH/nlTht3tSwUW0Daan0P5dv1x6lAetUQYwpRMB4k/rUZ6XPg1Hp
+         A1NfRXRuxm5sN24N5tw6AOZry9rI9DtENRHHeEfUVfo/QgU6s26fqi9fiIR8uHPmM66X
+         1bzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775838649; x=1776443449;
+        d=1e100.net; s=20251104; t=1775839957; x=1776444757;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LhP5b/cZwXBwnnrIhhft7r+i2inPS25UHhwkMigbIjk=;
-        b=ZmOSPQeJ+DpidPm2hap08bcaYl2vAcJzvhjMGdDOpILBCTGJS8fALaNzM12DBk41Ri
-         BSk44GJYby30iKRkwDDoA/JuPMeRHRHmt3nvvIIjZyiIXzJ050zp2riGJc39PeCcnj9t
-         SbF2bHkITxL7yL+my0tNjGeDydBGGnN8YiVGrJ0QO0zzUDZ+xbBukzkp8/Ts/sMCa0hi
-         l2DdZ19O5kTR17ZjT/B0oXOLpUjWQgVsLUmlOUxNHwfbeFwLJxw/RXckHdIl2IbUg7jD
-         m130aO8NcpJQg/V5oPVEbm4ys3EIRNAM6yAsCO6ZKUAvRQZn7okDccPn0bj6Wg4iomqQ
-         oPJA==
-X-Forwarded-Encrypted: i=1; AJvYcCUvc9Ee05gq3BF0jowIvi4uIZZ/yVVe/TZf+Jv3t2XxmBV6/8zPuavQB5DfM/8gymutZs6PD7Za2UwoKA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhxOhFWuaTpIKARn+dHfeMOhEkxw6vXmNA3kADWjTOb2Oy/D0I
-	DvO/NVan15U7axibShJBzC9ta4i9Xgks07Zt7l8sFkdEW5YttrYspmUF
-X-Gm-Gg: AeBDiet8eqMnCkGym7qbKnAlm/mc2ebzUT851nx/sojk/WEF8mPJI6QFdnGr5+YL2QX
-	M+kjOQc2rA8XOuVxg9neFC5YmXaStAEp2WmII1+ZKazMArUHyNUN2PWwdQPA5O4wdEnycOnRbY2
-	RgAuMCA/SSXkJxKirUiFTmaaWXoK+kck0RMde2b+CXSwcCFy+cl0zz20iMe0lLVFvmC48O9GFWd
-	Ici8rq2Mz6MWzJu0KjJHqxKOuxvnq+FR8AIyR8M9PdvP2VVqLBcgp9Q+DaX/fxB0C7z6hbiOpPs
-	ABuy2Z4wGFrM5NJ+I4AI/3GxwHH6O50+Taba9/kDkKkN2mkuMn2rLEV9dmNe2NrCFQPCDczviV8
-	4uLV4obn/pnUzuWBVkBMLhZPjdQG1eZY0dFk33wLf9CvKQ+9EjqrqYBkoFElfKhqd4D87PGZhyR
-	vZwbSePMewmy2U5n5ZR7o7rzw3X2xulw9Zyun+Eu0wRF3M9w3PTtF7hkRxkY4c1Z8AetVUwBxh
-X-Received: by 2002:a05:7300:f082:b0:2c1:7afc:df00 with SMTP id 5a478bee46e88-2d589361d94mr2267276eec.30.1775838648647;
-        Fri, 10 Apr 2026 09:30:48 -0700 (PDT)
+        bh=ipHaH6PMq71U83t6ZzV35VtmOmfjOzg6Hcsr7AXxQVc=;
+        b=maSrWOim50/NZ4ZT+Alvt92kGtpsYDhW9v8fbUIkJqxQN1CjUpHAT77hg22O1EvPMy
+         z24PEe8PRfvaYP//TKQVGyseU0lxSkOY4EJDr3eNGWz9gz5NXZMSrLT4+9dw61yh1lmw
+         NumBLZJlyXi9e5rE/XQdsG1UgLFo9LlVJ5fGA3h17vxbOx+29G/0HcmcWzwj+AFQXWHq
+         UeVyUDXWthV3CDBtHbsmliwWxiPpqOyaRuoUhYPrc21zcKVFUc6dVj1T5YGPzyt0hUYh
+         BhGs83gZhVQ+brb2ofrFymkmXkVBHgVP2pJ+VuYjvgAQ2pXgajUI+jyyba2lGvlOm3JF
+         9s7A==
+X-Forwarded-Encrypted: i=1; AJvYcCXdkixc1ee1Yir+Ev9Em2OmQuEw2wqLtuNBkTJr8pmNEWPQ1hJV/zthqcJBwq7v20465xcKOPiCx3LrLg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxDeEUzowbxZfdX3wQe77DPb+yOYlKbFLLtFzlYltKu3oxJb3bD
+	vyR4NbdpLbN7Y6J8tz10qHWE5GLDcYuVI9UJXXIo8SvW+ZmG1LvbroQxqcErwQ==
+X-Gm-Gg: AeBDietKitFfISJmRah0SeGFth7NwE37/s9L6Dj5rEOMDYf3qMpGPCm4hVHamlWwx0F
+	ojVzJMP2fIKuSp3k6fImktuDewnj0XJMTfQUOGKpuSZinUutg4oxxqMpLmmaq53SrypdxlJsC3/
+	joxCPXq4cyR1Gxu1a4a5HNk55kL2GIDUziSrFyLAcuNO7KwvOjnzbK2Ig/J2/yZgauqjaqU9aCm
+	5qp6JGfF5tk55CVUtVFy7/CW7i76dDAP4NTLaiXIzav72XjnHDopTn9RezkqKKAnSwAobfmrSTB
+	xdd+tKBDlqDtBgoBmUeAW3vNWYRNBLqYdcYcjgi57w85qvl8n1wimo5Yn2Xuj3lHSE61Ec3Woh7
+	GE4rJFDcGcT2Q9/SUbzj/Pu6Z+jEN4e6cUCXxOikAbqzjGNdT2+Ipy9ZhTdM3zcKvOKZj76N4du
+	G0Tp66uT8EPs+lLYLSJrG6dVKrTsKMA/Xgbo6yGkz2Rs7hGFn8p0EW2UfRo9shWUnQCIkMRLkln
+	pNrYFZ7NQw=
+X-Received: by 2002:a05:7300:320a:b0:2c8:6361:ab2e with SMTP id 5a478bee46e88-2d5877a7b8fmr2872302eec.8.1775839956718;
+        Fri, 10 Apr 2026 09:52:36 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2d5630ac330sm4803680eec.29.2026.04.10.09.30.47
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2d55f5c69d5sm5736628eec.3.2026.04.10.09.52.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Apr 2026 09:30:47 -0700 (PDT)
+        Fri, 10 Apr 2026 09:52:36 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9872a816-9a4f-4826-a4c9-151efa73213d@roeck-us.net>
-Date: Fri, 10 Apr 2026 09:30:46 -0700
+Message-ID: <f6a8479a-b955-41d6-9b45-1b16ef438188@roeck-us.net>
+Date: Fri, 10 Apr 2026 09:52:33 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,14 +70,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] hwmon: (pmbus/q54sj108a2) Add support for
- q50sn12072 and q54sn120a1
-To: Brian Chiang <chiang.brian@inventec.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, Jack Cheng <Cheng.JackHY@inventec.com>
-References: <20260402-add-support-for-q50sn12072-and-q54sn120a1-v3-0-67a5184e93b8@inventec.com>
- <20260402-add-support-for-q50sn12072-and-q54sn120a1-v3-2-67a5184e93b8@inventec.com>
+Subject: Re: [PATCH v5 0/3] hwmon: (sht3x) Add support for GXCAS GXHT30
+To: Zaixiang Xu <zaixiang.xu.dev@gmail.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <1775211296-63722-1-git-send-email-zaixiang.xu.dev@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -122,50 +121,41 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260402-add-support-for-q50sn12072-and-q54sn120a1-v3-2-67a5184e93b8@inventec.com>
+In-Reply-To: <1775211296-63722-1-git-send-email-zaixiang.xu.dev@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 4/1/26 18:29, Brian Chiang wrote:
-> From: Jack Cheng <cheng.jackhy@inventec.com>
+On 4/3/26 03:14, Zaixiang Xu wrote:
+> Hi all,
 > 
-> The Q50SN12072 and Q54SN120A1 are high-efficiency, high-density DC-DC power
-> module from Delta Power Modules.
+> First, I sincerely apologize for the noise in v3 and v4. I unfortunately
+> missed the crucial feedback provided in v1 by Krzysztof, Conor,
+> and Guenter.
 > 
-> The Q50SN12072, quarter brick, single output 12V. This product provides up
-> to 1200 watts of output power at 38~60V. The Q50SN12072 offers peak
-> efficiency up to 98.3%@54Vin.
+> In this v5, I have completely dropped the incorrect approaches from the
+> previous versions and completely refactored the patchset to strictly
+> follow the maintainers' guidelines:
 > 
-> The Q54SN120A1, quarter brick, single output 12V. This product provides up
-> to 1300 watts of output power at 40~60V. The Q54SN120A1 offers peak
-> efficiency up to 98.1%@54Vin.
+> 1. Wildcards are entirely avoided. Explicit chip names are used.
+> 2. The standalone YAML binding has been dropped. The devices are
+>     now added to trivial-devices.yaml.
+> 3. The redundant of_match_table addition in the driver is dropped.
+>     The driver now relies on the I2C core's fallback matching mechanism.
 > 
-> Add support for them to q54sj108a2 driver.
+> Patch 1 adds the vendor prefix for GXCAS (Carries Conor's Acked-by
+> from v1).
+> Patch 2 adds the explicit SHT3x/STS3x and GXHT30 models to
+> trivial-devices.yaml.
+> Patch 3 adds minimal I2C ID support to the sht3x driver.
 > 
-> Signed-off-by: Jack Cheng <cheng.jackhy@inventec.com>
-> Co-developed-by: Brian Chiang <chiang.brian@inventec.com>
-> Signed-off-by: Brian Chiang <chiang.brian@inventec.com>
-> ---
-...
-> -	/*
-> -	 * The chips support reading PMBUS_MFR_MODEL.
-> -	 */
->   	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
->   	if (ret < 0) {
->   		dev_err(dev, "Failed to read Manufacturer Model\n");
->   		return ret;
->   	}
-> -	if (ret != 14 || strncmp(buf, "Q54SJ108A2", 10)) {
-> +	for (mid = q54sj108a2_id; mid->name[0]; mid++) {
-> +		if (!strncasecmp(mid->name, buf, strlen(mid->name)))
-> +			break;
-> +	}
 
-If ret < strlen(mid->name), this check compares uninitialized data.
-Also see Sashiko feedback:
+Sashiko feedback:
 
-https://sashiko.dev/#/patchset/20260402-add-support-for-q50sn12072-and-q54sn120a1-v3-0-67a5184e93b8%40inventec.com
+https://sashiko.dev/#/patchset/1775211296-63722-1-git-send-email-zaixiang.xu.dev%40gmail.com
+
+I think at the very least this will require a proper of_device_id table.
 
 Thanks,
 Guenter
+
 
