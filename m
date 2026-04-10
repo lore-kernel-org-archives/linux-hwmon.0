@@ -1,138 +1,252 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 021CD351C04
-	for <linux-hwmon@vger.kernel.org>; Thu,  9 Apr 2026 21:20:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775769651; cv=none; b=Gsb/gOwfUKyv6qR9tu3QGv2tRuiKWwHb4rpRAUOr/RDJTmPaWgrilLPyx2Y1kU0oP339pQWpl9nOnf/cUxjkHCneuoya6J+uNIefG17znfEiv/WavBYH2b+6J8KbKnekTTTvh7m0k/jsfqZe8bSmmIGrFqvmFeC5D76qwfo1lAA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775769651; c=relaxed/simple;
-	bh=5uOmEpadRadRKkZuxWXITM1R8uvvnmGzgwB99E1jOtQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=azoj95WF1ldzQU8dlEXGDAm+mg9xruwbZBVvOwD/JYIe+SIaxPH6ntZvuuYylP/bVvWPXEwb8EOLBIssrXbpuPL+e50EA6xac+vI8u5IfZ7AmPhL7y97kd9w3iosI/cL/66aX8b8P0ZPH20pUS/loAlC7bEI7DwaH/t7HCbH5bE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A7a1Tghi; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5EF2BB13;
+	Fri, 10 Apr 2026 00:26:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.147.86
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775780779; cv=fail; b=awu7cmJB8WwpM9yzJ8YbNGpXp6vKieM64wXDknu8LO4Dk4Wc+oAg1hkWVASH8xxS8Tma4FVI80YzSs11mrshXcC82b10Q+4L49mIxVeE1HdcD3dlDKnxGerlJuxsJbOnLUiadSMe+XxnI488H5udsyuQhpJXOhvutqITyn3A9ew=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775780779; c=relaxed/simple;
+	bh=WUf96XPh8Jgvy0g2XgzOzqm/NEuGerDzjsA9Dl1mTG8=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=nnz3PCiUyAT2bqovlCO6IqkvMomgdaXyyc9rR9hft+31fWVGwHHXroVy09mWKEIeJgS+gaO3ltiuRPS2BOMVHyc0UZ/oTZrLL338OYJk6A7NdxUTjcqbre6F/frIDutVw/I9bAeM3iT6drU3iwNTEk8S0Gu5DbdaqlX91aKP1HU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=g4DavnQ4; arc=fail smtp.client-ip=148.163.147.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A7a1Tghi"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c76b6f9a50eso617071a12.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 09 Apr 2026 14:20:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775769649; x=1776374449; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sr5YxopLPPl6Lhy7H+cJ2Jp5D/0HQnUmZSE6Kn+2cL0=;
-        b=A7a1TghijWOY7IB4jn32kyk5mAY2jKgFQYsEsxry1kX6tsdsYRaJrZbZbnsLDzrRkI
-         XgeqtKVC+k6kEjaZMhxIqzAXfFeMCVyBOcJi3BrDJ7Rr9NTcVuTKu2ZP9K2+7KLycfBu
-         AfamMjAsI6aRIkH0XbrQivKcXBM6eFVQ3v+aP6ttTQ69pQppZRHz+tZZtZwGdmL981Vl
-         3xQMw9+RbB0Xxikq3Kcwe5XnPvpyxZQqBsOa0cqziuOMVooWRXAo2m68vWQeYviJuyEv
-         0/8nfjngEO5YfnxqLJr6sdMt2hoNMTzrT1pIhks3i5/BgfId/ki5+racs/AP3kzU6/oR
-         cBTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775769649; x=1776374449;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sr5YxopLPPl6Lhy7H+cJ2Jp5D/0HQnUmZSE6Kn+2cL0=;
-        b=g4wRLh+UTz0UJVbwzzeygBWhvEYLu60qj8eyX2skP6lScJKE5+ISufYtPKiAPoLKmK
-         R6IgKQsCBHc37eycVsOa15i5jhj/PTZUbqXN7v5PpT2R5lRkTALVB98So/AX51752+f3
-         nGxGMtaX0KGKdrt8L5yJDmt10bTJUm3+EpovHnFG4DLVi7y6lRf5A+Zg6cIUR7M16PfB
-         ahfaMQvHvWmc5g3lRz1qjE01eR7EwOS32Bnn+N970RYA1lISA2yprRBu6Yj3FE7W4BjD
-         MQ+xKJmlgyfkvGl2FsjjhskgW+F45eI5xusG4vt2744n9DYZw67WDRMpBNkVWxKFxfUz
-         M8EA==
-X-Forwarded-Encrypted: i=1; AJvYcCVRjFQZ71TNBX7TOE/7F6KUXQJ1VkPNoK7otJPeo455pGhztqAObrIlBHrrkCusWAvAXwTQrIr4xqdcFw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyeN1VrQPSKP9khFC662NtqbwoaDXRf6ovBe3cuSTcCgPzXxRgp
-	DLfvxiKe2lqTC5YzwG3bg7Cm4zsHM3ZUkt2k7TpjuNByU8/Bb7n4QB9jum3yKQ==
-X-Gm-Gg: AeBDietbd+Cw5C824Dom81+EVor/Tx8o3JxEP1WPog7yPZnjhSW2pf7WoAFbgexio3G
-	ZsnntQDS9RE6AgC3NLOpUpjbYZYMmexbbmHhbarcrfqZIuo7b9ffY5W33uRzp+kf2ybZVJLL9Us
-	FXM0CZtI55RGX1eoFbVdgGW8tp8hWtKtrNl69blW/7QYKybeWHV4xA++x8MQEkDjTvvavrXI2q3
-	dE8z3sXG5v/3yjxUA1FQWSrMpLeKBqlXGnMN8rEWJN+POcmHbvDWMCvr4KT8I5Cg7uDWa/sCxi/
-	dkIgWObNIVzwb+LOPIJI+5lyHP2hLszeTU4CRNA0GzBgS406cW4eh+B36XI+IzrsyY2Mgab+z/O
-	4Ka1pBjE3zdQOt2/QgFBW3lZtNp10qMiPwQVH9pHZe1gr2RCF8c8DagpJKq/saxoSOQb6M75Pb3
-	apApKFVyyidijhj1BYmikJDqnO7tD0jH86+wXQ
-X-Received: by 2002:a05:6a20:1588:b0:39b:989e:6d34 with SMTP id adf61e73a8af0-39fe3c1c2d6mr551016637.4.1775769649341;
-        Thu, 09 Apr 2026 14:20:49 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c79218fc64csm344061a12.11.2026.04.09.14.20.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Apr 2026 14:20:48 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 9 Apr 2026 14:20:47 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc: "robh@kernel.org" <robh@kernel.org>,
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 0/2] hwmon: pmbus: Sony APS-379
-Message-ID: <9abbac2b-ef37-4f8f-9193-f704d1669189@roeck-us.net>
-References: <20260402024101.4136697-1-chris.packham@alliedtelesis.co.nz>
- <cce0e8c4-8df3-408c-b3ac-6ede3c4b2cf0@roeck-us.net>
- <20ea1c7b-d7d4-4f29-a0f0-c8a8b5a1076d@alliedtelesis.co.nz>
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="g4DavnQ4"
+Received: from pps.filterd (m0148663.ppops.net [127.0.0.1])
+	by mx0a-002e3701.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 639NE3BN3168885;
+	Fri, 10 Apr 2026 00:26:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pps0720; bh=q+
+	wc2aandRkX4BigosdIvhsu8XBcL2cEbVKhUNsYj+4=; b=g4DavnQ4s+tUWH6PWz
+	f5TQA4Pjxtam2mBGtORgqAsCS1zizTrmdr5lz0HS0qFmEjwBgg2PMqZYcYKQ0xuz
+	amksTejcZqN199yETibBDd8oQcwSGy7OJh3zN1hChSYLZqU+l7GtrOxFJMdKRjHf
+	R5JQ/KOn+pGH2pjK1p1Zo6fK4LTjMYGC+/j/gmL9HkPAvioRV+gb5YlrrOUuMQ34
+	RB+ag5m72tINLdaXjV4hQfWRwiz07MQezb3zt8VQFeuksHNiSetZ3zc+QsmNxe6a
+	hZQxhRXLzYcr7iCjqhGvnSyO6d1Q7We4MAYtq5WH/mONudDPBndSQjRe8Ft8sRdS
+	Oc7w==
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+	by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 4dee6wp54h-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Fri, 10 Apr 2026 00:26:04 +0000 (GMT)
+Received: from p1wg14926.americas.hpqcorp.net (unknown [10.119.18.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by p1lg14880.it.hpe.com (Postfix) with ESMTPS id E192D80171C;
+	Fri, 10 Apr 2026 00:26:03 +0000 (UTC)
+Received: from p1wg14928.americas.hpqcorp.net (10.119.18.116) by
+ p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17; Thu, 9 Apr 2026 12:25:44 -1200
+Received: from p1wg14926.americas.hpqcorp.net (10.119.18.115) by
+ p1wg14928.americas.hpqcorp.net (10.119.18.116) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17; Thu, 9 Apr 2026 12:25:43 -1200
+Received: from p1wg14921.americas.hpqcorp.net (16.230.19.124) by
+ p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17 via Frontend Transport; Thu, 9 Apr 2026 12:25:43 -1200
+Received: from BL0PR07CU001.outbound.protection.outlook.com (192.58.206.38) by
+ edge.it.hpe.com (16.230.19.124) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Thu, 9 Apr
+ 2026 12:25:43 -1200
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Em8mqB3jUIfABX0QdttpbWKq9sZho91FqBTZ0sBdh/6ap2JMLHq2yiFYjo6JXAyWqzWEKFuUDIRlvbCLwHkUfqKTNCKYKaZOGYAh60VJxZsNxXVkPpeKJWOCYzdnlphvdbp2HDiYcoDqi87dBkyKDSteM5GdQCZQmIWxycKaZgLdRzR2mCsZ+6UfFWKmow8uFICfG7MFCLRNUh26XxW3trv1ZoJ7wK/oD7OHILtp16Jar6a5fftQv3hehxW/st2yVtjOkpDbZwGj+oJHL+c6aZseFZgLqYvtTr47GfDfrO2x2R8fYSEb/LuMzSsmfhc6oLcu8N1BJjYv/Rufn3FroA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q+wc2aandRkX4BigosdIvhsu8XBcL2cEbVKhUNsYj+4=;
+ b=V+xBNqNae+nuuY37Qy40CF3SC7gMo1lzByEsJdLL2h9vrYdLtCdxpcsTp553yTWV07f0tqtMUHBGVyci4YUklGwq5rkRRaam8kVcmkxL2PTpwYVtJeI82dPSRT+dCpwIKiS4nJT7Le3gJFwS6sN8TmQwiA/rGHhzHt1SN9IhMT7mfHgiOmZVTPlIP/JIqGW/hqYVxL6aB7OozpzHjAIXjdY265XG6lzhVLx9mmiUq+LUwPcb0YLsLbFiJkk64aHAC/iaFgsruvN1mA1e6W+fpAFnhMjKThHZll5CprL9kjMHGTZKJEzQ/+xZnBt56oDrXHE94hmdm2CRd0ZPyYyP/Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:610:1cc::7)
+ by MW4PR84MB1706.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1a5::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.42; Fri, 10 Apr
+ 2026 00:25:41 +0000
+Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::2c54:3534:122f:e74f]) by CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::2c54:3534:122f:e74f%4]) with mapi id 15.20.9769.020; Fri, 10 Apr 2026
+ 00:25:41 +0000
+From: "Pradhan, Sanman" <sanman.pradhan@hpe.com>
+To: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+CC: "linux@weissschuh.net" <linux@weissschuh.net>,
+        "linux@roeck-us.net"
+	<linux@roeck-us.net>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        Sanman Pradhan <psanman@juniper.net>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: [PATCH v4 2/2] hwmon: (powerz) Fix missing usb_kill_urb() on signal
+ interrupt
+Thread-Topic: [PATCH v4 2/2] hwmon: (powerz) Fix missing usb_kill_urb() on
+ signal interrupt
+Thread-Index: AQHcyICQ/XrWqYfMuE6+p/JzE+QxLQ==
+Date: Fri, 10 Apr 2026 00:25:41 +0000
+Message-ID: <20260410002521.422645-3-sanman.pradhan@hpe.com>
+References: <20260410002521.422645-1-sanman.pradhan@hpe.com>
+In-Reply-To: <20260410002521.422645-1-sanman.pradhan@hpe.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH3PR84MB3523:EE_|MW4PR84MB1706:EE_
+x-ms-office365-filtering-correlation-id: e62551a9-587f-4ff0-5f48-08de9697b29d
+x-ld-processed: 105b2061-b669-4b31-92ac-24d304d195dc,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|376014|1800799024|38070700021|22082099003|18002099003|56012099003;
+x-microsoft-antispam-message-info: Z18PKEnIdts/U5ncx66P0ZdmNG6G9CP8fcA4ilT8eRYVtI0zs4/oGqLlTVNotDZ64FemHG5Bm9rCT97mjmUUh7n4epMprydqQhH+xWJLcy03XWNFjDkGZUqeJ35N2W/JGpXWU0mKtXjZAl6IJgyqoGA1wz59x00YbFoYNojWYjmKyOVIiOMW8tcgYninzQrOcCGTTqGcPLZHoLUF4UFPxyWfi4C9soXJrzjzXKM8jEZgXdc1nLfRM7Q0WimsLOEu4PeM5/9kDxNoa6mYOLUpobKrdEreLEFdaF7g0ul6Tl4A0zB4q3BMgAcYWLgSLSL1u8fzvEYi8HfWqzvXTXHzygMSoEfS8KDW+ivdNpzKb+96CWxVO5x5P+A9tsDO1fyX27c4cpvGQIsQbJEWuKoDqyaTVUVhyAluLpzFmNnEB3X+VoR3fV6rMpsI4K1oygoK95tpiKVLqbHgn/G/DPs0MJzLsRl2yxVFi7S8wxrses992JQ4kEVSjyA5uqjnALZXgQHV6bfLHES3XE0GCtAZkYl9VcdmsCNlEUrlQQzJF4wVdqmrrtSkGFxiKT8vhsdcfG0co4pcp7+JXUmxfp1Ft8HqJm8us0UqWUTtpYlGkZMCg4sObobFuJ01HnbQ+a8rKMiDrpThQe1h12Dj9hLA5N7UepampYUpGo3WKvZ3d7iTUTArrNdcuOoFAQtPuh+giiK3lqTbkD1Sy1HzRCoAN0oUuwnpv9FEBeZWi32XBtxMArQfyVb8uPTYeSgtNsupiU437+FeBdycWQb3el+d0FJw2JgAXPwbkhQwQ0cVnyE=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(38070700021)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?Hyr5mnbH2wAV9y9N2znNeSEsqcMQ3TT5xN7shZq/hEBHQ3kj3T2PXhJmbS?=
+ =?iso-8859-1?Q?Q81xWx2We6H5awzYAXvURw9K20q7/it8enPgn90dipRBeDEEde5CHcE7V+?=
+ =?iso-8859-1?Q?e3084ypptUhXcDUbpFuF1sgp7Lm94Dwwzj/yzynkQbxeQ8VaN/+3KaB9PI?=
+ =?iso-8859-1?Q?r9cwloX3AwNi0opSPM6jKCTNbZ3LHPKXVBdwoKpvPo9R3QavEQ5YEO4I7v?=
+ =?iso-8859-1?Q?4TssFThzcVjCF5RtthV3HinGiEYP3pUJ+bLcnIiP1XY6UQbg9chzX/pCzu?=
+ =?iso-8859-1?Q?c1ZnX+IQwI+fHJLqpHqUrgRi0pg5DBx0LAhecxiPur60UKsSXchiLSieIV?=
+ =?iso-8859-1?Q?BUZ/ONOCS0Ein67EBqSrvLPHs4Qv3P9B8PpQ1bhONwL60YYw1FLxVL6E2A?=
+ =?iso-8859-1?Q?JpA80Qn3wFMsf1WzF37LAuc40nsyvLtKCkq+4qvpSCE9Kjl16fmC0FO7SF?=
+ =?iso-8859-1?Q?iImeCtMgDUKp4eu8mEy9rQG/p9mpWY6LCtfOawPpQYrK388w+WVHXGMhJU?=
+ =?iso-8859-1?Q?rtXF543fBo2NYqA1RfzEfNnuvdDlli7sFPbDGXloL08KGteK/Yyxg1pWlC?=
+ =?iso-8859-1?Q?Bjgb8eZko7tpVj5L745g2EQozsEFoOSXqFWotw1wlepwxH/jhuN0TwqZ0C?=
+ =?iso-8859-1?Q?9AtYu+EsRpSrnC56VXFo4at513enZWQ1CHXW1QfsKxkfjaGxqTmh+Z0hTl?=
+ =?iso-8859-1?Q?1dDh+K5HeecsrvHUxsDiMlW2ii/hXCVxbPDBJCL2rLPd7piPNb9HMiKtuv?=
+ =?iso-8859-1?Q?UO/QYJf8+3q2Gm8htfq1v6QCtK8rA2YFJJE0qUqBPFk/vuv2WStuRHXKHV?=
+ =?iso-8859-1?Q?4dzA2Q33O/dnRO43U0qse9t7/SUtkREf3P7gW0BW0elVcLVmyvJNM5EmeE?=
+ =?iso-8859-1?Q?MWbMaUQXNheuMl4UJSRUpXBcH1YDNr3dqmaM+ODwBAhDFgPjed68Dwl746?=
+ =?iso-8859-1?Q?tAvRAoGA+y3tldKdk9bM0UPsoKNtTKOgXqahatf+TcwWHEBUEc/JMU0eOI?=
+ =?iso-8859-1?Q?0kmArI1tFq5tm3ZhNksnZg79Jvjp7rBZ2PGqQLj2ZEC6FNZ5x8buw4fHQn?=
+ =?iso-8859-1?Q?3pzqUV5m14p+RHjrV8gQmdS96iFMXZDuudAFk1IYp8XJAz0g+3+OAcVfPs?=
+ =?iso-8859-1?Q?986TrjiOND7lQ5daZ9nXZ9u22xzmZa6JVRYQh54VtN8XE9MIAcYyGDhgvM?=
+ =?iso-8859-1?Q?ybSvld/ws9u2OMYMqQoHk2Q5h/TS/+INBiARXMhb6/e44wTWy8Xn5hNVO0?=
+ =?iso-8859-1?Q?DJ8s7Az4K2UNYjkqQV+MtW0TfeCu5h0hzmGRNy+1EYxpAxz8+4YkCuWI5y?=
+ =?iso-8859-1?Q?RA7YaQIdf/c7wcurXBtGREOFgf+mI6MukIFlgm624CHJ48QoXepcYk4X+m?=
+ =?iso-8859-1?Q?WBL5W9RjXxCcGByXgkQdoUb/D1V+0SmLR8DvezWgmm5C2WVszvg9KBMWDN?=
+ =?iso-8859-1?Q?yS6OW4Kk3gAA9dvPCwDwvKjn5eh+6I+0BnRJ3zhAp6sNQIMfkEo45X7nBA?=
+ =?iso-8859-1?Q?oGbibVBd5gMtG0ykxoxpYoQ09UwI7zKLjMWRitfGYi4ZToj88yBU0bLTkA?=
+ =?iso-8859-1?Q?oEYd45cHwlYTpBOW5TW8uKCveSC/pUa1HgguTjEf5C2/si44ucwziEA+pf?=
+ =?iso-8859-1?Q?TCgTWFQKIWO3+wp7aSiXs90Hr7RH0tvsFJ7z6pB+lEUeEKo7Upb3q7oILe?=
+ =?iso-8859-1?Q?mvRwEnKReorEg28DtIgLFKCeYRNdma/xqKVTGt+nfppfKeCiAMesXNL5C/?=
+ =?iso-8859-1?Q?Klok9e34fQR5WIlhPMwgg2G+gicu9K6ge/YaFLMGDOIE0Y9ZznCnI+Uei7?=
+ =?iso-8859-1?Q?L9OJIrRjkw=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20ea1c7b-d7d4-4f29-a0f0-c8a8b5a1076d@alliedtelesis.co.nz>
+X-Exchange-RoutingPolicyChecked: RT6FUzYgQuKVfn0YvL8Z6jmXWzLzPz4lmOKVp6Oqb9glwo3iA2M4kMCC+ATt/A7MfCjxV7ZnzzcKMbHnliUoOSX+Umljwj6rbJH/HHNUzOrXsAPGSU9U9kaualt1q1J3vej05d9TusYTfwvg6KyQmtxh8gEY3cMUZ/iFNNEoi5YMfL59xtQML9v3+vKkRYvD0KbDNxY72sFP8TDiNM1D8pFItIW0rizJvhFLW/diLky+8uGp7d/6gUWRxkHP0EjMC71OCICZJ1poFxRFh8drIJQY4PDeO9rHhjSfPT4KSR8M5bFpLlxHerW7YhD+UVzJMp7xLseHDBKLoagTh7PLGw==
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: e62551a9-587f-4ff0-5f48-08de9697b29d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Apr 2026 00:25:41.3923
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4ytF5bXd4aA1HHmsTgSSQPgg/ANiNl+hDmJ6W9lZkGedS+zAfpc+hDCQCn/CL4uxKVnckmxqz6uujDZ8PbvEOg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR84MB1706
+X-OriginatorOrg: hpe.com
+X-Proofpoint-ORIG-GUID: xLlHf5KCPw6eqcpBnmvoHmkMwK8egJ3m
+X-Authority-Analysis: v=2.4 cv=T/28ifKQ c=1 sm=1 tr=0 ts=69d8439c cx=c_pps
+ a=A+SOMQ4XYIH4HgQ50p3F5Q==:117 a=A+SOMQ4XYIH4HgQ50p3F5Q==:17
+ a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
+ a=xqWC_Br6kY4A:10 a=8nJEP1OIZ-IA:10 a=A5OVakUREuEA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=gQcMVamqm3wCPoSYhaRC:22 a=6_mrDcixewTG61oOsKN3:22
+ a=OUXY8nFuAAAA:8 a=VwQbUJbxAAAA:8 a=sZCmHRT7lcuF82sXxaYA:9 a=wPNLvfGTeEIA:10
+ a=cAcMbU7R10T-QSRYIcO_:22
+X-Proofpoint-GUID: xLlHf5KCPw6eqcpBnmvoHmkMwK8egJ3m
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDEwMDAwMiBTYWx0ZWRfX+3KOi7hsLAMl
+ HLo5w3ve59idtlnE25KVNJhvMogLhDucD5yrf6bMywV4ncUSXJuIju0CX/UQymNrGLodqd47Tjg
+ HpCWlMayEWc56QB6JOFELLfkKVSMQjc3zAWdBsLVNajnhsOiyjskFTUO6gkYC/ZW1Wu2m1RDW+p
+ PWcrzFTjpyo7ftxDxpOwXaNO62YWA23MkJw/L/R87I8DVhpibj/gcb9l90iXl0lg12yaI61YBHo
+ 97FR/pHYN9WABh1bIl5LDx9HNgtAL0amdy1ShnhlAaL4QrlxVyALXSx2uqmO9MI5iZon+Zf7m0Z
+ BE+Qu4+FaKWnKbp+BDMnLdiu9qjd66ptdSwHoHVZfB/bKJ++0cW4RQC3sdgqcks4g0HJNK4QdIW
+ GjA4AC4XRqhI3+8NjzURGNVNapnkvfWqh9Lnymx0xpLxymoJl3fI1PQidzycGBeNmRFcv6QqtpU
+ 0S1JrlVmRbD7niK+ozg==
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-09_05,2026-04-09_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 impostorscore=0 suspectscore=0 phishscore=0 adultscore=0
+ spamscore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604010000 definitions=main-2604100002
 
-On Thu, Apr 09, 2026 at 09:02:43PM +0000, Chris Packham wrote:
-> 
-> On 02/04/2026 23:38, Guenter Roeck wrote:
-> > On 4/1/26 19:40, Chris Packham wrote:
-> >> This series add support for the PMBus hwmon on the Sony
-> >> APS-379 power supply module. There's some deviations from
-> >> the PMBus specification that need to be dealt with.
-> >>
-> >> Chris Packham (2):
-> >>    dt-bindings: trivial-devices: Add sony,aps-379
-> >>    hwmon: pmbus: Add support for Sony APS-379
-> >>
-> >>   .../devicetree/bindings/trivial-devices.yaml  |   2 +
-> >>   Documentation/hwmon/aps-379.rst               |  58 ++++++
-> >>   Documentation/hwmon/index.rst                 |   1 +
-> >>   drivers/hwmon/pmbus/Kconfig                   |   6 +
-> >>   drivers/hwmon/pmbus/Makefile                  |   1 +
-> >>   drivers/hwmon/pmbus/aps-379.c                 | 178 ++++++++++++++++++
-> >>   6 files changed, 246 insertions(+)
-> >>   create mode 100644 Documentation/hwmon/aps-379.rst
-> >>   create mode 100644 drivers/hwmon/pmbus/aps-379.c
-> >>
-> >
-> > Sashiko still doesn't like it.
-> >
-> > https://sashiko.dev/#/patchset/20260402024101.4136697-1-chris.packham%40alliedtelesis.co.nz 
-> >
-> 
-> Just out if interest is this something I should be looking to run before 
-> submitting? I was put off by the low quality results (and dubious 
-> license) of some of the earlier AI code assistants so I tend to avoid 
-> them. Time to revisit perhaps.
-> 
-
-The latest AI models (both Claude and Gemini) are surprisingly good with
-code reviews. Failures are often because of missing context information
-(for example, Sashiko doesn't know that I3C selects I2C, and thus that
-CONFIG_I3C=m and CONFIG_I2C=n is not possible). However, it finds lots of
-problems that I (as human reviewer) had overlooked. Which means that, at
-this point, I trust it more than I trust my own reviews.
-
-For this reason, Sashiko now sends review feedback for all patches
-submitted into the hardware monitoring subsystem.
-
-So, yes, everyone should look into the results. If there are obviously
-wrong results provided by the AI, we should [try to] fix them in the AI
-prompts. Sashiko is public, so everyone can chime in and submit prompt
-updates.
-
-Thanks,
-Guenter
+From: Sanman Pradhan <psanman@juniper.net>=0A=
+=0A=
+wait_for_completion_interruptible_timeout() returns -ERESTARTSYS when=0A=
+interrupted. This needs to abort the URB and return an error. No data=0A=
+has been received from the device so any reads from the transfer=0A=
+buffer are invalid.=0A=
+=0A=
+The original code tests !ret, which only catches the timeout case (0).=0A=
+On signal delivery (-ERESTARTSYS), !ret is false so the function skips=0A=
+usb_kill_urb() and falls through to read from the unfilled transfer=0A=
+buffer.=0A=
+=0A=
+Fix by capturing the return value into a long (matching the function=0A=
+return type) and handling signal (negative) and timeout (zero) cases=0A=
+with separate checks that both call usb_kill_urb() before returning.=0A=
+=0A=
+Fixes: 4381a36abdf1c ("hwmon: add POWER-Z driver")=0A=
+Cc: stable@vger.kernel.org=0A=
+Signed-off-by: Sanman Pradhan <psanman@juniper.net>=0A=
+---=0A=
+v4:=0A=
+ - Split from combined patch into standalone signal fix=0A=
+ - Use long type for wait_for_completion return value=0A=
+ - Split ret <=3D 0 check into separate if (ret < 0) and=0A=
+   if (ret =3D=3D 0) blocks per review feedback=0A=
+ - Reword commit message per review feedback=0A=
+v1-v3:=0A=
+ - Part of combined patch "Fix use-after-free and signal=0A=
+   handling on USB disconnect"=0A=
+=0A=
+ drivers/hwmon/powerz.c | 11 +++++++++--=0A=
+ 1 file changed, 9 insertions(+), 2 deletions(-)=0A=
+=0A=
+diff --git a/drivers/hwmon/powerz.c b/drivers/hwmon/powerz.c=0A=
+index a75b941bd6e2..96438f5f05d4 100644=0A=
+--- a/drivers/hwmon/powerz.c=0A=
++++ b/drivers/hwmon/powerz.c=0A=
+@@ -106,6 +106,7 @@ static void powerz_usb_cmd_complete(struct urb *urb)=0A=
+ =0A=
+ static int powerz_read_data(struct usb_device *udev, struct powerz_priv *p=
+riv)=0A=
+ {=0A=
++	long rc;=0A=
+ 	int ret;=0A=
+ =0A=
+ 	if (!priv->urb)=0A=
+@@ -127,8 +128,14 @@ static int powerz_read_data(struct usb_device *udev, s=
+truct powerz_priv *priv)=0A=
+ 	if (ret)=0A=
+ 		return ret;=0A=
+ =0A=
+-	if (!wait_for_completion_interruptible_timeout=0A=
+-	    (&priv->completion, msecs_to_jiffies(5))) {=0A=
++	rc =3D wait_for_completion_interruptible_timeout(&priv->completion,=0A=
++						       msecs_to_jiffies(5));=0A=
++	if (rc < 0) {=0A=
++		usb_kill_urb(priv->urb);=0A=
++		return rc;=0A=
++	}=0A=
++=0A=
++	if (rc =3D=3D 0) {=0A=
+ 		usb_kill_urb(priv->urb);=0A=
+ 		return -EIO;=0A=
+ 	}=0A=
+-- =0A=
+2.34.1=0A=
+=0A=
