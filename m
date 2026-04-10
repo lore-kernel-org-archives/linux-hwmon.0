@@ -1,184 +1,156 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AEAF21CC5A;
-	Fri, 10 Apr 2026 09:57:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775815038; cv=none; b=NHuUtrE+yuE+PVZZdZNTAMTJdKGqKL4WAqVu0PQ3EPx4UX2K6UzBx9UAUV2yIjYt53rJ35do7tX20/bqp1KAfFFaqmAf7+gWHwG1mjQhNTSqP2WK4Yjgnz/OSmIpLVj4qThtNF5+OwHWofWV5Bwpa+rOvkWSoLRlFnMDS+R0BNc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775815038; c=relaxed/simple;
-	bh=T8Dpiclgk8Jf9La7iQF35pp6q30d9rgfaHQL5Rakqjc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=of+q/k/7IULCoREI48oJr7P+iSg3eojyqY8LRyGi5bZpWrFZPUQVKKUPuEhmKtx1x11zg21k/nJtf6DbeilKp6kYj/kKk32XTRM260Oi0B31CoHLYP0fTWkIHyXwICRZyXW7bM9K4okl+NPY3Mu9c/9OnJBS3iZJXWpWewF6EIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RX9WLI4y; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A8B53A783C
+	for <linux-hwmon@vger.kernel.org>; Fri, 10 Apr 2026 09:59:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775815175; cv=pass; b=AioVFw67MlbGHFTzg2KK2JhLE4lrdyLBoMmz/SF+U2eoSaZvzXYYzOyovgcitUPO1qXxxWzKSn4H3DherYvOmcJvDrkdr3D6NUchVEAYbSmBJzpK41C77j7GFJOFEGXwY4Fjs5ueuKfWgf7ApoQViD76SNMuQGm7ZMaxeCI9bTs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775815175; c=relaxed/simple;
+	bh=N2Ytf4PmH2myigvUKMqYUbjaDrOTgHCXnYH7NNPpZ9Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=n+Xnu9SBFwS5xUJ4smqvjGKWUfHUCGisUg9tK4cl6iCPfPjsqseEVEmsg0+7P3mBm5oNull7p2ugO3can+5Mg4k2d3inq0o4ulh8AYrV3C9T7l+2yO+dNAahAAfdZ0vZFlVUf0a/DSWlf3ObMlgH6OWy0maRfsOyTPDFNcpBElY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rErJRG4Z; arc=pass smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RX9WLI4y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF269C19421;
-	Fri, 10 Apr 2026 09:57:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775815038;
-	bh=T8Dpiclgk8Jf9La7iQF35pp6q30d9rgfaHQL5Rakqjc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RX9WLI4y3+csJJcf9jQG8Ba2LLobhbU+ToOw16B9IyN282S8duPvxsvh7qp4QSehp
-	 Vv07bLfvMbqQo5WaS63U9QzvWXFFcVh+ZsJgfJw1XmpQGoZOv+MubIowr1jKxoM2Hw
-	 7u6saOL9tK0sREeLg+/TuJCSzSmDtjZ2ux8P4Vl+bbftyIImJbr6DqvMaLMsxlBOmy
-	 ppeka/25AnYN35ReaHoURS5hjJd7ce4GeujNV1r6GvUbygGyfEKRQU/9n8VQT+OPQF
-	 kklpnjwHTPpSG4R/oL8e/M+TaoquHp5ORlVzFC3LobJIeD8yamNQXf548S8ctokRjG
-	 YL5AT2swl/7gQ==
-Message-ID: <5c751739-5044-4d23-9648-8d46dd0945d1@kernel.org>
-Date: Fri, 10 Apr 2026 11:57:11 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rErJRG4Z"
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-79a7109f568so21619297b3.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 10 Apr 2026 02:59:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775815173; cv=none;
+        d=google.com; s=arc-20240605;
+        b=XnGwHyrC1k9qcjuBqAZpZGk1Pyb2dI+tVMcEnm42wFp8Itte91ljP8ZfeE4kKJRyyr
+         TdNwLeEKmhSfRXdBOo6KPDleumC1nLVH37/wYGzujWWAMDrzAkPgsuRxQ8CPU1MLjmE8
+         F8rfpaf3gA5acez8ny3eu9UCIt/7GAQ44zAbGxFOqxzGMabtcmYfHUGozz+iqS29Jm2/
+         IsSjcHomt38zYeu6/Lo3HEntyqn930IPi0ItUzDPaG7RXIGBFPwavgH1J5QgD8OWBruV
+         3y9ZtGoTxB4xGbXF/omXpBxr4ooZhbSnGO3YdKq1IflWA1nni+4X8gCPYeyVlY1SQggX
+         n4/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=N2Ytf4PmH2myigvUKMqYUbjaDrOTgHCXnYH7NNPpZ9Q=;
+        fh=S9qHnmUrlXIjBwW/qDyWASZrEJ1m3VsSW45DeX7gll8=;
+        b=fYR/rmYQi4GCyuzXxJ9UbSa7Ks3RDTWDiE0cjDCxuXcPAzX+oAK96Teif3D7hYIA/K
+         YuhImCILp5dVRuXaqrAl1v44AJ7egJewvRwiD6/jndMtginAlKBmSUGgj38u5UKDJ6CN
+         rV1ZOUIb4rxj/ySnD0UP4jvNtvbUFShIqI7wf84PAWiRGHuDp8EYbRO2DPj9wc5GWvt3
+         JZC4suT4SORXkB0+iEu5SU/vFKxeyS58uMWBSCLAwdWxIZR8pXOh3nWFQjoJEDxc2HVO
+         7LLkFNBygFp/TE8jdaP/Ft9WYi4NGomI6MLOtIBhNM/eRpeEaHD/y6b3Cni6I77X4P6u
+         DfGw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775815173; x=1776419973; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N2Ytf4PmH2myigvUKMqYUbjaDrOTgHCXnYH7NNPpZ9Q=;
+        b=rErJRG4ZXVbUQMFbRFnmhepxOtcXBpodg5RLaOgBH+BoRSymMMJ7ImR40QJedCzbyW
+         tMf1Kw0G48yG1WZj+bNeo4MywgSjIiHC6+mdUiWs/1trlCFn5wz1/AAEssiw7iJpV45I
+         HfNU8cXmReN8Nsez829lTb/TBvUrr77OsqHawEgFSQ6vY1oOAVLWJ0U/Z4+fMTe/VFCg
+         IR23/Yp54EUoq9dhxidWHZuyoQIaTlIzdzfge5/sD4+zoIksk5Yd0vqptdZ4fGSwlDMf
+         y/S/uZCe8K9ouwDdws1zrrxjoze6PKxwMOQ8PgDitKmFK8vgUphQisVdc+pg/trHdpwt
+         wTJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775815173; x=1776419973;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=N2Ytf4PmH2myigvUKMqYUbjaDrOTgHCXnYH7NNPpZ9Q=;
+        b=nmBXdKZA8yzEDyl3mYuwndjHP9sdQeTPNoFdcNfAVcpsIkwKqT4SdCHmOnzFbCsq5g
+         02QNvDBZknPcDfjE0qa9YxEYS9qsq1DgLGqlo+0lQIVTmSWgoLhakE/RmQ4gYs8Gg3oR
+         8Dg3kogMuq8+6xLY5oTaW6VmfmyDrL9+06u83Z1iUVKZicZydqCDh3KgOyftgLHJDnto
+         TZntnbnN25HWPpvzf3J8Kkn2ST6DApKWIKxRKzW7YrO5vFwCb05/U87XvIjfep5/JuJO
+         13TiwjPoWIsUKgTGMnSKTHu5Y79aJWRkx7ZHRn1Njkn8wtq2+i24CCYjShHmi2UkitU9
+         5sqw==
+X-Forwarded-Encrypted: i=1; AJvYcCW7fJ081Pv7z0Ao9/77igp/kImb9EazpzqlQwmmnNwFEsuJLnsiW2nQ/5MFtwFWEqjh0gqgHVBcb9y7Ow==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwmJtwRjLOT42uUq7NRL4EYG3P3eeojmz5lJlWDnf4zOs1topP
+	KVzajVDTmYRmbLeKtHro1XkdmOdEDNms71m38oTV4zCOSVnP9r3jZOTDF7uVatJ4muKt0WrVH52
+	1+AcTajAOrQ2j9Cq07atBUftE61CbHeI=
+X-Gm-Gg: AeBDievfh1iRSO2RkUvfcGGaBDOP28sHugraOaa+vYPmhy1Ukp3iQpXLW6qSRf8GHvk
+	TvaD/FiPH2PeeIt8kQp1T12fMWetoAYG5EYYuDJkAv+YurSq1hqQQBvWLlaBt7Miv9UuYWAhu86
+	fxEsLNNoHyhTzNYf3l7jyss+kdSYNWEarp7Ov2wzyzEvFOqJHfrQ+p/hJDKNdp8sNNKY1sbkcfR
+	z4prLkAcoqygU2o0q+R4m51TAi+/CRfzqKkR4W3c/MNGwDlhb2cORy/gWfAdffEy7NmkZ0j2J6Z
+	m7xYAHp/p3kVmsIRkuvvtb2Txj+/IhchxvdBQk5i3g==
+X-Received: by 2002:a05:690c:83:b0:79f:3715:1980 with SMTP id
+ 00721157ae682-7af6f907f77mr24281587b3.12.1775815173216; Fri, 10 Apr 2026
+ 02:59:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 13/13] arm64: defconfig: Enable I3C and SPD5118 hwmon
-To: Akhil R <akhilrajeev@nvidia.com>
-Cc: Frank.Li@nxp.com, acpica-devel@lists.linux.dev,
- alexandre.belloni@bootlin.com, conor+dt@kernel.org,
- devicetree@vger.kernel.org, ebiggers@kernel.org, krzk+dt@kernel.org,
- lenb@kernel.org, linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux@roeck-us.net, miquel.raynal@bootlin.com, p.zabel@pengutronix.de,
- rafael@kernel.org, robh@kernel.org, sakari.ailus@linux.intel.com,
- wsa+renesas@sang-engineering.com
-References: <9e1093e6-18f9-4edc-8659-510245c5d6db@kernel.org>
- <20260410083710.54993-1-akhilrajeev@nvidia.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20260410083710.54993-1-akhilrajeev@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260408053037.1867092-1-a0282524688@gmail.com>
+ <20260408053037.1867092-2-a0282524688@gmail.com> <CAMRc=MeJL_po8HuBa4btVowR-e0i2FyzbDgNVo2u54iPKyuvWw@mail.gmail.com>
+In-Reply-To: <CAMRc=MeJL_po8HuBa4btVowR-e0i2FyzbDgNVo2u54iPKyuvWw@mail.gmail.com>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Fri, 10 Apr 2026 17:59:22 +0800
+X-Gm-Features: AQROBzChhaENjKRgm1eiXEkKC5Ek3HBghHXiZXP2Ngye9h9-wWZ61ho7Hz-V2Tw
+Message-ID: <CAOoeyxXqUbdd3Y0VorzVVOARVpoEkx033sYrv5Hs4tRfst2tOA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] mfd: nct6694: Switch to devm_mfd_add_devices() and
+ drop IDA
+To: Bartosz Golaszewski <brgl@kernel.org>
+Cc: tmyu0@nuvoton.com, linusw@kernel.org, linux@roeck-us.net, 
+	andi.shyti@kernel.org, lee@kernel.org, mkl@pengutronix.de, mailhol@kernel.org, 
+	alexandre.belloni@bootlin.com, wim@linux-watchdog.org, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/04/2026 10:37, Akhil R wrote:
-> On Fri, 10 Apr 2026 09:18:48 +0200, Krzysztof Kozlowski wrote:
->> On 10/04/2026 08:57, Guenter Roeck wrote:
->>> On 4/9/26 23:39, Krzysztof Kozlowski wrote:
->>>> On 09/04/2026 12:57, Akhil R wrote:
->>>>> Add I3C subsystem support, DesignWare I3C master controller, and
->>>>> SPD5118 hwmon sensor as modules to the defconfig and therefore
->>>>> enable the support for SPD5118 sensor on SOCAMM found in NVIDIA
->>>>> Vera platforms.
->>>>
->>>> git grep for "Vera" gave me zero results. Are you sure this is an
->>>> upstream platform? Please point the DTS using this.
->>>>
->>>
->>> I think this is an ACPI based system, or at least that is what Google search
->>> tells me.
->>
->> Thanks. Following Google Vera is either a "CPU" or entire architecture
->> (at least that's how they call it), so it does not have SPD5118 sensor.
-> 
-> SOCAMM is a Memory Module. SPD5118, as it's Kconfig mentions, is a sensor
-> found within such memory modules. I didn't quite get why would you state
-> that the SOCAMM present in Vera architecture (or CPU) does not have
-> SPD5118 in it.
+Hi Bart, all,
 
-I said that CPU or entire architecture does not have it.
+Thanks for the review.
 
-Commit is pretty vague in helping me to figure out the things I asked
-for in last email.
+Bartosz Golaszewski <brgl@kernel.org> =E6=96=BC 2026=E5=B9=B44=E6=9C=888=E6=
+=97=A5=E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=883:25=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Wed, Apr 8, 2026 at 7:31=E2=80=AFAM <a0282524688@gmail.com> wrote:
+> >
+> > From: Ming Yu <a0282524688@gmail.com>
+> >
+> > Currently, the nct6694 core driver uses mfd_add_hotplug_devices()
+> > and an IDA to manage subdevice IDs.
+> >
+> > Switch the core implementation to use the managed
+> > devm_mfd_add_devices() API, which simplifies the error handling and
+> > device lifecycle management. Concurrently, drop the custom IDA
+> > implementation and transition to using pdev->id.
+> >
+> > Signed-off-by: Ming Yu <a0282524688@gmail.com>
+> > ---
+>
+> This does result in a nice code shrink but I'd split this commit into
+> two: one switching to using MFD_CELL_BASIC() with hard-coded devices
+> IDs and one completing the transition to devres.
+>
 
 
-> 
-> Pasting the below from the Vera Rubin product page [1] -
-> "NVIDIA Vera CPUs add enhanced serviceability with small-outline
-> compression-attached memory modules (SOCAMM) LPDDR5X and in-system tests
-> for the CPU cores."
-> 
-> [1]: https://www.nvidia.com/en-us/data-center/technologies/rubin/
+You are right that this change is trying to do too much at once, and
+splitting it as you suggested would make the series much cleaner.
 
-So this is for Vera Rubin? For what is this exactly?
+After looking more closely at the ID handling and hotplug
+implications, I realized that switching to devm_mfd_add_devices() and
+dropping the IDA is not a good fit for this driver. The current
+mfd_add_hotplug_devices() path uses PLATFORM_DEVID_AUTO, which gives
+globally unique device IDs and avoids sysfs name collisions. If we
+switch to devm_mfd_add_devices() with fixed IDs, multiple identical
+NCT6694 devices can end up registering subdevices with the same
+platform device names, which would break hotplug support when more
+than one device is present.
 
-> 
->>
->>
->> "Nvidia vera socamm" gives me something about "rubin". It's not me who
->> should be guessing all this.
->>
->> "nvidia vera socamm SPD5118" gives me even less, so justification is flaky.
->>
->> To remind, this commit msg should convince why generic kernel for
->> developers affecting all possible platforms - not end users, because
->> they always use distro kernels - should enable these configs. And it
->> should bring me clear rule what I can or cannot remove from defconfig,
->> if in 2 years I come and start pruning it from symbols.
-> 
-> I found little details on what we should be adding in the defconfig. It
+So I think it is better not to pursue this direction further.
 
-Then maybe we should not be adding it to defconfig?
+For the next revision, I will drop this part of the change and keep
+the existing MFD core logic, including the IDA usage. The series will
+focus on adding the nct6694-hif MFD driver only, and I will add the
+IDA initialization there as needed.
 
-We usually do not make changes which we do not know why we are making
-them. IOW, every commit must be useful for the community and this is
-achieved by either explicit or implicit answer why doing this.
+Thanks again for the suggestion and review.
 
-And I gave in the past clear guidelines - this is config for the
-upstream kernel developers to use the upstream hardware and/or for
-distros to understand what is needed to support that upstream hardware
-(although last part in theory, because many distros do variantion of
-allmodconfig, so they don't really care about our defconfig).
-
-> would help if you could share some guidance. Do you mean to say that the
-> defconfig should include only the configs which are necessary in
-> development platforms and not in end-products?
-
-No, the type of product does not matter because upstream supports every
-type of product. Upstream does not say "oh, you run end-product, so we
-don't care about you". But defconfig is not used by endusers and has
-zero meaning to them.
-
-It seems to missed or ignored one more reason I wrote:
-
->> And it
->> should bring me clear rule what I can or cannot remove from defconfig,
->> if in 2 years I come and start pruning it from symbols.
 
 Best regards,
-Krzysztof
+Ming
