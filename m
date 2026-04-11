@@ -1,261 +1,166 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89251299923
-	for <linux-hwmon@vger.kernel.org>; Sat, 11 Apr 2026 06:20:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82E40329C49
+	for <linux-hwmon@vger.kernel.org>; Sat, 11 Apr 2026 07:20:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775888414; cv=none; b=SMQMtufP6lAEoDceu55Huee33PiKwKco7YqnTsbHrrtEBrqeg4HB8UUbsKmeRz5C0CA7JUYdve1aOKuTBCGwVYQ6QaSbxmTmz8uVsfzN5cWm2ptmjlGm27Dk4sIb8iHz9qnbfjNXd0AXPWpQ01wQVtVbdb56XV+b2Rnd8nb8Xws=
+	t=1775892032; cv=none; b=cgt46/huVEOx3hyBNGa+1ac89HFhT5rahz43amoGmisMgYgPYrMzrVYbyI4dN7vuG74zAb4LDvwtuE/ZBiSpMr4VGW16a7c7CWErvhEu+YhS2eLUgShgwYN1iiCKQ28E6l8f8VrzzgV0k424JtgjG8Z9ycTd5ia477URw4HO5tY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775888414; c=relaxed/simple;
-	bh=Lb1qCQHUxqZc2PkrrX50cOiJz/n3TrCChaayco2+nIQ=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=ZMbu72E686q3miiCqITovyXFaVHGfG+TzFKRGha3CHnmstdMT/3DyUtXk9DxcebRDGMAR3Q26fMDaiizkrKdJTtXb4QHgjm33YMh9xo48tol6w65qAnXgf3WfiJ/INDwt7lHU/+7lpi+jg3gnZDt1XTRXj7RvvMuJxDbeus4ur8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eCDaTYmH; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1775892032; c=relaxed/simple;
+	bh=giGY+nVbFQQ4Xw5h+OvpqFsfwqaC6d2zZAaoZfV8m6Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k9qYGtBgBdPhDFTKC4rX24gYpKcjtQ/apXoBP+NTBzS5O0nhqRDsFyjYEEeLQDGBYEj9Ux7k7nLCbmscH78riA0TPNbotfYhW7uETNm/WEK3Zns7TRyj+/PsT+uUnLKlUNAx0XBxe3G5k4qK9b1z9BxCRcnKRjqs/calf2PI5fY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h6wkAzBv; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eCDaTYmH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775888412; x=1807424412;
-  h=date:from:to:cc:subject:message-id;
-  bh=Lb1qCQHUxqZc2PkrrX50cOiJz/n3TrCChaayco2+nIQ=;
-  b=eCDaTYmHOd8Iwfhhr5MzwmD8dgEdrjkmQ32BLtCB+twRQad7HxWmnZGt
-   JsPBffxsQAfqjoqE6mbaMdZNyLl2+/svlIMfcDQ4Xlq3VHnEKCaY0Cd71
-   QeHYsss+AOUwq80c222pIjEVJEVYXLNqthrQp+Nxf36Q/cHVhsegcMBny
-   VjEPeNFwrY7UCIAIspB75zit8eOhbEXQAa+Oxwb/qmnPAy35Hn4MhRrHG
-   ElSBb+ZfKDnNp6SgqNvaa+x02ypIT27NbO+P8FIP719DQ30bjFKrkIpkB
-   DIiiB8qWNGEFTW3p8Yo+JlBspmo2rWZhD3r6HkHeLOUEMVJb8eIY3fXXo
-   w==;
-X-CSE-ConnectionGUID: qqWK6EXjSd6WClejtZoBQQ==
-X-CSE-MsgGUID: en5OPRjlQ9Gz0UtsZi4mug==
-X-IronPort-AV: E=McAfee;i="6800,10657,11755"; a="76973666"
-X-IronPort-AV: E=Sophos;i="6.23,173,1770624000"; 
-   d="scan'208";a="76973666"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2026 23:20:12 -0700
-X-CSE-ConnectionGUID: KO68HZX/S4y6lnXt0nxwCg==
-X-CSE-MsgGUID: GXCC5fjHQdG23PJKvGuzxQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,173,1770624000"; 
-   d="scan'208";a="259755973"
-Received: from lkp-server01.sh.intel.com (HELO 3eaaf1a74b89) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 10 Apr 2026 23:20:10 -0700
-Received: from kbuild by 3eaaf1a74b89 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wBRhP-000000000th-1OBp;
-	Sat, 11 Apr 2026 06:20:07 +0000
-Date: Sat, 11 Apr 2026 14:19:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Victor Duicu <victor.duicu@microchip.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: [groeck-staging:hwmon-next 76/78]
- drivers/hwmon/mcp9982.c:398:3: warning: unannotated fall-through between
- switch labels
-Message-ID: <202604111428.6XvpEPLI-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h6wkAzBv"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-35d95017a68so1855333a91.3
+        for <linux-hwmon@vger.kernel.org>; Sat, 11 Apr 2026 00:20:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775892031; x=1776496831; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=VlHFHyv7lotD4cDN/ipcHMLKOy2CDqZhb9XbRaJOH1U=;
+        b=h6wkAzBvB2DI6GRbAcT03i/5nmeRpuWPKr8xtzuTDRqqKTXLtuXmzgxS9JJjbhGjz8
+         81fj1S2a7sAl0WZe74H65R5DcSNslDqJEozYH/aWnsKFFPyY1T2xZE9JvZsP9Y8t45+7
+         mXuMtNKXWhzF+d8an6fLn3FoAmUKkoCa8MEsZsyg/uIqNRB9Avdee48D0+wt8ZXv61ta
+         ywVtNobAfgqGPZHV1PuN+5hhGUGpbuGYfYtJ9+xCHu4EbhNBJaYza0dPGaWnx4g8qrSg
+         mF5QzJ7f0DPLhIj1A57kbcs5aheAme4BZz3J2cA6x+ZLcePqSZ04erdB6bYd2JGdpmJV
+         C8hA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775892031; x=1776496831;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VlHFHyv7lotD4cDN/ipcHMLKOy2CDqZhb9XbRaJOH1U=;
+        b=kr/qJBfW67Y3vi2kive9iy9kx+sS5lE8eKIG73l8AIQyZxsvqgT68fsHnPVrNQCByw
+         7aP6qsDbYoPQuZdIGxzOMfEX2ILQjDkqtbWFhNtjz03lLL/hgw0Wh9a+5njn5cC9YlOX
+         pF556gCJ09QBwDAt9aenznKc4aS0d0HT0Egc3GnL2UEOwDJxdeOH/lPP5HRUCxmcZiCY
+         2QNy+kgdyAmQUHsh/VpXf5nu5Z87jQUTFEPkH0WQ+pvZ97Dz0pxf8hdS46MlRxfdt1Nm
+         kKGJw/miSa6lvmRB2o9e540nRmyW+Njd/uI35ic4JVT5qHA1hDDgyAB0uiaKngsEIdDD
+         0j2w==
+X-Forwarded-Encrypted: i=1; AJvYcCUfTx/kL/4BppmaPbOD+klunl0C6xck9Mz6OkAFJu9pXyamHK+YDfr6r8A9t/P3/19YmxHVirF10D3lLQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YylNOeyXjtA4xcAXRvri0CNtKraXfxjwfTZbo/w3aXvDsXoIahq
+	geAD9E8DEgHy152ohhfEWsdQ3zPiMyAXl5EjdoHBlTGtGz7bhyvYq3fE
+X-Gm-Gg: AeBDievuZjTNARDcYzdOJsn0LaxHlyZhnm603TgWiIwefgRrSUPanJtUQqE7UTwv132
+	euJCg6NTm2IVO0ksTn3eCZR5uUxW3AtXRhOB0dmKpI5Vk13cFQ51UQ5XPmKYvlTpdvQNNjyjQlB
+	bWkw3/eaYKti6QF7SIAeQDa5dQPP9v+TDprSNhVox5dI9yS4D2PnwaJscF9j8wn0NjapGERrpiQ
+	8d7f+YhFHQirWv8nIwADJjbeTcTYR6OGo9i4D8HSK9YFOv8Ax66AoCTYT4vH76xmifPoDmpfiGF
+	oTs3jzER6e8U8SJlTOR5Q7rKme02/B4kBnCcBLWDQ22o0M0prph5wDvxGacCO/ZruUfYGJCZr/3
+	8Uylye0SlZQNNtk9cSYj/zHJA/z36n44tsZDMAqQRhAMt17Ly19X8yS/IS6o1KQTBf3XrEzg60A
+	AOTKyaqzZrYAhaIwXJMjZ17rjH3iA1n4RSKGPNPqDZ9I0BmGItKkrjQ7+7s0BTtdFgl56e91ON
+X-Received: by 2002:a17:90b:2ccb:b0:35b:c900:79a6 with SMTP id 98e67ed59e1d1-35e4274e341mr5769646a91.4.1775892030776;
+        Sat, 11 Apr 2026 00:20:30 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35e35155829sm9191314a91.13.2026.04.11.00.20.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Apr 2026 00:20:30 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d0f1f053-589a-4681-8c8f-8e4b5daec145@roeck-us.net>
+Date: Sat, 11 Apr 2026 00:20:28 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 13/13] arm64: defconfig: Enable I3C and SPD5118 hwmon
+To: Akhil R <akhilrajeev@nvidia.com>, krzk@kernel.org
+Cc: Frank.Li@nxp.com, acpica-devel@lists.linux.dev,
+ alexandre.belloni@bootlin.com, conor+dt@kernel.org,
+ devicetree@vger.kernel.org, ebiggers@kernel.org, krzk+dt@kernel.org,
+ lenb@kernel.org, linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
+ miquel.raynal@bootlin.com, p.zabel@pengutronix.de, rafael@kernel.org,
+ robh@kernel.org, sakari.ailus@linux.intel.com,
+ wsa+renesas@sang-engineering.com
+References: <5c751739-5044-4d23-9648-8d46dd0945d1@kernel.org>
+ <20260411053433.49655-1-akhilrajeev@nvidia.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260411053433.49655-1-akhilrajeev@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-head:   3d6b94a0d05d28ff23750b68aba54598aa232832
-commit: 324fac7ae52b31dc67770b133389c7aba3fb058e [76/78] hwmon: add support for MCP998X
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260411/202604111428.6XvpEPLI-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260411/202604111428.6XvpEPLI-lkp@intel.com/reproduce)
+On 4/10/26 22:34, Akhil R wrote:
+[ ... ]
+>>>> And it
+>>>> should bring me clear rule what I can or cannot remove from defconfig,
+>>>> if in 2 years I come and start pruning it from symbols.
+> 
+> I am still a little confused on what information would likely accept (and
+> keep) these configs in the defconfig. Would updating the commit message
+> as below work?
+> 
+> "These configs enable the support for SPD5118 within the
+> Small-Outline-Compression-Attached Memory Modules (SOCAMM) LPDDR5X found
+> in the NVIDIA Vera CPUs. The Vera CPU uses ACPI and is part of platforms
+> such as Vera Rubin."
+> 
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604111428.6XvpEPLI-lkp@intel.com/
+It is quite interesting that we argue about SPD5118 which is mandatory in
+DDR5 systems. At the same time, CONFIG_IGB_HWMON, CONFIG_SENSORS_MACSMC_HWMON,
+CONFIG_SENSORS_RASPBERRYPI_HWMON, and CONFIG_RTC_DRV_DS3232_HWMON _are_
+enabled in arm64:defconfig. CONFIG_IGB_HWMON is even built-in.
 
-All warnings (new ones prefixed by >>):
+It is kind of difficult to understand why those are more important than
+the temperature sensor on DDR5 modules (or the temperature sensor on DDR4
+modules, for that matter).
 
->> drivers/hwmon/mcp9982.c:398:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-     398 |                 default:
-         |                 ^
-   drivers/hwmon/mcp9982.c:398:3: note: insert 'break;' to avoid fall-through
-     398 |                 default:
-         |                 ^
-         |                 break; 
-   1 warning generated.
+I don't know what the policy for defconfig is, but just based on that it does
+seem to lack consistency.
 
+A separate question is if it is time to enable I3C in default configurations.
+I'd think so - more and more chip vendors support it, and presumably they would
+not invest in it if there was no demand, but that is just my personal opinion.
 
-vim +398 drivers/hwmon/mcp9982.c
+Guenter
 
-   361	
-   362	static int mcp9982_read(struct device *dev, enum hwmon_sensor_types type, u32 attr, int channel,
-   363				long *val)
-   364	{
-   365		struct mcp9982_priv *priv = dev_get_drvdata(dev);
-   366		unsigned int reg_high, reg_low, hyst, reg_status;
-   367		int ret;
-   368		u8 addr;
-   369	
-   370		/*
-   371		 * In Standby State the conversion cycle must be initated manually in
-   372		 * order to read fresh temperature values and the status of the alarms.
-   373		 */
-   374		if (!priv->run_state) {
-   375			switch (type) {
-   376			case hwmon_temp:
-   377				switch (attr) {
-   378				case hwmon_temp_input:
-   379				case hwmon_temp_max_alarm:
-   380				case hwmon_temp_min_alarm:
-   381				case hwmon_temp_crit_alarm:
-   382					ret = regmap_write(priv->regmap, MCP9982_ONE_SHOT_ADDR, 1);
-   383					if (ret)
-   384						return ret;
-   385					/*
-   386					 * When the device is in Standby mode, 125 ms need
-   387					 * to pass from writing in One Shot register before
-   388					 * the conversion cycle begins.
-   389					 */
-   390					usleep_range(MCP9982_WAKE_UP_TIME_US, MCP9982_WAKE_UP_TIME_MAX_US);
-   391					ret = regmap_read_poll_timeout
-   392						       (priv->regmap, MCP9982_STATUS_ADDR,
-   393						       reg_status, !(reg_status & MCP9982_STATUS_BUSY),
-   394						       MCP9982_WAKE_UP_TIME_US,
-   395						       MCP9982_WAKE_UP_TIME_US * 10);
-   396					break;
-   397				}
- > 398			default:
-   399				break;
-   400			}
-   401		}
-   402	
-   403		switch (type) {
-   404		case hwmon_temp:
-   405			switch (attr) {
-   406			case hwmon_temp_input:
-   407				/*
-   408				 * The only areas of memory that support SMBus block read are 80h->89h
-   409				 * (temperature memory block) and 90h->97h(status memory block).
-   410				 * In this context the read operation uses SMBus protocol and the first
-   411				 * value returned will be the number of addresses that can be read.
-   412				 * Temperature memory block is 10 bytes long and status memory block is 8
-   413				 * bytes long.
-   414				 *
-   415				 * Depending on the read instruction used, the chip behaves differently:
-   416				 * - regmap_bulk_read() when applied to the temperature memory block
-   417				 * (80h->89h), the chip replies with SMBus block read, including count,
-   418				 * additionally to the high and the low bytes. This function cannot be
-   419				 * applied on the memory region 00h->09h(memory area which does not support
-   420				 * block reads, returns wrong data) unless use_single_read is set in
-   421				 * regmap_config.
-   422				 *
-   423				 * - regmap_multi_reg_read() when applied to the 00h->09h area uses I2C
-   424				 * and returns only the high and low temperature bytes. When applied to
-   425				 * the temperature memory block (80h->89h) returns the count till the end of
-   426				 * the temperature memory block(aka SMBus count).
-   427				 *
-   428				 * - i2c_smbus_read_block_data() is not supported by all drivers.
-   429				 *
-   430				 * In order to keep consistency with reading limit memory region we will
-   431				 * use single byte I2C read.
-   432				 *
-   433				 * Low register is latched when high temperature register is read.
-   434				 */
-   435				ret = regmap_read(priv->regmap, MCP9982_HIGH_BYTE_ADDR(channel), &reg_high);
-   436				if (ret)
-   437					return ret;
-   438	
-   439				ret = regmap_read(priv->regmap, MCP9982_HIGH_BYTE_ADDR(channel) + 1,
-   440						  &reg_low);
-   441				if (ret)
-   442					return ret;
-   443	
-   444				*val = ((reg_high << 8) + reg_low) >> 5;
-   445				*val = (*val - (MCP9982_OFFSET << 3)) * 125;
-   446	
-   447				return 0;
-   448			case hwmon_temp_max:
-   449				if (channel)
-   450					addr = MCP9982_EXT_HIGH_LIMIT_ADDR(channel);
-   451				else
-   452					addr = MCP9982_INTERNAL_HIGH_LIMIT_ADDR;
-   453	
-   454				return mcp9982_read_limit(priv, addr, val);
-   455			case hwmon_temp_max_alarm:
-   456				*val = regmap_test_bits(priv->regmap, MCP9982_HIGH_LIMIT_STATUS_ADDR,
-   457							BIT(channel));
-   458				if (*val < 0)
-   459					return *val;
-   460	
-   461				return 0;
-   462			case hwmon_temp_max_hyst:
-   463				if (channel)
-   464					addr = MCP9982_EXT_HIGH_LIMIT_ADDR(channel);
-   465				else
-   466					addr = MCP9982_INTERNAL_HIGH_LIMIT_ADDR;
-   467				ret = mcp9982_read_limit(priv, addr, val);
-   468				if (ret)
-   469					return ret;
-   470	
-   471				ret = regmap_read(priv->regmap, MCP9982_HYS_ADDR, &hyst);
-   472				if (ret)
-   473					return ret;
-   474	
-   475				*val -= hyst * 1000;
-   476	
-   477				return 0;
-   478			case hwmon_temp_min:
-   479				if (channel)
-   480					addr = MCP9982_EXT_LOW_LIMIT_ADDR(channel);
-   481				else
-   482					addr = MCP9982_INTERNAL_LOW_LIMIT_ADDR;
-   483	
-   484				return mcp9982_read_limit(priv, addr, val);
-   485			case hwmon_temp_min_alarm:
-   486				*val = regmap_test_bits(priv->regmap, MCP9982_LOW_LIMIT_STATUS_ADDR,
-   487							BIT(channel));
-   488				if (*val < 0)
-   489					return *val;
-   490	
-   491				return 0;
-   492			case hwmon_temp_crit:
-   493				return mcp9982_read_limit(priv, MCP9982_THERM_LIMIT_ADDR(channel), val);
-   494			case hwmon_temp_crit_alarm:
-   495				*val = regmap_test_bits(priv->regmap, MCP9982_THERM_LIMIT_STATUS_ADDR,
-   496							BIT(channel));
-   497				if (*val < 0)
-   498					return *val;
-   499	
-   500				return 0;
-   501			case hwmon_temp_crit_hyst:
-   502				ret = mcp9982_read_limit(priv, MCP9982_THERM_LIMIT_ADDR(channel), val);
-   503				if (ret)
-   504					return ret;
-   505	
-   506				ret = regmap_read(priv->regmap, MCP9982_HYS_ADDR, &hyst);
-   507				if (ret)
-   508					return ret;
-   509	
-   510				*val -= hyst * 1000;
-   511	
-   512				return 0;
-   513			default:
-   514				return -EINVAL;
-   515			}
-   516		case hwmon_chip:
-   517			switch (attr) {
-   518			case hwmon_chip_update_interval:
-   519				*val = mcp9982_update_interval[priv->interval_idx];
-   520				return 0;
-   521			default:
-   522				return -EINVAL;
-   523			}
-   524		default:
-   525			return -EINVAL;
-   526		}
-   527	}
-   528	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
