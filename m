@@ -1,2501 +1,1487 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5446223A564
-	for <linux-hwmon@vger.kernel.org>; Sat, 11 Apr 2026 13:36:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775914619; cv=none; b=UXH+7myE97L5Z2y5DgOqmoNz//n4LcuQXcuPYXBdpdmIYGH0TQK+T1S78AfXzRP3zhpACdk7ruUJXEGSrU6pW0a0yyi/nte43yCqbEAM42Y0fmY/R8d5msFC30CPOx/JSlhDx0N8UHEEbR4MLLNFTHDNN8S67uyFO/ixbmzLUaI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775914619; c=relaxed/simple;
-	bh=Zb+PiUKbvNxJshaJ2bac84cfTDcq26YKp/7H+L8IqHo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qJoawHIa+JEqxtZB7tD8SEm1Ax2jFs7QQcfka92vDIyqGTou5JngFPHpb2s6G4zVY7rvwAAlkoDG1Vru0BtAeM/37qfUOyszd1Q23ETnQOWJ30xcYkluGUyyPXbQYzqh+rS6OL++MOSEZ6AdEaF/VPh/HjAA+K4Yn1I/ooM3Na0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cPlPKCYC; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E88370D52;
+	Sat, 11 Apr 2026 14:36:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775918218; cv=pass; b=JJ4bxFuIZjeyj2iAW5dJKIE3momo7piMAsPsgM+Cc8o7rknJkwesMk2eZT9J27iljop7JbU3k9dCO+vcTbNGCo8vxOTI9WKnD0bEZ/KMTeF/SBKIdKKOJdwG3GVmf25H6sSpNKyeiUVsI9kwy0WsHCwZKWUjoDaxz4VbP+gIQEE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775918218; c=relaxed/simple;
+	bh=vlV+RbXrNNU59DJ2+4i6hSGP56fMQg62de4I8bGjB5Y=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=cf4myE9/xVVkGhlsj+R2upWMQkaOyvrDuUJWdb7PlM+JTKHW1RDlhJ6oyZ0BdyW8b19cOLexj+WGjeb2ybaElBj5YBG26t62ZJJMg1xImRuIobImtGAiHjQ9TEyHmf70LOaP0oavfmYGdmid9MK9G+anoZpvCXG1W4o2I7qGuNI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe; spf=pass smtp.mailfrom=rong.moe; dkim=pass (2048-bit key) header.d=rong.moe header.i=i@rong.moe header.b=fCoN8tHF; arc=pass smtp.client-ip=136.143.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rong.moe
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cPlPKCYC"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4838c15e3cbso26522005e9.3
-        for <linux-hwmon@vger.kernel.org>; Sat, 11 Apr 2026 06:36:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775914614; x=1776519414; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=V/Wfg6cO44vFG/2kfJzP5uEaiw9Af48TFMMLKIK4k4U=;
-        b=cPlPKCYCEaG4X530//C4I2mPBVbi/44d1GrlwyEag0X/WMmsIqKhWOhIHukXiRKeaC
-         vHuTKN23tvnFvCeTvKhAY4E/RZE2at539Qw+GSRGDZy/tqiaBSYtgAdc6zoHYS18HFhR
-         txtU7qrCE2MmphwG2P84jDcSfbXTApO1cBe0xhwcPhs9mPpTvFT1qHM5Om9Knk7/RAXm
-         +8J1aexZ3QOw1LzV26hyV7Xy5E4UvxYu4YfzPm8J+1/GIQJdkFb/mYayLQthSHTCbtJ/
-         7EsxwKso9FOjaKJeoflUys5NQl8rXuKMM1x1GhjcWcQU72Y9Hsl/M8NVCPm1YvcyYWFz
-         fdag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775914614; x=1776519414;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V/Wfg6cO44vFG/2kfJzP5uEaiw9Af48TFMMLKIK4k4U=;
-        b=hFwGZbZ6q0FY77bg6TYmlsARsUplObn6LxJOO1N1Jt+cMH+e0ZSTYmGyM1D9NAH9iH
-         Ga5wttT7IZ4c2OJ+Z02C6ye0pYZY13q2IAA5kQzht/l2uAVKUcrodP8fxwOqYhsAYSIC
-         epMwk8SGHMQf4B/Lq4GBlMH7PUp1j4eEleL4NEcRXaAbBLSLUuErsPDdCjNVO+waWoqJ
-         wMbMu5XqCFvsKpyf4l/MVQmKP/6qPY0tChy9iJFJ9g24P8mpmfYBLEuThT0ISMn/JwIa
-         4R9QQnAKr7ym1btcQv22J366AcRbYdddvjAbWwDOaFLUTCOmuR5h7EQgiepAqva6wQJE
-         4D+w==
-X-Forwarded-Encrypted: i=1; AJvYcCUuA4WR3q/1bon9abrAx9eopqTTR04oSPAW9we1C0dsxxNdxxKLrBV3E2YJsVDJEbkXH6Y53KFyPp/dpA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyeUQEO69NAO8kK9bFF2TrlYh04czc/4PtF5JKKadIcYb3+rGgU
-	XwiuZ+mkG5MMzl8i/Bx+7dtfQZt1lnSUdI18I7PUqZPnW+4FWL+/VhVw
-X-Gm-Gg: AeBDiesQ6zBKciaFeeOvvr4NCqvh/wn+AkfeHcp9ZD8biQa2GFbxf4bP/zxsj9K8uiB
-	LQ3T+EL368NtS1SaeJ9KRrFU+JL89se+u6g5PYm3ygK5PDO0PAYhrf86Iuwt0aew6VNYlmy64Sk
-	C9dB6ACsaLX/i1dKX/QePzBp+rHMeMcrqCLfvIRbEHuLM5wIL/U/yWN1C6wDlurspTKWmH/HLsc
-	wdXRW36mS6xeS4zqPXiayWhTveldadazGZ/53Hj7L2rh4UFJmDoJ4kbswgLPodFKxJqHN7thqxG
-	RPhrfxpN7A1BTjH8GRJ9SbbohhJqOlHuN/eyV0hb23o8R1cr3qDFJ34jzs2S7X9vEz2cMd3I+U0
-	/XwP5D++2mmnNrH4ZBG7VYCAHmZQ1pAFhcUsO401zVzjPTbqJEmgw0N+pOjgjGG1x4/AHjLfB39
-	IqKviB+bQZWUwag48CR7Y7gAJQjxQYAMN2sS3DrazJD53lO5iuyZNNpUjY1frqBxjLFqsq7BHuK
-	f4/CZR2UIYe
-X-Received: by 2002:a05:600c:a109:b0:488:a977:8de with SMTP id 5b1f17b1804b1-488d6839866mr65236815e9.16.1775914613068;
-        Sat, 11 Apr 2026 06:36:53 -0700 (PDT)
-Received: from ?IPv6:2001:818:ea56:d000:56e0:ceba:7da4:6673? ([2001:818:ea56:d000:56e0:ceba:7da4:6673])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488d58a8438sm161075665e9.5.2026.04.11.06.36.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Apr 2026 06:36:52 -0700 (PDT)
-Message-ID: <2653dc70f42fd015b88e2744da257f6200603b50.camel@gmail.com>
-Subject: Re: [PATCH v9 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap
- Controller
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>, nuno.sa@analog.com, 
-	linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-  Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Linus Walleij <linusw@kernel.org>,  Bartosz Golaszewski	 <brgl@kernel.org>
-Date: Sat, 11 Apr 2026 13:38:01 +0100
-In-Reply-To: <29b207c8-10ab-42b4-a1c8-988aacc75154@roeck-us.net>
-References: <20260406-ltc4283-support-v9-0-b66cfc749261@analog.com>
-	 <20260406-ltc4283-support-v9-2-b66cfc749261@analog.com>
-	 <29b207c8-10ab-42b4-a1c8-988aacc75154@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=rong.moe header.i=i@rong.moe header.b="fCoN8tHF"
+ARC-Seal: i=1; a=rsa-sha256; t=1775918193; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=TYxPUO8v1F7bwDeOnEjDHdYBKrFxiZkdBC8RyUeTu70HWXxBWXgnI22F2lBtdGDGEB8zoO0Di+ELnZ3/7fnmJThOtjg9KzQQJ0DSHVHOe4c2SGaghVJWt6H+21YYNKf3mDLIKLi1kZFLJGnUgZDICZp9eiU522Jp+//4u9oqrck=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1775918193; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=CBJu+PWrTpqXWJCLNcBLOIuapE7A5yiSa0WPdbVWUNo=; 
+	b=WxZUD/J1IQBX/tqTagy6JsuHUzBmkkDsDtOaghPWmbZuYDJgqzrl77NCoX32sIzr24pEtEIYtkW5lHATe2x67Ecu6JFor0vTjBzlRCIme6NUEe2lSOBJz3DKKzADzRDWPqns7enhKM51D+XFrtPj6QHtVV7ifflE29l5lbe5jB0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=rong.moe;
+	spf=pass  smtp.mailfrom=i@rong.moe;
+	dmarc=pass header.from=<i@rong.moe>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1775918192;
+	s=zmail2048; d=rong.moe; i=i@rong.moe;
+	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date:Date:MIME-Version:Message-Id:Reply-To;
+	bh=CBJu+PWrTpqXWJCLNcBLOIuapE7A5yiSa0WPdbVWUNo=;
+	b=fCoN8tHFujhewc71zZ8J3kdfpr6Tlo6YPNy+CYMved2l05T3sp5g0G26f7yDMU0d
+	/cvHTm440D/F1B7DnKctr6i6eqH1El6PCsm1+kBhH6+EG9F+miyuAgnCq6BcBhnvjfa
+	68UELYt0lUtY2NxiL2a2BHkit266Zjw16+eIs4FxO3t2ZiBbxOvNGpe5VRKejVBsrGe
+	JyOFxGfhJAiGsN8sDpsNk0sKp3/V08dSv9tjlM3tU0W0SNgpG5Pl/vx1xqN1GeRDQP8
+	ychKUNtqqmZyvLtxvHFnk/cEH+ch0bDm2Ud3JNsHIEvDQaMGKWdSdEP/PqdN16HtEYI
+	rcKe3MSLnA==
+Received: by mx.zohomail.com with SMTPS id 1775918188909961.7234914497765;
+	Sat, 11 Apr 2026 07:36:28 -0700 (PDT)
+Message-ID: <4c627b63e40d1a3b2923ebe8b42fedde176f35cd.camel@rong.moe>
+Subject: Re: [PATCH v14] Subject: [PATCH v14] hwmon: (yogafan) Extend
+ support to more Lenovo consumer models
+From: Rong Zhang <i@rong.moe>
+To: Sergio Melas <sergiomelas@gmail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, "Derek J. Clark"	
+ <derekjohn.clark@gmail.com>, Armin Wolf <W_Armin@gmx.de>, Jean Delvare	
+ <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org,  platform-driver-x86
+ <platform-driver-x86@vger.kernel.org>
+In-Reply-To: <CAP8e=s+TcnikqHtTaXdsDUmOreLP5MYNQN1gDWvrQa-smbh_9w@mail.gmail.com>
+References: <20260404164339.119023-1-sergiomelas@gmail.com>
+	 <ae53b7783787975caa973dcde337f20aee9b0b40.camel@rong.moe>
+	 <CAP8e=s+TcnikqHtTaXdsDUmOreLP5MYNQN1gDWvrQa-smbh_9w@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+Date: Sat, 11 Apr 2026 22:31:21 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Evolution 3.56.2-9 
+X-ZohoMailClient: External
 
-On Fri, 2026-04-10 at 16:27 -0700, Guenter Roeck wrote:
-> On 4/6/26 07:31, Nuno S=C3=A1 via B4 Relay wrote:
-> > From: Nuno S=C3=A1 <nuno.sa@analog.com>
+Hi Sergio,
+
+On Fri, 2026-04-10 at 22:14 +0200, Sergio Melas wrote:
+> Hi Rong, Hi Guenter,
+>=20
+> Thank you for the review and for pointing out the overlap with lenovo-wmi=
+-other.
+>=20
+> 1. WMI Coexistence and Bogus Fans
+> I completely agree that double-reporting is suboptimal. I will
+> implement a check in the probe function using
+> wmi_has_guid(LENOVO_WMI_FAN_GUID). If the WMI interface is present,
+> yogafan will return -ENODEV and yield to your driver. This ensures my
+> driver only covers models where WMI reporting is unavailable.=C2=A0
+>=20
+
+You may also want to add a module parameter to override the WMI GUID
+check as some devices do not support the fan reporting/tuning interface
+despite having the WMI GUIDs.
+
+> I will
+> also adjust the quirks for the ThinkBook 14 G7+ to avoid registering
+> bogus fan handles.
+>=20
+> 2. New Submission Plan and Community Testing
+> As requested by Guenter, I am preparing a fresh series starting from
+> [PATCH v1] to provide a clean baseline. This will include the WMI
+> back-off logic and the Aura Edition (83KF) support.
+> However, I must be clear: I do not have physical access to the latest
+> WMI-enabled hardware (like the ThinkBook G7+) to locally verify the
+> back-off logic. I will provide the V1 with the implemented check, but
+> I will have to rely on the community=E2=80=94and specifically Rong=E2=80=
+=94to test and
+> verify the behavior on affected models.
+
+Thanks, I will test it and add a Tested-by: tag then.
+
+>=20
+> 3. Authorship and AI Assistance
+> Regarding the Assisted-by: tag, I want to clarify that the driver
+> architecture, the design of the RLLag filter, derived from my PhD
+> research at: https://theses.fr/1998INPG0114, and the overall physical
+> modeling logic are entirely my original work.
+> Drawing on my automation background, I validated functional safety and
+> cybersecurity integrity using a full Bow-Tie Risk Analysis and
+> Traceability report (following IEC 61508, IEC 61511, and IEC 62443
+> standards).
+
+Awesome!
+
+>  I utilized Gemini as a productivity tool for non-creative, repetitive
+> tasks: specifically for generating the extensive DMI/ACPI mapping
+> tables from DSDT data=C2=A0
+>=20
+
+I am a little curious about where you got so many DSDTs. I sometimes
+need DSDTs from other devices for cross-reference. I didn't see a
+reference in the documentation. Am I missing something?
+
+> and community-driven reverse engineering of
+> Lenovo Legion/LOQ EC memory maps at:
+> https://github.com/hirschmann/nbfc/tree/master/Configs. The full
+> development history, DSDT research, and hardware analysis are
+> documented in my repository at:
+> https://github.com/sergiomelas/lenovo-linux-drivers. I will include
+> the tag in the next submission to be transparent about the tools used.
+>=20
+> Note: I will be traveling to China from April 15th to May 10th. My
+> connectivity will be limited. I will monitor the mailing list via
+> mobile roaming to address feedback,  but I will submit the new V1
+> series early next week, prior to my departure.
+
+Have a nice trip in China :-)
+
+Thanks,
+Rong
+
+>=20
+> Best regards,
+>=20
+> Sergio Melas
+>=20
+>=20
+> On Fri, Apr 10, 2026 at 7:20=E2=80=AFPM Rong Zhang <i@rong.moe> wrote:
 > >=20
-> > Support the LTC4283 Hot Swap Controller. The device features programmab=
-le
-> > current limit with foldback and independently adjustable inrush current=
- to
-> > optimize the MOSFET safe operating area (SOA). The SOA timer limits MOS=
-FET
-> > temperature rise for reliable protection against overstresses.
+> > (+CC pdx86 list, Armin, Derek)
 > >=20
-> > An I2C interface and onboard ADC allow monitoring of board current,
-> > voltage, power, energy, and fault status.
+> > Hi Sergio,
 > >=20
-> > Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
->=20
-> The patch still has some issues. Please see
->=20
-> https://sashiko.dev/#/patchset/20260406-ltc4283-support-v9-0-b66cfc749261=
-%40analog.com
->=20
-> Specifically:
->=20
-> - regmap_clear_bits() may not cause problems, but it is not the best
-> =C2=A0=C2=A0 choice either because the register was already read.
-> =C2=A0=C2=A0 It might be better to just write the value to be masked sinc=
+> > Thanks for developing this driver.
+> >=20
+> > On Sat, 2026-04-04 at 18:43 +0200, Sergio Melas wrote:
+> > > Please disregard the previous V13 submission; the patch was malformed
+> > > due to a header corruption issue during generation.
+> > >=20
+> > > This patch expands hardware compatibility for the yogafan driver from
+> > > 3 families to 12, covering approximately 95% of the Lenovo consumer
+> > > portfolio released between 2011 and 2026.
+> > >=20
+> > > Key improvements include:
+> > > - Implementation of linear estimation for discrete Embedded Controlle=
+rs.
+> > > - A major architectural refactor to move physics constants into hardw=
+are
+> > >   profiles.
+> > > - Safety fixes for divide-by-zero risks and filter state corruption.
+> >=20
+> > Derek and I recently noticed that the driver (more specifically, v11)
+> > has appeared in hwmon-next. We haven't carefully reviewed the code, but
+> > we have a minor concern.
+> >=20
+> > Some Legion/ThinkBook devices support reporting or tuning fan RPM via
+> > the LENOVO_OTHER_MODE WMI interface. I've added hwmon support to the
+> > lenovo-wmi-other driver to expose this capability:
+> >=20
+> > https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
+tree/drivers/platform/x86/lenovo/wmi-other.c?h=3Dv7.0-rc7#n153
+> > https://lore.kernel.org/all/20260120182104.163424-1-i@rong.moe/
+> >=20
+> > With yogafan and lenovo-wmi-other both enabled, there will be two hwmon
+> > devices reporting the same metric (except for some temporary hysteresis
+> > introduced by yogafan's RLLag filter).
+> >=20
+> > Ideally, it'd better not registering the same metric more than once.
+> > From our perspective, lenovo-wmi-other should be preferred as it
+> > provides tuning support, as well as min/max values directly from the
+> > LENOVO_FAN_TEST_DATA interface.
+> >=20
+> > To address the issue, it should be enough to return -ENODEV on probe
+> > when the WMI GUIDs of the LENOVO_OTHER_MODE and
+> > LENOVO_CAPABILITY_DATA_00 interfaces are present. Alternatively, we may
+> > introduce a coordinator driver to arbitrate between both drivers.
+> >=20
+> > That being said, I found no interference between the two driver during
+> > my test [1], so double reporting is not a major blocker of yogafan from
+> > my perspective.
+> >=20
+> > >=20
+> > > Signed-off-by: Sergio Melas <sergiomelas@gmail.com>
+> >=20
+> > I have a faint intuition that the patch might be AI assisted. If that's
+> > the case, please add an `Assisted-by:' tag accordingly. See also
+> > https://docs.kernel.org/process/coding-assistants.html
+> >=20
+> > I also noticed that you mentioned ideapad-laptop in the documentation.
+> > Since lenovo-wmi-other can provide the same metric on some devices, it
+> > may deserve a mention too. For the same reason, could you kindly CC the
+> > pdx86 list when you resubmit this?
+> >=20
+> > [1]: the test was against this patch (v14). I had to manually add a
+> > device table entry for my device (ThinkBook 14 G7+ ASP) as the ACPI pat=
+h
+> > of its fan is \_SB.PCI0.LPC0.EC0.FA1S. \_SB.PCI0.LPC0.EC0.FA2S also
+> > exists, but it's bogus -- that's why lenovo-wmi-other needs
+> > LENOVO_FAN_TEST_DATA to hide bogus fans.
+> >=20
+> > Thanks,
+> > Rong
+> >=20
+> > > ---
+> > > I realize we are late in the current cycle and this expansion will ha=
+ve to
+> > > wait for the next merge window. I am submitting V13 now to address th=
 e
-> =C2=A0=C2=A0 both the register value and the mask are known.
-
-Fair enough.
-
->=20
-> - I can't comment on the energy accuracy lost. That is your call.
->=20
-
-The AI might have a point. Maybe you know better but if I understood correc=
-tly,
-mul_u64_u64_div_u64() will handle the multiplication by using 128bits (when
-available) or if not, using clever tricks. And it should also handle overfl=
-ows.
-
-So my feeling is that we can simplify all of those check_overflow paths wit=
-h the
-suggested API.
-
-> - Clamping before multiplying is indeed wrong.
-> =C2=A0=C2=A0 You'll need to clamp before multiplying (and then possibly
-> =C2=A0=C2=A0 clamp again).
-
-Yeah, the clamp change was just nonsense from me. What about about
-
-val =3D clamp_val((u64)val * MILLI, ...)
-
-?=20
-
-
-> -=C2=A0 %*ph: The AI seems to have a point.
-
-Indeed!
-
-FWIW, I was already aware of the AI feedback but I'll just setup things loc=
-ally and
-run the review before submitting again.
-
-- Nuno S=C3=A1
-
->=20
-> - debugfs: False positive. I'll need to check if the guidance ever made i=
-t into the
-> =C2=A0=C2=A0 Agent's prompts.
->=20
-> Thanks,
-> Guenter
->=20
-> > ---
-> > =C2=A0 Documentation/hwmon/index.rst=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0 1 =
-+
-> > =C2=A0 Documentation/hwmon/ltc4283.rst |=C2=A0 266 ++++++
-> > =C2=A0 MAINTAINERS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=
-=A0=C2=A0=C2=A0 1 +
-> > =C2=A0 drivers/hwmon/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 12 +
-> > =C2=A0 drivers/hwmon/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0 1 +
-> > =C2=A0 drivers/hwmon/ltc4283.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 | 1808 +++++++++++++++++++++++++++++++++++++++
-> > =C2=A0 6 files changed, 2089 insertions(+)
-> >=20
-> > diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.=
-rst
-> > index 199f35a75282..d54dda83ab6e 100644
-> > --- a/Documentation/hwmon/index.rst
-> > +++ b/Documentation/hwmon/index.rst
-> > @@ -144,6 +144,7 @@ Hardware Monitoring Kernel Drivers
-> > =C2=A0=C2=A0=C2=A0=C2=A0 ltc4260
-> > =C2=A0=C2=A0=C2=A0=C2=A0 ltc4261
-> > =C2=A0=C2=A0=C2=A0=C2=A0 ltc4282
-> > +=C2=A0=C2=A0 ltc4283
-> > =C2=A0=C2=A0=C2=A0=C2=A0 ltc4286
-> > =C2=A0=C2=A0=C2=A0=C2=A0 macsmc-hwmon
-> > =C2=A0=C2=A0=C2=A0=C2=A0 max127
-> > diff --git a/Documentation/hwmon/ltc4283.rst b/Documentation/hwmon/ltc4=
-283.rst
-> > new file mode 100644
-> > index 000000000000..ba88445e45f4
-> > --- /dev/null
-> > +++ b/Documentation/hwmon/ltc4283.rst
-> > @@ -0,0 +1,266 @@
-> > +.. SPDX-License-Identifier: GPL-2.0-only
-> > +
-> > +Kernel drivers ltc4283
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +
-> > +Supported chips:
-> > +
-> > +=C2=A0 * Analog Devices LTC4283
-> > +
-> > +=C2=A0=C2=A0=C2=A0 Prefix: 'ltc4283'
-> > +
-> > +=C2=A0=C2=A0=C2=A0 Addresses scanned: -
-> > +
-> > +=C2=A0=C2=A0=C2=A0 Datasheet:
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
-> > https://www.analog.com/media/en/technical-documentation/data-sheets/ltc=
-4283.pdf
-> > +
-> > +Author: Nuno S=C3=A1 <nuno.sa@analog.com>
-> > +
-> > +Description
-> > +___________
-> > +
-> > +The LTC4283 negative voltage hot swap controller drives an external N-=
-channel
-> > +MOSFET to allow a board to be safely inserted and removed from a live =
-backplane.
-> > +The device features programmable current limit with foldback and indep=
-endently
-> > +adjustable inrush current to optimize the MOSFET safe operating area (=
-SOA). The
-> > +SOA timer limits MOSFET temperature rise for reliable protection again=
-st
-> > +overstresses. An I2C interface and onboard gear-shift ADC allow monito=
-ring of
-> > +board current, voltage, power, energy, and fault status.=C2=A0 Additio=
-nal features
-> > +respond to input UV/OV, interrupt the host when a fault has occurred, =
-notify
-> > +when output power is good, detect insertion of a board, turn off the M=
-OSFET
-> > +if an external supply monitor fails to indicate power good within a ti=
-meout
-> > +period, and auto-reboot after a programmable delay following a host co=
-mmanded
-> > +turn-off.
-> > +
-> > +Sysfs entries
-> > +_____________
-> > +
-> > +The following attributes are supported. Limits are read-write and all =
-the other
-> > +attributes are read-only. Note that the VADIOx channels might not be a=
-vailable
-> > +if the ADIO pins are used as GPIOs (naturally also affects the respect=
-ive
-> > +differential channels).
-> > +
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =
+> > > technical and safety concerns raised in the V12 review so the code is=
+ ready
+> > > when the next window opens.
+> > >=20
+> > > V14:
+> > >   - Technical content identical to v13.
+> > >   - Fixed malformed email headers and MIME/Subject corruption that pr=
+evented patch application.
+> > >=20
+> > > v13: Complete Architectural Refactor & Safety Fixes
+> > >   - Hardcoded Physics: Moved filter constants (Tau, Slew, Threshold) =
+from
+> > >     global defines into static hardware profiles within 'yogafan_conf=
+ig'
+> > >     to provide model-specific tuning and clear technical rationale.
+> > >   - Eliminated Module Parameters: Removed all module_param inputs to =
+comply
+> > >     with subsystem guidelines and prevent runtime instability.
+> > >   - Divide-by-Zero Protection: Implemented safety clamps (?: 1) in th=
+e probe
+> > >     calculation to ensure the denominator is never zero during initia=
+lization.
+> > >   - State Corruption Fix: Modified yoga_fan_read() to handle static _=
+max
+> > >     attribute requests at the entry point. This prevents userspace po=
+lling
+> > >     (e.g., KDE/Dashboards) from inadvertently triggering the RLLag fi=
+lter
+> > >     and corrupting the last_sample timestamp.
+> > >   - Sysfs Sanitation: Deleted custom attribute groups and non-standar=
+d _raw
+> > >     files; switched to standard HWMON core registration.
+> > >   - Clean Probing: Refactored the ACPI path discovery loop to a simpl=
+ified
+> > >     conditional for loop and removed unnecessary (void *) type casts.
+> > >   - Documentation Sync: Updated yogafan.rst to include secondary ACPI=
+ paths
+> > >     (.FANS) for Yoga 3/11s models to match the driver's probing logic=
+.
+> > >=20
+> > > v12: Expanded Architecture & Universal Coverage (Rejected)
+> > >   - Implemented Discrete Level Architecture (Linear Estimation) using=
+ the formula
+> > >     raw_RPM =3D (Rmax * IN) / Nmax to support legacy and ultra-portab=
+le models
+> > >     reporting fixed PWM steps.
+> > >   - Added specific DMI-based quirks for Yoga 710, 720, 510, IdeaPad 5=
+00S, U31-70,
+> > >     and Yoga 2/3 series to utilize the new estimation logic.
+> > >   - Expanded ACPI path probing to include "FAN0", "FA2S", and "FANS" =
+handles,
+> > >     ensuring out-of-the-box compatibility for ThinkBook G6 and LOQ se=
+ries.
+> > >   - Integrated the RLLag filter with discrete steps, mathematically s=
+moothing
+> > >     abrupt level jumps into a continuous physical RPM curve.
+> > >   - Refactored driver to store filter constants (Tau, Slew) per-devic=
+e,
+> > >     enabling dynamic synchronization with model-specific maximum RPMs=
+.
+> > >   - Updated Documentation/hwmon/yogafan.rst with the validated Master
+> > >     HAL Reference Database (2026).
+> > >   - Expanded support from 3 to 12 distinct hardware families, coverin=
+g over
+> > >     450 unique models and 95% of Lenovo's consumer portfolio (2011=E2=
+=80=932026).
+> > >   - Fixed Documentation formatting, now table appear correctly.
+> > >=20
+> > > V11: Multirate Filter & Autoreset Logic
+> > >   - Mapped ACPI paths directly via DMI quirks.
+> > >   - Fixed Documentation formatting (0-day robot warnings).
+> > >   - Implemented 100ms MIN_SAMPLING to address rapid polling concerns.
+> > >   - Removed redundant platform_set_drvdata() in probe.
+> > >   - Already Supported Models: Yoga 14c, Slim 7, Pro 7, Pro 9, Legion =
+5, Legion 7i, LOQ.
+> > >=20
+> > > v9/10:RLLag V1 Physics & Multiplier Fix
+> > >   - Implement ACPI handle resolution during probe for better performa=
+nce (O(1) read).
+> > >   - Add MODULE_DEVICE_TABLE(dmi, ...) to enable module autoloading.
+> > >   - Refine RLLag filter documentation and suspend/resume logic.
+> > >   - Include comprehensive EC architecture research database (8-bit vs=
+ 16-bit).
+> > >   - Validated efficiency on kernels 6.18, 6.19, and 7.0-rc5: 'perf to=
+p'
+> > >     confirms negligible CPU overhead (<0.01%) during active polling.
+> > > V08: ACPI Handle Discovery & Initial Probe
+> > >   - Replaced heuristic multiplier with deterministic DMI Quirk Table.
+> > >   - Added 'depends on DMI' to Kconfig.
+> > >   - Verified FOPTD model (1000ms TAU / 1500 RPM/s slew) against hardw=
+are traces.
+> > >   - Increased filter precision to 12-bit fixed-point.
+> > > V07: DMI Quirk Table & Device Identification
+> > >   - Fixed Kconfig: Removed non-existent 'select MATH64'.
+> > >   - Fixed unused macro: Utilized RPM_FLOOR_LIMIT to implement an
+> > >     immediate 0-RPM bypass in the filter.
+> > >   - Clarification: Previous "unified structure" comment meant that al=
+l
+> > >     6 files (driver, docs, metadata) are now in this single atomic pa=
+tch.
+> > > V06: Dual-Fan Support & ACPI Handle Eval
+> > >   - Unified patch structure (6 files changed).
+> > >   - Verified FOPTD (First-Order Plus Time Delay) model against hardwa=
+re
+> > >       traces (Yoga 14c) to ensure physical accuracy of the 1000ms tim=
+e constant.
+> > >   - Fixed a rounding stall: added a +/- 1 RPM floor to the step calcu=
+lation
+> > >     to ensure convergence even at high polling frequencies.
+> > >   - Set MAX_SLEW_RPM_S to 1500 to match physical motor inertia.
+> > >   - Documentation: Updated to clarify 100-RPM hardware step resolutio=
+n.
+> > >   - 32-bit safety: Implemented div64_s64 for coefficient precision.
+> > > V05: Raw EC Register Offset Validation
+> > >   - Fixed 32-bit build failures by using div64_s64 for 64-bit divisio=
+n.
+> > >   - Extracted magic numbers into constants (RPM_UNIT_THRESHOLD, etc.)=
+.
+> > >   - Fixed filter stall by ensuring a minimum slew limit (limit =3D 1)=
+.
+> > >   - Refined RPM floor logic to trigger only when hardware reports 0 R=
+PM.
+> > >   - Resolved 255/256 unit-jump bug by adjusting heuristic thresholds.
+> > > v04: Initial HWMON Sysfs Implementation
+> > >   - Rebased on groeck/hwmon-next branch for clean application.
+> > >   - Corrected alphabetical sorting in Kconfig and Makefile.
+> > >   - Technical Validation & FOPTD Verification:
+> > >     - Implemented RLLag (Rate-Limited Lag) first-order modeling.
+> > >     - Used 10-bit fixed-point math for alpha calculation to avoid
+> > >       floating point overhead in the kernel.
+> > >     - Added 5000ms filter reset for resume/long-polling sanitation.
+> > > V03: DSDT Analysis & ACPI Path Mapping
+> > >   - Added MAINTAINERS entry and full Documentation/hwmon/yogafan.rst.
+> > >   - Fixed integer overflow in filter math.
+> > >   - Added support for secondary fan paths (FA2S) for Legion laptops.
+> > > V02: Proof-of-Concept Embedded Controller Reads
+> > >   - Migrated from background worker to passive multirate filtering.
+> > >   - Implemented dt-based scaling to maximize CPU sleep states.
+> > >   - Restricted driver to Lenovo hardware via DMI matching.
+> > > V01: Initial Module Skeleton & Kbuild Setup
+> > >   - Initial submission with basic ACPI fan path support.
+> > > ---
+> > > ---
+> > >  Documentation/hwmon/yogafan.rst | 293 ++++++++++++++++++++----
+> > >  drivers/hwmon/Kconfig           |   1 -
+> > >  drivers/hwmon/yogafan.c         | 381 +++++++++++++++++++++++++++---=
+--
+> > >  3 files changed, 571 insertions(+), 104 deletions(-)
+> > >=20
+> > > diff --git a/Documentation/hwmon/yogafan.rst b/Documentation/hwmon/yo=
+gafan.rst
+> > > index c0a449aa8..eb5534fb8 100644
+> > > --- a/Documentation/hwmon/yogafan.rst
+> > > +++ b/Documentation/hwmon/yogafan.rst
+> > > @@ -1,56 +1,186 @@
+> > >  .. SPDX-License-Identifier: GPL-2.0-only
+> > > -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +in0_lcrit_alarm=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Critic=
-al Undervoltage alarm
-> > +in0_crit_alarm=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 C=
-ritical Overvoltage alarm
-> > +in0_label		Channel label (VIN)
-> > +
-> > +in1_input		Output voltage (mV).
-> > +in1_min			Undervoltage threshold
-> > +in1_max			Overvoltage threshold
-> > +in1_lowest		Lowest measured voltage
-> > +in1_highest		Highest measured voltage
-> > +in1_reset_history	Write 1 to reset history.
-> > +in1_min_alarm		Undervoltage alarm
-> > +in1_max_alarm		Overvoltage alarm
-> > +in1_label		Channel label (VPWR)
-> > +
-> > +in2_input		Output voltage (mV).
-> > +in2_min			Undervoltage threshold
-> > +in2_max			Overvoltage threshold
-> > +in2_lowest		Lowest measured voltage
-> > +in2_highest		Highest measured voltage
-> > +in2_reset_history	Write 1 to reset history.
-> > +in2_min_alarm		Undervoltage alarm
-> > +in2_max_alarm		Overvoltage alarm
-> > +in2_enable		Enable/Disable monitoring.
-> > +in2_label		Channel label (VADI1)
-> > +
-> > +in3_input		Output voltage (mV).
-> > +in3_min			Undervoltage threshold
-> > +in3_max			Overvoltage threshold
-> > +in3_lowest		Lowest measured voltage
-> > +in3_highest		Highest measured voltage
-> > +in3_reset_history	Write 1 to reset history.
-> > +in3_min_alarm		Undervoltage alarm
-> > +in3_max_alarm		Overvoltage alarm
-> > +in3_enable		Enable/Disable monitoring.
-> > +in3_label		Channel label (VADI2)
-> > +
-> > +in4_input		Output voltage (mV).
-> > +in4_min			Undervoltage threshold
-> > +in4_max			Overvoltage threshold
-> > +in4_lowest		Lowest measured voltage
-> > +in4_highest		Highest measured voltage
-> > +in4_reset_history	Write 1 to reset history.
-> > +in4_min_alarm		Undervoltage alarm
-> > +in4_max_alarm		Overvoltage alarm
-> > +in4_enable		Enable/Disable monitoring.
-> > +in4_label		Channel label (VADI3)
-> > +
-> > +in5_input		Output voltage (mV).
-> > +in5_min			Undervoltage threshold
-> > +in5_max			Overvoltage threshold
-> > +in5_lowest		Lowest measured voltage
-> > +in5_highest		Highest measured voltage
-> > +in5_reset_history	Write 1 to reset history.
-> > +in5_min_alarm		Undervoltage alarm
-> > +in5_max_alarm		Overvoltage alarm
-> > +in5_enable		Enable/Disable monitoring.
-> > +in5_label		Channel label (VADI4)
-> > +
-> > +in6_input		Output voltage (mV).
-> > +in6_min			Undervoltage threshold
-> > +in6_max			Overvoltage threshold
-> > +in6_lowest		Lowest measured voltage
-> > +in6_highest		Highest measured voltage
-> > +in6_reset_history	Write 1 to reset history.
-> > +in6_min_alarm		Undervoltage alarm
-> > +in6_max_alarm		Overvoltage alarm
-> > +in6_enable		Enable/Disable monitoring.
-> > +in6_label		Channel label (VADIO1)
-> > +
-> > +in7_input		Output voltage (mV).
-> > +in7_min			Undervoltage threshold
-> > +in7_max			Overvoltage threshold
-> > +in7_lowest		Lowest measured voltage
-> > +in7_highest		Highest measured voltage
-> > +in7_reset_history	Write 1 to reset history.
-> > +in7_min_alarm		Undervoltage alarm
-> > +in7_max_alarm		Overvoltage alarm
-> > +in7_enable		Enable/Disable monitoring.
-> > +in7_label		Channel label (VADIO2)
-> > +
-> > +in8_input		Output voltage (mV).
-> > +in8_min			Undervoltage threshold
-> > +in8_max			Overvoltage threshold
-> > +in8_lowest		Lowest measured voltage
-> > +in8_highest		Highest measured voltage
-> > +in8_reset_history	Write 1 to reset history.
-> > +in8_min_alarm		Undervoltage alarm
-> > +in8_max_alarm		Overvoltage alarm
-> > +in8_enable		Enable/Disable monitoring.
-> > +in8_label		Channel label (VADIO3)
-> > +
-> > +in9_input		Output voltage (mV).
-> > +in9_min			Undervoltage threshold
-> > +in9_max			Overvoltage threshold
-> > +in9_lowest		Lowest measured voltage
-> > +in9_highest		Highest measured voltage
-> > +in9_reset_history	Write 1 to reset history.
-> > +in9_min_alarm		Undervoltage alarm
-> > +in9_max_alarm		Overvoltage alarm
-> > +in9_enable		Enable/Disable monitoring.
-> > +in9_label		Channel label (VADIO4)
-> > +
-> > +in10_input		Output voltage (mV).
-> > +in10_min		Undervoltage threshold
-> > +in10_max		Overvoltage threshold
-> > +in10_lowest		Lowest measured voltage
-> > +in10_highest		Highest measured voltage
-> > +in10_reset_history	Write 1 to reset history.
-> > +in10_min_alarm		Undervoltage alarm
-> > +in10_max_alarm		Overvoltage alarm
-> > +in10_enable		Enable/Disable monitoring.
-> > +in10_label		Channel label (DRNS)
-> > +
-> > +in11_input		Output voltage (mV).
-> > +in11_min		Undervoltage threshold
-> > +in11_max		Overvoltage threshold
-> > +in11_lowest		Lowest measured voltage
-> > +in11_highest		Highest measured voltage
-> > +in11_reset_history	Write 1 to reset history.
-> > +			Also clears fet bad and short fault logs.
-> > +in11_min_alarm		Undervoltage alarm
-> > +in11_max_alarm		Overvoltage alarm
-> > +in11_enable		Enable/Disable monitoring
-> > +in11_fault		Failure in the MOSFET. Either bad or shorted FET.
-> > +in11_label		Channel label (DRAIN)
-> > +
-> > +in12_input		Output voltage (mV).
-> > +in12_min		Undervoltage threshold
-> > +in12_max		Overvoltage threshold
-> > +in12_lowest		Lowest measured voltage
-> > +in12_highest		Highest measured voltage
-> > +in12_reset_history	Write 1 to reset history.
-> > +in12_min_alarm		Undervoltage alarm
-> > +in12_max_alarm		Overvoltage alarm
-> > +in12_enable		Enable/Disable monitoring.
-> > +in12_label		Channel label (ADIN2-ADIN1)
-> > +
-> > +in13_input		Output voltage (mV).
-> > +in13_min		Undervoltage threshold
-> > +in13_max		Overvoltage threshold
-> > +in13_lowest		Lowest measured voltage
-> > +in13_highest		Highest measured voltage
-> > +in13_reset_history	Write 1 to reset history.
-> > +in13_min_alarm		Undervoltage alarm
-> > +in13_max_alarm		Overvoltage alarm
-> > +in13_enable		Enable/Disable monitoring.
-> > +in13_label		Channel label (ADIN4-ADIN3)
-> > +
-> > +in14_input		Output voltage (mV).
-> > +in14_min		Undervoltage threshold
-> > +in14_max		Overvoltage threshold
-> > +in14_lowest		Lowest measured voltage
-> > +in14_highest		Highest measured voltage
-> > +in14_reset_history	Write 1 to reset history.
-> > +in14_min_alarm		Undervoltage alarm
-> > +in14_max_alarm		Overvoltage alarm
-> > +in14_enable		Enable/Disable monitoring.
-> > +in14_label		Channel label (ADIO2-ADIO1)
-> > +
-> > +in15_input		Output voltage (mV).
-> > +in15_min		Undervoltage threshold
-> > +in15_max		Overvoltage threshold
-> > +in15_lowest		Lowest measured voltage
-> > +in15_highest		Highest measured voltage
-> > +in15_reset_history	Write 1 to reset history.
-> > +in15_min_alarm		Undervoltage alarm
-> > +in15_max_alarm		Overvoltage alarm
-> > +in15_enable		Enable/Disable monitoring.
-> > +in15_label		Channel label (ADIO4-ADIO3)
-> > +
-> > +curr1_input		Sense current (mA)
-> > +curr1_min		Undercurrent threshold
-> > +curr1_max		Overcurrent threshold
-> > +curr1_lowest		Lowest measured current
-> > +curr1_highest		Highest measured current
-> > +curr1_reset_history	Write 1 to reset curr1 history.
-> > +			Also clears overcurrent fault logs.
-> > +curr1_min_alarm		Undercurrent alarm
-> > +curr1_max_alarm		Overcurrent alarm
-> > +curr1_crit_alarm=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Critical Ov=
-ercurrent alarm
-> > +curr1_label		Channel label (ISENSE)
-> > +
-> > +power1_input		Power (in uW)
-> > +power1_min		Low power threshold
-> > +power1_max		High power threshold
-> > +power1_input_lowest	Historical minimum power use
-> > +power1_input_highest	Historical maximum power use
-> > +power1_reset_history	Write 1 to reset power1 history.
-> > +			Also clears power fault logs.
-> > +power1_min_alarm	Low power alarm
-> > +power1_max_alarm	High power alarm
-> > +power1_label		Channel label (Power)
-> > +
-> > +energy1_input		Measured energy over time (in microJoule)
-> > +energy1_enable		Enable/Disable Energy accumulation
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +
-> > +DebugFs entries
-> > +_______________
-> > +
-> > +The chip also has a fault log register where failures can be logged. H=
-ence,
-> > +as these are logging events, we give access to them in debugfs. Note t=
-hat
-> > +even if some failure is detected in these logs, it does necessarily me=
-an
-> > +that the failure is still present. As mentioned in the proper Sysfs en=
-tries,
-> > +these logs can be cleared by writing in the proper reset_history attri=
-bute.
-> > +
-> > +.. warning:: The debugfs interface is subject to change without notice
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 and is only available when the kernel is compiled with
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 ``CONFIG_DEBUG_FS`` defined.
-> > +
-> > +``/sys/kernel/debug/i2c/i2c-[X]/[X]-addr/``
-> > +contains the following attributes:
-> > +
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=
-	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > =3D=3D
-> > +power1_failed_fault_log		Set to 1 by a power1 fault occurring.
-> > +power1_good_input_fault_log	Set to 1 by a power1 good input fault occu=
-rring
-> > at PGIO3.
-> > +in11_fet_short_fault_log	Set to 1 when a FET-short fault occurs.
-> > +in11_fet_bad_fault_log		Set to 1 when a FET-BAD fault occurs.
-> > +in0_lcrit_fault_log		Set to 1 by a VIN undervoltage fault occurring.
-> > +in0_crit_fault_log		Set to 1 by a VIN overvoltage fault occurring.
-> > +curr1_crit_fault_log		Set to 1 by an overcurrent fault occurring.
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=C2=A0	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 3f727d7fdfa4..a63833b6fe8b 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -15166,6 +15166,7 @@ M:	Nuno S=C3=A1 <nuno.sa@analog.com>
-> > =C2=A0 L:	linux-hwmon@vger.kernel.org
-> > =C2=A0 S:	Supported
-> > =C2=A0 F:	Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml
-> > +F:	drivers/hwmon/ltc4283.c
-> > =C2=A0=20
-> > =C2=A0 LTC4286 HARDWARE MONITOR DRIVER
-> > =C2=A0 M:	Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> > index fb847ab40ab4..4d9f500ae6ee 100644
-> > --- a/drivers/hwmon/Kconfig
-> > +++ b/drivers/hwmon/Kconfig
-> > @@ -1157,6 +1157,18 @@ config SENSORS_LTC4282
-> > =C2=A0=C2=A0	=C2=A0 This driver can also be built as a module. If so, t=
-he module will
-> > =C2=A0=C2=A0	=C2=A0 be called ltc4282.
-> > =C2=A0=20
-> > +config SENSORS_LTC4283
-> > +	tristate "Analog Devices LTC4283"
-> > +	depends on I2C
-> > +	select REGMAP_I2C
-> > +	select AUXILIARY_BUS
-> > +	help
-> > +	=C2=A0 If you say yes here you get support for Analog Devices LTC4283
-> > +	=C2=A0 Negative Voltage Hot Swap Controller I2C interface.
-> > +
-> > +	=C2=A0 This driver can also be built as a module. If so, the module w=
-ill
-> > +	=C2=A0 be called ltc4283.
-> > +
-> > =C2=A0 config SENSORS_LTQ_CPUTEMP
-> > =C2=A0=C2=A0	bool "Lantiq cpu temperature sensor driver"
-> > =C2=A0=C2=A0	depends on SOC_XWAY
-> > diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> > index 0fce31b43eb1..b9d7b0287b9c 100644
-> > --- a/drivers/hwmon/Makefile
-> > +++ b/drivers/hwmon/Makefile
-> > @@ -147,6 +147,7 @@ obj-$(CONFIG_SENSORS_LTC4245)	+=3D ltc4245.o
-> > =C2=A0 obj-$(CONFIG_SENSORS_LTC4260)	+=3D ltc4260.o
-> > =C2=A0 obj-$(CONFIG_SENSORS_LTC4261)	+=3D ltc4261.o
-> > =C2=A0 obj-$(CONFIG_SENSORS_LTC4282)	+=3D ltc4282.o
-> > +obj-$(CONFIG_SENSORS_LTC4283)	+=3D ltc4283.o
-> > =C2=A0 obj-$(CONFIG_SENSORS_LTQ_CPUTEMP) +=3D ltq-cputemp.o
-> > =C2=A0 obj-$(CONFIG_SENSORS_MACSMC_HWMON)	+=3D macsmc-hwmon.o
-> > =C2=A0 obj-$(CONFIG_SENSORS_MAX1111)	+=3D max1111.o
-> > diff --git a/drivers/hwmon/ltc4283.c b/drivers/hwmon/ltc4283.c
-> > new file mode 100644
-> > index 000000000000..2a2674a55167
-> > --- /dev/null
-> > +++ b/drivers/hwmon/ltc4283.c
-> > @@ -0,0 +1,1808 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Analog Devices LTC4283 I2C Negative Voltage Hot Swap Controller (HW=
-MON)
-> > + *
-> > + * Copyright 2025 Analog Devices Inc.
-> > + */
-> > +#include <linux/auxiliary_bus.h>
-> > +#include <linux/bitfield.h>
-> > +#include <linux/bitmap.h>
-> > +#include <linux/bitops.h>
-> > +#include <linux/bits.h>
-> > +
-> > +#include <linux/debugfs.h>
-> > +#include <linux/device.h>
-> > +#include <linux/device/devres.h>
-> > +#include <linux/hwmon.h>
-> > +#include <linux/i2c.h>
-> > +#include <linux/math.h>
-> > +#include <linux/math64.h>
-> > +#include <linux/minmax.h>
-> > +#include <linux/module.h>
-> > +
-> > +#include <linux/mod_devicetable.h>
-> > +#include <linux/overflow.h>
-> > +#include <linux/property.h>
-> > +#include <linux/regmap.h>
-> > +#include <linux/unaligned.h>
-> > +#include <linux/units.h>
-> > +
-> > +#define LTC4283_SYSTEM_STATUS		0x00
-> > +#define LTC4283_FAULT_STATUS		0x03
-> > +#define=C2=A0=C2=A0 LTC4283_OV_MASK		BIT(0)
-> > +#define=C2=A0=C2=A0 LTC4283_UV_MASK		BIT(1)
-> > +#define=C2=A0=C2=A0 LTC4283_OC_MASK		BIT(2)
-> > +#define=C2=A0=C2=A0 LTC4283_FET_BAD_MASK		BIT(3)
-> > +#define=C2=A0=C2=A0 LTC4283_FET_SHORT_MASK	BIT(6)
-> > +#define LTC4283_FAULT_LOG		0x04
-> > +#define=C2=A0=C2=A0 LTC4283_OV_FAULT_MASK		BIT(0)
-> > +#define=C2=A0=C2=A0 LTC4283_UV_FAULT_MASK		BIT(1)
-> > +#define=C2=A0=C2=A0 LTC4283_OC_FAULT_MASK		BIT(2)
-> > +#define=C2=A0=C2=A0 LTC4283_FET_BAD_FAULT_MASK	BIT(3)
-> > +#define=C2=A0=C2=A0 LTC4283_PGI_FAULT_MASK	BIT(4)
-> > +#define=C2=A0=C2=A0 LTC4283_PWR_FAIL_FAULT_MASK	BIT(5)
-> > +#define=C2=A0=C2=A0 LTC4283_FET_SHORT_FAULT_MASK	BIT(6)
-> > +#define LTC4283_ADC_ALM_LOG_1		0x05
-> > +#define=C2=A0=C2=A0 LTC4283_POWER_LOW_ALM		BIT(0)
-> > +#define=C2=A0=C2=A0 LTC4283_POWER_HIGH_ALM	BIT(1)
-> > +#define=C2=A0=C2=A0 LTC4283_SENSE_LOW_ALM		BIT(4)
-> > +#define=C2=A0=C2=A0 LTC4283_SENSE_HIGH_ALM	BIT(5)
-> > +#define LTC4283_ADC_ALM_LOG_2		0x06
-> > +#define LTC4283_ADC_ALM_LOG_3		0x07
-> > +#define LTC4283_ADC_ALM_LOG_4		0x08
-> > +#define LTC4283_ADC_ALM_LOG_5		0x09
-> > +#define LTC4283_CONTROL_1		0x0a
-> > +#define=C2=A0=C2=A0 LTC4283_RW_PAGE_MASK		BIT(0)
-> > +#define=C2=A0=C2=A0 LTC4283_PIGIO2_ACLB_MASK	BIT(2)
-> > +#define=C2=A0=C2=A0 LTC4283_PWRGD_RST_CTRL_MASK	BIT(3)
-> > +#define=C2=A0=C2=A0 LTC4283_FET_BAD_OFF_MASK	BIT(4)
-> > +#define=C2=A0=C2=A0 LTC4283_THERM_TMR_MASK	BIT(5)
-> > +#define=C2=A0=C2=A0 LTC4283_DVDT_MASK		BIT(6)
-> > +#define LTC4283_CONTROL_2		0x0b
-> > +#define=C2=A0=C2=A0 LTC4283_OV_RETRY_MASK		BIT(0)
-> > +#define=C2=A0=C2=A0 LTC4283_UV_RETRY_MASK		BIT(1)
-> > +#define=C2=A0=C2=A0 LTC4283_OC_RETRY_MASK		GENMASK(3, 2)
-> > +#define=C2=A0=C2=A0 LTC4283_FET_BAD_RETRY_MASK	GENMASK(5, 4)
-> > +#define=C2=A0=C2=A0 LTC4283_EXT_FAULT_RETRY_MASK	BIT(7)
-> > +#define LTC4283_RESERVED_OC		0x0c
-> > +#define LTC4283_CONFIG_1		0x0d
-> > +#define=C2=A0=C2=A0 LTC4283_FB_MASK		GENMASK(3, 2)
-> > +#define=C2=A0=C2=A0 LTC4283_ILIM_MASK		GENMASK(7, 4)
-> > +#define LTC4283_CONFIG_2		0x0e
-> > +#define=C2=A0=C2=A0 LTC4283_COOLING_DL_MASK	GENMASK(3, 1)
-> > +#define=C2=A0=C2=A0 LTC4283_FTBD_DL_MASK		GENMASK(5, 4)
-> > +#define LTC4283_CONFIG_3		0x0f
-> > +#define=C2=A0=C2=A0 LTC4283_VPWR_DRNS_MASK	BIT(6)
-> > +#define=C2=A0=C2=A0 LTC4283_EXTFLT_TURN_OFF_MASK	BIT(7)
-> > +#define LTC4283_PGIO_CONFIG		0x10
-> > +#define=C2=A0=C2=A0 LTC4283_PGIO1_CFG_MASK	GENMASK(1, 0)
-> > +#define=C2=A0=C2=A0 LTC4283_PGIO2_CFG_MASK	GENMASK(3, 2)
-> > +#define=C2=A0=C2=A0 LTC4283_PGIO3_CFG_MASK	GENMASK(5, 4)
-> > +#define=C2=A0=C2=A0 LTC4283_PGIO4_CFG_MASK	GENMASK(7, 6)
-> > +#define LTC4283_PGIO_CONFIG_2		0x11
-> > +#define=C2=A0=C2=A0 LTC4283_ADC_MASK		GENMASK(2, 0)
-> > +#define LTC4283_ADC_SELECT(c)		(0x13 + (c) / 8)
-> > +#define=C2=A0=C2=A0 LTC4283_ADC_SELECT_MASK(c)	BIT((c) % 8)
-> > +#define LTC4283_SENSE_MIN_TH		0x1b
-> > +#define LTC4283_SENSE_MAX_TH		0x1c
-> > +#define LTC4283_VPWR_MIN_TH		0x1d
-> > +#define LTC4283_VPWR_MAX_TH		0x1e
-> > +#define LTC4283_POWER_MIN_TH		0x1f
-> > +#define LTC4283_POWER_MAX_TH		0x20
-> > +#define LTC4283_ADC_2_MIN_TH(c)		(0x21 + (c) * 2)
-> > +#define LTC4283_ADC_2_MAX_TH(c)		(0x22 + (c) * 2)
-> > +#define LTC4283_ADC_2_MIN_TH_DIFF(c)	(0x39 + (c) * 2)
-> > +#define LTC4283_ADC_2_MAX_TH_DIFF(c)	(0x3a + (c) * 2)
-> > +#define LTC4283_SENSE			0x41
-> > +#define LTC4283_SENSE_MIN		0x42
-> > +#define LTC4283_SENSE_MAX		0x43
-> > +#define LTC4283_VPWR			0x44
-> > +#define LTC4283_VPWR_MIN		0x45
-> > +#define LTC4283_VPWR_MAX		0x46
-> > +#define LTC4283_POWER			0x47
-> > +#define LTC4283_POWER_MIN		0x48
-> > +#define LTC4283_POWER_MAX		0x49
-> > +#define LTC4283_RESERVED_68		0x68
-> > +#define LTC4283_RESERVED_6D		0x6D
-> > +/* get channels from ADC 2 */
-> > +#define LTC4283_ADC_2(c)		(0x4a + (c) * 3)
-> > +#define LTC4283_ADC_2_MIN(c)		(0x4b + (c) * 3)
-> > +#define LTC4283_ADC_2_MAX(c)		(0x4c + (c) * 3)
-> > +#define LTC4283_ADC_2_DIFF(c)		(0x6e + (c) * 3)
-> > +#define LTC4283_ADC_2_MIN_DIFF(c)	(0x6f + (c) * 3)
-> > +#define LTC4283_ADC_2_MAX_DIFF(c)	(0x70 + (c) * 3)
-> > +#define LTC4283_ENERGY			0x7a
-> > +#define LTC4283_METER_CONTROL		0x84
-> > +#define=C2=A0=C2=A0 LTC4283_INTEGRATE_I_MASK	BIT(0)
-> > +#define=C2=A0=C2=A0 LTC4283_METER_HALT_MASK	BIT(6)
-> > +#define LTC4283_RESERVED_86		0x86
-> > +#define LTC4283_RESERVED_8F		0x8F
-> > +#define LTC4283_FAULT_LOG_CTRL		0x90
-> > +#define=C2=A0=C2=A0 LTC4283_FAULT_LOG_EN_MASK	BIT(7)
-> > +#define LTC4283_RESERVED_91		0x91
-> > +#define LTC4283_RESERVED_A1		0xA1
-> > +#define LTC4283_RESERVED_A3		0xA3
-> > +#define LTC4283_RESERVED_AC		0xAC
-> > +#define LTC4283_POWER_PLAY_MSB		0xE7
-> > +#define LTC4283_POWER_PLAY_LSB		0xE8
-> > +#define LTC4283_RESERVED_F1		0xF1
-> > +#define LTC4283_RESERVED_FF		0xFF
-> > +
-> > +/* also applies for differential channels */
-> > +#define LTC4283_ADC1_FS_uV		32768
-> > +#define LTC4283_ADC2_FS_mV		2048
-> > +#define LTC4283_TCONV_uS		64103
-> > +#define LTC4283_VILIM_MIN_uV		15000
-> > +#define LTC4283_VILIM_MAX_uV		30000
-> > +#define LTC4283_VILIM_RANGE	\
-> > +	(LTC4283_VILIM_MAX_uV - LTC4283_VILIM_MIN_uV + 1)
-> > +
-> > +#define LTC4283_PGIO_FUNC_GPIO		2
-> > +#define LTC4283_PGIO2_FUNC_ACLB		3
-> > +
-> > +/*
-> > + * Maximum value for rsense in nano ohms. The reasoning for this value=
- is that
-> > + * it's the max value for which multiplying by 256 does not overflow l=
-ong on
-> > + * 32bits. For the minimum value, is a sane minimum rsense for which p=
-ower_max
-> > + * does not overflow 32bits.
-> > + */
-> > +#define LTC4283_MAX_RSENSE	1677721599
-> > +#define LTC4283_MIN_RSENSE	50000
-> > +
-> > +/* voltage channels */
-> > +enum {
-> > +	LTC4283_CHAN_VIN,
-> > +	LTC4283_CHAN_VPWR,
-> > +	LTC4283_CHAN_ADI_1,
-> > +	LTC4283_CHAN_ADI_2,
-> > +	LTC4283_CHAN_ADI_3,
-> > +	LTC4283_CHAN_ADI_4,
-> > +	LTC4283_CHAN_ADIO_1,
-> > +	LTC4283_CHAN_ADIO_2,
-> > +	LTC4283_CHAN_ADIO_3,
-> > +	LTC4283_CHAN_ADIO_4,
-> > +	LTC4283_CHAN_DRNS,
-> > +	LTC4283_CHAN_DRAIN,
-> > +	/* differential channels */
-> > +	LTC4283_CHAN_ADIN12,
-> > +	LTC4283_CHAN_ADIN34,
-> > +	LTC4283_CHAN_ADIO12,
-> > +	LTC4283_CHAN_ADIO34,
-> > +	LTC4283_CHAN_MAX
-> > +};
-> > +
-> > +/* Just for ease of use on the regmap=C2=A0 */
-> > +#define LTC4283_ADIO34_MAX \
-> > +	LTC4283_ADC_2_MAX_DIFF(LTC4283_CHAN_ADIO34 - LTC4283_CHAN_ADIN12)
-> > +
-> > +struct ltc4283_hwmon {
-> > +	struct regmap *map;
-> > +	struct i2c_client *client;
-> > +	unsigned long gpio_mask;
-> > +	unsigned long ch_enable_mask;
-> > +	/* in microwatt */
-> > +	long power_max;
-> > +	/* in millivolt */
-> > +	u32 vsense_max;
-> > +	/* in tenths of microohm*/
-> > +	u32 rsense;
-> > +	bool energy_en;
-> > +	bool ext_fault;
-> > +};
-> > +
-> > +static int ltc4283_read_voltage_word(const struct ltc4283_hwmon *st,
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0 u32 reg, u32 fs, long *val)
-> > +{
-> > +	unsigned int __raw;
-> > +	int ret;
-> > +
-> > +	ret =3D regmap_read(st->map, reg, &__raw);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	*val =3D DIV_ROUND_CLOSEST(__raw * fs, BIT(16));
-> > +	return 0;
-> > +}
-> > +
-> > +static int ltc4283_read_voltage_byte(const struct ltc4283_hwmon *st,
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0 u32 reg, u32 fs, long *val)
-> > +{
-> > +	int ret;
-> > +	u32 in;
-> > +
-> > +	ret =3D regmap_read(st->map, reg, &in);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	*val =3D DIV_ROUND_CLOSEST(in * fs, BIT(8));
-> > +	return 0;
-> > +}
-> > +
-> > +static u32 ltc4283_in_reg(u32 attr, u32 channel)
-> > +{
-> > +	switch (attr) {
-> > +	case hwmon_in_input:
-> > +		if (channel =3D=3D LTC4283_CHAN_VPWR)
-> > +			return LTC4283_VPWR;
-> > +		if (channel >=3D LTC4283_CHAN_ADI_1 && channel <=3D
-> > LTC4283_CHAN_DRAIN)
-> > +			return LTC4283_ADC_2(channel - LTC4283_CHAN_ADI_1);
-> > +		return LTC4283_ADC_2_DIFF(channel - LTC4283_CHAN_ADIN12);
-> > +	case hwmon_in_highest:
-> > +		if (channel =3D=3D LTC4283_CHAN_VPWR)
-> > +			return LTC4283_VPWR_MAX;
-> > +		if (channel >=3D LTC4283_CHAN_ADI_1 && channel <=3D
-> > LTC4283_CHAN_DRAIN)
-> > +			return LTC4283_ADC_2_MAX(channel - LTC4283_CHAN_ADI_1);
-> > +		return LTC4283_ADC_2_MAX_DIFF(channel - LTC4283_CHAN_ADIN12);
-> > +	case hwmon_in_lowest:
-> > +		if (channel =3D=3D LTC4283_CHAN_VPWR)
-> > +			return LTC4283_VPWR_MIN;
-> > +		if (channel >=3D LTC4283_CHAN_ADI_1 && channel <=3D
-> > LTC4283_CHAN_DRAIN)
-> > +			return LTC4283_ADC_2_MIN(channel - LTC4283_CHAN_ADI_1);
-> > +		return LTC4283_ADC_2_MIN_DIFF(channel - LTC4283_CHAN_ADIN12);
-> > +	case hwmon_in_max:
-> > +		if (channel =3D=3D LTC4283_CHAN_VPWR)
-> > +			return LTC4283_VPWR_MAX_TH;
-> > +		if (channel >=3D LTC4283_CHAN_ADI_1 && channel <=3D
-> > LTC4283_CHAN_DRAIN)
-> > +			return LTC4283_ADC_2_MAX_TH(channel -
-> > LTC4283_CHAN_ADI_1);
-> > +		return LTC4283_ADC_2_MAX_TH_DIFF(channel - LTC4283_CHAN_ADIN12);
-> > +	default:
-> > +		if (channel =3D=3D LTC4283_CHAN_VPWR)
-> > +			return LTC4283_VPWR_MIN_TH;
-> > +		if (channel >=3D LTC4283_CHAN_ADI_1 && channel <=3D
-> > LTC4283_CHAN_DRAIN)
-> > +			return LTC4283_ADC_2_MIN_TH(channel -
-> > LTC4283_CHAN_ADI_1);
-> > +		return LTC4283_ADC_2_MIN_TH_DIFF(channel - LTC4283_CHAN_ADIN12);
-> > +	}
-> > +}
-> > +
-> > +static int ltc4283_read_in_vals(const struct ltc4283_hwmon *st,
-> > +				u32 attr, u32 channel, long *val)
-> > +{
-> > +	u32 reg =3D ltc4283_in_reg(attr, channel);
-> > +	int ret;
-> > +
-> > +	if (channel < LTC4283_CHAN_ADIN12) {
-> > +		if (attr !=3D hwmon_in_max && attr !=3D hwmon_in_min)
-> > +			return ltc4283_read_voltage_word(st, reg,
-> > +							 LTC4283_ADC2_FS_mV,
-> > +							 val);
-> > +
-> > +		return ltc4283_read_voltage_byte(st, reg,
-> > +						 LTC4283_ADC2_FS_mV, val);
-> > +	}
-> > +
-> > +	if (attr !=3D hwmon_in_max && attr !=3D hwmon_in_min)
-> > +		ret =3D ltc4283_read_voltage_word(st, reg,
-> > +						LTC4283_ADC1_FS_uV, val);
-> > +	else
-> > +		ret =3D ltc4283_read_voltage_byte(st, reg,
-> > +						LTC4283_ADC1_FS_uV, val);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	*val =3D DIV_ROUND_CLOSEST(*val, MILLI);
-> > +	return 0;
-> > +}
-> > +
-> > +static int ltc4283_read_alarm(struct ltc4283_hwmon *st, u32 reg,
-> > +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 mask, long *val)
-> > +{
-> > +	u32 alarm;
-> > +	int ret;
-> > +
-> > +	ret =3D regmap_read(st->map, reg, &alarm);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	*val =3D !!(alarm & mask);
-> > +
-> > +	/* If not status/fault logs, clear the alarm after reading it. */
-> > +	if (reg !=3D LTC4283_FAULT_STATUS && reg !=3D LTC4283_FAULT_LOG)
-> > +		return regmap_clear_bits(st->map, reg, mask);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int ltc4283_read_in_alarm(struct ltc4283_hwmon *st, u32 channel=
-,
-> > +				 bool max_alm, long *val)
-> > +{
-> > +	if (channel =3D=3D LTC4283_VPWR)
-> > +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_1,
-> > +					=C2=A0 BIT(2 + max_alm), val);
-> > +
-> > +	if (channel >=3D LTC4283_CHAN_ADI_1 && channel <=3D LTC4283_CHAN_ADI_=
-4) {
-> > +		u32 bit =3D (channel - LTC4283_CHAN_ADI_1) * 2;
-> > +		/*
-> > +		 * Lower channels go to higher bits. We also want to go +1 down
-> > +		 * in the min_alarm case.
-> > +		 */
-> > +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_2,
-> > +					=C2=A0 BIT(7 - bit - !max_alm), val);
-> > +	}
-> > +
-> > +	if (channel >=3D LTC4283_CHAN_ADIO_1 && channel <=3D LTC4283_CHAN_ADI=
-O_4) {
-> > +		u32 bit =3D (channel - LTC4283_CHAN_ADIO_1) * 2;
-> > +
-> > +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_3,
-> > +					=C2=A0 BIT(7 - bit - !max_alm), val);
-> > +	}
-> > +
-> > +	if (channel >=3D LTC4283_CHAN_ADIN12 && channel <=3D LTC4283_CHAN_ADI=
-O34) {
-> > +		u32 bit =3D (channel - LTC4283_CHAN_ADIN12) * 2;
-> > +
-> > +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_5,
-> > +					=C2=A0 BIT(7 - bit - !max_alm), val);
-> > +	}
-> > +
-> > +	if (channel =3D=3D LTC4283_CHAN_DRNS)
-> > +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_4,
-> > +					=C2=A0 BIT(6 + max_alm), val);
-> > +
-> > +	return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_4, BIT(4 + max_alm)=
-,
-> > +				=C2=A0 val);
-> > +}
-> > +
-> > +static int ltc4283_read_in(struct ltc4283_hwmon *st, u32 attr, u32 cha=
-nnel,
-> > +			=C2=A0=C2=A0 long *val)
-> > +{
-> > +	switch (attr) {
-> > +	case hwmon_in_input:
-> > +		if (!test_bit(channel, &st->ch_enable_mask))
-> > +			return -ENODATA;
-> > +
-> > +		return ltc4283_read_in_vals(st, attr, channel, val);
-> > +	case hwmon_in_highest:
-> > +	case hwmon_in_lowest:
-> > +	case hwmon_in_max:
-> > +	case hwmon_in_min:
-> > +		return ltc4283_read_in_vals(st, attr, channel, val);
-> > +	case hwmon_in_max_alarm:
-> > +		return ltc4283_read_in_alarm(st, channel, true, val);
-> > +	case hwmon_in_min_alarm:
-> > +		return ltc4283_read_in_alarm(st, channel, false, val);
-> > +	case hwmon_in_crit_alarm:
-> > +		return ltc4283_read_alarm(st, LTC4283_FAULT_STATUS,
-> > +					=C2=A0 LTC4283_OV_MASK, val);
-> > +	case hwmon_in_lcrit_alarm:
-> > +		return ltc4283_read_alarm(st, LTC4283_FAULT_STATUS,
-> > +					=C2=A0 LTC4283_UV_MASK, val);
-> > +	case hwmon_in_fault:
-> > +		/*
-> > +		 * We report failure if we detect either a fer_bad or a
-> > +		 * fet_short in the status register.
-> > +		 */
-> > +		return ltc4283_read_alarm(st, LTC4283_FAULT_STATUS,
-> > +					=C2=A0 LTC4283_FET_BAD_MASK |
-> > LTC4283_FET_SHORT_MASK, val);
-> > +	case hwmon_in_enable:
-> > +		*val =3D test_bit(channel, &st->ch_enable_mask);
-> > +		return 0;
-> > +	default:
-> > +		return -EOPNOTSUPP;
-> > +	}
-> > +	return 0;
-> > +}
-> > +
-> > +static int ltc4283_read_current_word(const struct ltc4283_hwmon *st, u=
-32 reg,
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0 long *val)
-> > +{
-> > +	u64 temp =3D (u64)LTC4283_ADC1_FS_uV * DECA * MILLI;
-> > +	unsigned int __raw;
-> > +	int ret;
-> > +
-> > +	ret =3D regmap_read(st->map, reg, &__raw);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	*val =3D DIV64_U64_ROUND_CLOSEST(__raw * temp,
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BIT_ULL(16) * st->rsense);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int ltc4283_read_current_byte(const struct ltc4283_hwmon *st, u=
-32 reg,
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0 long *val)
-> > +{
-> > +	u64 temp =3D (u64)LTC4283_ADC1_FS_uV * DECA * MILLI;
-> > +	u32 curr;
-> > +	int ret;
-> > +
-> > +	ret =3D regmap_read(st->map, reg, &curr);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	*val =3D DIV_ROUND_CLOSEST_ULL(curr * temp, BIT(8) * st->rsense);
-> > +	return 0;
-> > +}
-> > +
-> > +static int ltc4283_read_curr(struct ltc4283_hwmon *st, u32 attr, long =
-*val)
-> > +{
-> > +	switch (attr) {
-> > +	case hwmon_curr_input:
-> > +		return ltc4283_read_current_word(st, LTC4283_SENSE, val);
-> > +	case hwmon_curr_highest:
-> > +		return ltc4283_read_current_word(st, LTC4283_SENSE_MAX, val);
-> > +	case hwmon_curr_lowest:
-> > +		return ltc4283_read_current_word(st, LTC4283_SENSE_MIN, val);
-> > +	case hwmon_curr_max:
-> > +		return ltc4283_read_current_byte(st, LTC4283_SENSE_MAX_TH, val);
-> > +	case hwmon_curr_min:
-> > +		return ltc4283_read_current_byte(st, LTC4283_SENSE_MIN_TH, val);
-> > +	case hwmon_curr_max_alarm:
-> > +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_1,
-> > +					=C2=A0 LTC4283_SENSE_HIGH_ALM, val);
-> > +	case hwmon_curr_min_alarm:
-> > +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_1,
-> > +					=C2=A0 LTC4283_SENSE_LOW_ALM, val);
-> > +	case hwmon_curr_crit_alarm:
-> > +		return ltc4283_read_alarm(st, LTC4283_FAULT_STATUS,
-> > +					=C2=A0 LTC4283_OC_MASK, val);
-> > +	default:
-> > +		return -EOPNOTSUPP;
-> > +	}
-> > +}
-> > +
-> > +static int ltc4283_read_power_word(const struct ltc4283_hwmon *st,
-> > +				=C2=A0=C2=A0 u32 reg, long *val)
-> > +{
-> > +	u64 temp =3D (u64)LTC4283_ADC1_FS_uV * LTC4283_ADC2_FS_mV * DECA * MI=
-LLI;
-> > +	unsigned int __raw;
-> > +	int ret;
-> > +
-> > +	ret =3D regmap_read(st->map, reg, &__raw);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/*
-> > +	 * Power is given by:
-> > +	 *=C2=A0=C2=A0=C2=A0=C2=A0 P =3D CODE(16b) * 32.768mV * 2.048V / (2^1=
-6 * Rsense)
-> > +	 */
-> > +	*val =3D DIV64_U64_ROUND_CLOSEST(temp * __raw, BIT_ULL(16) * st->rsen=
-se);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int ltc4283_read_power_byte(const struct ltc4283_hwmon *st,
-> > +				=C2=A0=C2=A0 u32 reg, long *val)
-> > +{
-> > +	u64 temp =3D (u64)LTC4283_ADC1_FS_uV * LTC4283_ADC2_FS_mV * DECA * MI=
-LLI;
-> > +	u32 power;
-> > +	int ret;
-> > +
-> > +	ret =3D regmap_read(st->map, reg, &power);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	*val =3D DIV_ROUND_CLOSEST_ULL(power * temp, BIT(8) * st->rsense);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int ltc4283_read_power(struct ltc4283_hwmon *st, u32 attr, long=
- *val)
-> > +{
-> > +	switch (attr) {
-> > +	case hwmon_power_input:
-> > +		return ltc4283_read_power_word(st, LTC4283_POWER, val);
-> > +	case hwmon_power_input_highest:
-> > +		return ltc4283_read_power_word(st, LTC4283_POWER_MAX, val);
-> > +	case hwmon_power_input_lowest:
-> > +		return ltc4283_read_power_word(st, LTC4283_POWER_MIN, val);
-> > +	case hwmon_power_max_alarm:
-> > +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_1,
-> > +					=C2=A0 LTC4283_POWER_HIGH_ALM, val);
-> > +	case hwmon_power_min_alarm:
-> > +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_1,
-> > +					=C2=A0 LTC4283_POWER_LOW_ALM, val);
-> > +	case hwmon_power_max:
-> > +		return ltc4283_read_power_byte(st, LTC4283_POWER_MAX_TH, val);
-> > +	case hwmon_power_min:
-> > +		return ltc4283_read_power_byte(st, LTC4283_POWER_MIN_TH, val);
-> > +	default:
-> > +		return -EOPNOTSUPP;
-> > +	}
-> > +}
-> > +
-> > +static int ltc4283_read_energy(struct ltc4283_hwmon *st, u32 attr, s64=
- *val)
-> > +{
-> > +	u64 temp =3D LTC4283_ADC1_FS_uV * LTC4283_ADC2_FS_mV, energy, temp_2;
-> > +	u8 raw[8] =3D {};
-> > +	int ret;
-> > +
-> > +	if (!st->energy_en)
-> > +		return -ENODATA;
-> > +
-> > +	ret =3D i2c_smbus_read_i2c_block_data(st->client, LTC4283_ENERGY, 6, =
-raw);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +	if (ret !=3D 6)
-> > +		return -EIO;
-> > +
-> > +	energy =3D get_unaligned_be64(raw) >> 16;
-> > +
-> > +	/*
-> > +	 * The formula for energy is given by:
-> > +	 *	E =3D CODE(48b) * 32.768mV * 2.048V * Tconv / 2^24 * Rsense
-> > +	 *
-> > +	 * As Rsense can have tenths of micro-ohm resolution, we need to
-> > +	 * multiply by DECA to get microjoule.
-> > +	 */
-> > +	if (check_mul_overflow(temp * LTC4283_TCONV_uS, energy, &temp_2)) {
-> > +		/*
-> > +		 * We multiply again by 1000 to make sure that we don't get 0
-> > +		 * in the following division which could happen for big rsense
-> > +		 * values. OTOH, we then divide energy first by 1000 so that
-> > +		 * we do not overflow u64 again for very small rsense values.
-> > +		 * We add 100 factor for proper conversion to microjoule.
-> > +		 */
-> > +		temp_2 =3D DIV64_U64_ROUND_CLOSEST(temp * LTC4283_TCONV_uS *
-> > MILLI,
-> > +						 BIT_ULL(24) * st->rsense);
-> > +		energy =3D DIV_ROUND_CLOSEST_ULL(energy, MILLI * CENTI) * temp_2;
-> > +	} else {
-> > +		/* Put rsense back into nanoohm so we get microjoule. */
-> > +		energy =3D DIV64_U64_ROUND_CLOSEST(temp_2, BIT_ULL(24) * st-
-> > >rsense * CENTI);
-> > +	}
-> > +
-> > +	*val =3D energy;
-> > +	return 0;
-> > +}
-> > +
-> > +static int ltc4283_read(struct device *dev, enum hwmon_sensor_types ty=
-pe,
-> > +			u32 attr, int channel, long *val)
-> > +{
-> > +	struct ltc4283_hwmon *st =3D dev_get_drvdata(dev);
-> > +
-> > +	switch (type) {
-> > +	case hwmon_in:
-> > +		return ltc4283_read_in(st, attr, channel, val);
-> > +	case hwmon_curr:
-> > +		return ltc4283_read_curr(st, attr, val);
-> > +	case hwmon_power:
-> > +		return ltc4283_read_power(st, attr, val);
-> > +	case hwmon_energy:
-> > +		*val =3D st->energy_en;
-> > +		return 0;
-> > +	case hwmon_energy64:
-> > +		return ltc4283_read_energy(st, attr, (s64 *)val);
-> > +	default:
-> > +		return -EOPNOTSUPP;
-> > +	}
-> > +}
-> > +
-> > +static int ltc4283_write_power_byte(const struct ltc4283_hwmon *st, u3=
-2 reg,
-> > +				=C2=A0=C2=A0=C2=A0 long val)
-> > +{
-> > +	u64 temp =3D (u64)LTC4283_ADC1_FS_uV * LTC4283_ADC2_FS_mV * DECA * MI=
-LLI;
-> > +	u32 __raw;
-> > +
-> > +	val =3D clamp_val(val, 0, st->power_max);
-> > +	__raw =3D DIV64_U64_ROUND_CLOSEST(val * BIT_ULL(8) * st->rsense, temp=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > +
+> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > >  Kernel driver yogafan
+> > > -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > +
+> > > +The yogafan driver provides fan speed monitoring for Lenovo consumer=
+ laptops (Yoga, Legion, IdeaPad)
+> > > +by interfacing with the Embedded Controller (EC) via ACPI, implement=
+ing a Rate-Limited Lag (RLLag)
+> > > +filter to ensure smooth and physically accurate RPM telemetry.
+> > >=20
+> > >  Supported chips:
+> > > +----------------
+> > > +
+> > > +  * YOGA & SLIM SERIES (8-bit / Discrete Logic)
+> > > +    - Yoga 14cACN, 14s, 13 (including Aura Edition)
+> > > +    - Yoga Slim 7, 7i, 7 Pro, 7 Carbon
+> > > +    - Yoga Pro 7, 9 (83E2, 83DN)
+> > > +    - Yoga 710, 720, 510 (Discrete Step Logic)
+> > > +    - Yoga 3 14, 11s, Yoga 2 13 (Discrete Step Logic)
+> > > +    - Xiaoxin Pro, Air, 14, 16 (All PRC/Chinese Variants)
+> > > +
+> > > +  * LEGION, LOQ & G-SERIES (16-bit High-Precision Raw)
+> > > +    - Legion 5, 5i, 5 Pro (AMD & Intel 82JW/82JU)
+> > > +    - Legion 7, 7i, 7 Slim (82WQ)
+> > > +    - LOQ 15, 16 (82XV, 83DV)
+> > > +    - GeekPro G5000, G6000 (PRC Gaming Series)
+> > > +
+> > > +  * IDEAPAD & FLEX SERIES (8-bit / Discrete Logic)
+> > > +    - IdeaPad 5, 5i, 5 Pro (81YM, 82FG)
+> > > +    - IdeaPad 3, 3i (Modern 8-bit variants)
+> > > +    - IdeaPad 500S, U31-70 (Discrete Step Logic)
+> > > +    - Flex 5, 5i (81X1)
+> > > +
+> > > +  * THINKBOOK, V-SERIES & LEGACY (Discrete Logic)
+> > > +    - ThinkBook G6, G7 (83AK)
+> > > +    - V330-15IKB, V580
+> > > +    - Legacy U-Series (U330p, U430p)
+> > >=20
+> > > -  * Lenovo Yoga, Legion, IdeaPad, Slim, Flex, and LOQ Embedded Contr=
+ollers
+> > >      Prefix: 'yogafan'
+> > > -    Addresses: ACPI handle (See Database Below)
+> > > +
+> > > +    Addresses: ACPI handle (DMI Quirk Table Fallback)
+> > > +
+> > > +    Datasheet: Not available; based on ACPI DSDT and EC reverse engi=
+neering.
+> > >=20
+> > >  Author: Sergio Melas <sergiomelas@gmail.com>
+> > >=20
+> > >  Description
+> > >  -----------
+> > >=20
+> > > -This driver provides fan speed monitoring for modern Lenovo consumer=
+ laptops.
+> > > -Most Lenovo laptops do not provide fan tachometer data through stand=
+ard
+> > > -ISA/LPC hardware monitoring chips. Instead, the data is stored in th=
+e
+> > > -Embedded Controller (EC) and exposed via ACPI.
+> > > +This driver provides fan speed monitoring for a wide range of Lenovo=
+ consumer
+> > > +laptops. Unlike standard ThinkPads, these models do not use the 'thi=
+nkpad_acpi'
+> > > +interface for fan speed but instead store fan telemetry in the Embed=
+ded
+> > > +Controller (EC).
+> > > +
+> > > +The driver interfaces with the ACPI namespace to locate the fan tach=
+ometer
+> > > +objects. If the ACPI path is not standard, it falls back to a machin=
+e-specific
+> > > +quirk table based on DMI information.
+> > > +
+> > > +This driver covers over 95% of Lenovo's consumer and ultra-portable =
+laptop portfolio
+> > > +released between 2011 and 2026, providing a unified hardware abstrac=
+tion layer for diverse
+> > > +Embedded Controller (EC) architectures.
+> > > +
+> > > +The driver exposes the RLLag  physical filter parameters (time const=
+ant and slew-rate limit) in SI units (seconds),
+> > > +dynamically synchronizing them with the specific model's maximum RPM=
+ to ensure a consistent physical response
+> > > +across the entire Lenovo product stack.
+> > > +
+> > > +Filter Physics (RLLag )
+> > > +--------------------------
+> > > +
+> > > +To address low-resolution tachometer sampling in the Embedded Contro=
+ller,
+> > > +the driver implements a passive discrete-time first-order lag filter
+> > > +with slew-rate limiting.
+> > > +
+> > > +* Multirate Filtering: The filter adapts to the sampling time (dt) o=
+f the
+> > > +  userspace request.
+> > > +* Discrete Logic: For older models (e.g., Yoga 710), it estimates RP=
+M based
+> > > +  on discrete duty-cycle steps.
+> > > +* Continuous Logic: For modern models (e.g., Legion), it maps raw hi=
+gh-precision
+> > > +  units to RPM.
+> > >=20
+> > >  The driver implements a **Rate-Limited Lag (RLLag)** filter to handl=
+e
+> > > -the low-resolution and jittery sampling found in Lenovo EC firmware.
+> > > +low-resolution sampling in Lenovo EC firmware. The update equation i=
+s:
+> > > +
+> > > +    **RPM_state[t+1] =3D RPM_state[t] + Clamp(Alpha * (raw_RPM[t] - =
+RPM_state[t]), -limit[t], limit[t])**
+> > > +
+> > > +    Where:
+> > > +
+> > > +*   Time delta between reads:
+> > > +
+> > > +       **Ts[t]    =3D Sys_time[t+1] - Sys_time[t]**
+> > > +
+> > > +*   Low-pass smoothing factor
+> > > +
+> > > +       **Alpha    =3D 1 - exp(-Ts[t] / Tau)**
+> > > +
+> > > +*   Time-normalized slew limit
+> > > +
+> > > +       **limit[t] =3D MAX_SLEW_RPM_S * Ts[t]**
+> > > +
+> > > +To avoid expensive floating-point exponential calculations in the ke=
+rnel,
+> > > +we use a first-order Taylor/Bilinear approximation:
+> > > +
+> > > +       **Alpha =3D Ts / (Tau + Ts)**
+> > > +
+> > > +Implementing this in the driver state machine:
+> > > +
+> > > +*   Next step filtered RPM:
+> > > +       **RPM_state[t+1] =3D RPM_new**
+> > > +*   Current step filtered RPM:
+> > > +       **RPM_state[t]   =3D RPM_old**
+> > > +*   Time step Calculation:
+> > > +       **Ts             =3D current_time - last_sample_time**
+> > > +*   Alpha Calculation:
+> > > +       **Alpha           =3D Ts / (Tau + Ts)**
+> > > +*   RPM  step Calculation:
+> > > +       **step           =3D Alpha * (raw_RPM -  RPM_old)**
+> > > +*   Limit  step Calculation:
+> > > +       **limit           =3D MAX_SLEW_RPM_S * Ts**
+> > > +*   RPM physical step Calculation:
+> > > +       **step_clamped   =3D clamp(step, -limit, limit)**
+> > > +*   Update of RPM
+> > > +       **RPM_new        =3D RPM_old + step_clamped**
+> > > +*   Update internal state
+> > > +       **RPM_old        =3D RPM_new**
+> > > +
+> > > +The input of the filter (raw_RPM) is derived from the EC using the l=
+ogic defined in the
+> > > +HAL section below.
+> > > +
+> > > +The driver exposes the RLLag  physical filter parameters (time const=
+ant and slew-rate limit)
+> > > +in SI units (seconds), dynamically synchronizing them with the speci=
+fic model's maximum RPM
+> > > +to ensure a consistent physical response across the entire Lenovo pr=
+oduct stack.
+> > > +
+> > > +This approach inshures that the RLLag filter is a passive discrete-t=
+ime first-order lag model:
+> > > +  - **Smoothing:** Low-resolution step increments are smoothed into =
+1-RPM increments.
+> > > +  - **Slew-Rate Limiting:** Prevents unrealistic readings by capping=
+ the change
+> > > +    to 1500 RPM/s, matching physical fan inertia.
+> > > +  - **Polling Independence:** The filter math scales based on the ti=
+me delta
+> > > +    between userspace reads, ensuring a consistent physical curve re=
+gardless
+> > > +    of polling frequency.
+> > >=20
+> > >  Hardware Identification and Multiplier Logic
+> > >  --------------------------------------------
+> > >=20
+> > > -The driver supports two distinct EC architectures. Differentiation i=
+s handled
+> > > +The driver supports three distinct EC architectures. Differentiation=
+ is handled
+> > >  deterministically via a DMI Product Family quirk table during the pr=
+obe phase,
+> > >  eliminating the need for runtime heuristics.
+> > >=20
+> > > +Continuous RPM Reads
+> > > +~~~~~~~~~~~~~~~~~~~~
+> > > +
+> > >  1. 8-bit EC Architecture (Multiplier: 100)
+> > > -   - **Families:** Yoga, IdeaPad, Slim, Flex.
+> > > +   - **Families:** Yoga, IdeaPad, Slim, Flex, Xiaoxin.
+> > >     - **Technical Detail:** These models allocate a single 8-bit regi=
+ster for
+> > >     tachometer data. Since 8-bit fields are limited to a value of 255=
+, the
+> > >     BIOS stores fan speed in units of 100 RPM (e.g., 42 =3D 4200 RPM)=
+.
+> > >=20
+> > >  2. 16-bit EC Architecture (Multiplier: 1)
+> > > -   - **Families:** Legion, LOQ.
+> > > +   - **Families:** Legion, LOQ, GeekPro.
+> > >     - **Technical Detail:** High-performance gaming models require gr=
+eater
+> > >     precision for fans exceeding 6000 RPM. These use a 16-bit word (2=
+ bytes)
+> > >     storing the raw RPM value directly.
+> > >=20
+> > > -Filter Details:
+> > > ----------------
+> > > +Discrete RPM Reads
+> > > +~~~~~~~~~~~~~~~~~~
+> > >=20
+> > > -The RLLag filter is a passive discrete-time first-order lag model th=
+at ensures:
+> > > -  - **Smoothing:** Low-resolution step increments are smoothed into =
+1-RPM increments.
+> > > -  - **Slew-Rate Limiting:** Prevents unrealistic readings by capping=
+ the change
+> > > -    to 1500 RPM/s, matching physical fan inertia.
+> > > -  - **Polling Independence:** The filter math scales based on the ti=
+me delta
+> > > -    between userspace reads, ensuring a consistent physical curve re=
+gardless
+> > > -    of polling frequency.
+> > > +3. Discrete Level Architecture (Linear Estimation)
+> > > +   - **Families:** Yoga 710/510/13, IdeaPad 500S, Legacy U-Series.
+> > > +   - **Technical Detail:** Older or ultra-portable EC firmware does =
+not store
+> > > +   a real-time tachometer value. Instead, it operates on a fixed num=
+ber of
+> > > +   discrete PWM states (Nmax). The driver translates these levels in=
+to an
+> > > +   estimated physical RPM using the following linear mapping:
+> > > +
+> > > +     raw_RPM =3D (Rmax * IN) / Nmax
+> > > +
+> > > +     Where:
+> > > +     - IN:   Current discrete level read from the EC.
+> > > +     - Nmax: Maximum number of steps defined in the BIOS (e.g., 59, =
+255).
+> > > +     - Rmax: Maximum physical RPM of the fan motor at full duty cycl=
+e.
+> > > +
+> > > +   - **Filter Interaction:** Because these hardware reads jump abrup=
+tly
+> > > +     between levels (e.g., from level 4 to 5), the RLLag filter is e=
+ssential
+> > > +     here to simulate mechanical acceleration, smoothing the transit=
+ion
+> > > +     for the final fanX_input attribute.
+> > >=20
+> > >  Suspend and Resume
+> > >  ------------------
+> > > @@ -68,31 +198,11 @@ The driver exposes standard hwmon sysfs attribut=
+es:
+> > >  Attribute         Description
+> > >  fanX_input        Filtered fan speed in RPM.
+> > >=20
+> > > -
+> > >  Note: If the hardware reports 0 RPM, the filter is bypassed and 0 is=
+ reported
+> > >  immediately to ensure the user knows the fan has stopped.
+> > >=20
+> > > -
+> > > -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> > > -                 LENOVO FAN CONTROLLER: MASTER REFERENCE DATABASE (2=
+026)
+> > > -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> > > -
+> > > -MODEL (DMI PN) | FAMILY / SERIES  | EC OFFSET | FULL ACPI OBJECT PAT=
+H          | WIDTH  | MULTiplier
+> > > ---------------------------------------------------------------------=
+--------------------------------
+> > > -82N7           | Yoga 14cACN      | 0x06      | \_SB.PCI0.LPC0.EC0.F=
+ANS        |  8-bit | 100
+> > > -80V2 / 81C3    | Yoga 710/720     | 0x06      | \_SB.PCI0.LPC0.EC0.F=
+AN0        |  8-bit | 100
+> > > -83E2 / 83DN    | Yoga Pro 7/9     | 0xFE      | \_SB.PCI0.LPC0.EC0.F=
+ANS        |  8-bit | 100
+> > > -82A2 / 82A3    | Yoga Slim 7      | 0x06      | \_SB.PCI0.LPC0.EC0.F=
+ANS        |  8-bit | 100
+> > > -81YM / 82FG    | IdeaPad 5        | 0x06      | \_SB.PCI0.LPC0.EC0.F=
+AN0        |  8-bit | 100
+> > > -82JW / 82JU    | Legion 5 (AMD)   | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.F=
+ANS (Fan1) | 16-bit | 1
+> > > -82JW / 82JU    | Legion 5 (AMD)   | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.F=
+A2S (Fan2) | 16-bit | 1
+> > > -82WQ           | Legion 7i (Int)  | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.F=
+ANS (Fan1) | 16-bit | 1
+> > > -82WQ           | Legion 7i (Int)  | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.F=
+A2S (Fan2) | 16-bit | 1
+> > > -82XV / 83DV    | LOQ 15/16        | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.F=
+ANS /FA2S  | 16-bit | 1
+> > > -83AK           | ThinkBook G6     | 0x06      | \_SB.PCI0.LPC0.EC0.F=
+AN0        |  8-bit | 100
+> > > -81X1           | Flex 5           | 0x06      | \_SB.PCI0.LPC0.EC0.F=
+AN0        |  8-bit | 100
+> > > -*Legacy*       | Pre-2020 Models  | 0x06      | \_SB.PCI0.LPC.EC.FAN=
+0          |  8-bit | 100
+> > > ---------------------------------------------------------------------=
+--------------------------------
+> > > +Lenovo Fan HAL
+> > > +--------------
+> > >=20
+> > >  METHODOLOGY & IDENTIFICATION:
+> > >=20
+> > > @@ -109,6 +219,103 @@ METHODOLOGY & IDENTIFICATION:
+> > >     - 8-bit (Multiplier 100): Standard for Yoga/IdeaPad. Raw values (=
+0-255).
+> > >     - 16-bit (Multiplier 1): Standard for Legion/LOQ. Two registers (=
+0xFE/0xFF).
+> > >=20
+> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+> > > +LENOVO FAN CONTROLLER Hardware Abstraction Layer
+> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+> > > +
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| MODEL       | FAMILY / SERIES   |  OFFSET | FULL ACPI OBJECT PATH =
+         | WIDTH  | NMAX  | RMAX  | MULT |
+> > > ++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=
++=3D=3D=3D=3D=3D=3D+
+> > > +| 82N7        | Yoga 14cACN       | 0x06    | \_SB.PCI0.LPC0.EC0.FAN=
+S        | 8-bit  | 0     | 5500  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 80V2 / 81C3 | Yoga 710/720      | 0x06    | \_SB.PCI0.LPC0.EC0.FAN=
+0        | 8-bit  | 59    | 4500  | 0    |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 83E2 / 83DN | Yoga Pro 7/9      | 0xFE    | \_SB.PCI0.LPC0.EC0.FAN=
+S        | 8-bit  | 0     | 6000  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 82A2 / 82A3 | Yoga Slim 7       | 0x06    | \_SB.PCI0.LPC0.EC0.FAN=
+S        | 8-bit  | 0     | 5500  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 81YM / 82FG | IdeaPad 5         | 0x06    | \_SB.PCI0.LPC0.EC0.FAN=
+0        | 8-bit  | 0     | 4500  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 80S7        | Yoga 510          | 0x06    | \_SB.PCI0.LPC0.EC0.FAN=
+0        | 8-bit  | 41    | 4500  | 0    |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 81AX        | V330-15IKB        | 0x95    | \_SB.PCI0.LPC0.EC0.FAN=
+0        | 8-bit  | 116   | 4200  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 82JW / 82JU | Legion 5 (AMD)    | 0xFE/FF | \_SB.PCI0.LPC0.EC0.FAN=
+S (Fan1) | 16-bit | 0     | 6500  | 1    |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 82JW / 82JU | Legion 5 (AMD)    | 0xFE/FF | \_SB.PCI0.LPC0.EC0.FA2=
+S (Fan2) | 16-bit | 0     | 6500  | 1    |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 82WQ        | Legion 7i (Int)   | 0xFE/FF | \_SB.PCI0.LPC0.EC0.FAN=
+S (Fan1) | 16-bit | 0     | 8000  | 1    |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 82WQ        | Legion 7i (Int)   | 0xFE/FF | \_SB.PCI0.LPC0.EC0.FA2=
+S (Fan2) | 16-bit | 0     | 8000  | 1    |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 82XV / 83DV | LOQ 15/16         | 0xFE/FF | \_SB.PCI0.LPC0.EC0.FAN=
+S (Fan1) | 16-bit | 0     | 6500  | 1    |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 82XV / 83DV | LOQ 15/16         | 0xFE/FF | \_SB.PCI0.LPC0.EC0.FA2=
+S (Fan2) | 16-bit | 0     | 6500  | 1    |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 83AK        | ThinkBook G6      | 0x06    | \_SB.PCI0.LPC0.EC0.FAN=
+0        | 8-bit  | 0     | 5400  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 81X1        | Flex 5            | 0x06    | \_SB.PCI0.LPC0.EC0.FAN=
+0        | 8-bit  | 0     | 4500  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 80SR / 80SX | IdeaPad 500S-13   | 0x06    | \_SB.PCI0.LPC0.EC0.FAN=
+0        | 8-bit  | 44    | 5500  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 80S1        | IdeaPad 500S-14   | 0x95    | \_SB.PCI0.LPC0.EC0.FAN=
+0        | 8-bit  | 116   | 5000  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 80TK        | IdeaPad 510S      | 0x06    | \_SB.PCI0.LPC0.EC0.FAN=
+0        | 8-bit  | 41    | 5100  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 80S9        | IdeaPad 710S      | 0x95/98 | \_SB.PCI0.LPC0.EC0.FAN=
+1/2      | 8-bit  | 72    | 5200  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 80KU        | U31-70            | 0x06    | \_SB.PCI0.LPC0.EC0.FAN=
+0        | 8-bit  | 44    | 5500  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 80S1        | U41-70            | 0x95    | \_SB.PCI0.LPC0.EC0.FAN=
+0        | 8-bit  | 116   | 5000  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 80JH        | Yoga 3 14         | 0x06    | \_SB.PCI0.LPC0.EC0.FAN=
+0/.FANS  | 8-bit  | 80    | 5000  | 0    |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 20344       | Yoga 2 13         | 0xAB    | \_SB.PCI0.LPC0.EC0.FAN=
+0        | 8-bit  | 8     | 4200  | 0    |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 2191 / 20191| Yoga 13           | 0xF2/F3 | \_SB.PCI0.LPC0.EC0.FAN=
+1/2      | 8-bit  | 255   | 5000  | 0    |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| Legacy      | Yoga 11s          | 0x56    | \_SB.PCI0.LPC0.EC0.FAN=
+0/.FANS  | 8-bit  | 80    | 4500  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 20GJ / 20GK | ThinkPad 13       | 0x85    | \_SB.PCI0.LPC0.EC0.FAN=
+0        | 8-bit  | 7     | 5500  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 1143        | ThinkPad E520     | 0x95    | \_SB.PCI0.LPC0.EC0.FAN=
+0        | 8-bit  | 100   | 4200  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 3698        | ThinkPad Helix    | 0x2F    | \_SB.PCI0.LPC0.EC0.FAN=
+S        | 8-bit  | 7     | 4500  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 20M7 / 20M8 | ThinkPad L380     | 0x95    | \_SB.PCI0.LPC0.EC0.FAN=
+1        | 8-bit  | 52    | 4600  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 20NR / 20NS | ThinkPad L390     | 0x95    | \_SB.PCI0.LPC0.EC0.FAN=
+0        | 8-bit  | 64    | 5500  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 2464 / 2468 | ThinkPad L530     | 0x95    | \_SB.PCI0.LPC0.EC0.FAN=
+0        | 8-bit  | 75    | 4400  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 2356        | ThinkPad T430s    | 0x2F    | \_SB.PCI0.LPC0.EC0.FAN=
+S        | 8-bit  | 7     | 5000  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 20AQ / 20AR | ThinkPad T440s    | 0x4E    | \_SB.PCI0.LPC0.EC0.FAN=
+S        | 8-bit  | 7     | 5200  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 20BE / 20BF | ThinkPad T540p    | 0x2F    | \_SB.PCI0.LPC0.EC0.FAN=
+S        | 8-bit  | 7     | 5500  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 3051        | ThinkPad x121e    | 0x2F    | \_SB.PCI0.LPC0.EC0.FAN=
+S        | 8-bit  | 7     | 4500  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 4290        | ThinkPad x220i    | 0x2F    | \_SB.PCI0.LPC0.EC0.FAN=
+S        | 8-bit  | 7     | 5000  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| 2324 / 2325 | ThinkPad x230     | 0x2F    | \_SB.PCI0.LPC0.EC0.FAN=
+S        | 8-bit  | 7     | 5000  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| Legacy      | IdeaPad Y580      | 0x06    | \_SB.PCI0.LPC0.EC0.FAN=
+0        | 8-bit  | 95    | 5200  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| Legacy      | IdeaPad V580      | 0x95    | \_SB.PCI0.LPC0.EC0.FAN=
+0        | 8-bit  | 100   | 5000  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| Legacy      | U160              | 0x95    | \_SB.PCI0.LPC0.EC0.FAN=
+0        | 8-bit  | 64    | 4500  | 100  |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +| Legacy      | U330p/U430p       | 0x92    | \_SB.PCI0.LPC0.EC0.FAN=
+0        | 16-bit | 768   | 5000  | 0    |
+> > > ++-------------+-------------------+---------+-----------------------=
+---------+--------+-------+-------+------+
+> > > +
+> > > +Note for the  raw_RPM we have 2 cases:
+> > > +
+> > > +* Discrete Level Estimation
+> > > +    **Nmax > 0 then raw_RPM =3D (Rmax * IN) / Nmax**
+> > > +
+> > > +* Continuous Unit Mapping
+> > > +    **Nmax =3D 0 then raw_RPM =3D IN * Multiplier**
+> > >=20
+> > >  References
+> > >  ----------
+> > > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> > > index 0081dd097..f1b89bf45 100644
+> > > --- a/drivers/hwmon/Kconfig
+> > > +++ b/drivers/hwmon/Kconfig
+> > > @@ -2673,7 +2673,6 @@ config SENSORS_YOGAFAN
+> > >         This driver can also be built as a module. If so, the module
+> > >         will be called yogafan.
+> > >=20
+> > > -
+> > >  config SENSORS_INTEL_M10_BMC_HWMON
+> > >       tristate "Intel MAX10 BMC Hardware Monitoring"
+> > >       depends on MFD_INTEL_M10_BMC_CORE
+> > > diff --git a/drivers/hwmon/yogafan.c b/drivers/hwmon/yogafan.c
+> > > index 605cc928f..ee6ba5812 100644
+> > > --- a/drivers/hwmon/yogafan.c
+> > > +++ b/drivers/hwmon/yogafan.c
+> > > @@ -24,6 +24,7 @@
+> > >  #include <linux/platform_device.h>
+> > >  #include <linux/slab.h>
+> > >  #include <linux/math64.h>
+> > > +#include <linux/hwmon-sysfs.h>
+> > >=20
+> > >  /* Driver Configuration Constants */
+> > >  #define DRVNAME                      "yogafan"
+> > > @@ -37,37 +38,123 @@
+> > >=20
+> > >  /* RPM Sanitation Constants */
+> > >  #define RPM_FLOOR_LIMIT              50      /* Snap filtered value =
+to 0 if raw is 0 */
+> > > +#define MIN_THRESHOLD_RPM    10      /* Minimum safety floor for per=
+-model stop thresholds */
+> > >=20
+> > >  struct yogafan_config {
+> > > -     int multiplier;
+> > > -     int fan_count;
+> > > -     const char *paths[2];
+> > > +     int multiplier;                 /* Used if n_max =3D=3D 0 */
+> > > +     int fan_count;                  /* 1 or 2 */
+> > > +     int n_max;                      /* Discrete steps (0 =3D Contin=
+uous) */
+> > > +     int r_max;                      /* Max physical RPM for estimat=
+ion */
+> > > +     unsigned int tau_ms;            /* To store the smoothing speed=
+    */
+> > > +     unsigned int slew_time_s;       /* To store the acceleration li=
+mit */
+> > > +     unsigned int stop_threshold;    /* To store the RPM floor */
+> > > +     const char *paths[2];           /* Paths */
+> > >  };
+> > >=20
+> > >  struct yoga_fan_data {
+> > >       acpi_handle active_handles[MAX_FANS];
+> > >       long filtered_val[MAX_FANS];
+> > > +     long raw_val[MAX_FANS];
+> > >       ktime_t last_sample[MAX_FANS];
+> > > -     int multiplier;
+> > > +     const struct yogafan_config *config;
+> > >       int fan_count;
+> > > +     /* Per-device physics constants */
+> > > +     unsigned int internal_tau_ms;
+> > > +     unsigned int internal_max_slew_rpm_s;
+> > > +     unsigned int device_max_rpm;
+> > >  };
+> > >=20
+> > >  /* Specific configurations mapped via DMI */
+> > > -static const struct yogafan_config yoga_8bit_fans_cfg =3D {
+> > > -     .multiplier =3D 100,
+> > > -     .fan_count =3D 1,
+> > > -     .paths =3D { "\\_SB.PCI0.LPC0.EC0.FANS", NULL }
+> > > +//* --- CONTINUOUS PROFILES (Nmax =3D 0) --- */
+> > > +
+> > > +/* Standard 8-bit Yoga/IdeaPad (Covers 82N7, Slim 7, etc.) */
+> > > +static struct yogafan_config yoga_continuous_8bit_cfg =3D {
+> > > +     .multiplier =3D 100, .fan_count =3D 1, .n_max =3D 0,
+> > > +     .r_max =3D 5500,  /* Verified 14cACN peak */
+> > > +     .tau_ms =3D 1000, .slew_time_s =3D 4, .stop_threshold =3D 50,
+> > > +     .paths =3D { "\\_SB.PCI0.LPC0.EC0.FANS", "\\_SB.PCI0.LPC0.EC0.F=
+AN0" }
+> > > +};
+> > > +
+> > > +/* Legion / LOQ Gaming (2 Fans, Raw RPM 16-bit) */
+> > > +static struct yogafan_config legion_continuous_16bit_cfg =3D {
+> > > +     .multiplier =3D 1, .fan_count =3D 2, .n_max =3D 0,
+> > > +     .r_max =3D 6500,  /* Standard Legion/LOQ peak */
+> > > +     .tau_ms =3D 1000, .slew_time_s =3D 4, .stop_threshold =3D 50,
+> > > +     .paths =3D { "\\_SB.PCI0.LPC0.EC0.FANS", "\\_SB.PCI0.LPC0.EC0.F=
+A2S" }
+> > > +};
+> > > +
+> > > +/* --- DISCRETE ESTIMATION PROFILES (NMAX > 0) --- */
+> > > +
+> > > +/* Yoga 710/720 (N=3D59) */
+> > > +static struct yogafan_config yoga_710_discrete_cfg =3D {
+> > > +     .multiplier =3D 0, .fan_count =3D 1, .n_max =3D 59, .r_max =3D =
+4500,
+> > > +     .tau_ms =3D 1000, .slew_time_s =3D 4, .stop_threshold =3D 50,
+> > > +     .paths =3D { "\\_SB.PCI0.LPC0.EC0.FAN0", NULL }
+> > > +};
+> > > +
+> > > +/* Yoga 510 / Ideapad 510s (N=3D41) */
+> > > +static struct yogafan_config yoga_510_discrete_cfg =3D {
+> > > +     .multiplier =3D 0, .fan_count =3D 1, .n_max =3D 41, .r_max =3D =
+4500,
+> > > +     .tau_ms =3D 1000, .slew_time_s =3D 4, .stop_threshold =3D 50,
+> > > +     .paths =3D { "\\_SB.PCI0.LPC0.EC0.FAN0", NULL }
+> > >  };
+> > >=20
+> > > -static const struct yogafan_config ideapad_8bit_fan0_cfg =3D {
+> > > -     .multiplier =3D 100,
+> > > -     .fan_count =3D 1,
+> > > +/* Ideapad 500S / U31-70 (N=3D44) */
+> > > +static struct yogafan_config ideapad_500s_discrete_cfg =3D {
+> > > +     .multiplier =3D 0, .fan_count =3D 1, .n_max =3D 44, .r_max =3D =
+5500,
+> > > +     .tau_ms =3D 1000, .slew_time_s =3D 4, .stop_threshold =3D 50,
+> > >       .paths =3D { "\\_SB.PCI0.LPC0.EC0.FAN0", NULL }
+> > >  };
+> > >=20
+> > > -static const struct yogafan_config legion_16bit_dual_cfg =3D {
+> > > -     .multiplier =3D 1,
+> > > -     .fan_count =3D 2,
+> > > +/* Yoga 3 14 / Yoga 11s (N=3D80) */
+> > > +static struct yogafan_config yoga3_14_discrete_cfg =3D {
+> > > +     .multiplier =3D 0, .fan_count =3D 1, .n_max =3D 80, .r_max =3D =
+5000,
+> > > +     .tau_ms =3D 1000, .slew_time_s =3D 4, .stop_threshold =3D 50,
+> > > +     .paths =3D { "\\_SB.PCI0.LPC0.EC0.FAN0", "\\_SB.PCI0.LPC0.EC0.F=
+ANS" }
+> > > +};
+> > > +
+> > > +/* Yoga 2 13 (N=3D8) */
+> > > +static struct yogafan_config yoga2_13_discrete_cfg =3D {
+> > > +     .multiplier =3D 0, .fan_count =3D 1, .n_max =3D 8, .r_max =3D 4=
+200,
+> > > +     .tau_ms =3D 1000, .slew_time_s =3D 4, .stop_threshold =3D 50,
+> > > +     .paths =3D { "\\_SB.PCI0.LPC0.EC0.FAN0", NULL }
+> > > +};
+> > > +
+> > > +/* Yoga 13 (N=3D255) - Dual Fan */
+> > > +static struct yogafan_config yoga13_discrete_cfg =3D {
+> > > +     .multiplier =3D 0, .fan_count =3D 2, .n_max =3D 255, .r_max =3D=
+ 5000,
+> > > +     .tau_ms =3D 1000, .slew_time_s =3D 4, .stop_threshold =3D 50,
+> > > +     .paths =3D { "\\_SB.PCI0.LPC0.EC0.FAN1", "\\_SB.PCI0.LPC0.EC0.F=
+AN2" }
+> > > +};
+> > > +
+> > > +/* Legacy U330p/U430p (N=3D768) */
+> > > +static struct yogafan_config legacy_u_discrete_cfg =3D {
+> > > +     .multiplier =3D 0, .fan_count =3D 1, .n_max =3D 768, .r_max =3D=
+ 5000,
+> > > +     .tau_ms =3D 1000, .slew_time_s =3D 4, .stop_threshold =3D 50,
+> > > +     .paths =3D { "\\_SB.PCI0.LPC0.EC0.FAN0", NULL }
+> > > +};
+> > > +
+> > > +/* ThinkPad 13 / Helix / T-Series (Strict Discrete) */
+> > > +static struct yogafan_config thinkpad_discrete_cfg =3D {
+> > > +     .multiplier =3D 0, .fan_count =3D 1, .n_max =3D 7,
+> > > +     .r_max =3D 5500, /* Matching table peak for T540p/TP13 */
+> > > +     .tau_ms =3D 1000, .slew_time_s =3D 4, .stop_threshold =3D 50,
+> > > +     .paths =3D { "\\_SB.PCI0.LPC0.EC0.FAN0", "\\_SB.PCI0.LPC0.EC0.F=
+ANS" }
+> > > +};
+> > > +
+> > > +/* ThinkPad L-Series / V580 (Continuous 8-bit) */
+> > > +static struct yogafan_config thinkpad_l_cfg =3D {
+> > > +     .multiplier =3D 100, .fan_count =3D 1, .n_max =3D 100,
+> > > +     .r_max =3D 5500, /* Matching table peak for L390 */
+> > > +     .tau_ms =3D 1000, .slew_time_s =3D 4, .stop_threshold =3D 50,
+> > > +     .paths =3D { "\\_SB.PCI0.LPC0.EC0.FAN0", "\\_SB.PCI0.LPC0.EC0.F=
+AN1" }
+> > > +};
+> > > +
+> > > +/* High Performance (Strict Continuous) */
+> > > +static struct yogafan_config legion_high_perf_cfg =3D {
+> > > +     .multiplier =3D 1, .fan_count =3D 2, .n_max =3D 0,
+> > > +     .r_max =3D 8000, /* Peak for Legion 7i / Yoga Pro 9 */
+> > > +     .tau_ms =3D 1000, .slew_time_s =3D 4, .stop_threshold =3D 50,
+> > >       .paths =3D { "\\_SB.PCI0.LPC0.EC0.FANS", "\\_SB.PCI0.LPC0.EC0.F=
+A2S" }
+> > >  };
+> > >=20
+> > > @@ -78,12 +165,21 @@ static void apply_rllag_filter(struct yoga_fan_d=
+ata *data, int idx, long raw_rpm
+> > >       long delta, step, limit, alpha;
+> > >       s64 temp_num;
+> > >=20
+> > > -     if (raw_rpm < RPM_FLOOR_LIMIT) {
+> > > +     /* 1. PHYSICAL CLAMP & TELEMETRY: Use per-device device_max_rpm=
+ */
+> > > +     if (raw_rpm > (long)data->device_max_rpm)
+> > > +             raw_rpm =3D (long)data->device_max_rpm;
+> > > +
+> > > +     data->raw_val[idx] =3D raw_rpm;
+> > > +
+> > > +     /* 2. Threshold logic */
+> > > +     if (raw_rpm < (long)(data->config->stop_threshold < MIN_THRESHO=
+LD_RPM
+> > > +             ? MIN_THRESHOLD_RPM : data->config->stop_threshold)) {
+> > >               data->filtered_val[idx] =3D 0;
+> > >               data->last_sample[idx] =3D now;
+> > >               return;
+> > >       }
+> > >=20
+> > > +     /* 3. Auto-reset logic */
+> > >       if (data->last_sample[idx] =3D=3D 0 || dt_ms > MAX_SAMPLING) {
+> > >               data->filtered_val[idx] =3D raw_rpm;
+> > >               data->last_sample[idx] =3D now;
+> > > @@ -99,14 +195,16 @@ static void apply_rllag_filter(struct yoga_fan_d=
+ata *data, int idx, long raw_rpm
+> > >               return;
+> > >       }
+> > >=20
+> > > +     /* 4.  PHYSICS: Use per-device internal_tau_ms */
+> > >       temp_num =3D dt_ms << 12;
+> > > -     alpha =3D (long)div64_s64(temp_num, (s64)(TAU_MS + dt_ms));
+> > > +     alpha =3D (long)div64_s64(temp_num, (s64)(data->config->tau_ms =
++ dt_ms));
+> > >       step =3D (delta * alpha) >> 12;
+> > >=20
+> > >       if (step =3D=3D 0 && delta !=3D 0)
+> > >               step =3D (delta > 0) ? 1 : -1;
+> > >=20
+> > > -     limit =3D (MAX_SLEW_RPM_S * (long)dt_ms) / 1000;
+> > > +     /* 5.  SLEW: Use per-device internal_max_slew_rpm_s */
+> > > +     limit =3D ((long)data->internal_max_slew_rpm_s * (long)dt_ms) /=
+ 1000;
+> > >       if (limit < 1)
+> > >               limit =3D 1;
+> > >=20
+> > > @@ -123,19 +221,38 @@ static int yoga_fan_read(struct device *dev, en=
+um hwmon_sensor_types type,
+> > >                        u32 attr, int channel, long *val)
+> > >  {
+> > >       struct yoga_fan_data *data =3D dev_get_drvdata(dev);
+> > > +     const struct yogafan_config *cfg =3D data->config;
+> > >       unsigned long long raw_acpi;
+> > > +     long rpm_raw;
+> > >       acpi_status status;
+> > >=20
+> > > -     if (type !=3D hwmon_fan || attr !=3D hwmon_fan_input)
+> > > +     if (type !=3D hwmon_fan)
+> > >               return -EOPNOTSUPP;
+> > >=20
+> > > +     /* 1. Handle static MAX attribute immediately without filtering=
+ */
+> > > +     if (attr =3D=3D hwmon_fan_max) {
+> > > +             *val =3D (long)data->device_max_rpm;
+> > > +             return 0;
+> > > +     }
+> > > +
+> > > +     if (attr !=3D hwmon_fan_input)
+> > > +             return -EOPNOTSUPP;
+> > > +
+> > > +     /* 2. Get hardware data only for INPUT requests */
+> > >       status =3D acpi_evaluate_integer(data->active_handles[channel],=
+ NULL, NULL, &raw_acpi);
+> > >       if (ACPI_FAILURE(status))
+> > >               return -EIO;
+> > >=20
+> > > -     apply_rllag_filter(data, channel, (long)raw_acpi * data->multip=
+lier);
+> > > -     *val =3D data->filtered_val[channel];
+> > > +     /* 3. Calculate raw RPM based on architecture */
+> > > +     if (cfg->n_max > 0)
+> > > +             rpm_raw =3D (long)div64_s64((s64)cfg->r_max * raw_acpi,=
+ cfg->n_max);
+> > > +     else
+> > > +             rpm_raw =3D (long)raw_acpi * cfg->multiplier;
+> > > +
+> > > +     /* 4. Apply filter only for real speed readings */
+> > > +     apply_rllag_filter(data, channel, rpm_raw);
+> > >=20
+> > > +     *val =3D data->filtered_val[channel];
+> > >       return 0;
+> > >  }
+> > >=20
+> > > @@ -155,47 +272,150 @@ static const struct hwmon_ops yoga_fan_hwmon_o=
+ps =3D {
+> > >       .read =3D yoga_fan_read,
+> > >  };
+> > >=20
+> > > -static const struct hwmon_channel_info *yoga_fan_info[] =3D {
+> > > -     HWMON_CHANNEL_INFO(fan,
+> > > -                        HWMON_F_INPUT, HWMON_F_INPUT,
+> > > -                        HWMON_F_INPUT, HWMON_F_INPUT,
+> > > -                        HWMON_F_INPUT, HWMON_F_INPUT,
+> > > -                        HWMON_F_INPUT, HWMON_F_INPUT),
+> > > -     NULL
+> > > -};
+> > > -
+> > > -static const struct hwmon_chip_info yoga_fan_chip_info =3D {
+> > > -     .ops =3D &yoga_fan_hwmon_ops,
+> > > -     .info =3D yoga_fan_info,
+> > > -};
+> > > -
+> > >  static const struct dmi_system_id yogafan_quirks[] =3D {
+> > > +     /* --- DISCRETE OVERRIDES (Specific matches MUST come first) --=
+- */
+> > >       {
+> > > -             .ident =3D "Lenovo Yoga",
+> > > -             .matches =3D {
+> > > -                     DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> > > -                     DMI_MATCH(DMI_PRODUCT_FAMILY, "Yoga"),
+> > > -             },
+> > > -             .driver_data =3D (void *)&yoga_8bit_fans_cfg,
+> > > +             .ident =3D "Lenovo Yoga 710",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_NAME, "Yoga 710") =
+},
+> > > +             .driver_data =3D &yoga_710_discrete_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "Lenovo Yoga 510",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_NAME, "Yoga 510") =
+},
+> > > +             .driver_data =3D &yoga_510_discrete_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "Lenovo Ideapad 510s",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_NAME, "Ideapad 510=
+s") },
+> > > +             .driver_data =3D &yoga_510_discrete_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "Lenovo Ideapad 500S",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_NAME, "Ideapad 500=
+S") },
+> > > +             .driver_data =3D &ideapad_500s_discrete_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "Lenovo U31-70",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_NAME, "U31-70") },
+> > > +             .driver_data =3D &ideapad_500s_discrete_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "Lenovo Yoga 3 14",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_NAME, "80JH") },
+> > > +             .driver_data =3D &yoga3_14_discrete_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "Lenovo Yoga 2 13",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_NAME, "20344") },
+> > > +             .driver_data =3D &yoga2_13_discrete_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "Lenovo Yoga 13",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_NAME, "20191") },
+> > > +             .driver_data =3D &yoga13_discrete_cfg,
+> > >       },
+> > > +     {
+> > > +             .ident =3D "Lenovo U330p/U430p",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_NAME, "Lenovo u330=
+p") },
+> > > +             .driver_data =3D &legacy_u_discrete_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "ThinkPad 13",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_NAME, "ThinkPad 13=
+") },
+> > > +             .driver_data =3D &thinkpad_discrete_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "ThinkPad Helix",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_NAME, "3698") },
+> > > +             .driver_data =3D &thinkpad_discrete_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "ThinkPad X-Series",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_NAME, "ThinkPad X"=
+) },
+> > > +             .driver_data =3D &thinkpad_discrete_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "ThinkPad T-Series",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_NAME, "ThinkPad T"=
+) },
+> > > +             .driver_data =3D &thinkpad_discrete_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "Lenovo V330",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_NAME, "81AX") },
+> > > +             .driver_data =3D &thinkpad_l_cfg,
+> > > +     },
+> > > +
+> > > +     /* --- SPECIAL PROFILES (Must precede general fallbacks) --- */
+> > > +     {
+> > > +             .ident =3D "Lenovo Yoga Pro",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_NAME, "Yoga Pro") =
+},
+> > > +             .driver_data =3D &legion_high_perf_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "Lenovo Legion Pro",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_NAME, "Legion P") =
+},
+> > > +             .driver_data =3D &legion_high_perf_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "Lenovo ThinkPad L",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_NAME, "ThinkPad L"=
+) },
+> > > +             .driver_data =3D &thinkpad_l_cfg,
+> > > +     },
+> > > +
+> > > +     /* --- CONTINUOUS FALLBACKS (Family matches last) --- */
+> > >       {
+> > >               .ident =3D "Lenovo Legion",
+> > > -             .matches =3D {
+> > > -                     DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> > > -                     DMI_MATCH(DMI_PRODUCT_FAMILY, "Legion"),
+> > > -             },
+> > > -             .driver_data =3D (void *)&legion_16bit_dual_cfg,
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_FAMILY, "Legion") =
+},
+> > > +             .driver_data =3D &legion_continuous_16bit_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "Lenovo LOQ",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_FAMILY, "LOQ") },
+> > > +             .driver_data =3D &legion_continuous_16bit_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "Lenovo Yoga",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_FAMILY, "Yoga") },
+> > > +             .driver_data =3D &yoga_continuous_8bit_cfg,
+> > >       },
+> > >       {
+> > >               .ident =3D "Lenovo IdeaPad",
+> > > -             .matches =3D {
+> > > -                     DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> > > -                     DMI_MATCH(DMI_PRODUCT_FAMILY, "IdeaPad"),
+> > > -             },
+> > > -             .driver_data =3D (void *)&ideapad_8bit_fan0_cfg,
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_FAMILY, "IdeaPad")=
+ },
+> > > +             .driver_data =3D &yoga_continuous_8bit_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "Lenovo Xiaoxin",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_FAMILY, "Xiaoxin")=
+ },
+> > > +             .driver_data =3D &yoga_continuous_8bit_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "Lenovo GeekPro",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_FAMILY, "GeekPro")=
+ },
+> > > +             .driver_data =3D &legion_continuous_16bit_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "Lenovo ThinkBook",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_FAMILY, "ThinkBook=
+") },
+> > > +             .driver_data =3D &yoga_continuous_8bit_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "Lenovo Slim",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_FAMILY, "Slim") },
+> > > +             .driver_data =3D &yoga_continuous_8bit_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "Lenovo V-Series",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_NAME, "Lenovo V") =
+},
+> > > +             .driver_data =3D &yoga_continuous_8bit_cfg,
+> > > +     },
+> > > +     {
+> > > +             .ident =3D "Lenovo Aura Edition",
+> > > +             .matches =3D { DMI_MATCH(DMI_PRODUCT_NAME, "Aura") },
+> > > +             .driver_data =3D &yoga_continuous_8bit_cfg,
+> > >       },
+> > >       { }
+> > >  };
+> > > +
+> > >  MODULE_DEVICE_TABLE(dmi, yogafan_quirks);
+> > >=20
+> > >  static int yoga_fan_probe(struct platform_device *pdev)
+> > > @@ -203,7 +423,10 @@ static int yoga_fan_probe(struct platform_device=
+ *pdev)
+> > >       const struct dmi_system_id *dmi_id;
+> > >       const struct yogafan_config *cfg;
+> > >       struct yoga_fan_data *data;
+> > > -     struct device *hwmon_dev;
+> > > +     struct hwmon_chip_info *chip_info;
+> > > +     struct hwmon_channel_info *info;
+> > > +     u32 *fan_config;
+> > > +     acpi_status status;
+> > >       int i;
+> > >=20
+> > >       dmi_id =3D dmi_first_match(yogafan_quirks);
+> > > @@ -215,24 +438,62 @@ static int yoga_fan_probe(struct platform_devic=
+e *pdev)
+> > >       if (!data)
+> > >               return -ENOMEM;
+> > >=20
+> > > -     data->multiplier =3D cfg->multiplier;
+> > > +     data->config =3D cfg;
+> > > +     data->device_max_rpm =3D cfg->r_max ?: 5000;
+> > > +     data->internal_tau_ms =3D cfg->tau_ms;
+> > > +     data->internal_max_slew_rpm_s =3D data->device_max_rpm / (cfg->=
+slew_time_s ?: 1);
+> > >=20
+> > > -     for (i =3D 0; i < cfg->fan_count; i++) {
+> > > -             acpi_status status;
+> > > +     /* 1. Discover handles and set the REAL fan_count */
+> > > +     for (i =3D 0; i < 2 && cfg->paths[i]; i++) {
+> > > +             acpi_handle handle;
+> > >=20
+> > > -             status =3D acpi_get_handle(NULL, (char *)cfg->paths[i],
+> > > -                                      &data->active_handles[data->fa=
+n_count]);
+> > > -             if (ACPI_SUCCESS(status))
+> > > +             status =3D acpi_get_handle(NULL, cfg->paths[i], &handle=
 );
-> > +
-> > +	return regmap_write(st->map, reg, __raw);
-> > +}
-> > +
-> > +static int ltc4283_write_power_word(const struct ltc4283_hwmon *st,
-> > +				=C2=A0=C2=A0=C2=A0 u32 reg, long val)
-> > +{
-> > +	u64 temp =3D st->rsense * BIT_ULL(16), temp_2;
-> > +	u16 __raw;
-> > +
-> > +	if (check_mul_overflow(val, temp, &temp_2)) {
-> > +		temp =3D DIV_ROUND_CLOSEST_ULL(temp, DECA * MILLI);
-> > +		__raw =3D DIV_ROUND_CLOSEST_ULL(temp * val, LTC4283_ADC1_FS_uV *
-> > LTC4283_ADC2_FS_mV);
-> > +	} else {
-> > +		temp =3D (u64)LTC4283_ADC1_FS_uV * LTC4283_ADC2_FS_mV * DECA *
-> > MILLI;
-> > +		__raw =3D DIV64_U64_ROUND_CLOSEST(temp_2, temp);
-> > +	}
-> > +
-> > +	return regmap_write(st->map, reg, __raw);
-> > +}
-> > +
-> > +static int ltc4283_reset_power_hist(struct ltc4283_hwmon *st)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret =3D ltc4283_write_power_word(st, LTC4283_POWER_MIN, st->power_max=
-);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret =3D ltc4283_write_power_word(st, LTC4283_POWER_MAX, 0);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/* Clear possible power faults. */
-> > +	return regmap_clear_bits(st->map, LTC4283_FAULT_LOG,
-> > +				 LTC4283_PWR_FAIL_FAULT_MASK |
-> > LTC4283_PGI_FAULT_MASK);
-> > +}
-> > +
-> > +static int ltc4283_write_power(struct ltc4283_hwmon *st, u32 attr, lon=
-g val)
-> > +{
-> > +	switch (attr) {
-> > +	case hwmon_power_max:
-> > +		return ltc4283_write_power_byte(st, LTC4283_POWER_MAX_TH, val);
-> > +	case hwmon_power_min:
-> > +		return ltc4283_write_power_byte(st, LTC4283_POWER_MIN_TH, val);
-> > +	case hwmon_power_reset_history:
-> > +		return ltc4283_reset_power_hist(st);
-> > +	default:
-> > +		return -EOPNOTSUPP;
-> > +	}
-> > +}
-> > +
-> > +static int ltc4283_write_in_history(struct ltc4283_hwmon *st, u32 reg,
-> > +				=C2=A0=C2=A0=C2=A0 long lowest, u32 fs)
-> > +{
-> > +	u32 __raw;
-> > +	int ret;
-> > +
-> > +	__raw =3D DIV_ROUND_CLOSEST(BIT(16) * lowest, fs);
-> > +	if (__raw =3D=3D BIT(16))
-> > +		__raw =3D U16_MAX;
-> > +
-> > +	ret =3D regmap_write(st->map, reg, __raw);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	return regmap_write(st->map, reg + 1, 0);
-> > +}
-> > +
-> > +static int ltc4283_write_in_byte(const struct ltc4283_hwmon *st,
-> > +				 u32 reg, u32 fs, long val)
-> > +{
-> > +	u32 __raw;
-> > +
-> > +	val =3D clamp_val(val, 0, fs);
-> > +	__raw =3D DIV_ROUND_CLOSEST(val * BIT(8), fs);
-> > +	if (__raw =3D=3D BIT(8))
-> > +		__raw =3D U8_MAX;
-> > +
-> > +	return regmap_write(st->map, reg, __raw);
-> > +}
-> > +
-> > +static int ltc4283_reset_in_hist(struct ltc4283_hwmon *st, u32 channel=
-)
-> > +{
-> > +	u32 reg, fs;
-> > +	int ret;
-> > +
-> > +	/*
-> > +	 * Make sure to clear possible under/over voltage faults. Otherwise t=
-he
-> > +	 * chip won't latch on again.
-> > +	 */
-> > +	if (channel =3D=3D LTC4283_CHAN_VIN)
-> > +		return regmap_clear_bits(st->map, LTC4283_FAULT_LOG,
-> > +					 LTC4283_OV_FAULT_MASK |
-> > LTC4283_UV_FAULT_MASK);
-> > +
-> > +	if (channel =3D=3D LTC4283_CHAN_VPWR)
-> > +		return ltc4283_write_in_history(st, LTC4283_VPWR_MIN,
-> > +						LTC4283_ADC2_FS_mV,
-> > +						LTC4283_ADC2_FS_mV);
-> > +
-> > +	if (channel >=3D LTC4283_CHAN_ADI_1 && channel <=3D LTC4283_CHAN_DRAI=
-N) {
-> > +		fs =3D LTC4283_ADC2_FS_mV;
-> > +		reg =3D LTC4283_ADC_2_MIN(channel - LTC4283_CHAN_ADI_1);
-> > +	} else {
-> > +		fs =3D LTC4283_ADC1_FS_uV;
-> > +		reg =3D LTC4283_ADC_2_MIN_DIFF(channel - LTC4283_CHAN_ADIN12);
-> > +	}
-> > +
-> > +	ret =3D ltc4283_write_in_history(st, reg, fs, fs);
-> > +	if (ret)
-> > +		return ret;
-> > +	if (channel !=3D LTC4283_CHAN_DRAIN)
-> > +		return 0;
-> > +
-> > +	/* Then, let's also clear possible fet faults. Same as above. */
-> > +	return regmap_clear_bits(st->map, LTC4283_FAULT_LOG,
-> > +				 LTC4283_FET_BAD_FAULT_MASK |
-> > LTC4283_FET_SHORT_FAULT_MASK);
-> > +}
-> > +
-> > +static int ltc4283_write_in_en(struct ltc4283_hwmon *st, u32 channel, =
-bool en)
-> > +{
-> > +	unsigned int bit, adc_idx =3D channel - LTC4283_CHAN_ADI_1;
-> > +	unsigned int reg =3D LTC4283_ADC_SELECT(adc_idx);
-> > +	int ret;
-> > +
-> > +	bit =3D LTC4283_ADC_SELECT_MASK(adc_idx);
-> > +	if (channel > LTC4283_CHAN_DRAIN)
-> > +		/* Account for two reserved fields after DRAIN. */
-> > +		bit <<=3D 2;
-> > +
-> > +	if (en)
-> > +		ret =3D regmap_set_bits(st->map, reg, bit);
-> > +	else
-> > +		ret =3D regmap_clear_bits(st->map, reg, bit);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	__assign_bit(channel, &st->ch_enable_mask, en);
-> > +	return 0;
-> > +}
-> > +
-> > +static int ltc4283_write_minmax(struct ltc4283_hwmon *st, long val,
-> > +				u32 channel, bool is_max)
-> > +{
-> > +	u32 reg;
-> > +
-> > +	if (channel =3D=3D LTC4283_CHAN_VPWR) {
-> > +		if (is_max)
-> > +			return ltc4283_write_in_byte(st, LTC4283_VPWR_MAX_TH,
-> > +						=C2=A0=C2=A0=C2=A0=C2=A0 LTC4283_ADC2_FS_mV, val);
-> > +
-> > +		return ltc4283_write_in_byte(st, LTC4283_VPWR_MIN_TH,
-> > +					=C2=A0=C2=A0=C2=A0=C2=A0 LTC4283_ADC2_FS_mV, val);
-> > +	}
-> > +
-> > +	if (channel >=3D LTC4283_CHAN_ADI_1 && channel <=3D LTC4283_CHAN_DRAI=
-N) {
-> > +		if (is_max) {
-> > +			reg =3D LTC4283_ADC_2_MAX_TH(channel -
-> > LTC4283_CHAN_ADI_1);
-> > +			return ltc4283_write_in_byte(st, reg,
-> > +						=C2=A0=C2=A0=C2=A0=C2=A0 LTC4283_ADC2_FS_mV, val);
-> > +		}
-> > +
-> > +		reg =3D LTC4283_ADC_2_MIN_TH(channel - LTC4283_CHAN_ADI_1);
-> > +		return ltc4283_write_in_byte(st, reg, LTC4283_ADC2_FS_mV, val);
-> > +	}
-> > +
-> > +	/* Just sanity check we do not overflow val for 32bit */
-> > +	val =3D clamp_val(val * MILLI, 0, LTC4283_ADC1_FS_uV);
-> > +
-> > +	if (is_max) {
-> > +		reg =3D LTC4283_ADC_2_MAX_TH_DIFF(channel - LTC4283_CHAN_ADIN12);
-> > +		return ltc4283_write_in_byte(st, reg, LTC4283_ADC1_FS_uV, val);
-> > +	}
-> > +
-> > +	reg =3D LTC4283_ADC_2_MIN_TH_DIFF(channel - LTC4283_CHAN_ADIN12);
-> > +	return ltc4283_write_in_byte(st, reg, LTC4283_ADC1_FS_uV, val);
-> > +}
-> > +
-> > +static int ltc4283_write_in(struct ltc4283_hwmon *st, u32 attr, long v=
-al,
-> > +			=C2=A0=C2=A0=C2=A0 int channel)
-> > +{
-> > +	switch (attr) {
-> > +	case hwmon_in_max:
-> > +		return ltc4283_write_minmax(st, val, channel, true);
-> > +	case hwmon_in_min:
-> > +		return ltc4283_write_minmax(st, val, channel, false);
-> > +	case hwmon_in_reset_history:
-> > +		return ltc4283_reset_in_hist(st, channel);
-> > +	case hwmon_in_enable:
-> > +		return ltc4283_write_in_en(st, channel, !!val);
-> > +	default:
-> > +		return -EOPNOTSUPP;
-> > +	}
-> > +}
-> > +
-> > +static int ltc4283_write_curr_byte(const struct ltc4283_hwmon *st,
-> > +				=C2=A0=C2=A0 u32 reg, long val)
-> > +{
-> > +	u32 temp =3D LTC4283_ADC1_FS_uV * DECA * MILLI;
-> > +	u32 reg_val, isense_max;
-> > +
-> > +	isense_max =3D DIV_ROUND_CLOSEST(st->vsense_max * MICRO * DECA, st-
-> > >rsense);
-> > +	val =3D clamp_val(val, 0, isense_max);
-> > +	reg_val =3D DIV_ROUND_CLOSEST_ULL(val * BIT_ULL(8) * st->rsense, temp=
-);
-> > +
-> > +	return regmap_write(st->map, reg, reg_val);
-> > +}
-> > +
-> > +static int ltc4283_write_curr_history(struct ltc4283_hwmon *st)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret =3D ltc4283_write_in_history(st, LTC4283_SENSE_MIN,
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 st->vsense_max * MILLI,
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 LTC4283_ADC1_FS_uV);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/* Now, let's also clear possible overcurrent logs. */
-> > +	return regmap_clear_bits(st->map, LTC4283_FAULT_LOG,
-> > +				 LTC4283_OC_FAULT_MASK);
-> > +}
-> > +
-> > +static int ltc4283_write_curr(struct ltc4283_hwmon *st, u32 attr, long=
- val)
-> > +{
-> > +	switch (attr) {
-> > +	case hwmon_curr_max:
-> > +		return ltc4283_write_curr_byte(st, LTC4283_SENSE_MAX_TH, val);
-> > +	case hwmon_curr_min:
-> > +		return ltc4283_write_curr_byte(st, LTC4283_SENSE_MIN_TH, val);
-> > +	case hwmon_curr_reset_history:
-> > +		return ltc4283_write_curr_history(st);
-> > +	default:
-> > +		return -EOPNOTSUPP;
-> > +	}
-> > +}
-> > +
-> > +static int ltc4283_energy_enable_set(struct ltc4283_hwmon *st, long va=
-l)
-> > +{
-> > +	int ret;
-> > +
-> > +	/* Setting the bit halts the meter. */
-> > +	val =3D !!val;
-> > +	ret =3D regmap_update_bits(st->map, LTC4283_METER_CONTROL,
-> > +				 LTC4283_METER_HALT_MASK,
-> > +				 FIELD_PREP(LTC4283_METER_HALT_MASK, !val));
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	st->energy_en =3D val;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int ltc4283_write(struct device *dev, enum hwmon_sensor_types t=
-ype,
-> > +			 u32 attr, int channel, long val)
-> > +{
-> > +	struct ltc4283_hwmon *st =3D dev_get_drvdata(dev);
-> > +
-> > +	switch (type) {
-> > +	case hwmon_power:
-> > +		return ltc4283_write_power(st, attr, val);
-> > +	case hwmon_in:
-> > +		return ltc4283_write_in(st, attr, val, channel);
-> > +	case hwmon_curr:
-> > +		return ltc4283_write_curr(st, attr, val);
-> > +	case hwmon_energy:
-> > +		return ltc4283_energy_enable_set(st, val);
-> > +	default:
-> > +		return -EOPNOTSUPP;
-> > +	}
-> > +}
-> > +
-> > +static umode_t ltc4283_in_is_visible(const struct ltc4283_hwmon *st,
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0 u32 attr, int channel)
-> > +{
-> > +	/* If ADIO is set as a GPIO, don=C2=B4t make it visible. */
-> > +	if (channel >=3D LTC4283_CHAN_ADIO_1 && channel <=3D LTC4283_CHAN_ADI=
-O_4) {
-> > +		/* ADIOX pins come at index 0 in the gpio mask. */
-> > +		channel -=3D LTC4283_CHAN_ADIO_1;
-> > +		if (test_bit(channel, &st->gpio_mask))
-> > +			return 0;
-> > +	}
-> > +
-> > +	/* Also take care of differential channels. */
-> > +	if (channel >=3D LTC4283_CHAN_ADIO12 && channel <=3D LTC4283_CHAN_ADI=
-O34) {
-> > +		channel -=3D LTC4283_CHAN_ADIO12;
-> > +		/* If one channel in the pair is used, make it invisible. */
-> > +		if (test_bit(channel * 2, &st->gpio_mask) ||
-> > +		=C2=A0=C2=A0=C2=A0 test_bit(channel * 2 + 1, &st->gpio_mask))
-> > +			return 0;
-> > +	}
-> > +
-> > +	switch (attr) {
-> > +	case hwmon_in_input:
-> > +	case hwmon_in_highest:
-> > +	case hwmon_in_lowest:
-> > +	case hwmon_in_max_alarm:
-> > +	case hwmon_in_min_alarm:
-> > +	case hwmon_in_label:
-> > +	case hwmon_in_lcrit_alarm:
-> > +	case hwmon_in_crit_alarm:
-> > +	case hwmon_in_fault:
-> > +		return 0444;
-> > +	case hwmon_in_max:
-> > +	case hwmon_in_min:
-> > +	case hwmon_in_enable:
-> > +		return 0644;
-> > +	case hwmon_in_reset_history:
-> > +		return 0200;
-> > +	default:
-> > +		return 0;
-> > +	}
-> > +}
-> > +
-> > +static umode_t ltc4283_curr_is_visible(u32 attr)
-> > +{
-> > +	switch (attr) {
-> > +	case hwmon_curr_input:
-> > +	case hwmon_curr_highest:
-> > +	case hwmon_curr_lowest:
-> > +	case hwmon_curr_max_alarm:
-> > +	case hwmon_curr_min_alarm:
-> > +	case hwmon_curr_crit_alarm:
-> > +	case hwmon_curr_label:
-> > +		return 0444;
-> > +	case hwmon_curr_max:
-> > +	case hwmon_curr_min:
-> > +		return 0644;
-> > +	case hwmon_curr_reset_history:
-> > +		return 0200;
-> > +	default:
-> > +		return 0;
-> > +	}
-> > +}
-> > +
-> > +static umode_t ltc4283_power_is_visible(u32 attr)
-> > +{
-> > +	switch (attr) {
-> > +	case hwmon_power_input:
-> > +	case hwmon_power_input_highest:
-> > +	case hwmon_power_input_lowest:
-> > +	case hwmon_power_label:
-> > +	case hwmon_power_max_alarm:
-> > +	case hwmon_power_min_alarm:
-> > +		return 0444;
-> > +	case hwmon_power_max:
-> > +	case hwmon_power_min:
-> > +		return 0644;
-> > +	case hwmon_power_reset_history:
-> > +		return 0200;
-> > +	default:
-> > +		return 0;
-> > +	}
-> > +}
-> > +
-> > +static umode_t ltc4283_is_visible(const void *data,
-> > +				=C2=A0 enum hwmon_sensor_types type,
-> > +				=C2=A0 u32 attr, int channel)
-> > +{
-> > +	switch (type) {
-> > +	case hwmon_in:
-> > +		return ltc4283_in_is_visible(data, attr, channel);
-> > +	case hwmon_curr:
-> > +		return ltc4283_curr_is_visible(attr);
-> > +	case hwmon_power:
-> > +		return ltc4283_power_is_visible(attr);
-> > +	case hwmon_energy:
-> > +		/* hwmon_energy_enable */
-> > +		return 0644;
-> > +	case hwmon_energy64:
-> > +		/* hwmon_energy_input */
-> > +		return 0444;
-> > +	default:
-> > +		return 0;
-> > +	}
-> > +}
-> > +
-> > +static const char * const ltc4283_in_strs[] =3D {
-> > +	"VIN", "VPWR", "VADI1", "VADI2", "VADI3", "VADI4", "VADIO1", "VADIO2"=
-,
-> > +	"VADIO3", "VADIO4", "DRNS", "DRAIN", "ADIN2-ADIN1", "ADIN4-ADIN3",
-> > +	"ADIO2-ADIO1", "ADIO4-ADIO3"
-> > +};
-> > +
-> > +static int ltc4283_read_labels(struct device *dev,
-> > +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 enum hwmon_sensor_types type,
-> > +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 attr, int channel, const c=
-har **str)
-> > +{
-> > +	switch (type) {
-> > +	case hwmon_in:
-> > +		*str =3D ltc4283_in_strs[channel];
-> > +		return 0;
-> > +	case hwmon_curr:
-> > +		*str =3D "ISENSE";
-> > +		return 0;
-> > +	case hwmon_power:
-> > +		*str =3D "Power";
-> > +		return 0;
-> > +	default:
-> > +		return -EOPNOTSUPP;
-> > +	}
-> > +}
-> > +
-> > +/*
-> > + * Set max limits for ISENSE and Power as that depends on the max volt=
-age on
-> > + * rsense that is defined in ILIM_ADJUST. This is specially important =
-for power
-> > + * because for some rsense and vfsout values, if we allow the default =
-raw 255
-> > + * value, that would overflow long in 32bit archs when reading back th=
-e max
-> > + * power limit.
-> > + */
-> > +static int ltc4283_set_max_limits(struct ltc4283_hwmon *st, struct dev=
-ice *dev)
-> > +{
-> > +	u32 temp =3D st->vsense_max * DECA * MICRO;
-> > +	int ret;
-> > +
-> > +	ret =3D ltc4283_write_in_byte(st, LTC4283_SENSE_MAX_TH,
-> > LTC4283_ADC1_FS_uV,
-> > +				=C2=A0=C2=A0=C2=A0 st->vsense_max * MILLI);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/* Power is given by ISENSE * Vout. */
-> > +	st->power_max =3D DIV_ROUND_CLOSEST(temp, st->rsense) *
-> > LTC4283_ADC2_FS_mV;
-> > +	return ltc4283_write_power_byte(st, LTC4283_POWER_MAX_TH, st-
-> > >power_max);
-> > +}
-> > +
-> > +static int ltc4283_parse_array_prop(const struct ltc4283_hwmon *st,
-> > +				=C2=A0=C2=A0=C2=A0 struct device *dev, const char *prop,
-> > +				=C2=A0=C2=A0=C2=A0 const u32 *vals, u32 n_vals)
-> > +{
-> > +	u32 prop_val;
-> > +	int ret;
-> > +	u32 i;
-> > +
-> > +	ret =3D device_property_read_u32(dev, prop, &prop_val);
-> > +	if (ret)
-> > +		return n_vals;
-> > +
-> > +	for (i =3D 0; i < n_vals; i++) {
-> > +		if (prop_val !=3D vals[i])
-> > +			continue;
-> > +
-> > +		return i;
-> > +	}
-> > +
-> > +	return dev_err_probe(dev, -EINVAL,
-> > +			=C2=A0=C2=A0=C2=A0=C2=A0 "Invalid %s property value %u, expected on=
-e of:
-> > %*ph\n",
-> > +			=C2=A0=C2=A0=C2=A0=C2=A0 prop, prop_val, n_vals, vals);
-> > +}
-> > +
-> > +static int ltc4283_get_defaults(struct ltc4283_hwmon *st)
-> > +{
-> > +	u32 reg_val, ilm_adjust, c;
-> > +	int ret;
-> > +
-> > +	ret =3D regmap_read(st->map, LTC4283_METER_CONTROL, &reg_val);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	st->energy_en =3D !FIELD_GET(LTC4283_METER_HALT_MASK, reg_val);
-> > +
-> > +	ret =3D regmap_read(st->map, LTC4283_CONFIG_1, &reg_val);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ilm_adjust =3D FIELD_GET(LTC4283_ILIM_MASK, reg_val);
-> > +	st->vsense_max =3D LTC4283_VILIM_MIN_uV / MILLI + ilm_adjust;
-> > +
-> > +	ret =3D regmap_read(st->map, LTC4283_PGIO_CONFIG, &reg_val);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/* Can be latter overwritten in ltc4283_pgio_config() */
-> > +	if (FIELD_GET(LTC4283_PGIO4_CFG_MASK, reg_val) < LTC4283_PGIO_FUNC_GP=
-IO)
-> > +		st->ext_fault =3D true;
-> > +
-> > +	/* VPWR and VIN are always enabled */
-> > +	__set_bit(LTC4283_CHAN_VIN, &st->ch_enable_mask);
-> > +	__set_bit(LTC4283_CHAN_VPWR, &st->ch_enable_mask);
-> > +	for (c =3D LTC4283_CHAN_ADI_1; c < LTC4283_CHAN_MAX; c++) {
-> > +		u32 chan =3D c - LTC4283_CHAN_ADI_1, bit;
-> > +
-> > +		ret =3D regmap_read(st->map, LTC4283_ADC_SELECT(chan), &reg_val);
-> > +		if (ret)
-> > +			return ret;
-> > +
-> > +		bit =3D LTC4283_ADC_SELECT_MASK(chan);
-> > +		if (c > LTC4283_CHAN_DRAIN)
-> > +			/* account for two reserved fields after DRAIN */
-> > +			bit <<=3D 2;
-> > +
-> > +		if (!(bit & reg_val))
-> > +			continue;
-> > +
-> > +		__set_bit(c, &st->ch_enable_mask);
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static const char * const ltc4283_pgio1_funcs[] =3D {
-> > +	"inverted_power_good", "power_good", "gpio"
-> > +};
-> > +
-> > +static const char * const ltc4283_pgio2_funcs[] =3D {
-> > +	 "inverted_power_good", "power_good", "gpio", "active_current_limitin=
-g"
-> > +};
-> > +
-> > +static const char * const ltc4283_pgio3_funcs[] =3D {
-> > +	"inverted_power_good_input", "power_good_input", "gpio"
-> > +};
-> > +
-> > +static const char * const ltc4283_pgio4_funcs[] =3D {
-> > +	"inverted_external_fault", "external_fault", "gpio"
-> > +};
-> > +
-> > +enum {
-> > +	LTC4283_PIN_ADIO1,
-> > +	LTC4283_PIN_ADIO2,
-> > +	LTC4283_PIN_ADIO3,
-> > +	LTC4283_PIN_ADIO4,
-> > +	LTC4283_PIN_PGIO1,
-> > +	LTC4283_PIN_PGIO2,
-> > +	LTC4283_PIN_PGIO3,
-> > +	LTC4283_PIN_PGIO4,
-> > +};
-> > +
-> > +static int ltc4283_pgio_config(struct ltc4283_hwmon *st, struct device=
- *dev)
-> > +{
-> > +	int ret, func;
-> > +
-> > +	func =3D device_property_match_property_string(dev, "adi,pgio1-func",
-> > +						=C2=A0=C2=A0=C2=A0=C2=A0 ltc4283_pgio1_funcs,
-> > +						=C2=A0=C2=A0=C2=A0=C2=A0
-> > ARRAY_SIZE(ltc4283_pgio1_funcs));
-> > +	if (func < 0 && func !=3D -EINVAL)
-> > +		return dev_err_probe(dev, func,
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0 "Invalid adi,pgio1-func property\n");
-> > +	if (func >=3D 0) {
-> > +		if (func =3D=3D LTC4283_PGIO_FUNC_GPIO) {
-> > +			__set_bit(LTC4283_PIN_PGIO1, &st->gpio_mask);
-> > +			/* If GPIO, default to an input pin. */
-> > +			func++;
-> > +		}
-> > +
-> > +		ret =3D regmap_update_bits(st->map, LTC4283_PGIO_CONFIG,
-> > +					 LTC4283_PGIO1_CFG_MASK,
-> > +					 FIELD_PREP(LTC4283_PGIO1_CFG_MASK,
-> > func));
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	func =3D device_property_match_property_string(dev, "adi,pgio2-func",
-> > +						=C2=A0=C2=A0=C2=A0=C2=A0 ltc4283_pgio2_funcs,
-> > +						=C2=A0=C2=A0=C2=A0=C2=A0
-> > ARRAY_SIZE(ltc4283_pgio2_funcs));
-> > +
-> > +	if (func < 0 && func !=3D -EINVAL)
-> > +		return dev_err_probe(dev, func,
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0 "Invalid adi,pgio2-func property\n");
-> > +	if (func >=3D 0) {
-> > +		if (func !=3D LTC4283_PGIO2_FUNC_ACLB) {
-> > +			if (func =3D=3D LTC4283_PGIO_FUNC_GPIO)=C2=A0 {
-> > +				__set_bit(LTC4283_PIN_PGIO2, &st->gpio_mask);
-> > +				func++;
-> > +			}
-> > +
-> > +			ret =3D regmap_update_bits(st->map, LTC4283_PGIO_CONFIG,
-> > +						 LTC4283_PGIO2_CFG_MASK,
-> > +					=09
-> > FIELD_PREP(LTC4283_PGIO2_CFG_MASK, func));
-> > +		} else {
-> > +			ret =3D regmap_set_bits(st->map, LTC4283_CONTROL_1,
-> > +					=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 LTC4283_PIGIO2_ACLB_MASK);
-> > +		}
-> > +
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	func =3D device_property_match_property_string(dev, "adi,pgio3-func",
-> > +						=C2=A0=C2=A0=C2=A0=C2=A0 ltc4283_pgio3_funcs,
-> > +						=C2=A0=C2=A0=C2=A0=C2=A0
-> > ARRAY_SIZE(ltc4283_pgio3_funcs));
-> > +
-> > +	if (func < 0 && func !=3D -EINVAL)
-> > +		return dev_err_probe(dev, func,
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0 "Invalid adi,pgio3-func property\n");
-> > +	if (func >=3D 0) {
-> > +		if (func =3D=3D LTC4283_PGIO_FUNC_GPIO) {
-> > +			__set_bit(LTC4283_PIN_PGIO3, &st->gpio_mask);
-> > +			func++;
-> > +		}
-> > +
-> > +		ret =3D regmap_update_bits(st->map, LTC4283_PGIO_CONFIG,
-> > +					 LTC4283_PGIO3_CFG_MASK,
-> > +					 FIELD_PREP(LTC4283_PGIO3_CFG_MASK,
-> > func));
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	func =3D device_property_match_property_string(dev, "adi,pgio4-func",
-> > +						=C2=A0=C2=A0=C2=A0=C2=A0 ltc4283_pgio4_funcs,
-> > +						=C2=A0=C2=A0=C2=A0=C2=A0
-> > ARRAY_SIZE(ltc4283_pgio4_funcs));
-> > +
-> > +	if (func < 0 && func !=3D -EINVAL)
-> > +		return dev_err_probe(dev, func,
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0 "Invalid adi,pgio4-func property\n");
-> > +	if (func >=3D 0) {
-> > +		if (func =3D=3D LTC4283_PGIO_FUNC_GPIO) {
-> > +			__set_bit(LTC4283_PIN_PGIO4, &st->gpio_mask);
-> > +			func++;
-> > +			st->ext_fault =3D false;
-> > +		} else {
-> > +			st->ext_fault =3D true;
-> > +		}
-> > +
-> > +		ret =3D regmap_update_bits(st->map, LTC4283_PGIO_CONFIG,
-> > +					 LTC4283_PGIO4_CFG_MASK,
-> > +					 FIELD_PREP(LTC4283_PGIO4_CFG_MASK,
-> > func));
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int ltc4283_adio_config(struct ltc4283_hwmon *st, struct device=
- *dev,
-> > +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const char *prop, u32 pin)
-> > +{
-> > +	u32 adc_idx;
-> > +	int ret;
-> > +
-> > +	if (!device_property_read_bool(dev, prop))
-> > +		return 0;
-> > +
-> > +	adc_idx =3D LTC4283_CHAN_ADIO_1 - LTC4283_CHAN_ADI_1 + pin;
-> > +	ret =3D regmap_clear_bits(st->map, LTC4283_ADC_SELECT(adc_idx),
-> > +				LTC4283_ADC_SELECT_MASK(adc_idx));
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	__set_bit(pin, &st->gpio_mask);
-> > +	return 0;
-> > +}
-> > +
-> > +static int ltc4283_pin_config(struct ltc4283_hwmon *st, struct device =
-*dev)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret =3D ltc4283_pgio_config(st, dev);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret =3D ltc4283_adio_config(st, dev, "adi,gpio-on-adio1",
-> > LTC4283_PIN_ADIO1);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret =3D ltc4283_adio_config(st, dev, "adi,gpio-on-adio2",
-> > LTC4283_PIN_ADIO2);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret =3D ltc4283_adio_config(st, dev, "adi,gpio-on-adio3",
-> > LTC4283_PIN_ADIO3);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	return ltc4283_adio_config(st, dev, "adi,gpio-on-adio4",
-> > LTC4283_PIN_ADIO4);
-> > +}
-> > +
-> > +static const char * const ltc4283_oc_fet_retry[] =3D {
-> > +	"latch-off", "1", "7", "unlimited"
-> > +};
-> > +
-> > +static const u32 ltc4283_fb_factor[] =3D {
-> > +	100, 50, 20, 10
-> > +};
-> > +
-> > +static const u32 ltc4283_cooling_dl[] =3D {
-> > +	512, 1002, 2005, 4100, 8190, 16400, 32800, 65600
-> > +};
-> > +
-> > +static const u32 ltc4283_fet_bad_delay[] =3D {
-> > +	256, 512, 1002, 2005
-> > +};
-> > +
-> > +static int ltc4283_setup(struct ltc4283_hwmon *st, struct device *dev)
-> > +{
-> > +	u32 val;
-> > +	int ret;
-> > +
-> > +	/* The part has an eeprom so let's get the needed defaults from it */
-> > +	ret =3D ltc4283_get_defaults(st);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/*
-> > +	 * Default to LTC4283_MIN_RSENSE so we can probe without FW propertie=
-s.
-> > +	 */
-> > +	st->rsense =3D LTC4283_MIN_RSENSE;
-> > +	ret =3D device_property_read_u32(dev, "adi,rsense-nano-ohms",
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 &st->rsense);
-> > +	if (!ret) {
-> > +		if (st->rsense < LTC4283_MIN_RSENSE || st->rsense >
-> > LTC4283_MAX_RSENSE)
-> > +			return dev_err_probe(dev, -EINVAL,
-> > +					=C2=A0=C2=A0=C2=A0=C2=A0 "adi,rsense-nano-ohms(%u) too small
-> > or too large [%u %u]\n",
-> > +					=C2=A0=C2=A0=C2=A0=C2=A0 st->rsense, LTC4283_MIN_RSENSE,
-> > LTC4283_MAX_RSENSE);
-> > +	}
-> > +
-> > +	/*
-> > +	 * The resolution for rsense is tenths of micro (eg: 62.5 uOhm) which
-> > +	 * means we need nano in the bindings. However, to make things easier=
- to
-> > +	 * handle (with respect to overflows) we divide it by 100 as we don't
-> > +	 * really need the last two digits.
-> > +	 */
-> > +	st->rsense /=3D CENTI;
-> > +
-> > +	ret =3D device_property_read_u32(dev, "adi,current-limit-sense-microv=
-olt",
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 &st->vsense_max);
-> > +	if (!ret) {
-> > +		u32 reg_val;
-> > +
-> > +		if (!in_range(st->vsense_max, LTC4283_VILIM_MIN_uV,
-> > +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 LTC4283_VILIM_RANGE)) {
-> > +			return dev_err_probe(dev, -EINVAL,
-> > +					=C2=A0=C2=A0=C2=A0=C2=A0 "adi,current-limit-sense-microvolt
-> > (%u) out of range [%u %u]\n",
-> > +					=C2=A0=C2=A0=C2=A0=C2=A0 st->vsense_max,
-> > LTC4283_VILIM_MIN_uV,
-> > +					=C2=A0=C2=A0=C2=A0=C2=A0 LTC4283_VILIM_MAX_uV);
-> > +		}
-> > +
-> > +		st->vsense_max /=3D MILLI;
-> > +		reg_val =3D FIELD_PREP(LTC4283_ILIM_MASK,
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0 st->vsense_max - LTC4283_VILIM_MIN_uV /
-> > MILLI);
-> > +		ret =3D regmap_update_bits(st->map, LTC4283_CONFIG_1,
-> > +					 LTC4283_ILIM_MASK, reg_val);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	ret =3D ltc4283_parse_array_prop(st, dev, "adi,current-limit-foldback=
--
-> > factor",
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ltc4283_fb_factor,
-> > ARRAY_SIZE(ltc4283_fb_factor));
-> > +	if (ret < 0)
-> > +		return ret;
-> > +	if (ret < ARRAY_SIZE(ltc4283_fb_factor)) {
-> > +		ret =3D regmap_update_bits(st->map, LTC4283_CONFIG_1,
-> > LTC4283_FB_MASK,
-> > +					 FIELD_PREP(LTC4283_FB_MASK, ret));
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	ret =3D ltc4283_parse_array_prop(st, dev, "adi,cooling-delay-ms",
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ltc4283_cooling_dl,
-> > ARRAY_SIZE(ltc4283_cooling_dl));
-> > +	if (ret < 0)
-> > +		return ret;
-> > +	if (ret < ARRAY_SIZE(ltc4283_cooling_dl)) {
-> > +		ret =3D regmap_update_bits(st->map, LTC4283_CONFIG_2,
-> > LTC4283_COOLING_DL_MASK,
-> > +					 FIELD_PREP(LTC4283_COOLING_DL_MASK,
-> > ret));
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	ret =3D ltc4283_parse_array_prop(st, dev, "adi,fet-bad-timer-delay-ms=
-",
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ltc4283_fet_bad_delay,
-> > ARRAY_SIZE(ltc4283_fet_bad_delay));
-> > +	if (ret < 0)
-> > +		return ret;
-> > +	if (ret < ARRAY_SIZE(ltc4283_fet_bad_delay)) {
-> > +		ret =3D regmap_update_bits(st->map, LTC4283_CONFIG_2,
-> > LTC4283_FTBD_DL_MASK,
-> > +					 FIELD_PREP(LTC4283_FTBD_DL_MASK, ret));
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	ret =3D ltc4283_set_max_limits(st, dev);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret =3D ltc4283_pin_config(st, dev);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	if (device_property_read_bool(dev, "adi,power-good-reset-on-fet")) {
-> > +		ret =3D regmap_clear_bits(st->map, LTC4283_CONTROL_1,
-> > +					LTC4283_PWRGD_RST_CTRL_MASK);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	if (device_property_read_bool(dev, "adi,fet-turn-off-disable")) {
-> > +		ret =3D regmap_clear_bits(st->map, LTC4283_CONTROL_1,
-> > +					LTC4283_FET_BAD_OFF_MASK);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	if (device_property_read_bool(dev, "adi,tmr-pull-down-disable")) {
-> > +		ret =3D regmap_set_bits(st->map, LTC4283_CONTROL_1,
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 LTC4283_THERM_TMR_MASK);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	if (device_property_read_bool(dev, "adi,dvdt-inrush-control-disable")=
-) {
-> > +		ret =3D regmap_clear_bits(st->map, LTC4283_CONTROL_1,
-> > +					LTC4283_DVDT_MASK);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	if (device_property_read_bool(dev, "adi,undervoltage-retry-disable"))=
- {
-> > +		ret =3D regmap_clear_bits(st->map, LTC4283_CONTROL_2,
-> > +					LTC4283_UV_RETRY_MASK);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	if (device_property_read_bool(dev, "adi,overvoltage-retry-disable")) =
-{
-> > +		ret =3D regmap_clear_bits(st->map, LTC4283_CONTROL_2,
-> > +					LTC4283_OV_RETRY_MASK);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	if (device_property_read_bool(dev, "adi,external-fault-retry-enable")=
-) {
-> > +		if (!st->ext_fault)
-> > +			return dev_err_probe(dev, -EINVAL,
-> > +					=C2=A0=C2=A0=C2=A0=C2=A0 "adi,external-fault-retry-enable
-> > set but PGIO4 not configured\n");
-> > +		ret =3D regmap_set_bits(st->map, LTC4283_CONTROL_2,
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 LTC4283_EXT_FAULT_RETRY_MASK);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	if (device_property_read_bool(dev, "adi,fault-log-enable")) {
-> > +		ret =3D regmap_set_bits(st->map, LTC4283_FAULT_LOG_CTRL,
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 LTC4283_FAULT_LOG_EN_MASK);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	ret =3D device_property_match_property_string(dev, "adi,overcurrent-
-> > retries",
-> > +						=C2=A0=C2=A0=C2=A0 ltc4283_oc_fet_retry,
-> > +						=C2=A0=C2=A0=C2=A0
-> > ARRAY_SIZE(ltc4283_oc_fet_retry));
-> > +	/* We still want to catch when an invalid string is given. */
-> > +	if (ret < 0 && ret !=3D -EINVAL)
-> > +		return dev_err_probe(dev, ret,
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0 "adi,overcurrent-retries invalid value\n"=
-);
-> > +	if (ret >=3D 0) {
-> > +		ret =3D regmap_update_bits(st->map, LTC4283_CONTROL_2,
-> > +					 LTC4283_OC_RETRY_MASK,
-> > +					 FIELD_PREP(LTC4283_OC_RETRY_MASK,
-> > ret));
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	ret =3D device_property_match_property_string(dev, "adi,fet-bad-retri=
-es",
-> > +						=C2=A0=C2=A0=C2=A0 ltc4283_oc_fet_retry,
-> > +						=C2=A0=C2=A0=C2=A0
-> > ARRAY_SIZE(ltc4283_oc_fet_retry));
-> > +	if (ret < 0 && ret !=3D -EINVAL)
-> > +		return dev_err_probe(dev, ret,
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0 "adi,fet-bad-retries invalid value\n");
-> > +	if (ret >=3D 0) {
-> > +		ret =3D regmap_update_bits(st->map, LTC4283_CONTROL_2,
-> > +					 LTC4283_FET_BAD_RETRY_MASK,
-> > +					 FIELD_PREP(LTC4283_FET_BAD_RETRY_MASK,
-> > ret));
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	if (device_property_read_bool(dev, "adi,external-fault-fet-off-enable=
-"))
-> > {
-> > +		if (!st->ext_fault)
-> > +			return dev_err_probe(dev, -EINVAL,
-> > +					=C2=A0=C2=A0=C2=A0=C2=A0 "adi,external-fault-fet-off-enable
-> > set but PGIO4 not configured\n");
-> > +		ret =3D regmap_set_bits(st->map, LTC4283_CONFIG_3,
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 LTC4283_EXTFLT_TURN_OFF_MASK);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	if (device_property_read_bool(dev, "adi,vpower-drns-enable")) {
-> > +		u32 chan =3D LTC4283_CHAN_DRNS - LTC4283_CHAN_ADI_1;
-> > +
-> > +		__clear_bit(LTC4283_CHAN_DRNS, &st->ch_enable_mask);
-> > +		/*
-> > +		 * Then, let's by default disable DRNS from ADC2 given that it
-> > +		 * is already being monitored by the VPWR channel. One can still
-> > +		 * enable it later on if needed.
-> > +		 */
-> > +		ret =3D regmap_clear_bits(st->map, LTC4283_ADC_SELECT(chan),
-> > +					LTC4283_ADC_SELECT_MASK(chan));
-> > +		if (ret)
-> > +			return ret;
-> > +
-> > +		val =3D 1;
-> > +	} else {
-> > +		val =3D 0;
-> > +	}
-> > +
-> > +	ret =3D regmap_update_bits(st->map, LTC4283_CONFIG_3,
-> > +				 LTC4283_VPWR_DRNS_MASK,
-> > +				 FIELD_PREP(LTC4283_VPWR_DRNS_MASK, val));
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/* Make sure the ADC has 12bit resolution since we're assuming that. =
-*/
-> > +	ret =3D regmap_update_bits(st->map, LTC4283_PGIO_CONFIG_2,
-> > +				 LTC4283_ADC_MASK,
-> > +				 FIELD_PREP(LTC4283_ADC_MASK, 3));
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/* Energy reads (which are 6 byte block reads) rely on page access */
-> > +	ret =3D regmap_set_bits(st->map, LTC4283_CONTROL_1, LTC4283_RW_PAGE_M=
-ASK);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/*
-> > +	 * Make sure we are integrating power as we only support reporting
-> > +	 * consumed energy.
-> > +	 */
-> > +	return regmap_clear_bits(st->map, LTC4283_METER_CONTROL,
-> > +				 LTC4283_INTEGRATE_I_MASK);
-> > +}
-> > +
-> > +static const struct hwmon_channel_info * const ltc4283_info[] =3D {
-> > +	HWMON_CHANNEL_INFO(in,
-> > +			=C2=A0=C2=A0 HWMON_I_LCRIT_ALARM | HWMON_I_CRIT_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_RESET_HISTORY | HWMON_I_LABEL,
-> > +			=C2=A0=C2=A0 HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
-> > +			=C2=A0=C2=A0 HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_MAX_ALARM | HWMON_I_RESET_HISTORY |
-> > +			=C2=A0=C2=A0 HWMON_I_LABEL,
-> > +			=C2=A0=C2=A0 HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
-> > +			=C2=A0=C2=A0 HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_ENABLE | HWMON_I_LABEL,
-> > +			=C2=A0=C2=A0 HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
-> > +			=C2=A0=C2=A0 HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_ENABLE | HWMON_I_LABEL,
-> > +			=C2=A0=C2=A0 HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
-> > +			=C2=A0=C2=A0 HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_ENABLE | HWMON_I_LABEL,
-> > +			=C2=A0=C2=A0 HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
-> > +			=C2=A0=C2=A0 HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_ENABLE | HWMON_I_LABEL,
-> > +			=C2=A0=C2=A0 HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
-> > +			=C2=A0=C2=A0 HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_ENABLE | HWMON_I_LABEL,
-> > +			=C2=A0=C2=A0 HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
-> > +			=C2=A0=C2=A0 HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_ENABLE | HWMON_I_LABEL,
-> > +			=C2=A0=C2=A0 HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
-> > +			=C2=A0=C2=A0 HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_ENABLE | HWMON_I_LABEL,
-> > +			=C2=A0=C2=A0 HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
-> > +			=C2=A0=C2=A0 HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_ENABLE | HWMON_I_LABEL,
-> > +			=C2=A0=C2=A0 HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
-> > +			=C2=A0=C2=A0 HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_ENABLE | HWMON_I_LABEL,
-> > +			=C2=A0=C2=A0 HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
-> > +			=C2=A0=C2=A0 HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_FAULT | HWMON_I_ENABLE | HWMON_I_LABEL,
-> > +			=C2=A0=C2=A0 HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
-> > +			=C2=A0=C2=A0 HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_ENABLE | HWMON_I_LABEL,
-> > +			=C2=A0=C2=A0 HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
-> > +			=C2=A0=C2=A0 HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_ENABLE | HWMON_I_LABEL,
-> > +			=C2=A0=C2=A0 HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
-> > +			=C2=A0=C2=A0 HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_ENABLE | HWMON_I_LABEL,
-> > +			=C2=A0=C2=A0 HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
-> > +			=C2=A0=C2=A0 HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_I_ENABLE | HWMON_I_LABEL),
-> > +	HWMON_CHANNEL_INFO(curr,
-> > +			=C2=A0=C2=A0 HWMON_C_INPUT | HWMON_C_LOWEST | HWMON_C_HIGHEST |
-> > +			=C2=A0=C2=A0 HWMON_C_MAX | HWMON_C_MIN | HWMON_C_MIN_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_C_MAX_ALARM | HWMON_C_CRIT_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_C_RESET_HISTORY | HWMON_C_LABEL),
-> > +	HWMON_CHANNEL_INFO(power,
-> > +			=C2=A0=C2=A0 HWMON_P_INPUT | HWMON_P_INPUT_LOWEST |
-> > +			=C2=A0=C2=A0 HWMON_P_INPUT_HIGHEST | HWMON_P_MAX | HWMON_P_MIN |
-> > +			=C2=A0=C2=A0 HWMON_P_MAX_ALARM | HWMON_P_MIN_ALARM |
-> > +			=C2=A0=C2=A0 HWMON_P_RESET_HISTORY | HWMON_P_LABEL),
-> > +	HWMON_CHANNEL_INFO(energy,
-> > +			=C2=A0=C2=A0 HWMON_E_ENABLE),
-> > +	HWMON_CHANNEL_INFO(energy64,
-> > +			=C2=A0=C2=A0 HWMON_E_INPUT),
-> > +	NULL
-> > +};
-> > +
-> > +static const struct hwmon_ops ltc4283_ops =3D {
-> > +	.read =3D ltc4283_read,
-> > +	.write =3D ltc4283_write,
-> > +	.is_visible =3D ltc4283_is_visible,
-> > +	.read_string =3D ltc4283_read_labels,
-> > +};
-> > +
-> > +static const struct hwmon_chip_info ltc4283_chip_info =3D {
-> > +	.ops =3D &ltc4283_ops,
-> > +	.info =3D ltc4283_info,
-> > +};
-> > +
-> > +static int ltc4283_show_fault_log(void *arg, u64 *val, u32 mask)
-> > +{
-> > +	struct ltc4283_hwmon *st =3D arg;
-> > +	long alarm;
-> > +	int ret;
-> > +
-> > +	ret =3D ltc4283_read_alarm(st, LTC4283_FAULT_LOG, mask, &alarm);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	*val =3D alarm;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int ltc4283_show_in0_lcrit_fault_log(void *arg, u64 *val)
-> > +{
-> > +	return ltc4283_show_fault_log(arg, val, LTC4283_UV_FAULT_MASK);
-> > +}
-> > +DEFINE_DEBUGFS_ATTRIBUTE(ltc4283_in0_lcrit_fault_log,
-> > +			 ltc4283_show_in0_lcrit_fault_log, NULL, "%llu\n");
-> > +
-> > +static int ltc4283_show_in0_crit_fault_log(void *arg, u64 *val)
-> > +{
-> > +	return ltc4283_show_fault_log(arg, val, LTC4283_OV_FAULT_MASK);
-> > +}
-> > +DEFINE_DEBUGFS_ATTRIBUTE(ltc4283_in0_crit_fault_log,
-> > +			 ltc4283_show_in0_crit_fault_log, NULL, "%llu\n");
-> > +
-> > +static int ltc4283_show_fet_bad_fault_log(void *arg, u64 *val)
-> > +{
-> > +	return ltc4283_show_fault_log(arg, val, LTC4283_FET_BAD_FAULT_MASK);
-> > +}
-> > +DEFINE_DEBUGFS_ATTRIBUTE(ltc4283_fet_bad_fault_log,
-> > +			 ltc4283_show_fet_bad_fault_log, NULL, "%llu\n");
-> > +
-> > +static int ltc4283_show_fet_short_fault_log(void *arg, u64 *val)
-> > +{
-> > +	return ltc4283_show_fault_log(arg, val, LTC4283_FET_SHORT_FAULT_MASK)=
-;
-> > +}
-> > +DEFINE_DEBUGFS_ATTRIBUTE(ltc4283_fet_short_fault_log,
-> > +			 ltc4283_show_fet_short_fault_log, NULL, "%llu\n");
-> > +
-> > +static int ltc4283_show_curr1_crit_fault_log(void *arg, u64 *val)
-> > +{
-> > +	return ltc4283_show_fault_log(arg, val, LTC4283_OC_FAULT_MASK);
-> > +}
-> > +DEFINE_DEBUGFS_ATTRIBUTE(ltc4283_curr1_crit_fault_log,
-> > +			 ltc4283_show_curr1_crit_fault_log, NULL, "%llu\n");
-> > +
-> > +static int ltc4283_show_power1_failed_fault_log(void *arg, u64 *val)
-> > +{
-> > +	return ltc4283_show_fault_log(arg, val, LTC4283_PWR_FAIL_FAULT_MASK);
-> > +}
-> > +DEFINE_DEBUGFS_ATTRIBUTE(ltc4283_power1_failed_fault_log,
-> > +			 ltc4283_show_power1_failed_fault_log, NULL, "%llu\n");
-> > +
-> > +static int ltc4283_show_power1_good_input_fault_log(void *arg, u64 *va=
-l)
-> > +{
-> > +	return ltc4283_show_fault_log(arg, val, LTC4283_PGI_FAULT_MASK);
-> > +}
-> > +DEFINE_DEBUGFS_ATTRIBUTE(ltc4283_power1_good_input_fault_log,
-> > +			 ltc4283_show_power1_good_input_fault_log, NULL,
-> > "%llu\n");
-> > +
-> > +static void ltc4283_debugfs_init(struct ltc4283_hwmon *st, struct i2c_=
-client
-> > *i2c)
-> > +{
-> > +	debugfs_create_file_unsafe("in0_crit_fault_log", 0400, i2c->debugfs, =
-st,
-> > +				=C2=A0=C2=A0 &ltc4283_in0_crit_fault_log);
-> > +	debugfs_create_file_unsafe("in0_lcrit_fault_log", 0400, i2c->debugfs,
-> > st,
-> > +				=C2=A0=C2=A0 &ltc4283_in0_lcrit_fault_log);
-> > +	debugfs_create_file_unsafe("in0_fet_bad_fault_log", 0400, i2c->debugf=
-s,
-> > st,
-> > +				=C2=A0=C2=A0 &ltc4283_fet_bad_fault_log);
-> > +	debugfs_create_file_unsafe("in0_fet_short_fault_log", 0400, i2c-
-> > >debugfs, st,
-> > +				=C2=A0=C2=A0 &ltc4283_fet_short_fault_log);
-> > +	debugfs_create_file_unsafe("curr1_crit_fault_log", 0400, i2c->debugfs=
-,
-> > st,
-> > +				=C2=A0=C2=A0 &ltc4283_curr1_crit_fault_log);
-> > +	debugfs_create_file_unsafe("power1_failed_fault_log", 0400, i2c-
-> > >debugfs, st,
-> > +				=C2=A0=C2=A0 &ltc4283_power1_failed_fault_log);
-> > +	debugfs_create_file_unsafe("power1_good_input_fault_log", 0400, i2c-
-> > >debugfs,
-> > +				=C2=A0=C2=A0 st, &ltc4283_power1_good_input_fault_log);
-> > +}
-> > +
-> > +static bool ltc4283_is_word_reg(unsigned int reg)
-> > +{
-> > +	return reg >=3D LTC4283_SENSE && reg <=3D LTC4283_ADIO34_MAX;
-> > +}
-> > +
-> > +static int ltc4283_reg_read(void *context, unsigned int reg, unsigned =
-int *val)
-> > +{
-> > +	struct i2c_client *client =3D context;
-> > +	int ret;
-> > +
-> > +	if (ltc4283_is_word_reg(reg))
-> > +		ret =3D i2c_smbus_read_word_swapped(client, reg);
-> > +	else
-> > +		ret =3D i2c_smbus_read_byte_data(client, reg);
-> > +
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	*val =3D ret;
-> > +	return 0;
-> > +}
-> > +
-> > +static int ltc4283_reg_write(void *context, unsigned int reg, unsigned=
- int val)
-> > +{
-> > +	struct i2c_client *client =3D context;
-> > +
-> > +	if (ltc4283_is_word_reg(reg))
-> > +		return i2c_smbus_write_word_swapped(client, reg, val);
-> > +
-> > +	return i2c_smbus_write_byte_data(client, reg, val);
-> > +}
-> > +
-> > +static const struct regmap_bus ltc4283_regmap_bus =3D {
-> > +	.reg_read =3D ltc4283_reg_read,
-> > +	.reg_write =3D ltc4283_reg_write,
-> > +};
-> > +
-> > +static bool ltc4283_writable_reg(struct device *dev, unsigned int reg)
-> > +{
-> > +	switch (reg) {
-> > +	case LTC4283_SYSTEM_STATUS ... LTC4283_FAULT_STATUS:
-> > +		return false;
-> > +	case LTC4283_RESERVED_OC:
-> > +		return false;
-> > +	case LTC4283_RESERVED_86 ... LTC4283_RESERVED_8F:
-> > +		return false;
-> > +	case LTC4283_RESERVED_91 ... LTC4283_RESERVED_A1:
-> > +		return false;
-> > +	case LTC4283_RESERVED_A3:
-> > +		return false;
-> > +	case LTC4283_RESERVED_AC:
-> > +		return false;
-> > +	case LTC4283_POWER_PLAY_MSB ... LTC4283_POWER_PLAY_LSB:
-> > +		return false;
-> > +	case LTC4283_RESERVED_F1 ... LTC4283_RESERVED_FF:
-> > +		return false;
-> > +	default:
-> > +		return true;
-> > +	}
-> > +}
-> > +
-> > +static const struct regmap_config ltc4283_regmap_config =3D {
-> > +	.reg_bits =3D 8,
-> > +	.val_bits =3D 16,
-> > +	.max_register =3D 0xFF,
-> > +	.writeable_reg =3D ltc4283_writable_reg,
-> > +};
-> > +
-> > +static int ltc4283_probe(struct i2c_client *client)
-> > +{
-> > +	struct device *dev =3D &client->dev, *hwmon;
-> > +	struct auxiliary_device *adev;
-> > +	struct ltc4283_hwmon *st;
-> > +	int ret, id;
-> > +
-> > +	st =3D devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
-> > +	if (!st)
-> > +		return -ENOMEM;
-> > +
-> > +	if (!i2c_check_functionality(client->adapter,
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0 I2C_FUNC_SMBUS_BYTE_DATA |
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0 I2C_FUNC_SMBUS_WORD_DATA |
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0 I2C_FUNC_SMBUS_READ_I2C_BLOCK))
-> > +		return -EOPNOTSUPP;
-> > +
-> > +	st->client =3D client;
-> > +	st->map =3D devm_regmap_init(dev, &ltc4283_regmap_bus, client,
-> > +				=C2=A0=C2=A0 &ltc4283_regmap_config);
-> > +	if (IS_ERR(st->map))
-> > +		return dev_err_probe(dev, PTR_ERR(st->map),
-> > +				=C2=A0=C2=A0=C2=A0=C2=A0 "Failed to create regmap\n");
-> > +
-> > +	ret =3D ltc4283_setup(st, dev);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	hwmon =3D devm_hwmon_device_register_with_info(dev, "ltc4283", st,
-> > +						=C2=A0=C2=A0=C2=A0=C2=A0 &ltc4283_chip_info, NULL);
-> > +
-> > +	if (IS_ERR(hwmon))
-> > +		return PTR_ERR(hwmon);
-> > +
-> > +	ltc4283_debugfs_init(st, client);
-> > +
-> > +	if (!st->gpio_mask)
-> > +		return 0;
-> > +
-> > +	id =3D (client->adapter->nr << 10) | client->addr;
-> > +	adev =3D __devm_auxiliary_device_create(dev, KBUILD_MODNAME, "gpio",
-> > +					=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 NULL, id);
-> > +	if (!adev)
-> > +		return dev_err_probe(dev, -ENODEV, "Failed to add GPIO
-> > device\n");
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static const struct of_device_id ltc4283_of_match[] =3D {
-> > +	{ .compatible =3D "adi,ltc4283" },
-> > +	{ }
-> > +};
-> > +
-> > +static const struct i2c_device_id ltc4283_i2c_id[] =3D {
-> > +	{ "ltc4283" },
-> > +	{ }
-> > +};
-> > +MODULE_DEVICE_TABLE(i2c, ltc4283_i2c_id);
-> > +
-> > +static struct i2c_driver ltc4283_driver =3D {
-> > +	.driver	=3D {
-> > +		.name =3D "ltc4283",
-> > +		.of_match_table =3D ltc4283_of_match,
-> > +	},
-> > +	.probe =3D ltc4283_probe,
-> > +	.id_table =3D ltc4283_i2c_id,
-> > +};
-> > +module_i2c_driver(ltc4283_driver);
-> > +
-> > +MODULE_AUTHOR("Nuno S=C3=A1 <nuno.sa@analog.com>");
-> > +MODULE_DESCRIPTION("LTC4283 Hot Swap Controller driver");
-> > +MODULE_LICENSE("GPL");
-> >=20
+> > > +             if (ACPI_SUCCESS(status)) {
+> > > +                     data->active_handles[data->fan_count] =3D handl=
+e;
+> > >                       data->fan_count++;
+> > > +             }
+> > >       }
+> > >=20
+> > >       if (data->fan_count =3D=3D 0)
+> > >               return -ENODEV;
+> > >=20
+> > > -     hwmon_dev =3D devm_hwmon_device_register_with_info(&pdev->dev, =
+DRVNAME,
+> > > -                                                      data, &yoga_fa=
+n_chip_info, NULL);
+> > > +     /* 2. Dynamically build the HWMON channel info (Fixes Guenter's=
+ complaint) */
+> > > +     fan_config =3D devm_kcalloc(&pdev->dev, data->fan_count + 1, si=
+zeof(u32), GFP_KERNEL);
+> > > +     if (!fan_config)
+> > > +             return -ENOMEM;
+> > > +
+> > > +     for (i =3D 0; i < data->fan_count; i++)
+> > > +             fan_config[i] =3D HWMON_F_INPUT | HWMON_F_MAX;
+> > > +
+> > > +     info =3D devm_kzalloc(&pdev->dev, sizeof(*info), GFP_KERNEL);
+> > > +     if (!info)
+> > > +             return -ENOMEM;
+> > > +
+> > > +     info->type =3D hwmon_fan;
+> > > +     info->config =3D fan_config;
+> > > +
+> > > +/* 3. Wrap it in chip_info */
+> > > +     chip_info =3D devm_kzalloc(&pdev->dev, sizeof(*chip_info), GFP_=
+KERNEL);
+> > > +     if (!chip_info)
+> > > +             return -ENOMEM;
+> > > +
+> > > +     chip_info->ops =3D &yoga_fan_hwmon_ops;
+> > > +
+> > > +     /* Create AND ALLOCATE the temporary pointer array */
+> > > +     const struct hwmon_channel_info **chip_info_array;
+> > > +
+> > > +     chip_info_array =3D devm_kcalloc(&pdev->dev, 2, sizeof(*chip_in=
+fo_array), GFP_KERNEL);
+> > > +     if (!chip_info_array)
+> > > +             return -ENOMEM;
+> > > +
+> > > +     chip_info_array[0] =3D info;
+> > > +     chip_info_array[1] =3D NULL; /* Null terminated */
+> > > +
+> > > +     chip_info->info =3D chip_info_array;
+> > >=20
+> > > -     return PTR_ERR_OR_ZERO(hwmon_dev);
+> > > +     /* 4. Register with the accurate hardware description and retur=
+n the result */
+> > > +     return PTR_ERR_OR_ZERO(devm_hwmon_device_register_with_info(&pd=
+ev->dev,
+> > > +                             DRVNAME, data, chip_info, NULL));
+> > >  }
+> > >=20
+> > >  static struct platform_driver yoga_fan_driver =3D {
