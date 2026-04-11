@@ -1,153 +1,261 @@
-Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010013.outbound.protection.outlook.com [52.101.193.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F57C2DBF76;
-	Sat, 11 Apr 2026 05:41:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.13
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775886089; cv=fail; b=duSNUK/aXOnC9fzn/rcaofSEwcc2D5sFBvR6VPUgeYDdDCWXTm/8zFeCu3zWM8iPh/KgDvAo8FqjezkTnuAcQUbpRo+ZoiKDe0tTjNJkFKZB4orObMzHca7zw2oXXn5IkbKCYVq+ZC7lluubSc3EZov9mDU49P6pEvFZtXb69w8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775886089; c=relaxed/simple;
-	bh=Zi9YYF+wD3IxeiqdEoqw08las5xMg69g9vfnkqCvOFE=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=I+a/+/S6mBuN8TNQF8sfVll6WHAMs7x0acXPe+pJRlrAhisEMj+XsVow1nJT/9Qzoa149Vv/xyJbYvu62+uOX4C4LUJtc73OUjeyvXPqS6U4Kk7OJgxAn49pSEA3X2sOjjDbupCGUKcJmMz4WvZZAoA20dLaOStf+InbIHZcT88=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Pis9ojEK; arc=fail smtp.client-ip=52.101.193.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89251299923
+	for <linux-hwmon@vger.kernel.org>; Sat, 11 Apr 2026 06:20:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775888414; cv=none; b=SMQMtufP6lAEoDceu55Huee33PiKwKco7YqnTsbHrrtEBrqeg4HB8UUbsKmeRz5C0CA7JUYdve1aOKuTBCGwVYQ6QaSbxmTmz8uVsfzN5cWm2ptmjlGm27Dk4sIb8iHz9qnbfjNXd0AXPWpQ01wQVtVbdb56XV+b2Rnd8nb8Xws=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775888414; c=relaxed/simple;
+	bh=Lb1qCQHUxqZc2PkrrX50cOiJz/n3TrCChaayco2+nIQ=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ZMbu72E686q3miiCqITovyXFaVHGfG+TzFKRGha3CHnmstdMT/3DyUtXk9DxcebRDGMAR3Q26fMDaiizkrKdJTtXb4QHgjm33YMh9xo48tol6w65qAnXgf3WfiJ/INDwt7lHU/+7lpi+jg3gnZDt1XTRXj7RvvMuJxDbeus4ur8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eCDaTYmH; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Pis9ojEK"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=klh8csoBwx+q1yCpLdWUY6IA1PPVLnotYZI7cBifKkPtNw0GSz3S2Js8IqV3ItPGlb5PuXOhVYmZxcoJ053kXsSt7n/XANGb8gXcH/iw5AmNuorWsDfpk/NBaRx+08vAJn5GcgR8wskTLI7n8J2VxpESuIR+E29iaHkh6zyFUPD4uQa03oSwZenDSzDqr7qArnya4MdC/OHDpjlMOywoDJtIqDSp9Dp6MDurO6bDIHBKkEX0YhG62oFlr3q1kqwgTWuPb7F5g40LeuljWRce6taP//JDfAD5NCcQPSqieOeyAQoxX8Ak0zobxhUNzF0atIpP+QWO/CuDoah07MafFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aK+vOWvDBFMpLXYOmQRle+HbReR4882LXreDCWONZFU=;
- b=vLRhzz/qKVmpHEcqhym0sy3lWgXH3MLX160zOBkquBa8wanFKahxoEctr/OTA7lAgiC2bOljPjGDx5UXZFgq5XAI0aV3D8sMTw/WT+79ka5VlO+gxJPdjqOO1TOTGOWZhFQgwL56oEjyY1JzUPnnUOr0jZsd2fEF36MZ/tN7sOBcjMtn4exbkkbhA5sZylIRDvH9UDShwXInd76wNS8poD3BdkZlebYFabRcYToOZg/5pyKyn09nTuy//gD/bpNjJakl/WIjOlmI4hR/DQiwkd0rE86DaHuD0Z+3UR4jpwE82dXzZ82tsbiYphgxT+BInVz24fmTx2hHEaO0oJErVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aK+vOWvDBFMpLXYOmQRle+HbReR4882LXreDCWONZFU=;
- b=Pis9ojEK1o4fI7Zvvsgy7Edd2a2KXMcrFKBHDy9xQysBwSKBQPwmLebtNUU39p3qilIV39FL5OSRuAonuOCmAzMfhbMIxsSJgXVaIUXFqBPFt6fpe/a0cihUJUYwk+95uP7yZx9krXJDUmSUnovxshGSrmHOKLLuIn395tzF+bQ1AiXuygb61k35eXFqIETPkIPOMtSCLdnq2HzK7v18x6VkJ7YZPXONsXz/mZ+bQOgMf2IZylBJ/GftWI4p7mseAFVerP9tXEfSX1A3dvHGy/rXQb2bBwXdZrICLVDbwD34/0eF7Xo8EUnofAA3Y/ly2WY3JF/Tzhx+kfV1Niojlg==
-Received: from BYAPR11CA0076.namprd11.prod.outlook.com (2603:10b6:a03:f4::17)
- by CH3PR12MB9218.namprd12.prod.outlook.com (2603:10b6:610:19f::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9791.33; Sat, 11 Apr
- 2026 05:41:22 +0000
-Received: from CO1PEPF00012E83.namprd03.prod.outlook.com
- (2603:10b6:a03:f4:cafe::22) by BYAPR11CA0076.outlook.office365.com
- (2603:10b6:a03:f4::17) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9769.42 via Frontend Transport; Sat,
- 11 Apr 2026 05:41:21 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CO1PEPF00012E83.mail.protection.outlook.com (10.167.249.58) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9769.17 via Frontend Transport; Sat, 11 Apr 2026 05:41:21 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 10 Apr
- 2026 22:41:11 -0700
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 10 Apr
- 2026 22:41:09 -0700
-Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
- Transport; Fri, 10 Apr 2026 22:41:02 -0700
-From: Akhil R <akhilrajeev@nvidia.com>
-To: <rafael@kernel.org>
-CC: <acpica-devel@lists.linux.dev>, <akhilrajeev@nvidia.com>,
-	<alexandre.belloni@bootlin.com>, <conor+dt@kernel.org>,
-	<devicetree@vger.kernel.org>, <ebiggers@kernel.org>, <frank.li@nxp.com>,
-	<krzk+dt@kernel.org>, <lenb@kernel.org>, <linux-acpi@vger.kernel.org>,
-	<linux-hwmon@vger.kernel.org>, <linux-i3c@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux@roeck-us.net>,
-	<miquel.raynal@bootlin.com>, <p.zabel@pengutronix.de>, <robh@kernel.org>,
-	<sakari.ailus@linux.intel.com>, <wsa+renesas@sang-engineering.com>
-Subject: Re: [PATCH v2 02/13] ACPICA: Read LVR from the I2C resource descriptor
-Date: Sat, 11 Apr 2026 11:11:00 +0530
-Message-ID: <20260411054101.50827-1-akhilrajeev@nvidia.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <CAJZ5v0jW9=VtjyjeoEDTm9hrGKP_BYUeuKCxcKoV-VsvM5otiA@mail.gmail.com>
-References: <CAJZ5v0jW9=VtjyjeoEDTm9hrGKP_BYUeuKCxcKoV-VsvM5otiA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eCDaTYmH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775888412; x=1807424412;
+  h=date:from:to:cc:subject:message-id;
+  bh=Lb1qCQHUxqZc2PkrrX50cOiJz/n3TrCChaayco2+nIQ=;
+  b=eCDaTYmHOd8Iwfhhr5MzwmD8dgEdrjkmQ32BLtCB+twRQad7HxWmnZGt
+   JsPBffxsQAfqjoqE6mbaMdZNyLl2+/svlIMfcDQ4Xlq3VHnEKCaY0Cd71
+   QeHYsss+AOUwq80c222pIjEVJEVYXLNqthrQp+Nxf36Q/cHVhsegcMBny
+   VjEPeNFwrY7UCIAIspB75zit8eOhbEXQAa+Oxwb/qmnPAy35Hn4MhRrHG
+   ElSBb+ZfKDnNp6SgqNvaa+x02ypIT27NbO+P8FIP719DQ30bjFKrkIpkB
+   DIiiB8qWNGEFTW3p8Yo+JlBspmo2rWZhD3r6HkHeLOUEMVJb8eIY3fXXo
+   w==;
+X-CSE-ConnectionGUID: qqWK6EXjSd6WClejtZoBQQ==
+X-CSE-MsgGUID: en5OPRjlQ9Gz0UtsZi4mug==
+X-IronPort-AV: E=McAfee;i="6800,10657,11755"; a="76973666"
+X-IronPort-AV: E=Sophos;i="6.23,173,1770624000"; 
+   d="scan'208";a="76973666"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2026 23:20:12 -0700
+X-CSE-ConnectionGUID: KO68HZX/S4y6lnXt0nxwCg==
+X-CSE-MsgGUID: GXCC5fjHQdG23PJKvGuzxQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,173,1770624000"; 
+   d="scan'208";a="259755973"
+Received: from lkp-server01.sh.intel.com (HELO 3eaaf1a74b89) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 10 Apr 2026 23:20:10 -0700
+Received: from kbuild by 3eaaf1a74b89 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wBRhP-000000000th-1OBp;
+	Sat, 11 Apr 2026 06:20:07 +0000
+Date: Sat, 11 Apr 2026 14:19:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Victor Duicu <victor.duicu@microchip.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
+Subject: [groeck-staging:hwmon-next 76/78]
+ drivers/hwmon/mcp9982.c:398:3: warning: unannotated fall-through between
+ switch labels
+Message-ID: <202604111428.6XvpEPLI-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF00012E83:EE_|CH3PR12MB9218:EE_
-X-MS-Office365-Filtering-Correlation-Id: 34e908d6-04b0-410b-0e0f-08de978cf638
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|82310400026|36860700016|1800799024|13003099007|56012099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	kpnPbVQy24QbgoaOT+RD0UGnuw2Hue+UmUShh15nA7LimZ4+kqfIJM7xU4PbWhOu1cjZkmtXlvD21qPgF/TqMzKm2q2zv855z3I+uAb51gGGMLgSzvQQv87U6FREs18sUkAV9nRnQ0CugBO7ISfrj05QYNtQ+LhV6J7KEtOgt6xqLzVKp+mNqkCwsbU0kxB102rmR3PQ9T7zBnARjs6ar2aD/Fq+w4nYT/fIFAl66xwAJKUH+3ds3V0tnhQw1Aqwgaaz6/UaSSN4D9C8gm7iALmnH8yzHncOnpdWrs91E/HFq6TQjgHM5p7pVS6AkZpYfc3HfSij2bp9FW5hQiOnjfXBMP0nVnWaI3HG21rvH/O2rLGtVw6CejSNmy3yhGFbZY/Df5fARIqMaU7l96co0Y1GnFNdf5drjAAcTwvWWd5qwe2x5Ibs+oS7VExjEcNXAGdcIeEC+rZmSPZ+9fbBLM6lKYHLmeZC/tuFbKTaFHeXyFY9b8RN4LRoZszTocmFhP8kT4uHzQflVZkv52DwxVw0hFkM8jznnRh0WsMvFf/XdvNhPVwp/fYRm6RsqyVJz0uqr7Bgpg6ZtorjQmX1aFG6YqOS3YMrtI0jSwfo5OhsIoysbzmKOPK9kAkWsBajSAIsExEzCWh85uGd5roceAUxSD0qqHl+pXSJbtrEFZUDFy0n/EO4DM72PuNt0/a+SCPH514hz+8ELO+TrR/MlgqJYitGP+K1TXVIZwuV/l4+pe4mIbQaY6up1zFd4sIPVx1QH1oKRctd1NJ+untqWQ==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(82310400026)(36860700016)(1800799024)(13003099007)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	D07tL7Gu7xXvNdbJBzKsooKMlLx7fvoOr8PmltRzUkCpbzJS7hE63CgEjeduA/tArKPMg7XoMGvcmCdA3OI5r0vl/cPzQ9RDDNL/CgQuSrmcI4t/SZFpudlBnhBbaQ7xaHNlawts8Sv6mPWk/QL7oO4rvo/yjFxjNiTzPSGTyybD//mX32Osi5kmF+ub2NLRAN30Fcm8DrMZ6/IWttGSNcjAMof2S5gGsNYbJTdZo93lR5FG7WieLGH3K95nDdVz/pGbqSXtl0mJzsJSTS0yF/IXgXo/BOLJrctF3LLqgaYOJYtceVvjzQHfPaQhz4XyHK080GGoFTInUMN0HF7i0Fi9Ewfl1P/u/FfI0LAvJzd1K8udnIWHhzSRtGgm6Q6+TDi4LZES1hcjvmLOdZBy6VqjYXjElNNVKQx+gx7A8dtaB2ZDHi7eNVMcR/LOLTza
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2026 05:41:21.3859
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 34e908d6-04b0-410b-0e0f-08de978cf638
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CO1PEPF00012E83.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9218
 
-On Fri, 10 Apr 2026 12:59:06 +0200, Rafael J. Wysocki wrote:
-> On Fri, Apr 10, 2026 at 6:45 AM Akhil R <akhilrajeev@nvidia.com> wrote:
->>
->> On Thu, 9 Apr 2026 22:04:05 -0400, Frank Li wrote:
->>> On Thu, Apr 09, 2026 at 04:27:32PM +0530, Akhil R wrote:
->>>> ACPI 6.3 specifies byte 8 of I2C Serial Bus Connection descriptor to be
->>>> used for Legacy Virtual Register (LVR) data as specified in the MIPI
->>>> I3C Specification for an I2C device connected to an I3C Host Controller.
->>>> LVR will be read by I3C host controller drivers and it provides details
->>>> about the specific speed and 50ns spike filter capabilities of I2C
->>>> devices.
->>>>
->>>> Update the rsconvert_info to include this field. For I2C devices on an
->>>> I2C bus, this field is Reserved and unused.
->>>>
->>>> This commit is the result of squashing the following:
->>>> ACPICA commit 70082dc8fc847673ac7f4bbb1541776730f0b63e
->>>> ACPICA commit e62e74baf7e08cf059ec82049aeccd565b24d661
->>>> ACPICA commit c404118235108012cad396c834b5aabe2dd1b51a
->>>> ACPICA commit 7650d4a889ea7907060bfce89f4f780ce83e7b28
->>>> ACPICA commit 014fa9f2dbcc6b1bd42a4a4a6f6705d9cf7d460b
->>>
->>> These commit number is not existed at linus official tree. Please remove it.
->>
->> These are commits from ACPI-CA github. The files in the acpica folder is
->> a mirror of that repo. I suppose the commits in this folder are expected
->> to be structured like this. The process is also described here -
->> https://docs.kernel.org/driver-api/acpi/linuxized-acpica.html
-> 
-> While the above is correct overall, it would also be sufficient to use
-> Link: tags pointing to those commits.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+head:   3d6b94a0d05d28ff23750b68aba54598aa232832
+commit: 324fac7ae52b31dc67770b133389c7aba3fb058e [76/78] hwmon: add support for MCP998X
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260411/202604111428.6XvpEPLI-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260411/202604111428.6XvpEPLI-lkp@intel.com/reproduce)
 
-Ack. I will drop the commit IDs in the next version.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604111428.6XvpEPLI-lkp@intel.com/
 
-Best Regards,
-Akhil
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwmon/mcp9982.c:398:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     398 |                 default:
+         |                 ^
+   drivers/hwmon/mcp9982.c:398:3: note: insert 'break;' to avoid fall-through
+     398 |                 default:
+         |                 ^
+         |                 break; 
+   1 warning generated.
+
+
+vim +398 drivers/hwmon/mcp9982.c
+
+   361	
+   362	static int mcp9982_read(struct device *dev, enum hwmon_sensor_types type, u32 attr, int channel,
+   363				long *val)
+   364	{
+   365		struct mcp9982_priv *priv = dev_get_drvdata(dev);
+   366		unsigned int reg_high, reg_low, hyst, reg_status;
+   367		int ret;
+   368		u8 addr;
+   369	
+   370		/*
+   371		 * In Standby State the conversion cycle must be initated manually in
+   372		 * order to read fresh temperature values and the status of the alarms.
+   373		 */
+   374		if (!priv->run_state) {
+   375			switch (type) {
+   376			case hwmon_temp:
+   377				switch (attr) {
+   378				case hwmon_temp_input:
+   379				case hwmon_temp_max_alarm:
+   380				case hwmon_temp_min_alarm:
+   381				case hwmon_temp_crit_alarm:
+   382					ret = regmap_write(priv->regmap, MCP9982_ONE_SHOT_ADDR, 1);
+   383					if (ret)
+   384						return ret;
+   385					/*
+   386					 * When the device is in Standby mode, 125 ms need
+   387					 * to pass from writing in One Shot register before
+   388					 * the conversion cycle begins.
+   389					 */
+   390					usleep_range(MCP9982_WAKE_UP_TIME_US, MCP9982_WAKE_UP_TIME_MAX_US);
+   391					ret = regmap_read_poll_timeout
+   392						       (priv->regmap, MCP9982_STATUS_ADDR,
+   393						       reg_status, !(reg_status & MCP9982_STATUS_BUSY),
+   394						       MCP9982_WAKE_UP_TIME_US,
+   395						       MCP9982_WAKE_UP_TIME_US * 10);
+   396					break;
+   397				}
+ > 398			default:
+   399				break;
+   400			}
+   401		}
+   402	
+   403		switch (type) {
+   404		case hwmon_temp:
+   405			switch (attr) {
+   406			case hwmon_temp_input:
+   407				/*
+   408				 * The only areas of memory that support SMBus block read are 80h->89h
+   409				 * (temperature memory block) and 90h->97h(status memory block).
+   410				 * In this context the read operation uses SMBus protocol and the first
+   411				 * value returned will be the number of addresses that can be read.
+   412				 * Temperature memory block is 10 bytes long and status memory block is 8
+   413				 * bytes long.
+   414				 *
+   415				 * Depending on the read instruction used, the chip behaves differently:
+   416				 * - regmap_bulk_read() when applied to the temperature memory block
+   417				 * (80h->89h), the chip replies with SMBus block read, including count,
+   418				 * additionally to the high and the low bytes. This function cannot be
+   419				 * applied on the memory region 00h->09h(memory area which does not support
+   420				 * block reads, returns wrong data) unless use_single_read is set in
+   421				 * regmap_config.
+   422				 *
+   423				 * - regmap_multi_reg_read() when applied to the 00h->09h area uses I2C
+   424				 * and returns only the high and low temperature bytes. When applied to
+   425				 * the temperature memory block (80h->89h) returns the count till the end of
+   426				 * the temperature memory block(aka SMBus count).
+   427				 *
+   428				 * - i2c_smbus_read_block_data() is not supported by all drivers.
+   429				 *
+   430				 * In order to keep consistency with reading limit memory region we will
+   431				 * use single byte I2C read.
+   432				 *
+   433				 * Low register is latched when high temperature register is read.
+   434				 */
+   435				ret = regmap_read(priv->regmap, MCP9982_HIGH_BYTE_ADDR(channel), &reg_high);
+   436				if (ret)
+   437					return ret;
+   438	
+   439				ret = regmap_read(priv->regmap, MCP9982_HIGH_BYTE_ADDR(channel) + 1,
+   440						  &reg_low);
+   441				if (ret)
+   442					return ret;
+   443	
+   444				*val = ((reg_high << 8) + reg_low) >> 5;
+   445				*val = (*val - (MCP9982_OFFSET << 3)) * 125;
+   446	
+   447				return 0;
+   448			case hwmon_temp_max:
+   449				if (channel)
+   450					addr = MCP9982_EXT_HIGH_LIMIT_ADDR(channel);
+   451				else
+   452					addr = MCP9982_INTERNAL_HIGH_LIMIT_ADDR;
+   453	
+   454				return mcp9982_read_limit(priv, addr, val);
+   455			case hwmon_temp_max_alarm:
+   456				*val = regmap_test_bits(priv->regmap, MCP9982_HIGH_LIMIT_STATUS_ADDR,
+   457							BIT(channel));
+   458				if (*val < 0)
+   459					return *val;
+   460	
+   461				return 0;
+   462			case hwmon_temp_max_hyst:
+   463				if (channel)
+   464					addr = MCP9982_EXT_HIGH_LIMIT_ADDR(channel);
+   465				else
+   466					addr = MCP9982_INTERNAL_HIGH_LIMIT_ADDR;
+   467				ret = mcp9982_read_limit(priv, addr, val);
+   468				if (ret)
+   469					return ret;
+   470	
+   471				ret = regmap_read(priv->regmap, MCP9982_HYS_ADDR, &hyst);
+   472				if (ret)
+   473					return ret;
+   474	
+   475				*val -= hyst * 1000;
+   476	
+   477				return 0;
+   478			case hwmon_temp_min:
+   479				if (channel)
+   480					addr = MCP9982_EXT_LOW_LIMIT_ADDR(channel);
+   481				else
+   482					addr = MCP9982_INTERNAL_LOW_LIMIT_ADDR;
+   483	
+   484				return mcp9982_read_limit(priv, addr, val);
+   485			case hwmon_temp_min_alarm:
+   486				*val = regmap_test_bits(priv->regmap, MCP9982_LOW_LIMIT_STATUS_ADDR,
+   487							BIT(channel));
+   488				if (*val < 0)
+   489					return *val;
+   490	
+   491				return 0;
+   492			case hwmon_temp_crit:
+   493				return mcp9982_read_limit(priv, MCP9982_THERM_LIMIT_ADDR(channel), val);
+   494			case hwmon_temp_crit_alarm:
+   495				*val = regmap_test_bits(priv->regmap, MCP9982_THERM_LIMIT_STATUS_ADDR,
+   496							BIT(channel));
+   497				if (*val < 0)
+   498					return *val;
+   499	
+   500				return 0;
+   501			case hwmon_temp_crit_hyst:
+   502				ret = mcp9982_read_limit(priv, MCP9982_THERM_LIMIT_ADDR(channel), val);
+   503				if (ret)
+   504					return ret;
+   505	
+   506				ret = regmap_read(priv->regmap, MCP9982_HYS_ADDR, &hyst);
+   507				if (ret)
+   508					return ret;
+   509	
+   510				*val -= hyst * 1000;
+   511	
+   512				return 0;
+   513			default:
+   514				return -EINVAL;
+   515			}
+   516		case hwmon_chip:
+   517			switch (attr) {
+   518			case hwmon_chip_update_interval:
+   519				*val = mcp9982_update_interval[priv->interval_idx];
+   520				return 0;
+   521			default:
+   522				return -EINVAL;
+   523			}
+   524		default:
+   525			return -EINVAL;
+   526		}
+   527	}
+   528	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
