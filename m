@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A98C33D6CA;
-	Sun, 12 Apr 2026 13:21:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34B03E555;
+	Sun, 12 Apr 2026 13:32:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776000106; cv=none; b=FlcwLwIg+xqZskyYLxX3YCHcobIinzkwVmM2faFw0EB5Dysjx+tnD8LZ37sKsteA6T7q3f/WkiG7dUIj+WzPlk7FqlC65ATyNKVZTaj1qgiUcK7i5gNFk/00GSojvNvnDHabeE0nhaa1i8IQkl0gSR6cd7gnybDQXG9LvEQcloI=
+	t=1776000755; cv=none; b=NJz0fD/hXZdv5Vyt/mAAP79lqr9ayDhvO1Ps+sWz94MGjBfF1VmgFSFbLZuqc8I/UySr6+TSddWghUC2dVkdrJU5o+/KMArB7SuJtoeq0h8Cj6WiB9Tw4+v4PRAarrpxuoimH7c8QoY2uLiButcdDL+yPxznOinmzOzFU46e8Vo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776000106; c=relaxed/simple;
-	bh=5SZyBkE6asksdQJY2MgtgFUkYXkx6F6xTXUq/bmwqKI=;
+	s=arc-20240116; t=1776000755; c=relaxed/simple;
+	bh=z6WgQh/ArnAhmplYX1CEz9iRQGLFseHcrBMZ6G2udvw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Oopsvl1rbFzUJWkbvBqqmJZbv7gPHpcjDPsgH2Umxu1L27ZJ6ePcnUqLqw0tBlAbY8GUJFYuCBwy53ih3/t3MKbEf9dL1GZMgs5syWhnwxGwaXoJNGUj/3IH+ifUtWv1B93WWtDmo8cnaIhK5H9IOT/xzji4UBVcWzb7Hy43ivw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mZQsKP32; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=ReARtN2n6YCX01ZUnC4CNq4kc2jtdzD83JThssT8VdNU/UcuHFEmc5ze0rST4OCDdkgRMqpXO1jRZAoPtHhMIIbNqCv3jPYIIgvMYBPl1hGqa7iRVvEFoNsOL6uBm1igWmcvyVa7ghRD/gC+fzwdJZTKqlafOe44oy8S21XbY8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bRd4IcVR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mZQsKP32"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 546D1C2BCB0;
-	Sun, 12 Apr 2026 13:21:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bRd4IcVR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC47CC19424;
+	Sun, 12 Apr 2026 13:32:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776000106;
-	bh=5SZyBkE6asksdQJY2MgtgFUkYXkx6F6xTXUq/bmwqKI=;
+	s=k20201202; t=1776000754;
+	bh=z6WgQh/ArnAhmplYX1CEz9iRQGLFseHcrBMZ6G2udvw=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mZQsKP32Gl9lZPeZBwcB9Bg1fNsSTq3NcLmaMijXOrEM9wwUZ5nTfNQxAtbYR9N+Z
-	 3Ekz4U+uiqRFlCYzuzkeEVxi/5hkiiFRxp/oRptCVIe7OaIq87VR4Z9rQO7lyM/gcj
-	 IEskTIDc2z8qb6Rmnse7OfzpxWHHnsWCtPdaa8w8sdfQCvILiwrXkqyhl09aQsRiZx
-	 1FXUcz+Co9PH6pfadMITdszEKMeDe2DVDcfzbP2S26/Bl1QC5+k1X6lcNqV2vS/TBv
-	 tVQoLXSs3P1hWC81meQ2fVjiHiiPrlb8XRXi96M6/+25XsPVU0za96yxkz0frvWVcM
-	 5g2fpauKjAD0g==
-Message-ID: <5751aa6f-ee7a-4031-99a8-b64f45e9084b@kernel.org>
-Date: Sun, 12 Apr 2026 15:21:36 +0200
+	b=bRd4IcVRz3hgWmVkV1KSgKXtgsgIemwIHlNZ4J4FVRbsSxDEMpiuMZbCJgElm1S5h
+	 Bi6VU5tdUVZ4Ubv4xcQW6jKBL2HPEl/3WwdrfC0zMuCrgHeCoozOd855htEk4llqIY
+	 VQalqIh9VT9rt0QbwMGPi/bgWmafna9saTS+WoiTmXjgyeubGF2q4k9pm17Ac0pQs8
+	 VVIZbDVTxUcax6XaBitQpIev1GO/RPJvFVpkJmM8ZRoUrLtNdGAuMLZMi4PrfVoXY6
+	 FX7x2fgMbQBh45wibFrxEThdvF9QNtaCPck0WXxJpJpEIatmIfR1sNa0sqQzQwO5S5
+	 I682aty4mMOdg==
+Message-ID: <ef05d6fd-97d9-4795-9626-e69895e5df74@kernel.org>
+Date: Sun, 12 Apr 2026 15:32:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -36,17 +36,18 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 13/13] arm64: defconfig: Enable I3C and SPD5118 hwmon
-To: Akhil R <akhilrajeev@nvidia.com>
+To: Guenter Roeck <linux@roeck-us.net>, Akhil R <akhilrajeev@nvidia.com>
 Cc: Frank.Li@nxp.com, acpica-devel@lists.linux.dev,
  alexandre.belloni@bootlin.com, conor+dt@kernel.org,
  devicetree@vger.kernel.org, ebiggers@kernel.org, krzk+dt@kernel.org,
  lenb@kernel.org, linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
  linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux@roeck-us.net, miquel.raynal@bootlin.com, p.zabel@pengutronix.de,
- rafael@kernel.org, robh@kernel.org, sakari.ailus@linux.intel.com,
+ miquel.raynal@bootlin.com, p.zabel@pengutronix.de, rafael@kernel.org,
+ robh@kernel.org, sakari.ailus@linux.intel.com,
  wsa+renesas@sang-engineering.com
 References: <5c751739-5044-4d23-9648-8d46dd0945d1@kernel.org>
  <20260411053433.49655-1-akhilrajeev@nvidia.com>
+ <d0f1f053-589a-4681-8c8f-8e4b5daec145@roeck-us.net>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -92,59 +93,68 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260411053433.49655-1-akhilrajeev@nvidia.com>
+In-Reply-To: <d0f1f053-589a-4681-8c8f-8e4b5daec145@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/04/2026 07:34, Akhil R wrote:
-> On Fri, 10 Apr 2026 11:57:11 +0200, Krzysztof Kozlowski wrote:
->> On 10/04/2026 10:37, Akhil R wrote:
->>> On Fri, 10 Apr 2026 09:18:48 +0200, Krzysztof Kozlowski wrote:
->>>> On 10/04/2026 08:57, Guenter Roeck wrote:
->>>>> On 4/9/26 23:39, Krzysztof Kozlowski wrote:
->>>>>> On 09/04/2026 12:57, Akhil R wrote:
->>>>>>> Add I3C subsystem support, DesignWare I3C master controller, and
->>>>>>> SPD5118 hwmon sensor as modules to the defconfig and therefore
->>>>>>> enable the support for SPD5118 sensor on SOCAMM found in NVIDIA
->>>>>>> Vera platforms.
->>>>>>
->>>>>> git grep for "Vera" gave me zero results. Are you sure this is an
->>>>>> upstream platform? Please point the DTS using this.
->>>>>>
->>>>>
->>>>> I think this is an ACPI based system, or at least that is what Google search
->>>>> tells me.
->>>>
->>>> Thanks. Following Google Vera is either a "CPU" or entire architecture
->>>> (at least that's how they call it), so it does not have SPD5118 sensor.
->>>
->>> SOCAMM is a Memory Module. SPD5118, as it's Kconfig mentions, is a sensor
->>> found within such memory modules. I didn't quite get why would you state
->>> that the SOCAMM present in Vera architecture (or CPU) does not have
->>> SPD5118 in it.
+On 11/04/2026 09:20, Guenter Roeck wrote:
+> On 4/10/26 22:34, Akhil R wrote:
+> [ ... ]
+>>>>> And it
+>>>>> should bring me clear rule what I can or cannot remove from defconfig,
+>>>>> if in 2 years I come and start pruning it from symbols.
 >>
->> I said that CPU or entire architecture does not have it.
+>> I am still a little confused on what information would likely accept (and
+>> keep) these configs in the defconfig. Would updating the commit message
+>> as below work?
 >>
->> Commit is pretty vague in helping me to figure out the things I asked
->> for in last email.
+>> "These configs enable the support for SPD5118 within the
+>> Small-Outline-Compression-Attached Memory Modules (SOCAMM) LPDDR5X found
+>> in the NVIDIA Vera CPUs. The Vera CPU uses ACPI and is part of platforms
+>> such as Vera Rubin."
 >>
->>
->>>
->>> Pasting the below from the Vera Rubin product page [1] -
->>> "NVIDIA Vera CPUs add enhanced serviceability with small-outline
->>> compression-attached memory modules (SOCAMM) LPDDR5X and in-system tests
->>> for the CPU cores."
->>>
->>> [1]: https://www.nvidia.com/en-us/data-center/technologies/rubin/
->>
->> So this is for Vera Rubin? For what is this exactly?
 > 
-> SOCAMM is with the Vera CPU. Any Vera based platform would have this module.
-> Vera Rubin is one such platform.
-> 
-> SPD5118 is within the SOCAMM.
+> It is quite interesting that we argue about SPD5118 which is mandatory in
+> DDR5 systems. At the same time, CONFIG_IGB_HWMON, CONFIG_SENSORS_MACSMC_HWMON,
+> CONFIG_SENSORS_RASPBERRYPI_HWMON, and CONFIG_RTC_DRV_DS3232_HWMON _are_
+> enabled in arm64:defconfig. CONFIG_IGB_HWMON is even built-in.
 
-So just mention this, instead of giving imprecise "Vera".
+Why CONFIG_SENSORS_MACSMC_HWMON is weird? It is part of the soc using
+the defconfig?
+
+The author here has troubles bringing any arguments why his drivers
+should be defconfig and keeps asking what do I want to hear. If one
+cannot make an argument why a change is needed, then maybe the change
+should not be sent?
+
+It's the job of the author to convince why the community needs this
+change, unless it is obvious, ofc.
+
+> 
+> It is kind of difficult to understand why those are more important than
+> the temperature sensor on DDR5 modules (or the temperature sensor on DDR4
+> modules, for that matter).
+
+No one discussed this. I have no clue what is SPD5118 and commit msg did
+not explain that. Did not even provide accurate user of that.
+
+> 
+> I don't know what the policy for defconfig is, but just based on that it does
+> seem to lack consistency.
+
+No wonder... people write poor commits and send that to upstream. And
+when asked "why do we want this" they got stuck.
+
+> 
+> A separate question is if it is time to enable I3C in default configurations.
+> I'd think so - more and more chip vendors support it, and presumably they would
+> not invest in it if there was no demand, but that is just my personal opinion.
+
+Isn't I3C needed for SPD5118. Otherwise I understand even less from this
+rationale - why I3C is being enabled here?
+
+And before author asks what do I want to here: no, it is author's job to
+convince me to accept I3C in defconfig. Not mine.
 
 Best regards,
 Krzysztof
