@@ -1,59 +1,53 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 004EF35295C
-	for <linux-hwmon@vger.kernel.org>; Sun, 12 Apr 2026 20:16:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29C3937E30D;
+	Sun, 12 Apr 2026 20:18:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776024999; cv=none; b=IJtmv5z+ZL2FJCQOI65HQv7XW7Lv6xQ38vvTQKVndEjIcNvS0i+qIfuspBu6mXel3JYffyqmF5V+UiUxgzZsPOfys0nKFxqbzvFkvirC6mxueY+tkzAjsBLHtizds+S1hVbNQJ1KtYMYVDsUW/t2J9TrprB0IBPg9rcrEjlxW2o=
+	t=1776025089; cv=none; b=sKH2b3Kd++ChPKWQ8ydh967zkOej29NpV5qL/JvaCQqfR/U8U7r0k6BnHpJRbVlpOW6khe4RO1wVsYaqV+OlbCE99KRJr612pG+TjyvWE4Xeg4Do4qMMaaQksZxA4emVbjWePILY+TjFRLTudVUZDuxv2mlj6uEGm3guSkKUn8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776024999; c=relaxed/simple;
-	bh=wkIoDGw2inFVbsC8y6rpJ+eOOZE8VMAt9CK5OTCHrG0=;
+	s=arc-20240116; t=1776025089; c=relaxed/simple;
+	bh=iGGMa7Z7yKs8PCJqrveaurxhweXuFiwoOym7d8SEypk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fnG5RkIQr7OvrfkZLX08WfF0IJer4UUFHrNwpClhWp6Jtk2euzDKF4u5i+E6j8W0mY1XzeF5R44rELtPhi+ALHyQWwjdbS4VYcL1FMNhdozmFRuAQlmQ9pmLs+mGZWZyeRNX0pzwOcT12B1R6UaxpWlItss7NrDettwXqfsW3sw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=E+5vuCcY; arc=none smtp.client-ip=185.246.85.4
+	 Content-Type:Content-Disposition:In-Reply-To; b=J07V50W7ylIatcqYXlk+ykteo3A0ydhevb3RCoWZJVhAlDUF2deTxJ5+1ynD4XE+Kk3OCos7zPzxUmJOYOWeJtFRRn9YICCrsPLmi7oeHePyqsaUJWWjDuaUY51H/3Niy8ZV2ewaTB+bx1wltlV6TvmWI1HQvvbIWsXtDR/d3+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=nWTfwe/l; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="E+5vuCcY"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="nWTfwe/l"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 5DB1E4E429E2;
-	Sun, 12 Apr 2026 20:16:36 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id BB4B81A3220;
+	Sun, 12 Apr 2026 20:18:06 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 1330D5FFB9;
-	Sun, 12 Apr 2026 20:16:36 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B536E104500EE;
-	Sun, 12 Apr 2026 22:16:30 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 8CCA95FFB9;
+	Sun, 12 Apr 2026 20:18:06 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 69A491045012A;
+	Sun, 12 Apr 2026 22:18:02 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1776024994; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=YYgaBasPu/jNs2Sww7H5ka9hu3+0rgpJ63cKOKJsiiQ=;
-	b=E+5vuCcY8XufyKdg61LHjIa8ao0Lemtd3QpFm2aXGsodRtAQVLh/XF7q7xxUBrEngeCfrQ
-	Sws4n02B2Pb37njbWb9Hi/lA2d44xLw2l5hD18qw/pvl5O4zztiflEmnsgEVP62PljsCky
-	NdHxfO6U4tj5z28ord/9O4rZgp7Dqr+6dxqkWWq9XPCCJZ/bT8Vc7dFRLNN1NVXJk/zm6k
-	AmMlusSIfG2UAafaWjIdu2afO551qSMTj8uowrxDxpQFW9QeYYgdQtVVK6V8L2sdPq7EWD
-	qEiHAI/RtBjapUEaJq5RODY2ryG4oAyKZQpBiaJMt4+9PKnXJxe7bzjXr0AfVA==
-Date: Sun, 12 Apr 2026 22:16:29 +0200
+	t=1776025085; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=AQaMeJLQws+JogYQcF2TyPERMpXvW6pBtPclJ0LsSvg=;
+	b=nWTfwe/lLJQQ6aRVz/kxIj6bZJJgaW2Tuk9pYyyhrgEiL4OZeS/nNw22FgTszcsTwLkWZR
+	ruvn3IgA/0OD6kkUq4o0Z/yvNVGSgbysCeiR9B4WRBB/b0CFRqbwPnZNcBhuwF8WInCTTj
+	eGFNsloh8SG6OHPgXLS/igSoNhfIaJN92GOVuBySinHMuB/I75fFysrYzlf+lZSSzeLtdj
+	QKRcP8RZJ8wlh/hO4u74n8ALgCAe2tBEdhw3CzqdnXO/KJR9zI5TrBgPIVNP0hmAueCtgs
+	IFaX+UHS001PdC+pnzTsdYJMFeIIl94WoRJu7bcBJnVE3UGJZcyT1ROI/IoebA==
+Date: Sun, 12 Apr 2026 22:18:01 +0200
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Akhil R <akhilrajeev@nvidia.com>, Frank Li <Frank.Li@nxp.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	linux-i3c@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-	acpica-devel@lists.linux.dev, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2 12/13] hwmon: spd5118: Add I3C support
-Message-ID: <20260412201629345ffec6@mail.local>
-References: <20260409105747.48158-1-akhilrajeev@nvidia.com>
- <20260409105747.48158-13-akhilrajeev@nvidia.com>
- <19218853-499c-46a2-8843-0bafa17c81d5@roeck-us.net>
+To: Akhil R <akhilrajeev@nvidia.com>
+Cc: frank.li@nxp.com, acpica-devel@lists.linux.dev, conor+dt@kernel.org,
+	devicetree@vger.kernel.org, ebiggers@kernel.org, krzk+dt@kernel.org,
+	lenb@kernel.org, linux-acpi@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux@roeck-us.net,
+	miquel.raynal@bootlin.com, p.zabel@pengutronix.de,
+	rafael@kernel.org, robh@kernel.org, sakari.ailus@linux.intel.com,
+	wsa+renesas@sang-engineering.com
+Subject: Re: [PATCH v2 04/13] i3c: master: Support ACPI enumeration of child
+ devices
+Message-ID: <202604122018012539fc7c@mail.local>
+References: <adhdsn6u4RAIL9wC@lizhi-Precision-Tower-5810>
+ <20260410053147.27344-1-akhilrajeev@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -62,30 +56,71 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <19218853-499c-46a2-8843-0bafa17c81d5@roeck-us.net>
+In-Reply-To: <20260410053147.27344-1-akhilrajeev@nvidia.com>
 X-Last-TLS-Session-Version: TLSv1.3
 
-On 09/04/2026 07:19:25-0700, Guenter Roeck wrote:
-> On 4/9/26 03:57, Akhil R wrote:
-> > Add a regmap config and a probe function to support for I3C based
-> > communication to SPD5118 devices.
+On 10/04/2026 11:01:47+0530, Akhil R wrote:
+> On Thu, 9 Apr 2026 22:17:22 -0400, Frank Li wrote:
+> > On Thu, Apr 09, 2026 at 04:27:34PM +0530, Akhil R wrote:
+> >> Although the existing subsystem allows host controllers to register
+> >> through the ACPI table, it was not possible to describe I3C or I2C
+> >> devices when using ACPI. This is because the driver relied on reg
+> >> property to retrieve the PID, static address etc whereas ACPI uses
+> >> _ADR or serial resources to describe such devices.
+> >>
+> >> Read _ADR and LVR from the ACPI resources and extract the data as per the
+> >> ACPI specification for an I3C bus. Also read mipi-i3c-static-address as
+> >> per the MIPI DISCO specifications [1] to get the static address to be
+> >> used. Hence enable describing the I3C or I2C devices in the ACPI
+> >> table, which is required if the device is using a static address or if it
+> >> needs some specific properties to be attached to it.
 > > 
-> > On an I3C bus, SPD5118 are enumerated via SETAASA and always require an
-> > ACPI or device tree entry. The device matching is hence through the OF
-> > match tables only and do not need an I3C class match table. The device
-> > identity is verified in the type registers before proceeding to the
-> > common probe function.
-> > 
-> > Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> > Please wrap your commit message at 75 char.
 > 
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> Ack. Will do.
+> 
+> > 
+> >>
+> >> [1] https://www.mipi.org/mipi-disco-for-i3c-download
+> >>
+> >> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> >> ---
+> >>  drivers/i3c/master.c | 140 ++++++++++++++++++++++++++++++++++++++++---
+> >>  1 file changed, 132 insertions(+), 8 deletions(-)
+> >>
+> >> diff --git a/drivers/i3c/master.c b/drivers/i3c/master.c
+> >> index 5e0e926f61f3..08d0fcabd6f1 100644
+> >> --- a/drivers/i3c/master.c
+> >> +++ b/drivers/i3c/master.c
+> >> @@ -5,6 +5,7 @@
+> >>   * Author: Boris Brezillon <boris.brezillon@bootlin.com>
+> >>   */
+> >>
+> >> +#include <linux/acpi.h>
+> >>  #include <linux/atomic.h>
+> >>  #include <linux/bug.h>
+> >>  #include <linux/device.h>
+> >> @@ -2403,6 +2404,53 @@ EXPORT_SYMBOL_GPL(i3c_master_add_i3c_dev_locked);
+> >>
+> >>  #define OF_I3C_REG1_IS_I2C_DEV			BIT(31)
+> >>
+> >> +#ifdef CONFIG_ACPI
+> > ...
+> > 
+> >> +#ifdef CONFIG_ACPI
+> >> +static int i3c_master_add_acpi_dev(struct i3c_master_controller *master,
+> >> +				   struct fwnode_handle *fwnode)
+> > 
+> > 
+> > Can you move this and below function to previous #ifdef CONFIG_ACPI block.
+> 
+> Ack. I will update, but there are some cross-dependencies. We may have to
+> add a few function prototypes with the headers if we have to move these
+> under the same block. Hope that is fine.
 > 
 
-Guenter, I guess you can actually take 11/13 and 12/13 for 7.1 if you
-prefer as they don't seem to actually have any dependency on the
-previous patches. The worst that can happen is that the driver won't be
-probed because the I3C subsystem will not enumerate the device.
-
+If you have cross-dependencies, then I guess they can sty separate
+blocks.
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
