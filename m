@@ -1,89 +1,129 @@
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [1.95.21.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C45C3C13F9;
-	Tue, 14 Apr 2026 09:30:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=1.95.21.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91BDE3BD657;
+	Tue, 14 Apr 2026 09:48:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776159022; cv=none; b=dhYYjzWIEYLHjRfWSrWHtrRKMzuFg4QJ+psua94U76J2Cg0a4ZaKceCmF6LgKnIE9wUsj6gtwJRE/n3WXNc76BL1U46dg6VU1KjvaweWNDEFqf8K2bBQnQrg6gEGlxurFRob6bbtgWg+02LknlL4J1dInN4ZDIElTSTZAbvarfs=
+	t=1776160130; cv=none; b=Qz+zoYIoe5X4S7S/NkGApNr0y1gsAoujMYI6W9NXHyA12dZ3LKEH+FyqyzygkUHHN52ygz812n8plS4WDDStYMxG5MOuBErKImyrazS1rzpyMTPyB6/GGBTvQrp9nmityCJxP+hDMqPFoTUmTJOFJ+uh00QpV8hH8huvcd+qgZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776159022; c=relaxed/simple;
-	bh=C3Jk+havheEvSNjBbieXqRyaODbSdgXw2Er3e1mHqN0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Gz99/u30yEWCHDJ5LybcMW3Y2KMEsaNVgPYxXgj38neUTtT9P3Jw1Ac2uvd87zpCXxtgTPHtdwCjcizhV9Z+XVl3iY9Yf/QJ6UoRsEL2QdCzrfOa1/Uh8Z5iX4ndr1yUnsH4/uID5EQOJhminyZsNQGqLPz5CeNcyZcnB1b2dO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=W82Qj4wx; arc=none smtp.client-ip=1.95.21.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
+	s=arc-20240116; t=1776160130; c=relaxed/simple;
+	bh=22mEg7TC8hlK7fpynNDkNoReZfVYGw/TEFvhSPUn9F4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ot7Srnfjb6zM44YpqKescBisx/6XWt+5XVy5bvO7jtIRRQbZpPYBbhzNyBUo3iNoO/wrmBIkLprCDb5sH/zsFxwgD4bG0DOXF8Uyin0+DP4YtjAd6mNxyK1EuvZxLOfzlcQ5cajmSjo8UL/Uyy/5I3zDC4+wqAqWl+Ov8jRBkYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rDeN1PXQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="W82Qj4wx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=By
-	Nh+ZVMLlFAwQU1VPxOfH5E1NoPZjDNDG4koGc6CSU=; b=W82Qj4wxB84pMk/lMJ
-	1lwJTBuwdLsXpM7dGTm75smUtIAly3qKWX/Tb3XE/26WkxJbMGSFS4/Pj94zVMGl
-	dGdBAAmXYEfnMQAKfAGaR4u9XH3gsjYeye2irwbPtSuZV5YfWufg4/KUFke5jjAW
-	975zYGLJkmqryF9EUTFH6Dy50=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp3 (Coremail) with UTF8SMTPA id M88vCgD33wnzCN5p0_VbAQ--.56718S2;
-	Tue, 14 Apr 2026 17:29:24 +0800 (CST)
-From: wenswang@yeah.net
-To: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	linux@roeck-us.net,
-	corbet@lwn.net,
-	skhan@linuxfoundation.org
-Cc: devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Wensheng Wang <wenswang@yeah.net>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Subject: [PATCH v4 1/2] dt-bindings: hwmon: Add MPS mp2985
-Date: Tue, 14 Apr 2026 17:29:20 +0800
-Message-Id: <20260414092921.1067735-1-wenswang@yeah.net>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260414092801.1067470-1-wenswang@yeah.net>
-References: <20260414092801.1067470-1-wenswang@yeah.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rDeN1PXQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16BFCC2BCB5;
+	Tue, 14 Apr 2026 09:48:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776160130;
+	bh=22mEg7TC8hlK7fpynNDkNoReZfVYGw/TEFvhSPUn9F4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rDeN1PXQmPT5h/tqIJkwV3RjadZ8gVr5KMcF1OjZU8p6hwa74kgut5xHa7iVOYD3H
+	 EBD58Tbr66in2oF86hszJQXnEvwcamYKwL7bxZKSBi3D4Tx03K3rejJ2VScHy6el+Y
+	 BJ1BEBn7qsR/HZ7oBvvLVxDebTZLFiurb324jBKuf2Cg9sb8FygNeDfvL1CyVUNWtU
+	 CPg8xRQbWXi0DpA8PWfvEDninhpMya70iB8bO7LJj26OooJ6U1r/uCvhgbL+w13qeh
+	 utC/w71cW/2B6zB/ndnWh56PtLkph9j8biekd1vtUKkPETLq3XkExskKVr8H9P5cK0
+	 RZ3fxoPaKpguw==
+Date: Tue, 14 Apr 2026 11:48:48 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+To: Richard Weinberger <richard@nod.at>
+Cc: Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org, 
+	linux-pwm@vger.kernel.org, linux-hwmon@vger.kernel.org, julian.friedrich@frequentis.com
+Subject: Re: [PATCH] [RFC] hwmon: nct6775: Register fan PWMs as PWM chip
+Message-ID: <ad4LRX3tkC7lKiZu@monoceros>
+References: <20260225125159.20822-1-richard@nod.at>
+ <9c733024-8ad6-459d-ae5a-a9825f85c506@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:M88vCgD33wnzCN5p0_VbAQ--.56718S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7JryrXrWxXr47WFW8WFy3Arb_yoWDurc_Cw
-	4xZ3WDCrWkJFyfKan5AF4kGry5Ww17KrWUCw18t3WkXF9I9rW5CF9aq34YvryxGay7ur15
-	urn2qrZ3XrnxWjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRNL0eJUUUUU==
-X-CM-SenderInfo: 5zhq24xdqjq5hhdkh0dhw/1tbiIRRR9WneCPQnFwAA3q
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="bsmluefizzo4bzaq"
+Content-Disposition: inline
+In-Reply-To: <9c733024-8ad6-459d-ae5a-a9825f85c506@roeck-us.net>
 
-From: Wensheng Wang <wenswang@yeah.net>
 
-Add support for MPS mp2985 controller.
+--bsmluefizzo4bzaq
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] [RFC] hwmon: nct6775: Register fan PWMs as PWM chip
+MIME-Version: 1.0
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Signed-off-by: Wensheng Wang <wenswang@yeah.net>
----
-v1 -> v2:
-    1. add Krzysztof's Acked-by
+Hello Richard,
 
- Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+On Thu, Feb 26, 2026 at 02:38:27PM -0800, Guenter Roeck wrote:
+> On 2/25/26 04:51, Richard Weinberger wrote:
+> > The Nuvoton 6775 chip family also offers PWM functionality to control
+> > various fans. Depending on the hardware design, the PWM can also be
+> > used for other purposes, such as controlling a display backlight.
+> >=20
+> > Historically, the driver implemented its own sysfs-based interface to
+> > control the PWMs. This made it impossible to use the PWM as a backend
+> > for other drivers, such as pwm-backlight.
+> >=20
+> > This patch registers the PWM functionality as a PWM chip within the
+> > PWM subsystem. Since the Nuvoton chip has non-trivial control logic,
+> > the following constraints exist:
+> >=20
+> >   - Exporting a PWM for external use is only allowed when the fan mode
+> >     is set to manual or off.
+> >   - As soon as a PWM is exported, changing its configuration is no
+> >     longer possible through the hwmon sysfs interface, reading is
+> >     still allowed.
+> >   - Changing the PWM period is not supported. IMHO, it is too risky
+> >     since the PWMs usually control system fans and similar components.
+> >   - Reading and decoding the current PWM period is only supported for
+> >     one chip variant so far, for all other chips, a fixed period of
+> >     100ms is assumed.
+> >=20
+>=20
+> This is a good start, but I'll want to see stronger safeguards.
+> - Creating a pwmchip entry for a pwm channel must be triggered by
+>   device property data, obtained either from devicetree or through
+>   DMI or through device properties embedded in ACPI data. For each
+>   channel, this must be confirmed by checking that the channel is
+>   not associated with a fan control channel.
 
-diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-index a482aeadcd44..d61482269352 100644
---- a/Documentation/devicetree/bindings/trivial-devices.yaml
-+++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-@@ -325,6 +325,8 @@ properties:
-           - mps,mp29612
-             # Monolithic Power Systems Inc. multi-phase controller mp29816
-           - mps,mp29816
-+            # Monolithic Power Systems Inc. multi-phase controller mp2985
-+          - mps,mp2985
-             # Monolithic Power Systems Inc. multi-phase controller mp2993
-           - mps,mp2993
-             # Monolithic Power Systems Inc. hot-swap protection device
--- 
-2.25.1
+I personally would be more lax here. root being able to change the
+configuration at runtime is fine for me. IMHO this is in line with being
+able to unload a driver or manually bind and unbind a driver or
+dynamically creating an i2c device via sysfs.
 
+> - If a pwm channel is configured as pwmchip, it must not be used for fan
+>   control, meaning the hwmon properties associated with that channel
+>   must not be created.
+
+I fully agree here. At each point in time the hardware should either be
+exposed as hwmon or as PWM channel. And if changing that during runtime
+is possible, the old configuration must be completely gone before the
+new one gets active.
+
+This patch still was in the pwm patchwork as "action required". As is
+both Guenter and me agree the patch isn't ready to be merged (though for
+different reasons). I discarded the patch from my todo list and updated
+the state to "changes requested" now.
+
+Best regards
+Uwe
+
+--bsmluefizzo4bzaq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmneDX4ACgkQj4D7WH0S
+/k6BvQf/Q+3gBkHZ0ssuUbPrh5i/AYFsu8RBkt4hNK2oEm8EPU89z72OwsZJoYKu
+/fInRzl4rgUEHn3AWBnyCKFuK602EVp7Kerw9tmx/hRajNt4pxW47bQSa//gJf2J
+Ma/K/HQGKHZ+lgh/aPB/lY9uBw+vCvfNLd+4IR62ViA3pHgm853BkOURWO+94pK6
+yi7Dg1p/w13BTn6iXSBiy547+Xls3jNFRi5RhU77rN7/s+dCgbvEV1teEu9S5cgr
+P0A2hevBPwpyxXXdx33VzB58AHfEQoNstj5WWTaIuhJroqCqA+Z49yg6l9cTFfM5
+WsracqZr1dCPNQCD304r7yY0Dbuz2Q==
+=cQPw
+-----END PGP SIGNATURE-----
+
+--bsmluefizzo4bzaq--
