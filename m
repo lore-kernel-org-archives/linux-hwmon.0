@@ -1,64 +1,66 @@
 Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E10BD3043BE;
-	Thu, 16 Apr 2026 21:59:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9988F3203B6;
+	Thu, 16 Apr 2026 21:59:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.147.86
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776376792; cv=fail; b=blzdGbFki/GYwop+cJ8qj5eEFJwlSmjLyh8XOKyA0M4dG/K7Et+8iToio5B86VZQd4ein+61Q5S0n1Qq9uTwBdQR1izSN0PxBKQkNX2P7HsqjYrMJBpty5cz1x60W+bOg3fXh1vzy981U/F5HjT1rn/cOl4eQxEoq4uK/94b3MI=
+	t=1776376793; cv=fail; b=O7dPgYZNIxmmYMdxkFdjaQ0rCL4Cr9wc+jV23rEeJ35p385c5h1QtrMYUsSesUaFzdgKK4n7F3riLULrNTdpr5zppSUr4qW7j3MLJMmkvYYY39MW1J/V9ATzeUNqiCI4EmlAUlIBdU+KWPp+8ChI1pvipVauavAogijsu/sGF7U=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776376792; c=relaxed/simple;
-	bh=/6/3rH/RKNRdvA4WwhukuFnxytqFy3a96lrl78a2/BM=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=KkbPp7tnkn9Tb5DkGC7CKrxxwLy1Ae/b1BUxRPrUWpP19Zh+Q81OUXGYLBC5fixfVxjl74H4N+0GXkfwG0Ez/iSCikzhmdTREmT0DWzNC1EWWpxuAEb5tpq6mpBUb2N/WDWu2F51p6vef4BVx+CxoMdCf9yCYIeb4NGW+12t5jE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=HVJ4hfs8; arc=fail smtp.client-ip=148.163.147.86
+	s=arc-20240116; t=1776376793; c=relaxed/simple;
+	bh=oETJ07LXbdtGRv5hqr0DF0lsODZ0d+VD5YYoWO1HpN8=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=o2Dqq0qij5bDUUABs6Nxp3jFEEDLJpqo2/OISwFU5tOtwTxMlp2UW7eHfdnsuJ+skkpKTcrz8Cx35m1QaGU5hiE0FUVbJ+m4ERwSXrDNJQJTDex9MENNGQL+k7bEPbB3E6Opf+2LDO1dZEpgKCHxrDG939PPyfmZtzOdwedBgto=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=W2nPO1DL; arc=fail smtp.client-ip=148.163.147.86
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="HVJ4hfs8"
-Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
-	by mx0a-002e3701.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63GL3tVs2777672;
-	Thu, 16 Apr 2026 21:59:28 GMT
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="W2nPO1DL"
+Received: from pps.filterd (m0134421.ppops.net [127.0.0.1])
+	by mx0b-002e3701.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63GK3AmR2714091;
+	Thu, 16 Apr 2026 21:59:34 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pps0720; bh=NnUE+5L23qpe+KgsGjrrVMnq
-	UNpQ5ZyfshJsEfm5LfY=; b=HVJ4hfs8nJ/nQYx4LqH78QiXs2uZYXgysGVOqLUR
-	QnqdRXOmnakCLikbfuytf7N1iGcFfFx7TD+UFvcFU/j6iU3cO7LNXkUAfwvDZhd4
-	MmUGnVUmdipeq/9k/RJEpzGlQr7z4diA10F3UwFjMn41uOGNrdWxsF9kad9eTxhC
-	Ippnfsc6hlgevuieMHKN38D/kqjzp1I4XLZTqGjZzpdC7Yt6qmW3F7EiKUI+zd/h
-	z/v94xGc0yeppHyQKAbrWve0vr2lgnAOvhzjnC+E5iqgwOSDioJqnThvGZBLIipd
-	K5/8Ps0R4p/+eg7Aj2yi7CrN3gTKd1NiaVSZ98VjZo+Dxg==
-Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
-	by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 4djxn9qnv5-1
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pps0720; bh=IE
+	s6xCP2+LNw63xeVefbV/Td78gCYsJKkGh4xxR2Y8o=; b=W2nPO1DLg8mbV3jehn
+	FfBGEvmHLJpj2dGlv+o75+C3B9nrzk2FK1FDInTmaCqHgnghe07YvL1bbGopwaQ8
+	qGQ1MIjhMBefEz308qhejGJ6CHp+0kNoDIpZL0oXY4FEFID0PacRZiBneliSQSoD
+	3SVVCPGGn78k/N7DUVTJF53vfZVwd2uX/uvGd0ZDSCmAroNVc2JbTjJWi5e5cwT0
+	ncSYKSTUZfUB6q5MUBhePCo0vDBNliepvHyYKsubybfZD6+NZ4AE7Xb6nZEIJ+Vd
+	BNbalzpmHR3ycF3rttYKqtPxnwUpvL5Lx0wOQiYxemb1UY/whCiE58AxCj8aIu3y
+	t0rA==
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 4djxwfyht8-1
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Thu, 16 Apr 2026 21:59:28 +0000 (GMT)
+	Thu, 16 Apr 2026 21:59:34 +0000 (GMT)
 Received: from p1wg14926.americas.hpqcorp.net (unknown [10.119.18.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by p1lg14878.it.hpe.com (Postfix) with ESMTPS id 183FC8A3;
-	Thu, 16 Apr 2026 21:59:28 +0000 (UTC)
+	by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 9F981267;
+	Thu, 16 Apr 2026 21:59:33 +0000 (UTC)
 Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
  p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Thu, 16 Apr 2026 09:59:24 -1200
+ 15.2.2562.17; Thu, 16 Apr 2026 09:59:33 -1200
 Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
  p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Thu, 16 Apr 2026 09:59:24 -1200
-Received: from p1wg14919.americas.hpqcorp.net (16.230.19.122) by
+ 15.2.2562.17; Thu, 16 Apr 2026 09:59:33 -1200
+Received: from p1wg14920.americas.hpqcorp.net (16.230.19.123) by
  p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17 via Frontend Transport; Thu, 16 Apr 2026 09:59:24 -1200
-Received: from BL2PR08CU001.outbound.protection.outlook.com (192.58.206.35) by
- edge.it.hpe.com (16.230.19.122) with Microsoft SMTP Server (version=TLS1_2,
+ 15.2.2562.17 via Frontend Transport; Thu, 16 Apr 2026 09:59:33 -1200
+Received: from BL2PR08CU001.outbound.protection.outlook.com (192.58.206.38) by
+ edge.it.hpe.com (16.230.19.123) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Thu, 16 Apr
- 2026 09:59:23 -1200
+ 2026 09:59:32 -1200
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Eo4ae2yZbjhdmJHtB1LIR8JgwAg841KMAqwFee+pCqY5Z+PSwnfCcuQ9pilmagExzmW+spDAR82dISRqsPn6IqgZjQwafNUnDljTK26PlbRTIGC84EyE+0bCmDnLBVB30EYkS8JUB7GQeBayJeB1fnjDP8NershfuNLO52zhzuYNTBD7y6Y8b84XStPIWbKVudEeyIVYgXbCyYgf6uk+nj0cjpyzfLsIomFfuE6HFrcbStGJ8LXpN/YC+t8UTTgGn7N5qX4XMOYm6JrpMbde2FOgNFqbplVmibcqoCwX7is7bPHx6JOGfGMXx32eeapmmazkrLyAi/UaEROuBGwjBw==
+ b=vtOn87wVbCi+pU7wvFfKMeOkU5c44jOhcVTaj4kU4CvDiQE+9A3OBQj0vU/GzpALWAf2QJhlCC5M9P0Xq9r19YXAwkDpD6qCvYL4m48Y51vmlOKss5w7zxVHKXjnDw+Rgzz1R+U10+LldH7wj04XahC9Nydsq8cS/w3WRjzUSC76+ELbNTTMKsCg41k6tpMxEMrmiN20RxBqiun/veYYFXfY+IAolG+9bUG4FbeyGsHwFKsXD4Fb4i7ltqpwssD50u2JD6Mn7jD2/VamNcTXxi3zdR2Uryc5EQJH8Wdm07F+169WsEr4JV/M/oRJSHUoeih/PiBf0r/0eRik3StFcQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NnUE+5L23qpe+KgsGjrrVMnqUNpQ5ZyfshJsEfm5LfY=;
- b=HJLewTVCjhj7ppGvEdCuc4M+C6J4GKdxxFba4qlkoL3VhPjCrpfRDSPJ7lPU6EuQnwU9Rzi/KkiKEOcfFfvR3xEwpUjvmTQPKqKMpG/Wjb/Yotio2/TgyuHdNT83grQRd/7RY//6ZVIvsTcqQDjF6w1ziaiZ7bIcVpyZ0Oa8rXDm2a9BLNpECsmNWsDpzPU4brhGlfJzo+lp3qLjN3icRBi2y1uVVY/DOE/G9rrjWG+R0Q3UlQNoABs3n+0FxSqiG85xBdWHaL6f350Xvl0zlfPDPwCxVsoWeSMVuFZETRxasAuZ69mDlCmeOOPJ62iEN22yXuaeQVew949i7aRfdw==
+ bh=IEs6xCP2+LNw63xeVefbV/Td78gCYsJKkGh4xxR2Y8o=;
+ b=toEYUOSPJwNo00Bb10vxtjcIsJGbwjOrLhwkuLwvSJex2vbM8DOc9tt8Oqow3221AhV1kkdDdEK6SeBnlahjoGN96sFdk2zd+HvT8H2OEyMAnggv5bbpAv1Oybm9rr96ccKTmFeoTHmzOy7kjra/oIiq5SLBzz+qO1mBhjoLl1od+RQA4CK6Lm6qbidBH+QWcI+3Xb8s8vD0L02DxIwEt290HY919JMmDhx7GXCkuvCkZgWdl91Vkuct4KWl3RUI1fq6p/Cd/BKQMx7/Ad7tM65K0caiMsLFXaBUUAEm5yU2Vkjh7167Gpar2H/KqwjG20MjYwj/aiE8tH5eV+nCIg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
  header.d=hpe.com; arc=none
@@ -66,11 +68,11 @@ Received: from LV8PR84MB3535.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:408:203::11)
  by PH7PR84MB3250.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:1ad::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.48; Thu, 16 Apr
- 2026 21:59:22 +0000
+ 2026 21:59:30 +0000
 Received: from LV8PR84MB3535.NAMPRD84.PROD.OUTLOOK.COM
  ([fe80::fce6:5af1:e04e:caf6]) by LV8PR84MB3535.NAMPRD84.PROD.OUTLOOK.COM
  ([fe80::fce6:5af1:e04e:caf6%4]) with mapi id 15.20.9818.023; Thu, 16 Apr 2026
- 21:59:21 +0000
+ 21:59:30 +0000
 From: "Pradhan, Sanman" <sanman.pradhan@hpe.com>
 To: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
 CC: "linux@roeck-us.net" <linux@roeck-us.net>,
@@ -78,59 +80,61 @@ CC: "linux@roeck-us.net" <linux@roeck-us.net>,
 	<alexandru.tachici@analog.com>,
         "linux-kernel@vger.kernel.org"
 	<linux-kernel@vger.kernel.org>,
-        Sanman Pradhan <psanman@juniper.net>
-Subject: [PATCH 0/2] hwmon: (ltc2992) Fix threshold write and power read
- overflow
-Thread-Topic: [PATCH 0/2] hwmon: (ltc2992) Fix threshold write and power read
- overflow
-Thread-Index: AQHczexHcT0jH1LS2UaUGZGqO/Jd5Q==
-Date: Thu, 16 Apr 2026 21:59:21 +0000
-Message-ID: <20260416215904.101969-1-sanman.pradhan@hpe.com>
+        Sanman Pradhan <psanman@juniper.net>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: [PATCH 1/2] hwmon: (ltc2992) Clamp threshold writes to hardware range
+Thread-Topic: [PATCH 1/2] hwmon: (ltc2992) Clamp threshold writes to hardware
+ range
+Thread-Index: AQHczexNjyghzGFYcUu1C13GFiC2Vw==
+Date: Thu, 16 Apr 2026 21:59:30 +0000
+Message-ID: <20260416215904.101969-2-sanman.pradhan@hpe.com>
+References: <20260416215904.101969-1-sanman.pradhan@hpe.com>
+In-Reply-To: <20260416215904.101969-1-sanman.pradhan@hpe.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: LV8PR84MB3535:EE_|PH7PR84MB3250:EE_
-x-ms-office365-filtering-correlation-id: f9e06a76-2e9c-436b-f0e9-08de9c036a7d
+x-ms-office365-filtering-correlation-id: 8a5029ac-9299-4393-1ac5-08de9c036fdd
 x-ld-processed: 105b2061-b669-4b31-92ac-24d304d195dc,ExtAddr
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|376014|18002099003|38070700021|56012099003;
-x-microsoft-antispam-message-info: DyHRb5mrrrqXi6DIoT4qntkrWMaFyc4Dh4JSQvAjS6B6Z7ac3O8dVFwL5K4QKucHbqpPDcRXP+NdJwdB1Y64Aqz0D6OFEEW3zgdXrnJ1p6gTRQq9UHPRwg8PAaRKAR8AjpGLQtGZcyK0QEUP+S2QymR8pQtJ7lAexcqeNQY+nhpAIptbYg/mHJUURbbJPPLtX0HCWXu5g3KapVlO4m14VMR55Qe1tAe+4oe8wriUqLS2hJ30cddMzjmewYvvuNp7++hIKuk2DPawcdbepb1OE0WBMnFmGac35GVSJ34S8f1XoHiICoxP3cPy/zWjFQYLw82pg8l1W0kLpHx4GjHll60WLKGi0/d6z/RuvmW4RS+Jb9e+m+t9qBZNKXg7SBhpgP62ls0hT9wjI1pt1PXP1zZRvuefBb0SQqpv9ZGV84qCGUwkbO00l34RNzYmoGTqISf8qkUkx1Zerq+Lno4ynCyo5Wou04WS8Vsrp6vXD/FUL0reud+z22NWXTExr2EN2peS0Z+IjC/0Q1hkYdFgt/Wh5XNfZI+Mdi+M5/7Qr5ti6YSUlTbZikk/udt6MreCnKhZ2KZ10mVHyUSREeEt8lr7qP5hVv7AhOMjcgS470zCp5qs+Qwt6WRWjaqH8JBBRJutsuL+qw5/rAe9LEfGRrOvHu88V3cukiwTSHOfNmUQIYNWxYVjnhRKrwrHlrkpiR5TegBzjPH0I0GV/cAEuznQ/iJjYM90T2sn8IbBV0EhiSc1nyskeAdQCk3IMqp4g+BZF9FK6iXVcvuva5dqRLzno5z2UfFAQW2S0kEpHa8=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR84MB3535.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(18002099003)(38070700021)(56012099003);DIR:OUT;SFP:1101;
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|376014|18002099003|38070700021|56012099003|22082099003;
+x-microsoft-antispam-message-info: gbSRhHQnVHpEDIVuee8Bibthn3P8tViEt3IjZNNU+U23suDjwIdULGSNd/71vs3oFClDNL4XRjkV5JQLToC0uArlWJMn/0GLxopT/HRH3VGsPwRO7Yinhlmt4X30LXrdvrY+PL9m9C3O0ZkybtxbsKNP10yN34yQHywbs4e64/r3LXMLAa01ZJxgW+L+5z5SMRW+tYge3Fy77pq5St7K/vCPhEvlCk+yqbHljLbihe75m+bq9Rcg/cJCj/BuURn/rXBKVyBxRwYXYjwGeyRdk61ojQo3aedoIYwGrE0+rUu509v9xeGpgOUQehhg6tajKdXchF61EcY+UGz7s7SYuk/0JRoRoP80OBYruyjToGZvcpl47Bd2ILA3swxZ6kLC54YiYIjDVCOFQONJniow+Z7OlMJgJp/OmUuidc3mDt1RFhlGDnl5T7QM9NobJYxAPwhC0nba8qTPLbuIXh96JEOGFWFaca3FyTVbnJtdT9xor+pDCkO0fnlb2xpfYgvTbNArAf7M8Eks+jGN8lqI6iSiil9QHrZ7bqxluRrMoPXg7IIuKM8lhG0naFkAjIYkPjQPVU/F8LrGTiaITlQtrBaQCSLOfjSYxtXjpny1fXLID1LLnU8EpZMnvbWXosnw4VCSlcYy+QB9J+sBjRWZY5KlXFptVlEWbcwcrtMeHQrgfj6P2BBYTWqhd7QLcNx/x99NjsQJw6j4sqY2tPeWFPElvHZJBYYuaTIMPyjgbCwQe9fzN5DPvkn8dlB7P+xF78w84kb5YaKsYSHG8pHWKGseLu5Zl4t6HPoAlErftps=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR84MB3535.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(18002099003)(38070700021)(56012099003)(22082099003);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?BIlIsfuWr7rnRZh4dZk4zAI8DZ/FDFUEyBRdvB+qAY64IYUcHsdKF3ayJ2?=
- =?iso-8859-1?Q?hXZfGqEG0375txCMwEW0lhnj6GnH9kiB98ZNBSbMa+baYrH/HavO7I0XZu?=
- =?iso-8859-1?Q?0QQQ3qMitp3IQFmIToLQXXWVYKQPBj4PAoeZ7RxVU645/1RznlOEQInK+C?=
- =?iso-8859-1?Q?6xoNhCfI7xQvGqhXt7RS5FKOf0COFe8WqJUEfYscDJYo6AU4AYoCvDJ6TG?=
- =?iso-8859-1?Q?S1UzEo7N72612qL0/6O4/M61/5xROxsYmW6mxeSi8TwJboisyxlVTliMOh?=
- =?iso-8859-1?Q?Px+zTkImAA1u/NbAbl11USm7NpLq6LvVpAlV4b2jxDnQ08WYuukdcm877S?=
- =?iso-8859-1?Q?b9cPIKm3nqJ07DMNvcdHZpQTKFdF3YTSH4J+noz3suMqQKpCwNV5kcChVj?=
- =?iso-8859-1?Q?xXrKJoT6YLEU78/c2hO9rSQVCneDWcN69GjUFn8Bwl7XKD670vFYkHacXi?=
- =?iso-8859-1?Q?nmscz1FAOhTaOZh1rCofvJSfHq0Kl25GmMMwADtElJHOtElrK8HLw9K1tM?=
- =?iso-8859-1?Q?C20UgLeCvdQL9uuKvA1C3vIS2jB9KYdHcVIzTmQ4KHE6NJajgiuCaj5uis?=
- =?iso-8859-1?Q?+rlmFzOSvMPzNEYfd9xrVHR4as3zAgKaO+7oUoP4HigRcVEdctbyVqUNHS?=
- =?iso-8859-1?Q?5CzwIgQDzFquTn3rPhlqazlRi9bFU8mOGRtDHSTKIbpnTabjmGsA6+N+4Y?=
- =?iso-8859-1?Q?Yvx6Le0fJF8np57BDPlp6RvnNCsAJB8BUYTAaIdO4jn3ZfZpxCRKApX3is?=
- =?iso-8859-1?Q?E7wyVU4b8v8LtaTp2zwv7tVX7FhFRLtm0BGPyca/vern/DgAf5LJL1C6Lx?=
- =?iso-8859-1?Q?m+hhfUsWHVFC6LYzxZhE9XY2rurON+59fnfe1ZzsS4JPJqEt+wKx8E1cDA?=
- =?iso-8859-1?Q?OCUZPVNGdOVsOfBchH7y1L5vM19Zp8UiwD0ZegNd3jlE35VawLCLDMKv41?=
- =?iso-8859-1?Q?FenIdXA0gstMI1p+vHrB7rLmQujp9cIr80Jle759teETK1CedYMUkmSfDk?=
- =?iso-8859-1?Q?fOTYciouAjLD/QFt9TiEj2CBF3Caf2BhrcDvFnCT1i5gu4OQ+J8ErVcUtr?=
- =?iso-8859-1?Q?aCh1z77/69SFRV0XDfEDzDYp65IXxT5EbsvZ30GngZiMQYGww4LcgEruIz?=
- =?iso-8859-1?Q?QNSOA1/Zm0+tv5EEQT3i9yJqBnTaLOBimFfIPuzD1zKYda8GSRAhknuJAG?=
- =?iso-8859-1?Q?DyOMWL/lUqjRcu3PfFCjpWNVBBzyM+mnbidHr6TD1V+CQPt/XIkMp7nTLO?=
- =?iso-8859-1?Q?nce2N8+MpLn2fK2umQeHG0kYUSL+6chNTO62IDvw38/h8JTp88JOgi+G4+?=
- =?iso-8859-1?Q?wg/oQ9KHlLVr9JcT1h7+3cKU8bnsg48S1kUtuifhX9kfwYMSaf6mh+sS9y?=
- =?iso-8859-1?Q?tlY7nvfEYVcQrblKIj4Q8m0p8nRVss68JWahm/CQ4/ZybAN+oCbSe+5RkT?=
- =?iso-8859-1?Q?5GnFoQqjx2NC1aJds9khnG0RskBo7DS4J8rksvilZ9j7rzj+LTkMSArhC/?=
- =?iso-8859-1?Q?t1l8Jg6lTijilxs1C9YZohwdTc5NnOlvWQeEkWidRe2K+fe1VYdyOjQcsP?=
- =?iso-8859-1?Q?KLFPzOTktX4/nxXGXs+0hj4M3+JcJHZT9luxMeqtWHMkAYxqvoa8/6U2Jt?=
- =?iso-8859-1?Q?J7hQgCLDgRQglp7yPRK6+RZuAzaWFAjDe3ufbSHFr5UDvGUaDo6zXZgpEZ?=
- =?iso-8859-1?Q?aF1YcTxLMTcqkKuBmY4PeUurY5lOVY/lnOJybINzB6B/0YhEIacrpO7wbM?=
- =?iso-8859-1?Q?nH4jvp3OSyPj/0fcsJxs1pz6SQ20us9bX7NHUttAI/SGilhTLHFGipjqoC?=
- =?iso-8859-1?Q?dheX4d5IzA=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?M+2PoBU8y/ZB/kX3X+1YmT6DGeTrZIzj/SGGFMKy7HYoKNfGYcczNbk/4D?=
+ =?iso-8859-1?Q?HU9ad0W3W5d3U2SIrpQxWmekNiyG+BjVlLNHgpugLzZC/Toz/J/gY8UZwN?=
+ =?iso-8859-1?Q?3SvXdTOr/KqRe3kh2FTMpK4Q+iXaQw+dfBDBhcjry1TmQeZr8fOekis8bA?=
+ =?iso-8859-1?Q?Ct89stpE2mbRIY+ys2HfMJRACeV/Z5+Xl2t7DqmoS2HR+yhJgLQAE8TbBn?=
+ =?iso-8859-1?Q?oHVOQbbEYSkQ3jW+LDk6Tx6bpV8dcnoGG1AfoCmsz9TD/nFRy84dHDfHO5?=
+ =?iso-8859-1?Q?9afFg++B7WBcwCcZYwmkaWIct/T08Lb9y38Wk9Yd3nQ1NwoGW+p/5zqVyF?=
+ =?iso-8859-1?Q?Tu+OAsjgFV+T850NuCd/pb6TTd1ggdYB9cHdGuddrEsIfcAFiUXoD47ia9?=
+ =?iso-8859-1?Q?15KYiYdOqpNBZpb8J7J8cGfiezEKkpiDgeKM5g6tsCkP7vSPgLsa1jedUk?=
+ =?iso-8859-1?Q?p1A4jUwgQQ4GPhG/+yujMaE4rlP9agrno4AKxX7+OXZWpPa5yYnZjqMCjf?=
+ =?iso-8859-1?Q?6wF1RhJob7MZLWVTBEw5p4chqA0na+/wVMnmk1xN7WH14tysfxNVy2ddjw?=
+ =?iso-8859-1?Q?uIFpod9q8uDouEgTvWWM2VCkcV0AeyOMSr4brBs89gC+LdnPtN7okY2OrI?=
+ =?iso-8859-1?Q?bONVz1bshs86CPmsGl5RxIvtM/PIGhB7vMi0Ag2AVTOgjvuh5kO4GRdwsy?=
+ =?iso-8859-1?Q?HBqfMIXOIiH/m1y8j7HSrD7gswusyOreWfC0IcLmOCu0MzGpMN8KdZ9bxX?=
+ =?iso-8859-1?Q?Qk+Us4B7pw1ppIIJaZ88oZk+6ptlSrqls6raIAAIV8s8JpKVbacSfJnww2?=
+ =?iso-8859-1?Q?6fwFC7G908PSDiErRQuGY1SJ6MbfHR4nMonaX3wV5FkVqWenOTg82c3UYz?=
+ =?iso-8859-1?Q?jt967UrZwigfJSbYXaaGG+8x5u7hMi8Zy2HGp7UHy9sAB2/+sms4q1mlPH?=
+ =?iso-8859-1?Q?8U2UH6F0Q/WobUrujgHUnVlD34NcSbk51LQpP4a26gL105l0POvfjcguub?=
+ =?iso-8859-1?Q?CICnr6q+0IH6wL3IM06+oQuZtU4D08zZR9UTdr2hLmkPZH3bjwWpKkHK4x?=
+ =?iso-8859-1?Q?0Q4v+Qibzhrq+3OjiNpt5+/jRWLuCX1wy9WsXIdUaPp2Prs6dsGOvJYyRM?=
+ =?iso-8859-1?Q?hNbzCXogAhh22ehQ2NLL1JgA915bx68T4uGackNONiYPHDZJEmIkXpjI2U?=
+ =?iso-8859-1?Q?8U02+8IHUHr4L42I6OLmso/x6jsNe+yf2/+vjJijtdz5QemAdvXDseBGy1?=
+ =?iso-8859-1?Q?n+X5Fgv3MvfgvPgwvDloy9AZoDWrSC8x413a4O1h/Obmav8rikHTE71Mja?=
+ =?iso-8859-1?Q?X53sGHlcnIfTxeZ6kM1TcUVdQ7/Sy0tjkbjgWgb1WQBhq78uuk5wnt/Thq?=
+ =?iso-8859-1?Q?wPHz4VFrTCzf/lSrWfak6mqCwrAy00B6o2O6U9inUyznuvXZP2jl5yGdu3?=
+ =?iso-8859-1?Q?LyijfhFzuFjrdkZMMVx5p6XLHxYudDHcCYDwDgXSfq77S7xe9saZVIo3PV?=
+ =?iso-8859-1?Q?Mglfmc7TVueH9Q7Sq5AckvSLvuO33ORVTcBKZEhsiHMaj8/+Ov1M1HKYhx?=
+ =?iso-8859-1?Q?IkMnyaVS1UGptgzEESiHguk4KQxG+rT8fl6AuHZH5WKgTMVtfNdoE4/n60?=
+ =?iso-8859-1?Q?K6oyioVqIb05rZM+y8acxsSUR/50u6iMoRPxMwrzdwMExav9pK5f5eku7Z?=
+ =?iso-8859-1?Q?hKoRt7P9GgQ3RrCxPBJyoG4ulG0kG3MhRgg7Up5hqT5idTUT3lw7Z/xFvo?=
+ =?iso-8859-1?Q?g7gPsWlsyCePOxFTDDhnllzhQzYUs9VFCStKTjKqqRZHcLcnR0zUO4aWCf?=
+ =?iso-8859-1?Q?6fFXuvfE8w=3D=3D?=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
@@ -139,67 +143,162 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked: wj9hhjhes3AhYHbopeyy3NcqmunpAEqheBWTKmkVrF36F+mo8CFhZ7ydikJ46vbg7f6e5quedYQjNU1rqAVx8qrCxowlOTn3u0sqSKHvI2YKTjQZLkjGZlBgY5wvA3wCjB7UCa4x1RLuVN2z0uzb+FgXkzJIB04afMEVeEgb7c0sr8/VsHkJA9nSEZhGM7QRNZDVwISQ1SzuTmU1kgJxlUab8mevE++9INDLGOGOk430sZ7T7KhUUIkR3YIbeJCi6hF0jg3EJm7wgPD6Ud4Gv99pRloYk4xrbQvWDVBZecE8rRNwjTh36nRh9o7Of1lRbYWlBWaiqlVdutr2/S8Bdg==
+X-Exchange-RoutingPolicyChecked: lWII6j97i24GBhH86SJ2IBgEu8YjfCeNDwPcgcvYM7Ibzfn1E7gGrpYhANfMIqs0dwNx/ugpsI1HzqGIAJj7LiPRbsLoL/HeoiD53AH9djyLaO0Pagr6grxL4IrENePfLE2A/kTGvXs9d8vVJEWpjsLRJTObfJ9lRckPEfHvE9LO91JRTlZJdZ3vfLaRzQWIOXnJTEHnpBKhAuMfosbmyM/qU6g5qRbhUP8vvE/OnBPZRb27n8TYym1T70B0h+AXKwB0EdNzXedAnu7+hzxU3TQZZvR1BK1J9LsRg8KKaUZJO3/Vg7Lc1NfozyKB4JF/4ViJcwoH8qkQrhmSxsi2xw==
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: LV8PR84MB3535.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: f9e06a76-2e9c-436b-f0e9-08de9c036a7d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Apr 2026 21:59:21.8136
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a5029ac-9299-4393-1ac5-08de9c036fdd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Apr 2026 21:59:30.8479
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SrEGCOP4k2gAz8snnpJk1BpJvhIrOxalyZM2bQNTOT8IxaFnpzHjYn44lDfWKl3joQis7XZY3ivtZ0z5wd/Hkw==
+X-MS-Exchange-CrossTenant-userprincipalname: dxz6uAqBs3bRRrdC3geWNUzuxrpRLGAanKOLcPRRYduZ8jWDTo4RwimK/5FTeYomW/lg+Oz5j7/TU7Jzwjww1w==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR84MB3250
 X-OriginatorOrg: hpe.com
-X-Proofpoint-GUID: j3zJeXTuct9ldq2K-CFyXHG0bmXRasMK
-X-Proofpoint-ORIG-GUID: j3zJeXTuct9ldq2K-CFyXHG0bmXRasMK
-X-Authority-Analysis: v=2.4 cv=HIrz0Itv c=1 sm=1 tr=0 ts=69e15bc0 cx=c_pps
- a=UObrlqRbTUrrdMEdGJ+KZA==:117 a=UObrlqRbTUrrdMEdGJ+KZA==:17
+X-Proofpoint-ORIG-GUID: d7ZnCzbElvp_UW_S9V94EJG9VX0C6WyV
+X-Authority-Analysis: v=2.4 cv=YMKvDxGx c=1 sm=1 tr=0 ts=69e15bc6 cx=c_pps
+ a=5jkVtQsCUlC8zk5UhkBgHg==:117 a=5jkVtQsCUlC8zk5UhkBgHg==:17
  a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
  a=xqWC_Br6kY4A:10 a=8nJEP1OIZ-IA:10 a=A5OVakUREuEA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=gQcMVamqm3wCPoSYhaRC:22 a=_ZmgHqWwjZUDpi_pur5s:22
- a=OUXY8nFuAAAA:8 a=jlLFYfBBHW4x2wnp0QgA:9 a=wPNLvfGTeEIA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=gQcMVamqm3wCPoSYhaRC:22 a=ay80y3fxfMS_JZZz1qJy:22
+ a=OUXY8nFuAAAA:8 a=VwQbUJbxAAAA:8 a=9F0IhLLRAQ_6tfZunWoA:9 a=wPNLvfGTeEIA:10
  a=cAcMbU7R10T-QSRYIcO_:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE2MDIwOCBTYWx0ZWRfX+beWBG9bqJWi
- /oI5VnarOGLP9lJRJmlcNcEZqp8i9UbLZ4Y320Vh8H45NuLdwgZKrOESmks+zqviJL/Fq8vCss8
- bLTtJ0Cf7LTvBsTpG88B5YGDQ+Wq2M8fy+D5CopZPZouwhU1QoTNV/azOheiFWeQpijzaak4QG4
- sZ4QiqRZOpKxudami581sa1il3S8M4PiTpWpaInavjXxodxGdA3H7hnKKuc3CkihYUPBxgwsIr9
- lN0qpYuxmith4fCBpTbC3gYk8h0x53m6Q62mE+AhvEP6lUJABf1+5WeCBcoF8dbvrq6+2oIBxiT
- 2WMKkhGaKYaXhGefVDMQp/X7XcmLTRzBdQozTS3494gQ0Efdu6itiq9bHBXSH+OLlgWUiYj93aH
- ExgRK9s7BUG60H0LGI+zOZ/FexB9y58/z72rLLClmcnO8cTrEe8T9Z/GRXyqnXedXZKeMVrAyV9
- QxdM+zSN7qWzWwA+t/w==
+X-Proofpoint-GUID: d7ZnCzbElvp_UW_S9V94EJG9VX0C6WyV
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE2MDIwOCBTYWx0ZWRfX4orRzvAanuTI
+ thN/bC9YWYshVKI5JKi7hPiEV6JJ06GIKnsUonCvMkhhfNVqCVeOtsubds4tAs8YOK4a5jHFZdz
+ 8vM2wyMLvKf3dCK741nJLXkOePMvT2Mlej40GR/J0MWImK9PiQxAnE0xbbVgo+HeQSuv5Y9pqmJ
+ z4ubQC51wsSpg8EGF5rAsmN41BWNNFD6REBxUHOOIU83iBUHj5ZXiR5FP6hoNRcjXcvrg0sD4Gh
+ /U/fpkrSPgq6l25tHS+EhTPFJX5nGEyhZ4LPAwUjJP0kcMPT6zcGkJMvMsF1ztkdr01nzBVdevh
+ S4YR3E/o2klcDn7yI8dkTm50GRspWHCFYQUigAfXEtZTMnfchUpgKXydqukAsk+RM/UN0PZZL5A
+ xZ+PskPFb4+yDHetU79/REgSd1WsROkqkUx6kA4XGe5Lrn7cvnpKq5809zDyjBCvUpxunpR1BtB
+ tootge8B3OqxyTj+aqA==
 X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-04-16_03,2026-04-16_03,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 impostorscore=0 adultscore=0 priorityscore=1501 phishscore=0
- malwarescore=0 lowpriorityscore=0 bulkscore=0 suspectscore=0 clxscore=1011
+ suspectscore=0 bulkscore=0 malwarescore=0 impostorscore=0 lowpriorityscore=0
+ priorityscore=1501 adultscore=0 spamscore=0 clxscore=1015 phishscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2604070000 definitions=main-2604160208
 
 From: Sanman Pradhan <psanman@juniper.net>=0A=
 =0A=
-The ltc2992 driver has two related bugs in its threshold/power=0A=
-handling paths.=0A=
+ltc2992_set_voltage(), ltc2992_set_current(), and ltc2992_set_power()=0A=
+do not validate the user-supplied value before converting it to a=0A=
+register value. This can result in:=0A=
 =0A=
-Patch 1 clamps threshold writes (voltage, current, power) to the=0A=
-hardware-representable range, preventing negative values from wrapping,=0A=
-intermediate arithmetic from overflowing u64 on 64-bit, and register=0A=
-values from exceeding the hardware field width.  In the power write=0A=
-path, a factor-of-1000 cancellation also eliminates a u32 overflow in=0A=
-the divisor computation.=0A=
+1. Negative input values wrapping to large positive register values.=0A=
+   For power, the negative long is implicitly cast to u64 in=0A=
+   mul_u64_u32_div(), producing an incorrect value. For voltage and=0A=
+   current, the negative converted value wraps when passed to=0A=
+   ltc2992_write_reg() as a u32.=0A=
 =0A=
-Patch 2 applies the same factor-of-1000 cancellation to the power read=0A=
-path, which has the identical u32 overflow in its divisor.=0A=
+2. Intermediate arithmetic exceeding the range representable in u64 on=0A=
+   64-bit platforms. In ltc2992_set_voltage(), (u64)val * 1000 can=0A=
+   exceed U64_MAX when val is a large positive long. In=0A=
+   ltc2992_set_current(), (u64)val * r_sense_uohm can overflow=0A=
+   similarly. In ltc2992_set_power(), the computed value may not fit=0A=
+   in u64.=0A=
 =0A=
-Sanman Pradhan (2):=0A=
-  hwmon: (ltc2992) Clamp threshold writes to hardware range=0A=
-  hwmon: (ltc2992) Fix u32 overflow in power read path=0A=
+3. Register values exceeding the hardware field width. Voltage and=0A=
+   current threshold registers are 12-bit (stored left-justified in=0A=
+   16 bits), and power threshold registers are 24-bit. Without=0A=
+   clamping, bits above the field width are truncated in=0A=
+   ltc2992_write_reg().=0A=
 =0A=
- drivers/hwmon/ltc2992.c | 43 +++++++++++++++++++++++++++++++----------=0A=
- 1 file changed, 33 insertions(+), 10 deletions(-)=0A=
+Fix by clamping negative values to zero, clamping positive values to=0A=
+the rounded hardware-representable maximum (the value returned by the=0A=
+read path for a full-scale register) to prevent intermediate overflow,=0A=
+and clamping the converted register value to the hardware field width=0A=
+before writing. The existing conversion formula and rounding behavior=0A=
+are preserved.=0A=
 =0A=
+In the power write path, cancel the factor of 1000 from both the=0A=
+numerator (r_sense_uohm * 1000) and the denominator=0A=
+(VADC_UV_LSB * IADC_NANOV_LSB) to also eliminate a u32 overflow of=0A=
+r_sense_uohm * 1000 when r_sense_uohm exceeds about 4.29 ohms.=0A=
+=0A=
+Fixes: b0bd407e94b03 ("hwmon: (ltc2992) Add support")=0A=
+Cc: stable@vger.kernel.org=0A=
+Signed-off-by: Sanman Pradhan <psanman@juniper.net>=0A=
+---=0A=
+ drivers/hwmon/ltc2992.c | 37 +++++++++++++++++++++++++++++--------=0A=
+ 1 file changed, 29 insertions(+), 8 deletions(-)=0A=
+=0A=
+diff --git a/drivers/hwmon/ltc2992.c b/drivers/hwmon/ltc2992.c=0A=
+index 1fcd320d61619..1069736196763 100644=0A=
+--- a/drivers/hwmon/ltc2992.c=0A=
++++ b/drivers/hwmon/ltc2992.c=0A=
+@@ -431,10 +431,16 @@ static int ltc2992_get_voltage(struct ltc2992_state *=
+st, u32 reg, u32 scale, lon=0A=
+ =0A=
+ static int ltc2992_set_voltage(struct ltc2992_state *st, u32 reg, u32 scal=
+e, long val)=0A=
+ {=0A=
+-	val =3D DIV_ROUND_CLOSEST(val * 1000, scale);=0A=
+-	val =3D val << 4;=0A=
++	u32 reg_val;=0A=
++	long vmax;=0A=
++=0A=
++	vmax =3D DIV_ROUND_CLOSEST_ULL(0xFFFULL * scale, 1000);=0A=
++	val =3D max(val, 0L);=0A=
++	val =3D min(val, vmax);=0A=
++	reg_val =3D min(DIV_ROUND_CLOSEST_ULL((u64)val * 1000, scale),=0A=
++		      0xFFFULL) << 4;=0A=
+ =0A=
+-	return ltc2992_write_reg(st, reg, 2, val);=0A=
++	return ltc2992_write_reg(st, reg, 2, reg_val);=0A=
+ }=0A=
+ =0A=
+ static int ltc2992_read_gpio_alarm(struct ltc2992_state *st, int nr_gpio, =
+u32 attr, long *val)=0A=
+@@ -559,9 +565,15 @@ static int ltc2992_get_current(struct ltc2992_state *s=
+t, u32 reg, u32 channel, l=0A=
+ static int ltc2992_set_current(struct ltc2992_state *st, u32 reg, u32 chan=
+nel, long val)=0A=
+ {=0A=
+ 	u32 reg_val;=0A=
++	long cmax;=0A=
+ =0A=
+-	reg_val =3D DIV_ROUND_CLOSEST(val * st->r_sense_uohm[channel], LTC2992_IA=
+DC_NANOV_LSB);=0A=
+-	reg_val =3D reg_val << 4;=0A=
++	cmax =3D DIV_ROUND_CLOSEST_ULL(0xFFFULL * LTC2992_IADC_NANOV_LSB,=0A=
++				     st->r_sense_uohm[channel]);=0A=
++	val =3D max(val, 0L);=0A=
++	val =3D min(val, cmax);=0A=
++	reg_val =3D min(DIV_ROUND_CLOSEST_ULL((u64)val * st->r_sense_uohm[channel=
+],=0A=
++					    LTC2992_IADC_NANOV_LSB),=0A=
++		      0xFFFULL) << 4;=0A=
+ =0A=
+ 	return ltc2992_write_reg(st, reg, 2, reg_val);=0A=
+ }=0A=
+@@ -634,9 +646,18 @@ static int ltc2992_get_power(struct ltc2992_state *st,=
+ u32 reg, u32 channel, lon=0A=
+ static int ltc2992_set_power(struct ltc2992_state *st, u32 reg, u32 channe=
+l, long val)=0A=
+ {=0A=
+ 	u32 reg_val;=0A=
+-=0A=
+-	reg_val =3D mul_u64_u32_div(val, st->r_sense_uohm[channel] * 1000,=0A=
+-				  LTC2992_VADC_UV_LSB * LTC2992_IADC_NANOV_LSB);=0A=
++	u64 pmax, uval;=0A=
++=0A=
++	uval =3D max(val, 0L);=0A=
++	pmax =3D mul_u64_u32_div(0xFFFFFFULL,=0A=
++			       LTC2992_VADC_UV_LSB / 1000 *=0A=
++			       LTC2992_IADC_NANOV_LSB,=0A=
++			       st->r_sense_uohm[channel]);=0A=
++	uval =3D min(uval, pmax);=0A=
++	reg_val =3D min(mul_u64_u32_div(uval, st->r_sense_uohm[channel],=0A=
++				      LTC2992_VADC_UV_LSB / 1000 *=0A=
++				      LTC2992_IADC_NANOV_LSB),=0A=
++		      0xFFFFFFULL);=0A=
+ =0A=
+ 	return ltc2992_write_reg(st, reg, 3, reg_val);=0A=
+ }=0A=
 -- =0A=
 2.34.1=0A=
 =0A=
