@@ -1,43 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED26239DBD7
-	for <linux-hwmon@vger.kernel.org>; Thu, 16 Apr 2026 10:41:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3982378D9E
+	for <linux-hwmon@vger.kernel.org>; Thu, 16 Apr 2026 10:56:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776336097; cv=none; b=Nql2UUGO4/wPDSqjjoGodWAnjkzyuogAsSP5Lcb5f4ebaBtC60DoE1s0VJlG4vvAmllEBtIe6mqkpvGx3XYFlStG0dOY7+CDsPbYPvwqPloBlQZ5AHjWJ3fGUmTv4z2dHChvvAU60sA0mv2spkRCLAA7cWyi7bPfFgLPb1d5fVI=
+	t=1776336989; cv=none; b=EtDGcVjkNZD9H2SFLDyAVuDn+zKocLVG8Z7CPq9FnMKxK1wEO1VsAbqbiQTY6+rfTihM5kleMZsnhv7oGdAvekYxox9eWZ5BsjvlWSJMcrehNsXHUdSQZFdqUirYGHZteDLSn7qYtO5amFDued7sTlIYdQQLxkuM5OWB4Ai5TYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776336097; c=relaxed/simple;
-	bh=oWuCtCi6f2lyiwnVXftN7G3dXYJXgqzg7IyJ/ivImPw=;
+	s=arc-20240116; t=1776336989; c=relaxed/simple;
+	bh=FW6j9CYLWTfNfSAecoUlKzIdpv85RDKiTX89WGpQG9A=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fCtLKd0c0fe5GQW4JDqANoLc9MOi+Sd2EnbCJSimPHLpoyR5hSp7e5XybhS++8bdYMY0RG7d31buB+ocYNu/p9AOmig3aCPE7xCemjyaxFhIbyN8/bNKnmT/d/NCAI7TJ9iBvb0f0W2uZd1Cy2U/peiBXT/c6QxuGSUGO5fRphY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lrZ8bEkS; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=aM1CeV3pCwGsiF/JbW3DheWOqVDbQwLAeJgN3GQy0eDH6GikQVOVZ6Rc9dzIPOkvts5yjSlcGbToPC80+NKCu9BSP/mCFSiKlpLq4lkqh3D5lKEkR3p6eusDOufqMDShpO7AWi3uUhBvPgEsqJW0RVj5pr8hBPt852K63oy8Kbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oVA34VbE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lrZ8bEkS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63F14C2BCB0;
-	Thu, 16 Apr 2026 10:41:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oVA34VbE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E8EAC2BCAF;
+	Thu, 16 Apr 2026 10:56:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776336096;
-	bh=oWuCtCi6f2lyiwnVXftN7G3dXYJXgqzg7IyJ/ivImPw=;
+	s=k20201202; t=1776336988;
+	bh=FW6j9CYLWTfNfSAecoUlKzIdpv85RDKiTX89WGpQG9A=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=lrZ8bEkSKxpypVR1HBVQLK8v4atQg5vd15aWig23lrgI5RHVvCvdY+PnbpXNJ4jP3
-	 5OgCHARjGzoUr1xJBsc/Mrlgf0jpay3OzB4eVqd81LQsdfZ4m8UEyqAxt5XXXNKLCA
-	 n3XeBBdkp4tIiCPVQQK6YjzuzXUHNlCMoQPEkPurg3SYzbyTk29SoZKR8KXP8isqTD
-	 9M8vY+B7v0CtVRwwakdf3THctIZLGV+tvIqirdrFKmPkWjXOjiV3K3l3Om+PcLXN54
-	 326HfGeVMEQ0gNaxLrUc1JljmL4HlOD7XCevDS6GhBBQXcNzLFcEE4q+8gpkC4mVhP
-	 o0U3N+pDTpl9w==
+	b=oVA34VbEMunLZKq/3EeVHRggpGx6xSK2UPYeh5MOo+cksg2FlUVQ/kc8RbZ7MoYAt
+	 9/9URjyl+C6XaHADptUZMLOzH5OCg1d0RRMp1+YhDu0o0lIzBfjh/P+24nG/DL0zDL
+	 Cmh0QjASfmaOHEwr63d+yZ+LPHSMBzW0sONM/Sp/fylILo7n3zo1/Z8mYv7YrWD89h
+	 7J4hEVgZVeN3ZTSJJntPT5JERjJ6IUXIk88dnCVBbNLzXtZBc5Y9MNJvoYlkJC+K2s
+	 m9J+GcnhzVWQJAubwU7j3KZlwcih3a3WgiDAypeL+bKWwhue0t84O5hm267nTgiKHu
+	 OLoNsjZ1b16cg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/2] hwmon: (lm63) Convert macro to function to avoid
- TOCTOU
+Subject: Re: [PATCH v2 2/2] hwmon: (pmbus/max20830) add driver for max20830
 Reply-To: sashiko@lists.linux.dev
-To: "Gui-Dong Han" <hanguidong02@gmail.com>
+To: "Alexis Czezar Torreno" <alexisczezar.torreno@analog.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260416090752.97392-1-hanguidong02@gmail.com>
-References: <20260416090752.97392-1-hanguidong02@gmail.com>
+In-Reply-To: <20260416-dev_max20830-v2-2-2c7d676dc0bd@analog.com>
+References: <20260416-dev_max20830-v2-2-2c7d676dc0bd@analog.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 16 Apr 2026 10:41:35 +0000
-Message-Id: <20260416104136.63F14C2BCB0@smtp.kernel.org>
+Date: Thu, 16 Apr 2026 10:56:27 +0000
+Message-Id: <20260416105628.7E8EAC2BCAF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -45,89 +44,67 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
 Sashiko AI review found 2 potential issue(s):
-- [High] Incomplete TOCTOU fix allows compiler-induced divide-by-zero crash=
- in `show_fan()`.
-- [Medium] Lockless sysfs read in `show_fan()` causes torn reads and violat=
-es hwmon subsystem locking guidelines.
+- [High] Missing validation for short reads from `i2c_smbus_read_i2c_block_=
+data()` can lead to uninitialized stack memory access and information leak.
+- [Low] Off-by-one error when null-terminating the device ID string truncat=
+es the last character of the payload.
 --
 
-commit ebc10731137639981842ea19f80f0b969db71842
-Author: Gui-Dong Han <hanguidong02@gmail.com>
+commit 479738352902d3197058c3172cee31960249a6a5
+Author: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
 
-hwmon: (lm63) Convert macro to function to avoid TOCTOU
+hwmon: (pmbus/max20830) add driver for max20830
 
-The patch converts the FAN_FROM_REG macro to a static function
-fan_from_reg() to evaluate its argument only once, avoiding a TOCTOU
-race and potential divide-by-zero error.
+This adds support for the MAX20830 step-down DC-DC switching regulator with
+a PMBus interface, allowing monitoring of input/output voltages, output
+current, and temperature.
 
-Link: https://lore.kernel.org/linux-hwmon/CALbr=3DLYJ_ehtp53HXEVkSpYoub+XYS=
-TU8Rg=3Do1xxMJ8=3D5z8B-g@mail.gmail.com/
-
-> diff --git a/drivers/hwmon/lm63.c b/drivers/hwmon/lm63.c
-> index 035176a98ce9c..da132b267c584 100644
-> --- a/drivers/hwmon/lm63.c
-> +++ b/drivers/hwmon/lm63.c
-> @@ -109,8 +109,14 @@ static const unsigned short normal_i2c[] =3D { 0x18,=
- 0x4c, 0x4e, I2C_CLIENT_END };
->   * adapted accordingly.
->   */
-> =20
-> -#define FAN_FROM_REG(reg)	((reg) =3D=3D 0xFFFC || (reg) =3D=3D 0 ? 0 : \
-> -				 5400000 / (reg))
-> +static int fan_from_reg(int reg)
-> +{
-> +	if (reg =3D=3D 0xFFFC || reg =3D=3D 0)
-> +		return 0;
-> +
-> +	return 5400000 / reg;
-> +}
-> +
+> diff --git a/drivers/hwmon/pmbus/max20830.c b/drivers/hwmon/pmbus/max2083=
+0.c
+> new file mode 100644
+> index 0000000000000..21ea8b59150cb
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/max20830.c
 
 [ ... ]
 
-> @@ -333,7 +339,7 @@ static ssize_t show_fan(struct device *dev, struct de=
-vice_attribute *devattr,
->  {
->  	struct sensor_device_attribute *attr =3D to_sensor_dev_attr(devattr);
->  	struct lm63_data *data =3D lm63_update_device(dev);
-> -	return sprintf(buf, "%d\n", FAN_FROM_REG(data->fan[attr->index]));
-> +	return sprintf(buf, "%d\n", fan_from_reg(data->fan[attr->index]));
+> +	ret =3D i2c_smbus_read_i2c_block_data(client, PMBUS_IC_DEVICE_ID,
+> +					    I2C_SMBUS_BLOCK_MAX, buf);
+> +	if (ret < 0)
+> +		return dev_err_probe(&client->dev, ret,
+> +				     "Failed to read IC_DEVICE_ID\n");
 
-Since fan_from_reg() is a small static function, won't the compiler likely
-inline it?
+i2c_smbus_read_i2c_block_data() returns the number of bytes read on success.
+If the I2C controller performs a short read, returning fewer bytes than
+expected, buf will contain uninitialized stack memory for the remaining
+bytes.
 
-If it gets inlined, couldn't the compiler optimize the code by reloading
-data->fan[attr->index] from memory multiple times (once for the 0 check, and
-again for the division)?
+If buf[0] coincidentally contains 9, the len !=3D 9 check below will pass. =
+Could
+this lead to uninitialized stack memory being accessed and printed by
+dev_err_probe() on a mismatch? Should we verify the number of bytes read
+(e.g., ret >=3D 10) instead of just ret < 0?
 
-If lm63_update_device() concurrently writes to data->fan[0] in two non-atom=
-ic
-steps (where the first step can momentarily set the value to 0), and a relo=
-ad
-happens exactly when the value is 0, could this still cause a divide-by-zero
-panic?
+> +
+> +	/* First byte is the block length. */
+> +	len =3D buf[0];
+> +	if (len !=3D 9)
+> +		return dev_err_probe(&client->dev, -ENODEV,
+> +				     "Unexpected IC_DEVICE_ID response\n");
+> +
+> +	buf[len] =3D '\0';
 
-Note that the subsequent patch in the series ('hwmon: (lm63) Add locking
-to avoid TOCTOU') explicitly skips show_fan(), leaving this unfixed.
+Since the payload of length len occupies buf[1] through buf[len], doesn't
+setting buf[len] to '\0' overwrite the final byte of the device ID payload?
 
-Additionally, is it safe to read data->fan locklessly here?
+While this 9th byte is ignored by the 8-byte strncmp() call below, it will
+cause the dev_err_probe() error log to print a truncated string. Should the
+null terminator be placed at buf[len + 1] instead?
 
-According to the hwmon subsystem guidelines, drivers must implement locking
-for attributes registered outside the core-serialized info API. Because this
-driver registers its attributes using devm_hwmon_device_register_with_group=
-s(),
-it should lock its attribute accesses.
-
-Since lm63_update_device() releases the update_lock before returning, and
-data->fan[0] is updated non-atomically in two steps, couldn't a concurrent
-sysfs read observe a partially updated 16-bit state?
-
-Could this torn read result in wildly inaccurate fan speed values being
-reported? The subsequent patch ('hwmon: (lm63) Add locking to avoid TOCTOU')
-fixes similar locking issues but explicitly omits show_fan().
-
->  }
+> +	if (strncmp(buf + 1, "MAX20830", 8))
+> +		return dev_err_probe(&client->dev, -ENODEV,
+> +				     "Unsupported device: '%s'\n", buf + 1);
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416090752.9739=
-2-1-hanguidong02@gmail.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416-dev_max208=
+30-v2-0-2c7d676dc0bd@analog.com?part=3D2
