@@ -1,127 +1,145 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 658342580F3
-	for <linux-hwmon@vger.kernel.org>; Thu, 16 Apr 2026 11:57:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D778839D6D1;
+	Thu, 16 Apr 2026 11:59:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776340637; cv=none; b=NdIaxEFtdbALG2ADdKGAtT0VhXFH6zWBhbHDdfi3uXian1NrCBbTqrB1T1CAfS8Rf5zXK4Fp0GGZGAWD9Ec27FAtaiP1GR3mJDOWJaSyInVGtaJYV0eEBDrV9VYk2K/8ZYpI6qABl3Po9yeyJUsnk+x2VYdGxmaibN27+EWOBOc=
+	t=1776340763; cv=none; b=qFHfouTkNLN47eztD5yWesgXo7EzaKkR6RG8evutD0Ngy0ypezbBNrCnRG0+eAtbsayz8sAaCrCKb61jxBEv+jNldKgM8srcGUttwEDh5lvrG0eBl2mpdGZDfKOuxPZ/6dgwS+vkKrDdD2/thoA/vAjI2LJI8NKpuhmgo9yhatQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776340637; c=relaxed/simple;
-	bh=xr/XOK5ML/9W9/pbY4jCHX54I2ZxVGlMNhOYBdVTWaw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=r1WCGQCBwvkB2m4tdiC0SRqWhlEn3sn9odXpbVo3EBmdoG+6oFPpd9oZAIlCqTU+ekOPQcPm8RX/A5krzI2dhyA23pFjWhNM3j9NBM+B8OOACZ4YfER21S1cCiOeJcvNNMisSx1s7pkafUbQC/jRBa641vZOQxrSwZCOsNT9/lY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZYckWoIk; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776340763; c=relaxed/simple;
+	bh=py7wWhiWmBXGzlBtBHNVd2e7B5dJrS5FkveYE/aeNek=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RrPv4c5ddFFk3wgt85HzUlctA+Ip1R4pJ5Z4q7eqOVTHCTCV8dqDvqTnRoVO7LsPFt7QP+TRjF7EkCZc5gAbtzdY/mSEgcEBJLY8b1Jnk/S0z3M9OI/oZno3/S2hcXH6mqeCys+Jl8MiPZdKH7PtxHOWyP55nJfQAS/zlh1QHkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FKQSpSff; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZYckWoIk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBDAFC2BCAF;
-	Thu, 16 Apr 2026 11:57:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FKQSpSff"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34ACAC2BCAF;
+	Thu, 16 Apr 2026 11:59:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776340637;
-	bh=xr/XOK5ML/9W9/pbY4jCHX54I2ZxVGlMNhOYBdVTWaw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=ZYckWoIkfFkLzIZOuAcYD9UboaoqNKWhur5MNzodZoUXnDV9ooypkGn9PlaXZfPZR
-	 CYF2EtpOYq4oFcMDRJQNxS190r6MmqusajCPmmhO013SdrcjbHaVqeoCq6tYMjidwE
-	 dJhImI6VEnfsjlQIGtnwIk/z/ps4i0wUgPrxE+ysLHHQQJgX3Ef9laLjFa3JIuHnhY
-	 OB5yfbtROMjLnVjxrdxYNplkfdXf8008T/fJ69YLDb/Vn3+U32E0Xlb1lRzg2PQ/nN
-	 XMj8EfE44m5ndVLGFCj3aqDidYoSsEfm8DhvlINZcrjdfJRB1BSYw0xBIUhhV5Hzwt
-	 T/QoDJaLybiCQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/3] hwmon: (adm1031) Hold lock while reading cached
- data
-Reply-To: sashiko@lists.linux.dev
-To: "Gui-Dong Han" <hanguidong02@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260416091754.310-2-hanguidong02@gmail.com>
-References: <20260416091754.310-2-hanguidong02@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 16 Apr 2026 11:57:16 +0000
-Message-Id: <20260416115716.CBDAFC2BCAF@smtp.kernel.org>
+	s=k20201202; t=1776340763;
+	bh=py7wWhiWmBXGzlBtBHNVd2e7B5dJrS5FkveYE/aeNek=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FKQSpSffpiBziKTs2wrKLd54/U5m8YfRAOg7k9HlmeUGd0cqVQsHQmICDl1sS4fWw
+	 7YxEtCqUdJ3/MMg2ymrm4NgXW185Jd+gcoFxX0mGJwVeJenMzT1VFgtZGuoU9cE2lb
+	 hefo+YQtU9/oXiL9AyKUpgbzPvnCDLQCYsPil9MjvqVU+3ONKf15yRSE5eLwxA9lss
+	 IClFfY+vWWpS/vOvKtoMcw9m1/40d0SRkN3aPIWBP0gdwreaAfdJofPlZEemcw8sk8
+	 igPnINMEYDlNRCj7pupcdNWvr31ITdhrXpfd5GI9lpJc2pgWBQiXpx6Nqde0sazqrh
+	 fPlu2DYfBWzrA==
+Date: Thu, 16 Apr 2026 06:59:21 -0500
+From: Rob Herring <robh@kernel.org>
+To: Akhil R <akhilrajeev@nvidia.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Frank Li <Frank.Li@nxp.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	linux-i3c@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+	acpica-devel@lists.linux.dev, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2 01/13] dt-bindings: i3c: Add mipi-i3c-static-method to
+ support SETAASA
+Message-ID: <20260416115921.GA2724261-robh@kernel.org>
+References: <20260409105747.48158-1-akhilrajeev@nvidia.com>
+ <20260409105747.48158-2-akhilrajeev@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260409105747.48158-2-akhilrajeev@nvidia.com>
 
-Sashiko AI review found 2 potential issue(s):
-- [High] Store functions like fan_auto_channel_store() read uninitialized c=
-ached values, which can silently disable hardware monitoring.
-- [High] auto_temp_max_store() corrupts the temp_max cache and causes regis=
-ter desynchronization.
---
+On Thu, Apr 09, 2026 at 04:27:31PM +0530, Akhil R wrote:
+> Add the 'mipi-i3c-static-method' property mentioned in the MIPI I3C
+> Discovery and Configuration Specification [1] to specify which discovery
+> method an I3C device supports during bus initialization. The property is
+> a bitmap, where a bit value of 1 indicates support for that method, and 0
+> indicates lack of support.
+> Bit 0: SETDASA CCC (Direct)
+> Bit 1: SETAASA CCC (Broadcast)
+> Bit 2: Other CCC (vendor / standards extension)
+> All other bits are reserved.
+> 
+> It is specifically needed when an I3C device requires SETAASA for the
+> address assignment. SETDASA will be supported by default if this property
+> is absent, which means for now the property just serves as a flag to
+> enable SETAASA, but keep the property as a bitmap to align with the
+> specifications.
+> 
+> [1] https://www.mipi.org/mipi-disco-for-i3c-download
+> 
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> ---
+>  .../devicetree/bindings/i3c/i3c.yaml          | 30 ++++++++++++++++---
+>  1 file changed, 26 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/i3c/i3c.yaml b/Documentation/devicetree/bindings/i3c/i3c.yaml
+> index e25fa72fd785..1705d90d4d79 100644
+> --- a/Documentation/devicetree/bindings/i3c/i3c.yaml
+> +++ b/Documentation/devicetree/bindings/i3c/i3c.yaml
+> @@ -31,10 +31,12 @@ properties:
+>        described in the device tree, which in turn means we have to describe
+>        I3C devices.
+>  
+> -      Another use case for describing an I3C device in the device tree is when
+> -      this I3C device has a static I2C address and we want to assign it a
+> -      specific I3C dynamic address before the DAA takes place (so that other
+> -      devices on the bus can't take this dynamic address).
+> +      Other use-cases for describing an I3C device in the device tree are:
+> +      - When the I3C device has a static I2C address and we want to assign
+> +        it a specific I3C dynamic address before the DAA takes place (so
+> +        that other devices on the bus can't take this dynamic address).
+> +      - When the I3C device requires SETAASA for its discovery and uses a
+> +        pre-defined static address.
+>  
+>    "#size-cells":
+>      const: 0
+> @@ -147,6 +149,26 @@ patternProperties:
+>            through SETDASA. If static address is not present, this address is assigned
+>            through SETNEWDA after assigning a temporary address via ENTDAA.
+>  
+> +      mipi-i3c-static-method:
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        minimum: 0x1
+> +        maximum: 0xff
 
-commit 8f551aed0a746551e7fda3272d5c7e3fcaa2b090
-Author: Gui-Dong Han <hanguidong02@gmail.com>
+Looks like the max is 0x7 currently.
 
-hwmon: (adm1031) Hold lock while reading cached data
+> +        default: 1
+> +        description: |
+> +          Bitmap describing which methods of Dynamic Address Assignment from a
+> +          static address are supported by this I3C Target. A bit value of 1
+> +          indicates support for that method, and 0 indicates lack of support.
 
-The patch addresses TOCTOU races by holding data->update_lock while
-accessing cached values in sysfs show and store functions.
+blank line here.
 
-Link: https://lore.kernel.org/linux-hwmon/CALbr=3DLYJ_ehtp53HXEVkSpYoub+XYS=
-TU8Rg=3Do1xxMJ8=3D5z8B-g@mail.gmail.com/
+> +          Bit 0: SETDASA CCC (Direct)
+> +          Bit 1: SETAASA CCC (Broadcast)
+> +          Bit 2: Other CCC (vendor / standards extension)
+> +          All other bits are reserved.
 
-> diff --git a/drivers/hwmon/adm1031.c b/drivers/hwmon/adm1031.c
-> index 0551f815233d9..887fba9ea149f 100644
-> --- a/drivers/hwmon/adm1031.c
-> +++ b/drivers/hwmon/adm1031.c
-> @@ -350,9 +350,8 @@ fan_auto_channel_store(struct device *dev, struct dev=
-ice_attribute *attr,
->  	if (ret)
->  		return ret;
-> =20
-> -	old_fan_mode =3D data->conf1;
-> -
->  	mutex_lock(&data->update_lock);
-> +	old_fan_mode =3D data->conf1;
+Indent these by 2 more.
 
-This is not a regression from this patch, but does this store function read
-uninitialized cached values if it is called before adm1031_update_device()
-has populated them?
-
-The driver allocates its data structure with devm_kzalloc() during probe,
-initializing the cache variables (like data->conf1) to zero, but
-adm1031_update_device() is not called during probe to populate them.
-
-If a user writes to this sysfs attribute before any reads, the store
-function performs a read-modify-write using the zeroed data->conf1. When it
-writes data->conf1 back to the ADM1031_REG_CONF1 register, it clears the
-ADM1031_CONF1_MONITOR_ENABLE bit (0x01).
-
-Could this silently disable the chip's hardware monitoring and thermal
-protection?
-
-[ ... ]
-
-Additionally, there appears to be a separate pre-existing regression in
-auto_temp_max_store():
-
-drivers/hwmon/adm1031.c:auto_temp_max_store() {
-    ...
-	val =3D clamp_val(val, 0, 127000);
-	mutex_lock(&data->update_lock);
-	data->temp_max[nr] =3D AUTO_TEMP_MAX_TO_REG(val, data->auto_temp[nr],
-						  data->pwm[nr]);
-	adm1031_write_value(client, ADM1031_REG_AUTO_TEMP(nr),
-			    data->temp_max[nr]);
-	mutex_unlock(&data->update_lock);
-    ...
-}
-
-Does this corrupt the temp_max cache and cause register desynchronization?
-
-The calculated new automatic temperature limit is assigned to
-data->temp_max[nr] instead of data->auto_temp[nr], corrupting the cache
-used by temp_max_show().
-
-Because data->auto_temp[nr] is left stale, if auto_temp_min_store() is
-called before the cache expires, it will read the old data->auto_temp[nr]
-value and write it back to ADM1031_REG_AUTO_TEMP.
-
-Could this cause the hardware to silently revert the max temperature limit
-just set by the user?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416091754.310-=
-1-hanguidong02@gmail.com?part=3D2
+> +
+> +          This property follows the MIPI I3C specification. The primary use
+> +          of this property is to indicate support for SETAASA, i.e Bit 1, but
+> +          will allow all values so that it is aligned with the specifications.
+> +          SETDASA will remain as the default method even if this property is
+> +          not present.
+> +
+>      required:
+>        - reg
+>  
+> -- 
+> 2.50.1
+> 
