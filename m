@@ -1,206 +1,164 @@
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744891E531
-	for <linux-hwmon@vger.kernel.org>; Thu, 16 Apr 2026 13:15:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA5D01B4156
+	for <linux-hwmon@vger.kernel.org>; Thu, 16 Apr 2026 13:22:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.174
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776345357; cv=pass; b=KTIK5aSS9Z3Ui5I84eFIz2AbVZyo4i4zoPmsx2HuBYjl+FQExm/OxjrlCiPj4CGJvSoym89PZDVtuLuag8aT0haSSEmtTzToL0+2cksW/NbLTITCcn3aCpsfz5/mo+CHLIo98weyijUcxM/t9KYdszNQ5zsSJJF4pnHI4vN2frI=
+	t=1776345757; cv=pass; b=E8zjAepKBrRcWOMhRysNbT5BVRYkyoHQOa6+jnjQ3BBNZ/uDDJ/W0OWJxnqWf/oMTq7XpXP2OYzgoWIBFnCDtZomVXqnQwiwyhYQt/TTJ7cRVHQ9KcjkWtZlWMS9/25C2ZM1gsiCkAQ7+XgqhTOcazya/VSNc22zx/LSQklFbdE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776345357; c=relaxed/simple;
-	bh=RQ/nzNjGxdlPsgg0WN5PpATLVNP03uCuIwLlbSw2FgE=;
+	s=arc-20240116; t=1776345757; c=relaxed/simple;
+	bh=f3Z+4BHqD6MeOvKeK8Q6R3+N7O5qpXneON+iSIaOqzo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bddloWkn93cbeICs1oyhBUMWwZUQbI2h7Eio1E+Ktlc+qKtgWl69LweUAXPqw/hwsKNqbjz7BibE4svP54u5OZqJJU7eJKrl+3eR3Dpn3lxmyW7+BWr5MEFcjkBgAswegjXkxWxWdQExD41q7IgsmzT+J0nu7MKNeqsHFB3XkA0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IcDnFMz8; arc=pass smtp.client-ip=209.85.167.179
+	 To:Cc:Content-Type; b=f3y5Nsdz1hQM/nIgdXyaF2roDD5EfenQSB9KEgUlM3tVokyRmc9nkIdYxKQ8wBCPiH4s0elsy+TlxdKh+gBK1OIZ0hp5jOTxPXzI1+Gtume8OajlMaUEfPdFsr7TnKRFo6OGu3ghlNtNsbrxFot5YCbiMrPWuqNUmvP5nGzlPNk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fRSZGPjr; arc=pass smtp.client-ip=209.85.167.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IcDnFMz8"
-Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-464bc03efd8so4534159b6e.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 16 Apr 2026 06:15:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776345355; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fRSZGPjr"
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-4670464029eso4507174b6e.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 16 Apr 2026 06:22:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776345755; cv=none;
         d=google.com; s=arc-20240605;
-        b=M/XZXPnD/3oX3yVCySu7il79jDjbafPL4x2tJfuwXjXn75I0Q1hz+6DYlpKWCeNRJr
-         5NciBFtcuWfVToQs3+bLASwRP/03GBPbCSSRbFYk1kajRhvLIfIX231D1dBqUXQVArur
-         8Vm5XdD7PqVIdsNu/Jx4peMHacX/ELWlfRqFrlFx+qoyE7RNUzFO1kc9E2XX7g34RjiD
-         pfTEznnLF2F/j2FBnxA1kqtJMZ2qLYHvF3ttlAWEQfCrxUb94KZsGMqKPacs5fGIx9oE
-         Q5xhyyQuFrlE/NjRpqm5f4ajFUptcb/uwUx5ehmmGnh5HVbtbejOJyguxPsR285XEBJh
-         RzRQ==
+        b=iV9cvagUm4u7D70KpCX/nQqTAp1ppYyIOUPAKgfhPwI/kHrgachMDlNEF8KqVDLTe/
+         tJkbgFa4LPZ1wR7EDZzNQQOESpv79d7u+xRIOwA54J/5/UStUhd8wnW0lYmr0LrklIbB
+         7NEutGaH0PizXyXiRe23wv6iAjsSAUEX5mvu8YgRjFwspt7jWpOIez0m6YCa9V1ejlWA
+         NyVZSjV3JyMfT7kNg1ixqnqAYSy8PUM9cv1f+M2xjJpWkfHZyhpepm1hdfNWA7Rs0HFg
+         BVyv5MpDu8mq6E/1JC6JEtE3wsv+aKhMHc6gG4Qv1Zzw9xhLkhYcOhmbeQZfOynl8DQE
+         vJGQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=eNxy/oU7oyMIUDrrRH+z7VVC6MHx4Yy/gG9DvYfA+T0=;
+        bh=f3Z+4BHqD6MeOvKeK8Q6R3+N7O5qpXneON+iSIaOqzo=;
         fh=LIRAVtNkvFebIJTmd3sXQRhyI56KpQNcHjhAac0CiC0=;
-        b=aFfYpzkw8NUpTy2k/+hf5ravgCPaEwno/psR/Wfz20z0Eiay6SozJOGyXMzqK3mD+b
-         pb43Cbbj3WVgcGEZ2oz3l5P5CEHzWEduZxFsPrtfW3FgI5xZkzViWMWHW+Vt25D6IX0e
-         KkIdL3LE1To2q0Fh0nc8XfeJ1IS/rotXWFj7JB9Dw2HuhzCFRYwernpU29axWW/OJ8Gx
-         FrhSX4inIC3SigebHqvsHlR25qTd3AuOFjZXeNpYOEKV4y9YHnySUrV6zcdM7NkW/w0+
-         x/xVNMzpTimIDmjwcJfFLtPpHnix3UxLHA3unsWMN4uhNnDWoaOsLd4rMFU2gZBbXwhS
-         Bndw==;
+        b=asw58loDQ0u/1t3w4cvoLVgrzxl2wGYBIM8AVvjjlJBRQH3Gw/eTicFGnplyebDD1K
+         SNMf6lu0KWiV/Mr1VwRVRmbSOddJ5H86gcePdDvJMOR0Ti8PYMHM5zvKAR1u5XGRjxps
+         DdxbAwl+C9+gIFDkQB4Udfwt8pNUIRPCL+S9cP0mNsZ49Iaj8eSl3SHZUCWMFW3Uc07D
+         hG7Eeb7YpLlWtXO7j4I4RUj74I5DWgIqnuOBxFv3AzqL6McwqsTifDdY5z1cus+mI1zu
+         V/w4xwyTNcQ827gv2+XoSbpE2O5+zSmfW35A4iLgto+ykdCVzwDZ/VbKRq8w4EUq6/nz
+         4L3g==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776345355; x=1776950155; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776345755; x=1776950555; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eNxy/oU7oyMIUDrrRH+z7VVC6MHx4Yy/gG9DvYfA+T0=;
-        b=IcDnFMz84v5290FIkJtBgaol6neHiWnu2nKST+P5AKQUuvjh2wk1cEllk0FqteTcOb
-         Ecyf5gcayEF4kK57RtUP3aRHGEHxShB19u4x821Rh0F1qyAEv/aSa2AEL6zkKAmRTgz+
-         kB4yT6cj5QCh0U9KEQnkgR8avLnEiHza/XanX0gIh+nEOwR2pcIWdq3VSYHD/HBX/M8l
-         FMW1dv7HgN6GoLmwvzM8JSL9VBuWTEYEusnbBQogrR8V5tbOLCC2ZDIFDY1zYqxL8osp
-         1urs9Zm5kbucjzcQMPV6hXt9UH+Mxhw8jpMWX5vXoWZSRJ7x6QxxVm0dGiilyI0pHlpn
-         tieQ==
+        bh=f3Z+4BHqD6MeOvKeK8Q6R3+N7O5qpXneON+iSIaOqzo=;
+        b=fRSZGPjr7rAODBd2WMKLOZHeKc4hKxkF26u/X5yPa02PXoK/jkCM+M21HHx9qduPA3
+         EU3ySr8/Nc+D9ZFNw9vQgd5x6UBY29H/q9bJCU/DIOnOZBXkCflOkU7J4cn67cJVFMvq
+         /uCMWJsYPFRwxE4R9eW/B5u1kUHeeGzdJi7KPe6IHqcdlrOYkC1LnvZUjSaY50ccg5Ag
+         HWy0EoiNxKUxZPtk0TifHawOIx/XxpVJKdWVbsafo9DojNf9wSgfxzULPJf35S54v8EM
+         0e3YdboEeOLBl4A/uKpG31/SMNkMIMn7Lw216f16yIr0Dn55Fckjw6i6Ud0PDCjBqK7g
+         FA1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776345355; x=1776950155;
+        d=1e100.net; s=20251104; t=1776345755; x=1776950555;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=eNxy/oU7oyMIUDrrRH+z7VVC6MHx4Yy/gG9DvYfA+T0=;
-        b=Sdv00YtUT7wnF3RxbcJ+dIcoeSEwr16n1hi3piwdxArHTIWSXQPDg7smSs2hEIwRwy
-         ZDfxrdj4WGU8IdNqlFwzBoMhQ7bZuU2kKXbffvXrvjrmxRFobfY9yRuOA2ozvJGBkgud
-         uQB6BuAG719L+ftp2eVkoB+Tsbno4q1w7PRkZxH9yWo8+AC+GBnYAXM6JvGTlrcirear
-         ZkbqPQ7gCbnXEBvh59Zc07E4i64CrIcEyTLxAx/fO9LfGyhg9ckEN7Pfzj6pF8y6YHYP
-         xTsQJNk6EBqkBEmUewGPyEoE5ownOQX2wNaxgeXxnczZa/+3gymyYfEuHH1Hd6K8yp/t
-         yqaQ==
-X-Gm-Message-State: AOJu0YwAiazAv+Wj5Z9h2A52TNBhTPjULHsGH10cOlcKMTWwLkPyihti
-	aPBOA3gb6pc6VzqLlH09ETjzMHhjLR+7cQiGKZ8eTEGWuv5BW97SoOGXkC+qTaCV4Ft6Jk/MQyR
-	WQjy/QiFprzNL7ZhXZYDUcXA0nV2bCleppTRJ
-X-Gm-Gg: AeBDieu63fcmIL+U3Wf7B4m3SzAfTMWvw02xTkcug4qqh3igdfRNG8UHn47KoLy2gSS
-	rVWVlCBjOUIFbywiv6i0xjYlvHpG9og5BdWsBG+HXnrTI8+GBrkZpPriJazm2r3vx/GeVtU2LH6
-	Oj8lEgu0X9QWfd3rADo2cG7GurFbSEmJfN8NlBNrcz9twgS6khRcAb1va8veY0zI02ukTmmNNnI
-	G1UvH4wHJPlJTkyLUMbn/FJJ1zZAZFbUtXXg6VrRwsEM5sxwwtS116IsoNhQ5ALiize0amGHqRe
-	9Nt0eF5/WYw5VQihpEz3lA0wtWstULik7ZKig2AYOhvwQVSciOStHYmLqVvA13qr1AtWJGdOmi5
-	K+fdY+Ss7CahjMa0vGBKzAZjItZnueTbS0xRldq4=
-X-Received: by 2002:a05:6808:c168:b0:467:1f38:bc1a with SMTP id
- 5614622812f47-4789d95209bmr12935100b6e.7.1776345355123; Thu, 16 Apr 2026
- 06:15:55 -0700 (PDT)
+        bh=f3Z+4BHqD6MeOvKeK8Q6R3+N7O5qpXneON+iSIaOqzo=;
+        b=DtonuIwjFEnjRfX3CzITeY9g2sRwFM79PxuUgqFjW3cKUiuMJ+Aj4+GFvFZSzwQDbg
+         2z7KN50i3Nm6+D6U4BVjcXTlNFiDRyFUFKAMpNCUiKzOSsa/7i3Ccf/0OqhjASej/BX6
+         DTgJNHS72TNz/7GqKkGnM3984XGyHavKtzq+8x+Pku1b5vG97xMdyBz3UAtvp8sMpNQi
+         H+cTtkHUFqInhwAhWqEAjFDiVBZYZHG5Q+8aqLm2gJbCm+xPrS9xzD7sBcwrl7YA8plT
+         r/LnNPzQkFdArRgvdOXQd2sLfVVsEbElv86XFWJvc7UZB6o+jWfuzkG8QwCNsTEjKnAj
+         WXzQ==
+X-Gm-Message-State: AOJu0YzG/oHcnYvedrqRYHzYK8P3TXzZrwV3TH+LsgJTtzH5+Hf+10Xq
+	Fa20YwRXI1BAFCDDuEwqv0tpIisHx4Wj2PgDSiUbwrV8eYcHE1xGzORFQNkWuBouQhARjZ0rxbQ
+	a3hLLGv+T201N70cqbmHnHgZ36h7b2Pk=
+X-Gm-Gg: AeBDietrTHMaTMOQOx29T24kFWtrPwvn9jbuoxOb2f3CSHQyqSUE/VIoCZXrlVXYgJz
+	aFxRTmYk4pgr1QZE7oHCLt9/ev+Ev0kNVdQWotW287cdynJeaf5NcsjmxUMBYIV0d1XZBz7Ko88
+	hUDFVlKmFgk1q8sQGf7XXEAjokG4y0A7rL8QE5JRL2SnUy3pStHGvE1TMbfF7LtXItwjfzXRHxd
+	qajpKE4NWwDrd3q1QI4YFKdcXXwMg/E70mPYsqnP8x/jDZzWDXH+BZN4/S0vD9ubBMlngFei4VI
+	dGus08M5H5VG2CwmIfoms7tvaR2Ai/lUeCRzIZAl211/kVVraeDEuI+Jy4+9OlZMgyei4+3oYiH
+	Hkt7+enlNQWBETWeKYQUwCU9XeQ2q
+X-Received: by 2002:a05:6808:6a83:b0:45e:f443:dc3d with SMTP id
+ 5614622812f47-4789d04388emr13732748b6e.13.1776345754673; Thu, 16 Apr 2026
+ 06:22:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260416090752.97392-1-hanguidong02@gmail.com> <20260416104136.63F14C2BCB0@smtp.kernel.org>
-In-Reply-To: <20260416104136.63F14C2BCB0@smtp.kernel.org>
+References: <20260416090752.97392-2-hanguidong02@gmail.com> <20260416114435.061DFC2BCB3@smtp.kernel.org>
+In-Reply-To: <20260416114435.061DFC2BCB3@smtp.kernel.org>
 From: Gui-Dong Han <hanguidong02@gmail.com>
-Date: Thu, 16 Apr 2026 21:15:42 +0800
-X-Gm-Features: AQROBzD_hzeE2Uyez9rAZ-m57cvFs7xG0KJvMe0ElfA13adQFTx8Hf3KB28IHg8
-Message-ID: <CALbr=LZimkhj_R889nV5UxSjwNraB2reNgWF67_9j=r+g=2Rfw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] hwmon: (lm63) Convert macro to function to avoid TOCTOU
+Date: Thu, 16 Apr 2026 21:22:23 +0800
+X-Gm-Features: AQROBzBoCcOhtuZ9hh_NvsyGiEh5G0MEM9h_zh9A6jMJHAtvEfEyHyfBlqaWoDM
+Message-ID: <CALbr=Lb4v-eEh82eG-_BqESAWn6uaydzV5QEGeUpLwB6a=dg-g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] hwmon: (lm63) Add locking to avoid TOCTOU
 To: sashiko@lists.linux.dev
 Cc: linux-hwmon@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 16, 2026 at 6:41=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+On Thu, Apr 16, 2026 at 7:44=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
 >
-> Sashiko AI review found 2 potential issue(s):
-> - [High] Incomplete TOCTOU fix allows compiler-induced divide-by-zero cra=
-sh in `show_fan()`.
-> - [Medium] Lockless sysfs read in `show_fan()` causes torn reads and viol=
-ates hwmon subsystem locking guidelines.
+> Sashiko AI review found 3 potential issue(s):
+> - [High] Pre-existing Torn Read Race Condition in show_fan() causes massi=
+ve fan speed spikes
+> - [High] Pre-existing Uninitialized Cache Read in temp2_crit_hyst_store()=
+ corrupts hardware thermal limits
+> - [Medium] Incomplete Fix: Unaddressed TOCTOU Races in temp2_crit_hyst_sh=
+ow() and show_lut_temp_hyst()
+
+Thanks for the detailed review.
+
+I will add the missing locks for show_fan() and the hysteresis show
+functions in v2.
+
+The potential uninitialized cache read in temp2_crit_hyst_store()
+needs further investigation. If it is a bug, I will address it in a
+separate patch, as it is a pre-existing issue unrelated to this
+series.
+
 > --
 >
-> commit ebc10731137639981842ea19f80f0b969db71842
+> commit 1233dd514546736dfbbf09561bf360360c5933ca
 > Author: Gui-Dong Han <hanguidong02@gmail.com>
 >
-> hwmon: (lm63) Convert macro to function to avoid TOCTOU
+> hwmon: (lm63) Add locking to avoid TOCTOU
 >
-> The patch converts the FAN_FROM_REG macro to a static function
-> fan_from_reg() to evaluate its argument only once, avoiding a TOCTOU
-> race and potential divide-by-zero error.
+> This commit adds locking to show_pwm1() and show_temp11() to prevent
+> TOCTOU races when reading multiple cached values. It also states that
+> other functions in the driver were checked for similar issues.
 >
 > Link: https://lore.kernel.org/linux-hwmon/CALbr=3DLYJ_ehtp53HXEVkSpYoub+X=
 YSTU8Rg=3Do1xxMJ8=3D5z8B-g@mail.gmail.com/
 >
-> > diff --git a/drivers/hwmon/lm63.c b/drivers/hwmon/lm63.c
-> > index 035176a98ce9c..da132b267c584 100644
-> > --- a/drivers/hwmon/lm63.c
-> > +++ b/drivers/hwmon/lm63.c
-> > @@ -109,8 +109,14 @@ static const unsigned short normal_i2c[] =3D { 0x1=
-8, 0x4c, 0x4e, I2C_CLIENT_END };
-> >   * adapted accordingly.
-> >   */
-> >
-> > -#define FAN_FROM_REG(reg)    ((reg) =3D=3D 0xFFFC || (reg) =3D=3D 0 ? =
-0 : \
-> > -                              5400000 / (reg))
-> > +static int fan_from_reg(int reg)
-> > +{
-> > +     if (reg =3D=3D 0xFFFC || reg =3D=3D 0)
-> > +             return 0;
-> > +
-> > +     return 5400000 / reg;
-> > +}
-> > +
+> > Check the other functions in the driver as well. Keep them unchanged
+> > because they either do not access shared cached values multiple times
+> > or already do so under lock.
 >
-> [ ... ]
+> Is this description accurate?
 >
-> > @@ -333,7 +339,7 @@ static ssize_t show_fan(struct device *dev, struct =
-device_attribute *devattr,
-> >  {
-> >       struct sensor_device_attribute *attr =3D to_sensor_dev_attr(devat=
-tr);
-> >       struct lm63_data *data =3D lm63_update_device(dev);
-> > -     return sprintf(buf, "%d\n", FAN_FROM_REG(data->fan[attr->index]))=
-;
-> > +     return sprintf(buf, "%d\n", fan_from_reg(data->fan[attr->index]))=
-;
+> Looking at temp2_crit_hyst_show(), it calculates its value by reading
+> both data->temp8[2] and data->temp2_crit_hyst. Similarly,
+> show_lut_temp_hyst() reads data->temp8[attr->index] and
+> data->lut_temp_hyst. Because neither function holds data->update_lock,
+> can a concurrent cache update cause them to fetch a mixed snapshot (e.g.,=
+ a
+> newly updated base temperature but a stale hysteresis offset), resulting =
+in
+> corrupted absolute hysteresis values returned to userspace?
 >
-> Since fan_from_reg() is a small static function, won't the compiler likel=
-y
-> inline it?
+> Also, looking at show_fan(), it accesses data->fan[attr->index] without
+> holding data->update_lock. In lm63_update_device(), data->fan[0] is
+> populated via two separate non-atomic assignments. Can show_fan() read th=
+e
+> intermediate torn state where the MSB is still 0, causing the calculation
+> (5400000 / reg) to report massive, incorrect fan speed spikes?
 >
-> If it gets inlined, couldn't the compiler optimize the code by reloading
-> data->fan[attr->index] from memory multiple times (once for the 0 check, =
-and
-> again for the division)?
-
-I am not an expert on compiler optimization. I consulted a few
-different models and got mixed answers. Unlike a macro with a side
-effect (like ++), an inlined function doesn't strictly force multiple
-memory fetches, so it's a bit ambiguous.
-
->
-> If lm63_update_device() concurrently writes to data->fan[0] in two non-at=
-omic
-> steps (where the first step can momentarily set the value to 0), and a re=
-load
-> happens exactly when the value is 0, could this still cause a divide-by-z=
-ero
-> panic?
->
-> Note that the subsequent patch in the series ('hwmon: (lm63) Add locking
-> to avoid TOCTOU') explicitly skips show_fan(), leaving this unfixed.
->
-> Additionally, is it safe to read data->fan locklessly here?
->
-> According to the hwmon subsystem guidelines, drivers must implement locki=
-ng
-> for attributes registered outside the core-serialized info API. Because t=
-his
-> driver registers its attributes using devm_hwmon_device_register_with_gro=
-ups(),
-> it should lock its attribute accesses.
->
-> Since lm63_update_device() releases the update_lock before returning, and
-> data->fan[0] is updated non-atomically in two steps, couldn't a concurren=
-t
-> sysfs read observe a partially updated 16-bit state?
-
-Your point about data->fan[0] being updated non-atomically in two
-steps is a very nice finding. This gives me a solid reason to just add
-locking to show_fan() and fix the torn read properly.
-
->
-> Could this torn read result in wildly inaccurate fan speed values being
-> reported? The subsequent patch ('hwmon: (lm63) Add locking to avoid TOCTO=
-U')
-> fixes similar locking issues but explicitly omits show_fan().
->
-> >  }
+> Finally, in temp2_crit_hyst_store(), data is retrieved via
+> dev_get_drvdata(dev) without calling lm63_update_device() to populate the
+> cache. If a user writes to the sysfs node before any sensor read operatio=
+n
+> has occurred, data->temp8[2] will be 0. Does this cause the driver to
+> calculate the relative hysteresis based on a critical temperature of 0
+> degrees instead of the real thermal limit, corrupting the chip's thermal
+> protection configuration when written to the hardware register?
 >
 > --
 > Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416090752.97=
-392-1-hanguidong02@gmail.com?part=3D1
+392-1-hanguidong02@gmail.com?part=3D2
