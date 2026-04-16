@@ -1,97 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81A71373BEE
-	for <linux-hwmon@vger.kernel.org>; Thu, 16 Apr 2026 11:44:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 658342580F3
+	for <linux-hwmon@vger.kernel.org>; Thu, 16 Apr 2026 11:57:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776339875; cv=none; b=kWeLLAH0VoEUUEdTcUKHyFMu+4jv5k0dF3rsFI5myVnAnZIxyX1bH2jti2S7lzAJdtGe6A04sLHs3zAAkFZZGtdHVDJNp2wamLNOefnmYe0XVzVMX2oELCjAq/4X1J3Pic7O4HJZX3PO8P9eDM1Y1adPXdrVzQsNISKeGCTOr7c=
+	t=1776340637; cv=none; b=NdIaxEFtdbALG2ADdKGAtT0VhXFH6zWBhbHDdfi3uXian1NrCBbTqrB1T1CAfS8Rf5zXK4Fp0GGZGAWD9Ec27FAtaiP1GR3mJDOWJaSyInVGtaJYV0eEBDrV9VYk2K/8ZYpI6qABl3Po9yeyJUsnk+x2VYdGxmaibN27+EWOBOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776339875; c=relaxed/simple;
-	bh=s1wef89LZ7VeOQQ48Olol8Cg0u51MYLN96bTiuhIhbg=;
+	s=arc-20240116; t=1776340637; c=relaxed/simple;
+	bh=xr/XOK5ML/9W9/pbY4jCHX54I2ZxVGlMNhOYBdVTWaw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=MSuhFLVC9Z2DZI/0gaVkmO0FHx1wB9DxIlXA1AQ4OK/F62jczl3YOFCGMz24fUDlsrnjfZVro2LQT6iqxtZPlxZUZvfvFanEJ9PBctYD8iCSesxQYQCiw7yiu/ZoOf8D/Z9w/h0wkD5Eti5y3deGVMSJVWTH9DcdiEdLMyOSGZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p4aMYe3o; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=r1WCGQCBwvkB2m4tdiC0SRqWhlEn3sn9odXpbVo3EBmdoG+6oFPpd9oZAIlCqTU+ekOPQcPm8RX/A5krzI2dhyA23pFjWhNM3j9NBM+B8OOACZ4YfER21S1cCiOeJcvNNMisSx1s7pkafUbQC/jRBa641vZOQxrSwZCOsNT9/lY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZYckWoIk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p4aMYe3o"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 061DFC2BCB3;
-	Thu, 16 Apr 2026 11:44:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZYckWoIk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBDAFC2BCAF;
+	Thu, 16 Apr 2026 11:57:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776339875;
-	bh=s1wef89LZ7VeOQQ48Olol8Cg0u51MYLN96bTiuhIhbg=;
+	s=k20201202; t=1776340637;
+	bh=xr/XOK5ML/9W9/pbY4jCHX54I2ZxVGlMNhOYBdVTWaw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=p4aMYe3oWccbL22sCFnmnl+ELJoHEQHZE4ycggbwhYvLGuwgNUqBBwG9Ovb2Xmm26
-	 0IkbdFZkSSW3Skck0xE1cqr1ojWS4d748tVPnM2V+Uu6zWyQP74BpCTfXTIeMYTztr
-	 pmNCIpRvywtC0Mq8ATHzS0udGoKRKEKZ/RA2iQ+vmX/E9S+jojeKFFQ/QBg4dZZSa4
-	 +TffR+GuA6WGaibfrI/ER+5bKa4CbtvPDV8a7Oj77K+55Vel1KupbSGQVw/pOvJ+jM
-	 waDePZ8gNkGDeiC9g/xmZPMfMNeS3iIsBLu5VuAwh6/OX6VUFF1a/hoxL0dA5c0Vel
-	 IApr6QaXMAwRA==
+	b=ZYckWoIkfFkLzIZOuAcYD9UboaoqNKWhur5MNzodZoUXnDV9ooypkGn9PlaXZfPZR
+	 CYF2EtpOYq4oFcMDRJQNxS190r6MmqusajCPmmhO013SdrcjbHaVqeoCq6tYMjidwE
+	 dJhImI6VEnfsjlQIGtnwIk/z/ps4i0wUgPrxE+ysLHHQQJgX3Ef9laLjFa3JIuHnhY
+	 OB5yfbtROMjLnVjxrdxYNplkfdXf8008T/fJ69YLDb/Vn3+U32E0Xlb1lRzg2PQ/nN
+	 XMj8EfE44m5ndVLGFCj3aqDidYoSsEfm8DhvlINZcrjdfJRB1BSYw0xBIUhhV5Hzwt
+	 T/QoDJaLybiCQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/2] hwmon: (lm63) Add locking to avoid TOCTOU
+Subject: Re: [PATCH 2/3] hwmon: (adm1031) Hold lock while reading cached
+ data
 Reply-To: sashiko@lists.linux.dev
 To: "Gui-Dong Han" <hanguidong02@gmail.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260416090752.97392-2-hanguidong02@gmail.com>
-References: <20260416090752.97392-2-hanguidong02@gmail.com>
+In-Reply-To: <20260416091754.310-2-hanguidong02@gmail.com>
+References: <20260416091754.310-2-hanguidong02@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 16 Apr 2026 11:44:34 +0000
-Message-Id: <20260416114435.061DFC2BCB3@smtp.kernel.org>
+Date: Thu, 16 Apr 2026 11:57:16 +0000
+Message-Id: <20260416115716.CBDAFC2BCAF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 3 potential issue(s):
-- [High] Pre-existing Torn Read Race Condition in show_fan() causes massive=
- fan speed spikes
-- [High] Pre-existing Uninitialized Cache Read in temp2_crit_hyst_store() c=
-orrupts hardware thermal limits
-- [Medium] Incomplete Fix: Unaddressed TOCTOU Races in temp2_crit_hyst_show=
-() and show_lut_temp_hyst()
+Sashiko AI review found 2 potential issue(s):
+- [High] Store functions like fan_auto_channel_store() read uninitialized c=
+ached values, which can silently disable hardware monitoring.
+- [High] auto_temp_max_store() corrupts the temp_max cache and causes regis=
+ter desynchronization.
 --
 
-commit 1233dd514546736dfbbf09561bf360360c5933ca
+commit 8f551aed0a746551e7fda3272d5c7e3fcaa2b090
 Author: Gui-Dong Han <hanguidong02@gmail.com>
 
-hwmon: (lm63) Add locking to avoid TOCTOU
+hwmon: (adm1031) Hold lock while reading cached data
 
-This commit adds locking to show_pwm1() and show_temp11() to prevent
-TOCTOU races when reading multiple cached values. It also states that
-other functions in the driver were checked for similar issues.
+The patch addresses TOCTOU races by holding data->update_lock while
+accessing cached values in sysfs show and store functions.
 
 Link: https://lore.kernel.org/linux-hwmon/CALbr=3DLYJ_ehtp53HXEVkSpYoub+XYS=
 TU8Rg=3Do1xxMJ8=3D5z8B-g@mail.gmail.com/
 
-> Check the other functions in the driver as well. Keep them unchanged
-> because they either do not access shared cached values multiple times
-> or already do so under lock.
+> diff --git a/drivers/hwmon/adm1031.c b/drivers/hwmon/adm1031.c
+> index 0551f815233d9..887fba9ea149f 100644
+> --- a/drivers/hwmon/adm1031.c
+> +++ b/drivers/hwmon/adm1031.c
+> @@ -350,9 +350,8 @@ fan_auto_channel_store(struct device *dev, struct dev=
+ice_attribute *attr,
+>  	if (ret)
+>  		return ret;
+> =20
+> -	old_fan_mode =3D data->conf1;
+> -
+>  	mutex_lock(&data->update_lock);
+> +	old_fan_mode =3D data->conf1;
 
-Is this description accurate?
+This is not a regression from this patch, but does this store function read
+uninitialized cached values if it is called before adm1031_update_device()
+has populated them?
 
-Looking at temp2_crit_hyst_show(), it calculates its value by reading
-both data->temp8[2] and data->temp2_crit_hyst. Similarly,
-show_lut_temp_hyst() reads data->temp8[attr->index] and
-data->lut_temp_hyst. Because neither function holds data->update_lock,
-can a concurrent cache update cause them to fetch a mixed snapshot (e.g., a
-newly updated base temperature but a stale hysteresis offset), resulting in
-corrupted absolute hysteresis values returned to userspace?
+The driver allocates its data structure with devm_kzalloc() during probe,
+initializing the cache variables (like data->conf1) to zero, but
+adm1031_update_device() is not called during probe to populate them.
 
-Also, looking at show_fan(), it accesses data->fan[attr->index] without
-holding data->update_lock. In lm63_update_device(), data->fan[0] is
-populated via two separate non-atomic assignments. Can show_fan() read the
-intermediate torn state where the MSB is still 0, causing the calculation
-(5400000 / reg) to report massive, incorrect fan speed spikes?
+If a user writes to this sysfs attribute before any reads, the store
+function performs a read-modify-write using the zeroed data->conf1. When it
+writes data->conf1 back to the ADM1031_REG_CONF1 register, it clears the
+ADM1031_CONF1_MONITOR_ENABLE bit (0x01).
 
-Finally, in temp2_crit_hyst_store(), data is retrieved via
-dev_get_drvdata(dev) without calling lm63_update_device() to populate the
-cache. If a user writes to the sysfs node before any sensor read operation
-has occurred, data->temp8[2] will be 0. Does this cause the driver to
-calculate the relative hysteresis based on a critical temperature of 0
-degrees instead of the real thermal limit, corrupting the chip's thermal
-protection configuration when written to the hardware register?
+Could this silently disable the chip's hardware monitoring and thermal
+protection?
+
+[ ... ]
+
+Additionally, there appears to be a separate pre-existing regression in
+auto_temp_max_store():
+
+drivers/hwmon/adm1031.c:auto_temp_max_store() {
+    ...
+	val =3D clamp_val(val, 0, 127000);
+	mutex_lock(&data->update_lock);
+	data->temp_max[nr] =3D AUTO_TEMP_MAX_TO_REG(val, data->auto_temp[nr],
+						  data->pwm[nr]);
+	adm1031_write_value(client, ADM1031_REG_AUTO_TEMP(nr),
+			    data->temp_max[nr]);
+	mutex_unlock(&data->update_lock);
+    ...
+}
+
+Does this corrupt the temp_max cache and cause register desynchronization?
+
+The calculated new automatic temperature limit is assigned to
+data->temp_max[nr] instead of data->auto_temp[nr], corrupting the cache
+used by temp_max_show().
+
+Because data->auto_temp[nr] is left stale, if auto_temp_min_store() is
+called before the cache expires, it will read the old data->auto_temp[nr]
+value and write it back to ADM1031_REG_AUTO_TEMP.
+
+Could this cause the hardware to silently revert the max temperature limit
+just set by the user?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416090752.9739=
-2-1-hanguidong02@gmail.com?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416091754.310-=
+1-hanguidong02@gmail.com?part=3D2
