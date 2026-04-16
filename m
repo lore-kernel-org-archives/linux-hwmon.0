@@ -1,110 +1,97 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3982378D9E
-	for <linux-hwmon@vger.kernel.org>; Thu, 16 Apr 2026 10:56:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81A71373BEE
+	for <linux-hwmon@vger.kernel.org>; Thu, 16 Apr 2026 11:44:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776336989; cv=none; b=EtDGcVjkNZD9H2SFLDyAVuDn+zKocLVG8Z7CPq9FnMKxK1wEO1VsAbqbiQTY6+rfTihM5kleMZsnhv7oGdAvekYxox9eWZ5BsjvlWSJMcrehNsXHUdSQZFdqUirYGHZteDLSn7qYtO5amFDued7sTlIYdQQLxkuM5OWB4Ai5TYM=
+	t=1776339875; cv=none; b=kWeLLAH0VoEUUEdTcUKHyFMu+4jv5k0dF3rsFI5myVnAnZIxyX1bH2jti2S7lzAJdtGe6A04sLHs3zAAkFZZGtdHVDJNp2wamLNOefnmYe0XVzVMX2oELCjAq/4X1J3Pic7O4HJZX3PO8P9eDM1Y1adPXdrVzQsNISKeGCTOr7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776336989; c=relaxed/simple;
-	bh=FW6j9CYLWTfNfSAecoUlKzIdpv85RDKiTX89WGpQG9A=;
+	s=arc-20240116; t=1776339875; c=relaxed/simple;
+	bh=s1wef89LZ7VeOQQ48Olol8Cg0u51MYLN96bTiuhIhbg=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=aM1CeV3pCwGsiF/JbW3DheWOqVDbQwLAeJgN3GQy0eDH6GikQVOVZ6Rc9dzIPOkvts5yjSlcGbToPC80+NKCu9BSP/mCFSiKlpLq4lkqh3D5lKEkR3p6eusDOufqMDShpO7AWi3uUhBvPgEsqJW0RVj5pr8hBPt852K63oy8Kbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oVA34VbE; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=MSuhFLVC9Z2DZI/0gaVkmO0FHx1wB9DxIlXA1AQ4OK/F62jczl3YOFCGMz24fUDlsrnjfZVro2LQT6iqxtZPlxZUZvfvFanEJ9PBctYD8iCSesxQYQCiw7yiu/ZoOf8D/Z9w/h0wkD5Eti5y3deGVMSJVWTH9DcdiEdLMyOSGZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p4aMYe3o; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oVA34VbE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E8EAC2BCAF;
-	Thu, 16 Apr 2026 10:56:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p4aMYe3o"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 061DFC2BCB3;
+	Thu, 16 Apr 2026 11:44:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776336988;
-	bh=FW6j9CYLWTfNfSAecoUlKzIdpv85RDKiTX89WGpQG9A=;
+	s=k20201202; t=1776339875;
+	bh=s1wef89LZ7VeOQQ48Olol8Cg0u51MYLN96bTiuhIhbg=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=oVA34VbEMunLZKq/3EeVHRggpGx6xSK2UPYeh5MOo+cksg2FlUVQ/kc8RbZ7MoYAt
-	 9/9URjyl+C6XaHADptUZMLOzH5OCg1d0RRMp1+YhDu0o0lIzBfjh/P+24nG/DL0zDL
-	 Cmh0QjASfmaOHEwr63d+yZ+LPHSMBzW0sONM/Sp/fylILo7n3zo1/Z8mYv7YrWD89h
-	 7J4hEVgZVeN3ZTSJJntPT5JERjJ6IUXIk88dnCVBbNLzXtZBc5Y9MNJvoYlkJC+K2s
-	 m9J+GcnhzVWQJAubwU7j3KZlwcih3a3WgiDAypeL+bKWwhue0t84O5hm267nTgiKHu
-	 OLoNsjZ1b16cg==
+	b=p4aMYe3oWccbL22sCFnmnl+ELJoHEQHZE4ycggbwhYvLGuwgNUqBBwG9Ovb2Xmm26
+	 0IkbdFZkSSW3Skck0xE1cqr1ojWS4d748tVPnM2V+Uu6zWyQP74BpCTfXTIeMYTztr
+	 pmNCIpRvywtC0Mq8ATHzS0udGoKRKEKZ/RA2iQ+vmX/E9S+jojeKFFQ/QBg4dZZSa4
+	 +TffR+GuA6WGaibfrI/ER+5bKa4CbtvPDV8a7Oj77K+55Vel1KupbSGQVw/pOvJ+jM
+	 waDePZ8gNkGDeiC9g/xmZPMfMNeS3iIsBLu5VuAwh6/OX6VUFF1a/hoxL0dA5c0Vel
+	 IApr6QaXMAwRA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon: (pmbus/max20830) add driver for max20830
+Subject: Re: [PATCH 2/2] hwmon: (lm63) Add locking to avoid TOCTOU
 Reply-To: sashiko@lists.linux.dev
-To: "Alexis Czezar Torreno" <alexisczezar.torreno@analog.com>
+To: "Gui-Dong Han" <hanguidong02@gmail.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260416-dev_max20830-v2-2-2c7d676dc0bd@analog.com>
-References: <20260416-dev_max20830-v2-2-2c7d676dc0bd@analog.com>
+In-Reply-To: <20260416090752.97392-2-hanguidong02@gmail.com>
+References: <20260416090752.97392-2-hanguidong02@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 16 Apr 2026 10:56:27 +0000
-Message-Id: <20260416105628.7E8EAC2BCAF@smtp.kernel.org>
+Date: Thu, 16 Apr 2026 11:44:34 +0000
+Message-Id: <20260416114435.061DFC2BCB3@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 2 potential issue(s):
-- [High] Missing validation for short reads from `i2c_smbus_read_i2c_block_=
-data()` can lead to uninitialized stack memory access and information leak.
-- [Low] Off-by-one error when null-terminating the device ID string truncat=
-es the last character of the payload.
+Sashiko AI review found 3 potential issue(s):
+- [High] Pre-existing Torn Read Race Condition in show_fan() causes massive=
+ fan speed spikes
+- [High] Pre-existing Uninitialized Cache Read in temp2_crit_hyst_store() c=
+orrupts hardware thermal limits
+- [Medium] Incomplete Fix: Unaddressed TOCTOU Races in temp2_crit_hyst_show=
+() and show_lut_temp_hyst()
 --
 
-commit 479738352902d3197058c3172cee31960249a6a5
-Author: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+commit 1233dd514546736dfbbf09561bf360360c5933ca
+Author: Gui-Dong Han <hanguidong02@gmail.com>
 
-hwmon: (pmbus/max20830) add driver for max20830
+hwmon: (lm63) Add locking to avoid TOCTOU
 
-This adds support for the MAX20830 step-down DC-DC switching regulator with
-a PMBus interface, allowing monitoring of input/output voltages, output
-current, and temperature.
+This commit adds locking to show_pwm1() and show_temp11() to prevent
+TOCTOU races when reading multiple cached values. It also states that
+other functions in the driver were checked for similar issues.
 
-> diff --git a/drivers/hwmon/pmbus/max20830.c b/drivers/hwmon/pmbus/max2083=
-0.c
-> new file mode 100644
-> index 0000000000000..21ea8b59150cb
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/max20830.c
+Link: https://lore.kernel.org/linux-hwmon/CALbr=3DLYJ_ehtp53HXEVkSpYoub+XYS=
+TU8Rg=3Do1xxMJ8=3D5z8B-g@mail.gmail.com/
 
-[ ... ]
+> Check the other functions in the driver as well. Keep them unchanged
+> because they either do not access shared cached values multiple times
+> or already do so under lock.
 
-> +	ret =3D i2c_smbus_read_i2c_block_data(client, PMBUS_IC_DEVICE_ID,
-> +					    I2C_SMBUS_BLOCK_MAX, buf);
-> +	if (ret < 0)
-> +		return dev_err_probe(&client->dev, ret,
-> +				     "Failed to read IC_DEVICE_ID\n");
+Is this description accurate?
 
-i2c_smbus_read_i2c_block_data() returns the number of bytes read on success.
-If the I2C controller performs a short read, returning fewer bytes than
-expected, buf will contain uninitialized stack memory for the remaining
-bytes.
+Looking at temp2_crit_hyst_show(), it calculates its value by reading
+both data->temp8[2] and data->temp2_crit_hyst. Similarly,
+show_lut_temp_hyst() reads data->temp8[attr->index] and
+data->lut_temp_hyst. Because neither function holds data->update_lock,
+can a concurrent cache update cause them to fetch a mixed snapshot (e.g., a
+newly updated base temperature but a stale hysteresis offset), resulting in
+corrupted absolute hysteresis values returned to userspace?
 
-If buf[0] coincidentally contains 9, the len !=3D 9 check below will pass. =
-Could
-this lead to uninitialized stack memory being accessed and printed by
-dev_err_probe() on a mismatch? Should we verify the number of bytes read
-(e.g., ret >=3D 10) instead of just ret < 0?
+Also, looking at show_fan(), it accesses data->fan[attr->index] without
+holding data->update_lock. In lm63_update_device(), data->fan[0] is
+populated via two separate non-atomic assignments. Can show_fan() read the
+intermediate torn state where the MSB is still 0, causing the calculation
+(5400000 / reg) to report massive, incorrect fan speed spikes?
 
-> +
-> +	/* First byte is the block length. */
-> +	len =3D buf[0];
-> +	if (len !=3D 9)
-> +		return dev_err_probe(&client->dev, -ENODEV,
-> +				     "Unexpected IC_DEVICE_ID response\n");
-> +
-> +	buf[len] =3D '\0';
-
-Since the payload of length len occupies buf[1] through buf[len], doesn't
-setting buf[len] to '\0' overwrite the final byte of the device ID payload?
-
-While this 9th byte is ignored by the 8-byte strncmp() call below, it will
-cause the dev_err_probe() error log to print a truncated string. Should the
-null terminator be placed at buf[len + 1] instead?
-
-> +	if (strncmp(buf + 1, "MAX20830", 8))
-> +		return dev_err_probe(&client->dev, -ENODEV,
-> +				     "Unsupported device: '%s'\n", buf + 1);
+Finally, in temp2_crit_hyst_store(), data is retrieved via
+dev_get_drvdata(dev) without calling lm63_update_device() to populate the
+cache. If a user writes to the sysfs node before any sensor read operation
+has occurred, data->temp8[2] will be 0. Does this cause the driver to
+calculate the relative hysteresis based on a critical temperature of 0
+degrees instead of the real thermal limit, corrupting the chip's thermal
+protection configuration when written to the hardware register?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416-dev_max208=
-30-v2-0-2c7d676dc0bd@analog.com?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416090752.9739=
+2-1-hanguidong02@gmail.com?part=3D2
