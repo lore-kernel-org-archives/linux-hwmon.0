@@ -1,170 +1,155 @@
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAE2933B97A
-	for <linux-hwmon@vger.kernel.org>; Thu, 16 Apr 2026 04:49:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB48438E5EF;
+	Thu, 16 Apr 2026 08:00:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776314946; cv=none; b=Ry70Hm4X1QBChqsB2WEYVz6lmpdw5u14tX9FCPDkJeDp7HcByma0rVfPYSJUPgA0Dr7aORefTK3+u++9dQYNaM8GGi5RVZ8dj24WY0VMvbx1QhobNF+lisXfQzfnEc7uKFrz9G8SDumTbKNL387zsgeA+oNXWTXC3S4TUcaXCIs=
+	t=1776326422; cv=none; b=PjKbsukBEVfwIoyaal1BFQgM2mZ0JYwGB3ltfq2EfDeTi1Lx55MkppUchkQec2FdPfilBKqMBgtqtL5nHAITVnJwKAkcjrLAsBYMYmJqGiTgUg8bpqZVIjy70KvNKU8HjEoTk3uSLeOrCXdCCnQwYsWPFMbJsDcCv5MJ6K9GP5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776314946; c=relaxed/simple;
-	bh=58a1ou5dTzlBCcmc8gPgcsCSwZyWrOcRK+6vEMo8G5c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GZEUHZdOVRrsnZfOZz8YqBaMPXoxE2veVX+lkF46pCFcWktm28e2+CaARw9zB4+vULaNfUTfDWcXC3fDYgfuor+zm0fF17bfLJrae/h6veuq0Ry/L5kZy/4hNbBOKAeuf4o9cwbqcnDr6ImDEXqNo62m4gZ1sSeUSNKGoTRaHhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mOcDI8fJ; arc=none smtp.client-ip=74.125.82.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776326422; c=relaxed/simple;
+	bh=GPF1TfGOqzcqdTNO5Mh6DsmNyK7qEBczUVGwRXxwemI=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=HEx0UN1KYwjt4+woL8bWYgkSeBniy/eyJStl+vUl8MZ6sJDmnl36claLYfi0zK3UOR87cXkdfZ+M8lX7l/PdFV49FuN95Fxmw8GuRiSsWVDFx+/3Y4D/lMsJPrur/q2JdUVTSiXWykGfq/Sobe57eNawW8FTPfFZux1V22DjYE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=x6QHXlli; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mOcDI8fJ"
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2d96243c91fso806916eec.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 15 Apr 2026 21:49:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776314943; x=1776919743; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=l5qZNIb399Xzo4308jp71ye0p5c2WwoKVKHEs2lDIQ4=;
-        b=mOcDI8fJ5s3GIZn4taDIcR+CoMPmBwvsjAHu0lDS0DPIDSdokpxA2ykYgUBnbWqdsx
-         JYkzXdThgZlyvA8QF50j8xPNEq7WQ9H1x25//RGbMv6uNNtYY29jKul4pDlKsfVJUCUJ
-         Ewdd0TLU2ndctAnOGfsdbmqJpwt2F5EVWyiaZat4c8Fgqduayy9gf5cmo92DFUJ67diw
-         lCX/zuFHEBwPYmPTMDCWio8DXWqcavX2DSD91TkQMkd25yyhF9zKVljF9LlGIN5B8czU
-         p+wMyzXrP4S/3sDM5GuX/5MXtoS8F7nz1IO6UWSh2UaJKNNmYUPVXmM9XxzosMgp2Kll
-         Qf4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776314943; x=1776919743;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l5qZNIb399Xzo4308jp71ye0p5c2WwoKVKHEs2lDIQ4=;
-        b=C7DB/Zg4zEj6fXihBwY71dSKyAJMVaxc8hmg1RUBzrpwI45H7xcxZGqAlTjnYhJF5M
-         OzVCNeh8SH9gcIr/5RkfKGhe06DQgRMMTOgedSx3og/8oPeeSOJw09DqadQKoeHap8Rd
-         E/bsWcaAR3HYPU/xz8ls06hunAhNXWQlskduvqu0yixXlU175fZhK8FIQPi8ymMqKoiJ
-         JTeuqNbh1IByDQ+Q1UNz/ybvtxIb2eDwosslCKid4TiMovXwwIf892ieZ1TE1JJmEi/6
-         kKYe+O7MSm7g5gtthU8VR73eyds/LIO5yOyknZsBC7CppSQQk4+unanSFTH09tlEqwTQ
-         5Y4w==
-X-Gm-Message-State: AOJu0YzKNWZN2b822Lbso6JPwhSnq2DrIhKET/+ogsuKINlsAQ8M52Ym
-	HzprsqAaeH1KV3zK8wo2fCSKZEMBg/2kyoxl6uBPxvwp4XbDLMSi51jV
-X-Gm-Gg: AeBDiesgMQZuFVbxXFyOCMaJ6pM9KsK5r2GKmyqrfgHsXjmNAopNTchLrFeXfqAFynv
-	+LN6T7qOtrWn3qGi07OdYr7R2s/Uaog5WJSM5JD5cRzW6bVn3SwiC5xLdgoHzhS9E9fkw+VAKyn
-	RlSTm8aoltLViVA6gehkWJyWyhGyoE37IcniDbrJokfwmcaOfE6Z/dXcyBAG/Wjjo3J5KZxydkp
-	WIQEomUXtExtW17u/qGkwGY92TdNbz5Oe4zFig83lIUalJxBHMLi0OjqcfvnWHSvq6ftpzEeJ1W
-	plROzhx+Hx+A0+n/43QxXePsDNveynSoVC5Seng1WBKVMbnv/YYx1j4JEJHzj8rNzSFwby02uL1
-	R/EoixBjc1V8SHu8cBq85hycXYIrQTqxXKPKFxC/0xKESVx+PpJr7FFpYcfdDM3C6gNb8rBx92X
-	QDtBQ20F+EdAhXqjI7Vw0IQDVBkxV5jUF7kLGMy8YCvaSqKeRAy346ZFgXPqnVr7AG2AWla40XP
-	Y/rqe9WBZvSlGFh9PUGnw==
-X-Received: by 2002:a05:693c:2c92:b0:2df:7b88:a1b0 with SMTP id 5a478bee46e88-2df7b88a90cmr1341945eec.27.1776314943264;
-        Wed, 15 Apr 2026 21:49:03 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2de8eb84673sm5905125eec.19.2026.04.15.21.49.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Apr 2026 21:49:02 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <49e4ae2a-85a0-44c9-99e6-dc38d5cd60cf@roeck-us.net>
-Date: Wed, 15 Apr 2026 21:49:01 -0700
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="x6QHXlli"
+Received: from pps.filterd (m0516787.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63G7QGoR3359996;
+	Thu, 16 Apr 2026 04:00:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=DKIM; bh=O0gh3tgfUuAMymqw1xMuN6uE5BE
+	W0UfqtQMWfOAvnyU=; b=x6QHXlliS6gRccHp8ZVdq8djXJEPw9xypkOx71WE63U
+	49vW11Sh6+yu6oZ3Tu9YeCN6cBP1BdZ3hhVLr8cB7YcHZfUQiK9SzJazk0o32/Hk
+	QfH4pFwE7yPkjOUIXjUp+SAX6l5SnZo/q5PJuMgBS18edHlxLCIog5h2IBlcDaKI
+	mmOOQDSMXC4pFT0rm4m4841tUHh5ygjXuElOOa4cEAQNxQ9Kn0DyxOE+ik07G3pR
+	O85R1TDS1XNAsAac6T/3dzrxFqWLRUC4B4354X28lz4j0vVP7wAgjIu/qsL56QHH
+	FVFgvin2XxDBAZ7ixw2O5k9HSwmuZq6WD+olFa6xxSw==
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 4dh859dgnf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 16 Apr 2026 04:00:00 -0400 (EDT)
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 63G7xw4A042620
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 16 Apr 2026 03:59:58 -0400
+Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.37; Thu, 16 Apr 2026 03:59:58 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.37; Thu, 16 Apr 2026 03:59:58 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.1748.37 via Frontend
+ Transport; Thu, 16 Apr 2026 03:59:58 -0400
+Received: from ATORRENO-L02.ad.analog.com ([10.66.6.193])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 63G7xbdx025993;
+	Thu, 16 Apr 2026 03:59:46 -0400
+From: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+Subject: [PATCH v2 0/2] Add support for MAX20830 PMBUS
+Date: Thu, 16 Apr 2026 15:59:09 +0800
+Message-ID: <20260416-dev_max20830-v2-0-2c7d676dc0bd@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] hwmon: (pmbus/max20830) add driver for max20830
-To: "Torreno, Alexis Czezar" <AlexisCzezar.Torreno@analog.com>,
- "sashiko@lists.linux.dev" <sashiko@lists.linux.dev>
-Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-References: <20260414-dev_max20830-v1-2-210d3f82c571@analog.com>
- <20260414045647.4AACCC19425@smtp.kernel.org>
- <69f893bd-bb38-439c-b7e3-30d17c6b8cd3@roeck-us.net>
- <PH0PR03MB635179B8E59E60DB994415A7F1222@PH0PR03MB6351.namprd03.prod.outlook.com>
- <e4a4c2a6-e757-49f8-8fbc-215a74c7a9b5@roeck-us.net>
- <PH0PR03MB6351026955AFF2D037BF0266F1232@PH0PR03MB6351.namprd03.prod.outlook.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <PH0PR03MB6351026955AFF2D037BF0266F1232@PH0PR03MB6351.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAM2W4GkC/3XMQQ7CIBCF4as0sxYzTBFbV97DNAaBtiQWDBhS0
+ 3B3sXuX/0vet0Gy0dkEl2aDaLNLLvgadGhAz8pPljlTGwhJouCCGZvvi1oJuxZZLyQ+etKjVAr
+ q5RXt6Naduw21Z5feIX52PfPf+gfKnCEjjqYdO9KnM78qr55hOuqwwFBK+QLJqdbRqQAAAA==
+X-Change-ID: 20260414-dev_max20830-9460b92cf6aa
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>
+CC: <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        "Alexis Czezar
+ Torreno" <alexisczezar.torreno@analog.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1776326383; l=1936;
+ i=alexisczezar.torreno@analog.com; s=20250213; h=from:subject:message-id;
+ bh=GPF1TfGOqzcqdTNO5Mh6DsmNyK7qEBczUVGwRXxwemI=;
+ b=16+t065flkcUIGvZRwYWvlu2cRYg901H1i7NAIwBYCiobC6E9cL+/WGLe8JjAmIA4How9xJVv
+ vxSdNxC1tbZAwC0xBVZFn5vQ1ISfjbQzlDFsqQmx3qUeupA5Se5OCig
+X-Developer-Key: i=alexisczezar.torreno@analog.com; a=ed25519;
+ pk=XpXmJnRjnsKdDil6YpOlj9+44S+XYXVFnxvkbmaZ+10=
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: o1o8N6D4kH4mGTLCs_uHO2LmYO0-OQuk
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE2MDA3NCBTYWx0ZWRfX8iRnKc4tSYni
+ jfe3/uSv5r5xN6toaDPeivfAYT9sw8zIJVnRFeYLEgBtesklG6kXnV26fGLl+cu6rcxO8dkKdPo
+ ENfwAc6lyokAVIB4Kl48lN9rsxjXWCpMcs5uU62HvHdk/nKPlYrxUEe9m3WQcT941bUKek32E0O
+ PEL4FMJBRw3BOL882CM6bBrHqS7YMcQj3MemYLIKrbrRjC9QifseWDkb8cwRR5dFyKMNwgRsNKq
+ uTfYeZoCvuj8T8tLOgfEztSqIYIcPMFCUqNZpoR06NRlACLKc5rMC2XSIbKVa+IqwGei9prnsub
+ ruZB1kj+bdpWLqPjQIQsxJN4V5PbcsCWdGRU0h/Jlb+Xj5Yttsq8xzqKr4j1Kxc+YoYB4SUlN+/
+ lJO/jkW+FtfHmRhSF34b3LcUTItPkX0Lf0NKNBA8O2nVTKAh7zsf7/gJctIIGDczqrDAMpD8ENi
+ 39P2ni9f8uML0YYUSxw==
+X-Authority-Analysis: v=2.4 cv=Ivkutr/g c=1 sm=1 tr=0 ts=69e09700 cx=c_pps
+ a=3WNzaoukacrqR9RwcOSAdA==:117 a=3WNzaoukacrqR9RwcOSAdA==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=0sLvza09kfJOxVLZPwjg:22 a=OmVn7CZJonkx5R5zMQLL:22 a=gAnH3GRIAAAA:8
+ a=VwQbUJbxAAAA:8 a=r-qAA2OrMi8oRDqhcIUA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: o1o8N6D4kH4mGTLCs_uHO2LmYO0-OQuk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-16_02,2026-04-13_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 malwarescore=0 impostorscore=0 suspectscore=0 lowpriorityscore=0
+ clxscore=1015 bulkscore=0 spamscore=0 adultscore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604070000 definitions=main-2604160074
 
-On 4/15/26 20:04, Torreno, Alexis Czezar wrote:
->>>
->>> I may need to keep i2c_smbus_read_i2c_block_data. I'm testing this on
->>> an rpi4 and it seems i2c_smbus_read_block_data isn't supported by the
->> adapter.
->>>
->>
->> Odd. I can see that the bcm2835 controller driver sets
->> I2C_FUNC_SMBUS_EMUL but not I2C_FUNC_SMBUS_BLOCK_DATA. That
->> makes me wonder if the controller really does not support block reads. Any
->> chance you can try setting that flag in ./drivers/i2c/busses/i2c-bcm2835.c and
->> see what happens ?
->>
-> 
-> I tried using i2c_smbus_read_block_data, and here's some log messages
-> 
-> [ 6857.261998] max20830: adapter does NOT support I2C_FUNC_SMBUS_BLOCK_DATA
-> [ 6857.262006] max20830: adapter supports I2C_FUNC_SMBUS_READ_I2C_BLOCK
-> [ 6857.265228] max20830: i2c_block_data read 32 bytes: '        MAX20830'
-> [ 6857.265648] max20830: smbus_block_data read 9 bytes: ''
-> 
-> i2c_smbus_read_i2c_block_data returns 32 for 32 bytes read
-> and the buffer content is expected "MAX20830"
-> 
-> i2c_smbus_read_block_data returned 9 so I think it read the payload length of 1byte
-> but no data beyond it, hence buffer = ''
-> 
+This series adds support for the Analog Devices MAX20830 step-down
+switching regulator with PMBus interface.
 
-Ok, worth a try. The "correct" fix would be to implement support for the command
-in the I2C controller driver, but that would be too much to ask for.
+The MAX20830 provides 2.7V to 16V input, 0.4V to 5.8V output, and up
+to 30A output current. It supports monitoring of input/output voltage,
+output current, and temperature via PMBus.
 
-Ok to use i2c_smbus_read_i2c_block_data, but please add a comment describing
-the reason, i.e., that this is to support drivers/controllers which don't support
-i2c_smbus_read_block_data(). Also, please implement code to address the
-differences: The first returned byte is the real length, so please check that.
-Also, please fix the "Unsupported device" log to not print the first byte.
+Datasheet: https://www.analog.com/en/products/max20830.html
 
-Thanks,
-Guenter
+Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+---
+Changes in v2:
+- bindings:
+  - did not add interrupt, smbalert pin does not exist in device.
+  - added allof with ref to regulator.yaml
+  - changed additionalprop to unevaluatedprop
+  - device node name in example changed to regulator
+- driver: 
+  - max20830.rst: Added missing in2_alarm
+  - max20830.c: 
+    - added missing quotes in MODULE_IMPORT_NS
+    - added comment on why i2c_smbus_read_i2c_block_data is used
+    - first byte of buffer used as length instead of the return value
+    - "unsupported device" log now does not print first byte of buffer
+- Link to v1: https://lore.kernel.org/r/20260414-dev_max20830-v1-0-210d3f82c571@analog.com
+
+---
+Alexis Czezar Torreno (2):
+      dt-bindings: hwmon: pmbus: add max20830
+      hwmon: (pmbus/max20830) add driver for max20830
+
+ .../bindings/hwmon/pmbus/adi,max20830.yaml         | 61 +++++++++++++++
+ Documentation/hwmon/index.rst                      |  1 +
+ Documentation/hwmon/max20830.rst                   | 49 ++++++++++++
+ MAINTAINERS                                        |  9 +++
+ drivers/hwmon/pmbus/Kconfig                        |  9 +++
+ drivers/hwmon/pmbus/Makefile                       |  1 +
+ drivers/hwmon/pmbus/max20830.c                     | 86 ++++++++++++++++++++++
+ 7 files changed, 216 insertions(+)
+---
+base-commit: fb447217c59a13b2fff22d94de2498c185cd9032
+change-id: 20260414-dev_max20830-9460b92cf6aa
+
+Best regards,
+-- 
+Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
 
