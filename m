@@ -1,108 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B9C63264D0
-	for <linux-hwmon@vger.kernel.org>; Fri, 17 Apr 2026 15:07:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE22346FA8;
+	Fri, 17 Apr 2026 16:24:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776438431; cv=none; b=iCI0+0d0snM/OEbZS11kNy6NnpvSP+nj3uG0Qk8hzBUEnFEuy/IWCqwuztFOQ2HLkPwvbe1t+zOGajSw5p6vs8965FinHEcfR9aDckGiBfVo5tgPF0Y54H90nwuBZSUpc36f5Q3Swgq97F0Ly7Z5cnv4pDejzGmoFzSpu7IOOyQ=
+	t=1776443056; cv=none; b=uBh6p42dZX9nA8eLQ4yyf/7g45rxA70eZ/O3+OnCmzXtvGJM15eZCvtG8Y6fPqkRpwoUGG/xMLuc41eQwKXdQHi6C6FN8F/40+t93kGhVkDLWMcyx0FFQSRHqpXzBtT/tfQ4jsXBtv3UuA7CBphWTunDC8bkZG7jPTwFjnAl2z4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776438431; c=relaxed/simple;
-	bh=kzqd8+19sPpm3NUmtLaxvrJBy24G7Fm3N5Uym0jdus0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=mdU922ukmexmkGeYbUsCH4tW0vQtUFH5a7UvaVjNXo/ls7ExeCIYmsYdPjx92c0iX6SXW986tLskSeWJdg7aaXBy+X7yccusqTGqrjD51PGYhsn6w2aXy90X3O870QSIpOI5fRl6BhkInpal6LP4qUf+zNyYkzmq2vSrwtsnrl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WbVUEwnn; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776443056; c=relaxed/simple;
+	bh=aTsmt4pvePCj+enDftiv3VrCnTPML5qs0PQEa/hm/zw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EGUtMBfz8Xdbk63LEMX/L6o4in0CXGonQlqZhDncgmwCXtaDQUcu3QVgZ5qT8jrA3PPZbNCOEv+FTJHs5oAbngVDl/Zj9OF/9Xc0m3mXtseC9y5UVWeuS3ZPq+33AKrkd1UGgioymhrZgVZ4dJy0L8BXl/bZmt9nRBuGJjzKHUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CQtOqNjl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WbVUEwnn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CCE2C19425;
-	Fri, 17 Apr 2026 15:07:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CQtOqNjl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C18AC2BCB4;
+	Fri, 17 Apr 2026 16:24:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776438431;
-	bh=kzqd8+19sPpm3NUmtLaxvrJBy24G7Fm3N5Uym0jdus0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=WbVUEwnn+79YnaefjaPMhSvMpb7GXZAXqNeJ3T38Wzmm1n+hZW7144+xWVQ40ZRsS
-	 aW89O+hnp3iA6/ue549kz/DvL2MBWOsdV8Zx7ckU9WD0N81HcFCCXV73bEmXA6+i7U
-	 O1iOJ3efkY2bjVMjIqGTwdnThbrDtLhqVAgPWopSnTQRu6/H3xjs1zfTCV3rQSPdJV
-	 284SWZTH1LKjX9J4z0chpHkA0sDR/O4nslPU3g3Wbk9vj0Pv5RZioxwIXJ4hnN4hmD
-	 w8Kq+XI5374/r7sRMwvMyRAHrkSYGuguk0+NwhFEs+UL5vCVWdJqFTsTMWXz+EB/qy
-	 zLgdScg+5JO+w==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 1/2] hwmon: (yogafan) Use u32 types and improve RLLag
- filter
-Reply-To: sashiko@lists.linux.dev
-To: "Sergio Melas" <sergiomelas@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260417142455.18806-1-sergiomelas@gmail.com>
-References: <20260417142455.18806-1-sergiomelas@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 17 Apr 2026 15:07:10 +0000
-Message-Id: <20260417150711.0CCE2C19425@smtp.kernel.org>
+	s=k20201202; t=1776443056;
+	bh=aTsmt4pvePCj+enDftiv3VrCnTPML5qs0PQEa/hm/zw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CQtOqNjlOs4N098XjRSCs2/jcByx5NDX7WpfARi1KCL8oIsfBaQpCkHQv6miIRnYI
+	 3BKZUW8HP54Gq3reokSvmcMLIS7DfuYtHPZ22O4aEuhexBlT35Wdfyjzrrp7MPrFZC
+	 nnSnLqi6FAdr9ujhyrXDw2eKZxHvfIebTVASL3F9ltN6L0IT/NdfrO7WlK9Teh7xEz
+	 UAKlrnGnPokhqaIo2T7NCyeF//Yk3joEWIGMbH49qPknj1y4fITn/PMn1wqnbxxxzh
+	 Vq5qfnSsC29gAzay4ehF2ozfPqofrCrcWUkEpmz/JjI9ndrcg7KYbF5nI4wfSIJgwl
+	 pG4Jz3cpqs/Ew==
+Date: Fri, 17 Apr 2026 17:24:12 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: pmbus: add max20830
+Message-ID: <20260417-tightwad-stylized-2b0eea3b1e2e@spud>
+References: <20260417-dev_max20830-v3-0-0cb8d56067aa@analog.com>
+ <20260417-dev_max20830-v3-1-0cb8d56067aa@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="q4q4JCBLIcxVsWcx"
+Content-Disposition: inline
+In-Reply-To: <20260417-dev_max20830-v3-1-0cb8d56067aa@analog.com>
 
-Sashiko AI review found 1 potential issue(s):
-- [High] Flawed ACPI fallback logic in `yoga_fan_read` causes cross-channel=
- telemetry corruption and invalid handle evaluations.
---
 
-commit d83c5a919208687dd832e2bb2139addf047ec4f5
-Author: Sergio Melas <sergiomelas@gmail.com>
+--q4q4JCBLIcxVsWcx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-hwmon: (yogafan) Use u32 types and improve RLLag filter
+On Fri, Apr 17, 2026 at 04:27:13PM +0800, Alexis Czezar Torreno wrote:
+> Add device tree documentation for MAX20830 step-down DC-DC switching
+> regulator with PMBus interface.
+>=20
+> Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
 
-This update transitions the driver to a Hardware Abstraction Layer (HAL)
-to manage diverse EC behaviors across different hardware generations and
-adds explicit WMI GUID detection.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+pw-bot: not-applicable
 
-> --- a/drivers/hwmon/yogafan.c
-> +++ b/drivers/hwmon/yogafan.c
+In the future, please relax a bit with new revisions, particularly
+during the merge window when nothing is gonna get applied and there's no
+urgency.
 
-[ ... ]
+--q4q4JCBLIcxVsWcx
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> @@ -123,19 +187,58 @@ static int yoga_fan_read(struct device *dev, enum h=
-wmon_sensor_types type,
->  			 u32 attr, int channel, long *val)
->  {
->  	struct yoga_fan_data *data =3D dev_get_drvdata(dev);
+-----BEGIN PGP SIGNATURE-----
 
-[ ... ]
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaeJerAAKCRB4tDGHoIJi
+0pUkAP9wKSelTgmGoaJ3WPxVvBsOR1tqwDgsXopfQDfcdY7WPAD+JGGK7v957mgE
+hfl8ndcXy44fy/GxwR29EtZeee/3SAk=
+=qIra
+-----END PGP SIGNATURE-----
 
-> +	/* 3. Hardware Reading with AND fallback logic */
->  	status =3D acpi_evaluate_integer(data->active_handles[channel], NULL, N=
-ULL, &raw_acpi);
-> +
-> +	/* If the first attempt fails AND there is a second handle for that cha=
-nnel, */
-> +	/* try the second one */
-> +	if (ACPI_FAILURE(status) && cfg->paths[channel + 1])
-> +		status =3D acpi_evaluate_integer(data->active_handles[channel + 1],
-> +					       NULL, NULL, &raw_acpi);
-
-Does this fallback logic inadvertently access the wrong fan channel or
-out-of-bounds memory?
-
-During probe, active_handles is populated densely with successful ACPI
-handles for each fan. For multi-fan setups, active_handles[1] corresponds
-to the second fan. If reading the first fan (channel 0) fails, this fallback
-will read active_handles[1]. Could this result in reporting Fan 2's speed
-as Fan 1's speed?
-
-Additionally, in single-fan setups where probe stops after finding one fan,
-active_handles[1] remains uninitialized (NULL). If the read for channel 0
-fails, and cfg->paths[1] is populated, this will pass NULL to
-acpi_evaluate_integer(). Could this trigger an invalid evaluation of the
-ACPI root namespace?
-
-Finally, since MAX_FANS is 3, if this function is called for channel 2,
-could checking cfg->paths[channel + 1] and data->active_handles[channel + 1]
-read index 3, resulting in an out-of-bounds array access?
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260417142455.1880=
-6-1-sergiomelas@gmail.com?part=3D1
+--q4q4JCBLIcxVsWcx--
