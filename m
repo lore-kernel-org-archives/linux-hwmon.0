@@ -1,114 +1,113 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC787363C5F
-	for <linux-hwmon@vger.kernel.org>; Fri, 17 Apr 2026 05:45:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE4B02744F
+	for <linux-hwmon@vger.kernel.org>; Fri, 17 Apr 2026 05:49:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776404720; cv=none; b=IfD28QsAbzkzB0QXosMaDYO34INLu3ZlyAI3mgFl01yJ8AiADO6sA5L3aarMT0fU4SRgnG54bJ47ucnU6htQbyFATQuBRFtdnHX6C7bVH3np2fC2QPCBto1ug0vnsMKaAtIU6BnmmGcE7L/v/iTbCdLApRr7z6GsinmT0maSUQ0=
+	t=1776404966; cv=none; b=P75pRl/WeMk2gKTRvJzbMG3hwWIhfoOsMwnRopTsbAkK3QzQ4eLd9SNBCS4eQAkbMND00ZvPcRRymG98cReSTptxDjYIYIOM6LgrjZhf9yb4EiRlhXn6YP5lng9WL+bZUApJLsTIKTxnhWvYjRqiTO23KvKb4JCk6ovOjGotoo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776404720; c=relaxed/simple;
-	bh=wZdC9BWYRO29lozphVxX4EXA0IaDwFtXDAIqJ14A2+0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fDuv7ylLNemmXMkvUt79UhY23FgHYlDXEtSng6PwOkswsQp0k6MTqbPcW/ZypvvvVKsBrZ613sBCz0IMkH3w7WCT+rdk6plhyXSVGgXhN5f96c1tfk1sPQj1/UvAe9FNNR6keKUGvgMO8kievwSiLVh/xxfJA6WugIH9IR3UREY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HD6Fr9oq; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776404966; c=relaxed/simple;
+	bh=rOP3jY1WgimkY2Rjn1iORVmBscfHrz1obFc09WNpRLI=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=du+ETymFu34cb4rKudU5N8wrXKb3MrgOK1MIolfi6/6SAbZhnkzM+vOA7cRa2m2epCM0wzsSWuEEOiRAQr+NvxQAhl01UFASq913XZkgpcDRr9uZQfxuXyCx+XR55h1wIqLFqvo3diCR2bm142QCLlfi1UhOQrDi/7G5UxJaBiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kg/9Fl01; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HD6Fr9oq"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-48374014a77so3090185e9.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 16 Apr 2026 22:45:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776404717; x=1777009517; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+lxZRGzM2UzUkmShnZlluG7LoCdnbRayUSlhrqOwgrA=;
-        b=HD6Fr9oqYhcqiwo8r85p499lMRRo7Fz0CkRjvsLzolKUGyBi5kQyD2rBQ/7GYulTPt
-         RkAetcf9Qojy/Tf6JY7TGbdCbHkg5PhPbtUlfw/CHmR87337gVRROtp0UqdN5/lqzN5u
-         iFp7xLqy8+U39RKkfxZX2BR13On9Wmuj+yFaN+gTNgNeKNohCK0UHMb9Kc/ak3f6v8Mo
-         eR/D0WfsIrXeRBdArgZW8kalAPJLY7NgzMwMB2Ju28bwFEVaFaWYOP+cX4hKUoAcJnwo
-         Nn24NdXnCnE9dINMqKr9kUBgETXSEqEVxlLBW7/K35GP7iu2CDCZbnOjL7lxWBjTGgcf
-         9HnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776404717; x=1777009517;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+lxZRGzM2UzUkmShnZlluG7LoCdnbRayUSlhrqOwgrA=;
-        b=srpV+K6kn6QwqhiwiOvLF9jDSGRCcTID3SBllPjekMl85EApGmZwJtpZmbDl+vTvwq
-         BNpc8nc4012W5g36nWE+ezbR+KyRyNktZ77PJT2HZ/da2g6cGqF1IffevK4J+YyD1We6
-         v1I0Tdg2nmiKRIUlIGtz4kz8qrEx3LOOQcgmQHO8DMdSWgITJGAcinqgnuk8PYwJTspP
-         Wdf7uvMIS+WANRJ4S+SYn0k+XEjuZGXyjMUQ7xDLc+M4m/sqiwHhRYRtTXLg15jaKlPv
-         z3leKkV7KNafu/8yJO8c635LL1XYEcgs3ystZVTzy8doY49f8Ak6NUpYHW7czAaowJDj
-         yF8A==
-X-Forwarded-Encrypted: i=1; AFNElJ+OKJVvujUGGZcnbeEOYHTmqnIeT2Svi4fa07EeyTsepSWTp+tWNlKHwoUNoaj4NbTcvFrnAkivOLFxSA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKYtnX1d9fWzBrI1XU3u9ksowoixW4iiJUIvbaBUDRUZbtHxQ0
-	6jNSJC/gb5OLaEsOVGmx6iGhOPp3uN0USrVwmtGSFH+6aldntY0tVlbL
-X-Gm-Gg: AeBDiessx66Pt1z0M5jUFGqsv9HWnKfmmYG8fnzdx/te3M0dOw3yaRl3X0N8Bb6Dxid
-	Ar2QOvXg6Qiky4O+1KzDkCxmpH108Y14J29v8fvIKxZfi8Xx4Kydcexs+Z9LUm8SSlkMHb25sb/
-	TxuYn25yGFXVrziKFb4DgT8u11/7lfiKYPv4nUFzaWCzi+aCRjVFw9seq8Q+n4Rbz1P7cjJUqYH
-	5+fpwizaKt5Fpfw+og//XuSvp5DPeuu95AxPLFLIJJLFAZdMPT0lEt6XL2rKq83LLUyzOWaBJl3
-	tbZSihsYAzwd5AEe3Ejzjg3jZOUyZMQYbKM6s/0QCJAd1WuR22HJvdcdv1rNZoZhXVdtqnZeEQg
-	zKKbYysi1/Ln1ZDcIdpq7nDuQ1dAym6z4HBG+cpUghme9OyE66Q0Qi2NW5Oyb9WlQ8DbQ4QENlC
-	9Ai/cAZLB5oKgnvGg4U2HOOxyynux02kqHmuGqefpvpIa/K415v8ayObmDl563/jk7/ua4AEog2
-	aoXP9MTAo6rWw==
-X-Received: by 2002:a05:6000:381:b0:43b:5b25:67f8 with SMTP id ffacd0b85a97d-43fe3dd4ce6mr1872053f8f.20.1776404716906;
-        Thu, 16 Apr 2026 22:45:16 -0700 (PDT)
-Received: from flaviu-Aspire-E5-572G.. ([93.122.249.11])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4e3a174sm1868657f8f.18.2026.04.16.22.45.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2026 22:45:16 -0700 (PDT)
-From: Flaviu Nistor <flaviu.nistor@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: Flaviu Nistor <flaviu.nistor@gmail.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] docs: hwmon: (lm75) Add section for sysfs interface
-Date: Fri, 17 Apr 2026 08:45:11 +0300
-Message-ID: <20260417054511.5432-1-flaviu.nistor@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kg/9Fl01"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16CE3C19425;
+	Fri, 17 Apr 2026 05:49:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776404966;
+	bh=rOP3jY1WgimkY2Rjn1iORVmBscfHrz1obFc09WNpRLI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=kg/9Fl01sydzLor1Vfka9aNHbSktR7ujT7IGyMbfCex0oYWIqN6O1vtK35RTtQs9i
+	 ZPEvgHTeCBJEAnuap5TPHeAcjf7nzIdPJigexZ6sJHCodjCh/X808nEIlLGruwpf8y
+	 ATTz7+G0c+YY91hTaIjy7RUsiSk0DsgkR4amY/8IYjmJSkSTTqyPRp1CAy6MSIaQpH
+	 dKtSFHdw2hdPR1aL2NoPCz2wDffBrDGS1jhp83A4cVMvvx/o0DY7Sz2Obk8unJadiL
+	 ONpLkaVfA+Jjavhss2FK2abIdpEOruCSPgT6FJjssa5rO9r4158Gu3Wz8O6c+9Hga8
+	 +I2BnAHwp+BhA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] docs: hwmon: (lm75) Add section for sysfs interface
+Reply-To: sashiko@lists.linux.dev
+To: "Flaviu Nistor" <flaviu.nistor@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260417054511.5432-1-flaviu.nistor@gmail.com>
+References: <20260417054511.5432-1-flaviu.nistor@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 17 Apr 2026 05:49:25 +0000
+Message-Id: <20260417054926.16CE3C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Similar to other HWMON sensors add a section in the
-documentation describing the sysfs attributes, their
-permissions and a short description.
+Sashiko AI review found 3 potential issue(s):
+- [Low] Missing `temp1_alarm` sysfs attribute in the documentation.
+- [Low] Inaccurate permissions documented for `update_interval`.
+- [Low] Extraneous trailing colons in sysfs attribute names.
+--
 
-Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
----
- Documentation/hwmon/lm75.rst | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+commit c1dce0b929df71ecb8a78067d9800bb8e1c93d8f
+Author: Flaviu Nistor <flaviu.nistor@gmail.com>
 
-diff --git a/Documentation/hwmon/lm75.rst b/Documentation/hwmon/lm75.rst
-index 4269da04508e..288cf8485ea6 100644
---- a/Documentation/hwmon/lm75.rst
-+++ b/Documentation/hwmon/lm75.rst
-@@ -181,3 +181,19 @@ is supported by this driver, other specific enhancements are not.
- 
- The LM77 is not supported, contrary to what we pretended for a long time.
- Both chips are simply not compatible, value encoding differs.
-+
-+sysfs-Interface
-+---------------
-+
-+The following list includes the sysfs attributes that the driver provides, their
-+permissions and a short description:
-+
-+=============================== ======= ===========================================
-+Name                            Perm    Description
-+=============================== ======= ===========================================
-+temp1_input:                    RO      Temperature input
-+temp1_label:                    RO      Descriptive name for the sensor
-+temp1_max:                      RW      Maximum temperature
-+temp1_max_hyst:                 RW      Maximum hysteresis temperature
-+update_interval                 RW      Update conversions interval in milliseconds
-+=============================== ======= ===========================================
--- 
-2.34.1
+docs: hwmon: (lm75) Add section for sysfs interface
 
+This commit adds a new section to the lm75 documentation detailing the
+sysfs attributes, their permissions, and brief descriptions.
+
+> diff --git a/Documentation/hwmon/lm75.rst b/Documentation/hwmon/lm75.rst
+> index 4269da04508ef..288cf8485ea61 100644
+> --- a/Documentation/hwmon/lm75.rst
+> +++ b/Documentation/hwmon/lm75.rst
+
+[ ... ]
+
+> +sysfs-Interface
+> +---------------
+> +
+> +The following list includes the sysfs attributes that the driver provide=
+s, their
+> +permissions and a short description:
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D
+> +Name                            Perm    Description
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D
+> +temp1_input:                    RO      Temperature input
+> +temp1_label:                    RO      Descriptive name for the sensor
+> +temp1_max:                      RW      Maximum temperature
+> +temp1_max_hyst:                 RW      Maximum hysteresis temperature
+
+This isn't a bug, but should the trailing colons on these attribute names
+be removed? Sysfs filenames do not contain colons, and the update_interval
+attribute below correctly omits it.
+
+> +update_interval                 RW      Update conversions interval in m=
+illiseconds
+
+Is update_interval always read/write? Looking at lm75_is_visible() in the
+driver, it appears to only grant write permissions (0644) if the device
+supports multiple sample times. For chips with a single fixed sample time,
+the attribute is restricted to read-only (0444). Could the documentation
+reflect this conditional permission?
+
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D
+
+Should temp1_alarm be included in this list? The driver code exposes
+HWMON_T_ALARM as read-only for chips that support it (such as the as6200
+and tmp112), so the current documentation seems slightly incomplete without
+it.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260417054511.5432=
+-1-flaviu.nistor@gmail.com?part=3D1
