@@ -1,887 +1,108 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E34313E10
-	for <linux-hwmon@vger.kernel.org>; Fri, 17 Apr 2026 14:25:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B9C63264D0
+	for <linux-hwmon@vger.kernel.org>; Fri, 17 Apr 2026 15:07:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776435931; cv=none; b=PTx/0arO1y5AOaB1tVJaGG/3cdTYGgEZqvP+mVDfKNlHH1WhbrbRRUw+nuef1ZVzbqEWp8czx1xZX16n7TGWtmnFQWlBH+2cjQLBO9snJ6dBzDdsIvI7Bey8c+o22FS0zdP0cseZ7N3hK8MHp5M//IuVZZnBP1h3+buj1bpBMcM=
+	t=1776438431; cv=none; b=iCI0+0d0snM/OEbZS11kNy6NnpvSP+nj3uG0Qk8hzBUEnFEuy/IWCqwuztFOQ2HLkPwvbe1t+zOGajSw5p6vs8965FinHEcfR9aDckGiBfVo5tgPF0Y54H90nwuBZSUpc36f5Q3Swgq97F0Ly7Z5cnv4pDejzGmoFzSpu7IOOyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776435931; c=relaxed/simple;
-	bh=a/13XFYCdTU4HaQgxjc9utXhrjsDuUZZt9P6EGUH1oc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Buk14eUyOJPhjszTgSHmqSBNCtRrFY20gHo0MHmI6YbBm7owZx1w23hQZ2myKMp0Kk8VouXHo2NS28UnOY9aWLbydVB/rqneIhkAhaNy9w2spEu3GFzyEDSIxYqVpvxb19AR1q61xmLYAjbpjn0Kuz1KwUc8pGaZSYwAg11TT7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pc2vWbD0; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776438431; c=relaxed/simple;
+	bh=kzqd8+19sPpm3NUmtLaxvrJBy24G7Fm3N5Uym0jdus0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=mdU922ukmexmkGeYbUsCH4tW0vQtUFH5a7UvaVjNXo/ls7ExeCIYmsYdPjx92c0iX6SXW986tLskSeWJdg7aaXBy+X7yccusqTGqrjD51PGYhsn6w2aXy90X3O870QSIpOI5fRl6BhkInpal6LP4qUf+zNyYkzmq2vSrwtsnrl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WbVUEwnn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pc2vWbD0"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-488b8bc6bc9so5307295e9.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 17 Apr 2026 07:25:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776435928; x=1777040728; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=je+sxuQiN5EVlaKpjNYj6HRY4oeC7bKm3kGbXwrGR0M=;
-        b=Pc2vWbD07LxWgfwbrc+Ox7Nct23YwFkJ4aazmDjeFU5cnG63oN/3LI3NxYHNlnN37d
-         2Is9gk+RVOGefus2me3ykWXRDrIVbo+KYIzVWbT2dIOLw+Oy7Nr8CuY6l/DJjSA3Bscx
-         XkAAIgH8SWwNEOyi185DzGe8kSCSiV2Op4qyUrhCoTva40EA/7Gm1kFS4Sv3sjZsXvNv
-         ZGtaCHXS9arnAEJdsQvBRgCf2XxVW4leGeNO7cZl3gjjqW7NBJFZQy3NKRm0NKprLrMu
-         MFOEv6fCePXdLwSiTkajU9B4PFsNwKOj54pWd2ATqyjX2eyDeRv8HPNwYowE0yr2iMpb
-         BWBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776435928; x=1777040728;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=je+sxuQiN5EVlaKpjNYj6HRY4oeC7bKm3kGbXwrGR0M=;
-        b=PJ1KAGWRUeVvVxG677wIIiLOAuW0Cum/Xqn4wUSXvZICzue7gvWW7RIrB0/kDd7Z0G
-         dZUe3ycHSrOEyh6ApkrKAXIXYtFW+8e/ZChKRcaI0ZKUbZnDUY3Jgezi8N5WNHPC82Tp
-         9/Y+74HDknkscvIkZyAai0I++ScIoOnUYPUNmabD9PXVpRs7l3muwNAxndh58E2HMApt
-         2LGCCPzF2VTyyeGXHhiNTUlRvWOuCSJJgbRPGjv/Zr2dz7kCSYOezSWiPOD9H0q4/6am
-         zDnWNPc0NPRicYSAkgIRXd4QwYF6TDwCB1KnuJfk+T/7SL0VX7QxOwpOPP7heosR0UjS
-         IOGg==
-X-Gm-Message-State: AOJu0YyAWpsf+/c1wlfkBmmUm8pHqY19g5sUzxz6jsKglfBJUCAEFVUd
-	cji9hYg1XoyYD1+SmDU2aqVAc/r7KdWa6VY9sAlIhWbrWeNfazekIvjE
-X-Gm-Gg: AeBDietA+x3Ji7RX328bqhaFYS4YZwDEjDKz4kWZLT3Lt7OEleeVeDCKZ/x935QBRvi
-	5KWG78h0pqm6hyCnGfz/9DqK3rLLB+socDVGYrMutuUtSenuGoFNHoyHaGxGFON4wK337M3edkZ
-	8cZO7xXfP8Kk4scu/UjY/C8KtYZZPgXwjFcDg60rWqSkaN/+i7+KDBqoVIC6e6hkza60G6aOluP
-	Uca0t8YeDrAfENwqE4231zejRXcfd3YbvvmwX7xAIW8/Gq1eIwVTbehK+UW3MinGdJDE73+OJm+
-	+yw1VLSkgNSQInLA6KmNsxvSRsyMCS4eMWVxL1E4m33pigi6/lf/z7aVf/4uIbLeU+QJoWqVBFd
-	zpXSY+lrBK2QoWvHfriI9e+4Q6Ft7oZPY6TBKg/4l0hgcVW+OFc7zjaA1U33ehLfL0gI0KStUa1
-	fR075/WHbz110fTOrkn1DZVUfedOQnkyy97Y5YDotU3zt1
-X-Received: by 2002:a05:600c:e40b:b0:487:1fbf:e0bb with SMTP id 5b1f17b1804b1-488fb73d78amr36226135e9.6.1776435927315;
-        Fri, 17 Apr 2026 07:25:27 -0700 (PDT)
-Received: from sergio-82n7 ([62.19.60.188])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488fc1c01cfsm52976715e9.10.2026.04.17.07.25.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Apr 2026 07:25:26 -0700 (PDT)
-From: Sergio Melas <sergiomelas@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>
-Cc: linux-hwmon@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Armin Wolf <W_Armin@gmx.de>,
-	"Derek J . Clark" <derekjohn.clark@gmail.com>,
-	Rong Zhang <i@rong.moe>,
-	Sergio Melas <sergiomelas@gmail.com>
-Subject: [PATCH v2 2/2] hwmon: (yogafan) Add support for new Yoga, Legion and LOQ models
-Date: Fri, 17 Apr 2026 16:24:55 +0200
-Message-ID: <20260417142455.18806-2-sergiomelas@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WbVUEwnn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CCE2C19425;
+	Fri, 17 Apr 2026 15:07:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776438431;
+	bh=kzqd8+19sPpm3NUmtLaxvrJBy24G7Fm3N5Uym0jdus0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=WbVUEwnn+79YnaefjaPMhSvMpb7GXZAXqNeJ3T38Wzmm1n+hZW7144+xWVQ40ZRsS
+	 aW89O+hnp3iA6/ue549kz/DvL2MBWOsdV8Zx7ckU9WD0N81HcFCCXV73bEmXA6+i7U
+	 O1iOJ3efkY2bjVMjIqGTwdnThbrDtLhqVAgPWopSnTQRu6/H3xjs1zfTCV3rQSPdJV
+	 284SWZTH1LKjX9J4z0chpHkA0sDR/O4nslPU3g3Wbk9vj0Pv5RZioxwIXJ4hnN4hmD
+	 w8Kq+XI5374/r7sRMwvMyRAHrkSYGuguk0+NwhFEs+UL5vCVWdJqFTsTMWXz+EB/qy
+	 zLgdScg+5JO+w==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 1/2] hwmon: (yogafan) Use u32 types and improve RLLag
+ filter
+Reply-To: sashiko@lists.linux.dev
+To: "Sergio Melas" <sergiomelas@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
 In-Reply-To: <20260417142455.18806-1-sergiomelas@gmail.com>
 References: <20260417142455.18806-1-sergiomelas@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 17 Apr 2026 15:07:10 +0000
+Message-Id: <20260417150711.0CCE2C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-Expand hardware support to cover a broad range of Lenovo consumer
-laptops, including Yoga, Legion, LOQ, IdeaPad, and ThinkBook series.
+Sashiko AI review found 1 potential issue(s):
+- [High] Flawed ACPI fallback logic in `yoga_fan_read` causes cross-channel=
+ telemetry corruption and invalid handle evaluations.
+--
 
-This expansion utilizes the Hardware Abstraction Layer (HAL) profiles
-defined in the previous patch to manage diverse Embedded Controller
-behaviors. To maintain physical consistency of the RLLag filter across
-the expanded hardware list, 15 distinct physical profiles are used.
+commit d83c5a919208687dd832e2bb2139addf047ec4f5
+Author: Sergio Melas <sergiomelas@gmail.com>
 
-Dynamics (Tau and Slew Rate) for these profiles are derived by scaling
-reference measurements from a Yoga 14cACN based on fan diameter,
-assuming the relationship for the moment of inertia is J ∝ d².
+hwmon: (yogafan) Use u32 types and improve RLLag filter
 
-Assisted-by: Google:Gemini-3-Flash [DSDT/XML-Data-Aggregation & Formatting]
-Signed-off-by: Sergio Melas <sergiomelas@gmail.com>
+This update transitions the driver to a Hardware Abstraction Layer (HAL)
+to manage diverse EC behaviors across different hardware generations and
+adds explicit WMI GUID detection.
 
-v2: Inprovements after feedback
- - Split patch into two parts for easier review
- - Enforced system vendor matching (LENOVO) in all DMI quirk entries.
- - Moved the polling interval check before ACPI calls in yoga_fan_read()
-   to protect the EC from rapid polling spam.
- - Restored 'static const' qualifiers for hardware configuration
-   profiles to ensure .rodata placement.
- - Cleaned up redundant logic and transitioned internal comments to
-   English in yoga_fan_probe().
- - Dropped superlatives and simplified the commit message tone.
+> --- a/drivers/hwmon/yogafan.c
+> +++ b/drivers/hwmon/yogafan.c
 
-v1: Fresh baseline for HAL refactoring.
- - Integrated 7-section structural reorganization for both the
-   DMI quirk table and the yogafan.rst HAL table to support 400+ models.
- - Added support for legacy discrete-step EC logic (Nmax > 0).
- - Integrated documentation markup improvements suggested by Randy Dunlap.
- - Resolved "phantom fan" issues by implementing deterministic ACPI path
-   discovery that respects the expected fan count for each profile.
- - Physics Consistency: Modified the RLLag filter to use per-device
-   constants (internal_tau_ms). Time parameters (Tau/Slew) were measured
-   on a reference Yoga 14cACN; parameters for other models are currently
-   estimations derived from fan-size scaling (J ∝ d²).
- - Mathematical Safety: Implemented safety clamps and used resolved
-   device_max_rpm as a physical basis to prevent potential division-by-zero.
- - State Protection: yoga_fan_read() now handles static attributes (max)
-   immediately to prevent corruption of the filter timing state.
- - Implemented WMI GUID detection in the probe sequence for WMI coexistence.
+[ ... ]
 
-History:
- - Base Driver : Established the core RLLag filter logic and
-   initial support for ~12 modern Yoga/Legion families.
----
- Documentation/hwmon/yogafan.rst |  77 +++-
- drivers/hwmon/yogafan.c         | 601 +++++++++++++++++++++++++++++++-
- 2 files changed, 673 insertions(+), 5 deletions(-)
+> @@ -123,19 +187,58 @@ static int yoga_fan_read(struct device *dev, enum h=
+wmon_sensor_types type,
+>  			 u32 attr, int channel, long *val)
+>  {
+>  	struct yoga_fan_data *data =3D dev_get_drvdata(dev);
 
-diff --git a/Documentation/hwmon/yogafan.rst b/Documentation/hwmon/yogafan.rst
-index c07284acd..aa2545c1b 100644
---- a/Documentation/hwmon/yogafan.rst
-+++ b/Documentation/hwmon/yogafan.rst
-@@ -17,13 +17,37 @@ between 2011 and 2026. Hardware is categorized by the following
- series:
- 
- * 1. YOGA SERIES (8-bit Continuous / Discrete Logic)
-+  - Yoga Pro 7 (83E2)
-+  - Yoga Slim 7, 7i, 7 Pro, 7 Carbon, 7 ProX
-   - Yoga 14cACN (82N7), 14s, 13
-+  - Yoga 710, 720, 510, 5 Pro
-+  - Yoga 3 14, Yoga 2 13, Yoga 11s (Discrete Step Logic)
- 
- * 2. IDEAPAD SERIES (8-bit Continuous / Discrete Logic)
--  - IdeaPad 5, 5i (81YM)
-+  - IdeaPad 5, 5i, 5 Pro (81YM, 82FG)
-+  - IdeaPad 3, 3i (Modern 8-bit variants)
-+  - IdeaPad 500S, 510S, 710S
-+  - IdeaPad Y580 (Discrete Step Logic)
- 
--* 3. Legion SERIES (8-bit Continuous / 16-bit Logic)
--  - Legion 5 (82JW)
-+* 3. FLEX SERIES (8-bit Continuous)
-+  - Flex 5, 5i (81X1), Flex 6
-+
-+* 4. THINKPAD SERIES (8-bit Continuous / Discrete Logic)
-+  - ThinkPad L-Series (L380, L390, L530)
-+  - ThinkPad T/X/Edge Series (T430s, T440s, T540p, X220, X230)
-+  - ThinkPad 13, Helix, x121e
-+
-+* 5. THINKBOOK SERIES (8-bit Continuous)
-+  - ThinkBook 14, 16 (Plus, p series)
-+  - ThinkBook 13s, 14s (83AK)
-+
-+* 6. V-SERIES (8-bit Continuous)
-+  - V330-14, V330-15IKB (81AX)
-+  - V580, V580c
-+
-+* 7. U-SERIES & LEGACY (Discrete Logic)
-+  - U330p, U430p (High-resolution discrete)
-+  - U31-70, U41-70, U160
- 
-     Prefix: 'yogafan'
- 
-@@ -244,8 +268,53 @@ Which gives the table here:
- 	ID   FAMILY       OFF  PATH  WID NMAX RMAX MULT Tms SLW NOTES
- 	==== ============ === ====== === ==== ==== ==== === === =============
- 	82N7 Yoga 14cACN  06  .FANS  8b  0    5500 100  1k   4   **[REF]**
-+	83E2 Yoga Pro 7   FE  .FANS  8b  0    6000 100  1.1k 4   Dual Fan
-+	83CV Slim 7 (14") 06  .FANS  8b  0    5500 100  0.9k 3   Low Inertia
-+	82A2 Slim 7       06  .FANS  8b  0    5500 100  0.9k 3   Low Inertia
-+	82A3 Slim 7       06  .FANS  8b  0    5500 100  0.9k 3   Low Inertia
-+	80V2 Yoga 710     06  .FAN0  8b  59   4500 0    1k   4   Discrete
-+	81C3 Yoga 720     06  .FAN0  8b  59   4500 0    1k   4   Discrete
-+	80S7 Yoga 510     06  .FAN0  8b  41   4500 0    1k   4   Discrete
-+	80JH Yoga 3 (P1)  06  .FAN0  8b  80   5000 0    1k   4   Discrete
-+	80JH Yoga 3 (P2)  06  .FANS  8b  80   5000 0    1k   4   Discrete
-+	2034 Yoga 2 13    AB  .FANS  8b  8    4200 0    0.8k 3   Small Fan
-+	2019 Yoga 13 (F1) F2  .FAN1  8b  0    5000 100  0.8k 3   Dual Small
-+	2191 Yoga 13 (F2) F3  .FAN2  8b  0    5000 100  0.8k 3   Dual Small
-+	Leg. 11s (P1)     56  .FAN0  8b  80   4500 0    0.6k 2   Ultra-port
-+	Leg. 11s (P2)     56  .FANS  8b  80   4500 0    0.6k 2   Ultra-port
- 	81YM IdeaPad 5    06  .FAN0  8b  0    4500 100  1k   4   Standard
--	82JW Legion 5     06  .FANS  8b  0    6500 1    1.3k 5   Gaming dual
-+	82FG IdeaPad 5i   06  .FAN0  8b  0    4500 100  1k   4   Standard
-+	80SR 500S-13      06  .FAN0  8b  44   5500 0    0.9k 3   Slim
-+	80SX 500S-13      06  .FAN0  8b  44   5500 0    0.9k 3   Slim
-+	80S1 500S-14      95  .FAN0  8b  116  5000 0    1k   4   Standard
-+	80TK 510S         06  .FAN0  8b  41   5100 0    1k   4   Standard
-+	80S9 710S         95  .FAN1  8b  0    5200 100  0.9k 3   Slim
-+	81X1 Flex 5       06  .FAN0  8b  0    4500 100  1k   4   Standard
-+	83AK ThinkBook G7 06  .FAN0  8b  0    5400 100  1k   4   Modern 8b
-+	20GJ ThinkPad 13  85  .FAN0  8b  7    5500 0    0.8k 3   Compact
-+	20GK ThinkPad 13  85  .FAN0  8b  7    5500 0    0.8k 3   Compact
-+	3698 Helix        2F  .FANS  8b  7    4500 0    0.7  2   Hybrid
-+	20M7 L380         95  .FAN1  8b  0    4600 100  1k   4   Standard
-+	20M8 L380         95  .FAN1  8b  0    4600 100  1k   4   Standard
-+	20NR L390         95  .FAN0  8b  0    5500 100  1k   4   Standard
-+	20NS L390         95  .FAN0  8b  0    5500 100  1k   4   Standard
-+	2464 L530         95  .FAN0  8b  0    4400 100  1.1k 4   Standard
-+	2468 L530         95  .FAN0  8b  0    4400 100  1.1k 4   Standard
-+	2356 T430s        2F  .FANS  8b  7    5000 0    1k   4   Discrete
-+	20AQ T440s        4E  .FANS  8b  7    5200 0    1k   4   Discrete
-+	20AR T440s        4E  .FANS  8b  7    5200 0    1k   4   Discrete
-+	20BE T540p        2F  .FANS  8b  7    5500 0    1.1k 4   High Mass
-+	20BF T540p        2F  .FANS  8b  7    5500 0    1.1k 4   High Mass
-+	3051 x121e        2F  .FANS  8b  7    4500 0    0.6k 2   Small Fan
-+	4290 x220i        2F  .FANS  8b  7    5000 0    0.8k 3   Compact
-+	2324 x230         2F  .FANS  8b  7    5000 0    0.8k 3   Compact
-+	2325 x230         2F  .FANS  8b  7    5000 0    0.8k 3   Compact
-+	81AX V330-15IKB   95  .FAN0  8b  0    5100 100  1k   4   Standard
-+	80KU U31-70       06  .FAN0  8b  44   5500 0    0.9k 3   Slim
-+	80S1 U41-70       95  .FAN0  8b  116  5000 0    1k   4   Standard
-+	U330p U330p       92  .FAN0  16b 768  5000 0    0.8k 3   Multi-Res
-+	U430p U430p       92  .FAN0  16b 768  5000 0    0.8k 3   Multi-Res
-+	Leg. U160         95  .FAN0  8b  64   4500 0    0.6  2   Small Fan
- 	==== ============ === ===== === ==== ==== ==== === === =============
- 
- 
-diff --git a/drivers/hwmon/yogafan.c b/drivers/hwmon/yogafan.c
-index 9df42990b..de8d1f4cc 100644
---- a/drivers/hwmon/yogafan.c
-+++ b/drivers/hwmon/yogafan.c
-@@ -80,6 +80,20 @@ static const struct yogafan_config yoga_continuous_8bit_cfg = {
- 	.paths = { "\\_SB.PCI0.LPC0.EC0.FANS", "\\_SB.PCI0.LPC0.EC0.FAN0" }
- };
- 
-+/* Yoga Slim Series (d=45mm) - Reduced inertia (J ∝ d²) */
-+static const struct yogafan_config yoga_slim_cfg = {
-+	.multiplier = 100, .fan_count = 1, .n_max = 0,
-+	.r_max = 5500, .tau_ms = 900, .slew_time_s = 3, .stop_threshold = 50,
-+	.paths = { "\\_SB.PCI0.LPC0.EC0.FANS", NULL }
-+};
-+
-+/* ThinkPad L-Series / V580 (d=50mm) - Standard inertia */
-+static const struct yogafan_config thinkpad_l_cfg = {
-+	.multiplier = 100, .fan_count = 1, .n_max = 0,
-+	.r_max = 5500, .tau_ms = 1000, .slew_time_s = 4, .stop_threshold = 50,
-+	.paths = { "\\_SB.PCI0.LPC0.EC0.FAN0", "\\_SB.PCI0.LPC0.EC0.FAN1" }
-+};
-+
- /* 1.2 Dual-Fan Continuous (Gaming & Pro) */
- 
- /* Legion 5 / GeekPro (d=60mm) - Gaming high inertia */
-@@ -89,6 +103,118 @@ static const struct yogafan_config legion_5_cfg = {
- 	.paths = { "\\_SB.PCI0.LPC0.EC0.FANS", "\\_SB.PCI0.LPC0.EC0.FA2S" }
- };
- 
-+/* Legion 7i / Yoga Pro 9i (d=65mm) - High inertia (Heavy blades) */
-+static const struct yogafan_config legion_high_perf_cfg = {
-+	.multiplier = 1, .fan_count = 2, .n_max = 0,
-+	.r_max = 8000, .tau_ms = 1400, .slew_time_s = 6, .stop_threshold = 50,
-+	.paths = { "\\_SB.PCI0.LPC0.EC0.FANS", "\\_SB.PCI0.LPC0.EC0.FA2S" }
-+};
-+
-+/* LOQ Series (d=55mm) - Medium-high inertia */
-+static const struct yogafan_config loq_cfg = {
-+	.multiplier = 1, .fan_count = 2, .n_max = 0,
-+	.r_max = 6500, .tau_ms = 1200, .slew_time_s = 5, .stop_threshold = 50,
-+	.paths = { "\\_SB.PCI0.LPC0.EC0.FANS", "\\_SB.PCI0.LPC0.EC0.FA2S" }
-+};
-+
-+/* Yoga Pro 7i Aura Edition (83KF) - Dual-fan 8-bit architecture (d=55mm) */
-+static const struct yogafan_config yoga_aura_cfg = {
-+	.multiplier = 100, .fan_count = 2, .n_max = 0,
-+	.r_max = 6000, .tau_ms = 1100, .slew_time_s = 4, .stop_threshold = 50,
-+	.paths = { "\\_SB.PC00.LPCB.EC0.FA1S", "\\_SB.PC00.LPCB.EC0.FA2S" }
-+};
-+
-+/* Yoga 13 (d=40mm) - Dual small fans, low inertia */
-+static const struct yogafan_config yoga13_continous_cfg = {
-+	.multiplier = 100, .fan_count = 2, .n_max = 0,
-+	.r_max = 5000, .tau_ms = 800, .slew_time_s = 3, .stop_threshold = 50,
-+	.paths = { "\\_SB.PCI0.LPC0.EC0.FAN1", "\\_SB.PCI0.LPC0.EC0.FAN2" }
-+};
-+
-+/* Standard Dual-Fan (d=50/55mm) - Baseline inertia (Reference J) */
-+static const struct yogafan_config yoga_dual_8bit_cfg = {
-+	.multiplier = 100, .fan_count = 2, .n_max = 0,
-+	.r_max = 6000, .tau_ms = 1100, .slew_time_s = 4, .stop_threshold = 50,
-+	.paths = { "\\_SB.PCI0.LPC0.EC0.FANS", "\\_SB.PCI0.LPC0.EC0.FA2S" }
-+};
-+
-+/* 1.3 Triple-Fan Continuous */
-+
-+/* Legion 9i (d=70mm primary) - Massive inertia, triple assembly */
-+static const struct yogafan_config legion_triple_16bit_cfg = {
-+	.multiplier = 1, .fan_count = 3, .n_max = 0,
-+	.r_max = 8000, .tau_ms = 1500, .slew_time_s = 6, .stop_threshold = 50,
-+	.paths = { "\\_SB.PCI0.LPC0.EC0.FANS"
-+		 , "\\_SB.PCI0.LPC0.EC0.FA2S"
-+		 , "\\_SB.PCI0.LPC0.EC0.FA3S" }
-+};
-+
-+//* --- 2. DISCRETE ESTIMATION PROFILES (Nmax > 0) --- */
-+
-+/* 2.1 Single-Fan Discrete */
-+
-+/* Legacy Performance (d=55mm) - Higher inertia (J ∝ d²) */
-+static const struct yogafan_config ideapad_y580_discrete_cfg = {
-+	.multiplier = 0, .fan_count = 1, .n_max = 35, .r_max = 4800,
-+	.tau_ms = 1100, .slew_time_s = 4, .stop_threshold = 50,
-+	.paths = { "\\_SB.PCI0.LPC0.EC0.FAN0", "\\_SB.PCI0.LPC0.EC0.FANS" }
-+};
-+
-+/* Standard Legacy (d=50mm) - Baseline inertia (Reference J) */
-+static const struct yogafan_config yoga_710_discrete_cfg = {
-+	.multiplier = 0, .fan_count = 1, .n_max = 59, .r_max = 4500,
-+	.tau_ms = 1000, .slew_time_s = 4, .stop_threshold = 50,
-+	.paths = { "\\_SB.PCI0.LPC0.EC0.FAN0", NULL }
-+};
-+
-+static const struct yogafan_config yoga_510_discrete_cfg = {
-+	.multiplier = 0, .fan_count = 1, .n_max = 41, .r_max = 4500,
-+	.tau_ms = 1000, .slew_time_s = 4, .stop_threshold = 50,
-+	.paths = { "\\_SB.PCI0.LPC0.EC0.FAN0", NULL }
-+};
-+
-+/* Slim Discrete Models (d=45mm) - Reduced inertia */
-+static const struct yogafan_config ideapad_500s_discrete_cfg = {
-+	.multiplier = 0, .fan_count = 1, .n_max = 44, .r_max = 5500,
-+	.tau_ms = 900, .slew_time_s = 3, .stop_threshold = 50,
-+	.paths = { "\\_SB.PCI0.LPC0.EC0.FAN0", NULL }
-+};
-+
-+/* Standard Discrete (d=50mm) */
-+static const struct yogafan_config yoga3_14_discrete_cfg = {
-+	.multiplier = 0, .fan_count = 1, .n_max = 80, .r_max = 5000,
-+	.tau_ms = 1000, .slew_time_s = 4, .stop_threshold = 50,
-+	.paths = { "\\_SB.PCI0.LPC0.EC0.FAN0", "\\_SB.PCI0.LPC0.EC0.FANS" }
-+};
-+
-+/* Ultra-portable (d=35mm) - Minimal inertia, fast response */
-+static const struct yogafan_config yoga_11s_discrete_cfg = {
-+	.multiplier = 0, .fan_count = 1, .n_max = 80, .r_max = 4500,
-+	.tau_ms = 600, .slew_time_s = 2, .stop_threshold = 50,
-+	.paths = { "\\_SB.PCI0.LPC0.EC0.FAN0", "\\_SB.PCI0.LPC0.EC0.FANS" }
-+};
-+
-+/* Small Discrete (d=45mm) */
-+static const struct yogafan_config yoga2_13_discrete_cfg = {
-+	.multiplier = 0, .fan_count = 1, .n_max = 8, .r_max = 4200,
-+	.tau_ms = 800, .slew_time_s = 3, .stop_threshold = 50,
-+	.paths = { "\\_SB.PCI0.LPC0.EC0.FAN0", NULL }
-+};
-+
-+/* Legacy U-Series / High-Res Discrete (d=40mm) - Small blade mass */
-+static const struct yogafan_config legacy_u_discrete_cfg = {
-+	.multiplier = 0, .fan_count = 1, .n_max = 768, .r_max = 5000,
-+	.tau_ms = 800, .slew_time_s = 3, .stop_threshold = 50,
-+	.paths = { "\\_SB.PCI0.LPC0.EC0.FAN0", NULL }
-+};
-+
-+/* ThinkPad Discrete (d=50mm) */
-+static const struct yogafan_config thinkpad_discrete_cfg = {
-+	.multiplier = 0, .fan_count = 1, .n_max = 7,
-+	.r_max = 5500, .tau_ms = 1000, .slew_time_s = 4, .stop_threshold = 50,
-+	.paths = { "\\_SB.PCI0.LPC0.EC0.FAN0", "\\_SB.PCI0.LPC0.EC0.FANS" }
-+};
-+
- /*
-  * Filter Physics (RLLag) - Deterministic Telemetry
-  * ---------------------
-@@ -260,7 +386,79 @@ static const struct hwmon_ops yoga_fan_hwmon_ops = {
- 
- static const struct dmi_system_id yogafan_quirks[] = {
- /* --- 1. YOGA SERIES --- */
--{
-+	{
-+		.ident = "Lenovo Yoga Pro 9i (83DN)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "83DN")
-+		},
-+		.driver_data = (void *)&legion_high_perf_cfg, /* 16" Chassis - High Inertia */
-+	},
-+	{
-+		.ident = "Lenovo Yoga Pro 9 (83CV) - Aura Edition",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "83CV")
-+		},
-+		.driver_data = (void *)&yoga_slim_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Yoga Pro 9i (83E2 - Alt)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "83E2")
-+		},
-+		.driver_data = (void *)&yoga_dual_8bit_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Yoga Pro 7i Aura (83KF)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "83KF")
-+		},
-+		.driver_data = (void *)&yoga_aura_cfg, /* Aura Edition - Modern PC00 Path */
-+	},
-+	{
-+		.ident = "Lenovo Yoga Pro (Legacy ID)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Yoga Pro")
-+		},
-+		.driver_data = (void *)&legion_high_perf_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Yoga Slim 7 (82A2)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "82A2")
-+		},
-+		.driver_data = (void *)&yoga_slim_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Yoga Slim 7 (82A3)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "82A3")
-+		},
-+		.driver_data = (void *)&yoga_slim_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Yoga Slim 7 Pro / ProX",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Yoga Slim 7 Pro")
-+		},
-+		.driver_data = (void *)&yoga_dual_8bit_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Yoga Slim 7 Carbon",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Yoga Slim 7 Carbon")
-+		},
-+		.driver_data = (void *)&yoga_slim_cfg,
-+	},
-+	{
- 		.ident = "Lenovo Yoga 14cACN (82N7)",
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-@@ -268,8 +466,153 @@ static const struct dmi_system_id yogafan_quirks[] = {
- 		},
- 		.driver_data = (void *)&yoga_continuous_8bit_cfg,
- 	},
-+	{
-+		.ident = "Lenovo Yoga 14s",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Yoga 14s")
-+		},
-+		.driver_data = (void *)&yoga_continuous_8bit_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Yoga 710 (80V2)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "80V2")
-+		},
-+		.driver_data = (void *)&yoga_710_discrete_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Yoga 720 (81C3)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "81C3")
-+		},
-+		.driver_data = (void *)&yoga_710_discrete_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Yoga 710/720 (String Match)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Yoga 710")
-+		},
-+		.driver_data = (void *)&yoga_710_discrete_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Yoga 510 (80S7)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "80S7")
-+		},
-+		.driver_data = (void *)&yoga_510_discrete_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Yoga 510 (String Match)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Yoga 510")
-+		},
-+		.driver_data = (void *)&yoga_510_discrete_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Yoga 3 14 (80JH)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "80JH")
-+		},
-+		.driver_data = (void *)&yoga3_14_discrete_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Yoga 2 13 (20344)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "20344")
-+		},
-+		.driver_data = (void *)&yoga2_13_discrete_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Yoga 13 (20191)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "20191") },
-+		.driver_data = (void *)&yoga13_continous_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Yoga 11s (Legacy)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Yoga 11s")
-+		},
-+		.driver_data = (void *)&yoga_11s_discrete_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Yoga Aura Edition",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Aura Edition")
-+		},
-+		.driver_data = (void *)&yoga_continuous_8bit_cfg,
-+	},
-+
-+/* --- 2. XIAOXIN SERIES (PRC) --- */
-+	{
-+		.ident = "Lenovo Xiaoxin Pro (83JC)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "83JC")
-+		},
-+		.driver_data = (void *)&yoga3_14_discrete_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Xiaoxin Pro (83DX)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "83DX")
-+		},
-+		.driver_data = (void *)&yoga3_14_discrete_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Xiaoxin Pro (83FD)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "83FD")
-+		},
-+		.driver_data = (void *)&yoga_continuous_8bit_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Xiaoxin Pro (83DE)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "83DE")
-+		},
-+		.driver_data = (void *)&yoga_continuous_8bit_cfg,
-+	},
- 
- /* --- 3. LEGION SERIES --- */
-+	{
-+		.ident = "Lenovo Legion 9i / Extreme",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Legion 9")
-+		},
-+		.driver_data = (void *)&legion_triple_16bit_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Legion High Perf (P-Series)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Legion P")
-+		},
-+		.driver_data = (void *)&legion_high_perf_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Legion 7i (82WQ)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "82WQ")
-+		},
-+		.driver_data = (void *)&legion_high_perf_cfg,
-+	},
- 	{
- 		.ident = "Lenovo Legion 5 (82JW)",
- 		.matches = {
-@@ -278,6 +621,40 @@ static const struct dmi_system_id yogafan_quirks[] = {
- 		},
- 		.driver_data = (void *)&legion_5_cfg,
- 	},
-+	{
-+		.ident = "Lenovo Legion 5 (82JU)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "82JU")
-+		},
-+		.driver_data = (void *)&legion_5_cfg,
-+	},
-+	{
-+		.ident = "Lenovo GeekPro G5000/6000",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_FAMILY, "GeekPro")
-+		},
-+		.driver_data = (void *)&legion_5_cfg,
-+	},
-+
-+/* --- 4. LOQ SERIES --- */
-+	{
-+		.ident = "Lenovo LOQ (82XV)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "82XV")
-+		},
-+		.driver_data = (void *)&loq_cfg,
-+	},
-+	{
-+		.ident = "Lenovo LOQ (83DV)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "83DV")
-+		},
-+		.driver_data = (void *)&loq_cfg,
-+	},
- 
- /* --- 5. IDEAPAD SERIES --- */
- 	{
-@@ -288,6 +665,228 @@ static const struct dmi_system_id yogafan_quirks[] = {
- 		},
- 		.driver_data = (void *)&yoga_continuous_8bit_cfg,
- 	},
-+	{
-+		.ident = "Lenovo IdeaPad 5 (82FG)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "82FG")
-+
-+		},
-+		.driver_data = (void *)&yoga_continuous_8bit_cfg,
-+	},
-+	{
-+		.ident = "Lenovo IdeaPad Y580",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "IdeaPad Y580")
-+		},
-+		.driver_data = (void *)&ideapad_y580_discrete_cfg,
-+	},
-+	{
-+		.ident = "Lenovo IdeaPad Y580 (Legacy Match)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Lenovo IdeaPad Y580")
-+		},
-+		.driver_data = (void *)&ideapad_y580_discrete_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Ideapad 500S-13 (80SR)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "80SR")
-+		},
-+		.driver_data = (void *)&ideapad_500s_discrete_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Ideapad 500S-13 (80SX)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "80SX")
-+		},
-+		.driver_data = (void *)&ideapad_500s_discrete_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Ideapad 500S (String Match)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Ideapad 500S")
-+		},
-+		.driver_data = (void *)&ideapad_500s_discrete_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Ideapad 510S (80TK)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "80TK")
-+		},
-+		.driver_data = (void *)&yoga_510_discrete_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Ideapad 510s (String Match)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Ideapad 510s")
-+		},
-+		.driver_data = (void *)&yoga_510_discrete_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Ideapad 710S (80S9)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "80S9")
-+		},
-+		.driver_data = (void *)&yoga13_continous_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Ideapad 710S (String Match)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Ideapad 710S")
-+		},
-+		.driver_data = (void *)&yoga13_continous_cfg,
-+	},
-+	{
-+		.ident = "Lenovo IdeaPad Pro 5 (Modern)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "IdeaPad Pro 5")
-+		},
-+		.driver_data = (void *)&yoga_dual_8bit_cfg,
-+	},
-+
-+/* --- 6. FLEX SERIES --- */
-+	{
-+		.ident = "Lenovo Flex 5 (81X1)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "81X1")
-+
-+		},
-+		.driver_data = (void *)&yoga_continuous_8bit_cfg,
-+	},
-+
-+/* --- 7. THINKPAD SERIES --- */
-+	{
-+		.ident = "ThinkPad 13 (20GJ/20GK)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "ThinkPad 13")
-+
-+		},
-+		.driver_data = (void *)&thinkpad_discrete_cfg,
-+	},
-+	{
-+		.ident = "ThinkPad Helix (3698)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "3698")
-+		},
-+		.driver_data = (void *)&thinkpad_discrete_cfg,
-+	},
-+	{
-+		.ident = "ThinkPad Classic (Generic T/X/Edge)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "ThinkPad")
-+		},
-+		.driver_data = (void *)&thinkpad_discrete_cfg,
-+	},
-+	{
-+		.ident = "ThinkPad L-Series (Generic Match)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "ThinkPad L")
-+		},
-+		.driver_data = (void *)&thinkpad_l_cfg,
-+	},
-+	{
-+		.ident = "ThinkPad x121e (3051)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "3051")
-+		},
-+		.driver_data = (void *)&yoga_11s_discrete_cfg,
-+	},
-+
-+/* --- 8. THINKBOOK SERIES --- */
-+	{
-+		.ident = "Lenovo ThinkBook 14 G7+ (83GD)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "83GD")
-+		},
-+		/* Force single profile if WMI is off */
-+		.driver_data = (void *)&yoga_continuous_8bit_cfg,
-+	},
-+	{
-+		.ident = "Lenovo ThinkBook 14/16 Plus/p",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "ThinkBook 1")
-+		},
-+		.driver_data = (void *)&yoga_dual_8bit_cfg,
-+	},
-+
-+/* --- 9. V-SERIES --- */
-+	{
-+		.ident = "Lenovo V330-15IKB (81AX)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "81AX")
-+		},
-+		.driver_data = (void *)&thinkpad_l_cfg,
-+	},
-+	{
-+		.ident = "Lenovo V330 (String Match)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "V330-15IKB")
-+		},
-+		.driver_data = (void *)&thinkpad_l_cfg,
-+	},
-+	{
-+		.ident = "Lenovo V580 (String Match)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "V580")
-+		},
-+		.driver_data = (void *)&thinkpad_l_cfg,
-+	},
-+	{
-+		.ident = "Lenovo Edge E520 / V580 (20147)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "20147")
-+		},
-+		.driver_data = (void *)&thinkpad_l_cfg,
-+	},
-+
-+/* --- 10. U-SERIES (LEGACY) --- */
-+	{
-+		.ident = "Lenovo U330p/U430p",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Lenovo u330p")
-+		},
-+		.driver_data = (void *)&legacy_u_discrete_cfg,
-+	},
-+	{
-+		.ident = "Lenovo U31-70 (80KU)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "80KU")
-+		},
-+		.driver_data = (void *)&ideapad_500s_discrete_cfg,
-+	},
-+	{
-+		.ident = "Lenovo U31-70 (String Match)",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "U31-70")
-+		},
-+		.driver_data = (void *)&ideapad_500s_discrete_cfg,
-+	},
- 	{ }
- };
- 
--- 
-2.53.0
+[ ... ]
 
+> +	/* 3. Hardware Reading with AND fallback logic */
+>  	status =3D acpi_evaluate_integer(data->active_handles[channel], NULL, N=
+ULL, &raw_acpi);
+> +
+> +	/* If the first attempt fails AND there is a second handle for that cha=
+nnel, */
+> +	/* try the second one */
+> +	if (ACPI_FAILURE(status) && cfg->paths[channel + 1])
+> +		status =3D acpi_evaluate_integer(data->active_handles[channel + 1],
+> +					       NULL, NULL, &raw_acpi);
+
+Does this fallback logic inadvertently access the wrong fan channel or
+out-of-bounds memory?
+
+During probe, active_handles is populated densely with successful ACPI
+handles for each fan. For multi-fan setups, active_handles[1] corresponds
+to the second fan. If reading the first fan (channel 0) fails, this fallback
+will read active_handles[1]. Could this result in reporting Fan 2's speed
+as Fan 1's speed?
+
+Additionally, in single-fan setups where probe stops after finding one fan,
+active_handles[1] remains uninitialized (NULL). If the read for channel 0
+fails, and cfg->paths[1] is populated, this will pass NULL to
+acpi_evaluate_integer(). Could this trigger an invalid evaluation of the
+ACPI root namespace?
+
+Finally, since MAX_FANS is 3, if this function is called for channel 2,
+could checking cfg->paths[channel + 1] and data->active_handles[channel + 1]
+read index 3, resulting in an out-of-bounds array access?
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260417142455.1880=
+6-1-sergiomelas@gmail.com?part=3D1
