@@ -1,63 +1,63 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A7D72623
-	for <linux-hwmon@vger.kernel.org>; Sat, 18 Apr 2026 03:48:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C037E27F19F
+	for <linux-hwmon@vger.kernel.org>; Sat, 18 Apr 2026 03:48:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776484113; cv=none; b=AYvmgGMTMtWt02Tt2l//wayosfp7em9CZ/IyExV2xdhXOakus9eLBTYQVO8jaAusCuT3YtbOzw5nozW7iiiFHN9FRDPjGlCliB/US+vzDtJgKXFoIunKRFKXyq3B2DlLQxA2b5LZ3IEn3lRGLxFXFLjZOZ5szqbts+kf0suzWSw=
+	t=1776484117; cv=none; b=lnKNQW7ZxeV/OGRHDsDsBP7mKbOlkwktfBxSdZM8kDRIBV0jDgFghrYKglgOQqlPJocrPoaHdfUUuV7PGc97G1J1oFGatNFECiCjzrAzZR1WAnX9o0R949qHoP5eFRlGR8uxqm2WanA0FJIAxYCZ84JvEUB/76rNeY00ih99Ywk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776484113; c=relaxed/simple;
-	bh=jACSQHstZVFKbNTavRunskpjWXylElHwETO6kJX5INo=;
+	s=arc-20240116; t=1776484117; c=relaxed/simple;
+	bh=KlCZSGoNQ2owu6z4cnzLx9ww+W5qqB0R4s7DRzeFrS0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sLBpj356Fhk7CPOyO6qIIW417h6fFHobPEXngkaA7RhQgKfGCyJ/+BEqzPHZ/CwFw4DoNFShkMLguFCqGaYpq//Em/c9OQvHZF/mo71BtSOIQWsjELhvGsJgtfANh98Q4G7QtuGZ1xW7CrYRLZN3Ez7AxmcE1F8qP4l/Z87yzpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XZx/umZ6; arc=none smtp.client-ip=209.85.210.169
+	 MIME-Version; b=HYeGE/iySgETLzrgYSSlpYkShsGRam9WbgYvWpoTX/mn3AghAcTj3Qn1hDf/kzye7X+NlcxJumSc7w5sBrUDEF8DfVAEYH6phq8XTXTWwtRaVokJ8Xeqv1ao+TCg8+u6MblvZGM2Ju7HIsoOVZBqsy3snyfblGCcv5kx2B6sAEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ojNJKEw+; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XZx/umZ6"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-82f8893bff3so627422b3a.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 17 Apr 2026 20:48:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ojNJKEw+"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-82f69adeecbso624751b3a.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 17 Apr 2026 20:48:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776484110; x=1777088910; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776484115; x=1777088915; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GMyfv1bKqxfNWpqWMHaFl3fAcAdpQRPSSvO41ZTDbwY=;
-        b=XZx/umZ6PatfCXfDlT5h5VzB2DBXxtYhe0hHKUFVYPDCowADlsgRaZWN6PPMiMsrzj
-         BhNoxyGlDby2VpNby/4KRqPTa1QOMcWkIljX5knasTn53wZ3SwTlupCrKFfYiVRG/wJX
-         do6pXO8U0RfvHP5DcfNRhjaWzQpu6yAXB2GnkvMNFiFfk1QSt9Ky56jPRePH9AgQb+8v
-         xDlN4yAmvTwy86nYhnK6gxByKEObpOO5wQBjVfHFeTKzw84jBSRAueNFbVkPMRhU2RfN
-         JWU6NweCLBtZtzeD09JllVL/zOsH57/GNQ4LnVJtffxCsWTixD559i644zrUnzxalhbS
-         zBtA==
+        bh=Tv/rI+ADctzcEfXSseQ7mhn237mO7KKBrL7JH0PS3mo=;
+        b=ojNJKEw+hCCB+Eb+64Uxfwy8c6mkVACrdaF4Hfsy6pvKear/YBhlLXKXLVdsIjJyIS
+         AWTvUxuRKRIF+PPy1Wj0n39OZEZY4jlK8aR3QaapefyPgmUdM2YoTZ1vmH7jPSFH6xg7
+         Q60Y+TmIAhwo1mke5NMpz0gdx0FjPmwIc6rbTYGa8BVKgA2iO3VCQTaW3Vn5CunBsH1k
+         ZfMXIYpFGp9hNu9EoM6DMQAY0jyd9qrJnui2hi6xxDC3LDtFaLQA+2XtR6jkZN9vgQNA
+         tkUbU+w5uPXPzpQ+jbyrpH0+z09QYuyQwgHcFRYupSOw8YVFYsNpElHR4Z3gLUHVeLtn
+         EDpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776484110; x=1777088910;
+        d=1e100.net; s=20251104; t=1776484115; x=1777088915;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=GMyfv1bKqxfNWpqWMHaFl3fAcAdpQRPSSvO41ZTDbwY=;
-        b=LXmeu/cBD443NMLd37LxWZwqPH8JztLiu5QqSEJKipmuw2ryzksn0D0OWF37PzXpus
-         lhC0gSJpwSajHOdV55szXBLmhjsdBnQ5TXdHYG2ELQeBuSZm0TJLSHLfHJpqcFk3Sh5A
-         mi8fw4/SnCUl7eR6FBaLPRsOIw5r2PMpdKJRcPXZQS7FmeHaJhXWAi0vCX9QhOYIjCEW
-         ozmsTc+J69gvLip1v0KFDGtY/PMkG/Rn+gLgIp2aCQoEYQ1hG5dMxnh+RBK+UO5uHudX
-         GJut2YQNutSFcTFk40J5EbIkRMgrBk5PMgTYZ1w0ZxI/rUIIeuIVgmVUuxxKghqVToO9
-         WPPQ==
-X-Gm-Message-State: AOJu0YzeGEs1mZB4LBJzWslog31N6k2Khjd6i+JChxFHwxJC9s1xUkTr
-	FsqapMYUCx6lUPI6Q8ES4Lm3RgkKLy3CeQSPvrA+DszAmgphjxRJEt5qzm8viA==
-X-Gm-Gg: AeBDietc4XGU84CklDstIYI0BY5b1f0eTKL+xQ6aPq5Tv+qxpne/kUjmv8ErhAg0hA8
-	21Y9hWaz4HnHkUPxaXhpkuoRFaDuFK4UGYuVnhhHY9FCh9uM+1RqqGWhu/5+lT4GCngsNahpB1y
-	i8EGwQU7Lml+o9JXUJDrO2wesdtSGc0EH6ETZwwllgAUIMUkZ/08It4AbyHEgiRrAl0PJ1ucejg
-	XrIC3+CXqdbyF323/hu/pYMc6EEy5mH4mFSRTEQhvNRbVjdP0vk7AtBD672W6VDhnkg5FllGpRZ
-	owEYWOvXILlkGqbRmR93auza7YNMhYYI+QDFNo83ZlNuLz9WjkpcLn8PzL5yQn7HxnbaKBfFsIh
-	7NWcunTgqIE03CxQDPTB9NKPmspcwXe5my62E+UvYHb5iDkDf6eUab9wYkkEDckWQcO5ezAmaZM
-	iee3VUaYTgD1h38qskLFVs7qSSWfL6QguerqkAb4pW6VOixvc4OR7NQMOB6gnUpoUCcv5d1Ka+G
+        bh=Tv/rI+ADctzcEfXSseQ7mhn237mO7KKBrL7JH0PS3mo=;
+        b=NUuTbPdX7uzmfRFBsqZNH2T2h0Vc4V36f2jL5OfbyRKz2ZxAZpQuIZE3fmaH0HfyGH
+         i6PE9OBH9H9GBv3PMR8mJHtml33IZHzcXcH1Bwc7vvdsDfD7wd8YYtINfRG3gQrsvSXG
+         BPxlZ5m3oy7MLTqXa7BNq8d9wMOM6pxVYMW3pAeZhHPMlRztZbpXD1YQtjjIVklatNe3
+         f1m2pU9dHxrIgda/QxjikfV3sH1uwHgFxNya2UM0TCgd5DIZUBJh37vau4cMPpE2SY14
+         aPf2z24cmamnaYpZ+dvIt9fegrTubou2sMC6awLZ7/JPwzP6UtndzxLB0cRsg0lyflzN
+         8cBA==
+X-Gm-Message-State: AOJu0YzrZKsZ8mY713iTzPQD0Nwv0s520wU1H/tf9oQFU5ykYabPtmRf
+	EGhfAIQt+bj4Stfp67uolsywr7pOLxmNApXN04nQKUbKfZz6sabxkOf9kBAcPQ==
+X-Gm-Gg: AeBDiet1LDGtv52A8+MX2WFDaJQ56yYVuS2WvzyjcWLu66MPnbnSnMSfXRuGNFEeCqE
+	shqdBkV0AM1ammKcCEKneEh+80Yge3PrrJHbqYPncuyVJG7qt253hakXnHySUtkRrvm8xqTsII+
+	jo2ThgLpcZXJSdmjR0hL3bLnzvkCs9iBLERw2PH+FDOkVWWLF2F6390XUy/R0lPeUtGybWECEUh
+	Q2Y2W52a8OdAbFK8tvBZf7c4saZf6wZiE7xEHC4F2tuuER1m6lWhDPwRXVoNPvLBoIsuV57oyaa
+	E2BLGML7SreaEdYAakSvEgGTNf8RWOyYcFswuc6k22uoAn5F+QTaeupyWEvpYT8BxCNelr+P9cK
+	Admrwpppv4idFQLFMISUTKdXgjc3FaGfTytyk0EkYoUtxTTWgb05tWMekYIbuFdvh/+GkfFmGQX
+	59mHBjMVDkhw2ejddqgbkPjnccoXd5IIjn6T0GIvV0kxww5cDauyQIJ71JpfdDmg4ibqsUyqikA
 	g==
-X-Received: by 2002:a05:6a00:17a1:b0:82c:e0d7:2681 with SMTP id d2e1a72fcca58-82f8c8888b4mr5551098b3a.16.1776484110480;
-        Fri, 17 Apr 2026 20:48:30 -0700 (PDT)
+X-Received: by 2002:a05:6a00:4c0b:b0:82c:e4b4:b04f with SMTP id d2e1a72fcca58-82f8c9d598amr5356680b3a.47.1776484115185;
+        Fri, 17 Apr 2026 20:48:35 -0700 (PDT)
 Received: from tabrez-VivoBook-ASUSLaptop-X513UA-KM513UA.. ([27.4.62.72])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f8ec05391sm3549074b3a.56.2026.04.17.20.48.27
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f8ec05391sm3549074b3a.56.2026.04.17.20.48.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Apr 2026 20:48:30 -0700 (PDT)
+        Fri, 17 Apr 2026 20:48:34 -0700 (PDT)
 From: Tabrez Ahmed <tabreztalks@gmail.com>
 To: linux@roeck-us.net
 Cc: linux-hwmon@vger.kernel.org,
@@ -65,9 +65,9 @@ Cc: linux-hwmon@vger.kernel.org,
 	shuah@kernel.org,
 	me@brighamcampbell.com,
 	Tabrez Ahmed <tabreztalks@gmail.com>
-Subject: [PATCH v3 2/3] hwmon: (ads7871) Convert to hwmon_device_register_with_info
-Date: Sat, 18 Apr 2026 09:16:00 +0530
-Message-ID: <20260418034601.90226-3-tabreztalks@gmail.com>
+Subject: [PATCH v3 3/3] hwmon: (ads7871) Use DMA-safe buffer for SPI writes
+Date: Sat, 18 Apr 2026 09:16:01 +0530
+Message-ID: <20260418034601.90226-4-tabreztalks@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260418034601.90226-1-tabreztalks@gmail.com>
 References: <20260418034601.90226-1-tabreztalks@gmail.com>
@@ -79,147 +79,117 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Convert the ads7871 driver from the legacy hwmon_device_register() to the
-modern hwmon_device_register_with_info() API. This migration simplifies
-the driver by using the structured hwmon_channel_info approach and
-prepares the codebase for the transition to a shared DMA-safe buffer.
-While at it, fix checkpatch violations.
+The driver currently passes a stack-allocated buffer to spi_write(),
+which is incompatible with DMA on systems with CONFIG_VMAP_STACK
+enabled.
+
+Move the transfer buffer into the driver's private data structure
+to ensure it is DMA-safe. Since this shared buffer now requires
+serialization, this change depends on the previous commit which
+migrated the driver to the hwmon 'with_info' API.
+
+While moving the logic, also:
+- Corrected the sign extension for 14-bit data by casting to s16.
+- Scaled the output to millivolts (2500mV full scale
+) to comply with the hwmon ABI.
 
 Signed-off-by: Tabrez Ahmed <tabreztalks@gmail.com>
 ---
- drivers/hwmon/ads7871.c | 75 ++++++++++++++++++++++-------------------
- 1 file changed, 40 insertions(+), 35 deletions(-)
+ drivers/hwmon/ads7871.c | 35 +++++++++++++++++++++--------------
+ 1 file changed, 21 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/hwmon/ads7871.c b/drivers/hwmon/ads7871.c
-index 9b52aa496d522..851b70e9f6ba2 100644
+index 851b70e9f6ba2..d0f1eec8effbf 100644
 --- a/drivers/hwmon/ads7871.c
 +++ b/drivers/hwmon/ads7871.c
-@@ -56,7 +56,6 @@
- #include <linux/init.h>
- #include <linux/spi/spi.h>
- #include <linux/hwmon.h>
--#include <linux/hwmon-sysfs.h>
- #include <linux/err.h>
- #include <linux/delay.h>
- #include <asm/unaligned.h>
-@@ -67,6 +66,16 @@ struct ads7871_data {
+@@ -64,6 +64,7 @@
+ 
+ struct ads7871_data {
  	struct spi_device *spi;
++	u8 tx_buf[2] ____cacheline_aligned;
  };
  
-+static umode_t ads7871_is_visible(const void *data,
-+				  enum hwmon_sensor_types type,
-+				  u32 attr, int channel)
-+{
-+	if (type == hwmon_in && attr == hwmon_in_input)
-+		return 0444;
-+
-+	return 0;
-+}
-+
- static int ads7871_read_reg8(struct spi_device *spi, int reg)
- {
- 	int ret;
-@@ -91,19 +100,20 @@ static int ads7871_read_reg16(struct spi_device *spi, int reg)
- static int ads7871_write_reg8(struct spi_device *spi, int reg, u8 val)
- {
- 	u8 tmp[2] = {reg, val};
-+
- 	return spi_write(spi, tmp, sizeof(tmp));
+ static umode_t ads7871_is_visible(const void *data,
+@@ -97,11 +98,12 @@ static int ads7871_read_reg16(struct spi_device *spi, int reg)
+ 	return get_unaligned_le16(buf);
  }
  
--static ssize_t voltage_show(struct device *dev, struct device_attribute *da,
--			    char *buf)
-+static int ads7871_read(struct device *dev, enum hwmon_sensor_types type,
-+			u32 attr, int channel, long *val)
+-static int ads7871_write_reg8(struct spi_device *spi, int reg, u8 val)
++static int ads7871_write_reg8(struct ads7871_data *pdata, int reg, u8 val)
  {
- 	struct ads7871_data *pdata = dev_get_drvdata(dev);
- 	struct spi_device *spi = pdata->spi;
--	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
--	int ret, val, i = 0;
--	uint8_t channel, mux_cnv;
-+	int ret, raw_val, i = 0;
-+	u8 mux_cnv;
+-	u8 tmp[2] = {reg, val};
++	pdata->tx_buf[0] = reg;
++	pdata->tx_buf[1] = val;
  
--	channel = attr->index;
-+	if (type != hwmon_in || attr != hwmon_in_input)
-+		return -EOPNOTSUPP;
+-	return spi_write(spi, tmp, sizeof(tmp));
++	return spi_write(pdata->spi, pdata->tx_buf, 2);
+ }
+ 
+ static int ads7871_read(struct device *dev, enum hwmon_sensor_types type,
+@@ -120,7 +122,7 @@ static int ads7871_read(struct device *dev, enum hwmon_sensor_types type,
+ 	 */
+ 	/*MUX_M3_BM forces single ended*/
+ 	/*This is also where the gain of the PGA would be set*/
+-	ret = ads7871_write_reg8(spi, REG_GAIN_MUX,
++	ret = ads7871_write_reg8(pdata, REG_GAIN_MUX,
+ 				 (MUX_CNV_BM | MUX_M3_BM | channel));
+ 	if (ret < 0)
+ 		return ret;
+@@ -128,6 +130,7 @@ static int ads7871_read(struct device *dev, enum hwmon_sensor_types type,
+ 	ret = ads7871_read_reg8(spi, REG_GAIN_MUX);
+ 	if (ret < 0)
+ 		return ret;
++
+ 	mux_cnv = ((ret & MUX_CNV_BM) >> MUX_CNV_BV);
  	/*
- 	 * TODO: add support for conversions
- 	 * other than single ended with a gain of 1
-@@ -133,39 +143,34 @@ static ssize_t voltage_show(struct device *dev, struct device_attribute *da,
+ 	 * on 400MHz arm9 platform the conversion
+@@ -147,8 +150,11 @@ static int ads7871_read(struct device *dev, enum hwmon_sensor_types type,
+ 		if (raw_val < 0)
+ 			return raw_val;
+ 
+-		/*result in volts*10000 = (val/8192)*2.5*10000*/
+-		*val = ((raw_val >> 2) * 25000) / 8192;
++		/*
++		 * Use (s16) to ensure the sign bit is preserved during the shift.
++		 * Report millivolts (2.5V = 2500mV).
++		 */
++		*val = ((s16)raw_val >> 2) * 2500 / 8192;
+ 		return 0;
  	}
  
- 	if (mux_cnv == 0) {
--		val = ads7871_read_reg16(spi, REG_LS_BYTE);
--		if (val < 0)
--			return val;
-+		raw_val = ads7871_read_reg16(spi, REG_LS_BYTE);
-+		if (raw_val < 0)
-+			return raw_val;
+@@ -185,11 +191,17 @@ static int ads7871_probe(struct spi_device *spi)
+ 	spi->bits_per_word = 8;
+ 	spi_setup(spi);
+ 
+-	ads7871_write_reg8(spi, REG_SER_CONTROL, 0);
+-	ads7871_write_reg8(spi, REG_AD_CONTROL, 0);
++	pdata = devm_kzalloc(dev, sizeof(*pdata), GFP_KERNEL);
++	if (!pdata)
++		return -ENOMEM;
 +
- 		/*result in volts*10000 = (val/8192)*2.5*10000*/
--		val = ((val >> 2) * 25000) / 8192;
--		return sysfs_emit(buf, "%d\n", val);
-+		*val = ((raw_val >> 2) * 25000) / 8192;
-+		return 0;
- 	}
- 
- 	return -ETIMEDOUT;
- }
- 
--static SENSOR_DEVICE_ATTR_RO(in0_input, voltage, 0);
--static SENSOR_DEVICE_ATTR_RO(in1_input, voltage, 1);
--static SENSOR_DEVICE_ATTR_RO(in2_input, voltage, 2);
--static SENSOR_DEVICE_ATTR_RO(in3_input, voltage, 3);
--static SENSOR_DEVICE_ATTR_RO(in4_input, voltage, 4);
--static SENSOR_DEVICE_ATTR_RO(in5_input, voltage, 5);
--static SENSOR_DEVICE_ATTR_RO(in6_input, voltage, 6);
--static SENSOR_DEVICE_ATTR_RO(in7_input, voltage, 7);
--
--static struct attribute *ads7871_attrs[] = {
--	&sensor_dev_attr_in0_input.dev_attr.attr,
--	&sensor_dev_attr_in1_input.dev_attr.attr,
--	&sensor_dev_attr_in2_input.dev_attr.attr,
--	&sensor_dev_attr_in3_input.dev_attr.attr,
--	&sensor_dev_attr_in4_input.dev_attr.attr,
--	&sensor_dev_attr_in5_input.dev_attr.attr,
--	&sensor_dev_attr_in6_input.dev_attr.attr,
--	&sensor_dev_attr_in7_input.dev_attr.attr,
-+static const struct hwmon_channel_info * const ads7871_info[] = {
-+	HWMON_CHANNEL_INFO(in,
-+			   HWMON_I_INPUT, HWMON_I_INPUT, HWMON_I_INPUT, HWMON_I_INPUT,
-+			   HWMON_I_INPUT, HWMON_I_INPUT, HWMON_I_INPUT, HWMON_I_INPUT),
- 	NULL
- };
- 
--ATTRIBUTE_GROUPS(ads7871);
-+static const struct hwmon_ops ads7871_hwmon_ops = {
-+	.is_visible = ads7871_is_visible,
-+	.read = ads7871_read,
-+};
++	pdata->spi = spi;
 +
-+static const struct hwmon_chip_info ads7871_chip_info = {
-+	.ops = &ads7871_hwmon_ops,
-+	.info = ads7871_info,
-+};
++	ads7871_write_reg8(pdata, REG_SER_CONTROL, 0);
++	ads7871_write_reg8(pdata, REG_AD_CONTROL, 0);
  
- static int ads7871_probe(struct spi_device *spi)
- {
-@@ -200,10 +205,10 @@ static int ads7871_probe(struct spi_device *spi)
- 		return -ENOMEM;
+ 	val = (OSC_OSCR_BM | OSC_OSCE_BM | OSC_REFE_BM | OSC_BUFE_BM);
+-	ads7871_write_reg8(spi, REG_OSC_CONTROL, val);
++	ads7871_write_reg8(pdata, REG_OSC_CONTROL, val);
+ 	ret = ads7871_read_reg8(spi, REG_OSC_CONTROL);
  
- 	pdata->spi = spi;
+ 	dev_dbg(dev, "REG_OSC_CONTROL write:%x, read:%x\n", val, ret);
+@@ -200,11 +212,6 @@ static int ads7871_probe(struct spi_device *spi)
+ 	if (val != ret)
+ 		return -ENODEV;
+ 
+-	pdata = devm_kzalloc(dev, sizeof(struct ads7871_data), GFP_KERNEL);
+-	if (!pdata)
+-		return -ENOMEM;
 -
--	hwmon_dev = devm_hwmon_device_register_with_groups(dev, spi->modalias,
--							   pdata,
--							   ads7871_groups);
-+	hwmon_dev = devm_hwmon_device_register_with_info(dev, spi->modalias,
-+							 pdata,
-+							 &ads7871_chip_info,
-+							 NULL);
- 	return PTR_ERR_OR_ZERO(hwmon_dev);
- }
- 
+-	pdata->spi = spi;
+ 	hwmon_dev = devm_hwmon_device_register_with_info(dev, spi->modalias,
+ 							 pdata,
+ 							 &ads7871_chip_info,
 -- 
 2.43.0
 
