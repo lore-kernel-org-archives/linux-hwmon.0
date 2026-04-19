@@ -1,203 +1,329 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E302C2E1F02
-	for <linux-hwmon@vger.kernel.org>; Sat, 18 Apr 2026 15:49:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C47C29AAF3
+	for <linux-hwmon@vger.kernel.org>; Sun, 19 Apr 2026 18:22:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776527377; cv=none; b=ZpRizfe9RRct6W7W5gBUdysGZZFd1ISteBg4PfXsd1QfufkMZv2UdpoH3g/u4XKpDeiA7EOWxvRrOcLzwHD6jLJT8UVcYYAHKtPeTwS4wlxv6/M1OLjqM24bkr/XnKK8zH9gu6viDeBdspCjCkliXIHY6NTN2BzpTyZMbKPVnWw=
+	t=1776622954; cv=none; b=XsdZVhk+b5R50dbmiewIysp9fzuZPtmCOSULix7C1nRAN+R5/AFdgqJtmDov1oPJtjRQ5AVmruERtdv+98W3pO9vyIP23u+BudYkAS6ZgiXUXUk2Oo6DHrwfUH0dwrtckQzvj2ExYi2hEAoUYWewcpahRr/1+oJ6/OdXyzvkaCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776527377; c=relaxed/simple;
-	bh=Gc8LUIqFDOPIShSqQaDRlUqcJQ5FSr3KzP8QMFZFNnk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZnEKnAfJmule02i1+gBoKnRTAAGPRk+24f8t5mLMnCKpUlazD82QAn2Ir4vz+710DppTdOqmG0vIhatzExNpgtqH1soG0TwO+iuTpXOx0AMf2r4UBa+ZTGtULgYpV2QZRtLYwMRx9cZ7y82v1UHK5o8aBnh8rZ7OfNZCbgOATHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QLJghVJJ; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776622954; c=relaxed/simple;
+	bh=6y8me+lbEya3M63TkpXJZxxb0cmqOstkAs3tXw0mOAA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=URZbt7GGIxFezpIaT5sNcHPFRPRLMwCcLGDcSSgO0YQq5GSm0uEEU8w+zKhVQiEbdyBjJCJQD163d2hf3bdqbltg8tm/lgADayiBbo2np05c8jscEdj6dGpJcBasw1kouae6XaMBB27uO8IWJxRA1lYLbDFFJbwrTd2jpQbZ1ZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=nPk1ZXnz; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=ibB9K51O; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QLJghVJJ"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2ab39b111b9so6967405ad.1
-        for <linux-hwmon@vger.kernel.org>; Sat, 18 Apr 2026 08:49:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="nPk1ZXnz";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="ibB9K51O"
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63J10DjL287707
+	for <linux-hwmon@vger.kernel.org>; Sun, 19 Apr 2026 18:22:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=/JWZtoVPlmm+MrghkSNQxH
+	HxHST/CjnSiSoBT2omWu8=; b=nPk1ZXnzhKPdR/SAK301eVeaSjImVG8rgtab5j
+	fXkw32p+kUkhqgHikR7D5ihBwialbPncS9HSH800Mx8zHA/1UjzLf4n1co7wyA06
+	wK5kz5h01AzdYwcj7Bqe3V7Tnj2NvSGW1S1ofv8pyLCxOFNdkqDYCXkMTKlMX9oH
+	lTF46EweqEWtFQ6VdqQRw6ewNdIE3b57acSQeRba4PJq3IDNVTUQWDQTBT8VMnQY
+	oyYy/7JxR+r1/0zBfeHOUpY7v2vFinT37piV0FtA5WlKYq3QRYsVDv3wKXg+g1L+
+	xwipv1VHLPbgrpFiu2i26rd/cQbU1WOYr5RUYW4js8M+LLtg==
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4dm0y634xg-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-hwmon@vger.kernel.org>; Sun, 19 Apr 2026 18:22:30 +0000 (GMT)
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-50d8ed08aa4so84783931cf.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 19 Apr 2026 11:22:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776527375; x=1777132175; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=rrPn6UxPZBxRpYnhQkSmTP0wa8nccH72Tby/VYHj/MU=;
-        b=QLJghVJJ9Tj+LDPbuiqiN9dck+nTMLMoO4bA+Q0scNRJw526h6uwmTnRIKFpnDehEd
-         t1Er/c1J/vSDJQHSI2puphSfb+5oPb7zRjQcJ68VBQju0Rb2mh+5tTftnpr5cm7s4q94
-         VW38jd6B0FMQpsJCmV2F1Qe9CjAwmheqo3OlKydLHuQOHiBGSLLgROrojc4CsnxVkP4o
-         mcQFzbnjNjjNOrcE8mQ5cuA9B5puwckP7JvmChBrnc55otAAFyYbc/wmvxTDIqll70Nn
-         0TQzPmHz6sNjkpq0YMZGyYu44xXGIFSym2VDYeP5tilvzrqARk//nGPNLXdJB44RXQPu
-         XnHw==
+        d=oss.qualcomm.com; s=google; t=1776622950; x=1777227750; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/JWZtoVPlmm+MrghkSNQxHHxHST/CjnSiSoBT2omWu8=;
+        b=ibB9K51ORaHWit5Tpzhqxke9AMd39iCnkXNLzaMM4Kaf03+cdphCQTx5YyB/WMGWsU
+         H5ah7U6+rKgxGZmfaOX9heyowhDTCmOddBYxhT0bUJVaNxp54jJnj87oFny8WIX4Gzay
+         4/ex+MhQZiCt/Ok6UP21hglLaKN2fFlPAHVmkENLPEDgTePeuEuHU3Gpa5XvEbf4f1tP
+         e5ece/WWWhxoGn8apwyeq7L3kshMEYhKCGfURWLihSF3c/pBJKnU8PguQ6ddFZhXKJaV
+         aRTqV5ZHUaM0tnU/MSa8SoixLrD4F74CiAlgMFYgGyKQG9+GRDbaQXeiiRX6pyOSaB+I
+         2gBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776527375; x=1777132175;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rrPn6UxPZBxRpYnhQkSmTP0wa8nccH72Tby/VYHj/MU=;
-        b=KhXotgb8cO4Q4GWfavPTQM55JcwI7Q83oeZ8zIsUFE5g7sDgqlCcbbdSpGD7IaMe6b
-         Ubb0M3cJUnoayA8PUzd7sn8Wg7AIHiN0+qM0omEr4/9XL5HaJU9Pr8NicjEbZV4ySIQO
-         rytS5uKJXRGR6RNvv3Z64an18NQ8+hBlv1PU6dXRPfV4pSKDfs/OMwUcET8TrnR165jX
-         6xYPS6V6eEwuOfxu2aZ5S/Aq4405EBtEo/ffsxC/oKSazUvVAFtOuKGxN3xW+JQD+yXO
-         pG6AeJyrhD89c6rV0jxvIdzTzow+7JEzWFaxenQI000RVACUvDY1RKXG3WpadPTV2Opm
-         VZyg==
-X-Forwarded-Encrypted: i=1; AFNElJ/KNBn91uW6GkVPZ0G7NNLW/X/Wa/rEcEAxtD+P4q6ckoAIP+vYSGVv0lVOrCX2go0E7yP6/LJjAyjBng==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUyScc7iSZ7JEnehgvT9qBurQOJEqqfOPcUKweXnKc3u9lyii2
-	1bWWli0/w0c7sZEDkGG+wovI6kB1YzKOBKF7AnkGb6aXcLrssivqqMtf
-X-Gm-Gg: AeBDieu27qqtXEvqJMpVIlJzy7YFh+z4dJQvFo1NRvF9G0mfs/u6Sg/8HN8M7pJ8kig
-	aMyf8AcJNgYPxrHGNf7u+luYXNpFEJnftS4GDNjMC9X4pJTfIQv02n6MBGcPtbxQBi5JVNBgvB2
-	XcN1WxkhwcW2rv19jQ0RY++LZVNDEFDflg8xY8M3KwJW9jmdZznZKr+FJ6qPfnlY4NBzFlc8dzS
-	4gRx4xniAv/6ACegQaWU535wU70KuqunKhxDvfc65doLS7Vehrfu/HFZArJaDlQSMzG1raJ2b8P
-	qBG2TLntWsIyjKEPFjvQAZMHbNFQpBT1031wJGl0zJ5Mk8Au6Uwr7uDEQY96xs4I1v0VTnqX89k
-	aUhOoBOc9Ho8F8pw3Yw4KZWN1ATlFACHeB0ruQznBsSZ77s6g5fhu3O9PuU1D5qoEGTXGaKrxfy
-	w5tuZAjm5sRk5wKO3PfCyQ+LEur+2p4uYMuDJNAQ+TOCP6faaGNt21k6p7bUT5q8LSoHDdEov8g
-	IfrHPHd1hM=
-X-Received: by 2002:a17:903:2f08:b0:2b0:7d3d:756a with SMTP id d9443c01a7336-2b5f9f64c9cmr81119105ad.35.1776527375158;
-        Sat, 18 Apr 2026 08:49:35 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5fab2112csm49261195ad.62.2026.04.18.08.49.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Apr 2026 08:49:34 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7fa7d4dd-7b05-4af2-a8da-6e605fa91f90@roeck-us.net>
-Date: Sat, 18 Apr 2026 08:49:33 -0700
+        d=1e100.net; s=20251104; t=1776622950; x=1777227750;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/JWZtoVPlmm+MrghkSNQxHHxHST/CjnSiSoBT2omWu8=;
+        b=sVsbFmOfW942lz0ITVkXNXiBnRyHzrbqUDVW6Cr4p1cMJemYDDMUzactoyjVTurpRT
+         Xbvnj8k7/Uy8QK9q6McoTj6cA5sgeaKA9qIhvv3cBhCZ101Zip4qle4KHchOOO3tgor3
+         B26glVbDCk+bg28tuxkfPO9mCvv/VssRGqnc0Y070PQlIIdPBEvGk+gppT7CHNsSlacb
+         VXydeD12Xlb+6jCHiHjSKiGFMcG4dbDgQaxOKivvPJd94sX9P6XD01I5QdEFat7n6zKw
+         /Evow2pAdjNtd9oLRWc8UzM0khRa6K1ZKVSp8cH+VH8jq/tuXy2XPp/SpHejKcSvkl3E
+         STOg==
+X-Forwarded-Encrypted: i=1; AFNElJ92Oubb9NMNQZw+/4PQY8YmiQS6McLcL2s+7yK+nUsW+QcEL86QxC61L/mzphp52eL8T4Ur0HEAbOp4SQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWIf4BZIXsNT4stYsuprLqJUuOwBuR11jI7OvVGcd9YzsazpMs
+	GzjPlv/dBQug0bxIPpyrnS8FMpMVrtWP5RpAEsS3JuiMHUwKL3VoZ0+WvVTHLwa+9z6zWnAizA0
+	5Wxs7ktZ6RTrECdpXxT5lS/V2lgRNCuY0qveI/eVOyonlmNIdigfQV1a2aN9TvjU0rg==
+X-Gm-Gg: AeBDievIAz4E0HaJhIbdUcxoW0UQSBjDaeOlfxnvplISQfyAuQYTvZ0cOQcLs8ao+x5
+	lJncSFLlb1GMw0sGuADUshf6iNfHxlGYjj24WAd+uEe0s3MWjc5lmjIXMhtJ/ZPGbDtNGY5qpq8
+	BMSFyykRQsGXePyCotGAuNTQluzZj3+a/7mmfXsTUjvCOgSRRjyu/54oeNCYxOaOWLeSzdEl7Vh
+	1EFBMl8nQm+b6Tt6njzk8zbRo1Nt9/pps3QzxwPIZ+hUKHvdWY792B2JgX7rtHdx4E1bG3uem74
+	eqCU79y/kpIKCO8mRbA6SYSLC4pUzHMAg+lrbkUkyBtVla9X+czN3Dt7iqXiV1slzb8WWY8P+bF
+	3HPrsaG4ofzgK/PV1ZNJG7CaVHgKb819FDQXDxx8HNP6ViH9qQuuQjRlbdti/
+X-Received: by 2002:a05:622a:14d4:b0:50d:b33d:bc6b with SMTP id d75a77b69052e-50e36b44316mr167991191cf.20.1776622950282;
+        Sun, 19 Apr 2026 11:22:30 -0700 (PDT)
+X-Received: by 2002:a05:622a:14d4:b0:50d:b33d:bc6b with SMTP id d75a77b69052e-50e36b44316mr167990611cf.20.1776622949716;
+        Sun, 19 Apr 2026 11:22:29 -0700 (PDT)
+Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:ae20:597c:99b8:d161])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4e59f97sm25723070f8f.37.2026.04.19.11.22.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Apr 2026 11:22:29 -0700 (PDT)
+From: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+To: rafael@kernel.org
+Cc: gaurav.kohli@oss.qualcomm.com, Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+        Guenter Roeck <linux@roeck-us.net>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@codeconstruct.com.au>,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Benson Leung <bleung@chromium.org>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>, Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: [PATCH v1 00/14] Support cooling device with ID in the OF
+Date: Sun, 19 Apr 2026 20:21:44 +0200
+Message-ID: <20260419182203.4083985-1-daniel.lezcano@oss.qualcomm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] hwmon: (yogafan) Massive hardware expansion and
- structural refactoring
-To: Rong Zhang <i@rong.moe>, kernel test robot <lkp@intel.com>,
- Sergio Melas <sergiomelas@gmail.com>, Jean Delvare <jdelvare@suse.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- linux-kernel@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>,
- "Derek J . Clark" <derekjohn.clark@gmail.com>
-References: <20260413060931.31091-2-sergiomelas@gmail.com>
- <202604180539.EuswNnjG-lkp@intel.com>
- <b876cbcce7763041d93f9cad28b8aa4cac0a001a.camel@rong.moe>
- <fed0feb4770f7fab8d4336eb349d8703839e8ce4.camel@rong.moe>
- <27b467c7-7ca0-4198-b4ea-efb38f2ac787@roeck-us.net>
- <b70674d5a2152ed6123966f96acbd2872518a6f1.camel@rong.moe>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <b70674d5a2152ed6123966f96acbd2872518a6f1.camel@rong.moe>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: d_nnU1sQU4J8vW98dQTGwqlzDupv4ko4
+X-Authority-Analysis: v=2.4 cv=Fpo1OWrq c=1 sm=1 tr=0 ts=69e51d66 cx=c_pps
+ a=JbAStetqSzwMeJznSMzCyw==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=A5OVakUREuEA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=_glEPmIy2e8OvE2BGh3C:22 a=VwQbUJbxAAAA:8
+ a=EUspDBNiAAAA:8 a=dQoLWzlZYRxCxHJU1UwA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=uxP6HrT_eTzRwkO_Te1X:22
+X-Proofpoint-GUID: d_nnU1sQU4J8vW98dQTGwqlzDupv4ko4
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE5MDE5NyBTYWx0ZWRfX2JNpTHmhBiyT
+ YiUF2A8hyDOWZfM57IbnXG3eXx/SGtfKVNye0Wsm/RRe6XqlOcdWAe+GuJlXvMZbK4/Pwuk++ld
+ K062IK7ncnYsJpSn7LG8NE6Zy3ML1z03Q3tMR+53+n7ablrtYPyGrguyNa6wXudDehz1oTBCLTN
+ xcEyYhMN4o9oZ7+iIvV864x1EJ3/TfotO4zLZBvAHZo940gUPfjtG93DnGNm10aIT3P8HB7nQ+p
+ EMqAwUyXbeRNaSRZgtCfVblngAMInR5I04k+Na13HMWWYeCJHEDWd+bSGE6c4WK3MhmcX/N9YRS
+ 1yFEgFFQ78AiXT3CpKH04KNjnR21qiP1qMNmbUSPIdqbaTz/+yKmf05tLJk9covvc/IFxNl9JnP
+ NtxGy2PQ3W8s2BJWa8zvsl/iegAxvZ1aQSeJVuAUG9OqDMP5QpUaBa3y9LO5jMJQ7s98D9jEMyF
+ pAqGx/VNjp59TK8IzOQ==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-19_05,2026-04-17_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 phishscore=0 suspectscore=0 lowpriorityscore=0 bulkscore=0
+ priorityscore=1501 clxscore=1015 adultscore=0 spamscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604070000 definitions=main-2604190197
 
-On 4/18/26 08:14, Rong Zhang wrote:
-> Hi Guenter,
-> 
-> On Sat, 2026-04-18 at 06:49 -0700, Guenter Roeck wrote:
->> On 4/18/26 04:23, Rong Zhang wrote:
->>> Hi Sergio,
->>>
->>> On Sat, 2026-04-18 at 18:31 +0800, Rong Zhang wrote:
->>>> Hi Sergio,
->>>>
->>>> On Sat, 2026-04-18 at 05:37 +0800, kernel test robot wrote:
->>>>> Hi Sergio,
->>>>>
->>>>> kernel test robot noticed the following build errors:
->>>>>
->>>>> [auto build test ERROR on groeck-staging/hwmon-next]
->>>>> [also build test ERROR on linus/master next-20260416]
->>>>> [cannot apply to v7.0]
->>>>> [If your patch is applied to the wrong git tree, kindly drop us a note.
->>>>> And when submitting patch, we suggest to use '--base' as documented in
->>>>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>>>>
->>>>> url:    https://github.com/intel-lab-lkp/linux/commits/Sergio-Melas/hwmon-yogafan-Massive-hardware-expansion-and-structural-refactoring/20260417-063319
->>>>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
->>>>> patch link:    https://lore.kernel.org/r/20260413060931.31091-2-sergiomelas%40gmail.com
->>>>> patch subject: [PATCH v1] hwmon: (yogafan) Massive hardware expansion and structural refactoring
->>>>> config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20260418/202604180539.EuswNnjG-lkp@intel.com/config)
->>>>> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
->>>>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260418/202604180539.EuswNnjG-lkp@intel.com/reproduce)
->>>>>
->>>>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->>>>> the same patch/commit), kindly add following tags
->>>>>> Reported-by: kernel test robot <lkp@intel.com>
->>>>>> Closes: https://lore.kernel.org/oe-kbuild-all/202604180539.EuswNnjG-lkp@intel.com/
->>>>>
->>>>> All errors (new ones prefixed by >>):
->>>>>
->>>>>>> drivers/hwmon/yogafan.c:712:6: error: call to undeclared function 'wmi_has_guid'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->>>>>        712 |         if (wmi_has_guid(LENOVO_WMI_OTHER_MODE_GUID) ||
->>>>>            |             ^
->>>>>      1 error generated.
->>>>
->>>> Hmm, that's a bit troublesome. Usually we should have been able to
->>>> declare `depends on ACPI_WMI if ACPI_WMI' (new syntax since v7.0) or
->>>> `depends on ACPI_WMI || !ACPI_WMI' as an optional dependency to prevent
->>>> such an issue, but there is no static inline stubs for !ACPI_WMI...
->>>>
->>>> I'd suggest declaring `select ACPI_WMI if ACPI && X86' in Kconfig as
->>>> some drm drivers do, at least for the time being.
->>>
->>> Of course you'll still need to guard the wmi_has_guid() checks behind
->>> `#ifdef CONFIG_ACPI_WMI'. Just forgot to mention that.
->>>
->>> Hmm, in this way `depends on ACPI_WMI if ACPI_WMI' should also be OK...
->>
->> I don't know is this is a misspelling, but `depends on ACPI_WMI if ACPI_WMI'
->> doesn't make any sense.
-> 
-> This is the new syntax for optional dependencies since commit
-> 76df6815dab7 ("kconfig: Support conditional deps using "depends on X if
-> Y""), which is equivalent to the old-fashioned `depends on ACPI_WMI ||
-> !ACPI_WMI'.
-> 
+A cooling device can be a single cooling device or a cooling device
+controller with multiple cooling devices attached to it.
 
-Hmm, interesting. We live and learn. Thanks for the clarification.
+The thermal framework builds a connection between a cooling device and
+a thermal zone when there is a trip point to be mitigated by the
+cooling device. In the Linux kernel thermal semantic, the action of
+connecting the cooling device and the thermal zone is called a
+binding.
 
-Guenter
+The description of the aforementioned connection depends on the
+firmware definition and in our case it is through the device tree. The
+cooling map describes this connection.
+
+How is it done ?
+
+For a single cooling device, the DT describes:
+
+ * A cooling device:
+
+	mycooling_device {
+		...
+	};
+
+ * A cooling map in a thermal zone
+
+	mythermal_zone {
+	...
+      		cooling-maps {
+			map0 {
+				...
+				cooling-device = <&mycooling_device min max>;
+				...
+		   	};
+      		}
+      	...
+   	};
+
+For a cooling device controller with multiple cooling devices
+attached, the DT describes:
+
+ * A cooling device controller:
+
+	mycooling_device_ctrl {
+		mycooling_device1 {
+			...
+		};
+
+		mycooling_device2 {
+			...
+		};
+
+		...
+
+		mycooling_deviceN {
+			...
+		};
+   };
+
+ * A cooling map in a thermal zone
+
+	mythermal_zone {
+	...
+      		cooling-maps {
+			map0 {
+				...
+				cooling-device = <&mycooling_device1 min max>;
+				...
+		   	};
+      		}
+      	...
+   	};
+
+When the cooling device "mycooling_device" is registered, then the
+binding function will browse all the cooling maps and matches the node
+device pointer to do the association (the pĥandle in the cooling map
+vs the cooling device node).
+
+That is how the connection between the cooling device and the thermal
+zone is done.
+
+DT maintainers consider the above description with child nodes is
+incorrect if a child node doesn't have its own bindings as explained
+in the documentation [1].
+
+Gaurav Kohli posted a series to support the QMI TMD (Qualcomm
+Messaging Interface based Thermal Mitigation Devices) [2]. This device
+is a dedicated, centralized cooling device controller managing a set
+of cooling devices.
+
+Because of the above restrictions with child nodes there is no DT
+bindings allowing to do the connection between the cooling device
+inside the cooling device controller and a thermal zone.
+
+A QMI TMD is not a standalone cooling device neither a multiple
+cooling devices with their own DT description.
+
+For this reason, the proposed changes with child nodes has been
+rejected [3].
+
+As a solution, it has been proposed to fold all these child nodes into
+an array and add an id in the cooling maps to identify the cooling
+device entry in the controller node [4].
+
+Given the thermal zone has the same mechanism [5], that is a phandle
+to a sensor node and an sensor specifier. The proposed approach makes
+sense as it is consistent with the thermal zone description.
+
+This series provides a cleanup around the usage of the OF code which
+is interleaved with non-OF code. The OF and the non-OF code are
+separated and remain self-encapsulated.
+
+Then the function to register a cooling device is renamed to reflect
+the legacy usage and a new function is introduced with the id
+parameter.
+
+Finally, the DT bindings is updated with the new format and the
+thermal OF is changed to handle the new DT bindings.
+
+Given the trivial changes impacting the files outside of the thermal
+framework, this series is designed to have all changes going through
+the thermal tree.
+
+Thanks!
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/writing-bindings.rst
+[2] https://lore.kernel.org/all/20260127155722.2797783-1-gaurav.kohli@oss.qualcomm.com/
+[3] https://lore.kernel.org/all/546faeda-d896-403c-a449-5c9b0cd7159e@kernel.org/
+[4] https://lore.kernel.org/all/74f59ef0-ead7-483f-a80e-a3da2f6ebcdb@oss.qualcomm.com/
+[5] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/thermal/thermal-zones.yaml#n99
+
+Daniel Lezcano (13):
+  thermal/of: Move OF code where it belongs to
+  thermal/driver/tegra/soctherm: Use devm_ variant when registering a
+    cooling device
+  thermal/core: Make thermal_cooling_device_init_complete() non static
+  thermal/of: Move the node pointer assignation in the OF code file
+  thermal/core: Remove node pointer parameter parameter when registering
+    a tz
+  thermal/core: Register cooling device non-OF drivers
+  hwmon:: Use non-OF thermal cooling device register function
+  thermal/core: Move OF functions def in the CONFIG_OF section in
+    thermal.h
+  thermal/core: Put of_node field cooling device structure under Kconfig
+    option
+  thermal/of: Rename the devm_thermal_of_cooling_device_register()
+    function
+  thermal/of: Introduce cooling device of_index
+  thermal/of: Pass the of_index and add a function to register with an
+    index
+  thermal/of: Process cooling device index in cooling-spec
+
+Gaurav Kohli (1):
+  dt-bindings: thermal: cooling-devices: Update support for 3 cells
+    cooling device
+
+ .../thermal/thermal-cooling-devices.yaml      |   8 +-
+ .../bindings/thermal/thermal-zones.yaml       |   3 +-
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.c         |   2 +-
+ drivers/hwmon/amc6821.c                       |   2 +-
+ drivers/hwmon/aspeed-pwm-tacho.c              |   5 +-
+ drivers/hwmon/cros_ec_hwmon.c                 |   4 +-
+ drivers/hwmon/dell-smm-hwmon.c                |   4 +-
+ drivers/hwmon/emc2305.c                       |   6 +-
+ drivers/hwmon/gpio-fan.c                      |   6 +-
+ drivers/hwmon/max6650.c                       |   6 +-
+ drivers/hwmon/mlxreg-fan.c                    |   4 +-
+ drivers/hwmon/npcm750-pwm-fan.c               |   6 +-
+ drivers/hwmon/pwm-fan.c                       |   5 +-
+ drivers/hwmon/qnap-mcu-hwmon.c                |   6 +-
+ drivers/hwmon/tc654.c                         |   5 +-
+ drivers/memory/tegra/tegra210-emc-core.c      |   4 +-
+ drivers/soc/qcom/qcom_aoss.c                  |   2 +-
+ drivers/thermal/cpufreq_cooling.c             |   2 +-
+ drivers/thermal/cpuidle_cooling.c             |   2 +-
+ drivers/thermal/devfreq_cooling.c             |   2 +-
+ drivers/thermal/khadas_mcu_fan.c              |   7 +-
+ drivers/thermal/tegra/soctherm.c              |   6 +-
+ drivers/thermal/thermal_core.c                |  60 ++------
+ drivers/thermal/thermal_core.h                |   6 +
+ drivers/thermal/thermal_of.c                  | 139 +++++++++++++++++-
+ include/linux/thermal.h                       |  71 ++++++---
+ 26 files changed, 267 insertions(+), 106 deletions(-)
+
+-- 
+2.43.0
 
