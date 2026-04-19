@@ -1,144 +1,138 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3D092E06E6
-	for <linux-hwmon@vger.kernel.org>; Sun, 19 Apr 2026 18:29:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 105CC17DE36
+	for <linux-hwmon@vger.kernel.org>; Sun, 19 Apr 2026 18:34:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776623360; cv=none; b=ONrAkl/2D+oLliUTZDHMGD4Nq1zLRNeefXJWA15vbMLHhTmOtK8+bitGTJ8qh7XxM2CGNtbD3DbmGLU4OlUFuaKxxtdas0ymSpz/Cs4vLpleoGsNT6UiDxA7LLksGJu5WkOKvWRl+/T82Gsh37DCeefyT7LDswNCm7rJv0tm/TM=
+	t=1776623672; cv=none; b=nFKx5lmsbRKMnYsNb6WIEiEabyYMIyVv1Hxqg2HVuZ8XVIPes5YSxyo93bPQpXhoFEby1W40jAe7Wh3g80wBN4eSbrreBCh1a5ePOsNorkAY6Hh0nuOTAN+EH7sW+M3hrcvMAddnMu3cmkmApUh619iadzEvKFwNr/C1nv7pwnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776623360; c=relaxed/simple;
-	bh=6g+n+dR0djtJX7AfGJGddJN3OBqb/xp7CoI58EdVyyI=;
+	s=arc-20240116; t=1776623672; c=relaxed/simple;
+	bh=ft7kInWgnpep9V/ZTU1Bffes7qJ+ddB2hY/R8E8CjnY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=b8g/xs3tO5fIYAZbJ/MP0ltpBmp5eq68aT64U6EMZwrAv6GuGeyqvSEfnWyfUlla68WWYLJVhzfK13yfX2q8VsRu8GaNsxXG/RqgpMTCXj0I0vm0vLfnnIpxdujXRXeofdspyqfC+067s0lnfaaCKU7S5Vp7fSj9eROJvcGcJGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ikMjk9Pd; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=eEyCJrcpGLy16TOBt2Ar0CGTNRGHApfkISZ1ibaBxUO5ZZlmuvXEgz5tsa+d73JFFzcIPdti8hZ103iy53m9COgZtRo3k043hq2yPLu3go72rKl4AODk+TunN9mJgdRD28XLwMZLhF+/mMfa06HQViHEFtmBAO7PFrnCY9v+GvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DGLiQpP1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ikMjk9Pd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29E11C2BCAF;
-	Sun, 19 Apr 2026 18:29:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DGLiQpP1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5169C2BCAF;
+	Sun, 19 Apr 2026 18:34:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776623360;
-	bh=6g+n+dR0djtJX7AfGJGddJN3OBqb/xp7CoI58EdVyyI=;
+	s=k20201202; t=1776623671;
+	bh=ft7kInWgnpep9V/ZTU1Bffes7qJ+ddB2hY/R8E8CjnY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=ikMjk9Pd/8Z9+IpK7hxKi7dzNCPUq1vSjGv2lcbEeWGzV2ORkNrAKLSuRfHJP9B+v
-	 X2xeqc6KyQa4dqcp5P7HRjnr9vGPuG+c08jiMsHnZ4ak2u9oZ0Gu5q1GzEGLQ7ZsL9
-	 ZPtS/mvChyL+njpYTxIjfo6F7g670VjYqzyRyb+vnQ5Bt6lqnKpop0/ASmIMvudeFK
-	 ppgz9m/EsOMc3Il5R73KIKtWI7rdnlXYunXgSsgQTbGgf+zZ0cmzTDeK0e5PMXrqed
-	 rkjZ3OifS/yiXR12joYNuEeEodJNI2EscHYNAo1NCcxWvLfa1OamSrMhKfFQyW4Vmd
-	 XLSnZViuvo/1w==
+	b=DGLiQpP1Ov0okI/mE4wiGe1awfM9Qsf/xXeVSit2nzFEIEiySUEefBDbKtViWEQhs
+	 B0h+BR5oPjds10JIw1iJn56q6Q0/qZxg7mBz7jSZf+nuN3nWXk4aDzfIcjyWh6BaWi
+	 KZ2dJ35h76q/HmguvproxmL9Gf4C/Q1iEhwrUEayPtigOX3JgscYWuAMtMoKlaJGeB
+	 90MBacusLX2FG7O2tcio8grQ4igUTwy0z48/PxxE8pkVA2rhY/NSp0cpQXTpYTy6/F
+	 Wfnv/Hns7769N/joUo0h4+YZdPT4NCIAppRTaHBq0xZ8sitzC4V46966Q8qXLsVl1g
+	 s+GUQCszt68Kw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v1 06/14] thermal/core: Register cooling device non-OF
- drivers
+Subject: Re: [PATCH v1 10/14] thermal/of: Rename the
+ devm_thermal_of_cooling_device_register() function
 Reply-To: sashiko@lists.linux.dev
 To: "Daniel Lezcano" <daniel.lezcano@oss.qualcomm.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260419182203.4083985-7-daniel.lezcano@oss.qualcomm.com>
-References: <20260419182203.4083985-7-daniel.lezcano@oss.qualcomm.com>
+In-Reply-To: <20260419182203.4083985-11-daniel.lezcano@oss.qualcomm.com>
+References: <20260419182203.4083985-11-daniel.lezcano@oss.qualcomm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 19 Apr 2026 18:29:19 +0000
-Message-Id: <20260419182920.29E11C2BCAF@smtp.kernel.org>
+Date: Sun, 19 Apr 2026 18:34:31 +0000
+Message-Id: <20260419183431.B5169C2BCAF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 2 potential issue(s):
-- [Low] Missing `static inline` in the fallback dummy implementation of `de=
-vm_thermal_cooling_device_register`.
-- [Low] Incorrect kerneldoc comment for `devm_thermal_cooling_device_regist=
-er`.
+Sashiko AI review found 3 potential issue(s):
+- [Low] Semantic mismatch in API naming for drivers not using child nodes.
+- [Low] Incomplete refactoring leaves `thermal_of_cooling_device_register()=
+` with a generic name.
+- [Low] Kerneldoc for the renamed function does not document the new specia=
+lized semantics.
 --
 
-commit 18601ab408a18465a11642434a184fda33807cbc
+commit d1ab585391fe2969c56e5221cba69749aaa4c5c5
 Author: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+Subject: thermal/of: Rename the devm_thermal_of_cooling_device_register() f=
+unction
 
-thermal/core: Register cooling device non-OF drivers
+This commit renames devm_thermal_of_cooling_device_register() to
+devm_thermal_of_child_cooling_device_register() across the kernel. This
+name change is intended to distinguish the old bindings using child nodes f=
+rom
+an incoming new binding format for cooling devices.
 
-This commit provides a non-OF function to register a cooling device, allowi=
-ng
-a clear separation between OF and non-OF code. Drivers not using a devicetr=
-ee
-can then migrate to this new function.
-
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_cor=
-e.c
-> index 2f5d214d51a10..356a49e541fd5 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
+> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+> index 37269db2de84f..e6a567d58579d 100644
+> --- a/drivers/hwmon/pwm-fan.c
+> +++ b/drivers/hwmon/pwm-fan.c
 [ ... ]
-> @@ -1164,6 +1164,50 @@ thermal_cooling_device_register(const char *type, =
-void *devdata,
->  }
->  EXPORT_SYMBOL_GPL(thermal_cooling_device_register);
+> @@ -685,8 +685,9 @@ static int pwm_fan_probe(struct platform_device *pdev)
 > =20
-> +static void thermal_cooling_device_release(struct device *dev, void *res)
-> +{
-> +	thermal_cooling_device_unregister(*(struct thermal_cooling_device **)re=
-s);
-> +}
-> +
-> +/**
-> + * devm_thermal_cooling_device_register() - register a thermal cooling d=
-evice
-> + * @dev:	a valid struct device pointer of a sensor device.
-> + * @type:	the thermal cooling device type.
-> + * @devdata:	device private data.
-> + * @ops:	standard thermal cooling devices callbacks.
-> + *
-> + * This function will register a cooling device with device tree node re=
-ference.
+>  	ctx->pwm_fan_state =3D ctx->pwm_fan_max_state;
+>  	if (IS_ENABLED(CONFIG_THERMAL)) {
+> -		cdev =3D devm_thermal_of_cooling_device_register(dev,
+> -			dev->of_node, "pwm-fan", ctx, &pwm_fan_cooling_ops);
+> +		cdev =3D devm_thermal_of_child_cooling_device_register(dev, dev->of_no=
+de,
+> +								     "pwm-fan", ctx,
+> +								     &pwm_fan_cooling_ops);
 
-This isn't a bug, but the comment states this registers a cooling device
-with a device tree node reference. Since this is the non-OF version,
-should this part of the comment be updated to reflect that it does not use a
-devicetree?
+Since this driver is passing dev->of_node rather than a child node, does th=
+is
+renaming create a semantic mismatch for this and other similar drivers (such
+as tc654.c, max6650.c, and gpio-fan.c)?
 
-> + * This interface function adds a new thermal cooling device (fan/proces=
-sor/...)
-> + * to /sys/class/thermal/ folder as cooling_device[0-*]. It tries to bin=
-d itself
-> + * to all the thermal zone devices registered at the same time.
-> + *
-> + * Return: a pointer to the created struct thermal_cooling_device or an
-> + * ERR_PTR. Caller must check return value with IS_ERR*() helpers.
-> + */
-> +struct thermal_cooling_device *
-> +devm_thermal_cooling_device_register(struct device *dev, const char *typ=
-e,
+[ ... ]
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index 3d2fb8f37b9c5..ba5093f612d0e 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -550,7 +550,7 @@ static void thermal_cooling_device_release(struct dev=
+ice *dev, void *res)
+>  }
+> =20
+>  /**
+> - * devm_thermal_of_cooling_device_register() - register an OF thermal co=
+oling
+> + * devm_thermal_of_child_cooling_device_register() - register an OF ther=
+mal cooling
+>   *					       device
+>   * @dev:	a valid struct device pointer of a sensor device.
+>   * @np:		a pointer to a device tree node.
+
+Since the function is now explicitly meant for legacy bindings utilizing ch=
+ild
+nodes, could this kerneldoc description be updated to clarify its specializ=
+ed
+semantics instead of leaving it generically registering an OF thermal cooli=
+ng
+device?
+
 [ ... ]
 > diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index 0ddc77aeeca26..d9332b0371884 100644
+> index a8e870ca2e271..6535353ae83ca 100644
 > --- a/include/linux/thermal.h
 > +++ b/include/linux/thermal.h
-[ ... ]
-> @@ -317,6 +322,14 @@ devm_thermal_of_cooling_device_register(struct devic=
-e *dev,
->  {
->  	return ERR_PTR(-ENODEV);
->  }
-> +
-> +struct thermal_cooling_device *
-> +devm_thermal_cooling_device_register(struct device *dev, const char *typ=
-e,
-> +				     void *devdata, const struct thermal_cooling_device_ops *ops)
-> +{
-> +	return ERR_PTR(-ENODEV);
-> +}
+> @@ -206,10 +206,10 @@ thermal_of_cooling_device_register(struct device_no=
+de *np,
+>  				   const struct thermal_cooling_device_ops *ops);
+> =20
+>  struct thermal_cooling_device *
+> -devm_thermal_of_cooling_device_register(struct device *dev,
+> -					struct device_node *np,
+> -					const char *type, void *devdata,
+> -					const struct thermal_cooling_device_ops *ops);
+> +devm_thermal_of_child_cooling_device_register(struct device *dev,
+> +					      struct device_node *np,
+> +					      const char *type, void *devdata,
+> +					      const struct thermal_cooling_device_ops *ops);
 
-Does this fallback implementation need the static inline keywords?=20
-Without them, it looks like this will be defined as a strong global symbol =
-in
-every translation unit that includes the thermal header when CONFIG_THERMAL=
- is
-disabled, which could cause multiple definition linker errors.
-
-> +
->  static inline void thermal_cooling_device_unregister(
->  	struct thermal_cooling_device *cdev)
->  { }
+Should the underlying unmanaged thermal_of_cooling_device_register() also
+be renamed to maintain a consistent API surface between the managed and
+unmanaged variants?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260419182203.4083=
-985-1-daniel.lezcano@oss.qualcomm.com?part=3D6
+985-1-daniel.lezcano@oss.qualcomm.com?part=3D10
