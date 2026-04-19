@@ -1,87 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C87C3A1DB
-	for <linux-hwmon@vger.kernel.org>; Sun, 19 Apr 2026 18:47:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C0E03A1DB
+	for <linux-hwmon@vger.kernel.org>; Sun, 19 Apr 2026 18:47:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776624447; cv=none; b=Dg9mMUg/Sj1iARqtFmNEyMSC51tp9v5SRhUKZb7dk1hgW4gkEPnATbmofNI+kn5qLmCv9gH+kZs0qSzRgx9c/NssFYiAR/PcIkF7jbb43ErpSINFe5RqLH7IifqUbSJhngbv6yL5RM1O1KmL/TnuP1WzRKuNZfyeMG7G4q87gEs=
+	t=1776624467; cv=none; b=hl8t88qq3C+DPorQ5OZkIRasNRkFHWDRTqT3O4o5qC+73VHHarZ1E6xtPmHKUAncOTx19lydBoMpGhHuuM21E2OKT6GVSUIywdAaD1wKCPUoeeeL5y+6Era4Lbwb6WYPUOBKtX+LeJ4ssb9R6BqC5i1+hsQb/y371DMndXAl9HA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776624447; c=relaxed/simple;
-	bh=TKz9A0tAKqAtRZRs1EVY6ssM6cWWKKjCpzS4cs79wfM=;
+	s=arc-20240116; t=1776624467; c=relaxed/simple;
+	bh=tjz4swuufATKwaIYgR7aSJ3alWfgvcmA68y4m5aD/0E=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=eDI1PiD/0jDwukgMDtnq1jDn3a/6YXuXG+g9znMXnokLtR7Mbgz5+utyw4VKdlhXjBZNf/I0VAkRMqrxxwRjqIrJK5shhrgbvN6tiYzjUrd9eZ1jONJhd8EiqOH+goYCxQXIO7NKP8r1jPeQr3Edvm8/tubfB6h8JhTBhvQ5/P8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lSOEZQD2; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=ffhEKDPGgekuoJQTjamTyQgs/tZHtnp7s8dH2fKR78nRhoY1NrvZLdRUV9/2UsbP91zmQLwK108oZ7jsmvBfK0rjylq+TgNLxfXNHQJYiNqaqz0e8oHl83r5tOpMIH9uVfwzyE4liJHmkLpZjV+HccHeFbaZ8Q6/WVg4NThU29Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LabqkluL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lSOEZQD2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A8ABC2BCAF;
-	Sun, 19 Apr 2026 18:47:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LabqkluL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E84DC2BCAF;
+	Sun, 19 Apr 2026 18:47:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776624446;
-	bh=TKz9A0tAKqAtRZRs1EVY6ssM6cWWKKjCpzS4cs79wfM=;
+	s=k20201202; t=1776624467;
+	bh=tjz4swuufATKwaIYgR7aSJ3alWfgvcmA68y4m5aD/0E=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=lSOEZQD23LXANvN8BPnpexzDi+s7/PEolbFI8mv8MngDqU7h8GS3/gDSgyCv7EWCM
-	 PqO1DYANLR5sgvdf4bodHABQ1jq8BRV06l+d3uRncBmxORwhaKCQ1/9FxyFljHtYAF
-	 hEXCOLSuMBp4LQ9gdZQipbKaDl0o/n0YF8C96xUb0Ea5p6gk0mfRABW9pbvdqSsaix
-	 DRnGaTKFu/GWB1vhhC62xxP0mzxFvTpcu0khvZ+7gzdPiSbjAij99UaJy3+jncLb7T
-	 oVQfIsyDHqjL3vXIW1Za7i3M3hPDFudLbd4QNhpHVDmmKuspCxX3V1X9rbvPY8CvIH
-	 66e6XeNxQtkUA==
+	b=LabqkluLmlDVRI3pwbENk08b/JbmqgNzh6xMVPggvqnHmVIdw23IErcyysPO1Ccme
+	 FwM/pdwbryUxpHIJxyAPbKxa1QHn4FF/RcP3I06XUqM9DIBQdoLBg29NBKdxwLLACU
+	 3HYPVx28dj1vPZxM381eWkn68xnyMJDR60miItv5uPP2SHiLYhpk/oYM7y4MNP9rV6
+	 5jPoD0v3i6En81wbZwE1KgszKepxb+IjDx9uFaOyyttUWEWwhxuODGD3B1O53pnqQT
+	 ht1vtupL9dgTp28P60nz4cQb9OpizE5SnYYuoLieaCB/ykVWVNgsX+kx8tEKgxjFRi
+	 tcBdYFogre+sw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v1 01/14] thermal/of: Move OF code where it belongs to
+Subject: Re: [PATCH v1 07/14] hwmon:: Use non-OF thermal cooling device
+ register function
 Reply-To: sashiko@lists.linux.dev
 To: "Daniel Lezcano" <daniel.lezcano@oss.qualcomm.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260419182203.4083985-2-daniel.lezcano@oss.qualcomm.com>
-References: <20260419182203.4083985-2-daniel.lezcano@oss.qualcomm.com>
+In-Reply-To: <20260419182203.4083985-8-daniel.lezcano@oss.qualcomm.com>
+References: <20260419182203.4083985-8-daniel.lezcano@oss.qualcomm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 19 Apr 2026 18:47:25 +0000
-Message-Id: <20260419184726.6A8ABC2BCAF@smtp.kernel.org>
+Date: Sun, 19 Apr 2026 18:47:46 +0000
+Message-Id: <20260419184747.2E84DC2BCAF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 1 potential issue(s):
-- [Low] Moving `[devm_]thermal_of_cooling_device_register()` to `thermal_of=
-.c` causes undefined reference build errors on non-OF platforms.
+Sashiko AI review found 2 potential issue(s):
+- [High] This problem wasn't introduced by this patch, but in mlxreg-fan.c,=
+ the hwmon sysfs interfaces are exposed before the thermal cooling device p=
+ointer (pwm->cdev) is initialized, leading to a possible NULL pointer deref=
+erence.
+- [High] This problem wasn't introduced by this patch, but in mlxreg-fan.c,=
+ the variables pwm->last_hwmon_state and pwm->last_thermal_state are read a=
+nd modified concurrently without any locking, leading to inconsistent hardw=
+are state.
 --
 
-commit 10b09a7422c3dc398ce39daac38970f758efdaee
+commit c24a43d962cbf165d7c767a5a51aa1a15586bd28
 Author: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
 
-thermal/of: Move OF code where it belongs to
+hwmon:: Use non-OF thermal cooling device register function
 
-This commit moves the OF-specific cooling device registration functions
-from the thermal core to the thermal-of implementation.
+Make HWMON drivers which are not based on device tree to use the
+corresponding non-OF functions.
 
-> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> index 99085c806a1f6..398157e740fc7 100644
-> --- a/drivers/thermal/thermal_of.c
-> +++ b/drivers/thermal/thermal_of.c
 [ ... ]
-> +struct thermal_cooling_device *
-> +devm_thermal_of_cooling_device_register(struct device *dev,
-> +					struct device_node *np,
-> +					const char *type, void *devdata,
-> +					const struct thermal_cooling_device_ops *ops)
-> +{
-> +	struct thermal_cooling_device **ptr, *tcd;
 
-Will moving these functions to thermal_of.c cause undefined reference
-linker errors on non-OF platforms?
+> diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
+> index 137a90dd20752..860de6cfd8a4d 100644
+> --- a/drivers/hwmon/mlxreg-fan.c
+> +++ b/drivers/hwmon/mlxreg-fan.c
+> @@ -583,8 +583,8 @@ static int mlxreg_fan_cooling_config(struct device *d=
+ev, struct mlxreg_fan *fan)
+>  		pwm->fan =3D fan;
+>  		/* Set minimal PWM speed. */
+>  		pwm->last_hwmon_state =3D MLXREG_FAN_PWM_DUTY2STATE(MLXREG_FAN_MIN_DUT=
+Y);
 
-Several non-OF drivers, such as dell-smm-hwmon on x86, use these variants
-unconditionally by passing a NULL pointer for the device tree node. Since
-thermal_of.c is only compiled when CONFIG_THERMAL_OF is enabled, and the
-headers do not provide dummy stubs for the disabled case, this move appears
-to break the build for those platforms.
+This isn't a bug introduced by this commit, but are pwm->last_hwmon_state a=
+nd
+pwm->last_thermal_state read and modified concurrently without locking?
 
-I see this is addressed later in the patch series by commits 18601ab408a18,
-c24a43d962cbf, and 06c743d31c831. Could the dummy stubs or non-OF variants
-be introduced before or during this move to prevent bisectability issues?
+The function mlxreg_fan_write() (executed via sysfs) and
+mlxreg_fan_set_cur_state() (executed by the thermal subsystem) concurrently
+access and mutate these variables.
+
+While the hwmon core serializes sysfs operations via
+hwmon_device_register_with_info(), it does not serialize calls from the
+thermal subsystem.
+
+Because there is no lock protecting this multi-variable state, can a
+Time-Of-Check to Time-Of-Use race occur? One thread may evaluate the maximum
+of the two states using stale data and write an incorrectly low value to the
+hardware.
+
+Does this violate the hwmon subsystem guidelines requiring drivers to
+implement locking for attributes registered by any other means?
+
+> -		pwm->cdev =3D devm_thermal_of_cooling_device_register(dev, NULL, mlxre=
+g_fan_name[i],
+> -								    pwm, &mlxreg_fan_cooling_ops);
+> +		pwm->cdev =3D devm_thermal_cooling_device_register(dev, mlxreg_fan_nam=
+e[i],
+> +								 pwm, &mlxreg_fan_cooling_ops);
+
+This problem also wasn't introduced by this commit, but are the hwmon sysfs
+interfaces exposed before the thermal cooling device pointer (pwm->cdev) is
+initialized?
+
+In mlxreg_fan_probe(), the hwmon device is registered via
+devm_hwmon_device_register_with_info() before mlxreg_fan_cooling_config() is
+called.  This exposes sysfs attributes to user-space immediately.
+
+If a user writes to the PWM attribute in this narrow window, mlxreg_fan_wri=
+te()
+will be invoked and pass the currently uninitialized pwm->cdev to
+_mlxreg_fan_set_cur_state().
+
+Can this lead to a NULL pointer dereference when cdev->devdata is
+unconditionally dereferenced?
+
+>  		if (IS_ERR(pwm->cdev)) {
+>  			dev_err(dev, "Failed to register cooling device\n");
+>  			return PTR_ERR(pwm->cdev);
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260419182203.4083=
-985-1-daniel.lezcano@oss.qualcomm.com?part=3D1
+985-1-daniel.lezcano@oss.qualcomm.com?part=3D7
