@@ -1,44 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 898DF3D647F;
-	Mon, 20 Apr 2026 13:23:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EB963F660B;
+	Mon, 20 Apr 2026 13:25:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776691423; cv=none; b=i4/ZgFHVKXuem0IXoCX0hHRmEPx0tzJiCQa+hbDfgISOx9RrrqlgojDa+vtXtk39txAdUCfG9QnSd1dWxmPGyYJkPauhrGIHgjMOfJwVuRXjruLvJW6VzH6fnqcI8X44fPS54L7tZMwS+kGrE2o4/nGjCWxj7oafB146PVIE7dA=
+	t=1776691557; cv=none; b=bQoP0gaKEJdgfai+omNB4znuwKvSNly6Y5/ERmTbrjZ5Ee9kAOJ7tU4NVOwWIzrnvKIS+WQc/F7eGZKw3QA3oF3s6dIhZMtUlS318O4V6H2S5uPWYpddP37Dhy6ZxAEmxsYH9iYMIKjrel2hNeMj/5M7RfAzNo2/S5Pva5ROgkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776691423; c=relaxed/simple;
-	bh=HmVkddanjV40b6zd3ML51lSe6vmZoSzwh0EDddWFdhM=;
+	s=arc-20240116; t=1776691557; c=relaxed/simple;
+	bh=SZI/oSocyDlcozG/n+ticI/QDtm52F+51SbwuEk3IkE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gjT7ME76d7qyD8QTLW04PDhSuY3a0oHyomF8qZzi+hO6HUhzIplQiifyxDHfZ54JK0WEAb9pFQOx1jDKeYSbhlVyTxrvcU59pzwEuilqxddwdP2E3YF8JQUoKltlcvXPqgzq2rbC+9sg178vcHREMmMSgsTZ5F1aRSrdjuh1mbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YYHzTzpZ; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=swegGAKpXf5Wy6nlYp4JzMp3ni378tX+5hiZhCN7rs44ObMkvxpD3l63Ih/teIk+fHiM2dni0fgdZxaFapSmRuAm1Csjyrw7n7qukjq+GgCLQ/GKjaYUrmXSHavU9u6dmL0dLq1F5P/btH7d21+bPGnC61HiOKXIFaGdzIkK+c0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A1kNneet; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YYHzTzpZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 779C4C2BCB7;
-	Mon, 20 Apr 2026 13:23:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A1kNneet"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DB78C2BCB9;
+	Mon, 20 Apr 2026 13:25:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776691423;
-	bh=HmVkddanjV40b6zd3ML51lSe6vmZoSzwh0EDddWFdhM=;
+	s=k20201202; t=1776691556;
+	bh=SZI/oSocyDlcozG/n+ticI/QDtm52F+51SbwuEk3IkE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YYHzTzpZyxMyF+bhzk/3kMSOTOBcYGKP9kHX/v2HPgcjbN53RGM7/D63xdLE4Woh/
-	 nUtmiQUzOass9jLkJm83LjYZZLS1ReHAv38awr4plzjlUHsbu6QAXq7v73+Q2rmdgJ
-	 JAIy/TB1/5Lbt6YdhezbeMOY7XG0+w8zj7At+2tbt/7q2TMLVuSM+8oYQhmwMdjzON
-	 gOgFh6kjkf6Ou8W3NqnEAJWmrpLaRVOCp6nnxwRcbtdjMBpW0KTqQ7hXe1xldU/qnW
-	 myZXWHh01k3YN+T7oYt5qp2HqvLeo7TD5OEdpPnh+vMgcdx6V+YLVizhxmSF6BAbzR
-	 ZpXl/iAwc0q2A==
+	b=A1kNneetsnBEUqiEKjDPiyG6UoYoFhenvwQZvwNxCdZ5kHmCAF2ecaFOz3Qkh9Oce
+	 xiR8IuYoGZHZ3QvWCK8+AgAZlntbQX39tw+kLmsIbFxck0CR3M38tCkOdPPUn7muMp
+	 hqvBwOyZIPOyRy3H7+4mlPeqVqkcO75l+b5IBfSfzorcMiFE1vEnzm5K9mqzaMg1yl
+	 vFnQCiJNEeCBnorvXOtjitrjWbbrMAAjBFqlt5NqCxxXrbZqni7d8gNd3B3DoO2lvd
+	 QsgmrR/x07lXwX21BxV7iREHn7R9zVvD2c3Mr7NKG8Vk0Pyk4LBX7NoC8zY1bwT4tD
+	 Vp6rIWh/8exxA==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Denis Pauk <pauk.denis@gmail.com>,
-	=?UTF-8?q?Tom=C3=A1=C5=A1=20B=C5=BEatek?= <bugs@bzatek.net>,
-	Theunis Scheepers <ptscheepers@gmail.com>,
+Cc: "Timothy C. Sweeney-Fanelli" <tim@zerobytellc.com>,
+	Eugene Shalygin <eugene.shalygin@gmail.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Sasha Levin <sashal@kernel.org>,
+	corbet@lwn.net,
 	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 7.0-6.19] hwmon: (nct6775) Add ASUS X870/W480 to WMI monitoring list
-Date: Mon, 20 Apr 2026 09:16:52 -0400
-Message-ID: <20260420132314.1023554-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 7.0-6.18] hwmon: (asus-ec-sensors )add ROG CROSSHAIR X670E EXTREME
+Date: Mon, 20 Apr 2026 09:18:12 -0400
+Message-ID: <20260420132314.1023554-98-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260420132314.1023554-1-sashal@kernel.org>
 References: <20260420132314.1023554-1-sashal@kernel.org>
@@ -48,432 +49,328 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 7.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Denis Pauk <pauk.denis@gmail.com>
+From: "Timothy C. Sweeney-Fanelli" <tim@zerobytellc.com>
 
-[ Upstream commit 21518579cbdeb4e86a6fffbc3d52f52bd74ab87e ]
+[ Upstream commit ab4b7071ae0a831e4c2fd45c626c3b1d66cc1201 ]
 
-Boards such as
-* G15CE,
-* PRIME X870-P WIFI,
-* PRIME X870-P,
-* Pro WS W480-ACE,
-* ProArt X870E-CREATOR WIFI,
-* ROG CROSSHAIR X870E APEX,
-* ROG CROSSHAIR X870E DARK HERO,
-* ROG CROSSHAIR X870E EXTREME,
-* ROG CROSSHAIR X870E GLACIAL,
-* ROG CROSSHAIR X870E HERO BTF,
-* ROG CROSSHAIR X870E HERO,
-* ROG STRIX X870-A GAMING WIFI,
-* ROG STRIX X870-F GAMING WIFI,
-* ROG STRIX X870-I GAMING WIFI,
-* ROG STRIX X870E-E GAMING WIFI,
-* ROG STRIX X870E-E GAMING WIFI7 R2,
-* TUF GAMING X870-PLUS WIFI,
-* TUF GAMING X870-PRO WIFI7 W NEO,
-* TUF GAMING X870E-PLUS WIFI7,
-* W480/SYS,
-* X870 AYW GAMING WIFI W,
-* X870 MAX GAMING WIFI7 W,
-* X870 MAX GAMING WIFI7
-have got a nct6775 chip, but by default there's no use of it because of
-resource conflict with WMI method.
+Add support for ROG CROSSHAIR X670E EXTREME
 
-Add the boards to the WMI monitoring list.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-Tested-by: Tomáš Bžatek <bugs@bzatek.net>
-Tested-by: Theunis Scheepers <ptscheepers@gmail.com>
-Link: https://lore.kernel.org/r/20260322131848.6261-1-pauk.denis@gmail.com
+Signed-off-by: Timothy C. Sweeney-Fanelli <tim@zerobytellc.com>
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+Link: https://lore.kernel.org/r/20260215151743.20138-3-eugene.shalygin@gmail.com
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
-Now I have all the information needed for a comprehensive analysis. Let
-me compile my findings.
+Now I have all the information needed for a complete analysis.
 
 ---
 
 ## PHASE 1: COMMIT MESSAGE FORENSICS
 
 **Step 1.1: Subject Line**
-- Subsystem: `hwmon: (nct6775)`
-- Action verb: "Add" — adding board names to whitelist
-- Summary: Add 23 ASUS X870 and W480 motherboard names to the WMI
-  monitoring board lists
+- Subsystem: `hwmon: (asus-ec-sensors)`
+- Action verb: `add`
+- Summary: Add board support for ROG CROSSHAIR X670E EXTREME motherboard
+
+Record: [hwmon/asus-ec-sensors] [add] [New motherboard board definition
+for ROG CROSSHAIR X670E EXTREME]
 
 **Step 1.2: Tags**
-- `Link: https://bugzilla.kernel.org/show_bug.cgi?id=204807` — long-
-  running bug tracking nct6775 WMI access on ASUS boards
-- `Signed-off-by: Denis Pauk <pauk.denis@gmail.com>` — author, primary
-  maintainer of this WMI board list
-- `Tested-by: Tomáš Bžatek <bugs@bzatek.net>` — independent tester
-- `Tested-by: Theunis Scheepers <ptscheepers@gmail.com>` — second
-  independent tester
-- `Link:
-  https://lore.kernel.org/r/20260322131848.6261-1-pauk.denis@gmail.com`
-  — lore thread
+- `Signed-off-by: Timothy C. Sweeney-Fanelli <tim@zerobytellc.com>` —
+  original contributor/tester of the board info
+- `Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>` — driver
+  maintainer who curates submissions
+- `Link: https://lore.kernel.org/r/20260215151743.20138-3-
+  eugene.shalygin@gmail.com` — patch 3 of a series
 - `Signed-off-by: Guenter Roeck <linux@roeck-us.net>` — hwmon subsystem
-  maintainer
+  maintainer who merged it
 
-Record: Two independent testers, hwmon maintainer sign-off, bug tracker
-reference. Strong quality signals.
+Record: No Fixes tag (expected for a board addition). No Reported-by,
+Cc: stable, or syzbot. The patch went through the driver author
+(Shalygin) and hwmon maintainer (Roeck). This is patch 3 of a series.
 
-**Step 1.3: Body Text**
-The commit explains that these ASUS boards have nct6775-compatible chips
-but "by default there's no use of it because of resource conflict with
-WMI method." Without the board name in the whitelist, the driver can't
-use WMI to access the hardware monitoring chip, so users get zero sensor
-data.
+**Step 1.3: Commit Body**
+The body simply says "Add support for ROG CROSSHAIR X670E EXTREME." No
+bug description, stack traces, or failure modes — this is a hardware
+enablement commit.
 
-Record: Bug = no hardware monitoring on popular boards due to ACPI/WMI
-resource conflict. Symptom = sensors completely unavailable.
+Record: No bug is described; this is a hardware support addition for a
+specific ASUS motherboard model.
 
 **Step 1.4: Hidden Bug Fix Detection**
-This is not a hidden bug fix — it's explicitly an enablement for
-hardware that is inaccessible without the whitelist entry. This falls
-squarely in the "hardware quirk/workaround" exception category.
+This is not a hidden bug fix. It's a straightforward board ID / sensor
+configuration addition to enable hwmon sensor monitoring on a new
+motherboard.
 
----
+Record: Not a hidden bug fix. Pure hardware enablement.
 
 ## PHASE 2: DIFF ANALYSIS
 
 **Step 2.1: Inventory**
-- Files changed: 1 (`drivers/hwmon/nct6775-platform.c`)
-- Lines added: ~23 string entries across two `const char *` arrays
-- Lines removed: 0
-- Functions modified: 0 — only data arrays changed
-- Scope: Pure data addition, single file, no logic changes
+- `Documentation/hwmon/asus_ec_sensors.rst`: +1 line (adds board name to
+  supported list)
+- `drivers/hwmon/asus-ec-sensors.c`: +11 lines (9-line board_info struct
+  + 2-line DMI table entry)
+- Total: ~12 lines added, 0 removed
+- Functions modified: None. Only static const data structures added.
 
-**Step 2.2: Code Flow Change**
-- `asus_wmi_boards[]`: 2 entries added ("Pro WS W480-ACE", "W480/SYS")
-- `asus_msi_boards[]`: ~21 entries added (G15CE, various X870 boards,
-  ProArt X870E, ROG CROSSHAIR X870E variants, ROG STRIX X870 variants,
-  TUF GAMING X870 variants, X870 AYW/MAX variants)
-- Both arrays are used in `sensors_nct6775_platform_init()` via
-  `match_string()` to determine whether WMI access should be used
-  instead of direct I/O port access.
-- No control flow, no error handling, no locking changes.
+Record: 2 files, +12 lines, 0 lines removed. Only adds static const data
+(board_info struct and DMI match entry). Scope: single-file surgical
+addition.
+
+**Step 2.2: Code Flow**
+- Hunk 1 (board_info): Adds `board_info_crosshair_x670e_extreme` struct
+  with temperature sensors (CPU, CPU Package, MB, VRM, T_Sensor,
+  Water_In, Water_Out), mutex path
+  `ASUS_HW_ACCESS_MUTEX_SB_PCI0_SBRG_SIO1_MUT0`, and
+  `family_amd_600_series`.
+- Hunk 2 (DMI table): Adds a `DMI_EXACT_MATCH_ASUS_BOARD_NAME` entry
+  linking the board name to the new struct.
+- Before: The board was not recognized; driver wouldn't probe on this
+  motherboard.
+- After: The board is recognized and the defined sensors are exposed via
+  hwmon.
 
 **Step 2.3: Bug Mechanism**
-Category: Hardware workaround / device ID addition. Board names are
-added to static `const` whitelist arrays. When the board DMI name
-matches an entry, the driver uses WMI to access the nct6775 chip instead
-of direct I/O (which is blocked by ACPI resource claims).
+Category: Hardware workaround / device ID addition. No bug fix. The new
+struct uses existing sensor macros, an existing mutex path (verified at
+7 other locations), and an existing family (`family_amd_600_series`).
+The sensor table `sensors_family_amd_600[]` (line 275) includes all the
+sensors referenced: `ec_sensor_temp_cpu`, `ec_sensor_temp_cpu_package`,
+`ec_sensor_temp_mb`, `ec_sensor_temp_vrm`, `ec_sensor_temp_t_sensor`,
+`ec_sensor_temp_water_in`, `ec_sensor_temp_water_out`.
+
+Record: This is a hardware enablement (new board ID) addition. All
+referenced sensors, mutex path, and family exist in the codebase.
 
 **Step 2.4: Fix Quality**
-- Obviously correct: string literals added in alphabetical order to
-  const arrays
-- Minimal/surgical: only data, zero logic
-- Regression risk: zero — adding new strings cannot affect behavior for
-  existing boards
-- No red flags whatsoever
-
----
+- Obviously correct: Yes — follows the exact same pattern as dozens of
+  other board entries
+- Minimal/surgical: Yes — 12 lines of purely static data
+- Regression risk: Essentially zero — the new DMI match only triggers on
+  the exact board name "ROG CROSSHAIR X670E EXTREME". Cannot affect any
+  other board.
 
 ## PHASE 3: GIT HISTORY
 
 **Step 3.1: Blame**
-The `asus_wmi_boards[]` array originates from commit c3963bc0a0cf9
-(v5.19-rc1, platform split). The `asus_msi_boards[]` array originates
-from commit e2e09989ccc21 (v6.3-rc1). Both have been incrementally
-expanded with each new board generation, with ~20 prior similar commits
-by Denis Pauk and others.
+The code this is inserted adjacent to
+(`board_info_crosshair_viii_impact` and
+`board_info_crosshair_x670e_gene`) has been present since 2022-2023. The
+AMD 600 series family support was introduced in commit 790dec13c0128
+(April 2023), and is present in all stable trees since ~v6.5+.
 
-**Step 3.2: Fixes tag**
-No Fixes: tag (expected for this type of commit — it's an enablement,
-not a code fix).
+**Step 3.2: Fixes Tag**
+No Fixes: tag present (expected — this is not a bug fix, it's a new
+board addition).
 
 **Step 3.3: File History**
-20+ prior commits adding board names to these arrays. This is a well-
-established, routine pattern. Recent commits include:
-- 246167b17c14e: Add ASUS Pro WS WRX90E-SAGE SE
-- 03897f9baf3ee: Add ASUS ROG STRIX X870E-H GAMING WIFI7
-- ccae49e5cf6eb: Add 665-ACE/600M-CL
-- 1f432e4cf1dd3: Add G15CF
+The file has 65+ commits since the driver was introduced (d0ddfd241e571,
+Jan 2022). The vast majority are board additions just like this one.
+Eugene Shalygin is the driver author/maintainer and has authored nearly
+all of them.
 
 **Step 3.4: Author**
-Denis Pauk is the primary author of the WMI access support and has
-authored the vast majority of board list additions (12+ commits). He is
-the de facto maintainer of this feature.
+Eugene Shalygin is the original author and maintainer of the asus-ec-
+sensors driver (copyright 2021, authored 40+ commits). Timothy Sweeney-
+Fanelli is the board owner who contributed the sensor data.
 
 **Step 3.5: Dependencies**
-No dependencies. The commit is a pure addition of string constants. No
-new functions, no API changes, no prerequisite commits needed.
+No dependencies. All referenced constants (`SENSOR_TEMP_CPU`,
+`SENSOR_TEMP_WATER_IN`, `ASUS_HW_ACCESS_MUTEX_SB_PCI0_SBRG_SIO1_MUT0`,
+`family_amd_600_series`) already exist in the 7.0 stable tree. This is a
+standalone addition.
 
----
+## PHASE 4: MAILING LIST RESEARCH
 
-## PHASE 4: MAILING LIST AND EXTERNAL RESEARCH
+**Step 4.1-4.5:**
+The Link: tag indicates this is patch 3 of a series
+(20260215151743.20138-3). Lore.kernel.org is behind Anubis protection
+and cannot be fetched. However, b4 dig confirmed similar patches from
+the same author are findable. The patch was accepted by hwmon maintainer
+Guenter Roeck, the standard pathway for all asus-ec-sensors changes.
 
-**Step 4.1-4.2: Patch Discussion**
-The lore.kernel.org and bugzilla sites were behind anti-bot protection;
-however, web search confirmed:
-- Bug 204807 is a long-running tracker (since ~2019) for ASUS boards
-  where nct6775 sensors don't work without `acpi_enforce_resources=lax`
-- The WMI access method was the proper fix, implemented in v5.16
-- Board lists are updated as new ASUS models are released
-- Guenter Roeck (hwmon maintainer) reviewed and applied
-
-**Step 4.3: Bug Report**
-Bugzilla #204807 is a well-documented, long-standing issue affecting
-many ASUS users. The commit message and two Tested-by tags confirm real
-users need this.
-
-**Step 4.4-4.5: Related Patches**
-This is a standalone patch — no series dependencies. Previous identical-
-pattern patches have been applied regularly.
-
----
+Record: Could not access lore due to Anubis bot protection. The patch
+followed the standard hwmon submission path (contributor -> driver
+author -> Guenter Roeck).
 
 ## PHASE 5: CODE SEMANTIC ANALYSIS
 
-**Step 5.1-5.4: Function Impact**
-The modified arrays are referenced only in
-`sensors_nct6775_platform_init()` (lines 1521-1531) via
-`match_string()`. The call chain is:
-1. `module_init(sensors_nct6775_platform_init)` — called once at driver
-   load
-2. DMI board name is compared against whitelist
-3. If match, `nct6775_determine_access()` is called to probe WMI method
-4. If WMI works, sensor access uses WMI instead of direct I/O
+**Step 5.1-5.5:**
+No functions are modified. The change adds only static const data
+structures. The DMI matching framework (`dmi_table[]`) is used during
+module probe. When the DMI system matches the board name, the driver
+reads sensors from EC registers at the offsets defined in
+`sensors_family_amd_600[]`. This is a purely data-driven mechanism — no
+code path changes.
 
-The change only adds new match targets. Existing matches are completely
-unaffected.
-
-**Step 5.5: Similar Patterns**
-20+ identical pattern commits exist in the git history. This is routine
-maintenance of a device whitelist.
-
----
+Record: No code flow changes. Only static data additions. The DMI match
+→ board_info → sensor table pipeline is well-established and works
+identically for all 40+ supported boards.
 
 ## PHASE 6: STABLE TREE ANALYSIS
 
-**Step 6.1: Code Existence**
-- Both `asus_wmi_boards[]` and `asus_msi_boards[]` exist in the 7.0 tree
-  (and 6.6.y, 6.12.y)
-- The `asus_msi_boards[]` was introduced in v6.3, so it exists in 6.6.y
-  and later
-- For 6.1.y, only `asus_wmi_boards[]` entries would apply (2 entries)
+**Step 6.1:**
+The driver exists since v5.18 (d0ddfd241e571, Jan 2022). AMD 600 series
+support exists since v6.5 (790dec13c0128, Apr 2023). The
+`ASUS_HW_ACCESS_MUTEX_SB_PCI0_SBRG_SIO1_MUT0` mutex path and all sensor
+macros exist in 7.0.
 
-**Step 6.2: Backport Complications**
-Minimal. The patch adds strings in alphabetical order. The only context
-dependency is the surrounding existing strings. The "ROG STRIX X870E-H
-GAMING WIFI7" entry (03897f9baf3ee) is already in the 7.0 tree at line
-1407, which provides a context anchor. The patch should apply cleanly or
-with trivial offset adjustments.
+**Step 6.2:**
+The patch should apply cleanly. It's a pure addition between existing
+entries in two sorted lists (board_info structs and DMI table). No
+conflicts expected.
 
-**Step 6.3: Related Fixes Already in Stable**
-No — these specific X870/W480 board names are not in any stable tree
-yet.
+**Step 6.3:**
+No related fix needed — this board has never been supported before.
 
----
+## PHASE 7: SUBSYSTEM CONTEXT
 
-## PHASE 7: SUBSYSTEM AND MAINTAINER CONTEXT
+**Step 7.1:**
+Subsystem: hwmon (hardware monitoring). Criticality: PERIPHERAL —
+affects only users of this specific ASUS motherboard. However, hwmon
+sensor monitoring is important for users who rely on temperature/fan
+monitoring for system health.
 
-**Step 7.1: Subsystem**
-- Subsystem: `drivers/hwmon` — hardware monitoring
-- Criticality: PERIPHERAL (but widely used — temperatures, fan speeds,
-  voltages)
-- Without this fix, users of these popular boards cannot monitor
-  hardware health
-
-**Step 7.2: Activity**
-Active subsystem with regular board list updates. The file sees routine
-additions every few months.
-
----
+**Step 7.2:**
+The driver is actively maintained with 65+ commits, mostly board
+additions from the original author.
 
 ## PHASE 8: IMPACT AND RISK ASSESSMENT
 
-**Step 8.1: Affected Users**
-Users of 23 specific ASUS motherboard models. These are popular consumer
-and workstation boards (X870 is current-gen AMD AM5 platform, W480 is
-Intel workstation).
+**Step 8.1:** Affected users: only owners of the ROG CROSSHAIR X670E
+EXTREME motherboard.
 
-**Step 8.2: Trigger**
-Every boot on affected hardware. Without this patch, the driver silently
-falls back to direct I/O access, which fails due to ACPI resource
-conflict, resulting in no sensor data at all.
+**Step 8.2:** Trigger: automatic during driver probe if the DMI board
+name matches.
 
-**Step 8.3: Severity**
-- Failure mode: Complete loss of hardware monitoring capability
-- Severity: MEDIUM — no crash or data corruption, but hardware
-  monitoring is a core system management feature
+**Step 8.3:** Failure mode without fix: no hwmon sensor data available
+for this board. Users cannot monitor CPU/VRM temperatures, water cooling
+temps, etc. through the standard hwmon interface.
 
-**Step 8.4: Risk-Benefit**
-- BENEFIT: HIGH — enables hardware monitoring on popular current-gen
-  motherboards for all stable users
-- RISK: NEAR-ZERO — pure string additions to const arrays, cannot affect
-  other boards, zero logic changes
-- Ratio: Overwhelmingly favorable
-
----
+**Step 8.4:**
+- Benefit: LOW-MEDIUM — enables hardware monitoring for a specific
+  popular enthusiast motherboard
+- Risk: VERY LOW — 12 lines of static const data, cannot affect any
+  other board
+- Ratio: Favorable
 
 ## PHASE 9: FINAL SYNTHESIS
 
-**Step 9.1: Evidence Summary**
+**Evidence FOR backporting:**
+- Falls squarely into the "new device ID / board addition" exception
+  category
+- Trivially small (12 lines of static const data)
+- Zero regression risk (only triggers on exact DMI board name match)
+- All infrastructure (AMD 600 series sensors, mutex path) already exists
+  in stable
+- Authored by the driver maintainer, accepted by the hwmon subsystem
+  maintainer
+- Follows identical pattern to dozens of prior board additions
 
-FOR backporting:
-- Classic hardware quirk/device ID addition pattern
-- Zero logic changes — only const string array additions
-- Two independent Tested-by tags
-- hwmon maintainer (Guenter Roeck) signed off
-- Fixes real issue for popular current-gen hardware
-- Long-established pattern with 20+ identical prior commits
-- References well-known bugzilla bug #204807
-- No regression risk
+**Evidence AGAINST backporting:**
+- This is not a bug fix — it's hardware enablement
+- Affects only one specific motherboard model
+- No Cc: stable tag (but this is expected for board additions needing
+  manual review)
 
-AGAINST backporting:
-- (None identified)
+**Stable rules checklist:**
+1. Obviously correct? YES — identical pattern to 40+ other entries
+2. Fixes a real bug? NO — but falls into the device ID exception
+3. Important issue? NO — but enables real hardware for real users
+4. Small and contained? YES — 12 lines, static data only
+5. No new features/APIs? YES — no new interfaces, just enables existing
+   driver on new hardware
+6. Can apply to stable? YES — clean apply expected
 
-**Step 9.2: Stable Rules Checklist**
-1. Obviously correct and tested? **YES** — string additions, two testers
-2. Fixes a real bug? **YES** — hardware monitoring inaccessible on
-   affected boards
-3. Important issue? **MEDIUM** — not a crash, but total loss of hwmon on
-   popular boards
-4. Small and contained? **YES** — single file, pure data, ~23 lines of
-   strings
-5. No new features or APIs? **YES** — adds IDs to existing mechanism
-6. Can apply to stable? **YES** — clean apply expected
+**Verification:**
+- [Phase 1] Parsed tags: SOBs from Timothy Sweeney-Fanelli
+  (contributor), Eugene Shalygin (driver author), Guenter Roeck (hwmon
+  maintainer). Link to lore present.
+- [Phase 2] Diff: +12 lines across 2 files. Only static const board_info
+  struct and DMI table entry added. No code logic changes.
+- [Phase 3] git log: Eugene Shalygin authored 40+ commits to this file,
+  is the original driver author (copyright 2021).
+- [Phase 3] git log: AMD 600 series support introduced in 790dec13c0128
+  (April 2023), present in 7.0 tree.
+- [Phase 3] Verified `ASUS_HW_ACCESS_MUTEX_SB_PCI0_SBRG_SIO1_MUT0` used
+  by 7 other boards (lines 567, 673, 687, 694, 702, 710, 777).
+- [Phase 3] Verified all sensor macros used (`SENSOR_TEMP_CPU`,
+  `SENSOR_TEMP_CPU_PACKAGE`, `SENSOR_TEMP_MB`, `SENSOR_TEMP_VRM`,
+  `SENSOR_TEMP_T_SENSOR`, `SENSOR_TEMP_WATER_IN`,
+  `SENSOR_TEMP_WATER_OUT`) exist in `sensors_family_amd_600[]` (lines
+  275-293).
+- [Phase 4] Lore inaccessible due to Anubis protection; b4 dig could not
+  find the commit directly (likely not yet in tree). The submission path
+  (contributor -> driver author -> Guenter Roeck) is standard.
+- [Phase 5] No functions modified. Only static const data. Zero code
+  path impact.
+- [Phase 6] Driver and AMD 600 series support exist in 7.0 tree. Clean
+  apply expected.
+- [Phase 8] Risk: VERY LOW (static data only, DMI-scoped). Benefit:
+  enables hwmon on a specific board.
 
-**Step 9.3: Exception Category**
-**YES** — This is a hardware quirk/workaround addition (board names to
-existing WMI whitelist). This is explicitly listed as an exception that
-IS allowed in stable.
-
----
-
-## Verification
-
-- [Phase 1] Parsed tags: found 2x Tested-by, Link to bugzilla #204807,
-  maintainer SOB from Guenter Roeck
-- [Phase 2] Diff analysis: ~23 string literals added to
-  `asus_wmi_boards[]` (2 entries) and `asus_msi_boards[]` (21 entries),
-  zero logic changes
-- [Phase 3] git blame: `asus_wmi_boards[]` introduced in c3963bc0a0cf9
-  (v5.19-rc1), `asus_msi_boards[]` in e2e09989ccc21 (v6.3-rc1)
-- [Phase 3] git log: confirmed 20+ prior identical-pattern board
-  addition commits by Denis Pauk
-- [Phase 3] Author Denis Pauk: confirmed as primary maintainer of this
-  WMI board list feature (12+ commits)
-- [Phase 4] WebSearch: confirmed bugzilla #204807 is long-running
-  tracker for ASUS nct6775 WMI access issues
-- [Phase 4] b4 dig/lore: anti-bot protection prevented direct thread
-  access, but maintainer sign-off and metadata verified
-- [Phase 5] Code trace: arrays used only in
-  `sensors_nct6775_platform_init()` via `match_string()`, single
-  callsite
-- [Phase 6] Both arrays exist in 7.0 tree, `asus_msi_boards[]` exists in
-  6.6.y+
-- [Phase 6] "ROG STRIX X870E-H GAMING WIFI7" already present at line
-  1407, confirming context compatibility
-- [Phase 8] Failure mode: complete loss of hardware monitoring on
-  affected boards, severity MEDIUM
-- [Phase 8] Risk: near-zero — pure const data addition
+This is a textbook new board ID addition to an existing driver — one of
+the explicitly allowed exception categories for stable backporting. It's
+trivially small, uses only existing infrastructure, and cannot regress
+any other system.
 
 **YES**
 
- drivers/hwmon/nct6775-platform.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ Documentation/hwmon/asus_ec_sensors.rst |  1 +
+ drivers/hwmon/asus-ec-sensors.c         | 11 +++++++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-index 555029dfe713f..1975399ac440d 100644
---- a/drivers/hwmon/nct6775-platform.c
-+++ b/drivers/hwmon/nct6775-platform.c
-@@ -1159,6 +1159,7 @@ static const char * const asus_wmi_boards[] = {
- 	"Pro A520M-C",
- 	"Pro A520M-C II",
- 	"Pro B550M-C",
-+	"Pro WS W480-ACE",
- 	"Pro WS X570-ACE",
- 	"ProArt B550-CREATOR",
- 	"ProArt X570-CREATOR WIFI",
-@@ -1258,6 +1259,7 @@ static const char * const asus_wmi_boards[] = {
- 	"TUF Z390-PRO GAMING",
- 	"TUF Z390M-PRO GAMING",
- 	"TUF Z390M-PRO GAMING (WI-FI)",
-+	"W480/SYS",
- 	"WS Z390 PRO",
- 	"Z490-GUNDAM (WI-FI)",
- };
-@@ -1270,6 +1272,7 @@ static const char * const asus_msi_boards[] = {
- 	"EX-B760M-V5 D4",
- 	"EX-H510M-V3",
- 	"EX-H610M-V3 D4",
-+	"G15CE",
- 	"G15CF",
- 	"PRIME A620M-A",
- 	"PRIME B560-PLUS",
-@@ -1320,6 +1323,8 @@ static const char * const asus_msi_boards[] = {
- 	"PRIME X670-P",
- 	"PRIME X670-P WIFI",
- 	"PRIME X670E-PRO WIFI",
-+	"PRIME X870-P",
-+	"PRIME X870-P WIFI",
- 	"PRIME Z590-A",
- 	"PRIME Z590-P",
- 	"PRIME Z590-P WIFI",
-@@ -1362,11 +1367,18 @@ static const char * const asus_msi_boards[] = {
- 	"ProArt B660-CREATOR D4",
- 	"ProArt B760-CREATOR D4",
- 	"ProArt X670E-CREATOR WIFI",
-+	"ProArt X870E-CREATOR WIFI",
- 	"ProArt Z690-CREATOR WIFI",
- 	"ProArt Z790-CREATOR WIFI",
- 	"ROG CROSSHAIR X670E EXTREME",
- 	"ROG CROSSHAIR X670E GENE",
- 	"ROG CROSSHAIR X670E HERO",
-+	"ROG CROSSHAIR X870E APEX",
-+	"ROG CROSSHAIR X870E DARK HERO",
-+	"ROG CROSSHAIR X870E EXTREME",
-+	"ROG CROSSHAIR X870E GLACIAL",
-+	"ROG CROSSHAIR X870E HERO",
-+	"ROG CROSSHAIR X870E HERO BTF",
- 	"ROG MAXIMUS XIII APEX",
- 	"ROG MAXIMUS XIII EXTREME",
- 	"ROG MAXIMUS XIII EXTREME GLACIAL",
-@@ -1404,6 +1416,11 @@ static const char * const asus_msi_boards[] = {
- 	"ROG STRIX X670E-E GAMING WIFI",
- 	"ROG STRIX X670E-F GAMING WIFI",
- 	"ROG STRIX X670E-I GAMING WIFI",
-+	"ROG STRIX X870-A GAMING WIFI",
-+	"ROG STRIX X870-F GAMING WIFI",
-+	"ROG STRIX X870-I GAMING WIFI",
-+	"ROG STRIX X870E-E GAMING WIFI",
-+	"ROG STRIX X870E-E GAMING WIFI7 R2",
- 	"ROG STRIX X870E-H GAMING WIFI7",
- 	"ROG STRIX Z590-A GAMING WIFI",
- 	"ROG STRIX Z590-A GAMING WIFI II",
-@@ -1451,6 +1468,9 @@ static const char * const asus_msi_boards[] = {
- 	"TUF GAMING H770-PRO WIFI",
- 	"TUF GAMING X670E-PLUS",
- 	"TUF GAMING X670E-PLUS WIFI",
-+	"TUF GAMING X870-PLUS WIFI",
-+	"TUF GAMING X870-PRO WIFI7 W NEO",
-+	"TUF GAMING X870E-PLUS WIFI7",
- 	"TUF GAMING Z590-PLUS",
- 	"TUF GAMING Z590-PLUS WIFI",
- 	"TUF GAMING Z690-PLUS",
-@@ -1460,6 +1480,9 @@ static const char * const asus_msi_boards[] = {
- 	"TUF GAMING Z790-PLUS D4",
- 	"TUF GAMING Z790-PLUS WIFI",
- 	"TUF GAMING Z790-PLUS WIFI D4",
-+	"X870 AYW GAMING WIFI W",
-+	"X870 MAX GAMING WIFI7",
-+	"X870 MAX GAMING WIFI7 W",
- 	"Z590 WIFI GUNDAM EDITION",
+diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
+index 58986546c7233..8a080a786abd2 100644
+--- a/Documentation/hwmon/asus_ec_sensors.rst
++++ b/Documentation/hwmon/asus_ec_sensors.rst
+@@ -22,6 +22,7 @@ Supported boards:
+  * ROG CROSSHAIR VIII FORMULA
+  * ROG CROSSHAIR VIII HERO
+  * ROG CROSSHAIR VIII IMPACT
++ * ROG CROSSHAIR X670E EXTREME
+  * ROG CROSSHAIR X670E HERO
+  * ROG CROSSHAIR X670E GENE
+  * ROG MAXIMUS X HERO
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index adedaf0db10e6..934e37738a516 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -456,6 +456,15 @@ static const struct ec_board_info board_info_crosshair_viii_impact = {
+ 	.family = family_amd_500_series,
  };
  
++static const struct ec_board_info board_info_crosshair_x670e_extreme = {
++	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
++		SENSOR_TEMP_MB | SENSOR_TEMP_VRM |
++		SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_WATER_IN |
++		SENSOR_TEMP_WATER_OUT,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_SB_PCI0_SBRG_SIO1_MUT0,
++	.family = family_amd_600_series,
++};
++
+ static const struct ec_board_info board_info_crosshair_x670e_gene = {
+ 	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
+ 		SENSOR_TEMP_T_SENSOR |
+@@ -825,6 +834,8 @@ static const struct dmi_system_id dmi_table[] = {
+ 					&board_info_crosshair_viii_hero),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII IMPACT",
+ 					&board_info_crosshair_viii_impact),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR X670E EXTREME",
++					&board_info_crosshair_x670e_extreme),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR X670E GENE",
+ 					&board_info_crosshair_x670e_gene),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR X670E HERO",
 -- 
 2.53.0
 
