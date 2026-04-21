@@ -1,108 +1,227 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 718C62D0C7B
-	for <linux-hwmon@vger.kernel.org>; Mon, 20 Apr 2026 18:32:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2BD0363C45
+	for <linux-hwmon@vger.kernel.org>; Tue, 21 Apr 2026 03:05:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776709952; cv=none; b=MV4TRhmbMQU0L1bhfUgB9XqfR6EC2f9qrUD8pP5mNlixsMls7DJkSbVBTFXYTqMXRQepV76pPwMXtBwiEp4zwUMCysnKWaWPaM6eDld4o4ibyFqGBdDUx0Mn30IGOQNhHU/oZ/1TEeworlSfNMgkyHodb3Tjr+byfq/w5StsRx8=
+	t=1776740704; cv=none; b=e2iTd3RGi4f36F5Z3cgy0YArbm/0eXzn+KKmy7WOXob5PzUXaPg5L+z8AQS7jQv6XusJvsVDP4adQ3cNrOJO/SXzzUv/JnUgUHF3rkVU7F3mpEARpEyTbSP1m4mf8PGfuz2xgLTje5PuhzoHMv+JmzRH+QJd8SbftGPxq7ln1H0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776709952; c=relaxed/simple;
-	bh=1Nh1AHZB3jUyuCulcnQLcI1OPn9qD7DzyEUnCIeIxxE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=SCJM2pYoTt+av09cFN+k6vo6aIIAagnAxwPp64fh3YLrWtgdQywlFDJRNvAcRu0SQ98YglncsHVA9Xj3aOtECO6zrxzgDPjCa1S8D/T7c9h/lMXcmK59+AHqWl7mnbvKzLlYF5O72IGCkMETRvueouVcspvL0FAkT2c5JxAiZvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HwaGHHlF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776740704; c=relaxed/simple;
+	bh=f0r0hkJLwWzr6Lbbl7nS8piEjoIcwP0Du/gFOPR+3qc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DcHKny+B5JQ/lKzJmJH8FclubDLJIb2EMXD43gGqNvx80XMjfMzi7h4EZmNv/L4ICb1oJgOYcKwYfEgM+uR6C1k5Ir8BWRJPPxk4/LuusF4XMdL7PA48PwAi/V6NUtSvTUBNFigw5mWvCAT71I/PzNtjNinmIuqsUz/EllD5E14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aDAP67UZ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HwaGHHlF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E532DC19425;
-	Mon, 20 Apr 2026 18:32:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776709952;
-	bh=1Nh1AHZB3jUyuCulcnQLcI1OPn9qD7DzyEUnCIeIxxE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=HwaGHHlF/Kc4jG9nyjKexQJeR81uZ5xIGQ0kRnO38+SFfKbNNOKmvIqbz4IjRiKkd
-	 0LkJjST0wvjIjMyz1g4AeNMJW3ppudOQ6Njk/xJM2AdXcx1EhxOUhk3LQDU92PED5u
-	 JCoF+UInz18jd9CKACGSlIIa7vEkV7prLcMxDTOV4hCKx5G+XjJb8xGkZq4CuFrB8B
-	 2oDFSyOaUWTcmMuSHxufumiqIkHeqGR5bY1lEJHa1spW0CLq9qwHZk/wcX3KNzGPGh
-	 LnrYXjtZil+nqQVyu80HG8WSkyoejOT3Shaep5yjw56T4WZlEPHDol0unoL8IkfxMf
-	 Q39v4+L7pWSyQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH AUTOSEL 7.0-6.18] hwmon: (pmbus/isl68137) Add support
- for Renesas RAA228942 and RAA228943
-Reply-To: sashiko@lists.linux.dev
-To: "Sasha Levin" <sashal@kernel.org>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260420131539.986432-72-sashal@kernel.org>
-References: <20260420131539.986432-72-sashal@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 20 Apr 2026 18:32:31 +0000
-Message-Id: <20260420183231.E532DC19425@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aDAP67UZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1776740702;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=wjmNr9JCrkwrdx2sPCA7CcPctqUBoRuM1dGKFKpqRoo=;
+	b=aDAP67UZTbtTHAt+d7dtK6VMbWEOv7TBGStbObeaLcsrMzsUFKgJUxMJhVG1jci4F0K8UM
+	Hb+xy+6hWFJ54tBTiKsKh6oG2IQRTYfUESbHbUOyW4UOCNuNCjpWNPQf7EhaNR0HHtnfoG
+	YHPaWC0H3ZCLSRkkkUpiOEO7f71wfXU=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-637-Xlv27X_4Mf2hAD4VUDUogQ-1; Mon,
+ 20 Apr 2026 23:04:56 -0400
+X-MC-Unique: Xlv27X_4Mf2hAD4VUDUogQ-1
+X-Mimecast-MFC-AGG-ID: Xlv27X_4Mf2hAD4VUDUogQ_1776740691
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2F69018005AA;
+	Tue, 21 Apr 2026 03:04:50 +0000 (UTC)
+Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.65.81])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id EFB4119560AB;
+	Tue, 21 Apr 2026 03:04:40 +0000 (UTC)
+From: Waiman Long <longman@redhat.com>
+To: Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>,
+	Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun@kernel.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Ingo Molnar <mingo@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Chen Ridong <chenridong@huaweicloud.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>
+Cc: cgroups@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-hyperv@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	rcu@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Costa Shulyupin <cshulyup@redhat.com>,
+	Qiliang Yuan <realwujing@gmail.com>,
+	Waiman Long <longman@redhat.com>
+Subject: [PATCH-next 00/23] cgroup/cpuset: Enable runtime update of nohz_full and managed_irq CPUs
+Date: Mon, 20 Apr 2026 23:03:28 -0400
+Message-ID: <20260421030351.281436-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Sashiko AI review found 1 potential issue(s):
-- [High] Unchecked dereference of `i2c_match_id()` in probe function causes=
- a kernel panic when using Device Tree fallback compatibles, forcing unnece=
-ssary driver updates.
---
+The "isolcpus=domain" CPU list implied by the HK_TYPE_DOMAIN housekeeping
+cpumask is being dynamically updated whenever the set of cpuset isolated
+partitions change. This patch series extends the isolated partition code
+to make dynamic changes to the "nohz_full" and "isolcpus=managed_irq"
+CPU lists. These CPU lists correspoond to equivalent changes in the
+HK_TYPE_KERNEL_NOISE and HK_TYPE_MANAGED_IRQ housekeeping cpumasks.
 
-commit b782f8e0961d8ebf5fabe49f49ad99e6bb11a058
-Author: Dawei Liu <dawei.liu.jy@renesas.com>
+To facilitate the changing of these CPU lists, the CPU hotplug code
+which is doing a lot of heavy lifting is now being used. For changing
+the "nohz_full" and HK_TYPE_KERNEL_NOISE cpumasks, the affected CPUs
+are torn down into offline mode first. Then the housekeeping cpumask
+and the corresponding cpumasks in the RCU, tick and watchdog subsystems
+are modified. After that, the affected CPUs are brought online again.
 
-hwmon: (pmbus/isl68137) Add support for Renesas RAA228942 and RAA228943
+It is slightly different with the "managed_irq" HK_TYPE_MANAGED_IRQ
+cpumask, the cpumask is updated first and the affected CPUs are torn
+down and brought up to move the managed interrupts away from the newly
+isolated CPUs.
 
-This commit adds I2C device IDs for the Renesas RAA228942 and RAA228943
-chips. The commit message notes that devicetree will use fallback
-compatibles and no dedicated OF match entries are needed.
+Using CPU hotplug does have its drawback when multiple isolated
+partitions are being managed in a system. The CPU offline process uses
+the stop_machine mechanism to stop all the CPUs except the one being torn
+down. This will cause latency spike for isolated CPUs in other isolated
+partitions. It is not a problem if only one isolated partition is
+needed. This is an issue we need to address in the near future.
 
-Link: https://lore.kernel.org/r/20260325090208.857-3-dawei.liu.jy@renesas.c=
-om
+Patches 1-7 enables runtime updates to the nohz_full/managed_irq
+cpumasks in sched/isolation, tick, RCU and watchdog subsystems.
 
-> At the Linux PMBus hwmon interface level currently supported by this
-> driver, these devices are compatible with the existing 2-rail non-TC
-> controllers, so devicetree will use fallback compatibles and no
-> dedicated OF match entries are needed.
+Patches 8-17 modifies various subsystems that need access to the
+HK_TYPE_MANAGED_IRQ cpumask and HK_TYPE_KERNEL_NOISE cpumask and its
+aliases. Like the runtime modifiable HK_TYPE_DOMAIN cpumask, RCU is used
+to protect access to cpumasks to avoid potential UAF problem. Patch 17
+updates the housekeeping_dereference_check() to print a WARNING when
+lockdep is enabled if those housekeeping cpumasks are used without the
+proper lock protection.
 
-If no dedicated OF match entries are needed and fallback compatibles are
-used, does this addition to the I2C device ID table serve as a workaround
-for a NULL pointer dereference during probe?
+Patch 18 introduces a new cpuhp_offline_cb() API that enables the
+shutting down of a given list of CPUs, run a callback function and then
+brought those CPUs up again while disallowing any concurrent CPU hotplug
+activity.
 
-Looking at isl68137_probe():
+Patches 19-23 updates the cpuset code, selftest and documentation to
+allow change in isolated partition configuration to be reflected in
+the housekeeping and other cpumasks dynamically.
 
-drivers/hwmon/pmbus/isl68137.c:isl68137_probe() {
-    ...
-    switch (i2c_match_id(raa_dmpvr_id, client)->driver_data) {
-    case raa_dmpvr1_2rail:
-    ...
-}
+As there is a slight overhead in enabling dynamic update to the nohz_full
+cpumask, this new nohz_full and managed_irq runtime update feature
+has to be explicitly opted in by adding a nohz_full kernel command
+line parameter with or without a CPU list to indicate a desire to use
+this feature. It is also because a number of subsystems have explicit
+check of nohz_full at boot time to adjust their behavior which may not
+be easy to modify after boot.
 
-If a device is probed via a fallback compatible and its exact name isn't
-present in the raa_dmpvr_id table, wouldn't i2c_match_id() return NULL
-and cause a kernel panic when dereferencing ->driver_data?
+Waiman Long (23):
+  sched/isolation: Add HK_TYPE_KERNEL_NOISE_BOOT &
+    HK_TYPE_MANAGED_IRQ_BOOT
+  sched/isolation: Enhance housekeeping_update() to support updating
+    more than one HK cpumask
+  tick/nohz: Make nohz_full parameter optional
+  tick/nohz: Allow runtime changes in full dynticks CPUs
+  tick: Pass timer tick job to an online HK CPU in tick_cpu_dying()
+  rcu/nocbs: Allow runtime changes in RCU NOCBS cpumask
+  watchdog: Sync up with runtime change of isolated CPUs
+  arm64: topology: Use RCU to protect access to HK_TYPE_TICK cpumask
+  workqueue: Use RCU to protect access of HK_TYPE_TIMER cpumask
+  cpu: Use RCU to protect access of HK_TYPE_TIMER cpumask
+  hrtimer: Use RCU to protect access of HK_TYPE_TIMER cpumask
+  net: Use boot time housekeeping cpumask settings for now
+  sched/core: Use RCU to protect access of HK_TYPE_KERNEL_NOISE cpumask
+  hwmon/coretemp: Use RCU to protect access of HK_TYPE_MISC cpumask
+  Drivers: hv: Use RCU to protect access of HK_TYPE_MANAGED_IRQ cpumask
+  genirq/cpuhotplug: Use RCU to protect access of HK_TYPE_MANAGED_IRQ
+    cpumask
+  sched/isolation: Extend housekeeping_dereference_check() to cover
+    changes in nohz_full or manged_irqs           cpumasks
+  cpu/hotplug: Add a new cpuhp_offline_cb() API
+  cgroup/cpuset: Improve check for calling housekeeping_update()
+  cgroup/cpuset: Enable runtime update of
+    HK_TYPE_{KERNEL_NOISE,MANAGED_IRQ} cpumasks
+  cgroup/cpuset: Limit the side effect of using CPU hotplug on isolated
+    partition
+  cgroup/cpuset: Prevent offline_disabled CPUs from being used in
+    isolated partition
+  cgroup/cpuset: Documentation and kselftest updates
 
-> diff --git a/drivers/hwmon/pmbus/isl68137.c b/drivers/hwmon/pmbus/isl6813=
-7.c
-> index 3e3a887aad050..c8930f2d54237 100644
-> --- a/drivers/hwmon/pmbus/isl68137.c
-> +++ b/drivers/hwmon/pmbus/isl68137.c
-> @@ -498,6 +498,8 @@ static const struct i2c_device_id raa_dmpvr_id[] =3D {
->  	{"raa228228", raa_dmpvr2_2rail_nontc},
->  	{"raa228244", raa_dmpvr2_2rail_nontc},
->  	{"raa228246", raa_dmpvr2_2rail_nontc},
-> +	{"raa228942", raa_dmpvr2_2rail_nontc},
-> +	{"raa228943", raa_dmpvr2_2rail_nontc},
->  	{"raa229001", raa_dmpvr2_2rail},
->  	{"raa229004", raa_dmpvr2_2rail},
+ Documentation/admin-guide/cgroup-v2.rst       |  35 ++-
+ .../admin-guide/kernel-parameters.txt         |  15 +-
+ arch/arm64/kernel/topology.c                  |  17 +-
+ drivers/hv/channel_mgmt.c                     |  15 +-
+ drivers/hv/vmbus_drv.c                        |   7 +-
+ drivers/hwmon/coretemp.c                      |   6 +-
+ include/linux/context_tracking.h              |   8 +-
+ include/linux/cpuhplock.h                     |   9 +
+ include/linux/nmi.h                           |   2 +
+ include/linux/rcupdate.h                      |   2 +
+ include/linux/sched/isolation.h               |  18 +-
+ include/linux/tick.h                          |   2 +
+ kernel/cgroup/cpuset-internal.h               |   1 +
+ kernel/cgroup/cpuset.c                        | 292 +++++++++++++++++-
+ kernel/context_tracking.c                     |  19 +-
+ kernel/cpu.c                                  |  72 +++++
+ kernel/irq/cpuhotplug.c                       |   1 +
+ kernel/irq/manage.c                           |   1 +
+ kernel/rcu/tree_nocb.h                        |  24 +-
+ kernel/sched/core.c                           |   4 +-
+ kernel/sched/isolation.c                      | 135 +++++---
+ kernel/time/hrtimer.c                         |   4 +-
+ kernel/time/tick-common.c                     |  16 +-
+ kernel/time/tick-sched.c                      |  48 ++-
+ kernel/watchdog.c                             |  24 ++
+ kernel/workqueue.c                            |   6 +-
+ net/core/net-sysfs.c                          |   2 +-
+ .../selftests/cgroup/test_cpuset_prs.sh       |  70 ++++-
+ 28 files changed, 747 insertions(+), 108 deletions(-)
 
-Could isl68137_probe() be updated to use i2c_get_match_data() instead?
+-- 
+2.53.0
 
-This would extract match data directly from the OF fallback node without
-panicking, making the raa_dmpvr_id additions unnecessary.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260420131539.9864=
-32-72-sashal@kernel.org?part=3D1
