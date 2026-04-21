@@ -1,112 +1,138 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A87823D7DC;
-	Tue, 21 Apr 2026 09:02:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328AA3D8113
+	for <linux-hwmon@vger.kernel.org>; Tue, 21 Apr 2026 14:14:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776762153; cv=none; b=kM7cXqrVB4SJsHLqPjyt/rpCaxmVRXv/K59iwuPFUZOOaEKug6s/6CBX8H0sr+M4Uo1TdJAPDVTb85NR9qVHmOGP4f4yrPvT3YZNpmSffQmhH6AhIpVv5e0a1K5IiE0rY9Q1oge5jzw20qbsFYWAbory5N5wL/vENttORWtk/MM=
+	t=1776780877; cv=none; b=UqYTXZpwtTmhAEmLmhDIZ3+0niwpT4SAVJwx6NKmpL2+DkDBUXfxhc4sdQwOll3eo7PpVuD0ZfB0RmCkzpoyofyB0q7mogbC0HI6yOLZB/rbyJ6SNd7HqVsiutSV2N3Ai9MLPoemNNHpn95xO8dYduVRzMMMF+YNboEfQDkShOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776762153; c=relaxed/simple;
-	bh=hyZWWcOnCF0YqBIfepMB2TKvI6XHZWcg6x6y0OZJQLI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=QGmpFxmiLi2ZiMh/4pUFdLub6B8g0tlQ9SU9FiSw1LJv1U2kQ1/N5fa8KUiSa12yvSQfA/r8BjOcl3BoMGOapUoDSh4903ESek074jkamKBFu7tOxvT7m5xq/dxXM/BLCscPVXvO3234xeIkMVyz7zPp19QuwVAnOXgpu3zS2n4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dTHsJ8O1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776780877; c=relaxed/simple;
+	bh=9EVLxOxko56ykP0XKUiXqVA16ePSpExPWd0qgmq91lU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MgfRI7xYdxxlOkoKepV9a0+mfcK9yKiX5QNaenmEkWKxsjEJpeRHEO5VGAECW0yVrbwU/+CDYQu0xHqZYnOXslpuCYGke/+H5RLG8NawqfyU8neaPqR5+gA5skiQs+jSdS08QFW2MGgF30bhnwx7qq+B/CiIenzvkEZe8k6NtS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dRqkVysZ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dTHsJ8O1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB781C2BCB5;
-	Tue, 21 Apr 2026 09:02:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776762152;
-	bh=hyZWWcOnCF0YqBIfepMB2TKvI6XHZWcg6x6y0OZJQLI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=dTHsJ8O1tmL/CMMD9GDGnTM+P4zaYf0VkAPrivxCnrtZ13VF+imGxW9VTBIRq/Uf2
-	 SOF+NB6yQxfQQYNPzJk34BR5kVyD+W+jdDXneQtqRSWhS4SD+QZSj6I4bQzTtcspBX
-	 e8pzBlONSb73VG8u3/0biZVM1Fe2lfQa3EkCLYd20CL1r9ZXze4oaIXMZz5tEqWYTF
-	 Ji9ZurauMtTzsXivS8ZiFUfHXNA89x8w0rTDN5iIoWs3qPAfjwgLXFVn5Tx64Jrd8S
-	 IZ8CmCzIzJA5ncBEo/OSVj1zWApAUV1Ddw4xCcHDxilmuZ4e5C0ni0Qolyo9QgCEwE
-	 5Nrc5IUcYX9Og==
-From: Thomas Gleixner <tglx@kernel.org>
-To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>, Johannes
- Weiner <hannes@cmpxchg.org>, Michal =?utf-8?Q?Koutn=C3=BD?=
- <mkoutny@suse.com>, Jonathan
- Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Catalin
- Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, "K. Y.
- Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>,
- Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, Long Li
- <longli@microsoft.com>, Guenter Roeck <linux@roeck-us.net>, Frederic
- Weisbecker <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Joel Fernandes
- <joelagnelf@nvidia.com>, Josh Triplett <josh@joshtriplett.org>, Boqun Feng
- <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt
- <rostedt@goodmis.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>, Ingo Molnar
- <mingo@kernel.org>, Chen Ridong <chenridong@huaweicloud.com>, Peter
- Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann
- <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, Mel Gorman
- <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, K Prateek
- Nayak <kprateek.nayak@amd.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-hyperv@vger.kernel.org, linux-hwmon@vger.kernel.org,
- rcu@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Costa Shulyupin <cshulyup@redhat.com>,
- Qiliang Yuan <realwujing@gmail.com>, Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH 16/23] genirq/cpuhotplug: Use RCU to protect access of
- HK_TYPE_MANAGED_IRQ cpumask
-In-Reply-To: <20260421030351.281436-17-longman@redhat.com>
-References: <20260421030351.281436-1-longman@redhat.com>
- <20260421030351.281436-17-longman@redhat.com>
-Date: Tue, 21 Apr 2026 11:02:29 +0200
-Message-ID: <87qzo8bs9m.ffs@tglx>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dRqkVysZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1776780875;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HkSs5q895BkMlUjroUvolg58w1rFDrf/FdQnm8MeJy4=;
+	b=dRqkVysZQ1njbT/nDRJY5N+Dn4wYhT+n+873oy/tnrB6MdLnrtSTflNfNh1/DuZiRD7GMg
+	AIkEW8txnVr4h+Gvnk/fGwhD/7mdE+NuEoo/MqaCybSzNi5zkv9scvTurceKIcOOiemUXw
+	oyVtXKjjP79My8WcWfhdXKLt/jriknA=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-307-g7Ym5ECUP9WJNDNti_MzuQ-1; Tue,
+ 21 Apr 2026 10:14:28 -0400
+X-MC-Unique: g7Ym5ECUP9WJNDNti_MzuQ-1
+X-Mimecast-MFC-AGG-ID: g7Ym5ECUP9WJNDNti_MzuQ_1776780862
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1011E18002C0;
+	Tue, 21 Apr 2026 14:14:20 +0000 (UTC)
+Received: from [10.22.81.187] (unknown [10.22.81.187])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 67E2A19560AB;
+	Tue, 21 Apr 2026 14:14:10 +0000 (UTC)
+Message-ID: <3b796360-81e4-4f90-9b19-8a9f21cbac07@redhat.com>
+Date: Tue, 21 Apr 2026 10:14:09 -0400
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 03/23] tick/nohz: Make nohz_full parameter optional
+To: Thomas Gleixner <tglx@kernel.org>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ "K. Y. Srinivasan" <kys@microsoft.com>,
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+ Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
+ Guenter Roeck <linux@roeck-us.net>, Frederic Weisbecker
+ <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, Ingo Molnar
+ <mingo@kernel.org>, Chen Ridong <chenridong@huaweicloud.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall
+ <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+ Valentin Schneider <vschneid@redhat.com>,
+ K Prateek Nayak <kprateek.nayak@amd.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-hyperv@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ rcu@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Costa Shulyupin <cshulyup@redhat.com>,
+ Qiliang Yuan <realwujing@gmail.com>
+References: <20260421030351.281436-1-longman@redhat.com>
+ <20260421030351.281436-4-longman@redhat.com> <875x5kd88d.ffs@tglx>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <875x5kd88d.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On Mon, Apr 20 2026 at 23:03, Waiman Long wrote:
-
-> As HK_TYPE_MANAGED_IRQ cpumask is going to be changeable at run time,
-> use RCU to protect access to the cpumask.
+On 4/21/26 4:32 AM, Thomas Gleixner wrote:
+> On Mon, Apr 20 2026 at 23:03, Waiman Long wrote:
+>> To provide nohz_full tick support, there is a set of tick dependency
+>> masks that need to be evaluated on every IRQ and context switch.
+> s/IRQ/interrupt/
 >
-> To enable the new HK_TYPE_MANAGED_IRQ cpumask to take effect, the
-> following steps can be done.
+> This is a changelog and not a SMS service.
+>> Switching on nohz_full tick support at runtime will be problematic
+>> as some of the tick dependency masks may not be properly set causing
+>> problem down the road.
+> That's useless blurb with zero content.
+>
+>> Allow nohz_full boot option to be specified without any
+>> parameter to force enable nohz_full tick support without any
+>> CPU in the tick_nohz_full_mask yet. The context_tracking_key and
+>> tick_nohz_full_running flag will be enabled in this case to make
+>> tick_nohz_full_enabled() return true.
+> I kinda can crystal-ball what you are trying to say here, but that does
+> not make it qualified as a proper change log.
+>
+>> There is still a small performance overhead by force enable nohz_full
+>> this way. So it should only be used if there is a chance that some
+>> CPUs may become isolated later via the cpuset isolated partition
+>> functionality and better CPU isolation closed to nohz_full is desired.
+> Why has this key to be enabled on boot if there are no CPUs in the
+> isolated mask?
+>
+> If you want to manage this dynamically at runtime then enable the key
+> once CPUs are isolated. Yes, it's more work, but that avoids the "should
+> only be used" nonsense and makes this more robust down the road.
 
-Can be done?
+OK, I will try to make it fully dynamic. Of course, it will be more work.
 
->  1) Update the HK_TYPE_MANAGED_IRQ cpumask to take out the newly isolated
->     CPUs and add back the de-isolated CPUs.
->  2) Tear down the affected CPUs to cause irq_migrate_all_off_this_cpu()
->     to be called on the affected CPUs to migrate the irqs to other
->     HK_TYPE_MANAGED_IRQ housekeeping CPUs.
->  3) Bring up the previously offline CPUs to invoke
->     irq_affinity_online_cpu() to allow the newly de-isolated CPUs to
->     be used for managed irqs.
+Cheers,
+Longman
 
-Which previously offline CPUs?
+> Thanks,
+>
+>          tglx
+>
+>
 
-> diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
-> index 2e8072437826..8270c4de260b 100644
-> --- a/kernel/irq/manage.c
-> +++ b/kernel/irq/manage.c
-> @@ -263,6 +263,7 @@ int irq_do_set_affinity(struct irq_data *data, const struct cpumask *mask, bool
->  	    housekeeping_enabled(HK_TYPE_MANAGED_IRQ)) {
->  		const struct cpumask *hk_mask;
->  
-> +		guard(rcu)();
->  		hk_mask = housekeeping_cpumask(HK_TYPE_MANAGED_IRQ);
->  
->  		cpumask_and(tmp_mask, mask, hk_mask);
-
-How is this hunk related to $Subject?
-
-Thanks,
-
-        tglx
