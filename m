@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 405BC375F81
-	for <linux-hwmon@vger.kernel.org>; Tue, 21 Apr 2026 03:06:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE93437105A
+	for <linux-hwmon@vger.kernel.org>; Tue, 21 Apr 2026 03:06:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776740767; cv=none; b=gP6i7603whUvaqJ+Q6WxM2U9JtAWoAMjYVJvVQH0vPHOgzNQLQ7VSHqI0R5CDrgi/KJs+E/C15LrUbhxK006KXulbgyJPXKYaHh1GuPyeKHTJlZW/fCEvAJ5hrepdnLOH+foCP6NzRdob1KXrSWLsR0HyNJZ/IqizwrwVN1EwbI=
+	t=1776740771; cv=none; b=fNeKcoPar8Cii18w8G0i2sjJM41i9d37zF4BYC+QVhFCi7atlUAq2MlcbUVPOhECbfI4M4IB1rOEClJ885uWO3sluxupMhTZ+xRnKbJB6YZNghRj8ZqBOPhCPgCQSiCDv+X59A1LI9l5hFWndokRDMx3mZUUn+FbQac88Nu1Q8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776740767; c=relaxed/simple;
-	bh=TxL29QnTwq/820ZjxDXVDgXLQ2KjHnCopRJMsMKEbOE=;
+	s=arc-20240116; t=1776740771; c=relaxed/simple;
+	bh=hCmoCLgv9WCiy0WI6qTXzkfORhAfAjfFBOqTe129+N0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RQqGVBqelrJ/9L6CVYgfsRfqN4tcjpmPhJIbaptHoJlklXL+1dwzymm70i9eQ1CYjNYU8nBmig9njubuMInzw3NdVVHTSsbcTXFWM45wzAd7Ge9/O1lR+UYe69Ln6YBIIawmrFWvyQK+pfKK58V8mJG+GDNZwse3O5XAYDPAwd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cl6PvB4A; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=gg08SyQv0nPEVwosmA3gpndhRDVUDr9lckBV3ggZ6eOqqfcOTc17DarIn42/W9lvl6ckIbQ5+cseyjNPjZJoTHVcBwTz3dm2Y+e3b9bfNFKe8Fy9Uw2qFyMjTAiPZ05USPHBYFFO15Hc4iPiSCap9MC+sU/8ant+R/mOIaK6qD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IYD9LOfN; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cl6PvB4A"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IYD9LOfN"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1776740765;
+	s=mimecast20190719; t=1776740768;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xLt3YbZO8LaJ7i/PL30alZF/tGSXpd8N0J3i5JY/BrE=;
-	b=cl6PvB4AX0XZ6S71SQLB90ItGhTaUdi/HZhM3cEqTgA7GUsughWYo/QxzWm4pDQEUAM9f7
-	fTZf3U+QMNdsXoDQTvRm+b2Rqu4mbWdOvgCM974atVl+c4QZ1nWHIGq2v2GZ6l+zSI7pCn
-	9CP/eY6usz81a+ucj48Z1gGS7jyy1AI=
+	bh=UPmUBuUEIaNw490oCfROl6vphIOJhbJ7/BzVQQsjdOs=;
+	b=IYD9LOfN4s72JmKySSDatP6ujNB2qjCDkOzccSdI67OILzap1no0OBerPhnl5RFfO826ak
+	jkCNh7y72K0fuPQ9xY9m1vm0WEV8LYLts1ByH3niYOHXUISq7nz6VIhk+lra8WkjkEs/Bw
+	dSx55++25TSEO1CYA1jwf2zd4U1GYGE=
 Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-302-OH2KDsxlO5S_BO4AkuvH1A-1; Mon,
- 20 Apr 2026 23:05:59 -0400
-X-MC-Unique: OH2KDsxlO5S_BO4AkuvH1A-1
-X-Mimecast-MFC-AGG-ID: OH2KDsxlO5S_BO4AkuvH1A_1776740754
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-322-RV6ELyvuOd2DCv8Y77dPXA-1; Mon,
+ 20 Apr 2026 23:06:06 -0400
+X-MC-Unique: RV6ELyvuOd2DCv8Y77dPXA-1
+X-Mimecast-MFC-AGG-ID: RV6ELyvuOd2DCv8Y77dPXA_1776740761
 Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 091971800663;
-	Tue, 21 Apr 2026 03:05:54 +0000 (UTC)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4AE0B1800655;
+	Tue, 21 Apr 2026 03:06:01 +0000 (UTC)
 Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.65.81])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B279A19560AB;
-	Tue, 21 Apr 2026 03:05:46 +0000 (UTC)
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3FE6A19560AB;
+	Tue, 21 Apr 2026 03:05:54 +0000 (UTC)
 From: Waiman Long <longman@redhat.com>
 To: Tejun Heo <tj@kernel.org>,
 	Johannes Weiner <hannes@cmpxchg.org>,
@@ -96,9 +96,9 @@ Cc: cgroups@vger.kernel.org,
 	Costa Shulyupin <cshulyup@redhat.com>,
 	Qiliang Yuan <realwujing@gmail.com>,
 	Waiman Long <longman@redhat.com>
-Subject: [PATCH 08/23] arm64: topology: Use RCU to protect access to HK_TYPE_TICK cpumask
-Date: Mon, 20 Apr 2026 23:03:36 -0400
-Message-ID: <20260421030351.281436-9-longman@redhat.com>
+Subject: [PATCH 09/23] workqueue: Use RCU to protect access of HK_TYPE_TIMER cpumask
+Date: Mon, 20 Apr 2026 23:03:37 -0400
+Message-ID: <20260421030351.281436-10-longman@redhat.com>
 In-Reply-To: <20260421030351.281436-1-longman@redhat.com>
 References: <20260421030351.281436-1-longman@redhat.com>
 Precedence: bulk
@@ -110,69 +110,31 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-As the HK_TYPE_TICK cpumask is going to be changeable at run time, we
-need to use RCU to protect access to the cpumask to prevent it from
-going away in the middle of the operation.
+As HK_TYPE_TIMER cpumask is going to be changeable at run time, use
+RCU to protect access to the cpumask.
 
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- arch/arm64/kernel/topology.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+ kernel/workqueue.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-index b32f13358fbb..48f150801689 100644
---- a/arch/arm64/kernel/topology.c
-+++ b/arch/arm64/kernel/topology.c
-@@ -173,6 +173,7 @@ void arch_cpu_idle_enter(void)
- 	if (!amu_fie_cpu_supported(cpu))
- 		return;
- 
-+	guard(rcu)();
- 	/* Kick in AMU update but only if one has not happened already */
- 	if (housekeeping_cpu(cpu, HK_TYPE_TICK) &&
- 	    time_is_before_jiffies(per_cpu(cpu_amu_samples.last_scale_update, cpu)))
-@@ -187,11 +188,16 @@ int arch_freq_get_on_cpu(int cpu)
- 	unsigned int start_cpu = cpu;
- 	unsigned long last_update;
- 	unsigned int freq = 0;
-+	bool hk_cpu;
- 	u64 scale;
- 
- 	if (!amu_fie_cpu_supported(cpu) || !arch_scale_freq_ref(cpu))
- 		return -EOPNOTSUPP;
- 
-+	scoped_guard(rcu) {
-+		hk_cpu = housekeeping_cpu(cpu, HK_TYPE_TICK);
-+	}
-+
- 	while (1) {
- 
- 		amu_sample = per_cpu_ptr(&cpu_amu_samples, cpu);
-@@ -204,16 +210,21 @@ int arch_freq_get_on_cpu(int cpu)
- 		 * (and thus freq scale), if available, for given policy: this boils
- 		 * down to identifying an active cpu within the same freq domain, if any.
- 		 */
--		if (!housekeeping_cpu(cpu, HK_TYPE_TICK) ||
-+		if (!hk_cpu ||
- 		    time_is_before_jiffies(last_update + msecs_to_jiffies(AMU_SAMPLE_EXP_MS))) {
- 			struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
-+			bool hk_intersects;
- 			int ref_cpu;
- 
- 			if (!policy)
- 				return -EINVAL;
- 
--			if (!cpumask_intersects(policy->related_cpus,
--						housekeeping_cpumask(HK_TYPE_TICK))) {
-+			scoped_guard(rcu) {
-+				hk_intersects = cpumask_intersects(policy->related_cpus,
-+							housekeeping_cpumask(HK_TYPE_TICK));
-+			}
-+
-+			if (!hk_intersects) {
- 				cpufreq_cpu_put(policy);
- 				return -EOPNOTSUPP;
- 			}
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 08b1c786b463..2dab3872281a 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -2557,8 +2557,10 @@ static void __queue_delayed_work(int cpu, struct workqueue_struct *wq,
+ 	if (housekeeping_enabled(HK_TYPE_TIMER)) {
+ 		/* If the current cpu is a housekeeping cpu, use it. */
+ 		cpu = smp_processor_id();
+-		if (!housekeeping_test_cpu(cpu, HK_TYPE_TIMER))
+-			cpu = housekeeping_any_cpu(HK_TYPE_TIMER);
++		scoped_guard(rcu) {
++			if (!housekeeping_test_cpu(cpu, HK_TYPE_TIMER))
++				cpu = housekeeping_any_cpu(HK_TYPE_TIMER);
++		}
+ 		add_timer_on(timer, cpu);
+ 	} else {
+ 		if (likely(cpu == WORK_CPU_UNBOUND))
 -- 
 2.53.0
 
