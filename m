@@ -1,191 +1,200 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D180A33987F
-	for <linux-hwmon@vger.kernel.org>; Wed, 22 Apr 2026 22:07:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2C811E98EF
+	for <linux-hwmon@vger.kernel.org>; Wed, 22 Apr 2026 22:25:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776895624; cv=none; b=mkoShWj8ei1da565N2yDClfa1ztLIg8+sKDCQ63MP6ARk5+oDzD0VZ1lkxA8noRIhxnDPTYfZNAcfhp8pwRSJROTIEb3IURlqaI1Bd0TmqOZnSNuOCzHKJPtKdNF4VkZEOwNEK+wQOE30bwWIvuvIUYmWnloHhfASrHfFqnOfsU=
+	t=1776896713; cv=none; b=AG/76g5smtCsBfPZFFmEw6dws79/syKG1AIggOb18Nytpjkf+sz196SWai5TCh/Pkbfz8W40dUXtu2Idj/Em9LYzq+mr4EbMS9a/D/v8NRWNLj20JIZUGyTgPiBEU09ZBXFv9HkSA1XY0MbE7bpnMknAdp+GCUge5adNK8IayBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776895624; c=relaxed/simple;
-	bh=7dkfqZ2QLufa7LNB2J/Ggxkz1VIc9Esfwth4K6XRvb0=;
+	s=arc-20240116; t=1776896713; c=relaxed/simple;
+	bh=ETYKI83e+TckWanIbY0bS6JEasn7wp9HaiW6xkxkhK4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Wns+Uvx0EA53NQFLPEQdDK7MLyz5NLwD/HXWCyQUDhUzbqfw8gauTJIzAi5j27cx/ltjyUto6od5juDNr10a+MxeY9xpdErO6pMmT+NxUPzyPp9YIX7wx39Zd26RD3V5Sa4VgZ5iaNMlfgHtqqtd2uBhtTieRr7Ed4owj3iJU60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M6ZwphJ9; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=CRcvh25GNo5BkVgABX3GildyQP70ZVoks6vKbh2CRE4Rkl8G9+8IKohp00s/HgXR76MSTG07r6UWkeG40B4lEzuq4kfb5YA6DLauvChWlfekMNegJKQHHCIrmbNd2Dy8Hxw4tH6vuXS10MZWRQxJCnfWPz4JKxKUY8FYW9fycdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kqdlKafZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M6ZwphJ9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E5F5C19425;
-	Wed, 22 Apr 2026 22:07:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kqdlKafZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27E67C19425;
+	Wed, 22 Apr 2026 22:25:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776895624;
-	bh=7dkfqZ2QLufa7LNB2J/Ggxkz1VIc9Esfwth4K6XRvb0=;
+	s=k20201202; t=1776896713;
+	bh=ETYKI83e+TckWanIbY0bS6JEasn7wp9HaiW6xkxkhK4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=M6ZwphJ9rxAE47QB+gLRMT52sGdOdf2mb5WyTUziqMl17kQ0G1hnByh/e9g3qssl2
-	 e+g1OIiolRVnIm7HxkRhzhO3n9Aev42gO9vOVEFXMJR3o1+5BudI9kmq7wPtjXDQIu
-	 +Z5P4y3oernl+z63No4WymetTOB3YKmNJFx+VwSlOYDhGgYrSKHjxWE/g3bQzQauKM
-	 epsbAqTykS+HSoyU3UNO4AtGJBHFK2346N9NhaIH2k37PU2Yjyi2DX6Hy90+z3R7wy
-	 1dKtZJLBaFoZGlFVMXV6IrMtRnbFEuzqGT+MSVx7F7LNEHFS7CjSQupolS7bAGYa64
-	 uPi0STpCi1x6A==
+	b=kqdlKafZOebLjOMkPcdF7GZectKgd1nzBqtiY0/FiKupTbbjGumquwopwAHly+u6U
+	 jF+dh3MKuILI3Bf2QANjs2szhJYVPMolTMMjG3F31wVvrv1hwmEv+xqEetnjFm87XH
+	 2Gt6MtPfcXc4yIvgIjV1SGoaO7LFiaFTYBiSCqDtKhn8cfrsUxOvieBpmFxBHHMww1
+	 Kf/WRo8+24STozIo7GMb9HOvkroDkRuGjCVeUKBo9kmb0SMzegHJNXHaU1io0ptAcm
+	 dtXcP5NaRg2HDh/thJ1iCUWWX4D5ypCwDoZyoyP0xL7gZUt8LEntlAmpv2qrLmRmgH
+	 7LU+fXs271e0Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v1 1/2] thermal: hwmon: Register one hwmon device for
- each thermal zone
+Subject: Re: [PATCH v2 04/12] thermal/core: Remove node pointer parameter
+ when registering a tz
 Reply-To: sashiko@lists.linux.dev
-To: "Rafael J. Wysocki" <rafael@kernel.org>
+To: "Daniel Lezcano" <daniel.lezcano@oss.qualcomm.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <2413681.ElGaqSPkdT@rafael.j.wysocki>
-References: <2413681.ElGaqSPkdT@rafael.j.wysocki>
+In-Reply-To: <20260422174305.2899095-5-daniel.lezcano@oss.qualcomm.com>
+References: <20260422174305.2899095-5-daniel.lezcano@oss.qualcomm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 22 Apr 2026 22:07:03 +0000
-Message-Id: <20260422220704.5E5F5C19425@smtp.kernel.org>
+Date: Wed, 22 Apr 2026 22:25:12 +0000
+Message-Id: <20260422222513.27E67C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 5 potential issue(s):
-- [Critical] UAPI Breakage by changing existing hwmon device names
-- [High] Buffer truncation during hwmon name construction defeats disambigu=
-ation
-- [High] Kernel panic during thermal zone removal due to conditionally re-e=
-valuating hardware-dependent state
-- [Medium] Subsystem Guideline Violation: Mixing goto and scoped_guard
-- [Low] Unused dead code (hwmon_node) left in struct thermal_hwmon_temp
+Sashiko AI review found 4 potential issue(s):
+- [High] Compilation failure due to undeclared identifier `np` in `__therma=
+l_cooling_device_register`.
+- [High] Compilation failure due to argument count mismatch in `devm_therma=
+l_of_cooling_device_register`.
+- [High] Device tree (OF) cooling devices silently fail to bind to thermal =
+zones.
+- [Low] Misleading kerneldoc for `devm_thermal_cooling_device_register`.
 --
 
-commit 7f75c80d7fc0d5195ae6453505545af64be540ea
-Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Subject: thermal: hwmon: Register one hwmon device for each thermal zone
+commit fb0063667bcf5ae686659ae0c320b2fb8a2e567e
+Author: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
 
-The commit reworks the thermal hwmon code to register one hwmon device for =
-each
-thermal zone. It appends the thermal zone ID to the hwmon device name to
-disambiguate identical names.
+thermal/core: Remove node pointer parameter when registering a tz
 
-Link: https://lore.kernel.org/linux-pm/20260402021828.16556-1-liujia6264@gm=
-ail.com/
+This patch removes the device_node pointer parameter in the core function
+registering a thermal cooling device, which is inconsistent with non-OF cod=
+e.
 
-> diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hw=
-mon.c
-> index b624892bc6d66..46c40c0852804 100644
-> --- a/drivers/thermal/thermal_hwmon.c
-> +++ b/drivers/thermal/thermal_hwmon.c
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_cor=
+e.c
+> index 35cf170f3fa1c..113719466dc21 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
 [ ... ]
-> @@ -136,21 +95,17 @@ int thermal_add_hwmon_sysfs(struct thermal_zone_devi=
-ce *tz)
-[ ... ]
->  	hwmon =3D kzalloc_obj(*hwmon);
->  	if (!hwmon)
->  		return -ENOMEM;
-> =20
-> -	INIT_LIST_HEAD(&hwmon->tz_list);
-> -	strscpy(hwmon->type, tz->type, THERMAL_NAME_LENGTH);
-> +	/*
-> +	 * Append the thermal zone ID preceded by an underline character to the
-> +	 * type to disambiguate the sensors command output.
-> +	 */
-> +	scnprintf(hwmon->type, THERMAL_NAME_LENGTH, "%s_%d", tz->type, tz->id);
-
-Could this truncation defeat the disambiguation? hwmon->type is defined as
-char type[THERMAL_NAME_LENGTH]. If tz->type is already near
-THERMAL_NAME_LENGTH characters long, the appended _%d suffix would be
-truncated to fit the buffer, potentially resulting in identical names for
-different zones.
-
-Can appending a suffix to the name break the userspace ABI? Existing
-user-space utilities and configurations that match exactly on the original
-zone type string might no longer work when _0 is appended to the name.
-
->  	strreplace(hwmon->type, '-', '_');
->  	hwmon->device =3D hwmon_device_register_for_thermal(&tz->device,
->  							  hwmon->type, hwmon);
-[ ... ]
-> @@ -193,21 +137,17 @@ int thermal_add_hwmon_sysfs(struct thermal_zone_dev=
-ice *tz)
->  			goto unregister_input;
->  	}
-> =20
-> -	mutex_lock(&thermal_hwmon_list_lock);
-> -	if (new_hwmon_device)
-> +	/* The list is needed for hwmon lookup during removal. */
-> +	scoped_guard(mutex, &thermal_hwmon_list_lock) {
->  		list_add_tail(&hwmon->node, &thermal_hwmon_list);
-> -	list_add_tail(&temp->hwmon_node, &hwmon->tz_list);
-
-Since hwmon->tz_list is removed, does temp->hwmon_node still need to exist
-in struct thermal_hwmon_temp? It looks like it is no longer used anywhere.
-
-> -	mutex_unlock(&thermal_hwmon_list_lock);
-> +	}
-> =20
->  	return 0;
-> =20
->   unregister_input:
->  	device_remove_file(hwmon->device, &temp->temp_input.attr);
-> - free_temp_mem:
-> -	kfree(temp);
->   unregister_name:
-> -	if (new_hwmon_device)
-> -		hwmon_device_unregister(hwmon->device);
-> +	hwmon_device_unregister(hwmon->device);
->   free_mem:
->  	kfree(hwmon);
-
-Does this code mix goto-based error handling and scope-based cleanup helper=
-s?
-The cleanup subsystem guidelines expect that usage of goto and cleanup
-helpers are never mixed in the same function.
-
-This was noted as being fixed later in the series, but is included here
-for completeness.
-
-> =20
-> @@ -215,39 +155,37 @@ int thermal_add_hwmon_sysfs(struct thermal_zone_dev=
-ice *tz)
-[ ... ]
->  void thermal_remove_hwmon_sysfs(struct thermal_zone_device *tz)
+> @@ -1050,15 +1049,12 @@ void thermal_cooling_device_init_complete(struct =
+thermal_cooling_device *cdev)
+>   * This interface function adds a new thermal cooling device (fan/proces=
+sor/...)
+>   * to /sys/class/thermal/ folder as cooling_device[0-*]. It tries to bin=
+d itself
+>   * to all the thermal zone devices registered at the same time.
+> - * It also gives the opportunity to link the cooling device to a device =
+tree
+> - * node, so that it can be bound to a thermal zone created out of device=
+ tree.
+>   *
+>   * Return: a pointer to the created struct thermal_cooling_device or an
+>   * ERR_PTR. Caller must check return value with IS_ERR*() helpers.
+>   */
+>  struct thermal_cooling_device *
+> -__thermal_cooling_device_register(struct device_node *np,
+> -				  const char *type, void *devdata,
+> +__thermal_cooling_device_register(const char *type, void *devdata,
+>  				  const struct thermal_cooling_device_ops *ops)
 >  {
->  	struct thermal_hwmon_device *hwmon;
->  	struct thermal_hwmon_temp *temp;
+>  	struct thermal_cooling_device *cdev;
+
+Does removing the np parameter here cause a compilation failure?
+
+The assignment cdev->np =3D np; was left untouched further down in the func=
+tion
+body, which results in an undeclared identifier error.
+
+(Note: This regression is fixed later in the series by commit 1b7fe95232020)
+
+[ ... ]
+> @@ -1167,6 +1163,50 @@ thermal_cooling_device_register(const char *type, =
+void *devdata,
+>  }
+>  EXPORT_SYMBOL_GPL(thermal_cooling_device_register);
 > =20
-> -	hwmon =3D thermal_hwmon_lookup_by_type(tz);
-> -	if (unlikely(!hwmon)) {
-> -		/* Should never happen... */
-> -		dev_dbg(&tz->device, "hwmon device lookup failed!\n");
-> -		return;
-> -	}
-> +	scoped_guard(mutex, &thermal_hwmon_list_lock) {
-> +		hwmon =3D thermal_hwmon_lookup(tz);
-> +		if (!hwmon)
-> +			return;
-> =20
-> -	temp =3D thermal_hwmon_lookup_temp(hwmon, tz);
-> -	if (unlikely(!temp)) {
-> -		/* Should never happen... */
-> -		dev_dbg(&tz->device, "temperature input lookup failed!\n");
-> -		return;
-> +		list_del(&hwmon->node);
->  	}
-> =20
-> +	temp =3D &hwmon->tz_temp;
+> +static void thermal_cooling_device_release(struct device *dev, void *res)
+> +{
+> +	thermal_cooling_device_unregister(*(struct thermal_cooling_device **)re=
+s);
+> +}
 > +
->  	device_remove_file(hwmon->device, &temp->temp_input.attr);
->  	if (thermal_zone_crit_temp_valid(tz))
->  		device_remove_file(hwmon->device, &temp->temp_crit.attr);
+> +/**
+> + * devm_thermal_cooling_device_register() - register a thermal cooling d=
+evice
+> + * @dev:	a valid struct device pointer of a sensor device.
+> + * @type:	the thermal cooling device type.
+> + * @devdata:	device private data.
+> + * @ops:	standard thermal cooling devices callbacks.
+> + *
+> + * This function will register a cooling device with device tree node re=
+ference.
 
-Is there a potential panic during removal if the hardware state changes?
+This isn't a bug, but is this kerneldoc accurate?
 
-If thermal_zone_crit_temp_valid() fails during thermal_add_hwmon_sysfs()
-initialization, the temp_crit attribute is never created and its name
-remains NULL.
+This function is the generic (non-OF) devres variant and does not extract or
+assign any device tree node reference. It appears to be a copy-paste error
+from the OF-specific variant.
 
-If the hardware state later recovers and thermal_zone_crit_temp_valid()
-returns true during thermal_remove_hwmon_sysfs(), device_remove_file()
-will be called with a NULL name, which can cause a panic in the sysfs core.
+> + * This interface function adds a new thermal cooling device (fan/proces=
+sor/...)
+> + * to /sys/class/thermal/ folder as cooling_device[0-*]. It tries to bin=
+d itself
+> + * to all the thermal zone devices registered at the same time.
+> + *
+> + * Return: a pointer to the created struct thermal_cooling_device or an
+> + * ERR_PTR. Caller must check return value with IS_ERR*() helpers.
+> + */
+> +struct thermal_cooling_device *
+> +devm_thermal_cooling_device_register(struct device *dev, const char *typ=
+e,
+> +				     void *devdata, const struct thermal_cooling_device_ops *ops)
 
-This issue was also noted as being fixed later in the series.
+[ ... ]
+> diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_cor=
+e.h
+> index 6e44bcf37b003..d45455bb9e9e6 100644
+> --- a/drivers/thermal/thermal_core.h
+> +++ b/drivers/thermal/thermal_core.h
+> @@ -272,8 +272,7 @@ void thermal_governor_update_tz(struct thermal_zone_d=
+evice *tz,
+>  void thermal_cooling_device_init_complete(struct thermal_cooling_device =
+*cdev);
+> =20
+>  struct thermal_cooling_device *
+> -__thermal_cooling_device_register(struct device_node *np,
+> -				  const char *type, void *devdata,
+> +__thermal_cooling_device_register(const char *type, void *devdata,
+>  				  const struct thermal_cooling_device_ops *ops);
+
+Does changing this prototype cause a compilation failure due to an argument
+count mismatch in devm_thermal_of_cooling_device_register()?
+
+The existing call inside devm_thermal_of_cooling_device_register() in
+drivers/thermal/thermal_of.c was not updated and still passes 4 arguments.
+
+(Note: This regression is fixed later in the series by commit 1b7fe95232020)
+
+[ ... ]
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index c4b67554df447..3ba8c970f11f3 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -533,7 +533,7 @@ thermal_of_cooling_device_register(struct device_node=
+ *np,
+>  {
+>  	struct thermal_cooling_device *cdev;
+> =20
+> -	cdev =3D __thermal_cooling_device_register(np, type, devdata, ops);
+> +	cdev =3D __thermal_cooling_device_register(type, devdata, ops);
+>  	if (IS_ERR(cdev))
+>  		return cdev;
+
+Does this silently break device tree thermal zone cooling bindings?
+
+Since the np parameter is removed from the core registration function,
+cdev->np is no longer populated there. The np parameter is passed here, but
+not manually assigned to cdev->np.
+
+Because cdev is zero-allocated, cdev->np remains NULL. When
+thermal_cooling_device_init_complete() runs to bind the cooling device,
+the check if (cooling_spec.np !=3D cdev->np) will unconditionally fail.
+
+(Note: This regression is fixed later in the series by commit 1b7fe95232020)
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/5100596.31r3eYUQgx@=
-rafael.j.wysocki?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260422174305.2899=
+095-1-daniel.lezcano@oss.qualcomm.com?part=3D4
