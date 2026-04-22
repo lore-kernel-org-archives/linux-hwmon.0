@@ -1,214 +1,235 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA1D93A1697
-	for <linux-hwmon@vger.kernel.org>; Wed, 22 Apr 2026 03:09:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C7183A169F
+	for <linux-hwmon@vger.kernel.org>; Wed, 22 Apr 2026 03:09:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776827348; cv=none; b=GmFzBT725hsUMj3IEDnDFWlZwLkl5UquUbAmFz03t1sr8GXM45oBYxdy2VFgYPh9ABZMyTyknt0CDoa8rGd6wCGi1acVRn5AaXoyMsbnaj5GDMwm8jCrYJWOuy7V7UWgfcAXBK2IFYhUN8E/z3vh3y+RHEzcPf49GJ8a7ZeSD0s=
+	t=1776827351; cv=none; b=A3g54ZB52vF0fs2p0idH2UKG5vhVKFwVVnaP7wU7sSwEJjfraL5hStHq/1I1Sam6zgPIFXAMP2tN+wlhbR42mtad8SdlV94bNKqkbNnuJSUFuqXgjSUjrz9D2H3k6bnoz2hxrqx7NtWdyDFecVpfxULKvx9Ivd4X6iHYrou2nmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776827348; c=relaxed/simple;
-	bh=hP+iiIIku2MrV/xIeM7/5MqKjWpD9hgA9ekphVmkHzs=;
+	s=arc-20240116; t=1776827351; c=relaxed/simple;
+	bh=b05ALdjr+jcS8C2WNBcRztYFiAOv1zZf2PvGucdFrck=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=P8CMyt3dG5sP+jTdM6blKX6Z1oHVos2akdb/sCIL159PBr6ogLiyVyMyRiJqtZrWSbKJ1On7mKyDj1xEG7XXjNdbY4JXNiDhDkRZ+DQGkHjf9f8Y56hQ9fNC3h5SA4uw6rrX+FCzv3PWe100H3r6HTdz3cxVyYhBp3ToKixkHjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YXWqNVEB; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=O9iHgXMcuEqB1KvKQbjTv8h9JiXk4iLlzCtuUkjFIsLK21I6pEQDhq/KI2G8zAnF47Wl/13/c0mFJ2ncDOdh5I3tS9QTAbolJijwkUivEUnf5f/RIJ5DqnpODRIv3OhIhya9Mr5aFQfBUQ63bxSKFzWOTIf+6R/2zpo/YYWs4eY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BViuea0W; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YXWqNVEB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7662AC2BCB6;
-	Wed, 22 Apr 2026 03:09:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BViuea0W"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA3F4C2BCB0;
+	Wed, 22 Apr 2026 03:09:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776827346;
-	bh=hP+iiIIku2MrV/xIeM7/5MqKjWpD9hgA9ekphVmkHzs=;
+	s=k20201202; t=1776827349;
+	bh=b05ALdjr+jcS8C2WNBcRztYFiAOv1zZf2PvGucdFrck=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=YXWqNVEBT4pFsv0ksuxcC9719o7E+31IGmJOujEuPXZ+9bvxPw2h6sY0nIzgL0GR+
-	 lIn7tOc/epDyHCPqWTJgvEWjEOQd6Dyx+7KVcBReKqjeYbBHsx8o/FNE4yr88dtG43
-	 4drqbkTyKuf8MkGb4zRF2e90AC5dq/Smo2JKZZO3pSrv1DYizxp1vTTZ83kE3SgNE/
-	 6XmtwanjjznY5YZglJjveQ4WL2S0zgVZdIzoqMWOoE2ebw5U26Ca8649VWG0BO6jqE
-	 gQcFl7c3YL+acUWCe7h8yEnq7DvF4gDCoPFW7NFd393U5dsvGdbVMeSv1g6G7C4kAj
-	 H27tydlDN+jBA==
+	b=BViuea0WwrJj1OmCUVz+IE4COXO/VjwwswevbEpKXpsVeuEXEtLG+9QoBkDlDmtOo
+	 2JcWKSR/IHWNJQxiiqSXFdo9wNjjSoaviC9CbNAOtHQdo7XXc/snqonarHdC8vek9a
+	 /TQ9qfIhSo9tbsHD4wificlcX6GkF8/uDpzoNGq9/ExqdCMYUvDIyQndRhJ3SGHOtl
+	 wATEb/N23GDxcmu2To1TuSTeXqYpHyuswvpUIMo6IH7x0zE0eFzhPZToMdxB8r5XTO
+	 ZHxNNDEIom6T3ZH32Rerz6AO2J6yfbZD2NB6DYFqqK6ZdhujJSr11w7XD0AqyXP7XN
+	 cULlwjxQkR5Ow==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 20/23] cgroup/cpuset: Enable runtime update of
- HK_TYPE_{KERNEL_NOISE,MANAGED_IRQ} cpumasks
+Subject: Re: [PATCH 23/23] cgroup/cpuset: Documentation and kselftest
+ updates
 Reply-To: sashiko@lists.linux.dev
 To: "Waiman Long" <longman@redhat.com>
-Cc: tj@kernel.org, linux-hwmon@vger.kernel.org, hannes@cmpxchg.org, mkoutny@suse.com
-In-Reply-To: <20260421030351.281436-21-longman@redhat.com>
-References: <20260421030351.281436-21-longman@redhat.com>
+Cc: tj@kernel.org, hannes@cmpxchg.org, linux-hwmon@vger.kernel.org, mkoutny@suse.com
+In-Reply-To: <20260421030351.281436-24-longman@redhat.com>
+References: <20260421030351.281436-24-longman@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 22 Apr 2026 03:09:05 +0000
-Message-Id: <20260422030906.7662AC2BCB6@smtp.kernel.org>
+Date: Wed, 22 Apr 2026 03:09:08 +0000
+Message-Id: <20260422030908.CA3F4C2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 6 potential issue(s):
-- [High] Stale mask used for DOMAIN isolation when `tick_nohz_full_enabled(=
-)` is false, permanently breaking CPU isolation updates.
-- [High] Dynamic CPU de-isolation fails silently for `HK_TYPE_KERNEL_NOISE`=
- and `HK_TYPE_MANAGED_IRQ` masks, causing isolated CPUs to grow monotonical=
-ly.
-- [High] Lack of rollback on `housekeeping_update()` or hotplug failures ca=
-uses unrecoverable state desynchronization.
-- [High] `cpuset_nohz_update_cbfunc()` silently swallows the return value o=
-f `housekeeping_update()`, hiding failures from the hotplug callback.
-- [High] Housekeeping updates triggered by partition invalidations are perm=
-anently lost during CPU offline callbacks.
-- [Medium] TOCTOU race when reading `cpu_online_mask` after dropping `cpus_=
-read_lock()` leads to potential hotplug abortion and state inconsistency.
+Sashiko AI review found 5 potential issue(s):
+- [Medium] The newly added `nohz_full` check in `check_isolcpus()` is place=
+d before the state stabilization retry loop, leading to false test failures=
+ and bypassed validation.
+- [Medium] The selftest script enables kernel dynamic debugging globally bu=
+t fails to restore its state when the test finishes or aborts.
+- [Medium] The new `CPU0_ISOLCPUS_MATRIX` test cases omit the 12th field (`=
+ISOLCPUS`), silently bypassing validation of the `cpuset.cpus.isolated` sta=
+te.
+- [Low] Dead code: the variable `CHK_NOHZ_FULL` is defined and assigned but=
+ never used.
+- [Low] Grammatical errors and typos in documentation and commit message.
 --
 
-commit 35eda8af3da1589e50363cd927f6b3b902b398a2
+commit 84d90aacf6dde2c021ed021a8f60057d923655be
 Author: Waiman Long <longman@redhat.com>
-Subject: cgroup/cpuset: Enable runtime update of HK_TYPE_{KERNEL_NOISE,MANA=
-GED_IRQ} cpumasks
 
-This commit enables runtime updates for KERNEL_NOISE and MANAGED_IRQ
-housekeeping cpumasks. It uses CPU hotplug to facilitate transitioning CPUs
-into and out of isolated states when a nohz_full boot parameter is provided.
+cgroup/cpuset: Documentation and kselftest updates
 
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 1b0c50b46a49c..a927b9cd4f718 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
+This commit updates cpuset tests and documentation to reflect new CPU
+hotplug capabilities for nohz_full. It adds tests to prevent using CPU 0
+in isolated partitions when it cannot be brought offline, and updates
+documentation in cgroup-v2.rst.
 
+> A new test will also be run in offline isn't allowed in CPU 0 to verify
+> that using CPU 0 as part of an isolated partition will fail.
+
+This isn't a bug, but should "run in offline" be "run if offline"?
+
+> Since there is a slight performance overhead to enable runtime changes
+> to nohz_full CPU list, users have to explicitly opt in by adding a
+> "nohz_ful" kernel command line parameter with or without a CPU list.
+
+This isn't a bug, but there's a typo ("nohz_ful") in the commit message.
+
+> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admi=
+n-guide/cgroup-v2.rst
+> index 91beaa6798ce0..81181dc100ead 100644
+> --- a/Documentation/admin-guide/cgroup-v2.rst
+> +++ b/Documentation/admin-guide/cgroup-v2.rst
 [ ... ]
-
-> @@ -1328,29 +1336,67 @@ static bool prstate_housekeeping_conflict(int prs=
-tate, struct cpumask *new_cpus)
->  	return false;
->  }
+> @@ -2647,11 +2648,29 @@ Cpuset Interface Files
+>  	partition or scheduling domain.  The set of exclusive CPUs is
+>  	determined by the value of its "cpuset.cpus.exclusive.effective".
 > =20
-> +static int cpuset_nohz_update_cbfunc(void *arg)
-> +{
-> +	struct cpumask *isol_cpus =3D (struct cpumask *)arg;
+> -	When set to "isolated", the CPUs in that partition will be in
+> -	an isolated state without any load balancing from the scheduler
+> -	and excluded from the unbound workqueues.  Tasks placed in such
+> -	a partition with multiple CPUs should be carefully distributed
+> -	and bound to each of the individual CPUs for optimal performance.
+> +	When set to "isolated", the CPUs in that partition will be in an
+> +	isolated state without any load balancing from the scheduler and
+> +	excluded from the unbound workqueues as well as other OS noises.
+> +	Tasks placed in such a partition with multiple CPUs should be
+> +	carefully distributed and bound to each of the individual CPUs
+> +	for optimal performance.
 > +
-> +	if (isol_cpus)
-> +		housekeeping_update(isol_cpus, BIT(HK_TYPE_KERNEL_NOISE));
-> +	return 0;
+> +	As CPU hotplug, if supported, is used to improve the degree of
+> +	CPU isolation close to the "nohz_full" kernel boot parameter.
+
+This isn't a bug, but this sentence seems to be a subordinate clause lacking
+a main clause.
+
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/te=
+sting/selftests/cgroup/test_cpuset_prs.sh
+> index a56f4153c64df..eebb4122b581c 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -67,6 +67,12 @@ then
+>  	echo Y > /sys/kernel/debug/sched/verbose
+>  fi
+> =20
+> +# Enable dynamic debug message if available
+> +DYN_DEBUG=3D/proc/dynamic_debug/control
+> +[[ -f $DYN_DEBUG ]] && {
+> +	echo "file kernel/cpu.c +p" > $DYN_DEBUG
 > +}
 
-Is it intentional to discard the return value of housekeeping_update() here?
-If housekeeping_update() fails, returning 0 will cause cpuhp_offline_cb()
-to assume success, potentially hiding failures from the hotplug callback.
+Does this leak the debug state after the test finishes?
+
+The script enables dynamic debug messages for the CPU hotplug subsystem her=
+e.
+
+Looking at the cleanup() function triggered via trap, it does not restore or
+disable this configuration, which permanently alters the system's global de=
+bug
+state.
+
+Should the cleanup() function revert this change?
 
 [ ... ]
-
-> +	/*
-> +	 * Update isolated_nohz_cpus/isolated_mirq_cpus if necessary
-> +	 */
-> +	if (!boot_nohz_le_domain) {
-> +		cpumask_andnot(cpus, cpu_possible_mask,
-> +			       housekeeping_cpumask(HK_TYPE_KERNEL_NOISE));
-> +		cpumask_or(cpus, cpus, isolated_cpus);
-
-Could this prevent dynamic CPU de-isolation? Because housekeeping_cpumask()
-returns the current runtime mask rather than the boot mask, the newly
-isolated CPUs remain in the mask when cpumask_or() is called. This might
-cause isolated CPUs to grow monotonically rather than allowing removal.
-
-> +		update_nohz =3D !cpumask_equal(isolated_nohz_cpus, cpus);
-> +		if (update_nohz)
-> +			cpumask_copy(isolated_nohz_cpus, cpus);
-
-If a failure occurs later in this function, these tracking masks are updated
-but the state is not. For example, if cpuhp_offline_cb() fails, the code
-jumps to out_free. If userspace then retries the operation, won't it see
-cpumask_equal(isolated_cpus, isolated_hk_cpus) as true and return early,
-leaving the system permanently out of sync?
-
-[ ... ]
-
-> @@ -1360,10 +1406,103 @@ static void cpuset_update_sd_hk_unlock(void)
->  	 */
->  	mutex_unlock(&cpuset_mutex);
->  	cpus_read_unlock();
-
-[ ... ]
-
-> +		/*
-> +		 * Mask out offline CPUs in cpus
-> +		 * If there is no online CPUs, we can call
-> +		 * housekeeping_update() directly if needed.
-> +		 */
-> +		cpumask_and(cpus, cpus, cpu_online_mask);
-
-Can this race with CPU hotplug operations? The cpus_read_lock was released
-earlier in this function. If a CPU is offlined concurrently right after this
-check, cpuhp_offline_cb() might be passed a CPU that is no longer online,
-potentially causing the hotplug loop to abort.
-
-[ ... ]
-
-> +/*
-> + * cpuset_update_sd_hk_unlock - Rebuild sched domains, update HK & unlock
-> + *
-> + * Update housekeeping cpumasks and rebuild sched domains if necessary a=
-nd
-> + * then do a cpuset_full_unlock().
-> + * This should be called at the end of cpuset operation.
-> + */
-> +static void cpuset_update_sd_hk_unlock(void)
-> +	__releases(&cpuset_mutex)
-> +	__releases(&cpuset_top_mutex)
-> +{
-> +	/* force_sd_rebuild will be cleared in rebuild_sched_domains_locked() */
-> +	if (force_sd_rebuild)
-> +		rebuild_sched_domains_locked();
-> +
-> +	update_housekeeping =3D false;
-> +
-> +	if (cpumask_equal(isolated_cpus, isolated_hk_cpus)) {
-> +		cpuset_full_unlock();
-> +		return;
-> +	}
-> +
-> +	if (!tick_nohz_full_enabled()) {
-> +		/*
-> +		 * housekeeping_update() is now called without holding
-> +		 * cpus_read_lock and cpuset_mutex. Only cpuset_top_mutex
-> +		 * is still being held for mutual exclusion.
-> +		 */
-> +		mutex_unlock(&cpuset_mutex);
-> +		cpus_read_unlock();
-> +		WARN_ON_ONCE(housekeeping_update(isolated_hk_cpus,
-> +						 BIT(HK_TYPE_DOMAIN)));
-
-Are we passing a stale mask here? If tick_nohz_full_enabled() is false, we
-skip calling cpuset_update_housekeeping_unlock(), which means
-isolated_hk_cpus is never updated to match isolated_cpus. Subsequent checks
-for cpumask_equal(isolated_cpus, isolated_hk_cpus) will continue to fail,
-and the new mask is never applied to the DOMAIN isolation.
-
-> +		mutex_unlock(&cpuset_top_mutex);
-> +	} else {
-> +		cpuset_update_housekeeping_unlock();
-> +	}
-> +}
-
-[ ... ]
-
-> @@ -3954,7 +4116,10 @@ static void cpuset_handle_hotplug(void)
->  	 */
->  	if (force_sd_rebuild)
->  		rebuild_sched_domains_cpuslocked();
-> -	if (update_housekeeping)
-> +	/*
-> +	 * Don't need to update housekeeping cpumasks in cpuhp_offline_cb mode.
-> +	 */
-> +	if (update_housekeeping && !cpuhp_offline_cb_mode)
->  		queue_work(system_dfl_wq, &hk_sd_work);
+> @@ -84,6 +90,15 @@ echo member > test/cpuset.cpus.partition
+>  echo "" > test/cpuset.cpus
+>  [[ $RESULT -eq 0 ]] && skip_test "Child cgroups are using cpuset!"
 > =20
->  	free_tmpmasks(ptmp);
+> +#
+> +# If nohz_full parameter is specified and nohz_full file exists, CPU hot=
+plug
+> +# will be used to modify nohz_full cpumask to include all the isolated C=
+PUs
+> +# in cpuset isolated partitions.
+> +#
+> +NOHZ_FULL=3D/sys/devices/system/cpu/nohz_full
+> +BOOT_NOHZ_FULL=3D$(fmt -1 /proc/cmdline | grep "^nohz_full")
+> +[[ "$BOOT_NOHZ_FULL" =3D nohz_full ]] && CHK_NOHZ_FULL=3D1
 
-Does this cause housekeeping updates to be lost? If a CPU is offlined and
-it invalidates a cpuset partition, update_housekeeping is set to true. If we
-skip queuing the work here because cpuhp_offline_cb_mode is true, there
-doesn't appear to be a mechanism to retroactively process the pending flag
-once the bounce cycle completes.
+Is CHK_NOHZ_FULL used anywhere else in the script?
+
+It looks like it is defined and assigned here, but the same string
+comparison is redundantly evaluated later inside check_isolcpus() without
+using this variable.
+
+[ ... ]
+> +#
+> +# Test matrix to verify that using CPU 0 in isolated (local or remote) p=
+artition
+> +# will fail when offline isn't allowed for CPU 0.
+> +#
+> +CPU0_ISOLCPUS_MATRIX=3D(
+> +	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs P=
+state ISOLCPUS
+> +	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- -=
+----- --------
+> +	"   C0-3     .      .    C4-5     P2     .      .      .     0 A1:0-3|B=
+1:4-5 A1:P-2"
+> +	"   C1-3     .      .      .      P2     .      .      .     0 A1:1-3 A=
+1:P2"
+> +	"   C1-3     .      .      .    P2:C0-3  .      .      .     0 A1:0-3 A=
+1:P-2"
+> +	"  CX0-3   C0-3     .      .       .     P2     .      .     0 A1:0-3|A=
+2:0-3 A2:P-2"
+> +	"  CX0-3 C0-3:X1-3  .      .       .     P2     .      .     0 A1:0|A2:=
+1-3 A2:P2"
+> +	"  CX0-3 C0-3:X1-3  .      .       .   P2:X0-3  .      .     0 A1:0-3|A=
+2:0-3 A2:P-2"
+> +)
+
+Are these test cases bypassing the validation of the cpuset.cpus.isolated
+state?
+
+The test matrix headers indicate 12 fields, but the entries only provide
+11 fields, omitting the final ISOLCPUS field.
+
+Because the 12th field is missing, check_test_results() will evaluate if
+ISOLCPUS is non-empty as false and skip calling check_isolcpus(), leaving
+the isolated state unchecked.
+
+[ ... ]
+> @@ -789,6 +821,18 @@ check_isolcpus()
+>  		EXPECTED_SDOMAIN=3D$EXPECTED_ISOLCPUS
+>  	fi
+> =20
+> +	#
+> +	# Check if nohz_full match cpuset.cpus.isolated if nohz_boot parameter
+> +	# specified with no parameter.
+> +	#
+
+This isn't a bug, but there's a typo ("nohz_boot" instead of "nohz_full")
+in this comment.
+
+> +	[[ -f $NOHZ_FULL && "$BOOT_NOHZ_FULL" =3D nohz_full ]] && {
+> +		NOHZ_FULL_CPUS=3D$(cat $NOHZ_FULL)
+> +		[[ "$ISOLCPUS" !=3D "$NOHZ_FULL_CPUS" ]] && {
+> +			echo "nohz_full ($NOHZ_FULL_CPUS) does not match cpuset.cpus.isolated=
+ ($ISOLCPUS)"
+> +			return 1
+> +		}
+> +	}
+> +
+
+Will this check cause false test failures or bypass validation due to
+asynchronous state updates?
+
+The script reads the state and immediately returns an error if they mismatc=
+h.
+
+However, later in the function there is a 50ms retry loop to account for
+transient states.
+
+If the files update at slightly different times, the check instantly fails.
+If both files are in their old state, they match, passing the check, but
+then the script pauses and reads the new state without re-evaluating
+nohz_full against the final state.
+
+Could this check be moved after the state stabilization retry loop?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260421030351.2814=
-36-1-longman@redhat.com?part=3D20
+36-1-longman@redhat.com?part=3D23
