@@ -1,235 +1,275 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C7183A169F
-	for <linux-hwmon@vger.kernel.org>; Wed, 22 Apr 2026 03:09:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7062F31D366;
+	Wed, 22 Apr 2026 06:39:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776827351; cv=none; b=A3g54ZB52vF0fs2p0idH2UKG5vhVKFwVVnaP7wU7sSwEJjfraL5hStHq/1I1Sam6zgPIFXAMP2tN+wlhbR42mtad8SdlV94bNKqkbNnuJSUFuqXgjSUjrz9D2H3k6bnoz2hxrqx7NtWdyDFecVpfxULKvx9Ivd4X6iHYrou2nmI=
+	t=1776839991; cv=none; b=ubi8fsCt1YlwNTO9/+7yFf0518ZUd/bmrMffppvDWwXhORJgACdXz9lbQHS/VnSj2YifgtubvKAkSxf6UnygfxLqG9pafVRfhOslpg7idv4JX/K9ia+ze3rxBvBFkxFMJsr9jPYW6hSYZ4pqJOcrUsYIwMPkEBOPjGqVx8X2ePY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776827351; c=relaxed/simple;
-	bh=b05ALdjr+jcS8C2WNBcRztYFiAOv1zZf2PvGucdFrck=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=O9iHgXMcuEqB1KvKQbjTv8h9JiXk4iLlzCtuUkjFIsLK21I6pEQDhq/KI2G8zAnF47Wl/13/c0mFJ2ncDOdh5I3tS9QTAbolJijwkUivEUnf5f/RIJ5DqnpODRIv3OhIhya9Mr5aFQfBUQ63bxSKFzWOTIf+6R/2zpo/YYWs4eY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BViuea0W; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BViuea0W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA3F4C2BCB0;
-	Wed, 22 Apr 2026 03:09:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776827349;
-	bh=b05ALdjr+jcS8C2WNBcRztYFiAOv1zZf2PvGucdFrck=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=BViuea0WwrJj1OmCUVz+IE4COXO/VjwwswevbEpKXpsVeuEXEtLG+9QoBkDlDmtOo
-	 2JcWKSR/IHWNJQxiiqSXFdo9wNjjSoaviC9CbNAOtHQdo7XXc/snqonarHdC8vek9a
-	 /TQ9qfIhSo9tbsHD4wificlcX6GkF8/uDpzoNGq9/ExqdCMYUvDIyQndRhJ3SGHOtl
-	 wATEb/N23GDxcmu2To1TuSTeXqYpHyuswvpUIMo6IH7x0zE0eFzhPZToMdxB8r5XTO
-	 ZHxNNDEIom6T3ZH32Rerz6AO2J6yfbZD2NB6DYFqqK6ZdhujJSr11w7XD0AqyXP7XN
-	 cULlwjxQkR5Ow==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 23/23] cgroup/cpuset: Documentation and kselftest
- updates
-Reply-To: sashiko@lists.linux.dev
-To: "Waiman Long" <longman@redhat.com>
-Cc: tj@kernel.org, hannes@cmpxchg.org, linux-hwmon@vger.kernel.org, mkoutny@suse.com
-In-Reply-To: <20260421030351.281436-24-longman@redhat.com>
-References: <20260421030351.281436-24-longman@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 22 Apr 2026 03:09:08 +0000
-Message-Id: <20260422030908.CA3F4C2BCB0@smtp.kernel.org>
+	s=arc-20240116; t=1776839991; c=relaxed/simple;
+	bh=8auo9fApI0AJJbM0oVqd4iDvIZsHR0GHU8PCbKdtgfE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nEhnGlESkxk5sTuFyBRbXIkhzrOCb3a9m6NVJMgX5h698N9L6IaDoJzJnGGMxyXwfdPUnlx1I3gpIIZb/V8RPGtu/hmYgiGiRa6PX89OP81YlWNyIueKxfpE6A0OBr8SHCHG7g1GSK05fbutgELtbW6ibiBjAWzTBpLWKfF088Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4g0qMJ3lLGzKHMN6;
+	Wed, 22 Apr 2026 14:39:24 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id CB50540600;
+	Wed, 22 Apr 2026 14:39:44 +0800 (CST)
+Received: from [10.67.111.176] (unknown [10.67.111.176])
+	by APP4 (Coremail) with SMTP id gCh0CgBnBMIubehpzQ43BQ--.59576S2;
+	Wed, 22 Apr 2026 14:39:44 +0800 (CST)
+Message-ID: <48f5e1f5-bfb0-44cc-ae6a-14f66158796f@huaweicloud.com>
+Date: Wed, 22 Apr 2026 14:39:42 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 02/23] sched/isolation: Enhance housekeeping_update() to
+ support updating more than one HK cpumask
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ "K. Y. Srinivasan" <kys@microsoft.com>,
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+ Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
+ Guenter Roeck <linux@roeck-us.net>, Frederic Weisbecker
+ <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, Ingo Molnar
+ <mingo@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall
+ <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+ Valentin Schneider <vschneid@redhat.com>,
+ K Prateek Nayak <kprateek.nayak@amd.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-hyperv@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ rcu@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Costa Shulyupin <cshulyup@redhat.com>,
+ Qiliang Yuan <realwujing@gmail.com>
+References: <20260421030351.281436-1-longman@redhat.com>
+ <20260421030351.281436-3-longman@redhat.com>
+Content-Language: en-US
+From: Chen Ridong <chenridong@huaweicloud.com>
+In-Reply-To: <20260421030351.281436-3-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgBnBMIubehpzQ43BQ--.59576S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3GFyrGF4kGw1fAF4xGFyxAFb_yoW7Kw4Dpr
+	Z8W3y3GFWkJr13G3s8Zw1DJr4rWw4kCw1vk3sxWw15tFy2g3WkA3409F9xJr97ur9rCr17
+	ZFZ8KwsIgFyjyrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26rWY6Fy7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8
+	Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+	CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
+	xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+	xUVZ2-UUUUU
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
-Sashiko AI review found 5 potential issue(s):
-- [Medium] The newly added `nohz_full` check in `check_isolcpus()` is place=
-d before the state stabilization retry loop, leading to false test failures=
- and bypassed validation.
-- [Medium] The selftest script enables kernel dynamic debugging globally bu=
-t fails to restore its state when the test finishes or aborts.
-- [Medium] The new `CPU0_ISOLCPUS_MATRIX` test cases omit the 12th field (`=
-ISOLCPUS`), silently bypassing validation of the `cpuset.cpus.isolated` sta=
-te.
-- [Low] Dead code: the variable `CHK_NOHZ_FULL` is defined and assigned but=
- never used.
-- [Low] Grammatical errors and typos in documentation and commit message.
---
 
-commit 84d90aacf6dde2c021ed021a8f60057d923655be
-Author: Waiman Long <longman@redhat.com>
 
-cgroup/cpuset: Documentation and kselftest updates
-
-This commit updates cpuset tests and documentation to reflect new CPU
-hotplug capabilities for nohz_full. It adds tests to prevent using CPU 0
-in isolated partitions when it cannot be brought offline, and updates
-documentation in cgroup-v2.rst.
-
-> A new test will also be run in offline isn't allowed in CPU 0 to verify
-> that using CPU 0 as part of an isolated partition will fail.
-
-This isn't a bug, but should "run in offline" be "run if offline"?
-
-> Since there is a slight performance overhead to enable runtime changes
-> to nohz_full CPU list, users have to explicitly opt in by adding a
-> "nohz_ful" kernel command line parameter with or without a CPU list.
-
-This isn't a bug, but there's a typo ("nohz_ful") in the commit message.
-
-> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admi=
-n-guide/cgroup-v2.rst
-> index 91beaa6798ce0..81181dc100ead 100644
-> --- a/Documentation/admin-guide/cgroup-v2.rst
-> +++ b/Documentation/admin-guide/cgroup-v2.rst
-[ ... ]
-> @@ -2647,11 +2648,29 @@ Cpuset Interface Files
->  	partition or scheduling domain.  The set of exclusive CPUs is
->  	determined by the value of its "cpuset.cpus.exclusive.effective".
-> =20
-> -	When set to "isolated", the CPUs in that partition will be in
-> -	an isolated state without any load balancing from the scheduler
-> -	and excluded from the unbound workqueues.  Tasks placed in such
-> -	a partition with multiple CPUs should be carefully distributed
-> -	and bound to each of the individual CPUs for optimal performance.
-> +	When set to "isolated", the CPUs in that partition will be in an
-> +	isolated state without any load balancing from the scheduler and
-> +	excluded from the unbound workqueues as well as other OS noises.
-> +	Tasks placed in such a partition with multiple CPUs should be
-> +	carefully distributed and bound to each of the individual CPUs
-> +	for optimal performance.
+On 2026/4/21 11:03, Waiman Long wrote:
+> The housekeeping_update() function currently allows update to the
+> HK_TYPE_DOMAIN cpumask only. As we are going to enable dynamic
+> modification of the other housekeeping cpumasks, we need to extend
+> it to support passing in the information about the HK cpumask(s) to
+> be updated.  In cases where some HK cpumasks happen to be the same,
+> it will be more efficient to update multiple HK cpumasks in one single
+> call instead of calling it multiple times. Extend housekeeping_update()
+> to support that as well.
+> 
+> Also add the restriction that passed in isolated cpumask parameter
+> of housekeeping_update() must include all the CPUs isolated at boot
+> time. This is currently the case for cpuset anyway.
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  include/linux/sched/isolation.h |  2 +-
+>  kernel/cgroup/cpuset.c          |  2 +-
+>  kernel/sched/isolation.c        | 99 +++++++++++++++++++++++----------
+>  3 files changed, 71 insertions(+), 32 deletions(-)
+> 
+> diff --git a/include/linux/sched/isolation.h b/include/linux/sched/isolation.h
+> index d1707f121e20..a17f16e0156e 100644
+> --- a/include/linux/sched/isolation.h
+> +++ b/include/linux/sched/isolation.h
+> @@ -51,7 +51,7 @@ extern const struct cpumask *housekeeping_cpumask(enum hk_type type);
+>  extern bool housekeeping_enabled(enum hk_type type);
+>  extern void housekeeping_affine(struct task_struct *t, enum hk_type type);
+>  extern bool housekeeping_test_cpu(int cpu, enum hk_type type);
+> -extern int housekeeping_update(struct cpumask *isol_mask);
+> +extern int housekeeping_update(struct cpumask *isol_mask, unsigned long flags);
+>  extern void __init housekeeping_init(void);
+>  
+>  #else
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 1335e437098e..a4eccb0ec0d1 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -1354,7 +1354,7 @@ static void cpuset_update_sd_hk_unlock(void)
+>  		 */
+>  		mutex_unlock(&cpuset_mutex);
+>  		cpus_read_unlock();
+> -		WARN_ON_ONCE(housekeeping_update(isolated_hk_cpus));
+> +		WARN_ON_ONCE(housekeeping_update(isolated_hk_cpus, BIT(HK_TYPE_DOMAIN)));
+>  		mutex_unlock(&cpuset_top_mutex);
+>  	} else {
+>  		cpuset_full_unlock();
+> diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
+> index 9ec9ae510dc7..965d6f8fe344 100644
+> --- a/kernel/sched/isolation.c
+> +++ b/kernel/sched/isolation.c
+> @@ -120,48 +120,87 @@ bool housekeeping_test_cpu(int cpu, enum hk_type type)
+>  }
+>  EXPORT_SYMBOL_GPL(housekeeping_test_cpu);
+>  
+> -int housekeeping_update(struct cpumask *isol_mask)
+> -{
+> -	struct cpumask *trial, *old = NULL;
+> -	int err;
+> +/* HK type processing table */
+> +static struct {
+> +	int type;
+> +	int boot_type;
+> +} hk_types[] = {
+> +	{ HK_TYPE_DOMAIN,       HK_TYPE_DOMAIN_BOOT	  },
+> +	{ HK_TYPE_MANAGED_IRQ,  HK_TYPE_MANAGED_IRQ_BOOT  },
+> +	{ HK_TYPE_KERNEL_NOISE, HK_TYPE_KERNEL_NOISE_BOOT }
+> +};
+>  
+> -	trial = kmalloc(cpumask_size(), GFP_KERNEL);
+> -	if (!trial)
+> -		return -ENOMEM;
+> +#define HK_TYPE_CNT	ARRAY_SIZE(hk_types)
+>  
+> -	cpumask_andnot(trial, housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT), isol_mask);
+> -	if (!cpumask_intersects(trial, cpu_online_mask)) {
+> -		kfree(trial);
+> -		return -EINVAL;
+> +int housekeeping_update(struct cpumask *isol_mask, unsigned long flags)
+> +{
+> +	struct cpumask *trial[HK_TYPE_CNT];
+> +	int i, err = 0;
 > +
-> +	As CPU hotplug, if supported, is used to improve the degree of
-> +	CPU isolation close to the "nohz_full" kernel boot parameter.
-
-This isn't a bug, but this sentence seems to be a subordinate clause lacking
-a main clause.
-
-> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/te=
-sting/selftests/cgroup/test_cpuset_prs.sh
-> index a56f4153c64df..eebb4122b581c 100755
-> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> @@ -67,6 +67,12 @@ then
->  	echo Y > /sys/kernel/debug/sched/verbose
->  fi
-> =20
-> +# Enable dynamic debug message if available
-> +DYN_DEBUG=3D/proc/dynamic_debug/control
-> +[[ -f $DYN_DEBUG ]] && {
-> +	echo "file kernel/cpu.c +p" > $DYN_DEBUG
-> +}
-
-Does this leak the debug state after the test finishes?
-
-The script enables dynamic debug messages for the CPU hotplug subsystem her=
-e.
-
-Looking at the cleanup() function triggered via trap, it does not restore or
-disable this configuration, which permanently alters the system's global de=
-bug
-state.
-
-Should the cleanup() function revert this change?
-
-[ ... ]
-> @@ -84,6 +90,15 @@ echo member > test/cpuset.cpus.partition
->  echo "" > test/cpuset.cpus
->  [[ $RESULT -eq 0 ]] && skip_test "Child cgroups are using cpuset!"
-> =20
-> +#
-> +# If nohz_full parameter is specified and nohz_full file exists, CPU hot=
-plug
-> +# will be used to modify nohz_full cpumask to include all the isolated C=
-PUs
-> +# in cpuset isolated partitions.
-> +#
-> +NOHZ_FULL=3D/sys/devices/system/cpu/nohz_full
-> +BOOT_NOHZ_FULL=3D$(fmt -1 /proc/cmdline | grep "^nohz_full")
-> +[[ "$BOOT_NOHZ_FULL" =3D nohz_full ]] && CHK_NOHZ_FULL=3D1
-
-Is CHK_NOHZ_FULL used anywhere else in the script?
-
-It looks like it is defined and assigned here, but the same string
-comparison is redundantly evaluated later inside check_isolcpus() without
-using this variable.
-
-[ ... ]
-> +#
-> +# Test matrix to verify that using CPU 0 in isolated (local or remote) p=
-artition
-> +# will fail when offline isn't allowed for CPU 0.
-> +#
-> +CPU0_ISOLCPUS_MATRIX=3D(
-> +	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs P=
-state ISOLCPUS
-> +	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- -=
------ --------
-> +	"   C0-3     .      .    C4-5     P2     .      .      .     0 A1:0-3|B=
-1:4-5 A1:P-2"
-> +	"   C1-3     .      .      .      P2     .      .      .     0 A1:1-3 A=
-1:P2"
-> +	"   C1-3     .      .      .    P2:C0-3  .      .      .     0 A1:0-3 A=
-1:P-2"
-> +	"  CX0-3   C0-3     .      .       .     P2     .      .     0 A1:0-3|A=
-2:0-3 A2:P-2"
-> +	"  CX0-3 C0-3:X1-3  .      .       .     P2     .      .     0 A1:0|A2:=
-1-3 A2:P2"
-> +	"  CX0-3 C0-3:X1-3  .      .       .   P2:X0-3  .      .     0 A1:0-3|A=
-2:0-3 A2:P-2"
-> +)
-
-Are these test cases bypassing the validation of the cpuset.cpus.isolated
-state?
-
-The test matrix headers indicate 12 fields, but the entries only provide
-11 fields, omitting the final ISOLCPUS field.
-
-Because the 12th field is missing, check_test_results() will evaluate if
-ISOLCPUS is non-empty as false and skip calling check_isolcpus(), leaving
-the isolated state unchecked.
-
-[ ... ]
-> @@ -789,6 +821,18 @@ check_isolcpus()
->  		EXPECTED_SDOMAIN=3D$EXPECTED_ISOLCPUS
->  	fi
-> =20
-> +	#
-> +	# Check if nohz_full match cpuset.cpus.isolated if nohz_boot parameter
-> +	# specified with no parameter.
-> +	#
-
-This isn't a bug, but there's a typo ("nohz_boot" instead of "nohz_full")
-in this comment.
-
-> +	[[ -f $NOHZ_FULL && "$BOOT_NOHZ_FULL" =3D nohz_full ]] && {
-> +		NOHZ_FULL_CPUS=3D$(cat $NOHZ_FULL)
-> +		[[ "$ISOLCPUS" !=3D "$NOHZ_FULL_CPUS" ]] && {
-> +			echo "nohz_full ($NOHZ_FULL_CPUS) does not match cpuset.cpus.isolated=
- ($ISOLCPUS)"
-> +			return 1
+> +	for (i = 0; i < HK_TYPE_CNT; i++) {
+> +		int type = hk_types[i].type;
+> +		int boot = hk_types[i].boot_type;
+> +
+> +		trial[i] = NULL;
+> +		if (flags & BIT(type)) {
+> +			trial[i] = kmalloc(cpumask_size(), GFP_KERNEL);
+> +			if (!trial[i]) {
+> +				err = -ENOMEM;
+> +				goto out;
+> +			}
+> +			/*
+> +			 * The new HK cpumask must be a subset of its boot
+> +			 * cpumask.
+> +			 */
+> +			cpumask_andnot(trial[i], cpu_possible_mask, isol_mask);
+> +			if (!cpumask_intersects(trial[i], cpu_online_mask) ||
+> +			    !cpumask_subset(trial[i], housekeeping_cpumask(boot))) {
+> +				i++;
+> +				err = -EINVAL;
+> +				goto out;
+> +			}
 > +		}
+>  	}
+>  
+
+The i++ here is confusing. Wouldn't it be more readable to just use
+kfree(trial[i]) and then break out?
+
+>  	if (!housekeeping.flags)
+>  		static_branch_enable(&housekeeping_overridden);
+>  
+> -	if (housekeeping.flags & HK_FLAG_DOMAIN)
+> -		old = housekeeping_cpumask_dereference(HK_TYPE_DOMAIN);
+> -	else
+> -		WRITE_ONCE(housekeeping.flags, housekeeping.flags | HK_FLAG_DOMAIN);
+> -	rcu_assign_pointer(housekeeping.cpumasks[HK_TYPE_DOMAIN], trial);
+> -
+> -	synchronize_rcu();
+> -
+> -	pci_probe_flush_workqueue();
+> -	mem_cgroup_flush_workqueue();
+> -	vmstat_flush_workqueue();
+> +	for (i = 0; i < HK_TYPE_CNT; i++) {
+> +		int type =  hk_types[i].type;
+> +		struct cpumask *old;
+>  
+> -	err = workqueue_unbound_housekeeping_update(housekeeping_cpumask(HK_TYPE_DOMAIN));
+> -	WARN_ON_ONCE(err < 0);
+> +		if (!trial[i])
+> +			continue;
+> +		old = NULL;
+> +		if (housekeeping.flags & BIT(type))
+> +			old = housekeeping_cpumask_dereference(type);
+> +		rcu_assign_pointer(housekeeping.cpumasks[type], trial[i]);
+> +		trial[i] = old;
 > +	}
+>  
+> -	err = tmigr_isolated_exclude_cpumask(isol_mask);
+> -	WARN_ON_ONCE(err < 0);
+> +	if ((housekeeping.flags & flags) != flags)
+> +		WRITE_ONCE(housekeeping.flags, housekeeping.flags | flags);
+>  
+> -	err = kthreads_update_housekeeping();
+> -	WARN_ON_ONCE(err < 0);
+> +	synchronize_rcu();
+>  
+> -	kfree(old);
+> +	if (flags & HK_FLAG_DOMAIN) {
+> +		/*
+> +		 * HK_TYPE_DOMAIN specific callbacks
+> +		 */
+> +		pci_probe_flush_workqueue();
+> +		mem_cgroup_flush_workqueue();
+> +		vmstat_flush_workqueue();
 > +
+> +		WARN_ON_ONCE(workqueue_unbound_housekeeping_update(
+> +				housekeeping_cpumask(HK_TYPE_DOMAIN)) < 0);
+> +		WARN_ON_ONCE(tmigr_isolated_exclude_cpumask(isol_mask) < 0);
+> +		WARN_ON_ONCE(kthreads_update_housekeeping() < 0);
+> +	}
+>  
+> -	return 0;
+> +out:
+> +	while (--i >= 0)
+> +		kfree(trial[i]);
+> +	return err;
+>  }
+>  
+>  void __init housekeeping_init(void)
 
-Will this check cause false test failures or bypass validation due to
-asynchronous state updates?
+-- 
+Best regards,
+Ridong
 
-The script reads the state and immediately returns an error if they mismatc=
-h.
-
-However, later in the function there is a 50ms retry loop to account for
-transient states.
-
-If the files update at slightly different times, the check instantly fails.
-If both files are in their old state, they match, passing the check, but
-then the script pauses and reads the new state without re-evaluating
-nohz_full against the final state.
-
-Could this check be moved after the state stabilization retry loop?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260421030351.2814=
-36-1-longman@redhat.com?part=3D23
