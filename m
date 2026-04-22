@@ -1,67 +1,68 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36C3B3C198A
-	for <linux-hwmon@vger.kernel.org>; Wed, 22 Apr 2026 11:38:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6F9C3D2FE6
+	for <linux-hwmon@vger.kernel.org>; Wed, 22 Apr 2026 11:59:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776857897; cv=none; b=HvebXVMloRBoen0yvohsJHxIyj9FKAx7cNv2O4eQ/V17CBSmQH25EBng1Z0+WapfAUGbX5ZmST7NBkNZvClVR+fEwDQL+YFP3EdXqVswCr+JSAHSS4/atqRbmmF3WpLzipd+cv8YyK5PoMVnRhDYP98uJT2nWCNBegwH3pDogWk=
+	t=1776859163; cv=none; b=sFURQl3h0iLGnMqOktvm+bgtJZhEK+vUCoFC95cDdqFYy1use9Onx28weHPi0tXoyA6ZfRHUG1TRzCTTX11orGDH9QLFBNcQN0GFhbLQAxJm55Kzc/2l9QNnE6BERfnOT85pnQE4N78c9H2U2p4vWeeIYGOeBe+N5YFR4yJJ1FQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776857897; c=relaxed/simple;
-	bh=1ChudyhB9PrLpcu1ausyxcm+qbBvu52Jj1i2wzV2bJ4=;
+	s=arc-20240116; t=1776859163; c=relaxed/simple;
+	bh=PxxWuD2DAnmLuzpLFkG5DbUWJB0P/Lom4mu12j2Y8t8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OIqugLEDvjBirSIXblZugQcHrbRFpON8yM1CsoWqVHP3Bx5byJXxF6N7068NYeU/7I//IbdwTzGaSVzoOxiS+CJFhnZUgfkBwc2Eg6MDAGKfSm7g2apA7QzJC9TfrUlGWKaq6ukTKHk4hKwfVDod5CAmRHTJShHA2BS8fINIHSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PTT2R4tp; arc=none smtp.client-ip=209.85.214.173
+	 In-Reply-To:Content-Type; b=bJcUTPboPc4NtyJgUpWr1yC6VJaIlapWlB7I5H96XNFVebHZTDIYWdR33YbRb3SF390jAr4JmC29YgkaynEVXjYPvJocnr0e1cn1U+AKwSrNP07k16ZUMbJB9zFhn+6LrsOmi0ZQZ6Y6rCQ9pn1lq5Gp2E8Gt9VkqjsdPa1XfIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uun2H9H9; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PTT2R4tp"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2ab46931cf1so44401265ad.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 22 Apr 2026 04:38:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uun2H9H9"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2ad9516a653so27316785ad.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 22 Apr 2026 04:59:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776857894; x=1777462694; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776859161; x=1777463961; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZJmY/r8RzL8DJnHS2RBIb1cZGOshnBGPhFGVPd8dc78=;
-        b=PTT2R4tpCdazxftLT+38Iyl+CxmAn8tW/uq4nsewovkiF2G3qa2pWHExg2CMMh0MuN
-         fGUs0Hxb9oargoFlZgL5Lsb0f455lXfwetXYelzarIlvpvtw5rDYbYMuJ0rnIZaFw1Vg
-         zPms/SqXytZ0Huuf04rUr+3v2/mTEaZXGPz+oIU640Qckj36rQE1iaNEZi9copfbAqmk
-         YvC5a5UQ88B86Qw02RfH1t2z4W+qIApdxG8O4he/SlkqfKBGhSx+WO5LJNGFB0MIK4l2
-         WcFZvZztEnKD3T50r6qzI6V2eVraTcPg8gobecxGzmLkup0uapLGL0qwDUZU+JjC/uPU
-         7cXQ==
+        bh=yQdjvNpFoN4+Y1Foq/Arcrd5LT5ufq6D54+4yF+FPEo=;
+        b=Uun2H9H9u6S5WrW3FY+Daa+m4wxYIIOox/vp7Kn3Dz5C1JnuOrz3nQswel6dLY69ud
+         xbr/YqGjLW5LMtm3LZjuwc70QcBTqeoirIsq9lwJbadckirRTW9La+qosSPi/zij0v0n
+         bAkoecTLab5IVEnMS7CfLcHhC/DIZnM8j9ngA2pROd561tRxIzjGAqlM0GlkQr49EIB8
+         gWwwLgpj/tWyXu2JjAFO2TUxKmOLSH+sZq0KTQFqeZKx4dmRQLoeR2ItvDnwm7O43lWZ
+         pFTCk8VlSarIl/OUfPUMGcJf8x5vqhElgeeHt0tgNrk1g0b3H8Qn9J+IbTjzGQZmlV9R
+         9+Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776857894; x=1777462694;
+        d=1e100.net; s=20251104; t=1776859161; x=1777463961;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZJmY/r8RzL8DJnHS2RBIb1cZGOshnBGPhFGVPd8dc78=;
-        b=hEIxgZWewvTIb7VAojyHE5PIL7nsYm3WmZVaX7VjvcWx8K4KbfHNARGTO4nByy+NyB
-         /jNthZo+3QumdLK8nX96ODUMw99M+yvToDx5fR9eFBN+NCJh/gpwLwBmj/EN/+9Yql2k
-         jNzFnDA6ZNMRSiDzSChV6AaqxAV+LqHFFm17xGM6L+DT743l8fIyn6g7/mHf+f2I7O6k
-         8ZDje9uGwknq5+gM8OSYBJ59hZ06YgGu3z6Z3LqnVCO3FCaCJ4Xs2THGSlb/mCtj3jOB
-         nF3ZSfTbcMOKSCjMUhB669eSZk8YUGsTTBFNT41Ae8iTuqMjcDNwUe3h4ttFDTJ++9ol
-         4zTQ==
-X-Gm-Message-State: AOJu0Ywc5QuEftYU/7brsr2NwtjxiQ/gAvKinDhIUEj0MhmTdMYVrUMs
-	kVtThhcgeGErH/5ixu4SOlVrHUyb3lUiMYUhStvPfk/iJ7cJtVDvd4+0
-X-Gm-Gg: AeBDiett/h0JIcOyvZPpyeFXelp4Mo1fdJF515jY642Mzvkbp39O1WHQJbrXI3Ir1tz
-	b5OwOGRjWWfwnTKJROQsXCBFI0WwUbXNI8TPm0iZHewiyekL2/OFh8NEJKNEX4FlBOgqWGgy2PW
-	jlEURfIA4Ri0WOoyj3i+vk814xhLlc3LqlymMM5y7808zCWrTO4PV5L8ExMC/acQRgLEZLcDa3b
-	AUIWl8U5zdz0b09DVRCM3grApsILdGWXNnS/Kcjt5DTZZ02TPRfFQ/siNwAVS6khe1OdJjhnryo
-	JYfAvzI7U3zCbfJIhOCSIaaV7CGPlDdm0AhjGC5AWjoHD3k9sPcypRqCPyVOXhrxGrRvyuJud3v
-	ql/KeNXsATiqaQfDoprrT3cQ7eDRUYXJaxoYRxa7VuF5vvhgc7qiJ2dpvGM0PRGIR/WEkHp94To
-	ywYOqV2a88TN86xhYMvHKdHbKpi1vmi4mXnS+k6gya4eAfoUMmT/DpBg3dyHAK3mamtJr3CaOFH
-	5G7kA47Lo8=
-X-Received: by 2002:a17:903:bd0:b0:2b0:4f16:22f7 with SMTP id d9443c01a7336-2b5f9e8d873mr141633755ad.16.1776857894485;
-        Wed, 22 Apr 2026 04:38:14 -0700 (PDT)
+        bh=yQdjvNpFoN4+Y1Foq/Arcrd5LT5ufq6D54+4yF+FPEo=;
+        b=en5D351++55MtgUtN6ss/avUE+MOfMUxaKbhipXTeS7K/q3mmdAWvLC7ONSnY1oSbQ
+         zoDe8oboexByobQ0scDTjQVY6OCm+1FzUcmdpHjHHzv0SOKYRYqkZaiTQaxBXjIaQIV+
+         CRmZh5PzyG26/8DBr4TJysG+pDFUsj7khoV+gdEWLXFWe4INGkFHNyuUvc7fTHzUDvM8
+         u68fc5RpRgY+Me5tFsfcHLsDWb0xnwMTJp11qjK/qKHeLh/qILXO5NqcSlyYU3bfM2rE
+         JdQ9yeRpoTb9SgBhno1LiI03WRr6Lb0Da+w2PI73ZXpZBVh6C8qgFOGfgJ92xAPlgLZ0
+         Knkg==
+X-Forwarded-Encrypted: i=1; AFNElJ8I7RcNcoRuJtGE+uRKxrxXWX/zuU9HiG9G/rN87hQtB619Pc614PftPlDejfs0QEnaCgyAZRmEECT2RQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw98W7HuK40+XDvODtzXRb0uDCVggjg/umCSObS3fGrBpl2XB/K
+	elswe8zrUGsWl5FlZCPIXFcj0qJ/fgt4HIWEmyK7+xluYjNrAWlJ3At9
+X-Gm-Gg: AeBDievXM8V3Tz9Fw1Io1COH+SjiTqyJPRHv/jFaM5SUyVjCCvwlFtCOlOvyorSkEsE
+	sMq7UbM2Z5eMw8NXNwpRjS+ZeUfFu54779cNaiL1fR6BtHv0fNXQAJLB95P7fbh5BGdzWX24km0
+	eCFTTEoVb5QawlkTXsFdCzkg4cFJhBzL+YOYAuzVWP+ydPid2d3te4kagRWrmGbPTxF84rM0NX2
+	Vgvej2mK6/i5f4kGW8ebteEme8Zhdgds16V8ErlGZjwwkI15Fru0IfKEH1Wwlf/3TLR0peWAOmh
+	Ni7r42Sd1UPZxa7ETN80cYoLvCxw2HlgoHB43tjej8nIDKgAW8KLhdA4ayOQD6fG389Sy4e7KkW
+	kCZwHMB89IT1FqLW2qPIKmhfLdr8cDzemsOddqFBSkf2BccP2JPp24v0k2cpZgJqip3cQn/CP+x
+	RCSIJgOvLansnwL12ZXbmODQsAFlt0DLkR17LNE4pXirdginSxyDvWgABKuIhJmlLdPqPZG2b2n
+	3eJGLw76oA=
+X-Received: by 2002:a17:903:8c4:b0:2b0:61c2:8e7a with SMTP id d9443c01a7336-2b5f9f1c601mr217544535ad.25.1776859161266;
+        Wed, 22 Apr 2026 04:59:21 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5fab40786sm175528755ad.79.2026.04.22.04.38.13
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5fab0cdd1sm164231655ad.38.2026.04.22.04.59.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Apr 2026 04:38:14 -0700 (PDT)
+        Wed, 22 Apr 2026 04:59:20 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <aefd2450-9b60-4a15-9e34-6eb435b48b8c@roeck-us.net>
-Date: Wed, 22 Apr 2026 04:38:12 -0700
+Message-ID: <7e4a008b-74c9-40fa-8fff-ee4fa830e3dd@roeck-us.net>
+Date: Wed, 22 Apr 2026 04:59:17 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,11 +70,35 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: mcp9982: Add external diode fault read
-To: Victor Duicu <victor.duicu@microchip.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- marius.cristea@microchip.com
-References: <20260422-add-external-diode-fault-read-v1-1-bb28e03a0766@microchip.com>
+Subject: Re: [PATCH v1 07/14] hwmon:: Use non-OF thermal cooling device
+ register function
+To: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>, rafael@kernel.org
+Cc: gaurav.kohli@oss.qualcomm.com, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Lucas Stach <l.stach@pengutronix.de>,
+ Russell King <linux+etnaviv@armlinux.org.uk>,
+ Christian Gmeiner <christian.gmeiner@gmail.com>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Benson Leung <bleung@chromium.org>, =?UTF-8?Q?Pali_Roh=C3=A1r?=
+ <pali@kernel.org>, Avi Fishman <avifishman70@gmail.com>,
+ Tomer Maimon <tmaimon77@gmail.com>, Tali Perry <tali.perry1@gmail.com>,
+ Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
+ Benjamin Fair <benjaminfair@google.com>, Heiko Stuebner <heiko@sntech.de>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Neil Armstrong <neil.armstrong@linaro.org>, Amit Kucheria
+ <amitk@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org,
+ "open list:CHROMEOS EC HARDWARE MONITORING" <chrome-platform@lists.linux.dev>
+References: <20260419182203.4083985-1-daniel.lezcano@oss.qualcomm.com>
+ <20260419182203.4083985-8-daniel.lezcano@oss.qualcomm.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -119,86 +144,67 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260422-add-external-diode-fault-read-v1-1-bb28e03a0766@microchip.com>
+In-Reply-To: <20260419182203.4083985-8-daniel.lezcano@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 4/22/26 01:43, Victor Duicu wrote:
-> This patch adds external diode fault read capability
-> to the MCP998X/33 and MCP998XD/33D driver.
+On 4/19/26 11:21, Daniel Lezcano wrote:
+> Make HWMON drivers which are not based on device tree to use the
+> corresponding non-OF functions.
 > 
-> Signed-off-by: Victor Duicu <victor.duicu@microchip.com>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->   drivers/hwmon/mcp9982.c | 21 +++++++++++++++++----
->   1 file changed, 17 insertions(+), 4 deletions(-)
+>   drivers/hwmon/cros_ec_hwmon.c  | 4 ++--
+>   drivers/hwmon/dell-smm-hwmon.c | 4 ++--
+>   drivers/hwmon/mlxreg-fan.c     | 4 ++--
+>   3 files changed, 6 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/hwmon/mcp9982.c b/drivers/hwmon/mcp9982.c
-> index 26c69e3388ab..2e75ade20118 100644
-> --- a/drivers/hwmon/mcp9982.c
-> +++ b/drivers/hwmon/mcp9982.c
-> @@ -92,19 +92,19 @@ static const struct hwmon_channel_info * const mcp9985_info[] = {
->   			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_MIN |
->   			   HWMON_T_MIN_ALARM | HWMON_T_MAX | HWMON_T_MAX_ALARM |
->   			   HWMON_T_MAX_HYST | HWMON_T_CRIT | HWMON_T_CRIT_ALARM |
-> -			   HWMON_T_CRIT_HYST,
-> +			   HWMON_T_CRIT_HYST | HWMON_T_FAULT,
->   			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_MIN |
->   			   HWMON_T_MIN_ALARM | HWMON_T_MAX | HWMON_T_MAX_ALARM |
->   			   HWMON_T_MAX_HYST | HWMON_T_CRIT | HWMON_T_CRIT_ALARM |
-> -			   HWMON_T_CRIT_HYST,
-> +			   HWMON_T_CRIT_HYST | HWMON_T_FAULT,
->   			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_MIN |
->   			   HWMON_T_MIN_ALARM | HWMON_T_MAX | HWMON_T_MAX_ALARM |
->   			   HWMON_T_MAX_HYST | HWMON_T_CRIT | HWMON_T_CRIT_ALARM |
-> -			   HWMON_T_CRIT_HYST,
-> +			   HWMON_T_CRIT_HYST | HWMON_T_FAULT,
->   			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_MIN |
->   			   HWMON_T_MIN_ALARM | HWMON_T_MAX | HWMON_T_MAX_ALARM |
->   			   HWMON_T_MAX_HYST | HWMON_T_CRIT | HWMON_T_CRIT_ALARM |
-> -			   HWMON_T_CRIT_HYST),
-> +			   HWMON_T_CRIT_HYST | HWMON_T_FAULT),
->   	HWMON_CHANNEL_INFO(chip,
->   			   HWMON_C_UPDATE_INTERVAL),
->   	NULL
-> @@ -510,6 +510,18 @@ static int mcp9982_read(struct device *dev, enum hwmon_sensor_types type, u32 at
+> diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
+> index 6cf5ab0f4b73..77dd9f28962d 100644
+> --- a/drivers/hwmon/cros_ec_hwmon.c
+> +++ b/drivers/hwmon/cros_ec_hwmon.c
+> @@ -532,8 +532,8 @@ static void cros_ec_hwmon_register_fan_cooling_devices(struct device *dev,
 >   
->   			*val -= hyst * 1000;
->   
-> +			return 0;
-> +		case hwmon_temp_fault:
-> +			/*
-> +			 * Because the ALERT/THERM pin is set in Therm(Comparator)
-> +			 * mode, the external diode fault status register
-> +			 * does not clear the bits after reading.
-> +			 */
-
-
-What does that mean ? How does this behavior differ from other alarm
-bits to warrant that comment ?
-
-Thanks,
-Guenter
-
-> +			*val = regmap_test_bits(priv->regmap, MCP9982_EXT_FAULT_STATUS_ADDR,
-> +						BIT(channel));
-> +			if (*val < 0)
-> +				return *val;
-> +
->   			return 0;
->   		default:
->   			return -EINVAL;
-> @@ -681,6 +693,7 @@ static umode_t mcp9982_is_visible(const void *_data, enum hwmon_sensor_types typ
->   		case hwmon_temp_max_alarm:
->   		case hwmon_temp_max_hyst:
->   		case hwmon_temp_crit_alarm:
-> +		case hwmon_temp_fault:
->   			return 0444;
->   		case hwmon_temp_min:
->   		case hwmon_temp_max:
-> 
-> ---
-> base-commit: fb447217c59a13b2fff22d94de2498c185cd9032
-> change-id: 20260422-add-external-diode-fault-read-a0c3cd1a4761
-> 
-> Best regards,
+>   		cpriv->hwmon_priv = priv;
+>   		cpriv->index = i;
+> -		cdev = devm_thermal_of_cooling_device_register(dev, NULL, type, cpriv,
+> -							       &cros_ec_thermal_cooling_ops);
+> +		cdev = devm_thermal_cooling_device_register(dev, type, cpriv,
+> +							    &cros_ec_thermal_cooling_ops);
+>   		if (IS_ERR(cdev)) {
+>   			dev_warn(dev, "failed to register fan %zu as a cooling device: %pe\n", i,
+>   				 cdev);
+> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> index 038edffc1ac7..47b373ea6db4 100644
+> --- a/drivers/hwmon/dell-smm-hwmon.c
+> +++ b/drivers/hwmon/dell-smm-hwmon.c
+> @@ -1161,8 +1161,8 @@ static int dell_smm_init_cdev(struct device *dev, u8 fan_num)
+>   	if (cdata) {
+>   		cdata->fan_num = fan_num;
+>   		cdata->data = data;
+> -		cdev = devm_thermal_of_cooling_device_register(dev, NULL, name, cdata,
+> -							       &dell_smm_cooling_ops);
+> +		cdev = devm_thermal_cooling_device_register(dev, name, cdata,
+> +							    &dell_smm_cooling_ops);
+>   		if (IS_ERR(cdev)) {
+>   			devm_kfree(dev, cdata);
+>   			ret = PTR_ERR(cdev);
+> diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
+> index 137a90dd2075..860de6cfd8a4 100644
+> --- a/drivers/hwmon/mlxreg-fan.c
+> +++ b/drivers/hwmon/mlxreg-fan.c
+> @@ -583,8 +583,8 @@ static int mlxreg_fan_cooling_config(struct device *dev, struct mlxreg_fan *fan)
+>   		pwm->fan = fan;
+>   		/* Set minimal PWM speed. */
+>   		pwm->last_hwmon_state = MLXREG_FAN_PWM_DUTY2STATE(MLXREG_FAN_MIN_DUTY);
+> -		pwm->cdev = devm_thermal_of_cooling_device_register(dev, NULL, mlxreg_fan_name[i],
+> -								    pwm, &mlxreg_fan_cooling_ops);
+> +		pwm->cdev = devm_thermal_cooling_device_register(dev, mlxreg_fan_name[i],
+> +								 pwm, &mlxreg_fan_cooling_ops);
+>   		if (IS_ERR(pwm->cdev)) {
+>   			dev_err(dev, "Failed to register cooling device\n");
+>   			return PTR_ERR(pwm->cdev);
 
