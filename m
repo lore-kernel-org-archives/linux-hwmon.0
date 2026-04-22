@@ -1,122 +1,90 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEC253F075A
-	for <linux-hwmon@vger.kernel.org>; Wed, 22 Apr 2026 19:25:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 317E3368968
+	for <linux-hwmon@vger.kernel.org>; Wed, 22 Apr 2026 19:32:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776885914; cv=none; b=Omdcn5NlUpuehkrVzEvrvTzFsoCSd7AwL4DVevx2I3ZeUwTESmIPO7/l2fsWdqz5uKaT/qOKUZ2MNrWD9+kWKVhmUpChgZBOdaXt/pP/N8XM64R3w5q60zFTly/aXejUZJEM9pWwCKtZkLi+vHj3MNnHGPXi17STPfgFUyLA17w=
+	t=1776886325; cv=none; b=K9eObhk6xoMGad8EBgt9D9n9b669WkTdCEqMruT13vcZMK2wt0sctY1rcFvZ7PK31wMJ6sKSUJu9JcHCTW9MrpRFOtMmy1b3aXbrsfoSmbRI78sWgVHI8XTjpE22aTcT86uJnhDCPgQgwfz/T7Nr5v7RDa0s9voiia+r6VnxVRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776885914; c=relaxed/simple;
-	bh=3Fj/d3xKuzMpcPj+pc/EMVD52hGfQHHxFEfr+emMN1Y=;
+	s=arc-20240116; t=1776886325; c=relaxed/simple;
+	bh=qNqdwSdH6zLO2FlhNm7DQG7QwAxsj0NvQQ/ESML4/yE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=eRmIVxLC+e6e3/sNzTeDX1/ctuithQ2wnBJau/Xcff70GpKU/XCx3GWguQuf/7qH55MmMwHvpaavllLvy+KxGz1nR4tFX3ccQ32aV2Kc5tH7tVr21nf6Bc7BkA5N5z3chaoVwjz1Z3seSOFRsQKHoXP9IshViHn5xCoiux4Bgds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p5hevye9; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=pkuonV51jGfXEvvxOJZoAHThvAXlZi2IfShYvbDxsLei+gGDAJrYlQBOtIjeiMzw0EPOwJK5Tul9qi23ELPST1EnD3tKjiGVq4WObfa1y07bC0hG4IRD8QrY7hcTotK3DKtHD6CBsfL7BUXb1gUcKE2514zAVMT/v3qWb5pFjgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JCoZ3TCh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p5hevye9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEF0DC19425;
-	Wed, 22 Apr 2026 19:25:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JCoZ3TCh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9186C19425;
+	Wed, 22 Apr 2026 19:32:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776885913;
-	bh=3Fj/d3xKuzMpcPj+pc/EMVD52hGfQHHxFEfr+emMN1Y=;
+	s=k20201202; t=1776886325;
+	bh=qNqdwSdH6zLO2FlhNm7DQG7QwAxsj0NvQQ/ESML4/yE=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=p5hevye9gqUoO9nn5iObMb5+84R6t8L1ZlEVJ+xP6y2LkHivjKK9Vt/Tgqv8TUi9l
-	 1qSHXw29xx37EBCTdcCrmiTB57lsjKwPFp4gzviTQaWPxIWaRN1Wrctkbxc4vCpzHt
-	 T1Xg3nWMYVQEctU87MaFAboPZqGgXmx4Vj7mOYIQozvDYxowLevHlA2FlT3NHSjXTn
-	 BcEsGLSWKBLsetiudaM+Qs/0iZczx0mcJgF20t/3SDBbZIyZRzZ+nzVmPNYjdT0pOq
-	 sH/B+DMY4UasAQWIFAcIHWS9VGG9S2VKxg8PbA/YBrd0UNuEkeJQST49LSugHGDex5
-	 H12z+ll/WxXyA==
+	b=JCoZ3TChoIevifGKoiwBTg5cnKK/YjZ2p/Bn9K8cFjkwa6QvPiytAR/D/k7a3DKdL
+	 hqMYpsQCWQrj59qqsM1WjjPX3UArLkDe1NA8EPA7Jfw1AOBQwTTXx5/hFkvIE1ceau
+	 LPfKe4RXhAYDEv/dtveqGFWcYg4gvOEuuv6BeT7O35yzLl63iHM/kWN3+ADuxqeI/I
+	 RnlHQaS4oD2nX2PHFqUq+MnDdSawy2D8xkYCNliStkrU4x2Nu8CtcGELYJZWdbhadi
+	 2xMfr0zvYdzOulFfq5X9NPwa91AwyKHzB53vjwZpxrFQOyWIVvre6R6FamnRhsbfYE
+	 ZCvi9LjS6FfUA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/2] hwmon: (pmbus/lx1308) Add support for LX1308
+Subject: Re: [PATCH v5 2/2] hwmon: (pmbus/q54sj108a2) Add support for
+ q50sn12072 and q54sn120a1
 Reply-To: sashiko@lists.linux.dev
 To: "Brian Chiang" <chiang.brian@inventec.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260422-add-support-lx1308-v1-2-9b8322f45aae@inventec.com>
-References: <20260422-add-support-lx1308-v1-2-9b8322f45aae@inventec.com>
+In-Reply-To: <20260422-add-support-for-q50sn12072-and-q54sn120a1-v5-2-b8fb87262868@inventec.com>
+References: <20260422-add-support-for-q50sn12072-and-q54sn120a1-v5-2-b8fb87262868@inventec.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 22 Apr 2026 19:25:12 +0000
-Message-Id: <20260422192512.EEF0DC19425@smtp.kernel.org>
+Date: Wed, 22 Apr 2026 19:32:04 +0000
+Message-Id: <20260422193204.E9186C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 2 potential issue(s):
-- [High] Left shifting a negative mantissa in `linear11_to_int()` invokes u=
-ndefined behavior in C.
-- [Low] Alphabetical sorting violation in Kconfig and Makefile.
+Sashiko AI review found 1 potential issue(s):
+- [High] Unprotected multi-step I2C accesses in debugfs attributes violate =
+hwmon locking rules and risk hardware state corruption.
 --
 
-commit 1f51fd323179e1fa2a4bde6554dcffd04d32b646
-Author: Brian Chiang <chiang.brian@inventec.com>
+Note: The format of this report has been altered to provide a free-form
+summary of the findings without directly quoting the original patch code,
+due to text recitation restrictions.
 
-hwmon: (pmbus/lx1308) Add support for LX1308
-   =20
-Add support for the Luxshare LX1308, a high-efficiency 12V 860W
-DC/DC power module. The module operates from 40-60V input voltage.
+commit 2b69d94c9e5ce34bab27d73e893934ef3b3cab81
+Author: Jack Cheng <cheng.jackhy@inventec.com>
+Subject: hwmon: (pmbus/q54sj108a2) Add support for q50sn12072 and q54sn120a1
 
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -221,6 +221,16 @@ config SENSORS_ISL68137
->  	  This driver can also be built as a module. If so, the module will
->  	  be called isl68137.
-> =20
-> +config SENSORS_LX1308
-> +	tristate "Luxshare LX1308 DC/DC Power Module"
+This commit adds support for the Delta Q50SN12072 and Q54SN120A1 power
+modules to the existing q54sj108a2 PMBus driver.
 
-This isn't a bug, but should this be placed further down? SENSORS_LX1308 is
-inserted between SENSORS_ISL68137 and SENSORS_LM25066, which breaks
-alphabetical ordering.
+While reviewing the debugfs attribute setup extended in this patch, a
+potential locking issue in the underlying driver logic was noticed.
 
-[ ... ]
+According to the hardware monitoring subsystem guidelines, drivers must
+implement locking for attributes registered outside the core API, such as
+debugfs, to serialize i2c accesses with standard sysfs operations.
 
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -23,6 +23,7 @@ obj-$(CONFIG_SENSORS_IR36021)	+=3D ir36021.o
->  obj-$(CONFIG_SENSORS_IR38064)	+=3D ir38064.o
->  obj-$(CONFIG_SENSORS_IRPS5401)	+=3D irps5401.o
->  obj-$(CONFIG_SENSORS_ISL68137)	+=3D isl68137.o
-> +obj-$(CONFIG_SENSORS_LX1308)	+=3D lx1308.o
->  obj-$(CONFIG_SENSORS_LM25066)	+=3D lm25066.o
+Looking at the implementation of q54sj108a2_debugfs_write(), it performs
+multi-step i2c transactions without acquiring hwmon_lock(). For example,
+when executing operations to store default configurations, it disables write
+protection, writes a flash key, and then sends the store command.
 
-This isn't a bug, but should this also be placed further down to maintain
-alphabetical ordering?
+Because the subsystem core lock is not held, could concurrent telemetry
+polling from standard hwmon sysfs files interleave i2c operations within
+this sensitive sequence?
 
-[ ... ]
+If these transactions are interleaved, is there a risk of breaking the flash
+unlock sequence and corrupting the power supply's non-volatile memory or
+internal state machine?
 
-> diff --git a/drivers/hwmon/pmbus/lx1308.c b/drivers/hwmon/pmbus/lx1308.c
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/lx1308.c
-[ ... ]
-> +/*
-> + * Decode a Linear11-encoded word to an integer value.
-> + * Linear11 format: bits[15:11] =3D signed 5-bit exponent,
-> + * bits[10:0] =3D signed 11-bit mantissa. Result =3D mant * 2^exp.
-> + */
-> +static inline int linear11_to_int(u16 word)
-> +{
-> +	s16 exp =3D ((s16)word) >> 11;
-> +	s16 mant =3D ((s16)((word & 0x7ff) << 5)) >> 5;
-> +
-> +	return (exp >=3D 0) ? (mant << exp) : (mant / (1 << (-exp)));
-
-When a user writes a negative threshold value to a writable sysfs limit
-attribute, the PMBus core encodes it into a Linear11 word with a negative
-mantissa.
-
-If exp >=3D 0, this evaluates (mant << exp).
-
-In C, left-shifting a negative signed integer invokes undefined behavior and
-can trigger a UBSAN shift-out-of-bounds splat.
-
-Could this invoke undefined behavior when mant is negative?
-
-> +}
+Although this patch did not introduce the original debugfs write function,
+it conditionally enables these debugfs attributes for specific chips without
+addressing the missing serialization. Would it be possible to add the
+necessary locking to the debugfs read and write handlers?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260422-add-suppor=
-t-lx1308-v1-0-9b8322f45aae@inventec.com?part=3D2
+t-for-q50sn12072-and-q54sn120a1-v5-0-b8fb87262868@inventec.com?part=3D2
