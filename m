@@ -1,158 +1,125 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92E7A3921E7
-	for <linux-hwmon@vger.kernel.org>; Wed, 22 Apr 2026 03:09:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100333A1D05
+	for <linux-hwmon@vger.kernel.org>; Wed, 22 Apr 2026 03:09:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776827347; cv=none; b=hjzBaqlYe/27agxLqsjm6e13/5RrP2r2I447IUz8z0jyumj32lIjgqRXqSutqD8jy42aDyHb464loxhRihY6aemeHZC21vIB7+2hm98m7+4NBgty4n9d6tcf5laS5xv1T5mYmrbgjr5lsZoXtyoxlrhURT7662xnmEt7jw4Jfyk=
+	t=1776827347; cv=none; b=rtZWP3QI5Ks9oqbh7g/4vqfffXofAJV+rC1Dfv+PvvZJ0Vs33Z4UAf1yEXYMATrrpBTRGgLWOZKwDJ5bgxf9DJUtJJEHN9v4oMfAZX6e/6TWY7VS1vX+uYElUkLJXr3VGn5fLEOyn5rLsblO2m+DiNuVRSWvSPNonyCbZor22kw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1776827347; c=relaxed/simple;
-	bh=Cp8VPi6KxLq6/5Ps/ZmQE0Xu8w1wm8R+g7UfjRCpQPU=;
+	bh=ds76EB4aXqz9zsoC33KatdNojF+QDZT3aqqu0K9xgbA=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=uoI0ipVgE5SjqH46Cu2TvY8qRtDtfFuakACaEn/liTI6cuGbKS6bl8CGErHMSKHaljyVKQ/ffYqis2fgq8YmkjGsR6H8GvGg8/EbKp5UZvOey+3vAj/agqeIJylXKTH6KXn7FRnMfL6AGGW8fub300WkFcbY93LO/oZa2KpJT+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=joHKHdX3; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=eK/E1sjLKzh/8os32PdzcXH/zBxco5VIi8TwPLA0bmpuOtHjoR7csRu+O5L2XZKYjnS9agARQyTV/UUX6aQNTPNSWjkN7b+yDn6vLRyNoRbGIQu2GdA8bsocqtu+GpuSxG3qOpW1hLcLs1wVlfInycxSUcIkCwM/bRZIQfzfvuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qUPHOaYu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="joHKHdX3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 471D2C2BCB0;
-	Wed, 22 Apr 2026 03:09:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qUPHOaYu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1CEFC2BCB5;
+	Wed, 22 Apr 2026 03:09:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776827347;
-	bh=Cp8VPi6KxLq6/5Ps/ZmQE0Xu8w1wm8R+g7UfjRCpQPU=;
+	s=k20201202; t=1776827344;
+	bh=ds76EB4aXqz9zsoC33KatdNojF+QDZT3aqqu0K9xgbA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=joHKHdX34G0oHfhyGG5zC1DnFb39+SQFUm850ZBuQpjTs/aYnAyRx70t7mqCSyp+W
-	 j70ArMZMlcIWT7KSeBnNz43E4sDBPJ9ZDy72PnBZDRGwZzoYtknbrFdpSqUFu1z27Q
-	 zJmMZTtn0V+L/vrWC3iqyQRgrC2v9MHLnCXTkJlipEoE/7dpZIB7rWo/COvUoumwgo
-	 JyUy4P3doOVoN8bW3SSL1h7bYtn1BUJKqDtRlvE+3Kh/9zslon5ViLH6NRYlDz2fW1
-	 jX4flAeBm0s7+Sg2mR1983Cy0Kxf6Kjdjce/ZMGw6DhEExKyGBrKGGhSxzxjSWVWiZ
-	 w/rgVeocciM1Q==
+	b=qUPHOaYu8I2/b8Y+7nw9kGJRt7hbLlgNCcXigsbEQd4GPjVo+l4WjqTxhJ2/EcGUw
+	 1LCjRRLjP+lK363CN9nQHsSmrpmaZtBXz8lTE5/0laTGlHlvj6fh9V5kBXepU8gf4f
+	 mzhnFq/fC6iA3V2tJF1ia8/NC/kJrDLsRMoBXFtxB/ds4mf+BekAtBxkiq5ZN5VhqG
+	 BBvkVDf3X9gYXNCPt+xCn/ZyOamaYtwG5M+a7FYdID4umwHW3NtyZ7cZJBa12jXuXb
+	 nn6WnWF3g9hXO0OgUlL7bGxCYBnKyKeb5easvaPBOYFTQ+cPztBikmY2SPlygRNhf+
+	 4JglJUscAueiQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 21/23] cgroup/cpuset: Limit the side effect of using CPU
- hotplug on isolated partition
+Subject: Re: [PATCH 17/23] sched/isolation: Extend
+ housekeeping_dereference_check() to cover changes in nohz_full or
+ manged_irqs cpumasks
 Reply-To: sashiko@lists.linux.dev
 To: "Waiman Long" <longman@redhat.com>
-Cc: linux-hwmon@vger.kernel.org, mkoutny@suse.com, hannes@cmpxchg.org, tj@kernel.org
-In-Reply-To: <20260421030351.281436-22-longman@redhat.com>
-References: <20260421030351.281436-22-longman@redhat.com>
+Cc: hannes@cmpxchg.org, linux-hwmon@vger.kernel.org, mkoutny@suse.com, tj@kernel.org
+In-Reply-To: <20260421030351.281436-18-longman@redhat.com>
+References: <20260421030351.281436-18-longman@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 22 Apr 2026 03:09:06 +0000
-Message-Id: <20260422030907.471D2C2BCB0@smtp.kernel.org>
+Date: Wed, 22 Apr 2026 03:09:04 +0000
+Message-Id: <20260422030904.B1CEFC2BCB5@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 3 potential issue(s):
-- [High] The fallback CPU mask is overwritten and ignored in `cpuset_update=
-_tasks_cpumask`, causing task migration to fail silently.
-- [High] The `cpuhp_offline_cb_mode` hack bypasses partition invalidation g=
-lobally, but its fallback logic only protects `PRS_ISOLATED`, breaking stan=
-dard `PRS_ROOT` partitions.
-- [High] Unsynchronized access to the global `cpuhp_offline_cb_mode` flag c=
-reates a data race and TOCTOU vulnerability in partition validation.
+Sashiko AI review found 2 potential issue(s):
+- [Critical] Unprotected access to newly dynamic HK_TYPE_KERNEL_NOISE cause=
+s lockdep splats and Use-After-Free.
+- [Critical] Flawed lockdep exemptions mask genuine Use-After-Free vulnerab=
+ilities.
 --
 
-commit 273c35c4b20a0b62c4d54c5410e48d5450b71df4
+commit 7b12dcd17d401c6b135ee53ba4e8384a7bd3d867
 Author: Waiman Long <longman@redhat.com>
 
-cgroup/cpuset: Limit the side effect of using CPU hotplug on isolated parti=
-tion
+sched/isolation: Extend housekeeping_dereference_check() to cover changes i=
+n nohz_full or manged_irqs cpumasks
 
-CPU hotplug is used to facilitate the modification of the
-HK_TYPE_KERNEL_NOISE and HK_TYPE_MANAGED_IRQ cpumasks. However, tearing
-down and bringing up CPUs can impact the cpuset partition states
-as well. This patch attempts to work around partition invalidation by
-pretending partitions are empty during cpuhp_offline_cb_mode, and
-temporarily mapping tasks in isolated partitions to their parent's
-effective CPUs.
+This commit extends housekeeping_dereference_check() to apply the same
+lockdep exemptions used by HK_TYPE_DOMAIN to HK_TYPE_KERNEL_NOISE and
+HK_TYPE_MANAGED_IRQ, preparing them to be runtime changeable.
 
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index a927b9cd4f718..5f6b4e67748f2 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -434,6 +434,13 @@ static inline bool partition_is_populated(struct cpu=
-set *cs,
->  	struct cpuset *cp;
->  	struct cgroup_subsys_state *pos_css;
+> diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
+> --- a/kernel/sched/isolation.c
+> +++ b/kernel/sched/isolation.c
+> @@ -38,7 +38,8 @@ EXPORT_SYMBOL_GPL(housekeeping_enabled);
 > =20
-> +	/*
-> +	 * Hack: In cpuhp_offline_cb_mode, pretend all partitions are empty
-> +	 * to prevent unnecessary partition invalidation.
-> +	 */
-> +	if (cpuhp_offline_cb_mode)
-> +		return false;
-> +
+>  static bool housekeeping_dereference_check(enum hk_type type)
+>  {
+> -	if (IS_ENABLED(CONFIG_LOCKDEP) && type =3D=3D HK_TYPE_DOMAIN) {
+> +	if (IS_ENABLED(CONFIG_LOCKDEP) &&
+> +	   (BIT(type) & (HK_FLAG_DOMAIN | HK_FLAG_KERNEL_NOISE | HK_FLAG_MANAGE=
+D_IRQ))) {
 
-Is it safe to read cpuhp_offline_cb_mode here without synchronization?
+Because HK_TYPE_KERNEL_NOISE is becoming runtime changeable, does this
+expose existing readers to concurrent updates and use-after-free?
 
-The hotplug thread sets this flag while holding lock_device_hotplug(). A
-concurrent userspace write to cpuset.cpus.partition triggers
-validate_partition(), which holds cpuset_mutex and cpus_read_lock(), but not
-lock_device_hotplug().
+For example, housekeeping_show() reads this mask without holding
+rcu_read_lock(). Similarly, tmigr_isolated_exclude_cpumask() reads it
+holding only cpus_read_lock(), not the write lock.
 
-Could validate_partition() read cpuhp_offline_cb_mode as true before the
-hotplug thread acquires cpus_write_lock(), causing the safety checks to
-falsely conclude the partition is empty and bypassing cgroup validation?
+If housekeeping_update() allocates a new mask, calls synchronize_rcu(),
+and frees the old mask while these functions are accessing the pointer,
+could this result in a use-after-free?
 
-[ ... ]
+Additionally, does extending this lockdep exemption mask genuine
+use-after-free vulnerabilities?
 
-> @@ -3881,6 +3888,17 @@ hotplug_update_tasks(struct cpuset *cs,
->  	cs->effective_mems =3D *new_mems;
->  	spin_unlock_irq(&callback_lock);
-> =20
-> +	/*
-> +	 * When cpuhp_offline_cb_mode is active, valid isolated partition
-> +	 * with tasks may have no online CPUs available for a short while.
-> +	 * In that case, we fall back to parent's effective CPUs temporarily
-> +	 * which will be reset back to their rightful value once the affected
-> +	 * CPUs are online again.
-> +	 */
-> +	if (cpuhp_offline_cb_mode && cpumask_empty(new_cpus) &&
-> +	   (cs->partition_root_state =3D=3D PRS_ISOLATED))
-> +		cpumask_copy(new_cpus, parent_cs(cs)->effective_cpus);
-> +
+The exemptions below assume that holding cpuset_mutex or cpus_write_lock()
+protects the pointer:
 
-By bypassing partition_is_populated() globally during cpuhp_offline_cb_mode,
-all partitions skip normal invalidation. However, this fallback logic stric=
-tly
-checks for PRS_ISOLATED.
+>  		/* Cpuset isn't even writable yet? */
+>  		if (system_state <=3D SYSTEM_SCHEDULING)
+>  			return true;
+>=20
+>  		/* CPU hotplug write locked, so cpuset partition can't be overwritten =
+*/
+>  		if (IS_ENABLED(CONFIG_HOTPLUG_CPU) && lockdep_is_cpus_write_held())
+>  			return true;
+>=20
+>  		/* Cpuset lock held, partitions not writable */
+>  		if (IS_ENABLED(CONFIG_CPUSETS) && lockdep_is_cpuset_held())
+>  			return true;
 
-If a standard PRS_ROOT partition loses its last online CPU, it gets bypassed
-for invalidation but receives no fallback mask. Won't this leave the PRS_RO=
-OT
-partition with a completely empty effective_cpus mask, breaking its isolati=
-on
-and causing subsequent cgroup_attach() operations to fail with -ENOSPC?
+However, housekeeping_update() explicitly drops cpuset_mutex and
+cpus_read_lock() before updating masks and calling synchronize_rcu().
 
->  	if (cpus_updated)
->  		cpuset_update_tasks_cpumask(cs, new_cpus);
+This means housekeeping_update() can run in parallel with readers
+holding cpuset_mutex or CPU hotplug callbacks holding cpus_write_lock().
 
-Does the temporary fallback mask actually get applied to the tasks?
+Since these readers are exempted from needing rcu_read_lock(),
+synchronize_rcu() will not wait for them. Could this result in a silent
+use-after-free on a freed cpumask?
 
-Earlier in hotplug_update_tasks(), cs->effective_cpus is overwritten with t=
-he
-empty incoming new_cpus mask. Then, inside cpuset_update_tasks_cpumask(),
-new_cpus is overwritten again by intersecting it with cs->effective_cpus:
-
-kernel/cgroup/cpuset.c:cpuset_update_tasks_cpumask() {
-    ...
-		} else {
-			cpumask_and(new_cpus, possible_mask, cs->effective_cpus);
-		}
-		set_cpus_allowed_ptr(task, new_cpus);
-    ...
-}
-
-Since cs->effective_cpus is already empty, the resulting new_cpus mask pass=
-ed
-to set_cpus_allowed_ptr() will also be empty. Doesn't set_cpus_allowed_ptr()
-fail with -EINVAL when given an empty mask, leaving the task's affinity
-unchanged and forcing the scheduler to migrate the tasks to arbitrary fallb=
-ack
-CPUs system-wide?
+>  		return false;
+>  	}
+>=20
+>  	return true;
+>  }
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260421030351.2814=
-36-1-longman@redhat.com?part=3D21
+36-1-longman@redhat.com?part=3D17
