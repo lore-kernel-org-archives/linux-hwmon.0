@@ -1,176 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EDE5301472
-	for <linux-hwmon@vger.kernel.org>; Wed, 22 Apr 2026 23:33:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D0A2D6E66
+	for <linux-hwmon@vger.kernel.org>; Wed, 22 Apr 2026 23:48:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776900829; cv=none; b=F+fcnqLKU0UnLK0MlkqucX5Ws7wX96Qi8sQFRBSMIaM2lxLCvnso7QXsKvz3/PT+hGCwuL1m1J1Rk41ArWScPtSNf30HW5qRx8LT9/VAwzAFBBuJiKOU0mh2Ab8QR5B1uIkVQcvbQwdz1qINDQySmS4HNCcXi6NH/IBP1tOZ1fs=
+	t=1776901736; cv=none; b=JjjzMdmuN2NQwcD/llGOBsGF3iwpzo/ax216+Ud5qn8iefsfi8KEqRfpwi4wdbF059UFEcl4j3z8GrPspqhuZEwn+yfhL5xNkqKvVjO/g/89eK+sqToQRvoQn5wJjnBE6xu1pDDDUSctrOb/eXf1tQxRy1zCGaC2blkhXudWWR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776900829; c=relaxed/simple;
-	bh=mD/fKN+jeUquy4f0M8O7/XsmSXFoTXfBc7i8Orx3fLQ=;
+	s=arc-20240116; t=1776901736; c=relaxed/simple;
+	bh=eh44eMSufguYGpwwnWjjjak7eb6Wgyx0jUwuWzLQl8U=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=FUmHOSJGYMmy0lIzt96xq06TIY1ya3nAbHP9MrR7QIAp31suEqKxse7detAe7+IzIko53tfOuKVkvzeL907ZQJUyF+LFonUaISSb5h3aU9YdAt+qPCFrVaaFHmULSLAh44jAHj3TUFzXjms+zXGcbkmY9rP9lb0BkE+yIj8ajQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q53Kh2+o; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=eEQ2ym/A21GTuC6eyiyvSD+aDl3fxlQanSaGYoOLV2xmDh3aBxVCewrjOjaJzniLf2nL+UtpW14egot/OESnCBF8PkS49nfxipJ9T3zAAV6lREb00QYA/6O3adcdejMUY4dY+D5Hw+rC5QpOrpPk1ckdU5AV+sUvLtnVniZRoYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t+qh6j58; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q53Kh2+o"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EF3FC19425;
-	Wed, 22 Apr 2026 23:33:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t+qh6j58"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 323BAC19425;
+	Wed, 22 Apr 2026 23:48:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776900828;
-	bh=mD/fKN+jeUquy4f0M8O7/XsmSXFoTXfBc7i8Orx3fLQ=;
+	s=k20201202; t=1776901736;
+	bh=eh44eMSufguYGpwwnWjjjak7eb6Wgyx0jUwuWzLQl8U=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=q53Kh2+of4SGA26Nd0sQtR0O5XRtlMD/cFpUeCb0Ojp7ONfK71QVG5KI0U1Rwowzo
-	 H3X0lHM6+6VYv6UNVGkq81upuQEKgHlUtW8sRkWCXN/cT+SxZsAWHN4Vr1mgnP830M
-	 LbzN/boU1zEuIMzUxpWjDMWNiIDuEsSVaHn+yHdUeTAipRV09PCPMRZtfQXE5T8MD9
-	 BQKC7AF1G48JgItGmy4e+A2cGe3kCit+iQt1LbAYCPLpYJaSM8QFI9p9ZYBfSdjfJB
-	 8rPHWRhVvO648lLXdFavQ5VeGriaL5lD/ilaWvhBmrhPl+de8PmcQ1IcNu3MtBblF5
-	 ZiCAmkESkVtTw==
+	b=t+qh6j58viXsMzp2d6RGnj+8NXNyNGa5tBRpd6Jx/r0+DWl3pfIYFWnDAV0BhDjSI
+	 LbhZlZ5sw4qArEkOCFK4YXLv9py/I4/swHgXwh1jQSSlUzB1uzp+hOBu+J98ZscH70
+	 IwiLFwp2dNZ2ECLP8GhVhUypB82vg9qXFwHa9bBcH326HjC/uyUDltFCsHgEYUj4cm
+	 RYCp/1wISL2c2rl0xBBsow6Ne+Gvdl7Sp1qozibxfnKx2IXQujfQk61QmRAMmeaI4N
+	 DUGKs7oRdNmN2FK+k0IRYfJcvNJGEc1CHWD7dPiv9rss5VSH8IstoAlzCWZPmYHVvR
+	 W8keUPiOC3fxw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 08/12] thermal/of: Rename the
- devm_thermal_of_cooling_device_register() function
+Subject: Re: [PATCH v2 09/12] thermal/of: Introduce cooling device of_index
 Reply-To: sashiko@lists.linux.dev
 To: "Daniel Lezcano" <daniel.lezcano@oss.qualcomm.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260422174305.2899095-9-daniel.lezcano@oss.qualcomm.com>
-References: <20260422174305.2899095-9-daniel.lezcano@oss.qualcomm.com>
+In-Reply-To: <20260422174305.2899095-10-daniel.lezcano@oss.qualcomm.com>
+References: <20260422174305.2899095-10-daniel.lezcano@oss.qualcomm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 22 Apr 2026 23:33:48 +0000
-Message-Id: <20260422233348.9EF3FC19425@smtp.kernel.org>
+Date: Wed, 22 Apr 2026 23:48:55 +0000
+Message-Id: <20260422234856.323BAC19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 4 potential issue(s):
-- [Critical] Double call to thermal_cooling_device_init_complete() corrupts=
- thermal_cdev_list.
-- [High] cdev->np is stored without acquiring a reference, leading to a dan=
-gling pointer after the OF iterator loops finish.
-- [Low] The mass-rename forces standalone cooling devices to use an API exp=
-licitly named and documented for child nodes.
-- [Low] The non-devres equivalent of the API was not renamed, resulting in =
-an inconsistent subsystem interface.
+Sashiko AI review found 1 potential issue(s):
+- [Critical] Redundant call to `thermal_cooling_device_init_complete()` in =
+`devm_thermal_of_child_cooling_device_register()` causes list corruption an=
+d system hangs.
 --
 
-commit f1de025111783e26ec2bab8fd8078236f785c8b4
+commit 21654d6f9a89c28278edde82f1b1199e437fb996
 Author: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
 
-thermal/of: Rename the devm_thermal_of_cooling_device_register() function
+thermal/of: Introduce cooling device of_index
 
-This commit renames devm_thermal_of_cooling_device_register() to
-devm_thermal_of_child_cooling_device_register() to differentiate between
-cooling devices bound via child nodes and a proposed new binding. The
-rename was applied globally across drivers using a sed script.
-
-> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-> index 37269db2de84f..e6a567d58579d 100644
-> --- a/drivers/hwmon/pwm-fan.c
-> +++ b/drivers/hwmon/pwm-fan.c
-> @@ -685,8 +685,9 @@ static int pwm_fan_probe(struct platform_device *pdev)
-> =20
->  	ctx->pwm_fan_state =3D ctx->pwm_fan_max_state;
->  	if (IS_ENABLED(CONFIG_THERMAL)) {
-> -		cdev =3D devm_thermal_of_cooling_device_register(dev,
-> -			dev->of_node, "pwm-fan", ctx, &pwm_fan_cooling_ops);
-> +		cdev =3D devm_thermal_of_child_cooling_device_register(dev, dev->of_no=
-de,
-> +								     "pwm-fan", ctx,
-> +								     &pwm_fan_cooling_ops);
-
-This isn't a bug, but does it make sense to use an API explicitly named and
-documented for child nodes here?
-
-Many standalone drivers like pwm-fan, gpio-fan, and max6650 simply pass the=
-ir
-main device node (dev->of_node) rather than a child node, which creates a
-semantic contradiction with the new name.
-
-[ ... ]
+This commit augments thermal_of_cooling_device_register() to receive a
+cooling device id. It stores this id in the cooling device structure
+and updates the remaining drivers to use the new signature.
 
 > diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> index ee9776d0e5be7..d06487bb5e675 100644
+> index d06487bb5e675..a9319ff81d1d3 100644
 > --- a/drivers/thermal/thermal_of.c
 > +++ b/drivers/thermal/thermal_of.c
+
 [ ... ]
-> @@ -563,14 +563,17 @@ static void thermal_cooling_device_release(struct d=
-evice *dev, void *res)
->   * to /sys/class/thermal/ folder as cooling_device[0-*]. It tries to bin=
-d itself
->   * to all the thermal zone devices registered at the same time.
->   *
-> + * This function should be used when a cooling controller has child
-> + * nodes which are referenced in the thermal zone cooling map.
-> + *
->   * Return: a pointer to the created struct thermal_cooling_device or an
->   * ERR_PTR. Caller must check return value with IS_ERR*() helpers.
->   */
->  struct thermal_cooling_device *
-> -devm_thermal_of_cooling_device_register(struct device *dev,
-> -					struct device_node *np,
-> -					const char *type, void *devdata,
-> -					const struct thermal_cooling_device_ops *ops)
-> +devm_thermal_of_child_cooling_device_register(struct device *dev,
-> +					      struct device_node *np,
-> +					      const char *type, void *devdata,
-> +					      const struct thermal_cooling_device_ops *ops)
->  {
 
-This isn't a bug, but could this mass-rename cause confusion since the
-non-devres counterpart (thermal_of_cooling_device_register) was not renamed?
-Leaving one unchanged while renaming the other creates an inconsistent
-subsystem API.
-
-Also, since this API is now explicitly targeted at child nodes, which are
-often iterated over using macros like for_each_child_of_node() or
-for_each_child_of_node_scoped(), could this promote a use-after-free issue?
-
-These iterators automatically drop the node reference when advancing or goi=
-ng
-out of scope. If thermal_of_cooling_device_register() stores cdev->np =3D np
-without acquiring a reference via of_node_get(), cdev->np will become a
-dangling pointer once the loop finishes.
-
->  	struct thermal_cooling_device **ptr, *tcd;
+> @@ -538,6 +539,7 @@ thermal_of_cooling_device_register(struct device_node=
+ *np,
+>  		return cdev;
 > =20
-> @@ -592,4 +595,4 @@ devm_thermal_of_cooling_device_register(struct device=
- *dev,
+>  	cdev->np =3D np;
+> +	cdev->of_index =3D of_index;
+>  	thermal_cooling_device_init_complete(cdev);
 > =20
->  	return tcd;
->  }
-> -EXPORT_SYMBOL_GPL(devm_thermal_of_cooling_device_register);
-> +EXPORT_SYMBOL_GPL(devm_thermal_of_child_cooling_device_register);
+>  	return cdev;
 
-Can the double call to thermal_cooling_device_init_complete() cause an
-infinite loop during list traversal?
+[ ... ]
 
-Looking at the code just above the return in this function (affected by
-earlier commits):
+> @@ -582,7 +584,7 @@ devm_thermal_of_child_cooling_device_register(struct =
+device *dev,
+>  	if (!ptr)
+>  		return ERR_PTR(-ENOMEM);
+> =20
+> -	tcd =3D thermal_of_cooling_device_register(np, type, devdata, ops);
+> +	tcd =3D thermal_of_cooling_device_register(np, 0, type, devdata, ops);
+>  	if (IS_ERR(tcd)) {
+>  		devres_free(ptr);
+>  		return tcd;
 
-	tcd =3D thermal_of_cooling_device_register(np, type, devdata, ops);
-	if (IS_ERR(tcd)) {
-		devres_free(ptr);
-		return tcd;
-	}
+Could this regression cause list corruption by calling
+thermal_cooling_device_init_complete() redundantly?
 
-	*ptr =3D tcd;
-	devres_add(dev, ptr);
+It looks like thermal_of_cooling_device_register() internally invokes
+thermal_cooling_device_init_complete() just above. Immediately after,
+devm_thermal_of_child_cooling_device_register() calls
+thermal_cooling_device_init_complete() again on the same object:
 
-	thermal_cooling_device_init_complete(tcd);
+drivers/thermal/thermal_of.c:devm_thermal_of_child_cooling_device_register(=
+) {
+        ...
+        tcd =3D thermal_of_cooling_device_register(np, 0, type, devdata, op=
+s);
+        if (IS_ERR(tcd)) {
+                devres_free(ptr);
+                return tcd;
+        }
 
-thermal_of_cooling_device_register() already calls
-thermal_cooling_device_init_complete(), which adds the cooling device to
-thermal_cdev_list via list_add(). Calling it a second time here overwrites
-the list pointers, establishing a cyclic reference.
+        *ptr =3D tcd;
+        devres_add(dev, ptr);
 
-I noticed this regression was introduced by an earlier commit
-("thermal/core: Make thermal_cooling_device_init_complete() non static")
-and a fix was provided later in the series in commit
-("thermal/of: Pass the of_index and add a function to register with an
-index").
+        thermal_cooling_device_init_complete(tcd);
+        ...
+}
+
+Does calling list_add() twice on the same node overwrite its pointers and
+create a cycle where new->next =3D new, potentially causing an infinite loop
+during subsequent traversals of thermal_cdev_list if debug list checking is
+not enabled?
+
+I noticed this problem is present in the code at this commit, but it is
+fixed later in the series by commit 61302b0ce72b9 ("thermal/of: Pass the
+of_index and add a function to register with an index") which removes the
+duplicate call.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260422174305.2899=
-095-1-daniel.lezcano@oss.qualcomm.com?part=3D8
+095-1-daniel.lezcano@oss.qualcomm.com?part=3D9
