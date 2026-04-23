@@ -1,110 +1,183 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83FFF1ACEDF
-	for <linux-hwmon@vger.kernel.org>; Thu, 23 Apr 2026 00:23:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C78ECA4E;
+	Thu, 23 Apr 2026 01:11:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776903805; cv=none; b=ZADLT3WVaMT4JmhUotdsQy+Is00xjrhKDMZs3FB7BivHBVanE2s7FKu/u+d+pvuNbAsbGIBsK8vlJbddDiB0UiHYIZrpgdETm80OvcBOt0DgR2dsI2YMdgxn88ojCY7/lz8HggHGWqfkAtDh9tqIth9x1DSRi6qAKX1Y5xbWG0A=
+	t=1776906676; cv=none; b=bJxtXhPF/aRmVHnDnmsNXEjRrF9L3DVByYLyfZjx3CApYaQCx+xkYZuOFw4ZWOURhkA3HqP3W9o+bk+2xMe2+OjbjcQUJPLBIx8ttK+sqclIOhjlhtblop6NN3XoU9t7nbP8HKFY8Y4Za1BTBJ270cmoE0QmGK+9BpqsSd/IFFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776903805; c=relaxed/simple;
-	bh=ZhUT6cn4J7kLISTYfDzwGk7JAZbQCP+ztJ76+EjJAxc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=E6myBNg18VDYcscSu+y0HJ52Ynz/AXDqnhlv15S5r1oGDz2TdSsObgCeXCMNuphU/sFlC+b/cc122HVkdBWq4/wDX2BgDQjk+YhfGySi5KrvpHNkAbX6rCpT7pZN+7SXPk1898qSDnrLsSN/EvmalJB6UAP0eSlLpQwfuVoe9oY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hvyEBkEv; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hvyEBkEv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38A8FC19425;
-	Thu, 23 Apr 2026 00:23:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776903805;
-	bh=ZhUT6cn4J7kLISTYfDzwGk7JAZbQCP+ztJ76+EjJAxc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=hvyEBkEvV4M6onVvVZmXpqt0dvlyajJaNf/PEwTefCc4Sqtc13eL8MUQOmdI5atIy
-	 PCJv0as9y3E1qFiRCbMdDs6PawunyuYjSlHHb8sQlHMqG0tTDgezLpbKlr6kCemVl4
-	 bZdfWMx4YscCauQ5SuUaXOxOIDTkr8yA3lI8eWZBKYa0mdHcm+QbO40+g8PLRGQW6l
-	 M7T2oF/uwuu6izzhmySIYf2v4YDfTNzEhpdkwXaF5SiSV794UviD5LaecSBUI5R0gX
-	 sQblUExGJdpKlVwfd+gqsJCUr3HoBzXAA0DWGGDxIRi7V0k6g1Mo+1z9iey7pWlN8R
-	 +tUqeoyZYSuww==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 12/12] dt-bindings: thermal: cooling-devices: Update
- support for 3 cells cooling device
-Reply-To: sashiko@lists.linux.dev
-To: "Daniel Lezcano" <daniel.lezcano@oss.qualcomm.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260422174305.2899095-13-daniel.lezcano@oss.qualcomm.com>
-References: <20260422174305.2899095-13-daniel.lezcano@oss.qualcomm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 23 Apr 2026 00:23:24 +0000
-Message-Id: <20260423002325.38A8FC19425@smtp.kernel.org>
+	s=arc-20240116; t=1776906676; c=relaxed/simple;
+	bh=6IEjWa5Bp2HmWAT63DqZwaxugME+cvx69VMEGChpnTc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WVRejSmhhCgsxKtvPEj58Bj3JmWHQnjc2iachVRVjxev+oxqR+ZeQwazuZfDNjxSM9mBV/KwnyRB11mXfm+zcSxImBubeMqKL+uVwQe2Za2GMLYtKCSiaw7vnd6FaE8Xw61t+cNEL0fO965Kjc3CNVrVsAchaY6qqNJtaXLkdzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4g1J0p05thzYQtjP;
+	Thu, 23 Apr 2026 09:10:02 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id C684140561;
+	Thu, 23 Apr 2026 09:11:00 +0800 (CST)
+Received: from [10.67.111.176] (unknown [10.67.111.176])
+	by APP3 (Coremail) with SMTP id _Ch0CgAnHbehcelp3eGGBQ--.59173S2;
+	Thu, 23 Apr 2026 09:10:59 +0800 (CST)
+Message-ID: <e8824498-f8ec-496a-a21c-d1dc594f4c8e@huaweicloud.com>
+Date: Thu, 23 Apr 2026 09:10:57 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 19/23] cgroup/cpuset: Improve check for calling
+ housekeeping_update()
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ "K. Y. Srinivasan" <kys@microsoft.com>,
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+ Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
+ Guenter Roeck <linux@roeck-us.net>, Frederic Weisbecker
+ <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, Ingo Molnar
+ <mingo@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall
+ <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+ Valentin Schneider <vschneid@redhat.com>,
+ K Prateek Nayak <kprateek.nayak@amd.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-hyperv@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ rcu@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Costa Shulyupin <cshulyup@redhat.com>,
+ Qiliang Yuan <realwujing@gmail.com>
+References: <20260421030351.281436-1-longman@redhat.com>
+ <20260421030351.281436-20-longman@redhat.com>
+Content-Language: en-US
+From: Chen Ridong <chenridong@huaweicloud.com>
+In-Reply-To: <20260421030351.281436-20-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:_Ch0CgAnHbehcelp3eGGBQ--.59173S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCw1UJF1UurW7urWktr13urg_yoW5AFy5pr
+	yUWrW3t345trs7u343Xwn7Wry0gw48GF17KasxG3WrGF9rZFn2yry0kFnxCry8uwnxGryU
+	ZF9rWws29a4UArDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26rWY6Fy7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8
+	Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+	CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
+	xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+	xUVZ2-UUUUU
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
-Sashiko AI review found 1 potential issue(s):
-- [High] Schema Validation Loophole: Relaxing the global `#cooling-cells` p=
-roperty allows invalid device tree configurations to pass schema validation.
---
 
-commit 4d1db5332aa8215862512cf05a640de7afe86998
-Author: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
 
-dt-bindings: thermal: cooling-devices: Update support for 3 cells cooling d=
-evice
+On 2026/4/21 11:03, Waiman Long wrote:
+> By making sure that isolated_hk_cpus matches isolated_cpus at boot time,
+> we can more accurately determine if calling housekeeping_update()
+> is needed by comparing if the two cpumasks are equal. The
+> update_housekeeping flag still have a use in cpuset_handle_hotplug()
+> to determine if a work function should be queued to invoke
+> cpuset_update_sd_hk_unlock() as it is not supposed to look at
+> isolated_hk_cpus without holding cpuset_top_mutex.
+> 
 
-This commit extends the thermal cooling device binding to support a 3 cells
-specifier in addition to the 2 cells format. It updates the core
-#cooling-cells property to an enum allowing both 2 and 3 arguments, and
-adds an explicit constraint to pwm-fan.yaml.
+Currently, isolated_hk_cpus is updated within the cpuset_mutex critical section
+(before mutex_unlock(&cpuset_mutex)) in cpuset_update_sd_hk_unlock. Therefore, I
+think update_housekeeping can now be removed.
 
-> diff --git a/Documentation/devicetree/bindings/thermal/thermal-cooling-de=
-vices.yaml b/Documentation/devicetree/bindings/thermal/thermal-cooling-devi=
-ces.yaml
-> --- a/Documentation/devicetree/bindings/thermal/thermal-cooling-devices.y=
-aml
-> +++ b/Documentation/devicetree/bindings/thermal/thermal-cooling-devices.y=
-aml
-[ ... ]
-> @@ -44,10 +44,14 @@ select: true
->  properties:
->    "#cooling-cells":
->      description:
-> -      Must be 2, in order to specify minimum and maximum cooling state u=
-sed in
-> +      Must be 2 or 3. If 2, specifies minimum and maximum cooling state =
-used in
->        the cooling-maps reference. The first cell is the minimum cooling =
-state
->        and the second cell is the maximum cooling state requested.
-> -    const: 2
-> +      If 3, the first cell specifies the thermal mitigation device speci=
-fier
-> +      index for devices that support multiple thermal mitigation mechani=
-sms.
-> +      The two other cells are respectively the minimum cooling state and=
- the
-> +      maximum cooling state.
-> +    enum: [2, 3]
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  kernel/cgroup/cpuset.c | 36 ++++++++++++++++++++----------------
+>  1 file changed, 20 insertions(+), 16 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index a4eccb0ec0d1..1b0c50b46a49 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -1339,26 +1339,29 @@ static void cpuset_update_sd_hk_unlock(void)
+>  	__releases(&cpuset_mutex)
+>  	__releases(&cpuset_top_mutex)
+>  {
+> +	update_housekeeping = false;
+> +
+>  	/* force_sd_rebuild will be cleared in rebuild_sched_domains_locked() */
+>  	if (force_sd_rebuild)
+>  		rebuild_sched_domains_locked();
+>  
+> -	if (update_housekeeping) {
+> -		update_housekeeping = false;
+> -		cpumask_copy(isolated_hk_cpus, isolated_cpus);
+> -
+> -		/*
+> -		 * housekeeping_update() is now called without holding
+> -		 * cpus_read_lock and cpuset_mutex. Only cpuset_top_mutex
+> -		 * is still being held for mutual exclusion.
+> -		 */
+> -		mutex_unlock(&cpuset_mutex);
+> -		cpus_read_unlock();
+> -		WARN_ON_ONCE(housekeeping_update(isolated_hk_cpus, BIT(HK_TYPE_DOMAIN)));
+> -		mutex_unlock(&cpuset_top_mutex);
+> -	} else {
+> +	if (cpumask_equal(isolated_hk_cpus, isolated_cpus)) {
+> +		/* No housekeeping cpumask update needed */
+>  		cpuset_full_unlock();
+> +		return;
+>  	}
+> +
+> +	cpumask_copy(isolated_hk_cpus, isolated_cpus);
+> +
+> +	/*
+> +	 * housekeeping_update() is now called without holding
+> +	 * cpus_read_lock and cpuset_mutex. Only cpuset_top_mutex
+> +	 * is still being held for mutual exclusion.
+> +	 */
+> +	mutex_unlock(&cpuset_mutex);
+> +	cpus_read_unlock();
+> +	WARN_ON_ONCE(housekeeping_update(isolated_hk_cpus, BIT(HK_TYPE_DOMAIN)));
+> +	mutex_unlock(&cpuset_top_mutex);
+>  }
+>  
+>  /*
+> @@ -3692,10 +3695,11 @@ int __init cpuset_init(void)
+>  
+>  	BUG_ON(!alloc_cpumask_var(&cpus_attach, GFP_KERNEL));
+>  
+> -	if (housekeeping_enabled(HK_TYPE_DOMAIN_BOOT))
+> +	if (housekeeping_enabled(HK_TYPE_DOMAIN_BOOT)) {
+>  		cpumask_andnot(isolated_cpus, cpu_possible_mask,
+>  			       housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT));
+> -
+> +		cpumask_copy(isolated_hk_cpus, isolated_cpus);
+> +	}
+>  	return 0;
+>  }
+>  
 
-By relaxing the core schema to allow 3 cells globally, does this
-unintentionally create a validation loophole for other cooling providers?
+-- 
+Best regards,
+Ridong
 
-Many specific cooling provider bindings (such as nvidia,tegra210-emc.yaml
-or CPU nodes via arm/cpus.yaml) completely omitted local #cooling-cells
-constraints because they relied entirely on this core schema to enforce
-const: 2.
-
-Since the core schema now allows 3 cells, any device binding lacking an
-explicit const: 2 override will silently accept 3 cells, even if the
-hardware or driver only supports 2.=20
-
-Have all other existing cooling providers been audited and updated to ensure
-they have a local const: 2 constraint where needed, similar to what was done
-for pwm-fan.yaml?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260422174305.2899=
-095-1-daniel.lezcano@oss.qualcomm.com?part=3D12
