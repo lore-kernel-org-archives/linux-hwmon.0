@@ -1,187 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5515D244684
-	for <linux-hwmon@vger.kernel.org>; Fri, 24 Apr 2026 03:08:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5679E23370F
+	for <linux-hwmon@vger.kernel.org>; Fri, 24 Apr 2026 13:51:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777000090; cv=none; b=oVO+3h3A+5/aAwAW44z3KIFa4s9/VBtLawKA4ndieO9nU9DSgVEaEKGSMG7LZFeJ1LLlzHgOTV28UDCHfCcb8Jo6lP9XAlB/30bQifFTOq1omBF5Hf1SS53ceEAa1Puo+Zj0/Za2UA3OeiC3J+mgIINLsu13ul5I712jLhECzas=
+	t=1777038674; cv=none; b=uqqsPQ5W2dele6o/FRrf0nHrVnXUIOL6c6iCpQImqKOlXBkgXHVUvLlvji/CI2r/fT2LGNxBp6dqZb1ztWnhtclpaKFugH+TWEC6ZiLbSmIEQx0pXZ23YFSQl70H3pyNv12ZZOmvhVH+tT2i5n4VLLpXRNG1RM6sWjfBYQlN3uo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777000090; c=relaxed/simple;
-	bh=LagfTCZClyobVhA2aA0FRngQl8/bc0duTTo7ly1zraI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=a+moriMsOA3x0NT6PCI300XdIALIgV0gz+cZOUOfk0xVUpzgSlKqDTZYHTan2wdq2uC6Cnsd7wuO50Tnq8bfNaOhrA3tw6NaqTFD920by6Ou6uWULbP+MHhrSeAH1XJgjKnViKA3qw3KYPYeWxPbjnYtgMOO8ojIRTSXTvCasJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iex7tsGl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777038674; c=relaxed/simple;
+	bh=858P5mFpF+TrKrI6ZyGiotk5+CzcEz31qN54eKosWAQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=j/8eguy9pyvvmU7OFLLvIhf3ExQiyNdqlHaio5ohZNwTa3Mm0Z6UkfK9rrCCJqFiol4Pf2b1XCyx1R6SAoSPjfGzEayH5z1bPVYAvpG5/RX7We1STJoAdw24b8tLN6ubc38t1pUD4o30A1tkQ7CiVWzfDSEXxLPLoF2lqrsbCsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cznsQXEE; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iex7tsGl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0F7DC2BCAF;
-	Fri, 24 Apr 2026 03:08:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777000089;
-	bh=LagfTCZClyobVhA2aA0FRngQl8/bc0duTTo7ly1zraI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=iex7tsGlk5+t1YYIKBDHS6g3QXKjQxWCj3xfrSLu6/VyBc81d62SAnMJsFGUSzkyw
-	 GHXh4T26pZhnmnpwza5blc+3r94tpSnwr2NtIthMM7ZKVYLdPu6WKnOcISgvxSNy7j
-	 NFVhKG9AswyUHX9GaFyYuhY1tCWP/N9bUOh1fdBxq1s994qDKXUCu5zKed6R+mqRIW
-	 L0/D/nPEKdVWW6GeLP24HMZtf3M4ngDwR272X7t63mdselursyNZxAsXjk5HYngL1n
-	 MIbWLdpMNQXjSBRfkIFUBRki1/9mO+5yq/gQpN8vn2BXmXA1eZ4ixpY3CcjEHADprB
-	 WARBd4mhbcDMg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 12/13] hwmon: spd5118: Add I3C support
-Reply-To: sashiko@lists.linux.dev
-To: "Akhil R" <akhilrajeev@nvidia.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260423085718.70762-13-akhilrajeev@nvidia.com>
-References: <20260423085718.70762-13-akhilrajeev@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 24 Apr 2026 03:08:09 +0000
-Message-Id: <20260424030809.D0F7DC2BCAF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cznsQXEE"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-83177129e28so817768b3a.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 24 Apr 2026 06:51:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777038673; x=1777643473; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5BzP7d1QHnmFXYW9OV542PaMIY/QnoUuc/2j7D+PjyI=;
+        b=cznsQXEEMwHAveO4Uxx/xWl5VJxSOL/au8OU9oKdR2sDP31241rakHs8I5v9EYqZMu
+         lPlPRII2yJcuXxNBX6WNvCXErWyTpBNBlTFHBtg0FahHT2iNydo4OSc9UCgqwIIFXA/J
+         qlPX7279SnHS91aBK/b94W5mdp/kQb0uCVW0RkDjpJ7RqSfDa97tFuSjluu/8B98iO3c
+         /THZp7Lov3MY7x8sUV9KjGnPuNkGNmC4xHhRmKAGPChrxYC2D70KWQnlOiE3eXsBox8J
+         OWhIU59W28hjeeD69vjxneHcvlh593UWOc2kkzJSBBxSgsa9W6k0rAyKv2kJmXp1fOYy
+         N7yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777038673; x=1777643473;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5BzP7d1QHnmFXYW9OV542PaMIY/QnoUuc/2j7D+PjyI=;
+        b=bwnkpFVyhfZbDtcgOXaonnhWZHudL2W4XQoxVVx4THN+rQ8hldwYycEkIWYV1DMgxd
+         Uba9Lb3lpoSmZ1zze8h4Obh/MDZ/li3PfDlV/B0kgfWfRjE8lMSiPVciT5m6/h+vU1/D
+         bnaC++6t/04IhqDSFyc3m5SivNyvZ2Z82fw7b5bUHeNeC9ZcPXfV4Ffc0IWfjvOOrZBN
+         2aAa+UYDr1g26Nq6nKouY4zPaZ1S8D9suQTa2FQwI8+2/ZZ7jDH6J730PDf/BijCdzdd
+         j+ncwT+q0hu2x/Ws+z9pyz9RekoMMS7tPRJC0PL2THNkEsVz7ghSx3m/Uzye4xGOzgSk
+         46eQ==
+X-Gm-Message-State: AOJu0Ywl/aRgBU+HVnnt6YHKUmJvn/OlJ1axaW8SbL8Gv/5maVBgvq2z
+	85uRSty0141VCGbRctp88gzuyEYp1MjO8Cj+8BiLcsxiQAiKErjwIz8=
+X-Gm-Gg: AeBDieuI3BSLHm0XXDZqqtpstjtY/BZIZTLHeprHmuX7xMcv1mp7GeRxg4KtEpob0C0
+	oOE3AmaJdIQo+iuH2xaZxK0Nfpn0YcVzKWp3aDJc5nOlxbqJ6r6WSVQqqB5Vxbuu2u+8P1gPauO
+	rLA4olC7qvrjXpHwBMXlj1iLZsLq65jCBfyswI1CYxdOb9hR6v/LXTf7dx8T7Wt+C5oB06Jf1uW
+	ga/ZjsPZ4o/k71cVpYhDLC3Vo2/W7495a0PZMwWnPyF0LEo4UpQAfwezVQh36O0ePLfl77uiB6n
+	h45RTyK23itfZs8ABJBOPqlDoJ0dNiKslW1MocLFUciF3WhKp9sGQExzYojx3cmYuNGpM+cwqF3
+	nQ0pqTH6wuYHf/GBEwrtB1+1Hy8fCjJBxvZWtRLzDbYlQPMISVGFaT97fQZQGE8xHZaJ3xhuPJy
+	arvZDQwZolkZqB46qBjCTGXZftDnt0+8EORnKnfaX/oaoHau8mAuG6oFdXi8zKteHR4rTrjgHqn
+	pC2MnZ+p6B1N5A=
+X-Received: by 2002:a05:6a00:1307:b0:827:3b1b:43e6 with SMTP id d2e1a72fcca58-82f8c83bf5dmr31712297b3a.21.1777038672699;
+        Fri, 24 Apr 2026 06:51:12 -0700 (PDT)
+Received: from localhost.localdomain ([1.226.165.54])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f8e9cbb28sm22402386b3a.13.2026.04.24.06.51.10
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Fri, 24 Apr 2026 06:51:12 -0700 (PDT)
+From: Myeonghun Pak <mhun512@gmail.com>
+To: Wilken Gottwalt <wilken.gottwalt@posteo.net>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org,
+	Myeonghun Pak <mhun512@gmail.com>
+Subject: [PATCH] hwmon: (corsair-psu) Close HID device on probe errors
+Date: Fri, 24 Apr 2026 22:50:51 +0900
+Message-ID: <20260424135107.13720-1-mhun512@gmail.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Sashiko AI review found 4 potential issue(s):
-- [High] NVMEM reads over I3C return corrupted data due to an unhandled 64-=
-byte block rollover.
-- [High] Stack-allocated buffers are passed to `regmap_bulk_read()`, which =
-is unsafe for DMA-capable I3C controllers and will cause kernel panics or m=
-emory corruption.
-- [Low] The driver can be selected when `CONFIG_I2C` is disabled, leading t=
-o a Kconfig unmet direct dependency warning and a compilation failure due t=
-o undefined I2C APIs.
-- [Low] Building the driver when `CONFIG_I3C` is disabled results in a link=
-er error for `__devm_regmap_init_i3c`.
---
+corsairpsu_probe() opens the HID device before sending the device init
+and firmware-info commands. If either command fails, the error path jumps
+directly to fail_and_stop and skips hid_hw_close().
 
-commit 4b70b869fa4332fdf133591e152cc997f3522e25
-Author: Akhil R <akhilrajeev@nvidia.com>
+Use the existing fail_and_close label for those post-open failures so the
+open count and low-level close callback are balanced before hid_hw_stop().
 
-hwmon: spd5118: Add I3C support
-   =20
-Add a regmap config and a probe function to support I3C-based
-communication with SPD5118 devices.
+Fixes: d115b51e0e56 ("hwmon: add Corsair PSU HID controller driver")
+Cc: stable@vger.kernel.org
+Signed-off-by: Myeonghun Pak <mhun512@gmail.com>
+---
+ drivers/hwmon/corsair-psu.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 14e4cea48acc47..a7f60f8868eb6b 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -2309,12 +2309,15 @@ config SENSORS_INA3221
-> =20
->  config SENSORS_SPD5118
->  	tristate "SPD5118 Compliant Temperature Sensors"
-> -	depends on I2C
-> +	depends on I3C_OR_I2C
->  	select REGMAP_I2C
+diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+index dddbd2463f..76f3e1da68 100644
+--- a/drivers/hwmon/corsair-psu.c
++++ b/drivers/hwmon/corsair-psu.c
+@@ -796,13 +796,13 @@ static int corsairpsu_probe(struct hid_device *hdev, const struct hid_device_id
+ 	ret = corsairpsu_init(priv);
+ 	if (ret < 0) {
+ 		dev_err(&hdev->dev, "unable to initialize device (%d)\n", ret);
+-		goto fail_and_stop;
++		goto fail_and_close;
+ 	}
+ 
+ 	ret = corsairpsu_fwinfo(priv);
+ 	if (ret < 0) {
+ 		dev_err(&hdev->dev, "unable to query firmware (%d)\n", ret);
+-		goto fail_and_stop;
++		goto fail_and_close;
+ 	}
+ 
+ 	corsairpsu_get_criticals(priv);
+-- 
+2.50.1
 
-If CONFIG_I2C is disabled and CONFIG_I3C is enabled as a module, could this
-cause Kconfig unmet direct dependency warnings?
-
-Because select REGMAP_I2C strictly depends on I2C, it will result in warnin=
-gs.
-Compilation might also fail when module_i3c_i2c_driver() unconditionally
-references i2c_add_driver(), which is undefined when CONFIG_I2C is not set.
-
-> +	select REGMAP_I3C if I3C
-
-[ ... ]
-
-> diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
-> index 8fdde35e68cd3f..db66028d2f590e 100644
-> --- a/drivers/hwmon/spd5118.c
-> +++ b/drivers/hwmon/spd5118.c
-> @@ -464,6 +465,27 @@ static const struct regmap_config spd5118_regmap8_co=
-nfig =3D {
->  	.num_ranges =3D ARRAY_SIZE(spd5118_i2c_regmap_range_cfg),
->  };
-> =20
-> +/*
-> + * SPD5118 2-byte register address format (JESD300-5, Tables 7 & 20):
-> + *   Byte 1 (on wire first):  MemReg | BlkAddr[0] | Address[5:0]
-> + *   Byte 2 (on wire second): 0000   | BlkAddr[4:1]
-> + *
-> + * The address byte (with MemReg and lower address bits) must be sent fi=
-rst,
-> + * followed by the upper block address byte. With regmap 16-bit register
-> + * format, this maps to little-endian: the low byte of the 16-bit value =
-is
-> + * transmitted first. No range config is needed since I3C does not use M=
-R11
-> + * page switching.
-> + */
-> +static const struct regmap_config spd5118_regmap_i3c_config =3D {
-> +	.reg_bits =3D 16,
-> +	.val_bits =3D 8,
-> +	.max_register =3D 0x7ff,
-
-Since the 2-byte address format specifies only a 6-bit Address field, does =
-the
-internal address counter roll over at the 64-byte boundary during I3C mode?
-
-If spd5118_nvmem_read_page() executes a 128-byte regmap_bulk_read(), it
-appears the device will silently wrap around to the beginning of the same
-64-byte block, returning repeated and incorrect data instead of advancing to
-the next block.
-
-> +	.reg_format_endian =3D REGMAP_ENDIAN_LITTLE,
-> +	.writeable_reg =3D spd5118_writeable_reg,
-> +	.volatile_reg =3D spd5118_volatile_reg,
-> +	.cache_type =3D REGCACHE_MAPLE,
-> +};
-> +
-
-[ ... ]
-
-> @@ -701,7 +723,39 @@ static struct i2c_driver spd5118_i2c_driver =3D {
->  	.address_list	=3D IS_ENABLED(CONFIG_SENSORS_SPD5118_DETECT) ? normal_i2=
-c : NULL,
->  };
-> =20
-> -module_i2c_driver(spd5118_i2c_driver);
-> +/* I3C */
-> +
-> +static int spd5118_i3c_probe(struct i3c_device *i3cdev)
-> +{
-> +	struct device *dev =3D i3cdev_to_dev(i3cdev);
-> +	struct regmap *regmap;
-> +	u8 regval[2];
-> +	int err;
-> +
-> +	regmap =3D devm_regmap_init_i3c(i3cdev, &spd5118_regmap_i3c_config);
-
-If CONFIG_I3C is disabled, will this unconditionally call
-devm_regmap_init_i3c() and result in a linker error?
-
-When CONFIG_I3C is disabled, REGMAP_I3C is not selected, and
-__devm_regmap_init_i3c is only exported by regmap-i3c.c when REGMAP_I3C is
-enabled.
-
-> +	if (IS_ERR(regmap))
-> +		return dev_err_probe(dev, PTR_ERR(regmap), "regmap init failed\n");
-> +
-> +	err =3D regmap_bulk_read(regmap, SPD5118_REG_TYPE, regval, 2);
-
-Is it safe to pass the stack-allocated buffer regval to regmap_bulk_read()?
-
-Because val_bits =3D 8 uses regmap_parse_inplace_noop, regmap_bulk_read() a=
-voids
-bounce buffers and passes the user buffer directly down to regmap_i3c_read()
-and i3c_device_do_xfers().
-
-Passing stack memory to DMA-capable APIs can lead to memory corruption or
-kernel panics.
-
-> +	if (err)
-> +		return err;
-> +
-> +	if (regval[0] !=3D 0x51 || regval[1] !=3D 0x18)
-> +		return -ENODEV;
-> +
-> +	return spd5118_common_probe(dev, regmap);
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260423085718.7076=
-2-1-akhilrajeev@nvidia.com?part=3D12
