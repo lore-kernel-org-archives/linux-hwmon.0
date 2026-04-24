@@ -1,98 +1,139 @@
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A8F3CA4A3
-	for <linux-hwmon@vger.kernel.org>; Fri, 24 Apr 2026 15:37:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E24F1DED5B;
+	Fri, 24 Apr 2026 15:57:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777045067; cv=none; b=TGX5GmYXIKuWqz2KpBgTUFQU05o9vXenITvNoJsm5JLctaer7AgZo5N6jRMd7VqrQ6fEZGxq5PvWK26MQC5q1QkXAfQo/1ijfEMfemcQXOI0L0nAfIOkoKhgo53OoWylpGDbSKV+htoQrsTQBvqtcsY08qPHGp9c4LZV2XXmlgU=
+	t=1777046267; cv=none; b=fHlddOl9rDzcTI3iweNdh2/A0a3gcyDUwndX0+yYkehoFwPlG394VWDZsxJ4oY79w9JUsx8zRpsJJfsqCF7KcTNfaaXfxByFk2H6jI8GFw5RPl5mswihr2Ei83UqmHgDOJWkKjF1QwNrU7wTw/cnLiIWfscyjU8t+9I3xc79edU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777045067; c=relaxed/simple;
-	bh=joTQCSisSejxx5EDr/8wY+lbu5NUvCu/58i9SlUJgeI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=m9aEazNhJVXElUKyCYm2HiYCQdTYxsa6REwVu3CiVxkqLRJJ4WNqkWjngkBNY3y8YglOfUvihy+E+sswCmt1+GZmsQJciM4+35Q/D9L+eHpTs6GBC51dq0iYFI5hBR8k38UUJ8r3w4Bj5NWF6owZ0QtHzO3fF0JWizrDNd9w9zE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=OCnJ8hH2; arc=none smtp.client-ip=185.67.36.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
+	s=arc-20240116; t=1777046267; c=relaxed/simple;
+	bh=qO/MAUTAHfRFlyhPD2rItuN3QmG4P8rtxuTLbkxNwL0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JmsT/jq26HBpxr2QofPWP7j6OCG74VoZYZYRz0K8pR7nNuSaHcDzA8ABv1ZVHOTwZO/ncQpwAIY0Ff1mUGMSWhXRFfVjSKN7Ihq+S0sZZAc4JslppF/gpgS3FR+4jIbnoJUYJY8lXWFUoS50mYdlf1xk0YCqPyMPcu308pk15dA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ajfozHwD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="OCnJ8hH2"
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout02.posteo.de (Postfix) with ESMTPS id 4ACE4240101
-	for <linux-hwmon@vger.kernel.org>; Fri, 24 Apr 2026 17:37:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteo.net; s=2017;
-	t=1777045056; bh=/+koihDAy0q08mblule0I/lAVVbNH3IkitxS0KiKHEE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:From;
-	b=OCnJ8hH2Bqmja4Q5VAU/ET8Jl7NLoLn89RM1jQQU9gLBMGdQ/H9G4JG23Mt/S/khU
-	 n2eZeouMFUel2brNvzNHrRbLDZBwxe6valRX1gFfHyfZ4b8RInc8aQuITEK609MKzH
-	 WvQSkRG6qAdZjFXi5fhxv9bqtLNQVWnE1e35DAGnHk5JR4fsDG6B6dCNvh8HgMbKRW
-	 a/s4i2wZIXMG9gArW5OmjC3pUXBWhGoqGJI3qWdoiDjrSbA3+MHnnD6q/m9Ej4gB+R
-	 oMlgbfQCpmQ/mBzksy607xmR5+1atVvMGfDkvzXGco2vqoo66M3MEI2b+4NxegrVc5
-	 kOcQ+1q8CBF9g==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4g2HCM0KR9z6tsf;
-	Fri, 24 Apr 2026 17:37:35 +0200 (CEST)
-Date: Fri, 24 Apr 2026 15:37:35 +0000
-From: Wilken Gottwalt <wilken.gottwalt@posteo.net>
-To: Myeonghun Pak <mhun512@gmail.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (corsair-psu) Close HID device on probe errors
-Message-ID: <20260424173734.4ab5765f@posteo.net>
-In-Reply-To: <20260424135107.13720-1-mhun512@gmail.com>
-References: <20260424135107.13720-1-mhun512@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ajfozHwD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84C95C2BCB6;
+	Fri, 24 Apr 2026 15:57:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777046267;
+	bh=qO/MAUTAHfRFlyhPD2rItuN3QmG4P8rtxuTLbkxNwL0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ajfozHwD1fCyxVIfcezb1FBnsxwPft4s+SO1HNKvMY5sayIllGVwXOVtVSslBiMZF
+	 iBATPF8Gcw9+n7ropEBl/64VF34ptpNInOVsEsJkrETPnxJJKygFlN1VYMgsTk/aYJ
+	 gYUvbgp7JalTMlmRCPOXSELTijM0xY26ZJKLVNhvwHiNjYbLxtQV/g5iAlxMKVWK29
+	 RGgC4BQzNUj5QUpG0M5muBCkcgoXJy+cqEnzLKsOM+NOcQcatVhMlBI26zUciOzkDE
+	 k9Zm/lBjzIrlUV4Mjw8X3a4NKdoQ0/dEMltXuRb3fUxMSZ+xWpW5L0buiDsXXrS+bR
+	 AlN0XSo5XZv8Q==
+Date: Fri, 24 Apr 2026 17:57:43 +0200
+From: Frederic Weisbecker <frederic@kernel.org>
+To: Waiman Long <longman@redhat.com>
+Cc: Thomas Gleixner <tglx@kernel.org>, Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>, Guenter Roeck <linux@roeck-us.net>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Ingo Molnar <mingo@kernel.org>,
+	Chen Ridong <chenridong@huaweicloud.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, cgroups@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, rcu@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Costa Shulyupin <cshulyup@redhat.com>,
+	Qiliang Yuan <realwujing@gmail.com>
+Subject: Re: [PATCH 03/23] tick/nohz: Make nohz_full parameter optional
+Message-ID: <aeuS98a-u899PBmR@pavilion.home>
+References: <20260421030351.281436-1-longman@redhat.com>
+ <20260421030351.281436-4-longman@redhat.com>
+ <875x5kd88d.ffs@tglx>
+ <3b796360-81e4-4f90-9b19-8a9f21cbac07@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3b796360-81e4-4f90-9b19-8a9f21cbac07@redhat.com>
 
-On Fri, 24 Apr 2026 22:50:51 +0900
-Myeonghun Pak <mhun512@gmail.com> wrote:
-
-> corsairpsu_probe() opens the HID device before sending the device init
-> and firmware-info commands. If either command fails, the error path jumps
-> directly to fail_and_stop and skips hid_hw_close().
+Le Tue, Apr 21, 2026 at 10:14:09AM -0400, Waiman Long a écrit :
+11;rgb:2e2e/3434/3636> On 4/21/26 4:32 AM, Thomas Gleixner wrote:
+> > On Mon, Apr 20 2026 at 23:03, Waiman Long wrote:
+> > > To provide nohz_full tick support, there is a set of tick dependency
+> > > masks that need to be evaluated on every IRQ and context switch.
+> > s/IRQ/interrupt/
+> > 
+> > This is a changelog and not a SMS service.
+> > > Switching on nohz_full tick support at runtime will be problematic
+> > > as some of the tick dependency masks may not be properly set causing
+> > > problem down the road.
+> > That's useless blurb with zero content.
+> > 
+> > > Allow nohz_full boot option to be specified without any
+> > > parameter to force enable nohz_full tick support without any
+> > > CPU in the tick_nohz_full_mask yet. The context_tracking_key and
+> > > tick_nohz_full_running flag will be enabled in this case to make
+> > > tick_nohz_full_enabled() return true.
+> > I kinda can crystal-ball what you are trying to say here, but that does
+> > not make it qualified as a proper change log.
+> > 
+> > > There is still a small performance overhead by force enable nohz_full
+> > > this way. So it should only be used if there is a chance that some
+> > > CPUs may become isolated later via the cpuset isolated partition
+> > > functionality and better CPU isolation closed to nohz_full is desired.
+> > Why has this key to be enabled on boot if there are no CPUs in the
+> > isolated mask?
+> > 
+> > If you want to manage this dynamically at runtime then enable the key
+> > once CPUs are isolated. Yes, it's more work, but that avoids the "should
+> > only be used" nonsense and makes this more robust down the road.
 > 
-> Use the existing fail_and_close label for those post-open failures so the
-> open count and low-level close callback are balanced before hid_hw_stop().
-> 
-> Fixes: d115b51e0e56 ("hwmon: add Corsair PSU HID controller driver")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Myeonghun Pak <mhun512@gmail.com>
-> ---
->  drivers/hwmon/corsair-psu.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-> index dddbd2463f..76f3e1da68 100644
-> --- a/drivers/hwmon/corsair-psu.c
-> +++ b/drivers/hwmon/corsair-psu.c
-> @@ -796,13 +796,13 @@ static int corsairpsu_probe(struct hid_device *hdev, const struct
-> hid_device_id ret = corsairpsu_init(priv);
->  	if (ret < 0) {
->  		dev_err(&hdev->dev, "unable to initialize device (%d)\n", ret);
-> -		goto fail_and_stop;
-> +		goto fail_and_close;
->  	}
->  
->  	ret = corsairpsu_fwinfo(priv);
->  	if (ret < 0) {
->  		dev_err(&hdev->dev, "unable to query firmware (%d)\n", ret);
-> -		goto fail_and_stop;
-> +		goto fail_and_close;
->  	}
->  
->  	corsairpsu_get_criticals(priv);
+> OK, I will try to make it fully dynamic. Of course, it will be more work.
 
-I really had to go back to the initial commit to check, if I introduced that
-issue later. But nope, I had it that way from the start. Good catch, I totally
-missed that. Thank you.
+Since the target CPUs will be offline, it should be fine to just enable/disable
+the static key and masks on runtime. The only issue I see right now is posix
+CPU timers because the tick dependency is per task/process group. And those
+tasks could migrate to nohz_full CPUs by careless users (even though that's
+nonsense) once the target become online. So the per task/process tick dependency
+must be set up unconditionally. I don't think this should bring much noticeable
+overhead though.
 
-greetings,
-Wilken
+Oh and the other way to go, that is removing TICK_DEP_BIT_POSIX_TIMER and forbid to
+run posix cpu timers on nohz_full CPUs, would be even more painful to implement
+so I don't have a better idea.
 
-Reviewed-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+Thanks.
+
+-- 
+Frederic Weisbecker
+SUSE Labs
