@@ -1,139 +1,187 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E24F1DED5B;
-	Fri, 24 Apr 2026 15:57:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ACFC3F54B0
+	for <linux-hwmon@vger.kernel.org>; Fri, 24 Apr 2026 18:33:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777046267; cv=none; b=fHlddOl9rDzcTI3iweNdh2/A0a3gcyDUwndX0+yYkehoFwPlG394VWDZsxJ4oY79w9JUsx8zRpsJJfsqCF7KcTNfaaXfxByFk2H6jI8GFw5RPl5mswihr2Ei83UqmHgDOJWkKjF1QwNrU7wTw/cnLiIWfscyjU8t+9I3xc79edU=
+	t=1777055587; cv=none; b=lg4NBHYPMaUJEXJuaB6J3XzKfcDr8pMS5yIFlnIhqBxSXP+JhjJPph00ee0m6Da3YAVA4Kb7qvaJIukzz/jIDpDS2d6S66mdtxPcmIOzbiRayUGyJAMTfdKX2QlNfLIeuCXdZt24KSz/Ij8x1skeaDWPs+AzXXjH4pvJRiaP26g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777046267; c=relaxed/simple;
-	bh=qO/MAUTAHfRFlyhPD2rItuN3QmG4P8rtxuTLbkxNwL0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JmsT/jq26HBpxr2QofPWP7j6OCG74VoZYZYRz0K8pR7nNuSaHcDzA8ABv1ZVHOTwZO/ncQpwAIY0Ff1mUGMSWhXRFfVjSKN7Ihq+S0sZZAc4JslppF/gpgS3FR+4jIbnoJUYJY8lXWFUoS50mYdlf1xk0YCqPyMPcu308pk15dA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ajfozHwD; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777055587; c=relaxed/simple;
+	bh=5KKtAI6jaBrVREHQpySmvtkbvTyy3jqrl7fEoimPtZY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Z4qsShSvgJru8jko/P6eH0Dftiwz8Af2jkgFwS+Z4GMbEK4GNd/t2b0EGaFH0wBXuAurfabwnRajC4IYIM3FljO0BMkM8xGWV1rk6/4QLA/WYpHpBO5ZDjhBUAYNmokrA1Ln35ymst11bmbaLjoBR8G370kiDtkQmSXY72lRkrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZsY4k99C; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ajfozHwD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84C95C2BCB6;
-	Fri, 24 Apr 2026 15:57:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777046267;
-	bh=qO/MAUTAHfRFlyhPD2rItuN3QmG4P8rtxuTLbkxNwL0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ajfozHwD1fCyxVIfcezb1FBnsxwPft4s+SO1HNKvMY5sayIllGVwXOVtVSslBiMZF
-	 iBATPF8Gcw9+n7ropEBl/64VF34ptpNInOVsEsJkrETPnxJJKygFlN1VYMgsTk/aYJ
-	 gYUvbgp7JalTMlmRCPOXSELTijM0xY26ZJKLVNhvwHiNjYbLxtQV/g5iAlxMKVWK29
-	 RGgC4BQzNUj5QUpG0M5muBCkcgoXJy+cqEnzLKsOM+NOcQcatVhMlBI26zUciOzkDE
-	 k9Zm/lBjzIrlUV4Mjw8X3a4NKdoQ0/dEMltXuRb3fUxMSZ+xWpW5L0buiDsXXrS+bR
-	 AlN0XSo5XZv8Q==
-Date: Fri, 24 Apr 2026 17:57:43 +0200
-From: Frederic Weisbecker <frederic@kernel.org>
-To: Waiman Long <longman@redhat.com>
-Cc: Thomas Gleixner <tglx@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>, Guenter Roeck <linux@roeck-us.net>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>,
-	Chen Ridong <chenridong@huaweicloud.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, cgroups@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, rcu@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Costa Shulyupin <cshulyup@redhat.com>,
-	Qiliang Yuan <realwujing@gmail.com>
-Subject: Re: [PATCH 03/23] tick/nohz: Make nohz_full parameter optional
-Message-ID: <aeuS98a-u899PBmR@pavilion.home>
-References: <20260421030351.281436-1-longman@redhat.com>
- <20260421030351.281436-4-longman@redhat.com>
- <875x5kd88d.ffs@tglx>
- <3b796360-81e4-4f90-9b19-8a9f21cbac07@redhat.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZsY4k99C"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1777055585;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/+Ofdg4jOEN9y2ToBzvsak04ExFbOMNwCGnfdG4OLXM=;
+	b=ZsY4k99CZJT5QLk0OY+0xPrRWjzR+XnDmjBBvS8AUaV/oztFw0G2/jSWYC5vX7NnyJJWcx
+	KDKXwnmlwTNkhySjBOEKimxNKab0D47uP9xsVeEENd1LCCgg0tKNIBUrkNqSkWd8AZ2+i1
+	dgc5xX3pJDw/+bnPQDUfGf0DnOjNvHM=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-665-wNN_jrdwPo6U_kJxLlYKOg-1; Fri,
+ 24 Apr 2026 14:33:03 -0400
+X-MC-Unique: wNN_jrdwPo6U_kJxLlYKOg-1
+X-Mimecast-MFC-AGG-ID: wNN_jrdwPo6U_kJxLlYKOg_1777055577
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D7825195608B;
+	Fri, 24 Apr 2026 18:32:55 +0000 (UTC)
+Received: from [10.22.88.143] (unknown [10.22.88.143])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4304319560AB;
+	Fri, 24 Apr 2026 18:32:45 +0000 (UTC)
+Message-ID: <2658f7a3-5156-4cc5-86c4-b23627e4b5f2@redhat.com>
+Date: Fri, 24 Apr 2026 14:32:45 -0400
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3b796360-81e4-4f90-9b19-8a9f21cbac07@redhat.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 19/23] cgroup/cpuset: Improve check for calling
+ housekeeping_update()
+To: Chen Ridong <chenridong@huaweicloud.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ "K. Y. Srinivasan" <kys@microsoft.com>,
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+ Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
+ Guenter Roeck <linux@roeck-us.net>, Frederic Weisbecker
+ <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, Ingo Molnar
+ <mingo@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall
+ <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+ Valentin Schneider <vschneid@redhat.com>,
+ K Prateek Nayak <kprateek.nayak@amd.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-hyperv@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ rcu@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Costa Shulyupin <cshulyup@redhat.com>,
+ Qiliang Yuan <realwujing@gmail.com>
+References: <20260421030351.281436-1-longman@redhat.com>
+ <20260421030351.281436-20-longman@redhat.com>
+ <e8824498-f8ec-496a-a21c-d1dc594f4c8e@huaweicloud.com>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <e8824498-f8ec-496a-a21c-d1dc594f4c8e@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Le Tue, Apr 21, 2026 at 10:14:09AM -0400, Waiman Long a écrit :
-11;rgb:2e2e/3434/3636> On 4/21/26 4:32 AM, Thomas Gleixner wrote:
-> > On Mon, Apr 20 2026 at 23:03, Waiman Long wrote:
-> > > To provide nohz_full tick support, there is a set of tick dependency
-> > > masks that need to be evaluated on every IRQ and context switch.
-> > s/IRQ/interrupt/
-> > 
-> > This is a changelog and not a SMS service.
-> > > Switching on nohz_full tick support at runtime will be problematic
-> > > as some of the tick dependency masks may not be properly set causing
-> > > problem down the road.
-> > That's useless blurb with zero content.
-> > 
-> > > Allow nohz_full boot option to be specified without any
-> > > parameter to force enable nohz_full tick support without any
-> > > CPU in the tick_nohz_full_mask yet. The context_tracking_key and
-> > > tick_nohz_full_running flag will be enabled in this case to make
-> > > tick_nohz_full_enabled() return true.
-> > I kinda can crystal-ball what you are trying to say here, but that does
-> > not make it qualified as a proper change log.
-> > 
-> > > There is still a small performance overhead by force enable nohz_full
-> > > this way. So it should only be used if there is a chance that some
-> > > CPUs may become isolated later via the cpuset isolated partition
-> > > functionality and better CPU isolation closed to nohz_full is desired.
-> > Why has this key to be enabled on boot if there are no CPUs in the
-> > isolated mask?
-> > 
-> > If you want to manage this dynamically at runtime then enable the key
-> > once CPUs are isolated. Yes, it's more work, but that avoids the "should
-> > only be used" nonsense and makes this more robust down the road.
-> 
-> OK, I will try to make it fully dynamic. Of course, it will be more work.
+On 4/22/26 9:10 PM, Chen Ridong wrote:
+>
+> On 2026/4/21 11:03, Waiman Long wrote:
+>> By making sure that isolated_hk_cpus matches isolated_cpus at boot time,
+>> we can more accurately determine if calling housekeeping_update()
+>> is needed by comparing if the two cpumasks are equal. The
+>> update_housekeeping flag still have a use in cpuset_handle_hotplug()
+>> to determine if a work function should be queued to invoke
+>> cpuset_update_sd_hk_unlock() as it is not supposed to look at
+>> isolated_hk_cpus without holding cpuset_top_mutex.
+>>
+> Currently, isolated_hk_cpus is updated within the cpuset_mutex critical section
+> (before mutex_unlock(&cpuset_mutex)) in cpuset_update_sd_hk_unlock. Therefore, I
+> think update_housekeeping can now be removed.
 
-Since the target CPUs will be offline, it should be fine to just enable/disable
-the static key and masks on runtime. The only issue I see right now is posix
-CPU timers because the tick dependency is per task/process group. And those
-tasks could migrate to nohz_full CPUs by careless users (even though that's
-nonsense) once the target become online. So the per task/process tick dependency
-must be set up unconditionally. I don't think this should bring much noticeable
-overhead though.
+That is true. I will remove in the next version.
 
-Oh and the other way to go, that is removing TICK_DEP_BIT_POSIX_TIMER and forbid to
-run posix cpu timers on nohz_full CPUs, would be even more painful to implement
-so I don't have a better idea.
+Thanks,
+Longman
 
-Thanks.
+>
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+>>   kernel/cgroup/cpuset.c | 36 ++++++++++++++++++++----------------
+>>   1 file changed, 20 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>> index a4eccb0ec0d1..1b0c50b46a49 100644
+>> --- a/kernel/cgroup/cpuset.c
+>> +++ b/kernel/cgroup/cpuset.c
+>> @@ -1339,26 +1339,29 @@ static void cpuset_update_sd_hk_unlock(void)
+>>   	__releases(&cpuset_mutex)
+>>   	__releases(&cpuset_top_mutex)
+>>   {
+>> +	update_housekeeping = false;
+>> +
+>>   	/* force_sd_rebuild will be cleared in rebuild_sched_domains_locked() */
+>>   	if (force_sd_rebuild)
+>>   		rebuild_sched_domains_locked();
+>>   
+>> -	if (update_housekeeping) {
+>> -		update_housekeeping = false;
+>> -		cpumask_copy(isolated_hk_cpus, isolated_cpus);
+>> -
+>> -		/*
+>> -		 * housekeeping_update() is now called without holding
+>> -		 * cpus_read_lock and cpuset_mutex. Only cpuset_top_mutex
+>> -		 * is still being held for mutual exclusion.
+>> -		 */
+>> -		mutex_unlock(&cpuset_mutex);
+>> -		cpus_read_unlock();
+>> -		WARN_ON_ONCE(housekeeping_update(isolated_hk_cpus, BIT(HK_TYPE_DOMAIN)));
+>> -		mutex_unlock(&cpuset_top_mutex);
+>> -	} else {
+>> +	if (cpumask_equal(isolated_hk_cpus, isolated_cpus)) {
+>> +		/* No housekeeping cpumask update needed */
+>>   		cpuset_full_unlock();
+>> +		return;
+>>   	}
+>> +
+>> +	cpumask_copy(isolated_hk_cpus, isolated_cpus);
+>> +
+>> +	/*
+>> +	 * housekeeping_update() is now called without holding
+>> +	 * cpus_read_lock and cpuset_mutex. Only cpuset_top_mutex
+>> +	 * is still being held for mutual exclusion.
+>> +	 */
+>> +	mutex_unlock(&cpuset_mutex);
+>> +	cpus_read_unlock();
+>> +	WARN_ON_ONCE(housekeeping_update(isolated_hk_cpus, BIT(HK_TYPE_DOMAIN)));
+>> +	mutex_unlock(&cpuset_top_mutex);
+>>   }
+>>   
+>>   /*
+>> @@ -3692,10 +3695,11 @@ int __init cpuset_init(void)
+>>   
+>>   	BUG_ON(!alloc_cpumask_var(&cpus_attach, GFP_KERNEL));
+>>   
+>> -	if (housekeeping_enabled(HK_TYPE_DOMAIN_BOOT))
+>> +	if (housekeeping_enabled(HK_TYPE_DOMAIN_BOOT)) {
+>>   		cpumask_andnot(isolated_cpus, cpu_possible_mask,
+>>   			       housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT));
+>> -
+>> +		cpumask_copy(isolated_hk_cpus, isolated_cpus);
+>> +	}
+>>   	return 0;
+>>   }
+>>   
 
--- 
-Frederic Weisbecker
-SUSE Labs
