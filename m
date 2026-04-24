@@ -1,188 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DD2F19C556
-	for <linux-hwmon@vger.kernel.org>; Fri, 24 Apr 2026 00:18:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AB3A4A21
+	for <linux-hwmon@vger.kernel.org>; Fri, 24 Apr 2026 00:34:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776989921; cv=none; b=SLjQZJvxnqbWUZUJJbCyCa1KXNaTLVquQJL8meaTkMPhUrmBXVcTi9vifFV0u/v9pxsjIqz2Urecn4v+YO4dLQWQEONzUix9s5/7tZERkJ9BR4NCLRb6Po9XcYenisxD14EEA8dR3nXkPSpkalirfqgIXvnyC6ilXMMURqryBaM=
+	t=1776990880; cv=none; b=QMuCOC/lGxbe9M4xlSFx6O9p9ogou7Dty2Pn3eOgyGDyQS/KMP1OON9EYGCaiPoZUrgaop67tFpmEc5EcfVIvZM6mNi1rcq0Ik7HvtWVxBPQkQZq3b0AfJrTpazFOnzmWxWRYAt0B5qWbfQD96hdsIO3svGTZvahYPbkysPWMxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776989921; c=relaxed/simple;
-	bh=BDWVg+xsoZuu3/erQjXdOpjoEuCO9AXelt3tBM+A/44=;
+	s=arc-20240116; t=1776990880; c=relaxed/simple;
+	bh=O4AeGi15BmU4VofmQ77/xMEzA8IzvnhK7dFOC5iRUxU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=FSPvcsQTVBy4Eb01qHBURfQCzx7v/ANyDtC7bmHUFw0Qx7B4TeNdIuSzoBtCpLvnQocabv011Lig9QlcLUIW1/X2rtry7x9RLhwsKqQTUfIqrKNBByzFAhlgUWWGGh2us+yXO5GFITzY7XTlMiXIAqlmjljFu9TvbP8BuDjTfn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H7fu9FEl; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=hwCX6+BiHUK+lOXmNQGc36Gngsi4LC0MnZlmxsb44EEoU9OOxqHBx8JbzNjfEdLSet6yhYJoilBlWLO3Nur09+XLdUqcqPgL/ESj0bKKiZIY8vCNAVoG9bd5L2hhhzpJCi46m6BUCUJr9HnQHuaZo2jllmBEAa4Rr1mCYdVq7Bo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IwO5VSOo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H7fu9FEl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE092C2BCAF;
-	Fri, 24 Apr 2026 00:18:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IwO5VSOo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEE1AC2BCAF;
+	Fri, 24 Apr 2026 00:34:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776989920;
-	bh=BDWVg+xsoZuu3/erQjXdOpjoEuCO9AXelt3tBM+A/44=;
+	s=k20201202; t=1776990879;
+	bh=O4AeGi15BmU4VofmQ77/xMEzA8IzvnhK7dFOC5iRUxU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=H7fu9FEllSxZpQvNuQAM2LcFraQpz/DZcSHIVBM2LtAMChYfgVMThHmYhaIK4FaI3
-	 L9zfdR/brLn/8KU7oG49nFMzrYxZDP1uPFY/2wDra7M2+MQc+H92nRusVi64UsW2jl
-	 /8JqWizCZuQG9krz8mnKqVrhBn5iD2VjDJJ/7K9quL69W/cQu1I1TWxDiMQUkfasxi
-	 j7mvXH40xFU/NQQ8wtCDRjwnULAV0rBJH3puCZkrhLEHdpGmtG6NBykpzPAXHJUaSc
-	 1PW2LylRkunr4Ey7KvF0z9PrwHai/SxreJ0eiSYmdqOodFXsbxf/ocetkXiyAg9bhl
-	 jCX7NZ+zXLjKQ==
+	b=IwO5VSOo1/bScBcNeMDyDzg6ivlZgAjxczzhJsQtRCPP52QKShXCCwPx+fNQamAEP
+	 iroPFKR33wR45q4lO4fA/wsVtchoipaSrkjHTx7zbQYjxmWXbME+M3S474qMT3kGDu
+	 wJPlm9/AcVqBWuld63Dqrgo9FIe74CPrQRvI0feqfKIaBl6daiIYLyPPthklposkfa
+	 a+l0kNiG49y9wqASLxnAO/A9EX6NnDBu/wSqlIeuna9bGI8eYVlz1i4K1xzkkkfmYd
+	 +yOreTFvrlIMkTLpzPmNeaUTWRB6SDX95FDxvLV/ju53Z051JxtVCdCCnZD562lXrx
+	 rbvXhhlZ40N3Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 09/13] i3c: dw-i3c-master: Add a quirk to skip clock
- and reset
+Subject: Re: [PATCH v3 10/13] i3c: dw-i3c-master: Add ACPI ID for Tegra410
 Reply-To: sashiko@lists.linux.dev
 To: "Akhil R" <akhilrajeev@nvidia.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260423085718.70762-10-akhilrajeev@nvidia.com>
-References: <20260423085718.70762-10-akhilrajeev@nvidia.com>
+In-Reply-To: <20260423085718.70762-11-akhilrajeev@nvidia.com>
+References: <20260423085718.70762-11-akhilrajeev@nvidia.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 24 Apr 2026 00:18:40 +0000
-Message-Id: <20260424001840.AE092C2BCAF@smtp.kernel.org>
+Date: Fri, 24 Apr 2026 00:34:39 +0000
+Message-Id: <20260424003439.CEE1AC2BCAF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 5 potential issue(s):
-- [Critical] The driver fails to disable hardware interrupts before destroy=
-ing the workqueue during removal, leading to a potential Use-After-Free.
-- [High] The patch alters the initialization order of `pclk` and `core_rst`=
-, causing the core reset to be deasserted before the peripheral clock is en=
-abled.
-- [High] Casting the return value of `device_get_match_data()` to `unsigned=
- long` causes pointer addresses to be interpreted as quirk flags on ACPI PR=
-P0001 systems, which can lead to random hardware initialization failures.
-- [High] A crafted `clock-frequency` device property can cause an integer o=
-verflow leading to a divide-by-zero kernel panic on 32-bit systems.
-- [High] Combining `devm_clk_get_enabled()` with Runtime PM clock managemen=
-t causes a clock refcount underflow if the device is suspended during drive=
-r removal.
+Sashiko AI review found 1 potential issue(s):
+- [High] Type mismatch when retrieving match data for ACPI devices instanti=
+ated via PRP0001 (OF compatible strings).
 --
 
-commit 62e84914f9fc0efd829919bb31559f49b5cb8b00
+commit 333ca78106137e8c6bbf34e1b45a4801fdfbbebe
 Author: Akhil R <akhilrajeev@nvidia.com>
 
-i3c: dw-i3c-master: Add a quirk to skip clock and reset
+i3c: dw-i3c-master: Add ACPI ID for Tegra410
 
-Some ACPI-enumerated devices like Tegra410 do not have clock and reset
-resources exposed via the clk/reset frameworks. This patch adds match data
-to skip acquiring these controls during probe and reads the core clock rate
-from a device property instead.
+Update variable names to generic names and add Tegra410 ACPI ID to
+support the I3C controller in Tegra410, which is a DesignWare I3C host
+controller.
 
 > diff --git a/drivers/i3c/master/dw-i3c-master.c b/drivers/i3c/master/dw-i=
 3c-master.c
-> index edd42daf75539b..b90756ade2db6d 100644
+> index b90756ade2db6d..e63822df2ae48e 100644
 > --- a/drivers/i3c/master/dw-i3c-master.c
 > +++ b/drivers/i3c/master/dw-i3c-master.c
-[ ... ]
-> @@ -556,13 +557,26 @@ static void dw_i3c_master_set_intr_regs(struct dw_i=
-3c_master *master)
->  	writel(IBI_REQ_REJECT_ALL, master->regs + IBI_MR_REQ_REJECT);
->  }
+> @@ -1847,11 +1847,12 @@ static const struct of_device_id dw_i3c_master_of=
+_match[] =3D {
+>  };
+>  MODULE_DEVICE_TABLE(of, dw_i3c_master_of_match);
 > =20
-> +static unsigned long dw_i3c_master_get_core_rate(struct dw_i3c_master *m=
-aster)
-> +{
-> +	unsigned int core_rate_prop;
-> +
-> +	if (!(master->quirks & DW_I3C_ACPI_SKIP_CLK_RST))
-> +		return clk_get_rate(master->core_clk);
-> +
-> +	if (device_property_read_u32(master->dev, "clock-frequency", &core_rate=
-_prop))
-> +		return 0;
-> +
-> +	return core_rate_prop;
-> +}
+> -static const struct acpi_device_id amd_i3c_device_match[] =3D {
+> +static const struct acpi_device_id dw_i3c_master_acpi_match[] =3D {
+>  	{ "AMDI0015", AMD_I3C_OD_PP_TIMING },
+> +	{ "NVDA2018", DW_I3C_ACPI_SKIP_CLK_RST },
+>  	{ }
+>  };
 
-Could reading a large clock-frequency property cause an integer overflow?
+This isn't a regression from this commit, but I noticed a potential issue
+with how ACPI match data is extracted in dw_i3c_common_probe():
 
-If core_rate is read as a very large value from the property (e.g.,=20
-3400000000), it seems core_period in dw_i3c_clk_cfg() could evaluate to 0=20
-due to the addition in the DIV_ROUND_UP() macro wrapping around on 32-bit=20
-systems.=20
+drivers/i3c/master/dw-i3c-master.c:dw_i3c_common_probe() {
+    ...
+	if (has_acpi_companion(&pdev->dev)) {
+		quirks =3D (unsigned long)device_get_match_data(&pdev->dev);
+	} else if (pdev->dev.of_node) {
+		drvdata =3D device_get_match_data(&pdev->dev);
+		if (drvdata)
+			quirks =3D drvdata->flags;
+	}
+    ...
+}
 
-Would the subsequent DIV_ROUND_UP(I3C_BUS_THIGH_MAX_NS, core_period) then=20
-trigger a divide-by-zero panic?
+If an ACPI device is instantiated using the standard PRP0001 mechanism, it
+maps to OF compatible strings like "altr,agilex5-dw-i3c-master". In this
+scenario, has_acpi_companion() evaluates to true, but device_get_match_data=
+()
+will return the pointer to altr_agilex5_drvdata from the OF match table.
 
-[ ... ]
-> @@ -1580,19 +1594,33 @@ int dw_i3c_common_probe(struct dw_i3c_master *mas=
-ter,
->  	if (IS_ERR(master->regs))
->  		return PTR_ERR(master->regs);
-> =20
-> -	master->core_clk =3D devm_clk_get_enabled(&pdev->dev, NULL);
-> -	if (IS_ERR(master->core_clk))
-> -		return PTR_ERR(master->core_clk);
-> +	if (has_acpi_companion(&pdev->dev)) {
-> +		quirks =3D (unsigned long)device_get_match_data(&pdev->dev);
+Could this direct cast of the pointer to an unsigned long bitmask cause
+unintended quirk flags to be interpreted as true depending on memory layout?
 
-Can this pointer cast lead to random hardware initialization failures?
-
-If an ACPI device uses the PRP0001 mechanism, device_get_match_data()
-might return a pointer to struct dw_i3c_drvdata instead of an integer.
-
-If the pointer address happens to have BIT(3) set, could the driver
-inadvertently skip acquiring core_clk and core_rst, leading to an external
-abort when reading hardware registers on an unclocked device?
-
-> +	} else if (pdev->dev.of_node) {
-> +		drvdata =3D device_get_match_data(&pdev->dev);
-> +		if (drvdata)
-> +			quirks =3D drvdata->flags;
-> +	}
-> +	master->quirks =3D quirks;
-> +
-> +	if (master->quirks & DW_I3C_ACPI_SKIP_CLK_RST) {
-> +		master->core_clk =3D NULL;
-> +		master->core_rst =3D NULL;
-> +	} else {
-> +		master->core_clk =3D devm_clk_get_enabled(&pdev->dev, NULL);
-
-Is there a risk of a clock refcount underflow here during device removal?
-
-The clocks are dynamically disabled in dw_i3c_master_runtime_suspend().
-If the device is already suspended when dw_i3c_common_remove() calls
-pm_runtime_disable() without forcefully resuming first, would the
-devres cleanup unconditionally call clk_disable_unprepare() again?
-
-> +		if (IS_ERR(master->core_clk))
-> +			return PTR_ERR(master->core_clk);
-> +
-> +		master->core_rst =3D devm_reset_control_get_optional_exclusive_deasser=
-ted(&pdev->dev,
-> +											"core_rst");
-> +		if (IS_ERR(master->core_rst))
-> +			return PTR_ERR(master->core_rst);
-> +	}
-> =20
->  	master->pclk =3D devm_clk_get_optional_enabled(&pdev->dev, "pclk");
-
-Does this change alter the initialization order between the peripheral clock
-and the core reset?
-
-In the original code, pclk was enabled before core_rst was acquired and
-deasserted. By moving core_rst into the else block above pclk, the reset
-appears to be deasserted while pclk is still disabled.
-
-Since hardware IPs typically require the peripheral bus clock to be running
-for reset signals to properly synchronize and clear APB registers, could
-this inverted sequence cause bus hangs or initialization failures?
-
-[ ... ]
-
-Additionally, is there a potential use-after-free regarding hj_work during
-driver removal?
-
-In dw_i3c_common_remove(), cancel_work_sync(&master->hj_work) is called
-followed by i3c_master_unregister(), which destroys master->base.wq.
-
-Since the IRQ was requested with devm_request_irq(), it remains active
-until devres runs after remove() returns. If a Hot-Join interrupt fires
-after the workqueue is destroyed, would the handler execute and call
-queue_work(), dereferencing the freed pointer?
+Would it be safer to unify the match data format to always use struct
+pointers?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260423085718.7076=
-2-1-akhilrajeev@nvidia.com?part=3D9
+2-1-akhilrajeev@nvidia.com?part=3D10
