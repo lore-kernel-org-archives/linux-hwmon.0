@@ -1,187 +1,91 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ACFC3F54B0
-	for <linux-hwmon@vger.kernel.org>; Fri, 24 Apr 2026 18:33:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C952556E;
+	Sun, 26 Apr 2026 00:03:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777055587; cv=none; b=lg4NBHYPMaUJEXJuaB6J3XzKfcDr8pMS5yIFlnIhqBxSXP+JhjJPph00ee0m6Da3YAVA4Kb7qvaJIukzz/jIDpDS2d6S66mdtxPcmIOzbiRayUGyJAMTfdKX2QlNfLIeuCXdZt24KSz/Ij8x1skeaDWPs+AzXXjH4pvJRiaP26g=
+	t=1777161801; cv=none; b=Y9GZLGeZMUDotByYIqLvsRtfbOFlG4PcNOtJw0h1WRCKY/jZdkm5KTNy+ARzFWRFVl7Je53lIfuXCDytUfPdj35bLpT0zFQRRaX77ZOmH2tqzed+y5wEmjFZvsqrskaMl+Dc9nQXZuUVzCxDAaepEgyJokA5FHDAklPa0V805EM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777055587; c=relaxed/simple;
-	bh=5KKtAI6jaBrVREHQpySmvtkbvTyy3jqrl7fEoimPtZY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Z4qsShSvgJru8jko/P6eH0Dftiwz8Af2jkgFwS+Z4GMbEK4GNd/t2b0EGaFH0wBXuAurfabwnRajC4IYIM3FljO0BMkM8xGWV1rk6/4QLA/WYpHpBO5ZDjhBUAYNmokrA1Ln35ymst11bmbaLjoBR8G370kiDtkQmSXY72lRkrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZsY4k99C; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1777161801; c=relaxed/simple;
+	bh=5fGj6iW05hAnyDjVzh7Hsg1J/Xop4UKdM9625VU1SGA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GLexfy55POdFyVe0U5bWWZ71Lhm+uDGn92VdwKlCHm/gUhvFC8WScx2JmPpk3kVAq3y9mu0tD1dQutfud7Oz6AzZkYAoQGGYVLa0ZV2pQRQjwfAsXNdHdmDXwDZH9+qKeSj0pZSwwSL+YibJpXn/1shpb8fc6NPrny7oW3onRhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AMYBlI+K; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZsY4k99C"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1777055585;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/+Ofdg4jOEN9y2ToBzvsak04ExFbOMNwCGnfdG4OLXM=;
-	b=ZsY4k99CZJT5QLk0OY+0xPrRWjzR+XnDmjBBvS8AUaV/oztFw0G2/jSWYC5vX7NnyJJWcx
-	KDKXwnmlwTNkhySjBOEKimxNKab0D47uP9xsVeEENd1LCCgg0tKNIBUrkNqSkWd8AZ2+i1
-	dgc5xX3pJDw/+bnPQDUfGf0DnOjNvHM=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-665-wNN_jrdwPo6U_kJxLlYKOg-1; Fri,
- 24 Apr 2026 14:33:03 -0400
-X-MC-Unique: wNN_jrdwPo6U_kJxLlYKOg-1
-X-Mimecast-MFC-AGG-ID: wNN_jrdwPo6U_kJxLlYKOg_1777055577
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D7825195608B;
-	Fri, 24 Apr 2026 18:32:55 +0000 (UTC)
-Received: from [10.22.88.143] (unknown [10.22.88.143])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4304319560AB;
-	Fri, 24 Apr 2026 18:32:45 +0000 (UTC)
-Message-ID: <2658f7a3-5156-4cc5-86c4-b23627e4b5f2@redhat.com>
-Date: Fri, 24 Apr 2026 14:32:45 -0400
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AMYBlI+K"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0205C2BCB0;
+	Sun, 26 Apr 2026 00:03:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777161801;
+	bh=5fGj6iW05hAnyDjVzh7Hsg1J/Xop4UKdM9625VU1SGA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=AMYBlI+KOJvCWR69weQNstISnUfZP26ZfvrRZLZMtKGUbOrcNPYNVqSJDrcYMp8gj
+	 +1LlMJRdrZMpPZ4XdI7qOIBcilZt0GPBAMOOUgZ570ZEEm1iZcCWj3S2gGvY9Y8vgG
+	 633Yx6EF5A41sBcmiBdTey78SI10siN1eI/60hTgw6iA2rb5K3gYn1Kz6MTI/ylPUr
+	 pdrdYANMEOJVXBgXr+6/TGermqVR7QupwZqsE+Txb07BBM+5oqC9RwRrE+rbffKYuT
+	 47zU5KY26dovWu3dABIESfqE3OdCOrI7ZTsSv+FVUzo8gha1maAGVcvVFvYiDOJP3C
+	 UQq1hh8/fPgIQ==
+From: Sasha Levin <sashal@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: Remove stale CONFIG_SENSORS_SBRMI Makefile reference
+Date: Sat, 25 Apr 2026 20:03:19 -0400
+Message-ID: <20260426000319.55908-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 19/23] cgroup/cpuset: Improve check for calling
- housekeeping_update()
-To: Chen Ridong <chenridong@huaweicloud.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- "K. Y. Srinivasan" <kys@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
- Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
- Guenter Roeck <linux@roeck-us.net>, Frederic Weisbecker
- <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
- <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>, Ingo Molnar
- <mingo@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall
- <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
- Valentin Schneider <vschneid@redhat.com>,
- K Prateek Nayak <kprateek.nayak@amd.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-hyperv@vger.kernel.org, linux-hwmon@vger.kernel.org,
- rcu@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Costa Shulyupin <cshulyup@redhat.com>,
- Qiliang Yuan <realwujing@gmail.com>
-References: <20260421030351.281436-1-longman@redhat.com>
- <20260421030351.281436-20-longman@redhat.com>
- <e8824498-f8ec-496a-a21c-d1dc594f4c8e@huaweicloud.com>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <e8824498-f8ec-496a-a21c-d1dc594f4c8e@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 4/22/26 9:10 PM, Chen Ridong wrote:
->
-> On 2026/4/21 11:03, Waiman Long wrote:
->> By making sure that isolated_hk_cpus matches isolated_cpus at boot time,
->> we can more accurately determine if calling housekeeping_update()
->> is needed by comparing if the two cpumasks are equal. The
->> update_housekeeping flag still have a use in cpuset_handle_hotplug()
->> to determine if a work function should be queued to invoke
->> cpuset_update_sd_hk_unlock() as it is not supposed to look at
->> isolated_hk_cpus without holding cpuset_top_mutex.
->>
-> Currently, isolated_hk_cpus is updated within the cpuset_mutex critical section
-> (before mutex_unlock(&cpuset_mutex)) in cpuset_update_sd_hk_unlock. Therefore, I
-> think update_housekeeping can now be removed.
+kconfiglint reports:
 
-That is true. I will remove in the next version.
+  X001: CONFIG_SENSORS_SBRMI referenced in Makefile but not defined
+        in any Kconfig
 
-Thanks,
-Longman
+The SB-RMI hardware monitoring driver was originally introduced in
+commit 5a0f50d110b3 ("hwmon: Add support for SB-RMI power module") with
+both a Kconfig entry (CONFIG_SENSORS_SBRMI) and a Makefile line
+(obj-$(CONFIG_SENSORS_SBRMI) += sbrmi.o) in drivers/hwmon/.
 
->
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   kernel/cgroup/cpuset.c | 36 ++++++++++++++++++++----------------
->>   1 file changed, 20 insertions(+), 16 deletions(-)
->>
->> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->> index a4eccb0ec0d1..1b0c50b46a49 100644
->> --- a/kernel/cgroup/cpuset.c
->> +++ b/kernel/cgroup/cpuset.c
->> @@ -1339,26 +1339,29 @@ static void cpuset_update_sd_hk_unlock(void)
->>   	__releases(&cpuset_mutex)
->>   	__releases(&cpuset_top_mutex)
->>   {
->> +	update_housekeeping = false;
->> +
->>   	/* force_sd_rebuild will be cleared in rebuild_sched_domains_locked() */
->>   	if (force_sd_rebuild)
->>   		rebuild_sched_domains_locked();
->>   
->> -	if (update_housekeeping) {
->> -		update_housekeeping = false;
->> -		cpumask_copy(isolated_hk_cpus, isolated_cpus);
->> -
->> -		/*
->> -		 * housekeeping_update() is now called without holding
->> -		 * cpus_read_lock and cpuset_mutex. Only cpuset_top_mutex
->> -		 * is still being held for mutual exclusion.
->> -		 */
->> -		mutex_unlock(&cpuset_mutex);
->> -		cpus_read_unlock();
->> -		WARN_ON_ONCE(housekeeping_update(isolated_hk_cpus, BIT(HK_TYPE_DOMAIN)));
->> -		mutex_unlock(&cpuset_top_mutex);
->> -	} else {
->> +	if (cpumask_equal(isolated_hk_cpus, isolated_cpus)) {
->> +		/* No housekeeping cpumask update needed */
->>   		cpuset_full_unlock();
->> +		return;
->>   	}
->> +
->> +	cpumask_copy(isolated_hk_cpus, isolated_cpus);
->> +
->> +	/*
->> +	 * housekeeping_update() is now called without holding
->> +	 * cpus_read_lock and cpuset_mutex. Only cpuset_top_mutex
->> +	 * is still being held for mutual exclusion.
->> +	 */
->> +	mutex_unlock(&cpuset_mutex);
->> +	cpus_read_unlock();
->> +	WARN_ON_ONCE(housekeeping_update(isolated_hk_cpus, BIT(HK_TYPE_DOMAIN)));
->> +	mutex_unlock(&cpuset_top_mutex);
->>   }
->>   
->>   /*
->> @@ -3692,10 +3695,11 @@ int __init cpuset_init(void)
->>   
->>   	BUG_ON(!alloc_cpumask_var(&cpus_attach, GFP_KERNEL));
->>   
->> -	if (housekeeping_enabled(HK_TYPE_DOMAIN_BOOT))
->> +	if (housekeeping_enabled(HK_TYPE_DOMAIN_BOOT)) {
->>   		cpumask_andnot(isolated_cpus, cpu_possible_mask,
->>   			       housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT));
->> -
->> +		cpumask_copy(isolated_hk_cpus, isolated_cpus);
->> +	}
->>   	return 0;
->>   }
->>   
+Commit e156586764050 ("hwmon/misc: amd-sbi: Move core sbrmi from hwmon to
+misc")
+moved the driver to drivers/misc/amd-sbi/ to support additional
+functionality beyond hardware monitoring. That commit correctly removed the
+Kconfig entry from drivers/hwmon/Kconfig, moved the source file
+drivers/hwmon/sbrmi.c to drivers/misc/amd-sbi/sbrmi.c, and created new
+Kconfig/Makefile entries in drivers/misc/amd-sbi/ with a renamed symbol
+(CONFIG_AMD_SBRMI_I2C).
+
+However, the Makefile line in drivers/hwmon/Makefile was not removed in
+that commit. The orphaned line references a CONFIG symbol that no longer
+exists and a source file that is no longer present, so it has no effect
+on the build — but it is dead code that should be cleaned up.
+
+Remove the stale Makefile reference.
+
+Assisted-by: Claude:claude-opus-4-6 kconfiglint
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hwmon/Makefile | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 4788996aa1374..982ee2c6f9deb 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -201,7 +201,6 @@ obj-$(CONFIG_SENSORS_PWM_FAN)	+= pwm-fan.o
+ obj-$(CONFIG_SENSORS_QNAP_MCU_HWMON)	+= qnap-mcu-hwmon.o
+ obj-$(CONFIG_SENSORS_RASPBERRYPI_HWMON)	+= raspberrypi-hwmon.o
+ obj-$(CONFIG_SENSORS_SBTSI)	+= sbtsi_temp.o
+-obj-$(CONFIG_SENSORS_SBRMI)	+= sbrmi.o
+ obj-$(CONFIG_SENSORS_SCH56XX_COMMON)+= sch56xx-common.o
+ obj-$(CONFIG_SENSORS_SCH5627)	+= sch5627.o
+ obj-$(CONFIG_SENSORS_SCH5636)	+= sch5636.o
+-- 
+2.53.0
 
