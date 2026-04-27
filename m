@@ -1,162 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0287364949
-	for <linux-hwmon@vger.kernel.org>; Mon, 27 Apr 2026 07:22:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [4.193.249.245])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9AAA390CB2;
+	Mon, 27 Apr 2026 07:26:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.193.249.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777274520; cv=none; b=HbZg8/IVXxBXEIi6gNWzgpb/1JhSgKGtdZ3N4hR5iReosjO5VzCkXe09ydhEh+TZneM1dzlLvHle7keiGJY6u4wb2BJfwDfWgptA9TXb9yeg/n3j4+M7L0cakm/RCTW4mqoLymRGZBjNQLRK7eokoaIxoTNKUyNRDKvTUQdOJfI=
+	t=1777274780; cv=none; b=UuczXO48MeXVDuJLgZhxXZKNylfivmxduIIXFq13Gg9CtDKKg9w3/aD5oIEwrjRRi6VkVthH9MC6Z6bwLypssGha4Z2QBkK6vQvvoIExidczQTauiJWFjXZgco7+BbDmHdi4jHIEzEz16zMdrXnyIisIQIg9msuzL15vgCAhA2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777274520; c=relaxed/simple;
-	bh=eAhCfmh1T/nETfNs6YKQihopaI5pvM+C899Xfhr7es8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=UOUs3AuSJ1TjhyqVJwweFOV3woVzFXYAcwtYenCVjfUrTujCNzJ2pe3ilADcqjA8/q+TwhJS10+p2qhF5mvwbl5nbbNgRtLZL07uRxAB7ZpwUVyN/N+/o62Oyj7nUz9CLPlU6x6Uuq48hE91hJA3Eewoq7clDBTByX+BNW7nHSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PLkQZV+G; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PLkQZV+G"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B1D3C2BCB4;
-	Mon, 27 Apr 2026 07:22:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777274520;
-	bh=eAhCfmh1T/nETfNs6YKQihopaI5pvM+C899Xfhr7es8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=PLkQZV+G2Heqd0ZMngU9x53tPexfzVXXvedG7XeCDXOifH+io6u+4eJL2yH+mNYHn
-	 ywZVLMPTR4AzIpdhxdiGAOdelNwCPRW2kBcbRCvinXzg/uz6GMQa+XfQpEa9KN9PVu
-	 ot671s1Fr9FD+yLNJjTpJlychAqZMl8bUjeqD6g+yWDdoccpBPmJbXZmvvwGlgrgxJ
-	 m5fhcckx6Llv7YcOLuK3Y4+MdpOq5iWMoguStbbGLDf8LLsJaqDdcVRPGv/dF629Qt
-	 IRH3q20ematpb/txbWy8iT5SO8Yvs0ZRS6fbNBrBuB9zhgcXYSSZd9piAHB8UaWeII
-	 raS8Eh8QB3zdw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v6 2/2] hwmon: (pmbus/q54sj108a2) Add support for
- q50sn12072 and q54sn120a1
-Reply-To: sashiko@lists.linux.dev
-To: "Brian Chiang" <chiang.brian@inventec.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260427-add-support-for-q50sn12072-and-q54sn120a1-v6-2-ffa77bfa65e7@inventec.com>
-References: <20260427-add-support-for-q50sn12072-and-q54sn120a1-v6-2-ffa77bfa65e7@inventec.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 27 Apr 2026 07:21:59 +0000
-Message-Id: <20260427072200.4B1D3C2BCB4@smtp.kernel.org>
+	s=arc-20240116; t=1777274780; c=relaxed/simple;
+	bh=+f/Ak5ZvNVLxWoZopsI2/wbpbNejzmreXm9s1vzcDiA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=k+vpr6YZ2c3YXLn0JNOqRPXarshoHe5iFanX77Xq+8Zgmvi3Ek2hSGQL/I4RnxKvttdno+5wuar8+HXeWijY/C8WyqDz3mbJJ/V1le+Lv/Ty3UAhgut8cMvkMnleI1U5RZvOZnDXa9/1Vo0jRH1vAlD6syFnYo7T4LYiU49Xeoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=4.193.249.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
+Received: from hehuan1$eswincomputing.com ( [10.12.96.103] ) by
+ ajax-webmail-app2 (Coremail) ; Mon, 27 Apr 2026 15:25:56 +0800 (GMT+08:00)
+Date: Mon, 27 Apr 2026 15:25:56 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: "Huan He" <hehuan1@eswincomputing.com>
+To: conor+dt@kernel.org
+Cc: linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
+	p.zabel@pengutronix.de, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	ningyu@eswincomputing.com, linmin@eswincomputing.com,
+	pinkesh.vaghela@einfochips.com, luyulin@eswincomputing.com,
+	conor.dooley@microchip.com
+Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add Eswin EIC7700 PVT sensor
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2024.2-cmXT6 build
+ 20241203(6b039d88) Copyright (c) 2002-2026 www.mailtech.cn
+ mispb-72143050-eaf5-4703-89e0-86624513b4ce-eswincomputing.com
+In-Reply-To: <20260306094508.1098-1-hehuan1@eswincomputing.com>
+References: <20260306094312.1043-1-hehuan1@eswincomputing.com>
+ <20260306094508.1098-1-hehuan1@eswincomputing.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-ID: <28b4eea0.5ad0.19dcdd49d49.Coremail.hehuan1@eswincomputing.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:TQJkCgA3TJ+ED+9pcAkVAA--.2927W
+X-CM-SenderInfo: 5khk3tzqr6v25zlqu0xpsx3x1qjou0bp/1tbiAQEKCmnuPhohtAAA
+	s2
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+	daVFxhVjvjDU=
 
-Sashiko AI review found 4 potential issue(s):
-- [High] Denial of Service due to holding hardware lock while copying from =
-user space
-- [High] Use-After-Free of `psu` context due to incorrect devres initializa=
-tion order
-- [High] Hardware write protection is permanently disabled upon debugfs wri=
-te
-- [Medium] Guideline Violation: Use of incorrect lock for debugfs attributes
---
-
-commit d199d1aceab7c176fa10e4adf36411621ba1481b
-Author: Jack Cheng <cheng.jackhy@inventec.com>
-
-hwmon: (pmbus/q54sj108a2) Add support for q50sn12072 and q54sn120a1
-
-This commit adds support for the Q50SN12072 and Q54SN120A1 power modules
-to the q54sj108a2 driver. It introduces new driver information structures,
-device match tables, and debugfs entries for the supported hardware.
-
-> diff --git a/drivers/hwmon/pmbus/q54sj108a2.c b/drivers/hwmon/pmbus/q54sj=
-108a2.c
-> index d5d60a9af8c5..b59cfee861f2 100644
-> --- a/drivers/hwmon/pmbus/q54sj108a2.c
-> +++ b/drivers/hwmon/pmbus/q54sj108a2.c
-
-[ ... ]
-
-> @@ -83,73 +113,77 @@ static ssize_t q54sj108a2_debugfs_read(struct file *=
-file, char __user *buf,
->  	char *out =3D data;
->  	char *res;
-> =20
-> +	rc =3D pmbus_lock_interruptible(psu->client);
-> +	if (rc)
-> +		return rc;
-
-The hardware monitoring subsystem guidelines state that drivers must implem=
-ent
-locking for attributes registered by other means (such as debugfs) using
-hwmon_lock() and hwmon_unlock().
-
-Is pmbus_lock_interruptible() the correct lock to use here, or should this =
-be
-using the standard hwmon subsystem locks?
-
-[ ... ]
-
-> @@ -184,25 +224,29 @@ static ssize_t q54sj108a2_debugfs_write(struct file=
- *file, const char __user *bu
->  	int idx =3D *idxp;
->  	struct q54sj108a2_data *psu =3D to_psu(idxp, idx);
-> =20
-> -	rc =3D i2c_smbus_write_byte_data(psu->client, PMBUS_WRITE_PROTECT, 0);
-> +	rc =3D pmbus_lock_interruptible(psu->client);
->  	if (rc)
->  		return rc;
-> =20
-> +	rc =3D i2c_smbus_write_byte_data(psu->client, PMBUS_WRITE_PROTECT, 0);
-> +	if (rc)
-> +		goto unlock;
-
-This isn't introduced by this patch, but this code unconditionally disables
-hardware write protection.
-
-Does the driver ever restore the PMBUS_WRITE_PROTECT register to its
-original state? It looks like the power supply module might be left
-permanently unprotected against unintended I2C writes.
-
->  	switch (idx) {
->  	case Q54SJ108A2_DEBUGFS_OPERATION:
->  		rc =3D kstrtou8_from_user(buf, count, 0, &dst_data);
->  		if (rc < 0)
-> -			return rc;
-> +			goto unlock;
-
-Could calling kstrtou8_from_user() while holding pmbus_lock_interruptible()
-introduce a denial of service risk?
-
-If a user provides a buffer managed by userfaultfd, they might be able to
-indefinitely pause the page fault. Because the PMBus mutex is held, other
-tasks attempting to acquire the lock for this device could hang.
-
-Can the user input be copied and parsed into local variables before acquiri=
-ng
-the hardware lock?
-
-[ ... ]
-
-> @@ -341,6 +395,7 @@ static int q54sj108a2_probe(struct i2c_client *client)
->  	if (!psu)
->  		return 0;
-> =20
-> +	psu->chip =3D chip_id;
->  	psu->client =3D client;
-
-This isn't a new issue, but there appears to be an existing use-after-free
-risk during device unbind.
-
-Looking earlier in q54sj108a2_probe(), pmbus_do_probe() is called before
-allocating the psu context:
-
-	ret =3D pmbus_do_probe(client, &q54sj108a2_info[chip_id]);
-	if (ret)
-		return ret;
-
-	psu =3D devm_kzalloc(&client->dev, sizeof(*psu), GFP_KERNEL);
-
-Since devres actions execute in reverse order of addition, psu will be
-freed before the PMBus core cleans up the debugfs directory.
-
-Does this leave a window during removal where debugfs files are accessible,
-but any read or write will dereference the freed psu pointer?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260427-add-suppor=
-t-for-q50sn12072-and-q54sn120a1-v6-0-ffa77bfa65e7@inventec.com?part=3D2
+PiBGcm9tOiBIdWFuIEhlIDxoZWh1YW4xQGVzd2luY29tcHV0aW5nLmNvbT4KPiAKPiBBZGQgZGV2
+aWNlIHRyZWUgYmluZGluZyBkb2N1bWVudGF0aW9uIGZvciBFU1dJTiBFSUM3NzAwIFByb2Nlc3Ms
+IFZvbHRhZ2UKPiBhbmQgVGVtcGVyYXR1cmUgc2Vuc29yLgo+IAo+IFRoZSBFSUM3NzAwIFNvQyBp
+bnRlZ3JhdGVzIHR3byBQVlQgaW5zdGFuY2VzIGZvciBtb25pdG9yaW5nIFNvQyBhbmQgRERSCj4g
+cG93ZXIgZG9tYWlucyByZXNwZWN0aXZlbHkuCj4gCj4gU2lnbmVkLW9mZi1ieTogWXVsaW4gTHUg
+PGx1eXVsaW5AZXN3aW5jb21wdXRpbmcuY29tPgo+IFNpZ25lZC1vZmYtYnk6IEh1YW4gSGUgPGhl
+aHVhbjFAZXN3aW5jb21wdXRpbmcuY29tPgo+IFJldmlld2VkLWJ5OiBDb25vciBEb29sZXkgPGNv
+bm9yLmRvb2xleUBtaWNyb2NoaXAuY29tPgo+IC0tLQo+ICAuLi4vYmluZGluZ3MvaHdtb24vZXN3
+aW4sZWljNzcwMC1wdnQueWFtbCAgICAgfCA2NSArKysrKysrKysrKysrKysrKysrCj4gIDEgZmls
+ZSBjaGFuZ2VkLCA2NSBpbnNlcnRpb25zKCspCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBEb2N1bWVu
+dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaHdtb24vZXN3aW4sZWljNzcwMC1wdnQueWFtbAo+
+IAo+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaHdtb24v
+ZXN3aW4sZWljNzcwMC1wdnQueWFtbCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5n
+cy9od21vbi9lc3dpbixlaWM3NzAwLXB2dC55YW1sCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBp
+bmRleCAwMDAwMDAwMDAwMDAuLjM2NmRjZTNjNmQ0Mwo+IC0tLSAvZGV2L251bGwKPiArKysgYi9E
+b2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaHdtb24vZXN3aW4sZWljNzcwMC1wdnQu
+eWFtbAo+IEBAIC0wLDAgKzEsNjUgQEAKPiArIyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogKEdQ
+TC0yLjAtb25seSBPUiBCU0QtMi1DbGF1c2UpCj4gKyVZQU1MIDEuMgo+ICstLS0KPiArJGlkOiBo
+dHRwOi8vZGV2aWNldHJlZS5vcmcvc2NoZW1hcy9od21vbi9lc3dpbixlaWM3NzAwLXB2dC55YW1s
+Iwo+ICskc2NoZW1hOiBodHRwOi8vZGV2aWNldHJlZS5vcmcvbWV0YS1zY2hlbWFzL2NvcmUueWFt
+bCMKPiArCj4gK3RpdGxlOiBFU1dJTiBFSUM3NzAwIFBWVCBTZW5zb3IKPiArCj4gK21haW50YWlu
+ZXJzOgo+ICsgIC0gWXVsaW4gTHUgPGx1eXVsaW5AZXN3aW5jb21wdXRpbmcuY29tPgo+ICsgIC0g
+SHVhbiBIZSA8aGVodWFuMUBlc3dpbmNvbXB1dGluZy5jb20+Cj4gKwo+ICtkZXNjcmlwdGlvbjoK
+PiArICBFU1dJTiBFSUM3NzAwIFNvQyBpbnRlZ3JhdGVzIGVtYmVkZGVkIHByb2Nlc3MsIHZvbHRh
+Z2UgYW5kIHRlbXBlcmF0dXJlCj4gKyAgc2Vuc29ycyB0byBtb25pdG9yIHRoZSBpbnRlcm5hbCBT
+b0MgZW52aXJvbm1lbnQuIFRoZSBzeXN0ZW0gaW5jbHVkZXMgdHdvCj4gKyAgUFZUIHNlbnNvciBp
+bnN0YW5jZXMuIFRoZSBQVlQwIG1vbml0b3JzIHRoZSBtYWluIFNvQyBwb3dlciBkb21haW4uIFRo
+ZQo+ICsgIFBWVDEgc2Vuc29yIG1vbml0b3JzIHRoZSBERFIgY29yZSBwb3dlciBkb21haW4uCj4g
+Kwo+ICthbGxPZjoKPiArICAtICRyZWY6IC9zY2hlbWFzL2h3bW9uL2h3bW9uLWNvbW1vbi55YW1s
+Iwo+ICsKPiArcHJvcGVydGllczoKPiArICBjb21wYXRpYmxlOgo+ICsgICAgY29uc3Q6IGVzd2lu
+LGVpYzc3MDAtcHZ0Cj4gKwo+ICsgIHJlZzoKPiArICAgIG1heEl0ZW1zOiAxCj4gKwo+ICsgIGNs
+b2NrczoKPiArICAgIG1heEl0ZW1zOiAxCj4gKwo+ICsgIGludGVycnVwdHM6Cj4gKyAgICBtYXhJ
+dGVtczogMQo+ICsKPiArICBsYWJlbDogdHJ1ZQoKSGkgQ29ub3IsCgpUaGUgbGFiZWwgcHJvcGVy
+dHkgaXMgY3VycmVudGx5IGRlY2xhcmVkIGFzICdsYWJlbDogdHJ1ZScgd2l0aG91dCBhbnkKdmFs
+dWUgY29uc3RyYWludHMuIEhvd2V2ZXIsIHRoZSBkcml2ZXIgZXhwZWN0cyBzcGVjaWZpYyBsYWJl
+bCB2YWx1ZXMgKHB2dDAKb3IgcHZ0MSkuIElzIGl0IG9rIHRvIHVwZGF0ZSB0aGUgRFQgYmluZGlu
+ZyBzY2hlbWEgdG8gY29uc3RyYWluIHRoZSBsYWJlbApwcm9wZXJ0eSB0byBhbiBlbnVtOgoKLcKg
+IGxhYmVsOiB0cnVlCivCoCBsYWJlbDoKK8KgIMKgIGVudW06CivCoCDCoCDCoCAtIHB2dDAKK8Kg
+IMKgIMKgIC0gcHZ0MQoKQmVzdCByZWdhcmRzLApIdWFuIEhlCgo+ICsKPiArICByZXNldHM6Cj4g
+KyAgICBtYXhJdGVtczogMQo+ICsKPiArICAnI3RoZXJtYWwtc2Vuc29yLWNlbGxzJzoKPiArICAg
+IGNvbnN0OiAwCj4gKwo+ICtyZXF1aXJlZDoKPiArICAtIGNvbXBhdGlibGUKPiArICAtIHJlZwo+
+ICsgIC0gY2xvY2tzCj4gKyAgLSBpbnRlcnJ1cHRzCj4gKyAgLSBsYWJlbAo+ICsgIC0gcmVzZXRz
+Cj4gKwo+ICt1bmV2YWx1YXRlZFByb3BlcnRpZXM6IGZhbHNlCj4gKwo+ICtleGFtcGxlczoKPiAr
+ICAtIHwKPiArICAgIHB2dEA1MGIwMDAwMCB7Cj4gKyAgICAgIGNvbXBhdGlibGUgPSAiZXN3aW4s
+ZWljNzcwMC1wdnQiOwo+ICsgICAgICByZWcgPSA8MHg1MGIwMDAwMCAweDEwMDAwPjsKPiArICAg
+ICAgY2xvY2tzID0gPCZjbG9ja3MgMjQ0PjsKPiArICAgICAgaW50ZXJydXB0cyA9IDwzNDk+Owo+
+ICsgICAgICBpbnRlcnJ1cHQtcGFyZW50ID0gPCZwbGljPjsKPiArICAgICAgbGFiZWwgPSAicHZ0
+MCI7Cj4gKyAgICAgIHJlc2V0cyA9IDwmcmVzZXQgMTExPjsKPiArICAgICAgI3RoZXJtYWwtc2Vu
+c29yLWNlbGxzID0gPDA+Owo+ICsgICAgfTsKPiArLi4uCj4gLS0gCj4gMi4yNS4xCg==
