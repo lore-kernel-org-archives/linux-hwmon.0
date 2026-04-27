@@ -1,64 +1,65 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95CD03B6C17
-	for <linux-hwmon@vger.kernel.org>; Mon, 27 Apr 2026 11:15:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F07D73B6C13
+	for <linux-hwmon@vger.kernel.org>; Mon, 27 Apr 2026 11:15:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777288511; cv=none; b=khXDaB7GjrmYsUmeTo9YminpPYv3yXQJ7aIXLgTIrfVZ9MIFLtGdX6tdkjajyo/kq5tcEQ2o05YFAlcf1AYCeB/RUHFsufpqAPpxcEsGR/E6TNAxUwvQjR3Xazh2r1f+98ed0xXHJkguQY5qhUuz9titwy3R/RCKUYd3E8lhThw=
+	t=1777288541; cv=none; b=k9uiUB4A3xLQdIM0lVF7HlOoWcA+QBucCCeqSzt6zBIKciOTmK+BdGOjh8gXjwd/1hP64M2fhErsKLxMCu6n1yAkefvaV38vWS11M1eJuoAUlXNoivF7FoXmG6uYb6z4QhaSthAblQYEZ9ZxdKoQVYp6AT+tsRySc6dyVXk15PA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777288511; c=relaxed/simple;
-	bh=S5v5a2xILTFOuUeOI4/ZHldfWBXVtIB51PyRpwW4Xuc=;
+	s=arc-20240116; t=1777288541; c=relaxed/simple;
+	bh=zlrr2Yu1uoM/mY1F/y5KY8NvkTswYtCilqPxh/eNl9I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f7hQKRTIZF6y7JHm539VML8DnK+Q5pCaFzOXIZCVOGYRUABV3sXBYNc0HEJqMqYR+zJm5DoAzci9Xcql4yRkkayRbTZ5LznVMs6Yz8waOPmY7Kk7SOcDzABGunUqcTzYOKH157aLWhwydB5709iFA1v5ls8hCiv8c8lBYQVwlAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com; spf=pass smtp.mailfrom=inventec.com; dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b=L91vQEj1; arc=none smtp.client-ip=209.85.216.54
+	 Content-Type:Content-Disposition:In-Reply-To; b=XrPKfMx4XnfgjJddtXR8Ree5096wqnC0h51jeYGN4GDxNOG/er42YMd7bSXxWokOq2EFco7VNHH2FpRUERf92M96NjijtY1MKOSKp2Fr7TGuzsL91uiwVH+d24S12gisbdsnYdYtiZMnroMn5LOjNPw7W6UUQei+n3DXtP4npeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com; spf=pass smtp.mailfrom=inventec.com; dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b=FUXp3eM7; arc=none smtp.client-ip=209.85.210.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inventec.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b="L91vQEj1"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3585ec417f6so5128557a91.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 27 Apr 2026 04:15:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b="FUXp3eM7"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-827270d50d4so8997216b3a.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 27 Apr 2026 04:15:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=inventec.com; s=google; t=1777288507; x=1777893307; darn=vger.kernel.org;
+        d=inventec.com; s=google; t=1777288539; x=1777893339; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rj51DoniKArwyiQTRmeeRmOZITT30YvMqLl9YIyYIsU=;
-        b=L91vQEj1bSom3oomISEnGlu52fE4Sbkg2C3X8tSHqb/wnxP8yrNyal80RDmquANPJw
-         c0Uk6hGHDnmH3m2Hg1D5CKOcqdtTO27z+T++RCiS21VftXRnTZcA/QMvnaPbcNF2MowJ
-         /bgP2L5ibYKDzFNrj8H8skqrLEcmb3OFvctWrQRsMcppiLRP9OnKZXUR76AFsKNBREYW
-         VLm+cw3CljrT+YNvSqMSqqYxTYq3bXh7n29FEPGGIhzqUIJZnR5lQxBd9sVTq8QIS01H
-         a7i09BXGuINfZJXzXAx1kG58/+RxHqRU2TvByGm2rGTq5bQF4jHEBBpRu3XRRsVHXlB/
-         7ZPg==
+        bh=4Rje4x4SovYBJkB2QxRF5jrWyY5IZK3xvV8YvRMucwE=;
+        b=FUXp3eM7naSgV5IwSdhb6InelulGm26+3yaMSmn9fP/RcPVquIXPhJ92iTZZd/4f1H
+         Jg5KkWaq3ByGm0OeTLTgshlVH4MrSRVkmetSPlg7+eqd84FlY8eWUsSBefWflYUJBXzA
+         RWbNtfaWxPdTnYe7LQ7/1OJK+sYFis1cZSJk90frWxFAYyYwH/5eYTgrieAecr+IneeN
+         tZPp6syW9Kq5pGdGrkNl2F9ZxLWi7bE6cOiXK7WrlsEP2Bolee6AmVvndulSqiteR5hJ
+         QE8H2Ok3tZEkpHLv5Wu3mQgzioMjrddXjbG64pBaLjFGJc0VVXhIqRmwvPx3PhDxcwEt
+         RLGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777288507; x=1777893307;
+        d=1e100.net; s=20251104; t=1777288539; x=1777893339;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Rj51DoniKArwyiQTRmeeRmOZITT30YvMqLl9YIyYIsU=;
-        b=rYqUHmdrZim//SdeC1e/LrOVLi7B9g6Al6AyGd/Wd6hto5OWty1mZEs70nhPU3mn+a
-         v5CL2XSmtguNsjWZcOgDtSOFeLuuDUKvKlK0nPOZVEyu7fsNNVKCRfp0Zdaq2grZZH+D
-         1PKkJ9hc3Xy/Ckt4NgriRmvwDqPFsL8WVw4GHdsNoLob7AXhfVC2R0NuN1tZtvX33m0a
-         7JfoR82mEpOn/kjeo7SQrmDUeG/g6vme8V7rHAFLn37fqCwUznUymka3K94fFVWjNJNH
-         2H5h9RurLZownY5h+xEGcOWgC4Vuq8s3b7ED4DZIJxXeQoi4u5ABnSjHkVFFQEmgA5MM
-         Pc1A==
-X-Forwarded-Encrypted: i=1; AFNElJ+3/4BtL30DpKGvqcHaCx2/+w+BtM1oBMeEdKZu+9NfkrDtrq8K90uk9sze8kZpAoLbcKR5KHSs23nUIQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDDNUM8UOuXiPMjrODvVEYFyp6m03jj29PnbwQQn6a29rVb9+J
-	Ih78NECPcmTNuH6wt0P2Ty0K8D2/OjVaoL04OxdLUYf2wHooj0jrv3nXRbVKifTK4Qs=
-X-Gm-Gg: AeBDiesxvsRQKhAANTosaYqAwVrtD8pCgMnq9lrj3WsJPHEID029wnDRHC549UCoATL
-	JRXLH2eFr3SDfeFzjusKBRu/+n/KbJKOLuhycPhqfX5h+5ZFFrCw3UL8igIg7TPa3nFjWqKeeB3
-	Pn4tswoDmUgAG7itYtcFlS5fy+V6yMTrs09S0q/3j1K/3I6xI1eKni8XUByAEZoR52bX0TOOJPv
-	0PVQw/ACXNsAOxLVB+ujD/h1q6kyoWmCQ3VQ5zfujmiNyGr9GewoaHId5Bb+c7xJ/JLY/j+zC+y
-	gTovCzQS8kWD5ZG+QrsjHuWtfISJTCl8+TWR1bpgKZtzZk+oWc0yOsPcNAt8Hf2vEI6LDbO655W
-	/8TU1fXhoqTDSsJy3yv5PLpjxgVAdE0VUKFzoN/BAu46NQEvy2/vsbeKnpIMf/HtNoZ0qe3Lx8h
-	C61kvY5sfg4lhf7bHHxEiSocw9xwVIfjWTZWtoKbShmpNqaIJ6gePAANeZNs++74/byXKf7eYiI
-	bVA4iw=
-X-Received: by 2002:a17:90b:380c:b0:35f:bc9f:e1b6 with SMTP id 98e67ed59e1d1-3613ffce9b0mr33845874a91.1.1777288506885;
-        Mon, 27 Apr 2026 04:15:06 -0700 (PDT)
+        bh=4Rje4x4SovYBJkB2QxRF5jrWyY5IZK3xvV8YvRMucwE=;
+        b=D6jt1UFAFh26igvah+28XDuu1MT1JL8e4DSab54b6ZzVkHJNFkxy4PvGWCOg5KnnxR
+         b29JobjWY2uhd53m2lqxwLU6BudWFoOgb+N8bQaTBKnox7WhNnUh8AXylHo00Kcjl5g0
+         gtjalTiL1lhwk9CbwMgE5psQj3vtOEynuyEZJ/xPfx3/f/grFggzGFAQBscDwKO3I0XG
+         hZ3L3WLDzmks1YUdezkpEXNwe7G4hPdz1CaQOJTyvI9XnkY2CQ1AUex2XpAG6BDiilhq
+         T13OrtJo/Pz08GMtqXw5qsPlNQY+akSByCH0eA+PiyrJRJKfzyo+SZZlG/gFues3cxs1
+         KFMQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/aMNlruH9uj5M97jogyFyuSI8+W5m0ptntgGDMaesAYsWn58CKAsBPBDw+bKmCcF2khKPr+YIeP+TwJA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwcUknAlp5JOX0OZgf4C8WENUjTD28JB1zzqfCGNtgsWZLVXGEl
+	0kISBTiqhdtzMvbCl4OOcGTAcUdaImWOwIBrtpGF4BW9FFOMC8jqZ8qnojn1yhYsVw3PxCcx3bq
+	SveFg2ko=
+X-Gm-Gg: AeBDievGHy6gD1jccooAHBGmngc17qZWNkXm4qQleLPI2tlHmCpD5WrYEkzE+F4LsuH
+	FKuVFKcCqOlWRTo9O5NTX6oBVPZ8ThiqBsvoKucAFsL6CEU//aV5w9K0LJXd+gUxWB7jvNKuC56
+	xxbQJT2ytWnb+GEX7OM4MOvr9Yr5bfFMn9/MYbYVPbv8fL6fxKnFPbm4Sy6cBukWzI6mNChPrcb
+	Z4Nj0wUQzc2gOuYLhyXNY+f5ao64+0UcOkI223n0xvRHkTzU3RJMiVhdfKRD0F2bi0084hU9TL8
+	vvxOF1TEB/RhMrO2uLPSFnaXcoHhSMCblYdyt1xp4rQrubtfKABQjl3omP1yfvYzleSy5Hy3frI
+	UPPO8VaE2dXjqd6i7bzxpjMlYuHIt0BSjdkOU/8Nruyjo79lFLB9YbjeqC6FHHZd49eP25cqQSb
+	S8JBOKqsVn/agmttroYUuuVoiTOU9XXbeggBMq4c/i6GtGaPpYnMSMxdGMEkC7C0BI48qnSXIy4
+	JvUIl8=
+X-Received: by 2002:a05:6a00:2e15:b0:82f:f4d:23c1 with SMTP id d2e1a72fcca58-82f8c943269mr42638930b3a.44.1777288539329;
+        Mon, 27 Apr 2026 04:15:39 -0700 (PDT)
 Received: from TAO-BU2-SWA-3 (60-250-242-163.hinet-ip.hinet.net. [60.250.242.163])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-361410bac6dsm31270802a91.14.2026.04.27.04.15.04
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f8ec0307esm32600350b3a.53.2026.04.27.04.15.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Apr 2026 04:15:06 -0700 (PDT)
-Date: Mon, 27 Apr 2026 11:15:02 +0000
+        Mon, 27 Apr 2026 04:15:38 -0700 (PDT)
+Date: Mon, 27 Apr 2026 11:15:34 +0000
 From: Brian Chiang <chiang.brian@inventec.com>
 To: Krzysztof Kozlowski <krzk@kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
@@ -66,11 +67,11 @@ Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
 	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
 	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-doc@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: (pmbus/lx1308) Add LX1308 support
-Message-ID: <bnyp2ct63m2p2ln52lnmrxjrh7bgwfcelekeptbj6j3vgygpae@og4y7ul7gumz>
+Subject: Re: [PATCH 2/2] hwmon: (pmbus/lx1308) Add support for LX1308
+Message-ID: <sin7miac7dzupdvtnrngzvnkqqqqaojb7ige6465gajigiezsa@o3gsylu4shig>
 References: <20260422-add-support-lx1308-v1-0-9b8322f45aae@inventec.com>
- <20260422-add-support-lx1308-v1-1-9b8322f45aae@inventec.com>
- <20260423-free-blond-boobook-ceae7e@quoll>
+ <20260422-add-support-lx1308-v1-2-9b8322f45aae@inventec.com>
+ <20260423-simple-uber-labrador-0b9b36@quoll>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -79,164 +80,73 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20260423-free-blond-boobook-ceae7e@quoll>
+In-Reply-To: <20260423-simple-uber-labrador-0b9b36@quoll>
 
-On Thu, Apr 23, 2026 at 10:41:18AM +0200, Krzysztof Kozlowski wrote:
->On Wed, Apr 22, 2026 at 12:06:15PM +0000, Brian Chiang wrote:
->> Add device tree bindings for the Luxshare LX1308, a high-efficiency
->> 12V 860W DC/DC power module with PMBus interface.
->>
->> Signed-off-by: Brian Chiang <chiang.brian@inventec.com>
->> ---
->>  .../bindings/hwmon/pmbus/luxshare,lx1308.yaml      | 49 ++++++++++++++++++++++
->>  .../devicetree/bindings/vendor-prefixes.yaml       |  2 +
->>  MAINTAINERS                                        |  8 ++++
->>  3 files changed, 59 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/luxshare,lx1308.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/luxshare,lx1308.yaml
->> new file mode 100644
->> index 000000000000..a8d92447508d
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/luxshare,lx1308.yaml
->> @@ -0,0 +1,49 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
+
 >> +
->
->Drop blank line here
-
-Will fix in v2.
-
->
->> +$id: http://devicetree.org/schemas/hwmon/pmbus/luxshare,lx1308.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +static struct pmbus_driver_info lx1308_info = {
+>> +	.pages = 1,
+>> +	.format[PSC_VOLTAGE_IN] = linear,
+>> +	.format[PSC_VOLTAGE_OUT] = linear,
+>> +	.format[PSC_CURRENT_IN] = linear,
+>> +	.format[PSC_CURRENT_OUT] = linear,
+>> +	.format[PSC_POWER] = linear,
+>> +	.format[PSC_TEMPERATURE] = linear,
 >> +
->> +title: Luxshare LX1308 Digital DC/DC Power Module
+>> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+>> +		| PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
+>> +		| PMBUS_HAVE_PIN | PMBUS_HAVE_POUT
+>> +		| PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
+>> +		| PMBUS_HAVE_STATUS_INPUT,
 >> +
->> +maintainers:
->> +  - Brian Chiang <chiang.brian@inventec.com>
+>> +	.read_word_data  = lx1308_read_word_data,
+>> +	.write_word_data = lx1308_write_word_data,
+>> +};
 >> +
->> +description: |
+>> +static const struct i2c_device_id lx1308_id[] = {
+>> +	{ "lx1308" },
+>> +	{ }
+>> +};
 >
->Do not need '|' unless you need to preserve formatting.
+>All ID tables should be next to each other, usually just before the
+>struct with driver.
 
-Will drop the '|' in v2.
-
->
->> +  The LX1308 is a high-efficiency, non-isolated, regulated 12V, 860W,
->> +  digital DC/DC power module. The module operates from a 40V to 60V DC
->> +  primary bus and provides a 12V regulated output voltage. It can deliver
->> +  up to 860W continuous and 1300W in transient.
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - luxshare,lx1308lch
->> +      - luxshare,lx1308nch
->> +      - luxshare,lx1308sch
->> +      - luxshare,lx1308ldh
->> +      - luxshare,lx1308ndh
->> +      - luxshare,lx1308sdh
->> +      - luxshare,lx1308
->
->What are all these devices? What are the differences?
->
->Especially, what is the difference between lx1308sdh and lx1308?
-
-Thanks for catching this. The suffix letters encode purely
-mechanical/packaging options with no software visibility:
-
-   1st letter - pin length    (S=0.11", N=0.145", L=0.17")
-   2nd letter - pin assignment (C=pin14 IShare, D=pin14 NC,
-                                S=pin9/14 used as Vo sense)
-   3rd letter - HSP option    (H=HSP, O=open frame)
-   4th letter - output cap    (blank=600uF, C=2000uF)
-
-All variants share the same PMBus register map, scaling, and behavior.
+Will reorganize in v2 - i2c_device_id and of_device_id tables grouped
+together immediately before struct i2c_driver.
 
 >
 >> +
->> +  reg:
->> +    maxItems: 1
->
->No properties? Looks like suitable for trivial bundings.
-
-Agreed. Since there are no device-specific properties and software-wise
-this is a single device, I will drop the standalone binding in v2 and
-add a single entry to trivial-devices.yaml:
-
-   - description: Luxshare LX1308 12V/860W digital DC/DC power module
-     compatible: luxshare,lx1308
-
-The mechanical variant information will be documented in
-Documentation/hwmon/lx1308.rst (sent in patch 2/2) so integrators can
-still find it, without polluting the ABI.
-
->
+>> +MODULE_DEVICE_TABLE(i2c, lx1308_id);
 >> +
->> +required:
->> +  - compatible
->> +  - reg
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    i2c {
->> +      #address-cells = <1>;
->> +      #size-cells = <0>;
->> +
->> +      power-module@60 {
->> +        compatible = "luxshare,lx1308";
->> +        reg = <0x60>;
->> +      };
->> +    };
->> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
->> index ee7fd3cfe203..67fb1592daaa 100644
->> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
->> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
->> @@ -967,6 +967,8 @@ patternProperties:
->>      description: Shenzhen Luckfox Technology Co., Ltd.
->>    "^lunzn,.*":
->>      description: Shenzhen Lunzn Technology Co., Ltd.
->> +  "^luxshare,.*":
->> +    description: Luxshare-ICT Co., Ltd.
->>    "^luxul,.*":
->>      description: Lagrand | AV
->>    "^lwn,.*":
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index c3fe46d7c4bc..58fa595cff6a 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -15175,6 +15175,14 @@ S:	Maintained
->>  F:	Documentation/devicetree/bindings/iio/light/liteon,ltr390.yaml
->>  F:	drivers/iio/light/ltr390.c
->>
->> +LUXSHARE LX1308 PMBUS DRIVER
->> +M:	Brian Chiang <chiang.brian@inventec.com>
->> +L:	linux-hwmon@vger.kernel.org
->> +S:	Maintained
->> +F:	Documentation/devicetree/bindings/hwmon/pmbus/luxshare,lx1308.yaml
 >
+>...
 >
->> +F:	Documentation/hwmon/lx1308.rst
->> +F:	drivers/hwmon/pmbus/lx1308.c
+>> +	if (ret != 12 || buf[0] != 'V')
+>> +		return dev_err_probe(&client->dev, -ENODEV,
+>> +				     "Unsupported Manufacturer Revision '%s'\n", buf);
+>> +	return pmbus_do_probe(client, &lx1308_info);
+>> +}
+>> +
+>> +static const struct of_device_id lx1308_of_match[] = {
+>> +	{ .compatible = "luxshare,lx1308" },
 >
->There are no such files
+>Where is the rest of your compatibles? Do not document ABI which is
+>unused. submitting-patches in DT forbids that.
 
-These files are added in patch 2/2 of this series:
-https://lore.kernel.org/lkml/20260422-add-support-lx1308-v1-0-9b8322f45aae@inventec.com/
+Addressed in the patch 1/2 reply: the variant compatibles encode only
+mechanical differences (pin length, pin-14 assignment, output cap) that
+are invisible to software. In v2 I will drop them from the binding and
+move to trivial-devices.yaml with a single "luxshare,lx1308" compatible.
 
-I will note the series ordering more clearly in the v2 cover letter.
-
+>
+>> +	{ }
+>> +};
+>> +
+>> +MODULE_DEVICE_TABLE(of, lx1308_of_match);
 >
 >Best regards,
 >Krzysztof
 >
 
-Thanks for the review.
-
 Best regards,
 Brian
-
