@@ -1,117 +1,129 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634923E6DCA
-	for <linux-hwmon@vger.kernel.org>; Tue, 28 Apr 2026 11:10:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC00B426D02
+	for <linux-hwmon@vger.kernel.org>; Tue, 28 Apr 2026 12:19:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777374604; cv=none; b=T7/uor2j6h9ZxqZH2dBMMbWJFE5v7pHFJ0n8x27sIcuRIzgvdqr2l0WZxMoouvRl2s/G0QRMxph1XJmwqOEx27jgwtOdDQ7TS/o2h+YOZFSKjGL/zxY5yccymRz5JnCfSzxL8SvygUYH+oPSDv4rNkU+UUyN8Vw9p1HH0GkYwzk=
+	t=1777378786; cv=none; b=Or4Lb5B7WP0yHAp0mOvT47tR/hvrhf4pRu6md6xtC4oT/Kxtah56j6lCbQQAi5R98a27i5xJwuCgMw4iB5udZEmb6hmfkN+oNVrnsBTF++TZ07IGSBpMRMZ3NgHCUCkyodVVwviRU4DKAXkNAi6oTOZ8DL26kD3AopPUEfd0+/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777374604; c=relaxed/simple;
-	bh=VUFpOgb6S22ZcG0ANMgf/zXh1YJTmhZ2B8aJFv/OheI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=jjpMbCAF39248l0tfeGScvepeIpKPZ9QsR1vPacjS2C5k58ONmJv7kWWJi29ULuoCr56y9OZmBkl6/fOtWjpmDG40WH+uvbJbPLl68FMbpFwdVikm8+7cxBUf3NAEPbIQtOSF5RPYOOtIPlHxAy5F5sd1kPuDrT5BD0/9ETnDl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bpE9Mr+9; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777378786; c=relaxed/simple;
+	bh=qMPsGKiP1/3BxOxfOQ2894idq7MNjZh2VUDwYbD89Ac=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=PdzdJ17kZprmnAqefQsK8HK5k3LqsfDBK81l3QiNRoftDCvrSiXjnijJfzU9WjhKYGiLxRNfarKAKXS57+K9zy9xBWf7VPUqRNZqZx6TJiWcPtZ4qtY0MZ6B107T9rESpXxijMovXBv7X1n86JWw7v6mBQTCDoz5TL/HiR2AfxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com; spf=pass smtp.mailfrom=inventec.com; dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b=P/V9GYMa; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inventec.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bpE9Mr+9"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2b24fdac394so107102055ad.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 28 Apr 2026 04:10:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b="P/V9GYMa"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-82ce2e2880cso7844110b3a.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 28 Apr 2026 05:19:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777374599; x=1777979399; darn=vger.kernel.org;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pef3OD46TxOIUwH98qFLaQm0kXcNlzkOoDkRUMv4zcQ=;
-        b=bpE9Mr+9kPex17SnYTc+31S1kPOmtnzzUr9ZOOMUpKn75yxdTigfDBfgerrBWeBqWO
-         8/DpLFJuiucMOKkWZPcC+XP5m2e/Ib66Z3oZefHQACewYjXJvMB5NR0p2yDfnMls76A0
-         O2cbS4B/NT7MAJsivU/8wOMM24r7mqiSsTHpGj4p+ZyrmeRBGZ82/j830l0E55Wplv5B
-         OtFKIXjoGZLjmzR9TzFFb9Y+D60Uy18FZubDP7g0fpf0iZWrzRa3d5P3Le9gpQSoYind
-         LswGgB/raTb/sxi/cma0FOOmlSVV3PVkJ9+AfcjFa+2xZ0avwN4LRVA7iOhR1Hip/4zu
-         1lKw==
+        d=inventec.com; s=google; t=1777378778; x=1777983578; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=frMIZCIhOVYR65BCOqomQnYfaoTkq4t4Fqtd6/zq0j0=;
+        b=P/V9GYMavQX18tTET6d6FkIXQLcYBlxDOLTIymp27PLBJ/Jc06zyq9Bdm2n7Xo4nCq
+         /ghqlFE6J2RlEcPlrEAiZm81eXoliAQM0Q88sJ7Oj2G2lPmiYuroue5eeLcNHNOnctxW
+         axjJwcspgpfi1XMd15qEuOSAroUF1n2Nv1lxC5NowFik423guUt6u6vsAKWevd+AdrSe
+         CXF2PlpyeUVr+CBaSHGKjcY3ODf6C2AZv7wrU3knd//Uvwcxu9F2qidWc4gvzk8vVYZp
+         8kj6ak9GxWXQhAiaNLdlcuIE8VN3RveCt07qVcZonkyU7TKm5JYDTjlJQH5Q5gZpcb2H
+         dkeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777374599; x=1777979399;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pef3OD46TxOIUwH98qFLaQm0kXcNlzkOoDkRUMv4zcQ=;
-        b=PvSyzt1lcvE9HMdCzlqjYMlVmhCFccZ+FG17nmmcirOjUPqeOUj5c0wSoApeL7dwao
-         1+9GGWmf7n/Z1RckG/3uTl9wpw3IUJqflzk3PItbgH5F0/Gjygci8kxCUdbyGY5wyLgu
-         m2KuefGY5FlMWllou8O8dDd0uwe8jLwoI2N4IxMA7CsQBuCoBeP8dEVKV+g0WmOsl3Zc
-         YE2Cd0ACPDUPqZqnI+3BtNd0lDqJ8KHaJYMtoLDjg5AXRN8OY5tFwSZ63ZTVZhW3sVsj
-         JCfMYkRG4ppDtxGn0hHJ4NBwvMy070aVpDqHh5wIMBj04ZJi3zUvQqKCC0JNPgI81iFq
-         VKpA==
-X-Forwarded-Encrypted: i=1; AFNElJ+CQxm6sqKkFtZGFioo4HpelRQSnVfBuWcJ5ma7xKwhvFYexyjOf9yupL6VeYmZINHz4vHrfx8No0BokA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw18XuwIsyRE36q8n4osNObUhjCXN6yZ1fYNm82Mc8OKVk37ne8
-	2+XXMgEsp0jtnQnF80QpUMJXe70y95BslPSaONPRsLFro/oXDW9Mo79G
-X-Gm-Gg: AeBDieuWDQknEJHQd07j6ZcPII8jrZx78gvY76j9RSeHQfMQqjpIPpcpYALCCdLuip3
-	jIHjqDjwM57pdw7HeEdG2CFNaZb0L9OYNufNVbvBhTRrT3l5Dpk6rOx7LLH6jN76G6C2JFUxq75
-	DnUNWEE/9XsxjiNC0MpWh0fC4HFO+xA/sOaOYK+vSYCLMQWjXylW33s8FxuQUaFE0xQHYPXY94a
-	BefQHv3380kADbwH+KVm4+CwHWCA7KGSFY9cIBqEciDVFbRwLiJ750vuYb07G3SYQxegZrLgW0V
-	G82qaom9Dd+WYZ3UZfAm066G+kGU6gBPrMj0dz0YuT9KmEmV8c+eBPDA5HgsMSGYpGhWUe3R6lw
-	g7jmBxb57IoiTeHq4P2U4BKDAhQk4ARGD8i6RwCN45AYKbdDQmrAFpSGm4bFXl/a7L7H6mXtgUw
-	KpXqF4s7EVvvqdXf/CMnzuj1m4Z1MXRxj5+2g2ePyHlCCvo9xNfTBXEzI1hsoV2bF0J03ks1QuT
-	Q==
-X-Received: by 2002:a17:903:4b0c:b0:2b7:9ed0:4f92 with SMTP id d9443c01a7336-2b97c4b78fcmr27558045ad.32.1777374599397;
-        Tue, 28 Apr 2026 04:09:59 -0700 (PDT)
-Received: from ubuntu.localdomain ([27.217.83.168])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b97aa93bd4sm22828885ad.23.2026.04.28.04.09.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 Apr 2026 04:09:59 -0700 (PDT)
-From: Zaixiang Xu <zaixiang.xu.dev@gmail.com>
-To: linux@roeck-us.net
-Cc: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	zaixiang.xu.dev@gmail.com
-Subject: [PATCH v6 4/4] hwmon: (sht3x) Add support for GXCAS GXHT30
-Date: Tue, 28 Apr 2026 19:09:29 +0800
-Message-Id: <1777374569-59233-5-git-send-email-zaixiang.xu.dev@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1777374569-59233-1-git-send-email-zaixiang.xu.dev@gmail.com>
-References: <1777374569-59233-1-git-send-email-zaixiang.xu.dev@gmail.com>
+        d=1e100.net; s=20251104; t=1777378778; x=1777983578;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=frMIZCIhOVYR65BCOqomQnYfaoTkq4t4Fqtd6/zq0j0=;
+        b=cu0h64jnUbB9O7j4RbRsabnPvFCq9wBccvaR5mw7VKiTCJFvCPGuIglgjPheFSUE6U
+         siJD9EAS5DsuViayoNvbxXxM7XjGffmo+yTEqU0OqtGp4Ec+J2oFgxQ9s73ELv21m6Ld
+         u/UjXDiRlrW+JXGJfIT64xWznjJy/ql7MoXyrc9qoBDgtGZjWhzLBgV8Uq5jhkfd27a9
+         5J5Fpbj6RJ7rasKnUeCSDxD+gaX2Lk/RLsMlwBnnCI4GMqdkX6JqHKVmFMlC4O7HgwMY
+         lODh9g5HGpQ0zxt+UplXJrJYKnR36f1cEs8EtvACQU3hWTfCSagJVe4yALRBMRUp/G4e
+         2RjQ==
+X-Gm-Message-State: AOJu0YxKC5WzV85SOncz7XTLc5R0JyOknmsia1OJG3+KFYDKyV9imn6m
+	/5gk9jvYLOwLGV6GBt+sXJrLJ5jtGLV/m69wDvz4Q8DHaiiZ2fcaxn365U2fV9sfSJg=
+X-Gm-Gg: AeBDieuFrRWLEvivATHu7y08nNgrHTOEFFtwu5VkqsJ0J2EaJvyd+O4qRM+8qWzKAeK
+	AwwDDAFgIBQb9kOof2qWxsf9ex1DmrKT2s2Ld6PeXTRd9zV2ZZJWUCF/f/Bv+uO2eJubh6hCIb3
+	q2Zvune5Ze2twIT1dwUL5diYSqWN/r4bKsrfaBcc7La2B3s7AyKTbzZOVUKVJG9ji8H0b0Fz4NU
+	ge+HYthVuWwbkbQLdDIlD4HplSavu5jwzxccFkEnVvIJ/niXrIVa55oLDtazHHdnHUPm4rnXtVa
+	XyUW+DskQJBeA6CVc6LdSIEsjpyJlIUN5AnP9kr73kbxV7rx0vKykoyGp1Brquc9DN/WE1uFAxh
+	hfkqt7FzyDrz+5Ul8NRO1DDaNcQyiBfIwkYOqeA+ZyDbGNDTHUl7nc3NIdS5n9liKYqqAeFxrt4
+	j+OcOOfy3hlF205LwV25bC0Inw+GdABss5vW/aSV0S
+X-Received: by 2002:a05:6a00:3686:b0:82c:9e00:f958 with SMTP id d2e1a72fcca58-834dd913b2emr2965836b3a.0.1777378777797;
+        Tue, 28 Apr 2026 05:19:37 -0700 (PDT)
+Received: from [127.0.1.1] ([123.51.235.216])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-834daf5705fsm3254587b3a.42.2026.04.28.05.19.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Apr 2026 05:19:37 -0700 (PDT)
+From: Brian Chiang <chiang.brian@inventec.com>
+Subject: [PATCH v2 0/2] Add support for LX1308
+Date: Tue, 28 Apr 2026 12:19:27 +0000
+Message-Id: <20260428-add-support-lx1308-v2-0-90f115954143@inventec.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAM+l8GkC/22NQQ6CMBBFr0Jm7Zh2gAZceQ/DosAgTbRtWmwwh
+ LtbiUuX7yX//Q0iB8MRLsUGgZOJxtkMdCpgmLW9M5oxM5AgJSpZox5HjC/vXVjwscpSNChVrSs
+ SSveqhTz0gSezHtFbl3k2cXHhfXwk+bW/HNG/XJIosO2bkmiqaq35amxiu/BwHtwTun3fP8AxY
+ ci3AAAA
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Brian Chiang <chiang.brian@inventec.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777378774; l=1741;
+ i=chiang.brian@inventec.com; s=20260316; h=from:subject:message-id;
+ bh=qMPsGKiP1/3BxOxfOQ2894idq7MNjZh2VUDwYbD89Ac=;
+ b=sHVziZqGCDAKtI4ZWL5Twa/Bb+yAp9az43in8xGZnkYxKfnqkYI2ShDthPW9Wfy+luRnADqL3
+ Lr6+Gq3JMM5DQg6uGPop5/MenIXWUlZDMdxGX8MCQUEa6CD7jBZVAfa
+X-Developer-Key: i=chiang.brian@inventec.com; a=ed25519;
+ pk=q+NqJYuJbGpA9KS9941D7f+8PVVW+k7DvaGgFykBiUc=
 
-Add support for the GXCAS GXHT30 humidity and temperature sensor.
-The GXHT30 is software compatible with the Sensirion SHT30.
+The LX1308 is a high-efficiency, non-isolated power module. The module
+operates from a 40V to 60V DC primary bus and a 12V regulated output
+voltage. It can deliver up to 860W continuous and 1300W in transient.
+The built-in digital controller can store and restore module
+configurations. The fault status, input voltage, output voltage, output
+current, and temperature are monitored via the PMBus interface.
 
-Signed-off-by: Zaixiang Xu <zaixiang.xu.dev@gmail.com>
+Add support for this driver.
+
+Signed-off-by: Brian Chiang <chiang.brian@inventec.com>
 ---
- drivers/hwmon/sht3x.c | 3 +++
- 1 file changed, 3 insertions(+)
+Changes in v2:
+- Remove the unused compatibles of mechanical variants
+- Drop the existing pmbus binding in v1, and move lx1308 to trivial binding
+- Reorganize the id tables to be placed to each other
+- Reorder lx1308 with alphabetical ordering in Kconfig and Makefile
+- Fix undefined behavior left-shifting of a negative integer
+- Link to v1: https://lore.kernel.org/r/20260422-add-support-lx1308-v1-0-9b8322f45aae@inventec.com
 
-diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
-index 6437568aaf73..f52114c13edb 100644
---- a/drivers/hwmon/sht3x.c
-+++ b/drivers/hwmon/sht3x.c
-@@ -934,6 +934,7 @@ static const struct i2c_device_id sht3x_ids[] = {
- 	{"sht3x", sht3x},
- 	{"sts3x", sts3x},
- 	{"sht85", sht3x},
-+	{"gxht30", sht3x},
- 	{}
- };
- 
-@@ -948,6 +949,7 @@ static const struct of_device_id sht3x_of_match[] = {
- 	{ .compatible = "sensirion,sts31", .data = (void *)(uintptr_t)sts3x },
- 	{ .compatible = "sensirion,sts32", .data = (void *)(uintptr_t)sts3x },
- 	{ .compatible = "sensirion,sts35", .data = (void *)(uintptr_t)sts3x },
-+	{ .compatible = "gxcas,gxht30", .data = (void *)(uintptr_t)sht3x },
- 	{ }
- };
- 
-@@ -965,5 +967,6 @@ module_i2c_driver(sht3x_i2c_driver);
- 
- MODULE_AUTHOR("David Frey <david.frey@sensirion.com>");
- MODULE_AUTHOR("Pascal Sachs <pascal.sachs@sensirion.com>");
-+MODULE_AUTHOR("Zaixiang Xu <zaixiang.xu.dev@gmail.com>");
- MODULE_DESCRIPTION("Sensirion SHT3x humidity and temperature sensor driver");
- MODULE_LICENSE("GPL");
+---
+Brian Chiang (2):
+      dt-bindings: trivial: Add LX1308 support
+      hwmon: (pmbus/lx1308) Add support for LX1308
+
+ .../devicetree/bindings/trivial-devices.yaml       |   2 +
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ Documentation/hwmon/index.rst                      |   1 +
+ Documentation/hwmon/lx1308.rst                     |  90 +++++++++
+ drivers/hwmon/pmbus/Kconfig                        |  10 +
+ drivers/hwmon/pmbus/Makefile                       |   1 +
+ drivers/hwmon/pmbus/lx1308.c                       | 204 +++++++++++++++++++++
+ 7 files changed, 310 insertions(+)
+---
+base-commit: 591cd656a1bf5ea94a222af5ef2ee76df029c1d2
+change-id: 20260415-add-support-lx1308-165a4206ab69
+
+Best regards,
 -- 
-2.34.1
+Brian Chiang <chiang.brian@inventec.com>
 
