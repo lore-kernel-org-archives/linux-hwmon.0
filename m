@@ -1,65 +1,38 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A10642189C
-	for <linux-hwmon@vger.kernel.org>; Tue, 28 Apr 2026 12:19:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91EEE42B75E;
+	Tue, 28 Apr 2026 16:06:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777378796; cv=none; b=qBfiCyst8SK5Rt+MVTeaErmPm6GP9Q+YQguwts9Zx2guXb/pDVjHfAFYRa/gdqf9NIZyy1vYJ4hYvgAvEx7apMiFy7tUvl0Y17ZYrojuNRQd2tCn5RwtIRUMzXjsT5EqGK0lCFvte0tmmy1H4OGWnMQVN1Pbsh/EkIAYsENL3Ks=
+	t=1777392398; cv=none; b=GQQEOwK+VTCPmwXuD7r/KqE2DF/QGsXxwMwETqjbeMbmuiiey6M1vJxMEbjs4BmlRztC3fey9XYCmMh36gNDBq7HSLnBDSw1ajCrA7Q/5SXa7renN2EcpAptfa21p1lmwX/14aEPOxoLtUHL1IgaFmcuNN1S59vDRJatTxgc1Eg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777378796; c=relaxed/simple;
-	bh=M/sOIDN1OH5lbAtVgg3JeylSjCLDwSD5RTk79w8wpko=;
+	s=arc-20240116; t=1777392398; c=relaxed/simple;
+	bh=TzzVKxI2FrW84YRzG/hYFkOLGPwyEBgSEn1jul0FCDY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uI31IT/ukl54580LOeymJVxo81oA1q6JguhArTGz1EJ+jGNE3Hi6EDtA4/EuzQLZpXRTd5QbOM9IWh9cmilTB40z+f7kuX6oOxYO+4Q1KU0IapWKQgEKqdupm8tKmJYnY2gowJfq7yhVpEWfotQez7HQ1Apwgy1Q1QrzHmORthM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com; spf=fail smtp.mailfrom=inventec.com; dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b=AoCGqHKt; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=inventec.com
+	 In-Reply-To:To:Cc; b=N/0cY/lw8/SgU2p21xfnR22sJMFjdI3J1ABe61jcVeAZTV/+3B5jec4W/AVj3jfUaSDCIBmYRCW835AI1PPo6y4xcAzpbJfvXu6gfL2wWEiTiLwELqHSTq/7nMfjD9JPGBBYt7eLZdTC7tWs2iWMYK0xBTiBE5D02QpBgQIUD6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LLPsDGU1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b="AoCGqHKt"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-82f9fdfc965so4556211b3a.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 28 Apr 2026 05:19:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=inventec.com; s=google; t=1777378784; x=1777983584; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=am9M3EBhsBtI0W+fdPdNyDSQadIL28OCsPQk25ZYgrA=;
-        b=AoCGqHKtA5JLLi8MIovpDUPqqy3Uwjq10CnUyeIFJlZzhRndg/gvcPTB36eZSx1k/+
-         Egktoyz25eoeX0bFpnzAkKFBXweomcXF5FqfABm5lD6y9dTvyVc4ROqVjP8pbK7UqxKB
-         kDWMKjn286uzXBFDBymr1j7YX8hbqMm4Q/sX2tKmBZv/uNAWb2YH1C8LQLhbPTqT1bK+
-         niMYN7UJ5iKmBfvsmT/6NwspVCA0VcA02cLFwpObbbmLwfU/ru6JQ+F8rxt3TFiCx0vV
-         3jcMe4BPJ3azMQcSOov0QpydgZ/U0qajHa8lSS9t+2a3HVoRsvImo/fbhjbOGqpnG1mS
-         Xd8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777378784; x=1777983584;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=am9M3EBhsBtI0W+fdPdNyDSQadIL28OCsPQk25ZYgrA=;
-        b=IZAixkVjxSLUs2AByBZJDdWRCB/ZCpAxtl7h10ITHd5bD6ALZEvkFQzfax78ABGKit
-         udleWRwIsnjHqxHNP8A47yXJFRiNhYp1tOf31QKagAx0GCAEabCbiQ1L9024U02znJ50
-         qfdVsIrp2qtPHhiALxHmcg7lHs/iAhfA+KUfmWTN1PEAizNOyr05e7mYDc1gIjbcdW7o
-         HjI8OVT1fS8TS4MknLYctqOjyysmut4iA8jVw/cnezWwQq4L7xAn5LdHmR0xh28UR+LU
-         8AP2aE4TtfsZ55eD3tIU2Qa1teP43+el/7RIOsgajt6buiMZbW8zsIGnMO4Vol8AY9Rg
-         uzpA==
-X-Gm-Message-State: AOJu0Yy/eBUHDrqSOstJ8ACeub5W2Hj00qxS3chIpeZuqrpCrN0xJQsf
-	7VIuoIFooGgSFDqxVIYq5WGU+M/448X09tGE8LtLp1LRxTivu8Y+cvMeXdWMPyxjwh8=
-X-Gm-Gg: AeBDieugmMorXCfR6GqF6zQmnQs2llF6JlLWrkCBt0g1J2xrZ8wmMQx2mN55Y0KW78C
-	vrn+x41I2HGvBcqPYLn9uqi82OlNbTzj8sV32nkg0f3KdNSwFS/yPGqZXD8pJalL8h8J8qiwWoV
-	OnZ3ySz4H4sQ75wL9w93HT0JNFP6Cvq+kIBGN3dld+xbkABo7YoP/pZ5yxPiaCj9tI0sbKW9/vw
-	cAGhUQqmCSRrm8Xm+0MyNtj5jY6sqDeQqfxhjJWD0FmYy5VHohHUD6tgLddEE5zuCN9L6OaSMgm
-	49mqibYGh0ogh3KsKhiXPrum4V0QXGMqe2k45ibN5wgr5/LPrGFS7IYeId+1z+B1seaa2SrootZ
-	JA3YMD26gOJbhk1jfilKAgRaFKuqFvqrG1LPblgltpbwS6RN/L6rRLTr9BfITlUNrIytL+Tv6Hw
-	4yezdGCjt6avR99AoGF1qZFO0fqnomqMOXtenhJgcH
-X-Received: by 2002:a05:6a00:1805:b0:82c:e09b:3f76 with SMTP id d2e1a72fcca58-834ddc791bdmr3068989b3a.41.1777378783835;
-        Tue, 28 Apr 2026 05:19:43 -0700 (PDT)
-Received: from [127.0.1.1] ([123.51.235.216])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-834daf5705fsm3254587b3a.42.2026.04.28.05.19.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2026 05:19:43 -0700 (PDT)
-From: Brian Chiang <chiang.brian@inventec.com>
-Date: Tue, 28 Apr 2026 12:19:29 +0000
-Subject: [PATCH v2 2/2] hwmon: (pmbus/lx1308) Add support for LX1308
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LLPsDGU1"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3B526C4AF16;
+	Tue, 28 Apr 2026 16:06:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777392398;
+	bh=TzzVKxI2FrW84YRzG/hYFkOLGPwyEBgSEn1jul0FCDY=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=LLPsDGU1yam91pk/c9ftkn3VCtX0kgcqYfvd2RWWorZndoStxVjiKj88mVDadS4AS
+	 GVOcxPoYdMzeURB5c4JjaWD1fLcsq2XDyVtesU26AIKSKAcAlow8UWwqoqWOYaeR1g
+	 2sp+YTAFl48f4BrL9geoMmxzChKc7ZCntVnyiq1uQZiFa8pZuTOKZo4xsu4kCwhaES
+	 qmrX/DnZY87AJFD3sn240Rr+4Z4ArADaTMnQJHIDrWaha77A3wcv/3F9TYvMPpuNRf
+	 5zEl2//IinoyZ2PAWfXbPfVyVf84SOmAf8xDxpowcyXFHtEfFAM75/rjuhYQcyFN/0
+	 QoMTQqe+YDSNQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C93EFF8868;
+	Tue, 28 Apr 2026 16:06:38 +0000 (UTC)
+From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
+Date: Tue, 28 Apr 2026 17:07:26 +0100
+Subject: [PATCH v10 1/3] dt-bindings: hwmon: Document the LTC4283 Swap
+ Controller
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -67,390 +40,345 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260428-add-support-lx1308-v2-2-90f115954143@inventec.com>
-References: <20260428-add-support-lx1308-v2-0-90f115954143@inventec.com>
-In-Reply-To: <20260428-add-support-lx1308-v2-0-90f115954143@inventec.com>
-To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260428-ltc4283-support-v10-1-4f26f46491c3@analog.com>
+References: <20260428-ltc4283-support-v10-0-4f26f46491c3@analog.com>
+In-Reply-To: <20260428-ltc4283-support-v10-0-4f26f46491c3@analog.com>
+To: linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-doc@vger.kernel.org
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
- Brian Chiang <chiang.brian@inventec.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1777378774; l=11714;
- i=chiang.brian@inventec.com; s=20260316; h=from:subject:message-id;
- bh=M/sOIDN1OH5lbAtVgg3JeylSjCLDwSD5RTk79w8wpko=;
- b=lPbZLKRAyGIyAkbNNrCinnnrVVDG3QyFhF6tEDprn2s4A4zTXl5PVTHVCz2M1npddCMeIWjCR
- Dt6SU4zkHaZBSjoJ+Bry1czDY0ywld4nrVatCkbAHrWFOPuWJbPMJg0
-X-Developer-Key: i=chiang.brian@inventec.com; a=ed25519;
- pk=q+NqJYuJbGpA9KS9941D7f+8PVVW+k7DvaGgFykBiUc=
+ Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777392450; l=9689;
+ i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
+ bh=MUdw9MgEtSe5cQUGEWnL9j0RY+iBReWR/+IVYDATZQw=;
+ b=BG00MNekXvs1VujFMAfdWny82rvSBAXb9d7afcVa2Akg6PK0Hn7zLKobXXYI0vHUqLmI7E7pv
+ EUm4oXfly3+DUiVhJ3IZho71i74O8jyVhaqGrKChszKFrxkJx/Llhqd
+X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
+ pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
+X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
+ auth_id=100
+X-Original-From: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
+Reply-To: nuno.sa@analog.com
 
-Add support for the Luxshare LX1308, a high-efficiency 12V 860W
-DC/DC power module. The module operates from 40-60V input voltage.
+From: Nuno Sá <nuno.sa@analog.com>
 
-Signed-off-by: Brian Chiang <chiang.brian@inventec.com>
+The LTC4283 is a negative voltage hot swap controller that drives an
+external N-channel MOSFET to allow a board to be safely inserted and
+removed from a live backplane.
+
+Special note for the "adi,vpower-drns-enable" property. It allows to choose
+between the attenuated MOSFET drain voltage or the attenuated input
+voltage at the RTNS pin (effectively choosing between input or output
+power). This is a system level decision not really intended to change at
+runtime and hence is being added as a Firmware property.
+
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Signed-off-by: Nuno Sá <nuno.sa@analog.com>
 ---
- Documentation/hwmon/index.rst  |   1 +
- Documentation/hwmon/lx1308.rst |  90 ++++++++++++++++++
- drivers/hwmon/pmbus/Kconfig    |  10 ++
- drivers/hwmon/pmbus/Makefile   |   1 +
- drivers/hwmon/pmbus/lx1308.c   | 204 +++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 306 insertions(+)
+ .../devicetree/bindings/hwmon/adi,ltc4283.yaml     | 272 +++++++++++++++++++++
+ MAINTAINERS                                        |   6 +
+ 2 files changed, 278 insertions(+)
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index b2ca8513cfcd..c86c21554c37 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -145,6 +145,7 @@ Hardware Monitoring Kernel Drivers
-    ltc4261
-    ltc4282
-    ltc4286
-+   lx1308
-    macsmc-hwmon
-    max127
-    max15301
-diff --git a/Documentation/hwmon/lx1308.rst b/Documentation/hwmon/lx1308.rst
+diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml b/Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml
 new file mode 100644
-index 000000000000..c1b72e1647c5
+index 000000000000..05e2132ad4d8
 --- /dev/null
-+++ b/Documentation/hwmon/lx1308.rst
-@@ -0,0 +1,90 @@
-+.. SPDX-License-Identifier: GPL-2.0-or-later
++++ b/Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml
+@@ -0,0 +1,272 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/adi,ltc4283.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+Kernel driver lx1308
-+====================
++title: LTC4283 Negative Voltage Hot Swap Controller
 +
-+Supported chips:
++maintainers:
++  - Nuno Sá <nuno.sa@analog.com>
 +
-+  * Luxshare LX1308
++description: |
++  The LTC4283 negative voltage hot swap controller drives an external N-channel
++  MOSFET to allow a board to be safely inserted and removed from a live
++  backplane.
 +
-+    Prefixes: 'lx1308'
++  https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4283.pdf
 +
-+    Addresses scanned: -
++properties:
++  compatible:
++    enum:
++      - adi,ltc4283
 +
-+    Datasheet: Datasheet is not publicly available.
++  reg:
++    maxItems: 1
 +
-+Author: Brian Chiang <chiang.brian@inventec.com>
++  adi,rsense-nano-ohms:
++    description: Value of the sense resistor.
 +
++  adi,current-limit-sense-microvolt:
++    description:
++      The current limit sense voltage of the chip is adjustable between
++      15mV and 30mV in 1mV steps. This effectively limits the current
++      on the load.
++    minimum: 15000
++    maximum: 30000
++    default: 15000
 +
-+Description
-+-----------
++  adi,current-limit-foldback-factor:
++    description:
++      Specifies the foldback factor for the current limit. The current limit
++      can be reduced (folded back) to one of four preset levels. The value
++      represents the percentage of the current limit sense voltage to use
++      during foldback. A value of 100 means no foldback.
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [10, 20, 50, 100]
++    default: 100
 +
-+The LX1308 is a high-efficiency, non-isolated, regulated 12V, 860W,
-+digital DC/DC power module. The module operates from a 40V to 60V DC
-+primary bus and provides a 12V regulated output voltage. It can deliver
-+up to 860W continuous and 1300W in transient.
++  adi,cooling-delay-ms:
++    description:
++      Cooling time to apply after an overcurrent fault, FET bad or
++      external fault.
++    enum: [512, 1002, 2005, 4100, 8190, 16400, 32800, 65600]
++    default: 512
 +
-+The module has slow OCP and fast OCP. If the module output current is higher
-+than slow OCP set point and the lasting time is also longer than the delay,
-+the module will shut down and retry 3 time, if the fault still exists then
-+module enter latch mode.
++  adi,fet-bad-timer-delay-ms:
++    description:
++      FET bad timer delay. After a FET bad status condition is detected,
++      this timer is started. If the condition persists for the
++      specified time, the FET is turned off and a fault is logged.
++    enum: [256, 512, 1002, 2005]
++    default: 256
 +
-+If the module output current is higher than fast OCP set point then it shut
-+down and enter latch mode.
++  adi,power-good-reset-on-fet:
++    description:
++      If set, resets the power good status when the MOSFET is turned off.
++      Otherwise, it resets when a low output voltage is detected.
++    type: boolean
 +
-+The driver is a client driver to the core PMBus driver.
-+Please see Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
++  adi,fet-turn-off-disable:
++    description:
++      If set, the MOSFET is not turned off when a FET fault is detected.
++    type: boolean
 +
++  adi,tmr-pull-down-disable:
++    description: Disables 2uA pull-down current on the TMR pin.
++    type: boolean
 +
-+Usage Notes
-+-----------
++  adi,dvdt-inrush-control-disable:
++    description:
++      Disables dV/dt inrush control during startup. In dV/dt mode, the inrush
++      current is limited by controlling a constant output voltage ramp rate.
++      When disabled, the inrush control mechanism is active current limiting.
++    type: boolean
 +
-+This driver does not auto-detect devices. You will have to instantiate the
-+devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
-+details.
++  adi,fault-log-enable:
++    description:
++      If set, enables logging fault registers and ADC data into EEPROM upon a
++      fault.
++    type: boolean
 +
++  adi,vpower-drns-enable:
++    description:
++      If set, enables the attenuated MOSFET drain voltage to be monitored. This
++      effectively means that the MOSFET power is monitored. If not set, the
++      attenuated input voltage (and hence input power) is monitored.
++    type: boolean
 +
-+Sysfs entries
-+-------------
++  adi,external-fault-fet-off-enable:
++    description: Turns MOSFET off following an external fault.
++    type: boolean
 +
-+======================= ======================================================
-+curr1_alarm             Input current alarm
-+curr1_input             Input current (IIN)
-+curr1_label             "iin"
-+curr2_crit              Output over current fault threshold (slow OCP, 60ms delay)
-+curr2_crit_alarm        Output over current fault alarm
-+curr2_input             Output current (IOUT)
-+curr2_label             "iout1"
-+curr2_max               Output over current warning threshold (slow OCP, 60ms delay)
-+curr2_max_alarm         Output over current warning alarm
-+in1_crit                Input over voltage fault threshold
-+in1_crit_alarm          Input over voltage fault alarm
-+in1_input               Input voltage (VIN)
-+in1_label               "vin"
-+in1_lcrit               Input under voltage fault threshold
-+in1_lcrit_alarm         Input under voltage fault alarm
-+in1_max                 Input over voltage warning threshold
-+in1_max_alarm           Input over voltage warning alarm
-+in1_min                 Input under voltage warning threshold
-+in1_min_alarm           Input under voltage warning alarm
-+in2_crit                Output over voltage fault threshold
-+in2_crit_alarm          Output over voltage fault alarm
-+in2_input               Output voltage (VOUT)
-+in2_label               "vout1"
-+in2_lcrit               Output under voltage fault threshold
-+in2_lcrit_alarm         Output under voltage fault alarm
-+in2_max                 Output over voltage warning threshold
-+in2_max_alarm           Output over voltage warning alarm
-+in2_min                 Output under voltage warning threshold
-+in2_min_alarm           Output under voltage warning alarm
-+power1_alarm            Input power alarm
-+power1_input            Input power (PIN)
-+power1_label            "pin"
-+power2_input            Output power (POUT)
-+power2_label            "pout1"
-+temp1_crit              Over temperature fault threshold
-+temp1_crit_alarm        Over temperature fault alarm
-+temp1_input             Module hot spot temperature
-+temp1_max               Over temperature warning threshold
-+temp1_max_alarm         Over temperature warning alarm
-+======================= ======================================================
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index fc1273abe357..1b003a828537 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -302,6 +302,16 @@ config SENSORS_LTC4286
- 	  If you say yes here you get hardware monitoring support for Analog
- 	  Devices LTC4286.
++  adi,undervoltage-retry-disable:
++    description: Do not retry to turn on the MOSFET after an undervoltage fault.
++    type: boolean
++
++  adi,overvoltage-retry-disable:
++    description: Do not retry to turn on the MOSFET after an overvoltage fault.
++    type: boolean
++
++  adi,external-fault-retry-enable:
++    description: Retry to turn on the MOSFET after an external fault.
++    type: boolean
++
++  adi,overcurrent-retries:
++    description: Configures auto-retry following an Overcurrent fault.
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [latch-off, "1", "7", unlimited]
++    default: latch-off
++
++  adi,fet-bad-retries:
++    description:
++      Configures auto-retry following a FET bad fault and a consequent MOSFET
++      turn off.
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [latch-off, "1", "7", unlimited]
++    default: latch-off
++
++  adi,pgio1-func:
++    description: Configures the function of the PGIO1 pin.
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [inverted_power_good, power_good, gpio]
++    default: inverted_power_good
++
++  adi,pgio2-func:
++    description: Configures the function of the PGIO2 pin.
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [inverted_power_good, power_good, gpio, active_current_limiting]
++    default: inverted_power_good
++
++  adi,pgio3-func:
++    description: Configures the function of the PGIO3 pin.
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [inverted_power_good_input, power_good_input, gpio]
++    default: inverted_power_good_input
++
++  adi,pgio4-func:
++    description: Configures the function of the PGIO4 pin.
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [inverted_external_fault, external_fault, gpio]
++    default: inverted_external_fault
++
++  adi,gpio-on-adio1:
++    description: If set, the ADIO1 pin is used as a GPIO.
++    type: boolean
++
++  adi,gpio-on-adio2:
++    description: If set, the ADIO2 pin is used as a GPIO.
++    type: boolean
++
++  adi,gpio-on-adio3:
++    description: If set, the ADIO3 pin is used as a GPIO.
++    type: boolean
++
++  adi,gpio-on-adio4:
++    description: If set, the ADIO4 pin is used as a GPIO.
++    type: boolean
++
++  gpio-controller: true
++
++  '#gpio-cells':
++    const: 2
++
++dependencies:
++  adi,gpio-on-adio1:
++    - gpio-controller
++    - '#gpio-cells'
++  adi,gpio-on-adio2:
++    - gpio-controller
++    - '#gpio-cells'
++  adi,gpio-on-adio3:
++    - gpio-controller
++    - '#gpio-cells'
++  adi,gpio-on-adio4:
++    - gpio-controller
++    - '#gpio-cells'
++  adi,external-fault-retry-enable:
++    - adi,pgio4-func
++  adi,external-fault-fet-off-enable:
++    - adi,pgio4-func
++
++required:
++  - compatible
++  - reg
++  - adi,rsense-nano-ohms
++
++allOf:
++  - if:
++      properties:
++        adi,pgio1-func:
++          const: gpio
++      required:
++        - adi,pgio1-func
++    then:
++      required:
++        - gpio-controller
++        - '#gpio-cells'
++
++  - if:
++      properties:
++        adi,pgio2-func:
++          const: gpio
++      required:
++        - adi,pgio2-func
++    then:
++      required:
++        - gpio-controller
++        - '#gpio-cells'
++
++  - if:
++      properties:
++        adi,pgio3-func:
++          const: gpio
++      required:
++        - adi,pgio3-func
++    then:
++      required:
++        - gpio-controller
++        - '#gpio-cells'
++
++  - if:
++      properties:
++        adi,pgio4-func:
++          const: gpio
++      required:
++        - adi,pgio4-func
++    then:
++      properties:
++        adi,external-fault-retry-enable: false
++        adi,external-fault-fet-off-enable: false
++      required:
++        - gpio-controller
++        - '#gpio-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        swap-controller@15 {
++            compatible = "adi,ltc4283";
++            reg = <0x15>;
++
++            adi,rsense-nano-ohms = <500>;
++            adi,current-limit-sense-microvolt = <25000>;
++            adi,current-limit-foldback-factor = <10>;
++            adi,cooling-delay-ms = <8190>;
++            adi,fet-bad-timer-delay-ms = <512>;
++
++            adi,external-fault-fet-off-enable;
++            adi,pgio4-func = "external_fault";
++
++            adi,gpio-on-adio1;
++            adi,pgio1-func = "gpio";
++            gpio-controller;
++            #gpio-cells = <2>;
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e008c2bcc187..3f727d7fdfa4 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15161,6 +15161,12 @@ F:	Documentation/devicetree/bindings/hwmon/adi,ltc4282.yaml
+ F:	Documentation/hwmon/ltc4282.rst
+ F:	drivers/hwmon/ltc4282.c
  
-+config SENSORS_LX1308
-+	tristate "Luxshare LX1308 DC/DC Power Module"
-+	help
-+	  If you say yes here you get hardware monitoring support for
-+	  Luxshare LX1308, a high-efficiency 12V 860W DC/DC power module
-+	  with PMBus interface.
++LTC4283 HARDWARE MONITOR AND GPIO DRIVER
++M:	Nuno Sá <nuno.sa@analog.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Supported
++F:	Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml
 +
-+	  This driver can also be built as a module. If so, the module will
-+	  be called lx1308.
-+
- config SENSORS_MAX15301
- 	tristate "Maxim MAX15301"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index d6c86924f887..95fc539a77e9 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -29,6 +29,7 @@ obj-$(CONFIG_SENSORS_LT7182S)	+= lt7182s.o
- obj-$(CONFIG_SENSORS_LTC2978)	+= ltc2978.o
- obj-$(CONFIG_SENSORS_LTC3815)	+= ltc3815.o
- obj-$(CONFIG_SENSORS_LTC4286)	+= ltc4286.o
-+obj-$(CONFIG_SENSORS_LX1308)	+= lx1308.o
- obj-$(CONFIG_SENSORS_MAX15301)	+= max15301.o
- obj-$(CONFIG_SENSORS_MAX16064)	+= max16064.o
- obj-$(CONFIG_SENSORS_MAX16601)	+= max16601.o
-diff --git a/drivers/hwmon/pmbus/lx1308.c b/drivers/hwmon/pmbus/lx1308.c
-new file mode 100644
-index 000000000000..0c453393796b
---- /dev/null
-+++ b/drivers/hwmon/pmbus/lx1308.c
-@@ -0,0 +1,204 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include "pmbus.h"
-+
-+#define LX1308_MFR_IOUT_OCP3_FAULT	0xBE
-+#define LX1308_MFR_IOUT_OCP3_WARN	0xBF
-+
-+/*
-+ * Decode a Linear11-encoded word to an integer value.
-+ * Linear11 format: bits[15:11] = signed 5-bit exponent,
-+ * bits[10:0] = signed 11-bit mantissa. Result = mant * 2^exp.
-+ */
-+static inline int linear11_to_int(u16 word)
-+{
-+	s16 exp = ((s16)word) >> 11;
-+	s16 mant = ((s16)((word & 0x7ff) << 5)) >> 5;
-+
-+	return (exp >= 0) ? (int)((u32)mant << exp) : (mant >> -exp);
-+}
-+
-+static int lx1308_read_word_data(struct i2c_client *client, int page,
-+				 int phase, int reg)
-+{
-+	int ret;
-+
-+	if (page > 0)
-+		return -ENXIO;
-+
-+	switch (reg) {
-+	/*
-+	 * The LX1308 OCP3 registers (slow OCP, 60ms delay) use a
-+	 * manufacturer-specific U8.0 format. Read the byte value N and present
-+	 * it as a Linear11 word with exponent 0.
-+	 */
-+	case PMBUS_IOUT_OC_FAULT_LIMIT:
-+		ret = i2c_smbus_read_byte_data(client, LX1308_MFR_IOUT_OCP3_FAULT);
-+		if (ret < 0)
-+			break;
-+		ret &= 0x7FF;
-+		break;
-+
-+	case PMBUS_IOUT_OC_WARN_LIMIT:
-+		ret = i2c_smbus_read_byte_data(client, LX1308_MFR_IOUT_OCP3_WARN);
-+		if (ret < 0)
-+			break;
-+		ret &= 0x7FF;
-+		break;
-+
-+	/*
-+	 * The following registers are not implemented by the LX1308. Return
-+	 * -ENXIO to suppress the corresponding sysfs attributes.
-+	 */
-+	case PMBUS_IIN_OC_WARN_LIMIT:
-+	case PMBUS_IIN_OC_FAULT_LIMIT:
-+	case PMBUS_IOUT_UC_FAULT_LIMIT:
-+	case PMBUS_PIN_OP_WARN_LIMIT:
-+	case PMBUS_POUT_OP_WARN_LIMIT:
-+	case PMBUS_UT_WARN_LIMIT:
-+	case PMBUS_UT_FAULT_LIMIT:
-+	case PMBUS_MFR_IIN_MAX:
-+	case PMBUS_MFR_IOUT_MAX:
-+	case PMBUS_MFR_VIN_MIN:
-+	case PMBUS_MFR_VIN_MAX:
-+	case PMBUS_MFR_VOUT_MIN:
-+	case PMBUS_MFR_VOUT_MAX:
-+	case PMBUS_MFR_PIN_MAX:
-+	case PMBUS_MFR_POUT_MAX:
-+	case PMBUS_MFR_MAX_TEMP_1:
-+		ret = -ENXIO;
-+		break;
-+
-+	default:
-+		ret = -ENODATA;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static int lx1308_write_word_data(struct i2c_client *client, int page,
-+				  int reg, u16 word)
-+{
-+	int ret;
-+
-+	if (page > 0)
-+		return -ENXIO;
-+
-+	switch (reg) {
-+	case PMBUS_IOUT_OC_FAULT_LIMIT:
-+		/*
-+		 * Decode Linear11 word from pmbus_core back to a plain integer
-+		 * and write as the U8.0 byte the device expects.
-+		 */
-+		ret = i2c_smbus_write_byte_data(client, LX1308_MFR_IOUT_OCP3_FAULT,
-+						clamp_val(linear11_to_int(word), 0, 255));
-+		break;
-+
-+	case PMBUS_IOUT_OC_WARN_LIMIT:
-+		ret = i2c_smbus_write_byte_data(client, LX1308_MFR_IOUT_OCP3_WARN,
-+						clamp_val(linear11_to_int(word), 0, 255));
-+		break;
-+
-+	default:
-+		ret = -ENODATA;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static struct pmbus_driver_info lx1308_info = {
-+	.pages = 1,
-+	.format[PSC_VOLTAGE_IN] = linear,
-+	.format[PSC_VOLTAGE_OUT] = linear,
-+	.format[PSC_CURRENT_IN] = linear,
-+	.format[PSC_CURRENT_OUT] = linear,
-+	.format[PSC_POWER] = linear,
-+	.format[PSC_TEMPERATURE] = linear,
-+
-+	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-+		| PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
-+		| PMBUS_HAVE_PIN | PMBUS_HAVE_POUT
-+		| PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
-+		| PMBUS_HAVE_STATUS_INPUT,
-+
-+	.read_word_data  = lx1308_read_word_data,
-+	.write_word_data = lx1308_write_word_data,
-+};
-+
-+static const struct of_device_id lx1308_of_match[] = {
-+	{ .compatible = "luxshare,lx1308" },
-+	{ }
-+};
-+
-+MODULE_DEVICE_TABLE(of, lx1308_of_match);
-+
-+static const struct i2c_device_id lx1308_id[] = {
-+	{ "lx1308" },
-+	{ }
-+};
-+
-+MODULE_DEVICE_TABLE(i2c, lx1308_id);
-+
-+static int lx1308_probe(struct i2c_client *client)
-+{
-+	u8 buf[I2C_SMBUS_BLOCK_MAX + 1];
-+	const struct i2c_device_id *mid;
-+	int ret;
-+
-+	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
-+	if (ret < 0)
-+		return dev_err_probe(&client->dev, ret,
-+				     "Failed to read manufacturer id\n");
-+	buf[ret] = '\0';
-+
-+	if (ret != 12 || strncmp(buf, "LUXSHARE", 8))
-+		return dev_err_probe(&client->dev, -ENODEV,
-+				     "Unsupported Manufacturer ID '%s'\n", buf);
-+
-+	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
-+	if (ret < 0)
-+		return dev_err_probe(&client->dev, ret,
-+				     "Failed to read Manufacturer Model\n");
-+	buf[ret] = '\0';
-+
-+	for (mid = lx1308_id; mid->name[0]; mid++) {
-+		if (!strncasecmp(mid->name, buf, strlen(mid->name)))
-+			break;
-+	}
-+	if (!mid->name[0])
-+		return dev_err_probe(&client->dev, -ENODEV,
-+				     "Unsupported Manufacturer Model '%s'\n", buf);
-+
-+	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_REVISION, buf);
-+	if (ret < 0)
-+		return dev_err_probe(&client->dev, ret,
-+				     "Failed to read Manufacturer Revision\n");
-+	buf[ret] = '\0';
-+
-+	if (ret != 12 || buf[0] != 'V')
-+		return dev_err_probe(&client->dev, -ENODEV,
-+				     "Unsupported Manufacturer Revision '%s'\n", buf);
-+	return pmbus_do_probe(client, &lx1308_info);
-+}
-+
-+static struct i2c_driver lx1308_driver = {
-+	.driver = {
-+		.name = "lx1308",
-+		.of_match_table = lx1308_of_match,
-+	},
-+	.probe = lx1308_probe,
-+	.id_table = lx1308_id,
-+};
-+
-+module_i2c_driver(lx1308_driver);
-+
-+MODULE_AUTHOR("Brian Chiang <chiang.brian@inventec.com>");
-+MODULE_DESCRIPTION("PMBus driver for Luxshare LX1308");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("PMBUS");
+ LTC4286 HARDWARE MONITOR DRIVER
+ M:	Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+ L:	linux-hwmon@vger.kernel.org
 
 -- 
-2.43.0
+2.54.0
+
 
