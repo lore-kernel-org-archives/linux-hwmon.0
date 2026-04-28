@@ -1,113 +1,98 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE203750CC
-	for <linux-hwmon@vger.kernel.org>; Tue, 28 Apr 2026 22:09:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EDCE7478
+	for <linux-hwmon@vger.kernel.org>; Tue, 28 Apr 2026 22:16:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777414147; cv=none; b=DUPBiVCDqBBcpvrMCoDNc5o1oRpbqcG6OBXvqcV+PA5HDR7r0iGBocnYybynBefPsVcB/4I1193P8f1ACq/Kw9fWBYHew3ZABDwiMQzJb9snWTwlaJ9x6IyS1/tfiwFG1x9zBBnDSS8tv2woe+FSBbI4Ufrhb61eF5aYKgNgTZ8=
+	t=1777414589; cv=none; b=AGp7RzpVVKp3kZl+E0GSM444mjvDLWWSAd/T2lKQK+z1R5IyrF7BmdSh64Ez4a20HXtVjCNQClE/PAz3EfSnCLlwCr+f24onbgZXm66qG6pBY7dkv9mQbUw7aBNgsutfoaz6JB2IKFDthaDrGjRG5E2kKgOuvH8EgVUzxpq1Odc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777414147; c=relaxed/simple;
-	bh=HbpTy1RwC7P5OPtcPJjE7uhxwyUT7qQw7bIlV/gFrAQ=;
+	s=arc-20240116; t=1777414589; c=relaxed/simple;
+	bh=Bt/Jj09NPzvPasa8t0sfZgmLVHxCySdu8bXdOcYKr34=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=MgRkuDxUrhrh4mYEM3arUbB+AjN1xQG0CsrE/7NmnIoEfswDQljZfnNuPXU1oZZ83i3PvOzm7GzRq5Gh5bjwB58oKj2mHaGYBwTYcs0p5KeM64a32feJZV8cuV0cSdNVk3N4R6rWIV8W5+jt4XdgKZa5JwtNq1H9NHgsqJFlpGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A6frgd/G; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=NJyFFBrKf67CMvdYvQTkErGXJO7HnR24wKpaasDgZPF6gedl11tus6iPnZAVYYeoFgGIdcm5eg8PJJMMTB2QxPBGqRAuecBik4aByDXMmWPURWVoyGkHBqETFaIRGB8o1w4L3vlZjjgChkmQGC+Bs1oFd87UqJ3nPwJn2Ael9CQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pc/TqbWB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A6frgd/G"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73A40C2BCAF;
-	Tue, 28 Apr 2026 22:09:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pc/TqbWB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8E7DC2BCAF;
+	Tue, 28 Apr 2026 22:16:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777414146;
-	bh=HbpTy1RwC7P5OPtcPJjE7uhxwyUT7qQw7bIlV/gFrAQ=;
+	s=k20201202; t=1777414588;
+	bh=Bt/Jj09NPzvPasa8t0sfZgmLVHxCySdu8bXdOcYKr34=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=A6frgd/GNg9VXjiFobBySVbadRnCLzcWG+BeNAbH3JrH8TpuS31nnKNFSkpOKwl/r
-	 SH+qQNsT2l9eToXuJDd3AZQ942dspFaE9r63zm0dRUCCB6FRCMIxZXdHmK8dtlipjY
-	 3tOaZp9z43g6ckQn3MCBdJiPZUPlNlVvvSZ2qknmQ664HBezzcwMkCiA63thQUPhX8
-	 dRvJID1dpYiOXuW4q7poOkzCMQwPXVgvWVLc7cFMOaMajf7Tb6H37aNmdEPgFbF501
-	 2NH7m/uQv9sIFBBXAOwUDVcWTad5incbqZAV0drvZzZnU6yC2oRnMn2+dZeeBopiwN
-	 xijPzEoWVBodg==
+	b=Pc/TqbWBL6pxwHCObZdGflcouGKny9FgBAzYteQyo06VGrBPLtKnm48ycBwQqb/WM
+	 /p3D9+1X4ZpWeiqd/9UegqDq3gHNPuyRs0zseDsW75+1UNl0OX8VEL/5IC5tXRJ0pF
+	 R1FBr/LiZ/OvCvvkkFiXGMAgiPA1S63/2Qh7/gJS9It0ugz1I6Im4x8IHyvO9vHFZl
+	 5Aba9LbyjxPLMk5A/YLq0T5nMvpWZNkLTHKM7Gs0VNmXfDMf3beKMCnfJ2bZ2f+/iR
+	 TzmeNhDvEI08qoKcboWwuYN8P+LaCFZZ/ekQK5ScKSKgNKgIiueW2speDScQ6i0nWn
+	 CJY15eaOQ243w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v6 3/4] hwmon: (sht3x) Add devicetree support
+Subject: Re: [PATCH v6 4/4] hwmon: (sht3x) Add support for GXCAS GXHT30
 Reply-To: sashiko@lists.linux.dev
 To: "Zaixiang Xu" <zaixiang.xu.dev@gmail.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <1777374569-59233-4-git-send-email-zaixiang.xu.dev@gmail.com>
-References: <1777374569-59233-4-git-send-email-zaixiang.xu.dev@gmail.com>
+In-Reply-To: <1777374569-59233-5-git-send-email-zaixiang.xu.dev@gmail.com>
+References: <1777374569-59233-5-git-send-email-zaixiang.xu.dev@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 28 Apr 2026 22:09:05 +0000
-Message-Id: <20260428220906.73A40C2BCAF@smtp.kernel.org>
+Date: Tue, 28 Apr 2026 22:16:27 +0000
+Message-Id: <20260428221628.B8E7DC2BCAF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [High] Using enum value 0 as OF match data combined with missing I2C ID t=
-able entries causes incorrect device identification and brittle fallback lo=
-gic.
+- [Low] Redundant compatible string in the OF match table.
+- [Low] Missing update to subsystem documentation (`Documentation/hwmon/sht=
+3x.rst`).
+- [Low] Missing Kconfig help text update.
 --
 
-commit e029bdd9863615efb54ed7864138224170daf0d1
+commit 907d39a1530eacc8aee2b5e489cdd9c94b10ce78
 Author: Zaixiang Xu <zaixiang.xu.dev@gmail.com>
 
-hwmon: (sht3x) Add devicetree support
+hwmon: (sht3x) Add support for GXCAS GXHT30
 
-Add of_match_table to support devicetree based instantiation.
-Specific match data is used to distinguish between temperature/humidity
-(SHT) and temperature-only (STS) sensors.
+This commit adds support for the GXCAS GXHT30 humidity and temperature sens=
+or.
+The GXHT30 is described as being software compatible with the Sensirion SHT=
+30.
 
 > diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
-> index 08306ccb6d0b..6437568aaf73 100644
+> index 6437568aaf73..f52114c13edb 100644
 > --- a/drivers/hwmon/sht3x.c
 > +++ b/drivers/hwmon/sht3x.c
-> @@ -939,8 +939,25 @@ static const struct i2c_device_id sht3x_ids[] =3D {
-> =20
->  MODULE_DEVICE_TABLE(i2c, sht3x_ids);
-> =20
-> +static const struct of_device_id sht3x_of_match[] =3D {
-> +	{ .compatible =3D "sensirion,sht30", .data =3D (void *)(uintptr_t)sht3x=
+[ ... ]
+> @@ -948,6 +949,7 @@ static const struct of_device_id sht3x_of_match[] =3D=
+ {
+>  	{ .compatible =3D "sensirion,sts31", .data =3D (void *)(uintptr_t)sts3x=
  },
-> +	{ .compatible =3D "sensirion,sht31", .data =3D (void *)(uintptr_t)sht3x=
+>  	{ .compatible =3D "sensirion,sts32", .data =3D (void *)(uintptr_t)sts3x=
  },
-> +	{ .compatible =3D "sensirion,sht35", .data =3D (void *)(uintptr_t)sht3x=
+>  	{ .compatible =3D "sensirion,sts35", .data =3D (void *)(uintptr_t)sts3x=
  },
-> +	{ .compatible =3D "sensirion,sht85", .data =3D (void *)(uintptr_t)sht3x=
- },
-> +	{ .compatible =3D "sensirion,sts30", .data =3D (void *)(uintptr_t)sts3x=
- },
-> +	{ .compatible =3D "sensirion,sts31", .data =3D (void *)(uintptr_t)sts3x=
- },
-> +	{ .compatible =3D "sensirion,sts32", .data =3D (void *)(uintptr_t)sts3x=
- },
-> +	{ .compatible =3D "sensirion,sts35", .data =3D (void *)(uintptr_t)sts3x=
- },
-> +	{ }
-> +};
+> +	{ .compatible =3D "gxcas,gxht30", .data =3D (void *)(uintptr_t)sht3x },
 
-Since sht3x is the first element of enum sht3x_chips and evaluates to 0, do=
-es
-setting .data to (void *)(uintptr_t)sht3x essentially set it to NULL?
+Is this explicit compatible string entry necessary in the driver?
 
-When instantiated via device tree, does device_get_match_data() return NULL
-for these entries, causing i2c_get_match_data() to incorrectly fall back to
-i2c_match_id()?
+The device tree binding for the GXHT30 enforces using sensirion,sht30 as a
+fallback compatible string. Since the device tree node will provide
+sensirion,sht30 in its compatible list, and the driver already matches
+sensirion,sht30 using the same sht3x driver data, the fallback should handle
+the matching automatically without needing an explicit entry here.
 
-If instantiated manually via sysfs without a device tree node,
-device_get_match_data() also returns NULL. If i2c_get_match_data() then fal=
-ls
-back to i2c_match_id(), does it fail to match the STS devices because they
-are missing from sht3x_ids, causing it to return NULL?
+This isn't a bug, but should the documentation and Kconfig be updated for t=
+he
+new chip?
 
-When sht3x_probe() casts this NULL back to 0, does it incorrectly identify =
-an
-STS sensor as an SHT sensor, exposing non-functional humidity attributes?
-
-Would it help to offset the chip enum values so they avoid 0, and to
-explicitly add the newly added string variants to the I2C id_table?
+The patch adds a new hardware chip but doesn't update the supported chips
+section in Documentation/hwmon/sht3x.rst, or the help text for
+CONFIG_SENSORS_SHT3x in drivers/hwmon/Kconfig. Updating these is expected
+when adding support for a new device to the hardware monitoring subsystem.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/1777374569-59233-1-=
-git-send-email-zaixiang.xu.dev@gmail.com?part=3D3
+git-send-email-zaixiang.xu.dev@gmail.com?part=3D4
