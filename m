@@ -1,115 +1,168 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB9A3783C8
-	for <linux-hwmon@vger.kernel.org>; Wed, 29 Apr 2026 10:19:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B1A38F65A
+	for <linux-hwmon@vger.kernel.org>; Wed, 29 Apr 2026 11:29:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777457995; cv=none; b=ed1mSG2EaIKFFXc9l9w7jT781UdrI6nxJc92VIQsJMka2Z4Z4ERJIkH7xJ1jEklBCH3UNqhEdwz/5evilgLOYgCngObpjeLVuWR/5wq21teGenGp8E9wB9KEczIhF7y9iiRCh9q8hvkgml605ytKkG67a/WCzIjt0vRRnOREq/I=
+	t=1777462186; cv=none; b=VbI9HgnH/XRpxybNoYPArBIfIH40xAwHHWGmVVCV6l7RHwGnNJkdu0IutmcH47p0OoaQYhrqJFSw8QXQemwL0a2cp9GU3NEYtOMwTideHkVZnR0a9aNCLmYIDtHbiwbFLJOiX9Mfouip/HfreDnFoK3Pi7IO/z/XgnMbGGFyOv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777457995; c=relaxed/simple;
-	bh=B7we+FvBrhcMhg/YFrWM6lqpiLRaLZpmVaFcXVOfGrE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Igz3ObhJkZmfgRuwmC9tdP1cOanWUNAehDnc0N+ff3zILq3zyD6CRnXUfLbJq5pafJwKQ8etANN1L1083rY0Fz9SwzrHW7SifjbFBKUToVPjXleoMnJ5GVUEAT3E0RQmfqqN81vXkGmucQQPTQ6pTfkBpgipQH3L23rHGCtFFWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uaHQgS5w; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777462186; c=relaxed/simple;
+	bh=xe+MsCXfl3p1dLsFN+TVjTQqPTbPPjYf3XDLon7gknk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=B9hu2YJDKFhrW7DOBQ31Aq+nFi0+Waj3U5RTw8dvx7+NFATOCVGgFJg3tz7wndMH/odpFF/OCHV3rycWXbJt8hiuxZ0XAiFxdy/XnAAtGGG5+3K4frSEoKQlzBnhCOmfi4c1w3HDPwY22LBU+AZGJFmPdudhmOaePSzzF7pQog4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com; spf=pass smtp.mailfrom=inventec.com; dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b=fpnIIHLu; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inventec.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uaHQgS5w"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AAB8C19425;
-	Wed, 29 Apr 2026 10:19:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777457994;
-	bh=B7we+FvBrhcMhg/YFrWM6lqpiLRaLZpmVaFcXVOfGrE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=uaHQgS5wVW5bD6XbFUuVDLy2Io2Q5+mOYxTccwVxD5wW3UKoUOE12ZTWHZ7aqMViU
-	 avQ8vzLtBaKASs9+ODpshqW6Keettj5V51jaslP/hHcHogl61hlBuVHOkMZ92Srgcy
-	 pwCM2RdQG91MhSNyi6IdlviDJRTGicO4iq7cAIN7hKQSjTJThLUHHyjfP3Zs+ZRntM
-	 HjtRxL67ndRKd5KALMFPD6GyHcoDMbYAFgkGpphMFjJrBcfssFs4K4rbjTTyfSm99N
-	 /b3LhvJX18WfZZkCr+dzhp5+i4rNXpSp9q7L2ADtLmb2eUCjEJN7I1AHNMy3GVxI9L
-	 EPbtm1kZrIQDQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 3/3] hwmon: (pmbus) add support for Delta E50SN12051
-Reply-To: sashiko@lists.linux.dev
-To: "Colin Huang via B4 Relay" <devnull+u8813345.gmail.com@kernel.org>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260429-add-e50sn12051-v1-3-c101e6c80bbb@gmail.com>
-References: <20260429-add-e50sn12051-v1-3-c101e6c80bbb@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Apr 2026 10:19:53 +0000
-Message-Id: <20260429101954.1AAB8C19425@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b="fpnIIHLu"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-35d99031e4eso8771692a91.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 29 Apr 2026 04:29:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=inventec.com; s=google; t=1777462182; x=1778066982; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HeXECNGBJvHPKxS7FXZaQMkrp4TodQ+oswz046Aqoy8=;
+        b=fpnIIHLuafih4l5VISLoRgjCGdVAU7SarBKN/F8i6EhxsfSGEIauVEUhvN+aPJtWPE
+         5B8zLVu6pGWZGHf1tF1bQerUJRrblITODQ/nffxvQ7/bvhPdpc0URK4hm94xWsOCIlNM
+         sckkrouPNqiRqlI/xv39jBTxBeRhstuPKSuTNqTgB9j2wbkRhq5AYXDpweARKF9u2tIR
+         HIV9vAgQW5gzVS14y1A5+pAxJQCB9Krj4tkOThIbfMudShj0vys8zrP9IYh+yNvOVZyW
+         AY4oAQxEkuU8KwV4TMm0IbzpUWNGNXGXAK1HSrekh3fj9sZGyPFTBPi2TmkKLVBs4Mls
+         xzEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777462182; x=1778066982;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HeXECNGBJvHPKxS7FXZaQMkrp4TodQ+oswz046Aqoy8=;
+        b=k96S+O9WxCH3JhZBq5oQn3KcWIDPvYHCDb/2LX5SipDJPf7Nwngq77/2aas/8STPgO
+         PT8eWARjLzEM4T8vbOdk9kIfIrmh05fA+a9ZTJ6M+HmWrg4xShi4zQnTCayouYM93IgA
+         ycCUTDpOE9CxMPYYj3v8yxbnon8hH3p3Xud8lw0d5ATUIyZyc6jFlfFFDqBbWza9eEjt
+         zce/7DNfJ9Cx53mUT3T/dvLlMIxVCxpA5kl+8OFvUtv5zIL5K5I9yGznu6Y8qA5bgRCc
+         IXz3BBkBJqLdaRiNTYxFC/VQrFYGKyoOpl/t+u97/pshvjdPhmvaKjZQJ2ep3V8jb3OB
+         bAig==
+X-Forwarded-Encrypted: i=1; AFNElJ/bR4MIw7TyTl2AAfKAtW2kD/ZiVp2CpuThAGJL7BWunvUfPnqCUV66untdEqDmLTxdXO/qhmntAYRQ2g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+3IyCky27ESA9FYfne6IpXAZgELFH7c/U9WSJhf/IIfPiNt3P
+	uyZVf2RlfX2Qj3y4v8Fr0Y33BtFEMyKqRu7GBcmvZ3b7oK8uupd6by7hoPnQs/C01+c=
+X-Gm-Gg: AeBDievqg4JvEodK+ID19K6oIxdLRG5OgCjhsmsYlq8boGGs9DYRywHUPXrFFuVJFmu
+	BSzkd7jfrzmJLtZbb21sMnuwrsUPh22JSoWpZSkWenj6dx5VJc6YmyPS0emF67RQy1rJlMX7tpy
+	u6SF3RKqeViksc0PgkixvkwytyP1vLaB7YcV1Q4FFSu0zH6YqRl8M1crLeB8TU0wWhETvh1Pzlu
+	ZcIzxIHFYTU6gu1X5BOd2A4IjvLarSwKGtjVOs3op0TP2URUNplVI0yF+Yptgq0A6lYw80+Yfcz
+	ozC+x3a85LCUeZVG38qy5PL87t+ZlOEPJBoaeFXeBN0OvTDKBNdmg8sD8YNyQZQ4n2J2wl7HGjx
+	FkP3OiYlmuBi5bmlagJatnUjiwhjFObF7ffhiSac8ltJGLOc5eOJ6GOWog0lV2C/pnsXEv3++P/
+	LseW4QC6hNGIx1blwM/aVHBJqd4k7K8EEoIhhZGwPl
+X-Received: by 2002:a17:90b:2f8f:b0:35f:bb33:d727 with SMTP id 98e67ed59e1d1-3649202dabcmr6868224a91.20.1777462181860;
+        Wed, 29 Apr 2026 04:29:41 -0700 (PDT)
+Received: from [127.0.1.1] ([123.51.235.216])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-364a41520dbsm1923048a91.3.2026.04.29.04.29.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Apr 2026 04:29:41 -0700 (PDT)
+From: Brian Chiang <chiang.brian@inventec.com>
+Subject: [PATCH v7 0/2] Add support for q50sn12072 and q54sn120a1
+Date: Wed, 29 Apr 2026 11:29:35 +0000
+Message-Id: <20260429-add-support-for-q50sn12072-and-q54sn120a1-v7-0-f1f83d2039f7@inventec.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJ/r8WkC/53QTU7EMAwF4KuMsiYocZM4ZcU9EIv8OEwWtJ2kV
+ KBR706mEmKEuinLZ1nfs3xllUqmyp5OV1ZoyTWPQwv4cGLh7IY34jm2zECAFigkdzHy+jFNY5l
+ 5Ggu/aFEHCQKBuyG2qLbo2mYfoO/JRCsja95UKOXPrevlteVzrvNYvrbqRd6m/2lZJBc8dBa9S
+ z3Y4J/zsNAwU3gM4zu7FS3wgxvRgTmCQ8MRfUAkigHNDt794krAEbxruEGnpVXUd97u4OoOl+o
+ IrhrurSRHTvUxyR1c3+Fw6HK94clbBAPW7F1u7nE8gpuGp+Ta25MzmvAPvq7rNwGOVMi2AgAA
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org, Jack Cheng <Cheng.JackHY@inventec.com>, 
+ Brian Chiang <chiang.brian@inventec.com>, 
+ Jack Cheng <cheng.jackhy@inventec.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777462179; l=3701;
+ i=chiang.brian@inventec.com; s=20260316; h=from:subject:message-id;
+ bh=xe+MsCXfl3p1dLsFN+TVjTQqPTbPPjYf3XDLon7gknk=;
+ b=1exsHWiBxZCh7ojc/W16G4fD0TFJ3AV/GN2AdaW2DaUgnTyBHAgvY4Wv8VYF46/u3z51xKx+D
+ gcdcjkbTiqrDtfCQEXqYouyOSpiZekzZGBcLhhJxyaklodMsAhZHGed
+X-Developer-Key: i=chiang.brian@inventec.com; a=ed25519;
+ pk=q+NqJYuJbGpA9KS9941D7f+8PVVW+k7DvaGgFykBiUc=
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Low] The driver uses `pmbus_do_probe()` which is exported in the `PMBUS`=
- namespace, but fails to include `MODULE_IMPORT_NS("PMBUS");`.
-- [Low] The driver includes `<linux/debugfs.h>`, `<linux/kstrtox.h>`, and `=
-<linux/of_device.h>` when they are either unused or technically incorrect.
---
+The Q50SN12072 and Q54SN120A1 are high-efficiency, high-density DC-DC power
+module from Delta Power Modules.
 
-commit 8b9d265ffa7130b1c2d0afd9fd591168b6c43156
-Author: Colin Huang <u8813345@gmail.com>
+The Q50SN12072, quarter brick, single output 12V. This product provides up
+to 1200 watts of output power at 38~60V. The Q50SN12072 offers peak
+efficiency up to 98.3%@54Vin.
 
-hwmon: (pmbus) add support for Delta E50SN12051
+The Q54SN120A1, quarter brick, single output 12V. This product provides up
+to 1300 watts of output power at 40~60V. The Q54SN120A1 offers peak
+efficiency up to 98.1%@54Vin.
 
-Add the pmbus driver for Delta E50SN12051 600W Non-isolated 1/8th Brick
-DCDC Power Modules.
+Add support for them to q54sj108a2 driver.
 
-> diff --git a/drivers/hwmon/pmbus/e50sn12051.c b/drivers/hwmon/pmbus/e50sn=
-12051.c
-> new file mode 100644
-> index 000000000000..56935e9543b6
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/e50sn12051.c
-> @@ -0,0 +1,60 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Hardware monitoring driver for E50SN12051
-> + */
-> +
-> +#include <linux/debugfs.h>
-> +#include <linux/i2c.h>
-> +#include <linux/kstrtox.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
+Signed-off-by: Jack Cheng <Cheng.JackHY@inventec.com>
+Signed-off-by: Brian Chiang <chiang.brian@inventec.com>
 
-Are linux/debugfs.h and linux/kstrtox.h used in this driver? I don't see
-any debugfs interfaces or string parsing functions being utilized.
+Changes in v7:
+- Restore the PMBUS_WRITE_PROTECT register to its original state
+- Fix potential denial of service by storing user input berfore
+  acquiring lock
+- Fix use-after-free risk by moving pmbus_do_probe() after
+  devm_kzalloc() 
+- Link to v6: https://lore.kernel.org/r/20260427-add-support-for-q50sn12072-and-q54sn120a1-v6-0-ffa77bfa65e7@inventec.com
 
-Also, since this driver only uses of_device_id from linux/of_device.h,
-should it include linux/mod_devicetable.h instead to follow the standard
-device match table patterns?
+Changes in v6:
+- Add lock to debugfs read/write handlers
+- Remove the incorrect Co-developed-by tag in cover letter patch reported by checkpatch.pl
+- Link to v5: https://lore.kernel.org/r/20260422-add-support-for-q50sn12072-and-q54sn120a1-v5-0-b8fb87262868@inventec.com
 
-[ ... ]
+Changes in v5:
+- Rebase from 6.19 to 7.0-rc7 for review
+- Link to v4: https://lore.kernel.org/r/20260414-add-support-for-q50sn12072-and-q54sn120a1-v4-0-b81eaea49df1@inventec.com
 
-> +static int e50sn12051_probe(struct i2c_client *client)
-> +{
-> +	struct pmbus_driver_info *info;
-> +
-> +	info =3D devm_kmemdup(&client->dev, &e50sn12051_info, sizeof(*info),
-> +			    GFP_KERNEL);
-> +	if (!info)
-> +		return -ENOMEM;
-> +
-> +	return pmbus_do_probe(client, info);
-> +}
+Changes in v4:
+- Add null terminator to prevent comparison of uninitialized data which
+takes place when ret is shorter than strlen(mid->name)
+- Link to v3: https://lore.kernel.org/r/20260402-add-support-for-q50sn12072-and-q54sn120a1-v3-0-67a5184e93b8@inventec.com
 
-[ ... ]
+Changes in v3:
+- Fix MFR_MODEL detection by using strncasecmp prefix match, without the strict length equality
+- Move blackbox_read_offset debugfs entry inside the q54sj108a2-only guard block
+- Sort the debugfs entries by the order of PMBus register addresses 
+- Link to v2: https://lore.kernel.org/r/20260326-add-support-for-q50sn12072-and-q54sn120a1-v2-0-77bc77eedc76@inventec.com
 
-> +MODULE_AUTHOR("Kevin Chang <kevin.chang2@amd.com>");
-> +MODULE_DESCRIPTION("PMBus driver for E50SN12051");
-> +MODULE_LICENSE("GPL");
+Changes in v2:
+- Drop Q50SN12072_DEBUGFS_VOUT_COMMAND debugfs entry
+- Add .format[PSC_VOLTAGE_OUT] = linear explicitly to all three chip
+  entries for consistency
+- Replace hardcoded MFR_MODEL check (ret != 14 || strncmp("Q54SJ108A2"))
+  with a loop over q54sj108a2_id[] using strncasecmp to support all
+  three chip variants dynamically
+- Remove of_device_get_match_data()/i2c_match_id() early chip_id path;
+  derive chip_id exclusively from MFR_MODEL hardware read
+- Remove unused .data fields from of_device_id entries
+- Guard store_default, blackbox_erase, blackbox_set_offset, blackbox_read,
+  and flash_key debugfs entries under psu->chip == q54sj108a2 check
+- Add dev_notice() when configured device name differs from detected model
+- Update MODULE_DESCRIPTION to "PMBus driver for Delta Q54SJ108A2 and
+  compatibles"
+- Fix commit message typo: "Q54SN12072" -> "Q50SN12072"
+- Link to v1: https://lore.kernel.org/r/20250701-add-support-for-q50sn12072-and-q54sn120a1-v1-0-c387baf928cb@inventec.com
 
-Since this driver calls pmbus_do_probe() which is exported in the PMBUS
-namespace, does it need a MODULE_IMPORT_NS("PMBUS") declaration?
+---
+Jack Cheng (2):
+      dt-bindings: trivial: Add q50sn12072 and q54sn120a1 support
+      hwmon: (pmbus/q54sj108a2) Add support for q50sn12072 and q54sn120a1
 
-Without it, modpost might fail the build with a missing namespace import
-error if CONFIG_MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS is not enabled.
+ .../devicetree/bindings/trivial-devices.yaml       |   4 +
+ drivers/hwmon/pmbus/q54sj108a2.c                   | 238 +++++++++++++--------
+ 2 files changed, 151 insertions(+), 91 deletions(-)
+---
+base-commit: 591cd656a1bf5ea94a222af5ef2ee76df029c1d2
+change-id: 20250701-add-support-for-q50sn12072-and-q54sn120a1-a9c299e6d81d
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260429-add-e50sn1=
-2051-v1-0-c101e6c80bbb@gmail.com?part=3D3
+Best regards,
+-- 
+Brian Chiang <chiang.brian@inventec.com>
+
