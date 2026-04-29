@@ -1,127 +1,121 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DA6E24A069
-	for <linux-hwmon@vger.kernel.org>; Wed, 29 Apr 2026 13:24:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFFB126F28D;
+	Wed, 29 Apr 2026 14:28:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777469099; cv=none; b=SIgSPgx/W6vtvbDlRx0xVBQXuLVv+ao4fLoFU4mu2ii69Grm/N+3KyfGJP6stDNGiJO0T24vEq0tUmd5HMFDQPoOORXQBknCBP4oF2RGDbNPsLg6zZLOUE7povifUAa1LAZpxh/laRGnqkgnwIgZr0Y1GOOjZ9t9hVhhfOh/WJI=
+	t=1777472906; cv=none; b=Zdvm7mH0rA2cNzvkh/VeroOlLVUvfNyjkf7or7AZ4Q39N6tFtAQ6VzkOf2JWVAMNE556QhM2FiLNAVi5Vb2LwfK+q/pRWbP3Y6UJZK6iwzCwm1ujtM+lRumQnP5WAk3zRgy4gCPIDGMj05gLHBbl8TZQYN5dMtgOGDH5C1JCv9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777469099; c=relaxed/simple;
-	bh=aN01tjmalzpffml4Wi3sozwLyDOCSbxebD07h5YS9kc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=iRaJMmLXo9qRWTYtH0znwt0f1/XRb+n76UUZdmNFW9rqo9XmhrVnJFxwh8fZMe1evqLff47RXfhet91C9kKjIwjuC2IxBemKuZvQoWICcbXfvwa3CuITow0toav7d08qg6coXtWMUrbUVqMBhTZ78j2ugJXTYxbnHjca+2ngrHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bi3JFxjK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777472906; c=relaxed/simple;
+	bh=NG7wnStbNGVSAyuO0z858ZLJDnWlS6H44BMy/Yc3QyU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CuVRgm8DS3hQQlGLBdDOkjlxrp6kmYxbXk4gn1xXnMltEHFPKorrvNlagFeiR6dGjNeuEUx721STS9Q1kcEPOyuUZhmI0IzYeeI2Qy+xr1xH/0XOQTCZXQ/vUrd0D0/4TjsNvpUUxqMl3P5M6wUAcOjiFcAk5afhrKpDR4couhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eIRtjrT0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bi3JFxjK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 920C8C2BCB8;
-	Wed, 29 Apr 2026 13:24:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eIRtjrT0"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B9C9DC19425;
+	Wed, 29 Apr 2026 14:28:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777469098;
-	bh=aN01tjmalzpffml4Wi3sozwLyDOCSbxebD07h5YS9kc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=Bi3JFxjKhcmWU7Ws7ItQfy/6rFTr7cAtUsewXryjUfqd5bZD/UGwnxw7HeOQbGeuE
-	 2XT2XqBlNkPrR6MHLXJXw+EsHIAlyz5WPakT+XvedYPmVj8TH9xfgO53YpPWILQema
-	 7ebZtyQfU0cNjVVpKzS8sXdbSjPUJVC+3RTBT4EWY6HJl7sj5/0m9r+HMAl7JCD1Hl
-	 0/Fqn0l40+H6mHnlKvJ7VpyViosMYU+GdSmYqIKD19azyPiNVcv2gxhjF86n41we9W
-	 akkI0jOJ1+DbZAsEvZ64EOwlX9jdwWxTIRXFz2gEP3XUw9+3WjPlyei4KI7j8VkFud
-	 RNoMcgt3zMtOg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v10 1/2] dt-bindings: hwmon: temperature: add support
- for EMC1812
-Reply-To: sashiko@lists.linux.dev
-To: "Marius Cristea" <marius.cristea@microchip.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260429-hw_mon-emc1812-v10-1-a8ca1d779502@microchip.com>
-References: <20260429-hw_mon-emc1812-v10-1-a8ca1d779502@microchip.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Apr 2026 13:24:57 +0000
-Message-Id: <20260429132458.920C8C2BCB8@smtp.kernel.org>
+	s=k20201202; t=1777472905;
+	bh=NG7wnStbNGVSAyuO0z858ZLJDnWlS6H44BMy/Yc3QyU=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=eIRtjrT07U1BuQAtMlrSVQZ9LmUGDj10M3/RVMnxp8+ifKGkZ4HpSEdXylsvcZoa2
+	 4eoZZh08xiM59d1o6JqyZaW8H2mcet+yuE6eEBe93VKmO9HLLS0GLWvFyvw3JAqgTt
+	 AV2BCubKb/ZNSFVz5cV4kHens53FQjHOvmIv0Po1bKjFfe/45CGl85AQ/ZMCu9JQPp
+	 x1yZAAdPmd1ro7acS5VpP219rPEHzisn3sySQsfGbLO02edqL/FE2QhcD7edekH5uA
+	 UD92jG/IRJ3vco1XKUQU5IJyEd+ceH7h8IluhqXscOERnR34ytpEZvIQlNCdihhMuV
+	 +OfEdbIQDF8nA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B159DFF8875;
+	Wed, 29 Apr 2026 14:28:25 +0000 (UTC)
+From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
+Subject: [PATCH v11 0/3] hwmon: Add support for the LTC4283 Hot Swap
+ Controller
+Date: Wed, 29 Apr 2026 15:28:25 +0100
+Message-Id: <20260429-ltc4283-support-v11-0-27ccde619dad@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3XOQW7DIBAF0KtErEs0DHjAWfUeURcUQ4KUGgtcK
+ 1Xkuxdnk0Qoy/+leX9urPgcfWGH3Y1lv8QS01iDEB875s52PHkeh1owBCSQIPlldgqN5OV3mlK
+ eOZAM2ljnOqtYvZqyD/F6J49fNZ9jmVP+uy8stLXvrYU4cB+8EB1gsAN+2tFe0mnv0g/bsMU8A
+ ahbwFRAaTF47LpBo2mA/gEooBboK/BN5ILTqkcSDSDgSUDTCgK2HwJSUKR64eQLsa7rP79Y2VF
+ 1AQAA
+X-Change-ID: 20260303-ltc4283-support-063f78acc5a4
+To: linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-doc@vger.kernel.org
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>, 
+ Bartosz Golaszewski <brgl@kernel.org>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777472958; l=2151;
+ i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
+ bh=NG7wnStbNGVSAyuO0z858ZLJDnWlS6H44BMy/Yc3QyU=;
+ b=gUGEFQCje73mGm/tKWu/14p63uX6sHrdYTPKrCSRt8QAir2sDiCmCa7D2DItWF0PGosEJ/Mp2
+ Vhz5mDIKiJQADoYmyy6Ws5DoYACSB+kweAMtxjZlw5RGo8vAY8goH54
+X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
+ pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
+X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
+ auth_id=100
+X-Original-From: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
+Reply-To: nuno.sa@analog.com
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Low] The restriction for channel 4 on the `microchip,emc1814` compatible=
- uses `properties: channel@4: false`, which violates the dt-schema meta-sch=
-ema and will cause `dt_binding_check` to fail.
-- [Low] The device tree example uses an undefined phandle label `<&vdd>`, w=
-hich will cause `dt_binding_check` to fail with a `dtc` compilation error.
+This is v8 for the LTC4283 how swap controller. 
+
+Similar to the LTC4282 device, we're clearing some fault logs in the
+reset_history attributes.
+
+Guenter, for my last email worrying about rsense low values, this is
+what I got internally:
+
+"10uOhm at the smallest sense voltage of 15mV would be 1500A and 72kW, which
+seems a tad excessive. The highest currents I’ve seen are around 200A, and
+the -48V market 4283 serves is generally a lot lower than that. Normal values
+are around 200uOhm.  I’d say the resolution should be around 1uohm and if a
+minimum is needed, 50uOhm is probably safe."
+
+For the resolution, I'm pretty sure I got the tenths of micro
+resolution for ltc4282 so I just kept it in here. So, if you don't mind
+I would prefer to keep it this way to be safer and changing that now would
+require me to change some formulas and I would prefer not to do that at
+this stage.
+
+---
+Changes in v11:
+- Patch 2:
+  * s/LTC4283_VPWR/LTC4283_CHAN_VPWR in ltc4283_read_in_alarm()
+- Link to v10: https://patch.msgid.link/20260428-ltc4283-support-v10-0-4f26f46491c3@analog.com
+
+---
+Nuno Sá (3):
+      dt-bindings: hwmon: Document the LTC4283 Swap Controller
+      hwmon: ltc4283: Add support for the LTC4283 Swap Controller
+      gpio: gpio-ltc4283: Add support for the LTC4283 Swap Controller
+
+ .../devicetree/bindings/hwmon/adi,ltc4283.yaml     |  272 +++
+ Documentation/hwmon/index.rst                      |    1 +
+ Documentation/hwmon/ltc4283.rst                    |  266 +++
+ MAINTAINERS                                        |    9 +
+ drivers/gpio/Kconfig                               |   15 +
+ drivers/gpio/Makefile                              |    1 +
+ drivers/gpio/gpio-ltc4283.c                        |  218 +++
+ drivers/hwmon/Kconfig                              |   12 +
+ drivers/hwmon/Makefile                             |    1 +
+ drivers/hwmon/ltc4283.c                            | 1795 ++++++++++++++++++++
+ 10 files changed, 2590 insertions(+)
+---
+base-commit: 30a90fa04af6937493fbba20e3e923b5b5a162b4
+change-id: 20260303-ltc4283-support-063f78acc5a4
 --
 
-commit 6d9c42d650361ba383a1097abf05acff51bac85d
-Author: Marius Cristea <marius.cristea@microchip.com>
+Thanks!
+- Nuno Sá
 
-dt-bindings: hwmon: temperature: add support for EMC1812
 
-This commit adds the devicetree schema for the Microchip EMC1812/13/14/15/33
-Multichannel Low-Voltage Remote Diode Sensor Family. It specifies the prope=
-rties
-for each hardware variant, including differences in channel count and featu=
-res
-like anti-parallel diodes.
-
-> diff --git a/Documentation/devicetree/bindings/hwmon/microchip,emc1812.ya=
-ml b/Documentation/devicetree/bindings/hwmon/microchip,emc1812.yaml
-> new file mode 100644
-> index 000000000000..1a273621db82
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/microchip,emc1812.yaml
-[ ... ]
-> +  # EMC1814: 1 Internal, 3 External Channels, Supports APD,
-> +  # parasitic-res-on-channel1-2: on both channel 1 & 2
-> +  # parasitic-res-on-channel3-4: for channel 3
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          const: microchip,emc1814
-> +    then:
-> +      properties:
-> +        channel@4: false
-
-Should this restriction be placed under patternProperties instead of
-properties?
-
-In dt-schema, keys under properties must not contain the @ symbol used for
-device tree unit addresses. Using channel@4: false under properties will re=
-sult
-in a meta-schema validation regression during make dt_binding_check.
-
-To properly forbid the node, it could be written under patternProperties,
-such as "^channel@4$": false.
-
-[ ... ]
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +
-> +        temperature-sensor@4c {
-> +            compatible =3D "microchip,emc1813";
-> +            reg =3D <0x4c>;
-> +
-> +            #address-cells =3D <1>;
-> +            #size-cells =3D <0>;
-> +
-> +            microchip,parasitic-res-on-channel1-2;
-> +
-> +            vdd-supply =3D <&vdd>;
-
-Does this example need a node defining the vdd label?
-
-The assignment uses the phandle <&vdd>, but the label is not defined anywhe=
-re in
-the example block. When make dt_binding_check extracts and compiles the
-generated DTS, this will result in a dtc compilation regression because the
-phandle cannot be resolved.
-
-Adding a dummy regulator node with the vdd: label would fix this.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260429-hw_mon-emc=
-1812-v10-0-a8ca1d779502@microchip.com?part=3D1
