@@ -1,92 +1,112 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A285247A0B4
-	for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 18:18:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A6E257827
+	for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 18:19:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777573114; cv=none; b=kdTVSpPN9o9/g42ij4nAb6hdkMZjUooswrG6WUJiNhP9F/PeHIptHknJOD0DUuEnOkeqnjXcC45tQ3JqZWo9Dnv9h7rbgWamDFMZp/eAZRbmX2wBJNdsXTJoW/m+5cOimsw9yUHTeiNSusEjDaTp9Eueylb56HC6V1I+n1VUVH8=
+	t=1777573160; cv=none; b=XUREBplhnlH80D+Xn1+MVL9ruUepAbw+agB6f5Q0OlyOWuRqgE0YWXQohFuMEsJbrPE3ylYEAKXXvufpcQUez3qFnBBtcsqDdgVpJNLK4J1S2URPxrdlSx75I1XV4ZX6aTsxsXQtdLw6GRSi69lq2lsP/LV0YoAusCisfxS7vzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777573114; c=relaxed/simple;
-	bh=r1xldGkskM1LoWG/eSEiuRbHYKyqMWnb+9qvWV8vW+o=;
+	s=arc-20240116; t=1777573160; c=relaxed/simple;
+	bh=+qKaXpiv7eeIklafuIHZY8c2GZ7k4CIdfO5iNFUHTqU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RROMRGwbZmftrUJibf7wqy7Z3DH3YhWc8Q3Q9MSV7c3ZgwoYINxDaGAFm7cSBxfMWfubQcP9BZalfRlkzIXn/RiCM4RsLFE4wUtnNCNk1uiNrCDjkMEcRtILa9Rnzm27Cox3GuEfjN6Y2AqpQ/sZisN3Nn29EJRsKcfmSJ7Iv1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JV3/8xfo; arc=none smtp.client-ip=209.85.210.179
+	 Content-Type:Content-Disposition:In-Reply-To; b=JEK6fkhv5z6Yy/P0DdexGCCPCz9a+0nEAmjvjqhC0Pam5EIyT6CtLDwLO+BgrXbMgcTJ9h48uUr+BXy1XRuBYpXLY0UecVSx5M8ckpyAI2W+f69EEx+zhqXQLQMb/ORsE44hZTkARXmNhlMsEKfZowKOkrv1BwYv26f5mSWGgtw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bK5J7/5W; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JV3/8xfo"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-82fbdd60b64so930569b3a.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 11:18:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bK5J7/5W"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-82f69a286dbso894685b3a.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 11:19:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777573113; x=1778177913; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SKm1ZdQlx5hjZVefyBU7lA6ZzR4xQCcmrN+zV7mG1fg=;
-        b=JV3/8xfoTgec5Wt52gaGXCR0bNLsZVLmAckC+6/gFM6lWXuruFnwajK0CBJ0Hm4xlb
-         +pA1CnZX0gAWSv/9O7uLOeNIytKzFFCjSQIquHw1gJRJ2qEWf3JDPIHCyH6lJBUkr0zi
-         DZPmAi1R502fNr3V0Nn5Wzk3cZlhV2C1lKiwAzYeiCsPzbdE60o3P4FxLuUB2ZrdTV9i
-         ROPELSSK2fxcXvmOhxmH7SqxhiKJ7/lWwSU3+mXmHJRTfq0XhLbwDBaeh6IuwMbNVPGw
-         cnWoLtcBuK/pCDL5yvaZiof3SttPSqQUhhR5P9KZ4VbbF3HndX0z8pRjGq9HSipyzLCO
-         7Kyw==
+        d=gmail.com; s=20251104; t=1777573159; x=1778177959; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nMVHhZ1eUgYJb8AUkhSy4uV/Dn/nEc7kSE5GQyo6dnA=;
+        b=bK5J7/5W7wia4UUgDIMb4kAy0K87FBRFSjcatE7sQZ5h99GpEhAvRX2jOt81fLzccI
+         a5ierDJqtLRLtRkVh+R0TRcEG5BhpVofLD66au/+LZXrJq7K6hl/IT2XA3OiXSxYQ5bt
+         8vcMStSr7kL1dPyN8Eat4mT8/IYLPhRbccw41WczmKB5iQmUXuZ+OuEIDZd1ihwlj3jb
+         eEZLjF05nUiS43chHB9vuGOCyuhhE1dnMuwHF8SzaTCKph5ScMgGWE0E6+jRgLR3MD6J
+         11cO9yRsc0RoV/dVNaIGOw3bSBiAveOe5zTBRzBZwBVsba9ONKG81ixIuWI/yodN/RIC
+         x7hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777573113; x=1778177913;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SKm1ZdQlx5hjZVefyBU7lA6ZzR4xQCcmrN+zV7mG1fg=;
-        b=KuF5sxgpoO57ERpdpap7TiO/tmrx5m+rgyBsWj2pwe6MPmEkE1xGFFp6v7bgBdnxvI
-         sQ852BmqJ5zA6eLod/pragO8GEybTR9A1yC1CK5aMvDkM9FprBQgpubyGD8b1vV4VAv6
-         apwVRlZoycQqa2ceu1Xk6GkuXIs9igm+smIMakiLo+v6y7wWFaQsXC1SDv97MmZEzsQ2
-         ZK7CI+vuEEsnAk8zR+VIopjRHc6d/O6601BPrkZEWfE1zNOBF/GCI9C1g87oZ4bQ/w7T
-         TMvp5q/n5t40Mfc5Au7YXiwgtqnxVrjNO/oYvwPVyltAp2z50CHGDTYSbxd+XWKq2FpP
-         6S6g==
-X-Forwarded-Encrypted: i=1; AFNElJ/PF22jS5UZWwChzBBbaTRHT1VymCd8LpGnTc5NfOh/vPHevWAMuuOoN8ak1PsMiGz3Rvt0yZKNtAblkQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/LhkqSJOe7248Ybxi3Co+AyPjp5cHsysxdCn5KVKpPVyu6S9z
-	S0+hFz+nDdGg27lB4ogpGZFkvjGgvdSW7CgpBmLREBIOF+ewpnD93ZJc
-X-Gm-Gg: AeBDieuzZ6chkUnOYCJER2BZj+kMMg/dIJHQDLvbzXErh2zXig9/QTMIwWwrzqOksH1
-	spL+6jJVWqrNOJwnB/bpzT1AAcUajLRUKcGqIYWnNT8tq/91OklQGWO6PLXwh7jbI/kMa2luk5U
-	Y11xrpm7Rzvz6PZ8RIG+blQaraG38Jf/DU0gTVcRoYLL7GA3JsAVxR71G5dECnwCtKsjFuRG8wg
-	ZEmvRZMSuAm0xTQBgKJGXEcqLTZV/S91uXZ/i32m2emy9EPmHSOGVERfEgDZzbJAsE/27/bBIS6
-	Il2J8YHtJ+v4gzz1F2VnoWK4PQrtgtnKyTig7xokI+gLQIV6yfLIIjvCnIdZO7PHq143ovRYQuZ
-	3NFizseJY3M9+qxtdZohqyThKk3rn3oysYAgJcvx3Q93eQI63JV8Xy5IWou53vDnNozgOfcFjVG
-	X0knitawiEPSqBPKt0Z73OwU/DjFeDp9j3Vq5ZxJSmjDiG9Bc=
-X-Received: by 2002:a05:6a00:28c5:b0:82c:70a8:faee with SMTP id d2e1a72fcca58-834fdadf50amr5266501b3a.6.1777573112943;
-        Thu, 30 Apr 2026 11:18:32 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1777573159; x=1778177959;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nMVHhZ1eUgYJb8AUkhSy4uV/Dn/nEc7kSE5GQyo6dnA=;
+        b=J2zl/3LELvpIVHXxKxijr29i7Az4Z1tuF/5iTSAlqTwmWoU2Q2bkl/KWNgnG2uDo1a
+         FtvM06NtanGqlxKi7dJPsi8m1nZ8CGH7sCZC+aYLpJNIzzQUQOfCYqn7mD95CE7kDrNv
+         Vt32YhkramXIox5ehRJU6cjVaVjlimXa6GhDn5lMlukdb4Vjh944Ran0mSTAsDXQoOwP
+         hqlUxQasDIKzqNYX+I79Ex6u76NCtB2a1oUzuopRCixWWLx4q68SVhPBHMqMPxpGRNVG
+         jt2ofzzfO09WcCRXLj32bvU4nHDI+AjrFQS9upo/tlwXOf2xbGdpW0+mMoGoApCTB1fR
+         Coow==
+X-Gm-Message-State: AOJu0Yw+MeUFIlDrs/ZOf4h8Fzy5kSlwM79jELX8F5w5U50p8WepQOr9
+	x+dpSZkBwKuEhJiZg3btq0/7i/VrydxkTITy086xlnu4zyi17lLWNP0K
+X-Gm-Gg: AeBDievSWx2SQf/0y5CtwcvmqzEyUioHpdeGNbl99FaDRB8Hlm0Xk3D8037o3KqQWFD
+	4PfZg2/73xD0JgF42+TajQ0aV1vsDYLBXDV1La45qWzii4TIb/HdujKAi/NoA4fZgJRGFXBoYNv
+	JqUllhE6mmUQY4n0D5/IohlyxE37MYY0tnPoXrp3++4yvgZ8h+tAy/MbaMRvLfCO34E64GT6dop
+	GadG+OFbOsPRuDr3+giYXs4YM6fS6xOUFoJElyUHN5ZLNd+PtHsZvFMV0SauA7oVKZJq1Qpw4cR
+	6Wv8p0NWK2TxAQWnqMBB8BMjb6RVIbWs4eFRVZv/acUy2/BnduKlQuzDOdAngHOycGhlcPTDBNn
+	MoCHhMO4JMsdD2wAR5YWwwmb/q7TOskllMUCvguLnpu3u26MH84AlR6s270ZOrYHHgh6kHR1jfQ
+	/0CSeT3RTpYUqE7CXQgxlvzwCUULloKySHRGe1Ft7wrTdcJ9L/jhlfRIJxFw==
+X-Received: by 2002:a05:6a00:1745:b0:82f:a6bf:bee7 with SMTP id d2e1a72fcca58-834fdc96838mr4660286b3a.49.1777573158627;
+        Thu, 30 Apr 2026 11:19:18 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-835158aa1ffsm311794b3a.22.2026.04.30.11.18.32
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83515acfbcdsm325989b3a.30.2026.04.30.11.19.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Apr 2026 11:18:32 -0700 (PDT)
+        Thu, 30 Apr 2026 11:19:18 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 30 Apr 2026 11:18:31 -0700
+Date: Thu, 30 Apr 2026 11:19:16 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Brian Chiang <chiang.brian@inventec.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon: (pmbus/lx1308) Add support for LX1308
-Message-ID: <136527f6-5bcb-4cd1-b60c-ce7c80fd149b@roeck-us.net>
-References: <20260428-add-support-lx1308-v2-0-90f115954143@inventec.com>
- <20260428-add-support-lx1308-v2-2-90f115954143@inventec.com>
+To: Sasha Levin <sashal@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: Remove stale CONFIG_SENSORS_SBRMI Makefile
+ reference
+Message-ID: <f05a7ec3-8afa-484a-9385-87a0e18af9c8@roeck-us.net>
+References: <20260426000319.55908-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260428-add-support-lx1308-v2-2-90f115954143@inventec.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260426000319.55908-1-sashal@kernel.org>
 
-On Tue, Apr 28, 2026 at 12:19:29PM +0000, Brian Chiang wrote:
-> Add support for the Luxshare LX1308, a high-efficiency 12V 860W
-> DC/DC power module. The module operates from 40-60V input voltage.
+On Sat, Apr 25, 2026 at 08:03:19PM -0400, Sasha Levin wrote:
+> kconfiglint reports:
 > 
-> Signed-off-by: Brian Chiang <chiang.brian@inventec.com>
+>   X001: CONFIG_SENSORS_SBRMI referenced in Makefile but not defined
+>         in any Kconfig
+> 
+> The SB-RMI hardware monitoring driver was originally introduced in
+> commit 5a0f50d110b3 ("hwmon: Add support for SB-RMI power module") with
+> both a Kconfig entry (CONFIG_SENSORS_SBRMI) and a Makefile line
+> (obj-$(CONFIG_SENSORS_SBRMI) += sbrmi.o) in drivers/hwmon/.
+> 
+> Commit e156586764050 ("hwmon/misc: amd-sbi: Move core sbrmi from hwmon to
+> misc")
+> moved the driver to drivers/misc/amd-sbi/ to support additional
+> functionality beyond hardware monitoring. That commit correctly removed the
+> Kconfig entry from drivers/hwmon/Kconfig, moved the source file
+> drivers/hwmon/sbrmi.c to drivers/misc/amd-sbi/sbrmi.c, and created new
+> Kconfig/Makefile entries in drivers/misc/amd-sbi/ with a renamed symbol
+> (CONFIG_AMD_SBRMI_I2C).
+> 
+> However, the Makefile line in drivers/hwmon/Makefile was not removed in
+> that commit. The orphaned line references a CONFIG symbol that no longer
+> exists and a source file that is no longer present, so it has no effect
+> on the build — but it is dead code that should be cleaned up.
+> 
+> Remove the stale Makefile reference.
+> 
+> Assisted-by: Claude:claude-opus-4-6 kconfiglint
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
 Applied.
 
