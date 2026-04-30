@@ -1,246 +1,367 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868B3377574
-	for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 08:08:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 263C32264B0;
+	Thu, 30 Apr 2026 08:51:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777536481; cv=none; b=JE/Y2KWG9Ka2y94MKb79eU7fE0zOxYxet2oS0yRUJBmLsTi/hOWw2sUYq/yFOm2vP9I+rsN+froP6vHlycEYljHmpDbZj7ipBUzTzhHoJQA/azK8tEaHI+4b3JcMh0mYqpMhVtA7eXeyFpDwtb2RCciJsxNQMkVgTj/GW6qUE5g=
+	t=1777539072; cv=none; b=n6Asw7nnkA98GjYATQtT7qB2L7y3d/xmcPczxfB5W+Gm9k6MQo5aKh70lTapC17GOb9zebVBpWJ5zedKtT+SuLO58jT2U2pZxGNCWGwlKNlkJ+eYNkTWZDNLfIiqac+gLbYoZ3+E1oKwWD8Ln8quZUhDwR2uGgZiWCt74d8qBkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777536481; c=relaxed/simple;
-	bh=lYuTZ4Zhas8ZPRyj5etivQlp/UpZ+eG+upGuTZAwe6Y=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fvzT7BBR4/9tyWtw2HQS41fjG07MbuVvJnf/+pyyQJaXBD2DW1zQSqrA5rkPd8D36gQRIMKg0TXXuwjBx7aoRfy6+0F1BoHTViOq7es2gnIlEgPN0a6YNMh/7zKsFZLcm/UsOGDrvqQMSMpFic5+C566W8/2OBI6Dec4Dhs2RwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z2D1BRD9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777539072; c=relaxed/simple;
+	bh=ruQEE7iNdjUeMjgQ5l9kwFErghIXZ2/d/hvkCEGDcmM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=a7/eae/afNwflrIJjN+sfyZYxeSraIMKWv9pnGFpNF+et4zqOd1NEankpwMtHFhZkwZNVc9f80Bkm6JRUoSLcKlMwcjMvmyMOBNuqMfiphXSXbieXSFR/s1KPhNRiDdaIY1GT4ZE0vkvlvBM4WNd6scaqrpbEeGwb81lB4TPbGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dj3z+HY7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z2D1BRD9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AA92C2BCB3;
-	Thu, 30 Apr 2026 08:08:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dj3z+HY7"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F1681C2BCFC;
+	Thu, 30 Apr 2026 08:51:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777536481;
-	bh=lYuTZ4Zhas8ZPRyj5etivQlp/UpZ+eG+upGuTZAwe6Y=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=Z2D1BRD997dsWgitW7ZBH/FScuxWh40mSJsMKdjZ9LP9sXldYEd/SDcVMIHhXgPuB
-	 KAUXBUxDQ+eOM4dD7+d98eT6IkHg4qkz91saZ365WwsTpMS6f/dZkOaEu9przJrZut
-	 4CFRTAxiAVOhr3lQ+igw/Szm3GdmFq/3W36utfDwpq7lIAN2FDoie+aM0Hm5FaT3GT
-	 HUKHFnn1FlzLAq9EhwjEOpGA+G6niHrSK7NSmFJq8jJMvsTJosqyAo0QYuZ7Sr+x69
-	 4jE6OWvd7aTlu22Vedp3W6O9kSDZCJfdgVUBJyJJQptwirKW/4vEum7f07ObANT0e0
-	 tLwJ1AXHufTmg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 2/2] hwmon: Add Eswin EIC7700 PVT sensor driver
-Reply-To: sashiko@lists.linux.dev
-To: hehuan1@eswincomputing.com
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260430064519.1632-1-hehuan1@eswincomputing.com>
-References: <20260430064519.1632-1-hehuan1@eswincomputing.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 30 Apr 2026 08:08:00 +0000
-Message-Id: <20260430080801.1AA92C2BCB3@smtp.kernel.org>
+	s=k20201202; t=1777539072;
+	bh=ruQEE7iNdjUeMjgQ5l9kwFErghIXZ2/d/hvkCEGDcmM=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=dj3z+HY7uPESOhaBgXdMIXyaP9kL/r/2qgaMJ0zAhtpzWHvcMzzR7uG0yezAvjZL8
+	 AIHONTrffXaRxHKIGF1Cvwiqu73eNKNwTSIMu4jSjrP/eM2X+D7KXE5kGIfUf+zDd3
+	 SDF8HUKGoKpmxxUnwpRmahshHchG9nwnzKmf/sSucVAegmU5v7zHkf100kuOr6oXVG
+	 u05xY/5AJrCfji8umHsHfrBzKmLjV6qstbewbL2R9uhtG+dXca9XlW1SK/sZg4Bokb
+	 bpivbNbKezV+SS9nEaCCduV2sMGm+KR+ZtMuzwRmDED/C5RUp9g/nD2Cg35Xo+2ln7
+	 6tJFMb34T03Dg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5865CD13DA;
+	Thu, 30 Apr 2026 08:51:11 +0000 (UTC)
+From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
+Date: Thu, 30 Apr 2026 09:52:05 +0100
+Subject: [PATCH v12 3/3] gpio: gpio-ltc4283: Add support for the LTC4283
+ Swap Controller
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260430-ltc4283-support-v12-3-5dc9901f2567@analog.com>
+References: <20260430-ltc4283-support-v12-0-5dc9901f2567@analog.com>
+In-Reply-To: <20260430-ltc4283-support-v12-0-5dc9901f2567@analog.com>
+To: linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-doc@vger.kernel.org
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>, 
+ Bartosz Golaszewski <brgl@kernel.org>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777539125; l=8619;
+ i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
+ bh=HcILxbeDidetLOLt+/phZczCP+cgodBWiQsD5gX/J/s=;
+ b=OBUhmMYnb/FTGI/13d6I/4oJGBrOVGaTUy5Xbh1ZDHHfvm/TBsgCkv3sm2uPNI092RV+03amr
+ FrVaysb8RqZDtBZpy2+txcAkNup8Dj6RGZA5j3GklU3+hs+sEuLNnhQ
+X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
+ pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
+X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
+ auth_id=100
+X-Original-From: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
+Reply-To: nuno.sa@analog.com
 
-Thank you for your contribution! Sashiko AI review found 7 potential issue(=
-s) to consider:
-- [High] Hardware access with disabled clock when CONFIG_PM=3Dn
-- [High] Resource leak and hardware powered on during driver unbind
-- [High] System suspend state desynchronization causes potential crashes
-- [High] Unclocked hardware access in the interrupt handler
-- [Medium] Missing synchronization on timeout path causes race condition an=
-d stale data
-- [Medium] Unvalidated sysfs input and hwmon ABI violation for temp_offset
-- [Low] Mismatch between commit message and implemented voltage channels
---
+From: Nuno Sá <nuno.sa@analog.com>
 
-commit 226d2b003d7fbabad9b8abaf9c71cf6fdf386a91
-Author: Huan He <hehuan1@eswincomputing.com>
+The LTC4283 device has up to 8 pins that can be configured as GPIOs.
 
-hwmon: Add Eswin EIC7700 PVT sensor driver
-   =20
-Add support for ESWIN EIC7700 Voltage and Temperature sensor. The driver
-supports temperature and voltage monitoring with polynomial conversion,
-and provides sysfs interface for sensor data access.
-   =20
-The PVT IP contains one temperature sensor and four voltage sensors for
-process variation monitoring.
+Note that PGIO pins are not set as GPIOs by default so if they are
+configured to be used as GPIOs we need to make sure to initialize them
+to a sane default. They are set as inputs by default.
 
-> The PVT IP contains one temperature sensor and four voltage sensors for
-> process variation monitoring.
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Reviewed-by: Linus Walleij <linusw@kernel.org>
+Signed-off-by: Nuno Sá <nuno.sa@analog.com>
+---
+ MAINTAINERS                 |   2 +
+ drivers/gpio/Kconfig        |  15 +++
+ drivers/gpio/Makefile       |   1 +
+ drivers/gpio/gpio-ltc4283.c | 218 ++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 236 insertions(+)
 
-This isn't a bug, but the commit message states there are four voltage
-sensors, while the driver implementation only exposes a single voltage chan=
-nel.
-Could the commit message be updated to match the implementation?
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c657ca0a4652..de6bc7828f28 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15240,9 +15240,11 @@ F:	drivers/hwmon/ltc4282.c
+ 
+ LTC4283 HARDWARE MONITOR AND GPIO DRIVER
+ M:	Nuno Sá <nuno.sa@analog.com>
++L:	linux-gpio@vger.kernel.org
+ L:	linux-hwmon@vger.kernel.org
+ S:	Supported
+ F:	Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml
++F:	drivers/gpio/gpio-ltc4283.c
+ F:	drivers/hwmon/ltc4283.c
+ 
+ LTC4286 HARDWARE MONITOR DRIVER
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index 020e51e30317..9b6e0a34eff6 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -1783,6 +1783,21 @@ config GPIO_WM8994
+ 
+ endmenu
+ 
++menu "Auxiliary Bus GPIO drivers"
++	depends on AUXILIARY_BUS
++
++config GPIO_LTC4283
++	tristate "Analog Devices LTC4283 GPIO support"
++	depends on SENSORS_LTC4283
++	help
++	  If you say yes here you want the GPIO function available in Analog
++	  Devices LTC4283 Negative Voltage Hot Swap Controller.
++
++	  This driver can also be built as a module. If so, the module will
++	  be called gpio-ltc4283.
++
++endmenu
++
+ menu "PCI GPIO expanders"
+ 	depends on PCI
+ 
+diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+index b267598b517d..6e2367cab94f 100644
+--- a/drivers/gpio/Makefile
++++ b/drivers/gpio/Makefile
+@@ -100,6 +100,7 @@ obj-$(CONFIG_GPIO_LP873X)		+= gpio-lp873x.o
+ obj-$(CONFIG_GPIO_LP87565)		+= gpio-lp87565.o
+ obj-$(CONFIG_GPIO_LPC18XX)		+= gpio-lpc18xx.o
+ obj-$(CONFIG_GPIO_LPC32XX)		+= gpio-lpc32xx.o
++obj-$(CONFIG_GPIO_LTC4283)		+= gpio-ltc4283.o
+ obj-$(CONFIG_GPIO_MACSMC)		+= gpio-macsmc.o
+ obj-$(CONFIG_GPIO_MADERA)		+= gpio-madera.o
+ obj-$(CONFIG_GPIO_MAX3191X)		+= gpio-max3191x.o
+diff --git a/drivers/gpio/gpio-ltc4283.c b/drivers/gpio/gpio-ltc4283.c
+new file mode 100644
+index 000000000000..6609443c5d62
+--- /dev/null
++++ b/drivers/gpio/gpio-ltc4283.c
+@@ -0,0 +1,218 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Analog Devices LTC4283 GPIO driver
++ *
++ * Copyright 2025 Analog Devices Inc.
++ */
++
++#include <linux/auxiliary_bus.h>
++#include <linux/bitfield.h>
++#include <linux/bitmap.h>
++#include <linux/bits.h>
++#include <linux/device.h>
++#include <linux/gpio/driver.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/regmap.h>
++
++#define LTC4283_PINS_MAX			8
++#define LTC4283_PGIOX_START_NR			4
++#define LTC4283_INPUT_STATUS			0x02
++#define LTC4283_PGIO_CONFIG			0x10
++#define   LTC4283_PGIO_CFG_MASK(pin) \
++	GENMASK(((pin) - LTC4283_PGIOX_START_NR) * 2 + 1, (((pin) - LTC4283_PGIOX_START_NR) * 2))
++#define LTC4283_PGIO_CONFIG_2			0x11
++
++#define LTC4283_ADIO_CONFIG			0x12
++/* starts at bit 4 */
++#define   LTC4283_ADIOX_CONFIG_MASK(pin)	BIT((pin) + 4)
++#define LTC4283_PGIO_DIR_IN			3
++#define LTC4283_PGIO_DIR_OUT			2
++
++struct ltc4283_gpio {
++	struct gpio_chip gpio_chip;
++	struct regmap *regmap;
++};
++
++static int ltc4283_pgio_get_direction(const struct ltc4283_gpio *st, unsigned int off)
++{
++	unsigned int val;
++	int ret;
++
++	ret = regmap_read(st->regmap, LTC4283_PGIO_CONFIG, &val);
++	if (ret)
++		return ret;
++
++	val = field_get(LTC4283_PGIO_CFG_MASK(off), val);
++	if (val == LTC4283_PGIO_DIR_IN)
++		return GPIO_LINE_DIRECTION_IN;
++
++	return GPIO_LINE_DIRECTION_OUT;
++}
++
++static int ltc4283_gpio_get_direction(struct gpio_chip *gc, unsigned int off)
++{
++	struct ltc4283_gpio *st = gpiochip_get_data(gc);
++	unsigned int val;
++	int ret;
++
++	if (off >= LTC4283_PGIOX_START_NR)
++		return ltc4283_pgio_get_direction(st, off);
++
++	ret = regmap_read(st->regmap, LTC4283_ADIO_CONFIG, &val);
++	if (ret)
++		return ret;
++
++	if (val & LTC4283_ADIOX_CONFIG_MASK(off))
++		return GPIO_LINE_DIRECTION_IN;
++
++	return GPIO_LINE_DIRECTION_OUT;
++}
++
++static int ltc4283_gpio_direction_set(const struct ltc4283_gpio *st,
++				      unsigned int off, bool input)
++{
++	if (off >= LTC4283_PGIOX_START_NR) {
++		unsigned int val = LTC4283_PGIO_DIR_OUT;
++
++		if (input)
++			val = LTC4283_PGIO_DIR_IN;
++
++		val = field_prep(LTC4283_PGIO_CFG_MASK(off), val);
++		return regmap_update_bits(st->regmap, LTC4283_PGIO_CONFIG,
++					  LTC4283_PGIO_CFG_MASK(off), val);
++	}
++
++	return regmap_update_bits(st->regmap, LTC4283_ADIO_CONFIG,
++				  LTC4283_ADIOX_CONFIG_MASK(off),
++				  field_prep(LTC4283_ADIOX_CONFIG_MASK(off), input));
++}
++
++static int __ltc4283_gpio_set_value(const struct ltc4283_gpio *st,
++				    unsigned int off, int val)
++{
++	u32 reg = off < LTC4283_PGIOX_START_NR ? LTC4283_ADIO_CONFIG : LTC4283_PGIO_CONFIG_2;
++
++	return regmap_update_bits(st->regmap, reg, BIT(off),
++				  field_prep(BIT(off), !!val));
++}
++
++static int ltc4283_gpio_direction_input(struct gpio_chip *gc, unsigned int off)
++{
++	struct ltc4283_gpio *st = gpiochip_get_data(gc);
++
++	return ltc4283_gpio_direction_set(st, off, true);
++}
++
++static int ltc4283_gpio_direction_output(struct gpio_chip *gc, unsigned int off, int val)
++{
++	struct ltc4283_gpio *st = gpiochip_get_data(gc);
++	int ret;
++
++	ret = ltc4283_gpio_direction_set(st, off, false);
++	if (ret)
++		return ret;
++
++	return __ltc4283_gpio_set_value(st, off, val);
++}
++
++static int ltc4283_gpio_get_value(struct gpio_chip *gc, unsigned int off)
++{
++	struct ltc4283_gpio *st = gpiochip_get_data(gc);
++	unsigned int val, reg;
++	int ret, dir;
++
++	dir = ltc4283_gpio_get_direction(gc, off);
++	if (dir < 0)
++		return dir;
++
++	if (dir == GPIO_LINE_DIRECTION_IN) {
++		ret = regmap_read(st->regmap, LTC4283_INPUT_STATUS, &val);
++		if (ret)
++			return ret;
++
++		/* ADIO1 is at bit 3. */
++		if (off < LTC4283_PGIOX_START_NR)
++			return !!(val & BIT(3 - off));
++
++		/* PGIO1 is at bit 7. */
++		return !!(val & BIT(7 - (off - LTC4283_PGIOX_START_NR)));
++	}
++
++	if (off < LTC4283_PGIOX_START_NR)
++		reg = LTC4283_ADIO_CONFIG;
++	else
++		reg = LTC4283_PGIO_CONFIG_2;
++
++	ret = regmap_read(st->regmap, reg, &val);
++	if (ret)
++		return ret;
++
++	return !!(val & BIT(off));
++}
++
++static int ltc4283_gpio_set_value(struct gpio_chip *gc, unsigned int off, int val)
++{
++	struct ltc4283_gpio *st = gpiochip_get_data(gc);
++
++	return __ltc4283_gpio_set_value(st, off, val);
++}
++
++static int ltc4283_init_valid_mask(struct gpio_chip *gc, unsigned long *valid_mask,
++				   unsigned int ngpios)
++{
++	unsigned long *mask = dev_get_platdata(gc->parent);
++
++	bitmap_copy(valid_mask, mask, ngpios);
++	return 0;
++}
++
++static int ltc4283_gpio_probe(struct auxiliary_device *adev,
++			      const struct auxiliary_device_id *id)
++{
++	struct device *dev = &adev->dev;
++	struct ltc4283_gpio *st;
++	struct gpio_chip *gc;
++
++	st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
++	if (!st)
++		return -ENOMEM;
++
++	st->regmap = dev_get_regmap(dev->parent, NULL);
++	if (!st->regmap)
++		return dev_err_probe(dev, -ENODEV,
++				     "Failed to get regmap\n");
++
++	gc = &st->gpio_chip;
++	gc->parent = dev;
++	gc->get_direction = ltc4283_gpio_get_direction;
++	gc->direction_input = ltc4283_gpio_direction_input;
++	gc->direction_output = ltc4283_gpio_direction_output;
++	gc->get = ltc4283_gpio_get_value;
++	gc->set = ltc4283_gpio_set_value;
++	gc->init_valid_mask = ltc4283_init_valid_mask;
++	gc->can_sleep = true;
++
++	gc->base = -1;
++	gc->ngpio = LTC4283_PINS_MAX;
++	gc->label = adev->name;
++	gc->owner = THIS_MODULE;
++
++	return devm_gpiochip_add_data(dev, &st->gpio_chip, st);
++}
++
++static const struct auxiliary_device_id ltc4283_aux_id_table[] = {
++	{ "ltc4283.gpio" },
++	{ }
++};
++MODULE_DEVICE_TABLE(auxiliary, ltc4283_aux_id_table);
++
++static struct auxiliary_driver ltc4283_gpio_driver = {
++	.probe = ltc4283_gpio_probe,
++	.id_table = ltc4283_aux_id_table,
++};
++module_auxiliary_driver(ltc4283_gpio_driver);
++
++MODULE_AUTHOR("Nuno Sá <nuno.sa@analog.com>");
++MODULE_DESCRIPTION("GPIO LTC4283 Driver");
++MODULE_LICENSE("GPL");
 
-> diff --git a/drivers/hwmon/eic7700-pvt.c b/drivers/hwmon/eic7700-pvt.c
-> new file mode 100644
-> index 0000000000000..d9d6a035defeb
-> --- /dev/null
-> +++ b/drivers/hwmon/eic7700-pvt.c
-[ ... ]
-> +static irqreturn_t eic7700_pvt_hard_isr(int irq, void *data)
-> +{
-> +	struct pvt_hwmon *pvt =3D data;
-> +	u32 val;
-> +
-> +	eic7700_pvt_update(pvt->regs + PVT_INT, PVT_INT_CLR, PVT_INT_CLR);
-> +	/*
-> +	 * Read the data, update the cache and notify a waiter of this event.
-> +	 */
-> +	val =3D readl(pvt->regs + PVT_DATA);
+-- 
+2.54.0
 
-Could this cause a bus fault if a spurious or delayed interrupt fires while
-the device is in the RPM_SUSPENDED state?
 
-When the device is suspended, the hardware clock is gated. Accessing regist=
-ers
-without checking the PM runtime state could lead to a crash. Should this use
-pm_runtime_get_if_active() to protect against accessing unclocked hardware?
-
-[ ... ]
-> +static int eic7700_pvt_read_data(struct pvt_hwmon *pvt,
-> +				 enum pvt_sensor_type type, long *val)
-> +{
-> +	unsigned long timeout;
-> +	u32 data;
-> +	int ret;
-> +
-> +	/*
-> +	 * Wait for PVT conversion to complete and update the data cache. The
-> +	 * data read procedure is following: set the requested PVT sensor mode,
-> +	 * enable conversion, wait until conversion is finished, then disable
-> +	 * conversion and IRQ, and read the cached data.
-> +	 */
-> +	reinit_completion(&pvt->conversion);
-> +
-> +	eic7700_pvt_set_mode(pvt, pvt_info[type].mode);
-> +	eic7700_pvt_update(pvt->regs + PVT_ENA, PVT_ENA_EN, PVT_ENA_EN);
-> +
-> +	/*
-> +	 * Wait with timeout since in case if the sensor is suddenly powered
-> +	 * down the request won't be completed and the caller will hang up on
-> +	 * this procedure until the power is back up again. Multiply the
-> +	 * timeout by the factor of two to prevent a false timeout.
-> +	 */
-> +	timeout =3D 2 * usecs_to_jiffies(ktime_to_us(pvt->timeout));
-> +	ret =3D wait_for_completion_timeout(&pvt->conversion, timeout);
-> +
-> +	eic7700_pvt_update(pvt->regs + PVT_ENA, PVT_ENA_EN, 0);
-> +	eic7700_pvt_update(pvt->regs + PVT_INT, PVT_INT_CLR, PVT_INT_CLR);
-> +
-> +	data =3D READ_ONCE(pvt->data_cache);
-> +
-> +	if (!ret)
-> +		return -ETIMEDOUT;
-
-If the timeout expires, could an interrupt still be in flight?
-
-If so, a subsequent read request would call reinit_completion(), and the
-delayed interrupt handler could execute, complete the new request premature=
-ly,
-and cause the read to return stale data.
-
-Does the timeout path need to call synchronize_irq() to ensure no interrupt
-handler is running before returning?
-
-[ ... ]
-> +static int eic7700_pvt_write_trim(struct pvt_hwmon *pvt, long val)
-> +{
-> +	/*
-> +	 * Update PVT trim register safely while the controller is temporarily
-> +	 * disabled.
-> +	 */
-> +	eic7700_pvt_set_trim(pvt, val);
-> +
-> +	return 0;
-> +}
-
-Does this code validate the user input before writing it to the hardware?
-
-Writing a negative value could truncate to 0xFFFFFFFF and overwrite reserved
-bits in the register. Additionally, the hwmon ABI specifies that temp_offset
-should be in millidegrees Celsius, but this writes the raw value directly to
-the register without scaling.
-
-[ ... ]
-> +static void eic7700_pvt_disable_pm_runtime(void *data)
-> +{
-> +	struct pvt_hwmon *pvt =3D data;
-> +
-> +	pm_runtime_dont_use_autosuspend(pvt->dev);
-> +	pm_runtime_disable(pvt->dev);
-> +}
-
-Can this leak the clock reference and leave the hardware powered on if the
-device is unbound?
-
-Because pm_runtime_put_autosuspend() is used after reads, the device remains
-active for a 3-second window. If the module is removed during this window,
-pm_runtime_disable() will cancel the pending suspend but it does not suspend
-a device that is currently RPM_ACTIVE.
-
-Should this cleanup action explicitly suspend the device if it is active?
-
-[ ... ]
-> +static int eic7700_pvt_probe(struct platform_device *pdev)
-> +{
-[ ... ]
-> +	ret =3D eic7700_pvt_init_iface(pvt);
-> +	if (ret) {
-> +		clk_disable_unprepare(pvt->clk);
-> +		return ret;
-> +	}
-> +
-> +	clk_disable_unprepare(pvt->clk);
-
-Is this driver intended to be built when CONFIG_PM is disabled?
-
-If CONFIG_PM is disabled, pm_runtime_get_sync() in the hwmon read function =
-is
-a no-op that returns 1. Because the clock is explicitly disabled at the end=
- of
-probe() and relies entirely on PM runtime to re-enable it, a read operation
-will access the hardware registers while the clock is gated, leading to an
-external abort or system hang.
-
-Also, eic7700_pvt_suspend() checks !pm_runtime_status_suspended(dev), which
-is always false when CONFIG_PM=3Dn, causing it to erroneously call
-clk_disable_unprepare() on an already disabled clock.
-
-[ ... ]
-> +static int __maybe_unused eic7700_pvt_suspend(struct device *dev)
-> +{
-> +	int ret =3D 0;
-> +
-> +	if (!pm_runtime_status_suspended(dev)) {
-> +		ret =3D eic7700_pvt_runtime_suspend(dev);
-> +		if (ret) {
-> +			dev_err(dev, "Failed to suspend: %d\n", ret);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-
-Does calling eic7700_pvt_runtime_suspend() directly leave the PM runtime
-state desynchronized?
-
-This manually gates the clock if the device is active, but it fails to upda=
-te
-the device's PM runtime status. The PM core still considers the device to be
-RPM_ACTIVE.
-
-If a kernel thread calls pm_runtime_get_sync() before late suspend, it will
-see the state as active, return immediately without re-enabling the clock,
-and crash when accessing registers.
-
-Should this use pm_runtime_force_suspend() and pm_runtime_force_resume() to
-safely maintain state consistency?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260430064107.1598=
--1-hehuan1@eswincomputing.com?part=3D2
