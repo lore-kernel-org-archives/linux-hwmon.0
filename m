@@ -1,67 +1,67 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD9538236B
-	for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 20:17:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A624139D6E4
+	for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 20:18:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777580279; cv=none; b=oGIaGugkqukVA6aqEBQrCfJeih38JvbhrNt2sH4+LpkIZ5/iV5nQtIE1xXrAfOJreHtOgP0rdqSo1UHJVKvaqEriDQ9LPd5JM9wYyB/loMn//CydsTBTbPMZ3dNqMgXs3JRfhd1Y2zPkclW0EXo4PTZuistce18aVk4O3NsgvfE=
+	t=1777580335; cv=none; b=MX7YYh7r9e6d3Oq2VNWDvi59tRvoTFGUKGtqlatL+E+QD1Hb11wxjrQ9qaVL5jqZ5pG1glrHitjJ9NMgeWq0N4WMqPTeEdQQMDtH7oqxdrlPAwKF8oZI+TcbtaTi8Bx83yEoor4/CPZ0eu2Jk0tq2FHHmbCHAdzxVrgTkDwNL9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777580279; c=relaxed/simple;
-	bh=FoqGomH61K68W5R1FI7QkSX12Lw5Beu1A6pPITQb32Q=;
+	s=arc-20240116; t=1777580335; c=relaxed/simple;
+	bh=ipayLzQyOTnT6KB96s96FlDwUtWz3R0lg+FfOs2iarQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IJYps3tudSqEPruc1nPlob8M1AuTEdBYEE2TybXu797aRXM1X9EWqCoFdebB0+qKZFXSyNUMwJ1hdiXZHchjfB3j/m7IWE/gOJQMcsu5T/0XzMdM9aOQ4xt6Q/SeySb7GDok/A9mK/E0eWsJNrR8oh+vTB/qyJRZd6Le4itWSdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rnfcLNu3; arc=none smtp.client-ip=209.85.214.175
+	 In-Reply-To:Content-Type; b=WD4nRCSbC/Y/s2Bd4ygqnOEPWhVDWnn0hmqEsD9/rWFNxYeOoODPICBIfCOtV0G7f8xSC990u4LqbzLC558OcnCYMNdRSnUoiBkWYPWI7Z6ddmAqqz1TNbPPpttkt+DLqvPVRbB5MbS1nzVi9UkJ7L7cr5vU2Lcaaqu9uuKQ4ok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mb4ZmnT2; arc=none smtp.client-ip=209.85.215.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rnfcLNu3"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2b24fcc2b5dso8686655ad.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 13:17:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mb4ZmnT2"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-c79467f124dso495601a12.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 13:18:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777580277; x=1778185077; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1777580331; x=1778185131; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=MnVwBtZbfDqdeLh5y4Pf/WbasJ8kSvMt9+xGKTa8elE=;
-        b=rnfcLNu39JiMqzpngREN/fKBVYXMVhBfXCumrpLFZEDFbivQ6Rt/HD3jDWoPfq+Qos
-         I253s1CEaea2nbOkeTvSebJV1w0hTt+73EpdelCthoOqa28KcA4PuveMJ26uPX2AjxyO
-         o+Kv7lXfgXNI+kctNr2uGZK/jsPtxiNkSf/uk7SfnsNmz6ZGSe7Se2bKAKoLYJbHcSat
-         FjnkTncHMG7QRFc8i0x55+6m0LJvPHJcunQ/+VJ++hlYlnX4C1O0/i7iNb7ppQ69cr0T
-         CtknxtLx+J1+XGhKfSWbCrmXItoJec5P5ELIXi6qOjVu+cg2QNNMl0bweOLt+Cy0fdEl
-         QQSQ==
+        bh=23tE+HbjZXJoxqvHFayaQoGSWZhsiqS+lWP51Nu+eNU=;
+        b=Mb4ZmnT2hQ30rteE1LVXig8JP83OKTw3pIs0f5T9kMjKTfTEYLsI91MjyPOoQPKOGl
+         deCZpu3egGBMh+aAc0hvydVhxdnE2E2tpHh82KZOcnhjwFBc1w7UDZ56rdsZ+66H8UoC
+         bR/3rTifltUVbzQW6kZtOECsa+uSER/gfVwo0cdhlBwQNKu7zNEIiltHh84dwIFP8dRb
+         boadM0c0Q9NQWAwd4SICA0PpEvc5oUmPUPh3ZYgGAzkNF3IuEQwNHJN5H0F2uui4Egzj
+         1a/IYonOB8Ad1mL6OmesN/jGbwA0srHwmQ8JsOwV1h11Fg4sP64WM7ScZpX8Qdr35nY0
+         kBgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777580277; x=1778185077;
+        d=1e100.net; s=20251104; t=1777580331; x=1778185131;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MnVwBtZbfDqdeLh5y4Pf/WbasJ8kSvMt9+xGKTa8elE=;
-        b=nUONXbg1O8hJmagQ6vgQwzJQujy6OqtAh4PQdwp9XOxR4cglr6e6e6WcKltjdr35dC
-         /EfckzQUsAgpy0ice+wAWmf1dAH06XG2b5rnZ3mqoCvMX5lPU96LHcleDfFf/wMuHXgC
-         Qgu8JsXPNWeLu4qLwmMJ1tlRauztSQbVADYKvfRfCwNv5Shkywmr1cO7T1U75fJWxgBJ
-         k2COVNNNkXjeGND1eBTndDT6O8UZsBP3xs6ewfTgUAgcxr0GYcPP9ycTGKp1t950URv8
-         DmQ+oDQkxCQHwWUm+i8xHPFBy/HIVwLZWweNim/yLtKx8S2dPOoR8FQPsKkZ3SPhWmiP
-         7FtQ==
-X-Gm-Message-State: AOJu0YxFx4+tMNFaKkWiRpVJiiOiIPRb0EI4+vI0HnYZdI+OmOyYf9Dg
-	pQDGgnnk2AKtta8FqVAsyx4mQVvh2pV+4dfLD3QSNdXat0N3wV/JmHaJ
-X-Gm-Gg: AeBDieuC94goK/x+jqYfEJd98MfGmnVnnwno3W43G5xBOop5ioPqEXRFgbdasr5Gt1H
-	FyOD6M07w10zuhgkdcmP9NIUJhQmDHlbs48e6jpVT/XUtQ/4cJETKTr9kUUqujJ0C8CqBghgfA1
-	EqgtmqMpY2cpL0hZtAIy8XPGAtILY8M4ej8LjTkf9huZcgLNw1qnE7CMQT5muIm2gEUHCMA1DMW
-	TNi51ORm2/U/701+hJZ45unJZgqGDLey0Gsvqs1o/kJfk4uQ+b5BqZntTYz20lhVpRZoNbiU5AX
-	ULFGe8E3Gh01nFPuAjWVDurVHGtNMiN5LX0Xxo++/2NqLuWicQs842G/2vOqw9OnnoX+RCj16gf
-	QwQSMH2/yUaxcftsDDvtQQb/nemjjq+FXufsWoXOpzxXi+Q02pCz35BbZ6N3jEgNU3VoBqYtL8r
-	hiOzzdKccIMJNL3zzhCKzTlwn+YDebyV6qr/mACGwTyONJsUllpbAWTPvtSbTu/l+u0SJhK+iez
-	ifO0tZcpYg=
-X-Received: by 2002:a17:903:5cf:b0:2b0:7225:d2c0 with SMTP id d9443c01a7336-2b9a2504c12mr28102235ad.30.1777580276999;
-        Thu, 30 Apr 2026 13:17:56 -0700 (PDT)
+        bh=23tE+HbjZXJoxqvHFayaQoGSWZhsiqS+lWP51Nu+eNU=;
+        b=At5+DMzsZe9Mui50B3CcnmVltGfb7MMMxchdt+T1Uq4rgF59bkukD+EeKgvoHXhTbS
+         5NWYZA0NOXFgwAQrAtX60bxyXEFel1m04gLwz6RKSDg+s/KHRW3eCrVsY7neuh2abOV2
+         V92Hcycp6k8du3efeR2A6g6QOKhmqstxZpkyfOKk7JwkIi7QS/BEeKp3GBML/69e9qHo
+         2BCSXy8unKoPqnB/PN81aol47mMqCrUe8Um3J4NtuT0Fkiluv1hCmOrk5BIC1f3uSNr8
+         O9o7Td3k97NF81OtMFCCFSbPAt6W+ZwKrYmUR9seg1iQ4KRMoPDlSi/q0KlHS+v/+TXv
+         5GEg==
+X-Gm-Message-State: AOJu0YycFyGR8bqF78yyp01Tz70wggWJAfjuzXIqed8iQlrn2iZ3z0fm
+	el5EGhGeZdvblk5F12kYC5+fbvbIM/vSbuL1A3M+mPyBby8hkIuQVMlAc0/XJw==
+X-Gm-Gg: AeBDieu1gCS0n6evfWXRJpq8+96xWdFxb0s8dNbP9Mur+fqpTqRNERiiqGDX3vCS5hX
+	7jrdmyKZTIda4u5vxH/FqxrM0o3BjqwcjZLk64nODKgeAkMOm2r5KjwzODw3Jy5D6XfzRmqe2HT
+	AXD6otGUaiIwYlP4OZuBnsvW7WP6B9Xus25E8YRY+n24bG/Q/c17D3+uUY76vmglEJSWe2owvJc
+	rgSilaH4howRbaT/xe51dAOwGRv4lJGULCPMB38+M2yyteELJAErtAzDeFp+f7q0o4VCJMdc8o3
+	+UvWJLZvKMp2Rz5B8bqASnCajEFi8slcXVVgwmhY9DG/Dib5zF8ZnmlXT2DzHZ1JU2DERg95ku1
+	zRKwfBbARLkwiWcwbR2+am1F89Fzdqv/oxm7Geqhz6ygGXahUiKG2/RaMGboZV68oSZ1BXbjbkM
+	DN5v5c0CpO3K1hcfhG2RklBAAiFM+k43kmrsWNgLC0+QhvZVRSQOE0AFKcJ9iUAi3W3ihOuf/Ig
+	Z2bm9uFLgc=
+X-Received: by 2002:a05:6a00:22ca:b0:81f:4a0c:c584 with SMTP id d2e1a72fcca58-8351a2e5b0bmr81237b3a.1.1777580331224;
+        Thu, 30 Apr 2026 13:18:51 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b9cae3b169sm4413285ad.63.2026.04.30.13.17.55
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-835158aa1ffsm509604b3a.22.2026.04.30.13.18.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Apr 2026 13:17:56 -0700 (PDT)
+        Thu, 30 Apr 2026 13:18:50 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0fc8d540-2498-4e3c-a07e-273cdbd9546a@roeck-us.net>
-Date: Thu, 30 Apr 2026 13:17:54 -0700
+Message-ID: <f2cc69a9-9211-42d6-a349-17e67d1ae4b1@roeck-us.net>
+Date: Thu, 30 Apr 2026 13:18:49 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,7 +69,8 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/3] hwmon: (pmbus) add support for Delta E50SN12051
+Subject: Re: [PATCH v3 2/3] Documentation/hwmon: add Delta E50SN12051
+ documentation
 To: u8813345@gmail.com, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Kevin Chang <kevin.chang2@amd.com>,
@@ -78,7 +79,7 @@ Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
  Colin Huang <colin.huang2@amd.com>
 References: <20260430-add-e50sn12051-v3-0-f6d4e043ec7c@gmail.com>
- <20260430-add-e50sn12051-v3-3-f6d4e043ec7c@gmail.com>
+ <20260430-add-e50sn12051-v3-2-f6d4e043ec7c@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -124,15 +125,18 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260430-add-e50sn12051-v3-3-f6d4e043ec7c@gmail.com>
+In-Reply-To: <20260430-add-e50sn12051-v3-2-f6d4e043ec7c@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 4/29/26 23:16, Colin Huang via B4 Relay wrote:
 > From: Colin Huang <u8813345@gmail.com>
 > 
-> Add the pmbus driver for Delta E50SN12051 600W Non-isolated
-> 1/8th Brick DCDC Power Modules.
+> Document the hardware monitoring support for the Delta E50SN12051
+> device.
+> 
+> The documentation describes the supported sensors exposed via the
+> hwmon subsystem, including voltage, current, and temperature measurements.
 > 
 > Signed-off-by: Colin Huang <u8813345@gmail.com>
 
@@ -141,100 +145,108 @@ For my reference:
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->   drivers/hwmon/pmbus/Kconfig      |  9 +++++++
->   drivers/hwmon/pmbus/Makefile     |  1 +
->   drivers/hwmon/pmbus/e50sn12051.c | 52 ++++++++++++++++++++++++++++++++++++++++
->   3 files changed, 62 insertions(+)
+>   Documentation/hwmon/e50sn12051.rst | 81 ++++++++++++++++++++++++++++++++++++++
+>   Documentation/hwmon/index.rst      |  1 +
+>   2 files changed, 82 insertions(+)
 > 
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 8f4bff375ecb..4fbfcbc4a9c5 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -161,6 +161,15 @@ config SENSORS_DPS920AB
->   	  This driver can also be built as a module. If so, the module will
->   	  be called dps920ab.
->   
-> +config SENSORS_E50SN12051
-> +	tristate "Delta E50SN12051 Power Modules"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for Delta
-> +	  E50SN12051 Power Modules.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called e50sn12051.
-> +
->   config SENSORS_INA233
->   	tristate "Texas Instruments INA233 and compatibles"
->   	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 7129b62bc00f..fc910bf34fe3 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -17,6 +17,7 @@ obj-$(CONFIG_SENSORS_FSP_3Y)	+= fsp-3y.o
->   obj-$(CONFIG_SENSORS_HAC300S)	+= hac300s.o
->   obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
->   obj-$(CONFIG_SENSORS_DPS920AB)	+= dps920ab.o
-> +obj-$(CONFIG_SENSORS_E50SN12051) += e50sn12051.o
->   obj-$(CONFIG_SENSORS_INA233)	+= ina233.o
->   obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
->   obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
-> diff --git a/drivers/hwmon/pmbus/e50sn12051.c b/drivers/hwmon/pmbus/e50sn12051.c
+> diff --git a/Documentation/hwmon/e50sn12051.rst b/Documentation/hwmon/e50sn12051.rst
 > new file mode 100644
-> index 000000000000..efb4d62b2603
+> index 000000000000..cbbfa7895d82
 > --- /dev/null
-> +++ b/drivers/hwmon/pmbus/e50sn12051.c
-> @@ -0,0 +1,52 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Hardware monitoring driver for E50SN12051
-> + */
+> +++ b/Documentation/hwmon/e50sn12051.rst
+> @@ -0,0 +1,81 @@
+> +.. SPDX-License-Identifier: GPL-2.0-or-later
 > +
-> +#include <linux/i2c.h>
-> +#include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
-> +#include "pmbus.h"
+> +Kernel driver e50sn12051
+> +========================
 > +
-> +static struct pmbus_driver_info e50sn12051_info = {
-> +	.pages = 1,
-> +	.format[PSC_VOLTAGE_IN] = linear,
-> +	.format[PSC_VOLTAGE_OUT] = linear,
-> +	.format[PSC_CURRENT_OUT] = linear,
-> +	.format[PSC_TEMPERATURE] = linear,
-> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT |
-> +		   PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-> +		   PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-> +		   PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-> +};
+> +Supported chips:
 > +
-> +static const struct i2c_device_id e50sn12051_id[] = { { "e50sn12051", 0 }, {} };
-> +MODULE_DEVICE_TABLE(i2c, e50sn12051_id);
+> +  * Delta E50SN12051
 > +
-> +static const struct of_device_id e50sn12051_of_match[] = {
-> +	{ .compatible = "delta,e50sn12051" },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, e50sn12051_of_match);
+> +    Prefix: 'e50sn12051'
 > +
-> +static int e50sn12051_probe(struct i2c_client *client)
-> +{
-> +	return pmbus_do_probe(client, &e50sn12051_info);
-> +}
+> +    Addresses scanned: -
 > +
-> +static struct i2c_driver e50sn12051_driver = {
-> +	.driver = {
-> +		.name = "e50sn12051",
-> +		.of_match_table = e50sn12051_of_match,
-> +	},
-> +	.probe = e50sn12051_probe,
+> +    Datasheet:
 > +
-> +	.id_table = e50sn12051_id,
-> +};
+> +      Provided by Delta upon request and NDA
 > +
-> +module_i2c_driver(e50sn12051_driver);
+> +Description
+> +-----------
 > +
-> +MODULE_AUTHOR("Kevin Chang <kevin.chang2@amd.com>");
-> +MODULE_DESCRIPTION("PMBus driver for E50SN12051");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS("PMBUS");
+> +E50SN12051 is a 600W non-isolated 1/8th brick DC-DC power module.
+> +
+> +This driver supports the E50SN12051 PMBus compliant monitor device.
+> +
+> +The device provides measurements for:
+> +
+> +* Input voltage
+> +* Output current
+> +* Output voltage
+> +* Temperature
+> +
+> +The driver is based on the PMBus core and exposes standard hwmon
+> +sysfs attributes.
+> +
+> +Sysfs attributes
+> +----------------
+> +
+> +======================= =======================================================
+> +curr1_label             "iout1"
+> +curr1_crit              Critical maximum current.
+> +                        From IOUT_OC_FAULT_LIMIT register.
+> +curr1_crit_alarm        Current critical high alarm.
+> +                        From IOUT_OC_FAULT status.
+> +curr1_input             Measured current.
+> +                        From READ_IOUT register.
+> +curr1_max               Maximum current.
+> +                        From IOUT_OC_WARN_LIMIT register.
+> +curr1_max_alarm         Current high alarm.
+> +                        From IOUT_OC_WARN_LIMIT status.
+> +
+> +in1_label               "vin"
+> +in1_alarm               Input voltage alarm.
+> +in1_input               Measured voltage.
+> +                        From READ_VIN register.
+> +
+> +in2_label               "vout1"
+> +in2_crit                Critical maximum voltage.
+> +                        From VOUT_OV_FAULT_LIMIT register.
+> +in2_crit_alarm          Voltage critical high alarm.
+> +                        From VOLTAGE_OV_FAULT status.
+> +in2_input               Measured voltage.
+> +                        From READ_VOUT register.
+> +in2_max                 Maximum voltage.
+> +                        From VOUT_OV_WARN_LIMIT register.
+> +in2_max_alarm           Voltage high alarm.
+> +                        From VOLTAGE_OV_WARNING status.
+> +
+> +temp1_crit              Critical high temperature.
+> +                        From OT_FAULT_LIMIT register.
+> +temp1_crit_alarm        Module temperature critical high alarm.
+> +                        Set by comparing READ_TEMPERATURE_1 with OT_FAULT_LIMIT
+> +                        if TEMP_OT_FAULT status is set.
+> +temp1_input             Measured module's hot spot temperature.
+> +                        From READ_TEMPERATURE_1 register.
+> +temp1_max               Maximum temperature.
+> +                        From OT_WARN_LIMIT register.
+> +temp1_max_alarm         Module temperature high alarm.
+> +                        Set by comparing READ_TEMPERATURE_1 with OT_WARN_LIMIT if
+> +                        TEMP_OT_WARNING status is set.
+> +======================= =======================================================
+> +
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index 8b655e5d6b68..ba08655fc496 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -68,6 +68,7 @@ Hardware Monitoring Kernel Drivers
+>      drivetemp
+>      ds1621
+>      ds620
+> +   e50sn12051
+>      emc1403
+>      emc2103
+>      emc2305
 > 
 
