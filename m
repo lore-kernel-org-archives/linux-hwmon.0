@@ -1,67 +1,67 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A624139D6E4
-	for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 20:18:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 421F33822BB
+	for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 20:20:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777580335; cv=none; b=MX7YYh7r9e6d3Oq2VNWDvi59tRvoTFGUKGtqlatL+E+QD1Hb11wxjrQ9qaVL5jqZ5pG1glrHitjJ9NMgeWq0N4WMqPTeEdQQMDtH7oqxdrlPAwKF8oZI+TcbtaTi8Bx83yEoor4/CPZ0eu2Jk0tq2FHHmbCHAdzxVrgTkDwNL9c=
+	t=1777580405; cv=none; b=XYcuhBT/wKUHe3B6RcbRoq1Bda0cn12Ez7lMrXMDpCdEDONMldf7ktzpgWUoVSsAjFP40Z/bGHiP6XB+MmdVbdSDen98heF6oRa4K4KGNZxqoLZCJbx1+1rDJEkcJ/Q1zy45ujfk099tl3I8PUduvyGcBM2nK3YrSPi+WnNwQd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777580335; c=relaxed/simple;
-	bh=ipayLzQyOTnT6KB96s96FlDwUtWz3R0lg+FfOs2iarQ=;
+	s=arc-20240116; t=1777580405; c=relaxed/simple;
+	bh=5xDdPHwOPg1/+xEc48LhJjGaJZxT2Wy/Kj8wbOXVP5Q=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WD4nRCSbC/Y/s2Bd4ygqnOEPWhVDWnn0hmqEsD9/rWFNxYeOoODPICBIfCOtV0G7f8xSC990u4LqbzLC558OcnCYMNdRSnUoiBkWYPWI7Z6ddmAqqz1TNbPPpttkt+DLqvPVRbB5MbS1nzVi9UkJ7L7cr5vU2Lcaaqu9uuKQ4ok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mb4ZmnT2; arc=none smtp.client-ip=209.85.215.178
+	 In-Reply-To:Content-Type; b=jSl3aTHOCDK5f3K5RWSLj4defxWLcm6NRJx/T746nWyeIYtXAaUvQuARJBEj2jtP+Iw+icwgBJMARY7xFDw2kXzWpEfZye+Bp7kNlyLPfMgLQ3XYDoIQ0JGInZpftMgsTZctgenZaEoY7wMeOB7Vx9ZbWf5eYvTWzp7TRqK24i8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FtS+S6gG; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mb4ZmnT2"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-c79467f124dso495601a12.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 13:18:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FtS+S6gG"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-82f69a286dbso958420b3a.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 13:20:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777580331; x=1778185131; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1777580403; x=1778185203; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=23tE+HbjZXJoxqvHFayaQoGSWZhsiqS+lWP51Nu+eNU=;
-        b=Mb4ZmnT2hQ30rteE1LVXig8JP83OKTw3pIs0f5T9kMjKTfTEYLsI91MjyPOoQPKOGl
-         deCZpu3egGBMh+aAc0hvydVhxdnE2E2tpHh82KZOcnhjwFBc1w7UDZ56rdsZ+66H8UoC
-         bR/3rTifltUVbzQW6kZtOECsa+uSER/gfVwo0cdhlBwQNKu7zNEIiltHh84dwIFP8dRb
-         boadM0c0Q9NQWAwd4SICA0PpEvc5oUmPUPh3ZYgGAzkNF3IuEQwNHJN5H0F2uui4Egzj
-         1a/IYonOB8Ad1mL6OmesN/jGbwA0srHwmQ8JsOwV1h11Fg4sP64WM7ScZpX8Qdr35nY0
-         kBgA==
+        bh=vftSRvAvRX8nlWWNeiHY+Q4q7N388epoMGmpzJDaRr0=;
+        b=FtS+S6gGw1JTZ/zHHlmYvDJEaEokyRuJQvdJ3zkkWlHX7R8DGL5S+ItMKRo6MVL48E
+         94XoRl+3a6hqylUHg3SNwrnbPUvwj0NSI/o8EuK7eDYpAHq8j3oJFcLt8pyETNCSWDmS
+         oqjyAa+s6Q+76pltFs9jgUtk8Fj7nuUWUjEUZLxOnedzsEhRUfMfW0vn2ArQlIaM3jv7
+         nXLF6zXJIkA11lQlNu6czCEP2ueKsrVvbicLJjdpmHKS+B5GAk6mRnhau/qYivvb5cun
+         zafpsVe6a44kPYwDKO3zVXzFACsEKJhLGuIpeB+0XVzXQPyqWxM91E8ZVBPxPZnZZWU/
+         A3CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777580331; x=1778185131;
+        d=1e100.net; s=20251104; t=1777580403; x=1778185203;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=23tE+HbjZXJoxqvHFayaQoGSWZhsiqS+lWP51Nu+eNU=;
-        b=At5+DMzsZe9Mui50B3CcnmVltGfb7MMMxchdt+T1Uq4rgF59bkukD+EeKgvoHXhTbS
-         5NWYZA0NOXFgwAQrAtX60bxyXEFel1m04gLwz6RKSDg+s/KHRW3eCrVsY7neuh2abOV2
-         V92Hcycp6k8du3efeR2A6g6QOKhmqstxZpkyfOKk7JwkIi7QS/BEeKp3GBML/69e9qHo
-         2BCSXy8unKoPqnB/PN81aol47mMqCrUe8Um3J4NtuT0Fkiluv1hCmOrk5BIC1f3uSNr8
-         O9o7Td3k97NF81OtMFCCFSbPAt6W+ZwKrYmUR9seg1iQ4KRMoPDlSi/q0KlHS+v/+TXv
-         5GEg==
-X-Gm-Message-State: AOJu0YycFyGR8bqF78yyp01Tz70wggWJAfjuzXIqed8iQlrn2iZ3z0fm
-	el5EGhGeZdvblk5F12kYC5+fbvbIM/vSbuL1A3M+mPyBby8hkIuQVMlAc0/XJw==
-X-Gm-Gg: AeBDieu1gCS0n6evfWXRJpq8+96xWdFxb0s8dNbP9Mur+fqpTqRNERiiqGDX3vCS5hX
-	7jrdmyKZTIda4u5vxH/FqxrM0o3BjqwcjZLk64nODKgeAkMOm2r5KjwzODw3Jy5D6XfzRmqe2HT
-	AXD6otGUaiIwYlP4OZuBnsvW7WP6B9Xus25E8YRY+n24bG/Q/c17D3+uUY76vmglEJSWe2owvJc
-	rgSilaH4howRbaT/xe51dAOwGRv4lJGULCPMB38+M2yyteELJAErtAzDeFp+f7q0o4VCJMdc8o3
-	+UvWJLZvKMp2Rz5B8bqASnCajEFi8slcXVVgwmhY9DG/Dib5zF8ZnmlXT2DzHZ1JU2DERg95ku1
-	zRKwfBbARLkwiWcwbR2+am1F89Fzdqv/oxm7Geqhz6ygGXahUiKG2/RaMGboZV68oSZ1BXbjbkM
-	DN5v5c0CpO3K1hcfhG2RklBAAiFM+k43kmrsWNgLC0+QhvZVRSQOE0AFKcJ9iUAi3W3ihOuf/Ig
-	Z2bm9uFLgc=
-X-Received: by 2002:a05:6a00:22ca:b0:81f:4a0c:c584 with SMTP id d2e1a72fcca58-8351a2e5b0bmr81237b3a.1.1777580331224;
-        Thu, 30 Apr 2026 13:18:51 -0700 (PDT)
+        bh=vftSRvAvRX8nlWWNeiHY+Q4q7N388epoMGmpzJDaRr0=;
+        b=RnxwFG9f2+FFh/5I5IAlvkaEHVoQYXY0yjmHJ2GyILuJdIv5RjMaBJgRZjlpPZ7QMW
+         KwbIuM5XoY6TZIJGSaD2TdI1nOTHSOnzs8xG7S+H8SW9PCM28VW9HJmQI5dPP+itsOfE
+         FRq+p68lz2ywhe/rypAi1unOjNh2925bGaYuYvW3Cjs0rBrEwMuZTMDo9Q44JdPCvrzO
+         vUzRCH5bfpxFzuRiczhirTp5GHQi23NSlnpgEHAFdGdL6vS/VERF0u+pLfSzB2SxeXX5
+         FC8tplI/faQUKk8a6hBm3aAqYp+uI2auoyyBO24lkr4hKxLCrxMp47EWZIKIEYkr2nYm
+         Ccyg==
+X-Gm-Message-State: AOJu0Yzgwupq71QMOABIGj8Qbfw0CVpXHkdpFksWYM0J+0AnbnMI+bXm
+	lLr0PqrqpQUI6UaRf67SkjOUz4cOgv9TnNQt0iqhig64S6MwGYdFOh42SznfSw==
+X-Gm-Gg: AeBDieuae/XWhTC/84dKUyKl2VjjFVGrOAXvO83fuOmbD062p8g92KSMsWGL/m+iwXZ
+	NuxuSvH+LKxQwa2IdkZid4cYH2HkR2zyv+glhAumlwlKJDXZvbnHgM6JbtWpl2dZJNX7CgeFuGQ
+	Vc/7w4JgiyG7eDaiFi8foAAdGydegi4EOaMNYJdGLrbLBu8VMIHdEtJaOp4pH8q+KiXvll0DftE
+	jAk61bX7BsBU+2N0JMKYRt3Zgj9HvVcAbHgFLOQJOtpnk9wy61+XTyWQ54CswOJOAqnnNC1LLyY
+	p0I6jvw+He0mK8M+/UxyFdwBqeZZOhs6wWx6wfAbMZ6qfCtrhCz0i5z3xxbrxYzStEBpjDu6RqA
+	HcgiW0cQsI/2GxGATdNcso84Z5wK5hX9S4YuqsJFXjqCtRATjiWw41CHLahVmiIWsfD80sEJFiD
+	XLT3BlgshuMY8RN80g/7T8r0Fx2p9qJ1RMDnWnmsw0n6ODA9g4Xex2PvldySNieLvjDUqMbKPED
+	5+HVvwNXBM=
+X-Received: by 2002:a05:6a00:a586:b0:82f:4628:4198 with SMTP id d2e1a72fcca58-834fdbd3e88mr5451384b3a.31.1777580403523;
+        Thu, 30 Apr 2026 13:20:03 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-835158aa1ffsm509604b3a.22.2026.04.30.13.18.49
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83515b8500dsm521749b3a.58.2026.04.30.13.20.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Apr 2026 13:18:50 -0700 (PDT)
+        Thu, 30 Apr 2026 13:20:03 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f2cc69a9-9211-42d6-a349-17e67d1ae4b1@roeck-us.net>
-Date: Thu, 30 Apr 2026 13:18:49 -0700
+Message-ID: <3ca6fa91-e338-48bf-9262-e5dc9e22d228@roeck-us.net>
+Date: Thu, 30 Apr 2026 13:20:02 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,17 +69,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/3] Documentation/hwmon: add Delta E50SN12051
- documentation
-To: u8813345@gmail.com, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Kevin Chang <kevin.chang2@amd.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- Colin Huang <colin.huang2@amd.com>
-References: <20260430-add-e50sn12051-v3-0-f6d4e043ec7c@gmail.com>
- <20260430-add-e50sn12051-v3-2-f6d4e043ec7c@gmail.com>
+Subject: Re: [PATCH v3 1/3] dt-bindings: hwmon: pmbus: add Delta E50SN12051
+ binding
+To: sashiko@lists.linux.dev,
+ Colin Huang via B4 Relay <devnull+u8813345.gmail.com@kernel.org>
+Cc: linux-hwmon@vger.kernel.org
+References: <20260430-add-e50sn12051-v3-1-f6d4e043ec7c@gmail.com>
+ <20260430065909.981EAC4AF09@smtp.kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -125,128 +121,59 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260430-add-e50sn12051-v3-2-f6d4e043ec7c@gmail.com>
+In-Reply-To: <20260430065909.981EAC4AF09@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 4/29/26 23:16, Colin Huang via B4 Relay wrote:
-> From: Colin Huang <u8813345@gmail.com>
+On 4/29/26 23:59, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> - [Low] The binding description violates Devicetree principles by describing software instead of hardware. It explicitly states 'The driver supports...', which is an OS-specific software description.
+> - [Low] The Devicetree example uses the Linux-specific subsystem name 'hwmon@40' for the node name instead of a generic functional name.
+> --
 > 
-> Document the hardware monitoring support for the Delta E50SN12051
-> device.
+> commit 8f686eaa80cf8986d09fe9ea7dca7debf1c51cb1
+> Author: Colin Huang <u8813345@gmail.com>
 > 
-> The documentation describes the supported sensors exposed via the
-> hwmon subsystem, including voltage, current, and temperature measurements.
+> dt-bindings: hwmon: pmbus: add Delta E50SN12051 binding
 > 
-> Signed-off-by: Colin Huang <u8813345@gmail.com>
+> This commit introduces the devicetree binding schema for the Delta E50SN12051
+> PMBus-compliant sensor.
+> 
+>> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/delta,e50sn12051.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/delta,e50sn12051.yaml
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/delta,e50sn12051.yaml
+> [ ... ]
+>> +description: |
+>> +  This binding describes the Delta E50SN12051 PMBus sensor.
+>> +  The driver supports reading voltage, current, and temperature
+>> +  using the PMBus interface.
+> 
+> This isn't a bug, but should the description focus purely on the hardware
+> rather than mentioning what the driver supports? Devicetree bindings are
+> generally expected to be OS-agnostic hardware descriptions.
 
-For my reference:
+I am not a devicetree maintainer, but I agree.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Guenter
 
-> ---
->   Documentation/hwmon/e50sn12051.rst | 81 ++++++++++++++++++++++++++++++++++++++
->   Documentation/hwmon/index.rst      |  1 +
->   2 files changed, 82 insertions(+)
 > 
-> diff --git a/Documentation/hwmon/e50sn12051.rst b/Documentation/hwmon/e50sn12051.rst
-> new file mode 100644
-> index 000000000000..cbbfa7895d82
-> --- /dev/null
-> +++ b/Documentation/hwmon/e50sn12051.rst
-> @@ -0,0 +1,81 @@
-> +.. SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +Kernel driver e50sn12051
-> +========================
-> +
-> +Supported chips:
-> +
-> +  * Delta E50SN12051
-> +
-> +    Prefix: 'e50sn12051'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet:
-> +
-> +      Provided by Delta upon request and NDA
-> +
-> +Description
-> +-----------
-> +
-> +E50SN12051 is a 600W non-isolated 1/8th brick DC-DC power module.
-> +
-> +This driver supports the E50SN12051 PMBus compliant monitor device.
-> +
-> +The device provides measurements for:
-> +
-> +* Input voltage
-> +* Output current
-> +* Output voltage
-> +* Temperature
-> +
-> +The driver is based on the PMBus core and exposes standard hwmon
-> +sysfs attributes.
-> +
-> +Sysfs attributes
-> +----------------
-> +
-> +======================= =======================================================
-> +curr1_label             "iout1"
-> +curr1_crit              Critical maximum current.
-> +                        From IOUT_OC_FAULT_LIMIT register.
-> +curr1_crit_alarm        Current critical high alarm.
-> +                        From IOUT_OC_FAULT status.
-> +curr1_input             Measured current.
-> +                        From READ_IOUT register.
-> +curr1_max               Maximum current.
-> +                        From IOUT_OC_WARN_LIMIT register.
-> +curr1_max_alarm         Current high alarm.
-> +                        From IOUT_OC_WARN_LIMIT status.
-> +
-> +in1_label               "vin"
-> +in1_alarm               Input voltage alarm.
-> +in1_input               Measured voltage.
-> +                        From READ_VIN register.
-> +
-> +in2_label               "vout1"
-> +in2_crit                Critical maximum voltage.
-> +                        From VOUT_OV_FAULT_LIMIT register.
-> +in2_crit_alarm          Voltage critical high alarm.
-> +                        From VOLTAGE_OV_FAULT status.
-> +in2_input               Measured voltage.
-> +                        From READ_VOUT register.
-> +in2_max                 Maximum voltage.
-> +                        From VOUT_OV_WARN_LIMIT register.
-> +in2_max_alarm           Voltage high alarm.
-> +                        From VOLTAGE_OV_WARNING status.
-> +
-> +temp1_crit              Critical high temperature.
-> +                        From OT_FAULT_LIMIT register.
-> +temp1_crit_alarm        Module temperature critical high alarm.
-> +                        Set by comparing READ_TEMPERATURE_1 with OT_FAULT_LIMIT
-> +                        if TEMP_OT_FAULT status is set.
-> +temp1_input             Measured module's hot spot temperature.
-> +                        From READ_TEMPERATURE_1 register.
-> +temp1_max               Maximum temperature.
-> +                        From OT_WARN_LIMIT register.
-> +temp1_max_alarm         Module temperature high alarm.
-> +                        Set by comparing READ_TEMPERATURE_1 with OT_WARN_LIMIT if
-> +                        TEMP_OT_WARNING status is set.
-> +======================= =======================================================
-> +
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 8b655e5d6b68..ba08655fc496 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -68,6 +68,7 @@ Hardware Monitoring Kernel Drivers
->      drivetemp
->      ds1621
->      ds620
-> +   e50sn12051
->      emc1403
->      emc2103
->      emc2305
+> [ ... ]
+>> +examples:
+>> +  - |
+>> +    i2c {
+>> +        #address-cells = <1>;
+>> +        #size-cells = <0>;
+>> +
+>> +        hwmon@40 {
+> 
+> Is hwmon@40 the most appropriate node name here? The devicetree specification
+> usually recommends using generic names that reflect the function of the
+> hardware, such as sensor@40, rather than OS-specific subsystem names like
+> hwmon.
+> 
+>> +            compatible = "delta,e50sn12051";
+>> +            reg = <0x40>;
+>> +        };
+>> +    };
 > 
 
