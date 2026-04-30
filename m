@@ -1,55 +1,54 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1046D37E2F8
-	for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 19:57:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 015ED388E7D
+	for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 20:05:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777579059; cv=none; b=T12XQxC6kplx6jCUMW5IRxJHG0p6YYtcgAej3ejC1CJDgpZNVAk9KTEFBsh/whF3HtHFtitw3BJJ41tc/J/BVfEBSVx+wRC3D92k77LDoyiY4vCT2vSwwkubc7N+mpVTmc2RxPPbmjH8B9UTuj9KF+rq+hfHfjDW0WVdA/QoLfs=
+	t=1777579508; cv=none; b=gEfA5T4+1kmnwilBX3TtFtU19BS1BQdLg8z6cn5rEo3K/TC4IKKD/KNqPBfeu2oQW5A+en+6pLAEW+75zxUNUo5gktjP34sJJhPExp5rTur5mG8trdRUFLeJ4GgnOzefjQQ4fS/ecvwznsyEyZzWMk1amubxOPbIMRaoryYbTa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777579059; c=relaxed/simple;
-	bh=K7UUnm7+0T1FluJsMAj98tyxebsG7OvNNIYLUVmk6U8=;
+	s=arc-20240116; t=1777579508; c=relaxed/simple;
+	bh=cl9O+spRAp0wy6KKcnwvKXkFcRH/01WXV2qCe307Da8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XQ7B+mIqXyGjKYqOIOjltCiuDfEzITA3mvIOLDIrPl2gieuV0+f5n0pd4U9y0hTsn6VltKww4NQgRT3nbECOPqikrGL8Qgjm30tAiPaoB2Eha88ZrHJCzknrUz7PfySwRpcYmGprSkU13Cl2n6GwwPf7RpiApwg0jhCgHYsEDqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eNiqCZP6; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=QwZiqayQUC7eu+fTvEGP/E92LsaykXZnRVQFhUomGUe3cuSTBIkoPiXBfd+bloPZytt7WwFKLaRIZVZ3iyY7/Q50mJM8idNmyYgE68NXoiAjvT9qKksD3GO6Cr2WTnh7YIjYsmUZE8mH0Wx+Mkd2sqE0oFj+g0OCSANASXgRYUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FWnYhdli; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eNiqCZP6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBE57C2BCB4
-	for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 19:57:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FWnYhdli"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D091BC2BCC6
+	for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 20:05:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777579058;
-	bh=K7UUnm7+0T1FluJsMAj98tyxebsG7OvNNIYLUVmk6U8=;
+	s=k20201202; t=1777579507;
+	bh=cl9O+spRAp0wy6KKcnwvKXkFcRH/01WXV2qCe307Da8=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=eNiqCZP6K15SUCDKxqrrC3nMc6dHqpDr47XJOS0ufEyfx8v8tevv3bRSba2yjtOp4
-	 x1WsmBXBZNDYOa6Vhq2WjQKmjLV5+AvKl+pyr4j9tAVzDHVJOikbCIh+71fua8kue7
-	 wA4R/3g1+anlirVmDbElfr4KIntS6bolFIMcfj/gcpaG4IpwN2m8B+i4zc1NjKRjhZ
-	 BEhFNf/H1r/DjrxD8n6yBaVLusuMVhwaEqjpV5vLkHEBYq0hz0/VYwKVFNfG7urRkH
-	 vonGMlTd5DF4MOAKxvEs+ouiqpc7CfPLOpe2W1lXh/T5x2qajJ33M9hyvNRXi4tG8V
-	 8CJl7v5riswtA==
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5a2c3dfb4a1so1216004e87.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 12:57:38 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ/IlNkaNQEkDSE2SxfCZUtdiZgIplrItN55GQbh0cK8RKQZ/qCsoStjIfxcB0/P7aUsBgbP2PvHG5zlUg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzbe5MTTSgVrWiZ9NhmniepLmQyoz5s4saQuAyulWjisael0GTT
-	6nvrZHGmDesupFifFniQN4h79lGc2BNjvSryfR1XWpXkZIaMunyRNZ+dVVzjXGv0JIaTFVam1x2
-	LZ/lFBetaz2lRlNh5xQbC9lFKRKtz33k=
-X-Received: by 2002:a05:6512:3d02:b0:5a4:7ec:145a with SMTP id
- 2adb3069b0e04-5a85ae832fbmr37218e87.10.1777579056797; Thu, 30 Apr 2026
- 12:57:36 -0700 (PDT)
+	b=FWnYhdliKOP49C6Do51nNXZ3FQomUDF8hQKVDOxhExg5UvN8EcaJpf0Q6vikl9CGC
+	 dRFcQL4dcIapoPXyHlqIASPdhHyKh40U5yP+XTyJbAFHo92AqnF++AGGUpCg62OD7T
+	 /qtpNg4UWSdJonNzKRbjWpiVejWut70HR6NO2TtMjgpPgGeMBQVfpvQYqdtZWrNwtz
+	 aeL6CmQha10/Mlzqq40rEMyrX1Ch4dtB8/ZgpfXjCmCLSsdTajof7STA4Y5+kZXjKW
+	 3ZaM8buazYRE0B73HegZ4FY7xlrN1PeX8T9X5SQqXbOwICHBIJE5chfPDCRB0IxKGK
+	 7xAQbhEz94phg==
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5a62f43b76aso1158933e87.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 13:05:07 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ+8pNF3e0tWM3IaZBcD+YkaoI6e9jRS7YrZhS2C/J8LSqQJxpzpdUkEqLcoST2W+WcdTJdpvM+e+9Mhsw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7JBliGfNP1PRip3KkOFlcLrmn2kuwnkMjir8N+UNFWuWIrr3V
+	flYoZAM7KJ41GdQ7uDko9vmrJF8I+VqwCGJduRMZe1wk+ieR9L+6pdG74gQMnoLBaWPdg88pQyu
+	TKa6rNhafOFBHvOoEGHqJAHRUs0u3zb8=
+X-Received: by 2002:a05:6512:1188:b0:5a3:fd0e:ce6f with SMTP id
+ 2adb3069b0e04-5a8522d511fmr1959436e87.23.1777579505840; Thu, 30 Apr 2026
+ 13:05:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260429161430.3802970-1-daniel.lezcano@oss.qualcomm.com> <20260429161430.3802970-2-daniel.lezcano@oss.qualcomm.com>
-In-Reply-To: <20260429161430.3802970-2-daniel.lezcano@oss.qualcomm.com>
+References: <20260429161430.3802970-1-daniel.lezcano@oss.qualcomm.com> <20260429161430.3802970-3-daniel.lezcano@oss.qualcomm.com>
+In-Reply-To: <20260429161430.3802970-3-daniel.lezcano@oss.qualcomm.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 30 Apr 2026 21:57:23 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gYRuEBhdfeZ-kcwFPWxrRVFgA7+mBoTMnfeRk=8MBsBA@mail.gmail.com>
-X-Gm-Features: AVHnY4Jed_Zripca-VuCTXVAOcFTR8TI5HZ5ISsU6Twu3YasOnvmA_Ii-p9O6sI
-Message-ID: <CAJZ5v0gYRuEBhdfeZ-kcwFPWxrRVFgA7+mBoTMnfeRk=8MBsBA@mail.gmail.com>
-Subject: Re: [PATCH v3 01/11] thermal/core: Use devm_add_action_or_reset()
- when registering a cooling device
+Date: Thu, 30 Apr 2026 22:04:53 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0ikGV1RYWPs6uCiAbJgX2iCr46fJj8XPh1bgPUhWHUniQ@mail.gmail.com>
+X-Gm-Features: AVHnY4LtllfFFrrvT9P9cCy4j4syDT7Wt1JzyAEVB8JJUolnZv1oLO7bL5fb5Q8
+Message-ID: <CAJZ5v0ikGV1RYWPs6uCiAbJgX2iCr46fJj8XPh1bgPUhWHUniQ@mail.gmail.com>
+Subject: Re: [PATCH v3 02/11] thermal/core: Add a non-OF registering function
 To: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
 Cc: rafael@kernel.org, daniel.lezcano@kernel.org, 
 	gaurav.kohli@oss.qualcomm.com, Zhang Rui <rui.zhang@intel.com>, 
@@ -75,78 +74,121 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Apr 29, 2026 at 6:14=E2=80=AFPM Daniel Lezcano
 <daniel.lezcano@oss.qualcomm.com> wrote:
 >
-> Use devm_add_action_or_reset() which does the replaced code. It
-> results in a simpler and more concise code.
+> In order to propose an alternative to non OF code registering a
+> cooling device, provide functions which are not for OF code. That sets
+> the scene for OF and non-OF code split.
 >
 > Signed-off-by: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-
-Reviewed-by: Rafael J. Wysocki (Intel) <rafael@kernel.org>
-
 > ---
->  drivers/thermal/thermal_core.c | 30 +++++++++++++-----------------
->  1 file changed, 13 insertions(+), 17 deletions(-)
+>  drivers/thermal/thermal_core.c | 35 ++++++++++++++++++++++++++++++++++
+>  include/linux/thermal.h        | 16 ++++++++++++++--
+>  2 files changed, 49 insertions(+), 2 deletions(-)
 >
 > diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_cor=
 e.c
-> index 2f4e2dc46b8f..664a4cc95199 100644
+> index 664a4cc95199..5c954bcae4a4 100644
 > --- a/drivers/thermal/thermal_core.c
 > +++ b/drivers/thermal/thermal_core.c
-> @@ -1187,10 +1187,11 @@ thermal_of_cooling_device_register(struct device_=
-node *np,
->  }
->  EXPORT_SYMBOL_GPL(thermal_of_cooling_device_register);
->
-> -static void thermal_cooling_device_release(struct device *dev, void *res=
-)
-> +static void thermal_cooling_device_release(void *data)
->  {
-> -       thermal_cooling_device_unregister(
-> -                               *(struct thermal_cooling_device **)res);
-> +       struct thermal_cooling_device *cdev =3D data;
-> +
-> +       thermal_cooling_device_unregister(cdev);
+> @@ -1194,6 +1194,41 @@ static void thermal_cooling_device_release(void *d=
+ata)
+>         thermal_cooling_device_unregister(cdev);
 >  }
 >
->  /**
-> @@ -1216,23 +1217,18 @@ devm_thermal_of_cooling_device_register(struct de=
-vice *dev,
->                                 const char *type, void *devdata,
->                                 const struct thermal_cooling_device_ops *=
-ops)
->  {
-> -       struct thermal_cooling_device **ptr, *tcd;
+> +/**
+> + * devm_thermal_cooling_device_register() - register a thermal cooling d=
+evice
+> + * @dev:       a valid struct device pointer of a sensor device.
+> + * @type:      the thermal cooling device type.
+> + * @devdata:   device private data.
+> + * @ops:       standard thermal cooling devices callbacks.
+> + *
+> + * This function will register a cooling device with device tree node re=
+ference.
+> + * This interface function adds a new thermal cooling device (fan/proces=
+sor/...)
+> + * to /sys/class/thermal/ folder as cooling_device[0-*]. It tries to bin=
+d itself
+> + * to all the thermal zone devices registered at the same time.
+> + *
+> + * Return: a pointer to the created struct thermal_cooling_device or an
+> + * ERR_PTR. Caller must check return value with IS_ERR*() helpers.
+> + */
+> +struct thermal_cooling_device *
+> +devm_thermal_cooling_device_register(struct device *dev,
+> +                                    const char *type, void *devdata,
+> +                                    const struct thermal_cooling_device_=
+ops *ops)
+> +{
 > +       struct thermal_cooling_device *cdev;
 > +       int ret;
->
-> -       ptr =3D devres_alloc(thermal_cooling_device_release, sizeof(*ptr)=
-,
-> -                          GFP_KERNEL);
-> -       if (!ptr)
-> -               return ERR_PTR(-ENOMEM);
-> +       cdev =3D __thermal_cooling_device_register(np, type, devdata, ops=
-);
+> +
+> +       cdev =3D __thermal_cooling_device_register(NULL, type, devdata, o=
+ps);
 > +       if (IS_ERR(cdev))
 > +               return cdev;
->
-> -       tcd =3D __thermal_cooling_device_register(np, type, devdata, ops)=
-;
-> -       if (IS_ERR(tcd)) {
-> -               devres_free(ptr);
-> -               return tcd;
-> -       }
-> -
-> -       *ptr =3D tcd;
-> -       devres_add(dev, ptr);
+> +
 > +       ret =3D devm_add_action_or_reset(dev, thermal_cooling_device_rele=
 ase, cdev);
 > +       if (ret)
 > +               return ERR_PTR(ret);
->
-> -       return tcd;
+> +
 > +       return cdev;
->  }
->  EXPORT_SYMBOL_GPL(devm_thermal_of_cooling_device_register);
->
+
+After the previous patch, this may just be a wrapper around
+devm_thermal_of_cooling_device_register() passing NULL as np to it.
+
+> +}
+> +EXPORT_SYMBOL_GPL(devm_thermal_cooling_device_register);
+> +
+>  /**
+>   * devm_thermal_of_cooling_device_register() - register an OF thermal co=
+oling
+>   *                                            device
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index 0ddc77aeeca2..50b43e328ab9 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -253,8 +253,12 @@ void thermal_zone_device_update(struct thermal_zone_=
+device *,
+>  struct thermal_cooling_device *thermal_cooling_device_register(const cha=
+r *,
+>                 void *, const struct thermal_cooling_device_ops *);
+>  struct thermal_cooling_device *
+> -thermal_of_cooling_device_register(struct device_node *np, const char *,=
+ void *,
+> -                                  const struct thermal_cooling_device_op=
+s *);
+> +devm_thermal_cooling_device_register(struct device *dev, const char *typ=
+e,
+> +                                    void *devdata, const struct thermal_=
+cooling_device_ops *ops);
+> +
+> +struct thermal_cooling_device *
+> +thermal_of_cooling_device_register(struct device_node *np, const char *t=
+ype,
+> +                                  void *devdata, const struct thermal_co=
+oling_device_ops *ops);
+>  struct thermal_cooling_device *
+>  devm_thermal_of_cooling_device_register(struct device *dev,
+>                                 struct device_node *np,
+> @@ -304,6 +308,14 @@ static inline struct thermal_cooling_device *
+>  thermal_cooling_device_register(const char *type, void *devdata,
+>         const struct thermal_cooling_device_ops *ops)
+>  { return ERR_PTR(-ENODEV); }
+> +
+> +static inline struct thermal_cooling_device *
+> +devm_thermal_cooling_device_register(struct device *dev, const char *typ=
+e,
+> +                                    void *devdata, const struct thermal_=
+cooling_device_ops *ops)
+> +{
+> +       return ERR_PTR(-ENODEV);
+> +}
+> +
+>  static inline struct thermal_cooling_device *
+>  thermal_of_cooling_device_register(struct device_node *np,
+>         const char *type, void *devdata,
 > --
 > 2.43.0
+>
 >
