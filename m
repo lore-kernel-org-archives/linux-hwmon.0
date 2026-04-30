@@ -1,824 +1,594 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B37C1273F9;
-	Thu, 30 Apr 2026 06:45:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D28773783A1
+	for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 06:58:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777531532; cv=none; b=CqR8jLUfIhv9zvA8lGtpbaDNlGVun8oJ7VGqtabDCDS0lIgtatJbMqPlnI08RBdskVVLGl1VK5RaWoIyHLmT7Wvyvebb/BH+GW1y2HmrR8AaS9k8EQq4z/DIq9yu80agVw9mKxZGN873nD5CQD1C0oMR1A1Wj4ElXEY8sOtDjiU=
+	t=1777532323; cv=none; b=P6RRD0jkI+PWQZ/UBsFMpG86tnkPQmygdL8lKGCKtHNlKjbUwcUzL88Qr6C4X1v8BaKqJGjXMkYnXStkUuyjzQRV1bajmhuOfVnbllwMvR55L3V9jBNdeIzGSa0pcYHYesoq8mLqWTAiqiFCYwAT9Wyu5Q8c9MM8CJiHFFgstVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777531532; c=relaxed/simple;
-	bh=bbwd6X2g6RCBJ4/L3Nws8WaAGE0yj4c5/l2OSlKVMDk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=J+5f9L6OgDJJQo2hC0MhTtsu6KuRopFeZaw8kblQMcDfHzUySbFUpHUMlWZdlMjkKdXdEKtGdGGVQauEiKDNwM7u1Dg+2IlZj7j0//RPoQg8qGt96kxAZfcUgG/PB/SBVMgkXnHzo/PmYGoIiUp9N03YA6bAjD1qmbRaPNP7N5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=13.75.44.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
-Received: from E0005156LT.eswin.cn (unknown [10.12.96.79])
-	by app1 (Coremail) with SMTP id TAJkCgDXbHGC+vJpCvAVAA--.21438S2;
-	Thu, 30 Apr 2026 14:45:23 +0800 (CST)
-From: hehuan1@eswincomputing.com
-To: linux@roeck-us.net,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	p.zabel@pengutronix.de,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: ningyu@eswincomputing.com,
-	linmin@eswincomputing.com,
-	pinkesh.vaghela@einfochips.com,
-	luyulin@eswincomputing.com,
-	hehuan1@eswincomputing.com
-Subject: [PATCH v4 2/2] hwmon: Add Eswin EIC7700 PVT sensor driver
-Date: Thu, 30 Apr 2026 14:45:17 +0800
-Message-ID: <20260430064519.1632-1-hehuan1@eswincomputing.com>
-X-Mailer: git-send-email 2.47.1.windows.2
-In-Reply-To: <20260430064107.1598-1-hehuan1@eswincomputing.com>
-References: <20260430064107.1598-1-hehuan1@eswincomputing.com>
+	s=arc-20240116; t=1777532323; c=relaxed/simple;
+	bh=dGVxos3tYJBK/wmCdU1AAH/rB8aZs/X58kAs5fVnCy8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pKWEhs8RJEnSryg8wdYvHQKkNAzuB5NEwcmj8EUkTNfTOAmfyQP29lRDjkQiTaf7SlI83oUVJdZFYOjfGhyXvJW2o1iRzzBklHkqYMXzgvQja6fTe78/IXmT7/mqgFtcwqFoTidx5zd6wpF3Ze//WuRMUQLCfIu/WUfnSWvuUCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com; spf=pass smtp.mailfrom=inventec.com; dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b=EaZIEg/5; arc=none smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inventec.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b="EaZIEg/5"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-35fc258aaa4so342358a91.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 29 Apr 2026 23:58:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=inventec.com; s=google; t=1777532319; x=1778137119; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4hq1yA9knnG1UYdsGQDnpQCdbpBLyx36LMeq1zfmtBM=;
+        b=EaZIEg/5Qb8mQ/xiuIKLAADiUN/XGHnS7T+RE7uU/fi2lYYYykIzw+jtlLe0UrvV8o
+         V+obXSDxNQqotGjlvAnx/TU4Xmt/0Kc7+BViXmUm0poGNgHghT9CRW9O3n9Pkf2HG436
+         PtI7+LCJoIVIkNLWOuofKO3jEaDSwr6GPI25kTtZpU70TJd1PUspxQGtr5xeM/k4x6Sh
+         OKSfthmNBtVyUm/ZGNaJ6aEYPO2KmmTocv2WcxTshm/nOcb5uRuQgXDfpEQmTtCfZsYs
+         pQ9tnuFz5vE5gbOqayvR2yut+9BMLiZ/QlNusX1PktcnCYSJ4Y2L10aJb6suJMbZuTTb
+         W7Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777532319; x=1778137119;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4hq1yA9knnG1UYdsGQDnpQCdbpBLyx36LMeq1zfmtBM=;
+        b=JXGDBaDW4agN1ZCdoBLFbJhOo4rX1qPmN4suRYfKIahvPERPjAwz7J67hx5mWSYAmz
+         3i81N2YvBlDx8fqN/G2s5oM5NIxZwkLNgWC/LmPeclMNrkOI2qrxYMBxTApUbi5BzQCE
+         GRCONk/0W2h7Zu/9lL2DKzTUzrb8XyfCR92M1tq/6/vsbl8MX+cc4ueLePp2O9+GYlDA
+         1khfVy8A9psFmn4FezKPLWa2j+R3/RGZTIupIZ0hRNJZ4nSHwvy0Ft89Saa2rS30qSOk
+         yAMbStzy/UbAJ4JINVJHx/el+4Opiqxgh9vRGAjdlIjhvwkdcml81hkiYCsr3/HuiXYE
+         Yhsg==
+X-Forwarded-Encrypted: i=1; AFNElJ+tG4m4rxmlUFilEM1SJwNZI+Rv5p4tQUTgFvQLYPT8GiaBDcfuiX0FEdmhCN8gqm5AzIVXT5oQ+Qh07g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxD2kxBn0l0xHI8Ef+5WIREIi8jQMZYmquLMeg0WKzSjfCuGUgn
+	y2GgauARZywDtzLo2CyW1xUasZmce7dcnnPTewNSvWG8ZCnifkKDyy2UMyQy7PEuy6Q=
+X-Gm-Gg: AeBDieuGWyUXIyM7FsUz52/bQulXNsAogJXtQriBbOLsfPqeBU5dqgwVUUPPTy1HmWa
+	F6K2moaAyuw3SxdDpjkANLhyOwaw5zk/ClY/SSrGsgsXyym6RmtOkPV8G4jtNoZ+mHT4A1VZP1C
+	obsysX3f/DMJVy8L4piRn5QIoZXEXzxOCTpktDP/R7z81EnX2w3Fi/fZlKM2wst+iwVs+oevdlQ
+	5CsBenQacYfVrEUhar+kOvFFGVqKJq+KKCA2C+laHvMcrVpZJ+gR1g7UAQLxwCy+rRo7FUe51mB
+	372PpOyhFesfRyx+H2zLWrZJ8ApHArmXTF/YRNjVaRk3PFm5GmKBs6QyxmIEWL0JHp5MVZAq2Ie
+	z+HuyJcqarrTwPzhfaekouamqLpNURAnh8Co++97dlEuyEm6IsXFo8K2Dfm1Iy97vYwthlQ0/XD
+	0Mk5NoY6NkAL4NeZRiLoKdINBiFGTGf3pZIlWIO/wVLPb/lshjEGu2/XvQd8NQiwZw5ZmV3Mnbv
+	AnEtEc=
+X-Received: by 2002:a17:90b:3a4b:b0:35f:9ab2:a5a6 with SMTP id 98e67ed59e1d1-364c2f97873mr1633679a91.2.1777532319022;
+        Wed, 29 Apr 2026 23:58:39 -0700 (PDT)
+Received: from TAO-BU2-SWA-3 (59-120-179-172.hinet-ip.hinet.net. [59.120.179.172])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-364bdf81f28sm1670998a91.15.2026.04.29.23.58.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Apr 2026 23:58:38 -0700 (PDT)
+Date: Thu, 30 Apr 2026 06:58:34 +0000
+From: Brian Chiang <chiang.brian@inventec.com>
+To: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Guenter Roeck <linux@roeck-us.net>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, Jack Cheng <Cheng.JackHY@inventec.com>
+Subject: Re: [PATCH v7 2/2] hwmon: (pmbus/q54sj108a2) Add support for
+ q50sn12072 and q54sn120a1
+Message-ID: <mhguhlt5gi7sg7qsgetsizdslm2z4vdhlgag55bqjnq3a2kz24@iafh7hhezp4l>
+References: <20260429-add-support-for-q50sn12072-and-q54sn120a1-v7-0-f1f83d2039f7@inventec.com>
+ <20260429-add-support-for-q50sn12072-and-q54sn120a1-v7-2-f1f83d2039f7@inventec.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:TAJkCgDXbHGC+vJpCvAVAA--.21438S2
-X-Coremail-Antispam: 1UD129KBjvAXoWfZrW7Aw1Dtw1DXw4kCr4fAFb_yoW8Zw17uo
-	WfGFn3Xw18JrWfCrZxGF1IqFyxXwn2vw1rZF1FkFZF9F12yr1Ygay7KwnxW3W3Kr1Ygr4j
-	vr1fG34rZFZ7t3Wfn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UjIYCTnIWjp_UUUYK7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20EY4v20xva
-	j40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2
-	x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8
-	Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
-	xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-	6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-	0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
-	8cxan2IY04v7M4kE6xkIj40Ew7xC0wCY1x0262kKe7AKxVWUtVW8ZwCY02Avz4vE-syl42
-	xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWU
-	GwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI4
-	8JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4U
-	MIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I
-	8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOHUqUUUUU
-X-CM-SenderInfo: 5khk3tzqr6v25zlqu0xpsx3x1qjou0bp/
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20260429-add-support-for-q50sn12072-and-q54sn120a1-v7-2-f1f83d2039f7@inventec.com>
 
-From: Huan He <hehuan1@eswincomputing.com>
+On Wed, Apr 29, 2026 at 11:29:37AM +0000, Brian Chiang wrote:
+>From: Jack Cheng <cheng.jackhy@inventec.com>
+>
+>The Q50SN12072 and Q54SN120A1 are high-efficiency, high-density DC-DC power
+>module from Delta Power Modules.
+>
+>The Q50SN12072, quarter brick, single output 12V. This product provides up
+>to 1200 watts of output power at 38~60V. The Q50SN12072 offers peak
+>efficiency up to 98.3%@54Vin.
+>
+>The Q54SN120A1, quarter brick, single output 12V. This product provides up
+>to 1300 watts of output power at 40~60V. The Q54SN120A1 offers peak
+>efficiency up to 98.1%@54Vin.
+>
+>Add support for them to q54sj108a2 driver.
 
-Add support for ESWIN EIC7700 Voltage and Temperature sensor. The driver
-supports temperature and voltage monitoring with polynomial conversion,
-and provides sysfs interface for sensor data access.
+Greetings, I received the feedback from Sashiko for this patch:
 
-The PVT IP contains one temperature sensor and four voltage sensors for
-process variation monitoring.
+```
+This isn't a bug, but the commit message only mentions adding support for
+the new modules. However, the patch also includes several other changes:
+adding PMBus locking in the debugfs read/write paths, fixing the
+WRITE_PROTECT restore logic, modifying the configuration for the existing
+q54sj108a2 module, and refactoring the device identification logic.
+Could the commit message be updated to describe these additional changes,
+or should they be split into separate patches?
+```
 
-Signed-off-by: Yulin Lu <luyulin@eswincomputing.com>
-Signed-off-by: Huan He <hehuan1@eswincomputing.com>
----
- drivers/hwmon/Kconfig       |  12 +
- drivers/hwmon/Makefile      |   1 +
- drivers/hwmon/eic7700-pvt.c | 591 ++++++++++++++++++++++++++++++++++++
- drivers/hwmon/eic7700-pvt.h |  99 ++++++
- 4 files changed, 703 insertions(+)
- create mode 100644 drivers/hwmon/eic7700-pvt.c
- create mode 100644 drivers/hwmon/eic7700-pvt.h
+I'm wondering if it is more appropriate to split only `fixing the 
+WRITE_PROTECT restore logic` into separate patch? Since disabling 
+WRITE_PROTECT was introduced in previous commit. And maybe keeping
+other changes Sashiko mentioned in this patch and record them in 
+the commit message?
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 14e4cea48acc..1a69dfe7bdc1 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -2033,6 +2033,18 @@ config SENSORS_DME1737
- 	  This driver can also be built as a module. If so, the module
- 	  will be called dme1737.
- 
-+config SENSORS_EIC7700_PVT
-+	tristate "Eswin EIC7700 Process, Voltage, Temperature sensor driver"
-+	depends on ARCH_ESWIN || COMPILE_TEST
-+	depends on HWMON
-+	select POLYNOMIAL
-+	help
-+	  If you say yes here you get support for Eswin EIC7700 PVT sensor
-+	  embedded into the SoC.
-+
-+	  This driver can also be built as a module. If so, the module will be
-+	  called eic7700-pvt.
-+
- config SENSORS_EMC1403
- 	tristate "SMSC EMC1403/23 thermal sensor"
- 	depends on I2C
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 4788996aa137..3f8c347e3758 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -71,6 +71,7 @@ obj-$(CONFIG_SENSORS_DME1737)	+= dme1737.o
- obj-$(CONFIG_SENSORS_DRIVETEMP)	+= drivetemp.o
- obj-$(CONFIG_SENSORS_DS620)	+= ds620.o
- obj-$(CONFIG_SENSORS_DS1621)	+= ds1621.o
-+obj-$(CONFIG_SENSORS_EIC7700_PVT) += eic7700-pvt.o
- obj-$(CONFIG_SENSORS_EMC1403)	+= emc1403.o
- obj-$(CONFIG_SENSORS_EMC2103)	+= emc2103.o
- obj-$(CONFIG_SENSORS_EMC2305)	+= emc2305.o
-diff --git a/drivers/hwmon/eic7700-pvt.c b/drivers/hwmon/eic7700-pvt.c
-new file mode 100644
-index 000000000000..d9d6a035defe
---- /dev/null
-+++ b/drivers/hwmon/eic7700-pvt.c
-@@ -0,0 +1,591 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * ESWIN EIC7700 Process, Voltage, Temperature sensor driver
-+ *
-+ * Copyright 2026, Beijing ESWIN Computing Technology Co., Ltd.
-+ *
-+ * Authors:
-+ *   Yulin Lu <luyulin@eswincomputing.com>
-+ *   Huan He <hehuan1@eswincomputing.com>
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/clk.h>
-+#include <linux/delay.h>
-+#include <linux/device.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/polynomial.h>
-+#include <linux/reset.h>
-+#include "eic7700-pvt.h"
-+
-+static const struct pvt_sensor_info pvt_info[] = {
-+	PVT_SENSOR_INFO(0, "Temperature", hwmon_temp, TEMP),
-+	PVT_SENSOR_INFO(0, "Voltage", hwmon_in, VOLT),
-+};
-+
-+/*
-+ * The original translation formulae of the temperature (in degrees of Celsius)
-+ * to PVT data and vice-versa are following:
-+ * N = 6.0818e-8*(T^4) +1.2873e-5*(T^3) + 7.2244e-3*(T^2) + 3.6484*(T^1) +
-+ *     1.6198e2,
-+ * T = -1.8439e-11*(N^4) + 8.0705e-8*(N^3) + -1.8501e-4*(N^2) +
-+ *     3.2843e-1*(N^1) - 4.8690e1,
-+ * where T = [-40, 125]C and N = [27, 771].
-+ * They must be accordingly altered to be suitable for the integer arithmetics.
-+ * The technique is called 'factor redistribution', which just makes sure the
-+ * multiplications and divisions are made so to have a result of the operations
-+ * within the integer numbers limit. In addition we need to translate the
-+ * formulae to accept millidegrees of Celsius. Here what they look like after
-+ * the alterations:
-+ * N = (60818e-20*(T^4) + 12873e-14*(T^3) + 72244e-9*(T^2) + 36484e-3*T +
-+ *     16198e2) / 1e4,
-+ * T = -18439e-12*(N^4) + 80705e-9*(N^3) - 185010e-6*(N^2) + 328430e-3*N -
-+ *     48690,
-+ * where T = [-40000, 125000] mC and N = [27, 771].
-+ */
-+static const struct polynomial poly_N_to_temp = {
-+	.total_divider = 1,
-+	.terms = {
-+		{4, -18439, 1000, 1},
-+		{3, 80705, 1000, 1},
-+		{2, -185010, 1000, 1},
-+		{1, 328430, 1000, 1},
-+		{0, -48690, 1, 1}
-+	}
-+};
-+
-+/*
-+ * Similar alterations are performed for the voltage conversion equations.
-+ * The original formulae are:
-+ * N = 1.3905e3*V - 5.7685e2,
-+ * V = (N + 5.7685e2) / 1.3905e3,
-+ * where V = [0.72, 0.88] V and N = [424, 646].
-+ * After the optimization they looks as follows:
-+ * N = (13905e-3*V - 5768.5) / 10,
-+ * V = (N * 10^5 / 13905 + 57685 * 10^3 / 13905) / 10.
-+ * where V = [720, 880] mV and N = [424, 646].
-+ */
-+static const struct polynomial poly_N_to_volt = {
-+	.total_divider = 10,
-+	.terms = {
-+		{1, 100000, 13905, 1},
-+		{0, 57685000, 1, 13905}
-+	}
-+};
-+
-+static inline u32 eic7700_pvt_update(void __iomem *reg, u32 mask, u32 data)
-+{
-+	u32 old;
-+
-+	old = readl_relaxed(reg);
-+	writel((old & ~mask) | (data & mask), reg);
-+
-+	return old & mask;
-+}
-+
-+static inline void eic7700_pvt_set_mode(struct pvt_hwmon *pvt, u32 mode)
-+{
-+	u32 old;
-+
-+	mode = FIELD_PREP(PVT_MODE_MASK, mode);
-+
-+	old = eic7700_pvt_update(pvt->regs + PVT_ENA, PVT_ENA_EN, 0);
-+	eic7700_pvt_update(pvt->regs + PVT_MODE, PVT_MODE_MASK, mode);
-+	eic7700_pvt_update(pvt->regs + PVT_ENA, PVT_ENA_EN, old);
-+}
-+
-+static inline void eic7700_pvt_set_trim(struct pvt_hwmon *pvt, u32 val)
-+{
-+	u32 old;
-+
-+	old = eic7700_pvt_update(pvt->regs + PVT_ENA, PVT_ENA_EN, 0);
-+	writel(val, pvt->regs + PVT_TRIM);
-+	eic7700_pvt_update(pvt->regs + PVT_ENA, PVT_ENA_EN, old);
-+}
-+
-+static irqreturn_t eic7700_pvt_hard_isr(int irq, void *data)
-+{
-+	struct pvt_hwmon *pvt = data;
-+	u32 val;
-+
-+	eic7700_pvt_update(pvt->regs + PVT_INT, PVT_INT_CLR, PVT_INT_CLR);
-+	/*
-+	 * Read the data, update the cache and notify a waiter of this event.
-+	 */
-+	val = readl(pvt->regs + PVT_DATA);
-+	WRITE_ONCE(pvt->data_cache, FIELD_GET(PVT_DATA_OUT, val));
-+	complete(&pvt->conversion);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int eic7700_pvt_read_data(struct pvt_hwmon *pvt,
-+				 enum pvt_sensor_type type, long *val)
-+{
-+	unsigned long timeout;
-+	u32 data;
-+	int ret;
-+
-+	/*
-+	 * Wait for PVT conversion to complete and update the data cache. The
-+	 * data read procedure is following: set the requested PVT sensor mode,
-+	 * enable conversion, wait until conversion is finished, then disable
-+	 * conversion and IRQ, and read the cached data.
-+	 */
-+	reinit_completion(&pvt->conversion);
-+
-+	eic7700_pvt_set_mode(pvt, pvt_info[type].mode);
-+	eic7700_pvt_update(pvt->regs + PVT_ENA, PVT_ENA_EN, PVT_ENA_EN);
-+
-+	/*
-+	 * Wait with timeout since in case if the sensor is suddenly powered
-+	 * down the request won't be completed and the caller will hang up on
-+	 * this procedure until the power is back up again. Multiply the
-+	 * timeout by the factor of two to prevent a false timeout.
-+	 */
-+	timeout = 2 * usecs_to_jiffies(ktime_to_us(pvt->timeout));
-+	ret = wait_for_completion_timeout(&pvt->conversion, timeout);
-+
-+	eic7700_pvt_update(pvt->regs + PVT_ENA, PVT_ENA_EN, 0);
-+	eic7700_pvt_update(pvt->regs + PVT_INT, PVT_INT_CLR, PVT_INT_CLR);
-+
-+	data = READ_ONCE(pvt->data_cache);
-+
-+	if (!ret)
-+		return -ETIMEDOUT;
-+
-+	if (type == PVT_TEMP)
-+		*val = polynomial_calc(&poly_N_to_temp, data);
-+	else
-+		*val = polynomial_calc(&poly_N_to_volt, data);
-+
-+	return 0;
-+}
-+
-+static const struct hwmon_channel_info *pvt_channel_info[] = {
-+	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET),
-+	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT | HWMON_I_LABEL),
-+	NULL
-+};
-+
-+static umode_t eic7700_pvt_hwmon_is_visible(const void *data,
-+					    enum hwmon_sensor_types type,
-+					    u32 attr, int ch)
-+{
-+	switch (type) {
-+	case hwmon_temp:
-+		switch (attr) {
-+		case hwmon_temp_input:
-+		case hwmon_temp_label:
-+			return 0444;
-+		case hwmon_temp_offset:
-+			return 0644;
-+		}
-+		break;
-+	case hwmon_in:
-+		switch (attr) {
-+		case hwmon_in_input:
-+		case hwmon_in_label:
-+			return 0444;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static int eic7700_pvt_read_trim(struct pvt_hwmon *pvt, long *val)
-+{
-+	u32 data;
-+
-+	data = readl(pvt->regs + PVT_TRIM);
-+	*val = data;
-+
-+	return 0;
-+}
-+
-+static int eic7700_pvt_write_trim(struct pvt_hwmon *pvt, long val)
-+{
-+	/*
-+	 * Update PVT trim register safely while the controller is temporarily
-+	 * disabled.
-+	 */
-+	eic7700_pvt_set_trim(pvt, val);
-+
-+	return 0;
-+}
-+
-+static int eic7700_pvt_hwmon_read(struct device *dev,
-+				  enum hwmon_sensor_types type, u32 attr,
-+				  int ch, long *val)
-+{
-+	struct pvt_hwmon *pvt = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = pm_runtime_get_sync(pvt->dev);
-+	if (ret < 0) {
-+		dev_err(pvt->dev, "Failed to resume PVT device: %d\n", ret);
-+		pm_runtime_put_noidle(pvt->dev);
-+		return ret;
-+	}
-+
-+	switch (type) {
-+	case hwmon_temp:
-+		switch (attr) {
-+		case hwmon_temp_input:
-+			ret = eic7700_pvt_read_data(pvt, ch, val);
-+			break;
-+		case hwmon_temp_offset:
-+			ret = eic7700_pvt_read_trim(pvt, val);
-+			break;
-+		default:
-+			ret = -EOPNOTSUPP;
-+		}
-+		break;
-+	case hwmon_in:
-+		if (attr == hwmon_in_input)
-+			ret = eic7700_pvt_read_data(pvt, PVT_VOLT + ch, val);
-+		else
-+			ret = -EOPNOTSUPP;
-+		break;
-+	default:
-+		ret = -EOPNOTSUPP;
-+	}
-+
-+	pm_runtime_mark_last_busy(pvt->dev);
-+	pm_runtime_put_autosuspend(pvt->dev);
-+	return ret;
-+}
-+
-+static int eic7700_pvt_hwmon_read_string(struct device *dev,
-+					 enum hwmon_sensor_types type, u32 attr,
-+					 int ch, const char **str)
-+{
-+	switch (type) {
-+	case hwmon_temp:
-+		if (attr == hwmon_temp_label) {
-+			*str = pvt_info[ch].label;
-+			return 0;
-+		}
-+		break;
-+	case hwmon_in:
-+		if (attr == hwmon_in_label) {
-+			*str = pvt_info[PVT_VOLT + ch].label;
-+			return 0;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return -EOPNOTSUPP;
-+}
-+
-+static int eic7700_pvt_hwmon_write(struct device *dev,
-+				   enum hwmon_sensor_types type, u32 attr,
-+				   int ch, long val)
-+{
-+	struct pvt_hwmon *pvt = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = pm_runtime_get_sync(pvt->dev);
-+	if (ret < 0) {
-+		dev_err(pvt->dev, "Failed to resume PVT device: %d\n", ret);
-+		pm_runtime_put_noidle(pvt->dev);
-+		return ret;
-+	}
-+
-+	if (type == hwmon_temp && attr == hwmon_temp_offset)
-+		ret = eic7700_pvt_write_trim(pvt, val);
-+	else
-+		ret = -EOPNOTSUPP;
-+
-+	pm_runtime_mark_last_busy(pvt->dev);
-+	pm_runtime_put_autosuspend(pvt->dev);
-+	return ret;
-+}
-+
-+static const struct hwmon_ops pvt_hwmon_ops = {
-+	.is_visible = eic7700_pvt_hwmon_is_visible,
-+	.read = eic7700_pvt_hwmon_read,
-+	.read_string = eic7700_pvt_hwmon_read_string,
-+	.write = eic7700_pvt_hwmon_write
-+};
-+
-+static const struct hwmon_chip_info pvt_hwmon_info = {
-+	.ops = &pvt_hwmon_ops,
-+	.info = pvt_channel_info
-+};
-+
-+static void pvt_clear_data(void *data)
-+{
-+	struct pvt_hwmon *pvt = data;
-+
-+	complete_all(&pvt->conversion);
-+}
-+
-+static struct pvt_hwmon *eic7700_pvt_create_data(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct pvt_hwmon *pvt;
-+	int ret;
-+
-+	pvt = devm_kzalloc(dev, sizeof(*pvt), GFP_KERNEL);
-+	if (!pvt)
-+		return ERR_PTR(-ENOMEM);
-+
-+	pvt->dev = dev;
-+	init_completion(&pvt->conversion);
-+
-+	ret = devm_add_action(dev, pvt_clear_data, pvt);
-+	if (ret) {
-+		dev_err(dev, "Can't add PVT data clear action\n");
-+		return ERR_PTR(ret);
-+	}
-+
-+	return pvt;
-+}
-+
-+static int eic7700_pvt_init_iface(struct pvt_hwmon *pvt)
-+{
-+	/*
-+	 * Make sure controller are disabled so not to accidentally have ISR
-+	 * executed before the driver data is fully initialized. Clear the IRQ
-+	 * status as well.
-+	 */
-+	eic7700_pvt_update(pvt->regs + PVT_INT, PVT_INT_CLR, PVT_INT_CLR);
-+	eic7700_pvt_update(pvt->regs + PVT_ENA, PVT_ENA_EN, 0);
-+	readl(pvt->regs + PVT_INT);
-+	readl(pvt->regs + PVT_DATA);
-+
-+	/* Setup default sensor mode and temperature trim. */
-+	eic7700_pvt_set_mode(pvt, pvt_info[PVT_TEMP].mode);
-+
-+	/*
-+	 * Max conversion latency (~333 µs) derived from PVT spec:
-+	 * maximum sampling rate = 3000 samples/sec.
-+	 */
-+	pvt->timeout = ns_to_ktime(PVT_TOUT_MIN);
-+
-+	eic7700_pvt_set_trim(pvt, PVT_TRIM_DEF);
-+
-+	return 0;
-+}
-+
-+static int eic7700_pvt_request_irq(struct pvt_hwmon *pvt)
-+{
-+	struct platform_device *pdev = to_platform_device(pvt->dev);
-+	int ret;
-+
-+	pvt->irq = platform_get_irq(pdev, 0);
-+	if (pvt->irq < 0)
-+		return pvt->irq;
-+
-+	ret = devm_request_threaded_irq(pvt->dev, pvt->irq,
-+					eic7700_pvt_hard_isr, NULL,
-+					IRQF_TRIGGER_HIGH, "pvt", pvt);
-+	if (ret) {
-+		dev_err(pvt->dev, "Couldn't request PVT IRQ\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int eic7700_pvt_create_hwmon(struct pvt_hwmon *pvt)
-+{
-+	struct device *dev = pvt->dev;
-+	struct device_node *np = dev->of_node;
-+	const char *node_label;
-+	int type;
-+	const char *names[2] = {"soc_pvt", "ddr_pvt"};
-+
-+	if (of_property_read_string(np, "label", &node_label)) {
-+		dev_err(dev, "Missing 'label' property in DTS node\n");
-+		return -EINVAL;
-+	}
-+
-+	if (strcmp(node_label, "pvt0") == 0) {
-+		type = 0;
-+	} else if (strcmp(node_label, "pvt1") == 0) {
-+		type = 1;
-+	} else {
-+		dev_err(pvt->dev, "Unsupported label: %s\n", node_label);
-+		return -EINVAL;
-+	}
-+
-+	pvt->hwmon = devm_hwmon_device_register_with_info(pvt->dev, names[type],
-+							  pvt, &pvt_hwmon_info,
-+							  NULL);
-+	if (IS_ERR(pvt->hwmon)) {
-+		dev_err(pvt->dev, "Couldn't create hwmon device\n");
-+		return PTR_ERR(pvt->hwmon);
-+	}
-+
-+	return 0;
-+}
-+
-+static void eic7700_pvt_disable_pm_runtime(void *data)
-+{
-+	struct pvt_hwmon *pvt = data;
-+
-+	pm_runtime_dont_use_autosuspend(pvt->dev);
-+	pm_runtime_disable(pvt->dev);
-+}
-+
-+static int eic7700_pvt_probe(struct platform_device *pdev)
-+{
-+	struct pvt_hwmon *pvt;
-+	int ret;
-+
-+	pvt = eic7700_pvt_create_data(pdev);
-+	if (IS_ERR(pvt))
-+		return PTR_ERR(pvt);
-+
-+	platform_set_drvdata(pdev, pvt);
-+
-+	pvt->regs = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(pvt->regs))
-+		return PTR_ERR(pvt->regs);
-+
-+	pvt->clk = devm_clk_get(&pdev->dev, NULL);
-+	if (IS_ERR(pvt->clk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(pvt->clk),
-+				     "Couldn't get clock\n");
-+
-+	pvt->rst = devm_reset_control_get_exclusive_deasserted(&pdev->dev,
-+							       NULL);
-+	if (IS_ERR(pvt->rst))
-+		return dev_err_probe(pvt->dev, PTR_ERR(pvt->rst),
-+				     "Couldn't get reset control\n");
-+
-+	ret = clk_prepare_enable(pvt->clk);
-+	if (ret)
-+		return dev_err_probe(pvt->dev, ret, "Failed to enable clock\n");
-+
-+	ret = eic7700_pvt_init_iface(pvt);
-+	if (ret) {
-+		clk_disable_unprepare(pvt->clk);
-+		return ret;
-+	}
-+
-+	clk_disable_unprepare(pvt->clk);
-+
-+	ret = eic7700_pvt_request_irq(pvt);
-+	if (ret)
-+		return ret;
-+
-+	pm_runtime_enable(&pdev->dev);
-+	pm_runtime_set_autosuspend_delay(&pdev->dev, 3000);
-+	pm_runtime_use_autosuspend(&pdev->dev);
-+	pm_runtime_get_noresume(&pdev->dev);
-+
-+	ret = devm_add_action_or_reset(pvt->dev, eic7700_pvt_disable_pm_runtime,
-+				       pvt);
-+	if (ret) {
-+		pm_runtime_put_noidle(&pdev->dev);
-+		return dev_err_probe(&pdev->dev, ret,
-+				     "Can't register PM cleanup\n");
-+	}
-+
-+	ret = eic7700_pvt_create_hwmon(pvt);
-+	if (ret)
-+		goto err_put_pm_runtime;
-+
-+	pm_runtime_put_autosuspend(&pdev->dev);
-+
-+	return 0;
-+
-+err_put_pm_runtime:
-+	pm_runtime_put_noidle(&pdev->dev);
-+	return ret;
-+}
-+
-+static int __maybe_unused eic7700_pvt_runtime_resume(struct device *dev)
-+{
-+	struct pvt_hwmon *pvt = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = clk_prepare_enable(pvt->clk);
-+	if (ret) {
-+		dev_err(dev, "Failed to enable clock: %d\n", ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused eic7700_pvt_runtime_suspend(struct device *dev)
-+{
-+	struct pvt_hwmon *pvt = dev_get_drvdata(dev);
-+
-+	clk_disable_unprepare(pvt->clk);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused eic7700_pvt_suspend(struct device *dev)
-+{
-+	int ret = 0;
-+
-+	if (!pm_runtime_status_suspended(dev)) {
-+		ret = eic7700_pvt_runtime_suspend(dev);
-+		if (ret) {
-+			dev_err(dev, "Failed to suspend: %d\n", ret);
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused eic7700_pvt_resume(struct device *dev)
-+{
-+	int ret = 0;
-+
-+	if (!pm_runtime_status_suspended(dev)) {
-+		ret = eic7700_pvt_runtime_resume(dev);
-+		if (ret) {
-+			dev_err(dev, "Failed to resume: %d\n", ret);
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops eic7700_pvt_pm_ops = {
-+	SYSTEM_SLEEP_PM_OPS(eic7700_pvt_suspend, eic7700_pvt_resume)
-+	RUNTIME_PM_OPS(eic7700_pvt_runtime_suspend, eic7700_pvt_runtime_resume,
-+		       NULL)
-+};
-+
-+static const struct of_device_id pvt_of_match[] = {
-+	{ .compatible = "eswin,eic7700-pvt"},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, pvt_of_match);
-+
-+static struct platform_driver pvt_driver = {
-+	.probe = eic7700_pvt_probe,
-+	.driver = {
-+		.name = "eic7700-pvt",
-+		.of_match_table = pvt_of_match,
-+		.pm = pm_ptr(&eic7700_pvt_pm_ops),
-+	},
-+};
-+module_platform_driver(pvt_driver);
-+
-+MODULE_AUTHOR("Yulin Lu <luyulin@eswincomputing.com>");
-+MODULE_AUTHOR("Huan He <hehuan1@eswincomputing.com>");
-+MODULE_DESCRIPTION("Eswin eic7700 PVT driver");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/hwmon/eic7700-pvt.h b/drivers/hwmon/eic7700-pvt.h
-new file mode 100644
-index 000000000000..4b46cdeb2d58
---- /dev/null
-+++ b/drivers/hwmon/eic7700-pvt.h
-@@ -0,0 +1,99 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * ESWIN EIC7700 Process, Voltage, Temperature sensor driver
-+ *
-+ * Copyright 2026, Beijing ESWIN Computing Technology Co., Ltd.
-+ */
-+#ifndef __HWMON_EIC7700_PVT_H__
-+#define __HWMON_EIC7700_PVT_H__
-+
-+#include <linux/completion.h>
-+#include <linux/hwmon.h>
-+#include <linux/kernel.h>
-+#include <linux/time.h>
-+
-+/* ESWIN EIC7700 PVT registers and their bitfields */
-+#define PVT_TRIM		0x04
-+#define PVT_MODE		0x08
-+#define PVT_MODE_MASK		GENMASK(2, 0)
-+#define PVT_CTRL_MODE_TEMP	0x0
-+#define PVT_CTRL_MODE_VOLT	0x4
-+#define PVT_ENA			0x0c
-+#define PVT_ENA_EN		BIT(0)
-+#define PVT_INT			0x10
-+#define PVT_INT_STAT		BIT(0)
-+#define PVT_INT_CLR		BIT(1)
-+#define PVT_DATA		0x14
-+#define PVT_DATA_OUT		GENMASK(9, 0)
-+
-+/*
-+ * PVT sensors-related limits and default values
-+ * @PVT_TEMP_CHS: Number of temperature hwmon channels.
-+ * @PVT_VOLT_CHS: Number of voltage hwmon channels.
-+ * @PVT_TRIM_DEF: Default temperature sensor trim value (set a proper value
-+ *		  when one is determined for ESWIN EIC7700 SoC).
-+ * @PVT_TOUT_MIN: Minimal timeout between samples in nanoseconds.
-+ */
-+#define PVT_TEMP_CHS		1
-+#define PVT_VOLT_CHS		1
-+#define PVT_TRIM_DEF		0
-+#define PVT_TOUT_MIN		(NSEC_PER_SEC / 3000)
-+
-+/*
-+ * enum pvt_sensor_type - ESWIN EIC7700 PVT sensor types (correspond to each PVT
-+ *			  sampling mode)
-+ * @PVT_TEMP: PVT Temperature sensor.
-+ * @PVT_VOLT: PVT Voltage sensor.
-+ */
-+enum pvt_sensor_type {
-+	PVT_TEMP = 0,
-+	PVT_VOLT
-+};
-+
-+/*
-+ * struct pvt_sensor_info - ESWIN EIC7700 PVT sensor informational structure
-+ * @channel: Sensor channel ID.
-+ * @label: hwmon sensor label.
-+ * @mode: PVT mode corresponding to the channel.
-+ * @type: Sensor type.
-+ */
-+struct pvt_sensor_info {
-+	int channel;
-+	const char *label;
-+	u32 mode;
-+	enum hwmon_sensor_types type;
-+};
-+
-+#define PVT_SENSOR_INFO(_ch, _label, _type, _mode)	\
-+	{						\
-+		.channel = _ch,				\
-+		.label = _label,			\
-+		.mode = PVT_CTRL_MODE_ ##_mode,		\
-+		.type = _type,				\
-+	}
-+
-+/*
-+ * struct pvt_hwmon - Eswin EIC7700 PVT private data
-+ * @dev: device structure of the PVT platform device.
-+ * @hwmon: hwmon device structure.
-+ * @regs: pointer to the Eswin EIC7700 PVT registers region.
-+ * @irq: PVT events IRQ number.
-+ * @clk: PVT core clock (1.2MHz).
-+ * @rst: pointer to the reset descriptor.
-+ * @data_cache: data cache in raw format.
-+ * @conversion: data conversion completion.
-+ * @timeout: conversion timeout.
-+ */
-+struct pvt_hwmon {
-+	struct device *dev;
-+	struct device *hwmon;
-+	void __iomem *regs;
-+	int irq;
-+	struct clk *clk;
-+	struct reset_control *rst;
-+	u32 data_cache;
-+	struct completion conversion;
-+	ktime_t timeout;
-+};
-+
-+#endif /* __HWMON_EIC7700_PVT_H__ */
--- 
-2.25.1
+Please let me know if you have any suggestion, thanks.
 
+>
+>Signed-off-by: Jack Cheng <cheng.jackhy@inventec.com>
+>Co-developed-by: Brian Chiang <chiang.brian@inventec.com>
+>Signed-off-by: Brian Chiang <chiang.brian@inventec.com>
+>---
+> drivers/hwmon/pmbus/q54sj108a2.c | 238 ++++++++++++++++++++++++---------------
+> 1 file changed, 147 insertions(+), 91 deletions(-)
+>
+>diff --git a/drivers/hwmon/pmbus/q54sj108a2.c b/drivers/hwmon/pmbus/q54sj108a2.c
+>index d5d60a9af8c5..50539555a74e 100644
+>--- a/drivers/hwmon/pmbus/q54sj108a2.c
+>+++ b/drivers/hwmon/pmbus/q54sj108a2.c
+>@@ -22,7 +22,9 @@
+> #define PMBUS_FLASH_KEY_WRITE		0xEC
+>
+> enum chips {
+>-	q54sj108a2
+>+	q50sn12072,
+>+	q54sj108a2,
+>+	q54sn120a1
+> };
+>
+> enum {
+>@@ -55,10 +57,24 @@ struct q54sj108a2_data {
+> #define to_psu(x, y) container_of((x), struct q54sj108a2_data, debugfs_entries[(y)])
+>
+> static struct pmbus_driver_info q54sj108a2_info[] = {
+>-	[q54sj108a2] = {
+>+	[q50sn12072] = {
+> 		.pages = 1,
+>+		/* Source : Delta Q50SN12072 */
+>+		.format[PSC_VOLTAGE_OUT] = linear,
+>+		.format[PSC_TEMPERATURE] = linear,
+>+		.format[PSC_VOLTAGE_IN] = linear,
+>+		.format[PSC_CURRENT_OUT] = linear,
+>
+>+		.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
+>+		PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+>+		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+>+		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
+>+		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_POUT,
+>+	},
+>+	[q54sj108a2] = {
+>+		.pages = 1,
+> 		/* Source : Delta Q54SJ108A2 */
+>+		.format[PSC_VOLTAGE_OUT] = linear,
+> 		.format[PSC_TEMPERATURE] = linear,
+> 		.format[PSC_VOLTAGE_IN] = linear,
+> 		.format[PSC_CURRENT_OUT] = linear,
+>@@ -69,6 +85,20 @@ static struct pmbus_driver_info q54sj108a2_info[] = {
+> 		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
+> 		PMBUS_HAVE_STATUS_INPUT,
+> 	},
+>+	[q54sn120a1] = {
+>+		.pages = 1,
+>+		/* Source : Delta Q54SN120A1 */
+>+		.format[PSC_VOLTAGE_OUT] = linear,
+>+		.format[PSC_TEMPERATURE] = linear,
+>+		.format[PSC_VOLTAGE_IN] = linear,
+>+		.format[PSC_CURRENT_OUT] = linear,
+>+
+>+		.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
+>+		PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+>+		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+>+		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
+>+		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_POUT,
+>+	},
+> };
+>
+> static ssize_t q54sj108a2_debugfs_read(struct file *file, char __user *buf,
+>@@ -83,73 +113,77 @@ static ssize_t q54sj108a2_debugfs_read(struct file *file, char __user *buf,
+> 	char *out = data;
+> 	char *res;
+>
+>+	rc = pmbus_lock_interruptible(psu->client);
+>+	if (rc)
+>+		return rc;
+>+
+> 	switch (idx) {
+> 	case Q54SJ108A2_DEBUGFS_OPERATION:
+> 		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_OPERATION);
+> 		if (rc < 0)
+>-			return rc;
+>+			goto unlock;
+>
+> 		rc = snprintf(data, 3, "%02x", rc);
+> 		break;
+> 	case Q54SJ108A2_DEBUGFS_WRITEPROTECT:
+> 		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_WRITE_PROTECT);
+> 		if (rc < 0)
+>-			return rc;
+>+			goto unlock;
+>
+> 		rc = snprintf(data, 3, "%02x", rc);
+> 		break;
+> 	case Q54SJ108A2_DEBUGFS_VOOV_RESPONSE:
+> 		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_VOUT_OV_FAULT_RESPONSE);
+> 		if (rc < 0)
+>-			return rc;
+>+			goto unlock;
+>
+> 		rc = snprintf(data, 3, "%02x", rc);
+> 		break;
+> 	case Q54SJ108A2_DEBUGFS_IOOC_RESPONSE:
+> 		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_IOUT_OC_FAULT_RESPONSE);
+> 		if (rc < 0)
+>-			return rc;
+>+			goto unlock;
+>
+> 		rc = snprintf(data, 3, "%02x", rc);
+> 		break;
+> 	case Q54SJ108A2_DEBUGFS_PMBUS_VERSION:
+> 		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_REVISION);
+> 		if (rc < 0)
+>-			return rc;
+>+			goto unlock;
+>
+> 		rc = snprintf(data, 3, "%02x", rc);
+> 		break;
+> 	case Q54SJ108A2_DEBUGFS_MFR_ID:
+> 		rc = i2c_smbus_read_block_data(psu->client, PMBUS_MFR_ID, data);
+> 		if (rc < 0)
+>-			return rc;
+>+			goto unlock;
+> 		break;
+> 	case Q54SJ108A2_DEBUGFS_MFR_MODEL:
+> 		rc = i2c_smbus_read_block_data(psu->client, PMBUS_MFR_MODEL, data);
+> 		if (rc < 0)
+>-			return rc;
+>+			goto unlock;
+> 		break;
+> 	case Q54SJ108A2_DEBUGFS_MFR_REVISION:
+> 		rc = i2c_smbus_read_block_data(psu->client, PMBUS_MFR_REVISION, data);
+> 		if (rc < 0)
+>-			return rc;
+>+			goto unlock;
+> 		break;
+> 	case Q54SJ108A2_DEBUGFS_MFR_LOCATION:
+> 		rc = i2c_smbus_read_block_data(psu->client, PMBUS_MFR_LOCATION, data);
+> 		if (rc < 0)
+>-			return rc;
+>+			goto unlock;
+> 		break;
+> 	case Q54SJ108A2_DEBUGFS_BLACKBOX_READ_OFFSET:
+> 		rc = i2c_smbus_read_byte_data(psu->client, READ_HISTORY_EVENT_NUMBER);
+> 		if (rc < 0)
+>-			return rc;
+>+			goto unlock;
+>
+> 		rc = snprintf(data, 3, "%02x", rc);
+> 		break;
+> 	case Q54SJ108A2_DEBUGFS_BLACKBOX_READ:
+> 		rc = i2c_smbus_read_block_data(psu->client, READ_HISTORY_EVENTS, data);
+> 		if (rc < 0)
+>-			return rc;
+>+			goto unlock;
+>
+> 		res = bin2hex(data_char, data, rc);
+> 		rc = res - data_char;
+>@@ -158,16 +192,22 @@ static ssize_t q54sj108a2_debugfs_read(struct file *file, char __user *buf,
+> 	case Q54SJ108A2_DEBUGFS_FLASH_KEY:
+> 		rc = i2c_smbus_read_block_data(psu->client, PMBUS_FLASH_KEY_WRITE, data);
+> 		if (rc < 0)
+>-			return rc;
+>+			goto unlock;
+>
+> 		res = bin2hex(data_char, data, rc);
+> 		rc = res - data_char;
+> 		out = data_char;
+> 		break;
+> 	default:
+>-		return -EINVAL;
+>+		rc = -EINVAL;
+>+		goto unlock;
+> 	}
+>
+>+unlock:
+>+	pmbus_unlock(psu->client);
+>+	if (rc < 0)
+>+		return rc;
+>+
+> 	out[rc] = '\n';
+> 	rc += 2;
+>
+>@@ -183,27 +223,51 @@ static ssize_t q54sj108a2_debugfs_write(struct file *file, const char __user *bu
+> 	int *idxp = file->private_data;
+> 	int idx = *idxp;
+> 	struct q54sj108a2_data *psu = to_psu(idxp, idx);
+>+	int original_wp;
+>+	int rc_restore;
+>
+>-	rc = i2c_smbus_write_byte_data(psu->client, PMBUS_WRITE_PROTECT, 0);
+>-	if (rc)
+>-		return rc;
+>-
+>+	/*
+>+	 * Parse user input before acquiring the PMBus lock. Since calling
+>+	 * kstrtou8_from_user() while holding pmbus_lock_interruptible()
+>+	 * may introduce a denial of service risk.
+>+	 */
+> 	switch (idx) {
+> 	case Q54SJ108A2_DEBUGFS_OPERATION:
+>+	case Q54SJ108A2_DEBUGFS_VOOV_RESPONSE:
+>+	case Q54SJ108A2_DEBUGFS_IOOC_RESPONSE:
+>+	case Q54SJ108A2_DEBUGFS_BLACKBOX_SET_OFFSET:
+> 		rc = kstrtou8_from_user(buf, count, 0, &dst_data);
+> 		if (rc < 0)
+> 			return rc;
+>+		break;
+>+	case Q54SJ108A2_DEBUGFS_CLEARFAULT:
+>+	case Q54SJ108A2_DEBUGFS_STOREDEFAULT:
+>+	case Q54SJ108A2_DEBUGFS_BLACKBOX_ERASE:
+>+		break;
+>+	default:
+>+		return -EINVAL;
+>+	}
+>
+>-		rc = i2c_smbus_write_byte_data(psu->client, PMBUS_OPERATION, dst_data);
+>-		if (rc < 0)
+>-			return rc;
+>+	rc = pmbus_lock_interruptible(psu->client);
+>+	if (rc)
+>+		return rc;
+>+
+>+	original_wp = i2c_smbus_read_byte_data(psu->client, PMBUS_WRITE_PROTECT);
+>+	if (original_wp < 0) {
+>+		rc = original_wp;
+>+		goto unlock;
+>+	}
+>+
+>+	rc = i2c_smbus_write_byte_data(psu->client, PMBUS_WRITE_PROTECT, 0);
+>+	if (rc < 0)
+>+		goto unlock;
+>
+>+	switch (idx) {
+>+	case Q54SJ108A2_DEBUGFS_OPERATION:
+>+		rc = i2c_smbus_write_byte_data(psu->client, PMBUS_OPERATION, dst_data);
+> 		break;
+> 	case Q54SJ108A2_DEBUGFS_CLEARFAULT:
+> 		rc = i2c_smbus_write_byte(psu->client, PMBUS_CLEAR_FAULTS);
+>-		if (rc < 0)
+>-			return rc;
+>-
+> 		break;
+> 	case Q54SJ108A2_DEBUGFS_STOREDEFAULT:
+> 		flash_key[0] = 0x7E;
+>@@ -212,52 +276,35 @@ static ssize_t q54sj108a2_debugfs_write(struct file *file, const char __user *bu
+> 		flash_key[3] = 0x42;
+> 		rc = i2c_smbus_write_block_data(psu->client, PMBUS_FLASH_KEY_WRITE, 4, flash_key);
+> 		if (rc < 0)
+>-			return rc;
+>-
+>+			break;
+> 		rc = i2c_smbus_write_byte(psu->client, STORE_DEFAULT_ALL);
+>-		if (rc < 0)
+>-			return rc;
+>-
+> 		break;
+> 	case Q54SJ108A2_DEBUGFS_VOOV_RESPONSE:
+>-		rc = kstrtou8_from_user(buf, count, 0, &dst_data);
+>-		if (rc < 0)
+>-			return rc;
+>-
+> 		rc = i2c_smbus_write_byte_data(psu->client, PMBUS_VOUT_OV_FAULT_RESPONSE, dst_data);
+>-		if (rc < 0)
+>-			return rc;
+>-
+> 		break;
+> 	case Q54SJ108A2_DEBUGFS_IOOC_RESPONSE:
+>-		rc = kstrtou8_from_user(buf, count, 0, &dst_data);
+>-		if (rc < 0)
+>-			return rc;
+>-
+> 		rc = i2c_smbus_write_byte_data(psu->client, PMBUS_IOUT_OC_FAULT_RESPONSE, dst_data);
+>-		if (rc < 0)
+>-			return rc;
+>-
+> 		break;
+> 	case Q54SJ108A2_DEBUGFS_BLACKBOX_ERASE:
+> 		rc = i2c_smbus_write_byte(psu->client, ERASE_BLACKBOX_DATA);
+>-		if (rc < 0)
+>-			return rc;
+>-
+> 		break;
+> 	case Q54SJ108A2_DEBUGFS_BLACKBOX_SET_OFFSET:
+>-		rc = kstrtou8_from_user(buf, count, 0, &dst_data);
+>-		if (rc < 0)
+>-			return rc;
+>-
+> 		rc = i2c_smbus_write_byte_data(psu->client, SET_HISTORY_EVENT_OFFSET, dst_data);
+>-		if (rc < 0)
+>-			return rc;
+>-
+> 		break;
+>-	default:
+>-		return -EINVAL;
+> 	}
+>+	/*
+>+	 * Always restore WRITE_PROTECT and preserve the original error in
+>+	 * rc; only surface the restore failure if the operation itself was
+>+	 * successful.
+>+	 */
+>+	rc_restore = i2c_smbus_write_byte_data(psu->client, PMBUS_WRITE_PROTECT, original_wp);
+>+	if (rc_restore < 0 && rc >= 0)
+>+		rc = rc_restore;
+>+
+>+unlock:
+>+	pmbus_unlock(psu->client);
+>+	if (rc < 0)
+>+		return rc;
+>
+> 	return count;
+> }
+>@@ -270,7 +317,9 @@ static const struct file_operations q54sj108a2_fops = {
+> };
+>
+> static const struct i2c_device_id q54sj108a2_id[] = {
+>+	{ "q50sn12072", q50sn12072 },
+> 	{ "q54sj108a2", q54sj108a2 },
+>+	{ "q54sn120a1", q54sn120a1 },
+> 	{ },
+> };
+>
+>@@ -280,6 +329,7 @@ static int q54sj108a2_probe(struct i2c_client *client)
+> {
+> 	struct device *dev = &client->dev;
+> 	u8 buf[I2C_SMBUS_BLOCK_MAX + 1];
+>+	const struct i2c_device_id *mid;
+> 	enum chips chip_id;
+> 	int ret, i;
+> 	struct dentry *debugfs;
+>@@ -292,14 +342,9 @@ static int q54sj108a2_probe(struct i2c_client *client)
+> 				     I2C_FUNC_SMBUS_BLOCK_DATA))
+> 		return -ENODEV;
+>
+>-	if (client->dev.of_node)
+>-		chip_id = (enum chips)(unsigned long)of_device_get_match_data(dev);
+>-	else
+>-		chip_id = i2c_match_id(q54sj108a2_id, client)->driver_data;
+>-
+> 	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
+> 	if (ret < 0) {
+>-		dev_err(&client->dev, "Failed to read Manufacturer ID\n");
+>+		dev_err(dev, "Failed to read Manufacturer ID\n");
+> 		return ret;
+> 	}
+> 	if (ret != 6 || strncmp(buf, "DELTA", 5)) {
+>@@ -308,19 +353,25 @@ static int q54sj108a2_probe(struct i2c_client *client)
+> 		return -ENODEV;
+> 	}
+>
+>-	/*
+>-	 * The chips support reading PMBUS_MFR_MODEL.
+>-	 */
+> 	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
+> 	if (ret < 0) {
+> 		dev_err(dev, "Failed to read Manufacturer Model\n");
+> 		return ret;
+> 	}
+>-	if (ret != 14 || strncmp(buf, "Q54SJ108A2", 10)) {
+>-		buf[ret] = '\0';
+>+	buf[ret] = '\0';
+>+	for (mid = q54sj108a2_id; mid->name[0]; mid++) {
+>+		if (!strncasecmp(mid->name, buf, strlen(mid->name)))
+>+			break;
+>+	}
+>+	if (!mid->name[0]) {
+> 		dev_err(dev, "Unsupported Manufacturer Model '%s'\n", buf);
+> 		return -ENODEV;
+> 	}
+>+	chip_id = mid->driver_data;
+>+
+>+	if (strcmp(client->name, mid->name) != 0)
+>+		dev_notice(dev, "Device mismatch: Configured %s, detected %s\n",
+>+			   client->name, mid->name);
+>
+> 	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_REVISION, buf);
+> 	if (ret < 0) {
+>@@ -333,16 +384,17 @@ static int q54sj108a2_probe(struct i2c_client *client)
+> 		return -ENODEV;
+> 	}
+>
+>-	ret = pmbus_do_probe(client, &q54sj108a2_info[chip_id]);
+>-	if (ret)
+>-		return ret;
+>-
+> 	psu = devm_kzalloc(&client->dev, sizeof(*psu), GFP_KERNEL);
+> 	if (!psu)
+> 		return 0;
+>
+>+	psu->chip = chip_id;
+> 	psu->client = client;
+>
+>+	ret = pmbus_do_probe(client, &q54sj108a2_info[chip_id]);
+>+	if (ret)
+>+		return ret;
+>+
+> 	debugfs = pmbus_get_debugfs_dir(client);
+>
+> 	q54sj108a2_dir = debugfs_create_dir(client->name, debugfs);
+>@@ -359,9 +411,6 @@ static int q54sj108a2_probe(struct i2c_client *client)
+> 	debugfs_create_file("write_protect", 0444, q54sj108a2_dir,
+> 			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_WRITEPROTECT],
+> 			    &q54sj108a2_fops);
+>-	debugfs_create_file("store_default", 0200, q54sj108a2_dir,
+>-			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_STOREDEFAULT],
+>-			    &q54sj108a2_fops);
+> 	debugfs_create_file("vo_ov_response", 0644, q54sj108a2_dir,
+> 			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_VOOV_RESPONSE],
+> 			    &q54sj108a2_fops);
+>@@ -383,27 +432,34 @@ static int q54sj108a2_probe(struct i2c_client *client)
+> 	debugfs_create_file("mfr_location", 0444, q54sj108a2_dir,
+> 			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_MFR_LOCATION],
+> 			    &q54sj108a2_fops);
+>-	debugfs_create_file("blackbox_erase", 0200, q54sj108a2_dir,
+>-			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_ERASE],
+>-			    &q54sj108a2_fops);
+>-	debugfs_create_file("blackbox_read_offset", 0444, q54sj108a2_dir,
+>-			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_READ_OFFSET],
+>-			    &q54sj108a2_fops);
+>-	debugfs_create_file("blackbox_set_offset", 0200, q54sj108a2_dir,
+>-			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_SET_OFFSET],
+>-			    &q54sj108a2_fops);
+>-	debugfs_create_file("blackbox_read", 0444, q54sj108a2_dir,
+>-			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_READ],
+>-			    &q54sj108a2_fops);
+>-	debugfs_create_file("flash_key", 0444, q54sj108a2_dir,
+>-			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_FLASH_KEY],
+>-			    &q54sj108a2_fops);
+>+	if (psu->chip == q54sj108a2) {
+>+		debugfs_create_file("store_default", 0200, q54sj108a2_dir,
+>+				    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_STOREDEFAULT],
+>+				    &q54sj108a2_fops);
+>+		debugfs_create_file("blackbox_erase", 0200, q54sj108a2_dir,
+>+				    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_ERASE],
+>+				    &q54sj108a2_fops);
+>+		debugfs_create_file("blackbox_read_offset", 0444, q54sj108a2_dir,
+>+				    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_READ_OFFSET],
+>+				    &q54sj108a2_fops);
+>+		debugfs_create_file("blackbox_read", 0444, q54sj108a2_dir,
+>+				    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_READ],
+>+				    &q54sj108a2_fops);
+>+		debugfs_create_file("blackbox_set_offset", 0200, q54sj108a2_dir,
+>+				    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_SET_OFFSET],
+>+				    &q54sj108a2_fops);
+>+		debugfs_create_file("flash_key", 0444, q54sj108a2_dir,
+>+				    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_FLASH_KEY],
+>+				    &q54sj108a2_fops);
+>+	}
+>
+> 	return 0;
+> }
+>
+> static const struct of_device_id q54sj108a2_of_match[] = {
+>-	{ .compatible = "delta,q54sj108a2", .data = (void *)q54sj108a2 },
+>+	{ .compatible = "delta,q50sn12072" },
+>+	{ .compatible = "delta,q54sj108a2" },
+>+	{ .compatible = "delta,q54sn120a1" },
+> 	{ },
+> };
+>
+>@@ -421,6 +477,6 @@ static struct i2c_driver q54sj108a2_driver = {
+> module_i2c_driver(q54sj108a2_driver);
+>
+> MODULE_AUTHOR("Xiao.Ma <xiao.mx.ma@deltaww.com>");
+>-MODULE_DESCRIPTION("PMBus driver for Delta Q54SJ108A2 series modules");
+>+MODULE_DESCRIPTION("PMBus driver for Delta Q54SJ108A2 and compatibles");
+> MODULE_LICENSE("GPL");
+> MODULE_IMPORT_NS("PMBUS");
+>
+>-- 
+>2.43.0
+>
+
+Best regards,
+Brian
