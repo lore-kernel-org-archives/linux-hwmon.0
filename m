@@ -1,68 +1,67 @@
-Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
+Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D111C40B6FB
-	for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 14:01:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B68C0429825
+	for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 14:52:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777557687; cv=none; b=qy2odOhxfvMcVtFtBZ5kHZqfW2jcVreu43RCb0QKPIjQmlrQTzTLqpFSeNE0FcXONkhTcZUvlZ4N8zfIDvu/JWJJ86ejY7lK+oRvpZWe+qoqI1UWdpfVpbIWBNT+YnKm3/RN1JuWrgd0BF+sIcNQREGAo5HPR8AGkOke/NhHdf8=
+	t=1777560779; cv=none; b=AqKfIkeommDIcQZ66QfDo/WQWR5K+cMjxHkj5CLRADCrNEqqJw0liKFt216ETEqHyUNGqBDiwBNssYrhP2ksk5iCo9aOS+OLPkSbbYWpHFLQ6PCyHjpHXhkckWBUk2AIDf+Zz12gAc4AxoUI9LiTrpFOE/ZKqrzPncC60+WJPiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777557687; c=relaxed/simple;
-	bh=msv4UKCWnzRJ8AaUkkjBcemw+RJMUndgSk28nTFccU8=;
+	s=arc-20240116; t=1777560779; c=relaxed/simple;
+	bh=xXilKtlBu7ORsUeINFBNTicjpEJsSa5+vUSye8RrTVQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W4eZxMT+Qe2lZuAHVN7p8l/jpXEn0Sd4pe3TG9WvNKqqG7Z0FaVF5G//jVXYB+/pXADE/E0MXxXoMzSsrW03qNhU3H8sI6hlJyJzrLjl240SmyEWAIIfygm1b4PkjYZ3JTETOqjNEUgClrs1mmvppvFVy/cNa/GTcrr7YdhDD+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UF30Fap2; arc=none smtp.client-ip=74.125.82.49
+	 In-Reply-To:Content-Type; b=XQgHsYrqWIZJBigaOrPddDov6+gs/YszssfCH6OQdEGv45soQfufk8vOS/CH7LBIYSRYaETSmQyVFxdeFescQUz+VAKgv5IPzafw7qrjA3fRWrVUy8Knt9Twiv77DMGoTl2NIJkNFaIVQgjlfFitugI5kTe/1nRKQMZZLGt/UjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o8G3AfVl; arc=none smtp.client-ip=74.125.82.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UF30Fap2"
-Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-12c726ef332so1418014c88.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 07:01:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o8G3AfVl"
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-2bdcf5970cdso971104eec.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 07:52:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777557685; x=1778162485; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1777560778; x=1778165578; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=qfZbAXfxGOXaCq4/H3CYpwcnIHDGtx5biK9MXIffcuI=;
-        b=UF30Fap2OP/jPoGwTfeqM9oMj9KBgS0zZmZ5USk1NV+1Oe9G+Vy7x9at21mo4KtAoe
-         /BM46uzhZf869bMOEhOlUfQXxdQGAbl+JcR4Yzac7G756qiC4GDj0Qk9SPww7H1Zz/yd
-         LSNTCXEm+xdKYA4Znod+rk2sFfkeSEBRPFKNsOER9UIF60sVisQhntf0fNgc3sX8MdLj
-         80tnux1/nkHMS7CVjm3SRPna3aN+iKueC9q2NtoOJ2fziVRgkOpleDNV9jANMCMGIFWE
-         T9YRz+SqlADevINb6C4eq2RsuO1XkAuj4PJdDwXG0CskWEzPmevVc6NDOOilhw0FYAXg
-         CVwA==
+        bh=s97kimBkPdgWPFwDad6XY/gtHcLtkIRpBpV5NCCXEH0=;
+        b=o8G3AfVlQEXzH/Jbsw8dxXBGec/cq9NkklnA1rBA//8iLS4XmKx1KikF+YxON51DNQ
+         T4nLOGejZX5UTXy+eeFeKVhfrmgY+TVjFDb9IQLSmeA+a8UNGg87RNnTenxq6aholmWa
+         gX5fFQpJUWugTcfN7SeAvqg1hqWWApf60dZjZoXxHztpPKTGvHgGZBAWQYoZWCEn6BFP
+         6pkhY4CFi/Z11QJlxZAsRWN5MnIYaWIXVvk4j6z3ZQml+s4CHLXQm21G1k9zNXD/if2G
+         Q9Z3bAkAspN3qxomsDKcMN54spauInfbtWgHXucya4X8F6ChBNrTMo8lXdkGBtKChA/g
+         +yRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777557685; x=1778162485;
+        d=1e100.net; s=20251104; t=1777560778; x=1778165578;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qfZbAXfxGOXaCq4/H3CYpwcnIHDGtx5biK9MXIffcuI=;
-        b=irb4j4B7Ilhnj96YsWTX6b4vfeitWhZvYz5cCeuWpIIkfPmlatUBdBicDJQY9W/piT
-         vwCmqF/QEu0OAKiize6Ks0DHZ1XAx5zrq89l1BNpXeIaE4/QYgZVt975L6Vl9pd8QYJE
-         5D1ocrf6N9uhKAucT1CGofWL8l0Lb1s8Vl04RGx61iBJnwTHrbciNZnxzcN3MO4UzDPa
-         bFKudzAD/KEN0sVJtLHaloJ4/pDXG3INte5W7CsjL8aClssGIryFRJlvXlUh5ajhyWlg
-         lvF0Qrg1eKaZkqtUsLPG/Jo2Rxn9EbvaJG15nUeB8NMq2FSL4a5XsQhvoc06gIgcbIgb
-         uneQ==
-X-Forwarded-Encrypted: i=1; AFNElJ89+Tq0SbEny13wVkcIuBVIRrKKB3RCq2OrOB3DkUhaPeg5dnjGbFz3rXyD9wgPyzE8EIPRd5lji5tM/Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz1UC72U93YJMbuxbgq8tC2+mBmLhW2Zl32lfEBK0/kkqmfxakj
-	3+3HFZt6FSzIFYdQHDh2U91F8o+A8e4D2vWSQCsnxvA1ByLrDof2gctb
-X-Gm-Gg: AeBDievfC7X56MS4ueLrrh1P6a9893TJhKb4EELJ3nBHqMRuTejWNnWQy4uFLreIuUB
-	M3dd7SgQc6+u1JyB3SieIzJK25bYSCRdcpAjDuMDFGZ5t+xiAZ7+drXz7vdYcnpxMFsoqQ9Vhv0
-	j4FFTeXkE3U0P6FMR/Jkn/1F+4lTkYLFXojVwrQ5Yn58mYG0NDDz2Rnf4dOdhtCVX5fsjGKrw1p
-	Wkc6sCyORG+qKrJr3AwYKfDZciO7cQCysIUHmMUj8qpZNSqN3lSQeWgpMCU66S756/L2Ztplmop
-	KwhVNkbPtP1MKGQCJbZCm1wdmlVzTA3wfNY98Ez8TrBIBz26GxmhAapGRtwWBrU2XF9Gql+UJoW
-	f5lIDizSia1uk12A/2k94NPQT4wuCZgaOlbshE2b3NK6Ic1P2rLzAKKEKYwFC20gQa0dv/JQ3j3
-	Swa2aAAhukTblvdMKHWaB77vkz0v9J3jpFu3o1mFAsT1bR6OHyjC7a11VXDH9cS0CybJKlUodC/
-	J2AbR/mAKs=
-X-Received: by 2002:a05:7022:1702:b0:12d:ccf5:271c with SMTP id a92af1059eb24-12deace0f72mr564658c88.22.1777557684718;
-        Thu, 30 Apr 2026 07:01:24 -0700 (PDT)
+        bh=s97kimBkPdgWPFwDad6XY/gtHcLtkIRpBpV5NCCXEH0=;
+        b=SAR407WAxnZvir6wK3nrsEdh85vOH/ArrQ71YPHXwCg11kePSBvxrj62PzbU/w+J2L
+         V3UlgA8U7GOV+Lo2tjfzFeHLOF+2SD8G+ZskvZ/a6CdjQiISwqUOZbbdcB9EOO1up7Ok
+         ++LVsmxp/SiNXp/+DgWoufHqryHi0xImIM/Sh03NxbizxUCNIirVS/gXSIZ//D3meon0
+         4xmkt32byCRfkkTYbtJICDMrKvH2w7elVhO2kyNwZP6KsdopHdIS8in+NdH5FaZqQzP7
+         of7BlVo/5R83+HRw5CTIYjPk+w6Ku74x4hHbBw0oKFw73D/w53JsEekTD2TG0QCEOSKT
+         2EwA==
+X-Gm-Message-State: AOJu0YxeP/h+0yzcR8wMCqeUOX2lbkF3N0PrT0kfoFbXIAHOFrFEOKz7
+	/GtldYXqGCKEJxxyFa220eHhAbxcSAe/hukRGC8BszT9B/ixrlhYCY70
+X-Gm-Gg: AeBDieuz5vTwwPU5eExK2EvPPi0MgMZSIPCNya2C6R5NJ1+PNFjxk48/zkRXQ3R0rS4
+	lsdds7GH+NNa9S47FsaGEKDtOwiFrPKAqbRWIa9a/aPRvWCzE2JNDsWtQFr11sm74D1hDSdwX4S
+	/P1s3ux/z1Lz7r1e/F+B9ylS8aw0tlYWzqzxMyDa4iTdWwkrTzWo55x4VceZueFNSeumH6APpHF
+	jZIZZXhitTM71jfOPKtxuXveF+OZvNObOiZlLHJZXHHJdCVw9rRGqZQPMAE+4BJ10STbPKqHxq4
+	MH2862jwAW2yFrhZs4fC9Ldmw7DMaYm6eFEztIfQGmjBdI/2rD2J7bCr0YSC9kNY7hw9jRn5GQp
+	fg/GNu48QUct8yKXfMonjKCJufgfffQkKO8dixw1AMhUvKm8JMmlo7WukpEbRPgNGJ/JEUxJS6b
+	y6YucRQQmOBzQw70UvP6KPsVXRyqtUdaBHAIMACRniQG+IRapHWQmxeQnFfl2B9V4FccItaqfpk
+	H/XlmAzivw=
+X-Received: by 2002:a05:7300:1c24:b0:2d1:9b35:4edb with SMTP id 5a478bee46e88-2ed4a7bc357mr846236eec.0.1777560777350;
+        Thu, 30 Apr 2026 07:52:57 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12de321df36sm10222426c88.7.2026.04.30.07.01.23
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ee3889d657sm166134eec.4.2026.04.30.07.52.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Apr 2026 07:01:23 -0700 (PDT)
+        Thu, 30 Apr 2026 07:52:56 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f3b8d049-744c-42ab-a641-086bc1726b24@roeck-us.net>
-Date: Thu, 30 Apr 2026 07:01:22 -0700
+Message-ID: <e2d14b68-7f3f-4bcb-8687-857e9335deb8@roeck-us.net>
+Date: Thu, 30 Apr 2026 07:52:55 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,15 +69,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 2/2] hwmon: (pmbus/q54sj108a2) Add support for
- q50sn12072 and q54sn120a1
-To: Brian Chiang <chiang.brian@inventec.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, Jack Cheng <Cheng.JackHY@inventec.com>
-References: <20260429-add-support-for-q50sn12072-and-q54sn120a1-v7-0-f1f83d2039f7@inventec.com>
- <20260429-add-support-for-q50sn12072-and-q54sn120a1-v7-2-f1f83d2039f7@inventec.com>
- <mhguhlt5gi7sg7qsgetsizdslm2z4vdhlgag55bqjnq3a2kz24@iafh7hhezp4l>
+Subject: Re: [PATCH v12 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap
+ Controller
+To: sashiko@lists.linux.dev,
+ =?UTF-8?Q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
+Cc: linux-hwmon@vger.kernel.org
+References: <20260430-ltc4283-support-v12-2-5dc9901f2567@analog.com>
+ <20260430100343.45D31C2BCB3@smtp.kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -124,56 +121,31 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <mhguhlt5gi7sg7qsgetsizdslm2z4vdhlgag55bqjnq3a2kz24@iafh7hhezp4l>
+In-Reply-To: <20260430100343.45D31C2BCB3@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 4/29/26 23:58, Brian Chiang wrote:
-> On Wed, Apr 29, 2026 at 11:29:37AM +0000, Brian Chiang wrote:
->> From: Jack Cheng <cheng.jackhy@inventec.com>
->>
->> The Q50SN12072 and Q54SN120A1 are high-efficiency, high-density DC-DC power
->> module from Delta Power Modules.
->>
->> The Q50SN12072, quarter brick, single output 12V. This product provides up
->> to 1200 watts of output power at 38~60V. The Q50SN12072 offers peak
->> efficiency up to 98.3%@54Vin.
->>
->> The Q54SN120A1, quarter brick, single output 12V. This product provides up
->> to 1300 watts of output power at 40~60V. The Q54SN120A1 offers peak
->> efficiency up to 98.1%@54Vin.
->>
->> Add support for them to q54sj108a2 driver.
+On 4/30/26 03:03, sashiko-bot@kernel.org wrote:
+...
+>> +	id = (client->adapter->nr << 10) | client->addr;
+>> +	adev = __devm_auxiliary_device_create(dev, KBUILD_MODNAME, "gpio",
+>> +					      &st->gpio_mask, id);
+>> +	if (!adev)
+>> +		return dev_err_probe(dev, -ENODEV, "Failed to add GPIO device\n");
 > 
-> Greetings, I received the feedback from Sashiko for this patch:
+> Can this error path lead to a use-after-free?
 > 
-> ```
-> This isn't a bug, but the commit message only mentions adding support for
-> the new modules. However, the patch also includes several other changes:
-> adding PMBus locking in the debugfs read/write paths, fixing the
-> WRITE_PROTECT restore logic, modifying the configuration for the existing
-> q54sj108a2 module, and refactoring the device identification logic.
-> Could the commit message be updated to describe these additional changes,
-> or should they be split into separate patches?
-> ```
+> According to the I2C subsystem rules, debugfs entries attached to the
+> client debugfs directory are only cleaned up during the client device
+> removal function on driver unbind.
 > 
-> I'm wondering if it is more appropriate to split only `fixing the WRITE_PROTECT restore logic` into separate patch? Since disabling WRITE_PROTECT was introduced in previous commit. And maybe keeping
-> other changes Sashiko mentioned in this patch and record them in the commit message?
-> 
-> Please let me know if you have any suggestion, thanks.
+> If __devm_auxiliary_device_create() fails, the probe function aborts and
+> the devres subsystem frees the st pointer. However, the debugfs files
+> persist and retain operations that operate on the freed st pointer.
 > 
 
-Sorry, I seem to be missing something. I dont understand the logic above.
-What does fixing a bug have to do with how or when it was introduced ?
+AI taking everything literally :-(. I'll have to reword that guidance again
+to include the probe error path.
 
-The missing lock in debugfs functions is a pre-existing bug, isn't it ?
-All pre-existing bugs should be fixed first in separate patches so they
-can be backported.
-
-Please use guard(pmbus_lock)(client) instead of pmbus_lock_interruptible().
-
-Also, your patch does not apply anymore. Support for q54sn120a1 was already
-added in a separate patch. Please rebase your patches to v7.1-rc1.
-
-Thanks,
 Guenter
+
