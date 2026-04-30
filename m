@@ -1,97 +1,152 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 048E647B429
-	for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 18:20:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0115717B50A;
+	Thu, 30 Apr 2026 18:53:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777573239; cv=none; b=H4IwPpElDU0WfcgFXQ0yaIbGCpaNGkHgLcuutfPhFWrtsXSao1Mvhid8/0WtS0r8WJvNDlLVNxc6BqNIxWwl2yEV1Dvj5J6bBsgvf4f7DF367G9sNruL6ua8PQTCHV3eqUF/Cdu8GbVc0gWtkQLty3LkXobOWMIP/GUVhMmANfM=
+	t=1777575209; cv=none; b=DiJKlJ16ij9VWhC6QdwxydiK7f0S17Ffr2zZxj+qt6gOtb57URiM3vCuv0xebFco54W1Z3iudfeEpL0QsYbLCp9SD4a2S0DANQhBG7W/z5SPfuGir9w0Xp5ihhiydxuGAX/Qpj9ZM5n1r8TZRyu+IblY8p4TeFtsOwm34EKPr8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777573239; c=relaxed/simple;
-	bh=tCw+g7/7gagsLPju3PCwMZhvzQy38+5YtWX9iaZdW2k=;
+	s=arc-20240116; t=1777575209; c=relaxed/simple;
+	bh=fwwPcQWOWqGnk9tycak+N0Nfom1/bWobWQp3LsvSbMg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aM83yW3G22IE0ZZTE0d6JSfI6OY5cgL5UkT2m9RPYXTzi5RU2V2W0O5I3DT+jcXnDYcP8NCgQs+iNKzUOmb2csdky8iDKwJq77aHwSiY+BXek2ODzJASZJBkH/2acxTv/pSK8fs2bhDgNHcpkYswcF8hnVwfXwgb4ExnPyUwD2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AposASQX; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=I5HGrT/wooIIG0jx6Lzj14y5fk0vx2FbzoeehNCpl9Y7HS85v/IA3MK3TS2AwjSwwYrOiW3Z+MS17vxXkW/JvMEZ0JdQ/nDPplcQsjTyDBANfTg3PgnpF2MgikQ1EP9/Q1n/nEM8cz6a6WFv9aFf+suz7jSNzuCRZRN45cVPXyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HYYQdIsb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AposASQX"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-82735a41920so536916b3a.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 11:20:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777573237; x=1778178037; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=klUdmlVlpNVXegQCoO7cd9DXbhq3zKfW/7g8zOSk7s0=;
-        b=AposASQXhasbW4RnAqaUf5272lIrXoO1do32DcX92I3jHT8jBuxANAGJfqZv2/Ftn5
-         ssryFyxhReByinqmU5rabUvbXia43VJevIh3EbUBvmfkhHY5l3k9m6zX49FGFsJEr6OU
-         x7CggiQLrEiTmjQJ3Y7KNvB1u7FIAYKoAXPqo5tjY9XvBTL3o3eXzu4rvv70GN+asNVW
-         LAWyABwcg+oUEC6OWshsDMwJvFuS5/MB3huSZJCMJq1tWZDgUyWfM/ozIiQNEksdPOm/
-         /o+SAeAKHfAW00oj+qId+byc2m/TQZ8tKV91r/qDC+7xUD/6I0fEYuAFcKpmhnp4UOAL
-         m7PA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777573237; x=1778178037;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=klUdmlVlpNVXegQCoO7cd9DXbhq3zKfW/7g8zOSk7s0=;
-        b=oKYyP1WzmAX51gXxpM4QQ8t+Jlh0tYGZDVswp1uH92Ks4n/fS+WovJoo+7ECVnmZYr
-         Yc9iB71w0OERU9Ak8DGhtAmB7e0iTh07CSH++4hdQHPK2B4pS9RbtGLfTesrxtZRByui
-         KaGRi1H4oPifRg+4p9CYLNofmdTeE8JXscnkgstRLjO4fLHybXPme897uDIFQcl8bspq
-         w3BxG4l9i2UXSGXAsRI42DvkpMmZVm643m1pNB4xoWvC5x5ryOhH6OnVntQNshoeBWoL
-         3Tf36HOW40pmyq5oog7wV/B1AG3JIhyZOb4Wf6fzrsrtPRUZPAx9CVrsCBj71qPzFj9W
-         NRsg==
-X-Forwarded-Encrypted: i=1; AFNElJ9rXk937+bRvQncMoBW7J3CKgecQJXG/BHYUw/NXbjobcK9ESmfZSmq3hqUfls7QQp5ziW07WVo7tO5QA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzh6YKjfZAn4iCRAIR+uzSWle/yaaSnJ+zK2une1NJd/U8fcN9Y
-	NpfsyBzzwd6jZfSd67dPVmM9Ecp9rMOkVELIgkbpoFTHSPGYM3TgADoc
-X-Gm-Gg: AeBDiev1N4IW5O6QeMUqxRickaD5vMA1hYD7ixFW+IMFljQdhPv6+04o9mX7U+crxOQ
-	uu1faaB2iS4g46zm9oS0OYE/WZMsEqS+ATW6PrsWQFG6874wBNthPoYMo/aOyO0h4glyVxHsJxc
-	i4VvJHQ1BrR70C6VnVDdD8mM1uC7z5enI2K22/k3iJr5QLOPkEiAZM4xx4rZIaB1jm2J9WPTJxp
-	JRLAxLVOzqgeusXqgpvodLQodfu69nh6wg3BcgSLHAAGAwYfTHERaWQkB2g1oOc/prp3C5nq2+G
-	DVpS0utClY+bNNoQfRqKl29vjV+mLAC8cZQkmbi3Jz++AvJkShEE/SN8vwJg1li+bIWdwtXZIif
-	KDuGkLetlqPZeOoKT/7JLEajLPgz8tMm3gHdoBITjDPHsmrC+B1ininvFdrH4AVthBgBU5C1bWT
-	PRlEk9h3ZrR3zfWYo979zHu2ePTcmlQVrobTtici7YQKXT1XM1SWwUVNGVyA==
-X-Received: by 2002:a05:6a00:174b:b0:82d:6310:2efc with SMTP id d2e1a72fcca58-834fdb874e8mr4549707b3a.17.1777573237278;
-        Thu, 30 Apr 2026 11:20:37 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8351582e185sm330380b3a.3.2026.04.30.11.20.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Apr 2026 11:20:36 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 30 Apr 2026 11:20:36 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Myeonghun Pak <mhun512@gmail.com>
-Cc: Wilken Gottwalt <wilken.gottwalt@posteo.net>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (corsair-psu) Close HID device on probe errors
-Message-ID: <083849bd-9229-4ade-b60e-08cbc4ff1cd4@roeck-us.net>
-References: <20260424135107.13720-1-mhun512@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HYYQdIsb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 477E7C2BCB8;
+	Thu, 30 Apr 2026 18:53:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777575208;
+	bh=fwwPcQWOWqGnk9tycak+N0Nfom1/bWobWQp3LsvSbMg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HYYQdIsb3BRSmWBGulj7gwK+RisK5UnSmL0v6Uql95ZJ91CIS3Z/Na5yOKCPnJkM/
+	 CFUdYrcKqaJyGj05fQfcM5vePhU5XBHIvgKHBgPJWyEoJEgSgE08DtBOx0bDl+A3d3
+	 ctOE5gRi0xHUSoS4mk5QhzmitJJrtpFGGjH2qkyyL9UgiCYAZziccu98mSKX2YDO4p
+	 93DNOP/tDrgGRvpv2DLgEQ/1bH3/wpgS/fRNY5EIuGrABiWiDeEBUxjbVDo5RBciz/
+	 uZrBgydmZNXs/6ZVDDu32rbQDf2tMGIYx67hnnuOfY7PsPP16d5hVVHmj1fvrmR3jR
+	 7CgCIkFVv6uFA==
+Date: Thu, 30 Apr 2026 19:53:22 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Florin Leotescu <florin.leotescu@oss.nxp.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Shych <michaelsh@nvidia.com>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	daniel.baluta@nxp.com, viorel.suman@nxp.com,
+	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
+	festevam@gmail.com, Florin Leotescu <florin.leotescu@nxp.com>
+Subject: Re: [PATCH v7 2/3] dt-bindings: hwmon: emc2305: Add
+ fan-shutdown-percent property
+Message-ID: <20260430-breeching-directly-811a1b78182b@spud>
+References: <20260429065955.2113012-1-florin.leotescu@oss.nxp.com>
+ <20260429065955.2113012-3-florin.leotescu@oss.nxp.com>
+ <20260429-shiftless-docile-e57509e967c4@spud>
+ <afNE46C7GBswP8LG@ro-kernel-workstation>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="CIKz425QYUwqIjTi"
+Content-Disposition: inline
+In-Reply-To: <afNE46C7GBswP8LG@ro-kernel-workstation>
+
+
+--CIKz425QYUwqIjTi
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260424135107.13720-1-mhun512@gmail.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 24, 2026 at 10:50:51PM +0900, Myeonghun Pak wrote:
-> corsairpsu_probe() opens the HID device before sending the device init
-> and firmware-info commands. If either command fails, the error path jumps
-> directly to fail_and_stop and skips hid_hw_close().
-> 
-> Use the existing fail_and_close label for those post-open failures so the
-> open count and low-level close callback are balanced before hid_hw_stop().
-> 
-> Fixes: d115b51e0e56 ("hwmon: add Corsair PSU HID controller driver")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Myeonghun Pak <mhun512@gmail.com>
-> Reviewed-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+On Thu, Apr 30, 2026 at 03:02:43PM +0300, Florin Leotescu wrote:
+> On Wed, Apr 29, 2026 at 07:18:04PM +0100, Conor Dooley wrote:
+> > On Wed, Apr 29, 2026 at 09:59:54AM +0300, florin.leotescu@oss.nxp.com w=
+rote:
+> > > From: Florin Leotescu <florin.leotescu@nxp.com>
+> > >=20
+> > > The EMC2305 fan controller supports multiple independent PWM fan
+> > > outputs. Some systems require fans to enter a defined safe state
+> > > during system shutdown or reboot handoff, until firmware or the next
+> > > boot stage reconfigures the controller.
+> > >=20
+> > > Add an optional "fan-shutdown-percent" property to fan child nodes
+> > > allowing the PWM duty cycle applied during shutdown to be configured
+> > > per fan output.
+> > >=20
+> > > Signed-off-by: Florin Leotescu <florin.leotescu@nxp.com>
+> >=20
+> > Why didn't you pick up my tag from here:
+> > https://lore.kernel.org/all/20260407-slang-scoff-795164352c62@spud/
+> >
+>=20
+> Apologies, I missed your Acked-by tag when preparing the series.
+> I will include it in the next revision.
 
-Applied.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+pw-bot: not-applicable
 
-Thanks,
-Guenter
+Don't resend unless there's something else wrong with the series.
+
+>=20
+> > > ---
+> > >  .../devicetree/bindings/hwmon/microchip,emc2305.yaml      | 8 ++++++=
+++
+> > >  1 file changed, 8 insertions(+)
+> > >=20
+> > > diff --git a/Documentation/devicetree/bindings/hwmon/microchip,emc230=
+5.yaml b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+> > > index d3f06ebc19fa..8c2548539d7f 100644
+> > > --- a/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+> > > +++ b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+> > > @@ -54,6 +54,12 @@ patternProperties:
+> > >            The fan number used to determine the associated PWM channe=
+l.
+> > >          maxItems: 1
+> > > =20
+> > > +      fan-shutdown-percent:
+> > > +        description:
+> > > +          PWM duty cycle in percent applied to the fan during shutdo=
+wn.
+> > > +        minimum: 0
+> > > +        maximum: 100
+> > > +
+> > >      required:
+> > >        - reg
+> > > =20
+> > > @@ -80,12 +86,14 @@ examples:
+> > >              fan@0 {
+> > >                  reg =3D <0x0>;
+> > >                  pwms =3D <&fan_controller 26000 PWM_POLARITY_INVERTE=
+D 1>;
+> > > +                fan-shutdown-percent =3D <100>;
+> > >                  #cooling-cells =3D <2>;
+> > >              };
+> > > =20
+> > >              fan@1 {
+> > >                  reg =3D <0x1>;
+> > >                  pwms =3D <&fan_controller 26000 0 1>;
+> > > +                fan-shutdown-percent =3D <50>;
+> > >                  #cooling-cells =3D <2>;
+> > >              };
+> > > =20
+> > > --=20
+> > > 2.34.1
+> > >=20
+>=20
+>=20
+
+--CIKz425QYUwqIjTi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCafOlIgAKCRB4tDGHoIJi
+0tzDAPoCZp0mN8oQj5I4vZNujEnYEEez3a7DkufwLlRs66MyAwD/UfOlbzrNu9E9
+Tx1XmbVtEQZazMbIlyCCtrdKiJ+/2w0=
+=Zgdq
+-----END PGP SIGNATURE-----
+
+--CIKz425QYUwqIjTi--
