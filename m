@@ -1,71 +1,77 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0FFA32BF4B
-	for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 18:15:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B38AE35B62C
+	for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 18:18:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777572952; cv=none; b=cmzaerBYZXqOTM85AtXLVZF3svoR3Ms7OMTb7/WXUJeejslTBibgtTeQ9dVguY9WngfLsHqltULPfNhui6VXlQ7j/s+bQgxmI9/Rrk485SRRn3RqbfE8U2jh311gORcs9CrvJSG2VAx5wkEHpedy7nuYW+7v9TmNDRqvEp6pjqg=
+	t=1777573083; cv=none; b=eJ6ezg6McehGMz8loCKAmNezvTJckJsVi3MGmSEIactyWQsDyPmNIJ5nqCz8/4aJWJexWCrSQEkARFk5tpselayCpTLkSIt2K2ha0ycWY2cASIBMbdz3IEaev+Oy0xPFgS10TTIW3IfdBO3K6C8QldFLoXkMCd5dmucKZHfsZrA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777572952; c=relaxed/simple;
-	bh=ZDsZMoA9/WSo4HcPc0dJPU4kSOVUdowYn/YFm1z2xEc=;
+	s=arc-20240116; t=1777573083; c=relaxed/simple;
+	bh=EvDjr7QOEivWg0MJ80G0BfUhnPuWN2VrxZ3OPHfOdng=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TJ/0wV71hD0gRfhYBxxAip9jVVNVqz0jBLHhL6b+Rbs8nv7nM047X74xsKfpeOra39Ho3DvHhIahIQbdiDhXQlkd0RgxeAcaHEstZnFf9c3sTOwmkhBiGVP/yzwn8JrXeyO+b2F3A598Q7nWX5ISBu6xg+zmLzYSXCzyPAfVlA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K4O5nqtR; arc=none smtp.client-ip=209.85.214.177
+	 Content-Type:Content-Disposition:In-Reply-To; b=V6VDEQd1e9czPsrWSoj5TDpdM5F0s5XElRxB0IgWktKPaSvrWLp9riDVGP39JcIlFfYvEzip9A6hpfP+hVWldZYvDvvxU3PRtA5QJjJzxAoEYKmd/6Vkgba7ACDbMnQbxzaVNhcEys2VY8kvv0PzhX0sUgimdcT9MIBIeZvuFeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Py1+0xk5; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K4O5nqtR"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2b788a98557so10581315ad.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 11:15:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Py1+0xk5"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2addb31945aso6385995ad.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 11:18:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777572951; x=1778177751; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1777573082; x=1778177882; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=uEhlTZx8HGqlWFdMwpSRx7cd1QbHSDI+RBJ/gpUc+9I=;
-        b=K4O5nqtRqQ1AerWfnfh6X/KsQipMaYOCBpg+TycYcbZHtI0w+3MjuMHPx8nie095+L
-         vTXR8IGHT+voxoimg4/SBXM+wakHlqfZ1PURrBkYbapuCkqMbniC0jJ5xJ43o9HYlrMC
-         RomBdsBUxqxG9UGYkPJcra1YFfrqxJ1OQ+SNKjW1UV06rWhrdR/oq3CF2AgFoOTP+zh3
-         SZBMaFEOUMl0S4+ABNnkWVerfQiIA8g3aUkc8yGui4FdZNyuHyHbmxV9APmhMJgDW3RG
-         R76Aplk3n2W/cB8S7f/4qh+TAJtZlSdJI4akGQvZRwA3ZzF9rK4ER+XpCAhwPD7f25mO
-         bl4g==
+        bh=lNrseZwM9UnOfbU9abnm0ZEe80KdvydEgw0ah+e0N5g=;
+        b=Py1+0xk5ttpH19od0x68cXjHvzFZzrw73bApEB+sQgPXeK2ru3TPxuoS9ZUSxx/Lyi
+         gIUUcMFSaFUTBwgvkbGJQ2EL9qrDyfFNUAAEJ/XBJR1oLLG0fPU9l7ULeb7jIRn6BDxP
+         4P1nAyfttHi0qmK1cnwqTMBaRg7HEq3wB9gXJ4YAe5JRmJdMxBWyetP4vHdaDQYBtq+K
+         K0V+ymbdV5x60Z3QVl4Xzjv+Lcvx7XNXun83F8ESUuyQQ9ClwkoR/r38fO4ABB3hNAf3
+         /hvziNvnLqu7z6jwyqPqHxivhcsQPRBk4PEwSrutT5ENGXKnsA+qyyQ2Pnby5oCSMByY
+         Cxrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777572951; x=1778177751;
+        d=1e100.net; s=20251104; t=1777573082; x=1778177882;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=uEhlTZx8HGqlWFdMwpSRx7cd1QbHSDI+RBJ/gpUc+9I=;
-        b=phmdPPohxX/MSMoz7Jfew8YVKOZ3KZg46k0OwFbeyxbE3yL4tEk/f8NJDjYPYjhaH5
-         bfL0Pd9E41hkMDLOiXQPLxDqePH4itionmZzUCyooSLjiRTKL2KPfAe82GtiudVBgbAv
-         RUVLHsOT3paYKKyau3e4h3mzvX/NK8fAdrux4XgdqWL+d972pivwWTJ5bCxS752I5qB1
-         68bJeg8vetZMpW6SvJSr/L5Cvgwtul/jBctjVqxV62pJHGZJBT8B3jDvzgKOJXC0kAVl
-         FeU6AXhR9UT8ZFVH2QnlwBNTdCrCn96ApYhNQWZe2RY4AbtPF2R9oYUk2SLtM9/REuDw
-         ePLA==
-X-Gm-Message-State: AOJu0YygjU6uiIFOUp3mOGE7y9upHj9U0zaoiMpq5Ow9auHAdRb1F0CA
-	WO5z/hDhjusBMy2FHvl/RiOiv9kVrfK4EOfnYFwNowWUmwQuSZcmDW4Q
-X-Gm-Gg: AeBDieuJSXwjHZktK4KGhZuZhkdVoZl3kozzwirWt+pVJC70nP7B6Ghe0CkXWfxn+In
-	pKU4pSJcCStry2H5jdUfEyUh4+cttXO8xpEDp1qrMRy6BKA/TPOW0ukeJJhY3pQu1RJcmqwwHas
-	4LRRtcGZGfdi2mELO93MetBeGuUHUBIxfrpKrs5C7fAsUQtWfczURK0XtX6d+g64jr0g2cdvX+z
-	RqgkooevXCBWO/rTNSQ5aH5HSLpQwPIGyHPiC+4XCssX/ImjUmt0PHwOlapxUmEiL4zPzG8URWq
-	ZvB/yFWDl5Lg/XuxkyRTKsRBpHCIMPBrj2KSllYKJ1XYVUBW/HCVJNnsnuRhfKLVINe6ykQiAaE
-	y3toiRq4yDtSMDFm4Bhi8C37ZAgWe6OI6DLUJyIS9EKm+xIQVCe0qAYmdKNemAymBfQ6eYDEczO
-	pxnUoJu+gyiQWyNW0gvOnDOoNbPFfsx4Tb4bMop0qpFWffXNc=
-X-Received: by 2002:a17:903:3d46:b0:2b2:5ec6:dcf6 with SMTP id d9443c01a7336-2b9a231aa47mr31788415ad.8.1777572951235;
-        Thu, 30 Apr 2026 11:15:51 -0700 (PDT)
+        bh=lNrseZwM9UnOfbU9abnm0ZEe80KdvydEgw0ah+e0N5g=;
+        b=ZSsnOGGB6S7DDr5MDd2FRxdDrd0+Fug+6ac3WoDi/dgNuOjM+ZPrrFb9Z3BnIuSATO
+         mKMmVWYzsoFGOEBkWDA1h8T40qH7bq46KXDYCLPXKfvAK0bd/AuMaX+Ug1pN6QJ7c3W/
+         mpFlLJ0N8BhZhMcC6kjxnWRvzOyo3nxv0pA5KWohkOJheifsoaA8lKO3Y19wBUD4XLxa
+         2W4BFrfgHyhviTLfP25fbEyx5ao5CXj5z1FkU7b6Hgk4SUjBQPxsuCPIGKBG6ezLVSEX
+         pP/oU3C8qmYdlsUTfYuZKSZUxajPwt6nfwgbWuYwjAGtubmI0F+eUfM5hzdbSLU37LV0
+         +x4w==
+X-Forwarded-Encrypted: i=1; AFNElJ9uPAK5iGAqwo/RNn916oeFhPtmVe/pjVMEDe36bq+yCX9/P2MES+U40EO9jF2l8ZuITV2+Ye78L7hYYA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwM7gbmXkiQQxbX2Ak4O80Z/VOPHPx1H+PZ/K27sEuWe67Z5g5
+	MLQsrAj2QZnYnRrEJwI5UgkTXx5h+6LJVjKDirXFnOlV6pO646BLqhRH
+X-Gm-Gg: AeBDietRTjOoZUps5S0NP/29o6DDixOTdYDPEebqoxHFDPF8+5f78TPorPbGSiHrnPM
+	U1RTlLUfyWupUeZmz2/8TMo+T1pE2q6QJTHXBJ7XqI+djm9uLmVfkygdBAY7A9ReWYdsGAI2zg1
+	yVv0xu653hmRsP0jtSaAqMmEwlBnEok0Gpcy8bxlT25/qTFBHqeH+8YJO3qSd9lQ5gPGt1K+l7w
+	vhHuk8ufDMCrx3htHhwJzq9t1wLiaqx3OdU+GEMszj2XdsOJxE5or4IPnyHaVbxiLqUgiEYOXYQ
+	Qg1x/HD3Z56E7o2/g2mj1v36vELxPv3BkdniAoezaBzUqAtIsYFfKJxZe2tVbq6LjCIiDvBcFF6
+	DcH5d1d/eTbiyty03+qfPOrIQcSm566/Ec4X1lt1YepVAavib4dZRW9H+1AarjcjdAB9Mvdn8UG
+	1KMck/ImOudoTV2zQYn3ASRtIz/D001NVwyBW4nHlWvL3oGck=
+X-Received: by 2002:a17:902:f20d:b0:2b2:81aa:f6c3 with SMTP id d9443c01a7336-2b9a24e293dmr34311575ad.29.1777573081946;
+        Thu, 30 Apr 2026 11:18:01 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b9caaae66fsm2686245ad.21.2026.04.30.11.15.50
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b9caaadf8dsm3114255ad.23.2026.04.30.11.18.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Apr 2026 11:15:50 -0700 (PDT)
+        Thu, 30 Apr 2026 11:18:01 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 30 Apr 2026 11:15:49 -0700
+Date: Thu, 30 Apr 2026 11:18:00 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Victor Duicu <victor.duicu@microchip.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	marius.cristea@microchip.com
-Subject: Re: [PATCH v2] hwmon: mcp9982: Add external diode fault read
-Message-ID: <7b19c208-6d85-4c09-aac6-1f7cbb520150@roeck-us.net>
-References: <20260423-add-external-diode-fault-read-v2-1-4004bb5f7d55@microchip.com>
+To: Brian Chiang <chiang.brian@inventec.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: trivial: Add LX1308 support
+Message-ID: <fb8cbe2d-3ab2-43f0-a51a-3ffeb0d8de2d@roeck-us.net>
+References: <20260428-add-support-lx1308-v2-0-90f115954143@inventec.com>
+ <20260428-add-support-lx1308-v2-1-90f115954143@inventec.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -74,13 +80,14 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260423-add-external-diode-fault-read-v2-1-4004bb5f7d55@microchip.com>
+In-Reply-To: <20260428-add-support-lx1308-v2-1-90f115954143@inventec.com>
 
-On Thu, Apr 23, 2026 at 01:56:40PM +0300, Victor Duicu wrote:
-> Add external diode fault read capability to the
-> MCP998X/33 and MCP998XD/33D driver.
+On Tue, Apr 28, 2026 at 12:19:28PM +0000, Brian Chiang wrote:
+> Add device tree bindings for the Luxshare LX1308, a high-efficiency
+> 12V 860W DC/DC power module with PMBus interface.
 > 
-> Signed-off-by: Victor Duicu <victor.duicu@microchip.com>
+> Signed-off-by: Brian Chiang <chiang.brian@inventec.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
 Applied.
 
