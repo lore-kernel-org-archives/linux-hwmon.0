@@ -1,67 +1,68 @@
 Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646FCEEC3
-	for <linux-hwmon@vger.kernel.org>; Fri,  1 May 2026 05:45:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1CC34EF17
+	for <linux-hwmon@vger.kernel.org>; Fri,  1 May 2026 06:10:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777614329; cv=none; b=LX8rxz4nmCfTLXmzWZVh3iSXF+J/jOM2VVUCGDOuYJTSfrFLCeYr5SrgB97XyDnQeA0w4Ns0pRRfH4CIxPvkHL1/VseMcA628HI6KuksC4yteybRN7bveLHzmWgfgHtDxfByrikfCVceUUKFJgCA63zC7pwOuPE2Y+23pIWCQjA=
+	t=1777615814; cv=none; b=Fh0ne1EYn4/2S7XDlebwIj0UI3VRLxU6EC6kGaXO8iyqX3avpmsuzX/pYwWzxyTxKdoY29TlsFcjABACzNi6Vgmm9PLoqIDA/Fc2oJIHBfxc1s1gF7RQPr65X3LFJFLc79wpl4SBrTgbL3Keuoz1y2ZpxQ2+PH2Z2vh3U5X+Nr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777614329; c=relaxed/simple;
-	bh=Blzebelzu9CSYz9A09gISX5ZN3k01I0BB226xJHixFI=;
+	s=arc-20240116; t=1777615814; c=relaxed/simple;
+	bh=0IEGdnMyXloVDYwY7JeZH7JaeWxKh5toccHc/9uu6n4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qeSq0clr4aN8uyQsOt1Axj8I0Li+Aq0fKzFXUyvm0emtRBxRdBxBjlPSP5x39csTV2YtTHPoqJ1nECw9V5zvkOSFgkuNOIdF2PYJADVE/EUiluwfyPQEvQIoDSy9aElmRX6uV5uy9tZUMe+feMs1vNYiCenrC4LVwjWBClqNS14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SzEfX9Ts; arc=none smtp.client-ip=74.125.82.52
+	 In-Reply-To:Content-Type; b=Llow05OAXr34OfQmYcqBQ7+oMKBLF69CSikzOKGfFDdfJCy+lsyz9XyufmMwYs/kTPRTR7onL6vhTJDwaTijgo1KyJUCb39wyR/2jUDC9Ols+ve5CrbRB/pVMGzyxZIwSA4c6Cv8rbjffYZoqAPy2Jm+1Q2Rw+rMvYlUYlUtF0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rL82xhDT; arc=none smtp.client-ip=74.125.82.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SzEfX9Ts"
-Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-12c637089ccso1690834c88.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 22:45:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rL82xhDT"
+Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-12c8ccc7755so2559362c88.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 23:10:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777614325; x=1778219125; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1777615812; x=1778220612; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=2nztguEahnv0sUgxysVyQHSQXGk07aIv5dd5pmPIO7o=;
-        b=SzEfX9TsEqCyWLpqq5Ftq/bbxyg9h/2hidKO7g2L+8wjeCs6/Ipa/lYfJ7lyT4HyBO
-         QVOKBGWBfdwfbATktPc3MHjOWbgO4Pk5XUTIAkcqsOFIOpZ8i9k2Fp9sdHs1yz2KkMmq
-         /zlKEKW7FurLbLXF5XQkOOTc0psTIqYfexgmhQIES7CrHYUSPt/g1p6yY66vDq8SuP/n
-         BCLq//bsVIrkyEf+nvUHYcwvbasKtmwZAoqyDnJXpN3kGZA1rWHTXLxQzxHeOAqWvH2n
-         Hw7EBDRaWnsUYwWdwhWNOmAE31EqL1r6yDHH9hBq++g6fhmCNeqtEB5Qxss7+XW4VGbF
-         emMQ==
+        bh=2796HLH4hTEiV4bO0wRpxpNZp2wuKSRdSVogoyw9+qA=;
+        b=rL82xhDTRCVvslBcfFi2a8fD3r13oQ7gWMeGYdBWCxFvCK6ykAq/jVl16GU+0tjqT8
+         nxVPF+Rh3rIKCJVbv+m8QRYgeZb9SWhrJqWWmUqsLITcJxhnzY3rfzLoP4HLPZvniF1z
+         UWixlTq3QYv1xVnsvG9zsd2UiKWgUsC3V4a9qzuptMiXwTO1mxM4z8Ix9kjE//ISOtmw
+         gUUmmkX3uiRg5sAATIAqkjLOVcdUZFYb1ipYs8ro3/aIZhSXt8xgXd6Nx7EP/i4A9UH9
+         xKclqIS25FAR0BL3QX39h2RPn6biJyU3dM2DloEfeyB9kNUl48FQaUtzJBXzJdzfqzIC
+         PTGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777614325; x=1778219125;
+        d=1e100.net; s=20251104; t=1777615812; x=1778220612;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2nztguEahnv0sUgxysVyQHSQXGk07aIv5dd5pmPIO7o=;
-        b=NHqSvpk0pTqOrWclSlQAchTYxULFKFRahOSF5uOks83RnDYPoJmqd7sulTlW5kl4Ff
-         uCcDRXrYyG3fxI61Ao8xApzc+GIWVHGuJ+BQe6wiylRhjYnS2TCSh9WZhh5pgErUiy/I
-         dnECa37P9oySmztm6erV534Cb9JxjWa5MJR2qfDMJCmn/t1m4ikM0GOhG+adalzDZrDH
-         7TxOK0tHEBKeeA7Y2/4gTOcX9tL2cFUo9eRZQcpvcSV7h5/hcQQyO0sszAxCyOdEPvi+
-         6CJkG49av0vZKlOyv6B2mTgt41BV/TYyQ+/fhMb5ktRif9/646JeOpXT24U96YDIK0IA
-         F2dQ==
-X-Gm-Message-State: AOJu0YxijrF7zbtcZutDZQaDIeaHKgXm6gCPgaOO0uSa4rOlsk3kyOW1
-	c0u/hOTEQ9jZ0JhQD60iOqVF9L2HQunU4X1b+56virR3aRudsKPk0Ub0
-X-Gm-Gg: AeBDietMhiZF7BigPB4KfF+1rzVA5Cjj+8JUOcqg3TMGMM6uIb2YucBaJqK6WJkKwv6
-	AtGzQdMLhdDuS/r+9Z6D1xjab9gT0fIX8UIm5cBgERUOoTRwoAm4+eqetfwbTJAn1OIyztu4+jW
-	EZmX4mE0IAD3v9V4ChUSTk0Qxqgpt1diD2Q2v6IGSNphUW2vjuNMQrhN0u5RQPqPJnVLl1HiNcp
-	SUAJ1xkKXDdZ0Cc4Z6WZN3CZ97Hjo1Nj7PGsNgZ6qdLZAvfL2ryZ9I5BGqBlYBe4CD3uo9uI7tD
-	Zz3P+ylnhifjIodx315Jp1eTy2IXX8z7sP1thsLTNRtrzfK6Cm64XsQ4+axtqFX3UqLj5TGgQ6M
-	ZjEdxm0Y/GnlzYxSvuIOHiARzSDySGr0//tsP2bHwuBWyfJ1Aubfa+6S98nR7IRZHAylA77wxJo
-	jdiqeJ4hx3VWwXCYxle6sG2xCHMAtkTcupFS8Mf//7shYSlB6A+eDEo02YoyVo1HMkg+IozRkuu
-	abp0w80+VQ=
-X-Received: by 2002:a05:7022:b8f:b0:12a:72af:83d1 with SMTP id a92af1059eb24-12deac4d082mr3298828c88.11.1777614325365;
-        Thu, 30 Apr 2026 22:45:25 -0700 (PDT)
+        bh=2796HLH4hTEiV4bO0wRpxpNZp2wuKSRdSVogoyw9+qA=;
+        b=r1rOEwXsfYQ7oxCZE5t2SS8/empXLaCQt+Tjn8fo2Wee2QlkYs5bA7qgicrrxR0l/x
+         w3gketUee+KNxyvgf2Fw0k27Wi9xIuBQdR+cUmjtk2yPEffqs2ODs+UQtq503RSeEg3x
+         WaghwSQXnRxjijauy9lqCs1gStFTAdar0nt4ieGcAUPwlD1YiG2OJEDF0BiHHZ7pKdrg
+         DBIdgm0kJXgHFJFJq5ZDP7A3lLaWrYXgjX2PkixvXuUQA49EpKZQIkk10q889Ds3BDon
+         rqZoJiqGCYZQ0c73LZz8eGJtCgccu9JtArLUPsCxR3JnJfSx41ZSgR/emSmq0m0+HNmM
+         XIsA==
+X-Forwarded-Encrypted: i=1; AFNElJ8Nessswu0JN6ae0QF8X/Sb0+FnYD1mJ5AU+EdICXT1NHUXrlw230fSpkEYGKvvs+/7LmICG/kGTqNObg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyiaYDC4DHGJs0RtzB+J7tQjT1ugOSX+wLO3LBjJ1xY5EnOHoKa
+	53DrV6q5KkI43++2B5KzMjNNcSnzHstCEr9xkjssJb6AtjAd4sRwTGtv
+X-Gm-Gg: AeBDietBL3dh8f2v0AFw6Y+HETm8r/IwuQJ5ogWNVZLohDIRbdztVMr6iECUt+dh1X5
+	35a96FV2dt+zyLzAGAUevor22zy+/zqavZ8+IPUyUZKDN31UhSfyZiZtC0+d8vNrJ5DUmFI5D+i
+	Hns2pPNvGswmnNNCzE2KHw00FpnMhvhE//mAaI7LDW0we04D7MctBrg9pEGlI/BVsv3JCfPR67c
+	CLkMJZxDYUXKkSxxhcJW6UeNiLf9I4saJ5zJX2MMz5PZwZdx3UEgyV9GkfTB/JV/S3WVz/hEvMD
+	IDXjaU+cSSxRuYXSwApJ3eZf4OL7PXF8xFzX+HDTsvNkJF4vJthh3l8YRv/L4B3luFQ7jeV0295
+	/fYHHrcS7v+ko9fAWKH2D83t4ToqTcD5UShx7BbQPOQw/UrSBD19qGxnwyBwNmfzpMHK1SOK8SX
+	rqeJfBXjtkQeOlEs/Ubx6NqZnid5hXzo9AjkO4pczhjNciaguFh50EBo9M1hJQohUD4l2jArcOt
+	NXPHeStMK4=
+X-Received: by 2002:a05:7022:f103:b0:12a:7181:2f1a with SMTP id a92af1059eb24-12df820966emr693688c88.5.1777615811721;
+        Thu, 30 Apr 2026 23:10:11 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12df828849dsm1717160c88.5.2026.04.30.22.45.24
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12df81ec067sm2169548c88.0.2026.04.30.23.10.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Apr 2026 22:45:24 -0700 (PDT)
+        Thu, 30 Apr 2026 23:10:10 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <11f218ce-0067-4a14-9eae-da2517f31848@roeck-us.net>
-Date: Thu, 30 Apr 2026 22:45:23 -0700
+Message-ID: <190bf39b-172d-4852-be86-1d7379d7d4aa@roeck-us.net>
+Date: Thu, 30 Apr 2026 23:10:09 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,13 +70,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/3] hwmon: (ads7871) Fix endianness bug in 16-bit
- register reads
-To: Tabrez Ahmed <tabreztalks@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- shuah@kernel.org, me@brighamcampbell.com, Sashiko <sashiko-bot@kernel.org>
-References: <20260501023530.31160-1-tabreztalks@gmail.com>
- <20260501023530.31160-2-tabreztalks@gmail.com>
+Subject: Re: [PATCH v12 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap
+ Controller
+To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>
+Cc: sashiko@lists.linux.dev,
+ =?UTF-8?Q?Nuno_S=C3=A1_via_B4_Relay?=
+ <devnull+nuno.sa.analog.com@kernel.org>, linux-hwmon@vger.kernel.org
+References: <20260430-ltc4283-support-v12-2-5dc9901f2567@analog.com>
+ <20260430100343.45D31C2BCB3@smtp.kernel.org>
+ <e2d14b68-7f3f-4bcb-8687-857e9335deb8@roeck-us.net> <afOH5xx29LGJ9yKH@nsa>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,74 +124,43 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260501023530.31160-2-tabreztalks@gmail.com>
+In-Reply-To: <afOH5xx29LGJ9yKH@nsa>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 4/30/26 19:35, Tabrez Ahmed wrote:
-> The ads7871_read_reg16() function relies on spi_w8r16() to read the
-> 16-bit sensor output. The ADS7871 device transmits the Least Significant
-> Byte (LSB) first.
+On 4/30/26 09:50, Nuno Sá wrote:
+> On Thu, Apr 30, 2026 at 07:52:55AM -0700, Guenter Roeck wrote:
+>> On 4/30/26 03:03, sashiko-bot@kernel.org wrote:
+>> ...
+>>>> +	id = (client->adapter->nr << 10) | client->addr;
+>>>> +	adev = __devm_auxiliary_device_create(dev, KBUILD_MODNAME, "gpio",
+>>>> +					      &st->gpio_mask, id);
+>>>> +	if (!adev)
+>>>> +		return dev_err_probe(dev, -ENODEV, "Failed to add GPIO device\n");
+>>>
+>>> Can this error path lead to a use-after-free?
+>>>
+>>> According to the I2C subsystem rules, debugfs entries attached to the
+>>> client debugfs directory are only cleaned up during the client device
+>>> removal function on driver unbind.
+>>>
+>>> If __devm_auxiliary_device_create() fails, the probe function aborts and
+>>> the devres subsystem frees the st pointer. However, the debugfs files
+>>> persist and retain operations that operate on the freed st pointer.
+>>>
+>>
+>> AI taking everything literally :-(. I'll have to reword that guidance again
+>> to include the probe error path.
+>>
 > 
-> On Little-Endian architectures, spi_w8r16() correctly reconstructs the
-> 16-bit value. However, on Big-Endian architectures, the byte swapping
-> causes the first received byte (LSB) to be placed in the most significant
-> byte of the u16, resulting in corrupted voltage readings.
+> Yeah and it is annoying it always comes up with something that could
+> have been said before. Even more annoying some of are legit issues :)
 > 
-> Replace spi_w8r16() with a manual spi_write_then_read() into a byte array,
-> and safely reconstruct the integer using get_unaligned_le16() to ensure
-> correct behavior across all architectures. Additionally, use a u8
-> variable for the command byte to ensure the correct instruction is
-> transmitted on Big-Endian systems.
-> 
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Closes: https://sashiko.dev/#/patchset/20260418034601.90226-1-tabreztalks@gmail.com
-> Signed-off-by: Tabrez Ahmed <tabreztalks@gmail.com>
-> ---
->   drivers/hwmon/ads7871.c | 14 +++++++++++---
->   1 file changed, 11 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/hwmon/ads7871.c b/drivers/hwmon/ads7871.c
-> index 9bfdf9e6bcd77..d77eff430935b 100644
-> --- a/drivers/hwmon/ads7871.c
-> +++ b/drivers/hwmon/ads7871.c
-> @@ -59,9 +59,9 @@
->   #include <linux/hwmon-sysfs.h>
->   #include <linux/err.h>
->   #include <linux/delay.h>
-> +#include <linux/unaligned.h>
->   
->   #define DEVICE_NAME	"ads7871"
-> -
->   struct ads7871_data {
->   	struct spi_device *spi;
->   };
-> @@ -77,9 +77,17 @@ static int ads7871_read_reg8(struct spi_device *spi, int reg)
->   static int ads7871_read_reg16(struct spi_device *spi, int reg)
->   {
->   	int ret;
-> +	u8 tx_cmd;
-> +	u8 rx_buf[2];
-> +
->   	reg = reg | INST_READ_BM | INST_16BIT_BM;
-> -	ret = spi_w8r16(spi, reg);
-> -	return ret;
-> +	tx_cmd = reg;
 
-This can be combined into
+Agreed, but I think it it is better that it finds the issues in multiple
+rounds than not finding them at all. And I have to say it is very human -
+the same happens to me as well when I do code reviews of complex patches.
+A major difference is that, unlike me, AI doesn't get tired.
 
-	tx_cmd = reg | INST_READ_BM | INST_16BIT_BM;
-
-Thanks,
 Guenter
-
-> +
-> +	ret = spi_write_then_read(spi, &tx_cmd, 1, rx_buf, 2);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return get_unaligned_le16(rx_buf);
->   }
->   
->   static int ads7871_write_reg8(struct spi_device *spi, int reg, u8 val)
 
