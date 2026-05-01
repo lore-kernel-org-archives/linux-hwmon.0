@@ -1,94 +1,146 @@
-Received: from mail-qk1-f196.google.com (mail-qk1-f196.google.com [209.85.222.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC2B402B8D
-	for <linux-hwmon@vger.kernel.org>; Fri,  1 May 2026 16:36:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B57B03939B4;
+	Fri,  1 May 2026 17:05:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777653409; cv=none; b=faqCtR5lpzSbrQbG4h/TzbHos3H4VJKla4sK2ZY8LgxSIslyZbFD5jH5qd5jsCoTu/qyB8uun0yjCsSUV4CgAv4ZGQzLUCPX8uUAYU3CDZ+UuTxIV7Jf5PzttYS/qpWpD4Mmb95gT3AFSs70pX0I7CiX42xP+lRDTsMb1DJybqM=
+	t=1777655144; cv=none; b=FaPFwvh5OTdXh2A60ycZrsP5cO+DHxBr/QJcrJIGf8it82+qtKF25mgF7WpvcCBqj9+zEIiOTHE4mwjiTNrez7IO8DgE55xRscxStOjqMEEmyCZVb+m3h94aFrdCV81SNOTRktGb3lJZyPh8l0QIP+9fRNkQabTGMDp6OPSHlh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777653409; c=relaxed/simple;
-	bh=XbHuBazdIj59lFJGTiZLT9rr3cfwwaeJixTzB2ocrQE=;
-	h=Message-ID:Date:From:To:Subject; b=b7hLNcOyEnWzowsgL02IXsehBnVYr+XkG6crQm6hUmk00eORjbPph9RGBYggtgU8KRoybUbOSG9QuMtMitYOtMV3qspZ0SY30Z6HV98Lt61t4i9Vtc6CBKlula58TJSvTvPmXYkAydCWaTsXixjAFlpaPzpFNuNd1SjwFKCXML4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X7M/zbg7; arc=none smtp.client-ip=209.85.222.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777655144; c=relaxed/simple;
+	bh=Zky/w8roGFiUskCftirIBIfMhxs+OSpIo7CAX+36NS0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WuMl6eBLg+CXZNQKsOaW5bbExC37gCiZaAeBZKbqwMuiN+0hJUnIor0vyViIbvDErz2yOeRXzX9UuZvzB4524YjrcY23yV0o4WFsx3E80iSZohxr72WZjnG9/spSzTz7FlrYQ0kE5a8OKQ1i5E6alkhZLSPz5ymnWLCgr3zMvYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QtH5hMsv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X7M/zbg7"
-Received: by mail-qk1-f196.google.com with SMTP id af79cd13be357-8d67a483d3eso237935985a.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 01 May 2026 09:36:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777653400; x=1778258200; darn=vger.kernel.org;
-        h=subject:to:from:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XbHuBazdIj59lFJGTiZLT9rr3cfwwaeJixTzB2ocrQE=;
-        b=X7M/zbg7fKeKUOw2lTmzkFBlgILrW9zoE0dHsLj1GlwVYfOUYe+aY0zTl0BP9PC6BL
-         86T+Q+SjX+FoJjITNdsBW5s9IIpibyHyzoPRwqO5RMStE0pP23NQn2gPsQXl6lNeG3il
-         5FKPMgk0OLqAT+nOWjHUZWNLC74nw/2ppcb6AcDkg1ElSs66YpSn1BuoPxeJnqh48Wtk
-         7wcfUatUjypbqRcyfIwzXbVQRFrkafZljnNE2irezw4HyozeBlL0Mlw78mTnNjJp5ZAA
-         4lDlyxawHY9NPSZPrER4bfyXJUCyHstYAQV4YtVZu/JKcPZBLJL5fjpdbxjzGisp5kJo
-         mAcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777653400; x=1778258200;
-        h=subject:to:from:date:message-id:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=XbHuBazdIj59lFJGTiZLT9rr3cfwwaeJixTzB2ocrQE=;
-        b=SPPxEnCLu7aoxU46GMtU46cnWuQbWF639ReM4TVJohFgeBvvf7ZfZG8dKfn4rFxvWZ
-         147eTSKiw6rObM8f6h02pSoSQHPDXu4xVhz+B//ZiK/qvTKwI9E5eOo4UhHU0HjWWWZX
-         bmY2HLh3LyYC3zDYWq1MNhWyYTUlw2Q41vo3Aa7AuNH9FaNpjccWgVy6R7FWf/gcJJVt
-         yJ3gnm472aoaq0rhygYHmVXKwRjGIxXVsvhASOEuceWEo5gEF1S7w20Upz7y8LkS2R6v
-         mr81enry6rE4uwifLXjNYowpBnio4PVZ6FCNsCDrxrSFmP6wMKRZgZdgKVkL4irnTovV
-         DpUQ==
-X-Gm-Message-State: AOJu0Yz5Z4z3I6CF6KMaBoQn9vzlVtlbtE3jqf/jWgSP1DwyEaZdrjQ4
-	X5+ZkA9Eud9sl6kyyZu/U0ZO9R7ZDk7O5WpPv99VrngC4WMnQPfI/asBFhInrExxWK8=
-X-Gm-Gg: AeBDies+ZeAMlpL8zVH4hoeJiVlNxOP7QJrWFkO7CdYu5oaV1TZhLiktXkJcqSKaNea
-	gsRQYEwdz8uofkp8Il9S6BYxmG6xdKr9dw+FLBQHG/P/9fIAaael3cAZDbubL6GWXeUtFrXNIDZ
-	oRuY62X+supWfSm6u0kY7EfbEAf7l40J2V++lR5K8WepHxROPGwKVC9MLecNA5Rp0t+hbJVUpsK
-	Nz9qdDRP/OforhS0R+Fz1FNhEW3x5os0OkFuY+T7guUyU2RKd54jFH0eGkPQhkKFlzp+EMDrY3F
-	wojwqk37n5VObNCUNu00SU6tMXoqR4JKatz8J0Tt1zZyUpGy5ucy3bK+YiD/lBWXOAZrymPd7Jd
-	IFOSXw/OlkzxPr73W3DwiPuk3r3fgpc/jOWvgZe6UsvzES6Avt8qyV2FKUYFQMGc6m2/0FRPoMW
-	eO+ti7aM/vnMC9d1QgkJlSJ6K/jEN2/oFQlmdHyYzRUqMXpY+6+1/bSVN7rfeIVVvfTV4taWxX9
-	D5fADOcrM3VXho1377s6owVSi1Ft5anythOBx+Y5FuNiVfkBVSO
-X-Received: by 2002:a05:620a:4706:b0:8cd:a252:28fa with SMTP id af79cd13be357-8fd158e57a8mr23046485a.4.1777653399498;
-        Fri, 01 May 2026 09:36:39 -0700 (PDT)
-Received: from localhost (ec2-3-149-8-194.us-east-2.compute.amazonaws.com. [3.149.8.194])
-        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-8fc2c91dd48sm204932085a.38.2026.05.01.09.36.38
-        for <linux-hwmon@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 May 2026 09:36:38 -0700 (PDT)
-Message-ID: <69f4d696.050a0220.de9b2.0415@mx.google.com>
-Date: Fri, 01 May 2026 09:36:38 -0700 (PDT)
-From: mezabinsorifa@gmail.com
-X-Google-Original-From: PayPal,LLC
-To: linux-hwmon@vger.kernel.org
-Subject: Your Ticket 17CE6EDC payment is processed
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QtH5hMsv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6FA5C2BCB4;
+	Fri,  1 May 2026 17:05:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777655144;
+	bh=Zky/w8roGFiUskCftirIBIfMhxs+OSpIo7CAX+36NS0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QtH5hMsvh1iRv05XWNAfD5QvbGiCBqqoCOnRFj8pkOvmZu4lQIZI7yk5Z3afewJEN
+	 P9KZt3qbDUvj6EMnD77W2JSTbqssTn8tvc2SQQT6dNlZ8ZIsDXrHSFjlkGSYY4odtT
+	 d0pJXRYJ9NfXlH8UMMYlTbgq7PrfpXpO8c1Hjk/bcjYMwTCCALqclcmv2zSEhNM0ez
+	 KkaXMKOvFyfhlDEZ5IlFSrt8S1Cf2fDGtMx8p1Y7f0dq1dvWNPhm9BHQNW281LgK3n
+	 iBzXBUSoQ4niJachMKcBa7X1H3mq+b628v1/kMP10EThlQpmJliQ4Xs1/DJ6do4k4Y
+	 z3zjOzOF2ZYIA==
+Date: Fri, 1 May 2026 18:05:40 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Markus Stockhausen <markus.stockhausen@gmx.de>
+Cc: linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/2] hwmon: (lm75) Support active-high alert polarity
+Message-ID: <20260501-earache-balance-3ac33716ac5a@spud>
+References: <20260501120518.3085501-1-markus.stockhausen@gmx.de>
+ <20260501120518.3085501-3-markus.stockhausen@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="io1WObltbTbzSrNV"
+Content-Disposition: inline
+In-Reply-To: <20260501120518.3085501-3-markus.stockhausen@gmx.de>
 
-Dear linux-hwmon,
 
-We hope you’re doing well. This is a friendly reminder that your subscription with PayPal,LLC is scheduled for automatic renewal on 2026-05-01. As part of this renewal process, the applicable payment of 439.85 will be securely processed using your current payment method on file. This renewal ensures uninterrupted access to the valuable services and features included in your plan.
+--io1WObltbTbzSrNV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-We want to ensure you have full control over your subscription. If you choose not to continue, you can cancel your subscription at any time before the renewal is processed. If a payment has already been made and you decide not to proceed, you're eligible to request a full refund, no questions asked.
+On Fri, May 01, 2026 at 02:05:18PM +0200, Markus Stockhausen wrote:
+> All chips supported by this driver support configurable active-high
+> alert polarity. This is already documented in the devicetree description.
+> Add support for it to the driver.
+>=20
+> The default polarity of the devices is 0 (active-low). So there is
+> no need to change the clear mask. For consistency reasons adapt the
+> hard-coded configuration value of the AS6200. It is the only device
+> that defaults to active-high polarity.
 
-📋 Subscription Summary:
-Subscription Name: linux-hwmon
+Uh, I dunno if you can do this, changing defaults is an ABI break
+typically. What makes it okay to do that in this case?
 
-Company: PayPal,LLC
+>=20
+> Signed-off-by: Markus Stockhausen <markus.stockhausen@gmx.de>
+> ---
+>  drivers/hwmon/lm75.c | 18 ++++++++++++++----
+>  1 file changed, 14 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+> index f1a1e5b888f6..4b075a7b1cd7 100644
+> --- a/drivers/hwmon/lm75.c
+> +++ b/drivers/hwmon/lm75.c
+> @@ -123,7 +123,9 @@ struct lm75_data {
+> =20
+>  static const u8 lm75_sample_set_masks[] =3D { 0 << 5, 1 << 5, 2 << 5, 3 =
+<< 5 };
+> =20
+> -#define LM75_SAMPLE_CLEAR_MASK	(3 << 5)
+> +#define LM75_ALERT_POLARITY_HIGH_8_BIT	(BIT(2))
+> +#define LM75_ALERT_POLARITY_HIGH_16_BIT	(BIT(2) << 8)
+> +#define LM75_SAMPLE_CLEAR_MASK		(3 << 5)
+> =20
+>  /* The structure below stores the configuration values of the supported =
+devices.
+>   * In case of being supported multiple configurations, the default one m=
+ust
+> @@ -137,7 +139,7 @@ static const struct lm75_params device_params[] =3D {
+>  	},
+>  	[as6200] =3D {
+>  		.config_reg_16bits =3D true,
+> -		.set_mask =3D 0x94C0,	/* 8 sample/s, 4 CF, positive polarity */
+> +		.set_mask =3D 0x90C0,	/* 8 sample/s, 4 CF */
+>  		.default_resolution =3D 12,
+>  		.default_sample_time =3D 125,
+>  		.num_sample_times =3D 4,
+> @@ -728,6 +730,7 @@ static int lm75_generic_probe(struct device *dev, con=
+st char *name,
+>  	struct device *hwmon_dev;
+>  	struct lm75_data *data;
+>  	int status, err;
+> +	u16 set_mask;
+> =20
+>  	data =3D devm_kzalloc(dev, sizeof(struct lm75_data), GFP_KERNEL);
+>  	if (!data)
+> @@ -762,8 +765,15 @@ static int lm75_generic_probe(struct device *dev, co=
+nst char *name,
+>  		return err;
+>  	data->orig_conf =3D status;
+> =20
+> -	err =3D lm75_write_config(data, data->params->set_mask,
+> -				data->params->clr_mask);
+> +	set_mask =3D data->params->set_mask;
+> +	if (of_property_read_bool(dev->of_node, "lm75,alert-polarity-active-hig=
+h")) {
+> +		if (!data->params->config_reg_16bits)
+> +			set_mask |=3D LM75_ALERT_POLARITY_HIGH_8_BIT;
+> +		else
+> +			set_mask |=3D LM75_ALERT_POLARITY_HIGH_16_BIT;
+> +	}
+> +
+> +	err =3D lm75_write_config(data, set_mask, data->params->clr_mask);
+>  	if (err)
+>  		return err;
+> =20
+> --=20
+> 2.54.0
+>=20
 
-Product/Service: PC Life gaurd Security
+--io1WObltbTbzSrNV
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Subscription Duration: 1 Year
+-----BEGIN PGP SIGNATURE-----
 
-Renewal Amount: 439.85
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCafTdZAAKCRB4tDGHoIJi
+0sRhAP9cz2sSId3JiEBRhI4GSGt2Qgvy5RMclPY8f9aBBTPKuQD6A3T7JxhBNWz2
+D6FjAoSfQHoFQJSD0UF5ZrDHQRHmXgI=
+=cLHo
+-----END PGP SIGNATURE-----
 
-Should you have any questions, need assistance with managing your subscription, or want help with cancellation or billing, please don’t hesitate to reach out. Our support team is here to assist you and ensure your experience remains smooth and satisfactory. You can contact us directly at (828)-266-6592, and we’ll be happy to help.
-
-As always, thank you for choosing PayPal,LLC. We truly value your membership and the trust you’ve placed in us. Whether you continue your journey with us or decide to part ways, we’re grateful to have had the opportunity to serve you.
-
-Warm regards,
-PayPal,LLC
-📞 (828)-266-6592
+--io1WObltbTbzSrNV--
