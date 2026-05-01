@@ -1,195 +1,194 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29E442BEFEB
-	for <linux-hwmon@vger.kernel.org>; Fri,  1 May 2026 02:35:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646FCEEC3
+	for <linux-hwmon@vger.kernel.org>; Fri,  1 May 2026 05:45:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777602950; cv=none; b=MlbjP8Y6eFE8ITeaxj8JnHNmTUm2qeo2lbqZMZcWn3EhltWqX05mw4VMWGvWh6qsUY5XpjXhzPjdGpbF5nzmWq4h24z30ia0UvXtVSrvYymYYTT2LU3LKibkxPT09Z9kdNK1/Lnhdmhlbd/7XK1BSoU5BiQWM3jx5nTrkZsMVVY=
+	t=1777614329; cv=none; b=LX8rxz4nmCfTLXmzWZVh3iSXF+J/jOM2VVUCGDOuYJTSfrFLCeYr5SrgB97XyDnQeA0w4Ns0pRRfH4CIxPvkHL1/VseMcA628HI6KuksC4yteybRN7bveLHzmWgfgHtDxfByrikfCVceUUKFJgCA63zC7pwOuPE2Y+23pIWCQjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777602950; c=relaxed/simple;
-	bh=nI7jEuFl5Wx1BRcYnNc+rTGFK7F6A8M4xO6oyFoLWrk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LQyweRdbolMtCyBeeNw9S/O+qOi2sSD4OUQOw8btzk1PR8uMMSpPAMhzJN3IAGqY8t15iFjzPy53leAjo7DrIe+Pk/pj2LQnvVSnhFp8olrnBsf1zHy8JI2vRYPb4SRgoLpC9otwjAev5puHZXZtJurr9BjkxWbWTvKLIYIcMp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kf9ClMGu; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1777614329; c=relaxed/simple;
+	bh=Blzebelzu9CSYz9A09gISX5ZN3k01I0BB226xJHixFI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qeSq0clr4aN8uyQsOt1Axj8I0Li+Aq0fKzFXUyvm0emtRBxRdBxBjlPSP5x39csTV2YtTHPoqJ1nECw9V5zvkOSFgkuNOIdF2PYJADVE/EUiluwfyPQEvQIoDSy9aElmRX6uV5uy9tZUMe+feMs1vNYiCenrC4LVwjWBClqNS14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SzEfX9Ts; arc=none smtp.client-ip=74.125.82.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kf9ClMGu"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2ad9516a653so7926425ad.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 19:35:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SzEfX9Ts"
+Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-12c637089ccso1690834c88.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 30 Apr 2026 22:45:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777602948; x=1778207748; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kSnHTefyeA+2hwX9yr/+mpxR4GkNtCtvVO+4GeW9P5U=;
-        b=Kf9ClMGuYeuHvyKoEwrVB2k92lRLV1k31k1WmBJWnLobS56JvKzlHmy2CQ8j5E3ElT
-         L/arynh51/Fhcs/pOA6HgMl2P2wUjTE2o/Pnz4RL+vpPGCKjvhAMN/4ePvMpiHw0WWfG
-         gjHva2//BQrIXi7s4PCEJ5n+boDcQw8RiJzapYWqWi1hyDsf01BmOhM1O1ad8FSXYWKc
-         PkKT/vQwRJDUsbR3IJFaYuzv4aFqEblejo8Ax8aTqxbc1XZ+y6R8kFCAmJO48sw8LpS/
-         QvFxNcgODDtpICYGWlrRgg9ppqAFDDNWH3sDCYAghrHY6c/9ooGZIdtHiKAtVxO3t+F9
-         zPOQ==
+        d=gmail.com; s=20251104; t=1777614325; x=1778219125; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=2nztguEahnv0sUgxysVyQHSQXGk07aIv5dd5pmPIO7o=;
+        b=SzEfX9TsEqCyWLpqq5Ftq/bbxyg9h/2hidKO7g2L+8wjeCs6/Ipa/lYfJ7lyT4HyBO
+         QVOKBGWBfdwfbATktPc3MHjOWbgO4Pk5XUTIAkcqsOFIOpZ8i9k2Fp9sdHs1yz2KkMmq
+         /zlKEKW7FurLbLXF5XQkOOTc0psTIqYfexgmhQIES7CrHYUSPt/g1p6yY66vDq8SuP/n
+         BCLq//bsVIrkyEf+nvUHYcwvbasKtmwZAoqyDnJXpN3kGZA1rWHTXLxQzxHeOAqWvH2n
+         Hw7EBDRaWnsUYwWdwhWNOmAE31EqL1r6yDHH9hBq++g6fhmCNeqtEB5Qxss7+XW4VGbF
+         emMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777602948; x=1778207748;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=kSnHTefyeA+2hwX9yr/+mpxR4GkNtCtvVO+4GeW9P5U=;
-        b=IOCTvTZVY6vLNZSBaeoxeyX9QfD/Zd0wobxfn590ETbY5YVJhie6gCksdOtm48zvex
-         hcW/oZGrAsmVme08Nz1ViF/fpgNqiHsEgYNTeUuFyIndXXM/O8qIxK38eq/BK05iT0RX
-         s9hfQdaShe6pcKBAUKDUjZc7QreVM3dIhXdv+MfV+kTAhpcqX5q/Adyy9sftc7kWXHmJ
-         Wq3uY8xLEZTnaA3yN2obiKTr7u04YmvOvpWw2UjXsLNCtnk9wuYSqf4jE3dRhxJNgR9b
-         o0Ej05zPhAsASoxI1KdKCKgvKzCn/9Dke9mXALlR/x5f8Ygzd9DDxPcx1D5s4grqXsu2
-         5U9g==
-X-Gm-Message-State: AOJu0YyfOyNWh0bjwsCloQM/r5ynQjwXD9b8O5gzGceA1mo+PqaLbL5D
-	zXCAd1ofrXcRo4MYRPdDxo/iEtxuzboxNr1VlHieVoaoFNE1coNBCZS/
-X-Gm-Gg: AeBDiev6pSRYuVINCzKizUp5Wq0UTXYImYDNSBwzTBsFFQEx6jJLpeJG0w/gyTFoLFv
-	LU2uf3SWm8Rctw4GpqOXsO27wya7FH/NmNR/3Q7PljwpdvOJEtCXgt7URIug23fmvXTcFCMt4Vh
-	HUuYHqcJTr+C6EN2R3msFHgskTyXMzMeeZrBtvt5HIqH7twCOzfe0nkShYL048K8wQZ/VHIXdZm
-	W/z1B76v3uVpwa5b9kI+D1vf6YAVexgDGoz+3koqPAPyZmX6F4B0wXFM8sm2TyiFOoH4BGsNiJd
-	fVF4mc0o/sTGPJTYC9388xe3xRVag/t0Kbdndt+bC3oV5x6ub+ZSRH0O/sn5naFEIoMFF9WbKKt
-	qoiwuS7sFkrBjl1WxEqWhvkt1Tb8kHBbfVlaqRqNgFOjCGFEwRt2YKcvRjAFJCrqmzryMGcW1rh
-	v7h8VGgTC+5/GmM2R0xXRKspzkQANcwL065nGD3Zv4jhdcU42qSYJV0Ol6g2aTwuNoIhWlEYZxG
-	oZSyjV4Vu/80e2+
-X-Received: by 2002:a17:902:b186:b0:2b2:4fe3:7b89 with SMTP id d9443c01a7336-2b9a2546e2dmr41331905ad.38.1777602948495;
-        Thu, 30 Apr 2026 19:35:48 -0700 (PDT)
-Received: from tabrez-VivoBook-ASUSLaptop-X513UA-KM513UA.. ([116.72.73.183])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b9caa7e791sm9341385ad.7.2026.04.30.19.35.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Apr 2026 19:35:48 -0700 (PDT)
-From: Tabrez Ahmed <tabreztalks@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	shuah@kernel.org,
-	me@brighamcampbell.com,
-	Tabrez Ahmed <tabreztalks@gmail.com>
-Subject: [PATCH v5 3/3] hwmon: (ads7871) Use DMA-safe buffer for SPI writes
-Date: Fri,  1 May 2026 08:05:30 +0530
-Message-ID: <20260501023530.31160-4-tabreztalks@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260501023530.31160-1-tabreztalks@gmail.com>
-References: <20260501023530.31160-1-tabreztalks@gmail.com>
+        d=1e100.net; s=20251104; t=1777614325; x=1778219125;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2nztguEahnv0sUgxysVyQHSQXGk07aIv5dd5pmPIO7o=;
+        b=NHqSvpk0pTqOrWclSlQAchTYxULFKFRahOSF5uOks83RnDYPoJmqd7sulTlW5kl4Ff
+         uCcDRXrYyG3fxI61Ao8xApzc+GIWVHGuJ+BQe6wiylRhjYnS2TCSh9WZhh5pgErUiy/I
+         dnECa37P9oySmztm6erV534Cb9JxjWa5MJR2qfDMJCmn/t1m4ikM0GOhG+adalzDZrDH
+         7TxOK0tHEBKeeA7Y2/4gTOcX9tL2cFUo9eRZQcpvcSV7h5/hcQQyO0sszAxCyOdEPvi+
+         6CJkG49av0vZKlOyv6B2mTgt41BV/TYyQ+/fhMb5ktRif9/646JeOpXT24U96YDIK0IA
+         F2dQ==
+X-Gm-Message-State: AOJu0YxijrF7zbtcZutDZQaDIeaHKgXm6gCPgaOO0uSa4rOlsk3kyOW1
+	c0u/hOTEQ9jZ0JhQD60iOqVF9L2HQunU4X1b+56virR3aRudsKPk0Ub0
+X-Gm-Gg: AeBDietMhiZF7BigPB4KfF+1rzVA5Cjj+8JUOcqg3TMGMM6uIb2YucBaJqK6WJkKwv6
+	AtGzQdMLhdDuS/r+9Z6D1xjab9gT0fIX8UIm5cBgERUOoTRwoAm4+eqetfwbTJAn1OIyztu4+jW
+	EZmX4mE0IAD3v9V4ChUSTk0Qxqgpt1diD2Q2v6IGSNphUW2vjuNMQrhN0u5RQPqPJnVLl1HiNcp
+	SUAJ1xkKXDdZ0Cc4Z6WZN3CZ97Hjo1Nj7PGsNgZ6qdLZAvfL2ryZ9I5BGqBlYBe4CD3uo9uI7tD
+	Zz3P+ylnhifjIodx315Jp1eTy2IXX8z7sP1thsLTNRtrzfK6Cm64XsQ4+axtqFX3UqLj5TGgQ6M
+	ZjEdxm0Y/GnlzYxSvuIOHiARzSDySGr0//tsP2bHwuBWyfJ1Aubfa+6S98nR7IRZHAylA77wxJo
+	jdiqeJ4hx3VWwXCYxle6sG2xCHMAtkTcupFS8Mf//7shYSlB6A+eDEo02YoyVo1HMkg+IozRkuu
+	abp0w80+VQ=
+X-Received: by 2002:a05:7022:b8f:b0:12a:72af:83d1 with SMTP id a92af1059eb24-12deac4d082mr3298828c88.11.1777614325365;
+        Thu, 30 Apr 2026 22:45:25 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12df828849dsm1717160c88.5.2026.04.30.22.45.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Apr 2026 22:45:24 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <11f218ce-0067-4a14-9eae-da2517f31848@roeck-us.net>
+Date: Thu, 30 Apr 2026 22:45:23 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 1/3] hwmon: (ads7871) Fix endianness bug in 16-bit
+ register reads
+To: Tabrez Ahmed <tabreztalks@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ shuah@kernel.org, me@brighamcampbell.com, Sashiko <sashiko-bot@kernel.org>
+References: <20260501023530.31160-1-tabreztalks@gmail.com>
+ <20260501023530.31160-2-tabreztalks@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260501023530.31160-2-tabreztalks@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The driver currently passes a stack-allocated buffer to spi_write(),
-which is incompatible with DMA on systems with CONFIG_VMAP_STACK
-enabled.
+On 4/30/26 19:35, Tabrez Ahmed wrote:
+> The ads7871_read_reg16() function relies on spi_w8r16() to read the
+> 16-bit sensor output. The ADS7871 device transmits the Least Significant
+> Byte (LSB) first.
+> 
+> On Little-Endian architectures, spi_w8r16() correctly reconstructs the
+> 16-bit value. However, on Big-Endian architectures, the byte swapping
+> causes the first received byte (LSB) to be placed in the most significant
+> byte of the u16, resulting in corrupted voltage readings.
+> 
+> Replace spi_w8r16() with a manual spi_write_then_read() into a byte array,
+> and safely reconstruct the integer using get_unaligned_le16() to ensure
+> correct behavior across all architectures. Additionally, use a u8
+> variable for the command byte to ensure the correct instruction is
+> transmitted on Big-Endian systems.
+> 
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Closes: https://sashiko.dev/#/patchset/20260418034601.90226-1-tabreztalks@gmail.com
+> Signed-off-by: Tabrez Ahmed <tabreztalks@gmail.com>
+> ---
+>   drivers/hwmon/ads7871.c | 14 +++++++++++---
+>   1 file changed, 11 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/hwmon/ads7871.c b/drivers/hwmon/ads7871.c
+> index 9bfdf9e6bcd77..d77eff430935b 100644
+> --- a/drivers/hwmon/ads7871.c
+> +++ b/drivers/hwmon/ads7871.c
+> @@ -59,9 +59,9 @@
+>   #include <linux/hwmon-sysfs.h>
+>   #include <linux/err.h>
+>   #include <linux/delay.h>
+> +#include <linux/unaligned.h>
+>   
+>   #define DEVICE_NAME	"ads7871"
+> -
+>   struct ads7871_data {
+>   	struct spi_device *spi;
+>   };
+> @@ -77,9 +77,17 @@ static int ads7871_read_reg8(struct spi_device *spi, int reg)
+>   static int ads7871_read_reg16(struct spi_device *spi, int reg)
+>   {
+>   	int ret;
+> +	u8 tx_cmd;
+> +	u8 rx_buf[2];
+> +
+>   	reg = reg | INST_READ_BM | INST_16BIT_BM;
+> -	ret = spi_w8r16(spi, reg);
+> -	return ret;
+> +	tx_cmd = reg;
 
-Move the transfer buffer into the driver's private data structure
-to ensure it is DMA-safe. Since this shared buffer now requires
-serialization, this change depends on the previous commit which
-migrated the driver to the hwmon 'with_info' API.
+This can be combined into
 
-While moving the logic, also:
-- Corrected the sign extension for 14-bit data by casting to s16.
-- Scaled the output to millivolts (2500mV full scale
-) to comply with the hwmon ABI.
+	tx_cmd = reg | INST_READ_BM | INST_16BIT_BM;
 
-Signed-off-by: Tabrez Ahmed <tabreztalks@gmail.com>
----
- drivers/hwmon/ads7871.c | 35 +++++++++++++++++++++--------------
- 1 file changed, 21 insertions(+), 14 deletions(-)
+Thanks,
+Guenter
 
-diff --git a/drivers/hwmon/ads7871.c b/drivers/hwmon/ads7871.c
-index 75485a2c16b0b..cbb9a88229c50 100644
---- a/drivers/hwmon/ads7871.c
-+++ b/drivers/hwmon/ads7871.c
-@@ -63,6 +63,7 @@
- #define DEVICE_NAME	"ads7871"
- struct ads7871_data {
- 	struct spi_device *spi;
-+	u8 tx_buf[2] ____cacheline_aligned;
- };
- 
- static umode_t ads7871_is_visible(const void *data,
-@@ -99,11 +100,12 @@ static int ads7871_read_reg16(struct spi_device *spi, int reg)
- 	return get_unaligned_le16(rx_buf);
- }
- 
--static int ads7871_write_reg8(struct spi_device *spi, int reg, u8 val)
-+static int ads7871_write_reg8(struct ads7871_data *pdata, int reg, u8 val)
- {
--	u8 tmp[2] = {reg, val};
-+	pdata->tx_buf[0] = reg;
-+	pdata->tx_buf[1] = val;
- 
--	return spi_write(spi, tmp, sizeof(tmp));
-+	return spi_write(pdata->spi, pdata->tx_buf, 2);
- }
- 
- static int ads7871_read(struct device *dev, enum hwmon_sensor_types type,
-@@ -122,7 +124,7 @@ static int ads7871_read(struct device *dev, enum hwmon_sensor_types type,
- 	 */
- 	/*MUX_M3_BM forces single ended*/
- 	/*This is also where the gain of the PGA would be set*/
--	ret = ads7871_write_reg8(spi, REG_GAIN_MUX,
-+	ret = ads7871_write_reg8(pdata, REG_GAIN_MUX,
- 				 (MUX_CNV_BM | MUX_M3_BM | channel));
- 	if (ret < 0)
- 		return ret;
-@@ -130,6 +132,7 @@ static int ads7871_read(struct device *dev, enum hwmon_sensor_types type,
- 	ret = ads7871_read_reg8(spi, REG_GAIN_MUX);
- 	if (ret < 0)
- 		return ret;
-+
- 	mux_cnv = ((ret & MUX_CNV_BM) >> MUX_CNV_BV);
- 	/*
- 	 * on 400MHz arm9 platform the conversion
-@@ -149,8 +152,11 @@ static int ads7871_read(struct device *dev, enum hwmon_sensor_types type,
- 		if (raw_val < 0)
- 			return raw_val;
- 
--		/*result in volts*10000 = (val/8192)*2.5*10000*/
--		*val = ((raw_val >> 2) * 25000) / 8192;
-+		/*
-+		 * Use (s16) to ensure the sign bit is preserved during the shift.
-+		 * Report millivolts (2.5V = 2500mV).
-+		 */
-+		*val = ((s16)raw_val >> 2) * 2500 / 8192;
- 		return 0;
- 	}
- 
-@@ -187,11 +193,17 @@ static int ads7871_probe(struct spi_device *spi)
- 	spi->bits_per_word = 8;
- 	spi_setup(spi);
- 
--	ads7871_write_reg8(spi, REG_SER_CONTROL, 0);
--	ads7871_write_reg8(spi, REG_AD_CONTROL, 0);
-+	pdata = devm_kzalloc(dev, sizeof(*pdata), GFP_KERNEL);
-+	if (!pdata)
-+		return -ENOMEM;
-+
-+	pdata->spi = spi;
-+
-+	ads7871_write_reg8(pdata, REG_SER_CONTROL, 0);
-+	ads7871_write_reg8(pdata, REG_AD_CONTROL, 0);
- 
- 	val = (OSC_OSCR_BM | OSC_OSCE_BM | OSC_REFE_BM | OSC_BUFE_BM);
--	ads7871_write_reg8(spi, REG_OSC_CONTROL, val);
-+	ads7871_write_reg8(pdata, REG_OSC_CONTROL, val);
- 	ret = ads7871_read_reg8(spi, REG_OSC_CONTROL);
- 
- 	dev_dbg(dev, "REG_OSC_CONTROL write:%x, read:%x\n", val, ret);
-@@ -202,11 +214,6 @@ static int ads7871_probe(struct spi_device *spi)
- 	if (val != ret)
- 		return -ENODEV;
- 
--	pdata = devm_kzalloc(dev, sizeof(struct ads7871_data), GFP_KERNEL);
--	if (!pdata)
--		return -ENOMEM;
--
--	pdata->spi = spi;
- 	hwmon_dev = devm_hwmon_device_register_with_info(dev, spi->modalias,
- 							 pdata,
- 							 &ads7871_chip_info,
--- 
-2.43.0
+> +
+> +	ret = spi_write_then_read(spi, &tx_cmd, 1, rx_buf, 2);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return get_unaligned_le16(rx_buf);
+>   }
+>   
+>   static int ads7871_write_reg8(struct spi_device *spi, int reg, u8 val)
 
