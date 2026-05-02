@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C4153101CD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C4A1310645;
 	Sat,  2 May 2026 09:56:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777715764; cv=none; b=BnLmpmir2RQ/G1E5F6M/GNLrTslvqSGOvTpf9bRALic6NWnY+vmfN9hep7Syh/jCubUXLHNAmMcxV0wjbH8scdKWwNq/mEWQGdJVgHA4D/iCHCGPIUfXDsuMkY2lyol81BFSk4s7ziLFU9HOkSTAPBe/UDZ5xzql4Xa3UNO3kfo=
+	t=1777715764; cv=none; b=Tgaqzj9eF+96X5LUa7NZktAXS13EufJxtzGp6s8rB3K+SeCHKST6trL7wu8ZaLBIs3vVILxQIh4A98MwG94djt8OqNcKAtu/K8iEGD3SgvZdQVI/mon458vLTRSvq2Sygf1pgBmrrS1UlJe2d1MSaOzFtKddQ37wEQQzghB9irw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1777715764; c=relaxed/simple;
-	bh=n85EwuZM80TPYTvoitsvKKj8GlrXolyhBw778nIstJQ=;
+	bh=ruQEE7iNdjUeMjgQ5l9kwFErghIXZ2/d/hvkCEGDcmM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=a0kxwleqqazRbrodwkOvfvjn6v4A2bfcyamLMl7Oa25oQ4LUHkeT0maV4l0w9v8k32Q8i1s7UpaoyxWSD+04DhOHgUTZkPY1S6lDOgCghOqgvomTe/0uxf61FWpZwFUehnhnNS9B3aREwHXuqQeosXgTtsuRW47h7wlomp7qZ3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EndrXHfA; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=KEb07r1oEqsEpSl/t2XGn55/mWgHS+2tSzL36YpY7+Hsg/Szs6hVfjDqZj5xMtkszAFriOa+c8skZZH/W7HvOfvH8N/+V334jvkP4w53H419migVK9YqEcqPHz+C2rvbOH5KW9Qf7XRMxMc09yWFfBo7YJgtF8LS0En9tC1Fw48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OjjbE9ZY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EndrXHfA"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 06ED6C2BCB9;
-	Sat,  2 May 2026 09:56:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OjjbE9ZY"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 203E2C2BCB8;
+	Sat,  2 May 2026 09:56:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1777715764;
-	bh=n85EwuZM80TPYTvoitsvKKj8GlrXolyhBw778nIstJQ=;
+	bh=ruQEE7iNdjUeMjgQ5l9kwFErghIXZ2/d/hvkCEGDcmM=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=EndrXHfARdRWwwedZIUcDRJUKIwMh7eD3M7h5bHisPI4e2fS3yRDa7VukpmBNOrpe
-	 FAW4DBr8wiAhouHUzjvTmGItbVahcw3OHeRWfNNO2g2P3d+OlN/229fClZd2TeDEnC
-	 hllnZpcmo0/ymGPZVFsIr5Z1+64f4+wdmGWRL+3LK6uZFQOMTA8XE8CzpyhKCcKY7I
-	 /tMD8QByoguHKMPoawTDSTXRnudNaYMKPM1ioQCh/hmF6hj9vjn3+UqnW4h8t2mysd
-	 2x9BNJ/NXp9IcstewJ7jS4rXoOSg+sXj3zu7urldVNBGl98VXSFc9OzQsRHtX5kEnP
-	 +b+qybFo94qAA==
+	b=OjjbE9ZYVNUchhOSWGnyFJ8203czh327kVJ9s9/5oXFo0gTqbdh2djSnR/KC9+L2G
+	 Z4STqJs8CGc7MoN5fK1U8oId1wBQ4gPNhZTsSZrqrli7u5sz6E0bgcJJGFYbOp5bkN
+	 jW2S+96veic+hGMfSMRJQcTBUny+VGHCPIll2HaLHPlLNf6n46nVNpAk/9YocGfG0f
+	 gI/TkWex7tVadCZSw7bJ7fT0/dKEsNk6kIszgjukb7P5kQ+smMouPLqSEzWpExkFIp
+	 TPLl4xTc9tLC/X7JlCb4DBZnWS18O5aC4/xeAIPAJ5X1rXV1RU0stlbk9JM1LENTtn
+	 PG4Eiq+nWdGkw==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4AB9CD3424;
-	Sat,  2 May 2026 09:56:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15831CD342E;
+	Sat,  2 May 2026 09:56:04 +0000 (UTC)
 From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
-Date: Sat, 02 May 2026 10:56:52 +0100
-Subject: [PATCH v13 1/3] dt-bindings: hwmon: Document the LTC4283 Swap
- Controller
+Date: Sat, 02 May 2026 10:56:54 +0100
+Subject: [PATCH v13 3/3] gpio: gpio-ltc4283: Add support for the LTC4283
+ Swap Controller
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260502-ltc4283-support-v13-1-1c206542e652@analog.com>
+Message-Id: <20260502-ltc4283-support-v13-3-1c206542e652@analog.com>
 References: <20260502-ltc4283-support-v13-0-1c206542e652@analog.com>
 In-Reply-To: <20260502-ltc4283-support-v13-0-1c206542e652@analog.com>
 To: linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org, 
@@ -49,13 +49,14 @@ To: linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
 Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>
+ Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>, 
+ Bartosz Golaszewski <brgl@kernel.org>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1777715816; l=9689;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777715817; l=8619;
  i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
- bh=f7b2wqQNc0HwwOXz3qkTxBVhR6bxiBsOm20ISTh+p+4=;
- b=sDm3qS+Uos7xGPkQeEsbvpmapaDUrRVaQqNcSvH4MYmuRAAOya+H9/Y76rDgSkTIN+9SsJaHI
- jlEVbstJTduDfeshGQfz7VoGwvgn/acKiMsN5N+g7lljj01rF6ZXufU
+ bh=HcILxbeDidetLOLt+/phZczCP+cgodBWiQsD5gX/J/s=;
+ b=4yJ4QD8JY7eXNowKFDGGNLcXBAdlpBwxtpP60/G/XVdyls3yVKVXzkP4PYKDyR/XrEwjbDhqG
+ g4OpS7xMGZZAJjg5LXJERtyvKYyISCNx/4TyE/oNyCM1glVieFmO3o6
 X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
  pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
 X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
@@ -65,318 +66,300 @@ Reply-To: nuno.sa@analog.com
 
 From: Nuno Sá <nuno.sa@analog.com>
 
-The LTC4283 is a negative voltage hot swap controller that drives an
-external N-channel MOSFET to allow a board to be safely inserted and
-removed from a live backplane.
+The LTC4283 device has up to 8 pins that can be configured as GPIOs.
 
-Special note for the "adi,vpower-drns-enable" property. It allows to choose
-between the attenuated MOSFET drain voltage or the attenuated input
-voltage at the RTNS pin (effectively choosing between input or output
-power). This is a system level decision not really intended to change at
-runtime and hence is being added as a Firmware property.
+Note that PGIO pins are not set as GPIOs by default so if they are
+configured to be used as GPIOs we need to make sure to initialize them
+to a sane default. They are set as inputs by default.
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Reviewed-by: Linus Walleij <linusw@kernel.org>
 Signed-off-by: Nuno Sá <nuno.sa@analog.com>
 ---
- .../devicetree/bindings/hwmon/adi,ltc4283.yaml     | 272 +++++++++++++++++++++
- MAINTAINERS                                        |   6 +
- 2 files changed, 278 insertions(+)
+ MAINTAINERS                 |   2 +
+ drivers/gpio/Kconfig        |  15 +++
+ drivers/gpio/Makefile       |   1 +
+ drivers/gpio/gpio-ltc4283.c | 218 ++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 236 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml b/Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml
-new file mode 100644
-index 000000000000..05e2132ad4d8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml
-@@ -0,0 +1,272 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/adi,ltc4283.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: LTC4283 Negative Voltage Hot Swap Controller
-+
-+maintainers:
-+  - Nuno Sá <nuno.sa@analog.com>
-+
-+description: |
-+  The LTC4283 negative voltage hot swap controller drives an external N-channel
-+  MOSFET to allow a board to be safely inserted and removed from a live
-+  backplane.
-+
-+  https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4283.pdf
-+
-+properties:
-+  compatible:
-+    enum:
-+      - adi,ltc4283
-+
-+  reg:
-+    maxItems: 1
-+
-+  adi,rsense-nano-ohms:
-+    description: Value of the sense resistor.
-+
-+  adi,current-limit-sense-microvolt:
-+    description:
-+      The current limit sense voltage of the chip is adjustable between
-+      15mV and 30mV in 1mV steps. This effectively limits the current
-+      on the load.
-+    minimum: 15000
-+    maximum: 30000
-+    default: 15000
-+
-+  adi,current-limit-foldback-factor:
-+    description:
-+      Specifies the foldback factor for the current limit. The current limit
-+      can be reduced (folded back) to one of four preset levels. The value
-+      represents the percentage of the current limit sense voltage to use
-+      during foldback. A value of 100 means no foldback.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [10, 20, 50, 100]
-+    default: 100
-+
-+  adi,cooling-delay-ms:
-+    description:
-+      Cooling time to apply after an overcurrent fault, FET bad or
-+      external fault.
-+    enum: [512, 1002, 2005, 4100, 8190, 16400, 32800, 65600]
-+    default: 512
-+
-+  adi,fet-bad-timer-delay-ms:
-+    description:
-+      FET bad timer delay. After a FET bad status condition is detected,
-+      this timer is started. If the condition persists for the
-+      specified time, the FET is turned off and a fault is logged.
-+    enum: [256, 512, 1002, 2005]
-+    default: 256
-+
-+  adi,power-good-reset-on-fet:
-+    description:
-+      If set, resets the power good status when the MOSFET is turned off.
-+      Otherwise, it resets when a low output voltage is detected.
-+    type: boolean
-+
-+  adi,fet-turn-off-disable:
-+    description:
-+      If set, the MOSFET is not turned off when a FET fault is detected.
-+    type: boolean
-+
-+  adi,tmr-pull-down-disable:
-+    description: Disables 2uA pull-down current on the TMR pin.
-+    type: boolean
-+
-+  adi,dvdt-inrush-control-disable:
-+    description:
-+      Disables dV/dt inrush control during startup. In dV/dt mode, the inrush
-+      current is limited by controlling a constant output voltage ramp rate.
-+      When disabled, the inrush control mechanism is active current limiting.
-+    type: boolean
-+
-+  adi,fault-log-enable:
-+    description:
-+      If set, enables logging fault registers and ADC data into EEPROM upon a
-+      fault.
-+    type: boolean
-+
-+  adi,vpower-drns-enable:
-+    description:
-+      If set, enables the attenuated MOSFET drain voltage to be monitored. This
-+      effectively means that the MOSFET power is monitored. If not set, the
-+      attenuated input voltage (and hence input power) is monitored.
-+    type: boolean
-+
-+  adi,external-fault-fet-off-enable:
-+    description: Turns MOSFET off following an external fault.
-+    type: boolean
-+
-+  adi,undervoltage-retry-disable:
-+    description: Do not retry to turn on the MOSFET after an undervoltage fault.
-+    type: boolean
-+
-+  adi,overvoltage-retry-disable:
-+    description: Do not retry to turn on the MOSFET after an overvoltage fault.
-+    type: boolean
-+
-+  adi,external-fault-retry-enable:
-+    description: Retry to turn on the MOSFET after an external fault.
-+    type: boolean
-+
-+  adi,overcurrent-retries:
-+    description: Configures auto-retry following an Overcurrent fault.
-+    $ref: /schemas/types.yaml#/definitions/string
-+    enum: [latch-off, "1", "7", unlimited]
-+    default: latch-off
-+
-+  adi,fet-bad-retries:
-+    description:
-+      Configures auto-retry following a FET bad fault and a consequent MOSFET
-+      turn off.
-+    $ref: /schemas/types.yaml#/definitions/string
-+    enum: [latch-off, "1", "7", unlimited]
-+    default: latch-off
-+
-+  adi,pgio1-func:
-+    description: Configures the function of the PGIO1 pin.
-+    $ref: /schemas/types.yaml#/definitions/string
-+    enum: [inverted_power_good, power_good, gpio]
-+    default: inverted_power_good
-+
-+  adi,pgio2-func:
-+    description: Configures the function of the PGIO2 pin.
-+    $ref: /schemas/types.yaml#/definitions/string
-+    enum: [inverted_power_good, power_good, gpio, active_current_limiting]
-+    default: inverted_power_good
-+
-+  adi,pgio3-func:
-+    description: Configures the function of the PGIO3 pin.
-+    $ref: /schemas/types.yaml#/definitions/string
-+    enum: [inverted_power_good_input, power_good_input, gpio]
-+    default: inverted_power_good_input
-+
-+  adi,pgio4-func:
-+    description: Configures the function of the PGIO4 pin.
-+    $ref: /schemas/types.yaml#/definitions/string
-+    enum: [inverted_external_fault, external_fault, gpio]
-+    default: inverted_external_fault
-+
-+  adi,gpio-on-adio1:
-+    description: If set, the ADIO1 pin is used as a GPIO.
-+    type: boolean
-+
-+  adi,gpio-on-adio2:
-+    description: If set, the ADIO2 pin is used as a GPIO.
-+    type: boolean
-+
-+  adi,gpio-on-adio3:
-+    description: If set, the ADIO3 pin is used as a GPIO.
-+    type: boolean
-+
-+  adi,gpio-on-adio4:
-+    description: If set, the ADIO4 pin is used as a GPIO.
-+    type: boolean
-+
-+  gpio-controller: true
-+
-+  '#gpio-cells':
-+    const: 2
-+
-+dependencies:
-+  adi,gpio-on-adio1:
-+    - gpio-controller
-+    - '#gpio-cells'
-+  adi,gpio-on-adio2:
-+    - gpio-controller
-+    - '#gpio-cells'
-+  adi,gpio-on-adio3:
-+    - gpio-controller
-+    - '#gpio-cells'
-+  adi,gpio-on-adio4:
-+    - gpio-controller
-+    - '#gpio-cells'
-+  adi,external-fault-retry-enable:
-+    - adi,pgio4-func
-+  adi,external-fault-fet-off-enable:
-+    - adi,pgio4-func
-+
-+required:
-+  - compatible
-+  - reg
-+  - adi,rsense-nano-ohms
-+
-+allOf:
-+  - if:
-+      properties:
-+        adi,pgio1-func:
-+          const: gpio
-+      required:
-+        - adi,pgio1-func
-+    then:
-+      required:
-+        - gpio-controller
-+        - '#gpio-cells'
-+
-+  - if:
-+      properties:
-+        adi,pgio2-func:
-+          const: gpio
-+      required:
-+        - adi,pgio2-func
-+    then:
-+      required:
-+        - gpio-controller
-+        - '#gpio-cells'
-+
-+  - if:
-+      properties:
-+        adi,pgio3-func:
-+          const: gpio
-+      required:
-+        - adi,pgio3-func
-+    then:
-+      required:
-+        - gpio-controller
-+        - '#gpio-cells'
-+
-+  - if:
-+      properties:
-+        adi,pgio4-func:
-+          const: gpio
-+      required:
-+        - adi,pgio4-func
-+    then:
-+      properties:
-+        adi,external-fault-retry-enable: false
-+        adi,external-fault-fet-off-enable: false
-+      required:
-+        - gpio-controller
-+        - '#gpio-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        swap-controller@15 {
-+            compatible = "adi,ltc4283";
-+            reg = <0x15>;
-+
-+            adi,rsense-nano-ohms = <500>;
-+            adi,current-limit-sense-microvolt = <25000>;
-+            adi,current-limit-foldback-factor = <10>;
-+            adi,cooling-delay-ms = <8190>;
-+            adi,fet-bad-timer-delay-ms = <512>;
-+
-+            adi,external-fault-fet-off-enable;
-+            adi,pgio4-func = "external_fault";
-+
-+            adi,gpio-on-adio1;
-+            adi,pgio1-func = "gpio";
-+            gpio-controller;
-+            #gpio-cells = <2>;
-+        };
-+    };
-+...
 diff --git a/MAINTAINERS b/MAINTAINERS
-index c77860210bd5..76dd9edca7d5 100644
+index c657ca0a4652..de6bc7828f28 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -15238,6 +15238,12 @@ F:	Documentation/devicetree/bindings/hwmon/adi,ltc4282.yaml
- F:	Documentation/hwmon/ltc4282.rst
- F:	drivers/hwmon/ltc4282.c
+@@ -15240,9 +15240,11 @@ F:	drivers/hwmon/ltc4282.c
  
-+LTC4283 HARDWARE MONITOR AND GPIO DRIVER
-+M:	Nuno Sá <nuno.sa@analog.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Supported
-+F:	Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml
-+
- LTC4286 HARDWARE MONITOR DRIVER
- M:	Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+ LTC4283 HARDWARE MONITOR AND GPIO DRIVER
+ M:	Nuno Sá <nuno.sa@analog.com>
++L:	linux-gpio@vger.kernel.org
  L:	linux-hwmon@vger.kernel.org
+ S:	Supported
+ F:	Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml
++F:	drivers/gpio/gpio-ltc4283.c
+ F:	drivers/hwmon/ltc4283.c
+ 
+ LTC4286 HARDWARE MONITOR DRIVER
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index 020e51e30317..9b6e0a34eff6 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -1783,6 +1783,21 @@ config GPIO_WM8994
+ 
+ endmenu
+ 
++menu "Auxiliary Bus GPIO drivers"
++	depends on AUXILIARY_BUS
++
++config GPIO_LTC4283
++	tristate "Analog Devices LTC4283 GPIO support"
++	depends on SENSORS_LTC4283
++	help
++	  If you say yes here you want the GPIO function available in Analog
++	  Devices LTC4283 Negative Voltage Hot Swap Controller.
++
++	  This driver can also be built as a module. If so, the module will
++	  be called gpio-ltc4283.
++
++endmenu
++
+ menu "PCI GPIO expanders"
+ 	depends on PCI
+ 
+diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+index b267598b517d..6e2367cab94f 100644
+--- a/drivers/gpio/Makefile
++++ b/drivers/gpio/Makefile
+@@ -100,6 +100,7 @@ obj-$(CONFIG_GPIO_LP873X)		+= gpio-lp873x.o
+ obj-$(CONFIG_GPIO_LP87565)		+= gpio-lp87565.o
+ obj-$(CONFIG_GPIO_LPC18XX)		+= gpio-lpc18xx.o
+ obj-$(CONFIG_GPIO_LPC32XX)		+= gpio-lpc32xx.o
++obj-$(CONFIG_GPIO_LTC4283)		+= gpio-ltc4283.o
+ obj-$(CONFIG_GPIO_MACSMC)		+= gpio-macsmc.o
+ obj-$(CONFIG_GPIO_MADERA)		+= gpio-madera.o
+ obj-$(CONFIG_GPIO_MAX3191X)		+= gpio-max3191x.o
+diff --git a/drivers/gpio/gpio-ltc4283.c b/drivers/gpio/gpio-ltc4283.c
+new file mode 100644
+index 000000000000..6609443c5d62
+--- /dev/null
++++ b/drivers/gpio/gpio-ltc4283.c
+@@ -0,0 +1,218 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Analog Devices LTC4283 GPIO driver
++ *
++ * Copyright 2025 Analog Devices Inc.
++ */
++
++#include <linux/auxiliary_bus.h>
++#include <linux/bitfield.h>
++#include <linux/bitmap.h>
++#include <linux/bits.h>
++#include <linux/device.h>
++#include <linux/gpio/driver.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/regmap.h>
++
++#define LTC4283_PINS_MAX			8
++#define LTC4283_PGIOX_START_NR			4
++#define LTC4283_INPUT_STATUS			0x02
++#define LTC4283_PGIO_CONFIG			0x10
++#define   LTC4283_PGIO_CFG_MASK(pin) \
++	GENMASK(((pin) - LTC4283_PGIOX_START_NR) * 2 + 1, (((pin) - LTC4283_PGIOX_START_NR) * 2))
++#define LTC4283_PGIO_CONFIG_2			0x11
++
++#define LTC4283_ADIO_CONFIG			0x12
++/* starts at bit 4 */
++#define   LTC4283_ADIOX_CONFIG_MASK(pin)	BIT((pin) + 4)
++#define LTC4283_PGIO_DIR_IN			3
++#define LTC4283_PGIO_DIR_OUT			2
++
++struct ltc4283_gpio {
++	struct gpio_chip gpio_chip;
++	struct regmap *regmap;
++};
++
++static int ltc4283_pgio_get_direction(const struct ltc4283_gpio *st, unsigned int off)
++{
++	unsigned int val;
++	int ret;
++
++	ret = regmap_read(st->regmap, LTC4283_PGIO_CONFIG, &val);
++	if (ret)
++		return ret;
++
++	val = field_get(LTC4283_PGIO_CFG_MASK(off), val);
++	if (val == LTC4283_PGIO_DIR_IN)
++		return GPIO_LINE_DIRECTION_IN;
++
++	return GPIO_LINE_DIRECTION_OUT;
++}
++
++static int ltc4283_gpio_get_direction(struct gpio_chip *gc, unsigned int off)
++{
++	struct ltc4283_gpio *st = gpiochip_get_data(gc);
++	unsigned int val;
++	int ret;
++
++	if (off >= LTC4283_PGIOX_START_NR)
++		return ltc4283_pgio_get_direction(st, off);
++
++	ret = regmap_read(st->regmap, LTC4283_ADIO_CONFIG, &val);
++	if (ret)
++		return ret;
++
++	if (val & LTC4283_ADIOX_CONFIG_MASK(off))
++		return GPIO_LINE_DIRECTION_IN;
++
++	return GPIO_LINE_DIRECTION_OUT;
++}
++
++static int ltc4283_gpio_direction_set(const struct ltc4283_gpio *st,
++				      unsigned int off, bool input)
++{
++	if (off >= LTC4283_PGIOX_START_NR) {
++		unsigned int val = LTC4283_PGIO_DIR_OUT;
++
++		if (input)
++			val = LTC4283_PGIO_DIR_IN;
++
++		val = field_prep(LTC4283_PGIO_CFG_MASK(off), val);
++		return regmap_update_bits(st->regmap, LTC4283_PGIO_CONFIG,
++					  LTC4283_PGIO_CFG_MASK(off), val);
++	}
++
++	return regmap_update_bits(st->regmap, LTC4283_ADIO_CONFIG,
++				  LTC4283_ADIOX_CONFIG_MASK(off),
++				  field_prep(LTC4283_ADIOX_CONFIG_MASK(off), input));
++}
++
++static int __ltc4283_gpio_set_value(const struct ltc4283_gpio *st,
++				    unsigned int off, int val)
++{
++	u32 reg = off < LTC4283_PGIOX_START_NR ? LTC4283_ADIO_CONFIG : LTC4283_PGIO_CONFIG_2;
++
++	return regmap_update_bits(st->regmap, reg, BIT(off),
++				  field_prep(BIT(off), !!val));
++}
++
++static int ltc4283_gpio_direction_input(struct gpio_chip *gc, unsigned int off)
++{
++	struct ltc4283_gpio *st = gpiochip_get_data(gc);
++
++	return ltc4283_gpio_direction_set(st, off, true);
++}
++
++static int ltc4283_gpio_direction_output(struct gpio_chip *gc, unsigned int off, int val)
++{
++	struct ltc4283_gpio *st = gpiochip_get_data(gc);
++	int ret;
++
++	ret = ltc4283_gpio_direction_set(st, off, false);
++	if (ret)
++		return ret;
++
++	return __ltc4283_gpio_set_value(st, off, val);
++}
++
++static int ltc4283_gpio_get_value(struct gpio_chip *gc, unsigned int off)
++{
++	struct ltc4283_gpio *st = gpiochip_get_data(gc);
++	unsigned int val, reg;
++	int ret, dir;
++
++	dir = ltc4283_gpio_get_direction(gc, off);
++	if (dir < 0)
++		return dir;
++
++	if (dir == GPIO_LINE_DIRECTION_IN) {
++		ret = regmap_read(st->regmap, LTC4283_INPUT_STATUS, &val);
++		if (ret)
++			return ret;
++
++		/* ADIO1 is at bit 3. */
++		if (off < LTC4283_PGIOX_START_NR)
++			return !!(val & BIT(3 - off));
++
++		/* PGIO1 is at bit 7. */
++		return !!(val & BIT(7 - (off - LTC4283_PGIOX_START_NR)));
++	}
++
++	if (off < LTC4283_PGIOX_START_NR)
++		reg = LTC4283_ADIO_CONFIG;
++	else
++		reg = LTC4283_PGIO_CONFIG_2;
++
++	ret = regmap_read(st->regmap, reg, &val);
++	if (ret)
++		return ret;
++
++	return !!(val & BIT(off));
++}
++
++static int ltc4283_gpio_set_value(struct gpio_chip *gc, unsigned int off, int val)
++{
++	struct ltc4283_gpio *st = gpiochip_get_data(gc);
++
++	return __ltc4283_gpio_set_value(st, off, val);
++}
++
++static int ltc4283_init_valid_mask(struct gpio_chip *gc, unsigned long *valid_mask,
++				   unsigned int ngpios)
++{
++	unsigned long *mask = dev_get_platdata(gc->parent);
++
++	bitmap_copy(valid_mask, mask, ngpios);
++	return 0;
++}
++
++static int ltc4283_gpio_probe(struct auxiliary_device *adev,
++			      const struct auxiliary_device_id *id)
++{
++	struct device *dev = &adev->dev;
++	struct ltc4283_gpio *st;
++	struct gpio_chip *gc;
++
++	st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
++	if (!st)
++		return -ENOMEM;
++
++	st->regmap = dev_get_regmap(dev->parent, NULL);
++	if (!st->regmap)
++		return dev_err_probe(dev, -ENODEV,
++				     "Failed to get regmap\n");
++
++	gc = &st->gpio_chip;
++	gc->parent = dev;
++	gc->get_direction = ltc4283_gpio_get_direction;
++	gc->direction_input = ltc4283_gpio_direction_input;
++	gc->direction_output = ltc4283_gpio_direction_output;
++	gc->get = ltc4283_gpio_get_value;
++	gc->set = ltc4283_gpio_set_value;
++	gc->init_valid_mask = ltc4283_init_valid_mask;
++	gc->can_sleep = true;
++
++	gc->base = -1;
++	gc->ngpio = LTC4283_PINS_MAX;
++	gc->label = adev->name;
++	gc->owner = THIS_MODULE;
++
++	return devm_gpiochip_add_data(dev, &st->gpio_chip, st);
++}
++
++static const struct auxiliary_device_id ltc4283_aux_id_table[] = {
++	{ "ltc4283.gpio" },
++	{ }
++};
++MODULE_DEVICE_TABLE(auxiliary, ltc4283_aux_id_table);
++
++static struct auxiliary_driver ltc4283_gpio_driver = {
++	.probe = ltc4283_gpio_probe,
++	.id_table = ltc4283_aux_id_table,
++};
++module_auxiliary_driver(ltc4283_gpio_driver);
++
++MODULE_AUTHOR("Nuno Sá <nuno.sa@analog.com>");
++MODULE_DESCRIPTION("GPIO LTC4283 Driver");
++MODULE_LICENSE("GPL");
 
 -- 
 2.54.0
