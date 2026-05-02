@@ -1,118 +1,147 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DD021AA1F4
-	for <linux-hwmon@vger.kernel.org>; Sat,  2 May 2026 19:19:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D237B9463
+	for <linux-hwmon@vger.kernel.org>; Sat,  2 May 2026 19:36:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777749553; cv=none; b=in8kFUWxkk/7QbFtKvErGUmABfibwNasf4JqA1tJ39DupvZ2K2H7bmRVZlExY0AfZdKUsCdjrFqivcl7bFaml7g+C2r3bL1NWWMFxB6I8uUl9lCPLE7t6VeX6YCp0rfdowgW1W3cS2dNw0JpIltFpZ3R0zCU0u9nGpb4AXqH1us=
+	t=1777750587; cv=none; b=K0V7+gd+6mzFt6trD09wRsWmy192q6VIRqRVQ1PffIlSDJ0LJb8tu1ViJ/DL5g+QsNOt0aI2XDvmYgBvnJ2TIr6zLBa/y2T4i71AnRpNxi+dDjyc8M8ne6nxBx4AaHzYbCCy7vdmDg4i4kZZBSBv4GGiU7o33rEeO91+Qh24Gnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777749553; c=relaxed/simple;
-	bh=jqjVmQOHoPxCwCSSDWOkvtBe+m/L50ccDYKYvmQI7LM=;
+	s=arc-20240116; t=1777750587; c=relaxed/simple;
+	bh=mxXnhyCbHGUSpGCHeXtU3J3cyl+dlhBDUDQ/IS+Qmq0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Ko2J/ZSAfW9qp7sy/P2f62811dtoDsZcQ3+VRhKsvsGv7iuN5zllWPNS2axnvkglhMxysEon4qRK46alOZl4hgIyyqm+nu0SRjHkqxkV8inosNN4PC2fZLZokCL0M0qwSkdjmPHN8L5OVns/o2rweFwDXQVJeaegEjfBHK1VfcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sb/mFoQm; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=n55AoEBNGzEYdFn5HqAJxHsMnFGwAZPWFNy66X7aEvXnElEnvamowq741DJI2uPDRCDnUF2TVQ2V+MKmF4ZKYWFk1BhN48nBuCHtELdRlKLANXSaROh29l4fHcxRAxHVfAfH2Mffl9Ry1+eUCG2rYj/0AudRSqd2v7Cta+Ab7hM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GX0X8mGw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sb/mFoQm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F50AC19425;
-	Sat,  2 May 2026 19:19:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GX0X8mGw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F9C4C19425;
+	Sat,  2 May 2026 19:36:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777749552;
-	bh=jqjVmQOHoPxCwCSSDWOkvtBe+m/L50ccDYKYvmQI7LM=;
+	s=k20201202; t=1777750587;
+	bh=mxXnhyCbHGUSpGCHeXtU3J3cyl+dlhBDUDQ/IS+Qmq0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=Sb/mFoQmOj/GJv0C6M1aWgc3JRYeZYw/YacaHVoX7CYo0BNB9dp7ZR3awTvajEBfY
-	 UvUd4cr57PNSFTQdVxECUBEDYsLI7RH7e9CfSSyCc2Rmxo+YrUMqyUnu90RxoCAlT6
-	 A6nQKnA4rhhPBVI93KM5o0Gf1EG35xqBua9btFmarbBiPgznD+FFJpwt86zURvhkAy
-	 VvJucl5QkznHp50jyFoJyXBGXBRQHRqhstSy5wo6fCPZn/Pblnd4OQLHnkoOjXHpFa
-	 qyXxFZ0y1rGlwd6T5Hd4OMEyoiVisFAl09OWz5POCGF9xusVKT0K/SXUqLt2IYoZsl
-	 IGw46Rctuuu7g==
+	b=GX0X8mGwg8yiD3P5HfBXIyNA6MtIJ3O+QVVCGBKC9hvDlaCddKyqjO19sQhRrDX6e
+	 /apC6NVvnuzlhoM8sowSCPOOeXf/Js2Faq9QThYnvCmM0gnvQRL3T7eYMTfKTMwC/1
+	 nIAiM5XKBsg2eITHC4ndJ++BT+w/toJQ/CdNEWW9Dbr9MSeoOkhn7j5ZKGfYK9EvJy
+	 mP0l8bViS+YGFgbnOuO2/oUKW7CHuxSSl0u/E7UFomkyxmSamh9v0ioFPZ0fm3r5op
+	 l9MUzcpQx7QymdTygejgfMZSwmJhgLTwdFYjl9/vzH20VnrdO9GnLI8RmbRYaswEno
+	 eXozy8vgJcjxw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: lm75: Add
- ti,alert-polarity-active-high property
+Subject: Re: [PATCH 2/2] hwmon: (lm75) Support active-high alert polarity
 Reply-To: sashiko@lists.linux.dev
 To: "Markus Stockhausen" <markus.stockhausen@gmx.de>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260502190408.3577731-2-markus.stockhausen@gmx.de>
-References: <20260502190408.3577731-2-markus.stockhausen@gmx.de>
+In-Reply-To: <20260502190408.3577731-3-markus.stockhausen@gmx.de>
+References: <20260502190408.3577731-3-markus.stockhausen@gmx.de>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 02 May 2026 19:19:11 +0000
-Message-Id: <20260502191912.7F50AC19425@smtp.kernel.org>
+Date: Sat, 02 May 2026 19:36:26 +0000
+Message-Id: <20260502193627.3F9C4C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [High] The implementation of the alert polarity property in the driver is=
- structurally broken and non-functional.
-- [Medium] Vendor prefix violation and missing schema constraints for a gen=
-eric hardware feature.
+- [High] The alert polarity configuration is silently ignored by the hardwa=
+re because the new polarity bit is omitted from the register update mask.
+- [High] For devices with 16-bit configuration registers, the polarity bit =
+is incorrectly shifted into the wrong byte, modifying a reserved hardware b=
+it instead of the polarity bit.
+- [Low] The patch directly uses the Device Tree specific `of_property_read_=
+bool()` API instead of the firmware-agnostic `device_property_read_bool()`.
 --
 
-commit 92fb69393cd7ead8fd2be55819f1d1f0b77724f6
+commit 80ab4767c4e330cd441a8b4dcd804fcd1dec493b
 Author: Markus Stockhausen <markus.stockhausen@gmx.de>
 
-dt-bindings: hwmon: lm75: Add ti,alert-polarity-active-high property
+hwmon: (lm75) Support active-high alert polarity
 
-This commit adds an optional boolean property ti,alert-polarity-active-high
-to configure the alert pin polarity for the LM75 hardware monitor.
+LM75 devices supported by this driver support configurable active-high
+alert polarity. This is already documented in the devicetree description.
+Add support for it to the driver.
 
-> diff --git a/Documentation/devicetree/bindings/hwmon/lm75.yaml b/Document=
-ation/devicetree/bindings/hwmon/lm75.yaml
-> --- a/Documentation/devicetree/bindings/hwmon/lm75.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+> index f1a1e5b888f6..d5a14a3b2820 100644
+> --- a/drivers/hwmon/lm75.c
+> +++ b/drivers/hwmon/lm75.c
+> @@ -123,7 +123,9 @@ struct lm75_data {
+> =20
+>  static const u8 lm75_sample_set_masks[] =3D { 0 << 5, 1 << 5, 2 << 5, 3 =
+<< 5 };
+> =20
+> -#define LM75_SAMPLE_CLEAR_MASK	(3 << 5)
+> +#define LM75_ALERT_POLARITY_HIGH_8_BIT	(BIT(2))
+> +#define LM75_ALERT_POLARITY_HIGH_16_BIT	(BIT(2) << 8)
+
+Does this shift target the correct byte for 16-bit registers?
+
+Because the hardware typically expects the first transmitted byte to be the
+most significant byte of its configuration register (which contains the POL=
+ bit
+at bit 2), and i2c_smbus_write_word_data() transmits the least significant
+byte first, the POL bit might need to remain in the LSB of the logical value
+(BIT(2)).
+
+By shifting it by 8 bits, does this target the MSB of the value, which maps
+to the LSB of the hardware register, potentially modifying a reserved bit
+instead of the polarity?
+
+> +#define LM75_SAMPLE_CLEAR_MASK		(3 << 5)
+> =20
 
 [ ... ]
 
-> @@ -54,6 +54,13 @@ properties:
->    interrupts:
->      maxItems: 1
+> @@ -762,8 +765,15 @@ static int lm75_generic_probe(struct device *dev, co=
+nst char *name,
+>  		return err;
+>  	data->orig_conf =3D status;
 > =20
-> +  ti,alert-polarity-active-high:
-> +    description: Alert pin is asserted based on the value of alert polar=
-ity
-> +      bit of configuration register. Default value is normal (0 which ma=
-ps to
-> +      active-low). The other value is inverted (1 which maps to active-h=
-igh).
-> +      Specify this property to set the alert polarity to active-high.
-> +    $ref: /schemas/types.yaml#/definitions/flag
+> -	err =3D lm75_write_config(data, data->params->set_mask,
+> -				data->params->clr_mask);
+> +	set_mask =3D data->params->set_mask;
+> +	if (of_property_read_bool(dev->of_node, "ti,alert-polarity-active-high"=
+)) {
 
-Is the OS polarity (bit 2) a generic feature of the LM75 specification? If =
-so,
-should this property be named without the vendor prefix (e.g.,
-alert-polarity-active-high)?
+Could we use device_property_read_bool() here instead?
 
-If this is instead intended as a TI-specific extension, should it be
-constrained via an allOf -> if block restricted to ti,* compatible strings?
-As currently defined in the root properties block, it globally allows non-TI
-compatible devices (such as nxp,pct2075 or maxim,max6625) to pass schema
-validation with a TI-specific property.
+The probe function already uses device_property_read_string() to read the l=
+abel
+property earlier. Hardcoding the Device Tree specific API here breaks
+consistency and prevents the active-high polarity feature from working on
+systems using ACPI or software nodes.
 
-Also, regarding the implementation in the subsequent driver patch ("hwmon:
-(lm75) Support active-high alert polarity"), does the register update actua=
-lly
-take effect?
-
-The driver code adds LM75_ALERT_POLARITY_HIGH_8_BIT (BIT(2)) to set_mask, b=
-ut
-does it also update clr_mask? The helper function lm75_write_config() passes
-clr_mask | LM75_SHUTDOWN as the mask argument to regmap_update_bits().=20
-
-Because BIT(2) does not appear to be included in the static clr_mask
-definitions for devices in device_params, the bit would be excluded from the
-regmap_update_bits() mask. This would cause the register update to ignore t=
-he
-new polarity setting and preserve the existing hardware state.
-
+> +		if (!data->params->config_reg_16bits)
+> +			set_mask |=3D LM75_ALERT_POLARITY_HIGH_8_BIT;
+> +		else
+> +			set_mask |=3D LM75_ALERT_POLARITY_HIGH_16_BIT;
+> +	}
 > +
->  required:
->    - compatible
->    - reg
+> +	err =3D lm75_write_config(data, set_mask, data->params->clr_mask);
+
+Are we missing an update to the clear mask?
+
+When we pass data->params->clr_mask into lm75_write_config():
+
+drivers/hwmon/lm75.c:lm75_write_config() {
+	return regmap_update_bits(data->regmap, LM75_REG_CONF,
+				  clr_mask | LM75_SHUTDOWN, set_mask);
+}
+
+The regmap_update_bits() function uses clr_mask | LM75_SHUTDOWN as the mask
+of bits to modify. Since the newly added polarity bit isn't included in the
+mask, is the alert polarity configuration silently ignored by the hardware?
+
+If the device tree configures the interrupt controller for an active-high
+signal but the sensor remains in its default active-low state, could this
+lead to an unhandled interrupt storm?
+
+>  	if (err)
+>  		return err;
+>
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260502190408.3577=
-731-1-markus.stockhausen@gmx.de?part=3D1
+731-1-markus.stockhausen@gmx.de?part=3D2
