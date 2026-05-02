@@ -1,94 +1,105 @@
-Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37B80382F18
-	for <linux-hwmon@vger.kernel.org>; Sat,  2 May 2026 18:18:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC91111CBA
+	for <linux-hwmon@vger.kernel.org>; Sat,  2 May 2026 18:19:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777745931; cv=none; b=ZyJOI/WhVKPO6+5LOsBGDCpDnxozYO/7kRQjkpD7IIAYUeJJRPLNMfJ8wCPkteNlbfkkGUooSvCQauQ72SCKlaCp4/iVZPjnmE7SdcEd8CnqllIpRWWMiwc0wzQPP0ND1dpQ8jwHhnT3zDQcjvdtu8LKz2ehrBdIYrvXEFL5qpg=
+	t=1777745983; cv=none; b=f+Qy0N1AcEQP0JR4xYAtUBd4zCNdM0osc0JZ9IKotoDf+762G2Bl6XvTqpFsoqjdZZoA11lFVXQhQ4w4J6QkDXGEHFQKr5G8PVIpHV5oQluwFxlTxosmIJtdndXA5voq+414EqKlsg0XeZuc8p1DND0KjP3tRokQX0xnp07KJao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777745931; c=relaxed/simple;
-	bh=PK6r+Eva0NvTNWERpP0GymF1K0yBMZ+u7Lg7qibQU7U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J52mAf/WIwzbiG9b0KDh8d8MBY/AjYtGJPYl5HwjoU92dF2is+YP4gBSI+tIzLET+asFkRzm/c0iVYt+fmGY7r6jab0xy4etfzgVdSmULTNGbRvurRJbMfWgfD4t4gcu673rRk9+VDsEtm+JdkGzKPNohTlLR81rCIZSu+HCWRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k8Wpz5Wy; arc=none smtp.client-ip=74.125.82.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777745983; c=relaxed/simple;
+	bh=RxLFBRYkgk/QA3nC9iYvzs7LsPqgN8lCT66yeMMnAR8=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=FCXnxSkOIREBRLhIZ+GWplO4YPAnXAm+4EdvYMygoCvnb7BYZwnD9w6RIK78DYJyHmCi+uu2gf7De1koVgfNSbgyx3xdzAe6dihXB2KzHx+mamqxbA0F/bSxcaqY2J/E2ie46NJvb1b0oFTIziUq67KBY4p3i6dfVa3TWOoy1qE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ORuq1M4r; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k8Wpz5Wy"
-Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-12c45281a06so4493351c88.1
-        for <linux-hwmon@vger.kernel.org>; Sat, 02 May 2026 11:18:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777745929; x=1778350729; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=erTrquHndAR6fm4dGyR5mDtQyP+8IvuuMWeUEh+RyEM=;
-        b=k8Wpz5Wy83adLPvSPS9AVeCFTRZJfVsVcH17XAFfUjMnNTt/AoGGW7raf+HJL8XIOA
-         WJgbsEaSpVLX5gN/j1wDeVi8+SVWtqoJ2ZI8lQsJ79nVZxaGmKwf1kFxuAuc/5V9IJOa
-         3C4x3D4LmACZWaZUFUvOuRCDcERcjzE6TBJy6pOSw5fowNduX9nwCH+rnXXwf9qMtKAo
-         mAzxXMfytcoy0WaKPb0GZ4BpiXNe4rWdYTZjhXuBknnlCQNaT1c8pQs8dMO6YmqgbAxA
-         50dnE4wPcsYR6xaPYoRiEwMnc89+t2jADfn72KhanYO84LFzrevi+iiSfiFak/tZtCvA
-         OveQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777745929; x=1778350729;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=erTrquHndAR6fm4dGyR5mDtQyP+8IvuuMWeUEh+RyEM=;
-        b=pjyhF/QGof8Ey/P9CLQzHwya2Kq3OloSbo0UelXyaZVKy0FKiJzNAbwUJlIXp85Ktp
-         KNtjcqscXnzhOv+uBEE1nOPguqNt8Z4m/uAt/fCvk9mBoRIReNl7m9/+pgs9jhxSoqx1
-         REq7+6a1LAfZbvLa06DUqxvh0HSDvWFlcoTDbne9gVGwAG51MMFrs1YfG/ga85+fVybH
-         CEp3cpFNPVlNs6LRLC2zX2SzRAwaKR6Sklk2ffpFBUOxoZ9vo0yDmBSbuBKhJk0gEim1
-         XNjzwPLWAymBrTyr93Oj8HGZuS9bVFbyS8mjFyK7BaE/ZEClx1ppH/R/n5FmrLc2I1e7
-         Fidg==
-X-Gm-Message-State: AOJu0YwghWpz/B8u1cvTjCiqYssG5jHUe98LLgHYAEcK6ROrbYma1Ojp
-	I3rDambhlXJ3xlIiL+a0XlAbmddUpWoMi4rLY9B5MhLp1onWQz5nj5jr
-X-Gm-Gg: AeBDiesVhrg+Z+KwtFPqNsB01tV4tywEB5hhKwfeNVDop9kBGFdrZQILs7B4tJl3RSF
-	tCbKHxhT+uIQ4kWSuHJ8BhiAlhRxF6w7fL9UkGhlFKCkmlac0w3nGKPYYa1qKUvkKqlM7MPLP7n
-	WD4LPZ4xzloV6+1vKXJrmIcCdRzPrhEg7KZd/Z0dvKSc+kMkpfkbx3QvqOsta3dzYcc34PBjecT
-	iCzXE1BNgUNd4opkXug2bhB4Phhp/LgzjVXtSEB+Ks0ObrrWoqr2gPBAQ17xdi0gt0VxYujAl2H
-	A34N2T9MVaFw/gqU4fzYxugJnSPNRNqmsvNZZJ6oeV9iXfGIEZT4842z9AsrrV5ct8283EbfLWJ
-	s4i5GRVCux54fg8ms/EhRERtptmVUIwITznKX2+Vs/58lKeVNr1SDkIrTPG2OrdJIqgLcM9OKZP
-	UreAKBc294MUfa4+nU8554BKps6a4q2WEuRlCpWjGhwVorrTY=
-X-Received: by 2002:a05:7300:5712:b0:2de:aafb:feff with SMTP id 5a478bee46e88-2efb8b96397mr1520586eec.2.1777745929317;
-        Sat, 02 May 2026 11:18:49 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ee3889d5f0sm9431102eec.2.2026.05.02.11.18.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 May 2026 11:18:48 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 2 May 2026 11:18:47 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Tabrez Ahmed <tabreztalks@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	david.laight.linux@gmail.com, me@brighamcampbell.com,
-	shuah@kernel.org
-Subject: Re: [PATCH v6 2/3] hwmon: (ads7871) Convert to
- hwmon_device_register_with_info
-Message-ID: <73c5caaf-c725-441c-b01f-979b18c3cf7a@roeck-us.net>
-References: <20260502020844.110038-1-tabreztalks@gmail.com>
- <20260502020844.110038-3-tabreztalks@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ORuq1M4r"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1857CC19425;
+	Sat,  2 May 2026 18:19:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777745983;
+	bh=RxLFBRYkgk/QA3nC9iYvzs7LsPqgN8lCT66yeMMnAR8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=ORuq1M4rfZnuB39xM/5u83oI6HAfYuPEEja3iUjEaspyEf8+SM+cOfIDx+J4fbaWO
+	 2N1NfohOasZwr8OITjy+EJxGTpyLG+349gjVvgTa+HNFhjqjKBF93zIegP+JfCmpco
+	 mEEsgdsEZTsSQbRPKbMI73awcSnrtXexMdjkclxvmC8+t3hg/zOT2lwL+xx5oobKzC
+	 AsL/9jcdbzxkarDdWqndo825CchMxzhkenR435+8iSPBO8+txwHKFRNAXjCQDffPzb
+	 f8YoPLrJPCZbXvDNpXkQyy61W1VRRMqoKBYDwNkZcZHK/hp2mydkdapE4uoVbcIKS4
+	 1ikfDw3TBQxZw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v3 2/2] hwmon: (lm75) Fix configuration register writes.
+Reply-To: sashiko@lists.linux.dev
+To: "Markus Stockhausen" <markus.stockhausen@gmx.de>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260502173207.3567876-3-markus.stockhausen@gmx.de>
+References: <20260502173207.3567876-3-markus.stockhausen@gmx.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 02 May 2026 18:19:42 +0000
+Message-Id: <20260502181943.1857CC19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260502020844.110038-3-tabreztalks@gmail.com>
 
-On Sat, May 02, 2026 at 07:38:43AM +0530, Tabrez Ahmed wrote:
-> Convert the ads7871 driver from the legacy hwmon_device_register() to the
-> modern hwmon_device_register_with_info() API. This migration simplifies
-> the driver by using the structured hwmon_channel_info approach and
-> prepares the codebase for the transition to a shared DMA-safe buffer.
-> While at it, fix checkpatch violations.
-> 
-> Signed-off-by: Tabrez Ahmed <tabreztalks@gmail.com>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Applying this fix without correcting the 16-bit sensor masks cause=
+s `tmp112` and `as6200` to be severely misconfigured during probe.
+--
 
-Applied.
+commit 0da1c5266106ec86191304203df47a352a002b92
+Author: Markus Stockhausen <markus.stockhausen@gmx.de>
 
-Thanks,
-Guenter
+hwmon: (lm75) Fix configuration register writes.
+
+This commit fixes a bug in lm75_write_config() where set mask bits not
+defined in the clear mask were being dropped. It ensures both masks are
+properly combined for the regmap update.
+
+> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+> index 7efcef7768cd..8b74cc314196 100644
+> --- a/drivers/hwmon/lm75.c
+> +++ b/drivers/hwmon/lm75.c
+> @@ -353,7 +353,7 @@ static inline int lm75_write_config(struct lm75_data =
+*data, u16 set_mask,
+>  				    u16 clr_mask)
+>  {
+>  	return regmap_update_bits(data->regmap, LM75_REG_CONF,
+> -				  clr_mask | LM75_SHUTDOWN, set_mask);
+> +				  clr_mask | set_mask | LM75_SHUTDOWN, set_mask);
+
+Will applying this fix without correcting the 16-bit sensor masks cause
+sensors like tmp112 and as6200 to be misconfigured during probe?
+
+I2C temperature sensors transmit and receive the MSB first, but
+i2c_smbus_read_word_data() and i2c_smbus_write_word_data() read and write t=
+he
+LSB first. This causes the driver's memory representation of the configurat=
+ion
+register to be byte-swapped, with the sensor's physical MSB in the lower 8
+bits and the physical LSB in the upper 8 bits.
+
+The set_mask for tmp112 (0x60C0) and as6200 (0x10C0) are defined assuming
+native byte order. Prior to this patch, the logical bug in
+lm75_write_config() silently dropped the set_mask bits because they were not
+in clr_mask, leaving the sensors at their power-on defaults.
+
+By fixing the helper, 0x60C0 is actively written to the byte-swapped regist=
+er
+value. Due to the byte-swap, the 0xC0 byte is applied to the lower 8 bits
+(sensor MSB) and 0x60 to the upper 8 bits (sensor LSB).
+
+For tmp112, the device receives 0xC0 as its MSB and 0x60 as its LSB. Does
+this configure the sensor to 11-bit resolution and 1 Hz sample rate instead
+of the intended 12-bit, 8 Hz configuration?=20
+
+Could the endianness of the masks for 16-bit devices be fixed simultaneously
+to avoid this regression?
+
+>  }
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260502173207.3567=
+876-1-markus.stockhausen@gmx.de?part=3D2
