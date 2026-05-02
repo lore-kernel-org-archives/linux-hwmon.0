@@ -1,143 +1,143 @@
-Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAC2E1D7E41
-	for <linux-hwmon@vger.kernel.org>; Sat,  2 May 2026 14:48:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CD6D1F5EA
+	for <linux-hwmon@vger.kernel.org>; Sat,  2 May 2026 16:05:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777733290; cv=none; b=O3vBEROhCuP6Cj3Aex5tAeaiEVEgzvZVr0nD8m8xw5rJThKJ6k+ACTCsP9Zg+hwcSglXcY9qTUrHkPy3HENdqSQSNAzvJoUVyLXTRIScftPePMjngCDY3bgIbsFwWhyikSpeOHEHpcHAT5mHSoeJ1O35aJs23GUSU4Glh94wmzc=
+	t=1777737953; cv=none; b=U976hMX3SNwv1G6Zqv0Wg4x80uvp3k0YbbhI51deRQY5Ks1krxP3AsG8QlxJK4J3rWTY5CC8H40SaqphlFWNw4hD5uhZaGQyAokxfus0M4ceC0g/oBpQV1hJzhfwzqsxo8utm8mqOG0iwSaALsCFLBZ+hVqPYCvPK9xPgefpmdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777733290; c=relaxed/simple;
-	bh=46Tm76T5vVg/3XUK88NgEklf9oDJ16ZvFU1JsZ/VO6k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=h3QSP5+RNw4nKhNRwM4gGwuuUQtouAxjzhQAhc/rG+d8ezNSuC8YamoPVeHcvqTNYTVR5CaPW7msDjDDU3eKeMsFkkGNg9LwxZ4T7B/Q0rCK/2/iFBEaoCJ0D9xq5aYONecwmXjd/PGV/NqWvbgI3AeL+xh9w9tOYe7m/+mKj4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gIJlhj4S; arc=none smtp.client-ip=74.125.82.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777737953; c=relaxed/simple;
+	bh=A0O+AfYaXnVq6zwFu3qgCAKBc2o2KXAtW4ng6GO/oBk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IbKmejue6wh2pDutHA/vrJpaKmyzgaEJTWyzdeqctisDAexEVNGcSEqiUV6U4+Y2IbqW3jAtv432HNGqMyYYOAweqM9bzMqjALZe4tf8Ze79JWm2Awmjf/BllWJ+ITaFo71SF4ZVJKbtO600lbNIeh2acsC6sKXD6xokipPD7bg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=markus.stockhausen@gmx.de header.b=DL+s/Ous; arc=none smtp.client-ip=212.227.17.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gIJlhj4S"
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-12c45281a06so4317792c88.1
-        for <linux-hwmon@vger.kernel.org>; Sat, 02 May 2026 07:48:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777733289; x=1778338089; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=c5jZ1CoarEiOSwIoWW1VNZ7Ki+Uvhuwpedk7yjnYHDw=;
-        b=gIJlhj4SqZZFABx0mqUCG0XSKocVARIsialDCTN+FyJa38J5n8xLHJgqJiEi0QwKyW
-         M4bfxVU/cw/mAYZ579rStxQNq2G5fes2obvlLmfrNSqqFdFUZf44mIiQ1joP7/ouzEpD
-         KkmJpt32okuB+k/TsgsFTvrW0Tp2NpzGdkYuiTRWLyIyCZeVwPnXoRRlcHCg4xhhF0NC
-         /hI4FTOoOTGEYM7ojKIcrwqfq3+lFfIjku5PEMPXJgZbPaUwW3qOr5AbWEGZSP1yiayz
-         giQFuw6Lg+o5Iu6YcV60XKuB8eKfFvbrBZAgAoYiB9qSpmyjWuFReHzhZAO4rqfMruAK
-         bCTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777733289; x=1778338089;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=c5jZ1CoarEiOSwIoWW1VNZ7Ki+Uvhuwpedk7yjnYHDw=;
-        b=o4D+4VSqBN1yoN9hDKX9Sya0wvGvPpop0Feq9CK4EDYdh6k5pYRGff9TZvdh+Fspin
-         L99tTAzjoBfTXqYSPwILt4h6fa2MOS6sTabKjTWip7M3dHJoyEUCE40IYvBf78x9l68n
-         0Wbk525HnfPWvtieDugA5LF+pXo2qdcws7ouO668XbeRKay2JklNjHkH3tiIGi76aaii
-         Qn7beOw8FUGI5nwGd+zoB88e2bOeQmTE4mzN5KjXo12WVbjMaLI1iZ1gSZcYLrBDEU4c
-         Z6EZpOtA0Wk73x9+JIFk0Asa+SfLoynnSUAliFFxlpqlIJ7xRZLfyrWqo/IuWk9nDzpF
-         Tl3g==
-X-Forwarded-Encrypted: i=1; AFNElJ8+J4cGyKCC8w/2TMYNCDAgEBm7ig+T5aThHpkR+gQUeW/qP5rwbwXjVkT3iI6V7D+gZlfYW7+lSgGh4A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzmy6dkSTmbwPM/NYW2Z0C4euqF3NMOVDzOO1DyvocpEbRzDZMr
-	z+t1sHJ9XxNO4NHYOhzOmHdwFJWj0WrMLegfG7eAM4tQzsFlc8A1QMCV
-X-Gm-Gg: AeBDietakcWvrQuYkkFLzySjd1Z81eJKBP+INlZYbxoxm7aYcZx+VLjtqlyAJSZU8R5
-	ImS09f7hdVfXPb086r/Vs/h5NF1iaEbiSD/Rhm/s07I8v5D7tZhJHMchY7wXU3fha8uXlHR3iIT
-	iJpUM1Hc+T2oenEbWW7tlywLMVozkKH7QmWqHZHFsxfNraklueHe7wA3zxWgD0MbaP7n6JLgV7X
-	ZCnXbCLA2iVWSig8Tzgh0nFFkwjUak0X+QPanhAygqSvtiC6Qx+MvsHf/86MKDt8n5xVk7rWk8q
-	ELEXu3SF+lWnBxCqQWYCR6aKDUUprL0/JIjycQ+RiftDuhoWBMn3yTXIwkJLvW7XRya9OzXMbZk
-	ucGb4UtwpDQAknDedYgYc1GarFPFQPVMSlMWVu7IzMZ27BUn1/3ZRBeu0VEJdZ9mkcdbbs2lKcx
-	KirG2BKSQ5HjWvw2lDyoQzgoioBUbc5DWl2aBV6Ysg8HY4ZavdKtQY9FQ85a6kcAcZTUrXF5AJ6
-	LlSOaaq9O2EaNlrbULPnA==
-X-Received: by 2002:a05:7022:908:b0:12d:de3f:d851 with SMTP id a92af1059eb24-12dfd83bbf5mr1255711c88.42.1777733288845;
-        Sat, 02 May 2026 07:48:08 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12df84250f1sm8065715c88.11.2026.05.02.07.48.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 May 2026 07:48:08 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d591d58e-8a6c-4df0-b0a6-1b862120e4dd@roeck-us.net>
-Date: Sat, 2 May 2026 07:48:06 -0700
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=markus.stockhausen@gmx.de header.b="DL+s/Ous"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1777737943; x=1778342743;
+	i=markus.stockhausen@gmx.de;
+	bh=A0O+AfYaXnVq6zwFu3qgCAKBc2o2KXAtW4ng6GO/oBk=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+	 MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=DL+s/OusQyHoztFYf6Da6eqvq/AzUUTs+JNfMEu7FbANq25uVJE8bfK7ueuhTokw
+	 T1pITk2m3GDV5VTxeVrbV0OmxFFior7e8huSbi2zT/P8ARH9semUFjlfKuFJlcjMs
+	 fUuQbd6Ev50lR6H2xdqhrZVBtojgPuaPEgiLMC/q+TdZd/2MXkKtkkh9Qd39fc91W
+	 T6zAGcC0tdz7VwCZjSG6CtHOIssNP9wbP7mTJPFBRlBy8fy1NueXLJc3G1maxxygs
+	 rsYU/0Mz4c3jXStp2zYPRZHTdq358/shGYy8uVne0p1fYWz348pe/JVmEC1NFT4A5
+	 UsfNJSz+zlg/9B5mCw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MbRfl-1vmd7W1gOP-00n1Ku; Sat, 02
+ May 2026 18:05:43 +0200
+From: Markus Stockhausen <markus.stockhausen@gmx.de>
+To: linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org,
+	wsa+renesas@sang-engineering.com,
+	alkuor@gmail.com
+Cc: Markus Stockhausen <markus.stockhausen@gmx.de>
+Subject: [PATCH v2 0/2] hwmon: (lm75) Fix AS6200 and config register handling
+Date: Sat,  2 May 2026 18:05:31 +0200
+Message-ID: <20260502160533.3527619-1-markus.stockhausen@gmx.de>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] hwmon: (lm75) Fix AS6200 setup and alarm handling
-To: Markus Stockhausen <markus.stockhausen@gmx.de>,
- linux-hwmon@vger.kernel.org, wsa+renesas@sang-engineering.com,
- alkuor@gmail.com
-References: <20260502094524.3358193-1-markus.stockhausen@gmx.de>
- <20260502094524.3358193-2-markus.stockhausen@gmx.de>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260502094524.3358193-2-markus.stockhausen@gmx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:klsplxgKRtQSGhOBAt2NY1Sa8CLTdDqTlhkRYYzxPGNsvPPel5V
+ R4bDc21wqdw+ON85zfuyjeVo/bLGPvgkSDfK6QIavBoL3qZqEMlYIgON/S+gxIhzVfjWpnS
+ H43+Sa+oCPlQ7cAgNaOXFvDpfyYEI611kc2iGAJj9A8uNBhGLc4833huHNVK+ub6yMynxJ6
+ /EGKjLQNF+3CVv9eCStXQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:38qlWFW8+fc=;QL35yEImFuf9e4rn3FSIIyYxAGw
+ 0wU+fYRM+tCk0Eh1xTUYG1A9U6qiWxusDk9PBYftzSxot4nBWlLHWgMJTq90SVVWI7kQDOZBc
+ D6/SExxX0kuX5KgTnOvSES/I4BchLPwq+kZhqiIeRaR06ei8CSTSJ5rky/w39HaTqw9tSUpzL
+ nd2N0vE2X6Nfh1MXzjDwPLhliJ7Tv+BdOlvIzwkuIySj4MCpP1KkQa8ZCKRqvgCqerVJMvOet
+ f3GhACmoosBnReno0ihFx88B7mF+eh3tZnYDp6cYqzDJZ1s0GF26mCFBU4MQC93ynjDofqHSi
+ TAfWN+FKDYFmGLE2tfwhdHQFJWCIxUERHwMHW1thon6pFFGFcPn0+SUSxpDMhSFt3NC1aniIp
+ cY1mrE+l+NzPW/JxnzMPQKCdAkfQrsFQDznFQ33rg++mBzQFbE3AeXAuAZmU39JdvU/y2x6hS
+ 6FnRkukOhOEMYgKSe7/4ne0aF7WCBJnd+68aeslyW/9un6kWxefiofqOpc8TipKEGkBvOikOk
+ LsD0Ppj/xEuhQ0QLTwiOz2nAreU715ozv0HZMAdlmGhTBarJPbrzFbxCUM/JyTShn37YHcUmr
+ l3zwVFFSeTyjz0y5OwGu19ciy0R6n2Hh1PYb+k0biyLyoMPRlzURQNTzrpdSe3DzILSuenfNc
+ yo9MFKdAfD/tPaClyAfuG/mKClGHJseXmM1pZLWdJNKD2A8YkgFQrnzcxEUSEaqv1e6DVW2rB
+ J9C10hUn5nvucFbWQcdM15b3sjsSw68NAVgQhd4kb7aU/xIqHaWkU+gbIgHhMBtFtvtscLvr/
+ jBh0H1y3yPRPKUSIGIEjaB+GOmw8i8hWn6uy5MQ5KFjIVu7bL9vtWTbpsOI78N39ft5M0AaoG
+ fJKsRG9e9kIFAEO8N+dChe0ZGycEUQSkFz4DFc5VBR/9ndv85Fuxpt7BfvNfUsRDBwxunyJin
+ Fo/1kLxJlVKedA84dyBcH1jmXMo6sjEhIdkN/ltWxdQHK9kk0lhK+8WluTRmquCatEtzqKd0o
+ eXiZfeHHsC1mzOgOZZ9o47lcQnxZydtd5NbbTEY8i8RURm3iL/fVKEkTPquBpfcRU7aClHy/1
+ NixN6b/vdkws5Uc3Bpb6w/fScBwkOZyVTvYWJ5X2Lwn7N6sSPp13cjo8UeLla/Rkf/Ehbrefk
+ RLCaCNzyYn11jHTKRVncKVirzlNmMwsSnWKQDqb+/bltEXYNkuVfjiBD7Wik47qHXq8tjf9Sf
+ h9/FCBRv3ZGdEdKC4epkijPjWnrNdZ2bwdHyHUPdLAf62rAfRAR+pPyeuNJzYIzDCWwzAx5PN
+ ZFSOe2MMkqcOkV5hiH9HmSEmYoZeg3j5g6Gjd5+7c4aafzxSwc32tGc8UjMlPt2bR2AQw5n0K
+ irFWqSAwWVONt5x9IPgPPSEKI+mwgUH/iX5Yiw4H56nOZvfauqAMQLYYFkycJnxt0KhCen9Cb
+ jS5kjHZ8C5zKUddh4HLUowN/ACwZII/xl1Pn6l2Jli+9TnPFP+6LtvPTjTixxm8o75ZFcOxbE
+ pzGEp3TbInHg8r0rBM+pXLy06S02WztfSAqaVHHPdAGvByPC/WUPbGRlEQA/xAbyBqd5/4znd
+ ELRbT7U+Rv3fm6O6XK/MwmMGLXddzcJSWI5dcukj7GvBGSTqM2GmqgbCqHq7vs10aUnlCQP3a
+ aByvMeSZI/fHnvWFwdm63N1p9soZhDQo0cZU3aztTiKjDAOryU4D6JGX1cnzivAW69CntDn5Q
+ 3AflED9juRc4ZQ2HHrQihtJI75TYdyRg3Sju1FdcCSUAJzMsN4YDBTqJGlhU9ROjoTtG9cXXX
+ rvZ6pDCH9vaZaOuDFa+jtljzvgrHNtkUpEtfa6zvBz5S2XsiOxeI9AYR9U7k2wC+cuZFgJlHD
+ cJHyCJMHqyiAW/gQScPIWQpPuFFr1bEQAv6ouiPsL/9ShOh1/smIAhORapG+s/aKeMfGEmajF
+ DJ9jx7CSKzhQ7dQvLHS6v+P+BwufiChAE/ZhIX9Mxei2QNNBJXc6UfYhE1lkuulorki75R8Rr
+ R/oTvfoLMF0RksNSCtErV5dQJETHYv0FGXwfnrACGHNAIcmhfWvoaBI2PUoFBh26D7hnQL+Pq
+ emV390kU7PDLgh1hEfq056CQlv8tgOaFOD6VRpO0Jy1DBc8rKpdJNhLJYoI1UF5GG3BstUWqt
+ tLVYO/foumziVKNdlTcenQxwwLcr6dyaMUikqHN8E+R5/qFWeoH6Wapsqc0jahFqW3Vfa79LJ
+ 2oLo0BB00BkAlrOp2Sji28hhTNd8yBBSF22nGChTLgdca+O7L4gMutVf13nFJ9+b0Fjn6U7ed
+ uqCIHFlHH/AaxYtbwdx2CL04RUIOkIZs4Og8tnbGH0+gqgV7/ykie28dTHG5wtlk2IOSLNGuh
+ pk5huE8NImE4RIZtZ4A5r7x/prZd3Y9OkEoA5XurLVYxsUR4STDJcDO0vfK9H7wM8fOXXrEym
+ v4PihScF6nohEaRTJZFU9ZSTYU2/IQ8STxWOrBKExVx6COpZ3f8NZHIkVmDx9pv5+Bd2k3HNE
+ 5LkyD+BqlLipIA8H39mgpFOCpumEspy45FiueGWbR6nCIklJHHEPoX979LqxdPtvPFQaeUiPj
+ Y1BADIgrLrQsOE+O0BMi+nflqZlWSQw+m2QX5T01ByzwmtU5l+gNz/9QnANVooZfqHz9G2sY2
+ yLjHvkyAa3wVo8AFOJcAbu4m5h1SiB0AGb0k2ybIEk/YaN3DyxPk+E7ooAzv9heZdwDk3Iq+a
+ uW7SC+1ijF1CBaJp1zhLa0vDb8OKCmZxxusEOg5dDCGQSgjRqLxyi2vJ0l3f3yopvPmFUz1bm
+ issUBrAjy4147GaoCuWZm41AF/EUKk+xjQTPMSkvE6bESIj14PwqFMJr4tG2vfWF98dUkSAbr
+ v2YzBG7XM20xi43KsD/1QsjWJnNP78DnGrbC7R8dzHBResFwgd1CigSyKyaQmOSFUPBZjYZ41
+ vZ9hu3gE5xNJ3R9ZCdMphWhgSkyyZY30YfwQlF2orBynRBHCkBx7Mn00KuA4/rrzM88s9YJdp
+ fC2m5EOcwgzglosRxO1vaBEv9J88aPyu0pyozYmLXL2TjvKqkJqiP9ZH6i6kOMFXR+MgvGPoj
+ C0I4ONX62Mnegpr9nyVuyS4Ogp/Zd1mOgWEwcM/mbMj8Znpypxui5tg5Lag9wWFnT2VzT2sMf
+ L0aCT28m2KX9yh1rPYFC/TO6Mnp5tXGl3WQ0iIGNLdlRu5Qh6mHpkWG+8aLH+hEN+SAHm5lqC
+ XAgciD3dinYvGsHi4x07YXVH11q/y5u/5f72yltVz7LlB07lRclL/OtkaMBrk8oZpGFM4k5kk
+ v3Do5Fut1QW+JbB32PVFPV13i7ERQauqe3b9mDGcFoAvd9aXgLY/rk3RNWGiQzSw55ShW5PaT
+ cx2QnP+po5DEiiJYvS0URLYoSGrhhz1eYnO9ueKEPYdixOZ7rps48/R+MsdbGWFlYLxqXQWKn
+ mRAf5xcJlosPhQU4jyV55iyMFPETMXBEPOAHVjwBg1pZjMj1Lp/P5p0ho79ydhFJqMvFHlqJJ
+ qL1FJj5Nakt/2saHni5Ia0sDXLswncTpHLV/aaoe0aCRCgfi814u6SEdP+ytHYfWYCt4pY5rl
+ LHSvQRlGzTxyF2msYYlwlAjQ99d5sNqMUDmq8vTq614SlvB2KDSSWmImKRoT/yJiNJRpPaUL4
+ /Uy2rNDhT9gBs/PZr9+UEaN1ZmB8Yyz6RgNYD+AJejHNbQUPVzb1JKfakzJyeWRiFrJxRkDNa
+ XaFZYIX9JjtBfjfQ4YK7znDIhcYOBRT8cAy3+KDU8JkXDnIvZPynRbrj8tBI9LsPRmNQyp77b
+ cbmv2KNwOSwsh9C/43Ee2OZFwomGpOR9Aore0avl45biNhMG7v/tabHjF69bmT8DS4LJ3Mc50
+ /qOMJfR/obdPpmi9LPcfdZdnJwWoHAmpBu+dKx/WW++dAoRpYAsD/lvX3Q8eUt76g1cyiv9UU
+ 3iW3n0Go/lsQrVl6gq+SqDA93kzJtos23N+KEtIpuU9N5OzvVN2IZ45nx+2lOdxEUVp7ppkDr
+ jCNwrhMPk9lkrvIwKiWXWP8FcGUTnWbxVEkccfFNJ6iHON/yLw9WOml5cFvK1JvVNBBgJ4I/s
+ RwVeEWXLq+PU+2N4+I0mez+asgoOMvZKlWb3RAwmx0X1i4KFDJc6Olkk6OE2as4mUUVhtC6qo
+ HbQ+jnVVvJExrMySd4sU0PErblprV4NpMV79tHaBF3Ewibwb3nLg6GYhzCFwp6fkO8X13buSh
+ Jw4mA1fFSEGOg+jJlRyluh6WCQO1C7LEIqLfE5dDtcBdLerH1Fy0jVnf8qCvRVzNY+RQubQ6h
+ m59s4neKBltBLHCF79WZYdK/+ZmyZI/LF1PG4MhwJ2G/v05AbhI9tJCvbG2rUF/nhBHhFnPl2
+ YkgEUz51yW6tKNLNQ1ZFaowT/kb21Mwu6n3NzQEDtAVZn1ox27manCaGFjJKM6anqQSFJaKf/
+ qpobtElb/6WQYWbf2lXnQgsuR+tYHGYcqlguE+zaLkQlPFnLQdOg3Avv9iX/Gy16uC1HcA4Fs
+ ufcjP4msQzBS7oUDc01p+WQ4feamkzb6rd/SzmgDOXZl5GM37M5ZDYUpmTUNCQUv6gyG1+s6Z
+ fesFqLBq2VvK5qLP79u0BAYsgzPJTFVqeuyX8DCTHFL9H99PMhbd7TP2Ht1wjRGc2EhRGZ7th
+ dqmI93NnM0H7xYZ+ISQegZaUOtql9CWaeVqliW6jJq2bnGWcR2KzwkPwtHx3l4ilz8lxiFDTe
+ qUzl9VKnyRTWQL3BhoNERjedylByvEr4ay7vTiokoJLuk1v7dTr82Mq1PJRhkVDvYJRtQo2ku
+ NtPdplYVeqTM12nz7fBpDQtkbkcNu5K1Z2nAI0w6nTCzcGSU8poqFGunHnuTKyjEei6EZzQjp
+ Z3QiOFyWl69a9t2FzoRtcujkOeUstm1wlJgH/tA+Yu4T/gWecch9aLFN3W/zGd55RMyCVEU4a
+ A1cms/MkXKul0UqkJsxRDz26BOdJKuVqEMZyxr0yMBT44CqJTVCbNei/Ru41EJI1EvVxkUvqK
+ EZ7w2tqoKS1iAtuY5kKtPzlrXYdiVGM9eXK2UfPtAVtAXcTAWKxMqdJta1xkifIVYmSs2b8Rt
+ slVWrKddB+FkJnj91y+0XNRXJZSHFYOfq0f2qKl4Gai7XrxyjFlBD0EiLhJFRixq/vE7KCUBp
+ bfluEIE5Y75ol0bDGbmh2Dw9mMJnTvuLp9SBNABLfpbehzlTXc/NzqLywt6tqcXqi+m5Cw/S+
+ PvJBgj2LpQR6FCwahOtENA/x1BVqIF1UusydnVJnoxXXYXjhsr7dfFxN7SIxRiMetvDPMqHrW
+ 9s9j4EVhsTGX2zsLd70KIk0wjRtiQcFMf0llch5eSoFfiz1kU+Mrajpc0K17Suht0B55I6S+Y
+ S3ivKxsyU4djs74UfPYOmSSg==
 
-On 5/2/26 02:45, Markus Stockhausen wrote:
-> The initialization of the AS6200 has two shortcomings
-> 
-> - The device-add-commit states "Conversion mode: continuous" but the
->    the lm75_params structure uses set_mask = 0x94c0. This activates
->    single shot (bit 15) that effectly disables the sensor
+This series fixes two issues in the LM75 driver.=20
 
-Actually, according to the datasheet, the single-shot bit is only
-relevant in shutdown mode and is supposed to trigger a single shot
-conversion in that case. So setting it doesn't disable the sensor,
-but it is either pointless or has unknown effect.
+1. The AMS AS6200 is not initialized as documented in the device-add-commi=
+t.
+2. The lm75_write_config() skips bits during initialization.
 
-Sorry again.
-
-Guenter
+Signed-off-by: Markus Stockhausen <markus.stockhausen@gmx.de>
 
