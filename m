@@ -1,67 +1,68 @@
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E773806C5
-	for <linux-hwmon@vger.kernel.org>; Sat,  2 May 2026 14:45:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAC2E1D7E41
+	for <linux-hwmon@vger.kernel.org>; Sat,  2 May 2026 14:48:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777733119; cv=none; b=u0s7Wb2orINDyzSKzQTBlXpNnWzrUF0Zbjoxrlc8agWckHHaKcXh7/wAXiR7qPp6GRHngeA1SS1XgyYrAd5EfM0At/jI/pKn3P84g7JBJBrrO/H7EmHsmTVHstO+jRQBJsU7Oqxb4bPObXzeBrcoXZ6VkRa7oa08hzEve8kMiNw=
+	t=1777733290; cv=none; b=O3vBEROhCuP6Cj3Aex5tAeaiEVEgzvZVr0nD8m8xw5rJThKJ6k+ACTCsP9Zg+hwcSglXcY9qTUrHkPy3HENdqSQSNAzvJoUVyLXTRIScftPePMjngCDY3bgIbsFwWhyikSpeOHEHpcHAT5mHSoeJ1O35aJs23GUSU4Glh94wmzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777733119; c=relaxed/simple;
-	bh=iUtmapK7QV5nJmIfvVrcUOFHur8U2L6UftUm2xkVzI0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HCohrKseOOah/epcnSF5yAQ2LZRs2qMZAADBzFWqPg0SmuRNOJevpx2+3IkachCeyBGDi00HyeXF8h3PSXx4qkCXvr8yUwS6ukQnBjuTCixAyM9VJBP6c63pNnP5b2gjYIg1f5wQlwq4ZSmL+yECyxioszY/Rr0+999izIt+sB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lZ0e4ueQ; arc=none smtp.client-ip=74.125.82.174
+	s=arc-20240116; t=1777733290; c=relaxed/simple;
+	bh=46Tm76T5vVg/3XUK88NgEklf9oDJ16ZvFU1JsZ/VO6k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=h3QSP5+RNw4nKhNRwM4gGwuuUQtouAxjzhQAhc/rG+d8ezNSuC8YamoPVeHcvqTNYTVR5CaPW7msDjDDU3eKeMsFkkGNg9LwxZ4T7B/Q0rCK/2/iFBEaoCJ0D9xq5aYONecwmXjd/PGV/NqWvbgI3AeL+xh9w9tOYe7m/+mKj4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gIJlhj4S; arc=none smtp.client-ip=74.125.82.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lZ0e4ueQ"
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2f0ad52830cso230642eec.1
-        for <linux-hwmon@vger.kernel.org>; Sat, 02 May 2026 07:45:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gIJlhj4S"
+Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-12c45281a06so4317792c88.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 02 May 2026 07:48:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777733115; x=1778337915; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1777733289; x=1778338089; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=FyNr5N1YI1qjFmBeSOebvm0biXvEYdfui3Rfp9RSI5o=;
-        b=lZ0e4ueQ4cDVlCkhrSyaACr9JhF5gAEDDs0VmWs8FP6CHJuBsBC2aPeLXnWOrAksKt
-         V1yWiyxrI1uhpnvtpS2U0IYeUoaTyEGad9vtpknTpSunlotp28Ro/30IWmOcIMoDMwzJ
-         CLCqbA4rwB/2vHtzR/zjMyr28aaE2AK0U9D/uEZ4FKixDi0s2igQcCPhHi89TBEd63lB
-         ubT89Ou9OIjQ02+iqjfM00z5eCu4ARrdLuqAu7aMtjOa4PaJrOfvqwpQYS/VYsyj41x3
-         hu+jioHjdbESxFwDFW7e5VYsRG8qAqfGAiFnwSwjOSMX6IBMo8+8UxuzWM30v9mXYcNr
-         cYCw==
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=c5jZ1CoarEiOSwIoWW1VNZ7Ki+Uvhuwpedk7yjnYHDw=;
+        b=gIJlhj4SqZZFABx0mqUCG0XSKocVARIsialDCTN+FyJa38J5n8xLHJgqJiEi0QwKyW
+         M4bfxVU/cw/mAYZ579rStxQNq2G5fes2obvlLmfrNSqqFdFUZf44mIiQ1joP7/ouzEpD
+         KkmJpt32okuB+k/TsgsFTvrW0Tp2NpzGdkYuiTRWLyIyCZeVwPnXoRRlcHCg4xhhF0NC
+         /hI4FTOoOTGEYM7ojKIcrwqfq3+lFfIjku5PEMPXJgZbPaUwW3qOr5AbWEGZSP1yiayz
+         giQFuw6Lg+o5Iu6YcV60XKuB8eKfFvbrBZAgAoYiB9qSpmyjWuFReHzhZAO4rqfMruAK
+         bCTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777733115; x=1778337915;
+        d=1e100.net; s=20251104; t=1777733289; x=1778338089;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FyNr5N1YI1qjFmBeSOebvm0biXvEYdfui3Rfp9RSI5o=;
-        b=etYWV52wCi59cE1Zf4zDbUsD4FPYKmrtQxIpU8t9aUwCjWTuHVFnVseYGxVCx5ksMs
-         SMdCskNWdiVi7gXHB/yq7At66w3bDVQz88SuD6QSxX71oT3/YADXuY2pYZog2qKS33N2
-         oS1yYcLz5G5YCMwwPtkRF0UuzOKthsq9oeaBnAhqi6hMaWgQOcxJUGxgMTAfshapDKTK
-         olOF+xGBD/QNdDyDegkTDH8HqoEh23A+lM+tt+zMZMj2yc9WovVGJtpenj20vohuT53C
-         VRrFclePjJjkvsEmD4VZNKIcW/me1x+kn/2aKiFwhG4tVoECCIWL/PvZ8NaJLRz5w/JR
-         /A3w==
-X-Gm-Message-State: AOJu0YzXlU2YZiQHetZ1WsjSnW4+6Fd7xS3IXfFwv0dL9vpP/MnyBM+P
-	bdd/WaJBlD2fNiNNovGojHO7mdL5nLQp9HNb4JzJHLZ5F4nmaIl0ie8T
-X-Gm-Gg: AeBDieuxmIGdIRMkuFreffx69nk9UEDQhEA98FmEsXzvF0S2DDhl2kU2LuW05xUUWHq
-	AdkHBuXtBk6YD1EqqrIPOz5nn6Efy7xknOkxqA4Gdb/I1U2pVx6lddBXGwFtqSqaSIX/OfHnH6p
-	rJak6Q9F4Ho7IF0/YtoYW6z8PEX3+4NnIRhM6ybttirxZZBNMDYrMydmNPQKpdCmdyyxf2iBI9R
-	jIUU/zcdMu8HN27JYd96D5JNZK+EFRvRjNViy7N9wp0JntrugrCSbvLYGllEWIqOwsqua6x3Fyv
-	Y4CTfbjn4hqqhNLXLSQyyNhasV+dytpJWPFeg9wAJTLr+x3oBNGbpvHAY9Pp9urywhogAbWnnrr
-	kqLK6468Fo0fcij+tM9UwYXGHmeaGD0El1WExucLJ2YbLGpmMUiGJDDeGK0taMCs45zCsEkFj9h
-	WB+GOkbZsnOZGeJIBoIwCntP5Ls2zpoH24w7YDPCTceU36sPhA0AC3GiFUuGTumQKYtTOxaGuVe
-	9Oqa+nJs/g=
-X-Received: by 2002:a05:7300:6c2b:b0:2ed:a64:a457 with SMTP id 5a478bee46e88-2efb9c85886mr1618540eec.20.1777733115325;
-        Sat, 02 May 2026 07:45:15 -0700 (PDT)
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=c5jZ1CoarEiOSwIoWW1VNZ7Ki+Uvhuwpedk7yjnYHDw=;
+        b=o4D+4VSqBN1yoN9hDKX9Sya0wvGvPpop0Feq9CK4EDYdh6k5pYRGff9TZvdh+Fspin
+         L99tTAzjoBfTXqYSPwILt4h6fa2MOS6sTabKjTWip7M3dHJoyEUCE40IYvBf78x9l68n
+         0Wbk525HnfPWvtieDugA5LF+pXo2qdcws7ouO668XbeRKay2JklNjHkH3tiIGi76aaii
+         Qn7beOw8FUGI5nwGd+zoB88e2bOeQmTE4mzN5KjXo12WVbjMaLI1iZ1gSZcYLrBDEU4c
+         Z6EZpOtA0Wk73x9+JIFk0Asa+SfLoynnSUAliFFxlpqlIJ7xRZLfyrWqo/IuWk9nDzpF
+         Tl3g==
+X-Forwarded-Encrypted: i=1; AFNElJ8+J4cGyKCC8w/2TMYNCDAgEBm7ig+T5aThHpkR+gQUeW/qP5rwbwXjVkT3iI6V7D+gZlfYW7+lSgGh4A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzmy6dkSTmbwPM/NYW2Z0C4euqF3NMOVDzOO1DyvocpEbRzDZMr
+	z+t1sHJ9XxNO4NHYOhzOmHdwFJWj0WrMLegfG7eAM4tQzsFlc8A1QMCV
+X-Gm-Gg: AeBDietakcWvrQuYkkFLzySjd1Z81eJKBP+INlZYbxoxm7aYcZx+VLjtqlyAJSZU8R5
+	ImS09f7hdVfXPb086r/Vs/h5NF1iaEbiSD/Rhm/s07I8v5D7tZhJHMchY7wXU3fha8uXlHR3iIT
+	iJpUM1Hc+T2oenEbWW7tlywLMVozkKH7QmWqHZHFsxfNraklueHe7wA3zxWgD0MbaP7n6JLgV7X
+	ZCnXbCLA2iVWSig8Tzgh0nFFkwjUak0X+QPanhAygqSvtiC6Qx+MvsHf/86MKDt8n5xVk7rWk8q
+	ELEXu3SF+lWnBxCqQWYCR6aKDUUprL0/JIjycQ+RiftDuhoWBMn3yTXIwkJLvW7XRya9OzXMbZk
+	ucGb4UtwpDQAknDedYgYc1GarFPFQPVMSlMWVu7IzMZ27BUn1/3ZRBeu0VEJdZ9mkcdbbs2lKcx
+	KirG2BKSQ5HjWvw2lDyoQzgoioBUbc5DWl2aBV6Ysg8HY4ZavdKtQY9FQ85a6kcAcZTUrXF5AJ6
+	LlSOaaq9O2EaNlrbULPnA==
+X-Received: by 2002:a05:7022:908:b0:12d:de3f:d851 with SMTP id a92af1059eb24-12dfd83bbf5mr1255711c88.42.1777733288845;
+        Sat, 02 May 2026 07:48:08 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ee38e71cedsm10308108eec.9.2026.05.02.07.45.13
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12df84250f1sm8065715c88.11.2026.05.02.07.48.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 May 2026 07:45:14 -0700 (PDT)
+        Sat, 02 May 2026 07:48:08 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8928c046-69fa-4578-9a7d-87b98fc7c5a2@roeck-us.net>
-Date: Sat, 2 May 2026 07:45:12 -0700
+Message-ID: <d591d58e-8a6c-4df0-b0a6-1b862120e4dd@roeck-us.net>
+Date: Sat, 2 May 2026 07:48:06 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,10 +71,11 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 1/2] hwmon: (lm75) Fix AS6200 setup and alarm handling
-To: sashiko@lists.linux.dev, Markus Stockhausen <markus.stockhausen@gmx.de>
-Cc: linux-hwmon@vger.kernel.org
-References: <20260502094524.3358193-2-markus.stockhausen@gmx.de>
- <20260502101009.DFDF8C19425@smtp.kernel.org>
+To: Markus Stockhausen <markus.stockhausen@gmx.de>,
+ linux-hwmon@vger.kernel.org, wsa+renesas@sang-engineering.com,
+ alkuor@gmail.com
+References: <20260502094524.3358193-1-markus.stockhausen@gmx.de>
+ <20260502094524.3358193-2-markus.stockhausen@gmx.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -119,89 +121,23 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260502101009.DFDF8C19425@smtp.kernel.org>
+In-Reply-To: <20260502094524.3358193-2-markus.stockhausen@gmx.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/2/26 03:10, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [High] The updated set_mask of 0x10C0 is byte-swapped over I2C and will force the sensor into single-shot mode instead of the intended continuous mode.
-> - [High] The new alarm reporting logic is mathematically inverted, violating the hwmon ABI by returning 0 during an active alarm.
-> --
+On 5/2/26 02:45, Markus Stockhausen wrote:
+> The initialization of the AS6200 has two shortcomings
 > 
-> commit bef39cd430ab022cea5921c7c9e935e0fe939e92
-> Author: Markus Stockhausen <markus.stockhausen@gmx.de>
-> 
-> hwmon: (lm75) Fix AS6200 setup and alarm handling
-> 
-> This commit attempts to fix the AS6200 initialization by changing the set
-> mask to enable continuous conversion mode. It also modifies the alarm
-> handling logic with the intention of correctly reporting alarms regardless
-> of the configured polarity.
-> 
->> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
->> index f1a1e5b888f6..4fd4288ae502 100644
->> --- a/drivers/hwmon/lm75.c
->> +++ b/drivers/hwmon/lm75.c
->> @@ -137,7 +137,7 @@ static const struct lm75_params device_params[] = {
->>   	},
->>   	[as6200] = {
->>   		.config_reg_16bits = true,
->> -		.set_mask = 0x94C0,	/* 8 sample/s, 4 CF, positive polarity */
->> +		.set_mask = 0x10C0,	/* 8 sample/s, 4 CF */
-> 
-> The intent described in the commit message is to clear bit 15 to disable
-> single-shot mode. However, won't this new mask still force the sensor into
-> single-shot mode over the wire?
-> 
-> The LM75 driver writes LM75_REG_CONF using i2c_smbus_write_word_data(),
-> which transmits data in little-endian order. The AS6200 is a big-endian I2C
-> sensor. When 0x10C0 is transmitted, the lower byte (0xC0) is sent first and
-> interpreted by the device as the MSB. Since 0xC0 is 11000000 in binary,
-> bit 15 remains set to 1.
-> 
+> - The device-add-commit states "Conversion mode: continuous" but the
+>    the lm75_params structure uses set_mask = 0x94c0. This activates
+>    single shot (bit 15) that effectly disables the sensor
 
-... except for the config register, which is little endian, and the first
-byte sent to the chip is the LSB. No idea how to tell that to the agent.
+Actually, according to the datasheet, the single-shot bit is only
+relevant in shutdown mode and is supposed to trigger a single shot
+conversion in that case. So setting it doesn't disable the sensor,
+but it is either pointless or has unknown effect.
 
-Either case, I ended up ordering an evaluation board for as6200 and samples
-for TMP112, so we'll see how this works for real once I get that.
+Sorry again.
 
-> [ ... ]
-> 
->> @@ -416,7 +416,7 @@ static int lm75_read(struct device *dev, enum hwmon_sensor_types type,
->>   			switch (data->kind) {
->>   			case as6200:
->>   			case tmp112:
->> -				*val = (regval >> 13) & 0x1;
->> +				*val = !!(regval & BIT(13)) ^ !!(regval & BIT(2));
-> 
-> Does this logic correctly map to the hwmon ABI, which expects a value of 1
-> during an active alarm?
-> 
-> According to the sensor datasheets, the AL bit reflects the ALERT pin
-> directly.
-> 
-> If POL=0 (active low), the pin is low on alarm (AL=0), so 0 ^ 0 = 0.
-> If POL=1 (active high), the pin is high on alarm (AL=1), so 1 ^ 1 = 0.
-> 
-> In both cases, it appears this expression evaluates to 0 during an active
-> alarm and 1 during normal operation, inverting the expected hwmon behavior.
-> 
-
-I had another look at the datasheet. Turns out the agent is correct. The
-bits must be _different_ for the alarm to be active. So this has to be
-something like
-	!!(regval & BIT(13)) != !!(regval & BIT(2));
-
-Sorry for that.
-
-> Additionally, does hardcoding BIT(13) and BIT(2) solidify an underlying
-> I2C byte-swapping behavior directly into the logic rather than fixing the
-> root cause?
-> 
-We can live with that.
-
-Thanks,
 Guenter
 
