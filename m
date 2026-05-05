@@ -1,150 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 063B03ECBCF
-	for <linux-hwmon@vger.kernel.org>; Tue,  5 May 2026 12:41:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A634733343C
+	for <linux-hwmon@vger.kernel.org>; Tue,  5 May 2026 13:20:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777984875; cv=none; b=L8yXJsDlkRdjcUdHC/nl5K/prrMGx9juKCwYy050UbLgq/lMiborbycNZUn2TVN8S1CRgxrm8JdUKECSadTZGnZIF+FaqqdrsrkWEF35QCAra55q7eYR5y/8zUgXl95+qpJ2w54SBTEUH+8A+Nb/1A9tn/muT1iryr7nZiZ5nU8=
+	t=1777987205; cv=none; b=ZLG720sXpV/l5yMSMBj9OFRud/Xtu9xTskUujsZLurwC3hVHaBnTvgexoCDTt/chDddagmJOwaVCCgZqB9kJMUXL0mlQ1RMRCmYqReIuwNDTW9MCHJwBpB967cwyAcnJbBg0z2LHkQFOUN1HGWjPudial6Q2N5MzGVsvEHAZexQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777984875; c=relaxed/simple;
-	bh=dlwyggPkvrM8b/uD45FaumG2KGnCvn8Fgk+gtkqdZaY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=so7RiAKmk2h9g84CojdAxwGbrzTgmgm0UJ4ZQUKJIO5l065IKHz06Ev7xpu4yiSGR2gTv/EfvVdi4wyqwY6lymmVAK8bibNOss7dBgbxDcD5S+Etmooc1/w2iD85sBKYMC0uqzvw9j2LvVbcx86BDIWZpWC3oLlryAR1pqeN9Vo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dhfKbLwN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777987205; c=relaxed/simple;
+	bh=ibbhpUEspwDnILnKp6x/633TsOLMgM9F3dwGA03ePeQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W1ADFuKyMAKCkMkeG542wIoOwzaFuOIJ46qClKotn7U4TJQTu0AkOnAvfC8HAWZqTEsODD+MzyEXj7pdwPe4p7sFK0mRxEwcVggeGywkeGXBnzWQ9h/ddoldVIS5ESNT1HdAPmwHRscxXXf8rMS0VsiKrsL0CHEUf5Vj4w8HGBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sTNhkcnL; arc=none smtp.client-ip=74.125.82.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dhfKbLwN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87E85C2BCB9;
-	Tue,  5 May 2026 12:41:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777984874;
-	bh=dlwyggPkvrM8b/uD45FaumG2KGnCvn8Fgk+gtkqdZaY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=dhfKbLwNpiFWZmhrNK/6udmXUaVkgri405Om9L+TNIlAQ+SWMQaCnVD9mubZNMW5H
-	 3eKLN5RVAzB5tm3eF5nRv2Y+z12ReKuTrOblwu6cP0jxHYqW406vj8kG7w+Drjf2oU
-	 Hd7o5klFp3GNT7Nhs4Y4FNRt6aiVJEL7LnJFdlpCP+nvWeQtNPMnwzcG+NrGuZ//DO
-	 OtRc8yMlaOR9EiP8bDb8ey/WMweergP1KoU4g5I8p0odCg22afjffVO10o8Ngb3LUz
-	 8iJ1rCHvVQMWFCBNVxZSS84v6ql/Fnj6s5XK+yYhG9rel4T+pmdz7zkHBMasnXCwDK
-	 VlNiXqgqELd8A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 2/3] thermal: hwmon: Register a hwmon device for each
- thermal zone
-Reply-To: sashiko@lists.linux.dev
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <3070412.e9J7NaK4W3@rafael.j.wysocki>
-References: <3070412.e9J7NaK4W3@rafael.j.wysocki>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 05 May 2026 12:41:13 +0000
-Message-Id: <20260505124114.87E85C2BCB9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sTNhkcnL"
+Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-130c653cce4so1015791c88.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 05 May 2026 06:20:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777987204; x=1778592004; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/hZDbpmJBO/sT/pu/TH8yzpFbPIu2coGqQ48qccMAdc=;
+        b=sTNhkcnLvvKQEfJNQNcp3yu62lmQLU0uw7NCxE09P4qxqzOEucyc/YDRKCTsAIUni1
+         AKxhBRLCj7Ejo/vcNFIlIP/xKzHd+0R8p4x7DPH/+XSQPUW27DCr7NebgzApsAzf39CD
+         cFeWyfyStHMK8f5XJ7tW2QQIey5G7Y0kp22A6OqTkl3x8vyqG7ig43Xg0rlj8qMWtM2r
+         S1QcUWGFVmF43YlHZAWzjEEMCJn7iR7KU2/Qi553cpZyR5IEHpkzljBkbmqNb4X6P+02
+         q8+hFjmoJq8Im5YfVIsq3yO4zcfP1DygI3mHC4q2TpWqVMkc5+yyGun8g+kw1pVf36n4
+         5Y4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777987204; x=1778592004;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/hZDbpmJBO/sT/pu/TH8yzpFbPIu2coGqQ48qccMAdc=;
+        b=YNBxoBWCQ8CDTXxRHGZhJjEzegCRR07wKAscVh6h+2iJwHC1s72ZPSMcpMTEJAfTZS
+         vradqqOay0M1GRNIG5QkJ26bpOU8xFoVdSW+QCsIwOTSSiBs5GggrYts0stM8lcZ9kc9
+         oaO76xGxCki/4JjBrkQLyW9b38CZT0RL2RzqoBx8sXcuuxiMVIMhbjbHBdCeYO6PTdA2
+         ezIJETq2Uk1yRhOHV/KVQNbzu+8mNtzqm4ekCZQLjkJhHvj7T0Vgw+zH/iaAjS6xlqJw
+         UYKkaK0U/cXGew2EtBysxfsVf0nVyzBTUoYlCYg9PSQ8lE5EOAPYAoNsfAG5VRMCBKi3
+         J1Lw==
+X-Forwarded-Encrypted: i=1; AFNElJ/C7ow8ZnTg2VJXXz0rBx4a5T5v52oTR+fqKFhqHRW0tXmQZ046lj5uEsiHlHKKAJ6u+P5Z0lmJfioRNQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwsNhWDtqHRaFD+47X6mUxui3gPIfTVvsW9Cm6sGNWT7tNQWyBM
+	hVHTIaA0zz9ej60UhHYnBnJ6G9yJnRC7zCqG140IezFf1DP2oG0hE32n
+X-Gm-Gg: AeBDievifbx5D66B6FbfkY+6oaJenhIXwR/mZ19eXC2vzaqrXLIs1HFPC0zOZbZe2mf
+	zg2XVbMWk3PoBPfEdrSyk6dzxyABqhWv1KieUokMpbIgkKcA2rVJXHjlsNmkKwLsmnGu8UDcUIA
+	En0/juIxuBrwsRBjqw9JiAkIBiv9prTBYFli2PikjnLJ4KGM5vH5avUooZ0kCqdemSpoWOunxc+
+	/XQtuwxyOSWrDgPNy6Fcu233ILSMHyAYF4fF0W5Zh1nQ8ZdFMEAsIHql2rBMimgaCxDH24IY8ZU
+	pbisl0SADoVrTgU21Ow1cn1IPkmwWjfK0kYfIazf+SSq5qNZwYFvGnfF4HV7wRqqGFB5Hm+Fjfd
+	KNQ5ng/tmY4pWJ69Qz8n34aVPtK9AdYOkFyNU8VRxl+XGb90sZyKDPffEgtD1dawAy+xynqbhlE
+	x7q/LwbhF5SJcUWhGV0RMF/WQpBPLWj6uFyU1wJyP0hu+Ai9k=
+X-Received: by 2002:a05:7022:791:b0:12d:de3f:d845 with SMTP id a92af1059eb24-12dfd878a73mr6644320c88.40.1777987203611;
+        Tue, 05 May 2026 06:20:03 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12df843f04esm17670938c88.13.2026.05.05.06.20.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 May 2026 06:20:03 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 5 May 2026 06:20:02 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Cc: Henrik Rydberg <rydberg@bitmath.org>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Benson Leung <bleung@chromium.org>, Xu Yilun <yilun.xu@intel.com>,
+	Tom Rix <trix@redhat.com>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
+Subject: Re: [PATCH] hwmon: Move MODULE_DEVICE_TABLE next to the table itself
+Message-ID: <f0aca43d-6fa2-4e24-aee1-17943fab6b62@roeck-us.net>
+References: <20260505102923.189289-2-krzysztof.kozlowski@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260505102923.189289-2-krzysztof.kozlowski@oss.qualcomm.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Critical] Changing the hwmon device name and splitting aggregate devices=
- breaks userspace hwmon tools and configurations.
---
+On Tue, May 05, 2026 at 12:29:22PM +0200, Krzysztof Kozlowski wrote:
+> By convention MODULE_DEVICE_TABLE() immediately follows the ID table it
+> exports, because this is easier to read and verify.  It also makes more
+> sense since #ifdef for ACPI or OF could hide both of them.
+> 
+> Most of the privers already have this correctly placed, so adjust
+> the missing ones.  No functional impact.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
-commit ef04f4845b76df7ab7442699654ee8214cc3a4ea
-Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Applied.
 
-thermal: hwmon: Register a hwmon device for each thermal zone
-
-The current code creates one hwmon device per thermal zone type and registe=
-rs
-it under the first thermal zone of that type. This commit addresses removal
-issues by registering one hwmon device for each thermal zone individually,
-appending the zone ID to the hwmon name, and giving each its own temp1_inpu=
-t.
-
-Link: https://lore.kernel.org/linux-pm/20260402021828.16556-1-liujia6264@gm=
-ail.com/
-
-> diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hw=
-mon.c
-> index 597c33c8a5550..223ae1571655b 100644
-> --- a/drivers/thermal/thermal_hwmon.c
-> +++ b/drivers/thermal/thermal_hwmon.c
-
-[ ... ]
-
-> @@ -137,54 +101,39 @@ int thermal_add_hwmon_sysfs(struct thermal_zone_dev=
-ice *tz)
->  {
->  	struct thermal_hwmon_device *hwmon;
->  	struct thermal_hwmon_temp *temp;
-> -	int new_hwmon_device =3D 1;
->  	int result;
-> =20
-> -	hwmon =3D thermal_hwmon_lookup_by_type(tz);
-> -	if (hwmon) {
-> -		new_hwmon_device =3D 0;
-> -		goto register_sys_interface;
-> -	}
-> -
->  	hwmon =3D kzalloc_obj(*hwmon);
->  	if (!hwmon)
->  		return -ENOMEM;
-> =20
-> -	INIT_LIST_HEAD(&hwmon->tz_list);
-> -	strscpy(hwmon->type, tz->type, THERMAL_NAME_LENGTH);
-> -	strreplace(hwmon->type, '-', '_');
-> +	/*
-> +	 * Append the thermal zone ID preceded by an underline character to the
-> +	 * type to disambiguate the sensors command output.
-> +	 */
-> +	scnprintf(hwmon->name, THERMAL_HWMON_NAME_LENGTH, "%s_%d", tz->type, tz=
-->id);
-> +	strreplace(hwmon->name, '-', '_');
-
-Could this change to the hwmon name attribute cause a regression for usersp=
-ace
-tools?
-
-Tools and configuration files, such as sensors.conf, typically use the name
-attribute for matching devices (for example, matching acpitz-*). Appending =
-an
-instance-specific ID to the name might prevent these configurations from
-applying correctly.
-
->  	hwmon->device =3D hwmon_device_register_for_thermal(&tz->device,
-> -							  hwmon->type, hwmon);
-> +							  hwmon->name, hwmon);
->  	if (IS_ERR(hwmon->device)) {
->  		result =3D PTR_ERR(hwmon->device);
->  		goto free_mem;
->  	}
-> =20
-> - register_sys_interface:
-> -	temp =3D kzalloc_obj(*temp);
-> -	if (!temp) {
-> -		result =3D -ENOMEM;
-> -		goto unregister_name;
-> -	}
-> +	temp =3D &hwmon->tz_temp;
-> =20
->  	temp->tz =3D tz;
-> -	hwmon->count++;
-> =20
-> -	snprintf(temp->temp_input.name, sizeof(temp->temp_input.name),
-> -		 "temp%d_input", hwmon->count);
-> -	temp->temp_input.attr.attr.name =3D temp->temp_input.name;
-> +	temp->temp_input.attr.attr.name =3D "temp1_input";
-
-Does splitting aggregate devices break existing sysfs access patterns?
-
-Previously, a single hwmon device might have contained multiple temperature
-inputs, like temp1_input and temp2_input. Since each zone now gets its own
-hwmon device with only a temp1_input, scripts or tools that explicitly read
-temp2_input from the old aggregate device path will likely fail with a miss=
-ing
-file error.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/6017595.DvuYhMxLoT@=
-rafael.j.wysocki?part=3D2
+Thanks,
+Guenter
