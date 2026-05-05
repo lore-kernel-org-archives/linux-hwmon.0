@@ -1,350 +1,264 @@
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49EA232938D;
-	Tue,  5 May 2026 09:25:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08F1834750E
+	for <linux-hwmon@vger.kernel.org>; Tue,  5 May 2026 10:07:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777973158; cv=none; b=jgsXllAEPyWDr30FXNx2pOPxWVMSO6g989iq4XT7aUer574FnHamGevwiKlMO2hBHoW86lK9+lXW6hJKBcBgCMOvXovcfP990XBAjwyGErbx2/Hm7oqAHCMHUnPkDZE8uxe7es/qTfZ5kWdctGzMoeJNoQiN3RA5atGKxQ22sgQ=
+	t=1777975641; cv=none; b=cwJDZH2y5po6E+VsOXq0qzo0JzKlYsIVwIhmVSeVHrgKw4+E8zUkeJ+a6frXo/KtpjADsaJ1UAkMOWcQlSxEnFcXXFSlYEMsb8tysDuxcqqX2IE7zeYis/9X7DHWLp177r/R6LoCLZPpj1vcvZCoudggZQ0bYwkxyr5eK/8Xtxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777973158; c=relaxed/simple;
-	bh=WBPsHbqW7UdU36gM7pH5yfZ8IMDJDQcfx+lfzFveNzU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=mSgEeVJ7S65V7lRHx7tpDVR8vGfUCZoat/8oFuV5cVOjy6kWmbPVQAuR8G0VPHlPFkeLTkHGgfAzHTXwGqbLqqCsMYv5WswtoDblTsvskos2dBIBk7+aAcUr5xHqtowMheyNTvjfW83I+h6gNKWUE7pDdvOvfneHpuOS25v5K2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=vF2BMlW/; arc=none smtp.client-ip=148.163.135.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
+	s=arc-20240116; t=1777975641; c=relaxed/simple;
+	bh=O7HJ+iuUgSEmxINiGFsHkAy2ayaorypC4azbolseFeA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NOgla/8Gd8Mnm52A2Q5XhNnf/JQDF2FY1GBhsHNOWWuBDxSfmh+i0aOGpkMXBEWQCoMw5QfgbrYBKdBGmLYYTE8RKkxpsMNHkSh/Wf8j3rLrrtv7NRrVg8meLu81PDXBM1vh6xhlMHEkB4Lf5KxmyjdiwPgenJecu+nPkaH3x4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=VOnCOWEW; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=c/YdMRP6; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="vF2BMlW/"
-Received: from pps.filterd (m0516787.ppops.net [127.0.0.1])
-	by mx0a-00128a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6456Erfe3424258;
-	Tue, 5 May 2026 05:25:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=DKIM; bh=R06Vg
-	F3PxAnsAPMZpNbjmCDk2VKdj0IrHJFsWLXHC8E=; b=vF2BMlW/F8D+LZjPrXxEY
-	2bMZ83gF3EiLdkPgeYKYm/RGqIiTCDUfur+tpDQeT2pRZ7Gsogz1cMs0Ok0WINOy
-	NRFzDNi7DJukw5YcnptKbIonJK8414dRCgGqpv78mS6PzoloXdBZ5A2Nq3KhmEWw
-	tmfv9feQ8wsPXJLC4eFm6k4ANCFhLKHRc7k3KZFUm+Ai8d71SNJetm4K7znjqLMJ
-	CzRQ3e78xJXp3qtZlNbxv4r9/85N9/D0+DFpbLZgtR6W2C6ALkj2giKi6QuaK5Nk
-	mCmKg7bbeY066v95dO0OSBYsD9UXawt2MuZZEXkKc/xnR4h2Xzjx0Ry3zB+W5Wty
-	Q==
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 4dx2kfrdns-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 May 2026 05:25:39 -0400 (EDT)
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 6459PcWb031794
-	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 5 May 2026 05:25:38 -0400
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.37; Tue, 5 May
- 2026 05:25:38 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.2.1748.37 via Frontend
- Transport; Tue, 5 May 2026 05:25:38 -0400
-Received: from ATORRENO-L02.ad.analog.com ([10.66.6.191])
-	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 6459PELF029445;
-	Tue, 5 May 2026 05:25:30 -0400
-From: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-Date: Tue, 5 May 2026 17:25:06 +0800
-Subject: [PATCH v4 2/2] hwmon: (pmbus/max20830) add driver for max20830
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="VOnCOWEW";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="c/YdMRP6"
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6459VeaZ2859493
+	for <linux-hwmon@vger.kernel.org>; Tue, 5 May 2026 10:07:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	1CHXNJkOqtV2IaCPgughLsXWthxGEfJxjBeiLJ6cvmg=; b=VOnCOWEW2TvIlK3Q
+	ARgKxP57sMfAZQZcswPrCqLGi+Vaeaq1hkgTP8tJnJiGlDj3uJwNOpuXO7Mh/ht3
+	V1ow7L0pE55AQi8YdjJVU2xRsE7SpptQpdDN7gGu1IWzT2ev6E+QIEAcE2a8lGKj
+	oznFRpPL5xt40632azAwkNgIDIQQzFu/JK2KVqbIOKKrGcrmlP4VUAmc+yYuUax/
+	XdyhFmbR8CMXpAhsfRuVhvAjAPKoQQ8nIbJMeMuaq6GSEUTMQBFH77ysT5uqMjuw
+	SdMsasqBBvVFSM3+fnN5OLY/X6kaoCCEQuZu/VY78uqdTTpWIwBaTnzgHvJZ+F5F
+	M20+6A==
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4dye0ag4v7-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-hwmon@vger.kernel.org>; Tue, 05 May 2026 10:07:18 +0000 (GMT)
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-50d5d1c2289so124001891cf.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 05 May 2026 03:07:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1777975638; x=1778580438; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1CHXNJkOqtV2IaCPgughLsXWthxGEfJxjBeiLJ6cvmg=;
+        b=c/YdMRP61bsehy4zH3CNr30nCxlTR120GoRtx+DQq0jEMkAvQq73GrwoU5aMKeC8EO
+         LB/2tdpHMfMzG3iSSfFppAT/roCcMFbp9fmXQRVhBYs7Xe2g2Czya9wc//vXUQSX+90y
+         CPsdcTF02aOAzS5e04zwqrTkTLHXj4Zfd5t9BYtBbsYCOJlm3kCGbI51xLSdu3FXj5aH
+         kR3c1CYdMGySgTI9AHaBru8aZbPFrl1jE+zRz68TOStTXx5GOadlgMyHomyrPl/a6VGn
+         REuHtWyhf6aRFLPRFSHFYH078AZsO/8ibffuGZIVoR5E8NP9rKbT7d3ljnDye6lEpTxr
+         p9qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777975638; x=1778580438;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1CHXNJkOqtV2IaCPgughLsXWthxGEfJxjBeiLJ6cvmg=;
+        b=Z7KlXJ09Gr/jIhFWrQtZ4KruSDMREj5HFKqBM4KvricdNrEiWse2yEbMGS9koMGHTH
+         cMkwY8tOm940qqcVy9D/LdTnDDMLRzMDvWcHm8boSPnXZnsxl26G3eZerLL+uZmKkh8/
+         7j27KnxXDSGrYYtsdo3Vx7T5C1f892AX3IJAALKeBpvThTTOW1U4ao1lTvdR6xFNfJ2T
+         X7C+qM5uL/l6Gr4wKwDXlZg0Puxzgco5OaRIHP/LKVtRh5a0exO3qdWP5+WP2a77cGdN
+         oFKcRSUrvZAp4ZGzkn6CK9ztSxVLE1/Gz+1auGnxbsBSX2R8J6qC8ky3N+hIE4VJC+2c
+         jKmA==
+X-Forwarded-Encrypted: i=1; AFNElJ9Tb+Q1StE512SIMuRCUiuAQovDtSrkynqMCM4Cs3TFwWL1D+emkWI2bP2y8dLGv/yAUtL9cWpiHRXxWQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwudRoiGtXvzlyLa9G7k+CPbpLuYqFcyKtwnf5SmA1lIoZvnkXq
+	IeV21Ux7gaXS8197oZF5SPAIcQVQbLmWvzPZ5lzp8GBGC6Trdx9bqyx+fEqDsesK7lFhwNMU/oS
+	5BQy+Ud5adVJ6vAk004Ly++SrVG23tjtmdMqvR39BsP3pYHEzhKVo0ed+vRBiqc4rsw==
+X-Gm-Gg: AeBDies8ibPCuE30gIPcstZrWbiqD7mi4CWS9M/IxuqCj70MBMKAF44CfN9nRJYL8Px
+	24mnARgkBRfABcpL5ieVOgwyx7rMiBxLfQmVn/zdBvlp+0aCcoFpsbvXjQj1eUIDLj13xStnu/m
+	8H/f3zobuSx1rNMBGhUdiQrOH/g0eZrEV5N9ciyR1fugOoHIftrZU0jQmmuh45us9IEeGMp7qqv
+	aYdSkOIIkZ444UeBUYHx6sX545JdKII1C45keMNtxTcvQb7BHmXsyb/n+F0aSysNH10dT32t+kd
+	zYmUTuTIIKUoiWcy5bq24AjYvzTYD/tEBbt0V1MdSBQxnOVc14k2Z9zpNQlUIORf0ULo39O2LuM
+	QHMU+L4o5Y8PTgw4XNoAST0OtvP/OqeX2YnKV2MbpcIVXvaSfVO3eZdPwVWDPligVxA+lpRyml/
+	louSfOkmY/idHtLvUq
+X-Received: by 2002:a05:622a:4c83:b0:50f:b4c0:62ff with SMTP id d75a77b69052e-5104bfa6b9amr181644381cf.54.1777975638373;
+        Tue, 05 May 2026 03:07:18 -0700 (PDT)
+X-Received: by 2002:a05:622a:4c83:b0:50f:b4c0:62ff with SMTP id d75a77b69052e-5104bfa6b9amr181643591cf.54.1777975637812;
+        Tue, 05 May 2026 03:07:17 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:3d0:c2e8:9f02:5c9d? ([2a05:6e02:1041:c10:3d0:c2e8:9f02:5c9d])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45052a48c04sm3430045f8f.15.2026.05.05.03.07.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 May 2026 03:07:17 -0700 (PDT)
+Message-ID: <731f3161-a202-40e0-ac22-aa16ea58e832@oss.qualcomm.com>
+Date: Tue, 5 May 2026 12:07:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20260505-dev_max20830-v4-2-4343dcbfd7d7@analog.com>
-References: <20260505-dev_max20830-v4-0-4343dcbfd7d7@analog.com>
-In-Reply-To: <20260505-dev_max20830-v4-0-4343dcbfd7d7@analog.com>
-To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 03/11] thermal/of: Move the node pointer assignation in
+ the OF code file
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: daniel.lezcano@kernel.org, gaurav.kohli@oss.qualcomm.com,
+        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+        Rob Herring <robh@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>
-CC: <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        Alexis Czezar
- Torreno <alexisczezar.torreno@analog.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1777973114; l=8494;
- i=alexisczezar.torreno@analog.com; s=20250213; h=from:subject:message-id;
- bh=WBPsHbqW7UdU36gM7pH5yfZ8IMDJDQcfx+lfzFveNzU=;
- b=2S5yGUsJRhtoQQuy6YWhhx6i9ewrgj+d3ukw6ZctfaZCZFsKTFGYbkHTmfg8ctGIKK8K1+9du
- 6J7OX7B+ZiNDreeYmQivqbK8zMAF4fjlDOK2AKfkxDY+N3ihah1i0tf
-X-Developer-Key: i=alexisczezar.torreno@analog.com; a=ed25519;
- pk=XpXmJnRjnsKdDil6YpOlj9+44S+XYXVFnxvkbmaZ+10=
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: JPdJ1kjSsW5pc_xz2b0u8mTJIDRSxlcd
-X-Proofpoint-ORIG-GUID: JPdJ1kjSsW5pc_xz2b0u8mTJIDRSxlcd
-X-Authority-Analysis: v=2.4 cv=ZbMt8MVA c=1 sm=1 tr=0 ts=69f9b793 cx=c_pps
- a=3WNzaoukacrqR9RwcOSAdA==:117 a=3WNzaoukacrqR9RwcOSAdA==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=0sLvza09kfJOxVLZPwjg:22 a=OmVn7CZJonkx5R5zMQLL:22 a=gAnH3GRIAAAA:8
- a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8 a=7TXwWxp8f6xCumHJxbYA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA1MDA4NyBTYWx0ZWRfX7V6DONwwhjB+
- +zn4b71NGEnfzbGp5F/YPxyq7aDog3FKrZpQ55o8W81CenJxAfEifBOnJVyh12gprWaAPSHifaQ
- Ts3MV2TI7hKYcjfJlO4rirtKoyP983If7MFijIHO+YrKHTVk+WJc5U76Eq7RKd7TFs+Ck68x4uQ
- JZvnU+sInJuzTb6PNGpl0vejd0Gabxclg3yUC0laXSXQzblMOmKmzvo2+Rp6+Jk/8F9goZHIHMo
- PUy8Evvq0oOo5APn+nc8gLMmVrm5/3uDV3v3uH6zQcL7RY8eLYmKP2EjEL874U7gVarljigULeq
- Wr4OIhDan/ijPxxA4dUv17DiBP1hiutxJJpjZKA02I51iUDrRSNDhQIdFetxYLV0pUFOC49aFw6
- XdzhYVMrqxdQS+VCZj96NXuv+VgfN5fWyo0MIeauTtlcQVOtjwoSX8NHVcIFz8Xz86ZdVXHUY1P
- VUT/Jn7sPz2jwugXqSg==
+        Conor Dooley <conor+dt@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+        Guenter Roeck <linux@roeck-us.net>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@codeconstruct.com.au>,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Benson Leung <bleung@chromium.org>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?=
+ <pali@kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>, Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Amit Kucheria
+ <amitk@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+References: <20260429161430.3802970-1-daniel.lezcano@oss.qualcomm.com>
+ <20260429161430.3802970-4-daniel.lezcano@oss.qualcomm.com>
+ <CAJZ5v0jTbOkR8Odok2Cq6iWHGRzkF56spHr2xp_M8Zayg6ZAfA@mail.gmail.com>
+ <CAJZ5v0ikmPwRq6ykwCH=Qi7Z477sTktm5dRU721Ye6+qQKs2Dw@mail.gmail.com>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+In-Reply-To: <CAJZ5v0ikmPwRq6ykwCH=Qi7Z477sTktm5dRU721Ye6+qQKs2Dw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA1MDA5NCBTYWx0ZWRfX4caoDFVoogxt
+ Hw/7KVwg64AM0VRrs74Me8M/dyn3ATnlEKOwckF1BtUGKfhg5Q8RKr26oEUC0tTmDEemJMhLyV4
+ kf5k/zMsAOGwtKmA1MQheGBfkJAJb228CuHWgNIe68oE0HGv6Q+H0EJHaInfL7KAUXEFMSmb8pP
+ rBlfWAxhLX53je+UDM41ncbkMLesvSRq/08oa3vJEo3WUfcK73aJadFUJrhDfs4WVuE7DQzwv5r
+ tDH7YQTO/w5WuPMpazKwcdi7u9e06EO9YuslrxyeSAEOqo+LfzS6+6Ix1LTO/glRSpM7KO5bcTu
+ SQnIG6ZaKxCS7Ttjoa+ovhmOXgtW9FQQJ6QpufJAtpLRiZz7YPACkeOCK/a2S/hZrVYC4EwVEmQ
+ tAT3Ztn8oqOlQg2Dbcgg7LG8lIeBYYWy/ETQJWS3LpacG1dnXss+Kk37N4qKHxCR8iYtN6uu2LM
+ vQI8tRc1mkGbvoNcSJw==
+X-Authority-Analysis: v=2.4 cv=Wtkb99fv c=1 sm=1 tr=0 ts=69f9c156 cx=c_pps
+ a=JbAStetqSzwMeJznSMzCyw==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=gowsoOTTUOVcmtlkKump:22 a=VwQbUJbxAAAA:8
+ a=EUspDBNiAAAA:8 a=YZGnXRgRHs9QsuzmzP0A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=uxP6HrT_eTzRwkO_Te1X:22
+X-Proofpoint-GUID: TK0lS58JW0nF5DxOnCmdtIKbnNDHVrYe
+X-Proofpoint-ORIG-GUID: TK0lS58JW0nF5DxOnCmdtIKbnNDHVrYe
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-05-05_02,2026-04-30_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 lowpriorityscore=0 suspectscore=0 bulkscore=0 impostorscore=0
- adultscore=0 spamscore=0 clxscore=1015 priorityscore=1501 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605050087
+ suspectscore=0 priorityscore=1501 lowpriorityscore=0 phishscore=0
+ malwarescore=0 spamscore=0 bulkscore=0 adultscore=0 clxscore=1015
+ impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2604200000
+ definitions=main-2605050094
 
-Add support for MAX20830 step-down DC-DC switching regulator with
-PMBus interface. It allows monitoring of input/output voltage,
-output current and temperature through the PMBus serial interface.
+On 5/1/26 14:50, Rafael J. Wysocki wrote:
+> On Thu, Apr 30, 2026 at 10:12 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>>
+>> On Wed, Apr 29, 2026 at 6:14 PM Daniel Lezcano
+>> <daniel.lezcano@oss.qualcomm.com> wrote:
+>>>
+>>> The node pointer being assigned to the cooling device structure is an
+>>> action done by the thermal OF only and does not belong to the core
+>>> framework code. Move the node pointer assignation in the thermal OF
+>>> code. Consequently, the devm_thermal_of_cooling_device_register() can
+>>> call its non-devm version resulting in a more intuitive design of the
+>>> API.
+>>
+>> I wouldn't make this change.
+>>
+>> It adds overhead to the OF case that's not really necessary and
+>> complicates the code just to avoid using struct device_node pointers
+>> in the core and I'm not really convinced that passing a function
+>> pointer to __thermal_cooling_device_register() is so much better.
+> 
+> I would start with splitting __thermal_cooling_device_register() so
+> that it becomes (sorry for the white space breakage induced by GMail)
+> 
+> static struct thermal_cooling_device *
+> __thermal_cooling_device_register(struct device_node *np,
+>                    const char *type, void *devdata,
+>                    const struct thermal_cooling_device_ops *ops)
+> {
+>      struct thermal_cooling_device *cdev;
+> 
+>      cdev = thermal_cooling_device_alloc(ops);
+>      if (IS_ERR(cdev))
+>          return cdev;
+> 
+>      cdev->np = np;
+> 
+>      return thermal_cooling_device_add(cdev, type, devdata, ops);
+> }
+> 
+> where thermal_cooling_device_alloc() does all of the ops and other
+> checks and the cdev struct allocation, and
+> thermal_cooling_device_add() does everything else previously done by
+> __thermal_cooling_device_register() itself.
+> 
+> Then, it could be renamed to __thermal_of_cooling_device_register()
+> and the non-of variant would simply skip the np assignment (and it
+> would not take np as an argument).
+> 
+> You can deal with the devm_ variants of the above analogously.
 
-Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
----
- Documentation/hwmon/index.rst    |   1 +
- Documentation/hwmon/max20830.rst |  49 +++++++++++++++++
- MAINTAINERS                      |   2 +
- drivers/hwmon/pmbus/Kconfig      |   9 ++++
- drivers/hwmon/pmbus/Makefile     |   1 +
- drivers/hwmon/pmbus/max20830.c   | 110 +++++++++++++++++++++++++++++++++++++++
- 6 files changed, 172 insertions(+)
+So we will end up with:
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 8b655e5d6b68b90c697a52c7bf526e81d370caf7..56f7eb761be76dd627a2f34135abad05203b0582 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -158,6 +158,7 @@ Hardware Monitoring Kernel Drivers
-    max197
-    max20730
-    max20751
-+   max20830
-    max31722
-    max31730
-    max31760
-diff --git a/Documentation/hwmon/max20830.rst b/Documentation/hwmon/max20830.rst
-new file mode 100644
-index 0000000000000000000000000000000000000000..936e409dcc5c0898dde27d782308d4a7e1357e73
---- /dev/null
-+++ b/Documentation/hwmon/max20830.rst
-@@ -0,0 +1,49 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver max20830
-+======================
-+
-+Supported chips:
-+
-+  * Analog Devices MAX20830
-+
-+    Prefix: 'max20830'
-+
-+    Addresses scanned: -
-+
-+    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/max20830.pdf
-+
-+Author:
-+
-+  - Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-+
-+
-+Description
-+-----------
-+
-+This driver supports hardware monitoring for Analog Devices MAX20830
-+Step-Down Switching Regulator with PMBus Interface.
-+
-+The MAX20830 is a 2.7V to 16V, 30A fully integrated step-down DC-DC switching
-+regulator. Through the PMBus interface, the device can monitor input/output
-+voltages, output current and temperature.
-+
-+The driver is a client driver to the core PMBus driver. Please see
-+Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
-+
-+Sysfs entries
-+-------------
-+
-+================= ========================================
-+in1_label         "vin"
-+in1_input         Measured input voltage
-+in1_alarm         Input voltage alarm
-+in2_label         "vout1"
-+in2_input         Measured output voltage
-+in2_alarm         Output voltage alarm
-+curr1_label       "iout1"
-+curr1_input       Measured output current
-+curr1_alarm       Output current alarm
-+temp1_input       Measured temperature
-+temp1_alarm       Chip temperature alarm
-+================= ========================================
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 031c743e979521a92ed9ac67915c178ce31727bd..d6a6745e2dae29c3b8f80bbe61c54a2f5ecd9f47 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15585,6 +15585,8 @@ L:	linux-hwmon@vger.kernel.org
- S:	Supported
- W:	https://ez.analog.com/linux-software-drivers
- F:	Documentation/devicetree/bindings/hwmon/pmbus/adi,max20830.yaml
-+F:	Documentation/hwmon/max20830.rst
-+F:	drivers/hwmon/pmbus/max20830.c
- 
- MAX2175 SDR TUNER DRIVER
- M:	Ramesh Shanmugasundaram <rashanmu@gmail.com>
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 8f4bff375ecbc355f5ed3400855c2852ec2aa5ef..987705bf45b75b7b91ccc469247909f3c3f53d77 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -365,6 +365,15 @@ config SENSORS_MAX20751
- 	  This driver can also be built as a module. If so, the module will
- 	  be called max20751.
- 
-+config SENSORS_MAX20830
-+	tristate "Analog Devices MAX20830"
-+	help
-+	  If you say yes here you get hardware monitoring support for Analog
-+	  Devices MAX20830.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called max20830.
-+
- config SENSORS_MAX31785
- 	tristate "Maxim MAX31785 and compatibles"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index 7129b62bc00f8a2e98de14004997752a856dfda2..bc52f930e0825a902a0dd1c9e2b44f2e8d577c35 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -36,6 +36,7 @@ obj-$(CONFIG_SENSORS_MAX16601)	+= max16601.o
- obj-$(CONFIG_SENSORS_MAX17616)	+= max17616.o
- obj-$(CONFIG_SENSORS_MAX20730)	+= max20730.o
- obj-$(CONFIG_SENSORS_MAX20751)	+= max20751.o
-+obj-$(CONFIG_SENSORS_MAX20830)	+= max20830.o
- obj-$(CONFIG_SENSORS_MAX31785)	+= max31785.o
- obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
- obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
-diff --git a/drivers/hwmon/pmbus/max20830.c b/drivers/hwmon/pmbus/max20830.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..0f958e5eae1fa97e12ec73de1103cfed3d9228cb
---- /dev/null
-+++ b/drivers/hwmon/pmbus/max20830.c
-@@ -0,0 +1,110 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Hardware monitoring driver for Analog Devices MAX20830
-+ *
-+ * Copyright (C) 2026 Analog Devices, Inc.
-+ */
-+
-+#include <linux/errno.h>
-+#include <linux/i2c.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/string.h>
-+#include "pmbus.h"
-+
-+#define MAX20830_IC_DEVICE_ID_LENGTH	9
-+
-+static struct pmbus_driver_info max20830_info = {
-+	.pages = 1,
-+	.format[PSC_VOLTAGE_IN] = linear,
-+	.format[PSC_VOLTAGE_OUT] = linear,
-+	.format[PSC_CURRENT_OUT] = linear,
-+	.format[PSC_TEMPERATURE] = linear,
-+	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
-+		PMBUS_HAVE_TEMP |
-+		PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_STATUS_IOUT |
-+		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP,
-+};
-+
-+static int max20830_probe(struct i2c_client *client)
-+{
-+	u8 buf[I2C_SMBUS_BLOCK_MAX + 1] = {};
-+	int ret;
-+
-+	if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_READ_BLOCK_DATA) &&
-+	    !i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_READ_I2C_BLOCK))
-+		return -ENODEV;
-+
-+	/*
-+	 * Use i2c_smbus_read_block_data() if supported, otherwise fall back
-+	 * to i2c_smbus_read_i2c_block_data() to support I2C controllers
-+	 * which do not support SMBus block reads.
-+	 */
-+	if (i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_READ_BLOCK_DATA)) {
-+		/* Reads 9 Data bytes from MAX20830 */
-+		ret = i2c_smbus_read_block_data(client, PMBUS_IC_DEVICE_ID, buf);
-+		if (ret < 0)
-+			return dev_err_probe(&client->dev, ret,
-+					     "Failed to read IC_DEVICE_ID\n");
-+	} else {
-+		/* Reads 1 length byte + 9 Data bytes from MAX20830 */
-+		ret = i2c_smbus_read_i2c_block_data(client, PMBUS_IC_DEVICE_ID,
-+						    MAX20830_IC_DEVICE_ID_LENGTH + 1,
-+						    buf);
-+		if (ret < 0)
-+			return dev_err_probe(&client->dev, ret,
-+					     "Failed to read IC_DEVICE_ID\n");
-+		/*
-+		 * Moves data forward, removing the length byte, this is to
-+		 * match the format of i2c_smbus_read_block_data().
-+		 * Also adjust return value to reflect length byte removal.
-+		 */
-+		memmove(buf, buf + 1, MAX20830_IC_DEVICE_ID_LENGTH);
-+		ret = ret - 1;
-+	}
-+
-+	/*
-+	 * MAX20830 IC_DEVICE_ID sends string data "MAX20830\0".
-+	 * Return value should at least be 9 bytes of data.
-+	 */
-+	if (ret < MAX20830_IC_DEVICE_ID_LENGTH)
-+		return dev_err_probe(&client->dev, -ENODEV,
-+				     "IC_DEVICE_ID too short: expected at least 9 bytes, got %d\n",
-+				     ret);
-+
-+	/* 9 bytes of data, buf[0]-buf[7] = "MAX20830", buf[8] = '\0' */
-+	buf[MAX20830_IC_DEVICE_ID_LENGTH-1] = '\0';
-+	if (strncmp(buf, "MAX20830", MAX20830_IC_DEVICE_ID_LENGTH-1))
-+		return dev_err_probe(&client->dev, -ENODEV,
-+				     "Unsupported device: '%s'\n", buf);
-+
-+	return pmbus_do_probe(client, &max20830_info);
-+}
-+
-+static const struct i2c_device_id max20830_id[] = {
-+	{"max20830"},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, max20830_id);
-+
-+static const struct of_device_id max20830_of_match[] = {
-+	{ .compatible = "adi,max20830" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, max20830_of_match);
-+
-+static struct i2c_driver max20830_driver = {
-+	.driver = {
-+		.name = "max20830",
-+		.of_match_table = max20830_of_match,
-+	},
-+	.probe = max20830_probe,
-+	.id_table = max20830_id,
-+};
-+
-+module_i2c_driver(max20830_driver);
-+
-+MODULE_AUTHOR("Alexis Czezar Torreno <alexisczezar.torreno@analog.com>");
-+MODULE_DESCRIPTION("PMBus driver for Analog Devices MAX20830");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("PMBUS");
+static struct thermal_cooling_device *
+__thermal_of_cooling_device_register(struct device_node *np,
+		const char *type, void *devdata,
+		const struct thermal_cooling_device_ops *ops)
+{
+	struct thermal_cooling_device *cdev;
 
--- 
-2.34.1
+	cdev = thermal_cooling_device_alloc(ops);
+	if (IS_ERR(cdev))
+		return cdev;
+
+	cdev->np = np;
+
+	return thermal_cooling_device_add(cdev, type, devdata, ops);
+}
+
+and
+
+static struct thermal_cooling_device *
+__thermal_cooling_device_register(const char *type, void *devdata,
+		const struct thermal_cooling_device_ops *ops)
+{
+	struct thermal_cooling_device *cdev;
+
+	cdev = thermal_cooling_device_alloc(ops);
+	if (IS_ERR(cdev))
+		return cdev;
+
+	return thermal_cooling_device_add(cdev, type, devdata, ops);
+}
+
+Right ?
+
+That is what I did more or less initially [1]. It resulted into 
+exporting thermal_cooling_device_init_complete(). Here it is similar, 
+with other functions.
+
+The reason why I added an init callback in the 
+thermal_cooling_device_register() function is to centralize the cooling 
+device register logic into the core code only.
+
+By exporting the thermal_cooling_device_add() and 
+thermal_cooling_device_alloc() we duplicate the logic and IMO it is not 
+desirable.
+
+By introducing a init callback, the core code gives the opportunity to 
+any extra layers to initialize some private data in the cooling device 
+before the init completion
+
+[1] 
+https://lore.kernel.org/all/20260422174305.2899095-4-daniel.lezcano@oss.qualcomm.com/
+
 
