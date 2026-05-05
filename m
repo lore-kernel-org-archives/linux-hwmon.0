@@ -1,162 +1,174 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 183F03FA5C7
-	for <linux-hwmon@vger.kernel.org>; Mon,  4 May 2026 19:26:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BBC440DFB4;
+	Tue,  5 May 2026 09:25:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777922811; cv=none; b=IGWPn+3yutzKMPOZ/H2NqmJk3GrYvrCXiY/SUyPBMj0emo7TuaVEN8dbnOecWP5Ekt1XUx0c+wDLrGM0xF+RDLhPvDOdIND8UzJf5bvVu1SIq7cqfRf7lZucb2Oi2mIHVSuxDdZMmS8AZPIdq9kxZ5zCbd/MJ7kG3flx9KLC9AI=
+	t=1777973149; cv=none; b=f8Y5IY3rjwIVCDq8OTw9PTNUBfXcwlAfFS+4nmHHlEF5DJVgn1NY5ddWSEk0HfgeqNhN0fpj19buU9sPpekllI5wjGcTLPkB2ZF5XzlcqgFEWF7zbs2+S1IZ5Py5Hu8XEPSoiNrpfByzx8quU2d0sp7I7r2gmrIOXE+7vBW1R08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777922811; c=relaxed/simple;
-	bh=sASxvmxm4NYk57Kzk+zWsxxSkgmmvWJ+ADgKtzgBcKs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aPg5iXC3CkSWE/979ZRxFiIuBcH7zBm1L80UvKezogc2RSIEfFKX9XyOVAiE6+sUY5I22QgyN66BAwpHE4/v7CTMFgRHMK7lTuGAZJvMZa8GQZucXTxLQw/L6M90oTG7T7Jd1zV7UUXJupJQqOHOQ9KHde/K1o5+Y057065bfVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=onMHqcmL; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777973149; c=relaxed/simple;
+	bh=YwOxyr91bjaTxnMya4FX4eLzATEVx5qhhUCRFDD8ZVI=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=obGrLkQIP+ICnXr50FnjgDw3vJ/9FWsOjvsnXpb6lcxt0oalkQThO785RMnGCBh2d8NfebZi+h9KMsAeQDDwXN/JEpM4ERx+ZfXWVcE+NB0lOWSI7KdpMOMyayDTpUsucdgFc4tTskNc/gQpu7qj0MmyKFcrtgCMFXPoV9T2FEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=HxnLQI4H; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="onMHqcmL"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3651fa24c6bso1450535a91.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 04 May 2026 12:26:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777922808; x=1778527608; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=cTcvhNgcr7S4Cz3nerEDWFy/RWfW3N6YyG0A4VR1wYg=;
-        b=onMHqcmLx/WzU4KQi9fXRu/QMT5OQdzwHEf6NIFIflP64ZU6W5xPSHGTwQKV9zqNCq
-         hTcO7Bh0yOUoBKmadjDNAqo0+vgBAqH68XvRPvYTjpZMp60ILSOAEmJvtYgONq0T1C5c
-         RxAMlWFn4b6ystpwnFgddhBiPKAFsG909lezVG6xsXQaCZXh0Rzvg1bMxDk9C0tkf8pM
-         Km73PlAwVdgBSip7nEw/joFTYp/DahkVuHDxMcU+V7/30KgcEEK9z4FkgHDkQEL73tER
-         XkHpgl+euXxs755AROF0Ob7dmJwz4efKUBb9k53x8F122ygu+RqCjNMS4D/YcvSlQpKr
-         iPfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777922808; x=1778527608;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cTcvhNgcr7S4Cz3nerEDWFy/RWfW3N6YyG0A4VR1wYg=;
-        b=E79fpbVMgAGsyfH19alGB2lMIjrQu5DF51D+9Ewgi+YJS/lmC89chwE8rNfFRm8vZu
-         krSaee6K77qgPG4fbu9DsS4cM4LoiDob1HaRo6LeHJZC2F6Wc1yha0bDSqqbIxhwbuSi
-         VCB9h2RFngJM72hRBP4w6IR8W70BFaBrOuwdPXUiFlsJ0UOumFerjRcGZjfjNgwoOATo
-         rOAdh+ezdv03j3Q8Tt+r/VVWlcg7i0hR5KU50VP9dgN8WSAKaoI/dzjmpm8qNI36f90M
-         ZR7hqA5/wM+y5zWV0wwNvf+fIVMCJwTblQFxLHHF+Jkt3OUEV6oZW/L3zfNzy0yOHnbY
-         pccg==
-X-Forwarded-Encrypted: i=1; AFNElJ+SEfE/qsecyTROObuRJ2I7qs2RF9/MhhPchzdLdF9lzTNo1z4sLJUPFT2cdoWSoVx/+guxjzIGc0USSQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7P5G+xrxMIHh2/vW/ZYu2XZWSxPVtHNZu9Yk2flzUdVJSztns
-	Tpmc+sIarvXXgWKbE614awCf6Nr9JQAtrOAdls98NUkLVv6xL2iwJmTX
-X-Gm-Gg: AeBDiesHvKgdyAuSjEWlUZ7lPpWLYElHOXFEPi4M/toFzTrm1PuuOIUZm8wQmrjWMFj
-	I2E7eePDwH+MyupmCFppILH6zTgX2txgCirl9qPjSOXhjobuKVxi62tqZSu5+YKibijhAaIEldC
-	dCc17ycz3mCdsMmrN8Wv/o1FWnL90zgXoggwnCyEplWoWqx4EqAqPhE0TboWxu8397zP3l0Au4x
-	IRYWQtQUuzrE+aCUvfJJl8hwfBcS5JuPOzfMde/Icbw+fDdV3VDXVeClfEV9GD/Vzmk5DjSFCRF
-	3BR+0nj/yW5xCGq7xUzo8eYNlqskjk4aH4yYkwhemUy4+4/kzXwmi4YT9CfRQBKR/a3zvhZk/In
-	zAHbtnRwBTVJddk/q000k7QgfyC9TAuTP9WHgUG8IT0rXIvTzpKEfGnjDmaioZhA8FrHPbMeVjh
-	HWorHRzCTCoiFk/OPP5zY6bNMeDSyfZQ9LL8Dl6RVfSnn0hBX4+Rsz/IIValPu2zvSY8/UE2Dy8
-	fOXM+kbP6A=
-X-Received: by 2002:a17:90b:254e:b0:35f:bf4b:c396 with SMTP id 98e67ed59e1d1-3657736f0camr255503a91.1.1777922808457;
-        Mon, 04 May 2026 12:26:48 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-364be00b175sm14823232a91.9.2026.05.04.12.26.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 May 2026 12:26:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <66268e35-4897-4c40-b358-1c973b70426b@roeck-us.net>
-Date: Mon, 4 May 2026 12:26:43 -0700
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="HxnLQI4H"
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6455ADfR2211938;
+	Tue, 5 May 2026 05:25:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=DKIM; bh=JLxODZ+i/BQ948REmsWJ30LhSSJ
+	A9QisO/tghMAl6JY=; b=HxnLQI4HT2hfATCg/VjOdYO/5IdgYhdYsohE9DoqP+d
+	H3sPJGDg/TIl4MDw+1Sj54Y2BnO9b6Uwl5K8Rg1rGvRxCwK/KmKHzn5Xa91qfe5C
+	mNns7JBiOr63VFr3aTHIFMGobPx1HPQEbxgNZbgySdSjzX8YD02YQ6kTnIZM56UP
+	ODLVC3cg3h6Hy++eWFDuy3FEZ9XElGJDaPe01cR54mdvn+lcpz1yezt7jl8Is54h
+	Hhsy/ZxcxsL1dGmcSOwCxdP7HUY95FQH1KpoZGvBiHabDfPsiWKjj2fNJODiWNr+
+	x3VXt4AI/R+SpGCePoUBv6r3BTa7l67oJsAPhcJvoWA==
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 4dwb43b735-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 05 May 2026 05:25:30 -0400 (EDT)
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 6459PTf1031742
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Tue, 5 May 2026 05:25:29 -0400
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.37; Tue, 5 May 2026 05:25:29 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.37; Tue, 5 May 2026 05:25:29 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.1748.37 via Frontend
+ Transport; Tue, 5 May 2026 05:25:29 -0400
+Received: from ATORRENO-L02.ad.analog.com ([10.66.6.191])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 6459PELD029445;
+	Tue, 5 May 2026 05:25:17 -0400
+From: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+Subject: [PATCH v4 0/2] Add support for MAX20830 PMBUS
+Date: Tue, 5 May 2026 17:25:04 +0800
+Message-ID: <20260505-dev_max20830-v4-0-4343dcbfd7d7@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/5] iio: adc: add Versal SysMon driver
-To: Jonathan Cameron <jic23@kernel.org>, Salih Erim <salih.erim@amd.com>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, git@amd.com,
- nuno.sa@analog.com, andy@kernel.org, dlechner@baylibre.com,
- michal.simek@amd.com, conall.ogriofa@amd.com, erimsalih@gmail.com,
- linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20260502111951.538488-1-salih.erim@amd.com>
- <20260502111951.538488-3-salih.erim@amd.com>
- <20260504183215.37c8ae65@jic23-huawei>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260504183215.37c8ae65@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHC3+WkC/3XM3w6CIByG4VtpHEf78UfQjrqP1hoCKltKg8Zsz
+ nsPPTJbh9+3Pe+Eog3ORnQ+TCjY5KLzQx78eEC6U0NrsTN5IwpUACccG5vuvRoplAxwxQXUFdW
+ NUApl8gy2ceOau97y7lx8+fBe64ks759QIhgwJWBYU1JdSHJRg3r49qR9j5ZSolstdpouWksjp
+ DAaavOj2VbLnWZZg65LUwgQUqkvPc/zB77JjpIlAQAA
+X-Change-ID: 20260414-dev_max20830-9460b92cf6aa
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>
+CC: <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        "Alexis Czezar
+ Torreno" <alexisczezar.torreno@analog.com>,
+        Conor Dooley
+	<conor.dooley@microchip.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777973114; l=2624;
+ i=alexisczezar.torreno@analog.com; s=20250213; h=from:subject:message-id;
+ bh=YwOxyr91bjaTxnMya4FX4eLzATEVx5qhhUCRFDD8ZVI=;
+ b=iChA+dFxI9DOp4dPbc/E4mSx75qrZSotLqfpLiSXYOSmkvTf2OaTXJiC1o8aMVZ89cYjWCiwa
+ IhsyJ42KYbJCbsWs20U+6VVES5WiEsGz1o6l5hvm0OCfsHVXxbTQeTM
+X-Developer-Key: i=alexisczezar.torreno@analog.com; a=ed25519;
+ pk=XpXmJnRjnsKdDil6YpOlj9+44S+XYXVFnxvkbmaZ+10=
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA1MDA4NyBTYWx0ZWRfX0KHkP98ORQsk
+ GRdrcBmciCWerfnazhBzERSdFZrwUJxDU14TxZWDEriBKy5rhQzlO1Qq2vKB1bYVtv49fFSsR5W
+ aYeHnCzJbQM8eZwZCkT8odG/KwOCDgfzWUrRgbENgOebF/wUdeOejBubASTthKAcbUB7xYpJyKb
+ EdJeDSuvc6FvOZOnz8ceyd9c0dgkDuK0IBWMO/I09RP0spml3s2pAFKuSNPoqEUDfdP/sERYf9Q
+ JToLDQHpUetjzwyk53hYi82QrWXbqnGr8Df5kIxplNe7iz0fTReQWyv7uMXz7vG32Xga2Xl39tY
+ 2lbnCOXzpk2XeV5K6ld7sziB/MiiSM4TacsmulMTWcYdTEF4dbZJa14G6XRwCYOWSMAEozNAtDt
+ zN+avEgaTO3tGw2xmkrA3UxoDmNgYIh3pykUJIOvzNSOFP5kHvMvRE6jo2pDaCwxrAu7O7CS2BS
+ JL62bUFfmzuE9YQqAtw==
+X-Proofpoint-ORIG-GUID: LsvfyNOypqj4DDdE0QtANintqh71CyFM
+X-Authority-Analysis: v=2.4 cv=AeeB2XXG c=1 sm=1 tr=0 ts=69f9b78a cx=c_pps
+ a=3WNzaoukacrqR9RwcOSAdA==:117 a=3WNzaoukacrqR9RwcOSAdA==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=0sLvza09kfJOxVLZPwjg:22 a=uXIjobp8t2wMuQ0fPvqm:22 a=gAnH3GRIAAAA:8
+ a=VwQbUJbxAAAA:8 a=2qLcT7M3tytojYbHFIcA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: LsvfyNOypqj4DDdE0QtANintqh71CyFM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-05_02,2026-04-30_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 spamscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
+ priorityscore=1501 malwarescore=0 adultscore=0 clxscore=1011 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605050087
 
-On 5/4/26 10:32, Jonathan Cameron wrote:
-> On Sat, 2 May 2026 12:19:48 +0100
-> Salih Erim <salih.erim@amd.com> wrote:
-> 
->> Add the AMD/Xilinx Versal System Monitor (SysMon) IIO driver.
->>
->> The driver is split into a bus-agnostic core module
->> (versal-sysmon-core) and a memory-mapped I/O platform driver
->> (versal-sysmon). The core uses the regmap API so that different
->> bus implementations can share the same IIO logic.
->>
->> The core provides:
->>    - Static temperature channels (current max/min, peak max/min)
->>    - Supply voltage channels parsed from DT container nodes
->>    - Temperature satellite channels parsed from DT container nodes
->>    - read_raw for IIO_CHAN_INFO_RAW and IIO_CHAN_INFO_PROCESSED
->>    - read_label using the DT label property
-> 
-> Various comments inline.  One thing to check.
-> Is this one strictly a hardware monitoring device? Or does it
-> get used for more general ADC purposes?  Did you consider an HWMON driver
-> for it? The above sounds a lot like hwmon. So why IIO for this one?
-> 
-> I wasn't awake enough on v1 to raise this!  Sorry about that.
-> +CC Guenter and linux-hwmon for that discussion.
-> 
+This series adds support for the Analog Devices MAX20830 step-down
+switching regulator with PMBus interface.
 
-This very much sounds like a hardware monitoring device to me.
+The MAX20830 provides 2.7V to 16V input, 0.4V to 5.8V output, and up
+to 30A output current. It supports monitoring of input/output voltage,
+output current, and temperature via PMBus.
 
-Guenter
+Datasheet: https://www.analog.com/en/products/max20830.html
+
+Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+---
+Changes in v4:
+- driver:
+  - added i2c functionality check for i2c_smbus_read_block_data() then
+    in case of no device support, falls back to i2c_smbus_read_i2c_block_data()
+  - minor code edit to support the difference of the 2 functions
+- Link to v3: https://lore.kernel.org/r/20260417-dev_max20830-v3-0-0cb8d56067aa@analog.com
+
+Changes in v3:
+- bindings:
+  - Added pwr-good-gpios property
+- driver:
+  - Zero initialized IC_DEVICE_ID buffer
+  - added ret < len for validation of actual read bytes
+  - added comments clarifying block length format and null terminator placement
+- Link to v2: https://lore.kernel.org/r/20260416-dev_max20830-v2-0-2c7d676dc0bd@analog.com
+
+Changes in v2:
+- bindings:
+  - did not add interrupt, smbalert pin does not exist in device.
+  - added allof with ref to regulator.yaml
+  - changed additionalprop to unevaluatedprop
+  - device node name in example changed to regulator
+- driver: 
+  - max20830.rst: Added missing in2_alarm
+  - max20830.c: 
+    - added missing quotes in MODULE_IMPORT_NS
+    - added comment on why i2c_smbus_read_i2c_block_data is used
+    - first byte of buffer used as length instead of the return value
+    - "unsupported device" log now does not print first byte of buffer
+- Link to v1: https://lore.kernel.org/r/20260414-dev_max20830-v1-0-210d3f82c571@analog.com
+
+---
+Alexis Czezar Torreno (2):
+      dt-bindings: hwmon: pmbus: add max20830
+      hwmon: (pmbus/max20830) add driver for max20830
+
+ .../bindings/hwmon/pmbus/adi,max20830.yaml         |  66 +++++++++++++
+ Documentation/hwmon/index.rst                      |   1 +
+ Documentation/hwmon/max20830.rst                   |  49 +++++++++
+ MAINTAINERS                                        |   9 ++
+ drivers/hwmon/pmbus/Kconfig                        |   9 ++
+ drivers/hwmon/pmbus/Makefile                       |   1 +
+ drivers/hwmon/pmbus/max20830.c                     | 110 +++++++++++++++++++++
+ 7 files changed, 245 insertions(+)
+---
+base-commit: fb447217c59a13b2fff22d94de2498c185cd9032
+change-id: 20260414-dev_max20830-9460b92cf6aa
+
+Best regards,
+-- 
+Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
 
