@@ -1,40 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 060CD3770B;
-	Wed,  6 May 2026 01:22:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB1DE204F93;
+	Wed,  6 May 2026 01:25:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778030564; cv=none; b=mpUtMLhx48iFnZS/ofV5MO0hHfnbPHSRk44BhfdHaJ23E76IvqFxL9TSXsORevr8IZMYka9ES6LsNPOcnqtIDdsbADU3xbiVCO2XtZBPGHa4aBGCe6QtPw7fEkBK1LQA75G/ACd01AxCxQUh6lJ8yV8PLKJSL0zWxJqHqxcqObg=
+	t=1778030758; cv=none; b=fwO+u49dZv/GL4Hmcnhp6UKA/yFG/42yD/qTHno+JdE6uD8o3y1YbVDeEen/a3CSQnaAy0qmOgI2JHowi/j5pApVrQhxKBhpDCyNG4Hnnxcqh0pEXBFn4ownyFVfT0sA7DVdLjHqR8GSDSwySwNiGn45WobhJUCU4QUZ2JYHOlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778030564; c=relaxed/simple;
-	bh=vqpM+z6IMP1SGxcrsteKqQx3HnsRKEALogLdi1GJHyc=;
+	s=arc-20240116; t=1778030758; c=relaxed/simple;
+	bh=7XqJAINRGOIrXlZLOK6eK3oz0SKwRLEWMQhNHaZGhu4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dVf4Z1nPJUw3TGMfjYL8EZ0eYhkZDqpsjb51x5lMV0H/AD794eari2CzQyHlwqihjXKOKDAjJ8qJ6xRXGVCBCERehSgU++EXZUUqx7Oc3916p34zkyhOOwKUkakmSg6cr+ohf7DOzp18pSqx75Q7gtYSuyUy9+EWvgV1lROUxgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sYVAKITL; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=X3nVnl9kRfyHiJ+lIXqVRdWqwOxqZLVJi9crv5t3VFz78nnzg5ublEweyWcFq+pYk9+e81Vr9DJLITEewAxknsI0mZYm61noEtdtvVqYUGWA2EaZOUQYxb4hyICsnn/v+pk22eKsSSQvdmchTk/pkcjHzRz0HuZrSoyYkvSYavU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uiHCivsv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sYVAKITL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89D1CC2BCB4;
-	Wed,  6 May 2026 01:22:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uiHCivsv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3803FC2BCB4;
+	Wed,  6 May 2026 01:25:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778030563;
-	bh=vqpM+z6IMP1SGxcrsteKqQx3HnsRKEALogLdi1GJHyc=;
+	s=k20201202; t=1778030758;
+	bh=7XqJAINRGOIrXlZLOK6eK3oz0SKwRLEWMQhNHaZGhu4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sYVAKITLvGAKNmtxbIXRltxdqMUvq9FzagmxdqvcZo+l3wHIZZoAH3RPXt1q0ub1w
-	 jYFtdcqc1v6kVVYXGnu5GhzIxeYAXUUeF7TDp3bk9z6gG0B3yw6h02LNQN/HYIJsqa
-	 SyCFyfCMM7V32UeY6J6F5Y9rDJMBg/mIhDou8x3SDT/sbK46YCObJ2YuYtLAXlcF+s
-	 VRZzeNGqcEArn1XQmvL3bSvqzU0pLCgOCoOfdkqcAMHkUqaZdIY2XWZMiai1qn0FSR
-	 tC2QxDCQHgkCt4olZ3N/q/h3OfB4qViCsr1WuJLisVoTtru0EZ6ZZuRx9qB2LRh+nv
-	 8M2+gKjfmB7Yw==
-Date: Tue, 5 May 2026 20:22:41 -0500
+	b=uiHCivsv7jc8PG4ySgH1N4AemPKi9n46X8G+I3KCPPU4OtX5rukWQqxWGXKnMqGb6
+	 0lJQKB3oSD7AyS+Q3nhM/HrQV+Vq2E0hfkxOz14qEEa0RmtG83lsvss/DJBHBdbAqL
+	 GfYeiPn8BJumA+nVx2m2+dR0Mr7kjtnCuLEDChDw4825cjRJl7e8L1pxL/4fM2bp7E
+	 ZqZQSiQGPWgNcK/PHrQgTn5wU2A3yHJYaToQTWtpnoFQkj4p2Oy5fCkUu6FhAIFGwz
+	 4mqm5AQBJ1li/a65LCqg132ddmXW35uUVwaqZhxbdVs+X+iBwF/YuZvKMNKE0iy6zD
+	 YA5IwvC0AAmeg==
+Date: Tue, 5 May 2026 20:25:56 -0500
 From: Rob Herring <robh@kernel.org>
-To: sashiko@lists.linux.dev
-Cc: Changhuang Liang <changhuang.liang@starfivetech.com>,
-	linux-hwmon@vger.kernel.org
+To: Changhuang Liang <changhuang.liang@starfivetech.com>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
 Subject: Re: [PATCH v1 1/2] dt-bindings: hwmon: Add starfive,jhb100-fan-tach
-Message-ID: <20260506012241.GA248179-robh@kernel.org>
-References: <20260428082337.743546-2-changhuang.liang@starfivetech.com>
- <20260428193953.31ED7C2BCAF@smtp.kernel.org>
+Message-ID: <20260506012556.GB248179-robh@kernel.org>
+References: <20260428082337.743546-1-changhuang.liang@starfivetech.com>
+ <20260428082337.743546-2-changhuang.liang@starfivetech.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -43,57 +45,100 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260428193953.31ED7C2BCAF@smtp.kernel.org>
+In-Reply-To: <20260428082337.743546-2-changhuang.liang@starfivetech.com>
 
-On Tue, Apr 28, 2026 at 07:39:52PM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Low] The `tach-ch` property in the device tree example uses incorrect comma-separated syntax that evaluates to a 5-byte array rather than the intended 2-byte array.
-> --
+On Tue, Apr 28, 2026 at 01:23:36AM -0700, Changhuang Liang wrote:
+> Add compatible "starfive,jhb100-fan-tach" for StarFive JHB100 Fan-Tach
+> controller.
 > 
-> commit 4bf196984d444742e611042f289ee38d6b5ced8c
-> Author: Changhuang Liang <changhuang.liang@starfivetech.com>
+> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+> ---
+>  .../hwmon/starfive,jhb100-fan-tach.yaml       | 98 +++++++++++++++++++
+>  1 file changed, 98 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/starfive,jhb100-fan-tach.yaml
 > 
-> dt-bindings: hwmon: Add starfive,jhb100-fan-tach
-> 
-> This commit adds the compatible string "starfive,jhb100-fan-tach" and the
-> corresponding binding schema for the StarFive JHB100 Fan-Tach controller.
-> The controller supports up to 16 fan tach inputs.
-> 
-> > diff --git a/Documentation/devicetree/bindings/hwmon/starfive,jhb100-fan-tach.yaml b/Documentation/devicetree/bindings/hwmon/starfive,jhb100-fan-tach.yaml
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/starfive,jhb100-fan-tach.yaml
-> [ ... ]
-> > +examples:
-> > +  - |
-> > +    fan-tach-controller@11be0000 {
-> > +        compatible = "starfive,jhb100-fan-tach";
-> > +        reg = <0x11be0000 0x400>;
-> > +        interrupts = <128>;
-> > +        clocks = <&per2crg 33>;
-> > +        resets = <&per2crg 5>;
-> > +        #address-cells = <1>;
-> > +        #size-cells = <0>;
-> > +
-> > +        fan@0 {
-> > +            reg = <0>;
-> > +            tach-ch = /bits/ 8 <0x0>, <0x8>;
-> 
-> Is the comma-separated syntax in tach-ch intentional? In Device Tree Source
-> syntax, the /bits/ 8 directive applies only to the immediately following
-> angle-bracket block.
-> 
-> Because tach-ch = /bits/ 8 <0x0>, <0x8>; separates the values with a comma,
-> the second block reverts to the default 32-bit cell size. This produces a
-> 5-byte array [0x00, 0x00, 0x00, 0x00, 0x08] rather than the intended 2-byte
-> array.
-> 
-> If a developer copies this example into a real device tree, will the driver
-> incorrectly interpret it as 5 separate tachometer channels (0, 0, 0, 0, 8)
-> instead of the intended 2 channels (0, 8)?
-> 
-> Should this be written as /bits/ 8 <0x0 0x8>; or using byte array syntax
-> like [00 08] instead?
+> diff --git a/Documentation/devicetree/bindings/hwmon/starfive,jhb100-fan-tach.yaml b/Documentation/devicetree/bindings/hwmon/starfive,jhb100-fan-tach.yaml
+> new file mode 100644
+> index 000000000000..fdc8539ec804
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/starfive,jhb100-fan-tach.yaml
+> @@ -0,0 +1,98 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/starfive,jhb100-fan-tach.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: StarFive JHB100 Fan-Tach controller
+> +
+> +maintainers:
+> +  - Changhuang Liang <changhuang.liang@starfivetech.com>
+> +
+> +description:
+> +  The StarFive Fan-Tach controller can support up to 16 fan tach input.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - starfive,jhb100-fan-tach
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+> +patternProperties:
+> +  "^fan@[0-9]+$":
 
-Yes. The former style though.
+Unit-addresses are hex.
+
+> +    $ref: fan-common.yaml#
+> +    unevaluatedProperties: false
+> +    required:
+> +      - reg
+> +      - tach-ch
+
+You need constraints on the 'reg' values. Also, what does 'reg' 
+represent in this case?
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - resets
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    fan-tach-controller@11be0000 {
+> +        compatible = "starfive,jhb100-fan-tach";
+> +        reg = <0x11be0000 0x400>;
+> +        interrupts = <128>;
+> +        clocks = <&per2crg 33>;
+> +        resets = <&per2crg 5>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        fan@0 {
+> +            reg = <0>;
+> +            tach-ch = /bits/ 8 <0x0>, <0x8>;
+
+How do you have 1 fan with 2 tach signals?
 
 Rob
