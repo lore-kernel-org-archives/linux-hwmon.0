@@ -1,97 +1,185 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2BD01F3BA2;
-	Thu,  7 May 2026 04:14:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F271C23ABBF;
+	Thu,  7 May 2026 05:12:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778127248; cv=none; b=YEuDMAI0tYT6MBKqaPcuGVVfh9Cv5y6Yidgq+7Klx3xdBqLE32SK1zajkw5UFHjWY3yh+3JL9Wc8Nco5TqThWixIUH4EYKxHvhGNHYkDM0mp4kolUOjCYCNG/RHU1BoBJDi1rxkTeeN8WazL63K/rDrNnvIheTdizZeY8vhCNGQ=
+	t=1778130755; cv=none; b=KWwj+g14b7UTJmJrFHOTHt5iYCTqqBO2TMfddKkprQKY+T0WTyIOqhM7XMEADoSnV79TYhJvng0BvLOvmvXo4QBCS4GpRNTiNRiODLTl6CwqqVzaPqzfDmI0P+8+CsJHkP8IPcjZXBIOHiF4ZH68/8+51dwDaJFRFvp1zAn5xS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778127248; c=relaxed/simple;
-	bh=+Vt8zEJ+r9dsyJnh4bur3B+ar7F8gndoI9eBYPPbNbY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=kIXhoB6w1J3r2z1jVPk3vXd7i+hdjMtKjQYMDwlfmrqGkVRoReNUkwJr8+QI9fbEgevdryOtL/2DxFfPBHIm+f6dS+rJqigSqRJaCbcQeYwqyXFcuDRcY7+JygFZNNpJa9Lc88dcz8y18eR5bXfTwmWF0eawG8Ag5t4suO4pz/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=avdHQttl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778130755; c=relaxed/simple;
+	bh=ZG6EAt6QuyZEF5Q1C1YnthssCRpvs7iwMwqrX4o7QwQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=CoiBNBOC3JvZT4wk6QSkujhyxYokGQ47ICkbNU5S4L8ow/hqtBrkxY8vYGF0f8LQBdMZK1ODDy6BbYKNf6OV8b817gmP75uFpdusjUz5dSztr/BCAHmnBtCtC7C8TqjBpIJDlkyx2wiWihi1q/wBWDAbkviibZbpILoEKTAw0R0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A9Ok0s8E; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="avdHQttl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 493A7C2BCF4;
-	Thu,  7 May 2026 04:14:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A9Ok0s8E"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C4918C2BCF5;
+	Thu,  7 May 2026 05:12:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778127248;
-	bh=+Vt8zEJ+r9dsyJnh4bur3B+ar7F8gndoI9eBYPPbNbY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=avdHQttldlCnr3z/AXxaeesqrlTCzTZGEiqQ4BzNaLj9qTpzSoffU8ka/YHYk4p22
-	 pHhZkuYCuBneUKhyF7lBhhGy3xMeaVzO88kDNZgwh1IkJMTnt1YinEeUnPGMjJM58k
-	 wOwC0xobfO/D+PYCPtZzUMmEMGwsWKMZ09y/J5/wPv7iZ4SPJEWK40UfolyYS/fN6I
-	 A/Q53uk0SoAYFdaf0goPbc+S2YlBuJq1aWYgzEf+LuJ9c73DEijPbmWmVcOhtDe7Rp
-	 PAvx1GUCqrA0lvqOXDkoEdns2zCyTn0OsibYQpH9lPIa+L5N18G4BmcfAbzyn1aumS
-	 ca5PzHPZ2bTZw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 1/2] usb: xhci-pci: add generic auxiliary device
- interface
-Reply-To: sashiko@lists.linux.dev
-To: "Jihong Min" <hurryman2212@gmail.com>
-Cc: linux-pci@vger.kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <effa7bd7bef8a8ea28b9e28fe47af6a58e39edf2.1778123510.git.hurryman2212@gmail.com>
-References: <effa7bd7bef8a8ea28b9e28fe47af6a58e39edf2.1778123510.git.hurryman2212@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 07 May 2026 04:14:07 +0000
-Message-Id: <20260507041408.493A7C2BCF4@smtp.kernel.org>
+	s=k20201202; t=1778130754;
+	bh=ZG6EAt6QuyZEF5Q1C1YnthssCRpvs7iwMwqrX4o7QwQ=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=A9Ok0s8Ed2p5N+3C64FFyYZAVg7CA+cMhqPkqm3ZCRjS4cOla4Cgl5uuitVzHdG5i
+	 /Lf6+0EJZpc2H/O3SKplmfE/5jCl9IgO52Qc+63KFQnNTGoZxD+U2ix0DolcdotzzC
+	 mT1YZQfWYkMfLCUaz3Z6kCxCmIxNmDHPXM/VHSC+viAwq6+t/VbIX9R9nfCevzEL+m
+	 pgEoss3GD9QFUlk6s3qKgTjLbFFbTlPSjUbhc3wPdiByksfrJwaoJncA2vhEeb6HA6
+	 9lDO3kntpm46KEDSarR79WcBfZ0sobtTRKo+uW9uchDyaCvR15MiYSRQzCv95cEdyl
+	 AYMiVF7bJkxSA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE59DCD3445;
+	Thu,  7 May 2026 05:12:34 +0000 (UTC)
+From: Colin Huang via B4 Relay <devnull+u8813345.gmail.com@kernel.org>
+Date: Thu, 07 May 2026 13:12:27 +0800
+Subject: [PATCH v4 2/3] Documentation/hwmon: add Delta E50SN12051
+ documentation
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260507-add-e50sn12051-v4-2-ff2b3768ac7e@gmail.com>
+References: <20260507-add-e50sn12051-v4-0-ff2b3768ac7e@gmail.com>
+In-Reply-To: <20260507-add-e50sn12051-v4-0-ff2b3768ac7e@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Kevin Chang <kevin.chang2@amd.com>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Colin Huang <colin.huang2@amd.com>, Colin Huang <u8813345@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1778130752; l=3975;
+ i=u8813345@gmail.com; s=20260202; h=from:subject:message-id;
+ bh=AWrzobGEVmZ1wrQzAaH1cnIviz5MTfwrqcs9SVlqod0=;
+ b=kwzObFFsGjNxBsLw7zNjj5w0T2RYFjiS+TYKc7NqviY2UHCnAaJgwS6GPH7o9xOLOFsNzB29i
+ 0VzMbd5tze7C/ZiUGNeunpEObbJaEoGNhHboZX3dcx6BprfsMjv26gc
+X-Developer-Key: i=u8813345@gmail.com; a=ed25519;
+ pk=Zlg0WqpCw4qbswOqamTBTXIchwR/3SnYZpy7rjaGMdQ=
+X-Endpoint-Received: by B4 Relay for u8813345@gmail.com/20260202 with
+ auth_id=761
+X-Original-From: Colin Huang <u8813345@gmail.com>
+Reply-To: u8813345@gmail.com
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Lockless modification of devres payload in `xhci_pci_try_remove_=
-aux_device` bypasses the subsystem's devres locking mechanism.
---
+From: Colin Huang <u8813345@gmail.com>
 
-commit bb8a85242e2a88f6613cf1810360076073e5ac66
-Author: Jihong Min <hurryman2212@gmail.com>
+Document the hardware monitoring support for the Delta E50SN12051
+device.
 
-usb: xhci-pci: add generic auxiliary device interface
+The documentation describes the supported sensors exposed via the
+hwmon subsystem, including voltage, current, and temperature measurements.
 
-This commit adds a small auxiliary device registration path for selected
-xHCI PCI controllers like the AMD Promontory 21. It creates an auxiliary
-device and stores it in devres so subsystem-specific child drivers can bind
-to controller-specific functionality outside xhci-pci.
+Signed-off-by: Colin Huang <u8813345@gmail.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+---
+ Documentation/hwmon/e50sn12051.rst | 81 ++++++++++++++++++++++++++++++++++++++
+ Documentation/hwmon/index.rst      |  1 +
+ 2 files changed, 82 insertions(+)
 
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index 585b2f3117b08..618d6840e1083 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-[ ... ]
-> @@ -103,6 +106,80 @@ static int xhci_pci_run(struct usb_hcd *hcd);
-[ ... ]
-> +static void xhci_pci_try_remove_aux_device(struct pci_dev *pdev)
-> +{
-> +	struct xhci_pci_aux_devres *devres;
-> +
-> +	devres =3D devres_find(&pdev->dev, xhci_pci_aux_devres_release, NULL,
-> +			     NULL);
-> +	if (!devres || !devres->auxdev)
-> +		return;
-> +
-> +	auxiliary_device_destroy(devres->auxdev);
-> +	devres->auxdev =3D NULL;
+diff --git a/Documentation/hwmon/e50sn12051.rst b/Documentation/hwmon/e50sn12051.rst
+new file mode 100644
+index 000000000000..cbbfa7895d82
+--- /dev/null
++++ b/Documentation/hwmon/e50sn12051.rst
+@@ -0,0 +1,81 @@
++.. SPDX-License-Identifier: GPL-2.0-or-later
++
++Kernel driver e50sn12051
++========================
++
++Supported chips:
++
++  * Delta E50SN12051
++
++    Prefix: 'e50sn12051'
++
++    Addresses scanned: -
++
++    Datasheet:
++
++      Provided by Delta upon request and NDA
++
++Description
++-----------
++
++E50SN12051 is a 600W non-isolated 1/8th brick DC-DC power module.
++
++This driver supports the E50SN12051 PMBus compliant monitor device.
++
++The device provides measurements for:
++
++* Input voltage
++* Output current
++* Output voltage
++* Temperature
++
++The driver is based on the PMBus core and exposes standard hwmon
++sysfs attributes.
++
++Sysfs attributes
++----------------
++
++======================= =======================================================
++curr1_label             "iout1"
++curr1_crit              Critical maximum current.
++                        From IOUT_OC_FAULT_LIMIT register.
++curr1_crit_alarm        Current critical high alarm.
++                        From IOUT_OC_FAULT status.
++curr1_input             Measured current.
++                        From READ_IOUT register.
++curr1_max               Maximum current.
++                        From IOUT_OC_WARN_LIMIT register.
++curr1_max_alarm         Current high alarm.
++                        From IOUT_OC_WARN_LIMIT status.
++
++in1_label               "vin"
++in1_alarm               Input voltage alarm.
++in1_input               Measured voltage.
++                        From READ_VIN register.
++
++in2_label               "vout1"
++in2_crit                Critical maximum voltage.
++                        From VOUT_OV_FAULT_LIMIT register.
++in2_crit_alarm          Voltage critical high alarm.
++                        From VOLTAGE_OV_FAULT status.
++in2_input               Measured voltage.
++                        From READ_VOUT register.
++in2_max                 Maximum voltage.
++                        From VOUT_OV_WARN_LIMIT register.
++in2_max_alarm           Voltage high alarm.
++                        From VOLTAGE_OV_WARNING status.
++
++temp1_crit              Critical high temperature.
++                        From OT_FAULT_LIMIT register.
++temp1_crit_alarm        Module temperature critical high alarm.
++                        Set by comparing READ_TEMPERATURE_1 with OT_FAULT_LIMIT
++                        if TEMP_OT_FAULT status is set.
++temp1_input             Measured module's hot spot temperature.
++                        From READ_TEMPERATURE_1 register.
++temp1_max               Maximum temperature.
++                        From OT_WARN_LIMIT register.
++temp1_max_alarm         Module temperature high alarm.
++                        Set by comparing READ_TEMPERATURE_1 with OT_WARN_LIMIT if
++                        TEMP_OT_WARNING status is set.
++======================= =======================================================
++
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index 8b655e5d6b68..ba08655fc496 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -68,6 +68,7 @@ Hardware Monitoring Kernel Drivers
+    drivetemp
+    ds1621
+    ds620
++   e50sn12051
+    emc1403
+    emc2103
+    emc2305
 
-Is it safe to locklessly modify the devres payload here?
+-- 
+2.34.1
 
-The code uses devres_find() to obtain the devres object and manually clears
-devres->auxdev after destroying the auxiliary device. This bypasses the
-devres subsystem's internal spinlocks and leaves a dead devres node in the
-device's list until standard devres_release_all() runs.
 
-Should this use devres_release() instead? Calling devres_release() would
-safely acquire the required locks, invoke the callback, remove the node
-from the list, and free the memory.
-
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1778123510.gi=
-t.hurryman2212@gmail.com?part=3D1
