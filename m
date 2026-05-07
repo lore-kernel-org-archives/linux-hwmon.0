@@ -1,144 +1,110 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE2F32C923;
-	Thu,  7 May 2026 17:07:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B5D33BBB1
+	for <linux-hwmon@vger.kernel.org>; Thu,  7 May 2026 21:11:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778173640; cv=none; b=KusSzLDSrkyZR1Od6FOP/3VvexOaC8pTkCAohDWIJeO9eu1gQoLgmgqjWuK+i3yV7jORramGe2WyNjxXGNewqeX4ms5a26Xjy0PtG9AA8DVxjAzi+sme5mZl2lTWvBqNwwsU93dVSiVDozJyi6EqdB9JJuEjqgIhU+kkcfiVZB8=
+	t=1778188269; cv=none; b=Tqq690rh+2ewJVQnxfyNBBLUggXpMxWrcew6wqdvTb7xzciM9dDZYl2up6rvJPJQclolqQyVycQU+QTzb6wWX97ulDsHsX+vjovb2LBDaHYIJOCJNZdCZdBPKXR7aS88yHHptrIt99dP4CvT07Lparp5dq4ImwR6fq9wLm2DLuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778173640; c=relaxed/simple;
-	bh=c4gV57TC8fT2cJF8+yJXdW2q5GT1M2sibP6Ru132maY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DYoJk7drxulYtNWiMJayPZyUQV9hswoqTWZSMh+C8kDtsywNyzvfbDaFrKTgMuo+AomkdLyT59y74O4QQhWDRpW8QvUmB43Y+fhwWIOX6NMBmcwyWfRNKTkx7ENDc3iSPW8uFbmOPVM/sPo7XE8cT12GK5HBUJ45aFKiCPbFO9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C3gMQBJl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778188269; c=relaxed/simple;
+	bh=s3EBoimWRZr71X8J3FasJRDEeCVcKeBPp7lJ0Gbo9RM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=b0XtGdtp8cEHcffClK2wFnvmNo1JbmYLTSYkFACQFsmD0pP3VTX0B805qhR3BN+v1F66njXE4ICQxmlXBizfxd+owzP69RJ61vdEOibqHpmE35YOuhGTDvMYYl/xXDerlWsQVSmbDmk/WWVl070LO6VU7mBki+XHLNGNPHmin4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ki8LlY6y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C3gMQBJl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1875BC4AF09;
-	Thu,  7 May 2026 17:07:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ki8LlY6y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62D73C2BCB2;
+	Thu,  7 May 2026 21:11:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778173640;
-	bh=c4gV57TC8fT2cJF8+yJXdW2q5GT1M2sibP6Ru132maY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=C3gMQBJlN1MSWCADLTajo0HPH5qHwTnHu3X1QxAa8OYsCd82DlrohUg2lby1g8oLp
-	 vJIsAsJgGO0eWXLtd/hrLgSCwZtLMEtCkirAC8Rhb0JiKg8LeFk0R0HiGu3+Bj1EoY
-	 iYKoVecuc25eD9UTuIy4vIgaxZBhZJzv+1gFRC2KsLgvVN4eXFd/Jk0VsLLZOI7AhC
-	 t7WmH3ZHH2U/f2Kj34uCUmGDD7hQVxYJCIwuaP0hb1BqjKdvkaVRoZ/Fg6gnCtWJ7Q
-	 PfQ7gUMCD9GrbMgZE+MJOuX+g5iL3oTpDYKfjR7yUOKsdkKTxUpVB88bHGCeSXVyLW
-	 rgruAi7OyFwDA==
-Date: Thu, 7 May 2026 18:07:15 +0100
-From: Conor Dooley <conor@kernel.org>
-To: u8813345@gmail.com
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Kevin Chang <kevin.chang2@amd.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, Colin Huang <colin.huang2@amd.com>
-Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: pmbus: add Delta E50SN12051
- binding
-Message-ID: <20260507-squealing-vanish-16fea3c114f5@spud>
-References: <20260507-add-e50sn12051-v4-0-ff2b3768ac7e@gmail.com>
- <20260507-add-e50sn12051-v4-1-ff2b3768ac7e@gmail.com>
+	s=k20201202; t=1778188268;
+	bh=s3EBoimWRZr71X8J3FasJRDEeCVcKeBPp7lJ0Gbo9RM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=Ki8LlY6yhnf1++enprZJZgj52E8WccGBng4gApM7QV9nUdLes8SzKORoorMANHj76
+	 xj+v+oA5C4YUV0b8DRXBJ+gtZa/WJIrgCFDmnlFraoHwzMJA8rXma32bCO9xwxwlXO
+	 jgSb1WIVcFDPN8ZxPMtF5xcS/jUrJAYkvWEbtFDftPXKK1DL8FH/LcnMAdz10J63PB
+	 uML5U5oIfEWfwm6wcGDnWLSY7KhAF711hefJ/i8c+ZU5pToO77qNyJcE4CtZydX5NL
+	 pOjFpnfBvXHS+AUZQ8Or13A0jjwCA3NMmgLV8mT2si8bsdouQAGZlmv4MCb+kuaddO
+	 NZmj6qvvO1U1A==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 2/3] hwmon: lm93: Change unsigned to unsigned int for
+ clarity
+Reply-To: sashiko@lists.linux.dev
+To: "Ninad Naik" <ninadnaik07@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260507101143.559475-3-ninadnaik07@gmail.com>
+References: <20260507101143.559475-3-ninadnaik07@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 07 May 2026 21:11:07 +0000
+Message-Id: <20260507211108.62D73C2BCB2@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="PcTxrWV42aINvzPC"
-Content-Disposition: inline
-In-Reply-To: <20260507-add-e50sn12051-v4-1-ff2b3768ac7e@gmail.com>
 
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Broken arithmetic and unsigned underflow in `LM93_IN_REL_TO_REG` c=
+ompletely breaks relative voltage limit configuration.
+--
 
---PcTxrWV42aINvzPC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+commit d027c76dfc6bdf77f6a91f44199f1d10dda57fdd
+Author: Ninad Naik <ninadnaik07@gmail.com>
 
-On Thu, May 07, 2026 at 01:12:26PM +0800, Colin Huang via B4 Relay wrote:
-> From: Colin Huang <u8813345@gmail.com>
->=20
-> Add devicetree binding documentation for the Delta E50SN12051
-> PMBus-compliant device.
->=20
-> Signed-off-by: Colin Huang <u8813345@gmail.com>
-> ---
->  .../bindings/hwmon/pmbus/delta,e50sn12051.yaml     | 42 ++++++++++++++++=
-++++++
->  1 file changed, 42 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/delta,e50sn120=
-51.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/delta,e50sn12051.ya=
-ml
-> new file mode 100644
-> index 000000000000..72aefe212d17
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/delta,e50sn12051.yaml
-> @@ -0,0 +1,42 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/pmbus/delta,e50sn12051.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Delta E50SN12051 PMBus Sensor
-> +
-> +maintainers:
-> +  - Kevin Chang <kevin.chang2@amd.com>
-> +
-> +description: |
-> +  Delta E50SN12051 is a non-isolated 1/8th brick DC-DC power module.
-> +  It is a PMBus-compliant device accessible via an I2C/SMBus interface
-> +  and provides standard telemetry such as voltage, current, and
-> +  temperature measurements.
-> +
-> +properties:
-> +  compatible:
-> +    const: delta,e50sn12051
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description: I2C bus address of the PMBus device
-> +
-> +required:
-> +  - compatible
-> +  - reg
+hwmon: lm93: Change unsigned to unsigned int for clarity
 
-With only these two properties, shouldn't this be in trivial-devices?
+This commit fixes checkpatch.pl warnings by changing unsigned to unsigned i=
+nt
+for clarity and to follow the latest kernel code style.
 
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +
-> +        power-module@40 {
-> +            compatible =3D "delta,e50sn12051";
-> +            reg =3D <0x40>;
-> +        };
-> +    };
->=20
-> --=20
-> 2.34.1
->=20
->=20
+> diff --git a/drivers/hwmon/lm93.c b/drivers/hwmon/lm93.c
+> index c15e2a02dd86a..1a3b5da924b2e 100644
+> --- a/drivers/hwmon/lm93.c
+> +++ b/drivers/hwmon/lm93.c
 
---PcTxrWV42aINvzPC
-Content-Type: application/pgp-signature; name="signature.asc"
+[ ... ]
 
------BEGIN PGP SIGNATURE-----
+> @@ -396,7 +396,7 @@ static unsigned LM93_IN_REL_FROM_REG(u8 reg, int uppe=
+r, int vid)
+>   * upper also determines which nibble of the register is returned
+>   * (the other nibble will be 0x0)
+>   */
+> -static u8 LM93_IN_REL_TO_REG(unsigned val, int upper, int vid)
+> +static u8 LM93_IN_REL_TO_REG(unsigned int val, int upper, int vid)
+>  {
+>  	long uv_offset =3D vid * 1000 - val * 10000;
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCafzGwwAKCRB4tDGHoIJi
-0qdCAPoDRX/x8dDtyITcvWtPvsglAgujnKJfndPcFrd5MaOiNQEAo3dkj9tX23oA
-5+H451V3Kj9vCQ2sMmUeR8DxzbazqQI=
-=J5lY
------END PGP SIGNATURE-----
+This isn't a regression introduced by this patch, but does this calculation
+cause an unsigned underflow?
 
---PcTxrWV42aINvzPC--
+Because val is an unsigned int, the operation vid * 1000 - val * 10000 is
+evaluated as unsigned. For an upper limit, the limit (val * 10000) is
+typically greater than the voltage (vid * 1000), causing the subtraction to
+wrap around to a large positive value.
+
+On 64-bit systems, assigning this to long uv_offset zero-extends it. The
+function then executes clamp_val(uv_offset, 12500, 200000). Because the
+underflowed value is massive, it is clamped to the maximum bound (200000).
+On 32-bit systems, the huge unsigned value is reinterpreted as negative and
+clamped to the minimum bound (12500). For lower limits, the inverted
+subtraction yields a positive value, which is then clamped against a
+negative range (-400000 to -25000), forcing it to -25000.
+
+Also, does the formula subtract in the wrong order? To correctly invert the
+logic of LM93_IN_REL_FROM_REG (which computes
+val =3D (vid * 1000 + uv_offset + 5000) / 10000), should the offset be
+calculated as uv_offset =3D val * 10000 - vid * 1000?
+
+Lastly, since the unbounded user input val is multiplied by 10000 prior to
+any bounds checking, can large inputs silently overflow the 32-bit unsigned
+integer?
+
+Could these arithmetic regressions cause writes to the in_min or in_max
+sysfs attributes for channels 6 and 7 to misconfigure the hardware
+monitoring bounds, potentially masking important voltage alarms?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260507101143.5594=
+75-1-ninadnaik07@gmail.com?part=3D2
