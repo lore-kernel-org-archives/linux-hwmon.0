@@ -1,268 +1,98 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C36F0175A6E;
-	Thu,  7 May 2026 09:31:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBE723BC673
+	for <linux-hwmon@vger.kernel.org>; Thu,  7 May 2026 10:12:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778146295; cv=none; b=Q93hRvHscN0MHTcVMYqz3jruQZuK6i8iG+EPgKjeoIWvYkHivirLNiJVn/9hyPJd7gD9OlFCFxcPlEvWEjd+R0oiUFbLr8HKU/EIB19orwRY79T2racbXGrW84UlrN+H8h8qtYZCguJqxUpDlAy71RMIpTPhY/Sr26lsGg2cxNE=
+	t=1778148776; cv=none; b=ZXbjrzXRA4j4zZNwL/VUv8s/SFL/rInFROwdgSp7BnV2MSkZ/UZ4+HqonkKLidj273B396X0AUNIdw9lRffAjTtPV43YEQ5cxaUYqL8gO0Ep1oy+Y/9so2iIiX9EYJMc7/cR4BrszD2kOP4AGyGuj2QLufxdkkpyZbyhOw04Jt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778146295; c=relaxed/simple;
-	bh=fnl5fISQxFrCK/lisBXUvoXxWWrrbQLIv9INB6mUopQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BUtWia4YISdcG6hfYKK6LBJpNiyQMZTgtNArT268G2vpCH73xKwraecGtxMTCBpDwu+lcDkKSIwUsfGMC9Egc6H9DYAid5DB7tNe9A8XEHkuRMNEufxlHwHqVBLrDL//immbanFo4qIJr41ncsJvLVhB+20LA4VvRplM9IhNZXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G8CoT6M5; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1778148776; c=relaxed/simple;
+	bh=3xfA1DkquYuRG5e/fkJPGHmYNlnl2sMR1OxKC/FswyQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AM6/t/i07HgaDMyhDAZNpj0/hzshft0Qp8p65ZAD/AP9ypyobhc7ydrHtukdTuITwtn80IDOC/ierP/0DRdXtll1hjz2LpFAR6Toy65bMkEub4kdWSGzWh63J0yOFZn7PD1llQAm03cxQloNKuyHP72Sr+twWg2uIshMqiM6zfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NRowDPRy; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G8CoT6M5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778146294; x=1809682294;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fnl5fISQxFrCK/lisBXUvoXxWWrrbQLIv9INB6mUopQ=;
-  b=G8CoT6M5mhOZwG0BMo1G/n8/+XwOLL7D6s9za2GYDqDpIMsd52Z8I5d5
-   f46JduFonIh4zpdOmri3b5YcTbd0p+thiPBQ42LMAYzbvHkT11rdupywx
-   lzFjOFtIpDezwHZdQofgIjUap/iC9UWyd+DzelgOTL3CpfsQlXdhxibmW
-   TxhNrIurhmx5VWvCliiN4+3quIa4Nb8uB0VBndIXwPuy45MpAyfWjMlgK
-   IWCODWctuA2w4UcZQrM08xUPb9DwfhVDxLX8cWlKWlDI1o7KcvzODx+a2
-   kQXvuSAOaZp2jFP2Q2L0Asp31LqLP/o1K7DzgSndzG134wxHTH2cYRXXN
-   A==;
-X-CSE-ConnectionGUID: m3P1y2DwTTiNGe6d073xxA==
-X-CSE-MsgGUID: +gN0SbMDS3SJTp4idMxw+A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11778"; a="101767607"
-X-IronPort-AV: E=Sophos;i="6.23,221,1770624000"; 
-   d="scan'208";a="101767607"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2026 02:31:33 -0700
-X-CSE-ConnectionGUID: 792qLpIHSgKnVzg2h56TEQ==
-X-CSE-MsgGUID: B+lUKi63TAuujGLUo71Fkg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,221,1770624000"; 
-   d="scan'208";a="241410896"
-Received: from smoticic-mobl1.ger.corp.intel.com (HELO [10.245.245.122]) ([10.245.245.122])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2026 02:31:27 -0700
-Message-ID: <a5739875-b8a5-4918-8850-fa4b32d5279d@linux.intel.com>
-Date: Thu, 7 May 2026 12:31:24 +0300
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NRowDPRy"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-834f1075805so395258b3a.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 07 May 2026 03:12:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778148774; x=1778753574; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3TsBqtt18Cwy3ovtqkmoggUEtnSub60FoPA8LRbU20A=;
+        b=NRowDPRyT61Dfh1jbN9+aiUu+RUIhtbtwHs4cMU6rA52J0hOb7TUVzk55xrn+gDCit
+         pBHBZ1Wf/7JTjmZg2YoutaNbGiW3sMU3ZFZJmkqf0cAEvd+M48e+yFRNFb4peRCEKZkL
+         6bDQTiYReOlfy8yFyxTLa3nurAYO3OtR2qB97gClBXA3QQM4VtChoByQDFstS6wzWlE7
+         2z8O7DYLFIuxSPoQ/MeKkX0AHfWC1GxlPkIRlokYJ8tUTpP80Q4ZjRpXxkKB8HEivvX4
+         YM9FoK90rsqpEpTXTBKEUBQRtcY14XtyFIwQTyr67Gqoa8LVaNX+updy6B+Rg4rGDMFg
+         xhGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778148774; x=1778753574;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3TsBqtt18Cwy3ovtqkmoggUEtnSub60FoPA8LRbU20A=;
+        b=k9K/C0LJJLqaNegLLPqymSuBihnzMhzZZwwKLdnpcds7dCxL3ARyi9nAhz5J5ONukP
+         sf+4RdRNjPvxe+OcpUS3Vgwwr4jFLbCQMlj0n/zk8lADfZ9tdeR0Y2lcL3YKSklJZvh8
+         8Ojwj7uuEfknu1tBzUoCcImBW3lBhn1uDzgwc2cmis3PBxJwOyjQ7YqcITheQK+vCTPK
+         O9tlwTf+6bZquLJIDjIiLiUCq9l6hDF67gNzgfUpBh4eLk2m5jedBZOLqGRWbQOFHR86
+         bXdmih+L//3xBUMI8WIBmprz6hKoMKx5rBW/4DUtFVPpA9XDwYw4CJ0quPXfTMA9wXI1
+         X1zA==
+X-Gm-Message-State: AOJu0YyBY1IHofgwcAVLcMLCsYnAMdBtDvY1V0EcleYYTkDnpnoLQ/Up
+	n0b1eWC9aFhiOiNjQrMNrQN0BcnwmErmXLeNkY8j7+O9jQ3EIq4AZaXS
+X-Gm-Gg: AeBDievdgnFLZiCucN/CkodGDxLcSyhlWBcQONKrvu6kNZvfm7jL34QcQkJXsMMYM1v
+	v1bvvKtqlfrExno44pzCC29L7LRsbHkweqtDftRqbzxUrHPAg/rAevHU43f8C8vhGDLlWfmUoZV
+	S1dJYRC3NAuziUJi+8zx9BDH62Jcb9xdpLkt91emF+QE4uvgDj/uKafHseNIEIUuYGrdlBVdNbO
+	ZkN/ZKh86WM9oMfqiDC27jbvOaLffSyL10gs9VsaSMRgy1Qs59jAviaf03VF/+w6m8Uk74KU41b
+	0/3zVzYV7oqoXoPmIji41TJiqZV2ws+8xv2Om0n6Hj7kVfXW99lSB63GvTEjGztmPh8ZTVrz8Vc
+	YHDcYuvJq6FPZrkXgjZb3dcGvO5LycCkBhDD8L/eCh2nPNr/ENVgYHLXCbKgpcFKA0EHotnBzIQ
+	MUKbpNEn9BUsg1k7msLALdAzxw57lSO67o2WAMiPsQGgh8+JPhHudwIUADLeuSQOlu50zvKpusD
+	oaXKumH3JtJfChhnYVH8F+Vw+bBpw==
+X-Received: by 2002:a05:6a00:27a4:b0:838:a46:ce99 with SMTP id d2e1a72fcca58-83a5e457a1fmr6768497b3a.48.1778148774344;
+        Thu, 07 May 2026 03:12:54 -0700 (PDT)
+Received: from fedora ([103.181.54.100])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83967dbcf16sm9797998b3a.40.2026.05.07.03.12.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 May 2026 03:12:54 -0700 (PDT)
+From: Ninad Naik <ninadnaik07@gmail.com>
+To: linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	skhan@linuxfoundation.org,
+	me@brighamcampbell.com,
+	linux-kernel-mentees@lists.linux.dev,
+	Ninad Naik <ninadnaik07@gmail.com>
+Subject: [PATCH 0/3] hwmon: lm93: clean up coding style issues
+Date: Thu,  7 May 2026 15:41:40 +0530
+Message-ID: <20260507101143.559475-1-ninadnaik07@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] usb: xhci-pci: add generic auxiliary device
- interface
-To: Jihong Min <hurryman2212@gmail.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Mathias Nyman <mathias.nyman@intel.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-usb@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1778123510.git.hurryman2212@gmail.com>
- <effa7bd7bef8a8ea28b9e28fe47af6a58e39edf2.1778123510.git.hurryman2212@gmail.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <effa7bd7bef8a8ea28b9e28fe47af6a58e39edf2.1778123510.git.hurryman2212@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5/7/26 06:31, Jihong Min wrote:
-> Some xHCI PCI controllers expose controller-specific functionality that is
-> not part of generic xHCI operation and is better handled by optional child
-> drivers in other subsystems. Add a small auxiliary device registration path
-> for selected xHCI PCI controllers.
-> 
-> The initial PCI ID match table lists AMD Promontory 21 (PROM21) 1022:43fd
-> controllers. For matching controllers, xhci-pci creates an auxiliary
-> device and stores it in devres so the remove path destroys it before HCD
-> teardown.
-> 
-> Subsystem-specific child drivers can then bind to those devices through
-> the auxiliary bus and keep their hardware-specific logic outside xhci-pci.
-> 
-> Assisted-by: Codex:gpt-5.5
-> Signed-off-by: Jihong Min <hurryman2212@gmail.com>
-> ---
->   drivers/usb/host/Kconfig    | 10 +++++
->   drivers/usb/host/xhci-pci.c | 83 +++++++++++++++++++++++++++++++++++++
->   2 files changed, 93 insertions(+)
-> 
-> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-> index 0a277a07cf70..e0c2c7ac5c97 100644
-> --- a/drivers/usb/host/Kconfig
-> +++ b/drivers/usb/host/Kconfig
-> @@ -42,6 +42,16 @@ config USB_XHCI_PCI
->   	depends on USB_PCI
->   	default y
->   
-> +config USB_XHCI_PCI_AUXDEV
-> +	bool "xHCI PCI auxiliary device support"
-> +	depends on USB_XHCI_PCI
-> +	select AUXILIARY_BUS
-> +	help
-> +	  This enables xHCI PCI support for registering auxiliary devices
-> +	  for selected controllers. It is used by optional child drivers
-> +	  that bind to xHCI PCI controller-specific functionality through
-> +	  the auxiliary bus.
-> +
->   config USB_XHCI_PCI_RENESAS
->   	tristate "Support for additional Renesas xHCI controller with firmware"
->   	depends on USB_XHCI_PCI
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index 585b2f3117b0..618d6840e108 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -8,6 +8,8 @@
->    * Some code borrowed from the Linux EHCI driver.
->    */
->   
-> +#include <linux/auxiliary_bus.h>
-> +#include <linux/device/devres.h>
->   #include <linux/pci.h>
->   #include <linux/slab.h>
->   #include <linux/module.h>
-> @@ -80,6 +82,7 @@
->   #define PCI_DEVICE_ID_AMD_RAVEN_15E1_XHCI		0x15e1
->   #define PCI_DEVICE_ID_AMD_RAVEN2_XHCI			0x15e5
->   #define PCI_DEVICE_ID_AMD_RENOIR_XHCI			0x1639
-> +#define PCI_DEVICE_ID_AMD_PROM21_XHCI			0x43fd
->   #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
->   #define PCI_DEVICE_ID_AMD_PROMONTORYA_3			0x43ba
->   #define PCI_DEVICE_ID_AMD_PROMONTORYA_2			0x43bb
-> @@ -103,6 +106,80 @@ static int xhci_pci_run(struct usb_hcd *hcd);
->   static int xhci_pci_update_hub_device(struct usb_hcd *hcd, struct usb_device *hdev,
->   				      struct usb_tt *tt, gfp_t mem_flags);
->   
-> +static const struct pci_device_id pci_ids_have_aux[] = {
-> +	{ PCI_DEVICE_DATA(AMD, PROM21_XHCI, "prom21_hwmon") },
-> +	{ /* end: all zeroes */ }
-> +};
-> +
-> +struct xhci_pci_aux_devres {
-> +	struct auxiliary_device *auxdev;
-> +};
-> +
-> +static const char *xhci_pci_aux_dev_name(struct pci_dev *pdev)
-> +{
-> +	const struct pci_device_id *id;
-> +
-> +	id = pci_match_id(pci_ids_have_aux, pdev);
-> +	if (!id)
-> +		return NULL;
-> +
-> +	return (const char *)id->driver_data;
-> +}
-> +
-> +static void xhci_pci_aux_devres_release(struct device *dev, void *res)
-> +{
-> +	struct xhci_pci_aux_devres *devres = res;
-> +
-> +	if (devres->auxdev)
-> +		auxiliary_device_destroy(devres->auxdev);
-> +}
-> +
-> +static void xhci_pci_try_add_aux_device(struct pci_dev *pdev)
-> +{
-> +	struct xhci_pci_aux_devres *devres;
-> +	struct auxiliary_device *auxdev;
-> +	const char *aux_dev_name;
-> +
-> +	aux_dev_name = xhci_pci_aux_dev_name(pdev);
-> +	if (!aux_dev_name)
-> +		return;
-> +
-> +	devres = devres_alloc(xhci_pci_aux_devres_release, sizeof(*devres),
-> +			      GFP_KERNEL);
-> +	if (!devres) {
-> +		dev_warn(&pdev->dev,
-> +			 "failed to allocate auxiliary device state\n");
-> +		return;
-> +	}
-> +
-> +	auxdev = auxiliary_device_create(&pdev->dev, KBUILD_MODNAME,
-> +					 aux_dev_name, NULL,
-> +					 (pci_domain_nr(pdev->bus) << 16) |
-> +						 pci_dev_id(pdev));
-> +	if (!auxdev) {
-> +		devres_free(devres);
-> +		dev_warn(&pdev->dev, "failed to add %s auxiliary device\n",
-> +			 aux_dev_name);
-> +		return;
-> +	}
-> +
-> +	devres->auxdev = auxdev;
-> +	devres_add(&pdev->dev, devres);
-> +}
-> +
-> +static void xhci_pci_try_remove_aux_device(struct pci_dev *pdev)
-> +{
-> +	struct xhci_pci_aux_devres *devres;
-> +
-> +	devres = devres_find(&pdev->dev, xhci_pci_aux_devres_release, NULL,
-> +			     NULL);
-> +	if (!devres || !devres->auxdev)
-> +		return;
-> +
-> +	auxiliary_device_destroy(devres->auxdev);
-> +	devres->auxdev = NULL;
-> +}
-> +
->   static const struct xhci_driver_overrides xhci_pci_overrides __initconst = {
->   	.reset = xhci_pci_setup,
->   	.start = xhci_pci_run,
-> @@ -677,6 +754,9 @@ int xhci_pci_common_probe(struct pci_dev *dev, const struct pci_device_id *id)
->   	if (device_property_read_bool(&dev->dev, "ti,pwron-active-high"))
->   		pci_clear_and_set_config_dword(dev, 0xE0, 0, 1 << 22);
->   
-> +	if (IS_ENABLED(CONFIG_USB_XHCI_PCI_AUXDEV))
-> +		xhci_pci_try_add_aux_device(dev);
-> +
->   	return 0;
+This patch series includes code style changes for lm93 driver to fix
+several checkpatch.pl warnings. No functional changes are made. I tested
+the changes by compiling the file.
 
-I think this should be turned around so that the vendor specific code calls the common code.
-xhci-pci-renesas.c does this nicely.
+Changes include:
+- Add blank lines after variable declarations
+- Change 'unsigned' to 'unsigned int'
+- Remove else blocks after break or return statements
 
-In your case it would be adding something like a xhci-pci-prom21.c pci driver:
+Ninad Naik (3):
+  hwmon: lm93: Add missing blank lines after declarations
+  hwmon: lm93: Change unsigned to unsigned int for clarity
+  hwmon: lm93: Remove else blocks after break or return for consistency
 
-xhci_pci_prom21_probe(struct pci_dev *dev, const struct pci_device_id *id)
-{
-	crate_auxiliary_device(dev);
-	return xhci_pci_common_probe(dev, id);
-}
+ drivers/hwmon/lm93.c | 87 ++++++++++++++++++++++++++++----------------
+ 1 file changed, 56 insertions(+), 31 deletions(-)
 
-xhci_pci_prom21_remove(struct pci_dev *dev)
-{
-	destroy_auxiliary_device(dev);
-	xhci_pci_remove(dev);
-}
+-- 
+2.54.0
 
-static const struct pci_device_id pci_ids[] = {
-	{ PCI_DEVICE(YOUR_AMD_PCI_VENDOR_ID, YOUR_PROM21_DEVICE_ID) },
-	{ /* end: all zeroes */ }
-};
-MODULE_DEVICE_TABLE(pci, pci_ids);
-
-static struct pci_driver xhci_prom21_pci_driver = {
-	.name =		"xhci-pci-prom21",
-	.id_table =	pci_ids,
-
-	.probe =	xhci_pci_prom21_probe,
-	.remove =	xhci_pci_prom21_remove,
-
-	.shutdown = 	usb_hcd_pci_shutdown,
-	.driver = {
-		.pm = pm_ptr(&usb_hcd_pci_pm_ops),
-	},
-};
-module_pci_driver(xhci_prom21_pci_driver);
-
-MODULE_DESCRIPTION("AMD Promontory 21 xHCI PCI Host Controller Driver");
-MODULE_IMPORT_NS("xhci");
-MODULE_LICENSE("GPL v2");
-
--Mathias
