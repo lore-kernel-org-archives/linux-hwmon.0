@@ -1,38 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F271C23ABBF;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0553B26ED41;
 	Thu,  7 May 2026 05:12:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778130755; cv=none; b=KWwj+g14b7UTJmJrFHOTHt5iYCTqqBO2TMfddKkprQKY+T0WTyIOqhM7XMEADoSnV79TYhJvng0BvLOvmvXo4QBCS4GpRNTiNRiODLTl6CwqqVzaPqzfDmI0P+8+CsJHkP8IPcjZXBIOHiF4ZH68/8+51dwDaJFRFvp1zAn5xS4=
+	t=1778130755; cv=none; b=cbJt6c4wHT7KSQuGYTlASNt7iYRzncdmT3JQdyzi+88gdhFfo+vF5PwQTVj9bNdq8gBGXWw+z91O70Q6G6DLKwHw19v9RQrTVgBX2n01F0SuloPD+Y3/ObP93FlJ69MJxoh9IoDLXY+4IfBL8l0TiPDs7FhIUSKiDG8ndexaAqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1778130755; c=relaxed/simple;
-	bh=ZG6EAt6QuyZEF5Q1C1YnthssCRpvs7iwMwqrX4o7QwQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=CoiBNBOC3JvZT4wk6QSkujhyxYokGQ47ICkbNU5S4L8ow/hqtBrkxY8vYGF0f8LQBdMZK1ODDy6BbYKNf6OV8b817gmP75uFpdusjUz5dSztr/BCAHmnBtCtC7C8TqjBpIJDlkyx2wiWihi1q/wBWDAbkviibZbpILoEKTAw0R0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A9Ok0s8E; arc=none smtp.client-ip=10.30.226.201
+	bh=CZULrdKEKUjyo58BZeIybbnpWRynSP6n1PZzb6YPirY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=rX0VJayVT3u5H4rOQ0V3g60ujare64uST91Ld90Zs0Z0paL+wXOHn3ESIhZa132FqESVrhZ7wbG/nQc/cS22k/oAusHdGNyS3ixryTacSTUfwrLZ54kGBgtHZ3g6irmwFqpTgnfUPPthYMwyLBnhrwU1miYnxZiLgcXgmHv/usY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y6femQKK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A9Ok0s8E"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C4918C2BCF5;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y6femQKK"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9E9EEC2BCB8;
 	Thu,  7 May 2026 05:12:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1778130754;
-	bh=ZG6EAt6QuyZEF5Q1C1YnthssCRpvs7iwMwqrX4o7QwQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=A9Ok0s8Ed2p5N+3C64FFyYZAVg7CA+cMhqPkqm3ZCRjS4cOla4Cgl5uuitVzHdG5i
-	 /Lf6+0EJZpc2H/O3SKplmfE/5jCl9IgO52Qc+63KFQnNTGoZxD+U2ix0DolcdotzzC
-	 mT1YZQfWYkMfLCUaz3Z6kCxCmIxNmDHPXM/VHSC+viAwq6+t/VbIX9R9nfCevzEL+m
-	 pgEoss3GD9QFUlk6s3qKgTjLbFFbTlPSjUbhc3wPdiByksfrJwaoJncA2vhEeb6HA6
-	 9lDO3kntpm46KEDSarR79WcBfZ0sobtTRKo+uW9uchDyaCvR15MiYSRQzCv95cEdyl
-	 AYMiVF7bJkxSA==
+	bh=CZULrdKEKUjyo58BZeIybbnpWRynSP6n1PZzb6YPirY=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=Y6femQKKIDTp4TcdZuoYK41VccO7rNEaBlnNRjKgLxOMSOk8qFFFu4t5ZBp6Mza/c
+	 N1kIbv0945e+PrZY9MmSFpDyavC9N/axtaYs3qcH70ZrmoTNkRtz8bg/BUycNK8Brf
+	 DCl56FEo6eQy4/EtXNfowU3APTt+IncrKX4bQ5DbepJnqEZkOkgqKVATq7mlLK9Gur
+	 LOkF6scLbLLfLC/G2JgJA4b7l2yxil7onpDCXrft8WzNoPpiNGzHmq1M+ISvIXkN4a
+	 fiHDsqm/1K9b5mD0tFdmg1QhVtK+jEVb3oAymd8WxLORKPtkylz4cOXgh50Vvl2YSX
+	 PLzubGPGU/fOg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE59DCD3445;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EB16CD3442;
 	Thu,  7 May 2026 05:12:34 +0000 (UTC)
 From: Colin Huang via B4 Relay <devnull+u8813345.gmail.com@kernel.org>
-Date: Thu, 07 May 2026 13:12:27 +0800
-Subject: [PATCH v4 2/3] Documentation/hwmon: add Delta E50SN12051
- documentation
+Subject: [PATCH v4 0/3] add support for Delta E50SN12051
+Date: Thu, 07 May 2026 13:12:25 +0800
+Message-Id: <20260507-add-e50sn12051-v4-0-ff2b3768ac7e@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -41,9 +40,11 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260507-add-e50sn12051-v4-2-ff2b3768ac7e@gmail.com>
-References: <20260507-add-e50sn12051-v4-0-ff2b3768ac7e@gmail.com>
-In-Reply-To: <20260507-add-e50sn12051-v4-0-ff2b3768ac7e@gmail.com>
+X-B4-Tracking: v=1; b=H4sIADkf/GkC/33M0Q6CIBTG8VdxXEeDA4J11Xu0LhCOypbaoLGa8
+ 91Du3G5dfmds99/IhGDx0jOxUQCJh/9OOQhDwWxnRlapN7lTYCBYoIrapyjWLI4cGAlz7OCyji
+ ltTYko0fAxr/W4PWWd+fjcwzvtZ/4cv2mJJx+U4lTRi1nHJWtWF3Xl7Y3/n60Y0+WVIINF2zHI
+ XOnVYMSZAVmx8V/LjJvlJOYv2i13fJ5nj9NDVv/KgEAAA==
+X-Change-ID: 20260316-add-e50sn12051-ad828ad6777a
 To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>, Kevin Chang <kevin.chang2@amd.com>, 
@@ -52,11 +53,11 @@ Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
  Colin Huang <colin.huang2@amd.com>, Colin Huang <u8813345@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1778130752; l=3975;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1778130752; l=2026;
  i=u8813345@gmail.com; s=20260202; h=from:subject:message-id;
- bh=AWrzobGEVmZ1wrQzAaH1cnIviz5MTfwrqcs9SVlqod0=;
- b=kwzObFFsGjNxBsLw7zNjj5w0T2RYFjiS+TYKc7NqviY2UHCnAaJgwS6GPH7o9xOLOFsNzB29i
- 0VzMbd5tze7C/ZiUGNeunpEObbJaEoGNhHboZX3dcx6BprfsMjv26gc
+ bh=CZULrdKEKUjyo58BZeIybbnpWRynSP6n1PZzb6YPirY=;
+ b=+BgMMz2iQjcARQdnDtHRIGv8FB+bP4ZOmwTQ7WxzCEHxW4kJ5en2exSg3aiY3tC29W4AlCqz+
+ 7aB1JWDFLnmCWPhBwjZYK9e3Od2+XqxTi6jggvIecuOP5wRkfLouZtw
 X-Developer-Key: i=u8813345@gmail.com; a=ed25519;
  pk=Zlg0WqpCw4qbswOqamTBTXIchwR/3SnYZpy7rjaGMdQ=
 X-Endpoint-Received: by B4 Relay for u8813345@gmail.com/20260202 with
@@ -64,122 +65,53 @@ X-Endpoint-Received: by B4 Relay for u8813345@gmail.com/20260202 with
 X-Original-From: Colin Huang <u8813345@gmail.com>
 Reply-To: u8813345@gmail.com
 
-From: Colin Huang <u8813345@gmail.com>
+Delta E50SN12051 is a 600W non-isolated 1/8th brick DC-DC power module.
+With this series applied, voltage, current and temperature sensors can 
+be exposed through the standard hwmon interface.
 
-Document the hardware monitoring support for the Delta E50SN12051
-device.
-
-The documentation describes the supported sensors exposed via the
-hwmon subsystem, including voltage, current, and temperature measurements.
+Changes in this series:
+- Introduce device-tree binding documentation for the new device
+- Add hwmon documentation describing the supported sensors
+- Add PMBus driver support for Delta E50SN12051
 
 Signed-off-by: Colin Huang <u8813345@gmail.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 ---
- Documentation/hwmon/e50sn12051.rst | 81 ++++++++++++++++++++++++++++++++++++++
- Documentation/hwmon/index.rst      |  1 +
- 2 files changed, 82 insertions(+)
+Changes in v4:
+- Rewrite binding description to be hardware-centric and OS-agnostic.
+- Rename example node from hwmon@40 to a generic power-module@40.
+- Link to v3: https://lore.kernel.org/r/20260430-add-e50sn12051-v3-0-f6d4e043ec7c@gmail.com
 
-diff --git a/Documentation/hwmon/e50sn12051.rst b/Documentation/hwmon/e50sn12051.rst
-new file mode 100644
-index 000000000000..cbbfa7895d82
---- /dev/null
-+++ b/Documentation/hwmon/e50sn12051.rst
-@@ -0,0 +1,81 @@
-+.. SPDX-License-Identifier: GPL-2.0-or-later
-+
-+Kernel driver e50sn12051
-+========================
-+
-+Supported chips:
-+
-+  * Delta E50SN12051
-+
-+    Prefix: 'e50sn12051'
-+
-+    Addresses scanned: -
-+
-+    Datasheet:
-+
-+      Provided by Delta upon request and NDA
-+
-+Description
-+-----------
-+
-+E50SN12051 is a 600W non-isolated 1/8th brick DC-DC power module.
-+
-+This driver supports the E50SN12051 PMBus compliant monitor device.
-+
-+The device provides measurements for:
-+
-+* Input voltage
-+* Output current
-+* Output voltage
-+* Temperature
-+
-+The driver is based on the PMBus core and exposes standard hwmon
-+sysfs attributes.
-+
-+Sysfs attributes
-+----------------
-+
-+======================= =======================================================
-+curr1_label             "iout1"
-+curr1_crit              Critical maximum current.
-+                        From IOUT_OC_FAULT_LIMIT register.
-+curr1_crit_alarm        Current critical high alarm.
-+                        From IOUT_OC_FAULT status.
-+curr1_input             Measured current.
-+                        From READ_IOUT register.
-+curr1_max               Maximum current.
-+                        From IOUT_OC_WARN_LIMIT register.
-+curr1_max_alarm         Current high alarm.
-+                        From IOUT_OC_WARN_LIMIT status.
-+
-+in1_label               "vin"
-+in1_alarm               Input voltage alarm.
-+in1_input               Measured voltage.
-+                        From READ_VIN register.
-+
-+in2_label               "vout1"
-+in2_crit                Critical maximum voltage.
-+                        From VOUT_OV_FAULT_LIMIT register.
-+in2_crit_alarm          Voltage critical high alarm.
-+                        From VOLTAGE_OV_FAULT status.
-+in2_input               Measured voltage.
-+                        From READ_VOUT register.
-+in2_max                 Maximum voltage.
-+                        From VOUT_OV_WARN_LIMIT register.
-+in2_max_alarm           Voltage high alarm.
-+                        From VOLTAGE_OV_WARNING status.
-+
-+temp1_crit              Critical high temperature.
-+                        From OT_FAULT_LIMIT register.
-+temp1_crit_alarm        Module temperature critical high alarm.
-+                        Set by comparing READ_TEMPERATURE_1 with OT_FAULT_LIMIT
-+                        if TEMP_OT_FAULT status is set.
-+temp1_input             Measured module's hot spot temperature.
-+                        From READ_TEMPERATURE_1 register.
-+temp1_max               Maximum temperature.
-+                        From OT_WARN_LIMIT register.
-+temp1_max_alarm         Module temperature high alarm.
-+                        Set by comparing READ_TEMPERATURE_1 with OT_WARN_LIMIT if
-+                        TEMP_OT_WARNING status is set.
-+======================= =======================================================
-+
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 8b655e5d6b68..ba08655fc496 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -68,6 +68,7 @@ Hardware Monitoring Kernel Drivers
-    drivetemp
-    ds1621
-    ds620
-+   e50sn12051
-    emc1403
-    emc2103
-    emc2305
+Changes in v3:
+- Simplify to pass &e50sn12051_info directly to pmbus_do_probe() 
+  to avoid the extra memory allocation
+- Link to v2: https://lore.kernel.org/r/20260430-add-e50sn12051-v2-0-d76fe42482ab@gmail.com
 
+Changes in v2:
+- Add %YAML 1.2 declaration in binding document.
+- Use a generic node name in examples in binding document.
+- Add MODULE_IMPORT_NS("PMBUS")
+- Remove unused / incorrect headers
+- Link to v1: https://lore.kernel.org/r/20260429-add-e50sn12051-v1-0-c101e6c80bbb@gmail.com
+
+---
+Colin Huang (3):
+      dt-bindings: hwmon: pmbus: add Delta E50SN12051 binding
+      Documentation/hwmon: add Delta E50SN12051 documentation
+      hwmon: (pmbus) add support for Delta E50SN12051
+
+ .../bindings/hwmon/pmbus/delta,e50sn12051.yaml     | 42 +++++++++++
+ Documentation/hwmon/e50sn12051.rst                 | 81 ++++++++++++++++++++++
+ Documentation/hwmon/index.rst                      |  1 +
+ drivers/hwmon/pmbus/Kconfig                        |  9 +++
+ drivers/hwmon/pmbus/Makefile                       |  1 +
+ drivers/hwmon/pmbus/e50sn12051.c                   | 52 ++++++++++++++
+ 6 files changed, 186 insertions(+)
+---
+base-commit: b584e7d50af502462349910bf4ed30057620b69f
+change-id: 20260316-add-e50sn12051-ad828ad6777a
+
+Best regards,
 -- 
-2.34.1
+Colin Huang <u8813345@gmail.com>
 
 
