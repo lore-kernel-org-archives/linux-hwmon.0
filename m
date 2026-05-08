@@ -1,31 +1,31 @@
-Received: from outbound.st.icloud.com (p-east2-cluster5-host5-snip4-5.eps.apple.com [57.103.79.88])
+Received: from outbound.ms.icloud.com (ms-2001k-snip4-5.eps.apple.com [57.103.73.236])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF5D3303C97
-	for <linux-hwmon@vger.kernel.org>; Fri,  8 May 2026 17:48:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.79.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E5831F98F
+	for <linux-hwmon@vger.kernel.org>; Fri,  8 May 2026 18:11:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.73.236
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778262523; cv=none; b=LcQfxVOTrrRszbIEBNn8YSLeIrmonYFiqzjnfXhlsPmTLMkKQbUznECd/6xf5hukRGIk7OY46NTJcHBal7myRtRYiKm35sDg6c6XHLlmf4BWiQR/51mzCLUR70zW5vs2KMFIe7w3x0MWoJKYzFuxmfWlTCiT9ICYdj/thvjGS74=
+	t=1778263871; cv=none; b=mLMymKrNbK24mrANk4PpmZa9rl8qdULlFw+gETcBCo6BRWGDsPnDKXHz19zf+wlznCR0d/AAtOE90mcjs/FFAmQslx9a8Xd2BXlsz5CoYMifsfQ8fyGNDcUKY5I31jI5KSWKvCsJUBywCV283RKDnEWkwQ1J1OUynu2muueIX9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778262523; c=relaxed/simple;
-	bh=bHw7HTwpfOq3QxiJ1BuUqK1tzCiOsxQO9p4QQ4I7pi0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UJ5b5sI/dlG8UcWM4jx/h3Bg0vOuKlHiTBnRBTybs5G5vCCQUNEaLxjAYHhQXRVZFu0Jaqw+rkd6DmyF9cof9czfwdRDUKQHWZnu4FneGWRDzLA1xxufyhPQwYcUKVZEl6CwwB98ggnS7pXosUiU3+uVoQTKzCQ1MhOLVP0OUI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=P0rY+qLi; arc=none smtp.client-ip=57.103.79.88
+	s=arc-20240116; t=1778263871; c=relaxed/simple;
+	bh=uhoEwFpD0wLLc2f6/ghy4yzGQTrFwfEiWin1DsoyXDg=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=ihUPhEz/22uDIdgBSDcAfzkLa6W3xo/RK7kuZMvumSajK2Nze1XiTISZ9STv7cIHJC72IdhgVvvs8lKHPPhyMT3ZGFuROQjKtyZDRs3TmoKaWgBH4ucR2kwCuwZAltPZeUvG2q9FbLFUwtaICwgVmeW3CM6gaN2VZqsk4w4a4Zo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=nkFuTMQD; arc=none smtp.client-ip=57.103.73.236
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="P0rY+qLi"
-Received: from outbound.st.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-east-1a-100-percent-7 (Postfix) with ESMTPS id 3192318002F5;
-	Fri, 08 May 2026 17:48:40 +0000 (UTC)
-X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQhJBkMDRQVJF0wBTVIPDxhMCkEUWgpcQgtJAS1eCF4fTBwdDlgGEhZdRVsYRRlLHVgWAV8GWXIZWhRcGFNFUR9UWEEOCloBUFEdXwIKBEcEWxdGA1NFQQQXEVABWB5WXloXXk1HH0BNYkkBWhlbHEAXSm5NUw8PGVoUXBhTRVEfVFheBFNWDhIBSwRfBlkKXVpBAV8aX1BGC1UKXFReH0QPHgtZD1oKQFsbBi1eCF4fTBwdDlgGDFBNAUMICgJRHFYNVw==
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1778262521; x=1780854521; bh=kHvvy5yxS7CNw2T1Cpc3tHmZrh6rKc5Q3rWxoahWoGI=; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme; b=P0rY+qLiJOhbkk4DD57e/fqrCGypCEtIH0T54h65TV6EmTxEUcPg4/Qo3Iy7BBOt+ykZpNQm33eHdCAXU7t5p+m5jGc9eO86MgUC+P5esZuQh3woZ1eAHDn6pOnPhDuw573yhgdcusab6Cx4caqRTW/rtZinwFkmITTsFw6oher3j1oVRi7x5+74TBLF0w5k0fp9T8oTRexRy+ULf2VZ+67F9H32uNP+AEeINXZYL5PPYvoE4dKrpctwSdx/cnDF2nNDXG875OdEfQsb30V34uvYigeu483UYhDMWMkmUyEFxrk+XVPz5DS0hU6g72APPllIJbaNkBWsxW01G/qFcQ==
-Received: from [192.168.89.2] (unknown [17.42.251.67])
-	by p00-icloudmta-asmtp-us-east-1a-100-percent-7 (Postfix) with ESMTPSA id 2D7D418002C1;
-	Fri, 08 May 2026 17:48:36 +0000 (UTC)
-Message-ID: <b8372128-c922-4b62-91c5-46f848180bc5@icloud.com>
-Date: Sat, 9 May 2026 02:48:35 +0900
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="nkFuTMQD"
+Received: from outbound.ms.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-west-3a-100-percent-1 (Postfix) with ESMTPS id D77FE180044B;
+	Fri, 08 May 2026 18:11:06 +0000 (UTC)
+X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQhJBkMDRQVJF0wBTVIPDxhMCkEUWgpcQgtJAS1eCF4fTBwdDlgGEhZdRVsYRRlLHVgWAV8GWXIZWhRcGFNFUR9UWEEOCloBUFEdXwIKBEcEWxdGA1NFXwMXEVABWB5WXloXXk1HH0BNYkkBWhlbHEAXSm5NUw8PGVoUXBhTRVEfVFheBFNWDkIPTQQIBgkFXQhKBQkaX1FEW1ULXQVcH0AISlJbU1hUFlwdAC1eCF4fTBwdDlgGDFBNAUMICgJRHFYNVw==
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1778263869; x=1780855869; bh=0mjrF1GTIkE+Ezcb/ccqXnK0O806odp0Xc3hbwPBEkM=; h=Message-ID:Date:MIME-Version:Subject:From:To:Content-Type:x-icloud-hme; b=nkFuTMQDJ8l08ZZ+Bhzk8a24C9DCGNM2eGCagE5cdFQRV9kjTmLrxMnnxQDHthRPosYB66SdV0fK9KQuiAy1RQdZK6zFGLt582R9nK75+n7zPu1sg1kRpZ8AhenUJzQ9lXBTCEwsWREk3z2XkCNw/L3sGEUUPpFA0l8VnxYWJhX+Qs/7aj5CSJhRJjVHFfokZz1MyP2ZSSXGL+DLbaJEPXWfF+eHezqGiBIr4CAJ+TwBDAlGIQfc4w/3RZybDZlkeWHVW9wun0i5TU6y3zePM35vOsqP424Jpe6L9emveubXnMQRQUgAA8kbuMAsR26aBCFgmC5V/qhPOvNa3c7fSA==
+Received: from [192.168.89.2] (unknown [17.57.154.37])
+	by p00-icloudmta-asmtp-us-west-3a-100-percent-1 (Postfix) with ESMTPSA id E513A1800152;
+	Fri, 08 May 2026 18:11:03 +0000 (UTC)
+Message-ID: <2657e1b7-126d-4c4b-8027-012a6d3ffee3@icloud.com>
+Date: Sat, 9 May 2026 03:11:01 +0900
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -34,6 +34,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v4 1/2] usb: xhci-pci: add AMD Promontory 21 PCI glue
+From: Jihong Min <hurryman2212@icloud.com>
 To: Mario Limonciello <mario.limonciello@amd.com>,
  Jihong Min <hurryman2212@gmail.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -48,34 +49,47 @@ References: <20260508143910.14673-1-hurryman2212@gmail.com>
  <ad41d70b-e9c0-446e-8bd0-4528de75b592@amd.com>
  <0d518d40-e239-4d93-8e71-0d2e140f00ca@icloud.com>
  <966c9e07-10e6-4abe-9cb5-77b974f31302@amd.com>
+ <b8372128-c922-4b62-91c5-46f848180bc5@icloud.com>
 Content-Language: en-US
-From: Jihong Min <hurryman2212@icloud.com>
-In-Reply-To: <966c9e07-10e6-4abe-9cb5-77b974f31302@amd.com>
+In-Reply-To: <b8372128-c922-4b62-91c5-46f848180bc5@icloud.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA4MDE3OCBTYWx0ZWRfX935Lm/qcOlJ4
- Wd9FC7bHZcNIWRmEu4awLvUwSbEm2uMLs//2yZT8sgY4kYWdfpnwgSmELukQA0CfCZ4bUuVuD0Z
- U+k/FjEfI8w/y0wKB+QhldIyZ1X1/5RtVcxAOGQQXndpLxzrt/yF6RADdaMcM4j1of9vEBdDg5g
- g6tzmp/kz5P8i872ylvf4UjnucFwADrfm1DKeJcE5z9yxsKd4FS5bAQTofOjT4XOLuIqQS8NRHb
- XMmWo06QZmHmKYbEnJOCbxx8WV1a2ArLy2Af4qhzA2V8lbbAvuT5uSK57oZsgMiFd4+hvPcv94o
- euha7GuwlZHsxJyRk3WkUIOWQ+xwFljM5rpmL/xL/HyPmrhFHfxx9TvEQSTx6I=
-X-Proofpoint-GUID: Cd0ZLK5VeTSlOhUfl_RtlPeOkMoRsz_y
-X-Proofpoint-ORIG-GUID: Cd0ZLK5VeTSlOhUfl_RtlPeOkMoRsz_y
-X-Authority-Info-Out: v=2.4 cv=GJ4F0+NK c=1 sm=1 tr=0 ts=69fe21f8
- cx=c_apl:c_pps:t_out a=YrL12D//S6tul8v/L+6tKg==:117
- a=YrL12D//S6tul8v/L+6tKg==:17 a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10
- a=x7bEGLp0ZPQA:10 a=5jDBv52wX64A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=W5yn_su87cR4V-zVC3gA:9 a=QEXdDO2ut3YA:10 a=PgRulw5oR9JgysbTFEid:22
- a=oa2-kN79Xhin27rcel9q:22
+X-Proofpoint-ORIG-GUID: sl9rJsX7eR6qgLM1qVLBH4gVb3t01cp7
+X-Authority-Info-Out: v=2.4 cv=f79FxeyM c=1 sm=1 tr=0 ts=69fe273c
+ cx=c_apl:c_pps:t_out a=qkKslKyYc0ctBTeLUVfTFg==:117 a=IkcTkHD0fZMA:10
+ a=NGcC8JguVDcA:10 a=x7bEGLp0ZPQA:10 a=5jDBv52wX64A:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=cZtEhlklJ10v6u5TLhAA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: sl9rJsX7eR6qgLM1qVLBH4gVb3t01cp7
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA4MDE4MiBTYWx0ZWRfX+B2wgVjg2Q/r
+ RNN4afRGFiweI7ch7aU7gk8wbXXDLe7vpVXTQNRBqgetOdAFvRiXZ9ra0bHEAv7FsvjsFaa52UR
+ aMDmjdnMfYNec17kLaG1ZkJqUN3q/IVNmIHbhsVX1ZU1VbAq5oIK2S3EV1HayXWpchk75te3iek
+ plxGGzivtAbYTEQ9QV/4SS6r0GMsBeRNOsgYI2E3dmn5U1pQLMutx00UVOdI1hlY9pMjQm2wYef
+ Y3inbE7domPmONMWSIDhZTF19tnOM68r5sZ8BBZ6wUOnY66gS0qtQMVSUVPhxlsiBMrB9Idfzww
+ LeRFlbox0YGi6iTwrG57y60ahU/owMXgxl98lm/hFHDjG5s184IaQFpHBZHBIg=
 
-> Something else I was thinking about while reviewing this series.
->
-> Promontory 21 is only on AMD platforms and AMD platforms are only x86. 
-> I think the Kconfig should be conditional on AMD CPU support being 
-> enabled and X86 architecture so that we don't bloat other 
-> architectures with dead code that will never run.
-Agreed. PROM21 is AMD x86 platform-specific, so I will add X86 and
-CPU_SUP_AMD dependencies to USB_XHCI_PCI_PROM21 for v5.
+>> Something else I was thinking about while reviewing this series.
+>>
+>> Promontory 21 is only on AMD platforms and AMD platforms are only 
+>> x86. I think the Kconfig should be conditional on AMD CPU support 
+>> being enabled and X86 architecture so that we don't bloat other 
+>> architectures with dead code that will never run.
+One related Kconfig question: would it be acceptable to make
+USB_XHCI_PCI_PROM21 default y with the X86 && CPU_SUP_AMD dependency?
+
+This would only default-enable the PROM21 xHCI PCI glue. The hwmon driver
+would still be controlled separately by SENSORS_PROM21_XHCI and would remain
+opt-in, so the undocumented temperature register polling would not be 
+enabled
+by default.
+
+The concern is that, without default y, distribution configs may miss the
+PROM21 PCI glue and then SENSORS_PROM21_XHCI can not bind even if the hwmon
+driver itself is enabled or available as a module.
+
+Would you prefer this, or should USB_XHCI_PCI_PROM21 remain explicitly 
+enabled
+by distributions?
 
 Sincerely,
 Jihong Min
+
