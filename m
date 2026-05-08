@@ -1,150 +1,125 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DEBE2E762C;
-	Fri,  8 May 2026 21:52:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755783630B7;
+	Fri,  8 May 2026 23:33:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778277168; cv=none; b=FICMSPAov9iXUUK3WY8Nfme6f8IDDqfidEQmTsfIi+flaA8p8lUr/ZT27xHUzwzuBvuOfKWHNXPRk7edxTX79WVzox44BsjYlEHvq58+WFfnaytQwixRacjosY2Cdk8Fh+gt6hNhiXsxzNQpEX8e8JR9pA8403m46vQgYnCdVP8=
+	t=1778283205; cv=none; b=uDz18J0E64XZUaEPWh50R+NXnHEXiuF4198SnpAxxUiSK5PwSiehmFYCI80KLLVwjx+6sIvHAHFgLM2u4J3wIAusUZye+BoWHk0+/wByXb6fJ2nzK8XY7RYJuPrJnr8EjjR7rmpZ1K+PKY76FgsNQo9x/8cYMjg3g41GpekSQec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778277168; c=relaxed/simple;
-	bh=2ft7ENV4Q+1UIVHLV+1ZilABTSDxqlSv/DzDkwMcbWM=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=V6A0qT7628UUhwpEZz6hoU5+mg04dINbz5LVR1I/jBL/DCudpsdWvRmcTWcG+wAxl71ImfTo34IP+f8te10a6ZNIQFZtAP4oTR7VT0EHdRFW38g7ft1Zpz86m8I+pRKomJttsWNesFaby+JIK6YCBYXRrT3wOE2hpuqkJPPlE7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DGkJLYQp; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778283205; c=relaxed/simple;
+	bh=jt0U3NVrVS1sKLM6aSFaTtJhs6yLPAuUJNrXgqbkitg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ZNC5EWDYuYaJtRiFSWQnIS9K8xia+ksgwU4C5z/P1gtq9gu2ZqIertIvyjyUII162gNYayIyWqTdhMGmv52L52MoMr197koNErU1/02pSoSgoKqLzfkACvJ1ibJJ1pSorUIaoCX+3O1orFDjP1fokiJk3BcIXDZTUih9HV2MlBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kiDW5SFQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DGkJLYQp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71919C2BCB0;
-	Fri,  8 May 2026 21:52:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kiDW5SFQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5651DC2BCB0;
+	Fri,  8 May 2026 23:33:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778277167;
-	bh=2ft7ENV4Q+1UIVHLV+1ZilABTSDxqlSv/DzDkwMcbWM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=DGkJLYQps+6b5pT9X0x+i5jagWGJu1wvR6rjNFIFhuZNLZ6/9yiQgQY3C+MF3R/D2
-	 rsJvYwDPIYk4qiY2Fc0MZFcv2w5sb2QtW7LgToQGABm7mzmKDUUe6eJ2yQkvkzvENb
-	 wijjnJQw9AH6M+rhqjyIruoUjYA64ZQiNbuwpKHGt3hv5KMIgou9kO/MKntgIf4ejo
-	 vZ3zphcLVusDm65+ZtA/GI2/DUr2fMH/E2SKRBXsiSffVWuwv0PyhwN5BI/At56uya
-	 WTmCvf8ucBZa85Cf2pd3wvssa0884U/b9jQxT4LuqpjcETBvKDm5O3HMYCUpDoqoAe
-	 vF6SHIkTYTgVw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 2/2] hwmon: add AMD Promontory 21 xHCI temperature
- sensor support
-Reply-To: sashiko@lists.linux.dev
-To: "Jihong Min" <hurryman2212@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-pci@vger.kernel.org
-In-Reply-To: <20260508143910.14673-3-hurryman2212@gmail.com>
-References: <20260508143910.14673-3-hurryman2212@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 08 May 2026 21:52:46 +0000
-Message-Id: <20260508215247.71919C2BCB0@smtp.kernel.org>
+	s=k20201202; t=1778283205;
+	bh=jt0U3NVrVS1sKLM6aSFaTtJhs6yLPAuUJNrXgqbkitg=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=kiDW5SFQEn1EP9zwj3oMUsZFVcmA7HpHndcHIVqkR+WS9DR/VGjvH5ZXYFF/sxEAi
+	 rqc++zAU+dC1q2abALKxcsYud+eG8tTSU+cEMkm128fdIVngqe5zmuT8M3kXq0QkgD
+	 JkJX9Tm55d056VBTH5aQymNxHfCzoCV9LVrEnpArbE7S0+pKDZKPDHEEq5iJHHFraT
+	 QFm7nlU8QkYuM1O1ft3ihnsKYCV+r4tuPL9nE8e3ZMMw/8ntqXqrEPmYb2fiBRgMbS
+	 w78bNzUWS9ugr5DWGZe5C7XyTaU+yPDLPKuWD+32P7DGW2u9T2rK3RO+O9RnyvUaUb
+	 IjRqK3P1DkNaw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46166CD37AC;
+	Fri,  8 May 2026 23:33:25 +0000 (UTC)
+From: Abdurrahman Hussain via B4 Relay <devnull+abdurrahman.nexthop.ai@kernel.org>
+Subject: [PATCH 0/7] hwmon: (pmbus/adm1266) RTC fix, blackbox, FW rev,
+ rtc_class
+Date: Fri, 08 May 2026 16:33:12 -0700
+Message-Id: <20260508-adm1266-v1-0-ec08bf29e0ce@nexthop.ai>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALhy/mkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDUwNz3cSUXEMjMzPd5DTjxDQTo5Rk4xQjJaDqgqLUtMwKsEnRsRB+cWl
+ SVmpyCUi7Um0tAH79X4hrAAAA
+X-Change-ID: 20260507-adm1266-cf3af42dc3d2
+To: Guenter Roeck <linux@roeck-us.net>, 
+ Alexandru Tachici <alexandru.tachici@analog.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Abdurrahman Hussain <abdurrahman@nexthop.ai>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2581;
+ i=abdurrahman@nexthop.ai; h=from:subject:message-id;
+ bh=jt0U3NVrVS1sKLM6aSFaTtJhs6yLPAuUJNrXgqbkitg=;
+ b=owJ4nJvAy8zAJbYltPXv6rsCXxhPqyUxZP4r2p+ZsuDQpJOV5jeuBCUtnlPwfeOFcx4+Vxl57
+ vT5WM55NKOyo5SFQYyLQVZMkWXOI/83bR1tERtiDtnDzGFlAhnCwMUpABN5OpHhf6Dufk1G0+Jj
+ 64NuXj7Es3fOnOBSJfO7m26onDkp4+rmGMDwP+J7ncqVmOnRZ9+s6ZibfMNgg1OZ6s+Vshb7Ij6
+ c/iktxA8A3JdTJg==
+X-Developer-Key: i=abdurrahman@nexthop.ai; a=openpgp;
+ fpr=9CE24FEC86888658B05CC23FB45585FDABDD10F4
+X-Endpoint-Received: by B4 Relay for abdurrahman@nexthop.ai/default with
+ auth_id=756
+X-Original-From: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+Reply-To: abdurrahman@nexthop.ai
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] Using pm_runtime_put_noidle() can permanently prevent the PCI devi=
-ce from runtime-suspending.
-- [Low] The local hwmon->lock mutex is redundant and violates the hwmon sub=
-system locking architecture.
---
+This series fixes a few issues in the adm1266 driver and fills in
+some gaps, as listed below.
 
-commit 62e33fab546f8b14b0cd80683aa504672db60e64
-Author: Jihong Min <hurryman2212@gmail.com>
+Patch 1 is a wall-clock RTC bug fix: the driver currently seeds the
+device's timestamp counter with CLOCK_MONOTONIC seconds, which makes
+blackbox record timestamps non-comparable across reboots. It carries
+a Fixes: tag.
 
-hwmon: add AMD Promontory 21 xHCI temperature sensor support
+Patch 2 writes the 16-bit fractional-seconds field of SET_RTC that
+the driver was zeroing, restoring sub-second resolution on records.
 
-This commit adds an auxiliary-bus hwmon driver to expose the temperature
-sensor on AMD Promontory 21 xHCI controllers. It reads the sensor value
-through a vendor-specific index/data register pair in the PCI MMIO BAR.
+Patch 3 exposes the firmware revision (IC_DEVICE_REV, 0xAE) via
+debugfs alongside the existing sequencer_state entry.
 
-> diff --git a/drivers/hwmon/prom21-xhci.c b/drivers/hwmon/prom21-xhci.c
-> new file mode 100644
-> index 0000000000000..f91303ce3428d
-> --- /dev/null
-> +++ b/drivers/hwmon/prom21-xhci.c
-> @@ -0,0 +1,250 @@
+Patch 4 adds a write-only clear_blackbox debugfs file. Devices
+configured for single-recording mode (BLACKBOX_CONFIG[0] = 0) need
+an explicit clear once the 32-record buffer fills; the documented
+sub-command ({0xFE, 0x00} block-write to 0xDE) wasn't reachable
+from userspace.
 
-[ ... ]
+Patch 5 exposes the non-volatile POWERUP_COUNTER (0xE4) via debugfs.
+The same value is embedded in every blackbox record, so the live
+value lets userspace match a captured record back to the boot it
+came from when correlating logs.
 
-> +static int prom21_xhci_read_temp_raw_restore_index(struct prom21_xhci *h=
-wmon,
-> +						   u8 *raw)
-> +{
-> +	struct device *dev =3D &hwmon->pdev->dev;
-> +	bool pm_ref;
-> +	u32 index;
-> +	u32 data;
-> +	int ret;
-> +
-> +	ret =3D prom21_xhci_pm_get(hwmon, &pm_ref);
-> +	if (ret)
-> +		return ret;
-> +
-> +	mutex_lock(&hwmon->lock);
+Patch 6 registers an rtc_class device backed by SET_RTC. The data
+sheet (Rev. D, p. 22) explicitly recommends "frequently send the
+time stamp to the ADM1266 to synchronize the UNIX time and reduce
+the time from drifting" when running on the internal oscillator
+(no external 32.768 kHz crystal). With this patch userspace can
+drive the re-sync via standard tooling (hwclock, chrony,
+systemd-timesyncd) against /dev/rtcN, with no driver-specific
+sysfs ABI.
 
-Is this private mutex redundant here?
+Patch 7 disambiguates GPIO line labels on platforms that fit two
+ADM1266 devices on different I2C buses at the same slave address.
 
-According to the hardware monitoring subsystem guidelines, the hwmon core
-automatically serializes sysfs operations for attributes registered via the
-info parameter of hwmon_device_register_with_info().
+Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+---
+Abdurrahman Hussain (7):
+      hwmon: (pmbus/adm1266) use wall-clock seconds for SET_RTC
+      hwmon: (pmbus/adm1266) write fractional-seconds field of SET_RTC
+      hwmon: (pmbus/adm1266) add firmware_revision debugfs entry
+      hwmon: (pmbus/adm1266) add clear_blackbox debugfs entry
+      hwmon: (pmbus/adm1266) add powerup_counter debugfs entry
+      hwmon: (pmbus/adm1266) register rtc_class device backed by SET_RTC
+      hwmon: (pmbus/adm1266) include adapter number in GPIO line label
 
-Since this driver registers its only attribute (temp1_input) via the info
-parameter and does not access the hardware from interrupt handlers or other
-asynchronous paths, does it need its own serialization?
+ drivers/hwmon/pmbus/adm1266.c | 177 +++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 167 insertions(+), 10 deletions(-)
+---
+base-commit: 917719c412c48687d4a176965d1fa35320ec457c
+change-id: 20260507-adm1266-cf3af42dc3d2
 
-> +	index =3D readl(hwmon->regs + PROM21_INDEX);
-> +	/* Select the PROM21 temperature register through the vendor index. */
-> +	writel(PROM21_TEMP_REG, hwmon->regs + PROM21_INDEX);
-> +	data =3D readl(hwmon->regs + PROM21_DATA);
-> +	/* Restore the previous vendor index register value. */
-> +	writel(index, hwmon->regs + PROM21_INDEX);
-> +	readl(hwmon->regs + PROM21_INDEX);
-> +	mutex_unlock(&hwmon->lock);
-> +
-> +	if (pm_ref) {
-> +		/*
-> +		 * Drop only the reference taken by pm_runtime_get_if_active().
-> +		 * Do not mark the device busy or schedule autosuspend from the
-> +		 * hwmon path; sensor polling must not keep the xHCI PCI device
-> +		 * active.
-> +		 */
-> +		pm_runtime_put_noidle(dev);
+Best regards,
+--  
+Abdurrahman Hussain <abdurrahman@nexthop.ai>
 
-Can using pm_runtime_put_noidle() permanently prevent the PCI device from
-runtime-suspending?
 
-If the xHCI driver drops its own runtime PM reference concurrently (e.g., v=
-ia
-pm_runtime_put_autosuspend()), the PM core's idle check sees usage_count > =
-0,
-returns -EAGAIN, and skips scheduling the autosuspend timer.
-
-This code then calls pm_runtime_put_noidle(), which decrements usage_count
-to 0 but intentionally bypasses queueing an idle check or notifying the PM
-core.
-
-Could this leave the xHCI controller permanently in the RPM_ACTIVE state wi=
-th
-a usage_count of 0 and no pending autosuspend timer until the next PM state
-change?
-
-To safely drop the reference without resetting the autosuspend timer, should
-this use pm_runtime_put() instead, which properly queues an asynchronous
-idle check?
-
-> +	}
-> +
-> +	*raw =3D data & 0xff;
-> +	if (!*raw || *raw =3D=3D 0xff)
-> +		return -ENODATA;
-> +
-> +	return 0;
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260508143910.1467=
-3-1-hurryman2212@gmail.com?part=3D2
