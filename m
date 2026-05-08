@@ -1,31 +1,31 @@
-Received: from outbound.ci.icloud.com (ci-2004d-snip4-1.eps.apple.com [57.103.89.34])
+Received: from outbound.st.icloud.com (p-east2-cluster3-host11-snip4-6.eps.apple.com [57.103.77.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 097F92BEC52
-	for <linux-hwmon@vger.kernel.org>; Fri,  8 May 2026 16:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.89.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E82040FD8F
+	for <linux-hwmon@vger.kernel.org>; Fri,  8 May 2026 17:38:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.77.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778259387; cv=none; b=MwyCyWDkg8DK9Q/6oh8/nzX9UBTVLdSdiRXpuXDMFkpJXlPYfpsoJdEli1o4rXu1nkFQUxIy0emBOjXov9+qCUyuJ2LjFBrJV3/txqRLk8XKloDA44++CkyW/g3VHRrYQZo47Uaa6mClaOsLJE8HrzOLrz6tT5+tshoxAHH/7bE=
+	t=1778261887; cv=none; b=lP2FlR5TaaA85j6XiPAcADEtMPQqvRjkGbgJ6ETGvleEF4SnDUmlUHZN1IvvQNkqlmRN9w9OjED5jxfzXrEJMUA7SHAYW3eWuomgEcTCDGO2K9uw8GCyYexwVJBvo7Djub90+bp3NAIU2ynMzWQyfqQfNRba/twZAlGtGMLrtS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778259387; c=relaxed/simple;
-	bh=O+Z+iiQS6mOHEHFMXl2jZzyLVpVMQFSe6c0A8tPA/Y0=;
+	s=arc-20240116; t=1778261887; c=relaxed/simple;
+	bh=94R/QwsybbBzR1ekCC85MN/MnNhExX89pnlxdPMUFIQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iYd9I9xhE1wgCDUFBKkFPPvlocDszJ2Cki9M7fMDau4KynqPcLwaVp7W0JHK1m5MEE+rNBY2Rszw2D3fXSLhV/NUZNPxvQbfHSrX/QX4jTLgQb5qEKfJBCSKHpwIAt6TViuQioxlKkoVpYt4ProqpG2eCJi2otEqyLkNWXNmpmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=mLSdWLvZ; arc=none smtp.client-ip=57.103.89.34
+	 In-Reply-To:Content-Type; b=CNv3XTqS2Qh0z4OexdLLtGKo1bfMnXn+rWH8HAP7KpgxIT3AhHJXIvSKdZg6iQ8dNSq7aQjAu8DksY8jGyhmfytzxW4lAtGoBGajG9ge/iTAEKhLOI/mSCoaL9IinV3Q1qU5P76hoYWJijB1hkk4+4oG0adsbn4VEisQZwEmB6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=zW8G0XVJ; arc=none smtp.client-ip=57.103.77.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="mLSdWLvZ"
-Received: from outbound.ci.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-central-1k-100-percent-8 (Postfix) with ESMTPS id 1A45418003AE;
-	Fri, 08 May 2026 16:56:22 +0000 (UTC)
-X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQhJBkMDRQVJF0wBTVIPDxhMCkEUWgpcQgtJAS1eCF4fTBwdDlgGEhZdRVsYRRlLHVgWAV8GWXIZWhRcGFNFUR9UWEEOCloBUFEdXwIKBEcEWxdGA1NFURkXEVABWB5WXloXXk1HH0BNYkkBWhlbHEAXSm5NUw8PGVoUXBhTRVEfVFheBFNWDkAMSwZYUQlWXQ1LAFQaXwcRDVUKCFUNH0RfTwFcA14DQwFAAS1eCF4fTBwdDlgGDFBNAUMICgJRHFYNVw==
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1778259385; x=1780851385; bh=+QLZLsNYf7h9Ce79kOQN7zRPNN2q7F1QoiGbgvgNk78=; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme; b=mLSdWLvZwqNRhNXhUmkJmhVTY7rlx831BK9MA47Ujn6al8NsCzs2vAVcWeuMFjznM2mfiqMfa4WcmoBtLWqWQ1cIVC469vVg4XC8VyCxOwi4HgZQ4JkCml5gB4hnu7FuTuYjEFJHNPi5jFuHZFJtQWNmMAnH9oHV3ZIr9OvyDCgDmz7MRTePhkULARMyFcyCH6OFkzcz2aVfuAWyOQrbIQOWrR7VKaljt3q1UHzG2W1hdajhVA8Up4tJMK2rteIUXOtmpYsHxRRbER1UKg+kfKy08ZGxTCoBCv8t8rWSp2rqP9XK9Ug6y0DrTGZPEa3ul8K4cLTxlGrSYhpJ1JbLUg==
-Received: from [192.168.89.2] (unknown [17.57.156.36])
-	by p00-icloudmta-asmtp-us-central-1k-100-percent-8 (Postfix) with ESMTPSA id BB7C11802090;
-	Fri, 08 May 2026 16:56:19 +0000 (UTC)
-Message-ID: <05355fbd-4339-45a4-9ebf-4f7214513882@icloud.com>
-Date: Sat, 9 May 2026 01:56:17 +0900
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="zW8G0XVJ"
+Received: from outbound.st.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-east-1a-60-percent-3 (Postfix) with ESMTPS id 630251800644;
+	Fri, 08 May 2026 17:38:01 +0000 (UTC)
+X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQhJBkMDRQVJF0wBTVIPDxhMCkEUWgpcQgtJAS1eCF4fTBwdDlgGEhZdRVsYRRlLHVgWAV8GWXIZWhRcGFNFUR9UWEEOCloBUFEdXwIKBEcEWxdGA1NFQQQXEVABWB5WXloXXk1HH0BNYkkBWhlbHEAXSm5NUw8PGVoUXBhTRVEfVFheBFNWDkUNTlAIDlJWXQxNBwwaX1ZGDVVSXFENH0QLSFZVB1kCQAgZAy1eCF4fTBwdDlgGDFBNAUMICgJRHFYNVw==
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1778261885; x=1780853885; bh=2Gaxvl/4GCmdXsxMSVsMtj2eUIHFRsgIyPlEsCEOxsM=; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme; b=zW8G0XVJbCf/FlLxdOUv/OED4zzYr0FEw2Tat38Oqq3QPQHVctYCFi2BQuyMFV/raoouTsKb7EnADK/GzrHJm7uHeMzoUNk3Cw6ZAyZNHCfOmjl67iD8sNlAujrfW4fBWDSP5OomfZkoc4wasqUbLahbwoLR6aLWk7CA5XyvRVSpQnYqVo0qBpkCnSaXmp3vszZ2kz5cNkXXpIKZsYKU5FBe83SyrvWT7DDrf1Svqw0LBDJrB18M14lr49rOJxVWJaTkGuX+F+/SsqjdcWaZYlYTEQR+b7U7YXr9gT3V6EZ8J03yK0QxxR/jfmVw8fiWZNK6udcEsmV49YRRzXYYFw==
+Received: from [192.168.89.2] (unknown [17.42.251.67])
+	by p00-icloudmta-asmtp-us-east-1a-60-percent-3 (Postfix) with ESMTPSA id 7BCDD180161F;
+	Fri, 08 May 2026 17:37:57 +0000 (UTC)
+Message-ID: <546ce99d-554a-4d64-a1ff-420e802001a0@icloud.com>
+Date: Sat, 9 May 2026 02:37:54 +0900
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -33,76 +33,84 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] hwmon: add AMD Promontory 21 xHCI temperature
+Subject: Re: [PATCH v4 2/2] hwmon: add AMD Promontory 21 xHCI temperature
  sensor support
-To: Mario Limonciello <mario.limonciello@amd.com>,
- Guenter Roeck <linux@roeck-us.net>, Jihong Min <hurryman2212@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Mathias Nyman <mathias.nyman@intel.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>,
+To: Guenter Roeck <linux@roeck-us.net>, Jihong Min <hurryman2212@gmail.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mathias Nyman <mathias.nyman@intel.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Mario Limonciello <mario.limonciello@amd.com>,
  Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-usb@vger.kernel.org,
  linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1778123510.git.hurryman2212@gmail.com>
- <0c35058bb088213397b42fca8d51e9ad0bba5169.1778123510.git.hurryman2212@gmail.com>
- <35c2436b-d172-4172-a684-a96c4a0dcabe@roeck-us.net>
- <16c4f7e5-e33d-4271-a7af-5d6c7fca0570@icloud.com>
- <6745fd21-2001-4e06-af41-96ae63154c02@roeck-us.net>
- <198ae20f-49c9-4f81-87e2-e16e81053f08@icloud.com>
- <70035490-eafb-4610-8889-9e04931c8b32@amd.com>
+References: <20260508143910.14673-1-hurryman2212@gmail.com>
+ <20260508143910.14673-3-hurryman2212@gmail.com>
+ <0269bf45-316b-4ba5-af0e-312f6c2bebdd@roeck-us.net>
 Content-Language: en-US
 From: Jihong Min <hurryman2212@icloud.com>
-In-Reply-To: <70035490-eafb-4610-8889-9e04931c8b32@amd.com>
+In-Reply-To: <0269bf45-316b-4ba5-af0e-312f6c2bebdd@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Authority-Info-Out: v=2.4 cv=NfzrFmD4 c=1 sm=1 tr=0 ts=69fe15b7
- cx=c_apl:c_pps:t_out a=2G65uMN5HjSv0sBfM2Yj2w==:117
- a=2G65uMN5HjSv0sBfM2Yj2w==:17 a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10
+X-Proofpoint-GUID: rD_QwU-zS2IxD-YnjQpZCyhF2T3lsYc4
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA4MDE3NiBTYWx0ZWRfX4ZkxS6YcZIaj
+ O8O7cCFtCe8MOO/Wnq9S2NzTa/f7GEFsorYF0tthmi8aqRK5gjhPb/FytGKQJdgbddzRGXui/A6
+ 5DvuOTKSxubRxJ7imzJMQI7XttUwh6VwQ5ReFG914t5P5GYDeCtO+QlT1/KOtR7ifVmk59w29El
+ B9E7UYRbI3zpGEYTOl3rW7DLzaFnJgcSKkywkjCm6XrPo/2J4L67fCujHdkS+4pyrEMlkrtGoFn
+ K2uPGoQK36tuuCw89w3J/Qb5yHx7rkaCZYL/7JBMrw1xKoL+eFa8KpL1J7tuxkvcFt4fGeq9CfT
+ HuIvpRPj/SVEylgqHs5GJaY7qSWJsOBB0mYtOjQ8owJV8/I8zBVlMSbtZpy6Yo=
+X-Proofpoint-ORIG-GUID: rD_QwU-zS2IxD-YnjQpZCyhF2T3lsYc4
+X-Authority-Info-Out: v=2.4 cv=P7E3RyAu c=1 sm=1 tr=0 ts=69fe1f7b
+ cx=c_apl:c_pps:t_out a=YrL12D//S6tul8v/L+6tKg==:117
+ a=YrL12D//S6tul8v/L+6tKg==:17 a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10
  a=x7bEGLp0ZPQA:10 a=5jDBv52wX64A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=c92rfblmAAAA:8 a=pGLkceISAAAA:8 a=NEAV23lmAAAA:8 a=jm6BaUM5yunLdwCpO_4A:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=GvGzcOZaWPEFPQC_NcjD:22
+ a=NEAV23lmAAAA:8 a=k_rWY7h1Oc5qVOcB2M4A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
  a=PgRulw5oR9JgysbTFEid:22 a=MienORt8HT0FiJ1vGQZ6:22
-X-Proofpoint-GUID: zLnn0M4GnOupoLmgccVWtpqh383ISKTu
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA4MDE2OSBTYWx0ZWRfX0oLtkKpTDFo8
- Q1C3S/9OJHt0gK558mbjbUH+xyYetB1TWRJq3wYHUstKW9SGieVCx64c1+yxTgUzCwao8ZQ7cM3
- WBLs05D7DOPnYPOyh63Lzf3G4CVkhHLN7OFA1rj5nh0zjLGft3IHygrOOMR8VEiIfGPU8s5SXYG
- Mc4yCWAhsQFsCE5wHu6bTzrBYSK/Dx5mJrDKarAwAreLC3uNH7DvvdZ0YBMkAe8Wp4C3FOcMpcS
- kfetB5gt5pLSjWgZFxjXJh9iQFgnVUxnQ2yjI8xqVCOyCoOEd/+jzs6eLyk0+ZuiIsTFVRNi1o4
- bmp7pUK5BZDHsvIEdSswUJ9sKxnrwm9fwHQHZV5sJqVB5cgWLSeTFJeB16zV1w=
-X-Proofpoint-ORIG-GUID: zLnn0M4GnOupoLmgccVWtpqh383ISKTu
 
->
-> Another thing to mention is that you are going too fast between patch 
-> versions.  All your patches show up in a ton of people's inboxes.
->
-> It's great you've gotten feedback on them but I suggest you give it a 
-> few days or a week between versions to gather more feedback.
-Thanks for the guidance. I understand, and I agree that I have been sending
-new revisions too quickly.
+ > I am sure I understand the reasoning here. What is the problem if it 
+is attached
+ > to the auxiliary device ? Other drivers do that, so I don't immediate 
+see why
+ > that would be a problem here.
 
-I will slow down the revision cadence from now on and wait a few days, or
-until the review discussion settles, before sending the next version.
->
-> If you haven't already; you should take a look at what Sahiko finds on 
-> your patches too.  Be sure to look at the feedback critically and take 
-> it with a grain of salt; but it often finds a few nuggets that are 
-> worthwhile to consider.
->
-> Here is the Sahiko link for v4 you can review if you weren't already 
-> looking at it.
->
-> https://sashiko.dev/#/patchset/20260508143910.14673-1-hurryman2212%40gmail.com 
->
->
-I have been checking the Sashiko feedback and have been incorporating the
-actionable issues it found where they made sense. I will continue to review
-it critically before sending future revisions.
+I kept the hwmon device parented to the PCI function intentionally 
+because the
+temperature value is read from that PCI function's MMIO BAR, and systems may
+have more than one PROM21 xHCI PCI function.
 
-For reference only, and not as a substitute for the mailing-list 
-patches, I am
-keeping my current work-in-progress branch here:
+If the hwmon device is parented to the auxiliary device, userspace may 
+report it
+as a virtual adapter. Parenting it to the PCI function lets userspace 
+identify
+which PCI endpoint each reading belongs to, which is useful on systems with
+multiple PROM21 xHCI functions.
+
+The auxiliary driver still owns the hwmon lifetime. Its remove path 
+unregisters
+the hwmon device before the PROM21 xHCI PCI glue tears down the HCD/MMIO
+mapping.
+
+ > +#include <linux/math.h>
+ >
+ > Is this needed ?
+
+Yes. It is used for DIV_ROUND_CLOSEST() in the raw-to-millicelsius 
+conversion.
+
+The other review comments have been addressed locally, including 
+dropping the
+extra mutex, removing the unnecessary channel checks, passing the MMIO 
+resource
+through platform data instead of looking at the parent's driver data, 
+removing
+the redundant hwmon ABI wording from the documentation, and the small style
+cleanups.
+
+Following Mario's advice from the v3 discussion, I will wait for the current
+review discussion to settle before sending v5. I am keeping the current
+work-in-progress branch here for reference only:
 
    https://github.com/hurryman2212/linux/tree/prom21_hwmon
 
 Sincerely,
 Jihong Min
+
