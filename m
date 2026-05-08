@@ -1,85 +1,145 @@
-Received: from outbound.st.icloud.com (p-east2-cluster4-host8-snip4-10.eps.apple.com [57.103.78.251])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EE033C1973
-	for <linux-hwmon@vger.kernel.org>; Fri,  8 May 2026 18:39:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.78.251
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8009B36F419
+	for <linux-hwmon@vger.kernel.org>; Fri,  8 May 2026 18:41:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778265568; cv=none; b=LVvreWAPD0m5J2Stk543a5S5Hv9tNHf44ncn7vqoueJKqQGhFlA2Tgw4e6WA3pPJcmHDTdVPXNBpo/04Y3a/7yHl6H9/yt8a15HyG8XNLOEItUbZTIfy+KkMqwrnLc8txB2wEkIHK3m0LDhUe+0NRZ66kiuc75ot+JIgM7F/I98=
+	t=1778265669; cv=none; b=JBSfk0SeH28VVzVYMZN6DaE8d5GYKc58y8ZzKmPdsQ1ZJ6hWeVBMrLm/HPsLZUHWAsEWDcGiDw0puYKlyOFwL6SGrbQgrKzYWDzjnnWu0UJREEANZwgD6gOZL8i7GCkvdXMGaXKZOPaLaAJuluJl5iOLy7VZiTdacFCO/wtmj2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778265568; c=relaxed/simple;
-	bh=BVSUt+ZizRqp6BDhTylI8djJnN+nMLNyWkGm3KGv7k0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V1UwIJ8XdudFvdqUumgz913ML70iSEEFMEYfTev9jCpEGf5Qg3dP14/fl4dp2FmOjI6HU8M5tVcFqBxP5fev0GmxuANBhQy3jFbBtabt2QgVL8kT7XqB1U2ziGYhxPcJ/ExTkUwRbUMBAIaF4K8/hrm3d4Q9gYZvRyji0R219lQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=tEEhhB/F; arc=none smtp.client-ip=57.103.78.251
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+	s=arc-20240116; t=1778265669; c=relaxed/simple;
+	bh=EZaiKQ2Igewejr/mBgC2O2msXgfzgRjupf+kA1bz7Sk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=QqIJBSJhUBiOZtfqSOlbUavtmkt30rMmcrS0tiTuhvEwO+tcrvn0iRS7ja+xIdb9G5e6wxaKrHJXieRUL/vZProWo63jW0kgCemeRieA0UDm8x9jHhCtK+bauoKDtfkwrpizaEezxA4SqLwbLVgVaa1z4CZNKbWAdnkMZhRXQT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QAj8T0m8; arc=none smtp.client-ip=74.125.82.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="tEEhhB/F"
-Received: from outbound.st.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-east-1a-100-percent-2 (Postfix) with ESMTPS id C4D3A1800762;
-	Fri, 08 May 2026 18:39:23 +0000 (UTC)
-X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQhJBkMDRQVJF0wBTVIPDxhMCkEUWgpcQgtJAS1eCF4fTBwdDlgGEhZdRVsYRRlLHVgWAV8GWXIZWhRcGFNFUR9UWEEOCloBUFEdXwIKBEcEWxdGA1NFQQQXEVABWB5WXloXXk1HH0BNYkkBWhlbHEAXSm5NUw8PGVoUXBhTRVEfVFheBFNWDhYMHQEODw1WXV1OBwsaXwISXVUKCFJYH0EATwcIBV9RSFpKVy1eCF4fTBwdDlgGDFBNAUMICgJRHFYNVw==
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1778265566; x=1780857566; bh=BVSUt+ZizRqp6BDhTylI8djJnN+nMLNyWkGm3KGv7k0=; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme; b=tEEhhB/F7RQKWpeFf1nvXjbBtKc6jgFBO6aQ8QGXKameHDW694/fC8G9SZduavVx4B7H8hrRAk/dNoV2BIvifr1lscV3gnWwUnwlWURjX7iooBjw/NkNgg3F7rC1VlwOKtf6kmdp9GjR6jD3kc/UrKKRHjKctBjj38GeQ/Of7Fs0P6/E+3drdZOewzv2l9XrT05tg3IBqWt8Dui76ryriEfEV6ceDJ3JnARAwswj00qIgwwCxLy589rgu/GljLK9AgV6P6CBAQpXIs33OBnyHYZwgoPSAKMY8OOyTO3BvM3U1n4DlbCyqlrQKejEQaTY8zB66TrCZmR2EsvaHLmPQA==
-Received: from [192.168.89.2] (unknown [17.42.251.67])
-	by p00-icloudmta-asmtp-us-east-1a-100-percent-2 (Postfix) with ESMTPSA id 6FB5718000B1;
-	Fri, 08 May 2026 18:39:20 +0000 (UTC)
-Message-ID: <f5e2c8fd-d64f-40bd-9ee3-1974e24c8c2d@icloud.com>
-Date: Sat, 9 May 2026 03:39:17 +0900
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QAj8T0m8"
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2ecf9e398f4so6130242eec.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 08 May 2026 11:41:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778265667; x=1778870467; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WNHFxOPKssTiIkdcxNpnCuXp2DqdPiAAb46D1S13Dew=;
+        b=QAj8T0m8errkfGu54SnXxEgn403EgURbX3giHC7Da77qJHu2N1u0wYWJh1ZIMCkG70
+         JC7mn7z+dx0qp3a1FYnDCPPEitp08BLyakogoAuHh90i7FA+pkKaeFPTndmXA8EwNyB4
+         QZx3nL7yZKXfydcfV//ILY2maQlTMmcHxOXKtwFd+2Btln9y4vZnQITMuAXO4iRsOHiE
+         Qt1Q0Ftk6l+fDXGX2jKQmj+oqCVppw40OeU6oL91e5d6oU4AlebjMrudqq5n1MoJIUlz
+         gBv2mLxnTOzaSfVWaYfa5KyDuD8WZzwcaRELhgutnX9p51O/pafLgmLeYAM1zBMQS3aq
+         Vifg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778265667; x=1778870467;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=WNHFxOPKssTiIkdcxNpnCuXp2DqdPiAAb46D1S13Dew=;
+        b=r/oayjzN/YIWzJ21qOMA0kNmpVpYK18hg/6q0YSq4Hy+rSQTq/XPwLvOETSWQkfynS
+         aT+EfzpUFBnh/a4cruIVNwUYVsvd2GBKo4ClFh8C3kb1fzbd/d+LRObSjo5WDd5acP9T
+         GANzPtS/RoNBbzpjUuIgMTpyyT7j+S2JP+lqI2x9GL0zLoMu1GmJVhFDvCFQJoOUjWCu
+         X6yxZwoeUME54kAHVtCbd8JWJY3fyqqDN5lyGQiZvcWFex59C7HIwNubMxRfVLx7SFGV
+         zZIUk+V0iJz+dzfdoYyfw5XwP0VrR8UTcMGIpSqUYFWID5Rh/4/whVQiwYyEasNYhPZt
+         R4QQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/+AFZvzTlV1uJrYLyLn4sn53b9uKDvPTwGugsTqDfigBpjYuLvhSyfT2VsfWVx9ofx7q+HhDpHaf84Wg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywy72g7MCwGEZwyRfEf5Ci+yA734tIIoSbslR1c5JF7W1I7k+wr
+	Jot71IAT999/mYQo0yFT1YeBw8YsGausLwZv5ddQ+OBZM4Z+bGR2YnSV
+X-Gm-Gg: Acq92OFtYed70viYU1HNfiXV13YinBoir3A4PHO1H4d6bsM0ZEVAtKDSTwghOg5A9mD
+	25OcOn3BWQDgQZ9Kg6hLo43/0VIYBDK1GOT4KRAUHMNVe47G65uASjeQZ16T3P5iqOCWaxlIO4s
+	FwKQuR/Z1v2H0/bAsg7Op9Y8O6urjXC/lgyfO6DmojcrhwuLEdsjj8ta0Nllg7lb9jlGLQPvbO+
+	Nk6D5zV9doIta3bzFUNoyMa5Mf5eVueLt4ckoPsDhSK9JuZvAbhiqrCETCsy2TnNe4YmdAJUJ3h
+	qx5+Jqi6myZQR6+6lCAKcNLF4oeHBmao2CbMqkuIoSyf6j/4Jv46jdLO6z3cmUUWxqTBieJLCMp
+	YQGbDY36t4FOkhsNsgeCzqAnNIlTEb1jdP+lwPiJzwfijEgs1WDrUczErU+MERwRTkT5QMWiodU
+	CpmP/pLhMI2oJx+3XJUjIifGzxTgmsUNMEI2aasdCDTSWgIW2jp31AI4ymIC0M1gRYgIu7S1dxu
+	AXH
+X-Received: by 2002:a05:7300:e60c:b0:2dd:6937:79bc with SMTP id 5a478bee46e88-2f54ad72f58mr7379780eec.6.1778265666442;
+        Fri, 08 May 2026 11:41:06 -0700 (PDT)
+Received: from lappy (108-228-232-20.lightspeed.sndgca.sbcglobal.net. [108.228.232.20])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f88885be8esm3365279eec.22.2026.05.08.11.41.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 May 2026 11:41:06 -0700 (PDT)
+From: "Derek J. Clark" <derekjohn.clark@gmail.com>
+To: lkml@antheas.dev
+Cc: W_Armin@gmx.de,
+	corbet@lwn.net,
+	hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com,
+	jdelvare@suse.com,
+	kuurtb@gmail.com,
+	linux-doc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux@roeck-us.net,
+	platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH v1 00/10] platform/x86: msi-wmi-platform: Add fan curves/platform profile/tdp/battery limiting
+Date: Fri,  8 May 2026 11:41:04 -0700
+Message-ID: <20260508184104.623016-1-derekjohn.clark@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20250511204427.327558-1-lkml@antheas.dev>
+References: <20250511204427.327558-1-lkml@antheas.dev>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/2] usb: xhci-pci: add AMD Promontory 21 PCI glue
-To: Guenter Roeck <linux@roeck-us.net>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Jihong Min <hurryman2212@gmail.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Mathias Nyman <mathias.nyman@intel.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-usb@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260508143910.14673-1-hurryman2212@gmail.com>
- <20260508143910.14673-2-hurryman2212@gmail.com>
- <ad41d70b-e9c0-446e-8bd0-4528de75b592@amd.com>
- <0d518d40-e239-4d93-8e71-0d2e140f00ca@icloud.com>
- <966c9e07-10e6-4abe-9cb5-77b974f31302@amd.com>
- <b8372128-c922-4b62-91c5-46f848180bc5@icloud.com>
- <2657e1b7-126d-4c4b-8027-012a6d3ffee3@icloud.com>
- <053b019e-9c6a-4eb3-aa69-0c07cd6e7f12@roeck-us.net>
-Content-Language: en-US
-From: Jihong Min <hurryman2212@icloud.com>
-In-Reply-To: <053b019e-9c6a-4eb3-aa69-0c07cd6e7f12@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA4MDE4NiBTYWx0ZWRfX5l+nXdPZIG85
- 0vN+HkQohTFxE1W0vt+9a8Hok4QWjMOj5Kkg/hw3id43Nj81o3EznIxSnSteykA328i+BBWBMsw
- kZcb6ia2jqxFeuZ7/Ab9KLwrQOLyZN90OctDd5+Mk+boB5jNTBJ1uyEK3wR/mIeoesKuqTD++Pr
- Zd/PS+qoasJII2h3vZ9BEaB3L4vICxy+Lm3atWXyJYHwIPkqeLxlQRDMWad+fXqnW05gwdcMkzE
- cZ27s/+E5Dc3K7TYZYfUgA3iGIh4A+xhoQpi3q66ggx2UWoxlL2yQn6EGaMgfvB3DkCIXbiHajM
- seuAVvNp40C+oIjpvO4BNAL9p5DjHK8GNeU5u1KPf0xTnCDSamcekEAgSOoEBY=
-X-Authority-Info-Out: v=2.4 cv=eb4wvrEH c=1 sm=1 tr=0 ts=69fe2ddc
- cx=c_apl:c_pps:t_out a=YrL12D//S6tul8v/L+6tKg==:117
- a=YrL12D//S6tul8v/L+6tKg==:17 a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10
- a=x7bEGLp0ZPQA:10 a=5jDBv52wX64A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=KVoNWVYdi2H2b-9ruPcA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=PgRulw5oR9JgysbTFEid:22 a=oa2-kN79Xhin27rcel9q:22
-X-Proofpoint-GUID: uGSqubEKY4K-OAH_rpyAlLQCnNopeudA
-X-Proofpoint-ORIG-GUID: uGSqubEKY4K-OAH_rpyAlLQCnNopeudA
 
-> How about "default USB_XHCI_PCI" ?
+>This draft patch series brings into parity the msi-wmi-platform driver with
+>the MSI Center M Windows application for the MSI Claw (all models).
+>Unfortunately, MSI Center M and this interface do not have a discovery API,
+>necessitating the introduction of a quirk system.
 >
-> Guenter
-That makes sense. I changed USB_XHCI_PCI_PROM21 to use
+>While this patch series is fully functional and tested, there are still
+>some issues that need to be addressed:
+>  - Armin notes we need to disable fan curve support by default and quirk
+>    it as well, as it is not supported on all models. However, the way
+>    PWM enable ops work, this makes it a bit difficult, so I would like
+>    some suggestions on how to rework this.
+>  - It turns out that to fully disable the fan curve, we have to restore
+>    the default fan values. This is also what is done on the OEM software.
+>    For this, the last patch in the series is used, which is a bit dirty.
+>
+>Sleep was tested with all values being preserved during S0iX (platform
+>profile, fan curve, PL1/PL2), so we do not need suspend/resume hooks, at
+>least for the Claw devices.
+>
+>For PL1/PL2, we use firmware-attributes. So for that I +cc Kurt since if
+>his new high level interface is merged beforehand, we can use that instead.
+>
 
-   default USB_XHCI_PCI
+Hi Antheas,
 
-locally.
+It seems this series is stalled for 3 days shy of a year now. I have an
+interest in getting this across the finish line. Will you be continuing
+development? If not, I will take what you've started here and finish out
+the remaining nits, keeping your original attribution of course.
 
-Sincerely,
-Jihong Min
+Cheers,
+Derek
 
+>Antheas Kapenekakis (8):
+>  platform/x86: msi-wmi-platform: Add unlocked msi_wmi_platform_query
+>  platform/x86: msi-wmi-platform: Add quirk system
+>  platform/x86: msi-wmi-platform: Add platform profile through shift
+>    mode
+>  platform/x86: msi-wmi-platform: Add PL1/PL2 support via firmware
+>    attributes
+>  platform/x86: msi-wmi-platform: Add charge_threshold support
+>  platform/x86: msi-wmi-platform: Drop excess fans in dual fan devices
+>  platform/x86: msi-wmi-platform: Update header text
+>  platform/x86: msi-wmi-platform: Restore fan curves on PWM disable and
+>    unload
+>
+>Armin Wolf (2):
+>  platform/x86: msi-wmi-platform: Use input buffer for returning result
+>  platform/x86: msi-wmi-platform: Add support for fan control
+>
+> .../wmi/devices/msi-wmi-platform.rst          |   26 +
+> drivers/platform/x86/Kconfig                  |    3 +
+> drivers/platform/x86/msi-wmi-platform.c       | 1181 ++++++++++++++++-
+> 3 files changed, 1156 insertions(+), 54 deletions(-)
+>
+>
+>base-commit: 62b1dcf2e7af3dc2879d1a39bf6823c99486a8c2
