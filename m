@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC6B3C3C06;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2D9A3C3C10;
 	Fri,  8 May 2026 09:44:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778233496; cv=none; b=XADadm1NIX8IRYaUs5yeMCtXHEOGBsVe9xC4gkT25Uhj1UnYd7grSnREnOl2XzXOUF7qeKh+7ei8EO1ERQ0qgLuCDtgc86CVNNDHg24XXIQFwXT/9/R78Qa6tcDGkIm4YmNAJshp3MjlRYGQYGdmxLIlDD0eNgdoTCbqC4UUBHw=
+	t=1778233496; cv=none; b=VWgfu+nQTVrkkHFkgtpCKLhbzhUQS9NcZY1df3EX665lt6L1yiY1jkQL0y/AvIypJ+KPa9us/+NfidZJSupkp7ZQqCSvfSMrAGTCD/73frBv936xRmzQ7e26nDP2uhsamdDGZgxloZ+Quz+Wr0FHGmtLeYyUl+pIMrhElcuUIsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1778233496; c=relaxed/simple;
-	bh=xr3nP/6V7+777LfTLLcyKXsjbdL+xpZf3cjxFBvkFAI=;
+	bh=ZG6EAt6QuyZEF5Q1C1YnthssCRpvs7iwMwqrX4o7QwQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DoyvmaIFPG2wT3490pBHB1rbA/XtY3YoenLT/KtrvNeS4wnLyJUjPZ0BLAC6HwksLeTK9rFXxc5Kqe6aICGV7FHe46GkEEK+/FPxmHSHTt/+81oMqG+Y9eRq6+42wtgGtzjasicBcvQHC6X10MLQTZd5DaukxFb7WkSP2xqv0qk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AqFwtnur; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=lqF6Kvgq0tNfXIE1lfmhjJAriBzq4ihvdeRSr3Ps1M5w4v/TXkDYltVeaT3n1DvT4+ARlrd7LzCcON6WIiIqRkqKWfTpbfJq70U5egnndpTupbfGu/nCo28MpZGho53Ag1iR266ZrLcyjz7bKXavNBq+faEPMy8c2bE41jkIlm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jTYLnXQk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AqFwtnur"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 875D7C2BCF6;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jTYLnXQk"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7D490C2BCB8;
 	Fri,  8 May 2026 09:44:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1778233495;
-	bh=xr3nP/6V7+777LfTLLcyKXsjbdL+xpZf3cjxFBvkFAI=;
+	bh=ZG6EAt6QuyZEF5Q1C1YnthssCRpvs7iwMwqrX4o7QwQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=AqFwtnur2OU/c4AMRJFNQldTcsFsrndvsi25FKeXv31sfWj/quAUSaD2D3bEuXMQu
-	 JEVGNgdSTT/mA57coCaxORlRTtkoCnA2tWzeC5ALtnIHtTfkwALBL0LuCpF9VXGSG2
-	 GEapXj5E1uun0/VRxZ5GqramAoRni58Uk8MvQO+KImzu0upZYLt8ORFyaRWIT1VMXp
-	 wAgVwtb5Qyf7lnh5pgDHliZq0+9Vn3IM4RmFh+Tgu0LmHkGgwyh69JRSJy0T/xiSJZ
-	 sk+4GfGJUfsPFHtKUy3Djq2PpQIQXH7cjvH3LxWbJUrytKvhR5po5z+/EIqZtn+ClY
-	 Lpv/mS+fh06Gw==
+	b=jTYLnXQklLo6Jo6z0Vp/9egJadeNsqqJHayXXtz4ObWiF45j/DrkpkLLSKCI3N5S6
+	 VuJDfxzZbI/i8MH4KFWF4dOAteGfi84ebiMufn6CfKRaBEJiehrqYnCAb+wqo0sBLH
+	 mOkHO3Cg5ClJfrAFi+jzzPy8/k+Z08KqzR/VbrxKhmnU9MLbSlT5oFM+KGcXx8a8cJ
+	 Ms5pWCv+XHVDl3YyqCyi9l/ACKeAShyHBNjux23p3xcboUe6w8sapHBXKGtKZ9N3dV
+	 //73tsnW6/S/BMcWTZ7IjATXKsxzY0Xo9eaWaMG82RNnTT20pyz52r+JRCcDL3iZNL
+	 0TvN1zwbhuiBw==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EBC0CD37AC;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F04DCD342F;
 	Fri,  8 May 2026 09:44:55 +0000 (UTC)
 From: Colin Huang via B4 Relay <devnull+u8813345.gmail.com@kernel.org>
-Date: Fri, 08 May 2026 17:44:30 +0800
-Subject: [PATCH v5 3/3] hwmon: (pmbus) add support for Delta E50SN12051
+Date: Fri, 08 May 2026 17:44:29 +0800
+Subject: [PATCH v5 2/3] Documentation/hwmon: add Delta E50SN12051
+ documentation
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -40,7 +41,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260508-add-e50sn12051-v5-3-abebdcc29665@gmail.com>
+Message-Id: <20260508-add-e50sn12051-v5-2-abebdcc29665@gmail.com>
 References: <20260508-add-e50sn12051-v5-0-abebdcc29665@gmail.com>
 In-Reply-To: <20260508-add-e50sn12051-v5-0-abebdcc29665@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
@@ -51,11 +52,11 @@ Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
  Colin Huang <colin.huang2@amd.com>, Colin Huang <u8813345@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1778233493; l=3403;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1778233493; l=3975;
  i=u8813345@gmail.com; s=20260202; h=from:subject:message-id;
- bh=kdG0eiaCamlrenMRC/OYLox58O/g4hUW+Ptrly3KsCw=;
- b=82HA/zNfxyV0RoF2vNxqQskZeKFU/11QCdH8RtQyWTOHogWDyhjmzHHFLgfDhBC0vTvj9BDec
- RhObeoWcDUZBHaelfp7sUz8svfLUVwsDEp2dzscJ7NYG91UvLdHN5J3
+ bh=AWrzobGEVmZ1wrQzAaH1cnIviz5MTfwrqcs9SVlqod0=;
+ b=lOOD0P0q6aihz3wfzfJ6LXDlhPcrctSUcx9m0bvT3sa2V8R6rRtG0Obq0MC0aIOhuQNAFzQFn
+ E8XMcP49ij7Ay9rdgrsEi6086CFQE9AGLZ1ZZUOIApAazf1mbE0Oga3
 X-Developer-Key: i=u8813345@gmail.com; a=ed25519;
  pk=Zlg0WqpCw4qbswOqamTBTXIchwR/3SnYZpy7rjaGMdQ=
 X-Endpoint-Received: by B4 Relay for u8813345@gmail.com/20260202 with
@@ -65,107 +66,118 @@ Reply-To: u8813345@gmail.com
 
 From: Colin Huang <u8813345@gmail.com>
 
-Add the pmbus driver for Delta E50SN12051 600W Non-isolated
-1/8th Brick DCDC Power Modules.
+Document the hardware monitoring support for the Delta E50SN12051
+device.
+
+The documentation describes the supported sensors exposed via the
+hwmon subsystem, including voltage, current, and temperature measurements.
 
 Signed-off-by: Colin Huang <u8813345@gmail.com>
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/pmbus/Kconfig      |  9 +++++++
- drivers/hwmon/pmbus/Makefile     |  1 +
- drivers/hwmon/pmbus/e50sn12051.c | 52 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 62 insertions(+)
+ Documentation/hwmon/e50sn12051.rst | 81 ++++++++++++++++++++++++++++++++++++++
+ Documentation/hwmon/index.rst      |  1 +
+ 2 files changed, 82 insertions(+)
 
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 8f4bff375ecb..4fbfcbc4a9c5 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -161,6 +161,15 @@ config SENSORS_DPS920AB
- 	  This driver can also be built as a module. If so, the module will
- 	  be called dps920ab.
- 
-+config SENSORS_E50SN12051
-+	tristate "Delta E50SN12051 Power Modules"
-+	help
-+	  If you say yes here you get hardware monitoring support for Delta
-+	  E50SN12051 Power Modules.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called e50sn12051.
-+
- config SENSORS_INA233
- 	tristate "Texas Instruments INA233 and compatibles"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index 7129b62bc00f..fc910bf34fe3 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -17,6 +17,7 @@ obj-$(CONFIG_SENSORS_FSP_3Y)	+= fsp-3y.o
- obj-$(CONFIG_SENSORS_HAC300S)	+= hac300s.o
- obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
- obj-$(CONFIG_SENSORS_DPS920AB)	+= dps920ab.o
-+obj-$(CONFIG_SENSORS_E50SN12051) += e50sn12051.o
- obj-$(CONFIG_SENSORS_INA233)	+= ina233.o
- obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
- obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
-diff --git a/drivers/hwmon/pmbus/e50sn12051.c b/drivers/hwmon/pmbus/e50sn12051.c
+diff --git a/Documentation/hwmon/e50sn12051.rst b/Documentation/hwmon/e50sn12051.rst
 new file mode 100644
-index 000000000000..efb4d62b2603
+index 000000000000..cbbfa7895d82
 --- /dev/null
-+++ b/drivers/hwmon/pmbus/e50sn12051.c
-@@ -0,0 +1,52 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Hardware monitoring driver for E50SN12051
-+ */
++++ b/Documentation/hwmon/e50sn12051.rst
+@@ -0,0 +1,81 @@
++.. SPDX-License-Identifier: GPL-2.0-or-later
 +
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include "pmbus.h"
++Kernel driver e50sn12051
++========================
 +
-+static struct pmbus_driver_info e50sn12051_info = {
-+	.pages = 1,
-+	.format[PSC_VOLTAGE_IN] = linear,
-+	.format[PSC_VOLTAGE_OUT] = linear,
-+	.format[PSC_CURRENT_OUT] = linear,
-+	.format[PSC_TEMPERATURE] = linear,
-+	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT |
-+		   PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-+		   PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-+		   PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-+};
++Supported chips:
 +
-+static const struct i2c_device_id e50sn12051_id[] = { { "e50sn12051", 0 }, {} };
-+MODULE_DEVICE_TABLE(i2c, e50sn12051_id);
++  * Delta E50SN12051
 +
-+static const struct of_device_id e50sn12051_of_match[] = {
-+	{ .compatible = "delta,e50sn12051" },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, e50sn12051_of_match);
++    Prefix: 'e50sn12051'
 +
-+static int e50sn12051_probe(struct i2c_client *client)
-+{
-+	return pmbus_do_probe(client, &e50sn12051_info);
-+}
++    Addresses scanned: -
 +
-+static struct i2c_driver e50sn12051_driver = {
-+	.driver = {
-+		.name = "e50sn12051",
-+		.of_match_table = e50sn12051_of_match,
-+	},
-+	.probe = e50sn12051_probe,
++    Datasheet:
 +
-+	.id_table = e50sn12051_id,
-+};
++      Provided by Delta upon request and NDA
 +
-+module_i2c_driver(e50sn12051_driver);
++Description
++-----------
 +
-+MODULE_AUTHOR("Kevin Chang <kevin.chang2@amd.com>");
-+MODULE_DESCRIPTION("PMBus driver for E50SN12051");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("PMBUS");
++E50SN12051 is a 600W non-isolated 1/8th brick DC-DC power module.
++
++This driver supports the E50SN12051 PMBus compliant monitor device.
++
++The device provides measurements for:
++
++* Input voltage
++* Output current
++* Output voltage
++* Temperature
++
++The driver is based on the PMBus core and exposes standard hwmon
++sysfs attributes.
++
++Sysfs attributes
++----------------
++
++======================= =======================================================
++curr1_label             "iout1"
++curr1_crit              Critical maximum current.
++                        From IOUT_OC_FAULT_LIMIT register.
++curr1_crit_alarm        Current critical high alarm.
++                        From IOUT_OC_FAULT status.
++curr1_input             Measured current.
++                        From READ_IOUT register.
++curr1_max               Maximum current.
++                        From IOUT_OC_WARN_LIMIT register.
++curr1_max_alarm         Current high alarm.
++                        From IOUT_OC_WARN_LIMIT status.
++
++in1_label               "vin"
++in1_alarm               Input voltage alarm.
++in1_input               Measured voltage.
++                        From READ_VIN register.
++
++in2_label               "vout1"
++in2_crit                Critical maximum voltage.
++                        From VOUT_OV_FAULT_LIMIT register.
++in2_crit_alarm          Voltage critical high alarm.
++                        From VOLTAGE_OV_FAULT status.
++in2_input               Measured voltage.
++                        From READ_VOUT register.
++in2_max                 Maximum voltage.
++                        From VOUT_OV_WARN_LIMIT register.
++in2_max_alarm           Voltage high alarm.
++                        From VOLTAGE_OV_WARNING status.
++
++temp1_crit              Critical high temperature.
++                        From OT_FAULT_LIMIT register.
++temp1_crit_alarm        Module temperature critical high alarm.
++                        Set by comparing READ_TEMPERATURE_1 with OT_FAULT_LIMIT
++                        if TEMP_OT_FAULT status is set.
++temp1_input             Measured module's hot spot temperature.
++                        From READ_TEMPERATURE_1 register.
++temp1_max               Maximum temperature.
++                        From OT_WARN_LIMIT register.
++temp1_max_alarm         Module temperature high alarm.
++                        Set by comparing READ_TEMPERATURE_1 with OT_WARN_LIMIT if
++                        TEMP_OT_WARNING status is set.
++======================= =======================================================
++
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index 8b655e5d6b68..ba08655fc496 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -68,6 +68,7 @@ Hardware Monitoring Kernel Drivers
+    drivetemp
+    ds1621
+    ds620
++   e50sn12051
+    emc1403
+    emc2103
+    emc2305
 
 -- 
 2.34.1
