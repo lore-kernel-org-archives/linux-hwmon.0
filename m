@@ -1,156 +1,187 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010053.outbound.protection.outlook.com [40.93.198.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2FD82F99BD
-	for <linux-hwmon@vger.kernel.org>; Fri,  8 May 2026 16:27:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778257645; cv=none; b=TbP0U4J5TQXBIgJ4sveJZrQPhBAAwPczC21zqszDbnVNa1CG6jw5xPFj6sFvNmdd9mvRtS6zmjJV7edGHv24uBHEGvEGbyNTEBbXuDpkqvH4cJhhhtAqhO1hY5+mdLAw9w9ntkEMb973WI2QRI7I7CrOtjBvNr3aCEQdOmfncVY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778257645; c=relaxed/simple;
-	bh=6KxY9Roi8N8d4WWwIr2x6TbvGnckQnG05iuZrFnZ2Gk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dEgEK5C2McAtJRtKPWeeDHTiT4ziugyqjelUQLIMqjy2NW+TSeVrPefRPzD6MVQNNptP9Ck/AY8PvxxOqqdlYh4TQ7mJVLtlOsjDUx0FvV8hlNXf/KY9dHa6NhGGjlaWhTncshjOs7srP/nuINFjdkS2UAflWj15KpFlyR41k7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dDIuZn8x; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19D3330BBBF;
+	Fri,  8 May 2026 16:27:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778257651; cv=fail; b=WhcwC90Th7vTEq4Yel/XYIYF57W82bFB+wkHLT6KXxOn6B/wZgQ1v48pn0mXZtUgiW7RM0YY6f1YjURLP1+hwV0gBXqIQBpTyqXAX/5nPGAR5B+53dKVCn2/kJaRxeDnZNTJaoMwzDWHw/hPFFr3EjXVi3UXTN+bCDNuKROymO8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778257651; c=relaxed/simple;
+	bh=IPrhcqyUCxiuRWFEFEyDBBW2IZK9/gr9I0PYES++Muc=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=n206W+kosyTIV8je2ikl5jDvcMD/rNhSq+OQxj5igS6NJCQzWf7Xar+fj/PKZ8XqFb2q7GCgiiyDBjsp03jVzUV9V9nKWARdF+llxoqdiMncCkY3InONl4fafUUpcO7hiTXErcicHf3TrMEyT8Aw02TfGpWJvR40oKXiUh13Cco=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=BiE0iZ6P; arc=fail smtp.client-ip=40.93.198.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dDIuZn8x"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2ad9f316d68so10885295ad.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 08 May 2026 09:27:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778257644; x=1778862444; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=3S7UqGfQlbSNMAblK1AF7WjzWItdK4mDnUlHoxWt7Tk=;
-        b=dDIuZn8xJIP4rPpd8h3xaz99u35NPa2AxjrWfHw1OpAZBxQv+l7ybf6MmPDYaczEQs
-         LyMoHsLnPmTC4pBULwhHn/KhquLZPnzsFDYz+Ry5y7QkL+1H1lQUCVjWPw/AckyCffNo
-         PouoC5zsb6WmRrCeBD0LrYNm0nbDt2b9BmdxxQtrCAiuB1xH4csqkLXXEZPru+E9dOOP
-         AHkHlfSUkWkjVhXpTBNZ4qWDRgAJavSkAsLWSeq6JK2Q7VUag1oCTfDPWSsnPTxqzgbo
-         fVjI/h828wwNsqJ2uhg8Q1unQp/XjOTiHhbeH3ppJJlebMFWoo8ZPv8njwkZbAHWJ1+P
-         lPcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778257644; x=1778862444;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3S7UqGfQlbSNMAblK1AF7WjzWItdK4mDnUlHoxWt7Tk=;
-        b=WjJGbUm/KlCOr9EwRjvLHLXXyMLFKOi/Vo5GSpe8cf4Up1SLRnn438vdkNkgw7hDVy
-         z4N3C6g/wVqAcIAKrNiLltq1yoVSC+EOy00Hu1KuPz3jRcNm4cTA+3aaCKrESpogTyoI
-         J5UOZiBSQTxgsqrve3YdtFyNEq6NAhLqrlIMUhePk8mfE0VtvksahNrLpVrDt54JpxRP
-         32jH8642D/hIOwgT5s96ZSKZ9RftWD1qLeOK+pre68cLEwWswiMt7GY6A+ZS1dpBwzki
-         +af7Czr6rKb+eMfPmyqUTYfbxKUBuAa1mYgqVAeSwHB/9v9g6JlNz5kgC9jYvbyKeakL
-         zB9w==
-X-Gm-Message-State: AOJu0Yxv3N8vY7VwE5NPfTK2mNGZwUZ61TW09jcPLo0ECTg9VeJgpuTm
-	XaQglSvzjYO/iZIXvwf7S7ITzqxF7IM9FlnUaIhWfuHY6OuCUzSDVJY5Vf4TYQ==
-X-Gm-Gg: Acq92OFUq8V2Odb1ljPV6r7xp6JNbTrKV91o9HgMdh60CvEMS7Y9nJUJgvl61PNy5M5
-	R+Ac/kMUWVBDKUzZPTjZfkw5DmLRjqPf0nHZF/VOutpG77mJLW90Ux/t/7JCUXEyQkpnLKiAFKF
-	pGcaBky1+s6riIIdLyIcPqspyXvmJa2BzmvC3BPU6m5gKh35pfXSOppwbpZG5LUX/FrblbjoXYd
-	74H6eTtQY/gAAJfh1ScewRHFzuet+qxDwMGNH9LJ17eep5hygHbeKq3hSE5HUaldSDBNKZGRJiZ
-	TR4fVJCRdBZsmuCKVePHdlbkboj7ecJSpL7VTG23AcVEMEsshKtk7qPQv/L94UWq/33oSAvWlpG
-	VKbCVS8SLlHZbnQBUd2/fjetLVsPASW3kHryDsZyovjvGXgRMMkBl2sd9fzdFDA+K9/NYLZ2TCp
-	QTaKbndRWzJrv1IlTQIyENrq8QcF6+ROFVfFVqZduAN5T9a5ziODwkfhh5K24DTipIAk2BzTnX
-X-Received: by 2002:a17:903:1a24:b0:2b4:63bf:5535 with SMTP id d9443c01a7336-2ba79be13f6mr131726645ad.41.1778257644123;
-        Fri, 08 May 2026 09:27:24 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1ead90asm25973485ad.72.2026.05.08.09.27.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 May 2026 09:27:23 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b6ed50e1-c095-4400-b538-b51ea7b26e0b@roeck-us.net>
-Date: Fri, 8 May 2026 09:27:22 -0700
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="BiE0iZ6P"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=XvaYN4NQavJcV4B7M5g93kh6MSydAdE5ARbp8pTqasPKM7p4MsjqVLgs9uEXSTgcwUAJ4cNQU92Kx83451k5ctLbSktA7/jGPGXy0HeQc7cAta5ZxoaKOPA0TnrZ1tslWu2dlSk+A8+jt8Djq2iVhobhx0w81hYoVzkYoJVU43o7slESC5oBUKB7E9k2qFjgzFLB3Qo+9+IwRnVP+ZK0Oh5L0gkDuR4FRD9n6K8/IP4T3Bnu7sVlS2xMCdXG1h+61W9ks082U6KxzRiFBrjo0D6NOUSJlP1p5SKsCNbio64QwdUxuRPwavDVcgBrE00CkthH6N0uc0nBiyF0FAq+zA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xajWmA05dYFXq3UBkGXuWAxwfZZ7SIk+8PygALyOHP8=;
+ b=rCzPYo0YQgcme5A6MP5F9SyXIAW1UP260S8irKYRGU2zy1CVpEajAi0ffZ/WDqG3qJ6+s604wf7LIcOlXdVXvgf4j3TB7cDaXybrf0VR6gTLGdnIy8AbUyRXIUBoBnwgIPwKDNi+RyNJuEwf0uS1q8GjKxl681ZAsdejycG/ofs4aLT/+OaQho/XyLmIr1fpq0yfwMgg1tWK7CBqCYj02Yl4fpiP0cgCveZhTrIKkoTHVqA4clKKOsb2ZQLxFrrXSti4CnGorZTF0cehWrsM9WHlF97H/7qDj3FWT9gM7WQ3HtLRUukekfgzKYlUSAe+oWDfnBeWtwWU5Inr01+lbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xajWmA05dYFXq3UBkGXuWAxwfZZ7SIk+8PygALyOHP8=;
+ b=BiE0iZ6PfblQv0DkEY/MhLa5wMgYJWstaTeWg8dyZ6JZVKg1Wh66Fhlojs9ViJB8k7ODWnGG8PTrlhoCOubKgIlYchH6XFohUC/VQ29ju/lQHe04JhaHOer1608y9Oz1LDVSWXywNY2bLJVCD4Gu/b4EtSbx+tWQfeIDk4x+7Us=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SA0PR12MB4557.namprd12.prod.outlook.com (2603:10b6:806:9d::10)
+ by BY5PR12MB4177.namprd12.prod.outlook.com (2603:10b6:a03:201::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.19; Fri, 8 May
+ 2026 16:27:24 +0000
+Received: from SA0PR12MB4557.namprd12.prod.outlook.com
+ ([fe80::885a:79b3:8288:287]) by SA0PR12MB4557.namprd12.prod.outlook.com
+ ([fe80::885a:79b3:8288:287%5]) with mapi id 15.20.9891.019; Fri, 8 May 2026
+ 16:27:24 +0000
+Message-ID: <70035490-eafb-4610-8889-9e04931c8b32@amd.com>
+Date: Fri, 8 May 2026 11:27:21 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] hwmon: add AMD Promontory 21 xHCI temperature
+ sensor support
+Content-Language: en-US
+To: Jihong Min <hurryman2212@icloud.com>, Guenter Roeck <linux@roeck-us.net>,
+ Jihong Min <hurryman2212@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mathias Nyman <mathias.nyman@intel.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-usb@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1778123510.git.hurryman2212@gmail.com>
+ <0c35058bb088213397b42fca8d51e9ad0bba5169.1778123510.git.hurryman2212@gmail.com>
+ <35c2436b-d172-4172-a684-a96c4a0dcabe@roeck-us.net>
+ <16c4f7e5-e33d-4271-a7af-5d6c7fca0570@icloud.com>
+ <6745fd21-2001-4e06-af41-96ae63154c02@roeck-us.net>
+ <198ae20f-49c9-4f81-87e2-e16e81053f08@icloud.com>
+From: Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <198ae20f-49c9-4f81-87e2-e16e81053f08@icloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: DS7PR03CA0177.namprd03.prod.outlook.com
+ (2603:10b6:5:3b2::32) To SA0PR12MB4557.namprd12.prod.outlook.com
+ (2603:10b6:806:9d::10)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] hwmon: lm93: clean up coding style issues
-To: Ninad Naik <ninadnaik07@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- skhan@linuxfoundation.org, me@brighamcampbell.com,
- linux-kernel-mentees@lists.linux.dev
-References: <20260507101143.559475-1-ninadnaik07@gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260507101143.559475-1-ninadnaik07@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA0PR12MB4557:EE_|BY5PR12MB4177:EE_
+X-MS-Office365-Filtering-Correlation-Id: dfb10e12-ebe1-4e19-2786-08dead1eaf95
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|376014|7416014|18002099003|56012099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	RfUTJvNyFnGomcX/Q/F/Myzeiv2n1PEgQeT/7cvx+42eOj8Xxlqv3gMapaXu0OCV5H6/6LuTpcjtPXLV/Cb9+DZ8QEX6FXkfbmxrPQMsqpKZQPoVniszFfpKbga9Eh6luUhrzdHzR8XgIb2ANiZ3d2QbYOn1fcSwfrB7YEbWpX8TwaZOvJQgEYHUOob0qZbYwN4yJuz/LAABRwpuHSgCAQfpOFqGsZD2F/098Pkf7yIEYpMJqseybdQ+fGAHGm257RJsQ3WSkRuMgE8URChM119gHBEKZ21KueF4lOF30tVxOYsX1L9oqaTQsEvMnMchnQuVO0axEz8+czdFNe2zoPKmyeAbPFRQBrY82c2LTQovM2DeJNx0NDc4PyDPwdBpKyBBFyf4SYEa5oW3roRVls/Wsp4ekxr4K2vsjBAkOKc0bNMzyCYypqXwfX7FDz4sTb9wsstm//TUlA8SZQiJ8SXnLmI7hoyPvklMo4xti9aeR5Q5CVwCkPAiEheo8XvBSMlpYltBmbdCoQh/V5oKjd9hh/no24/0ePxJ2pDu3ncVNEekOQ4AkeBzVXLpCfAxFHaLPKnZPyJYhFg61mz0x9qjVUjpkVabcTICFO/7LZPSj7huYqrTVYKNeSe1/6rwpCKKs+hx4c9+3pOiO/MqLA==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR12MB4557.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?eURmNUpIMWZYK0J5NURoNkU2cmJ2ZTFrUDhQVEdJdmduNGhPOUorTXRGUkdQ?=
+ =?utf-8?B?dDg3ZWEzbEQ2WXBWT0MyS2V1VGhQN2toNVo2RlJVT3hsSmNwUzdQV0VJZGp6?=
+ =?utf-8?B?em9yVk5VMXU2YmhaM0J2N1VYVFozM0FEU2pEbmZFYXRzbHNRaEFzTDRraHly?=
+ =?utf-8?B?V3VKMzB2K3gvNWorb0xwQXFVVU9NYWdyYWxTaXEwQ1U3ODRJUFJsRmd0UDdk?=
+ =?utf-8?B?OGliWGFMamw1YzhLZWVZdWxhWDQvaWl1aTNxazhaOWRKSXBMcGQ3UnhyNUl6?=
+ =?utf-8?B?NXhOblF6NzdvczRzQnhheWNVWEY3L2Q5bkF2dDlyUUZGbmp3WnM0NmU4SVFw?=
+ =?utf-8?B?T2M1bkpjUnJRVkNHekpVa2pnQXZld1ZldzVNYXUxaUd5UWxYckg4QXFyN1M5?=
+ =?utf-8?B?Q2dOelBKSVo3ejh6OHNNQXd4L0Z0OVRWWGMxNisyZnpSSklLdmc5R0RHaU1W?=
+ =?utf-8?B?VlpVWjVvaHh1YWtra0JYWnBSZ3NaVE5CaFhPU05QS1JIZ1JQUzRNZitteFM3?=
+ =?utf-8?B?RUJyN1NFSHA2eDZtSml2bUw1YzhSSjYxRWJpZU4yZ0MxRGd6RGFjWkUwNWlh?=
+ =?utf-8?B?UmRWSkk1dGVlMTJML3hFVVVWK2cwK25NOUd6bkdMQ3RXS0NXTmxpdm1JNVJ1?=
+ =?utf-8?B?djEvUDlXYVNqWlQ5MVpncTFQRW9hNDVMSU9JNjArZVFXRXlsTkdrRmVWaElo?=
+ =?utf-8?B?aDNSNGdLQ1RSaFRYeG1TRHBWYWRtaENNMXEwN0ljVFE4R2NpTnFNalVnSk5k?=
+ =?utf-8?B?UEQ3TDZFb0dIdnZjNGovZkpHZjdReG13NFpndkJZblZRZEJDOXgzSnpiZzJi?=
+ =?utf-8?B?dU9UaHUxWlc1S0xnUCtEOHhWcUhETndNbG9QbGJFZHk4YklZUzN0eGJqVVNR?=
+ =?utf-8?B?RnhtcnZpMHhXbTJjM1I0RXBIbGRaclVyQlhDalRiWTV3RjdYUHptenVuRVFq?=
+ =?utf-8?B?OWNkQi83aU1vU2lUalllc1E2Q1Zvb0F6TVZCaE9wWld6dElTTjcwSW5PQmtI?=
+ =?utf-8?B?cmk4VjA0ME1WN1pDbFByYk5aM24xbC9PVGx6RnFVcWtjVTljYklyWlFLN05H?=
+ =?utf-8?B?KzljczF3bmowZ282Q1BvYW9pcExmMXNtZnZKRmJzazk4UEtCOW5xMW9Kb3JO?=
+ =?utf-8?B?Rk8zL1FtcXJ4SkZXVDM0NTA2aFJFcTZtTEVrNWZJekZOTTArcWFtQ2pHOEsx?=
+ =?utf-8?B?ZEJxNWZGbThUbjJBeHBtTko2RmlaU1VCdzRMalAzN2t1L1UwTG50U25HZE50?=
+ =?utf-8?B?Yk1rZ2tBVWg2YmRnYWZsTlhwcStqVkhMa2VXalNzTGhCUDU1cXhSRS9nNjRj?=
+ =?utf-8?B?Vi80MlpFd2lOdWNxeXNCbjBmRVpyUVh1dndPekEweFNDK2NOS3hZd2lFY0th?=
+ =?utf-8?B?QyswMVRtMzNwVTlDV1ViRlpnZFA5QVBzb3RkcW9rTTU1dG11Tk9GL1V1MFcy?=
+ =?utf-8?B?bTBMcWFvK0lnZ0tVY2U2RWliRmIrMjdQdzJGcnlCNHpMK1BVS1VCNkdrME00?=
+ =?utf-8?B?SzBzU0NEb0c3UHhROVJEaWwxRTZYQlcxSzRGSlVaYUdWUXRzMWVpTXhFYnVH?=
+ =?utf-8?B?cUVtQzkxU3UvQjhmcHRXN0d5K1dNM0pzbjQvMDZrNnBDZFlrTEZQZW15OUdw?=
+ =?utf-8?B?aXF0K0swRHRuYmZkNEhlK0hybllWM1g4UWdlcGlkR2lVVHdibGxtTWQwekwv?=
+ =?utf-8?B?cW5qOTFGeXd3dDFRN3BRL3VPVVBxRE5yRkcvRTZLVG1jb3dBc1c1WUc2dUVu?=
+ =?utf-8?B?WUs3aFBVaGJsUW1WbVJKQW1oWjBwM2Vnb1FyMG9sai9ndmYxRXhHRW16bXpQ?=
+ =?utf-8?B?czdraXMyUGxPcGF4T0pWOVZkOTV1emhibnlDa3NSamZJYmxLSmg5K3lwaHR5?=
+ =?utf-8?B?cXI3cnlHQzRtRExSRW5mMHE4cjc0aXZ2dU1NWWJwelFqaVlrSjYyVEl0Y0JR?=
+ =?utf-8?B?ZWlxNjhqNHV5VldyQ1lGYVpvd3lQSGh0ZDBtWnJjWHJ1Z1N5RVRiZW4vYU8x?=
+ =?utf-8?B?UDlnZ0tmTXNUdS9OcTg0VWRtNGI2Ulp3anh3NGljOXZoUDFLODlraVJYamtm?=
+ =?utf-8?B?NkpPUk8zbUVwMkYwOFNmWVp4RFZJa0VROWxjZHhlQy9ObjRBYm5HMVJsd0RZ?=
+ =?utf-8?B?VFljalJuUU1JOHM0bXhudDJDRHhOdVhZVE1jWDlsMnVUMEhQRGF0ajYvTDJt?=
+ =?utf-8?B?UThmcFZnRUE1bVdNc21nRk5Mb2VYTDdMYlRQbjZ0SnlDdjlKTzBZTzduUVNZ?=
+ =?utf-8?B?QVlMb2F5ZHlRb0FyaDBpa0NRM0Jtc0Y0bjBNV01jZnNGWGwrYzhRckVGVG1y?=
+ =?utf-8?B?b2dvQWxsNVhJQkRPVWlLT1VUTkRNV095czR6SDBBMUdNeGtQVWVYQT09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dfb10e12-ebe1-4e19-2786-08dead1eaf95
+X-MS-Exchange-CrossTenant-AuthSource: SA0PR12MB4557.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2026 16:27:24.2826
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fkdmyoDZPKPpK6UYdLa4xzFTVVSjW2Rwi4u0U54fLxQKeuB+VcPBvk73rxeotqFbliMYcRhXqgB95/1a2B5xSQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4177
 
-On 5/7/26 03:11, Ninad Naik wrote:
-> This patch series includes code style changes for lm93 driver to fix
-> several checkpatch.pl warnings. No functional changes are made. I tested
-> the changes by compiling the file.
-> 
-> Changes include:
-> - Add blank lines after variable declarations
-> - Change 'unsigned' to 'unsigned int'
-> - Remove else blocks after break or return statements
-> 
-> Ninad Naik (3):
->    hwmon: lm93: Add missing blank lines after declarations
->    hwmon: lm93: Change unsigned to unsigned int for clarity
->    hwmon: lm93: Remove else blocks after break or return for consistency
-> 
->   drivers/hwmon/lm93.c | 87 ++++++++++++++++++++++++++++----------------
->   1 file changed, 56 insertions(+), 31 deletions(-)
-> 
 
-Please refrain from submitting such cleanups into the hwnon subsystem.
-As you can see from Sashiko's feedback, the driver has functional problems.
-On top of that, it uses a deprecated API.
 
-Fixing actual bugs and backporting them is only made more difficult by
-cosmetic changes. I don't mind if cosmetic changes are made as part of
-a functional series, in this case for example when porting the driver
-to use the with_info hwmon API. On their own they have no value.
+On 5/8/26 09:21, Jihong Min wrote:
+>> Yes.
+>>
+>> Please note that you keep top-posting. I don't mind that much, but
+>> top-posting is (sometimes strongly) discouraged for linux kernel 
+>> discussions.
+> 
+> Sorry, this is my first kernel contribution and I was not familiar with the
+> mailing list convention around top-posting. I will avoid top-posting and 
+> use
+> inline replies from now on.
 
-Thanks,
-Guenter
+Another thing to mention is that you are going too fast between patch 
+versions.  All your patches show up in a ton of people's inboxes.
+
+It's great you've gotten feedback on them but I suggest you give it a 
+few days or a week between versions to gather more feedback.
+
+If you haven't already; you should take a look at what Sahiko finds on 
+your patches too.  Be sure to look at the feedback critically and take 
+it with a grain of salt; but it often finds a few nuggets that are 
+worthwhile to consider.
+
+Here is the Sahiko link for v4 you can review if you weren't already 
+looking at it.
+
+https://sashiko.dev/#/patchset/20260508143910.14673-1-hurryman2212%40gmail.com
+
+> 
+> I have addressed the review comments in v4, including runtime PM behavior,
+> temp1_label removal, -ENODATA return, the PROM21-specific xHCI PCI glue 
+> split,
+> and making the PROM21 PCI glue built-in only when enabled. I also 
+> adopted the
+> naming scheme discussed above:
+> 
+>    - drivers/hwmon/prom21-xhci.c
+>    - CONFIG_SENSORS_PROM21_XHCI
+>    - hwmon name: prom21_xhci
+> 
+> I will send v4 now.
+> 
+> Sincerely,
+> Jihong Min
 
