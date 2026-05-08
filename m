@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755783630B7;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41B2363C6A;
 	Fri,  8 May 2026 23:33:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778283205; cv=none; b=uDz18J0E64XZUaEPWh50R+NXnHEXiuF4198SnpAxxUiSK5PwSiehmFYCI80KLLVwjx+6sIvHAHFgLM2u4J3wIAusUZye+BoWHk0+/wByXb6fJ2nzK8XY7RYJuPrJnr8EjjR7rmpZ1K+PKY76FgsNQo9x/8cYMjg3g41GpekSQec=
+	t=1778283205; cv=none; b=Y4TIACotEyJGOzVd64JWt96uf9wOYrtEIXKUl4jD+YDDL7Kt3y7CMrnnT1x2fKdwvYuECNz7XSj5jBMBBzhX5Gu0msTLn3nxv47kY/RvOiI1Q1mlCuE/nV1EcskPUxp3EidIxl66z0gu8C66YOB152o7FmITL0HSIjUAyljQeSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1778283205; c=relaxed/simple;
-	bh=jt0U3NVrVS1sKLM6aSFaTtJhs6yLPAuUJNrXgqbkitg=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ZNC5EWDYuYaJtRiFSWQnIS9K8xia+ksgwU4C5z/P1gtq9gu2ZqIertIvyjyUII162gNYayIyWqTdhMGmv52L52MoMr197koNErU1/02pSoSgoKqLzfkACvJ1ibJJ1pSorUIaoCX+3O1orFDjP1fokiJk3BcIXDZTUih9HV2MlBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kiDW5SFQ; arc=none smtp.client-ip=10.30.226.201
+	bh=3Jk+MCPJV9A6mfPn4xgNbIiXSnu2WaJ3tVt2NCsUpQc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=LXLdTa72faNDC2PwUTflqbNMvwW9c8nVHSPyfraQmY977jsMe1M97en5hSyr6c8F4OD5yTU9yLTeL1UeYxJb/DixLZ9iF4s+LYOtaubhQTSj4conGtebDKBU5MLY902WuVCmyfGmfOxe1d5+pBALvR9evsew2WZJDIpIzwWRdbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lX/bKh+m; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kiDW5SFQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5651DC2BCB0;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lX/bKh+m"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 88E3DC2BCF4;
 	Fri,  8 May 2026 23:33:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1778283205;
-	bh=jt0U3NVrVS1sKLM6aSFaTtJhs6yLPAuUJNrXgqbkitg=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=kiDW5SFQEn1EP9zwj3oMUsZFVcmA7HpHndcHIVqkR+WS9DR/VGjvH5ZXYFF/sxEAi
-	 rqc++zAU+dC1q2abALKxcsYud+eG8tTSU+cEMkm128fdIVngqe5zmuT8M3kXq0QkgD
-	 JkJX9Tm55d056VBTH5aQymNxHfCzoCV9LVrEnpArbE7S0+pKDZKPDHEEq5iJHHFraT
-	 QFm7nlU8QkYuM1O1ft3ihnsKYCV+r4tuPL9nE8e3ZMMw/8ntqXqrEPmYb2fiBRgMbS
-	 w78bNzUWS9ugr5DWGZe5C7XyTaU+yPDLPKuWD+32P7DGW2u9T2rK3RO+O9RnyvUaUb
-	 IjRqK3P1DkNaw==
+	bh=3Jk+MCPJV9A6mfPn4xgNbIiXSnu2WaJ3tVt2NCsUpQc=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=lX/bKh+mz9tmrZk9kVeWGg9VpFk9f8+sDDpfG9dLg7drPGxqBbIQ7PJ+ak4h1Tadx
+	 JSuF0rUrT2iKacdeYLPfY3HCXBTgtNbKMdXpFh8E1fvG9QKDv+TQefY+1IKnlGj1rl
+	 ZeWtxpMKBap+iajLW+sbvodsjSlKC23ouo29dUR0YhJC7b6RR8mjsMeUd4Xtypv55U
+	 SjdkfpY3l9R1XuVnzgM2TItAI4rfeJV9iPWTxkryu7q3u6XXOpmZ3iuE2tvozilb7A
+	 uqH7LpMB0U72UGHlkpGPqR6FBRL2QYT0FbMAwEam9WAiEk5Y5kVVMlfJS97D4JMVxQ
+	 RNEY7dl0qTYEw==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46166CD37AC;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81619CD37B6;
 	Fri,  8 May 2026 23:33:25 +0000 (UTC)
 From: Abdurrahman Hussain via B4 Relay <devnull+abdurrahman.nexthop.ai@kernel.org>
-Subject: [PATCH 0/7] hwmon: (pmbus/adm1266) RTC fix, blackbox, FW rev,
- rtc_class
-Date: Fri, 08 May 2026 16:33:12 -0700
-Message-Id: <20260508-adm1266-v1-0-ec08bf29e0ce@nexthop.ai>
+Date: Fri, 08 May 2026 16:33:16 -0700
+Subject: [PATCH 4/7] hwmon: (pmbus/adm1266) add clear_blackbox debugfs
+ entry
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -41,22 +41,21 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIALhy/mkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDUwNz3cSUXEMjMzPd5DTjxDQTo5Rk4xQjJaDqgqLUtMwKsEnRsRB+cWl
- SVmpyCUi7Um0tAH79X4hrAAAA
-X-Change-ID: 20260507-adm1266-cf3af42dc3d2
+Message-Id: <20260508-adm1266-v1-4-ec08bf29e0ce@nexthop.ai>
+References: <20260508-adm1266-v1-0-ec08bf29e0ce@nexthop.ai>
+In-Reply-To: <20260508-adm1266-v1-0-ec08bf29e0ce@nexthop.ai>
 To: Guenter Roeck <linux@roeck-us.net>, 
  Alexandru Tachici <alexandru.tachici@analog.com>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Abdurrahman Hussain <abdurrahman@nexthop.ai>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2581;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2640;
  i=abdurrahman@nexthop.ai; h=from:subject:message-id;
- bh=jt0U3NVrVS1sKLM6aSFaTtJhs6yLPAuUJNrXgqbkitg=;
- b=owJ4nJvAy8zAJbYltPXv6rsCXxhPqyUxZP4r2p+ZsuDQpJOV5jeuBCUtnlPwfeOFcx4+Vxl57
- vT5WM55NKOyo5SFQYyLQVZMkWXOI/83bR1tERtiDtnDzGFlAhnCwMUpABN5OpHhf6Dufk1G0+Jj
- 64NuXj7Es3fOnOBSJfO7m26onDkp4+rmGMDwP+J7ncqVmOnRZ9+s6ZibfMNgg1OZ6s+Vshb7Ij6
- c/iktxA8A3JdTJg==
+ bh=k9XGGAziLKna9OD3zoDFGbWFq64Y+DfU8TmPayUhAPg=;
+ b=owJ4nJvAy8zAJbYltPXv6rsCXxhPqyUxZP4rOhLF4R476eTDJDWTCnnva0bvAw4UeUy4p5mxi
+ N152uW81486SlkYxLgYZMUUWeY88n/T1tEWsSHmkD3MHFYmkCEMXJwCMBEOKUaGqRVNVgni0ic7
+ raZn7j77sKDzv+WP5z1cNdv3zTjnu/VXOsNPxoiuH5+d8nJ9Q9jfS4g+qXPp2Zw1p/z5vociV5l
+ Fgo4zAQA54U+X
 X-Developer-Key: i=abdurrahman@nexthop.ai; a=openpgp;
  fpr=9CE24FEC86888658B05CC23FB45585FDABDD10F4
 X-Endpoint-Received: by B4 Relay for abdurrahman@nexthop.ai/default with
@@ -64,62 +63,78 @@ X-Endpoint-Received: by B4 Relay for abdurrahman@nexthop.ai/default with
 X-Original-From: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 Reply-To: abdurrahman@nexthop.ai
 
-This series fixes a few issues in the adm1266 driver and fills in
-some gaps, as listed below.
+From: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 
-Patch 1 is a wall-clock RTC bug fix: the driver currently seeds the
-device's timestamp counter with CLOCK_MONOTONIC seconds, which makes
-blackbox record timestamps non-comparable across reboots. It carries
-a Fixes: tag.
+The ADM1266 blackbox can be configured in two recording modes via
+BLACKBOX_CONFIG[0]: cyclic, where the device overwrites the oldest
+record once the 32-record buffer fills, and single, where it stops
+recording until the buffer is cleared. Deployments that need to
+preserve the full record history across multiple fault episodes
+typically run in single mode and need a way to clear the buffer
+after the records have been collected.
 
-Patch 2 writes the 16-bit fractional-seconds field of SET_RTC that
-the driver was zeroing, restoring sub-second resolution on records.
-
-Patch 3 exposes the firmware revision (IC_DEVICE_REV, 0xAE) via
-debugfs alongside the existing sequencer_state entry.
-
-Patch 4 adds a write-only clear_blackbox debugfs file. Devices
-configured for single-recording mode (BLACKBOX_CONFIG[0] = 0) need
-an explicit clear once the 32-record buffer fills; the documented
-sub-command ({0xFE, 0x00} block-write to 0xDE) wasn't reachable
-from userspace.
-
-Patch 5 exposes the non-volatile POWERUP_COUNTER (0xE4) via debugfs.
-The same value is embedded in every blackbox record, so the live
-value lets userspace match a captured record back to the boot it
-came from when correlating logs.
-
-Patch 6 registers an rtc_class device backed by SET_RTC. The data
-sheet (Rev. D, p. 22) explicitly recommends "frequently send the
-time stamp to the ADM1266 to synchronize the UNIX time and reduce
-the time from drifting" when running on the internal oscillator
-(no external 32.768 kHz crystal). With this patch userspace can
-drive the re-sync via standard tooling (hwclock, chrony,
-systemd-timesyncd) against /dev/rtcN, with no driver-specific
-sysfs ABI.
-
-Patch 7 disambiguates GPIO line labels on platforms that fit two
-ADM1266 devices on different I2C buses at the same slave address.
+Expose a write-only debugfs file alongside sequencer_state. Writing
+any data to it issues the documented clear-blackbox sub-command:
+a 2-byte block-write to READ_BLACKBOX (0xDE) with payload
+{0xFE, 0x00} (datasheet Rev. D).
 
 Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 ---
-Abdurrahman Hussain (7):
-      hwmon: (pmbus/adm1266) use wall-clock seconds for SET_RTC
-      hwmon: (pmbus/adm1266) write fractional-seconds field of SET_RTC
-      hwmon: (pmbus/adm1266) add firmware_revision debugfs entry
-      hwmon: (pmbus/adm1266) add clear_blackbox debugfs entry
-      hwmon: (pmbus/adm1266) add powerup_counter debugfs entry
-      hwmon: (pmbus/adm1266) register rtc_class device backed by SET_RTC
-      hwmon: (pmbus/adm1266) include adapter number in GPIO line label
+ drivers/hwmon/pmbus/adm1266.c | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
- drivers/hwmon/pmbus/adm1266.c | 177 +++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 167 insertions(+), 10 deletions(-)
----
-base-commit: 917719c412c48687d4a176965d1fa35320ec457c
-change-id: 20260507-adm1266-cf3af42dc3d2
+diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
+index 5cfca00a4468..4c8d2e9e07dd 100644
+--- a/drivers/hwmon/pmbus/adm1266.c
++++ b/drivers/hwmon/pmbus/adm1266.c
+@@ -356,6 +356,36 @@ static int adm1266_firmware_revision_read(struct seq_file *s, void *pdata)
+ 	return 0;
+ }
+ 
++/*
++ * Clearing the blackbox is required when the device is configured in
++ * single-recording mode (BLACKBOX_CONFIG[0] = 0): once the 32-record
++ * buffer is full the device stops recording until cleared.
++ *
++ * The clear is issued as a 2-byte block-write to READ_BLACKBOX with
++ * payload {0xFE, 0x00} per the datasheet.
++ */
++static ssize_t adm1266_clear_blackbox_write(struct file *file, const char __user *ubuf,
++					    size_t count, loff_t *ppos)
++{
++	struct i2c_client *client = file->private_data;
++	u8 payload[2] = { 0xFE, 0x00 };
++	int ret;
++
++	ret = i2c_smbus_write_block_data(client, ADM1266_READ_BLACKBOX,
++					 sizeof(payload), payload);
++	if (ret < 0)
++		return ret;
++
++	return count;
++}
++
++static const struct file_operations adm1266_clear_blackbox_fops = {
++	.owner = THIS_MODULE,
++	.open = simple_open,
++	.write = adm1266_clear_blackbox_write,
++	.llseek = noop_llseek,
++};
++
+ static void adm1266_init_debugfs(struct adm1266_data *data)
+ {
+ 	struct dentry *root;
+@@ -370,6 +400,8 @@ static void adm1266_init_debugfs(struct adm1266_data *data)
+ 				    adm1266_state_read);
+ 	debugfs_create_devm_seqfile(&data->client->dev, "firmware_revision", data->debugfs_dir,
+ 				    adm1266_firmware_revision_read);
++	debugfs_create_file("clear_blackbox", 0200, data->debugfs_dir, data->client,
++			    &adm1266_clear_blackbox_fops);
+ }
+ 
+ static int adm1266_nvmem_read_blackbox(struct adm1266_data *data, u8 *read_buff)
 
-Best regards,
---  
-Abdurrahman Hussain <abdurrahman@nexthop.ai>
+-- 
+2.53.0
 
 
