@@ -1,329 +1,178 @@
-Received: from outbound.qs.icloud.com (qs-2003h-snip4-2.eps.apple.com [57.103.86.75])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com [209.85.217.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3076B37BE84
-	for <linux-hwmon@vger.kernel.org>; Fri,  8 May 2026 07:05:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.86.75
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778223908; cv=none; b=ht1qI+qQcdq0wwGDjcydXJNtBjy53JWWmZuTpCBdd/h4ed3msIZ0FkUrMGxv43Jg6M1UG7ZwXhURygBVj1woNbQnSHO6D0fYgaSc8wLdyoUONxbTib5HoCBjQplH7/s17lL8daSxC2/YPQeaYtJ4354d0t88ZhdLru26h/woB0Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778223908; c=relaxed/simple;
-	bh=FVVww/7ZCIlmqpV3f56A52J55Nootnml61a5paF3DJ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dmnS27fDgXYzKJUvUubbjV8wa2A5+Mv/WaqMV3rMOXaiLLiXIuxsKnH0YtU+lpuq5zcSqDeWllArI3dvC6o+B7rli5dKsN1DGHS9qcqKLMl6qBvPGp/fiJOTVTXMQ5uGSJNcmFBScXfLY40Ln0S4Zjm4O9XuUJrTtL+/1wXQGgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=dRHlgSxC; arc=none smtp.client-ip=57.103.86.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A6ED383C7B
+	for <linux-hwmon@vger.kernel.org>; Fri,  8 May 2026 08:20:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778228451; cv=pass; b=nt2jJs6mmSiNA+/EBuAhV6kmp3V+3jOYM3aLLnwyTgtV2W6AQQS25tBeAPifYZdpLB9tdL1q3VgpUYM8m3swd9zMfyl9iDb8/J/jhTM08tEjst78Cb+vcYKmz4Y1DKjdYQRq3m2L3tISYz+u6gsLhiUkPkurIvtU0WmZfGbm1LI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778228451; c=relaxed/simple;
+	bh=lTkF7Xj1pPLGJApccu/V8Mry4PVrzP0dv5SU+hphSqo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jOwSPNCPBDmi156y1526+jwPtco6uzFMx8CCu15TLvcQZnZMxZaZdPC+BiBHZ3hZCEIcex5aySQLBPz35RZKAx7xV1ilOQcNRkNCtWzukrUCf2zhSpBqfOPc2wh7hXRFt0N4d7Tn42hUUkLxKt2tX15nwQZHBBmcWWaP3k+NEZ8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ovy7WJKb; arc=pass smtp.client-ip=209.85.217.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="dRHlgSxC"
-Received: from outbound.qs.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-east-2d-60-percent-5 (Postfix) with ESMTPS id 7A33218000B1;
-	Fri, 08 May 2026 07:04:59 +0000 (UTC)
-X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQhJBkMDRQVJF0wBTVIPDxhMCkEUWgpcQgtJAS1eCF4fTBwdDlgGEhZdRVsYRRlLHVgWAV8GWXIZWhRcGFNFUR9UWEEOCloGUFEdXwIKBEcEWxdGA1NFQwMXEVABWB5WXloXXk1HH0BNYkkBWhlbHEAXSm5NUw8PGVoUXBhTRVEfVFheBFNWDhYNT1dUVAgDXVxLCg8aXwNJAFVRXQRaHxUASVFVUlsAEVtJVy1eCF4fTBwdDlgGDFBNAUMICgJRHFYNVw==
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1778223902; x=1780815902; bh=vrmtu3cjU0Q9sWlHRKR3zouF3lZXojOuoaPUVq+EAGk=; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme; b=dRHlgSxCBwoj/Zd/vcadOj/ngR35cjx4kq2GWUFBWRgeElA4mHCfeIPBi5G1ouP/GLoceFsh0RxOsV5vBgNE7aftR3sDWUK2+A0YjxgEkjRmioIm/0JU/zC8dLFUNCynUEZZ6S7N+jH67+wV1ug4KFbLsHgZt8HMi98HSDhvqV6jC2AHYc5fml2vBk2bE8YGP4sWMosGwioKaMn/9KzZ1C0eX5GlrjfsLk6HRE+f2m3pYAhQHzQ3EXjUkxCeighdodgp0aqppCo+qg48cAl1bMydnTprZoA2qf+hpiJ9hfEn8j/mKhK8QQfuA2UiUehi3vuINnWs05+u5guYpzw7uA==
-Received: from [192.168.89.2] (unknown [17.57.155.37])
-	by p00-icloudmta-asmtp-us-east-2d-60-percent-5 (Postfix) with ESMTPSA id 876501800160;
-	Fri, 08 May 2026 07:04:55 +0000 (UTC)
-Message-ID: <f47d9cc1-e39b-4199-b031-e91b8e02ab1d@icloud.com>
-Date: Fri, 8 May 2026 16:04:52 +0900
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ovy7WJKb"
+Received: by mail-vs1-f47.google.com with SMTP id ada2fe7eead31-5ff05af29b4so665712137.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 08 May 2026 01:20:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778228448; cv=none;
+        d=google.com; s=arc-20240605;
+        b=eQKZpGEL/3z5bE6xObhotDTslMGcw2uaLfohgq2SeJOZ6Z/PnCv6mbkhE4qns1xRA+
+         T7ulb3Jof9MUb5nDazklmfyKntFhkbFJ5dT1b37AH3f5u648ZBLbgVcNzH9MuWGu/W9n
+         lC1yR6EtHTyjv0bEL0UrfFsi0lNXaByv1Q2SnaZ9i9jtgyPhbUP483j7ErOOsAdo+YHP
+         z4NhPg5RC7oVBVLrC1Kzai5vu2++37HNab8/N9o667xqdXnlo40pl3+8mas3jRyQtVCM
+         NyB2DUtGPTr6KDjeA0QzrtQBZnAaK5Yefk9rZVPJrTUZxL4QeSS1ybfbZfjMuoKvu192
+         qRYg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=HHvqc5QQlNg6QfQkGnDzkz4AP6jx9Mcp6qm5SqdJ5gs=;
+        fh=c/3QOEt0Gu0PhTUFah/h4JgtdWOK8kXu3UHcY9RuDdM=;
+        b=QQYfPeuyZh3A6b8GVIj0KLHFhNI4BplwlUh8bU75yg0sKEb117ImicctFed2XZ+OPo
+         SAf4jybs5tZsU4P496gldsj/SZcbeWmt31fL1MGApIjJ7wenvJZ3IClHFXgksPCO/635
+         +LDYbGWpCQ3/kZ0BKEdV+iGo7UYlSeF6fepytznoXgx9WrhcwObkbP9zxm8Vu/TeBJDo
+         nav0DFo3kt0vPwiisFvOM9cXeJtUScOV2Eu5tiIcgFsKBuLLlJAVKDWUUdDRcDOdi0AM
+         fMIrHT3wBMGUdikERy8jvgMdBPzWuC8YPoegIq+c00HndEuO3eK1ZudJ3SiP7yJ4pyal
+         X2mA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778228448; x=1778833248; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HHvqc5QQlNg6QfQkGnDzkz4AP6jx9Mcp6qm5SqdJ5gs=;
+        b=ovy7WJKbLUXUpfS9AK2nUoxnoJ9aJC6emEzi+YmThLXN3+ZEuEXrvBzJQGuVY42x+C
+         LrikbL6KCjLDmFV54CKsT+eLXen8f96b8TRh0qwRS6iuazJxpaZNiPO1+t8ZqeSG01/3
+         iKVptjKvNT8Ac62at3juk15Mcc/wEYp4PFs2E/Tg6YnohqQT5LrWCYWyLOir8aqkAtBu
+         1xHn1s36xFW+mmiaqKn7KH6MsGDm1rWMU2X+H9DUfZfP/4G+KgHqTsUiVi0q2TexHLqD
+         rvEigLzLkD5gXEU2j9fTz4cY8ohLJvXfyb/Z2FMKo1iZKvkd1sDYlOkbVki1Umxcskep
+         60+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778228448; x=1778833248;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=HHvqc5QQlNg6QfQkGnDzkz4AP6jx9Mcp6qm5SqdJ5gs=;
+        b=DQT/gx3Bhdv5POMBjUQTYABz1oGrJBmNc0RXT1d41L6UZ9VxxdriyiB7Te64Zjuvrj
+         2tVHOLAagoV/yAu3wtRB3Mdul4yAalhm6bVkyGvt21ugdUJYWSSfQxeP0bZAUpUA8Y1P
+         90wCmPQd0JtI4SImtl/eD5TCt/5VA2RCrkqI0hvnz3LMrOuRaBP4KuzezOcGxQFUDBm2
+         F182gAGr7jxaAz6rP7MwUuEf+1gwMSqr0LoiKOzpqsLb2tJ7KjQHTQzluytQCWN02N17
+         5k3bgz/IZMaM6HHdjLApVZw2bh/9oeUJhg1EHgplHscilHU8WcIRzmPv7B2pnv4X6mle
+         kb2w==
+X-Forwarded-Encrypted: i=1; AFNElJ82kuQI5Cyp7q1pj8nZEJA/j7tFfk89VQ9cVlaEjGVz2lVUQ8ClFKi09bkpoNhVc4JR5sHB/fFNpLq+CA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUKWyYDbPNmwUcmTHx81t6+m20AahQwGbqTgjsE9b439zQVN6x
+	LrBpvdhBAIAuZOo6so2HBkZaVsIB+s+shzoUYN3P8zLPIuShsy4V1FH62yZ78XvgqS7ZPP1A05u
+	mXXdUfXQqDstRRaaJoOlh33q9VQGNGPsMlSTx
+X-Gm-Gg: Acq92OFjAummaOWD55w5ZPH65r+sVsSyDknT9dIVN8jmPquoLyNVRZO2/zoViNrWmOn
+	T2aHqOuzF//WoGzz4MVAyQq9/BRjWDj4Orwzm9vKH5MsX+j2F4F6HenEaL06d3Mbge7JPAR5yBQ
+	enfTrIlMzAfeSnA82gAKlUfwYd7PqZiY3AUXeQE2fN4R7W3AhUp8kdXWcpBQY5hVrVfJfd5CaNn
+	AETKdk7WwQfF3wAuA8T74r1YHtmBM8EEiOiOnOCn1BaTulV7mtiK1AzqOaxW/Q2ZqWnsRr8DOng
+	0otcbgGYMubQJsSw
+X-Received: by 2002:a05:6102:26d1:b0:608:6b33:5bc2 with SMTP id
+ ada2fe7eead31-630f8fc123emr6203272137.18.1778228448423; Fri, 08 May 2026
+ 01:20:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] usb: xhci-pci: add generic auxiliary device
- interface
-To: Mathias Nyman <mathias.nyman@linux.intel.com>,
- Jihong Min <hurryman2212@gmail.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Mathias Nyman <mathias.nyman@intel.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-usb@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1778123510.git.hurryman2212@gmail.com>
- <effa7bd7bef8a8ea28b9e28fe47af6a58e39edf2.1778123510.git.hurryman2212@gmail.com>
- <a5739875-b8a5-4918-8850-fa4b32d5279d@linux.intel.com>
-Content-Language: en-US
-From: Jihong Min <hurryman2212@icloud.com>
-In-Reply-To: <a5739875-b8a5-4918-8850-fa4b32d5279d@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA4MDA2OSBTYWx0ZWRfX3OtCKsrl9iKU
- O0kZio6YZt0+Es+cFbKxRawMpamIQ0z5Zmi33Rr2pkBPoyyqwCgW2jre1TyywphSPIJeLCBDK/P
- yxS39LxuRePCzrmcTwNMsX02Q9Fq2R0K2OhfIBDGJbOwFyMPb4w9UmzbxiNMJy9ZsV6YfxNbeuR
- JUVYM6vpQgpehUnwYJkhdj7SQRQfCBVJ7oBMwqa800CgFo+TIbEBBVi5Z+JKjGMrnsQl3qy1K3j
- HzHPKDXMN1/CORzbjPS1dtBTJsXceHzjsKFUbXo0ex8Qd8iv4JffNfj8WIFBz109EcZH3vclFFZ
- PqYhy5h7dcoeXmrktBwpD3l7uxulVF2S51wAyJXa0g9C87URJvFFXbrSVFTM1o=
-X-Proofpoint-GUID: jxdjthE2mhazQywaLHtx2bDqtk9HS8zs
-X-Authority-Info-Out: v=2.4 cv=IdyKmGqa c=1 sm=1 tr=0 ts=69fd8b1c
- cx=c_apl:c_pps:t_out a=bsP7O+dXZ5uKcj+dsLqiMw==:117
- a=bsP7O+dXZ5uKcj+dsLqiMw==:17 a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10
- a=x7bEGLp0ZPQA:10 a=5jDBv52wX64A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=pGLkceISAAAA:8 a=L7A7A1ypuKKR8YZ4-2cA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=PgRulw5oR9JgysbTFEid:22 a=oa2-kN79Xhin27rcel9q:22
-X-Proofpoint-ORIG-GUID: jxdjthE2mhazQywaLHtx2bDqtk9HS8zs
+References: <20260507-add-e50sn12051-v4-0-ff2b3768ac7e@gmail.com>
+ <20260507-add-e50sn12051-v4-1-ff2b3768ac7e@gmail.com> <20260507-squealing-vanish-16fea3c114f5@spud>
+In-Reply-To: <20260507-squealing-vanish-16fea3c114f5@spud>
+From: Colin Huang <u8813345@gmail.com>
+Date: Fri, 8 May 2026 16:20:37 +0800
+X-Gm-Features: AVHnY4LY8-27TKesI70xHAUIFe9rb9_MdP2mFDNPu7z3TNgg0dnTs4zeU01pEIQ
+Message-ID: <CAPBH0A_D3siq+_CMM5Ouqemn56eJhU8U7KuL5gTC8h_tvL7kXQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: pmbus: add Delta E50SN12051 binding
+To: Conor Dooley <conor@kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Kevin Chang <kevin.chang2@amd.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, Colin Huang <colin.huang2@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Mathias,
-
-I tried the xhci-pci-prom21.c approach you suggested, with a PROM21-specific
-PCI glue driver calling xhci_pci_common_probe() and creating the auxiliary
-hwmon child device from that driver.
-
-While doing that I noticed a possible boot-time regression with the module
-case.
-
-If CONFIG_USB_XHCI_PCI=y and CONFIG_USB_XHCI_PCI_PROM21=m, then generic
-xhci-pci sees CONFIG_USB_XHCI_PCI_PROM21 as enabled and refuses the PROM21
-PCI ID:
-
-     if (IS_ENABLED(CONFIG_USB_XHCI_PCI_PROM21) &&
-         pci_match_id(pci_ids_prom21, dev))
-             return -ENODEV;
-
-That means the PROM21 xHCI controller is handled only by
-xhci-pci-prom21.ko. If that module is not present in the initramfs or is not
-loaded early enough, the PROM21 xHCI controller remains unbound during early
-boot. Devices behind that controller, such as a USB keyboard used for early
-boot or disk unlock, would not work even though the generic xhci-pci 
-driver is
-built in and could otherwise operate the controller.
-
-This seems different from the Renesas case, where the separate PCI driver is
-needed for controller-specific firmware handling. For PROM21, the USB/xHCI
-operation itself is still generic; the only extra function is publishing an
-optional hwmon child device.
-
-So I am not sure what the preferred direction should be:
-
-   1. Keep the separate xhci-pci-prom21.c PCI glue driver and make
-      USB_XHCI_PCI_PROM21 built-in only, or otherwise constrain the 
-Kconfig so
-      the generic xhci-pci handoff cannot break early boot.
-
-   2. Keep PROM21 handled by generic xhci-pci and add only a small
-      PROM21-specific auxiliary-device creation hook in xhci-pci after the
-      common probe succeeds. In that model, failure to create the 
-optional hwmon
-      auxiliary device would not affect USB operation.
-
-   3. Some other split that keeps PROM21-specific sensor code outside
-      xhci-pci, but does not prevent generic xhci-pci from binding the
-      controller when the optional PROM21 glue is not available early.
-
-Do you still prefer the separate xhci-pci-prom21.c PCI driver for this case,
-or would the minimal xhci-pci auxiliary-device hook be more appropriate 
-given
-the built-in xhci-pci / modular PROM21 glue case?
-
-Sincerely,
-Jihong Min
-
-On 5/7/26 18:31, Mathias Nyman wrote:
-> On 5/7/26 06:31, Jihong Min wrote:
->> Some xHCI PCI controllers expose controller-specific functionality 
->> that is
->> not part of generic xHCI operation and is better handled by optional 
->> child
->> drivers in other subsystems. Add a small auxiliary device 
->> registration path
->> for selected xHCI PCI controllers.
->>
->> The initial PCI ID match table lists AMD Promontory 21 (PROM21) 
->> 1022:43fd
->> controllers. For matching controllers, xhci-pci creates an auxiliary
->> device and stores it in devres so the remove path destroys it before HCD
->> teardown.
->>
->> Subsystem-specific child drivers can then bind to those devices through
->> the auxiliary bus and keep their hardware-specific logic outside 
->> xhci-pci.
->>
->> Assisted-by: Codex:gpt-5.5
->> Signed-off-by: Jihong Min <hurryman2212@gmail.com>
->> ---
->>   drivers/usb/host/Kconfig    | 10 +++++
->>   drivers/usb/host/xhci-pci.c | 83 +++++++++++++++++++++++++++++++++++++
->>   2 files changed, 93 insertions(+)
->>
->> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
->> index 0a277a07cf70..e0c2c7ac5c97 100644
->> --- a/drivers/usb/host/Kconfig
->> +++ b/drivers/usb/host/Kconfig
->> @@ -42,6 +42,16 @@ config USB_XHCI_PCI
->>       depends on USB_PCI
->>       default y
->>   +config USB_XHCI_PCI_AUXDEV
->> +    bool "xHCI PCI auxiliary device support"
->> +    depends on USB_XHCI_PCI
->> +    select AUXILIARY_BUS
->> +    help
->> +      This enables xHCI PCI support for registering auxiliary devices
->> +      for selected controllers. It is used by optional child drivers
->> +      that bind to xHCI PCI controller-specific functionality through
->> +      the auxiliary bus.
->> +
->>   config USB_XHCI_PCI_RENESAS
->>       tristate "Support for additional Renesas xHCI controller with 
->> firmware"
->>       depends on USB_XHCI_PCI
->> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
->> index 585b2f3117b0..618d6840e108 100644
->> --- a/drivers/usb/host/xhci-pci.c
->> +++ b/drivers/usb/host/xhci-pci.c
->> @@ -8,6 +8,8 @@
->>    * Some code borrowed from the Linux EHCI driver.
->>    */
->>   +#include <linux/auxiliary_bus.h>
->> +#include <linux/device/devres.h>
->>   #include <linux/pci.h>
->>   #include <linux/slab.h>
->>   #include <linux/module.h>
->> @@ -80,6 +82,7 @@
->>   #define PCI_DEVICE_ID_AMD_RAVEN_15E1_XHCI        0x15e1
->>   #define PCI_DEVICE_ID_AMD_RAVEN2_XHCI            0x15e5
->>   #define PCI_DEVICE_ID_AMD_RENOIR_XHCI            0x1639
->> +#define PCI_DEVICE_ID_AMD_PROM21_XHCI            0x43fd
->>   #define PCI_DEVICE_ID_AMD_PROMONTORYA_4            0x43b9
->>   #define PCI_DEVICE_ID_AMD_PROMONTORYA_3            0x43ba
->>   #define PCI_DEVICE_ID_AMD_PROMONTORYA_2            0x43bb
->> @@ -103,6 +106,80 @@ static int xhci_pci_run(struct usb_hcd *hcd);
->>   static int xhci_pci_update_hub_device(struct usb_hcd *hcd, struct 
->> usb_device *hdev,
->>                         struct usb_tt *tt, gfp_t mem_flags);
->>   +static const struct pci_device_id pci_ids_have_aux[] = {
->> +    { PCI_DEVICE_DATA(AMD, PROM21_XHCI, "prom21_hwmon") },
->> +    { /* end: all zeroes */ }
->> +};
->> +
->> +struct xhci_pci_aux_devres {
->> +    struct auxiliary_device *auxdev;
->> +};
->> +
->> +static const char *xhci_pci_aux_dev_name(struct pci_dev *pdev)
->> +{
->> +    const struct pci_device_id *id;
->> +
->> +    id = pci_match_id(pci_ids_have_aux, pdev);
->> +    if (!id)
->> +        return NULL;
->> +
->> +    return (const char *)id->driver_data;
->> +}
->> +
->> +static void xhci_pci_aux_devres_release(struct device *dev, void *res)
->> +{
->> +    struct xhci_pci_aux_devres *devres = res;
->> +
->> +    if (devres->auxdev)
->> +        auxiliary_device_destroy(devres->auxdev);
->> +}
->> +
->> +static void xhci_pci_try_add_aux_device(struct pci_dev *pdev)
->> +{
->> +    struct xhci_pci_aux_devres *devres;
->> +    struct auxiliary_device *auxdev;
->> +    const char *aux_dev_name;
->> +
->> +    aux_dev_name = xhci_pci_aux_dev_name(pdev);
->> +    if (!aux_dev_name)
->> +        return;
->> +
->> +    devres = devres_alloc(xhci_pci_aux_devres_release, sizeof(*devres),
->> +                  GFP_KERNEL);
->> +    if (!devres) {
->> +        dev_warn(&pdev->dev,
->> +             "failed to allocate auxiliary device state\n");
->> +        return;
->> +    }
->> +
->> +    auxdev = auxiliary_device_create(&pdev->dev, KBUILD_MODNAME,
->> +                     aux_dev_name, NULL,
->> +                     (pci_domain_nr(pdev->bus) << 16) |
->> +                         pci_dev_id(pdev));
->> +    if (!auxdev) {
->> +        devres_free(devres);
->> +        dev_warn(&pdev->dev, "failed to add %s auxiliary device\n",
->> +             aux_dev_name);
->> +        return;
->> +    }
->> +
->> +    devres->auxdev = auxdev;
->> +    devres_add(&pdev->dev, devres);
->> +}
->> +
->> +static void xhci_pci_try_remove_aux_device(struct pci_dev *pdev)
->> +{
->> +    struct xhci_pci_aux_devres *devres;
->> +
->> +    devres = devres_find(&pdev->dev, xhci_pci_aux_devres_release, NULL,
->> +                 NULL);
->> +    if (!devres || !devres->auxdev)
->> +        return;
->> +
->> +    auxiliary_device_destroy(devres->auxdev);
->> +    devres->auxdev = NULL;
->> +}
->> +
->>   static const struct xhci_driver_overrides xhci_pci_overrides 
->> __initconst = {
->>       .reset = xhci_pci_setup,
->>       .start = xhci_pci_run,
->> @@ -677,6 +754,9 @@ int xhci_pci_common_probe(struct pci_dev *dev, 
->> const struct pci_device_id *id)
->>       if (device_property_read_bool(&dev->dev, "ti,pwron-active-high"))
->>           pci_clear_and_set_config_dword(dev, 0xE0, 0, 1 << 22);
->>   +    if (IS_ENABLED(CONFIG_USB_XHCI_PCI_AUXDEV))
->> +        xhci_pci_try_add_aux_device(dev);
->> +
->>       return 0;
+Conor Dooley <conor@kernel.org> =E6=96=BC 2026=E5=B9=B45=E6=9C=888=E6=97=A5=
+=E9=80=B1=E4=BA=94 =E4=B8=8A=E5=8D=881:07=E5=AF=AB=E9=81=93=EF=BC=9A
 >
-> I think this should be turned around so that the vendor specific code 
-> calls the common code.
-> xhci-pci-renesas.c does this nicely.
+> On Thu, May 07, 2026 at 01:12:26PM +0800, Colin Huang via B4 Relay wrote:
+> > From: Colin Huang <u8813345@gmail.com>
+> >
+> > Add devicetree binding documentation for the Delta E50SN12051
+> > PMBus-compliant device.
+> >
+> > Signed-off-by: Colin Huang <u8813345@gmail.com>
+> > ---
+> >  .../bindings/hwmon/pmbus/delta,e50sn12051.yaml     | 42 ++++++++++++++=
+++++++++
+> >  1 file changed, 42 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/delta,e50sn1=
+2051.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/delta,e50sn12051.=
+yaml
+> > new file mode 100644
+> > index 000000000000..72aefe212d17
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/hwmon/pmbus/delta,e50sn12051.ya=
+ml
+> > @@ -0,0 +1,42 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/hwmon/pmbus/delta,e50sn12051.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Delta E50SN12051 PMBus Sensor
+> > +
+> > +maintainers:
+> > +  - Kevin Chang <kevin.chang2@amd.com>
+> > +
+> > +description: |
+> > +  Delta E50SN12051 is a non-isolated 1/8th brick DC-DC power module.
+> > +  It is a PMBus-compliant device accessible via an I2C/SMBus interface
+> > +  and provides standard telemetry such as voltage, current, and
+> > +  temperature measurements.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: delta,e50sn12051
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +    description: I2C bus address of the PMBus device
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
 >
-> In your case it would be adding something like a xhci-pci-prom21.c pci 
-> driver:
+> With only these two properties, shouldn't this be in trivial-devices?
+Thanks for your comment.
+I will remove this file, delta,e50sn12051.yaml,
+and add device into trivial-devices.yaml.
 >
-> xhci_pci_prom21_probe(struct pci_dev *dev, const struct pci_device_id 
-> *id)
-> {
->     crate_auxiliary_device(dev);
->     return xhci_pci_common_probe(dev, id);
-> }
->
-> xhci_pci_prom21_remove(struct pci_dev *dev)
-> {
->     destroy_auxiliary_device(dev);
->     xhci_pci_remove(dev);
-> }
->
-> static const struct pci_device_id pci_ids[] = {
->     { PCI_DEVICE(YOUR_AMD_PCI_VENDOR_ID, YOUR_PROM21_DEVICE_ID) },
->     { /* end: all zeroes */ }
-> };
-> MODULE_DEVICE_TABLE(pci, pci_ids);
->
-> static struct pci_driver xhci_prom21_pci_driver = {
->     .name =        "xhci-pci-prom21",
->     .id_table =    pci_ids,
->
->     .probe =    xhci_pci_prom21_probe,
->     .remove =    xhci_pci_prom21_remove,
->
->     .shutdown =     usb_hcd_pci_shutdown,
->     .driver = {
->         .pm = pm_ptr(&usb_hcd_pci_pm_ops),
->     },
-> };
-> module_pci_driver(xhci_prom21_pci_driver);
->
-> MODULE_DESCRIPTION("AMD Promontory 21 xHCI PCI Host Controller Driver");
-> MODULE_IMPORT_NS("xhci");
-> MODULE_LICENSE("GPL v2");
->
-> -Mathias
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    i2c {
+> > +        #address-cells =3D <1>;
+> > +        #size-cells =3D <0>;
+> > +
+> > +        power-module@40 {
+> > +            compatible =3D "delta,e50sn12051";
+> > +            reg =3D <0x40>;
+> > +        };
+> > +    };
+> >
+> > --
+> > 2.34.1
+> >
+> >
