@@ -1,65 +1,65 @@
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65FE122541C
-	for <linux-hwmon@vger.kernel.org>; Sat,  9 May 2026 15:38:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005CC26B75B
+	for <linux-hwmon@vger.kernel.org>; Sat,  9 May 2026 15:40:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778341104; cv=none; b=M3EP+4kufpvNIton//irQwsuAG4M4eEAjGgpKAwh80tVQmS9AmUDPq1YavfzhxupOJ5qY9/Ckt1sswxM4nY4pZscNKdfEXJ4VCLw+nfZGDysrL1TZQ5bdSNtnJ703Xovji52GWrV5VzLNsdRuweG3pY/7PwiZ9fQ+g/z8Hu7+6o=
+	t=1778341223; cv=none; b=Og1WrO1GaimpLsRszFru+/eZtHnlUql0TYiT3BE5DEfeWMOFP5TdveEcGixefyCnV123lZ7jdDa5dnocZb8biyXkO+l5+L0uXav6CdH0yB54oG+Y3b5xoFQES1n5NHsZkuIG0bmY6E4l3c26bOUEaeFAL7K4C3NO/yxHgCdRtiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778341104; c=relaxed/simple;
-	bh=gLKSdOShGg2uo9akYAxRNmgFpbWG+H/A9yxY41Cj1Xc=;
+	s=arc-20240116; t=1778341223; c=relaxed/simple;
+	bh=90ABeSQWds/sn2w99N2BJPg8+8uGqH/ToAzyW/wK/8g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bhB6wAktEI6IgVyTiiY27VmE5vPDXmS0rbnH5tvPGnUFC2InZ/iSVCQEQJfUW1AD+HQS1WQVuVxtnGngnot4H9dvMK+LX5T6OaUGWdlqwxt10MWovdi74I9YeTuYR5Q5vvWoOYcqkYejudUbNkVepydg8FN5GwzTpJaN9Vw/Iic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NzYYw0tm; arc=none smtp.client-ip=74.125.82.175
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yf0qOxenNZN/cyliYCIC14HmZZx8mBjsZym3rlupw7CdR+Tx5TL/qzhwO3fVzVzClu2QxP0pVHqmFDkNziEl/gFC6xpbynAPfAeCrs2qIzQHjS76Epc6RinDFEgQQYmkCmgKsR0lmG6qEqWrjqh/od5xdlboc/mvIpa+LrOhpqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RK4LbZuT; arc=none smtp.client-ip=74.125.82.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NzYYw0tm"
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2f68f3b075fso2721747eec.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 09 May 2026 08:38:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RK4LbZuT"
+Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-1329507c387so2859651c88.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 09 May 2026 08:40:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778341101; x=1778945901; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778341221; x=1778946021; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KjmP2EjAZo0hE7GjYBWYjrfK9ueJxklnVjumEmxItLM=;
-        b=NzYYw0tmj8AKhcs2nzO4Q8L54dGP9P4u4luMqhJ6ROPPv2HllgtB05ILwNRiqHaMBO
-         yJ2miicFqOHtg99vsrYQiTHcKnKTIJ5KGEtlQBm+IDOjb+/6fpNfoFE7Qe1nYcNTWaw4
-         vEyT0r7q7V3fHFeBKT8ZA028cy/zse8N+islCm15CiWniqSuNnHiN9zLNyy0OpCbuG+Q
-         7v8nv/XTTnUnrwwA0D7ipwF6R51EvbrnP78JwFGDQ1YgsRplf4c+/jnkGMioUPNPJEWc
-         rMgY3Q4CcP1ogpAq6AVpN9yUK59jDz3x4XLpdc4QB5LoMoELX1ZUEvrYcJcti3RBQM2H
-         /2SQ==
+        bh=wIunFsTg35qiBdjtt8jGYanfPNrLdcpPoJiWvKofhfQ=;
+        b=RK4LbZuTX8yjgCbR71Wkmypz/DH4oSMxN7dmayOVLp928o5DxIAlrOmuDqv/eLEb7x
+         dqbFpxzcRa4Q1jeZ7uXqqgPyGbtWWKH+ZQ27IiUtRnVf4DKiH6kfYzEjW50oplKoB1AY
+         bBzMrUWuiog0YdrYJ+YuGJ+svSyNzkczqjkLVDm2S8GV8QIV662rnc0WQKPQX55fkrDH
+         g0yMSyQn5YhGMnZPVD0+6Yd9LVpsD8dFHCloOMBFRzflGNrmJbAqdW0b5uD5mduMNI/H
+         T4MLuxUlAAia9wciifDp3VAtqrVmMbeo0YNPVKdOYSsmbcUvFb4kYQZcZ6bNazhJnciQ
+         72Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778341101; x=1778945901;
+        d=1e100.net; s=20251104; t=1778341221; x=1778946021;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=KjmP2EjAZo0hE7GjYBWYjrfK9ueJxklnVjumEmxItLM=;
-        b=bM64rsgzTlzykdBuuY+DVVmcHBxlQ4C6U3tWaLfjfNiDtQ6B/4a+IBYHrRWY5S8+Vh
-         s5KRMMIiYKyjM5IuyxekOg+ppSGertB4wLB6yUWroZnZPoLrQwYy4Ung82VrX7dEFWO2
-         LAFOg1OezDus1ebzi5zCcmLnArOIGo6iNEtwX9uEWezXlTxhW+BW8nf8IDbw6NJhE7DS
-         B4T0wtyV0uNL2HCJzR5sZj4Gzn3L9SBlACxoqYoVaxPnUW51F3hSmQeo2e7adPUgEs66
-         mWT7CJEspborhE9UhYvuE13V69XtUBCSxEUdSTUVo5Chls2GhFiZAjPnToQfg3kMEUHl
-         R2GA==
-X-Forwarded-Encrypted: i=1; AFNElJ/T40SqNtGi5iW0SX7HNm2UQWoYKydvwphLWrDkRIPVpP7DIfsvbqVoXFloA9yHoDDzqLX1tynPLFTOrQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YylM41PRs+8x9Mq8b0OeCT8U5iCEtmmQhvZQXTW1C5C+iSkD9Mx
-	tPI5fm+0ng00c6A4cYfjTXHfN01CsaJfyOcSFT6pct+C2lCAjKZijdQx
-X-Gm-Gg: Acq92OEuPKC3yIRNyNl18eZY9SwhjfC4gEWYDnjYwYNkosoXhaLEtkhi0WCSHfnehUt
-	Ywkq07NtVfvuJLzTW9AaKiyh2hT2TAZBBz20grUojcPkzRj8Pv6MwOIZGbBkJsf14+/DeAkOsrv
-	RFnJkVeN/3SAn2sPUoptLmTvaVd2gwqPouflP+7SHsy0t/wCuJLOIWDsIVCD6n/Zu+9eOm+akxE
-	zFInGOP9lr/xHsYQKsJVbvpphkIVTHeINRM/BIJ4ANn1R05DML1mkK6c/AS5CCVQ1656AtHcr2c
-	qGSa2Ez7cemF+cl+z+nv/l4bMyeTvf7QglMpDYirYykYl/0388X2MPbOa7RF3IGKsQtKKRq9B1n
-	dzjwpONlcLveV+Dv8xzOnoBrxPmC2OT7RmS1RuR9umYLPNCtrVVWF/hKeConjGco2NoBPF1azpR
-	xMBLsxG0JmOlxDctvM9i91nldO+YSmG+hIdvG1
-X-Received: by 2002:a05:693c:2b15:b0:2d9:6373:ad22 with SMTP id 5a478bee46e88-2f85c07f8bfmr3256312eec.12.1778341101337;
-        Sat, 09 May 2026 08:38:21 -0700 (PDT)
+        bh=wIunFsTg35qiBdjtt8jGYanfPNrLdcpPoJiWvKofhfQ=;
+        b=JaJW2iDs5TPaO0osyvYRmvmkKL3Ch2kyBqIz2FiEyOa0X+hHO9HbGqU9ZsJ7oKx372
+         z2EMzE0aP0Dzy4UJF2aWaX0zjOlTaq4aN6Z6KPXU8Xwy8rvMYgYV43grPDjIRRiBgF8J
+         hDNBiPiGIuRJ6Kih28trrF71ti/0gq2d+fON0B/jmnKSe4upVRmKfhoqFe/jqzGkyKkq
+         /vSoo+Os+mouDPqKf9525TSJxhWAu0Ef7YzJU19/4lEXQNCR+smTxhM1PG7S/8P7Mx8P
+         Cc9FHWMovl9P+ZJvZGeq22+flCuN/pPa7r9a0r0b+HnDXz5BoJT6bk4CXWeqmMTebKLt
+         Sx6g==
+X-Forwarded-Encrypted: i=1; AFNElJ9XDpPWOqcFQPwPisvnSeT+MtvglTJLjP31M6ciJ24lnS5T3/ZZUyO8ZuMmEnXj6YaRhF1PnEDV5YZgFw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyl2Xq276Gwt9LghFL5Kwqp1NRtenW1rrLcRDaRguLcoWcTcp4L
+	G2gi9MF/mxgz3bFeG2W/prqBWgtubDAxmNEkZthj2qKqutdkKyYqJWki
+X-Gm-Gg: Acq92OELkagUwp6swGj2UU9Z9D4J11abn8iB34+nHYtwRW1nqroSdSu6QgoL4eWMof9
+	m28Sd+HT06nfVnPgG9wQoTaSe8CvOnWQjgS97P6kA+H6mAVvRcEcmC41ASd50ez3dOuoaD9o9/c
+	6YiHCs9tihNfJEGU/Vv5WzkNuFOTgD5rKBXp9EvLHi4l9Iaa6HUcXI8DIAEuC8hTyi5vCP9p/v8
+	R6DIqkf88cUDjRdaQYtULrVq0MFwY0VvV9Tv5+wjlAHfsnNS8IwQXncDYcb63s3IfyDK+s/6pGJ
+	AlVO1RMW4uSKyd5owBaV9Qypt5ny4dJbfTgo0B/FYewOLL7K3NlXIynRBZt+Q7zJsTRlkkMHyBV
+	6qEzarLsxAA4MBmezdW4tHt2eMc8ayjLaZoruKgKkZ3q8jfJaZz8WcKIBnpsDyKdIZFPrhHesEP
+	FesPbc7UzsiPbcuc3X0qXgdMeYvAGlKrtqWEIlrep8/Go684U=
+X-Received: by 2002:a05:7022:e1e:b0:12d:de3f:d849 with SMTP id a92af1059eb24-1319cf5bd08mr10389339c88.44.1778341220922;
+        Sat, 09 May 2026 08:40:20 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f88924af95sm6551514eec.30.2026.05.09.08.38.20
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13278758e0csm7279364c88.12.2026.05.09.08.40.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 May 2026 08:38:20 -0700 (PDT)
+        Sat, 09 May 2026 08:40:20 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 9 May 2026 08:38:19 -0700
+Date: Sat, 9 May 2026 08:40:19 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Colin Huang <u8813345@gmail.com>
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -69,10 +69,11 @@ Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org, Colin Huang <colin.huang2@amd.com>
-Subject: Re: [PATCH v5 1/3] dt-bindings: trivial-devices: Add Delta E50SN12051
-Message-ID: <cede86e8-8bee-4bb4-b6de-e9bc399d316b@roeck-us.net>
+Subject: Re: [PATCH v5 2/3] Documentation/hwmon: add Delta E50SN12051
+ documentation
+Message-ID: <2c1cf69f-2732-4ce5-8626-09dd380227e8@roeck-us.net>
 References: <20260508-add-e50sn12051-v5-0-abebdcc29665@gmail.com>
- <20260508-add-e50sn12051-v5-1-abebdcc29665@gmail.com>
+ <20260508-add-e50sn12051-v5-2-abebdcc29665@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -81,35 +82,21 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260508-add-e50sn12051-v5-1-abebdcc29665@gmail.com>
+In-Reply-To: <20260508-add-e50sn12051-v5-2-abebdcc29665@gmail.com>
 
-On Fri, May 08, 2026 at 05:44:28PM +0800, Colin Huang wrote:
+On Fri, May 08, 2026 at 05:44:29PM +0800, Colin Huang wrote:
 > From: Colin Huang <u8813345@gmail.com>
 > 
-> Add 600W Non-isolated 1/8th Brick DC/DC Power Modules, E50SN12051.
+> Document the hardware monitoring support for the Delta E50SN12051
+> device.
+> 
+> The documentation describes the supported sensors exposed via the
+> hwmon subsystem, including voltage, current, and temperature measurements.
 > 
 > Signed-off-by: Colin Huang <u8813345@gmail.com>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Applied, after swapping the inserted lines below.
+Applied.
 
 Thanks,
 Guenter
-
-> ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> index 23fd4513933a..0f10368a1386 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -100,6 +100,8 @@ properties:
->              # Delta Electronics DPS920AB 920W 54V Power Supply
->            - delta,dps920ab
->              # 1/4 Brick DC/DC Regulated Power Module
-> +          - delta,e50sn12051
-> +            # 600W Non-isolated 1/8th Brick DC/DC Power Modules
->            - delta,q54sj108a2
->              # 1300W 1/4 Brick DC/DC Regulated Power Module
->            - delta,q54sn120a1
