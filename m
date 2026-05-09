@@ -1,87 +1,103 @@
-Received: from outbound.st.icloud.com (p-east2-cluster4-host2-snip4-5.eps.apple.com [57.103.78.166])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3EDE2D739B
-	for <linux-hwmon@vger.kernel.org>; Sat,  9 May 2026 06:54:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.78.166
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C8C830EF9A
+	for <linux-hwmon@vger.kernel.org>; Sat,  9 May 2026 11:24:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778309680; cv=none; b=nrDD8F4+c9b3zD3Ye0jUf7lXy3lUOitkh+PA5+gSMYY/ZbBe3g2K7hQVfH/7QP1O7vr/5sj3Wnltcb6wLFmJVocL9s/efXI7C1BT0mAO8JW6FAw5O9tUH2m0bOHlrowIC1w4VwHRMFt+3w3SNXTa8+z0Qh2+eSJ4xXKF+ELYMjg=
+	t=1778325865; cv=none; b=cKRv1QIt1dL5g6LrBF2FEFcRq8OsWOm24nE8PGE/LoAVDnzLEK8gbOQkF5nm06YWdpi+VmaAWj3L1rfgDl5abxHsPCf+786AwLohLOpHMItMS3Ked0r777wh6b2qXlpOaL5viVQ2iooiDwKt1QLiyiGEje8RsmDqCV8P93Ydz6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778309680; c=relaxed/simple;
-	bh=7SCitI/IKRgV/RD7FHgYtxomBF96XBJ+ngw6fZeM7l4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S+Ko1fHbfgQaDFz8z5tp+uMBTMKPcx3Uvzbx2lQXz5oCMtan5NRzauYgNQ2dKWBXL1+PVcFs6y5F1DphU5NPfJFchdYyTye+FIArK4btAvbZexvYQNndUbVw2WoIPvbblK7C9G7fFBFmqk+sm/Qq1kb7DdJbMe8prWFfnwSZ170=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=OsJDSYoq; arc=none smtp.client-ip=57.103.78.166
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+	s=arc-20240116; t=1778325865; c=relaxed/simple;
+	bh=xFgzggUcwTQhYrztMktpZ4J0+1wDQhjy4GgYdiA5J74=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jpyXofsX92L6O38cWi5sGdUFjo+zgscnftw+3QEJscw7dEsywgzGwP3aKKRNT0Ie8lsjxYI2tuDEj5nxpJYU+DwbsgE90JB1fAnkTRmuHQZ8y70EMgnEha+Q2mQrxo2C3Qim6KHioTDKmlsJKULex9/yKv21MhpFGZBuTk5lBd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ivhr0HDR; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="OsJDSYoq"
-Received: from outbound.st.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-east-1a-100-percent-7 (Postfix) with ESMTPS id 22E521800184;
-	Sat, 09 May 2026 06:54:37 +0000 (UTC)
-X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQhJBkMDRQVJF0wBTVIPDxhMCkEUWgpcQgtJAS1eCF4fTBwdDlgGEhZdRVsYRRlLHVgWAV8GWXIZWhRcGFNFUR9UWEEOCloBUFEdXwIKBEcEWxdGA1NFQQQXEVABWB5WXloXXk1HH0BNYkkBWhlbHEAXSm5NUw8PGVoUXBhTRVEfVFheBFNWDkEOGQNYAVlWXVxLVw8aXwtDWlVRDA5YHxYBQQpaUVoERlpAUC1eCF4fTBwdDlgGDFBNAUMICgJRHFYNVw==
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1778309677; x=1780901677; bh=7SCitI/IKRgV/RD7FHgYtxomBF96XBJ+ngw6fZeM7l4=; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme; b=OsJDSYoqykkNO89rAiJ5GTztmHrKOzdzmZPn+1L7U1IbhB6ucPwGIJsYLxYthr8FV0Lp1KiHpglrSgO8lDtbpb/SXd9xIXRDI7FXcq+x41SSS1aC9s6snHtIqXjTPjaH530P+uJ0jbYOazWtkuWYSfxmAhfNoFKYlqR9KXPlecedCnZGuYiiH+vkUo61aeAah9Dwn01hQC/KtsXkYZFQL0rsAqxYoAYOHUZtA1cQ8vsZmsqlzIajafF+o7coqoq17k/tOWPfV5nPIXNxDmj2fIgsrxTIFvr6BNY4tAJVuqfzfY263hhqaGCV2aVCNa1JZOgvGaR7XT5nOBZ6pWFt7g==
-Received: from [192.168.89.2] (unknown [17.42.251.67])
-	by p00-icloudmta-asmtp-us-east-1a-100-percent-7 (Postfix) with ESMTPSA id 1C1391800188;
-	Sat, 09 May 2026 06:54:33 +0000 (UTC)
-Message-ID: <17a0562d-e3db-493c-ba93-f8997f166c8c@icloud.com>
-Date: Sat, 9 May 2026 15:54:31 +0900
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ivhr0HDR"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-43d7645adbdso1569406f8f.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 09 May 2026 04:24:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778325862; x=1778930662; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SsRNO1k/pPTGGEjXO+I0arbWvPAyg9Kvj9fHEjeDPnM=;
+        b=Ivhr0HDRD9QLoBR/qmNgR57JEyq+AIeOnoeUhvBZ8BxE+7SYzk3Ir2ava/U6vUF8BX
+         zQH5SsNnOcmIqdBhvsq7OrD+kd9mhYY4A7d426d3S6NGuea97VLVuRu8+Musc+pXVrd4
+         xDJqkijCaBMSK0x0Nhx8y6MiaDpXzO8sKmq32F370LqoJZmGKvam1lA3BSb6noOVC4SP
+         ZEFLmAslifMQ33vFtULRaOyvgfelWJs44GBv2QJVnu1ruNhFNBGT56PI7Tt4tgBiMJMq
+         5Mze8y/rSCMgoCmpn7+TFz73SyFLh9axigu9js1coqlYKsbKjEHC+RGeA8VGAkaYZRdS
+         b7Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778325862; x=1778930662;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SsRNO1k/pPTGGEjXO+I0arbWvPAyg9Kvj9fHEjeDPnM=;
+        b=lc/FU9dLB0OP9rBFHCBlWKKZRE5OPVHiYFs7DeqzspmH4lJhXuwevXNZkBN8IpWeuM
+         91dlY6ysMUDb+BOgRBJ3dpdp32sAylULgMMn0DFbUlJH50M5QlmXSOipN+gxVhgKIKOD
+         y1SCC7SxJi63d+GgFGTVN8DL7qsqgjYSKcX/fczUSgORcO01cTB7fbbW1z3K858euisC
+         RhJrPvts4BgNL/I1wXHz4r9cG3TJHMo6FaufOva9ZvmrE1YLAMWvEC5698wc7M00e+uO
+         4GDTg5NP68fFjlk/H6zQWaUvHIL3/fRNy0Rp4AWn7gEITc4MX9DXwjkvVVsVER1ffH+a
+         F+dA==
+X-Forwarded-Encrypted: i=1; AFNElJ/f4cNTxMPcH1r9dV1MuUeIFWV7AikD43qAd4/Ls6O/IQyKa4vp9CwqSGfghlEpbNUoqLXAIkklcu1cWQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVGpwQXHDUgfVtEoGBPNzL5BaJK5ux3A8QgkeIFbpH4pBpEm3M
+	xx096R3p29vE5wimU3DHXNi/k0GiVgzgs5KqZt0+1LcvfW0WpzuDsk4AJCnFHefa
+X-Gm-Gg: Acq92OFG6cCLxxi8zMss6HJmR9cmGetK5LfcADmBnMTG+UpLCfucWpoSi6d2t3X/9wY
+	146ZEnNrp6oYVBJ44vCy96u8i5SzpHwiNjPyW76VQqvkI2RJ0U/FjLEJKOXDf9TNMSH55pp1Kjc
+	isWAV6mFPLXZ/YzYRaLk+Q72KokrXNcnf9LrXZDG5mEgGFvE+TWrTrTs5omg6kvcYd+QY6rISfN
+	P5QcJaNEbavkrkZuAWu1rIN8SJPx7BeaGvWSgb65bZ0HbMU28NNsrLfiGPNGvvpUe3GMcu6rXmM
+	ig4Uq9lS8rU4vj57ku65dFVV25DrtFTgFAXjB4Y0Zc/QsTRPBzVuCJGnERAr+EfI9RdZHw/H2Cp
+	mxpclrILBvNob4snJbEJcsqK9vkRLM3WMJ++dyn778kbNxFsgBvfqtmsrAaYTvmjQrlTXnGM0R7
+	jBKCWXeuqAQRF7kFrKqEfppCNgLmZiEvP66a7ZX5yzr5NoHrGtXoJuVG+huW+AoUXE9Kx5FS6E0
+	Hpo
+X-Received: by 2002:a05:6000:18a6:b0:455:cff5:9178 with SMTP id ffacd0b85a97d-455cff591b5mr4738540f8f.9.1778325861662;
+        Sat, 09 May 2026 04:24:21 -0700 (PDT)
+Received: from flaviu-Aspire-E5-572G.. ([93.122.249.211])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45492271510sm14095710f8f.37.2026.05.09.04.24.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 09 May 2026 04:24:21 -0700 (PDT)
+From: Flaviu Nistor <flaviu.nistor@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Flaviu Nistor <flaviu.nistor@gmail.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (tmp102) Change mode to read label property
+Date: Sat,  9 May 2026 14:24:17 +0300
+Message-ID: <20260509112417.51164-1-flaviu.nistor@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/2] usb: xhci-pci: add AMD Promontory 21 PCI glue
-To: Mario Limonciello <mario.limonciello@amd.com>,
- Jihong Min <hurryman2212@gmail.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Mathias Nyman <mathias.nyman@intel.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>,
- Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-usb@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260508143910.14673-1-hurryman2212@gmail.com>
- <20260508143910.14673-2-hurryman2212@gmail.com>
- <ad41d70b-e9c0-446e-8bd0-4528de75b592@amd.com>
- <0d518d40-e239-4d93-8e71-0d2e140f00ca@icloud.com>
- <966c9e07-10e6-4abe-9cb5-77b974f31302@amd.com>
- <e8c5f5e0-e0d7-4231-8c46-be7a175941f5@icloud.com>
- <93c43962-6aee-45c8-97c0-a4fbf5124ce8@amd.com>
-Content-Language: en-US
-From: Jihong Min <hurryman2212@icloud.com>
-In-Reply-To: <93c43962-6aee-45c8-97c0-a4fbf5124ce8@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA5MDA3MCBTYWx0ZWRfXznzN/avUrUFG
- TBXqyQwcFpJLaybcCXXnJcANONt+o173+h/ivafcP7ulPkrpbqoLyk7lqwWV8Y9VH5z4LauOe0U
- QHKE9QweoV/bFYaGB3FbdZx+Sc5FLNKE6b7kBP89UMyJhNXyh0SQCG9ZBwSiG/KXAX8HStDY3cQ
- qKiLUvCv1bo4WR4Nrva5e2OziqnSHuTA2/FqORvsuExpqkRt4J9CFl0VmtqQSm0iFS/C2fe2sD/
- kon7vxOx6uzuaI//bKCLvVuk2vdT90EsFX9+aoMDR/vmyual6mzEwFu9cqq56cDQclKZV9x5SEG
- 6yGJDNpqy0e1/TE1DGB2xQTqa1cXR9eZiUSNHyuilJdKKE1IOk3V/xjAsb2VNI=
-X-Authority-Info-Out: v=2.4 cv=Sbb6t/Ru c=1 sm=1 tr=0 ts=69feda2d
- cx=c_apl:c_pps:t_out a=YrL12D//S6tul8v/L+6tKg==:117
- a=YrL12D//S6tul8v/L+6tKg==:17 a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10
- a=x7bEGLp0ZPQA:10 a=5jDBv52wX64A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=AGBWbnDlIYaA8OOaHYkA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=PgRulw5oR9JgysbTFEid:22 a=oa2-kN79Xhin27rcel9q:22
-X-Proofpoint-GUID: ApNzMT8qMeyRJFiA37BvS_DBDxNsMqLZ
-X-Proofpoint-ORIG-GUID: ApNzMT8qMeyRJFiA37BvS_DBDxNsMqLZ
 
+Replace of_property_read_string() with the preferred
+device_property_read_string() in the probe function to
+read the device label property, improving the driver
+compatibility since this method is not limited to
+Device Tree only.
 
-On 5/9/26 14:52, Mario Limonciello wrote:
->
-> Fine by me either way.
->
-Thanks. I changed the current branch to:
+Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
+---
+ drivers/hwmon/tmp102.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-   depends on X86
-   default USB_XHCI_PCI
-
-and removed the CPU_SUP_AMD-specific help text.
-
-Sincerely,
-Jihong Min
+diff --git a/drivers/hwmon/tmp102.c b/drivers/hwmon/tmp102.c
+index 3aa1a3fbeaa9..a89cc49798f5 100644
+--- a/drivers/hwmon/tmp102.c
++++ b/drivers/hwmon/tmp102.c
+@@ -313,7 +313,7 @@ static int tmp102_probe(struct i2c_client *client)
+ 	if (!tmp102)
+ 		return -ENOMEM;
+ 
+-	of_property_read_string(dev->of_node, "label", &tmp102->label);
++	device_property_read_string(dev, "label", &tmp102->label);
+ 
+ 	i2c_set_clientdata(client, tmp102);
+ 
+-- 
+2.43.0
 
