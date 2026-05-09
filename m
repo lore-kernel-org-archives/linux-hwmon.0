@@ -1,66 +1,66 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD533624B8
-	for <linux-hwmon@vger.kernel.org>; Sat,  9 May 2026 14:09:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1A0738C414
+	for <linux-hwmon@vger.kernel.org>; Sat,  9 May 2026 14:14:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778335768; cv=none; b=NKjATnEMtGpcKDhr1FdNPgAR1rZDaxai+P71oDgAJ0VoJG6p7LrWx++snQa8Wspk3e2pkW4UEHnPg/ghR2LZRjBz6Blr1R+Whwe+osHrOKI6jkROujGzGZleZlVpJ/6hYmfqni/QH95hgUAeKcNNrLjgDCGFgGtai0hXLnjIrdo=
+	t=1778336071; cv=none; b=TMihtBGvKdQ91EyMHdO46/Ox6dI3tLb+ILF6CDOeD+pyAJM66H1zPwX3sd59AIr/zxDthsQiZY6a610LcSy9jRbbHLhC27qX2OHPeyUzaN9s10q7FF7+agkzaYoiiIfFNBTncx3AZnHp9MK/vwT51S7OYA8gmgvvsgmfsQKciQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778335768; c=relaxed/simple;
-	bh=oYAxhIvZeCn40YN8KpNAi05K6/LRmfEEo+SxmVkk/S8=;
+	s=arc-20240116; t=1778336071; c=relaxed/simple;
+	bh=fVIQH2EWhWzjlxv9cJPtI+TZdFEzV66Pj+PTiEmdEf4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mnZxJ0A+Z2T1JEmYI6BADiTJic+CMa5dFVgVXQsoYCq4JH4631XkrQyM8B8/pu3g+MkXzwYXhNOvrjJWd7a88Ujf6dvNz4nE4+2gGDngqtSmWpSv1ksc1qHFO2YYhlC3im48yR9B/Kon0zrUJW9CHcu6SmXh9xa0A79moSQKW8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HCU0B+uj; arc=none smtp.client-ip=209.85.210.182
+	 In-Reply-To:Content-Type; b=iVTS/wD4BPsxdeqqutBUsDKy+2f6SY7re+H+xIEITxDMYTkIwR20h7c//aqkBCajPwYdIK9RzNtNlgkayjjjbi1yz9/OmGNzgix/oPsHxlR0OJFx0zQCLp+au3FO1E9HL8pUHL+uLcgOJsDTY3Ar5HFov9yTJ2G7fY/4aOcLOdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bxI+QCml; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HCU0B+uj"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-8353c9f24d2so1557670b3a.3
-        for <linux-hwmon@vger.kernel.org>; Sat, 09 May 2026 07:09:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bxI+QCml"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-8354461da74so1402391b3a.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 09 May 2026 07:14:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778335766; x=1778940566; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778336070; x=1778940870; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=AlxQP7KD0OIWwE/rLNzbrt4glxGsF3le5hqNR/dWpjA=;
-        b=HCU0B+ujUtS0kmOtV4fgiM41hY9na/2nKvLBZs5ciMdlfLCP85eL9bLpBqLFve2DGi
-         bbdhrKOLB74fdeo39anKA759nrE3NG+CvOI+oQtQLL8hS/2G2X9IeX/IRKHtLegPMbRP
-         ed8gXIe/VNlHa1YgpywB/QEvgh5+FFIEfWBCS/wezMX0x5zO9Z/txCYdRQYMRqyFpuYs
-         k7Sob3Rgil5FGYgeAOqosydlz08AHiLCk7hWWlnBfSKlvoEHtC1nxa80TsFnoeNUEHww
-         eyeD5OEb/IrSkh9WSsscttNzfD2d9hULhZXl+zXNdbiRj/96HIedn9LgP1tIDHns7xxE
-         nRMw==
+        bh=G8kXhF5s0O3Ic9ZiNv6RXHFSbFRQgsl3B4rvt8vDPgI=;
+        b=bxI+QCmlDzFIlqfjW9Sb3cn/Mq7TxlkLmWDOiQHiW+3Vmw/RoC8XYNg7tSd0Mr6r7Z
+         qAE+EHT4FW21OVe1I+bPWHEJuIDw9U0YKOCqime+u9Ew+yU7eM1mN4jXlKo26bZ49tm5
+         8nZ+5bv12q9zFIu2vxrtVcdbb4dAhzVABBk4/9xRV8DHw6Zc9aM5Sgh9LJb+uzkHtQs9
+         MiPtx6HbbDIDh6yfxJwQIwxYz1jJxJs6+WUoyCejhJdAsu7u3eNlIgt1DVcF1cxIRfzd
+         0EV4yi3LNDMC095e98+/Ezdn5BHn4q9Li6kZg3fowQq9FrysP1L9cEJCwDXrM3CV+Q2Y
+         Ae7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778335766; x=1778940566;
+        d=1e100.net; s=20251104; t=1778336070; x=1778940870;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AlxQP7KD0OIWwE/rLNzbrt4glxGsF3le5hqNR/dWpjA=;
-        b=AvISXe1mYHQiLd4du5KcdGRvOqsCcfepXn5NCECs83nVw3BpK8Aip0Wuc7OvTjBoSE
-         v1UiZxn+Pp/7Jioa/svjWuCNR3Q3u1Eo0iul8fGWgaTp6oTz+K+a1gN35DrdL+caUdmT
-         ea7eGIjdKtH1RWP2gPLoVFTRfH4rLMUIneuWDxsLny0xVRTB0Os6IfEDF062T+9p2oRP
-         bgi/4GsRlVS/0+SMgxnJMPqsuIgEUQK90I0TFfcPcniQcpPiy3uJy6nUEY+tr90NUmG0
-         zJB+J3KK4T5gfm30qAo+5ttPPv1hch+g92ZHA/9LXLUZv69Ppr8eMvS/ZBVKXvMPZgKf
-         /2CQ==
-X-Gm-Message-State: AOJu0Yyha2e9RIqgu68cS6q+/RRovayPi2WP/FBuyqN+ZfSebh8/YdYu
-	qZGP0gzqzZuXJTZmwjrmwhyTbnaQaJzY1udnAE/xBQZMCdhcYd7y8q5O
-X-Gm-Gg: Acq92OF1hSANkkOmpNGTZYjK/OX34/3R967MLD9pZV5Di7CTwV6vI3tH4dqGx9MLRpk
-	y12Ossekd0/1cU/KNVyq2vC6QCyKx7TIwMZ5I/GA+0CIp5280bfMjZxDgsmsi3Y804/iigeR847
-	H93mo/PTRXAusE/s8qfei/wYCLbX3NHgcZdVQVBiGuu3lzdBdcWiLysqD15eXufnXBr5OkFVaaY
-	4DPnGWW4ZZkKWtRya3L0FJFEozbR2+y4HFBIp5daLgEcqP1B1+eR7WbhpzdINjyeutLcUUCwmWz
-	q4W7GPw+MjplEsnLynvORLzkWqcBBCsNxW8AcgivBh2/EGV0ll5S85nqpuLwTsM/iumMREjD2rU
-	FeuE0T2kNVHtwmJJZCU6AchRxgYqo5uLurw5uxfhYRqewyYPkR5jVtmn5jhtHxqSEKBbVdxZIZR
-	/eZ38PzPmEAx0ggwyEVe3B0YCQn2RYG9xzg+3nNTjLwr5ZVWT7lguOdibz4rLyfx90rZ99oyXW
-X-Received: by 2002:a05:6a00:1ace:b0:82a:6f69:7f72 with SMTP id d2e1a72fcca58-83a5e35b57fmr16736492b3a.47.1778335765975;
-        Sat, 09 May 2026 07:09:25 -0700 (PDT)
+        bh=G8kXhF5s0O3Ic9ZiNv6RXHFSbFRQgsl3B4rvt8vDPgI=;
+        b=FyVZX2QVODVzadB+wVncsAHreDZeyaVG+58U7asd3HrxuIINAv50usNZtw+iGygnok
+         hg8t/nZLlYFAxIKwkYE4kJSYD7fb9b5rjHgmy5o/U9iquIEirj3chSVn9JamXPcmJcsB
+         WbFdKaFyGR2EomG19M6PLSSmt6H51N2isGZDaxBh8R2iFYOvB72+LQCHTUpPD7HJ/1ep
+         B68W142//Y1lXPyJ/63e3D3S/nB3KZzEquVQXXmLCtbjN6649McvjiuBjifO8OKXQUwG
+         5EOvTkz+lIaLbg+FFHXfAOgcD5h9UihS4sMbgeujrh3TLpv57ECMkhL5EePl0uqwp+pg
+         96NQ==
+X-Gm-Message-State: AOJu0YyFpH6uvNR6usFIRuvzdpfJy6/RuUIDHtI1u07shw5tY/HYlB+z
+	blKWE3K6gHyENSSGm6F5IM1b69wDMXoenmZ49pDHUYUomOBCyIYJw17o
+X-Gm-Gg: Acq92OE3kxdrgmP/CSviXXTA0lOgexnlKXyCMTbgWt+1GS/qyqV7MqhTPmXlZehqgG+
+	i7YUuDspAiekzDoRyhkKQ4jzAcdVT6xHBb4zw5WCaifGfc3k9nbFY9Q3uUU1kH1y8J3pqZ24b3U
+	XbyEA5g1ESKJbl07vmUhm6MLTVnHWP5g/79YdnRnp5apTykKu+YDmJ8KpfoydR2QhzgVzBzWREx
+	lvXyuQBHik8vambL/wXLSNaMrX3bo+FXj0WqDJezx4l5OFxyNuGeZFWzGSQ7DNhCujlBHPZWROJ
+	ptDdl4eVFhBV3vtts8FH5MWEwKKgt2YtM5Kraf4O1ig//wYw3sjjRJNbEMBCrsCCWM15nXvFAej
+	5ajtu0TAHFnY1hW3JhEyLIWnibMNc+L5X/OVJKWXBAo8aJyBQtK8JEs6XHjFYRY++N0zuilQO5k
+	VW6aUOYRZcGZLAFq8ZtoeOdQL9utwGh2zlxRDkjbeIkkxc7RYKQePDIdHrCHSpf7YpNj6DBt/t
+X-Received: by 2002:a05:6a00:1c82:b0:82d:30f:b197 with SMTP id d2e1a72fcca58-83e3a2237e2mr2394839b3a.22.1778336069866;
+        Sat, 09 May 2026 07:14:29 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-839659487afsm14500715b3a.18.2026.05.09.07.09.25
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83965d36c10sm18887263b3a.25.2026.05.09.07.14.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 May 2026 07:09:25 -0700 (PDT)
+        Sat, 09 May 2026 07:14:29 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <91b3bd35-2988-42eb-ab71-18e936c4e8f0@roeck-us.net>
-Date: Sat, 9 May 2026 07:09:23 -0700
+Message-ID: <53d965b4-ab1c-4cb1-9fc3-c99538336d53@roeck-us.net>
+Date: Sat, 9 May 2026 07:14:28 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,11 +68,11 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] hwmon: (tmp102) Use device_property_read_string API
-To: Flaviu Nistor <flaviu.nistor@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-References: <20260509121511.60601-1-flaviu.nistor@gmail.com>
- <20260509122803.1FDD0C2BCB2@smtp.kernel.org>
+Subject: Re: [PATCH 0/7] hwmon: (pmbus/adm1266) RTC fix, blackbox, FW rev,
+ rtc_class
+To: abdurrahman@nexthop.ai, Alexandru Tachici <alexandru.tachici@analog.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260508-adm1266-v1-0-ec08bf29e0ce@nexthop.ai>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -118,65 +118,52 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260509122803.1FDD0C2BCB2@smtp.kernel.org>
+In-Reply-To: <20260508-adm1266-v1-0-ec08bf29e0ce@nexthop.ai>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/9/26 05:28, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] The patch introduces an implicit header dependency and leaves cross-firmware compatibility incomplete by retaining the `of_match_ptr()` macro.
-> --
+On 5/8/26 16:33, Abdurrahman Hussain via B4 Relay wrote:
+> This series fixes a few issues in the adm1266 driver and fills in
+> some gaps, as listed below.
 > 
-> commit 8699d5dea7c2614372ba1cab8f6b99f73ebebe1e
-> Author: Flaviu Nistor <flaviu.nistor@gmail.com>
-> Subject: hwmon: (tmp102) Use device_property_read_string API
+> Patch 1 is a wall-clock RTC bug fix: the driver currently seeds the
+> device's timestamp counter with CLOCK_MONOTONIC seconds, which makes
+> blackbox record timestamps non-comparable across reboots. It carries
+> a Fixes: tag.
 > 
-> This patch replaces of_property_read_string() with
-> device_property_read_string() for reading the device label. It aims to
-> improve compatibility since the new method is not limited to Device Tree.
+> Patch 2 writes the 16-bit fractional-seconds field of SET_RTC that
+> the driver was zeroing, restoring sub-second resolution on records.
 > 
->> improving the driver
->> compatibility since this method is not limited to
->> Device Tree only.
+> Patch 3 exposes the firmware revision (IC_DEVICE_REV, 0xAE) via
+> debugfs alongside the existing sequencer_state entry.
 > 
-> If the goal is to improve non-Device Tree compatibility, shouldn't
-> of_match_ptr() also be removed from the i2c_driver struct?
+> Patch 4 adds a write-only clear_blackbox debugfs file. Devices
+> configured for single-recording mode (BLACKBOX_CONFIG[0] = 0) need
+> an explicit clear once the 32-record buffer fills; the documented
+> sub-command ({0xFE, 0x00} block-write to 0xDE) wasn't reachable
+> from userspace.
 > 
-> When CONFIG_OF is disabled on ACPI-only platforms, of_match_ptr()
-> evaluates to NULL. This prevents the standard PRP0001 mechanism from
-> matching the driver via compatible strings.
+> Patch 5 exposes the non-volatile POWERUP_COUNTER (0xE4) via debugfs.
+> The same value is embedded in every blackbox record, so the live
+> value lets userspace match a captured record back to the boot it
+> came from when correlating logs.
 > 
->> diff --git a/drivers/hwmon/tmp102.c b/drivers/hwmon/tmp102.c
->> index 3aa1a3fbeaa92..79578b28a91d3 100644
->> --- a/drivers/hwmon/tmp102.c
->> +++ b/drivers/hwmon/tmp102.c
->> @@ -15,7 +15,8 @@
->>   #include <linux/jiffies.h>
->>   #include <linux/regmap.h>
->>   #include <linux/regulator/consumer.h>
->> -#include <linux/of.h>
->> +#include <linux/mod_devicetable.h>
->> +#include <linux/property.h>
+> Patch 6 registers an rtc_class device backed by SET_RTC. The data
+> sheet (Rev. D, p. 22) explicitly recommends "frequently send the
+> time stamp to the ADM1266 to synchronize the UNIX time and reduce
+> the time from drifting" when running on the internal oscillator
+> (no external 32.768 kHz crystal). With this patch userspace can
+> drive the re-sync via standard tooling (hwclock, chrony,
+> systemd-timesyncd) against /dev/rtcN, with no driver-specific
+> sysfs ABI.
 > 
-> Does removing this include create an implicit header dependency?
+> Patch 7 disambiguates GPIO line labels on platforms that fit two
+> ADM1266 devices on different I2C buses at the same slave address.
 > 
-> The code still uses of_match_ptr() further down in the file:
-> 
-> drivers/hwmon/tmp102.c:
-> static struct i2c_driver tmp102_driver = {
-> 	.driver.name	= DRIVER_NAME,
-> 	.driver.of_match_table = of_match_ptr(tmp102_of_match),
-> 	...
-> };
-> 
-> Since of_match_ptr() is defined in linux/of.h, the file now relies on
-> another header to implicitly include it. Dropping the of_match_ptr()
-> macro entirely would safely resolve this implicit dependency and fully
-> support the cross-firmware compatibility goal.
-> 
+> Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 
-Please listen. Sashiko told you that you should drop of_match_ptr() already
-in its feedback to v1.
+Please address Sashiko's feedback.
 
+Thanks,
 Guenter
 
