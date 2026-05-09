@@ -1,146 +1,115 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED611A683A
-	for <linux-hwmon@vger.kernel.org>; Sat,  9 May 2026 14:28:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65FE122541C
+	for <linux-hwmon@vger.kernel.org>; Sat,  9 May 2026 15:38:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778336940; cv=none; b=iJ6jA6iui0VyjqteXn0AQ3DBGFKzl7C9GHbogD90yS6yHb2iQQ4+a5Rx4hAyBvALllKXHE4DSNoMrxj7AsCdjwhHSXvg4Qyx9oaQfIfLZHqx9rFW2FFrvYoU31jE67HD0HhasRvpYvs7iqQJ3D9jpen2sp2ywGricqhICU4rhaI=
+	t=1778341104; cv=none; b=M3EP+4kufpvNIton//irQwsuAG4M4eEAjGgpKAwh80tVQmS9AmUDPq1YavfzhxupOJ5qY9/Ckt1sswxM4nY4pZscNKdfEXJ4VCLw+nfZGDysrL1TZQ5bdSNtnJ703Xovji52GWrV5VzLNsdRuweG3pY/7PwiZ9fQ+g/z8Hu7+6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778336940; c=relaxed/simple;
-	bh=4/4uziXSrPmR6yYWrjys3cgLdOi/1pgxARE5bDGdwfk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WyihVD2P5c8iJ4ODMLWQ5KFnXORfsvvUR2BYCQLR8MrOp/DfH4DetShlTjaUHoFM6qTV1qbZF2embdM5raEP2PdcF161Hu0YBaC6UxaqsUxbXY/wgAe2lFltY2p/SLfI6uBtPYNQi9i5NHTgGa7urs92JgOfDqmd7KG0eeaOJ8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AFIDPqjV; arc=none smtp.client-ip=209.85.216.47
+	s=arc-20240116; t=1778341104; c=relaxed/simple;
+	bh=gLKSdOShGg2uo9akYAxRNmgFpbWG+H/A9yxY41Cj1Xc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bhB6wAktEI6IgVyTiiY27VmE5vPDXmS0rbnH5tvPGnUFC2InZ/iSVCQEQJfUW1AD+HQS1WQVuVxtnGngnot4H9dvMK+LX5T6OaUGWdlqwxt10MWovdi74I9YeTuYR5Q5vvWoOYcqkYejudUbNkVepydg8FN5GwzTpJaN9Vw/Iic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NzYYw0tm; arc=none smtp.client-ip=74.125.82.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AFIDPqjV"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-366375c4076so1193877a91.3
-        for <linux-hwmon@vger.kernel.org>; Sat, 09 May 2026 07:28:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NzYYw0tm"
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2f68f3b075fso2721747eec.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 09 May 2026 08:38:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778336937; x=1778941737; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=/3wl3+doAi+WlD8B4g07cK2s5moaWWBNNcS4MSBtosE=;
-        b=AFIDPqjVTpPvEG5cBRoSNbYrA5KFQNUU+P/ngT6FGSb8qparag9mYcAAkmc+vQu7yL
-         EucTcIWrXMq87kP66tEyTi2ba/nGzDP1DevujocbKo2dHISJZybLKGfPe03bnGjoA4cu
-         FX0Sp73zdNHT5eMvn/4TRulpceGZ6oxFWvoDD4aBlMLtdDMfjX43arbMRwhrtgLOPTzW
-         9lJtoMNT6gXmMos532J8R4ag4cP2QHe9LYRgb8DZIVAihq0QKHbivwxCRXFhKPb+2qXf
-         PprR0Ssjp6h7ZdotjgaFtRGJOo7IoHisP6j5ZSbL9LATxYtKcsPZ4cmP+Ih0vU3p2Z1T
-         F47w==
+        d=gmail.com; s=20251104; t=1778341101; x=1778945901; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KjmP2EjAZo0hE7GjYBWYjrfK9ueJxklnVjumEmxItLM=;
+        b=NzYYw0tmj8AKhcs2nzO4Q8L54dGP9P4u4luMqhJ6ROPPv2HllgtB05ILwNRiqHaMBO
+         yJ2miicFqOHtg99vsrYQiTHcKnKTIJ5KGEtlQBm+IDOjb+/6fpNfoFE7Qe1nYcNTWaw4
+         vEyT0r7q7V3fHFeBKT8ZA028cy/zse8N+islCm15CiWniqSuNnHiN9zLNyy0OpCbuG+Q
+         7v8nv/XTTnUnrwwA0D7ipwF6R51EvbrnP78JwFGDQ1YgsRplf4c+/jnkGMioUPNPJEWc
+         rMgY3Q4CcP1ogpAq6AVpN9yUK59jDz3x4XLpdc4QB5LoMoELX1ZUEvrYcJcti3RBQM2H
+         /2SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778336937; x=1778941737;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/3wl3+doAi+WlD8B4g07cK2s5moaWWBNNcS4MSBtosE=;
-        b=I36NcaWi9QEdh4FfKE59E5RnUaHp2ADQ20rD7wkjrjsL++9Drr0/EWtT+ViwD8DpZz
-         voN95E/iqm4Y2OSFxwLmkO5Kmn6RTdqLRsPLklIFCDzXU5nH/DCalC/v2qzXQoff5DE9
-         yiOihdHrJqWSToZWuS7ia8as2iiyuVd02e94rytCftWYS/P2z32ADJhklvs/MgY/xxbD
-         YArp5uoI8wuSB6zZIAPjwpJzz4EEf2IzciO9Rv4Uvzsp21IuOTBSrTch9M1e5/7gX61g
-         Ctrb3D/9/6pDS7QFjaXBCJXieFQ0bj2dULyn2XT6lQA0wtRIqsxMxtX7Z01aiVPEdeZG
-         OBGg==
-X-Gm-Message-State: AOJu0YyGeCmXm3KHZ+2D+A8h3Pp3Z/Xe2KzKzN4LSk8RF5h3GFAa42mz
-	xWJlwtXP4VkC/KNgrBUeR914gIxhFwkJCOrBLER0/KFXJCjmGRuxwvJY
-X-Gm-Gg: Acq92OF7OLkRGoa9fR91GCIG6ppmqylFct/w/lhuUNWtWsLEUcd0ubWA/e0lselIHwo
-	Tr0OkYnw2M20odW0c/fkIFkPxDkfvcM4/zxUkMhyhekAjkwRnubGYv/wsTT7PWdSvh4MSQJS71m
-	A4B2xZSKVKKUoA9Dw51xID5cfw3dq0sTQyBhRVtT2KUrxvL5TIah8jp9pWVQAiuzocDB0QVMXWm
-	/h7LwzJ/Bp/x3J8RhxsDBI8kVTTRLcsngIQC44nm0h61LtW/RLTlLXFerCXkU0LojC25dveHo7Z
-	46WrWNx1yv2hTQHbMLm41Vqs7I9z+R6BF1vF6EkFRjKAyoMh32F+/k+GuhsZw0oBWYWUO6xu4RZ
-	JU7BfhH+lquqBWmsSCe19FSK6dSiTvTK0BhfWTzM67oOissJV8tNFYNmxfg6Dw/7boXXaGxQwit
-	9VvOdqM56yTxElTH63vrnFdJjF+TqMzmpaRK+P
-X-Received: by 2002:a17:90b:1b12:b0:366:3517:1aa2 with SMTP id 98e67ed59e1d1-367d3c75385mr2836903a91.0.1778336937231;
-        Sat, 09 May 2026 07:28:57 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1778341101; x=1778945901;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=KjmP2EjAZo0hE7GjYBWYjrfK9ueJxklnVjumEmxItLM=;
+        b=bM64rsgzTlzykdBuuY+DVVmcHBxlQ4C6U3tWaLfjfNiDtQ6B/4a+IBYHrRWY5S8+Vh
+         s5KRMMIiYKyjM5IuyxekOg+ppSGertB4wLB6yUWroZnZPoLrQwYy4Ung82VrX7dEFWO2
+         LAFOg1OezDus1ebzi5zCcmLnArOIGo6iNEtwX9uEWezXlTxhW+BW8nf8IDbw6NJhE7DS
+         B4T0wtyV0uNL2HCJzR5sZj4Gzn3L9SBlACxoqYoVaxPnUW51F3hSmQeo2e7adPUgEs66
+         mWT7CJEspborhE9UhYvuE13V69XtUBCSxEUdSTUVo5Chls2GhFiZAjPnToQfg3kMEUHl
+         R2GA==
+X-Forwarded-Encrypted: i=1; AFNElJ/T40SqNtGi5iW0SX7HNm2UQWoYKydvwphLWrDkRIPVpP7DIfsvbqVoXFloA9yHoDDzqLX1tynPLFTOrQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YylM41PRs+8x9Mq8b0OeCT8U5iCEtmmQhvZQXTW1C5C+iSkD9Mx
+	tPI5fm+0ng00c6A4cYfjTXHfN01CsaJfyOcSFT6pct+C2lCAjKZijdQx
+X-Gm-Gg: Acq92OEuPKC3yIRNyNl18eZY9SwhjfC4gEWYDnjYwYNkosoXhaLEtkhi0WCSHfnehUt
+	Ywkq07NtVfvuJLzTW9AaKiyh2hT2TAZBBz20grUojcPkzRj8Pv6MwOIZGbBkJsf14+/DeAkOsrv
+	RFnJkVeN/3SAn2sPUoptLmTvaVd2gwqPouflP+7SHsy0t/wCuJLOIWDsIVCD6n/Zu+9eOm+akxE
+	zFInGOP9lr/xHsYQKsJVbvpphkIVTHeINRM/BIJ4ANn1R05DML1mkK6c/AS5CCVQ1656AtHcr2c
+	qGSa2Ez7cemF+cl+z+nv/l4bMyeTvf7QglMpDYirYykYl/0388X2MPbOa7RF3IGKsQtKKRq9B1n
+	dzjwpONlcLveV+Dv8xzOnoBrxPmC2OT7RmS1RuR9umYLPNCtrVVWF/hKeConjGco2NoBPF1azpR
+	xMBLsxG0JmOlxDctvM9i91nldO+YSmG+hIdvG1
+X-Received: by 2002:a05:693c:2b15:b0:2d9:6373:ad22 with SMTP id 5a478bee46e88-2f85c07f8bfmr3256312eec.12.1778341101337;
+        Sat, 09 May 2026 08:38:21 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-367d625ef70sm2410549a91.1.2026.05.09.07.28.56
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f88924af95sm6551514eec.30.2026.05.09.08.38.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 May 2026 07:28:56 -0700 (PDT)
+        Sat, 09 May 2026 08:38:20 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sat, 9 May 2026 08:38:19 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v7.1-rc3
-Date: Sat,  9 May 2026 07:28:55 -0700
-Message-ID: <20260509142855.1456995-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+To: Colin Huang <u8813345@gmail.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Kevin Chang <kevin.chang2@amd.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, Colin Huang <colin.huang2@amd.com>
+Subject: Re: [PATCH v5 1/3] dt-bindings: trivial-devices: Add Delta E50SN12051
+Message-ID: <cede86e8-8bee-4bb4-b6de-e9bc399d316b@roeck-us.net>
+References: <20260508-add-e50sn12051-v5-0-abebdcc29665@gmail.com>
+ <20260508-add-e50sn12051-v5-1-abebdcc29665@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260508-add-e50sn12051-v5-1-abebdcc29665@gmail.com>
 
-Hi Linus,
+On Fri, May 08, 2026 at 05:44:28PM +0800, Colin Huang wrote:
+> From: Colin Huang <u8813345@gmail.com>
+> 
+> Add 600W Non-isolated 1/8th Brick DC/DC Power Modules, E50SN12051.
+> 
+> Signed-off-by: Colin Huang <u8813345@gmail.com>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-Please pull hwmon fixes for Linux v7.1-rc3 from signed tag:
-
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v7.1-rc3
+Applied, after swapping the inserted lines below.
 
 Thanks,
 Guenter
-------
 
-The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
-
-  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v7.1-rc3
-
-for you to fetch changes up to 99076a17a112ac43cbd37f6883898ae649166303:
-
-  hwmon: (ads7871) Fix endianness bug in 16-bit register reads (2026-05-07 16:30:12 -0700)
-
-----------------------------------------------------------------
-hwmon fixes for v7.1-rc3
-
-* ads7871: Fix endianness bug in 16-bit register reads
-
-* lm75: Fix configuration register writes and AS6200/TMP112 setup and
-  alarm handling
-
-* lm63: Fix TOCTOU problems
-
-* corsair-psu: Close HID device on probe errors
-
-* ltc2992: Fix overflow and threshold range
-
-* Documentation: fix link to ideapad-laptop.c file
-
-* Makefile: Remove stale CONFIG_SENSORS_SBRMI Makefile reference
-
-----------------------------------------------------------------
-Gui-Dong Han (1):
-      hwmon: (lm63) Add locking to avoid TOCTOU
-
-Markus Stockhausen (2):
-      hwmon: (lm75) Fix AS6200 and TMP112 setup and alarm handling
-      hwmon: (lm75) Fix configuration register writes.
-
-Myeonghun Pak (1):
-      hwmon: (corsair-psu) Close HID device on probe errors
-
-Ninad Naik (1):
-      Documentation: hwmon: fix link to ideapad-laptop.c file
-
-Sanman Pradhan (2):
-      hwmon: (ltc2992) Clamp threshold writes to hardware range
-      hwmon: (ltc2992) Fix u32 overflow in power read path
-
-Sasha Levin (1):
-      hwmon: Remove stale CONFIG_SENSORS_SBRMI Makefile reference
-
-Tabrez Ahmed (1):
-      hwmon: (ads7871) Fix endianness bug in 16-bit register reads
-
- Documentation/hwmon/yogafan.rst |  2 +-
- drivers/hwmon/Makefile          |  1 -
- drivers/hwmon/ads7871.c         |  6 +++++-
- drivers/hwmon/corsair-psu.c     |  4 ++--
- drivers/hwmon/lm63.c            | 39 ++++++++++++++++++++++++++++++---------
- drivers/hwmon/lm75.c            | 10 +++++-----
- drivers/hwmon/ltc2992.c         | 41 ++++++++++++++++++++++++++++++++---------
- 7 files changed, 75 insertions(+), 28 deletions(-)
+> ---
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> index 23fd4513933a..0f10368a1386 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -100,6 +100,8 @@ properties:
+>              # Delta Electronics DPS920AB 920W 54V Power Supply
+>            - delta,dps920ab
+>              # 1/4 Brick DC/DC Regulated Power Module
+> +          - delta,e50sn12051
+> +            # 600W Non-isolated 1/8th Brick DC/DC Power Modules
+>            - delta,q54sj108a2
+>              # 1300W 1/4 Brick DC/DC Regulated Power Module
+>            - delta,q54sn120a1
