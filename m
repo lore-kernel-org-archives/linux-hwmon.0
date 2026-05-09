@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8262DF59
-	for <linux-hwmon@vger.kernel.org>; Sat,  9 May 2026 00:38:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C365E573
+	for <linux-hwmon@vger.kernel.org>; Sat,  9 May 2026 01:10:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778287119; cv=none; b=nXPkE7FXRjXTJjwEBOdmEISJXciw3j5j/66gd5rzc2KvrIAJqtr7IKvcWJVbd43FOhNpmcqjR19F05f89zDGuY6eE4fAgFr80lN2r87MYuGqCUnYUMESyLusNrm2ocGaZrKYMo3VQKoQv5h1WrAfrdJEr/yPEq5ei5NLxEPPhAg=
+	t=1778289014; cv=none; b=SdMbUcC7rknIJ19bbunR+lYyFA+tQHI9Np64WNnn0b4vs3MPEzEoItUmp6TW7pDwXyTqoLx4vDuftD3omm/2unpoi2jfr+PVD+6bL5SSR3mT/KApO2Ht0JFWHYe6Cxi2LNiXI0X7F7WwyiB4/8MVLAQF/rHOV8WnMbFJIdxGnWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778287119; c=relaxed/simple;
-	bh=1dDEiS3FtHeSP07BBlh+ohYPPY/idXLrY1/ZrkprUpM=;
+	s=arc-20240116; t=1778289014; c=relaxed/simple;
+	bh=Zo8a+0AvypZRcVyxEa3yGppAS5kG8KAEQWND9UsgCnQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=BP0iqAGd+vuF8bzWP4bwP7eikaaG3ijYzDgYTffnsz7lhKM+h7rGPna8ju1PlOIOuKlKObE1RawOWeuKFzKPZv3eZu/x9nsMcQiWdrma8W7r/Cym9SP9SqWzTA7d2gT708aOrCejVNGqy5kTPpAb3GeMf4mWsiNabV7zRbYKguU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jf988igN; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=FsabjZnIAZTh9CGuL4p54b2q4c4HBRYQSQ+T2iI4jX8jDBDalXQYL2DMGxNni2n1BZX2nc2xkB/UAtUBmT7/XmTDZ9bANCG355Kqc5f9THMKPS+FxnV69pHEIvEpB1K+gBUlnz0NYoOzBQVn5/8VeO20Ewmn6pLvj5LTxWAGVig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vA11HmoI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jf988igN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64E84C2BCB0;
-	Sat,  9 May 2026 00:38:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vA11HmoI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E87FFC2BCB0;
+	Sat,  9 May 2026 01:10:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778287119;
-	bh=1dDEiS3FtHeSP07BBlh+ohYPPY/idXLrY1/ZrkprUpM=;
+	s=k20201202; t=1778289014;
+	bh=Zo8a+0AvypZRcVyxEa3yGppAS5kG8KAEQWND9UsgCnQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=Jf988igNrI5+1/ly0VjBTjUhnu8N/SjOqwshZ0G0Cwl1ygyTziUYgTfI2byh6eC/g
-	 MrbzA794Cd5K8uJu3UAmTpLraH342qMI3OFtSYQC6VYibbo2Sb+FSXvOvkM1duywuS
-	 6cdeWTnzKF6NsHq2/bDl3karE/4ac9ToC/QFXcWNGsQ3C9fAzgJ1pgfhC0oaaNV6Bd
-	 VHqGRjCXeJcXnAMTMjVJcerzlObBHdOv0tYjfLXYvrWbSgFhQCvQ1SMfr+9iEKYwcn
-	 LVv9tgfPMK8KKsPis9g3qWqxZuAkJtOxQ7DVXHT2ymMjq5Hw+CpAY7HUAkxEFJmVZR
-	 EkdBGPvq0cu1A==
+	b=vA11HmoIhEIBnI6T0MYN+f8YifZd32V80D+7WIKVpJTxAXLl0kxsasu40WdN+x1ra
+	 mwVBR0fNrhQ/9NlKrQSzPgj7MTH1hweNVaZgW2RvlQ+A+ztFD2ylj/3f5il0RH/YS6
+	 VWNhS/sBC4iKJZ3JANxfBktvC2a0vKtoAvrGZZBC/YUV8O9/G5sUf7Jb/dUntJ+xMM
+	 a4Ii4rsMeB3jiKhSFor/jTfTou9wEZuJnI5uvRp5qE8uRf9WxkMfVhREXzRQpcSyFT
+	 qTt7GB1+h4guL3wJTN5NKqFRy7nWp5IgxVnagc6/30+bmTR5+sx4QaUe/5IcuCiQ7B
+	 eWTYQSmX0m24A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 3/7] hwmon: (pmbus/adm1266) add firmware_revision
- debugfs entry
+Subject: Re: [PATCH 4/7] hwmon: (pmbus/adm1266) add clear_blackbox debugfs
+ entry
 Reply-To: sashiko@lists.linux.dev
 To: "Abdurrahman Hussain via B4 Relay" <devnull+abdurrahman.nexthop.ai@kernel.org>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260508-adm1266-v1-3-ec08bf29e0ce@nexthop.ai>
-References: <20260508-adm1266-v1-3-ec08bf29e0ce@nexthop.ai>
+In-Reply-To: <20260508-adm1266-v1-4-ec08bf29e0ce@nexthop.ai>
+References: <20260508-adm1266-v1-4-ec08bf29e0ce@nexthop.ai>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 09 May 2026 00:38:38 +0000
-Message-Id: <20260509003839.64E84C2BCB0@smtp.kernel.org>
+Date: Sat, 09 May 2026 01:10:13 +0000
+Message-Id: <20260509011013.E87FFC2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -46,55 +46,69 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] The newly added `firmware_revision` debugfs attribute does not imp=
-lement the required locking, violating hwmon subsystem guidelines.
+- [High] Missing locking in the debugfs clear_blackbox attribute handler cr=
+eates a race condition with nvmem blackbox reads and violates hwmon subsyst=
+em guidelines.
 --
 
-commit f5df7ce75de0c22a0deb00195b618fb596ec7c9a
+commit bc35a67bf6371f1a9ee8f0d0c2436676ca57954d
 Author: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 
-hwmon: (pmbus/adm1266) add firmware_revision debugfs entry
+hwmon: (pmbus/adm1266) add clear_blackbox debugfs entry
 
-This commit adds a debugfs entry to read and report the ADM1266 firmware
-revision. It fetches the data via the manufacturer-specific IC_DEVICE_REV
-block-read command.
+This commit exposes a write-only debugfs file alongside sequencer_state to
+clear the ADM1266 blackbox. Writing any data to this file issues a 2-byte
+block-write command to the READ_BLACKBOX register.
 
-> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
-> index ba8a025095287..5cfca00a44682 100644
 > --- a/drivers/hwmon/pmbus/adm1266.c
 > +++ b/drivers/hwmon/pmbus/adm1266.c
-
 [ ... ]
-
-> +static int adm1266_firmware_revision_read(struct seq_file *s, void *pdat=
-a)
+> +static ssize_t adm1266_clear_blackbox_write(struct file *file, const cha=
+r __user *ubuf,
+> +					    size_t count, loff_t *ppos)
 > +{
-> +	struct device *dev =3D s->private;
-> +	struct i2c_client *client =3D to_i2c_client(dev);
-> +	u8 buf[I2C_SMBUS_BLOCK_MAX];
+> +	struct i2c_client *client =3D file->private_data;
+> +	u8 payload[2] =3D { 0xFE, 0x00 };
 > +	int ret;
 > +
-> +	ret =3D i2c_smbus_read_block_data(client, ADM1266_IC_DEVICE_REV, buf);
+> +	ret =3D i2c_smbus_write_block_data(client, ADM1266_READ_BLACKBOX,
+> +					 sizeof(payload), payload);
 
-Does this function need to take the hardware monitoring lock before accessi=
-ng
-the device?
+Could this clear command race with concurrent reads of the blackbox?
 
-The subsystem guidelines state that drivers must implement locking for
-attributes registered by other means than the standard sysfs info parameter.
-Would it be appropriate to wrap this I2C read with hwmon_lock() and
-hwmon_unlock() to prevent concurrent access issues?
+Looking at adm1266_nvmem_read_blackbox(), it performs a multi-transaction
+sequence where it first reads the record_count, then loops to read individu=
+al
+records:
+
+drivers/hwmon/pmbus/adm1266.c:adm1266_nvmem_read_blackbox() {
+    ...
+    ret =3D i2c_smbus_read_block_data(data->client, ADM1266_BLACKBOX_INFO, =
+buf);
+    ...
+    record_count =3D buf[3];
+
+    for (index =3D 0; index < record_count; index++) {
+        ret =3D adm1266_pmbus_block_xfer(data, ADM1266_READ_BLACKBOX, 1,
+                                       &index, read_buff);
+    ...
+}
+
+If this write runs concurrently, it seems it could clear the hardware
+blackbox mid-read since the core I2C bus lock only serializes individual
+transactions. This might cause the remaining nvmem reads to fetch corrupted
+data or fail with I/O errors.
+
+The hwmon subsystem guidelines also mention that drivers must implement
+locking for attributes registered outside the core subsystem. Should this
+write be protected to serialize it against other hardware accesses?
 
 > +	if (ret < 0)
 > +		return ret;
-> +	if (ret < 3)
-> +		return -EIO;
 > +
-> +	seq_printf(s, "%u.%u.%u\n", buf[0], buf[1], buf[2]);
-> +
-> +	return 0;
+> +	return count;
 > +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260508-adm1266-v1=
--0-ec08bf29e0ce@nexthop.ai?part=3D3
+-0-ec08bf29e0ce@nexthop.ai?part=3D4
