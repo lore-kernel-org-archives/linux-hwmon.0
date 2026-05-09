@@ -1,158 +1,153 @@
-Received: from relay11.grserver.gr (relay11.grserver.gr [78.46.171.57])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395232F8EB0
-	for <linux-hwmon@vger.kernel.org>; Sat,  9 May 2026 17:26:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.46.171.57
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778347576; cv=none; b=Wuic2S3EJmAvnDRGVQbDuXk4Jkyj2dPPfTaFMpN2oOu+oAlfpon8WWQ0/RqE2Y0M7CBsfeIHXk3RCBN7bAYQAjPfnPtRVdH40yaEoME6+Adzs8ym5BK0lxExPh13sv+w4rynbUG23a4bOIyVvicSeVAWniuGGMq08b0n5RfPc0s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778347576; c=relaxed/simple;
-	bh=l462U55PT64SV7/6J/PrglUYrWnvSBMER0UTA9BRUMI=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91A1839E6F8
+	for <linux-hwmon@vger.kernel.org>; Sat,  9 May 2026 21:58:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778363932; cv=pass; b=UglvhKApIwvJEE5ejfCgdu1dbMXUJKlg4eYLAtPDvx/BUtdPC3JrBPZBvjTs5h4ZFk22J8sANTgMFimkzco2c0C6zxXxyGHMggMKHHHp7H3xMDVyWzLPOlFapjZ1t2Qhxt2h/nqQQP1ozgAPBN6lbBy8jNat/5cMsoxGr33J6H8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778363932; c=relaxed/simple;
+	bh=dm0HlNrhORG5lAH3KtOTjsoyE/sRNZ/1Avn3eZ91HUA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OPH2TWm7u8P2bYl1vC9krJRYJM11mUtsamD6oEFcJ+dC601SN3Q0xJWQJoLA7g9cmv70U7DZ1VBjoUrp9PWTWQXGQdGlYqNUhwPkviFCr7hyqp6DCs/vml4dzioQUKujxN0ychlP5hEGZW3w4qVe5Nz5L3R0d2yKgyiSZjcU+wY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (2048-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=Nh7UoZey; arc=none smtp.client-ip=78.46.171.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
+	 To:Cc:Content-Type; b=tCyInVpuVqFoaQlkWUnO1cnZgugNj+f7JHle/PdGS7YQhASJvK1I1dyfhA+sHSom71WxsEdGlr0Wxgzzr+a+nUxqkYZa+RKGufdlAAjDCEz7RiYk5kJ++fqxdS4E+h8o422wdbo1CkK2N4NF1JbRJ07SSKyxd/EawvDPsCOZ97w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai; spf=pass smtp.mailfrom=nexthop.ai; dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b=XZpjv72L; arc=pass smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="Nh7UoZey"
-Received: from relay11 (localhost.localdomain [127.0.0.1])
-	by relay11.grserver.gr (Proxmox) with ESMTP id 32628C3CAE
-	for <linux-hwmon@vger.kernel.org>; Sat,  9 May 2026 20:26:10 +0300 (EEST)
-Received: from linux3247.grserver.gr (linux3247.grserver.gr [213.158.90.240])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by relay11.grserver.gr (Proxmox) with ESMTPS id A87EFC18FE
-	for <linux-hwmon@vger.kernel.org>; Sat,  9 May 2026 20:26:09 +0300 (EEST)
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	by linux3247.grserver.gr (Postfix) with ESMTPSA id 0314B1FFBE6
-	for <linux-hwmon@vger.kernel.org>; Sat,  9 May 2026 20:26:08 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1778347569;
-	bh=aaVLGWdALPBEsCmykSE9FJJUaBWJ7tM3Snl5Lo8yqac=;
-	h=Received:From:Subject:To;
-	b=Nh7UoZeyCSuLKXr29qnk8VBAGg/zK7qSzQjHFDeF0DAXUNI0+6zkhSjE/BOn5+L/+
-	 D78yXTUpTeqOzJ+S0GNH8GpZysLl3nTqco46pNSwq4dxTvqhuIqbJ4h3M0oqIj/kZm
-	 DQnoW1wBAZpfetkT3654X6GKIVrwALHOpZePRchBbddSBvG82VjoN3NvENrXqMgPHr
-	 rJjbwPrunNZ6fh9AA9iYlQEd6aZHhL+Am/q/SfFPi7IkxUe+n/wRbBJAfSizx2hwr7
-	 78HcjKS3+wkjwd0a9xp8giH/sf3tnVWIXRp/kkB2GPiYWto710by0SjyqCZR6ifCs8
-	 lk017z8X3mHjg==
-Authentication-Results: linux3247.grserver.gr;
-        spf=pass (sender IP is 209.85.214.179) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-pl1-f179.google.com
-Received-SPF: pass (linux3247.grserver.gr: connection is authenticated)
-Received: by mail-pl1-f179.google.com with SMTP id
- d9443c01a7336-2ba928852a5so20219485ad.1
-        for <linux-hwmon@vger.kernel.org>;
- Sat, 09 May 2026 10:26:08 -0700 (PDT)
-X-Forwarded-Encrypted: i=1;
- AFNElJ8rivvqJ5AAFiPBcGjSwgN9Z7oBaiZ2kS/4aQfckS2k/quw87BaoOizVi0iaZRBOCykCZmTNy06znVE7g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZ8IK+qHKZzQmSVxGaX2+1VP6H8aM9nbvmYvAsHJqedxR1WRnY
-	PXyaAwDx0ynmKDTNbkiVOQ5R/52nVwAZb7QjLR6g24LPB7e/4prbFJBaAQ8tazZXuyp07WbLivY
-	mlfGvmlkI5jlSCQBAGs7k6OP5C1o5Exk=
-X-Received: by 2002:a17:903:1a28:b0:2b9:f8e9:70e2 with SMTP id
- d9443c01a7336-2bc7a990b6emr31487655ad.8.1778347567646; Sat, 09 May 2026
- 10:26:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b="XZpjv72L"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-7bdc947aa88so25110647b3.3
+        for <linux-hwmon@vger.kernel.org>; Sat, 09 May 2026 14:58:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778363929; cv=none;
+        d=google.com; s=arc-20240605;
+        b=deivp9Op2u9FTdKjWPi4sHUxvVPGHpnBwee7FHJuhPA+VEBIdI7QApFuxg9cjvUjvP
+         IEh5Isog6rwdZofTBS3Nf13tlc1OPRjhEkGYAMB7UosO1FTU6sgsFC7XPOBVA2MSm5Qo
+         MvY6vZQlukeDrKTEk9lOTGnt1hMyjsBV+PYIPQJL7mgH8PI+vQfcs+jkASvw+o+jNm7J
+         VTrVMBfR4S3cZIg0GyZs0SbRBrkyjab/gL97R591ip8W0G2AgdYpBv60APhcYfl/zhkn
+         MHDfXofopbVKNI4DMQE97OpyLNbAGBxj/i9Kri3ikgal59D3/ofVc5FYLIdCW+TEJScv
+         jN/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=dm0HlNrhORG5lAH3KtOTjsoyE/sRNZ/1Avn3eZ91HUA=;
+        fh=mpT47LXfjkLgjrcCkBDVVXdDKRoJjbgsi7K4xp4R3mA=;
+        b=WnR+gVwA3OwcPgB9mAG+jTcAetcTIEYew0S33MINFF5KNs4hU42Onl0kgb0b9intqZ
+         Czc2n/AzVyyq8seLE2CZ0SuhSlzeIFtqSFz2wvm7s7POtHgdSRSRHPNXUnmpjn+6cghT
+         p5JzJ2WbQscF5KhhuYGsv7TuvaL2ArQQ7kItGuR8xNQ6YYlpYN4XZoQeVqjKl0ExCT3q
+         V0gWLUeF0hXk/k7te5eZUVtqeZ7ibICTTxo7/YxCv+IZej6GAXbxZpAH0p555tTHMnCN
+         InbDk9bhxiOoaAMdv031S0FhhWvwKN5b89XZNqEfcfKX8hREZXDCcPs9jU3D8xYn7qC1
+         hbvQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nexthop.ai; s=google; t=1778363929; x=1778968729; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dm0HlNrhORG5lAH3KtOTjsoyE/sRNZ/1Avn3eZ91HUA=;
+        b=XZpjv72Lag5q+NouSuzpHTqGTtpFHuJ8M3cCiAF7ysrMiEmRXSdrluze6+bWDoDr5B
+         94A6DUMaVpBBFTsvlRL+t8S8DNYNenRhalxZUi2Ta7YAYS9Faj/8P69I3DUeZWiMj1ht
+         1F/wqlptC0jdlNPALXoxTkAbcPvPbppqWAeEXaRCxRB5xf05tyVDsAWEI+tjy+AM2MrS
+         fZUmA8T2adC5eOmQVryv0sSE8MOwSQ+DbQ8kx5Qwwwbb/eJVpcLN5H7LU/6nsk3Fr+kh
+         zQWZIzwbbvxN3zSwg9Kr8vF267E7+ah35E11TM9HmGZPyfIfp3RKUKIcb8q8hwJykuwt
+         PBBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778363929; x=1778968729;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=dm0HlNrhORG5lAH3KtOTjsoyE/sRNZ/1Avn3eZ91HUA=;
+        b=gar29vEXAx3a9YbufmlTFTFAKnRtEDUoAwjKgAboPNEZbScM8HFyrqnjd2AIdJWqS0
+         k9QHk9N+tUzRklYd3+QO6dByDCwZOIScIKqoAVDSmXeWx3ztVL8+udNsuPLmCdRLmxFn
+         cp6/s4GBlkf4mpByb6DawORd5YrVOV2FXJ1mdU61AfXX3qWdxvniqL3FdaYN6BPVwbqQ
+         7zAlwwu622XWwktbMvMbqkzf6hLXHXwtD4nWpdpRhj/10iS13Psz7U1uokAKKgRv9ErH
+         v38n1nx91dkvXZVZDMnMVgf2iKLH2tpuuBvz6jhuglfvXJdotaTjR8cEl52TMVB2yBH1
+         C6sA==
+X-Forwarded-Encrypted: i=1; AFNElJ+VFVhxC9jgAOyrsur0k25gJgZsLNu11ONt6nGdJgjP85ZkoLB0iTC9Z2qfruBo9AHVvHWQNFp+dtLPAQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzu+m0U6/QLdCxwRawMAw3Khe9dHXe8o6NDVTf3UcdwbPwRPQHh
+	hVjdEO3I5razXVeGvrXD2CjxRlyOk5oEjU0LQYRqKi+CH1gk1tnL1QLo2soKOZkczBOXI5rmH+9
+	WPSc2OE2N41KqEjqwyMExhoOCbNawWU9FFZ3NkD9sGg==
+X-Gm-Gg: Acq92OHxLCrgshn1HnBqw8Rx9JKv9S2cGTn7FovE2SwwAbRkBWaujXDOCRjCHRVNRDh
+	nuK3D6j/5UrJwpnSPgnqmp1EVkY9x2/DOmaQIwSVlNW4Nv2jaVDG6qtnM/HK6jgMwEXm85uwVp7
+	QnthrLzT7Xnqis0Y9hRv3QyfTXAk4ObhvVz84CtowI/gjDsShm02kr4OMTZecvpelLzcq4RnVyO
+	/FxDhijuKfco2FjHzhswnaCBsshta6AQebxDOPR4ALKqhg8EbmWEEhB0+Y8+0JM52wiyRTSUkpd
+	9REL/28=
+X-Received: by 2002:a05:690c:698b:b0:7bd:7afc:ec4b with SMTP id
+ 00721157ae682-7bdf5eb58b8mr200528777b3.31.1778363929394; Sat, 09 May 2026
+ 14:58:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250511204427.327558-1-lkml@antheas.dev>
- <20260508184104.623016-1-derekjohn.clark@gmail.com>
-In-Reply-To: <20260508184104.623016-1-derekjohn.clark@gmail.com>
-From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Sat, 9 May 2026 19:25:54 +0200
-X-Gmail-Original-Message-ID: 
- <CAGwozwFXDP+nQO8bkW01t_iSOYQ6OUQkfv35ULfHrnLjVoFZvg@mail.gmail.com>
-X-Gm-Features: AVHnY4JBi-EFhXFTQHQXwlf5sV1Obpy2Ad4iTU3cNjmImPpDtrJiKAc9dKkWupo
-Message-ID: 
- <CAGwozwFXDP+nQO8bkW01t_iSOYQ6OUQkfv35ULfHrnLjVoFZvg@mail.gmail.com>
-Subject: Re: [PATCH v1 00/10] platform/x86: msi-wmi-platform: Add fan
- curves/platform profile/tdp/battery limiting
-To: "Derek J. Clark" <derekjohn.clark@gmail.com>
-Cc: W_Armin@gmx.de, corbet@lwn.net, hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com, jdelvare@suse.com, kuurtb@gmail.com,
-	linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux@roeck-us.net,
-	platform-driver-x86@vger.kernel.org
+References: <20260508-adm1266-v1-0-ec08bf29e0ce@nexthop.ai> <53d965b4-ab1c-4cb1-9fc3-c99538336d53@roeck-us.net>
+In-Reply-To: <53d965b4-ab1c-4cb1-9fc3-c99538336d53@roeck-us.net>
+From: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+Date: Sat, 9 May 2026 14:58:38 -0700
+X-Gm-Features: AVHnY4KPFt92RvnFzxDYbTomUx_SMoOoHXEVLbm3FV8ovR3W2KZgY12MPugPxl4
+Message-ID: <CAGYn4vyDi8Z2i4mvuEZEP-nXCOO-X393=UuaogWJ9k3sXhQ8nQ@mail.gmail.com>
+Subject: Re: [PATCH 0/7] hwmon: (pmbus/adm1266) RTC fix, blackbox, FW rev, rtc_class
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Alexandru Tachici <alexandru.tachici@analog.com>, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-PPP-Message-ID: 
- <177834756922.2678364.8822577964454957156@linux3247.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 1.4.3 at linux3247.grserver.gr
-X-Virus-Status: Clean
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 8 May 2026 at 20:41, Derek J. Clark <derekjohn.clark@gmail.com> wrote:
+Hi Guenter,
+
+I didn't see any feedback. Checked my spam folder and nothing
+shows up on the mailing list either.
+
+Regards,
+Abdurrahman
+
+
+On Sat, May 9, 2026 at 7:14=E2=80=AFAM Guenter Roeck <linux@roeck-us.net> w=
+rote:
 >
-> >This draft patch series brings into parity the msi-wmi-platform driver with
-> >the MSI Center M Windows application for the MSI Claw (all models).
-> >Unfortunately, MSI Center M and this interface do not have a discovery API,
-> >necessitating the introduction of a quirk system.
+> On 5/8/26 16:33, Abdurrahman Hussain via B4 Relay wrote:
+> > This series fixes a few issues in the adm1266 driver and fills in
+> > some gaps, as listed below.
 > >
-> >While this patch series is fully functional and tested, there are still
-> >some issues that need to be addressed:
-> >  - Armin notes we need to disable fan curve support by default and quirk
-> >    it as well, as it is not supported on all models. However, the way
-> >    PWM enable ops work, this makes it a bit difficult, so I would like
-> >    some suggestions on how to rework this.
-> >  - It turns out that to fully disable the fan curve, we have to restore
-> >    the default fan values. This is also what is done on the OEM software.
-> >    For this, the last patch in the series is used, which is a bit dirty.
+> > Patch 1 is a wall-clock RTC bug fix: the driver currently seeds the
+> > device's timestamp counter with CLOCK_MONOTONIC seconds, which makes
+> > blackbox record timestamps non-comparable across reboots. It carries
+> > a Fixes: tag.
 > >
-> >Sleep was tested with all values being preserved during S0iX (platform
-> >profile, fan curve, PL1/PL2), so we do not need suspend/resume hooks, at
-> >least for the Claw devices.
+> > Patch 2 writes the 16-bit fractional-seconds field of SET_RTC that
+> > the driver was zeroing, restoring sub-second resolution on records.
 > >
-> >For PL1/PL2, we use firmware-attributes. So for that I +cc Kurt since if
-> >his new high level interface is merged beforehand, we can use that instead.
+> > Patch 3 exposes the firmware revision (IC_DEVICE_REV, 0xAE) via
+> > debugfs alongside the existing sequencer_state entry.
 > >
+> > Patch 4 adds a write-only clear_blackbox debugfs file. Devices
+> > configured for single-recording mode (BLACKBOX_CONFIG[0] =3D 0) need
+> > an explicit clear once the 32-record buffer fills; the documented
+> > sub-command ({0xFE, 0x00} block-write to 0xDE) wasn't reachable
+> > from userspace.
+> >
+> > Patch 5 exposes the non-volatile POWERUP_COUNTER (0xE4) via debugfs.
+> > The same value is embedded in every blackbox record, so the live
+> > value lets userspace match a captured record back to the boot it
+> > came from when correlating logs.
+> >
+> > Patch 6 registers an rtc_class device backed by SET_RTC. The data
+> > sheet (Rev. D, p. 22) explicitly recommends "frequently send the
+> > time stamp to the ADM1266 to synchronize the UNIX time and reduce
+> > the time from drifting" when running on the internal oscillator
+> > (no external 32.768 kHz crystal). With this patch userspace can
+> > drive the re-sync via standard tooling (hwclock, chrony,
+> > systemd-timesyncd) against /dev/rtcN, with no driver-specific
+> > sysfs ABI.
+> >
+> > Patch 7 disambiguates GPIO line labels on platforms that fit two
+> > ADM1266 devices on different I2C buses at the same slave address.
+> >
+> > Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 >
-> Hi Antheas,
+> Please address Sashiko's feedback.
 >
-> It seems this series is stalled for 3 days shy of a year now. I have an
-> interest in getting this across the finish line. Will you be continuing
-> development? If not, I will take what you've started here and finish out
-> the remaining nits, keeping your original attribution of course.
-
-Hi,
-I plan to get back to this after the standby rfc is in a good place.
-There are some issues with this series that need resolving, MSI
-firmware is a lot more varied and unstable than other OEMs which make
-it hard to pin down to a defined ABI.
-
-For V2, we'd need to look into testing into at least some laptops to
-verify shift mode behavior
-
-Antheas
-
-> Cheers,
-> Derek
+> Thanks,
+> Guenter
 >
-> >Antheas Kapenekakis (8):
-> >  platform/x86: msi-wmi-platform: Add unlocked msi_wmi_platform_query
-> >  platform/x86: msi-wmi-platform: Add quirk system
-> >  platform/x86: msi-wmi-platform: Add platform profile through shift
-> >    mode
-> >  platform/x86: msi-wmi-platform: Add PL1/PL2 support via firmware
-> >    attributes
-> >  platform/x86: msi-wmi-platform: Add charge_threshold support
-> >  platform/x86: msi-wmi-platform: Drop excess fans in dual fan devices
-> >  platform/x86: msi-wmi-platform: Update header text
-> >  platform/x86: msi-wmi-platform: Restore fan curves on PWM disable and
-> >    unload
-> >
-> >Armin Wolf (2):
-> >  platform/x86: msi-wmi-platform: Use input buffer for returning result
-> >  platform/x86: msi-wmi-platform: Add support for fan control
-> >
-> > .../wmi/devices/msi-wmi-platform.rst          |   26 +
-> > drivers/platform/x86/Kconfig                  |    3 +
-> > drivers/platform/x86/msi-wmi-platform.c       | 1181 ++++++++++++++++-
-> > 3 files changed, 1156 insertions(+), 54 deletions(-)
-> >
-> >
-> >base-commit: 62b1dcf2e7af3dc2879d1a39bf6823c99486a8c2
->
-
