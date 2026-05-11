@@ -1,224 +1,166 @@
 Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB9B3AA4F2
-	for <linux-hwmon@vger.kernel.org>; Mon, 11 May 2026 07:51:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7361F3FB07E
+	for <linux-hwmon@vger.kernel.org>; Mon, 11 May 2026 14:10:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778485906; cv=none; b=lyMl+oarbZ5YzHrCAfwNscjEl4i20ddmmbmGdNUZ7bXgOc0kmjP/MMDQG/ApnVmzgwURlJrhV3KI/RROctOPvbn9PMZcQ+kLaG1uUhI7kb00PafbzGtAp5+Qr1T/5WGSMmWP52me+r5n3Xke7q/jNqoc0Jm8r9PJMzsJTokUZ10=
+	t=1778508639; cv=none; b=BIh1knvphf2eTWf/FIBBh9X8+JTDai2r+zeBLMURxCW/0BxEu7CSZem3hIcsluy41a1TQ4QP77MZtnk4hwBpCIZoSEINVgQBNdbuMOR69rTEf+h0ER+wBWqDnJVonuyF1X9eEy7nJjbjZr9Ky/5OKPPPaqOo7cVvLPxXhN8f6SY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778485906; c=relaxed/simple;
-	bh=4ibCJKgh5O0PlQIzarHRly8PpVR0ik1+YJcgF8LKXcQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VMyJQQ7omqD6DWq8wZBwD7QtQTv+j1q0Cd0XkSKfIZKDchb6sIausCyU1hRxUGcigArJ7W+NfgeoIH2YFBnTpDBmVlW3W2R88gotZI6H2nBK2i4m+YvShn71EADZV4vivMPsSsg3JAf/+IXAux/deppsZX/QKLpfX9DgCLRD7TM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai; spf=pass smtp.mailfrom=nexthop.ai; dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b=dru2DOmx; arc=none smtp.client-ip=74.125.82.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
+	s=arc-20240116; t=1778508639; c=relaxed/simple;
+	bh=C3TYF3A+xLeWhTvn+PpgTVJyoz3bnNYXCV2J4whcObA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qcRMUaTHTg1xH35R+xeu54T9bqq5X/7XSAmoPLFdyva71u1TlEmZkq2PYt1cqTuEBlg7sPF7XBiAl8Yp68tI+T3dkzZlx7oFRs9PeI3CCQ36nYj9YEP3l589WFtdGO1NnXjdruAljjVmzbjyqyQOXCPE5X5fGli8sisJWynU3LQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MCGMUPaK; arc=none smtp.client-ip=74.125.82.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b="dru2DOmx"
-Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-2ee990e8597so7084568eec.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 11 May 2026 00:51:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MCGMUPaK"
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-2f0ad52830cso6267748eec.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 11 May 2026 07:10:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexthop.ai; s=google; t=1778485888; x=1779090688; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gOMLJB4Oh7xtGNEINQHb/KOg6mgGsuMaGDF24hTcF4o=;
-        b=dru2DOmxZbt/rBepApbb+Dm+/+I4wkfqSOkm4CCvDDlw0chs1XiRX8ObqjVv5MEz6j
-         Dc/V4bOQoRXs0rS6pwL22+lwUfDpDlzSCXRUMuWqD9+Obv8b7QHGugsDnc+1TXAtUv8N
-         W6bVeUyCgpZcGc1sfWZljx05+Uw8fDGmRyq0davN/AnjKsl6idEBKPfvhHpJxR6Ky9hr
-         +58owaDk8wweyBG5ORgF0ry/4zACD0Uk/uN85Fhqu1CzBNwSHq5MrpasdAFTDhH0MmOh
-         Jv1faExq07NuIKeLume/xAIjDiQiKQot7Nk8xRPMogFU/wiXu1RPJFprf4nF4R1AUCc5
-         gUZg==
+        d=gmail.com; s=20251104; t=1778508637; x=1779113437; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=q2m5k8HcnqElTrUL4NOVcwGXoLhFvGTwO4KH82Z/apY=;
+        b=MCGMUPaK+8fWhn+9DTbG5TkBW+FwuzFXuVAFElmYCHF6J/veoLJLo1U1jmwEpToivR
+         j55Sr9482423zKG/hPOiVot4J097gndI4CnxPRmggDa2jBDwqcP/GsSiClvnh4doR/tF
+         8kqJLcsEeqitDVjiBux2nyPQNshXnviaGNwiQlgO8ilWc5k4/v25lQJLGt23AZhH4zm5
+         1/flU476o+qelEVuUHsKEuKg+GM3wTlsZndFmkVUN4JoiDibUjuNCTACae2oyg+Zu4AG
+         fnk41kcSdlcKeDp/gMxsTPGNTLp0ZsJZ0HExmqvchGk3P0US+zrBbPyq74yTxLOvyLeZ
+         zyWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778485888; x=1779090688;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gOMLJB4Oh7xtGNEINQHb/KOg6mgGsuMaGDF24hTcF4o=;
-        b=nKLSsAihgDHhdnScLgHd82ndmPu136ZQP/gfG/3RH44kQ0r6ftLdmpqDeAYzAZgcz9
-         YcZJvaq8McOefNnxUrUWcbNfA7rnkhKGQ/+09xIZ8vd+gPsiJiNw9pQ+ztaO/AUmpP/j
-         ZN/NWV1/DFq4ZQsiQxCdL4P7xahyWZgIu4HUmOWi7ZtoR1TwP+RHoSsPOhp/bknQIHgf
-         eTD6VDR12tAdk1Q5mHAE6t/etoQ6sPTsEmBemsoQFt5x91Ix+Y3eMl3O9wM6kJxm+LUj
-         apU9sT5YAHfAz20sg6RboShYoN3qKyAhiKw2zr7Td8LHes98Gnz98u+WJJFmM2c6xiAm
-         fHyg==
-X-Gm-Message-State: AOJu0YxJm9OgZl6piK+UXaTkHFQ0AXV+nhVmXbvcizgXPkfaOrh9L0i0
-	K3nSIWT0GFyudwDVPAwbNNMP/PLn4svpq6WHK3EQxFGECS6j/9SbFd0/cp55f96q4PA=
-X-Gm-Gg: Acq92OGMNn8qYdnaB12y/qiUuoTNzD2eKL5rP6zmo2RxYvvWN5BNF3SMVUBe+kBQakX
-	vilYkgDiV3lq69dncRgRsrL78XqyuMkyIJSG0b9QMghAdGS7sJiOsEhHRMNt5sUn6n1PkBXjxof
-	hmsCAnIer5Q//pgGeL6gJQjPpxpRtt1mNbg07df5gOZ/5Ij/hTP2mbDrhLzjZJrBhS2MGM2WkY8
-	3qHfDHos1g4puTrFVQ8VeltRKMqfu6xfPhyK8YRjctd6YHqYowe+N4WVSs03YiEHWrt9Ij9WTXQ
-	ciP1Nrho9T3JWZTczElp0D7NBXuWiTcl/4s3/b03AmlR7ceUA3B+Hx7FiktCjXreWV+BOHt9TmM
-	ZLDArwbpr3nvkX8pdfLj7KsKIWeZtGQD0gNhk0P60AKXH9cq7S2plETbaH9vB8JDXx7tNSLBa0/
-	dL+sXTL02vR/ATf3nhPzNwR/YHmg==
-X-Received: by 2002:a05:693c:2c01:b0:2c5:b23e:48a6 with SMTP id 5a478bee46e88-2f54b265a7dmr11730370eec.23.1778485888037;
-        Mon, 11 May 2026 00:51:28 -0700 (PDT)
-Received: from [127.0.0.2] ([50.145.100.174])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f8862d429asm12549498eec.12.2026.05.11.00.51.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2026 00:51:27 -0700 (PDT)
-From: Abdurrahman Hussain <abdurrahman@nexthop.ai>
-Date: Mon, 11 May 2026 00:51:22 -0700
-Subject: [PATCH RESEND v2 4/5] hwmon: (pmbus/adm1266) replace probe-time
- RTC seed with rtc_class device
+        d=1e100.net; s=20251104; t=1778508637; x=1779113437;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q2m5k8HcnqElTrUL4NOVcwGXoLhFvGTwO4KH82Z/apY=;
+        b=MvgtIHn+4L5/XGPhPe/a0FTlLddPLHEVqgMie7lOW5j9BdgvzwDyeMGdYewpTL1dLS
+         VRLjLP/dsy9+EHU2IXB5jlXOaEFNKoxQJpPzSuTMxJt8izWJwDno9ycRg/bFqYkewFpg
+         AQp5+sM/P86e8jhpfdY01LCxrA6sVZSJDxvgLBYwAKS53Yl08i26HVQWvcARclu0QYhL
+         Elqz+Ydd35ccidbl5qbYE8DfD6EOF6fH6fZ+xObNapPydxbjMGSbapYLhlq6tEtFM23P
+         ESu5/4hZtWnEnmgm/W8XusALhfjcQqVMwg7AFjj/hCQgiq/YU1rnieGgy9Wtea/kb5LC
+         ZlNg==
+X-Gm-Message-State: AOJu0YyYupUKRi76WKDsiH6zTj8FHfCaaWALn+p/b0lveYgXACnLkOpR
+	HVM0Z7+cdljOSpCpQtj54TTjuQ3esF9Dh3hn3wUEduj+/fmAfpMmlyHr
+X-Gm-Gg: Acq92OEKGwC4oAV45VJD9GnRrU+2bOqpnIfhwY3TURlgNVEhauqVCAyJWVaooNOKSl4
+	ddUF5EmlMTvNpwlYA/tYmLOSkZbWl5FKY7kaxqcrLHufn/z4ygWKekE29VIBKB4+msTtVMA07Yr
+	m49soweVLm0t4usF0rlqKXGMzmRnCWrwneZYUFni6MEEZ9ldfEq12ADlrgpxyT5/3K9KTHiNmbD
+	jtiaLbo4ouSzyo3BOQwFvqcmFEbLqRtUp4l3AAOXMmHYpfSU5QhVZAznJoj2b3XgvZp72UUDx97
+	cdxnyPA+JR7FMpjKfT3BMR1/Obkgkrb6kjWOXlhjqrJCOts40V8RGKBQ0hrgCWPY/Jj3ua3BcwS
+	XVNDp8iWgPNZsL+RA/tkpfgBN1jnODbihg5FGYksCyVDRdFzz1rIcUcHCIX4EfQu3PxsMxMh4D0
+	/AxTcu6xi0u6DaJ1YJSke4MGZJttZ1fEj4Lo2fuxN3bzU/L7wre0pXfZ7H7CkzBmoiYtJvrNAx
+X-Received: by 2002:a05:7300:2319:b0:2ea:b85c:153d with SMTP id 5a478bee46e88-2fb4e0419aemr3728477eec.27.1778508637388;
+        Mon, 11 May 2026 07:10:37 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f8862d429asm13664218eec.12.2026.05.11.07.10.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 May 2026 07:10:36 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <94cd8a1a-7b72-4c4b-a4ca-72cdf5ba73da@roeck-us.net>
+Date: Mon, 11 May 2026 07:10:35 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260511-adm1266-v2-4-7a6d34f0de5d@nexthop.ai>
-References: <20260511-adm1266-v2-0-7a6d34f0de5d@nexthop.ai>
-In-Reply-To: <20260511-adm1266-v2-0-7a6d34f0de5d@nexthop.ai>
-To: Guenter Roeck <linux@roeck-us.net>, 
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND v2 0/5] hwmon: (pmbus/adm1266) blackbox, FW rev,
+ rtc_class, GPIO label
+To: Abdurrahman Hussain <abdurrahman@nexthop.ai>,
  Alexandru Tachici <alexandru.tachici@analog.com>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1778485884; l=4478;
- i=abdurrahman@nexthop.ai; s=20260510; h=from:subject:message-id;
- bh=4ibCJKgh5O0PlQIzarHRly8PpVR0ik1+YJcgF8LKXcQ=;
- b=ETLsCjM6H4EMaCozDZLBwrdM/ijhzzcc38skjIZYng0g5ME3hk6FcDI+ofaNo9bzLZ8FSJDwv
- RyvPs1Q4UI7CsFu4ZIz7XnG9ONonKq1lMoV+ugVjX2nlH3hls/JeE6B
-X-Developer-Key: i=abdurrahman@nexthop.ai; a=ed25519;
- pk=omTm9cCAbO0ZhS32aKfJDKue0W3sQGpG9ub5eYHif8I=
+References: <20260511-adm1266-v2-0-7a6d34f0de5d@nexthop.ai>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260511-adm1266-v2-0-7a6d34f0de5d@nexthop.ai>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The driver currently writes the device's internal RTC at probe with
-ktime_get_seconds(), which returns CLOCK_MONOTONIC seconds since boot
-and is not a wall-clock value. The resulting timestamps embedded in
-blackbox records are therefore meaningless across reboots, defeating
-the cross-reboot record-correlation use case the field exists for.
+On 5/11/26 00:51, Abdurrahman Hussain wrote:
+> This series fills in some gaps in the adm1266 driver and removes a
+> probe-time RTC seed that was clobbering valid device state.
+> 
+> Patch 1 exposes the firmware revision (IC_DEVICE_REV, 0xAE) via
+> debugfs alongside the existing sequencer_state entry.
+> 
+> Patch 2 adds a write-only clear_blackbox debugfs file. Devices
+> configured for single-recording mode (BLACKBOX_CONFIG[0] = 0) need
+> an explicit clear once the 32-record buffer fills; the documented
+> sub-command ({0xFE, 0x00} block-write to 0xDE) wasn't reachable
+> from userspace.
+> 
+> Patch 3 exposes the non-volatile POWERUP_COUNTER (0xE4) via debugfs.
+> The same value is embedded in every blackbox record, so the live
+> value lets userspace match a captured record back to the boot it
+> came from when correlating logs.
+> 
+> Patch 4 replaces the probe-time SET_RTC seed with an rtc_class
+> device backed by SET_RTC. The existing seed used CLOCK_MONOTONIC
+> seconds, which is meaningless as a wall-clock time and clobbers
+> whatever the device retained across a warm reboot. The data sheet
+> (Rev. D, p. 22) explicitly recommends "frequently send the time
+> stamp to the ADM1266 to synchronize the UNIX time and reduce the
+> time from drifting" when running on the internal oscillator (no
+> external 32.768 kHz crystal). Letting userspace own the policy via
+> standard tooling (hwclock, chrony, systemd-timesyncd) against
+> /dev/rtcN is both more correct and avoids any driver-specific
+> sysfs ABI.
+> 
+> Patch 5 disambiguates GPIO line labels on platforms that fit two
+> ADM1266 devices on different I2C buses at the same slave address.
+> 
+> Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+> ---
+> Changes in v2:
 
-Switching the seed to ktime_get_real_seconds() does not actually fix
-this: at probe the system wall clock may not yet have been set (no
-external RTC, no userspace NTP), and seeding unconditionally also
-clobbers whatever valid time the ADM1266 retained across a warm
-reboot.
+And why the resend ?
 
-The data sheet (Rev. D, p. 22) recommends "frequently send the time
-stamp to the ADM1266 to synchronize the UNIX time and reduce the time
-from drifting" when running on the internal oscillator. The clean way
-to expose that policy is an rtc_class device backed by SET_RTC, so
-that userspace tooling (hwclock, chrony, systemd-timesyncd) can drive
-the re-sync against /dev/rtcN once it trusts the system clock - with
-no driver-specific sysfs ABI.
-
-Drop the probe-time seed and adm1266_set_rtc() entirely. Add an
-rtc_class device whose ->read_time and ->set_time callbacks read and
-write the SET_RTC frame. The rtc_class API is second-precision, so
-the SET_RTC fractional-seconds bytes are always written as zero.
-
-Fixes: 15609d189302 ("hwmon: (pmbus/adm1266) read blackbox")
-Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
----
- drivers/hwmon/pmbus/adm1266.c | 70 ++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 60 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
-index 99e92a8365fb..0dfb02db8683 100644
---- a/drivers/hwmon/pmbus/adm1266.c
-+++ b/drivers/hwmon/pmbus/adm1266.c
-@@ -18,8 +18,8 @@
- #include <linux/nvmem-consumer.h>
- #include <linux/nvmem-provider.h>
- #include "pmbus.h"
-+#include <linux/rtc.h>
- #include <linux/slab.h>
--#include <linux/timekeeping.h>
- 
- #define ADM1266_IC_DEVICE_REV	0xAE
- #define ADM1266_BLACKBOX_CONFIG	0xD3
-@@ -513,21 +513,71 @@ static int adm1266_config_nvmem(struct adm1266_data *data)
- 	return 0;
- }
- 
--static int adm1266_set_rtc(struct adm1266_data *data)
-+/*
-+ * SET_RTC frame layout (datasheet Rev. D, Table 84):
-+ *   bytes [1:0] = fractional seconds, LSB = 1/65536 s
-+ *   bytes [5:2] = seconds since 1970-01-01 UTC
-+ * The rtc_class API is second-precision, so the fractional bytes are
-+ * always written as zero.
-+ */
-+static int adm1266_write_rtc(struct i2c_client *client, time64_t secs)
- {
--	time64_t kt;
--	char write_buf[6];
-+	u8 buf[6] = { 0 };
- 	int i;
- 
--	kt = ktime_get_seconds();
-+	for (i = 0; i < 4; i++)
-+		buf[2 + i] = (secs >> (i * 8)) & 0xFF;
-+
-+	return i2c_smbus_write_block_data(client, ADM1266_SET_RTC, sizeof(buf), buf);
-+}
-+
-+static int adm1266_rtc_read_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	u8 buf[I2C_SMBUS_BLOCK_MAX];
-+	u32 secs;
-+	int ret;
-+	int i;
- 
--	memset(write_buf, 0, sizeof(write_buf));
-+	ret = i2c_smbus_read_block_data(client, ADM1266_SET_RTC, buf);
-+	if (ret < 0)
-+		return ret;
-+	if (ret != 6)
-+		return -EIO;
- 
-+	secs = 0;
- 	for (i = 0; i < 4; i++)
--		write_buf[2 + i] = (kt >> (i * 8)) & 0xFF;
-+		secs |= (u32)buf[2 + i] << (i * 8);
-+
-+	rtc_time64_to_tm(secs, tm);
-+	return 0;
-+}
-+
-+static int adm1266_rtc_set_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+
-+	return adm1266_write_rtc(client, rtc_tm_to_time64(tm));
-+}
-+
-+static const struct rtc_class_ops adm1266_rtc_ops = {
-+	.read_time = adm1266_rtc_read_time,
-+	.set_time = adm1266_rtc_set_time,
-+};
-+
-+static int adm1266_register_rtc(struct adm1266_data *data)
-+{
-+	struct rtc_device *rtc;
-+
-+	rtc = devm_rtc_allocate_device(&data->client->dev);
-+	if (IS_ERR(rtc))
-+		return PTR_ERR(rtc);
-+
-+	rtc->ops = &adm1266_rtc_ops;
-+	rtc->range_min = 0;
-+	rtc->range_max = U32_MAX;
- 
--	return i2c_smbus_write_block_data(data->client, ADM1266_SET_RTC, sizeof(write_buf),
--					  write_buf);
-+	return devm_rtc_register_device(rtc);
- }
- 
- static int adm1266_probe(struct i2c_client *client)
-@@ -553,7 +603,7 @@ static int adm1266_probe(struct i2c_client *client)
- 	if (ret < 0)
- 		return ret;
- 
--	ret = adm1266_set_rtc(data);
-+	ret = adm1266_register_rtc(data);
- 	if (ret < 0)
- 		return ret;
- 
-
--- 
-2.53.0
+Guenter
 
