@@ -1,243 +1,462 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.barrensea.org (mail.barrensea.org [198.12.121.168])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A163B1036
-	for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 14:26:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65853B813E;
+	Tue, 12 May 2026 15:58:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.12.121.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778596017; cv=none; b=XkiMMlyjHzryTIsp8rTbSxaxiowP/WnZfzv2v1FVae0v0jvAiFeSgQMC6y2stxbmZvroG5qx0SY/RQ4TtZ/R1JrDECldV2mnxaKxvzUaL7Qyr8IwbwKOtkjQOg0yWpkvGxYlIO3dKV60cOORKblPHvOAdAn20z3tcc1uxJNepdQ=
+	t=1778601524; cv=none; b=lpc342fGsgnwvbSaYtc1+cT89+tdTs5P3XJwZV3/fTBCBQR4qC+31flSImJvNsdV+EGXYiibs/DPCbEKd9dHPGXUWfGjJmm47UuS11tFleI6lryvKmzbu8fdDbgtMxoVEMT3hvivHdoc0j5LAdAwf411qXNne+7F4sGjdwiIzfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778596017; c=relaxed/simple;
-	bh=LHxGHDQg0A8g0ZoFxTIcO/DG9cbc9wUb2DfSBybA7C8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nDKIRct6WLc5TKcMMVo9quJrM6RCEJX/mbii0qOsiKSu8P7eiEhNt1HIYsNlYznl/K7avAdn0asHLLQzLCKkOEfXOaQ9qYuCO5UwmB9tIBLXC5PwvxLwVEidOtUEtI50EZ6NUhVhkAaF2WLstdbqtMd0ZFElnUq8Bu75PRZcpz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gyJMqtK4; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778601524; c=relaxed/simple;
+	bh=LyVevI4iq2pqbF82MP/74G9GBCLiZ00V0jsayugsU9s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=U+QM7jAibq+oeBQ1nxKgp0WCNs5dhxsqADeX6+8ICXjCBXLcERcx1PkxZZjnayfrTP3VNOtxuqMYoeeNYeWSgbwa4ulm4B78e5zej3zbyoir+rzbiENXozIMhjP54hT1u/oZBwgDAuT0MIGkQuotrXnHWIn9HK5/4M522COI/8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=barrensea.org; spf=pass smtp.mailfrom=barrensea.org; dkim=pass (2048-bit key) header.d=barrensea.org header.i=@barrensea.org header.b=BK/BmsIZ; arc=none smtp.client-ip=198.12.121.168
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=barrensea.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=barrensea.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gyJMqtK4"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c8025500cc7so4053214a12.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 07:26:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778596015; x=1779200815; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=mVwixBMlzgK8411ArAJ0OyYAcRwgADMyDeeatOBedHg=;
-        b=gyJMqtK4yROvZ8QgiDbHcIlJ6bGW4JhMm/VQU95vqnblfSmBSHJYs5dTc2hgOf7En0
-         nWxacDxcbWJaCmORlMHOWp8SeCPkvNXT0e0VzqikxlAlR6xShAzkgFlvhoOqJKWnd4Cx
-         FcDIhM9/GtdsGnS/oNSfYFLyjn0zaAsTne7SJtHcGcKHJv0fbJS4uvp2tl/lSduDPRCF
-         Bds1odYJTrSeRPXyfEbksStcLME2pMOhtQzUUCZ2JIzjzUwXdu4zKce+XjKub2BsTiz5
-         RiBBStv6SNPrXkWRT2+vEFHtm/yr7dw+hOz3Q44iivxA0hIupDzY0gbLsDMU3ee8c30L
-         Jyng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778596015; x=1779200815;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mVwixBMlzgK8411ArAJ0OyYAcRwgADMyDeeatOBedHg=;
-        b=punQnMIVqob6yKBdjpkLtWuwKaiDsbhJmLGFJ4+/cMoUdF4rnCdwNJjkcKP6zZ8FiZ
-         D9o/M/nqrJlA8ycNe8HQXDhajFESMN7q+I4EOSPOz6A2wZuLRXl/kH8jsN2OBLhv6rPy
-         A4+85uwrKqIMWkLsGRndBtiLYJDRqOr1qB+n0mh63j7hTP8k8QiA5uN5tkkGksu6g7G9
-         qYHz4t/OLvQuDsIwsLMDGg63D4LAhIJSdL+JPjCI2h8kKGPtCpJ+SoJqgrYlDj4WDWLA
-         uYLeIABjQgpWH8Z+hnb7g1CztL8XUnQIiX7QPOvrrYfOLgU1NV3/Gwmkqrh+GQTqCd+T
-         Tw5w==
-X-Forwarded-Encrypted: i=1; AFNElJ9kal43BmCCrgabCgfF0m8HDGxIH+2cMQfwl2TP5OFETALNan4aEmNMAcoZS8q8JxdW+Rhw6wBfVUh4QQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/9Khs8a9k9rpzhkDbGva0MnYSfj69wN4n4ulmB3jpSeNqRtpA
-	WZXAJn7kYl2W4tG1lL5+8sAqAtNkvMUG5G1ge2/hFsJ1/cqqBPsJFbrA
-X-Gm-Gg: Acq92OHSQqDoW2shR5A+/x0uWmTNzyKOrkkqVI+aMveFkdaQyP8sMCCPj00lu7km5Dj
-	RIwk+mUSOlMmAtsZ+DQB+7LtM+Ga5+kOOivgZjgtrm/RhG1s0BXUeHiPXR0m4tJ2TQBVTlsUWwS
-	D0BK8VgoVdQstCU1vxndi6xTlTDz+p686WzgyKi+EXQ/O34GSJzaHtK/DbVY/lWtij2gEmvfLHD
-	4gYlekhWbi1lqnZ1J5+3+r5RGO6YS/VePG1ktiw1JebH3r25NuM2H5NRa5F/5looxdLHjhlN+ux
-	lcNvJ7E8Ffq3X5Y+rL8sZQ5bDcXcqbBg/GcKUejRGxWqRXSqyhVV/NCB4z9YnUqQu7vKRQUXlMw
-	dvxZS4Zx/xuLI24z/a4JT5WIGsg67ZAGeVSjMAeAp8uheBimzjrmbCkHLgrX0LX9UWoMg0Gqf8O
-	3zcOWsKgBPqRBDwiyVy7IDRExUhggphd9hRkji5TDq7VZqQTNZ58ejo7SgMb5nGUOHgawd8dMG
-X-Received: by 2002:a17:903:1ad0:b0:2b0:a980:3687 with SMTP id d9443c01a7336-2ba79291460mr327409235ad.3.1778596015206;
-        Tue, 12 May 2026 07:26:55 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1d2700dsm141284675ad.2.2026.05.12.07.26.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 May 2026 07:26:54 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c4082788-9e2f-4108-9d2f-13648bf4e5bf@roeck-us.net>
-Date: Tue, 12 May 2026 07:26:53 -0700
+	dkim=pass (2048-bit key) header.d=barrensea.org header.i=@barrensea.org header.b="BK/BmsIZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=barrensea.org;
+	s=mail; t=1778601517;
+	bh=LyVevI4iq2pqbF82MP/74G9GBCLiZ00V0jsayugsU9s=;
+	h=From:To:Cc:Subject;
+	b=BK/BmsIZnXpfBR+zaj4IjqF9401nET42739/7aYHyeXKGhUX8u2169wfo9at24b3j
+	 +g3SEmSfZpBhXY4faEXpgDC9WoFaFTSrNXS1IgAi1oCPtSyiW2wKKumogfN8IsrHjN
+	 i7cbj6b9yL8dE5LXUV2Wx/ejz8mlJiCL+HfDM810zaPjumFPbOgSPMu56ih+uI/0ZR
+	 lkf5SA4m7u1yh5VmvO5dW4ian4xce9vSYxn7v8LqcAu2AhBZWeEXnPOtwPvO4S8ZtF
+	 ZeFEWC7rD0ZkZy87QxBDNLCFnQ6WPKiHirctls26IWs0bBzZeecl60+vhfJhTGAHge
+	 zlbU0JdjvMC/Q==
+From: Donjuanplatinum <donplat@barrensea.org>
+To: ojeda@kernel.org,
+	linux@roeck-us.net
+Cc: boqun@kernel.org,
+	gary@garyguo.net,
+	bjorn3_gh@protonmail.com,
+	lossin@kernel.org,
+	a.hindborg@kernel.org,
+	aliceryhl@google.com,
+	tmgross@umich.edu,
+	dakr@kernel.org,
+	rust-for-linux@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Donjuanplatinum <donplat@barrensea.org>
+Subject: [RFC PATCH] rust: hwmon: add basic hwmon abstractions
+Date: Tue, 12 May 2026 23:57:46 +0800
+Message-ID: <20260512155747.10136-1-donplat@barrensea.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: Add Eswin EIC7700 PVT sensor
-To: Huan He <hehuan1@eswincomputing.com>,
- Krzysztof Kozlowski <krzk@kernel.org>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- p.zabel@pengutronix.de, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- ningyu@eswincomputing.com, linmin@eswincomputing.com,
- pinkesh.vaghela@einfochips.com, luyulin@eswincomputing.com
-References: <20260430064107.1598-1-hehuan1@eswincomputing.com>
- <20260430064444.1615-1-hehuan1@eswincomputing.com>
- <20260503-brave-bullfinch-of-innovation-942914@quoll>
- <4339b90a.6169.19e1b798c90.Coremail.hehuan1@eswincomputing.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAmgrMyQFCSbODQkACgkQyx8mb86fmYGcWRAA
- oRwrk7V8fULqnGGpBIjp7pvR187Yzx+lhMGUHuM5H56TFEqeVwCMLWB2x1YRolYbY4MEFlQg
- VUFcfeW0OknSr1s6wtrtQm0gdkolM8OcCL9ptTHOg1mmXa4YpW8QJiL0AVtbpE9BroeWGl9v
- 2TGILPm9mVp+GmMQgkNeCS7Jonq5f5pDUGumAMguWzMFEg+Imt9wr2YA7aGen7KPSqJeQPpj
- onPKhu7O/KJKkuC50ylxizHzmGx+IUSmOZxN950pZUFvVZH9CwhAAl+NYUtcF5ry/uSYG2U7
- DCvpzqOryJRemKN63qt1bjF6cltsXwxjKOw6CvdjJYA3n6xCWLuJ6yk6CAy1Ukh545NhgBAs
- rGGVkl6TUBi0ixL3EF3RWLa9IMDcHN32r7OBhw6vbul8HqyTFZWY2ksTvlTl+qG3zV6AJuzT
- WdXmbcKN+TdhO5XlxVlbZoCm7ViBj1+PvIFQZCnLAhqSd/DJlhaq8fFXx1dCUPgQDcD+wo65
- qulV/NijfU8bzFfEPgYP/3LP+BSAyFs33y/mdP8kbMxSCjnLEhimQMrSSo/To1Gxp5C97fw5
- 3m1CaMILGKCmfI1B8iA8zd8ib7t1Rg0qCwcAnvsM36SkrID32GfFbv873bNskJCHAISK3Xkz
- qo7IYZmjk/IJGbsiGzxUhvicwkgKE9r7a1rOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAmgrMyQFCSbODQkACgkQyx8mb86fmYHlgg/9
- H5JeDmB4jsreE9Bn621wZk7NMzxy9STxiVKSh8Mq4pb+IDu1RU2iLyetCY1TiJlcxnE362kj
- njrfAdqyPteHM+LU59NtEbGwrfcXdQoh4XdMuPA5ADetPLma3YiRa3VsVkLwpnR7ilgwQw6u
- dycEaOxQ7LUXCs0JaGVVP25Z2hMkHBwx6BlW6EZLNgzGI2rswSZ7SKcsBd1IRHVf0miwIFYy
- j/UEfAFNW+tbtKPNn3xZTLs3quQN7GdYLh+J0XxITpBZaFOpwEKV+VS36pSLnNl0T5wm0E/y
- scPJ0OVY7ly5Vm1nnoH4licaU5Y1nSkFR/j2douI5P7Cj687WuNMC6CcFd6j72kRfxklOqXw
- zvy+2NEcXyziiLXp84130yxAKXfluax9sZhhrhKT6VrD45S6N3HxJpXQ/RY/EX35neH2/F7B
- RgSloce2+zWfpELyS1qRkCUTt1tlGV2p+y2BPfXzrHn2vxvbhEn1QpQ6t+85FKN8YEhJEygJ
- F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
- FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <4339b90a.6169.19e1b798c90.Coremail.hehuan1@eswincomputing.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 5/12/26 02:16, Huan He wrote:
-> Hi Krzysztof,
-> 
-> Thank you very much for your detailed review. We appreciate the feedback.
-> 
->> On Thu, Apr 30, 2026 at 02:44:44PM +0800, hehuan1@eswincomputing.com wrote:
->>> +
->>> +  label:
->>> +    enum:
->>> +      - pvt0
->>> +      - pvt1
->>
->> No, label is user-visible name. Can be whatever user decides.
->>
->> Please read writing bindings - instance IDs are not allowed.
-> 
-> Thanks for the clarification.
-> I am planning to update the next revision as follows. Would this be
-> acceptable?
-> 
-> YAML:
-> -  label:
-> -    enum:
-> -      - pvt0
-> -      - pvt1
-> +  label: true
-> 
-> required:
->    - compatible
->    - reg
->    - clocks
->    - interrupts
-> - - label
-> 
-> Driver:
->   static int eic7700_pvt_create_hwmon(struct pvt_hwmon *pvt)
->   {
-> -   struct device *dev = pvt->dev;
-> -   struct device_node *np = dev->of_node;
-> -   const char *node_label;
-> -   int type;
-> -   const char *names[2] = {"soc_pvt", "ddr_pvt"};
-> -
-> -   if (of_property_read_string(np, "label", &node_label)) {
-> -       dev_err(dev, "Missing 'label' property in DTS node\n");
-> -       return -EINVAL;
-> -   }
-> -
-> -   if (strcmp(node_label, "pvt0") == 0) {
-> -       type = 0;
-> -   } else if (strcmp(node_label, "pvt1") == 0) {
-> -       type = 1;
-> -   } else {
-> -       dev_err(pvt->dev, "Unsupported label: %s\n", node_label);
-> -       return -EINVAL;
-> -   }
-> +   const char *name = "pvt";
-> +
-> +   of_property_read_string(pvt->dev->of_node, "label", &name);
->   
-> -   pvt->hwmon = devm_hwmon_device_register_with_info(pvt->dev, names[type],
-> +   pvt->hwmon = devm_hwmon_device_register_with_info(pvt->dev, name,
->                                pvt, &pvt_hwmon_info,
->                                NULL);
-> 
+Add a minimal Rust abstraction for the Hardware Monitoring (hwmon)
+subsystem.
 
-This would try to register a free-text name for the hwmon device,
-which would be unacceptable.
+Currently, this abstraction supports a Minimum Viable Product (MVP) scope:
+registering a single temperature sensor with the read-only `temp1_input`
+attribute. Support for multi-channel, additional sensor types, and
+writable attributes is deferred to future patches to keep this initial
+foundation reviewable.
 
-There are lots of multi-channel devices out there. None of them
-have those problems. Why do you insist in free-text names instead of
-using, say, "reg" to distinguish the channels ?
+The primary architectural challenge in wrapping hwmon is initializing
+`struct hwmon_chip_info`, which requires stable, self-referential
+pointers to nested NULL-terminated arrays. Instead of relying on complex
+macro generation for static allocation, this implementation leverages
+a single heap allocation (`KBox`). It safely wires the self-referential
+raw pointers using unaliased `&raw mut` during the allocation's
+exclusive ownership phase, and then securely seals it by pinning
+(`Pin::new_unchecked`).
 
-Guenter
+For resource management, this implementation uses standard Rust RAII
+(calling `hwmon_device_unregister` in `Drop`) rather than `devm_`
+variants, ensuring natural drop ordering and avoiding complex C-side
+trampolines for generic types.
 
->>
->>> +
->>> +  resets:
->>> +    maxItems: 1
->>> +
->>> +  '#thermal-sensor-cells':
->>> +    const: 0
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +  - clocks
->>> +  - interrupts
->>> +  - label
->>> +  - resets
->>> +
->>> +unevaluatedProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +    pvt@50b00000 {
->>
->>
->> Node names should be generic. See also an explanation and list of
->> examples (not exhaustive) in DT specification:
->> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
->> If you cannot find a name matching your device, please check in kernel
->> sources for similar cases or you can grow the spec (via pull request to
->> DT spec repo).
-> 
-> I will update the example node name from "pvt@..." to the generic
-> "sensor@...". Is this acceptable?
-> 
-> Best regards,
-> Huan He
+Signed-off-by: Donjuanplatinum <donplat@barrensea.org>
+---
+ rust/bindings/bindings_helper.h   |   1 +
+ rust/kernel/hwmon.rs              | 249 ++++++++++++++++++++++++++++++
+ rust/kernel/lib.rs                |   2 +
+ samples/rust/Kconfig              |  11 ++
+ samples/rust/Makefile             |   1 +
+ samples/rust/rust_driver_hwmon.rs |  50 ++++++
+ 6 files changed, 314 insertions(+)
+ create mode 100644 rust/kernel/hwmon.rs
+ create mode 100644 samples/rust/rust_driver_hwmon.rs
+
+diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
+index 446dbeaf0..e08e9181d 100644
+--- a/rust/bindings/bindings_helper.h
++++ b/rust/bindings/bindings_helper.h
+@@ -60,6 +60,7 @@
+ #include <linux/file.h>
+ #include <linux/firmware.h>
+ #include <linux/fs.h>
++#include <linux/hwmon.h>
+ #include <linux/i2c.h>
+ #include <linux/interrupt.h>
+ #include <linux/io-pgtable.h>
+diff --git a/rust/kernel/hwmon.rs b/rust/kernel/hwmon.rs
+new file mode 100644
+index 000000000..5697a1a0d
+--- /dev/null
++++ b/rust/kernel/hwmon.rs
+@@ -0,0 +1,249 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! Hardware Monitoring (Hwmon) abstractions.
++//!
++//! C header: [`include/linux/hwmon.h`](srctree/include/linux/hwmon.h)
++//!
++//! Currently, this abstraction supports registering a single temperature sensor with the
++//! `temp1_input` attribute (read-only). Multi-channel support, additional sensor types (fan,
++//! voltage, etc.), and writable attributes will be added in follow-up patches.
++
++use crate::{
++    bindings,
++    device::Device,
++    error::{from_err_ptr, from_result, Result},
++    prelude::*,
++    str::CStr,
++};
++
++use core::marker::{PhantomData, PhantomPinned};
++
++/// Sensor type.
++#[derive(Copy, Clone, Debug, PartialEq, Eq)]
++pub enum SensorType {
++    /// Temperature sensor.
++    Temp,
++}
++
++impl TryFrom<u32> for SensorType {
++    type Error = Error;
++
++    fn try_from(value: u32) -> Result<Self> {
++        match value {
++            bindings::hwmon_sensor_types_hwmon_temp => Ok(Self::Temp),
++            _ => Err(EINVAL),
++        }
++    }
++}
++
++/// Temperature attribute.
++#[derive(Copy, Clone, Debug, PartialEq, Eq)]
++pub enum TempAttr {
++    /// Temperature input value, in millidegrees Celsius.
++    Input,
++}
++
++impl TryFrom<u32> for TempAttr {
++    type Error = Error;
++
++    fn try_from(value: u32) -> Result<Self> {
++        match value {
++            bindings::hwmon_temp_attributes_hwmon_temp_input => Ok(Self::Input),
++            _ => Err(ENOTSUPP),
++        }
++    }
++}
++
++const HWMON_T_INPUT: u32 = 1u32 << bindings::hwmon_temp_attributes_hwmon_temp_input;
++
++/// The hwmon driver trait.
++#[vtable]
++pub trait Driver: Send + Sync {
++    /// Reads a sensor value.
++    fn read(&self, sensor: SensorType, attr: u32, channel: u32) -> Result<crate::ffi::c_long>;
++
++    /// Returns the sysfs file permission bits for a sensor attribute.
++    fn is_visible(&self, sensor: SensorType, attr: u32, channel: u32) -> u16;
++}
++
++/// Adapter translating C hwmon callbacks to [`Driver`] trait method calls.
++struct Adapter<T: Driver> {
++    _p: PhantomData<T>,
++}
++
++impl<T: Driver> Adapter<T> {
++    /// # Safety
++    ///
++    /// Called by the hwmon core during and after registration with the `drvdata`
++    /// pointer set in `hwmon_device_register_with_info`. The pointer remains valid
++    /// until `hwmon_device_unregister` returns in [`Registration`]'s `Drop`.
++    unsafe extern "C" fn is_visible_callback(
++        drvdata: *const core::ffi::c_void,
++        type_: u32,
++        attr: u32,
++        channel: crate::ffi::c_int,
++    ) -> u16 {
++        if drvdata.is_null() {
++            return 0;
++        }
++        // SAFETY: `drvdata` is `inner_ptr` set in `Registration::new`. The
++        // hwmon core's barrier in `hwmon_device_unregister` ensures this
++        // pointer is valid for the lifetime of any callback invocation.
++        let inner = unsafe { &*drvdata.cast::<HwmonInner<T>>() };
++
++        let sensor = match SensorType::try_from(type_) {
++            Ok(s) => s,
++            Err(_) => return 0,
++        };
++
++        // C core guarantees `channel >= 0`.
++        T::is_visible(&inner.driver, sensor, attr, channel as u32)
++    }
++
++    /// # Safety
++    ///
++    /// Called by the hwmon core. `dev` is the device created during registration, and `val`
++    /// points to writable memory for the result.
++    unsafe extern "C" fn read_callback(
++        dev: *mut bindings::device,
++        type_: u32,
++        attr: u32,
++        channel: crate::ffi::c_int,
++        val: *mut crate::ffi::c_long,
++    ) -> crate::ffi::c_int {
++        from_result(|| {
++            // SAFETY: `dev_get_drvdata` returns the pointer set during registration, valid
++            // until `hwmon_device_unregister` completes.
++            let drvdata = unsafe { bindings::dev_get_drvdata(dev) };
++            if drvdata.is_null() {
++                return Err(EINVAL);
++            }
++            let inner = unsafe { &*drvdata.cast::<HwmonInner<T>>() };
++
++            let sensor = SensorType::try_from(type_)?;
++            // C core guarantees `channel >= 0`.
++            let result = T::read(&inner.driver, sensor, attr, channel as u32)?;
++
++            // SAFETY: `val` is provided by the hwmon core and points to a valid `long`.
++            unsafe { *val = result };
++            Ok(0)
++        })
++    }
++}
++
++/// Container holding the driver and all C structures for hwmon registration.
++struct HwmonInner<T: Driver> {
++    driver: T,
++    ops: bindings::hwmon_ops,
++    temp_config: [u32; 2],
++    temp_channel: bindings::hwmon_channel_info,
++    channel_info_array: [*const bindings::hwmon_channel_info; 2],
++    chip_info: bindings::hwmon_chip_info,
++    _pin: PhantomPinned,
++}
++
++impl<T: Driver> HwmonInner<T> {
++    /// Returns a placeholder with all pointer fields set to null. The returned structure is
++    /// safe to drop — no dynamic resources are held before registration completes.
++    fn new_placeholder(driver: T) -> Self {
++        Self {
++            driver,
++            ops: bindings::hwmon_ops {
++                is_visible: Some(Adapter::<T>::is_visible_callback),
++                visible: 0,
++                read: Some(Adapter::<T>::read_callback),
++                read_string: None,
++                write: None,
++            },
++            temp_config: [0; 2],
++            temp_channel: bindings::hwmon_channel_info {
++                type_: 0,
++                config: core::ptr::null(),
++            },
++            channel_info_array: [core::ptr::null(), core::ptr::null()],
++            chip_info: bindings::hwmon_chip_info {
++                ops: core::ptr::null(),
++                info: core::ptr::null(),
++            },
++            _pin: PhantomPinned,
++        }
++    }
++}
++
++/// A registered hwmon device.
++pub struct Registration<T: Driver> {
++    hwmon_dev: *mut bindings::device,
++    // Held exclusively for drop ordering: keeps `HwmonInner<T>` alive until
++    // `hwmon_device_unregister` returns. The value is never read.
++    #[expect(dead_code)]
++    inner: Pin<KBox<HwmonInner<T>>>,
++}
++
++impl<T: Driver> Registration<T> {
++    /// Registers a new hwmon device.
++    ///
++    /// The device is registered as a child of `parent`. `name` must not contain characters
++    /// rejected by `hwmon_is_bad_char` (hyphens, spaces, asterisks).
++    pub fn new(parent: &Device, name: &CStr, data: T) -> Result<Self> {
++        let mut boxed = KBox::new(HwmonInner::new_placeholder(data), GFP_KERNEL)?;
++
++        // Wire self-referential pointers before pinning. We obtain a mutable raw pointer
++        // from the uniquely-owned `KBox` — no intermediate `&mut` reference is created,
++        // so no aliasing rules are violated.
++        //
++        // SAFETY: `boxed` is exclusively owned. We write only to C-struct fields meant
++        // for one-time initialization, never to `driver`.
++        let inner_ptr: *mut HwmonInner<T> = &raw mut *boxed;
++        unsafe {
++            (*inner_ptr).temp_config = [HWMON_T_INPUT, 0];
++            (*inner_ptr).temp_channel = bindings::hwmon_channel_info {
++                type_: bindings::hwmon_sensor_types_hwmon_temp,
++                config: (*inner_ptr).temp_config.as_ptr(),
++            };
++            (*inner_ptr).channel_info_array =
++                [&raw const (*inner_ptr).temp_channel, core::ptr::null()];
++            (*inner_ptr).chip_info = bindings::hwmon_chip_info {
++                ops: &raw const (*inner_ptr).ops,
++                info: (*inner_ptr).channel_info_array.as_ptr(),
++            };
++        }
++
++        // SAFETY: `HwmonInner<T>` is `!Unpin` (via `PhantomPinned`). All self-referential
++        // pointers are now set to their final values. The struct will never be moved.
++        let inner = unsafe { Pin::new_unchecked(boxed) };
++
++        let drvdata: *mut core::ffi::c_void = inner_ptr.cast();
++
++        // SAFETY: `chip_info` and all nested pointers target memory within the same
++        // allocation, which remains valid until `hwmon_device_unregister` in `Drop`.
++        // `parent.as_raw()` and `name.as_char_ptr()` are valid. The name is copied by
++        // the kernel (via `dev_set_name` → `kvasprintf_const`), so no lifetime issue.
++        let hwmon_dev = from_err_ptr(unsafe {
++            bindings::hwmon_device_register_with_info(
++                parent.as_raw(),
++                name.as_char_ptr(),
++                drvdata,
++                &raw const (*inner_ptr).chip_info,
++                core::ptr::null_mut(),
++            )
++        })?;
++
++        Ok(Self { hwmon_dev, inner })
++    }
++}
++
++impl<T: Driver> Drop for Registration<T> {
++    fn drop(&mut self) {
++        // SAFETY: `hwmon_dev` was returned by a successful registration. This call waits for
++        // all in-flight callbacks before returning.
++        unsafe { bindings::hwmon_device_unregister(self.hwmon_dev) };
++    }
++}
++
++// SAFETY: `T: Driver` requires `T: Send`. `Pin<KBox<HwmonInner<T>>>` is `Send` when `T: Send`.
++unsafe impl<T: Driver> Send for Registration<T> {}
++
++// SAFETY: `T: Driver` requires `T: Sync`, which makes `HwmonInner<T>: Sync`, and therefore
++// `Pin<KBox<HwmonInner<T>>>: Sync`. `Registration` has no public methods that could cause
++// data races through shared references.
++unsafe impl<T: Driver> Sync for Registration<T> {}
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index b72b2fbe0..0ff9d6e6e 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -74,6 +74,8 @@
+ pub mod fs;
+ #[cfg(CONFIG_GPU_BUDDY = "y")]
+ pub mod gpu;
++#[cfg(CONFIG_HWMON = "y")]
++pub mod hwmon;
+ #[cfg(CONFIG_I2C = "y")]
+ pub mod i2c;
+ pub mod id_pool;
+diff --git a/samples/rust/Kconfig b/samples/rust/Kconfig
+index c49ab9106..d306b681c 100644
+--- a/samples/rust/Kconfig
++++ b/samples/rust/Kconfig
+@@ -161,6 +161,17 @@ config SAMPLE_RUST_DRIVER_AUXILIARY
+ 
+ 	  If unsure, say N.
+ 
++config SAMPLE_RUST_HWMON
++	tristate "Hwmon Driver"
++	depends on HWMON=y
++	help
++	  This option builds the Rust hwmon driver sample.
++
++	  To compile this as a module, choose M here:
++	  the module will be called rust_driver_hwmon.
++
++	  If unsure, say N.
++
+ config SAMPLE_RUST_SOC
+ 	tristate "SoC Driver"
+ 	select SOC_BUS
+diff --git a/samples/rust/Makefile b/samples/rust/Makefile
+index 6c0aaa58c..0109d7a8d 100644
+--- a/samples/rust/Makefile
++++ b/samples/rust/Makefile
+@@ -15,6 +15,7 @@ obj-$(CONFIG_SAMPLE_RUST_DRIVER_USB)		+= rust_driver_usb.o
+ obj-$(CONFIG_SAMPLE_RUST_DRIVER_FAUX)		+= rust_driver_faux.o
+ obj-$(CONFIG_SAMPLE_RUST_DRIVER_AUXILIARY)	+= rust_driver_auxiliary.o
+ obj-$(CONFIG_SAMPLE_RUST_CONFIGFS)		+= rust_configfs.o
++obj-$(CONFIG_SAMPLE_RUST_HWMON)			+= rust_driver_hwmon.o
+ obj-$(CONFIG_SAMPLE_RUST_SOC)			+= rust_soc.o
+ 
+ rust_print-y := rust_print_main.o rust_print_events.o
+diff --git a/samples/rust/rust_driver_hwmon.rs b/samples/rust/rust_driver_hwmon.rs
+new file mode 100644
+index 000000000..3362de924
+--- /dev/null
++++ b/samples/rust/rust_driver_hwmon.rs
+@@ -0,0 +1,50 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++//! Rust hwmon device sample.
++
++use kernel::{faux, hwmon, prelude::*};
++
++module! {
++    type: SampleModule,
++    name: "rust_hwmon_driver",
++    authors: ["DonjuanPlatium"],
++    description: "Rust hwmon device sample",
++    license: "GPL",
++}
++
++struct SampleHwmon;
++
++#[vtable]
++impl hwmon::Driver for SampleHwmon {
++    fn read(&self, _sensor: hwmon::SensorType, _attr: u32, _channel: u32) -> Result<c_long> {
++        // Always return 25°C.
++        Ok(25000)
++    }
++
++    fn is_visible(&self, _sensor: hwmon::SensorType, _attr: u32, _channel: u32) -> u16 {
++        // All declared attributes are world-readable.
++        0o444
++    }
++}
++
++struct SampleModule {
++    _hwmon: hwmon::Registration<SampleHwmon>,
++    _faux: faux::Registration,
++}
++
++impl kernel::Module for SampleModule {
++    fn init(_module: &'static ThisModule) -> Result<Self> {
++        pr_info!("Initialising Rust Hwmon Sample\n");
++
++        let faux = faux::Registration::new(c"rust-hwmon-sample-device", None)?;
++
++        let hwmon = hwmon::Registration::new(faux.as_ref(), c"sample", SampleHwmon)?;
++
++        pr_info!("Registered hwmon device\n");
++
++        Ok(Self {
++            _hwmon: hwmon,
++            _faux: faux,
++        })
++    }
++}
+-- 
+2.53.0
 
