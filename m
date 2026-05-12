@@ -1,206 +1,197 @@
-Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010002.outbound.protection.outlook.com [52.101.61.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF531395AC6;
-	Tue, 12 May 2026 11:35:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.2
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778585732; cv=fail; b=CTkWhzTElUc4p2wsM0GI/yMcNAa/txdCE8YPbX90KGNFYuqDEu3gULFwxlxRcvSky+6VX/y0w1NkEGPkFQ6f51hM+PyTnIrZXUhu/ST5Zd/tpuaPJjY76lY3bTDG+r9Cu16AmJLmW0BEx8uvVLEyPBXUJTGL2R3L8/m3pTh8ufk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778585732; c=relaxed/simple;
-	bh=TknMzeREQ/l8HJL8wJDwbMIhRzF8jX0s0BFD4lk8wWg=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=i2lyoXOtsn94YsqPwfxf0LABc79V0EDcbdHJfnnOpavix5URaRyzCD1gkrakp2W8ikrvO9rIjubZdyYEhh8tyujnTbp6C5xvhtB3lohHYg9NbL2V2ZoqV6+AUbqyG8m1a2QWnK60uRn4HvcjDdiC9933tGgvR0aKWv07KIhV/8g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Pt7Bl1QB; arc=fail smtp.client-ip=52.101.61.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39EF039AD5B
+	for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 13:55:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778594122; cv=none; b=fGgzHnSRUfIOAuDThdxtVdsj7gVW6zm2Y8JRErhNXoabnU0gOtXACBCAI2BMpnp9u54aGRKn5CNk4+HWUG/v02A/pvjPypJwmPNh8NmlFMJjz7jWQs4IzFVZ/9KO7nmiLtCleZGeeFLRiOpZIb5ggNrHbjgloygrqkIoH6rN4V0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778594122; c=relaxed/simple;
+	bh=WV0Jj2uYN+LDi0YrhfsM1rMAqeYq5r16T4MRZ5bboCs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Z+jRFFl/bJznV9rdfrs4iQ2NlbS9TUFtoI/21pEhefH3BJcqPN2ofZIiS+aRlxDB3CZi/fqcut/S3Owx/xma9PspnjzHLqwg8pAn63tdluc7M+chUBmEdaw1dYGl5dJ/QHfa6UB5CDNqgEOxQBmmvCbnWXG598Yiaxw8G+EKaN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qZpUF04b; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Pt7Bl1QB"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=h96MYrhGKYI7M+C1gr5rVmbhgFlaM0O4EL0UKXoSq9n8fmjEVmW2Nck1FfPCuwe/265LdMlFScxeHBKs1YRzjI21lWmLJ4h83K5AWD2U8ps763kz1wyIkiXiEmy7WpCmO/nYWXj/Wl216iMto/LmQzTdY74T8UVaXZF5ljTIh2Vm3e2UOnENkhLewrLBN3A98q11de6YaGqrsBRa9xe06N63fy7SKMcu6j2MvQfmbIjapyVgeJVK6BkLA88VuqZmpNjRxVDT+WFivoPiPCxc9DWhdukUu41PUiLA/kbREc0xDtbNlu7GUWORs3Rbjff4IbhfMfgnZKqyhq8ZZkc5Tg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rE8sZaYo/iYhAsvs5Qna6D6hYEc0XCHal9Cr/dbNV2U=;
- b=FWi3hVxxL+sVxKTSAxs9bnycdvs+kfrLkzBCQZ6VvVtLjoRndpeLVK8YMLlxJS5B+Q4WpY6bfZlHfXpUqy4MQ7JhSNmjaS8xm+QTUvdAjWGT9CL6dWWrsgYiBJ9vOnZAm/90INPrtWWngfxWPqkb/DvFqmq8ZTf3L0vqbMlm63ySh0n5BDGRKbMJjdTUnRQSN/8mHq2n77XnX/R50hyhJnCJoLXfun0Qzv2OBrF9TKwaE+NPcyMXosmoVcCgEGRgliEHJh/SJS1gxz9Jkvv/IAiAz/C97AmtzNveEqS+BDa97yCIOoSz9iyhfUMFPBgnFTG7Np632XgZzWK13pnzPw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rE8sZaYo/iYhAsvs5Qna6D6hYEc0XCHal9Cr/dbNV2U=;
- b=Pt7Bl1QBt2+5Knh5QHG+ldz6mM8Ugu71USlbCNtbGIIx8OUdpeu9/nWQASBnj1WpDouxZTb80Jzqo1Y3Fmt5YuvOX7cVPYmOG01UaMANxJoRA5rituuHHOiXLmXlyl/p+5Vsucx6aKBBmCQMt+cVE67W7rCDerF1sZlabxEVqNY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from IA1PR12MB7736.namprd12.prod.outlook.com (2603:10b6:208:420::15)
- by MN0PR12MB5809.namprd12.prod.outlook.com (2603:10b6:208:375::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.23; Tue, 12 May
- 2026 11:35:26 +0000
-Received: from IA1PR12MB7736.namprd12.prod.outlook.com
- ([fe80::2274:9fed:8f3:8550]) by IA1PR12MB7736.namprd12.prod.outlook.com
- ([fe80::2274:9fed:8f3:8550%6]) with mapi id 15.20.9891.021; Tue, 12 May 2026
- 11:35:26 +0000
-Message-ID: <ec5634b3-2f17-42b6-8bfb-124ac0c7cde8@amd.com>
-Date: Tue, 12 May 2026 12:35:21 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/5] iio: adc: add Versal SysMon driver
-To: Guenter Roeck <linux@roeck-us.net>, Jonathan Cameron <jic23@kernel.org>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, git@amd.com,
- nuno.sa@analog.com, andy@kernel.org, dlechner@baylibre.com,
- michal.simek@amd.com, conall.ogriofa@amd.com, erimsalih@gmail.com,
- linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20260502111951.538488-1-salih.erim@amd.com>
- <20260502111951.538488-3-salih.erim@amd.com>
- <20260504183215.37c8ae65@jic23-huawei>
- <66268e35-4897-4c40-b358-1c973b70426b@roeck-us.net>
-Content-Language: en-US
-From: Salih Erim <salih.erim@amd.com>
-In-Reply-To: <66268e35-4897-4c40-b358-1c973b70426b@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO2P123CA0091.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:139::6) To IA1PR12MB7736.namprd12.prod.outlook.com
- (2603:10b6:208:420::15)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qZpUF04b"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ba6485d219so36143755ad.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 06:55:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778594120; x=1779198920; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=i1vAUH1Xc/CeVIjxxykjK48OMEfxWKrZOx+2D03GO68=;
+        b=qZpUF04bprIBOxcElXaccYIqaLLfNrE/lUzX4vGgcInwVh4TEOozBhJqX3x1lOUTs0
+         AjB7Gx9RV+dOicqULXjgSquXy2Dwqos0awvgZRGmICG6Ejh/MmLHJcVy0ncuSVpxBzso
+         BjZ6j6P3oGxagKHmwa+QGPtsEG2bEfc17fUSoNxdsXnwWYUqPCqtSA+c5BHXdqZ7qkko
+         gEufGsD6scYpmTsMunM10Gtbkv6SS8BP/QnO9eIlvJEUmSJS8fiLpOAcLrxnZAlxXptm
+         Fv2Y0LhyJep2zpolpnwX7qv5tF/0Ur8s8sks7DxXMM+1R7F3uq6quStk+SDOs7c/PVQG
+         WPbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778594120; x=1779198920;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=i1vAUH1Xc/CeVIjxxykjK48OMEfxWKrZOx+2D03GO68=;
+        b=pRfUDWsH6FV9OC28G5RSToWdQIzdRbfmdMl1N+cCyjLg7tno87INPV/u1Kk6OTAe1I
+         +DughepmjZcDlGeTHuEZoZHo3gC9a+bXOc4VHYx9+BOLMs3zQQDOuBtBYYfh9Yyw69vU
+         RUMiMnh4L4eFS4VYqUUMELPx5cnoi0HYtn95ORdIw7Z6G+4YPtzKjoaaqX9rfSRoMJJb
+         dqgfnhcyi7aJDHpfurLWIRITvFxnfKqTK2GNL5Eg7GmOzX53LhwlDrQWAHOPKGPjbMFY
+         9/RDGznt7j6FxFJX378uKZv2DBkKCliYGuRlkTqMJCufWl5iqMgGNDLTRK6iRx2fVmDh
+         OmVQ==
+X-Gm-Message-State: AOJu0YyC5Uu01JgjN9tX3yHjwHikJTNRodprAkUlqBirtD1kreBT96YI
+	ml0qKmIx0J7h0TpgPPqocRMc78ck+h29TG/Q69iRV0qkS324NU2iYtfXx2TmjA==
+X-Gm-Gg: Acq92OFBnkGSbMA2A92kB+yyzvDCNzMtKICo3Kkx+TtLiYz7TxXPJz8IGOfjy0pH4h3
+	Q2T9slVNMVO6BTg9v1wz7hhH2mLTmLwVaioVGaMBgXTMjTEsJuZ+BUxFb9ZmvtF6vqYcdV31gyl
+	GFp9VKIc3QrZbEtodfGDbBjoWEFEsxGbPdLsWXyBanlnOgPyu3kVzDk3MlHTarFqGXW7Ffu2e9x
+	JtY+EGRoS1HMZjs7aDOpEMRyTJmy/pgNUOfAm9E4I1GOzXNYhTHhpeW3nb3zlQcRiJyTR3/E7oJ
+	r39oNDF3AmE9QOxOMRrY0lObInVeVoCVUxRUrRkRhlArLx3OL8uAomdwXryLafCrBqr10K+SCLO
+	BmCKEmkkZaz7t5MQTpwfiXrXEFOO6n5lmlXMG5wh/0iYZelfkPX8UwFKOK305S+jKQMzsn3TK0A
+	9eM4vQTlPRXf7EjKyRpDSNmcKKkwdIkbaR+px0lAaqYHv3ChK+I/gTF1L7vUVQOmcmsz83X39Q
+X-Received: by 2002:a17:903:1b10:b0:2b9:f55e:1c1b with SMTP id d9443c01a7336-2ba78f50707mr291111935ad.5.1778594120465;
+        Tue, 12 May 2026 06:55:20 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1e374besm142579725ad.47.2026.05.12.06.55.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 May 2026 06:55:19 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <52651031-9dc4-4c8c-b14c-7c1f645f9af6@roeck-us.net>
+Date: Tue, 12 May 2026 06:55:18 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR12MB7736:EE_|MN0PR12MB5809:EE_
-X-MS-Office365-Filtering-Correlation-Id: e96ccca3-6971-45c0-2329-08deb01a8f7f
-X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|7416014|376014|1800799024|56012099003|22082099003|18002099003|11063799003;
-X-Microsoft-Antispam-Message-Info:
-	lIpkOvQMoJApmuo37bexl6VPKptgdjNGE6g53Io/O7h9nhG6Y6Ijjd91IDRBSA6fvmt9cgIF4hpLJtZjk5H653GXStZAeKBjmzcYWe3Zq7hFOXdsvoAr/ol6bvSwy2SBnP1CCtwF2zxasNyEOmUy4F8M1oWGxJ5Xaw83JPxt3bjK90DrDW/IuaEkJ/6mBBlhZwDg4BKsLtMLFJTlUr4fuA9aCId9DwbclnovVt+pMpvqFyhg4HeD5IcY5x2qUfPhZyzHtSjJuk1BQdi6YPXlH6fhUu5FInqPb84/B7ys5e9IfR3AJS0eiZQ8aAgnE1OERvvisbqYKBR+3LdssU7nRNpJc2jfKKJdTrjWKgvNXvXE6V4vsNLHqbyrDrItNIielmH1PhElNSgz9hK5S9Em0xYZNNakv29GK9fzLRgiN14av/Ish0uYA0XWCZ69VCu5aGX/8dOw5H2m+KZ5AgfWpmmQKX1yrBXeJYw0orJHdxiKPPG+6m0baHveSyrwtxezlpDoK9grBJzUz3P+i0YjmTNfP9D9l/FsfwYVopt8//ySvWIIoNZ37VUWLeTwAoD+C+dwwn68f50dCccGKw9imcksq1kmFnOCUYVFUbIOXtejUbAo7Ayn6eDuscOFAP2OVNRsTGBsXEEaubHn9Hs2Btp/l/E6x0K0LsU+VKtmX4E2mE5a0Vs6N+CEi8TyleYm
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB7736.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(56012099003)(22082099003)(18002099003)(11063799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?blhsMlZ3MHpUSm5DTnYzUUVDMlFESnVqQW1GV2hvUG9FUzhkM3dtRGpGY1Np?=
- =?utf-8?B?Y0dvZ1RTMHJTVzFNSS9PUWZxSTZiOVNmOTAzaWxSaDRubVBUV3QrRGhvakhm?=
- =?utf-8?B?VTlqVWVCMlpUQkJNdSt6VnFtdytVQ21vUHhlOFZ0Tm40SzR5b2Y2bFM0T21h?=
- =?utf-8?B?QkVSOVhFdWd0ZHppd1ZDWTdza2tjY3NSTitOSVk3TzNMUk9xQkhnT3BzSTBx?=
- =?utf-8?B?VFFRL0s5WDY1YzZoN0FMTVp1VFpRY0Q0NTlDZWdScFdPV0hXMnp6bDZ2WkpS?=
- =?utf-8?B?NlU0WU9DOG5LbnJxSHo1d1M3MkVXZW9uMU0wWGFOUEw1ZkhGeUZub0xiNWxB?=
- =?utf-8?B?WitGYmlpVUkzQ2FtQ0lMVUNBMXB3YjZucG5QdjR5MUdTZndRczNiTkRCdCtQ?=
- =?utf-8?B?dERqd3g5aDI0UmV3VlBiMXRCeWpVT1lFMTFzT2FmWldFSU9zb0xQSThMQXlV?=
- =?utf-8?B?Y0ZHcUZHb1dOUTB1YmV5MXRFcDZwM3A2d0lWUnVqMjdXdGdsWXlPbjRBdzdI?=
- =?utf-8?B?NzdoVis0a1liZlJXbEJXczJaOGYrQ0haelM2N1BQSUNyV2ZrVEtWREtLTm5m?=
- =?utf-8?B?MXdpR2c2NldMczcyMjBkdXQ1NDE5VU5Kd3VkSnlzOEl6cDZHeno4eVlCSTRt?=
- =?utf-8?B?dXJMQkVuU1Q5NmxwbGEyUHBFRmhmUDdCRUx5eWxDVVN2ejFEOTJkSnloU25O?=
- =?utf-8?B?dkNYNm52U2xRSzNJcVRuSUx4ZFhJYUpYVzJZcXRmYVJmcTg1VjgyQnEwcnF5?=
- =?utf-8?B?V2VhbXByU21nRXJjYWhYT3hCb1Y1dytpNlhlUm5yelpMUUxZM0lYN0VFc1B1?=
- =?utf-8?B?d2orLzlJOHliSFgwRGwvdHRyb3BiN1NwMFFuV2oxSWtscGxoZU5tUFBNaEQ5?=
- =?utf-8?B?R0xaNVVrNWRyeHQ4U3k1WHk3dWJURzdXTEtEWXJGMlIweW94UjFJaW5tMXVH?=
- =?utf-8?B?bjVOQXBSL0NoTzhTYjlERDduUTYyY0hVU3ZqWEk1ckhoWFpXbHlSZnIrWEVk?=
- =?utf-8?B?WkhyNmNUbTZsZU96emxvcDgrR1VndHpORE1rcUk5dlBoZzNqd29TMk1ZaXhs?=
- =?utf-8?B?eGtmSkNkY005cW1MSnhJL083aytQZHJGQU9VYnNQbU1LOU9JOCtOdUhCZUpm?=
- =?utf-8?B?K1ZaMkhZS2RKdURvRTJMb3hSSWQyQlY4Q29Ta1E5aTRhb2FSVTA0QzhoY0xP?=
- =?utf-8?B?UEZYb0c3bHExaWhrenNHVWE2alk0YkJEVlIrSndYUkhpS0ZoNnE5V2tDRG5v?=
- =?utf-8?B?YnAvRVBmL1Z1RVc4UndBaXlqcHpsYTcvNFNDam9TbjYvQzhzc1I0VFJ1MHdw?=
- =?utf-8?B?Ti9mWWl0RkFiM2tpWjBBd0ZFWG9BeEJJOFQ2a3hPK2JCWlE2Sm8rb3JVTXQw?=
- =?utf-8?B?N3hGYzB6bnhQU0Q5R2RaaW9RVS9VY1N4ODNiV2Z5ck1YNU5sMTJERnZZQU5W?=
- =?utf-8?B?U2VkYm5MS05Va0NvZ0dnT1FKdEJlNWtUYWNQVjVET2Z5MkI5c0dLTFFqVHUv?=
- =?utf-8?B?ZGpKL3BMQWlQVWxuM2JYejJOWEJhTjNpTjd3L3laUCs5czNkQWNzcHBuQ1pR?=
- =?utf-8?B?Y0h2Zkg3Zmd6bzhZbm9TT2MxbkFxUkdhQllWRk1rR2FabW1Dc0s5WU81Y3hM?=
- =?utf-8?B?TkNqMTFwUndaUnpmcW42Z0ZBMDRMWUl5MFBDY0JOVXZCa0lkVHFua0hTRFpm?=
- =?utf-8?B?eHV5dmJDT2sxQ0pNVXJrVEhSSUs0WlJTTHFETGFjRXMzV1RGNkhub0srZTQx?=
- =?utf-8?B?YmlLWHJ3UGRDQTZlYUs5NFNYWEJWK1FSRnlaQ3Y2OWV0NWFQWFVPU2lzWml3?=
- =?utf-8?B?RUJ0Z0pTMEpqaDdKZm1xcmZQdU5DT2hVYU1YZmlaclZKcW9Tdjc4cjBkYnlD?=
- =?utf-8?B?VDNoMXRhVU1mUHB1R0diME5Ea1pzQThscTNtZVkxcW0yaDE4U3JOa3FHMHNX?=
- =?utf-8?B?NWx6T01UeTlUdER3MTZkZmFXZEMzMkJnOTdnYzJQbmVPTkswVlh6ZWhxVGRC?=
- =?utf-8?B?Wm05WGNyZ2kwL0pVeGNyRGdDNkd1Mm52Q3BzTWlOL0N6aW5QZWUvNEFPbm1i?=
- =?utf-8?B?eHB3RjRuMWtFQlB2QlM2YUJBNWN0ZDBhZmVidmtHU3RneFlWRXl1Y0ptQko5?=
- =?utf-8?B?d1lOeFRNSlFkSDdvOXN3WjdUNUZoaWY0SytUcmtPUzdsTk1OTXpidGEzeUlu?=
- =?utf-8?B?MWxNbE9COFpZcnVTK2tCYzAzMWJxcnJHdTEvZzZ6M0FjOTJyWWpNODR0ZW9T?=
- =?utf-8?B?RUdJSFlzK0JSSnpwWXFPVkRoTDEva1N2QUxXVUlDTDhUM21XRGNDbEdxdE9D?=
- =?utf-8?Q?0EztZ2yo+eD6NeSmA8?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e96ccca3-6971-45c0-2329-08deb01a8f7f
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB7736.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2026 11:35:25.9510
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Zrqoq2lq0Tq/yi4aj9pmQoDQNZ9ik37Vze6ywJDDI5Xa6M4eSWBnqKP5qZjHVjFg
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5809
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND v2 2/5] hwmon: (pmbus/adm1266) add clear_blackbox
+ debugfs entry
+To: Abdurrahman Hussain <abdurrahman@nexthop.ai>, sashiko@lists.linux.dev
+Cc: linux-hwmon@vger.kernel.org, Guenter Roeck <groeck7@gmail.com>
+References: <20260511-adm1266-v2-2-7a6d34f0de5d@nexthop.ai>
+ <20260512005252.763EAC2BCB0@smtp.kernel.org>
+ <DIGK0X9I3A0U.2A2QP1GD1983O@nexthop.ai>
+ <eaf93149-a7cf-4a11-8ccc-8aa1b1e83b7e@roeck-us.net>
+ <DIGMFKP4POUI.2ZTJ4UM3GJW02@nexthop.ai>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <DIGMFKP4POUI.2ZTJ4UM3GJW02@nexthop.ai>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Guenter and Jonathan,
-
-On 5/4/2026 8:26 PM, Guenter Roeck wrote:
-> 
-> 
-> On 5/4/26 10:32, Jonathan Cameron wrote:
->> On Sat, 2 May 2026 12:19:48 +0100
->> Salih Erim <salih.erim@amd.com> wrote:
->>
->>> Add the AMD/Xilinx Versal System Monitor (SysMon) IIO driver.
+On 5/12/26 03:20, Abdurrahman Hussain wrote:
+> On Tue May 12, 2026 at 2:19 AM PDT, Guenter Roeck wrote:
+>> On 5/12/26 01:27, Abdurrahman Hussain wrote:
+>>> On Mon May 11, 2026 at 5:52 PM PDT, sashiko-bot wrote:
+>>>> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+>>>> - [High] The debugfs write handler `adm1266_clear_blackbox_write` performs an I2C transaction without acquiring the required hardware monitoring locks, violating hwmon subsystem guidelines.
+>>>> --
+>>>>
+>>>> commit ab9c19373562d58415e28511b037545cfd278c2a
+>>>> Author: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+>>>> Subject: hwmon: (pmbus/adm1266) add clear_blackbox debugfs entry
+>>>>
+>>>> This commit adds a debugfs entry to clear the ADM1266 blackbox buffer by
+>>>> issuing a block-write command to the device. This is needed when the
+>>>> device operates in single-recording mode to preserve fault history.
+>>>>
+>>>>> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
+>>>>> index 7b8433226176f..31aefa8fc75f5 100644
+>>>>> --- a/drivers/hwmon/pmbus/adm1266.c
+>>>>> +++ b/drivers/hwmon/pmbus/adm1266.c
+>>>>
+>>>> [ ... ]
+>>>>
+>>>>> +static ssize_t adm1266_clear_blackbox_write(struct file *file, const char __user *ubuf,
+>>>>> +					    size_t count, loff_t *ppos)
+>>>>> +{
+>>>>> +	struct i2c_client *client = file->private_data;
+>>>>> +	u8 payload[2] = { 0xFE, 0x00 };
+>>>>> +	int ret;
+>>>>> +
+>>>>> +	ret = i2c_smbus_write_block_data(client, ADM1266_READ_BLACKBOX,
+>>>>> +					 sizeof(payload), payload);
+>>>>
+>>>> Does this I2C block write need to be protected by hwmon_lock() and
+>>>> hwmon_unlock()?
+>>>>
+>>>> The hardware monitoring subsystem guidelines require drivers to implement
+>>>> locking for attributes registered outside of the core registration functions,
+>>>> such as debugfs entries.
+>>>>
+>>>> Without these locks, could this write operation race with other multi-record
+>>>> transactions? For example, if this clear command is interleaved while
+>>>> adm1266_nvmem_read_blackbox() is iterating through multiple records, might
+>>>> it corrupt the read sequence?
+>>>>
+>>>>> +	if (ret < 0)
+>>>>> +		return ret;
+>>>>> +
+>>>>> +	return count;
+>>>>> +}
 >>>
->>> The driver is split into a bus-agnostic core module
->>> (versal-sysmon-core) and a memory-mapped I/O platform driver
->>> (versal-sysmon). The core uses the regmap API so that different
->>> bus implementations can share the same IIO logic.
+>>> Good catch!
 >>>
->>> The core provides:
->>>    - Static temperature channels (current max/min, peak max/min)
->>>    - Supply voltage channels parsed from DT container nodes
->>>    - Temperature satellite channels parsed from DT container nodes
->>>    - read_raw for IIO_CHAN_INFO_RAW and IIO_CHAN_INFO_PROCESSED
->>>    - read_label using the DT label property
+>>> Will use pmbus_lock_interruptible() in v3.
+>>>
 >>
->> Various comments inline.  One thing to check.
->> Is this one strictly a hardware monitoring device? Or does it
->> get used for more general ADC purposes?  Did you consider an HWMON driver
->> for it? The above sounds a lot like hwmon. So why IIO for this one?
->>
->> I wasn't awake enough on v1 to raise this!  Sorry about that.
->> +CC Guenter and linux-hwmon for that discussion.
->>
+>> There is also "guard(pmbus_lock)(client);" or "scoped_guard(pmbus_lock, client) { ... }".
+>> Guenter
 > 
-> This very much sounds like a hardware monitoring device to me.
-
-The device is indeed used for hardware monitoring, but the hardware
-characteristics push it towards IIO:
-
-- The predecessor (Zynq UltraScale+ AMS, xilinx-ams.c) is already
-   in drivers/iio/adc/ upstream. This driver is the direct successor
-   for the Versal generation.
-
-- The supply voltage encoding is a modified floating-point format
-   with per-register exponent and format bits. This non-linear
-   encoding doesn't map well to hwmon's linear in*_input model.
-
-- The device has configurable threshold events with per-channel
-   alarm registers, hysteresis bits, and level-sensitive interrupt
-   masking/unmasking -- which maps directly to the IIO event
-   infrastructure.
-
-- Oversampling is hardware-configurable per channel type with
-   per-channel averaging enable registers.
-
-- Up to 160 voltage and 64 temperature channels are dynamically
-   configured from DT, which fits IIO's dynamic channel model
-   better than hwmon's compile-time attribute groups.
-
-- The follow-up thermal driver uses the IIO consumer API
-   (iio_channel_read) to aggregate temperature data across
-   multiple satellites into thermal zones. The iio-hwmon bridge
-   then exposes the same data to hwmon userspace.
-
-So the architecture is: IIO driver (provider) -> iio-hwmon bridge
-(hwmon exposure) + IIO consumer (thermal zones). This gives both
-hwmon and thermal framework access through a single IIO provider.
-> 
-> Guenter
+> Thanks for the tip! Does that mean you're ok with losing the
+> interruptibility, since there's no DEFINE_GUARD_COND for interruptible
+> variant?
 > 
 
-Salih.
+Yes. If anything, I'd like to drop the _interruptible variant entirely.
+I only keep it for historic reasons.
+
+Guenter
+
