@@ -1,66 +1,67 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39EF039AD5B
-	for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 13:55:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A163B1036
+	for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 14:26:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778594122; cv=none; b=fGgzHnSRUfIOAuDThdxtVdsj7gVW6zm2Y8JRErhNXoabnU0gOtXACBCAI2BMpnp9u54aGRKn5CNk4+HWUG/v02A/pvjPypJwmPNh8NmlFMJjz7jWQs4IzFVZ/9KO7nmiLtCleZGeeFLRiOpZIb5ggNrHbjgloygrqkIoH6rN4V0=
+	t=1778596017; cv=none; b=XkiMMlyjHzryTIsp8rTbSxaxiowP/WnZfzv2v1FVae0v0jvAiFeSgQMC6y2stxbmZvroG5qx0SY/RQ4TtZ/R1JrDECldV2mnxaKxvzUaL7Qyr8IwbwKOtkjQOg0yWpkvGxYlIO3dKV60cOORKblPHvOAdAn20z3tcc1uxJNepdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778594122; c=relaxed/simple;
-	bh=WV0Jj2uYN+LDi0YrhfsM1rMAqeYq5r16T4MRZ5bboCs=;
+	s=arc-20240116; t=1778596017; c=relaxed/simple;
+	bh=LHxGHDQg0A8g0ZoFxTIcO/DG9cbc9wUb2DfSBybA7C8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Z+jRFFl/bJznV9rdfrs4iQ2NlbS9TUFtoI/21pEhefH3BJcqPN2ofZIiS+aRlxDB3CZi/fqcut/S3Owx/xma9PspnjzHLqwg8pAn63tdluc7M+chUBmEdaw1dYGl5dJ/QHfa6UB5CDNqgEOxQBmmvCbnWXG598Yiaxw8G+EKaN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qZpUF04b; arc=none smtp.client-ip=209.85.214.169
+	 In-Reply-To:Content-Type; b=nDKIRct6WLc5TKcMMVo9quJrM6RCEJX/mbii0qOsiKSu8P7eiEhNt1HIYsNlYznl/K7avAdn0asHLLQzLCKkOEfXOaQ9qYuCO5UwmB9tIBLXC5PwvxLwVEidOtUEtI50EZ6NUhVhkAaF2WLstdbqtMd0ZFElnUq8Bu75PRZcpz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gyJMqtK4; arc=none smtp.client-ip=209.85.215.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qZpUF04b"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ba6485d219so36143755ad.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 06:55:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gyJMqtK4"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c8025500cc7so4053214a12.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 07:26:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778594120; x=1779198920; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778596015; x=1779200815; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=i1vAUH1Xc/CeVIjxxykjK48OMEfxWKrZOx+2D03GO68=;
-        b=qZpUF04bprIBOxcElXaccYIqaLLfNrE/lUzX4vGgcInwVh4TEOozBhJqX3x1lOUTs0
-         AjB7Gx9RV+dOicqULXjgSquXy2Dwqos0awvgZRGmICG6Ejh/MmLHJcVy0ncuSVpxBzso
-         BjZ6j6P3oGxagKHmwa+QGPtsEG2bEfc17fUSoNxdsXnwWYUqPCqtSA+c5BHXdqZ7qkko
-         gEufGsD6scYpmTsMunM10Gtbkv6SS8BP/QnO9eIlvJEUmSJS8fiLpOAcLrxnZAlxXptm
-         Fv2Y0LhyJep2zpolpnwX7qv5tF/0Ur8s8sks7DxXMM+1R7F3uq6quStk+SDOs7c/PVQG
-         WPbQ==
+        bh=mVwixBMlzgK8411ArAJ0OyYAcRwgADMyDeeatOBedHg=;
+        b=gyJMqtK4yROvZ8QgiDbHcIlJ6bGW4JhMm/VQU95vqnblfSmBSHJYs5dTc2hgOf7En0
+         nWxacDxcbWJaCmORlMHOWp8SeCPkvNXT0e0VzqikxlAlR6xShAzkgFlvhoOqJKWnd4Cx
+         FcDIhM9/GtdsGnS/oNSfYFLyjn0zaAsTne7SJtHcGcKHJv0fbJS4uvp2tl/lSduDPRCF
+         Bds1odYJTrSeRPXyfEbksStcLME2pMOhtQzUUCZ2JIzjzUwXdu4zKce+XjKub2BsTiz5
+         RiBBStv6SNPrXkWRT2+vEFHtm/yr7dw+hOz3Q44iivxA0hIupDzY0gbLsDMU3ee8c30L
+         Jyng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778594120; x=1779198920;
+        d=1e100.net; s=20251104; t=1778596015; x=1779200815;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=i1vAUH1Xc/CeVIjxxykjK48OMEfxWKrZOx+2D03GO68=;
-        b=pRfUDWsH6FV9OC28G5RSToWdQIzdRbfmdMl1N+cCyjLg7tno87INPV/u1Kk6OTAe1I
-         +DughepmjZcDlGeTHuEZoZHo3gC9a+bXOc4VHYx9+BOLMs3zQQDOuBtBYYfh9Yyw69vU
-         RUMiMnh4L4eFS4VYqUUMELPx5cnoi0HYtn95ORdIw7Z6G+4YPtzKjoaaqX9rfSRoMJJb
-         dqgfnhcyi7aJDHpfurLWIRITvFxnfKqTK2GNL5Eg7GmOzX53LhwlDrQWAHOPKGPjbMFY
-         9/RDGznt7j6FxFJX378uKZv2DBkKCliYGuRlkTqMJCufWl5iqMgGNDLTRK6iRx2fVmDh
-         OmVQ==
-X-Gm-Message-State: AOJu0YyC5Uu01JgjN9tX3yHjwHikJTNRodprAkUlqBirtD1kreBT96YI
-	ml0qKmIx0J7h0TpgPPqocRMc78ck+h29TG/Q69iRV0qkS324NU2iYtfXx2TmjA==
-X-Gm-Gg: Acq92OFBnkGSbMA2A92kB+yyzvDCNzMtKICo3Kkx+TtLiYz7TxXPJz8IGOfjy0pH4h3
-	Q2T9slVNMVO6BTg9v1wz7hhH2mLTmLwVaioVGaMBgXTMjTEsJuZ+BUxFb9ZmvtF6vqYcdV31gyl
-	GFp9VKIc3QrZbEtodfGDbBjoWEFEsxGbPdLsWXyBanlnOgPyu3kVzDk3MlHTarFqGXW7Ffu2e9x
-	JtY+EGRoS1HMZjs7aDOpEMRyTJmy/pgNUOfAm9E4I1GOzXNYhTHhpeW3nb3zlQcRiJyTR3/E7oJ
-	r39oNDF3AmE9QOxOMRrY0lObInVeVoCVUxRUrRkRhlArLx3OL8uAomdwXryLafCrBqr10K+SCLO
-	BmCKEmkkZaz7t5MQTpwfiXrXEFOO6n5lmlXMG5wh/0iYZelfkPX8UwFKOK305S+jKQMzsn3TK0A
-	9eM4vQTlPRXf7EjKyRpDSNmcKKkwdIkbaR+px0lAaqYHv3ChK+I/gTF1L7vUVQOmcmsz83X39Q
-X-Received: by 2002:a17:903:1b10:b0:2b9:f55e:1c1b with SMTP id d9443c01a7336-2ba78f50707mr291111935ad.5.1778594120465;
-        Tue, 12 May 2026 06:55:20 -0700 (PDT)
+        bh=mVwixBMlzgK8411ArAJ0OyYAcRwgADMyDeeatOBedHg=;
+        b=punQnMIVqob6yKBdjpkLtWuwKaiDsbhJmLGFJ4+/cMoUdF4rnCdwNJjkcKP6zZ8FiZ
+         D9o/M/nqrJlA8ycNe8HQXDhajFESMN7q+I4EOSPOz6A2wZuLRXl/kH8jsN2OBLhv6rPy
+         A4+85uwrKqIMWkLsGRndBtiLYJDRqOr1qB+n0mh63j7hTP8k8QiA5uN5tkkGksu6g7G9
+         qYHz4t/OLvQuDsIwsLMDGg63D4LAhIJSdL+JPjCI2h8kKGPtCpJ+SoJqgrYlDj4WDWLA
+         uYLeIABjQgpWH8Z+hnb7g1CztL8XUnQIiX7QPOvrrYfOLgU1NV3/Gwmkqrh+GQTqCd+T
+         Tw5w==
+X-Forwarded-Encrypted: i=1; AFNElJ9kal43BmCCrgabCgfF0m8HDGxIH+2cMQfwl2TP5OFETALNan4aEmNMAcoZS8q8JxdW+Rhw6wBfVUh4QQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/9Khs8a9k9rpzhkDbGva0MnYSfj69wN4n4ulmB3jpSeNqRtpA
+	WZXAJn7kYl2W4tG1lL5+8sAqAtNkvMUG5G1ge2/hFsJ1/cqqBPsJFbrA
+X-Gm-Gg: Acq92OHSQqDoW2shR5A+/x0uWmTNzyKOrkkqVI+aMveFkdaQyP8sMCCPj00lu7km5Dj
+	RIwk+mUSOlMmAtsZ+DQB+7LtM+Ga5+kOOivgZjgtrm/RhG1s0BXUeHiPXR0m4tJ2TQBVTlsUWwS
+	D0BK8VgoVdQstCU1vxndi6xTlTDz+p686WzgyKi+EXQ/O34GSJzaHtK/DbVY/lWtij2gEmvfLHD
+	4gYlekhWbi1lqnZ1J5+3+r5RGO6YS/VePG1ktiw1JebH3r25NuM2H5NRa5F/5looxdLHjhlN+ux
+	lcNvJ7E8Ffq3X5Y+rL8sZQ5bDcXcqbBg/GcKUejRGxWqRXSqyhVV/NCB4z9YnUqQu7vKRQUXlMw
+	dvxZS4Zx/xuLI24z/a4JT5WIGsg67ZAGeVSjMAeAp8uheBimzjrmbCkHLgrX0LX9UWoMg0Gqf8O
+	3zcOWsKgBPqRBDwiyVy7IDRExUhggphd9hRkji5TDq7VZqQTNZ58ejo7SgMb5nGUOHgawd8dMG
+X-Received: by 2002:a17:903:1ad0:b0:2b0:a980:3687 with SMTP id d9443c01a7336-2ba79291460mr327409235ad.3.1778596015206;
+        Tue, 12 May 2026 07:26:55 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1e374besm142579725ad.47.2026.05.12.06.55.19
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1d2700dsm141284675ad.2.2026.05.12.07.26.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 May 2026 06:55:19 -0700 (PDT)
+        Tue, 12 May 2026 07:26:54 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <52651031-9dc4-4c8c-b14c-7c1f645f9af6@roeck-us.net>
-Date: Tue, 12 May 2026 06:55:18 -0700
+Message-ID: <c4082788-9e2f-4108-9d2f-13648bf4e5bf@roeck-us.net>
+Date: Tue, 12 May 2026 07:26:53 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,15 +69,18 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v2 2/5] hwmon: (pmbus/adm1266) add clear_blackbox
- debugfs entry
-To: Abdurrahman Hussain <abdurrahman@nexthop.ai>, sashiko@lists.linux.dev
-Cc: linux-hwmon@vger.kernel.org, Guenter Roeck <groeck7@gmail.com>
-References: <20260511-adm1266-v2-2-7a6d34f0de5d@nexthop.ai>
- <20260512005252.763EAC2BCB0@smtp.kernel.org>
- <DIGK0X9I3A0U.2A2QP1GD1983O@nexthop.ai>
- <eaf93149-a7cf-4a11-8ccc-8aa1b1e83b7e@roeck-us.net>
- <DIGMFKP4POUI.2ZTJ4UM3GJW02@nexthop.ai>
+Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: Add Eswin EIC7700 PVT sensor
+To: Huan He <hehuan1@eswincomputing.com>,
+ Krzysztof Kozlowski <krzk@kernel.org>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ p.zabel@pengutronix.de, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ ningyu@eswincomputing.com, linmin@eswincomputing.com,
+ pinkesh.vaghela@einfochips.com, luyulin@eswincomputing.com
+References: <20260430064107.1598-1-hehuan1@eswincomputing.com>
+ <20260430064444.1615-1-hehuan1@eswincomputing.com>
+ <20260503-brave-bullfinch-of-innovation-942914@quoll>
+ <4339b90a.6169.19e1b798c90.Coremail.hehuan1@eswincomputing.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -122,76 +126,118 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <DIGMFKP4POUI.2ZTJ4UM3GJW02@nexthop.ai>
+In-Reply-To: <4339b90a.6169.19e1b798c90.Coremail.hehuan1@eswincomputing.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5/12/26 03:20, Abdurrahman Hussain wrote:
-> On Tue May 12, 2026 at 2:19 AM PDT, Guenter Roeck wrote:
->> On 5/12/26 01:27, Abdurrahman Hussain wrote:
->>> On Mon May 11, 2026 at 5:52 PM PDT, sashiko-bot wrote:
->>>> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
->>>> - [High] The debugfs write handler `adm1266_clear_blackbox_write` performs an I2C transaction without acquiring the required hardware monitoring locks, violating hwmon subsystem guidelines.
->>>> --
->>>>
->>>> commit ab9c19373562d58415e28511b037545cfd278c2a
->>>> Author: Abdurrahman Hussain <abdurrahman@nexthop.ai>
->>>> Subject: hwmon: (pmbus/adm1266) add clear_blackbox debugfs entry
->>>>
->>>> This commit adds a debugfs entry to clear the ADM1266 blackbox buffer by
->>>> issuing a block-write command to the device. This is needed when the
->>>> device operates in single-recording mode to preserve fault history.
->>>>
->>>>> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
->>>>> index 7b8433226176f..31aefa8fc75f5 100644
->>>>> --- a/drivers/hwmon/pmbus/adm1266.c
->>>>> +++ b/drivers/hwmon/pmbus/adm1266.c
->>>>
->>>> [ ... ]
->>>>
->>>>> +static ssize_t adm1266_clear_blackbox_write(struct file *file, const char __user *ubuf,
->>>>> +					    size_t count, loff_t *ppos)
->>>>> +{
->>>>> +	struct i2c_client *client = file->private_data;
->>>>> +	u8 payload[2] = { 0xFE, 0x00 };
->>>>> +	int ret;
->>>>> +
->>>>> +	ret = i2c_smbus_write_block_data(client, ADM1266_READ_BLACKBOX,
->>>>> +					 sizeof(payload), payload);
->>>>
->>>> Does this I2C block write need to be protected by hwmon_lock() and
->>>> hwmon_unlock()?
->>>>
->>>> The hardware monitoring subsystem guidelines require drivers to implement
->>>> locking for attributes registered outside of the core registration functions,
->>>> such as debugfs entries.
->>>>
->>>> Without these locks, could this write operation race with other multi-record
->>>> transactions? For example, if this clear command is interleaved while
->>>> adm1266_nvmem_read_blackbox() is iterating through multiple records, might
->>>> it corrupt the read sequence?
->>>>
->>>>> +	if (ret < 0)
->>>>> +		return ret;
->>>>> +
->>>>> +	return count;
->>>>> +}
->>>
->>> Good catch!
->>>
->>> Will use pmbus_lock_interruptible() in v3.
->>>
+On 5/12/26 02:16, Huan He wrote:
+> Hi Krzysztof,
+> 
+> Thank you very much for your detailed review. We appreciate the feedback.
+> 
+>> On Thu, Apr 30, 2026 at 02:44:44PM +0800, hehuan1@eswincomputing.com wrote:
+>>> +
+>>> +  label:
+>>> +    enum:
+>>> +      - pvt0
+>>> +      - pvt1
 >>
->> There is also "guard(pmbus_lock)(client);" or "scoped_guard(pmbus_lock, client) { ... }".
->> Guenter
+>> No, label is user-visible name. Can be whatever user decides.
+>>
+>> Please read writing bindings - instance IDs are not allowed.
 > 
-> Thanks for the tip! Does that mean you're ok with losing the
-> interruptibility, since there's no DEFINE_GUARD_COND for interruptible
-> variant?
+> Thanks for the clarification.
+> I am planning to update the next revision as follows. Would this be
+> acceptable?
+> 
+> YAML:
+> -  label:
+> -    enum:
+> -      - pvt0
+> -      - pvt1
+> +  label: true
+> 
+> required:
+>    - compatible
+>    - reg
+>    - clocks
+>    - interrupts
+> - - label
+> 
+> Driver:
+>   static int eic7700_pvt_create_hwmon(struct pvt_hwmon *pvt)
+>   {
+> -   struct device *dev = pvt->dev;
+> -   struct device_node *np = dev->of_node;
+> -   const char *node_label;
+> -   int type;
+> -   const char *names[2] = {"soc_pvt", "ddr_pvt"};
+> -
+> -   if (of_property_read_string(np, "label", &node_label)) {
+> -       dev_err(dev, "Missing 'label' property in DTS node\n");
+> -       return -EINVAL;
+> -   }
+> -
+> -   if (strcmp(node_label, "pvt0") == 0) {
+> -       type = 0;
+> -   } else if (strcmp(node_label, "pvt1") == 0) {
+> -       type = 1;
+> -   } else {
+> -       dev_err(pvt->dev, "Unsupported label: %s\n", node_label);
+> -       return -EINVAL;
+> -   }
+> +   const char *name = "pvt";
+> +
+> +   of_property_read_string(pvt->dev->of_node, "label", &name);
+>   
+> -   pvt->hwmon = devm_hwmon_device_register_with_info(pvt->dev, names[type],
+> +   pvt->hwmon = devm_hwmon_device_register_with_info(pvt->dev, name,
+>                                pvt, &pvt_hwmon_info,
+>                                NULL);
 > 
 
-Yes. If anything, I'd like to drop the _interruptible variant entirely.
-I only keep it for historic reasons.
+This would try to register a free-text name for the hwmon device,
+which would be unacceptable.
+
+There are lots of multi-channel devices out there. None of them
+have those problems. Why do you insist in free-text names instead of
+using, say, "reg" to distinguish the channels ?
 
 Guenter
+
+>>
+>>> +
+>>> +  resets:
+>>> +    maxItems: 1
+>>> +
+>>> +  '#thermal-sensor-cells':
+>>> +    const: 0
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>> +  - clocks
+>>> +  - interrupts
+>>> +  - label
+>>> +  - resets
+>>> +
+>>> +unevaluatedProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    pvt@50b00000 {
+>>
+>>
+>> Node names should be generic. See also an explanation and list of
+>> examples (not exhaustive) in DT specification:
+>> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+>> If you cannot find a name matching your device, please check in kernel
+>> sources for similar cases or you can grow the spec (via pull request to
+>> DT spec repo).
+> 
+> I will update the example node name from "pvt@..." to the generic
+> "sensor@...". Is this acceptable?
+> 
+> Best regards,
+> Huan He
 
