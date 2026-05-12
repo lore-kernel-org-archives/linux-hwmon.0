@@ -1,161 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B2463B1022;
-	Tue, 12 May 2026 16:41:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B80E25B0A0
+	for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 18:32:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778604097; cv=none; b=n0vMips9u4ZKPKRkVwtlR1X9/OC6jMHXrZr3zvmwF57FZOdD5gxIYall0gIPtmrRsNQhB6MduIpQsmCu7NRGUIod7n9muiI2N9tIDKvDLKfydzfvXR8Y7Vns2LwW0DQhjfUIArzUqvVluwgJ/KcT7Z7hbaPEnNpj4dN4b1N5lig=
+	t=1778610764; cv=none; b=fkofgTeumDne2xvEzxPx8Q/oKMy272IqPDs5TW46rrdBn9kxlfBF0+OIcPnqABiEXEPvDuzdbECgQvGjBHD5540J5A1aGg6HzWYWM5oKjb6p2MTCNMT4HeioT+tCNznhzQSJo0TFafMhUZuRc0m7J9eExdcwpjBz5hOsr8poBis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778604097; c=relaxed/simple;
-	bh=3T821//nbNwWklMRAa45rcdnQRCet1wa2TYkQKWcGRc=;
+	s=arc-20240116; t=1778610764; c=relaxed/simple;
+	bh=TpQV7EfOpsbYJ6QldzBf1Aw+Bi4z2zhrb+GGulcJC0s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CJ5BBsUfBEcoKwEtu/72DoV22qep2jeQmN6irj/vyxXbIRlRNlt2Dcg+BrI/vDgIIs+zFGxS882xGt1WE4UvXAgO/V8R/3GcR+T1wLE8wW4Mqd6j/wJB/V311bc1RgXyWARyynJfVPG+pItmGhOLW25bW6Iook5qbZhEXhbI9Ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RFovT11n; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=qxwLhIjkcRNXMLwNWtWZxdYNAWu0XnN2gRSevCsc7aAGHbZFH/zfbX6D4lF6iMgSjgviKixgvXyuPYri9PA6uiIaXPfLBQZYkP51sA6hD+eWPuGqBrkkGNGH94RSaHw3QRkzXlpr+YjA3iG4COzypNSHJOw3Ve82BA5Me6jhHjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AtPNbU5c; arc=none smtp.client-ip=74.125.82.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RFovT11n"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ACC3C2BCB0;
-	Tue, 12 May 2026 16:41:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778604096;
-	bh=3T821//nbNwWklMRAa45rcdnQRCet1wa2TYkQKWcGRc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RFovT11nCVNQ0W2sFpLtL7YSr7qsmxl5HTRJsUmGooJgLq7A9p3m0WDHNFRN3sBnS
-	 yf8oJAEvi5XTRzfpkeSBIeExVYTRzekMZP8VcSfEuITHIwZbcQt7oOkCciY1/gdAiL
-	 7T+3/SnI3CuEKRb4EPA6FGBKWo2S4S/AFccenGoIXxItjqMnOzPOAqV8Zl5zBGWoLN
-	 QnRpXsbyZl/MJTfJ1rvxiArEDXqXU5cNchmuy15OMa95AwomBNQnC7Sq98+9cWDcxD
-	 p1Uw5nWhi8B+THoLpQQ09GmjqSPIUCsI0IF4QSel3fFlYxKM1M5MTnDL/Z292+x5bb
-	 KQAYUXRcsZF0w==
-Date: Tue, 12 May 2026 17:41:32 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Abdurrahman Hussain <abdurrahman@nexthop.ai>
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pmbus: Add Murata D1U74T PSU
-Message-ID: <20260512-defame-stinky-62670d7e7ebf@spud>
-References: <20260511-d1u74t-v1-0-623c2bc1532a@nexthop.ai>
- <20260511-d1u74t-v1-1-623c2bc1532a@nexthop.ai>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AtPNbU5c"
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2f3c623322bso9756551eec.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 11:32:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778610762; x=1779215562; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ja6bKCcVCVMtzZDOZ+vitgR4xNzTf+japdav6A1ckx4=;
+        b=AtPNbU5cQIFElvPpOV+3AjXxGa6KKDxF4gg54N5qtJFxx+NBiS0p5jtt/a6Z6Kax4S
+         Clz7A1bBVncTpWtSUBi9x7Nr2mqLQ9TUQRBRuAp6ovc5x7jm6XqW9t0XOebQ0kVB/vmq
+         lBr+ifXFou8204pYNFi1olZ63fmEOMeUfsLHbMz092t703G9XmV3yo3jVL7akVqXrFW5
+         hVBtDS+kyO8YK/fMNLrMRfU2A/7fsoAJNuMkkftlwELr54+vn6/sk8IU3zhQe2yogSSN
+         76HcGOQXfhBGI7d4IMqKBnC/ZinkqEoy8zgQAQ7imvnpJNXgV2n85oz16hYRs5MLOt16
+         oRPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778610762; x=1779215562;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ja6bKCcVCVMtzZDOZ+vitgR4xNzTf+japdav6A1ckx4=;
+        b=VUTMV/ZYtBlGZJx7oba1NWIPViUo2g6I3SemCSyBggNNU6oJbgGydWAy2nRsiadxD2
+         bFG6r8+u+nGO6/ZoldQJ9OUS4oOAOgLT6qKVRtihCnJ9pKGVB1aE5z1Hpb2E6UORwb//
+         hIK2MaxBLFmVPEYq8PVKd5/8a6T2s5qZmJTReS5+oCJqC7MFo4nypBhCSDB2LGg7wpYa
+         uZPl2e+YHmKHNmra1I38esWPmNH9FTzKvqlsa8dHNdE4YvOU8KoXoGTDUGh97l4uZMmZ
+         Wvsk8eIZU1qOgfOkzjj/OI5SPX3USH1Kxde9AQNg2P8PV5pTujHT5I0A/dbIjay5EGLP
+         TE5g==
+X-Gm-Message-State: AOJu0Ywa19BURgHv0fBFdHQ7l4Of0GCScv+QEDBokbiZDAYP/cEIwgC7
+	IuhJ/4V9/9vibBAR6k64L5YzY5TDM7NKlBRYWJWmjBLsaCPwSm0d275FpjhX+w==
+X-Gm-Gg: Acq92OHrSy0ISWP+0s/PZ8uD/I/crdO0NMLtGDeQ6x6CbbWdDbS3M3wGYxtkezAynpb
+	XSoWRaUIOhQDNPaTciK9cPdGju85+Aujqjw23CzLocrbPnx3sSp4Rmt6C2YY2QkILYqKkCnLasx
+	/Nal5eoM8UsO085R932DFKco5/DSxSwSsUVGbztAN6lmyqv8uZEZLLJ0kD8nwxmgRudL4L+ArZk
+	bOu9MGxpDWhA8+sxxl6L3MYyZtY2SFQr4NcZcj7MTpOd2bfYZjGGm1Fr1aJy9DdTsRGFEa3VfWJ
+	XYX7OQjzgznkGBAh9zDRnGzD5Yp4rJTMoFfDIeeR3iqQEOY984QHfA8taLg+vQrDzpDx0NYtbOH
+	599JrX04oRwSnJvh1ESJnZWPua6rxzkhCtxXSRqev1OyI/dgnUSj684l+LSKRb1JJuO/XI8wyYM
+	TAcUYyEAqBVxaaaQaZvXiPP2/MR2NooY8Cyslc
+X-Received: by 2002:a05:693c:290d:b0:2d8:df01:d9f7 with SMTP id 5a478bee46e88-30117a7ad80mr157863eec.15.1778610762401;
+        Tue, 12 May 2026 11:32:42 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f888c469b6sm19080122eec.24.2026.05.12.11.32.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2026 11:32:41 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 12 May 2026 11:32:41 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+	Linux ACPI <linux-acpi@vger.kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v1] hwmon: (acpi_power_meter) Check ACPI_COMPANION()
+ against NULL
+Message-ID: <c7b6cd59-7ef8-467a-a5f0-b1882059a8ea@roeck-us.net>
+References: <5068745.GXAFRqVoOG@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="C1G0h9dIKgTPurGm"
-Content-Disposition: inline
-In-Reply-To: <20260511-d1u74t-v1-1-623c2bc1532a@nexthop.ai>
-
-
---C1G0h9dIKgTPurGm
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <5068745.GXAFRqVoOG@rafael.j.wysocki>
 
-On Mon, May 11, 2026 at 06:44:27PM -0700, Abdurrahman Hussain wrote:
-> Add devicetree binding for the Murata D1U74T-W PMBus power supply
-> unit.
->=20
-> Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+On Mon, May 11, 2026 at 09:54:51PM +0200, Rafael J. Wysocki wrote:
+> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+> 
+> Every platform driver can be forced to match a device that doesn't match
+> its list of device IDs because of device_match_driver_override(), so
+> platform drivers that rely on the existence of a device's ACPI companion
+> object need to verify its presence.
+> 
+> Accordingly, add a requisite ACPI_COMPANION() check against NULL to the
+> acpi_power_meter hwmon driver.
+> 
+> Fixes: afc6c4aedea5 ("hwmon: (acpi_power_meter) Convert ACPI driver to a platform one")
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-If you're not adding regulators/supplies, this looks like a candidate
-for trivial-devices.yaml.
+Applied.
 
-pw-bot: changes-requested
-
-Thanks
-Conor.
-
-> ---
->  .../bindings/hwmon/pmbus/murata,d1u74t.yaml        | 41 ++++++++++++++++=
-++++++
->  MAINTAINERS                                        |  6 ++++
->  2 files changed, 47 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/murata,d1u74t.=
-yaml b/Documentation/devicetree/bindings/hwmon/pmbus/murata,d1u74t.yaml
-> new file mode 100644
-> index 000000000000..ef080283bf79
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/murata,d1u74t.yaml
-> @@ -0,0 +1,41 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/pmbus/murata,d1u74t.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Murata D1U74T-W power supply unit
-> +
-> +maintainers:
-> +  - Abdurrahman Hussain <abdurrahman@nexthop.ai>
-> +
-> +description:
-> +  The Murata D1U74T-W is a PMBus-compliant AC/DC power supply unit that
-> +  exposes input/output voltage, current and power telemetry, three
-> +  temperature sensors and dual fan monitoring over an I2C interface.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - murata,d1u74t
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +
-> +        psu@58 {
-> +            compatible =3D "murata,d1u74t";
-> +            reg =3D <0x58>;
-> +        };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index b2040011a386..b6a055fbb870 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6803,6 +6803,12 @@ S:	Maintained
->  F:	Documentation/hwmon/crps.rst
->  F:	drivers/hwmon/pmbus/crps.c
-> =20
-> +MURATA D1U74T PSU DRIVER
-> +M:	Abdurrahman Hussain <abdurrahman@nexthop.ai>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/hwmon/pmbus/murata,d1u74t.yaml
-> +
->  CRYPTO API
->  M:	Herbert Xu <herbert@gondor.apana.org.au>
->  M:	"David S. Miller" <davem@davemloft.net>
->=20
-> --=20
-> 2.53.0
->=20
-
---C1G0h9dIKgTPurGm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCagNYPAAKCRB4tDGHoIJi
-0sj1AQDvYulhZABh59b0EWQID7gTD5EkN1jAh17MTdu5gQubBAEA7+3j7Lfi8NLZ
-bsIpWTXmocNuMihP8t6Pq7/TqXofNwI=
-=mH/0
------END PGP SIGNATURE-----
-
---C1G0h9dIKgTPurGm--
+Thanks,
+Guenter
