@@ -1,240 +1,140 @@
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227DB1E49F
-	for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 04:18:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6D1F47DD7A
+	for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 08:27:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778559513; cv=none; b=qoDg9V0FXIc9nNqdXby1x3b8oenO0xPCPSHHqHdaN8LMWd0qIr99eJ3TrIpI+lS6/+a4uOWzMVi1dbqj+BAgHYVxjfaBSFQBARgoIiT8LO9u5vy0tIn+IDoWJPnsqLVVeoq5lt3ixyCK//wGUlMNmHSykKvzL9kRrkGnlYCHBnk=
+	t=1778574460; cv=none; b=I0l/PlUYUaVylTMtit1rAz79BoHpJPfk3BVeUEVyfJ9gTSBKyuaSkfJkf8dPPvYQZhuO43PMS+I/KT4zjUh/rokBj0mTh7CgNAmzNIgxq6Jtvm76XKi3BhKvtS6HgzBFbzVACJmD4MM53ByIPWf+MXw7+/1kvsZsdsaY1d+/QW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778559513; c=relaxed/simple;
-	bh=wmEhwYBrvTo3rJxVF5c4cFc9mwGJ04+s3Swr8pg7Y7U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Gdm0rm9ihZCmtSE7N+WG25yyv1uodOS1TDGglVJwHE/4xN1LaciboxHk2IZwZGr9zK6t80SJD5CKQ4iwD0G1Ee40WRs9sa5ilR2Fm5GFHYu2RgJqVAgv+izAPyo78cMiFLhPxpdZMcc1dkV13QPkNDZgFJIFkBQDS4LbBg7E7Iw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=IqlqYM11; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+	s=arc-20240116; t=1778574460; c=relaxed/simple;
+	bh=ZTEA2HdnjfCI9FQGyKiUf4vkUNGZFMRD1SeoOJUqdNA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=Q496h3PzBXH2YIvQTLML565Ow2tBtbpzoqrPMcM+rFcN6l7xsKWj0nmsk+cm44WSDS7iN6ejJaUE4X6gLkFAcBDJ2aQiR93C0yjrD9CufEfpXu+P5u9djBBKUJrsLuec/K915xAAooa2YWJcosvYTbD5rsEeiF46//9/J6Oi8/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai; spf=pass smtp.mailfrom=nexthop.ai; dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b=jJeKW0yH; arc=none smtp.client-ip=74.125.82.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="IqlqYM11"
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 9BB2A2C012E;
-	Tue, 12 May 2026 16:18:28 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1778559508;
-	bh=0t0Ua3EBvWAFWh8vr+gC+iI44t30654i2d3xDYYAFtc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=IqlqYM11Os81kEDx9+l7+1M4vWb96d78CiMqLhg4jKxkpa5YflI5JZ2KK1lMIwFqx
-	 LXYQQQnIm5SicBnYDmGDv8oCNE9MNAbBKJZB9OhL40/+ZDsi9rVO/VhCFJq/4WZXeb
-	 fXpD44wfhR+hajuDaiiS7AG9X/9JZV7kqqpOGah6T2yoLPLdyxdE+akifV6wnG2lL9
-	 U03/wQUfxam+eewQtHopFvqK8GGjfrQorao4FggPS7tmwHULeL6FX4ieywwJxTM8WX
-	 /+DoLh3tixfZeByZwCGM/Ob47vCyt0F6i9lyWfkCeHbt7wNkXp3CwYQukbtE9qaRs+
-	 EnEqzMJ59acKg==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B6a02aa140000>; Tue, 12 May 2026 16:18:28 +1200
-Received: from ronand-dl.ws.atlnz.lc (ronand-dl.ws.atlnz.lc [10.33.12.18])
-	by pat.atlnz.lc (Postfix) with ESMTP id 6ACCE13ED2A;
-	Tue, 12 May 2026 16:18:28 +1200 (NZST)
-Received: by ronand-dl.ws.atlnz.lc (Postfix, from userid 1930)
-	id 6642D84004F; Tue, 12 May 2026 16:18:28 +1200 (NZST)
-From: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>
-To: linux@roeck-us.net
-Cc: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH] hwmon: (nct7802) Add time step attributes for tweaking responsiveness
-Date: Tue, 12 May 2026 16:15:50 +1200
-Message-ID: <20260512041607.988078-2-ronan.dalton@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b="jJeKW0yH"
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-1330d6bb78dso1736440c88.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 01:27:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nexthop.ai; s=google; t=1778574457; x=1779179257; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=45jcoL8Jg+P3cfU+/0k5pK8BmuLH8yz4uxFezEXSjvU=;
+        b=jJeKW0yHQfxtdf4mHYkGz6JEP0HQpdyhRrWTiwkGF4zm7LIt8CsxzbSqt3TRmeiaap
+         TR47NEnyNrXT/hlSuPxaIL5CauSm6WMYnx7MCCAYehNXOj7TfRkwvjUuKI/56IP0rJkK
+         ZJ1pj43EMYeR7nxDETwlooVYXtYCy/RVos31iRasoHv2lY8ax1OgSrmLOhIXUm3TwSqR
+         TyxxDQ2SsLnd1twz8wXSyfyoYn3g4RNYZ/j5I55eJGZJFI8ffDxpBGIIi2THPhcjj4oR
+         yNNUjC7ycGj2uOmHeV9skjRsRrn/jtRuepryXmg55C8rQGNBAtRt5fxQlaiEZ6XJ4Lfw
+         E7BQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778574457; x=1779179257;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=45jcoL8Jg+P3cfU+/0k5pK8BmuLH8yz4uxFezEXSjvU=;
+        b=OFvC27njq1VWbqKbkh0q+/CCOaICdAyVIB0kTl+579Wz1Zy17kWeIK3jCTyFWwmCVQ
+         LLEsWmhJNEzsjhmF2edVvj2Lua7gD18ULrpFQORUI2+NG69O8RWixP7p9gndZ2C7QIbz
+         kWdFxyMaK/gJygmV4mRNXzjH9w80hx9UVyoDi7SX5EJn0PCX5EmxN5KM7OFyJqLhKvDy
+         JJHFS129+LjzjsmDMrLTdqdX6yOpntDzvjm5oRsWoRyGc+rpMVfiLAqcS1E3pXH+3q/6
+         jcyDbXhgdZcFOsd9Us8FoFexeQGtiwhtavF/CF2cHriEFUTwK1GQQflAUOpErX5Hz+aR
+         fYzw==
+X-Gm-Message-State: AOJu0YyyJjd/OkWh1XkA0ssEwXa3sgE+D1iR/gJl0Ppsi9/Is9jT8N3J
+	YSVlt5Sam+8GNFimPVLHidnix1eTzu/aMSXpErci0G4QQJ4vToVvKl9df4ZszBy+aHI=
+X-Gm-Gg: Acq92OF5tA69f//rYvFd2VQO9sVsKsJjc9bM5mWoVQy2yoJmmZu3eQNX9KZ7AROZthJ
+	8gaZHpRQmVnlf39WJ5OpckZv+Nwp7+m9NwOspM3KxXCtDfaaR9kfMpVl+gKzSY73qoduMnCaC0P
+	5J4gIkPBReNZ7J0eScaO4HWQGC+hUINDPiqM30RqECFSxYpoP4/G2m7Ty1qXmXCttfoysfIFH5D
+	UutYv7cwHUWsH0+QuxntQoV7w4Dnr+HGeyFqa5/wv5TpefhTEXhY3vlyig7Cazll+2QwvZUgwbe
+	gGWHEj+aiBxiMbKNXhv9lZp0w3b9myv4cMYwDPDF+kqiDnWtcaMGPApQMw1knwyLa6cInZl6JP4
+	SlA/tMpYcTnzyVu44m0n1f0FJboGZ9DX+4o3RbzaIBQ1u5hd/xiJ9qktwMIggH+TmShJNj4lCe/
+	3LSpsZNIArV/0fr/OtU6/dUlY=
+X-Received: by 2002:a05:7022:260a:b0:12c:34b9:61bc with SMTP id a92af1059eb24-13344b2f7femr1272482c88.5.1778574457372;
+        Tue, 12 May 2026 01:27:37 -0700 (PDT)
+Received: from localhost ([50.145.100.174])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13278210ff2sm18280950c88.6.2026.05.12.01.27.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 May 2026 01:27:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=FPe4xPos c=1 sm=1 tr=0 ts=6a02aa14 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VwQbUJbxAAAA:8 a=_jlGtV7tAAAA:8 a=YTW7iPMTII0yQG4K03oA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=nlm17XC03S6CtCLSeiRr:22
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 12 May 2026 01:27:35 -0700
+Message-Id: <DIGK0X9I3A0U.2A2QP1GD1983O@nexthop.ai>
+Cc: <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH RESEND v2 2/5] hwmon: (pmbus/adm1266) add clear_blackbox
+ debugfs entry
+From: "Abdurrahman Hussain" <abdurrahman@nexthop.ai>
+To: <sashiko@lists.linux.dev>, "Abdurrahman Hussain"
+ <abdurrahman@nexthop.ai>
+X-Mailer: aerc 0.21.0
+References: <20260511-adm1266-v2-2-7a6d34f0de5d@nexthop.ai>
+ <20260512005252.763EAC2BCB0@smtp.kernel.org>
+In-Reply-To: <20260512005252.763EAC2BCB0@smtp.kernel.org>
 
-The nct7802 chip exposes two registers that allow setting the time
-interval between successive duty increases or decreases in Smart Fan
-mode. The units are intervals of 0.1 second. The default value at power
-on is 10, so 1 second.
+On Mon May 11, 2026 at 5:52 PM PDT, sashiko-bot wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [High] The debugfs write handler `adm1266_clear_blackbox_write` perform=
+s an I2C transaction without acquiring the required hardware monitoring loc=
+ks, violating hwmon subsystem guidelines.
+> --
+>
+> commit ab9c19373562d58415e28511b037545cfd278c2a
+> Author: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+> Subject: hwmon: (pmbus/adm1266) add clear_blackbox debugfs entry
+>
+> This commit adds a debugfs entry to clear the ADM1266 blackbox buffer by
+> issuing a block-write command to the device. This is needed when the
+> device operates in single-recording mode to preserve fault history.
+>
+>> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266=
+.c
+>> index 7b8433226176f..31aefa8fc75f5 100644
+>> --- a/drivers/hwmon/pmbus/adm1266.c
+>> +++ b/drivers/hwmon/pmbus/adm1266.c
+>
+> [ ... ]
+>
+>> +static ssize_t adm1266_clear_blackbox_write(struct file *file, const ch=
+ar __user *ubuf,
+>> +					    size_t count, loff_t *ppos)
+>> +{
+>> +	struct i2c_client *client =3D file->private_data;
+>> +	u8 payload[2] =3D { 0xFE, 0x00 };
+>> +	int ret;
+>> +
+>> +	ret =3D i2c_smbus_write_block_data(client, ADM1266_READ_BLACKBOX,
+>> +					 sizeof(payload), payload);
+>
+> Does this I2C block write need to be protected by hwmon_lock() and
+> hwmon_unlock()?
+>
+> The hardware monitoring subsystem guidelines require drivers to implement
+> locking for attributes registered outside of the core registration functi=
+ons,
+> such as debugfs entries.
+>
+> Without these locks, could this write operation race with other multi-rec=
+ord
+> transactions? For example, if this clear command is interleaved while
+> adm1266_nvmem_read_blackbox() is iterating through multiple records, migh=
+t
+> it corrupt the read sequence?
+>
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	return count;
+>> +}
 
-Add sysfs attributes for step_up_time and step_down_time to allow
-controlling the responsiveness of the fan speed. Values are represented
-as milliseconds to the user. When set, the value is clamped to the valid
-range of 100 to 25500 (0.1 to 25.5 seconds), and rounded to the nearest
-multiple of 100.
+Good catch!
 
-Signed-off-by: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-hwmon@vger.kernel.org
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
- Documentation/hwmon/nct7802.rst | 16 ++++++
- drivers/hwmon/nct7802.c         | 91 +++++++++++++++++++++++++++++++++
- 2 files changed, 107 insertions(+)
-
-diff --git a/Documentation/hwmon/nct7802.rst b/Documentation/hwmon/nct780=
-2.rst
-index 8b7365a7cb32..366050ea595c 100644
---- a/Documentation/hwmon/nct7802.rst
-+++ b/Documentation/hwmon/nct7802.rst
-@@ -24,6 +24,22 @@ speed sensors.
-=20
- Smart Fan=E2=84=A2 speed control is available via pwmX_auto_point attrib=
-utes.
-=20
-+Sysfs Attributes
-+----------------
-+
-+Sysfs attributes unique to this chip are documented below. For common
-+attributes, see Documentation/hwmon/sysfs-interface.rst.
-+
-+step_up_time
-+			Time interval between successive duty cycle increases
-+			when in Smart Fan mode. Specified in milliseconds and
-+			rounded to intervals of 100 in the range 100-25500.
-+
-+step_down_time
-+			Time interval between successive duty cycle decreases
-+			when in Smart Fan mode. Specified in milliseconds and
-+			rounded to intervals of 100 in the range 100-25500.
-+
- Tested Boards and BIOS Versions
- -------------------------------
-=20
-diff --git a/drivers/hwmon/nct7802.c b/drivers/hwmon/nct7802.c
-index 8c9351da12c6..f30123fd908c 100644
---- a/drivers/hwmon/nct7802.c
-+++ b/drivers/hwmon/nct7802.c
-@@ -47,6 +47,8 @@ static const u8 REG_VOLTAGE_LIMIT_MSB_SHIFT[2][5] =3D {
- #define REG_PWM(x)		(0x60 + (x))
- #define REG_SMARTFAN_EN(x)      (0x64 + (x) / 2)
- #define SMARTFAN_EN_SHIFT(x)    ((x) % 2 * 4)
-+#define REG_SMARTFAN_STEP_UP_TIME	0x6e
-+#define REG_SMARTFAN_STEP_DOWN_TIME	0x6f
- #define REG_VENDOR_ID		0xfd
- #define REG_CHIP_ID		0xfe
- #define REG_VERSION_ID		0xff
-@@ -560,6 +562,77 @@ beep_store(struct device *dev, struct device_attribu=
-te *attr, const char *buf,
- 	return err ? : count;
- }
-=20
-+static ssize_t step_time_show(struct device *dev, struct device_attribut=
-e *attr,
-+			      char *buf, bool step_up)
-+{
-+	struct nct7802_data *data =3D dev_get_drvdata(dev);
-+	unsigned int reg, val;
-+	int ret;
-+
-+	if (step_up)
-+		reg =3D REG_SMARTFAN_STEP_UP_TIME;
-+	else
-+		reg =3D REG_SMARTFAN_STEP_DOWN_TIME;
-+
-+	ret =3D regmap_read(data->regmap, reg, &val);
-+	if (ret < 0)
-+		return ret;
-+
-+	return sprintf(buf, "%u\n", val * 100); /* Convert from ds to ms */
-+}
-+
-+static ssize_t step_up_time_show(struct device *dev,
-+				 struct device_attribute *attr, char *buf)
-+{
-+	return step_time_show(dev, attr, buf, true);
-+}
-+
-+static ssize_t step_down_time_show(struct device *dev,
-+				   struct device_attribute *attr, char *buf)
-+{
-+	return step_time_show(dev, attr, buf, false);
-+}
-+
-+static ssize_t step_time_store(struct device *dev,
-+			       struct device_attribute *attr, const char *buf,
-+			       size_t count, bool step_up)
-+{
-+	struct nct7802_data *data =3D dev_get_drvdata(dev);
-+	unsigned long val;
-+	unsigned int reg;
-+	int ret;
-+
-+	ret =3D kstrtoul(buf, 0, &val);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Clamp range, and convert from ms to ds */
-+	val =3D DIV_ROUND_CLOSEST(clamp_val(val, 100, 25500), 100);
-+
-+	if (step_up)
-+		reg =3D REG_SMARTFAN_STEP_UP_TIME;
-+	else
-+		reg =3D REG_SMARTFAN_STEP_DOWN_TIME;
-+
-+	ret =3D regmap_write(data->regmap, reg, val);
-+
-+	return ret ? : count;
-+}
-+
-+static ssize_t step_up_time_store(struct device *dev,
-+				  struct device_attribute *attr,
-+				  const char *buf, size_t count)
-+{
-+	return step_time_store(dev, attr, buf, count, true);
-+}
-+
-+static ssize_t step_down_time_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	return step_time_store(dev, attr, buf, count, false);
-+}
-+
- static SENSOR_DEVICE_ATTR_RW(temp1_type, temp_type, 0);
- static SENSOR_DEVICE_ATTR_2_RO(temp1_input, temp, 0x01, REG_TEMP_LSB);
- static SENSOR_DEVICE_ATTR_2_RW(temp1_min, temp, 0x31, 0);
-@@ -975,12 +1048,30 @@ static const struct attribute_group nct7802_auto_p=
-oint_group =3D {
- 	.attrs =3D nct7802_auto_point_attrs,
- };
-=20
-+/* 7.2.102 0x6E FANCTL Step Up Time Register */
-+static SENSOR_DEVICE_ATTR_RW(step_up_time, step_up_time, 0);
-+
-+/* 7.2.103 0x6F FANCTL Step Down Time Register */
-+static SENSOR_DEVICE_ATTR_RW(step_down_time, step_down_time, 0);
-+
-+static struct attribute *nct7802_step_time_attrs[] =3D {
-+	&sensor_dev_attr_step_up_time.dev_attr.attr,
-+	&sensor_dev_attr_step_down_time.dev_attr.attr,
-+
-+	NULL
-+};
-+
-+static const struct attribute_group nct7802_step_time_group =3D {
-+	.attrs =3D nct7802_step_time_attrs,
-+};
-+
- static const struct attribute_group *nct7802_groups[] =3D {
- 	&nct7802_temp_group,
- 	&nct7802_in_group,
- 	&nct7802_fan_group,
- 	&nct7802_pwm_group,
- 	&nct7802_auto_point_group,
-+	&nct7802_step_time_group,
- 	NULL
- };
-=20
---=20
-2.53.0
+Will use pmbus_lock_interruptible() in v3.
 
