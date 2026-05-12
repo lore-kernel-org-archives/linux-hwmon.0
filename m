@@ -1,107 +1,159 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80D623CC7FD
-	for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 16:29:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A45423E1717
+	for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 16:30:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778603367; cv=none; b=qkDUqf6uv03dK24N/fq/mvoX7fjC9G7/wAD2hb8Y31UBV/wk0+Z6y3Rc+0iAX33/K0X52HLStjoqzHOQBubPJWslrsfwfRTPlEcAcQnFSJ7vSpLpl8rv9ASjtY194JZ0LwR2JvT4Lj6lh7atyClFI454VA8UGJQI3bYvDOU51zo=
+	t=1778603450; cv=none; b=o3yNAOu8AoJJLLG87F2Glx3nBd7lBFRSDBMmogsbjjoiRnJqehu9wLkmC4sDW3rGh9QUyA3ktvEj40JdSK8TtPb6NEnUpPPp90Uos8zaoaW8X7TWILtG+7RXfS+1BCV5VQPlkxax0tV4J/GkdYzcXnZCYISLHWBoaTqzZo9TAF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778603367; c=relaxed/simple;
-	bh=mFO9TYHX1xITid0n9nDEsYlpc16BXCaIdCL6ZQkkhbA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=duRdwk/ap+QssT9NVHoD9UHx50sGnU3O2Xil4ar7Y7vl5VbxxvZpJ1cYID7VnZ20UhQU82qey9BycxJEFCD3i2Xg2xX4F8wVUEgbJvsUj9mLlVkafkl/04mQ2m+So2zyiDNO3f8aNsHtuTHiHWundoNdKQIhHhmJh0VNxf/5LRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20251104.gappssmtp.com header.i=@baylibre-com.20251104.gappssmtp.com header.b=ty3UbMtX; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1778603450; c=relaxed/simple;
+	bh=E45NsLo+6kvqVV/KKb2dKqlO/74CweDavS593hXMbP4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nJ50Po9kYleYvKdamc0s5QhsYcjs/BGxLY42shoiV4+XaykN2omgHA7AZLKQaDtMuPBJ0cao01ZPzhGJaJHgEEpn2/rzyimjaOfrIMhc5pVziQ2RoigLKuNF1RYm4+u+iWHi7hZcZMughw5t7hgY7EC8ztuvfZ4eZFjcJFupTTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bz9IPp9t; arc=none smtp.client-ip=74.125.82.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20251104.gappssmtp.com header.i=@baylibre-com.20251104.gappssmtp.com header.b="ty3UbMtX"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-44e1860558fso3720178f8f.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 09:29:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bz9IPp9t"
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2ff5472f263so1754882eec.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 09:30:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20251104.gappssmtp.com; s=20251104; t=1778603362; x=1779208162; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3RzMfN/3xFNCmPXgNJ1Xq4UquVQnLyOYsZWRgZvy3h0=;
-        b=ty3UbMtXabcV5+gvYKkkgiHWFDXbKVvHFoaRnNqGhkwuX/yCWH5i3dMGyvvXvXuA8H
-         rO8ji33qkGBQvAnyIdItEzbQjYLDA1S7zO4dQBWYvyaKODVklC2oha4qhOjXR3Q4wHMM
-         qkLVSCnpMcTm4kHEqU/8U3x5p+OTklU6s04GVN7bc59UwxC1lE3nHCHUXbK2+x0cFjT2
-         IMtMPkmqEraOvaxhF7nJ1vAPWXfNDnFShQE8c9zCvOWHymm9FaJWeqAe4ND0k1AdHDvT
-         zurYeyXE9yUYCpunoQxxsn9k2fr9+c5d+mAvZtzQFl/4IuodLnUFcNwDty5bzaHvShdl
-         75Zg==
+        d=gmail.com; s=20251104; t=1778603448; x=1779208248; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=w5cj7voQXxv1O1JhfJ17HzUJkc0EkMptUyjXmf+q4tU=;
+        b=bz9IPp9tcG+7gspPDbmHedT5wC0OUBTMsFbB/Q5w/6G9uZUul1daO7jDk9FskcypsC
+         TcZCFLSoK8/38ZXKUpm0YxD/L3Fi8H8ddE57PCaBLIG4dSQdOgbZkzL2vR8w13X1/ziD
+         PycjIZptd2+HsiN+kPXwjUBee0oss3tDzT/GsM3lsbiNhYo0LL7qHNnQiibUxs894p/H
+         eqI6oDCjEGxzyMa02lmRpTe8kXFKat58wJ7bhve0xZtP5qxUM+JDwjnhDzduwo9vCY6h
+         Wb9Wo84vim5pp9Wd7Nsm5rC2yOAAidlV1ChfPvsxTgVeP2ED/r234S9pH3QZqQ69jyKv
+         DV5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778603362; x=1779208162;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=3RzMfN/3xFNCmPXgNJ1Xq4UquVQnLyOYsZWRgZvy3h0=;
-        b=COfxB/VHAQsflVhyrmM981Bz0iXx+yXQrHmpErI8gr5ioJz7qrBXMhfhA+5/ciywaB
-         PywdJuHpIHEyHvswPG5iOZvp/cSqCjlskQi/VI9y2pw7gccp6+GFOBAwoQSId4JHqnr+
-         SnWfeX3USE0HsH253wyXOPqpjugUw+5UWoDtH2ZCtUpOChEk3diXijux9zAjfS16t/ms
-         JIO3Ylpc6hLYXvPiTZKT5lLq4Nvo3KTSV/uMmsIZPlDPaGcaXE3hbrm2/CgbsxZHJYyu
-         BcWO19WhQhap2ieFTguF28DdslC1+qlPRzJCg8q+wBhqI9iRtzImyQUMuA2+Wa8jhgCn
-         Oi1A==
-X-Gm-Message-State: AOJu0YxOfNAG4ts+Z74fKL+irdaQY0Di9Y0tZUvv5D12cjqjrpeY46K5
-	HhMUNbd24LR35nZN+cz1QtSBDyL053G+vIco/YEZP2oVjbRmIInvu8sdEZ0+WzexE8csbevZAX2
-	RWa46
-X-Gm-Gg: Acq92OHlD5Bc+bCA+a6ZfYeWldqCpNYcWFV7NVe/KUdZa5ppWP7U0v9zko0XNi7chX3
-	JCUkgX1hNLtxxL4HdPhcqqWtrattWHoDKYeLYE8h08rU4BB5Rb91lwTcP3VB/ZBNwF3ssFm083G
-	PUvS50J87uTtORoI1lSlCYxxM8RbeK+9yq2SvcZY3LCOw1uX3HWwytST6TrduBTHMChmYBSQohR
-	FTGEnQWVXIWS8K+xIHsKTpM+lbBoweQ9MMg5VpdWCJWORmqu2QiQmztWhP86iZbMy9C0UCtx6ha
-	XHnU3vK7nW0j7eQMtwh3iFA7rPB5HktGKHIAegGNJHlp2G1QRVCYV69Ut/y3sR2MJXyonWeYBNC
-	vGOOCD4Fgy6dIrsheZzSpr2A+J5Ye2EH5xSI+Gqr1Kl6E/tjJWWxjZQNXkZunA4Ss7Xum2jQmg0
-	x7ezj3YGz4MCYgR+BTZHwwhoY2pONf2Q56YVFWIoi2mTEUbvI4+A5p43AS0SM4ZVPD9v8z0X2bZ
-	neQkSPg032QyXCNRJ8Aqko06Q==
-X-Received: by 2002:a05:6000:22c3:b0:44f:9b70:2996 with SMTP id ffacd0b85a97d-45462c3554emr30298402f8f.21.1778603361735;
-        Tue, 12 May 2026 09:29:21 -0700 (PDT)
-Received: from localhost (p200300f65f114e08229f8c404acd2182.dip0.t-ipconnect.de. [2003:f6:5f11:4e08:229f:8c40:4acd:2182])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-454922715b9sm35834923f8f.36.2026.05.12.09.29.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2026 09:29:21 -0700 (PDT)
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig=20=28The=20Capable=20Hub=29?= <u.kleine-koenig@baylibre.com>
-To: Wensheng Wang <wenswang@yeah.net>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/2] hwmon: (pmbus/mp2869) Drop unjustified __maybe_unused
-Date: Tue, 12 May 2026 18:28:57 +0200
-Message-ID:  <3ec2ee181d4f5bfc48c3745f9ce4fdbd1e8fb01e.1778603083.git.ukleinek@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <cover.1778603083.git.ukleinek@kernel.org>
-References: <cover.1778603083.git.ukleinek@kernel.org>
+        d=1e100.net; s=20251104; t=1778603448; x=1779208248;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=w5cj7voQXxv1O1JhfJ17HzUJkc0EkMptUyjXmf+q4tU=;
+        b=gznUqn88UJ9MsruqGjJaDXBbOTCb9MPSNVp8YLHYNOXo99tYtVvy52xNhiW0VZ8fwA
+         oMjZ7VqkGYVHX7aRmwobxSv1MxcW1qq8uVSK1oDUM860I4jIdTFDtlRbFpAV8dnT9e/V
+         fFV01GJqUfLZxwYsYu8HPI4ocbmSZZw8EvupgozoIxJviEv/kdUHi7/ZsPJQLrH/Xg6N
+         4TgYNh084QxAkYVSekUQglRluvbWrCTgwbktqsJYgNgFaRVUc47R36YMx62QBCzBDJHZ
+         hQ+LkIqA6Bv/NZrslki8wGGNT+JnCRAJAWWRpICK6Xbt9IWZ6Q5xzZYcP1ttNzSHdluy
+         ALtA==
+X-Forwarded-Encrypted: i=1; AFNElJ8XGCRjwziGzYHTqU1ui2gh0b4NzhJrp0RyUHa3dgu9uQAtDi53W6LgqNSj6hYOu3oCvP58KOQ+dZxoWw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyw3TUSLdkOFFKa9bkQdmnYVtczpX/ty1/g46rjE3WeclC/66R1
+	IjaUJaUqldrZKphMOXUhA4cGhEVY51kZIGbvaew04HasMJ9w5SC1XmpwI5i+Tw==
+X-Gm-Gg: Acq92OE8EMC5E87lq4IsWsecpzLVNrlji1CumSgsXi8xe3z02gGcCTyxSn6c0z7asav
+	5e+BkFLE3vaeUGYxZZe3qLuFxQQrdihct5PnWH+beMxoU6yFZfJ/tO1WIYj/tSooAewSRJsbKU6
+	lso5oEJBXdCk5EVbN+ptKwndaAugUib8KWjgYSCQarfCRWwaXEJcS7A1rodOj7vGPwarNvFq6FX
+	VqaCZoPWbH4GQwLo23ZNj+5U3N9SyxBUPrWhUk189gnejy7RNvc1SuLxRhzONR92rUzTLxs8szf
+	mxkMyX1owY7jTTMhUyO5+3Qc+EVfsRbVXS3rHckjBRJfRlOGsFlrRxTYgxDfgZSe6e2ARttpUuN
+	g++6rCRPrF9boSNPglEQJeRTq0NNe5P6LplP8sX5yYS46vNPtkRVp+PMVhntIaK5LyKOCJhoa3y
+	jgv6C87G5a9twg7Ex24SUvu5C/vKfk84w08VgOR6b6bX7qoY3kC9QJA9XRz6v+RscegfUWuDlQL
+	m/yUU9TV6o=
+X-Received: by 2002:a05:7300:214f:b0:2ea:cd38:f921 with SMTP id 5a478bee46e88-2ffd7ce16bdmr2132706eec.26.1778603447566;
+        Tue, 12 May 2026 09:30:47 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f8884752ccsm17932722eec.17.2026.05.12.09.30.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 May 2026 09:30:47 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <9c2fa543-525a-4e43-9f73-7caf13b98039@roeck-us.net>
+Date: Tue, 12 May 2026 09:30:45 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=843; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=mFO9TYHX1xITid0n9nDEsYlpc16BXCaIdCL6ZQkkhbA=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBqA1VNCidzRxy0KlQiCGM+OToCeMzEe4gEd6zcG P6tn8av0XmJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCagNVTQAKCRCPgPtYfRL+ Tr95B/45yJGatbpKmS+GCBF5Ycy88pcZjDZCUfMWdc+NzFU8lK6NN8QCkR34kI38J4ppbky4rKN ruNNCEOadeos+WdeJHHyq7qJq01GAF6Bk/Pw3t2Q8MarjV4cdm5eUU5o4gv9WqWy0c4cjgRHDsG E6vCwovVkqg918cHeJR/xEzKuqWRifqET5V9nKeqdf/rNvjME/GpniKptG7+2+fP1Wpv+kDXPRu NVg+E+tfOLdptMOPW6n1NvvF8XcOqjGWEal9XPNLzbWp6hSPfYDpWEIQDhprpEBiF3nbJZZ9aZS ms3XXlqXIfnGFgisn9r5ub80In5j8dxah376ynMtG1n/kSuB
-X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH] rust: hwmon: add basic hwmon abstractions
+To: Donjuanplatinum <donplat@barrensea.org>, ojeda@kernel.org
+Cc: boqun@kernel.org, gary@garyguo.net, bjorn3_gh@protonmail.com,
+ lossin@kernel.org, a.hindborg@kernel.org, aliceryhl@google.com,
+ tmgross@umich.edu, dakr@kernel.org, rust-for-linux@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260512155747.10136-1-donplat@barrensea.org>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260512155747.10136-1-donplat@barrensea.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-mp2869_of_match is used unconditionally in mp2869_driver, so there is no
-need for the __maybe_unused marker.
+On 5/12/26 08:57, Donjuanplatinum wrote:
+> Add a minimal Rust abstraction for the Hardware Monitoring (hwmon)
+> subsystem.
+> 
+> Currently, this abstraction supports a Minimum Viable Product (MVP) scope:
+> registering a single temperature sensor with the read-only `temp1_input`
+> attribute. Support for multi-channel, additional sensor types, and
+> writable attributes is deferred to future patches to keep this initial
+> foundation reviewable.
+> 
+> The primary architectural challenge in wrapping hwmon is initializing
+> `struct hwmon_chip_info`, which requires stable, self-referential
+> pointers to nested NULL-terminated arrays. Instead of relying on complex
+> macro generation for static allocation, this implementation leverages
+> a single heap allocation (`KBox`). It safely wires the self-referential
+> raw pointers using unaliased `&raw mut` during the allocation's
+> exclusive ownership phase, and then securely seals it by pinning
+> (`Pin::new_unchecked`).
+> 
+> For resource management, this implementation uses standard Rust RAII
+> (calling `hwmon_device_unregister` in `Drop`) rather than `devm_`
+> variants, ensuring natural drop ordering and avoiding complex C-side
+> trampolines for generic types.
+> 
+> Signed-off-by: Donjuanplatinum <donplat@barrensea.org>
 
-Signed-off-by: Uwe Kleine-König (The Capable Hub) <u.kleine-koenig@baylibre.com>
----
- drivers/hwmon/pmbus/mp2869.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Sorry, rust support in the hardware monitoring subsystem will have to wait
+for someone else to pick up maintainership.
 
-diff --git a/drivers/hwmon/pmbus/mp2869.c b/drivers/hwmon/pmbus/mp2869.c
-index d345be920429..76c6017507b3 100644
---- a/drivers/hwmon/pmbus/mp2869.c
-+++ b/drivers/hwmon/pmbus/mp2869.c
-@@ -640,7 +640,7 @@ static const struct i2c_device_id mp2869_id[] = {
- };
- MODULE_DEVICE_TABLE(i2c, mp2869_id);
- 
--static const struct of_device_id __maybe_unused mp2869_of_match[] = {
-+static const struct of_device_id mp2869_of_match[] = {
- 	{ .compatible = "mps,mp2869" },
- 	{ .compatible = "mps,mp29608" },
- 	{ .compatible = "mps,mp29612" },
--- 
-2.47.3
+Guenter
 
