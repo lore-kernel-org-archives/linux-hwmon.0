@@ -1,196 +1,110 @@
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 897084A1387
-	for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 08:42:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33B7C3A5E84
+	for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 09:14:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778575361; cv=none; b=c4iQInMUELMOLAJRrYSWbhlA+I9flWmV8s657zUIidfV8TYqn68Tz5s2EIY6DzlVuBbfrhS6Rez3inxQGrac6tKMhrCvxvX/0yPWW/DylP3Y9ZwZ8REwj23kb3a+2xln13Y76/YUK+NSmTR8BuP6Enlze9dTEr9SfREO28mUET4=
+	t=1778577249; cv=none; b=uG1omTT6zIcbrDxLM7X9hUR1HVmhS69wQ0vXPjxtnGKRG3oYn+tiZUyZB8VUf5UOdC05zYkFzRgc5WAC699QiehI5YahgKcvfJUIdHD8yJHwhjZ2XhJ4kN3nr460Ynfcuz/WtdkjbG3zJjGSVzSgTcxeuo5MqDJLv/9xPf5HnSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778575361; c=relaxed/simple;
-	bh=lq+/2jh4vsMC5QGD+Xb1leAx79zaNi8OYDy5lVugXcI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=VJ+DFPqSc5MLZ4G9wymrGZlDyj1xdxTqrNXxZz6/uQ5hKvbjbxSG2N+0rJriteu0Evz9YCt4gAddSQBCjIF+8DTBl2ucoel/JVmb0mI3FHhemWJbIe8BowCt2fQDAodYD3w6uQrElKsijeam2ZdE0VBhLj82QTA77kXbzDzgiUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai; spf=pass smtp.mailfrom=nexthop.ai; dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b=Chir+hrS; arc=none smtp.client-ip=74.125.82.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b="Chir+hrS"
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2bdcf5970cdso3817147eec.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 01:42:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexthop.ai; s=google; t=1778575349; x=1779180149; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8nV86GhwDOWsGDhN/ru26Dzx9121SYap+YK8888DQW0=;
-        b=Chir+hrS9TP70zVAvS5qPyQpKVk+jC0Wrs6RwhSfUCW1QiSbziK2cSxmYSxNbvr9SI
-         +OtcsVSpQkLy9do0k30yTTnvblGZ0lHzn8E4dOKP/7n0RzrSxj71RFB6nLdzIleiUW5s
-         945rqUdSQ38n29coKO+Tu9RVWAYRAsOLVXs4vokjqn3jERFCx+dp1fhWKWBavjQKLYjS
-         LktxissiRM7mVxYbfPjK7HWC80fZstQw4Q3SfCANXF7j7mminUvec4Vn7frjZq2wTUwh
-         dV4ezlumB27Wsw9yo6zMtwOCQ79qhqSHvS6lvVybMSMuV4bfvRoZfjw8VKqIyXPKKn4Q
-         +PXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778575349; x=1779180149;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8nV86GhwDOWsGDhN/ru26Dzx9121SYap+YK8888DQW0=;
-        b=imN3ec9HBs8afiq1ZcEufuktB7Ovi7JiT39aB451L6zMmiUKJzpC1TOVz62xZK6JiZ
-         CoqtiUlVE0bf9IAKrFGGusHMR7ML1pyQ7vt54nHvGB3GgmS6cvneTRind1BSSomw2Ru3
-         Y2EAVNszYDSPv4XnBWDbPbYnYD2I2/HLLh9wAHdroxGtstxEGrITCMsN7x/kfLa4Zb4j
-         71Wfk1SZvti7i3vd8JdsOo31Bou6an0XcrxCI3Vxhv37d0zrNdScedyJldTwhZRHoCrj
-         kRSr2Su8S5grlrvRmal+4sU4lKTG0JDBsJOI1lozk2Q+ECeiywyUwupTHaz5fCIGM3BD
-         2v8A==
-X-Gm-Message-State: AOJu0Ywsx6H8z5HMX2QV92gxY+54uAQu5V9EG3D/SWolnVLcuRYafHvV
-	m5+NjODFCeGyORGWKUZQ4v0fjr4U/2Pm48F6gL1ihU6wWL/WMdCKD8De2kTW7Xh2l2Osfzq6X3X
-	GnomFg+8=
-X-Gm-Gg: Acq92OEXyKsnqFq8fXORgusW/hW4Q/KlfUA11pu3StVKFZiyPvy6IPEXQ2EWc0fsV04
-	2sWFZtDLx8bjw1A4KieF5Bd67zMcD1/voILex50tWSR46ZW4wn7ofra7TWs9Y/qQ6wA0kk2t1wp
-	Wf1J9tRS2DmVpqN+Z5G2Id9pWMF8azf8JzIgwBweoZpI48i32/+lXSIHke3wz99+vcaRm0+smxD
-	llVY+Pwbd+KdVcO4hQvb1eH1TvXVBeuJi9RXJVyKlYv3pFiZ9f2ozPpoY6NNCLpcMyPHCIcv+ue
-	f2woL0qe0gaDpgdyaV8v0AZ3vaWNROGj+VKIplA4D37K0CyfL9mimwOEOiqkSUWUc+8ZacjA3A3
-	VsOU8B1dTb9jk+6AaHi/PxTKP1GeAur4arbTCLl+dx0/EkvaJF02Z2iQNOszc9IIdwwAN0SnqY4
-	2WKdTs4TOx5P4plVSyI98821M=
-X-Received: by 2002:a05:7300:324b:b0:2f3:5d44:eeba with SMTP id 5a478bee46e88-2ff93d089efmr1476347eec.6.1778575348498;
-        Tue, 12 May 2026 01:42:28 -0700 (PDT)
-Received: from localhost ([50.145.100.174])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f8864c37basm16695078eec.13.2026.05.12.01.42.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 May 2026 01:42:28 -0700 (PDT)
+	s=arc-20240116; t=1778577249; c=relaxed/simple;
+	bh=sCjxp2FDiVf9IqZaN8jRPP5BqnwoUzKVhYi5ATmijQs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=hNL8kZIj3LNt05KcJ+p80kvX26qMRyF8rtyziBfZMEC0ovcYJdsjpJkXb9fXakxC7HaXnlbjYijJSJ64go7/Z/WCDj98mchHBDyOMBsiMMKnxKWsNRBySkpQZMzdpNJvDzp/CnonYTqfgJJlzi5GZ8g89upWoFsCZ5gxSygsbtc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=13.75.44.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
+Received: from hehuan1$eswincomputing.com ( [10.12.96.103] ) by
+ ajax-webmail-app2 (Coremail) ; Tue, 12 May 2026 17:14:03 +0800 (GMT+08:00)
+Date: Tue, 12 May 2026 17:14:03 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: "Huan He" <hehuan1@eswincomputing.com>
+To: sashiko@lists.linux.dev
+Cc: linux-hwmon@vger.kernel.org
+Subject: Re: Re: [PATCH v4 1/2] dt-bindings: hwmon: Add Eswin EIC7700 PVT
+ sensor
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2024.2-cmXT6 build
+ 20241203(6b039d88) Copyright (c) 2002-2026 www.mailtech.cn
+ mispb-72143050-eaf5-4703-89e0-86624513b4ce-eswincomputing.com
+In-Reply-To: <20260430070049.0B702C2BCB4@smtp.kernel.org>
+References: <20260430064444.1615-1-hehuan1@eswincomputing.com>
+ <20260430070049.0B702C2BCB4@smtp.kernel.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 12 May 2026 01:42:27 -0700
-Message-Id: <DIGKCAWMW65P.1GSNT49V8KH98@nexthop.ai>
-Subject: Re: [PATCH RESEND v2 4/5] hwmon: (pmbus/adm1266) replace probe-time
- RTC seed with rtc_class device
-From: "Abdurrahman Hussain" <abdurrahman@nexthop.ai>
-To: <sashiko@lists.linux.dev>, "Abdurrahman Hussain"
- <abdurrahman@nexthop.ai>
-Cc: <linux-hwmon@vger.kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260511-adm1266-v2-4-7a6d34f0de5d@nexthop.ai>
- <20260512033233.6868FC2BCB0@smtp.kernel.org>
-In-Reply-To: <20260512033233.6868FC2BCB0@smtp.kernel.org>
+MIME-Version: 1.0
+Message-ID: <75446e0c.6167.19e1b76fe55.Coremail.hehuan1@eswincomputing.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:TQJkCgAHHaBb7wJqYMQYAA--.5063W
+X-CM-SenderInfo: 5khk3tzqr6v25zlqu0xpsx3x1qjou0bp/1tbiAgEFCmoCBREpMwAB
+	sr
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+	daVFxhVjvjDU=
 
-On Mon May 11, 2026 at 8:32 PM PDT, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issu=
-e(s) to consider:
-> - [High] Missing locking in RTC callbacks causes race condition with PMBu=
-s transactions.
-> - [Medium] Premature exposure of the RTC device before hardware initializ=
-ation is complete.
-> --
->
-> commit 20e4a34f4a236495f598a1957552fb4fea44b3d3
-> Author: Abdurrahman Hussain <abdurrahman@nexthop.ai>
->
->     hwmon: (pmbus/adm1266) replace probe-time RTC seed with rtc_class dev=
-ice
->
-> This commit replaces the probe-time RTC seeding with an rtc_class device
-> backed by SET_RTC. This allows userspace tooling to drive the re-sync aga=
-inst
-> /dev/rtcN once it trusts the system clock.
->
->> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266=
-.c
->> index 99e92a8365fb7..0dfb02db86837 100644
->> --- a/drivers/hwmon/pmbus/adm1266.c
->> +++ b/drivers/hwmon/pmbus/adm1266.c
-> [ ... ]
->> +static int adm1266_rtc_read_time(struct device *dev, struct rtc_time *t=
-m)
->> +{
->> +	struct i2c_client *client =3D to_i2c_client(dev);
->> +	u8 buf[I2C_SMBUS_BLOCK_MAX];
->> +	u32 secs;
->> +	int ret;
->> +	int i;
->> =20
->> -	memset(write_buf, 0, sizeof(write_buf));
->> +	ret =3D i2c_smbus_read_block_data(client, ADM1266_SET_RTC, buf);
->
-> Since this RTC device is exposed to userspace, can this callback be invok=
-ed
-> concurrently with hwmon sysfs attributes managed by the PMBus core?
->
-> The PMBus core uses pmbus_lock to serialize multi-step sequences. If an R=
-TC
-> I2C transaction interleaves in the middle of a PMBus sequence, can it dis=
-rupt
-> the device's internal state machine or cause unpredictable behavior?
->
-> Should this callback acquire pmbus_lock(client) (or its interruptible
-> variant) around the I2C transfer to prevent a race condition?
->
->> +	if (ret < 0)
->> +		return ret;
-> [ ... ]
->> +static int adm1266_rtc_set_time(struct device *dev, struct rtc_time *tm=
-)
->> +{
->> +	struct i2c_client *client =3D to_i2c_client(dev);
->> +
->> +	return adm1266_write_rtc(client, rtc_tm_to_time64(tm));
->> +}
->
-> Does this callback also need to acquire pmbus_lock(client) around the I2C
-> transfer to prevent concurrent access with PMBus transactions?
->
-> [ ... ]
-
-Agreed. In v3 both callbacks wrap their I2C transfer in
-pmbus_lock_interruptible() / pmbus_unlock(). adm1266_write_rtc() is
-no longer reachable from probe (the probe-time SET_RTC seed is what
-this patch removes), so the new lock acquisition is purely on the
-userspace path and a signal can interrupt a contended wait cleanly.
-
->> @@ -553,7 +603,7 @@ static int adm1266_probe(struct i2c_client *client)
->>  	if (ret < 0)
->>  		return ret;
->> =20
->> -	ret =3D adm1266_set_rtc(data);
->> +	ret =3D adm1266_register_rtc(data);
->>  	if (ret < 0)
->>  		return ret;
->
-> By registering the RTC device here, is the /dev/rtcX interface exposed to
-> userspace before pmbus_do_probe() completes the hardware discovery and
-> initialization sequence?
->
-> If a userspace process immediately opens the RTC device and issues read/w=
-rite
-> commands, can the resulting I2C traffic interleave with the driver's
-> initial setup?
->
-> Should adm1266_register_rtc() be called at the end of the probe function,
-> after pmbus_do_probe() succeeds, to ensure the device is fully initialize=
-d
-> before it is accessed externally?
-
-The ordering follows the existing pattern for the GPIO and nvmem
-registrations in this driver. None of the three registration helpers
-performs I2C at registration time =E2=80=94 devm_{gpiochip,nvmem,rtc}_*()
-only install callbacks that fire later when userspace touches the
-interface. With the v3 locking in place, any userspace RTC access
-that lands during pmbus_do_probe() will serialise on
-pmbus_lock_interruptible() against the core's PAGE+register
-sequences rather than interleave with them, so the
-window-without-protection that the original concern describes is
-closed by the locking change.
-
-I would prefer to leave the registration ordering as-is for
-consistency with the GPIO and nvmem paths, but I am happy to move
-all three after pmbus_do_probe() if you would rather have a stricter
-"nothing visible to userspace until probe is done" invariant across
-the driver. Happy to do that in a follow-up if so.
-
-Best regards,
-Abdurrahman
+SGkgU2FzaGlrbywKClRoYW5rIHlvdSB2ZXJ5IG11Y2ggZm9yIHlvdXIgZGV0YWlsZWQgcmV2aWV3
+LsKgV2UgYXBwcmVjaWF0ZSB0aGUgZmVlZGJhY2suCgo+IAo+IFRoYW5rIHlvdSBmb3IgeW91ciBj
+b250cmlidXRpb24hIFNhc2hpa28gQUkgcmV2aWV3IGZvdW5kIDIgcG90ZW50aWFsIGlzc3VlKHMp
+IHRvIGNvbnNpZGVyOgo+IC0gW01lZGl1bV0gVGhlICdsYWJlbCcgcHJvcGVydHkgaXMgcmVxdWly
+ZWQgYW5kIHJlc3RyaWN0ZWQgdG8gYW4gZW51bSwgbWlzdXNpbmcgaXQgZm9yIGhhcmR3YXJlIGlu
+c3RhbmNlIGlkZW50aWZpY2F0aW9uLgo+IC0gW01lZGl1bV0gVGhlICcjdGhlcm1hbC1zZW5zb3It
+Y2VsbHMnIHByb3BlcnR5IGlzIGRlZmluZWQgYnV0IG9taXR0ZWQgZnJvbSB0aGUgJ3JlcXVpcmVk
+JyBsaXN0Lgo+IC0tCj4gCj4gY29tbWl0IDVhNWVkMzRkMTdlYTRlODhjZDgwYjVhOGU5NmUyMWRj
+YzY1ZTlmMTEKPiBBdXRob3I6IEh1YW4gSGUgPGhlaHVhbjFAZXN3aW5jb21wdXRpbmcuY29tPgo+
+IAo+IGR0LWJpbmRpbmdzOiBod21vbjogQWRkIEVzd2luIEVJQzc3MDAgUFZUIHNlbnNvcgo+IAo+
+IFRoaXMgY29tbWl0IGFkZHMgdGhlIGRldmljZSB0cmVlIGJpbmRpbmcgZG9jdW1lbnRhdGlvbiBm
+b3IgdGhlIEVzd2luCj4gRUlDNzcwMCBQcm9jZXNzLCBWb2x0YWdlIGFuZCBUZW1wZXJhdHVyZSBz
+ZW5zb3IuIFRoZSBTb0MgaW50ZWdyYXRlcyB0d28KPiBQVlQgaW5zdGFuY2VzIGZvciBtb25pdG9y
+aW5nIHRoZSBtYWluIFNvQyBhbmQgRERSIHBvd2VyIGRvbWFpbnMuCj4gCj4gPiBkaWZmIC0tZ2l0
+IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2h3bW9uL2Vzd2luLGVpYzc3MDAt
+cHZ0LnlhbWwgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaHdtb24vZXN3aW4s
+ZWljNzcwMC1wdnQueWFtbAo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDAwMDAw
+MDAwMDAwMDAuLmJhODliODI5ZWU5NDcKPiA+IC0tLSAvZGV2L251bGwKPiA+ICsrKyBiL0RvY3Vt
+ZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9od21vbi9lc3dpbixlaWM3NzAwLXB2dC55YW1s
+Cj4gCj4gWyAuLi4gXQo+IAo+ID4gKyAgaW50ZXJydXB0czoKPiA+ICsgICAgbWF4SXRlbXM6IDEK
+PiA+ICsKPiA+ICsgIGxhYmVsOgo+ID4gKyAgICBlbnVtOgo+ID4gKyAgICAgIC0gcHZ0MAo+ID4g
+KyAgICAgIC0gcHZ0MQo+IAo+IElzIGl0IGFwcHJvcHJpYXRlIHRvIHJlc3RyaWN0IHRoZSBzdGFu
+ZGFyZCBsYWJlbCBwcm9wZXJ0eSB0byBhIHN0cmljdCBlbnVtCj4gYW5kIHJlcXVpcmUgaXQ/IAo+
+IAo+IFRoZSBkZXZpY2V0cmVlIHNwZWNpZmljYXRpb24gZ2VuZXJhbGx5IGRlZmluZXMgbGFiZWwg
+YXMgYW4gb3B0aW9uYWwsCj4gaHVtYW4tcmVhZGFibGUgc3RyaW5nLiBTaG91bGQgdGhlIGhhcmR3
+YXJlIGluc3RhbmNlcyBiZSBkaWZmZXJlbnRpYXRlZCBieQo+IHRoZWlyIHJlZyBhZGRyZXNzZXMs
+IGFsaWFzZXMsIG9yIGRlZGljYXRlZCBwcm9wZXJ0aWVzIGluc3RlYWQgb2YgaW1wb3NpbmcKPiBh
+IHN0cmljdCBlbnVtIG9uIGEgc3RhbmRhcmQgZnJlZS1mb3JtIHN0cmluZz8KCkkgYW0gcGxhbm5p
+bmcgdG8gdXBkYXRlIHRoZSBuZXh0IHJldmlzaW9uIGFzIGZvbGxvd3MuIFdvdWxkIHRoaXMgYmUK
+YWNjZXB0YWJsZT8KCllBTUw6Ci0gwqBsYWJlbDoKLSDCoCDCoGVudW06Ci0gwqAgwqAgwqAtIHB2
+dDAKLSDCoCDCoCDCoC0gcHZ0MQorIMKgbGFiZWw6IHRydWUKCnJlcXVpcmVkOgrCoCAtIGNvbXBh
+dGlibGUKwqAgLSByZWcKwqAgLSBjbG9ja3MKwqAgLSBpbnRlcnJ1cHRzCi0gLSBsYWJlbAoKRHJp
+dmVyOgrCoHN0YXRpYyBpbnQgZWljNzcwMF9wdnRfY3JlYXRlX2h3bW9uKHN0cnVjdCBwdnRfaHdt
+b24gKnB2dCkKwqB7Ci0gwqAgc3RydWN0IGRldmljZSAqZGV2ID0gcHZ0LT5kZXY7Ci0gwqAgc3Ry
+dWN0IGRldmljZV9ub2RlICpucCA9IGRldi0+b2Zfbm9kZTsKLSDCoCBjb25zdCBjaGFyICpub2Rl
+X2xhYmVsOwotIMKgIGludCB0eXBlOwotIMKgIGNvbnN0IGNoYXIgKm5hbWVzWzJdID0geyJzb2Nf
+cHZ0IiwgImRkcl9wdnQifTsKLQotIMKgIGlmIChvZl9wcm9wZXJ0eV9yZWFkX3N0cmluZyhucCwg
+ImxhYmVsIiwgJm5vZGVfbGFiZWwpKSB7Ci0gwqAgwqAgwqAgZGV2X2VycihkZXYsICJNaXNzaW5n
+ICdsYWJlbCcgcHJvcGVydHkgaW4gRFRTIG5vZGVcbiIpOwotIMKgIMKgIMKgIHJldHVybiAtRUlO
+VkFMOwotIMKgIH0KLQotIMKgIGlmIChzdHJjbXAobm9kZV9sYWJlbCwgInB2dDAiKSA9PSAwKSB7
+Ci0gwqAgwqAgwqAgdHlwZSA9IDA7Ci0gwqAgfSBlbHNlIGlmIChzdHJjbXAobm9kZV9sYWJlbCwg
+InB2dDEiKSA9PSAwKSB7Ci0gwqAgwqAgwqAgdHlwZSA9IDE7Ci0gwqAgfSBlbHNlIHsKLSDCoCDC
+oCDCoCBkZXZfZXJyKHB2dC0+ZGV2LCAiVW5zdXBwb3J0ZWQgbGFiZWw6ICVzXG4iLCBub2RlX2xh
+YmVsKTsKLSDCoCDCoCDCoCByZXR1cm4gLUVJTlZBTDsKLSDCoCB9CisgwqAgY29uc3QgY2hhciAq
+bmFtZSA9ICJwdnQiOworCisgwqAgb2ZfcHJvcGVydHlfcmVhZF9zdHJpbmcocHZ0LT5kZXYtPm9m
+X25vZGUsICJsYWJlbCIsICZuYW1lKTsKwqAKLSDCoCBwdnQtPmh3bW9uID0gZGV2bV9od21vbl9k
+ZXZpY2VfcmVnaXN0ZXJfd2l0aF9pbmZvKHB2dC0+ZGV2LCBuYW1lc1t0eXBlXSwKKyDCoCBwdnQt
+Pmh3bW9uID0gZGV2bV9od21vbl9kZXZpY2VfcmVnaXN0ZXJfd2l0aF9pbmZvKHB2dC0+ZGV2LCBu
+YW1lLArCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCBwdnQsICZw
+dnRfaHdtb25faW5mbywKwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
+wqAgTlVMTCk7Cgo+IAo+ID4gKwo+ID4gKyAgcmVzZXRzOgo+ID4gKyAgICBtYXhJdGVtczogMQo+
+ID4gKwo+ID4gKyAgJyN0aGVybWFsLXNlbnNvci1jZWxscyc6Cj4gPiArICAgIGNvbnN0OiAwCj4g
+PiArCj4gPiArcmVxdWlyZWQ6Cj4gPiArICAtIGNvbXBhdGlibGUKPiA+ICsgIC0gcmVnCj4gPiAr
+ICAtIGNsb2Nrcwo+ID4gKyAgLSBpbnRlcnJ1cHRzCj4gPiArICAtIGxhYmVsCj4gPiArICAtIHJl
+c2V0cwo+IAo+IFNob3VsZCAjdGhlcm1hbC1zZW5zb3ItY2VsbHMgYmUgaW5jbHVkZWQgaW4gdGhp
+cyByZXF1aXJlZCBsaXN0Pwo+IAo+IFNpbmNlIHRoZSBkZXZpY2UgYWN0cyBhcyBhIHRoZXJtYWwg
+c2Vuc29yIHByb3ZpZGVyLCBvbWl0dGluZyBpdHMgY2VsbC1jb3VudAo+IHByb3BlcnR5IGFsbG93
+cyBpbmNvbXBsZXRlIGRldmljZSB0cmVlIG5vZGVzIHRvIHNpbGVudGx5IHBhc3Mgc2NoZW1hCj4g
+dmFsaWRhdGlvbi4gVGhpcyBtaWdodCBsZWFkIHRvIHJ1bnRpbWUgZmFpbHVyZXMgb3IgbWlzY29u
+ZmlndXJhdGlvbnMgd2hlbgo+IGRlcGVuZGVudCB0aGVybWFsIHpvbmVzIGF0dGVtcHQgdG8gcmVm
+ZXJlbmNlIHRoZSBzZW5zb3IuCgpJIHdpbGwgYWRkICIjdGhlcm1hbC1zZW5zb3ItY2VsbHMiIHRv
+IHRoZSByZXF1aXJlZCBsaXN0IGluIHRoZSBuZXh0CnJldmlzaW9uLgoKQmVzdCByZWdhcmRzLApI
+dWFuIEhlCg==
