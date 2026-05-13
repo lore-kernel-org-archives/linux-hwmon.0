@@ -1,162 +1,101 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 784C4883F
-	for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 00:10:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88A84388E58;
+	Wed, 13 May 2026 02:24:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778631001; cv=none; b=MzGLv5F/E+rhRtH4Hfu5OnP4h3+dFMqaYXZRdtl6uiuYijYOatFRVfBcu9bXPjCvNhu5mUg1UZQzK5AweM9B/BEnMh7+DX/a+6gh8g9dFnRKTHIOfP1ZAFu07Ft9z9w8C5+1TYZ7PiidN56Gc/6e/ThDP13vYMz2cAufbV3qSNU=
+	t=1778639087; cv=none; b=brnkFfCID31Q9/lcpSQ6dLB6Elhp4CYxfwoSTvv7nmDDgLGBYU9cFck7jUl/uTV+gRTLZQNZkjItPRSKcBKU/teRVvmhkvJ/O4rFwDqpDLFuLOXMZ6yfWPj6H+tb6zSLpgmk/bASZZBqRbTS/3thuxo2mYyHalPMq4y7uqN2yw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778631001; c=relaxed/simple;
-	bh=p7VZPZPDImfQMSzAHpf5FRol1QR5Zt1GmHF8OE2f1fk=;
+	s=arc-20240116; t=1778639087; c=relaxed/simple;
+	bh=9cIfxuycgP8z4g23PgKgPgWRXfTbd9QvLzmPjgLbCjw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=m+Cdt+s0oGB4djntLfZuyvDyKJ64Ec7WStf4lYFXphxUbYzra60Dwtsac2jB5FJa120w6uXDQdBLZCg80GSRSv2HEGMk5SDpM7VK63NsuXLwNd1o82ZCct7+rZiMXfwifjOseZiESddB9pWiW5P60DyJK5pXEx5C9G5QNNxe4VY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H40wUX/3; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=CD+reL+xbkZm/PMbxEkCZakV+ScCmAVbLaYs66gTkY1eaQkcuMcWWEpPN2P3xOURYUfVhVeiJbVx2VFai+V+Bh7rwRKEvEplv6tPcY4umV/FbcW6mDEMOrDFGrJVQSl2h2RJuOjfKFqiAppRuxDY6JAgs39VntgHapTEW7+u358=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cp6mP9lo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H40wUX/3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0800C2BCB0;
-	Wed, 13 May 2026 00:10:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cp6mP9lo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19F29C2BCB0;
+	Wed, 13 May 2026 02:24:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778631001;
-	bh=p7VZPZPDImfQMSzAHpf5FRol1QR5Zt1GmHF8OE2f1fk=;
+	s=k20201202; t=1778639087;
+	bh=9cIfxuycgP8z4g23PgKgPgWRXfTbd9QvLzmPjgLbCjw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=H40wUX/3s+bTD9OVvdI0mllsVLbGfwhTt5PxeDT1ONqbD10mNJMBxSZXaaByLOW1X
-	 8EyNNbe0OtllhJZaw73MZpdj1QDiI7MbCH5xUqEXnhpIEOTLaAnLh3GXNalUpikHTc
-	 0PdTK8hPacm6ne5lBwSr7klKnBUTRiKrDcz68Z3Hs1ZRRN6ZeO2OhZlb5bVAIN6uCj
-	 PBreMUjwZC4xcWtJDCpETcREInLkGQgAFPecVuPR4wKTDZ8EgwkAKy2Aku5yeSXIje
-	 eqZ38LWJL86NGfoYm9o/cncovNEKwiSmRiPcEBEm6WJ8dH2fv7XCZo1qQSoM9hy56o
-	 alOk0Gfl6OkTg==
+	b=Cp6mP9loWgeE+UlD61nyBeaRUDf+dTG/tK7LRaDWbA9+m1O/HVYfU/dt+rq1EuTeo
+	 IXris+1vw0HsVBJks+2OdYJ1wZWMbcyp8HSxXQQANm3ijwvBivCFFn72qr+KEkswa9
+	 ZhBVhtJ0NXlE1I1DbZn9VhYALOWhD4qPeccsVri5vscd7agfRNqtGyYN2Y+yBP/B3F
+	 QWuwPGQJucJg71KjKvweWcuNUc0vW1eCk6FcNbOe+U1Juljub0ROPBAdx6I8YLP1ly
+	 H/ZnoDYEwIwreQFmxc2OkxNpYoAAn3D9fYPeRu3BQY8CHUF33EbbhhmzHApCO2CPqs
+	 cqrnQwuuISTMA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v1] hwmon: (acpi_power_meter) Check ACPI_COMPANION()
- against NULL
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pmbus: Add Murata D1U74T PSU
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <5068745.GXAFRqVoOG@rafael.j.wysocki>
-References: <5068745.GXAFRqVoOG@rafael.j.wysocki>
+To: "Abdurrahman Hussain" <abdurrahman@nexthop.ai>
+Cc: devicetree@vger.kernel.org, krzk+dt@kernel.org, robh@kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org
+In-Reply-To: <20260511-d1u74t-v1-1-623c2bc1532a@nexthop.ai>
+References: <20260511-d1u74t-v1-1-623c2bc1532a@nexthop.ai>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 13 May 2026 00:10:00 +0000
-Message-Id: <20260513001000.F0800C2BCB0@smtp.kernel.org>
+Date: Wed, 13 May 2026 02:24:46 +0000
+Message-Id: <20260513022447.19F29C2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] Subsystem Guideline Violation / Data Race: Missing and incorrect l=
-ocking for extra attributes.
-- [High] Subsystem Guideline Violation: Integer overflow in DIV_ROUND_CLOSE=
-ST bypasses boundary checks.
-- [High] Subsystem Guideline Violation: Integer truncation during 64-bit po=
-wer calculations.
+- [Low] The 'MURATA D1U74T PSU DRIVER' MAINTAINERS entry breaks alphabetica=
+l sorting.
+- [Low] The devicetree example uses a non-standard node name 'psu@58'.
 --
 
-commit 20d683b13caf3ad1f2da04d46b6d0bb7dff30a02
-Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+commit ff01149325e7be87488c4a95814dc42ab054bb39
+Author: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 
-hwmon: (acpi_power_meter) Check ACPI_COMPANION() against NULL
+dt-bindings: hwmon: pmbus: Add Murata D1U74T PSU
 
-Every platform driver can be forced to match a device that doesn't match
-its list of device IDs because of device_match_driver_override(), so
-platform drivers that rely on the existence of a device's ACPI companion
-object need to verify its presence.
+This commit adds the devicetree binding documentation and MAINTAINERS entry
+for the Murata D1U74T-W PMBus power supply unit.
 
-> diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_=
-meter.c
-> index be7f702dcde9c..0c9b9f4180fb7 100644
-> --- a/drivers/hwmon/acpi_power_meter.c
-> +++ b/drivers/hwmon/acpi_power_meter.c
-> @@ -884,10 +884,14 @@ static void acpi_power_meter_notify(acpi_handle han=
-dle, u32 event, void *data)
-> =20
->  static int acpi_power_meter_probe(struct platform_device *pdev)
->  {
-> -	struct acpi_device *device =3D ACPI_COMPANION(&pdev->dev);
->  	struct acpi_power_meter_resource *resource;
-> +	struct acpi_device *device;
->  	int res;
-> =20
-> +	device =3D ACPI_COMPANION(&pdev->dev);
-> +	if (!device)
-> +		return -ENODEV;
+> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/murata,d1u74t.=
+yaml b/Documentation/devicetree/bindings/hwmon/pmbus/murata,d1u74t.yaml
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/murata,d1u74t.yaml
+[ ... ]
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
 > +
->  	resource =3D kzalloc_obj(*resource);
->  	if (!resource)
->  		return -ENOMEM;
+> +        psu@58 {
 
-These might not be regressions introduced by the new code, but the hwmon
-subsystem guidelines explicitly mandate that drivers must implement locking
-required for attributes registered by any other means, and should use
-hwmon_lock() and hwmon_unlock() for this purpose.
+Does this node name follow the standard devicetree specification? The
+standard generic name for this class of device is typically "power-supply".
+Should this be updated to "power-supply@58" rather than "psu@58" to better
+reflect the generic function of the device?
 
-Does this sysfs show function read the 64-bit res->trip array without
-acquiring any locks?
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6803,6 +6803,12 @@ S:	Maintained
+>  F:	Documentation/hwmon/crps.rst
+>  F:	drivers/hwmon/pmbus/crps.c
+> =20
+> +MURATA D1U74T PSU DRIVER
+> +M:	Abdurrahman Hussain <abdurrahman@nexthop.ai>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/hwmon/pmbus/murata,d1u74t.yaml
+> +
+>  CRYPTO API
 
-drivers/hwmon/acpi_power_meter.c:power1_average_min_show() {
-    ...
-    if (res->trip[POWER_METER_TRIP_AVERAGE_MIN_IDX] < 0)
-        return sysfs_emit(buf, "unknown\n");
-
-    return sysfs_emit(buf, "%lld\n",
-              res->trip[POWER_METER_TRIP_AVERAGE_MIN_IDX] * 1000);
-}
-
-On 32-bit architectures, can this lead to torn reads and expose corrupted
-states to userspace if updated concurrently via store operations?
-
-Also, is it incorrect to use the driver's own mutex_lock(&res->lock) instead
-of the required hwmon_lock() API?
-
-drivers/hwmon/acpi_power_meter.c:power1_average_min_store() {
-    ...
-    mutex_lock(&res->lock);
-    ret =3D set_trip(res, POWER_METER_TRIP_AVERAGE_MIN_IDX, trip);
-    mutex_unlock(&res->lock);
-    ...
-}
-
-Can these DIV_ROUND_CLOSEST macros overflow the integer width and wrap arou=
-nd
-to a very small number if a mistakenly large value is provided?
-
-drivers/hwmon/acpi_power_meter.c:set_trip() {
-    ...
-    trip =3D DIV_ROUND_CLOSEST(trip, 1000);
-    ...
-}
-
-drivers/hwmon/acpi_power_meter.c:set_cap() {
-    ...
-    cap =3D DIV_ROUND_CLOSEST(cap, 1000);
-    ...
-}
-
-Since the macro evaluates using the expression x + 500, does this silently
-bypass boundary checks like min_cap and incorrectly program the underlying
-ACPI hardware limits?
-
-Finally, could the multiplication of the 64-bit attribute res->power
-(measured in milliwatts) by 1000 severely overflow the 32-bit bound on 32-b=
-it
-architectures?
-
-drivers/hwmon/acpi_power_meter.c:power_meter_read() {
-    ...
-    case hwmon_power_average:
-        ...
-        *val =3D res->power * 1000;
-        break;
-    ...
-}
-
-Since *val is a long capable of representing up to ~2.14 billion on 32-bit
-systems, can a power consumption of 3000 Watts result in returning
-fundamentally incorrect, negative numbers to userspace due to the lack of
-overflow clamping or checks?
+This isn't a bug, but it appears this entry was inserted out of alphabetical
+order. Since "MURATA D1U74T PSU DRIVER" is currently placed just before
+"CRYPTO API", should it be relocated further down the file into its proper
+alphabetical position in the "M" section?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/5068745.GXAFRqVoOG@=
-rafael.j.wysocki?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260511-d1u74t-v1-=
+0-623c2bc1532a@nexthop.ai?part=3D1
