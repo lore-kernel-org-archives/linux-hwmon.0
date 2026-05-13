@@ -1,69 +1,69 @@
-Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
+Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58CA238F928
-	for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 14:25:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B643624DB
+	for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 14:25:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778682325; cv=none; b=Q+hJihUcuDahkfbEyj/QY/8XOVDwJpbE1rH2o6v5KkOUiYndA6cg3i5BAkZSPNEK5CAePBY6Ae/c/d01XAbgp2CalTQjO/jPA4zXfRgNELs7DFBG2OrbGbcytP8g9dJT6IvJwyFNbWJe0mcf5zSQSgUAzkUfOD6YDcufJ+xh5ms=
+	t=1778682326; cv=none; b=tMLTJqduiP2qa2HHmqnrCrTCNabPqDIKtzPNquZmIx3ExnmCbhfiaTMmr0aPABg+T8lTDgOR5oCYLiNdF2qaZUORNh4nBKaDya+aOrfvh7R8xWMpzEawdr7zqhnxYp24fQjeZjT1ZKUWXbpvL/2EIH1wDoL7KsQpMaYAqiUL/ak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778682325; c=relaxed/simple;
-	bh=2J6Z1aWXa94L0ypaDUb/nGQT6aqSYlQMERR5enB9Gfs=;
+	s=arc-20240116; t=1778682326; c=relaxed/simple;
+	bh=hl8gnuqHkdE1akbEtaVKew0r5vf4DZtKuWwu0nnxNZw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FlmD3sYvTUCPlCpHNuiU01zKJkeWPXLTsPotS6atbStecTfAsn6s+gVDtKhvFuzLGlZ3CdAVT/hYDy5/Ed4aE2gBU5xiM0kNBF7X18dA69OufvvFQLDUGV0HIuioycoyTABZFGv47ilIFuaTPwiviQ7DP7J60EzutJXcD5OXZgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jWpgXC9i; arc=none smtp.client-ip=74.125.82.44
+	 MIME-Version; b=HHdCHZb0SVrdFeJDAaAZ8i4yF0PMglakLf+ZEBfv3XwXajLgHFKWM2pWgO6AdRy+0YjBL3nZrBl9ny93L8sB0FyB8H4eWVJWQD8746TtqSo6WZuJeY/9XUxsjXjodAqDF33Q04Sq2kGduVvGRzYmrsu2sidR2ZxMksksNwv1vh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LdvuYN5H; arc=none smtp.client-ip=74.125.82.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jWpgXC9i"
-Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-130c9dcbd25so6285559c88.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 07:25:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LdvuYN5H"
+Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-13317450f83so2982778c88.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 07:25:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778682322; x=1779287122; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778682324; x=1779287124; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Pt12hQ/vcTj5sdQffSNzTYqGnNKO0mgUTFUTx9KUeOM=;
-        b=jWpgXC9iULcNqYYo6dOqGNN9/hBMCJHGAsbWemN46q3F3w8K+Gt+KxEaK0x7jGun2F
-         DovGVPOHT6s+nLEY1M9Vs43RAf6b3oiR+CNYlhDKhKXDJjYUbz55hX2+ZqZmAZXadMrX
-         FEatIWkbZP28JzBqYhJiYkNfuk8xJ7/Lz0bQBgh/RaK1BJTLTKTdzZjnvlpw7MtJg5JN
-         BTO6YGX6z7xqfX/IB0QUT/Yab+W8qz97uI33CdXt8x4opTnwth3GqSpdCdwSQjBLSz7w
-         WFmwB3cA21o+gFVK/jQlYmlWzl2ydPLbfirLSYEJ63qCy7pWr8yxnRa5A5vzaUZAS1R/
-         sJzA==
+        bh=FHhLhMWyvo012pORJ+YnzTJvLRFn8WJeslnPjdteNd4=;
+        b=LdvuYN5H3qCNRmSEPFufa7qoksgMtPx9vvB3ESoQoCNJdcVjojC5ojGtWWENiqTKTU
+         LUAQI1zQQHnlquews1UvWwSUmyd2pl2Is8dDezxtMhHf/TW3+PGQJ5TV7DSABz3V6xwE
+         t/sgicOYYLxLq559eBj5uHKjNWD6+Ydg/IoiSC8c5KOlt4d9eigqBdOUcB9puZ3Ob1kU
+         5fCpPla+C9Ah47LZPM6otv6ctc6l8KN2avT79KwwP+q0gXaLM53g10ZcatY+lKtqll+m
+         zZcIa/f4kzVFBYKRYHhxiTxXwEPvSsICwWkKXugROcChYKndws6kG3WAbAMmNycqGfrG
+         FfrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778682322; x=1779287122;
+        d=1e100.net; s=20251104; t=1778682324; x=1779287124;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pt12hQ/vcTj5sdQffSNzTYqGnNKO0mgUTFUTx9KUeOM=;
-        b=Kg3p6NldF13373WkguR2mhZrpe6rvrPLynOD8AkFvIyNrdpknZH2wCv6R/JMMW3pgv
-         Xn9WHd9+VNlc3CD4OXPEWPh0Hleo3RcmGDNmagtuT6W2ibbgYTx1tmk8Bl8QmGNPPEne
-         WCdxjhFzT2M8XYTV0R9UK/K9zhvNJueyicQKXcfgJ31CGPUD28m7YFxw5g0VE3faRf25
-         DbbRE/8/g8mbhCVb7v7KpXRZ8VVOBqBL13ffEZqsOEmDoUXb69WEYNJr/X6mH69FysNr
-         /BQMPfdrSZoXq5FEx/vNWkqKjMNhA5CpHKUskg7GNun14SwRSM/2xADTqEt30oF+BTZC
-         X4yA==
-X-Gm-Message-State: AOJu0YzL6kA+VIfPBOEzztIRUTTrBuDaZVNiwqiRtvP4Y4fEbI8OecF8
-	P0SBFYOtH12Vgq98cvvFo8Uz80drgY6r7/T1xRJlTK0qdjurBL4cwRQioGQq1A==
-X-Gm-Gg: Acq92OE5Hi7+EMZ9A8/9c8BDjOnv06p+tvky0G5C+o+zpKUViTV5WJ6/qVzB2XgKCcL
-	pw3YZeZBgIq2XNv0LGHSZaPHsmhybudxV+R52ReCBNGA2T5R6iOc4M/lWhTg2GfqOPH+Nzd5EMp
-	UlCnwvdex5lxXSLY8ZaHWpU8sL0+Dyju02ac1IH1Nl3KhGrHbc6nQi9Brpfdool4zD2cFBvXPsy
-	Vqiz0YomIO1x0tgCiBXfF5Mj5/0Dx8MfafCpgz/oLy6WQP1Ka68QTk4pyWJZdu+mp3EEWCGxBKM
-	wm3TlqfIkn+8Pce6XgBUMvFG5sGN1Oh52umpX9X0jpZn4u3g7iO6eucp4IQ0IEZMOFQACYfIT9X
-	g/P08LoY6fJVq8iOMwsONH2Pu+AC+5tzU2jeymP8uzw4idQgzrUdG9C/FcgdyDLvsn+RxVBedgg
-	4h1QswEtP+1uMoM/YRkAbm/6kwZ3i/i1ytgO0N
-X-Received: by 2002:a05:7022:660d:b0:12c:91ef:6e63 with SMTP id a92af1059eb24-1333af97fd9mr5221739c88.7.1778682321952;
-        Wed, 13 May 2026 07:25:21 -0700 (PDT)
+        bh=FHhLhMWyvo012pORJ+YnzTJvLRFn8WJeslnPjdteNd4=;
+        b=RT5MLa/3CTRGBDx7MqSi6dvArS3YuqfA1s0lNdZcxU9vrpdGHBuH+v5I92X+7J/TCs
+         v13jFipbNHfAmZeyXpguUPzazmuR0HrVydCyo/HtK1+jEdmCAoWRjutJB3LnClaZ9tnO
+         lIhEnSq5DtfJs3agNBUG6l9j9Wdj6g01dCjloYOvuiQa77G1mH0/QNfSDVTou9Tv47Fq
+         mlWuS/ox26C2Yg5ELQKs5Gx9RlYb111yhfD1v65/ywjzNYw3CiMymZPfmRMm0ivA8+td
+         t1g+1Pq6Po0e4w0ymVFqulPWUVIsTFd5ZlkWfU1hHw2aoVk8EKpQGVty+q868KDuMzP6
+         ++rQ==
+X-Gm-Message-State: AOJu0YzBevGimFk5Yl/u1/dFgG/yj2S6vDU77z4EbY5DiT5gYfw4/Bi6
+	o3gq70mTWHiSVpG7pGjHiiWSCxCZr/Rzda+C1ZvNAAdVkKctI1aiOti4c6bGhw==
+X-Gm-Gg: Acq92OHHAeUr9nl6c0ORa1hSFPhnbzrspQ2XQPv8axbktnx73xYn11t71gATPOPU89t
+	w/983Chd4R59ObCGgcDi781j+x+V/0jilIBoCw4AI48haBaP3WYW9Na8A5N8QLTTrhvaswUcRN5
+	oxcrVAjSTV30/BPSHcC1vWVT4LRkgvo1zHQO6OFF92ft9tLdXXbR6vZa+DrKJZGxokRw0LZLOXd
+	ckVfT6UXAAbgDzGfk8wa/aiVgmwCODE5yX7/GRgZZJmdb1vYeaFpVylUVsKQvRRTFQ3FveK3y/L
+	ehAN9bJ9TTnPM3rarO0V7dMIBNHS62NmnS2JR3mXTj50LZr1loeOcNI4QsLEOQeNLPqR52s8UrZ
+	vjFCh3H8v0o1lZFcH7r1JkKF1Fez20a7OZANRi3UxCL1XTJZomUmeSdflx8UgpvOUuRSialQtem
+	4qOP/b+sKzEBgFqr09JonxzBY6nwIMiA6OazNSQLmVAhVpjQA=
+X-Received: by 2002:a05:7022:ea2b:b0:133:1cfe:5120 with SMTP id a92af1059eb24-1342ee3a1f0mr2262231c88.7.1778682323425;
+        Wed, 13 May 2026 07:25:23 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13278210d40sm28594610c88.4.2026.05.13.07.25.21
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f88847506fsm27177427eec.18.2026.05.13.07.25.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2026 07:25:21 -0700 (PDT)
+        Wed, 13 May 2026 07:25:23 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 1/4] hwmon: Support guard() and scoped_guard for subsystem locks
-Date: Wed, 13 May 2026 07:25:11 -0700
-Message-ID: <20260513142514.419345-2-linux@roeck-us.net>
+Subject: [PATCH 2/4] hwmon: (lm90) Use guard() to acquire subsystem lock
+Date: Wed, 13 May 2026 07:25:12 -0700
+Message-ID: <20260513142514.419345-3-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20260513142514.419345-1-linux@roeck-us.net>
 References: <20260513142514.419345-1-linux@roeck-us.net>
@@ -75,46 +75,34 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add support for guard() and scoped_guard() for the hwmon subsystem lock
-to simplify its use.
+Use guard() instead of hwmon_lock() / hwmon_unlock() to acquire and release
+the hardware monitoring subsystem lock.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- Documentation/hwmon/hwmon-kernel-api.rst | 7 ++++---
- include/linux/hwmon.h                    | 2 ++
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ drivers/hwmon/lm90.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-index 1d7f1397a827..9fcde32a140d 100644
---- a/Documentation/hwmon/hwmon-kernel-api.rst
-+++ b/Documentation/hwmon/hwmon-kernel-api.rst
-@@ -85,9 +85,10 @@ removal.
- When using ``[devm_]hwmon_device_register_with_info()`` to register the
- hardware monitoring device, accesses using the associated access functions
- are serialised by the hardware monitoring core. If a driver needs locking
--for other functions such as interrupt handlers or for attributes which are
--fully implemented in the driver, hwmon_lock() and hwmon_unlock() can be used
--to ensure that calls to those functions are serialized.
-+for other functions such as interrupt handlers, attributes which are fully
-+implemented in the driver, or debugfs functions, hwmon_lock() and hwmon_unlock()
-+can be used to ensure that calls to those functions are serialized. Those
-+functions also support guard() and scoped_guard() variants.
+diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+index 3c10a5066b53..9ca49abc1a93 100644
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -1222,13 +1222,8 @@ static int lm90_update_alarms_locked(struct lm90_data *data, bool force)
  
- Using devm_hwmon_device_register_with_info()
- --------------------------------------------
-diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-index 301a83afbd66..04959e044fd0 100644
---- a/include/linux/hwmon.h
-+++ b/include/linux/hwmon.h
-@@ -495,6 +495,8 @@ char *devm_hwmon_sanitize_name(struct device *dev, const char *name);
- void hwmon_lock(struct device *dev);
- void hwmon_unlock(struct device *dev);
+ static int lm90_update_alarms(struct lm90_data *data, bool force)
+ {
+-	int err;
+-
+-	hwmon_lock(data->hwmon_dev);
+-	err = lm90_update_alarms_locked(data, force);
+-	hwmon_unlock(data->hwmon_dev);
+-
+-	return err;
++	guard(hwmon_lock)(data->hwmon_dev);
++	return lm90_update_alarms_locked(data, force);
+ }
  
-+DEFINE_GUARD(hwmon_lock, struct device *, hwmon_lock(_T), hwmon_unlock(_T))
-+
- /**
-  * hwmon_is_bad_char - Is the char invalid in a hwmon name
-  * @ch: the char to be considered
+ static void lm90_alert_work(struct work_struct *__work)
 -- 
 2.45.2
 
