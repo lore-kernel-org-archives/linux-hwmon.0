@@ -1,66 +1,67 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 676BB288C2C
-	for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 13:43:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 709EC2BDC16
+	for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 14:05:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778679807; cv=none; b=eqN4puNYMLzQF7FqHmilrAxITEDHlygVzKhcyFkLCA6/0R/o7QyHm+CHfDHci7rp7jL3eoAp60TcRW9olROV/kLTFje3S6k5EtHKBQQxnwSZs8TUhig+9PalmHBSPqDoPbRzlsA/XZP0jleYdAinybYIRMoqzyy/JhlwNYwapU4=
+	t=1778681145; cv=none; b=TcKMu/JkmWKo3oxtvUVohQ0TSlq6B/tfvt5CLXiAULqJindqdhrhJf2bebfeUcU5F3nhY00XjwZFmi+brdt9WPQmy6OYaurN3qoAJ2VKh4z+iOEyNqXlMv9AwN1nZhhe6RrQXNdL6kK9I5JfMUpSZpjwE7J+TldCocweVHCsBGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778679807; c=relaxed/simple;
-	bh=LgaBpRbH0jTvyUE3zxMISlAWWSXauQqy/d2F2WCfT10=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IELoE3/qQJWMIUEt2asesXit3KhwXPLikt8eWMilv+qxcf1zBM2P56lGmHWKm1A8izeJ6mAtBvK2lUGb91NArQmEnvnIy9GiVPPamFp2or/wkqpY9cg5sYb2E0OJ6tJIE6WNqvTr7TC2fG56Bo1viXk2N7fwMm7h98YrLFg9akk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KFgZlaBV; arc=none smtp.client-ip=209.85.210.173
+	s=arc-20240116; t=1778681145; c=relaxed/simple;
+	bh=rBOXqwWQ8mwmYLJsPxyjaSk4d7qHCF7BxdORHqxHnzU=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=f3tCyZ8om7dYVb2EJXWwuUxasrZDnmux3MU8CsNcLLkba26IfDoQrgfh35wQrCF2kYoyEks/2QdIcgk06QOBLv4EdQhF0rXkxqJNGkCVnQFHZ2fVRCoETwfeIdo4GtLnE7zUyQeOlaA41C4l+8nT5ibYboReai6WCODQtdE/AJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N+hNbXaf; arc=none smtp.client-ip=74.125.82.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KFgZlaBV"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-837b39eb078so4609419b3a.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 06:43:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N+hNbXaf"
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-1329fc4bf77so4133463c88.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 07:05:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778679805; x=1779284605; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=StTBdXZeps9ND5CVXmnzCum6vD1IwdcWlV8P15if0vM=;
-        b=KFgZlaBV8j4asKVEZR06ESAhAOekZnc1noRugz+kr4s/P9ik9v6GMELKzIcUPyO1/y
-         XH7EInnQAtUvAzx4+iSagPSR/3gExLknn0eu4614nQOwcLBMYzjKTh72/LQkpZJ2cqFl
-         4JXDXEgyw6bjREGaTPEjy+3SmbqQRgYxVEQVsPIjl66pNq95jMbOcX16Ht8l8t5pOQku
-         Z23dCBsomz2uqgTzXSTmvplmB0kI8BEUShc48NmXhvskb5K17bIwMfphVhTFF0gHUKJI
-         gavIlIlDyYBm/fjkeKt//lhAkDGj33L0hSiY+y9VCfwZ0Oy9e6htlWmCcKXbfun7BS3m
-         /Ndw==
+        d=gmail.com; s=20251104; t=1778681144; x=1779285944; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=sQRXkG4wRh99NErHsyPmbae7UrLAtk1RG2SB7nBNkF8=;
+        b=N+hNbXafkj3JIUbDiNT1O1xBTNpdkq8y5APLRmj1Wf72eYO/Us428c7aoR5FagTya/
+         T5Xp0TWpDpflUrRfcyoTOZT9vPqHGmDUNAMVgy67Co/yZX63tkAN0sEbf/1umXgunnbM
+         3yXHe3mmHVpXPSv2v6SmlBrzvYEU2ewkytDIyDwZ6zEdg282WyLMFhwHRLZlOM5SpINj
+         1NtgH+EaqTlxQ6Iww8EQ3G6Ad9cP5EHkw0bHGvZMhHBFmOBnSFdl+Jve1pZ8kUWyMJov
+         /9q3J+YGt3TOObDir/Uc2lOJyjLNDwb/zCCmqRnvpF4d/u2wzz7I6TSBwQZ2d+H4ZVv2
+         bOuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778679805; x=1779284605;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=StTBdXZeps9ND5CVXmnzCum6vD1IwdcWlV8P15if0vM=;
-        b=KYIuDXgsDhkpNRqzCdphIMYrRQmIWeUMziWNLP+nunmApF1STHdFuhSaomIe5T/uac
-         tec8NLNLVBxYsT+cA2xLXV9RgCEZtE6Q+pwWKHY9cjQ5zItUFFAjiSB2BAJaVP/l178B
-         BVeoSv87y7z3uI//K9Na4kyH6BAKP1NYyCe6YED3jlZ6ssN4Csa9sNbJOMoP5ilfej2L
-         Vb5qaUu+HnNGn4X9UKccCckKFfq62gWHVi8u8PBjIl2I26diVKdd5CC/xkdubn+m9Qzc
-         MGcqxcX+/OCfa+gf03ZZpTEhn8yEHggZMJJbFNNa0HIRPmAyAhGkqUx6a/JK/O465r7j
-         utug==
-X-Gm-Message-State: AOJu0YzqmJMxfhoW3dh1xYXlVriYULvBlN9N21KDWU9D4F9NWWD6KkXp
-	oLCT8AoAIqVqtTb7RMFlXZh90EVwFz8PWIyiGm/JGqJdFGf5ThdF8ni9U4RMaw==
-X-Gm-Gg: Acq92OFnsiurUG3Ijk3P5tlQuXVcM77SXE+7AXUB+sR9UbfxI/l/MZYeNXtei/E148H
-	pC7TmWjv3TbH4A5qub0MxtCpaYhYDf98H6H2RYZi+RzzgjZ6KBZL+Y5Sumg1vn88L0vfFLE3RWI
-	oO1m1zJjxEQCTA4X5IZJJWm/ajirYzAIb0Sb/2dz3XUoShZFCqtYp4kVa604j8a1HUk8cCz5MvC
-	xxGNCBRrGHSNQnChAiz1mwHWt3u4fbwSTiPjJiF9Rby1eZ8F9yJ/OhXk2FgWu406lhhGBtiR4hM
-	8CxdcZleLWwqWyGbmqXfHzzD1kajeoQyQXwngmVUeQLqKMqaggVfWAm3a3djDIc4z7wM9/jcdqK
-	YLUFl6Mdbrcar0VedkIIs87PBpp4N9BciNi8uB8OE96IZi7/FGlIsRq9pMzkdpTgNIqpGHwHMyh
-	8wMP8XLF9jpvdyjR0myLNSxsxHnh/4fDJJHpimjzxV1DjQJXM/VgrgXLS2IjDilNphbusQ0aU6
-X-Received: by 2002:a05:6a00:4f88:b0:82f:4f63:31e1 with SMTP id d2e1a72fcca58-83f03e753femr3614936b3a.8.1778679805344;
-        Wed, 13 May 2026 06:43:25 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1778681144; x=1779285944;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=sQRXkG4wRh99NErHsyPmbae7UrLAtk1RG2SB7nBNkF8=;
+        b=r+0HD3+N6iMmGfzeV0Td4w0V37oZ5GAxskTaqkME/gVYyTJ7N29bLm3BbZ5f5oZQ/K
+         USV66/8JAUjWKOininZOAOWyiyQeiU9kvmj44eCypAm4W5GtBOy0YX4r2e5pnVmc5Yyf
+         8C/wEBlT8RvGtxSPqlc+Kft6A9QTqfRHZwpDihZ9EsA1yjSETY2ZqVLDg7liL9wCnXQU
+         ajZKk/qeluz4c41NDq3xV7GC6jH8px2I3SNCFhXrL+2v2g73fwaDhkU4375zrxn0B2XF
+         w2xHuJtiU6HDXpPeA6ERmAiFXOAaYpFt4D3SkHKeA6x/GyiUdTGgAQlsR1qgzW4dM5G2
+         bvVQ==
+X-Gm-Message-State: AOJu0Yzp5RKKiKD8Aq/cMwU2XVgabILnz7EyY5okyhiB6PwuwbDWqhJT
+	Bwio8lVQhMgtrN6FEk1H4bFhuUsGzBBay8nC0VAkPOO1lcgIaoUGOctd
+X-Gm-Gg: Acq92OGlYN9QRBAOetYPJLgFsRvVXNStSxaPqfKMijXVm5MToB5wXBri6dZYpJuzPJk
+	AbNaOnswZgbh7rX3V+Usy4jlAvyfQjgFnNJMLezVqLplSAW44QnJKEhtHmYgFUDCPfG3jMp3sHw
+	/rgBMxc1vyUkiUvDfH3EZyIEImvrNJpy7ni5x6DJ1mCCqCsngfPD9sLPH6LkYTHDzXIxoC4hY22
+	F4lT/2UE0NuhxvtP5W0xyd6mcKXF0u/ciVJONK++LA6gpC5uKgv5K2gS6D0pcbXe8si2nC4u04v
+	g5xMhmDfd1ovbSllKhpzYIN7hOXCeX2NP7wmf5QhR52LT8E3On4grJddIHM0sLwxY790wxKEmo6
+	zKo8HeAOJMJTpGp0leBVygdtR/4kYHb0dMQDPGyhdHYKpDpOvcgxgx1U/M1+PgwZAYJ0BurkCgy
+	dnnI2b0i/V3UplXvxenQ6eUk5NLt8joxa6ncaSNP+394SLEf+hSuk5YWhKggIGg7qw8B1J5gzt8
+	2nDp0LTM/o=
+X-Received: by 2002:a05:7300:e105:b0:2f6:811e:c840 with SMTP id 5a478bee46e88-30118daa1f4mr2145319eec.18.1778681143450;
+        Wed, 13 May 2026 07:05:43 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83965b333f2sm33057862b3a.20.2026.05.13.06.43.24
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f8860c7accsm22141144eec.8.2026.05.13.07.05.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 May 2026 06:43:24 -0700 (PDT)
+        Wed, 13 May 2026 07:05:42 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5f0406fa-9692-49f0-bcfe-c013f5fc7b62@roeck-us.net>
-Date: Wed, 13 May 2026 06:43:23 -0700
+Message-ID: <bde0fa1e-93a5-4819-aa19-04554c24d31c@roeck-us.net>
+Date: Wed, 13 May 2026 07:05:41 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,11 +71,12 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] hwmon: corsair-psu: fix and readd locking of command
  buffer
+From: Guenter Roeck <linux@roeck-us.net>
 To: Wilken Gottwalt <wilken.gottwalt@posteo.net>, linux-kernel@vger.kernel.org
 Cc: linux-hwmon@vger.kernel.org
 References: <agR9YW7hGTJ_l7ms@monster.localdomain>
+ <5f0406fa-9692-49f0-bcfe-c013f5fc7b62@roeck-us.net>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
  RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
@@ -118,99 +120,28 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <agR9YW7hGTJ_l7ms@monster.localdomain>
+In-Reply-To: <5f0406fa-9692-49f0-bcfe-c013f5fc7b62@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/13/26 06:32, Wilken Gottwalt wrote:
-> Fix removed locking mechanism. The locking mechanism does protect
-> chained commands (set rail + get value), which are two separate calls
-> to the low level access function. The hwmon (temps for example) and
-> debugfs (uptimes for example) subsystem can trigger that chain of
-> commands in parallel. The serialization in the hw monioring core alone
-> is not enough.
+On 5/13/26 06:43, Guenter Roeck wrote:
+> On 5/13/26 06:32, Wilken Gottwalt wrote:
+>> Fix removed locking mechanism. The locking mechanism does protect
+>> chained commands (set rail + get value), which are two separate calls
+>> to the low level access function. The hwmon (temps for example) and
+>> debugfs (uptimes for example) subsystem can trigger that chain of
+>> commands in parallel. The serialization in the hw monioring core alone
+>> is not enough.
+>>
+>> Fixes: 4207069edbf0 ("hwmon: (corsair-psu) Rely on subsystem locking")
+>> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
 > 
-> Fixes: 4207069edbf0 ("hwmon: (corsair-psu) Rely on subsystem locking")
-> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+> You'll need to explain why using the subsystem lock for debugfs
+> accesses does not work.
+> 
 
-You'll need to explain why using the subsystem lock for debugfs
-accesses does not work.
+Clarifying: "Why using hwmon_lock() / hwmon_unlock() in the debugfs functions
+would be insufficient".
 
 Guenter
-
-> ---
->   drivers/hwmon/corsair-psu.c | 14 ++++++++++++--
->   1 file changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-> index 76f3e1da68d0..6db899b37ede 100644
-> --- a/drivers/hwmon/corsair-psu.c
-> +++ b/drivers/hwmon/corsair-psu.c
-> @@ -12,6 +12,7 @@
->   #include <linux/jiffies.h>
->   #include <linux/kernel.h>
->   #include <linux/module.h>
-> +#include <linux/mutex.h>
->   #include <linux/slab.h>
->   #include <linux/types.h>
->   
-> @@ -122,6 +123,7 @@ struct corsairpsu_data {
->   	struct device *hwmon_dev;
->   	struct dentry *debugfs;
->   	struct completion wait_completion;
-> +	struct mutex lock; /* serializes chained commands and parallel debugfs/hwmon access */
->   	u8 *cmd_buffer;
->   	char vendor[REPLY_SIZE];
->   	char product[REPLY_SIZE];
-> @@ -194,12 +196,14 @@ static int corsairpsu_init(struct corsairpsu_data *priv)
->   	/*
->   	 * PSU_CMD_INIT uses swapped length/command and expects 2 parameter bytes, this command
->   	 * actually generates a reply, but we don't need it
-> +	 * only runs during probe/resume and does not switch rails, no locking required
->   	 */
->   	return corsairpsu_usb_cmd(priv, PSU_CMD_INIT, 3, 0, NULL);
->   }
->   
->   static int corsairpsu_fwinfo(struct corsairpsu_data *priv)
->   {
-> +	/* only runs in probe and does not switch rails, no locking required */
->   	int ret;
->   
->   	ret = corsairpsu_usb_cmd(priv, 3, PSU_CMD_VEND_STR, 0, priv->vendor);
-> @@ -217,6 +221,7 @@ static int corsairpsu_request(struct corsairpsu_data *priv, u8 cmd, u8 rail, voi
->   {
->   	int ret;
->   
-> +	mutex_lock(&priv->lock);
->   	switch (cmd) {
->   	case PSU_CMD_RAIL_VOLTS_HCRIT:
->   	case PSU_CMD_RAIL_VOLTS_LCRIT:
-> @@ -226,13 +231,17 @@ static int corsairpsu_request(struct corsairpsu_data *priv, u8 cmd, u8 rail, voi
->   	case PSU_CMD_RAIL_WATTS:
->   		ret = corsairpsu_usb_cmd(priv, 2, PSU_CMD_SELECT_RAIL, rail, NULL);
->   		if (ret < 0)
-> -			return ret;
-> +			goto cmd_fail;
->   		break;
->   	default:
->   		break;
->   	}
->   
-> -	return corsairpsu_usb_cmd(priv, 3, cmd, 0, data);
-> +	ret = corsairpsu_usb_cmd(priv, 3, cmd, 0, data);
-> +
-> +cmd_fail:
-> +	mutex_unlock(&priv->lock);
-> +	return ret;
->   }
->   
->   static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8 rail, long *val)
-> @@ -789,6 +798,7 @@ static int corsairpsu_probe(struct hid_device *hdev, const struct hid_device_id
->   
->   	priv->hdev = hdev;
->   	hid_set_drvdata(hdev, priv);
-> +	mutex_init(&priv->lock);
->   	init_completion(&priv->wait_completion);
->   
->   	hid_device_io_start(hdev);
 
