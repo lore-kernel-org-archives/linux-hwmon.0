@@ -1,200 +1,174 @@
-Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CD0549550A
-	for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 16:42:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E61138D016
+	for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 16:44:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778690535; cv=none; b=dlfbqdrqvk+zbb7wgRl19lCU7vSQGKb51qpp9oyQPOA24p6CrfCG5uFfwtThTItpGKCM4pEgznYR1l/EqYF1SGcafy2NiBq9S5flmKA2ASeY1SOQA+sgXDhVmY27fH3ZfM5G00AoKI6QZj3BPBUlZqMWS2LDcajz4rU3xb2/QXs=
+	t=1778690671; cv=none; b=Ndc1OAfeou4Ir1WwA30C38W85zNL8sTHKsYfQV//BkWyoAvGTyBepObCvjlo74K9Kqd5vzbKsjYnTj8VmOZX0Eu4/Kl8I583soZxWmY0BjhIoszwiU73GreMMdsQ+gUwYRXL7+AMYvy8D0ZzAtILkBxLxZhTNwSXM4AAdFn5kLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778690535; c=relaxed/simple;
-	bh=vvtdaRHyEuZeha02kd+2URKxUEiaCXnvqXP6cyFr+V0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Uug2OiLpNK168XMBEmTgTxmIeLDzvGGr+CqwkVGOn8KEKYiqPLxw1e/XIRaVLWXc56zuFbUbGBninEM7o2qqLiiy9DOncA6i5uvU1X8I2PpfT8cGuQgLDgRJ8y4f5XFMRuNxnCbwHwsfwgAUtcYmSkk3tJ6qvvA65XiswwFjHGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lxEA31Ui; arc=none smtp.client-ip=74.125.82.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778690671; c=relaxed/simple;
+	bh=owGm+6Ms1s9d1BVzLgyFp+un8WuAsYAf6l9Aw77jkfw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=iY0NIbB8WdoGS5C8X+M53C0fZQR8DU4yX/VnZ/+LVpFjyf1i2hhFn6Epa4davUXqgqGo6S7aJ8PT+gKPO7wUIAvIrvxxojhsM7BJcsmURwVxWsTDKHuRIrh8S1lS2144axfvA9oNMaCH39Z21H2liR2RG0/efOn8y9XzoCIpL3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=okBjSjsH; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=QaJ+tAFG; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lxEA31Ui"
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2ef2a1cc06dso241380eec.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 09:42:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="okBjSjsH";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="QaJ+tAFG"
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64DGAvHx2524346
+	for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 16:44:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=GxOv3DEpeFsG7lGsUZy6wV
+	j3hN4O8w4tkjgP0Pww0/o=; b=okBjSjsHw5BOpXgK5ziJusqTYibbI6kIQpYBmk
+	giLoWevafMpybboM+vGfOD8xMjXNy+ZJYLOlAp/kUl+r5c7wWiR9KQdGYb79jycM
+	lQNyyEXf7OmwbBPmAY1I+y2lvbbfywFHr1Ab7fVNKgfozyXdCbIIKiSVRydK6EG5
+	kyGJsXRxg9Yu1MB4g/QOuLeykYBO6s+qq3CwguXGfoDFzRx3bp8kTSPei/ObVaQs
+	WufDZauE0fbf9DThk9H+PV2/DPmFCYv0xumXye7sKq6P+EquzGF3rwkf45D7y87c
+	G5VU4h/3Cz6JoKoVgS+WacJW5ycpsfgeF42ZX5KNZfV2JPwQ==
+Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4e4vkjg48m-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 16:44:28 +0000 (GMT)
+Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-2fded513994so12306585eec.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 09:44:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778690531; x=1779295331; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yLsKUFfU9a+f/1xvI6FPcRccHieAeA3lWoK8bAq9lao=;
-        b=lxEA31UicdTlCMq57daua40CjgizQ9K5L69Z77foYy9gEkCuZthkDG+7iRtG1Z9Aij
-         I/2jGWiToj5yYcErtWb8HW7nONvUlTlbtNO9mu2AwvIenAwqri/Mrn8nIhqy9nKtkKkb
-         DOBgskh3XgntIDRxhXRkU048y6V48GqWzeaSUy4JmWeQJEpKD06qFhyqYJfgEhDas844
-         KQ9qBrTdwofq4YSLRZcJpyiRCTpx8gEX34sQJkrUEix7Gi2GxL1GHbIBzW+Q7xSq9IFV
-         tz6mcinCQ6r9ro75vrjWVUTEJ10jdKCP0kXL945TWRL61n6mXeQBM+Z0bx0DE1raKlxr
-         7rKA==
+        d=oss.qualcomm.com; s=google; t=1778690667; x=1779295467; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GxOv3DEpeFsG7lGsUZy6wVj3hN4O8w4tkjgP0Pww0/o=;
+        b=QaJ+tAFG4J/pTJsaDGEHOy6rpQ0+R+z6nDS0NTS/n+uBq6RmJ+19fNdttXAQ42bwEo
+         yAV0wDsmq7vuIAlGmG/3hN7DOkq7bMkcjcmOQATUv9z8R7IzgfgYIA98n3fVfyfTvP30
+         aBC6EZuQAfBUyClVTm+kq0VvmZ1AyFtILI30zYBgD+fO50QtXoTSbjs714J6lRve9JBX
+         VKeAmAQSdsybKg1Xru5b7W8ClEswVSYkSjVYgyx8LOzkJOnE19kpjmar5/XLGBHfVGH3
+         xoQsch484dlIqgU0ZyvOA6RdAOUj0HrN72WDAVYUNhc/vuUwFvSgKOeVozZjiUwep8hG
+         Qrkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778690531; x=1779295331;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=yLsKUFfU9a+f/1xvI6FPcRccHieAeA3lWoK8bAq9lao=;
-        b=OiLIH17BvhKy9tZZdPmH+pTD3L57YRrdW09/jHNB/x1BBO+DmnObcLQaMkfA3X3+Oo
-         W/GKPC0pUkRN5rDe3uyrAdtaUxwknO5q0TJnL4ARRlpxmoyTLw5XgtUelQtrUSfanSPE
-         WBlPcOqUl+X/6Epn1TUEc7Nku7fo84IrSMUqQUrVjhoM1/2yGY805YzWoUnVwlSSGxos
-         Q4ig3kBWxI0nlZoIn0zDNmVCjGPIYT/ho/oY587L+Zo30x8VcVKuGx64dxHWgpufHGOy
-         VF33SBFq2ITj4BeqY/DPNtS8TtU5popl87M/xvu0D8ki5MhSn0xb+9emPkF2bK8YTRlG
-         roMw==
-X-Forwarded-Encrypted: i=1; AFNElJ924EzfAYNmskrGRxeMjk1pYCBLhuiD6koTAfwa8e4Lkzr2qlzUO3f5dmHtWefYRO1q2GoGA0sjqZUihA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzncu5obBzAa+QDQ958AXnz/KBJX4DDUXz00i08YNZOsQOxCoEI
-	WQD/HyOfm7KTnhg7Jp+aBHrBIqGJF9sSyE09A+A1FQqA2CbMzQEOpBjA
-X-Gm-Gg: Acq92OGXhswxj1/ntz6YUEtK4KsIDbnDCKRfXMxXHgloPsd+fnbmX4AuuIt7ealVL2B
-	9LMQR1X5LyMWUgtLl0FzQDZDh6fdNn127SiVOX7HyDxX1laxiVKzr4t5O4MApYkVIYAH9o0ChAS
-	hGfPNoRWeA0zPcj5bZMROtQIS9fQRh0f2DzRvJw3VBXPps9v3zG/JQpt1Gfvf8UrM+DCXjLQQxc
-	YXUj1QzUzobXLM0PMvt1R3+OuParjgoE6LH9JnJrNjn5rurBoUGzlLWMemlwaef4WeTerpqlvQK
-	XmSeQDaXWZLhf7mETKVnG6qQovVqb7+iLzmI8ZHnVzAnIgIoJXaIlq8oA6+xd07hNm2dZupTThi
-	wVroCriaw2qs5ev8zsvJNvmo/ePklhnp7wdU3kWV0NHaOFQ2vDBM+6JZE4AqDJS/cBqUJogMxGu
-	2xrf7uv/XIh1Y8RlcaQT0s5xmY41q0IBJLZpJO
-X-Received: by 2002:a05:7301:400a:b0:2df:5715:82be with SMTP id 5a478bee46e88-30117faa7c2mr2579316eec.2.1778690530910;
-        Wed, 13 May 2026 09:42:10 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f8859eafcdsm28743312eec.6.2026.05.13.09.42.09
+        d=1e100.net; s=20251104; t=1778690667; x=1779295467;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GxOv3DEpeFsG7lGsUZy6wVj3hN4O8w4tkjgP0Pww0/o=;
+        b=f/81TwvjdL/id0QhcLAIAYWYEI8ABXsZqUT0zjZef3h5t2rr5pEnApL0v3JL+p6hP4
+         CivUNL6tC2E9XPmDWvsVU7tnZwEw44yzgAqHIlWX9vNxNCp10UqY50PSOfzj1XYD6eJi
+         EYJDAq8pw7m9z37kPGBEcWujTOVkkta3m4sMN3y6GaCSSfKQ1arUHtL1SjfR8gLVDuG3
+         N8JzRjUpv5RBk8QLky69kLSul8sCM7GAsWD3V1oFwtPE0JYaOFezUlEEQR0zevQDYQFg
+         5vnnFZiyaD5A1sQ4MObNPIib5bOsNSORzNgXkS/4wj9CJGrr4pG58axIeWNwFlaCtykG
+         3/kQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8UEbsr/jOyBIK/NH/Ldl6+jxledMyxMyoZtimOvnEBTEEpC2BHKRvFyINoXZpMQ6e/aiz0osYXoI1S2w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxHAdndlsgcNa+2i9U/tU0qE/a3xSg2tHt0vpr0R7EVCAHpjr2
+	Lx1vQIV3AIIYeXFmdIC4GJvIXwM/S1XEdHzoU8v0b9YBNhG/sG5NpkNENDC8a7sLZUgEz8sLaRX
+	L0c5qTGA0968G8tXC/Ot//lsdzTjA8isiZlOYT+V7MsY0U2O5duTacw0mv76BhH3UAg==
+X-Gm-Gg: Acq92OG+3YnosDQ+Mrouva5j6sz12ll801HjP08t+3daTU+abs7EPfQPIG1x1p1h53D
+	TFG68YByYE/K63f+f+M8CxOhUuqy6cUqPDFBYaeXqMwrZBU8FR3JdpeUgBcX/VUzRNK0SUldnO6
+	riJgWWFdVsY9/iViSWH8XxtIucNcklcsR4fc8E4d/SXs3EcehO6I5sSlCbyJmje8rFnKntwpk7T
+	NawnLkObZ5R1qcPisOCQgg6iyLz07kEdSLGt8MhWhY48pmOaztZflj/pCgcwPuGYBFxBFdHObpl
+	bO7Y4qJ+ImlDzg4psPgugzFTpPdlClPFXwzrCyLdfd9c5wqELf4vSdiTT4AUwjKQqxglcUzfiMy
+	QJph7ewJifydpvXtXnUakn69xBjGIIyKe2OBgB+wwg0vFJDBeDFydm9kJf7ghBWQK7A7ivPw=
+X-Received: by 2002:a05:7300:a504:b0:2d9:7bc4:9578 with SMTP id 5a478bee46e88-30155e304dbmr1975318eec.28.1778690667516;
+        Wed, 13 May 2026 09:44:27 -0700 (PDT)
+X-Received: by 2002:a05:7300:a504:b0:2d9:7bc4:9578 with SMTP id 5a478bee46e88-30155e304dbmr1975276eec.28.1778690666940;
+        Wed, 13 May 2026 09:44:26 -0700 (PDT)
+Received: from hu-aletran-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f8864c37basm22570076eec.13.2026.05.13.09.44.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2026 09:42:10 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 13 May 2026 09:42:08 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Wilken Gottwalt <wilken.gottwalt@posteo.net>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: corsair-psu: fix and readd locking of command
- buffer
-Message-ID: <62e02950-e31b-4faa-8b36-98bbfe898367@roeck-us.net>
-References: <agR9YW7hGTJ_l7ms@monster.localdomain>
- <5f0406fa-9692-49f0-bcfe-c013f5fc7b62@roeck-us.net>
- <bde0fa1e-93a5-4819-aa19-04554c24d31c@roeck-us.net>
- <20260513162135.2893e42d@posteo.net>
- <254b59a8-182f-4ad3-8469-4f9e9511d3a5@roeck-us.net>
- <20260513175350.07900558@posteo.net>
+        Wed, 13 May 2026 09:44:26 -0700 (PDT)
+From: Alex Tran <alex.tran@oss.qualcomm.com>
+Subject: [PATCH 0/5] scmi: Log client subsystem entity counts
+Date: Wed, 13 May 2026 09:44:18 -0700
+Message-Id: <20260513-scmi-client-probe-log-v1-0-00b47b1be009@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260513175350.07900558@posteo.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGOqBGoC/x3MTQqAIBBA4avErBuwQvu5SrQoHWugNDQiCO+et
+ PwW770QKTBFGIoXAt0c2buMqixAb7NbCdlkQy1qJaToMeqDUe9M7sIz+IVw9ytWbaNtJ42UqoH
+ cnoEsP/93nFL6AFz84YxnAAAA
+To: Jyoti Bhayana <jbhayana@google.com>, Jonathan Cameron <jic23@kernel.org>,
+        David Lechner <dlechner@baylibre.com>,
+        =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Sudeep Holla <sudeep.holla@kernel.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Linus Walleij <linusw@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, Alex Tran <alex.tran@oss.qualcomm.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1778690665; l=1343;
+ i=alex.tran@oss.qualcomm.com; h=from:subject:message-id;
+ bh=owGm+6Ms1s9d1BVzLgyFp+un8WuAsYAf6l9Aw77jkfw=;
+ b=W/Xp+gageC3TE/YpgFXFLe+pQ267y6ZmcjgpS00EQKpFmnevoEgeH6XSr277h756bxENsa6q3
+ 0CHZJDNRK41CRyitjcc/SiRtRARtb3XvVyWqFikd3hYiupPgngaWxsP
+X-Developer-Key: i=alex.tran@oss.qualcomm.com; a=ed25519;
+ pk=vKab/gw1fXij5UviWoglv+ho+H/oOiTHyETCLfayPE0=
+X-Proofpoint-GUID: x93cusbFC9VRAFsDlmX4gyH1tG70vhHv
+X-Proofpoint-ORIG-GUID: x93cusbFC9VRAFsDlmX4gyH1tG70vhHv
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTEzMDE2OSBTYWx0ZWRfX8K17/EFMslcH
+ YFN3i8e2wnCXYLMEzViD9sbX+wxlpo3+UhryGHXnC+pE4dBiqfqEzKPixgaxI+FF2BrUzyfPVC2
+ VIYDJJjiz3y0CV91JIl6wTmsLW11oWW0BzeOaeE1Ia5JhkD7tgmBLTSta/qtXS06xt7cBZxPWeg
+ foTl7etxJmGZDaAVH0RcSUoFlvs906Zhw8T9/8Xrq5wiV4XAP/CcgboGP4lqOwgibN/57Pzes/A
+ vc6k8+rOSSXuDDm7422ckCTEeqbmd5McJLj24tFfdjUT8ujecw56Dtcq3RWyevV343WEEndn9/i
+ d5HMdWs3xDgMYrhu0pmsjEdua8s97laMrrQ4Rjn7F8xS0zgJO6YEz9wFLnS7tC0svqsKveedOBA
+ 5DYMxQMn7FVI0NIG9jTUI4btdNDIE44iMCtTIe82K3CWzJCaelPKrxL++TVOw/Qe252guTSKvKV
+ GZ23XRT7Pn8cSfhV1sA==
+X-Authority-Analysis: v=2.4 cv=PbDPQChd c=1 sm=1 tr=0 ts=6a04aa6c cx=c_pps
+ a=Uww141gWH0fZj/3QKPojxA==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=_glEPmIy2e8OvE2BGh3C:22
+ a=EUspDBNiAAAA:8 a=0wi9YMwNQcJCIsSnl6QA:9 a=QEXdDO2ut3YA:10
+ a=PxkB5W3o20Ba91AHUih5:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-13_01,2026-05-13_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
+ priorityscore=1501 bulkscore=0 phishscore=0 malwarescore=0 spamscore=0
+ clxscore=1011 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2605050000
+ definitions=main-2605130169
 
-On Wed, May 13, 2026 at 03:53:51PM +0000, Wilken Gottwalt wrote:
-> On Wed, 13 May 2026 07:58:14 -0700
-> Guenter Roeck <linux@roeck-us.net> wrote:
-> 
-...
-> Okay, that will get a bit complex now, because I added my hack and I see
-> exactly what I assumed is happening.
-> 
-...
-> 
-> If this does not explain the obvious issue, I have not idea how explain
-> it further. My English is limited. This is a HID driver with data gathering
-> functions running in the context of the USB-HID context. Callbacks from the
-> hwmon and the debugfs subsystem call these data gathering functions, and the
-> first function in that context, corsairpsu_request(), which can run several
-> instances in paralellel, needs the mutex.
-> 
+SCMI client drivers do not consistently log the number of supported
+entities discovered from firmware. This information is useful during
+debugging because it shows which domains or resources were exposed by
+firmware during probe.
 
-You don't explain why the patches below are insufficient.
+Add logging of the number of supported entities to the SCMI cpufreq,
+pinctrl, reset, hwmon, and powercap client drivers after a successful
+probe. This aligns these drivers with the existing logging in the SCMI
+power and performance domain drivers.
 
-I used guard() to keep the changes simple, but hwmon_lock() / hwmon_unlock()
-would be similar. Please provide evidence that this does not work.
-
-Thanks,
-Guenter
---
-From aa3ec1484bdd619e8fa2ce569ec653d35fbf3615 Mon Sep 17 00:00:00 2001
-From: Guenter Roeck <linux@roeck-us.net>
-Date: Wed, 13 May 2026 07:14:33 -0700
-Subject: [PATCH 1/4] hwmon: Support guard() and scoped_guard for subsystem
- locks
-
-Add support for guard() and scoped_guard() for the hwmon subsystem lock
-to simplify its use.
-
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Alex Tran <alex.tran@oss.qualcomm.com>
 ---
- Documentation/hwmon/hwmon-kernel-api.rst | 7 ++++---
- include/linux/hwmon.h                    | 2 ++
- 2 files changed, 6 insertions(+), 3 deletions(-)
+Alex Tran (5):
+      powercap: arm_scmi_powercap: Log number of powercap domains
+      cpufreq: scmi-cpufreq: Log number of perf domains
+      hwmon: scmi-hwmon: Log number of sensors
+      reset: reset-scmi: Log number of reset domains
+      pinctrl: pinctrl-scmi: Log number of pins, groups, functions
 
-diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-index 1d7f1397a827..9fcde32a140d 100644
---- a/Documentation/hwmon/hwmon-kernel-api.rst
-+++ b/Documentation/hwmon/hwmon-kernel-api.rst
-@@ -85,9 +85,10 @@ removal.
- When using ``[devm_]hwmon_device_register_with_info()`` to register the
- hardware monitoring device, accesses using the associated access functions
- are serialised by the hardware monitoring core. If a driver needs locking
--for other functions such as interrupt handlers or for attributes which are
--fully implemented in the driver, hwmon_lock() and hwmon_unlock() can be used
--to ensure that calls to those functions are serialized.
-+for other functions such as interrupt handlers, attributes which are fully
-+implemented in the driver, or debugfs functions, hwmon_lock() and hwmon_unlock()
-+can be used to ensure that calls to those functions are serialized. Those
-+functions also support guard() and scoped_guard() variants.
- 
- Using devm_hwmon_device_register_with_info()
- --------------------------------------------
-diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-index 301a83afbd66..04959e044fd0 100644
---- a/include/linux/hwmon.h
-+++ b/include/linux/hwmon.h
-@@ -495,6 +495,8 @@ char *devm_hwmon_sanitize_name(struct device *dev, const char *name);
- void hwmon_lock(struct device *dev);
- void hwmon_unlock(struct device *dev);
- 
-+DEFINE_GUARD(hwmon_lock, struct device *, hwmon_lock(_T), hwmon_unlock(_T))
-+
- /**
-  * hwmon_is_bad_char - Is the char invalid in a hwmon name
-  * @ch: the char to be considered
+ drivers/cpufreq/scmi-cpufreq.c       |  5 ++++-
+ drivers/hwmon/scmi-hwmon.c           |  1 +
+ drivers/pinctrl/pinctrl-scmi.c       | 11 ++++++++++-
+ drivers/powercap/arm_scmi_powercap.c |  1 +
+ drivers/reset/reset-scmi.c           |  8 +++++++-
+ 5 files changed, 23 insertions(+), 3 deletions(-)
+---
+base-commit: 1bfaee9d3351b9b32a99766bbfb1f5baed60ddef
+change-id: 20260509-scmi-client-probe-log-173cf85d5563
+
+Best regards,
 -- 
-2.45.2
-
----
-From bf0a3d1a69d123eee3126f6a360f0ee3e54f7b17 Mon Sep 17 00:00:00 2001
-From: Guenter Roeck <linux@roeck-us.net>
-Date: Wed, 13 May 2026 09:25:46 -0700
-Subject: [PATCH] hwmon: (corsair-psu) Protect debugfs accesses with subsystem
- lock
-
-Debugfs accesses need to be mutext protected. Acquire hwmon
-subsystem lock to avoid race conditions against hwmon sysfs
-accesses.
-
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/corsair-psu.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-index 76f3e1da68d0..4a456ba44a9b 100644
---- a/drivers/hwmon/corsair-psu.c
-+++ b/drivers/hwmon/corsair-psu.c
-@@ -664,6 +664,8 @@ static void print_uptime(struct seq_file *seqf, u8 cmd)
- 	long val;
- 	int ret;
- 
-+	guard(hwmon_lock)(priv->hwmon_dev);
-+
- 	ret = corsairpsu_get_value(priv, cmd, 0, &val);
- 	if (ret < 0) {
- 		seq_puts(seqf, "N/A\n");
-@@ -723,6 +725,8 @@ static int ocpmode_show(struct seq_file *seqf, void *unused)
- 	long val;
- 	int ret;
- 
-+	guard(hwmon_lock)(priv->hwmon_dev);
-+
- 	/*
- 	 * The rail mode is switchable on the fly. The RAW interface can be used for this. But it
- 	 * will not be included here, because I consider it somewhat dangerous for the health of the
--- 
-2.45.2
+Alex Tran <alex.tran@oss.qualcomm.com>
 
