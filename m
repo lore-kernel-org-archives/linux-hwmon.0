@@ -1,99 +1,179 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.175.55.52])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F118B239E75;
-	Wed, 13 May 2026 07:03:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.175.55.52
+Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACD5D37F8CB
+	for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 10:33:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778655836; cv=none; b=mjpAW0nekR8n6pTyC1JKLzulhg0iH7dGnGiuZC7R6Is190gdtSzFADQsHqYaLxA3ecos42Umxgz1jC0Mlq0/1izn+m88FNA1fEJ9NZb9H0UMm4cXxFynFz+P/Zf57FDLHR9XRjRRCxfyZeYDx+HjcUaNgjmflbx26GIxfjif75g=
+	t=1778668388; cv=none; b=HApLZUdaueS0NS23ZK7kojO6UHW+el65tCEGKmM0sspMyG9FbqKx9Cu7mEHo0Mp4LuWpUSiTFdWgf9+0wtBauFUY3TAkTCePyYkMhxuO23lwZcjDmXPR3xwPrNFjPFlzwub2+qOPM/FRuKJFu67I8M46k6yt95LNs+yn+76DmN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778655836; c=relaxed/simple;
-	bh=0FY7JyXpC5qFAoRGp8Q6IRw5utBLdqLGmJnoGzyWg08=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=T/U9uujY53YTtBF+PtvEzd8tYT8mbzINroh9+uNJczzAq74zFZDYaweVhwRiRWjjsCBw30lzpx/RYItckkN+eZl4r3Bdl3Vu6t63Fk0KB8i5oFelGXCP3ttYsSOKnrFs/FQGaPZ5SLRtngxmPMT9CS0yUEyq6a2mbfa0YvimK3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=52.175.55.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
-Received: from hehuan1$eswincomputing.com ( [10.12.96.103] ) by
- ajax-webmail-app2 (Coremail) ; Wed, 13 May 2026 15:03:36 +0800 (GMT+08:00)
-Date: Wed, 13 May 2026 15:03:36 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: "Huan He" <hehuan1@eswincomputing.com>
-To: "Guenter Roeck" <linux@roeck-us.net>
-Cc: "Krzysztof Kozlowski" <krzk@kernel.org>, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, p.zabel@pengutronix.de,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, ningyu@eswincomputing.com,
-	linmin@eswincomputing.com, pinkesh.vaghela@einfochips.com,
-	luyulin@eswincomputing.com
-Subject: Re: Re: [PATCH v4 1/2] dt-bindings: hwmon: Add Eswin EIC7700 PVT
- sensor
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.2-cmXT6 build
- 20241203(6b039d88) Copyright (c) 2002-2026 www.mailtech.cn
- mispb-72143050-eaf5-4703-89e0-86624513b4ce-eswincomputing.com
-In-Reply-To: <c4082788-9e2f-4108-9d2f-13648bf4e5bf@roeck-us.net>
-References: <20260430064107.1598-1-hehuan1@eswincomputing.com>
- <20260430064444.1615-1-hehuan1@eswincomputing.com>
- <20260503-brave-bullfinch-of-innovation-942914@quoll>
- <4339b90a.6169.19e1b798c90.Coremail.hehuan1@eswincomputing.com>
- <c4082788-9e2f-4108-9d2f-13648bf4e5bf@roeck-us.net>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	s=arc-20240116; t=1778668388; c=relaxed/simple;
+	bh=XubH/O6xm8n3FFF345gC2jEfwCMEnkublF27VZ+i100=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=F+m2zUY3zT1dgLtyLAhP40QcmTGCdrMhYknp/0rWaLZljpGIas7WjaG51OgYF/t4LMuFukbHqb2Rq2Z4SKLAGYIQZNcxL/q7NWZeFrHd2iKjHT+Odif2W6Qesex8emtx3/94TTjYfpceo73SpWw9rVaMoJ3XUi7AiE3SIuh1GHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai; spf=pass smtp.mailfrom=nexthop.ai; dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b=LzNfH1Ja; arc=none smtp.client-ip=74.125.82.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b="LzNfH1Ja"
+Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-2f36da5c8fbso6468613eec.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 03:33:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nexthop.ai; s=google; t=1778668386; x=1779273186; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6JXcuqkb4Uvvy0hPitb2uTD+GewzBCMOZ0/iRPS+11E=;
+        b=LzNfH1JaU9C89EgffMuPi7uO4a0fG4Hak7EnVnMmmT70QaIkSuzQYG/1zgZM+2EC4t
+         0umAy9MiXNWxwCwGhTtDuk98EK44fGn2h2JtyH7n1eYfnfhQFx5saP1shZyJf6hHtFfA
+         hWvSg/L0o7Fru8fOR5KqUbcdoKX19TZIwg00kZLHiLAa718aIrB0hu6/X5+OsXRx09uY
+         lNBTo5nV8K+w/O1WaePchinQMbFi3ac+S7migAWIdptXCOOKhVkQBmjrXUn5b+oK09bS
+         Zy8x/sHvBnz6VUdF6XE+rKdqNEXZzkOZTVrfX6LGlw1MOMeyUnfKUF3RPF51N9YgAyD6
+         gj6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778668386; x=1779273186;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6JXcuqkb4Uvvy0hPitb2uTD+GewzBCMOZ0/iRPS+11E=;
+        b=RFWtAH79IU3zBUQo60GmOlO8gcnDHnhRfr0TkipRrBQzLVm8SSVUOnF0OsPBQ8/tsU
+         UoZ/sqKtAsEm397GAbDlGPxxUYgTQEaEo7GC81OcoqHW3Sn1hGaCAtt+iT771X3E3JNI
+         rCQ3s4auSJ2VhZDPkRZNLs4JfWcsHT4Gm1GvpMz1r/+BTTUp62NcFqxulUepTihPiFco
+         g7/uiWe7l6qoceMhnwl+cD2ZfDBQ4wG6r6r3QDRa2X+BPfr/S004I9dqbhLarIbmQY5S
+         4fLMEHXnxTjM9D2i09dyMVmRuXI7JcjLDYcz3uaZLgd5uYCqYbalBPsdrBKpwVt8709O
+         G2yw==
+X-Gm-Message-State: AOJu0Yzp4UoJ8JncBXtHjUgnhfXyfmRG9XHSYkJyJZwxRwoz53C9LwCA
+	QXUIuQq2QeO76O0MOLX62D/5dzbq1RuSZVJ/8UwQ0vlbioM5XLqwRGR4XB/h0IUnjZI=
+X-Gm-Gg: Acq92OFcC868Oab2/aq56vpW3QDVBMGe9C25lmDuD5rNzUXMTDAm7of8UyevGQdc4Gy
+	AB36q3B6KHxvNXrvdKHtf/T2fjYKCTeIoOeGQQJrv17qCzWAZuxJjQSUVFjJ+AAs8uWUgIn5BnL
+	yb9qPbxBiBrr6nLulaIvXO6TNxarE+svITAvKlC1Yd0RpEQQkRpf2+SeEUFCwunbWHZEJqjJZ06
+	JsE5CWsNb/aPccHltQh88z/OdBPfD/IG7iJGEV72856J2AmSzrSq6h/E5oIIRZHFG5pW3DrNV2t
+	FRz55dnIcmUlH8l6eKV7GWC5VHKUUv13iwWEUpiVSLLkQ7j3u7euWFJwd9+DK43NJvSqXE1ZcNJ
+	fOHrtvTqRHl/YEc8/7bwWJ48lXTlYPtElwMvxULsyDp0a3tfPjdMDGGM1hN1jlTxfYEF/u61Qny
+	J3uTWYNVkFrPYBO2SerUMJGMQ/dQ==
+X-Received: by 2002:a05:693c:2b08:b0:2f3:c3d4:382f with SMTP id 5a478bee46e88-301181aa331mr1540032eec.8.1778668385703;
+        Wed, 13 May 2026 03:33:05 -0700 (PDT)
+Received: from [127.0.0.2] ([50.145.100.174])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f8859eb4b7sm22241537eec.2.2026.05.13.03.33.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 May 2026 03:33:05 -0700 (PDT)
+From: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+Subject: [PATCH v3 0/2] hwmon: Add Murata D1U74T-W PSU driver
+Date: Wed, 13 May 2026 03:33:01 -0700
+Message-Id: <20260513-d1u74t-v3-0-27bcd6852c45@nexthop.ai>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <70426510.61e4.19e2025eac7.Coremail.hehuan1@eswincomputing.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:TQJkCgDH3aBIIgRqPv0YAA--.5758W
-X-CM-SenderInfo: 5khk3tzqr6v25zlqu0xpsx3x1qjou0bp/1tbiAgEGCmoDVpFTxgAA
-	s0
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAF1TBGoC/2WNwQ7CIBAFf6XhLIZdaDWe/A/jAbbU4qE1QElN0
+ 38XamI0Hid5M29hwXpnAztVC/M2ueDGIYPcVYx6Pdwsd21mhgIbUQPwFqaDipwEGX3sgKRSLI8
+ f3nZu3kKX65vDZO6WYrHLonchjv65PSUou79oAi54g5LQENQS9Xmwc+zHx147VqoJvz38eJg9J
+ aEVojMGSP1467q+AAcoB2znAAAA
+X-Change-ID: 20260511-d1u74t-c0cba8f1c344
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Abdurrahman Hussain <abdurrahman@nexthop.ai>, 
+ kernel test robot <lkp@intel.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1778668384; l=3943;
+ i=abdurrahman@nexthop.ai; s=20260510; h=from:subject:message-id;
+ bh=XubH/O6xm8n3FFF345gC2jEfwCMEnkublF27VZ+i100=;
+ b=4ATJFkhxDu3NdxHh+vWA7EQwBloSZK4elKxoxL7VYGX+KmDgFYez6Iu7tEo7F/fqs5gCbG8oV
+ mQQJx/u95UJDrfoZYAJhLUDYZVAEa1UbuZW6NyksHH495jHPvxfL8Ng
+X-Developer-Key: i=abdurrahman@nexthop.ai; a=ed25519;
+ pk=omTm9cCAbO0ZhS32aKfJDKue0W3sQGpG9ub5eYHif8I=
 
-SGkgR3VlbnRlciwKClRoYW5rIHlvdSB2ZXJ5IG11Y2ggZm9yIHlvdXIgZGV0YWlsZWQgcmV2aWV3
-LiBXZSBhcHByZWNpYXRlIHRoZSBmZWVkYmFjay4KCj4gCj4gT24gNS8xMi8yNiAwMjoxNiwgSHVh
-biBIZSB3cm90ZToKPiA+IEhpIEtyenlzenRvZiwKPiA+IAo+ID4gVGhhbmsgeW91IHZlcnkgbXVj
-aCBmb3IgeW91ciBkZXRhaWxlZCByZXZpZXcuIFdlIGFwcHJlY2lhdGUgdGhlIGZlZWRiYWNrLgo+
-ID4gCj4gPj4gT24gVGh1LCBBcHIgMzAsIDIwMjYgYXQgMDI6NDQ6NDRQTSArMDgwMCwgaGVodWFu
-MUBlc3dpbmNvbXB1dGluZy5jb20gd3JvdGU6Cj4gPj4+ICsKPiA+Pj4gKyAgbGFiZWw6Cj4gPj4+
-ICsgICAgZW51bToKPiA+Pj4gKyAgICAgIC0gcHZ0MAo+ID4+PiArICAgICAgLSBwdnQxCj4gPj4K
-PiA+PiBObywgbGFiZWwgaXMgdXNlci12aXNpYmxlIG5hbWUuIENhbiBiZSB3aGF0ZXZlciB1c2Vy
-IGRlY2lkZXMuCj4gPj4KPiA+PiBQbGVhc2UgcmVhZCB3cml0aW5nIGJpbmRpbmdzIC0gaW5zdGFu
-Y2UgSURzIGFyZSBub3QgYWxsb3dlZC4KPiA+IAo+ID4gVGhhbmtzIGZvciB0aGUgY2xhcmlmaWNh
-dGlvbi4KPiA+IEkgYW0gcGxhbm5pbmcgdG8gdXBkYXRlIHRoZSBuZXh0IHJldmlzaW9uIGFzIGZv
-bGxvd3MuIFdvdWxkIHRoaXMgYmUKPiA+IGFjY2VwdGFibGU/Cj4gPiAKPiA+IFlBTUw6Cj4gPiAt
-IMKgbGFiZWw6Cj4gPiAtIMKgIMKgZW51bToKPiA+IC0gwqAgwqAgwqAtIHB2dDAKPiA+IC0gwqAg
-wqAgwqAtIHB2dDEKPiA+ICsgwqBsYWJlbDogdHJ1ZQo+ID4gCj4gPiByZXF1aXJlZDoKPiA+ICDC
-oCAtIGNvbXBhdGlibGUKPiA+ICDCoCAtIHJlZwo+ID4gIMKgIC0gY2xvY2tzCj4gPiAgwqAgLSBp
-bnRlcnJ1cHRzCj4gPiAtIC0gbGFiZWwKPiA+IAo+ID4gRHJpdmVyOgo+ID4gIMKgc3RhdGljIGlu
-dCBlaWM3NzAwX3B2dF9jcmVhdGVfaHdtb24oc3RydWN0IHB2dF9od21vbiAqcHZ0KQo+ID4gIMKg
-ewo+ID4gLSDCoCBzdHJ1Y3QgZGV2aWNlICpkZXYgPSBwdnQtPmRldjsKPiA+IC0gwqAgc3RydWN0
-IGRldmljZV9ub2RlICpucCA9IGRldi0+b2Zfbm9kZTsKPiA+IC0gwqAgY29uc3QgY2hhciAqbm9k
-ZV9sYWJlbDsKPiA+IC0gwqAgaW50IHR5cGU7Cj4gPiAtIMKgIGNvbnN0IGNoYXIgKm5hbWVzWzJd
-ID0geyJzb2NfcHZ0IiwgImRkcl9wdnQifTsKPiA+IC0KPiA+IC0gwqAgaWYgKG9mX3Byb3BlcnR5
-X3JlYWRfc3RyaW5nKG5wLCAibGFiZWwiLCAmbm9kZV9sYWJlbCkpIHsKPiA+IC0gwqAgwqAgwqAg
-ZGV2X2VycihkZXYsICJNaXNzaW5nICdsYWJlbCcgcHJvcGVydHkgaW4gRFRTIG5vZGVcbiIpOwo+
-ID4gLSDCoCDCoCDCoCByZXR1cm4gLUVJTlZBTDsKPiA+IC0gwqAgfQo+ID4gLQo+ID4gLSDCoCBp
-ZiAoc3RyY21wKG5vZGVfbGFiZWwsICJwdnQwIikgPT0gMCkgewo+ID4gLSDCoCDCoCDCoCB0eXBl
-ID0gMDsKPiA+IC0gwqAgfSBlbHNlIGlmIChzdHJjbXAobm9kZV9sYWJlbCwgInB2dDEiKSA9PSAw
-KSB7Cj4gPiAtIMKgIMKgIMKgIHR5cGUgPSAxOwo+ID4gLSDCoCB9IGVsc2Ugewo+ID4gLSDCoCDC
-oCDCoCBkZXZfZXJyKHB2dC0+ZGV2LCAiVW5zdXBwb3J0ZWQgbGFiZWw6ICVzXG4iLCBub2RlX2xh
-YmVsKTsKPiA+IC0gwqAgwqAgwqAgcmV0dXJuIC1FSU5WQUw7Cj4gPiAtIMKgIH0KPiA+ICsgwqAg
-Y29uc3QgY2hhciAqbmFtZSA9ICJwdnQiOwo+ID4gKwo+ID4gKyDCoCBvZl9wcm9wZXJ0eV9yZWFk
-X3N0cmluZyhwdnQtPmRldi0+b2Zfbm9kZSwgImxhYmVsIiwgJm5hbWUpOwo+ID4gICAKPiA+IC0g
-wqAgcHZ0LT5od21vbiA9IGRldm1faHdtb25fZGV2aWNlX3JlZ2lzdGVyX3dpdGhfaW5mbyhwdnQt
-PmRldiwgbmFtZXNbdHlwZV0sCj4gPiArIMKgIHB2dC0+aHdtb24gPSBkZXZtX2h3bW9uX2Rldmlj
-ZV9yZWdpc3Rlcl93aXRoX2luZm8ocHZ0LT5kZXYsIG5hbWUsCj4gPiAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgcHZ0LCAmcHZ0X2h3bW9uX2luZm8sCj4gPiAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgTlVMTCk7Cj4gPiAK
-PiAKPiBUaGlzIHdvdWxkIHRyeSB0byByZWdpc3RlciBhIGZyZWUtdGV4dCBuYW1lIGZvciB0aGUg
-aHdtb24gZGV2aWNlLAo+IHdoaWNoIHdvdWxkIGJlIHVuYWNjZXB0YWJsZS4KPiAKPiBUaGVyZSBh
-cmUgbG90cyBvZiBtdWx0aS1jaGFubmVsIGRldmljZXMgb3V0IHRoZXJlLiBOb25lIG9mIHRoZW0K
-PiBoYXZlIHRob3NlIHByb2JsZW1zLiBXaHkgZG8geW91IGluc2lzdCBpbiBmcmVlLXRleHQgbmFt
-ZXMgaW5zdGVhZCBvZgo+IHVzaW5nLCBzYXksICJyZWciIHRvIGRpc3Rpbmd1aXNoIHRoZSBjaGFu
-bmVscyA/CgpUaGFua3MgZm9yIHRoZSBjbGFyaWZpY2F0aW9uLgoKSW4gdGhlIG5leHQgcmV2aXNp
-b24sIEkgd2lsbCByZWdpc3RlciB0aGUgaHdtb24gZGV2aWNlIHdpdGggdGhlIGZpeGVkIG5hbWUK
-InB2dCIuCgpCZXN0IHJlZ2FyZHMsCkh1YW4gSGUKCg==
+This series adds a PMBus driver for the Murata D1U74T-W AC/DC power
+supply unit, used in some Open Compute Project platforms.
+
+The PSU is PMBus-compliant and uses the linear data format. The driver
+exposes:
+
+  - input/output voltage, current and power telemetry,
+  - three temperature sensors,
+  - dual fan tachometer monitoring,
+
+through the standard hwmon/pmbus sysfs interface. Probe verifies the
+PMBUS_MFR_ID and PMBUS_MFR_MODEL fields before binding so the driver
+only attaches to actual D1U74T-W hardware.
+
+Patch 1 adds the compatible string to trivial-devices.yaml. The
+binding declares only compatible and reg (no regulators, no supplies),
+so a standalone binding file is not warranted.
+
+Patch 2 adds the driver, hwmon documentation, Kconfig/Makefile entries
+and MAINTAINERS section.
+
+Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+---
+Changes in v3 (addresses the sashiko automated review):
+- Patch 2: move the new MAINTAINERS entry into the correct
+  alphabetical position in the M section (between MULTIPLEXER
+  SUBSYSTEM and MUSB MULTIPOINT) instead of leaving it wedged
+  between CRPS DRIVER and CRYPTO API.
+- Patch 2: rewrite the sysfs-entries table in
+  Documentation/hwmon/d1u74t.rst to match the attributes the chip
+  actually exposes. The previous table listed the PMBus-spec
+  maximal set (crit/lcrit/max/min for in1/in2, crit for temp,
+  max/max_alarm for curr1, etc.) but the chip only implements a
+  subset; pmbus_core consequently only creates a subset of attrs.
+  Cross-checked against two D1U74T-W units, both expose the same
+  attribute set. Also fixes the in2_* descriptions that incorrectly
+  referred to "input voltage" rather than output voltage (in2 is
+  vout1).
+- Patch 2: use dev_err_probe() for the MFR_ID-mismatch error path
+  in d1u74t_probe(), matching the surrounding error-handling style.
+- Patch 2: gate the MFR_MODEL strncmp() on rc >= 8 so a short
+  block-read response cannot make the comparison read stale bytes
+  left over from the previous MFR_ID read into the same buffer.
+- Patch 1 is unchanged from v2.
+- Link to v2: https://patch.msgid.link/20260512-d1u74t-v2-0-431d00fbb1c4@nexthop.ai
+
+Changes in v2:
+- Patch 1: move the binding into trivial-devices.yaml rather than
+  carrying a standalone murata,d1u74t.yaml. The device only declares
+  compatible and reg, with no regulators or supplies, so the
+  standalone binding was not warranted (Conor Dooley review).
+- Patch 2: fix the d1u74t.rst title underline (was 18 '=' chars under
+  a 20-char title, docutils warning from the kernel test robot).
+- Link to v1: https://patch.msgid.link/20260511-d1u74t-v1-0-623c2bc1532a@nexthop.ai
+
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+To: Guenter Roeck <linux@roeck-us.net>
+To: Jonathan Corbet <corbet@lwn.net>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+
+---
+Abdurrahman Hussain (2):
+      dt-bindings: trivial-devices: Add Murata D1U74T PSU
+      hwmon: (pmbus/d1u74t) Add Murata D1U74T PSU driver
+
+ .../devicetree/bindings/trivial-devices.yaml       |  2 +
+ Documentation/hwmon/d1u74t.rst                     | 81 ++++++++++++++++++++
+ Documentation/hwmon/index.rst                      |  1 +
+ MAINTAINERS                                        |  7 ++
+ drivers/hwmon/pmbus/Kconfig                        |  9 +++
+ drivers/hwmon/pmbus/Makefile                       |  1 +
+ drivers/hwmon/pmbus/d1u74t.c                       | 86 ++++++++++++++++++++++
+ 7 files changed, 187 insertions(+)
+---
+base-commit: 5d6919055dec134de3c40167a490f33c74c12581
+change-id: 20260511-d1u74t-c0cba8f1c344
+
+Best regards,
+--  
+Abdurrahman Hussain <abdurrahman@nexthop.ai>
+
