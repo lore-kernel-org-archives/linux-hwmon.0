@@ -1,189 +1,402 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C53F34D9915
-	for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 16:44:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4612E4949E1
+	for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 16:45:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778690677; cv=none; b=VgoU/Yl+BqdRV0XIbDU9st/U08a4d4LenPwdZG4hBHh0tN7JikniRfINStkkbqyvtt6T1TbZ6j/p908gFlMNXGTCUHtKjZlx6YAqnsg4KCx1byIX+Tv4nx6xTh5gtIC7+OKzu8ETy5jdwAX/aga9otYZL+PX9e1AlUXmouT+5ns=
+	t=1778690715; cv=none; b=prv9ZkFG2bYyNCEJFZA17cs9STHQWgtuWr9+0WOo6c7UBWyCgyZfS3BOkcwm0zNCirTsd5xeoDt5XjVWqG6CuwHEPSozBoIKo+4zBI9EXGu1EwYoNxeK9OZDCwKp90MM9fxVeHSbUVI19eXxyyL8c9jYAcFDuTnkDCj1glxEgOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778690677; c=relaxed/simple;
-	bh=12DADEarUp3gyIYLo4clpW0RLu3uLhIZfXDpYh9E1eQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gfDrmjLfCSHTp2sPOzMDRayQzzmI3+dX5CI+9v/mCpjXqC7tz17/khxxcPIQQfC8mFHUvFrZNko61JOk0zVflStiau48luoKro8F9LvnwxyyDz+u8gAI9TilWCv80qgUwwGjCycrvy9dz6JrV7cPv3158heY6f23rHxCvRUAxd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=k9DJ3/eO; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Tc7LkZbb; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1778690715; c=relaxed/simple;
+	bh=rXjZn3imjV4d0sWzAc5EwA0C+in9T5UPvs46nYpbOnQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=lD606B3BwEOsQjfR+a53njRebrvQ7hhrh9f5ZGVFcv32siMWzew9xe2r/QMuvEu+9IFn+JpxdT0QanxdslEPfZ82FLQvLh4RbQGsBYcuiWU7gQ4lNO7pwimJmP1T9EnaYIuiDsx9uUgxi/YzL14R9uC+zM/TgE/QqshA8zqHp+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20251104.gappssmtp.com header.i=@baylibre-com.20251104.gappssmtp.com header.b=s0E5YvBq; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="k9DJ3/eO";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Tc7LkZbb"
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64DAVKSh3430141
-	for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 16:44:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	GJPzNroPQWOtDnw6fNmSbwn2Jxwjo9RD6cA8VRV4jDs=; b=k9DJ3/eOBorwwk4+
-	zKViZkFVYSkOhuK2Zf/yp9bWAkDC00IepLkab5tzvVD6RJgqHVrkznwqIp00sGwF
-	zTMWU9uiNNckpMBuiOm3wt2n/x+dgtJxQXNZnPuj8ptfD8NAf3WakVqSOrYpcol8
-	sPMCpU4Rha5ok9LMAB2RyU3mGAdLvkMQuLPqlnQ9cNai0scs0b+qR5zpxIGjpm/C
-	mvvdebiTPTG0ZV9XUWWdEbEl4ntx5LpRd5qX89JXWMWdxaPW9eRAJjZJhD3Bmp3H
-	hoSag84tFXFccKZENy/C+BGsRT7Eoda2sg7otQNzvB0ccUzNajELJP3hv4TQKQnd
-	Sq1mjw==
-Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4e4qmchf5q-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 16:44:33 +0000 (GMT)
-Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-2f525565b33so8273939eec.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 09:44:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20251104.gappssmtp.com header.i=@baylibre-com.20251104.gappssmtp.com header.b="s0E5YvBq"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4893940bb5eso44369935e9.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 09:45:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1778690672; x=1779295472; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GJPzNroPQWOtDnw6fNmSbwn2Jxwjo9RD6cA8VRV4jDs=;
-        b=Tc7LkZbb/+C50WMNZdKSS1E2+nTUS9DJkcb6r5g2xbjYDnizxFtS5OLKi8BqdI2doC
-         OSzEUS9xa/lj4Ea+akxDGpYHLRgWT+LeqRSem/qfNPcawcRxBkzcdzFF2QAJIki1K9V0
-         66+DNurpiuc5VGkeqKWJ05MEOeyvDilol+Hbw0rWjlonhMTcq5HQqyhKGVCpNH5KJHv7
-         hBg+LJWGeAcexf0gOmMg+Kgez0ZIZbje6fbo7IP2lVRDwS9N+UmeXAxrVcojpwgHIpvA
-         XkiV/fFX8I9p76I++Ya9D02IkaONW+i/eP2U1oAp+1zQDhbfTNGxJQgZPEql9MqRasbt
-         xGBw==
+        d=baylibre-com.20251104.gappssmtp.com; s=20251104; t=1778690711; x=1779295511; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ezVOCwbzx05T50oaVMb0pg561EUcKl7puUvKV/7af1Y=;
+        b=s0E5YvBqGzCyMrpE5rDLCt2PVeoocWzjUZOhJFLT3ZA3Y4epdoNSqf87hUBRk3rkYU
+         EVeSFgXigmWbONFlBoTppu5vOg6AXsd111Umw5YvaVn7HcUIzXWDJ3nlWimb4kjUeAeg
+         amP55FMyaFnUAHnMXsLwvX9D2omjrSSsgo0eeJwtq2fWN5hMMAMtvLW9v23ljA3aAHxV
+         KdOMD05unCvWmaCt17wm/v35Z9ZXOqAuBtmmNOocKh3paFCQtuOzndlQmpNx16ULXx/Z
+         tZL+3gP1nq7Cphl2FTBJrWD6WHenmj0QIasTM4B88LwgWb0mIHtqKj06N0nh5KAeoY+y
+         Du5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778690672; x=1779295472;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GJPzNroPQWOtDnw6fNmSbwn2Jxwjo9RD6cA8VRV4jDs=;
-        b=VAJznzn4nnhzNIzzLDmm9KNl78CcOZRNJZVbWvHfRpU/RwzI0N6zvM4eQE6x6FPbFB
-         sw22PlypNcNIb3ViY+XHkIFpngZHsPkH7joDRmamyPvPYNHTAfkhpRYknGsWizXm/+S2
-         vTDjKMbc/jz719MQz2+VDS54du+GFVllAqAB/XXOPDu77cl3vDzkdLG7SooGFbAMjvLj
-         uN+U+52RELZNA0mdHNUJi688NlCeYy5odu0Q0Q0d2Fps2GvNElLMsSwK8UUaD33QoLoS
-         bhoWA2EzODvKXcbs+4GKMvoKx3HYAyvoXVrcdjrc29xVaA198LDZaxPfHzIYbdKiv0Ar
-         P0fg==
-X-Forwarded-Encrypted: i=1; AFNElJ+NjKIEVWpMSU2y6GjWCyZjebN0AJIladDk4ZHflfeKsLTrSjSZfqZUh6KJY2T+B8zQkxxWcv5UXu98hA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYO802Xfgdl126FppQvF+5+Hb8vl3iSRFy7lBt0hYWF+G36TK9
-	TtzViyQxQDAvTLqMlnuyC8svBSo1twKtS/HK3YXpuaE61hR5eCmAs8/OUAg99V3dlk+I1/tN0ft
-	u86dZ/GEUEUnoPyjPTN5Ra66kx304gQGSqoazTGXAJn0HLnlMozNNnNdcki39JNbuRA==
-X-Gm-Gg: Acq92OFXNalHEMQ2CrNrhW5YeKT+kO9v+CdEsicGRO5sT4IxVe7OLr/R1IhiMnZazZC
-	gBNqq4fiHC6uXfWy4ZxxNUd/uC8pCsJCw6Sb/U5qAtG5f9YMD9/SgMGMqvGND2iSnAinXKb8S7K
-	Yz5hdyGj4W88LzxvwI+OwyOIL5IUsZruhpZT/TIvWjIrpfADl12ahTr2pwiaLn1DJu9/BTdQrQb
-	O6A/39VMtLa1l64DYcA2B73lpzdHJ5gMUqXERpvo6g8L7qsDAyxaVGdvCP/DbDalVpyonFxICbu
-	faSe2DR+1Y4K+4vnqyKP1QXHi+efPoA7xiIp8R8ny1nzcAdeWsURCrL9V4XhOpGDHkGJ6DzvHUG
-	vNJhbXIwkHC/BCLKGTR9dU5uo8QTHV/PGWeHqaZq5TXhkcRU/p9yYcZn7NfZDNd636kzxJJs=
-X-Received: by 2002:a05:7301:600c:b0:2d8:df01:d9f6 with SMTP id 5a478bee46e88-30156511808mr2025520eec.23.1778690672491;
-        Wed, 13 May 2026 09:44:32 -0700 (PDT)
-X-Received: by 2002:a05:7301:600c:b0:2d8:df01:d9f6 with SMTP id 5a478bee46e88-30156511808mr2025483eec.23.1778690671931;
-        Wed, 13 May 2026 09:44:31 -0700 (PDT)
-Received: from hu-aletran-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f8864c37basm22570076eec.13.2026.05.13.09.44.31
+        d=1e100.net; s=20251104; t=1778690711; x=1779295511;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ezVOCwbzx05T50oaVMb0pg561EUcKl7puUvKV/7af1Y=;
+        b=ZJ9iHMiXflaDnz5INZJdrlLBp5URSwGeJ6/MjOR6YpjT+QrdgSH9y4GRVeY2GVaq4M
+         /oOxQJ29Eb+wq252yS9xBPDEw4iwGmb2VocdMd0LDb1wjRbDve1ogpCju6+2bpQ8yWai
+         sR/30ZMBWqVGs95SaHOmniUlQPEKal/Vlc+46TbKZCeoEvG/mqFibu2sBCIXaV+2jNjd
+         ArTkEtTZ06/ESTrANY+cNHxBCZdQN5/29+kR1vQ32G0oJgHo/6oRmZqVKOv7R/XLuz3U
+         9QTc7ys6n58Z0kJtC+1bY0Y3ivEUZiKAWglhSIhQ7XGhBbHWByyaZqu1b6Mx5OARoWjD
+         n8Gw==
+X-Forwarded-Encrypted: i=1; AFNElJ/LyQUoW3yBDe9M9/rx5c747qB6EMYo/rgAcrq7e69HLbBCMZrPdC9CFCMRTas7LpU+NA4aomGaTevEvQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxEbAOXyTw6K3vFrHh56keCaXTDNULr4ea/365FsSMIjrF0MFZv
+	pOj3Hugkv3M6XPS9o7kCCGqRTtGLAGbO/HMQ2qOLlGLej5EWlqjgaOr2DIfni9LN2ZQ=
+X-Gm-Gg: Acq92OGZDJJNA5bxqJqRHwwWgsB+UR0i2klxCBJswKxc6Uo9J+sHm4Q4/iTQOtQsKgd
+	YaocYMuc+LRq0cDYoQdbiJS7jVokP/t/jelQwmmDaRKMzMWXbGF6H1W2adTKr3ZLXwqOSwQlG4E
+	AzBmStg3eXJjynn+1mWePTzj2BEOSi7pLnrUVHouquDoLsyXdomOA8DNwylMm4H2Kc4yyx4nqeO
+	kwy3f3K38d5UUvjTDHhkQzaP6R88j1sM13ZuhfZWrFNjL5diJNRsYK+3Z0slTeJnN4rxOufj2ZE
+	X4qT4cwZfGqRgtpK2Kd4F6nv4DRuWyXx/x3cG2/77BPba1W1wWb/2JvByieg2s5xREdoO/H+TxB
+	qHLGBo1GnMuWe4scNEp6+TlF+aNv83b6A9TIDeBhbcOhuOcADtH9IJIieH3Y/bgKbb8oFtTBJOo
+	A3R8ObSYANPEJBFskM5hNgMsuvGeSJj7CIUn5/r7vx0d904CL/CXEtiYHKAlpKjrzg4WaX6HvuP
+	FA4BuB1gf2jSpo=
+X-Received: by 2002:a05:600c:848c:b0:489:e696:8362 with SMTP id 5b1f17b1804b1-48fc9a30a6amr60463905e9.13.1778690710608;
+        Wed, 13 May 2026 09:45:10 -0700 (PDT)
+Received: from localhost (p200300f65f47db04379dbd4376e53036.dip0.t-ipconnect.de. [2003:f6:5f47:db04:379d:bd43:76e5:3036])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-48fd627569bsm5293725e9.1.2026.05.13.09.45.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2026 09:44:31 -0700 (PDT)
-From: Alex Tran <alex.tran@oss.qualcomm.com>
-Date: Wed, 13 May 2026 09:44:23 -0700
-Subject: [PATCH 5/5] pinctrl: pinctrl-scmi: Log number of pins, groups,
- functions
+        Wed, 13 May 2026 09:45:09 -0700 (PDT)
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig=20=28The=20Capable=20Hub=29?= <u.kleine-koenig@baylibre.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	Igor Reznichenko <igor@reznichenko.net>,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jean Delvare <jdelvare@suse.com>,
+	Corentin Labbe <clabbe.montjoie@gmail.com>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	George Joseph <george.joseph@fairview5.com>,
+	Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+	Juerg Haefliger <juergh@proton.me>,
+	Steve Glendinning <steve.glendinning@shawell.net>,
+	Riku Voipio <riku.voipio@iki.fi>,
+	Andre Werner <andre.werner@systec-electronic.com>,
+	Andrei Lalaev <andrey.lalaev@gmail.com>,
+	=?utf-8?q?Carsten_Spie=C3=9F?= <mail@carsten-spiess.de>,
+	Guillaume Ligneul <guillaume.ligneul@gmail.com>,
+	=?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+	Antoniu Miclaus <antoniu.miclaus@analog.com>,
+	Zev Weiss <zev@bewilderbeest.net>,
+	Ninad Palsule <ninad@linux.ibm.com>,
+	Robert Marko <robert.marko@sartura.hr>,
+	Vasileios Amoiridis <vasileios.amoiridis@cern.ch>,
+	Leo Yang <leo.yang.sy0@gmail.com>,
+	Daniel Nilsson <daniel.nilsson@flex.com>,
+	Kim Seer Paller <kimseer.paller@analog.com>,
+	Noah Wang <noahwang.wang@outlook.com>,
+	Wensheng Wang <wenswang@yeah.net>,
+	Yuxi Wang <Yuxi.Wang@monolithicpower.com>,
+	Cosmo Chou <chou.cosmo@gmail.com>,
+	Saravanan Sekar <sravanhome@gmail.com>,
+	Charles Hsu <hsu.yungteng@gmail.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Duke Du <dukedu83@gmail.com>,
+	Eric Tremblay <etremblay@distech-controls.com>,
+	Marc Hulsman <m.hulsman@tudelft.nl>,
+	Rudolf Marek <r.marek@assembler.cz>,
+	ChiShih Tsai <tomtsai764@gmail.com>,
+	Andrew Davis <afd@ti.com>,
+	Sanman Pradhan <psanman@juniper.net>,
+	Dawei Liu <dawei.liu.jy@renesas.com>,
+	Grant Peltier <grantpeltier93@gmail.com>,
+	Chiang Brian <chiang.brian@inventec.com>,
+	Jeff Lin <jefflin994697@gmail.com>,
+	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
+	Carl Lee <carl.lee@amd.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Andy Shevchenko <andriy.shevchenko@intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Colin Huang <u8813345@gmail.com>,
+	Torben Nielsen <t8927095@gmail.com>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Ashish Yadav <ashish.yadav@infineon.com>,
+	Markus Schneider-Pargmann <msp@baylibre.com>
+Subject: [PATCH v1 0/2] hwmon: Rework initialization of i2c_device_ids
+Date: Wed, 13 May 2026 18:44:56 +0200
+Message-ID: <cover.1778688802.git.u.kleine-koenig@baylibre.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260513-scmi-client-probe-log-v1-5-00b47b1be009@oss.qualcomm.com>
-References: <20260513-scmi-client-probe-log-v1-0-00b47b1be009@oss.qualcomm.com>
-In-Reply-To: <20260513-scmi-client-probe-log-v1-0-00b47b1be009@oss.qualcomm.com>
-To: Jyoti Bhayana <jbhayana@google.com>, Jonathan Cameron <jic23@kernel.org>,
-        David Lechner <dlechner@baylibre.com>,
-        =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Sudeep Holla <sudeep.holla@kernel.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Linus Walleij <linusw@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, Alex Tran <alex.tran@oss.qualcomm.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1778690666; l=1457;
- i=alex.tran@oss.qualcomm.com; h=from:subject:message-id;
- bh=12DADEarUp3gyIYLo4clpW0RLu3uLhIZfXDpYh9E1eQ=;
- b=f8Z4VKh3kEE91Iigqa0bRxoLVWmVWQbHnG8x2yHuKGTYSe4kcqQ+PrzEu+FAzIg8VOT/Il56e
- tXkqUQ93A4lC6rKJcTD1nMijrqk2HNyOstseNE6TFsoECw1hvHSuoOq
-X-Developer-Key: i=alex.tran@oss.qualcomm.com; a=ed25519;
- pk=vKab/gw1fXij5UviWoglv+ho+H/oOiTHyETCLfayPE0=
-X-Proofpoint-GUID: xGsk2PMCbe3LJHR0fRs1GSSTRcAsGdsq
-X-Authority-Analysis: v=2.4 cv=Hu5G3UTS c=1 sm=1 tr=0 ts=6a04aa71 cx=c_pps
- a=PfFC4Oe2JQzmKTvty2cRDw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=ZpdpYltYx_vBUK5n70dp:22
- a=EUspDBNiAAAA:8 a=HhDMDxCfm6Xc3nGqG0sA:9 a=QEXdDO2ut3YA:10
- a=6Ab_bkdmUrQuMsNx7PHu:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTEzMDE2OSBTYWx0ZWRfXxqi2aFS8b6ag
- MA/hZxuYbTdvIeuyB1gbtOWBIEYFKIMScFnE1KtamR4lXjv9R6Gy9Uz/yUn0dmBqcDY+Xfbl5gK
- 3EU8rYSQVCttKmVNkJH3qqeZuFRmzaJhcjMIelOG10PWNAXXhJFgkP+s99CYi8oeTO3oyplNsRT
- iHPmkQYh4gSiDV+CYHVXVIB/NzOAqgaG/xwX3Pji0scI17j83FVpHya1iUj5/L0Na3s5v5vtKAQ
- 64JPpM93no+PbEC7iMFiCqqxHlkLGxRW0Ua5CtuW98XTgABatClORS2372xB3eFcmJW2f+PUWTc
- zaktuFJrQe+JEkmmUATwr4JvMr+vvlI5f8whjvUH9Sn9TZlGOGiX6iC4G8faxgu0nX4RH/65VaA
- TWeC/+nUoxMKLavFY6EJxZH2D0R0G/kbMEJfB2nqtCzNI38kpF/ooDtOW4fRsKpJwPOUHlw4Bo1
- igfnE4ZRkM+bNgmwgTQ==
-X-Proofpoint-ORIG-GUID: xGsk2PMCbe3LJHR0fRs1GSSTRcAsGdsq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-13_01,2026-05-13_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 malwarescore=0 impostorscore=0 priorityscore=1501 spamscore=0
- clxscore=1015 bulkscore=0 suspectscore=0 adultscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605050000 definitions=main-2605130169
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=12770; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=rXjZn3imjV4d0sWzAc5EwA0C+in9T5UPvs46nYpbOnQ=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBqBKqIuTABM3gC9G+nGGDT87HPgQKMU7bBlNdBb VSx+P6qkQ+JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCagSqiAAKCRCPgPtYfRL+ TiIKCACDKvQN50GaeG5gXqfXVnIUxzbCbf1gb4QTjvW2mBG5OFpGudIoXyV5eYJ1+ccc1GPAoZ3 GSLReyri5kFI6l72vIbXFRps96QVR9Gs0h/fI1Vojy9ixt0irFImnfnb4SZECz8A5pLHE5QKvgq 7gK4qFotWByKarybvHTNvIZeS9hwtG4zlamcND7135h1rNrx+s3tWQMj/hfJWJqbcA0Vt67XrrD V2+ziK/+RSECaOAw7Y4Olh1lZ2IN8LbtiwIIpiwTpm+eLumwSGXHmVGoWhqT3f2wJfHtKYTOinu SLP9t9h/bdu7Va+DzcW+CNrzuKrRj6eY+ZFSqR3HfhLONiht
+X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
 
-The SCMI pinctrl driver does not currently log the number of pins,
-groups, and functions discovered from firmware. This information is
-useful for confirming the firmware exposed pinctrl resources during
-debugging.
+Hello,
 
-Log these counts after a successful probe to align with the existing
-SCMI client driver logging pattern.
+this series is a preparation for
 
-Signed-off-by: Alex Tran <alex.tran@oss.qualcomm.com>
----
- drivers/pinctrl/pinctrl-scmi.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+	diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
+	index 23ff24080dfd..aebd3a5e90af 100644
+	--- a/include/linux/mod_devicetable.h
+	+++ b/include/linux/mod_devicetable.h
+	@@ -477,7 +477,11 @@ struct rpmsg_device_id {
+	 
+	 struct i2c_device_id {
+		char name[I2C_NAME_SIZE];
+	-	kernel_ulong_t driver_data;	/* Data private to the driver */
+	+	union {
+	+		/* Data private to the driver */
+	+		kernel_ulong_t driver_data;
+	+		const void *driver_data_ptr;
+	+	};
+	 };
+	 
+	 /* pci_epf */
 
-diff --git a/drivers/pinctrl/pinctrl-scmi.c b/drivers/pinctrl/pinctrl-scmi.c
-index f22be6b7b82a..abc90a3a7eaf 100644
---- a/drivers/pinctrl/pinctrl-scmi.c
-+++ b/drivers/pinctrl/pinctrl-scmi.c
-@@ -40,6 +40,7 @@ struct scmi_pinctrl {
- 	struct pinctrl_desc pctl_desc;
- 	struct pinfunction *functions;
- 	unsigned int nr_functions;
-+	unsigned int nr_groups;
- };
- 
- static int pinctrl_scmi_get_groups_count(struct pinctrl_dev *pctldev)
-@@ -578,7 +579,15 @@ static int scmi_pinctrl_probe(struct scmi_device *sdev)
- 	if (!pmx->functions)
- 		return -ENOMEM;
- 
--	return pinctrl_enable(pmx->pctldev);
-+	pmx->nr_groups = pinctrl_scmi_get_groups_count(pmx->pctldev);
-+
-+	ret = pinctrl_enable(pmx->pctldev);
-+	if (ret)
-+		return ret;
-+
-+	dev_info(dev, "Initialized %d pins, %d groups, %d functions\n",
-+		 pmx->pctl_desc.npins, pmx->nr_groups, pmx->nr_functions);
-+	return 0;
- }
- 
- static const struct scmi_device_id scmi_id_table[] = {
+and this requires that .driver_data is assigned via a named initializer
+for static data. This requirement isn't a bad one because named
+initializers are also much better readable than list initializers.
 
+There are no hwmon drivers that benefit from that change to
+i2c_device_id, but it allows further cleanups like:
+
+
+        diff --git a/drivers/iio/accel/kxcjk-1013.c b/drivers/iio/accel/kxcjk-1013.c
+        index 8a082ff034dd..b2aac7348d22 100644
+        --- a/drivers/iio/accel/kxcjk-1013.c
+        +++ b/drivers/iio/accel/kxcjk-1013.c
+	@@ -1429,7 +1429,7 @@ static int kxcjk1013_probe(struct i2c_client *client)
+	 
+		if (id) {
+			name = id->name;
+	-		data->info = (const struct kx_chipset_info *)(id->driver_data);
+	+		data->info = id->driver_data_ptr;
+		} else {
+			name = iio_get_acpi_device_name_and_data(&client->dev, &ddata);
+			data->info = ddata;
+	@@ -1630,11 +1630,11 @@ static const struct dev_pm_ops kxcjk1013_pm_ops = {
+	 };
+	 
+	 static const struct i2c_device_id kxcjk1013_id[] = {
+	-	{ .name = "kxcjk1013", .driver_data = (kernel_ulong_t)&kxcjk1013_info },
+	-	{ .name = "kxcj91008", .driver_data = (kernel_ulong_t)&kxcj91008_info },
+	-	{ .name = "kxtj21009", .driver_data = (kernel_ulong_t)&kxtj21009_info },
+	-	{ .name = "kxtf9", .driver_data = (kernel_ulong_t)&kxtf9_info },
+	-	{ .name = "kx023-1025", .driver_data = (kernel_ulong_t)&kx0231025_info },
+	+	{ .name = "kxcjk1013", .driver_data_ptr = &kxcjk1013_info },
+	+	{ .name = "kxcj91008", .driver_data_ptr = &kxcj91008_info },
+	+	{ .name = "kxtj21009", .driver_data_ptr = &kxtj21009_info },
+	+	{ .name = "kxtf9", .driver_data_ptr = &kxtf9_info },
+	+	{ .name = "kx023-1025", .driver_data_ptr = &kx0231025_info },
+		{ }
+	 };
+	 MODULE_DEVICE_TABLE(i2c, kxcjk1013_id);
+
+that are an improvement for readability (again!) and it keeps some
+properties of the pointers (here: being const) without having to pay
+attention for that.
+
+My additional motivation for this effort is CHERI[1]. This is a hardware
+extension that uses 128 bit pointers but unsigned long is still 64 bit.
+So with CHERI you cannot store pointers in unsigned long variables.
+
+The first patch drops a few unused assignments to .driver_data (which is
+still better than assigning the values by name) and the second converts
+all hwmon drivers to use named initializers.
+
+Uwe Kleine-König (The Capable Hub) (2):
+  hwmon: Drop unused i2c driver_data
+  hwmon: Use named initializers for arrays of i2c_device_data
+
+ drivers/hwmon/ad7414.c                  |  4 +-
+ drivers/hwmon/ad7418.c                  |  6 +-
+ drivers/hwmon/adc128d818.c              |  2 +-
+ drivers/hwmon/adm1025.c                 |  4 +-
+ drivers/hwmon/adm1026.c                 |  2 +-
+ drivers/hwmon/adm1029.c                 |  2 +-
+ drivers/hwmon/adm1031.c                 |  4 +-
+ drivers/hwmon/adm1177.c                 |  4 +-
+ drivers/hwmon/adm9240.c                 |  6 +-
+ drivers/hwmon/ads7828.c                 |  4 +-
+ drivers/hwmon/adt7410.c                 |  8 +--
+ drivers/hwmon/adt7411.c                 |  2 +-
+ drivers/hwmon/adt7462.c                 |  2 +-
+ drivers/hwmon/adt7470.c                 |  2 +-
+ drivers/hwmon/adt7475.c                 |  8 +--
+ drivers/hwmon/aht10.c                   |  8 +--
+ drivers/hwmon/amc6821.c                 |  2 +-
+ drivers/hwmon/asb100.c                  |  2 +-
+ drivers/hwmon/asc7621.c                 |  6 +-
+ drivers/hwmon/atxp1.c                   |  2 +-
+ drivers/hwmon/chipcap2.c                | 16 ++---
+ drivers/hwmon/dme1737.c                 |  4 +-
+ drivers/hwmon/ds1621.c                  | 10 +--
+ drivers/hwmon/ds620.c                   |  4 +-
+ drivers/hwmon/emc1403.c                 | 24 +++----
+ drivers/hwmon/emc2103.c                 |  2 +-
+ drivers/hwmon/emc2305.c                 |  8 +--
+ drivers/hwmon/emc6w201.c                |  2 +-
+ drivers/hwmon/f75375s.c                 |  6 +-
+ drivers/hwmon/fschmd.c                  | 14 ++--
+ drivers/hwmon/ftsteutates.c             |  2 +-
+ drivers/hwmon/g760a.c                   |  2 +-
+ drivers/hwmon/g762.c                    |  6 +-
+ drivers/hwmon/gl518sm.c                 |  2 +-
+ drivers/hwmon/gl520sm.c                 |  2 +-
+ drivers/hwmon/hih6130.c                 |  2 +-
+ drivers/hwmon/hs3001.c                  |  4 +-
+ drivers/hwmon/htu31.c                   |  2 +-
+ drivers/hwmon/ina209.c                  |  2 +-
+ drivers/hwmon/ina238.c                  | 12 ++--
+ drivers/hwmon/ina2xx.c                  | 16 ++---
+ drivers/hwmon/ina3221.c                 |  2 +-
+ drivers/hwmon/isl28022.c                |  2 +-
+ drivers/hwmon/jc42.c                    |  2 +-
+ drivers/hwmon/lineage-pem.c             |  4 +-
+ drivers/hwmon/lm63.c                    |  6 +-
+ drivers/hwmon/lm73.c                    |  2 +-
+ drivers/hwmon/lm75.c                    | 62 ++++++++--------
+ drivers/hwmon/lm77.c                    |  2 +-
+ drivers/hwmon/lm78.c                    |  4 +-
+ drivers/hwmon/lm80.c                    |  4 +-
+ drivers/hwmon/lm83.c                    |  4 +-
+ drivers/hwmon/lm85.c                    | 24 +++----
+ drivers/hwmon/lm87.c                    |  4 +-
+ drivers/hwmon/lm90.c                    | 96 ++++++++++++-------------
+ drivers/hwmon/lm92.c                    |  6 +-
+ drivers/hwmon/lm93.c                    |  4 +-
+ drivers/hwmon/lm95234.c                 |  4 +-
+ drivers/hwmon/lm95241.c                 |  4 +-
+ drivers/hwmon/lm95245.c                 |  4 +-
+ drivers/hwmon/ltc2945.c                 |  2 +-
+ drivers/hwmon/ltc2947-i2c.c             |  4 +-
+ drivers/hwmon/ltc2990.c                 |  4 +-
+ drivers/hwmon/ltc2991.c                 |  4 +-
+ drivers/hwmon/ltc2992.c                 |  4 +-
+ drivers/hwmon/ltc4151.c                 |  2 +-
+ drivers/hwmon/ltc4215.c                 |  2 +-
+ drivers/hwmon/ltc4222.c                 |  2 +-
+ drivers/hwmon/ltc4245.c                 |  2 +-
+ drivers/hwmon/ltc4260.c                 |  2 +-
+ drivers/hwmon/ltc4261.c                 |  4 +-
+ drivers/hwmon/max127.c                  |  2 +-
+ drivers/hwmon/max16065.c                | 12 ++--
+ drivers/hwmon/max1619.c                 |  2 +-
+ drivers/hwmon/max1668.c                 |  6 +-
+ drivers/hwmon/max31730.c                |  2 +-
+ drivers/hwmon/max31760.c                |  2 +-
+ drivers/hwmon/max31790.c                |  2 +-
+ drivers/hwmon/max31827.c                |  6 +-
+ drivers/hwmon/max6620.c                 |  2 +-
+ drivers/hwmon/max6621.c                 |  2 +-
+ drivers/hwmon/max6639.c                 |  2 +-
+ drivers/hwmon/max6650.c                 |  4 +-
+ drivers/hwmon/max6697.c                 | 20 +++---
+ drivers/hwmon/mc34vr500.c               |  4 +-
+ drivers/hwmon/mcp3021.c                 |  4 +-
+ drivers/hwmon/nct6775-i2c.c             | 26 +++----
+ drivers/hwmon/nct7802.c                 |  2 +-
+ drivers/hwmon/nct7904.c                 |  4 +-
+ drivers/hwmon/pcf8591.c                 |  2 +-
+ drivers/hwmon/pmbus/acbel-fsg032.c      |  4 +-
+ drivers/hwmon/pmbus/adm1266.c           |  2 +-
+ drivers/hwmon/pmbus/adm1275.c           | 20 +++---
+ drivers/hwmon/pmbus/aps-379.c           |  4 +-
+ drivers/hwmon/pmbus/bel-pfe.c           |  6 +-
+ drivers/hwmon/pmbus/bpa-rs600.c         |  6 +-
+ drivers/hwmon/pmbus/crps.c              |  4 +-
+ drivers/hwmon/pmbus/delta-ahe50dc-fan.c |  2 +-
+ drivers/hwmon/pmbus/dps920ab.c          |  4 +-
+ drivers/hwmon/pmbus/fsp-3y.c            |  4 +-
+ drivers/hwmon/pmbus/hac300s.c           |  4 +-
+ drivers/hwmon/pmbus/ibm-cffps.c         |  8 +--
+ drivers/hwmon/pmbus/ina233.c            |  4 +-
+ drivers/hwmon/pmbus/inspur-ipsps.c      |  4 +-
+ drivers/hwmon/pmbus/ir35221.c           |  4 +-
+ drivers/hwmon/pmbus/ir36021.c           |  4 +-
+ drivers/hwmon/pmbus/ir38064.c           | 10 +--
+ drivers/hwmon/pmbus/irps5401.c          |  4 +-
+ drivers/hwmon/pmbus/isl68137.c          | 92 ++++++++++++------------
+ drivers/hwmon/pmbus/lm25066.c           | 10 +--
+ drivers/hwmon/pmbus/lt3074.c            |  4 +-
+ drivers/hwmon/pmbus/lt7182s.c           |  4 +-
+ drivers/hwmon/pmbus/ltc2978.c           | 60 ++++++++--------
+ drivers/hwmon/pmbus/ltc3815.c           |  2 +-
+ drivers/hwmon/pmbus/max15301.c          |  8 +--
+ drivers/hwmon/pmbus/max16064.c          |  4 +-
+ drivers/hwmon/pmbus/max16601.c          | 10 +--
+ drivers/hwmon/pmbus/max17616.c          |  2 +-
+ drivers/hwmon/pmbus/max20730.c          | 10 +--
+ drivers/hwmon/pmbus/max20751.c          |  4 +-
+ drivers/hwmon/pmbus/max31785.c          |  8 +--
+ drivers/hwmon/pmbus/max34440.c          | 18 ++---
+ drivers/hwmon/pmbus/max8688.c           |  2 +-
+ drivers/hwmon/pmbus/mp2856.c            |  6 +-
+ drivers/hwmon/pmbus/mp2888.c            |  4 +-
+ drivers/hwmon/pmbus/mp2891.c            |  2 +-
+ drivers/hwmon/pmbus/mp2925.c            |  6 +-
+ drivers/hwmon/pmbus/mp29502.c           |  4 +-
+ drivers/hwmon/pmbus/mp2975.c            |  8 +--
+ drivers/hwmon/pmbus/mp2993.c            |  2 +-
+ drivers/hwmon/pmbus/mp5920.c            |  2 +-
+ drivers/hwmon/pmbus/mp5926.c            |  4 +-
+ drivers/hwmon/pmbus/mp5990.c            |  4 +-
+ drivers/hwmon/pmbus/mp9941.c            |  2 +-
+ drivers/hwmon/pmbus/mp9945.c            |  4 +-
+ drivers/hwmon/pmbus/mpq7932.c           |  6 +-
+ drivers/hwmon/pmbus/mpq8785.c           | 10 +--
+ drivers/hwmon/pmbus/pim4328.c           | 18 ++---
+ drivers/hwmon/pmbus/pli1209bc.c         |  4 +-
+ drivers/hwmon/pmbus/pm6764tr.c          |  4 +-
+ drivers/hwmon/pmbus/pmbus.c             | 60 ++++++++--------
+ drivers/hwmon/pmbus/pxe1610.c           |  8 +--
+ drivers/hwmon/pmbus/q54sj108a2.c        |  8 +--
+ drivers/hwmon/pmbus/stef48h28.c         |  4 +-
+ drivers/hwmon/pmbus/stpddc60.c          |  6 +-
+ drivers/hwmon/pmbus/tda38640.c          |  4 +-
+ drivers/hwmon/pmbus/tps25990.c          |  4 +-
+ drivers/hwmon/pmbus/tps40422.c          |  4 +-
+ drivers/hwmon/pmbus/tps53679.c          | 18 ++---
+ drivers/hwmon/pmbus/tps546d24.c         |  4 +-
+ drivers/hwmon/pmbus/ucd9000.c           | 16 ++---
+ drivers/hwmon/pmbus/ucd9200.c           | 18 ++---
+ drivers/hwmon/pmbus/xdp710.c            |  2 +-
+ drivers/hwmon/pmbus/xdp720.c            |  4 +-
+ drivers/hwmon/pmbus/xdpe12284.c         |  8 +--
+ drivers/hwmon/pmbus/xdpe152c4.c         |  6 +-
+ drivers/hwmon/pmbus/xdpe1a2g7b.c        |  6 +-
+ drivers/hwmon/pmbus/zl6100.c            | 44 ++++++------
+ drivers/hwmon/powr1220.c                |  4 +-
+ drivers/hwmon/pt5161l.c                 |  4 +-
+ drivers/hwmon/sbtsi_temp.c              |  4 +-
+ drivers/hwmon/sg2042-mcu.c              |  2 +-
+ drivers/hwmon/sht21.c                   |  6 +-
+ drivers/hwmon/sht3x.c                   |  8 +--
+ drivers/hwmon/sht4x.c                   |  4 +-
+ drivers/hwmon/shtc1.c                   |  6 +-
+ drivers/hwmon/smsc47m192.c              |  2 +-
+ drivers/hwmon/spd5118.c                 |  2 +-
+ drivers/hwmon/stts751.c                 |  2 +-
+ drivers/hwmon/tc654.c                   |  6 +-
+ drivers/hwmon/tc74.c                    |  4 +-
+ drivers/hwmon/thmc50.c                  |  4 +-
+ drivers/hwmon/tmp102.c                  |  2 +-
+ drivers/hwmon/tmp103.c                  |  2 +-
+ drivers/hwmon/tmp108.c                  |  8 +--
+ drivers/hwmon/tmp401.c                  | 10 +--
+ drivers/hwmon/tmp421.c                  | 10 +--
+ drivers/hwmon/tmp464.c                  |  4 +-
+ drivers/hwmon/tmp513.c                  |  4 +-
+ drivers/hwmon/tsc1641.c                 |  2 +-
+ drivers/hwmon/w83773g.c                 |  2 +-
+ drivers/hwmon/w83781d.c                 |  8 +--
+ drivers/hwmon/w83791d.c                 |  2 +-
+ drivers/hwmon/w83792d.c                 |  2 +-
+ drivers/hwmon/w83793.c                  |  2 +-
+ drivers/hwmon/w83795.c                  |  4 +-
+ drivers/hwmon/w83l785ts.c               |  2 +-
+ drivers/hwmon/w83l786ng.c               |  2 +-
+ 188 files changed, 687 insertions(+), 687 deletions(-)
+
+
+base-commit: 254f49634ee16a731174d2ae34bc50bd5f45e731
 -- 
-2.43.0
+2.47.3
 
