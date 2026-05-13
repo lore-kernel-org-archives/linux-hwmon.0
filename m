@@ -1,67 +1,67 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12FAE38887F
-	for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 03:57:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D55643921FB
+	for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 04:56:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778644659; cv=none; b=er/YeAu+6IKS04SgSKywG3p2DsCLqxUBBUvX/IUePNcqDMSxUB98M3NjLRe7K6MfaUviwihfyEMDNrowAMwJCUNg4G1usD5iQkRc0wic3OetJU+UhzkpyIR24RvA4rI37e10evcwbgWA8BufADSHUahnEy0GIUcHHywCW2SltxQ=
+	t=1778648186; cv=none; b=FVnrfKjoNrwYpn2nG3HPlSfozmfZR84mFf5RHvvVRrbnRfygvZhkkgZon3p9wJxMJEGTsdKILzVnCLw7SP0VLu0WxX0TFHM8hvhnqwWR7wpJgjXsHTE19X5HG2+xM2brp3bP1kCX0bdWxdXgr3pw7v5GhnXZNZOMzSeyS9pgYOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778644659; c=relaxed/simple;
-	bh=S/18jstxGLku7AnB6d6xJJ/nJKtfUR371Hl7TxTz4Ew=;
+	s=arc-20240116; t=1778648186; c=relaxed/simple;
+	bh=oEFqrGJElVWsJCJsodudX+JDfgrg6P0Nyniu6jzWYn8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ccCziAd19hetT8gnz+m/sK1lhCEoTqhkzQWrwb4TcG+NA6t8FNtvxIN4VJU1CwrBA/dfsbVYkd6ccxBWp4PmQcpJfazYbPdI5LrXv9k2nxpq7CPfMvrZUULy/MjmpGZ4BhKTT0iO35wkt6HhsWnK/vqS5P4LzbxGZ7clDOGRWOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MOSn0EI5; arc=none smtp.client-ip=209.85.214.177
+	 In-Reply-To:Content-Type; b=IyhcZERd9uNJqDF0gPhHhLslyCpODlu2BpmKBFu1CTJlfFjyjr9hOprU32Hi8HC2zRZM6yK6IOnjvwSPh5OQH2EnNJakIj/MFtb+Wpgo4nWb2rSJgWy1XJ09iF5wPwNgOQ77w6ai+tGxZsgTg/fNp8T+r4doqm/UCYoSl2siuxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yexmv0Rh; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MOSn0EI5"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2ba21d32776so42013095ad.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 20:57:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yexmv0Rh"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-835386ff122so5946375b3a.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2026 21:56:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778644657; x=1779249457; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778648184; x=1779252984; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=SMmA1p470K8kHm/RzIg3KMhBzTbF4IoaEYfJlifMsIQ=;
-        b=MOSn0EI5z2HuWTU20ReCJgelxTn3yW3BiPoUv0+Eilq1AnQ5hgj8Enh09E0w5lbZ1t
-         zE8E98jD9FSOEnnIX48pF5706aHYMY7keSbTiKF0Cq1r14tu6y2JOR6f+hIaEt/k4WNq
-         VgmU7dQbwH1KCkInJpWDsOBE2dviYq8iqLMZY3g4ZdNcLL55TYzbECl+JnyK7luinPSS
-         SdlnDfMuUjnvRAjsNRag4FrnSDyJRz1YOQxDK2KcbhafXVVwQx+K0BOR1rAL4SNcI08M
-         lNKcew78YnVMfnbompDzXJTcabCuxoB/PNmJIVieaBCAOhedd1GqWrZPZ5I1ewLX67O3
-         Cq/Q==
+        bh=BY2NFR2OVpU0WhoUPQAwuaAExP4/KT35v4Z4OHaj9Es=;
+        b=Yexmv0RhAnB3YFu28XfmvRuyVSDTYwFcYgKPsP9bNBpkkXLPtbtdVu7ze//E2Swl/w
+         VpBXpwbXZUjRCEgSLnevYoa3yfRT2KUyb5NwpS0iuIlxSstVJtaiqsvTyi187kueLRO3
+         gF8hhlY0D0B/1tLlLOwU5nH69sCyQn3QGxutMQv/YQls5/G4s415cJ9GVQfWkysFT8jA
+         LHApzBPY4xcn8Ws5C4nmUiBok9us38iQwi/11GgBXzZUwvHsxUoDr8Bw5ZX5dRabEEWR
+         TMAE14oyWf4MkeRP9kcUiPzb4IKYKaXubNJyKX06lhL5mrOSR0cyCYXVv58yhC451EZB
+         jWOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778644657; x=1779249457;
+        d=1e100.net; s=20251104; t=1778648184; x=1779252984;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SMmA1p470K8kHm/RzIg3KMhBzTbF4IoaEYfJlifMsIQ=;
-        b=GrgjEZ2UkMuzGItvgraHiEkDTl4N/u4FFDjOwNipSWuyCy8UUGG30qKHzgxGFeUyUg
-         64Asc/78+BUrg+sTelcYtzQnidas5I4YMQ1K37uJNJnYdIoskZd9P/p6ZhixLd348vA6
-         ic4Vi/y+vwOyYx+xG/s904Vw2ZPFwJM8UmeBhoDGaQUL2T08hCdb0/4g8YtJtOE32LKC
-         EA/JNZj5J9XESfSUHewmunWzsiQAO8BgbHaUI1Qwd2pP8LSKaGjrGG2YYe8qR+80xyZm
-         3k8x6+QvcXbWdhNBMtiENeRbbi8TF2nVEYh7MRmBnV/piilUs8N4fxe6zkev0A5kPov3
-         /geA==
-X-Forwarded-Encrypted: i=1; AFNElJ/Q0vA/DJVHXPnOj9JCgteqEcltXBVjz2EeTQjM+JRuUdT5524ffxHqZNOvKfFjLPFAx3fIUqEYyHSYvw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyO0djks/reLv5ONYxGAK38Y9IjV4eeh9TRbMp/bReha5zD7oph
-	Ndfrv/cqFRCQgXWgx3NfItx3AnLHWyz9pTVclMq+FQvomi/n98xFkBFg
-X-Gm-Gg: Acq92OGBpKRyXE3IueERSYFkFu9E7au+xuJDDvBg9wBeDg4u85mQfcxkpz7WrA0buMU
-	uVRujFVyQLopIDZnRmcaF5jFFi/V3Sp5kNDMyzSVTD5/oAqtt8davfs+KbfGV87xANxAGmyT4M2
-	hd4c85xpbvsJNjUw1YJYvkueQqpxNCJCeyqx+j4dsC2VT8Uy4OvJQRmQMRU1B1GJf468hrQPsBR
-	wFBvGk2CObO7hxh25XIWbX3ANYq8Y4e3/9wH/GRTCMRNtZrLGb6u9CrG6deANMsn8ng1P67bBan
-	IhkXcXNWtsuvRdAgmZ8AH7U0Rgp8b9p2PZEiJ8lL1JrT4CepTetclCjZLYojYR4eThb3MMZ4rGB
-	zgWu/TPjKD8I+6cY2Prm32iY4L0fgCTdzXLbUHomwtMr1GJy4oSScS0D9zQ6cQ99PIQ5B9Sp/7t
-	I+tkt09L7WSEzWGV99xfPaTYueB7rkQIjQ/ZG+6kIykd27/vv2wV01rBxxZcqIduzuIq/u9/RD
-X-Received: by 2002:a17:903:44c8:b0:2b4:5e65:5d0e with SMTP id d9443c01a7336-2bd27156fe4mr12608565ad.10.1778644657042;
-        Tue, 12 May 2026 20:57:37 -0700 (PDT)
+        bh=BY2NFR2OVpU0WhoUPQAwuaAExP4/KT35v4Z4OHaj9Es=;
+        b=T1cevBJmOJEyP4iqsLOlkYkSrEmm+bE4/u00baa81o8oTA1L8NQlH4ZYUyXcMfafCg
+         apqOKe0+bubV/1tWGO4+Lr6rbMtaLLJQXMutyOo3LYr4rF0/IvqFf2UKgRWmhZCHj8wu
+         aCiNMBruBW2Hg6MCBJsjEJqYfAfjAN/qpxdnc4R5lE8kPuDVlygPWP2nxHd5UCJkfVCg
+         zzuww/ODIXly9eR95XoBTYdaXCJmF3bSqpep9GNLw5breukyT9bcYPoGu1pLnkoVOtjo
+         D/EsXzwcADWIhcaq0DFwDZPmMELFwGibCV5j4sm2vDj4dDlEf8mtfOeRI4xnZbeXJxmi
+         sYyg==
+X-Forwarded-Encrypted: i=1; AFNElJ+OXSc+Nf1/Rq3fd8gLDdf1tM3Id4S91uaUIpqWcXwwgxBkNoRNp1FWfapYVqg1blVssF1/Qy0YpRaevg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUwUjPPlPDaBLuF20MWA5SdFea99pl04NqxK8b+n/IwSSNZrMt
+	qs+8k4IhIVU8tNoQCdJ9HrkJItYNyLi/mU0wsiqJ2dqDXFbfYCd3hm2c
+X-Gm-Gg: Acq92OGSlPxiqtcYW0xcxaQvVqfHOCsnsA2Zounxg2+G0O9GiH682k9wDvWZG6P6ijd
+	QrGnDtIiaIDwEia9tmxvUk6baezS+GFFhotgJgqw2Qa5zuiR/X77UUR1xHctoSA9MS21Uf4lTk7
+	0q5Ca4rOMWh+lb0pwDeVHGWgpJay8BCypCG6jBz71mAfaeTN+KclXuPAUnYGKYcgSCr3wgcdYVf
+	8vG8sh1Ci2KrDil9VAPn0fkwUnfcNGb8vff9GY6uLZOCXvxSJj2irc5iEU3INB4TYtv03xHYB88
+	nNcENJw9ieloorDkIBGTqI3VK8DoqP6OwDXG/Dq24/Lr0+nVY63YE3C4b2iWMEvrqrikol5xXsZ
+	aq8pYcSmB8R/NkGUFVaRvFbLokgT3gWvr4hvjX2BE1dBohAFEnQgrh/S6fdlzHjADzXk09iIXGf
+	mgmiRgeAftHQTOPNrbFYWy/NYyMtkptay5UmAceiC8rh1YOTjOA7uIoFgG0cLLI8zeaPc+K7gW
+X-Received: by 2002:a05:6a00:2291:b0:835:4776:7d7b with SMTP id d2e1a72fcca58-83f042b9b10mr1696659b3a.42.1778648183897;
+        Tue, 12 May 2026 21:56:23 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1d52f27sm186309545ad.36.2026.05.12.20.57.35
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83967dbf0cesm30881108b3a.46.2026.05.12.21.56.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 May 2026 20:57:36 -0700 (PDT)
+        Tue, 12 May 2026 21:56:23 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <934b475d-1d77-4670-af10-4f3f2ddad61d@roeck-us.net>
-Date: Tue, 12 May 2026 20:57:34 -0700
+Message-ID: <9fa93f79-526f-427b-bc43-1216fb5ce94e@roeck-us.net>
+Date: Tue, 12 May 2026 21:56:22 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,20 +69,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] scsi: mpt3sas: add hwmon support
-To: Louis Sautier <sautier.louis@gmail.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Sathya Prakash <sathya.prakash@broadcom.com>,
- Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
- Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
- Ranjan Kumar <ranjan.kumar@broadcom.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260512214703.655633-1-sautier.louis@gmail.com>
- <20260512214703.655633-3-sautier.louis@gmail.com>
+Subject: Re: [PATCH 2/2] hwmon: (pmbus/d1u74t) Add Murata D1U74T PSU driver
+To: sashiko-reviews@lists.linux.dev,
+ Abdurrahman Hussain <abdurrahman@nexthop.ai>
+Cc: robh@kernel.org, krzk+dt@kernel.org, devicetree@vger.kernel.org,
+ conor+dt@kernel.org, linux-hwmon@vger.kernel.org
+References: <20260511-d1u74t-v1-2-623c2bc1532a@nexthop.ai>
+ <20260513031519.A55BCC2BCB0@smtp.kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -128,439 +121,100 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260512214703.655633-3-sautier.louis@gmail.com>
+In-Reply-To: <20260513031519.A55BCC2BCB0@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 5/12/26 14:47, Louis Sautier wrote:
-> Expose the IOC and board temperature sensors of LSI / Broadcom SAS
-> HBAs through hwmon. Readings come from MPI IO Unit Page 7 via the
-> accessor added in the preceding patch.
-> 
-> The same fields are exposed by Broadcom's userspace tooling
-> through the /dev/mpt[23]ctl ioctl path (typically root-only):
-> IOCTemperature and BoardTemperature in lsiutil; ROC and Controller
-> in storcli. With this driver, sensors(1) shows them unprivileged:
-> 
->    $ sensors mpt3sas-pci-0200
->    mpt3sas-pci-0200
->    Adapter: PCI adapter
->    IOC:          +42.0°C
-> 
-> Each channel is gated independently by its *TemperatureUnits field
-> through is_visible(); cards that populate only one sensor expose
-> only one input file, and cards that populate neither do not register
-> an hwmon device.
-> 
-> Built into mpt3sas.ko under a new CONFIG_SCSI_MPT3SAS_HWMON Kconfig
-> option.
-> 
-> Assisted-by: Claude:claude-opus-4-7
-> Signed-off-by: Louis Sautier <sautier.louis@gmail.com>
-> ---
->   Documentation/hwmon/index.rst        |   1 +
->   Documentation/hwmon/mpt3sas.rst      |  57 ++++++++
+Hi,
 
-This is not appropriate. The description is wrong and misleading.
-mpt3sas is _not_ a hwmon driver. It is a chip access driver which
-happens to support hardware monitoring.
-
-If this is part of the mpt3sas code and not a separate driver,
-please keep it there.
+On 5/12/26 20:15, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
+> - [Medium] The driver fails to verify the number of bytes read (`rc`) from `PMBUS_MFR_MODEL` before calling `strncmp(buf, "D1U74T-W", 8)`.
+> - [Low] Copy-paste errors in `Documentation/hwmon/d1u74t.rst` for `in2_*` attributes.
+> - [Low] Inconsistent error handling styles for failure modes returning `-ENODEV` in the probe function.
+> --
+> 
+> commit a76e770177dc6ee5472b638d5e12f032fd0a5cd5
+> Author: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+> 
+> hwmon: (pmbus/d1u74t) Add Murata D1U74T PSU driver
+> 
+> This commit introduces a new PMBus driver for Murata D1U74T power supplies.
+> It relies on the core PMBus framework and checks the manufacturer ID and
+> model string during probe.
+> 
+>> diff --git a/Documentation/hwmon/d1u74t.rst b/Documentation/hwmon/d1u74t.rst
+>> new file mode 100644
+>> index 0000000000000..f7786ebba0b47
+>> --- /dev/null
+>> +++ b/Documentation/hwmon/d1u74t.rst
+>> @@ -0,0 +1,97 @@
+> [ ... ]
+>> +in2_label		"vout1"
+>> +in2_input		Measured input voltage
+>> +in2_crit		Critical input over voltage
+>> +in2_crit_alarm		Critical input over voltage alarm
+>> +in2_lcrit		Critical input under voltage fault
+>> +in2_lcrit_alarm		Critical input under voltage fault alarm
+>> +in2_max			Maximum input over voltage
+>> +in2_max_alarm		Maximum input over voltage alarm
+>> +in2_min			Minimum input under voltage warning
+>> +in2_min_alarm		Minimum input under voltage warning alarm
+>> +in2_rated_min		Minimum rated input voltage
+>> +in2_rated_max		Maximum rated input voltage
+> 
+> This isn't a bug, but should these descriptions refer to output voltage
+> instead of input voltage, since the label is vout1?
+> 
+> [ ... ]
+>> diff --git a/drivers/hwmon/pmbus/d1u74t.c b/drivers/hwmon/pmbus/d1u74t.c
+>> new file mode 100644
+>> index 0000000000000..3127e0e5a23de
+>> --- /dev/null
+>> +++ b/drivers/hwmon/pmbus/d1u74t.c
+>> @@ -0,0 +1,85 @@
+> [ ... ]
+>> +static int d1u74t_probe(struct i2c_client *client)
+>> +{
+>> +	char buf[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
+>> +	struct device *dev = &client->dev;
+>> +	int rc;
+>> +
+>> +	rc = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
+>> +	if (rc < 0)
+>> +		return dev_err_probe(dev, rc, "Failed to read PMBUS_MFR_ID\n");
+>> +
+>> +	if (rc != 9 || strncmp(buf, "Murata-PS", 9)) {
+>> +		buf[rc] = '\0';
+>> +		dev_err(dev, "Unsupported Manufacturer ID '%s'\n", buf);
+>> +		return -ENODEV;
+>> +	}
+> 
+> This isn't a bug, but could dev_err_probe() be used here for consistency
+> with the other error paths in this function?
+> 
+>> +
+>> +	rc = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
+>> +	if (rc < 0)
+>> +		return dev_err_probe(dev, rc,
+>> +				     "Failed to read PMBUS_MFR_MODEL\n");
+>> +
+>> +	if (strncmp(buf, "D1U74T-W", 8)) {
+>> +		buf[rc] = '\0';
+>> +		return dev_err_probe(dev, -ENODEV, "Model '%s' not supported\n",
+>> +				     buf);
+>> +	}
+> 
+> Does this code evaluate stale data in the buffer if the model read returns
+> fewer than 8 bytes?
+> 
+> The buf array isn't cleared between the manufacturer and model reads. If
+> i2c_smbus_read_block_data() successfully returns a length smaller than 8,
+> strncmp() could end up comparing against leftover characters from the
+> previous Murata-PS string since rc isn't verified before the comparison.
+> 
+I think those are all valid issues. Please fix.
 
 Thanks,
 Guenter
-
->   MAINTAINERS                          |   1 +
->   drivers/scsi/mpt3sas/Kconfig         |   9 ++
->   drivers/scsi/mpt3sas/Makefile        |   2 +
->   drivers/scsi/mpt3sas/mpt3sas_base.h  |  17 +++
->   drivers/scsi/mpt3sas/mpt3sas_hwmon.c | 200 +++++++++++++++++++++++++++
->   drivers/scsi/mpt3sas/mpt3sas_scsih.c |   6 +
->   8 files changed, 293 insertions(+)
->   create mode 100644 Documentation/hwmon/mpt3sas.rst
->   create mode 100644 drivers/scsi/mpt3sas/mpt3sas_hwmon.c
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 8b655e5d6b68..106f87fa8b18 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -193,6 +193,7 @@ Hardware Monitoring Kernel Drivers
->      mp9941
->      mp9945
->      mpq8785
-> +   mpt3sas
->      nct6683
->      nct6775
->      nct7363
-> diff --git a/Documentation/hwmon/mpt3sas.rst b/Documentation/hwmon/mpt3sas.rst
-> new file mode 100644
-> index 000000000000..3a260a389d6d
-> --- /dev/null
-> +++ b/Documentation/hwmon/mpt3sas.rst
-> @@ -0,0 +1,57 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +Kernel driver mpt3sas
-> +=====================
-> +
-> +Supported chips:
-> +
-> +  * LSI / Broadcom / Avago SAS HBAs handled by the mpt3sas driver,
-> +    such as the 9300, 9400, and 9500 series.
-> +
-> +    Prefix: ``mpt3sas``
-> +
-> +
-> +Description
-> +-----------
-> +
-> +The mpt3sas driver exposes the IOC and board temperature sensors of
-> +LSI / Broadcom SAS HBAs through the hwmon interface.
-> +Either or both sensors may be absent depending on the card; the
-> +corresponding sysfs files only appear when the firmware reports the
-> +sensor as present, and cards that report neither sensor do not
-> +register an hwmon device at all.
-> +
-> +
-> +Sysfs entries
-> +-------------
-> +
-> +============  ======================
-> +Name          Description
-> +============  ======================
-> +temp1_input   IOC temperature (mC)
-> +temp1_label   "IOC"
-> +temp2_input   Board temperature (mC)
-> +temp2_label   "Board"
-> +============  ======================
-> +
-> +
-> +Cross-reference with vendor tooling
-> +-----------------------------------
-> +
-> +The hwmon channels correspond to fields reported by Broadcom's
-> +proprietary tools as follows:
-> +
-> +=================  ==========================  ===============================
-> +hwmon label        lsiutil                     storcli
-> +=================  ==========================  ===============================
-> +``IOC`` (temp1)    ``IOCTemperature``          ``ROC temperature``
-> +``Board`` (temp2)  ``BoardTemperature``        ``Controller temperature``
-> +=================  ==========================  ===============================
-> +
-> +With lsiutil::
-> +
-> +    lsiutil -pN -a 25,2,0,0
-> +
-> +With storcli::
-> +
-> +    storcli /cN show temperature
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index b2040011a386..e084f710f436 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -15154,6 +15154,7 @@ L:	MPT-FusionLinux.pdl@broadcom.com
->   L:	linux-scsi@vger.kernel.org
->   S:	Supported
->   W:	http://www.avagotech.com/support/
-> +F:	Documentation/hwmon/mpt3sas.rst
->   F:	drivers/message/fusion/
->   F:	drivers/scsi/mpt3sas/
->   
-> diff --git a/drivers/scsi/mpt3sas/Kconfig b/drivers/scsi/mpt3sas/Kconfig
-> index c299f7e078fb..638acd2c6623 100644
-> --- a/drivers/scsi/mpt3sas/Kconfig
-> +++ b/drivers/scsi/mpt3sas/Kconfig
-> @@ -73,6 +73,15 @@ config SCSI_MPT3SAS_MAX_SGE
->   	can be 256. However, it may decreased down to 16.  Decreasing this
->   	parameter will reduce memory requirements on a per controller instance.
->   
-> +config SCSI_MPT3SAS_HWMON
-> +	bool "LSI MPT Fusion SAS hwmon support"
-> +	depends on SCSI_MPT3SAS && HWMON
-> +	depends on !(SCSI_MPT3SAS=y && HWMON=m)
-> +	help
-> +	Say Y here to expose the IOC and board temperature sensors of
-> +	LSI / Broadcom SAS HBAs (such as the 9300, 9400, and 9500 series)
-> +	through hwmon. See Documentation/hwmon/mpt3sas.rst for details.
-> +
->   config SCSI_MPT2SAS
->   	tristate "Legacy MPT2SAS config option"
->   	default n
-> diff --git a/drivers/scsi/mpt3sas/Makefile b/drivers/scsi/mpt3sas/Makefile
-> index e76d994dbed3..9a2f3ce4158a 100644
-> --- a/drivers/scsi/mpt3sas/Makefile
-> +++ b/drivers/scsi/mpt3sas/Makefile
-> @@ -9,3 +9,5 @@ mpt3sas-y +=  mpt3sas_base.o     \
->   		mpt3sas_trigger_diag.o \
->   		mpt3sas_warpdrive.o \
->   		mpt3sas_debugfs.o \
-> +
-> +mpt3sas-$(CONFIG_SCSI_MPT3SAS_HWMON) += mpt3sas_hwmon.o
-> diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.h b/drivers/scsi/mpt3sas/mpt3sas_base.h
-> index c655742d0dde..63252f30343b 100644
-> --- a/drivers/scsi/mpt3sas/mpt3sas_base.h
-> +++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
-> @@ -1629,6 +1629,7 @@ struct MPT3SAS_ADAPTER {
->   	u8		is_aero_ioc;
->   	struct dentry	*debugfs_root;
->   	struct dentry	*ioc_dump;
-> +	struct mpt3sas_hwmon *hwmon;
->   	PUT_SMID_IO_FP_HIP put_smid_scsi_io;
->   	PUT_SMID_IO_FP_HIP put_smid_fast_path;
->   	PUT_SMID_IO_FP_HIP put_smid_hi_priority;
-> @@ -2049,6 +2050,22 @@ void mpt3sas_destroy_debugfs(struct MPT3SAS_ADAPTER *ioc);
->   void mpt3sas_init_debugfs(void);
->   void mpt3sas_exit_debugfs(void);
->   
-> +#if IS_ENABLED(CONFIG_SCSI_MPT3SAS_HWMON)
-> +int mpt3sas_hwmon_register(struct MPT3SAS_ADAPTER *ioc);
-> +void mpt3sas_hwmon_unregister(struct MPT3SAS_ADAPTER *ioc);
-> +#else
-> +static inline int
-> +mpt3sas_hwmon_register(struct MPT3SAS_ADAPTER *ioc)
-> +{
-> +	return 0;
-> +}
-> +
-> +static inline void
-> +mpt3sas_hwmon_unregister(struct MPT3SAS_ADAPTER *ioc)
-> +{
-> +}
-> +#endif
-> +
->   /**
->    * _scsih_is_pcie_scsi_device - determines if device is an pcie scsi device
->    * @device_info: bitfield providing information about the device.
-> diff --git a/drivers/scsi/mpt3sas/mpt3sas_hwmon.c b/drivers/scsi/mpt3sas/mpt3sas_hwmon.c
-> new file mode 100644
-> index 000000000000..26227a992f35
-> --- /dev/null
-> +++ b/drivers/scsi/mpt3sas/mpt3sas_hwmon.c
-> @@ -0,0 +1,200 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Hardware monitoring (hwmon) support for the LSI / Broadcom mpt3sas
-> + * SAS HBA driver. Exposes the IOC and board temperature sensors by
-> + * reading MPI IO Unit Page 7.
-> + */
-> +
-> +#include <linux/err.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/kernel.h>
-> +#include <linux/slab.h>
-> +
-> +#include "mpt3sas_base.h"
-> +
-> +struct mpt3sas_hwmon {
-> +	struct MPT3SAS_ADAPTER *ioc;
-> +	struct device *hwmon_dev;
-> +	bool ioc_present;
-> +	bool board_present;
-> +};
-> +
-> +/*
-> + * Convert a (raw, units) reading to millidegrees Celsius.
-> + * Returns -ENODATA when the sensor reports "not present" or
-> + * unknown units. Temperature values are interpreted as signed
-> + * two's-complement integers.
-> + *
-> + * The MPI2_IOUNITPAGE7_IOC_TEMP_* and MPI2_IOUNITPAGE7_BOARD_TEMP_*
-> + * defines in mpi2_cnfg.h share the same values; the IOC ones are
-> + * used for both channels.
-> + */
-> +static int
-> +_hwmon_to_mdegc(s16 raw, u8 units, long *out)
-> +{
-> +	switch (units) {
-> +	case MPI2_IOUNITPAGE7_IOC_TEMP_CELSIUS:
-> +		*out = (long)raw * 1000;
-> +		return 0;
-> +	case MPI2_IOUNITPAGE7_IOC_TEMP_FAHRENHEIT:
-> +		/* (F - 32) * 5 / 9, expressed in milli-units */
-> +		*out = ((long)raw - 32) * 5000 / 9;
-> +		return 0;
-> +	default:
-> +		return -ENODATA;
-> +	}
-> +}
-> +
-> +static umode_t
-> +_hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
-> +		  u32 attr, int channel)
-> +{
-> +	const struct mpt3sas_hwmon *h = drvdata;
-> +
-> +	if (type != hwmon_temp)
-> +		return 0;
-> +	if (attr != hwmon_temp_input && attr != hwmon_temp_label)
-> +		return 0;
-> +	if (channel == 0 && h->ioc_present)
-> +		return 0444;
-> +	if (channel == 1 && h->board_present)
-> +		return 0444;
-> +	return 0;
-> +}
-> +
-> +static int
-> +_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-> +	    u32 attr, int channel, long *val)
-> +{
-> +	struct mpt3sas_hwmon *h = dev_get_drvdata(dev);
-> +	Mpi2ConfigReply_t mpi_reply;
-> +	Mpi2IOUnitPage7_t page;
-> +	int r;
-> +
-> +	if (type != hwmon_temp || attr != hwmon_temp_input)
-> +		return -EOPNOTSUPP;
-> +
-> +	r = mpt3sas_config_get_iounit_pg7(h->ioc, &mpi_reply, &page);
-> +	if (r)
-> +		return r;
-> +
-> +	if (channel == 0)
-> +		return _hwmon_to_mdegc((s16)le16_to_cpu(page.IOCTemperature),
-> +				       page.IOCTemperatureUnits, val);
-> +	if (channel == 1)
-> +		return _hwmon_to_mdegc((s16)le16_to_cpu(page.BoardTemperature),
-> +				       page.BoardTemperatureUnits, val);
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static const char * const mpt3sas_hwmon_temp_labels[] = {
-> +	"IOC",
-> +	"Board",
-> +};
-> +
-> +static int
-> +_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
-> +		   u32 attr, int channel, const char **str)
-> +{
-> +	if (type != hwmon_temp || attr != hwmon_temp_label)
-> +		return -EOPNOTSUPP;
-> +	*str = mpt3sas_hwmon_temp_labels[channel];
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_channel_info * const mpt3sas_hwmon_info[] = {
-> +	HWMON_CHANNEL_INFO(temp,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL),
-> +	NULL,
-> +};
-> +
-> +static const struct hwmon_ops mpt3sas_hwmon_ops = {
-> +	.is_visible	= _hwmon_is_visible,
-> +	.read		= _hwmon_read,
-> +	.read_string	= _hwmon_read_string,
-> +};
-> +
-> +static const struct hwmon_chip_info mpt3sas_hwmon_chip_info = {
-> +	.ops	= &mpt3sas_hwmon_ops,
-> +	.info	= mpt3sas_hwmon_info,
-> +};
-> +
-> +/**
-> + * mpt3sas_hwmon_register - register an hwmon device for the IOC
-> + * @ioc: per adapter object
-> + * Context: sleep.
-> + *
-> + * Succeeds without registering when no temperature sensors are present,
-> + * so cards without thermal monitoring do not expose an empty hwmon node.
-> + * Paired with mpt3sas_hwmon_unregister() from the driver's remove path.
-> + *
-> + * Return: 0 for success, non-zero for failure.
-> + */
-> +int
-> +mpt3sas_hwmon_register(struct MPT3SAS_ADAPTER *ioc)
-> +{
-> +	struct device *parent = &ioc->pdev->dev;
-> +	struct mpt3sas_hwmon *h;
-> +	struct device *hwdev;
-> +	Mpi2ConfigReply_t mpi_reply;
-> +	Mpi2IOUnitPage7_t page;
-> +	int r;
-> +
-> +	h = kzalloc_obj(*h);
-> +	if (!h)
-> +		return -ENOMEM;
-> +
-> +	h->ioc = ioc;
-> +
-> +	r = mpt3sas_config_get_iounit_pg7(ioc, &mpi_reply, &page);
-> +	if (r) {
-> +		kfree(h);
-> +		return r;
-> +	}
-> +
-> +	h->ioc_present = page.IOCTemperatureUnits != MPI2_IOUNITPAGE7_IOC_TEMP_NOT_PRESENT;
-> +	h->board_present = page.BoardTemperatureUnits != MPI2_IOUNITPAGE7_BOARD_TEMP_NOT_PRESENT;
-> +
-> +	/*
-> +	 * A page where both *TemperatureUnits are NOT_PRESENT covers
-> +	 * two cases: cards that genuinely lack sensors, and firmware
-> +	 * errors that left the page zero-filled (the accessor mirrors
-> +	 * _config_request() behaviour). Either way: skip registration.
-> +	 */
-> +	if (!h->ioc_present && !h->board_present) {
-> +		kfree(h);
-> +		return 0;
-> +	}
-> +
-> +	hwdev = hwmon_device_register_with_info(parent, "mpt3sas", h,
-> +						&mpt3sas_hwmon_chip_info,
-> +						NULL);
-> +	if (IS_ERR(hwdev)) {
-> +		kfree(h);
-> +		return PTR_ERR(hwdev);
-> +	}
-> +
-> +	h->hwmon_dev = hwdev;
-> +	ioc->hwmon = h;
-> +	return 0;
-> +}
-> +
-> +/**
-> + * mpt3sas_hwmon_unregister - tear down the hwmon device, if any
-> + * @ioc: per adapter object
-> + *
-> + * Safe to call when registration was skipped (no sensors) or
-> + * failed; in those cases ioc->hwmon is NULL and this is a no-op.
-> + */
-> +void
-> +mpt3sas_hwmon_unregister(struct MPT3SAS_ADAPTER *ioc)
-> +{
-> +	struct mpt3sas_hwmon *h = ioc->hwmon;
-> +
-> +	if (!h)
-> +		return;
-> +	hwmon_device_unregister(h->hwmon_dev);
-> +	kfree(h);
-> +	ioc->hwmon = NULL;
-> +}
-> diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-> index 12caffeed3a0..dea78688cc9b 100644
-> --- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-> +++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-> @@ -12562,6 +12562,7 @@ static void scsih_remove(struct pci_dev *pdev)
->   	/* release all the volumes */
->   	_scsih_ir_shutdown(ioc);
->   	mpt3sas_destroy_debugfs(ioc);
-> +	mpt3sas_hwmon_unregister(ioc);
->   	sas_remove_host(shost);
->   	list_for_each_entry_safe(raid_device, next, &ioc->raid_device_list,
->   	    list) {
-> @@ -13651,6 +13652,11 @@ _scsih_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   	}
->   
->   	scsi_scan_host(shost);
-> +
-> +	if (mpt3sas_hwmon_register(ioc))
-> +		ioc_warn(ioc,
-> +			 "hwmon registration failed; temperatures not exposed\n");
-> +
->   	mpt3sas_setup_debugfs(ioc);
->   	return 0;
->   out_add_shost_fail:
 
