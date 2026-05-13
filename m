@@ -1,133 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7669925B094;
-	Wed, 13 May 2026 13:04:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 205E92E11A6
+	for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 13:32:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778677478; cv=none; b=ZnXhbKtPenqi8aJSpt0GetKmMoN+Jqu0CWMvOqEMj9CLei5MavoceTI/2WRizZWt7O48gUQ4UTDqP8+FUv0t6WjcxdNJr4StTxnGSC/ltgUJ+WgqBBulbRxoFEpxM35AlwfmNq5ZpJMBIRgCpx/rBMyiZAoe3BzjFTDI3euisjE=
+	t=1778679150; cv=none; b=oGIf6YvAadiFbCPrKcF2uVtak+oInmhO5+6tBBv4qxai6h8jCbI1HbvlO8yJokrTxeTfQjid0bG2IwfeHqDTlIVGQRpvyZnh7QYBtdd/+Ll+/tw0QppPF+fyoOtxD/t0jZmSO+Wd18MFjHScYiRmp2tWie0y+jb94ic6qOrXnRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778677478; c=relaxed/simple;
-	bh=6LEu9DtzugsPgS9zY7ikDk3PNAySaXFJrErwGthAkfU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cDgAuUuuooH4DASttJopd8bADXLyLqxvHBVPZyLYTq2nrja9qkfhzuwy6fXnN6ps821Z+IAaER5vOCYTGmRy7SkIEdT1DlD/Qs5Fe7oetWSG9oD39/CE1OBDK3eTCKMmIigojT7zwfKeX0nb9oFBIGpgkiib9AfabTHsMdix9OA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lGsDWVW2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778679150; c=relaxed/simple;
+	bh=NXorX92yHQ5zo3++4WCWch8ji7TTThSLko44OAaV2fM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=jAqwOO6GZ2nUpxkDRxK40Hw7PsavpR7NfQBRSOzDw19c1oRCFxhi0ldE2eEhMo517rJivehYLPUfm37Y1AepZOACzm0v/SK0u/5zhvnG7qarqRZiAEapNEXSvQEwHQfw5w+c5WDRGXV1IwD3Rwu0qi+cUqAVsG2ltGDr1nh6bJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=M2WSsu+g; arc=none smtp.client-ip=185.67.36.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lGsDWVW2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F9F9C2BCC7;
-	Wed, 13 May 2026 13:04:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778677478;
-	bh=6LEu9DtzugsPgS9zY7ikDk3PNAySaXFJrErwGthAkfU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lGsDWVW2oR08PACx9KcRC8YMpUuN6oYYOvoOWllZtScTRbHp7+islHrOswbDz0e1U
-	 Rd/2lD7xK6tofxdt3rjsHrXixgEE2cEIam/CmgAPO+rVJ0EqqFFymekAQgAVcROykG
-	 /N7UobOXD+QLpx6gmP6NTOmHQYOBi0pny/Bp5nb7yAfX2fzkn+nP5WBB8+35vCpLep
-	 jh4Y8TgC1kC/ozfdDPxCBHLqgSPMWYg5w/mYxRbWDqfzsPeOwoBvd1TnZH2MG/F2uI
-	 pbR8JRRzktjhwXI6yger0M0d/hUI8h3I7h6ajlUBWmNi8Qu54RVQUXSLuoGBn6Z7hf
-	 kXJB84AOZ4pfg==
-Date: Wed, 13 May 2026 15:04:35 +0200
-From: Frederic Weisbecker <frederic@kernel.org>
-To: Thomas Gleixner <tglx@kernel.org>
-Cc: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>, Guenter Roeck <linux@roeck-us.net>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>,
-	Chen Ridong <chenridong@huaweicloud.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, cgroups@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, rcu@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Costa Shulyupin <cshulyup@redhat.com>,
-	Qiliang Yuan <realwujing@gmail.com>
-Subject: Re: [PATCH 04/23] tick/nohz: Allow runtime changes in full dynticks
- CPUs
-Message-ID: <agR241twxk9UdRrg@localhost.localdomain>
-References: <20260421030351.281436-1-longman@redhat.com>
- <20260421030351.281436-5-longman@redhat.com>
- <87340od7ev.ffs@tglx>
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="M2WSsu+g"
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout01.posteo.de (Postfix) with ESMTPS id C9B75240028
+	for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 15:32:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteo.net; s=2017;
+	t=1778679139; bh=RXIeif85BWe0YLX6yZ5TQEOc5dfCF/ZdiOdkb6wxE2I=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:From;
+	b=M2WSsu+giymrM3NrIJyJvc5yeivDixoslKhXYEPVUAWvQVUEnyepr98cggcdLpxWH
+	 N2ImPs3mZy5Z1IL/XEqVeuq5FPe95Ru0jNNvXsOrXTGbmKpUjqPWu9P9c3OPudN2u6
+	 dDF7HyP+J/h1ujBWxO8lubRfqsjJd5P4NVcBS9p+uYFuSYtyC08piZzyuKWpee5PHf
+	 7klhkAMwFWOK/zvpTqRlwhGVhStlNmlh7TZk8ySAdGJWMQdhf1qqSa2iookRRJ/Ait
+	 QTZ96iIIBhqaHyG3hTFGnRYYhCyjCBJj+FR6t4CmrTk9s921+4Mt4INc+ExouBsCEf
+	 Agk7c9hdB9uKg==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4gFvX30mM1z6txT;
+	Wed, 13 May 2026 15:32:18 +0200 (CEST)
+Date: Wed, 13 May 2026 13:32:19 +0000
+From: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+To: linux-kernel@vger.kernel.org
+Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: [PATCH] hwmon: corsair-psu: fix and readd locking of command buffer
+Message-ID: <agR9YW7hGTJ_l7ms@monster.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87340od7ev.ffs@tglx>
 
-Le Tue, Apr 21, 2026 at 10:50:00AM +0200, Thomas Gleixner a écrit :
-> On Mon, Apr 20 2026 at 23:03, Waiman Long wrote:
-> > +	/*
-> > +	 * To properly enable/disable nohz_full dynticks for the affected CPUs,
-> > +	 * the new nohz_full CPUs have to be copied to tick_nohz_full_mask and
-> > +	 * ct_cpu_track_user/ct_cpu_untrack_user() will have to be called
-> > +	 * for those CPUs that have their states changed. Those CPUs should be
-> > +	 * in an offline state.
-> > +	 */
-> > +	for_each_cpu_andnot(cpu, cpumask, tick_nohz_full_mask) {
-> > +		WARN_ON_ONCE(cpu_online(cpu));
-> > +		ct_cpu_track_user(cpu);
-> > +		cpumask_set_cpu(cpu, tick_nohz_full_mask);
-> > +	}
-> > +
-> > +	for_each_cpu_andnot(cpu, tick_nohz_full_mask, cpumask) {
-> > +		WARN_ON_ONCE(cpu_online(cpu));
-> > +		ct_cpu_untrack_user(cpu);
-> > +		cpumask_clear_cpu(cpu, tick_nohz_full_mask);
-> > +	}
-> > +}
-> 
-> So this writes to tick_nohz_full_mask while other CPUs can access
-> it. That's just wrong and I'm not at all interested in the resulting
-> KCSAN warnings.
-> 
-> tick_nohz_full_mask needs to become a RCU protected pointer, which is
-> updated once the new mask is established in a separately allocated one.
+Fix removed locking mechanism. The locking mechanism does protect
+chained commands (set rail + get value), which are two separate calls
+to the low level access function. The hwmon (temps for example) and
+debugfs (uptimes for example) subsystem can trigger that chain of
+commands in parallel. The serialization in the hw monioring core alone
+is not enough.
 
-How about just dropping tick_nohz_full_mask that is just
- ~housekeeping_cpumask(HK_TYPE_KERNEL_NOISE) which itself is becoming RCU
-protected in this patchset?
+Fixes: 4207069edbf0 ("hwmon: (corsair-psu) Rely on subsystem locking")
+Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+---
+ drivers/hwmon/corsair-psu.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-Thanks.
-
-> 
-> Thanks,
-> 
->         tglx
-> 
-> 
-
+diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+index 76f3e1da68d0..6db899b37ede 100644
+--- a/drivers/hwmon/corsair-psu.c
++++ b/drivers/hwmon/corsair-psu.c
+@@ -12,6 +12,7 @@
+ #include <linux/jiffies.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <linux/mutex.h>
+ #include <linux/slab.h>
+ #include <linux/types.h>
+ 
+@@ -122,6 +123,7 @@ struct corsairpsu_data {
+ 	struct device *hwmon_dev;
+ 	struct dentry *debugfs;
+ 	struct completion wait_completion;
++	struct mutex lock; /* serializes chained commands and parallel debugfs/hwmon access */
+ 	u8 *cmd_buffer;
+ 	char vendor[REPLY_SIZE];
+ 	char product[REPLY_SIZE];
+@@ -194,12 +196,14 @@ static int corsairpsu_init(struct corsairpsu_data *priv)
+ 	/*
+ 	 * PSU_CMD_INIT uses swapped length/command and expects 2 parameter bytes, this command
+ 	 * actually generates a reply, but we don't need it
++	 * only runs during probe/resume and does not switch rails, no locking required
+ 	 */
+ 	return corsairpsu_usb_cmd(priv, PSU_CMD_INIT, 3, 0, NULL);
+ }
+ 
+ static int corsairpsu_fwinfo(struct corsairpsu_data *priv)
+ {
++	/* only runs in probe and does not switch rails, no locking required */
+ 	int ret;
+ 
+ 	ret = corsairpsu_usb_cmd(priv, 3, PSU_CMD_VEND_STR, 0, priv->vendor);
+@@ -217,6 +221,7 @@ static int corsairpsu_request(struct corsairpsu_data *priv, u8 cmd, u8 rail, voi
+ {
+ 	int ret;
+ 
++	mutex_lock(&priv->lock);
+ 	switch (cmd) {
+ 	case PSU_CMD_RAIL_VOLTS_HCRIT:
+ 	case PSU_CMD_RAIL_VOLTS_LCRIT:
+@@ -226,13 +231,17 @@ static int corsairpsu_request(struct corsairpsu_data *priv, u8 cmd, u8 rail, voi
+ 	case PSU_CMD_RAIL_WATTS:
+ 		ret = corsairpsu_usb_cmd(priv, 2, PSU_CMD_SELECT_RAIL, rail, NULL);
+ 		if (ret < 0)
+-			return ret;
++			goto cmd_fail;
+ 		break;
+ 	default:
+ 		break;
+ 	}
+ 
+-	return corsairpsu_usb_cmd(priv, 3, cmd, 0, data);
++	ret = corsairpsu_usb_cmd(priv, 3, cmd, 0, data);
++
++cmd_fail:
++	mutex_unlock(&priv->lock);
++	return ret;
+ }
+ 
+ static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8 rail, long *val)
+@@ -789,6 +798,7 @@ static int corsairpsu_probe(struct hid_device *hdev, const struct hid_device_id
+ 
+ 	priv->hdev = hdev;
+ 	hid_set_drvdata(hdev, priv);
++	mutex_init(&priv->lock);
+ 	init_completion(&priv->wait_completion);
+ 
+ 	hid_device_io_start(hdev);
 -- 
-Frederic Weisbecker
-SUSE Labs
+2.54.0
+
