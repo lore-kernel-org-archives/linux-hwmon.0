@@ -1,137 +1,160 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4DFC3A59A2
-	for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 18:16:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5B01B652E
+	for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 18:27:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778696219; cv=none; b=ouVAL8Fk3/uC7dD8B/JwyIboayZs4lGwcJdD0Zsl/virLzVoIhaRHE0nRYMdAxzycNhZLhr7EZo7rABvRWZrFvT9QACiCTF9BEVO+mpCle8MUKijaJmQUQJGurFEaKlhQSb+cHBXTwLd6HQmnRsbnB9jatseioX+8lo1yU7OY88=
+	t=1778696846; cv=none; b=eW4ig7o8cAzRsV9za6LmdDSmWjWa+3sZbDijySb5ZBnpj0Fv4z/HzxDm5ZeJl4Wg4Am8nb0mKmlhEeEEi5ECmxeo5tyLEjdzYJNiPmZtA2ZJuNsjeicVw8sdLAqHQ/wUXjFi100a6QDGQexExZMkJLEVkuvy4VhKqCCYtH8hDkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778696219; c=relaxed/simple;
-	bh=iOltX60XHPNgqNIC2DpQT5Z7BO+j/K77i8PFIemPJSU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e2bReYlX7S0I1TDKHLyO6VLPJ2EMPqAkVeBK4vnxM7RAkuf7Q2FqNlRT8xYh9HnKHyyl66doKFH/vJpIqX4mKBjWUkutkQvfNipaHP/EBM5noXmr8D8ESnZH6y/yCKNi3lO/DdRVpgOnIfxcRxl1gY/qFBd8rTLu3JqWXDhhlBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a4OJJW6V; arc=none smtp.client-ip=209.85.215.175
+	s=arc-20240116; t=1778696846; c=relaxed/simple;
+	bh=k5IVFtFkizYO9JvUz++Nf75KXmQjUQ2V7WuK3NLE/xs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hl3DE/jRYzlMpMburj9h6TwVA8s9zH4YW0Dq0e6WUb+eDmd5zEraPi5vHvbfJBRpd5h0L+3kD/B8SQnD3dmFaxIgqZHH6Kua4GKcpff7tC7bgyPPdy5a0yS10agFBqvIKFwqNUyI9Q8TMwoGE26Bmtk7+/Pv7OiYCT34znMRWpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ljVtTYYk; arc=none smtp.client-ip=74.125.82.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a4OJJW6V"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-c7ffe8eeaf2so3081261a12.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 11:16:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ljVtTYYk"
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2f36da5c8fbso7042232eec.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 11:27:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778696217; x=1779301017; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s03Oh/BgVRz777SZgXCs5erRF14ygyMEU76E4HIIUlM=;
-        b=a4OJJW6V3AsKe7WrE2jneBjmQFz0lhp83ZA77ymTVE4zgqV1UTY0pekS2n8mQFMyC3
-         3G+VsPaJJg8867jqClkZDoQXwgCKRmcdFiVuvsMq5UDAAcGrNHy9vsKwy8528+fDNuYd
-         XnErY/uPbAhfZD0gMHIR0COl1kkinYkzp3YDVl2M1zYyn96xGLccL49kqFMggVqDILrD
-         HYzA7XoDZN+4UrL3jeB06JEFDAXzdxOgMT349Y160FIHp2Fz09ygugzIqvSklnXuv6En
-         uEwrXWPb34rfdcMYBfi+sYX3LG1Y3D0qs+MJ3sZEVpmf3f/HkB4WuFK52FLyScqd3Z5H
-         T+NQ==
+        d=gmail.com; s=20251104; t=1778696844; x=1779301644; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=mKJozyiXPAnQIsv7H4f79u/+ZUVGgrXC9SUuc+YMN9A=;
+        b=ljVtTYYkSIjLVTuxIcZsyq14SxBn+lld8q4T+BAfKaunDYIxdmHD6rpbNhBpqKUrTS
+         JOy4RxfUQPiNRM4OeBuQ6JbUaOMFYYueIVpZyXRPZ4M+5CphViVFr52yzPfq3BnarQX+
+         3cU2gDA9iFB5rfhgGdbBw4fQ35j8sNds4/93YKx3bGD5GjWxNSP0/TqA5i07kzNNHekw
+         JCpPjFtUGLbm+Ab0jKqSrke6SdPW1Ob6d7jIhfsyI65ZKQA0SaOofeTB48fzUEJna3rr
+         Pkrbzmf1VX6FKaTxQii1tDXPW3v5qmHKDYi75BxAQovFfxrwgqY6g9IvFyoiwtn9dKsv
+         wd0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778696217; x=1779301017;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=s03Oh/BgVRz777SZgXCs5erRF14ygyMEU76E4HIIUlM=;
-        b=oh2u0LmYcquQDdTrnrVV7MGm+Ld9CWAwzkMNyyfB4hD0OGgHX6xvhVvWoEMJNcbsnU
-         Qw7cBGuQBTvIH2Wmn49vgr1Mxtgdmu37wNrHS0lilAAY/whHa3m+o2i8y9kgtrk+zdSb
-         1TsnRLYq6mqPVE7xs0p8IpXlajzxb/PV5oXvuDA+9idFewg85dXCs0Trw11bP6IF3BWA
-         mDLfQKucCLpX6noozUzCxVLlj9LBRIJDzjwUr/t+U/GbpOM1lcRQVrf/yD1BnjVjRdzX
-         WdUJhwbfpqw7gFZsPtbzJQ74kpdha2h2JkveI3HSSUAl0G5yOLdfU266ZTY7axPIZTv7
-         S/9Q==
-X-Forwarded-Encrypted: i=1; AFNElJ+KZ7n70/3W/ffh3FBi50bTfjqriLmsRkzi348zhV2mXKpaDLWuPCQ8t47NmMI0iKy7i20hWtviGX4/pQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyE70EmLMwacXJqV/zztxA2qQX49/UxmRUnWeMLWZCY80EwwKn
-	qkXcgK3QSa0bZSxRRcx4FR4VYhSJFVG1oIED1E6YGl2T9iE9rZLg8StG
-X-Gm-Gg: Acq92OEiA1NvD/E/kmH0nm0hATR9JqFgk7piaVeEkcYzjBYgpEnVt8iZlE+Xu22QC8i
-	JCS6EEVMGB+/S/cqa+H0VUXA84R+tuyRxQUEVoC7/g6Pt6bDmMJ4P9Dip5cEkwtjFnE2ajGQ+h1
-	zrENVbIU9N/4uf18Z9kzAnv3+Qr0A1x06vhgEcnAyD80e03m+GVr0sQ84b8lLzxmX/HQOSd0I8M
-	64q7+5td6Z3rv15QzSrr7WaDbQ2k4rN8vlM4RS9L1xz/nh4HJ38tfVBVj3wd0TWmW0eJjahkecn
-	IpCVdSbfzbiLvVJfxhW4kl0KExDWekiUil6AxXe41Fod0J1LvIrsC8Br3NF+XLB0pxHsd+8IhT+
-	SUfST6lq9lJYfrf1Hc8cmZID/Io+nHguHDScvAPqseHuPnF3DC1MvwOPION07pCd1lR50PT2L4I
-	XhM/eW6mA/LMKRj57JabiUSFh0HwDppz6xpesctXeLEXt7d18=
-X-Received: by 2002:a05:6a20:2454:b0:3a2:f05a:7952 with SMTP id adf61e73a8af0-3afb1a0a587mr4668221637.39.1778696216880;
-        Wed, 13 May 2026 11:16:56 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c826768acf3sm18893427a12.10.2026.05.13.11.16.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2026 11:16:55 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1778696844; x=1779301644;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mKJozyiXPAnQIsv7H4f79u/+ZUVGgrXC9SUuc+YMN9A=;
+        b=WgCNY4LkY/iCdjhTNzRCvfvxLQobT91ogM8k845Zupq2xHn4d+4HPCTd9CGFA+kFmV
+         1FSWHnBGMlt4T3UMVe5T1gaiO1k1uNfnLGyUodpWip29wDFjM84b6JnB7U12YRWNDBZq
+         VTppco30j3I3/DiIxpHpm6H+5M0V2521v8J8V413YQ34zdbIy16TOEa8D+CeBr12lAAr
+         Day5wlGv94crog7bf0L3Va2icooNLbPk9Wo96ovE7fHR0qNf0TmNcjYEZ1nuV0bannOq
+         G86nXex/q2dI1Dp29cRWP486KqOZDUmP8OWjlGoXkNugZnPmTvKyJruL/HIVnyQrCZ2J
+         upfQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8IuJ7WWTojIRxg9mXekBWo4B4icJYdFBa4rNi3mH9Jdi5vV/rVuqayI3STawDmMZ1xaSwtJc2DXW4P8g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLg3gL2r5RX5sgW/KQrsdaNbqoHU/xQ4lezE2FGmtYw1E4fyXN
+	espS08WSIRIac/K3QoHd54m5ZWI3CbFUj3BI4223XOogwHpfuneb19Rg
+X-Gm-Gg: Acq92OHzMSt+PnVyAdfCi23/UWg1f+fHRMJXFs5xHJ6/xwIhMPopVFOitqUrVziZyJM
+	xMSc4Z/40ecEAQT+COiSUgLVNMeWpFoEJiGgTpBdoa1EugWlzlzG+HylFRBiOu+oI/786zeXGu4
+	vUKWHQ6kz/BFWiLy3CIMmBNC7114IXO0ToXrDVh7dmyUNOVkk5k1VozlgTsGA4B2e//AVNx4phM
+	sqAc0llSlUjILt4MkL1W89kOwGkklqQ0Y7pSrSLFHPSetxfGESOlSw+dhvnVvOCChSj5PCgD0vK
+	PxIivOPt0E4uxDft83hok3RhcEYv9AIn21MKf76XkXkw1A+Rx4XEhdvdJ8eI6rKHlxtsOgYlqbh
+	iIWkLmXenTSSaWHMsPiFnfFpI66rqaKAleLUdlHa18QcaCqkxhQgaNzdgis+dZhgPAEWAvFUZAP
+	hfczce9SPoRttYr21drJz4jhrUftFH92S9fLKLH94Bm0yfE8ryxvoHmoXajvmH8EfEykFKiEk4
+X-Received: by 2002:a05:7301:7c0c:b0:2c5:60d0:702e with SMTP id 5a478bee46e88-3011996d245mr2563952eec.18.1778696843940;
+        Wed, 13 May 2026 11:27:23 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f888e3e285sm27544171eec.27.2026.05.13.11.27.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 May 2026 11:27:23 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 13 May 2026 11:16:54 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Wilken Gottwalt <wilken.gottwalt@posteo.net>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: corsair-psu: fix and readd locking of command
- buffer
-Message-ID: <1a11ddfb-8c3a-4f0d-afda-c4c82daa6d9e@roeck-us.net>
-References: <agR9YW7hGTJ_l7ms@monster.localdomain>
- <5f0406fa-9692-49f0-bcfe-c013f5fc7b62@roeck-us.net>
- <bde0fa1e-93a5-4819-aa19-04554c24d31c@roeck-us.net>
- <20260513162135.2893e42d@posteo.net>
- <254b59a8-182f-4ad3-8469-4f9e9511d3a5@roeck-us.net>
- <20260513175350.07900558@posteo.net>
- <62e02950-e31b-4faa-8b36-98bbfe898367@roeck-us.net>
- <20260513195027.028b7b63@posteo.net>
+Message-ID: <1f2fb1de-ebc8-40ef-ac53-3348499295e3@roeck-us.net>
+Date: Wed, 13 May 2026 11:27:21 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260513195027.028b7b63@posteo.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/5] scmi: Log client subsystem entity counts
+To: Andy Shevchenko <andriy.shevchenko@intel.com>,
+ Alex Tran <alex.tran@oss.qualcomm.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jyoti Bhayana <jbhayana@google.com>, Jonathan Cameron <jic23@kernel.org>,
+ David Lechner <dlechner@baylibre.com>, =?UTF-8?Q?Nuno_S=C3=A1?=
+ <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>,
+ Sudeep Holla <sudeep.holla@kernel.org>,
+ Cristian Marussi <cristian.marussi@arm.com>,
+ Linus Walleij <linusw@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>,
+ Viresh Kumar <viresh.kumar@linaro.org>, linux-iio@vger.kernel.org,
+ linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org
+References: <20260513-scmi-client-probe-log-v1-0-00b47b1be009@oss.qualcomm.com>
+ <agS8udcvqgQmiqB4@ashevche-desk.local>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <agS8udcvqgQmiqB4@ashevche-desk.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, May 13, 2026 at 05:50:30PM +0000, Wilken Gottwalt wrote:
-> On Wed, 13 May 2026 09:42:08 -0700
-> Guenter Roeck <linux@roeck-us.net> wrote:
+On 5/13/26 11:02, Andy Shevchenko wrote:
+> +Greg (I believe the trend is to drop such messages and not add them [back]?)
 > 
-> Now I am completely confused. What is that guard() and scoped_guard() patch?
 
-Again, with subsystem locks instead of guard().
+Is there some common guidance on this ? I'd be all for dropping messages
+instead of adding them, but there seems to be a perpetual battle between
+people who want to log everything and people concerned about logging noise.
+As maintainer I always seem to be stuck between those two camps.
 
 Guenter
----
-From bafbb2e301621335381209e395fa281a395ffc53 Mon Sep 17 00:00:00 2001
-From: Guenter Roeck <linux@roeck-us.net>
-Date: Wed, 13 May 2026 09:25:46 -0700
-Subject: [PATCH] hwmon: (corsair-psu) Protect debugfs accesses with subsystem
- lock
 
-Debugfs accesses need to be mutext protected. Acquire hwmon subsystem
-lock where needed to avoid race conditions against hwmon sysfs accesses.
-
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/corsair-psu.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-index 76f3e1da68d0..866e798d553c 100644
---- a/drivers/hwmon/corsair-psu.c
-+++ b/drivers/hwmon/corsair-psu.c
-@@ -664,7 +664,9 @@ static void print_uptime(struct seq_file *seqf, u8 cmd)
- 	long val;
- 	int ret;
- 
-+	hwmon_lock(priv->hwmon_dev);
- 	ret = corsairpsu_get_value(priv, cmd, 0, &val);
-+	hwmon_unlock(priv->hwmon_dev);
- 	if (ret < 0) {
- 		seq_puts(seqf, "N/A\n");
- 		return;
-@@ -730,7 +732,9 @@ static int ocpmode_show(struct seq_file *seqf, void *unused)
- 	 * getting of the value itself can also fail during this. Because of this every other value
- 	 * than OCP_MULTI_RAIL can be considered as "single rail".
- 	 */
-+	hwmon_lock(priv->hwmon_dev);
- 	ret = corsairpsu_get_value(priv, PSU_CMD_OCPMODE, 0, &val);
-+	hwmon_unlock(priv->hwmon_dev);
- 	if (ret < 0)
- 		seq_puts(seqf, "N/A\n");
- 	else
--- 
-2.45.2
+> On Wed, May 13, 2026 at 09:44:18AM -0700, Alex Tran wrote:
+>> SCMI client drivers do not consistently log the number of supported
+>> entities discovered from firmware. This information is useful during
+>> debugging because it shows which domains or resources were exposed by
+>> firmware during probe.
+>>
+>> Add logging of the number of supported entities to the SCMI cpufreq,
+>> pinctrl, reset, hwmon, and powercap client drivers after a successful
+>> probe. This aligns these drivers with the existing logging in the SCMI
+>> power and performance domain drivers.
+> 
 
