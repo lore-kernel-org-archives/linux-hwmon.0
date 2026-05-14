@@ -1,110 +1,107 @@
-Received: from outbound.mr.icloud.com (mr-2001h-snip4-3.eps.apple.com [57.103.68.96])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E11783FD128
-	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 14:29:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.68.96
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5347E3DCDAB
+	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 15:41:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778768984; cv=none; b=Kuww234VhY/BzfFSyZXuENHOn2s2Q1bm3dj7h6VwSV4dicoOEP2P2x6zm9ik60NVkXeQVEH6gvIK6tRZltFt7rkY1994NrXr4JtML2vfGf97pkFQ8qb1lRKYjJZJkFRjg7yjUyxLhUv4MeZNau1tBc3YAjMBT6nZKGECS/lRH6A=
+	t=1778773288; cv=none; b=Ja6jUgk6ZnDOehctiMsUODr7ri4xSftpORuHwXUutOfNDr6diIj2RuSdAX5NeuBMBdjO7w8/cWhI1E3VxDr3V0X38Cc4kyo0FNGH+oygrFF2Soo2pxrTkKtRxdBQhMDGkipZLh7pXAWDaaDbUiBe/zzVHEAXdlyXHDkhWKr9zho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778768984; c=relaxed/simple;
-	bh=apfiA1cyuebfnJCwwK+v2w0GMpzMc1iTPf97Sc3qVZg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZxPK5PZJ8iUf+Tu6oYlL2d4BrDoQYOiTEErPnpl3yc9S+F27SpGMtX63O2g3d26a3/SZBYiOL7Lerw2LDU3YG3AKbMpcXG5s9KpOZPBLy3ReplDZ1187ZGRB9eZTLHXYC08uczEdBXmWrSX0Ls6XapVZ19aco+9T2ZVeO4SgccQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=j6DBgwRx; arc=none smtp.client-ip=57.103.68.96
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+	s=arc-20240116; t=1778773288; c=relaxed/simple;
+	bh=LqWHZ889FfjSUsJJDSnXMSZ2jEN+n2I+ZNi6tiS8o0k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fs5xicp4S8Q08YK3lHmB+qt829EILMcnf1aJDGOC3HUPb7owahIjnsqqogL+0WeLaDNz0xeBq/Pbko7DOpAp2C4czGEI/TiJwfufUaCjxmLGgkn+SGnDHc5iZIsPqcuUfJcufoj9wKHZdM7zFer8j7LPRT5WyhaSHOfbo/KhhoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sey3l20T; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="j6DBgwRx"
-Received: from outbound.mr.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-west-2a-100-percent-3 (Postfix) with ESMTPS id 646211800136;
-	Thu, 14 May 2026 14:29:41 +0000 (UTC)
-X-ICL-Out-Info: HUtFAUMEWwJACUgBTUQeDx5WFlZNRAJCTQhJC0MCWBxCCUAdXA9cEhVdRVsYRRlLHVgWAV8GWXIZWhRcGFNFUR9UWFUJCgNHAksBXgxZWQBBCzhaDlsERxQXG1wAFxlRTQxYWwhbBA8fTAxRAkIFVl5UCh0EVAddBV1WUAJaS0IES0VoXAVcHEAXSB1faktWFAQRUAFYHlZeWhdeTVoCVk0FSQJaBA0HEwxVUloDWx9EDU0LQA8OAkgUSlBZBVxTRwlMAV0AK1sTVRdGCRkIXR0HWEcURw4PGVoUXBhT
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com; s=1a1hai; t=1778768982; x=1781360982; bh=xdOFhRK+BndMXFoccb5KRWPPSr0SfUNYq4YCKjDeRD0=; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme; b=j6DBgwRxhwc6NsD8oQyOTekj7woRqNM6895kDcQ0X3QAetQDeQ4WWFYa/yfqbTZESyfCvPoFXC1PvJJg33VH4md8GTnHJ5DBQ7FtyK4XeF1smkxOXen+5sRamwJx98T1Bh839/f9353tiKLU0KoaEreaxR7MBNjq/9zsH6HyYodLtJungsBs67MTnpadyfagbHdnEm421Dvb29Bp3JDr00vPzFibRY2UNpIRb/PFpshKh+cq4muM8sQ8q8LEMMFLEW41fc3l442a6iLX3qWHY+yFl+O+5LH+BoPcjhdBTNzQ44NyDvxjx2mxxqODImnKRapy1ZLtmVhk98UuWHeKXQ==
-Received: from [192.168.89.3] (unknown [17.57.152.38])
-	by p00-icloudmta-asmtp-us-west-2a-100-percent-3 (Postfix) with ESMTPSA id 0540218006C9;
-	Thu, 14 May 2026 14:29:39 +0000 (UTC)
-Message-ID: <1173f5c5-a740-4458-8e08-2c427a704207@icloud.com>
-Date: Thu, 14 May 2026 23:29:36 +0900
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sey3l20T"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3664df32e91so6998360a91.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 08:41:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778773286; x=1779378086; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aGhCi4yyqYpXjwh9zUcoDYb6CxobDy3aAgcw86g1Gxg=;
+        b=Sey3l20TjQtCr5hjE4GJMA8p+IlJZHoPPxekbkSEqo2myBv4QSdYwLdlnQeKYBcmwi
+         lmqixjwczKgBX/skSsFyw0qngDBEnkvNxsUlnlnQMVY6b88DifDHqPWm99J5z6N+xO2M
+         FLaKtmlc/xaxfprkVs1U2EQDpN2zXfMA1Gs3IhJPbiGXdHSgr0VQAcL/+TJgrw9bEYDs
+         a8VPwdpLBayhLFKUcJRsPZUwjR8lPcmXJRKSxKKF91J6YVU42/D8YLc1SFjkdfZAGlrv
+         djkswI/+OP6RKtyF2NBjt5uoJzWaRA+OKnwM85WEs/Xko1Gw0Kc8NvW3/Rs9pMbiHZve
+         NRmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778773286; x=1779378086;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aGhCi4yyqYpXjwh9zUcoDYb6CxobDy3aAgcw86g1Gxg=;
+        b=IoUhYRXx1yj8vzhoq8ZDsIS6EWUz80LXra6RQzsOMG7hkV/HzyUO0Lm2uKyYw/ckvU
+         IgagC+ZdlAn19wDnSouPxe2qGVPqcMSd4dBu9EhvKKDucGcgtbSZQ1jFwNwAGluKmBcE
+         zCY5Tec77N25Wcx9R80t5Gwug1SxSA+vlTfDPFNYXdikWLEMd4HZBahqKJmojckkXatb
+         oGeYCFctxEBWuRRWCYPt2KFZXOahAmL4eXFo/vHzt+A9EiPP+i9ShJCgnm9yLBqlV+UK
+         w8rhzYSVKYMO2JtmdKvTAe4HPziPa1VP+8GBc3E8k5hEQ0mhcCPjWRskkfxTbf+V//52
+         bERQ==
+X-Forwarded-Encrypted: i=1; AFNElJ94hcl2lE4mQc3H4U7OzWbavnYhLgIkffhFRS1CtnTAla+zjaK37Da42g+MnWq36CLPrbM70LC9CtsjZw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwK94fvEwgpr1NMT1tP7po5jNEv5fXK1v26Pr5Hv51F/FXRhvfb
+	FHjHemfeLK+8EAT5P8WqUZgfXS4eZOszYRzdKFKiUuprwPputlWzL3cl
+X-Gm-Gg: Acq92OES5hpYOcR2vhactzxb7vNi8SWLd3Hrs86TsFrpRnVgyw5caR9/Zx98u0Cn+aE
+	kwdhOLrmIj9i+Azeb53o0m6JqRY3pjlk+iQEnaEfpUezNG8VKJJXvxjKJZZiBBMhPBZnknhiv0Z
+	JnmLy1+evfOpEXBA9TTqnxmmMdDUJb3xmozZrg2WwLOxKFutMtHV4mF1u9a7QRhAboNwYY6Ecsz
+	0uncVwqkTMcRzR8XC1k/5gvlkBn+1yZ8aKOF6ny6qH0I3tpCTMxR5PB6o3Vd+6OKls6RRYvk0h5
+	6U2BRkg13BZ3IxwgRVeZgXB3l1rCD0u2mZgAdAHEyIxcOQVQEbszOKOrDx1+vuf+N10rfyA343q
+	5Vohf0Jk3RBby10/Zv7ioIXmmTlJl6ccZnQ/jvMP9zwxL1GkaZOYzhwflcr7wkjcGXLhyLcOJBE
+	TdEDL5o3Js7zSTuTypXGViqT9xF7CXs9uFTZp8pRmAlxUGNXee8VCHY1DgYRKSfcQ/zh71KQhSs
+	TqAI1Bna5PVUeiPAGPKlq3NhrldrsHfekyoBAOnYCBkJ5bF5W73HBoXdPy4XX5dEQ==
+X-Received: by 2002:a17:90a:a81:b0:369:1dff:6bd5 with SMTP id 98e67ed59e1d1-3691dff76dcmr3620471a91.17.1778773286539;
+        Thu, 14 May 2026 08:41:26 -0700 (PDT)
+Received: from ERIC039ERIC.localdomain (1-170-163-225.dynamic-ip.hinet.net. [1.170.163.225])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5d23044csm28385315ad.78.2026.05.14.08.41.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 May 2026 08:41:26 -0700 (PDT)
+From: Chen-Shi-Hong <eric039eric@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Chen-Shi-Hong <eric039eric@gmail.com>
+Subject: [PATCH] docs: hwmon: sy7636a: fix temperature sysfs attribute name
+Date: Thu, 14 May 2026 23:39:13 +0800
+Message-ID: <20260514154108.1937-1-eric039eric@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/2] usb: xhci-pci: add AMD Promontory 21 PCI glue
-To: Guenter Roeck <linux@roeck-us.net>, sashiko-reviews@lists.linux.dev,
- Jihong Min <hurryman2212@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-pci@vger.kernel.org
-References: <20260512213910.871859-2-hurryman2212@gmail.com>
- <20260514004055.1BBCAC19425@smtp.kernel.org>
- <110e9a0d-bc91-4959-8a7b-1a055d0b49f7@roeck-us.net>
-Content-Language: en-US
-From: Jihong Min <hurryman2212@icloud.com>
-In-Reply-To: <110e9a0d-bc91-4959-8a7b-1a055d0b49f7@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Authority-Info-Out: v=2.4 cv=Uqpu9uwB c=1 sm=1 tr=0 ts=6a05dc55
- cx=c_apl:c_pps:t_out a=9OgfyREA4BUYbbCgc0Y0oA==:117
- a=9OgfyREA4BUYbbCgc0Y0oA==:17 a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10
- a=x7bEGLp0ZPQA:10 a=5jDBv52wX64A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=z0MguAZywq-667BnQBMA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=PgRulw5oR9JgysbTFEid:22 a=oa2-kN79Xhin27rcel9q:22
-X-Proofpoint-ORIG-GUID: W6ODzCiIRAmxc73BlqpCyQLG1kjttXL_
-X-Proofpoint-GUID: W6ODzCiIRAmxc73BlqpCyQLG1kjttXL_
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE0MDE0NiBTYWx0ZWRfX8fsNMcdv6CsL
- VMMxVHn4LO1M7eTXwvVSCiBIKc2yN7xflFOHBg00vKlUCJsfw2KeAlDMu+AtupuLTP6S6vInGY8
- LicgSQpPbMkvnPXETv1CQ4VvLuVAVd/l5EhfCPqSwFeLpqOReNhYfozE+qxLELGXYZCLHXs2eLb
- ABpIE/4yQXEF1a6AaPcg4CRf2WcbzI+Gu5QvZ7fvB+W0T0sFKOWD2Dth/WzJrSimaoC9yu95CC7
- 5lMSWRZK0H3e5lvrcsikorJZIsxApi9wM0lpLLJrhmIqQQlZUJnIQaZnaFwAKShFk1RQkd1T09z
- 9uM9Ff+oGtNbSzPSHUwww3RomDaFgN+RTuLJoXsQNxYjaT0p/dXrmOm/5W9lGg=
 
+The hwmon sysfs naming convention uses
+temp[1-*]_input for temperature channels.
 
-On 5/14/26 10:20, Guenter Roeck wrote:
->>> +    prom21_auxdev->auxdev =
->>> +        auxiliary_device_create(&pdev->dev, KBUILD_MODNAME, "hwmon",
->>> +                    &prom21_auxdev->pdata,
->>> +                    (pci_domain_nr(pdev->bus) << 16) |
->>> +                        pci_dev_id(pdev));
->>
->> Does left-shifting pci_domain_nr() introduce a signed integer overflow
->> regression?
->>
->> The function pci_domain_nr() returns a signed int, which can be up to 
->> 0xFFFF
->> on ACPI systems. Left-shifting a value of 0x8000 or greater by 16 bits
->> alters the sign bit of a 32-bit int, resulting in undefined behavior 
->> in C.
->>
->> Would casting the return value to an unsigned integer, such as
->> (u32)pci_domain_nr(pdev->bus) << 16, avoid this overflow?
->>
-> FWIW, I don't think that is a real problem. auxiliary_device_create()
-> takes an int as id parameter, so the result would be converted back to 
-> int
-> anyway. Maybe use "(pci_domain_nr(pdev->bus) & 0x7fff) << 16" instead,
-> but I don't know if that adds any practical value.
->
-> Thanks,
-> Guenter
->
-For the auxiliary device id issue, after thinking about it a bit more, I 
-think
-a simpler approach is to avoid encoding the PCI domain/BDF into the 
-auxiliary
-id. The auxiliary id only needs to make the auxiliary device name unique;
-userspace identification is already tied to the parent PCI function.
+Documentation/hwmon/sy7636a-hwmon.rst currently documents
+temp0_input, while the driver uses the standard hwmon
+temperature channel interface.
 
-So instead of:
+Update the documentation to use temp1_input.
 
-   (pci_domain_nr(pdev->bus) << 16) | pci_dev_id(pdev)
+Signed-off-by: Chen-Shi-Hong <eric039eric@gmail.com>
+---
+ Documentation/hwmon/sy7636a-hwmon.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I plan to use an IDA-allocated id:
+diff --git a/Documentation/hwmon/sy7636a-hwmon.rst b/Documentation/hwmon/sy7636a-hwmon.rst
+index 0143ce0e5db7..03d866aba6e8 100644
+--- a/Documentation/hwmon/sy7636a-hwmon.rst
++++ b/Documentation/hwmon/sy7636a-hwmon.rst
+@@ -22,5 +22,5 @@ The following sensors are supported
+ sysfs-Interface
+ ---------------
+ 
+-temp0_input
++temp1_input
+ 	- Temperature of external NTC (milli-degree C)
+-- 
+2.53.0
 
-   id = ida_alloc(&prom21_xhci_auxdev_ida, GFP_KERNEL);
-   auxiliary_device_create(..., id);
-   ida_free(&prom21_xhci_auxdev_ida, id);
-
-This avoids both the signed shift concern and PCI domain 
-truncation/masking.
