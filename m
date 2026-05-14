@@ -1,97 +1,110 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 621F718872A
-	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 08:42:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F743D7D79
+	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 09:07:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778748167; cv=none; b=tr4J/zgqYjOIMt0zJO4qPsZ7B8cfZJ8qf0fiupe/PWMqGB8nwdMu+HKUtqvqB/WDrQ4ri71xcPrINjJI8Z1kacM35gEnjQDAQENcKAf7CoQpYyseOieTjFHm6VPljUw5nTqbSBCKKz90mTF9SEbAUuU1Gs/RoDl+/2yX3jhdVcE=
+	t=1778749646; cv=none; b=VZ/EKYj08I7YKW8i2B1uyjDy5V3soFjfY6flCTIxLl9c8xqskyePwaHKePfzywO4OdZupM7UMtsegETI5/zLOLIgKgjEGThhRE7u0CAqPlIXFvUWevmjV8iLEbauEMkA8nvoG4eSTo9w1YIZHPsfu5ekIHp9QN6Z2H2Php426FQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778748167; c=relaxed/simple;
-	bh=yvCgs0E04ltr9/IOw058XmRnJcTknqZU9zckaXlE+KA=;
+	s=arc-20240116; t=1778749646; c=relaxed/simple;
+	bh=WqQ5PVXhcIKs0E34HaS7f+6OFDFKD0vL5zCYUOLNuY8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Rna8ewpFWA5YJ9dPz5bWdMmc3oORcmdwbMR7/7ES79UNbrhYZASwdVUEukijlypyO2DBfruasZOsx0Z4B9dr1tIMHclJjQiIePcn6C4M8AnOODzYcHJNDZ8chzTgKSsOsUN2fcm+C0TuQUseK2RrPejfEcNyQ+HX6eQD6APO+qY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lNkNXAcH; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=oAeHMZSKoBkzIh/rS/w7D5TbBgXc5NhMurgHax9iKnsO6GSecEJuywnbK9Ji1SOmb2Nxd/VzrnpIf1OYeBK20MZOMJef15KCrCZurPiMm9a72x3AiOj5DK4dD4IuRQjSJkaBkHN9U7HWs7IKJKTS6HHB8s1rcuufaM54Uhd5wSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sWkrHaJ+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lNkNXAcH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F03A5C2BCB7;
-	Thu, 14 May 2026 08:42:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sWkrHaJ+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C63B3C2BCC7;
+	Thu, 14 May 2026 09:07:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778748167;
-	bh=yvCgs0E04ltr9/IOw058XmRnJcTknqZU9zckaXlE+KA=;
+	s=k20201202; t=1778749645;
+	bh=WqQ5PVXhcIKs0E34HaS7f+6OFDFKD0vL5zCYUOLNuY8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=lNkNXAcHAz0yTUWkZfBwzIP00sX2/no1q4bQkcZ6ATdrM1WZ99JoXzQDEGW666tV0
-	 ou3uBifsuZKtj7UIr2A34gHtLickdiZBsI4DenDNLGQN53O5JxyQLViK/lmR76bSX2
-	 iTrXcWBT0k6KXtA2qlwnI0ZUcQJrXpXGjtw52uxUxskr2Gx0tjoRXCRw6ypfXqAImx
-	 8fxaIv2ZHwyWMXDNyLyOjzS+PStzb8MZ30J8k8pysH5b0ApGL9La61J0g5rZPjMfS8
-	 VxmajTUJiaGKfD88nTP5BqpMw8chxfZ46zQvwC8RvoxOXBYEiq44Z154eSZuFFm31J
-	 51+xf7rmHdfiQ==
+	b=sWkrHaJ+AV/mPBjH7nSwuI756K5nAh9s1KLs8oWRi15pWrcu3FgRuDWUFmkwQWRDe
+	 uRyhB/t7gyUPRuQYVRXIHeNZEt502SwWRqDmtKsZW5So5eXFviXH2pXOtKQvp4P6gw
+	 ub3aKR8CuQBPYFcaIfln5Ds9eI9A5Ou+tce40BXTGcguUGtT8sR0ZrILWJ35/t7bR/
+	 J6wK09BSoNnnoWOgohJ6u9BjufxD1oWXQ64v0dSQjbH7umvLW7mx4YD6ux4ap+/OwJ
+	 ke6yQ8Spxgp2POdL0uBK/6FD7/FPMysgVLFmObcjjofTu4xiYNAJ5mCU+lUzY1iHIQ
+	 XQ/uqnISeWM7w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 2/5] cpufreq: scmi-cpufreq: Log number of perf
- domains
+Subject: Re: [PATCH 5/5] pinctrl: pinctrl-scmi: Log number of pins, groups,
+ functions
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alex Tran" <alex.tran@oss.qualcomm.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260513-scmi-client-probe-log-v2-2-36607e9dd540@oss.qualcomm.com>
-References: <20260513-scmi-client-probe-log-v2-2-36607e9dd540@oss.qualcomm.com>
+In-Reply-To: <20260513-scmi-client-probe-log-v1-5-00b47b1be009@oss.qualcomm.com>
+References: <20260513-scmi-client-probe-log-v1-5-00b47b1be009@oss.qualcomm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 14 May 2026 08:42:46 +0000
-Message-Id: <20260514084246.F03A5C2BCB7@smtp.kernel.org>
+Date: Thu, 14 May 2026 09:07:25 +0000
+Message-Id: <20260514090725.C63B3C2BCC7@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Medium] Misleading debug log message contradicts driver behavior and com=
-mit message.
+- [Medium] Unhandled error code from pinctrl_scmi_get_groups_count() masks =
+firmware failure.
+- [Low] Unnecessary persistent state added to struct scmi_pinctrl.
+- [Low] Format string type mismatch in dev_info() logging.
 --
 
-commit 1a4bf472420109c67d582c98f4a85ffbf1fdd048
+commit d7d0dd8e474d3b2b3d8c68dd2d8713e62d0299a0
 Author: Alex Tran <alex.tran@oss.qualcomm.com>
 
-cpufreq: scmi-cpufreq: Log number of perf domains
+pinctrl: pinctrl-scmi: Log number of pins, groups, functions
 
-This commit adds a debug log to the SCMI cpufreq driver to report the
-number of performance domains discovered from firmware.
+The SCMI pinctrl driver does not currently log the number of pins,
+groups, and functions discovered from firmware.
 
-> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufre=
-q.c
-> index 4edb4f7a8aa97..f4cf59d862c61 100644
-> --- a/drivers/cpufreq/scmi-cpufreq.c
-> +++ b/drivers/cpufreq/scmi-cpufreq.c
-> @@ -468,9 +468,12 @@ static int scmi_cpufreq_probe(struct scmi_device *sd=
-ev)
+> diff --git a/drivers/pinctrl/pinctrl-scmi.c b/drivers/pinctrl/pinctrl-scm=
+i.c
+> index f22be6b7b82a4..abc90a3a7eaf4 100644
+> --- a/drivers/pinctrl/pinctrl-scmi.c
+> +++ b/drivers/pinctrl/pinctrl-scmi.c
+> @@ -40,6 +40,7 @@ struct scmi_pinctrl {
+>  	struct pinctrl_desc pctl_desc;
+>  	struct pinfunction *functions;
+>  	unsigned int nr_functions;
+> +	unsigned int nr_groups;
+>  };
+
+Does nr_groups need to be stored in the scmi_pinctrl struct? It looks like
+it is only used once in scmi_pinctrl_probe() for logging, so could it be
+declared as a local variable instead?
 
 [ ... ]
 
->  	if (ret) {
->  		dev_err(dev, "%s: registering cpufreq failed, err: %d\n",
->  			__func__, ret);
-> +		return ret;
->  	}
+> @@ -578,7 +579,15 @@ static int scmi_pinctrl_probe(struct scmi_device *sd=
+ev)
+>  	if (!pmx->functions)
+>  		return -ENOMEM;
 > =20
-> -	return ret;
-> +	dev_dbg(dev, "Initialized %d performance domains\n",
-> +		 perf_ops->num_domains_get(ph));
+> -	return pinctrl_enable(pmx->pctldev);
+> +	pmx->nr_groups =3D pinctrl_scmi_get_groups_count(pmx->pctldev);
 
-The commit message states the intent is to log the number of domains
-"discovered from firmware". Does the wording "Initialized" in this log
-message accurately reflect the driver's behavior?
+Can pinctrl_scmi_get_groups_count() return a negative error code here if the
+firmware fails? Since pmx->nr_groups is an unsigned int, would a negative
+error code be implicitly cast to a large positive value and mask the failur=
+e?
 
-The driver primarily registers the cpufreq driver and does not actually
-initialize the SCMI performance domains. Additionally, num_domains_get()
-returns the total count of SCMI performance domains exposed by the
-firmware, which may also include non-CPU domains like GPUs.
+> +
+> +	ret =3D pinctrl_enable(pmx->pctldev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	dev_info(dev, "Initialized %d pins, %d groups, %d functions\n",
+> +		 pmx->pctl_desc.npins, pmx->nr_groups, pmx->nr_functions);
 
-Would a word like "Discovered" be more appropriate here?
+This isn't a bug, but the variables npins, nr_groups, and nr_functions are
+all unsigned integers. Should these format specifiers be %u instead of %d?
 
 > +	return 0;
 >  }
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260513-scmi-clien=
-t-probe-log-v2-0-36607e9dd540@oss.qualcomm.com?part=3D2
+t-probe-log-v1-0-00b47b1be009@oss.qualcomm.com?part=3D5
