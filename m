@@ -1,66 +1,68 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD6201EB9E3
-	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 01:20:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E5ED30674B
+	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 01:26:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778721659; cv=none; b=Syaevqb5fYsVAEUDMCzoO0EpWypFh9qmjBULmj8lkFyrhAKzmp2h1k/ln2LIVA7eAF4CPvNqGIs1WW0zAC1+48MSujWDEmKF6n1SQ9yhiTQdT8REV5kepmY2YmoGOn+ChbObKtU6nA9r71mejicftbe4YGwEIsSaQsc3WtUWj8w=
+	t=1778721993; cv=none; b=CLZq+x7OsNOzYHZFY/klfcEHeGSmpzotAGZPqwjEpcfXUaETvBiEJCsG8R1dxXVtzbELCf/z2KBJ3lhUi2EgaDJ1hcCaf1da7UfWfqZTTj2PrQY2gGqFlQ90s/QPIfAViChPFIYRwBR3BsUF8ICXHVokIGXxkqksTFXB5dAd16E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778721659; c=relaxed/simple;
-	bh=slEw3KvaooDkY984ag9tHUglDzCiqW0LHTYF2Wnt0nQ=;
+	s=arc-20240116; t=1778721993; c=relaxed/simple;
+	bh=J9t7Y3dCSOWjzc2KZXw6OyJ0fX4LV/SSR6k3ZSG8cP4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fJTAwOsfb46w0IyO5jeDRLgvyJsi58TMe30kaIeA7CQoV1ktcrgKelvq719tZfK6ucM0OSx9eFWOV46mHUTHUM5BrT/8PsCSIWUmPnnyh6vIzrtX41ljYGkpuvK4Sy8U8pTgPL5GX/+9vDifU+0tVwUSx+YgclWa/2JKedMbZn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LlBp6aUh; arc=none smtp.client-ip=74.125.82.180
+	 In-Reply-To:Content-Type; b=rNWCseTPVD+TvxIeZ43kss0axIU6t4KMvxPJIZErbmnLE3HRabFRd75EIAx/Zl1/hdTzBfdCaLwa8DzXE6WGxHeZYHfiexSQ9OjX7/8y3TZJJ2kfcIMp8pSWxrp3j8EZOESPeKH/fo+XP80Q4EqARR4cnR+ABRsFXNTdF6nhw+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bmuCmMnR; arc=none smtp.client-ip=74.125.82.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LlBp6aUh"
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2f0ad52830cso10970317eec.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 18:20:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bmuCmMnR"
+Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2f36da5c8fbso7349745eec.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 18:26:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778721657; x=1779326457; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778721991; x=1779326791; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=qLy91Zspdgwq3Y5ACwXU3/2hLqUalzK4wJt+J779ge0=;
-        b=LlBp6aUhP844IZh3Be0eRCEdlXg2ARVwoDugbCru++t6vWqU5I88GynT0uEPE31SXL
-         9YJ1M7oMCZISfy0UlThPuJKjrcoV9JrY+4+pbsorfQbGmYoU8tWkvmrsX0hRIz9nZpE5
-         3s3jPLvQTdEUP1G6IF6nmPKPn6VtUQcK7rDsIU4kSaA1hEbUhFKFzQTpbGNY5wI+wxoo
-         ntixzFpIIqoOn540ZZzlqQJeKjo1NFKC0Acj/LmWW+5SrLDGIBXrTfQPoQxisHSBalSW
-         sEm/yWbQny1Pf0ulCoqVPTrgXJ0BqFPUzysUGocK/56JJ5zvFMoTFFWYTpNomTcuuIWE
-         yyzg==
+        bh=Ow0R4jeXxEVO1Et6duyD4OCmVuya7nxVLjLxDugc27w=;
+        b=bmuCmMnRCXsXCzTsUXubTkLmwO6IPgoPx6FKXObYiqcbmIU+alwIetyAUNv8Xyz7HL
+         dLx5kgPeW24m2bsnMkdbIdxsbR88IqqWXN22MHNtGAUaRZzhxouqHjGYgLrKBmEtYGh4
+         dKvThpsERR55kDN9Yg84Y1zGbEcoEAfjXe5QqWMWHsNO9lwqDMKHTUb/GSZdSskVBCgT
+         bB0fgzImxmTuV3Q2qbc0Y3Ahnr1B1omfNjKEfhsEM1QNAkvRJxv1K42xAyYJi50zNk2N
+         HFp5P7w03QK4aovo9zDu6zrvKRcCSPIDBCqy7cgKiReNQaceSVzqE3/SSh7+m7oYRCNP
+         +/VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778721657; x=1779326457;
+        d=1e100.net; s=20251104; t=1778721991; x=1779326791;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qLy91Zspdgwq3Y5ACwXU3/2hLqUalzK4wJt+J779ge0=;
-        b=Rs0I82CXcSUPu3NpSf9MV4AX7pUgzLb+PjfKIr60AIkaqC1wOA/jwkguLUkzF51M6g
-         xe3SPwV+6dEx5ggiTIaLkRTVczV4b+yPEhiA/PLTGGhLhRBKsb9Kxl13WyCFf7mn3mUH
-         vgmrZKTD2USo4tg1DH5/ImIR7tSX2dfVWtrjRFyCLobTOvuKqF9z+lkVgLIIzPW60wLN
-         Q+SuEkPaDFBqpNr1WMQ3XhlrKetvJqNFxX2xABqE3OxZ3iWKPaN9hK2bEeVxNez5x1xZ
-         zA6400ajn7hxvydbn6fTLZSCCL+UByuI8i/CMTk9m/TOVtywk8sezj52C0xb1OdBroB7
-         W1Bg==
-X-Gm-Message-State: AOJu0YxNFp4GchsYADEPxygDGwzuEL6TzY38PWC384axaR2wOlOor2wX
-	nsBmt+TdZi6K62sAteT5dD8etGWnHlqMRBD8ifUutY+I7GPmKivGHLTB
-X-Gm-Gg: Acq92OGEi2+ghOxpf47UBp+M369zOyzqYctBYE0ktRzcFFsgI1rBXFDnSJih06TiveH
-	Ch77dZdRPTuoqDLovvdzPcssikSlhQmFdISHUTFKbWNwGUSvYhMMO4ohK3KGSghrM+oUg7qsTXD
-	zcR1J7yRVhuR7nbZF2U/2lREG5JMo0317d+2z0EiHunTWi6mDYI+Q1h7lYldfxCHVA0QBi1oSgf
-	+5ypggCzcw2ZDbis3tL69TdYT8RJ/qRRIH7mjTkwy8JG15QaytC9BgzHduQHXuP4e6k40VupkoS
-	raRAZeb/Yi3U6N+CI7Q+t4Bx/Rj5FWPZ9fYt6qJsiP20B/c+ASlJt06DmAerVkwi2Q+fg0qtOy9
-	UuXAC5AzjxKT1M6vk8o2/3iH9RqedA/WLBQhe+YyvtK5/HsHzN0MxANFOg9kOmQAlsm0tJyJnXb
-	9lRKtmSwGVRIzFLf0742q1cdy46dnNSi8X2cxryqPFCLDMxBAqz7vq6Vjuqy1ZXUJQ61SQHuOD
-X-Received: by 2002:a05:7300:eb91:b0:2ed:e12:3769 with SMTP id 5a478bee46e88-3011a467d7cmr3505014eec.31.1778721656416;
-        Wed, 13 May 2026 18:20:56 -0700 (PDT)
+        bh=Ow0R4jeXxEVO1Et6duyD4OCmVuya7nxVLjLxDugc27w=;
+        b=JdiH4YkfxfHd1/MaJrNttRnJ6GVxH1YiQlrIHDT9uWEaRS++/YN0rjAzo8kfKXZwvg
+         weRaoRCYoH+eJcXbP3J0TJbFpjUorEiNEQXvWCATuDatuuAyqollbr02pKjqNdGJZzGI
+         Bj16xvnuICO1l6CRXM7AZ7MdES35bserwb8RKwpHfNuiaO9VU43xqTwcIdactFjC195z
+         nQf4P92jmhZIZayiYGpQ8Bc/RT8nIze6zSsuRgqIWDzwX0IPmPX/efX3tzZS4kCTDcY9
+         WgBn1GUmKMHHfkzRE7S+9gwionJ24KnT+v8iWR9xQhgT7zCXkSrt9FPHsLhj3Tq2EPsB
+         CiOQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8fNd0vQzhwbVmI+2fNz5DGBIhD649HqGL7fjsb6pwp9OgUonDydiRA0nV7HQMBoAo292JlKK81g4dRXA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxR/NbukHhK5XpiEgWBZlEvrs7HJgToYSx3BGx6wYDJPME+OYTP
+	4KWBp6oyj9jMBpYdj46h2afvqqCbaoJfipHEA82yJgUrNoU2Lg0m9Fd6
+X-Gm-Gg: Acq92OFQ3oT7zprDOlE56j92PThdWOKB6s3QjnhwMO3O5ps3gmkRssmV7msrs26FrTT
+	sv1xECuPDkpjXrBuYs9aBbUlRdZPsSiygffAz17E9126dkqqOZzpuPdTXBIK83FWeldIzUJEgNL
+	Qk85KS0v7Q15b2WQ06mBTqzWHnZAU91Ulv3kEHcXDBkP5a2PmbHBwmnPd6me8cZmfTiGjjVstG7
+	ZkQo+/gTSoRpxyr/1BDemZ68sIByepWKdCzW+XYrFdHMe5Fy4SXn7wCoH4WfOI4ZKXrK5UWZtOk
+	GV6mervxRQl5BZeGjbaf3czfYfCn+/xUU5M0bPt8oONTDMe0TAQ2Arx2KXWIk8a4HWPAnhhSUR8
+	VDhI+EmKID4iLttK7VMnJxcM6ntdljd3f4G0HSJbUuCuEv0/PZ9iQr/h8banNVtbhGLBslGifKO
+	TRReT9AfiiYP5ZcE9Uj/Bp9w/8xnWz203Pv5JrXxZhBSHrGkAUjg4sTWlXeJSBY0ejEJWiJzBQT
+	SuoZvIiReE=
+X-Received: by 2002:a05:7300:e78d:b0:2fc:9aa8:83da with SMTP id 5a478bee46e88-3011a369aa2mr3335097eec.29.1778721991110;
+        Wed, 13 May 2026 18:26:31 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-302973bc9d4sm1132828eec.23.2026.05.13.18.20.55
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-302973bcd0csm1239878eec.24.2026.05.13.18.26.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 May 2026 18:20:55 -0700 (PDT)
+        Wed, 13 May 2026 18:26:30 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <110e9a0d-bc91-4959-8a7b-1a055d0b49f7@roeck-us.net>
-Date: Wed, 13 May 2026 18:20:55 -0700
+Message-ID: <ab7c7a3a-332a-4316-93de-c6e9b5ca6c62@roeck-us.net>
+Date: Wed, 13 May 2026 18:26:29 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,11 +70,22 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/2] usb: xhci-pci: add AMD Promontory 21 PCI glue
-To: sashiko-reviews@lists.linux.dev, Jihong Min <hurryman2212@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-pci@vger.kernel.org
-References: <20260512213910.871859-2-hurryman2212@gmail.com>
- <20260514004055.1BBCAC19425@smtp.kernel.org>
+Subject: Re: [PATCH 2/2] scsi: mpt3sas: add hwmon support
+To: Louis Sautier <sautier.louis@gmail.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Sathya Prakash <sathya.prakash@broadcom.com>,
+ Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+ Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+ Ranjan Kumar <ranjan.kumar@broadcom.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260512214703.655633-1-sautier.louis@gmail.com>
+ <20260512214703.655633-3-sautier.louis@gmail.com>
+ <934b475d-1d77-4670-af10-4f3f2ddad61d@roeck-us.net>
+ <4e757864-c062-4467-83b4-1e0d08b68b2d@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -118,92 +131,34 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260514004055.1BBCAC19425@smtp.kernel.org>
+In-Reply-To: <4e757864-c062-4467-83b4-1e0d08b68b2d@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5/13/26 17:40, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [High] The Kconfig dependency `depends on USB_XHCI_PCI=y` completely disables PROM21 support for systems where the core driver is built as a module.
-> - [Low] Signed integer overflow when calculating the auxiliary device ID.
-> --
+On 5/13/26 18:11, Louis Sautier wrote:
+> On 13/05/2026 05:57, Guenter Roeck wrote:
+>>>    Documentation/hwmon/index.rst        |   1 +
+>>>    Documentation/hwmon/mpt3sas.rst      |  57 ++++++++
+>>
+>> This is not appropriate. The description is wrong and misleading.
+>> mpt3sas is _not_ a hwmon driver. It is a chip access driver which
+>> happens to support hardware monitoring.
+>>
+>> If this is part of the mpt3sas code and not a separate driver,
+>> please keep it there.
+>>
+>> Thanks,
+>> Guenter
 > 
-> commit 20f4e35b2f88ebe2b8988b4f07fe7cc28199096b
-> Author: Jihong Min <hurryman2212@gmail.com>
-> Subject: usb: xhci-pci: add AMD Promontory 21 PCI glue
+> Hi,
 > 
-> This commit adds a small PCI glue driver for AMD Promontory 21 xHCI
-> controllers. It binds the controllers, delegates USB host operation to
-> the common xHCI PCI core, and creates an auxiliary device for optional
-> temperature sensor support.
-> 
->> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
->> --- a/drivers/usb/host/Kconfig
->> +++ b/drivers/usb/host/Kconfig
-> 
-> [ ... ]
-> 
->> @@ -42,6 +42,26 @@ config USB_XHCI_PCI
->>   	depends on USB_PCI
->>   	default y
->>   
->> +config USB_XHCI_PCI_PROM21
->> +	bool "AMD Promontory 21 xHCI PCI support"
->> +	depends on X86
->> +	depends on USB_XHCI_PCI=y
-> 
-> Does depending strictly on USB_XHCI_PCI=y cause a configuration regression
-> for most distributions where the core driver is configured as a module?
-> 
-> The driver source appears fully capable of being built as a module, using
-> module-related macros and module_pci_driver().
-> 
-> If the intent is to prevent an early boot mismatch where xhci-pci is
-> built-in but the PROM21 glue is a module, could this instead be a tristate
-> option using depends on USB_XHCI_PCI and depends on !(USB_XHCI_PCI=y && m)?
-> This would enforce the boot constraint while preserving support for modular
-> kernel builds.
+> Sorry about that, I had assumed this directory was also meant to contain
+> documentation for chip drivers that support hardware monitoring.
 > 
 
-That makes sense to me. That would be stronger than using default (which
-was my idea of dealing with the problem). Restricting the code to USB_XHCI_PCI=y
-seems to be a bit extreme.
-
-> [ ... ]
-> 
->> diff --git a/drivers/usb/host/xhci-pci-prom21.c b/drivers/usb/host/xhci-pci-prom21.c
->> --- /dev/null
->> +++ b/drivers/usb/host/xhci-pci-prom21.c
-> 
-> [ ... ]
-> 
->> +static int prom21_xhci_create_auxdev(struct pci_dev *pdev)
->> +{
->> +	struct prom21_xhci_auxdev *prom21_auxdev;
->> +	struct usb_hcd *hcd = pci_get_drvdata(pdev);
-> 
-> [ ... ]
-> 
->> +	prom21_auxdev->auxdev =
->> +		auxiliary_device_create(&pdev->dev, KBUILD_MODNAME, "hwmon",
->> +					&prom21_auxdev->pdata,
->> +					(pci_domain_nr(pdev->bus) << 16) |
->> +						pci_dev_id(pdev));
-> 
-> Does left-shifting pci_domain_nr() introduce a signed integer overflow
-> regression?
-> 
-> The function pci_domain_nr() returns a signed int, which can be up to 0xFFFF
-> on ACPI systems. Left-shifting a value of 0x8000 or greater by 16 bits
-> alters the sign bit of a 32-bit int, resulting in undefined behavior in C.
-> 
-> Would casting the return value to an unsigned integer, such as
-> (u32)pci_domain_nr(pdev->bus) << 16, avoid this overflow?
-> 
-FWIW, I don't think that is a real problem. auxiliary_device_create()
-takes an int as id parameter, so the result would be converted back to int
-anyway. Maybe use "(pci_domain_nr(pdev->bus) & 0x7fff) << 16" instead,
-but I don't know if that adds any practical value.
+My recommendation is to implement drivers such as this one as auxiliary drivers.
+Most people don't want to do that. I accept that, but then I don't want to carry
+the documentation either.
 
 Thanks,
 Guenter
