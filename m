@@ -1,62 +1,62 @@
-Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
+Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C892C3A5E8E
-	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 04:25:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2BB82FFDFC
+	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 04:58:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778732758; cv=none; b=URWeKk6oXIGD5/myT+iXlc/9pUIATbPThUeu7jKGcnxxmuCjL1rtV8G9cpbgabIvX88v1IuPywHIEdKi5BUPNqayHb3Kt/CD23wLFkKTgEVw8m7JHXtwyMFqUE3Nv39LAmdsRBxeyCfKKmX3RK3rBuSdRbGm614aweeQ0N/Or8M=
+	t=1778734739; cv=none; b=jhQBAqq7WydRSc0i2ovSs6i4xEAUvRzYppc83UQIarnuPYek2JQ0OeqhBJOQI0RGY4Jkl34nX42RVXWvfvkL9uweHmR+9E5poHmKxufkjLNpbPg+IQcnJkjJ5AVml3xu3tds7nPhAPiORNxR8VYY9ITjZ94fZDhMjb7T06LhcfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778732758; c=relaxed/simple;
-	bh=Xk9UOkNIs/6BZtbVkVNxSjWkErNcowjkARNVXgeAc1o=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=DRsyZi9Ps8U9e03NtyMlKVD+RXe+ufePjVAhK7CL+qR/GJRb1t0VJVzAe2Qk47k/uWK6/fRPCRrgUepeYyisO4uqY64Lhc/8zFOHwzmZKPUIhRI4fes8xbKF90DWswoe5jE/TsJVO5rUNB0tKe9RcbJEnDWwJ7Lr0UTOl1+odj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai; spf=pass smtp.mailfrom=nexthop.ai; dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b=QU52XJy9; arc=none smtp.client-ip=74.125.82.49
+	s=arc-20240116; t=1778734739; c=relaxed/simple;
+	bh=GyLKE/ObGiUS+GmBhoU0kNu2raSet2R5I1pqOXZEM3s=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=HXhPeZNtoKetvbk38fTX9GqqWTNQ8xNdtrxbeFHCOO15UavfqqNENQEJkzv6jgXWiM6XQ/oKG9hMtAJmrEFVBEAuGu539LaGsXrGNlvyeTtfxxv93r26bH9N+cKNaPBT31Eng7SWG5HrT0NBJ0YtRoKL+ommFKHwsaBF+9Fk8eg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai; spf=pass smtp.mailfrom=nexthop.ai; dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b=X1p5itWQ; arc=none smtp.client-ip=74.125.82.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b="QU52XJy9"
-Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-12c8f9846c8so11257541c88.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 21:25:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b="X1p5itWQ"
+Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-2ef2a1cc06dso1612300eec.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 21:58:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexthop.ai; s=google; t=1778732756; x=1779337556; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
+        d=nexthop.ai; s=google; t=1778734737; x=1779339537; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=13EaFGhc9sBhjVtX9ZyJlLsTcSvLGmruzmbLxhBQiPU=;
-        b=QU52XJy9ZlRpHenIyK6djz3UFt5uUyNjvjP+VJMhdCP/KfXAvme8ULuhtDNGJ+mh66
-         altNc+sGEBOs2j6zO/w+EwJ8lgSMzGs+F0xOZXECk3Hzj/zoMTDPWybUWv3f09+Xz1w1
-         in2nzydjb5Bbx4ctbEKqsRP4z0KRqtdCaYaiN229N3YAkzFhXItF+xV5FhsQu5QtKd2n
-         91WnMFmMgGej8cJFsCufEWqZK4Ke3OG48pW9d0wqW9mu4yY10WChZEJFLJO17omUOLyX
-         kgihJ7K77lKVTJ3b5dC7dDc9cD+LSUYZ+0rhS1svBjNhz3F3Au7sfsWBKBAKMK7QuTN7
-         LECw==
+        bh=J4E6xAV+ymnZaVvNz/6Cf5lX7tVpE5qIZhbUx7OqV4o=;
+        b=X1p5itWQHjJocpRBQaXQdbk2ZQQJE0wlft2aqsVdHv4BKxlqhD4qeuIeiiJ3EjynYp
+         TkjAwQp9IPJF4fOa6HHvDHTq1RYRkYSpYyW5eVmHxlIW5ERZr5j/lOkuK1/pDWk5bRRD
+         uNKmpMNqbFXZ3KDOisnXiz/ckfn7FRWTnJASjYsrT3OaFZ9tfoFRplKFsdUoy4K3Y6bc
+         XNz1MB6XCho8n5JXNdpAM7Z7/09cRCXnnEnGfDm8GaoflrgbbUYl9bovQKC0Z1bQbjOc
+         B/Lo1U7HwyzYyr9Lf2H6SGGo6H9lOo4ES2Sow0fVPH6VDiMrbVNceBAhRdylAKCwMleG
+         4I8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778732756; x=1779337556;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
+        d=1e100.net; s=20251104; t=1778734737; x=1779339537;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=13EaFGhc9sBhjVtX9ZyJlLsTcSvLGmruzmbLxhBQiPU=;
-        b=ioqyeP3yUS/9vtvyRikLAzk56P8oY9foyOtP37Ta2RsyEW5ipw1h4SmEm8J8dU7+22
-         jTQxiU5HlzOK50AhSusLQPb3L7q/YFY5aDKsq6D2DW+YaZ40bwEvGdVcQ3u+0KDfqL/+
-         a/tlgwPW10teP5KryXxN0QRn0x4orvDr6vcKc1JBCl9aAk2MP4CMZiJwINTW262qf0Z0
-         d+QgaU5FECYAEn6XfvOPvFZvp/1EQzm9iaoa7GMNbCI9QTk8VphHRJYYWURiJihBBxj1
-         zakChwzo+E2r4PHPhXd5SAM0zeQ4WpfvuCQ/33yb0hhWPRL53T+CcvZUdbfhnHzlKAGT
-         1Afw==
-X-Gm-Message-State: AOJu0YyvXOy8T+Ld29oeIgSg5zM0llrQc7BtrIpfXtw1TNu/zCDdfVtH
-	ReVOMyWvebb3YMzc5jAimTu6gfb71uu6EEndCQ3jA4qwjjOIgjhAVnnmm25Cfp//U4A=
-X-Gm-Gg: Acq92OERpenVtQc7X2pLiMKoz99iWcPcWZvlrxLhnLW1WyAjIMqB+KCyoZy8PbpDhzf
-	XAuLFc/e+fq9gah2F5MzbRyHvz+KPEbAcmUXh1zSStr5X3RSVyhC0+HBUH+rZR7glo4A9TEAduo
-	h3LBSivnQ50R0NBDXFaUp2rATdlGRv48j7KLgW5qWZCuoD4CvbD2/cX8O7GDOiQaSo+XWhPTQN+
-	kHnVJXoos8afpo1B6OxmujRc5DIfkHf/MOpyK9nEaSAEBmJ71f91ZVJfp0+9m99/FR/jtIvcfqx
-	j46t/UhtinfymEFi6fCLuDAcdV6HnniHBgIbTvaH646LQhGgjPXby8Wftsbruat3RcZdRVMzEcb
-	FtB4/lD2NufAHuJ9fmt9ZNb/RHMSk5s0behm92Ezrjy9AuishkZ5nCzku21VBD0Kdjx+hI/mtoc
-	IZnhl188Ohitj+w2gpWeLbRTg1mzXnevh8Sw==
-X-Received: by 2002:a05:7022:f87:b0:12d:ce60:cb52 with SMTP id a92af1059eb24-1343677c21cmr4095334c88.18.1778732755696;
-        Wed, 13 May 2026 21:25:55 -0700 (PDT)
+        bh=J4E6xAV+ymnZaVvNz/6Cf5lX7tVpE5qIZhbUx7OqV4o=;
+        b=CqQq9BcROEJM53bvX7gzprV5ilTO85uKakLxC5UJvPTPQFuB71flsykOkuW5nuuBoq
+         xetFZZKDxkoMt6TkE0JLnZ8SYJvJALY6yVe/DSg8jyw5Ssw9oRnV6kn4zAzipsDz9L2c
+         b4by525MULkHPFWFDCg/P7ntRfMgJZ8bIxf2Q6v3+br3cGnSLqPjPtLu69oV9bQ9x33u
+         hEBRW6d2gzcIwY7pFJU1WvvPS3qE6NAaX4gjNNAn1IYI2Xpq11KDyIZU2taVlljDVdf6
+         1f232IOzalNSO+ImURmY/VIiAefeFFiHr4z6iyMEKCiifc8kqI2zmP3bQsqUmNQiqhYq
+         vcVw==
+X-Gm-Message-State: AOJu0YymVRzGPRMkSlGvc9bKlxmDEVXniKsiuULARcGg/g/u9KZWRcmm
+	Q98y+/rOTciwHJHr58MMklsLmdmZ+KGfIo23Wyr/b3Xzk5NTquhakuvi1eQZJsvUx+s=
+X-Gm-Gg: Acq92OGGMgRTTLoND4KegAztBOjqRBO1cAkUGRTSILRWMaXifwj0eBWPesAj52L6kKO
+	/QiHpDhHNTLOd1tUaDrSMFBMXCiIU2vl51ZpEPkPyl0EqA85Qh7mYSpyvoFfEBU3Wa0VU9fDGvZ
+	qzKqyhKYPc70Z21stTcWBP1g6l/Qp6dG5wcP6Jo9nmUwPnODcyPoDs9BzygEnGa35V5Zil5hHEi
+	apwf3HIrgXv7omoX4403tdNbTJrrrduMcY3fss2TMx77EqaaTJ7m7+JTvfsnY8oAkNKUtqInCGJ
+	lUAN24SwDmQwBiiYpLYjBFQyZZmWMAykvti1XI7aGpTgc6rALNu3VUPBgOKg1zGvS+/CNWbc7Sx
+	VxR28oVigT5KwkFV8tk3/J81j5McIksvkBa1tB9cnHGnGSRv0WAC71lgDo5g62774CGpWm7qgQL
+	LzQS197KybBe5h5BKfZp8pZ0E=
+X-Received: by 2002:a05:7300:5412:b0:2e2:3381:2fba with SMTP id 5a478bee46e88-30117faa7d3mr3926686eec.3.1778734736576;
+        Wed, 13 May 2026 21:58:56 -0700 (PDT)
 Received: from localhost ([50.145.100.174])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cbcb93f3sm2645323c88.3.2026.05.13.21.25.54
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30296dcb6e9sm1945150eec.16.2026.05.13.21.58.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 May 2026 21:25:55 -0700 (PDT)
+        Wed, 13 May 2026 21:58:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -65,85 +65,189 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 13 May 2026 21:25:54 -0700
-Message-Id: <DII44YQHQRAQ.1BOWF2JZ2RY5N@nexthop.ai>
+Date: Wed, 13 May 2026 21:58:55 -0700
+Message-Id: <DII4U8OGDPXK.2JJTHRE0OEGA5@nexthop.ai>
+Cc: <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH v3 2/5] hwmon: (pmbus/adm1266) add clear_blackbox
+ debugfs entry
 From: "Abdurrahman Hussain" <abdurrahman@nexthop.ai>
-To: "Guenter Roeck" <linux@roeck-us.net>, "Abdurrahman Hussain"
- <abdurrahman@nexthop.ai>, "Alexandru Tachici"
- <alexandru.tachici@analog.com>
-Cc: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>, "linux-rtc"
- <linux-rtc@vger.kernel.org>, "Guenter Roeck" <groeck7@gmail.com>
-Subject: Re: [PATCH v3 4/5] hwmon: (pmbus/adm1266) replace probe-time RTC
- seed with rtc_class device
+To: <sashiko-reviews@lists.linux.dev>, "Abdurrahman Hussain"
+ <abdurrahman@nexthop.ai>
 X-Mailer: aerc 0.21.0
-References: <20260512-adm1266-v3-0-a81a479b0bb0@nexthop.ai>
- <20260512-adm1266-v3-4-a81a479b0bb0@nexthop.ai>
- <045f1907-0180-46df-a123-cd0ce349e86b@roeck-us.net>
-In-Reply-To: <045f1907-0180-46df-a123-cd0ce349e86b@roeck-us.net>
+References: <20260512-adm1266-v3-2-a81a479b0bb0@nexthop.ai>
+ <20260514004750.10B3FC19425@smtp.kernel.org>
+In-Reply-To: <20260514004750.10B3FC19425@smtp.kernel.org>
 
-On Wed May 13, 2026 at 7:14 PM PDT, Guenter Roeck wrote:
-> On 5/12/26 11:56, Abdurrahman Hussain wrote:
->> The driver currently writes the device's internal RTC at probe with
->> ktime_get_seconds(), which returns CLOCK_MONOTONIC seconds since boot
->> and is not a wall-clock value. The resulting timestamps embedded in
->> blackbox records are therefore meaningless across reboots, defeating
->> the cross-reboot record-correlation use case the field exists for.
->>=20
->> Switching the seed to ktime_get_real_seconds() does not actually fix
->> this: at probe the system wall clock may not yet have been set (no
->> external RTC, no userspace NTP), and seeding unconditionally also
->> clobbers whatever valid time the ADM1266 retained across a warm
->> reboot.
->>=20
->> The data sheet (Rev. D, p. 22) recommends "frequently send the time
->> stamp to the ADM1266 to synchronize the UNIX time and reduce the time
->> from drifting" when running on the internal oscillator. The clean way
->> to expose that policy is an rtc_class device backed by SET_RTC, so
->> that userspace tooling (hwclock, chrony, systemd-timesyncd) can drive
->> the re-sync against /dev/rtcN once it trusts the system clock - with
->> no driver-specific sysfs ABI.
->>=20
->> Drop the probe-time seed and adm1266_set_rtc() entirely. Add an
->> rtc_class device whose ->read_time and ->set_time callbacks read and
->> write the SET_RTC frame. The rtc_class API is second-precision, so
->> the SET_RTC fractional-seconds bytes are always written as zero.
->>=20
+On Wed May 13, 2026 at 5:47 PM PDT, sashiko-bot wrote:
+> Thank you for your contribution! Sashiko AI review found 5 potential issu=
+e(s) to consider:
+> - [Critical] The shared buffer `data->dev_mem` is modified and accessed i=
+n `adm1266_nvmem_read()` outside of any lock, leading to data corruption on=
+ concurrent nvmem reads.
+> - [Critical] Stack buffer overflow in `adm1266_nvmem_read_blackbox()` cau=
+sed by an undersized buffer passed to `i2c_smbus_read_block_data()`.
+> - [Critical] Heap buffer overflow in `adm1266_nvmem_read_blackbox()` due =
+to blindly trusting the hardware-provided `record_count`.
+> - [Critical] Out-of-bounds write in `adm1266_pmbus_block_xfer()` due to u=
+nsafe `memcpy` using an untrusted length from the I2C device.
+> - [High] DMA read buffer bounds mismatch in `adm1266_pmbus_block_xfer()` =
+exposes an out-of-bounds write vulnerability.
+> --
 >
-> This doesn't just set the RTC time, it also acts as a real-time-clock.
-> That seems undesirable, since it isn't really a real-time clock.
-> It would also be the first (pseudo) rtc residing outside the rtc
-> subsystem.
+> commit 2afefd44ddcfcdd2fe5f8721e42653261b4e9ff0
+> Author: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 >
-
-Agreed -- calling it an RTC overstates what the chip does.  The
-register is a 32-bit seconds counter seeded via SET_RTC and stamped
-into each blackbox record.  No battery, no alarm, nothing the RTC API
-normally implies; treating it as an rtc_class device was the wrong
-fit.
-
-> It seems to me that there must be a better solution. The rtc subsystem
-> needs to be involved in this discussion.
+> hwmon: (pmbus/adm1266) add clear_blackbox debugfs entry
 >
-
-Would you prefer I drop anything RTC-shaped from this driver
-altogether and reach for something else (e.g. a read/write debugfs
-file under pmbus/<dev>/, consistent with the other debugfs entries
-this series adds), or would you rather I post a separate thread to
-linux-rtc asking how a device like this should expose a host-driven
-seconds counter and wait on their guidance before respinning?
-
-The datasheet's intended use is for the host to frequently send the
-current timestamp to the chip, so the value stamped into each blackbox
-record reflects wall-clock time at the moment of the event.  Either
-direction works for me; my mild preference is the debugfs path since
-it lets me close the loop without holding up the rest of the series.
-
-> Note - as sent separately - that making this driver dependent on
-> the RTC subsystem (as would be required by this patch) is unacceptable.
+> This commit adds a write-only debugfs file to clear the ADM1266 blackbox
+> buffer. Writing to the file issues a 2-byte block-write command to the
+> device. It also adds a pmbus_lock guard to adm1266_nvmem_read_blackbox()
+> to prevent concurrent read/write operations from interleaving.
+>
+>> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266=
+.c
+>> index 7b8433226176f..bd3784d59a7c8 100644
+>> --- a/drivers/hwmon/pmbus/adm1266.c
+>> +++ b/drivers/hwmon/pmbus/adm1266.c
+> [ ... ]
+>> @@ -379,10 +415,11 @@ static int adm1266_nvmem_read_blackbox(struct adm1=
+266_data *data, u8 *read_buff)
+>>  	u8 buf[5];
+>>  	int ret;
+>> =20
+>> +	guard(pmbus_lock)(data->client);
+>> +
+>
+> While this patch adds a guard here, does adm1266_nvmem_read() also modify
+> and access data->dev_mem without taking this lock?
+>
+> If two threads read the nvmem device concurrently, could one thread's
+> memset() execute during another thread's memcpy(), causing corrupted data
+> to be copied to userspace?
 >
 
-Understood -- I'll drop the rtc_class approach in v4 either way.
+Yes, this is a real race -- the nvmem core (nvmem_reg_read() in
+drivers/nvmem/core.c) does not serialize reg_read callbacks, so two
+concurrent reads of the nvmem device can interleave the memset and
+memcpy on data->dev_mem.  For v4 I'll lift the guard from
+adm1266_nvmem_read_blackbox() up into adm1266_nvmem_read() so it
+covers the memset, the blackbox refill, and the memcpy as a single
+critical section.
 
-Thanks for the quick feedback,
+>>  	ret =3D i2c_smbus_read_block_data(data->client, ADM1266_BLACKBOX_INFO,=
+ buf);
+>
+> Can this call overflow the buf array?
+>
+> Looking at i2c_smbus_read_block_data(), it blindly copies up to
+> I2C_SMBUS_BLOCK_MAX (32) bytes into the provided buffer based on the
+> length byte returned by the hardware:
+>
+> drivers/i2c/i2c-core-smbus.c:i2c_smbus_read_block_data() {
+>     ...
+> 	status =3D i2c_smbus_xfer(...);
+> 	if (status)
+> 		return status;
+>
+> 	memcpy(values, &data.block[1], data.block[0]);
+> 	return data.block[0];
+> }
+>
+> If the I2C device returns a block length greater than 5, would this
+> memcpy() overflow the 5-byte buf array?
+>
+
+Yes -- a malformed length byte from the device would overflow the
+5-byte buf onto the stack.  This is pre-existing in the original
+driver; I'll send a separate fix patch with a Fixes: tag sizing buf
+at I2C_SMBUS_BLOCK_MAX, and rebase the feature series on top.
+
+>>  	if (ret < 0)
+>>  		return ret;
+>> -
+>>  	if (ret !=3D 4)
+>>  		return -EIO;
+>> =20
+>> @@ -392,7 +429,6 @@ static int adm1266_nvmem_read_blackbox(struct adm126=
+6_data *data, u8 *read_buff)
+>>  		ret =3D adm1266_pmbus_block_xfer(data, ADM1266_READ_BLACKBOX, 1, &ind=
+ex, read_buff);
+>
+> Does this loop have a bounds checking issue?
+>
+> The record_count loop limit is read directly from buf[3]. If the device
+> returns a record_count greater than 32, will the loop advance read_buff
+> past the end of the 2048-byte allocation for data->dev_mem?
+>
+
+Yes; record_count comes straight from the device.  Pre-existing as
+well -- same fix path.  v4 will clamp against the declared blackbox
+size (32 records) before entering the loop and return -EIO if the
+device reports more.
+
+> Also, could this call to adm1266_pmbus_block_xfer() cause an
+> out-of-bounds write?
+>
+> In adm1266_pmbus_block_xfer(), the memcpy() uses a length from the I2C
+> device:
+>
+> drivers/hwmon/pmbus/adm1266.c:adm1266_pmbus_block_xfer() {
+>     ...
+> 	memcpy(data_r, &msgs[1].buf[1], msgs[1].buf[0]);
+>     ...
+> }
+>
+> If the device returns a length up to 255, could this write past the
+> expected 64 bytes (ADM1266_BLACKBOX_SIZE) allocated for read_buff?
+>
+
+Yes.  adm1266_pmbus_block_xfer() memcpy()s up to 255 bytes into a
+caller-supplied buffer whose size the function has no knowledge of.
+Pre-existing; same fix path.  The fix will add a max-length
+parameter to the helper and update the three call sites to pass
+their actual buffer size.
+
+> Additionally, does the DMA read buffer size in adm1266_pmbus_block_xfer()
+> expose an overflow regression?
+>
+> The read_buf array in struct adm1266_data is sized
+> ADM1266_PMBUS_BLOCK_MAX + 1 (256 bytes). However, the i2c_msg length is
+> set to 257:
+>
+> drivers/hwmon/pmbus/adm1266.c:adm1266_pmbus_block_xfer() {
+>     ...
+> 		{
+> 			.addr =3D client->addr,
+> 			.flags =3D I2C_M_RD | I2C_M_DMA_SAFE,
+> 			.buf =3D data->read_buf,
+> 			.len =3D ADM1266_PMBUS_BLOCK_MAX + 2,
+> 		}
+>     ...
+> }
+>
+> If the hardware sends a full 257-byte response, will the controller
+> write 1 byte past the end of data->read_buf?
+>
+>>  		if (ret < 0)
+>>  			return ret;
+>> -
+>>  		if (ret !=3D ADM1266_BLACKBOX_SIZE)
+>>  			return -EIO;
+>>
+
+Yes -- read_buf needs ADM1266_PMBUS_BLOCK_MAX + 2 (257 bytes) to hold
+the length byte plus up to 255 payload bytes plus the PEC byte.  The
+subsequent PEC compare,
+
+  if (crc !=3D msgs[1].buf[msgs[1].buf[0] + 1])
+
+also reads past the end of the current array for a max-length
+response.  Pre-existing; same fix path.
+
+In summary, the four pre-existing buffer-bound bugs (points 2-5
+above) will go into a separate fix series with Fixes: tags sent
+first; the nvmem-read race (point 1) is folded into this patch in
+v4.
+
+Thanks,
 Abdurrahman
