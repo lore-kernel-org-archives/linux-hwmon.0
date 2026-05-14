@@ -1,243 +1,76 @@
 Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B52E61A7264
-	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 00:34:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D29C128C2DD
+	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 00:36:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778718875; cv=none; b=s9x4MVs3Bibd1XteUVrbGhKuOnIN7iWdi0e/sHd4aNqgf8tM+S6jp7myxttOydmspP5BTxWsL1Ydk/q1IQ1O7rsany5KSmvjDDpXYmm1tVTWXbKcVCXkt5IuOeTIWUFshYsRmw3Ca5DBJzJmENufuHOlCPKzCZQO5mkaW/HBoNU=
+	t=1778718974; cv=none; b=VI7m692vGLWr04Ok52+jA4fa8ZrGKsqf2s+6z1EiYETpvlX+qAuBzIOD5o2w5M/hFeW+7Vki28pfwMOTq0UYxBHQwiSfv80T9crhgdWV2jkA1cUuh+PVwIbqDxDF6DKHGnOdU3XfsePtHDduUCGJl4JYzXK9vKRM39l+8D0tnf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778718875; c=relaxed/simple;
-	bh=8oE4sDMKzB4U41OIEaBw2p8cbJovaqY+6moGpJWXbpY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mO268TLT2G+ShWafA4Xj1ouOfqVSjMAhfdFo1wkoR1Auf5pyVkT3UFZCYybiGfYgS/uwSruhDxhhxzo+6Koqc9j30aSv31D+GuoTNE3+pEwb5+UGXLHu/HVXEpD3ML3eKKStZlKIDsyl10WSan8HWNN32HuUKbVrATK0G9Pg/GE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=OWfVnVls; arc=none smtp.client-ip=202.36.163.20
+	s=arc-20240116; t=1778718974; c=relaxed/simple;
+	bh=hKEzkWQOglLU6cByh2LmsHajF98FBytJqpKxeYHfBNk=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=fI1tkXxzpWi0h7pyA1WUtrv5Ac0J+wTCfwZnne6LFf+xC6XJQrZLRr18qGDN6NedrPJXmv06wdpq7hDMue/SfUPk33knUZh/B9h1y86sBSmQUZG/ZsCI/K+Dok0IAwiX7uRmgPfX7BHQqxsGKV/u024pQESZc312UAsbhHJG8c0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=h3mk7wRf; arc=none smtp.client-ip=202.36.163.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="OWfVnVls"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="h3mk7wRf"
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A6BFC2C0613;
-	Thu, 14 May 2026 12:34:30 +1200 (NZST)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 4DA8E2C0666;
+	Thu, 14 May 2026 12:36:10 +1200 (NZST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1778718870;
-	bh=k1xqFY5HSHn9oX9ocHE041lrr2xDhoE7kuwo8mLYcCQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=OWfVnVls4kKDx7/qhAGIdlrDCVQ4/Y/rVkwMbEZdCmqLPZP4hkBaDMfeAcKCvBSxD
-	 Jl1IJ9miAXkMODXLQ5QFDSxg23YF5Ll4Eo77ZFqwJPfIKWDtospeTkLzNjyit3jFQL
-	 pvq1kA+TSNzujKqJDfZ1Ze8aDVESHSjXBiv4old0cVoMTrH5QO80CcMBRl8fnu6kav
-	 L+YU5VBIK0KtjPt6sSVE3uiMJhmGBmwdUd8KyzGbzyHdew3dShy8mURuxdgS8cfQxs
-	 dAcoDDLmJhi+FBAmNcN3hLKBQGoM3Yqx+amMy/3pf85VYNjFSRma4y3vCgbwNv8iG7
-	 Jo7DfJ+jRxlyw==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B6a0518960000>; Thu, 14 May 2026 12:34:30 +1200
-Received: from ronand-dl.ws.atlnz.lc (ronand-dl.ws.atlnz.lc [10.33.12.18])
-	by pat.atlnz.lc (Postfix) with ESMTP id 6940413ED2A;
-	Thu, 14 May 2026 12:34:30 +1200 (NZST)
-Received: by ronand-dl.ws.atlnz.lc (Postfix, from userid 1930)
-	id 651B184004F; Thu, 14 May 2026 12:34:30 +1200 (NZST)
-From: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>
-To: linux@roeck-us.net
-Cc: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v2] hwmon: (nct7802) Add time step attributes for tweaking responsiveness
-Date: Thu, 14 May 2026 12:34:04 +1200
-Message-ID: <20260514003404.1548747-2-ronan.dalton@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.53.0
+	s=mail181024; t=1778718970;
+	bh=hKEzkWQOglLU6cByh2LmsHajF98FBytJqpKxeYHfBNk=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=h3mk7wRf1A1TFslZK6RGrgRoxrO0/F6Ye55JQAwHySFiJ+lUCAoGLOq5TFrPGDCNt
+	 2ZggYuDFTWVjBB8gYX7XY2u0BMgDvUw3dA71BPUYOM4patvKdyFJ0MILtafpTx4NiJ
+	 9zXb6rgzk/0BMD+0ELu8E+3BMoPnx5Qhs+FejwxdWmq6rxW+04iQjJP8pMih171IsR
+	 Oy2JOn+KXcrCQKp3jxm+dH3YsdJsIdU7F9aeOkc4Sb1EYzs954IEjpwy/j6UHRpPtO
+	 GPF7D1fzGQTtivqzN6C85zD0K4DHqtkfr1vClvVTsxvjXXxqjZGG3cRJIj8rjxCdNg
+	 5wtkNlmSU/Y7w==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B6a0518fa0001>; Thu, 14 May 2026 12:36:10 +1200
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.39; Thu, 14 May 2026 12:36:10 +1200
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1748.039; Thu, 14 May 2026 12:36:10 +1200
+From: Ronan Dalton <Ronan.Dalton@alliedtelesis.co.nz>
+To: "linux@roeck-us.net" <linux@roeck-us.net>
+CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Chris Packham
+	<Chris.Packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH] hwmon: (nct7802) Add time step attributes for tweaking
+ responsiveness
+Thread-Topic: [PATCH] hwmon: (nct7802) Add time step attributes for tweaking
+ responsiveness
+Thread-Index: AQHc4zcUuc9evSL/uk+yq2ZvjD3IabYL47eA
+Date: Thu, 14 May 2026 00:36:09 +0000
+Message-ID: <9bf867c1bef8166705182a73f664d2d2313fc684.camel@alliedtelesis.co.nz>
+References: <20260514001701.1533275-2-ronan.dalton@alliedtelesis.co.nz>
+In-Reply-To: <20260514001701.1533275-2-ronan.dalton@alliedtelesis.co.nz>
+Accept-Language: en-US, en-NZ
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=Es1xrjcA c=1 sm=1 tr=0 ts=6a051896 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VwQbUJbxAAAA:8 a=_jlGtV7tAAAA:8 a=YTW7iPMTII0yQG4K03oA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=nlm17XC03S6CtCLSeiRr:22
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=Es1xrjcA c=1 sm=1 tr=0 ts=6a0518fa a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=BhaoXNk7gXQA:10 a=8nJEP1OIZ-IA:10 a=NGcC8JguVDcA:10 a=XFHmKnU1uVBh4PVQG0MA:9 a=3ZKOabzyN94A:10 a=wPNLvfGTeEIA:10 a=UzISIztuOb4A:10
 X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
 
-The nct7802 chip exposes two registers that allow setting the time
-interval between successive duty increases or decreases in Smart Fan
-mode. The units are intervals of 0.1 second. The default value at power
-on is 10, so 1 second.
+Oops, I accidentally sent the patch without (v2).
 
-Add sysfs attributes for step_up_time and step_down_time to allow
-controlling the responsiveness of the fan speed. Values are represented
-as milliseconds to the user. When set, the value is clamped to the valid
-range of 100 to 25500 (0.1 to 25.5 seconds), and rounded to the nearest
-multiple of 100.
-
-Signed-off-by: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-hwmon@vger.kernel.org
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
-Changes in v2:
-- Require base 10 when parsing input number in step_time_store
-
- Documentation/hwmon/nct7802.rst | 16 ++++++
- drivers/hwmon/nct7802.c         | 91 +++++++++++++++++++++++++++++++++
- 2 files changed, 107 insertions(+)
-
-diff --git a/Documentation/hwmon/nct7802.rst b/Documentation/hwmon/nct780=
-2.rst
-index 8b7365a7cb32..366050ea595c 100644
---- a/Documentation/hwmon/nct7802.rst
-+++ b/Documentation/hwmon/nct7802.rst
-@@ -24,6 +24,22 @@ speed sensors.
-=20
- Smart Fan=E2=84=A2 speed control is available via pwmX_auto_point attrib=
-utes.
-=20
-+Sysfs Attributes
-+----------------
-+
-+Sysfs attributes unique to this chip are documented below. For common
-+attributes, see Documentation/hwmon/sysfs-interface.rst.
-+
-+step_up_time
-+			Time interval between successive duty cycle increases
-+			when in Smart Fan mode. Specified in milliseconds and
-+			rounded to intervals of 100 in the range 100-25500.
-+
-+step_down_time
-+			Time interval between successive duty cycle decreases
-+			when in Smart Fan mode. Specified in milliseconds and
-+			rounded to intervals of 100 in the range 100-25500.
-+
- Tested Boards and BIOS Versions
- -------------------------------
-=20
-diff --git a/drivers/hwmon/nct7802.c b/drivers/hwmon/nct7802.c
-index 8c9351da12c6..faa2988e40f8 100644
---- a/drivers/hwmon/nct7802.c
-+++ b/drivers/hwmon/nct7802.c
-@@ -47,6 +47,8 @@ static const u8 REG_VOLTAGE_LIMIT_MSB_SHIFT[2][5] =3D {
- #define REG_PWM(x)		(0x60 + (x))
- #define REG_SMARTFAN_EN(x)      (0x64 + (x) / 2)
- #define SMARTFAN_EN_SHIFT(x)    ((x) % 2 * 4)
-+#define REG_SMARTFAN_STEP_UP_TIME	0x6e
-+#define REG_SMARTFAN_STEP_DOWN_TIME	0x6f
- #define REG_VENDOR_ID		0xfd
- #define REG_CHIP_ID		0xfe
- #define REG_VERSION_ID		0xff
-@@ -560,6 +562,77 @@ beep_store(struct device *dev, struct device_attribu=
-te *attr, const char *buf,
- 	return err ? : count;
- }
-=20
-+static ssize_t step_time_show(struct device *dev, struct device_attribut=
-e *attr,
-+			      char *buf, bool step_up)
-+{
-+	struct nct7802_data *data =3D dev_get_drvdata(dev);
-+	unsigned int reg, val;
-+	int ret;
-+
-+	if (step_up)
-+		reg =3D REG_SMARTFAN_STEP_UP_TIME;
-+	else
-+		reg =3D REG_SMARTFAN_STEP_DOWN_TIME;
-+
-+	ret =3D regmap_read(data->regmap, reg, &val);
-+	if (ret < 0)
-+		return ret;
-+
-+	return sprintf(buf, "%u\n", val * 100); /* Convert from ds to ms */
-+}
-+
-+static ssize_t step_up_time_show(struct device *dev,
-+				 struct device_attribute *attr, char *buf)
-+{
-+	return step_time_show(dev, attr, buf, true);
-+}
-+
-+static ssize_t step_down_time_show(struct device *dev,
-+				   struct device_attribute *attr, char *buf)
-+{
-+	return step_time_show(dev, attr, buf, false);
-+}
-+
-+static ssize_t step_time_store(struct device *dev,
-+			       struct device_attribute *attr, const char *buf,
-+			       size_t count, bool step_up)
-+{
-+	struct nct7802_data *data =3D dev_get_drvdata(dev);
-+	unsigned long val;
-+	unsigned int reg;
-+	int ret;
-+
-+	ret =3D kstrtoul(buf, 10, &val);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Clamp range, and convert from ms to ds */
-+	val =3D DIV_ROUND_CLOSEST(clamp_val(val, 100, 25500), 100);
-+
-+	if (step_up)
-+		reg =3D REG_SMARTFAN_STEP_UP_TIME;
-+	else
-+		reg =3D REG_SMARTFAN_STEP_DOWN_TIME;
-+
-+	ret =3D regmap_write(data->regmap, reg, val);
-+
-+	return ret ? : count;
-+}
-+
-+static ssize_t step_up_time_store(struct device *dev,
-+				  struct device_attribute *attr,
-+				  const char *buf, size_t count)
-+{
-+	return step_time_store(dev, attr, buf, count, true);
-+}
-+
-+static ssize_t step_down_time_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	return step_time_store(dev, attr, buf, count, false);
-+}
-+
- static SENSOR_DEVICE_ATTR_RW(temp1_type, temp_type, 0);
- static SENSOR_DEVICE_ATTR_2_RO(temp1_input, temp, 0x01, REG_TEMP_LSB);
- static SENSOR_DEVICE_ATTR_2_RW(temp1_min, temp, 0x31, 0);
-@@ -975,12 +1048,30 @@ static const struct attribute_group nct7802_auto_p=
-oint_group =3D {
- 	.attrs =3D nct7802_auto_point_attrs,
- };
-=20
-+/* 7.2.102 0x6E FANCTL Step Up Time Register */
-+static SENSOR_DEVICE_ATTR_RW(step_up_time, step_up_time, 0);
-+
-+/* 7.2.103 0x6F FANCTL Step Down Time Register */
-+static SENSOR_DEVICE_ATTR_RW(step_down_time, step_down_time, 0);
-+
-+static struct attribute *nct7802_step_time_attrs[] =3D {
-+	&sensor_dev_attr_step_up_time.dev_attr.attr,
-+	&sensor_dev_attr_step_down_time.dev_attr.attr,
-+
-+	NULL
-+};
-+
-+static const struct attribute_group nct7802_step_time_group =3D {
-+	.attrs =3D nct7802_step_time_attrs,
-+};
-+
- static const struct attribute_group *nct7802_groups[] =3D {
- 	&nct7802_temp_group,
- 	&nct7802_in_group,
- 	&nct7802_fan_group,
- 	&nct7802_pwm_group,
- 	&nct7802_auto_point_group,
-+	&nct7802_step_time_group,
- 	NULL
- };
-=20
---=20
-2.53.0
+Please disregard.
 
