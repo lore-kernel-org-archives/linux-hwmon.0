@@ -1,122 +1,80 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A524E2857EE
-	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 06:18:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FC7C38F929;
+	Thu, 14 May 2026 06:49:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778739497; cv=none; b=KfWoOCMklLB4otxYNEo9beeqJqs5W4KLTTkZ31gIaqjJ+jkQfD3Avpl4WJl6VNKdBen3Z7i3VCBJCRwuCPH+qJap3wk6JeXsNsb5T2ssO89NNEiT3bk8En+j+M7KN8h8kMcAJBEtvbU2ub8AStRhg8CQ1l2IbGvklSee93GPht4=
+	t=1778741344; cv=none; b=A3mHQJdkq8suXr7XcmKiXpLmiz7fWx+tZsqRdaCov2NFv4r7rUntzUnq+RNuh1bPc6l1HWLuvYsFXl485IdR9bFx1q8lAfK9M3dmCbv7uV2TLGZU1WTU9GQ5Kq59LU8A6Xsd2tWVqFz1KoqyW4Ecb8xCwHdaaRhmWycIFOW5Ue0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778739497; c=relaxed/simple;
-	bh=qc2Regf4nWSwFLUT5KladB5dyvaD7UUFFunvcJiXPDU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=bMH6uJ7gZFN9tnwbRUK0Xs+z7d+UjwLVh5FrlFdCR0k8FcxgtqBxNUXdtXbvvV1rRSJjSE3h45JcjRUOz5y+kI5ztuhLpLIPQgJ30haLIL5Lwd6gW7wdUnxRYSNGXKC3J2G/eSibOKnVp/ywRRLV9vn3jd1ytFHiJGw0mn3e8CE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ERgZ4DkW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778741344; c=relaxed/simple;
+	bh=ScTbkdHtQwGqkowBWsSjhjRkE6Kb+/LGJ07lyfcr+U4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lriehd02FvMoQ0uufXh/IgrQ2aNo6FiYjIFeira28vPGzCrbwfV0Y6gCFF7yUC3EJjeBBTuQyOOOzxs0OzzuqzeDcO5TzX2E9DmhWNE3dRpov8Pv7EF0NQjkN1o4OVZ1pdk1zpT+IOOHXdoK6wEVlT70N1lJxl5s08IG4m5/YoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=rjqpkp0W; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ERgZ4DkW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 270BDC2BCC9;
-	Thu, 14 May 2026 06:18:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778739497;
-	bh=qc2Regf4nWSwFLUT5KladB5dyvaD7UUFFunvcJiXPDU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=ERgZ4DkWS5R+/jwBqM7sB/iDuHNQg7P/RTWHX4sG+OIwfISqIyWmIv04SYNbIxyy+
-	 WBiUGe87oqBvAPbMYrpq/79PAmT1Tc5YrtoI3Sl+rGIvGj4fNAwWDZ+ViEsWIRRbKf
-	 Hdn/hfl0E0bVEnQqtaWPN8YVxB4AVz6ufB0uJK/HEpc1dWG7Wtr5AZfBRIwNpVRU0J
-	 dayLslYSWPyV1woJj9GWdWssWaeex9olZRA3chbQou06lbLUspCadZzG8qVeVkFa6R
-	 rM2DinorW/ysCHD1YAEdS6qOJvYri/poN+8uVGMvc0obgbyezxsrDi6zt0JmMtWXZH
-	 0WnvInG8qjbuQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/4] hwmon: (lm90) Use guard() to acquire subsystem lock
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Guenter Roeck" <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260513142514.419345-3-linux@roeck-us.net>
-References: <20260513142514.419345-3-linux@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 14 May 2026 06:18:16 +0000
-Message-Id: <20260514061817.270BDC2BCC9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="rjqpkp0W"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA1CAC2BCB7;
+	Thu, 14 May 2026 06:49:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1778741344;
+	bh=ScTbkdHtQwGqkowBWsSjhjRkE6Kb+/LGJ07lyfcr+U4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rjqpkp0WQIRm9dgM5y5Y/4JTN1V+PEHl5Ifbr7UWYeHD6WROSNpbjXEPZ6bQ0eU+J
+	 mMzx0UqRapFU76U0xsAY/BdR116hHq1mwy2ifivXLXaGs2M0EuycoDjpS8D4ri4iIA
+	 P53bjzBKT4DGAm9h7MnhuPT51SAqMLnjpTYe6Ngk=
+Date: Thu, 14 May 2026 08:48:19 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Andy Shevchenko <andriy.shevchenko@intel.com>,
+	Alex Tran <alex.tran@oss.qualcomm.com>,
+	Jyoti Bhayana <jbhayana@google.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Sudeep Holla <sudeep.holla@kernel.org>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Linus Walleij <linusw@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Viresh Kumar <viresh.kumar@linaro.org>, linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 0/5] scmi: Log client subsystem entity counts
+Message-ID: <2026051441-agreed-suffice-bbe1@gregkh>
+References: <20260513-scmi-client-probe-log-v1-0-00b47b1be009@oss.qualcomm.com>
+ <agS8udcvqgQmiqB4@ashevche-desk.local>
+ <1f2fb1de-ebc8-40ef-ac53-3348499295e3@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1f2fb1de-ebc8-40ef-ac53-3348499295e3@roeck-us.net>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] Devm registration ordering causes a Use-After-Free of `data->hwmon=
-_dev` if delayed works run during driver removal.
-- [High] Modifying `data->config` in `lm90_alert()` without holding `hwmon_=
-lock` creates a data race with sysfs operations.
---
+On Wed, May 13, 2026 at 11:27:21AM -0700, Guenter Roeck wrote:
+> On 5/13/26 11:02, Andy Shevchenko wrote:
+> > +Greg (I believe the trend is to drop such messages and not add them [back]?)
+> > 
+> 
+> Is there some common guidance on this ? I'd be all for dropping messages
+> instead of adding them, but there seems to be a perpetual battle between
+> people who want to log everything and people concerned about logging noise.
+> As maintainer I always seem to be stuck between those two camps.
 
-commit 7118ba7da109d5ac53da9e4739a437d57be7a2f6
-Author: Guenter Roeck <linux@roeck-us.net>
-Subject: hwmon: (lm90) Use guard() to acquire subsystem lock
+When drivers work properly, they should be quiet.  This patch series
+adds a bunch of dev_info() calls, which is not ok.  If a developer wants
+to see extra messages, use the dev_dbg() infrastructure, or the tracing
+infrastructure, both of which are there for this very reason.
 
-This commit converts the lm90 driver to use the scope-based guard() macro
-for acquiring and releasing the hardware monitoring subsystem lock, replaci=
-ng
-the explicit hwmon_lock() and hwmon_unlock() calls.
+So yes, I agree with Andy, this series is not ok, don't make more noise
+please.
 
-> diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-> index 3c10a5066b53d..9ca49abc1a93a 100644
-> --- a/drivers/hwmon/lm90.c
-> +++ b/drivers/hwmon/lm90.c
-> @@ -1222,13 +1222,8 @@ static int lm90_update_alarms_locked(struct lm90_d=
-ata *data, bool force)
-> =20
->  static int lm90_update_alarms(struct lm90_data *data, bool force)
->  {
-> -	int err;
-> -
-> -	hwmon_lock(data->hwmon_dev);
-> -	err =3D lm90_update_alarms_locked(data, force);
-> -	hwmon_unlock(data->hwmon_dev);
-> -
-> -	return err;
-> +	guard(hwmon_lock)(data->hwmon_dev);
+thanks,
 
-Can this cause a use-after-free of data->hwmon_dev if the delayed works
-run during driver removal?
-
-This is a pre-existing issue, but looking at lm90_probe(), the devm action
-to cancel the alert_work and report_work (lm90_restore_conf) is registered
-in lm90_init_client() before devm_hwmon_device_register_with_info() is call=
-ed.
-
-Because devm executes cleanup actions in reverse order during module
-unbind or probe failure, the hwmon device is unregistered and freed first.
-
-If lm90_alert_work() or lm90_report_alarms() runs in the window between
-the hwmon device being freed and the delayed works being cancelled,
-lm90_update_alarms() will dereference the freed data->hwmon_dev here.
-
-Is there also a data race when modifying data->config in lm90_alert() witho=
-ut
-holding the subsystem lock?
-
-This is another pre-existing issue. lm90_alert() executes in the smbus alert
-context and calls lm90_update_confreg() to disable the hardware alert line,
-without acquiring hwmon_lock.
-
-Concurrently, sysfs write operations (such as lm90_write_convrate) hold
-the hwmon_lock, temporarily modify data->config, and then restore it.
-
-If an alert interrupt occurs concurrently with a sysfs write, the sysfs
-path will overwrite the alert handler's modifications to data->config
-and the hardware register.=20
-
-This unintentionally re-enables the hardware alert line while the alarm is=
-=20
-still active, causing an interrupt storm.
-
-> +	return lm90_update_alarms_locked(data, force);
->  }
-> =20
->  static void lm90_alert_work(struct work_struct *__work)
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260513142514.4193=
-45-1-linux@roeck-us.net?part=3D2
+greg k-h
