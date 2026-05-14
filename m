@@ -1,107 +1,106 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5347E3DCDAB
-	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 15:41:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1533423A62;
+	Thu, 14 May 2026 15:44:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778773288; cv=none; b=Ja6jUgk6ZnDOehctiMsUODr7ri4xSftpORuHwXUutOfNDr6diIj2RuSdAX5NeuBMBdjO7w8/cWhI1E3VxDr3V0X38Cc4kyo0FNGH+oygrFF2Soo2pxrTkKtRxdBQhMDGkipZLh7pXAWDaaDbUiBe/zzVHEAXdlyXHDkhWKr9zho=
+	t=1778773475; cv=none; b=F/PNjlVDGT0riO/6nhaA1eTyogE5Js9qkp71ER2Vq6xQfBfM8mhxPZkTfVLcigxGUC1ukvXsEbrbo6HDmY0zSW1yBe3hUWhdDI1Y6JYeHj1a3qmir397yn6bdwI117t9Oh7VIY96NVMzXri0SXaUMNMuzvsaTfNW9dqeaoIQuiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778773288; c=relaxed/simple;
-	bh=LqWHZ889FfjSUsJJDSnXMSZ2jEN+n2I+ZNi6tiS8o0k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fs5xicp4S8Q08YK3lHmB+qt829EILMcnf1aJDGOC3HUPb7owahIjnsqqogL+0WeLaDNz0xeBq/Pbko7DOpAp2C4czGEI/TiJwfufUaCjxmLGgkn+SGnDHc5iZIsPqcuUfJcufoj9wKHZdM7zFer8j7LPRT5WyhaSHOfbo/KhhoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sey3l20T; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778773475; c=relaxed/simple;
+	bh=CVhvSu6SkBppssOg7G5C2DGY9lLATzw7R1N/Bet/nzg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QC1F2BIB+C7o99mOvr+8/71qVZnmZ2JxM7vUW4x3CrjpGC74y7OlyWmoAZNTZAiw0MsohCPTglMV0kvyPnh5ocQBKYQCHdhUwjcKTUsu1L2/TuWYVLAwXzSNQessC89dr7AyaoGaiUkTI4WowY8g2iFIey5ogiHD0I5bwiaVPO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OfPF7T8D; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sey3l20T"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3664df32e91so6998360a91.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 08:41:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778773286; x=1779378086; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aGhCi4yyqYpXjwh9zUcoDYb6CxobDy3aAgcw86g1Gxg=;
-        b=Sey3l20TjQtCr5hjE4GJMA8p+IlJZHoPPxekbkSEqo2myBv4QSdYwLdlnQeKYBcmwi
-         lmqixjwczKgBX/skSsFyw0qngDBEnkvNxsUlnlnQMVY6b88DifDHqPWm99J5z6N+xO2M
-         FLaKtmlc/xaxfprkVs1U2EQDpN2zXfMA1Gs3IhJPbiGXdHSgr0VQAcL/+TJgrw9bEYDs
-         a8VPwdpLBayhLFKUcJRsPZUwjR8lPcmXJRKSxKKF91J6YVU42/D8YLc1SFjkdfZAGlrv
-         djkswI/+OP6RKtyF2NBjt5uoJzWaRA+OKnwM85WEs/Xko1Gw0Kc8NvW3/Rs9pMbiHZve
-         NRmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778773286; x=1779378086;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aGhCi4yyqYpXjwh9zUcoDYb6CxobDy3aAgcw86g1Gxg=;
-        b=IoUhYRXx1yj8vzhoq8ZDsIS6EWUz80LXra6RQzsOMG7hkV/HzyUO0Lm2uKyYw/ckvU
-         IgagC+ZdlAn19wDnSouPxe2qGVPqcMSd4dBu9EhvKKDucGcgtbSZQ1jFwNwAGluKmBcE
-         zCY5Tec77N25Wcx9R80t5Gwug1SxSA+vlTfDPFNYXdikWLEMd4HZBahqKJmojckkXatb
-         oGeYCFctxEBWuRRWCYPt2KFZXOahAmL4eXFo/vHzt+A9EiPP+i9ShJCgnm9yLBqlV+UK
-         w8rhzYSVKYMO2JtmdKvTAe4HPziPa1VP+8GBc3E8k5hEQ0mhcCPjWRskkfxTbf+V//52
-         bERQ==
-X-Forwarded-Encrypted: i=1; AFNElJ94hcl2lE4mQc3H4U7OzWbavnYhLgIkffhFRS1CtnTAla+zjaK37Da42g+MnWq36CLPrbM70LC9CtsjZw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwK94fvEwgpr1NMT1tP7po5jNEv5fXK1v26Pr5Hv51F/FXRhvfb
-	FHjHemfeLK+8EAT5P8WqUZgfXS4eZOszYRzdKFKiUuprwPputlWzL3cl
-X-Gm-Gg: Acq92OES5hpYOcR2vhactzxb7vNi8SWLd3Hrs86TsFrpRnVgyw5caR9/Zx98u0Cn+aE
-	kwdhOLrmIj9i+Azeb53o0m6JqRY3pjlk+iQEnaEfpUezNG8VKJJXvxjKJZZiBBMhPBZnknhiv0Z
-	JnmLy1+evfOpEXBA9TTqnxmmMdDUJb3xmozZrg2WwLOxKFutMtHV4mF1u9a7QRhAboNwYY6Ecsz
-	0uncVwqkTMcRzR8XC1k/5gvlkBn+1yZ8aKOF6ny6qH0I3tpCTMxR5PB6o3Vd+6OKls6RRYvk0h5
-	6U2BRkg13BZ3IxwgRVeZgXB3l1rCD0u2mZgAdAHEyIxcOQVQEbszOKOrDx1+vuf+N10rfyA343q
-	5Vohf0Jk3RBby10/Zv7ioIXmmTlJl6ccZnQ/jvMP9zwxL1GkaZOYzhwflcr7wkjcGXLhyLcOJBE
-	TdEDL5o3Js7zSTuTypXGViqT9xF7CXs9uFTZp8pRmAlxUGNXee8VCHY1DgYRKSfcQ/zh71KQhSs
-	TqAI1Bna5PVUeiPAGPKlq3NhrldrsHfekyoBAOnYCBkJ5bF5W73HBoXdPy4XX5dEQ==
-X-Received: by 2002:a17:90a:a81:b0:369:1dff:6bd5 with SMTP id 98e67ed59e1d1-3691dff76dcmr3620471a91.17.1778773286539;
-        Thu, 14 May 2026 08:41:26 -0700 (PDT)
-Received: from ERIC039ERIC.localdomain (1-170-163-225.dynamic-ip.hinet.net. [1.170.163.225])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5d23044csm28385315ad.78.2026.05.14.08.41.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2026 08:41:26 -0700 (PDT)
-From: Chen-Shi-Hong <eric039eric@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Chen-Shi-Hong <eric039eric@gmail.com>
-Subject: [PATCH] docs: hwmon: sy7636a: fix temperature sysfs attribute name
-Date: Thu, 14 May 2026 23:39:13 +0800
-Message-ID: <20260514154108.1937-1-eric039eric@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OfPF7T8D"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31F46C2BCB3;
+	Thu, 14 May 2026 15:44:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778773474;
+	bh=CVhvSu6SkBppssOg7G5C2DGY9lLATzw7R1N/Bet/nzg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=OfPF7T8Dkf57fQNYbdn1sJwBXS6alw7Q80vJL5FGwa2aKEx8wDyDBLGSLWsSEshsu
+	 Pn1xToB2PgjjLwZO2moTMx3IQ4j/GJussxwCtDD3BhgSJIw9qfu2RGM+IePNiMOu2e
+	 b6vVqN6As7QplUup4ak5gPy3O2D2Ri/ruJxq1IwnxJ9AhQbEid5RYXmOxbatN0RaNN
+	 W1H0TaDNZRCTLaovQQpHLbMI1jg3QzHUmGuhEgud8dgNYV9Hs0EvuRl5J5EfZhn4vI
+	 Rp+Orfxw6qDTq57H5bli8GIvbfV1OQQ7dubMPGcxe2pJGgTPJVECRXxLEo5s/InDVf
+	 VsflAmexmcR7Q==
+Date: Thu, 14 May 2026 16:44:22 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Alex Tran <alex.tran@oss.qualcomm.com>
+Cc: Jyoti Bhayana <jbhayana@google.com>, David Lechner
+ <dlechner@baylibre.com>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Andy
+ Shevchenko <andy@kernel.org>, Sudeep Holla <sudeep.holla@kernel.org>,
+ Cristian Marussi <cristian.marussi@arm.com>, Linus Walleij
+ <linusw@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Philipp Zabel
+ <p.zabel@pengutronix.de>, Viresh Kumar <viresh.kumar@linaro.org>, Guenter
+ Roeck <linux@roeck-us.net>, linux-iio@vger.kernel.org,
+ linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2 0/5] scmi: Log client subsystem entity counts
+Message-ID: <20260514164422.0eba9a61@jic23-huawei>
+In-Reply-To: <20260513-scmi-client-probe-log-v2-0-36607e9dd540@oss.qualcomm.com>
+References: <20260513-scmi-client-probe-log-v2-0-36607e9dd540@oss.qualcomm.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-The hwmon sysfs naming convention uses
-temp[1-*]_input for temperature channels.
+On Wed, 13 May 2026 10:16:53 -0700
+Alex Tran <alex.tran@oss.qualcomm.com> wrote:
 
-Documentation/hwmon/sy7636a-hwmon.rst currently documents
-temp0_input, while the driver uses the standard hwmon
-temperature channel interface.
+> SCMI client drivers do not consistently log the number of supported
+> entities discovered from firmware. This information is useful during
+> debugging because it shows which domains or resources were exposed by
+> firmware during probe.
+> 
+> Add logging of the number of supported entities to the SCMI cpufreq,
+> pinctrl, reset, hwmon, and powercap client drivers after a successful
+> probe. This aligns these drivers with the existing logging in the SCMI
+> power and performance domain drivers.
+> 
+> Signed-off-by: Alex Tran <alex.tran@oss.qualcomm.com>
+Hi Alex,
 
-Update the documentation to use temp1_input.
+Just curious but why +CC linux-iio and IIO folk?
 
-Signed-off-by: Chen-Shi-Hong <eric039eric@gmail.com>
----
- Documentation/hwmon/sy7636a-hwmon.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+May be you had a false suggestion to add them from get maintainers.
+If so be sure to check it's suggestions make sense!
 
-diff --git a/Documentation/hwmon/sy7636a-hwmon.rst b/Documentation/hwmon/sy7636a-hwmon.rst
-index 0143ce0e5db7..03d866aba6e8 100644
---- a/Documentation/hwmon/sy7636a-hwmon.rst
-+++ b/Documentation/hwmon/sy7636a-hwmon.rst
-@@ -22,5 +22,5 @@ The following sensors are supported
- sysfs-Interface
- ---------------
- 
--temp0_input
-+temp1_input
- 	- Temperature of external NTC (milli-degree C)
--- 
-2.53.0
+Not to worry - we can all hit the delete button ;)
+
+Jonathan
+
+
+> ---
+> Changes in v2:
+> - Use dev_dbg instead of dev_info log level
+> - Link to v1: https://lore.kernel.org/r/20260513-scmi-client-probe-log-v1-0-00b47b1be009@oss.qualcomm.com
+> 
+> ---
+> Alex Tran (5):
+>       powercap: arm_scmi_powercap: Log number of powercap domains
+>       cpufreq: scmi-cpufreq: Log number of perf domains
+>       hwmon: scmi-hwmon: Log number of sensors
+>       reset: reset-scmi: Log number of reset domains
+>       pinctrl: pinctrl-scmi: Log number of pins, groups, functions
+> 
+>  drivers/cpufreq/scmi-cpufreq.c       |  5 ++++-
+>  drivers/hwmon/scmi-hwmon.c           |  1 +
+>  drivers/pinctrl/pinctrl-scmi.c       | 11 ++++++++++-
+>  drivers/powercap/arm_scmi_powercap.c |  1 +
+>  drivers/reset/reset-scmi.c           |  8 +++++++-
+>  5 files changed, 23 insertions(+), 3 deletions(-)
+> ---
+> base-commit: 1bfaee9d3351b9b32a99766bbfb1f5baed60ddef
+> change-id: 20260509-scmi-client-probe-log-173cf85d5563
+> 
+> Best regards,
 
