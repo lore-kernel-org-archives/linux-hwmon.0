@@ -1,97 +1,65 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930AC3845AA;
-	Thu, 14 May 2026 10:38:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20C53AFAFF;
+	Thu, 14 May 2026 11:43:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778755092; cv=none; b=Ricecf8eZFeQRIuxFhfpwZblrjsr2HD4gOeCld/Sb1t9ep6Fj0r8jYSVnzVoxdwxsinzXjrv0iwzo8qqOkxAfvraEkJYCHRkqwpluwHaPHPhHyAaQJE6OW8saLBoZacSo3rsKOq2YedEZZBff02EoGinFyhaswSJeijAXYs0waU=
+	t=1778759004; cv=none; b=CltZaqrLRZlmjXV4IKaLb20MiHPIiEDbCXZAevjhUOlhA2CBMRc7LU0oaBoSZR/OUzu59M4M6Csj1ACkiz9PZtlakb7rfbmVbzHJzEgHsprRR2AzVhxXF94afiRBOfvuXejxZxPo/XsVXv2FHGPWqA5ePR+t5jlN+rUHRyU7lf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778755092; c=relaxed/simple;
-	bh=6KuqpnKj9sobxjDeqvX+sSPZ/QSHETFRdP4dGEBM9Kk=;
+	s=arc-20240116; t=1778759004; c=relaxed/simple;
+	bh=8uvHL9zd/W4MzaGePykxvJrwfNXRylh/wVLnkJKzd7E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IK1YD+gIhASAc6Sy4egXO+hOn3OpmObEJdQCKHqdD6VPvs0+T8LDH9e0nj85vKiv+ft7xSdpzxDmorICJEUHMkIgjsogLLYuoe0cdTA6LWSML2IOerOBkkkCtZD3L3WfF8o3aRccG/PWUqXgta07Qzg6IdaM5Tq/NfOk2TvNrWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CP2+Q6k+; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=EfNy9CgZyEFHP+gCABmVkmJtfx/+H/8f5kyLtbcOYL7QkMeh8FrMBggy6WzlFhW/gyph3pnjSIu64XmCxeSlEvmVA2vGWsR2IrFtDtbBdlsoryuz464/fzPdlGn+9U64aY4gBziGEmXNz3tCzX3ereGskoA7CXhSJpK84N7nis0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=faHWajg1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CP2+Q6k+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D05ABC2BCB3;
-	Thu, 14 May 2026 10:38:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="faHWajg1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2B4FC2BCB3;
+	Thu, 14 May 2026 11:43:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778755092;
-	bh=6KuqpnKj9sobxjDeqvX+sSPZ/QSHETFRdP4dGEBM9Kk=;
+	s=k20201202; t=1778759003;
+	bh=8uvHL9zd/W4MzaGePykxvJrwfNXRylh/wVLnkJKzd7E=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CP2+Q6k+vOdNmZMCBg/czK3/XTzKq0VLFIDXnQfI8q1f+VEZYn5dEFbuxpbhMVrKZ
-	 LcDgW9pgW31NqQNAkn7M4q9P5MWsdEG75eNTJNuHXQu3VLIt8HrPHm/up/QrlZ3mY0
-	 fzPYe8svCetFMPVLD/SM0Yi3iVTZb0iVGk8XokfoS+fbK6L+SHkBqDT/iorLvpG0GL
-	 PQ5KaPxmJRTwQgTrA9hbLpPyHj25xksmDOIASEbpj14sISdX9+X/KOJo2yX7u0wUjc
-	 feFwDC2Dyev2jez7STICOVKK3blTa65kRGL11nWgCmZE1UFBSxg9fUCpd+b1OWCmNb
-	 jxpZVrv2QQt9w==
-Date: Thu, 14 May 2026 11:38:06 +0100
-From: Sudeep Holla <sudeep.holla@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Andy Shevchenko <andriy.shevchenko@intel.com>,
-	Alex Tran <alex.tran@oss.qualcomm.com>,
-	Sudeep Holla <sudeep.holla@kernel.org>,
-	Jyoti Bhayana <jbhayana@google.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Linus Walleij <linusw@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Viresh Kumar <viresh.kumar@linaro.org>, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 0/5] scmi: Log client subsystem entity counts
-Message-ID: <20260514-finicky-acoustic-flounder-2dd405@sudeepholla>
-References: <20260513-scmi-client-probe-log-v1-0-00b47b1be009@oss.qualcomm.com>
- <agS8udcvqgQmiqB4@ashevche-desk.local>
- <1f2fb1de-ebc8-40ef-ac53-3348499295e3@roeck-us.net>
- <2026051441-agreed-suffice-bbe1@gregkh>
+	b=faHWajg1RinoZINo2zzw/9LYhaBpCAO/WjniBeVywbskviXc90WOjIgzqclFC/aI+
+	 99AeFcPs33YWa+cGZgNI3dtza9vSrNN6mMPk8F60CeYfXMXbel+24P77oWLOGHCzX3
+	 5afJRDMXWTLXEQOl2iuzExQ1HaAlj9/f87CAAAoANqoU260Tb/TBlmi/1gtLGQHAIs
+	 YGn5u5Qot9sFHOCXYBtSiQBCXyrzOt3sUi2Q4jnioPE2ztJWRkvlR+Sa2nTVtHwVA3
+	 Z7B7iwQTQr/BQYijqwo04L95gaThQ05dOGIbr0/vTEshL02soTccdt4y336+ODOgJA
+	 nUYG05ef2ywGg==
+Date: Thu, 14 May 2026 13:43:21 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: trivial-devices: Add Murata D1U74T
+ PSU
+Message-ID: <20260514-dazzling-ethereal-bumblebee-d9b69e@quoll>
+References: <20260513-d1u74t-v3-0-27bcd6852c45@nexthop.ai>
+ <20260513-d1u74t-v3-1-27bcd6852c45@nexthop.ai>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2026051441-agreed-suffice-bbe1@gregkh>
+In-Reply-To: <20260513-d1u74t-v3-1-27bcd6852c45@nexthop.ai>
 
-On Thu, May 14, 2026 at 08:48:19AM +0200, Greg Kroah-Hartman wrote:
-> On Wed, May 13, 2026 at 11:27:21AM -0700, Guenter Roeck wrote:
-> > On 5/13/26 11:02, Andy Shevchenko wrote:
-> > > +Greg (I believe the trend is to drop such messages and not add them [back]?)
-> > > 
-> > 
-> > Is there some common guidance on this ? I'd be all for dropping messages
-> > instead of adding them, but there seems to be a perpetual battle between
-> > people who want to log everything and people concerned about logging noise.
-> > As maintainer I always seem to be stuck between those two camps.
-> 
-> When drivers work properly, they should be quiet.  This patch series
-> adds a bunch of dev_info() calls, which is not ok.  If a developer wants
-> to see extra messages, use the dev_dbg() infrastructure, or the tracing
-> infrastructure, both of which are there for this very reason.
-> 
+On Wed, May 13, 2026 at 03:33:02AM -0700, Abdurrahman Hussain wrote:
+> The Murata D1U74T-W is a PMBus-compliant AC/DC power supply unit. The
+> binding only declares the compatible string and i2c reg, with no
 
-I completely agree and tend to follow that. But I always assumed it was
-left to maintainers taste.
+Describe the hardware, not binding. What does the hardware have?
+Supplies? Pins? Clocks? Interrupts?
 
-> So yes, I agree with Andy, this series is not ok, don't make more noise
-> please.
-> 
 
-I am now thinking if [1] was the one setting example for this series. I did
-ack it as I left it to the subsystem maintainer's choice(in this case author
-as well).
+> additional properties (no regulators, no supplies), so add it to
+> trivial-devices.yaml rather than carrying a standalone binding file.
 
--- 
-Regards,
-Sudeep
+Best regards,
+Krzysztof
 
-[1] https://lore.kernel.org/all/20260304101457.7470-1-ulf.hansson@linaro.org/
