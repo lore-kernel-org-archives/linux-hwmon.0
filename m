@@ -1,43 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 656B01531C8;
-	Thu, 14 May 2026 01:00:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3E2E2FD69A
+	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 01:02:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778720446; cv=none; b=oOy3P8EezyJX/uEkO9hI4ySRSrqv9oYXm8MfWpIkHN0qqGJ2ojzPeUmaan4vRSfv63pKctGj4URNDrcWoJXM0PtuHC72GZVYQRpIw38A6gm9axO/VJDlG72O45yhrahIA3ZY2/nBqkH73H9QzH9xiJ5eMQhPkfcjD/Y/4hpByP8=
+	t=1778720529; cv=none; b=fJ/G5FWdLr1y6dGmLU24Ttacxs1biYAeKFy8RspLQ776iooAA9ykBkg2ruBwNeymN2hR6uCtF67QWosuDhK8qdy7Uh9x/4rnKMwwX8JqZA7dyrgH4xlIwZRi8sO6pH0OD2rl0KADhaGhsSOemrOdTzEbwxQIeHuJiMqSF1qYTq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778720446; c=relaxed/simple;
-	bh=c0dvtN3hG6NA848503CiLGO4uQ5N2nrPxiII+aSKRwY=;
+	s=arc-20240116; t=1778720529; c=relaxed/simple;
+	bh=DnH3fhyJCIN4Gbts01zgYwXmpoa71WrYFFa5xC9vJ4o=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=KvIB/3AEGLWD1yycd2TSjHJjuT8pnGkOaVau81eQ0HYQijWO25I2hWaOS8wpJ6O7H2hlkvMwHFX/Q0MyPwjwH2El8ZWYesna12SolRFnp1lErQttjOxwRVSDkY48xFV3zrkxdz3vefZ8XxYZrX6FEJHMyFP5+YH4DVI/AkkCIyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JTosgnBZ; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=cxkFmKt7pmy9MnjGwkFZnq8i2/z3z8s/wcEd67RFKmzkvfODpG6DUVQsaCu88YOtHwWoo7nkQ4r+G+bZKa/0ERXXUfVQjiNlAlO0hj+UFm193CwmiVkgDi8dPP09WoL8Bt7ZgTQDj/pgaDyGmx6L3d5LXwjifQKvZ6MktaH5DLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g+u9ncLh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JTosgnBZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9B52C19425;
-	Thu, 14 May 2026 01:00:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g+u9ncLh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C3ABC19425;
+	Thu, 14 May 2026 01:02:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778720446;
-	bh=c0dvtN3hG6NA848503CiLGO4uQ5N2nrPxiII+aSKRwY=;
+	s=k20201202; t=1778720529;
+	bh=DnH3fhyJCIN4Gbts01zgYwXmpoa71WrYFFa5xC9vJ4o=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=JTosgnBZPajai8gk08RhnzAdba4SJkF0nuui6R0J7gWEFtnPzXaakiHCIfY5ME0o/
-	 H1tr2qTYjOgqgaOq5Av1E3eSuT9h6GguE72r03LveTp1ynnxIeWeVG0r2L/idn27TL
-	 NkWSmtzDPSrnMl9ZVl4/QVQdn8CHSFDXINC/rYTOzqgWR2XZtheWUZUCEgRlKGfeAI
-	 UigXMLS4PJhKvHcIyLu1pshpvZXNaIMlIfDzzTpkXOPDgVNqBhTLa9WE9hIkp81k+w
-	 MnVRnMELOKQm4YnofwQXN5v8oHciRXNZlgpBFL6ix3wnTyv1WDfjExQ3Iy7Vq+lKvP
-	 kBWKRKzKqJi8g==
+	b=g+u9ncLhFl07JKCWYXf2tU32CRwJcxW7eqYW5ln27p6CqVBZ32+ZgdTPfppey5F7Q
+	 IZ5aW0cSP3mL2Nc77ODDKGYEzs2jFG6tf1Ji+xfyuF5LCDnlpiCntUi4O80FBM9Lwv
+	 7mxZPrD61FC6gMntlf9Gg0lVgie20Viuv2Goyus8VybwqtI9HL93Mr+4tZuxqQ7URa
+	 /lNKRf4Y/ph7O0tHx9hQLSZXfhYVIojICsGca5VHQ+Vf19yspdJsVZmzDFhiujjMlR
+	 nm/mR2ZfjaLCiQ1VT7CR6CtQGVRzRQSQipJOAzQ+CuyLrCb94S8Xd5iFIgUlQrjqfd
+	 4dPKYShag8FrA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 2/2] hwmon: add AMD Promontory 21 xHCI temperature
- sensor support
+Subject: Re: [PATCH 2/2] scsi: mpt3sas: add hwmon support
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jihong Min" <hurryman2212@gmail.com>
-Cc: linux-pci@vger.kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <20260512213910.871859-3-hurryman2212@gmail.com>
-References: <20260512213910.871859-3-hurryman2212@gmail.com>
+To: "Louis Sautier" <sautier.louis@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260512214703.655633-3-sautier.louis@gmail.com>
+References: <20260512214703.655633-3-sautier.louis@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 14 May 2026 01:00:45 +0000
-Message-Id: <20260514010045.D9B52C19425@smtp.kernel.org>
+Date: Thu, 14 May 2026 01:02:07 +0000
+Message-Id: <20260514010209.5C3ABC19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -46,57 +45,73 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] Using readb() on a 32-bit PCIe MMIO vendor data register may cause=
- unsupported request faults.
+- [High] Unprivileged user-space processes can flood the HBA firmware with =
+synchronous configuration requests, contending a shared mutex and causing a=
+ Denial of Service (DoS).
 --
 
-commit 9f079250f98377be1d241f6f3c08a14ae44d8785
-Author: Jihong Min <hurryman2212@gmail.com>
+commit 12785f6156b64bc1ece9061e087614ba8f75d567
+Author: Louis Sautier <sautier.louis@gmail.com>
 
-hwmon: add AMD Promontory 21 xHCI temperature sensor support
+scsi: mpt3sas: add hwmon support
 
-Add an auxiliary-bus hwmon driver for the temperature sensor exposed by
-AMD Promontory 21 (PROM21) xHCI PCI functions.
+This commit adds hardware monitoring support for LSI / Broadcom SAS HBAs,
+exposing IOC and board temperature sensors. The readings are obtained by
+querying MPI IO Unit Page 7 and exposed to userspace through standard
+hwmon sysfs files.
 
-> diff --git a/drivers/hwmon/prom21-xhci.c b/drivers/hwmon/prom21-xhci.c
+> diff --git a/drivers/scsi/mpt3sas/mpt3sas_hwmon.c b/drivers/scsi/mpt3sas/=
+mpt3sas_hwmon.c
 > new file mode 100644
-> index 0000000000000..7124824a1f5ed
 > --- /dev/null
-> +++ b/drivers/hwmon/prom21-xhci.c
-
+> +++ b/drivers/scsi/mpt3sas/mpt3sas_hwmon.c
 [ ... ]
-
-> +static int prom21_xhci_read_temp_raw_restore_index(struct prom21_xhci *h=
-wmon,
-> +						   u8 *raw)
+> +static umode_t
+> +_hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
+> +		  u32 attr, int channel)
 > +{
-> +	struct device *dev =3D &hwmon->pdev->dev;
-> +	u32 index;
-> +	u8 data;
-> +	int ret;
+[ ... ]
+> +	if (channel =3D=3D 0 && h->ioc_present)
+> +		return 0444;
+> +	if (channel =3D=3D 1 && h->board_present)
+> +		return 0444;
+> +	return 0;
+> +}
+[ ... ]
+> +static int
+> +_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+> +	    u32 attr, int channel, long *val)
+> +{
+> +	struct mpt3sas_hwmon *h =3D dev_get_drvdata(dev);
+> +	Mpi2ConfigReply_t mpi_reply;
+> +	Mpi2IOUnitPage7_t page;
+> +	int r;
 > +
-> +	ret =3D prom21_xhci_pm_get(hwmon);
-> +	if (ret)
-> +		return ret;
+> +	if (type !=3D hwmon_temp || attr !=3D hwmon_temp_input)
+> +		return -EOPNOTSUPP;
 > +
-> +	index =3D readl(hwmon->regs + PROM21_XHCI_INDEX_OFFSET);
-> +	/* Select the PROM21 temperature register through the vendor index. */
-> +	writel(PROM21_XHCI_TEMP_SELECTOR,
-> +	       hwmon->regs + PROM21_XHCI_INDEX_OFFSET);
-> +	data =3D readb(hwmon->regs + PROM21_XHCI_DATA_OFFSET);
+> +	r =3D mpt3sas_config_get_iounit_pg7(h->ioc, &mpi_reply, &page);
 
-Is it safe to use readb() on this 32-bit PCIe MMIO vendor data register?
+Could exposing this read to unprivileged users lead to excessive firmware
+requests and mutex contention?
 
-Many PCIe controllers and peripheral MMIO implementations strictly require
-32-bit transactions. Issuing an 8-bit read can result in a PCIe unsupported
-request, which may return 0xff or trigger a fatal PCIe error.
+Since the sysfs files are world-readable, any local user can read them in a
+tight loop. Every read directly calls mpt3sas_config_get_iounit_pg7(), which
+issues synchronous requests to the firmware over the PCIe bus and acquires
+the shared config_cmds.mutex:
 
-Could this instead use readl() and mask out the lowest 8 bits?
+_hwmon_read() ->
+    mpt3sas_config_get_iounit_pg7() ->
+        _config_request() ->
+            mutex_lock(&ioc->config_cmds.mutex)
 
-> +	/* Restore the previous vendor index register value. */
-> +	writel(index, hwmon->regs + PROM21_XHCI_INDEX_OFFSET);
-> +	readl(hwmon->regs + PROM21_XHCI_INDEX_OFFSET);
+Does this allow an unprivileged user to starve other storage subsystem
+components that rely on this mutex for administrative tasks or device
+discovery?
+
+Could we implement a caching mechanism (for example, caching the readings
+for a short period using jiffies) to rate-limit these firmware requests?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260512213910.8718=
-59-1-hurryman2212@gmail.com?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260512214703.6556=
+33-1-sautier.louis@gmail.com?part=3D2
