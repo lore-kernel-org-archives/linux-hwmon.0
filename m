@@ -1,155 +1,149 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6115F18AE2
-	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 03:39:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C892C3A5E8E
+	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 04:25:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778729949; cv=none; b=Zwsig1RMEt1mxbGl37lP963d9QurTEmic2r5nkxFjmpETBEUpkVJ6pMgc0rQV0MSa/CiHYLjcfD1P6p3qEN+yXDJNt+qsvXDJ0fj+QATR++0Yo4+Ym5SN2dbzkWVZues/JW0ztoiOabCyM13rGsZXPO3ZlF2zVj7qsjgMviN2/A=
+	t=1778732758; cv=none; b=URWeKk6oXIGD5/myT+iXlc/9pUIATbPThUeu7jKGcnxxmuCjL1rtV8G9cpbgabIvX88v1IuPywHIEdKi5BUPNqayHb3Kt/CD23wLFkKTgEVw8m7JHXtwyMFqUE3Nv39LAmdsRBxeyCfKKmX3RK3rBuSdRbGm614aweeQ0N/Or8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778729949; c=relaxed/simple;
-	bh=JI3Tic8kGKB1wdh+cjilfB7nx7M8j1Iv145J4brxnvg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mNKEikZs4B82IlsrWoHEv8pIJhkkrbNaRhNoxoyRtnXDMZvevIJFVIM3oP6+TDJJCZrCWIgworQxjfHdA9AY8R4ApRFwgn1e5gkpRd0BF2FjroBncNiVOIYitf73Cy/ek1kvjGUC4h+qfQhQKVPcAdXTK3q/hEQLUEc3XFMTisA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YscnQzUs; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778732758; c=relaxed/simple;
+	bh=Xk9UOkNIs/6BZtbVkVNxSjWkErNcowjkARNVXgeAc1o=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=DRsyZi9Ps8U9e03NtyMlKVD+RXe+ufePjVAhK7CL+qR/GJRb1t0VJVzAe2Qk47k/uWK6/fRPCRrgUepeYyisO4uqY64Lhc/8zFOHwzmZKPUIhRI4fes8xbKF90DWswoe5jE/TsJVO5rUNB0tKe9RcbJEnDWwJ7Lr0UTOl1+odj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai; spf=pass smtp.mailfrom=nexthop.ai; dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b=QU52XJy9; arc=none smtp.client-ip=74.125.82.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YscnQzUs"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48984d29fe3so80107485e9.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 20:39:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b="QU52XJy9"
+Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-12c8f9846c8so11257541c88.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 21:25:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778729947; x=1779334747; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=L9MV03PlSAgIq6woleWvfcysA/R9I3vTW8H0Yie2PHQ=;
-        b=YscnQzUsLfIL8cThKRo51clSC66ECXJGqUd2tgOn9oxQyM7i5JxZUO1HSgAe2QePr6
-         xiDiPTbxy8oOd8wvDYoSsvVE4NF3CJJA/VNKrMdnv/uxW62ZuFBDP1mY5WOyI2TFt0EV
-         GdwDCI98nItemvB5+kcVqu5cxZFsEXbYEkVdAXR/TxbUCORFlFInPenm87BnTYsMXmtB
-         E0QII6c8dCV+XbACa11OoCrldwFdu8CgAmVn+KJSinp+r3z3QHwaqwrcP21ZWwWFV3aG
-         ICcB7BoRAJcIjeBQknbpdddODBG5tUEUcrf8V1rGgabMBbkUOFcHsZTbqtSA3cPwpaJ9
-         +EJQ==
+        d=nexthop.ai; s=google; t=1778732756; x=1779337556; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=13EaFGhc9sBhjVtX9ZyJlLsTcSvLGmruzmbLxhBQiPU=;
+        b=QU52XJy9ZlRpHenIyK6djz3UFt5uUyNjvjP+VJMhdCP/KfXAvme8ULuhtDNGJ+mh66
+         altNc+sGEBOs2j6zO/w+EwJ8lgSMzGs+F0xOZXECk3Hzj/zoMTDPWybUWv3f09+Xz1w1
+         in2nzydjb5Bbx4ctbEKqsRP4z0KRqtdCaYaiN229N3YAkzFhXItF+xV5FhsQu5QtKd2n
+         91WnMFmMgGej8cJFsCufEWqZK4Ke3OG48pW9d0wqW9mu4yY10WChZEJFLJO17omUOLyX
+         kgihJ7K77lKVTJ3b5dC7dDc9cD+LSUYZ+0rhS1svBjNhz3F3Au7sfsWBKBAKMK7QuTN7
+         LECw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778729947; x=1779334747;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L9MV03PlSAgIq6woleWvfcysA/R9I3vTW8H0Yie2PHQ=;
-        b=KyaXjRiR2r3afABsNnBUpKQf55AhHJnBB2AZiUjlVD2yh7MhuIVIQKLfCBaStHNo9y
-         T7gLpIeqqt0WVfuxQVwggnu7C8sqklTRAKVo9fsB8cSPIdRxP5Lz5uC695QM1NY2/ufJ
-         fXUh6J5sx9hLmElq3Za4N3RCM5HtzrwzyIWvITgLrISaCGCJJwwUIB9Bp+5XM0BNjlkZ
-         y2BYD5x7f+OTN9UHjirio4yqDo+Kpn317r153k0xkJGnFBVzpMUt0lS7qlvLO6jXIg3L
-         dJT3viJRsvXSm8bxIbrqIEBVstvUPJEREDnhH08OnT+SnLEbkfmf7obmubtpf0cyxoMR
-         zwxg==
-X-Gm-Message-State: AOJu0YyG0NEEr1vSjCo3nf7a9MFk3fwNUriMkdoxufVBGQ0eKY/mD6EK
-	cgOzMq3/S3iWlEZs8417dbpnj4BGQzHLqrvfa03UqXAwMSYb3+6oFXFns6+jV7aB
-X-Gm-Gg: Acq92OENNISUpE3zdqGVAi8h7Q7CxFHuoyzo27tdZsLlqk3K2OY5+LLPWacgGyYW9fi
-	/QxrsYyOQPSjdMX09g1DEIdybsnxoP2E/s3KPJ8FyBLw8FK7qlnCQzU0Zn9hnMzpGqAZZfPI0u3
-	CS8PD77B7zJXbG78vq+ssyuvo5HO5AsYzzkWPsr3W/KstYFYGJL27sNTpmKEMPuYcd6O1LYeGfD
-	lmVRj+rabNuQlaxk4f8T9T1Es7iR95U14NiBsxAyomA5KENgWCsVp9nXj8yQnnOaOopSiEsv6wb
-	jjqLbzx3ChjVbDDZiy/mC8l/QsbnFWtsdtaoWeQtUDxL2RsP4nAzfc3nNok306M8Kq+ZHINZd3l
-	G19Tnyouc0aEoBoJiS2fkENCFarv2j1j9elBxDlhgXasyzMWisXX7keXb4KH7MoMdIpQDCSYYGG
-	Hnk0LBhsMuvtP20R7XTMq6/8xUpKXKwHj51UmZTQ==
-X-Received: by 2002:a05:600c:444b:b0:48e:706b:53e3 with SMTP id 5b1f17b1804b1-48fc9a0231emr91759905e9.1.1778729946546;
-        Wed, 13 May 2026 20:39:06 -0700 (PDT)
-Received: from localhost ([2001:863:36e:5104:a331:7451:88e0:34ca])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fdb271468sm16981835e9.4.2026.05.13.20.39.05
+        d=1e100.net; s=20251104; t=1778732756; x=1779337556;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=13EaFGhc9sBhjVtX9ZyJlLsTcSvLGmruzmbLxhBQiPU=;
+        b=ioqyeP3yUS/9vtvyRikLAzk56P8oY9foyOtP37Ta2RsyEW5ipw1h4SmEm8J8dU7+22
+         jTQxiU5HlzOK50AhSusLQPb3L7q/YFY5aDKsq6D2DW+YaZ40bwEvGdVcQ3u+0KDfqL/+
+         a/tlgwPW10teP5KryXxN0QRn0x4orvDr6vcKc1JBCl9aAk2MP4CMZiJwINTW262qf0Z0
+         d+QgaU5FECYAEn6XfvOPvFZvp/1EQzm9iaoa7GMNbCI9QTk8VphHRJYYWURiJihBBxj1
+         zakChwzo+E2r4PHPhXd5SAM0zeQ4WpfvuCQ/33yb0hhWPRL53T+CcvZUdbfhnHzlKAGT
+         1Afw==
+X-Gm-Message-State: AOJu0YyvXOy8T+Ld29oeIgSg5zM0llrQc7BtrIpfXtw1TNu/zCDdfVtH
+	ReVOMyWvebb3YMzc5jAimTu6gfb71uu6EEndCQ3jA4qwjjOIgjhAVnnmm25Cfp//U4A=
+X-Gm-Gg: Acq92OERpenVtQc7X2pLiMKoz99iWcPcWZvlrxLhnLW1WyAjIMqB+KCyoZy8PbpDhzf
+	XAuLFc/e+fq9gah2F5MzbRyHvz+KPEbAcmUXh1zSStr5X3RSVyhC0+HBUH+rZR7glo4A9TEAduo
+	h3LBSivnQ50R0NBDXFaUp2rATdlGRv48j7KLgW5qWZCuoD4CvbD2/cX8O7GDOiQaSo+XWhPTQN+
+	kHnVJXoos8afpo1B6OxmujRc5DIfkHf/MOpyK9nEaSAEBmJ71f91ZVJfp0+9m99/FR/jtIvcfqx
+	j46t/UhtinfymEFi6fCLuDAcdV6HnniHBgIbTvaH646LQhGgjPXby8Wftsbruat3RcZdRVMzEcb
+	FtB4/lD2NufAHuJ9fmt9ZNb/RHMSk5s0behm92Ezrjy9AuishkZ5nCzku21VBD0Kdjx+hI/mtoc
+	IZnhl188Ohitj+w2gpWeLbRTg1mzXnevh8Sw==
+X-Received: by 2002:a05:7022:f87:b0:12d:ce60:cb52 with SMTP id a92af1059eb24-1343677c21cmr4095334c88.18.1778732755696;
+        Wed, 13 May 2026 21:25:55 -0700 (PDT)
+Received: from localhost ([50.145.100.174])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cbcb93f3sm2645323c88.3.2026.05.13.21.25.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 May 2026 20:39:06 -0700 (PDT)
-Message-ID: <106e2981-35a1-4559-ae20-2026c224f590@gmail.com>
-Date: Thu, 14 May 2026 05:39:04 +0200
+        Wed, 13 May 2026 21:25:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] scsi: mpt3sas: add hwmon support
-To: sashiko-reviews@lists.linux.dev
-Cc: linux-hwmon@vger.kernel.org
-References: <20260512214703.655633-3-sautier.louis@gmail.com>
- <20260514010209.5C3ABC19425@smtp.kernel.org>
-Content-Language: en-US-large
-From: Louis Sautier <sautier.louis@gmail.com>
-In-Reply-To: <20260514010209.5C3ABC19425@smtp.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Date: Wed, 13 May 2026 21:25:54 -0700
+Message-Id: <DII44YQHQRAQ.1BOWF2JZ2RY5N@nexthop.ai>
+From: "Abdurrahman Hussain" <abdurrahman@nexthop.ai>
+To: "Guenter Roeck" <linux@roeck-us.net>, "Abdurrahman Hussain"
+ <abdurrahman@nexthop.ai>, "Alexandru Tachici"
+ <alexandru.tachici@analog.com>
+Cc: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ "Alexandre Belloni" <alexandre.belloni@bootlin.com>, "linux-rtc"
+ <linux-rtc@vger.kernel.org>, "Guenter Roeck" <groeck7@gmail.com>
+Subject: Re: [PATCH v3 4/5] hwmon: (pmbus/adm1266) replace probe-time RTC
+ seed with rtc_class device
+X-Mailer: aerc 0.21.0
+References: <20260512-adm1266-v3-0-a81a479b0bb0@nexthop.ai>
+ <20260512-adm1266-v3-4-a81a479b0bb0@nexthop.ai>
+ <045f1907-0180-46df-a123-cd0ce349e86b@roeck-us.net>
+In-Reply-To: <045f1907-0180-46df-a123-cd0ce349e86b@roeck-us.net>
 
-On 14/05/2026 03:02, sashiko-bot@kernel.org wrote:
-> Could exposing this read to unprivileged users lead to excessive firmware
-> requests and mutex contention?
-> 
-> Since the sysfs files are world-readable, any local user can read them in a
-> tight loop. Every read directly calls mpt3sas_config_get_iounit_pg7(), which
-> issues synchronous requests to the firmware over the PCIe bus and acquires
-> the shared config_cmds.mutex:
-> 
-> _hwmon_read() ->
->     mpt3sas_config_get_iounit_pg7() ->
->         _config_request() ->
->             mutex_lock(&ioc->config_cmds.mutex)
-> 
-> Does this allow an unprivileged user to starve other storage subsystem
-> components that rely on this mutex for administrative tasks or device
-> discovery?
-> 
-> Could we implement a caching mechanism (for example, caching the readings
-> for a short period using jiffies) to rate-limit these firmware requests?
+On Wed May 13, 2026 at 7:14 PM PDT, Guenter Roeck wrote:
+> On 5/12/26 11:56, Abdurrahman Hussain wrote:
+>> The driver currently writes the device's internal RTC at probe with
+>> ktime_get_seconds(), which returns CLOCK_MONOTONIC seconds since boot
+>> and is not a wall-clock value. The resulting timestamps embedded in
+>> blackbox records are therefore meaningless across reboots, defeating
+>> the cross-reboot record-correlation use case the field exists for.
+>>=20
+>> Switching the seed to ktime_get_real_seconds() does not actually fix
+>> this: at probe the system wall clock may not yet have been set (no
+>> external RTC, no userspace NTP), and seeding unconditionally also
+>> clobbers whatever valid time the ADM1266 retained across a warm
+>> reboot.
+>>=20
+>> The data sheet (Rev. D, p. 22) recommends "frequently send the time
+>> stamp to the ADM1266 to synchronize the UNIX time and reduce the time
+>> from drifting" when running on the internal oscillator. The clean way
+>> to expose that policy is an rtc_class device backed by SET_RTC, so
+>> that userspace tooling (hwclock, chrony, systemd-timesyncd) can drive
+>> the re-sync against /dev/rtcN once it trusts the system clock - with
+>> no driver-specific sysfs ABI.
+>>=20
+>> Drop the probe-time seed and adm1266_set_rtc() entirely. Add an
+>> rtc_class device whose ->read_time and ->set_time callbacks read and
+>> write the SET_RTC frame. The rtc_class API is second-precision, so
+>> the SET_RTC fractional-seconds bytes are always written as zero.
+>>=20
+>
+> This doesn't just set the RTC time, it also acts as a real-time-clock.
+> That seems undesirable, since it isn't really a real-time clock.
+> It would also be the first (pseudo) rtc residing outside the rtc
+> subsystem.
+>
 
-My initial implementation had a 1-second jiffies-based cache; I
-dropped it after seeing that drivers/nvme/host/hwmon.c follows the
-same no-cache pattern.
+Agreed -- calling it an RTC overstates what the chip does.  The
+register is a 32-bit seconds counter seeded via SET_RTC and stamped
+into each blackbox record.  No battery, no alarm, nothing the RTC API
+normally implies; treating it as an rtc_class device was the wrong
+fit.
 
-The cover letter's contention figure came from a less direct
-measurement and was too optimistic. I re-measured directly on
-ioc->config_cmds.mutex, hammering the sysfs temperature file from
-N concurrent unprivileged workers on a 9500-8i / SAS3816 while a
-separate "administrative" reader runs in the foreground. The same
-setup against the system's NVMe is included below for comparison:
+> It seems to me that there must be a better solution. The rtc subsystem
+> needs to be involved in this discussion.
+>
 
-hwmon: mpt3sas (/sys/class/hwmon/hwmon3/temp1_input)
-nproc: 16
+Would you prefer I drop anything RTC-shaped from this driver
+altogether and reach for something else (e.g. a read/write debugfs
+file under pmbus/<dev>/, consistent with the other debugfs entries
+this series adds), or would you rather I post a separate thread to
+linux-rtc asking how a device like this should expose a host-driven
+seconds counter and wait on their guidance before respinning?
 
-baseline (no concurrent readers): p50=14.6µs  p95=18.9µs
+The datasheet's intended use is for the host to frequently send the
+current timestamp to the chip, so the value stamped into each blackbox
+record reflects wall-clock time at the moment of the event.  Either
+direction works for me; my mild preference is the debugfs path since
+it lets me close the loop without holding up the rest of the series.
 
-Foreground reader latency with N concurrent unprivileged hammers:
+> Note - as sent separately - that making this driver dependent on
+> the RTC subsystem (as would be required by this patch) is unacceptable.
+>
 
-  N   agg r/s   p50 µs   p95 µs   max µs
-  1     65244     38.0     60.2     60.8
-  2     57722     57.0     60.1    120.5
-  4     55026     90.8    115.5    152.9
-  8     53688    207.2    247.9    300.1
- 16     52188    345.8    390.3    444.8
+Understood -- I'll drop the rtc_class approach in v4 either way.
 
-hwmon: nvme (/sys/class/hwmon/hwmon2/temp1_input)
-nproc: 16
-
-baseline (no concurrent readers): p50=268.6µs  p95=289.4µs
-
-Foreground reader latency with N concurrent unprivileged hammers:
-
-  N   agg r/s   p50 µs   p95 µs   max µs
-  1      3558    803.8    839.8   1008.3
-  2      3549   1342.0   1443.6   1558.7
-  4      3543   2154.8   2473.0   2756.6
-  8      3518   4130.9   4459.6   4677.4
- 16      3522   7394.6   8743.6   8804.3
-
-Aggregate throughput is mutex-bound: every hwmon read takes
-config_cmds.mutex, so contention is bounded. The worst
-foreground p95 I observed was ~8.5 ms at N=nproc=96 on the
-9305-24i (below).
-
-Across the other two test boxes:
-- 9305-24i / SAS3224 (nproc=96): mpt3sas baseline 31 µs, p95 at
-  N=96 ~8.5 ms; same shape, ~2x slower per read than the more
-  recent 9500-8i / SAS3816 above.
-- 9211-4i / SAS2004: no mpt3sas sensors reported, no hwmon
-  device registered, no contention surface (graceful-skip path
-  in the cover letter).
-
-If a maintainer thinks the cache should come back to bound this
-independently of the attacker count, I am happy to re-add it.
+Thanks for the quick feedback,
+Abdurrahman
