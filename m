@@ -1,127 +1,97 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F16B538E100
-	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 10:22:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930AC3845AA;
+	Thu, 14 May 2026 10:38:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778754176; cv=none; b=YxIb6ZseftO//zGr25KGVuYB+H4qZow0RCpAH9LT0aEBHbG1i/p4chHvkVdz/oQn+AfINkZZByUcgyTfc/O8o6pZ1k55okO1E1PS3xgDc7rU8u+GmvWuQm8t/VKHjaYEPiEzlT9aA85Qa5jOLgZCeEpSjjHbh6g41IAQz0cWf5Y=
+	t=1778755092; cv=none; b=Ricecf8eZFeQRIuxFhfpwZblrjsr2HD4gOeCld/Sb1t9ep6Fj0r8jYSVnzVoxdwxsinzXjrv0iwzo8qqOkxAfvraEkJYCHRkqwpluwHaPHPhHyAaQJE6OW8saLBoZacSo3rsKOq2YedEZZBff02EoGinFyhaswSJeijAXYs0waU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778754176; c=relaxed/simple;
-	bh=ZKQpxjqTqRs50eLDPP/RTtzt1rN+G2d25wUsw5tADKU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=tlDxVB/uefWtOX7ne4SRrR58Q/ZUtcVUFEtXNvW6qtRzJtxYNdi6XXOdXfRwEuoF3tWOYK64amJD52R1qSmwgotb+9wIOWmB/MhmUcRu2D16U6Htptj/thMTMyiy8i7WS0fF72lNxROnN42JWOPMW8xjoUUJBHB74fLqWurVpmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nRzUQQY7; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778755092; c=relaxed/simple;
+	bh=6KuqpnKj9sobxjDeqvX+sSPZ/QSHETFRdP4dGEBM9Kk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IK1YD+gIhASAc6Sy4egXO+hOn3OpmObEJdQCKHqdD6VPvs0+T8LDH9e0nj85vKiv+ft7xSdpzxDmorICJEUHMkIgjsogLLYuoe0cdTA6LWSML2IOerOBkkkCtZD3L3WfF8o3aRccG/PWUqXgta07Qzg6IdaM5Tq/NfOk2TvNrWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CP2+Q6k+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nRzUQQY7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86C36C2BCB3;
-	Thu, 14 May 2026 10:22:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CP2+Q6k+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D05ABC2BCB3;
+	Thu, 14 May 2026 10:38:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778754175;
-	bh=ZKQpxjqTqRs50eLDPP/RTtzt1rN+G2d25wUsw5tADKU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=nRzUQQY7TBLAMH6Bmj1o8POiD9qa+DnTVBHGIfliLw7SjJ5U1SDSwnJ3Ek92UdBqC
-	 oY0C/Vxt9rnxjYwCuCgeIpxFI8Rs+zVgu+alEHqm/Y0pIWJSGgl4B5yOpl+DF0i8+U
-	 w1U4tKb32tMdUny0H4K7idwkW7oEHrK8Yux4l4s6M3iTno2CTgtsMPRbneGVbkvvwl
-	 h1+bAntpqXDkdA6VlSrnxvf+/vJ/kGzf4QLRrAed8Gu3U3L80hM+Z9uHeANFvArtc4
-	 /cnGIEBOsQFTt5xergCAFkdFDo+dxlKQaKy9OmHuSlJSWoe8bxRoloYJs8M5B/JQYh
-	 hISjxm7Zebbog==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 5/5] pinctrl: pinctrl-scmi: Log number of pins,
- groups, functions
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alex Tran" <alex.tran@oss.qualcomm.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260513-scmi-client-probe-log-v2-5-36607e9dd540@oss.qualcomm.com>
-References: <20260513-scmi-client-probe-log-v2-5-36607e9dd540@oss.qualcomm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 14 May 2026 10:22:55 +0000
-Message-Id: <20260514102255.86C36C2BCB3@smtp.kernel.org>
+	s=k20201202; t=1778755092;
+	bh=6KuqpnKj9sobxjDeqvX+sSPZ/QSHETFRdP4dGEBM9Kk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CP2+Q6k+vOdNmZMCBg/czK3/XTzKq0VLFIDXnQfI8q1f+VEZYn5dEFbuxpbhMVrKZ
+	 LcDgW9pgW31NqQNAkn7M4q9P5MWsdEG75eNTJNuHXQu3VLIt8HrPHm/up/QrlZ3mY0
+	 fzPYe8svCetFMPVLD/SM0Yi3iVTZb0iVGk8XokfoS+fbK6L+SHkBqDT/iorLvpG0GL
+	 PQ5KaPxmJRTwQgTrA9hbLpPyHj25xksmDOIASEbpj14sISdX9+X/KOJo2yX7u0wUjc
+	 feFwDC2Dyev2jez7STICOVKK3blTa65kRGL11nWgCmZE1UFBSxg9fUCpd+b1OWCmNb
+	 jxpZVrv2QQt9w==
+Date: Thu, 14 May 2026 11:38:06 +0100
+From: Sudeep Holla <sudeep.holla@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Andy Shevchenko <andriy.shevchenko@intel.com>,
+	Alex Tran <alex.tran@oss.qualcomm.com>,
+	Sudeep Holla <sudeep.holla@kernel.org>,
+	Jyoti Bhayana <jbhayana@google.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Linus Walleij <linusw@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Viresh Kumar <viresh.kumar@linaro.org>, linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 0/5] scmi: Log client subsystem entity counts
+Message-ID: <20260514-finicky-acoustic-flounder-2dd405@sudeepholla>
+References: <20260513-scmi-client-probe-log-v1-0-00b47b1be009@oss.qualcomm.com>
+ <agS8udcvqgQmiqB4@ashevche-desk.local>
+ <1f2fb1de-ebc8-40ef-ac53-3348499295e3@roeck-us.net>
+ <2026051441-agreed-suffice-bbe1@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2026051441-agreed-suffice-bbe1@gregkh>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Low] Unnecessary structure bloat by adding `nr_groups` to persistent dri=
-ver state.
-- [Low] Missing error handling for firmware query result before assignment =
-to an unsigned integer.
-- [Low] Format specifier type mismatch in `dev_dbg`.
---
+On Thu, May 14, 2026 at 08:48:19AM +0200, Greg Kroah-Hartman wrote:
+> On Wed, May 13, 2026 at 11:27:21AM -0700, Guenter Roeck wrote:
+> > On 5/13/26 11:02, Andy Shevchenko wrote:
+> > > +Greg (I believe the trend is to drop such messages and not add them [back]?)
+> > > 
+> > 
+> > Is there some common guidance on this ? I'd be all for dropping messages
+> > instead of adding them, but there seems to be a perpetual battle between
+> > people who want to log everything and people concerned about logging noise.
+> > As maintainer I always seem to be stuck between those two camps.
+> 
+> When drivers work properly, they should be quiet.  This patch series
+> adds a bunch of dev_info() calls, which is not ok.  If a developer wants
+> to see extra messages, use the dev_dbg() infrastructure, or the tracing
+> infrastructure, both of which are there for this very reason.
+> 
 
-commit 1afe1feb7c661d03b99df0a5046eac6639ef2fe6
-Author: Alex Tran <alex.tran@oss.qualcomm.com>
+I completely agree and tend to follow that. But I always assumed it was
+left to maintainers taste.
 
-pinctrl: pinctrl-scmi: Log number of pins, groups, functions
+> So yes, I agree with Andy, this series is not ok, don't make more noise
+> please.
+> 
 
-The SCMI pinctrl driver does not currently log the number of pins, groups,
-and functions discovered from firmware. This commit adds a debug log statem=
-ent
-to print these counts after a successful probe.
+I am now thinking if [1] was the one setting example for this series. I did
+ack it as I left it to the subsystem maintainer's choice(in this case author
+as well).
 
-> diff --git a/drivers/pinctrl/pinctrl-scmi.c b/drivers/pinctrl/pinctrl-scm=
-i.c
-> index f22be6b7b82a4..999c2061ddc38 100644
-> --- a/drivers/pinctrl/pinctrl-scmi.c
-> +++ b/drivers/pinctrl/pinctrl-scmi.c
-> @@ -40,6 +40,7 @@ struct scmi_pinctrl {
->  	struct pinctrl_desc pctl_desc;
->  	struct pinfunction *functions;
->  	unsigned int nr_functions;
-> +	unsigned int nr_groups;
+-- 
+Regards,
+Sudeep
 
-Is it necessary to add nr_groups to struct scmi_pinctrl?
-
-Unlike nr_functions which is used later, nr_groups is only written and read
-sequentially within scmi_pinctrl_probe() to populate the dev_dbg message.
-Could this simply be a local variable in the probe function to avoid bloati=
-ng
-the persistent device data structure?
-
->  };
-> =20
->  static int pinctrl_scmi_get_groups_count(struct pinctrl_dev *pctldev)
-
-[ ... ]
-
-> @@ -578,7 +579,15 @@ static int scmi_pinctrl_probe(struct scmi_device *sd=
-ev)
->  	if (!pmx->functions)
->  		return -ENOMEM;
-> =20
-> -	return pinctrl_enable(pmx->pctldev);
-> +	pmx->nr_groups =3D pinctrl_scmi_get_groups_count(pmx->pctldev);
-
-What happens if pinctrl_scmi_get_groups_count() returns a negative error co=
-de
-due to an SCMI firmware query failure?
-
-Since nr_groups is an unsigned int, assigning a negative error code will
-result in a silent integer underflow. While this isn't used for memory
-allocation or bounds checking, it will result in incorrect values being
-logged.
-
-> +
-> +	ret =3D pinctrl_enable(pmx->pctldev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	dev_dbg(dev, "Initialized %d pins, %d groups, %d functions\n",
-> +		 pmx->pctl_desc.npins, pmx->nr_groups, pmx->nr_functions);
-
-Should we use %u instead of %d for these format specifiers?
-
-pmx->pctl_desc.npins, nr_groups, and nr_functions are all unsigned integers.
-Using %d causes any underflowed error codes to print deceptively as negative
-numbers in the logs rather than revealing the implicit cast.
-
-> +	return 0;
->  }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260513-scmi-clien=
-t-probe-log-v2-0-36607e9dd540@oss.qualcomm.com?part=3D5
+[1] https://lore.kernel.org/all/20260304101457.7470-1-ulf.hansson@linaro.org/
