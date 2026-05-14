@@ -1,125 +1,161 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60CEE2E8DEA;
-	Thu, 14 May 2026 00:40:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D649B1A683C;
+	Thu, 14 May 2026 00:43:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778719255; cv=none; b=RXnqKEa9qzdR7IvJx681E4b77yy3t2bQNQsrTi6ixuHUayWWd1k+NouhtlDMO2+dfcyiWLbx0zSwYkrkTvypJ/hRZx6ppEUPO7jX/q6i0O8mXomCICK038R2XzmL1H2j1ZsWX5yD/wbSEJU836Ovy+jgj9oeWC0f+XuvmIdyJiY=
+	t=1778719396; cv=none; b=cOulGWF7mZQ7lely6YHr82yr0aaAwjeMIWWBgmQpTJ3yquoV/bG0xzuFrI6meK+nkLUsbsXCkh9FYwLf0vfo9JeJ57l5BDJ4VOYrZtA6MlN6IUXAgHsPeSbf+QwRoJVR4ywrK2ZE8hIKRHX17PIsqtXILFfRwL3eg0Huvz5Wusc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778719255; c=relaxed/simple;
-	bh=9xPoi/jOuwJ24aHDa6rb5dxZ5tEHkzImVHb7GEE3Ank=;
+	s=arc-20240116; t=1778719396; c=relaxed/simple;
+	bh=njUG4gtX0gjjaL4ssT35jpzwhO2AkUWQoMd2hjUQoGU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pWe8BGEW5raWGrA3k1rOM1kRZHODxHjnI93vMZsvyNZ/ZkSmg9XzYptQDfTZeH5E4Vmh1u3PpsaKKbP517bMMGV6X334Tbkbc0kwQZGzgnf47dApB2iu73OSrMtu93o1rpjVor5tJI0nXjuzWZMURpI7XexrR291oLaXIBv8zBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WwALq+zL; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=X9YexGkq1b5lLdhVur0Xuzi8hKBzjExXKbREPShXSZRrlRuCjj/RrPJAjqWC2yD91P1lM71YPG+3VPFz6KaXPab7HpPa8z3Oll06qwFobKPVTCJwlx6Tz6l5GPW3+NfWy5mZJoh+uuvXe2EjmAROFcxMjqp+3+vvPOqk3/A6n64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t06+8Y3k; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WwALq+zL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BBCAC19425;
-	Thu, 14 May 2026 00:40:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t06+8Y3k"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47E27C2BCB3;
+	Thu, 14 May 2026 00:43:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778719255;
-	bh=9xPoi/jOuwJ24aHDa6rb5dxZ5tEHkzImVHb7GEE3Ank=;
+	s=k20201202; t=1778719396;
+	bh=njUG4gtX0gjjaL4ssT35jpzwhO2AkUWQoMd2hjUQoGU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=WwALq+zLr6juGAVWrscXnuOn6M+Si5TMteJB+GlzHW2Ua9l/ulr3ZqFHDIoqxBLIb
-	 PsXuSuvGg1sWjx4YeukBgtb52oaRaGE4srSMeiv4gLcwxlru211RTF5oPyfY3NVpwX
-	 RjsyS3yLRE15Szc26kgtaNVBqqz0tR+E5W1j9PpyLSZfIvgIVU0NMEIBY7Ed3P81j3
-	 kJ4vG+OYVhVKHzNMUOpK9owGmrcpvOPOfceZlaNHJJ6utHDOugmWc+cKHjv7EvLnhR
-	 LYdwAVb2g2qsJJga3NlxT7KQBG4MvwfpaOZPvAKoS//6P/b7v7PBE2O6rvGSm2dZ1w
-	 Awwq7LSKuCOHw==
+	b=t06+8Y3kZjJCJ2qeaBS72SEeCwrKe0JtKatZLYdSjTotSIbkh4kRJLZ3sXTFc6XAL
+	 GskzZ3Hh/BkBdJIFVbBTtmTxIoSpozdz7FBqFx1EVUzu9eYyzlokZB0TqGEpNv+qLM
+	 aCbuU8MZ0pEquuH5PkbcSLixGhZYByZdv7a1eo8uDkfSZxx+EKoQ27eCfHHlQlWmTG
+	 2DCgyauILWDy6nU4D+uMOg3sjx8p7Qiy45ERusqK/1xC4ZfF/R3Pfzt5/skl22qIfu
+	 97N47PBlbrI+VlB1E7OlhXfBZAEYSGq7NkFsHFpANGEEGSUyZAOrLeSem8oyTxknYb
+	 RRuoMPhSue91w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 1/2] usb: xhci-pci: add AMD Promontory 21 PCI glue
+Subject: Re: [PATCH v2 2/2] hwmon: (pmbus/d1u74t) Add Murata D1U74T PSU
+ driver
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jihong Min" <hurryman2212@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-pci@vger.kernel.org
-In-Reply-To: <20260512213910.871859-2-hurryman2212@gmail.com>
-References: <20260512213910.871859-2-hurryman2212@gmail.com>
+To: "Abdurrahman Hussain" <abdurrahman@nexthop.ai>
+Cc: conor+dt@kernel.org, krzk+dt@kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20260512-d1u74t-v2-2-431d00fbb1c4@nexthop.ai>
+References: <20260512-d1u74t-v2-2-431d00fbb1c4@nexthop.ai>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 14 May 2026 00:40:54 +0000
-Message-Id: <20260514004055.1BBCAC19425@smtp.kernel.org>
+Date: Thu, 14 May 2026 00:43:14 +0000
+Message-Id: <20260514004316.47E27C2BCB3@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [High] The Kconfig dependency `depends on USB_XHCI_PCI=3Dy` completely di=
-sables PROM21 support for systems where the core driver is built as a modul=
-e.
-- [Low] Signed integer overflow when calculating the auxiliary device ID.
+- [Low] Brittle validation logic due to missing read length check for PMBUS=
+_MFR_MODEL.
+- [Low] Copy-paste errors in sysfs documentation for `in2_*` attributes.
+- [Low] MAINTAINERS file entry breaks alphabetical ordering.
 --
 
-commit 20f4e35b2f88ebe2b8988b4f07fe7cc28199096b
-Author: Jihong Min <hurryman2212@gmail.com>
-Subject: usb: xhci-pci: add AMD Promontory 21 PCI glue
+commit ec60b1738fafe62da18eefb7e9b1f9a12b6a9113
+Author: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 
-This commit adds a small PCI glue driver for AMD Promontory 21 xHCI
-controllers. It binds the controllers, delegates USB host operation to
-the common xHCI PCI core, and creates an auxiliary device for optional
-temperature sensor support.
+hwmon: (pmbus/d1u74t) Add Murata D1U74T PSU driver
 
-> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-> --- a/drivers/usb/host/Kconfig
-> +++ b/drivers/usb/host/Kconfig
+This commit adds a new PMBus driver for Murata D1U74T power supplies. It
+registers the device with the hwmon subsystem and provides documentation for
+the driver's sysfs attributes.
 
-[ ... ]
+Closes: https://lore.kernel.org/oe-kbuild-all/202605122253.zInzmUeX-lkp@int=
+el.com/
 
-> @@ -42,6 +42,26 @@ config USB_XHCI_PCI
->  	depends on USB_PCI
->  	default y
-> =20
-> +config USB_XHCI_PCI_PROM21
-> +	bool "AMD Promontory 21 xHCI PCI support"
-> +	depends on X86
-> +	depends on USB_XHCI_PCI=3Dy
-
-Does depending strictly on USB_XHCI_PCI=3Dy cause a configuration regression
-for most distributions where the core driver is configured as a module?
-
-The driver source appears fully capable of being built as a module, using
-module-related macros and module_pci_driver().
-
-If the intent is to prevent an early boot mismatch where xhci-pci is
-built-in but the PROM21 glue is a module, could this instead be a tristate
-option using depends on USB_XHCI_PCI and depends on !(USB_XHCI_PCI=3Dy && m=
-)?
-This would enforce the boot constraint while preserving support for modular
-kernel builds.
-
-[ ... ]
-
-> diff --git a/drivers/usb/host/xhci-pci-prom21.c b/drivers/usb/host/xhci-p=
-ci-prom21.c
+> diff --git a/Documentation/hwmon/d1u74t.rst b/Documentation/hwmon/d1u74t.=
+rst
+> new file mode 100644
+> index 0000000000000..7362e56e76a71
 > --- /dev/null
-> +++ b/drivers/usb/host/xhci-pci-prom21.c
-
+> +++ b/Documentation/hwmon/d1u74t.rst
 [ ... ]
+> +in1_rated_min		Minimum rated input voltage
+> +in1_rated_max		Maximum rated input voltage
+> +
+> +in2_label		"vout1"
+> +in2_input		Measured input voltage
 
-> +static int prom21_xhci_create_auxdev(struct pci_dev *pdev)
+This isn't a bug, but is there a copy-paste error in these descriptions?
+Should these be documented as 'output voltage' instead of 'input voltage',
+since the label is "vout1"?
+
+> +in2_crit		Critical input over voltage
+> +in2_crit_alarm		Critical input over voltage alarm
+> +in2_lcrit		Critical input under voltage fault
+> +in2_lcrit_alarm		Critical input under voltage fault alarm
+> +in2_max			Maximum input over voltage
+> +in2_max_alarm		Maximum input over voltage alarm
+> +in2_min			Minimum input under voltage warning
+> +in2_min_alarm		Minimum input under voltage warning alarm
+> +in2_rated_min		Minimum rated input voltage
+> +in2_rated_max		Maximum rated input voltage
+[ ... ]
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index b2040011a3865..28ca8e0353124 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6803,6 +6803,13 @@ S:	Maintained
+>  F:	Documentation/hwmon/crps.rst
+>  F:	drivers/hwmon/pmbus/crps.c
+> =20
+> +MURATA D1U74T PSU DRIVER
+> +M:	Abdurrahman Hussain <abdurrahman@nexthop.ai>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/hwmon/d1u74t.rst
+> +F:	drivers/hwmon/pmbus/d1u74t.c
+> +
+>  CRYPTO API
+
+This isn't a bug, but does this entry break the alphabetical ordering? It
+places an 'M' entry immediately before the 'C' section for CRYPTO API.
+
+>  M:	Herbert Xu <herbert@gondor.apana.org.au>
+[ ... ]
+> diff --git a/drivers/hwmon/pmbus/d1u74t.c b/drivers/hwmon/pmbus/d1u74t.c
+> new file mode 100644
+> index 0000000000000..3127e0e5a23de
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/d1u74t.c
+[ ... ]
+> +static int d1u74t_probe(struct i2c_client *client)
 > +{
-> +	struct prom21_xhci_auxdev *prom21_auxdev;
-> +	struct usb_hcd *hcd =3D pci_get_drvdata(pdev);
+> +	char buf[I2C_SMBUS_BLOCK_MAX + 2] =3D { 0 };
+> +	struct device *dev =3D &client->dev;
+> +	int rc;
+> +
+> +	rc =3D i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
+> +	if (rc < 0)
+> +		return dev_err_probe(dev, rc, "Failed to read PMBUS_MFR_ID\n");
+> +
+> +	if (rc !=3D 9 || strncmp(buf, "Murata-PS", 9)) {
+> +		buf[rc] =3D '\0';
+> +		dev_err(dev, "Unsupported Manufacturer ID '%s'\n", buf);
+> +		return -ENODEV;
+> +	}
+> +
+> +	rc =3D i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
+> +	if (rc < 0)
+> +		return dev_err_probe(dev, rc,
+> +				     "Failed to read PMBUS_MFR_MODEL\n");
+> +
+> +	if (strncmp(buf, "D1U74T-W", 8)) {
 
+Is there a missing check for the read length in rc here?
+
+If a short read occurs, could strncmp() evaluate the newly read bytes
+combined with stale memory leftover from the previous PMBUS_MFR_ID read?
+
+> +		buf[rc] =3D '\0';
+> +		return dev_err_probe(dev, -ENODEV, "Model '%s' not supported\n",
+> +				     buf);
+> +	}
+> +
+> +	rc =3D pmbus_do_probe(client, &d1u74t_info);
 [ ... ]
-
-> +	prom21_auxdev->auxdev =3D
-> +		auxiliary_device_create(&pdev->dev, KBUILD_MODNAME, "hwmon",
-> +					&prom21_auxdev->pdata,
-> +					(pci_domain_nr(pdev->bus) << 16) |
-> +						pci_dev_id(pdev));
-
-Does left-shifting pci_domain_nr() introduce a signed integer overflow
-regression?
-
-The function pci_domain_nr() returns a signed int, which can be up to 0xFFFF
-on ACPI systems. Left-shifting a value of 0x8000 or greater by 16 bits
-alters the sign bit of a 32-bit int, resulting in undefined behavior in C.
-
-Would casting the return value to an unsigned integer, such as
-(u32)pci_domain_nr(pdev->bus) << 16, avoid this overflow?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260512213910.8718=
-59-1-hurryman2212@gmail.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260512-d1u74t-v2-=
+0-431d00fbb1c4@nexthop.ai?part=3D2
