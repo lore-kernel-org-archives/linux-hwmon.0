@@ -1,68 +1,72 @@
-Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEDBE3AC0F1
-	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 22:02:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 865D33AC0F1
+	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 22:02:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778796142; cv=none; b=kDdxb4jWuF0lc/5llI9HRmcIcXWgc1PI8ivIdC1+HRL7LzqnHcI+RHM8rQS4OH7wcXKeJWP5tLF4WVQEMrEZkYZGXAHZGA6F6KSPK39pgHOtQoPGVzRIRNGKHz3stXXcIv728Navswlx3b4Dp2lM/JYMbbDf6hF9ZATbzgObAaw=
+	t=1778796143; cv=none; b=JFGyBFIZMY2qJ7rQtFBP7Gd4T9H2jO5qORDMkfJgrObrzLZGvSi+q62cpUTv3adon4GIir9z05TdOugObmSjaXl0h4AMQEPrgFro3qyTNR31DnrSpPgdG/4KHzbefTQieqPl+rHiMRcDB0nrbOM3OXHMkw7TQETDt+5BVpC5Ovw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778796142; c=relaxed/simple;
-	bh=OuNUP4VQ/cd2XOzQDsaDoxFooK7tR82O/MqAGRITIm4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kmdKIasK1xxALVSgyvS3EQUSR79OXOwhwCV0OoNffoSKJujvBB4USEGp7vnWOZh7tN1+fJs6EGKf06URsTTmTMwdX747sQQfWnoerc1EeJbPWahyzUfM+U3WK6Yly7n/i1c8zTyHFbL8sl+KLc3wb/dwLxp+dcP2EuuTq6bAvFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i1plhtRC; arc=none smtp.client-ip=74.125.82.43
+	s=arc-20240116; t=1778796143; c=relaxed/simple;
+	bh=eXXB9ogR0eAY1urJO0yEFWMXSu04x966v4NZ+Ghfm+w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=F8ID9hDx3dJIaFnxtEEjkFB/6RQXIM6T0fI2x5MaLVNhUZXDu8x6/1vmLbJFUJ9dPc/+FoWdfY5yF3gMB238iqkXobTGUBQwXZXtQRYVdkGInu3n+kgrMDli8/nRjhxi7rNiLp49EeBtA8cA6FXID3T0/1QxYgH8W8j6ys+6e8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a7MzhyP3; arc=none smtp.client-ip=74.125.82.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i1plhtRC"
-Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-12c19d23b19so14224424c88.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 15:02:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a7MzhyP3"
+Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-2f7020a928eso12026447eec.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 15:02:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778796140; x=1779400940; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=bCQWuLvtl32GOyFUXVkpB+IrAH0y2Vh06ov3fjg3pns=;
-        b=i1plhtRCg+TeZLPKQdWrRnu5HmI9PBfbS2h2flk/b4la0PCTjNPxtPRcEyAAWX+U+a
-         heBrk4+7xNqFYhmVNs//oolI9o4rqEiovgRogzKiN4I5LJgFLUgIJat5KOLnAbTrad1V
-         mddnzkt/mH38v8IZNjiNj71BR7lVoCZrvCobSlkhp2zQJRBO8/qyp+UNCJNMNdX8NGsM
-         V0JVpw1qxgk54GD6FM4PSfXZHIdpFHJgvU84oKQ3XVWfFvWbQCLqYuDMZhV4tAfjfPBk
-         6kEmX7qWx0ZuZbto5tuPkvXJFBAh5ujNLcWBjNm5nS9Z8mu6dl4P4i/Bp1SMkFCC7iWp
-         mTuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778796140; x=1779400940;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1778796141; x=1779400941; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bCQWuLvtl32GOyFUXVkpB+IrAH0y2Vh06ov3fjg3pns=;
-        b=H4IYGv1Y896TajJ5jPj5Yuha07FTwZU0BSI12nyVRvNUznT0L/j1fTVQe3d8jUjDJR
-         gmP85e3uV1ZB5ojMtzua+SH7xhy9KByK712A3ey62BLur00gzm2rEiCeDzODEX2z0Lnn
-         yPhgwxRPExBNjIv3m/74gD2tUsqKGoVyOppi3bhPg+8jyqwwjWEgfirM6vpvR6dj2HQT
-         S68OlA1+mWyL3mfBoTkNu5GMbC1ct11T4ykCNgvXa6j/UsIz3fq6lwvw1o+/fEGohQPW
-         OOgqJewQOfiwkNM5YSAvWKK4uNhLwS2EvbzCpNavpmt2J4e7Jk1oCWzrOUcB/7rppTHA
-         QbjQ==
-X-Gm-Message-State: AOJu0YxO9GkW5Yw17RIh5VGGOxC4lLVGRwr19+sYZQ56Arx6SXG1yciY
-	r+TX6ZUoGbVQs+wA5wGYuKCXRMHU8FbK4g9Q0A9I8LTJ+LA5TOHwdukEHjD0aQ==
-X-Gm-Gg: Acq92OFcOM8tYHuHyho5+GeiQkE5xhndQPybIkjLzXuTqOuUzLhftIuaUfLF+Bp1SD2
-	6bxNPgFeDe6At652p7NutVZLYSw30pv3Pj26hMxLsbCr4Iqq1DmnAMP3Rmk4djI0U3cIRd0Kjln
-	nqLbFnAtUCjHX0kT+E49pF6xO25CZMjRAIKpLW3Rcrz9Zu6IXQ00jCU/FTEYBhQSj+IQgDAxdZa
-	Tg73g3BwWJqq8M164JCf5fNeteRwRqGcZDVaPEHCsm/YBrO9jd9EncXRJQ86OH0yPXNX8anrdeu
-	ZHPn9ZGYwFoyXPcnyqv7HS2rIH7C5oaO398XEl3LuTf43bmq4RZ/iVAZCLsokLuK+DuVglyNA8W
-	FZ/hOfEjevq4H0znDyjD6KmTWYQ78k6w+WiHWfI6w31pC8TZ0tHXNbaezwaYmkthd0mX9pUw/UD
-	TY8DFQ1ZKuclUnDGE6fW5h7OWdxpCbDQtKJap0Zo0jEhrefP4=
-X-Received: by 2002:a05:7022:907:b0:12b:ec15:69d3 with SMTP id a92af1059eb24-135047413a9mr479921c88.19.1778796139882;
-        Thu, 14 May 2026 15:02:19 -0700 (PDT)
+        bh=xYL53xr9VbkHoR2KiufjTPqDf0nioIqOELaxBTK6sfA=;
+        b=a7MzhyP3LHVHBcuJVpsGOPYANjlk+0bMyZkpvz2ZJeRLDLGN6rYl+hRKsf0Aitnuo7
+         BJNuErq8Jp8pTfOq2/ng3muhCXvh6rYj6dsTYhzSH3Xzf4IawzXuD8Uno91m5N3pS/62
+         JZGSRswUBKhgmpi0XAC0TjojGa7wfk1AU85CLXu3UX6T+sKoi1OkUp+x5zJUiqBdG+RZ
+         aCnHGrexbkvrKOsCr9NKmnO644tDXBLFqc1umj3XdU7G7DKYzuMhadKaS9m6VL/GuQjD
+         5446PbCWGyoy+txUIlRvD8KpaZOMvE3Hu5Tbl6mOUcdozJ79qqFYlSsQnBUIv3nugswM
+         aeVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778796141; x=1779400941;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xYL53xr9VbkHoR2KiufjTPqDf0nioIqOELaxBTK6sfA=;
+        b=X+5bS6WcoM4J0iIjWQ5aLGIE5L4CLwIDS+XRn2wb/BLReq4leptvOhjNwIcVYwZ+5l
+         lanrnINpeiIFS+YYzALh5KzeL+/K6Di0OrT4EJ/J9QvJORuF2UQuquGOrMSihyzMHp8M
+         z5k6Qh5BP9qgLbViwt0CaA1+mUuPczoXDbsZvUTiYQ0w2VOAHsEuwjlBtD9U2XA2UxkX
+         ZU5AQNmKo/ASc9V1KQVZ1QeEPda2lzBAdBMw/pWJmcKacpiSoe/8CM8Xc7FUwfaW9LWT
+         l28iJdFh4oIL3utYT3LgRhVR8eGvM29ZPiNu3hQpjLxtN7TRHOfiHbas3qkKBfmTP2g9
+         q33w==
+X-Gm-Message-State: AOJu0Ywy1jIt2FY7cDSXJ1mRI7yGIovc0z1On85adOv9ZZnQsMg7ii2V
+	dbFw3Gi3Tk4h6nBRxHcFclBB4LEhz+kSoCj8ZKPDizT5N9JObUrO9qk5yKcrTg==
+X-Gm-Gg: Acq92OFXnC6v4+i1oRO9l85jhg7kQc8QebDHZB/gyjWk50YNisdRrCjbykHqCP/FgyH
+	4j1if1WWoFhOqghZmobtytXGPqwjekhgvO6cWGaWLf6Qcwq6wBNXzY6G8vWa17otvVB00EDVuaz
+	wRxIRaqs/+zeC4EbWpBKEXxJ9/FlAzDjFQMNMYkgDyuIP0z5ps0hCNNbev8OzzV1mEvNv28nGBG
+	9nM95Ph/P3Mc+Ln6jOu6GxMgUIKHERRu5kWTjqGuYh1VkRLd3B2Olm8/RPlbV0gpHExOeGY0bZc
+	FDQunAXxOEch3sRGWmALbKs4sTBpZI+b0GPOAP1cNndJfsw53aule9rPdHFkTLWA/vZpKtiOPTW
+	5sVZAtX4xaP56Gj1P61olJ2e42R8yXmcpDs3i8j1gnDL4yU+rA9ToFE8TTfNghaR6GhDeHlymft
+	D/NGrPWSA6RGEFqFBCVB1byqORXXr+6iZOeGni
+X-Received: by 2002:a05:7300:fd15:b0:2de:aafb:feff with SMTP id 5a478bee46e88-3039818b0b2mr661275eec.2.1778796141098;
+        Thu, 14 May 2026 15:02:21 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cbdcf140sm6541905c88.5.2026.05.14.15.02.18
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-302978b1a79sm4605802eec.28.2026.05.14.15.02.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2026 15:02:19 -0700 (PDT)
+        Thu, 14 May 2026 15:02:20 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 1/2] hwmon: (lm90) Stop work before releasing hwmon device
-Date: Thu, 14 May 2026 15:02:13 -0700
-Message-ID: <20260514220214.1380831-1-linux@roeck-us.net>
+Subject: [PATCH 2/2] hwmon: (lm90) Add lock protection to lm90_alert
+Date: Thu, 14 May 2026 15:02:14 -0700
+Message-ID: <20260514220214.1380831-2-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20260514220214.1380831-1-linux@roeck-us.net>
+References: <20260514220214.1380831-1-linux@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -73,67 +77,48 @@ Content-Transfer-Encoding: 8bit
 
 Sashiko reports:
 
-In lm90_probe(), the devm action to cancel the alert_work and report_work
-(lm90_restore_conf) is registered in lm90_init_client() before
-devm_hwmon_device_register_with_info() is called.
+lm90_alert() executes in the smbus alert context and calls
+lm90_update_confreg() to disable the hardware alert line, without
+acquiring hwmon_lock.
 
-Because devm executes cleanup actions in reverse order during module
-unbind or probe failure, the hwmon device is unregistered and freed first.
+Concurrently, sysfs write operations (such as lm90_write_convrate) hold
+the hwmon_lock, temporarily modify data->config, and then restore it.
 
-If lm90_alert_work() or lm90_report_alarms() runs in the window between
-the hwmon device being freed and the delayed works being cancelled,
-lm90_update_alarms() will dereference the freed data->hwmon_dev here.
+If an alert interrupt occurs concurrently with a sysfs write, the sysfs
+path will overwrite the alert handler's modifications to data->config
+and the hardware register.
 
-Fix the problem by canceling the workers separately after registering
-the hwmon device and before registering the interrupt handler. This ensures
-that the workers are canceled after interrupts are disabled and before
-the hwmon device is released.
+This unintentionally re-enables the hardware alert line while the alarm is
+still active, causing an interrupt storm.
 
-Fixes: f6d0775119fb9 ("hwmon: (lm90) Rework alarm/status handling")
+Add the missing lock to lm90_alert() to solve the problem.
+
+Fixes: 7a1d220ccb0cc ("hwmon: (lm90) Introduce function to update configuration register")
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/lm90.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ drivers/hwmon/lm90.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index 3c10a5066b53..50b30d719225 100644
+index 50b30d719225..6658c743659b 100644
 --- a/drivers/hwmon/lm90.c
 +++ b/drivers/hwmon/lm90.c
-@@ -2584,15 +2584,20 @@ static void lm90_restore_conf(void *_data)
- 	struct lm90_data *data = _data;
- 	struct i2c_client *client = data->client;
+@@ -2939,6 +2939,7 @@ static void lm90_alert(struct i2c_client *client, enum i2c_alert_protocol type,
+ 		 */
+ 		struct lm90_data *data = i2c_get_clientdata(client);
  
--	cancel_delayed_work_sync(&data->alert_work);
--	cancel_work_sync(&data->report_work);
--
- 	/* Restore initial configuration */
- 	if (data->flags & LM90_HAVE_CONVRATE)
- 		lm90_write_convrate(data, data->convrate_orig);
- 	lm90_write_reg(client, LM90_REG_CONFIG1, data->config_orig);
- }
- 
-+static void lm90_stop_work(void *_data)
-+{
-+	struct lm90_data *data = _data;
-+
-+	cancel_delayed_work_sync(&data->alert_work);
-+	cancel_work_sync(&data->report_work);
-+}
-+
- static int lm90_init_client(struct i2c_client *client, struct lm90_data *data)
- {
- 	struct device_node *np = client->dev.of_node;
-@@ -2902,6 +2907,10 @@ static int lm90_probe(struct i2c_client *client)
- 
- 	data->hwmon_dev = hwmon_dev;
- 
-+	err = devm_add_action_or_reset(&client->dev, lm90_stop_work, data);
-+	if (err)
-+		return err;
-+
- 	if (client->irq) {
- 		dev_dbg(dev, "IRQ: %d\n", client->irq);
- 		err = devm_request_threaded_irq(dev, client->irq,
++		hwmon_lock(data->hwmon_dev);
+ 		if ((data->flags & LM90_HAVE_BROKEN_ALERT) &&
+ 		    (data->current_alarms & data->alert_alarms)) {
+ 			if (!(data->config & 0x80)) {
+@@ -2948,6 +2949,7 @@ static void lm90_alert(struct i2c_client *client, enum i2c_alert_protocol type,
+ 			schedule_delayed_work(&data->alert_work,
+ 				max_t(int, HZ, msecs_to_jiffies(data->update_interval)));
+ 		}
++		hwmon_unlock(data->hwmon_dev);
+ 	} else {
+ 		dev_dbg(&client->dev, "Everything OK\n");
+ 	}
 -- 
 2.45.2
 
