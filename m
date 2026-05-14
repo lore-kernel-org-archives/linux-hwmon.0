@@ -1,67 +1,67 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E28C431AA87
-	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 01:36:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 911C731AA87
+	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 01:37:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778722590; cv=none; b=WMpw6lGmaLusitS9C8bCS5Lbsyfv6Mpv4TCgf/bEkt3FKNHJ8iRiLhyKrU6N8YovDkZAnKukqOe8UmbmLCbOkMiIFfRL5XluCXdmQC1RjNZq31aXAuhTjv87HvdJLdZCuEq+34xiqOM8qE7nWehf01u62C5LKkegY6MZlF3Ukh0=
+	t=1778722649; cv=none; b=GPdt3ZFHCoyD92+YeLgX/QODsATHnmn/4Lqt4JG+GJrJc5zV1p9UycRWbvdB+IPFlvj/HXPTI+2a14A0DOgBhQviLcF6webFwqbmP1GZh1irh56OE6G6EJGFDFDqXlcFeUwSM5gFDUq76AGGreJiVx3utr8u9+m3mIqc8Vgg3qo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778722590; c=relaxed/simple;
-	bh=LFppPWSmOXeJo51++aAC0TLdHXWDtbCDvMrxMQtueHI=;
+	s=arc-20240116; t=1778722649; c=relaxed/simple;
+	bh=karPUL7ncg3d13Kd5U+OLYVeRtGIGRUhNgVga0LzLMY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UC6BDV5RYdU6HQydkH0HAI1nA2Cw3LywsgXjs+h0HtxwrLV7O92SP/AxfPBokPljErLV9iHWXcJfk/2mV/xZnYPAcTei+tvesMHkZ8xPiqVN7hPtc+l6NHTRmC18HQaYc5/Qe40G7i8E96rVIrHsbhLkW5sKr5sVx8i6AAIdO78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QseZA+My; arc=none smtp.client-ip=209.85.216.51
+	 In-Reply-To:Content-Type; b=bNWjIRsCSrTxoDBdmoUMIz+cMNlFErcvrqqfQ8G2Iz9vwXUrSKTKOscPTiMWsz2wcrb836dnvgYl8viJi+dEyLTf7iT6nxsdqLEYbZnhQjvlZBlTKtlhPjsAd8/1VjI3xbIGkRUoEDGci4dGnvbizMk54WEEsdTox23E9a4GJkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ARyHIgez; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QseZA+My"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-36608b2f2dcso5304304a91.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 18:36:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ARyHIgez"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8367df48711so3525744b3a.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 18:37:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778722588; x=1779327388; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778722648; x=1779327448; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=HyzUK3ipgqV9IXR7iiEoV2eo7NR0IJ/lnsHXhN3GONU=;
-        b=QseZA+MyaOGpAodzOBxVLmUfK0M1zTpCZTg/9kRZhNZ0IGYRBx3J48s1cbqggVDoaA
-         1yzgwyP0NmxaOT2VSWIXl+SehS4EGaMHUVy8dv50xLkr4WG7K2JEyWfkLTg2u2fcWlS3
-         pPjqjlYqQd67WJvEYITVMZt+lOkVrdj5Y9iPekxD19zuFeHlnN7XOywl6npmcMNamd4L
-         mLbMa8hTkAKdYY8JNTZLjbTa01qUbevihpPdqpkpA8K/Ao2wrCqqNlCYI3m7pOlEAcfS
-         JrximblCbvBVcTbwbj0rTMnGQOTDTrzQuGQDwJVIY7Wstz/EIBFFspCHdVdru1dija8F
-         rP6g==
+        bh=mAKAJQbl4Cd4/zopDe4p8caMLQ0m6LhmzJdP+QLvBb8=;
+        b=ARyHIgezChsjkRYZRz6gk6Gvlq5a8iil7gRA4n04ddnLzQ346xnDefYWoPt5x6FR9e
+         dhTLN5k9lolD9J/K8nUqm+BTgMjsQGL8kK37wfo8tADPKZTreBFEalK2sSBepVmxLXNB
+         1oloJCYJRFtQm5BFsRbu3tBHgLkpVOGJxxz1ZtHPfs9HnxQn56PmfQoeLaIQOJ/YD2Sb
+         stcrJG3tH4LAyea6YKbSei67P6FDORsXD7tpsGxekZA4ezlHVNOEHwyPT0F8ZNFlQGa0
+         1lx+AXvfQ2EYsWzgLjkKbjvRg84FZ60P4yM1LTY43v6FbXb7rU18/0K99f8CMMkwbgDP
+         9MHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778722588; x=1779327388;
+        d=1e100.net; s=20251104; t=1778722648; x=1779327448;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HyzUK3ipgqV9IXR7iiEoV2eo7NR0IJ/lnsHXhN3GONU=;
-        b=bTK87XFsdhtOLCxZp4IoTzLkDagn9BeCWYypNVNA92nwtKq+4Yst3z6N9DvX6MXSAa
-         K7TmL9MJvrozow72iOOo4NZb6Xqoo9fdWJ4dNQ5/KMnivRbMBZnBNh48GTQTDOGQh0jO
-         s525XlLDcdAXgBIEKrxp8XYvywqelsNCfgzOiSS32rg9Y6btp8PbkQh6LsJ+IkdJE81P
-         2V76HOp6iYh/K50UhPE+2xWiOFUV6iT4FWt2BfXNFvPa3yTu8LLOtLbMLhoEd9C0vu7d
-         8fF4fCgWkEylqlUXkMog+nHJfhNwjIUWDVnUv//TX1X/ky6OdvePh96JT/Jj9qP7o18T
-         a7cw==
-X-Forwarded-Encrypted: i=1; AFNElJ9R8q78fK2oPbSg54l9xVDsXWBPGz7cp6ByLhpT36Mrdzd8lf0IhtKFWvFh0GS3UEVdw/YpABBYlkzE+w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YygxAoQHlmHLfWRzHetifP9HRqjsFOLPn6J5CD3UevBLGhfa5VI
-	OuUsxfPoyFaly1kRynY9GcoVii67loWsEeOkYRD91UI+LlsFYP8LZdlC
-X-Gm-Gg: Acq92OH4dcSUsXIAalRRJwFwtxNhzcM840dHssdjrA7Xd611/ojMmzxltH0ciZ05/jv
-	7u4t0deVXNj+VKNHYO1rolFUwMfgS0oxET7ILsVYxsP5nbaLP003YE388KAkUMKqvYobCPMhJiU
-	2EILIkBN16sIr7x2RoC564gK0V27PRa4Kq0S6hsI8XXaz76mDlR3v1rqvT1yeWwJxGnGYoK4a51
-	P0CRCzO4A8tUSs9JdGX6iInHuHTsaSDWzWiV0uX5sGPcWeXQ5z92vMxSR1GhBB1kf2s02KK6Vou
-	MPGWU+tQl9l3A5FM+wP+ELe1l9OYmdFG4LhfM03kEQWZsX8zKYtBHe1PN5GkXSJWA2HGXSs1Np2
-	IJy/zCwzhVllbtRKMnOy7X8W2NODJRFnwMNjFlhcaoGVZy3hrpfKp/t8wQJ8bmw7J/wjIRQfSJx
-	oV+VGuDHWvtqabiK97ct2gK3Wb525I8kkTF4SkD96nWbLoz26XobxDs0cfKuyEvYnJ7U+roDa8
-X-Received: by 2002:a17:90b:5628:b0:368:a297:bd3d with SMTP id 98e67ed59e1d1-368f77c87d1mr5215861a91.3.1778722587959;
-        Wed, 13 May 2026 18:36:27 -0700 (PDT)
+        bh=mAKAJQbl4Cd4/zopDe4p8caMLQ0m6LhmzJdP+QLvBb8=;
+        b=F7xqvYrPb+5w7kTZcu/7wDv6Ew8h7OFqT+7KB9jJDmpCOdh+pVICTAjIqeDteAvqyU
+         g3Kf8YIdkfwfrthGt4RRzrgbAE7TWkGZABA8OopcCgeA/iQXad0PwOKTmU8N9pdm3BCf
+         usE+3X0pKkP6TNa3tR/yAEOxcewoEaK+OhNFqeHwKX5ArO3oEjyuEsfDCZWyAzPbrPTh
+         RO661/WrF+lH3yNPBQX1VA3wsZQlhsbUd9jY0hO1uKxmPsAzzsxqVotMXqxDWm/rnTuT
+         CLuJ33ub0gVnEn+2j5Hhe1oBmRCV7/IfLUIu2w04/i7uJby/dzjRfzGucg2pO6rM0cCG
+         LftA==
+X-Forwarded-Encrypted: i=1; AFNElJ+4UIHQbiVOCXFd1ADC6d/x9SkEpZjtP0km5X9RReEAYlu09tzl+mA5slrl7rCoLnqWfLs0xIGoXab0SQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwcUgC74rPoCfBDOaONozh7chUe9r4og2O4vpedTet2x+A1a0Ne
+	YxDKYCbQ/ORTYhCs6alb7vzS6jZ2AyigxF+E23hjNezuEBiMU6PTgbIiQysgNw==
+X-Gm-Gg: Acq92OGv8pykxEQuv/SKdxQtN3r3bKl3YP0pSYUa93Vei3W+zELz9wqKsoWcRbApEmL
+	CSqqPI8C3T+c8TZ92AeQvzLwjMHPCg+DZMU3xw78ZCUi5zaXei85Wn02zIX4Y0fjZTqYYH0XgbO
+	aWLRkH0GqVA+Ib39P+sWEwUsOqWD5rYia7o/d+9+xKR9JK3nEpX4cIXHeBgQztRHlc4axK9HomB
+	cEVv0XpOQdKoldaN4fwbEvJ+KeMDDko2QOLTvDO8YuuQUdh/VqJZ3VpdfJCyQM6yJ8d79p9/eAJ
+	yIiPGHpawvIOxFTPJ3vGIw8e1pT87syxZHCheoJSeuw3mDgUmhn5GHwVkGtZvBMLDv6+k6crzzd
+	zoBYZaLPLqh0S5Re1VLkA8rpbp6V/H5EtJUHhElmWPH6TVFmPE19ubxsDEiYjenQom1qo+LobYk
+	HRQnu4sUdbiZoce5oHe+3hX1BHHcCKORJqy++ST802loMwHrEa+ad5GGN8QW4shdlmEVWGRu4N
+X-Received: by 2002:a05:6a00:4404:b0:837:a211:4ed0 with SMTP id d2e1a72fcca58-83f042c81bamr6157499b3a.41.1778722647729;
+        Wed, 13 May 2026 18:37:27 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c82bb121ccasm464806a12.29.2026.05.13.18.36.27
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83f196647aasm767494b3a.5.2026.05.13.18.37.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 May 2026 18:36:27 -0700 (PDT)
+        Wed, 13 May 2026 18:37:27 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6377419e-da4c-4b79-86f5-25417fe6db06@roeck-us.net>
-Date: Wed, 13 May 2026 18:36:26 -0700
+Message-ID: <80804838-5526-4096-b0ee-d6b46bbe0ecb@roeck-us.net>
+Date: Wed, 13 May 2026 18:37:26 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,13 +69,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] hwmon: lenovo-ec-sensors: Use devm_request_region for
- automatic cleanup
+Subject: Re: [PATCH 1/3] hwmon: lenovo-ec-sensors: Fix EC signature check
+ logic in probe
 To: Kean <rh_king@163.com>
 Cc: Mark Pearson <mpearson-lenovo@squebb.ca>, linux-hwmon@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20260514011411.4167069-1-rh_king@163.com>
- <20260514011411.4167069-4-rh_king@163.com>
+ <20260514011411.4167069-2-rh_king@163.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,96 +121,52 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260514011411.4167069-4-rh_king@163.com>
+In-Reply-To: <20260514011411.4167069-2-rh_king@163.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 5/13/26 18:14, Kean wrote:
-> Replace manual request_region()/release_region() with
-> devm_request_region(). This lets the device-managed framework
-> handle I/O region lifetime automatically and fixes:
+> The probe function reads a 4-byte signature ("MCHP") from the EC to
+> verify it is a Microchip EC before binding the driver. The condition
+> uses && (AND) to check if each byte differs from the expected value:
 > 
-> - A double release_region() when probe fails after acquiring the
->    I/O region: the probe error path releases it, and then
->    lenovo_ec_init() releases it again on the same error path.
+>    if ((byte0 != 'M') && (byte1 != 'C') && (byte2 != 'H') && (byte3 != 'P'))
 > 
-> - A release-after-free in lenovo_ec_exit() where release_region()
->    was called after platform_device_unregister(), which has already
->    released the I/O region via the platform device removal path.
+> This rejects the device only if ALL four bytes are wrong simultaneously.
+> A partially matching signature (e.g. "MXXX") would pass the check and
+> cause the driver to bind to a non-Microchip EC, as long as at least one
+> byte matches the expected value.
 > 
-> - Missing release_region() in lenovo_ec_probe() on the DMI match
->    failure path, which leaked the I/O region.
-> 
-> Remove all manual release_region() calls that are now handled
-> automatically by the devm framework.
+> Change && to || so the driver is rejected when ANY byte does not match
+> the expected "MCHP" signature.
 > 
 > Signed-off-by: Kean <rh_king@163.com>
 > 
-Why this empty line ?
-
 > Reviewed-by: Mark Pearson <mpearson-lenovo@squebb.ca>
 
-How do I know that this review really happened ?
+As with the other patches: How do I know that this review really happened ?
+
+Guenter
 
 > ---
->   drivers/hwmon/lenovo-ec-sensors.c | 13 +++++--------
->   1 file changed, 5 insertions(+), 8 deletions(-)
+>   drivers/hwmon/lenovo-ec-sensors.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
 > 
 > diff --git a/drivers/hwmon/lenovo-ec-sensors.c b/drivers/hwmon/lenovo-ec-sensors.c
-> index b0f2a04ce679..ea74bddbad5a 100644
+> index 8681bbf6665b..a32b1f2c6a3a 100644
 > --- a/drivers/hwmon/lenovo-ec-sensors.c
 > +++ b/drivers/hwmon/lenovo-ec-sensors.c
-> @@ -519,8 +519,8 @@ static int lenovo_ec_probe(struct platform_device *pdev)
->   	if (!ec_data)
->   		return -ENOMEM;
+> @@ -537,9 +537,9 @@ static int lenovo_ec_probe(struct platform_device *pdev)
+>   	outw_p(MCHP_SING_IDX, MCHP_EMI0_EC_ADDRESS);
+>   	mutex_unlock(&ec_data->mec_mutex);
 >   
-> -	if (!request_region(IO_REGION_START, IO_REGION_LENGTH, "LNV-WKS")) {
-> -		pr_err(":request fail\n");
-> +	if (!devm_request_region(dev, IO_REGION_START, IO_REGION_LENGTH, "LNV-WKS")) {
-> +		dev_err(dev, "Failed to request I/O region.\n");
->   		return -EIO;
->   	}
->   
-> @@ -541,7 +541,6 @@ static int lenovo_ec_probe(struct platform_device *pdev)
->   	    (inb_p(MCHP_EMI0_EC_DATA_BYTE1) != 'C') ||
->   	    (inb_p(MCHP_EMI0_EC_DATA_BYTE2) != 'H') ||
+> -	if ((inb_p(MCHP_EMI0_EC_DATA_BYTE0) != 'M') &&
+> -	    (inb_p(MCHP_EMI0_EC_DATA_BYTE1) != 'C') &&
+> -	    (inb_p(MCHP_EMI0_EC_DATA_BYTE2) != 'H') &&
+> +	if ((inb_p(MCHP_EMI0_EC_DATA_BYTE0) != 'M') ||
+> +	    (inb_p(MCHP_EMI0_EC_DATA_BYTE1) != 'C') ||
+> +	    (inb_p(MCHP_EMI0_EC_DATA_BYTE2) != 'H') ||
 >   	    (inb_p(MCHP_EMI0_EC_DATA_BYTE3) != 'P')) {
-> -		release_region(IO_REGION_START, IO_REGION_LENGTH);
+>   		release_region(IO_REGION_START, IO_REGION_LENGTH);
 >   		return -ENODEV;
->   	}
->   
-> @@ -579,7 +578,8 @@ static int lenovo_ec_probe(struct platform_device *pdev)
->   		lenovo_ec_chip_info.info = lenovo_ec_hwmon_info_p8;
->   		break;
->   	default:
-> -		release_region(IO_REGION_START, IO_REGION_LENGTH);
-> +		dev_err(dev, "Unsupported platform type %ld\n",
-> +			(long)dmi_id->driver_data);
-
-This is not documented in the commit message and, on top of that, pointless.
-It isn't even noise, it is just pointless (the default case can not be reached).
-
->   		return -ENODEV;
->   	}
->   
-> @@ -608,10 +608,8 @@ static int __init lenovo_ec_init(void)
->   		platform_create_bundle(&lenovo_ec_sensors_platform_driver,
->   				       lenovo_ec_probe, NULL, 0, NULL, 0);
->   
-> -	if (IS_ERR(lenovo_ec_sensors_platform_device)) {
-> -		release_region(IO_REGION_START, IO_REGION_LENGTH);
-> +	if (IS_ERR(lenovo_ec_sensors_platform_device))
->   		return PTR_ERR(lenovo_ec_sensors_platform_device);
-> -	}
->   
->   	return 0;
->   }
-> @@ -619,7 +617,6 @@ module_init(lenovo_ec_init);
->   
->   static void __exit lenovo_ec_exit(void)
->   {
-> -	release_region(IO_REGION_START, IO_REGION_LENGTH);
->   	platform_device_unregister(lenovo_ec_sensors_platform_device);
->   	platform_driver_unregister(&lenovo_ec_sensors_platform_driver);
->   }
 
