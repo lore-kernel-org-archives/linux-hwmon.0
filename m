@@ -1,66 +1,66 @@
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8A7319847
-	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 02:14:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EABD331A4B
+	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 02:14:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778724865; cv=none; b=S6bHztdtkOElHueAtmUWd0+Cx4E1H7fi6mgPL2onsZulLWZtMUBiyRTp4c/YjqU2RrFjbfVmsDEjSy3KaK5S3/PmoWnEGp1CSGhrdBz+wsGP/jhNsvy0UUp+FGwzyqqLqz7PK4YqVNTCk0R0L1uPDcpiyht4DFQEdMfWTLhxosc=
+	t=1778724900; cv=none; b=tw7DPfoqZsvpCBDUGz3mlQoNjEf8iKEFeGNL5m+n4EfqnSdKllLnenXckYfjcb7xZ+Nap70ovcdZfOhBA6e/bOpHSix/kOluVpvup/LoCB4hzFYubyD5ybyqNGINHRbYIqz+59OkhrSXyBL2XCls7ukqq3M+3LgHLO4mBckeTHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778724865; c=relaxed/simple;
-	bh=gE2HvHmwzigNwBPoHesD9UdxhZ0Ehim6vcqs+z7Mods=;
+	s=arc-20240116; t=1778724900; c=relaxed/simple;
+	bh=mLwa8hT48xikqr5alwbZvYtL+YPKEw0F1k3NSY7iBY0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gzPSnABszicj67dyzMpnH+B6MJ5UIZWIi7i7Tvo6YK7alnKj3V8fEIG6sw7C9reTmrXOd7sjJPCNZJe/xz6nP0x7qTBb3jJAthkjrWuMYexeg1y3bz/MpnBlNLRj/dpQExt+v82kArCrfdUojZMABkymMIFZ5WFiWDUqaAGJ7wM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CPE5IdX8; arc=none smtp.client-ip=74.125.82.177
+	 In-Reply-To:Content-Type; b=F3aIrBJ7+T+158wlql1BRozmDIJnij5z0vPS8uvb95/oJ0oNiuNoQl7NPiJn2RzCX2aKtY+yl7vK42qmsa64TELCxZEzq5ahRUrDIEXWLsBznIGt1ay61nOTXpuMkfBrE7/Q4wsdUFFWUWoSaAZB/+7x9ZAn3IwCQIIoIC5Pgoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XDWWqIA5; arc=none smtp.client-ip=74.125.82.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CPE5IdX8"
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2f36da5c8fbso7372036eec.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 19:14:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XDWWqIA5"
+Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-1329fc4bf77so235388c88.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 19:14:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778724862; x=1779329662; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778724898; x=1779329698; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=7Qpmkf3DSLZHVaV2Sltdw1pOYMH7v1LuMy0tCXwCkfs=;
-        b=CPE5IdX8dRRSZ4gzki0h+ZMiDi6w4REuS5hSGab8NF4Zc3VtcW//6xi/krYf3zZx7l
-         ImnLW2BvQg45e1JsrA2XXHhaOCVctRmSGCAQuHmLF88utnaKBKKuUxl0/5oJTOK//5Tu
-         p0JC4y/FBQO8EyfCULkLLZWjqDfeWQvVbMoteLwzL/B/M2tIjl9dSer1fA3D5qbT/+dC
-         WXeq2Ykb6LUTiUEIKt4GGz5GKwgRiNkUjfocvW1Y8+3iuD5+SrRJB8z2w7tJPv2AWsdU
-         9LHmRSzJYK4VxNT8YPvKPJccvesLd9ZwHr+/2bVuWF13wOUYlpuWre4gICAWvQQcMCpI
-         ZvMg==
+        bh=YFeSFQ5fWNanAAto4axcgqwLVs3s/DcV44ZRpfZXmiU=;
+        b=XDWWqIA5Czf0E89jwc6ppleI6Mvv1MMf3kFGMLpff58E/beMcuyyCqY4xzzOg81Jde
+         3m+obkFfW+EzFo51GdG/RW4IoD0uhsrILsTkDnxU6FkFRd90AfvyOQQlZdVYP/SpFjwQ
+         KJLxAnsXQVTzrvnA+nNao3Cxppe5n7U6cn0dOimau57PYzajgZeXntXhCQ/l57w+cIZW
+         amofgPMnGmh94MDwM4HraevU2/ZsfEzavsa9swyI3rxdZWhsXBPCpjd6n6QYMhOy7Pi7
+         1k8D7k62D2E1t9NWVlWxKBinc0HFAYywWmJpzeWLFUuVaI1Le4VvcBcrmyNxkCVzAXdr
+         knBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778724862; x=1779329662;
+        d=1e100.net; s=20251104; t=1778724898; x=1779329698;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7Qpmkf3DSLZHVaV2Sltdw1pOYMH7v1LuMy0tCXwCkfs=;
-        b=OS8D2PE/M/2/Ghap4wZlLjE2l30TALYa9n58kv3myA2PP1s+YAYSoih5El21pYmG6w
-         UM3+4AtIlda8XxVy9zBak8VtqMo5BTbYjGkU/pVwpR0bwBIjV/p3Ew2bXuLIE23+aaD4
-         yJDamNVqR4jZOJJJFPGHQaH12v7UY+2Ci8f7dCE+oeWurTINQBAnHvDZrjv8rlZBEYUJ
-         8mbmv9XFlRBHqXoOf9VBaV3yKVX/7rIKWLr8Dw4BCT4ki3iP5Qlx7RPekCGltS8C9zcl
-         hcFFio03s6ZOXJ0G68GSUsOxlAVAVXWLjDyLdRv5KByN+bsGf1XwHM6JCP/TJurv+dvg
-         Z0fQ==
-X-Gm-Message-State: AOJu0YwZu9p2AgjaItat/cU9LeKUheh053SAXlvHgmrTQ7M2VbjTRswW
-	oqY0GZekkUrOz2Lo7n8e+534SD/iqJe9UMnQ+lSecofSHZI+tY+J+pLV
-X-Gm-Gg: Acq92OFhuwFsnYiWsiy3XVnPSQufqC5VM8BGh89HLSDrCaUne8ZM2DEWP5SuC1VyNwi
-	zKjhP3fn2PplXss+UjWzZ62tmMlTR96zU18ssqNVxvSOhXmigcCZBl54z8rnBlE15aHZgdyJ0pw
-	6nN+9Uy64WdZwf8zVJFbWR1NRMEXa3RV+NEe2MqiacKjJMB6NLOVMtDH/nZ6+gx8SLulGy+wqqi
-	5pl8xaNIngv6+qzF2NVxHxANlcKVU+bc2mLCFzCapybjyYBGworLSFahXpb30yfC66EkS/2AaPc
-	xIbpYjjSdOL7hFj4iT0zXIM5yWeSLBJurRHaeNvu60P02nox1zq8SfB2d1mainJe+tqDnUlWAlD
-	6NoXTqExi7v8Xp2dMvzCjw2Z/gIHK4ZafO0JLUflAjb9TJwpMyQ41KgItvkYGXK7U1wVWtHUti/
-	w8iG9OJqWJn3cTYUQtOv7ICk5cP05ocZuj67DEK6j+33LqsJz5oGpHFnZn1HY89R8sVezlxN/D
-X-Received: by 2002:a05:7301:22a8:b0:2d3:2983:c87c with SMTP id 5a478bee46e88-30117c7eb93mr3806778eec.1.1778724861950;
-        Wed, 13 May 2026 19:14:21 -0700 (PDT)
+        bh=YFeSFQ5fWNanAAto4axcgqwLVs3s/DcV44ZRpfZXmiU=;
+        b=CjcxHw8JVqJ5fQHaiIL6X+Hy/nFtQ1wLHg+NjNbxf8W42nV2U1si03R69uZ/zQopJg
+         jk4/PBAETMOkBfYiicro+dXpseQfQOYBbH069kn5Dnz1U0tRochBEdayNKNgd50eFgxy
+         t1BdSvZ9CasZYGeqY08h16xj/1lMHntcC1fUrnY8K+9qSvXKeU30ozUG0irjpwo/28Ah
+         eFOcxorsw86RP5AkQryBNGeHlCgUZZ83yclfoc9t4Re9FIu0GAA9PV9/OAs9dGrkF9UL
+         SyFRyodOD6IeVKOUUl7SiBUIVoLyFjbEKw5AZYirePPb+71uGYA7FICfhbWrneDPVFXs
+         jFDQ==
+X-Gm-Message-State: AOJu0YzaI3BrZYDA1cl/rmY8l0u40jqjAB899zLsacT3r7tARnytFOHA
+	1zCDFsEweoL+SrRFpECFFRTAVsK8u1t8Jk1okJ6UzRJpUWOWlleEcD1T
+X-Gm-Gg: Acq92OGoPfL5JONDJ9V0dOZD9Ckss8JVMun/Mk0V/4PKaIo5EZOBfM5ppvVl139XefC
+	v/dO0A5zrJKFq/VXdEJ9sP2EsbQkokLvmF0A0giEl8JMi8R4EvWy5QK4HfTlk7RAjEkVGw3eiQ+
+	YYZaVUM9DMmCk3H5WUt4paFgiSYlTyAM1zCBPglMX9Pz3pbSe1TI6By30zgAeXsNdBtvce8uLsF
+	t3cuU1UutM2TyePjSArWMJVo6OreJZg17hXsSRycoWXnLjji/5MWm27gp6gFsdIX3duiY+i7OdO
+	14ETPRwyhjHVgh1sZUHZcpnAAlX4EK+bmPRbadKh0DLMJEOf7ijIHqUAsAg0EbUz9VNxL83bMHB
+	hy+dftEz/lPGznHX3eYzNdx2T+/rnPqMd0JP6splmjANdVxZqKiXH8DLQTkI0WxW8JZ0u8jP+T9
+	m/fsc6iLU8BxrpgNCeGHetl8awW4vn3vI7bsNhDo4/6NzcFImjt5d9aGNs2YnNIzE4ja7af7DO
+X-Received: by 2002:a05:7022:2605:b0:12a:68cc:3efb with SMTP id a92af1059eb24-13436682901mr3723291c88.16.1778724897922;
+        Wed, 13 May 2026 19:14:57 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-302978ad18asm1259151eec.26.2026.05.13.19.14.21
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cf44668asm1498825c88.6.2026.05.13.19.14.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 May 2026 19:14:21 -0700 (PDT)
+        Wed, 13 May 2026 19:14:57 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <045f1907-0180-46df-a123-cd0ce349e86b@roeck-us.net>
-Date: Wed, 13 May 2026 19:14:20 -0700
+Message-ID: <69b9cc9b-1336-4093-8fd0-e1816e038926@roeck-us.net>
+Date: Wed, 13 May 2026 19:14:56 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,13 +70,11 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 4/5] hwmon: (pmbus/adm1266) replace probe-time RTC seed
  with rtc_class device
-To: Abdurrahman Hussain <abdurrahman@nexthop.ai>,
- Alexandru Tachici <alexandru.tachici@analog.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- linux-rtc <linux-rtc@vger.kernel.org>
-References: <20260512-adm1266-v3-0-a81a479b0bb0@nexthop.ai>
- <20260512-adm1266-v3-4-a81a479b0bb0@nexthop.ai>
+To: sashiko-reviews@lists.linux.dev,
+ Abdurrahman Hussain <abdurrahman@nexthop.ai>
+Cc: linux-hwmon@vger.kernel.org
+References: <20260512-adm1266-v3-4-a81a479b0bb0@nexthop.ai>
+ <20260514015706.D7E91C19425@smtp.kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -122,173 +120,56 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260512-adm1266-v3-4-a81a479b0bb0@nexthop.ai>
+In-Reply-To: <20260514015706.D7E91C19425@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/12/26 11:56, Abdurrahman Hussain wrote:
-> The driver currently writes the device's internal RTC at probe with
-> ktime_get_seconds(), which returns CLOCK_MONOTONIC seconds since boot
-> and is not a wall-clock value. The resulting timestamps embedded in
-> blackbox records are therefore meaningless across reboots, defeating
-> the cross-reboot record-correlation use case the field exists for.
+On 5/13/26 18:57, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Low] Missing Kconfig dependency on RTC_CLASS causing potential build failures.
+> --
 > 
-> Switching the seed to ktime_get_real_seconds() does not actually fix
-> this: at probe the system wall clock may not yet have been set (no
-> external RTC, no userspace NTP), and seeding unconditionally also
-> clobbers whatever valid time the ADM1266 retained across a warm
-> reboot.
+> commit f54ef3c53db957606d5afd59cb615359c244ece4
+> Author: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 > 
-> The data sheet (Rev. D, p. 22) recommends "frequently send the time
-> stamp to the ADM1266 to synchronize the UNIX time and reduce the time
-> from drifting" when running on the internal oscillator. The clean way
-> to expose that policy is an rtc_class device backed by SET_RTC, so
-> that userspace tooling (hwclock, chrony, systemd-timesyncd) can drive
-> the re-sync against /dev/rtcN once it trusts the system clock - with
-> no driver-specific sysfs ABI.
+> hwmon: (pmbus/adm1266) replace probe-time RTC seed with rtc_class device
 > 
-> Drop the probe-time seed and adm1266_set_rtc() entirely. Add an
-> rtc_class device whose ->read_time and ->set_time callbacks read and
-> write the SET_RTC frame. The rtc_class API is second-precision, so
-> the SET_RTC fractional-seconds bytes are always written as zero.
+> This commit drops the probe-time seed and adm1266_set_rtc() entirely. It adds
+> an rtc_class device whose read_time and set_time callbacks read and write the
+> SET_RTC frame to expose the time stamp policy properly.
+> 
+>> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
+>> index 080e7dbd0c069..05b31bb08f38c 100644
+>> --- a/drivers/hwmon/pmbus/adm1266.c
+>> +++ b/drivers/hwmon/pmbus/adm1266.c
+> 
+> [ ... ]
+> 
+>> @@ -517,21 +517,73 @@ static int adm1266_config_nvmem(struct adm1266_data *data)
+> 
+> [ ... ]
+> 
+>> +static int adm1266_register_rtc(struct adm1266_data *data)
+>> +{
+>> +	struct rtc_device *rtc;
+>> +
+>> +	rtc = devm_rtc_allocate_device(&data->client->dev);
+> 
+> Could this introduce a build regression if CONFIG_RTC_CLASS is disabled?
+> 
+> The patch unconditionally adds calls to RTC subsystem functions like
+> devm_rtc_allocate_device() and devm_rtc_register_device(). These functions
+> are implemented in the RTC core, which is governed by CONFIG_RTC_CLASS.
+> 
+> There are no fallback stubs in linux/rtc.h for these allocation functions
+> when the subsystem is disabled. Does CONFIG_SENSORS_ADM1266 need a dependency
+> on RTC_CLASS in drivers/hwmon/pmbus/Kconfig to prevent unresolved external
+> symbols during linking?
 > 
 
-This doesn't just set the RTC time, it also acts as a real-time-clock.
-That seems undesirable, since it isn't really a real-time clock.
-It would also be the first (pseudo) rtc residing outside the rtc
-subsystem.
-
-It seems to me that there must be a better solution. The rtc subsystem
-needs to be involved in this discussion.
-
-Note - as sent separately - that making this driver dependent on
-the RTC subsystem (as would be required by this patch) is unacceptable.
+That would be unacceptable. The driver has to work on systems with no RTC.
 
 Guenter
 
-> Fixes: 15609d189302 ("hwmon: (pmbus/adm1266) read blackbox")
-> Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
-> ---
->   drivers/hwmon/pmbus/adm1266.c | 78 +++++++++++++++++++++++++++++++++++--------
->   1 file changed, 65 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
-> index 080e7dbd0c06..05b31bb08f38 100644
-> --- a/drivers/hwmon/pmbus/adm1266.c
-> +++ b/drivers/hwmon/pmbus/adm1266.c
-> @@ -18,8 +18,8 @@
->   #include <linux/nvmem-consumer.h>
->   #include <linux/nvmem-provider.h>
->   #include "pmbus.h"
-> +#include <linux/rtc.h>
->   #include <linux/slab.h>
-> -#include <linux/timekeeping.h>
->   
->   #define ADM1266_IC_DEVICE_REV	0xAE
->   #define ADM1266_BLACKBOX_CONFIG	0xD3
-> @@ -517,21 +517,73 @@ static int adm1266_config_nvmem(struct adm1266_data *data)
->   	return 0;
->   }
->   
-> -static int adm1266_set_rtc(struct adm1266_data *data)
-> +/*
-> + * SET_RTC frame layout (datasheet Rev. D, Table 84):
-> + *   bytes [1:0] = fractional seconds, LSB = 1/65536 s
-> + *   bytes [5:2] = seconds since 1970-01-01 UTC
-> + * The rtc_class API is second-precision, so the fractional bytes are
-> + * always written as zero.
-> + */
-> +static int adm1266_write_rtc(struct i2c_client *client, time64_t secs)
->   {
-> -	time64_t kt;
-> -	char write_buf[6];
-> +	u8 buf[6] = { 0 };
->   	int i;
->   
-> -	kt = ktime_get_seconds();
-> +	for (i = 0; i < 4; i++)
-> +		buf[2 + i] = (secs >> (i * 8)) & 0xFF;
-> +
-> +	return i2c_smbus_write_block_data(client, ADM1266_SET_RTC, sizeof(buf), buf);
-> +}
-> +
-> +static int adm1266_rtc_read_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	struct i2c_client *client = to_i2c_client(dev);
-> +	u8 buf[I2C_SMBUS_BLOCK_MAX];
-> +	u32 secs;
-> +	int ret;
-> +	int i;
->   
-> -	memset(write_buf, 0, sizeof(write_buf));
-> +	guard(pmbus_lock)(client);
-> +	ret = i2c_smbus_read_block_data(client, ADM1266_SET_RTC, buf);
-> +	if (ret < 0)
-> +		return ret;
-> +	if (ret != 6)
-> +		return -EIO;
->   
-> +	secs = 0;
->   	for (i = 0; i < 4; i++)
-> -		write_buf[2 + i] = (kt >> (i * 8)) & 0xFF;
-> +		secs |= (u32)buf[2 + i] << (i * 8);
-> +
-> +	rtc_time64_to_tm(secs, tm);
-> +	return 0;
-> +}
->   
-> -	return i2c_smbus_write_block_data(data->client, ADM1266_SET_RTC, sizeof(write_buf),
-> -					  write_buf);
-> +static int adm1266_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	struct i2c_client *client = to_i2c_client(dev);
-> +
-> +	guard(pmbus_lock)(client);
-> +	return adm1266_write_rtc(client, rtc_tm_to_time64(tm));
-> +}
-> +
-> +static const struct rtc_class_ops adm1266_rtc_ops = {
-> +	.read_time = adm1266_rtc_read_time,
-> +	.set_time = adm1266_rtc_set_time,
-> +};
-> +
-> +static int adm1266_register_rtc(struct adm1266_data *data)
-> +{
-> +	struct rtc_device *rtc;
-> +
-> +	rtc = devm_rtc_allocate_device(&data->client->dev);
-> +	if (IS_ERR(rtc))
-> +		return PTR_ERR(rtc);
-> +
-> +	rtc->ops = &adm1266_rtc_ops;
-> +	rtc->range_min = 0;
-> +	rtc->range_max = U32_MAX;
-> +
-> +	return devm_rtc_register_device(rtc);
->   }
->   
->   static int adm1266_probe(struct i2c_client *client)
-> @@ -557,10 +609,6 @@ static int adm1266_probe(struct i2c_client *client)
->   	if (ret < 0)
->   		return ret;
->   
-> -	ret = adm1266_set_rtc(data);
-> -	if (ret < 0)
-> -		return ret;
-> -
->   	ret = pmbus_do_probe(client, &data->info);
->   	if (ret)
->   		return ret;
-> @@ -569,6 +617,10 @@ static int adm1266_probe(struct i2c_client *client)
->   	if (ret < 0)
->   		return ret;
->   
-> +	ret = adm1266_register_rtc(data);
-> +	if (ret < 0)
-> +		return ret;
-> +
->   	adm1266_init_debugfs(data);
->   
->   	return 0;
-> 
+
 
