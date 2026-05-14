@@ -1,253 +1,214 @@
-Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2BB82FFDFC
-	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 04:58:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06DB25B098
+	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 05:17:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778734739; cv=none; b=jhQBAqq7WydRSc0i2ovSs6i4xEAUvRzYppc83UQIarnuPYek2JQ0OeqhBJOQI0RGY4Jkl34nX42RVXWvfvkL9uweHmR+9E5poHmKxufkjLNpbPg+IQcnJkjJ5AVml3xu3tds7nPhAPiORNxR8VYY9ITjZ94fZDhMjb7T06LhcfE=
+	t=1778735851; cv=none; b=bD6J8XGLELehZbEdvc5/RuWN+1sEBMZfrLR9uSDJ+xOsk6eN8SeLZpBKpqPPvRQrdAyO27MNZmDeKVhsrB/QE4cdiJSKUbSKKD5AWyNq6SVWG3chTJWh4lkSfPXM85a0fhwvmwo2WoE1C0ukYpqaxdq+xLd5+EvaWOk3sPHemIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778734739; c=relaxed/simple;
-	bh=GyLKE/ObGiUS+GmBhoU0kNu2raSet2R5I1pqOXZEM3s=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=HXhPeZNtoKetvbk38fTX9GqqWTNQ8xNdtrxbeFHCOO15UavfqqNENQEJkzv6jgXWiM6XQ/oKG9hMtAJmrEFVBEAuGu539LaGsXrGNlvyeTtfxxv93r26bH9N+cKNaPBT31Eng7SWG5HrT0NBJ0YtRoKL+ommFKHwsaBF+9Fk8eg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai; spf=pass smtp.mailfrom=nexthop.ai; dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b=X1p5itWQ; arc=none smtp.client-ip=74.125.82.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
+	s=arc-20240116; t=1778735851; c=relaxed/simple;
+	bh=+yrA+pG0I/dSz7fpzwQiNOOK+H+ExX8/eCT6i7SYtVQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hMIZqlx/CBBwQ2+9N9pcswisMiI9lT/QYtiawq65C5PmInj49i2cTY+T/aumc3tweSf6wy/HyoEk6C8buDqANWnTChv42eSdtTySwlAJa+PP9tRFf7X2qL3pWN28QfrMv+vZEEpDe4Mpfoq+bv2NE5StgZc5w0DX0EIASh/zutw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rlhw7uaa; arc=none smtp.client-ip=74.125.82.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b="X1p5itWQ"
-Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-2ef2a1cc06dso1612300eec.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 21:58:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rlhw7uaa"
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2ef2a1cc06dso1633971eec.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 22:17:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexthop.ai; s=google; t=1778734737; x=1779339537; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J4E6xAV+ymnZaVvNz/6Cf5lX7tVpE5qIZhbUx7OqV4o=;
-        b=X1p5itWQHjJocpRBQaXQdbk2ZQQJE0wlft2aqsVdHv4BKxlqhD4qeuIeiiJ3EjynYp
-         TkjAwQp9IPJF4fOa6HHvDHTq1RYRkYSpYyW5eVmHxlIW5ERZr5j/lOkuK1/pDWk5bRRD
-         uNKmpMNqbFXZ3KDOisnXiz/ckfn7FRWTnJASjYsrT3OaFZ9tfoFRplKFsdUoy4K3Y6bc
-         XNz1MB6XCho8n5JXNdpAM7Z7/09cRCXnnEnGfDm8GaoflrgbbUYl9bovQKC0Z1bQbjOc
-         B/Lo1U7HwyzYyr9Lf2H6SGGo6H9lOo4ES2Sow0fVPH6VDiMrbVNceBAhRdylAKCwMleG
-         4I8g==
+        d=gmail.com; s=20251104; t=1778735849; x=1779340649; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=QY9dUZyhAciLJDOU3t/7DNHKq1hJHqqVlOT7yQkdLeY=;
+        b=rlhw7uaaSjF8K300Nl1mJMY6XzzN/vRc7OFxlCx/iGkmRqn2I819YiSMKXRLTcE5jU
+         0/FL/RN7HK67QXHTDVj9ViSzqX45dVnnLrs5n5hMMPVxa/zm+JUxhzmcFJNLk4kqvMKe
+         UHm3vDWgE9qyaIXyUjPMPP17Mg1tU7d7o+i/zw+Ylus6nk9GzfQTuRY3pXTu1/yCBtZ2
+         n+OXnyo7NoW/q546TeCMDoAWXHlsyJdmbSZmJLrjPWXEDwkEKhHtiZ8FbfIscPsEtRff
+         SDXNWgWSMBqWlwHyRhBwYxFv519L/BK+ZGJtfVT9dE7poCqzL4RtIgbr+dmn3b+cEFBt
+         PeOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778734737; x=1779339537;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=J4E6xAV+ymnZaVvNz/6Cf5lX7tVpE5qIZhbUx7OqV4o=;
-        b=CqQq9BcROEJM53bvX7gzprV5ilTO85uKakLxC5UJvPTPQFuB71flsykOkuW5nuuBoq
-         xetFZZKDxkoMt6TkE0JLnZ8SYJvJALY6yVe/DSg8jyw5Ssw9oRnV6kn4zAzipsDz9L2c
-         b4by525MULkHPFWFDCg/P7ntRfMgJZ8bIxf2Q6v3+br3cGnSLqPjPtLu69oV9bQ9x33u
-         hEBRW6d2gzcIwY7pFJU1WvvPS3qE6NAaX4gjNNAn1IYI2Xpq11KDyIZU2taVlljDVdf6
-         1f232IOzalNSO+ImURmY/VIiAefeFFiHr4z6iyMEKCiifc8kqI2zmP3bQsqUmNQiqhYq
-         vcVw==
-X-Gm-Message-State: AOJu0YymVRzGPRMkSlGvc9bKlxmDEVXniKsiuULARcGg/g/u9KZWRcmm
-	Q98y+/rOTciwHJHr58MMklsLmdmZ+KGfIo23Wyr/b3Xzk5NTquhakuvi1eQZJsvUx+s=
-X-Gm-Gg: Acq92OGGMgRTTLoND4KegAztBOjqRBO1cAkUGRTSILRWMaXifwj0eBWPesAj52L6kKO
-	/QiHpDhHNTLOd1tUaDrSMFBMXCiIU2vl51ZpEPkPyl0EqA85Qh7mYSpyvoFfEBU3Wa0VU9fDGvZ
-	qzKqyhKYPc70Z21stTcWBP1g6l/Qp6dG5wcP6Jo9nmUwPnODcyPoDs9BzygEnGa35V5Zil5hHEi
-	apwf3HIrgXv7omoX4403tdNbTJrrrduMcY3fss2TMx77EqaaTJ7m7+JTvfsnY8oAkNKUtqInCGJ
-	lUAN24SwDmQwBiiYpLYjBFQyZZmWMAykvti1XI7aGpTgc6rALNu3VUPBgOKg1zGvS+/CNWbc7Sx
-	VxR28oVigT5KwkFV8tk3/J81j5McIksvkBa1tB9cnHGnGSRv0WAC71lgDo5g62774CGpWm7qgQL
-	LzQS197KybBe5h5BKfZp8pZ0E=
-X-Received: by 2002:a05:7300:5412:b0:2e2:3381:2fba with SMTP id 5a478bee46e88-30117faa7d3mr3926686eec.3.1778734736576;
-        Wed, 13 May 2026 21:58:56 -0700 (PDT)
-Received: from localhost ([50.145.100.174])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30296dcb6e9sm1945150eec.16.2026.05.13.21.58.55
+        d=1e100.net; s=20251104; t=1778735849; x=1779340649;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QY9dUZyhAciLJDOU3t/7DNHKq1hJHqqVlOT7yQkdLeY=;
+        b=jcVoZuU/376PcYMHskNbvYyymIkHh0mnBzktDzsh9fERGvEEtfBfnr0dk0poj4GNkU
+         aaauPZdjiuhnkB4lfqBQawjaF7kVMKaPMtOjGAP2/p/0CQZ1uSPphBHCmyc1DmX82GNh
+         teHplnmFQWp+g1+kOQKxJpS1GEBiHajrCv71JXwRSaVZgwOOCoIAVg957eaZwJ35rpTG
+         4ZwZYChmo/hO2WOEMEGnJ5NLlfSOybzhw4HtrMO9lAaqYO/IYS+WZ1ZT0okNj+ULOegD
+         oz0skG5RlolFFUrRHb6yNuV/z1gBaPuM18viQcxsulE+L58jIn6muhf8LAUWrmvBDdD9
+         SwnQ==
+X-Gm-Message-State: AOJu0YyjSk3um/v+IYS0QBB7jykhjH/OgSaQJfqFKiXtTZut4NekE5nC
+	+1mNj7teCItSBjggxXJsR5J7up2psln9PlORvkcpjySttPFWYdC4rKeH
+X-Gm-Gg: Acq92OEPX0jpNygbdJ2dfSksa6xMpt7j4VNotQzXFVZL+b7vNUPBt5UmJsBJ1+CgUP6
+	pXP2xYwM49RXL9vzEW9HaJ9iSLA/KNBl6UsahjT4ocTCsNe7OWEWJEjwOt8rX+FT8eEnbtUtQov
+	rQY74eWYu4jjnSyoy7NKRdHQM5mjP01MIjbnclkUa5VqckZ879Bk3g5JLbESVZsAJZ7RitRNzHr
+	BS0+HDpqPbJPz4egtv1kt3zf7v4kyZ3Slg00zRotwva+a7ZCzgOZJyUmd07iKJ/ACgmH0sPr7+4
+	A+l8S/g3/WQRiccLf69OLJ05/k5iNa0VgCH4VYUodxi5FYC41GRCOTxGSVSqnROWzr/yK+oysRX
+	Bio+fxYukyvsfWPYdrtDs/fpT65gN6cbtzgFv6AgIRGBNSFS9D1IOQBevr9nc8kvn69uXCLDNkj
+	9iUQjVwbxXC53xK/cNc24NDyZPobkiRM4q8ygE1zeaLcdS5wZ1Ktwqzzwc+ST65X4MyS/yRYrx
+X-Received: by 2002:a05:693c:2b08:b0:2f2:32bc:787d with SMTP id 5a478bee46e88-3011a661913mr4172772eec.23.1778735848686;
+        Wed, 13 May 2026 22:17:28 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-302973bc8ddsm1633828eec.21.2026.05.13.22.17.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 May 2026 21:58:56 -0700 (PDT)
+        Wed, 13 May 2026 22:17:27 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <388bb990-3df0-4eb4-983d-59c502397b8c@roeck-us.net>
+Date: Wed, 13 May 2026 22:17:26 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 13 May 2026 21:58:55 -0700
-Message-Id: <DII4U8OGDPXK.2JJTHRE0OEGA5@nexthop.ai>
-Cc: <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH v3 2/5] hwmon: (pmbus/adm1266) add clear_blackbox
- debugfs entry
-From: "Abdurrahman Hussain" <abdurrahman@nexthop.ai>
-To: <sashiko-reviews@lists.linux.dev>, "Abdurrahman Hussain"
- <abdurrahman@nexthop.ai>
-X-Mailer: aerc 0.21.0
-References: <20260512-adm1266-v3-2-a81a479b0bb0@nexthop.ai>
- <20260514004750.10B3FC19425@smtp.kernel.org>
-In-Reply-To: <20260514004750.10B3FC19425@smtp.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] scsi: mpt3sas: add hwmon support
+To: Louis Sautier <sautier.louis@gmail.com>, sashiko-reviews@lists.linux.dev
+Cc: linux-hwmon@vger.kernel.org
+References: <20260512214703.655633-3-sautier.louis@gmail.com>
+ <20260514010209.5C3ABC19425@smtp.kernel.org>
+ <106e2981-35a1-4559-ae20-2026c224f590@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAmgrMyQFCSbODQkACgkQyx8mb86fmYGcWRAA
+ oRwrk7V8fULqnGGpBIjp7pvR187Yzx+lhMGUHuM5H56TFEqeVwCMLWB2x1YRolYbY4MEFlQg
+ VUFcfeW0OknSr1s6wtrtQm0gdkolM8OcCL9ptTHOg1mmXa4YpW8QJiL0AVtbpE9BroeWGl9v
+ 2TGILPm9mVp+GmMQgkNeCS7Jonq5f5pDUGumAMguWzMFEg+Imt9wr2YA7aGen7KPSqJeQPpj
+ onPKhu7O/KJKkuC50ylxizHzmGx+IUSmOZxN950pZUFvVZH9CwhAAl+NYUtcF5ry/uSYG2U7
+ DCvpzqOryJRemKN63qt1bjF6cltsXwxjKOw6CvdjJYA3n6xCWLuJ6yk6CAy1Ukh545NhgBAs
+ rGGVkl6TUBi0ixL3EF3RWLa9IMDcHN32r7OBhw6vbul8HqyTFZWY2ksTvlTl+qG3zV6AJuzT
+ WdXmbcKN+TdhO5XlxVlbZoCm7ViBj1+PvIFQZCnLAhqSd/DJlhaq8fFXx1dCUPgQDcD+wo65
+ qulV/NijfU8bzFfEPgYP/3LP+BSAyFs33y/mdP8kbMxSCjnLEhimQMrSSo/To1Gxp5C97fw5
+ 3m1CaMILGKCmfI1B8iA8zd8ib7t1Rg0qCwcAnvsM36SkrID32GfFbv873bNskJCHAISK3Xkz
+ qo7IYZmjk/IJGbsiGzxUhvicwkgKE9r7a1rOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAmgrMyQFCSbODQkACgkQyx8mb86fmYHlgg/9
+ H5JeDmB4jsreE9Bn621wZk7NMzxy9STxiVKSh8Mq4pb+IDu1RU2iLyetCY1TiJlcxnE362kj
+ njrfAdqyPteHM+LU59NtEbGwrfcXdQoh4XdMuPA5ADetPLma3YiRa3VsVkLwpnR7ilgwQw6u
+ dycEaOxQ7LUXCs0JaGVVP25Z2hMkHBwx6BlW6EZLNgzGI2rswSZ7SKcsBd1IRHVf0miwIFYy
+ j/UEfAFNW+tbtKPNn3xZTLs3quQN7GdYLh+J0XxITpBZaFOpwEKV+VS36pSLnNl0T5wm0E/y
+ scPJ0OVY7ly5Vm1nnoH4licaU5Y1nSkFR/j2douI5P7Cj687WuNMC6CcFd6j72kRfxklOqXw
+ zvy+2NEcXyziiLXp84130yxAKXfluax9sZhhrhKT6VrD45S6N3HxJpXQ/RY/EX35neH2/F7B
+ RgSloce2+zWfpELyS1qRkCUTt1tlGV2p+y2BPfXzrHn2vxvbhEn1QpQ6t+85FKN8YEhJEygJ
+ F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
+ FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <106e2981-35a1-4559-ae20-2026c224f590@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed May 13, 2026 at 5:47 PM PDT, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 5 potential issu=
-e(s) to consider:
-> - [Critical] The shared buffer `data->dev_mem` is modified and accessed i=
-n `adm1266_nvmem_read()` outside of any lock, leading to data corruption on=
- concurrent nvmem reads.
-> - [Critical] Stack buffer overflow in `adm1266_nvmem_read_blackbox()` cau=
-sed by an undersized buffer passed to `i2c_smbus_read_block_data()`.
-> - [Critical] Heap buffer overflow in `adm1266_nvmem_read_blackbox()` due =
-to blindly trusting the hardware-provided `record_count`.
-> - [Critical] Out-of-bounds write in `adm1266_pmbus_block_xfer()` due to u=
-nsafe `memcpy` using an untrusted length from the I2C device.
-> - [High] DMA read buffer bounds mismatch in `adm1266_pmbus_block_xfer()` =
-exposes an out-of-bounds write vulnerability.
-> --
->
-> commit 2afefd44ddcfcdd2fe5f8721e42653261b4e9ff0
-> Author: Abdurrahman Hussain <abdurrahman@nexthop.ai>
->
-> hwmon: (pmbus/adm1266) add clear_blackbox debugfs entry
->
-> This commit adds a write-only debugfs file to clear the ADM1266 blackbox
-> buffer. Writing to the file issues a 2-byte block-write command to the
-> device. It also adds a pmbus_lock guard to adm1266_nvmem_read_blackbox()
-> to prevent concurrent read/write operations from interleaving.
->
->> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266=
-.c
->> index 7b8433226176f..bd3784d59a7c8 100644
->> --- a/drivers/hwmon/pmbus/adm1266.c
->> +++ b/drivers/hwmon/pmbus/adm1266.c
-> [ ... ]
->> @@ -379,10 +415,11 @@ static int adm1266_nvmem_read_blackbox(struct adm1=
-266_data *data, u8 *read_buff)
->>  	u8 buf[5];
->>  	int ret;
->> =20
->> +	guard(pmbus_lock)(data->client);
->> +
->
-> While this patch adds a guard here, does adm1266_nvmem_read() also modify
-> and access data->dev_mem without taking this lock?
->
-> If two threads read the nvmem device concurrently, could one thread's
-> memset() execute during another thread's memcpy(), causing corrupted data
-> to be copied to userspace?
->
-
-Yes, this is a real race -- the nvmem core (nvmem_reg_read() in
-drivers/nvmem/core.c) does not serialize reg_read callbacks, so two
-concurrent reads of the nvmem device can interleave the memset and
-memcpy on data->dev_mem.  For v4 I'll lift the guard from
-adm1266_nvmem_read_blackbox() up into adm1266_nvmem_read() so it
-covers the memset, the blackbox refill, and the memcpy as a single
-critical section.
-
->>  	ret =3D i2c_smbus_read_block_data(data->client, ADM1266_BLACKBOX_INFO,=
- buf);
->
-> Can this call overflow the buf array?
->
-> Looking at i2c_smbus_read_block_data(), it blindly copies up to
-> I2C_SMBUS_BLOCK_MAX (32) bytes into the provided buffer based on the
-> length byte returned by the hardware:
->
-> drivers/i2c/i2c-core-smbus.c:i2c_smbus_read_block_data() {
->     ...
-> 	status =3D i2c_smbus_xfer(...);
-> 	if (status)
-> 		return status;
->
-> 	memcpy(values, &data.block[1], data.block[0]);
-> 	return data.block[0];
-> }
->
-> If the I2C device returns a block length greater than 5, would this
-> memcpy() overflow the 5-byte buf array?
->
-
-Yes -- a malformed length byte from the device would overflow the
-5-byte buf onto the stack.  This is pre-existing in the original
-driver; I'll send a separate fix patch with a Fixes: tag sizing buf
-at I2C_SMBUS_BLOCK_MAX, and rebase the feature series on top.
-
->>  	if (ret < 0)
->>  		return ret;
->> -
->>  	if (ret !=3D 4)
->>  		return -EIO;
->> =20
->> @@ -392,7 +429,6 @@ static int adm1266_nvmem_read_blackbox(struct adm126=
-6_data *data, u8 *read_buff)
->>  		ret =3D adm1266_pmbus_block_xfer(data, ADM1266_READ_BLACKBOX, 1, &ind=
-ex, read_buff);
->
-> Does this loop have a bounds checking issue?
->
-> The record_count loop limit is read directly from buf[3]. If the device
-> returns a record_count greater than 32, will the loop advance read_buff
-> past the end of the 2048-byte allocation for data->dev_mem?
->
-
-Yes; record_count comes straight from the device.  Pre-existing as
-well -- same fix path.  v4 will clamp against the declared blackbox
-size (32 records) before entering the loop and return -EIO if the
-device reports more.
-
-> Also, could this call to adm1266_pmbus_block_xfer() cause an
-> out-of-bounds write?
->
-> In adm1266_pmbus_block_xfer(), the memcpy() uses a length from the I2C
-> device:
->
-> drivers/hwmon/pmbus/adm1266.c:adm1266_pmbus_block_xfer() {
->     ...
-> 	memcpy(data_r, &msgs[1].buf[1], msgs[1].buf[0]);
->     ...
-> }
->
-> If the device returns a length up to 255, could this write past the
-> expected 64 bytes (ADM1266_BLACKBOX_SIZE) allocated for read_buff?
->
-
-Yes.  adm1266_pmbus_block_xfer() memcpy()s up to 255 bytes into a
-caller-supplied buffer whose size the function has no knowledge of.
-Pre-existing; same fix path.  The fix will add a max-length
-parameter to the helper and update the three call sites to pass
-their actual buffer size.
-
-> Additionally, does the DMA read buffer size in adm1266_pmbus_block_xfer()
-> expose an overflow regression?
->
-> The read_buf array in struct adm1266_data is sized
-> ADM1266_PMBUS_BLOCK_MAX + 1 (256 bytes). However, the i2c_msg length is
-> set to 257:
->
-> drivers/hwmon/pmbus/adm1266.c:adm1266_pmbus_block_xfer() {
->     ...
-> 		{
-> 			.addr =3D client->addr,
-> 			.flags =3D I2C_M_RD | I2C_M_DMA_SAFE,
-> 			.buf =3D data->read_buf,
-> 			.len =3D ADM1266_PMBUS_BLOCK_MAX + 2,
-> 		}
->     ...
-> }
->
-> If the hardware sends a full 257-byte response, will the controller
-> write 1 byte past the end of data->read_buf?
->
->>  		if (ret < 0)
->>  			return ret;
->> -
->>  		if (ret !=3D ADM1266_BLACKBOX_SIZE)
->>  			return -EIO;
+On 5/13/26 20:39, Louis Sautier wrote:
+> On 14/05/2026 03:02, sashiko-bot@kernel.org wrote:
+>> Could exposing this read to unprivileged users lead to excessive firmware
+>> requests and mutex contention?
 >>
+>> Since the sysfs files are world-readable, any local user can read them in a
+>> tight loop. Every read directly calls mpt3sas_config_get_iounit_pg7(), which
+>> issues synchronous requests to the firmware over the PCIe bus and acquires
+>> the shared config_cmds.mutex:
+>>
+>> _hwmon_read() ->
+>>      mpt3sas_config_get_iounit_pg7() ->
+>>          _config_request() ->
+>>              mutex_lock(&ioc->config_cmds.mutex)
+>>
+>> Does this allow an unprivileged user to starve other storage subsystem
+>> components that rely on this mutex for administrative tasks or device
+>> discovery?
+>>
+>> Could we implement a caching mechanism (for example, caching the readings
+>> for a short period using jiffies) to rate-limit these firmware requests?
+> 
+> My initial implementation had a 1-second jiffies-based cache; I
+> dropped it after seeing that drivers/nvme/host/hwmon.c follows the
+> same no-cache pattern.
+> 
+> The cover letter's contention figure came from a less direct
+> measurement and was too optimistic. I re-measured directly on
+> ioc->config_cmds.mutex, hammering the sysfs temperature file from
+> N concurrent unprivileged workers on a 9500-8i / SAS3816 while a
 
-Yes -- read_buf needs ADM1266_PMBUS_BLOCK_MAX + 2 (257 bytes) to hold
-the length byte plus up to 255 payload bytes plus the PEC byte.  The
-subsequent PEC compare,
+If you use a recent kernel, the hwmon subsystem serializes sysfs accesses,
+so hammering it from multiple threads should not substantially increase
+the back-end load. If you have 16 readers, 15 of them will wait for the
+hwmon subsystem lock. All lock contention will happen in the hwmon core.
 
-  if (crc !=3D msgs[1].buf[msgs[1].buf[0] + 1])
+> separate "administrative" reader runs in the foreground. The same
+> setup against the system's NVMe is included below for comparison:
+> 
+> hwmon: mpt3sas (/sys/class/hwmon/hwmon3/temp1_input)
+> nproc: 16
+> 
+> baseline (no concurrent readers): p50=14.6µs  p95=18.9µs
+> 
+> Foreground reader latency with N concurrent unprivileged hammers:
+> 
+>    N   agg r/s   p50 µs   p95 µs   max µs
+>    1     65244     38.0     60.2     60.8
+>    2     57722     57.0     60.1    120.5
+>    4     55026     90.8    115.5    152.9
+>    8     53688    207.2    247.9    300.1
+>   16     52188    345.8    390.3    444.8
+> 
+> hwmon: nvme (/sys/class/hwmon/hwmon2/temp1_input)
+> nproc: 16
+> 
+> baseline (no concurrent readers): p50=268.6µs  p95=289.4µs
+> 
+> Foreground reader latency with N concurrent unprivileged hammers:
+> 
+>    N   agg r/s   p50 µs   p95 µs   max µs
+>    1      3558    803.8    839.8   1008.3
+>    2      3549   1342.0   1443.6   1558.7
+>    4      3543   2154.8   2473.0   2756.6
+>    8      3518   4130.9   4459.6   4677.4
+>   16      3522   7394.6   8743.6   8804.3
+> 
+> Aggregate throughput is mutex-bound: every hwmon read takes
+> config_cmds.mutex, so contention is bounded. The worst
 
-also reads past the end of the current array for a max-length
-response.  Pre-existing; same fix path.
+It also takes a device mutex in the hwmon core.
 
-In summary, the four pre-existing buffer-bound bugs (points 2-5
-above) will go into a separate fix series with Fixes: tags sent
-first; the nvmem-read race (point 1) is folded into this patch in
-v4.
+Guenter
 
-Thanks,
-Abdurrahman
+> foreground p95 I observed was ~8.5 ms at N=nproc=96 on the
+> 9305-24i (below).
+> 
+> Across the other two test boxes:
+> - 9305-24i / SAS3224 (nproc=96): mpt3sas baseline 31 µs, p95 at
+>    N=96 ~8.5 ms; same shape, ~2x slower per read than the more
+>    recent 9500-8i / SAS3816 above.
+> - 9211-4i / SAS2004: no mpt3sas sensors reported, no hwmon
+>    device registered, no contention surface (graceful-skip path
+>    in the cover letter).
+> 
+> If a maintainer thinks the cache should come back to bound this
+> independently of the attacker count, I am happy to re-add it.
+> 
+
