@@ -1,87 +1,116 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D4D717A2EA
-	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 19:57:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212E33A48C2
+	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 20:01:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778788641; cv=none; b=MFPQp54LjpkIMp3xIJ/8l5h55O1zkdLK4DWYQzYMfrP0HnXEUbPTHX1TYtp9RXiuMVI/axxiFy2gqtwQWbPE2yY3/v8rYz2nelviWE70Ezot+i1SqL0jcTIcvRStPBEeOivasbfSLhqxwUBVCgLEty5ExHDvBxisxyM7NmjuR64=
+	t=1778788909; cv=none; b=JiSaMbps0l+iZkVZWPfeQCrL+hl5wXklKONYST1EhdHZct05+zHrKqX0Yi1Qz5nLL03phSHLo7aST96pdtOOZ1RBE0WTl9qdsP/vTOqa5mbdlbBj05LOty3ivUvhJAcyKH9lzQ2OjHmJ6sOgIPiwgWmTaVzC8AoCPr2VhkQEmB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778788641; c=relaxed/simple;
-	bh=Az1IYaOEEgLz6UKgjZworSIXQ7lq5fipFLycaAAHFPs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i+y4/cjwhvH0tMps8b54VjI11iArEPHEeM9ogxHn6X/bN/K8zJ7OyodXUdQHyh8RxHP0gr8V98A7vjCOxJRzNVy+/y4RhVuLeRZBwOk7/14IpmUNiilf9Fem/U3OBuZ/e/NOFrnBOpiD4O2EQvBLKchkqrjldDmJI4ToKqXe1hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=syqCzKQi; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778788909; c=relaxed/simple;
+	bh=SUe2Z7csLu3EIVSgP3ikRvI6dwffX9wqRIZ9j07Ovhw=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:Mime-Version:
+	 References:In-Reply-To; b=e5XlgEeK0hBwwSb4vHneI6WSIgxJ5pSh8RB9dDCyDnaowGpN699ZJH8U6avccjQT0Qlb29Bxw+yP861fJe1V3zI3GBl8wGTGpztQaWOvuDkIZRm9emS3VEOfrvdbARLNls0/8GgHg0yT5kgrdOC0Y4v5Q8NZTK7f64JGpjSV6eM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai; spf=pass smtp.mailfrom=nexthop.ai; dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b=DG6zvNGH; arc=none smtp.client-ip=74.125.82.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="syqCzKQi"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-48e6db3ff7eso35979495e9.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 12:57:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b="DG6zvNGH"
+Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-12c8f9846c8so12599824c88.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 13:01:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778788639; x=1779393439; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Az1IYaOEEgLz6UKgjZworSIXQ7lq5fipFLycaAAHFPs=;
-        b=syqCzKQim6dXsrTJ5wmCyd7R0kJaX0brVFLOoW7g+D2vV8TcodF9h9l5AvNCsAduen
-         NuBcrakl436S3QfY/jVv0X+ZH9goWQlmbKJXuntpLb76ggoG/ffR4t0TJxs5heaCplC5
-         Eq+zCaCuBkP0Htevqw39cnsSVFQ3sMWhxpV3Xesz9VIXwAhANIPKShsQ4Sr5GoRFDJJf
-         GUUJr9VPOWFp8qKHmebolYtfY8K4WijfowbaZ6Y7gHleRFx2WfhnVpTfvIko6BobU3Cf
-         t76vZ47G8mMWgmAg0DB5BIPlGuFZW+5InjLab4j4htgQfrx0vS9G4ac4rk5sMaiEIzC9
-         SCHg==
+        d=nexthop.ai; s=google; t=1778788907; x=1779393707; darn=vger.kernel.org;
+        h=in-reply-to:references:content-transfer-encoding:mime-version:to
+         :from:subject:cc:message-id:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=apzLLVPJoJDzSyz6mTxviWGjUoPCsnXa0PozzLDEgxo=;
+        b=DG6zvNGHi200NQ6aoIFP+TdLjIn/iZoZiTfJe3oMkkcNVyw7uBWa5W/2wYvlrR4rk+
+         eTNIg9nUmwwbbb7Ng16wWu5AxjYc4pFIP4UM8IbAv96ZlZVCSsI4EO0e1X68X5S1BawK
+         ZQaTlhwh/ZUEcHspAlsp0NHiHBEwN11YqUktC95LIn4tR1HGqAFySAnC9Y3aCmer7kKg
+         ee5CPUEFQgBzY2EDkEuj9rb+zUw6vDregfZsAMu5VbqNNwsL4A6kA/iPLWm8waNS/140
+         SRZA8TNBaT3/xU7uLoC67Z4VIcn4ifF3+vyRvFuHtImf1EWjQN/le09L4ph7ItHIFej/
+         D3Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778788639; x=1779393439;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Az1IYaOEEgLz6UKgjZworSIXQ7lq5fipFLycaAAHFPs=;
-        b=TZ31q41WOdhH5TIPkrSxI7FfmpvSFZSeW5MstLnmQ41x+h4GvrnIfjNCYP0FxtfFpG
-         5ADsSjdS/39quB4M5yApfSLWPE/qJ3U55WMx3hJ+sUamX98uSq1YXJgZOhtnM+7J0BQl
-         EtQRwz5fad0AWM7XzhZiGb+tn81GF86zlbf4OSSvToY04HiT+mbYWVjW99KS1PoMGH30
-         vRVR2zv4D6T6Uxm+BsC6wM0WIfUtrncfbhFLoa4AuOI6escX3cFm4rGCLMCudv+00Y1A
-         XR5mn9PmmUSrbEgmlY2BlWx4+emi364uiDPJjIumk8//ssiZ9NQB9wiC8HrdhcTvO43H
-         KS4w==
-X-Forwarded-Encrypted: i=1; AFNElJ8okjFpS0OBdvEOJiNv9eYHAdGaVN4k9twl+t7DFppOfOTXil6IRTbFScZPhgC2NSGCsxoFJXYNjbb3zg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyrx5uTvSOesKCFAQit/u7JlF/ndIBCcEE97RuErif1ouiXqjz+
-	iaXtuxIIwzShV/oOE/Z/eSRVNsPBKkZVP6Te94ja110c4HOj6JDztwRO
-X-Gm-Gg: Acq92OFKRmsCxHIaAHm19AH+xMm3c7vuJhAqlbSLp+HBi+lJ4LtPnPVpOggIXdrfg0C
-	DI0ZRGIChLR4tDlt+7nEd+WDBbdUzRmj9O7ZAVwyjs4rTPgqoGW9ZY91N2AkUD6jUy9omBhP21K
-	3c4wGT1fY1p/Didy2W05TIOLZLIt4KUE8aYYt3etX7TNUz3q0HIxyf0c5pdljc0JHXG3IecVBwk
-	flwfCf4S4rDl7W4gLLKYtU0CTkkUDs1qGmO7UQwEFcPZ++KfKTjuEqAR0eICJddBUabQguPBI19
-	3Qbi54o7rJqilAY7NLIgdgCXGPHVGIDZEptixA9+EZ/ZTcU7ASp62ChoES4DuCfajjQwUThosMW
-	xOJ0OYyVI9tQR70EtmnloJTmgOUn+RdAMiezi+t0FsW96yXxMw5opKq8dwuwtaT9+FCoC+Dvnal
-	HSqdNFs7zuJ0l313IBdA==
-X-Received: by 2002:a05:600c:b95:b0:48a:8b02:ae91 with SMTP id 5b1f17b1804b1-48fe60ea2dfmr11004965e9.11.1778788638724;
-        Thu, 14 May 2026 12:57:18 -0700 (PDT)
-Received: from localhost ([2603:c027:c000:3cde::f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fe5cab818sm12617995e9.14.2026.05.14.12.57.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2026 12:57:18 -0700 (PDT)
-Date: Thu, 14 May 2026 21:57:17 +0200
-From: Louis Sautier <sautier.louis@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: sashiko-reviews@lists.linux.dev, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 2/2] scsi: mpt3sas: add hwmon support
-Message-ID: <agYpHdvQiUtsXeJw@localhost>
-References: <20260512214703.655633-3-sautier.louis@gmail.com>
- <20260514010209.5C3ABC19425@smtp.kernel.org>
- <106e2981-35a1-4559-ae20-2026c224f590@gmail.com>
- <388bb990-3df0-4eb4-983d-59c502397b8c@roeck-us.net>
+        d=1e100.net; s=20251104; t=1778788907; x=1779393707;
+        h=in-reply-to:references:content-transfer-encoding:mime-version:to
+         :from:subject:cc:message-id:date:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=apzLLVPJoJDzSyz6mTxviWGjUoPCsnXa0PozzLDEgxo=;
+        b=FPNuMakh4cosuihrLP/utH7Xlr5I0y8GyhisAjqfzvOdZT1MEkOldDC8WybeWkcLZX
+         rD+hJIAWxkebGSHXupuguHI9xdG7ziItyKH+3pNQuUWNg2mPaNYeOc8UEumjDyIBs7Ps
+         Uadz+MMRgbvQYNXFv4/KsjcAibn5QP2YJxJ7QyY7DUp01TRopXZ2GNNp1cYL3q+Di7yT
+         4GzqVZ1t7/uU3RlM5r6J4INxMXHgvqXlaiU6RSUTivz9aT5RdJyjUe0kYztNyP3/JkjD
+         CFlprlbDI6bQai5aSFy7erUCEUxxEUH3iAdT7yz6SoFcTIGz4qtlk2noEDu5NW9XY6KX
+         4+Fg==
+X-Forwarded-Encrypted: i=1; AFNElJ977XQecydnXyLx/0tGp3X53bm05dJtRoS3RNgBrjIHP1X0Ktn01dact3RcSC4uTO8UwaUwyIETS/W+7Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDJTxsL91nmtMsWV3mYAPok9g0q9jg9KyWhqqBlpfug/A+H6ba
+	DyB1YayY+tAGM591Xppzhe2+dVm/qZzd3TNegYooXUg0znliPsysUdVQn86OJ/WFJAQ=
+X-Gm-Gg: Acq92OEtZZ7gsxQ1oIoN/QYmmFNTniQSkZgahxIbN6tp9XF4QYkZsqRZNUiteM7IU6J
+	wojOyVLIY8HfLZ1i3gyXizVNUVHNdKyw4V6+j2Xm1nCwOSXLI2gw/15KpsDByY7O3e5glWDgbzs
+	1DITceH6ArINZb8EnLVYmmCj2poVBxQvaY5V2PKeV4odKYAmtHFqp5bSTvAZxtoIsffJDH1bGlc
+	agXbayKvS7+5X11G3Mxt0HvyX777dLeSXrs6+4kWgpx0jDp+sgsFTDLa3blpyzwSnzWbNsJs+E0
+	8raVHHkysuS7fSHmDlBWVDPM5cD3yyDyFKrXAnnvJvBU12MHBwfZ5GyKh6fL74TA3cfNc168K/o
+	U39qKwvluAkfhzhqXTfK5d97hYQfd1PtGOdPxkzuAch2CQ07c0lFdyDeaEwhLIKYzHNT4/C3DUq
+	fn73oknaXOICxZBsnzCLzHHVT5O1EwP8T5vA==
+X-Received: by 2002:a05:7022:220:b0:128:d29a:3d45 with SMTP id a92af1059eb24-1350474413bmr286821c88.22.1778788907100;
+        Thu, 14 May 2026 13:01:47 -0700 (PDT)
+Received: from localhost ([50.145.100.174])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cc33a67csm5914767c88.13.2026.05.14.13.01.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 May 2026 13:01:46 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 14 May 2026 13:01:45 -0700
+Message-Id: <DIIO1I9O6X0A.21ESYHG7CYZZX@nexthop.ai>
+Cc: "Guenter Roeck" <linux@roeck-us.net>, "Rob Herring" <robh@kernel.org>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Conor Dooley"
+ <conor+dt@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan"
+ <skhan@linuxfoundation.org>, <linux-hwmon@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: trivial-devices: Add Murata D1U74T
+ PSU
+From: "Abdurrahman Hussain" <abdurrahman@nexthop.ai>
+To: "Krzysztof Kozlowski" <krzk@kernel.org>, "Abdurrahman Hussain"
+ <abdurrahman@nexthop.ai>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <388bb990-3df0-4eb4-983d-59c502397b8c@roeck-us.net>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: aerc 0.21.0
+References: <20260513-d1u74t-v3-0-27bcd6852c45@nexthop.ai>
+ <20260513-d1u74t-v3-1-27bcd6852c45@nexthop.ai>
+ <20260514-dazzling-ethereal-bumblebee-d9b69e@quoll>
+In-Reply-To: <20260514-dazzling-ethereal-bumblebee-d9b69e@quoll>
 
-On Wed, 13 May 2026 22:17:26 -0700, Guenter Roeck wrote:
-> If you use a recent kernel, the hwmon subsystem serializes sysfs accesses,
-> so hammering it from multiple threads should not substantially increase
-> the back-end load. If you have 16 readers, 15 of them will wait for the
-> hwmon subsystem lock. All lock contention will happen in the hwmon core.
+On Thu May 14, 2026 at 4:43 AM PDT, Krzysztof Kozlowski wrote:
+> On Wed, May 13, 2026 at 03:33:02AM -0700, Abdurrahman Hussain wrote:
+>> The Murata D1U74T-W is a PMBus-compliant AC/DC power supply unit. The
+>> binding only declares the compatible string and i2c reg, with no
+>
+> Describe the hardware, not binding. What does the hardware have?
+> Supplies? Pins? Clocks? Interrupts?
+>
 
-Right, I wasn't aware of this mechanism. So the amplification
-path the bot worried about doesn't actually exist?
+Hi Krzysztof,
+
+The Murata D1U74T-W series are hot-pluggable 1U AC/DC front-end
+power supplies in the Intel CRPS-185 / OCP M-CRPS form factor.
+Each variant delivers a 12 V main output plus a 12 V standby output
+from a wide AC input (90-264 Vac) or HVDC supply, and includes an
+internal variable-speed cooling fan and on-board voltage, current,
+power, fan-speed, and temperature telemetry.
+
+The host-side digital interface is a PMBus 1.2 port on I2C.  The
+PSU's other electrical signals (status, alert, current-share) live
+on the CRPS edge connector and are consumed by the chassis
+controller rather than the host SoC, so there are no host-described
+supplies, gpios, clocks, or interrupts.
+
+If the above two paragraphs provide the adequate description of the
+hardware I will include them verbatim in v4.
+
+Best regards,
+Abdurrahman
