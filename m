@@ -1,161 +1,176 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D649B1A683C;
-	Thu, 14 May 2026 00:43:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887AA2F0C48
+	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 00:47:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778719396; cv=none; b=cOulGWF7mZQ7lely6YHr82yr0aaAwjeMIWWBgmQpTJ3yquoV/bG0xzuFrI6meK+nkLUsbsXCkh9FYwLf0vfo9JeJ57l5BDJ4VOYrZtA6MlN6IUXAgHsPeSbf+QwRoJVR4ywrK2ZE8hIKRHX17PIsqtXILFfRwL3eg0Huvz5Wusc=
+	t=1778719670; cv=none; b=Zd7ePhWpcPJ+glb0cO/FxYfImOTXOL9MPUBTUGdipFBop3Gsk/tX76VsMo3fP5f8ex3hcaqAZj9EeAZEhzjDN3HIgm/qVhQdFTNlpgQlUk1MbB98SGm4urEP4+8uTiBibwAwWv2EEAnjAZFDCk0ny3m6hNxv9LcF7Qf3B6bD1xY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778719396; c=relaxed/simple;
-	bh=njUG4gtX0gjjaL4ssT35jpzwhO2AkUWQoMd2hjUQoGU=;
+	s=arc-20240116; t=1778719670; c=relaxed/simple;
+	bh=NYh77a42ZfUmDM0rYmu9Ji4df4rFg7OUQt93wwtXLLs=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=X9YexGkq1b5lLdhVur0Xuzi8hKBzjExXKbREPShXSZRrlRuCjj/RrPJAjqWC2yD91P1lM71YPG+3VPFz6KaXPab7HpPa8z3Oll06qwFobKPVTCJwlx6Tz6l5GPW3+NfWy5mZJoh+uuvXe2EjmAROFcxMjqp+3+vvPOqk3/A6n64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t06+8Y3k; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=hYD3AsCwiIrrKGZ8mOTYHKDjwezk9A0dpW9m6HgJ3bJd8OSx1iHYFyFvK8GkgkkYWWbEr9eSlNl099ek8H7t8gA77kpqYp+8Ip62uS0x//M7qc7WMaopvyfzQ/kSNhQxSwGDxV00boGWb38YLbOttb7Wxksu7vMmN5LIXF4glBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fS0gYLNP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t06+8Y3k"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47E27C2BCB3;
-	Thu, 14 May 2026 00:43:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fS0gYLNP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10B3FC19425;
+	Thu, 14 May 2026 00:47:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778719396;
-	bh=njUG4gtX0gjjaL4ssT35jpzwhO2AkUWQoMd2hjUQoGU=;
+	s=k20201202; t=1778719670;
+	bh=NYh77a42ZfUmDM0rYmu9Ji4df4rFg7OUQt93wwtXLLs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=t06+8Y3kZjJCJ2qeaBS72SEeCwrKe0JtKatZLYdSjTotSIbkh4kRJLZ3sXTFc6XAL
-	 GskzZ3Hh/BkBdJIFVbBTtmTxIoSpozdz7FBqFx1EVUzu9eYyzlokZB0TqGEpNv+qLM
-	 aCbuU8MZ0pEquuH5PkbcSLixGhZYByZdv7a1eo8uDkfSZxx+EKoQ27eCfHHlQlWmTG
-	 2DCgyauILWDy6nU4D+uMOg3sjx8p7Qiy45ERusqK/1xC4ZfF/R3Pfzt5/skl22qIfu
-	 97N47PBlbrI+VlB1E7OlhXfBZAEYSGq7NkFsHFpANGEEGSUyZAOrLeSem8oyTxknYb
-	 RRuoMPhSue91w==
+	b=fS0gYLNPwv3yq0ML+EWqxmfi3UXPeJoaCYV7SKt9Wj960pXd5p9exu+q5/iTVpzo6
+	 b0Bgnb9PuZqnK4mwZPFgHv2yh0YBSicYxvwhOU31GamDsygzaQZ6ho/k57dUUWJAFp
+	 GXZRl1/VaKpY4GHmDRDo5yh6shajlMLI98qnANWbaSe3dWl6ZDWq4+YInew3Iz9sNN
+	 9GyHiR21W0Wf/a54aSFMK8G3hZDoFev0TFGyNpszvCITmRqRfvV2H8eWGKb8knyHPq
+	 CGgBUynwntuSMRsR1OZ3lVRz0nQj9kikZxHoNkHXxuy+kCMCtGngGiwte/Q0/7BblQ
+	 lxixyL4VNrb6A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon: (pmbus/d1u74t) Add Murata D1U74T PSU
- driver
+Subject: Re: [PATCH v3 2/5] hwmon: (pmbus/adm1266) add clear_blackbox
+ debugfs entry
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Abdurrahman Hussain" <abdurrahman@nexthop.ai>
-Cc: conor+dt@kernel.org, krzk+dt@kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org, devicetree@vger.kernel.org
-In-Reply-To: <20260512-d1u74t-v2-2-431d00fbb1c4@nexthop.ai>
-References: <20260512-d1u74t-v2-2-431d00fbb1c4@nexthop.ai>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260512-adm1266-v3-2-a81a479b0bb0@nexthop.ai>
+References: <20260512-adm1266-v3-2-a81a479b0bb0@nexthop.ai>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 14 May 2026 00:43:14 +0000
-Message-Id: <20260514004316.47E27C2BCB3@smtp.kernel.org>
+Date: Thu, 14 May 2026 00:47:49 +0000
+Message-Id: <20260514004750.10B3FC19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
 s) to consider:
-- [Low] Brittle validation logic due to missing read length check for PMBUS=
-_MFR_MODEL.
-- [Low] Copy-paste errors in sysfs documentation for `in2_*` attributes.
-- [Low] MAINTAINERS file entry breaks alphabetical ordering.
+- [Critical] The shared buffer `data->dev_mem` is modified and accessed in =
+`adm1266_nvmem_read()` outside of any lock, leading to data corruption on c=
+oncurrent nvmem reads.
+- [Critical] Stack buffer overflow in `adm1266_nvmem_read_blackbox()` cause=
+d by an undersized buffer passed to `i2c_smbus_read_block_data()`.
+- [Critical] Heap buffer overflow in `adm1266_nvmem_read_blackbox()` due to=
+ blindly trusting the hardware-provided `record_count`.
+- [Critical] Out-of-bounds write in `adm1266_pmbus_block_xfer()` due to uns=
+afe `memcpy` using an untrusted length from the I2C device.
+- [High] DMA read buffer bounds mismatch in `adm1266_pmbus_block_xfer()` ex=
+poses an out-of-bounds write vulnerability.
 --
 
-commit ec60b1738fafe62da18eefb7e9b1f9a12b6a9113
+commit 2afefd44ddcfcdd2fe5f8721e42653261b4e9ff0
 Author: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 
-hwmon: (pmbus/d1u74t) Add Murata D1U74T PSU driver
+hwmon: (pmbus/adm1266) add clear_blackbox debugfs entry
 
-This commit adds a new PMBus driver for Murata D1U74T power supplies. It
-registers the device with the hwmon subsystem and provides documentation for
-the driver's sysfs attributes.
+This commit adds a write-only debugfs file to clear the ADM1266 blackbox
+buffer. Writing to the file issues a 2-byte block-write command to the
+device. It also adds a pmbus_lock guard to adm1266_nvmem_read_blackbox()
+to prevent concurrent read/write operations from interleaving.
 
-Closes: https://lore.kernel.org/oe-kbuild-all/202605122253.zInzmUeX-lkp@int=
-el.com/
-
-> diff --git a/Documentation/hwmon/d1u74t.rst b/Documentation/hwmon/d1u74t.=
-rst
-> new file mode 100644
-> index 0000000000000..7362e56e76a71
-> --- /dev/null
-> +++ b/Documentation/hwmon/d1u74t.rst
+> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
+> index 7b8433226176f..bd3784d59a7c8 100644
+> --- a/drivers/hwmon/pmbus/adm1266.c
+> +++ b/drivers/hwmon/pmbus/adm1266.c
 [ ... ]
-> +in1_rated_min		Minimum rated input voltage
-> +in1_rated_max		Maximum rated input voltage
-> +
-> +in2_label		"vout1"
-> +in2_input		Measured input voltage
-
-This isn't a bug, but is there a copy-paste error in these descriptions?
-Should these be documented as 'output voltage' instead of 'input voltage',
-since the label is "vout1"?
-
-> +in2_crit		Critical input over voltage
-> +in2_crit_alarm		Critical input over voltage alarm
-> +in2_lcrit		Critical input under voltage fault
-> +in2_lcrit_alarm		Critical input under voltage fault alarm
-> +in2_max			Maximum input over voltage
-> +in2_max_alarm		Maximum input over voltage alarm
-> +in2_min			Minimum input under voltage warning
-> +in2_min_alarm		Minimum input under voltage warning alarm
-> +in2_rated_min		Minimum rated input voltage
-> +in2_rated_max		Maximum rated input voltage
-[ ... ]
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index b2040011a3865..28ca8e0353124 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6803,6 +6803,13 @@ S:	Maintained
->  F:	Documentation/hwmon/crps.rst
->  F:	drivers/hwmon/pmbus/crps.c
+> @@ -379,10 +415,11 @@ static int adm1266_nvmem_read_blackbox(struct adm12=
+66_data *data, u8 *read_buff)
+>  	u8 buf[5];
+>  	int ret;
 > =20
-> +MURATA D1U74T PSU DRIVER
-> +M:	Abdurrahman Hussain <abdurrahman@nexthop.ai>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/hwmon/d1u74t.rst
-> +F:	drivers/hwmon/pmbus/d1u74t.c
+> +	guard(pmbus_lock)(data->client);
 > +
->  CRYPTO API
 
-This isn't a bug, but does this entry break the alphabetical ordering? It
-places an 'M' entry immediately before the 'C' section for CRYPTO API.
+While this patch adds a guard here, does adm1266_nvmem_read() also modify
+and access data->dev_mem without taking this lock?
 
->  M:	Herbert Xu <herbert@gondor.apana.org.au>
-[ ... ]
-> diff --git a/drivers/hwmon/pmbus/d1u74t.c b/drivers/hwmon/pmbus/d1u74t.c
-> new file mode 100644
-> index 0000000000000..3127e0e5a23de
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/d1u74t.c
-[ ... ]
-> +static int d1u74t_probe(struct i2c_client *client)
-> +{
-> +	char buf[I2C_SMBUS_BLOCK_MAX + 2] =3D { 0 };
-> +	struct device *dev =3D &client->dev;
-> +	int rc;
-> +
-> +	rc =3D i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
-> +	if (rc < 0)
-> +		return dev_err_probe(dev, rc, "Failed to read PMBUS_MFR_ID\n");
-> +
-> +	if (rc !=3D 9 || strncmp(buf, "Murata-PS", 9)) {
-> +		buf[rc] =3D '\0';
-> +		dev_err(dev, "Unsupported Manufacturer ID '%s'\n", buf);
-> +		return -ENODEV;
-> +	}
-> +
-> +	rc =3D i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
-> +	if (rc < 0)
-> +		return dev_err_probe(dev, rc,
-> +				     "Failed to read PMBUS_MFR_MODEL\n");
-> +
-> +	if (strncmp(buf, "D1U74T-W", 8)) {
+If two threads read the nvmem device concurrently, could one thread's
+memset() execute during another thread's memcpy(), causing corrupted data
+to be copied to userspace?
 
-Is there a missing check for the read length in rc here?
+>  	ret =3D i2c_smbus_read_block_data(data->client, ADM1266_BLACKBOX_INFO, =
+buf);
 
-If a short read occurs, could strncmp() evaluate the newly read bytes
-combined with stale memory leftover from the previous PMBUS_MFR_ID read?
+Can this call overflow the buf array?
 
-> +		buf[rc] =3D '\0';
-> +		return dev_err_probe(dev, -ENODEV, "Model '%s' not supported\n",
-> +				     buf);
-> +	}
-> +
-> +	rc =3D pmbus_do_probe(client, &d1u74t_info);
-[ ... ]
+Looking at i2c_smbus_read_block_data(), it blindly copies up to
+I2C_SMBUS_BLOCK_MAX (32) bytes into the provided buffer based on the
+length byte returned by the hardware:
+
+drivers/i2c/i2c-core-smbus.c:i2c_smbus_read_block_data() {
+    ...
+	status =3D i2c_smbus_xfer(...);
+	if (status)
+		return status;
+
+	memcpy(values, &data.block[1], data.block[0]);
+	return data.block[0];
+}
+
+If the I2C device returns a block length greater than 5, would this
+memcpy() overflow the 5-byte buf array?
+
+>  	if (ret < 0)
+>  		return ret;
+> -
+>  	if (ret !=3D 4)
+>  		return -EIO;
+> =20
+> @@ -392,7 +429,6 @@ static int adm1266_nvmem_read_blackbox(struct adm1266=
+_data *data, u8 *read_buff)
+>  		ret =3D adm1266_pmbus_block_xfer(data, ADM1266_READ_BLACKBOX, 1, &inde=
+x, read_buff);
+
+Does this loop have a bounds checking issue?
+
+The record_count loop limit is read directly from buf[3]. If the device
+returns a record_count greater than 32, will the loop advance read_buff
+past the end of the 2048-byte allocation for data->dev_mem?
+
+Also, could this call to adm1266_pmbus_block_xfer() cause an
+out-of-bounds write?
+
+In adm1266_pmbus_block_xfer(), the memcpy() uses a length from the I2C
+device:
+
+drivers/hwmon/pmbus/adm1266.c:adm1266_pmbus_block_xfer() {
+    ...
+	memcpy(data_r, &msgs[1].buf[1], msgs[1].buf[0]);
+    ...
+}
+
+If the device returns a length up to 255, could this write past the
+expected 64 bytes (ADM1266_BLACKBOX_SIZE) allocated for read_buff?
+
+Additionally, does the DMA read buffer size in adm1266_pmbus_block_xfer()
+expose an overflow regression?
+
+The read_buf array in struct adm1266_data is sized
+ADM1266_PMBUS_BLOCK_MAX + 1 (256 bytes). However, the i2c_msg length is
+set to 257:
+
+drivers/hwmon/pmbus/adm1266.c:adm1266_pmbus_block_xfer() {
+    ...
+		{
+			.addr =3D client->addr,
+			.flags =3D I2C_M_RD | I2C_M_DMA_SAFE,
+			.buf =3D data->read_buf,
+			.len =3D ADM1266_PMBUS_BLOCK_MAX + 2,
+		}
+    ...
+}
+
+If the hardware sends a full 257-byte response, will the controller
+write 1 byte past the end of data->read_buf?
+
+>  		if (ret < 0)
+>  			return ret;
+> -
+>  		if (ret !=3D ADM1266_BLACKBOX_SIZE)
+>  			return -EIO;
+>
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260512-d1u74t-v2-=
-0-431d00fbb1c4@nexthop.ai?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260512-adm1266-v3=
+-0-a81a479b0bb0@nexthop.ai?part=3D2
