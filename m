@@ -1,172 +1,139 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5513C3BF7
-	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 21:24:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEDBE3AC0F1
+	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 22:02:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778793842; cv=none; b=mO2Q4xwsu1b6dP/kXHTwRDsawNwX0nQmDr0n929RQwzflr2JY7SErHuELQaC+vy1CA1rV07TbIyIgcsNADEp6+iKeM4jFIJ36dhyJh/CS9EKfGTgdCFIUArCu59uEBNribwveme7zCoNuUv7ljHKJRJlL6a/WlTKdc7r+6REX4c=
+	t=1778796142; cv=none; b=kDdxb4jWuF0lc/5llI9HRmcIcXWgc1PI8ivIdC1+HRL7LzqnHcI+RHM8rQS4OH7wcXKeJWP5tLF4WVQEMrEZkYZGXAHZGA6F6KSPK39pgHOtQoPGVzRIRNGKHz3stXXcIv728Navswlx3b4Dp2lM/JYMbbDf6hF9ZATbzgObAaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778793842; c=relaxed/simple;
-	bh=Wi9wq6ITuBhZ0//XzAr/F1HphLRzl3ZxiOclMvD0KoE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bYhmT2+PgkVMZ3V1sBElJ3/db4GJmOGZV+EwXTMCuNDmdPyNemuKgcJ+EOoqOh0b4m5vPWComliKrapnZCqWbGI8GS96H5bS27fGNApKHG3LSKhNnC12pfVfwDFNNqrUcT+ySa42svDeZMftR1gSlAXtWmamdZm8vOiyoRpvSlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=pB1PvYyE; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=BC/6aT81; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1778796142; c=relaxed/simple;
+	bh=OuNUP4VQ/cd2XOzQDsaDoxFooK7tR82O/MqAGRITIm4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kmdKIasK1xxALVSgyvS3EQUSR79OXOwhwCV0OoNffoSKJujvBB4USEGp7vnWOZh7tN1+fJs6EGKf06URsTTmTMwdX747sQQfWnoerc1EeJbPWahyzUfM+U3WK6Yly7n/i1c8zTyHFbL8sl+KLc3wb/dwLxp+dcP2EuuTq6bAvFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i1plhtRC; arc=none smtp.client-ip=74.125.82.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="pB1PvYyE";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="BC/6aT81"
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64EIpPgJ1847948
-	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 21:23:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	Wi9wq6ITuBhZ0//XzAr/F1HphLRzl3ZxiOclMvD0KoE=; b=pB1PvYyErK43eAPY
-	8GRxW3u7AM7AHohNM0M3cHCMCNo1VwAlgiEmlPBRRhAH3qzvDhBijYNB8Mozuu1t
-	A0lh6pes7yXko1c9nG+m9lUnW0Id2COTnlBJXuVbwlwJcKrTpdQyWe3r3T1io7Wj
-	SjhPG5n4X8xvsENTS0CdPmtrRTaEQKdFIWa0HxwsCZDv1rMxb4234qxcRW5FPYMB
-	6eFs8mtHEJekZQyzkcvtIws/TE/h1OvUe7QYba9+pcSqPKlYR/Ya1dKobZLgN1kS
-	yEs0DqhocJ+ok1uVUHzxmQen9ZwP+lp1oWjuC5BaSko7GFzEEpB+JYeXEl2cRUyP
-	AHWxDg==
-Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4e5m1t0ehr-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 21:23:59 +0000 (GMT)
-Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-2f3ec2e8d07so7177940eec.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 14:23:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i1plhtRC"
+Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-12c19d23b19so14224424c88.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 15:02:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1778793838; x=1779398638; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Wi9wq6ITuBhZ0//XzAr/F1HphLRzl3ZxiOclMvD0KoE=;
-        b=BC/6aT81v1IKW/jRwglaUTZ4VgJb2m3X6e9uWA651mOdjSw+TgBCXkCV7f96Pw1cVl
-         wn6mSAxs4FEVjWeTtHXkzZtKjJV5huI2Zn7f+CDjCiriUFZLuPqDIG5YBVR5aldhMLXI
-         ci/VRXNk3Utuwa2don0zO2DNcyJuF//bCB/n3OJc73fNuQJhS5wB95iVyekLwW1+Nd2d
-         E6Uq5h+lRYDiFrhoqqChO++WST91KGaUC1AO5ucDI47A2hiC5JzpAM3B/iKZaXBSHwdc
-         Qs5XTy4XIjQf/6X108DAOmE/gUwpHCQJ1bDiJkcL9Dl41ELCKjU07Fw/MmIY36QF3jML
-         c/Dw==
+        d=gmail.com; s=20251104; t=1778796140; x=1779400940; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=bCQWuLvtl32GOyFUXVkpB+IrAH0y2Vh06ov3fjg3pns=;
+        b=i1plhtRCg+TeZLPKQdWrRnu5HmI9PBfbS2h2flk/b4la0PCTjNPxtPRcEyAAWX+U+a
+         heBrk4+7xNqFYhmVNs//oolI9o4rqEiovgRogzKiN4I5LJgFLUgIJat5KOLnAbTrad1V
+         mddnzkt/mH38v8IZNjiNj71BR7lVoCZrvCobSlkhp2zQJRBO8/qyp+UNCJNMNdX8NGsM
+         V0JVpw1qxgk54GD6FM4PSfXZHIdpFHJgvU84oKQ3XVWfFvWbQCLqYuDMZhV4tAfjfPBk
+         6kEmX7qWx0ZuZbto5tuPkvXJFBAh5ujNLcWBjNm5nS9Z8mu6dl4P4i/Bp1SMkFCC7iWp
+         mTuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778793838; x=1779398638;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Wi9wq6ITuBhZ0//XzAr/F1HphLRzl3ZxiOclMvD0KoE=;
-        b=SK5crPKhPErAWCgxyu7MApTqrzIQLn2T5hPK9lUmHWykAH3hTG3DfmavbTyitpHlYC
-         WblDrwUiDWq+7I6Sff3S7m4kfGJvdttOd8X0hUy5xcCqGtslPhhQN9/3lw3+ZEToGkFY
-         B2Wbjczw3SM98KlAbRno8Veh0CLPlrUgO+nI5gGTt7LvSMhPhhsWbyQyt/14Vqu7Febl
-         sePx6HZq3V6bn273YqMZaaWepuZcmsuPioQkw0Qt1SuT5Cutc06ZUwe8A7v2eFXFyILW
-         LSkBPumKHCv8MxoccHN6IQZzoBjj/9epi8NDlA7TdUooGooE2JNqq384ripE3/mQKzG3
-         vLoA==
-X-Forwarded-Encrypted: i=1; AFNElJ9lWPhyyypkr3UoszlCmXRhWZMassgD5kxpiUG91HuXfhsY8q7WbmuYX746rFvVRKI0bPApqgxWbXdFlQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YynSsX6KGuasXyeYoYZ4oEFDQ6lRWLbz11mvL2v+C/QNYp5sFQ8
-	ODXbLFz8wzBGQNV49YbGT3DTzGxA/zHbMc10GMGSdfsMGF2AHQQGiqnJT32YZC4pPB5HC0ow/Xp
-	VrzEOFZ67t8lYua/eU+PAaua9XHygxBEJNnIXWcvD33QF7TyoJX5LUJ/Mq/lKsjTQCA==
-X-Gm-Gg: Acq92OEsxt1Ga34hzkjW+EXJellKq0zynwDb9Pa5o/R74CQypNR4GjXHoJAX1+M0qKN
-	eTzKy8QVi/i5al8FDzJT+ElYPHBzfzKqxY/3X3vf4fnUgK113J8s99zps5VYeUGpFkbAuXGc2yd
-	3iXhHCfzqJAHWSX1/hDWK47R5XsfKiWWWWAkrcY0ffibJ/1OeC4YNdoL2KV4k4xBnrRYr1yBWot
-	rOIzRLj+QZ/gpkRo+giG2SQFjeEmvx7/Hcloc2X6MK5fq1dUvXgiB5Sp1YfVjh05xLIK7VBPYQ8
-	S/vXQNqCgBdCNcHpvlNlzyBlhyne1WnqvnGSC+XqkZUOarV6u9UnaVQv3NLZ8wOqJ1Ldx3YQ+ML
-	ZAsF0fXzEOCp4XqqZdy4FIUPd4apnkoAxf1I6ucwMbbHaLpvp/FjJaFbIatUy/1vlFFJJQ9Bpn+
-	/j
-X-Received: by 2002:a05:7300:724f:b0:2ed:27a3:eae2 with SMTP id 5a478bee46e88-30398189fa8mr789549eec.15.1778793838380;
-        Thu, 14 May 2026 14:23:58 -0700 (PDT)
-X-Received: by 2002:a05:7300:724f:b0:2ed:27a3:eae2 with SMTP id 5a478bee46e88-30398189fa8mr789513eec.15.1778793837795;
-        Thu, 14 May 2026 14:23:57 -0700 (PDT)
-Received: from [10.73.236.148] (pat_11.qualcomm.com. [192.35.156.11])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-302946f2149sm4468333eec.11.2026.05.14.14.23.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 May 2026 14:23:57 -0700 (PDT)
-Message-ID: <8857fc71-aec6-4682-b4f4-0bd463f367c4@oss.qualcomm.com>
-Date: Thu, 14 May 2026 14:23:56 -0700
+        d=1e100.net; s=20251104; t=1778796140; x=1779400940;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bCQWuLvtl32GOyFUXVkpB+IrAH0y2Vh06ov3fjg3pns=;
+        b=H4IYGv1Y896TajJ5jPj5Yuha07FTwZU0BSI12nyVRvNUznT0L/j1fTVQe3d8jUjDJR
+         gmP85e3uV1ZB5ojMtzua+SH7xhy9KByK712A3ey62BLur00gzm2rEiCeDzODEX2z0Lnn
+         yPhgwxRPExBNjIv3m/74gD2tUsqKGoVyOppi3bhPg+8jyqwwjWEgfirM6vpvR6dj2HQT
+         S68OlA1+mWyL3mfBoTkNu5GMbC1ct11T4ykCNgvXa6j/UsIz3fq6lwvw1o+/fEGohQPW
+         OOgqJewQOfiwkNM5YSAvWKK4uNhLwS2EvbzCpNavpmt2J4e7Jk1oCWzrOUcB/7rppTHA
+         QbjQ==
+X-Gm-Message-State: AOJu0YxO9GkW5Yw17RIh5VGGOxC4lLVGRwr19+sYZQ56Arx6SXG1yciY
+	r+TX6ZUoGbVQs+wA5wGYuKCXRMHU8FbK4g9Q0A9I8LTJ+LA5TOHwdukEHjD0aQ==
+X-Gm-Gg: Acq92OFcOM8tYHuHyho5+GeiQkE5xhndQPybIkjLzXuTqOuUzLhftIuaUfLF+Bp1SD2
+	6bxNPgFeDe6At652p7NutVZLYSw30pv3Pj26hMxLsbCr4Iqq1DmnAMP3Rmk4djI0U3cIRd0Kjln
+	nqLbFnAtUCjHX0kT+E49pF6xO25CZMjRAIKpLW3Rcrz9Zu6IXQ00jCU/FTEYBhQSj+IQgDAxdZa
+	Tg73g3BwWJqq8M164JCf5fNeteRwRqGcZDVaPEHCsm/YBrO9jd9EncXRJQ86OH0yPXNX8anrdeu
+	ZHPn9ZGYwFoyXPcnyqv7HS2rIH7C5oaO398XEl3LuTf43bmq4RZ/iVAZCLsokLuK+DuVglyNA8W
+	FZ/hOfEjevq4H0znDyjD6KmTWYQ78k6w+WiHWfI6w31pC8TZ0tHXNbaezwaYmkthd0mX9pUw/UD
+	TY8DFQ1ZKuclUnDGE6fW5h7OWdxpCbDQtKJap0Zo0jEhrefP4=
+X-Received: by 2002:a05:7022:907:b0:12b:ec15:69d3 with SMTP id a92af1059eb24-135047413a9mr479921c88.19.1778796139882;
+        Thu, 14 May 2026 15:02:19 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cbdcf140sm6541905c88.5.2026.05.14.15.02.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 May 2026 15:02:19 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 1/2] hwmon: (lm90) Stop work before releasing hwmon device
+Date: Thu, 14 May 2026 15:02:13 -0700
+Message-ID: <20260514220214.1380831-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/5] scmi: Log client subsystem entity counts
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: Jyoti Bhayana <jbhayana@google.com>,
-        David Lechner
- <dlechner@baylibre.com>,
-        =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Sudeep Holla <sudeep.holla@kernel.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Linus Walleij <linusw@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20260513-scmi-client-probe-log-v2-0-36607e9dd540@oss.qualcomm.com>
- <20260514164422.0eba9a61@jic23-huawei>
-Content-Language: en-US
-From: Alex Tran <alex.tran@oss.qualcomm.com>
-In-Reply-To: <20260514164422.0eba9a61@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=D7Z37PRj c=1 sm=1 tr=0 ts=6a063d6f cx=c_pps
- a=Uww141gWH0fZj/3QKPojxA==:117 a=ZdW6uxA9NKXbfdqeeS2OGA==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=_glEPmIy2e8OvE2BGh3C:22
- a=EUspDBNiAAAA:8 a=yQWfTViADuQTjb5oKp4A:9 a=QEXdDO2ut3YA:10
- a=PxkB5W3o20Ba91AHUih5:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE0MDIxMSBTYWx0ZWRfXxEESdUBpAD79
- Lri8x+r0bs27xFGTM8SE1LWzHRPoi4ef98/X/iAQhw9YIUWfwPZ7XXQ+KeK0Ns1xioB3gApcdPA
- WMNMfl/sZO9TupkpjTJpStBe8/1AYPm/F1aCC5KuDkf7mPdlM7WFgc6HHyAOZMUBcl2H95wR5YN
- tpDOw/UVHPJfQ25z9tOqkOgDXj0lmb0o3BdutCzBywDBeQtT7KYHDF4evpZKZHOImeKgnXjo3Ev
- f0Lm4RhQa72em0odJNJiug9BWLvsuCOAv1aznrTpZh5QxjVa6lMixM0SwMnWmVegdtmRN/PkreB
- B7T2mUsvHK2dlMzj9yySBdEBCLxHE7/NNTkgY8RtHa6iMacVvsNL24Q1ab6Jug/kgecZJoiCKN3
- uwdahj7h0z6/7+hT5wHeypQkVk+EHbRApmsBqLfekbaNPfY7/tHSc10m5tqxO5fytkHG9uzSJyy
- qTw4bfhSZ22Sn1uAqeQ==
-X-Proofpoint-ORIG-GUID: IaxpKAkRl2K_etycntsILsMmAYhmhCMR
-X-Proofpoint-GUID: IaxpKAkRl2K_etycntsILsMmAYhmhCMR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-14_05,2026-05-13_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 lowpriorityscore=0 priorityscore=1501 impostorscore=0
- adultscore=0 phishscore=0 clxscore=1015 bulkscore=0 spamscore=0
- suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2605130000
- definitions=main-2605140211
+Content-Transfer-Encoding: 8bit
 
-On 5/14/2026 8:44 AM, Jonathan Cameron wrote:
+Sashiko reports:
 
-> On Wed, 13 May 2026 10:16:53 -0700
-> Alex Tran <alex.tran@oss.qualcomm.com> wrote:
->
->> SCMI client drivers do not consistently log the number of supported
->> entities discovered from firmware. This information is useful during
->> debugging because it shows which domains or resources were exposed by
->> firmware during probe.
->>
->> Add logging of the number of supported entities to the SCMI cpufreq,
->> pinctrl, reset, hwmon, and powercap client drivers after a successful
->> probe. This aligns these drivers with the existing logging in the SCMI
->> power and performance domain drivers.
->>
->> Signed-off-by: Alex Tran <alex.tran@oss.qualcomm.com>
-> Hi Alex,
->
-> Just curious but why +CC linux-iio and IIO folk?
->
-> May be you had a false suggestion to add them from get maintainers.
-> If so be sure to check it's suggestions make sense!
->
-> Not to worry - we can all hit the delete button ;)
->
-> Jonathan
-Hi Jonathan,
+In lm90_probe(), the devm action to cancel the alert_work and report_work
+(lm90_restore_conf) is registered in lm90_init_client() before
+devm_hwmon_device_register_with_info() is called.
 
-Originally, there was another patch in this series to add the same functionality to scmi_iio probe but it was dropped. Apparently running b4 prep --auto-to-cc does not prune stale entries from the cover letter. Will manually remove all entries and rerun the command in the future.
+Because devm executes cleanup actions in reverse order during module
+unbind or probe failure, the hwmon device is unregistered and freed first.
 
-Alex
+If lm90_alert_work() or lm90_report_alarms() runs in the window between
+the hwmon device being freed and the delayed works being cancelled,
+lm90_update_alarms() will dereference the freed data->hwmon_dev here.
+
+Fix the problem by canceling the workers separately after registering
+the hwmon device and before registering the interrupt handler. This ensures
+that the workers are canceled after interrupts are disabled and before
+the hwmon device is released.
+
+Fixes: f6d0775119fb9 ("hwmon: (lm90) Rework alarm/status handling")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/lm90.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+index 3c10a5066b53..50b30d719225 100644
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -2584,15 +2584,20 @@ static void lm90_restore_conf(void *_data)
+ 	struct lm90_data *data = _data;
+ 	struct i2c_client *client = data->client;
+ 
+-	cancel_delayed_work_sync(&data->alert_work);
+-	cancel_work_sync(&data->report_work);
+-
+ 	/* Restore initial configuration */
+ 	if (data->flags & LM90_HAVE_CONVRATE)
+ 		lm90_write_convrate(data, data->convrate_orig);
+ 	lm90_write_reg(client, LM90_REG_CONFIG1, data->config_orig);
+ }
+ 
++static void lm90_stop_work(void *_data)
++{
++	struct lm90_data *data = _data;
++
++	cancel_delayed_work_sync(&data->alert_work);
++	cancel_work_sync(&data->report_work);
++}
++
+ static int lm90_init_client(struct i2c_client *client, struct lm90_data *data)
+ {
+ 	struct device_node *np = client->dev.of_node;
+@@ -2902,6 +2907,10 @@ static int lm90_probe(struct i2c_client *client)
+ 
+ 	data->hwmon_dev = hwmon_dev;
+ 
++	err = devm_add_action_or_reset(&client->dev, lm90_stop_work, data);
++	if (err)
++		return err;
++
+ 	if (client->irq) {
+ 		dev_dbg(dev, "IRQ: %d\n", client->irq);
+ 		err = devm_request_threaded_irq(dev, client->irq,
+-- 
+2.45.2
+
