@@ -1,52 +1,52 @@
 Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B38E61FC7FB
-	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 00:17:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B52E61A7264
+	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 00:34:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778717870; cv=none; b=tQIqXWDWuf+oOIgKvOWMqG3r/zGUcv3lW246oREVtMx2shcf28ovcjPZQxQaKo8+FDtkfYIk0XT3XmasCcHYQmIXqWIg4tbvp4kud3VfhyqzBYUs2bjImEH1pLfu19rcGK5rUfi3aa9XfXJ0m1f32pZSAfHeNcDxyC7eqJ8QvMY=
+	t=1778718875; cv=none; b=s9x4MVs3Bibd1XteUVrbGhKuOnIN7iWdi0e/sHd4aNqgf8tM+S6jp7myxttOydmspP5BTxWsL1Ydk/q1IQ1O7rsany5KSmvjDDpXYmm1tVTWXbKcVCXkt5IuOeTIWUFshYsRmw3Ca5DBJzJmENufuHOlCPKzCZQO5mkaW/HBoNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778717870; c=relaxed/simple;
+	s=arc-20240116; t=1778718875; c=relaxed/simple;
 	bh=8oE4sDMKzB4U41OIEaBw2p8cbJovaqY+6moGpJWXbpY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=IeODkldlCnJ1ZYBQRLMgLHSrYM5NTMyKH+S0RG8L/g0dh5vjK7bJiiptvKMnqF4KLBZSxsNoR2wL+adKHLb0ePKeFONcfK/1Njh2MVkwKs1zKn3AQ/re7S3M6BCWe+sm1ZkAaOLBFGmQZsBGp+5k4Cr2BuvrvBSXWKlAPAzZOa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=yjuSbSOk; arc=none smtp.client-ip=202.36.163.20
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mO268TLT2G+ShWafA4Xj1ouOfqVSjMAhfdFo1wkoR1Auf5pyVkT3UFZCYybiGfYgS/uwSruhDxhhxzo+6Koqc9j30aSv31D+GuoTNE3+pEwb5+UGXLHu/HVXEpD3ML3eKKStZlKIDsyl10WSan8HWNN32HuUKbVrATK0G9Pg/GE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=OWfVnVls; arc=none smtp.client-ip=202.36.163.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="yjuSbSOk"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="OWfVnVls"
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 746D92C0613;
-	Thu, 14 May 2026 12:17:42 +1200 (NZST)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A6BFC2C0613;
+	Thu, 14 May 2026 12:34:30 +1200 (NZST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1778717862;
+	s=mail181024; t=1778718870;
 	bh=k1xqFY5HSHn9oX9ocHE041lrr2xDhoE7kuwo8mLYcCQ=;
 	h=From:To:Cc:Subject:Date:From;
-	b=yjuSbSOkJMfngOmCulLISLBfFRBRRS38GOpe2iHCcVnw48Mn429BsXzpbDfePrwBz
-	 G6L6ZOwVtkA1aswPP3Ydj9QUA9Xqj3ysSQfOL9nUhfMHuyWIiWw319WodMkZaisrpK
-	 QTo1s8KGlFHWj76xVXe1S/NuuuMTkD1YU5zXHwO8nylyTfI/ifkJCeH6QY5KsH9ZoP
-	 JMGvpmN4KVPAj+nFKC8U9YliZ5KoBNmq8GczZPi3cGdXGtYdw0cK0ESkDKb4NGiT7N
-	 xT0NHLYQZPp8fM9EeNEr9PcwFN5eaVp+JKm+otBkN+W/br5dDAYtRfpaYblSNXKA/d
-	 7SwItN6EoZehw==
+	b=OWfVnVls4kKDx7/qhAGIdlrDCVQ4/Y/rVkwMbEZdCmqLPZP4hkBaDMfeAcKCvBSxD
+	 Jl1IJ9miAXkMODXLQ5QFDSxg23YF5Ll4Eo77ZFqwJPfIKWDtospeTkLzNjyit3jFQL
+	 pvq1kA+TSNzujKqJDfZ1Ze8aDVESHSjXBiv4old0cVoMTrH5QO80CcMBRl8fnu6kav
+	 L+YU5VBIK0KtjPt6sSVE3uiMJhmGBmwdUd8KyzGbzyHdew3dShy8mURuxdgS8cfQxs
+	 dAcoDDLmJhi+FBAmNcN3hLKBQGoM3Yqx+amMy/3pf85VYNjFSRma4y3vCgbwNv8iG7
+	 Jo7DfJ+jRxlyw==
 Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B6a0514a60000>; Thu, 14 May 2026 12:17:42 +1200
+	id <B6a0518960000>; Thu, 14 May 2026 12:34:30 +1200
 Received: from ronand-dl.ws.atlnz.lc (ronand-dl.ws.atlnz.lc [10.33.12.18])
-	by pat.atlnz.lc (Postfix) with ESMTP id 42DA313ED2A;
-	Thu, 14 May 2026 12:17:42 +1200 (NZST)
+	by pat.atlnz.lc (Postfix) with ESMTP id 6940413ED2A;
+	Thu, 14 May 2026 12:34:30 +1200 (NZST)
 Received: by ronand-dl.ws.atlnz.lc (Postfix, from userid 1930)
-	id 3F3E884004F; Thu, 14 May 2026 12:17:42 +1200 (NZST)
+	id 651B184004F; Thu, 14 May 2026 12:34:30 +1200 (NZST)
 From: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>
 To: linux@roeck-us.net
 Cc: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>,
 	linux-kernel@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
 	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH] hwmon: (nct7802) Add time step attributes for tweaking responsiveness
-Date: Thu, 14 May 2026 12:16:58 +1200
-Message-ID: <20260514001701.1533275-2-ronan.dalton@alliedtelesis.co.nz>
+Subject: [PATCH v2] hwmon: (nct7802) Add time step attributes for tweaking responsiveness
+Date: Thu, 14 May 2026 12:34:04 +1200
+Message-ID: <20260514003404.1548747-2-ronan.dalton@alliedtelesis.co.nz>
 X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=Es1xrjcA c=1 sm=1 tr=0 ts=6a0514a6 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VwQbUJbxAAAA:8 a=_jlGtV7tAAAA:8 a=YTW7iPMTII0yQG4K03oA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=nlm17XC03S6CtCLSeiRr:22
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=Es1xrjcA c=1 sm=1 tr=0 ts=6a051896 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VwQbUJbxAAAA:8 a=_jlGtV7tAAAA:8 a=YTW7iPMTII0yQG4K03oA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=nlm17XC03S6CtCLSeiRr:22
 X-SEG-SpamProfiler-Score: 0
 x-atlnz-ls: pat
 
