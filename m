@@ -1,68 +1,67 @@
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E5ED30674B
-	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 01:26:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E7513112BA
+	for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 01:29:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778721993; cv=none; b=CLZq+x7OsNOzYHZFY/klfcEHeGSmpzotAGZPqwjEpcfXUaETvBiEJCsG8R1dxXVtzbELCf/z2KBJ3lhUi2EgaDJ1hcCaf1da7UfWfqZTTj2PrQY2gGqFlQ90s/QPIfAViChPFIYRwBR3BsUF8ICXHVokIGXxkqksTFXB5dAd16E=
+	t=1778722156; cv=none; b=QP30U1yDqQ4TpWVzD9TP4DzGXyIET3kq0/X76VYy0P2yXcVyaALuXbiaLt0PE9urmMmb/KXtjDM24+LGKYZfCaC3u7Nm5BOZKv26Rw7jV/LU9f+f6iHBiH7Cc71T52FOZXmHUDFmi8uopvTwrq1A99ca9P+kadV9Nk1uKZJCcDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778721993; c=relaxed/simple;
-	bh=J9t7Y3dCSOWjzc2KZXw6OyJ0fX4LV/SSR6k3ZSG8cP4=;
+	s=arc-20240116; t=1778722156; c=relaxed/simple;
+	bh=l86ufggAd4c7tUjUM1xUPtCifs1068odxp7kjf00w2U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rNWCseTPVD+TvxIeZ43kss0axIU6t4KMvxPJIZErbmnLE3HRabFRd75EIAx/Zl1/hdTzBfdCaLwa8DzXE6WGxHeZYHfiexSQ9OjX7/8y3TZJJ2kfcIMp8pSWxrp3j8EZOESPeKH/fo+XP80Q4EqARR4cnR+ABRsFXNTdF6nhw+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bmuCmMnR; arc=none smtp.client-ip=74.125.82.176
+	 In-Reply-To:Content-Type; b=ukJvjddWpbZQCfGUmrBlMkAx5nxSU4bwRcUlimaM+652Aw1w4StgBGn7e8XSNvKmGbrGQqT60Sn0vv3yRrhuvpkTFH23NS3ATKtz4SM3gNAGXUWN/U2ytzdWRaEGzQi/L4p8CCKpoxZaoU0P4f8oyD/ib819Ghz+Jd0ropO8CLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KyHgIL79; arc=none smtp.client-ip=74.125.82.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bmuCmMnR"
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2f36da5c8fbso7349745eec.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 18:26:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KyHgIL79"
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-130c9dcbd25so6810195c88.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 13 May 2026 18:29:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778721991; x=1779326791; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778722154; x=1779326954; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ow0R4jeXxEVO1Et6duyD4OCmVuya7nxVLjLxDugc27w=;
-        b=bmuCmMnRCXsXCzTsUXubTkLmwO6IPgoPx6FKXObYiqcbmIU+alwIetyAUNv8Xyz7HL
-         dLx5kgPeW24m2bsnMkdbIdxsbR88IqqWXN22MHNtGAUaRZzhxouqHjGYgLrKBmEtYGh4
-         dKvThpsERR55kDN9Yg84Y1zGbEcoEAfjXe5QqWMWHsNO9lwqDMKHTUb/GSZdSskVBCgT
-         bB0fgzImxmTuV3Q2qbc0Y3Ahnr1B1omfNjKEfhsEM1QNAkvRJxv1K42xAyYJi50zNk2N
-         HFp5P7w03QK4aovo9zDu6zrvKRcCSPIDBCqy7cgKiReNQaceSVzqE3/SSh7+m7oYRCNP
-         +/VQ==
+        bh=fHK8+ySx1qJ4ZPnZp6f5AvHndZduIM6uMuNhMEw3KMc=;
+        b=KyHgIL79SiVkQgv2AMSJ//hGKj66mrFlOYA+m3TIbClBqyvf/fXW34R9l4bVdcwrWk
+         dPdvhYq4N4/G6igloW0bKkwmfmEdw/pwJP9JXwzyzZX/o3s1LG8axY2Xun3y85/P9/pt
+         bAsnCTMmHVQOv5kLkvFcwnbsPbQ/TTJXnftroLIgiYmD77lBnm2IRCX/CXvFl/bVl0w7
+         VIQivp1tv9ieqMD2svGlgijaLvvQWwQwzaXig+J6hj5O0x0vFAwcuQCyVmrEG5YOT0e0
+         fKtOxiNkl9m9/zi4ynB1tQrkm067DfIP0M4Ltw8umfAlLuFO239hz4vlPPpFLAs119gU
+         7qCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778721991; x=1779326791;
+        d=1e100.net; s=20251104; t=1778722154; x=1779326954;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ow0R4jeXxEVO1Et6duyD4OCmVuya7nxVLjLxDugc27w=;
-        b=JdiH4YkfxfHd1/MaJrNttRnJ6GVxH1YiQlrIHDT9uWEaRS++/YN0rjAzo8kfKXZwvg
-         weRaoRCYoH+eJcXbP3J0TJbFpjUorEiNEQXvWCATuDatuuAyqollbr02pKjqNdGJZzGI
-         Bj16xvnuICO1l6CRXM7AZ7MdES35bserwb8RKwpHfNuiaO9VU43xqTwcIdactFjC195z
-         nQf4P92jmhZIZayiYGpQ8Bc/RT8nIze6zSsuRgqIWDzwX0IPmPX/efX3tzZS4kCTDcY9
-         WgBn1GUmKMHHfkzRE7S+9gwionJ24KnT+v8iWR9xQhgT7zCXkSrt9FPHsLhj3Tq2EPsB
-         CiOQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8fNd0vQzhwbVmI+2fNz5DGBIhD649HqGL7fjsb6pwp9OgUonDydiRA0nV7HQMBoAo292JlKK81g4dRXA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxR/NbukHhK5XpiEgWBZlEvrs7HJgToYSx3BGx6wYDJPME+OYTP
-	4KWBp6oyj9jMBpYdj46h2afvqqCbaoJfipHEA82yJgUrNoU2Lg0m9Fd6
-X-Gm-Gg: Acq92OFQ3oT7zprDOlE56j92PThdWOKB6s3QjnhwMO3O5ps3gmkRssmV7msrs26FrTT
-	sv1xECuPDkpjXrBuYs9aBbUlRdZPsSiygffAz17E9126dkqqOZzpuPdTXBIK83FWeldIzUJEgNL
-	Qk85KS0v7Q15b2WQ06mBTqzWHnZAU91Ulv3kEHcXDBkP5a2PmbHBwmnPd6me8cZmfTiGjjVstG7
-	ZkQo+/gTSoRpxyr/1BDemZ68sIByepWKdCzW+XYrFdHMe5Fy4SXn7wCoH4WfOI4ZKXrK5UWZtOk
-	GV6mervxRQl5BZeGjbaf3czfYfCn+/xUU5M0bPt8oONTDMe0TAQ2Arx2KXWIk8a4HWPAnhhSUR8
-	VDhI+EmKID4iLttK7VMnJxcM6ntdljd3f4G0HSJbUuCuEv0/PZ9iQr/h8banNVtbhGLBslGifKO
-	TRReT9AfiiYP5ZcE9Uj/Bp9w/8xnWz203Pv5JrXxZhBSHrGkAUjg4sTWlXeJSBY0ejEJWiJzBQT
-	SuoZvIiReE=
-X-Received: by 2002:a05:7300:e78d:b0:2fc:9aa8:83da with SMTP id 5a478bee46e88-3011a369aa2mr3335097eec.29.1778721991110;
-        Wed, 13 May 2026 18:26:31 -0700 (PDT)
+        bh=fHK8+ySx1qJ4ZPnZp6f5AvHndZduIM6uMuNhMEw3KMc=;
+        b=XDEsHCMBH0Y0B0a1NckHL0nuEMI+5079kVyiDDg7kpgXiZgrW/RGxHAsokr+/7qPsQ
+         c1osMmQxMtsVO3pU30PiZlb441ta6wnQtjFpA/rcejKQI3T56AlcvnSUb2lIPMAjHY8k
+         UXp/vbUUZvKWbTNvj3MGbzygewp3T/KhcEJKVGE/8Nutd7XShCMLhXfvEvd+3So6okc4
+         SHo6wSr/uzVJdpaIqJTxSQzAZqhOuqXiNZ3Sdb3HQ+/wpkMJgSqtOTQKrIgJ+HvcG6FZ
+         LoRmfVPhVIMbXfdD06U4DCn5dsEI1qZ3+d+zEqrNu5Kc1ONYIYJEnvVku7SheTjIF3X8
+         YZ7g==
+X-Forwarded-Encrypted: i=1; AFNElJ+8QDIZXQascM/f48D3sOOcyyVmX2+kDNB1uq6I4s/fTvQDZJsf+FxQBhd140DcCR4Z2OoAQbBRn8K/VA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxIhHgMuWsqa41FQqQWBLFLM7pMckaBIgK4myUc1Nsy4ij3JV4V
+	ji8O13mRLLWfOibD4WPw8ACscuieqhXpToYxtn6+hqEuUXDtSnWpxNX5
+X-Gm-Gg: Acq92OGCrDOqAlmKzLq8MLg1/czB13Pjq/IIhIn6K3w5anQuDxU7y4HOHax97bojRkH
+	u8rT4NMQbi5QgZG7YFgHhqylBdqIyhmn9YnItKjhHlYtccaBJcA72FgRmpFZOGFXMuN55oA9w/3
+	iviNcn1fXv5IsYOogd2/7YHsuxl1+sNXdCOeOHyRfq0jXyQARf9hFHYjQdt/4iF5JSS3rWl34Tq
+	y6URR24ku1WBIuRDZW+5P+Oms6GABtKJq7vUCfH2Z6hzN3Vd+N8+seWRLfXRyDcmxgCTcPyJHI3
+	LN2VIX9+QC8JAnTGwMGVJAm56JBp0bnoUBy8wDYAnL6o4g8Ll493R9s2MM3PL4mHyHqxtkxKXUA
+	OG9Ppio8Po/O5xVlbtAvuVecGSAyvdwFY2FtJFo68aFbSNxFTRvYTlY6XTA0C+c7Ek6qroj0FZr
+	DrQ7xAJyw8LDypfFqOqjFIETSPjDB/t4UZpmrFE79q0xHtGTR1XlA/VJmaS/Up7sXTWNu18Ji+
+X-Received: by 2002:a05:7022:90e:b0:134:74a6:7db1 with SMTP id a92af1059eb24-134c8d412d1mr1063490c88.20.1778722153814;
+        Wed, 13 May 2026 18:29:13 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-302973bcd0csm1239878eec.24.2026.05.13.18.26.29
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cb5b3c20sm2119725c88.0.2026.05.13.18.29.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 May 2026 18:26:30 -0700 (PDT)
+        Wed, 13 May 2026 18:29:13 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ab7c7a3a-332a-4316-93de-c6e9b5ca6c62@roeck-us.net>
-Date: Wed, 13 May 2026 18:26:29 -0700
+Message-ID: <d59e3a08-cfc1-4231-9adc-14b62f3aff90@roeck-us.net>
+Date: Wed, 13 May 2026 18:29:12 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,22 +69,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] scsi: mpt3sas: add hwmon support
-To: Louis Sautier <sautier.louis@gmail.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Sathya Prakash <sathya.prakash@broadcom.com>,
- Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
- Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
- Ranjan Kumar <ranjan.kumar@broadcom.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+Subject: Re: [PATCH 2/3] hwmon: lenovo-ec-sensors: Fix NULL pointer
+ dereference when DMI match fails
+To: Kean <rh_king@163.com>
+Cc: Mark Pearson <mpearson-lenovo@squebb.ca>, linux-hwmon@vger.kernel.org,
  linux-kernel@vger.kernel.org
-References: <20260512214703.655633-1-sautier.louis@gmail.com>
- <20260512214703.655633-3-sautier.louis@gmail.com>
- <934b475d-1d77-4670-af10-4f3f2ddad61d@roeck-us.net>
- <4e757864-c062-4467-83b4-1e0d08b68b2d@gmail.com>
+References: <20260514011411.4167069-1-rh_king@163.com>
+ <20260514011411.4167069-3-rh_king@163.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -131,34 +121,26 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <4e757864-c062-4467-83b4-1e0d08b68b2d@gmail.com>
+In-Reply-To: <20260514011411.4167069-3-rh_king@163.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 5/13/26 18:11, Louis Sautier wrote:
-> On 13/05/2026 05:57, Guenter Roeck wrote:
->>>    Documentation/hwmon/index.rst        |   1 +
->>>    Documentation/hwmon/mpt3sas.rst      |  57 ++++++++
->>
->> This is not appropriate. The description is wrong and misleading.
->> mpt3sas is _not_ a hwmon driver. It is a chip access driver which
->> happens to support hardware monitoring.
->>
->> If this is part of the mpt3sas code and not a separate driver,
->> please keep it there.
->>
->> Thanks,
->> Guenter
+On 5/13/26 18:14, Kean wrote:
+> dmi_first_match() returns NULL if the running system does not match any
+> entry in thinkstation_dmi_table. Without a NULL check, the subsequent
+> dmi_id->driver_data access dereferences a NULL pointer, causing a kernel
+> oops or panic.
 > 
-> Hi,
-> 
-> Sorry about that, I had assumed this directory was also meant to contain
-> documentation for chip drivers that support hardware monitoring.
+> Add a NULL check and return -ENODEV to gracefully fail the probe when
+> the driver is loaded on an unsupported platform.
 > 
 
-My recommendation is to implement drivers such as this one as auxiliary drivers.
-Most people don't want to do that. I accept that, but then I don't want to carry
-the documentation either.
+How would that happen in practice ? The driver init code has
+
+         if (!dmi_check_system(thinkstation_dmi_table))
+                 return -ENODEV;
+
+Please provide a reproducer.
 
 Thanks,
 Guenter
