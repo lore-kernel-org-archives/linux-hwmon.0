@@ -1,283 +1,190 @@
-Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E4425C80E
-	for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2026 01:49:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78E6F3C8C68
+	for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2026 03:03:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778809794; cv=none; b=nwjLm9wi9i6Ir8ZDHiEasP4ufCQqenPRARbE+h/ugVBxSXWrG3OVnHuDEF/Y1XfXSHEMBbi4FRhcwRtbF36lffGMPMWUCd7ZxcAi6vNsV1WveFu2marOm8orF572T0ZPGuqYmCJw0y7I9bUDdTZE7Ikj0bxTZd64drQEz3Nh1YQ=
+	t=1778814213; cv=none; b=Pc0ry0yFAPpItjOdD3TrhLgU2i/0AweMrSJ7smCrdjOkJ3/iPwRjcCLXAju420IBR9ORjf9r43HGeCe9xfn13aqVwl99FMx71NYCh44hyZ6XiNT1l5AX++YbyOqUGL3p0ShudfX+2IgQsj7bJk6IxQTdh3LhANWSGcvXLnUwJsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778809794; c=relaxed/simple;
-	bh=SIkgv8WQ93LCQ71jhhL3Di/xP8TbuCuowvj1KosLZko=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X0AxvKiABWjVPeOpJhoi3iAagUOvuztEQBF5W9dq/n6pndV9fkzYobpvh5l3U7/JJ1K7a3LQMvvJIUvqiKra4P0sj4Prz6gqoCCn9ij6lIUzKuQ6Kai6B86E6Ee10y3DfRiPky1kNa29MITdg4VQ2xJmShtEWO3fkGeF13BbErc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oWBhPXr0; arc=none smtp.client-ip=74.125.82.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778814213; c=relaxed/simple;
+	bh=OxGWlzEJeWEJ0/mwm6tr0gvLid5D4nkqPKsW4pKcxsI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=l1PfTVSVXPru41SazDTz6YsnlHMkvJ0flpXcSsndAps+NA4B0pJ/R9rtULVwBMviRKSjTrJirLvmmQhb4UUJajoZJi6mzSO/DDNEw1p9/z1QVCr49EfRkGxYDzhJHWANbF7xZRBCruTZ5kOpOj6SQ+hJK9aINZF6lMjGusTU9f8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai; spf=pass smtp.mailfrom=nexthop.ai; dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b=NC9pfFhP; arc=none smtp.client-ip=74.125.82.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oWBhPXr0"
-Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-12c1a170a50so12195287c88.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 18:49:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b="NC9pfFhP"
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2ff5472f263so5068504eec.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 20:03:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778809792; x=1779414592; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=zrNDITa07PIrUrnI0P0l/esE24/KQSx6Tox+P9NMGxo=;
-        b=oWBhPXr0SycOWAmTPteIs17tKJBKkiUQxpVoUCn7ddRMGeMbZSgoaVGcRJ/OeFEntF
-         TnJgPbe1AdXoUBSPoJR51y/8dY5QUn1n9VIaY5Omuj7au3txbRX3fifNKE8B751aZd6Q
-         UzYZbKuwPdyKS6z7BsARsIjXuvVP9nBU+1mlwQadJyKT4XeaJG5FvliDHSDacX0hbahi
-         4wz/vyQNg4vCsg6EKP0yQypUz1HB/gA3C71EJFuemGN1ZnjH+KqAG6oPpZ2FOde5SaIW
-         bIpa+fuhGLYa1zmVQCgVxjY7rbxx4IP3FypX88VKVK2Zp9ONFaz8b9NNmkqFwukoC/wp
-         yyYQ==
+        d=nexthop.ai; s=google; t=1778814210; x=1779419010; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mLc8hoxLlLR50zyDrnuTvZsozUqMQjyYuYXQlzRXPII=;
+        b=NC9pfFhPtqLL74qC7izf8QTuDIgFhrYFu/sOIbEiQuKxQ9VweUWeOekJJLXTSTGdLv
+         KyzUkFxgdhvkcVkpsvPSSnyLQQUNGMPTaVNyzlIjSjBjzgDSHAHuGGSHaETCH84uBtTr
+         5oIE1CjfVUhYN/JbeLgsTVYWPHYmSNT7rbJ3XmLgjevjHxNR6CJ//KJzD4fmFlwKlFkW
+         K+QushC0JHffGbrMB7YjXApP6GHH7tMpPVRYWJQCifvTkcJ0+MhvOqP5Zgh+wAEYy+NA
+         ARuxZTtJytsp0fGMYrf7/Z+6+z3cy+pjrQnvifzhfbR1Bv4+6bGcTwblOf2oWUMqkMXe
+         6MJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778809792; x=1779414592;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zrNDITa07PIrUrnI0P0l/esE24/KQSx6Tox+P9NMGxo=;
-        b=i3t2RCxm15chnTF5P5wycES9PFSEgGhBjNgjmbPjWCOiQENA90aNk9gIkUlFDThrrP
-         D2kDylgcVRulyDFOGEWqe5YX/zS8a3+VVjnp18MQskj/3Kw1Sd10oXCjIma/dJvQKAVx
-         51R3gFueYEhdKrQjx/1Fkt79F/RMK1AuF0KbWqc2yoQ2wQQk+MOxSRl3Welr50SH6HUz
-         xv2Df7pt0c+Lo80hWrfMhMaiHYCDUl3fJAv5haDUOqn6jfCd8USYU1wneQDnfgjgipQd
-         4lJou7vh6r30lyyQ+fCadKA0XY5il2maX3qtAPqFReyMPUvRBMhGnyEZA4ErkBP2rVw2
-         w9YQ==
-X-Gm-Message-State: AOJu0YxskHxXMmv2fwabpKhCGHPQVw4kXFVmqBHNybbrjftjwg8S2F8e
-	kY5y1+glGBoA4khGOFq9ps/7a4wYCLX80n7fwyvC1T21OEAAvmhDydidnjiKnA==
-X-Gm-Gg: Acq92OHNIQ0hLpu1GZxuw6zt96t3o5dWFZ5R8M9B6uG2CdC7vduSQrTlUzjFRO9an4j
-	tGk1HulrQ/JYvZurQP9E3D24qnwkVwmUkhG6Xj1lqLCFKkPyHz9ZFs27weYzw3IL6Jq4l4hUW98
-	saWs29JRfFBc4DAWBQ3DNng7AKV0TvXRHxPPXl30BFmVZmuYWLHjQliOwDJI+G/S6hPaW3/5cUE
-	rQbcl0ZBg2O8QoN82p2+5icvVAmFXE7rdqAVhL5FebI2x1gTStAA9UvWSbgnYzbmhfl409Dv8cY
-	plnLpBStLW+gLg5wwNVJEf06pUqhAUiB+hfMNoSlnjDJCdfVbygmkoNXEqA9pIu68pYb26EO0fC
-	vRohH8zPBGvKVbjwNWAVm+VwX64DGurMThat0VGnDeRX/mRe4YiYpdQrO20vq25UEDWjKcyi2Bh
-	clr8SWP/oqFGFWcXKfrw408r6jCXaCxPk2QBqKyKGwHugH2uxl2RJrhl7wgEVV3KQHiGzBHP3uk
-	3LQjw9/XlA=
-X-Received: by 2002:a05:7022:311:b0:12d:b396:eaed with SMTP id a92af1059eb24-1350440ae04mr818420c88.9.1778809792003;
-        Thu, 14 May 2026 18:49:52 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cbed2232sm7676638c88.7.2026.05.14.18.49.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 May 2026 18:49:51 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a1ada282-ecc4-4b9f-a479-c5bddf25e641@roeck-us.net>
-Date: Thu, 14 May 2026 18:49:50 -0700
+        d=1e100.net; s=20251104; t=1778814210; x=1779419010;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mLc8hoxLlLR50zyDrnuTvZsozUqMQjyYuYXQlzRXPII=;
+        b=IvltVpm0GVfNiJjVkeTR+B/NTLgP0W2ncAVKwx3dfT0IwX4YpsPEWaeoR+M2zPNtHv
+         SCZXf3GExa4uFOGXMDOx2lpDpU2HWkCtZYz3R2dAE/zR53s5N/wCnMfpj/HEr+W9DsI0
+         X6ffjIDamEbu+UcUwTMbOx3OphESg0VfgW86PR/rPtezkaqWB7KPgyh+iSg9e21ks9KS
+         Fohc4tYcdktcunFg8yLNelaAtbiI6h6bJj01E34SpDXetbvMNdBHJfXc02w99jWCfU+P
+         s1nR0fYIA+75S8p02BQtkYvrpIO4JJ8NRvGQCYLPfDnTDS5VxcWqfKSgyR3NHikim6lt
+         c7Ww==
+X-Gm-Message-State: AOJu0YyEuWECweJ2+tOzRj2UvOuE2nR3F91p3PbUA4/Z7v52EXtP5Ecg
+	aVKMhObjWj05EwrB1EWuuzHsm6oM2To9paPIe26EvXD+/kwGAErnnhVSc7vWZxvkbp8=
+X-Gm-Gg: Acq92OFGXzetQUY273QMVsTwJQ1k0EMfI8sMvgmebeVE0/qjqW6edDsp69SmhZXr/VP
+	4YMCZ6tROtS5wFOQtwlF4v6hb5DN6jwqXIvM4DNgGcGGOzlwOLbWxI4XtnBuV0VeA3KM/HX2VVf
+	SPmnVMEf1/U+SV/rzhVF17aDrLUt68kNcZiazASxbwkX4xDkwMFxCJxbvFteEaXCUiQxGs1OxjC
+	LeIAiHSRHNzBFgPVDpYQAssDkoXBJZPWmgPojHadyDtt4ByQKT0K9JX2V2S6JwJwEwdEEU89No/
+	yO4O0ypOs3er4NlG48DDK5OLm9pmTVPoaMc0yOQ+J6SReoST3CSBSkwLrF+88es1Y2s1bNrFP4D
+	aPmzqK8fSQJxFhQEV8gLJ7CBlaKD1+7Hz4FiX2+GexUteOYHxRpoh12TZDK+ASpenO/c8X3kgAQ
+	ZAeBCrmeR26LmJC7BuW75ME2UeDg==
+X-Received: by 2002:a05:7300:fd83:b0:2de:3022:a459 with SMTP id 5a478bee46e88-3039867f855mr1026827eec.21.1778814210362;
+        Thu, 14 May 2026 20:03:30 -0700 (PDT)
+Received: from [127.0.0.2] ([50.145.100.174])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30296dcb6f6sm6347011eec.17.2026.05.14.20.03.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 May 2026 20:03:29 -0700 (PDT)
+From: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+Subject: [PATCH v4 0/2] hwmon: Add Murata D1U74T-W PSU driver
+Date: Thu, 14 May 2026 20:03:24 -0700
+Message-Id: <20260514-d1u74t-v4-0-1f1ee7b002ec@nexthop.ai>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/2] usb: xhci-pci: add AMD Promontory 21 PCI glue
-To: Jihong Min <hurryman2212@icloud.com>, sashiko-reviews@lists.linux.dev,
- Jihong Min <hurryman2212@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-pci@vger.kernel.org
-References: <20260512213910.871859-2-hurryman2212@gmail.com>
- <20260514004055.1BBCAC19425@smtp.kernel.org>
- <110e9a0d-bc91-4959-8a7b-1a055d0b49f7@roeck-us.net>
- <1f296d29-3d43-4dd3-b751-8a0892b4095a@icloud.com>
- <a90ab332-9f86-4486-8243-07c98e3f7578@icloud.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <a90ab332-9f86-4486-8243-07c98e3f7578@icloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPyMBmoC/2XNzQqDMBAE4FeRnJuS3cQfeup7lB6SNdb0oGJUL
+ OK7N7EgFo8D880szNveWc9uycJ6Oznv2iYEdUkY1bp5We7KkBkKzEQKwEsYczVwEmR0UQFJpVg
+ od72t3LwNPZ6/7EfztjREHRu180Pbf7anCWLvNDoBFzxDSWgIUon63th5qNvuqh2LqxMeHe4Og
+ 1MSSiEqY4DUycmjk7uTwWFuqMyKFEmlf25d1y+R8WysHwEAAA==
+X-Change-ID: 20260511-d1u74t-c0cba8f1c344
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Abdurrahman Hussain <abdurrahman@nexthop.ai>, 
+ kernel test robot <lkp@intel.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1778814209; l=4522;
+ i=abdurrahman@nexthop.ai; s=20260510; h=from:subject:message-id;
+ bh=OxGWlzEJeWEJ0/mwm6tr0gvLid5D4nkqPKsW4pKcxsI=;
+ b=w7PkR3H+B7QHqJ0Dsmsm4myLl30hSgmpND0PSJUJyfqGOm+XqGyC++1HuJ6yMudAFwHx/7eQM
+ KCYR61U1AVqBny6anNgnbsIkDtCTS8F4R3olQVb5qRcideDIQGo6nRz
+X-Developer-Key: i=abdurrahman@nexthop.ai; a=ed25519;
+ pk=omTm9cCAbO0ZhS32aKfJDKue0W3sQGpG9ub5eYHif8I=
 
-On 5/14/26 06:44, Jihong Min wrote:
-> 
-> On 5/14/26 22:38, Jihong Min wrote:
->>
->> On 5/14/26 10:20, Guenter Roeck wrote:
->>> On 5/13/26 17:40, sashiko-bot@kernel.org wrote:
->>>> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
->>>> - [High] The Kconfig dependency `depends on USB_XHCI_PCI=y` completely disables PROM21 support for systems where the core driver is built as a module.
->>>> - [Low] Signed integer overflow when calculating the auxiliary device ID.
->>>> -- 
->>>>
->>>> commit 20f4e35b2f88ebe2b8988b4f07fe7cc28199096b
->>>> Author: Jihong Min <hurryman2212@gmail.com>
->>>> Subject: usb: xhci-pci: add AMD Promontory 21 PCI glue
->>>>
->>>> This commit adds a small PCI glue driver for AMD Promontory 21 xHCI
->>>> controllers. It binds the controllers, delegates USB host operation to
->>>> the common xHCI PCI core, and creates an auxiliary device for optional
->>>> temperature sensor support.
->>>>
->>>>> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
->>>>> --- a/drivers/usb/host/Kconfig
->>>>> +++ b/drivers/usb/host/Kconfig
->>>>
->>>> [ ... ]
->>>>
->>>>> @@ -42,6 +42,26 @@ config USB_XHCI_PCI
->>>>>       depends on USB_PCI
->>>>>       default y
->>>>>   +config USB_XHCI_PCI_PROM21
->>>>> +    bool "AMD Promontory 21 xHCI PCI support"
->>>>> +    depends on X86
->>>>> +    depends on USB_XHCI_PCI=y
->>>>
->>>> Does depending strictly on USB_XHCI_PCI=y cause a configuration regression
->>>> for most distributions where the core driver is configured as a module?
->>>>
->>>> The driver source appears fully capable of being built as a module, using
->>>> module-related macros and module_pci_driver().
->>>>
->>>> If the intent is to prevent an early boot mismatch where xhci-pci is
->>>> built-in but the PROM21 glue is a module, could this instead be a tristate
->>>> option using depends on USB_XHCI_PCI and depends on !(USB_XHCI_PCI=y && m)?
->>>> This would enforce the boot constraint while preserving support for modular
->>>> kernel builds.
->>>>
->>>
->>> That makes sense to me. That would be stronger than using default (which
->>> was my idea of dealing with the problem). Restricting the code to USB_XHCI_PCI=y
->>> seems to be a bit extreme.
->>
->> Hi Guenter,
->>
->> I looked more closely at the Kconfig part of the Sashiko suggestion.
->>
->> The concern itself is valid: the v5 dependency on USB_XHCI_PCI=y is too
->> strict because it prevents the PROM21 PCI glue from being built when
->> USB_XHCI_PCI=m.
->>
->> However, I do not think the suggested expression works as intended:
->>
->>   depends on !(USB_XHCI_PCI=y && m)
->>
->> With Kconfig tristate logic, `m` is a tristate literal, not "this symbol is
->> being built as a module". If USB_XHCI_PCI=y, then:
->>
->>   USB_XHCI_PCI=y && m  => m
->>   !(USB_XHCI_PCI=y && m) => m
->>
->> So the dependency becomes `m`, which limits USB_XHCI_PCI_PROM21 to `m` instead
->> of allowing `y`. That is the opposite of what we need for the built-in
->> xhci-pci case.
->>
->> The combinations I think we want are:
->>
->>   USB_XHCI_PCI=y  -> USB_XHCI_PCI_PROM21=y or n, but not m
->>   USB_XHCI_PCI=m  -> USB_XHCI_PCI_PROM21=m or n
->>   USB_XHCI_PCI=n  -> USB_XHCI_PCI_PROM21=n
->>
->> I see a few possible ways to handle this:
->>
->> 1. Keep USB_XHCI_PCI_PROM21 as a visible tristate:
->>
->>      config USB_XHCI_PCI_PROM21
->>        tristate "AMD Promontory 21 xHCI PCI support"
->>        depends on X86
->>        depends on USB_XHCI_PCI
->>        default USB_XHCI_PCI
->>        select AUXILIARY_BUS
->>
->>    This supports USB_XHCI_PCI=m, but it still lets a user select the unsafe
->>    USB_XHCI_PCI=y / USB_XHCI_PCI_PROM21=m combination.
->>
->> 2. Keep it visible and rely on help text to warn users not to select `m` when
->>    USB_XHCI_PCI=y.
->>
->>    This is simple, but it does not actually prevent the bad combination.
->>
->> 3. Use IS_REACHABLE() in xhci-pci.c instead of IS_ENABLED().
->>
->>    That would prevent built-in xhci-pci from rejecting PROM21 devices when the
->>    PROM21 glue is only available as a module. However, it also means the
->>    PROM21 glue/hwmon path would not be used in that configuration unless the
->>    PCI device is rebound later, so I do not think it is ideal.
->>
->> 4. Make USB_XHCI_PCI_PROM21 a hidden tristate that follows USB_XHCI_PCI:
->>
->>      config USB_XHCI_PCI_PROM21
->>        tristate
->>        depends on X86
->>        depends on USB_XHCI_PCI
->>        default USB_XHCI_PCI
->>        select AUXILIARY_BUS
->>
->>    Then the value follows the common xhci-pci driver:
->>
->>      USB_XHCI_PCI=y  -> USB_XHCI_PCI_PROM21=y
->>      USB_XHCI_PCI=m  -> USB_XHCI_PCI_PROM21=m
->>      USB_XHCI_PCI=n  -> USB_XHCI_PCI_PROM21=n
->>
->>    This prevents the unsafe y/m split while still supporting modular
->>    USB_XHCI_PCI builds. The actual user-visible sensor option remains
->>    SENSORS_PROM21_XHCI.
->>
->> My current preference is option 4, because the PROM21 PCI glue is not really a
->> user-facing feature by itself. It exists so the common xhci-pci driver can hand
->> PROM21 devices to the PROM21-specific glue and so the optional hwmon driver can
->> bind through the auxiliary device. The user-visible part remains the hwmon
->> sensor driver.
->>
->> Does that sound reasonable to you, or would you prefer one of the other
->> approaches?
->>
->> Thanks,
->> Jihong
->>
-> One follow-up to my previous mail:
-> 
-> If we go with option 4 and make USB_XHCI_PCI_PROM21 a hidden tristate
-> symbol, I think its help text should probably be removed as well, since the
-> symbol would no longer have a user-visible prompt.
-> 
-Agreed.
+This series adds a PMBus driver for the Murata D1U74T-W AC/DC power
+supply unit, used in some Open Compute Project platforms.
 
-> The user-visible option would remain SENSORS_PROM21_XHCI, where the hwmon
-> sensor help text can stay.
-> 
-> Does that sound right?
-> 
-Yes.
+The PSU is PMBus-compliant and uses the linear data format. The driver
+exposes:
 
-Thanks,
-Guenter
+  - input/output voltage, current and power telemetry,
+  - three temperature sensors,
+  - dual fan tachometer monitoring,
+
+through the standard hwmon/pmbus sysfs interface. Probe verifies the
+PMBUS_MFR_ID and PMBUS_MFR_MODEL fields before binding so the driver
+only attaches to actual D1U74T-W hardware.
+
+Patch 1 adds the compatible string to trivial-devices.yaml. The
+binding declares only compatible and reg (no regulators, no supplies),
+so a standalone binding file is not warranted.
+
+Patch 2 adds the driver, hwmon documentation, Kconfig/Makefile entries
+and MAINTAINERS section.
+
+Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+---
+Changes in v4:
+- Patch 1: rewrite the commit message to describe the hardware (the
+  D1U74T-W series of 1U CRPS-185 / OCP M-CRPS AC/DC PSUs, dual 12 V
+  outputs, internal variable-speed fan, PMBus 1.2 on I2C) rather
+  than the binding format, per Krzysztof Kozlowski's review of v3.
+- Patch 2: update the Datasheet line in
+  Documentation/hwmon/d1u74t.rst from "Only available under NDA" to
+  reflect that the D1U74T-W series datasheets are publicly available
+  on Murata's website.
+- Link to v3: https://patch.msgid.link/20260513-d1u74t-v3-0-27bcd6852c45@nexthop.ai
+
+Changes in v3 (addresses the sashiko automated review):
+- Patch 2: move the new MAINTAINERS entry into the correct
+  alphabetical position in the M section (between MULTIPLEXER
+  SUBSYSTEM and MUSB MULTIPOINT) instead of leaving it wedged
+  between CRPS DRIVER and CRYPTO API.
+- Patch 2: rewrite the sysfs-entries table in
+  Documentation/hwmon/d1u74t.rst to match the attributes the chip
+  actually exposes. The previous table listed the PMBus-spec
+  maximal set (crit/lcrit/max/min for in1/in2, crit for temp,
+  max/max_alarm for curr1, etc.) but the chip only implements a
+  subset; pmbus_core consequently only creates a subset of attrs.
+  Cross-checked against two D1U74T-W units, both expose the same
+  attribute set. Also fixes the in2_* descriptions that incorrectly
+  referred to "input voltage" rather than output voltage (in2 is
+  vout1).
+- Patch 2: use dev_err_probe() for the MFR_ID-mismatch error path
+  in d1u74t_probe(), matching the surrounding error-handling style.
+- Patch 2: gate the MFR_MODEL strncmp() on rc >= 8 so a short
+  block-read response cannot make the comparison read stale bytes
+  left over from the previous MFR_ID read into the same buffer.
+- Patch 1 is unchanged from v2.
+- Link to v2: https://patch.msgid.link/20260512-d1u74t-v2-0-431d00fbb1c4@nexthop.ai
+
+Changes in v2:
+- Patch 1: move the binding into trivial-devices.yaml rather than
+  carrying a standalone murata,d1u74t.yaml. The device only declares
+  compatible and reg, with no regulators or supplies, so the
+  standalone binding was not warranted (Conor Dooley review).
+- Patch 2: fix the d1u74t.rst title underline (was 18 '=' chars under
+  a 20-char title, docutils warning from the kernel test robot).
+- Link to v1: https://patch.msgid.link/20260511-d1u74t-v1-0-623c2bc1532a@nexthop.ai
+
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+To: Guenter Roeck <linux@roeck-us.net>
+To: Jonathan Corbet <corbet@lwn.net>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+
+---
+Abdurrahman Hussain (2):
+      dt-bindings: trivial-devices: Add Murata D1U74T PSU
+      hwmon: (pmbus/d1u74t) Add Murata D1U74T PSU driver
+
+ .../devicetree/bindings/trivial-devices.yaml       |  2 +
+ Documentation/hwmon/d1u74t.rst                     | 81 ++++++++++++++++++++
+ Documentation/hwmon/index.rst                      |  1 +
+ MAINTAINERS                                        |  7 ++
+ drivers/hwmon/pmbus/Kconfig                        |  9 +++
+ drivers/hwmon/pmbus/Makefile                       |  1 +
+ drivers/hwmon/pmbus/d1u74t.c                       | 86 ++++++++++++++++++++++
+ 7 files changed, 187 insertions(+)
+---
+base-commit: 1f63dd8ca0dc05a8272bb8155f643c691d29bb11
+change-id: 20260511-d1u74t-c0cba8f1c344
+
+Best regards,
+--  
+Abdurrahman Hussain <abdurrahman@nexthop.ai>
 
