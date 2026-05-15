@@ -1,194 +1,180 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010033.outbound.protection.outlook.com [52.101.201.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE623F4129;
-	Fri, 15 May 2026 12:41:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778848912; cv=none; b=LuCTYLYKKcCnVvlWZnQQ+X9bMQt1lZ/TU+dGnZNYrE0/ihkbOVMZ6Q1KQGlQqAJBCBf8lz5bMa5geDnF8FaSDxPe9us22HnI1ezllWUOJ99lKBSMPjH1jBREWvOxTGG7lZaNdvhSA2lcI3Pb3tIJn1a3lJ9tlGfyJFO8bjBvfFY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778848912; c=relaxed/simple;
-	bh=byBYAVDjaoKlALuDppBYnRFz/zySWNjJSefSLftspx0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LkxqRe0cjhU6ypSE8pjo48R7cilIAGihRAojNDJmrKoKtCk5+Zj6YVYBryPwhOCNJjfFkHTlVcTzAJ0xdOZpc1wvgzg3yjhpD21h9eHV9pju2lCLvSYWKBVFNtLctykHcQof43F1EvT3H+ztZXn8s1pFcu4R6b1LN3oA7E/mxo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=MI4hhL7x; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09E9747F2CA;
+	Fri, 15 May 2026 13:45:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.33
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778852737; cv=fail; b=Xn74xsggSyEVmvWsoL3BiMvd0y1mlMFPK59uNm1WlRj+Hy4qgaOkz8y49YICnHPHpmlUozTZ6RzBITcCIDCL0HYO6l5CarI81YwVS+VPdOcLE1uKQw1TTO8pmYYWmrKWwi5fHfpGR5lHFmB1sn8AQVX0YWyweHqYHvnwIz7zp/Q=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778852737; c=relaxed/simple;
+	bh=GAhuiNaMgdWJkc3MfLbXb8E+BKkC3SKavSZt0GPcvDc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QJgkc8YHI5UNLz1TQSQa6Pr3qjIq9MMnulIoJGaOP79C4wxORq2PRvlWLbZPzwzl2DLdhYkKteu+xafSNBaB/zGxExxzK/MPVYaTSsRNy3a/wyyS4wQboK8IgCuvlvZ317ks84THSmUIuVrqLen71nSmss433KdtnnBc6B4DBgQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=d4w20+69; arc=fail smtp.client-ip=52.101.201.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="MI4hhL7x"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=GmifB1ZCgimZhhcProIdhFi1yPDkpQoTGWkF/PVYbRI=; b=MI4hhL7xpbSSCovw03l08oGGxy
-	4aCxc3/gYL4DWmKHvrrF6Q3sDAUEp7GH6jVoTWzQ3ZvC9YjK2wKVKwr3Y+PWbjqIVs18fBbYSq/MB
-	4I3TwbQ9aH4rXl93K/R7NUuvTjl5CJ7QexImPqsTiO4gx5Ec1kNF8qITUUStvsZVitTE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1wNrrC-0033vB-IM; Fri, 15 May 2026 14:41:34 +0200
-Date: Fri, 15 May 2026 14:41:34 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: a0282524688@gmail.com
-Cc: tmyu0@nuvoton.com, linusw@kernel.org, brgl@kernel.org,
-	linux@roeck-us.net, andi.shyti@kernel.org, lee@kernel.org,
-	mkl@pengutronix.de, mailhol@kernel.org,
-	alexandre.belloni@bootlin.com, wim@linux-watchdog.org,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 1/1] mfd: Add Host Interface (HIF) support for Nuvoton
- NCT6694
-Message-ID: <ef9449dc-ef2a-415e-8acc-a15f349bac24@lunn.ch>
-References: <20260515085746.114361-1-a0282524688@gmail.com>
- <20260515085746.114361-2-a0282524688@gmail.com>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="d4w20+69"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BBQ73skNVX16eyJprEbhZLaFkYbYFyZnNalyXA2POQ4nkBx1mUEqkHQixiuMs5sqyXFOOcovREGBSagcS45SPdWJw5NecFjqF0SPbgwwtBQ722fkN2MMn7nh8WbLzq11eXKHeRAlNaHRMXUS2RDEvZLVEYmF8Rt14Dl+Iku3w8lKV8K3dylTzpMoYUwoEAMYRo7bWVsf3qddVyk1TNxwc57eTZmD/b7lW4niKnYqg29X24oYhyid88Fz8ImDcar8JszOBhL+tmRLtMPqFY2IqG+wOdFEdEblFRn5JvSyYQANT5O4XGzhqUFsxfJOQ4cRLM76samBc+IrYN7Nc6FVNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=i9PhJI+uUggX4vTboLz2Cxvp5UvUmmgRkAG48d7trYM=;
+ b=A8caRam+V3tRQAT7KrRgq5ABAvgB9KVs6uuE5n4U5/GRNiga/TalVYSkNiT2wQmfXfeJWbl5+rkSy73nSWtbRihB9atFLQsD874JQxys6LAX9bhljjCTBpLbhsmB+SLEudDL7NKX/8lSfV2Wf6ulKl3eXnwJLWyX6ACoeYBzo6bSXZFxk3wPau/nwNPbZVdBr47Ncpz65W1Y7Qpm7SBauzFjAUUOXDMBG9LB4JhvaRoLdNBGvX6Yosu0Mketha4NqT0X88TGDd2zQlH3QGTIbiK2iS08iKorSg8g5ekwigTm3ljaPrvjnc5cdl09B5CWaCaZeNZHw0r8sJS5Gxzb+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=i9PhJI+uUggX4vTboLz2Cxvp5UvUmmgRkAG48d7trYM=;
+ b=d4w20+695jnGLVATXm2cPCHTaScwz8OV6FRZhYOifKJY2OswaxLAw0f3p7jgJ35b6nLgMWi824Mb4zEshrezEXbOgutMvd3aLj9OhDeY8da4wHLFGGXaciCoP9+s8rv7y7RPZKdS0M/QlrA6HIlhutDmXnruttm3ZKK3mBuiQfk=
+Received: from BL1PR13CA0430.namprd13.prod.outlook.com (2603:10b6:208:2c3::15)
+ by IA1PR12MB6483.namprd12.prod.outlook.com (2603:10b6:208:3a8::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.25.18; Fri, 15 May
+ 2026 13:45:29 +0000
+Received: from BL6PEPF0001AB74.namprd02.prod.outlook.com
+ (2603:10b6:208:2c3:cafe::78) by BL1PR13CA0430.outlook.office365.com
+ (2603:10b6:208:2c3::15) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.25.18 via Frontend Transport; Fri, 15
+ May 2026 13:45:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ BL6PEPF0001AB74.mail.protection.outlook.com (10.167.242.167) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.25.13 via Frontend Transport; Fri, 15 May 2026 13:45:29 +0000
+Received: from dcsm-trdripper1.amd.com (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.41; Fri, 15 May
+ 2026 08:45:24 -0500
+From: Akshay Gupta <Akshay.Gupta@amd.com>
+To: <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-hwmon@vger.kernel.org>
+CC: <corbet@lwn.net>, <skhan@linuxfoundation.org>, <linux@roeck-us.net>,
+	<arnd@arndb.de>, <gregkh@linuxfoundation.org>, <akshay.gupta@amd.com>,
+	<naveenkrishna.chatradhi@amd.com>, <Prathima.Lk@amd.com>,
+	<Anand.Umarji@amd.com>, <Kevin.Tung@quantatw.com>, Akshay Gupta
+	<Akshay.Gupta@amd.com>
+Subject: [PATCH v2 0/6] misc: amd-sbi: Refactor SBTSI driver with I3C support and ioctl interface
+Date: Fri, 15 May 2026 19:15:00 +0530
+Message-ID: <20260515134506.397649-1-Akshay.Gupta@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260515085746.114361-2-a0282524688@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: satlexmb08.amd.com (10.181.42.217) To satlexmb07.amd.com
+ (10.181.42.216)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB74:EE_|IA1PR12MB6483:EE_
+X-MS-Office365-Filtering-Correlation-Id: 45a0b482-f88d-46cb-9e5a-08deb2883a27
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|36860700016|82310400026|1800799024|56012099003|18002099003|3023799003|11063799003;
+X-Microsoft-Antispam-Message-Info:
+	G8JRPqVK6igVjxOe+r2EYbjEXscNvldIx2dXjM4Zr64ipsvWZlBi2pV1xRKynXrUUUG6nWFAVbLxBLBBBfyzyZXPBCpPlFgOttpiEtCBkA/5Oxg3u0wY9AEv/Qz4DPfxSNHj4EVE8alGIvlYMVp5KxzsmGfNIdZBjsSLGmz5hYs4lWmhyXp4ofj3EescnS//r5Amka53tca9hXL5Hy5m6Y0HtS86fnBMuDsnfNsoP6zlmivCWm2Kd8Xup/bQUZhkK7iPNkxS0Am90yqIHjkxM0/CHOjgbLmoHJVp562a6JpY+SSmD/9I9OEBRD3E0MJ7/qh3/ttJynGJDD1d+HwG+1vNUkEs8qlpInRbtcG4Y6O2TuFlVAQPF55Ql9YeLcl3A3pazgOPdCQxFPjQttrtzUgQmvEWqJ6rc9St857lmPtKq71j4V+E6MACMceE7NwfjF0JeFJ16kgB9xLDv8ZUFQ9asq5pVOwu7tU55zRZTYO0DsUz07CAadPXaVhmhwGwl4cuY53BZ5ubwMIrVYVEALZyPTFph7v5HMOaiTE5dOt8dCXLm2j7hhrr8h/CmtFm5M45/DxEMuO7bnSqdz+gHYF+ODUPjNuPAhJ+iPzsfiv9La1Ol5AZI/ZeFe6VDWhyaYmMY9t+8trTxBq5vejdFHZ6porRmi/qRznKv3vWDgbIoWQ3TlB3FXcvyTBLNQKlH/o9LYSWVEbRJa3rR0uXioYmMOAgSFzACz4mWAFIeXs=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(36860700016)(82310400026)(1800799024)(56012099003)(18002099003)(3023799003)(11063799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	mS0eOgl2WGkFrGeQ9vvIIJKViaceV51GTgyQCaRalTzi+dWu1trS/hmPe0+RMP/CplfRiI5hlz1obF9wzxsBK1scXnwz1yoLFqHGai4wx/wiJLqK4kAljeV9KaqFghsPZ4xCy9vGRCh1eYJ3/qVi2Vops6u5MgUKFO0oLURSH5mNTJrBVDV4+rvpKFRtO8/cfbQzjRkryTZatdfgPlavjYDx7zPVn37a6or1H2OoSq7aW9W5A0faW88CqfiWVCZXLutVEBMvqoEtI8OvMslyobiXVLVl2DudjxMtqqr8S6InXnxBdEldhOQIn04hBDDWLxSJEqkvqaGaW0lJRBtP1KW6OYZ8X9u+rPW4CtsRqzGonKNv4iCjJEDTRiCwN/SCAEMLjyZI1DmsarymDrJ7d3WvAdRPIynWH8F8PmAHuEzhFDYR7e2M5Q3B4IlpO8dz
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2026 13:45:29.3731
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 45a0b482-f88d-46cb-9e5a-08deb2883a27
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF0001AB74.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6483
 
->  MAINTAINERS                         |   1 +
->  drivers/gpio/gpio-nct6694.c         |   7 -
->  drivers/hwmon/nct6694-hwmon.c       |  21 -
->  drivers/i2c/busses/i2c-nct6694.c    |   7 -
->  drivers/mfd/Kconfig                 |  47 +-
->  drivers/mfd/Makefile                |   3 +-
->  drivers/mfd/nct6694-hif.c           | 663 ++++++++++++++++++++++++++++
->  drivers/mfd/nct6694.c               | 111 +++--
->  drivers/net/can/usb/nct6694_canfd.c |   6 -
+This series refactors the AMD SB-TSI (Side-Band Temperature Sensor
+Interface) driver by moving the core from the hwmon subsystem into the
+drivers/misc/amd-sbi framework, alongside the existing SB-RMI driver.
+Registers an auxiliary device keeping hwmon sensors functionality intact. 
 
-The networking change here is very small, so my influence as a
-networking Maintainer should be considered small.
+Background:
+The SB-TSI driver currently lives under drivers/hwmon/sbtsi_temp.c and
+is limited to exposing temperature readings via the hwmon interface.
+As AMD platforms evolve, SB-TSI access is required from multiple
+consumers (hwmon, userspace via ioctl, I3C-attached devices), making
+the hwmon-only placement insufficient.
 
-However, i would say this patch is too big, does too many different
-things at once, making it harder to review. Please could you break it
-up into lots of small patches, each with good commit messages, and
-being obviously correct.
+This series restructures the driver into a layered design:
 
-> +F:	drivers/mfd/nct6694-hif.c
+  - tsi-core.c   : core register access and ioctl/miscdevice support
+  - tsi.c        : I2C/I3C probe and glue
+  - sbtsi_temp.c : hwmon sensor layer built on top of the core using aux device
 
-Maybe move all the usb code into nct6694-usb.c ?
+Changes in this series:
+1. Move core SBTSI driver probe from drivers/hwmon into drivers/misc/amd-sbi,
+   and registering an auxiliary device in core for hwmon subsystem probing
 
-> - * USB command module type for NCT6694 GPIO controller.
-> - * This defines the module type used for communication with the NCT6694
-> - * GPIO controller over the USB interface.
-> - */
-> -#define NCT6694_GPIO_MOD	0xFF
-> -
->  #define NCT6694_GPIO_VER	0x90
->  #define NCT6694_GPIO_VALID	0x110
->  #define NCT6694_GPI_DATA	0x120
+2. Register order follows the device ReadOrder bit so both parts latch atomically;
+   limit registers (temp / temp1_max / temp1_min) use the same helpers instead of
+   separate SMBus calls. 
 
-Moving code from one place to another can be a patch. Just moving code
-is quick and easy to review, and it gets it out of more complex
-patches which are harder to review.
+3. Move sbtsi register transfer to core abstraction to decouple the hwmon sensor
+   driver from the underlying bus transport. Preparing for I3C support in a
+   subsequent patch
 
-> +static int nct6694_response_err_handling(struct nct6694 *nct6694, unsigned char err_status)
-> +{
-> +	switch (err_status) {
-> +	case NCT6694_NO_ERROR:
-> +		return 0;
-> +	case NCT6694_NOT_SUPPORT_ERROR:
-> +		dev_err(nct6694->dev, "Command is not supported!\n");
-> +		break;
+4. Extend the driver to support SB-TSI over I3C in addition to I2C.
+   Both buses share the same core read/write path via sbtsi_xfer();
+   the is_i3c flag selects the underlying transport at probe time.
+   Backward compatibility with existing I2C deployments is maintained.
 
-Maybe EOPNOTSUPP?
+5. Add a miscdevice (/dev/sbtsi-<addr>) and an ioctl interface
+   (SBTSI_IOCTL_REG_XFER_CMD) that allows root userspace to perform
+   SB-TSI register read/write operations through the APML protocol,
+   consistent with the existing SBRMI ioctl interface.
 
-> +	case NCT6694_NO_RESPONSE_ERROR:
-> +		dev_warn(nct6694->dev, "Command received no response!\n");
-> +		break;
-> +	case NCT6694_TIMEOUT_ERROR:
-> +		dev_warn(nct6694->dev, "Command timed out!\n");
-> +		break;
+6. Document the new SBTSI miscdevice and its ioctl in
+   Documentation/misc-devices/amd-sbi.rst.
 
-Maybe ETIMEDOUT?
+Testing:
+Tested on AMD Genoa/Turin/Venice BMC platforms with both I2C and I3C-attached
+SB-TSI targets. hwmon sysfs attributes (tempX_input, tempX_max, etc.)
+and ioctl register transfers verified against hardware.
 
+Prathima (6):
+  hwmon/misc: amd-sbi: Move core sbtsi support from hwmon to misc
+  hwmon: sbtsi_temp: Refactor temperature register access into helpers
+  hwmon/misc: amd-sbi: Move sbtsi register transfer to core abstraction
+  misc: amd-sbi: Add support for SB-TSI over I3C
+  misc: amd-sbi: Add SBTSI ioctl register transfer interface
+  docs: misc: amd-sbi: Document SBTSI userspace interface
 
-> +	case NCT6694_PENDING:
-> +		dev_err(nct6694->dev, "Command is pending!\n");
-> +		break;
+ Documentation/misc-devices/amd-sbi.rst |  64 ++++++++
+ drivers/hwmon/Kconfig                  |   2 +-
+ drivers/hwmon/sbtsi_temp.c             | 158 ++++++++++----------
+ drivers/misc/amd-sbi/Kconfig           |  13 ++
+ drivers/misc/amd-sbi/Makefile          |   3 +
+ drivers/misc/amd-sbi/tsi-core.c        | 148 ++++++++++++++++++
+ drivers/misc/amd-sbi/tsi-core.h        |  15 ++
+ drivers/misc/amd-sbi/tsi.c             | 198 +++++++++++++++++++++++++
+ include/linux/misc/tsi.h               |  63 ++++++++
+ include/uapi/misc/amd-apml.h           |  23 +++
+ 10 files changed, 604 insertions(+), 83 deletions(-)
+ create mode 100644 drivers/misc/amd-sbi/tsi-core.c
+ create mode 100644 drivers/misc/amd-sbi/tsi-core.h
+ create mode 100644 drivers/misc/amd-sbi/tsi.c
+ create mode 100644 include/linux/misc/tsi.h
 
-EBUSY?
+-- 
+2.34.1
 
-Having different error codes can make it easier to debug when things
-so wrong. But you also have dev_err(), so it is less important.
-
-> -static int nct6694_response_err_handling(struct nct6694 *nct6694, unsigned char err_status)
-> +static int nct6694_usb_err_handling(struct nct6694 *nct6694,
-> +				    unsigned char err_status)
-
-These renames can happen in one patch. Again, it is quick and easy to
-review.
-
->  
-> -	guard(mutex)(&nct6694->access_lock);
-> +	guard(mutex)(&udata->access_lock);
-
-This change is not obviously correct. Can moving the lock be made of
-patch of its own, with an explanation of why?
-
-> -	nct6694->usb_msg = devm_kzalloc(dev, sizeof(union nct6694_usb_msg), GFP_KERNEL);
-> -	if (!nct6694->usb_msg)
-> +	udata = devm_kzalloc(dev, sizeof(*udata), GFP_KERNEL);
-> +	if (!udata)
->  		return -ENOMEM;
->  
-> -	nct6694->int_buffer = devm_kzalloc(dev, sizeof(*nct6694->int_buffer), GFP_KERNEL);
-> -	if (!nct6694->int_buffer)
-> +	udata->usb_msg = devm_kzalloc(dev, sizeof(*udata->usb_msg), GFP_KERNEL);
-> +	if (!udata->usb_msg)
->  		return -ENOMEM;
->  
-> -	nct6694->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
-> -	if (!nct6694->int_in_urb)
-> +	udata->int_buffer = devm_kzalloc(dev, sizeof(*udata->int_buffer), GFP_KERNEL);
-> +	if (!udata->int_buffer)
->  		return -ENOMEM;
->  
-> +	udata->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
-> +	if (!udata->int_in_urb)
-> +		return -ENOMEM;
-
-
-In this hunk, diff(1) has done a poor job and made it harder to
-review. If i understand the code correctly, udata contains USB
-specific data? Maybe call it usdata? That also has the same length as
-ntc6694, which has some minor advantages. What you might find is that
-if you have a patch adding only the allocation of usbdata, and then a
-patch moving things into usbdata, diff(1) does a better job, and the
-code is more obviously correct.
-
-> @@ -305,16 +344,15 @@ static int nct6694_usb_probe(struct usb_interface *iface,
->  	}
->  
->  	nct6694->dev = dev;
-> -	nct6694->udev = udev;
-> +
-> +	spin_lock_init(&nct6694->irq_lock);
->  
->  	ida_init(&nct6694->gpio_ida);
->  	ida_init(&nct6694->i2c_ida);
->  	ida_init(&nct6694->canfd_ida);
->  	ida_init(&nct6694->wdt_ida);
->  
-> -	spin_lock_init(&nct6694->irq_lock);
-> -
-
-Why has the spin_lock_init() moved? Having lots of small patches would
-make that stand out, and when you reviewed your own patches, you might
-decided to change it back, because it does not appear to be needed.
-
-Given the size of this patch, i'm finding it hard to see the overall
-structure. Generally, when you have one device with two different
-access mechanisms, you end up with three files, two implementing
-access, and the third with the common code. With one big patch, i
-don't see this common code.
-
-	Andrew
