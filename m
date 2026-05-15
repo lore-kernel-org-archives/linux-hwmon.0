@@ -1,98 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B8FB3EF649
-	for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2026 22:28:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E8561DED5C
+	for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2026 22:39:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778884089; cv=none; b=haQrCLLMEvB+3aIMiXBwGx9suBql+03y/yWq09381/cvRAFyzNTGy/uXWM4AVAKb/Z/C7/0jEaMHLDID900wKzGjoOEsKIGoOy1UzxomeXUCqiy7K9S6Ai8Ff07DsZjlg8e42udSd+NPwlUL9RkDl83ovbt+XjHnXVJ4PezzT1k=
+	t=1778884774; cv=none; b=L7a13VbsCi9uoekCrbwbHOtS3BLtiXlqqk1e60gLoX6Y461R0N3OU/faWOzqKWZOCLK7DCNSusRk4npoAwvvjpm5az2gFrDxr9161KcEyVdp2nRmoJ3p3ZsV5YeiZ1NNKb3PKWQcEMoavkog+8R+KBiPTCmT646HFskSdePZHSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778884089; c=relaxed/simple;
-	bh=al89eVZbnkuwPfy5Xy1y378vivgklVuwjtcqJzjnvHw=;
+	s=arc-20240116; t=1778884774; c=relaxed/simple;
+	bh=aBy0TjaurMnLZOAMBsfy1jo4X01KwcwsMEXDaSYwF+0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fVpU3GROPUKY6NtC1Fvp+Ppro+BRRRI8fPJk6dvNYPI7nDfhT2jAIBhKMlTKYoH13vmvjtwcySc09ccaLpPHxBK5q02Of9NbdZ8UbSawbNwnIjBoZQqwzz5LXr+qtCEevtvl5IV5o+VnTU+vOS0921+FN/LRl7OBHsycaiqRJdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aXXXjKLL; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=Z+UhkAkwwTrNEMxh71Q5hT+N6TAQLcc1UT1oR1lfI1yOAP3c7UBU+4v/VHEJCj40EuQ8I0GRFAtEITAd3uD7ombTGT4vTPx2/t4FWYroTvx/ae1QmwmCje94wIDoGJhX7k2Lz5zBqhBl4ua6UaVn8oOiGEbrQl/lTiUa8FlyZFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ORcsCdyL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aXXXjKLL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E97CC2BCB0;
-	Fri, 15 May 2026 22:28:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ORcsCdyL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 134C3C2BCB0;
+	Fri, 15 May 2026 22:39:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778884088;
-	bh=al89eVZbnkuwPfy5Xy1y378vivgklVuwjtcqJzjnvHw=;
+	s=k20201202; t=1778884774;
+	bh=aBy0TjaurMnLZOAMBsfy1jo4X01KwcwsMEXDaSYwF+0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=aXXXjKLL6kNVzzTa46hLD86lQyoScDmtcubqoXVZc+s4vY0WHc0CLQ1oSQDOSG4gA
-	 VZpmsFB20bDJXeSpTSPgEmH2mZ/fIuUhW2utGxFmnn2lnVN/voRxHIhbCBoTKjkKYk
-	 sZ/HR/zZXR8pONvy7RM/3p51kbDjnSm0yaKWDxK+hFRvwhFWmEAuGyhqoSckKSPamf
-	 9gm5zbmlhh+0BsymTFbjlzZ0gAvK6xIqjxt/viqlStPnRWgDzoG+RCaxChtzJi0N5B
-	 vwurGzOhQDnVvqAIGGvsFSBviImjeXEe4mZ0AnPNfozmfMBdEmKJLKPMi+T3iuJpEp
-	 Rp5PlVsMfxkbw==
+	b=ORcsCdyLhCHNCWTTr5+fBp/SALdm1IH3WKGU4QGCEDU0N58wJTBcP5QOwXLP5imYP
+	 nuzdcwN+ULEEQHsJoihbQbMuOSH0F0teioWGbfRYjmsGsGUan3oXU0hScxLnhNkw2b
+	 XJnfzoQjVOfARCSoF+H3ZWU6vH/Htlpm/GwfLtiTPzPLiNh8p1AMRSDk8M0s8BBjC1
+	 tiAOgwlcHKhuCCJ4t8K/4xBNjvn3892m2d/0m1z5gRpd5SvlhTN1V1lsnOddIXOQ+j
+	 07rqYFlsFY+LfnIMHUDs36He3kMdANZQTFlNosa3XZPizdw4f62Sp8DA48/7em/ez7
+	 iOM6Skq+7PDgw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/5] hwmon: (pmbus/adm1266) seed timestamp from the
- real-time clock
+Subject: Re: [ v01] mailbox: pcc: report errors for PCC clients
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Abdurrahman Hussain" <abdurrahman@nexthop.ai>
+To: "Adam Young" <admiyo@os.amperecomputing.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260515-adm1266-fixes-v1-1-1c1ea1349cfe@nexthop.ai>
-References: <20260515-adm1266-fixes-v1-1-1c1ea1349cfe@nexthop.ai>
+In-Reply-To: <20260515221745.714736-1-admiyo@os.amperecomputing.com>
+References: <20260515221745.714736-1-admiyo@os.amperecomputing.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 15 May 2026 22:28:08 +0000
-Message-Id: <20260515222808.8E97CC2BCB0@smtp.kernel.org>
+Date: Fri, 15 May 2026 22:39:33 +0000
+Message-Id: <20260515223934.134C3C2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Medium] Fetching wall-clock time during device probe yields an uninitial=
-ized value, defeating the purpose of the patch.
-- [Medium] Switching from monotonic time to wall-clock time introduces a Ye=
-ar 2038 silent truncation bug.
+- [High] The error path fails to clear the `pchan->chan_in_use` flag, leadi=
+ng to state machine corruption and spurious client callbacks.
+- [High] The error path fails to acknowledge Slave Subspace notifications, =
+which can permanently hang the channel.
+- [High] The interrupt handler incorrectly returns `IRQ_NONE` after success=
+fully handling a mailbox error condition, risking the disablement of the sh=
+ared IRQ line.
 --
 
-commit a6888c73c1a25c1329fffa916ee8e1654b5eaa1a
-Author: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+commit 8be35a18843a43d39fee5986fb5339b3f4e55c68
+Author: Adam Young <admiyo@os.amperecomputing.com>
 
-hwmon: (pmbus/adm1266) seed timestamp from the real-time clock
+mailbox: pcc: report errors for PCC clients
 
-This commit switches the adm1266 driver to use ktime_get_real_seconds()
-instead of ktime_get_seconds() to seed the chip's SET_RTC register.
-The intention is to provide wall-clock time for blackbox records.
+This commit updates the PCC mailbox interrupt handler to pass the error code
+to the tx_done callback via mbox_chan_txdone() when a channel error is
+detected. This allows several clients to accurately report these errors.
 
-> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
-> index d90f8f80be8e0..a86666c73a5e9 100644
-> --- a/drivers/hwmon/pmbus/adm1266.c
-> +++ b/drivers/hwmon/pmbus/adm1266.c
-> @@ -432,7 +432,7 @@ static int adm1266_set_rtc(struct adm1266_data *data)
->  	char write_buf[6];
->  	int i;
+> diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
+> --- a/drivers/mailbox/pcc.c
+> +++ b/drivers/mailbox/pcc.c
+[ ... ]
+> @@ -327,8 +328,11 @@ static irqreturn_t pcc_mbox_irq(int irq, void *p)
+>  	if (!pcc_mbox_cmd_complete_check(pchan))
+>  		return IRQ_NONE;
 > =20
-> -	kt =3D ktime_get_seconds();
-> +	kt =3D ktime_get_real_seconds();
+> -	if (pcc_mbox_error_check_and_clear(pchan))
+> +	rc =3D pcc_mbox_error_check_and_clear(pchan);
+> +	if (rc) {
+> +		mbox_chan_txdone(chan, rc);
+>  		return IRQ_NONE;
 
-Since adm1266_set_rtc() is called during device probe, will the wall-clock
-time be initialized at this point?
+Since the early return is taken when an error occurs, does this code need to
+clear pchan->chan_in_use? If it remains true while the channel is idle, cou=
+ld
+the next interrupt on a shared IRQ line bypass the !pchan->chan_in_use filt=
+er,
+incorrectly evaluate cmd_complete as true, and spuriously call
+mbox_chan_received_data() with phantom data?
 
-During early boot, before the system timekeeper is synchronized with a
-hardware RTC or NTP, ktime_get_real_seconds() might return a near-zero
-value. Would this effectively behave like a monotonic timestamp and
-silently defeat the purpose of the patch?
+Also, for PCC Slave Subspaces, the platform sends asynchronous notifications
+that must be acknowledged. By returning early, this path skips calling
+pcc_chan_acknowledge(pchan). Can this leave the command unacknowledged and
+hang the Slave Subspace if the platform stops sending notifications?
 
-Additionally, does the 4-byte serialization loop in this function silently
-truncate the 64-bit kt value?
+Finally, since pcc_mbox_error_check_and_clear() clears the hardware error
+register, it confirms the device legitimately generated the interrupt. Does
+returning IRQ_NONE here risk having the kernel's spurious interrupt detector
+eventually disable the shared IRQ line if this error path is triggered
+repeatedly?
 
-drivers/hwmon/pmbus/adm1266.c:adm1266_set_rtc() {
-    ...
-    for (i =3D 0; i < 4; i++)
-        write_buf[2 + i] =3D (kt >> (i * 8)) & 0xFF;
-    ...
-}
-
-Because kt is now a wall-clock timestamp instead of system uptime, a 4-byte
-field will overflow in the year 2038.
+> +	}
+> =20
+>  	/*
+>  	 * Clear this flag after updating interrupt ack register and just
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260515-adm1266-fi=
-xes-v1-0-1c1ea1349cfe@nexthop.ai?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260515221745.7147=
+36-1-admiyo@os.amperecomputing.com?part=3D1
