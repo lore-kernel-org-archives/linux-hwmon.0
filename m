@@ -1,42 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E3BC4C6EE3;
-	Fri, 15 May 2026 16:48:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D47744C77CC
+	for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2026 16:49:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778863733; cv=none; b=PRrVcQL2Vp2ayROFOAtIedGrGusQySVda/54AlXhNkho9XkErMvUhssHcd1JcJ2tMCRL1wGeIcbuYe+G3VQtuQcZDdiA8smKxB2XmKKWC5uWMdg/Ys51F62ygF1ck9dhYzzYHEiFYtOhem5gc+jbOKF+4nASuYVITIcFkMCOZc4=
+	t=1778863745; cv=none; b=mxiyeD3Z01O9U+uAOtTg/n6Q06Mn4t3k6zixofXxqiNdtsGFd4wrJKkyhw+dkTG3g6Bn8RBkA1NiNCXJSmFHy/3nYTGXqfMTdwmeIXd/5NTRw2jvstTYQv8Y6fGKxuedi7WOgvbpTteYUhY/1T6eM5DPUVgFLPAxLkypj3LeG3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778863733; c=relaxed/simple;
-	bh=ydeO6pbhPsSTDy08iF5L9BvTw26BZ6WQggBk9NY2ZMA=;
+	s=arc-20240116; t=1778863745; c=relaxed/simple;
+	bh=KI7lLxSUgnY3MUbKb98hQPulgspHYcli4AOWR1mObQw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=mGHb20+BAm4xa7bbB9z0ygfZm5RiFfOc3eXRnXYWRrHMUzNb4C/fvTqp7axPvW4xHMMEa+FvSgGEaBhymU3Kc1z0IQJLi+FOZu5+45NwcAmCmbZEvh0wPcHfmJzAqehHOMS8CUFaj0EaNTBCddZAS6ia4/Y5V2hn48PcyIAI8K8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JPIvQcHa; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=OKnEMZZqQSsw68Js4bVIUloUexImqPtM2uBGpRbLJPYNJsnKaBW51mSpz0MDo68I3C4zbncmDFW7owso4SUDBcyEi48Rq3PXIQTDZ3yUyYrYwV7SQZz1FS3cDs0ckC89UTRznUs22izpWPvyisbZsW9e9H8cuZxzbKCsRm7iwxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FtPW3rpa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JPIvQcHa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6848BC2BCB0;
-	Fri, 15 May 2026 16:48:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FtPW3rpa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 337DAC2BCC9;
+	Fri, 15 May 2026 16:49:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778863732;
-	bh=ydeO6pbhPsSTDy08iF5L9BvTw26BZ6WQggBk9NY2ZMA=;
+	s=k20201202; t=1778863745;
+	bh=KI7lLxSUgnY3MUbKb98hQPulgspHYcli4AOWR1mObQw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=JPIvQcHaR3OcaTbYhvnnXgUW3ezb08rBasc2Ah9nIXasFKXBnr7XVwd5qriND6fCD
-	 KZNcHeUQxZf7wtSGDswgr2GHMNVYHo+wPjEBtpBo9ssedAfl6+j/agTXbqglso10tk
-	 9BZL9eeSUwQ6vfmOSIPMu+oEUNGU0oAZjC/9f9uFnKfmiQXutTI+F2ue9gcx0dGkjE
-	 Nwln8pmy7KaMpHiIisepo3FelrD07OqTIdxQxu52zJH7uW0opUW14oYPFrndkZD4wJ
-	 H82NxXG8Gw+zqOJjGgnGJccuoE3uOofMLMOEGZAFZ5BN/wW7yAhQN4Y2/WBBH/5MKa
-	 AXPwCSprFi9rQ==
+	b=FtPW3rpapCPlcKcE0F1Riy5ucUNKkZ3ZnOa+EqyXHkRCyS+iYZ0QpKNXeYtqxDsFk
+	 5V1XSKDVvixpVOoYAjI5y10yIJAbKB58uT0gE+BhR6dYX019RBOaqKxQ2uru4H8HYF
+	 V/Rk3m7e2+tJVfVpNV00WqJGMrDoiBQjlhpYFXRjyYIn5HETvk3Ih4lzd6k7lyYJrL
+	 vSmuDhrl3iAECHrf3wyhMUHELb2kITR7KbkT4uIRnL/Cevep/cX7IIzb3sbBmILPq3
+	 jlpQ2ic88YEEVUNzrMQpHK8USnaabb3fWm4OW46hyk3xAeBwPrMGeQ7uwRYgZwsu7a
+	 9Bq00TaMOKSyg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v12 2/6] mfd: add NXP MC33978/MC34978 core driver
+Subject: Re: [PATCH] mailbox/pcc.c move shmem unmap to teardown
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Oleksij Rempel" <o.rempel@pengutronix.de>
-Cc: robh@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, krzk+dt@kernel.org
-In-Reply-To: <20260515160537.115808-3-o.rempel@pengutronix.de>
-References: <20260515160537.115808-3-o.rempel@pengutronix.de>
+To: "Adam Young" <admiyo@os.amperecomputing.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260515161001.699470-1-admiyo@os.amperecomputing.com>
+References: <20260515161001.699470-1-admiyo@os.amperecomputing.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 15 May 2026 16:48:51 +0000
-Message-Id: <20260515164852.6848BC2BCB0@smtp.kernel.org>
+Date: Fri, 15 May 2026 16:49:04 +0000
+Message-Id: <20260515164905.337DAC2BCC9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -45,114 +45,113 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] Sustained hardware faults cause a 100% CPU lockup in the event han=
-dling loop.
-- [Medium] Transient fault detection logic is dead code due to pipelined SP=
-I dummy fetch filtering.
+- [High] Double Unmap / iounmap(NULL) in pcc_mbox_request_channel error pat=
+h.
+- [High] TOCTOU Race Condition in pcc_mbox_request_channel leading to panic.
 --
 
-commit a9e570c4deed793a38c78aa7e88c2bfc68e7b1cd
-Author: Oleksij Rempel <o.rempel@pengutronix.de>
+commit b19a3a11311850c88f208492b1f19cd0503eefd7
+Author: Adam Young <admiyo@os.amperecomputing.com>
 
-    mfd: add NXP MC33978/MC34978 core driver
+mailbox/pcc.c move shmem unmap to teardown
 
-Add core Multi-Function Device (MFD) driver for the NXP MC33978 and MC34978
-Multiple Switch Detection Interfaces (MSDI).
+This commit moves the shared memory unmapping from pcc_mbox_free_channel()
+to the pcc_shutdown() callback. This is intended to fix a race condition
+where late interrupts could write to unmapped memory if the channel was
+torn down while the IRQ was active.
 
-> diff --git a/drivers/platform/misc/mc33978-core.c b/drivers/platform/misc=
-/mc33978-core.c
-> index 0000000000000..287b524aed98a
-> --- /dev/null
-> +++ b/drivers/platform/misc/mc33978-core.c
-
+> diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
+> index 636879ae1db76..7fa2f6b5c492a 100644
+> --- a/drivers/mailbox/pcc.c
+> +++ b/drivers/mailbox/pcc.c
 [ ... ]
+> @@ -488,15 +478,22 @@ static int pcc_startup(struct mbox_chan *chan)
+> =20
+>  /**
+>   * pcc_shutdown - Called from Mailbox Controller code. Used here
+> - *		to free the interrupt.
+> + *		to free the interrupt and unmap the shared memory.
+>   * @chan: Pointer to Mailbox channel to shutdown.
+>   */
+>  static void pcc_shutdown(struct mbox_chan *chan)
+>  {
+>  	struct pcc_chan_info *pchan =3D chan->con_priv;
+> +	struct pcc_mbox_chan *pcc_mbox_chan;
+> =20
+>  	if (pchan->plat_irq > 0)
+>  		devm_free_irq(chan->mbox->dev, pchan->plat_irq, chan);
+> +
+> +	pcc_mbox_chan =3D &pchan->chan;
+> +	if (pcc_mbox_chan->shmem) {
+> +		iounmap(pcc_mbox_chan->shmem);
+> +		pcc_mbox_chan->shmem =3D NULL;
+> +	}
+>  }
 
-> 	/*
-> 	 * Transient fault detection (=C2=A79.10.27): FAULT_STAT latches on fault
-> 	 * occurrence and persists until Fault register (0x42) read clears it.
-> 	 * Hwmon driver reads Fault register, which triggers regmap SPI read with
-> 	 * pipelined frames: REQ frame (old response, FAULT_STAT=3D1 latched) and
-> 	 * PIPE frame (Fault register response clears latch). If fault condition
-> 	 * cleared between latch and read, FAULT_STAT won't re-latch (datasheet:
-> 	 * "immediately set again if condition still present").
-> 	 *
-> 	 * Transient detection: hw_flags contains harvested FAULT_STAT bit
-> 	 * (latched evidence from REQ frame), but bus_fault_active=3D0 and
-> 	 * cached_fault_active=3D0 (PIPE frame showed cleared, condition gone).
-> 	 * This proves brief fault (VBATP voltage glitch, threshold oscillation)
-> 	 * occurred and cleared before Fault register read. Edge-triggered
-> 	 * consumers need this event notification.
-> 	 *
-> 	 * WAKE_BIT exclusion: WAKE_BIT is synthetic (bus_fault_active changes),
-> 	 * not hardware evidence. Including it causes phantom transients when
-> 	 * normal faults deassert (WAKE_BIT present but no actual transient).
-> 	 */
-> 	transient =3D !changed && !fault_active && !cached_fault &&
-> 		    (hw_flags & MC33978_HI_BYTE_STAT_FAULT);
+Will this cause a regression with a double unmap and an iounmap(NULL) call
+during the error path of pcc_mbox_request_channel()?
 
-Is it possible that the transient fault detection logic is never executed?
+If mbox_bind_client() fails during its startup phase, the mailbox core
+automatically unwinds by calling mbox_free_channel(), which invokes this
+updated pcc_shutdown() callback.=20
 
-Since mc33978_prepare_messages() hardcodes the dummy fetch for the PIPE fra=
-me
-to be MC33978_REG_CHECK, the REQ frame in the next SPI read will contain the
-response to REG_CHECK.
+When control returns to pcc_mbox_request_channel(), it sees the failure
+and executes its own error path:
 
-However, mc33978_rx_decode() explicitly sets has_status =3D false for
-MC33978_REG_CHECK and returns -ENODATA.
+drivers/mailbox/pcc.c:pcc_mbox_request_channel() {
+...
+	rc =3D mbox_bind_client(chan, cl);
+	if (rc) {
+		iounmap(pcc_mchan->shmem);
+		pcc_mchan->shmem =3D NULL;
+		return ERR_PTR(rc);
+	}
+...
+}
 
-This skips status harvesting for the REQ frame in mc33978_spi_read(), meani=
-ng
-the latched FAULT_STAT evidence might never be harvested.
+Since the pointer was already set to NULL in pcc_shutdown(), won't this
+unconditionally execute iounmap(NULL)? This violates kernel API contracts
+and can trigger a stack trace on architectures like x86, or potentially
+cause a kernel oops. Should an explicit check for pcc_mchan->shmem be added
+to the error path?
 
-[ ... ]
+Additionally, there appears to be a pre-existing regression in
+pcc_mbox_request_channel() that wasn't introduced by this patch.
 
-> static void mc33978_process_single_event(struct mc33978_core_data *cdata)
-> {
-> 	unsigned int harvested;
-> 	unsigned int pin_state;
-> 	int ret;
->=20
-> 	/*
-> 	 * Grab harvested_flags BEFORE hardware read. Flags harvested during
-> 	 * the read trigger another loop pass. This intentionally forces a
-> 	 * redundant SPI read on most interrupts, but is necessary to prevent
-> 	 * lost events when concurrent regmap access races with IRQ thread
-> 	 * (hardware has clear-on-read INT_flg).
-> 	 */
-> 	harvested =3D atomic_xchg(&cdata->harvested_flags, 0);
->=20
-> 	ret =3D regmap_read(cdata->map, MC33978_REG_READ_IN, &pin_state);
-> 	if (ret)
-> 		dev_err_ratelimited(&cdata->spi->dev, "failed to read pin state: %d\n",
-> 				    ret);
-> 	else
-> 		mc33978_handle_pin_changes(cdata, pin_state);
->=20
-> 	mc33978_handle_fault_condition(cdata, harvested);
-> }
->=20
-> static void mc33978_handle_events(struct mc33978_core_data *cdata)
-> {
-> 	guard(mutex)(&cdata->event_lock);
->=20
-> 	do {
-> 		mc33978_process_single_event(cdata);
-> 	} while (atomic_read(&cdata->harvested_flags) !=3D 0);
+If two threads request the same subspace simultaneously, can both observe
+chan->cl =3D=3D NULL without locks and proceed to map the shared memory?
 
-Can a sustained hardware fault cause a soft lockup in this event loop?
+drivers/mailbox/pcc.c:pcc_mbox_request_channel() {
+...
+	if (IS_ERR(chan) || chan->cl) {
+		pr_err("Channel not found for idx: %d\n", subspace_id);
+		return ERR_PTR(-EBUSY);
+	}
 
-If a persistent physical fault exists, the hardware continuously latches
-FAULT_STAT=3D1. The regmap_read() to MC33978_REG_READ_IN inside
-mc33978_process_single_event() triggers mc33978_spi_read(), which then
-calls mc33978_harvest_status().
+	pcc_mchan =3D &pchan->chan;
+	pcc_mchan->shmem =3D acpi_os_ioremap(pcc_mchan->shmem_base_addr,
+					   pcc_mchan->shmem_size);
+...
 
-Because mc33978_harvest_status() unconditionally adds
-MC33978_HI_BYTE_STAT_FAULT back into cdata->harvested_flags, the
-atomic_read(&cdata->harvested_flags) check would perpetually evaluate
-to true.
+Both threads blindly overwrite the shared pcc_mchan->shmem pointer.
+When both threads call mbox_bind_client(), one thread will successfully
+bind and begin using the channel, while the second thread will fail
+with -EBUSY.
 
-> }
+The second thread will then enter its error path:
+
+	rc =3D mbox_bind_client(chan, cl);
+	if (rc) {
+		iounmap(pcc_mchan->shmem);
+		pcc_mchan->shmem =3D NULL;
+		return ERR_PTR(rc);
+	}
+
+Doesn't this unmap the active memory mapping for the winning thread?
+The next time the winning thread interacts with the hardware, won't it
+dereference the NULL pointer or access unmapped memory, resulting in a
+kernel panic?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260515160537.1158=
-08-1-o.rempel@pengutronix.de?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260515161001.6994=
+70-1-admiyo@os.amperecomputing.com?part=3D1
