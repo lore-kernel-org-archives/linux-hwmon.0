@@ -1,73 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3D1382F1D;
-	Fri, 15 May 2026 06:43:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56F753F0ABE;
+	Fri, 15 May 2026 08:09:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778827435; cv=none; b=CGjswHiG+pyFJq6Kvpze9xyH+ctSPuxTcXsjPFvVUS6Wht76srBYK2eYI2lswW5X0YKrisyIjMzMw1ESHuuDuM/GMAWehBfmynu4XnYTat+JPBk3vAcNzzuAVjTDXQT7sjgiqsfVGUcZarViTNki9MpXSnLinPT41iqhii+Vlis=
+	t=1778832601; cv=none; b=K05LCpiNA8U1nRMVyFI/j00K2f0EwQgn3X93kcx3PqYeHd21bXEWrEJqP5fD2HlyDsz09FlfaJ3H8IR8bij3y10JOZGidLYrAysXqenEXs2yu4Xkzs6g5to1YXAZ4o05q1TU9YVHf+2PMzIT602TUrBaEE17iGtaUyBvCbw2v0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778827435; c=relaxed/simple;
-	bh=I58VdQFMUKXo8PZU5IovKieuw/MW5rBPpKTnZLHl/mo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nBhdAZlNfnks0h6rdZl0kA0RTzcen0Z0ZvMexASRRuARlyOrCqMl2V4wk+3bOkMiBaS5qrVBeLaoIMHZFqzcHacLvSlQ3/AJJlCvuWoW0R4UyGkrENPzsJ4ttPL+GoBK4fRg9lgiQP78JcXib6XBcacN2UpJTa4I2wB/ZwYGRw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WRaOCCNq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778832601; c=relaxed/simple;
+	bh=HXevtQEQ+RqsIpAAfI6MMSxM6qkfSnzz17m3dJ7nZI4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IKt/qNOugCExBF2X1+gG4SThRLi3ZUpIgrfnhpt0KjPbHBmUrYVMFn51yTahowcNDhmTpAGnUD1YWVbgRz6cwg4AmQ+YGOpmWa+uzUmyVhoLLfrYA6Lc414tZp8t9ZJ5bg3xGI8ZbUWboEsimRI6tiYimBCJzLJb0Mv5pIkGFas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=GpwLAJCG; arc=none smtp.client-ip=117.135.210.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WRaOCCNq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E66F6C2BCB0;
-	Fri, 15 May 2026 06:43:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778827435;
-	bh=I58VdQFMUKXo8PZU5IovKieuw/MW5rBPpKTnZLHl/mo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WRaOCCNqxCOkrIXhOp7gtJR/nxS0KzV3nse4AeiEQ85hDoIt25S+3iV15ug98xpXY
-	 HxBJgpgRBfEE2eeDOJlXhDEp0CfAVlTYCZEGVHIlMQD9vIRVM8wBzgnPyFO8URt9ia
-	 SNkF5F+Z+GVuh96jdvovjySGDRL/2fLlIA6ln4iW+Eb/UQCKcCKPMupm8H8m7a/V53
-	 mFchWD2WJLPx67rj9YeF+fYfwlBuIlXSP2QNdWfged6l3oxz/F0en9Gk+Nq9FrvVx5
-	 WCQDDtW1WI8ewDEp3XrDOLxKaF77JlS2VZR2y54s9QV7UHYpALU87ulXcminKn/adc
-	 X3t3MXN03vZ4w==
-Date: Fri, 15 May 2026 08:43:52 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Abdurrahman Hussain <abdurrahman@nexthop.ai>
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: trivial-devices: Add Murata D1U74T
- PSU
-Message-ID: <20260515-melodic-nimble-gorilla-21c7ed@quoll>
-References: <20260514-d1u74t-v4-0-1f1ee7b002ec@nexthop.ai>
- <20260514-d1u74t-v4-1-1f1ee7b002ec@nexthop.ai>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="GpwLAJCG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version:
+	Content-Type; bh=yMYFQ3HfKARwXP6ADff9ztpQMHVRNylbm0LSYCOqZcY=;
+	b=GpwLAJCGXlAbggXlVYPsnd/MMhxsgbkDXd1E9CUUPZPhQaMZminFjHT/u+UJhI
+	mW6kV+6/iFkR2tMudTr2wQn956GB32uWvwV1WG0ysUK/b6/mabR17BXxZv3+YdFF
+	fQqKrjhW25cha1nbKTjGioYFhBtW6iVNg3YdUA0hI4TWo=
+Received: from debian.lenovo.com (unknown [])
+	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wD311641AZqM7DFBQ--.58569S2;
+	Fri, 15 May 2026 16:09:29 +0800 (CST)
+From: Kean <rh_king@163.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Mark Pearson <mpearson-lenovo@squebb.ca>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Kean <rh_king@163.com>
+Subject: Re: [PATCH 2/3] hwmon: lenovo-ec-sensors: Fix NULL pointer dereference when DMI match fails
+Date: Fri, 15 May 2026 16:10:08 +0800
+Message-ID: <20260515081010.32812-1-rh_king@163.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <c808d5bf-b166-432d-864e-db0536a3f4e3@roeck-us.net>
+References: <c808d5bf-b166-432d-864e-db0536a3f4e3@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260514-d1u74t-v4-1-1f1ee7b002ec@nexthop.ai>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD311641AZqM7DFBQ--.58569S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7KFyDGry8ZFyUAw4rGw13CFg_yoW8GF13pa
+	93Xw43trWUCw1kJrn7Cw4UZrWrAw4ftayDWF1rJw1DA3s8Gr4SqrySqa1Y9a4DuFs3Wa15
+	ta1DCFsxXa15AaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUpT5PUUUUU=
+X-CM-SenderInfo: 5ukbyxlqj6il2tof0z/xtbC4Bp-LmoG1Lr9JQAA3x
 
-On Thu, May 14, 2026 at 08:03:25PM -0700, Abdurrahman Hussain wrote:
-> The Murata D1U74T-W series are hot-pluggable 1U AC/DC front-end
-> power supplies in the Intel CRPS-185 / OCP M-CRPS form factor.
-> Each variant delivers a 12 V main output plus a 12 V standby output
-> from a wide AC input (90-264 Vac) or HVDC supply, and includes an
-> internal variable-speed cooling fan and on-board voltage, current,
-> power, fan-speed, and temperature telemetry.
-> 
-> The host-side digital interface is a PMBus 1.2 port on I2C.  The
-> PSU's other electrical signals (status, alert, current-share) live
-> on the CRPS edge connector and are consumed by the chassis
-> controller rather than the host SoC, so there are no host-described
-> supplies, GPIOs, clocks, or interrupts.  Add the compatible to
-> trivial-devices.yaml rather than carrying a standalone binding file.
-> 
-> Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+Hi Guenter,
+Thank you for the review and for pointing this out!
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+You're absolutely right. I realize now that my patch was overly
+cautious — in normal operation dmi_first_match() can never return
+NULL here because lenovo_ec_init() already guards the probe behind:
 
-Best regards,
-Krzysztof
+	static int __init lenovo_ec_init(void)
+	{
+		if (!dmi_check_system(thinkstation_dmi_table))
+			return -ENODEV;
+		...
+	}
+
+That said, I tend to follow a defensive programming style — checking
+for errors and returning early whenever something looks even slightly
+unexpected. This is exactly what lenovo_ec_init() itself does with
+dmi_check_system(), and it's also why we often put a return (or break)
+in the default branch of a switch statement. So I added the NULL check
+for dmi_first_match() as an extra sanity guard, even though logically
+it should never trigger.
+
+I should have made this clearer in the commit message. The patch was
+meant as a defensive sanity check, but my description made it sound
+like an actual reachable bug, which it isn't. That's my mistake.
+
+I'm happy to drop this patch from the series if you'd prefer. Please
+let me know how you'd like me to proceed.
+
+For other parts and the format issues is my mistake that missed the 
+--strict to check the patches file, I will send the V2 version, hope
+ get your review, any problem you can tell me, I will feedback and 
+tested as your requested.
+
+Thanks,
+Kean
 
