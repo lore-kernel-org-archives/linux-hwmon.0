@@ -1,122 +1,283 @@
-Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
+Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A62C26A0B9
-	for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2026 01:45:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E4425C80E
+	for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2026 01:49:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778809524; cv=none; b=Cunv/kIy+VM6Y/1yMzqO9U2aBHIPOr8zmsgwfTP8n1gHjdqpsid26VeSPHbPyviHELlUme4v4AMhr+UnVKO61Dd6wnicoKbNlQeFOo1npv4lKQbeZSrEXu2x71QPK5Ib7CcwTcSXvG8YH0fPS0vz5CA4I2O3TWsg8IvAiEguFXw=
+	t=1778809794; cv=none; b=nwjLm9wi9i6Ir8ZDHiEasP4ufCQqenPRARbE+h/ugVBxSXWrG3OVnHuDEF/Y1XfXSHEMBbi4FRhcwRtbF36lffGMPMWUCd7ZxcAi6vNsV1WveFu2marOm8orF572T0ZPGuqYmCJw0y7I9bUDdTZE7Ikj0bxTZd64drQEz3Nh1YQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778809524; c=relaxed/simple;
-	bh=ugNfDe5iiDtBCLoGrBS8jtDNE7bgRfZxthW9fe8F4Fw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pp8JmNX4dUgzaHIMBUg7qsi3gb02BKtYdiA/OrvwCtJC4bkS7FGjmNGxd8xNE7bwPLACtzbXKEv6kWwcE7fmSPAjv2CGfA+pay+iA/vT2mEs7h1MsY7r3EgaI/utu4tYSaBhzWY/QZzy4crmkfmR6vfaT3mDRFVVYTCjV4VskT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HTjXxviO; arc=none smtp.client-ip=74.125.82.182
+	s=arc-20240116; t=1778809794; c=relaxed/simple;
+	bh=SIkgv8WQ93LCQ71jhhL3Di/xP8TbuCuowvj1KosLZko=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=X0AxvKiABWjVPeOpJhoi3iAagUOvuztEQBF5W9dq/n6pndV9fkzYobpvh5l3U7/JJ1K7a3LQMvvJIUvqiKra4P0sj4Prz6gqoCCn9ij6lIUzKuQ6Kai6B86E6Ee10y3DfRiPky1kNa29MITdg4VQ2xJmShtEWO3fkGeF13BbErc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oWBhPXr0; arc=none smtp.client-ip=74.125.82.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HTjXxviO"
-Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-2ef8d6ba48bso302683eec.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 18:45:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oWBhPXr0"
+Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-12c1a170a50so12195287c88.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 14 May 2026 18:49:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778809522; x=1779414322; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dw9O+N/qBD88B3z5kXXHKsi3gAMVqUZYDR9e86dCtjw=;
-        b=HTjXxviO6xUp0xCXoVY7YuueT0exbQQUS9w+kQJwzO2C0kMVDLKU0je2b0HzWkaDbv
-         CCak/1zMJ5rNH/t1CFcEmgBQ5W+gsuhC7MluKmj5cWVXkz0e3GyYHT+YYsn2N2ptm5vA
-         YLwYYDDiZOrk4bHigmsbE0UUY2eJa0taM5E0IXQ7Vv2AcCDE7u2YEyWJZHEWacwsvDqr
-         zXjyRD0mW7B5nfox151qYG/7qZJas0FzvhT+MWXyKxVk0avxKK1E9Hsf/QGt9Rz0lhH8
-         0HGnujFBFsSCMQUMDamfMqyGnoSbInyCIff9wgu3h7ylC3R7I68+Q5588EM710b4E+UB
-         /UEg==
+        d=gmail.com; s=20251104; t=1778809792; x=1779414592; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=zrNDITa07PIrUrnI0P0l/esE24/KQSx6Tox+P9NMGxo=;
+        b=oWBhPXr0SycOWAmTPteIs17tKJBKkiUQxpVoUCn7ddRMGeMbZSgoaVGcRJ/OeFEntF
+         TnJgPbe1AdXoUBSPoJR51y/8dY5QUn1n9VIaY5Omuj7au3txbRX3fifNKE8B751aZd6Q
+         UzYZbKuwPdyKS6z7BsARsIjXuvVP9nBU+1mlwQadJyKT4XeaJG5FvliDHSDacX0hbahi
+         4wz/vyQNg4vCsg6EKP0yQypUz1HB/gA3C71EJFuemGN1ZnjH+KqAG6oPpZ2FOde5SaIW
+         bIpa+fuhGLYa1zmVQCgVxjY7rbxx4IP3FypX88VKVK2Zp9ONFaz8b9NNmkqFwukoC/wp
+         yyYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778809522; x=1779414322;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=dw9O+N/qBD88B3z5kXXHKsi3gAMVqUZYDR9e86dCtjw=;
-        b=i4s/mlqxN2z2bgMayQfhNguA3Tn5WCA1UCUKHK9ADYvwAqsdws70hJY9z/9PN0vE5I
-         oy5iEDfi3/D9++mlVhO+i+lnrtRuv0OYyCoJsdnRVBvM5/B6zKa1pDWW89t5pcJDBSeR
-         EV3vsuuX4HsKM/a70m9lebDLwUL0qXAtIdqr/8B92FKv6IYE7WPvW8WkkAa8uezOmLZe
-         J7vQbugrbVAAXgX8sVXRAmJWAzU9kZIpZOTZ0KFRGzZ+rP91GHgfUiREgm861yffRxmX
-         ChYn/+sH+DNnDRhhtl369baCcu5BLpLZi+CQRLYiZGDzTwYmOjiD56SBT2u3O5CN/Uvu
-         8V9A==
-X-Forwarded-Encrypted: i=1; AFNElJ89b7Rt9cBJ6dNgz8ug5M4Y7clTeeJNyt93wqe3uGc0qEXLxpjJjgqSueXd9zZ4TbLx3fdnhMMfikr+qA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRg4+Ont82iIoNMTrX01p84En7PXW7zV8E0xkmskVtB8DwW8Nc
-	bB8Y1rhk59bHplU3yUdG8uCV8I8UUCkFtuLw9UwcV5jKtYRLR06F4K1k
-X-Gm-Gg: Acq92OHoF7MzhjbdD1J2nnlKVhuiKgteQCtyYwdpNbNw1pFLiBadzvWxTwIVaF+08So
-	bgRY9B8XFwCQb8P1DvBxDfJHLjniIFYC6q4P5rinzzVBWndJPgfYGhVEM1mqNutfuSpZQPfyqkp
-	wfGnx84r7t28sv73+A2DUOPcadEeAwjmUIb1502lI/KYEY9GXoH7YsAxkxuJiF4a1PdAHSoN21v
-	xxknxrVuM4SGKV4FbHaH8jb/6QAfTow6/PDJMCTgP3yZjRmzb+2lqci/dinPyg0dDai7xZGnN+0
-	4Z35eSG67j/l9OREMgeWVhXHQkh1gS2jaFuH6jKYhKqqLwFhUa6YMNRLbCsIxSpWMRC75I3r9G0
-	bj1CIGFB0lCyx3AK0SWnF33VwYnEPeszrdbr7+LxZ7otE93AW1M69yA5MksN9hSCJQEwMA8ofOZ
-	6xdW9vPUKyhgxlzyo1T+5Ec7o/esav2JcqDVdn
-X-Received: by 2002:a05:7301:644b:b0:2d9:db50:c6ce with SMTP id 5a478bee46e88-3039785c4f8mr955396eec.3.1778809522192;
-        Thu, 14 May 2026 18:45:22 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30296dcc458sm6205369eec.18.2026.05.14.18.45.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2026 18:45:21 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1778809792; x=1779414592;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zrNDITa07PIrUrnI0P0l/esE24/KQSx6Tox+P9NMGxo=;
+        b=i3t2RCxm15chnTF5P5wycES9PFSEgGhBjNgjmbPjWCOiQENA90aNk9gIkUlFDThrrP
+         D2kDylgcVRulyDFOGEWqe5YX/zS8a3+VVjnp18MQskj/3Kw1Sd10oXCjIma/dJvQKAVx
+         51R3gFueYEhdKrQjx/1Fkt79F/RMK1AuF0KbWqc2yoQ2wQQk+MOxSRl3Welr50SH6HUz
+         xv2Df7pt0c+Lo80hWrfMhMaiHYCDUl3fJAv5haDUOqn6jfCd8USYU1wneQDnfgjgipQd
+         4lJou7vh6r30lyyQ+fCadKA0XY5il2maX3qtAPqFReyMPUvRBMhGnyEZA4ErkBP2rVw2
+         w9YQ==
+X-Gm-Message-State: AOJu0YxskHxXMmv2fwabpKhCGHPQVw4kXFVmqBHNybbrjftjwg8S2F8e
+	kY5y1+glGBoA4khGOFq9ps/7a4wYCLX80n7fwyvC1T21OEAAvmhDydidnjiKnA==
+X-Gm-Gg: Acq92OHNIQ0hLpu1GZxuw6zt96t3o5dWFZ5R8M9B6uG2CdC7vduSQrTlUzjFRO9an4j
+	tGk1HulrQ/JYvZurQP9E3D24qnwkVwmUkhG6Xj1lqLCFKkPyHz9ZFs27weYzw3IL6Jq4l4hUW98
+	saWs29JRfFBc4DAWBQ3DNng7AKV0TvXRHxPPXl30BFmVZmuYWLHjQliOwDJI+G/S6hPaW3/5cUE
+	rQbcl0ZBg2O8QoN82p2+5icvVAmFXE7rdqAVhL5FebI2x1gTStAA9UvWSbgnYzbmhfl409Dv8cY
+	plnLpBStLW+gLg5wwNVJEf06pUqhAUiB+hfMNoSlnjDJCdfVbygmkoNXEqA9pIu68pYb26EO0fC
+	vRohH8zPBGvKVbjwNWAVm+VwX64DGurMThat0VGnDeRX/mRe4YiYpdQrO20vq25UEDWjKcyi2Bh
+	clr8SWP/oqFGFWcXKfrw408r6jCXaCxPk2QBqKyKGwHugH2uxl2RJrhl7wgEVV3KQHiGzBHP3uk
+	3LQjw9/XlA=
+X-Received: by 2002:a05:7022:311:b0:12d:b396:eaed with SMTP id a92af1059eb24-1350440ae04mr818420c88.9.1778809792003;
+        Thu, 14 May 2026 18:49:52 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cbed2232sm7676638c88.7.2026.05.14.18.49.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 May 2026 18:49:51 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 14 May 2026 18:45:21 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Abdurrahman Hussain <abdurrahman@nexthop.ai>
-Cc: Alexandru Tachici <alexandru.tachici@analog.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 5/5] hwmon: (pmbus/adm1266) include adapter number in
- GPIO line label
-Message-ID: <0f2be441-34ea-497d-8b2d-5883d0ea82c4@roeck-us.net>
-References: <20260512-adm1266-v3-0-a81a479b0bb0@nexthop.ai>
- <20260512-adm1266-v3-5-a81a479b0bb0@nexthop.ai>
+Message-ID: <a1ada282-ecc4-4b9f-a479-c5bddf25e641@roeck-us.net>
+Date: Thu, 14 May 2026 18:49:50 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260512-adm1266-v3-5-a81a479b0bb0@nexthop.ai>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 1/2] usb: xhci-pci: add AMD Promontory 21 PCI glue
+To: Jihong Min <hurryman2212@icloud.com>, sashiko-reviews@lists.linux.dev,
+ Jihong Min <hurryman2212@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-pci@vger.kernel.org
+References: <20260512213910.871859-2-hurryman2212@gmail.com>
+ <20260514004055.1BBCAC19425@smtp.kernel.org>
+ <110e9a0d-bc91-4959-8a7b-1a055d0b49f7@roeck-us.net>
+ <1f296d29-3d43-4dd3-b751-8a0892b4095a@icloud.com>
+ <a90ab332-9f86-4486-8243-07c98e3f7578@icloud.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <a90ab332-9f86-4486-8243-07c98e3f7578@icloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, May 12, 2026 at 11:56:28AM -0700, Abdurrahman Hussain wrote:
-> Platforms that fit more than one ADM1266 on different I2C buses at
-> the same 7-bit slave address (a common shelf-management pattern,
-> e.g. one device per power domain) end up with duplicate GPIO line
-> labels because the existing format only includes the slave address.
-> Including the adapter number disambiguates them.
+On 5/14/26 06:44, Jihong Min wrote:
 > 
-> The adapter number is formatted as decimal to match the i2c-N
-> convention used elsewhere in Linux (sysfs paths, dev nodes); the
-> slave address keeps its conventional hexadecimal form.
+> On 5/14/26 22:38, Jihong Min wrote:
+>>
+>> On 5/14/26 10:20, Guenter Roeck wrote:
+>>> On 5/13/26 17:40, sashiko-bot@kernel.org wrote:
+>>>> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+>>>> - [High] The Kconfig dependency `depends on USB_XHCI_PCI=y` completely disables PROM21 support for systems where the core driver is built as a module.
+>>>> - [Low] Signed integer overflow when calculating the auxiliary device ID.
+>>>> -- 
+>>>>
+>>>> commit 20f4e35b2f88ebe2b8988b4f07fe7cc28199096b
+>>>> Author: Jihong Min <hurryman2212@gmail.com>
+>>>> Subject: usb: xhci-pci: add AMD Promontory 21 PCI glue
+>>>>
+>>>> This commit adds a small PCI glue driver for AMD Promontory 21 xHCI
+>>>> controllers. It binds the controllers, delegates USB host operation to
+>>>> the common xHCI PCI core, and creates an auxiliary device for optional
+>>>> temperature sensor support.
+>>>>
+>>>>> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+>>>>> --- a/drivers/usb/host/Kconfig
+>>>>> +++ b/drivers/usb/host/Kconfig
+>>>>
+>>>> [ ... ]
+>>>>
+>>>>> @@ -42,6 +42,26 @@ config USB_XHCI_PCI
+>>>>>       depends on USB_PCI
+>>>>>       default y
+>>>>>   +config USB_XHCI_PCI_PROM21
+>>>>> +    bool "AMD Promontory 21 xHCI PCI support"
+>>>>> +    depends on X86
+>>>>> +    depends on USB_XHCI_PCI=y
+>>>>
+>>>> Does depending strictly on USB_XHCI_PCI=y cause a configuration regression
+>>>> for most distributions where the core driver is configured as a module?
+>>>>
+>>>> The driver source appears fully capable of being built as a module, using
+>>>> module-related macros and module_pci_driver().
+>>>>
+>>>> If the intent is to prevent an early boot mismatch where xhci-pci is
+>>>> built-in but the PROM21 glue is a module, could this instead be a tristate
+>>>> option using depends on USB_XHCI_PCI and depends on !(USB_XHCI_PCI=y && m)?
+>>>> This would enforce the boot constraint while preserving support for modular
+>>>> kernel builds.
+>>>>
+>>>
+>>> That makes sense to me. That would be stronger than using default (which
+>>> was my idea of dealing with the problem). Restricting the code to USB_XHCI_PCI=y
+>>> seems to be a bit extreme.
+>>
+>> Hi Guenter,
+>>
+>> I looked more closely at the Kconfig part of the Sashiko suggestion.
+>>
+>> The concern itself is valid: the v5 dependency on USB_XHCI_PCI=y is too
+>> strict because it prevents the PROM21 PCI glue from being built when
+>> USB_XHCI_PCI=m.
+>>
+>> However, I do not think the suggested expression works as intended:
+>>
+>>   depends on !(USB_XHCI_PCI=y && m)
+>>
+>> With Kconfig tristate logic, `m` is a tristate literal, not "this symbol is
+>> being built as a module". If USB_XHCI_PCI=y, then:
+>>
+>>   USB_XHCI_PCI=y && m  => m
+>>   !(USB_XHCI_PCI=y && m) => m
+>>
+>> So the dependency becomes `m`, which limits USB_XHCI_PCI_PROM21 to `m` instead
+>> of allowing `y`. That is the opposite of what we need for the built-in
+>> xhci-pci case.
+>>
+>> The combinations I think we want are:
+>>
+>>   USB_XHCI_PCI=y  -> USB_XHCI_PCI_PROM21=y or n, but not m
+>>   USB_XHCI_PCI=m  -> USB_XHCI_PCI_PROM21=m or n
+>>   USB_XHCI_PCI=n  -> USB_XHCI_PCI_PROM21=n
+>>
+>> I see a few possible ways to handle this:
+>>
+>> 1. Keep USB_XHCI_PCI_PROM21 as a visible tristate:
+>>
+>>      config USB_XHCI_PCI_PROM21
+>>        tristate "AMD Promontory 21 xHCI PCI support"
+>>        depends on X86
+>>        depends on USB_XHCI_PCI
+>>        default USB_XHCI_PCI
+>>        select AUXILIARY_BUS
+>>
+>>    This supports USB_XHCI_PCI=m, but it still lets a user select the unsafe
+>>    USB_XHCI_PCI=y / USB_XHCI_PCI_PROM21=m combination.
+>>
+>> 2. Keep it visible and rely on help text to warn users not to select `m` when
+>>    USB_XHCI_PCI=y.
+>>
+>>    This is simple, but it does not actually prevent the bad combination.
+>>
+>> 3. Use IS_REACHABLE() in xhci-pci.c instead of IS_ENABLED().
+>>
+>>    That would prevent built-in xhci-pci from rejecting PROM21 devices when the
+>>    PROM21 glue is only available as a module. However, it also means the
+>>    PROM21 glue/hwmon path would not be used in that configuration unless the
+>>    PCI device is rebound later, so I do not think it is ideal.
+>>
+>> 4. Make USB_XHCI_PCI_PROM21 a hidden tristate that follows USB_XHCI_PCI:
+>>
+>>      config USB_XHCI_PCI_PROM21
+>>        tristate
+>>        depends on X86
+>>        depends on USB_XHCI_PCI
+>>        default USB_XHCI_PCI
+>>        select AUXILIARY_BUS
+>>
+>>    Then the value follows the common xhci-pci driver:
+>>
+>>      USB_XHCI_PCI=y  -> USB_XHCI_PCI_PROM21=y
+>>      USB_XHCI_PCI=m  -> USB_XHCI_PCI_PROM21=m
+>>      USB_XHCI_PCI=n  -> USB_XHCI_PCI_PROM21=n
+>>
+>>    This prevents the unsafe y/m split while still supporting modular
+>>    USB_XHCI_PCI builds. The actual user-visible sensor option remains
+>>    SENSORS_PROM21_XHCI.
+>>
+>> My current preference is option 4, because the PROM21 PCI glue is not really a
+>> user-facing feature by itself. It exists so the common xhci-pci driver can hand
+>> PROM21 devices to the PROM21-specific glue and so the optional hwmon driver can
+>> bind through the auxiliary device. The user-visible part remains the hwmon
+>> sensor driver.
+>>
+>> Does that sound reasonable to you, or would you prefer one of the other
+>> approaches?
+>>
+>> Thanks,
+>> Jihong
+>>
+> One follow-up to my previous mail:
 > 
-> The label is purely informational (visible via gpioinfo and the
-> gpiochip /sys/class/gpio name); no DT or ABI consumer parses it.
+> If we go with option 4 and make USB_XHCI_PCI_PROM21 a hidden tristate
+> symbol, I think its help text should probably be removed as well, since the
+> symbol would no longer have a user-visible prompt.
 > 
-> Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+Agreed.
 
-Applied.
+> The user-visible option would remain SENSORS_PROM21_XHCI, where the hwmon
+> sensor help text can stay.
+> 
+> Does that sound right?
+> 
+Yes.
 
 Thanks,
 Guenter
 
-> ---
->  drivers/hwmon/pmbus/adm1266.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
-> index 05b31bb08f38..12cdf6de341a 100644
-> --- a/drivers/hwmon/pmbus/adm1266.c
-> +++ b/drivers/hwmon/pmbus/adm1266.c
-> @@ -292,8 +292,9 @@ static int adm1266_config_gpio(struct adm1266_data *data)
->  	int i;
->  
->  	for (i = 0; i < ARRAY_SIZE(data->gpio_names); i++) {
-> -		gpio_name = devm_kasprintf(&data->client->dev, GFP_KERNEL, "adm1266-%x-%s",
-> -					   data->client->addr, adm1266_names[i]);
-> +		gpio_name = devm_kasprintf(&data->client->dev, GFP_KERNEL, "adm1266-%d-%x-%s",
-> +					   data->client->adapter->nr, data->client->addr,
-> +					   adm1266_names[i]);
->  		if (!gpio_name)
->  			return -ENOMEM;
->  
