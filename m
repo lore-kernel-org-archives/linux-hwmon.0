@@ -1,272 +1,194 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE4AD3CF674
-	for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2026 10:24:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE623F4129;
+	Fri, 15 May 2026 12:41:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778840667; cv=none; b=l3EvF9cA7CTJXIPO7lHZS9FZL5zB4FaPuuJy1512bOYu3eG3B6CznLIueCNEFh/4a60HanXCoM/3O9PsxBYq44A1rJOqpm5YFwKLFCcNcq3OYaWmka0w8tL1nfRdRUO9YND8SxWfQ6hCmejGfg54hizgLpQF+64sqXIkFgkQW1I=
+	t=1778848912; cv=none; b=LuCTYLYKKcCnVvlWZnQQ+X9bMQt1lZ/TU+dGnZNYrE0/ihkbOVMZ6Q1KQGlQqAJBCBf8lz5bMa5geDnF8FaSDxPe9us22HnI1ezllWUOJ99lKBSMPjH1jBREWvOxTGG7lZaNdvhSA2lcI3Pb3tIJn1a3lJ9tlGfyJFO8bjBvfFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778840667; c=relaxed/simple;
-	bh=8xEDce2Q5TNrRuQOskR4CwZF5AI16FzC3URY6q99CbA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fd/2yFJ1g3gj+V8inKKMKTOFpxiTLlAxtDPdDjHMLvTCg9LN6uRVz3oTtg5BRZbncR1tN/A6vfifZnlO3N48nSH7uzGSqZCxysx+N1CFkeeDhwHB1FR88jZft0wsKBa71ZTD6LL0EakEGCnxfUSipK2xn5iDDco3s0X/r6KF8JA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bO9+CUBL; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778848912; c=relaxed/simple;
+	bh=byBYAVDjaoKlALuDppBYnRFz/zySWNjJSefSLftspx0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LkxqRe0cjhU6ypSE8pjo48R7cilIAGihRAojNDJmrKoKtCk5+Zj6YVYBryPwhOCNJjfFkHTlVcTzAJ0xdOZpc1wvgzg3yjhpD21h9eHV9pju2lCLvSYWKBVFNtLctykHcQof43F1EvT3H+ztZXn8s1pFcu4R6b1LN3oA7E/mxo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=MI4hhL7x; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bO9+CUBL"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2bd2c147abaso21028335ad.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2026 03:24:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778840665; x=1779445465; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=7lGapQgwNQPPih2EM0EGGV8Ut1x59WEYoqlJ7vxU+bQ=;
-        b=bO9+CUBL4H6Hma1NoIdx9kG2qqLaACZATb+igSKSbDdL00z5r8JbRHInHxVDYyLXgd
-         YH3wDYIJlxZEs7kf0wUoPQxya1Dmi1TkhWhr/leudwS0KCwyGdanHruBXN/t/O8w/sdX
-         brwhMGizWkXaCewVyQRIsX40xaES4PK6+Pvbf80tdmFSDeb43bs8Itdu1jUcyKlVWJox
-         NZjCaJvGHRPmh/Q9BPMHJUfvPw9inkx6Enxjy82msw6UqZfCtB+h+E+QNx9oxmMPW/+2
-         1WqISJawLkoK2hiJE0rIET+aBW3QmdhlIwWpmRalddy1EM6jT6CV2ymts+VBzSpFrWe8
-         nDiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778840665; x=1779445465;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7lGapQgwNQPPih2EM0EGGV8Ut1x59WEYoqlJ7vxU+bQ=;
-        b=RC5CC7/yRDoca+6XAZs7MqYQkB0ESprYjX4e6yfvmX+MlT4xFTSijq8IHzmITHb6ZC
-         gPEYzTvjSIuTmjOUlTno3eI+zup47d34VU2rgSnG4AiqYvDMub7+gSi19VhiwqC1YzTT
-         gjjz55HrecnJrKVKcZbhcnvoPDv2sD1DdE4I9dUTTYyVogYW1BWZpsS4cusrHOhEoUky
-         ora+LQU5Ed/eFSAI3cTnUjEvqnDTtyfimRkb6ffVaVRB8Uu9okbbDm3u9W7l7koyWC4f
-         u+otrL5LjnpKWSUAczSvnHLalqcLoeiQAug0rI7QEnwl2LZFB8ubnjcF0+xDO87e6xAJ
-         6Jyw==
-X-Gm-Message-State: AOJu0YyLtekTBqe+9kSXLTtLNSZyWEc8uaE5+b3LdGqdfBbJ4yMF7hD2
-	2go+lP0PzZYbZ/xPqdkXQmoGz3YNh/x0JXLdpZ9n4eQNyoXatH0bRbFA
-X-Gm-Gg: Acq92OElSGLCj9XDP1brfvFGWyLP6K/fhX8wDpXUC1GXl4HbHeWsSMGZADfHRKmeLWp
-	czT+S410CYCuVglTuiCOBwH1uRgRYN3m6dMa+WQCN8XMC2IPpOU9/ALBCBqoCoosGwSZG9cnF1J
-	OSzqbVWvCo4Dyv8pJMRvwzbj7ruEnRI+YGk5XSCCrR6E402HfvFY8vhm/T1Sqei5Uz1+AD/02Y0
-	ztoEsdHmZfqZALytV7Pki7Th1M002+nIJz73+nKxCIaxWW7H+KmNym4jNBzEwBD/l3Fag8qw/Cl
-	pOAFdcRlMkThzQxAyKkN9QnLE9X4F2+ANRbsRWdYOcGP5x0nECyG6GJXUj4KmKvYMySMBlFwJP/
-	fYvm/XrJepZJQs6cMtKB3o5QBEItPI4cgCX7SmWQYbxMlkhE1Jl3fSg9GRb1FJg9Aps21GEdzDY
-	ifW03OwXEVocmayYpEqHDhtprUQIiFt5aSS4vNJ6xOhBdGRY4M65U/4RsEjXg/pwYfYI5F3sx8N
-	C2t2/tzOa8=
-X-Received: by 2002:a17:902:76cb:b0:2ae:ba5f:3ac3 with SMTP id d9443c01a7336-2bd7e78576cmr31546395ad.2.1778840664890;
-        Fri, 15 May 2026 03:24:24 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5cfe8698sm52556945ad.40.2026.05.15.03.24.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 May 2026 03:24:24 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <fd9b767e-18e5-40a6-b503-52427852951c@roeck-us.net>
-Date: Fri, 15 May 2026 03:24:23 -0700
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="MI4hhL7x"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=GmifB1ZCgimZhhcProIdhFi1yPDkpQoTGWkF/PVYbRI=; b=MI4hhL7xpbSSCovw03l08oGGxy
+	4aCxc3/gYL4DWmKHvrrF6Q3sDAUEp7GH6jVoTWzQ3ZvC9YjK2wKVKwr3Y+PWbjqIVs18fBbYSq/MB
+	4I3TwbQ9aH4rXl93K/R7NUuvTjl5CJ7QexImPqsTiO4gx5Ec1kNF8qITUUStvsZVitTE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1wNrrC-0033vB-IM; Fri, 15 May 2026 14:41:34 +0200
+Date: Fri, 15 May 2026 14:41:34 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: a0282524688@gmail.com
+Cc: tmyu0@nuvoton.com, linusw@kernel.org, brgl@kernel.org,
+	linux@roeck-us.net, andi.shyti@kernel.org, lee@kernel.org,
+	mkl@pengutronix.de, mailhol@kernel.org,
+	alexandre.belloni@bootlin.com, wim@linux-watchdog.org,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v4 1/1] mfd: Add Host Interface (HIF) support for Nuvoton
+ NCT6694
+Message-ID: <ef9449dc-ef2a-415e-8acc-a15f349bac24@lunn.ch>
+References: <20260515085746.114361-1-a0282524688@gmail.com>
+ <20260515085746.114361-2-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/2] hwmon: Add Eswin EIC7700 PVT sensor driver
-To: sashiko-reviews@lists.linux.dev, hehuan1@eswincomputing.com
-Cc: linux-hwmon@vger.kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, devicetree@vger.kernel.org
-References: <20260515092128.483-1-hehuan1@eswincomputing.com>
- <20260515100355.A7497C2BCB0@smtp.kernel.org>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260515100355.A7497C2BCB0@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260515085746.114361-2-a0282524688@gmail.com>
 
-On 5/15/26 03:03, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 7 potential issue(s) to consider:
-> - [Critical] The timeout calculation for sensor conversion evaluates to 0 jiffies, causing all reads to instantly fail.
-> - [High] Missing pm_runtime_disable() in the devres cleanup path leads to an unbalanced disable_depth.
-> - [High] Clock leakage on the IRQ request error path when CONFIG_PM is disabled.
-> - [High] Race condition between ISR and main thread leaks PM runtime active state.
-> - [High] Incorrect initialization order causes an IRQ storm during probe if an interrupt fires early.
-> - [High] Lack of internal locking in eic7700_pvt_hwmon_read allows concurrent hardware state corruption.
-> - [Medium] Useless and incorrectly ordered devres action for unblocking sysfs readers.
-> --
-> 
-> commit fe78922d5101b3a07ca5ea0fbd0fd5e9cba0dcc9
-> Author: Huan He <hehuan1@eswincomputing.com>
-> 
-> hwmon: Add Eswin EIC7700 PVT sensor driver
-> 
-> Add support for ESWIN EIC7700 Voltage and Temperature sensor. The driver
-> supports temperature and voltage monitoring with polynomial conversion,
-> and provides sysfs interface for sensor data access.
-> 
->> diff --git a/drivers/hwmon/eic7700-pvt.c b/drivers/hwmon/eic7700-pvt.c
->> index 0000000000000..cdcfa031cdbdb
->> --- /dev/null
->> +++ b/drivers/hwmon/eic7700-pvt.c
-> [ ... ]
->> +static irqreturn_t eic7700_pvt_hard_isr(int irq, void *data)
->> +{
-> [ ... ]
->> +	val = readl(pvt->regs + PVT_DATA);
->> +	WRITE_ONCE(pvt->data_cache, FIELD_GET(PVT_DATA_OUT, val));
->> +	complete(&pvt->conversion);
->> +
->> +	if (IS_ENABLED(CONFIG_PM))
->> +		pm_runtime_put_noidle(pvt->dev);
->> +
->> +	return IRQ_HANDLED;
->> +}
-> 
-> If the main thread in eic7700_pvt_hwmon_read() drops the usage count from 2
-> to 1 before the ISR drops it from 1 to 0, will both threads fail to trigger
-> the idle callback?
-> 
-> This could leave the device indefinitely in the active state. Should the ISR
-> use pm_runtime_put_autosuspend() or pm_runtime_put() instead of
-> pm_runtime_put_noidle()?
-> 
-> [ ... ]
->> +static int eic7700_pvt_read_data(struct pvt_hwmon *pvt,
->> +				 enum pvt_sensor_type type, long *val)
->> +{
->> +	unsigned long timeout;
-> [ ... ]
->> +	timeout = 2 * usecs_to_jiffies(ktime_to_us(pvt->timeout));
->> +	ret = wait_for_completion_timeout(&pvt->conversion, timeout);
-> 
-> Because pvt->timeout is 333 microseconds, will usecs_to_jiffies(333) evaluate
-> to 0 on standard kernel configurations like HZ=1000?
-> 
-> If so, this acts as a non-blocking check and wait_for_completion_timeout()
-> could instantly return 0, causing all reads to permanently fail with
-> -ETIMEDOUT.
-> 
-> [ ... ]
->> +static int eic7700_pvt_hwmon_read(struct device *dev,
->> +				  enum hwmon_sensor_types type, u32 attr,
->> +				  int ch, long *val)
->> +{
->> +	struct pvt_hwmon *pvt = dev_get_drvdata(dev);
-> 
-> The driver registers the temperature sensor with the thermal subsystem via
-> the HWMON_C_REGISTER_TZ flag.
-> 
-> If thermal zone background polling directly invokes this read callback while
-> a user concurrently reads a hwmon sysfs attribute, is there a race condition?
-> Does this need an internal mutex to prevent concurrent hardware state
-> corruption?
-> 
+>  MAINTAINERS                         |   1 +
+>  drivers/gpio/gpio-nct6694.c         |   7 -
+>  drivers/hwmon/nct6694-hwmon.c       |  21 -
+>  drivers/i2c/busses/i2c-nct6694.c    |   7 -
+>  drivers/mfd/Kconfig                 |  47 +-
+>  drivers/mfd/Makefile                |   3 +-
+>  drivers/mfd/nct6694-hif.c           | 663 ++++++++++++++++++++++++++++
+>  drivers/mfd/nct6694.c               | 111 +++--
+>  drivers/net/can/usb/nct6694_canfd.c |   6 -
 
-False positive. Polling is through the hwmon subsystem, which protects such
-accesses with the hwmon subsystem lock.
+The networking change here is very small, so my influence as a
+networking Maintainer should be considered small.
+
+However, i would say this patch is too big, does too many different
+things at once, making it harder to review. Please could you break it
+up into lots of small patches, each with good commit messages, and
+being obviously correct.
+
+> +F:	drivers/mfd/nct6694-hif.c
+
+Maybe move all the usb code into nct6694-usb.c ?
+
+> - * USB command module type for NCT6694 GPIO controller.
+> - * This defines the module type used for communication with the NCT6694
+> - * GPIO controller over the USB interface.
+> - */
+> -#define NCT6694_GPIO_MOD	0xFF
+> -
+>  #define NCT6694_GPIO_VER	0x90
+>  #define NCT6694_GPIO_VALID	0x110
+>  #define NCT6694_GPI_DATA	0x120
+
+Moving code from one place to another can be a patch. Just moving code
+is quick and easy to review, and it gets it out of more complex
+patches which are harder to review.
+
+> +static int nct6694_response_err_handling(struct nct6694 *nct6694, unsigned char err_status)
+> +{
+> +	switch (err_status) {
+> +	case NCT6694_NO_ERROR:
+> +		return 0;
+> +	case NCT6694_NOT_SUPPORT_ERROR:
+> +		dev_err(nct6694->dev, "Command is not supported!\n");
+> +		break;
+
+Maybe EOPNOTSUPP?
+
+> +	case NCT6694_NO_RESPONSE_ERROR:
+> +		dev_warn(nct6694->dev, "Command received no response!\n");
+> +		break;
+> +	case NCT6694_TIMEOUT_ERROR:
+> +		dev_warn(nct6694->dev, "Command timed out!\n");
+> +		break;
+
+Maybe ETIMEDOUT?
 
 
-The other concerns seem real. Please address.
+> +	case NCT6694_PENDING:
+> +		dev_err(nct6694->dev, "Command is pending!\n");
+> +		break;
 
-Thanks,
-Guenter
+EBUSY?
 
-> [ ... ]
->> +static struct pvt_hwmon *eic7700_pvt_create_data(struct platform_device *pdev)
->> +{
-> [ ... ]
->> +	ret = devm_add_action(dev, pvt_clear_data, pvt);
-> 
-> Because devres actions execute in reverse order of registration (LIFO), will
-> this action run after the hwmon device is unregistered?
-> 
-> Since hwmon unregistration blocks until all active sysfs read operations
-> finish, the reader would have already completed before pvt_clear_data runs,
-> which might make it ineffective for unblocking sysfs readers.
-> 
-> [ ... ]
->> +static void eic7700_pvt_disable_pm_runtime(void *data)
->> +{
->> +	struct pvt_hwmon *pvt = data;
->> +
->> +	pm_runtime_dont_use_autosuspend(pvt->dev);
->> +	pm_runtime_force_suspend(pvt->dev);
->> +
->> +	if (!IS_ENABLED(CONFIG_PM))
->> +		clk_disable_unprepare(pvt->clk);
->> +}
-> 
-> Should this custom devres cleanup action call pm_runtime_disable()?
-> 
-> If the module is unloaded and then re-probed, could the unbalanced
-> disable_depth cause an "Unbalanced pm_runtime_enable!" warning and corrupt
-> the power management state?
-> 
->> +
->> +static int eic7700_pvt_probe(struct platform_device *pdev)
->> +{
-> [ ... ]
->> +	if (IS_ENABLED(CONFIG_PM))
->> +		clk_disable_unprepare(pvt->clk);
->> +
->> +	ret = eic7700_pvt_request_irq(pvt);
->> +	if (ret)
->> +		return ret;
-> 
-> If CONFIG_PM is disabled, the clock remains enabled. If
-> eic7700_pvt_request_irq() fails here, does the function return without
-> disabling the clock? This could permanently leak the clock reference because
-> the devres cleanup action is not yet registered.
-> 
->> +
->> +	pm_runtime_enable(&pdev->dev);
-> 
-> Since the IRQ is unmasked before pm_runtime_enable() is called, what happens
-> if the hardware asserts an interrupt in this window?
-> 
-> If eic7700_pvt_hard_isr() fires, pm_runtime_get_if_active() would return
-> -EINVAL and the handler would return IRQ_NONE without clearing the interrupt.
-> Since the interrupt is level-triggered (IRQF_TRIGGER_HIGH), could this cause
-> an infinite IRQ storm that locks up the CPU?
-> 
+Having different error codes can make it easier to debug when things
+so wrong. But you also have dev_err(), so it is less important.
 
+> -static int nct6694_response_err_handling(struct nct6694 *nct6694, unsigned char err_status)
+> +static int nct6694_usb_err_handling(struct nct6694 *nct6694,
+> +				    unsigned char err_status)
+
+These renames can happen in one patch. Again, it is quick and easy to
+review.
+
+>  
+> -	guard(mutex)(&nct6694->access_lock);
+> +	guard(mutex)(&udata->access_lock);
+
+This change is not obviously correct. Can moving the lock be made of
+patch of its own, with an explanation of why?
+
+> -	nct6694->usb_msg = devm_kzalloc(dev, sizeof(union nct6694_usb_msg), GFP_KERNEL);
+> -	if (!nct6694->usb_msg)
+> +	udata = devm_kzalloc(dev, sizeof(*udata), GFP_KERNEL);
+> +	if (!udata)
+>  		return -ENOMEM;
+>  
+> -	nct6694->int_buffer = devm_kzalloc(dev, sizeof(*nct6694->int_buffer), GFP_KERNEL);
+> -	if (!nct6694->int_buffer)
+> +	udata->usb_msg = devm_kzalloc(dev, sizeof(*udata->usb_msg), GFP_KERNEL);
+> +	if (!udata->usb_msg)
+>  		return -ENOMEM;
+>  
+> -	nct6694->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
+> -	if (!nct6694->int_in_urb)
+> +	udata->int_buffer = devm_kzalloc(dev, sizeof(*udata->int_buffer), GFP_KERNEL);
+> +	if (!udata->int_buffer)
+>  		return -ENOMEM;
+>  
+> +	udata->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
+> +	if (!udata->int_in_urb)
+> +		return -ENOMEM;
+
+
+In this hunk, diff(1) has done a poor job and made it harder to
+review. If i understand the code correctly, udata contains USB
+specific data? Maybe call it usdata? That also has the same length as
+ntc6694, which has some minor advantages. What you might find is that
+if you have a patch adding only the allocation of usbdata, and then a
+patch moving things into usbdata, diff(1) does a better job, and the
+code is more obviously correct.
+
+> @@ -305,16 +344,15 @@ static int nct6694_usb_probe(struct usb_interface *iface,
+>  	}
+>  
+>  	nct6694->dev = dev;
+> -	nct6694->udev = udev;
+> +
+> +	spin_lock_init(&nct6694->irq_lock);
+>  
+>  	ida_init(&nct6694->gpio_ida);
+>  	ida_init(&nct6694->i2c_ida);
+>  	ida_init(&nct6694->canfd_ida);
+>  	ida_init(&nct6694->wdt_ida);
+>  
+> -	spin_lock_init(&nct6694->irq_lock);
+> -
+
+Why has the spin_lock_init() moved? Having lots of small patches would
+make that stand out, and when you reviewed your own patches, you might
+decided to change it back, because it does not appear to be needed.
+
+Given the size of this patch, i'm finding it hard to see the overall
+structure. Generally, when you have one device with two different
+access mechanisms, you end up with three files, two implementing
+access, and the third with the common code. With one big patch, i
+don't see this common code.
+
+	Andrew
