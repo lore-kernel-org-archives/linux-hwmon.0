@@ -1,67 +1,68 @@
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9603948BD2F
-	for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2026 14:04:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D601B31F999
+	for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2026 14:11:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778853871; cv=none; b=lfWZ1XBygmafqp3NTVOl9vP3+e3NjgErh4rqbHRJw6fWtxAI6v4vourFC+9jQ4vUjVTr4QR7ovU6tkkHCyb4vWcI72W/vKddj0iEXrrC8DSvx31kJ3MeWk8FItsHdi86DODzLUelJSLAeXycp/HfK4OvQ0E++7UJ+IqtE1GKbPE=
+	t=1778854269; cv=none; b=eTe5NYRdHdYsRXk40fLVWdLpzgP+s0GzCS9Qw+Un1PWEc8l+qCRLJ+8/Shg4oBezLArQYdPrMBzpkP1vg/2RA/2baYz5wyvOeqEtpUpWzNo9M6CxOUrEJQlSese07Lyb96owv9spxD48O8/uo7fdeBkiy8KywcEpdA8ZeWbX/D0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778853871; c=relaxed/simple;
-	bh=GG46pSh5d0vn9yBp53h1hxap4udjkrgURZeJc5+2YyE=;
+	s=arc-20240116; t=1778854269; c=relaxed/simple;
+	bh=oYYzVpTKzGuJc8QWczA/enECx9ZhL4LtYa3m9P3daMY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rtu+kNEC39Z6UKanntFR2YYEh2xovVLi/R6TwlVZWyBqE3l1EHNUCl0ZUlrzYuxYUSpcdp9zz7iktzWOXzb/c5d87uDDoPRA55GjbuPCamFpAoQ9yAOhqtBrqI6oIQ46ndIN+UHkJFDEEIxaAdFeVh4cK9C57CM6gI+Ht3X7p8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qrgqacc3; arc=none smtp.client-ip=74.125.82.170
+	 In-Reply-To:Content-Type; b=qVQyLltNmtjbk5KoqAGhVi2zcFalYWeLm70SmbDYIqNhJn7zgsDfLOeB99K1S3YwMFyDdLON7a/MiBLhebvEqRATsSdU2YUpJ/WLx54ggCuprF3dyOdjT6OgT2k84P4onoLYc2GuUUv8fAtZZljDeshON6S/gkJICWqzV5dmeN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gPLrtGwt; arc=none smtp.client-ip=209.85.215.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qrgqacc3"
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-2c15849aa2cso12513224eec.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2026 07:04:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gPLrtGwt"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-c6dd5b01e14so4434674a12.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2026 07:11:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778853866; x=1779458666; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778854267; x=1779459067; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=1xq8W0xM16bA8z+e9ItjmHiUZEnug/7oVf/JqPTdq4Q=;
-        b=qrgqacc3bN3q4/aMGMXmyVsjVbYFnMF9yaTqR6tKQj5sKos+LG9K/Oj951Ijhy33lp
-         Ouy2EjLVatPBLFLFDFfiuXJRllLrfHu40dvyogEkuH+BBvq7/7FqQhSdKe693raoDdmD
-         LsP7sP4ILMGFejpioDq6dE0rBH5tHSQL/TgCzbmhLAQ5DNSCdAzmlec+nf91zE9aRW16
-         EwzisdEzHwLx2Vo+81XlG9ZkghK/ASdD6SoOL6mpOCwYH3/2Ha+07fgHqVxQbdPOMN0B
-         9Dat3cUb6sS4DkY6BG7ssnWcExPZHSGUVvJkbY46BYTBMX9vP7NzKYPKPpyDCWik6PPV
-         3lSw==
+        bh=81XPbDwfScOnAZMMx/pWg3B2AY2BVs/a2ta6xIUDaJg=;
+        b=gPLrtGwtpaz8gAd18MisukF2Q5SBuG+J1YIGJndSU0wHaEpI+DbP7u8gD3KQOy0vCi
+         z7K97Z0ew+xl5fux288Kdb5kDpmby48OVQFS0/dgqwbvho+dST0PmBlMTSuKx3Wt9z47
+         iJWyPHuHeo645ew9FaA3okOmvCqrlRRIH/UHRkBs3NS7rxKuSdbZaPUaXiXycemLPkme
+         3yeY4rO4oIfh7Uhk9NOstr6btYlzFJXkzTDPql6t1jGIZNoQgTMBWXOoDnJWLBg9p3Ug
+         fy7IJI3cN+ss7OqR0rzLeydSJX/HZIR3pCZZ3e2j5V4P3n5aUvhT/qaS9jLKPhywWrp5
+         JU+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778853866; x=1779458666;
+        d=1e100.net; s=20251104; t=1778854267; x=1779459067;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1xq8W0xM16bA8z+e9ItjmHiUZEnug/7oVf/JqPTdq4Q=;
-        b=PLFiyMdbMe+xz4qWilouwB/j2TKwZpZsB729cPGJHDa+WLKTPQxDE0caLYKM2VvSS8
-         v1MF5SJwSg5qwKc09buC/JwjCXExjK7Pbx7CcxjUZ+3nA6ds3LyLhfZsbuHh5KVEiyb9
-         GDfF9EVDiK+DrajekSypWeuS0OO7rawxYRcAzWuM1GGeMHzOmFDAgpU+vQeLCrK/sdBO
-         xNYwTNLjeo1fhf1UoSBWpZPUZmywyTCdkgRAjjO7EFAI7LVI9yp1rsQTB9vE3KukN5hX
-         Oh8or5EKNxCfH7oq9XmpAH1HtHjP6IKToYnjw66qVp7Qi04ZEtPcQwU6J1KC+wX/iSYg
-         P3yg==
-X-Forwarded-Encrypted: i=1; AFNElJ9++auT6YwBrsNlItw0X69JXO8Ql41iUNJfjk/RmSFfSq+MnAM8eLPLYONwGrV0LRLIifi7+SkTmLvRhA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzb0JCBrmdJFpk0hn4yK9bWs2huuOJvQRMI6neD1zNwb5vzBgGK
-	dFKx4/BXahV75QYW+YG7amMheKrLThTBEN1wabjFoIri2hPvHb+Mltkt
-X-Gm-Gg: Acq92OGdMOd3myA9iWEiIrozbyBzgmZKNAEfY+ZFHJ+0HlwHQYTbStmTQWH1ybdjfI4
-	IT48O243Ub6dyAzc+RG696P8S0MQrHMC1gvm4CnurZ3jCG2LFg6MJJCG5NRngYP/BjqjVQAxXGZ
-	a12rImEl0af8PRLOWFh3i/avIDUdTdyYcGwueIh26e0LA6o2lYyjlxrs0xNdolkMdHYQgRtB+RR
-	DR/jPdSN30GfrLd3r2PGwxx7TPRlXQ5bhzcS+kzEAL6Rd28bMxx5eTowvMCsf0PjD9N8PM4TZ7T
-	zWpVzOxL+DuQeOzEvMCN1/eUOaTpANuyh9qg68j7rF+CkewXljpoTDpW8eipWJ0v/7YO0rESQKS
-	hzn0fb4/hmZeGefGnhGVvlcF/krqXsCCgMZPc/tr1gbJ4x8LNRSlh9bT4TJ+/rTYUIponG9MP9D
-	o1uuvhBmZisP+2tNLYJ/kRGHtr8zu++GipEC82oYndAxADSRL2rxKdHW19H5MMhZ8DHRzTxeuY
-X-Received: by 2002:a05:7301:6448:b0:2da:a813:a5fd with SMTP id 5a478bee46e88-3039867fa16mr2160782eec.22.1778853864553;
-        Fri, 15 May 2026 07:04:24 -0700 (PDT)
+        bh=81XPbDwfScOnAZMMx/pWg3B2AY2BVs/a2ta6xIUDaJg=;
+        b=NOWvjAQ/MHGwpopzpYzV3vkBAMYso5TTDzHucfkjoZAutnDY+/9Yw6h7/fQU3VhUXD
+         z/ls6gEeYn/+ouXMFGAv+yJMl3lm5a2h3OnU82/u5ohvnD0yQLDMHUcl+YyzL/noaDXq
+         AKB2JhTd0RB9GMUd6l5l9qn2hIK2AqnpNmddNAdkedL/KWe8I3wdfkz75Cyb0+Rf5PDF
+         S85e3EaPWUzeSVj/A04s9MAlCnZm4ejJCqFWX14jHYnM57WiPLh8bgqXeSKwu4xxfQa9
+         eF4bEwZIkk0BH+hv5lPKf1vZMVGQpM4uF19moVH6Rb0eIdCaPoQx/tKKnBvC4vi5xrni
+         rvnw==
+X-Forwarded-Encrypted: i=1; AFNElJ/gj0mC8C6RmWdG07l3m5nfv96tq5ICsW28Qnqcjdg1qX+HSPg4Vz03+kFJ7W3SwETpbL/jU8mAkoRWxA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9XJeHnFXkTq39B5IZDYpPh9NN28NhpeYv0AP+x4kjFxZMkPtO
+	+MUs4ZUu8mtvSkRGs/0rcj/GycYbazGR6/BWPptW445ZDS7/BoRODkjB
+X-Gm-Gg: Acq92OH8ilPd2GrVAvOKDL07crbG3ieX0j6Z3XZVISDX5RAj6Jr8FB1GjpjF2C5gp31
+	BsgopHXejasIKzSYQiWqJLhaRzfzxen655IVsgz164QQ4ekYWvEa17NQD84AUxOYVOdnwRGl77v
+	+XQ80c722lIX2wJthQw5g6oBz9nqrMrmLDQr2eA62G/+Ljxhr11pTBiyXsB96Kt/75tp2eaOLVU
+	uFisymv6EX4Y/RbSqBbej2rSyBd9chsKl3i7Zk26V+aXZqsoWqpA5mMWK9rP0BfgF92BwIsYPpr
+	3WymvRE6ixaPajirIOQnCv9iZJFcGzC2HT/4rQwSaNUq1j9YaOdbajqreOvPNXFlxlnwMAWmFUV
+	HzOVN2qlWH0xdT43OGHTM0WGqGoS9sLTPJ7SBpqeKm90xhVt78dWl6QGtiIKp4It938o4uhYp6G
+	ihHBYeZ1Z7x1/9tQwNi9s2Ilz+Xy9KD6dKNrbnPx2VdrmBr7loSCqWGp64Cxox1bQbCMS6I0AK7
+	LGXZPZ9YnM=
+X-Received: by 2002:a17:903:f8d:b0:2b0:b016:773f with SMTP id d9443c01a7336-2bd7e8a0b31mr49913305ad.11.1778854266855;
+        Fri, 15 May 2026 07:11:06 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-302977a9474sm7099623eec.25.2026.05.15.07.04.23
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5cfe8baesm63119575ad.47.2026.05.15.07.11.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 May 2026 07:04:24 -0700 (PDT)
+        Fri, 15 May 2026 07:11:06 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <17828a1b-86c7-4ad6-a93b-3f91c6b2c24f@roeck-us.net>
-Date: Fri, 15 May 2026 07:04:22 -0700
+Message-ID: <54160fbb-01d9-400b-80f7-bf340997a8d0@roeck-us.net>
+Date: Fri, 15 May 2026 07:11:05 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,20 +70,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/1] mfd: Add Host Interface (HIF) support for Nuvoton
- NCT6694
-To: Andrew Lunn <andrew@lunn.ch>, a0282524688@gmail.com
-Cc: tmyu0@nuvoton.com, linusw@kernel.org, brgl@kernel.org,
- andi.shyti@kernel.org, lee@kernel.org, mkl@pengutronix.de,
- mailhol@kernel.org, alexandre.belloni@bootlin.com, wim@linux-watchdog.org,
- linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20260515085746.114361-1-a0282524688@gmail.com>
- <20260515085746.114361-2-a0282524688@gmail.com>
- <ef9449dc-ef2a-415e-8acc-a15f349bac24@lunn.ch>
+Subject: Re: [PATCH v2 5/6] misc: amd-sbi: Add SBTSI ioctl register transfer
+ interface
+To: Akshay Gupta <Akshay.Gupta@amd.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Cc: corbet@lwn.net, skhan@linuxfoundation.org, arnd@arndb.de,
+ gregkh@linuxfoundation.org, naveenkrishna.chatradhi@amd.com,
+ Prathima.Lk@amd.com, Anand.Umarji@amd.com, Kevin.Tung@quantatw.com
+References: <20260515134506.397649-1-Akshay.Gupta@amd.com>
+ <20260515134506.397649-6-Akshay.Gupta@amd.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -128,30 +124,61 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <ef9449dc-ef2a-415e-8acc-a15f349bac24@lunn.ch>
+In-Reply-To: <20260515134506.397649-6-Akshay.Gupta@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/15/26 05:41, Andrew Lunn wrote:
->>   MAINTAINERS                         |   1 +
->>   drivers/gpio/gpio-nct6694.c         |   7 -
->>   drivers/hwmon/nct6694-hwmon.c       |  21 -
->>   drivers/i2c/busses/i2c-nct6694.c    |   7 -
->>   drivers/mfd/Kconfig                 |  47 +-
->>   drivers/mfd/Makefile                |   3 +-
->>   drivers/mfd/nct6694-hif.c           | 663 ++++++++++++++++++++++++++++
->>   drivers/mfd/nct6694.c               | 111 +++--
->>   drivers/net/can/usb/nct6694_canfd.c |   6 -
+On 5/15/26 06:45, Akshay Gupta wrote:
+> From: Prathima <Prathima.Lk@amd.com>
 > 
-> The networking change here is very small, so my influence as a
-> networking Maintainer should be considered small.
+> Implement IOCTL interface for SB-TSI driver to enable userspace access
+> to TSI register read/write operations through the AMD Advanced Platform
+> Management Link (APML) protocol.
+> Add an ioctl command (SBTSI_IOCTL_REG_XFER_CMD) that accepts a register
+> address, data byte, and direction flag. Serialize access with a mutex
+> shared between the hwmon and ioctl paths to prevent concurrent bus
+> transactions from corrupting register state.
 > 
-> However, i would say this patch is too big, does too many different
-> things at once, making it harder to review. Please could you break it
-> up into lots of small patches, each with good commit messages, and
-> being obviously correct.
+> Reviewed-by: Akshay Gupta <Akshay.Gupta@amd.com>
+> Signed-off-by: Prathima <Prathima.Lk@amd.com>
+> ---
+> Changes since v1:
+> - Use of devm_mutex_init in place of mutex_init
+> - Use of guard_mutex in place of mutex_lock()/mutex_unlock()
+> - Use of devm_add_action_or_reset() for clean removal
+>   
+>   drivers/hwmon/sbtsi_temp.c      |  6 +++
+>   drivers/misc/amd-sbi/tsi-core.c | 84 ++++++++++++++++++++++++++++++++-
+>   drivers/misc/amd-sbi/tsi-core.h | 15 ++++++
+>   drivers/misc/amd-sbi/tsi.c      | 20 ++++++--
+>   include/linux/misc/tsi.h        |  8 ++++
+>   include/uapi/misc/amd-apml.h    | 23 +++++++++
+>   6 files changed, 151 insertions(+), 5 deletions(-)
+>   create mode 100644 drivers/misc/amd-sbi/tsi-core.h
 > 
-Add my influence as hardware monitoring maintainer. I very much agree.
+> diff --git a/drivers/hwmon/sbtsi_temp.c b/drivers/hwmon/sbtsi_temp.c
+> index d7ae986d824c..00e982f4c716 100644
+> --- a/drivers/hwmon/sbtsi_temp.c
+> +++ b/drivers/hwmon/sbtsi_temp.c
+> @@ -64,12 +64,15 @@ static inline void sbtsi_mc_to_reg(s32 temp, u8 *integer, u8 *decimal)
+>   /*
+>    * Read integer and decimal parts of an SB-TSI temperature register pair
+>    * The read order is determined by the ReadOrder bit to ensure atomic latching.
+> + * The mutex protects against concurrent access to the shared I2C/I3C bus by
+> + * the hwmon sysfs and a userspace ioctl
+>    */
+>   static int sbtsi_temp_read(struct sbtsi_data *data, u8 reg1, u8 reg2,
+>   			   u8 *val1, u8 *val2)
+>   {
+>   	int ret;
+>   
+> +	guard(mutex)(&data->lock);
 
+I would suggest to hide this behind access functions such as sbtsi_lock(),
+sbtsi_unlock(), and the matching guard functions. That can be done in a
+separate patch; it should not be necessary to include hwmon in the patch
+introducing the ioctl.
+
+Thanks,
 Guenter
 
