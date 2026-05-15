@@ -1,173 +1,136 @@
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D1C9351C29
-	for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2026 08:48:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B541426D17
+	for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2026 08:58:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778834913; cv=none; b=XVNJU3/eUc3De4toRc6Po/wpttFRwuEmyG+C8vlBJA1wuaLBs/s3flTg8XibWNHzhSs65ZRV6ZLu/PvLnRpP86Z63L3MbaV/I7vCmcUKvVfU7SmGS7r48pomVvJuapykJ8eLJCxVVG7KLjgY6aybjhW4jRGOHCouAilE+8wZSUY=
+	t=1778835485; cv=none; b=B+9PKzZ2mEo5la70X0/0GxSm5uyzMPYQjSSjsFlmS/k6jAVH/fekQ5HwppdUIx+KVld/e0GFB09/ThUMx/tJ8zvkMdmYi3ULv4+5jSUFmERv9fikra7ZZRuFmlMUQYnQ+Nm+cAtH9vIW3uQZhTY9ftZt7zUEzrzw0fLbcXgW99k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778834913; c=relaxed/simple;
-	bh=Pnd808UBff4GjC+i21qzNAko299+7qljAWX0u/GlnyI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lPcNu/I2dzgj5gFlbRM2J496NV7c9XPLKQh5g2+d1c6XyXuvuTXaPso1kAEfh56aFxe0mQPEgeyoXKAM3DdMGDXSPTuRGXBOn5Awv9Eq02q8V2gGou1nrTL37Tiyzj0ifZNwUHRZ3/qQXBJPy3JhPKKibK8D1QSoX2erzK2Uqzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a9kAMB+K; arc=none smtp.client-ip=74.125.82.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1778835485; c=relaxed/simple;
+	bh=dyP4n9uPfOXLtZxIOJmI/uU/nI5UYjP6DCnh6DbN2Hc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XC8qy5UeiehWCfCWFXdu3KDKEOzl5sUP0GvLxRI6IFuLoTXnJVZjosVY1ic+yjaAa2muGVGrMxMnVzefD2Vi7hI3uSbBUjHNDo6oQYw4lbxF1GymAcEn8tUORc+Drms1xUAY5RSNOjsE+MiKU6r99cyZkBc25jn2X8nRlLgVaTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IwdJwuu3; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a9kAMB+K"
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2f0ad52830cso13241733eec.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2026 01:48:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IwdJwuu3"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2babfd18435so45276755ad.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2026 01:58:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778834911; x=1779439711; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=T8BhEeyim7dMCP6Y9mo9cuIYca3GTiBV7wuxQ8auLf8=;
-        b=a9kAMB+KRfv5jvytSHy9hvlLFk1Iz/lIh7Iy7VCQdqV5lRKXYYAihzAZ6XK99C8eZ9
-         7fC/Kql/3TJl0qZ4gmfZyWAuajFW236Mp1cKRPps/mEOz/IikiOH6LiB1UEPMW/ryYpV
-         DlGyHOBBfFsfPgw0O/VSu5FFhXC5ejo5yjLxNdVfpF9DubqgOsrM+e4zMCViKR91z4zW
-         axvSy41bkVCB2h84QMOk22ytikO4pgb4kljqWHm6EZd6uDZ/CGJ6ZUi8ZhGwm0/zhGdW
-         5SIdhW8pdX6vRP6s4+BPDXOFIe6HIAntNqgdDyJO+nwzLrvMowDwf9GqUJ8Pny2mTGoe
-         mKHw==
+        d=gmail.com; s=20251104; t=1778835483; x=1779440283; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JI5rbOuDA7OsqPK6rS6KZm2RpgqeyURJ5czLB7dxhv4=;
+        b=IwdJwuu3fbspKY4M46qwfE07A8WvFOSz4mMgl34oOxhRdGNhwzqBAkAzgmDJONgcWO
+         /rfrYcNtRiGEnyAdrmqYH84LLCQeREjdpE0zwj5994JUXOoj/DAkMppV2j5NZuXIPy/Z
+         CAFd7/E9sd+mjo+k5Nh9NvOcNjYIuF/OZ+Fisj83doFwXoSObViUphY97xLhYncQSPUL
+         VVtx2JdUsemqY9xKlxSj8mwZz7fPIlHoJFxZea9sY4qW5mhQiYPX7IhVOIB7DpFKo0sY
+         igrikZblRT7S9fnn8mpMayBfG/pL35ZYWfBObHkmDZ5RJKXklCdxeH9Bg0OAftjaCVKH
+         F+lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778834911; x=1779439711;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T8BhEeyim7dMCP6Y9mo9cuIYca3GTiBV7wuxQ8auLf8=;
-        b=DK+kSTH+E5BC74RHiLgIdGl3xlT9Dined6SyIxAUat4ClOVM8yrqa5X9c2tZdczbcO
-         o+w1HAiSpDcYsFEMUVo1D+6aCvF619XZMzIbEg6d6YJmgqZwyk1eqF0iabLJVHLfwCZw
-         H8qeDjzVFreEVSwBDKmJj8X8eJKzK3vw+jqtAVToHD15UFv9Ofz86rnhydkYYSb4+vkK
-         bzk9dCMDIiJlnHrFkeCJMVJyMvxWDpEpueYd9WDuxZl0ULjR9dMOtHayl9okpa6Y1Fxs
-         VKt6YgAXHOh6yFDwPESBXsih7gOgxvOHi2zULAKCRRP76vF+cFvlO6UtRoztuuC1xHfG
-         UzMQ==
-X-Forwarded-Encrypted: i=1; AFNElJ82hV89aLn4rO4z+b8y3bCO8VOV9DndckY7mHhBPDwdv0c4zgx0Dd5D4QOYQzgonYJRYI3ch99pdcw71A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyb4/EwqPkK6q5TX2XvfYG29eg5DnWxQ8Wk2IU4KIQImNUfm2nF
-	SCawjOQGa6abx6lvYtV1UnxUPwkYf4CafAATT/OPtgtfFRIqn9Ahy3CoPxGxeA==
-X-Gm-Gg: Acq92OFXBl60NfkmuT4mjIbah/PRlML/UxcIXvBv0i2gyIgshJaRgPVdpN20edQPoYu
-	xz3mRPUJ61+zpO5G0H0ynI5BAwQPRUSFPAUj+Vak3h6xtm+l83Ttd6wiCuA+ZlGNg+y8G9kLiuJ
-	+Drnkf5MhGqLZ1TuXkGFM+Erq0qGLCMToTwpEtgrcCVty7iLYtANpxyKLPcGFJqfGeT+tu1/+I9
-	lhHJSbxHeHFRxLbCKDM85l3wwW19bNhnF7igc9fQVvjZGSGgH/Q08Y6tub3lZ86Us1idpZVa2Wm
-	IxfG+goWhkw63630aI1ETWq5EzbKTkCE4eD5U/qGDpr5hYhZ/BAMSA9QalojVRpwNJQYVD87fTp
-	exrhI6CpC+0N9kZpIJ/NTwkrjvCRwv4qDJpnelX55qdFtl7NAt2oZAoPXGnczFFDRqTeWOx03eE
-	CiYxqCxDScKBXhrfw1GB1lMoJdBK5tjoVKeJxPz2WT17ZeIxkIRUZEg95cShBUQLWgku1d8QI1
-X-Received: by 2002:a05:7300:6c12:b0:2ef:8b72:1b9 with SMTP id 5a478bee46e88-30397bc0584mr1725169eec.0.1778834911436;
-        Fri, 15 May 2026 01:48:31 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30294500726sm5808336eec.10.2026.05.15.01.48.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 May 2026 01:48:29 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5f598d37-deff-41b0-a81b-c618f0ab3339@roeck-us.net>
-Date: Fri, 15 May 2026 01:48:28 -0700
+        d=1e100.net; s=20251104; t=1778835483; x=1779440283;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JI5rbOuDA7OsqPK6rS6KZm2RpgqeyURJ5czLB7dxhv4=;
+        b=EyfFa/VMKlfFhfEckSvZ45LiNgHsp6ihxZjv9HUeaI0r6c//fKVxtySk1EV82iQtIn
+         RDZNLVZuOy7oyV8oa4aQoJ0kN1a5ntMxtWPl70ZJbanYdjUVszlziUkCvpY1eGZxWwZ6
+         rslL5YXTf5QoXb0tP5W7LCtE8sKB76w29oXgXoBGkdQbZDEXbdZSvJJHGfNixmxTRZGc
+         8DK0GADBQo0jMwVSWNZJWCiB2LeCmdRqLk0xEFCYnV+Q/LBtAb4KXEai2qCk4enMhunF
+         gFcfl5mKhZtn3BuX1VuM8kgT5Z3fbjcPgmVZRih4gpg17N5dSHJKwJ9OtH4Sc4trJ7un
+         P06Q==
+X-Forwarded-Encrypted: i=1; AFNElJ+EXH4xFapyR6DuUui1ayMFTf/W4R0A/O+sOnYxh0bsum7YlRbqkaxMcwV/0bzRWnwDwBPmKcpzsv0YvA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxA2y2gqeV826GYWIpJvGsPZLHv7VlgdfJAHfSQiR5VnMCndrR6
+	Y1ZZqMYJfKFbqxXAYRL3ivf2PLjBPz9nNI/4rtPF+MJ+5LqqphPnkHYi
+X-Gm-Gg: Acq92OFifG5Gj4TTGfGwehWFf+JOgMXKhi401KbLNwaZWh+FaGPSiaFp5tIC5wiR2Vl
+	l8ZSWvGg35JD2WmEWn4kLJoEVWJMNiExEzEFEfQyvO/YwiXXfd1EtAMx5d/QkwXeuoSTi/4FCYG
+	SF6s3iIryt/2GrwjsVMleEL84I7LdyqOFrDn3BGYwzzvNow1Ad+4v2GWH6/+LjpgrnkZmYz3CDL
+	xE12I+L1YSEPLAfPp8XyjD9pX2WPO5fqG6slToeNmxIhopPWS98mxxQPmf8yh7y4CR73DeUOPUH
+	sUZMfQrayGVr7MCrL613lsNyVB7elHkgBpJmxsJ3Nt2OD/CP9w6uVss4u7GfLQ9Iyts7BVt9Ykt
+	sT0F7sIWxdUZ6eKnAftfmZbcBk5x4RS1fFmrCtKdJygtCSEWs8fkz+uq+S2xgzjIVVcdKIUweUK
+	a6lwUVQelkFGI2oKVIwejwsy7LvwtuX227sdrBhwP3pZJA5DJd32QE9P1H3D2Y1QnXew==
+X-Received: by 2002:a17:903:390b:b0:2bd:1903:6ced with SMTP id d9443c01a7336-2bd7e93cf74mr34268585ad.41.1778835482629;
+        Fri, 15 May 2026 01:58:02 -0700 (PDT)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5cfe6512sm52249325ad.52.2026.05.15.01.57.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 May 2026 01:58:02 -0700 (PDT)
+From: a0282524688@gmail.com
+To: tmyu0@nuvoton.com,
+	linusw@kernel.org,
+	brgl@kernel.org,
+	linux@roeck-us.net,
+	andi.shyti@kernel.org,
+	lee@kernel.org,
+	mkl@pengutronix.de,
+	mailhol@kernel.org,
+	alexandre.belloni@bootlin.com,
+	wim@linux-watchdog.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Ming Yu <a0282524688@gmail.com>
+Subject: [PATCH v4 0/1] mfd: nct6694: Refactor transport layer and add HIF (eSPI) support
+Date: Fri, 15 May 2026 16:57:45 +0800
+Message-Id: <20260515085746.114361-1-a0282524688@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] hwmon: lenovo-ec-sensors: Fix NULL pointer
- dereference when DMI match fails
-To: Kean <rh_king@163.com>
-Cc: Mark Pearson <mpearson-lenovo@squebb.ca>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <c808d5bf-b166-432d-864e-db0536a3f4e3@roeck-us.net>
- <20260515081010.32812-1-rh_king@163.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260515081010.32812-1-rh_king@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 5/15/26 01:10, Kean wrote:
-> Hi Guenter,
-> Thank you for the review and for pointing this out!
-> 
-> You're absolutely right. I realize now that my patch was overly
-> cautious — in normal operation dmi_first_match() can never return
-> NULL here because lenovo_ec_init() already guards the probe behind:
-> 
-> 	static int __init lenovo_ec_init(void)
-> 	{
-> 		if (!dmi_check_system(thinkstation_dmi_table))
-> 			return -ENODEV;
-> 		...
-> 	}
-> 
-> That said, I tend to follow a defensive programming style — checking
-> for errors and returning early whenever something looks even slightly
-> unexpected. This is exactly what lenovo_ec_init() itself does with
-> dmi_check_system(), and it's also why we often put a return (or break)
-> in the default branch of a switch statement. So I added the NULL check
-> for dmi_first_match() as an extra sanity guard, even though logically
-> it should never trigger.
-> 
+From: Ming Yu <a0282524688@gmail.com>
 
-Maybe other subsystems accept that nowadays. Historically it was considered
-waste. I still consider it waste, and I won't accept it.
+The Nuvoton NCT6694 is a peripheral expander that provides GPIO, I2C,
+CAN-FD, Watchdog, HWMON, PWM, and RTC sub-devices. Currently, the
+driver only supports USB as the host transport interface.
 
-Guenter
+This series refactors the NCT6694 MFD core to support multiple transport
+backends and adds a new Host Interface (HIF) transport driver that
+communicates over eSPI using Super-I/O shared memory.
 
-> I should have made this clearer in the commit message. The patch was
-> meant as a defensive sanity check, but my description made it sound
-> like an actual reachable bug, which it isn't. That's my mistake.
-> 
-> I'm happy to drop this patch from the series if you'd prefer. Please
-> let me know how you'd like me to proceed.
-> 
-> For other parts and the format issues is my mistake that missed the
-> --strict to check the patches file, I will send the V2 version, hope
->   get your review, any problem you can tell me, I will feedback and
-> tested as your requested.
-> 
-> Thanks,
-> Kean
-> 
-> 
+Changes since version 3:
+- Remove redundant module type macro definitions from sub-device drivers
+  that are now provided by the shared header <linux/mfd/nct6694.h>,
+  fixing -Wmacro-redefined warnings.
+
+Changes since version 2:
+- Restore per-device IDA and mfd_add_hotplug_devices()/PLATFORM_DEVID_AUTO
+  to avoid child device ID conflicts with multiple NCT6694 chips.
+- Validate irq_find_mapping() return value before dispatching IRQs.
+- Check superio_enter() return value in nct6694_irq_init().
+
+Changes since version 1:
+- Reworked the Super-I/O access helpers.
+
+Ming Yu (1):
+  mfd: Add Host Interface (HIF) support for Nuvoton NCT6694
+
+ MAINTAINERS                         |   1 +
+ drivers/gpio/gpio-nct6694.c         |   7 -
+ drivers/hwmon/nct6694-hwmon.c       |  21 -
+ drivers/i2c/busses/i2c-nct6694.c    |   7 -
+ drivers/mfd/Kconfig                 |  47 +-
+ drivers/mfd/Makefile                |   3 +-
+ drivers/mfd/nct6694-hif.c           | 663 ++++++++++++++++++++++++++++
+ drivers/mfd/nct6694.c               | 111 +++--
+ drivers/net/can/usb/nct6694_canfd.c |   6 -
+ drivers/rtc/rtc-nct6694.c           |   7 -
+ drivers/watchdog/nct6694_wdt.c      |   7 -
+ include/linux/mfd/nct6694.h         |  54 ++-
+ 12 files changed, 813 insertions(+), 121 deletions(-)
+ create mode 100644 drivers/mfd/nct6694-hif.c
+
+-- 
+2.34.1
 
