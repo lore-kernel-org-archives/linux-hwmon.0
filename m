@@ -1,32 +1,32 @@
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F4F44C8FFC
-	for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2026 16:06:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 638444C6F09
+	for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2026 16:06:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778861180; cv=none; b=FBNrldzZiYuZu7p35AB8dKDsFDlC/DNmizXj9Mdckaz+f1D4O/Qwi0vp81vcBCsgqhvc9/pKvhHG1+JgVeKCcoSD1RdUerB5xqADKBCzpfrNhLJxC2UQcTWq7hyb/Y96m8JKyxlMuBKPGSOk/nkjOuP91TSMQcx1Si6kq2GiC5I=
+	t=1778861180; cv=none; b=bSM0wq6mBxK5If2t09zP9Gz/43PWfFfnjxrHcmmcJ3Jh5WngIPXGOHiHFuVHFRzhfEaQIdJK1IFpXGK5yxiTLnyMrasg4l5+n4nvCtDX0stBx3jPD1qZqmDfYT3LwBnuw3xfsCaRs+Ek3BPmVIG2mxCBskIsRyMQ8+5v7WEBsC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1778861180; c=relaxed/simple;
-	bh=s0IFUB5dnL6nJt8gSmVJTlhHE9O5MYjQ1WwnrWhvslI=;
+	bh=2XP/jkISsyRTwrllTVtwDY1oD0NbKgg8BhGfIN3OSR0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dMN0ToYHdOgjU4tN4GqnMJ8d+9Iov1u3E6liTnO01xMk1moLibTs9nxCYfXy8z4IfbbOE6LMmUvv/1jKBHfAkzxaBImhc6X4yW9wBoOj1s8M128ZS8/w8Td4gcgUGGvCdYjr6adFqK/7StzizZlffb7G4fDnwvvTJeMTBJnX+6g=
+	 MIME-Version:Content-Type; b=I07z3viheDpRCTROxXpBN0HYS560YaLrtbJKl0rpnAWOoTDNu8nAU9mp4A3DfUdZlb9vuwAnxWj/aMpx22A/kiKQMK+bL+XZxj81cR2nFyTILIaIJbOe6ZikjRCoGgdOujp/WsIpp6aWopLzP81Hl0LfuMeaStON23JHchp7V+o=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <ore@pengutronix.de>)
-	id 1wNv2h-00023c-2r; Fri, 15 May 2026 18:05:39 +0200
+	id 1wNv2h-00023b-2g; Fri, 15 May 2026 18:05:39 +0200
 Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac] helo=dude04)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <ore@pengutronix.de>)
-	id 1wNv2g-000wnG-27;
+	id 1wNv2g-000wnE-1r;
 	Fri, 15 May 2026 18:05:38 +0200
 Received: from ore by dude04 with local (Exim 4.98.2)
 	(envelope-from <ore@pengutronix.de>)
-	id 1wNv2g-00000000U9h-2Je2;
+	id 1wNv2g-00000000U9M-26mT;
 	Fri, 15 May 2026 18:05:38 +0200
 From: Oleksij Rempel <o.rempel@pengutronix.de>
 To: Guenter Roeck <linux@roeck-us.net>,
@@ -36,16 +36,16 @@ To: Guenter Roeck <linux@roeck-us.net>,
 	Lee Jones <lee@kernel.org>,
 	Peter Rosin <peda@axentia.se>,
 	Linus Walleij <linusw@kernel.org>
-Cc: David Jander <david@protonic.nl>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
 	kernel@pengutronix.de,
 	linux-kernel@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
-	linux-gpio@vger.kernel.org
-Subject: [PATCH v12 4/6] pinctrl: add NXP MC33978/MC34978 pinctrl driver
-Date: Fri, 15 May 2026 18:05:32 +0200
-Message-ID: <20260515160537.115808-5-o.rempel@pengutronix.de>
+	linux-gpio@vger.kernel.org,
+	David Jander <david@protonic.nl>
+Subject: [PATCH v12 2/6] mfd: add NXP MC33978/MC34978 core driver
+Date: Fri, 15 May 2026 18:05:30 +0200
+Message-ID: <20260515160537.115808-3-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260515160537.115808-1-o.rempel@pengutronix.de>
 References: <20260515160537.115808-1-o.rempel@pengutronix.de>
@@ -55,1194 +55,1737 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: ore@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-From: David Jander <david@protonic.nl>
+Add core Multi-Function Device (MFD) driver for the NXP MC33978 and
+MC34978 Multiple Switch Detection Interfaces (MSDI).
 
-Add pin control and GPIO driver for the NXP MC33978/MC34978 Multiple
-Switch Detection Interface (MSDI) devices.
+The MC33978/MC34978 devices provide 22 switch detection inputs, analog
+multiplexing (AMUX), and comprehensive hardware fault detection.
 
-This driver exposes the 22 mechanical switch detection inputs (14
-Switch-to-Ground, 8 Programmable) as standard GPIOs.
+This core driver handles:
+- SPI communications via a custom regmap bus to support the device's
+  pipelined two-frame MISO response requirement.
+- Power sequencing for the VDDQ (logic) and VBATP (battery) regulators.
+- Interrupt demultiplexing, utilizing an irq_domain to provide 22 virtual
+  IRQs for switch state changes and 1 virtual IRQ for hardware faults.
+- Inline status harvesting from the SPI MSB to detect and trigger events
+  without requiring dedicated status register polling.
 
-Key features implemented:
-- GPIO read/write: Translates physical switch states (open/closed)
-  to logical GPIO levels based on the configured switch topology
-  (Switch-to-Ground vs. Switch-to-Battery).
-- Emulated Output: Allows setting pins "high" or "low" by manipulating
-  the tri-state registers and hardware pull topologies.
-- Interrupt routing: Proxies GPIO interrupt requests to the irq_domain
-  managed by the parent MFD core driver via a hierarchical irq_chip.
+Child devices (pinctrl, hwmon, mux) are instantiated by the core driver
+from match data.
 
-Signed-off-by: David Jander <david@protonic.nl>
-Co-developed-by: Oleksij Rempel <o.rempel@pengutronix.de>
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Assisted-by: Gemini:gemini-3.1-pro Sashiko
-Reviewed-by: Linus Walleij <linusw@kernel.org>
 ---
 changes v12:
-- Fix indentation alignment in mc33978_set_pull() function
-- Convert platform_device_id array to use explicit .name field
-  assignment in preparation for upcoming kernel infrastructure changes
-  https://lore.kernel.org/all/cover.1778582187.git.u.kleine-koenig@baylibre.com
+- Split monolithic MFD driver into two modules per maintainer feedback:
+  * drivers/mfd/mc33978.c: Thin wrapper for SPI binding, power sequencing,
+    and child device registration
+  * drivers/platform/misc/mc33978-core.c: Complex core functionality
+    including custom regmap bus, IRQ domain, and event handling
+- Add mc33978_core_init() API exported by core module for MFD initialization
+- Introduce CONFIG_MC33978_CORE in drivers/platform/misc/Kconfig
+- Update CONFIG_MFD_MC33978 to select CONFIG_MC33978_CORE
+- Add MODULE_SOFTDEP("pre: mc33978-core") to ensure correct module load order
+- Rename struct mc33978_mfd_priv to context-specific names:
+  * mc33978_ddata in MFD driver
+  * mc33978_core_data in core module
+- Rename local variables from 'mc' to 'ddata'/'cdata' for clarity
+- Replace MC33978_DRV_NAME macro with string literal "mc33978"
+- Convert kerneldoc (/** */) on static functions to regular comments (/* */)
+- Adopt 100-character line limit throughout
+- Fix misleading cacheline alignment comment ("must be at end" -> "prevent
+  DMA corruption from adjacent fields")
+- Document IRQ locking strategy explicitly (irq_lock mutex for regmap/SPI,
+  irq_state_lock raw spinlock for atomic state access)
+- Reformat header file comments from inline style to preceding style for
+  improved readability
+- Enhance interrupt behavior documentation with detailed datasheet references
+  explaining INT_flg clear timing and FAULT_STAT latching behavior
 - add .suppress_bind_attrs = true
 changes v11:
-- no changes
+- Introduce synthetic wakeup bit to prevent hardware bit overloading and
+  avoid phantom transient faults.
+- Add smp_mb__before_atomic() to ensure memory visibility before
+  updating harvested_flags.
+- Update event processing to mask synthetic bits before evaluating
+  hardware fault conditions.
+- Introduce fault_lock spinlock to protect fault state members.
+- Replace manual memory barriers and READ_ONCE/WRITE_ONCE with
+  spinlock-protected access.
+- Introduce irq_state_lock raw spinlock to protect IRQ state fields.
+- Replace irq_lock mutex with raw spinlock in IRQ callbacks and event
+  handling paths.
+- Include MC33978_REG_ENTER_LPM in volatile and precious ranges.
+- Mark MC33978_REG_ENTER_LPM as readable to avoid regcache sync writes.
 changes v10:
-- Replace state macros with enum mc33978_bias_state and enum
-  mc33978_drive_mode for better type safety.
-- Add cached_drive array to isolate output drive topology from the input
-  bias configuration (cached_bias).
-- Decouple set_pull and set_drive functions to fix state leakage when
-  switching between input and output modes.
-- Add explicit comments explaining how hardware wetting currents are
-  used to emulate standard pinctrl drive/pull modes.
-- Initialize both bias and drive state caches directly from hardware
-  registers during driver probe.
+- Refactor IRQ setup into a common helper to unify the .map and .alloc
+  code paths.
+- Enable hierarchical IRQ support to allow integration with the
+  pinctrl/GPIO child domain.
+- Simplify event handling by removing redundant boolean return values
+  from internal handlers.
+- Fix IRQ cleanup by disposing of all active mappings before removing
+  the IRQ domain.
+- Standardize IRQ constants using MC33978_NUM_IRQS for consistent domain
+  sizing and bounds checks.
 changes v9:
-- Resolve probe fwnode directly from parent (`dev_fwnode(dev->parent)`) and
-  fail early with `-ENODEV` if the parent firmware node is missing.
-- Set child device node from this validated parent fwnode.
-- Replace mutex_init() with devm_mutex_init()
-- Add gpiochip_disable_irq/enable_irq calls in mask/unmask callbacks
-  for proper gpiolib IRQ state tracking with IRQCHIP_IMMUTABLE
-- Set DOMAIN_BUS_WIRED token for GPIO IRQ domain to distinguish from
-  parent MFD domain sharing same fwnode
-- Add explanatory comment about fwnode sharing and bus token isolation
-  to prevent domain shadowing concerns
-- select GPIOLIB_IRQCHIP and IRQ_DOMAIN_HIERARCHY
+- Fix null irq_domain dereference from debugfs race by initializing IRQ domain
+  early before regmap initialization.
+- Refactor mc33978_handle_fault_condition() to improve readability by keeping
+  variable declarations at the top and adding inline comments.
+- Fix spurious transient fault events caused by redundant STAT_FAULT flags
+  during event loop.
+- Fix spurious interrupt loops by explicitly returning -ENODATA in
+  mc33978_rx_decode() for registers without status bits.
+- Validate hwirq bounds in mc33978_irq_domain_alloc() to prevent corruption
+  of irq_rise/irq_fall bitmasks by malformed device tree inputs.
+- set DOMAIN_BUS_NEXUS
+- Protect work on teardown
+- remove IRQF_SHARED
 changes v8:
-- Fix comment documentation to state the driver implements a hierarchical
-  irq_chip instead of proxying .to_irq().
-- Add missing <linux/irqdomain.h> include.
-- Add .irq_set_wake = irq_chip_set_wake_parent to the gpio_irq_chip to
-  properly proxy wake-up configuration to the parent domain.
-- Replace irq_find_host() with irq_find_matching_fwnode() during probe
-  to support parent domain lookup on non-OF platforms.
+- Fix TOCTOU race condition in SPI event harvesting loop by grabbing
+  harvested_flags before hardware reads.
+- Fix broken hierarchical IRQ allocation by replacing
+  irq_domain_set_hwirq_and_chip() with irq_domain_set_info() and passing
+  the handle_simple_irq flow handler.
+- Fix out-of-bounds stack read and endianness bug in for_each_set_bit() by
+  typing fired_pins as unsigned long instead of casting u32.
+- Prevent DMA cacheline corruption by explicitly aligning rx_frame with
+  ____cacheline_aligned to separate it from tx_frame.
+- Prevent spurious IRQs by verifying irq_find_mapping() returns non-zero
+  before calling handle_nested_irq().
+- Prevent missed transient hardware faults by explicitly evaluating
+  hw_flags in mc33978_handle_fault_condition().
+- Fix missing memory barrier in mc33978_harvest_status() with
+  smp_mb__after_atomic() to ensure harvested_flags visibility.
+- Fix devres use-after-free teardown race by using INIT_WORK and a custom
+  cancel action after the IRQ domain is destroyed, instead of
+  devm_work_autocancel.
+- Prevent spurious pin interrupts on boot by priming cached_pin_state via
+  a regmap_read() during probe before enabling IRQs.
+- Implement .irq_set_wake callback to support system wake from
+  hardware faults and switch state changes.
 changes v7:
-- Refactor I/O state reading and tri-state updates for SG/SB topologies
-- Fix open-drain and open-source pinconf emulation
-- Make direction_input a no-op to prevent overriding pinctrl bias
-- Add defensive wrappers for IRQ proxying to prevent NULL pointer panics
-- Add missing mutex guards to pinconf and get operations
-- Convert generic internal variables to u32 and add lockdep assertions
+- Fix event handling race condition with smp_mb()
+- Replace INIT_WORK() with devm_work_autocancel()
 changes v6:
-- no changes
+- Remove the hardcoded bypass in irq_set_type to allow child drivers to
+  configure the FAULT line for edge-triggering.
+- Implement software edge-detection for FAULT interrupt.
+- Add MC33978_FAULT_ALARM_MASK to the shared header for child devices
+- Use READ_ONCE() and WRITE_ONCE() for lockless shared state variables
+  (cached_pin_mask, irq_rise, irq_fall, bus_fault_active,
+  cached_fault_active) accessed across the SPI harvesting context and
+  the event worker.
+- Add an if (hwirq < MC33978_NUM_PINS) guard in irq_mask() and
+  irq_unmask() to prevent the FAULT hwirq (22) from altering the
+  physical pin mask registers.
+- Lowercase the error strings in dev_err_probe()
+- Add inline comments explaining the irq_map fallback behavior
 changes v5:
 - no changes
 changes v4:
-- add Reviewed-by: Linus Walleij ...
-- Replace the of_device_id match table with a platform_device_id table
-- Add device_set_node(dev, dev_fwnode(dev->parent)) during probe
-- Remove the check for a missing dev->of_node
+- Removed .of_compatible strings from the mfd_cell arrays
 changes v3:
-- replace manual mutex_lock()/mutex_unlock() paths with guard(mutex)
-- Unify error checking style by replacing if (ret < 0) with if (ret)
-- Migrate from a custom .to_irq callback to a hierarchical gpio_irq_chip
-- Implement .irq_bus_lock and .irq_bus_sync_unlock proxies to properly
-  cascade SPI bus lock operations to the parent MFD domain
-- Set girq->handler to handle_simple_irq
+- Select IRQ_DOMAIN_HIERARCHY in Kconfig
+- Add .alloc and .free callbacks to irq_domain_ops to support hierarchical
+  IRQ domains
+- Set IRQ_DOMAIN_FLAG_HIERARCHY flag on the core MFD irq_domain
+- replace manual lock/unlock with guard()
 changes v2:
-- Translate all remaining German comments to English.
-- Remove unnecessary #ifdef CONFIG_OF wrappers around dt_node_to_map.
-- Add detailed comments to mc33978_get() and mc33978_get_multiple() explaining
-  the hardware comparator logic (1 = closed, 0 = open) and justifying the
-  bitwise inversion required to report actual physical voltage levels.
-- Add comments to the .set() and .set_config() callbacks explaining why
-  gpiolib's standard open-drain emulation (switching to input mode) fails on
-  this hardware due to active wetting currents, and why tri-state isolation is
-  mandatory.
-- Add a comment to mc33978_gpio_to_irq() explaining why it must act as a
-  proxy to the parent MFD's irq_domain (shared physical INT_B line with hwmon).
-- Drop dummy pin group callbacks (get_groups_count, etc.). This relies on a
-  preparatory patch in this series making these callbacks optional in the core.
-- Fix debugfs 'pinconf-pins' read errors by correctly returning -ENOTSUPP
-  instead of -EOPNOTSUPP for unsupported generic configurations.
-- Fix empty 'gpio-ranges' and missing debugfs labels by explicitly calling
-  gpiochip_add_pin_range() during probe.
-- Eliminate "magic" bitwise math in the wetting current configuration by
-  introducing a static lookup array (mc33978_wet_mA).
-- Resolve checkpatch.pl strict warnings regarding macro argument reuse by
-  converting MC33978_SPSG, MC33978_PINSHIFT, MC33978_WREG, and MC33978_WSHIFT
-  to static inline functions.
-- Remove artifacts from previous interrupt handling implementations.
-- Address minor formatting and whitespace nits.
+- Rewrite the driver header comment
+- Explicitly reject IRQ_TYPE_LEVEL_HIGH and IRQ_TYPE_LEVEL_LOW in
+  mc33978_irq_set_type() to correctly reflect the hardware's edge-only
+  interrupt capabilities.
+- Pass the hardware fault IRQ to the hwmon child driver via mfd_cell
+  resources, rather than requiring the child to parse the parent's irq_domain.
+- Ensure the Kconfig strictly depends on OF and SPI
 ---
- drivers/pinctrl/Kconfig           |   16 +
- drivers/pinctrl/Makefile          |    1 +
- drivers/pinctrl/pinctrl-mc33978.c | 1020 +++++++++++++++++++++++++++++
- 3 files changed, 1037 insertions(+)
- create mode 100644 drivers/pinctrl/pinctrl-mc33978.c
+ drivers/mfd/Kconfig                  |   15 +
+ drivers/mfd/Makefile                 |    2 +
+ drivers/mfd/mc33978.c                |  187 +++++
+ drivers/platform/Kconfig             |    2 +
+ drivers/platform/Makefile            |    1 +
+ drivers/platform/misc/Kconfig        |   10 +
+ drivers/platform/misc/Makefile       |    6 +
+ drivers/platform/misc/mc33978-core.c | 1106 ++++++++++++++++++++++++++
+ include/linux/mfd/mc33978.h          |  160 ++++
+ 9 files changed, 1489 insertions(+)
+ create mode 100644 drivers/mfd/mc33978.c
+ create mode 100644 drivers/platform/misc/Kconfig
+ create mode 100644 drivers/platform/misc/Makefile
+ create mode 100644 drivers/platform/misc/mc33978-core.c
+ create mode 100644 include/linux/mfd/mc33978.h
 
-diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
-index 03f2e3ee065f..6ba1a35ce180 100644
---- a/drivers/pinctrl/Kconfig
-+++ b/drivers/pinctrl/Kconfig
-@@ -385,6 +385,22 @@ config PINCTRL_MAX77620
- 	  function in alternate mode. This driver also configure push-pull,
- 	  open drain, FPS slots etc.
+diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+index 7192c9d1d268..d610c2149b5c 100644
+--- a/drivers/mfd/Kconfig
++++ b/drivers/mfd/Kconfig
+@@ -2566,6 +2566,21 @@ config MFD_UPBOARD_FPGA
+ 	  To compile this driver as a module, choose M here: the module will be
+ 	  called upboard-fpga.
  
-+config PINCTRL_MC33978
-+	tristate "MC33978/MC34978 industrial input controller support"
-+	depends on MFD_MC33978
-+	select GPIOLIB
-+	select GPIOLIB_IRQCHIP
-+	select IRQ_DOMAIN_HIERARCHY
-+	select GENERIC_PINCONF
++config MFD_MC33978
++	tristate "NXP MC33978/MC34978 MFD driver"
++	depends on OF && SPI
++	select MC33978_CORE
 +	help
-+	  Say Y here to enable support for NXP MC33978/MC34978 Multiple
-+	  Switch Detection Interface (MSDI) devices. This driver provides
-+	  pinctrl and GPIO interfaces for the 22 mechanical switch inputs
-+	  (14 Switch-to-Ground, 8 Programmable).
++	  MFD driver for NXP MC33978/MC34978 industrial input controllers.
 +
-+	  It allows reading switch states, configuring hardware pull
-+	  topologies, and handling interrupts for state changes.
++	  The MC33978/MC34978 devices provide 22 switch detection inputs,
++	  analog multiplexing (AMUX), and comprehensive hardware fault
++	  detection. This driver provides IRQ domain, event processing,
++	  and interfaces for child devices (pinctrl, hwmon, mux).
 +
- config PINCTRL_MCP23S08_I2C
- 	tristate
- 	select REGMAP_I2C
-diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
-index f7d5d5f76d0c..afb58fb5a197 100644
---- a/drivers/pinctrl/Makefile
-+++ b/drivers/pinctrl/Makefile
-@@ -40,6 +40,7 @@ obj-$(CONFIG_PINCTRL_XWAY)	+= pinctrl-xway.o
- obj-$(CONFIG_PINCTRL_LPC18XX)	+= pinctrl-lpc18xx.o
- obj-$(CONFIG_PINCTRL_MAX7360)	+= pinctrl-max7360.o
- obj-$(CONFIG_PINCTRL_MAX77620)	+= pinctrl-max77620.o
-+obj-$(CONFIG_PINCTRL_MC33978)	+= pinctrl-mc33978.o
- obj-$(CONFIG_PINCTRL_MCP23S08_I2C)	+= pinctrl-mcp23s08_i2c.o
- obj-$(CONFIG_PINCTRL_MCP23S08_SPI)	+= pinctrl-mcp23s08_spi.o
- obj-$(CONFIG_PINCTRL_MCP23S08)	+= pinctrl-mcp23s08.o
-diff --git a/drivers/pinctrl/pinctrl-mc33978.c b/drivers/pinctrl/pinctrl-mc33978.c
++	  To compile this driver as a module, choose M here: the module
++	  will be called mc33978.
++
+ config MFD_MAX7360
+ 	tristate "Maxim MAX7360 I2C IO Expander"
+ 	depends on I2C
+diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+index e75e8045c28a..dcd99315f683 100644
+--- a/drivers/mfd/Makefile
++++ b/drivers/mfd/Makefile
+@@ -122,6 +122,8 @@ obj-$(CONFIG_MFD_MC13XXX)	+= mc13xxx-core.o
+ obj-$(CONFIG_MFD_MC13XXX_SPI)	+= mc13xxx-spi.o
+ obj-$(CONFIG_MFD_MC13XXX_I2C)	+= mc13xxx-i2c.o
+ 
++obj-$(CONFIG_MFD_MC33978)	+= mc33978.o
++
+ obj-$(CONFIG_MFD_PF1550)	+= pf1550.o
+ 
+ obj-$(CONFIG_MFD_NCT6694)	+= nct6694.o
+diff --git a/drivers/mfd/mc33978.c b/drivers/mfd/mc33978.c
 new file mode 100644
-index 000000000000..2ee1b1284c87
+index 000000000000..d46b76ca9147
 --- /dev/null
-+++ b/drivers/pinctrl/pinctrl-mc33978.c
-@@ -0,0 +1,1020 @@
++++ b/drivers/mfd/mc33978.c
+@@ -0,0 +1,187 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (C) 2024 David Jander <david@protonic.nl>, Protonic Holland
 + * Copyright (C) 2026 Oleksij Rempel <kernel@pengutronix.de>, Pengutronix
 + *
-+ * MC33978/MC34978 Multiple Switch Detection Interface - Pinctrl/GPIO Driver
-+ *
-+ * Provides GPIO and pinctrl interfaces for the 22 switch detection inputs.
-+ * Handles digital input reading and wetting current configuration. Analog AMUX
-+ * functionality is handled by a separate mux driver.
-+ *
-+ * GPIO Mapping:
-+ * - GPIO 0-13:  SG0-SG13 (Switch-to-Ground inputs)
-+ * - GPIO 14-21: SP0-SP7 (Programmable: Switch-to-Ground or Switch-to-Battery)
-+ * This is dictated by the READ_IN register where bits [21:14] = SP[7:0]
-+ * and bits [13:0] = SG[13:0].
-+ *
-+ * Register Organization:
-+ * Configuration registers are generally paired. The _SP register at offset N
-+ * controls SP0-SP7, and the _SG register at offset N+2 controls SG0-SG13.
-+ *
-+ * Wetting Currents vs. Pull Resistors:
-+ * The hardware physically lacks traditional passive pull-up or pull-down
-+ * resistors. Instead, it uses active, controllable current regulators
-+ * (wetting currents) to detect switch states and clean mechanical contacts.
-+ * - Because these are active current sources, specifying an ohmic value for
-+ * pull-up/down biases is physically invalid. The driver ignores ohm arguments.
-+ * - 8 selectable current values: 2, 6, 8, 10, 12, 14, 16, 20 mA.
-+ * - Exposed via the pinconf PIN_CONFIG_DRIVE_STRENGTH parameter (in mA).
-+ *
-+ * Emulated Outputs:
-+ * The hardware lacks traditional push-pull output drivers; it is strictly an
-+ * input device. "Outputs" are simulated by toggling the wetting currents and
-+ * physically isolating the pins via hardware tri-state registers. Consequently,
-+ * consumers should flag outputs with GPIO_OPEN_DRAIN or GPIO_OPEN_SOURCE in
-+ * the Device Tree to match the emulated output model.
-+ *
-+ * Input Detection Mechanics:
-+ * This input mechanism relies on the active current regulators rather than
-+ * passive hard resistors. For a Switch-to-Ground (SG) pin, the chip sources
-+ * a constant current. When the switch is open, the pin voltage floats up to
-+ * the battery voltage. When the switch closes, it creates a path to ground;
-+ * because the current is strictly regulated, the pin voltage drops sharply
-+ * below the internal 4.0V comparator threshold.
-+ * The hardware evaluates this and reports an abstract "contact status"
-+ * (1 = closed, 0 = open). For SG pins, a closed switch (~0V) reports as '1'.
-+ * To align with gpiolib expectations where ~0V equals a physical logical '0',
-+ * this driver explicitly inverts the hardware status for all SG-configured
-+ * pins before reporting them.
-+ *
-+ * Interrupts:
-+ * The physical INT_B line and threaded IRQ domain are managed centrally by
-+ * the parent MFD core. This driver implements a hierarchical irq_chip
-+ * to proxy masking/unmasking and configuration to the parent domain.
-+ *
-+ * Written by David Jander <david@protonic.nl>
-+ *
-+ * Datasheet:
-+ * https://www.nxp.com/docs/en/data-sheet/MC33978.pdf
++ * MC33978/MC34978 MFD Driver - Device binding and power sequencing only.
++ * Core logic (regmap/IRQ/events) lives in separate mc33978-core module to
++ * isolate complex SPI protocol from simple MFD device registration.
 + */
 +
-+#include <linux/cleanup.h>
-+#include <linux/device.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
 +#include <linux/irqdomain.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/pinctrl/pinconf-generic.h>
-+#include <linux/pinctrl/pinconf.h>
-+#include <linux/pinctrl/pinctrl.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+
++#include <linux/mfd/core.h>
 +#include <linux/mfd/mc33978.h>
-+
-+#define MC33978_NGPIO		22
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/regulator/consumer.h>
++#include <linux/spi/spi.h>
 +
 +/*
-+ * Input numbering is dictated by bit-order of the input register:
-+ * Inputs 0-13 -> SG0-SG13
-+ * Inputs 14-21 -> SP0-SP7
++ * MC33978 vs MC34978: Identical register map and pin configuration; only
++ * temperature range differs (MC33978: -40°C to +125°C, MC34978: -40°C to
++ * +150°C). Both variants share IRQ layout and resources. Device type
++ * preserved for potential errata handling and hwmon-specific attributes.
 + */
-+#define MC33978_NUM_SG		14
-+#define MC33978_SP_MASK		GENMASK(MC33978_NGPIO - 1, MC33978_NUM_SG)
-+#define MC33978_SG_MASK		GENMASK(MC33978_NUM_SG - 1, 0)
-+#define MC33978_SG_SHIFT	0
-+#define MC33978_SP_SHIFT	MC33978_NUM_SG
-+
-+enum mc33978_bias_state {
-+	MC33978_TRISTATE = 0,
-+	MC33978_PU,
-+	MC33978_PD,
++enum mc33978_device_type {
++	MC33978 = 1,  /* Must be non-zero: used as match_data pointer value */
++	MC34978 = 2,
 +};
 +
-+enum mc33978_drive_mode {
-+	MC33978_OPEN_SOURCE = 0,
-+	MC33978_OPEN_DRAIN,
++static const struct resource mc33978_hwmon_resources[] = {
++	DEFINE_RES_IRQ(MC33978_HWIRQ_FAULT),
 +};
 +
-+struct mc33978_pinctrl {
-+	struct device *dev;
-+	struct regmap *regmap;
++static const struct mfd_cell mc33978_cells[] = {
++	MFD_CELL_NAME("mc33978-pinctrl"),
++	MFD_CELL_RES("mc33978-hwmon", mc33978_hwmon_resources),
++	MFD_CELL_NAME("mc33978-mux"),
++};
 +
++static const struct mfd_cell mc34978_cells[] = {
++	MFD_CELL_NAME("mc34978-pinctrl"),
++	MFD_CELL_RES("mc34978-hwmon", mc33978_hwmon_resources),
++	MFD_CELL_NAME("mc34978-mux"),
++};
++
++struct mc33978_ddata {
 +	struct irq_domain *domain;
-+
-+	struct gpio_chip chip;
-+	struct pinctrl_dev *pctldev;
-+	struct pinctrl_desc pinctrl_desc;
-+
-+	/*
-+	 * Protects multi-register hardware sequences in .set() and atomic
-+	 * READ_IN + CONFIG reads in .get()
-+	 */
-+	struct mutex lock;
-+
-+	enum mc33978_bias_state cached_bias[MC33978_NGPIO];
-+	enum mc33978_drive_mode cached_drive[MC33978_NGPIO];
 +};
 +
-+static const struct pinctrl_pin_desc mc33978_pins[] = {
-+	PINCTRL_PIN(0, "sg0"),
-+	PINCTRL_PIN(1, "sg1"),
-+	PINCTRL_PIN(2, "sg2"),
-+	PINCTRL_PIN(3, "sg3"),
-+	PINCTRL_PIN(4, "sg4"),
-+	PINCTRL_PIN(5, "sg5"),
-+	PINCTRL_PIN(6, "sg6"),
-+	PINCTRL_PIN(7, "sg7"),
-+	PINCTRL_PIN(8, "sg8"),
-+	PINCTRL_PIN(9, "sg9"),
-+	PINCTRL_PIN(10, "sg10"),
-+	PINCTRL_PIN(11, "sg11"),
-+	PINCTRL_PIN(12, "sg12"),
-+	PINCTRL_PIN(13, "sg13"),
-+	PINCTRL_PIN(14, "sp0"),
-+	PINCTRL_PIN(15, "sp1"),
-+	PINCTRL_PIN(16, "sp2"),
-+	PINCTRL_PIN(17, "sp3"),
-+	PINCTRL_PIN(18, "sp4"),
-+	PINCTRL_PIN(19, "sp5"),
-+	PINCTRL_PIN(20, "sp6"),
-+	PINCTRL_PIN(21, "sp7"),
-+};
-+
-+static inline bool mc33978_is_sp(unsigned int pin)
++static int mc33978_mfd_probe(struct spi_device *spi)
 +{
-+	return pin >= MC33978_NUM_SG;
-+}
-+
-+/* Choose register offset for _SG/_SP registers. reg is always the _SP addr. */
-+static inline u8 mc33978_spsg(u8 reg, unsigned int pin)
-+{
-+	return mc33978_is_sp(pin) ? reg : reg + 2;
-+}
-+
-+/* Get the bit index into the corresponding register */
-+static inline unsigned int mc33978_pinshift(unsigned int pin)
-+{
-+	return mc33978_is_sp(pin) ? pin - MC33978_NUM_SG : pin;
-+}
-+
-+#define MC33978_PINMASK(pin)	BIT(mc33978_pinshift(pin))
-+
-+/*
-+ * Wetting current registers: 3 in total, each pin uses a 3-bit field,
-+ * 8 pins per register, except for the last one.
-+ */
-+static inline u8 mc33978_wreg(u8 reg, unsigned int pin)
-+{
-+	return reg + (mc33978_is_sp(pin) ? 0 : 2 + 2 * (pin / 8));
-+}
-+
-+static inline unsigned int mc33978_wshift(unsigned int pin)
-+{
-+	return mc33978_is_sp(pin) ? 3 * (pin - MC33978_NUM_SG) : 3 * (pin % 8);
-+}
-+
-+#define MC33978_WMASK(pin)	(7 << mc33978_wshift(pin))
-+
-+static int mc33978_read(struct mc33978_pinctrl *mpc, u8 reg, u32 *val)
-+{
++	unsigned long type;
++	const struct mfd_cell *cells;
++	struct device *dev = &spi->dev;
++	struct mc33978_ddata *ddata;
++	int num_cells;
 +	int ret;
 +
-+	ret = regmap_read(mpc->regmap, reg, val);
-+	if (ret)
-+		dev_err_ratelimited(mpc->dev, "Regmap read error %d at reg: %02x.\n",
-+				    ret, reg);
-+	return ret;
-+}
-+
-+static int mc33978_update_bits(struct mc33978_pinctrl *mpc, u8 reg, u32 mask,
-+			       u32 val)
-+{
-+	int ret;
-+
-+	ret = regmap_update_bits(mpc->regmap, reg, mask, val);
-+	if (ret)
-+		dev_err_ratelimited(mpc->dev, "Regmap update bits error %d at reg: %02x.\n",
-+				    ret, reg);
-+	return ret;
-+}
-+
-+static const struct pinctrl_ops mc33978_pinctrl_ops = {
-+	.dt_node_to_map = pinconf_generic_dt_node_to_map_pin,
-+	.dt_free_map = pinconf_generic_dt_free_map,
-+};
-+
-+/*
-+ * Output Drive Emulation:
-+ * The MC33978 is an input device and physically lacks output drivers.
-+ * We emulate output drive modes by mapping them to the hardware's wetting
-+ * current topologies:
-+ * - Open-Source : Maps to Switch-to-Ground (Pull-Up) topology.
-+ * - Open-Drain  : Maps to Switch-to-Battery (Pull-Down) topology.
-+ *
-+ * SG pins (0-13) are physically hardwired to Open-Source.
-+ * SP pins (14-21) are configurable via the CONFIG register.
-+ */
-+static int mc33978_get_drive(struct mc33978_pinctrl *mpc, unsigned int pin,
-+			     enum mc33978_drive_mode *mode)
-+{
-+	u32 data;
-+	int ret;
-+
-+	lockdep_assert_held(&mpc->lock);
-+
-+	if (!mc33978_is_sp(pin)) {
-+		*mode = MC33978_OPEN_SOURCE;
-+		return 0;
-+	}
-+
-+	ret = mc33978_read(mpc, MC33978_REG_CONFIG, &data);
-+	if (ret)
-+		return ret;
-+
-+	if (data & MC33978_PINMASK(pin))
-+		*mode = MC33978_OPEN_DRAIN;
-+	else
-+		*mode = MC33978_OPEN_SOURCE;
-+
-+	return 0;
-+}
-+
-+static int mc33978_set_drive(struct mc33978_pinctrl *mpc, unsigned int pin,
-+			     enum mc33978_drive_mode mode)
-+{
-+	u32 mask = MC33978_PINMASK(pin);
-+	int ret;
-+
-+	lockdep_assert_held(&mpc->lock);
-+
-+	if (!mc33978_is_sp(pin)) {
-+		if (mode != MC33978_OPEN_SOURCE)
-+			return -EINVAL;
-+
-+		mpc->cached_drive[pin] = MC33978_OPEN_SOURCE;
-+		return 0;
-+	}
-+
-+	ret = mc33978_update_bits(mpc, MC33978_REG_CONFIG, mask,
-+				  (mode == MC33978_OPEN_DRAIN) ? mask : 0);
-+	if (!ret)
-+		mpc->cached_drive[pin] = mode;
-+
-+	return ret;
-+}
-+
-+/*
-+ * Input Bias (Pull) Configuration:
-+ * The MC33978 physically lacks passive pull-up/down resistors. Instead,
-+ * input bias is achieved using active wetting current sources. We map the
-+ * standard pinctrl bias terms to these hardware topologies:
-+ * - Pull-Up   : Maps to Switch-to-Ground (SG) topology.
-+ * - Pull-Down : Maps to Switch-to-Battery (SB) topology.
-+ * - Tri-state : Disables the wetting current (High-Z).
-+ *
-+ * SG pins (0-13) physically only support Pull-Up.
-+ * SP pins (14-21) are configurable via the CONFIG register.
-+ * The TRI_SP/TRI_SG registers connect or disconnect these currents.
-+ */
-+static int mc33978_get_pull(struct mc33978_pinctrl *mpc, unsigned int pin,
-+			    enum mc33978_bias_state *val)
-+{
-+	u32 data;
-+	int ret;
-+
-+	lockdep_assert_held(&mpc->lock);
-+
-+	ret = mc33978_read(mpc, mc33978_spsg(MC33978_REG_TRI_SP, pin), &data);
-+	if (ret)
-+		return ret;
-+
-+	/* Is the pin tri-stated? */
-+	if (data & MC33978_PINMASK(pin)) {
-+		*val = MC33978_TRISTATE;
-+		return 0;
-+	}
-+
-+	/* Pins 0..13 only support pull-up */
-+	if (!mc33978_is_sp(pin)) {
-+		*val = MC33978_PU;
-+		return 0;
-+	}
-+
-+	/* Check pin pull direction for pins 14..21 */
-+	ret = mc33978_read(mpc, MC33978_REG_CONFIG, &data);
-+	if (ret)
-+		return ret;
-+
-+	if (data & MC33978_PINMASK(pin))
-+		*val = MC33978_PD;
-+	else
-+		*val = MC33978_PU;
-+
-+	return 0;
-+}
-+
-+static int mc33978_set_pull(struct mc33978_pinctrl *mpc, unsigned int pin,
-+			    enum mc33978_bias_state val)
-+{
-+	u32 mask = MC33978_PINMASK(pin);
-+	int ret;
-+
-+	lockdep_assert_held(&mpc->lock);
-+
-+	/* SG pins physically lack pull-down current sources */
-+	if (val == MC33978_PD && !mc33978_is_sp(pin))
-+		return -EINVAL;
-+
-+	/* Configure direction (Exclusively for SP pins) */
-+	if (mc33978_is_sp(pin) && val != MC33978_TRISTATE) {
-+		ret = mc33978_update_bits(mpc, MC33978_REG_CONFIG, mask,
-+					  (val == MC33978_PD) ? mask : 0);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	/* Enable current source or set to tri-state  */
-+	ret = mc33978_update_bits(mpc, mc33978_spsg(MC33978_REG_TRI_SP, pin),
-+				  mask,
-+				   (val == MC33978_TRISTATE) ? mask : 0);
-+	if (!ret)
-+		mpc->cached_bias[pin] = val;
-+
-+	return ret;
-+}
-+
-+static const unsigned int mc33978_wet_mA[] = { 2, 6, 8, 10, 12, 14, 16, 20 };
-+
-+static int mc33978_set_ds(struct mc33978_pinctrl *mpc, unsigned int pin,
-+			  u32 val)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(mc33978_wet_mA); i++) {
-+		if (val == mc33978_wet_mA[i]) {
-+			return mc33978_update_bits(mpc,
-+					mc33978_wreg(MC33978_REG_WET_SP, pin),
-+					MC33978_WMASK(pin),
-+					i << mc33978_wshift(pin));
-+		}
-+	}
-+
-+	return -EINVAL;
-+}
-+
-+static int mc33978_get_ds(struct mc33978_pinctrl *mpc, unsigned int pin,
-+			  u32 *val)
-+{
-+	u32 data;
-+	int ret;
-+
-+	ret = mc33978_read(mpc, mc33978_wreg(MC33978_REG_WET_SP, pin), &data);
-+	if (ret)
-+		return ret;
-+
-+	data &= MC33978_WMASK(pin);
-+	data >>= mc33978_wshift(pin);
-+
-+	if (data >= ARRAY_SIZE(mc33978_wet_mA))
-+		return -EINVAL;
-+
-+	*val = mc33978_wet_mA[data];
-+
-+	return 0;
-+}
-+
-+static int mc33978_pinconf_get(struct pinctrl_dev *pctldev, unsigned int pin,
-+			       unsigned long *config)
-+{
-+	struct mc33978_pinctrl *mpc = pinctrl_dev_get_drvdata(pctldev);
-+	enum pin_config_param param = pinconf_to_config_param(*config);
-+	enum mc33978_bias_state bias;
-+	enum mc33978_drive_mode drive;
-+	u32 arg, data;
-+	int ret;
-+
-+	guard(mutex)(&mpc->lock);
-+
-+	switch (param) {
-+	case PIN_CONFIG_BIAS_PULL_UP:
-+		ret = mc33978_get_pull(mpc, pin, &bias);
-+		if (ret)
-+			return ret;
-+		if (bias != MC33978_PU)
-+			return -EINVAL;
-+		arg = 0;
-+		break;
-+	case PIN_CONFIG_BIAS_PULL_DOWN:
-+		ret = mc33978_get_pull(mpc, pin, &bias);
-+		if (ret)
-+			return ret;
-+		if (bias != MC33978_PD)
-+			return -EINVAL;
-+		arg = 0;
-+		break;
-+	case PIN_CONFIG_DRIVE_OPEN_DRAIN:
-+		ret = mc33978_get_drive(mpc, pin, &drive);
-+		if (ret)
-+			return ret;
-+		if (drive != MC33978_OPEN_DRAIN)
-+			return -EINVAL;
-+		arg = 1;
-+		break;
-+	case PIN_CONFIG_DRIVE_OPEN_SOURCE:
-+		ret = mc33978_get_drive(mpc, pin, &drive);
-+		if (ret)
-+			return ret;
-+		if (drive != MC33978_OPEN_SOURCE)
-+			return -EINVAL;
-+		arg = 1;
-+		break;
-+	case PIN_CONFIG_BIAS_DISABLE:
-+	case PIN_CONFIG_BIAS_HIGH_IMPEDANCE:
-+		ret = mc33978_get_pull(mpc, pin, &bias);
-+		if (ret)
-+			return ret;
-+		if (bias != MC33978_TRISTATE)
-+			return -EINVAL;
-+		arg = 1;
-+		break;
-+	case PIN_CONFIG_DRIVE_STRENGTH:
-+		ret = mc33978_get_ds(mpc, pin, &data);
-+		if (ret)
-+			return ret;
-+		arg = data;
-+		break;
-+	default:
-+		/*
-+		 * Ignore checkpatch warning: the pinctrl core specifically
-+		 * expects -ENOTSUPP to silently skip unsupported generic
-+		 * parameters. Using -EOPNOTSUPP causes debugfs read failures.
-+		 */
-+		return -ENOTSUPP;
-+	}
-+
-+	*config = pinconf_to_config_packed(param, arg);
-+
-+	return 0;
-+}
-+
-+/*
-+ * Hardware constraint regarding PIN_CONFIG_BIAS_PULL_UP/DOWN:
-+ * The MC33978 utilizes active constant current sources (wetting currents)
-+ * rather than passive pull-resistors. Since the equivalent ohmic resistance
-+ * scales dynamically with the fluctuating board voltage (VBATP), computing
-+ * a static ohm value is physically invalid.
-+ * The driver intentionally ignores resistance arguments during configuration
-+ * and continuously reports 0 ohms to the pinctrl framework.
-+ */
-+static int mc33978_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
-+			       unsigned long *configs, unsigned int num_configs)
-+{
-+	struct mc33978_pinctrl *mpc = pinctrl_dev_get_drvdata(pctldev);
-+	enum pin_config_param param;
-+	int ret = 0;
-+	u32 arg;
-+	int i;
-+
-+	guard(mutex)(&mpc->lock);
-+
-+	for (i = 0; i < num_configs; i++) {
-+		param = pinconf_to_config_param(configs[i]);
-+		arg = pinconf_to_config_argument(configs[i]);
-+
-+		/*
-+		 * The hardware physically lacks push-pull output drivers.
-+		 * By explicitly handling OPEN_DRAIN and OPEN_SOURCE here, we
-+		 * signal to gpiolib that we support these modes natively.
-+		 *
-+		 * This prevents gpiolib from falling back to its software
-+		 * emulation, which attempts to achieve High-Z by switching the
-+		 * pin to input mode. Because this driver's .direction_input()
-+		 * explicitly restores the cached bias, gpiolib's emulation
-+		 * would inadvertently turn the wetting current back on instead
-+		 * of achieving a High-Z state.
-+		 */
-+		switch (param) {
-+		case PIN_CONFIG_DRIVE_OPEN_SOURCE:
-+			ret = mc33978_set_drive(mpc, pin, MC33978_OPEN_SOURCE);
-+			break;
-+		case PIN_CONFIG_BIAS_PULL_UP:
-+			ret = mc33978_set_pull(mpc, pin, MC33978_PU);
-+			break;
-+		case PIN_CONFIG_DRIVE_OPEN_DRAIN:
-+			ret = mc33978_set_drive(mpc, pin, MC33978_OPEN_DRAIN);
-+			break;
-+		case PIN_CONFIG_BIAS_PULL_DOWN:
-+			ret = mc33978_set_pull(mpc, pin, MC33978_PD);
-+			break;
-+		/*
-+		 * The MC33978 uses active wetting currents rather than passive
-+		 * pull-resistors. Disabling the bias (pull-up/down) is
-+		 * physically equivalent to putting the pin into a
-+		 * high-impedance state. Both actions are achieved by isolating
-+		 * the pin via the hardware tri-state registers.
-+		 */
-+		case PIN_CONFIG_BIAS_DISABLE:
-+		case PIN_CONFIG_BIAS_HIGH_IMPEDANCE:
-+			ret = mc33978_set_pull(mpc, pin, MC33978_TRISTATE);
-+			break;
-+		case PIN_CONFIG_DRIVE_STRENGTH_UA:
-+			arg /= 1000;
-+			fallthrough;
-+		case PIN_CONFIG_DRIVE_STRENGTH:
-+			ret = mc33978_set_ds(mpc, pin, arg);
-+			break;
-+		default:
-+			/*
-+			 * Required by the pinctrl core to safely fall back or
-+			 * skip unsupported configs. Do not use -EOPNOTSUPP.
-+			 */
-+			return -ENOTSUPP;
-+		}
-+
-+		if (ret) {
-+			dev_err(mpc->dev, "Failed to set config param %04x for pin %u: %d\n",
-+				param, pin, ret);
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct pinconf_ops mc33978_pinconf_ops = {
-+	.pin_config_get = mc33978_pinconf_get,
-+	.pin_config_set = mc33978_pinconf_set,
-+	.is_generic = true,
-+};
-+
-+static int mc33978_direction_input(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct mc33978_pinctrl *mpc = gpiochip_get_data(chip);
-+
-+	guard(mutex)(&mpc->lock);
-+
-+	/*
-+	 * The MC33978 lacks physical output drivers; we emulate outputs by
-+	 * toggling the hardware tri-state registers to connect or disconnect
-+	 * the wetting currents.
-+	 *
-+	 * A valid input on this chip can be either actively wetted (PU/PD)
-+	 * or High-Z (tri-stated). Because our output emulation directly
-+	 * hijacks the tri-state register, switching back to input mode requires
-+	 * us to explicitly restore the original wetting current topology from
-+	 * the cache.
-+	 */
-+	return mc33978_set_pull(mpc, offset, mpc->cached_bias[offset]);
-+}
-+
-+/*
-+ * The hardware evaluates pin voltage against a threshold (default 4.0V)
-+ * and reports an abstract contact status (1 = closed, 0 = open):
-+ *
-+ * SG (Switch-to-Ground) topology (pull-up current source):
-+ * - Voltage > Threshold: Switch Open   (HW reports 0) -> Physical High
-+ * - Voltage < Threshold: Switch Closed (HW reports 1) -> Physical Low
-+ *
-+ * SB (Switch-to-Battery) topology (pull-down current source):
-+ * - Voltage > Threshold: Switch Closed (HW reports 1) -> Physical High
-+ * - Voltage < Threshold: Switch Open   (HW reports 0) -> Physical Low
-+ *
-+ * We translate this contact status back into physical voltage levels by
-+ * inverting the hardware status for all pins operating in SG topology.
-+ */
-+static int mc33978_read_in_state(struct mc33978_pinctrl *mpc,
-+				 unsigned long mask, unsigned long *state)
-+{
-+	u32 status, inv_mask;
-+	u32 config_reg = 0;
-+	int ret;
-+
-+	ret = mc33978_read(mpc, MC33978_REG_READ_IN, &status);
-+	if (ret)
-+		return ret;
-+
-+	/* Read CONFIG register only if the requested mask involves SP pins */
-+	if (mask & MC33978_SP_MASK) {
-+		ret = mc33978_read(mpc, MC33978_REG_CONFIG, &config_reg);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	/*
-+	 * Create an inversion mask for all pins currently operating in
-+	 * Switch-to-Ground (SG) topology. SG pins always have pull-ups.
-+	 * For SP pins, CONFIG bit value 0 = Switch-to-Ground (PU),
-+	 * CONFIG bit value 1 = Switch-to-Battery (PD).
-+	 */
-+	inv_mask = MC33978_SG_MASK |
-+		   (~(config_reg << MC33978_NUM_SG) & MC33978_SP_MASK);
-+
-+	*state = (status ^ inv_mask) & mask;
-+
-+	return 0;
-+}
-+
-+static int mc33978_get(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct mc33978_pinctrl *mpc = gpiochip_get_data(chip);
-+	unsigned long state;
-+	int ret;
-+
-+	guard(mutex)(&mpc->lock);
-+
-+	ret = mc33978_read_in_state(mpc, BIT(offset), &state);
-+	if (ret)
-+		return ret;
-+
-+	return !!(state & BIT(offset));
-+}
-+
-+static int mc33978_get_multiple(struct gpio_chip *chip,
-+				unsigned long *mask, unsigned long *bits)
-+{
-+	struct mc33978_pinctrl *mpc = gpiochip_get_data(chip);
-+	unsigned long state;
-+	int ret;
-+
-+	guard(mutex)(&mpc->lock);
-+
-+	ret = mc33978_read_in_state(mpc, *mask, &state);
-+	if (ret)
-+		return ret;
-+
-+	*bits = (*bits & ~*mask) | state;
-+
-+	return 0;
-+}
-+
-+/*
-+ * Emulate output states by routing or isolating active wetting currents.
-+ * To turn the line ON, we disable the hardware tri-state (write 0).
-+ * To turn the line OFF (High-Z), we enable tri-state (write 1).
-+ *
-+ * For Open-Source (Pull-Up): value=1 turns it ON, value=0 is High-Z.
-+ * For Open-Drain (Pull-Down): value=0 turns it ON, value=1 is High-Z.
-+ * We dynamically read the CONFIG register to determine the topology
-+ * and invert the bits accordingly for Open-Drain pins.
-+ *
-+ * Note: The hardware physically lacks push-pull drivers. Toggling outputs
-+ * via tri-state isolation may cause transient spikes.
-+ */
-+static int mc33978_update_tri_state(struct mc33978_pinctrl *mpc, u32 mask,
-+				    u32 bits)
-+{
-+	u32 sgmask = (mask & MC33978_SG_MASK) >> MC33978_SG_SHIFT;
-+	u32 sgbits = (bits & MC33978_SG_MASK) >> MC33978_SG_SHIFT;
-+	u32 spmask = (mask & MC33978_SP_MASK) >> MC33978_SP_SHIFT;
-+	u32 spbits = (bits & MC33978_SP_MASK) >> MC33978_SP_SHIFT;
-+	u32 config_reg = 0;
-+	int ret = 0;
-+
-+	if (spmask) {
-+		/* Read topology: 1 = PD (Open-Drain), 0 = PU (Open-Source) */
-+		ret = mc33978_read(mpc, MC33978_REG_CONFIG, &config_reg);
-+		if (ret)
-+			return ret;
-+
-+		/*
-+		 * Invert bits for Open-Drain (PD) pins.
-+		 * The Open-Drain API contract expects value=1 to be High-Z.
-+		 */
-+		spbits ^= (config_reg & spmask);
-+
-+		ret = mc33978_update_bits(mpc, MC33978_REG_TRI_SP, spmask,
-+					  ~spbits);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	/* SG pins are always Pull-Up (Open-Source), no inversion needed */
-+	if (sgmask)
-+		ret = mc33978_update_bits(mpc, MC33978_REG_TRI_SG, sgmask,
-+					  ~sgbits);
-+
-+	return ret;
-+}
-+
-+static int mc33978_set(struct gpio_chip *chip, unsigned int offset, int value)
-+{
-+	struct mc33978_pinctrl *mpc = gpiochip_get_data(chip);
-+	u32 mask = BIT(offset);
-+	u32 bits = value ? mask : 0;
-+
-+	guard(mutex)(&mpc->lock);
-+
-+	return mc33978_update_tri_state(mpc, mask, bits);
-+}
-+
-+static int mc33978_set_multiple(struct gpio_chip *chip,
-+				unsigned long *mask, unsigned long *bits)
-+{
-+	struct mc33978_pinctrl *mpc = gpiochip_get_data(chip);
-+
-+	guard(mutex)(&mpc->lock);
-+
-+	return mc33978_update_tri_state(mpc, *mask, *bits);
-+}
-+
-+static int mc33978_direction_output(struct gpio_chip *chip, unsigned int offset,
-+				    int value)
-+{
-+	struct mc33978_pinctrl *mpc = gpiochip_get_data(chip);
-+	u32 mask = BIT(offset);
-+	u32 bits = value ? mask : 0;
-+	int ret;
-+
-+	guard(mutex)(&mpc->lock);
-+
-+	ret = mc33978_set_drive(mpc, offset, mpc->cached_drive[offset]);
-+	if (ret)
-+		return ret;
-+
-+	return mc33978_update_tri_state(mpc, mask, bits);
-+}
-+
-+static int mc33978_gpio_child_to_parent_hwirq(struct gpio_chip *gc,
-+					      unsigned int child,
-+					      unsigned int child_type,
-+					      unsigned int *parent,
-+					      unsigned int *parent_type)
-+{
-+	*parent_type = child_type;
-+	*parent = child;
-+
-+	return 0;
-+}
-+
-+/*
-+ * Defensive wrappers for hierarchical IRQ proxying.
-+ *
-+ * gpiolib's hierarchical allocation exposes a lifecycle gap: the child
-+ * descriptor is registered before irq_domain_alloc_irqs_parent() fully
-+ * instantiates the parent chip.
-+ *
-+ * During consumer probe (e.g., gpiod_to_irq()), irq_create_fwspec_mapping()
-+ * allocates the hierarchy. As part of this, irq_domain_set_info() initializes
-+ * the top-level irq_desc and calls __irq_set_handler(). If the irq_desc
-+ * requires locking, __irq_get_desc_lock() will invoke the child's
-+ * .irq_bus_lock before the parent allocation is complete.
-+ *
-+ * Upstream generic helpers (e.g., irq_chip_mask_parent) blindly dereference
-+ * data->parent_data->chip, causing an immediate NULL pointer panic during
-+ * this gap. These wrappers check for a valid parent chip to safely drop
-+ * premature locking or masking events while the legacy subsystem hierarchy
-+ * is still assembling itself.
-+ */
-+static void mc33978_gpio_irq_mask(struct irq_data *data)
-+{
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
-+	struct irq_data *parent = data->parent_data;
-+
-+	if (parent && parent->chip && parent->chip->irq_mask)
-+		parent->chip->irq_mask(parent);
-+	gpiochip_disable_irq(gc, data->hwirq);
-+}
-+
-+static void mc33978_gpio_irq_unmask(struct irq_data *data)
-+{
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
-+	struct irq_data *parent = data->parent_data;
-+
-+	gpiochip_enable_irq(gc, data->hwirq);
-+	if (parent && parent->chip && parent->chip->irq_unmask)
-+		parent->chip->irq_unmask(parent);
-+}
-+
-+static int mc33978_gpio_irq_set_type(struct irq_data *data, unsigned int type)
-+{
-+	struct irq_data *parent = data->parent_data;
-+
-+	if (parent && parent->chip && parent->chip->irq_set_type)
-+		return parent->chip->irq_set_type(parent, type);
-+
-+	return -EINVAL;
-+}
-+
-+static void mc33978_gpio_irq_bus_lock(struct irq_data *data)
-+{
-+	struct irq_data *parent = data->parent_data;
-+
-+	if (parent && parent->chip && parent->chip->irq_bus_lock)
-+		parent->chip->irq_bus_lock(parent);
-+}
-+
-+static void mc33978_gpio_irq_bus_sync_unlock(struct irq_data *data)
-+{
-+	struct irq_data *parent = data->parent_data;
-+
-+	if (parent && parent->chip && parent->chip->irq_bus_sync_unlock)
-+		parent->chip->irq_bus_sync_unlock(parent);
-+}
-+
-+static const struct irq_chip mc33978_gpio_irqchip = {
-+	.name = "mc33978-gpio",
-+	.irq_mask = mc33978_gpio_irq_mask,
-+	.irq_unmask = mc33978_gpio_irq_unmask,
-+	.irq_set_type = mc33978_gpio_irq_set_type,
-+	.irq_bus_lock = mc33978_gpio_irq_bus_lock,
-+	.irq_bus_sync_unlock = mc33978_gpio_irq_bus_sync_unlock,
-+	.irq_set_wake = irq_chip_set_wake_parent,
-+	.flags = IRQCHIP_IMMUTABLE,
-+	GPIOCHIP_IRQ_RESOURCE_HELPERS,
-+};
-+
-+static void mc33978_init_gpio_chip(struct mc33978_pinctrl *mpc,
-+				   struct device *dev)
-+{
-+	struct gpio_irq_chip *girq;
-+
-+	mpc->chip.label = dev_name(dev);
-+	mpc->chip.direction_input = mc33978_direction_input;
-+	mpc->chip.get = mc33978_get;
-+	mpc->chip.get_multiple = mc33978_get_multiple;
-+	mpc->chip.direction_output = mc33978_direction_output;
-+	mpc->chip.set = mc33978_set;
-+	mpc->chip.set_multiple = mc33978_set_multiple;
-+	mpc->chip.set_config = gpiochip_generic_config;
-+
-+	mpc->chip.base = -1;
-+	mpc->chip.ngpio = MC33978_NGPIO;
-+	mpc->chip.can_sleep = true;
-+	mpc->chip.parent = dev;
-+	mpc->chip.owner = THIS_MODULE;
-+
-+	girq = &mpc->chip.irq;
-+	gpio_irq_chip_set_chip(girq, &mc33978_gpio_irqchip);
-+	/*
-+	 * Share parent's DT fwnode. This does NOT cause IRQ domain shadowing
-+	 * because the parent MFD domain uses DOMAIN_BUS_NEXUS while this GPIO
-+	 * domain will use DOMAIN_BUS_WIRED (set after gpiochip registration).
-+	 * Domain lookups match on both fwnode AND bus_token, ensuring proper
-+	 * domain isolation. See crystalcove GPIO driver for similar pattern.
-+	 */
-+	girq->fwnode = dev_fwnode(dev);
-+	girq->parent_domain = mpc->domain;
-+	girq->child_to_parent_hwirq = mc33978_gpio_child_to_parent_hwirq;
-+	girq->handler = handle_simple_irq;
-+	girq->default_type = IRQ_TYPE_NONE;
-+}
-+
-+static void mc33978_init_pinctrl_desc(struct mc33978_pinctrl *mpc,
-+				      struct device *dev)
-+{
-+	mpc->pinctrl_desc.name = dev_name(dev);
-+
-+	mpc->pinctrl_desc.pctlops = &mc33978_pinctrl_ops;
-+	mpc->pinctrl_desc.confops = &mc33978_pinconf_ops;
-+	mpc->pinctrl_desc.pins = mc33978_pins;
-+	mpc->pinctrl_desc.npins = MC33978_NGPIO;
-+	mpc->pinctrl_desc.owner = THIS_MODULE;
-+}
-+
-+static int mc33978_init_cached_bias(struct mc33978_pinctrl *mpc)
-+{
-+	int i;
-+
-+	guard(mutex)(&mpc->lock);
-+
-+	for (i = 0; i < MC33978_NGPIO; i++) {
-+		enum mc33978_bias_state val;
-+		int ret;
-+
-+		ret = mc33978_get_pull(mpc, i, &val);
-+		if (ret)
-+			return ret;
-+
-+		mpc->cached_bias[i] = val;
-+	}
-+
-+	return 0;
-+}
-+
-+static int mc33978_init_cached_drive(struct mc33978_pinctrl *mpc)
-+{
-+	int i;
-+
-+	guard(mutex)(&mpc->lock);
-+
-+	for (i = 0; i < MC33978_NGPIO; i++) {
-+		enum mc33978_drive_mode mode;
-+		int ret;
-+
-+		ret = mc33978_get_drive(mpc, i, &mode);
-+		if (ret)
-+			return ret;
-+
-+		mpc->cached_drive[i] = mode;
-+	}
-+
-+	return 0;
-+}
-+
-+static int mc33978_pinctrl_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct fwnode_handle *fwnode;
-+	struct mc33978_pinctrl *mpc;
-+	int ret;
-+
-+	fwnode = dev_fwnode(dev->parent);
-+	if (!fwnode)
-+		return dev_err_probe(dev, -ENODEV,
-+				     "Missing parent firmware node\n");
-+
-+	device_set_node(dev, fwnode);
-+
-+	mpc = devm_kzalloc(dev, sizeof(*mpc), GFP_KERNEL);
-+	if (!mpc)
++	ddata = devm_kzalloc(dev, sizeof(*ddata), GFP_KERNEL);
++	if (!ddata)
 +		return -ENOMEM;
 +
-+	mpc->dev = dev;
++	spi_set_drvdata(spi, ddata);
 +
-+	mpc->regmap = dev_get_regmap(dev->parent, NULL);
-+	if (!mpc->regmap)
-+		return dev_err_probe(dev, -ENODEV, "Failed to get parent regmap\n");
-+
-+	/* Find parent MFD IRQ domain (uses DOMAIN_BUS_NEXUS token) */
-+	mpc->domain = irq_find_matching_fwnode(fwnode, DOMAIN_BUS_NEXUS);
-+	if (!mpc->domain)
-+		return dev_err_probe(dev, -ENODEV, "Failed to find parent IRQ domain\n");
-+
-+	ret = devm_mutex_init(dev, &mpc->lock);
++	/* Power up chip: VDDQ first per datasheet sequencing requirements */
++	ret = devm_regulator_get_enable(dev, "vddq");
 +	if (ret)
-+		return ret;
++		return dev_err_probe(dev, ret, "failed to enable VDDQ supply\n");
 +
-+	ret = mc33978_init_cached_bias(mpc);
++	ret = devm_regulator_get_enable(dev, "vbatp");
 +	if (ret)
-+		return ret;
-+
-+	ret = mc33978_init_cached_drive(mpc);
-+	if (ret)
-+		return ret;
-+
-+	mc33978_init_gpio_chip(mpc, dev);
-+	mc33978_init_pinctrl_desc(mpc, dev);
-+
-+	mpc->pctldev = devm_pinctrl_register(dev, &mpc->pinctrl_desc, mpc);
-+	if (IS_ERR(mpc->pctldev))
-+		return dev_err_probe(dev, PTR_ERR(mpc->pctldev),
-+				     "can't register pinctrl\n");
-+
-+	ret = devm_gpiochip_add_data(dev, &mpc->chip, mpc);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "can't add GPIO chip\n");
++		return dev_err_probe(dev, ret, "failed to enable VBATP supply\n");
 +
 +	/*
-+	 * Distinguish GPIO IRQ domain from parent MFD domain sharing the same
-+	 * fwnode. Matches the pattern used by other GPIO drivers (e.g.,
-+	 * crystalcove). DOMAIN_BUS_WIRED indicates this domain represents
-+	 * actual GPIO pin interrupts (wired lines).
++	 * Core module creates regmap/IRQ domain/event handling. Separated
++	 * because custom SPI protocol needs complex regmap_bus implementation.
++	 *
++	 * API contract: mc33978_core_init() initializes domain_out to NULL on
++	 * entry. On success (return 0), domain_out is guaranteed to point to a
++	 * valid IRQ domain. On error, domain_out remains NULL. This allows
++	 * safe dereference of ddata->domain below without NULL check after
++	 * verifying ret == 0.
 +	 */
-+	irq_domain_update_bus_token(mpc->chip.irq.domain, DOMAIN_BUS_WIRED);
-+
-+	ret = gpiochip_add_pin_range(&mpc->chip, dev_name(dev), 0, 0,
-+				     MC33978_NGPIO);
++	ret = mc33978_core_init(dev, spi, &ddata->domain);
 +	if (ret)
-+		return dev_err_probe(dev, ret, "failed to add pin range\n");
++		return ret;
 +
-+	platform_set_drvdata(pdev, mpc);
++	/*
++	 * Validate IRQ domain size before passing to child devices.
++	 * hwirq_max is inclusive, we need MC33978_NUM_IRQS entries (0..22).
++	 */
++	if (ddata->domain->hwirq_max < MC33978_NUM_IRQS - 1)
++		return dev_err_probe(dev, -EINVAL,
++				     "IRQ domain has insufficient hwirqs (need %d)\n",
++				     MC33978_NUM_IRQS);
++
++	/*
++	 * Device type stored as pointer value in OF/SPI ID tables.
++	 * Explicit zero-check: spi_get_device_match_data() won't return NULL
++	 * since probe matched, but .data could be NULL if table misconfigured.
++	 */
++	type = (unsigned long)spi_get_device_match_data(spi);
++	if (!type)
++		return dev_err_probe(dev, -EINVAL, "missing device match data\n");
++
++	switch (type) {
++	case MC33978:
++		cells = mc33978_cells;
++		num_cells = ARRAY_SIZE(mc33978_cells);
++		break;
++	case MC34978:
++		cells = mc34978_cells;
++		num_cells = ARRAY_SIZE(mc34978_cells);
++		break;
++	default:
++		return dev_err_probe(dev, -ENODEV, "unknown device type\n");
++	}
++
++	/*
++	 * Child devices inherit IRQ domain for platform_get_irq(). devm cleanup
++	 * order is critical (LIFO - Last In, First Out):
++	 *
++	 * Teardown sequence:
++	 * 1. THIS: devm_mfd_add_devices() cleanup
++	 *    - Child devices removed, child devm_request_irq() freed
++	 * 2. Core: devm_request_threaded_irq() cleanup in mc33978_core_init()
++	 *    - Parent IRQ handler freed, no new events triggered
++	 * 3. Core: devm_add_action(mc33978_teardown) cleanup
++	 *    - event_work canceled via cancel_work_sync()
++	 * 4. Core: devm_regmap_init() cleanup
++	 *    - Regmap destroyed (safe: work stopped, IRQ freed)
++	 * 5. Core: devm_add_action(mc33978_irq_domain_remove) in mc33978_irq_init()
++	 *    - IRQ domain removed (safe: children gone, work stopped)
++	 *
++	 * Step 3 is critical: event_work accesses both regmap and IRQ domain.
++	 * cancel_work_sync() in mc33978_teardown() ensures the worker completes
++	 * before steps 4-5 destroy the resources it uses.
++	 *
++	 * Core module manually calls irq_dispose_mapping() for all hwirqs before
++	 * irq_domain_remove() because free_irq() doesn't dispose mappings, and
++	 * irq_domain_remove() expects an empty radix tree.
++	 */
++	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO,
++				   cells, num_cells,
++				   NULL, 0, ddata->domain);
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to add MFD child devices\n");
 +
 +	return 0;
 +}
 +
-+static const struct platform_device_id mc33978_pinctrl_id[] = {
-+	{ .name = "mc33978-pinctrl" },
-+	{ .name = "mc34978-pinctrl" },
++static const struct of_device_id mc33978_mfd_of_match[] = {
++	{ .compatible = "nxp,mc33978", .data = (void *)MC33978 },
++	{ .compatible = "nxp,mc34978", .data = (void *)MC34978 },
 +	{ }
 +};
-+MODULE_DEVICE_TABLE(platform, mc33978_pinctrl_id);
++MODULE_DEVICE_TABLE(of, mc33978_mfd_of_match);
 +
-+static struct platform_driver mc33978_pinctrl_driver = {
++static const struct spi_device_id mc33978_mfd_spi_id[] = {
++	{ .name = "mc33978", .driver_data = MC33978 },
++	{ .name = "mc34978", .driver_data = MC34978 },
++	{ }
++};
++MODULE_DEVICE_TABLE(spi, mc33978_mfd_spi_id);
++
++static struct spi_driver mc33978_mfd_driver = {
 +	.driver = {
-+		.name = "mc33978-pinctrl",
++		.name = "mc33978",
++		.of_match_table = mc33978_mfd_of_match,
 +		/*
-+		 * Suppress bind/unbind via sysfs. The pinctrl subsystem has a
-+		 * fundamental use-after-free bug: pinctrl_unregister() frees
-+		 * pctldev immediately, but consumers may still have pinctrl
-+		 * handles with maps referencing the freed pctldev. See the TODO
-+		 * comment in pinctrl_unregister() in drivers/pinctrl/core.c.
-+		 *
-+		 * Until this is fixed in the pinctrl core, unbinding is unsafe
-+		 * and must be prevented. This driver can only be unloaded via
-+		 * module removal (if built as a module).
++		 * Suppress bind/unbind via sysfs. The pinctrl child driver has
++		 * suppress_bind_attrs=true due to a pinctrl subsystem bug, which
++		 * means this MFD parent cannot be unbound either (device links
++		 * require all children to unbind first).
 +		 */
 +		.suppress_bind_attrs = true,
 +	},
-+	.probe = mc33978_pinctrl_probe,
-+	.id_table = mc33978_pinctrl_id,
++	.probe = mc33978_mfd_probe,
++	.id_table = mc33978_mfd_spi_id,
 +};
-+module_platform_driver(mc33978_pinctrl_driver);
++module_spi_driver(mc33978_mfd_driver);
 +
 +MODULE_AUTHOR("David Jander <david@protonic.nl>");
-+MODULE_DESCRIPTION("NXP MC33978/MC34978 pinctrl driver");
++MODULE_AUTHOR("Oleksij Rempel <o.rempel@pengutronix.de>");
++MODULE_DESCRIPTION("NXP MC33978/MC34978 MFD driver");
 +MODULE_LICENSE("GPL");
++MODULE_SOFTDEP("pre: mc33978-core");
+diff --git a/drivers/platform/Kconfig b/drivers/platform/Kconfig
+index 312788f249c9..45e66de36678 100644
+--- a/drivers/platform/Kconfig
++++ b/drivers/platform/Kconfig
+@@ -11,6 +11,8 @@ source "drivers/platform/cznic/Kconfig"
+ 
+ source "drivers/platform/mellanox/Kconfig"
+ 
++source "drivers/platform/misc/Kconfig"
++
+ source "drivers/platform/olpc/Kconfig"
+ 
+ source "drivers/platform/surface/Kconfig"
+diff --git a/drivers/platform/Makefile b/drivers/platform/Makefile
+index fa322e7f8716..124d325d9a2d 100644
+--- a/drivers/platform/Makefile
++++ b/drivers/platform/Makefile
+@@ -6,6 +6,7 @@
+ obj-$(CONFIG_X86)		+= x86/
+ obj-$(CONFIG_LOONGARCH)		+= loongarch/
+ obj-$(CONFIG_MELLANOX_PLATFORM)	+= mellanox/
++obj-$(CONFIG_MC33978_CORE)	+= misc/
+ obj-$(CONFIG_MIPS)		+= mips/
+ obj-$(CONFIG_OLPC_EC)		+= olpc/
+ obj-$(CONFIG_GOLDFISH)		+= goldfish/
+diff --git a/drivers/platform/misc/Kconfig b/drivers/platform/misc/Kconfig
+new file mode 100644
+index 000000000000..e5730bfd31e8
+--- /dev/null
++++ b/drivers/platform/misc/Kconfig
+@@ -0,0 +1,10 @@
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# Platform miscellaneous drivers configuration
++#
++
++config MC33978_CORE
++	tristate
++	depends on SPI
++	select IRQ_DOMAIN_HIERARCHY
++	select REGMAP
+diff --git a/drivers/platform/misc/Makefile b/drivers/platform/misc/Makefile
+new file mode 100644
+index 000000000000..4aa1351a46ad
+--- /dev/null
++++ b/drivers/platform/misc/Makefile
+@@ -0,0 +1,6 @@
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# Makefile for miscellaneous platform-specific drivers
++#
++
++obj-$(CONFIG_MC33978_CORE)	+= mc33978-core.o
+diff --git a/drivers/platform/misc/mc33978-core.c b/drivers/platform/misc/mc33978-core.c
+new file mode 100644
+index 000000000000..287b524aed98
+--- /dev/null
++++ b/drivers/platform/misc/mc33978-core.c
+@@ -0,0 +1,1106 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2024 David Jander <david@protonic.nl>, Protonic Holland
++ * Copyright (C) 2026 Oleksij Rempel <kernel@pengutronix.de>, Pengutronix
++ *
++ * MC33978/MC34978 - Core functionality module
++ *
++ * This module implements the complex functionality:
++ * - Custom regmap bus (pipelined SPI protocol)
++ * - IRQ chip + IRQ domain (23 virtual IRQs)
++ * - Event processing (pin changes + fault detection)
++ * - Status harvesting from SPI responses
++ *
++ * The MFD driver (mc33978.c) calls mc33978_core_init() to initialize
++ * this functionality, keeping the MFD driver simple for review.
++ *
++ * Custom SPI Regmap & Event Harvesting:
++ * The device uses a non-standard pipelined SPI protocol where the MISO
++ * response logically lags the MOSI command by one frame. Furthermore, the
++ * hardware embeds volatile global status bits (INT_flg, FAULT_STAT) into the
++ * high byte of almost every SPI response (with specific exceptions handled by
++ * the decoder). This core implements a custom regmap_bus to handle the
++ * 2-frame dummy fetches and transparently "harvests" these status bits in
++ * the background to schedule event processing.
++ *
++ * Interrupt Quirks & Limitations (MC33978 Rev. 10, §9.10.27):
++ * - Clear-on-Read INT_flg: The INT_B pin is cleared 1.0ms after CS_B falling
++ * edge. Any SPI message that returns INT_flg will clear this flag. The
++ * INT_flg bit is set on any interrupt event (pin change, fault). Harvesting
++ * INT_flg from all SPI traffic is the ONLY way to know this device triggered
++ * an interrupt (crucial for shared IRQ lines where another driver's regmap
++ * access would silently clear the flag).
++ * - FAULT_STAT Latching (§9.10.27): FAULT_STAT is a sticky summary bit that
++ * latches HIGH when any fault occurs and remains HIGH in all subsequent SPI
++ * responses until the Fault register (0x42) is read. Reading Fault register
++ * clears the latch; hardware immediately re-latches if fault condition still
++ * present. INT_flg clears on any SPI read regardless of persistence. This
++ * allows transient detection: FAULT_STAT can appear in one SPI frame (latched
++ * evidence) but be absent in the next (condition cleared before register read),
++ * proving a transient fault occurred.
++ * - Stateless Pin Edge Detection: Hardware lacks per-pin interrupt status
++ * registers. READ_IN register (§9.10.27) returns instantaneous switch state
++ * (Logic[1]=closed, Logic[0]=open). The driver XORs current state against
++ * cached state to derive which pins changed.
++ * - Missed Short Pulses: Pin interrupts are state-sampled, not edge-latched.
++ * Physical pulses shorter than SPI read latency (~1-2ms) will be missed if
++ * the pin reverts before READ_IN sampling. Inherent hardware limitation.
++ * - Edge-Only Pin Interrupts: Hardware asserts INT_B only on state changes,
++ * never continuously for sustained levels. Driver emulates edge interrupts
++ * (RISING/FALLING) and rejects LEVEL configurations to match hardware.
++ */
++
++#include <linux/array_size.h>
++#include <linux/atomic.h>
++#include <linux/bitfield.h>
++#include <linux/bits.h>
++#include <linux/cache.h>
++#include <linux/cleanup.h>
++#include <linux/device.h>
++#include <linux/interrupt.h>
++#include <linux/irq.h>
++#include <linux/irqdomain.h>
++#include <linux/module.h>
++#include <linux/property.h>
++#include <linux/regmap.h>
++#include <linux/spi/spi.h>
++#include <linux/string.h>
++
++#include <linux/mfd/mc33978.h>
++
++/* Device identification signature returned by CHECK register */
++#define MC33978_CHECK_SIGNATURE		0x123456
++
++/*
++ * Pipelined two-frame SPI transfer:
++ * [REQ]  - Transmits command/write-data, receives dummy/previous response
++ * [PIPE] - Transmits dummy CHECK, receives actual response to current command
++ */
++enum mc33978_frame_index {
++	MC33978_FRAME_REQ = 0,
++	MC33978_FRAME_PIPE,
++	MC33978_FRAME_COUNT
++};
++
++/* SPI frame byte offsets (transmitted MSB first) */
++enum mc33978_frame_offset {
++	MC33978_FRAME_CMD = 0,
++	MC33978_FRAME_DATA_HI,
++	MC33978_FRAME_DATA_MID,
++	MC33978_FRAME_DATA_LO
++};
++
++#define MC33978_FRAME_LEN		4
++
++/* Regmap internal value buffer offsets */
++enum mc33978_payload_offset {
++	MC33978_PAYLOAD_HI = 0,
++	MC33978_PAYLOAD_MID,
++	MC33978_PAYLOAD_LO
++};
++
++#define MC33978_PAYLOAD_LEN		3
++
++/*
++ * SPI Command Byte (FRAME_CMD).
++ * Maps to frame bit [24] in the datasheet.
++ */
++#define MC33978_CMD_BYTE_WRITE		BIT(0)
++
++/* High Payload Byte Masks (FRAME_DATA_HI / PAYLOAD_HI). */
++/* Maps to frame bit [23] */
++#define MC33978_HI_BYTE_STAT_FAULT     BIT(7)
++/* Maps to frame bit [22] */
++#define MC33978_HI_BYTE_STAT_INT       BIT(6)
++
++#define MC33978_HI_BYTE_STATUS_MASK    (MC33978_HI_BYTE_STAT_FAULT | \
++					MC33978_HI_BYTE_STAT_INT)
++
++/* Synthetic wakeup bit for harvested flags */
++#define MC33978_HARVEST_WAKE_BIT	BIT(8)
++
++/* Maps to frame bits [21:16] */
++#define MC33978_HI_BYTE_DATA_MASK	GENMASK(5, 0)
++
++#define MC33978_CACHE_SG_PIN_MASK	GENMASK(13, 0)
++#define MC33978_CACHE_SP_PIN_MASK	GENMASK(21, 14)
++
++#define MC33978_SG_PIN_MASK		GENMASK(13, 0)
++#define MC33978_SP_PIN_MASK		GENMASK(7, 0)
++
++enum mc33978_device_type {
++	MC33978,
++	MC34978,
++};
++
++struct mc33978_core_data {
++	struct device *dev;
++	struct spi_device *spi;
++	struct regmap *map;
++	struct regulator *vddq;
++	struct regulator *vbatp;
++	struct irq_domain *domain;
++
++	/* Pre-built SPI messages (immutable after init) */
++	struct spi_message msg_read;
++	struct spi_message msg_write;
++	struct spi_transfer xfer_read[MC33978_FRAME_COUNT];
++	struct spi_transfer xfer_write;
++
++	/* Protected by event_lock */
++	struct mutex event_lock;
++	/* Previous pin state for edge detection */
++	u32 cached_pin_state;
++
++	/*
++	 * IRQ subsystem locking:
++	 * - irq_lock: Mutex for sleeping operations (regmap/SPI access)
++	 * - irq_state_lock: Raw spinlock for atomic state access
++	 */
++	struct mutex irq_lock;
++	raw_spinlock_t irq_state_lock;
++	/* IRQ mask for 23 IRQs: bits 0-21 for pins, bit 22 for fault */
++	u32 cached_pin_mask;
++	/* Rising edge IRQ enable mask (23 IRQs) */
++	u32 irq_rise;
++	/* Falling edge IRQ enable mask (23 IRQs) */
++	u32 irq_fall;
++
++	/* Protected by state_lock */
++	spinlock_t state_lock;
++	/* Prevents work scheduling during teardown */
++	bool tearing_down;
++	/* Prevents work scheduling before IRQ handler ready */
++	bool irq_ready;
++	/* Latest physical fault state on bus */
++	bool bus_fault_active;
++	/* Cached fault state from previous event */
++	bool cached_fault_active;
++
++	/* Atomic operations (no lock needed) */
++	/* Status bits from SPI responses */
++	atomic_t harvested_flags;
++
++	/*
++	 * Work scheduling protected by state_lock.
++	 * Work execution serialized by workqueue subsystem.
++	 */
++	struct work_struct event_work;
++
++	/*
++	 * DMA buffers protected by SPI subsystem + regmap serialization.
++	 * Modified before spi_sync(), read after it returns.
++	 * Cache-line aligned to prevent DMA corruption from adjacent fields.
++	 */
++	u8 tx_frame[MC33978_FRAME_COUNT][MC33978_FRAME_LEN] ____cacheline_aligned;
++	u8 rx_frame[MC33978_FRAME_COUNT][MC33978_FRAME_LEN] ____cacheline_aligned;
++};
++
++static void mc33978_irq_mask(struct irq_data *data)
++{
++	struct mc33978_core_data *cdata = irq_data_get_irq_chip_data(data);
++	irq_hw_number_t hwirq = irqd_to_hwirq(data);
++
++	if (hwirq < MC33978_NUM_IRQS) {
++		scoped_guard(raw_spinlock_irqsave, &cdata->irq_state_lock)
++			cdata->cached_pin_mask &= ~BIT(hwirq);
++	}
++}
++
++static void mc33978_irq_unmask(struct irq_data *data)
++{
++	struct mc33978_core_data *cdata = irq_data_get_irq_chip_data(data);
++	irq_hw_number_t hwirq = irqd_to_hwirq(data);
++
++	if (hwirq < MC33978_NUM_IRQS) {
++		scoped_guard(raw_spinlock_irqsave, &cdata->irq_state_lock)
++			cdata->cached_pin_mask |= BIT(hwirq);
++	}
++}
++
++static void mc33978_irq_bus_lock(struct irq_data *data)
++{
++	struct mc33978_core_data *cdata = irq_data_get_irq_chip_data(data);
++
++	mutex_lock(&cdata->irq_lock);
++}
++
++/* Sync cached IRQ mask to hardware IE_SG/IE_SP registers, then unlock */
++static void mc33978_irq_bus_sync_unlock(struct irq_data *data)
++{
++	struct mc33978_core_data *cdata = irq_data_get_irq_chip_data(data);
++	u32 sg_mask, sp_mask, cached_mask;
++	int ret;
++
++	scoped_guard(raw_spinlock_irqsave, &cdata->irq_state_lock)
++		cached_mask = cdata->cached_pin_mask;
++
++	/*
++	 * Split the cached 22-bit pin mask into hardware register format:
++	 * - SG pins: bits [13:0] (14 pins, mask 0x3FFF)
++	 * - SP pins: bits [21:14] (8 pins, mask 0xFF)
++	 */
++	sg_mask = FIELD_GET(MC33978_CACHE_SG_PIN_MASK, cached_mask);
++	sp_mask = FIELD_GET(MC33978_CACHE_SP_PIN_MASK, cached_mask);
++
++	ret = regmap_update_bits(cdata->map, MC33978_REG_IE_SG,
++				 MC33978_SG_PIN_MASK, sg_mask);
++	if (ret)
++		dev_err(&cdata->spi->dev, "failed to sync SG IRQ mask: %d\n", ret);
++
++	ret = regmap_update_bits(cdata->map, MC33978_REG_IE_SP,
++				 MC33978_SP_PIN_MASK, sp_mask);
++	if (ret)
++		dev_err(&cdata->spi->dev, "failed to sync SP IRQ mask: %d\n", ret);
++
++	mutex_unlock(&cdata->irq_lock);
++}
++
++static int mc33978_irq_set_type(struct irq_data *data, unsigned int type)
++{
++	struct mc33978_core_data *cdata = irq_data_get_irq_chip_data(data);
++	irq_hw_number_t hwirq = irqd_to_hwirq(data);
++	u32 mask;
++
++	if (hwirq >= MC33978_NUM_IRQS)
++		return -EINVAL;
++
++	/*
++	 * Safe to use BIT(hwirq) with u32: we support 23 IRQs (0-22),
++	 * validated by check above. Using u32 for consistency with
++	 * irq_rise/irq_fall/cached_pin_mask fields.
++	 */
++	mask = BIT(hwirq);
++
++	if (type == IRQ_TYPE_NONE)
++		return -EINVAL;
++
++	if (type & (IRQ_TYPE_LEVEL_HIGH | IRQ_TYPE_LEVEL_LOW))
++		return -EINVAL;
++
++	scoped_guard(raw_spinlock_irqsave, &cdata->irq_state_lock) {
++		if (type & IRQ_TYPE_EDGE_RISING)
++			cdata->irq_rise |= mask;
++		else
++			cdata->irq_rise &= ~mask;
++
++		if (type & IRQ_TYPE_EDGE_FALLING)
++			cdata->irq_fall |= mask;
++		else
++			cdata->irq_fall &= ~mask;
++	}
++
++	return 0;
++}
++
++static int mc33978_irq_set_wake(struct irq_data *data, unsigned int on)
++{
++	struct mc33978_core_data *cdata = irq_data_get_irq_chip_data(data);
++
++	return irq_set_irq_wake(cdata->spi->irq, on);
++}
++
++static struct irq_chip mc33978_irq_chip = {
++	.name			= "mc33978",
++	.irq_mask		= mc33978_irq_mask,
++	.irq_unmask		= mc33978_irq_unmask,
++	.irq_bus_lock		= mc33978_irq_bus_lock,
++	.irq_bus_sync_unlock	= mc33978_irq_bus_sync_unlock,
++	.irq_set_type		= mc33978_irq_set_type,
++	.irq_set_wake		= mc33978_irq_set_wake,
++};
++
++static void mc33978_irq_setup(struct irq_domain *domain, unsigned int virq,
++			      irq_hw_number_t hwirq)
++{
++	struct mc33978_core_data *cdata = domain->host_data;
++
++	irq_domain_set_info(domain, virq, hwirq, &mc33978_irq_chip, cdata,
++			    handle_simple_irq, NULL, NULL);
++	irq_set_nested_thread(virq, 1);
++	irq_clear_status_flags(virq, IRQ_NOREQUEST | IRQ_NOPROBE);
++}
++
++static int mc33978_irq_map(struct irq_domain *d, unsigned int virq,
++			   irq_hw_number_t hw)
++{
++	mc33978_irq_setup(d, virq, hw);
++	return 0;
++}
++
++static int mc33978_irq_domain_alloc(struct irq_domain *domain,
++				    unsigned int virq,
++				    unsigned int nr_irqs, void *arg)
++{
++	struct irq_fwspec *fwspec = arg;
++	irq_hw_number_t hwirq;
++	int i;
++
++	if (fwspec->param_count < 1)
++		return -EINVAL;
++
++	hwirq = fwspec->param[0];
++
++	if (hwirq >= MC33978_NUM_IRQS ||
++	    nr_irqs > MC33978_NUM_IRQS - hwirq)
++		return -EINVAL;
++
++	for (i = 0; i < nr_irqs; i++)
++		mc33978_irq_setup(domain, virq + i, hwirq + i);
++
++	return 0;
++}
++
++static void mc33978_irq_domain_free(struct irq_domain *domain,
++				    unsigned int virq,
++				    unsigned int nr_irqs)
++{
++	int i;
++
++	for (i = 0; i < nr_irqs; i++)
++		irq_domain_reset_irq_data(irq_domain_get_irq_data(domain,
++								  virq + i));
++}
++
++/*
++ * Dual-mode IRQ domain: supports both direct MFD child (hwmon via .map)
++ * and hierarchical child (pinctrl GPIO IRQ chip via .alloc). The .xlate
++ * translates DT 2-cell format (hwirq 0-22, type flags).
++ * IRQ_DOMAIN_FLAG_HIERARCHY enables the pinctrl hierarchical chain.
++ */
++static const struct irq_domain_ops mc33978_irq_domain_ops = {
++	.map	= mc33978_irq_map,
++	.alloc	= mc33978_irq_domain_alloc,
++	.free	= mc33978_irq_domain_free,
++	.xlate	= irq_domain_xlate_twocell,
++};
++
++static void mc33978_irq_domain_remove(void *data)
++{
++	struct mc33978_core_data *cdata = data;
++	struct irq_domain *domain = cdata->domain;
++	int hwirq;
++
++	/*
++	 * Must manually dispose mappings before irq_domain_remove().
++	 * Child platform_get_irq() creates mappings via irq_create_of_mapping().
++	 * devm_request_irq() only calls free_irq(), not irq_dispose_mapping().
++	 * irq_domain_remove() expects empty radix tree (has WARN_ON check).
++	 */
++	for (hwirq = 0; hwirq < MC33978_NUM_IRQS; hwirq++) {
++		unsigned int virq;
++
++		virq = irq_find_mapping(domain, hwirq);
++		if (virq)
++			irq_dispose_mapping(virq);
++	}
++
++	irq_domain_remove(domain);
++}
++
++static void mc33978_handle_pin_changes(struct mc33978_core_data *cdata,
++				       unsigned int pin_state)
++{
++	unsigned long fired_pins = 0;
++	u32 changed_pins;
++	u32 rise, fall, pin_mask;
++	int i;
++
++	changed_pins = pin_state ^ cdata->cached_pin_state;
++	if (!changed_pins)
++		return;
++
++	cdata->cached_pin_state = pin_state;
++
++	scoped_guard(raw_spinlock_irqsave, &cdata->irq_state_lock) {
++		pin_mask = cdata->cached_pin_mask;
++		rise = cdata->irq_rise;
++		fall = cdata->irq_fall;
++	}
++
++	changed_pins &= pin_mask;
++
++	if (!changed_pins)
++		return;
++
++	fired_pins |= (changed_pins & pin_state) & rise;
++	fired_pins |= (changed_pins & ~pin_state) & fall;
++
++	for_each_set_bit(i, &fired_pins, MC33978_NUM_PINS) {
++		int virq = irq_find_mapping(cdata->domain, i);
++
++		if (virq)
++			handle_nested_irq(virq);
++	}
++}
++
++/*
++ * Fault Signaling Variants (hwirq 22, consumed by hwmon driver):
++ *
++ * The driver distinguishes three fault event types based on timing and
++ * hardware FAULT_STAT latch behavior:
++ *
++ * 1. Sustained Fault Edges (normal operation):
++ *    - Fault persists through detection cycle
++ *    - Rising edge: fault_active=1, cached_fault=0 -> dispatch if rise enabled
++ *    - Falling edge: fault_active=0, cached_fault=1 -> dispatch if fall enabled
++ *    - Example: Overtemperature condition that lasts seconds
++ *
++ * 2. Transient Fault (brief pulse <1ms):
++ *    - Fault occurs and clears before Fault register (0x42) read
++ *    - Detection: hw_flags contains FAULT_STAT bit (latched evidence from
++ *      pipelined SPI REQ frame), but both fault_active=0 and cached_fault=0
++ *      (PIPE frame showed condition cleared)
++ *    - Dispatch: Single IRQ if ANY edge enabled (represents both edges)
++ *    - Example: VBATP voltage glitch during inductive load switching, or fault
++ *      clears coincidentally between SPI frames (threshold boundary oscillation)
++ *    - Rationale: Without preserving FAULT_STAT bit, these events are invisible
++ *
++ * 3. No Event (filtered):
++ *    - Fault state unchanged (fault_active == cached_fault) AND no transient
++ *      evidence in hw_flags
++ *    - Common during polling: hardware still overtemp, state already reflected
++ *    - No IRQ dispatch (prevents duplicate notifications)
++ *
++ * State Tracking:
++ * - bus_fault_active: Live FAULT_STAT from most recent SPI response
++ * - cached_fault_active: Last fault state dispatched to consumer
++ * - hw_flags: Accumulated FAULT_STAT bits from pipelined SPI (transient evidence)
++ *
++ * Edge Configuration:
++ * - Consumers use irq_set_irq_type(virq, IRQ_TYPE_EDGE_RISING/FALLING/BOTH)
++ * - Level types rejected (hardware limitation: edge-only assertion)
++ * - Masking via disable_irq() prevents dispatch but harvesting continues
++ */
++static void mc33978_handle_fault_condition(struct mc33978_core_data *cdata,
++					   unsigned int hw_flags)
++{
++	bool fault_active, cached_fault, transient, changed;
++	u32 rise, fall;
++	int virq;
++
++	scoped_guard(spinlock_irqsave, &cdata->state_lock) {
++		fault_active = cdata->bus_fault_active;
++		cached_fault = cdata->cached_fault_active;
++
++		changed = fault_active ^ cached_fault;
++		if (changed)
++			cdata->cached_fault_active = fault_active;
++	}
++
++	/*
++	 * Transient fault detection (§9.10.27): FAULT_STAT latches on fault
++	 * occurrence and persists until Fault register (0x42) read clears it.
++	 * Hwmon driver reads Fault register, which triggers regmap SPI read with
++	 * pipelined frames: REQ frame (old response, FAULT_STAT=1 latched) and
++	 * PIPE frame (Fault register response clears latch). If fault condition
++	 * cleared between latch and read, FAULT_STAT won't re-latch (datasheet:
++	 * "immediately set again if condition still present").
++	 *
++	 * Transient detection: hw_flags contains harvested FAULT_STAT bit
++	 * (latched evidence from REQ frame), but bus_fault_active=0 and
++	 * cached_fault_active=0 (PIPE frame showed cleared, condition gone).
++	 * This proves brief fault (VBATP voltage glitch, threshold oscillation)
++	 * occurred and cleared before Fault register read. Edge-triggered
++	 * consumers need this event notification.
++	 *
++	 * WAKE_BIT exclusion: WAKE_BIT is synthetic (bus_fault_active changes),
++	 * not hardware evidence. Including it causes phantom transients when
++	 * normal faults deassert (WAKE_BIT present but no actual transient).
++	 */
++	transient = !changed && !fault_active && !cached_fault &&
++		    (hw_flags & MC33978_HI_BYTE_STAT_FAULT);
++
++	if (!changed && !transient)
++		return;
++
++	scoped_guard(raw_spinlock_irqsave, &cdata->irq_state_lock) {
++		rise = cdata->irq_rise;
++		fall = cdata->irq_fall;
++	}
++
++	virq = irq_find_mapping(cdata->domain, MC33978_HWIRQ_FAULT);
++	if (!virq)
++		return;
++
++	if (transient) {
++		/*
++		 * Transient pulse: both edges occurred. Dispatch once if
++		 * any edge is enabled. Dispatching both edges separately
++		 * would incorrectly report two interrupts for one event.
++		 */
++		if ((rise | fall) & BIT(MC33978_HWIRQ_FAULT))
++			handle_nested_irq(virq);
++	} else if ((fault_active && (rise & BIT(MC33978_HWIRQ_FAULT))) ||
++		    (!fault_active && (fall & BIT(MC33978_HWIRQ_FAULT)))) {
++		/* Normal edge */
++		handle_nested_irq(virq);
++	}
++}
++
++static void mc33978_process_single_event(struct mc33978_core_data *cdata)
++{
++	unsigned int harvested;
++	unsigned int pin_state;
++	int ret;
++
++	/*
++	 * Grab harvested_flags BEFORE hardware read. Flags harvested during
++	 * the read trigger another loop pass. This intentionally forces a
++	 * redundant SPI read on most interrupts, but is necessary to prevent
++	 * lost events when concurrent regmap access races with IRQ thread
++	 * (hardware has clear-on-read INT_flg).
++	 */
++	harvested = atomic_xchg(&cdata->harvested_flags, 0);
++
++	ret = regmap_read(cdata->map, MC33978_REG_READ_IN, &pin_state);
++	if (ret)
++		dev_err_ratelimited(&cdata->spi->dev, "failed to read pin state: %d\n",
++				    ret);
++	else
++		mc33978_handle_pin_changes(cdata, pin_state);
++
++	mc33978_handle_fault_condition(cdata, harvested);
++}
++
++static void mc33978_handle_events(struct mc33978_core_data *cdata)
++{
++	guard(mutex)(&cdata->event_lock);
++
++	do {
++		mc33978_process_single_event(cdata);
++	} while (atomic_read(&cdata->harvested_flags) != 0);
++}
++
++static irqreturn_t mc33978_irq_thread(int irq, void *data)
++{
++	mc33978_handle_events(data);
++
++	return IRQ_HANDLED;
++}
++
++static void mc33978_teardown(void *data)
++{
++	struct mc33978_core_data *cdata = data;
++
++	/*
++	 * Set teardown flag before cancel_work_sync(). Prevents debugfs
++	 * regmap reads from rescheduling work after cancellation during
++	 * the devres LIFO teardown window.
++	 */
++	scoped_guard(spinlock_irqsave, &cdata->state_lock) {
++		cdata->tearing_down = true;
++	}
++
++	cancel_work_sync(&cdata->event_work);
++}
++
++static int mc33978_irq_init(struct mc33978_core_data *cdata,
++			    struct fwnode_handle *fwnode)
++{
++	struct device *dev = &cdata->spi->dev;
++	int ret;
++
++	mutex_init(&cdata->irq_lock);
++
++	/*
++	 * Create IRQ domain with 23 interrupts:
++	 * - hwirq 0-21: Pin change interrupts (22 pins)
++	 * - hwirq 22: Fault interrupt (for hwmon driver)
++	 */
++	cdata->domain = irq_domain_create_linear(fwnode, MC33978_NUM_IRQS,
++						 &mc33978_irq_domain_ops, cdata);
++	if (!cdata->domain)
++		return dev_err_probe(dev, -ENOMEM, "failed to create IRQ domain\n");
++
++	/*
++	 * Use DOMAIN_BUS_NEXUS to distinguish this intermediate demux domain
++	 * from child domains sharing the same fwnode. Matches the pattern used
++	 * by other MFD drivers (e.g., crystalcove).
++	 */
++	irq_domain_update_bus_token(cdata->domain, DOMAIN_BUS_NEXUS);
++
++	/*
++	 * Enable hierarchical IRQ domain support for pinctrl's GPIO IRQ chip.
++	 * See mc33978_irq_domain_ops for detailed architecture explanation.
++	 */
++	cdata->domain->flags |= IRQ_DOMAIN_FLAG_HIERARCHY;
++
++	ret = devm_add_action_or_reset(dev, mc33978_irq_domain_remove, cdata);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static void mc33978_event_work(struct work_struct *work)
++{
++	struct mc33978_core_data *cdata =
++		container_of(work, struct mc33978_core_data, event_work);
++
++	mc33978_handle_events(cdata);
++}
++
++/*
++ * Status Harvesting: Opportunistic Event Detection
++ *
++ * The hardware embeds volatile status bits (FAULT_STAT, INT_flg) in the high
++ * byte of almost every SPI response. These bits are harvested from all regmap
++ * operations (reads, writes, any register) to detect events regardless of
++ * which code path triggered the SPI transaction.
++ *
++ * Rationale for Harvesting All Traffic:
++ *
++ * The INT_flg bit is clear-on-read: any SPI transaction clears it, even if
++ * unrelated to interrupt handling. On shared IRQ lines, another driver's
++ * regmap access could clear INT_flg before this driver's IRQ thread runs,
++ * making it impossible to determine if this device triggered the interrupt.
++ * Harvesting INT_flg from all traffic ensures we see it before it's cleared.
++ *
++ * Current Usage:
++ *
++ * The driver does NOT use IRQF_SHARED (see mc33978_core_init comment), so
++ * shared IRQ protection is currently defensive/future-proofing. The harvesting
++ * architecture supports shared IRQs if the design changes.
++ *
++ * The Fault register (0x42) is marked volatile+precious in regmap config,
++ * which excludes it from regmap debugfs dumps, so unintended side effects
++ * from debug inspection cannot occur. Harvesting still applies to intentional
++ * Fault register reads from the hwmon driver.
++ *
++ * Harvesting Call Sites:
++ * - mc33978_spi_write(): Single frame (1 harvest from response)
++ * - mc33978_spi_read(): Pipelined (2 harvests: REQ frame + PIPE frame)
++ */
++static void mc33978_harvest_status(struct mc33978_core_data *cdata, int status)
++{
++	bool fault_active;
++
++	fault_active = !!(status & MC33978_HI_BYTE_STAT_FAULT);
++
++	scoped_guard(spinlock_irqsave, &cdata->state_lock) {
++		cdata->bus_fault_active = fault_active;
++
++		/*
++		 * If the bus state changed from what the IRQ thread last
++		 * evaluated, wake it up using a synthetic software bit to avoid
++		 * overloading the hardware STAT_FAULT bit and causing phantom
++		 * transient faults.
++		 */
++		if (fault_active != cdata->cached_fault_active)
++			atomic_or(MC33978_HARVEST_WAKE_BIT,
++				  &cdata->harvested_flags);
++	}
++
++	if (status & MC33978_HI_BYTE_STAT_INT)
++		atomic_or(MC33978_HI_BYTE_STAT_INT, &cdata->harvested_flags);
++
++	/*
++	 * Preserve FAULT_STAT bit for transient detection: FAULT_STAT is sticky
++	 * (latched until Fault register read). When hwmon reads Fault register,
++	 * pipelined SPI produces two harvest calls: first with FAULT_STAT=1
++	 * (latched evidence), second with FAULT_STAT=0 (if condition cleared).
++	 * Transient detection in mc33978_handle_fault_condition() needs the
++	 * harvested FAULT_STAT bit as proof the fault occurred, even if both
++	 * bus_fault_active and cached_fault_active are false (condition cleared
++	 * before Fault register read could re-latch it).
++	 *
++	 * Always harvest when present; mc33978_handle_fault_condition() filters
++	 * transients vs sustained faults using bus_fault_active state tracking.
++	 */
++	if (status & MC33978_HI_BYTE_STAT_FAULT)
++		atomic_or(MC33978_HI_BYTE_STAT_FAULT, &cdata->harvested_flags);
++
++	/*
++	 * Barrier required: atomic_or() is RELAXED, spin_lock() is ACQUIRE.
++	 * Without barrier, atomic_or() can be reordered past the lock, causing
++	 * both work's final check and our check below to miss the flag.
++	 */
++	smp_mb__after_atomic();
++
++	scoped_guard(spinlock_irqsave, &cdata->state_lock) {
++		if (cdata->irq_ready && !cdata->tearing_down &&
++		    atomic_read(&cdata->harvested_flags))
++			schedule_work(&cdata->event_work);
++	}
++}
++
++/*
++ * Initialize persistent SPI messages.
++ * Write: 1 frame. Read: 2 frames (MISO lags by 1 frame, needs dummy fetch).
++ */
++static void mc33978_prepare_messages(struct mc33978_core_data *cdata)
++{
++	/* --- Prepare Write Message (1 Frame) --- */
++	spi_message_init(&cdata->msg_write);
++
++	cdata->xfer_write.tx_buf = cdata->tx_frame[MC33978_FRAME_REQ];
++	cdata->xfer_write.rx_buf = cdata->rx_frame[MC33978_FRAME_REQ];
++	cdata->xfer_write.len = MC33978_FRAME_LEN;
++
++	spi_message_add_tail(&cdata->xfer_write, &cdata->msg_write);
++
++	/* --- Prepare Read Message (2 Frames) --- */
++	spi_message_init(&cdata->msg_read);
++
++	/* Frame 1: Request */
++	cdata->xfer_read[MC33978_FRAME_REQ].tx_buf =
++		cdata->tx_frame[MC33978_FRAME_REQ];
++	cdata->xfer_read[MC33978_FRAME_REQ].rx_buf =
++		cdata->rx_frame[MC33978_FRAME_REQ];
++	cdata->xfer_read[MC33978_FRAME_REQ].len = MC33978_FRAME_LEN;
++	/* Latch command */
++	cdata->xfer_read[MC33978_FRAME_REQ].cs_change = 1;
++
++	/* Frame 2: Fetch (Dummy CHECK) */
++	cdata->xfer_read[MC33978_FRAME_PIPE].tx_buf =
++		cdata->tx_frame[MC33978_FRAME_PIPE];
++	cdata->xfer_read[MC33978_FRAME_PIPE].rx_buf =
++		cdata->rx_frame[MC33978_FRAME_PIPE];
++	cdata->xfer_read[MC33978_FRAME_PIPE].len = MC33978_FRAME_LEN;
++
++	/* Preload the dummy CHECK command statically */
++	cdata->tx_frame[MC33978_FRAME_PIPE][MC33978_FRAME_CMD] = MC33978_REG_CHECK;
++
++	spi_message_add_tail(&cdata->xfer_read[MC33978_FRAME_REQ], &cdata->msg_read);
++	spi_message_add_tail(&cdata->xfer_read[MC33978_FRAME_PIPE], &cdata->msg_read);
++}
++
++/*
++ * Decode 4-byte SPI frame to 3-byte regmap payload, extract status bits.
++ *
++ * Semi-global status flags (§9.10.27): FAULT_STAT and INT_flg bits are
++ * returned in most register responses for opportunistic harvesting, with
++ * documented exceptions: SPICheck (REG_CHECK) and Wetting Current config
++ * registers (REG_WET_*) use those bit positions for device configuration
++ * instead of status flags.
++ *
++ * Return: status bits (MC33978_HI_BYTE_STATUS_MASK) or -ENODATA if register
++ *         has no status bits.
++ */
++static int mc33978_rx_decode(const u8 *rx_frame, u8 *val_buf)
++{
++	u8 cmd = rx_frame[MC33978_FRAME_CMD] & ~MC33978_CMD_BYTE_WRITE;
++	bool has_status;
++	u8 status = 0;
++
++	switch (cmd) {
++	case MC33978_REG_CHECK:
++	case MC33978_REG_WET_SP:
++	case MC33978_REG_WET_SG0:
++	case MC33978_REG_WET_SG1:
++		has_status = false;
++		break;
++	default:
++		has_status = true;
++		break;
++	}
++
++	if (has_status)
++		status = rx_frame[MC33978_FRAME_DATA_HI] &
++						MC33978_HI_BYTE_STATUS_MASK;
++
++	if (val_buf) {
++		memcpy(val_buf, &rx_frame[MC33978_FRAME_DATA_HI],
++		       MC33978_PAYLOAD_LEN);
++
++		if (has_status)
++			val_buf[MC33978_PAYLOAD_HI] &= MC33978_HI_BYTE_DATA_MASK;
++	}
++
++	return has_status ? status : -ENODATA;
++}
++
++static int mc33978_spi_write(void *ctx, const void *data, size_t count)
++{
++	struct mc33978_core_data *cdata = ctx;
++	int status;
++	int ret;
++
++	if (count != MC33978_FRAME_LEN)
++		return -EINVAL;
++
++	memcpy(cdata->tx_frame[MC33978_FRAME_REQ], data, MC33978_FRAME_LEN);
++
++	ret = spi_sync(cdata->spi, &cdata->msg_write);
++	if (ret)
++		return ret;
++
++	status = mc33978_rx_decode(cdata->rx_frame[MC33978_FRAME_REQ], NULL);
++	if (status >= 0)
++		mc33978_harvest_status(cdata, status);
++
++	return 0;
++}
++
++static int mc33978_spi_read(void *ctx, const void *reg_buf, size_t reg_size,
++			    void *val_buf, size_t val_size)
++{
++	struct mc33978_core_data *cdata = ctx;
++	int status_req, status_pipe;
++	int ret;
++
++	if (reg_size != 1 || val_size != MC33978_PAYLOAD_LEN)
++		return -EINVAL;
++
++	memset(&cdata->tx_frame[MC33978_FRAME_REQ][MC33978_FRAME_DATA_HI], 0,
++	       MC33978_PAYLOAD_LEN);
++	cdata->tx_frame[MC33978_FRAME_REQ][MC33978_FRAME_CMD] =
++		((const u8 *)reg_buf)[0];
++
++	ret = spi_sync(cdata->spi, &cdata->msg_read);
++	if (ret)
++		return ret;
++
++	status_req = mc33978_rx_decode(cdata->rx_frame[MC33978_FRAME_REQ], NULL);
++	status_pipe = mc33978_rx_decode(cdata->rx_frame[MC33978_FRAME_PIPE],
++					val_buf);
++
++	if (status_req >= 0)
++		mc33978_harvest_status(cdata, status_req);
++	if (status_pipe >= 0)
++		mc33978_harvest_status(cdata, status_pipe);
++
++	return 0;
++}
++
++static const struct regmap_bus mc33978_regmap_bus = {
++	.read = mc33978_spi_read,
++	.write = mc33978_spi_write,
++};
++
++static const struct regmap_range mc33978_volatile_range[] = {
++	regmap_reg_range(MC33978_REG_ENTER_LPM, MC33978_REG_ENTER_LPM),
++	regmap_reg_range(MC33978_REG_READ_IN, MC33978_REG_RESET),
++};
++
++static const struct regmap_access_table mc33978_volatile_table = {
++	.yes_ranges = mc33978_volatile_range,
++	.n_yes_ranges = ARRAY_SIZE(mc33978_volatile_range),
++};
++
++static const struct regmap_range mc33978_precious_range[] = {
++	regmap_reg_range(MC33978_REG_ENTER_LPM, MC33978_REG_ENTER_LPM),
++	regmap_reg_range(MC33978_REG_READ_IN, MC33978_REG_RESET),
++};
++
++static const struct regmap_access_table mc33978_precious_table = {
++	.yes_ranges = mc33978_precious_range,
++	.n_yes_ranges = ARRAY_SIZE(mc33978_precious_range),
++};
++
++/*
++ * NOTE: Need to fake REG_ENTER_LPM, REG_IRQ and REG_RESET as readable, so
++ * regcache will NOT write them on a cache sync. Sounds counterintuitive, but
++ * marking a reg as "precious" or "volatile" is the only way to avoid this,
++ * and that works only with readable regs.
++ */
++static const struct regmap_range mc33978_readable_range[] = {
++	regmap_reg_range(MC33978_REG_CHECK, MC33978_REG_WET_SG1),
++	regmap_reg_range(MC33978_REG_CWET_SP, MC33978_REG_ENTER_LPM),
++	regmap_reg_range(MC33978_REG_AMUX_CTRL, MC33978_REG_RESET),
++};
++
++static const struct regmap_access_table mc33978_readable_table = {
++	.yes_ranges = mc33978_readable_range,
++	.n_yes_ranges = ARRAY_SIZE(mc33978_readable_range),
++};
++
++static const struct regmap_range mc33978_writable_range[] = {
++	regmap_reg_range(MC33978_REG_CONFIG, MC33978_REG_WET_SG1),
++	regmap_reg_range(MC33978_REG_CWET_SP, MC33978_REG_AMUX_CTRL),
++	regmap_reg_range(MC33978_REG_IRQ, MC33978_REG_RESET),
++};
++
++static const struct regmap_access_table mc33978_writable_table = {
++	.yes_ranges = mc33978_writable_range,
++	.n_yes_ranges = ARRAY_SIZE(mc33978_writable_range),
++};
++
++static const struct regmap_config mc33978_regmap_config = {
++	.name = "mc33978",
++	.reg_bits = 8,
++	.val_bits = 24,
++	.reg_stride = 2,
++	.write_flag_mask = MC33978_CMD_BYTE_WRITE,
++	.reg_format_endian = REGMAP_ENDIAN_BIG,
++	.val_format_endian = REGMAP_ENDIAN_BIG,
++	.use_single_read = true,
++	.use_single_write = true,
++	.volatile_table = &mc33978_volatile_table,
++	.precious_table = &mc33978_precious_table,
++	.rd_table = &mc33978_readable_table,
++	.wr_table = &mc33978_writable_table,
++	.cache_type = REGCACHE_MAPLE,
++	.max_register = MC33978_REG_RESET,
++};
++
++/* Verify SPI communication via CHECK register signature (0x123456) */
++static int mc33978_check_device(struct mc33978_core_data *cdata)
++{
++	struct device *dev = &cdata->spi->dev;
++	unsigned int check;
++	int ret;
++
++	ret = regmap_read(cdata->map, MC33978_REG_CHECK, &check);
++	if (ret)
++		return ret;
++
++	if (check != MC33978_CHECK_SIGNATURE)
++		return dev_err_probe(dev, -ENODEV,
++				     "SPI check failed. Expected: 0x%06x, got: 0x%06x\n",
++				     MC33978_CHECK_SIGNATURE, check);
++
++	return 0;
++}
++
++/**
++ * mc33978_core_init() - Initialize core functionality
++ * @dev: Parent device (for devm allocation)
++ * @spi: SPI device (already powered)
++ * @domain_out: Returns created IRQ domain
++ *
++ * Called by MFD driver to initialize regmap, IRQ domain, and event handling.
++ * All resources are devm-managed and tied to @dev lifecycle.
++ *
++ * Return: 0 on success, negative error code on failure
++ */
++int mc33978_core_init(struct device *dev, struct spi_device *spi,
++		      struct irq_domain **domain_out)
++{
++	struct fwnode_handle *fwnode;
++	struct mc33978_core_data *cdata;
++	int ret;
++
++	/* Initialize output parameter to NULL for error paths */
++	*domain_out = NULL;
++
++	fwnode = dev_fwnode(dev);
++	if (!fwnode)
++		return dev_err_probe(dev, -ENODEV, "missing firmware node\n");
++
++	cdata = devm_kzalloc(dev, sizeof(*cdata), GFP_KERNEL);
++	if (!cdata)
++		return -ENOMEM;
++
++	cdata->spi = spi;
++
++	mutex_init(&cdata->event_lock);
++	mutex_init(&cdata->irq_lock);
++	spin_lock_init(&cdata->state_lock);
++	raw_spin_lock_init(&cdata->irq_state_lock);
++
++	INIT_WORK(&cdata->event_work, mc33978_event_work);
++
++	atomic_set(&cdata->harvested_flags, 0);
++
++	mc33978_prepare_messages(cdata);
++
++	ret = mc33978_irq_init(cdata, fwnode);
++	if (ret)
++		return ret;
++
++	cdata->map = devm_regmap_init(dev, &mc33978_regmap_bus, cdata,
++				      &mc33978_regmap_config);
++	if (IS_ERR(cdata->map))
++		return dev_err_probe(dev, PTR_ERR(cdata->map),
++				     "failed to initialize regmap\n");
++
++	/*
++	 * Register teardown action to cancel event_work before resource cleanup.
++	 * Critical devm LIFO ordering (registered AFTER regmap/IRQ init above):
++	 *
++	 * Teardown sequence:
++	 * 1. MFD: devm_mfd_add_devices() cleanup
++	 *    - Child devices removed, child IRQ handlers freed
++	 * 2. THIS MODULE: devm_request_threaded_irq() cleanup (below)
++	 *    - Parent IRQ handler freed, stops new event triggers
++	 * 3. THIS ACTION: mc33978_teardown() via devm_add_action
++	 *    - Calls cancel_work_sync(&cdata->event_work)
++	 * 4. THIS MODULE: devm_regmap_init() cleanup (above)
++	 *    - Regmap destroyed
++	 * 5. THIS MODULE: devm_add_action(mc33978_irq_domain_remove) in
++	 *    mc33978_irq_init()
++	 *    - IRQ domain removed
++	 *
++	 * event_work (via mc33978_handle_events) accesses both cdata->map and
++	 * cdata->domain. Registering this action AFTER their creation but BEFORE
++	 * devm_request_threaded_irq() ensures LIFO cleanup: work is canceled in
++	 * step 3, guaranteeing no worker is running when resources are destroyed
++	 * in steps 4-5.
++	 *
++	 * Additionally, mc33978_teardown() sets tearing_down flag to prevent
++	 * debugfs regmap operations from rescheduling work after cancellation.
++	 */
++	ret = devm_add_action_or_reset(dev, mc33978_teardown, cdata);
++	if (ret)
++		return ret;
++
++	ret = mc33978_check_device(cdata);
++	if (ret)
++		return ret;
++
++	/*
++	 * POR state (§9.10.27): After power-on reset, both FAULT_STAT and
++	 * INT_flg are set high. These will be harvested during initialization
++	 * but discarded (no child IRQ handlers registered yet). Disable
++	 * interrupts before priming to prevent storms during state setup.
++	 */
++	ret = regmap_write(cdata->map, MC33978_REG_IE_SP, 0);
++	if (ret)
++		return ret;
++
++	ret = regmap_write(cdata->map, MC33978_REG_IE_SG, 0);
++	if (ret)
++		return ret;
++
++	/*
++	 * Prime the cached pin state under lock to prevent spurious events.
++	 * Work scheduling is disabled (irq_ready=false) to prevent the work
++	 * feedback loop that would occur during init: regmap_read() harvests
++	 * status -> schedules work -> work does regmap_read() -> schedules more
++	 * work -> infinite loop on single-core systems where work monopolizes
++	 * CPU before init can complete.
++	 */
++	scoped_guard(mutex, &cdata->event_lock) {
++		ret = regmap_read(cdata->map, MC33978_REG_READ_IN,
++				  &cdata->cached_pin_state);
++	}
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to read initial pin state\n");
++
++	if (spi->irq <= 0)
++		return dev_err_probe(dev, -EINVAL,
++				     "no valid IRQ provided for INT_B pin\n");
++
++	/*
++	 * Not using IRQF_SHARED: threaded handler with IRQF_ONESHOT may hold
++	 * line masked too long on slow SPI, making shared operation impractical.
++	 */
++	ret = devm_request_threaded_irq(dev, spi->irq,
++					NULL,
++					mc33978_irq_thread,
++					IRQF_ONESHOT,
++					dev_name(dev), cdata);
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to request IRQ\n");
++
++	/*
++	 * Enable work scheduling now that IRQ handler is registered.
++	 * This prevents the work feedback loop during initialization while
++	 * allowing proper event processing after setup completes.
++	 */
++	scoped_guard(spinlock_irqsave, &cdata->state_lock)
++		cdata->irq_ready = true;
++
++	/* Return IRQ domain for MFD to use */
++	*domain_out = cdata->domain;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(mc33978_core_init);
++
++MODULE_AUTHOR("David Jander <david@protonic.nl>");
++MODULE_AUTHOR("Oleksij Rempel <o.rempel@pengutronix.de>");
++MODULE_DESCRIPTION("NXP MC33978/MC34978 Core Module");
++MODULE_LICENSE("GPL");
+diff --git a/include/linux/mfd/mc33978.h b/include/linux/mfd/mc33978.h
+new file mode 100644
+index 000000000000..9016553ef892
+--- /dev/null
++++ b/include/linux/mfd/mc33978.h
+@@ -0,0 +1,160 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2024 David Jander <david@protonic.nl>, Protonic Holland
++ * Copyright (C) 2026 Oleksij Rempel <kernel@pengutronix.de>, Pengutronix
++ *
++ * MC34978/MC33978 Multiple Switch Detection Interface - Shared Definitions
++ */
++
++#ifndef _LINUX_MFD_MC33978_H
++#define _LINUX_MFD_MC33978_H
++
++#include <linux/bits.h>
++
++/* Register Map - All addresses are base command bytes (R/W bit = 0) */
++/* SPI communication check */
++#define MC33978_REG_CHECK		0x00
++/* Device configuration */
++#define MC33978_REG_CONFIG		0x02
++/* Tri-state enable SP */
++#define MC33978_REG_TRI_SP		0x04
++/* Tri-state enable SG */
++#define MC33978_REG_TRI_SG		0x06
++/* Wetting current level SP */
++#define MC33978_REG_WET_SP		0x08
++/* Wetting current level SG0 (SG7-SG0) */
++#define MC33978_REG_WET_SG0		0x0a
++/* Wetting current level SG1 (SG13-SG8) */
++#define MC33978_REG_WET_SG1		0x0c
++/* Continuous wetting current SP */
++#define MC33978_REG_CWET_SP		0x16
++/* Continuous wetting current SG */
++#define MC33978_REG_CWET_SG		0x18
++/* Interrupt enable SP */
++#define MC33978_REG_IE_SP		0x1a
++/* Interrupt enable SG */
++#define MC33978_REG_IE_SG		0x1c
++/* Low-power mode configuration */
++#define MC33978_REG_LPM_CONFIG		0x1e
++/* Wake-up enable SP */
++#define MC33978_REG_WAKE_SP		0x20
++/* Wake-up enable SG */
++#define MC33978_REG_WAKE_SG		0x22
++/* Comparator only mode SP */
++#define MC33978_REG_COMP_SP		0x24
++/* Comparator only mode SG */
++#define MC33978_REG_COMP_SG		0x26
++/* LPM voltage threshold SP */
++#define MC33978_REG_LPM_VT_SP		0x28
++/* LPM voltage threshold SG */
++#define MC33978_REG_LPM_VT_SG		0x2a
++/* Polling current SP */
++#define MC33978_REG_IP_SP		0x2c
++/* Polling current SG */
++#define MC33978_REG_IP_SG		0x2e
++/* Slow polling SP */
++#define MC33978_REG_SPOLL_SP		0x30
++/* Slow polling SG */
++#define MC33978_REG_SPOLL_SG		0x32
++/* Wake-up debounce SP */
++#define MC33978_REG_WDEB_SP		0x34
++/* Wake-up debounce SG */
++#define MC33978_REG_WDEB_SG		0x36
++/* Enter low-power mode (write-only) */
++#define MC33978_REG_ENTER_LPM		0x38
++/* AMUX control */
++#define MC33978_REG_AMUX_CTRL		0x3a
++/* Read switch status (READ_SW in datasheet) */
++#define MC33978_REG_READ_IN		0x3e
++/* Fault status register */
++#define MC33978_REG_FAULT		0x42
++/* Interrupt request (write-only) */
++#define MC33978_REG_IRQ			0x46
++/* Reset (write-only) */
++#define MC33978_REG_RESET		0x48
++
++/*
++ * FAULT Register (0x42) bit definitions
++ * Reading this register clears most fault flags except persistent conditions
++ */
++/* SPI communication error */
++#define MC33978_FAULT_SPI_ERROR		BIT(10)
++/* SPI register hash mismatch */
++#define MC33978_FAULT_HASH		BIT(9)
++/* VBATP undervoltage */
++#define MC33978_FAULT_UV		BIT(7)
++/* VBATP overvoltage */
++#define MC33978_FAULT_OV		BIT(6)
++/* Temperature warning threshold */
++#define MC33978_FAULT_TEMP_WARN		BIT(5)
++/* Over-temperature */
++#define MC33978_FAULT_OT		BIT(4)
++/* Woken by INT_B pin */
++#define MC33978_FAULT_INTB_WAKE		BIT(3)
++/* Woken by WAKE_B pin */
++#define MC33978_FAULT_WAKEB_WAKE	BIT(2)
++/* Woken by SPI message */
++#define MC33978_FAULT_SPI_WAKE		BIT(1)
++/* Power-on reset occurred */
++#define MC33978_FAULT_POR		BIT(0)
++
++/* Critical faults that need immediate attention */
++#define MC33978_FAULT_CRITICAL		(MC33978_FAULT_UV | \
++					 MC33978_FAULT_OV | \
++					 MC33978_FAULT_OT)
++
++/* Bits relevant as hwmon alarms; excludes wake/reset/SPI status bits */
++#define MC33978_FAULT_ALARM_MASK	(MC33978_FAULT_UV | \
++					 MC33978_FAULT_OV | \
++					 MC33978_FAULT_TEMP_WARN | \
++					 MC33978_FAULT_OT)
++
++#define MC33978_NUM_PINS		22
++
++/*
++ * Virtual IRQ number for fault handling.
++ * Using hwirq 22 (beyond the 22 pin IRQs 0-21).
++ */
++#define MC33978_HWIRQ_FAULT		22
++
++/* Total number of hwirqs exposed by the MFD IRQ domain */
++#define MC33978_NUM_IRQS		(MC33978_HWIRQ_FAULT + 1)
++
++/*
++ * AMUX channel definitions
++ * The AMUX can route one of 24 signals to the external AMUX pin
++ */
++/* Switch-to-Ground inputs 0-13 */
++#define MC33978_AMUX_CH_SG0		0
++#define MC33978_AMUX_CH_SG13		13
++/* Programmable switch inputs 0-7 */
++#define MC33978_AMUX_CH_SP0		14
++#define MC33978_AMUX_CH_SP7		21
++/* Internal temperature diode */
++#define MC33978_AMUX_CH_TEMP		22
++/* Battery voltage sense */
++#define MC33978_AMUX_CH_VBATP		23
++/* Total number of AMUX channels */
++#define MC33978_NUM_AMUX_CH		24
++
++/* Forward declarations */
++struct device;
++struct spi_device;
++struct irq_domain;
++
++/*
++ * Core initialization function (implemented in mc33978-core module)
++ *
++ * This initializes the regmap, IRQ domain, and event handling for the device.
++ * The mc33978-core module must be loaded before the mc33978 MFD driver.
++ *
++ * @dev: Device pointer
++ * @spi: SPI device pointer
++ * @domain_out: Returns the IRQ domain for child device registration
++ *
++ * Returns: 0 on success, negative error code on failure
++ */
++int mc33978_core_init(struct device *dev, struct spi_device *spi,
++		      struct irq_domain **domain_out);
++
++#endif /* _LINUX_MFD_MC33978_H */
 -- 
 2.47.3
 
