@@ -1,213 +1,310 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0027B305668
-	for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2026 15:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6CFD3FD97C
+	for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2026 16:05:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778860689; cv=none; b=hM/fEL7k0NojlP/TVm5+l+YosJjOy6pO/EEXKhgoME378amMcsF5uYjKLD1eHVjGI766EbADVB09saw6LGQ6LeZrchKl1DoNCTPTq6wE7boi++61Hm12q26q3XCR2tajPqWk4jwNTvteNpCqA1ehxC9d4279BoTwDdF20WzYCZY=
+	t=1778861158; cv=none; b=AOJa/AK/f7rlG9zUQHsneapXtyoxpf/ZFa7OgyPHvotz/3pS57oNg04x9goOSrjVE1K8+Jb4oOEmSwqs+iES/M9vrOavAcl2qYmvQ+GTGZt3t6mJLaM7uOBSrVRrM/qSPrwNFuLHg8WYtjpNDtRd8RQFPxPDTmkuoDjfZgnFulI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778860689; c=relaxed/simple;
-	bh=2QxrSXh3RfVdD9VPrsCvlhcHYFMiXQKs1ERqRgbEjEM=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=FNpm7nGQiRnxmZ9cbjMt2/KXpEr5UBqcpKJrFN9RgAGYE81auwfMiiRP19hbh+9/y/iGKuQvL9lKKonu8z245O2pidV4QXMiyti0dEipq+LL/HYBBgl/AsTHtpDQyhyauNhrBd/0eMfFACeRfGkKQ8l17lKpgajKgXUAe9TCdsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YZwVaSOj; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YZwVaSOj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC27CC2BCB3;
-	Fri, 15 May 2026 15:58:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778860688;
-	bh=2QxrSXh3RfVdD9VPrsCvlhcHYFMiXQKs1ERqRgbEjEM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=YZwVaSOje00wcAWC19cBpOq9CIgTQlLx3i5i8Z3TXa0f+17c4OwD06s64kcv597ox
-	 BdIUvwypEqyUiQyGnBVKrVlEyHqhablnNRsvTviQlGtfAZqccWuuWf6ORDQbV79pZT
-	 PWwmPM44vyYAsHeDbx9KorPxPne3xQe2+WNADNu1iHYfXIOfPlBpDQQ/5kMITdnTwf
-	 v7/+5M/rR0BhIo74jeWTO3L7J2W0UOExlkRhBXdcGESDWE6AYXIZJOP9FOF7wM05cB
-	 vVHi/c8tTR7H31YRv9iQTBLYUlPC7yo/kxU6bIy3kxtS0sUrsti5XRpvWTr1KiSDvG
-	 iGV+rs5Med1oA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 5/6] misc: amd-sbi: Add SBTSI ioctl register transfer
- interface
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Akshay Gupta" <Akshay.Gupta@amd.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260515134506.397649-6-Akshay.Gupta@amd.com>
-References: <20260515134506.397649-6-Akshay.Gupta@amd.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 15 May 2026 15:58:07 +0000
-Message-Id: <20260515155808.AC27CC2BCB3@smtp.kernel.org>
+	s=arc-20240116; t=1778861158; c=relaxed/simple;
+	bh=EsC7JRKY1dHFeqTc8rjqeF6+9bR/r+UBix9SFoUp0Sc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nHIkOK7hWKnkCYkAdnJaZVt9sJFmgo7o/hJWD+xAJ8tOE/XUsfkGJkencSC/bX0JRXDLxnkhHpOzLUvOg5DL0OrufyPRTQObRZzlkRflD7ZIitVYR0w6i3BTE81a50vfXyghi9BfD0m2TrOt52kTDMMC3t/gzMlTabS+zsQazZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1wNv2h-00023Z-2h; Fri, 15 May 2026 18:05:39 +0200
+Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac] helo=dude04)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1wNv2g-000wnD-1k;
+	Fri, 15 May 2026 18:05:38 +0200
+Received: from ore by dude04 with local (Exim 4.98.2)
+	(envelope-from <ore@pengutronix.de>)
+	id 1wNv2g-00000000U9B-1yI0;
+	Fri, 15 May 2026 18:05:38 +0200
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Lee Jones <lee@kernel.org>,
+	Peter Rosin <peda@axentia.se>,
+	Linus Walleij <linusw@kernel.org>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
+	kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	David Jander <david@protonic.nl>
+Subject: [PATCH v12 1/6] dt-bindings: pinctrl: add NXP MC33978/MC34978 MSDI
+Date: Fri, 15 May 2026 18:05:29 +0200
+Message-ID: <20260515160537.115808-2-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260515160537.115808-1-o.rempel@pengutronix.de>
+References: <20260515160537.115808-1-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-Thank you for your contribution! Sashiko AI review found 6 potential issue(=
-s) to consider:
-- [Critical] Use-After-Free of `sbtsi_data` due to misaligned devres and VF=
-S lifecycles
-- [High] Unsafe DMA Buffer Allocation from stack variables
-- [High] Subsystem Guideline Violation: Redundant custom lock instead of hw=
-mon_lock()
-- [High] sysfs name collision for miscdevice on multi-bus systems
-- [Medium] Hardware state desynchronization via unrestricted IOCTL writes
-- [Medium] UAPI Flaw: Unvalidated padding byte in IOCTL message
---
+Add device tree binding documentation for the NXP MC33978 and MC34978
+Multiple Switch Detection Interface (MSDI) devices.
 
-commit a076ef47ca989260af804712d32ac63c2aaf11cb
-Author: Prathima <Prathima.Lk@amd.com>
+The MC33978 and MC34978 differ primarily in their operating temperature
+ranges. While not software-detectable, providing specific compatible
+strings allows the hwmon subsystem to correctly interpret thermal
+thresholds and hardware faults.
 
-misc: amd-sbi: Add SBTSI ioctl register transfer interface
+These ICs monitor up to 22 mechanical switch contacts in automotive and
+industrial environments. They provide configurable wetting currents to
+break through contact oxidation and feature extensive hardware
+protection against thermal overload and voltage transients (load
+dumps/brown-outs).
 
-Implement IOCTL interface for SB-TSI driver to enable userspace access
-to TSI register read/write operations through the AMD Advanced Platform
-Management Link (APML) protocol.
-Add an ioctl command (SBTSI_IOCTL_REG_XFER_CMD) that accepts a register
-address, data byte, and direction flag.
+The device interfaces via SPI. While it provides multiple functions, its
+primary hardware purpose is pin/switch control. To accurately represent
+the hardware as a single physical integrated circuit without unnecessary
+DT overhead, all functions are flattened into a single pinctrl node:
+- pinctrl: Exposing the 22 switch inputs (SG/SP pins) as a GPIO controller
+  and managing their pin configurations.
+- hwmon: Exposing critical hardware faults (OT, OV, UV) and static
+  voltage/temperature thresholds.
+- mux: Controlling the 24-to-1 analog multiplexer to route pin voltages,
+  internal temperature, or battery voltage to an external SoC ADC.
 
-> diff --git a/drivers/hwmon/sbtsi_temp.c b/drivers/hwmon/sbtsi_temp.c
-> index d7ae986d824c4..00e982f4c716c 100644
-> --- a/drivers/hwmon/sbtsi_temp.c
-> +++ b/drivers/hwmon/sbtsi_temp.c
-> @@ -64,12 +64,15 @@ static inline void sbtsi_mc_to_reg(s32 temp, u8 *inte=
-ger, u8 *decimal)
->  /*
->   * Read integer and decimal parts of an SB-TSI temperature register pair
->   * The read order is determined by the ReadOrder bit to ensure atomic la=
-tching.
-> + * The mutex protects against concurrent access to the shared I2C/I3C bu=
-s by
-> + * the hwmon sysfs and a userspace ioctl
->   */
->  static int sbtsi_temp_read(struct sbtsi_data *data, u8 reg1, u8 reg2,
->  			   u8 *val1, u8 *val2)
->  {
->  	int ret;
-> =20
-> +	guard(mutex)(&data->lock);
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Reviewed-by: Linus Walleij <linusw@kernel.org>
+---
+changes v12:
+- no changes
+changes v11:
+- no changes
+changes v10:
+- no changes
+changes v9:
+- no changes
+changes v8:
+- Update IRQ_TYPE_* macros include path reference in documentation from
+  interrupt-controller.h to dt-bindings/interrupt-controller/irq.h.
+- Add bias-disable, drive-open-drain, drive-open-source, and drive-strength
+  to the list of supported pin configuration properties.
+changes v7:
+- no changes
+changes v6:
+- add Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+- add Reviewed-by: Linus Walleij <linusw@kernel.org>
+changes v5:
+- Commit Message: Added justification for distinct compatible strings
+  based on temperature ranges.
+- Restricted pins property to an explicit enum of valid hardware pins
+changes v4:
+- Drop the standalone mfd/nxp,mc33978.yaml schema entirely.
+- Move the unified device binding to bindings/pinctrl/nxp,mc33978.yaml,
+- Remove the dedicated child node compatible strings (nxp,mc33978-pinctrl).
+- Flatten the pinctrl/gpio properties directly into the main SPI device
+  node.
+changes v3:
+- Drop regular expression pattern from pinctrl child node and define
+  it as a standard property
+- Reorder required properties list in MFD binding
+- Remove stray blank line from the MFD binding devicetree example
+- Replace unevaluatedProperties with additionalProperties in the pinctrl
+  binding
+changes v2:
+- Squashed MFD, pinctrl, hwmon, and mux bindings into a single patch
+- Removed the empty hwmon child node
+- Folded the mux-controller node into the parent MFD node
+- Added vbatp-supply and vddq-supply to the required properties block
+- Changed the example node name from mc33978@0 to gpio@0
+- Removed unnecessary literal block scalars (|) from descriptions
+- Documented SG, SP, and SB pin acronyms in the pinctrl description
+- Added consumer polarity guidance (GPIO_ACTIVE_LOW/HIGH) for SG/SB
+  inputs, with a note on output circuit dependency
+- Updated commit message
+---
+ .../bindings/pinctrl/nxp,mc33978.yaml         | 158 ++++++++++++++++++
+ 1 file changed, 158 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,mc33978.yaml
 
-Does this custom lock bypass the standardized hwmon core synchronization
-mechanism? The hwmon subsystem guidelines appear to mandate using
-hwmon_lock() and hwmon_unlock() to serialize sysfs operations against
-attributes registered by other means.
+diff --git a/Documentation/devicetree/bindings/pinctrl/nxp,mc33978.yaml b/Documentation/devicetree/bindings/pinctrl/nxp,mc33978.yaml
+new file mode 100644
+index 000000000000..2a3c565c3c03
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pinctrl/nxp,mc33978.yaml
+@@ -0,0 +1,158 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pinctrl/nxp,mc33978.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP MC33978/MC34978 Multiple Switch Detection Interface
++
++maintainers:
++  - David Jander <david@protonic.nl>
++  - Oleksij Rempel <o.rempel@pengutronix.de>
++
++description: |
++  The MC33978 and MC34978 are Multiple Switch Detection Interface (MSDI)
++  devices with 22 switch inputs, integrated fault detection, and analog
++  multiplexer (AMUX) for voltage/temperature monitoring.
++
++  Pin numbering:
++  - Pins 0-13: SG0-SG13 (Switch-to-Ground inputs). These pins monitor
++    contacts closed to ground and typically require GPIO_ACTIVE_LOW
++    flags when used as digital inputs.
++  - Pins 14-21: SP0-SP7 (Programmable inputs). These can be configured
++    as SG (Switch-to-Ground) or SB (Switch-to-Battery) inputs. SB
++    inputs monitor contacts closed to the battery voltage and typically
++    require GPIO_ACTIVE_HIGH flags when used as digital inputs.
++
++  Output Emulation:
++  The hardware lacks standard push-pull output drivers. Outputs are emulated
++  by toggling the programmable wetting current sources (acting as pull-ups
++  or pull-downs) and the hardware tri-state registers. Because of this
++  physical constraint:
++  - Consumers using pins as outputs MUST flag them with GPIO_OPEN_DRAIN or
++    GPIO_OPEN_SOURCE in the device tree.
++  - Push-pull configurations are physically unsupported.
++  - The active polarity depends entirely on the external circuit (e.g., how
++    an LED is wired) and must be flagged accordingly by the consumer.
++
++allOf:
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
++
++properties:
++  compatible:
++    enum:
++      - nxp,mc33978
++      - nxp,mc34978
++
++  reg:
++    maxItems: 1
++    description: SPI chip select number
++
++  spi-max-frequency:
++    maximum: 8000000
++    description: Maximum SPI clock frequency (up to 8 MHz)
++
++  interrupts:
++    maxItems: 1
++    description:
++      INT_B pin interrupt. Active-low, indicates pin state changes or
++      fault conditions.
++
++  interrupt-controller: true
++
++  '#interrupt-cells':
++    const: 2
++    description:
++      First cell is the IRQ number (0-21 for pins, 22 for faults).
++      Second cell is the trigger type (IRQ_TYPE_* from dt-bindings/interrupt-controller/irq.h).
++
++  '#mux-control-cells':
++    const: 0
++    description:
++      Present if the device AMUX selector is used as a mux provider.
++      Consumers (e.g. io-channel-mux) must provide settle-time-us for the
++      external ADC sampling path.
++
++  vddq-supply:
++    description: Digital supply voltage
++
++  vbatp-supply:
++    description: Battery/power supply
++
++  gpio-controller: true
++
++  '#gpio-cells':
++    const: 2
++
++  ngpios:
++    const: 22
++
++patternProperties:
++  '^.*-grp$':
++    type: object
++    $ref: /schemas/pinctrl/pincfg-node.yaml#
++    additionalProperties: false
++    description: Pin configuration subnodes.
++    properties:
++      pins:
++        items:
++          enum: [sg0, sg1, sg2, sg3, sg4, sg5, sg6, sg7, sg8, sg9,
++                 sg10, sg11, sg12, sg13, sp0, sp1, sp2, sp3,
++                 sp4, sp5, sp6, sp7]
++
++      bias-pull-up: true
++      bias-pull-down: true
++      bias-high-impedance: true
++      bias-disable: true
++      drive-open-drain: true
++      drive-open-source: true
++      drive-strength:
++        enum: [2, 6, 8, 10, 12, 14, 16, 20]
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - interrupt-controller
++  - '#interrupt-cells'
++  - vddq-supply
++  - vbatp-supply
++  - gpio-controller
++  - '#gpio-cells'
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/gpio/gpio.h>
++
++    spi {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        msdi: gpio@0 {
++            compatible = "nxp,mc33978";
++            reg = <0>;
++            spi-max-frequency = <4000000>;
++
++            interrupt-parent = <&gpiog>;
++            interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
++            interrupt-controller;
++            #interrupt-cells = <2>;
++
++            vddq-supply = <&reg_3v3>;
++            vbatp-supply = <&reg_12v>;
++
++            #mux-control-cells = <0>;
++
++            gpio-controller;
++            #gpio-cells = <2>;
++            ngpios = <22>;
++
++            door-grp {
++                pins = "sg0";
++                bias-high-impedance;
++            };
++        };
++    };
+-- 
+2.47.3
 
-[ ... ]
-
-> diff --git a/drivers/misc/amd-sbi/tsi-core.c b/drivers/misc/amd-sbi/tsi-c=
-ore.c
-> index 19388737b225e..c5bd60409d5bb 100644
-> --- a/drivers/misc/amd-sbi/tsi-core.c
-> +++ b/drivers/misc/amd-sbi/tsi-core.c
-[ ... ]
-> +static int apml_tsi_reg_xfer(struct sbtsi_data *data,
-> +			     struct apml_tsi_xfer_msg __user *arg)
-> +{
-> +	struct apml_tsi_xfer_msg msg =3D { 0 };
-> +	int ret;
-> +
-> +	if (copy_from_user(&msg, arg, sizeof(struct apml_tsi_xfer_msg)))
-> +		return -EFAULT;
-> +
-> +	ret =3D sbtsi_xfer_ioctl(data, msg.reg_addr, &msg.data_in_out, msg.rfla=
-g);
-
-Could passing &msg.data_in_out to sbtsi_xfer_ioctl() eventually result in
-a DMA transfer from stack memory?
-
-If the transfer goes over I3C, sbtsi_i3c_read() uses this pointer directly:
-
-static int sbtsi_i3c_read(struct sbtsi_data *data, u8 reg, u8 *val)
-{
-	struct i3c_xfer xfers[2] =3D { };
-
-	xfers[0].rnw =3D false;
-	xfers[0].len =3D 1;
-	xfers[0].data.out =3D &reg;
-
-	xfers[1].rnw =3D true;
-	xfers[1].len =3D 1;
-	xfers[1].data.in =3D val;
-
-	return i3c_device_do_xfers(data->i3cdev, xfers, 2, I3C_SDR);
-}
-
-Since I3C host controllers commonly use DMA, and stack variables are not
-cacheline aligned (and reside in virtually mapped memory with
-CONFIG_VMAP_STACK enabled), this might violate the DMA API and lead to adja=
-cent
-stack corruption.
-
-Furthermore, does this unrestricted IOCTL write capability allow userspace
-to overwrite the SBTSI_REG_CONFIG register?
-
-During probe, the driver caches hardware state (ext_range_mode and
-read_order) from this register. If userspace modifies it without the
-driver intercepting the write to update its cache, the hwmon interface
-could report incorrect temperatures.
-
-[ ... ]
-
-> +static long sbtsi_ioctl(struct file *fp, unsigned int cmd, unsigned long=
- arg)
-> +{
-> +	void __user *argp =3D (void __user *)arg;
-> +	struct sbtsi_data *data;
-> +
-> +	data =3D container_of(fp->private_data, struct sbtsi_data, sbtsi_misc_d=
-ev);
-
-Can this lead to a use-after-free if the device is unbound?
-
-The sbtsi_data structure is allocated with devm_kzalloc(), tying its
-lifetime to the device's driver binding. When the device unbinds, devres
-calls misc_deregister() and frees sbtsi_data.
-
-Since misc_deregister() does not close or revoke existing file descriptors,
-a process could retain its file descriptor and call ioctl() after the unbin=
-d,
-extracting the freed sbtsi_data pointer and attempting to lock data->lock.
-
-[ ... ]
-
-> +int create_misc_tsi_device(struct sbtsi_data *data, struct device *dev)
-> +{
-> +	int ret;
-> +
-> +	data->sbtsi_misc_dev.name =3D devm_kasprintf(dev, GFP_KERNEL,
-> +						   "sbtsi-%x", data->dev_addr);
-
-Will this naming scheme cause a sysfs name collision on systems with
-multiple I2C/I3C buses?
-
-If identically-addressed sensors exist on different buses, it looks like
-misc_register() will attempt to create a duplicate sysfs entry
-(e.g., /sys/class/misc/sbtsi-4c), fail with -EEXIST, and abort the probe.
-
-[ ... ]
-
-> diff --git a/include/uapi/misc/amd-apml.h b/include/uapi/misc/amd-apml.h
-> index 745b3338fc06f..8a85f79b0938d 100644
-> --- a/include/uapi/misc/amd-apml.h
-> +++ b/include/uapi/misc/amd-apml.h
-> @@ -73,6 +73,13 @@ struct apml_reg_xfer_msg {
->  	__u8 rflag;
->  };
-> =20
-> +struct apml_tsi_xfer_msg {
-> +	__u8 reg_addr;		/* TSI register address offset */
-> +	__u8 data_in_out;	/* Register data for read/write */
-> +	__u8 rflag;		/* Register read or write */
-> +	__u8 pad;		/* Explicit padding */
-> +};
-
-Should msg.pad be validated in apml_tsi_reg_xfer() to ensure it is zero?
-
-Without this check, userspace can pass uninitialized garbage in the padding
-field, which might prevent safely repurposing this field for new flags or
-extensions in the future.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260515134506.3976=
-49-1-Akshay.Gupta@amd.com?part=3D5
