@@ -1,153 +1,130 @@
-Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B0FC3D47C1
-	for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 12:14:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADED83DD85A
+	for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 12:16:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778933655; cv=none; b=jF/NgnfA9WIiEJhHz7s9SA7hGy5EcRffWT5ZAIzUd8ghOzabmEAdl4J/mR9qNgPYwlqEpT04/1CpEsInUBvDzVl9EV683cl9odION4I3BoyXzpe+cGFDKXL/7KoMNsIRkior7AkL3BK7vvMnpklsEcKX/qXJ+VdCU+EPFxGWqQM=
+	t=1778933782; cv=none; b=kx/sfv0ZbKdks7YU0w1inZGFvX9DGcfht9rs8kStSsXYAvQrATCwv5lN7glh6vA3odjgqZHwdAcUvBwwDGytj4Wpzu44Yzk/3mZLST2PPggiS7GFuaLpi6woS4UsgxZbLX9Dd4X0xAf4rGB4qZIZWn8wiSRP3MfhSLXSnbtxoA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778933655; c=relaxed/simple;
-	bh=NXstNpsh57964jU5eVuSN4GcLNqI+VymMcfVvCPW3uE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Sx27s0xt7O1oFtK+Uzi+5lQ1T2MIf1s5wDE6SGMOuoUF+02fLFh0cT8L4sxIk0E7GUA4NjyERHJIh+xlOmN2vpEm07Id8rpWc3db0KRp/f3J/fj4qLW09+wpKAVnXC1lBwLdrLbpo5Q6XiSKPznsu5MaO/wmsiCNMdJrcI6qay8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bqxgAJtC; arc=none smtp.client-ip=74.125.82.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778933782; c=relaxed/simple;
+	bh=SL7s83SxEWFI9hIJQAe2/kxGjIjdClsMFF8K0lGsf5g=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=f7W1gCA8G+ucpjcd8T2hVdQDxH+bRmqQQ6266c40ihQmeshNkhSp40YOrHWo2Git58NaSoSLDmgWh4gm8s/Nr/pHKwfP5dBMUfU7vogfr57bWrfRNiHmtX2cSBJfD7URLLCPXGdMIJkCPu/FNtgQtK8bRJOXlUUmczIrJzrOcZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eKvwBnTZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bqxgAJtC"
-Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-12c1a170a50so770480c88.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 05:14:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778933653; x=1779538453; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=WfRu3W9UXERmyIjiKGpcfMwX45w5ccCYkQKnR4ynbas=;
-        b=bqxgAJtCf6Y3RCCyoby+0//QYS+KBNBHauMtiig3GsYrhJHeonSIIu+HUmpoRJKEmh
-         3O+8NQ/KbzSQ0qMzuyGJJILP6yXXHIF7JGxWFLrXvIvZG6I2AgOeVsIJ3/Qpt1yoHKfH
-         4Kn0sVGucwReDotRBYTbc1eBlqHqkmKf0llzwuU4GkbjfZtCNnfVoAqR7BNDmY1C2iHx
-         gkHa4ZRABVQowgcWbV9HWCeyesKED+Uz3Yg8YBkZcKiEkVRyF92pTVkhpKgFcMOJjFej
-         1LjKCE8nTVkjy2yiyiE8v48lXAC+xEfGjA8qOFpG2yQmPCSUqhPvPuq/XsvqQgNyeDwA
-         yGtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778933653; x=1779538453;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WfRu3W9UXERmyIjiKGpcfMwX45w5ccCYkQKnR4ynbas=;
-        b=GcdFukkM7ZfvfSU0gOjDy+DtS/FSqwz5VoSUm83lIe7IVE1w/oPJzWMBNBagI+hqol
-         eklbDTwX7vkLqm6xsxsea+W6IvONclqNsBQk/pGgBhP1CncvrgAzgsq4iKwXjWdgvL1N
-         8Li22c06hNNvBsYt8G4xiSNk3QlzH1xzUFhlGjeVi1SNEN9GDhmMvYXlzJh/FvR3QCnV
-         Eoc3fl2xX1BBqaVkfi24ZRhnXWVa86Q3f1IL3JxehAIkY/sxITIojpm15WwZH4y/lJWf
-         dP/pBKUBYLkQ/Gb1TJ2wGiBaodMotf46Y72HQScHRAls53p6N3jVJaBXUfUl82loIzEZ
-         WxZQ==
-X-Gm-Message-State: AOJu0YyRIQsVuTaQuOFSQ9hE44+8HC2331KIn84xqj8B5P2qs+O3O3Xs
-	5wZE1g2udTyiShaBOvZ6MV2s09c360A2GAb/Upmi2M8XSIxEgRhkOEpwaLFY32zI
-X-Gm-Gg: Acq92OH7qAZNIJQRwvAHXB+KQjDk/XkxRWM+zVYCL7aJVRjMv+OHWgv59nS4rgV+Pf0
-	zH1NEJzWFqXE04wWLaPEl7oxZgFDCXDdc3zZ0NIZL1aYJIaSXFI+3aeaw8/A4s54qXEmtSgnf6/
-	1pEjhPKRXsmG4BE995sY0dKvlwYJYGmBib77ye9mUX4T7NiM/ZFwzeqA7VUP2JpIUsZU2OOOlQe
-	n1TeikNZvlIl3cfbwl2Zxws1GxWMTHVd29CqQy4i135Zan0qCMroeq0Fqf0sOs4lruqGhO/X+ts
-	f/lB/DqkVfNb2aYPYHTixCD4Z0Hc3Mb/3xNs/HxKSP3LxcdpLw7Jsd7mt4y4con7qsqaUqH2Z6T
-	0QfOXuBcfvVN2tWxlOCbqfjv/g5Amwp1YFp1DtSCfww6z66URv234HMuWEnNrf9WDBSwSkmQFfW
-	lqp4cyJkv/AMCjEhcLEOAK+jUEZAcfa9zc/+786jvtyvGmesnuRxjX0B6/duiALLXxA1kGzoQH4
-	xtUhS/zuOI=
-X-Received: by 2002:a05:7022:128c:b0:12c:6e85:505c with SMTP id a92af1059eb24-1350440a9cbmr3283254c88.4.1778933653130;
-        Sat, 16 May 2026 05:14:13 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cc3490bcsm11753600c88.15.2026.05.16.05.14.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 May 2026 05:14:12 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <94f708bc-f78a-41bc-974a-b54604fae1e1@roeck-us.net>
-Date: Sat, 16 May 2026 05:14:11 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eKvwBnTZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E9DAC19425;
+	Sat, 16 May 2026 12:16:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778933782;
+	bh=SL7s83SxEWFI9hIJQAe2/kxGjIjdClsMFF8K0lGsf5g=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=eKvwBnTZiAeRZvjxELMpe6HubLIY/tkeNItuQZOraU8HtuHhllEfxeWJJtjCxKCaX
+	 kPCSjASf4JKzrSD9zDvqAvyv+jVmzxazo7xuDyocwvUyereV6MWTV9lcLG9aTSUEnF
+	 BORV9VnJ5CxumywUCS/v59dzgw4WFqxV380BWRvFxxDCJEQayN8NlRgCsv2HKv08UM
+	 w2yg4sF3YQuz3NJDe2KeqO4qkYx1n/4FuGvgjUcNuHVX3uixNtDFaEg/AhS93hFm2i
+	 b/1o7r/UuJmNcBYgUb2R5dCBLgN6RIRsIceeDUJCJxOdIeed32oh3M9aVwsnDjRy1D
+	 h6eXj1/Av942g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 1/2] hwmon: (coretemp) replace hardcoded core count with
+ dynamic value
+Reply-To: sashiko-reviews@lists.linux.dev
+To: bakshansky.lists@gmail.com
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260516114253.5466-2-bakshansky.lists@gmail.com>
+References: <20260516114253.5466-2-bakshansky.lists@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 16 May 2026 12:16:21 +0000
+Message-Id: <20260516121622.1E9DAC19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (lm75) Add explicit header include
-To: Krzysztof Kozlowski <krzk@kernel.org>, sashiko-reviews@lists.linux.dev,
- Flaviu Nistor <flaviu.nistor@gmail.com>,
- Roman Gushchin <roman.gushchin@linux.dev>
-Cc: linux-hwmon@vger.kernel.org
-References: <20260516075708.6682-1-flaviu.nistor@gmail.com>
- <20260516080647.4C31AC19425@smtp.kernel.org>
- <3f20b310-fd59-46d7-ad1f-201c755b690a@kernel.org>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <3f20b310-fd59-46d7-ad1f-201c755b690a@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 5/16/26 01:14, Krzysztof Kozlowski wrote:
-> On 16/05/2026 10:06, sashiko-bot@kernel.org wrote:
->>> Since device_property_read_string() is used in the
->>> probe function add explicit include for
->>> linux/mod_devicetable.h and linux/property.h rather
->>> than having implicit inclusions.
->>> Header linux/of.h can be removed and also of_match_ptr()
->>> improving non-Device Tree compatibility of the driver.
->>>
->>> Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
->>
->> Reviewed-by: Sashiko <sashiko-bot@kernel.org>
->>
-> 
-> NAK, fake tag.
-> 
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] If `topology_num_cores_per_package()` evaluates to 0, an integer u=
+nderflow occurs leading to an out-of-bounds write and kernel panic.
+- [High] Using the global `topology_num_cores_per_package()` limits the per=
+-package array size, preventing sensor initialization on heterogeneous pack=
+ages or during CPU hot-add.
+--
 
-Until and unless there is an official policy that explicitly states
-that AI agents MUST NOT provide Reviewed-by: tags, I will ignore your
-NAKs on patches submitted in my scope of responsibility. Please point
-to the policy, not to your opinion about review feedback from AI agents.
+commit d686b3577dd2107e7452adf6a949cc0720d2213a
+Author: Roman Bakshansky <bakshansky.lists@gmail.com>
 
-Thanks,
-Guenter
+hwmon: (coretemp) replace hardcoded core count with dynamic value
 
+This commit replaces the hardcoded limit of 512 cores per package with
+a dynamic value. It uses topology_num_cores_per_package() to allocate
+only the needed amount of memory for core_data.
+
+> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+> index 6a0d94711eadb..c722b1d8e4804 100644
+> --- a/drivers/hwmon/coretemp.c
+> +++ b/drivers/hwmon/coretemp.c
+
+[ ... ]
+
+> @@ -485,13 +484,7 @@ init_temp_data(struct platform_data *pdata, unsigned=
+ int cpu, int pkg_flag)
+>  	struct temp_data *tdata;
+> =20
+>  	if (!pdata->core_data) {
+> -		/*
+> -		 * TODO:
+> -		 * The information of actual possible cores in a package is broken for=
+ now.
+> -		 * Will replace hardcoded NUM_REAL_CORES with actual per package core =
+count
+> -		 * when this information becomes available.
+> -		 */
+> -		pdata->nr_cores =3D NUM_REAL_CORES;
+> +		pdata->nr_cores =3D topology_num_cores_per_package();
+
+Since topology_num_cores_per_package() returns a global value that is set
+once during boot, could this prevent sensor initialization on heterogeneous
+packages or during CPU hot-add?
+
+In asymmetric multi-package architectures where a secondary package has more
+cores than the primary, or when virtual CPUs are hot-added, pdata->nr_cores
+would be capped at the primary package's boot core count. When initializing
+extra cores, ida_alloc_max() would enforce this bound and return -ENOSPC,
+silently dropping temperature sensors for valid cores.
+
+Additionally, could topology_num_cores_per_package() return 0 if the CPU
+topology is broken or misconfigured by a hypervisor?
+
+> +		pdata->core_data =3D kzalloc_objs(struct temp_data *,
+> +						pdata->nr_cores);
+>  		if (!pdata->core_data)
+>  			return NULL;
+
+If pdata->nr_cores is 0, kzalloc_objs() will allocate 0 bytes and return the
+kernel's ZERO_SIZE_PTR instead of NULL, bypassing this error check.
+
+Later in this function, the index is allocated:
+
+	} else {
+		tdata->index =3D ida_alloc_max(&pdata->ida, pdata->nr_cores - 1, GFP_KERN=
+EL);
+
+If pdata->nr_cores is 0, the maximum bound (0 - 1) evaluates to -1, which
+implicitly casts to UINT_MAX. ida_alloc_max() would accept this large bound
+and return a valid index.
+
+		if (tdata->index < 0) {
+			kfree(tdata);
+			return NULL;
+		}
+		pdata->core_data[tdata->index] =3D tdata;
+
+Could this result in an attempt to write to the ZERO_SIZE_PTR address,
+causing an unhandled page fault and kernel panic?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260516114253.5466=
+-1-bakshansky.lists@gmail.com?part=3D1
