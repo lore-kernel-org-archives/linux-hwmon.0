@@ -1,67 +1,67 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191D629898B
-	for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 15:19:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2ADD3E3C40
+	for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 15:23:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778944756; cv=none; b=Kb1jm7VsJtOBtXWhPRNuuFHbuw2drF4iSQIassP7VAQpwWgbWThXuPJ4a6S0KAD+tA8Uj2/v2bqF9BaYWv6HUwilZsYmcFx+ArXkhWeil1MGkSMDtcVzN7y1YZd8zXzGRbqUWXZ33QCpdxqI08EDlfRfF2qbyvdw8zMhIWrux+M=
+	t=1778944998; cv=none; b=pRw/9eCGaQ5dw6AVgrDj6cp8cSWQBe9+g6GTfN2kOw6DPruKJEbfAqm9UI8KUU2pXzWubEG6Do3brnkjsaZ4tNBcSHPSOihUJGq+YsFUOQUZfQZsfLkeZyFpW+SD0ckMQqDpPANEZH+K4mdPM27PB0BsieuaT+A1yU3z+ghEhes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778944756; c=relaxed/simple;
-	bh=Pw8b5bPQqcNlcW3aCbB9ag/FgzotRKgymsVwoZrW7mk=;
+	s=arc-20240116; t=1778944998; c=relaxed/simple;
+	bh=6BFJ7gLNaRS9ktkzCQvQKWgq9XlntK/DE37quGD8Ifk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P++3ACcLPRZ2mGaJw0kuGAK0lZbNJfQchOPdEePkM4UXNJ2RIQYULpLw8XQR+McnTgFDp5sgFax2rRfAe/kN/GoeShTlNYhbRn/45fgjDUv3H1z1nfLmTSEUrawDg3gs+RG6cxbcU8sn4ieRZMs4avfDkicLA3qaab+BtBZWEt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TA8OZ4YP; arc=none smtp.client-ip=209.85.214.175
+	 In-Reply-To:Content-Type; b=bdcVMmpKZwkJ4Q7Iq3Po9dwncGOOVZg7EekPCF1j6CRKDXXCeuzkTchyjZdC2DCgBogIWzJC4WDQnkX+oLDvRrqG1vHoSpowBuzKlNik2IE0f/H8i5Uss4rzkgnHrg/z75//f5gqdwZOXfuPRJR/NdBr3OpyTJjerQlH85D6hkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FMf0n3xf; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TA8OZ4YP"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2ba3e3c4f87so8334805ad.3
-        for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 08:19:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FMf0n3xf"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2bc763e2ba8so3769665ad.3
+        for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 08:23:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778944754; x=1779549554; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778944997; x=1779549797; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=rj8rndSFiycmqOwIbgdwAMxdgZDADNL4od2Tb81O+Tg=;
-        b=TA8OZ4YP5xFwn19JTT81kHJ080SGQjLROvos8bCkabdbj9OX7maleqjtF0R+FpgCtA
-         iqo1L0KKD1IgO93CriX1mHDp2KcJ9WnTduYxrGBYqstfa48J+Ufb1JZ9w1giJuLzJn6L
-         rgFo6SkPDsCTTuswWPoybjq0MvWN1E1FnSUk6C6SKSRaj6YHA4GWO04UjoD6HGWwN50d
-         CfpVLj6SKs0+NHOTAihY8eudj7xsW4AhN2rN/YF8ZWChRcz7tJmMH5a/9vb/Bc5mVIqi
-         i/5Y0rNcGb1NuHdvjH7GJePBucSwMdfUTnsQEF7yd8ugn8rbCUYUzT4doI+C5CxkNavx
-         Lx9w==
+        bh=45gdeTVXp8vVFaeA4pBMgjJh10jZNhmWEpnGdFpVpHo=;
+        b=FMf0n3xft+PqHqJNDCEmWEQb5o/YjhaFNJWV5/WMUMFuJQX8qB8NSskIs5263Oo7vn
+         aD3mHV8684XbkkX3Cm6IzbbBU/FJOwz2uFgUo2SxikOT0d9ofs2/W/sn6tlBve6n8c/y
+         PsPA05rXzkVb6uCyOuakaljcQR35+EgLZ8pFuMYM6JWyCzzkfZh3qv3TFqa8kCD2/jQS
+         h/5/NfN1b0wDgbUJt7WXUdJWm4NFCi/vvoQeVJitrlDe2o7A94oeDGbg+WFTOKPfv4v3
+         PbfuuI4S5AsJ3Mg9hr31WcPlMGEMiFpQmkPWy631fF5NtINrZYxrmoW5T4EuAXtBLEd3
+         5Q3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778944754; x=1779549554;
+        d=1e100.net; s=20251104; t=1778944997; x=1779549797;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rj8rndSFiycmqOwIbgdwAMxdgZDADNL4od2Tb81O+Tg=;
-        b=CmC0ibuoUGcWOo1arJ2/ezGBSN5qCVIXOfLJoajwLb2uQFSjp95I4nveUcmR7+QnRm
-         AEEKhW1+/ZVBebUey+iMqKl+x9azzpewLECTnPcPlc94mipRmU7+3fVHUZtga6pltCoH
-         DGPmPc2UlQNE9fx6wc0gGr+AHnY9i9kLQW67TRgKsZaQEccol/daegdiQRqvDUqWSqWc
-         5kWZbTqNeu9vEUFRdAdN32ZxjJ1BCMbiIhVJW89sQdI2HD0a4S7+Q0AX5HQ6rWCyMzce
-         Q05FAVPDyAbwyac46vMGbF7c+iK+dI40Bl6qZag83VejqdgGx6Z0m+iBgqe6p5nxP5+p
-         /Nbg==
-X-Forwarded-Encrypted: i=1; AFNElJ+wIUFoTRVOTk7bblbO4jCq1l7ypYHMG8eqH2rImeXHGbRthhhUos86BSG/IZjPL0Chkw+bJN4onaUd9w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDeMh6Jq4h3pFr2DbeRMHqaWo09F8OKSXaqCnkb7IEp7I1S4s4
-	n0bSfc80NObjt66Ydoab/deTzxoa+O9GrX5JYLPbkG1hBZrONYo+VBEh
-X-Gm-Gg: Acq92OGncAg0JiurjFbQkx0e/nUCfzkzObVSjYb7P25u1Sn2wq2kb7I4C3MgGhn0pM6
-	gGJbt51k6OjAEKNslHPsQzgh4K3RL2VcCXFQgoHDkAee/zjPeb2lym+BJMg+mCSIXq8VTv8fQW5
-	oBH9TVYnL/2JRq4K8PAe3ikYSMC6wt74RpK9yMAfejIctQt8nfrmZ5iBQBeM009pW9s6IWfuk1n
-	hhbRS23Q0ZD2MTPni90+6hwX2PmhktV8l12a7ithtI9FMaz4PlUCz0PgaEC7j2yCSyGRqUNJhPI
-	YQs32NPK4n1A4Pm1Sjw8VtV+wSRa7aO64bGuVqzZ4SbHOaf1AUqTH/EfrOds7u7qzFGdj0jrlkQ
-	1jv16XaA8zRoFnduu7llTBXGKaiQhgrYpdtP997j0xuEPtOsAopldbjBDEqjVw4r6KfH4Y5hDOe
-	vE22MET4ir9/jmFmtVJbyLK6/RdlObN60sbr/+Vv9UQ77KYUqkyCLPnyOl4/S1DHHLD9I+jyKS
-X-Received: by 2002:a17:902:a701:b0:2bd:5b20:a5b5 with SMTP id d9443c01a7336-2bd7e951360mr67938555ad.37.1778944754433;
-        Sat, 16 May 2026 08:19:14 -0700 (PDT)
+        bh=45gdeTVXp8vVFaeA4pBMgjJh10jZNhmWEpnGdFpVpHo=;
+        b=g+0rq2aKnWEO4ZFsx5KDl3EFfFmOeFlXp+O4ZZ6WFajwhRylmkDhLqwkfYc0vT8eJN
+         fcqnuIbSCKUZdNGBCTvoksktJoSmhnE9dw2A4rZG44QPyfBeddgzo+HdSHaDBctGRwPi
+         XgT7s7zvCsC+Mm3dWXBFjSagzcJcUsrNUCVUd1YuBy+jWadUdiAW0j09EUvsukgVshlJ
+         vQlEQK61C/7Ky8fcx6bTKh5MoOn25vgwa6Z4EnJjlGDPETvkjV8Q/a/yjmg74rKk/jFd
+         OPeZ8Ylq9E9RCLpDLdME9bnNxjH5Am4/4q92GooqmVHwQPFbuz8JeoiFLmqxJP3pKAMR
+         bWuw==
+X-Forwarded-Encrypted: i=1; AFNElJ8VL6pbN3A4JejoJlPTEKvzq+T0GdAKOyG1EPgfhnCdyla6AYeAFrFoplquOrSoLlUs18YaR3MofNxAIw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywku/qWUoODXhXHd8wu3u/1w1O6G0LBVsQef4CId5XnupkIJFie
+	tsXFbrD95CQSqjPaVqCsMUx4aR4bNOVdf4j+x9VlCFUms0GlfYElFg78
+X-Gm-Gg: Acq92OGh7xBwjMKUvBm9O8IE54v/PFBsjQLn0oLXKPD3tpWfImNHBjgCMIalmmgrtXO
+	vasC5YNugOB7um8j8ZZPySwtFmnLjT3bW6NHak+iRJsbBg83pONzPFrvsECr8c1AGD0PrCv7x5I
+	A/B5kgl7Hr0x3La+Klo02m4hJmLwsHQpgXLtQUYkiTQMg5QFSNQthvlVKyvWqQ1Y/CdlFS7IRp5
+	Xt/YQc8WLzLX2UCTIqoblm+9ain0CQaUzvWivR0bgMN6NdrD+jpr2JaGKQJc2XGdRhYme0qr1yo
+	PyM5zyyHxmOpQnUUDKVn0/vhzbq3B9FqiNiW+H4T1M4G92XpybCnB1QJuQ8PXT1JdQ2K/yNrb4p
+	56WmPZI0BKsLZETeL226oLtrb6dRgJQqZTJltFGyqBjR/Tdv3VSUJyCbqadV2eaBdzF7m2aZrGF
+	a8fbLup3/2UjtrliHf5rGVsYhTj5p+9IMkgBv/ts8jfLpjXjTnqGE/7yWeL5mClk/1vGx16M1Y
+X-Received: by 2002:a17:902:b405:b0:2b2:4d78:eec2 with SMTP id d9443c01a7336-2bd7e92ca04mr67331295ad.18.1778944996887;
+        Sat, 16 May 2026 08:23:16 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bdc58575dfsm3068475ad.20.2026.05.16.08.19.13
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c82bb1231c7sm8737986a12.31.2026.05.16.08.23.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 May 2026 08:19:13 -0700 (PDT)
+        Sat, 16 May 2026 08:23:16 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <23b62e32-8773-49f4-98d2-3c32b229650c@roeck-us.net>
-Date: Sat, 16 May 2026 08:19:13 -0700
+Message-ID: <2a3c5a65-e2b7-4159-9d3c-eb6a8a600b37@roeck-us.net>
+Date: Sat, 16 May 2026 08:23:15 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,13 +69,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/2] hwmon: (pmbus/d1u74t) Add Murata D1U74T PSU driver
-To: sashiko-reviews@lists.linux.dev,
- Abdurrahman Hussain <abdurrahman@nexthop.ai>
-Cc: devicetree@vger.kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- linux-hwmon@vger.kernel.org, conor+dt@kernel.org
-References: <20260514-d1u74t-v4-2-1f1ee7b002ec@nexthop.ai>
- <20260515033458.CFBFCC2BCB0@smtp.kernel.org>
+Subject: Re: [PATCH 0/5] hwmon: (pmbus/adm1266) buffer-bound and timestamp
+ fixes
+To: Abdurrahman Hussain <abdurrahman@nexthop.ai>,
+ Alexandru Tachici <alexandru.tachici@analog.com>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20260515-adm1266-fixes-v1-0-1c1ea1349cfe@nexthop.ai>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,90 +121,63 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260515033458.CFBFCC2BCB0@smtp.kernel.org>
+In-Reply-To: <20260515-adm1266-fixes-v1-0-1c1ea1349cfe@nexthop.ai>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/14/26 20:34, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [Low] Missing includes for <linux/module.h> and <linux/string.h>.
-> - [Low] Logging raw I2C device strings without escaping.
+On 5/15/26 15:11, Abdurrahman Hussain wrote:
+> This series fixes five pre-existing bugs in adm1266.c that were
+> surfaced by automated review of an in-flight feature series for the
+> same driver [1].  None of them are introduced by that feature work --
+> they are all reachable on the existing driver as it sits in mainline.
+> Sending them standalone first, with Fixes: tags and Cc: stable, so
+> the feature respin (v5) can rebase on top.
+> 
+> Patch 1 fixes a CLOCK_MONOTONIC vs CLOCK_REALTIME confusion in
+> adm1266_set_rtc(): the chip's SET_RTC register is documented to hold
+> wall-clock seconds, but the driver currently seeds it from
+> ktime_get_seconds(), giving blackbox records timestamps that reset
+> to small values on every host reboot.
+> 
+> Patches 2 and 3 fix two ways the blackbox-info path can be driven
+> out of bounds by a misbehaving slave: a 5-byte stack buffer that
+> i2c_smbus_read_block_data() will memcpy() up to 32 bytes into, and
+> a record_count loop bound taken directly from the device with no
+> upper clamp against the 32-record dev_mem allocation.
+> 
+> Patches 4 and 5 fix the two ways adm1266_pmbus_block_xfer() can
+> write past the end of a buffer: an off-by-one on the helper's own
+> read_buf (sized for the length+payload but missing the PEC byte the
+> i2c_msg length already accounts for), and a caller-side bug where
+> adm1266_nvmem_read_blackbox() advances its destination pointer in
+> 64-byte strides while the helper is willing to write up to 255
+> bytes per call.
+> 
+> [1] https://lore.kernel.org/r/20260512-adm1266-v3-0-a81a479b0bb0@nexthop.ai
+> 
+> Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+> ---
+> Abdurrahman Hussain (5):
+>        hwmon: (pmbus/adm1266) seed timestamp from the real-time clock
+>        hwmon: (pmbus/adm1266) widen blackbox-info buffer to I2C_SMBUS_BLOCK_MAX
+>        hwmon: (pmbus/adm1266) reject implausible blackbox record_count
+>        hwmon: (pmbus/adm1266) include PEC byte in pmbus_block_xfer read buffer
+>        hwmon: (pmbus/adm1266) bounce blackbox records through a protocol-sized buffer
+> 
+>   drivers/hwmon/pmbus/adm1266.c | 13 +++++++++----
+>   1 file changed, 9 insertions(+), 4 deletions(-)
+> ---
+> base-commit: 1f63dd8ca0dc05a8272bb8155f643c691d29bb11
+> change-id: 20260514-adm1266-fixes-853003a0fad4
+> 
+> Best regards,
 > --
-> 
-> commit f645f72f2f4d8cc53bec169fb4350e6231e649a4
-> Author: Abdurrahman Hussain <abdurrahman@nexthop.ai>
-> 
-> hwmon: (pmbus/d1u74t) Add Murata D1U74T PSU driver
-> 
-> This commit adds a PMBus client driver for the Murata D1U74T power supplies.
-> 
-> Closes: https://lore.kernel.org/oe-kbuild-all/202605122253.zInzmUeX-lkp@intel.com/
-> 
->> diff --git a/drivers/hwmon/pmbus/d1u74t.c b/drivers/hwmon/pmbus/d1u74t.c
->> new file mode 100644
->> index 0000000000000..286ba492e3362
->> --- /dev/null
->> +++ b/drivers/hwmon/pmbus/d1u74t.c
->> @@ -0,0 +1,86 @@
->> +// SPDX-License-Identifier: GPL-2.0-or-later
->> +/*
->> + * Copyright 2026 Nexthop Systems.
->> + */
->> +
->> +#include <linux/i2c.h>
->> +#include <linux/of.h>
->> +#include <linux/pmbus.h>
->> +
->> +#include "pmbus.h"
-> 
-> This isn't a bug, but should this file include <linux/module.h> and
-> <linux/string.h>? It uses module-specific macros like MODULE_DEVICE_TABLE
-> and MODULE_AUTHOR, as well as the strncmp function. While compilation might
-> succeed due to transitive includes, it could lead to build failures or
-> implicit declaration warnings on some architectures.
+> Abdurrahman Hussain <abdurrahman@nexthop.ai>
 > 
 
-I added that; no need to resend.
-
-> [ ... ]
-> 
->> +static int d1u74t_probe(struct i2c_client *client)
->> +{
->> +	char buf[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
->> +	struct device *dev = &client->dev;
->> +	int rc;
->> +
->> +	rc = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
->> +	if (rc < 0)
->> +		return dev_err_probe(dev, rc, "Failed to read PMBUS_MFR_ID\n");
->> +
->> +	if (rc != 9 || strncmp(buf, "Murata-PS", 9)) {
->> +		buf[rc] = '\0';
->> +		return dev_err_probe(dev, -ENODEV,
->> +				     "Unsupported Manufacturer ID '%s'\n",
->> +				     buf);
->> +	}
->> +
->> +	rc = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
->> +	if (rc < 0)
->> +		return dev_err_probe(dev, rc,
->> +				     "Failed to read PMBUS_MFR_MODEL\n");
->> +
->> +	if (rc < 8 || strncmp(buf, "D1U74T-W", 8)) {
->> +		buf[rc] = '\0';
->> +		return dev_err_probe(dev, -ENODEV, "Model '%s' not supported\n",
->> +				     buf);
->> +	}
-> 
-> Does this code log potentially unescaped strings directly from the device?
-> 
-> Since the I2C bus can return garbage data or unprintable characters from a
-> malfunctioning device, using the %s format specifier could result in
-> corrupted log output. Would it be safer to use the %*pE specifier to safely
-> escape these untrusted strings?
-> 
-Possibly, but I'll let it go for now. Other drivers do the same. It can be
-fixed in a follow-up patch if needed.
+Sashiko identified several issues with the driver as part of the review.
+Most if not all of them seem valid, but were not introduced with this
+series. I'll apply the series as is. Any fixes can come later.
 
 Thanks,
 Guenter
