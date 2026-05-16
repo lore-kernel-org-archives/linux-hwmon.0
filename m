@@ -1,114 +1,123 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B2518EB0
-	for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 07:57:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 490E0171AF;
+	Sat, 16 May 2026 08:06:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778918236; cv=none; b=WvCL2/ezH/ItmYhG0A9JN17QVh0mo5CDasSGWWHmfoWGOvVtYv5A/0LvY2dgnFSWGrqYyBA152BlVxLcs5gkxG5QXhAQQNJ5vh/gIKGn1ZVQ1+wrmNEdghZS+B5RvgHWK7BtncGZP3YimQodIL7H//ZFnpwNZs6mEKd2ydDElGM=
+	t=1778918794; cv=none; b=kld+6hcKzduo6BpcSlUUnpG5J7iOZmsSZyXN9NNVhYx1ofEFRtHEJm1/3Jp8+qGQJyghKdFDAlHLGAUcaqzNQlG+WmTSRt2UuAmLrNTVNU67crulofM64Qfy5WW2ckda26lr8ppzI03JFdVMPXAyUR6oQhWrb4jQy6kwHelqcj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778918236; c=relaxed/simple;
-	bh=XnvFvE2NxfNYSWePwNZxwD8M2o7IapgO3O4qUY/nUHY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VwYFKIthCM+owyBkpuoROGRsQPN5kBqORAasxHCamB3D/Gvd/WYAfukcPG/W+7Y/x7DABBCQbCr0aCwxK2RGfKgPnvZcXWC6ZeGRq/FGjKEhcl7j2gwVFuq4lRdcXu68rZu6GAqtOCbz8Cap/acU386v11KbzTBjm78bfICdOiQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BNJyKKYC; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778918794; c=relaxed/simple;
+	bh=6QEEQie7p+zy+rGX2jwDJCDq0zv+Tjf8uhHk2xM3zNE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EJc3QmBnlupVpvJ5rLVKIcq//lNB+L3IllvOVISlv44AU7yldGKFfFKB3FC679qiyVMBt/dTBu+uEyVIXadHW5Z4l+budhhv7gMi8ofFQ61z/JQyxCesC+kmMkMfiBv+8YEKzW8NQfXfWmeGss70+3DTn2DOqzDLpsk7qggIIpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZMKhYeLl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BNJyKKYC"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-48a7fe4f40bso6856935e9.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 00:57:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778918232; x=1779523032; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uZDD45ZMggWfTmYRIqeHT/QgETcJhRX5fns6ydT5F/s=;
-        b=BNJyKKYCWWTWt4G9xgtaRi92oJkpWUqxMaRFUiQ5NqJuy+CMerX+UQukxpjbCwFOAq
-         YhjopkTfeqOgYJLtGMSp47N801vh85UKrZF06qFJLLhyZ3Bmcky40ubA/sl2g0KFKvFO
-         xhfa0HY2T1ZheLWGIoqPw0buzNBak5GSloxMTk9pqHc2rWUYOjSgLzvoKhQSyYOMHOU0
-         fsAfx0KYuHCj/qgUd3OeLxNkbTIGjQu5fBfJUjSxPSTzrbeA2NjkdjGFJ3wWXmCZERfp
-         9dF/WnAzcYDzvVZcLUcycQhJ+OOHvk2a0GmCvD3iglVKT2KTU0sN+ysCuUJxmWLPSyBF
-         WARA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778918232; x=1779523032;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uZDD45ZMggWfTmYRIqeHT/QgETcJhRX5fns6ydT5F/s=;
-        b=BGhqb6mdVW/YrqgGjCVRvVN0EdW+3J4nI9r30xxcR67/e9EsJtwG9+/XmZFkN/ik0S
-         /vbOidHJP3aSJqYH1UWmxUTBqSfWEIW/6rPBvVY2jRpGtPucH7s18EuD9ILM1Qpq5q1u
-         kj9F2TzKT6AFAAHlETQhvMGFZ5/WfaR58GWDhAIFGTeOzCybU/UUfKv3NHSMQAfRh+Mw
-         O8kqzI7r6jiorG+1/Hfw2/H0vg2bFmnRf+fW9yCuDGVUEkQYLz3lQ+WJ8PIuWGl1lBfM
-         h42mLlI+1buy0e1uPJLa7F51w2SEz5gd/pdChwakDVi+hpD7v/duvdJp0J5dWSHGkFWr
-         Urcw==
-X-Forwarded-Encrypted: i=1; AFNElJ880g4+Iau87nPvEEIpX0+cpfrRK6pH6l4w9yHjJqJM5cm3KObABVeIv8U+aGA7dxD16uN4dwZJj9OZGQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGEuIxEVHPIQW+t2Taz4hHkqh2MBibvHBozCpIBiSt1yrjzVVl
-	5rb3Pf8Oo2pKgDYs4mi/CBNupV9lzZ/jzqxqkepZkwLbwnbi2yoOmSEe
-X-Gm-Gg: Acq92OEdl5++DrvulL9WuV1alWEmooBloRvDE76dMVSAkjEEQO9LjNVCAeCwomyk+Sq
-	0leaDIOMvT5ohApdpuL8koq/Of9ZQh3rS01gY4trLoPMSQzccIpCfA2yzXi3xDBmGmkP7gVk2lP
-	YsPZuPAkNBocIB6ENm79RkgcUyIFJwlBlA7JL5KA/zfXJWhrpRLcMDzmMqK+lGG4v9dirv6oi+4
-	Xv37y9uoNoblFt5JPM+T0bdhaXw1PN6pbD1bPUJbtOXyPn0YoKg5hrIB8WK95xE+XLhEVVXt+lQ
-	m8co4SSN6lsVwhIWcoHG7GAgZjywAhOuzWkgPenKMHFldfl05r+wNFWOEDU7IWsrCJ5qM2/UKhW
-	uUzsCKSHxPIPdnWaKafgBGCrU+BEaS9PO5+aD7OKiJpr1cgM+6W0iOQ0zu+l5Ziu68W/VOQlm3C
-	kc0JsDGHa1koPFGrK/ZDOlMImEySUIiYGFoeRiVaDxPyjuALSLw8lysEzkUpeka5Nalr47uv4XA
-	d/xAglzluzn6c6MZTdllg==
-X-Received: by 2002:a05:600c:848c:b0:48f:d0f1:ed28 with SMTP id 5b1f17b1804b1-48fe60e4e32mr96678295e9.1.1778918231600;
-        Sat, 16 May 2026 00:57:11 -0700 (PDT)
-Received: from flaviu-Aspire-E5-572G.. ([5.15.232.50])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fe4c90b27sm118479145e9.8.2026.05.16.00.57.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 May 2026 00:57:11 -0700 (PDT)
-From: Flaviu Nistor <flaviu.nistor@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Flaviu Nistor <flaviu.nistor@gmail.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (lm75) Add explicit header include
-Date: Sat, 16 May 2026 10:57:08 +0300
-Message-ID: <20260516075708.6682-1-flaviu.nistor@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZMKhYeLl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5535FC19425;
+	Sat, 16 May 2026 08:06:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778918794;
+	bh=6QEEQie7p+zy+rGX2jwDJCDq0zv+Tjf8uhHk2xM3zNE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ZMKhYeLl8VXA0NnG1zRh68V/EQsgGXakX30dS7joKs+78LvP7Gx8h3c+wW/IOpegZ
+	 hVbEAll4E5bo0NoM6A9UmjYVmZYA7yOFfJzJ7y9B3O/OuPYxC2ddTVjF2QQOOd56rM
+	 v4GFIZV/PWbcIq+IM1nInjuBGxcwhILxbJAxst530Lpj3ZMfxEUHeWhXKqUxiNItRm
+	 cKbOxcxu3koP6IA+X9Y6ZrfmYH4sRLHj90UoX4g2dLOROS+p/B501qDb/23IQ8Snht
+	 siip+qz9cSEeLfJxATNWsXJbH4bTAj5Da0AdvollTBgjw2UnMOg+lrQNAzb+1WQKeo
+	 /55YQTZhTuepA==
+Message-ID: <e573fb8f-b507-4d54-b990-57f0ea66fec5@kernel.org>
+Date: Sat, 16 May 2026 10:06:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v12 5/6] hwmon: add NXP MC33978/MC34978 driver
+To: sashiko-reviews@lists.linux.dev, Oleksij Rempel <o.rempel@pengutronix.de>
+Cc: devicetree@vger.kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, linux-hwmon@vger.kernel.org
+References: <20260515160537.115808-6-o.rempel@pengutronix.de>
+ <20260515183847.D8091C2BCB0@smtp.kernel.org>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20260515183847.D8091C2BCB0@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Since device_property_read_string() is used in the
-probe function add explicit include for
-linux/mod_devicetable.h and linux/property.h rather
-than having implicit inclusions.
-Header linux/of.h can be removed and also of_match_ptr()
-improving non-Device Tree compatibility of the driver.
+On 15/05/2026 20:38, sashiko-bot@kernel.org wrote:
+>> Add hardware monitoring support for the NXP MC33978/MC34978 Multiple
+>> Switch Detection Interface (MSDI).
+>>
+>> The hardware utilizes a clear-on-read FAULT register, but physical
+>> faults remain asserted as long as the underlying condition exists. This
+>> asserts a global FAULT_STAT bit on the SPI bus. To handle this without
+>> trapping the CPU in an interrupt storm, this driver implements the
+>> following architecture:
+>> - Requests a rising-edge nested IRQ (IRQF_TRIGGER_RISING) from the MFD
+>>   core to catch the initial 0 -> 1 transition of the global fault state.
+>> - Caches hwmon-specific alarm bits and calculates state edges (XOR) to
+>>   isolate alarm transitions from system integrity faults.
+>> - Implements a 1Hz delayed workqueue that polls the hardware as long as
+>>   any alarm is active. This compensates for the edge-triggered IRQ by
+>>   discovering secondary faults that occur without a rising edge, and
+>>   detecting when the hardware clears.
+>>
+>> Assisted-by: Gemini:gemini-3.1-pro Sashiko
+>> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> 
+> Reviewed-by: Sashiko <sashiko-bot@kernel.org>
 
-Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
----
- drivers/hwmon/lm75.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-index 845a0e09ea9f..32279049d44c 100644
---- a/drivers/hwmon/lm75.c
-+++ b/drivers/hwmon/lm75.c
-@@ -14,7 +14,8 @@
- #include <linux/i3c/device.h>
- #include <linux/hwmon.h>
- #include <linux/err.h>
--#include <linux/of.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/property.h>
- #include <linux/regmap.h>
- #include <linux/util_macros.h>
- #include <linux/regulator/consumer.h>
-@@ -1152,7 +1153,7 @@ static struct i2c_driver lm75_i2c_driver = {
- 	.class		= I2C_CLASS_HWMON,
- 	.driver = {
- 		.name	= "lm75",
--		.of_match_table = of_match_ptr(lm75_of_match),
-+		.of_match_table = lm75_of_match,
- 		.pm	= LM75_DEV_PM_OPS,
- 	},
- 	.probe		= lm75_i2c_probe,
--- 
-2.34.1
+NAK, fake tag.
 
+https://lore.kernel.org/linux-devicetree/ad139e54-a7f0-4d09-832c-6b2bf2e93e03@kernel.org/T/#u
+
+
+Best regards,
+Krzysztof
