@@ -1,130 +1,88 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADED83DD85A
-	for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 12:16:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23C237BE8E
+	for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 12:26:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778933782; cv=none; b=kx/sfv0ZbKdks7YU0w1inZGFvX9DGcfht9rs8kStSsXYAvQrATCwv5lN7glh6vA3odjgqZHwdAcUvBwwDGytj4Wpzu44Yzk/3mZLST2PPggiS7GFuaLpi6woS4UsgxZbLX9Dd4X0xAf4rGB4qZIZWn8wiSRP3MfhSLXSnbtxoA4=
+	t=1778934362; cv=none; b=MsKXEpdqib+H+J/zQB2J3h6v/xFWjcsL4Qj45CnrQvEFiJ2elOY+R1MibAIRUUutK46Cm0B4YoEaVdm0bKtsA2+kGHgel1R/+ASLu22xC0rYflc1Q5a2GMC1KUGgrNTDNnYE3FS95D4M3YeQnAzEjEN8OIOq03PXzFRhHRJayjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778933782; c=relaxed/simple;
-	bh=SL7s83SxEWFI9hIJQAe2/kxGjIjdClsMFF8K0lGsf5g=;
+	s=arc-20240116; t=1778934362; c=relaxed/simple;
+	bh=TiUxjS4T/MLbcGALje09hm7FmXpNXFQIoX2sC3rexmI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=f7W1gCA8G+ucpjcd8T2hVdQDxH+bRmqQQ6266c40ihQmeshNkhSp40YOrHWo2Git58NaSoSLDmgWh4gm8s/Nr/pHKwfP5dBMUfU7vogfr57bWrfRNiHmtX2cSBJfD7URLLCPXGdMIJkCPu/FNtgQtK8bRJOXlUUmczIrJzrOcZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eKvwBnTZ; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=qVkJWNU+nygugfIAOZt/6w89cFeAmL2D/R2PEI0cppCTAKw6bDtAImfjdVPReWb0lKBaF+0T4Leds2HS0YkxxgwoSHwDDcdnzJgsczJ5lSvqvuk6CPtOnEqgvF6Nxstw4/+VPh9lPR59BnT+yYARSPSNkRmY9ipJ+OL6918KJBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zpa+KJ/8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eKvwBnTZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E9DAC19425;
-	Sat, 16 May 2026 12:16:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zpa+KJ/8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56C85C19425;
+	Sat, 16 May 2026 12:26:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778933782;
-	bh=SL7s83SxEWFI9hIJQAe2/kxGjIjdClsMFF8K0lGsf5g=;
+	s=k20201202; t=1778934362;
+	bh=TiUxjS4T/MLbcGALje09hm7FmXpNXFQIoX2sC3rexmI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=eKvwBnTZiAeRZvjxELMpe6HubLIY/tkeNItuQZOraU8HtuHhllEfxeWJJtjCxKCaX
-	 kPCSjASf4JKzrSD9zDvqAvyv+jVmzxazo7xuDyocwvUyereV6MWTV9lcLG9aTSUEnF
-	 BORV9VnJ5CxumywUCS/v59dzgw4WFqxV380BWRvFxxDCJEQayN8NlRgCsv2HKv08UM
-	 w2yg4sF3YQuz3NJDe2KeqO4qkYx1n/4FuGvgjUcNuHVX3uixNtDFaEg/AhS93hFm2i
-	 b/1o7r/UuJmNcBYgUb2R5dCBLgN6RIRsIceeDUJCJxOdIeed32oh3M9aVwsnDjRy1D
-	 h6eXj1/Av942g==
+	b=Zpa+KJ/8dFlEfO+qxsTbMDPKAMXDx3/V6kKOdkVlU2rayealgWt1bT4r1ukQV7Lr2
+	 sNb/VB+PhkyxO72dc2Q21Bk616vRGE2oikqkmQIP1JegRs/ZkrXECYuS56//MOdSnS
+	 3KhairM3Rvx94C3+aS2mljqC4hHGmtX5PFgRiuwStMZr8ZaGTkt0N9Cv641jBAbCoF
+	 BAHOFWwhxYtIA7ZpUrQ3hu2S7QUNQqrt9M1I/X0fc9rGSMkZbsExGHUjcozp6As41G
+	 yfpT/4CQkKsrRY5j00tBEi0KB9QTzhrZ4HrsRCT1BLFvy8esRRT6Z3zUXZ9oMgNm0r
+	 KBxT1FwvcbPPA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/2] hwmon: (coretemp) replace hardcoded core count with
- dynamic value
+Subject: Re: [PATCH 2/2] hwmon: (coretemp) fix coding style issues
 Reply-To: sashiko-reviews@lists.linux.dev
 To: bakshansky.lists@gmail.com
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260516114253.5466-2-bakshansky.lists@gmail.com>
-References: <20260516114253.5466-2-bakshansky.lists@gmail.com>
+In-Reply-To: <20260516114253.5466-3-bakshansky.lists@gmail.com>
+References: <20260516114253.5466-3-bakshansky.lists@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 16 May 2026 12:16:21 +0000
-Message-Id: <20260516121622.1E9DAC19425@smtp.kernel.org>
+Date: Sat, 16 May 2026 12:26:01 +0000
+Message-Id: <20260516122602.56C85C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] If `topology_num_cores_per_package()` evaluates to 0, an integer u=
-nderflow occurs leading to an out-of-bounds write and kernel panic.
-- [High] Using the global `topology_num_cores_per_package()` limits the per=
--package array size, preventing sensor initialization on heterogeneous pack=
-ages or during CPU hot-add.
+- [Low] A blank line was incorrectly added inside a contiguous block of dec=
+larations in `create_core_attrs()`, splitting the variable declarations.
 --
 
-commit d686b3577dd2107e7452adf6a949cc0720d2213a
+commit fd6a696ecbdee696c6e67fb77fb06e3c1baa31cc
 Author: Roman Bakshansky <bakshansky.lists@gmail.com>
 
-hwmon: (coretemp) replace hardcoded core count with dynamic value
+hwmon: (coretemp) fix coding style issues
 
-This commit replaces the hardcoded limit of 512 cores per package with
-a dynamic value. It uses topology_num_cores_per_package() to allocate
-only the needed amount of memory for core_data.
+This commit addresses several coding style warnings reported by checkpatch.=
+pl.
+It updates header inclusions, adds missing blank lines, combines split stri=
+ngs,
+and reorders the __initconst attribute.
 
 > diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-> index 6a0d94711eadb..c722b1d8e4804 100644
+> index c722b1d8e4804..a79c2d65a2bee 100644
 > --- a/drivers/hwmon/coretemp.c
 > +++ b/drivers/hwmon/coretemp.c
-
 [ ... ]
+> @@ -424,6 +423,7 @@ static ssize_t show_temp(struct device *dev,
+>  static int create_core_attrs(struct temp_data *tdata, struct device *dev)
+>  {
+>  	int i;
+> +
 
-> @@ -485,13 +484,7 @@ init_temp_data(struct platform_data *pdata, unsigned=
- int cpu, int pkg_flag)
->  	struct temp_data *tdata;
-> =20
->  	if (!pdata->core_data) {
-> -		/*
-> -		 * TODO:
-> -		 * The information of actual possible cores in a package is broken for=
- now.
-> -		 * Will replace hardcoded NUM_REAL_CORES with actual per package core =
-count
-> -		 * when this information becomes available.
-> -		 */
-> -		pdata->nr_cores =3D NUM_REAL_CORES;
-> +		pdata->nr_cores =3D topology_num_cores_per_package();
+This isn't a bug, but does this newly added blank line split a contiguous
+block of variable declarations?
 
-Since topology_num_cores_per_package() returns a global value that is set
-once during boot, could this prevent sensor initialization on heterogeneous
-packages or during CPU hot-add?
+The static array rd_ptr is also a variable declaration, so this separates it
+from the int i declaration. It looks like checkpatch.pl might have misparsed
+the complex function pointer array declaration as a statement.
 
-In asymmetric multi-package architectures where a secondary package has more
-cores than the primary, or when virtual CPUs are hot-added, pdata->nr_cores
-would be capped at the primary package's boot core count. When initializing
-extra cores, ida_alloc_max() would enforce this bound and return -ENOSPC,
-silently dropping temperature sensors for valid cores.
-
-Additionally, could topology_num_cores_per_package() return 0 if the CPU
-topology is broken or misconfigured by a hypervisor?
-
-> +		pdata->core_data =3D kzalloc_objs(struct temp_data *,
-> +						pdata->nr_cores);
->  		if (!pdata->core_data)
->  			return NULL;
-
-If pdata->nr_cores is 0, kzalloc_objs() will allocate 0 bytes and return the
-kernel's ZERO_SIZE_PTR instead of NULL, bypassing this error check.
-
-Later in this function, the index is allocated:
-
-	} else {
-		tdata->index =3D ida_alloc_max(&pdata->ida, pdata->nr_cores - 1, GFP_KERN=
-EL);
-
-If pdata->nr_cores is 0, the maximum bound (0 - 1) evaluates to -1, which
-implicitly casts to UINT_MAX. ida_alloc_max() would accept this large bound
-and return a valid index.
-
-		if (tdata->index < 0) {
-			kfree(tdata);
-			return NULL;
-		}
-		pdata->core_data[tdata->index] =3D tdata;
-
-Could this result in an attempt to write to the ZERO_SIZE_PTR address,
-causing an unhandled page fault and kernel panic?
+>  	static ssize_t (*const rd_ptr[TOTAL_ATTRS]) (struct device *dev,
+>  			struct device_attribute *devattr, char *buf) =3D {
+>  			show_label, show_crit_alarm, show_temp, show_tjmax,
+>  			show_ttarget };
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260516114253.5466=
--1-bakshansky.lists@gmail.com?part=3D1
+-1-bakshansky.lists@gmail.com?part=3D2
