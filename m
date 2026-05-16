@@ -1,67 +1,67 @@
 Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2ADD3E3C40
-	for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 15:23:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51B0A2777F3
+	for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 15:51:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778944998; cv=none; b=pRw/9eCGaQ5dw6AVgrDj6cp8cSWQBe9+g6GTfN2kOw6DPruKJEbfAqm9UI8KUU2pXzWubEG6Do3brnkjsaZ4tNBcSHPSOihUJGq+YsFUOQUZfQZsfLkeZyFpW+SD0ckMQqDpPANEZH+K4mdPM27PB0BsieuaT+A1yU3z+ghEhes=
+	t=1778946706; cv=none; b=L/BesOvJunJnA6SrgfT+C+hu31bp7wsBfelwj6Ku3WWBRpjYU1oEkndK7cJkDpp1BWJx3K2gBdNnH5KGBShFa5AP1v9KJap3rYjLeDGOXQgwX2TI9L7uM4i2CepXK9LjXdUtZJfXntH0l5fcODMwzGcnpLhXG0c617fApHWUd3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778944998; c=relaxed/simple;
-	bh=6BFJ7gLNaRS9ktkzCQvQKWgq9XlntK/DE37quGD8Ifk=;
+	s=arc-20240116; t=1778946706; c=relaxed/simple;
+	bh=nO1iPAHL++UmR2y3CU/E0GVxto24i+BZ0kPWySFj0m8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bdcVMmpKZwkJ4Q7Iq3Po9dwncGOOVZg7EekPCF1j6CRKDXXCeuzkTchyjZdC2DCgBogIWzJC4WDQnkX+oLDvRrqG1vHoSpowBuzKlNik2IE0f/H8i5Uss4rzkgnHrg/z75//f5gqdwZOXfuPRJR/NdBr3OpyTJjerQlH85D6hkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FMf0n3xf; arc=none smtp.client-ip=209.85.214.173
+	 In-Reply-To:Content-Type; b=df7W+Ce1BTcyojMGTCK/hu0e9Kc5yx56tSFSyeXMNOgXuCLZj1FkwD52NxlY+q6TwcFvRurrMWKMXTHXRi3OYSqJUS8fuoQ6EfV0I+gp2M7+ZwO1xPMPkb/vTHilgy3Ux4BkVvfUbJRPrqqDVlMRsnPUufcK9TLs/kMbdOxJOD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n6YUiqjW; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FMf0n3xf"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2bc763e2ba8so3769665ad.3
-        for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 08:23:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n6YUiqjW"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2adff872068so3908545ad.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 08:51:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778944997; x=1779549797; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778946705; x=1779551505; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=45gdeTVXp8vVFaeA4pBMgjJh10jZNhmWEpnGdFpVpHo=;
-        b=FMf0n3xft+PqHqJNDCEmWEQb5o/YjhaFNJWV5/WMUMFuJQX8qB8NSskIs5263Oo7vn
-         aD3mHV8684XbkkX3Cm6IzbbBU/FJOwz2uFgUo2SxikOT0d9ofs2/W/sn6tlBve6n8c/y
-         PsPA05rXzkVb6uCyOuakaljcQR35+EgLZ8pFuMYM6JWyCzzkfZh3qv3TFqa8kCD2/jQS
-         h/5/NfN1b0wDgbUJt7WXUdJWm4NFCi/vvoQeVJitrlDe2o7A94oeDGbg+WFTOKPfv4v3
-         PbfuuI4S5AsJ3Mg9hr31WcPlMGEMiFpQmkPWy631fF5NtINrZYxrmoW5T4EuAXtBLEd3
-         5Q3A==
+        bh=2IUc5k1iXS35LL71ghjiDI4fOzIuLreckHEqQfAipz0=;
+        b=n6YUiqjWb1MxwmLtVelVKFOYZ92vFQm9SkPa3bilVnnddVAnbsi352T++qyTNrLArr
+         VwFP+zD+QzvW1tO+ySIcH5R0r/4cld5OGNw4e1NU/qste+vmTvPQNZ/yqhgxKUFwJTMZ
+         ExM8lYXFTowxFviZiQ3KdeWj7vELlU5jglmdlX2nY0Pu/poUfvouVggICZi/rPjrmPX0
+         onWGYQXnTnHWNX3oYdxyKXWwXH8N5G72Zl0x5zP1jZbp7HAd8NWzUVXiBsElHEmA7JlP
+         8f8Y+9vTLYQMeXWHVfzRbrVrKjNOFbpRwuwMn2Tp1ZNygVFCUVgd0saOBqa7Ed+7GmhG
+         L7jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778944997; x=1779549797;
+        d=1e100.net; s=20251104; t=1778946705; x=1779551505;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=45gdeTVXp8vVFaeA4pBMgjJh10jZNhmWEpnGdFpVpHo=;
-        b=g+0rq2aKnWEO4ZFsx5KDl3EFfFmOeFlXp+O4ZZ6WFajwhRylmkDhLqwkfYc0vT8eJN
-         fcqnuIbSCKUZdNGBCTvoksktJoSmhnE9dw2A4rZG44QPyfBeddgzo+HdSHaDBctGRwPi
-         XgT7s7zvCsC+Mm3dWXBFjSagzcJcUsrNUCVUd1YuBy+jWadUdiAW0j09EUvsukgVshlJ
-         vQlEQK61C/7Ky8fcx6bTKh5MoOn25vgwa6Z4EnJjlGDPETvkjV8Q/a/yjmg74rKk/jFd
-         OPeZ8Ylq9E9RCLpDLdME9bnNxjH5Am4/4q92GooqmVHwQPFbuz8JeoiFLmqxJP3pKAMR
-         bWuw==
-X-Forwarded-Encrypted: i=1; AFNElJ8VL6pbN3A4JejoJlPTEKvzq+T0GdAKOyG1EPgfhnCdyla6AYeAFrFoplquOrSoLlUs18YaR3MofNxAIw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywku/qWUoODXhXHd8wu3u/1w1O6G0LBVsQef4CId5XnupkIJFie
-	tsXFbrD95CQSqjPaVqCsMUx4aR4bNOVdf4j+x9VlCFUms0GlfYElFg78
-X-Gm-Gg: Acq92OGh7xBwjMKUvBm9O8IE54v/PFBsjQLn0oLXKPD3tpWfImNHBjgCMIalmmgrtXO
-	vasC5YNugOB7um8j8ZZPySwtFmnLjT3bW6NHak+iRJsbBg83pONzPFrvsECr8c1AGD0PrCv7x5I
-	A/B5kgl7Hr0x3La+Klo02m4hJmLwsHQpgXLtQUYkiTQMg5QFSNQthvlVKyvWqQ1Y/CdlFS7IRp5
-	Xt/YQc8WLzLX2UCTIqoblm+9ain0CQaUzvWivR0bgMN6NdrD+jpr2JaGKQJc2XGdRhYme0qr1yo
-	PyM5zyyHxmOpQnUUDKVn0/vhzbq3B9FqiNiW+H4T1M4G92XpybCnB1QJuQ8PXT1JdQ2K/yNrb4p
-	56WmPZI0BKsLZETeL226oLtrb6dRgJQqZTJltFGyqBjR/Tdv3VSUJyCbqadV2eaBdzF7m2aZrGF
-	a8fbLup3/2UjtrliHf5rGVsYhTj5p+9IMkgBv/ts8jfLpjXjTnqGE/7yWeL5mClk/1vGx16M1Y
-X-Received: by 2002:a17:902:b405:b0:2b2:4d78:eec2 with SMTP id d9443c01a7336-2bd7e92ca04mr67331295ad.18.1778944996887;
-        Sat, 16 May 2026 08:23:16 -0700 (PDT)
+        bh=2IUc5k1iXS35LL71ghjiDI4fOzIuLreckHEqQfAipz0=;
+        b=FbTxenu8zi+09xnKBEjLnSKgLJH6rkCX+FFr2dr9ycCBjuH0ablFK2Zk6/+1mt58Pt
+         KtWWxDZhV4kfwQI/O2APpieZJRzF/Nw/2CQJSuR6G+HUk8DGhqCTUeRKDIaiRkQy0cgV
+         yajT/WFv4p77lm1S3B7VNAcWv6bu8fizxjZ8wyp0zW8vvJG1gK9mc7OOdGP1WaQHDz6U
+         /P1+QYRC9ATfg5Y0a3WcYOMRzFg/JQJLsausagONA3szPb9DPFMVRf04/xVZI2OFQawR
+         FLMF1l1IsYtIiwXl1xMYrInsolBIBsRt78gK1m6AlMNtyPkol7Fr+qkh3GR42rzEtX8b
+         iT8g==
+X-Gm-Message-State: AOJu0YwFZTRl2T3NHSOvUSnzGpE0ehhfebbWC2KwnM1p7U6b81rlkO+O
+	BU3ek21SxEY8ehPlJAo2z3BKdSiutgd2DxBUM0se18Pva5xrfCroRWud
+X-Gm-Gg: Acq92OEjlsH9OgL/4ccoXLgRv6RkY6iWmpQOSiuWCOUqaR8dSC5QS/9Z2SJpHKIAc+q
+	J1td8XDmTyI1SyMxldG1l5mOiG/qquUbOVO1qX/snsqZzMyLVqrvYz4KsNnbSQJebTiw05AcOc7
+	6fo/E9bzlfT4MO50V17wLHqN97OWyWKffrryPhk1iAGXEwt3XIGVEMfm9jALQVg47/+1ULu+cyb
+	8YmnFqe11T/cy78ORNqKQuUMKWlpOqrn0DPf26GGMtQ/Gz4OJiR4ydj0a5k8mFbAvlhHZzKTK9s
+	xJvijnVXFSNHB9ANJF2AbFVgCpltN3fAchb+AYc9t67OkRVJ8VAfaHUXRmiZ0CUQftjq0VBA3T0
+	jJA3D1giKoOETJZ/yBjAH+78KBekVYyuzhaMWiFTc3Oh7ngNAuDiKInFqSi2jmCVT7J5AiXlNhn
+	8ad7cskrs2e9SgGYTLn+6IBcI5LlDaxDMz16X5ZLqQN49p6uXU72OjdkQ8pjcJWCOSyR+sG3rxb
+	3lZArFl/ik=
+X-Received: by 2002:a17:903:3884:b0:2bd:b585:55f5 with SMTP id d9443c01a7336-2bdb585571amr17474795ad.8.1778946704682;
+        Sat, 16 May 2026 08:51:44 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c82bb1231c7sm8737986a12.31.2026.05.16.08.23.16
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5bd60275sm88717315ad.7.2026.05.16.08.51.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 May 2026 08:23:16 -0700 (PDT)
+        Sat, 16 May 2026 08:51:44 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2a3c5a65-e2b7-4159-9d3c-eb6a8a600b37@roeck-us.net>
-Date: Sat, 16 May 2026 08:23:15 -0700
+Message-ID: <fd38d9d9-d755-425a-bb1e-100606ce62b0@roeck-us.net>
+Date: Sat, 16 May 2026 08:51:43 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,13 +69,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/5] hwmon: (pmbus/adm1266) buffer-bound and timestamp
- fixes
-To: Abdurrahman Hussain <abdurrahman@nexthop.ai>,
- Alexandru Tachici <alexandru.tachici@analog.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20260515-adm1266-fixes-v1-0-1c1ea1349cfe@nexthop.ai>
+Subject: Re: [PATCH 1/5] hwmon: (pmbus/adm1266) seed timestamp from the
+ real-time clock
+To: sashiko-reviews@lists.linux.dev,
+ Abdurrahman Hussain <abdurrahman@nexthop.ai>
+Cc: linux-hwmon@vger.kernel.org
+References: <20260515-adm1266-fixes-v1-1-1c1ea1349cfe@nexthop.ai>
+ <20260515222808.8E97CC2BCB0@smtp.kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,63 +121,50 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260515-adm1266-fixes-v1-0-1c1ea1349cfe@nexthop.ai>
+In-Reply-To: <20260515222808.8E97CC2BCB0@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/15/26 15:11, Abdurrahman Hussain wrote:
-> This series fixes five pre-existing bugs in adm1266.c that were
-> surfaced by automated review of an in-flight feature series for the
-> same driver [1].  None of them are introduced by that feature work --
-> they are all reachable on the existing driver as it sits in mainline.
-> Sending them standalone first, with Fixes: tags and Cc: stable, so
-> the feature respin (v5) can rebase on top.
-> 
-> Patch 1 fixes a CLOCK_MONOTONIC vs CLOCK_REALTIME confusion in
-> adm1266_set_rtc(): the chip's SET_RTC register is documented to hold
-> wall-clock seconds, but the driver currently seeds it from
-> ktime_get_seconds(), giving blackbox records timestamps that reset
-> to small values on every host reboot.
-> 
-> Patches 2 and 3 fix two ways the blackbox-info path can be driven
-> out of bounds by a misbehaving slave: a 5-byte stack buffer that
-> i2c_smbus_read_block_data() will memcpy() up to 32 bytes into, and
-> a record_count loop bound taken directly from the device with no
-> upper clamp against the 32-record dev_mem allocation.
-> 
-> Patches 4 and 5 fix the two ways adm1266_pmbus_block_xfer() can
-> write past the end of a buffer: an off-by-one on the helper's own
-> read_buf (sized for the length+payload but missing the PEC byte the
-> i2c_msg length already accounts for), and a caller-side bug where
-> adm1266_nvmem_read_blackbox() advances its destination pointer in
-> 64-byte strides while the helper is willing to write up to 255
-> bytes per call.
-> 
-> [1] https://lore.kernel.org/r/20260512-adm1266-v3-0-a81a479b0bb0@nexthop.ai
-> 
-> Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
-> ---
-> Abdurrahman Hussain (5):
->        hwmon: (pmbus/adm1266) seed timestamp from the real-time clock
->        hwmon: (pmbus/adm1266) widen blackbox-info buffer to I2C_SMBUS_BLOCK_MAX
->        hwmon: (pmbus/adm1266) reject implausible blackbox record_count
->        hwmon: (pmbus/adm1266) include PEC byte in pmbus_block_xfer read buffer
->        hwmon: (pmbus/adm1266) bounce blackbox records through a protocol-sized buffer
-> 
->   drivers/hwmon/pmbus/adm1266.c | 13 +++++++++----
->   1 file changed, 9 insertions(+), 4 deletions(-)
-> ---
-> base-commit: 1f63dd8ca0dc05a8272bb8155f643c691d29bb11
-> change-id: 20260514-adm1266-fixes-853003a0fad4
-> 
-> Best regards,
+On 5/15/26 15:28, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> - [Medium] Fetching wall-clock time during device probe yields an uninitialized value, defeating the purpose of the patch.
+> - [Medium] Switching from monotonic time to wall-clock time introduces a Year 2038 silent truncation bug.
 > --
-> Abdurrahman Hussain <abdurrahman@nexthop.ai>
+> 
+> commit a6888c73c1a25c1329fffa916ee8e1654b5eaa1a
+> Author: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+> 
+> hwmon: (pmbus/adm1266) seed timestamp from the real-time clock
+> 
+> This commit switches the adm1266 driver to use ktime_get_real_seconds()
+> instead of ktime_get_seconds() to seed the chip's SET_RTC register.
+> The intention is to provide wall-clock time for blackbox records.
+> 
+>> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
+>> index d90f8f80be8e0..a86666c73a5e9 100644
+>> --- a/drivers/hwmon/pmbus/adm1266.c
+>> +++ b/drivers/hwmon/pmbus/adm1266.c
+>> @@ -432,7 +432,7 @@ static int adm1266_set_rtc(struct adm1266_data *data)
+>>   	char write_buf[6];
+>>   	int i;
+>>   
+>> -	kt = ktime_get_seconds();
+>> +	kt = ktime_get_real_seconds();
+> 
+> Since adm1266_set_rtc() is called during device probe, will the wall-clock
+> time be initialized at this point?
+> 
+> During early boot, before the system timekeeper is synchronized with a
+> hardware RTC or NTP, ktime_get_real_seconds() might return a near-zero
+> value. Would this effectively behave like a monotonic timestamp and
+> silently defeat the purpose of the patch?
 > 
 
-Sashiko identified several issues with the driver as part of the review.
-Most if not all of them seem valid, but were not introduced with this
-series. I'll apply the series as is. Any fixes can come later.
+Possibly, but I'd like to see actual evidence of that. ktime_get_real_seconds()
+is used throughout the kernel by various drivers, including security code.
+I didn't find any indication of handling the situation described above.
+Given that, since the patch is a real improvement, I applied it as-is.
+We can discuss improvements if it turns out to be insufficient.
 
 Thanks,
 Guenter
