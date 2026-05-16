@@ -1,280 +1,174 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAFB0380FCE;
-	Sat, 16 May 2026 08:58:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAFC9405C33;
+	Sat, 16 May 2026 10:21:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778921899; cv=none; b=jKjL327dM9yz4DNCClZSLVtBeCgK17jHdevFVYTBPykkmnhoiCEj3QUcNboQ4ZEEcgDnFzAQHbHRkA7P/a3Ghht4xvrWnscQK7lO3KQNYizgqe1mVjrZzN+24InXuE0j9pMI4Ktd+Cc8HXru8XOZoJY7qk+8WI3aG0MjfFQd+eA=
+	t=1778926868; cv=none; b=LCY6FYfbnYfPF6LjNFSo4U3AEzdhHNZFiXppGvW6DQ33Of1+ppdS7C6LGB5bL4gqp+uI6T2lXspTBfvIVPr1/Jg+xX1QEZHgCpit9i0IT6tH/dwKfg3XRKqTS31FDYsp05xSyIIAlRbCDjONcScorpLdrt+VqaUhNK49kBY53pM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778921899; c=relaxed/simple;
-	bh=dinb0IQ5qy1hbH/IQIh+2H5l94KQ4lc28u7UcPyWt5I=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fdKt6ecwuGbmriutelw005bqAsa1MalMZH/HLGxIFFSxrr6k2OZ7trqiavDaZ72bGdV/ckGKzYgCy3CTgC8plKJh+UmA8HifzvwWQr34KHM6229YHvBJBHcifhM5UMPU1l50LWCuej2FvVcmFqPEEAaE/VfiS1qQ2Jn9jg/N9eU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SrNZodaR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778926868; c=relaxed/simple;
+	bh=ayP8RTZV4aYS2r9BLo6oxyb7aJ6ZybkcMp13vh+CxOg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LI5LqAD0qv46/8C53f0IHPWS8tLyuoVU6vP3oaEowYaW26uhv0HF6CujU4uUC087assNRT8aADnUFnmb5AQjnAlqmXLK8r8L/EjBMYV6BsSytROuWcNc+UBfq39lKk1gds+TDxIf4d097KSquVBbEdphtJYVngH/Y31XeS41nEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FHKM1Mzy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SrNZodaR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55708C19425;
-	Sat, 16 May 2026 08:58:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FHKM1Mzy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56A43C19425;
+	Sat, 16 May 2026 10:21:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778921899;
-	bh=dinb0IQ5qy1hbH/IQIh+2H5l94KQ4lc28u7UcPyWt5I=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=SrNZodaRZ4hSG3JdozlvcFnVEH6skQkaCUdwl10Gbcnt+Excvm9voJojCMXN46eW3
-	 83bPvIZh22syTKsEUdIruDQBecj4aY/me8GACOWqSxSKVyDlQMGVOG6dOzYYgji6Fx
-	 VdIINDN+a/bJNJgmfpkIcGNw/S7yp/jkd5+h29ncsxNNmVTgwybZmi/Y/RjRmURe0s
-	 VkRttNhSNDK4MzBMPRSlimix5ifbWudYXU5sCj4vOl/eHkHk9YYJMfX1y0RmYHoiBw
-	 0McnP/2bUJzxuPe+NJLjN0MxjXJFAQ7402U3LatUDC/ZK+4sCG+OQG0NmACnPh6Wky
-	 CqV0Z4W4pg0Vg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 1/1] mfd: Add Host Interface (HIF) support for
- Nuvoton NCT6694
-Reply-To: sashiko-reviews@lists.linux.dev
-To: a0282524688@gmail.com
-Cc: linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <20260515085746.114361-2-a0282524688@gmail.com>
-References: <20260515085746.114361-2-a0282524688@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 16 May 2026 08:58:18 +0000
-Message-Id: <20260516085819.55708C19425@smtp.kernel.org>
+	s=k20201202; t=1778926867;
+	bh=ayP8RTZV4aYS2r9BLo6oxyb7aJ6ZybkcMp13vh+CxOg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=FHKM1MzySVT5ClMJdbvU9+3HIucfIV84zqtCridmzIpVNr6txWMjNKrVDXiZB7yYM
+	 QiMfZ4ZirCWuF+PswB/oatMb+mGk4vEyCE6AAEo+VNojg24hZDRH3xyyN3SXbDskfi
+	 frMstlyG7Gr/Oy/G9LuzAuF3PwL4+tZY2+M7p5iP4GeekeWTExhGvOOzXfxKkFA+eV
+	 Gwvob6B/QvoT6oqQPDnWiAYPRYkqt+1toeV0+/l0vb3L7qiCaVcq5rDRLNfx7XMxZb
+	 ycOrSA3wHozRsedE9dFcaR9AcCzXhLm065Xqh/MmBoIdwUVriVW5iQaeuUuLTO/Vb3
+	 g1nlS0NXujZfw==
+Date: Sat, 16 May 2026 11:20:57 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Salih Erim <salih.erim@amd.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, git@amd.com, nuno.sa@analog.com, andy@kernel.org,
+ dlechner@baylibre.com, michal.simek@amd.com, conall.ogriofa@amd.com,
+ erimsalih@gmail.com, linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] iio: adc: add Versal SysMon driver
+Message-ID: <20260516112057.381dc19c@jic23-huawei>
+In-Reply-To: <ec5634b3-2f17-42b6-8bfb-124ac0c7cde8@amd.com>
+References: <20260502111951.538488-1-salih.erim@amd.com>
+	<20260502111951.538488-3-salih.erim@amd.com>
+	<20260504183215.37c8ae65@jic23-huawei>
+	<66268e35-4897-4c40-b358-1c973b70426b@roeck-us.net>
+	<ec5634b3-2f17-42b6-8bfb-124ac0c7cde8@amd.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 8 potential issue(=
-s) to consider:
-- [Critical] Calling devm_request_threaded_irq() with a NULL primary handle=
-r and IRQF_SHARED unconditionally fails.
-- [High] The Linux virtual IRQ number is incorrectly written to the hardwar=
-e Super-I/O IRQ routing register.
-- [High] USB transfer buffers are allocated with devm_kzalloc(), violating =
-DMA cacheline alignment requirements.
-- [High] Hardware interrupts are enabled before the IRQ handler is register=
-ed, and disabled after the handler is freed, creating a window for unhandle=
-d interrupt storms.
-- [High] Missing bounds check on interface->endpoint array before accessing=
- the first endpoint in the USB probe function.
-- [High] The USB interrupt callback ignores urb->actual_length, risking rea=
-ding uninitialized or stale memory.
-- [High] Returning IRQ_NONE after successfully acknowledging the device's i=
-nterrupt in the HIF IRQ handler.
-- [High] Software-only IRQ masking causes an interrupt storm if a child dev=
-ice's IRQ is disabled by the OS.
---
+On Tue, 12 May 2026 12:35:21 +0100
+Salih Erim <salih.erim@amd.com> wrote:
 
-commit 719984a8b6993b3c3d29315e4713194e4c4a7af4
-Author: Ming Yu <a0282524688@gmail.com>
+> Hi Guenter and Jonathan,
+>=20
+> On 5/4/2026 8:26 PM, Guenter Roeck wrote:
+> >=20
+> >=20
+> > On 5/4/26 10:32, Jonathan Cameron wrote: =20
+> >> On Sat, 2 May 2026 12:19:48 +0100
+> >> Salih Erim <salih.erim@amd.com> wrote:
+> >> =20
+> >>> Add the AMD/Xilinx Versal System Monitor (SysMon) IIO driver.
+> >>>
+> >>> The driver is split into a bus-agnostic core module
+> >>> (versal-sysmon-core) and a memory-mapped I/O platform driver
+> >>> (versal-sysmon). The core uses the regmap API so that different
+> >>> bus implementations can share the same IIO logic.
+> >>>
+> >>> The core provides:
+> >>> =C2=A0=C2=A0 - Static temperature channels (current max/min, peak max=
+/min)
+> >>> =C2=A0=C2=A0 - Supply voltage channels parsed from DT container nodes
+> >>> =C2=A0=C2=A0 - Temperature satellite channels parsed from DT containe=
+r nodes
+> >>> =C2=A0=C2=A0 - read_raw for IIO_CHAN_INFO_RAW and IIO_CHAN_INFO_PROCE=
+SSED
+> >>> =C2=A0=C2=A0 - read_label using the DT label property =20
+> >>
+> >> Various comments inline.=C2=A0 One thing to check.
+> >> Is this one strictly a hardware monitoring device? Or does it
+> >> get used for more general ADC purposes?=C2=A0 Did you consider an HWMO=
+N driver
+> >> for it? The above sounds a lot like hwmon. So why IIO for this one?
+> >>
+> >> I wasn't awake enough on v1 to raise this!=C2=A0 Sorry about that.
+> >> +CC Guenter and linux-hwmon for that discussion.
+> >> =20
+> >=20
+> > This very much sounds like a hardware monitoring device to me. =20
+>=20
+> The device is indeed used for hardware monitoring, but the hardware
+> characteristics push it towards IIO:
+>=20
+> - The predecessor (Zynq UltraScale+ AMS, xilinx-ams.c) is already
+>    in drivers/iio/adc/ upstream. This driver is the direct successor
+>    for the Versal generation.
 
-mfd: Add Host Interface (HIF) support for Nuvoton NCT6694
+Was a long time back but at the time I think it was argued that some
+usecases for that device were general purpose external ADC channels
+rather than just hardware monitoring. Is that true for the new IP?
+(might not have been true for the old one!)
 
-The Nuvoton NCT6694 provides a Host Interface (HIF) via eSPI. This commit
-updates the driver configuration to allow selecting between the USB and HIF
-interfaces, sharing common functions and sub-devices.
+>=20
+> - The supply voltage encoding is a modified floating-point format
+>    with per-register exponent and format bits. This non-linear
+>    encoding doesn't map well to hwmon's linear in*_input model.
 
-> diff --git a/drivers/mfd/nct6694-hif.c b/drivers/mfd/nct6694-hif.c
-> new file mode 100644
-> index 0000000000000..ca8c08b0d2e34
-> --- /dev/null
-> +++ b/drivers/mfd/nct6694-hif.c
-[ ... ]
-> +static irqreturn_t nct6694_irq_handler(int irq, void *data)
-> +{
-> +	struct nct6694 *nct6694 =3D data;
-> +	struct nct6694_hif_data *hdata =3D nct6694->priv;
-> +	u8 reg_data[4];
-> +	u32 intr_status;
-> +	int ret;
-> +
-> +	/* Check interrupt status is set */
-> +	if (!(inb(hdata->shm_base + NCT6694_SHM_COFS_STS) & NCT6694_SHM_COFS_ST=
-S_COFS4W))
-> +		return IRQ_NONE;
-> +
-> +	/* Clear interrupt status */
-> +	outb(NCT6694_SHM_COFS_STS_COFS4W, hdata->shm_base + NCT6694_SHM_COFS_ST=
-S);
-> +
-> +	ret =3D regmap_bulk_read(hdata->regmap, NCT6694_SHM_INTR_STATUS,
-> +			       reg_data, ARRAY_SIZE(reg_data));
-> +	if (ret)
-> +		return IRQ_NONE;
+Given IIO doesn't really do floating point either I assume that is
+getting converted to something fixed point which ever subsystem
+is used.
 
-Is it correct to return IRQ_NONE here?
+>=20
+> - The device has configurable threshold events with per-channel
+>    alarm registers, hysteresis bits, and level-sensitive interrupt
+>    masking/unmasking -- which maps directly to the IIO event
+>    infrastructure.
 
-The driver has already verified the interrupt belongs to the device and
-cleared it at the hardware level.
+What in that list doesn't map to hwmon events?
 
-Should this return IRQ_HANDLED instead to prevent misleading the kernel's
-spurious interrupt detector?
+>=20
+> - Oversampling is hardware-configurable per channel type with
+>    per-channel averaging enable registers.
 
-[ ... ]
-> +static int nct6694_irq_init(struct nct6694 *nct6694, int irq)
-> +{
-> +	struct nct6694_hif_data *hdata =3D nct6694->priv;
-> +	struct nct6694_sio_data *sio_data =3D hdata->sio_data;
-> +	unsigned char cofs_ctl2;
-> +	int ret;
-> +
-> +	/* Set SIRQ number */
-> +	ret =3D superio_enter(sio_data);
-> +	if (ret)
-> +		return ret;
-> +
-> +	superio_select(sio_data, SIO_REG_LD_SHM);
-> +
-> +	if (!superio_inb(sio_data, SIO_REG_SHM_ENABLE)) {
-> +		superio_exit(sio_data);
-> +		return -EIO;
-> +	}
-> +
-> +	hdata->shm_base =3D superio_inw(sio_data, SIO_REG_SHM_BASE_ADDR);
-> +
-> +	superio_outb(sio_data, SIO_REG_SHM_IRQ_NR, irq);
+I think this is not present in hwmon (could be wrong!) but is there
+a 'right' configuration for a typical usecase?  I.e. would sensible
+defaults work?
 
-Does irq hold a Linux virtual IRQ number here?
+>=20
+> - Up to 160 voltage and 64 temperature channels are dynamically
+>    configured from DT, which fits IIO's dynamic channel model
+>    better than hwmon's compile-time attribute groups.
 
-platform_get_irq() returns a Linux-internal virtual IRQ number (virq), while
-the Super-I/O hardware configuration register typically expects a physical =
-ISA
-IRQ routing number (e.g. 0-15).
+This used to be true, but hwmon has for some years supported a similar
+model for channel creation to that of IIO + you even for traditional
+attributes it is easy enough to create them dynamically (that's afterall
+what the IIO core does under the hood!)
 
-Could writing a virtual IRQ number misconfigure the hardware?
+Anyhow, take a look at struct hwmon_chip_info and the HWMON_CHANNEL_INFO()
+macro.  I couldn't immediately spot a dynamic user but maybe Guenter can
+point to one.
 
-[ ... ]
-> +static void nct6694_irq_disable(struct irq_data *data)
-> +{
-> +	struct nct6694 *nct6694 =3D irq_data_get_irq_chip_data(data);
-> +	irq_hw_number_t hwirq =3D irqd_to_hwirq(data);
-> +
-> +	guard(spinlock_irqsave)(&nct6694->irq_lock);
-> +
-> +	nct6694->irq_enable &=3D ~BIT(hwirq);
-> +}
+>=20
+> - The follow-up thermal driver uses the IIO consumer API
+>    (iio_channel_read) to aggregate temperature data across
+>    multiple satellites into thermal zones. The iio-hwmon bridge
+>    then exposes the same data to hwmon userspace.
 
-Could this software-only IRQ masking cause an interrupt storm?
+This might be a good reason for IIO. However what stops you just embedding
+all that in a single hwmon driver that also registers the thermal zones?
 
-If a child device's IRQ is disabled by the OS, nct6694->irq_enable is updat=
-ed
-but the interrupt is not masked at the hardware level.
+>=20
+> So the architecture is: IIO driver (provider) -> iio-hwmon bridge
+> (hwmon exposure) + IIO consumer (thermal zones). This gives both
+> hwmon and thermal framework access through a single IIO provider.
 
-Since the top-level handler nct6694_irq_handler() dispatches interrupts via
-generic_handle_irq_safe(), which ignores irq_enable, could the device
-immediately reassert the interrupt if the child handler never runs to clear
-the hardware condition?
+So overall there are some possible reasons in here for using IIO but
+I think a little more in depth analysis is needed.
 
-[ ... ]
-> +static int nct6694_probe(struct platform_device *pdev)
-> +{
-[ ... ]
-> +	ret =3D nct6694_irq_init(data, irq);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret =3D devm_add_action_or_reset(dev, nct6694_irq_release, data);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret =3D devm_request_threaded_irq(dev, irq, NULL, nct6694_irq_handler,
-> +					IRQF_ONESHOT | IRQF_SHARED,
-> +					dev_name(dev), data);
+Thanks,
 
-Does this sequence create a window for unhandled interrupt storms?
+Jonathan
 
-nct6694_irq_init() enables interrupts on the device hardware, and the OS
-handler is requested afterwards. Similarly, because devres unwinds in rever=
-se
-order, the OS handler will be freed before the hardware interrupt is disabl=
-ed
-during removal.
+> >=20
+> > Guenter
+> >  =20
+>=20
+> Salih.
+>=20
 
-Also, can devm_request_threaded_irq() succeed here?
-
-The Linux interrupt core explicitly rejects requests for shared interrupts
-(IRQF_SHARED) with a NULL primary hardirq handler, returning -EINVAL.
-
-> diff --git a/drivers/mfd/nct6694.c b/drivers/mfd/nct6694.c
-> index 308b2fda3055c..cf3457c2b3ed2 100644
-> --- a/drivers/mfd/nct6694.c
-> +++ b/drivers/mfd/nct6694.c
-[ ... ]
-> @@ -210,10 +236,12 @@ static void usb_int_callback(struct urb *urb)
->  	int_status =3D le32_to_cpu(*status_le);
-> =20
->  	while (int_status) {
-> -		int irq =3D __ffs(int_status);
-> +		int hwirq =3D __ffs(int_status);
-> +		unsigned int virq =3D irq_find_mapping(nct6694->domain, hwirq);
-
-Is it safe to read *status_le without checking urb->actual_length?
-
-If a buggy or malicious USB device sends a short packet or a Zero-Length
-Packet (ZLP), could the driver read uninitialized or stale data from the
-transfer buffer?
-
-[ ... ]
-> @@ -284,18 +313,28 @@ static int nct6694_usb_probe(struct usb_interface *=
-iface,
->  	if (!nct6694)
->  		return -ENOMEM;
-> =20
-> -	nct6694->usb_msg =3D devm_kzalloc(dev, sizeof(union nct6694_usb_msg), G=
-FP_KERNEL);
-> -	if (!nct6694->usb_msg)
-> +	udata =3D devm_kzalloc(dev, sizeof(*udata), GFP_KERNEL);
-> +	if (!udata)
->  		return -ENOMEM;
-> =20
-> -	nct6694->int_buffer =3D devm_kzalloc(dev, sizeof(*nct6694->int_buffer),=
- GFP_KERNEL);
-> -	if (!nct6694->int_buffer)
-> +	udata->usb_msg =3D devm_kzalloc(dev, sizeof(*udata->usb_msg), GFP_KERNE=
-L);
-> +	if (!udata->usb_msg)
->  		return -ENOMEM;
-> =20
-> -	nct6694->int_in_urb =3D usb_alloc_urb(0, GFP_KERNEL);
-> -	if (!nct6694->int_in_urb)
-> +	udata->int_buffer =3D devm_kzalloc(dev, sizeof(*udata->int_buffer), GFP=
-_KERNEL);
-> +	if (!udata->int_buffer)
->  		return -ENOMEM;
-
-Is it safe to allocate USB DMA transfer buffers using devm_kzalloc()?
-
-Memory allocated via devm_kzalloc() is prefixed with a devres header, causi=
-ng
-the actual payload to be unaligned to ARCH_DMA_MINALIGN.
-
-Could this lead to cache invalidation wiping out concurrent CPU updates to =
-the
-adjacent devres header on architectures with non-coherent DMA? Should stand=
-ard
-kmalloc() be used instead?
-
-[ ... ]
-> @@ -326,11 +364,11 @@ static int nct6694_usb_probe(struct usb_interface *=
-iface,
->  		goto err_ida;
->  	}
-> =20
-> -	usb_fill_int_urb(nct6694->int_in_urb, udev, usb_rcvintpipe(udev, NCT669=
-4_INT_IN_EP),
-> -			 nct6694->int_buffer, sizeof(*nct6694->int_buffer), usb_int_callback,
-> +	usb_fill_int_urb(udata->int_in_urb, udev, usb_rcvintpipe(udev, NCT6694_=
-INT_IN_EP),
-> +			 udata->int_buffer, sizeof(*udata->int_buffer), usb_int_callback,
->  			 nct6694, int_endpoint->bInterval);
-
-Does the code verify that the interface has any endpoints configured before
-accessing &interface->endpoint[0].desc to set int_endpoint earlier in the
-probe function?
-
-If a malformed USB device exposes an interface with zero endpoints, could
-accessing endpoint[0] result in an out-of-bounds read?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260515085746.1143=
-61-2-a0282524688@gmail.com?part=3D1
