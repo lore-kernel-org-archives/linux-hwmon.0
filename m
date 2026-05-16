@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 490E0171AF;
-	Sat, 16 May 2026 08:06:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4538B380FC3;
+	Sat, 16 May 2026 08:06:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778918794; cv=none; b=kld+6hcKzduo6BpcSlUUnpG5J7iOZmsSZyXN9NNVhYx1ofEFRtHEJm1/3Jp8+qGQJyghKdFDAlHLGAUcaqzNQlG+WmTSRt2UuAmLrNTVNU67crulofM64Qfy5WW2ckda26lr8ppzI03JFdVMPXAyUR6oQhWrb4jQy6kwHelqcj8=
+	t=1778918804; cv=none; b=ZepgvHQZrA/rTJs0+aZG5sg/casbnNoyEG4jcACMcFmze9kax6svPx6ScOmR/GSsu8fz5OPWy3RUvevorenv5vrvnKtwd5ax36PpONEa41bZ68W+Ac+W/jVI372nDdgyhiCP1SNw7Ip+ClQH7Ihk+8oVNlf1lbzvwzHCDuO+UNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778918794; c=relaxed/simple;
-	bh=6QEEQie7p+zy+rGX2jwDJCDq0zv+Tjf8uhHk2xM3zNE=;
+	s=arc-20240116; t=1778918804; c=relaxed/simple;
+	bh=M3QbY342WYiDcF7bGDxy5MSdQpaSdFlTPCHhpJtGE7s=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EJc3QmBnlupVpvJ5rLVKIcq//lNB+L3IllvOVISlv44AU7yldGKFfFKB3FC679qiyVMBt/dTBu+uEyVIXadHW5Z4l+budhhv7gMi8ofFQ61z/JQyxCesC+kmMkMfiBv+8YEKzW8NQfXfWmeGss70+3DTn2DOqzDLpsk7qggIIpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZMKhYeLl; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=ZDo3P+A758Pkawxjvik1PrGfCEz98TUP+xPFjG5zeZZGMpK0avN+pQtkoYpN7zGcxMuUVqtj1yaWxGjTMWy6GI4V8luQKSnPAeteLOLo+ebjIwpyw+f4KA3UXSJpoHnw7xUmdU9au7IfcitXC1CM2E9EcUFdLfElzs027Cyeuo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=in8+fCwo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZMKhYeLl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5535FC19425;
-	Sat, 16 May 2026 08:06:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="in8+fCwo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E348C19425;
+	Sat, 16 May 2026 08:06:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778918794;
-	bh=6QEEQie7p+zy+rGX2jwDJCDq0zv+Tjf8uhHk2xM3zNE=;
+	s=k20201202; t=1778918803;
+	bh=M3QbY342WYiDcF7bGDxy5MSdQpaSdFlTPCHhpJtGE7s=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ZMKhYeLl8VXA0NnG1zRh68V/EQsgGXakX30dS7joKs+78LvP7Gx8h3c+wW/IOpegZ
-	 hVbEAll4E5bo0NoM6A9UmjYVmZYA7yOFfJzJ7y9B3O/OuPYxC2ddTVjF2QQOOd56rM
-	 v4GFIZV/PWbcIq+IM1nInjuBGxcwhILxbJAxst530Lpj3ZMfxEUHeWhXKqUxiNItRm
-	 cKbOxcxu3koP6IA+X9Y6ZrfmYH4sRLHj90UoX4g2dLOROS+p/B501qDb/23IQ8Snht
-	 siip+qz9cSEeLfJxATNWsXJbH4bTAj5Da0AdvollTBgjw2UnMOg+lrQNAzb+1WQKeo
-	 /55YQTZhTuepA==
-Message-ID: <e573fb8f-b507-4d54-b990-57f0ea66fec5@kernel.org>
-Date: Sat, 16 May 2026 10:06:30 +0200
+	b=in8+fCwodfdJhgsyBO7+7qC9M8FwsqHIxILHw6grlbPiJItW1WlPZO4CjzWkzrXr2
+	 5W8ANEkzfnCJqJivbxfIvSBf/NN1omzB5w1X9XdRlqVD7MyOTHCdgOSxMZ3ahJtKFr
+	 Tfiydck2+/PJvaUKJlHgkxWTSHE0KN1VUJrUfhK02zGU68CdE55kuYe0wPPKLd+6BF
+	 xZiwZ0h4HE07apf/Ls2HjTl03sui3DmGlpidQUMYrj7ZYZMnVH22ENwPBM5GumJivi
+	 zMcFLV0hKWttnDykLWT7I/7dd6HBfk77Dzr/v4dlhQeYT8TssNs0IlT0S42BcfpUsP
+	 IxI2pAuur+UAw==
+Message-ID: <9671efcb-8347-4b56-8b2d-2f7edd04f424@kernel.org>
+Date: Sat, 16 May 2026 10:06:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,12 +35,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v12 5/6] hwmon: add NXP MC33978/MC34978 driver
+Subject: Re: [PATCH v12 3/6] pinctrl: core: Make pin group callbacks optional
+ for pin-only drivers
 To: sashiko-reviews@lists.linux.dev, Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: devicetree@vger.kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, linux-hwmon@vger.kernel.org
-References: <20260515160537.115808-6-o.rempel@pengutronix.de>
- <20260515183847.D8091C2BCB0@smtp.kernel.org>
+Cc: krzk+dt@kernel.org, robh@kernel.org, linux-hwmon@vger.kernel.org,
+ conor+dt@kernel.org, devicetree@vger.kernel.org
+References: <20260515160537.115808-4-o.rempel@pengutronix.de>
+ <20260515174309.B55B4C2BCB0@smtp.kernel.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -86,38 +87,37 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260515183847.D8091C2BCB0@smtp.kernel.org>
+In-Reply-To: <20260515174309.B55B4C2BCB0@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 15/05/2026 20:38, sashiko-bot@kernel.org wrote:
->> Add hardware monitoring support for the NXP MC33978/MC34978 Multiple
->> Switch Detection Interface (MSDI).
+On 15/05/2026 19:43, sashiko-bot@kernel.org wrote:
+>> Currently, the pinctrl core strictly requires all drivers to implement
+>> .get_groups_count and .get_group_name callbacks in their pinctrl_ops.
 >>
->> The hardware utilizes a clear-on-read FAULT register, but physical
->> faults remain asserted as long as the underlying condition exists. This
->> asserts a global FAULT_STAT bit on the SPI bus. To handle this without
->> trapping the CPU in an interrupt storm, this driver implements the
->> following architecture:
->> - Requests a rising-edge nested IRQ (IRQF_TRIGGER_RISING) from the MFD
->>   core to catch the initial 0 -> 1 transition of the global fault state.
->> - Caches hwmon-specific alarm bits and calculates state edges (XOR) to
->>   isolate alarm transitions from system integrity faults.
->> - Implements a 1Hz delayed workqueue that polls the hardware as long as
->>   any alarm is active. This compensates for the edge-triggered IRQ by
->>   discovering secondary faults that occur without a rising edge, and
->>   detecting when the hardware clears.
+>> However, for simple pinctrl drivers that act purely as GPIO controllers
+>> and pin-specific configuration proxies, without any concept of muxing or
+>> pin groups, this strict requirement forces the implementation of dummy
+>> callbacks just to satisfy pinctrl_check_ops().
 >>
->> Assisted-by: Gemini:gemini-3.1-pro Sashiko
+>> Relax this requirement for pin-only drivers by making the group callbacks
+>> optional when no muxing or group pin configuration support is provided.
+>> Update the core and debugfs helpers to check for the existence of these
+>> callbacks before invoking them.
+>>
+>> Drivers that provide muxing or group pin configuration operations still
+>> must implement group enumeration and naming callbacks, and are rejected
+>> at registration time if they do not.
+>>
+>> Suggested-by: Linus Walleij <linusw@kernel.org>
 >> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 > 
 > Reviewed-by: Sashiko <sashiko-bot@kernel.org>
-
+> 
 
 NAK, fake tag.
 
 https://lore.kernel.org/linux-devicetree/ad139e54-a7f0-4d09-832c-6b2bf2e93e03@kernel.org/T/#u
-
 
 Best regards,
 Krzysztof
