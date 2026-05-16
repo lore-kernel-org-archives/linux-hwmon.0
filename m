@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED75A372681;
-	Sat, 16 May 2026 08:07:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D758A171AF;
+	Sat, 16 May 2026 08:09:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778918822; cv=none; b=hbCXN7J6bBPpAtM3AZP4i7iZJaBVkaJqKePQSIAteOOBv1ueNt9bZVJz+uy811KwwFOcuJ77BsvVKbM5JL3b6gqLM28fdtt2HCbAnL0DZyKHnkp7819EEt4dyP37fIE76oOtbxkRCGWvcWV9Om5hturektzbrTl2lWsX7WiDKuM=
+	t=1778918966; cv=none; b=t0J8zPNbM7aHY6UQDGRBr2JRRI0SzY5R4PxEJ16Z6h2uvS+N5+Eobcb2Fc3qePw0PnmTUomSPpVtV1w7dThzk+HpNl9AkGbnQ0Xs197sxB5JQFIvZINDcMg0O+F3O0aV96vyFf60lFuOR1/h+RnV0wvBWxWyX8mOWsFEcYU20Bo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778918822; c=relaxed/simple;
-	bh=73A8eNWNypa6Q6X+sSdLDeP2/T8SpuHmPJjswFft5C0=;
+	s=arc-20240116; t=1778918966; c=relaxed/simple;
+	bh=h+vvkkwbWH8bnOXe5K+AzHcJLSJrBudor1HnpnPA8io=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Bq9Bij4rYRTCdVkHrGc+MRUWgLI5EaaKUidsTXaybd2xxORNf6yWTgyXbzCR/W0tAexATcR0g+WGLhR1RnNHHkKwgpBM8qXCBys7A9EB/Y9ElB/O4Abj2o/k4U8izQ7bdj6inQjgb+y0dQe5h1Cm1zHaI48/kwmHLCw3Ej4CUqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bOkwS8Fl; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=gBC9GDlhct0Eh6p9wmy95Bw8IlSND+WveJZaHtCa/aZ3NdmSjXUtEfi5XN36ORAd9gqrMAos80688GwbEhnMCZNCT2zf687Cee+Rf+TgcMxRL0n2HxVqSJYZXBXxD5HENKMFKxGNq3Kjo2q4ZjHLsI4jgbWdlBX6+akaw9CkKNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jfBGHn0T; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bOkwS8Fl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97489C19425;
-	Sat, 16 May 2026 08:07:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jfBGHn0T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A77ABC19425;
+	Sat, 16 May 2026 08:09:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778918821;
-	bh=73A8eNWNypa6Q6X+sSdLDeP2/T8SpuHmPJjswFft5C0=;
+	s=k20201202; t=1778918966;
+	bh=h+vvkkwbWH8bnOXe5K+AzHcJLSJrBudor1HnpnPA8io=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=bOkwS8FlNNONdkE6zNSc5M+9WL8es31mDNt+/rxxtsRwmP7BbnCcms24s2Re9jJZf
-	 6FJ5b89ajTuUje/GtloM+M7klmEP0ebfnjHeTIutCZnqBZxUuN9C1bAo0UE0WwBcJv
-	 PNPMKYr4ZVyneLB/OmNAc6Eg5dHR7jG5NeyIQDryQfxDqFvg/yXcTVnbBtCeEo18ck
-	 4D3P7o9SL/1M4uAVXEXaawRqD1QiB/ozYDTETTxDK3ApVRPg3HP2IUxN0Z32BGR7xn
-	 Byk0H3Q8EfQcSvfN073pNJiUNS7RbYdq0gjTl4bdip4gc2uYCaSscvmuUk4boBb8cd
-	 KvYwfK7P2qf9w==
-Message-ID: <04803ae3-990b-462d-968a-94999366499e@kernel.org>
-Date: Sat, 16 May 2026 10:06:59 +0200
+	b=jfBGHn0TwXUrDdIQtLyDGXWsJuQK2I+GsVVDahQjfZR29IZRDTQ8X4c2sgDpYs5/u
+	 5RQD6zvacn55+j3ljKsDWN2XsmP9V6c3PyhfpXX/KJwrMqfThnKoj9Vhp//uWcsHjj
+	 WDJ1auJvQfjoi4ssNpNG7BzoH70Apsn20FyJprfuj1kwKNe4jy3bQv0sIsD4Lm4ehu
+	 cimanpoFzoxPGhrmrSl+O+ER30jZs3XVdb41KRFd2I2WRjnH9cdD3MjU0yN6SczkH8
+	 JvJ0dPp7jcIW5SXeOaOXXCgiaB0zSDarArkR+ecKMNlnUbjMMVyCcwHJgX98+3xSQw
+	 FKoCvKTxiXvBw==
+Message-ID: <123f4268-11c8-4136-9782-4727c5e98403@kernel.org>
+Date: Sat, 16 May 2026 10:09:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -38,7 +38,7 @@ User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] Documentation: hwmon: adt7411: document supported sysfs
  attributes
 To: sashiko-reviews@lists.linux.dev, Chen-Shi-Hong <eric039eric@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org, sashiko-bot@kernel.org
 References: <20260516035245.1604-1-eric039eric@gmail.com>
  <20260516035715.BEFE0C19425@smtp.kernel.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
@@ -106,11 +106,9 @@ On 16/05/2026 05:57, sashiko-bot@kernel.org wrote:
 >> Signed-off-by: Chen-Shi-Hong <eric039eric@gmail.com>
 > 
 > Reviewed-by: Sashiko <sashiko-bot@kernel.org>
-> 
 
-NAK, fake tag.
-
-https://lore.kernel.org/linux-devicetree/ad139e54-a7f0-4d09-832c-6b2bf2e93e03@kernel.org/T/#u
+NAK, fake tag, fake review from tool. Stop this nonsense! You cannot
+make a reviewer statement of oversight.
 
 Best regards,
 Krzysztof
