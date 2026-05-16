@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D758A171AF;
-	Sat, 16 May 2026 08:09:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7EDA3AEF45;
+	Sat, 16 May 2026 08:14:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778918966; cv=none; b=t0J8zPNbM7aHY6UQDGRBr2JRRI0SzY5R4PxEJ16Z6h2uvS+N5+Eobcb2Fc3qePw0PnmTUomSPpVtV1w7dThzk+HpNl9AkGbnQ0Xs197sxB5JQFIvZINDcMg0O+F3O0aV96vyFf60lFuOR1/h+RnV0wvBWxWyX8mOWsFEcYU20Bo=
+	t=1778919275; cv=none; b=TrXIGk2WN7MuDmcXCqLZlkcN80SLxrs3XaeoZT7By0v+oR2nT9zEOacpyCzA4hoaNFM8LXxC59A8MYvXbW8vweVyyyifQ+RsFe/5apE13JOkW0gNOZZF/SZhGfysRdOg2T2wjo2+e/ODX6QTJHZPmJqIXNSdHTqHPx1vPTnrPU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778918966; c=relaxed/simple;
-	bh=h+vvkkwbWH8bnOXe5K+AzHcJLSJrBudor1HnpnPA8io=;
+	s=arc-20240116; t=1778919275; c=relaxed/simple;
+	bh=bK83tb/pVMiTr0bTUeIdnQhGoudkOfJvzTqtJGCrX5A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gBC9GDlhct0Eh6p9wmy95Bw8IlSND+WveJZaHtCa/aZ3NdmSjXUtEfi5XN36ORAd9gqrMAos80688GwbEhnMCZNCT2zf687Cee+Rf+TgcMxRL0n2HxVqSJYZXBXxD5HENKMFKxGNq3Kjo2q4ZjHLsI4jgbWdlBX6+akaw9CkKNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jfBGHn0T; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=U/o94PVmBLrRz/IWVgAEIfFXgnhC9gbOF3uEwcuJFdAmY6G9DtyhQhL27wl9DARhrkQi8b7v/Ym2JjEtb/WSXKqDp39cGIPrtASdy4UXe7oJeOVxVOl8GAFxi7/aVhkJ3+TBgDQDi+ey/w/AXnjnyZwxRmtfhSyTntUpOppgI3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lPqBv4iB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jfBGHn0T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A77ABC19425;
-	Sat, 16 May 2026 08:09:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lPqBv4iB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5744DC19425;
+	Sat, 16 May 2026 08:14:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778918966;
-	bh=h+vvkkwbWH8bnOXe5K+AzHcJLSJrBudor1HnpnPA8io=;
+	s=k20201202; t=1778919274;
+	bh=bK83tb/pVMiTr0bTUeIdnQhGoudkOfJvzTqtJGCrX5A=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=jfBGHn0TwXUrDdIQtLyDGXWsJuQK2I+GsVVDahQjfZR29IZRDTQ8X4c2sgDpYs5/u
-	 5RQD6zvacn55+j3ljKsDWN2XsmP9V6c3PyhfpXX/KJwrMqfThnKoj9Vhp//uWcsHjj
-	 WDJ1auJvQfjoi4ssNpNG7BzoH70Apsn20FyJprfuj1kwKNe4jy3bQv0sIsD4Lm4ehu
-	 cimanpoFzoxPGhrmrSl+O+ER30jZs3XVdb41KRFd2I2WRjnH9cdD3MjU0yN6SczkH8
-	 JvJ0dPp7jcIW5SXeOaOXXCgiaB0zSDarArkR+ecKMNlnUbjMMVyCcwHJgX98+3xSQw
-	 FKoCvKTxiXvBw==
-Message-ID: <123f4268-11c8-4136-9782-4727c5e98403@kernel.org>
-Date: Sat, 16 May 2026 10:09:23 +0200
+	b=lPqBv4iBQ9JlAz9Iihtc8ifyWS5DqLtXE+GCFW+QdjvjxCpx3NKfEG5bW/Wbxsj23
+	 SPWUOCvE3m4zo2nnhWnA7LJc5L+PNTEcWIHg2dnYuiH5JvCdgVz9LkcSziMKsq2AFl
+	 +aJh7OmwTEmEoYi118saZ7RvPSw5qCD9DUB1/IsRdlzuJjkpybPOCNDIedAEdASA8K
+	 fAB1EJZICoaU45ZsJk0zDBaHEIvFz0ppGD0YIFzQb0qUIkpUzBB/tqEArExGzgK7+T
+	 pxrWb0XWRMMLbnxSk6DyP2oVh2Px2razk9Bbcf7jDQkjLDlo1j8mQU163J2iF6IHKb
+	 ppQFBIPJWO6yA==
+Message-ID: <3f20b310-fd59-46d7-ad1f-201c755b690a@kernel.org>
+Date: Sat, 16 May 2026 10:14:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,12 +35,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Documentation: hwmon: adt7411: document supported sysfs
- attributes
-To: sashiko-reviews@lists.linux.dev, Chen-Shi-Hong <eric039eric@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, sashiko-bot@kernel.org
-References: <20260516035245.1604-1-eric039eric@gmail.com>
- <20260516035715.BEFE0C19425@smtp.kernel.org>
+Subject: Re: [PATCH] hwmon: (lm75) Add explicit header include
+To: sashiko-reviews@lists.linux.dev, Flaviu Nistor <flaviu.nistor@gmail.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>
+Cc: linux-hwmon@vger.kernel.org
+References: <20260516075708.6682-1-flaviu.nistor@gmail.com>
+ <20260516080647.4C31AC19425@smtp.kernel.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -86,29 +86,26 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260516035715.BEFE0C19425@smtp.kernel.org>
+In-Reply-To: <20260516080647.4C31AC19425@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 16/05/2026 05:57, sashiko-bot@kernel.org wrote:
->> The adt7411 driver exposes additional standard hwmon attributes beyond
->> the ones currently listed in Documentation/hwmon/adt7411.rst.
+On 16/05/2026 10:06, sashiko-bot@kernel.org wrote:
+>> Since device_property_read_string() is used in the
+>> probe function add explicit include for
+>> linux/mod_devicetable.h and linux/property.h rather
+>> than having implicit inclusions.
+>> Header linux/of.h can be removed and also of_match_ptr()
+>> improving non-Device Tree compatibility of the driver.
 >>
->> Document voltage min/max/alarm attributes, temperature min/max and
->> min_alarm/max_alarm attributes, and the temp2_fault attribute for the
->> external temperature channel.
->>
->> Also update the documentation to clarify that analog inputs in1 and in2
->> are not available when the external temperature sensor is enabled, and
->> remove the outdated statement claiming that external temperature support
->> and limit registers are unsupported.
->>
->> Signed-off-by: Chen-Shi-Hong <eric039eric@gmail.com>
+>> Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
 > 
 > Reviewed-by: Sashiko <sashiko-bot@kernel.org>
+> 
 
-NAK, fake tag, fake review from tool. Stop this nonsense! You cannot
-make a reviewer statement of oversight.
+NAK, fake tag.
+
+https://lore.kernel.org/r/ad139e54-a7f0-4d09-832c-6b2bf2e93e03@kernel.org
 
 Best regards,
 Krzysztof
