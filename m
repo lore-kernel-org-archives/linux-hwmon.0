@@ -1,163 +1,265 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4838F3D6465
-	for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 12:50:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F1B33E2AA6
+	for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 15:04:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778935858; cv=none; b=pEDxxuU3DTSInTNw12SeupkGG5hCOCuwc7oaGIsF7o2j1dapjaY29yHMX+qmkIuIuz/Kl7TAwB6zp9lIfnj9khqOrTc5UUKe4lGIcXGgQYVylmo/qoZrVTJDwVWFZ6+qdIibTD8DpEVo+GHl/aSYA90gRJ4Q/fhvCtz2lOSXitc=
+	t=1778943881; cv=none; b=aPe3UUphlBHdHe/beuI+eBfn2ZSH8s3phykInnU1QpnU71rfBqTeSp8oLBw5DdI7JpXkf6Ma1CtOenx3yyg8nxOVJX2pUI/272/XyitnwO9AocA9uc+ld7VvXR/xyHT9agPm/QMWtl+1+YPSOVUOhfZIIgDhHEP0I3Vl6S3Xd6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778935858; c=relaxed/simple;
-	bh=cjF41LislovNrKBBxrqS+3UmXx+XEN1IOxlEEO0t5Q8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VK8vob09VLeUWfPZ20DvTi7xHanFOwVI3aOx0zFIudrtj7EaQtoxz8DANWXz1QWwEyoTM2haFPgnRCqx4QOy41VrK3N3Pd0xA5cQKRYeWZQkbmbOHGfUdwEG3y50E66bmHvlN6FExriPs9I6AOBETl+LfDiaLHXO8IV0Vg6Eo20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KFb/9hht; arc=none smtp.client-ip=209.85.216.50
+	s=arc-20240116; t=1778943881; c=relaxed/simple;
+	bh=DeP8aPNhQW7RoZvHLHe8KiJ2+37TOAE4UdpZx1617fQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cIgV1uDmhk1QekeN2TuEnKc6uW5dqeaoIvp1dzWpsTckADHTMn/yIRauPH4IrgwaBnvq/dZm0fjVGF/tLjAzmPhajauSeopIGJYdEogVGbnhnlsEjeYEyfIukJLHF8TC9DBaVnyJAkYLQesYKNmvcXliP7Ka9MBnkghy0bZtR5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C3Dnw17Q; arc=none smtp.client-ip=209.85.215.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KFb/9hht"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-366be8040a9so257182a91.3
-        for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 05:50:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C3Dnw17Q"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c8016d642b2so838761a12.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 08:04:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778935857; x=1779540657; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4+qx3eTngXVCuxXDVoPTQXVaaBA80s1wEeSi6eUvohM=;
-        b=KFb/9hht1ScJeJOuD/dOpoU8MBtF/fItW25xg5WpS03fZuYi/KSBcfZ+N55M8lu5pA
-         xEw5LS5mr66fq86KmfIkw5m+2XsBLr+bFQ2Uro2L5t8KwuFIxUvkUdiXUQrLvOcarFqf
-         aZJ2W3e0vpHAp1GoYoAskI/mtARL87PoBPnvhmU650TwzvUx4PcNn9+KvzlY6Ob2o1cy
-         KMUsFl6Yy/FMwUxiBjwOB2PattVlRBi0YBrB+HqcTX0Qr4X0g1vjKnuDXqq6DlkMUR74
-         R05B92fhE7qxipW3ZdxkesGGlRUxnac59eff5wyl9zO/Lnqc7nhPonu+5/wBWqHiL0bw
-         0vTw==
+        d=gmail.com; s=20251104; t=1778943879; x=1779548679; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=oCte4RlZADTF+ESUS6lzcGdE+SS5zOb6KTF8q92kgKY=;
+        b=C3Dnw17QSffMmTTRiMGUjCPvmeuqFkg2bADtVqbzE/AmR97Gg88JnaIWi1SUFVLS0O
+         xq55hCssgeGzrR5jWA9BHoCzWdZd3lZ/uFiSfahEzY0OG5a6ifgMJWUZgvBEvPjgVSTp
+         TUePt8gcnm4sZVcXD4forV4xFKJLddalo0vBF1DLWuJI8TaRlMlfLf2Hqs3yLDqDxstZ
+         adhkRDIlFcqjs92cDmnizD/fURSqnfHW4kOcWtaYvyKmex2H6p8C5Rivc1YnNasSi9We
+         sHyRKNM+uTrK+hVVqr8SZ8YluLfTdG0Tlb9AFJc96/ulVeTxbDMlQSDHJNxHcTCIKnKu
+         7kww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778935857; x=1779540657;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4+qx3eTngXVCuxXDVoPTQXVaaBA80s1wEeSi6eUvohM=;
-        b=UtexFbDCxWJM3ZNp3wQihc7K5EdrJnRy3YLEtN9AjdAU26KlH/LCjj3X5vT+G02Mcx
-         GQMoMoP4rNZfEL0SVEtYlM7+4ir8zLdS1Pu+3s5wuYgxB+ItCaVVK/P6t8+4V33eMaUK
-         aqktteOGUbU5QKS00NwduRVcUc64tHvbTqwn2dKYnAW6PM/jgOqwNYRdIEj3zsDsHVDT
-         0KUncq+GdX5ts9ZxRydtCKlXyQfVECRewEyk3R6UlTZdzgFOtbzPw6UdDxNhBXkMIMyK
-         8YAlzi5ufMEbygFSCWOcaS1nGWkVrW+DRNHK4N5dRexOTdB1kCuh8jnd/ee/ZIdSVK42
-         vzXg==
-X-Gm-Message-State: AOJu0YyKM2lP+X0jDtq0TKyWyDlVyVT7Nm0/ZYeb9JXtvK9iwPyuumrj
-	vVNXeIpHEblJ+0y7HP/rMJsOKks9X7zovPGn1OGwW3zawoETurHnjJL9qAAGbDKX
-X-Gm-Gg: Acq92OHRsiZ5E5sdPqw0kdYkYOTJZ7zZs6GSlp0PhGQRBF56AKgcU7OfTZZF80mOThI
-	F3x3xquUEalXzLm4fbHENMCMb28am5F34kNIrE6sjeRoHbuTmcj4AMHu820FAWme5VarxGVidnr
-	D0HD4RSa/Vou13wCeTghuHdrYgW0tBQkkm8qxghtjSkVMW2iC4ShYYAst71VpzBfDss4Lnwo9yZ
-	3xeZYKD2SrQH9DHH9CU62ckVmR1Lwn5peAEaSI1QQR74qRDMWgXs0ZWAMR7nkdAvzsuh1s9cdlL
-	aidHJFxTwUjjkcam/2gm4ymTcX00vTcTzMZA9mCaaTdnVx2+MvQUh08iXjXVV4pUGSYYFff16fo
-	/Vbz1nGqYbe/mJnKkr3aH1HcXCnwyPEFjnfvrpovugqka7VwnuQWCXHFc/wWe7DvFqz32q28axg
-	gpabQvU5YDHm9jn0AVHXflrN4UeSBHCXop3qgP
-X-Received: by 2002:a17:90b:4ecc:b0:369:932a:2b8b with SMTP id 98e67ed59e1d1-369932a311cmr761144a91.11.1778935856660;
-        Sat, 16 May 2026 05:50:56 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3695a160682sm1845102a91.14.2026.05.16.05.50.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 May 2026 05:50:56 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1778943879; x=1779548679;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oCte4RlZADTF+ESUS6lzcGdE+SS5zOb6KTF8q92kgKY=;
+        b=i/FHhBxLZU9OtC2OS3aM3OZnXS5pzRZBeJhM8etodaj2W6LJIXPezbgD7zT3s5gN3A
+         JpdbJT/Jz6bSbMLIe/PT1n0SAyVX5rm4m5g1kJfJP+ZDMbWNSnUa6/wKIKJEtnc+Idal
+         IZRFvPaCChOXnFo1I9KtGXxXjoRMeLsr26NO13ATKWER0Ya99pj6TyGku5Xslf/xhXMU
+         jccWJJZn5Js/O4Wl97OmXcccLdAzRdnR2+N0DHsVWnx0lJRzU6gbqkxK2L4BnFm/TFKV
+         N0/sQmlRC+FIrqm7uvCoW9qDXXHDm0u9P6G76YE71qiYyV2cqPZI2v6qMnyOuP77vyBQ
+         hx8Q==
+X-Forwarded-Encrypted: i=1; AFNElJ9+6i6aJcR6qPiYNgBTWTWovYeSsRDYTrLgafjbdVFT689cSooUZ+jeY2M7SSKlFbQoQXXQNb/jVstTsw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5tQ7vMU4xmzMa0TOdIT9SJFK90paOzAr1QnoxqWmlQM67G82L
+	vk24J8XAjyDR7oZVvCB92vKcUi3moHjoIsCvmePJdrJO3pdJ7tQJnHk5
+X-Gm-Gg: Acq92OGm1JZP0mRMlN7BeMqYaeiC8sBLCp+05gFD1djrqWJxiz3uegM8hFqqb2vuBAe
+	Z4NsjbTc3527BkBtdUAZKwly1kFuIlh32xNvx96HyZOECsU/9oDUKOz6MLXoQcmyhJeGhKg0LLm
+	hiRfFeTIsdyGKUrv1I+K4WBH1d36/7qhVcnV1USX+FdvUjcnqZQNrmVs75pZOilCnHhqMTmiQTq
+	UD5fuAep08ynEcg8D3nI6n4JkOH+M19M2uGwUnZR+StAxZ3p9rxBLCz9cKeM8nJLJqQ66BbH6c1
+	SAY/HV4fint2MKEdjhSRdXrYdp9NGCpYtvfCseLseriKwobA4QQwjTAod10R3fS1ylyGQzstG2p
+	Stbmebr8eGP6TqE507xUzxkVvpdc4IJjHt1B3bhSfGu3bXaPuqK0r6CCNraxMLU2Vb6qvrwQZ5l
+	S4rXuObG/xoi9LqYvxbR2haTE61kxWIWMbO58LS4lec79Gq2WLlHeeix9fwVKLMF9tURCPRHmmT
+	9siG1G0ZyY=
+X-Received: by 2002:a17:90b:38c9:b0:369:9469:aeba with SMTP id 98e67ed59e1d1-3699469b41cmr739591a91.1.1778943878670;
+        Sat, 16 May 2026 08:04:38 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-369517fe89dsm5806546a91.17.2026.05.16.08.04.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 16 May 2026 08:04:38 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 16 May 2026 05:50:55 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: bakshansky.lists@gmail.com
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: (coretemp) fix coding style issues
-Message-ID: <6d062c67-5741-4a55-a741-00a5d810747c@roeck-us.net>
-References: <20260516114253.5466-1-bakshansky.lists@gmail.com>
- <20260516114253.5466-3-bakshansky.lists@gmail.com>
+Message-ID: <d5fe3740-bd49-4835-acf1-b8cc56543318@roeck-us.net>
+Date: Sat, 16 May 2026 08:04:36 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260516114253.5466-3-bakshansky.lists@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/5] iio: adc: add Versal SysMon driver
+To: Jonathan Cameron <jic23@kernel.org>, Salih Erim <salih.erim@amd.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, git@amd.com,
+ nuno.sa@analog.com, andy@kernel.org, dlechner@baylibre.com,
+ michal.simek@amd.com, conall.ogriofa@amd.com, erimsalih@gmail.com,
+ linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+References: <20260502111951.538488-1-salih.erim@amd.com>
+ <20260502111951.538488-3-salih.erim@amd.com>
+ <20260504183215.37c8ae65@jic23-huawei>
+ <66268e35-4897-4c40-b358-1c973b70426b@roeck-us.net>
+ <ec5634b3-2f17-42b6-8bfb-124ac0c7cde8@amd.com>
+ <20260516112057.381dc19c@jic23-huawei>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260516112057.381dc19c@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Sat, May 16, 2026 at 02:42:53PM +0300, bakshansky.lists@gmail.com wrote:
-> From: Roman Bakshansky <bakshansky.lists@gmail.com>
+On 5/16/26 03:20, Jonathan Cameron wrote:
+> On Tue, 12 May 2026 12:35:21 +0100
+> Salih Erim <salih.erim@amd.com> wrote:
 > 
-> Address several coding style warnings reported by checkpatch.pl:
-> - Replace <asm/processor.h> with <linux/processor.h>
-> - Add missing blank lines after declarations
-> - Combine split quoted strings
-> - Reorder __initconst placement
+>> Hi Guenter and Jonathan,
+>>
+>> On 5/4/2026 8:26 PM, Guenter Roeck wrote:
+>>>
+>>>
+>>> On 5/4/26 10:32, Jonathan Cameron wrote:
+>>>> On Sat, 2 May 2026 12:19:48 +0100
+>>>> Salih Erim <salih.erim@amd.com> wrote:
+>>>>   
+>>>>> Add the AMD/Xilinx Versal System Monitor (SysMon) IIO driver.
+>>>>>
+>>>>> The driver is split into a bus-agnostic core module
+>>>>> (versal-sysmon-core) and a memory-mapped I/O platform driver
+>>>>> (versal-sysmon). The core uses the regmap API so that different
+>>>>> bus implementations can share the same IIO logic.
+>>>>>
+>>>>> The core provides:
+>>>>>     - Static temperature channels (current max/min, peak max/min)
+>>>>>     - Supply voltage channels parsed from DT container nodes
+>>>>>     - Temperature satellite channels parsed from DT container nodes
+>>>>>     - read_raw for IIO_CHAN_INFO_RAW and IIO_CHAN_INFO_PROCESSED
+>>>>>     - read_label using the DT label property
+>>>>
+>>>> Various comments inline.  One thing to check.
+>>>> Is this one strictly a hardware monitoring device? Or does it
+>>>> get used for more general ADC purposes?  Did you consider an HWMON driver
+>>>> for it? The above sounds a lot like hwmon. So why IIO for this one?
+>>>>
+>>>> I wasn't awake enough on v1 to raise this!  Sorry about that.
+>>>> +CC Guenter and linux-hwmon for that discussion.
+>>>>   
+>>>
+>>> This very much sounds like a hardware monitoring device to me.
+>>
+>> The device is indeed used for hardware monitoring, but the hardware
+>> characteristics push it towards IIO:
+>>
+>> - The predecessor (Zynq UltraScale+ AMS, xilinx-ams.c) is already
+>>     in drivers/iio/adc/ upstream. This driver is the direct successor
+>>     for the Versal generation.
 > 
-> No functional change.
+> Was a long time back but at the time I think it was argued that some
+> usecases for that device were general purpose external ADC channels
+> rather than just hardware monitoring. Is that true for the new IP?
+> (might not have been true for the old one!)
 > 
-> Signed-off-by: Roman Bakshansky <bakshansky.lists@gmail.com>
-> ---
->  drivers/hwmon/coretemp.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+>>
+>> - The supply voltage encoding is a modified floating-point format
+>>     with per-register exponent and format bits. This non-linear
+>>     encoding doesn't map well to hwmon's linear in*_input model.
 > 
-> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-> index c722b1d8e480..a79c2d65a2be 100644
-> --- a/drivers/hwmon/coretemp.c
-> +++ b/drivers/hwmon/coretemp.c
-> @@ -25,7 +25,7 @@
->  #include <linux/moduleparam.h>
->  #include <linux/pci.h>
->  #include <asm/msr.h>
-> -#include <asm/processor.h>
-> +#include <linux/processor.h>
->  #include <asm/cpu_device_id.h>
->  #include <linux/sched/isolation.h>
->  
-> @@ -200,6 +200,7 @@ static int adjust_tjmax(struct cpuinfo_x86 *c, u32 id, struct device *dev)
->  
->  	for (i = 0; i < ARRAY_SIZE(tjmax_model_table); i++) {
->  		const struct tjmax_model *tm = &tjmax_model_table[i];
-> +
->  		if (c->x86_vfm == tm->vfm &&
->  		    (tm->stepping_mask == ANY ||
->  		     tm->stepping_mask == c->x86_stepping))
-> @@ -222,8 +223,7 @@ static int adjust_tjmax(struct cpuinfo_x86 *c, u32 id, struct device *dev)
->  		err = rdmsr_safe_on_cpu(id, 0x17, &eax, &edx);
->  		if (err) {
->  			dev_warn(dev,
-> -				 "Unable to access MSR 0x17, assuming desktop"
-> -				 " CPU\n");
-> +				 "Unable to access MSR 0x17, assuming desktop CPU\n");
->  			usemsr_ee = 0;
->  		} else if (c->x86_vfm < INTEL_CORE2_PENRYN &&
->  			   !(eax & 0x10000000)) {
-> @@ -257,8 +257,7 @@ static int adjust_tjmax(struct cpuinfo_x86 *c, u32 id, struct device *dev)
->  		err = rdmsr_safe_on_cpu(id, 0xee, &eax, &edx);
->  		if (err) {
->  			dev_warn(dev,
-> -				 "Unable to access MSR 0xEE, for Tjmax, left"
-> -				 " at default\n");
-> +				 "Unable to access MSR 0xEE, for Tjmax, left at default\n");
->  		} else if (eax & 0x40000000) {
->  			tjmax = tjmax_ee;
->  		}
-> @@ -424,6 +423,7 @@ static ssize_t show_temp(struct device *dev,
->  static int create_core_attrs(struct temp_data *tdata, struct device *dev)
->  {
->  	int i;
-> +
+> Given IIO doesn't really do floating point either I assume that is
+> getting converted to something fixed point which ever subsystem
+> is used.
+> 
+>>
+>> - The device has configurable threshold events with per-channel
+>>     alarm registers, hysteresis bits, and level-sensitive interrupt
+>>     masking/unmasking -- which maps directly to the IIO event
+>>     infrastructure.
+> 
+> What in that list doesn't map to hwmon events?
+> 
+>>
+>> - Oversampling is hardware-configurable per channel type with
+>>     per-channel averaging enable registers.
+> 
+> I think this is not present in hwmon (could be wrong!) but is there
+> a 'right' configuration for a typical usecase?  I.e. would sensible
+> defaults work?
+> 
 
-As pointed out by Sashiko, this is a false positive.
+There is a per sensor type "samples" attribute. I don't recall a request
+or even a chip supporting per-channel oversampling, though such an attribute
+could easily be added if there is a use case.
 
->  	static ssize_t (*const rd_ptr[TOTAL_ATTRS]) (struct device *dev,
->  			struct device_attribute *devattr, char *buf) = {
->  			show_label, show_crit_alarm, show_temp, show_tjmax,
-> @@ -774,7 +774,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
->  	}
->  	return 0;
->  }
-> -static const struct x86_cpu_id __initconst coretemp_ids[] = {
-> +static const struct x86_cpu_id coretemp_ids[] __initconst = {
+>>
+>> - Up to 160 voltage and 64 temperature channels are dynamically
+>>     configured from DT, which fits IIO's dynamic channel model
+>>     better than hwmon's compile-time attribute groups.
+> 
+> This used to be true, but hwmon has for some years supported a similar
+> model for channel creation to that of IIO + you even for traditional
+> attributes it is easy enough to create them dynamically (that's afterall
+> what the IIO core does under the hood!)
+> 
+> Anyhow, take a look at struct hwmon_chip_info and the HWMON_CHANNEL_INFO()
+> macro.  I couldn't immediately spot a dynamic user but maybe Guenter can
+> point to one.
+> 
 
-checkpatch says:
+There are several hardware monitoring drivers with dynamic sensor allocation.
 
-CHECK: Please use a blank line after function/struct/union/enum declarations
-#170: FILE: drivers/hwmon/coretemp.c:777:
- }
-+static const struct x86_cpu_id coretemp_ids[] __initconst = {
-
-Oh never mind, I'll fix that up and apply the patch.
+>>
+>> - The follow-up thermal driver uses the IIO consumer API
+>>     (iio_channel_read) to aggregate temperature data across
+>>     multiple satellites into thermal zones. The iio-hwmon bridge
+>>     then exposes the same data to hwmon userspace.
+> 
+> This might be a good reason for IIO. However what stops you just embedding
+> all that in a single hwmon driver that also registers the thermal zones?
+> 
+The hardware monitoring subsystem supports registering thermal sensors as
+thermal zones. It would be up to the thermal subsystem to aggregate them.
 
 Guenter
+
+>>
+>> So the architecture is: IIO driver (provider) -> iio-hwmon bridge
+>> (hwmon exposure) + IIO consumer (thermal zones). This gives both
+>> hwmon and thermal framework access through a single IIO provider.
+> 
+> So overall there are some possible reasons in here for using IIO but
+> I think a little more in depth analysis is needed.
+> 
+> Thanks,
+> 
+> Jonathan
+> 
+>>>
+>>> Guenter
+>>>    
+>>
+>> Salih.
+>>
+> 
+
