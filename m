@@ -1,88 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23C237BE8E
-	for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 12:26:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE4F237BE8E
+	for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 12:27:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778934362; cv=none; b=MsKXEpdqib+H+J/zQB2J3h6v/xFWjcsL4Qj45CnrQvEFiJ2elOY+R1MibAIRUUutK46Cm0B4YoEaVdm0bKtsA2+kGHgel1R/+ASLu22xC0rYflc1Q5a2GMC1KUGgrNTDNnYE3FS95D4M3YeQnAzEjEN8OIOq03PXzFRhHRJayjI=
+	t=1778934434; cv=none; b=r8BN9nrWbkYvrrBQCK2tjkLTAqTAZKzkNjKlwsosMQhTL9cDDJuZs4yWvgb7mkx31EV6BTfZI41zwTb+00noYb/JhMU1ptDoyEPov31Tw5gq9p3y66tRVMm9t8SxFA//HgNY6RPS3/7TOYtEJODwVcpBtKoRueXt8hl+IYHG7MY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778934362; c=relaxed/simple;
-	bh=TiUxjS4T/MLbcGALje09hm7FmXpNXFQIoX2sC3rexmI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=qVkJWNU+nygugfIAOZt/6w89cFeAmL2D/R2PEI0cppCTAKw6bDtAImfjdVPReWb0lKBaF+0T4Leds2HS0YkxxgwoSHwDDcdnzJgsczJ5lSvqvuk6CPtOnEqgvF6Nxstw4/+VPh9lPR59BnT+yYARSPSNkRmY9ipJ+OL6918KJBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zpa+KJ/8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778934434; c=relaxed/simple;
+	bh=lKwBaJ24JqzgREHEkfvZhcwADcKQDPsrZz1yrVLlFTs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xh8LmLVoIm/78XhFIXrprDh45/HtB8fWqaPc9TUdKk3G3mk2jDqzsrWNPKV6ZwhBgEzDkjfyzjPfmsZHgaMMH9d97WXwES8wAmJNzfFtgLxFOGu5/msDD55ESMBNNDXvPuDX0LbOJwROJFhsxzYCMnMdtY8OAouHWzvVEWWXQBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zb5MP8nL; arc=none smtp.client-ip=74.125.82.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zpa+KJ/8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56C85C19425;
-	Sat, 16 May 2026 12:26:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778934362;
-	bh=TiUxjS4T/MLbcGALje09hm7FmXpNXFQIoX2sC3rexmI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=Zpa+KJ/8dFlEfO+qxsTbMDPKAMXDx3/V6kKOdkVlU2rayealgWt1bT4r1ukQV7Lr2
-	 sNb/VB+PhkyxO72dc2Q21Bk616vRGE2oikqkmQIP1JegRs/ZkrXECYuS56//MOdSnS
-	 3KhairM3Rvx94C3+aS2mljqC4hHGmtX5PFgRiuwStMZr8ZaGTkt0N9Cv641jBAbCoF
-	 BAHOFWwhxYtIA7ZpUrQ3hu2S7QUNQqrt9M1I/X0fc9rGSMkZbsExGHUjcozp6As41G
-	 yfpT/4CQkKsrRY5j00tBEi0KB9QTzhrZ4HrsRCT1BLFvy8esRRT6Z3zUXZ9oMgNm0r
-	 KBxT1FwvcbPPA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/2] hwmon: (coretemp) fix coding style issues
-Reply-To: sashiko-reviews@lists.linux.dev
-To: bakshansky.lists@gmail.com
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260516114253.5466-3-bakshansky.lists@gmail.com>
-References: <20260516114253.5466-3-bakshansky.lists@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 16 May 2026 12:26:01 +0000
-Message-Id: <20260516122602.56C85C19425@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zb5MP8nL"
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-134ac81c445so3459604c88.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 05:27:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778934432; x=1779539232; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wtsW1UMn77MIYK/LruizydGU3ibgXTA6d40uo+sS34A=;
+        b=Zb5MP8nLwGpyydoJ6FlnW/gkycm8XqFJfZuSuw54Y8/FF+oFRSGfMpFGspElVS9hdO
+         f1IvtoZTcYun1WyrbkJS4ia/dloyEXCVmjUo9fkf1dZCNHdLo9Ij48I85/Yqxoh8cB++
+         XNlfi6CxFnrt3bjBeTxOlHBAsUsx0o51OaIWThX5WSyaGkLV8WexGyR14tFJIRFnLvRf
+         DsLlI7w3R5/zmVpzF7S/5uch45MhuCO4H9mvxFMEYmFJNTlU3sXFCjuUGXD7u+Why3R0
+         +nM0hIxLZIjMiaxdQD1PaIo+yd3fpaoCdicDLUlYlYyvPoC8VdFjOsasJQbb5+bzE2Ui
+         4N+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778934432; x=1779539232;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=wtsW1UMn77MIYK/LruizydGU3ibgXTA6d40uo+sS34A=;
+        b=L+eUrul1snub0V5GXivwgzxLUFrPLJhe59bIVx8R3ELBQVtksR3w1DxQY9lJbQ1qaH
+         7Oi9DFyscvd1Vn3/qycx0yALAc7/WzCRj5Cuw6Tna4xTXMcONVq1F+vDlyXuVyjaSvEO
+         C/J0VsAO9BMDNs4H8ORv8qSJRskd3F6LbseWknP3yO6+cg/BZwML/06iQ2AQ+uX4OUGy
+         WJEhNAHCBDD8r1VrckVni8bOqRpIsmEdN9thdimnaQ2JMELcZwoZiE2r9xZZbD3xG16+
+         m39HucgoDxycp+WmRBt051K0WaLK92I9AGXBjwslo3YaBscwo11506ytl2puR47ugFPv
+         pedg==
+X-Gm-Message-State: AOJu0YxrVcAm9lLQUbDIxU1E2pOIQQQjjftt1rLh8ccbE8v/lRNBG/5y
+	iqH0DFlkX43XSusy2iM+8XmIEZsrGhl8yolsyzzrG1/l5Q40svI4xpqO
+X-Gm-Gg: Acq92OFTBVTBBXNCsV8tUNNRn4kUfmPb0QnVJuVowNBdIe0ioOfh8LkIBGmSyM+K6rq
+	LjXqcJHB7nALjDOjriXaY57ppy+nCgmJb71TfPk06jSINmgsH+ERaggQf7MGUpDF+UgcjAo+xZ8
+	3RzKP+5qe3sQgp7hZsg0QsgMuNM2PMwg6DCu14Kly6EmaFlceQgoN5hy6AUkQOFIhGh9anbKX1k
+	PDmdeeH4YCgjqngs079b2+P8x9gT5oIwQ35Rofe7mnp9uP9KhEPPm0H2VutFD4c83mjwYmqK0xv
+	MbxPfKO0/zWqu0G/VsEGp1WKBconnznJ/Yl7ik7rdtzwLT6LBW3gx2S9/onsafO1F6NRNdmahWx
+	CinMuq7MdYEJ39ZbW/4mH1wRpglDNhsMaw9Pw6e96PlWAACAjMkKQP4EGP1tgVBXwGfdlBHywCN
+	jhjlCuoYuF9nm5oMX7Zod4JK6IiHFwI4i8byBA
+X-Received: by 2002:a05:7023:b87:b0:12d:ea4f:99de with SMTP id a92af1059eb24-13503decf1dmr3660980c88.0.1778934431878;
+        Sat, 16 May 2026 05:27:11 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cbcb93f3sm14198076c88.3.2026.05.16.05.27.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 May 2026 05:27:11 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sat, 16 May 2026 05:27:10 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Flaviu Nistor <flaviu.nistor@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (lm75) Add explicit header include
+Message-ID: <690b856a-e02e-4780-803f-7bfd2c9cf596@roeck-us.net>
+References: <20260516075708.6682-1-flaviu.nistor@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260516075708.6682-1-flaviu.nistor@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] A blank line was incorrectly added inside a contiguous block of dec=
-larations in `create_core_attrs()`, splitting the variable declarations.
---
+On Sat, May 16, 2026 at 10:57:08AM +0300, Flaviu Nistor wrote:
+> Since device_property_read_string() is used in the
+> probe function add explicit include for
+> linux/mod_devicetable.h and linux/property.h rather
+> than having implicit inclusions.
+> Header linux/of.h can be removed and also of_match_ptr()
+> improving non-Device Tree compatibility of the driver.
+> 
 
-commit fd6a696ecbdee696c6e67fb77fb06e3c1baa31cc
-Author: Roman Bakshansky <bakshansky.lists@gmail.com>
+Line breaks should be at column 75. There are way too many line breaks
+above.
 
-hwmon: (coretemp) fix coding style issues
+> ---
+>  drivers/hwmon/lm75.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+> index 845a0e09ea9f..32279049d44c 100644
+> --- a/drivers/hwmon/lm75.c
+> +++ b/drivers/hwmon/lm75.c
+> @@ -14,7 +14,8 @@
+>  #include <linux/i3c/device.h>
+>  #include <linux/hwmon.h>
+>  #include <linux/err.h>
+> -#include <linux/of.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/property.h>
+>  #include <linux/regmap.h>
+>  #include <linux/util_macros.h>
+>  #include <linux/regulator/consumer.h>
+> @@ -1152,7 +1153,7 @@ static struct i2c_driver lm75_i2c_driver = {
+>  	.class		= I2C_CLASS_HWMON,
+>  	.driver = {
+>  		.name	= "lm75",
+> -		.of_match_table = of_match_ptr(lm75_of_match),
+> +		.of_match_table = lm75_of_match,
 
-This commit addresses several coding style warnings reported by checkpatch.=
-pl.
-It updates header inclusions, adds missing blank lines, combines split stri=
-ngs,
-and reorders the __initconst attribute.
+With this, the __maybe_unused in the declaration of lm75_of_match
+is no longer necessary. Please drop.
 
-> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-> index c722b1d8e4804..a79c2d65a2bee 100644
-> --- a/drivers/hwmon/coretemp.c
-> +++ b/drivers/hwmon/coretemp.c
-[ ... ]
-> @@ -424,6 +423,7 @@ static ssize_t show_temp(struct device *dev,
->  static int create_core_attrs(struct temp_data *tdata, struct device *dev)
->  {
->  	int i;
-> +
-
-This isn't a bug, but does this newly added blank line split a contiguous
-block of variable declarations?
-
-The static array rd_ptr is also a variable declaration, so this separates it
-from the int i declaration. It looks like checkpatch.pl might have misparsed
-the complex function pointer array declaration as a statement.
-
->  	static ssize_t (*const rd_ptr[TOTAL_ATTRS]) (struct device *dev,
->  			struct device_attribute *devattr, char *buf) =3D {
->  			show_label, show_crit_alarm, show_temp, show_tjmax,
->  			show_ttarget };
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260516114253.5466=
--1-bakshansky.lists@gmail.com?part=3D2
+Thanks,
+Guenter
