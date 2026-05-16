@@ -1,348 +1,152 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A56B331E85E
-	for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 18:25:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179712DFF3F
+	for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 19:13:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778955903; cv=none; b=XV+w8m/h6d13XfurKuF0VZ4zSd1J8bxNDXcM+1L33gKlo9PwvHQwzyltF+RbZuerChT8Is48pG2vWw2IkThIwjW/URK5cznYsKzofpHVJqygRIhRNrMW/s8PCTYfnSB5ppEYTS9KuEf3ioOW+ZV3OpIwkFJWRfkpmErAYIEL0Rw=
+	t=1778958789; cv=none; b=q1ufaLrWsl6DffIR7SsqgJhxlOuwrYMZP3rp4092htWK32Fj6Prqy6FZ/rvC1W6iaCOkDPyprU2oNcKFsZfKFc9pu2Y7usdSE3rTnBfmrYyXY3l4Km32ZylMNYBeqLvcBuQpf+fFORq9nl2tr+XTrCrkYyn8AKYZPoZn3CGVecE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778955903; c=relaxed/simple;
-	bh=YmgNJ9xyrTsLaXQYMequiE+gxpIUaFn/zhPmbssVgEo=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:References:
-	 In-Reply-To:Content-Type; b=cGFog5p4X9AEYwpAOB5n9HYmECbjxStg7CuzyVH9D37FmzOTz/2d+pqzbTe+0rPOhCx4OyReBEZBwpNqUwqxMtclxZqrwF+xuUiFpDgXsboXcdg5lSyiS3ymT7G+t4M8DrIdjUeNL4Qwyi80VM7PwHed3zrj4g1TjJ5yt6EHxXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CU7kk1V1; arc=none smtp.client-ip=74.125.82.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778958789; c=relaxed/simple;
+	bh=gn2uMmGVqz7bX9M35WbIy51eFSYt1rl4hYvMtRDztHc=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:Mime-Version:
+	 References:In-Reply-To; b=sWSkcbYpZAm7rS+B3VamVXRcWPyzh1b0oNNcSxcO46C0gYj9TEezJIz3kAOZ5c7lLhf5bA6u3JNs5kb3ttBMb3ZT/pPEcY254oa/SD0Wfh3kYHpib3hn5MIW5KtGoakGar8dtJndQXrN37L+ZIBx3P/SbBJlX58oyT5UjAgVyyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai; spf=pass smtp.mailfrom=nexthop.ai; dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b=Iuma67aS; arc=none smtp.client-ip=74.125.82.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CU7kk1V1"
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2f36da5c8fbso773451eec.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 11:25:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b="Iuma67aS"
+Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-12c8f9846c8so1050458c88.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 16 May 2026 12:13:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778955901; x=1779560701; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:to:from:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=gnO5IioVzWSYwRbqhkh2raHko5bjhTUierG2nULceM0=;
-        b=CU7kk1V1SpzRklZ6ypkIYhIwNra8CBgzOyUSUwvFpnO9UjfSDds7cdHCpfDafz2kGA
-         D3qU+AG294NgP5lRjQDvU+P+eXn43PKc1xwAHm1APxyXUcNhyhRh6PIyR+ObIXHw3eO0
-         nzlQNryu4FLpWrkPaBBA9UGLnRqWxqgQhbdTIpk/qQsDLCZEfCgF6dHmpHyBIRuCqtS/
-         lt7YIWrC6k/SuwQ3xuWdaawV3A2AI3sWcALfKWK2n87l2nGYpFAmpzoVD1XI/RcnihnQ
-         xNkshAW4AoEq3uDOSusVIeoD5QsjddFZKGa6GEK1z8LmzdTIGm2U/IzmWjQtSvIYaoXf
-         TYGA==
+        d=nexthop.ai; s=google; t=1778958786; x=1779563586; darn=vger.kernel.org;
+        h=in-reply-to:references:content-transfer-encoding:mime-version:to
+         :from:subject:cc:message-id:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e8MJvVWg0F0H0jEwe7ABZnubh9KyrgWaVRhp78yyYlk=;
+        b=Iuma67aSVt8qMWqkGW0rkta/GCsnMGN9BZte5OBOnScGEBGHP8nxDgEPHKlZnczilY
+         bd/ojji4yWFZL+AlnXBN+2SzNznUYFvRnl9ySdRM3xPpz6NzNm75z4tIGbyyneCoXvro
+         uWm/fLq0ity/QT5EL0wi5Jss/hZmwUJp8ZqUgVnF4oadatY6BKhA52bAMWnYbgbYC4OS
+         xNy7ggWNBAagSm2/p9NRwGF6wMM0879RNlMeM83IPJktPaK5BehUMgY7F4cDYubqzikz
+         0g5AAAMYY+lxI3tfGF9KlxNgRxVge47PknLY71RVA2JyjITNvQ1zVTew/RNkn7FYxskq
+         dSaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778955901; x=1779560701;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:to:from:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gnO5IioVzWSYwRbqhkh2raHko5bjhTUierG2nULceM0=;
-        b=eu2xqcl93SUcUImIfAhmkYoI4BfwRtLd3U7KNIGg584eHQ8geGUc0rwY/A3RCr0N2I
-         ngQBLmj5GalCP4R8EBpUq+l0mopv9KfrN1N23SDr8cG2EE/KHMDsDGQGHbEWMDppPd8f
-         3Dp4PLrn0XXLAXzuHR20mf5AjJKp2QgGfDg7EYSfW+UmNJ9KZV0BvPny4XSGX3y9YJKg
-         jU9bXZfzH7EO+07V8cBvPWMljUZUya0v/1dFzPxi2E7Ar1SLszrxSHfIOZO3NPkGiwCu
-         AMbSTDRnduJP6dX8x0xLMKpDd6oo4YrHc9c5vuMsYUsOFyAPMgYjP5R9KtZuvXXYr8uU
-         cayQ==
-X-Forwarded-Encrypted: i=1; AFNElJ//OTwH/8CNY+iPooTkI2TRsBD/9Hv9A+5QddBfvVg6GRBnbLzq6pnmtDRwvDqGxawF82ka+MX/6+E0Rg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzftLqq9JH9o7nFmmgqMbPXzkYmX6En/HEoz4WCYfzu4rw1xbhO
-	rEk5/jU/Ma2V9H1vKHLe0agp8+hIVnH68JvWt0y+4ZS0vlp6EheQ9IM0
-X-Gm-Gg: Acq92OHhG05u292ENu9N6oDliQEdiwbwd9jNjgChuWZ2pX5a0exZ4EQ5PtP8QIsUss+
-	Hl8+9T814PoK2QGX+ItdlJz6IE9dbzCHeXZyaPRphxlHvwEUhwXE8Ko+ELDpX/gDjdTxx8fzi63
-	32Vel9B+uB3Lv7alr5ADXBKvuUfQj4qMyYHhSJ0didrabK2sIBw4kYqU1p4k1zgZRluxWcqbca1
-	I7n5Dd5jdH+VQLSMbNi17xmKMPm8wSshWElb/aKVOWi8eOfBAE+C4He199/Tga+82lG8WrqKgeI
-	5VMl3kKRxwlB//9scxmOG5+cGaju8majNOPtopk0jnm5F720C6Rvt2iNJ8GyHZzzehRI2k+zpn3
-	LxsV/q7yk08F8iiNiU8GOGQ7Y3Wt9cvvlAzEXFud12cd72BsiWNvN+CD+u4EKPuIkgDPVIVy3Kl
-	amYpUkc2LreaaubISAD1Gjnm+PUFXolfyv9rc50nLmToeLtyAFj6hzsTRfcxBJnG1+e6Y6oKRe
-X-Received: by 2002:a05:7301:608a:b0:2fc:9aa8:83da with SMTP id 5a478bee46e88-303986a03d0mr4032865eec.29.1778955900702;
-        Sat, 16 May 2026 11:25:00 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-302978afdd3sm10300284eec.29.2026.05.16.11.24.59
+        d=1e100.net; s=20251104; t=1778958786; x=1779563586;
+        h=in-reply-to:references:content-transfer-encoding:mime-version:to
+         :from:subject:cc:message-id:date:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=e8MJvVWg0F0H0jEwe7ABZnubh9KyrgWaVRhp78yyYlk=;
+        b=BaMjCnvUB62TJiefGgbyCgIdfPPsalVfpM2vhH8rUMvMNl8qKM69h14UrNrTXW8zdl
+         6mT1wo0N9ygsvfTDu0jBdY7KLHnZUeZ2t2ihgJskzKo2X16wJjkXswH2ESTY7iaPyvjQ
+         s01kW446L99G/LjFFXKCo00sysl9FzzXkhSpQQRcSrHX9X6t6aZ0YMKOKW+Svp6xeo2d
+         ULeBiQ+bOrQoP97dLYFKckr+c/Z5YaCIbsfs1iYGATS7IZHDlWC11bQlaIzZmoLDm5mN
+         9FNyu+e+TNlmTp7cAkfccM4lSD6luqgLt6tJKTJEMPTpiNtL+EZTlLKwSiCk5ly2oBmp
+         EmRw==
+X-Forwarded-Encrypted: i=1; AFNElJ8edV5VDIxMqMg8nXYFE8/GK+gWr0Gv8HqpqXsPRHtaDu05U371R6s9SdmjvGAxNiSu6sgPydLW1INugQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNjoZfpJvOxs9wRO0RypKiJIDL+KiNOBr8ayzF+VC0GXUjHZsO
+	dczCLD71XGDrUbtSZ7QCACFJ0N9w2vRA6zSeAcJtp0dVqClV8PgzgRBYiL0/C6l3UUM=
+X-Gm-Gg: Acq92OFjMjU++xMAGEAThRke5UToNvSqkjaSY94fvsw1OcBoweAh9qvoK8qSvzqdyBn
+	UJyMC8Fl+8otR99wBw9u7JEGRRnOmsDrNoVctPqQo9/D3SiVm3sAX61IcQGgcKp0hrg6xE0cR64
+	pGPhB8GgGc0wW2txjRdzZ5jZMgJCyeBwe7ZncbiNeHedWV/ibGAlcYDqA2fDcX4IXWy12Jp/w40
+	XDku+uvINeFfQOpXRi7KfdaeMdV4TVmSU68uC0pJBUesQSCKew7GLqgLzP17sGOFpekzGQRyGe2
+	OulbZpec+QjFF45PSAlZTDOdiSRpDlAY2azE0piqkpcngx/Oq0GN0uACNGur8DPtHIZI3XBtI8N
+	ubl2Wko0rh4lapUmBe8/PtUAucbVeQcGJh26NMdiZfo9/JF0nTTJoR/D5VdBGVre2H5j+wuzx9c
+	Fi+lHYWSZFjFUdiIL+Y8dMozGlfZQdfCBeuQ==
+X-Received: by 2002:a05:7022:922:b0:132:7ab5:6cb8 with SMTP id a92af1059eb24-13504311c97mr4432138c88.2.1778958786004;
+        Sat, 16 May 2026 12:13:06 -0700 (PDT)
+Received: from localhost ([50.145.100.174])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cb5b3c20sm15046942c88.0.2026.05.16.12.13.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 May 2026 11:25:00 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <68c963ab-042f-496b-ae38-9f9584b3c427@roeck-us.net>
-Date: Sat, 16 May 2026 11:24:59 -0700
+        Sat, 16 May 2026 12:13:05 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 16 May 2026 12:13:04 -0700
+Message-Id: <DIKC9BK2GTDE.3L5O0LAIZAGH@nexthop.ai>
+Cc: "Jean Delvare" <jdelvare@suse.com>, <linux-hwmon@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>, "Guenter Roeck"
+ <groeck7@gmail.com>
+Subject: Re: [PATCH 0/5] hwmon: (pmbus/adm1266) buffer-bound and timestamp
+ fixes
+From: "Abdurrahman Hussain" <abdurrahman@nexthop.ai>
+To: "Guenter Roeck" <linux@roeck-us.net>, "Abdurrahman Hussain"
+ <abdurrahman@nexthop.ai>, "Alexandru Tachici"
+ <alexandru.tachici@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] hwmon: raspberrypi: Add voltage input support
-From: Guenter Roeck <linux@roeck-us.net>
-To: Shubham Chakraborty <chakrabortyshubham66@gmail.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, linux-hwmon@vger.kernel.org,
- linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-References: <20260516164407.25255-1-chakrabortyshubham66@gmail.com>
- <20260516164407.25255-2-chakrabortyshubham66@gmail.com>
- <ff7bf6f8-0090-4aea-ba60-3477cc81a458@roeck-us.net>
-Content-Language: en-US
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <ff7bf6f8-0090-4aea-ba60-3477cc81a458@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: aerc 0.21.0
+References: <20260515-adm1266-fixes-v1-0-1c1ea1349cfe@nexthop.ai>
+ <2a3c5a65-e2b7-4159-9d3c-eb6a8a600b37@roeck-us.net>
+In-Reply-To: <2a3c5a65-e2b7-4159-9d3c-eb6a8a600b37@roeck-us.net>
 
-On 5/16/26 10:13, Guenter Roeck wrote:
-> On 5/16/26 09:44, Shubham Chakraborty wrote:
->> Extend the raspberrypi-hwmon driver to expose firmware-provided
->> voltage measurements through the hwmon subsystem.
->>
->> The driver now exports the following voltage inputs:
->>
->>    - in0_input (core)
->>    - in1_input (sdram_c)
->>    - in2_input (sdram_i)
->>    - in3_input (sdram_p)
->>
->> Voltage values returned by firmware are converted from microvolts
->> to millivolts as expected by the hwmon subsystem.
->>
->> The existing undervoltage sticky alarm handling is preserved and
->> associated with the first voltage channel.
->>
->> Tested in -
->> - Raspberry Pi 3b+ (Linux raspberrypi 6.12.75+rpt-rpi-v8 #1 SMP PREEMPT
->>    Debian 1:6.12.75-1+rpt1 (2026-03-11) aarch64 GNU/Linux)
->>
->> Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-> 
-> I wasn't copied on patch 1/2, so I have no idea what is in there
-> and how it is related to this patch. Either way it seems unlikely that
-> the new functionality is supported by all versions of Raspberry Pi supported
-> by this driver. Just returning an error when the user tries to read a sensor
-> that is not supported is unacceptable. This needs either evidence that the
-> sensors are supported by all board variants and firmware versions supported
-> by this driver, or the is_visible function needs to selectively enable the
-> supported sensors.
-> 
+On Sat May 16, 2026 at 8:23 AM PDT, Guenter Roeck wrote:
+> On 5/15/26 15:11, Abdurrahman Hussain wrote:
+>> This series fixes five pre-existing bugs in adm1266.c that were
+>> surfaced by automated review of an in-flight feature series for the
+>> same driver [1].  None of them are introduced by that feature work --
+>> they are all reachable on the existing driver as it sits in mainline.
+>> Sending them standalone first, with Fixes: tags and Cc: stable, so
+>> the feature respin (v5) can rebase on top.
+>>=20
+>> Patch 1 fixes a CLOCK_MONOTONIC vs CLOCK_REALTIME confusion in
+>> adm1266_set_rtc(): the chip's SET_RTC register is documented to hold
+>> wall-clock seconds, but the driver currently seeds it from
+>> ktime_get_seconds(), giving blackbox records timestamps that reset
+>> to small values on every host reboot.
+>>=20
+>> Patches 2 and 3 fix two ways the blackbox-info path can be driven
+>> out of bounds by a misbehaving slave: a 5-byte stack buffer that
+>> i2c_smbus_read_block_data() will memcpy() up to 32 bytes into, and
+>> a record_count loop bound taken directly from the device with no
+>> upper clamp against the 32-record dev_mem allocation.
+>>=20
+>> Patches 4 and 5 fix the two ways adm1266_pmbus_block_xfer() can
+>> write past the end of a buffer: an off-by-one on the helper's own
+>> read_buf (sized for the length+payload but missing the PEC byte the
+>> i2c_msg length already accounts for), and a caller-side bug where
+>> adm1266_nvmem_read_blackbox() advances its destination pointer in
+>> 64-byte strides while the helper is willing to write up to 255
+>> bytes per call.
+>>=20
+>> [1] https://lore.kernel.org/r/20260512-adm1266-v3-0-a81a479b0bb0@nexthop=
+.ai
+>>=20
+>> Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 >> ---
->>   drivers/hwmon/raspberrypi-hwmon.c | 112 +++++++++++++++++++++++++++++-
-> 
-> Documentation/hwmon/raspberrypi-hwmon.rst needs to be updated as well.
-> 
->>   1 file changed, 109 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/hwmon/raspberrypi-hwmon.c b/drivers/hwmon/raspberrypi-hwmon.c
->> index a2938881ccd2..c73a970db025 100644
->> --- a/drivers/hwmon/raspberrypi-hwmon.c
->> +++ b/drivers/hwmon/raspberrypi-hwmon.c
->> @@ -5,6 +5,7 @@
->>    * Based on firmware/raspberrypi.c by Noralf Trønnes
->>    *
->>    * Copyright (C) 2018 Stefan Wahren <stefan.wahren@i2se.com>
->> + * Copyright (C) 2026 Shubham Chakraborty <chakrabortyshubham66@gmail.com>
->>    */
->>   #include <linux/device.h>
->>   #include <linux/devm-helpers.h>
->> @@ -18,6 +19,11 @@
->>   #define UNDERVOLTAGE_STICKY_BIT    BIT(16)
->> +struct rpi_firmware_get_value {
->> +    __le32 id;
->> +    __le32 val;
->> +} __packed;
->> +
+>> Abdurrahman Hussain (5):
+>>        hwmon: (pmbus/adm1266) seed timestamp from the real-time clock
+>>        hwmon: (pmbus/adm1266) widen blackbox-info buffer to I2C_SMBUS_BL=
+OCK_MAX
+>>        hwmon: (pmbus/adm1266) reject implausible blackbox record_count
+>>        hwmon: (pmbus/adm1266) include PEC byte in pmbus_block_xfer read =
+buffer
+>>        hwmon: (pmbus/adm1266) bounce blackbox records through a protocol=
+-sized buffer
+>>=20
+>>   drivers/hwmon/pmbus/adm1266.c | 13 +++++++++----
+>>   1 file changed, 9 insertions(+), 4 deletions(-)
+>> ---
+>> base-commit: 1f63dd8ca0dc05a8272bb8155f643c691d29bb11
+>> change-id: 20260514-adm1266-fixes-853003a0fad4
+>>=20
+>> Best regards,
+>> --
+>> Abdurrahman Hussain <abdurrahman@nexthop.ai>
+>>=20
+>
+> Sashiko identified several issues with the driver as part of the review.
+> Most if not all of them seem valid, but were not introduced with this
+> series. I'll apply the series as is. Any fixes can come later.
+>
+> Thanks,
+> Guenter
 
-More feedback:
+Thanks Guenter!
 
-Why define this here but RPI_FIRMWARE_VOLT_ID_CORE etc. in the
-firmware API include file ? struct rpi_firmware_clk_rate_request
-is quite similar and defined (and documented) in the include file.
+I will address the issues in a follow up series.
 
-Also, the name is quite generic, suggesting a common structure.
-rpi_firmware_clk_rate_request, as used for the clock, is much more
-specific. I would suggest to either use a single structure for all
-requests or clarify that this is for voltages only (i.e., name the
-structure and the returned value appropriately).
-
-Last but not least, please send both patches to the same set of people
-and mailing lists.
-
-Thanks,
-Guenter
-
->>   struct rpi_hwmon_data {
->>       struct device *hwmon_dev;
->>       struct rpi_firmware *fw;
->> @@ -56,6 +62,23 @@ static void rpi_firmware_get_throttled(struct rpi_hwmon_data *data)
->>       hwmon_notify_event(data->hwmon_dev, hwmon_in, hwmon_in_lcrit_alarm, 0);
->>   }
->> +static int rpi_firmware_get_voltage(struct rpi_hwmon_data *data, u32 id,
->> +                    long *val)
->> +{
->> +    struct rpi_firmware_get_value packet;
->> +    int ret;
->> +
->> +    packet.id = cpu_to_le32(id);
->> +    packet.val = 0;
->> +    ret = rpi_firmware_property(data->fw, RPI_FIRMWARE_GET_VOLTAGE,
->> +                    &packet, sizeof(packet));
->> +    if (ret)
->> +        return ret;
->> +
->> +    *val = le32_to_cpu(packet.val) / 1000;
->> +    return 0;
->> +}
->> +
->>   static void get_values_poll(struct work_struct *work)
->>   {
->>       struct rpi_hwmon_data *data;
->> @@ -77,19 +100,101 @@ static int rpi_read(struct device *dev, enum hwmon_sensor_types type,
->>   {
->>       struct rpi_hwmon_data *data = dev_get_drvdata(dev);
->> -    *val = !!(data->last_throttled & UNDERVOLTAGE_STICKY_BIT);
->> +    if (type == hwmon_in) {
->> +        switch (attr) {
->> +        case hwmon_in_input:
->> +            switch (channel) {
->> +            case 0:
->> +                return rpi_firmware_get_voltage(data,
->> +                        RPI_FIRMWARE_VOLT_ID_CORE,
->> +                        val);
->> +            case 1:
->> +                return rpi_firmware_get_voltage(data,
->> +                        RPI_FIRMWARE_VOLT_ID_SDRAM_C,
->> +                        val);
->> +            case 2:
->> +                return rpi_firmware_get_voltage(data,
->> +                        RPI_FIRMWARE_VOLT_ID_SDRAM_I,
->> +                        val);
->> +            case 3:
->> +                return rpi_firmware_get_voltage(data,
->> +                        RPI_FIRMWARE_VOLT_ID_SDRAM_P,
->> +                        val);
->> +            default:
->> +                return -EOPNOTSUPP;
->> +            }
->> +        case hwmon_in_lcrit_alarm:
->> +            if (channel == 0) {
->> +                *val = !!(data->last_throttled & UNDERVOLTAGE_STICKY_BIT);
->> +                return 0;
->> +            }
->> +            return -EOPNOTSUPP;
->> +        default:
->> +            return -EOPNOTSUPP;
->> +        }
->> +    }
->> +
->> +    return -EOPNOTSUPP;
->> +}
->> +
->> +static int rpi_read_string(struct device *dev, enum hwmon_sensor_types type,
->> +               u32 attr, int channel, const char **str)
->> +{
->> +    if (type == hwmon_in && attr == hwmon_in_label) {
->> +        switch (channel) {
->> +        case 0:
->> +            *str = "core";
->> +            return 0;
->> +        case 1:
->> +            *str = "sdram_c";
->> +            return 0;
->> +        case 2:
->> +            *str = "sdram_i";
->> +            return 0;
->> +        case 3:
->> +            *str = "sdram_p";
->> +            return 0;
->> +        default:
->> +            return -EOPNOTSUPP;
->> +        }
-> 
-> This can be implemented as string array.
-> 
->> +    }
->> +
->> +    return -EOPNOTSUPP;
->> +}
->> +
->> +static umode_t rpi_is_visible(const void *_data, enum hwmon_sensor_types type,
->> +                  u32 attr, int channel)
->> +{
->> +    if (type == hwmon_in) {
->> +        switch (attr) {
->> +        case hwmon_in_input:
->> +        case hwmon_in_label:
->> +            return 0444;
->> +        case hwmon_in_lcrit_alarm:
->> +            if (channel == 0)
->> +                return 0444;
->> +            return 0;
->> +        default:
->> +            return 0;
->> +        }
->> +    }
->> +
->>       return 0;
->>   }
->>   static const struct hwmon_channel_info * const rpi_info[] = {
->>       HWMON_CHANNEL_INFO(in,
->> -               HWMON_I_LCRIT_ALARM),
->> +               HWMON_I_INPUT | HWMON_I_LABEL | HWMON_I_LCRIT_ALARM,
->> +               HWMON_I_INPUT | HWMON_I_LABEL,
->> +               HWMON_I_INPUT | HWMON_I_LABEL,
->> +               HWMON_I_INPUT | HWMON_I_LABEL),
->>       NULL
->>   };
->>   static const struct hwmon_ops rpi_hwmon_ops = {
->> -    .visible = 0444,
->> +    .is_visible = rpi_is_visible,
->>       .read = rpi_read,
->> +    .read_string = rpi_read_string,
->>   };
->>   static const struct hwmon_chip_info rpi_chip_info = {
->> @@ -159,6 +264,7 @@ static struct platform_driver rpi_hwmon_driver = {
->>   module_platform_driver(rpi_hwmon_driver);
->>   MODULE_AUTHOR("Stefan Wahren <wahrenst@gmx.net>");
->> +MODULE_AUTHOR("Shubham Chakraborty <chakrabortyshubham66@gmail.com>");
->>   MODULE_DESCRIPTION("Raspberry Pi voltage sensor driver");
->>   MODULE_LICENSE("GPL v2");
->>   MODULE_ALIAS("platform:raspberrypi-hwmon");
-> 
-> 
-
+Best regards,
+Abdurrahman
