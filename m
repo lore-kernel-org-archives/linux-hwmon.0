@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 339FC18DB1A;
-	Sat, 16 May 2026 07:55:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E4DF18DB1A;
+	Sat, 16 May 2026 07:56:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778918149; cv=none; b=qFfcMV4kAu7iN2snI78jAy5lWWSvTJAnnbbdBWbgDZIQn3xfSjXRbnPxXmeIXIls1EZzgwS6HT6uIE+QQkTaoeekmynau9vjEae3OoAl1oSGSlg0I2tYtHLOQBD997dQIQfHai9SxuZ74Ron/wjlD9vw+gh6uAIdFylqLKjvKjM=
+	t=1778918186; cv=none; b=rfqbCKdHFX7kQIT6yJc0is9DdVonjabRMh7oGaRVEtEEQTqkcHHjm2uPNEDUigSPG5qdAlGtUyiSsoBby4N3g+KjBrOQ76VAKsnmMhYXr0TSenJy+4FGu64REintiCxmiqtFxzEuABQnfuZ+4slNW4FTkjMa4wmLgumlK5WwKis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778918149; c=relaxed/simple;
-	bh=lyKQDl9shdzld6H85nuhDfW5SWBWfpPfHmTt2wTHX9M=;
+	s=arc-20240116; t=1778918186; c=relaxed/simple;
+	bh=QLpimf2mTc5uEmHCmkOIkCwDPngDdgWmVNJz617coAo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n0Ef/41eE+MxvAh1ftPDucLxvvwUQdRiyEWvYyF//3xCq0iG9RgApbWXsss3siBd7AFvlMwDADD6B6xvhipsttr91LwQxnJy/nh1XkUX8FF2ukBeI2w13glp7mHf69Mdk2RSu5/yfBqCCcf3wuwQz0zl6zG3iN3K6V57/TKUHsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iW11IbnG; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=XALvcKVsS7H6J964L0bDTzStazcBUB4urt8yz+pmxeLF2Cmv8MMh1Dh13dbXUNgQCzCuzAAVNsevpytT9VAHlqJHCo4XRmSBU8Q5cXsO3zLbhnup+Y6tSASVXV59uBdmHkSnUNqpFIsfci0Uj0xSeMesR4ThBhRTxHXPd++SM9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K6YqegU0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iW11IbnG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE611C19425;
-	Sat, 16 May 2026 07:55:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K6YqegU0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9745FC19425;
+	Sat, 16 May 2026 07:56:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778918148;
-	bh=lyKQDl9shdzld6H85nuhDfW5SWBWfpPfHmTt2wTHX9M=;
+	s=k20201202; t=1778918186;
+	bh=QLpimf2mTc5uEmHCmkOIkCwDPngDdgWmVNJz617coAo=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=iW11IbnG7DzrBCyv3suJ0ytxRdSyQHAOzMUdqD8Ptv9F52y41VcRwD6DHqAZq0nhV
-	 jfaKHsrNe7diTW2sRUF7vXrvNp/+S4sy4t7Cg29opvo94ixqwnhLf/eEpm0oc2sfLM
-	 5yqYq6IPjQicDkn0F4dl0QTylg/TqhKlXDS9tTVAJo7sWN4YMP59xVqFeW9fQGOmz/
-	 O5bdDA4ehxVzNsKPEAM9+KKvdY/ehYQJAlWbwdTO12hYkkqyD9wpHhuFX3jKgKJBwr
-	 YXfPajo2YkUc40j8VYyVzQRdrEi+F4YNZHkK4FEXkhwQkT6mziQaGNwVs5jTLLMO8q
-	 M67Z6YCwyHUAg==
-Message-ID: <b004dde7-f883-44c5-ba37-6084ffb6d061@kernel.org>
-Date: Sat, 16 May 2026 09:55:45 +0200
+	b=K6YqegU0H6/Zv0qfnnHEKTcgvOMejCu5q0uUNDJAVboj2oLPV5rZTbu23SkV3ErOM
+	 ISO4ymYdf70NoMlzux4YD3I/rM8K6L4g7SI6UZ3E5M/lHJM1+Ug+3wgkn/YqdyQFiq
+	 WcGOPvzy+LU4cBA8UuXcZW1+Wn/SUH0lmrU/l+PaVZtiMmQLRUQpnr7YoFkJSpNhf8
+	 VgE3+3VnEdVpkERw/fJNDvFxmSI4ax1I+3LlfRaK1Wi8gpvObnJi5hjRlg3nQupuBk
+	 p+pHY8Jalt8PCCN6tafbwlWoW5ez6VMvYKe9aRVlXuZ4lRsFdb7Ewc2pZSoP4OQ2m/
+	 8IA3f/LhzJsdQ==
+Message-ID: <afcbfcef-4c86-4222-bf48-fc12acf914a9@kernel.org>
+Date: Sat, 16 May 2026 09:56:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,11 +35,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND] Documentation: fix typo in heading for max31730
-To: sashiko-reviews@lists.linux.dev, Hassan Maazu <maazudev@proton.me>
-Cc: linux-hwmon@vger.kernel.org
-References: <hGgiFItk4iaav9-zfXL4hA_EVmxAaZYRbYviXz8aKKzOVAqduObTpd-PvRy1-9Ksuziam1HIXZNEkXbw3znqWX86Lplbq-Axo3fImYbtNZA=@proton.me>
- <20260516060236.B92E2C19425@smtp.kernel.org>
+Subject: Re: [PATCH v12 6/6] mux: add NXP MC33978/MC34978 AMUX driver
+To: sashiko-reviews@lists.linux.dev, Oleksij Rempel <o.rempel@pengutronix.de>
+Cc: krzk+dt@kernel.org, devicetree@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, robh@kernel.org, conor+dt@kernel.org
+References: <20260515160537.115808-7-o.rempel@pengutronix.de>
+ <20260515190707.033BDC2BCB0@smtp.kernel.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -85,20 +86,22 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260516060236.B92E2C19425@smtp.kernel.org>
+In-Reply-To: <20260515190707.033BDC2BCB0@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 16/05/2026 08:02, sashiko-bot@kernel.org wrote:
->> Wrong device name used in heading.
+On 15/05/2026 21:07, sashiko-bot@kernel.org wrote:
+>> Add a mux-control driver for the 24-to-1 analog multiplexer (AMUX)
+>> embedded in the NXP MC33978/MC34978 Multiple Switch Detection
+>> Interface (MSDI) devices.
 >>
->> Signed-off-by: Hassan Maazu <maazudev@proton.me>
+>> Assisted-by: Gemini:gemini-3.1-pro Sashiko
+>> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 > 
 > Reviewed-by: Sashiko <sashiko-bot@kernel.org>
 > 
 
-What is that? Sashiko CANNOT attest reviewer statement oversight. Stop
-this nonsense.
+NAK! You cannot make reviewer statement oversight.
 
 
 Best regards,
