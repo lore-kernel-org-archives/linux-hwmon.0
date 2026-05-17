@@ -1,91 +1,63 @@
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EA272E175F
-	for <linux-hwmon@vger.kernel.org>; Sun, 17 May 2026 16:36:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E22D30C154;
+	Sun, 17 May 2026 19:28:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779035764; cv=none; b=NMpTKj4VGw7+BYrYN499r//u3sjw3G9XcTc0GfWBMavPCevdzItq1Au/PkdmZzffd/rLifoxh6PbYwLhFAP/nt2JblrRJC5rkAFxoBVg2U5+AI/2P7sH7PQ7szFs+ngERynJfjInmZQayqw69SmJskJxrJJbvgA03t69Vin2ul0=
+	t=1779046087; cv=none; b=VNXYD4Uoyddt5Vt6558pzGOQ+KkzJEppoPv6Kpmi4xN3QXZm3zSWPSbosmi+MRvg5x1zJ0eDe9l6JvngM7Sz/aPxu4HlZWDtH3xQM3eWTxC7zjmZ5ujOELzPcsEcpv0JiJIYCspieRW0rZkzAASRzbeK3y1l2T8BqjRvLpophCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779035764; c=relaxed/simple;
-	bh=Cj+9cmabijep/deaJfnH7LIDDhBOmoD3M5cP/tXP+TU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Jlu3T30Cv0AJPHB8K/8+VyePqCSoBen2IyzmR5CjBVwV1dNoGP9WtNouUkXv2XWaAHfpq2F6qs6susZjfEOqFQHi7cdIeJRJtqnBHudY010K+JJBgQqg49fsLRvoYOBA9B1xW8NgGDtpt4svP0Csd/vYfV+8D86Amvr2wDAXfo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QWKmRMxB; arc=none smtp.client-ip=74.125.82.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779046087; c=relaxed/simple;
+	bh=ruFR9MHhnuuFkzPtLCX9x9rW6+rzdFYGK7+Wv4lvnug=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=U0/eBRAuP6n15MaAXAKYu0YzyRgxqNu0Q3a5dwAQ1XSvT/35Q3EwUEq/cj9VTUBYzaKSHo+H+hFs/Q7ExJg1+18ElkZcK1eATurO4/32EE0LI9LT1cdayZPFGW1WzOEUFI+t3vhmmsP7xCtcy37NBu4VLUm+833+R0uvij+1kUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PgXxAAoj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QWKmRMxB"
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2c156c4a9efso1677129eec.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 17 May 2026 09:36:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779035762; x=1779640562; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HPorwG15/XWzJyBYLzFXxINYCVIEFMIvrAdrpQUCB6c=;
-        b=QWKmRMxBtEWGFkIGQEAYDTFBklaeQWvrMhVmUATVSEOVS1i/teBq11Bd62810s/vQs
-         L2OdjgU2+TV7S4R53ryEU8Zy2NCsa9VL5s6PkOVNzb/3s3Ohl6lU+Yw0skRq6x2XCB9r
-         V2yZl3zUwFLx/U3HChgzU/eWmA5I1CXvt6FBdTbMWJseZrxSBPFBhQK2PQV+kPH0h1fT
-         6zyYriKKLlnVRkvjChHoVplImE4/AlbBrLw6yCXsbhxHcXKfr4WHzFSGvM/pS3QBymT5
-         aQ88N06ZvHV30p0gglsE4Oxce6pLYzkyyAu5qz3y4ZeMgxUWbd100doQhzYZIkhHWrRd
-         YiLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779035762; x=1779640562;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=HPorwG15/XWzJyBYLzFXxINYCVIEFMIvrAdrpQUCB6c=;
-        b=CdaSUn90Y/2Vs5mJS4sEFdUCYmKx/AOBtHWoQTzR5oNcsrthlW1zgWYpIq2PVL2pOL
-         wQTPJ/UXiEXCcx4IcOAMgsXUcnJw7smxeROjOuAIYTwvfGuxo+ZNMbHXKFKDEVvkRhDN
-         VPaguhwzejOiImNn17zBnU25JetEIAHhWIdB6Qfaqy/NROpA1hixB4FRsq92WDp+fqoB
-         YAGlSCBCdCQViZmgz6ihTuEeBILClrnIdJx3NPkeOz4fyL/glxyrd0SI+jopvzgdOUPn
-         x1Adt2zZEE7pirQ7sMUUqXRyU2W1nV01UGlsj4/KUfYXkwe18fQVXPk29ZAx2e9OeX/K
-         kWGA==
-X-Gm-Message-State: AOJu0YzbuAnl/giF0apcZtTQ1UHBws72ibPZhPp+Tp1po6SAC721yy71
-	VgA8nZFv+S1sqI5jEZu8rxmpbLHZ5qq9bzV0mI+gZp7t/k6uxe9y3E3JrFoL4fhL
-X-Gm-Gg: Acq92OGfFEcPkueWXPlK+eCBq7J+//J+ZWLUqbKZCiBbkHHZJOdQ7Tcdrg4r9c2fP1o
-	sxxB8f0tyXRZtMR3cnKCmA7UnzDCYL5Z0wxjeUgRtxvdkO5BYkMZQYinhmNCY9hSxjEM/MAlopt
-	DPGx3kuJDygz1y1QerrhfejmS+nAeap2u2y3kh3hX6c9iljuU6eXsvxsMVqqTIAhTD7Beq2fwjw
-	0hFMbr3D07zJ/k5K+BRdHzCUCqyMSmXxcljD7RFd7UBN8iAA58pDeMWoGVXvcAd//BLRfgwGftS
-	NkA/FRcNAy65znU75RuKDV+2bKuBa0nO2UozKJv8a/9I6oztzjXPdwe4iU4+vN679USupELrc+Z
-	/8Um4hEg8pzLv28mXe8NM5FgyxzoblF64cPkG+jZgqQj/Cl0S2a66xgqJcVRghH6xZcAZJUw+RB
-	IMvvyaskLjmEkgQ5YkzY5ns+PfsMvlq+SUAPVsrf6CMgvNaYo=
-X-Received: by 2002:a05:7022:1e12:b0:12d:de3f:f3e5 with SMTP id a92af1059eb24-135049530aemr5010386c88.37.1779035762279;
-        Sun, 17 May 2026 09:36:02 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cc2352f2sm17449983c88.10.2026.05.17.09.36.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 May 2026 09:36:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 17 May 2026 09:36:01 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: bakshansky.lists@gmail.com
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] docs: hwmon: (coretemp) fix outdated documentation
-Message-ID: <21937c2f-8cfc-4517-b880-a70d1635202d@roeck-us.net>
-References: <20260517152027.350356-1-bakshansky.lists@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PgXxAAoj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04679C2BCB0;
+	Sun, 17 May 2026 19:28:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1779046087;
+	bh=ruFR9MHhnuuFkzPtLCX9x9rW6+rzdFYGK7+Wv4lvnug=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=PgXxAAojwSssm11qfpkAxrGK4f754DZubPIcYGN7+j1KSEXofEJZ5U26mOaqEIhix
+	 sKtpDHT+PfKn6GWQPPlE7gCiMh3Xs6hZwq3K5gzF50Rzfc33owyAbGWO53mMteTj3i
+	 vRy1PCixn/z/mwoH3/wM8nY0+DnwQXnQOOem+ZVkutJRsHQPBfb6QvIsnNVD8NKsai
+	 YIq4Zbd/5pCeKEPOhy5qqUtf6XJJrrEFCjL8f3xPS/Y1udAXxoZWrSF+Bg1pv+QAWk
+	 LUQAaw+6U9R26pZaJERXCoFThEtjA9Op7PTFoPRzLNVOHn4CGUHLSzPbtM8Fo6z5oY
+	 2X9rBkeByvG4w==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 56AAA3930B89;
+	Sun, 17 May 2026 19:28:20 +0000 (UTC)
+Subject: Re: [GIT PULL] hwmon fixes for v7.1-rc4
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20260516224338.1750738-1-linux@roeck-us.net>
+References: <20260516224338.1750738-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-hwmon.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20260516224338.1750738-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v7.1-rc4
+X-PR-Tracked-Commit-Id: 873e919e3101063a7a75989510ccfc125a4391cf
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 1405a07192a3c5420c5fd7437f7945ebe1e71ad7
+Message-Id: <177904609891.673362.10827758563321387302.pr-tracker-bot@kernel.org>
+Date: Sun, 17 May 2026 19:28:18 +0000
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260517152027.350356-1-bakshansky.lists@gmail.com>
 
-On Sun, May 17, 2026 at 06:20:27PM +0300, bakshansky.lists@gmail.com wrote:
-> From: Roman Bakshansky <bakshansky.lists@gmail.com>
-> 
-> - Remove broken Intel wiki link; add Intel SDM download page link
-> - Fix description of tempX_max to clarify it is not Core2-only
-> - Correct tempX_label string for package temperature (changed in commit
-> 2bc0e6d07ee5 ("hwmon: (coretemp) rearrange tjmax handing code"))
-> 
-> Signed-off-by: Roman Bakshansky <bakshansky.lists@gmail.com>
+The pull request you sent on Sat, 16 May 2026 15:43:38 -0700:
 
-Applied.
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v7.1-rc4
 
-Thanks,
-Guenter
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/1405a07192a3c5420c5fd7437f7945ebe1e71ad7
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
