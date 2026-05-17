@@ -1,145 +1,99 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629762E1F06
-	for <linux-hwmon@vger.kernel.org>; Sun, 17 May 2026 08:05:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5D0F3542F8
+	for <linux-hwmon@vger.kernel.org>; Sun, 17 May 2026 10:44:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779005122; cv=none; b=QDQui3mXFBNfs4yTGSaVi5eRy8Va8Gpjha5/UyK1rVQmkwVJi1c4qbD+CHFEt+DtIIPpQB+p6ZTc2Sr+66prVzfkjDHEaYjYnQOBWfjuP8JksotkcJGmq4YfTYTbb6pobGnMGOkz+6bAnnFPvPAlitNKuv7jG89tH7dSlU/KBQ4=
+	t=1779014680; cv=none; b=AYokVpuf7s2bh+wSqbKuYyDz7brv7i9bmiB8xRbU4h6A1PKrOBy3TfhT5PgVXV80R/cTe1+AAWriUEWiu7gj5nE7TdbQDYs21F6w6VjleteSPo2/jwgoAOxO7nrRYyBGe6LKxKw5BXigXxACSTBRwWzoTGwWEpbtA1aLZXvn/Yg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779005122; c=relaxed/simple;
-	bh=NGMb25quMJA/qmhqXGV0PuyWAv1LkEiCtHZF83T9J/Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=G9jqw6HJN0WEup8J6Na4/wxSXg79HBo9xAdyFo+c/Ij4vKTZ4AdkSVIeu4Eh8Yw58641x0KSSnr/zW49NqTFEL7SnfkQfztx99/TkhV3s4MSvm85ZDmY0jY45Z2yMUlE084Ej6Phz2Tray3tVo5uzehqX+oe04w/IqIw+CbTf+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dX9kROA7; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779014680; c=relaxed/simple;
+	bh=NKgBvtdxZXByhazq/jWIBzKN5aXVZCRe1HDn4CdDzrU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qA5CvVlA8XHqAOkIOYvHG5Qxlr611+ZQeErXblUNAz9FCelHAYqV+BbiYxY9W55jImRDMRvOmOG5Mf6LtRkPuJWDFe6O1uyy/kcAbYt6ZXSJhq/V+0qcyymq89uJX0UIc5KqaSTgYYB8qeakSMAeZbYZsQJR/89Vo0lzAQ0sDH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hbPKp5z0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dX9kROA7"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2b45cb89f7eso7767015ad.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 17 May 2026 01:05:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779005121; x=1779609921; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yMtYakkWg6xW89eWo2V/gAFSemUpeEFr7/GQfm8tsfU=;
-        b=dX9kROA7A82iVIFYb1z97RYdleh5cBn7EHgQ3KYhRKjOmWeUu581VaJpX+J98LIqIS
-         PvTYGF9Hdaipk0QhkKbCUm4YAfff95W+k13r8mjdw1xemczO3PfZdNZgNb+Ql3NkW7k+
-         CjF1gihNTes2g2OdLMhaREbiCpJu8Icwz/vUzMpB4EjDVu9IGgsiH93z2tLNDWDGDaFX
-         WUHvdtMw5rmyNQjRaCUCxSMHoisdzVXSfurJaQVG0/uluRuP7UKUcIRuHoKtYIzMtQ0h
-         8DXlvfVwiXQFgEnPu7i6hXj24XpjCMdSzWgUhamD45rFK709gc7kcUguDvaLlD456EN6
-         +cNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779005121; x=1779609921;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=yMtYakkWg6xW89eWo2V/gAFSemUpeEFr7/GQfm8tsfU=;
-        b=adbaUDOBo7wTH14sox6BqBPUbiLvsmCbiVLovfW2cW5CXb0f9+LQLumVf2372Yddp2
-         NtbIQEAMZaAWqsJiswwaySzsEiOcD2Od4nF0JVHaJsFBDtagqQJ0G0dMJq/dthoxKKmO
-         MbLD7jqBb8OQJDmpNxA32Apy9CkV/Be6FuAsf+mn3+PAeC3tWcDDFXcmhjLwyAcjJ5vo
-         8YHlFwLxHzSJgpwJMTb4bOiR8ho/+GiIxXD1cghPqvfjvPFY6rXIPU2gamP4VczLF80+
-         6ddc+3auARZTn39SPaAbKWJ2cz7UKjxsZDa3QuyoAfbGhQHB6edgpL8UaiocjgyWVFhB
-         I9RQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8K7goVjvKT+COMZToFe63Y1gSPbfjCjPLX4DDknY50J6325VxYnknHNNofBdtV1W1ftFLGxyu7g9eXjA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5ZtyzrFkIrpryCqFo1O1DqHA+5xA03YBzhAeydsBeL6mF8gAL
-	vK7+Q3gCNmHb79xmgY0orUoMXy4Eq/TduiPHLFU+410b++Qx79M4gwoy
-X-Gm-Gg: Acq92OHa3LnLjU9h00+HQST6x+4j8IDSSCZp58NLPIeKgXyrxuf6qd/ex7Upq+YyUc+
-	IBN2qjZTpovgj8Qd3clB/ytbAYrkyDP8n7tjgRMgcgXK8fGcsn+Yl783AEuybi+fNRavlDnU68w
-	g+xZzhoXFY4wV4CwsoQqYPCQtfTJ5cDXrU8ZZO7bRqKSWSHuTpsocNAwwA9hqnJ4C+cfynzEY6b
-	fEIOkV172Q0FIkrj/h7Dkyg4E6d5nRML8BkUAws0EbGqMiob1gVvg6UKAf3HLKYIHrvT0vJYTgS
-	erH1HkhNlPilMLqc0Zj2/Ojw+VDl98rykfEL77mqocg4XYhzFkFjFemGyuV0wTkjfNhIHSFSG19
-	uXfQMouTwNelnd8MnBXHcMg1f6cRLrTU4izdU/kBnzSEBFD8Etye91KFxecPXecSCeFpY42AHAX
-	QWezjs0jdMxO0UfvJdymOWmQem9+VtcK34q8Kim/j37UqGElgAQFM8Ypjf6AMu
-X-Received: by 2002:a17:902:7d86:b0:2bc:7486:21cf with SMTP id d9443c01a7336-2bd7e9056dfmr70871815ad.36.1779005120658;
-        Sun, 17 May 2026 01:05:20 -0700 (PDT)
-Received: from fedora.taildae27b.ts.net ([2409:4064:2d80:75ca:8541:272f:2bb3:5e55])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5bd5fb17sm109834595ad.1.2026.05.17.01.05.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 May 2026 01:05:20 -0700 (PDT)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: Shuah Khan <skhan@linuxfoundation.org>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Subject: [PATCH v3 3/3] hwmon: raspberrypi: Fix delayed-work teardown race
-Date: Sun, 17 May 2026 13:34:45 +0530
-Message-ID: <20260517080445.103962-4-chakrabortyshubham66@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260517080445.103962-1-chakrabortyshubham66@gmail.com>
-References: <20260516164407.25255-1-chakrabortyshubham66@gmail.com>
- <20260517080445.103962-1-chakrabortyshubham66@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hbPKp5z0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81A3CC2BCB0
+	for <linux-hwmon@vger.kernel.org>; Sun, 17 May 2026 10:44:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1779014680;
+	bh=NKgBvtdxZXByhazq/jWIBzKN5aXVZCRe1HDn4CdDzrU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=hbPKp5z02331fBlD+oTpgWi6l8Q0TDyAjRwsQyjHImfPjkHSlTooE+0uve6NRmiFi
+	 2KxKGokwVEQe0F8c2l2ysZe5YqdcoZJ60Tp1SoJsju9oEBFL87b8P3odZFBu6nrd9H
+	 SX/d6zFhkTNSzis8bUf5LGI7q8pg0L83YMIRy3zMNrAmqwMEVgLS+vnicAzT4IpAzl
+	 p3rsMVjT9JllcEf+7tipZwtPeuGpPgWkBQcqlf8fbc7hMQXqdN/iMYL5QmcBScMO8V
+	 jGEtNn3ts7aOVK+0Tx9lndZx+PQ4nXqCQeWXw9Io/6cM5s4Yb2G45ClXsHsZOc6uiW
+	 vppm1IocoCRpQ==
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5a40502e63bso1451929e87.0
+        for <linux-hwmon@vger.kernel.org>; Sun, 17 May 2026 03:44:40 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ+hbldxwCQt+CZ7yzz07/SYk3DQoSOGpvM1WoUfTEJn4ihGFtH/POuMZJOZF8nz0DNeLm1fo7wyuhDZ3Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwPIN1Tp5HmPmXThF55GpGh9UBpRmVSar8lmyXC/qWQE1j+pYTa
+	a1XXdHuSmt+Hn76ezrTVK+PK44hgrKQHYypQwmSCQn7p1QXqZ063bKQbNiJG6pRqtSPHNvRtA21
+	d4g2JI9jf0eN7KvkY0W0GHvDT1b8PjIs=
+X-Received: by 2002:a05:6512:10c2:b0:5a8:89ad:e172 with SMTP id
+ 2adb3069b0e04-5aa0e742357mr2819131e87.37.1779014679272; Sun, 17 May 2026
+ 03:44:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260516-adm1266-gpio-fixes-v1-0-38d9dd39b905@nexthop.ai>
+In-Reply-To: <20260516-adm1266-gpio-fixes-v1-0-38d9dd39b905@nexthop.ai>
+From: Linus Walleij <linusw@kernel.org>
+Date: Sun, 17 May 2026 12:44:26 +0200
+X-Gmail-Original-Message-ID: <CAD++jL=rasuYTot3M8u75PXRgrhbCzpue=pY2Yxx7ymVwhgGGQ@mail.gmail.com>
+X-Gm-Features: AVHnY4KcJvQqyALWA-N59W5M_RE1X3XTIoTuBsqq7gVwhaUyQq70O1xKLiW2oz8
+Message-ID: <CAD++jL=rasuYTot3M8u75PXRgrhbCzpue=pY2Yxx7ymVwhgGGQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] hwmon: (pmbus/adm1266) adm1266_gpio_get_multiple() fixes
+To: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+Cc: Guenter Roeck <linux@roeck-us.net>, Alexandru Tachici <alexandru.tachici@analog.com>, 
+	Bartosz Golaszewski <brgl@kernel.org>, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The delayed polling work rearms itself from the work function, so use
-explicit delayed-work setup and cleanup instead of
-devm_delayed_work_autocancel().
+On Sat, May 16, 2026 at 10:45=E2=80=AFPM Abdurrahman Hussain
+<abdurrahman@nexthop.ai> wrote:
 
-Initialize the delayed work with INIT_DELAYED_WORK() and register a
-devres cleanup action that calls disable_delayed_work_sync() during
-teardown.
+> Two pre-existing bugs in adm1266_gpio_get_multiple() that landed
+> together when GPIO support was first added (commit d98dfad35c38).
+> Both are reachable any time userspace queries multiple ADM1266 GPIO
+> or PDIO lines at once via the gpiolib char-dev or sysfs interfaces.
+>
+> Patch 1 caps the PDIO scan loop at ADM1266_PDIO_NR (16) instead of
+> ADM1266_PDIO_STATUS (0xE9 =3D 233, a PMBus command code that ended up
+> in the bound by mistake).  As written, the scan walks
+> find_next_bit() up to bit 242 across a 25-bit caller mask, reading
+> out of bounds and -- if any of that incidental memory contains a
+> set bit -- driving a corresponding out-of-bounds write to the
+> caller's bits array.  Flagged by sashiko in review of an unrelated
+> fix series [1].
+>
+> Patch 2 drops a redundant "*bits =3D 0" reset that sits between the
+> GPIO and PDIO halves of the function.  As written, the GPIO bits
+> the first loop populates are immediately discarded before the PDIO
+> loop runs, so any caller asking for a mix of GPIO and PDIO lines
+> sees the GPIO half always reported as 0.
+>
+> [1] https://sashiko.dev/#/patchset/20260515-adm1266-fixes-v1-0-1c1ea1349c=
+fe@nexthop.ai
+>
+> Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 
-This addresses the concern raised during review about the polling work
-being able to requeue itself while the driver is being removed.
+Reviewed-by: Linus Walleij <linusw@kernel.org>
 
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
----
- drivers/hwmon/raspberrypi-hwmon.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+The better option would be to:
 
-diff --git a/drivers/hwmon/raspberrypi-hwmon.c b/drivers/hwmon/raspberrypi-hwmon.c
-index 8ce6dacc19b0..0bbc735f74a4 100644
---- a/drivers/hwmon/raspberrypi-hwmon.c
-+++ b/drivers/hwmon/raspberrypi-hwmon.c
-@@ -8,7 +8,6 @@
-  * Copyright (C) 2026 Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-  */
- #include <linux/device.h>
--#include <linux/devm-helpers.h>
- #include <linux/err.h>
- #include <linux/hwmon.h>
- #include <linux/module.h>
-@@ -96,6 +95,13 @@ static void get_values_poll(struct work_struct *work)
- 	schedule_delayed_work(&data->get_values_poll_work, 2 * HZ);
- }
- 
-+static void rpi_hwmon_cancel_poll_work(void *res)
-+{
-+	struct rpi_hwmon_data *data = res;
-+
-+	disable_delayed_work_sync(&data->get_values_poll_work);
-+}
-+
- static int rpi_read(struct device *dev, enum hwmon_sensor_types type,
- 		    u32 attr, int channel, long *val)
- {
-@@ -237,8 +243,8 @@ static int rpi_hwmon_probe(struct platform_device *pdev)
- 	if (IS_ERR(data->hwmon_dev))
- 		return PTR_ERR(data->hwmon_dev);
- 
--	ret = devm_delayed_work_autocancel(dev, &data->get_values_poll_work,
--					   get_values_poll);
-+	INIT_DELAYED_WORK(&data->get_values_poll_work, get_values_poll);
-+	ret = devm_add_action_or_reset(dev, rpi_hwmon_cancel_poll_work, data);
- 	if (ret)
- 		return ret;
- 	platform_set_drvdata(pdev, data);
--- 
-2.54.0
+1. Convert this driver to use regmap
+2. Extend gpio-regmap with get/set_multiple()
+3. Convert the driver to use gpio-regmap
 
+So if you feel adventurous and have time on your hands,
+consider it! :)
+
+Yours,
+Linus Walleij
