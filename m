@@ -1,68 +1,66 @@
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9630D3AC0E7
-	for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 22:25:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1F2C405C5C
+	for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 23:06:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779143153; cv=none; b=N42esIqHk0enSIiYFtdM8eMGRepglYaIrJj3tjOVV2g0ohV44IDlvx+Ryfg8LX0LV4T1edvRe0V3lSWR3E6/ExDzUkZpS5iEt+azjtDl4xJk7RRUVZbnswypwKB/J6ej+fJnlbN+xEgmDd2KEnv0U23Q4hw87w8srF0/fFUCEZ0=
+	t=1779145600; cv=none; b=Nvkuj8hAOUArERrZu8FS7oJhlIEVTvnlypM9IdTIjYTowLE16LS6/JfvzRpXpCzpDWkk0MeGiAfpth29SBQWeBOLyElmqFVXOZt+oyceKN2Y6Kag/NGF0IxwU86f0IzSQuABO8K8uvtkYZ+j5W780CM4eMrGuz1P1nobFeKFbjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779143153; c=relaxed/simple;
-	bh=zxRp3GpglRdru2dzTviXae9Rm0zTVlUvDkO9Kg86QvE=;
+	s=arc-20240116; t=1779145600; c=relaxed/simple;
+	bh=tdQX6z5Ow34bb/pGtk3dNyrAbcLCh7UCBhe9r1uuApA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OJnC4kqHc6lJ7lutznoSBaaiSZVGA0rwU51bSNAMw6OIxB9AopDaF7OJynQyAid1Rn0lGySDs2q915Yizxvhk44iS8+A6WLc4uKvkhiaCXllEyJEPwgaWviBD+6HBgRN7eqVuePCjb5Q99kxCKm9dMpXbWxzQOfoG4ZzbRYvWwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pEeiLXmE; arc=none smtp.client-ip=74.125.82.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	 In-Reply-To:Content-Type; b=JbA1XwveObtAIGF3UUtRbsxv4/eikj+CIFzDo3RLT62VqgIP50NyY5wNZO1wRsVWkZn9Cn9tfREhCUAuw/vEbBByG/bzpMVjAnMQbJAumwToFkZzqmO8DfU8cWGVdRMQV5nxrnltLV2xLHsmrXQsT8r9gUfVvBAhO6NnfzFzClE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iKifQGEz; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pEeiLXmE"
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2f33ae12f97so9992734eec.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 15:25:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iKifQGEz"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2baca4df358so15696675ad.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 16:06:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779143151; x=1779747951; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=yIaEBuVIsiHcibkjeCjIYH7vswglxKBI9QeKiz+liVA=;
-        b=pEeiLXmEX1dH3AEUNPqXyf6i3YCHHzeUFsdtHafZgPGSgERaad9XB3AxjltZnBaWd9
-         tkIp0sMspu0BdbdAQxcab+qI9ACP2TO8ib9nEyzD0/rsepA6028hN6FgOkaiWUrTcVWl
-         A+qSOvtN/grWqO9yKYCcxyuP7x0QnPnyLkVs1efuTRBE9Dwwbhbz/C5r8n3iSuKxoQTT
-         0DzBJuu8rJ2XJbUeCsECscPExY1j5/cwIijXDf9VRO14cLgw8K8FikqbldHvNjZ/6ONc
-         gOPFB26X+K1LehWwtiWM9BsbK+7k/71kdgyuhDHuH+v21YwAKqP00aH7opXwr2Hlk03j
-         Ealw==
+        d=gmail.com; s=20251104; t=1779145598; x=1779750398; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=J6fRPsUXaMKX0qPKfz3OqQyhzwCYHmD71RB3fhnMJPw=;
+        b=iKifQGEzAh3nSIZfpJZ9YmMOaA3tTspIJSBXVF+njJnVFVRWhMr60osRzOcmOzsKRX
+         YrGDT1oBgngfvbxZW/hzH6hciFB9fdnt4qrI18QoiRjMG7ybEfkCnD+4hvYqTZzhgQyc
+         HY1KpuxlP1Ql7R7Jm+eHeVN9Rj4CHp7JTNTqapF1TLxPuF/vokhvpCnrCujUlIHNNUK0
+         FO6byZ4mQg+RBG8hEiFzs5o5LAnIiBvAgVoWjtCusn2O0n/OX+RGKGvJh6uznc45IezW
+         3vI3xm5nYYRaDpNWpariflH0kh6b4/zXJNo7FWWFvPY6IL27dfbkncRf+YIwT2VgCx5F
+         mHeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779143151; x=1779747951;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yIaEBuVIsiHcibkjeCjIYH7vswglxKBI9QeKiz+liVA=;
-        b=LEUfcOsah60vSt3VWwTkZYQINOWe/I0wF97wWbp8TIgkpQ4DvrKAJL9L0M1qRvEn2D
-         KrAYSkpRwpgYaSG0pSSd3ftwKFj6uYwTnD17ougK/zYho4HzY4G/hwqntGLNr0akNT0D
-         Fyp3lyE1ilWU94cJSu1iI5W+w+T3NCSW58M4m9dh45vj0qQtyAPwRRimLVcR2RhnIzaw
-         AAxa5xHhbzEQ5YSDQD7qDzDs7wto1pO+7eE6fcThAVRBri0qrL8aJnNO1uiMRUsebVLk
-         GUN4hPEAZYTLNnh2MySbKhGp08gSgb6kXfo6p1GTA68+1z+u1t+g4jN5H39dmEM7kmFB
-         9vqw==
-X-Forwarded-Encrypted: i=1; AFNElJ/W+CTUqnSWu9x1+veNCfwpT2dQ/sjTKKrE+KSZAQBzMPvruEZfJ6Zxt6jMhD2PgO1P8QpzLUzoukluAg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGK0gKVFTUolt3Kxur1YMRKmGY1ftoz64/KvtK84I66leMMSoO
-	gULW4sZjhB2Fv3DrMWItQYKd6vLtQtQiIBOYZPrcy5XJyCI1i0lgtjvN
-X-Gm-Gg: Acq92OFQNrAOeyMkBmq+N73SFJwNlihqZrXsfaIdWsgwiD92H/8EXJB6s/qMNN8HOB0
-	oXsqZ+RX7MlV8lTsMLxSMv7urDH0zCuAi7/pdAmZ5PHMIprG2df9yghYjbKDqU/97z6VVbMZKAh
-	tgvleHCeogLhgTCpzRYSFOD+mBrDeY0vzZhs+z9xAQH93YVethxQqyklVyviNt015zEoflrrfV8
-	snNh8UnMBAV54P2yx/xrGZUgJXLMDwR5LfMvSgeRFClhADbOvNxReXqDjMxtGdEZQkwscf2vzbW
-	2kv+oVvJ6D53FSiz321oYXx7mMyQtXHGX0pryMqpGc1CeWsMQSLUVLVvEuvsh/XTWEkTh7YQu6i
-	iCs72d5NJmANPvUOIrhFkmR9TEORTCTtVkXkH103FURLtgdUDjxY7/FfY22+gzW3kloMfc2G+Gq
-	a4lrGkb6mHcozU+GvrZLG1btKp9hR4OInvMO218X0ic5p8+5cJhVBrTxtBEgpOwsY7OfcZUQqQ0
-	wzrRBACz04=
-X-Received: by 2002:a05:7301:1004:b0:2c5:b972:b436 with SMTP id 5a478bee46e88-30398652460mr6944628eec.23.1779143150537;
-        Mon, 18 May 2026 15:25:50 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30296dcb6adsm16657384eec.15.2026.05.18.15.25.49
+        d=1e100.net; s=20251104; t=1779145598; x=1779750398;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J6fRPsUXaMKX0qPKfz3OqQyhzwCYHmD71RB3fhnMJPw=;
+        b=leDb+mFoWlK8sjZyezo4Afq7JrjfU/dQuSH06GBk4udL+HXSzz5FG/te6IXfLKxaTl
+         jfJNGlhn69bLqCrN3WL5ly14W4BA4eICkzzBmEgGjqFlDYDBKAWO09qi534wAAwqmxer
+         dgr/ItP/vLO7IgaiApEp/olrdIyegEL0ZCJRjf8YxXwGiYuNaMOePbmIDkq7REE5XX2Q
+         C+CUGw7l1YV04HIR5qsSaS0zEvbsYK8wINUx29A1eFFC8z1ShlMpBAH/2vtrq1EVVK3c
+         v+uYBnU8Rk70/wuq89Wxz856So7YB9akPwoT2k1YFAH0V2/yZQjF2cRknikh4XFR1+f1
+         DhAA==
+X-Forwarded-Encrypted: i=1; AFNElJ9U9AJ/+lZpOHcIzB1R4p7G6pYz1cZK1/zlgaB8KJ59tLr5/syotKeAZefwitw4ZMcp0K+mmAGt6sP/gg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw99Gr7Gxf0/QoqcuCcB0PmPbNc7xYymh2vCTybQZ9+NQ7FoZqR
+	DiiA5NIXHz2wAbgQ/PoTFNGCIUiD+brFj1uJfDlg7yWo09ojNmu9+vK2
+X-Gm-Gg: Acq92OG5m0P5hXfNqdBhtnwVm6J2A6NDbBJf+mg0YD/fjXlI/Yk+xYq1pKWO1CCw6ol
+	oEamCZYdPe5/awSlYrHEDMdlFa4lkWypuRzrBabZSUHpqKu5Lzc213JJJu28O3JIHHQthBKINfx
+	8QZZJcZliglbgT3aRe3oTg3MIXRI9nOZOAhI/QCRCsh+nrrKHP2xo8AkEWCpM+ELrch/jGD+pcr
+	31zJHQCdLIHhf83ciO7CgfxpTATmn/mVkk9ctNe4AhV+iw80UaxTdi3/4xO7TmMgy19Klb46ivJ
+	x+YyT2XjK1jQ+DQbrC73Q4aK+h34VMhRw/DlhzfBQcJx74Q856weocZWF4G/zKsqhkxN3kXw0pN
+	KMD7Ic1bDU7YRYdz9FbC79ZfkWFqBqnxKIR06vyqPtGBgPFx9siZu2w+7FhX1dG0+GrkHTuu9ZN
+	woDMln1B/IF0bby9FqvRhc9oxAtL8yyX4=
+X-Received: by 2002:a17:903:3c43:b0:2bd:e43c:12d0 with SMTP id d9443c01a7336-2bde43c14b7mr63463745ad.28.1779145598364;
+        Mon, 18 May 2026 16:06:38 -0700 (PDT)
+Received: from [192.168.89.2] ([119.214.48.64])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5bd5fb35sm159558035ad.12.2026.05.18.16.06.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 May 2026 15:25:50 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8855d587-8351-42f4-8f79-9e763f56ccf0@roeck-us.net>
-Date: Mon, 18 May 2026 15:25:48 -0700
+        Mon, 18 May 2026 16:06:37 -0700 (PDT)
+Message-ID: <7ff352be-05d2-4c21-931e-18238172e4d7@gmail.com>
+Date: Tue, 19 May 2026 08:06:34 +0900
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,118 +68,96 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] hwmon: (pmbus/adm1266) adm1266_gpio_get_multiple()
- fixes
-To: Linus Walleij <linusw@kernel.org>,
- Abdurrahman Hussain <abdurrahman@nexthop.ai>
-Cc: Alexandru Tachici <alexandru.tachici@analog.com>,
- Bartosz Golaszewski <brgl@kernel.org>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org,
- linux-gpio@vger.kernel.org
-References: <20260516-adm1266-gpio-fixes-v1-0-38d9dd39b905@nexthop.ai>
- <CAD++jL=rasuYTot3M8u75PXRgrhbCzpue=pY2Yxx7ymVwhgGGQ@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] usb: xhci-pci: add AMD Promontory 21 PCI glue
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mathias Nyman <mathias.nyman@intel.com>, Guenter Roeck <linux@roeck-us.net>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-usb@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+ "Mario Limonciello (AMD)" <superm1@kernel.org>,
+ Yaroslav Isakov <yaroslav.isakov@gmail.com>
+References: <20260517130407.795157-1-hurryman2212@gmail.com>
+ <20260517130407.795157-2-hurryman2212@gmail.com>
+ <20260517232147.34931718.michal.pecio@gmail.com>
+ <144ec61c-4cc1-4986-a16c-7c1b99f3a72e@gmail.com>
+ <20260518233711.4c99cc72.michal.pecio@gmail.com>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <CAD++jL=rasuYTot3M8u75PXRgrhbCzpue=pY2Yxx7ymVwhgGGQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: Jihong Min <hurryman2212@gmail.com>
+In-Reply-To: <20260518233711.4c99cc72.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 5/17/26 03:44, Linus Walleij wrote:
-> On Sat, May 16, 2026 at 10:45 PM Abdurrahman Hussain
-> <abdurrahman@nexthop.ai> wrote:
-> 
->> Two pre-existing bugs in adm1266_gpio_get_multiple() that landed
->> together when GPIO support was first added (commit d98dfad35c38).
->> Both are reachable any time userspace queries multiple ADM1266 GPIO
->> or PDIO lines at once via the gpiolib char-dev or sysfs interfaces.
->>
->> Patch 1 caps the PDIO scan loop at ADM1266_PDIO_NR (16) instead of
->> ADM1266_PDIO_STATUS (0xE9 = 233, a PMBus command code that ended up
->> in the bound by mistake).  As written, the scan walks
->> find_next_bit() up to bit 242 across a 25-bit caller mask, reading
->> out of bounds and -- if any of that incidental memory contains a
->> set bit -- driving a corresponding out-of-bounds write to the
->> caller's bits array.  Flagged by sashiko in review of an unrelated
->> fix series [1].
->>
->> Patch 2 drops a redundant "*bits = 0" reset that sits between the
->> GPIO and PDIO halves of the function.  As written, the GPIO bits
->> the first loop populates are immediately discarded before the PDIO
->> loop runs, so any caller asking for a mix of GPIO and PDIO lines
->> sees the GPIO half always reported as 0.
->>
->> [1] https://sashiko.dev/#/patchset/20260515-adm1266-fixes-v1-0-1c1ea1349cfe@nexthop.ai
->>
->> Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
-> 
-> Reviewed-by: Linus Walleij <linusw@kernel.org>
-> 
-> The better option would be to:
-> 
-> 1. Convert this driver to use regmap
 
-That would mean to convert the pmbus core code to regmap,
-plus all the pmbus client drivers.
 
-PMBus uses a mix of registers/command with different size, plus some
-block commands. That would be a difficult task. Byte registers can be
-mapped to word size, but for block registers that is difficult,
-and then there are commands with zero data length. Maybe someone
-managed to do this somewhere. I tried some time ago and could not get
-it to work.
+On 5/19/26 06:37, Michal Pecio wrote:
+> That's true.
+> Making this possible is the whole purpose of "if IS_ENABLED" here:
 
-Guenter
+I re-checked the Kconfig cases, and I think you are right here.
 
-> 2. Extend gpio-regmap with get/set_multiple()
-> 3. Convert the driver to use gpio-regmap
-> 
-> So if you feel adventurous and have time on your hands,
-> consider it! :)
-> 
-> Yours,
-> Linus Walleij
-> 
+The two cases I was trying to avoid are:
 
+  1. the sensor driver is built as a module, or loads only after the
+     initramfs stage, but the PROM21 controller has already been bound by
+     the generic xhci-pci driver, so no auxiliary device exists for the
+     sensor driver to bind to;
+
+  2. the built-in generic xhci-pci driver rejects the PROM21 controller, but
+     xhci-pci-prom21 is only available as a module and is not present during
+     initramfs, leaving USB behind that controller unavailable at that
+stage.
+
+Looking at your proposed Kconfig shape again, it handles both cases.
+
+If SENSORS_PROM21_XHCI=n, then no sensor support is requested and
+USB_XHCI_PCI_PROM21 can stay disabled. In that case generic xhci-pci binds
+the controller, which is fine because there is no sensor driver that
+needs an
+auxiliary device.
+
+If SENSORS_PROM21_XHCI=m or y and USB_XHCI_PCI=y, then
+USB_XHCI_PCI_PROM21 follows USB_XHCI_PCI and becomes y. That means the
+PROM21
+glue is available during early boot, creates the auxiliary device, and the
+hwmon driver can still bind later if it is built as a module.
+
+If USB_XHCI_PCI=m, then xhci-pci itself is modular. In that case needing the
+PROM21 glue module in initramfs is not a PROM21-specific built-in/module
+split
+problem; it is the normal requirement for a modular xHCI PCI setup.
+
+So I agree that tying the hidden glue option to whether
+SENSORS_PROM21_XHCI is enabled is reasonable.
+
+> Currently, you have a weird situation where xhci-pci-prom21 always
+> binds on x86 and xhci-pci on other platforms (with the unofficial PCIe
+> card you mentioned), plus the sensor cannot work on other platforms.
+
+Agreed. I also agree that the X86 dependency is only a heuristic and is
+not a
+good restriction for a PCI ID based driver. PROM21 is mainly used on AMD x86
+desktop platforms today, but the unofficial PCIe card example shows that the
+device can exist outside the normal AMD x86 chipset topology.
+
+I do not know whether other PROM21-related functionality is supported on
+non-x86 platforms, but this driver does not need to prevent the xHCI
+temperature sensor path from being built there.
+
+> One could further argue that neither should it care whether some hwmon
+> driver exists at all, or which kernel releases it exists in :)
+
+Right. I think the cleanest result is:
+
+  - generic xhci-pci handles PROM21 when no sensor support is requested;
+  - xhci-pci-prom21 handles PROM21 only when the sensor path is enabled;
+  - the hwmon driver remains the user-visible option.
+
+Unless Guenter or the USB maintainers object, I plan to change the next
+revision in that direction and test the Kconfig combinations locally.
+
+
+Sincerely,
+Jihong Min
