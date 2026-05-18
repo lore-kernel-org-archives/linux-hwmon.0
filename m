@@ -1,68 +1,67 @@
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A6A346E7A
-	for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 10:55:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11CC83F1660
+	for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 10:58:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779101759; cv=none; b=EIUqtoeNiCZ3aILOmGOzjcSSO0kJq8GV/KiROko5Q5b0QqP4FIkNBIz7H4GN4N9Eecc1f1lUPEnLc4I+yzmV5ts1ItzqsiZEfgeIOdhRNd6sAV3kBS+riFOd05Xo5Uvg3L8wrZIyM2yCr9f4H9KSdYz3Sy51cPWW6sm4EpBiPV4=
+	t=1779101933; cv=none; b=h08T6W4ldgdcQPGq1sZOylnPNgBvQ1c5/NJVwBHYvCYeqRoxzGuFDGDHwD12eqtXSE6v/kLeH8jyIAx9tGYbaM5DGNFx4s/6GgaAYd52ye/nzV8uTOAXlZNPv8gHzk8GWUxTSdr0N97/6OWfuHBffeoVyWmoYEXhK8pxQGJeFFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779101759; c=relaxed/simple;
-	bh=hHrnrova4QOYv2M6dIOzxmlKptiDDDOXgFRyBRFswWM=;
+	s=arc-20240116; t=1779101933; c=relaxed/simple;
+	bh=kSL6GZts6v+waFfKhqYl/IdC+/kKb177D6xHvzMR/4E=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Fks1MIRWv/3IpH1IrcprUNU3WovcZMNb4vsV4auDgL+YFBjmw106tPsIcNVdBBBQQ47FyzGT1qNqDqqDKsFg7/mhQAg6V5vetznDsZVJimtCabRz9hE/QkjxPFVZLAMCBtOQU+oF7oP6FERSskt6pplZUUsmqikWzmNDAyunUM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RJ+peLbN; arc=none smtp.client-ip=74.125.82.172
+	 In-Reply-To:Content-Type; b=So91XzRhfNPPFDnSx+701TbMDSfMQgomlVyeyOEhFLHyPjwNQf07u/YtqoSHc9BxLI+NydXKzGpgdMn/tIeqiE/8nTdl+tneqva94WkykJUOZLnck5L9Ttoo+m7gEDx/jrMf3wd2o38t4WziTyM7XB2k8KlSZy2xdHkBkowU4Cg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aEjQuvl1; arc=none smtp.client-ip=74.125.82.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RJ+peLbN"
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2f36da5c8fbso1745756eec.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 03:55:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aEjQuvl1"
+Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2f0d3e07e30so8184373eec.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 03:58:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779101755; x=1779706555; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779101919; x=1779706719; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fv8cUffeX0YGsV9duS8FS6XTQ7kK/O4/YLY9appo4lw=;
-        b=RJ+peLbNbir3jr4971jUhuRTqRK6nzP9YseDMYD9dztemweAnGsdaqrP17cDKashmp
-         o1dTpZGyShDmnba8711ZeX7QRJ7RR1YbBwI/4rH9jNM0H/Yhe/9v1oLuaF4K1coMPPdt
-         1MjfkQ5qeZePNsQa2LbCuv/xZyhu0exD3HEpLYNCN9X48lnCP3QmJWnKJ/LEC44GoB64
-         m0kaSz7Q0ijMCW+dB8E3/IpcAOR6VvdWIwaF6jRyHKNMdujZJ82MG7lkadZV7Tun20yh
-         st0DZnwAXi4TjCrUnFaLwYzUi7HlUMP0rzZpXTGo8O/OAwaYTivMu1vFmaisdF2wbMcF
-         2UzQ==
+        bh=guulY/czompKgO0Ba6aB4aCZrOgAPdTJkMrk16h99KQ=;
+        b=aEjQuvl1mG3PMKxY6nPk36pUH5JuSipImHLCbJ2/x+AumVgkvzLJEuKtk5SH6bLXDW
+         A5J8XXn0hKvGC4uW7a/GErYSQO9jEbc+af8g560RQWCPEVarOZuLrJVwKn6c5FAINpXA
+         xRc989kBMp6SdB6ZsPIUfvd5pNJdsn2aT/XHIZ7SjMKShXyDP8OYlUZ3+3803y2LONL6
+         xC6n3FbXWw6R01fi6AsMCpmRTI/1vqah5JIPQh6b9Eotq93gfWQLW72/TtYmj4gRnZ30
+         EQbTKxEblqBeAniVC2bkkJSjeMjKLRoNDR/YNfGma0laFqymRWpqoMgK+/ww6SGS3wc8
+         xo0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779101755; x=1779706555;
+        d=1e100.net; s=20251104; t=1779101919; x=1779706719;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Fv8cUffeX0YGsV9duS8FS6XTQ7kK/O4/YLY9appo4lw=;
-        b=QRcBbdTBIWx9uw6C6iaqX9DyuL8PwaasmMyKxeO1snauUFkVrgycuitlOPNM53ZqwC
-         nzn6PF9bLkNVnydo6oV5D9D+IPSP3Xfl5aSah9fJ8X53T1OALB3Iwm8DCBuoRMF8UWMA
-         pAn3MBOXEa2Mt7F4FGN9HhkO0085qFRdSh2BVJAemZNhrPc6UxuGU115jA8LAgbRj6pp
-         KZ2BqYJ21oLSuq7pYK/KtY0INaCT9YAnJbd5v44e1ocRnfnT3ejH5+J4olUrCB0U6j17
-         q8oveqN+L9cxnHIoZ64Ap/21zTg3h+eFI6O+ZifH9jLXOPZ580Z1dsXsD4SpqdjGbDF5
-         A8jQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+zeHcwKZh4ZDu4CTpdDspHssZ1VIZZQuz+dzTXUG7b93SCr/Nzi+50JXM0xmQzJJZeJsLPoAWP/xhToQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWc/0DoOUpw54XtGxzzvNvwepBOAEeQy9+nS039YD4e3Q/bf0v
-	BDEM9DnyyrceTK4GJAlQZqxzdOa0Hu9BFSkYv9lbqUD4ysZVxklGbhHj1tyT2Njc
-X-Gm-Gg: Acq92OEP/P+8b6cM3pWUkDruUW8xnJNf0OikOfOXV0SEm+83AvJSCJyC4y6dVzJ3NcZ
-	Nr8K5TXQDpK9OP9R4iGmaJ8DNTZTzl2MmjpWv3QXoUVMuDtmC0voEX1XOWZbCq41LlDga3q2R5a
-	3xKcqdifl1Y6qDroXLJTwyCZpF0kGc1slzZ4mRY0joRIIFu7xyrDqW2EIqm8McG5cG9nrfCJLJG
-	TcXH3T/5xsONI3IdD+DO+7flriTwaVrcm2L3OtkvShcBYXPuk+ZN3VEc7Jy6o9OYmJIv4ZHMu6v
-	2IgftilpQvC1seKndSyQilO+JlQmlxP+JvAL346p2Xelg/3kmzc+1y8cz5HZyMOjpzdHePsiw9+
-	SJKetL1UdiAboOwfvGjOegBUGetr6igKjk/bO3KhlpdihRB8BJkgPi8dRzSYnQLFC3db71QBbdC
-	TuygRXGXtEJNvCf00hFgn4Yp3NGiRMrHqDC9sIqph6D7xvNqQxa9zMinxz6NAXQz33fjPn7P40g
-	3fegGdU1Yo=
-X-Received: by 2002:a05:7300:dc8e:b0:2f2:5c68:5074 with SMTP id 5a478bee46e88-3039818af8fmr6391352eec.13.1779101754580;
-        Mon, 18 May 2026 03:55:54 -0700 (PDT)
+        bh=guulY/czompKgO0Ba6aB4aCZrOgAPdTJkMrk16h99KQ=;
+        b=LY5sk1Vy6OD2Ja39xDTWjm89HlbW91JZBmRnmIx8X8jdcU31DBwo1u/yQEYQqsFYGz
+         w2s9ywkxPXpTXeR9HkELnl4JnmCRG/JMWtvnz41cjo+LcGh0kmY9LjifvL4eMww/2RPW
+         YLwBUdOAfm7ItHh5/JDJt/WDaw71LeEpfq0hxqy8OZ2v1+Jnwad7vnnA4vsOgxqS+cs8
+         iU1/488tuTysirHpzGAIj44T/tOY4cC7CdQm7KnqvJGyxwV8J4qt5ASzQs78Nvta1QrI
+         OujgO4alxOhcwCGMEmy8aFhiZFVg0i/h35Au5tSEz5NfeLElty6HkJt6z8e1JWrEjKPF
+         F71w==
+X-Forwarded-Encrypted: i=1; AFNElJ8qB6c9ekfJHv447yoXaop23/gaLaSYDvqgcDDjb85i+au/x6qIsmFJa/oAiaM96EzZbZUPdd3FvOYpwA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxpwH4yBmtqELbqfafKweevIEEEadflLJg6y7WfbF4LNAz3hfP/
+	SGufUzo2s0GqancLLnkjOutX/5Mr0hOGteUW07ZAsV9ZUM/ScZrsolTh
+X-Gm-Gg: Acq92OGf0hjOLYdhfQm6EVdZDpOPcxwccXyGbwwL+Sddg5ggRvFnddn77cn/mJ8Mcbo
+	LBjmMXVhlpFMA4eJ/qX00BpIeM642revXlFvuGqDGIJXAcoJJH0S0XTe6z6/ESvq6eMXGB9pAXf
+	9iy49KGmV0Xv8rMNdSOA3AfWnzPuxSMgcDvYmufCiZ2cr99wP5XDGCR+AG/JxLL9aUpgLQyhy7E
+	i5ZP102Fqm53hInG++puKh0vbazZmg0VtD+mUF3sLPzzlOZMIb9NWtBAuU8mPQI26XTXFLtf128
+	jChrwTfGx+jlXb8wvyzBfzBLxo1LzmMhYlidgl8kR12ZhcMzXoEDhkoMMyWBg2ykTQQ5ed6GYSZ
+	p9winBNSdhNz4+vu5liM0Xvv/G2RmiGb6w769BeDp5f/IOy1UfC1ZFgskIUKdO0OadVrI+jc4cV
+	BA935lgoQLk0H+8/N6bBq5elFQZTUROYfMjTO7YSntyj7U6Q1OEfqi/BjYHk2MK4ayEJJapxc0
+X-Received: by 2002:a05:7300:a286:b0:2f1:6252:f8fe with SMTP id 5a478bee46e88-303981914a5mr6338309eec.3.1779101919432;
+        Mon, 18 May 2026 03:58:39 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30294500a97sm15416905eec.9.2026.05.18.03.55.53
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30293e2e69esm16592264eec.1.2026.05.18.03.58.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 May 2026 03:55:54 -0700 (PDT)
+        Mon, 18 May 2026 03:58:39 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f05e075d-a87e-49b5-95f8-5858d21acf64@roeck-us.net>
-Date: Mon, 18 May 2026 03:55:52 -0700
+Message-ID: <7e0a499d-9517-4559-abf9-ffbaaa45f12e@roeck-us.net>
+Date: Mon, 18 May 2026 03:58:37 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,11 +69,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/2] usb: xhci-pci: add AMD Promontory 21 PCI glue
-To: Michal Pecio <michal.pecio@gmail.com>, Jihong Min <hurryman2212@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Mathias Nyman <mathias.nyman@intel.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>,
+Subject: Re: [PATCH v6 2/2] hwmon: add AMD Promontory 21 xHCI temperature
+ sensor support
+To: Jihong Min <hurryman2212@gmail.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mathias Nyman <mathias.nyman@intel.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
  Mario Limonciello <mario.limonciello@amd.com>,
  Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-usb@vger.kernel.org,
  linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
@@ -82,8 +82,7 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  "Mario Limonciello (AMD)" <superm1@kernel.org>,
  Yaroslav Isakov <yaroslav.isakov@gmail.com>
 References: <20260517130407.795157-1-hurryman2212@gmail.com>
- <20260517130407.795157-2-hurryman2212@gmail.com>
- <20260517232147.34931718.michal.pecio@gmail.com>
+ <20260517130407.795157-3-hurryman2212@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -129,87 +128,41 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260517232147.34931718.michal.pecio@gmail.com>
+In-Reply-To: <20260517130407.795157-3-hurryman2212@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/17/26 14:21, Michal Pecio wrote:
-> On Sun, 17 May 2026 22:04:06 +0900, Jihong Min wrote:
->> AMD Promontory 21 (PROM21) xHCI controllers use generic xHCI
->> operation, but the PCI function also exposes optional
->> controller-specific sensor functionality. Add a small PROM21 PCI glue
->> driver for AMD 1022:43fc and 1022:43fd controllers.
->>
->> The driver delegates USB host operation to the common xhci-pci core,
->> collects the parent-provided MMIO resource data, and creates a "hwmon"
->> auxiliary device for optional child drivers. Failure to create the
->> auxiliary device is logged but does not fail the xHCI probe, since the
->> auxiliary device is only needed for sensor support.
->>
->> Make the PROM21 PCI glue a hidden Kconfig tristate that follows
->> USB_XHCI_PCI. This keeps the glue built in with a built-in xhci-pci core
->> and builds it as a module with a modular xhci-pci core. A built-in
->> xhci-pci core must not hand PROM21 controllers to a PROM21 glue driver
->> that is only available as a module, otherwise USB behind those controllers
->> can be unavailable during initramfs and PROM21 temperature sensor support
->> may not appear until the controller is rebound after the module loads.
->>
->> Assisted-by: Codex:gpt-5.5
->> Signed-off-by: Jihong Min <hurryman2212@gmail.com>
->> Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
->> Tested-by: Yaroslav Isakov <yaroslav.isakov@gmail.com>
->> ---
->>   drivers/usb/host/Kconfig                      |   7 +
->>   drivers/usb/host/Makefile                     |   1 +
->>   drivers/usb/host/xhci-pci-prom21.c            | 136 ++++++++++++++++++
->>   drivers/usb/host/xhci-pci.c                   |  11 ++
->>   drivers/usb/host/xhci-pci.h                   |   3 +
->>   include/linux/platform_data/usb-xhci-prom21.h |  22 +++
->>   6 files changed, 180 insertions(+)
->>   create mode 100644 drivers/usb/host/xhci-pci-prom21.c
->>   create mode 100644 include/linux/platform_data/usb-xhci-prom21.h
->>
->> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
->> index 0a277a07cf70..89bf262235e1 100644
->> --- a/drivers/usb/host/Kconfig
->> +++ b/drivers/usb/host/Kconfig
->> @@ -42,6 +42,13 @@ config USB_XHCI_PCI
->>   	depends on USB_PCI
->>   	default y
->>   
->> +config USB_XHCI_PCI_PROM21
->> +	tristate
->> +	depends on X86
->> +	depends on USB_XHCI_PCI
->> +	default USB_XHCI_PCI
->> +	select AUXILIARY_BUS
->> +
+On 5/17/26 06:04, Jihong Min wrote:
+> Add an auxiliary-bus hwmon driver for the temperature sensor exposed by
+> AMD Promontory 21 (PROM21) xHCI PCI functions. The driver binds to the
+> "hwmon" auxiliary device published by the PROM21 xHCI PCI glue and
+> exposes the sensor as temp1_input under the prom21_xhci hwmon device.
 > 
-> Instead of the X86 heuristic, would it be possible to build glue
-> code if and only if SENSORS_PROM21_XHCI is enabled?
+> The sensor is accessed through a PROM21 vendor index/data register pair
+> in the xHCI PCI MMIO BAR. The driver consumes parent-provided MMIO data
+> from the PROM21 PCI glue instead of inspecting the parent PCI driver's
+> drvdata. The read path restores the previous vendor index value after
+> sampling and does not runtime-resume the parent PCI device; reads from a
+> suspended parent return -ENODATA.
 > 
-> This seems to work:
+> Document the supported device, register access, runtime PM behavior, and
+> sysfs lookup method. The documentation also records the observation
+> method used to identify the register pair and derive the conversion
+> formula.
 > 
->   config SENSORS_PROM21_XHCI
->          tristate "AMD Promontory 21 xHCI temperature sensor"
-> -       depends on USB_XHCI_PCI_PROM21
-> +       depends on USB_XHCI_PCI
-> 
->   config USB_XHCI_PCI_PROM21
->          tristate
-> -       depends on X86
->          depends on USB_XHCI_PCI
-> -       default USB_XHCI_PCI
-> +       default USB_XHCI_PCI if SENSORS_PROM21_XHCI != 'n'
->          select AUXILIARY_BUS
-> 
-> I don't know if it's the best way, perhaps it would be preferable for
-> the hwmon driver to select the glue, but then I'm not sure how to force
-> glue to become 'y' when xhci-pci is 'y'.
-> 
+> Assisted-by: Codex:gpt-5.5
+> Signed-off-by: Jihong Min <hurryman2212@gmail.com>
+> Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
+> Tested-by: Yaroslav Isakov <yaroslav.isakov@gmail.com>
 
-Unless I am missing something, that would disable the entire controller
-if the hwmon device is not enabled. That seems a bit draconian to me.
+For my reference:
 
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+I'll need an Acked-by: from a maintainer on the first patch to apply
+both patches, or this patch can be applied through some other tree.
+I am fine with both.
+
+Thanks,
 Guenter
 
