@@ -1,61 +1,63 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF4B381B0A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 997572C187
 	for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 18:41:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779129686; cv=none; b=dQGxc7UtibxsbZlgAcX0vUrg1/02YhSw3checRmcp/E1VyVWEHbHqldn3Gs480QIVO4sQIHFVhylvFPetzx2wKz+OE9jL72bsjTc+3UgBNmctpoeMC1vL/FFzzCafA6tMQLCmONcwEfngvnffqRSynfzYQ24knbRan9/SNIlqso=
+	t=1779129687; cv=none; b=lFJWoTSCw5unQGuAqybPNFWlM75IAASrt+YS36ZdERiHxZ8KgdWDzt12jDqRRM/5VFfKJAZae/tKVEGHLbOWydPCsa7mriFsjBHXx7+5gOZ/9gdSc7s1aKAP6gqxx4TgbyG0oSyhjC2ozqvHxKGRKImQBX60PrVlEXMP6vrOpeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779129686; c=relaxed/simple;
-	bh=OzEYtXnV85GnF+LqOcz5UNsNvTkWQ53yW9dRfFpIzTo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ALowmN2c3RPLU0t66KSHP8BaqmYUgJnNAoqNVzZnl5x0XnlYwrAAfTRuGH0F4Vl1khG44w5KWHR1HtZWZAN5ffpi3PxcUgfiMlwRfngA6+kK9M6KBt0TNOj65WwiGfDW2bUSxlNbbHcU/c0YoJRcSXBnIy8/TJzp4bkxpyDJVKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jo+j94yS; arc=none smtp.client-ip=209.85.221.45
+	s=arc-20240116; t=1779129687; c=relaxed/simple;
+	bh=Bt3my+6l00h9cgScvXgngonjEUgxY/cU8mMorKuK7Cg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=XgGfvT5K4lPQ/XdknTB/vUmsf9tLhAgc6ThdtI/zLs8/O3vF5NdIVNaIGxP/ltD5G9GrRuynRP59LCSLG0o7reQl8wxIBgI/ByYYSxbOqfuIA+AAI6itBHHU/1Is4jOksdunkWWL5Hs288Z9bEF1cm5JILLIjLPaJh0BGF9Nzwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m3ahKnax; arc=none smtp.client-ip=209.85.221.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jo+j94yS"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-44a044cb827so1855088f8f.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 11:41:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m3ahKnax"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-453903ee4adso83308f8f.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 11:41:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779129683; x=1779734483; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=U7pmfatTAGCFopvwOxekiavKhWvJwuVBKlcaz6/af+I=;
-        b=Jo+j94ySkMhMW7OIVytFRNRxxPNESIum42HrGU3sfwOrtDF6tfKSasKcheKgfyruhL
-         EkYIriQgzR8e0NrFAe5n3yuUwSqUHN9cRN9foad99O1j4cHnjoWkdhKAVOf5eOoQVdfE
-         qQQpZEMKgYfen1tFlHD97dtCeZVF85YZFIALrGGzBC68PGKkZte9DqDcYGmacElXKtex
-         8JFT+qINcM/zr2yqJCIyISp8Jm8JE2fsDNQ0OMfjWuRqHPLmFylgHYOyjGW/VL7nwYQS
-         uXkoehVWtEn+ZvLKzcSAd+vgJPY4K8QLIzzoeMT/QfovEGFiL58gbGXNWvnmRPlxAchG
-         NKLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779129683; x=1779734483;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1779129684; x=1779734484; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=U7pmfatTAGCFopvwOxekiavKhWvJwuVBKlcaz6/af+I=;
-        b=K7gjJ/anVjUvvvHltRHh2XTf+BVJs0anWOJyZzQFZEkAPrTGzSnEygLS3gmHlB7isA
-         hRwT6tn4QDf7XqceaG2Kirj8v+dTd55KfIGke2eH1w0LczlTL+Qi4BhmD4MjUmVBoeLI
-         kz//Q9uIXfxlbzNHEE7NR7W/A8S9J4Kie4x/YDBxmz5VWC75mxcanoVXwzrcTKw2iv7n
-         lGmbSdORUHFneezXnX1KaR3RTqvFnWaUkc/tFYXsfiBhzKvTPZ9RD0YeIC+14A4BlmKV
-         /+FVkXGjAYKkytf+m9BIoyFT+1o/fk/8xVhw+RI/vFor7CkSptRtGYTtJjlZ2zKv9h+W
-         jWpA==
-X-Forwarded-Encrypted: i=1; AFNElJ/EUFXZN8YbMI3RZalwpGAIpnIzGJOts7dHj+VP6wp7NJSU7zPGnLO7XDOaH9rKUD9WVWGmc793njoN0Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw28MXLFjt5FeiJQwmuO8fH07Ozl+gIstQZUd5VFalClnGk9cQE
-	JNolu5ATe1NUDBFRnl/2DT9T2axy145ZNild7V8A5b0+X91/dDhv3/i/
-X-Gm-Gg: Acq92OEbhozFXcK+wPaX7tsG+1sLrW3Xcg1KpOyTzuDIkUEOxQ11Ew9P5is3loLVSsR
-	WjY7iucjxce3dp5vEH7LZzXo6NtOLmiJc8JjtCoBlpv/dRplZhSd2JaNeoTAq/9J6S/UhFNfJAO
-	0jKEAhfrdNlkZ9TiJWy+1tbWSR1ow2B5lnXUlHiG8WH4zN/LKI2IzgbQ2r5A4zLF8G+yS//JQ1a
-	6vVN7wlozDifiR8ST5UtoiXa+GUKftu/kUGQ8wJu28l6sH2I3HVbjgxq64M9aNfyd8ud7qBDGm1
-	b6rQvniwYPKe68m2eb6isb6TaV7tS51b1VXQSxKG9AKJSDD0y4pxrBLUV+sat9hx5tZRRiG06PS
-	JXavYZyZ0BP2lkIy8kdQPevpP4Inc1XtpV4S3zrfx8YMSIBoMvHfcP6LcFT62wdjiuvpYtOG8M1
-	hBntWeM4g=
-X-Received: by 2002:a05:6000:2902:b0:45a:e3dd:586b with SMTP id ffacd0b85a97d-45e5c59a269mr26461049f8f.18.1779129683293;
-        Mon, 18 May 2026 11:41:23 -0700 (PDT)
+        bh=f8+wQM4a4tsMzXZ7biCKDr40TVU55tRrbtX6KIaXn24=;
+        b=m3ahKnaxaW1Ou8SvREKiHiQ4UNGReS5iZBkWTeovQ66QE9Poyyx3zYwc2C4XrG7k86
+         U8/i6uOdicL96UWoDgGr+ReQxxvRMPYW+5KkclmSqWsaS1IeoOYbeBJXW8kfo6LeG1WM
+         hhzI3pnGs8L67zdyxveQDp4Vj+WogXAhWAO00tOyRm7q9y9LTov1DRHOwtPUNwwb4Gwe
+         BEkPKygmL4S2WzB9XMbb50NvKEJ1Ygvy9tWru6xL65w44vI9QpJOsxL/nMdFArzHrH32
+         OFYyacVT8WYzQ5v5bjvb1km+1+1NWBNDXpE4bLIjbUmkCOTkZxmE4EqPBkbYJTaAkTsE
+         mjug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779129684; x=1779734484;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=f8+wQM4a4tsMzXZ7biCKDr40TVU55tRrbtX6KIaXn24=;
+        b=pcu5q5SB3H3BZ+YI8XGjmwGiZNvRsudbfH8Y5BwIZ6qNDutQntx1k0XZXr+6Ox0SGM
+         3lJs2+IrZpbotIpVR/dKx0X7uHatOxN0jPeoPwMDJTSyoOGpYovinZbrc+Tyc0M1DYwA
+         fNkisGLVXqA/89IpJT5GvTVKhsetO83aH7ubqhUCxUlXg0Ha+NTrq1kWh+7QUJrft1px
+         eUlzv/lb4gBE82FT8UOTaqeQ17pu4LR/QT0NHPKvXICRDOsIuLVN6yaGmAzUqfV9MUnO
+         k2GdXoAlRJ9lmYOUT3Oitkr142/nRL3z7Cp6VSLvn0Tu/BUnEbYr5ybiulKL3UcG1vOf
+         NwUg==
+X-Forwarded-Encrypted: i=1; AFNElJ8ttW6GrYmn7IJjWApdJSt2JqesIbm8ql3Xbu64u5zO76S+kf9t5wjbIWemMRemrmRwROBgFoJGx6g82A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQyzSFbaUtf5PVL2rot0zGWcBuOfZGHVX4YwiSQpeCfFNsdGmC
+	FTtddF366mRIN3PTMa1mitiX2n4pbhWMYH68qQ7RlXz0XalE5fzDP0X+
+X-Gm-Gg: Acq92OGed/h0QbnWKbx2CBmrsE6P3HjDg0Jb5tWuU0ioMR9S8iWVvcT7Vkj/s1E3e/l
+	oSV0PMryYCcGKDSndrXtsWSgIV8G2SEQBQ97Axoqfx+3fk7efI7R+r430BhjkDfJGKVeNd1DPfC
+	pUeEe00hnPLkFZGQOxuAo7gBkArszxQO6Z32o4ZPGIXYZpYtjOh5fT3mrgNZmmMtBo5uxEbHpY6
+	G7gtKiSSZSsTPUlG+DiVkB+WtjX7iEoRLIqvn14SlM/LH5MOr+9u/KR9A+z4SKdiZJPV7FfJORk
+	bWZ+fLutB879yr8adQQoZR1GglMFflSTwzlomUobwL2L4wcB0NHbXmsREthdzW+AvgKVUtyaOf8
+	rjTGpsDNHW0wziX1hcHJ8IOiT4njkzLxbk1toPmbXRWtskmiNfSA0IxFvOdXdPIhh32ARsqEz7B
+	tVpkVxMq8=
+X-Received: by 2002:adf:f784:0:b0:45e:7997:8b82 with SMTP id ffacd0b85a97d-45e79978bfbmr9017983f8f.16.1779129684055;
+        Mon, 18 May 2026 11:41:24 -0700 (PDT)
 Received: from localhost ([2603:c027:c000:3cde::f])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45d9e768c4fsm39305594f8f.8.2026.05.18.11.41.22
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45d9e768c4fsm39305594f8f.8.2026.05.18.11.41.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2026 11:41:22 -0700 (PDT)
+        Mon, 18 May 2026 11:41:23 -0700 (PDT)
 From: Louis Sautier <sautier.louis@gmail.com>
 To: Sathya Prakash <sathya.prakash@broadcom.com>,
 	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
@@ -68,79 +70,91 @@ Cc: Guenter Roeck <linux@roeck-us.net>,
 	linux-scsi@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/2] scsi: mpt3sas: add hwmon support
-Date: Mon, 18 May 2026 20:41:07 +0200
-Message-ID: <20260518184109.770185-1-sautier.louis@gmail.com>
+Subject: [PATCH v2 1/2] scsi: mpt3sas: add IO Unit Page 7 config accessor
+Date: Mon, 18 May 2026 20:41:08 +0200
+Message-ID: <20260518184109.770185-2-sautier.louis@gmail.com>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260518184109.770185-1-sautier.louis@gmail.com>
+References: <20260518184109.770185-1-sautier.louis@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Expose the IOC and board temperature sensors of LSI / Broadcom / Avago
-SAS HBAs that bind to mpt3sas through the hwmon interface. The data
-lives in MPI IO Unit Page 7.
+Add mpt3sas_config_get_iounit_pg7(), mirroring the existing iounit
+page accessors. Used by the hwmon driver added in the following patch
+to read the IOC and board temperatures.
 
-The same fields are exposed by Broadcom's userspace tooling through
-the /dev/mpt[23]ctl ioctl path (typically root-only): IOCTemperature
-and BoardTemperature in lsiutil; ROC and Controller in storcli.
-With this driver, sensors(1) shows them unprivileged:
+Assisted-by: Claude:claude-opus-4-7
+Signed-off-by: Louis Sautier <sautier.louis@gmail.com>
+---
+ drivers/scsi/mpt3sas/mpt3sas_base.h   |  2 ++
+ drivers/scsi/mpt3sas/mpt3sas_config.c | 36 +++++++++++++++++++++++++++
+ 2 files changed, 38 insertions(+)
 
-  $ sensors mpt3sas-pci-0200
-  mpt3sas-pci-0200
-  Adapter: PCI adapter
-  IOC:          +42.0°C
-
-v1 -> v2:
-  v1: https://lore.kernel.org/r/20260512214703.655633-1-sautier.louis@gmail.com
-  * Dropped misleading Documentation/hwmon/mpt3sas.rst.
-  * Dropped inaccurate concurrency-wait figure from Testing;
-    corrected empirical data is in the on-list discussion.
-
-Testing
--------
-
-Validated across three Broadcom SAS chip generations. None of the
-cards had a board sensor present, so the testing only covers the
-IOC channel:
-
-  * LSI 9500-8i / SAS3816, SAS-3:
-    - hwmon device registers as "mpt3sas" with only temp1 (IOC) exposed
-    - IOC reading matches `storcli /c0 show temperature` and
-      `lsiutil -p1 -a 25,2,0,0`
-    - rmmod / modprobe cycle goes through the explicit
-      unregister/register paths cleanly
-
-  * LSI 9305-24i / SAS3224, SAS-3: same behaviour.
-
-  * LSI 9211-4i / SAS2004, SAS-2: firmware reports both
-    *TemperatureUnits = NOT_PRESENT, no hwmon device registered
-    (graceful-skip path).
-
-Not verified (no available hardware):
-  * Path with both IOC and board sensors present.
-  * Fahrenheit-units conversion.
-  * Sub-zero readings (signed-cast path).
-
-Louis Sautier (2):
-  scsi: mpt3sas: add IO Unit Page 7 config accessor
-  scsi: mpt3sas: add hwmon support
-
- drivers/scsi/mpt3sas/Kconfig          |   9 ++
- drivers/scsi/mpt3sas/Makefile         |   2 +
- drivers/scsi/mpt3sas/mpt3sas_base.h   |  19 +++
- drivers/scsi/mpt3sas/mpt3sas_config.c |  36 +++++
- drivers/scsi/mpt3sas/mpt3sas_hwmon.c  | 200 ++++++++++++++++++++++++++
- drivers/scsi/mpt3sas/mpt3sas_scsih.c  |   6 +
- 6 files changed, 272 insertions(+)
- create mode 100644 drivers/scsi/mpt3sas/mpt3sas_hwmon.c
-
-
-base-commit: 5d6919055dec134de3c40167a490f33c74c12581
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.h b/drivers/scsi/mpt3sas/mpt3sas_base.h
+index d4597d058705..c655742d0dde 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.h
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
+@@ -1904,6 +1904,8 @@ int mpt3sas_config_get_iounit_pg3(struct MPT3SAS_ADAPTER *ioc,
+ 	Mpi2ConfigReply_t *mpi_reply, Mpi2IOUnitPage3_t *config_page, u16 sz);
+ int mpt3sas_config_set_iounit_pg1(struct MPT3SAS_ADAPTER *ioc, Mpi2ConfigReply_t
+ 	*mpi_reply, Mpi2IOUnitPage1_t *config_page);
++int mpt3sas_config_get_iounit_pg7(struct MPT3SAS_ADAPTER *ioc,
++	Mpi2ConfigReply_t *mpi_reply, Mpi2IOUnitPage7_t *config_page);
+ int mpt3sas_config_get_iounit_pg8(struct MPT3SAS_ADAPTER *ioc, Mpi2ConfigReply_t
+ 	*mpi_reply, Mpi2IOUnitPage8_t *config_page);
+ int mpt3sas_config_get_sas_iounit_pg1(struct MPT3SAS_ADAPTER *ioc,
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_config.c b/drivers/scsi/mpt3sas/mpt3sas_config.c
+index 45ac853e1289..ef07825046bc 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_config.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_config.c
+@@ -991,6 +991,42 @@ mpt3sas_config_get_iounit_pg3(struct MPT3SAS_ADAPTER *ioc,
+ 	return r;
+ }
+ 
++/**
++ * mpt3sas_config_get_iounit_pg7 - obtain iounit page 7
++ * @ioc: per adapter object
++ * @mpi_reply: reply mf payload returned from firmware
++ * @config_page: contents of the config page
++ * Context: sleep.
++ *
++ * Return: 0 for success, non-zero for failure.
++ */
++int
++mpt3sas_config_get_iounit_pg7(struct MPT3SAS_ADAPTER *ioc,
++	Mpi2ConfigReply_t *mpi_reply, Mpi2IOUnitPage7_t *config_page)
++{
++	Mpi2ConfigRequest_t mpi_request;
++	int r;
++
++	memset(&mpi_request, 0, sizeof(Mpi2ConfigRequest_t));
++	mpi_request.Function = MPI2_FUNCTION_CONFIG;
++	mpi_request.Action = MPI2_CONFIG_ACTION_PAGE_HEADER;
++	mpi_request.Header.PageType = MPI2_CONFIG_PAGETYPE_IO_UNIT;
++	mpi_request.Header.PageNumber = 7;
++	mpi_request.Header.PageVersion = MPI2_IOUNITPAGE7_PAGEVERSION;
++	ioc->build_zero_len_sge_mpi(ioc, &mpi_request.PageBufferSGE);
++	r = _config_request(ioc, &mpi_request, mpi_reply,
++	    MPT3_CONFIG_PAGE_DEFAULT_TIMEOUT, NULL, 0);
++	if (r)
++		goto out;
++
++	mpi_request.Action = MPI2_CONFIG_ACTION_PAGE_READ_CURRENT;
++	r = _config_request(ioc, &mpi_request, mpi_reply,
++	    MPT3_CONFIG_PAGE_DEFAULT_TIMEOUT, config_page,
++	    sizeof(*config_page));
++ out:
++	return r;
++}
++
+ /**
+  * mpt3sas_config_get_iounit_pg8 - obtain iounit page 8
+  * @ioc: per adapter object
 -- 
 2.54.0
 
