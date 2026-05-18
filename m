@@ -1,105 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213BF3E3DB6
-	for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 09:08:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C4A732143D
+	for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 10:01:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779095339; cv=none; b=DOPfBP8aIwcjnPRIKXaz3u+EV40rLhzcB/Cn3lWXNcpkZOSHJujPwK/5R8TtnqLhzhobiAH8aP2N0dEKUSCefj9/R/nCIKcssS949cKyePnlhiYR3VexbdwMBSpP1Udcnr/48c9ej62rFuTyPo1EHIgpstiRAKsdurTsxivKguw=
+	t=1779098486; cv=none; b=e1SFCJKJnyeZfI65Pr5ZqcB4VK1bbiO7zGIiFv6CJlDeAKGlJ299nLtpQZUKmlwoCX3wNTAEWuoDCKDGQnw3mj6gVdIwZmUUPzyo+VOv6xl5i8p8Eu1HHQOsl3KaJzEDEUcV7gFKG+dwzSKQXi97x3LlhstPdW4uycNzcs6OwUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779095339; c=relaxed/simple;
-	bh=YnbQADgWw4IQd99TL1cCUGSxWNTcIBiIuwe+4uWsrgA=;
-	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qH0jfgiy2ooHwiVEwIeKipcpYMlYjR1zY6QG6jU13ztVA5TzaATbfiSjbsPeftIkcPi1WPFaujuv/3U1jGeO6sWQ5+H8Gy0M6yciB2vLd4mX/zGA7i1ezsW0oCgZlrPnUT4SJ+1C7LMzTkmjs2QyhHSRbuwUY+LnRhbVc2AEnlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XTVZXc+g; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XTVZXc+g"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3A1CC4AF09
-	for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 09:08:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779095338;
-	bh=YnbQADgWw4IQd99TL1cCUGSxWNTcIBiIuwe+4uWsrgA=;
-	h=From:In-Reply-To:References:Date:Subject:To:Cc:From;
-	b=XTVZXc+gUAnDhqmz+JI6igCAP2gIc6+8uSPoGlILC2yFuxWvNHZxKdDoeJLQWn/Dw
-	 boN2H5l1JdCbFQBk9bC4L1zTQZaO0y0rvm/+eFQMJO/DPz2903V40+X/zmXHLUI1+X
-	 CnlnYsW4Ubn+AgYOx4EJdbk/tQlgW8wGu/o8AkNcRCcLIogyYSCtfaxlxjBim++CMy
-	 jPHzPa477HenIlPr1n02v6FNZdkZlOTNQiFFGt4bw8+kNaWT9+7poswyO8Qgow0Skg
-	 REw8Jzj2mb61NBtPv7gwrnQFR6tgXbEy3ubBjlmVxCwIFpCcam2MNnO/PH39JbN0oI
-	 2GmDhLfCNvWbQ==
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5aa0da74eaaso2949286e87.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 02:08:58 -0700 (PDT)
-X-Gm-Message-State: AOJu0YzwOlqav8ZVRxCMYyNk4t/rZtMEMVdEogOGjy7Zby+Ua/IjVlgH
-	HBKY6LURwj/UniD0orqqROcLXSb7f6rDlcdokO20U02ffE5SB8LcGKXrt6gseh7jjnlN2ISWX7/
-	d80DYkpAx3WLtUX4RljutKiP3YVehalKhH33dE8yCXg==
-X-Received: by 2002:a05:6512:2301:b0:5a4:d0d:84e9 with SMTP id
- 2adb3069b0e04-5a8ffc3dce5mr5141862e87.4.1779095337458; Mon, 18 May 2026
- 02:08:57 -0700 (PDT)
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 18 May 2026 05:08:56 -0400
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 18 May 2026 05:08:56 -0400
-From: Bartosz Golaszewski <brgl@kernel.org>
-In-Reply-To: <20260516-adm1266-gpio-fixes-v2-0-801f13debcb2@nexthop.ai>
+	s=arc-20240116; t=1779098486; c=relaxed/simple;
+	bh=1276fB5RBiZbAgWn9O/5ryiqLf6OwFygyCuZizASu6Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JPTx5UIcxRRe2LCO4n+tdkD5RPakM8swrKzSUwxeBBKb14j4SfKFYzz5tkUdiNJFs+WYJdt+yRM2KiiCzpiIc31EGqchgnP1/zzGGiieiS9MBG+IBYPm79aRK4wBNgTzuQ1nDCL4gxbV+t/07CXoH7kIKyzuEJwTeLdaejiLgVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1wOumO-0001E5-Tt; Mon, 18 May 2026 12:00:56 +0200
+Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac] helo=dude04)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1wOumN-000ZTu-1T;
+	Mon, 18 May 2026 12:00:56 +0200
+Received: from ore by dude04 with local (Exim 4.98.2)
+	(envelope-from <ore@pengutronix.de>)
+	id 1wOumN-0000000Eu5p-3xhv;
+	Mon, 18 May 2026 12:00:55 +0200
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Lee Jones <lee@kernel.org>,
+	Peter Rosin <peda@axentia.se>,
+	Linus Walleij <linusw@kernel.org>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
+	kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	David Jander <david@protonic.nl>
+Subject: [PATCH v13 0/6] mfd: Add support for NXP MC33978/MC34978 MSDI
+Date: Mon, 18 May 2026 12:00:47 +0200
+Message-ID: <20260518100054.3552143-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260516-adm1266-gpio-fixes-v2-0-801f13debcb2@nexthop.ai>
-Date: Mon, 18 May 2026 05:08:56 -0400
-X-Gmail-Original-Message-ID: <CAMRc=Md_kjwH5v1JkQz5DxnzhK9yk1t+kjNcHG7P75bdg_16xA@mail.gmail.com>
-X-Gm-Features: AVHnY4JrVPNxA1mweXYiG-jAyfspnD_e2PKGNQOQJaiNP977WegN9bOtVULGtxU
-Message-ID: <CAMRc=Md_kjwH5v1JkQz5DxnzhK9yk1t+kjNcHG7P75bdg_16xA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] hwmon: (pmbus/adm1266) GPIO accessor fixes
-To: Abdurrahman Hussain <abdurrahman@nexthop.ai>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	Guenter Roeck <linux@roeck-us.net>, Alexandru Tachici <alexandru.tachici@analog.com>, 
-	Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-On Sun, 17 May 2026 01:18:46 +0200, Abdurrahman Hussain
-<abdurrahman@nexthop.ai> said:
-> Five pre-existing bugs in the adm1266 GPIO path that all landed when
-> GPIO support was first added (commit d98dfad35c38).  Each is
-> reachable any time userspace queries an ADM1266 GPIO/PDIO line via
-> the gpiolib char-dev or sysfs interfaces, or reads
-> debugfs/gpio-<chip>.
->
-> Patch 1 caps the PDIO scan loop in adm1266_gpio_get_multiple() at
-> ADM1266_PDIO_NR (16) instead of ADM1266_PDIO_STATUS (0xE9 = 233, a
-> PMBus command code that ended up in the bound by mistake).  As
-> written, the scan walks find_next_bit() up to bit 242 across a
-> 25-bit caller mask, reading out of bounds and -- if any of that
-> incidental memory contains a set bit -- driving a corresponding
-> out-of-bounds write to the caller's bits array.
->
-> Patch 2 drops a redundant "*bits = 0" reset that sits between the
-> GPIO and PDIO halves of adm1266_gpio_get_multiple().  As written,
-> the GPIO bits the first loop populates are immediately discarded
-> before the PDIO loop runs, so any caller asking for a mix of GPIO
-> and PDIO lines sees the GPIO half always reported as 0.
->
-> Patch 3 adds the missing "ret < 2" length check after the three
-> i2c_smbus_read_block_data() calls in adm1266_gpio_get() and
-> adm1266_gpio_get_multiple().  A device returning a 0- or 1-byte
-> response would otherwise compose pin status from uninitialised
-> stack memory and leak it to userspace via gpiolib.
->
-> Patch 4 moves adm1266_config_gpio() past pmbus_do_probe() in
-> adm1266_probe() so the gpio_chip isn't registered (and reachable
-> from userspace) until the PMBus state the GPIO accessors depend
-> on is initialised.  This is a prerequisite for patch 5.
->
-> Patch 5 takes pmbus_lock at the top of adm1266_gpio_get(),
-> adm1266_gpio_get_multiple(), and adm1266_gpio_dbg_show() so the
-> GPIO PMBus reads can't land between a PAGE write and the paged
-> read pmbus_core does in another thread.
->
-> Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
-> ---
+changes v7:
+- drop gpiolib irq fix and make pinctrl more robust against NULL point
+  dereference.
 
-All these make sense to me.
+This series adds support for the NXP MC33978/MC34978 Multiple Switch Detection
+Interface (MSDI) via the MFD framework.
 
-Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Architecture overview:
+* mfd: Core driver handling 2-frame pipelined SPI, regulator sequencing, and
+  linear irq_domain. Harvests status bits from SPI MISO MSB.
+* pinctrl: Exposes 22 physical switch inputs as standard GPIOs. Proxies IRQs to
+  the MFD domain.
+* hwmon: Exposes thermal limits, VBATP/VDDQ voltage boundaries, and dynamic
+  fault alarms.
+* mux: Controls the 24-to-1 AMUX routing analog signals (switch voltages,
+  temperature, VBATP) to an external ADC.
+
+Initial pinctrl implementation by David Jander, reworked into this MFD
+architecture.
+
+Best regards,
+Oleksij
+
+David Jander (1):
+  pinctrl: add NXP MC33978/MC34978 pinctrl driver
+
+Oleksij Rempel (5):
+  dt-bindings: pinctrl: add NXP MC33978/MC34978 MSDI
+  mfd: add NXP MC33978/MC34978 core driver
+  pinctrl: core: Make pin group callbacks optional for pin-only drivers
+  hwmon: add NXP MC33978/MC34978 driver
+  mux: add NXP MC33978/MC34978 AMUX driver
+
+ .../bindings/pinctrl/nxp,mc33978.yaml         |  158 +++
+ drivers/hwmon/Kconfig                         |   10 +
+ drivers/hwmon/Makefile                        |    1 +
+ drivers/hwmon/mc33978-hwmon.c                 |  576 +++++++++
+ drivers/mfd/Kconfig                           |   15 +
+ drivers/mfd/Makefile                          |    2 +
+ drivers/mfd/mc33978.c                         |  187 +++
+ drivers/mux/Kconfig                           |   14 +
+ drivers/mux/Makefile                          |    2 +
+ drivers/mux/mc33978-mux.c                     |  141 ++
+ drivers/pinctrl/Kconfig                       |   16 +
+ drivers/pinctrl/Makefile                      |    1 +
+ drivers/pinctrl/core.c                        |   40 +-
+ drivers/pinctrl/pinconf.c                     |    9 +-
+ drivers/pinctrl/pinctrl-mc33978.c             | 1027 +++++++++++++++
+ drivers/platform/Kconfig                      |    2 +
+ drivers/platform/Makefile                     |    1 +
+ drivers/platform/misc/Kconfig                 |   10 +
+ drivers/platform/misc/Makefile                |    6 +
+ drivers/platform/misc/mc33978-core.c          | 1133 +++++++++++++++++
+ include/linux/mfd/mc33978.h                   |  160 +++
+ 21 files changed, 3504 insertions(+), 7 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,mc33978.yaml
+ create mode 100644 drivers/hwmon/mc33978-hwmon.c
+ create mode 100644 drivers/mfd/mc33978.c
+ create mode 100644 drivers/mux/mc33978-mux.c
+ create mode 100644 drivers/pinctrl/pinctrl-mc33978.c
+ create mode 100644 drivers/platform/misc/Kconfig
+ create mode 100644 drivers/platform/misc/Makefile
+ create mode 100644 drivers/platform/misc/mc33978-core.c
+ create mode 100644 include/linux/mfd/mc33978.h
+
+--
+2.47.3
+
