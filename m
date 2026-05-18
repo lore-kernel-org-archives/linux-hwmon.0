@@ -1,153 +1,117 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57EC03F58E2;
-	Mon, 18 May 2026 11:19:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FBAD325491;
+	Mon, 18 May 2026 11:46:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779103189; cv=none; b=bPKZNgUMzZyDZwMfqb45FdsMpdlweppPr1UZrhTSKl6+Y/gYolwzDG9PX2zVp5uPrmil7kDBZrOsampiAfQKVl9e5cj50nK0clz65/wZXSebbGNGKL0Aji4v1lPY8bohle0GxD4uTpW300RqDOaCfvWNSqbOkL1GX3tuv1YKkz0=
+	t=1779104778; cv=none; b=Uj07+SUfIF2VaAGlgpEDYJ1tpEwRc/kZ8oNnuadhMR6KW4L9DtNGsLRpIHw09oPXgNvR2d5WgCYqcXjZeBtAe5s4dSLOdwcl+5/E8PImL/A1VEQRGQap8DiL4f9cuGwWTeOiVwkHQWUJdsbfqYlRiEcoL7sa0J9fueHgHbkqZiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779103189; c=relaxed/simple;
-	bh=vH7pnbYGn7AO3OaKGHuq9u2nobog1aJHQ14rr8QXIog=;
+	s=arc-20240116; t=1779104778; c=relaxed/simple;
+	bh=O/pwzqRu2WmJr9zRBK96Yj3d47SMwBWRGkBwHkoayuQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gapSoVu9cIP/+Nrdd+Ll2dylYE+rObx6X+zbBN0UvGcBNenI+dlhEO5Dr2AqxJv/sGQZSuI0cWll6j3UL7rMpsAuB10TxSt1zlVqSnWzK6my7YgSWuGb4Cwi/eM0JADc+dU3mLxBTtJuF9pJvM/gblgyV8JfVxb+itVimxJzz6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dfhU79R+; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=lwxgGv7mLHpGjH31yzkzCVQhaG++VLhNCgTX0NzcMVmno6kjXAgXqhvuWIh+mflGjtWVcXKYVT9Wqx2FdBUbx5NwP29GojIJNCdUkTTsmCgVuXOqg7H0UaU1186UimF22w+Pg+5Vs1+cEobPiEm7HCTJ/unWooapPjFxnji7LAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ajIiep4u; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dfhU79R+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D177CC2BCB7;
-	Mon, 18 May 2026 11:19:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ajIiep4u"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 995E2C2BCC6;
+	Mon, 18 May 2026 11:46:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779103188;
-	bh=vH7pnbYGn7AO3OaKGHuq9u2nobog1aJHQ14rr8QXIog=;
+	s=k20201202; t=1779104778;
+	bh=O/pwzqRu2WmJr9zRBK96Yj3d47SMwBWRGkBwHkoayuQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=dfhU79R+hGg0NyjDnDXOjG21p7dVP7hxjyBA2dmLmGKNKBXKYBCRHDbUzC5tQ6SXN
-	 CNOLdpJEQWniZNHRXuQBXg0aqVKSDZxly9XpdqG3xXvD5v0X35DIYUZ6OJ/VxvdSFc
-	 E5npmSAX/K00E00f5BiG3bsPnDaE65u7fV6DVnBJMs/Iy0rqhZ+5fzUf3uJ4QsXIJc
-	 irvjDREjorLtHXVon7/THV0rFHWDPvD/pim70aa736hF89Sin9du6ZQXwsYWYR3LWL
-	 N219DxEDJzODsyNDJPZlp0kpvjx1S+/UGNe6ewIwPJGlgnF1HtXS2cus9RuIWSwnFw
-	 Ceb+qCKIcZtjA==
+	b=ajIiep4umMEeQYb2a6AbIHbcROhdZNR3+xoXW7mdlngdc9nBL3cBzzEA9c3O0LHzc
+	 A2UzmjdVSFVXf341CV9Vg7dASV7d4l0kXyCbSfzgOlNen/SRu9uyOqJI1OrBq4xUIL
+	 Osbj5KGggP+tC0pnzxaDXibW+BqwG7BO+QqY5h5tfR8dD1YujgDTRmD+P0m0lnDQmc
+	 4ut87dbY/dDtEbpn5ib0CKdsZ2VSD9+WZzBLzJ71fFfS8l6lDRzFQBZvhIOVivaB6i
+	 dkIvQWycRjkaZZ4oZnX79ZxEMgahuxgOC8GIZnOn+IcYTjEl6d56PowLm5VdgOqg/n
+	 7ETDEAQHUAmaw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v13 3/6] pinctrl: core: Make pin group callbacks
- optional for pin-only drivers
+Subject: Re: [PATCH v13 4/6] pinctrl: add NXP MC33978/MC34978 pinctrl driver
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Oleksij Rempel" <o.rempel@pengutronix.de>
-Cc: robh@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <20260518100054.3552143-4-o.rempel@pengutronix.de>
-References: <20260518100054.3552143-4-o.rempel@pengutronix.de>
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, conor+dt@kernel.org, robh@kernel.org
+In-Reply-To: <20260518100054.3552143-5-o.rempel@pengutronix.de>
+References: <20260518100054.3552143-5-o.rempel@pengutronix.de>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 18 May 2026 11:19:47 +0000
-Message-Id: <20260518111947.D177CC2BCB7@smtp.kernel.org>
+Date: Mon, 18 May 2026 11:46:16 +0000
+Message-Id: <20260518114617.995E2C2BCC6@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Critical] The function `pinconf_groups_show` iterates locklessly over pi=
-n groups using `pctlops->get_group_name` without taking `pctldev->mutex`, l=
-eading to a Use-After-Free (UAF) race condition.
-- [Critical] The function `pinctrl_get_group_selector` iterates over `pctlo=
-ps->get_group_name` locklessly, creating a Use-After-Free (UAF) race condit=
-ion during map resolution.
+- [Medium] The GPIO chip is exposed to consumers before its pin ranges are =
+established, creating a race condition.
 --
 
-commit 02ec67dd43dc0fad7f2e694d9ac1bbd0d9a91c1a
-Author: Oleksij Rempel <o.rempel@pengutronix.de>
+commit 3bc65f1451eade57ad8e2b23e1cd7f59d63eb878
+Author: David Jander <david@protonic.nl>
 
-pinctrl: core: Make pin group callbacks optional for pin-only drivers
+pinctrl: add NXP MC33978/MC34978 pinctrl driver
 
-Relax the requirement for pin-only drivers by making the group callbacks
-optional when no muxing or group pin configuration support is provided.
+Add pin control and GPIO driver for the NXP MC33978/MC34978 Multiple Switch
+Detection Interface (MSDI) devices. This driver exposes the 22 mechanical
+switch detection inputs as standard GPIOs and supports emulated outputs
+and hierarchical interrupt routing.
 
-> diff --git a/drivers/pinctrl/core.c b/drivers/pinctrl/core.c
-> index 6cbcaa6709da1..3fcb7e584a937 100644
-> --- a/drivers/pinctrl/core.c
-> +++ b/drivers/pinctrl/core.c
-
-[ ... ]
-
-> @@ -738,8 +743,15 @@ int pinctrl_get_group_selector(struct pinctrl_dev *p=
-ctldev,
->  			       const char *pin_group)
->  {
->  	const struct pinctrl_ops *pctlops =3D pctldev->desc->pctlops;
-> -	unsigned int ngroups =3D pctlops->get_groups_count(pctldev);
->  	unsigned int group_selector =3D 0;
-> +	unsigned int ngroups;
-> +
-> +	if (!pctlops->get_groups_count || !pctlops->get_group_name) {
-> +		dev_err(pctldev->dev, "does not support pin groups\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	ngroups =3D pctlops->get_groups_count(pctldev);
-> =20
->  	while (group_selector < ngroups) {
->  		const char *gname =3D pctlops->get_group_name(pctldev,
-
-This isn't a new regression introduced by this commit, but since the
-surrounding logic is being modified, does this code have a use-after-free
-race condition?
-
-pinctrl_get_group_selector() iterates over pctlops->get_group_name
-locklessly. This is called from map resolution paths
-(e.g. pinmux_map_to_setting()) holding pinctrl_maps_mutex but not
-pctldev->mutex.=20
-
-If there is a concurrent dynamic modification to the group list (such as a
-provider driver unbinding and calling pinctrl_generic_remove_group() which
-frees the descriptor), could it race against the lockless radix tree lookup
-and lead to a use-after-free when accessing the returned group name?
-
-Note that simply adding mutex_lock(&pctldev->mutex) inside
-pinctrl_get_group_selector() would deadlock callers like
-pin_config_group_get() which already hold the lock, so the locking might
-need to be addressed correctly in the call stack.
+> diff --git a/drivers/pinctrl/pinctrl-mc33978.c b/drivers/pinctrl/pinctrl-=
+mc33978.c
+> new file mode 100644
+> index 0000000000000..5ac4ebb115b66
+> --- /dev/null
+> +++ b/drivers/pinctrl/pinctrl-mc33978.c
 
 [ ... ]
 
-> diff --git a/drivers/pinctrl/pinconf.c b/drivers/pinctrl/pinconf.c
-> index dca963633b5d1..81686844dfa5f 100644
-> --- a/drivers/pinctrl/pinconf.c
-> +++ b/drivers/pinctrl/pinconf.c
-
-[ ... ]
-
-> @@ -348,8 +348,13 @@ static int pinconf_groups_show(struct seq_file *s, v=
-oid *what)
->  {
->  	struct pinctrl_dev *pctldev =3D s->private;
->  	const struct pinctrl_ops *pctlops =3D pctldev->desc->pctlops;
-> -	unsigned int ngroups =3D pctlops->get_groups_count(pctldev);
->  	unsigned int selector =3D 0;
-> +	unsigned int ngroups;
+> +	mpc->pctldev =3D devm_pinctrl_register(dev, &mpc->pinctrl_desc, mpc);
+> +	if (IS_ERR(mpc->pctldev))
+> +		return dev_err_probe(dev, PTR_ERR(mpc->pctldev),
+> +				     "can't register pinctrl\n");
 > +
-> +	if (!pctlops->get_groups_count || !pctlops->get_group_name)
-> +		return 0;
+> +	ret =3D devm_gpiochip_add_data(dev, &mpc->chip, mpc);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "can't add GPIO chip\n");
 > +
-> +	ngroups =3D pctlops->get_groups_count(pctldev);
-> =20
->  	seq_puts(s, "Pin config settings per pin group\n");
->  	seq_puts(s, "Format: group (name): configs\n");
+> +	/*
+> +	 * Distinguish GPIO IRQ domain from parent MFD domain sharing the same
+> +	 * fwnode. Matches the pattern used by other GPIO drivers (e.g.,
+> +	 * crystalcove). DOMAIN_BUS_WIRED indicates this domain represents
+> +	 * actual GPIO pin interrupts (wired lines).
+> +	 */
+> +	irq_domain_update_bus_token(mpc->chip.irq.domain, DOMAIN_BUS_WIRED);
+> +
+> +	ret =3D gpiochip_add_pin_range(&mpc->chip, dev_name(dev), 0, 0,
+> +				     MC33978_NGPIO);
 
-Similarly, this isn't a new regression introduced by this patch, but does
-pinconf_groups_show() have a use-after-free race condition?
+Could this create a race condition where the GPIO chip is exposed to
+consumers before its pin ranges are established?
 
-It iterates locklessly over pin groups using pctlops->get_group_name without
-taking pctldev->mutex (unlike its sibling pinctrl_groups_show).
+If a consumer requests a GPIO in the narrow window after
+devm_gpiochip_add_data() completes but before gpiochip_add_pin_range()
+is called, gpiolib's pinctrl_gpio_request() might not find the pinctrl
+mapping and could bypass the pinctrl back-end synchronization.
 
-Since pinconf_groups_show() is a debugfs callback, it can run concurrently
-with a pinctrl driver's unbind or dynamic group removal. A driver unbinding
-calls pinctrl_unregister() or pinctrl_generic_remove_group(), which frees
-the group descriptor.
+Additionally, if gpiochip_add_pin_range() fails, returning an error here
+would unregister the already-exposed gpiochip, potentially leaving
+consumers with dangling handles.
 
-Because pinconf_groups_show() traverses the radix tree locklessly and does
-not hold pctldev->mutex, can it access a freed group name and lead to memory
-corruption?
+Would it be better to implement the .add_pin_ranges callback in
+struct gpio_chip so that gpiolib can safely and atomically establish the
+pin ranges under its own internal locks during registration?
+
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "failed to add pin range\n");
+> +
+> +	platform_set_drvdata(pdev, mpc);
+> +
+> +	return 0;
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260518100054.3552=
-143-1-o.rempel@pengutronix.de?part=3D3
+143-1-o.rempel@pengutronix.de?part=3D4
