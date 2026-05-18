@@ -1,42 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FBAD325491;
-	Mon, 18 May 2026 11:46:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7C873FE34D;
+	Mon, 18 May 2026 12:15:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779104778; cv=none; b=Uj07+SUfIF2VaAGlgpEDYJ1tpEwRc/kZ8oNnuadhMR6KW4L9DtNGsLRpIHw09oPXgNvR2d5WgCYqcXjZeBtAe5s4dSLOdwcl+5/E8PImL/A1VEQRGQap8DiL4f9cuGwWTeOiVwkHQWUJdsbfqYlRiEcoL7sa0J9fueHgHbkqZiI=
+	t=1779106503; cv=none; b=jwk3qEuqOKV5wZfWs3Ur9JExBd3dxOqYBvyRE1N3FvxwveRyMEsQit/NqMc3t4Y53T+XQz/4uDS2Pc1r8UWJQ2qVUxDsT5o4y1R4LwBSvXXg8wve7xYsU3CwJKefmcKd2W5+MV6eoDIPrlrOZYD1L3rD8vu4XWz5u0dSj9blQZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779104778; c=relaxed/simple;
-	bh=O/pwzqRu2WmJr9zRBK96Yj3d47SMwBWRGkBwHkoayuQ=;
+	s=arc-20240116; t=1779106503; c=relaxed/simple;
+	bh=X3GigOM2u4KI51FwnzMMnvpD7nABhS3JcQX5+WHADl8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=lwxgGv7mLHpGjH31yzkzCVQhaG++VLhNCgTX0NzcMVmno6kjXAgXqhvuWIh+mflGjtWVcXKYVT9Wqx2FdBUbx5NwP29GojIJNCdUkTTsmCgVuXOqg7H0UaU1186UimF22w+Pg+5Vs1+cEobPiEm7HCTJ/unWooapPjFxnji7LAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ajIiep4u; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=fJ87bBYD3vJ/JZSn0G0TuD61qaahKyJmm3EvnFGsYuvED7LMM/xsaN0/IvwTgZcNu62RNWKgd1enc+C+CBUaD19g6vOWci+dFtfuu6HIa46ft2xeXiHTBzpgI1RZO1/abModx6TT7VLTba1N3bcGfr20DGKM1UTdkdaHkcmxJog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VbgSEgM6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ajIiep4u"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 995E2C2BCC6;
-	Mon, 18 May 2026 11:46:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VbgSEgM6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A558C2BCC7;
+	Mon, 18 May 2026 12:15:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779104778;
-	bh=O/pwzqRu2WmJr9zRBK96Yj3d47SMwBWRGkBwHkoayuQ=;
+	s=k20201202; t=1779106503;
+	bh=X3GigOM2u4KI51FwnzMMnvpD7nABhS3JcQX5+WHADl8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=ajIiep4umMEeQYb2a6AbIHbcROhdZNR3+xoXW7mdlngdc9nBL3cBzzEA9c3O0LHzc
-	 A2UzmjdVSFVXf341CV9Vg7dASV7d4l0kXyCbSfzgOlNen/SRu9uyOqJI1OrBq4xUIL
-	 Osbj5KGggP+tC0pnzxaDXibW+BqwG7BO+QqY5h5tfR8dD1YujgDTRmD+P0m0lnDQmc
-	 4ut87dbY/dDtEbpn5ib0CKdsZ2VSD9+WZzBLzJ71fFfS8l6lDRzFQBZvhIOVivaB6i
-	 dkIvQWycRjkaZZ4oZnX79ZxEMgahuxgOC8GIZnOn+IcYTjEl6d56PowLm5VdgOqg/n
-	 7ETDEAQHUAmaw==
+	b=VbgSEgM6SBT3UNvGn/kjE3YkFPFJh2/lET1sRBNQ07ah1EsnToU1YDDwbmdTm36DA
+	 4/2jHm7SftznDfJXS2WHZ636UlJW3SMPUnYgOTIeE1/pJjrPH6yPlhIurntOlz3Q2g
+	 chQMdHacyQGk0s0q/+7KrACfsoT8m+PlKQ5KsUOOgw8x2HIG4QPjo9ul3baifcN5B8
+	 5B+XQirYAie642sCfJ5UcwAaRzuRZDX4GxNRvLTL7Z9QyJBnMlkzh23kab8OlwGkW2
+	 krZzi4duZxLqxxpXpTNCZQ/HIasXBYr4yWXwJkI7dNzDQz7TahenwSKcEv8IwEgjBC
+	 7+biN4/O3cX9g==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v13 4/6] pinctrl: add NXP MC33978/MC34978 pinctrl driver
+Subject: Re: [PATCH v13 5/6] hwmon: add NXP MC33978/MC34978 driver
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Oleksij Rempel" <o.rempel@pengutronix.de>
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, conor+dt@kernel.org, robh@kernel.org
-In-Reply-To: <20260518100054.3552143-5-o.rempel@pengutronix.de>
-References: <20260518100054.3552143-5-o.rempel@pengutronix.de>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, robh@kernel.org, conor+dt@kernel.org
+In-Reply-To: <20260518100054.3552143-6-o.rempel@pengutronix.de>
+References: <20260518100054.3552143-6-o.rempel@pengutronix.de>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 18 May 2026 11:46:16 +0000
-Message-Id: <20260518114617.995E2C2BCC6@smtp.kernel.org>
+Date: Mon, 18 May 2026 12:15:02 +0000
+Message-Id: <20260518121503.4A558C2BCC7@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -45,73 +45,91 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The GPIO chip is exposed to consumers before its pin ranges are =
-established, creating a race condition.
+- [High] Background polling worker unconditionally re-arms itself during te=
+ardown, leading to a Use-After-Free.
 --
 
-commit 3bc65f1451eade57ad8e2b23e1cd7f59d63eb878
-Author: David Jander <david@protonic.nl>
+commit 120174fd926c55b417dcd675badea0f431859a73
+Author: Oleksij Rempel <o.rempel@pengutronix.de>
 
-pinctrl: add NXP MC33978/MC34978 pinctrl driver
+hwmon: add NXP MC33978/MC34978 driver
 
-Add pin control and GPIO driver for the NXP MC33978/MC34978 Multiple Switch
-Detection Interface (MSDI) devices. This driver exposes the 22 mechanical
-switch detection inputs as standard GPIOs and supports emulated outputs
-and hierarchical interrupt routing.
+This commit adds hardware monitoring support for the NXP MC33978/MC34978
+Multiple Switch Detection Interface (MSDI). It implements an edge-triggered
+interrupt handler paired with a polling delayed workqueue to manage persist=
+ent
+hardware faults.
 
-> diff --git a/drivers/pinctrl/pinctrl-mc33978.c b/drivers/pinctrl/pinctrl-=
-mc33978.c
+> diff --git a/drivers/hwmon/mc33978-hwmon.c b/drivers/hwmon/mc33978-hwmon.c
 > new file mode 100644
-> index 0000000000000..5ac4ebb115b66
+> index 0000000000000..bd4dd25b3b20a
 > --- /dev/null
-> +++ b/drivers/pinctrl/pinctrl-mc33978.c
-
+> +++ b/drivers/hwmon/mc33978-hwmon.c
 [ ... ]
-
-> +	mpc->pctldev =3D devm_pinctrl_register(dev, &mpc->pinctrl_desc, mpc);
-> +	if (IS_ERR(mpc->pctldev))
-> +		return dev_err_probe(dev, PTR_ERR(mpc->pctldev),
-> +				     "can't register pinctrl\n");
+> +static int mc33978_hwmon_update_faults(struct mc33978_hwmon_priv *priv)
+> +{
+[ ... ]
+> +	ret =3D mc33978_hwmon_read_fault(priv, &faults);
+> +	if (ret) {
+> +		hwmon_unlock(priv->hwmon_dev);
+> +		dev_err_ratelimited(priv->dev,
+> +				    "failed to read fault register: %pe\n",
+> +				    ERR_PTR(ret));
+> +		/*
+> +		 * Always retry on read failure. If we drop the heartbeat during
+> +		 * the initial fault before caching it, the edge-triggered IRQ
+> +		 * will never fire again and permanently stall fault monitoring.
+> +		 */
+> +		rearm =3D true;
+> +		goto out_poll;
+> +	}
+[ ... ]
+> +	rearm =3D !!alarm_faults;
 > +
-> +	ret =3D devm_gpiochip_add_data(dev, &mpc->chip, mpc);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "can't add GPIO chip\n");
-> +
+> +out_poll:
 > +	/*
-> +	 * Distinguish GPIO IRQ domain from parent MFD domain sharing the same
-> +	 * fwnode. Matches the pattern used by other GPIO drivers (e.g.,
-> +	 * crystalcove). DOMAIN_BUS_WIRED indicates this domain represents
-> +	 * actual GPIO pin interrupts (wired lines).
+> +	 * If any alarms are currently active, the global FAULT_STAT bit remains
+> +	 * asserted. The hardware will not generate a new rising edge interrupt
+> +	 * if a secondary fault occurs, nor will it interrupt when faults clear.
+> +	 * Schedule a poll to detect both clearing edges and secondary alarms.
 > +	 */
-> +	irq_domain_update_bus_token(mpc->chip.irq.domain, DOMAIN_BUS_WIRED);
+> +	if (rearm)
+> +		/* Use freezable polling to pause while the system is suspended. */
+> +		mod_delayed_work(system_freezable_wq, &priv->poll_work,
+> +				 msecs_to_jiffies(MC33978_FAULT_POLL_INTERVAL_MS));
 > +
-> +	ret =3D gpiochip_add_pin_range(&mpc->chip, dev_name(dev), 0, 0,
-> +				     MC33978_NGPIO);
-
-Could this create a race condition where the GPIO chip is exposed to
-consumers before its pin ranges are established?
-
-If a consumer requests a GPIO in the narrow window after
-devm_gpiochip_add_data() completes but before gpiochip_add_pin_range()
-is called, gpiolib's pinctrl_gpio_request() might not find the pinctrl
-mapping and could bypass the pinctrl back-end synchronization.
-
-Additionally, if gpiochip_add_pin_range() fails, returning an error here
-would unregister the already-exposed gpiochip, potentially leaving
-consumers with dangling handles.
-
-Would it be better to implement the .add_pin_ranges callback in
-struct gpio_chip so that gpiolib can safely and atomically establish the
-pin ranges under its own internal locks during registration?
-
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "failed to add pin range\n");
-> +
-> +	platform_set_drvdata(pdev, mpc);
-> +
-> +	return 0;
+> +	return ret;
 > +}
+[ ... ]
+> +static void mc33978_hwmon_action_cancel_work(void *data)
+> +{
+> +	struct mc33978_hwmon_priv *priv =3D data;
+> +
+> +	cancel_delayed_work_sync(&priv->poll_work);
+> +}
+
+During device removal, devres calls mc33978_hwmon_action_cancel_work(), whi=
+ch
+uses cancel_delayed_work_sync(). If the work is concurrently executing,
+cancel_delayed_work_sync() will wait for the worker to finish.
+
+Inside the running worker, mc33978_hwmon_update_faults() attempts a
+regmap_read(). Since the device is being removed, this read is likely to fa=
+il
+or return persistent physical faults, setting rearm to true. The worker then
+calls mod_delayed_work() and queues the underlying timer to fire again.
+
+When cancel_delayed_work_sync() observes the completion of the execution, it
+returns without canceling the newly re-armed timer. The teardown sequence t=
+hen
+continues, freeing the devm-allocated priv structure.
+
+When the timer expires, could this cause a use-after-free when the kernel t=
+imer
+subsystem dereferences the freed priv->poll_work.timer memory? Should there=
+ be
+a state flag to prevent re-arming the work during teardown?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260518100054.3552=
-143-1-o.rempel@pengutronix.de?part=3D4
+143-1-o.rempel@pengutronix.de?part=3D5
