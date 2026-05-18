@@ -1,66 +1,67 @@
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F6F39BFE7
-	for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 22:08:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FEA039B4BB
+	for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 22:14:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779142087; cv=none; b=EdP1qtIbGYb8yPgYZg+jQqvbaIxm6tA0pRS4nd74R+CBoU1ClcxRtTfnWZDZDVyvGPuQF8oaQ8rXmf+cChtY4WtcIQQOZ3A/4GMMAOG1izx/NvYA2V1w3uvfa/fClFHJD1LxFVxTDtJlEXiRbFa9wmsmxNVv6dY/92TR/T9KlIg=
+	t=1779142482; cv=none; b=lh8x7DPbrxbmgFh/BVc+A3TJM5UzabF62/yz77DNF9AYRok9SqKtDdxEalkESEX6z8/TkQuY9MIhdpzbii9wpL5wtG1ukx2Qu5keEcsw+XoATaAGns0/LuKbILLtm2xmxLg4FZoYXIIwRB/G0SNXx1YrBp9/ACfZtQarmOg5B4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779142087; c=relaxed/simple;
-	bh=ZeHrTM95+S1Ac1kBGowZn208fl0ne8C3fh5bhdKFRT0=;
+	s=arc-20240116; t=1779142482; c=relaxed/simple;
+	bh=FDGfy9RkHrUA1hhX6Q8EIAnaYFrZXOOI9g9WriqUMNE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MoY7/kJUG+8Bv0q4/JKUeLZCg3iBgVsgOVrc2LffBhS/xOO0lrBoYrhLWO4duFsNghOBDmfQYX/JQ0ySg45rguNJY3kNyEA/gqnRM2Xlhcd0G2io21eIc/Camp2je2vv4FpmmN0+4H19UZf00stAeazjMqRWqtxmk0IibHWFZNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mfwVRnxd; arc=none smtp.client-ip=74.125.82.170
+	 In-Reply-To:Content-Type; b=GRmUJbLU4c2+IFTv/ZPv94ThwS8/HzeoqLYo4pWtUAfn5FbFKGjXFni3OtVXwO8zka0hTb+nCynMzSxUQJWB8Aby6oNHDjkOuJLgC8OYw823u4RrES0b9rGWj8uld8F2VY1IcbczmlfEAPc3oRKWu1yrxeOzis4cBRwKzmCKUSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X7Ew8A45; arc=none smtp.client-ip=74.125.82.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mfwVRnxd"
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-2f30a4601bbso2546359eec.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 15:08:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X7Ew8A45"
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-134ac81c445so10418430c88.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 15:14:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779142085; x=1779746885; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779142476; x=1779747276; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=4h7adFpT3DzT6y9igk6xVmIBKDtCJtpJ+ZzZ67vZi7A=;
-        b=mfwVRnxd5nfIAlLNtjmxWz27II4bazTCZPMM0hj9bYIs2DVQ4Ew9VCu/vZqKJwwCL9
-         85F51FTGz7j+zNGbJ+CX6lmy79F5k3StTZ5XS5rj86dzNem3Gh0Vy0KxnQjNh+E6q0pz
-         0ZUBAhIh7hOvpzzI40la6tt39l0ISp1+3XUKzc4bgU+tykk8kJL4fqRpityIWiCj/XX1
-         GieHhXOWLSqi+Moq7bLTBfAaIf1+S4GLKmlzOwZejJPtEFNFYQag8uXFSCGT/3P5tDxG
-         jFX5G+73x9J8VRHAQuX3VGTa/BUBipJIsr95Q7ZySUJt/IUvm+feYIFDrHq4IJbDJpyW
-         AV1A==
+        bh=12UM/UGG3HVTOjCKVDDcmh8GYgIR5ex4BLaqtn6bAK0=;
+        b=X7Ew8A457782cnNdLbJu8EEXwU07eMfokxM2CE65L/MGVZdNC0j+t4WF42tkqPBnep
+         CV7i2z7SAIPfH0VjnO72UIjEQdGf2ilHDKmmAX75NTZiPGPqcxAxLaJ7krqf2xHeJF6c
+         fSeX6KxaZ5IQs58Am5rwTHI7oQb11wIjBpwbK7V2MpLkYQAWLTgsrSD/GAlTpUTdGxE8
+         i2VZgOGGhI6k0tLF9yseiYyZClvjU1NezaFOA+MO0ldD5w6DGlYMAPaGdLISxMk0FbE3
+         X3zIW2sUYobHcK41KY9ZyOh8de/S9b0Waa0XiJW7GdglS9n7oGy6WuaOyDc2xvV5xRHT
+         vcFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779142085; x=1779746885;
+        d=1e100.net; s=20251104; t=1779142476; x=1779747276;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4h7adFpT3DzT6y9igk6xVmIBKDtCJtpJ+ZzZ67vZi7A=;
-        b=iZONzeFpMDPS0BovLyrKT63tAj6DGTEf2gWHtkSJvaaE0uz+hq+0iCgi3FTFHj4InZ
-         YMHoQT4racBjtaIenJ4SkacsJrz20yYlk50M2maLIlFXBveqTyyMhfti3elDo3D+LNsA
-         CHqnSHY4qlc3MVe/FJlgdy0lABwzPcNxtEZmJYKmNZv3Kk1Qitdm/jvybnHk/LIndoMN
-         rlBrakzTTTPsNBQ/GAmMkvaig3bRR0I4OM5wJPc21pT2/XRfLL/o5jiG/2Gsjg4Vypzs
-         pvGGiYPYCmrFFyaHMqRb2f56FxQZST1fNgGyqo4OAFXbbmaLgFb/Nv+xd8AG6S2To3HY
-         nZww==
-X-Gm-Message-State: AOJu0YxkigWnk5KVuJwhD/nEL+l/RgbtVOJ9qgbxxmNzJuxNrQiOEJIx
-	/u/Kt9ZCwXx5VNVah2vG0UTLANwHjvIh0ZOPMDDlLJQyqZoXAFSXqd7X
-X-Gm-Gg: Acq92OGgFGZoLBdO2ej1QwPiOiU8E17AN+hrjzElw7wN+hWduBIOghPsfkyV6bsVQ6R
-	4VaDl+LBiE4emqg4s19yqAaFa8UkAtUMLfE7VbCu+r1a3ai3UgKfT1/5zGb9+WldovvRSamrW5e
-	J61dZljfgWvPZ16YlLhVB3oivyWlt8FMHkFAugOhD2mv0hg7Gjd9h0km63cakmXW7x5J6ppwJNq
-	g0g0wYO7g8KbrIKuDAyswgozu668pfROquRDBHU5NbjNwN8dUQhzl/MeNv+0TgUqy/h45sF817w
-	gTrRCaLlbXqkIirxwtV6hzq19qhKjeGCHmF0mVNAA/rnpx70o2i8nKYtAnN7h2TtpuFewIwVrT7
-	IApFhEuQ+LdS2I6+uRQQ1VWDcfqcNzrcsxGRrB3Lyj75PSYjBbyg3eA46iF8ev27FRJr3WSO+FE
-	1gPBO4nTAERNiNgRWFRMnXaBRwEVIcJ089tlbACTP0D2xi2YfqWG1Djjv4xUF540rn7OZdi7/K
-X-Received: by 2002:a05:7300:5726:b0:2d9:bc8d:f62a with SMTP id 5a478bee46e88-3039868cd4fmr7172595eec.16.1779142085307;
-        Mon, 18 May 2026 15:08:05 -0700 (PDT)
+        bh=12UM/UGG3HVTOjCKVDDcmh8GYgIR5ex4BLaqtn6bAK0=;
+        b=Nc+IkOky2wLjXLMyRIIZlJCOe8vPebQemTeaD3YFWcAE5PkKTE/xTJPmxrf1CaBAkU
+         038HoEbfuN46tOTnwYbLUSLpLoRs8NzJF8fJRITW1paaAcIMfIR/N1/nfTATbtbDqIw8
+         6u3ucdwIoiMIfontyso+rysIiUQAS6Qlu9KCnvjVEQFva/1ZuYgEG3Bi8SAFWpJBblth
+         3K3SsUOoOiKnVWLP8zLFY1JalN3zfG1/O3McT4RclKZksdxIv+JyA1Z3mlXlO156+nGT
+         s8iT5HqFJzBvDWUjFfqYUD4ZzdNJ0Nw4fc8+zF4/pWwo/zqYlrpgO/v79Qes7bQWLqWO
+         BSlA==
+X-Forwarded-Encrypted: i=1; AFNElJ+fkPJtaDxa0W2s0f77+0fP4PRJrBiIdlSgI0Ehnd+USdeUVFTmuHeEh6fAQEB/ai3+Rp7M58Be9RhejA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4OUhBvjez56KE/CBJny+ssYrDQ5lVj2yl1w85m6vpahsahxLi
+	affel1mz8t4rkKHrC5OtCQ0HFZz8iTaGIfx1cHCUVhR0POvGSCfzHK+U
+X-Gm-Gg: Acq92OES4pEwLIcxn2HR3QckXvOCT5yU6so9Y5hWvp5IMcBTtpc3BJgfR0lP3BwLnMh
+	YvxNlQvjXbvwYeSreZ1VEFAFQrbkRI9bqa5IbUp/7VU0NDqMnv4C/oi67tLdGF++/KcYQZahb3w
+	F2p3W5YmNI2DoxnsVAlMMiLuaEpYzaWnV18F4mSzcb2dJyvmW9ULESkfKv/lV21iM9EnMXXUlS7
+	llrxT0HOyvz7m4K+wNEYiwBOKqtAEetFK8A4baUsILHKdsCvZI75ILeNkqCIInzBrnu5WTlK1xC
+	44sMfoDMDyXUZ9xlKHclgpkg3G61C2XpB/zPYplkccKP2302SD1oBe6PprUNV6sHrYv0jAYtnRE
+	8Vsf8PYvG9ao9j4AlFp4/dZQ7XxebxRylDW9v/Tsna0vhQx1fta4Muuu+vE44opPEPMX7MOLm0K
+	8UfuO8uawQBjreNCcuVplmEjRJrD3fTBtT2jkyvLLQPYax7z0LysMBBBAJXpgIPBG8eH7Ip93J
+X-Received: by 2002:a05:7022:eaca:b0:128:d4be:7428 with SMTP id a92af1059eb24-1350483f0efmr8602447c88.19.1779142475840;
+        Mon, 18 May 2026 15:14:35 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30293e2e6a9sm14601361eec.2.2026.05.18.15.08.04
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cc33a67csm20513080c88.13.2026.05.18.15.14.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 May 2026 15:08:04 -0700 (PDT)
+        Mon, 18 May 2026 15:14:35 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6ec6270c-595e-49b2-8465-31b5019de87c@roeck-us.net>
-Date: Mon, 18 May 2026 15:08:03 -0700
+Message-ID: <006d3f24-b1cd-4fad-b8b6-96ddd904c283@roeck-us.net>
+Date: Mon, 18 May 2026 15:14:34 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,13 +69,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/5] hwmon: (pmbus/adm1266) GPIO accessor fixes
-To: Abdurrahman Hussain <abdurrahman@nexthop.ai>,
- Alexandru Tachici <alexandru.tachici@analog.com>,
- Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org, linux-gpio@vger.kernel.org
-References: <20260516-adm1266-gpio-fixes-v2-0-801f13debcb2@nexthop.ai>
+Subject: Re: [PATCH] Documentation: hwmon: ad7314: document sysfs interface
+To: Chen-Shi-Hong <eric039eric@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260518182744.1302-1-eric039eric@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -120,54 +120,39 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260516-adm1266-gpio-fixes-v2-0-801f13debcb2@nexthop.ai>
+In-Reply-To: <20260518182744.1302-1-eric039eric@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi,
+On 5/18/26 11:27, Chen-Shi-Hong wrote:
+> Document the temp1_input sysfs attribute supported by the ad7314
+> driver.
+> 
+> Signed-off-by: Chen-Shi-Hong <eric039eric@gmail.com>
+> ---
+>   Documentation/hwmon/ad7314.rst | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/hwmon/ad7314.rst b/Documentation/hwmon/ad7314.rst
+> index bf389736bcd1..b454e617d48c 100644
+> --- a/Documentation/hwmon/ad7314.rst
+> +++ b/Documentation/hwmon/ad7314.rst
+> @@ -28,6 +28,12 @@ Driver supports the above parts.  The ad7314 has a 10 bit
+>   sensor with 1lsb = 0.25 degrees centigrade. The adt7301 and
+>   adt7302 have 14 bit sensors with 1lsb = 0.03125 degrees centigrade.
+>   
+> +sysfs-Interface
+> +---------------
+> +
+> +temp1_input
+> +        temperature input
+> +
+>   Notes
+>   -----
+>   
 
-On 5/16/26 16:18, Abdurrahman Hussain wrote:
-> Five pre-existing bugs in the adm1266 GPIO path that all landed when
-> GPIO support was first added (commit d98dfad35c38).  Each is
-> reachable any time userspace queries an ADM1266 GPIO/PDIO line via
-> the gpiolib char-dev or sysfs interfaces, or reads
-> debugfs/gpio-<chip>.
-> 
-> Patch 1 caps the PDIO scan loop in adm1266_gpio_get_multiple() at
-> ADM1266_PDIO_NR (16) instead of ADM1266_PDIO_STATUS (0xE9 = 233, a
-> PMBus command code that ended up in the bound by mistake).  As
-> written, the scan walks find_next_bit() up to bit 242 across a
-> 25-bit caller mask, reading out of bounds and -- if any of that
-> incidental memory contains a set bit -- driving a corresponding
-> out-of-bounds write to the caller's bits array.
-> 
-> Patch 2 drops a redundant "*bits = 0" reset that sits between the
-> GPIO and PDIO halves of adm1266_gpio_get_multiple().  As written,
-> the GPIO bits the first loop populates are immediately discarded
-> before the PDIO loop runs, so any caller asking for a mix of GPIO
-> and PDIO lines sees the GPIO half always reported as 0.
-> 
-> Patch 3 adds the missing "ret < 2" length check after the three
-> i2c_smbus_read_block_data() calls in adm1266_gpio_get() and
-> adm1266_gpio_get_multiple().  A device returning a 0- or 1-byte
-> response would otherwise compose pin status from uninitialised
-> stack memory and leak it to userspace via gpiolib.
-> 
-> Patch 4 moves adm1266_config_gpio() past pmbus_do_probe() in
-> adm1266_probe() so the gpio_chip isn't registered (and reachable
-> from userspace) until the PMBus state the GPIO accessors depend
-> on is initialised.  This is a prerequisite for patch 5.
-> 
-> Patch 5 takes pmbus_lock at the top of adm1266_gpio_get(),
-> adm1266_gpio_get_multiple(), and adm1266_gpio_dbg_show() so the
-> GPIO PMBus reads can't land between a PAGE write and the paged
-> read pmbus_core does in another thread.
-> 
-> Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
-
-Sashiko reported a number of additional problems. As far as I can
-see those are real. Would you mind fixing those issues as well
-as part of this series ?
+Please stop doing that. It adds little if any value and takes time away
+from reviewing and handing real patches.
 
 Thanks,
 Guenter
