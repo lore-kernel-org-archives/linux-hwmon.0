@@ -1,135 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7C873FE34D;
-	Mon, 18 May 2026 12:15:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CE6D403159
+	for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 12:22:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779106503; cv=none; b=jwk3qEuqOKV5wZfWs3Ur9JExBd3dxOqYBvyRE1N3FvxwveRyMEsQit/NqMc3t4Y53T+XQz/4uDS2Pc1r8UWJQ2qVUxDsT5o4y1R4LwBSvXXg8wve7xYsU3CwJKefmcKd2W5+MV6eoDIPrlrOZYD1L3rD8vu4XWz5u0dSj9blQZc=
+	t=1779106941; cv=none; b=Ja0jNqWCjYWewKnDllEyWnTmu1JL/oQNJqXOc5GYJpr5qkqSVDbD2AfpxcVHsJnTYO6qFLcsjlYh+k3rTAaFn3HSqHztdZEvRWNerbMtP4bOZ7nRUt8ut/uUxRW5xu8rfyqwKcU49sGj0uH6FcHistQ1LJHPglB3B2QmJZPT+Ak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779106503; c=relaxed/simple;
-	bh=X3GigOM2u4KI51FwnzMMnvpD7nABhS3JcQX5+WHADl8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fJ87bBYD3vJ/JZSn0G0TuD61qaahKyJmm3EvnFGsYuvED7LMM/xsaN0/IvwTgZcNu62RNWKgd1enc+C+CBUaD19g6vOWci+dFtfuu6HIa46ft2xeXiHTBzpgI1RZO1/abModx6TT7VLTba1N3bcGfr20DGKM1UTdkdaHkcmxJog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VbgSEgM6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779106941; c=relaxed/simple;
+	bh=Kf6TvpA6nPP5hKSYBBQLiXNExX+0T2ySTWa6Sd1vvgI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EAOnB+hI02TPLONTY5l6r0kMkUVqmjkYnzLNYYpAJS8QBOCSxlmIqma43O9WctP9YWLG6GfxtQ21P2Vndev9jm7clqgxXbBYTQ/7ohRDRpfLWpfm7vvqrJnpvne2wVhoTl4jDqEmNLhDTmT+Tpjt1YrmZsnxmDn9u30inhpPVNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LKU3OcTJ; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VbgSEgM6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A558C2BCC7;
-	Mon, 18 May 2026 12:15:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779106503;
-	bh=X3GigOM2u4KI51FwnzMMnvpD7nABhS3JcQX5+WHADl8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=VbgSEgM6SBT3UNvGn/kjE3YkFPFJh2/lET1sRBNQ07ah1EsnToU1YDDwbmdTm36DA
-	 4/2jHm7SftznDfJXS2WHZ636UlJW3SMPUnYgOTIeE1/pJjrPH6yPlhIurntOlz3Q2g
-	 chQMdHacyQGk0s0q/+7KrACfsoT8m+PlKQ5KsUOOgw8x2HIG4QPjo9ul3baifcN5B8
-	 5B+XQirYAie642sCfJ5UcwAaRzuRZDX4GxNRvLTL7Z9QyJBnMlkzh23kab8OlwGkW2
-	 krZzi4duZxLqxxpXpTNCZQ/HIasXBYr4yWXwJkI7dNzDQz7TahenwSKcEv8IwEgjBC
-	 7+biN4/O3cX9g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v13 5/6] hwmon: add NXP MC33978/MC34978 driver
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Oleksij Rempel" <o.rempel@pengutronix.de>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, robh@kernel.org, conor+dt@kernel.org
-In-Reply-To: <20260518100054.3552143-6-o.rempel@pengutronix.de>
-References: <20260518100054.3552143-6-o.rempel@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 18 May 2026 12:15:02 +0000
-Message-Id: <20260518121503.4A558C2BCC7@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LKU3OcTJ"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-4585a116a4aso1771981f8f.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 05:22:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779106934; x=1779711734; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=u+rVKnguaP3FlTIvom/NT5GF4l5qCS1YRqi9HCBkSNU=;
+        b=LKU3OcTJ1jVJs6praTbxqd95k/x0dgOEVuSbCTrBq67jZEYuPKpMDDR102KEASy2/O
+         hYIbEXnWcC6KrwofOGalNGKIuKN5jKK5e51VRE34eSfPjJ7VWFw7GNpO0OuFo6juMPpf
+         EBT2kbCI8EQOD8GXF3qwA64SzRjFd/xB5F6UAbLQ3snpVpTUzcNmqnteIvmSuuM+QIaE
+         +ga5SJ3OlX7c74UGdaYg/wY4GMUYfj9M8nbFhLDcKGfaTjdFUvep/pgATu4dSq8nJ4Ju
+         +w2aa38D3XRfdkpkWAfLeJfyZ7QgsXSilS0T0xhNI5dryc8S5CMLnykn/GkHzBUiDt7g
+         SZbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779106934; x=1779711734;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u+rVKnguaP3FlTIvom/NT5GF4l5qCS1YRqi9HCBkSNU=;
+        b=ItStLNoROJG3KgsoGZ+Ktc3Fi0xfhDF64aCESgaNnWZXfwvDKx8lk63PCP8Okn47Hk
+         g9MKjhovTscS/f0Qe6k7wKUWlFE7AxAPD0oNrQXZkQnI5wOdmzcPz4p4i/P8WL9GAjQm
+         9w0CctrYs30F/LRmn6iBbhXyd+Egh6WTFne5BnZ9UvjJFg0wi0N496LoT+ZanfrRn3Vb
+         LywhlJdLMkBBdiHbjTUmzZo8ss5qzV2pui85GHz5sTUqBLUQj81J4EfHlb3MQpBqyYbL
+         jwRwwoT3dhnAnaZFXINyxPiSW1jso/+lspRnJQ1Dt+gbVIaH34FUGeuNuZr+fBgsLXMK
+         yW1w==
+X-Forwarded-Encrypted: i=1; AFNElJ9GoRslo/GejCJRvmQfQkIFiBBwIB2Lk5Ocwhf34O35CF21rCXcD0xCAlkL5g9SSfgCMhQm5ZmWQT9HhA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YygPhaltm1pdSyKijgGslrfAR/EhOR7cUFP5fnJCG1rN8ZIMdbu
+	5+IDmJ6BPn86tcl/pxZsWQxnZ076xt3Yu6s6AQKWw+ACPnO9na3H9nHn
+X-Gm-Gg: Acq92OFGdGuxOhcwojzvYfZl77zhTO8bbvg9SKt4yQ2MalnyWYw41petcXqz2yQ25JP
+	gXEukeF9AMZa0z9D2anL5tAnZsFjuiz2KeaG+sndENKZa9CI+L4iFMb5CNy1LqeHNA7VZehruV6
+	GBBZ1t75HTVKLWV394L1reRHVJT1/aWZoQH/xzXJ9DT0InUECtjHaqJD7JYxyeF06NTwNDQHZ6I
+	jAs63bFSf1umi6Wp1U0MBB5iRuv+U3511dtmYOvOd/QmDvRWxj1jit++D/EdGkIlQP0DQ2Sl/+/
+	6YtxG5kRGiGK0D9px/9nvQGHWgFzxAF93mrYBugki3zEVADatlllHlRlCI+3IChDy5/0YaKUIbM
+	DEBV4vD7IP8ifOy5X+PiZ8nRh1rrOnyCV7S83lonrtUnr+GhGG1tj8V6ie6aszZgduUzW9bbO2E
+	dZ8Oursb0lAr7jc+4xDBvdBZ6KjUjoma8ecrNXDbgEUhhapFuwxfGzbMzfJXxyY9/Lhjg+5MkTO
+	NyskBdg2Gs=
+X-Received: by 2002:a05:6000:25c4:b0:44e:d7f8:3945 with SMTP id ffacd0b85a97d-45e5c589300mr25834852f8f.13.1779106934186;
+        Mon, 18 May 2026 05:22:14 -0700 (PDT)
+Received: from flaviu-Aspire-E5-572G.. ([5.15.232.50])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da15a6454sm37311881f8f.34.2026.05.18.05.22.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 May 2026 05:22:13 -0700 (PDT)
+From: Flaviu Nistor <flaviu.nistor@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Flaviu Nistor <flaviu.nistor@gmail.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (tmp102) Drop unnecessary __maybe_unused
+Date: Mon, 18 May 2026 15:22:10 +0300
+Message-ID: <20260518122210.10288-1-flaviu.nistor@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Background polling worker unconditionally re-arms itself during te=
-ardown, leading to a Use-After-Free.
---
+tmp102_of_match is used unconditionally in tmp102_driver, so there is no
+need for __maybe_unused.
 
-commit 120174fd926c55b417dcd675badea0f431859a73
-Author: Oleksij Rempel <o.rempel@pengutronix.de>
+Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
+---
+ drivers/hwmon/tmp102.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-hwmon: add NXP MC33978/MC34978 driver
+diff --git a/drivers/hwmon/tmp102.c b/drivers/hwmon/tmp102.c
+index 29e44c8db540..6bd1bed3cdb8 100644
+--- a/drivers/hwmon/tmp102.c
++++ b/drivers/hwmon/tmp102.c
+@@ -401,7 +401,7 @@ static const struct i2c_device_id tmp102_id[] = {
+ };
+ MODULE_DEVICE_TABLE(i2c, tmp102_id);
+ 
+-static const struct of_device_id __maybe_unused tmp102_of_match[] = {
++static const struct of_device_id tmp102_of_match[] = {
+ 	{ .compatible = "ti,tmp102" },
+ 	{ },
+ };
+-- 
+2.34.1
 
-This commit adds hardware monitoring support for the NXP MC33978/MC34978
-Multiple Switch Detection Interface (MSDI). It implements an edge-triggered
-interrupt handler paired with a polling delayed workqueue to manage persist=
-ent
-hardware faults.
-
-> diff --git a/drivers/hwmon/mc33978-hwmon.c b/drivers/hwmon/mc33978-hwmon.c
-> new file mode 100644
-> index 0000000000000..bd4dd25b3b20a
-> --- /dev/null
-> +++ b/drivers/hwmon/mc33978-hwmon.c
-[ ... ]
-> +static int mc33978_hwmon_update_faults(struct mc33978_hwmon_priv *priv)
-> +{
-[ ... ]
-> +	ret =3D mc33978_hwmon_read_fault(priv, &faults);
-> +	if (ret) {
-> +		hwmon_unlock(priv->hwmon_dev);
-> +		dev_err_ratelimited(priv->dev,
-> +				    "failed to read fault register: %pe\n",
-> +				    ERR_PTR(ret));
-> +		/*
-> +		 * Always retry on read failure. If we drop the heartbeat during
-> +		 * the initial fault before caching it, the edge-triggered IRQ
-> +		 * will never fire again and permanently stall fault monitoring.
-> +		 */
-> +		rearm =3D true;
-> +		goto out_poll;
-> +	}
-[ ... ]
-> +	rearm =3D !!alarm_faults;
-> +
-> +out_poll:
-> +	/*
-> +	 * If any alarms are currently active, the global FAULT_STAT bit remains
-> +	 * asserted. The hardware will not generate a new rising edge interrupt
-> +	 * if a secondary fault occurs, nor will it interrupt when faults clear.
-> +	 * Schedule a poll to detect both clearing edges and secondary alarms.
-> +	 */
-> +	if (rearm)
-> +		/* Use freezable polling to pause while the system is suspended. */
-> +		mod_delayed_work(system_freezable_wq, &priv->poll_work,
-> +				 msecs_to_jiffies(MC33978_FAULT_POLL_INTERVAL_MS));
-> +
-> +	return ret;
-> +}
-[ ... ]
-> +static void mc33978_hwmon_action_cancel_work(void *data)
-> +{
-> +	struct mc33978_hwmon_priv *priv =3D data;
-> +
-> +	cancel_delayed_work_sync(&priv->poll_work);
-> +}
-
-During device removal, devres calls mc33978_hwmon_action_cancel_work(), whi=
-ch
-uses cancel_delayed_work_sync(). If the work is concurrently executing,
-cancel_delayed_work_sync() will wait for the worker to finish.
-
-Inside the running worker, mc33978_hwmon_update_faults() attempts a
-regmap_read(). Since the device is being removed, this read is likely to fa=
-il
-or return persistent physical faults, setting rearm to true. The worker then
-calls mod_delayed_work() and queues the underlying timer to fire again.
-
-When cancel_delayed_work_sync() observes the completion of the execution, it
-returns without canceling the newly re-armed timer. The teardown sequence t=
-hen
-continues, freeing the devm-allocated priv structure.
-
-When the timer expires, could this cause a use-after-free when the kernel t=
-imer
-subsystem dereferences the freed priv->poll_work.timer memory? Should there=
- be
-a state flag to prevent re-arming the work during teardown?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260518100054.3552=
-143-1-o.rempel@pengutronix.de?part=3D5
