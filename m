@@ -1,197 +1,215 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C220634250D;
-	Mon, 18 May 2026 10:41:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A6A346E7A
+	for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 10:55:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779100867; cv=none; b=nOMF59KalHSkRHH8WYTkicdabRx1A37lmiRa7QVOgxLxdKyS3+a47YTdFgxNZA9ynLrZZvgukzyTrQF8QOr6wJ/adCs8JF1Lwls8eMhBaxq/ZGNpBMAYlKCZJDQ/sWr+UHl3KYBlYpMnMuUY9VsdJswIXUJFYTPpJimjf2DTX9I=
+	t=1779101759; cv=none; b=EIUqtoeNiCZ3aILOmGOzjcSSO0kJq8GV/KiROko5Q5b0QqP4FIkNBIz7H4GN4N9Eecc1f1lUPEnLc4I+yzmV5ts1ItzqsiZEfgeIOdhRNd6sAV3kBS+riFOd05Xo5Uvg3L8wrZIyM2yCr9f4H9KSdYz3Sy51cPWW6sm4EpBiPV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779100867; c=relaxed/simple;
-	bh=jaReAO60D3BjnUZS6hadjRcjHJfx/UAoiI//OuOiMOg=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Z8rkg1fJZA0HriOruZ13HonbNzxalwq4u6OZaldwKCvawrFQihHOgGnKd8wBGvCHjOBzBdghigHrdU0zF3eNYctvLcwlrveCbrIoSz5FERFinarXIhMYOlzNsCIcov8T6N87woD6UWHIKFWyDVqv2kS2XOwAEB9uIGY0SyUllCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nbKyIAZC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779101759; c=relaxed/simple;
+	bh=hHrnrova4QOYv2M6dIOzxmlKptiDDDOXgFRyBRFswWM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Fks1MIRWv/3IpH1IrcprUNU3WovcZMNb4vsV4auDgL+YFBjmw106tPsIcNVdBBBQQ47FyzGT1qNqDqqDKsFg7/mhQAg6V5vetznDsZVJimtCabRz9hE/QkjxPFVZLAMCBtOQU+oF7oP6FERSskt6pplZUUsmqikWzmNDAyunUM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RJ+peLbN; arc=none smtp.client-ip=74.125.82.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nbKyIAZC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEE75C2BCB7;
-	Mon, 18 May 2026 10:40:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779100866;
-	bh=jaReAO60D3BjnUZS6hadjRcjHJfx/UAoiI//OuOiMOg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=nbKyIAZCXrtcmoeYGW4sFM8pIArTdLOfPFs1rqdymObCihdM4t5UTJHYDGSK9p6A/
-	 dDd17dX7LTy9dC6QYEMgCC6+WcEASJRUExVBKKPVAti8Zd1NA1fTILoXM3stKmr589
-	 KIfxGKMUPnILyTkP/Lbh+maTLQQqIRpfXi2b71Jo/NqGp+0lS3VPpl1rb9TBNTHzMb
-	 j/paIuB0XpUpMfMMyq0hdk7EFZ7kCzUWi4qRXhvyuLE0bc6r1MCzk6R1WXCUuQSinh
-	 IJE2E4K6MCa3QY7xdPszNEw7kPeIrP2bN9S826lGxd/O4SA8KQ6pyRpANkrZutdNBx
-	 Ex+9Lgobi5nXg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v13 2/6] mfd: add NXP MC33978/MC34978 core driver
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Oleksij Rempel" <o.rempel@pengutronix.de>
-Cc: conor+dt@kernel.org, robh@kernel.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <20260518100054.3552143-3-o.rempel@pengutronix.de>
-References: <20260518100054.3552143-3-o.rempel@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 18 May 2026 10:40:59 +0000
-Message-Id: <20260518104059.CEE75C2BCB7@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RJ+peLbN"
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2f36da5c8fbso1745756eec.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 03:55:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779101755; x=1779706555; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fv8cUffeX0YGsV9duS8FS6XTQ7kK/O4/YLY9appo4lw=;
+        b=RJ+peLbNbir3jr4971jUhuRTqRK6nzP9YseDMYD9dztemweAnGsdaqrP17cDKashmp
+         o1dTpZGyShDmnba8711ZeX7QRJ7RR1YbBwI/4rH9jNM0H/Yhe/9v1oLuaF4K1coMPPdt
+         1MjfkQ5qeZePNsQa2LbCuv/xZyhu0exD3HEpLYNCN9X48lnCP3QmJWnKJ/LEC44GoB64
+         m0kaSz7Q0ijMCW+dB8E3/IpcAOR6VvdWIwaF6jRyHKNMdujZJ82MG7lkadZV7Tun20yh
+         st0DZnwAXi4TjCrUnFaLwYzUi7HlUMP0rzZpXTGo8O/OAwaYTivMu1vFmaisdF2wbMcF
+         2UzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779101755; x=1779706555;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Fv8cUffeX0YGsV9duS8FS6XTQ7kK/O4/YLY9appo4lw=;
+        b=QRcBbdTBIWx9uw6C6iaqX9DyuL8PwaasmMyKxeO1snauUFkVrgycuitlOPNM53ZqwC
+         nzn6PF9bLkNVnydo6oV5D9D+IPSP3Xfl5aSah9fJ8X53T1OALB3Iwm8DCBuoRMF8UWMA
+         pAn3MBOXEa2Mt7F4FGN9HhkO0085qFRdSh2BVJAemZNhrPc6UxuGU115jA8LAgbRj6pp
+         KZ2BqYJ21oLSuq7pYK/KtY0INaCT9YAnJbd5v44e1ocRnfnT3ejH5+J4olUrCB0U6j17
+         q8oveqN+L9cxnHIoZ64Ap/21zTg3h+eFI6O+ZifH9jLXOPZ580Z1dsXsD4SpqdjGbDF5
+         A8jQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+zeHcwKZh4ZDu4CTpdDspHssZ1VIZZQuz+dzTXUG7b93SCr/Nzi+50JXM0xmQzJJZeJsLPoAWP/xhToQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWc/0DoOUpw54XtGxzzvNvwepBOAEeQy9+nS039YD4e3Q/bf0v
+	BDEM9DnyyrceTK4GJAlQZqxzdOa0Hu9BFSkYv9lbqUD4ysZVxklGbhHj1tyT2Njc
+X-Gm-Gg: Acq92OEP/P+8b6cM3pWUkDruUW8xnJNf0OikOfOXV0SEm+83AvJSCJyC4y6dVzJ3NcZ
+	Nr8K5TXQDpK9OP9R4iGmaJ8DNTZTzl2MmjpWv3QXoUVMuDtmC0voEX1XOWZbCq41LlDga3q2R5a
+	3xKcqdifl1Y6qDroXLJTwyCZpF0kGc1slzZ4mRY0joRIIFu7xyrDqW2EIqm8McG5cG9nrfCJLJG
+	TcXH3T/5xsONI3IdD+DO+7flriTwaVrcm2L3OtkvShcBYXPuk+ZN3VEc7Jy6o9OYmJIv4ZHMu6v
+	2IgftilpQvC1seKndSyQilO+JlQmlxP+JvAL346p2Xelg/3kmzc+1y8cz5HZyMOjpzdHePsiw9+
+	SJKetL1UdiAboOwfvGjOegBUGetr6igKjk/bO3KhlpdihRB8BJkgPi8dRzSYnQLFC3db71QBbdC
+	TuygRXGXtEJNvCf00hFgn4Yp3NGiRMrHqDC9sIqph6D7xvNqQxa9zMinxz6NAXQz33fjPn7P40g
+	3fegGdU1Yo=
+X-Received: by 2002:a05:7300:dc8e:b0:2f2:5c68:5074 with SMTP id 5a478bee46e88-3039818af8fmr6391352eec.13.1779101754580;
+        Mon, 18 May 2026 03:55:54 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30294500a97sm15416905eec.9.2026.05.18.03.55.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 May 2026 03:55:54 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <f05e075d-a87e-49b5-95f8-5858d21acf64@roeck-us.net>
+Date: Mon, 18 May 2026 03:55:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 1/2] usb: xhci-pci: add AMD Promontory 21 PCI glue
+To: Michal Pecio <michal.pecio@gmail.com>, Jihong Min <hurryman2212@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mathias Nyman <mathias.nyman@intel.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-usb@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+ "Mario Limonciello (AMD)" <superm1@kernel.org>,
+ Yaroslav Isakov <yaroslav.isakov@gmail.com>
+References: <20260517130407.795157-1-hurryman2212@gmail.com>
+ <20260517130407.795157-2-hurryman2212@gmail.com>
+ <20260517232147.34931718.michal.pecio@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260517232147.34931718.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [High] Stale POR status flags are not cleared before enabling event proce=
-ssing, causing a spurious hardware fault interrupt.
-- [High] The pipelined SPI read message forcefully toggles chip select with=
-out guaranteeing a minimum CS inactive time.
-- [Low] The validation check for the IRQ domain size contains an off-by-one=
- error.
---
+On 5/17/26 14:21, Michal Pecio wrote:
+> On Sun, 17 May 2026 22:04:06 +0900, Jihong Min wrote:
+>> AMD Promontory 21 (PROM21) xHCI controllers use generic xHCI
+>> operation, but the PCI function also exposes optional
+>> controller-specific sensor functionality. Add a small PROM21 PCI glue
+>> driver for AMD 1022:43fc and 1022:43fd controllers.
+>>
+>> The driver delegates USB host operation to the common xhci-pci core,
+>> collects the parent-provided MMIO resource data, and creates a "hwmon"
+>> auxiliary device for optional child drivers. Failure to create the
+>> auxiliary device is logged but does not fail the xHCI probe, since the
+>> auxiliary device is only needed for sensor support.
+>>
+>> Make the PROM21 PCI glue a hidden Kconfig tristate that follows
+>> USB_XHCI_PCI. This keeps the glue built in with a built-in xhci-pci core
+>> and builds it as a module with a modular xhci-pci core. A built-in
+>> xhci-pci core must not hand PROM21 controllers to a PROM21 glue driver
+>> that is only available as a module, otherwise USB behind those controllers
+>> can be unavailable during initramfs and PROM21 temperature sensor support
+>> may not appear until the controller is rebound after the module loads.
+>>
+>> Assisted-by: Codex:gpt-5.5
+>> Signed-off-by: Jihong Min <hurryman2212@gmail.com>
+>> Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
+>> Tested-by: Yaroslav Isakov <yaroslav.isakov@gmail.com>
+>> ---
+>>   drivers/usb/host/Kconfig                      |   7 +
+>>   drivers/usb/host/Makefile                     |   1 +
+>>   drivers/usb/host/xhci-pci-prom21.c            | 136 ++++++++++++++++++
+>>   drivers/usb/host/xhci-pci.c                   |  11 ++
+>>   drivers/usb/host/xhci-pci.h                   |   3 +
+>>   include/linux/platform_data/usb-xhci-prom21.h |  22 +++
+>>   6 files changed, 180 insertions(+)
+>>   create mode 100644 drivers/usb/host/xhci-pci-prom21.c
+>>   create mode 100644 include/linux/platform_data/usb-xhci-prom21.h
+>>
+>> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+>> index 0a277a07cf70..89bf262235e1 100644
+>> --- a/drivers/usb/host/Kconfig
+>> +++ b/drivers/usb/host/Kconfig
+>> @@ -42,6 +42,13 @@ config USB_XHCI_PCI
+>>   	depends on USB_PCI
+>>   	default y
+>>   
+>> +config USB_XHCI_PCI_PROM21
+>> +	tristate
+>> +	depends on X86
+>> +	depends on USB_XHCI_PCI
+>> +	default USB_XHCI_PCI
+>> +	select AUXILIARY_BUS
+>> +
+> 
+> Instead of the X86 heuristic, would it be possible to build glue
+> code if and only if SENSORS_PROM21_XHCI is enabled?
+> 
+> This seems to work:
+> 
+>   config SENSORS_PROM21_XHCI
+>          tristate "AMD Promontory 21 xHCI temperature sensor"
+> -       depends on USB_XHCI_PCI_PROM21
+> +       depends on USB_XHCI_PCI
+> 
+>   config USB_XHCI_PCI_PROM21
+>          tristate
+> -       depends on X86
+>          depends on USB_XHCI_PCI
+> -       default USB_XHCI_PCI
+> +       default USB_XHCI_PCI if SENSORS_PROM21_XHCI != 'n'
+>          select AUXILIARY_BUS
+> 
+> I don't know if it's the best way, perhaps it would be preferable for
+> the hwmon driver to select the glue, but then I'm not sure how to force
+> glue to become 'y' when xhci-pci is 'y'.
+> 
 
-commit cbdb6fa84cbdc2a33e2c2e0cdc333ff4eef528f4
-Author: Oleksij Rempel <o.rempel@pengutronix.de>
+Unless I am missing something, that would disable the entire controller
+if the hwmon device is not enabled. That seems a bit draconian to me.
 
-mfd: add NXP MC33978/MC34978 core driver
+Guenter
 
-Add core Multi-Function Device (MFD) driver for the NXP MC33978 and
-MC34978 Multiple Switch Detection Interfaces (MSDI). This driver provides
-an IRQ domain, event processing, and interfaces for child devices.
-
-> diff --git a/drivers/mfd/mc33978.c b/drivers/mfd/mc33978.c
-> index 0000000000000..d46b76ca91473
-> --- /dev/null
-> +++ b/drivers/mfd/mc33978.c
-[ ... ]
-> +static int mc33978_mfd_probe(struct spi_device *spi)
-> +{
-[ ... ]
-> +	ret =3D mc33978_core_init(dev, spi, &ddata->domain);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/*
-> +	 * Validate IRQ domain size before passing to child devices.
-> +	 * hwirq_max is inclusive, we need MC33978_NUM_IRQS entries (0..22).
-> +	 */
-> +	if (ddata->domain->hwirq_max < MC33978_NUM_IRQS - 1)
-
-Is this bounds check correct?
-
-For a linear IRQ domain, domain->hwirq_max represents the exclusive upper
-bound (the size of the domain). Since the driver requires 23 hwirqs (0
-through 22, where 22 is MC33978_HWIRQ_FAULT), hwirq_max must be at least 23.
-
-Checking if hwirq_max < 22 allows a domain size of 22 to pass the validatio=
-n,
-which only supports hwirqs 0-21 and would fail when requesting hwirq 22.
-
-Should this be checked as < MC33978_NUM_IRQS instead?
-
-[ ... ]
-> diff --git a/drivers/platform/misc/mc33978-core.c b/drivers/platform/misc=
-/mc33978-core.c
-> index 0000000000000..b5b3388b270bd
-> --- /dev/null
-> +++ b/drivers/platform/misc/mc33978-core.c
-[ ... ]
-> +static void mc33978_prepare_messages(struct mc33978_core_data *cdata)
-> +{
-[ ... ]
-> +	/* --- Prepare Read Message (2 Frames) --- */
-> +	spi_message_init(&cdata->msg_read);
-> +
-> +	/* Frame 1: Request */
-> +	cdata->xfer_read[MC33978_FRAME_REQ].tx_buf =3D
-> +		cdata->tx_frame[MC33978_FRAME_REQ];
-> +	cdata->xfer_read[MC33978_FRAME_REQ].rx_buf =3D
-> +		cdata->rx_frame[MC33978_FRAME_REQ];
-> +	cdata->xfer_read[MC33978_FRAME_REQ].len =3D MC33978_FRAME_LEN;
-> +	/* Latch command */
-> +	cdata->xfer_read[MC33978_FRAME_REQ].cs_change =3D 1;
-
-Does this transfer need an explicit cs_inactive delay?
-
-Setting cs_change to 1 without populating the cs_inactive delay structure
-can cause the SPI core to toggle the Chip Select line too quickly on modern
-hardware-accelerated controllers. This might violate the MC33978's minimum =
-CS
-inactive time requirements for latching the command, causing a communication
-regression.
-
-[ ... ]
-> +int mc33978_core_init(struct device *dev, struct spi_device *spi,
-> +		      struct irq_domain **domain_out)
-> +{
-[ ... ]
-> +	/*
-> +	 * Prime the cached pin state under lock to prevent spurious events.
-> +	 * Work scheduling is disabled (irq_ready=3Dfalse) to prevent the work
-> +	 * feedback loop that would occur during init: regmap_read() harvests
-> +	 * status -> schedules work -> work does regmap_read() -> schedules more
-> +	 * work -> infinite loop on single-core systems where work monopolizes
-> +	 * CPU before init can complete.
-> +	 */
-> +	scoped_guard(mutex, &cdata->event_lock) {
-> +		ret =3D regmap_read(cdata->map, MC33978_REG_READ_IN,
-> +				  &cdata->cached_pin_state);
-> +	}
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "failed to read initial pin state\n");
-> +
-> +	if (spi->irq <=3D 0)
-> +		return dev_err_probe(dev, -EINVAL,
-> +				     "no valid IRQ provided for INT_B pin\n");
-> +
-> +	/*
-> +	 * Not using IRQF_SHARED: threaded handler with IRQF_ONESHOT may hold
-> +	 * line masked too long on slow SPI, making shared operation impractica=
-l.
-> +	 */
-> +	ret =3D devm_request_threaded_irq(dev, spi->irq,
-> +					NULL,
-> +					mc33978_irq_thread,
-> +					IRQF_ONESHOT,
-> +					dev_name(dev), cdata);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "failed to request IRQ\n");
-> +
-> +	/*
-> +	 * Enable work scheduling now that IRQ handler is registered.
-> +	 * This prevents the work feedback loop during initialization while
-> +	 * allowing proper event processing after setup completes.
-> +	 */
-> +	scoped_guard(spinlock_irqsave, &cdata->state_lock)
-> +		cdata->irq_ready =3D true;
-
-Could this cause a regression by triggering a spurious hardware fault
-interrupt?
-
-During initialization, regmap accesses (like reading MC33978_REG_READ_IN ab=
-ove)
-harvest the initial Power-On Reset status flags into cdata->harvested_flags.
-Since irq_ready is false, the event worker is correctly prevented from runn=
-ing.
-
-However, the stale harvested flags are not cleared before irq_ready is set =
-to
-true. When a child driver makes its first regmap read, mc33978_harvest_stat=
-us()
-will run, see irq_ready =3D=3D true with a non-zero harvested_flags, and sc=
-hedule
-the event_work.
-
-The worker will then process the stale FAULT_STAT bit, see that the live bus
-fault is false, and incorrectly treat it as a transient fault, dispatching a
-spurious interrupt to the child driver.=20
-
-Should atomic_set(&cdata->harvested_flags, 0) be called right before setting
-irq_ready to true?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260518100054.3552=
-143-1-o.rempel@pengutronix.de?part=3D2
