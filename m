@@ -1,149 +1,100 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA2F2DCF74
-	for <linux-hwmon@vger.kernel.org>; Tue, 19 May 2026 03:42:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 809FF28CF5D
+	for <linux-hwmon@vger.kernel.org>; Tue, 19 May 2026 04:18:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779162150; cv=none; b=fXpJYQ2LukJQaQFObR2742zpAJu3H9rrchnMfTGUZCzS+DE9jUFKM6IIhXsF75KYepLAo4XXwUx/Xbe8ZVDDz3Yo6O9UwzAynKHm3eFQJNd96KxfiDcHnNa468DIBnBa+DZ6peCGGfZQYmca6ByfgpTHT4cIl6I83B+1Ozsp5mo=
+	t=1779164310; cv=none; b=PjlVehZtp8wVlYhuJ0ktY75JFDnXNVC4X//Cnvw5EU2WOqiuPwR7sMiXc0LhABkkGsF96qmwALsZ1ZlvVthp13u8S4Wst5Ld1JqyA13u8YjRNmcg+29x1eOWUvRR91TjU3E6Ho7LkAK7jxRFsVp1pmkNSr/CRzwBWMvckozDXNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779162150; c=relaxed/simple;
-	bh=EqHkzndzSVD5hD8r+WcceCpq/j7Lx8aXtOc+uy1EJfY=;
+	s=arc-20240116; t=1779164310; c=relaxed/simple;
+	bh=EJe2LpL3uUhw1GnO8YZMiNpGhgSLfN5BNNTS/uqMPKA=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hopSimKfybPlz72F3osZ+FH9rMy/Tafx3X4foTHiMX4ILfQxuCGVeVvJP6kOv8wLfO8pCHGv1YjAKq5AeVSgZfWSYcGrbYcD6WoAWSAZnlKEP1VxCuogD1bxdwlIFsXPc51oyztTOIZPoKF/vHSTYCfpXZDq7KA5N2T7e3tXqCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GRfI31lI; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=rlt7tygY5r3+et7AE27Zmum376MENSKAbUSkAeEt5D/a5G7KeMh77+R46nX8GdoDU62J4YqAK8uVbKTcTywfSTtlbdkYqEg6L/tfI6uZFTsk7myliix/PZyxMdDeW2g7XJ4o+XhkY1Uldjf3YchNw5yGCe8iZpIWsVt0VsS+Uk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PTyEuefx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GRfI31lI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2F70C2BCB3;
-	Tue, 19 May 2026 03:42:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PTyEuefx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0338FC2BCB3;
+	Tue, 19 May 2026 04:18:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779162149;
-	bh=EqHkzndzSVD5hD8r+WcceCpq/j7Lx8aXtOc+uy1EJfY=;
+	s=k20201202; t=1779164310;
+	bh=EJe2LpL3uUhw1GnO8YZMiNpGhgSLfN5BNNTS/uqMPKA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=GRfI31lIIWDvY1fe50Fqt/87ib8/ziH0EhO2nm2HXvNqMIRJmB/zZ5blJ+Zrc8bsO
-	 EbOQ9m7zzINTvF/aHHViyGKTWAx7DpufiQmFsnBPyF7KwTINZoJf7kUJcMAtSjd87Z
-	 wyRz5Z6vuShUtRg/wPMF0DpxKYtNSN4DTClpt8Bc+EnPqV/LkVR1uNzt20JoLe4nZk
-	 Nu6fHiD0EeQYgB6PdVb7ctMQQrjXow7IDhw1bz47zabrAKGHS8uIeQZ6Dy1H4CVPgQ
-	 z9bqgIPStyntqSTYvO8QOFGUrpY6dWwMon8Si6Tnon1mbGezsjITGUh476ljbOaBQk
-	 NmOV2RRCQ0nBA==
+	b=PTyEuefxQA0LCf2y7XfiwUatlulIiJLl/Yrno2w8TysV+/jh0doNG4wHKy9LvfXur
+	 4HsLsCr4ZDSuad9UfsaDHqfes056mdskGBzBY3zb9RkMUzvZTlQOUTBbIRu1L0s9w3
+	 +rNL2eJsFIASWT2kqIlAwWpuXNa5c2uT0XJvqwyuwx+aCmqJrxv9Dmn20zqc1ytmsa
+	 U0HCwLUeRnN2RGbzeJb/lfcZv+C0nMVlbpWWTElBxt4TM0n1FPfg0etRq3HTPH6z3n
+	 EwUoHhPsziFy71TYkGNjI+90Rr4Hy4e0KI56xtmRByA5sMizbxLvjam/wLGY7tJvmi
+	 +ExuVdT/7kujw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 5/8] hwmon: (pmbus/adm1266) register the nvmem device
- after pmbus_do_probe()
+Subject: Re: [PATCH v3 6/8] hwmon: (pmbus/adm1266) serialize GPIO PMBus
+ accesses with pmbus_lock
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Abdurrahman Hussain" <abdurrahman@nexthop.ai>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260518-adm1266-gpio-fixes-v3-5-e425e4f88139@nexthop.ai>
-References: <20260518-adm1266-gpio-fixes-v3-5-e425e4f88139@nexthop.ai>
+In-Reply-To: <20260518-adm1266-gpio-fixes-v3-6-e425e4f88139@nexthop.ai>
+References: <20260518-adm1266-gpio-fixes-v3-6-e425e4f88139@nexthop.ai>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 19 May 2026 03:42:28 +0000
-Message-Id: <20260519034229.B2F70C2BCB3@smtp.kernel.org>
+Date: Tue, 19 May 2026 04:18:29 +0000
+Message-Id: <20260519041830.0338FC2BCB3@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] Unbounded loop in adm1266_nvmem_read_blackbox allows a heap buffer=
- overflow triggered by an untrusted I2C device response.
-- [High] Length validation in adm1266_nvmem_read_blackbox occurs after memc=
-py, leading to heap corruption.
-- [High] 1-byte static out-of-bounds read/write on the heap during every ad=
-m1266_pmbus_block_xfer I2C transaction.
-- [High] NVMEM reads at non-zero offsets skip device reads and return unini=
-tialized or stale data.
+- [Critical] Heap buffer overflow and infinite loop in adm1266_nvmem_read_b=
+lackbox() due to unvalidated device input
+- [Critical] Out-of-bounds read and write in adm1266_pmbus_block_xfer() due=
+ to undersized read_buf
 --
 
-commit 1d749e51ad745af23cd77d7854a264e1e6247407
+commit 72c9d4f76b145894590481f2c71edfe0ff2e57c9
 Author: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+hwmon: (pmbus/adm1266) serialize GPIO PMBus accesses with pmbus_lock
 
-hwmon: (pmbus/adm1266) register the nvmem device after pmbus_do_probe()
-
-adm1266_probe() calls adm1266_config_nvmem() before pmbus_do_probe() has
-initialised the per-client PMBus state. This moves adm1266_config_nvmem()
-down past pmbus_do_probe() so the nvmem device isn't reachable from userspa=
-ce
-until the PMBus state is fully initialised.
+This commit adds guard(pmbus_lock) to GPIO accessors in the adm1266 driver.
+This ensures the pmbus_lock is held during multi-transaction sequences,
+preventing other threads from corrupting the device state machine.
 
 > diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
-> index b91dcf067fa6d..8b9fbb99a4bda 100644
+> index 8b9fbb99a4bda..a80fb2ea73bdb 100644
 > --- a/drivers/hwmon/pmbus/adm1266.c
 > +++ b/drivers/hwmon/pmbus/adm1266.c
-> @@ -471,14 +471,14 @@ static int adm1266_probe(struct i2c_client *client)
->  	if (ret < 0)
->  		return ret;
+[ ... ]
+> @@ -235,6 +239,8 @@ static void adm1266_gpio_dbg_show(struct seq_file *s,=
+ struct gpio_chip *chip)
+>  	int ret;
+>  	int i;
 > =20
-> -	ret =3D adm1266_config_nvmem(data);
-> -	if (ret < 0)
-> -		return ret;
-> -
->  	ret =3D pmbus_do_probe(client, &data->info);
->  	if (ret)
->  		return ret;
-> =20
-> +	ret =3D adm1266_config_nvmem(data);
-> +	if (ret < 0)
-> +		return ret;
+> +	guard(pmbus_lock)(data->client);
 > +
->  	ret =3D adm1266_config_gpio(data);
->  	if (ret < 0)
->  		return ret;
+>  	for (i =3D 0; i < ADM1266_GPIO_NR; i++) {
+>  		write_cmd =3D adm1266_gpio_mapping[i][1];
+>  		ret =3D adm1266_pmbus_block_xfer(data, ADM1266_GPIO_CONFIG, 1, &write_=
+cmd, read_buf);
 
-While reviewing this patch, I noticed some pre-existing issues in the NVMEM
-handling and I2C transfers.
+This isn't a bug introduced by this patch, but could this call to
+adm1266_pmbus_block_xfer() trigger an out-of-bounds read and write due
+to an undersized read_buf?
 
-Could this loop in adm1266_nvmem_read_blackbox() cause a heap buffer overfl=
-ow?
+In struct adm1266_data, read_buf is sized at ADM1266_PMBUS_BLOCK_MAX + 1
+(256 bytes):
 
-drivers/hwmon/pmbus/adm1266.c:adm1266_nvmem_read_blackbox() {
-    ...
-	record_count =3D buf[3];
+struct adm1266_data {
+	...
+	u8 read_buf[ADM1266_PMBUS_BLOCK_MAX + 1] ____cacheline_aligned;
+};
 
-	for (index =3D 0; index < record_count; index++) {
-		ret =3D adm1266_pmbus_block_xfer(data, ADM1266_READ_BLACKBOX, 1, &index, =
-read_buff);
-		if (ret < 0)
-			return ret;
+However, adm1266_pmbus_block_xfer() constructs an I2C read message with a l=
+ength
+of ADM1266_PMBUS_BLOCK_MAX + 2 (257 bytes):
 
-		if (ret !=3D ADM1266_BLACKBOX_SIZE)
-			return -EIO;
-
-		read_buff +=3D ADM1266_BLACKBOX_SIZE;
-	}
-    ...
-}
-
-The function reads record_count directly from the device response, which ca=
-n be
-up to 255.
-
-It then loops record_count times, appending 64 bytes into data->dev_mem.
-
-Since data->dev_mem is allocated with a fixed size of 2048 bytes, could a
-record_count greater than 32 linearly write past the end of the buffer and
-corrupt kernel heap memory?
-
-Additionally, does the length validation happen too late?
-
-Inside the loop, adm1266_pmbus_block_xfer() copies up to 255 bytes into the
-current position of read_buff.
-
-The length check (ret !=3D ADM1266_BLACKBOX_SIZE) is performed after the co=
-py.
-
-If read_buff is near the end of the 2048-byte buffer, could copying up to 2=
-55
-bytes silently overflow the heap before the error is caught?
-
-There also appears to be a 1-byte out-of-bounds access in
-adm1266_pmbus_block_xfer():
-
-drivers/hwmon/pmbus/adm1266.c:adm1266_pmbus_block_xfer() {
-    ...
 	struct i2c_msg msgs[2] =3D {
-        ...
+		...
 		{
 			.addr =3D client->addr,
 			.flags =3D I2C_M_RD | I2C_M_DMA_SAFE,
@@ -151,48 +102,57 @@ drivers/hwmon/pmbus/adm1266.c:adm1266_pmbus_block_xfer() {
 			.len =3D ADM1266_PMBUS_BLOCK_MAX + 2,
 		}
 	};
-    ...
-		if (crc !=3D msgs[1].buf[msgs[1].buf[0] + 1]) {
-			mutex_unlock(&data->buf_mutex);
-			return -EBADMSG;
-		}
-    ...
-}
 
-The read_buf in struct adm1266_data is allocated with a size of 256 bytes
-(ADM1266_PMBUS_BLOCK_MAX + 1).
+If the I2C device returns the maximum allowable payload, will the I2C contr=
+oller
+write 257 bytes into the 256-byte buffer and corrupt adjacent memory?
 
-However, the i2c_msg requests a length of 257 bytes. Doesn't this instruct
-the I2C master to write up to 257 bytes into the 256-byte buffer,
-overflowing it by 1 byte?
+Additionally, during PEC verification, the code evaluates the length byte:
 
-Also, if the device returns a length of 255, the PEC validation logic
-accesses msgs[1].buf[msgs[1].buf[0] + 1], which reads index 256. Does this
-result in an out-of-bounds read?
+	if (crc !=3D msgs[1].buf[msgs[1].buf[0] + 1]) {
 
-Finally, could adm1266_nvmem_read() return uninitialized or stale data?
+If the device returns a length byte of 255, this calculates an index of 256.
+Does this cause an out-of-bounds read of the 257th byte?
 
-drivers/hwmon/pmbus/adm1266.c:adm1266_nvmem_read() {
-    ...
-	if (offset =3D=3D 0) {
-		memset(data->dev_mem, 0, data->nvmem_config.size);
+Also not introduced by this patch, but does adm1266_nvmem_read_blackbox() h=
+ave
+a potential heap buffer overflow and infinite loop?
 
-		ret =3D adm1266_nvmem_read_blackbox(data, data->dev_mem);
-        ...
+The function reads record_count from the I2C peripheral without bounds chec=
+king:
+
+static int adm1266_nvmem_read_blackbox(struct adm1266_data *data, u8 *read_=
+buff)
+{
+	int record_count;
+	char index;
+	u8 buf[5];
+	...
+	record_count =3D buf[3];
+
+	for (index =3D 0; index < record_count; index++) {
+		ret =3D adm1266_pmbus_block_xfer(data, ADM1266_READ_BLACKBOX, 1, &index, =
+read_buff);
+		...
+		read_buff +=3D ADM1266_BLACKBOX_SIZE;
 	}
-
-	memcpy(val, data->dev_mem + offset, bytes);
-
 	return 0;
 }
 
-If a user performs a read starting at an offset greater than 0, the device
-read is skipped entirely.
+Since record_count can be up to 255 and each iteration writes 64 bytes
+(ADM1266_BLACKBOX_SIZE), wouldn't a record_count greater than 32 overflow
+the 2048-byte data->dev_mem destination buffer?
 
-Since data->dev_mem is allocated with devm_kzalloc, doesn't this return pure
-zeros if no prior read at offset 0 has occurred, breaking standard
-random-access file semantics?
+Furthermore, index is declared as a char. On architectures where char is si=
+gned,
+if the device returns a record_count between 128 and 255, index will increm=
+ent
+to 127 and then wrap around to -128.
+
+Since -128 is less than the positive record_count, does the loop condition
+remain true forever and lead to an infinite loop of sequential out-of-bounds
+memory writes?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260518-adm1266-gp=
-io-fixes-v3-0-e425e4f88139@nexthop.ai?part=3D5
+io-fixes-v3-0-e425e4f88139@nexthop.ai?part=3D6
