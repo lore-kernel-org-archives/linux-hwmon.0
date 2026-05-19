@@ -1,162 +1,139 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA3EC2EE262
-	for <linux-hwmon@vger.kernel.org>; Tue, 19 May 2026 01:58:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C387D30FC1C
+	for <linux-hwmon@vger.kernel.org>; Tue, 19 May 2026 02:35:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779155919; cv=none; b=fCGP0d5ywDMBttGapXJBK9i20+g4uat3v6NK5AgQhRhkhlREN/eLpvSU7eRTw3fOmm5VhKw1D4qCM+0gmwcZsw3Rv0CwUBmK2i4E0b2aQRAdAnEfGol1TMLyUw7i9fxoVVq9qrRDl+yzfDrrnxu8m4UggNbtgl+/Vn7TdgIqoEY=
+	t=1779158145; cv=none; b=X4sJeGIC4KCka3jt+0XyKNS5uQi7PoNz9pA35XeoyfucN2tC6WNHMJ6o4u+YyBr+77u4Mqi8BWMiKzP6Si4o6hU5dmzXiKJVrqq/t3IAMQ2AVT8cRSYe1/2Zaq62bcqIiPcG+XVTsRDYVKhntI8B/yOPoTyVDjBCZ/xV/Vdsq+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779155919; c=relaxed/simple;
-	bh=dHtjhKiB318hdct302S/gVKa0hQAHYw+ImkptZABg9M=;
+	s=arc-20240116; t=1779158145; c=relaxed/simple;
+	bh=WD3hTjrShxbqh4rAqwybvVWfJ8scTDLyjUNUfn+yOJw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=b+R8KfTnDMozJsDl7jzXJBq+ilYmvuhoAoxO+7F9xDDwdmall4p95Te/X4M2rr1Uf1yPijdhgchM7L7iz2u4LL7srouJwaP9u0TQvtpXvJGIKd8kaidBQbsBDzRSG+zXJRLRHWRyFgQgK/NR5UEqMxJSU7+Di7vMpmu+9u2imCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DR+y/Vgw; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=i3lkIhUxkNDxrZV5A5IRbvLUJKt5exf2suOniuhlV+VMNmd6sK9cO15q3K+1FeVyDC6IPxgM4hXotHJY2A+nQWpNm09X8Xm0BEQByCs0jWmKeNWuQ3E4mG8lRsqdqTiEgcPYTPOvq4IeNyUXxldL80W9kKMVV3ZyrF0B0PAh2Ug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f+oJeUWV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DR+y/Vgw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79EBEC2BCB7;
-	Tue, 19 May 2026 01:58:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f+oJeUWV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 870EBC2BCB7;
+	Tue, 19 May 2026 02:35:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779155919;
-	bh=dHtjhKiB318hdct302S/gVKa0hQAHYw+ImkptZABg9M=;
+	s=k20201202; t=1779158145;
+	bh=WD3hTjrShxbqh4rAqwybvVWfJ8scTDLyjUNUfn+yOJw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=DR+y/VgwqARkc4qCqu49btLMyc/Ik5eRlVXwqg00EBDJ46RooBwQjCoMVZxIh0Wvn
-	 JqgnGza7DysWTtJdmMPWYD/otbwS9AvYZbgx3uVWDWeZIyKhnfLJi4yOwuW+ebjf4+
-	 /EunYCJDui3wTzYah6kMGlhmhRMzx2nh5986jicay7H8OUkYtcHNe7FNX7MQzLRl/A
-	 dOH6LBO13jxidnzsDfgIGMzfpRIch5S2gT7fJNR2c/d6G//VZ4ltB2y9A9hS6X3jT1
-	 pA4dTM7hPi4T5IBTEQiVtkogyN49K1KDi39QH4a59jKSFPDS5Oe2j8nO0U+CSH9FrT
-	 SPTY7vxWO8OSQ==
+	b=f+oJeUWVix7o5cOPF1Gbk+w4rmT0VsZGYWZmsCCAeW+f/dxSl+to1DH3pvpCELkz3
+	 sfKS/byppF87rkDNqr2ZJ/byEXcmSfCNHe4lfU4NRp+O+ewbfEtIKewmc9NPYYe2OU
+	 SVcxrmliBGBDnYO8Z2p656wEElZoxT4DzM/SaQjqeAkt00f9/47ROhb7wiOGwJaMeP
+	 4ZS8aUdZFgLbOc/uPf5CM3uHn1H/LMpYw5hFTJGgojxHARXZ80u9V/1me3VtzKJYMg
+	 Js7CThMEDvQrD7+n0MjGbj0go0stIpCs1SkdBPQR+UEBBlaTeglRdPwPtl7+JSJDjA
+	 oznA0JjUA7POQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 3/8] hwmon: (pmbus/adm1266) reject short block-read
- responses in the GPIO accessors
+Subject: Re: [PATCH v3 4/8] hwmon: (pmbus/adm1266) register the gpio_chip
+ after pmbus_do_probe()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Abdurrahman Hussain" <abdurrahman@nexthop.ai>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260518-adm1266-gpio-fixes-v3-3-e425e4f88139@nexthop.ai>
-References: <20260518-adm1266-gpio-fixes-v3-3-e425e4f88139@nexthop.ai>
+In-Reply-To: <20260518-adm1266-gpio-fixes-v3-4-e425e4f88139@nexthop.ai>
+References: <20260518-adm1266-gpio-fixes-v3-4-e425e4f88139@nexthop.ai>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 19 May 2026 01:58:38 +0000
-Message-Id: <20260519015839.79EBEC2BCB7@smtp.kernel.org>
+Date: Tue, 19 May 2026 02:35:38 +0000
+Message-Id: <20260519023545.870EBC2BCB7@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Critical] Stack buffer overflow in adm1266_nvmem_read_blackbox() caused =
-by untrusted device response.
-- [Critical] Heap buffer overflow in adm1266_nvmem_read_blackbox() due to m=
-issing bounds check on record_count.
-- [High] Mismatched buffer sizes in adm1266_pmbus_block_xfer() cause an out=
--of-bounds heap read and write.
+- [Critical] Massive heap buffer overflow in adm1266_nvmem_read_blackbox() =
+via untrusted record_count.
+- [High] Deterministic 1-byte heap out-of-bounds write in adm1266_pmbus_blo=
+ck_xfer() due to mismatched buffer sizes.
 --
 
-commit 54bf8f3eaa13fb13d4eb4adf5a3d15d39e6a5e7a
+commit 1aa8682477a4237d507fab67a50b6b1b23c803b4
 Author: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 
-hwmon: (pmbus/adm1266) reject short block-read responses in the GPIO access=
-ors
+hwmon: (pmbus/adm1266) register the gpio_chip after pmbus_do_probe()
 
-This commit adds length checks to adm1266_gpio_get() and
-adm1266_gpio_get_multiple() after calling i2c_smbus_read_block_data(). This
-prevents uninitialized stack memory from being returned to userspace via
-gpiolib when a device returns a short block-read response.
+This commit changes the order of operations in adm1266_probe() to register
+the gpio_chip only after pmbus_do_probe() has fully initialized the PMBus
+state. This prevents a race condition where userspace could access the
+uninitialized PMBus state via gpiolib.
 
 > diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
-> index 4dd67c02b412e..57cb7d302cddd 100644
+> index 57cb7d302cddd..b91dcf067fa6d 100644
 > --- a/drivers/hwmon/pmbus/adm1266.c
 > +++ b/drivers/hwmon/pmbus/adm1266.c
 
 [ ... ]
 
-This isn't a bug introduced by this patch, but while addressing short
-block-read responses, there appears to be a related stack buffer overflow
-caused by untrusted device responses:
+This problem wasn't introduced by this patch, but can a malfunctioning or
+malicious I2C device returning a large record_count cause a heap buffer
+overflow here?
 
 drivers/hwmon/pmbus/adm1266.c:adm1266_nvmem_read_blackbox() {
-    ...
-	u8 buf[5];
-	int ret;
-
-	ret =3D i2c_smbus_read_block_data(data->client, ADM1266_BLACKBOX_INFO, buf=
-);
-    ...
-}
-
-The SMBus block read function can copy up to 32 bytes into the buffer before
-returning the actual length. If a malfunctioning I2C device returns a block
-length greater than 5, could this overflow the 5-byte stack buffer buf?
-
-This isn't a bug introduced by this patch, but there might also be a heap
-buffer overflow due to a missing bounds check on record_count:
-
-drivers/hwmon/pmbus/adm1266.c:adm1266_nvmem_read_blackbox() {
-    ...
+...
 	record_count =3D buf[3];
 
 	for (index =3D 0; index < record_count; index++) {
 		ret =3D adm1266_pmbus_block_xfer(data, ADM1266_READ_BLACKBOX, 1, &index, =
 read_buff);
-        ...
+		if (ret < 0)
+			return ret;
+
+		if (ret !=3D ADM1266_BLACKBOX_SIZE)
+			return -EIO;
+
 		read_buff +=3D ADM1266_BLACKBOX_SIZE;
 	}
-    ...
+...
 }
 
-The record_count is read directly from buf[3] without validation and used as
-the loop upper limit to iteratively read 64-byte records into read_buff.
+The record_count is read directly from the I2C device into buf[3] (an 8-bit
+unsigned value, up to 255). The function iterates record_count times without
+an upper bound validation, advancing and writing 64 bytes to read_buff on e=
+ach
+iteration.
 
-Since read_buff points to data->dev_mem, which is allocated with a fixed si=
-ze
-of 2048 bytes (allowing a maximum of 32 records), what happens if a device
-returns a record_count larger than 32? Could the loop overflow the heap
-buffer by writing up to 16,320 bytes?
+Since read_buff points to data->dev_mem which is exactly 2048 bytes,
+could this write up to 16,320 bytes and overflow the buffer?
 
-This isn't a bug introduced by this patch, but there is a mismatch in buffer
-sizes in adm1266_pmbus_block_xfer():
 
-drivers/hwmon/pmbus/adm1266.c:
-struct adm1266_data {
-    ...
-	u8 read_buf[ADM1266_PMBUS_BLOCK_MAX + 1] ____cacheline_aligned;
-};
+This problem wasn't introduced by this patch, but is it possible for this I=
+2C
+transfer to write past the end of data->read_buf?
 
 drivers/hwmon/pmbus/adm1266.c:adm1266_pmbus_block_xfer() {
-    ...
+...
+	struct i2c_msg msgs[2] =3D {
+		{
+...
+		},
 		{
 			.addr =3D client->addr,
 			.flags =3D I2C_M_RD | I2C_M_DMA_SAFE,
 			.buf =3D data->read_buf,
 			.len =3D ADM1266_PMBUS_BLOCK_MAX + 2,
-		},
-    ...
-	return i2c_transfer(client->adapter, msgs, 2);
+		}
+	};
+...
+	ret =3D i2c_transfer(client->adapter, msgs, 2);
+...
 }
 
-The array data->read_buf is 256 bytes, but the read message defines its len=
-gth
-as 257 bytes. Will i2c_transfer() read up to 257 bytes into the 256-byte
-buffer and cause a heap out-of-bounds write?
+data->read_buf is defined with size ADM1266_PMBUS_BLOCK_MAX + 1 (256 bytes).
+However, msgs[1].len is hardcoded to ADM1266_PMBUS_BLOCK_MAX + 2 (257 bytes=
+).
 
-Additionally, if the PEC flag is enabled and the device returns a maximum
-length of 255:
+Because this is a raw I2C_M_RD transfer, the I2C adapter will blindly write
+exactly 257 bytes into data->read_buf.
 
-drivers/hwmon/pmbus/adm1266.c:adm1266_pmbus_block_xfer() {
-    ...
-	if (client->flags & I2C_CLIENT_PEC) {
-		if (i2c_smbus_msg_pec(0, &msgs[0], &msgs[1]) !=3D
-		    msgs[1].buf[msgs[1].buf[0] + 1])
-			return -EBADMSG;
-    ...
-}
-
-Would the CRC validation access msgs[1].buf[256], performing an out-of-boun=
-ds
-read past the end of the 256-byte array?
+Since read_buf is the last member of the devm_kzalloc-allocated adm1266_data
+struct, could this unconditionally corrupt adjacent heap memory on every
+block read transfer?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260518-adm1266-gp=
-io-fixes-v3-0-e425e4f88139@nexthop.ai?part=3D3
+io-fixes-v3-0-e425e4f88139@nexthop.ai?part=3D4
