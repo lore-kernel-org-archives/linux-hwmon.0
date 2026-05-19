@@ -1,80 +1,80 @@
-Received: from mail-yw1-f226.google.com (mail-yw1-f226.google.com [209.85.128.226])
+Received: from mail-vs1-f98.google.com (mail-vs1-f98.google.com [209.85.217.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60FA140801E
-	for <linux-hwmon@vger.kernel.org>; Tue, 19 May 2026 15:28:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1203408001
+	for <linux-hwmon@vger.kernel.org>; Tue, 19 May 2026 15:29:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779204502; cv=none; b=CDCnXhOYN1dne11towMDjJg69Wps7tUWgXLeEh0kQYqNSTnJ9vxHtGWx0PvbMUqdwGEY2j7IOIGfiS3v9RiHVX6DUqMT3ehkWRp1y0xegYjkDKSt5YRqzlQ+lQKHxDvUKVooYHH7WFHyR7KrunxXo9ImKrXRYB38iLgnGoOZA1I=
+	t=1779204552; cv=none; b=cd15s/ZpOpjhAI++3XZyJAzyWTIoXrzT8FfKd8NbD+EGkw1FEUpOdAl3kAamUYTPyaecTc9nzShJ4Ex6LksBz8uvlx99O2kM3omr1lUvBzaIN5949HI1io2Kp+X1n9LYlm2FtCwRCGHx4PLBVyufaKCSK+EskUQ72oWSo/fZ+as=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779204502; c=relaxed/simple;
-	bh=7U3DpHGKHbLVxNQHooKXxFaPlFJ2BrqPpyXAw7jk440=;
+	s=arc-20240116; t=1779204552; c=relaxed/simple;
+	bh=GYEQ9w3VV57pezS1h6pAlX0hH6C/t5Vqgbmi39hHnpY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EvtXrBvzhqO3QK+Q3LiDvVNCV5YYUs1BqiAyMQ+dRe2XxJaylMplj76HezirfB/oEfcqwoUZTcqDQthat78JC4K7Kf8Q+lCXOloEvlOYO112hZmSJWLmMNn/Is4ZWUaJZY1SRfYlFDJNTtgq6HaxOQwPIX8wY/7TlGcEep7jHI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=hEUI5fZ2; arc=none smtp.client-ip=209.85.128.226
+	 In-Reply-To:Content-Type; b=dHSDLnXfAg4V69O07SEMoMt7xdU1pIkRjOGGNzkfZREuVSWyBIXvRz1POmli4F5THRJ3DoSsuVeuM/BTv/fk53GOdX5gNrSPZhfvridTiVdgvl7+p73+v8T55pOJIHdBEvWC/kH9/STAt1BZNWzO7n+LeL3/T3LODzmWaABJJHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=Vwu0Ubwg; arc=none smtp.client-ip=209.85.217.98
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="hEUI5fZ2"
-Received: by mail-yw1-f226.google.com with SMTP id 00721157ae682-7b6ae2ea4a1so33459867b3.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 19 May 2026 08:28:20 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="Vwu0Ubwg"
+Received: by mail-vs1-f98.google.com with SMTP id ada2fe7eead31-6312a0d556cso1633425137.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 19 May 2026 08:29:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779204499; x=1779809299;
+        d=1e100.net; s=20251104; t=1779204550; x=1779809350;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:dkim-signature:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=ybKseu4uG1MNY6IQoD8TBrLpm9iKlKVO0I43NmR8gBU=;
-        b=JvYEMTiOWStWUuO6Utffp/+bvL1BC76gM+31yg3xutUxC0wvW7Nh/KwDWG3jItjTec
-         fpZi3DgLWozStkJYC7lsKCdWa2yQx7+57Y5Jl9YBZLCgB9nyD5ze6JRy9uC10lyzYng3
-         cOTjDoTVjbmfEdmDIV84zf/isFNe9aWO/R5J7uzDEgVb6rhbsdeTezZMdwSi+79Ixffu
-         iE3484g9iFDu0/m8gXEcZbDQd6gmsqERPc/acS29SZlmjY1XVaurqoaGFnS0Xet1AZXR
-         n6SCk+odQ23tyCunvYsEhrKavw6DzYsV0mta4j+cm5cVUpIIM9uy7PEoJGYo30/dFIsh
-         PJtQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+NnpQD5woexm5p1hj024R3If4IsulDArvZjDMT2v8BsWdR7vet0AgPYOH3pAgMWh1rXbdcEONOQxEz0Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwL82O59DCcqjt66efUHth8Xua9yP55d8FVz8lb0P6m0d8qFQIL
-	GoaoeKzOkQ8jv/EgUPUnY+OL4t9kN3yCEd4vjqhnF4XMMgePJKcI3Qk4OBIOVc0oj/zFcppAvJ7
-	JmV+jg3rZMUD63mzLK7hBjXBXzLq0KoVg6p3XuF71QxZ3YcJrKs4Ba8T5NlaRpAXSR37RD3nDdE
-	ae8Sha+ySk4Ujq38geHtcWjcWqMD9GeIFl5/89AML81znKY23PNIbkZFJYn/76asHcXp2/6Q14K
-	g+kdKhLzt66wyjjxVK2Rx0=
-X-Gm-Gg: Acq92OGNt6f5+EKMLRyC1R62eDGnWHKA5IYaK6oDeOkh40khg7CjP3DMuDYfqiH1baJ
-	TJKx0uCNizK/3+NJTQAJfH4lLbKM2aLweWh1P0S4HIcsRP5bB359DM3/ICCcwYemcb9/slJDKXl
-	Df4c/K4uogP0S23ja8bMDJ6r2rc6oz/qAB3+CYyqL9kzYYJRmrKtz+vHYDyP/SWser6LX2htMok
-	XTZx55uIDUZWA1KKmngDtdhg6nkKlaNWZY2KPZe0FRlFZKIKeLPLUL5fqVeYkcQyeL/WIQuCZF3
-	G1U8R5Lqh7YEKUkFtu0DjIq1zkSm8BMSHHvuQR597q4HXGafb3CKXMT6+T9LYwP8V9CrlOvD8MP
-	jb6Mbkxa4pMGikBgmroAoeFmhrKaouAV4c8RPI0D4e+Jd7SRTYr2VoYYLmPRzMpvF2A9lNR5ZYC
-	Lc5mr8uUiHKA==
-X-Received: by 2002:a05:690e:400a:b0:65e:3bde:1afb with SMTP id 956f58d0204a3-65e3bde223cmr13298271d50.34.1779204498919;
-        Tue, 19 May 2026 08:28:18 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com ([144.49.247.127])
-        by smtp-relay.gmail.com with ESMTPS id 956f58d0204a3-65e0db30c04sm1327795d50.27.2026.05.19.08.28.18
+        bh=FhiHL8lJqMLwH/tA/yyEZXng5kcabiZPDcP4lU8JGSY=;
+        b=VS2uSpVacvpJQFvKKwPqufbOgprzWog3ZGXnexpje0UPtLElQhT1nD/efmPrOwUs3m
+         B5i8Zr+DzWNNp2GjekVeDHp+gWTLl5SRTbpnztSM9imMndbJDVXCKtm2ok6oXuSo94aD
+         0c+tQeK/tbCJ5dbNOf47cAkA9lQw/Ez4+vc8Ifh0kQLm5aeIMQoW9yecIhr/sWFwEB1A
+         /mtFsLT1FDlaanxD52OFOTvTn7HZZOF8oOMFhnjac5VN7mXmj3xMCzs+GHdsNH0mBJH/
+         ouX+JGrmckg6vz9EgUolio7sIJjBJM0mawlgXYwhDFa8NtC7LP6SoQ3u6BXg8/mmnfFN
+         0W9A==
+X-Forwarded-Encrypted: i=1; AFNElJ8iOcQe6nvDcgwG8qdWvDCHodirBctFeGoDLC56akmAr1BBDIYcCSbNG7QdUNFFOEq+6kKkML5IiQmHJg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMDOaXx2+rsMs7d/sb5ktV3taXiqgKfr2Qtx4EwT6hRrHOTVoz
+	M+/qzY7YwfBCOXhZvzGqkL4X3UFZuNGEZMdQEAZrKBoeZw0u37jcG4jQ8uUeN4qlGCiznm3dJb8
+	YzENX6GFtXcX0bq1pFM7uw85uM6F216NZIZFohtzilYblH7kdiqkdyBym0ajq5IhY4YhpE9Q8lE
+	n3hEac/Ps8wln7DluwC2iyovUpsoA2a6EGBr3fGfJdw767VHLDZlnMAcVp7OHZ3rqEz1g0uQrWE
+	SY16dX7rYtvXJ+yITtBV4k=
+X-Gm-Gg: Acq92OHog9IML6gH7Q3orF8N9SKmVdrIuN6iuhfOpsKrtgx0OjS50YOPzt5q1mC716v
+	OzRXyyfASh6hDb/tIR6ErnAxX0lyYNO5b7lQNsuIwWLzhLT5dCgQ26IaHrjnv3/ibHju4NbyqcB
+	1i1aSn3DroOSHjJk0jFEs9WtdUmyypDsz+R6q2uc7tleCgx67jpt4gw9yL8XQPajq+6oGkj35JU
+	GvBEmZ0PqQzFrZFi1C0oZdvxOa4abbuly4VqdWmX4zdCsems+z4pIDSHtgI40o+scw2lD3eFven
+	LVM3BJ38e0gqeM7gSjP4WvSBo7QKZ0FwMc7Z3Y99GaNP3s/8otdE/gnCNEuYWaY9mCsMBQAEe6J
+	mgMZuS+ojtVUdyHRsjaL+81QIeCVyead0q4/BQmsJkjeBntjGxp4i8c2lDf4E5KIekx4tUmOWWC
+	fWNBQTFxOVHy7uAV3toaaEzRVv03vYR5y4yxtzE+AnLFTCQTPnY9YG05zMaee01g==
+X-Received: by 2002:a05:6102:1610:b0:62d:b0b2:88b1 with SMTP id ada2fe7eead31-63a3cc0cb09mr9729595137.4.1779204549523;
+        Tue, 19 May 2026 08:29:09 -0700 (PDT)
+Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-21.dlp.protect.broadcom.com. [144.49.247.21])
+        by smtp-relay.gmail.com with ESMTPS id ada2fe7eead31-63cededcee0sm893429137.29.2026.05.19.08.29.09
         for <linux-hwmon@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 19 May 2026 08:28:18 -0700 (PDT)
+        Tue, 19 May 2026 08:29:09 -0700 (PDT)
 X-Relaying-Domain: broadcom.com
 X-CFilter-Loop: Reflected
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-8c9352f816aso89552576d6.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 19 May 2026 08:28:18 -0700 (PDT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-90fd6eeed3cso915954085a.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 19 May 2026 08:29:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1779204498; x=1779809298; darn=vger.kernel.org;
+        d=broadcom.com; s=google; t=1779204549; x=1779809349; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ybKseu4uG1MNY6IQoD8TBrLpm9iKlKVO0I43NmR8gBU=;
-        b=hEUI5fZ2SM43Ja43CBzkQu8sZwS5MoIiEgboTBYjFWmpmlYu04bISODmyIFR68LAzT
-         ACzTRa1IlvsOBHqvMFG43cgJQW1koWBKt8dhwMcTprpTL92BzoQrjk7klIbPCn0ED8S6
-         pEmRS9ETiOeaqHzQ/VYF0+g8gnQ06qCXgPme8=
-X-Forwarded-Encrypted: i=1; AFNElJ9aI3u2+TohUafQhsCbkJ2bH1lE70zLV7J/Z3088DX3motNnqwIGNEctV8Tv3PuKRWzmk4KYlFZLkQ0oA==@vger.kernel.org
-X-Received: by 2002:a05:6214:484a:b0:8bd:1f2e:7063 with SMTP id 6a1803df08f44-8ca0f643076mr294961706d6.5.1779204498085;
-        Tue, 19 May 2026 08:28:18 -0700 (PDT)
-X-Received: by 2002:a05:6214:484a:b0:8bd:1f2e:7063 with SMTP id 6a1803df08f44-8ca0f643076mr294960916d6.5.1779204497466;
-        Tue, 19 May 2026 08:28:17 -0700 (PDT)
+        bh=FhiHL8lJqMLwH/tA/yyEZXng5kcabiZPDcP4lU8JGSY=;
+        b=Vwu0UbwgM6utIFfCpJfssdwQ4ISNb9+4bc1o12i6cO7lE31+h1KcbLfuZ/+kBHyC9m
+         lp+wMGU5dIREnKiWV8JnftGPf5d2CS44nG5z7DP+BSDzEDTg130PwcV0sZpplKwDuTeE
+         gD91c1JoTfKeUuN/jS2zkHnpy3xALNOq2YlWk=
+X-Forwarded-Encrypted: i=1; AFNElJ/eTwso001fl+riXjECoaJ/1r64tFNDdGQEBLOKEMrjSoGFiIAdjLP6nLgtLKzAogRBIQfs8P3vAU9mlQ==@vger.kernel.org
+X-Received: by 2002:a05:620a:4492:b0:8ef:3953:7ab with SMTP id af79cd13be357-911cea09723mr2975878485a.40.1779204548826;
+        Tue, 19 May 2026 08:29:08 -0700 (PDT)
+X-Received: by 2002:a05:620a:4492:b0:8ef:3953:7ab with SMTP id af79cd13be357-911cea09723mr2975869385a.40.1779204548070;
+        Tue, 19 May 2026 08:29:08 -0700 (PDT)
 Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ca3619c29asm93644856d6.34.2026.05.19.08.28.15
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-910bc83b85asm1860419685a.25.2026.05.19.08.29.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 May 2026 08:28:16 -0700 (PDT)
-Message-ID: <31af08eb-8299-4ba9-aaa7-3150ce31b523@broadcom.com>
-Date: Tue, 19 May 2026 08:28:14 -0700
+        Tue, 19 May 2026 08:29:07 -0700 (PDT)
+Message-ID: <edff09ba-f21e-4009-9b9f-4e7a9f630618@broadcom.com>
+Date: Tue, 19 May 2026 08:29:05 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -82,7 +82,8 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/3] hwmon: raspberrypi: Add voltage input support
+Subject: Re: [PATCH v3 1/3] soc: bcm2835: raspberrypi-firmware: Add voltage
+ domain IDs
 To: Shubham Chakraborty <chakrabortyshubham66@gmail.com>,
  Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>
 Cc: Shuah Khan <skhan@linuxfoundation.org>,
@@ -93,7 +94,7 @@ Cc: Shuah Khan <skhan@linuxfoundation.org>,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20260516164407.25255-1-chakrabortyshubham66@gmail.com>
  <20260517080445.103962-1-chakrabortyshubham66@gmail.com>
- <20260517080445.103962-3-chakrabortyshubham66@gmail.com>
+ <20260517080445.103962-2-chakrabortyshubham66@gmail.com>
 Content-Language: en-US, fr-FR
 From: Florian Fainelli <florian.fainelli@broadcom.com>
 Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
@@ -128,36 +129,21 @@ Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
  7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
  95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <20260517080445.103962-3-chakrabortyshubham66@gmail.com>
+In-Reply-To: <20260517080445.103962-2-chakrabortyshubham66@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
 
 On 5/17/26 01:04, Shubham Chakraborty wrote:
-> Extend the raspberrypi-hwmon driver to expose firmware-provided
-> voltage measurements through the hwmon subsystem.
+> Add Raspberry Pi firmware voltage domain identifiers for the mailbox
+> property interface.
 > 
-> The driver now exports the following voltage inputs:
-> 
->    - in0_input (core)
->    - in1_input (sdram_c)
->    - in2_input (sdram_i)
->    - in3_input (sdram_p)
-> 
-> Voltage values returned by firmware are converted from microvolts
-> to millivolts as expected by the hwmon subsystem.
-> 
-> Update the documentation related to it.
-> 
-> The existing undervoltage sticky alarm handling is preserved and
-> associated with the first voltage channel.
-> 
-> Tested in -
-> - Raspberry Pi 3b+ (Linux raspberrypi 6.12.75+rpt-rpi-v8 #1 SMP PREEMPT
->    Debian 1:6.12.75-1+rpt1 (2026-03-11) aarch64 GNU/Linux)
+> Also add the voltage request structure used with
+> RPI_FIRMWARE_GET_VOLTAGE so firmware clients can share the common API
+> definition from the firmware header.
 > 
 > Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
 
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
 -- 
 Florian
