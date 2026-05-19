@@ -1,180 +1,143 @@
-Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11022089.outbound.protection.outlook.com [52.101.43.89])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8302C3ED3A9;
-	Tue, 19 May 2026 14:26:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.89
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779200795; cv=fail; b=iNQnleFw7a2o1fe5ltLa7oHWgnSbYNw8nCz9TcZA48x9O9tSW3uAPPfGko9msYunh1pniQybqgatvj/HIlQiti5QBnUZMdHEt8FM6HG5Va5j6ImnALcGO4kXmi6rZ5XhIuLkh3iKzTOxVLbCW0xDbPc1T+nQ/Agz6ZGFvb0ctdI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779200795; c=relaxed/simple;
-	bh=bgdJQq53KlN3JWvvwMJBGcAKAbsjNsrOb/YA83OXSAA=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=gbupd3BBs/nxo8OP0PoitV72E4uqzbhTIlnAJero8ThnqAF7haySpO8LCOwvyb64wTN3/bGMAowBUyIWxIRbxQCK3mjBb7NRe0pzwm4LXCGOqjWWrg6OXUCB3L2CD7mLrheSVyjRNomspkLNcsrSy8B+8Y6nbxBXEbRwoIxb6lM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=fail (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b=zQVgQNUR reason="key not found in DNS"; arc=fail smtp.client-ip=52.101.43.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70B9A403E8A
+	for <linux-hwmon@vger.kernel.org>; Tue, 19 May 2026 15:16:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779203792; cv=none; b=dK/scdq/3aGtg236M6oHovzYu/MHUxd1k3Ebg+5x6ENoZpkwCgZ1iN/BWOyEsByexEZgJfxSJWC9GjG29L0CAVaCZI0EeRwUuB4v/9aGTePtV0DkJm8FQVspnAf10y1P3WEC15ACY4A8lNToaAEJtjWI9xC5OCzFs0dGZdV9bi4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779203792; c=relaxed/simple;
+	bh=zYiDoAQO2Oy4AQUxAHMTieQNFitOSxjQDqz8o8ANDYk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YaTMlQ24YwZ60UmQlylsv6aW7J7UuKcrJZ0V5l7JG/ryuL6QcQ5v0er4Y/EZeWwX29/4fmwxBP6EpfjFFu7BrxB78NjNaCTzK9OZDD+MWxdNXPEMl6n17ycl5vFR191CyZmWPRxDLkzU/iFxh7Uu+ks63/zY9xUs4wtP6aEbies=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MFl9kSMN; arc=none smtp.client-ip=74.125.82.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b="zQVgQNUR"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LRwtNwIJ9kReJisr37UufvGznGTt4mzil5UYlem2umTzSf6lyQtJO36XHlhylMig22uDaDSoXRjr5GJyVnb/P4x3ZhHpjnLh6Cww/jY0p/feMO2KPcTm3UBOGavdgQS9ITczgsmegTE0lk7GvHC1jGaLCD8f13+IZIkB9orFhbSwSiLrQPD7549LGhRn0NsoskNakVen9TXt5Q/ZNFtz2RmIAGe0LAY4zGrPtfXKSqq3uVgGmenoRIK/p7+S2OR7w8rRMb2/LDzfWe3C1XBZ6wf2XzcSfYXmwd2m0xDMSsZOGtX0RnobXaah8zAQI3ivpDMXWqzH4qzFXpPOKgMhBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Q8HyB9xU4qgwyHeyiYb5DNauYBvkExwq69227ktoDeM=;
- b=WJWr12uNyOKnznxI/e50FpimKDWOQtV9TaHJ2XpCuJeQ5P98KSVc1KL1fY6LbO4KIBWNBPwsgDvGKeJErDYG+iwk2yjrAOzTLbZx7YNB38Pkdst+9rZsiATgG1xqXd9JqI5LiVcYJKDcc1HRiAjvD7T10pmQpjP/hfe+etYHWUZ8OJKg6XT/gfbCfBcZbgdBF3UzfkS7qXzphYQybvBRSE5e0r3ApYFsNG/vdYVjLScwFiwpKZozJ8udOShCrosVuO0MO4OjwtIBOnz8hda84bKszSuh/Tmj52hhk+jIpPyu86ce9VCWlLuwWWxh8bx+ARJdSGHtE6JRiN1AFGE/tg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=amperemail.onmicrosoft.com; dkim=pass
- header.d=amperemail.onmicrosoft.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MFl9kSMN"
+Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-135200bc7d2so9897365c88.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 19 May 2026 08:16:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amperemail.onmicrosoft.com; s=selector1-amperemail-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q8HyB9xU4qgwyHeyiYb5DNauYBvkExwq69227ktoDeM=;
- b=zQVgQNURbMWd+EKG1TrBMk7mXsJpCRSC3XzmMJlpgN2s70tsEvXLcSnozkm1TRJ2uVt2kVNkt/1IBBlDbFYXYc3Tm0FD+igkqvKATQsym34LuL6DCgtvS0EZRdsCvF0aGT/3U7oOK7fJhi91mPi+573dXW7xP1D15x7FDBTQ14I=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amperemail.onmicrosoft.com;
-Received: from BN3PR01MB9212.prod.exchangelabs.com (2603:10b6:408:2cb::8) by
- SA6PR01MB8901.prod.exchangelabs.com (2603:10b6:806:42f::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.48.14; Tue, 19 May 2026 14:26:27 +0000
-Received: from BN3PR01MB9212.prod.exchangelabs.com
- ([fe80::44f3:1050:dce8:1ea9]) by BN3PR01MB9212.prod.exchangelabs.com
- ([fe80::44f3:1050:dce8:1ea9%6]) with mapi id 15.21.0025.023; Tue, 19 May 2026
- 14:26:26 +0000
-Message-ID: <05347a7f-ce9c-41da-a4ba-fbd27bd9f934@amperemail.onmicrosoft.com>
-Date: Tue, 19 May 2026 10:26:21 -0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mailbox/pcc.c move shmem unmap to teardown
-To: Sudeep Holla <sudeep.holla@kernel.org>,
- Adam Young <admiyo@os.amperecomputing.com>
-Cc: Jassi Brar <jassisinghbrar@gmail.com>, Huisong Li <lihuisong@huawei.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
- linux-acpi@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>,
- Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>
-References: <20260515161001.699470-1-admiyo@os.amperecomputing.com>
- <20260519-annoying-athletic-mustang-cf3f02@sudeepholla>
-Content-Language: en-US
-From: Adam Young <admiyo@amperemail.onmicrosoft.com>
-In-Reply-To: <20260519-annoying-athletic-mustang-cf3f02@sudeepholla>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CYZPR10CA0016.namprd10.prod.outlook.com
- (2603:10b6:930:8a::19) To BN3PR01MB9212.prod.exchangelabs.com
- (2603:10b6:408:2cb::8)
+        d=gmail.com; s=20251104; t=1779203789; x=1779808589; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=f5HsYuB95nz3GqSJZmQ/OT5b3WhcyqQVI32u0/zES9o=;
+        b=MFl9kSMNYHRafgrWL+RnWQ6ygQApT6rFTyp5yUdjm/1ZqFnyHuL0ySV9bysye7pttC
+         n6cm+Vi7x0SKkCGzr5DTWTiziAclLkszmfX76Eqmy7IfhAj3K1nRs4c9qf++TVy67chC
+         0sDW1QllQCtyveax4TJPQlcM/hRamLnF6WW5UmSqII3fRxSPR8acauoPdSCvuoUt3Rkd
+         lCWNjkTuVaUca6SfdXqghTM6VMFoBsXwdIIIh/iEwaloj/sNwVQqyxEQKjPiKDioBm+H
+         huW4DzYKPy1bS2Xfn65wgbKg0DrHIUZF70m0Pfy25eDBMF7hsbFlHG2ZteIAPgSdld/p
+         NYkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779203789; x=1779808589;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=f5HsYuB95nz3GqSJZmQ/OT5b3WhcyqQVI32u0/zES9o=;
+        b=DP+vJfyIRvXQknx/HNt7OfKDa3OZoZhiuZm3pu5euoe4mP7TLt+ejmbnNtut30DDm+
+         scOcl7ctrXsik98YBL14Bo9uyo5Z+Y6CWrpdJ1ZOzouhG6rTlmFd0AVcfpGuaoLW3hiE
+         AOSFujcoewgdTUYQHKLuTItJ+bOJMj9tyuFhGOM/g33WVi/J0dpl65mZ35bdpUNGx5g2
+         7zuu+vX1QgbZVbxcv2+kz1S6ZCP61Fa2daLXGfm8Dd1epfP+2qbxQnDGBa94e+uLt4BG
+         1FfZ24EjnFxMK8Qz0cA9DS0TmdApckMxgfv5Sb9HRKtUiEIWvFdbFbi4bIxLwUPET3kF
+         YkmQ==
+X-Gm-Message-State: AOJu0YxCd6IYqiJH4IibjLxnOJJ6Ky3ixv8KodCYGo2v29h/KHSTnRZ2
+	tA/43hbJexAC22HAjrYZX4fy6O3gmwZlfdhL2sKGbRt/f2Tr0v6grBXW
+X-Gm-Gg: Acq92OEHFDXi7q33Uc4tAgmnUX3zTO8WsfOGV+lTsDMPjKyhnc6dOnnR3pROR09JRgP
+	5mPMfJBmti4W1RtVWg6QYeE5wfZjeRs6KFfVB5oG+o9KbgIYtS/V2MSb4eO6gtTwTP1QKYUb6+Y
+	mALTyIL+IbYk5PmrU+7JQ3T8ehWJUC8VVMpISYdesQXf+xrTaRQfAjhbxttVUKaO58UmJEA2YZ1
+	c68RnAhuo1T+V1/qlUb++rYLaQ+/tkzfOWmiftpZ/XA2NGDSQ0RH+KV73Ya4umcguJ6FrNjsF/f
+	40Ja276aoD2WHghQAHIuuGAAyHKnKFnnA6vLHvpUDrTmwyU6GDASZSmprXiXTtxV9ep8PFRM1Ad
+	/SWT4V0jaS7KTBfHChjmdhuoro97U59EsmiaOep1PHQz+In8KcLBkvcDwA9RWJyqUOByGf6Re2j
+	fyQVeY+rDEW9pKgZQeFfkuE0iL2BpgVbdPXD+gcWaH/aBoOsvoTMuXrsCHHO+EYgCdUP64DW/FB
+	8RrxMUA19y4EXkD//AxGw==
+X-Received: by 2002:a05:7022:1e11:b0:12a:94ab:e20 with SMTP id a92af1059eb24-1350484e7ebmr9511463c88.20.1779203789318;
+        Tue, 19 May 2026 08:16:29 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-135e5c0a918sm1387359c88.14.2026.05.19.08.16.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 May 2026 08:16:28 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d4ac610a-b34c-44aa-8e7e-b27092390c63@roeck-us.net>
+Date: Tue, 19 May 2026 08:16:27 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PR01MB9212:EE_|SA6PR01MB8901:EE_
-X-MS-Office365-Filtering-Correlation-Id: 298ce677-6da6-4676-3543-08deb5b29c54
-X-MS-Exchange-AtpMessageProperties: SA
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|10070799003|1800799024|376014|7416014|18002099003|22082099003|56012099003|11063799006|55112099003|4143699003;
-X-Microsoft-Antispam-Message-Info:
-	fzIrzLD+RnUwj/OvZkZxAFJBUm9Q14SsRZDnkfh6R7oA3oOw7MS84OivTx+/5PBj6DV05LYVW8Q23VkX/4jOV9Aatx7WETAG8z00vU4sRTWFh+GA5FeHTWTjSREa2IHdHqf6dpSjyepEjpELf8NwfuUGrkAoIzyI4ni90cQGOOM9RvV3R713dpv98j1af5NMSJ7cFw2mQ6MZuEyAAZU2l8Q5hAMNPcqw+t2eS3onOS2RY1WufTvrhQBrqnsNiSsa6cOTEx4JMjL14ZhqSsUvRtFxxwhlBGOjmsQmPRxkMUP16YASRCPlPQCxR7SaGH6BnVlPDDWOIWS8rsC2O6C7wz4YvVdzecI+5zlKvWslrzW0rbbUCPmc9XE/A4WdAkxcUHbH60aW8DbQYcGEoh79+QxcY6cKIDQ+vMGy8tqHwXh+JxCWd+VN0J3B95S1CSRXis05o/A+/e2Zww80ywagftINFB2UijrYUBBQPJE9e9uPHs3fZ+TLzsm/Cn1CtZaCeA9phTZCis6+858oK3T8YO3g8BjTeZ9qXue+qsKS2dli9lW4e3IO+Y4FeiyhpjMVKs4ypbll22TDpM/Hk51dT/Wz6BahpfV5KtcFxsaiyZ48sQ7Ou3hbEUrsdEYUH5ONinq0aPFzIbDc83usRIWMjPMLgpTDftfXkTiQdMjD13DcnYvnjWlNpMsE2nNhG3HW
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN3PR01MB9212.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(10070799003)(1800799024)(376014)(7416014)(18002099003)(22082099003)(56012099003)(11063799006)(55112099003)(4143699003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?OUdiMWFZOS9IWFhKRWRhNmMvK244NC9RL0hvMDUvNEJqWm4xcSthYXYyUE9I?=
- =?utf-8?B?SFV6MzQyZXBWKzdDbFVReHNyK1NHRGE5c0tXOVJJUnhuMGc0cVhHcW92NDk1?=
- =?utf-8?B?TnFnM2h6N2tBVmRoRENkUmMwTzdFcDAvRGZMdWxlSVRtc2Q5Y0dQcHArSmJw?=
- =?utf-8?B?M3NpM2hJYWhEQnRDV05vM2VlUjd1M0FDcUdTdnppMDV3KzVKY2JJWVY3Wkd5?=
- =?utf-8?B?cnZIZ1Uyblllbk92a0JQOWo5eGxJdnY0cnVuTGwzNjRxQkFEalRwNm5TSElN?=
- =?utf-8?B?MzFTYkdYa2dLTzZXMWs3VFJ0SGpzbjVkTVlyQW5MVFBRbHRmMzhCYWZSY3pF?=
- =?utf-8?B?WFNpaFNreGxkd0N2dUJHa2ltNVZVdVQrZEEvQTdIRFMxWkJ1a0JadER4c0ps?=
- =?utf-8?B?V2MxSkZBalpsMWV4YzBVMW9uRGg0MkFNM1RyRDlDMktSOGc2UHdLV1ZuQlow?=
- =?utf-8?B?Kzd5ZHZPVXM4T1VyVW1DWlM2NCs5c09GV3htTUxQNWtwMjMrdnhTY3FXRUhn?=
- =?utf-8?B?dENFYkNMaHQ2OUdvZGhzR3RHN05pb0FReEpTb1FwbWFQRGMrTytYZEZJR2ZR?=
- =?utf-8?B?T2ovOHlacXc2WEw2QWhoZFBGTVdoQmRyaHNmZlZqZ2llUTZjZS84d0Ftd1Yv?=
- =?utf-8?B?THlFUHNxWGw1ak5HVkdSMVBMV2VUbUdsOXNNWUxCZE5hNWlYMFZocVJ5b2M5?=
- =?utf-8?B?UVRCeTBjcXBMMHhTakVHOWVKdmNkQ05mZHA5bTdoMFpPaENzcVV5N2VWd0lO?=
- =?utf-8?B?VithbVRDd3c3YVNpMDF5ZEFJTFk3aVNXTDNhUUg3RVpac2xtdE1CVXRMeFp5?=
- =?utf-8?B?US96NDY2NnF4eXZ3REhYRHYvVXdrdHV1RjVJdmFBWlZ5SjhtNEJ2bkhmWGR6?=
- =?utf-8?B?YzFTN1BXVGZNSVlEZ2pzcUlleWpEUE9pOC9PUUNwZlNqQTNXd3hDWmZkeVV2?=
- =?utf-8?B?Wlh1YjAxU1FIdVFRb21GYnRxRVFhZjBrbGk2THNyelRGZHQ1S2NsV2wveXkx?=
- =?utf-8?B?Y2VTMFZTaW0zY2hRbG44bmczWUc0bkZBNTFlK2F3ei9IU1pmazF4NzUxNGtK?=
- =?utf-8?B?ZkZtU1ZoYUZmeXl0eEUwRkZzOGNsMEllMG55bzlMZmFlaDRyTFdTUU12VVE3?=
- =?utf-8?B?N0NZejgrV1BkK0I3YVpybjZMN2lpbXRoT3ovWTgxcGIvVXgvREJvVzZlUW96?=
- =?utf-8?B?bnFwRXVsdkd4cjdOcXI2aHdFV1NrZ3ZmV2pMTDI2WmphU2QvamRvbkoxZzkv?=
- =?utf-8?B?Y2VrUVMzR25UUjVqQTNieEEybExOYkUyWTB1bDdWZ253djlqSWo2NitqR1F5?=
- =?utf-8?B?ZElOa24vMUhXa3BBclVJbFRDWnA0bzRxQnk1andzSzlyVUpmVHhEbVh3S2hl?=
- =?utf-8?B?R0JVMEw3NzR6ZHZUOWRZeVlNOHFnUVhHbXRwQWdpWGFKdEg2Ulp5aHQ3RER4?=
- =?utf-8?B?ck1YM1dnQm5pcUU3SGhOcGU1eFNvQkwrRlErVlVkRmJVS0w4Y0NQRWE5dmY2?=
- =?utf-8?B?VWFMTGNQb0Y3MlVtdEl2ZjdYajVKdHVUOE9YVVR6a1I0VGZSYVZoWWlyNXo2?=
- =?utf-8?B?Q3liUUQxZ1Z0T2ZVQjNESXVlNzlFdk1ac3pLVmlndXRSQXBwOU5oV1g1NUFZ?=
- =?utf-8?B?cXlqYklIeStWVzZzSmRlQU9rbUNYL0g1Tnp4VSs2MlJLcW9NYUlqNFlpdXBX?=
- =?utf-8?B?QnlFNERMQ2k1YmVDMlUrTnBrYklGeDEzbGtjcTFYditzQVJucUJZTC9IeG1u?=
- =?utf-8?B?WEUvK1lBMHhXaTNBWEdOa3VjOE85Y2c4Z1pGYVpqZk1nS3ZSTnVuWXplbWxT?=
- =?utf-8?B?ZUFZenB0eW96OXhtVHg4SytOcm5GdzZnU3NobDVFa2s2Z3M4MzZ2Y2xqSHlo?=
- =?utf-8?B?eUg0TzRZNEZ0SUplYnBzUUw2NWZ2cnlSSmVqTTgvaGNQK2VqQ29DRVJSYTNG?=
- =?utf-8?B?RFVZTlRtVUpEWm44OGtmd01MVkwzSU0rT1FGTWRaUGh5SkpmVXo1ZVFBYVRY?=
- =?utf-8?B?UFIvRzA0NDk2RFNUT1ljZzZrS1dQM1k1L2YxaVp2a0cyV3BYOHlpQWNJUHAx?=
- =?utf-8?B?ejhkMHMvckpERkxxeGpwZGJwaE9kRE1tVDN2dXNsREV0UUJUaWNIUWVEV2VK?=
- =?utf-8?B?cFNHNk1mWjNKTkE2TUtlc2xEWUFvRmo2STRHbGVaUENSeGtRVUpIaDJ2Tzkv?=
- =?utf-8?B?L01PK3BtT3BKazZCNmpDREp6WlFDb1AxNDNhcGI5Um9JTC9aR3hteU1zWVdk?=
- =?utf-8?B?WG9PUi9SZDc0KzN3QVo4aGJjS3FWdXErdnVFREd1VE5vaHF5SW9qcWF1dWlq?=
- =?utf-8?B?VUNpVHBYS3VpQVNlcW5oSU1Qa0hDU2NsNU8rckI1RklTYkd2eGsxSVN6MmlQ?=
- =?utf-8?Q?0TAwRrTkBQFhvlrsjQjqO3vgAWgco51y1qQTUJ/4EyebC?=
-X-MS-Exchange-AntiSpam-MessageData-1:
-	THhNZx6wQBZALblkRIGtpgWB8k44aaa7O3IGwgdaVgFW9oKGmhiomllG
-X-OriginatorOrg: amperemail.onmicrosoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 298ce677-6da6-4676-3543-08deb5b29c54
-X-MS-Exchange-CrossTenant-AuthSource: BN3PR01MB9212.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2026 14:26:26.7310
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MYFaN5LsgJug840MR7MkMjhJQM2hggy61Q/PB8IlUIEluI+W5PMkOr2vkyhyuAK/MhH/Ixa8O5XvDzaiGbLBkBT3iruud3gnUxkFTnRd5fQ2DqUN8R+Q12V+Qx+MqdzN
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA6PR01MB8901
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: (coretemp) Replace sprintf() with sysfs_emit() for
+ sysfs show functions
+To: Dongyang Jin <jindongyang@kylinos.cn>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260519065220.2348524-1-jindongyang@kylinos.cn>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260519065220.2348524-1-jindongyang@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 5/18/26 23:52, Dongyang Jin wrote:
+> Replace sprintf() with sysfs_emit() in sysfs show functions.  sysfs_emit()
+> is preferred for formatting sysfs output because it provides safer bounds
+> checking.  No functional changes.
+> 
+> Signed-off-by: Dongyang Jin <jindongyang@kylinos.cn>
 
-On 5/19/26 08:18, Sudeep Holla wrote:
-> On Fri, May 15, 2026 at 12:10:01PM -0400, Adam Young wrote:
->> If the mailbox IRQ and shmems are not cleaned up atomically there is a
->> race condition. If the shmem is torn down while the IRQ is active, a late
->> interrupt can trigger a write to un-mapped memory.
->> If the shmem is torn down after the IRQ, and another thread requests the
->> channel again, we can end up with a channel that has had its shmem
->> unmapped.
->>
->> By moving the unmap to the teardown process, we can let the mailbox
->> mechanism prevent re-entrance into the startup/teardown functions.
->>
-> The startup-failure path now pass NULL to iounmap() in
-> pcc_mbox_request_channel().
->
-> __mbox_bind_client() calls mbox_free_channel() before returning an error when
-> ->startup() fails:
->
-> With this change, that mbox_free_channel() reaches pcc_shutdown() and clears
-> pcc_mchan->shmem.  Control then returns to pcc_mbox_request_channel(), which
-> still unconditionally calls iounmap(pcc_mchan->shmem) in the error path.
->
-> The startup and shutdown calls are symmetrical and similarly the
-> mbox_request and mbox_free. This change is removing that balance.
->
-> NACK from me.
->
-Yeah, I saw that (since posting) as well.
+I consider this a nuisance patch. Nothing is gained from it.
+Can people please stop sending such patches ? It gets annoying,
+and I don't have an endless amount of time to review it all.
 
-I have an updated version that moves the map to the startup and that 
-removes the unmmap call from pcc_mbox_request_channel which seems to 
-resolve the balancing issue. I will post shortly.
+If you make a functional change or fix bugs, cleanups are welcome.
+Otherwise, I'll barely accept bare cleanup patches for drivers
+using the with_info API. Otherwise please leave old drivers alone.
 
-I was trying to minimize the change by not moving the map portion, but I 
-realize that both need to be under control of the mbox code to get to a 
-multithread safe design.
-
+Thanks,
+Guenter
 
