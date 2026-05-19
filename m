@@ -1,66 +1,66 @@
-Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E8C123C8C7
-	for <linux-hwmon@vger.kernel.org>; Tue, 19 May 2026 00:52:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 362E92D47FF
+	for <linux-hwmon@vger.kernel.org>; Tue, 19 May 2026 00:52:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779151959; cv=none; b=basEz/dd5ddRusOIinHxppvneYPtivjytDEqk4Pez7ghbgCxMk04MZzKmoBnud1nartmKVnYwqCRfTo6NcqmKDk7pnMMYt3teLvw4VO9joJNyaq85z47NAGjzwyrRMnZFJK5csUVq2NdwyI7qEhmGjjiqOVS9mP45WgBW80vcEg=
+	t=1779151960; cv=none; b=fkiBfF5FeYGpWQ8OX6iqlIl+aOcN4fVvOH+iigsxlikdfen8Qs0T57BMYTmcw8za8rRfgGDxWvn6xQYibUUTJYgMX4GyZQbYVUg92lYeSGyae9QFvhXkpwaB5/+iCa+ZzRzGFu2Dcflak89Hu6gBOyIXOnb59xQcCXU0tEicxuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779151959; c=relaxed/simple;
-	bh=FDObNUWMvwjjzrN2IkV6Cgo3wEKZLI2a8RqN+knZ8DY=;
+	s=arc-20240116; t=1779151960; c=relaxed/simple;
+	bh=MbcEhPfilDl5djs8OwiISgXUAGJH031p6hDtDP0Q1lw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=JXcAqp5iyMSgCV4VV3/HSMQI0pf+IEgY6JW9M4o+oROtC2I8kE/sPUOVTXHQgia6IhyP5MYmOvvPOH0fqB7o7hZLBZBvqyq7qqMdKldD0zqjHOqz6YxCcllrG/OkbC/x2QlkyNl1GCUbR43KXVPsKLUUQKorvSlnPCcNbBdq5WI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai; spf=pass smtp.mailfrom=nexthop.ai; dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b=FokCYGVf; arc=none smtp.client-ip=74.125.82.48
+	 In-Reply-To:To:Cc; b=LtT7RGUcrsb1yisU0erxBc9B7WHniz8AeUaEhEOEabSWsctbS+TAXZfwGN7vAd0UoRKg0vufEa4lvVQi8RHVPuds9YlL5d9EASNy4AqlAZCVQNuU2H9wE/SPHKvsc8M30bv///6Bx1e3ZswTXoM/KUjnXf0CjDNKBaZktxEqniQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai; spf=pass smtp.mailfrom=nexthop.ai; dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b=HLBhpNFK; arc=none smtp.client-ip=74.125.82.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b="FokCYGVf"
-Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-12db2e415a7so1362766c88.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 17:52:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b="HLBhpNFK"
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-134ac81c445so10801944c88.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 18 May 2026 17:52:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexthop.ai; s=google; t=1779151956; x=1779756756; darn=vger.kernel.org;
+        d=nexthop.ai; s=google; t=1779151957; x=1779756757; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=k/5ooRxhmqvebnRUuOuBr2iP+EihWYORWSHfWOHXOBo=;
-        b=FokCYGVfbUh3NyYoQHX98CPim+tFdcPD3ttErufWDJtZIqPQbdnPeRsCt/cv+gInSR
-         BAdSdvFMUROPobIGUgaWJUaodkTLlj0Lizu3cM0FW1Pq8CzEj6O8W7liMNbEpVBbXxeG
-         v6vRGyj+YiNdB/sJYyCCbA/9da4qzUi5uTnFINwKDTPQA8qUOk8oqfbYwyk7cIF1eW0s
-         u+Sgofk85lc1fhVYTPG9ZKi4wwkehkoyx1YCKxf+ZvcodoAO3O2wzaKPMSfgxK2UhEj3
-         b+ny1xDjhaEVM0qBav3u1kA3jdlJFQlgpvwYTL3YWOTIeMHW1k+PJFbjvMmTTn91b+eS
-         ev3w==
+        bh=jWewpsuFbzTqoRaVPbiB62v6E+GOY+1kwxAn2d+qoXs=;
+        b=HLBhpNFKhHmcW89rtStr/gT2BTY9pEKaCzvShRGGfeaTMbrtbKv83n4BKV+OIJcfV+
+         nDheqI9UjvqzcntyDsPWPkMNj2k8BEVVV9MPP1+cXrXUfjnmJPTjsL08fH/uzmLu5fxJ
+         mAJxqRHqbABchNgCc32T/1/v8XgNzpL8U9fVVWwJWl7wye6fVgVdvCJBuGvPR/2Wu7/V
+         GhHSr1SRrn4geRzsniihVyEOItBFmMG/V7ZgX3vDbgrlocMvnpSnt6v/hKhU6idYDfCI
+         Qxb+NpSGkKhZnkmfRrlnQ/8OoFlI2jpCe3z7VuGLV2PKqWWmHfdOPWmQrfr27SmJK9PD
+         2KTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779151956; x=1779756756;
+        d=1e100.net; s=20251104; t=1779151957; x=1779756757;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=k/5ooRxhmqvebnRUuOuBr2iP+EihWYORWSHfWOHXOBo=;
-        b=ik/A7w1A5m2IJEgVowF15IT3X4vXqRnE6ojhwqJHcihQQsPLY+zzCtN15xYwGvOLGb
-         dt/DQdbTWEiaz/Jg5rXnhYQ1AIKI+2MPQKoQgZkSLbSLMADThADoqwq9FkWR8ar/nzZg
-         2WjkHtQ7PisHGvUSExqitnxVJVtniZNdELd4BmTosLetrMlFatEOAURz3G8CZLvW6EXD
-         sJWLa7QeO4CiWIjWf7lzo8HyGldeMyX03winBM4/BHj79Six0d8cEtW3qgqOPoc25i6j
-         FJBdy/i5wcbcNpCC0jn1ijXdytgBUFkqrRTBG6uTImxNoBI0JnuZCP93RTQvEjxL96bp
-         YCxw==
-X-Gm-Message-State: AOJu0YzKDfA7sMACAUAJq9kAhx150J8WJoVTJ3rIbCb20uMJ+4L6e/LP
-	YnNqWkSLJDYjComlq8LEbm/sdq90nDy/4u9pscpSK4ap1oegRJuxdcKCq1Ln9boX2fE=
-X-Gm-Gg: Acq92OHMR3roP6BSCWhosWFyTqVknwegXIgtAdZI9P/agkCGxCtMjoQ1Bf5l+eoCD/k
-	dZQ44RJ1Gc/BHi5y9am+opZ+ydtUzC7xFCal5WxZsRdQtw6FQYL8FosbUY4zBsl8VV1X3J2WoZj
-	WMZsia7o7vg7zM0z2b1bhYUrSGQhK08ju6+szxLTE9BD12IAsLlZJsxF6nLNdCDJLTY5WdVVFJm
-	06Igbv3k1tD2UIMvL0HZsPWoZXtoOgEsKzJkUkmiN6XwzZqlaHrAr+Ah/60LqNOh/r1jEDWsX+/
-	TaLjvJ+5tLblhxRcOGqSPV03I+havbKRXCII16r7zM/HM5/T7KO/2vsqfFOICPveyqMwVrv6Ptw
-	ILHkNyGro4Ukf8yGynDAkqN9bXCJf8AsLm0MKwhA2fOKWSTzk+DL1xwWZCIc3ROXRV9kCQhLLyK
-	yKdgsRBJsxS1CxWVPPEqtgfF5yAA==
-X-Received: by 2002:a05:7022:f88:b0:12c:2dd7:9099 with SMTP id a92af1059eb24-13504945cc6mr6484019c88.30.1779151956046;
+        bh=jWewpsuFbzTqoRaVPbiB62v6E+GOY+1kwxAn2d+qoXs=;
+        b=oKRGk+3S7Mr+rJRPeu0jBPyo0/9tQegqHbTAmoUIG2EGDJBKTrIDE7LU6XFExTOk+5
+         oJniAn5PL6VmLrvjXYqUtTSButmHZUQThyuzIztZRy4811s6GHfPcB0ozsf2c6vpasr1
+         o924A3OdliU+QdxEELfAVZK+dtXxpdSCs47nIk9wQ3n+PaRhP+ucavF/E5J+MRpcb2Vn
+         dXNSzegnPL8T1sR2HomR6np5A3/vRGS9k4PiVJ0vRZS7fssSX8V/j/UsNqAv+4hlePfx
+         5aVaJrwbKcihvUxLmOuG+0lentkpnQMcX1NNk5Rk+giUGXaKicjHdUbM9C+0XPRAXAeG
+         m+cw==
+X-Gm-Message-State: AOJu0YydUF9SsJq8tZjHbHXUyea8HtALOnjtapGBVeP8865oEuXt/qHK
+	zBNd/Bs85zAV+eojexotSzlPe1nRmPdb5mlzOXgWYghK4hhnGNrhEGcLZ8ZSpdp/jbk=
+X-Gm-Gg: Acq92OG3Smo0eIb538KCkNRu03pDz7RHndlKkkd1vnmG9GY0KTlEci07wp8ty3OiROD
+	9IoF4THWlQwvsThlIU9YxwsrgKXX4BnN+ghiKKeMBhPBpxivWSI+hBY/0ntgQjTZ03xAqdJkRJK
+	QqrzYM84C79fc6pa4nw7djZZKH8M2lvL6nXsL9/TK1308G6bvAENo3cVhVVRojZophbTQqsFhLm
+	+D1xt5Jb28FPCRSQMiQht81BtkD55KX75YJbUG7Ef/x9GdykmBKOqxRKhJlo5RhtmUKQ+tIKgW7
+	rbqix6pUw+8pxefYcz7IqMBEMqbp74blS+zvqlyZA7+9JIWNyEJmGalZGJIYwsSsuk8D427oTZl
+	1Wn+4uiQgP+76sD1W1ft7tu9h3OCVI/W8srpQOnh5zdoXaIdMnve4wbdB+5iFGoWEnhefjV3Reh
+	1zeIKB1Fr8TRzZH3yB5pparR1ooA==
+X-Received: by 2002:a05:7022:2201:b0:128:bae0:e03c with SMTP id a92af1059eb24-13504948b9cmr7313101c88.30.1779151956831;
         Mon, 18 May 2026 17:52:36 -0700 (PDT)
 Received: from [127.0.0.2] ([50.145.100.174])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cbcb93f3sm22546633c88.3.2026.05.18.17.52.35
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cbcb93f3sm22546633c88.3.2026.05.18.17.52.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2026 17:52:35 -0700 (PDT)
+        Mon, 18 May 2026 17:52:36 -0700 (PDT)
 From: Abdurrahman Hussain <abdurrahman@nexthop.ai>
-Date: Mon, 18 May 2026 17:52:31 -0700
-Subject: [PATCH v3 7/8] hwmon: (pmbus/adm1266) serialize NVMEM blackbox
- read with pmbus_lock
+Date: Mon, 18 May 2026 17:52:32 -0700
+Subject: [PATCH v3 8/8] hwmon: (pmbus/adm1266) serialize sequencer_state
+ debugfs read with pmbus_lock
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260518-adm1266-gpio-fixes-v3-7-e425e4f88139@nexthop.ai>
+Message-Id: <20260518-adm1266-gpio-fixes-v3-8-e425e4f88139@nexthop.ai>
 References: <20260518-adm1266-gpio-fixes-v3-0-e425e4f88139@nexthop.ai>
 In-Reply-To: <20260518-adm1266-gpio-fixes-v3-0-e425e4f88139@nexthop.ai>
 To: Guenter Roeck <linux@roeck-us.net>, 
@@ -79,62 +79,48 @@ Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
  stable@vger.kernel.org, linux-gpio@vger.kernel.org, 
  Abdurrahman Hussain <abdurrahman@nexthop.ai>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1779151949; l=2029;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779151949; l=1513;
  i=abdurrahman@nexthop.ai; s=20260510; h=from:subject:message-id;
- bh=FDObNUWMvwjjzrN2IkV6Cgo3wEKZLI2a8RqN+knZ8DY=;
- b=o4T0vpm7vwd7nU4PKFq3LRjfSe8OC/WKKKQElG1ohtEyZMkibITfRtuoo4iMw2HUrWZ5T/jQj
- fdKq75w5UTrA8wEIqtvyvFpSdRLwy/IkjcE+xsu56FiOHl5FTYfOXj8
+ bh=MbcEhPfilDl5djs8OwiISgXUAGJH031p6hDtDP0Q1lw=;
+ b=tZbataWxursToK6TwLtzAmcuF1Y17nbY6u7cTpaJYyj/zzPSkodk7mxZZH1JHVU1DnAEfVJlV
+ wM8DBAZHWeaDlPp97HVGOW3fr13+66tWHGwfFTqkXPbMbpgV5W2XWyX
 X-Developer-Key: i=abdurrahman@nexthop.ai; a=ed25519;
  pk=omTm9cCAbO0ZhS32aKfJDKue0W3sQGpG9ub5eYHif8I=
 
-adm1266_nvmem_read() is the reg_read callback the NVMEM core invokes
-when userspace reads /sys/bus/nvmem/devices/.../nvmem on this chip.
-On the first byte of every read it does a memset of data->dev_mem,
-walks the device blackbox through adm1266_nvmem_read_blackbox()
-(which issues a chain of PMBus block transactions), and then memcpys
-the refreshed buffer out to userspace.  None of that runs under
-pmbus_lock today.
+adm1266_state_read() backs the sequencer_state debugfs entry and
+issues an i2c_smbus_read_word_data(client, ADM1266_READ_STATE)
+against the device without taking pmbus_lock.  pmbus_core holds
+pmbus_lock around its own multi-transaction sequences (notably the
+"set PAGE, then read paged register" pattern used by hwmon
+attributes), so an unlocked debugfs reader can land between a PAGE
+write and the subsequent paged read in another thread.  READ_STATE
+itself is not paged, so it cannot corrupt PAGE in flight, but the
+same defensive serialisation that applies to the GPIO accessors
+applies here: any direct device access from outside pmbus_core
+should be ordered with respect to pmbus_core's own.
 
-Two consequences:
+Take pmbus_lock at the top of adm1266_state_read() via the
+scope-based guard().
 
-  - The PMBus traffic the refresh issues is not serialised against
-    pmbus_core's own multi-step PAGE+register sequences.  A paged
-    hwmon attribute read from another thread can land between a
-    PAGE write and the paged read in either direction and corrupt
-    one side's view of the device state machine.
-
-  - The NVMEM core does not serialise concurrent reg_read calls, so
-    two userspace readers racing at offset 0 can interleave the
-    memset of data->dev_mem with another reader's
-    adm1266_nvmem_read_blackbox() refill or memcpy out, returning
-    torn data to userspace.
-
-Take pmbus_lock at the top of adm1266_nvmem_read() via the
-scope-based guard().  Patch 5 of this series moves
-adm1266_config_nvmem() past pmbus_do_probe() so the lock is
-guaranteed to be live before the callback is reachable from
-userspace.
-
-Fixes: 15609d189302 ("hwmon: (pmbus/adm1266) read blackbox")
+Fixes: ed1ff457e187 ("hwmon: (pmbus/adm1266) add debugfs for states")
 Cc: stable@vger.kernel.org
 Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 ---
- drivers/hwmon/pmbus/adm1266.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/hwmon/pmbus/adm1266.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
-index a80fb2ea73bd..051f4f188ec5 100644
+index 051f4f188ec5..605db086236c 100644
 --- a/drivers/hwmon/pmbus/adm1266.c
 +++ b/drivers/hwmon/pmbus/adm1266.c
-@@ -394,6 +394,8 @@ static int adm1266_nvmem_read(void *priv, unsigned int offset, void *val, size_t
- 	if (offset + bytes > data->nvmem_config.size)
- 		return -EINVAL;
+@@ -333,6 +333,7 @@ static int adm1266_state_read(struct seq_file *s, void *pdata)
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 	int ret;
  
-+	guard(pmbus_lock)(data->client);
-+
- 	if (offset == 0) {
- 		memset(data->dev_mem, 0, data->nvmem_config.size);
- 
++	guard(pmbus_lock)(client);
+ 	ret = i2c_smbus_read_word_data(client, ADM1266_READ_STATE);
+ 	if (ret < 0)
+ 		return ret;
 
 -- 
 2.53.0
