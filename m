@@ -1,80 +1,66 @@
-Received: from mail-vs1-f98.google.com (mail-vs1-f98.google.com [209.85.217.98])
+Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1203408001
-	for <linux-hwmon@vger.kernel.org>; Tue, 19 May 2026 15:29:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 106D2408016
+	for <linux-hwmon@vger.kernel.org>; Tue, 19 May 2026 15:29:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779204552; cv=none; b=cd15s/ZpOpjhAI++3XZyJAzyWTIoXrzT8FfKd8NbD+EGkw1FEUpOdAl3kAamUYTPyaecTc9nzShJ4Ex6LksBz8uvlx99O2kM3omr1lUvBzaIN5949HI1io2Kp+X1n9LYlm2FtCwRCGHx4PLBVyufaKCSK+EskUQ72oWSo/fZ+as=
+	t=1779204553; cv=none; b=Ofq7eCjEsdrk+3o9p7fhoBEOU4XK0lUQhirDXa44wlDlNa3d8SAH6NaJyxgxjeBEoK6Eia3CumLW7cf8E8yHHVTnABeqszTePS4RGR9RbhaV0QsNFBJq0u0YYzf2ixEDD0Xg0WHC8XV1+zb+MjajjGI2ho7uzVFNYMj+AETZ9K0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779204552; c=relaxed/simple;
-	bh=GYEQ9w3VV57pezS1h6pAlX0hH6C/t5Vqgbmi39hHnpY=;
+	s=arc-20240116; t=1779204553; c=relaxed/simple;
+	bh=N0HBUn9Mh5pL+ucb5UEd0fgcswa/bdyHlGsPKKEWNpM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dHSDLnXfAg4V69O07SEMoMt7xdU1pIkRjOGGNzkfZREuVSWyBIXvRz1POmli4F5THRJ3DoSsuVeuM/BTv/fk53GOdX5gNrSPZhfvridTiVdgvl7+p73+v8T55pOJIHdBEvWC/kH9/STAt1BZNWzO7n+LeL3/T3LODzmWaABJJHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=Vwu0Ubwg; arc=none smtp.client-ip=209.85.217.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	 In-Reply-To:Content-Type; b=rH2sFCs2lsabKg7I5evzuY5OzJtHHn3otlOyaTmedi8pcNQeJ9YjqDcOKMbV8pVVqlpm1lRASQjpO0qHPY0s/ZepM3lwzk9stRF5WNjOMMINGa8B+BiQvfYFLUzvEF7RvnOzQN2SBUXfv0KY6XW9I1JqMi99E9e6ngpXFxbHR1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LaI3lp+S; arc=none smtp.client-ip=74.125.82.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="Vwu0Ubwg"
-Received: by mail-vs1-f98.google.com with SMTP id ada2fe7eead31-6312a0d556cso1633425137.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 19 May 2026 08:29:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779204550; x=1779809350;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:dkim-signature:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=FhiHL8lJqMLwH/tA/yyEZXng5kcabiZPDcP4lU8JGSY=;
-        b=VS2uSpVacvpJQFvKKwPqufbOgprzWog3ZGXnexpje0UPtLElQhT1nD/efmPrOwUs3m
-         B5i8Zr+DzWNNp2GjekVeDHp+gWTLl5SRTbpnztSM9imMndbJDVXCKtm2ok6oXuSo94aD
-         0c+tQeK/tbCJ5dbNOf47cAkA9lQw/Ez4+vc8Ifh0kQLm5aeIMQoW9yecIhr/sWFwEB1A
-         /mtFsLT1FDlaanxD52OFOTvTn7HZZOF8oOMFhnjac5VN7mXmj3xMCzs+GHdsNH0mBJH/
-         ouX+JGrmckg6vz9EgUolio7sIJjBJM0mawlgXYwhDFa8NtC7LP6SoQ3u6BXg8/mmnfFN
-         0W9A==
-X-Forwarded-Encrypted: i=1; AFNElJ8iOcQe6nvDcgwG8qdWvDCHodirBctFeGoDLC56akmAr1BBDIYcCSbNG7QdUNFFOEq+6kKkML5IiQmHJg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMDOaXx2+rsMs7d/sb5ktV3taXiqgKfr2Qtx4EwT6hRrHOTVoz
-	M+/qzY7YwfBCOXhZvzGqkL4X3UFZuNGEZMdQEAZrKBoeZw0u37jcG4jQ8uUeN4qlGCiznm3dJb8
-	YzENX6GFtXcX0bq1pFM7uw85uM6F216NZIZFohtzilYblH7kdiqkdyBym0ajq5IhY4YhpE9Q8lE
-	n3hEac/Ps8wln7DluwC2iyovUpsoA2a6EGBr3fGfJdw767VHLDZlnMAcVp7OHZ3rqEz1g0uQrWE
-	SY16dX7rYtvXJ+yITtBV4k=
-X-Gm-Gg: Acq92OHog9IML6gH7Q3orF8N9SKmVdrIuN6iuhfOpsKrtgx0OjS50YOPzt5q1mC716v
-	OzRXyyfASh6hDb/tIR6ErnAxX0lyYNO5b7lQNsuIwWLzhLT5dCgQ26IaHrjnv3/ibHju4NbyqcB
-	1i1aSn3DroOSHjJk0jFEs9WtdUmyypDsz+R6q2uc7tleCgx67jpt4gw9yL8XQPajq+6oGkj35JU
-	GvBEmZ0PqQzFrZFi1C0oZdvxOa4abbuly4VqdWmX4zdCsems+z4pIDSHtgI40o+scw2lD3eFven
-	LVM3BJ38e0gqeM7gSjP4WvSBo7QKZ0FwMc7Z3Y99GaNP3s/8otdE/gnCNEuYWaY9mCsMBQAEe6J
-	mgMZuS+ojtVUdyHRsjaL+81QIeCVyead0q4/BQmsJkjeBntjGxp4i8c2lDf4E5KIekx4tUmOWWC
-	fWNBQTFxOVHy7uAV3toaaEzRVv03vYR5y4yxtzE+AnLFTCQTPnY9YG05zMaee01g==
-X-Received: by 2002:a05:6102:1610:b0:62d:b0b2:88b1 with SMTP id ada2fe7eead31-63a3cc0cb09mr9729595137.4.1779204549523;
-        Tue, 19 May 2026 08:29:09 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-21.dlp.protect.broadcom.com. [144.49.247.21])
-        by smtp-relay.gmail.com with ESMTPS id ada2fe7eead31-63cededcee0sm893429137.29.2026.05.19.08.29.09
-        for <linux-hwmon@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 19 May 2026 08:29:09 -0700 (PDT)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-90fd6eeed3cso915954085a.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 19 May 2026 08:29:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LaI3lp+S"
+Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-303f2fb7225so1811367eec.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 19 May 2026 08:29:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1779204549; x=1779809349; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779204551; x=1779809351; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=FhiHL8lJqMLwH/tA/yyEZXng5kcabiZPDcP4lU8JGSY=;
-        b=Vwu0UbwgM6utIFfCpJfssdwQ4ISNb9+4bc1o12i6cO7lE31+h1KcbLfuZ/+kBHyC9m
-         lp+wMGU5dIREnKiWV8JnftGPf5d2CS44nG5z7DP+BSDzEDTg130PwcV0sZpplKwDuTeE
-         gD91c1JoTfKeUuN/jS2zkHnpy3xALNOq2YlWk=
-X-Forwarded-Encrypted: i=1; AFNElJ/eTwso001fl+riXjECoaJ/1r64tFNDdGQEBLOKEMrjSoGFiIAdjLP6nLgtLKzAogRBIQfs8P3vAU9mlQ==@vger.kernel.org
-X-Received: by 2002:a05:620a:4492:b0:8ef:3953:7ab with SMTP id af79cd13be357-911cea09723mr2975878485a.40.1779204548826;
-        Tue, 19 May 2026 08:29:08 -0700 (PDT)
-X-Received: by 2002:a05:620a:4492:b0:8ef:3953:7ab with SMTP id af79cd13be357-911cea09723mr2975869385a.40.1779204548070;
-        Tue, 19 May 2026 08:29:08 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-910bc83b85asm1860419685a.25.2026.05.19.08.29.06
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q/se++TNvk8+Q7Ds+IWKg6JPvzTs/UdaVZJDuU/0ji0=;
+        b=LaI3lp+SOHHGqWsTc3Y2udZlUufakS+84jpG2r+dx70bOviSCVyPWJFsi5TQK67sLq
+         ia8x0JO0piWSoMI+nt1ixS052TZTqLsZQqBAgvgYLoEyjy2mPRX7gCqvb39XrcjJL7sj
+         spm0gBta62dH0kNQcf7m0FXc3bxYrvZdbxwlA2DxGHBRFA4emmg4TD8SPbXZjdJgDHgo
+         nABPUFHjK24H84RtT5kG6/XmB5+CqevlhH3xxC+7Om0rwX1b40sRUZ97ApiWGx4WWYAt
+         fjJTfW5+ZpR7YEqLr/99HnA59oB2x4hI/je092DQ07UxXOff6uYPpMNFDS1hzXG1sZfY
+         QBUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779204551; x=1779809351;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q/se++TNvk8+Q7Ds+IWKg6JPvzTs/UdaVZJDuU/0ji0=;
+        b=LHlBYOYP1RDPGvK+m6S/5g4S7z0EK3SiDLENHrxddumw0mmBntXplJPXDrV4XWBfR8
+         AOsL+LDtZ7xNLlBu960KCIy46SulYG0wKmvOY+2e6wrS987JsD4mrcW4wa/IiDKZX0yl
+         5z2pAwSq2Aie8l1XMFAFg6RaiyO7fOzVQtQjFP/1uDAe41Avojcob5aqKuKW2wE5aAMd
+         eFr1JoMLbThtbcg+wFw7WY5py+4O06tj2ENpijY6ehWbmNONLtCPWytFGySFHaaUrwu4
+         asdiGKJ/VcC8jWlvdUMbjdHvJiDE99J7nJKVkuUby2Vj3+jpDYRhPpz+MPjLNK9lOkqf
+         9bfg==
+X-Gm-Message-State: AOJu0YxoS+HEZhMq9ckWQa6HXca0vAjR9F+5n0x8GOPT2KjDTqc4XY35
+	xfw8kcLHgypoO/TWZXhLXjukqaD9gnkR6iPwsHrQPGewAESITaGELGMJ
+X-Gm-Gg: Acq92OGmd9QD2Otp/Qd+Pf/H/37JCKdkBzoPWljPdm1lKXJw0hWN8mzcXjQx3feuGPb
+	hpOzd7kF1wVQC1W//huG8VjO6tcWEVbUf/7xi2C+DEsgqZOwIoLjprs8/RifdYSR1Kr5K8pR+mv
+	Wg0h8NLBgXAxojyin8yKCr/j6HsJVSFTwzRePS/PDJo6IIbjw5aKFw0Ekt9X0V1bd6SOnHKzwEc
+	8FKxq9Fk7BofmzwHFbFuIDEs2t7D7vceGIK9WTP3M025xgQ8NOuGkdD3/iie7Qc1u64PTthWogX
+	R0fCGhCs2NTOVwAOYaZ6hh3N5u2ZhvqFS1z11LernMpuTCZmhWInXhkpFqzCxFze0I6aqIzV5oT
+	TEmqAdCC8WkH/FuyvlFPl1UUKgQpLJguiGFhKhKjz+l3vxSMpp1FB1R2SAxNYkYQvOcP1ankY0D
+	VP77pKqHe7uiLgHIRZDDVDvLdwb057FiZ1DUeZFPhPnjaO2XfwXI9gAWZL5vhZ3TFymJDQZp1f
+X-Received: by 2002:a05:7300:d4cf:b0:2ed:e14:42e6 with SMTP id 5a478bee46e88-303986bbe5bmr8933376eec.31.1779204551163;
+        Tue, 19 May 2026 08:29:11 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30296dcc458sm20207784eec.18.2026.05.19.08.29.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 May 2026 08:29:07 -0700 (PDT)
-Message-ID: <edff09ba-f21e-4009-9b9f-4e7a9f630618@broadcom.com>
-Date: Tue, 19 May 2026 08:29:05 -0700
+        Tue, 19 May 2026 08:29:10 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <51133193-57fb-4a22-bf9e-9817f1f52ad5@roeck-us.net>
+Date: Tue, 19 May 2026 08:29:09 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -82,68 +68,78 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/3] soc: bcm2835: raspberrypi-firmware: Add voltage
- domain IDs
-To: Shubham Chakraborty <chakrabortyshubham66@gmail.com>,
- Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>
-Cc: Shuah Khan <skhan@linuxfoundation.org>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Ray Jui <rjui@broadcom.com>,
- Scott Branden <sbranden@broadcom.com>, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20260516164407.25255-1-chakrabortyshubham66@gmail.com>
- <20260517080445.103962-1-chakrabortyshubham66@gmail.com>
- <20260517080445.103962-2-chakrabortyshubham66@gmail.com>
-Content-Language: en-US, fr-FR
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
- xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
- M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
- JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
- PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
- KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
- AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
- IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
- ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
- bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
- Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
- tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
- TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
- zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
- WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
- IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
- U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
- 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
- pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
- MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
- IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
- gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
- obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
- N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
- CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
- C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
- wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
- EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
- fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
- MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
- 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
- 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <20260517080445.103962-2-chakrabortyshubham66@gmail.com>
+Subject: Re: [PATCH 0/2] Add support for Infineon Digital eFuse XDP730
+To: ASHISH YADAV <ashishyadav78@gmail.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Ashish Yadav <ashish.yadav@infineon.com>
+References: <20260519075558.91466-1-Ashish.Yadav@infineon.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260519075558.91466-1-Ashish.Yadav@infineon.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
 
-On 5/17/26 01:04, Shubham Chakraborty wrote:
-> Add Raspberry Pi firmware voltage domain identifiers for the mailbox
-> property interface.
+On 5/19/26 00:55, ASHISH YADAV wrote:
+> From: Ashish Yadav <ashish.yadav@infineon.com>
 > 
-> Also add the voltage request structure used with
-> RPI_FIRMWARE_GET_VOLTAGE so firmware clients can share the common API
-> definition from the firmware header.
+> Hi,
 > 
-> Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+> These patches add support for Infineon Digital eFuse XDP730.
+> XDP730 provides accurate system telemetry (V, I, P, T) and
+> reports analog current at the IMON pin for post-processing.
+> 
+> The Current and Power measurement depends on the RIMON and GIMON values.
+> Please look into data sheet sections 4.4.2 and 4.4.4 for more details:
+> https://www.infineon.com/assets/row/public/documents/24/49/infineon-xdp730-001-datasheet-en.pdf
+> 
 
-Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
--- 
-Florian
+This driver is 99% identical to the xdp720 driver, except for the gimon
+constants. Please add support for this chip to that driver.
+
+Thanks,
+Guenter
+
