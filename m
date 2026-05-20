@@ -1,87 +1,87 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D7422FD1B3;
-	Wed, 20 May 2026 02:29:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6AD524DFF9;
+	Wed, 20 May 2026 02:30:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779244193; cv=none; b=UCVRtkn9eTjMkq5r4SI2ZcE6Mc6xDsj7VEBmTgb7njT5vdqS/eZuEXthHDlPNg6/fnPgH+JyVBltDPBAH9MRVqQ0QmAE/tKFtT8yvbVc0cSC64j9kGt4+c3YozfAGf09ZwZ4EyazDEa8MI8W182VPlJOwFV0aSX3hyKN6gmc/jc=
+	t=1779244229; cv=none; b=FsKXQdJMfCWPuPj9bPz7h1JD3KvyViITLbZKC+NKCPyxM8u5GRuUOZd5eUyaQ54+V833TzP62jJzRWbbMq8BXMVjed6ptZmT6cAtbAP2xMZlGVIRopzoX/KL7JtUR0/AxAw4fCPnTN1DwdZ3XHtGbAtYjXMlaVCzYmZwkJHw+64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779244193; c=relaxed/simple;
-	bh=qKdP8gwbFrZCu+rkDA2VPIxHVZvAwIavEfUrS4mdvJI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Kqnu1Zj9gBbWBEa4E5UbVKLop2kio4g9yqm6kWowpDAdxr0v3vVi6/nVWQk1GLs6KoUIwmiJxZqwCt5PjJ+654nFw8n8LTpkhmzOJ62c2b7KDr1kbS+h2Rws3me/znkuik4y7lvNxNugVETIi3o0W0+op1WhuFRzilQGCVQ8PT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: c34dc11653f311f1aa26b74ffac11d73-20260520
-X-CID-CACHE: Type:Local,Time:202605201015+08,HitQuantity:1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:e089502b-a961-44a4-9ae0-26776ac77df4,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:e7bac3a,CLOUDID:1b5cdee170193ef0d64151a4d1e62d24,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|865|898,TC:0,Content:0|1
-	4|50,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI
-	:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: c34dc11653f311f1aa26b74ffac11d73-20260520
-X-User: jindongyang@kylinos.cn
-Received: from [172.25.120.11] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <jindongyang@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 1238087666; Wed, 20 May 2026 10:29:44 +0800
-Message-ID: <9d36e57d-5949-4af0-9f3a-0742ff18a3e7@kylinos.cn>
-Date: Wed, 20 May 2026 10:29:41 +0800
+	s=arc-20240116; t=1779244229; c=relaxed/simple;
+	bh=umQySL/i+cwheVXxfAEP6UJDIKBClRPeT5TeOrqGCIU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RRAJ5wRXke0Z+Hg5/wLGP4FZr8P2DYSNjIinahK+t3dZNVyTj8Aqe53G+NLPKE3ChEfAKlu2mNgf0HkOLY+IDQBEnOXn0HCNfBjEsQsEira2dMYO3yMQPwlDMd3z0/PF5UG2eYtqPjoDQsXcJq2ZTbot3Ny4UxQmNQj0qhzh/ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=XhZtIhVw; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="XhZtIhVw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Kh
+	6jrTawrsOKTR3GpJla7SjL53Y2IcXzw55QN3iN+tM=; b=XhZtIhVwP5+c4FpkuG
+	A/L8c0ml0UKRnRfq518OiqMmMrhjKfcJFE1MS98CdsZpRUJ0eR8D2BQ3+SjidHOe
+	qgBAddKaD5LhexpEBOX4iwMERz66xn9UHkQT1fg6Ap0hqVveBPNiD+EYGTME3AWG
+	4vAWIZQQHaHN9B//iM/wx6H/Y=
+Received: from debian.lenovo.com (unknown [])
+	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wCH7QulHA1qB42DCQ--.11360S2;
+	Wed, 20 May 2026 10:29:59 +0800 (CST)
+From: Kean Ren <rh_king@163.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Mark Pearson <mpearson-lenovo@squebb.ca>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Kean Ren <rh_king@163.com>
+Subject: [PATCH v2 0/2] hwmon: (lenovo-ec-sensors): Fix EC signature validation and I/O resource management
+Date: Wed, 20 May 2026 10:29:44 +0800
+Message-ID: <20260520022946.17335-1-rh_king@163.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260514011411.4167069-1-rh_king@163.com>
+References: <20260514011411.4167069-1-rh_king@163.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (coretemp) Replace sprintf() with sysfs_emit() for
- sysfs show functions
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260519065220.2348524-1-jindongyang@kylinos.cn>
- <d4ac610a-b34c-44aa-8e7e-b27092390c63@roeck-us.net>
-Content-Language: en-US
-From: Dongyang Jin <jindongyang@kylinos.cn>
-In-Reply-To: <d4ac610a-b34c-44aa-8e7e-b27092390c63@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wCH7QulHA1qB42DCQ--.11360S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWrtrWUCw43tFyrCw1UXF45GFg_yoW8JF18pa
+	yfWFs0krWDG34DXws7Aa42vF15Z3yfJFyUWr1UJw4fAFn8Xr1vvr48K3Wv9ryjk3yfX3Wa
+	9ryUXFnavF1qva7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRGYLgUUUUU=
+X-CM-SenderInfo: 5ukbyxlqj6il2tof0z/xtbC3wgPvWoNHKjOSQAA3x
 
-You are absolutely right, and I apologize for the noise.
+Hi Guenter,
 
-I misunderstood the scope of acceptable cleanups for legacy drivers. I 
-will stop sending such patches and focus only on functional fixes or 
-updates for drivers that specifically require them.
-Thank you for your time.
+This is v2 of the lenovo-ec-sensors fix series.
 
-Best regards,
-Dongyang Jin
+The original v1 [1] included a combined patch for both the EC signature
+fix and the I/O resource conversion, along with other driver fixes.
+Based on your feedback, this v2 makes the following changes:
 
-On 2026/5/19 23:16, Guenter Roeck wrote:
-> On 5/18/26 23:52, Dongyang Jin wrote:
->> Replace sprintf() with sysfs_emit() in sysfs show functions.  
->> sysfs_emit()
->> is preferred for formatting sysfs output because it provides safer 
->> bounds
->> checking.  No functional changes.
->>
->> Signed-off-by: Dongyang Jin <jindongyang@kylinos.cn>
->
-> I consider this a nuisance patch. Nothing is gained from it.
-> Can people please stop sending such patches ? It gets annoying,
-> and I don't have an endless amount of time to review it all.
->
-> If you make a functional change or fix bugs, cleanups are welcome.
-> Otherwise, I'll barely accept bare cleanup patches for drivers
-> using the with_info API. Otherwise please leave old drivers alone.
->
-> Thanks,
-> Guenter
+- Dropped the "Fix NULL pointer dereference" patch (previously patch 2).
+- Keep the original case of default case, remove the dev_err.
+
+Patch 1 converts manual request_region()/release_region() calls to
+devm_request_region(), eliminating a double-release on the probe error
+path and a release-after-use window on module exit.
+
+Patch 2 fixes the EC "MCHP" signature check that used && instead of ||,
+which caused the validation to accept a non-Microchip EC if any single
+byte of the expected 4-byte signature happened to match.
+
+Both patches apply cleanly against v7.1-rc3 and pass checkpatch with
+0 errors, 0 warnings.
+
+[1] https://sashiko.dev/#/patchset/20260514011411.4167069-1-rh_king@163.com
+
+Kean (2):
+  hwmon: (lenovo-ec-sensors): Convert to devm_request_region()
+  hwmon: (lenovo-ec-sensors): Fix EC "MCHP" signature validation logic
+
+ drivers/hwmon/lenovo-ec-sensors.c | 17 ++++++-----------
+ 1 file changed, 6 insertions(+), 11 deletions(-)
+
+-- 
+2.53.0
+
