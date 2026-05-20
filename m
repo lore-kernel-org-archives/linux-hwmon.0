@@ -1,89 +1,133 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAFFB3F871A
-	for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 18:16:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4BB8368968
+	for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 18:18:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779301007; cv=none; b=FFS6iJlhsm90w20qdJfmvQZrI/na76xbg/3nZmv6LVU8KPOnWi23tAwD10HK1erJQwlFENUk6uYt8rPyRp4ousRAPgCNYv3FTbq0dcHyX8Tn52VdAEB31kQPYurwcAjzHKZD7bRk8q8emBmQt86imfvccZzaXu84w2jrcpWl84Q=
+	t=1779301115; cv=none; b=apE4cC9LFatCVQJCUkiHlW0hkY/LniVO15n+Ab8o0fEDT1jPRFSios+F19q2cFJfLvYHMYCJG/v8onUrsp/60+7/CVfg/00usj8TG1ZquhSbWn7D+oEwUWBDDYqU43jFjlVZmHTZcpw5bQMgsdrxwhq1ZqHL/ACvhHbkT8vE+NE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779301007; c=relaxed/simple;
-	bh=l6DKCXjemggPrcXPN7QV86I1EbhcMscTp0hAIaRQquc=;
-	h=Message-ID:Date:From:To:Subject; b=MHYt+SMiWcEXpysLldDAJAuLNEwx9kUhXDqFNU38LIPdDvwcIsiVWC4qf4cHkbsgwy7dAeVPo5I5GBcivMvJfIN9VsREbwoNb9Zwp3/wutacnzm5cgRwtxHVL3OBsewevC2iM+TU87RBVz5PTrlZ+vVkZ+vJ8s+df+Ga3gnjrRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tKF22ldw; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779301115; c=relaxed/simple;
+	bh=EPKGMVgeP0QmgxAZFTHH1/2wAAnTB2qVLSYrZUlctkQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=eOM9TSwkIqn6cFpe6NDOVROx8TtyhL2nHMgTSCKFGWvHWdNhYFyrrI+R984Ydcn9FaD1fTNeNbgYn6wDgslPoNoq8oPU29NzGlgT3+kg3hDcnFOaQbhFxY9Z9zYrp8PDQfFCvNqlbBmy5Gi4ZKRdBDUdHDql3q0jWzZU2bmdgJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LHtyQFmO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tKF22ldw"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2ba6485d219so38210135ad.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 11:16:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779301004; x=1779905804; darn=vger.kernel.org;
-        h=subject:to:from:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=l6DKCXjemggPrcXPN7QV86I1EbhcMscTp0hAIaRQquc=;
-        b=tKF22ldwRBHrnpuYpL4rGlTMLCLz4CkWsQgR5drOXAMNl0J8/uXWk/2VS7ozwNhIoB
-         k21ZcqWuO8TpBZtxNrSXRbPbPTGTARf1QwP7JDIwflnwok6ZGKCpKfJ5D/Jy4g/JQLI5
-         O74fdx80ZrIDkZHlV3cyxdWS/0NcX/bKZ9+BrOUxgbV7PtzVoAr/56G9cbZxvPblms0L
-         Y6jrhohzb7fDPwGe3NRv3ydW9TWr53BAYTi+2KEOYWDF2kM1kAt/ovXXfEGcDdH6MaNl
-         RmHFqMhen6IBX/DOg5Htla1hGjA+Jq1qUCVQDktudNjw7HL098lH97R6ybbnuTpBsu7M
-         oWlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779301004; x=1779905804;
-        h=subject:to:from:date:message-id:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=l6DKCXjemggPrcXPN7QV86I1EbhcMscTp0hAIaRQquc=;
-        b=PjJpAa1lPHmeKZrXy+mZJNA8U9SiSRYJfcF/nyTuGMPBCTOlv2NxzSE2kJh8P/t2T9
-         J9q95xAE2uHhehR/fplKW6P6gks8niqe54kB8gsTWRxnbAuApv0iYTh3vNE5CCu6kS6k
-         po7REH/tZ2kthovsSUlgZp4vamzYa8LA9xlLxLrm3dxOrdSqDWyLlZ5FuRMfjhUSUFYP
-         QrcK47N9go8nEsxHJtKq3O/UluhykUaMTQ44RvJVNvjcgaHebVbCzPAw/YTsjkoTUKlx
-         xubWGIqdCDpff0JvYmA+p2Rh7WXrbUvlutfA3AgdEe0E8wHwIid/2ZOfpYBeCfJmrj/e
-         V64A==
-X-Gm-Message-State: AOJu0YxukJYSO54z4kIdHy6aHozfqrpuvMclVlE0eUMaArg8fp640vbk
-	v2o+4N+KjVB5qIeqUWKsCnBFSDrsF55MfVnxF9rvXzVpp+WGWsJz0ZkGze9PJmJpeD8=
-X-Gm-Gg: Acq92OGEr0AKHw+glmfNHc3UTjIi6M6YU4XXCdqoxBcvpCCpPqfG6FM7FGkepfaU3iO
-	DUmstHH82BYDeGYYULKBsfIrcQbds8/2VOs/IO8aMi/HqxuiMTXKhhPgOF13DGEotrbI0p6v5Me
-	xXx9lcVa2pfBJcWuR7zwqtu58O4Lj8sv4Ezahjb5tESTiVZIMMCteX5IjcIdTy8MuwxNbcWHcwz
-	cskUe2i1kT59GD47QyTG0xr13lRxDzUDOz2OBzfJ2n/kR50L9XPMqn7riA4LOEqFUOZ53HSvOff
-	c5ZURDmiCrsUGn+qUMSv9glMVYwPGUqoA3YfAiVjQiGd1VDWVp0+QDc3qGQh5yCbhy8sbYjGqz2
-	nA7KHXlGsDJQuUpxdQaNnmJnKpSdM469kbsjaw3OLzpysdwOaHYRAOrqKovZ7QfcQZSJu+mxzYd
-	VLMkshm76DLGCJ2thfzrU8LnnLilOAdrq2yu1iRBaIXV68VyGB0USklSH2ajMzCtIZAIuyh7p2s
-	Bprs0Jh4VfmsJoCuQ7JfQ1qpFf5neCjhsOAaFPczo0=
-X-Received: by 2002:a17:903:4b0d:b0:2bd:7684:34b0 with SMTP id d9443c01a7336-2bd7e8a4e47mr260942145ad.15.1779301003830;
-        Wed, 20 May 2026 11:16:43 -0700 (PDT)
-Received: from localhost (ec2-35-94-83-63.us-west-2.compute.amazonaws.com. [35.94.83.63])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-2bd5d0f8efesm233502985ad.55.2026.05.20.11.16.42
-        for <linux-hwmon@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 May 2026 11:16:43 -0700 (PDT)
-Message-ID: <6a0dfa8b.f4d142a5.6d373.e680@mx.google.com>
-Date: Wed, 20 May 2026 11:16:43 -0700 (PDT)
-From: jongsuktinalee@gmail.com
-X-Google-Original-From: PayPal
-To: linux-hwmon@vger.kernel.org
-Subject: Invoice Generated | $537.07 | Ref: TXN-B5YE-LMM7-J83Y
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LHtyQFmO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D15F1F00893;
+	Wed, 20 May 2026 18:18:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779301113;
+	bh=KXGZzlgBJ3phGJ9C4/QHHIhdXtoExUuN+0ok01EZKNc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=LHtyQFmOMXEdX5dnzn+T5B+4cocZd+uefVPTKqehsb+Aa8QPUi2e4MxVkgol3gvNs
+	 Pr70I4q5VNdppWlgdJ6dz6rZH/NpkRSLywcKkuZ0pGQQ/DVjsbbB02aU1pavaO23Ej
+	 XlqcxJfp4/XF02lYhJJUtVhNRF/6Rb/E89L2TtjhgkM1O7vMdZ6D/qnjk58nNAYQI6
+	 Ibz+yle6ZMmiaLcDVL9GNjxc6kVW32mOAzUcl30Lbr9KQ6ey3dfbSK+0CXYnQEDndT
+	 9mFt+cEbDpw8n0V4pe3kcUUXVmt3O0qWuVtY7JtI+M51xr4Sb6ufeNM0JYh38+BbTI
+	 1pXGyUlnDRFPw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] hwmon: (pmbus/adm1266) serialize firmware_revision
+ debugfs read with pmbus_lock
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Abdurrahman Hussain" <abdurrahman@nexthop.ai>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260520-adm1266-fwrev-fix-v1-1-8a78c94a53ef@nexthop.ai>
+References: <20260520-adm1266-fwrev-fix-v1-1-8a78c94a53ef@nexthop.ai>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 20 May 2026 18:18:33 +0000
+Message-Id: <20260520181833.9D15F1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Subject: Your PayPal Renewal
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
 
-Hi Customer,
+Pre-existing issues:
+- [Critical] Out-of-bounds memory read/write and logic bug in `adm1266_gpio=
+_get_multiple()`.
+- [High] Direct device accessors lack the `pmbus_lock` required for seriali=
+zation, contradicting the commit message.
+- [High] GPIO and NVMEM devices are exposed to userspace before PMBus probe=
+ is complete, creating a race condition.
+--
 
-Thanks for being part of PayPal! Your 1-year membership renewed automatically at our special anniversary rate.
+commit 93431d6d47217063e4487061d81fc6df727bcdb0
+Author: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 
-Renewal Details:
+hwmon: (pmbus/adm1266) serialize firmware_revision debugfs read with pmbus_=
+lock
 
-Service: Virus Protection Security Pro
+adm1266_firmware_revision_read() backs the firmware_revision debugfs
+entry and issues an i2c_smbus_read_block_data() without taking pmbus_lock.
+This patch adds guard(pmbus_lock)(client) to serialize the read.
 
-Customer: Customer (ID: UID551649)
+>     Take pmbus_lock at the top of adm1266_firmware_revision_read()
+>     via the scope-based guard(), matching the pattern just applied to
+>     adm1266_state_read() and the GPIO/NVMEM accessors.
 
-Amount: 537.07 USD
+[Severity: High]
+This isn't a bug introduced by this patch, but the commit message asserts t=
+hat
+the guard(pmbus_lock) pattern was "just applied to adm1266_state_read() and=
+ the
+GPIO/NVMEM accessors."
 
-Need help? C_ontact u_s: +1 (845)-212-9062
+Does the current code actually do this? Looking at adm1266_state_read(),
+adm1266_gpio_get(), adm1266_gpio_get_multiple(), and
+adm1266_nvmem_read_blackbox(), they do not appear to use pmbus_lock. This
+omission leaves direct I2C accesses unprotected and vulnerable to interleav=
+ing
+with pmbus_core's multi-transaction sequences, which can corrupt hardware s=
+tate
+or interrupt PMBus transactions.
 
-Best,
-PayPal
-+1 (845)-212-9062
+[Severity: High]
+This is a pre-existing issue, but are GPIO and NVMEM devices exposed to
+userspace before PMBus probe is complete?
+
+In adm1266_probe(), adm1266_config_gpio() and adm1266_config_nvmem() are ca=
+lled
+before pmbus_do_probe(). These functions register their respective devices,
+immediately exposing them to userspace.
+
+If userspace accesses these interfaces early, do the accessors run before P=
+MBus
+core structures are fully initialized? If the missing pmbus_lock were added=
+ to
+these accessors (as the commit message assumes it was), wouldn't it retriev=
+e a
+NULL pointer from i2c_get_clientdata() and dereference it during pmbus_lock=
+(),
+causing a kernel crash?
+
+[Severity: Critical]
+This is a pre-existing issue, but is there an out-of-bounds memory read/wri=
+te
+and logic bug in adm1266_gpio_get_multiple()?
+
+In adm1266_gpio_get_multiple(), the second bit-iteration loop incorrectly u=
+ses
+the PMBus command byte ADM1266_PDIO_STATUS (0xE9 =3D 233) instead of the co=
+rrect
+pin count macro ADM1266_PDIO_NR (16) as the loop's upper limit.
+
+Does this cause for_each_set_bit_from() to iterate up to bit 242? Since the
+mask and bits variables from the GPIO subsystem are sized only for ngpio (25
+bits, which fits in 1 unsigned long), does this result in out-of-bounds rea=
+ds
+on mask and out-of-bounds writes on bits via set_bit(), leading to severe
+memory corruption?
+
+Furthermore, doesn't executing *bits =3D 0; immediately before the second l=
+oop
+inadvertently wipe out all the valid pin states gathered during the first l=
+oop?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260520-adm1266-fw=
+rev-fix-v1-1-8a78c94a53ef@nexthop.ai?part=3D1
