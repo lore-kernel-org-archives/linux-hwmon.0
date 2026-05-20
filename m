@@ -1,105 +1,194 @@
-Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A276B2701C4
-	for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 13:39:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE85F3E7BC6
+	for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 14:02:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779284357; cv=none; b=muoJGQkD1dUm4/485qVXgQhjCNZgFBg5/ELVBGadDyKj5A3k/Eu1XjLpexaKR79kRHOMq8y8WrGAZ6jse+nkXYHhHATQrJLNwfwIl+aH4Y0DLgJOBx//aclbHmlNNGqrJ2BjtB16OLCJTwj69Nyv9quyN8boT9NQFCk38VPK58A=
+	t=1779285755; cv=none; b=cIFiLslEN8uI59+xH087thzgqTD70D/VP5t2eIciZf7N12+P+OjA8RM/kQByjiIq+joGYwqeteS5fa+0MZ3EdZSaGmeJ9YLSFOACj0q0wzOA+Aiq0BPYaf21+ADeCW95upH+tLQzbY/PMDvWDuyAnmQWsSwLKa0yDQKYLa7KK6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779284357; c=relaxed/simple;
-	bh=oaFdq8z1elXJ2kvvKaYfJ7RYMi53L4i1xZbiNUaix60=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mZ3sgxecRwSbJkUcTqgOYg00a6URfYIV+16qMROdiFy7POx34Pkpd5368Vwl18CGcd2O2sKpNJTvqmkMU5dv8KebEzpZ3ucvFMRe7HFvt2EwvkkdDoGEAvpinxspa6zmO/t4xE/XXtDU/xIOnnPOd0vNMnsZgYIoND8wNvAIB9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LcA1+J23; arc=none smtp.client-ip=74.125.82.169
+	s=arc-20240116; t=1779285755; c=relaxed/simple;
+	bh=lfU22JuMTGqpNRTq06SvaHT2aCYrYJ0561qqJVpzVFk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iC/f2HjZg31coBgBjSP0/907NWY+b+8FuMKu/jqHVXvS+iRqz7Ma3y4k/DtbLy6J1WsX5L9hkAM1FWIDAaj/rwyeX9edJSWzZUpC2PHDehw+JfXEJUaIxa2QC4jsonGeQMN4mlbaU6bAdO01U/vG+jg7z3PvlDInJmjR9qxaswI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=np5Eo/MD; arc=none smtp.client-ip=74.125.82.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LcA1+J23"
-Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-303f2fb7225so3040360eec.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 06:39:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="np5Eo/MD"
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-30246cfd41aso2040697eec.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 07:02:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779284356; x=1779889156; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XydIKcKEN1f8CDYCbBpZkqLXM7ghEeBzqIONwAcRzBw=;
-        b=LcA1+J23VlhZIvCQK/z/UPJhLlLioKWNlYnB0G8F/sOzOvAE5gZyNeQrPHBQEDJGbN
-         Kd5DaUcfnVSUvehSXP+qWmfLz2C0Krom4oFIzxJGXDeIpp0PRM8PwZ6Ym/wFwQBzycYd
-         Pbwt1RXpGNj95YSbr8jh93T8KLDhfdhsU91HGiRmQY6oIR89y7clxLKm/Y1v1HmjUyhj
-         QA7yw5FUW5kVVc4+zlRYX4ZQDHf+nVkJfnVO0Zlf/T9InwoGGl+4RX9t4BKZqRkDyGH4
-         /8JyDbXPXWAosHeUANAx6xvzrKYN8RLDOhqpymdciQZjCOmwepfYkI+ra+yxlAirvM3Q
-         tPEw==
+        d=gmail.com; s=20251104; t=1779285753; x=1779890553; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=QH/+hBnpTGrzN0wXR/d49KtC+d0ximgNyQb80BoPFYo=;
+        b=np5Eo/MD5LAX/iJ9qESoz0oIMTdgSbEJmsZTcRYlokvoFDq/Ea8LChtTEnlVZTgreM
+         hfRx650/UjmJzeQ16wg8BYwSRTs1QUPkBgbrv0O9eLKG32Z3BQO4WhJobJzggqyZt5kW
+         iWOfoKKQ9S3Itlj9fKXoHZQF3Fhge3SnLC3iWHazfcNrrbF2B8BjpH1bKo47l2Nrul1l
+         32qTlUKqw0qkCkM5lzYGIGsYrNzW45qTpzHwhuxTff7OOh40Aqyv6c9kJ2bpJbrLisMd
+         UTmi1rEnH3iRE0M9ZEGt5mbsdCkxirccvp1/VSZ7HJqbrNKbHTfMVF4aKSUyf5d4OXT9
+         9kuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779284356; x=1779889156;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=XydIKcKEN1f8CDYCbBpZkqLXM7ghEeBzqIONwAcRzBw=;
-        b=IKPc91PsarvC+Ine8nXQF9XhJiwKxGmPpGkLHlIBMA64AqhZJKmQrivJ55zrr7RNkm
-         zi2zwwhmS10JFaDjFEi8O8wwwZDzTEvufHNP1jkpt15LsTJ0s41FoPHtGcIYCpBYVHD/
-         pEkcElKpFIt2irRBZw67C58BhySpfiEKF3cWyTFjixMrW4fWxj+vqfW7yizNUFKTSX7Y
-         WuOyjTWrDjwjM7J233Ij/nzx1hKpDdW2Re0/dj47/w7BR46n6wY/or79HsoxEvZCnQ5s
-         8k9+TjhtOVmhMkb+hLk3EeVZYyIyZYj9RT5+oHjNK+wBAPHM8nZmcYZ8qAEsIBu8MVqv
-         pxSw==
-X-Forwarded-Encrypted: i=1; AFNElJ9HHLxXA0BlTdewa7mqx50B+lio+e94w7w6T1DBZObewo9D8wSVryiiQhsyRJo97bHBhor1kW1KI/18MQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzbn+4Ttt8reLv/QopSHipjZ2J804OI+tZu9zOGcnfVzmGYhtmV
-	Ut1BnG414/7DoX/2suK5UNgJiG8Gx8qDi4kpIY3AZp97PPE+Q29C7x/q
-X-Gm-Gg: Acq92OGU2xlbclMVcwJwzwlsETvbmm6X2d3T2RI9INoJg2w8TJaY3Ax6w0B7Ub9mW+w
-	jhR2vhpCYzc6BiCDzabWnA3Eswm1GF6D6Im1n2Wsczg0K++u+jQMPuxtefgnX9hxZpVvfz6tzl5
-	C4g/b9HMUkbfn7+iKiRavUrqi6c+DZYUBh+P24Jk3xYwIeSx4OunVVWM5nUV3EG7SICV4H2/JFC
-	m2k3GtjzCmP8llGf429dQe+7jzOKcDThGXEpYOB+9a5PrD/7OYdrFH9YHUzxJ+k5WcJjDxtGTJr
-	HTOX2fmdrBi/AQ9ndGRrXL+2htI0bjeU+HP1cqgaEh/Z71vFAnLsYRzUNLgSPNtdF7Kg15/om6N
-	1xJ6cNYVm50y1FZHZ7VCGxXipej5l2ZiJ+slmIHSm1tyhHHEWb0eBuB1abklcPZ2ai06Og4B2V1
-	9un5SIU8w2afSVeXNRyWjdx5wiSe6gZ3pSYhWL
-X-Received: by 2002:a05:7300:a907:b0:2c5:220c:5670 with SMTP id 5a478bee46e88-3039818eec3mr9988056eec.2.1779284355819;
-        Wed, 20 May 2026 06:39:15 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-302978ad18asm18456851eec.26.2026.05.20.06.39.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2026 06:39:15 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1779285753; x=1779890553;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QH/+hBnpTGrzN0wXR/d49KtC+d0ximgNyQb80BoPFYo=;
+        b=hxvNHEIzvncKUXr9XpPjUdAsKx6hk49mW8/yRdt4xnFZdMNbbDv3LE3yUwVzXmNjA2
+         LK0HEK4xTYhnzp/SXkm8w3UQ/aHiVZ/FkNZ3Ezf8MC5SBJ+6luLKGG18L3uRi0tCVX+N
+         KsGnOzW60GyhgQ3+IM7/AWdGmWWafkPWgHjd25M4d3iZUCUu97QcW3ej1XssFkRXrvvI
+         GtqwK+Nxrmt62JT2Thos8CrcZyZbwkcWAyUpiu82WNOYZvFdDPRlZ3eZ9WUgOuRzNn0b
+         r+T4iQYuuR8GvwovG8gVOxGkJMAspnkrCIhfhaV1p1+MkmRN3m6r0na2E9Y3E0JjzUIW
+         mQ3A==
+X-Gm-Message-State: AOJu0YxEzpJXi2AQ+wbDHgzHq6HarFBJGwH6V6PpsxWvXK5mHYxQGSpj
+	dUSJK5iRGp0CzEjWcDVT4jgv8SJOzTPhK7kLhWOXOq2MfLeEG8NuNrre
+X-Gm-Gg: Acq92OFqx3Ruw5O77pwgJhu4oMVXakscZIj9WnruTZAYGpbiRRhZSUshbgow5VUkcEh
+	JhdRCUAyWL5tzI/CVc0OebrjX88+VEKIBFh9gQW/pD8MHwSJtfdYpOzZlVLz/DofYmTz0ABLQ0T
+	YcYNudMS8+fHe0OdIOgqcyAd3jU5Mt6krXiEkPgr/OiaZwr0KouRcaRSRHLYJY6oottE35SApsb
+	O5LcKG2pRkAYSOmPbNOmK5qa6qBICCd4ry/x2Fs4HlEC+QUYtjsfP9f5fj1VFKI2jzQAgfX13zg
+	qMmsOuLevwDsa6Vwq9vDl0zkSNwMpi3X3Y74sF9Yl2JZtzmFZTtMyCFJQwpXQznydH5cpZ8C4Dt
+	6IMeZAouuBZLae0sULNarEvSwYvzTIf9h970OoWR2sIeZTjsZKvHRIYz+kG/rqUw6Lnya15EDs2
+	lcWU/SlluhccwdPbPFu0haPZbr0ZMC2hpqk3WNlsdIudglCPj4byLyjW7nFfkuXay3apXEMETqK
+	ooAyBeUhw8=
+X-Received: by 2002:a05:7300:6c21:b0:2da:4216:7ea3 with SMTP id 5a478bee46e88-303983c6376mr13070641eec.14.1779285752147;
+        Wed, 20 May 2026 07:02:32 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-302973bbd50sm18484883eec.20.2026.05.20.07.02.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 May 2026 07:02:31 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 20 May 2026 06:39:14 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] hwmon: raspberrypi: Fix delayed-work teardown race
-Message-ID: <f1b970b8-1785-4f96-ac79-d3bb79c53101@roeck-us.net>
-References: <20260516164407.25255-1-chakrabortyshubham66@gmail.com>
- <20260517080445.103962-1-chakrabortyshubham66@gmail.com>
- <20260517080445.103962-4-chakrabortyshubham66@gmail.com>
+Message-ID: <57f31aba-b7d0-4e8d-8abe-84e4fc6cad84@roeck-us.net>
+Date: Wed, 20 May 2026 07:02:30 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260517080445.103962-4-chakrabortyshubham66@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/8] hwmon: (pmbus/adm1266) GPIO, NVMEM, and debugfs
+ accessor fixes
+To: Abdurrahman Hussain <abdurrahman@nexthop.ai>,
+ Alexandru Tachici <alexandru.tachici@analog.com>,
+ Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org, linux-gpio@vger.kernel.org,
+ Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+References: <20260518-adm1266-gpio-fixes-v3-0-e425e4f88139@nexthop.ai>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260518-adm1266-gpio-fixes-v3-0-e425e4f88139@nexthop.ai>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sun, May 17, 2026 at 01:34:45PM +0530, Shubham Chakraborty wrote:
-> The delayed polling work rearms itself from the work function, so use
-> explicit delayed-work setup and cleanup instead of
-> devm_delayed_work_autocancel().
+On 5/18/26 17:52, Abdurrahman Hussain wrote:
+> Eight pre-existing bugs in the adm1266 driver's userspace-facing
+> accessors and probe ordering.  Each is reachable any time userspace
+> touches an ADM1266 GPIO/PDIO line via the gpiolib char-dev or sysfs
+> interfaces, opens the nvmem device, or reads the sequencer_state
+> debugfs entry.  Five landed when GPIO support was added (commit
+> d98dfad35c38), one when blackbox/NVMEM was added (commit
+> 15609d189302), and one when the sequencer_state debugfs entry was
+> added (commit ed1ff457e187).
 > 
-> Initialize the delayed work with INIT_DELAYED_WORK() and register a
-> devres cleanup action that calls disable_delayed_work_sync() during
-> teardown.
+> Patch 1 caps the PDIO scan loop in adm1266_gpio_get_multiple() at
+> ADM1266_PDIO_NR (16) instead of ADM1266_PDIO_STATUS (0xE9 = 233, a
+> PMBus command code that ended up in the bound by mistake).  As
+> written, the scan walks find_next_bit() up to bit 242 across a
+> 25-bit caller mask, reading out of bounds and -- if any of that
+> incidental memory contains a set bit -- driving a corresponding
+> out-of-bounds write to the caller's bits array.
 > 
-> This addresses the concern raised during review about the polling work
-> being able to requeue itself while the driver is being removed.
+> Patch 2 drops a redundant "*bits = 0" reset that sits between the
+> GPIO and PDIO halves of adm1266_gpio_get_multiple().  As written,
+> the GPIO bits the first loop populates are immediately discarded
+> before the PDIO loop runs, so any caller asking for a mix of GPIO
+> and PDIO lines sees the GPIO half always reported as 0.
 > 
-> Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+> Patch 3 adds the missing "ret < 2" length check after the three
+> i2c_smbus_read_block_data() calls in adm1266_gpio_get() and
+> adm1266_gpio_get_multiple().  A device returning a 0- or 1-byte
+> response would otherwise compose pin status from uninitialised
+> stack memory and leak it to userspace via gpiolib.
+> 
+> Patch 4 moves adm1266_config_gpio() past pmbus_do_probe() in
+> adm1266_probe() so the gpio_chip isn't registered (and reachable
+> from userspace) until the PMBus state the GPIO accessors depend
+> on is initialised.  This is a prerequisite for patch 6.
+> 
+> Patch 5 does the same for adm1266_config_nvmem(): the nvmem
+> device is now also registered after pmbus_do_probe(), so the
+> nvmem callback (adm1266_nvmem_read) cannot race
+> pmbus_do_probe()'s own device accesses.
+> 
+> Patch 6 takes pmbus_lock at the top of adm1266_gpio_get(),
+> adm1266_gpio_get_multiple(), and adm1266_gpio_dbg_show() so the
+> GPIO PMBus reads can't land between a PAGE write and the paged
+> read pmbus_core does in another thread.
+> 
+> Patch 7 takes pmbus_lock in adm1266_nvmem_read() so its memset /
+> blackbox refill / memcpy run as a single critical section.  The
+> NVMEM core does not serialise concurrent reg_read invocations, so
+> without this two readers racing at offset 0 can interleave the
+> memset on data->dev_mem with another reader's memcpy to userspace
+> and return torn data.  The same lock also serialises the refill's
+> PMBus traffic against pmbus_core's own PAGE+register sequences.
+> 
+> Patch 8 takes pmbus_lock in adm1266_state_read() (the
+> sequencer_state debugfs handler) for the same defensive-locking
+> reason: any direct device access from outside pmbus_core should
+> be ordered with respect to pmbus_core's own.
+> 
+> Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 
-Applied.
+Series applied.
 
 Thanks,
 Guenter
+
