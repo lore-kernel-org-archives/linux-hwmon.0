@@ -1,135 +1,188 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D05F36A35F
-	for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 21:02:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FF3937B40E
+	for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 21:18:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779310944; cv=none; b=Jow6sJTDyo3oZCkZ54v15V96qAa1RgcZU6YUzBuY3k5t4bFQaC78MiccSY8djPzx/z/F1bjjx6ILVhyZVa7JfholjtAV1m22SkjEvUzV3FQtbVBp6+5VjByHHx1YgX3KEx2BgEoNYVImykmIt5PpVKLnRgLNj6zRjcZKV3kMbTg=
+	t=1779311902; cv=none; b=TkCIdeVp2BaFcIAfOL7IUgwI3KWD4twtae2jZ8Mu/QZFGEzZCF7j+CYWlbuzw8l1Py1LNW83llYqdFd5PydQFr2irU0Pe4AOUurPOs1xIvZsmyDEYA2ze2L1mu2A9wGXcDsAoV2DfxbJrUYzwFMAtroOgJFgurNxUMElKMJQ6Kc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779310944; c=relaxed/simple;
-	bh=xQKB7CIE4VjzLRBLwlAbP2vGsCXOBhOpQ7c6EF2CKLQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W7TnS7e/T5pY6S7CD/1e/fz50XgkJhVyqM5P5hsc/39tCdft5IKnUnAmLgEi0H8hYg73JmadNBVusW7os/2gD871FqJn7iQeibquYmu/SIFKYW7ndDmCCpOg4CirXue33Ry2OoueyplIPN2l0UGtFO5xHgXh02mUpvhOvfm/GGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jqjDNPNP; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779311902; c=relaxed/simple;
+	bh=2qBAJakZ99cnOL/2UwFpo8VxRhNqhAyyDd3DXmJ7Fcc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=o5dQ0kMQM5VeqhsB/Xni9hQT4Xa8NJJR+o9Er0nbppVfxBxiu8zG0xBMTKmJ3vN2X9McmmYVCE8PJwZws/KdOfMWXrtJ+UsCdohVojIlR53QYnyXP8TvpzRrR0DRZoE6uDR49MrE3ozHg1JofrtbrGXA4TybqmuSJA1d2MZhHYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai; spf=pass smtp.mailfrom=nexthop.ai; dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b=Yf8PAX5P; arc=none smtp.client-ip=74.125.82.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jqjDNPNP"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-367d88b9940so3497252a91.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 14:02:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b="Yf8PAX5P"
+Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-12ddbe104ccso3865940c88.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 14:18:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779310942; x=1779915742; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=VTmur95naqjnIgZ5hp+V9rZ3PhbDCDGfUxAndYAErTI=;
-        b=jqjDNPNPLM/k9b2VPgVn87eYxyoKlXdJAFG2HsLjT8M4b0irp2E21xk40tCs42R8bv
-         u9f1bCCEJPr5tMLsqrCzGFeQ/Q544utaqnbuEw3RzMQI0IYb5qroZyKiPCPzCqLxNQjy
-         uHdp9Fj1b0MtMWr2ftjffKONGBICREs6dSjRy6xYLC7ShtBphPRUUJmU8E/Jmsxvq19r
-         5ufNv46sGpobwlxPM132It+Zxy5h1mN7RYvnvlttghyl3Fau4GdG407bzDyWAjWXQtqE
-         V3eE/Yg6frk8bemEhrPPXPRSuhEHSmEoDS0geJ8AuS0kr0DQNibejSx0WLQi0MUhVtFC
-         XC7Q==
+        d=nexthop.ai; s=google; t=1779311900; x=1779916700; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9Tf2Xd147xJ0sNfv/d8vxtKV4pEk11pNA8lNnJlbJZM=;
+        b=Yf8PAX5PGIAB+58vF1DTGHYBfhfzNuCxJkKOhA/X4nILwk5+ll+fuR0YF+64WfTHkr
+         3l9cAhZzeMxMMladx+FkF5vtnWfn6cOW7YqCt6ficI3TVA6CrwkHUEQ0biO6f7qV3GkP
+         9L7Xg96mtLUmjB9GnHgZM6jBHg6/hHCD6/wIdldxHNLckT7t1onOlxf7w0kzc5wFudIY
+         bX55Xgqks/9Oj/MA3orWI1LBpVAWVoHHuWysODNRKUJtugUA81+XD6FL8JhH7JgCcKJM
+         VG4VmkjVrAXzrRT0TjMRkoPA8HWfs2JwMbqXffqoHZ8q03JywRcXJWinMoz2nAZ6yp3R
+         ro+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779310942; x=1779915742;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VTmur95naqjnIgZ5hp+V9rZ3PhbDCDGfUxAndYAErTI=;
-        b=WVG3bmR/f+5ZiCKZBvduNz5DC10j0jxQ3DvStUbnc6lB3X5OE3OZHf3xlfMs5qeuQt
-         U4thCi87SjLkCCI8C74+pDZZJYxWjXsmebHnlRp1LfAypJNE1OAOhswVbNw4Bfhp9rSW
-         TrbxJbTzrD7spn2pq+PoTuRThp7eHLyJDrDA24dcbjWa4ouo/495EIWyJ6j8F4lYb2e9
-         lYH6PCvpR0XJnRSIuBvURFQr/all77xlvmWe2uojuB+nxWMe6akSE2lyvcLKXS3zoHvy
-         bPmfHjUJ4eBff8yEP820VleiUfvsyDA1RzQpSH246qMcPyvgOB3K3tAY118HOpoX5XCw
-         PZ/Q==
-X-Gm-Message-State: AOJu0Yz2Vy8xnRC0aGrQMBZPrXMUiDCHdZSD1BcTWn7243Do1QhGJc+7
-	2o048wa6jI/NPRXTsv4Du61jHkcAE/A783C52WfpsN5OWd+9gXtF9It8
-X-Gm-Gg: Acq92OE7WTyMpdEKofiyXc1PSNyOj9y2RkYhi30Wm6+squbR6JJWEzB/3JPY0ybWudM
-	mfXXriYVipq7IDYSpw0khHMdsytNfF/Vq3pITYMvArr8CoMj3yaxITjJcFObrskyvKZ8VC7r4Qs
-	lmd0joDx//e9+evkTtqYsCteNJDMf2RijmVfAEF1qEeX3zr4RbEgCh2+9qQiC5Ozpib/flmGbUc
-	nHNXeDNnkcsCF2umVSVhUPE22m5RK31TeE4qY8HHUKKBfpLZfAYobACuo9HqvCx1xcv1fKWY4CR
-	Jot8YxSqt8G5wUOxswI5ShzxrQYlpuH7ZZfWXDMvlgPm4EB3ASlCB9+K8T8htW3wif+SMuJSNNU
-	G2Bz5hbbO+vbqGY8nBxv7JhtDFxCelLtc08v6wzUZuR2r8zIlDId5FUJehuEtzCGUdWiYQQKL0C
-	NnS7D8V7a53s24BYqF6MfPdpmNx00mIohs+dEPhy1NnY5z2GpiYJ70C5fjM2ESk7hGBpA2zP28
-X-Received: by 2002:a17:90b:5245:b0:369:a359:b181 with SMTP id 98e67ed59e1d1-36a4562f4famr149583a91.23.1779310942284;
-        Wed, 20 May 2026 14:02:22 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36a45627582sm26232a91.1.2026.05.20.14.02.21
+        d=1e100.net; s=20251104; t=1779311900; x=1779916700;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9Tf2Xd147xJ0sNfv/d8vxtKV4pEk11pNA8lNnJlbJZM=;
+        b=oTHapyj5tqa+r8lc1/Y99Va2K2tNs/RK5hou51O60s5XTOgCVLbFxNIL7hoLDq6Ga7
+         A2AS/UP2dmGVoD7H6j0T2jg+QNFGO+jzSgGWqfgyfo5HTIm+qShRFIZLdTsHFUE+lSmc
+         I9GPLgx2vN0RJFvJdOEPqcCrkkA7Av11OU2LR2SEpO4N1xSZ2MfgJkCs7hhGaejQHr6R
+         kWNQ1IIH/cKCUkU/j12yZlLYluUJAWSFd2OFfBxVqdN0YOfix0JFDQ+d5UpMIOhHvNG+
+         o3z05bVhB99fmHU5MQCcly/B4Cu/QcCDzGB0ghi9XhE7xGvyg0nJWqoq7+638jixzo+2
+         Cvqw==
+X-Gm-Message-State: AOJu0YzoKMWwMCsX+jYqsg5q2TNxrRiEVwzTJIxkvX17vRLhWQlrKsvx
+	pwMrDZruHmR2uQ7XrA2RI1HZi1zQ5CIvhvbnjoWYwjlH510ziqIXrLAa7WLAAlu39tE=
+X-Gm-Gg: Acq92OEKaIqFAEEGgTrpApwMdH6sL800Qx6PI3ogjdGnM9UlEcsd6W8Saz9giJMHf5w
+	hDOBHyq8Bs+Kqqyzk5g0Y4XzipU6Yh0WB+SyaKQn3hr9Yv94FztjREzuO3sY8BtotbbROQD9JN7
+	IsoreVVD7yKa7Ky5fHB2vXmmqVzmLfvdDnMN1+gUNBHGoluKX4rwn8WbNY9ZMgWZrlNpHrGzRZD
+	FwEzt5hC7MiNQuF4hZLnN5qYj9PU1SP6tKlm5sow409Yeb1RcT4tbihY6KZeTpz04Q6csAafxJq
+	OoSjRxnwB038c1a0jfAeN2Ojw5nddJjjcgZyl533YDUuY6UExB0ijXcchSiL6dvrWZal+PbIJ2z
+	6WYpvNmGr2PtO9Nia5LMpT2M5N0io6Dcy+HB3LyYNzKXlPx6RO6fPuYoUVWYPJgjkU++H4+rDoU
+	wDAtqLbUGrVTvr0mUBtb1j9Lk=
+X-Received: by 2002:a05:7023:b10:b0:12a:8ea4:252 with SMTP id a92af1059eb24-136327f23d5mr182452c88.4.1779311900270;
+        Wed, 20 May 2026 14:18:20 -0700 (PDT)
+Received: from localhost ([50.145.100.174])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cc33a67csm26481338c88.13.2026.05.20.14.18.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 May 2026 14:02:21 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c11e0bdd-0684-4312-a7e6-188f3f6437b0@roeck-us.net>
-Date: Wed, 20 May 2026 14:02:21 -0700
+        Wed, 20 May 2026 14:18:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: nct6683 Add support for ASRock Z890 Pro-A
-To: =?UTF-8?Q?Reiner_Pr=C3=B6ls?= <reiner.proels@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <4eee938d-e4ca-427d-a161-aa9ef737af3c@gmail.com>
- <7ec1cd4a-c094-42a2-ba60-e6cc7d82e7e2@roeck-us.net>
- <ef137927-4626-44ec-9726-019be9347d2c@gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <ef137927-4626-44ec-9726-019be9347d2c@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 20 May 2026 14:18:18 -0700
+Message-Id: <DINTFDZ1H8B4.FZ50CYI6WTVI@nexthop.ai>
+Cc: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <stable@vger.kernel.org>, "Guenter Roeck" <groeck7@gmail.com>
+Subject: Re: [PATCH v4 0/3] hwmon: (pmbus/adm1266) add clear_blackbox and
+ powerup_counter debugfs entries
+From: "Abdurrahman Hussain" <abdurrahman@nexthop.ai>
+To: "Guenter Roeck" <linux@roeck-us.net>, "Abdurrahman Hussain"
+ <abdurrahman@nexthop.ai>, "Alexandru Tachici"
+ <alexandru.tachici@analog.com>
+X-Mailer: aerc 0.21.0
+References: <20260516-adm1266-v4-0-1f8df4797258@nexthop.ai>
+ <da0fbce2-788e-4419-8ca1-975311951ce3@roeck-us.net>
+ <DINO5GQHP6VK.ZBC2D5ENBYKW@nexthop.ai>
+ <DINRCDZ0SHS3.1X4T3VVLSL36E@nexthop.ai>
+ <1783d74e-6acc-40d2-bdff-9bacbb04032c@roeck-us.net>
+In-Reply-To: <1783d74e-6acc-40d2-bdff-9bacbb04032c@roeck-us.net>
 
-On 5/20/26 13:46, Reiner Pröls wrote:
-> Here the patch as attatchment
-> 
+On Wed May 20, 2026 at 1:59 PM PDT, Guenter Roeck wrote:
+> On 5/20/26 12:40, Abdurrahman Hussain wrote:
+>> On Wed May 20, 2026 at 10:10 AM PDT, Abdurrahman Hussain wrote:
+>>> On Wed May 20, 2026 at 7:10 AM PDT, Guenter Roeck wrote:
+>>>> Hi,
+>>>>
+>>>> On 5/16/26 18:18, Abdurrahman Hussain wrote:
+>>>>> This is what remains of the v3 series after Guenter applied patches
+>>>>> 1/5 (firmware_revision) and 5/5 (GPIO line label) to hwmon-next, and
+>>>>> asked for patch 4/5 (rtc_class) to be dropped.
+>>>>>
+>>>>> Patch 1 adds a write-only clear_blackbox debugfs file. Devices
+>>>>> configured for single-recording mode (BLACKBOX_CONFIG[0] =3D 0) need
+>>>>> an explicit clear once the 32-record buffer fills; the documented
+>>>>> sub-command ({0xFE, 0x00} block-write to 0xDE) wasn't reachable
+>>>>> from userspace. The patch also acquires pmbus_lock at the
+>>>>> adm1266_nvmem_read() callback boundary so the memset of
+>>>>> data->dev_mem, the blackbox refill, and the memcpy to userspace run
+>>>>> as a single critical section -- the nvmem core does not serialize
+>>>>> concurrent reg_read calls.
+>>>>>
+>>>>> Patch 2 exposes the non-volatile POWERUP_COUNTER (0xE4) via debugfs.
+>>>>> The same value is embedded in every blackbox record, so the live
+>>>>> value lets userspace match a captured record back to the boot it
+>>>>> came from when correlating logs. The block-read is taken under
+>>>>> pmbus_lock to serialise against any pmbus_core PAGE+register
+>>>>> sequence on the device.
+>>>>>
+>>>>> Patch 3 takes pmbus_lock in adm1266_state_read() (the pre-existing
+>>>>> sequencer_state debugfs handler) for the same defensive-locking
+>>>>> reason that motivates the new debugfs files in patches 1 and 2:
+>>>>> any direct device access from outside pmbus_core should be ordered
+>>>>> with respect to pmbus_core's own PAGE+register sequences.
+>>>>>
+>>>>> Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+>>>>
+>>>> The series no longer applies after applying the bug fix series.
+>>>> Please rebase it on top of the hwmon-next branch of
+>>>> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
+>>>> and resubmit.
+>>>>
+>>>> Sorry for the trouble, and thanks a lot for fixing all the problems
+>>>> with the driver.
+>>>>
+>>>> Guenter
+>>>
+>>> Will do, thank you for your support!
+>>>
+>>> Abdurrahman
+>>=20
+>> Hi Guenter,
+>>=20
+>> Before I send v5 of the adm1266 series, I'd like to revisit the
+>> SET_RTC exposure question from your v3 review [1].
+>>=20
+>> The use case I keep landing on is the one the datasheet itself
+>> recommends: a userspace agent (chrony hook, systemd-timesyncd
+>> script, or a small periodic daemon) keeps the chip's seconds
+>> counter aligned with wall-clock so the value embedded in each
+>> blackbox record stays correct across long uptimes.  The probe-
+>> time ktime_get_real_seconds() seed (now in hwmon-next) only fixes
+>> this at boot; the chip's counter drifts after that.
+>>=20
+>> You ruled out rtc_class and called a kernel-side periodic timer
+>> "a bit excessive", which I agree, it is.  That leaves a
+>> userspace-triggered sync.  Two debugfs shapes I'd consider, both under
+>> pmbus/<hwmon>/adm1266/ (alongside the clear_blackbox,
+>> powerup_counter, and sequencer_state entries v5 already adds):
+>>=20
+>>    A. RW since_epoch -- mirrors /sys/class/rtc/<dev>/since_epoch.
+>>       Read returns the chip's SET_RTC seconds counter, write sets
+>>       it.  The read has the useful side benefit of letting
+>>       userspace measure host-vs-chip drift without writing.
+>>=20
+>>    B. Write-only set_rtc -- writing anything to the file makes
+>>       the driver read ktime_get_real_seconds() itself and push it
+>>       to SET_RTC.  Simpler interface (kernel owns the time
+>>       source; userspace just triggers the sync), no payload to
+>>       parse, no way for userspace to pass in a wrong value.
+>>=20
+>
+> How about a combination ? read returns the current value, anything
+> written synchronizes with the kernel rtc.
+>
 
-Sending a patch as attachment will cause it to be dropped from
-the mailing list, the AI review agent wont see it, and I
-won't even look at it.
+Going with that for v5.  One naming question before I send:
 
-Guenter
+  - set_rtc -- matches the PMBus command name (SET_RTC =3D 0xDF), but
+    "set" reads as write-only at first glance, which is a bit
+    misleading for an RW file.
+  - since_epoch -- mirrors /sys/class/rtc/<dev>/since_epoch, but
+    that one is read-only in the RTC subsystem so the dual
+    semantic might surprise users coming from there.
+  - rtc_sync -- describes the write semantic directly, but leaves
+    the read side unnamed.
+  - rtc -- shortest and most neutral; doesn't bias toward either
+    operation.
+
+Any preference, or should I just pick?
+
+Thanks,
+Abdurrahman
 
