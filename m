@@ -1,133 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4BB8368968
-	for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 18:18:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEAF62F8E9E
+	for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 19:16:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779301115; cv=none; b=apE4cC9LFatCVQJCUkiHlW0hkY/LniVO15n+Ab8o0fEDT1jPRFSios+F19q2cFJfLvYHMYCJG/v8onUrsp/60+7/CVfg/00usj8TG1ZquhSbWn7D+oEwUWBDDYqU43jFjlVZmHTZcpw5bQMgsdrxwhq1ZqHL/ACvhHbkT8vE+NE=
+	t=1779304602; cv=none; b=fbDKa38NVD9ArgLPlE3OfHY+tWswltKfwpiEd2IdGgY4n4ceMvNGxg54zqrsDHB0tD6jZU99ZNMdDqPJs9V4GPBaffQsTrP6HzUotnJF7VjYW9Z2Ez6q8Gu6bMRno9i2Q6b9wIRZ/iC21WpcPnf7wUTYzZYmiD3+Ef0B0j7Fd4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779301115; c=relaxed/simple;
-	bh=EPKGMVgeP0QmgxAZFTHH1/2wAAnTB2qVLSYrZUlctkQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=eOM9TSwkIqn6cFpe6NDOVROx8TtyhL2nHMgTSCKFGWvHWdNhYFyrrI+R984Ydcn9FaD1fTNeNbgYn6wDgslPoNoq8oPU29NzGlgT3+kg3hDcnFOaQbhFxY9Z9zYrp8PDQfFCvNqlbBmy5Gi4ZKRdBDUdHDql3q0jWzZU2bmdgJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LHtyQFmO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779304602; c=relaxed/simple;
+	bh=ZvGZl4XeWLXFFeQ4aTEV4yxa0gPtVwWnwBVb7wd3R/U=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=SivhMUdJhJTk4mBl5z2ZnUz+qM0bQk4KIYPPU78quI76kaCb7ftghEDSriJT6OcjRKIMg2vVn70seJpXUxdp0Q+vN2cqovVCIggHAVJ9ZlJ0thX1qAG9w1mmGI+Z3WFlTiEAjmKus32UauuH/Yo2isvMnCdZNWfmpS9y7KE3e4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mozm9lK2; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LHtyQFmO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D15F1F00893;
-	Wed, 20 May 2026 18:18:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779301113;
-	bh=KXGZzlgBJ3phGJ9C4/QHHIhdXtoExUuN+0ok01EZKNc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=LHtyQFmOMXEdX5dnzn+T5B+4cocZd+uefVPTKqehsb+Aa8QPUi2e4MxVkgol3gvNs
-	 Pr70I4q5VNdppWlgdJ6dz6rZH/NpkRSLywcKkuZ0pGQQ/DVjsbbB02aU1pavaO23Ej
-	 XlqcxJfp4/XF02lYhJJUtVhNRF/6Rb/E89L2TtjhgkM1O7vMdZ6D/qnjk58nNAYQI6
-	 Ibz+yle6ZMmiaLcDVL9GNjxc6kVW32mOAzUcl30Lbr9KQ6ey3dfbSK+0CXYnQEDndT
-	 9mFt+cEbDpw8n0V4pe3kcUUXVmt3O0qWuVtY7JtI+M51xr4Sb6ufeNM0JYh38+BbTI
-	 1pXGyUlnDRFPw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (pmbus/adm1266) serialize firmware_revision
- debugfs read with pmbus_lock
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Abdurrahman Hussain" <abdurrahman@nexthop.ai>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260520-adm1266-fwrev-fix-v1-1-8a78c94a53ef@nexthop.ai>
-References: <20260520-adm1266-fwrev-fix-v1-1-8a78c94a53ef@nexthop.ai>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 20 May 2026 18:18:33 +0000
-Message-Id: <20260520181833.9D15F1F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mozm9lK2"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4891e5b9c1fso46660285e9.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 12:16:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779304599; x=1779909399; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=83m6SZbEBpihEPTjW8tmO4zGxJjuOBgsUIutZ8PnXrc=;
+        b=Mozm9lK27Of2QyOF3F86gLX7jgHJ9ZUKH+nTDcnQO4ki09neKEjnThGNUPZoLMleam
+         u9C71WJ708YsxR457MmaaflfXIwfXW09oU6ZfKPUrnTAodWfVqQ9T1yOss9xf2HV7AjP
+         U8treQ1g2d7/3UuPUzv3LFK7xxjEEcsZAJ+ZB5ivoHgJ6HnRda2glN7OjERry8+CqJcV
+         TYRJmT0sioYdJkrj9+9fQ+w88nb8HBf/UuFMVnkIUkQKYa0LBSNf2QsnuKVONygXYGqp
+         8XH/8nwoTaaEUbTsg8JG9vT7U9q/waHnmA1F+ZYsTQ+iRgWc87EDMg+xlA1/PThrPJI9
+         cHWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779304599; x=1779909399;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=83m6SZbEBpihEPTjW8tmO4zGxJjuOBgsUIutZ8PnXrc=;
+        b=hrokKOA5s2momHzHln9dGxbIW34piBarIVEwuiToGgRFz8wIDjjDIhBCSWsBG9XdCE
+         u/DSRS/kVRGgm7yvF/pMIPisrbz/O1UnruyS9o1TYqweDhU4IoHcPLcUZ/hgxKYnH3Jx
+         2Sas1Tt+QhwwXUi3rFnLZ1lAc0a+HThvFdyleevpB07TOWQRPL6i/Oh5QaY38dY+Tih6
+         ZuXWQDVlfRAwiz3bruntIHPiH+aOvVSA/vgt+Xtnjca1L2blhRunKP4Eg3b90znR7XSo
+         6qU/mZynJD0LXftipq2rMB8+cmPd3O21fs3CxsvJCCwz+ZCoudEghIFxsnrbQUViz6It
+         UmhQ==
+X-Gm-Message-State: AOJu0Yy4m/VrWCGZdS5kQ+bvPMr7jeHFj5tzpuYZgekDDp8KBwqockAf
+	73boU2aDlgLYtpERgzfugGI6n0Cf8GEPKMSD67+47K8xe/STOJXcKV+0
+X-Gm-Gg: Acq92OELJhPOlM9mw6sIRbnpOmOWI+gX92XEBhtcztqXqFBZxfrNKGdado6MAVZbRXM
+	uN7XCtlbh+fY9nIRcBEvLmt1UnVPISPncK+4ucPf1/9JumWcSXEXjaZ9AQONPB4qpBZ/COQ16S2
+	40+86n6AUUsbNP+rhsHs2XWcync3qawKX6sfuMRBIIJSIjhq/cTO7EcbeDGxclrj3iQ8NIqt5M2
+	cf2V4stNHYrnJ0BzsOP6PR/dcI4gr883613qCU5pY44OnDUIFUWoYYf05WyM89WNfxl70Ksx/Xx
+	GCipyakRa2YLJ3GdI4CMSq+lOC1dYjE48KfGL5Ym9z4EREz798IaVOELr52nVu42lDqo73376gR
+	5wYVBFlhNWImGRUOz6ui+lmjYhrLHrcgXzc7X/p0Bk49H/RMDkXHdj9fWMpX4I+OjYH2uZllcSf
+	AJcbR3zVV7GoSIBxgLDk2EEvdb3o7G/fu+KTsz8GhdbhrnSAcbyoztm+CBUORb
+X-Received: by 2002:a05:600c:1f8f:b0:490:2153:2c3d with SMTP id 5b1f17b1804b1-49021532e9cmr108317935e9.20.1779304598955;
+        Wed, 20 May 2026 12:16:38 -0700 (PDT)
+Received: from [192.168.0.2] (p5de56645.dip0.t-ipconnect.de. [93.229.102.69])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49033dab0besm10206805e9.15.2026.05.20.12.16.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 May 2026 12:16:38 -0700 (PDT)
+Message-ID: <4eee938d-e4ca-427d-a161-aa9ef737af3c@gmail.com>
+Date: Wed, 20 May 2026 21:16:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+From: =?UTF-8?Q?Reiner_Pr=C3=B6ls?= <reiner.proels@gmail.com>
+Subject: [PATCH] hwmon: nct6683 Add support for ASRock Z890 Pro-A
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
+ From ac010d19f5ba1e44a0ddb83cc570f18ca3348015 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Reiner=20Pr=C3=B6ls?= <Reiner.Pröls@gmail.com>
+Date: Wed, 20 May 2026 20:59:57 +0200
+Subject: [PATCH] Add support for ASRock Z890 Pro-A mainboard
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Pre-existing issues:
-- [Critical] Out-of-bounds memory read/write and logic bug in `adm1266_gpio=
-_get_multiple()`.
-- [High] Direct device accessors lack the `pmbus_lock` required for seriali=
-zation, contradicting the commit message.
-- [High] GPIO and NVMEM devices are exposed to userspace before PMBus probe=
- is complete, creating a race condition.
---
+Signed-off-by: Reiner Pröls <Reiner.Pröls@gmail.com>
+---
+  drivers/hwmon/nct6683.c | 5 ++++-
+  1 file changed, 4 insertions(+), 1 deletion(-)
 
-commit 93431d6d47217063e4487061d81fc6df727bcdb0
-Author: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
+index 0581770380cc..1b9092f48c7d 100644
+--- a/drivers/hwmon/nct6683.c
++++ b/drivers/hwmon/nct6683.c
+@@ -177,12 +177,13 @@ superio_exit(int ioreg)
+  #define NCT6683_CUSTOMER_ID_MSI3    0x207
+  #define NCT6683_CUSTOMER_ID_MSI4    0x20d
+  #define NCT6683_CUSTOMER_ID_AMD        0x162b
+-#define NCT6683_CUSTOMER_ID_ASROCK        0xe2c
++#define NCT6683_CUSTOMER_ID_ASROCK    0xe2c
+  #define NCT6683_CUSTOMER_ID_ASROCK2    0xe1b
+  #define NCT6683_CUSTOMER_ID_ASROCK3    0x1631
+  #define NCT6683_CUSTOMER_ID_ASROCK4    0x163e
+  #define NCT6683_CUSTOMER_ID_ASROCK5    0x1621
+  #define NCT6683_CUSTOMER_ID_ASROCK6    0x1633
++#define NCT6683_CUSTOMER_ID_ASROCK7    0x163d // Z890 Pro-A
 
-hwmon: (pmbus/adm1266) serialize firmware_revision debugfs read with pmbus_=
-lock
+  #define NCT6683_REG_BUILD_YEAR        0x604
+  #define NCT6683_REG_BUILD_MONTH        0x605
+@@ -1248,6 +1249,8 @@ static int nct6683_probe(struct platform_device *pdev)
+          break;
+      case NCT6683_CUSTOMER_ID_ASROCK6:
+          break;
++    case NCT6683_CUSTOMER_ID_ASROCK7:
++        break;
+      default:
+          if (!force)
+              return -ENODEV;
+-- 
+2.43.0
 
-adm1266_firmware_revision_read() backs the firmware_revision debugfs
-entry and issues an i2c_smbus_read_block_data() without taking pmbus_lock.
-This patch adds guard(pmbus_lock)(client) to serialize the read.
 
->     Take pmbus_lock at the top of adm1266_firmware_revision_read()
->     via the scope-based guard(), matching the pattern just applied to
->     adm1266_state_read() and the GPIO/NVMEM accessors.
-
-[Severity: High]
-This isn't a bug introduced by this patch, but the commit message asserts t=
-hat
-the guard(pmbus_lock) pattern was "just applied to adm1266_state_read() and=
- the
-GPIO/NVMEM accessors."
-
-Does the current code actually do this? Looking at adm1266_state_read(),
-adm1266_gpio_get(), adm1266_gpio_get_multiple(), and
-adm1266_nvmem_read_blackbox(), they do not appear to use pmbus_lock. This
-omission leaves direct I2C accesses unprotected and vulnerable to interleav=
-ing
-with pmbus_core's multi-transaction sequences, which can corrupt hardware s=
-tate
-or interrupt PMBus transactions.
-
-[Severity: High]
-This is a pre-existing issue, but are GPIO and NVMEM devices exposed to
-userspace before PMBus probe is complete?
-
-In adm1266_probe(), adm1266_config_gpio() and adm1266_config_nvmem() are ca=
-lled
-before pmbus_do_probe(). These functions register their respective devices,
-immediately exposing them to userspace.
-
-If userspace accesses these interfaces early, do the accessors run before P=
-MBus
-core structures are fully initialized? If the missing pmbus_lock were added=
- to
-these accessors (as the commit message assumes it was), wouldn't it retriev=
-e a
-NULL pointer from i2c_get_clientdata() and dereference it during pmbus_lock=
-(),
-causing a kernel crash?
-
-[Severity: Critical]
-This is a pre-existing issue, but is there an out-of-bounds memory read/wri=
-te
-and logic bug in adm1266_gpio_get_multiple()?
-
-In adm1266_gpio_get_multiple(), the second bit-iteration loop incorrectly u=
-ses
-the PMBus command byte ADM1266_PDIO_STATUS (0xE9 =3D 233) instead of the co=
-rrect
-pin count macro ADM1266_PDIO_NR (16) as the loop's upper limit.
-
-Does this cause for_each_set_bit_from() to iterate up to bit 242? Since the
-mask and bits variables from the GPIO subsystem are sized only for ngpio (25
-bits, which fits in 1 unsigned long), does this result in out-of-bounds rea=
-ds
-on mask and out-of-bounds writes on bits via set_bit(), leading to severe
-memory corruption?
-
-Furthermore, doesn't executing *bits =3D 0; immediately before the second l=
-oop
-inadvertently wipe out all the valid pin states gathered during the first l=
-oop?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260520-adm1266-fw=
-rev-fix-v1-1-8a78c94a53ef@nexthop.ai?part=3D1
