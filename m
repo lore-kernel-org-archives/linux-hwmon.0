@@ -1,66 +1,66 @@
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 945A133B6C9
-	for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 05:03:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45906200C2
+	for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 05:47:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779253433; cv=none; b=Nh98db86Of9ip5gCmxt3OPlgooBbnSNEwcEXpQJtEx+P9hWA7dqQIEYY7kTYdKEJtUflJ2YSR9k2Gp8T4KG9LHBcBfsZN1OkhffBTn2Z2ww8klduG9+LoLNY+kf0s1HemetvxsgIzwMyC7eM0/dRXsf/zmQq51w/XOk2LMahjVs=
+	t=1779256022; cv=none; b=cjUzRLs9zCYvty9ZSedTQKBP1NZ1yfaxgrVOyOcJ8IRk75SEzDtLOYmktE1yFjUNoVqscpHfpyCd15NttwMR0j3vH7RBO8OPQRT5r+hGl0qFwG/fz9d9s0RdXGFIdinTIb7qHLIQheLlR2TJuj0u3DMzTzEtMwRDUWIDhY5O0fA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779253433; c=relaxed/simple;
-	bh=XY3uf602Ba/C4DeV0TBm7ywPL/0eDoa92sLY3bgPT5s=;
+	s=arc-20240116; t=1779256022; c=relaxed/simple;
+	bh=QPcqOJG94oweAnv3Ku2mLnd5cWp2n5c3khvOT2J+uDo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=riBGpa3Mqs+k4bBuZxXiTq68fr4ZkBH5uY/a+x2M7qx1J6qG+Unxcn1TxAXtNf9pI3yTvePXuPnWhOHSiNPxr7mTLmvUEnKMaK9h0IEag92pG9vFxZ1VPG5xIl7pNInEIZxW3xPvMXcZvtHuRp6fodS8P3YJjSh4Mf9m22z58x8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PTf13z9W; arc=none smtp.client-ip=74.125.82.177
+	 In-Reply-To:Content-Type; b=jr8Sdjk3Vl11ZM9KP02z3sfTAcOifUVCO0YExQrzJWR5jL71AhVc+S4iiRV5QfBZHN1mL4tmR/LYuAAMLWrDr10XwqswS9Nhr0oM7OisYW08Lm+1FwrlMhYCm+D/MAa/lPFVOCQwCI5oiV9amQAhxGPG7jNbNjD/OHmv7ErMVH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PTYGpYaR; arc=none smtp.client-ip=74.125.82.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PTf13z9W"
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-303dbfbec77so4255002eec.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 19 May 2026 22:03:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PTYGpYaR"
+Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2f33ae12f97so1630602eec.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 19 May 2026 22:47:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779253431; x=1779858231; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779256020; x=1779860820; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=owrf94ddYwaqYEgNfgCjoUKkkvN+uo9vnxJR4lLBfXQ=;
-        b=PTf13z9W/AmlDzlD2JIJ0CgPiZQDcBjSQJPkkGCnfoiposXxCDzmynwQyG4mF+7rZA
-         k8KMUGJfk/u7Sz1Fq67M9h5vwdUgvMl3CrZmqSKraer5JWn8v+HVkvBtoVYwwcUTVwOu
-         8wVc6LAPGRr4VccG6k326xeCpin+UZqAyatRzHgQhBh7rGp5nnVsn/OyUqgK31Wxn97j
-         1f945gDdPBkXejDpaUbAzbw4gvohCQZ3C+KlvI63Pqx//v8g1potdXRIx8Defp5ngaP1
-         KHV/hxoJaCfKcJwR9Lio2pdQ2LEo4g/dYHZc1yvR2zPRUEmW3dTmw4EjfGpsxFnFHkkN
-         vKKw==
+        bh=95XuvVfir7/dycN57uY6vwTIw3bLwgAABLiAfkp1y7E=;
+        b=PTYGpYaRZ3WiUmt10pmRz1/03seOq+fl7nQEkU3aJMuHvkIf3fIwAmyB/QnWbfJsev
+         xzJyPyZgPUT4Qaj8CoF6qGzX8L28+hLwBnNKK7SiGTmbLEJ8DYXpHsSK8vcU1PYftQL7
+         /Tv1ohdS0ULZtcaujpb9Jj+hsT8RjjWfa7HHuZPnLLP9j+PX5l8HxObDFCWPkxJRgEEQ
+         WnnZfe9kUoAFmsddpwBQYBsXizxDeCsjuceAOKoYevQGycmYrrT2Qit6Wy5RhbXFEEDn
+         SfVLJrRJcOigSVILI7mRzpdVw2jEDhe7r5ObNtoh8HxTnElpshu/qQiYKmpNB7TiSjWv
+         XbLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779253431; x=1779858231;
+        d=1e100.net; s=20251104; t=1779256020; x=1779860820;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=owrf94ddYwaqYEgNfgCjoUKkkvN+uo9vnxJR4lLBfXQ=;
-        b=DB2eFu1OWGBrOczyZCDm/coW8Ts7KrrbF1YtZr/r/+qLxdVG1xX5zcvKJIhr6EJl8v
-         ZoeM+QHNSnOzWgYqKiPeFxUnD27wKo3H3bjSgqltgjxp6gOkQZ0vCIVAI1/aYf8k8DGT
-         G9Jr1HPfVhWzt5lmQ6cB6jWRR4eb8cEmbK6vXqd/CWQnqRI5aKRSkd3VCX6T5L7n4Ee0
-         Ne0yJtk6AFDjGWyokuqpHclh+aESK4mVtLULImBAn6+kG3PMxmC9OwexZW5IiMHhbxR1
-         PnSVyZnd9VgYc78P6FOb8u9hzEVBdAryxg67rlXuSQIoypgbTJXjpzmh5Fnzp92d0alc
-         SEIw==
-X-Gm-Message-State: AOJu0YzB6ABugcpV2qUM/BT/3ZnZ1jvYGAG9BuPknf7I+hbqrujFefLB
-	fS8zl9i2jOUiDnQKMEbFvEp5lQcdC0L7gk/kdN4b5uQt3mmK3gNFeNjs
-X-Gm-Gg: Acq92OHLIhAD6oFb4BLT+kAOdlhsVR9AMwMM5wNQ723yG9f/aLoIFmyg+QFJTLLdKBu
-	MUuVc70CcTGoOpry9tdRwkPgkArWZkzlHvvyFFTkSS6db/Qyzqqu5b2IGiT4rDZI4SOqjkuypJu
-	dJWJag3ug5ZbnA5d8pisFn5OBo3UfJhx29skPRRVTJ4piHPqM6UsoyIR3Kb7g1BGDQ+czLoYsp1
-	Tq609tEk/1BrfVIJ82TpD1+nRdRm2PTCfFi96apzkNjtUBjucQRGTbd8UpFRiu7kV4Cc3vqcquw
-	xZat/w3T+FSsfIUqK5+LIRBv7CqfvUjLqHC5dZSe5UVQbFA53s9SCnsVlvifrHdC7nRtfQ6tYcT
-	cHKBxr4X6WtTJfmqczF1qO6F5vOcKUPEoKy/Au/ZvTc3SbrUE8s2yBApi1G1GzJ8xlN0S73Ed7s
-	jKdSxym+EesUH9e8fvVO8lhCIhfHoWMiZ6TX3dn7fNNeqzFscNe1ydlxYws/iGGhUl6a1J5b3J
-X-Received: by 2002:a05:7300:d08f:b0:303:f2fc:c483 with SMTP id 5a478bee46e88-303f2fd1799mr2990674eec.1.1779253430519;
-        Tue, 19 May 2026 22:03:50 -0700 (PDT)
+        bh=95XuvVfir7/dycN57uY6vwTIw3bLwgAABLiAfkp1y7E=;
+        b=lWxajZ2Z/Yt93538wBpiqwip9E+K3dCsVDjxWbIRARHoMxkH7eb/t6u6art4KTcyND
+         YOcw0AiuKeF7Ga6OCUj1Cnz8GjCq+W/I7wnrp5r1UoSmuTKtxjcgkRlWAf+HPBEMHeHa
+         XVo5IfH5XGgfGqzVgZaC2TiSGu1PuX63PLHQPxdcOf3PX0AhNTItCcLGL/phmIwZoSXP
+         8xBgWgixyRVfstjOKDLlaxxwCuXLxOGrSR9BtMpbu1LmyfV8bJ9rKwWIgfhPnoviQ/2O
+         33sJ8aRlnWrzhm8AZkBjtuA5eZlHsM8fgl5WsHCpH+auRb9Nnu67yd4RA2INd6ObyrZ9
+         g1zw==
+X-Gm-Message-State: AOJu0YwJUgOrwgel4Bjp1UCoGo4gRRqhKl/4ncppLlEhbjMCe95B9NDa
+	7N671HWj8jODY+jkhR/q+KRE7Lay1ou6lWQN00i93/LwuSPE09qBlDIq
+X-Gm-Gg: Acq92OFUw6Jl9El/3erRMs6RWXWkdRlEMYl3HfU45Hn9D+RSHi45ZHw1NnDVqbcpsQK
+	YeX2CraMDMMpR1AD22Vke++YThZvhE99osMyyBF8jUQxVvrZxlrQDcsNvlL0vIP+elJU4eTTpbH
+	8AbkCm6rjY5wmCozWYeI5WxfMI+Tbh7G+xlI21X1sOMFoOvDQMAZN134I6DYaI9WmgHwiR8RmqE
+	lc7IHO7HZzaInaWg1fUUkPEeIYSgijKvX3PRZVgYkd7HBfOAxkps+NyF9yB0w/8dlT9+idFUNXJ
+	rNeRKMHXguZ0PDKql2zXQl383L8Z/hxs+ynVjk4Slo7cjieZTR5M2ZkFQBF4VRYcAnzOZzfudbW
+	BWl54iUq0tds2CoNgg6hOrL+y/3m4QXrnwZv5mvlMybloNL8cSeInrN0E7kG7jDeLFfD8ROHCbl
+	YruBhU8Su6L/O97YU49av1zRK8JPJW690FNl22J0jGYVtYtOE/430yLNkTzGEfCUp42YkZkEXa
+X-Received: by 2002:a05:7301:6089:b0:2ed:e16:6b4c with SMTP id 5a478bee46e88-303986a9647mr11396908eec.34.1779256020063;
+        Tue, 19 May 2026 22:47:00 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-302973bc9d4sm17552282eec.23.2026.05.19.22.03.49
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-302973bcc5asm17890186eec.22.2026.05.19.22.46.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 May 2026 22:03:50 -0700 (PDT)
+        Tue, 19 May 2026 22:46:59 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <58352b37-a87a-49f0-ac89-da226f2266dc@roeck-us.net>
-Date: Tue, 19 May 2026 22:03:48 -0700
+Message-ID: <5718e677-b0a8-4335-939e-949dc9888bc2@roeck-us.net>
+Date: Tue, 19 May 2026 22:46:58 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,12 +68,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] hwmon: (lenovo-ec-sensors): Convert to
- devm_request_region()
-To: sashiko-reviews@lists.linux.dev, Kean Ren <rh_king@163.com>
-Cc: linux-hwmon@vger.kernel.org
-References: <20260520022946.17335-2-rh_king@163.com>
- <20260520025130.DB45A1F000E9@smtp.kernel.org>
+Subject: Re: [PATCH] hwmon: (coretemp) Replace sprintf() with sysfs_emit() for
+ sysfs show functions
+To: Dongyang Jin <jindongyang@kylinos.cn>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260519065220.2348524-1-jindongyang@kylinos.cn>
+ <d4ac610a-b34c-44aa-8e7e-b27092390c63@roeck-us.net>
+ <636141af-f4db-4d11-9247-b175b575a0de@kylinos.cn>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -119,72 +120,48 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260520025130.DB45A1F000E9@smtp.kernel.org>
+In-Reply-To: <636141af-f4db-4d11-9247-b175b575a0de@kylinos.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5/19/26 19:51, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] The commit message inaccurately claims to remove five `release_region()` calls and drop unnecessary braces, but only four calls were removed and the braces were left intact.
-> --
-> 
-> commit e8c1e48be4d237988380d2577325024d4865618f
-> Author: Kean Ren <rh_king@163.com>
-> 
-> hwmon: (lenovo-ec-sensors): Convert to devm_request_region()
-> 
-> This commit replaces manual request_region() and release_region() calls
-> with devm_request_region() to allow the device-managed framework to
-> handle the I/O region lifetime automatically.
-> 
->> Remove all five manual release_region() calls that are now handled
->> automatically, and drop the unnecessary braces on the single-statement
->> blocks that previously contained them.
-> 
-> [Severity: Medium]
-> Is this description accurate? The patch diff shows that only four
-> release_region() calls were removed.
-> 
+On 5/19/26 19:14, Dongyang Jin wrote:
+> You are absolutely right, and I apologize for the noise.
+> I misunderstood the scope of acceptable cleanups for legacy drivers. I will stop sending such patches and focus only on functional fixes or updates for drivers that specifically require them.
 
-As far as I can see there are only four calls in the code. Description
-problem ?
+Times change. Until recently there was no AI code review, and it was unknown
+that the code is in such a bad shape. We have to concentrate on fixing bugs
+for the time being.
 
->> diff --git a/drivers/hwmon/lenovo-ec-sensors.c b/drivers/hwmon/lenovo-ec-sensors.c
->> index 8681bbf6665b1..45db49e189d3d 100644
->> --- a/drivers/hwmon/lenovo-ec-sensors.c
->> +++ b/drivers/hwmon/lenovo-ec-sensors.c
->> @@ -541,7 +541,6 @@ static int lenovo_ec_probe(struct platform_device *pdev)
->>   	    (inb_p(MCHP_EMI0_EC_DATA_BYTE1) != 'C') &&
->>   	    (inb_p(MCHP_EMI0_EC_DATA_BYTE2) != 'H') &&
->>   	    (inb_p(MCHP_EMI0_EC_DATA_BYTE3) != 'P')) {
->> -		release_region(IO_REGION_START, IO_REGION_LENGTH);
->>   		return -ENODEV;
->>   	}
-> 
-> [Severity: Medium]
-> This isn't a bug, but could these curly braces be removed? The commit
-> message mentions dropping the unnecessary braces on the single-statement
-> blocks, but they appear to have been left intact here.
-> 
-
-Hmm, yes, the description does not match the code changes. Please drop
-the now unnecessary {}.
+On top of that, it does appear that people started using AI to implement changes
+such as this one, even though many of such changes could be implemented with
+a deterministic application such as Coccinelle. That adds additional burden
+on reviewers. While AI is good at finding bugs, its ability for fixing them
+isn't that good. Result is that those cleanups can not be trusted, meaning
+they require extra scrutiny. I just do not have the time for that right now.
 
 Thanks,
 Guenter
 
-> [ ... ]
+> Thank you for your time.
+> Best regards,
+> Dongyang Jin
 > 
->> @@ -607,7 +605,6 @@ static int __init lenovo_ec_init(void)
->>   				       lenovo_ec_probe, NULL, 0, NULL, 0);
->>   
->>   	if (IS_ERR(lenovo_ec_sensors_platform_device)) {
->> -		release_region(IO_REGION_START, IO_REGION_LENGTH);
->>   		return PTR_ERR(lenovo_ec_sensors_platform_device);
->>   	}
-> 
-> [Severity: Medium]
-> Could the braces be removed from this block as well, to match the
-> description in the commit message?
-> 
+> On 2026/5/19 23:16, Guenter Roeck wrote:
+>> On 5/18/26 23:52, Dongyang Jin wrote:
+>>> Replace sprintf() with sysfs_emit() in sysfs show functions.  sysfs_emit()
+>>> is preferred for formatting sysfs output because it provides safer bounds
+>>> checking.  No functional changes.
+>>>
+>>> Signed-off-by: Dongyang Jin <jindongyang@kylinos.cn>
+>>
+>> I consider this a nuisance patch. Nothing is gained from it.
+>> Can people please stop sending such patches ? It gets annoying,
+>> and I don't have an endless amount of time to review it all.
+>>
+>> If you make a functional change or fix bugs, cleanups are welcome.
+>> Otherwise, I'll barely accept bare cleanup patches for drivers
+>> using the with_info API. Otherwise please leave old drivers alone.
+>>
+>> Thanks,
+>> Guenter
 
