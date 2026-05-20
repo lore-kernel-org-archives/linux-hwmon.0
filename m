@@ -1,118 +1,89 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50DAA36405A
-	for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 17:49:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAFFB3F871A
+	for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 18:16:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779299363; cv=none; b=CFOUmM7Owj3+FVRPievKvpshoKKIgN2+EbCHjcabJWsYUP5Zl9iNjORhH7QFcuX/F6bAQ1WMleeguSV8ugG7hCCGyuoYVLc+wuv6aBYc5pd8QRN4yBpWCqLYWt3hSNP2UPH73oKVrlL8IbETIPR9Y4UpxfmQg7fnqL5N99jcGu0=
+	t=1779301007; cv=none; b=FFS6iJlhsm90w20qdJfmvQZrI/na76xbg/3nZmv6LVU8KPOnWi23tAwD10HK1erJQwlFENUk6uYt8rPyRp4ousRAPgCNYv3FTbq0dcHyX8Tn52VdAEB31kQPYurwcAjzHKZD7bRk8q8emBmQt86imfvccZzaXu84w2jrcpWl84Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779299363; c=relaxed/simple;
-	bh=DpvmlzvY6/2l4J6yYlA8b6johltNQYMgxfF9s7rxyCk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nrcxjq95/Yxs4kKhSDfAw1CpjUF8eLcqeKCijLE3hYO7ATWH1GJRRIlFHHCdupAot+SXBlLxcKXb1ICKKGotyBnwRAb3vCXX48IebqmiXY4o9xOG7LA59H0WWcR6SVOMi90IkvY6OKp7TqGBrxdA2ayx0xvvNc7N8AjtaFfibyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ezG3XlIv; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1779301007; c=relaxed/simple;
+	bh=l6DKCXjemggPrcXPN7QV86I1EbhcMscTp0hAIaRQquc=;
+	h=Message-ID:Date:From:To:Subject; b=MHYt+SMiWcEXpysLldDAJAuLNEwx9kUhXDqFNU38LIPdDvwcIsiVWC4qf4cHkbsgwy7dAeVPo5I5GBcivMvJfIN9VsREbwoNb9Zwp3/wutacnzm5cgRwtxHVL3OBsewevC2iM+TU87RBVz5PTrlZ+vVkZ+vJ8s+df+Ga3gnjrRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tKF22ldw; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ezG3XlIv"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2b941cd869cso32954555ad.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 10:49:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tKF22ldw"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2ba6485d219so38210135ad.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 11:16:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779299362; x=1779904162; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20251104; t=1779301004; x=1779905804; darn=vger.kernel.org;
+        h=subject:to:from:date:message-id:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=sUocfPeZqMUh8C1wxj8BZw9l2bs4+997e5jXLGYDljU=;
-        b=ezG3XlIvKFXoX4Yf7fK4iMq3HTfvjozVxcVy5JvCpCwnHGa7e7VUYaHqWc8CsjWS46
-         7fgORnxKZYPIH4fBRfxTF0gmBxkICJebwFiACRzoUo0YPYeMmfr4tf+2qfuWGt1wY5X8
-         nFLBAWr/8A3dOvhGmAcgs6Qs7oC3JyU/0QCKCt0nJW/mdLYByU6zdQkFd4uG0lkv6e0Y
-         3C9vtsrz8gqCvOmTYOWo6Ulu7lJiXp6KvHQyA0HHR85+SxWE/JhSj5MPpQrN7nJErY1f
-         a5TiBfbmeiY4kK2S7mfTc2eNXdNwjYiapa5Ow8aK1DqnwRCgvxbNUKU3gRGscndZd4Lj
-         Xf+g==
+        bh=l6DKCXjemggPrcXPN7QV86I1EbhcMscTp0hAIaRQquc=;
+        b=tKF22ldwRBHrnpuYpL4rGlTMLCLz4CkWsQgR5drOXAMNl0J8/uXWk/2VS7ozwNhIoB
+         k21ZcqWuO8TpBZtxNrSXRbPbPTGTARf1QwP7JDIwflnwok6ZGKCpKfJ5D/Jy4g/JQLI5
+         O74fdx80ZrIDkZHlV3cyxdWS/0NcX/bKZ9+BrOUxgbV7PtzVoAr/56G9cbZxvPblms0L
+         Y6jrhohzb7fDPwGe3NRv3ydW9TWr53BAYTi+2KEOYWDF2kM1kAt/ovXXfEGcDdH6MaNl
+         RmHFqMhen6IBX/DOg5Htla1hGjA+Jq1qUCVQDktudNjw7HL098lH97R6ybbnuTpBsu7M
+         oWlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779299362; x=1779904162;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+        d=1e100.net; s=20251104; t=1779301004; x=1779905804;
+        h=subject:to:from:date:message-id:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=sUocfPeZqMUh8C1wxj8BZw9l2bs4+997e5jXLGYDljU=;
-        b=qDoawgr7CCCees5D8FU4pSY3Y9WAj9qMiNuA9IErgAzonXihmcrEzoUd9QfG2TDafk
-         ajxmYorcv180GFg7/CO3MYFdHWTmzwlV46IfsjPN/i/K9ewbiAZGthtJVGrydYZhbMb1
-         6IekX2k6MVBo9vMZ3u7m8Se2LkmahO0V86jvB8V0TO2KfFho1iJiabp52EVQDv1+wYkQ
-         0g/D/LZSqR9dvbH4W3IpnCrHKUWiSFezb9jEMeTquv0rmS/N0mrZxosd8sgrSnNuYRHr
-         Rom+DkSOSyQnX+pdrJNlTJwxTp/HqkrR9gMMJTo2WU0IlPjL+JSYdVm8HvEgUXz3T9lW
-         /UwQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9qtMGu6i7iPFqnLHEDOHoZpuzFEK0biCeOujFsqxqEGuwdDcNL/O2AcnE+FbEUJkRvbBDfRjGVdSXZww==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIyZLq9Rzl758mtbbjv5dBW3TjRINNEbPHZmEd3bdVAhTT92t1
-	L9unPZt1pDLclBJpxEUFuAXRjSpZFnuwGni/4RFoSnqJMFITOaBNRyDIhTgxyr++
-X-Gm-Gg: Acq92OFlH663pqidGVKG0LPVi2ysu8Y0Hp/BLPi7VWK/0EmXk/aj/IWU4Kk3FgLp/2P
-	vFn02cBJxkaOm+A1H035Y2+nEOFDqEBo9/RNt9R+zPCuRTHu1GiL8La7+vgjUb0w8JcKmvYjSbm
-	IWNnkyiGwr8VCCexgcPgyWYtzE7cjFbja1O82HD/bMSNOenK0Wj7ph9nA3eiYcZZ6XckDgCZXn4
-	h5hOel4T2QFBlIPFkiKuw/dqYWALRCwuc4KCiVqRpLfkgxuZWE9SsJkVyPeMmjltIMZ1npQyDkC
-	wzJHvFjY+Tmm9Qh4bALYAapqHM9Nj6v2YQUYh2Ae7aRvGlmDBHJLB5ozCBqCm+mN15QTEel6Dpy
-	cKhM1SqJlw7zofAyeyzrHQZzYPI1q2cH6SR2uWslGhNhK4/BPtdDF0YTKhhl7/LCx7698bF6Aj0
-	1r7NXCWZC5RZkV66ixqEIVPS+tftGh4EH8JfuN
-X-Received: by 2002:a17:903:1ae7:b0:2b2:49a7:a5bc with SMTP id d9443c01a7336-2bd7e9e5458mr256888955ad.39.1779299361763;
-        Wed, 20 May 2026 10:49:21 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5d235e04sm233974235ad.80.2026.05.20.10.49.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2026 10:49:21 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 20 May 2026 10:49:20 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Abdurrahman Hussain <abdurrahman@nexthop.ai>
-Cc: Alexandru Tachici <alexandru.tachici@analog.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (pmbus/adm1266) serialize firmware_revision
- debugfs read with pmbus_lock
-Message-ID: <22158259-31fd-4f0c-906e-46d93ad44f9a@roeck-us.net>
-References: <20260520-adm1266-fwrev-fix-v1-1-8a78c94a53ef@nexthop.ai>
+        bh=l6DKCXjemggPrcXPN7QV86I1EbhcMscTp0hAIaRQquc=;
+        b=PjJpAa1lPHmeKZrXy+mZJNA8U9SiSRYJfcF/nyTuGMPBCTOlv2NxzSE2kJh8P/t2T9
+         J9q95xAE2uHhehR/fplKW6P6gks8niqe54kB8gsTWRxnbAuApv0iYTh3vNE5CCu6kS6k
+         po7REH/tZ2kthovsSUlgZp4vamzYa8LA9xlLxLrm3dxOrdSqDWyLlZ5FuRMfjhUSUFYP
+         QrcK47N9go8nEsxHJtKq3O/UluhykUaMTQ44RvJVNvjcgaHebVbCzPAw/YTsjkoTUKlx
+         xubWGIqdCDpff0JvYmA+p2Rh7WXrbUvlutfA3AgdEe0E8wHwIid/2ZOfpYBeCfJmrj/e
+         V64A==
+X-Gm-Message-State: AOJu0YxukJYSO54z4kIdHy6aHozfqrpuvMclVlE0eUMaArg8fp640vbk
+	v2o+4N+KjVB5qIeqUWKsCnBFSDrsF55MfVnxF9rvXzVpp+WGWsJz0ZkGze9PJmJpeD8=
+X-Gm-Gg: Acq92OGEr0AKHw+glmfNHc3UTjIi6M6YU4XXCdqoxBcvpCCpPqfG6FM7FGkepfaU3iO
+	DUmstHH82BYDeGYYULKBsfIrcQbds8/2VOs/IO8aMi/HqxuiMTXKhhPgOF13DGEotrbI0p6v5Me
+	xXx9lcVa2pfBJcWuR7zwqtu58O4Lj8sv4Ezahjb5tESTiVZIMMCteX5IjcIdTy8MuwxNbcWHcwz
+	cskUe2i1kT59GD47QyTG0xr13lRxDzUDOz2OBzfJ2n/kR50L9XPMqn7riA4LOEqFUOZ53HSvOff
+	c5ZURDmiCrsUGn+qUMSv9glMVYwPGUqoA3YfAiVjQiGd1VDWVp0+QDc3qGQh5yCbhy8sbYjGqz2
+	nA7KHXlGsDJQuUpxdQaNnmJnKpSdM469kbsjaw3OLzpysdwOaHYRAOrqKovZ7QfcQZSJu+mxzYd
+	VLMkshm76DLGCJ2thfzrU8LnnLilOAdrq2yu1iRBaIXV68VyGB0USklSH2ajMzCtIZAIuyh7p2s
+	Bprs0Jh4VfmsJoCuQ7JfQ1qpFf5neCjhsOAaFPczo0=
+X-Received: by 2002:a17:903:4b0d:b0:2bd:7684:34b0 with SMTP id d9443c01a7336-2bd7e8a4e47mr260942145ad.15.1779301003830;
+        Wed, 20 May 2026 11:16:43 -0700 (PDT)
+Received: from localhost (ec2-35-94-83-63.us-west-2.compute.amazonaws.com. [35.94.83.63])
+        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-2bd5d0f8efesm233502985ad.55.2026.05.20.11.16.42
+        for <linux-hwmon@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 May 2026 11:16:43 -0700 (PDT)
+Message-ID: <6a0dfa8b.f4d142a5.6d373.e680@mx.google.com>
+Date: Wed, 20 May 2026 11:16:43 -0700 (PDT)
+From: jongsuktinalee@gmail.com
+X-Google-Original-From: PayPal
+To: linux-hwmon@vger.kernel.org
+Subject: Invoice Generated | $537.07 | Ref: TXN-B5YE-LMM7-J83Y
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260520-adm1266-fwrev-fix-v1-1-8a78c94a53ef@nexthop.ai>
 
-On Wed, May 20, 2026 at 10:38:28AM -0700, Abdurrahman Hussain wrote:
-> adm1266_firmware_revision_read() backs the firmware_revision debugfs
-> entry and issues an i2c_smbus_read_block_data(client,
-> ADM1266_IC_DEVICE_REV, buf) without taking pmbus_lock.  pmbus_core
-> holds pmbus_lock around its own multi-transaction sequences
-> (notably the "set PAGE, then read paged register" pattern used by
-> hwmon attributes), so an unlocked debugfs reader can land between
-> a PAGE write and the subsequent paged read in another thread.
-> IC_DEVICE_REV itself is not paged, so it cannot corrupt PAGE in
-> flight, but the same defensive serialisation applied to the other
-> adm1266 direct-device accessors applies here: any direct device
-> access from outside pmbus_core should be ordered with respect to
-> pmbus_core's own.
-> 
-> Take pmbus_lock at the top of adm1266_firmware_revision_read()
-> via the scope-based guard(), matching the pattern just applied to
-> adm1266_state_read() and the GPIO/NVMEM accessors.
-> 
-> Fixes: 7c99762af5c1 ("hwmon: (pmbus/adm1266) add firmware_revision debugfs entry")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
-> Assisted-by: Claude-Code:claude-opus-4-7
-> ---
-> The previous "GPIO, NVMEM, and debugfs accessor fixes" series [1]
-> locked all the adm1266 direct-device accessors except this one,
-> which slipped through because firmware_revision was already in
-> hwmon-next when the fixes were written.  Same defensive-locking
-> reason as adm1266_state_read() got there; same Fixes: shape
-> (stable backport candidate against the original firmware_revision
-> patch).
+Subject: Your PayPal Renewal
 
-I completely forgot about this one. Thanks for remembering.
-I squashed this patch into the firmware_revision patch.
+Hi Customer,
 
-Thanks!
+Thanks for being part of PayPal! Your 1-year membership renewed automatically at our special anniversary rate.
 
-Guenter
+Renewal Details:
+
+Service: Virus Protection Security Pro
+
+Customer: Customer (ID: UID551649)
+
+Amount: 537.07 USD
+
+Need help? C_ontact u_s: +1 (845)-212-9062
+
+Best,
+PayPal
++1 (845)-212-9062
