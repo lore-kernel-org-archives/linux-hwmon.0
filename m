@@ -1,151 +1,192 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E9F34A3C4
-	for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 19:54:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F1A6372EFF
+	for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 20:46:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779306885; cv=none; b=Wf7SgGr1TmELVgPenSxcjE+kilw1vxxPLwxKRt/GgfUCI5SqHpBrAjbnDBquyB/28R3hKTAvq30iQKFLhbnfUBABVmb0jqznZr9nUrSU/LLi+vy9D3Pl0edQOgToxcJZp/C8V27PQJs0axiTyfSX73tIcHI9aTUBanr7sCWcWyk=
+	t=1779310015; cv=none; b=BvV05EzdZTHmrZZXchOevMfpTQY7zGzRXZV2ddG7k8OAqIs71k8X8HBOzyba06mYIt+fw6YPFQf2rp58zzNtnVNV1GBKl3IVQhbZgasZLJ1yms4p4h899/cF4Wg8pHDAsYH9KJGytAV+f/h2jzox7WPDTqidkeAr0cETbyE5mWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779306885; c=relaxed/simple;
-	bh=9ZWtFRH0DPYU9OZpvc16UhZqJMlJFzczsymdwuMzGxY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mn+kYii2wXLRVyo7c0MpLkLvdL4BWn+Ak+bKmVrvISJd1tc091EzkgCT27nqmwJQHwkq/+eC+HQUK9VwnTMC7b3/BQTnmgFvGiQg6TWwYEuXu33bwzNctW7bO5a1hcfC/VQgPWb2aJtlLjexP+VdqziOSD71ipVtAu2dba7ro+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V7gqvzRj; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1779310015; c=relaxed/simple;
+	bh=Z5VgK4TfYvCC753qCsEXSy9TbUdGtsypGhKVOiRA9hU=;
+	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To; b=trsfFCcvJGcJ6Z2vslwFFZoyocAfX8XvP2C35ZQdmHdyT5E91cDz8NmI+GtWODGX+d6BA9Ci38wt8wny3twsmidQDxCWqdplkBy/Fcel2AWe/m6ot0PZdKK+AhQz4s6nPm/ZUk+fSUrVHNfa4g8GtZ+JKoLEpliCb5984bcr3eE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CvVFdlXw; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V7gqvzRj"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ba6485d219so38975635ad.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 12:54:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CvVFdlXw"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-488b3f8fa2bso50747665e9.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 13:46:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779306883; x=1779911683; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MvDmyYYDhU9M3W4nTBWC6Lb+TYu2a1Dlqugl0ynZCbs=;
-        b=V7gqvzRjnpD/U1FBJiUhin3xfMWZDkhKCFHpT/XgNYO8nLcoGvUINYhbzflGJjY4bb
-         sP0rRCHknKCyt2akAUK0amJptk+KaDxs/dd3N0RnOYCHrLogVlbIia89bRlSOPAYhqEh
-         KOVYYERnwXuYGFcdY///0cYRlPW+xEmhF2lD3PTMhKFTxfKWTaCHvgQAAZrDL/NKA2A+
-         V9rbYysPtF4ErNH8c9rLpPf/SqZ+78IA9ry2nzGLdKKhNTuleGhEkToosuhGPoPtBcDy
-         em+qVW5J7XdwFzTCCD3yasEd+XHJQCLyyNeuLkmxmqcC1PrjKGTMT4GF+j+nSyL9cd8S
-         pQ+w==
+        d=gmail.com; s=20251104; t=1779310012; x=1779914812; darn=vger.kernel.org;
+        h=in-reply-to:from:content-language:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i5VR6wSxGmgQGRO4B5HiOLZyz+Qvz6Sca486NUkPoFE=;
+        b=CvVFdlXwPMjhughWg7wLvQhmSQwenIgV8OVe3nVjoKBUEt5qZ0cMzoyxGtf3kZmQv5
+         IFWN4zw1tIuz6ekBvCVOlGjHitQTPlYq0zfm+rDbbBun1eG2fWKBTnnB0ptSTgWKrEzn
+         OyvYhR7MzalL3EgsPNfXFy1aL4ZOOXEYfEPvMGNG7hJYgT0wVu8yLT7PVH0uQr7/E1KV
+         QRlb2G1aA7BmRD1iapQgUftZkamD6wL0aFZcUbAQS8KSZgNt2+4WAuvuqRM1AOVnT8VZ
+         tCizmVsSVhz5A8oyESQsG/7klE7qgV7pbHYpcdDGbXqiVXXgDvFDzXYwblc/HGCSHPN3
+         7gRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779306883; x=1779911683;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MvDmyYYDhU9M3W4nTBWC6Lb+TYu2a1Dlqugl0ynZCbs=;
-        b=qrrVXOpFWXIAf7k6FmHex5A1/gRX1hrDKvWnNWl8Rnu4afUogu+w37JL4PE5VOm8cP
-         tXl2sEh7eHouSkLa9ah3mrWkJhzk7Q2ZFZwIlxA/GIIWH/+yHlCuB5DupBLORel0k7aH
-         ZebGHraJgtE5UWo3i8X/q/7jGcZ0buOely4NOfqVa1Nbau0XRYqjl+NY+TeWLYvabQuY
-         vvWAgfSXQuAGzV9wWoZpckaff1d20VIKUGUE2t6Sn6+0oDYap2HAeuw5pmOWhAVSQWiO
-         bne5ZJYZAkfATKYkIAtdMHho/R9MpyEx7FvWOHk88eFRMe2KvKZhpVLgJcoOuk0A6tYh
-         3jzA==
-X-Gm-Message-State: AOJu0YzOQ0OhgRJNbGwHXOVzOPPzvcfftaE8j0sb7KtF4SnXH7PD/67O
-	/Z4m0WCO5D3ZH3HklxflnTqoquFBhdTVIJNb3IT0jRZsvJWAxrGXnZNb4de2z2NX
-X-Gm-Gg: Acq92OH8YYejqvxR9U56kefHo689vTcmVEilhEHts865V7EneH3QH+W4lHBIJ1Mw3s7
-	y0GFvDYWc4uVSYnQh3AnewL7U9H/6Eg+wuaFD60klCjx88/0IWB+/WpudUoFdg0pTilQV25Qv6T
-	CBdReaLWSRSku8UM3EwSAF+lW5OV0dc0Un+/gFuoEGUouAXdC3qROJWOQ0x/9Zfh0NRq3GMsAVu
-	J8yZ7bdpHRDC5tUoKVYfUw3KyDGSA9ON8KdkijYJOnKjAnxN5by35GlLK71u2fKD6Qt3OBZT8is
-	XjlQY89QzdiqZWMKzizvU0Med0Bfga0TvDRnCHL4Na+aDcX2RCb7I67dr0ovSza+rEJKWKHDJbq
-	CUCxuaMc4kPLDWki0dBcqz4vvbsWKQVjxnlFOkNI9VrN85Z+EsCCvrpWDPgybNh0+O3DDvT14bC
-	7Gdzp7VM6vsBKGRiP/lMwoBejV8m28zSR3NlGm4aUWCN4Ph1s=
-X-Received: by 2002:a17:903:22c9:b0:2bc:e2ed:fd03 with SMTP id d9443c01a7336-2bd7e9c8834mr267611215ad.39.1779306883142;
-        Wed, 20 May 2026 12:54:43 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5d0fcb10sm227212495ad.60.2026.05.20.12.54.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2026 12:54:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 20 May 2026 12:54:41 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Reiner =?iso-8859-1?Q?Pr=F6ls?= <reiner.proels@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: nct6683 Add support for ASRock Z890 Pro-A
-Message-ID: <7ec1cd4a-c094-42a2-ba60-e6cc7d82e7e2@roeck-us.net>
-References: <4eee938d-e4ca-427d-a161-aa9ef737af3c@gmail.com>
+        d=1e100.net; s=20251104; t=1779310012; x=1779914812;
+        h=in-reply-to:from:content-language:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=i5VR6wSxGmgQGRO4B5HiOLZyz+Qvz6Sca486NUkPoFE=;
+        b=jIV6rs0hLPrkj7elVyiHcYE2Mdo5i9JUhBD+kR2szk+b3vVGeWj0VAwNHeq928j6g7
+         JAJqGfQpA4OsVTR/DdjGrHfDLC40G8eM7hGO9GvJ8Sm3+OjmNmADHx5k5b8MLHyZbeG2
+         rG0Ui1rsffiMyRpkb9B1vMRzhTIG8aB6xrmjzbZKSd7g7V/u8IzW0aG7XT91DEt00IBQ
+         zB9RWMifdZvFfzMKhuBhJfPkFlnM5yMOcR9ah0ck5j+SZcgovR5u1UeZgG5ZSh+OCM4s
+         VWoxM8S1ga+6E4RiNxEjSHw6m7R8rIVf61iCwzqScjYVcPpjJgwhkpGyDNy91pEZRQma
+         grCA==
+X-Gm-Message-State: AOJu0Yyu7GC+HMgDNhy342s4CzFUWH99gIrYSDe+/pLKxgk9fQzw01OJ
+	9JQGif+CSzqJQ8Pj+3v1Y/ItCTyfsbABZp7Qozr9NraWWBRewGy3M7JW
+X-Gm-Gg: Acq92OE9EMNw2DXkJUrpW0B3S1pRmTHWke6p/340wKQ7VBpdiNuIx6c0Y1GeYcwuHUk
+	+YVRdXJclsQfmtY/5ButChMljZjVQa/q/t7dRlmdqDejWKNnj0zk5MX+aQlJ18193+7BLuaw1iH
+	5eVGkhOFOSTrC7L5l22IAkEt6/2X3eyl10zimyMmiT7EwMy3MY7Q0MKZTOv0e5rJXJ+AH7JAIyp
+	DluVK6LH/C7RuKhK0QT5KYekkJrUUUtITAyeBYBLuKV8vdyj38PgRzSX436mximn7dgiGYtMmy/
+	+D1N4jgCMEPKgWXaLye7+IGrdOdKRtXyqkTxjoVemxlQ8bB8BExQF9RdVtYo9LmILgiZFXGZkxo
+	HUBVj3Y7Watw9UTfXPyP74FaHyjI/E+cI61/CWGwq14nPXFhCQrIJrTpNjEZx5xWkoGY9aaCZkW
+	d1cW8IJvON7KcJuafI13Z+9vbUGfdwKqd9f4FX/4LQCNj5jZKXbrNSlZpZvAAG
+X-Received: by 2002:a05:600c:34d5:b0:486:faa8:9e4 with SMTP id 5b1f17b1804b1-49035f6762bmr531805e9.12.1779310011590;
+        Wed, 20 May 2026 13:46:51 -0700 (PDT)
+Received: from [192.168.0.2] (p5de56645.dip0.t-ipconnect.de. [93.229.102.69])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49033d44705sm14758295e9.4.2026.05.20.13.46.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 May 2026 13:46:51 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------t3O1XtFmplW2EzpOz37QZuZG"
+Message-ID: <ef137927-4626-44ec-9726-019be9347d2c@gmail.com>
+Date: Wed, 20 May 2026 22:46:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: nct6683 Add support for ASRock Z890 Pro-A
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <4eee938d-e4ca-427d-a161-aa9ef737af3c@gmail.com>
+ <7ec1cd4a-c094-42a2-ba60-e6cc7d82e7e2@roeck-us.net>
+Content-Language: en-US
+From: =?UTF-8?Q?Reiner_Pr=C3=B6ls?= <reiner.proels@gmail.com>
+In-Reply-To: <7ec1cd4a-c094-42a2-ba60-e6cc7d82e7e2@roeck-us.net>
+
+This is a multi-part message in MIME format.
+--------------t3O1XtFmplW2EzpOz37QZuZG
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <4eee938d-e4ca-427d-a161-aa9ef737af3c@gmail.com>
 
-On Wed, May 20, 2026 at 09:16:37PM +0200, Reiner Pröls wrote:
-> From ac010d19f5ba1e44a0ddb83cc570f18ca3348015 Mon Sep 17 00:00:00 2001
-> From: =?UTF-8?q?Reiner=20Pr=C3=B6ls?= <Reiner.Pröls@gmail.com>
-> Date: Wed, 20 May 2026 20:59:57 +0200
-> Subject: [PATCH] Add support for ASRock Z890 Pro-A mainboard
+Here the patch as attatchment
 
-Subject should be
-	"hwmon: (nct6683) Add support for ASRock Z890 Pro-A"
-or similar. Actually, your outer subject comes close.
 
-> MIME-Version: 1.0
-> Content-Type: text/plain; charset=UTF-8
-> Content-Transfer-Encoding: 8bit
-> 
+Am 20.05.26 um 21:54 schrieb Guenter Roeck:
+> On Wed, May 20, 2026 at 09:16:37PM +0200, Reiner PrÃ¶ls wrote:
+>>  From ac010d19f5ba1e44a0ddb83cc570f18ca3348015 Mon Sep 17 00:00:00 2001
+>> From: =?UTF-8?q?Reiner=20Pr=C3=B6ls?= <Reiner.PrÃ¶ls@gmail.com>
+>> Date: Wed, 20 May 2026 20:59:57 +0200
+>> Subject: [PATCH] Add support for ASRock Z890 Pro-A mainboard
+> Subject should be
+> 	"hwmon: (nct6683) Add support for ASRock Z890 Pro-A"
+> or similar. Actually, your outer subject comes close.
+>
+>> MIME-Version: 1.0
+>> Content-Type: text/plain; charset=UTF-8
+>> Content-Transfer-Encoding: 8bit
+>>
+> Description goes here. Look into the driver log for examples.
+>
+> Also, it looks like you embedded your patch in another patch
+> with a different subject. That probably triggers:
+>
+> WARNING: From:/Signed-off-by: email address mismatch: 'From: "Reiner PrÃ¶ls" <Reiner.PrÃƒÂ¶ls@gmail.com>' != 'Signed-off-by: Reiner PrÃ¶ls <Reiner.PrÃ¶ls@gmail.com>'
+>
+> Also, when I try to apply the patch, I get "patch is empty".
+>
+> Please fix this up.
+>
+>> Signed-off-by: Reiner PrÃ¶ls <Reiner.PrÃ¶ls@gmail.com>
+>> ---
+>>  Â drivers/hwmon/nct6683.c | 5 ++++-
+>>  Â 1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
+>> index 0581770380cc..1b9092f48c7d 100644
+>> --- a/drivers/hwmon/nct6683.c
+>> +++ b/drivers/hwmon/nct6683.c
+>> @@ -177,12 +177,13 @@ superio_exit(int ioreg)
+>>  Â #define NCT6683_CUSTOMER_ID_MSI3Â  Â  0x207
+>>  Â #define NCT6683_CUSTOMER_ID_MSI4Â  Â  0x20d
+>>  Â #define NCT6683_CUSTOMER_ID_AMDÂ  Â  Â  Â  0x162b
+>> -#define NCT6683_CUSTOMER_ID_ASROCKÂ  Â  Â  Â  0xe2c
+>> +#define NCT6683_CUSTOMER_ID_ASROCKÂ  Â  0xe2c
+>>  Â #define NCT6683_CUSTOMER_ID_ASROCK2Â  Â  0xe1b
+>>  Â #define NCT6683_CUSTOMER_ID_ASROCK3Â  Â  0x1631
+>>  Â #define NCT6683_CUSTOMER_ID_ASROCK4Â  Â  0x163e
+>>  Â #define NCT6683_CUSTOMER_ID_ASROCK5Â  Â  0x1621
+>>  Â #define NCT6683_CUSTOMER_ID_ASROCK6Â  Â  0x1633
+>> +#define NCT6683_CUSTOMER_ID_ASROCK7Â  Â  0x163d // Z890 Pro-A
+> No C++ comments in this file, please.
+>
+>>  Â #define NCT6683_REG_BUILD_YEARÂ  Â  Â  Â  0x604
+>>  Â #define NCT6683_REG_BUILD_MONTHÂ  Â  Â  Â  0x605
+>> @@ -1248,6 +1249,8 @@ static int nct6683_probe(struct platform_device *pdev)
+>>  Â  Â  Â  Â  Â break;
+>>  Â  Â  Â case NCT6683_CUSTOMER_ID_ASROCK6:
+>>  Â  Â  Â  Â  Â break;
+>> +Â  Â  case NCT6683_CUSTOMER_ID_ASROCK7:
+>> +Â  Â  Â  Â  break;
+> Was this cut-and-paste ? There are no tabs, just spaces, meaning the
+> patch would not apply. That would also explain the duplicated headers.
+>
+> Guenter
+>
+>>  Â  Â  Â default:
+>>  Â  Â  Â  Â  Â if (!force)
+>>  Â  Â  Â  Â  Â  Â  Â return -ENODEV;
+>> -- 
+>> 2.43.0
+>>
+>>
 
-Description goes here. Look into the driver log for examples.
+--------------t3O1XtFmplW2EzpOz37QZuZG
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-hwmon-Added-support-for-ASRock-Z890-Pro-A.patch"
+Content-Disposition: attachment;
+ filename="0001-hwmon-Added-support-for-ASRock-Z890-Pro-A.patch"
+Content-Transfer-Encoding: base64
 
-Also, it looks like you embedded your patch in another patch
-with a different subject. That probably triggers:
+RnJvbSA2ZDg4ZjAyZTc3MGZkMTk2NWExNGY5NzVjM2ExNzNmZWVlZDllMWFjIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiA9P1VURi04P3E/UmVpbmVyPTIwUHI9QzM9QjZscz89
+IDxSZWluZXIuUHLDtmxzQGdtYWlsLmNvbT4KRGF0ZTogV2VkLCAyMCBNYXkgMjAyNiAyMjo0
+NDo0NSArMDIwMApTdWJqZWN0OiBbUEFUQ0hdIGh3bW9uOiBBZGRlZCBzdXBwb3J0IGZvciBB
+U1JvY2sgWjg5MCBQcm8tQQpNSU1FLVZlcnNpb246IDEuMApDb250ZW50LVR5cGU6IHRleHQv
+cGxhaW47IGNoYXJzZXQ9VVRGLTgKQ29udGVudC1UcmFuc2Zlci1FbmNvZGluZzogOGJpdAoK
+U2lnbmVkLW9mZi1ieTogUmVpbmVyIFByw7ZscyA8UmVpbmVyLlByw7Zsc0BnbWFpbC5jb20+
+Ci0tLQogZHJpdmVycy9od21vbi9uY3Q2NjgzLmMgfCA1ICsrKystCiAxIGZpbGUgY2hhbmdl
+ZCwgNCBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVy
+cy9od21vbi9uY3Q2NjgzLmMgYi9kcml2ZXJzL2h3bW9uL25jdDY2ODMuYwppbmRleCAwNTgx
+NzcwMzgwY2MuLjM3NDA1MzI5YmE3OCAxMDA2NDQKLS0tIGEvZHJpdmVycy9od21vbi9uY3Q2
+NjgzLmMKKysrIGIvZHJpdmVycy9od21vbi9uY3Q2NjgzLmMKQEAgLTE3NywxMiArMTc3LDEz
+IEBAIHN1cGVyaW9fZXhpdChpbnQgaW9yZWcpCiAjZGVmaW5lIE5DVDY2ODNfQ1VTVE9NRVJf
+SURfTVNJMwkweDIwNwogI2RlZmluZSBOQ1Q2NjgzX0NVU1RPTUVSX0lEX01TSTQJMHgyMGQK
+ICNkZWZpbmUgTkNUNjY4M19DVVNUT01FUl9JRF9BTUQJCTB4MTYyYgotI2RlZmluZSBOQ1Q2
+NjgzX0NVU1RPTUVSX0lEX0FTUk9DSwkJMHhlMmMKKyNkZWZpbmUgTkNUNjY4M19DVVNUT01F
+Ul9JRF9BU1JPQ0sJMHhlMmMKICNkZWZpbmUgTkNUNjY4M19DVVNUT01FUl9JRF9BU1JPQ0sy
+CTB4ZTFiCiAjZGVmaW5lIE5DVDY2ODNfQ1VTVE9NRVJfSURfQVNST0NLMwkweDE2MzEKICNk
+ZWZpbmUgTkNUNjY4M19DVVNUT01FUl9JRF9BU1JPQ0s0CTB4MTYzZQogI2RlZmluZSBOQ1Q2
+NjgzX0NVU1RPTUVSX0lEX0FTUk9DSzUJMHgxNjIxCiAjZGVmaW5lIE5DVDY2ODNfQ1VTVE9N
+RVJfSURfQVNST0NLNgkweDE2MzMKKyNkZWZpbmUgTkNUNjY4M19DVVNUT01FUl9JRF9BU1JP
+Q0s3CTB4MTYzZCAKIAogI2RlZmluZSBOQ1Q2NjgzX1JFR19CVUlMRF9ZRUFSCQkweDYwNAog
+I2RlZmluZSBOQ1Q2NjgzX1JFR19CVUlMRF9NT05USAkJMHg2MDUKQEAgLTEyNDgsNiArMTI0
+OSw4IEBAIHN0YXRpYyBpbnQgbmN0NjY4M19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNl
+ICpwZGV2KQogCQlicmVhazsKIAljYXNlIE5DVDY2ODNfQ1VTVE9NRVJfSURfQVNST0NLNjoK
+IAkJYnJlYWs7CisJY2FzZSBOQ1Q2NjgzX0NVU1RPTUVSX0lEX0FTUk9DSzc6CisJCWJyZWFr
+OwogCWRlZmF1bHQ6CiAJCWlmICghZm9yY2UpCiAJCQlyZXR1cm4gLUVOT0RFVjsKLS0gCjIu
+NDMuMAoK
 
-WARNING: From:/Signed-off-by: email address mismatch: 'From: "Reiner Pröls" <Reiner.PrÃ¶ls@gmail.com>' != 'Signed-off-by: Reiner Pröls <Reiner.Pröls@gmail.com>'
-
-Also, when I try to apply the patch, I get "patch is empty".
-
-Please fix this up.
-
-> Signed-off-by: Reiner Pröls <Reiner.Pröls@gmail.com>
-> ---
->  drivers/hwmon/nct6683.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
-> index 0581770380cc..1b9092f48c7d 100644
-> --- a/drivers/hwmon/nct6683.c
-> +++ b/drivers/hwmon/nct6683.c
-> @@ -177,12 +177,13 @@ superio_exit(int ioreg)
->  #define NCT6683_CUSTOMER_ID_MSI3    0x207
->  #define NCT6683_CUSTOMER_ID_MSI4    0x20d
->  #define NCT6683_CUSTOMER_ID_AMD        0x162b
-> -#define NCT6683_CUSTOMER_ID_ASROCK        0xe2c
-> +#define NCT6683_CUSTOMER_ID_ASROCK    0xe2c
->  #define NCT6683_CUSTOMER_ID_ASROCK2    0xe1b
->  #define NCT6683_CUSTOMER_ID_ASROCK3    0x1631
->  #define NCT6683_CUSTOMER_ID_ASROCK4    0x163e
->  #define NCT6683_CUSTOMER_ID_ASROCK5    0x1621
->  #define NCT6683_CUSTOMER_ID_ASROCK6    0x1633
-> +#define NCT6683_CUSTOMER_ID_ASROCK7    0x163d // Z890 Pro-A
-
-No C++ comments in this file, please.
-
-> 
->  #define NCT6683_REG_BUILD_YEAR        0x604
->  #define NCT6683_REG_BUILD_MONTH        0x605
-> @@ -1248,6 +1249,8 @@ static int nct6683_probe(struct platform_device *pdev)
->          break;
->      case NCT6683_CUSTOMER_ID_ASROCK6:
->          break;
-> +    case NCT6683_CUSTOMER_ID_ASROCK7:
-> +        break;
-
-Was this cut-and-paste ? There are no tabs, just spaces, meaning the
-patch would not apply. That would also explain the duplicated headers.
-
-Guenter
-
->      default:
->          if (!force)
->              return -ENODEV;
-> -- 
-> 2.43.0
-> 
-> 
+--------------t3O1XtFmplW2EzpOz37QZuZG--
