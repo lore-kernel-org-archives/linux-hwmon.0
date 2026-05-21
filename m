@@ -1,70 +1,61 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2AEF383981
-	for <linux-hwmon@vger.kernel.org>; Thu, 21 May 2026 04:19:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49CAB351C1E
+	for <linux-hwmon@vger.kernel.org>; Thu, 21 May 2026 04:45:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779337163; cv=none; b=WKzWvjhWCSDpxA8++4jKIFMlwFlq6LE06Q6GCQKZOer+HvVxnrvr7U/GsjkmM0EH1Ai8A9ccnZES2Vu852LuOUX6zg1oNFOUHWG+7NQ7qQvzZnvmRgtDp1Ox9dspRj6+3Zes588vAeX4m4kbwywxg+ojdGZc0HVRV2YgiVud71o=
+	t=1779338712; cv=none; b=AjIiX2TAvps20dqAvR4rzxdRGZ+Irev/0EAcuhwSiSVrCYoUYcc1fUhOm97a9oVtG3p1p5ax+pt38luQbIpriAR5+bsV+qBCHRJ8V34bYk18najv7frz2sJ2GBIiRakx5NUnW09XMgc9vIkicXrRsFEKPuEtsQowMoC/zqbkM48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779337163; c=relaxed/simple;
-	bh=iPcpJtFGSYzYrJ8LH0k5fS9RCPo1IYvwyf9g7yfBK08=;
+	s=arc-20240116; t=1779338712; c=relaxed/simple;
+	bh=f+SuW4wtmXabyvuk3MIXwyq36ZsAFMXKtJ2DLYB/C9g=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=id+zbZeQPMMQcexwPGR+3cPm4bSQ9be0z/uiEAMTR/FyeQkq6WRHzoVaqWGfpp28d1w33Z0wl0MUEIFvRcuPmBElMOHMPYOvxlsaUqQsoZWjGgz4+8/uoNL3fupEVaVqdXewGckOYkijqA6PySl0CuKLVYd+ty2KAL/fVAhA8N4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QYXfRZaP; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=uHq4cZO76AMhar87NzR81zz3qGPOi9XoUr3GGfSiCbek3qSy/AxH4mswDlLc1ymvY+F8+rRsaKJMxzDsmYJFFAiZSW4DRKv2DO0PkwCq/G6L+JmE15IlzXIEMPLsz4K4tfpSSSLpQUIiYNH4/kPfNDahF10uqXVowi9/SETGfRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EDv1DE6X; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QYXfRZaP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AE091F000E9;
-	Thu, 21 May 2026 04:19:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EDv1DE6X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A4ED1F000E9;
+	Thu, 21 May 2026 04:45:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779337152;
-	bh=bcoLJ6uJglj1bAoDL29nRV0gRNnDFkUUO0prCCWogE0=;
+	s=k20260515; t=1779338710;
+	bh=gV20FZtO4CZkmQyBlw0tuTA5LRmV99fQ8A748zN8TBk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=QYXfRZaP6gTfCz6LwgY+42Nzdr4Tq+MITd9kpA8TdejoLu7DlogNK9jr/bJzVFio5
-	 M2SBj3Mtsx231QZuRMuRNRGR/f/hOWPXB9WTrQqaGTjFfCGHtlctK9oq34a/0ziGFm
-	 N6hgXqfImt40jv83a+HHCx7nuVWDSq7kQIMNmaak4t3wy9tYfoDXjbR+87B0ACynqG
-	 NDOJu2v1nTgv6Qy2kkI0c8jNAC2nTfJjVvdfYnEGkDXf7OJemZBUvm6SH5zYtIV4yN
-	 0dZ6ZEXPBF7nJRQ1RQLXuVVdmqaysDTGdhORfG7Zj7M7eZzlTiT7SmXNkWO6XXDcxy
-	 UIYjK7p/JkB7g==
+	b=EDv1DE6Xm8HSauMSxzk5uTqhydyUwvC7FFJo1ajZmRIbqbYfd2YUoPc4p886gmhnR
+	 pvvLsnoiEneCeeiLbs1553GAWV2nmursCVg60166jARprqAqGKQiT3Y+Y4D+wVnFVd
+	 TTfFymT90eND/OWZi1ju4huodrCWgViSuW5cQcR7ROjWlAiLSRW+Ins8pb61ma7P58
+	 1W6veLi79N5K/V3a3n/nysFDK+7M4EjEdZtHN9x4dlVlp7KbUH5EbFTflpQGEApdpk
+	 AyHtpQjrW9r5q4fXnkDkCBNYh7fhNiVRNxeo5yM0cZYpGZgwkA0ZLCBRIW2tVjn92a
+	 ZdFSwCeybHnlQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 1/2] hwmon: (lenovo-ec-sensors): Convert to
-  devm_request_region()
+Subject: Re: [PATCH v3 2/2] hwmon: (lenovo-ec-sensors): Fix EC "MCHP"
+ signature  validation logic
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Kean Ren" <rh_king@163.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260521035228.533317-2-rh_king@163.com>
-References: <20260521035228.533317-2-rh_king@163.com>
+In-Reply-To: <20260521035228.533317-3-rh_king@163.com>
+References: <20260521035228.533317-3-rh_king@163.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 21 May 2026 04:19:11 +0000
-Message-Id: <20260521041912.3AE091F000E9@smtp.kernel.org>
+Date: Thu, 21 May 2026 04:45:09 +0000
+Message-Id: <20260521044510.8A4ED1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-> Replace manual request_region()/release_region() with
-> devm_request_region().  This lets the device-managed framework
-> handle I/O region lifetime automatically and fixes:
+> The EC signature check uses && instead of || between the four
+> byte comparisons.  With &&, the condition is true only when ALL
+> four bytes fail to match simultaneously, meaning the driver
+> accepts a device as a valid Microchip EC if ANY single byte of
+> the 4-byte "MCHP" signature happens to match.
 >=20
-> - A double release_region() when probe fails after acquiring the
->   I/O region: the probe error path releases it, and then
->   lenovo_ec_init() releases it again on the same error path.
+> Due to short-circuit evaluation, if the first byte reads back as
+> 'M' (0x4D, a very common register value), the remaining three
+> comparisons are skipped entirely and the device is accepted.
 >=20
-> - A release-after-use window in lenovo_ec_exit() where
->   release_region() was called before platform_device_unregister(),
->   leaving the hwmon device active with a released I/O region.
->=20
-> - Missing release_region() in lenovo_ec_probe() if
->   devm_hwmon_device_register_with_info() fails.
->=20
-> Remove all four manual release_region() calls that are now handled
-> automatically and replace request_region with
-> devm_request_region, use dev_err replace pr_err.
->=20
-> Also remove the now-unnecessary braces around the single-statement
-> if body.
+> Change && to || so the check rejects devices that do not fully
+> match the expected EC signature, as originally intended.
 >=20
 > Reviewed-by: Mark Pearson <mpearson-lenovo@squebb.ca>
 > Signed-off-by: Kean Ren <rh_king@163.com>
@@ -73,5 +64,5 @@ Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260521035228.5333=
-17-1-rh_king@163.com?part=3D1
+17-1-rh_king@163.com?part=3D2
 
