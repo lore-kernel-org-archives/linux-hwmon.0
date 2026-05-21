@@ -1,75 +1,48 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1588611E
-	for <linux-hwmon@vger.kernel.org>; Thu, 21 May 2026 13:46:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4E6237206F;
+	Thu, 21 May 2026 14:47:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779371163; cv=none; b=kVzOI4CqwiLaVRQJsQDJjgUJpZQJEfq9/hJXhl5GFxCw/m15jHWH9IoRw1dq9khLbQ7wUpzUJN4g2/Bue6cHbtr1qp6nA8Tps/SNJsfHJuPhHJqGa1guZnHt518uO/DfzxVJZyc9QmpXnag+NGHzadT4FG1n8Bhx5Oms1Z5HeUk=
+	t=1779374856; cv=none; b=JaL3IMqfjNr+O55C5GUfYYsD8S9N5jxlLuGoYSA7Yq9y506bRvPL82es725SXclfgKi4KMnd6YZoPCzTUKP9sgF3YwJhvyKLDbKrptD+041taRmWzU8/k1CFnLU7x7sMJAL6Mut08O62sF1iNrd1+SE1v5Zg/90R0HkYsPVrFI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779371163; c=relaxed/simple;
-	bh=fwrXDyVaz2vFk8whiNZbjAk8uDTFuOSI9Qe0VnvaFAU=;
+	s=arc-20240116; t=1779374856; c=relaxed/simple;
+	bh=34vM8oC08HMw+E4/NG6bZv1CxZSArT+5viOXRQ6TiDs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fHuYamE2gerCCi7392hxvi5tktENM9oUy4GoM1QGvNCkKgr8LHtypbCA2xu3IE70ZChn/aiuNRS8D6TA0jWgz+njYC9OEavnq4kJGb8wLdch/6IxiKqb1tW7YeeelbR5swE7hZjSID+y7+xXR5k64uDqkqJdVTKhjtGD02p45x4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oztxlp+X; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=kwBJWguVBthGRg9uYqs7oes/tYd+Ad7RpoMzscmNdk1qRR3j7yg6qYGbvSr5N5kqjzmdayY/Qgb65gg06KmT2KlgIejAuPrMFtyDTvTtOyYnYb12psXGF1/A2PtJG4pBt+o1V7gItlpjkE/leIQ6Q5e77FC28kboGRjD5RLcgV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=zc9Y2EKE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oztxlp+X"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2bab82d75fdso30156245ad.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 21 May 2026 06:46:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779371161; x=1779975961; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qMfJJmpBQ+WQiwiLW9XDeAzh5VEAeS2cIS33bhI8vz4=;
-        b=Oztxlp+XdOP5w4S4RI2oTfQBBTNcxJl3daO+4zljAq9O1r5RhydMKuTPZeG3LVd2YD
-         oWWtJXLTe3ANc6yjGHdf2T01DuPpZnDXDfSFUa44CSRk9vRNfctKrIVkapcZnq8Ei/Kt
-         mgJWUZxV/ZB++hTROIc+EidDdj5UBXLsiw+0uuLUHizMvQUy0oeRPLztWp1mis43MsP/
-         bXRPmff7h9n4a9tC3p6X3QomuR88JbrWByxH80gIOcCsCKDKuc9wRHMkFi3qtBSdBdhc
-         eWpR4EzYY9DtzDF1E0SlFdMmS1+Y36h1L0UcC631zlMEJdoTwki7IZFhd58gNC0D1bCn
-         NDdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779371161; x=1779975961;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=qMfJJmpBQ+WQiwiLW9XDeAzh5VEAeS2cIS33bhI8vz4=;
-        b=hPGylJCU5il/MpU6cEi6XG3vRKjJ1qqz6GgrfeO44IufjyZaiU6pDdMA3A3g3oDnGx
-         znYmfNxnSbhCPktbrmg5kNWIM8gt3w8kGIMJvYv5lj2CwV+SZRL6OCoTsjQJC7uxibDw
-         X76quJQ3MNWciSnqlwYFQVjyNjkgh9lqVN9sQmNUkXpTDBv8K3mCzelQ05EBYAlDD9po
-         Z+E6swTzB0FTUmXQ3dCxAdTYp4qqqnJ8Utb1lzsibP/fS/yF3ivrOQJgEwljNpgiDpO1
-         jSEN1ORel3OiJalospgf3sAEF5ocgfBFOazB7CiRIRnXPGNb4g3Ka8WGS67O/0B1ZyLk
-         nRfg==
-X-Forwarded-Encrypted: i=1; AFNElJ8AR7hcBKlwn0XXi9iVYG64S39cJewrdfjw2yfeDZvRPDYg2M8Iq8rk/9jHmn6b/nAUR/spqy2uplBCKw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBV6Dejym2e/CpoqIQ6yRD6BQmWoYYAWYMGLJkqJQMTJI3h9aD
-	mzsgAluMb0LR/pDSMpAOcV1Ool9E+mbZ0Pq7LtpuTZDYt43WOeoFJw9/
-X-Gm-Gg: Acq92OFYWJodjUc0bUZ1RqWxrzPL/34QasW5GZV1iVJ+uVFO/f0z1LFrP+FAdvraH1R
-	0Mvo2Z3Yj2SYER1EnjD6vz/Pmos0UfYRaGVkn/f3kFcWqWgTCc3P6zC6VqqSoIIKbygRusliQF6
-	bOnkJDQif6XLL0A9B72o/eeOIRu2RZBGVzLdoXsuPPl2+8Ys82PcdgRdRGbEmeDZyJihEbhiegq
-	hcqY+S+e3/8qptZDFLe3cYqDk97X+sC8U9Vl1Jpns8lhidTMkOkTscn5XBiGBer73AFhtxZ0Mrt
-	FNjHeBVXQHXV6i+czS5H+wzFTpSRb5KYPOeUZCGk9JohITahPHKB+quDHv5MNMTlD4f5j1Yfvbl
-	K2ROxOqTGZGMTfaN6rYyv3gHEaZnbNzMj2Pt1C1+Z14bmVWMUDL+87ZpZhDDmcInAc24oZUCndX
-	8FewO875DHY851HlZlV9/phcvxbC4lUTnXpQiq
-X-Received: by 2002:a17:902:fc4f:b0:2bd:5026:ca11 with SMTP id d9443c01a7336-2bea30910cfmr35741965ad.2.1779371161153;
-        Thu, 21 May 2026 06:46:01 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bea9282b63sm13015465ad.22.2026.05.21.06.46.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 May 2026 06:46:00 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 21 May 2026 06:46:00 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Kean Ren <rh_king@163.com>
-Cc: Mark Pearson <mpearson-lenovo@squebb.ca>, linux-hwmon@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="zc9Y2EKE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE69D1F000E9;
+	Thu, 21 May 2026 14:47:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1779374855;
+	bh=gVaOyRE5SdvShW4Noo+xeu/A7h7G8HtSGPx8etBkX5I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=zc9Y2EKE6Helr38u2v9PnCCoGJaGhBxPLIr/lzyyt/VgW3GZ+YkVvF4am9hfWZp45
+	 3EnKnJNkmumsFoSOcbQd3oxj4i35n3jrzNMLtA5jEKljl4HyFEjuwZhuOLFdOp2Wel
+	 uQySJhO8rQObXQqBR38SuTyAlC5QQVT5W0BKA+jk=
+Date: Thu, 21 May 2026 16:47:38 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jihong Min <hurryman2212@gmail.com>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+	Michal Pecio <michal.pecio@gmail.com>,
+	Mario Limonciello <superm1@kernel.org>,
+	Yaroslav Isakov <yaroslav.isakov@gmail.com>,
+	linux-usb@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-pci@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] hwmon: (lenovo-ec-sensors): Fix EC "MCHP"
- signature validation logic
-Message-ID: <f12705e0-2e91-49db-aead-d29d92141511@roeck-us.net>
-References: <20260514011411.4167069-1-rh_king@163.com>
- <20260521035228.533317-1-rh_king@163.com>
- <20260521035228.533317-3-rh_king@163.com>
+Subject: Re: [PATCH v7 1/2] usb: xhci-pci: add AMD Promontory 21 PCI glue
+Message-ID: <2026052131-dad-glory-59b3@gregkh>
+References: <20260519000732.2334711-1-hurryman2212@gmail.com>
+ <20260519000732.2334711-2-hurryman2212@gmail.com>
+ <06236462-6c4f-413d-8324-537fb8f743d9@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -78,26 +51,40 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260521035228.533317-3-rh_king@163.com>
+In-Reply-To: <06236462-6c4f-413d-8324-537fb8f743d9@roeck-us.net>
 
-On Thu, May 21, 2026 at 11:52:28AM +0800, Kean Ren wrote:
-> The EC signature check uses && instead of || between the four
-> byte comparisons.  With &&, the condition is true only when ALL
-> four bytes fail to match simultaneously, meaning the driver
-> accepts a device as a valid Microchip EC if ANY single byte of
-> the 4-byte "MCHP" signature happens to match.
+On Wed, May 20, 2026 at 07:18:49AM -0700, Guenter Roeck wrote:
+> On Tue, May 19, 2026 at 09:07:31AM +0900, Jihong Min wrote:
+> > AMD Promontory 21 (PROM21) xHCI PCI functions use the common xhci-pci
+> > core for USB operation, but also expose controller-specific sensor data.
+> > Add a small PROM21 PCI glue driver for AMD 1022:43fc and 1022:43fd
+> > controllers.
+> > 
+> > The glue delegates USB host operation to the common xhci-pci core and
+> > publishes a "hwmon" auxiliary device with parent-provided MMIO data.
+> > Auxiliary device creation failure is logged but does not fail the xHCI
+> > probe.
+> > 
+> > Make the PROM21 glue a hidden Kconfig tristate driven by the user-visible
+> > SENSORS_PROM21_XHCI option. If sensor support is disabled, generic
+> > xhci-pci binds PROM21 controllers normally. If sensor support is enabled,
+> > the glue follows USB_XHCI_PCI.
+> > 
+> > This keeps the auxiliary device available for a modular sensor driver while
+> > avoiding a built-in xhci-pci core handing PROM21 controllers to a glue
+> > driver that is only available as a module during initramfs.
+> > 
+> > Assisted-by: Codex:gpt-5.5
+> > Signed-off-by: Jihong Min <hurryman2212@gmail.com>
+> > Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
+> > Tested-by: Yaroslav Isakov <yaroslav.isakov@gmail.com>
 > 
-> Due to short-circuit evaluation, if the first byte reads back as
-> 'M' (0x4D, a very common register value), the remaining three
-> comparisons are skipped entirely and the device is accepted.
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
 > 
-> Change && to || so the check rejects devices that do not fully
-> match the expected EC signature, as originally intended.
-> 
-> Reviewed-by: Mark Pearson <mpearson-lenovo@squebb.ca>
-> Signed-off-by: Kean Ren <rh_king@163.com>
+> The two patches should be applied together. For now I will assume that
+> they will both be applied through a usb tree since this patch touches
+> common usb code.
 
-Applied.
+Sounds good, I'll go take it now, thanks.
 
-Thanks,
-Guenter
+greg k-h
