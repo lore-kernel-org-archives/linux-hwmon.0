@@ -1,75 +1,75 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A9863D79E1
-	for <linux-hwmon@vger.kernel.org>; Thu, 21 May 2026 13:45:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1588611E
+	for <linux-hwmon@vger.kernel.org>; Thu, 21 May 2026 13:46:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779371120; cv=none; b=P0A24T8+K4/qtrJKuzZWoDo7qdV7oc5+O9nIq/gtsYsPh+tlHw/SGxJqbzWvhgGZhKJhWSxJUs8dlCPMdlgX6BoXKrL/V48wRHneA4Bs8jhnZVIJra1pBWFt2OB07/r9Pu5iLiyceX+dYAQI1GbCEEAdZBUCuaTXABFPKEXNBLk=
+	t=1779371163; cv=none; b=kVzOI4CqwiLaVRQJsQDJjgUJpZQJEfq9/hJXhl5GFxCw/m15jHWH9IoRw1dq9khLbQ7wUpzUJN4g2/Bue6cHbtr1qp6nA8Tps/SNJsfHJuPhHJqGa1guZnHt518uO/DfzxVJZyc9QmpXnag+NGHzadT4FG1n8Bhx5Oms1Z5HeUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779371120; c=relaxed/simple;
-	bh=/DEflrKuXkSN6SXy9TR71fPfn8N/sM3Ar9dVtZ92DNw=;
+	s=arc-20240116; t=1779371163; c=relaxed/simple;
+	bh=fwrXDyVaz2vFk8whiNZbjAk8uDTFuOSI9Qe0VnvaFAU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YNGdOfsOOBRXGjGh7ipvnAYNYvX9aTNJtZLX8t+vSqD3VXVulfLU0DIe+xqFeVkLd+qpcW6Jx2El1shhdRfIzRmq+EcaMbUQWid+pMiGyw6z/fnY9OdZERjgxQf7UM77pTCBqY24cN7gUURfp/nshiOacqskSwWpnu2vS0okv34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ahO7fwAK; arc=none smtp.client-ip=209.85.210.181
+	 Content-Type:Content-Disposition:In-Reply-To; b=fHuYamE2gerCCi7392hxvi5tktENM9oUy4GoM1QGvNCkKgr8LHtypbCA2xu3IE70ZChn/aiuNRS8D6TA0jWgz+njYC9OEavnq4kJGb8wLdch/6IxiKqb1tW7YeeelbR5swE7hZjSID+y7+xXR5k64uDqkqJdVTKhjtGD02p45x4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oztxlp+X; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ahO7fwAK"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-82faf871346so4770015b3a.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 21 May 2026 06:45:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oztxlp+X"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2bab82d75fdso30156245ad.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 21 May 2026 06:46:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779371119; x=1779975919; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779371161; x=1779975961; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ASnpw6D1CgJehkqtVhHFBNRmAKXhCA0vpBuLCSePIkg=;
-        b=ahO7fwAK/oZgDDg3Z9akIctLxSWmsGb201qgq0pSfkf6TMBaTNgTmHbkZftOGSQYRd
-         6t1uLPRTW0YSVrO5TM5Uq2pKfQmE4qKGnaGMhhXSxg7IgTVvEYYv8fTjvYdO4ioNeLMG
-         oZPG7xJyECdjlCVMT/RIYiKHVm3KLp2Zf10XH80Vffe/Saq9tPZEMId3hG0C6wbDYM1m
-         0sIyMqWVLalyInBGKnugZy0eANBkcc1Wewqk+aHzCGtjqHx3lGTPEKyKGygBKHasm6LY
-         tV4lOLBWfcplrZsmv2ebvrpBDS2STZRk07nHCoSptyjLJ65pLGwCKfSvL8hbcyn41BdW
-         peUg==
+        bh=qMfJJmpBQ+WQiwiLW9XDeAzh5VEAeS2cIS33bhI8vz4=;
+        b=Oztxlp+XdOP5w4S4RI2oTfQBBTNcxJl3daO+4zljAq9O1r5RhydMKuTPZeG3LVd2YD
+         oWWtJXLTe3ANc6yjGHdf2T01DuPpZnDXDfSFUa44CSRk9vRNfctKrIVkapcZnq8Ei/Kt
+         mgJWUZxV/ZB++hTROIc+EidDdj5UBXLsiw+0uuLUHizMvQUy0oeRPLztWp1mis43MsP/
+         bXRPmff7h9n4a9tC3p6X3QomuR88JbrWByxH80gIOcCsCKDKuc9wRHMkFi3qtBSdBdhc
+         eWpR4EzYY9DtzDF1E0SlFdMmS1+Y36h1L0UcC631zlMEJdoTwki7IZFhd58gNC0D1bCn
+         NDdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779371119; x=1779975919;
+        d=1e100.net; s=20251104; t=1779371161; x=1779975961;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=ASnpw6D1CgJehkqtVhHFBNRmAKXhCA0vpBuLCSePIkg=;
-        b=U/J3nL5X9foUCKuVUcMGJtKGXvCsbmLUjQUW00qigRmL7dxQ+TAOXms4uv45t5oFmv
-         /oXC+Ja7BrJia1EtOXyySUnIIxW5e798MwCskexNl0W/vNzDEdisIuNBxYLVHsqUrpTv
-         MBEZsTyG4D0gXXbzQgptR+xv0zuNObe2qGolMFPjfUpa+YDHzqkpqNkB9SLl8QlNFjcp
-         59CKczUZWPERyBx5zKN0zGB79Anm1GMlzfbZqVKqbqSC2sRL9FQvtDBcJTYmrin11o2l
-         c6lP8uXe6oAQa6HtY65Dy3iZF6CMJJw65VBTpkwrZk05ZmxXgIlTJY6x5uyFzpwYcCnU
-         u47w==
-X-Forwarded-Encrypted: i=1; AFNElJ/g5aGGBmfv3W6qjOfP7Bt2/QrsL0JQaXgWoTxrhCRnfMo1MQf2cVbWs4SQKGfKTc3o8fBUF/wwSXfHkA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBIJptHdlmmvKadITaHrB07VG99DzPtA/2MIRwzYbX65Pbmyya
-	raImD1JmIxTcKog+VqvN4Ypc2IpG85hekthIYtQCMgRKHYXakWOTyn2k
-X-Gm-Gg: Acq92OExPXHulfMMu1f7xBuMXwp6e2z14SUsMEuym5MeKdd42XWna6CHeV33cgTDbsP
-	895eroirvVqshjNxWsrLZRRgBSzofUjfd2WC8E8b93sFORXHgBH9dVIUKg9AspC2ewA4LIYI47a
-	R54otChMuCdp8RNoSYVsdNGODSE74XJupSeHjXpBFUsmEWYAUi3SsTUz/9teJsLyTaye3r8M+sD
-	QpKc2k4Mo+QwLD/OKiWGUa6O02CZzefSesEHDZNF5wG950MTU5QEzk/a06FtI5H8FEZDvlpXZnA
-	e0Xh5mMbwTAukhHkV/1L++cVV44M31w10+97swlutnujFRqUJEbptJHh8Zlr7pziIuxloIx5kz4
-	ocwzUXSXkvHY2V7+/E+FO8qIbECb6QlpwoVnx3aYtLq9tZSqWMC+KlPlaJKtg/+l1AF18BRRbBg
-	hxGquoLsYfEAYhbyoMcG5agTQBwi/7XZl3YBmlqR/yh/r0gP0=
-X-Received: by 2002:a05:6a00:419b:b0:82f:1369:7268 with SMTP id d2e1a72fcca58-8414adf69admr3300026b3a.30.1779371118605;
-        Thu, 21 May 2026 06:45:18 -0700 (PDT)
+        bh=qMfJJmpBQ+WQiwiLW9XDeAzh5VEAeS2cIS33bhI8vz4=;
+        b=hPGylJCU5il/MpU6cEi6XG3vRKjJ1qqz6GgrfeO44IufjyZaiU6pDdMA3A3g3oDnGx
+         znYmfNxnSbhCPktbrmg5kNWIM8gt3w8kGIMJvYv5lj2CwV+SZRL6OCoTsjQJC7uxibDw
+         X76quJQ3MNWciSnqlwYFQVjyNjkgh9lqVN9sQmNUkXpTDBv8K3mCzelQ05EBYAlDD9po
+         Z+E6swTzB0FTUmXQ3dCxAdTYp4qqqnJ8Utb1lzsibP/fS/yF3ivrOQJgEwljNpgiDpO1
+         jSEN1ORel3OiJalospgf3sAEF5ocgfBFOazB7CiRIRnXPGNb4g3Ka8WGS67O/0B1ZyLk
+         nRfg==
+X-Forwarded-Encrypted: i=1; AFNElJ8AR7hcBKlwn0XXi9iVYG64S39cJewrdfjw2yfeDZvRPDYg2M8Iq8rk/9jHmn6b/nAUR/spqy2uplBCKw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBV6Dejym2e/CpoqIQ6yRD6BQmWoYYAWYMGLJkqJQMTJI3h9aD
+	mzsgAluMb0LR/pDSMpAOcV1Ool9E+mbZ0Pq7LtpuTZDYt43WOeoFJw9/
+X-Gm-Gg: Acq92OFYWJodjUc0bUZ1RqWxrzPL/34QasW5GZV1iVJ+uVFO/f0z1LFrP+FAdvraH1R
+	0Mvo2Z3Yj2SYER1EnjD6vz/Pmos0UfYRaGVkn/f3kFcWqWgTCc3P6zC6VqqSoIIKbygRusliQF6
+	bOnkJDQif6XLL0A9B72o/eeOIRu2RZBGVzLdoXsuPPl2+8Ys82PcdgRdRGbEmeDZyJihEbhiegq
+	hcqY+S+e3/8qptZDFLe3cYqDk97X+sC8U9Vl1Jpns8lhidTMkOkTscn5XBiGBer73AFhtxZ0Mrt
+	FNjHeBVXQHXV6i+czS5H+wzFTpSRb5KYPOeUZCGk9JohITahPHKB+quDHv5MNMTlD4f5j1Yfvbl
+	K2ROxOqTGZGMTfaN6rYyv3gHEaZnbNzMj2Pt1C1+Z14bmVWMUDL+87ZpZhDDmcInAc24oZUCndX
+	8FewO875DHY851HlZlV9/phcvxbC4lUTnXpQiq
+X-Received: by 2002:a17:902:fc4f:b0:2bd:5026:ca11 with SMTP id d9443c01a7336-2bea30910cfmr35741965ad.2.1779371161153;
+        Thu, 21 May 2026 06:46:01 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84154a000cdsm1232585b3a.17.2026.05.21.06.45.17
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bea9282b63sm13015465ad.22.2026.05.21.06.46.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 May 2026 06:45:17 -0700 (PDT)
+        Thu, 21 May 2026 06:46:00 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 21 May 2026 06:45:16 -0700
+Date: Thu, 21 May 2026 06:46:00 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Kean Ren <rh_king@163.com>
 Cc: Mark Pearson <mpearson-lenovo@squebb.ca>, linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] hwmon: (lenovo-ec-sensors): Convert to
- devm_request_region()
-Message-ID: <69ebb33a-25f3-4106-95b4-bf70476c9b84@roeck-us.net>
+Subject: Re: [PATCH v3 2/2] hwmon: (lenovo-ec-sensors): Fix EC "MCHP"
+ signature validation logic
+Message-ID: <f12705e0-2e91-49db-aead-d29d92141511@roeck-us.net>
 References: <20260514011411.4167069-1-rh_king@163.com>
  <20260521035228.533317-1-rh_king@163.com>
- <20260521035228.533317-2-rh_king@163.com>
+ <20260521035228.533317-3-rh_king@163.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -78,30 +78,21 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260521035228.533317-2-rh_king@163.com>
+In-Reply-To: <20260521035228.533317-3-rh_king@163.com>
 
-On Thu, May 21, 2026 at 11:52:27AM +0800, Kean Ren wrote:
-> Replace manual request_region()/release_region() with
-> devm_request_region().  This lets the device-managed framework
-> handle I/O region lifetime automatically and fixes:
+On Thu, May 21, 2026 at 11:52:28AM +0800, Kean Ren wrote:
+> The EC signature check uses && instead of || between the four
+> byte comparisons.  With &&, the condition is true only when ALL
+> four bytes fail to match simultaneously, meaning the driver
+> accepts a device as a valid Microchip EC if ANY single byte of
+> the 4-byte "MCHP" signature happens to match.
 > 
-> - A double release_region() when probe fails after acquiring the
->   I/O region: the probe error path releases it, and then
->   lenovo_ec_init() releases it again on the same error path.
+> Due to short-circuit evaluation, if the first byte reads back as
+> 'M' (0x4D, a very common register value), the remaining three
+> comparisons are skipped entirely and the device is accepted.
 > 
-> - A release-after-use window in lenovo_ec_exit() where
->   release_region() was called before platform_device_unregister(),
->   leaving the hwmon device active with a released I/O region.
-> 
-> - Missing release_region() in lenovo_ec_probe() if
->   devm_hwmon_device_register_with_info() fails.
-> 
-> Remove all four manual release_region() calls that are now handled
-> automatically and replace request_region with
-> devm_request_region, use dev_err replace pr_err.
-> 
-> Also remove the now-unnecessary braces around the single-statement
-> if body.
+> Change && to || so the check rejects devices that do not fully
+> match the expected EC signature, as originally intended.
 > 
 > Reviewed-by: Mark Pearson <mpearson-lenovo@squebb.ca>
 > Signed-off-by: Kean Ren <rh_king@163.com>
