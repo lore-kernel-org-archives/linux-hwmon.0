@@ -1,74 +1,74 @@
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE162349CF6
-	for <linux-hwmon@vger.kernel.org>; Thu, 21 May 2026 03:21:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0385335677C
+	for <linux-hwmon@vger.kernel.org>; Thu, 21 May 2026 03:21:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779333667; cv=none; b=AFz+ulCayBrc4077/SY5urwvyRSZttLfwlQin4fcc93pTBpuNr2uv4GMWEDDV81OiYhrZu2eWDaJQuhAD1DrirEkwVQZxOwe2XB825RUn3pdJrhos/hXcTFT3CVXFpK9/r6vuCpGiu+pdfzTcemIMib5bZ6ns+iXvc+c5zMcJ7E=
+	t=1779333699; cv=none; b=PKG0JWK3x+IKeM2OnSQ0gs6dqFhAP2SsN5A7eJK9eurF6XQJrfe6Epwb0rfrY7/lSTxmznS7CD2w6fSMXDAnK+HdtJDQ2daCRqVbvQ1spLPgeojQm3EITnzFak46vN9t5on80H1UccsoPcXeElugjpVjhLXExd7wLdnzmFn/H4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779333667; c=relaxed/simple;
-	bh=nBRs/4+4lIS1FVs1LHhoV3i49yDqQ5+KQ4/SxNY5D68=;
+	s=arc-20240116; t=1779333699; c=relaxed/simple;
+	bh=7vKJfReVHTqlLDtTCR60wcc4317N0UuwLu664Gww9bU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PPKdcwN3ohRy96cRQO5UmHmQGHx2Rm8gsie0U2i48HuWqKPrtTLSByTemz/4Z1qIVQZ8c/6MLGETLXLaFYZcphnLWdnnmh+3kdAmnWEs0Pxyq8CWhFE9zKpw2+F0c4/W/tj+24EXzBj65iitE1e4qYL/JXgPmxrRT2GT79HnAo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BjYfYFeJ; arc=none smtp.client-ip=74.125.82.172
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZOxydF7v3Vv7FISw0BVtZuhxjXxEuG3n1t3evnrYEekgRqhvR6B/pVA9ofToxj91atcZUk8uTlQpR/f7Gua/L3Wrj10maq4Q+HxiAOgixuSDQZWLXYWTbqcWqfPnEfEZExGOQ0rfYWjdPmd1wZ4JvusBj0+PnCwb2GJcdXWe+Uw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KESInHVA; arc=none smtp.client-ip=74.125.82.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BjYfYFeJ"
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-304106b1204so2050956eec.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 20:21:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KESInHVA"
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-1363fe80fe8so22533c88.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2026 20:21:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779333665; x=1779938465; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779333697; x=1779938497; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WbHMFjNKeehaSqwOnPCxaXlVw9gZNG/Qs5AE3FPln0w=;
-        b=BjYfYFeJLPK33W8w1ISPY9B+zeI55cUQRPoeSU6LQcntoxHNDCzdwri0sIwW31Kupd
-         /4wxyU/GHJ4hsIT67pmiIfPkec6rzE6wHGHdG0GonKpLiJZoSfhZ3zUvFw1+U2tsd8Pp
-         hpXL6/orJZU7MOsEpY/99HAbAlC310R7byOiEK+G72GbmxRgqnBsbaVBehOrlTR0/rhD
-         q0zp6sR4VFC4AbmgSwyukDOYsqFQdcGd0fCW51xlT3/wshg889NX/mqYYbn7izmVSq/j
-         +Ig+ddfifehD2hzoEtotztmVMQKnKu+Eoade3m4Xm369tOlcMpEODll2Y4ThXh8dcZTz
-         FFOw==
+        bh=dZ8txBXaIoej+lGMf0Ak8SbcwyYcdQI+h52688H57Sc=;
+        b=KESInHVAGq4CXfbGghUFThvJzOEnIh28zGfd2n/HF/H+RI7M2e9+CIoyukiPA85RNq
+         bMaCNVMbs7+rG3wFVZU5lywY9Gq8lBCIUOT0HevgpnnZsuoWAGabBE8Ij0EdWI2Qm1xY
+         4VmhUWIioPz0J8UlO+EtNIYWMRRBEQ7snWXWfjeH1G8EPegDJyrHYrq1snc2M4PK9rvV
+         oalzfsPEmjQQ+3HfFxKpv03c7Q34qayIzTfUOYEZh5DG8yAamZ7GIcLRA4tY2UgN5/Oi
+         TZ/sGywRdCjiJT+ciX3GiXXPSD0FycWv4JEBVrnmMe0GwQAJwNWWLKtdnFIC+iZnSPc1
+         ICYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779333665; x=1779938465;
+        d=1e100.net; s=20251104; t=1779333697; x=1779938497;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=WbHMFjNKeehaSqwOnPCxaXlVw9gZNG/Qs5AE3FPln0w=;
-        b=NKULikjdcVGd73W6xy+2EXphN4T19lrdBqxZbE28CBrqognNiv0Z8u7zvAAZyeL4GP
-         uOKjBpLHL9UKcn2Csd734LsnTqxUSAmlJmpY1drGUoKAO4R41BwxmEx4ARRwnYPBkszU
-         UIhJRZT+dTc07y8e6Zp3jwBweYpWrJY1StFodhy3zmxFEdn6rxS97+JU/JWyqqhayyAw
-         +vvqnvYvXKjRAN/ghF0bERXYDnuqsynuqyPVB254RsLJHJu1rlFEL2tbZqm1A7J878CL
-         D4FFnZUsLywUlW7dlbfq82IsCHXznfhD2JmVFEU7RlWFzforQ08Db+OhIfYNv5ihYQN8
-         WyRg==
-X-Forwarded-Encrypted: i=1; AFNElJ8Vb51jtJt/Gpu8K3RHlsDTJ3tJ41SXIpqU2aDOWKiBt9fRa+5bu2GvUy8Zo5J+0Pjw+08VM2sTl0PdoQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5CXsBJHNeiO4dx68MUWAaFXp2HRNIf8x71TuuqWAZrHfWFibt
-	oeTKE56rNr6D8G4NB9s0TWLBNm6J02jWX4fdLnqo4m80NDxGhwYMFMWmA5iM0AoH
-X-Gm-Gg: Acq92OFNILxJCt0c5XnHkzck55mojOWHZMBIg4LzTwKhiB8BvZyrmw+uHQRyuNNtlSW
-	O6236d+XaXaZV/JI8H2KUmImjOtvYTr6jDXJLisMnsCBorli7s4O/joerXdWyGBhigRcDGLP5dL
-	nHsORC8u8XgNLfYpD0X5za7yZAnxExq/gTIZuWiKYPxeKH/SPRqYAnI1QT2uVQ2vq3ZS03yYRMe
-	TPJq+TdPua8URUfU+rPN/myZCDxQ2BUKHBJUS/mM2FwnWOCq9PPXBcjbZ6Cx+0LlliZA3xGoaT/
-	TjAhF2Wa1PR+rnwkk6ImslwZyKH2HiSAJMt09ARyJ7bBABqGoITWJaZmZt9kCOpPJfpsMc1fSwL
-	I3ogYU3OJyjd3oN/XArGJbfSxdfLLC/T5G8Q84Kk5f9o4aFYrB2wj7nqLwwYshcQAf27VVVPRNz
-	BP2s4lxP7pibEOAI7TB6jbyuorKMj02+jtEMZk2POvHXZlvEA=
-X-Received: by 2002:a05:7301:2c05:b0:304:2e9b:8f56 with SMTP id 5a478bee46e88-3042facd675mr705429eec.31.1779333664533;
-        Wed, 20 May 2026 20:21:04 -0700 (PDT)
+        bh=dZ8txBXaIoej+lGMf0Ak8SbcwyYcdQI+h52688H57Sc=;
+        b=rJ0kgW+sIvk/lIUdwxHxZpChQBQ7qEMnCs//ZuTke1suUEdQ7Ts8l5/y+zffdH28Ft
+         eVS6iFpjzu+i9KIp0fwLPzwwXUYjnazEpTjUiCSqjdlyVazN6XOSAMHxq4hvnhtwMC70
+         c/MAfzg/3+xB01hzOzSsyQjJ+eNa4+fYvcbMDAwIQ2y0Lpqn7VBZv4Co+YCAgLLTjklN
+         lR1tRBiMPEEcorkPgpDo1+06q8SRjwQDPDZXlxDnnhuBxGpNQEOdrkGwao8wthMdlBKI
+         lWwCpv9uZT/pNDTUtN9rEa//1rTIw/9dTc0iJkFPhR6c+/m5h9C69jhDdRKtTHv3jPho
+         ygqQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/vONYEwLskJdg+giRvsvwgnLE46+HLV2RWekjLgL2sHV6hsTEjfKim0Bgc059ESOq4xODjGx4L762pzA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxt0p9yUD2KQ1qI4Rj8AvhhjLrPa86Z/LicmL+y0cp9ppWZAzJS
+	J2OQnGir7lCNgcbzwtuGoUtRYvXMQBnPttmvAu82GN0k+Y38SP5czaN/
+X-Gm-Gg: Acq92OG3NW3ImWhClVAB1Jn06kVA5N8pZEyFkOU3jmucj8jwpIfCsiP8Tl0oTZWJE4r
+	7Zf4bWtfdg8FEo99OXM5saYhcgQUruzqIIGKu/uKDRVZMebuk8tRPVGs/VukahfnSLfpZnc4vHI
+	IYSwRrCIRsFE4KFWvgisvwNUSLk3INcU+M8iNiHAORL6kvCkD9PqiMsTJJUxp/0KxaXtOY/aLQX
+	aHqFsSIsXnL+4gagNCNmcuem19usiXo+Cwzt7lbC+CI3QlnRp0+8Pl0VcJG7v3qIi744isUGmDg
+	pGNycYspiJ5LAoI38pAYiN1fvmEbJsQvyDaZEqrzYcb4/MiKJLMYxxxr2i1yyk9hBKoQalbmmyi
+	jWzvLwDfDf78QVFnkMw1INn0xqWYSWv6zSwhI8cQsutHjyjJO7PoGbAjgnqhjq3RTz4YukHY44i
+	sb4uTNCSWw9laejxKybJUnchK3uOsJaJ7iIiPu
+X-Received: by 2002:a05:701b:241a:b0:130:73ed:214 with SMTP id a92af1059eb24-136327e4904mr301506c88.1.1779333697030;
+        Wed, 20 May 2026 20:21:37 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3043620b9a7sm475886eec.15.2026.05.20.20.21.03
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cbed2232sm29418937c88.7.2026.05.20.20.21.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2026 20:21:03 -0700 (PDT)
+        Wed, 20 May 2026 20:21:36 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 20 May 2026 20:21:02 -0700
+Date: Wed, 20 May 2026 20:21:35 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 Cc: Alexandru Tachici <alexandru.tachici@analog.com>,
 	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/3] hwmon: (pmbus/adm1266) add clear_blackbox debugfs
- entry
-Message-ID: <0e599493-c394-4a34-bc30-c2cd31e0cce9@roeck-us.net>
+Subject: Re: [PATCH v5 2/3] hwmon: (pmbus/adm1266) add powerup_counter
+ debugfs entry
+Message-ID: <1da8e9c5-2b41-4f96-b572-f9047e842e32@roeck-us.net>
 References: <20260520-adm1266-v5-0-c72ef1fac1ea@nexthop.ai>
- <20260520-adm1266-v5-1-c72ef1fac1ea@nexthop.ai>
+ <20260520-adm1266-v5-2-c72ef1fac1ea@nexthop.ai>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -77,26 +77,24 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260520-adm1266-v5-1-c72ef1fac1ea@nexthop.ai>
+In-Reply-To: <20260520-adm1266-v5-2-c72ef1fac1ea@nexthop.ai>
 
-On Wed, May 20, 2026 at 03:42:40PM -0700, Abdurrahman Hussain wrote:
-> The ADM1266 blackbox can be configured in two recording modes via
-> BLACKBOX_CONFIG[0]: cyclic, where the device overwrites the oldest
-> record once the 32-record buffer fills, and single, where it stops
-> recording until the buffer is cleared. Deployments that need to
-> preserve the full record history across multiple fault episodes
-> typically run in single mode and need a way to clear the buffer
-> after the records have been collected.
+On Wed, May 20, 2026 at 03:42:41PM -0700, Abdurrahman Hussain wrote:
+> The ADM1266 maintains a 16-bit non-volatile POWERUP_COUNTER register
+> (0xE4, datasheet Rev. D, Table 93) that increments on every power
+> cycle and cannot be reset by the host. Each blackbox record already
+> embeds the counter at record time, so the standalone live value is
+> primarily useful for matching a captured record back to the boot it
+> came from when correlating logs.
 > 
-> Expose a write-only debugfs file alongside sequencer_state. Writing
-> any data to it issues the documented clear-blackbox sub-command:
-> a 2-byte block-write to READ_BLACKBOX (0xDE) with payload
-> {0xFE, 0x00} (datasheet Rev. D).
+> Expose it as a read-only debugfs file alongside sequencer_state. The
+> block-read returns two payload bytes in little-endian order.
 > 
-> The clear is taken under pmbus_lock because READ_BLACKBOX is also
-> used by adm1266_nvmem_read_blackbox() to walk records one at a
-> time; both paths run under pmbus_lock so the clear cannot
-> interleave mid-iteration and corrupt the read sequence.
+> Take pmbus_lock around the block-read so the access serialises with
+> any pmbus_core sequence that sets PAGE on the device. Without it, a
+> PAGE write from another thread could interleave between a PAGE set
+> and a paged read elsewhere in the driver and corrupt either side's
+> view of the device state machine.
 > 
 > Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 > Assisted-by: Claude-Code:claude-opus-4-7
