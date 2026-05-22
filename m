@@ -1,104 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45751346E7D
-	for <linux-hwmon@vger.kernel.org>; Fri, 22 May 2026 07:50:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB9A93A75AE
+	for <linux-hwmon@vger.kernel.org>; Fri, 22 May 2026 08:24:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779436225; cv=none; b=ITLDdgHhJOXYcSNws7rP45gOCOFY+VMmMb9O+riEiZUmlJZ9SEPBmrzmFk2rMCzdZw7yEfNRF4mmUyg59XcfhTvHZD5pI1gxct1we0P0Z1NElyWn4K0ARZMkowegZAQHxUomNF82ZHjjWWodsO2fdcrIfnU3Va1bFlj1uucl7Fk=
+	t=1779438252; cv=none; b=swkFyJ+sZcg+PY4EFY57PmpilqjH5p8n7smOwCU97kmu01tegLtqgHN+//anrlxvjVEhuVd54IcYjdWK5bZ/RH/+Rhc9hQ5Huv4YKWsBxSXtqZSIxM8F2QA4ifl1ayamDe6qtpLt9E6+zPAo00QjLIAYgdycxzZHxw3ftluDQ3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779436225; c=relaxed/simple;
-	bh=r/fcixIaBsfrDHNDsCp6AjtRLp/QTDIDrugJUQAEfzo=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=VoD27Ia7/kh4jVwjjvHnlCfCdJUNjrPfsY129xU+9n5b4bDiqrEPDfx37wng8cjJku0Nkqn84Mj6rZPabs5NU+9ty4QbBzqT9PfNWFukyFa2dFfV8UsHZ9gp42vM0dg23lew4t7de3WLSaDNYW9wr6xPzoUpzREbbTElrxSYaYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c9YUkIFT; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779438252; c=relaxed/simple;
+	bh=3q7Of61NRAonCCG64eOeQNKQfyhqKqxdG9RLjiPKTXM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AEsHR2JXHFx8D/nfKj0teZWV2/h7xS/WUeSxAXIi+809UXNlMhW1PcpROjpAj4tb35ODaK+Dmbpy1lTuvcYDNEzlBo9sFDeIfhpEgevqi6eMCzqvuugJMKs/1FAlJwb/rH7Kq8oBs5I9YK2mKGj/EaUnBdBbv/4r4CzkC3j5BXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=BHVo/xNt; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c9YUkIFT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D222E1F000E9;
-	Fri, 22 May 2026 07:50:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779436224;
-	bh=X1+1JJlV2Ftt3ckgGeSXDUyJgs3C0+9C6FkEsDpDmng=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=c9YUkIFTh7WQzwyTC+/YFKSEFdaAIbafRQwb+m5nhQgfkS3qCkFLK9Q3Xy2f/rcEI
-	 6NjouF6QCrxOhkVotJ102n0l6wU8b3T8svFTaR5RXFqwSiJQEqqfBdRyxumUw+tvb7
-	 iQqLcChJh2IdWNUI/lBZuGKRHJVEQTLz17MpLm8cM4Clwbb3usPRWhM4Ptz2V38O3n
-	 s6/8CAnX9wyIYxO0gbMmk0O88aRcEQCCYiw8Aa7qUMVNjB1x4t4E9DnRzcWhJuY8+q
-	 pPdqTOhQf5GWYeJfJYHcO0JcgbzVD056ORmDcEa1GgirMq/ELvdN674IQJR/zuyChM
-	 Nf6ZOnrYP8e5w==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/2] hwmon: ina238: use microseconds for update_interval
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ferdinand Schwenk via B4 Relay" <devnull+ferdinand.schwenk.advastore.com@kernel.org>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260522-hwmon-ina238-add-samples-update-interval-v1-2-e1acfceb447e@advastore.com>
-References: <20260522-hwmon-ina238-add-samples-update-interval-v1-2-e1acfceb447e@advastore.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 22 May 2026 07:50:23 +0000
-Message-Id: <20260522075023.D222E1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="BHVo/xNt"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-44b330c5cc6so5286533f8f.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 22 May 2026 01:24:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1779438247; x=1780043047; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0rOd1e3lZNhkcxa+BicVSQFmQVFgFvl+9kN36m8Y/6A=;
+        b=BHVo/xNtTcMsYkytIFZqvOvCOqc6FOeuF9usdLM3/SS7TaSD6r66rVTV4isN4/C8/R
+         A7jpg/24nHR7xqlYRJF0DwyUV17mc8TRwg/vRabI7UF8tes/MK0iwoiFSHzGFvCOgmcb
+         9dSf3P9UhdZdYj+aLWgvdcLve5354JEs6v2OTbwc/IGBopjNxQ3txF+LYHrcS5E7nxM9
+         c59EAnD7OCpSwgFlv/ILv+E+Eusyxk4dtGVYO6G5uox4Tl/z6o+yMw+hZHCEaW1e4Xoe
+         HD9do4ASAHCfeU2dErqMOcbyBV8PMWn1nH4zTydJ9NuQ0vH1SpIlFtE27GuBL/42x3Wi
+         JynQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779438247; x=1780043047;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0rOd1e3lZNhkcxa+BicVSQFmQVFgFvl+9kN36m8Y/6A=;
+        b=TlUPffDffJ/QElweq+e7fSxVXSqoHUKC1iCbzdX1DBsgo5On0wH1hqxYf2277zMocg
+         M5CriP2Gmb9qj1OgVe0WbnJTlVpzk3PQhQjQoOH24enI9Nj3ZW67Kn4tHfAYQKiq/GlU
+         PS8xEepTwECV49rsE02nF7caFpmTJ0RNx+3Z+QKFpVRiGYWvsBr+uM3Ndilc8toAJle1
+         nlI2VpGfEYdKsFcuV6V5f9B+Jwm6RP+SZsTr097+itJUlo5vHTwbMeAutmP3Hj2at1O5
+         Hl0ooj/xooYmTM9VApvtxIYjc4YofRIvDponlVtZ2Il/YAPUmAH+Z1lBtVm0Q4/EF3eQ
+         WKfw==
+X-Gm-Message-State: AOJu0YxSPHqdw+ff3EYzypugVWC+2BiJub+EBxyloRq2wgBPJgAyKVIh
+	vAFYjr/KUGr6z+s3Dc/RxEhW8bM137+r5/9QICc8ejbp+Rfvg9sd083XLkexgwZakUE=
+X-Gm-Gg: Acq92OECTJm37/LKc6oZOA5ymY8a3fAZrXFtkUlRi07dSjHX2PEO2wJePRBnHwi7vR2
+	hvUnH3yuqbhekw+4FC0lwqVdyyoDRwJeKhyJDYIEPgAML4FAiNes9rdXJQ/VL1PsjAqHwTA4k4z
+	Vn8eqqE88478JRRASKxihRNpyibHh4EZnUceHq3ynnpmJ+KKPqeG4np5VAbLM5nW+XJq566ZxFe
+	ODVKcqoAV/w8jdtjRvsAZNboWWsVF100wQifsHjgRCowb4jIE9ZC5bHjsRq4KzbBNPKINQssjmD
+	C+SGd9pkHAO0x6uwJOn5JWI034y2zIkUUXiBEqpH8QUz4yB6lD5ZkpZ4U5n7MBxd883AlyrwPW/
+	krPfIJhPgldU+YUE1I+splqPzj0FZwB6mjz6GDk5sVRJvbYyZMcy1C9aUX/Ql0aLmyRPwUtCT9V
+	ke1q1QgXiuqRIQhKAUFhu70E8EwLno6j6N7iuFSsWzexOWf/GTozuWtNdycmlhGooRzDH+PApHq
+	Lg6BGzev5LCk5jtjCVvng==
+X-Received: by 2002:a05:6000:2888:b0:43d:7d6f:f529 with SMTP id ffacd0b85a97d-45eb38b796amr3607454f8f.31.1779438247244;
+        Fri, 22 May 2026 01:24:07 -0700 (PDT)
+Received: from silence.. ([46.10.240.40])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eb6c9f58dsm2398471f8f.5.2026.05.22.01.24.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 May 2026 01:24:06 -0700 (PDT)
+From: Stoyan Bogdanov <sbogdanov@baylibre.com>
+To: jbrunet@baylibre.com,
+	linux@roeck-us.net,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org
+Cc: linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Stoyan Bogdanov <sbogdanov@baylibre.com>
+Subject: [PATCH v4 0/4] Rework TPS25990 direct conversions and add TPS1689 support
+Date: Fri, 22 May 2026 11:23:35 +0300
+Message-ID: <20260522082349.2749970-1-sbogdanov@baylibre.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Critical] Changing the unit of the `update_interval` sysfs attribute fro=
-m milliseconds to microseconds violates the standard hwmon sysfs ABI.
---
+This series reworks the TPS25990 PMBus driver direct conversion
+handling to provide a unified and maintainable approach for devices
+using non-standard direct format conversions.
 
-commit f2472e232de816df3e93f686ee0c5f31ec06d663
-Author: Ferdinand Schwenk <ferdinand.schwenk@advastore.com>
+The existing TPS25990-specific conversion defines are replaced with a
+generic parameter enumeration and conversion descriptor using the PMBus
+direct format coefficients (m, b, R). A new local structure combines
+pmbus_driver_info with direct conversion data, simplifying support
+for related devices sharing the same conversion model.
 
-hwmon: ina238: use microseconds for update_interval
+To avoid duplicated conversion logic in drivers, this series also adds
+and exports generic helper functions from the PMBus core:
+pmbus_reg2data_direct_calc() and
+pmbus_data2reg_direct_calc().
 
-This commit changes the unit of the update_interval sysfs attribute for the
-INA238 hardware monitoring driver. It modifies the driver to accept and
-report values in microseconds instead of milliseconds, aiming to allow users
-to configure conversion times with higher precision.
+With the conversion handling generalized, support for TPS1689 is added
+to the TPS25990 driver. Both devices share most internal functionality,
+differing mainly in supported voltage and current operating ranges.
 
-> diff --git a/drivers/hwmon/ina238.c b/drivers/hwmon/ina238.c
-> index 7bc18e5445b27..db0c0b5344d6b 100644
-> --- a/drivers/hwmon/ina238.c
-> +++ b/drivers/hwmon/ina238.c
-[ ... ]
-> @@ -327,8 +330,8 @@ static int ina238_read_chip(struct device *dev, u32 a=
-ttr, long *val)
->  					  INA238_ADC_CONFIG_AVG_SHIFT];
->  		return 0;
->  	case hwmon_chip_update_interval:
-> -		/* Return in msec */
-> -		*val =3D DIV_ROUND_CLOSEST(ina238_reg_to_interval_us(data), 1000);
-> +		/* Return in usec */
-> +		*val =3D ina238_reg_to_interval_us(data);
+Link to V3 at [1]
 
-[Severity: Critical]
-Does this change break standard hwmon sysfs ABI compatibility?
+v4:
+- Fix non-devicetree support as reported by Guenter Roeck
+- Rework direct conversion handling to use exported PMBus core helpers
+  instead of driver-local implementations
+- Update dt-bindings commit message and ti,tps25990.yaml
+- Clarify commit messages to better reflect the final implementation
+- Add and export direct conversion helpers from pmbus_core
+- Eliminate duplicated conversion code in the driver
 
-The hwmon subsystem defines the update_interval sysfs attribute unit strict=
-ly
-as milliseconds. By exporting and expecting microseconds here, it appears
-this would break userspace tools like libsensors that rely on the standard
-hwmon ABI. For instance, a userspace tool writing 50 to request 50ms will
-now incorrectly configure 50us.
+V3:
+- Fix error detected from kernel test bot regarding division
 
->  		return 0;
->  	default:
->  		return -EOPNOTSUPP;
-[ ... ]
-> @@ -353,7 +356,7 @@ static int ina238_write_chip(struct device *dev, u32 =
-attr, long val)
->  		data->adc_config =3D adc_config;
->  		return 0;
->  	case hwmon_chip_update_interval:
-> -		val =3D ina238_interval_ms_to_conv_time(val);
-> +		val =3D ina238_interval_us_to_conv_time(val);
->  		idx =3D find_closest(val, data->config->conv_time,
->  				   ARRAY_SIZE(ina238_conv_time));
->  		adc_config =3D (data->adc_config &
+Tests:
+- Test builds for x86_64, arm64, i386
+- Retest driver on arm64
+- Validate driver direct conversion functions manualy
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260522-hwmon-ina2=
-38-add-samples-update-interval-v1-0-e1acfceb447e@advastore.com?part=3D2
+
+V2:
+- Fix error detected from kernel test bot
+- Add Acked-by to dt-bindings commit
+- Drop "support" from dt-bindings commit subject
+
+[1] https://lore.kernel.org/all/20260217081203.1792025-1-sbogdanov@baylibre.com/
+
+Stoyan Bogdanov (4):
+  hwmon: (pmbus) Add and export direct conversion calculation helpers
+  hwmon: (pmbus/tps25990): Rework TPS25990 direct conversion handling
+  dt-bindings: hwmon: pmbus/tps25990: Add TPS1689
+  hwmon: (pmbus/tps25990): Add TPS1689 support
+
+ .../bindings/hwmon/pmbus/ti,tps25990.yaml     |   8 +-
+ Documentation/hwmon/tps25990.rst              |  15 +-
+ drivers/hwmon/pmbus/pmbus.h                   |   2 +
+ drivers/hwmon/pmbus/pmbus_core.c              |  59 ++--
+ drivers/hwmon/pmbus/tps25990.c                | 261 +++++++++++++-----
+ 5 files changed, 243 insertions(+), 102 deletions(-)
+
+-- 
+2.43.0
+
