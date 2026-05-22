@@ -1,31 +1,32 @@
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EC773537F8
-	for <linux-hwmon@vger.kernel.org>; Fri, 22 May 2026 04:49:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFD9335BDBB
+	for <linux-hwmon@vger.kernel.org>; Fri, 22 May 2026 04:49:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779425362; cv=none; b=ZB0JFw6KT7Tt/WOOlIzw7X9N4dr4VYwkEt+W215G2SDPGAdYq+Xeq4rO2gL5mXNBJIMUl4dGF+3kNcNOhtwVNNwGNCQMwiZjCif36OC76fUJgyFVXkfI7czHHS0adA7c+Abb3ta3jp04R0u2sZGrcHrdsblZSf9bJBYcTGHRxz4=
+	t=1779425364; cv=none; b=k/HOt9mlJ7Rm3Tr155nPzUoD3OU/koyax82rKkmtGz1YS/5AdxzrBeOQwzkYr+RqVJdabRN7uiXZg0jodvm7IpONby4zGgrhyq2hGFPnH9mkwhSkAGVj8x3G/7BSv2emGMNwl4N48sxhbFs3yQ33Q7EGEMutxIer8PVOlvTkPPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779425362; c=relaxed/simple;
-	bh=bzToLbFrLMw+az6HPNL8kxWfdbTtKRZXGnMYlWc8CGM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=sZ7z0CQ0dWSKaL+MnrxS/q+6LtDvk5EJQ6H1M3gLMnsmbpNJ8wctL6r3wyQFTgXFmtu/lUfH0tqLoa5rJYQsHyWH1sdyWmrLLj4lY6ePhx8TLKL7Uv5G9XbPCsqgZVIWFiDAkawO89IvcOxYEVXN+U1Nu15Oaniie55OpiHK+hc=
+	s=arc-20240116; t=1779425364; c=relaxed/simple;
+	bh=rj5mQmkIV/zI/OyZIPAYbeVK/KniPsoBZt97PcZ7czs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Aj27boX+6byhQiVuePY6WYP3bFZTsUobg+W116ANgbCq3TseOCSK0OW2Ttt8LpSQu1MPg3NkqctSj/1W2A4y/lAZDKSrPMO5CnkQ0vFny55m+q8DsctquFsCJIkwIwZ0QO+n46xAj4JiKeXA9p2KH92FON0+Z8d0jzytqERfo5U=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <ore@pengutronix.de>)
-	id 1wQHof-0007eo-AQ; Fri, 22 May 2026 06:48:57 +0200
+	id 1wQHof-0007er-AQ; Fri, 22 May 2026 06:48:57 +0200
 Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac] helo=dude04)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <ore@pengutronix.de>)
-	id 1wQHod-001DGg-2O;
+	id 1wQHod-001DGj-2k;
 	Fri, 22 May 2026 06:48:56 +0200
 Received: from ore by dude04 with local (Exim 4.98.2)
 	(envelope-from <ore@pengutronix.de>)
-	id 1wQHoe-00000007RA6-0udG;
+	id 1wQHoe-00000007RAa-1H9L;
 	Fri, 22 May 2026 06:48:56 +0200
 From: Oleksij Rempel <o.rempel@pengutronix.de>
 To: Guenter Roeck <linux@roeck-us.net>,
@@ -42,88 +43,187 @@ Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
 	linux-hwmon@vger.kernel.org,
 	linux-gpio@vger.kernel.org,
 	David Jander <david@protonic.nl>
-Subject: [PATCH v14 0/6] mfd: Add support for NXP MC33978/MC34978 MSDI
-Date: Fri, 22 May 2026 06:48:49 +0200
-Message-ID: <20260522044855.1772639-1-o.rempel@pengutronix.de>
+Subject: [PATCH v14 3/6] pinctrl: core: Make pin group callbacks optional for pin-only drivers
+Date: Fri, 22 May 2026 06:48:52 +0200
+Message-ID: <20260522044855.1772639-4-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260522044855.1772639-1-o.rempel@pengutronix.de>
+References: <20260522044855.1772639-1-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: ore@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
+Currently, the pinctrl core strictly requires all drivers to implement
+.get_groups_count and .get_group_name callbacks in their pinctrl_ops.
+
+However, for simple pinctrl drivers that act purely as GPIO controllers
+and pin-specific configuration proxies, without any concept of muxing or
+pin groups, this strict requirement forces the implementation of dummy
+callbacks just to satisfy pinctrl_check_ops().
+
+Relax this requirement for pin-only drivers by making the group callbacks
+optional when no muxing or group pin configuration support is provided.
+Update the core and debugfs helpers to check for the existence of these
+callbacks before invoking them.
+
+Drivers that provide muxing or group pin configuration operations still
+must implement group enumeration and naming callbacks, and are rejected
+at registration time if they do not.
+
+Suggested-by: Linus Walleij <linusw@kernel.org>
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Reviewed-by: Linus Walleij <linusw@kernel.org>
+---
+Note: there seems to be other known issues around the code touched by
+this patch, but currently out of scope for this patch set.
+
+changes v14:
+- no changes
+changes v13:
+- no changes
+changes v12:
+- no changes
+changes v11:
+- no changes
+changes v10:
+- no changes
+changes v9:
+- no changes
+changes v8:
+- no changes
 changes v7:
-- drop gpiolib irq fix and make pinctrl more robust against NULL point
-  dereference.
+- no changes
+changes v6:
+- Reject drivers in pinctrl_check_ops() that use pmxops or group confops
+  without providing group callbacks.
+- Add <linux/pinctrl/pinconf.h> to core.c.
+- Revert the unnecessary NULL check in pinconf_show_setting(), since
+  group settings are now strictly gated.
+- Keep debugfs group listings tolerant of drivers without group callbacks.
+changes v5:
+- no changes
+changes v4:
+- add Reviewed-by: Linus Walleij ...
+changes v3:
+- no changes
+---
+ drivers/pinctrl/core.c    | 40 ++++++++++++++++++++++++++++++++++-----
+ drivers/pinctrl/pinconf.c |  9 +++++++--
+ 2 files changed, 42 insertions(+), 7 deletions(-)
 
-This series adds support for the NXP MC33978/MC34978 Multiple Switch Detection
-Interface (MSDI) via the MFD framework.
-
-Architecture overview:
-* mfd: Core driver handling 2-frame pipelined SPI, regulator sequencing, and
-  linear irq_domain. Harvests status bits from SPI MISO MSB.
-* pinctrl: Exposes 22 physical switch inputs as standard GPIOs. Proxies IRQs to
-  the MFD domain.
-* hwmon: Exposes thermal limits, VBATP/VDDQ voltage boundaries, and dynamic
-  fault alarms.
-* mux: Controls the 24-to-1 AMUX routing analog signals (switch voltages,
-  temperature, VBATP) to an external ADC.
-
-Initial pinctrl implementation by David Jander, reworked into this MFD
-architecture.
-
-Best regards,
-Oleksij
-
-David Jander (1):
-  pinctrl: add NXP MC33978/MC34978 pinctrl driver
-
-Oleksij Rempel (5):
-  dt-bindings: pinctrl: add NXP MC33978/MC34978 MSDI
-  mfd: add NXP MC33978/MC34978 core driver
-  pinctrl: core: Make pin group callbacks optional for pin-only drivers
-  hwmon: add NXP MC33978/MC34978 driver
-  mux: add NXP MC33978/MC34978 AMUX driver
-
- .../bindings/pinctrl/nxp,mc33978.yaml         |  160 ++
- drivers/hwmon/Kconfig                         |   10 +
- drivers/hwmon/Makefile                        |    1 +
- drivers/hwmon/mc33978-hwmon.c                 |  580 ++++++++
- drivers/mfd/Kconfig                           |   16 +
- drivers/mfd/Makefile                          |    2 +
- drivers/mfd/mc33978.c                         |  195 +++
- drivers/mux/Kconfig                           |   14 +
- drivers/mux/Makefile                          |    2 +
- drivers/mux/mc33978-mux.c                     |  141 ++
- drivers/pinctrl/Kconfig                       |   16 +
- drivers/pinctrl/Makefile                      |    1 +
- drivers/pinctrl/core.c                        |   40 +-
- drivers/pinctrl/pinconf.c                     |    9 +-
- drivers/pinctrl/pinctrl-mc33978.c             | 1042 +++++++++++++
- drivers/platform/Kconfig                      |    2 +
- drivers/platform/Makefile                     |    1 +
- drivers/platform/misc/Kconfig                 |   10 +
- drivers/platform/misc/Makefile                |    6 +
- drivers/platform/misc/mc33978-core.c          | 1284 +++++++++++++++++
- include/linux/mfd/mc33978.h                   |  196 +++
- 21 files changed, 3721 insertions(+), 7 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,mc33978.yaml
- create mode 100644 drivers/hwmon/mc33978-hwmon.c
- create mode 100644 drivers/mfd/mc33978.c
- create mode 100644 drivers/mux/mc33978-mux.c
- create mode 100644 drivers/pinctrl/pinctrl-mc33978.c
- create mode 100644 drivers/platform/misc/Kconfig
- create mode 100644 drivers/platform/misc/Makefile
- create mode 100644 drivers/platform/misc/mc33978-core.c
- create mode 100644 include/linux/mfd/mc33978.h
-
---
+diff --git a/drivers/pinctrl/core.c b/drivers/pinctrl/core.c
+index 6cbcaa6709da..3fcb7e584a93 100644
+--- a/drivers/pinctrl/core.c
++++ b/drivers/pinctrl/core.c
+@@ -622,8 +622,13 @@ static int pinctrl_generic_group_name_to_selector(struct pinctrl_dev *pctldev,
+ 						  const char *function)
+ {
+ 	const struct pinctrl_ops *ops = pctldev->desc->pctlops;
+-	int ngroups = ops->get_groups_count(pctldev);
+ 	int selector = 0;
++	int ngroups;
++
++	if (!ops->get_groups_count || !ops->get_group_name)
++		return -EINVAL;
++
++	ngroups = ops->get_groups_count(pctldev);
+ 
+ 	/* See if this pctldev has this group */
+ 	while (selector < ngroups) {
+@@ -738,8 +743,15 @@ int pinctrl_get_group_selector(struct pinctrl_dev *pctldev,
+ 			       const char *pin_group)
+ {
+ 	const struct pinctrl_ops *pctlops = pctldev->desc->pctlops;
+-	unsigned int ngroups = pctlops->get_groups_count(pctldev);
+ 	unsigned int group_selector = 0;
++	unsigned int ngroups;
++
++	if (!pctlops->get_groups_count || !pctlops->get_group_name) {
++		dev_err(pctldev->dev, "does not support pin groups\n");
++		return -EINVAL;
++	}
++
++	ngroups = pctlops->get_groups_count(pctldev);
+ 
+ 	while (group_selector < ngroups) {
+ 		const char *gname = pctlops->get_group_name(pctldev,
+@@ -1801,6 +1813,11 @@ static int pinctrl_groups_show(struct seq_file *s, void *what)
+ 
+ 	mutex_lock(&pctldev->mutex);
+ 
++	if (!ops->get_groups_count || !ops->get_group_name) {
++		mutex_unlock(&pctldev->mutex);
++		return 0;
++	}
++
+ 	ngroups = ops->get_groups_count(pctldev);
+ 
+ 	seq_puts(s, "registered pin groups:\n");
+@@ -2081,12 +2098,25 @@ static void pinctrl_remove_device_debugfs(struct pinctrl_dev *pctldev)
+ static int pinctrl_check_ops(struct pinctrl_dev *pctldev)
+ {
+ 	const struct pinctrl_ops *ops = pctldev->desc->pctlops;
++	const struct pinconf_ops *confops = pctldev->desc->confops;
++	bool needs_groups = false;
+ 
+-	if (!ops ||
+-	    !ops->get_groups_count ||
+-	    !ops->get_group_name)
++	if (!ops)
+ 		return -EINVAL;
+ 
++	if (pctldev->desc->pmxops)
++		needs_groups = true;
++
++	if (confops && (confops->pin_config_group_get ||
++			confops->pin_config_group_set))
++		needs_groups = true;
++
++	if (needs_groups && (!ops->get_groups_count || !ops->get_group_name)) {
++		dev_err(pctldev->dev,
++			"driver needs group callbacks for mux or group config\n");
++		return -EINVAL;
++	}
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/pinctrl/pinconf.c b/drivers/pinctrl/pinconf.c
+index dca963633b5d..81686844dfa5 100644
+--- a/drivers/pinctrl/pinconf.c
++++ b/drivers/pinctrl/pinconf.c
+@@ -275,7 +275,7 @@ void pinconf_show_setting(struct seq_file *s,
+ 	case PIN_MAP_TYPE_CONFIGS_GROUP:
+ 		seq_printf(s, "group %s (%d)",
+ 			   pctlops->get_group_name(pctldev,
+-					setting->data.configs.group_or_pin),
++						   setting->data.configs.group_or_pin),
+ 			   setting->data.configs.group_or_pin);
+ 		break;
+ 	default:
+@@ -348,8 +348,13 @@ static int pinconf_groups_show(struct seq_file *s, void *what)
+ {
+ 	struct pinctrl_dev *pctldev = s->private;
+ 	const struct pinctrl_ops *pctlops = pctldev->desc->pctlops;
+-	unsigned int ngroups = pctlops->get_groups_count(pctldev);
+ 	unsigned int selector = 0;
++	unsigned int ngroups;
++
++	if (!pctlops->get_groups_count || !pctlops->get_group_name)
++		return 0;
++
++	ngroups = pctlops->get_groups_count(pctldev);
+ 
+ 	seq_puts(s, "Pin config settings per pin group\n");
+ 	seq_puts(s, "Format: group (name): configs\n");
+-- 
 2.47.3
 
