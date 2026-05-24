@@ -1,178 +1,229 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F86B31F9A7;
-	Sun, 24 May 2026 21:37:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F5A3148D0
+	for <linux-hwmon@vger.kernel.org>; Sun, 24 May 2026 21:39:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779658636; cv=none; b=RIXCTflM40UIylGUB3o5F0mJ05CsmY+5h4A3+o03y8/+l8ucfUJYFkETWqF0zHHLeE9B8DY49byvJ8O6Q85diTVais86R8kP4SjMNhakAA/thvPF9GmASCu60ilLEXCg4BTBiu3VccYAe8AO+hVTOjpw8vlHAde4fdnOzViDxf4=
+	t=1779658752; cv=none; b=c6C2Ojf19ciPMGOg6oMzZKinYmiq2fohs8DID5uf/VaU3TBH9dyuE1qaBH/ECIXum3r+eI2sViNAQGE+heNbnITxk+GSAI346/Om9fZ7I4J+XToaBvXeotfYsHP/RyiUYJpK6DQNgvHJjJfYW1rbol+nXHxZ49XWBMqlldQpnxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779658636; c=relaxed/simple;
-	bh=j2QPNcxSh4BS75E5BSKw8B084oAtPnSbhFBD9LTiEFA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=W/9XSr/cUzTNGO/ydcQgWgKzk89QYbOG/2osiPpxr3LyVK8x5l4qfhx8YzHjSbAmpBqBA0pjfyaU2zA56WH5614nrUsyXQuiWQFBSMQBFnLNdMGeHML2sbcwLQ9vpxCbi+A6g1ClrNCv76qFYMruNNRXZJ/q+Q1pQg/sJyU/Nis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KRks5jvp; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779658752; c=relaxed/simple;
+	bh=ppcUKHw63/62CDABjF21GkA4Y+TFIUCPLasI6KiPMQE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VZoai+8Zw0xKjERZHui39dFrX4a3v8zwD/lJMuFgrNbhyCm37/xY3n7kg0V0AYVIGBYhdkBz5lHt3NQugecjdLCYWLl6/9zKCHB6LAPbzQrwIHYYmyVPcSab/4Hr442V6lw6RDmaYWRHqAkXvBkkuAaIPZ+iwTHYCGSuJzR+BEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kzf6zB3H; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KRks5jvp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4084A1F000E9;
-	Sun, 24 May 2026 21:37:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779658634;
-	bh=UxreL2xCDAvofEAynAn+CGiECFVDKCrcBodPDP6h6uU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=KRks5jvpv+bonwdybSRGBachdUCi4bpfJkegm6QEbh/wTNaDkVmK7iyNx79zKNFWL
-	 AG2rARQ/cqpQzVQJYKC2Tx54L/XVLLEAsqWRGfFisa9Jaz9F7oP5NYtlHW3inkjK0X
-	 4FJCTg+tmaooLVlvYcUeqNmzzox2f7TAMRyEzd6kSDwSjOM4Jk7Mk/Yn0pMDc3PpED
-	 Y/KxPHM2/WBeqpFrGoRyjCtv1zADTBaJgtzbk/XBqbQYQmMOl46i/F0ptzfi3vHxvc
-	 gyFEdiE4QQjXYMKyPrFquiI0f5LK7bLs+OzJ5H/MeOg738eircx29zu7odYP6XD9RE
-	 Zz/H9/wejj6yw==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH v1 3/4] iio: flow: add Sensirion SLF3x liquid flow
- sensor driver
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Wadim Mueller" <wafgo01@gmail.com>
-Cc: conor+dt@kernel.org, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, robh@kernel.org
-In-Reply-To: <20260524205112.26638-4-wafgo01@gmail.com>
-References: <20260524205112.26638-4-wafgo01@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 24 May 2026 21:37:13 +0000
-Message-Id: <20260524213714.4084A1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kzf6zB3H"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-82fbdd60b64so7560730b3a.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 24 May 2026 14:39:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779658750; x=1780263550; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=pKBkAs6C8YaB4CUd9CTag1oLEcWAKz7fDVIDPuAOyaw=;
+        b=Kzf6zB3HrTcmoQdkKKhMiGLbchZZTqvWfMWyNqPd0M4mP/JbUa3k1oWa3zWfjpmfk0
+         WuE0yQ4WSASZuS9WfMqAIg//9tdp2GQueJQoEs3nKnKlDckJTTgomGg56jsEAlz9QRwW
+         rL1zGfhuKYeBkgCg+aJlJ5fheNkYSXOf/sPiGpjhWATI9Iel6zFCMFdgwi19v/IM5zZ5
+         l4s7hD80dXxDB3js5XbkQljWCf1Ho0NJTTif7KUHmhWIw4ZTsgTNZg0p+XtIZ9ecLnct
+         eYgG9QJ4+gSpNxTpMYTxJC4JIF3A7Z0R3orc1ZB+GYBwkRM6TAOTV3hrCshK8IZwm2kW
+         xJpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779658750; x=1780263550;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pKBkAs6C8YaB4CUd9CTag1oLEcWAKz7fDVIDPuAOyaw=;
+        b=DI/Qg9rgVQzikNBnPYhjxqPjGlaV8Hd2QOiDbO+keJq5Jfp1yszsN32zaKSig5Xcjn
+         CzGG9ypLCLzkhgiC0/JLyZDm4WvhuvHf46BcWhoOo5URhHEjp7qy2NQx+AoLbns+YTeK
+         lZyBEH37hZYucUYciIR4u8O0bP2/pC4cx35uzrPkjz12Nrt0gS7bShztfg+b6OzJQQJH
+         vKJO4MU2+KBppGVe2ryxnqJC5JbbT91wBT3xMt7stra9bLthehzQhOTcb7QUjOq9sss9
+         1hey18oiLOXGxfwZAM0HM772R0tows3ItN4IA6Hr8mf6RyEnK51B3dUKe1RT+5WwKTXD
+         pqDA==
+X-Forwarded-Encrypted: i=1; AFNElJ9S2h8rAKu4iy8NuIOpPDR5VTBQQ8xxcvrgUEp8YtmuPLE2L7kw3YBOPzfsC8SW3MlkYdmev3J1XmfIDA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7pHMFJeG3NiONlnZi+vleWpwBAp2TCBdMfLDghmrkXkOUpsKG
+	sSPLRCZWSMhO5Adz6PD4WBS87TO6Oy7Tz5Uy05J1pOj9mLQiqk5HVzCt
+X-Gm-Gg: Acq92OFsnUwxd6WAqrses+hOwaQqi8XkerVOVB4uNgzYHOfCF4C0ioB3vCZsRN1Ss/Y
+	g5pPPhx8TkR2uqpcMi07JcFEDZn/voxlBUmH1zKS/l138vksnQA0Rg//QatvzjE/8iTyK2xkoX3
+	iyxumFO3O3QUS6zJzuGzCYNimnES1+jRaI63Vd9s/R6y8fbq+knwmSeq1650QmweVEFhP+lJ4OG
+	9nQ8w2hFwj2RQIy75Ht3ovO832Ou1TNsPdIGcqnde7rmn7CBdrdpIAPaQ3frfwYAKCgH58uwb7B
+	K/EuQh3cx7URzlfjVqTBfwaGjrWBaE21n08cQFyjQFRbfZ6DK7fAjV83mW6bXUD6WXnoC++3fQ4
+	xlklvVZfKeldq/H+evETh3SgALAZ8sE8BpigADv2YlXZlkiKjwUj+OJ9xNUYNDrtdauFbmnUEul
+	F/UFnbl6yz6P82vIG7RAY3S8n035hsF1FvDH5Rp6gfrtyyJdu5uH3YuwYgrZqABa6RHNMJ4Ul2k
+	dM9ObMB3f4=
+X-Received: by 2002:a05:6a00:94d3:b0:835:388c:9764 with SMTP id d2e1a72fcca58-8415f379971mr11312991b3a.37.1779658750143;
+        Sun, 24 May 2026 14:39:10 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84165003369sm8285196b3a.57.2026.05.24.14.39.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 May 2026 14:39:08 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <95f0914a-cb25-44ea-9cef-d203c624f74d@roeck-us.net>
+Date: Sun, 24 May 2026 14:39:06 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1 1/4] iio: types: add IIO_VOLUMEFLOW channel type
+To: Wadim Mueller <wafgo01@gmail.com>, jic23@kernel.org
+Cc: lars@metafoo.de, dlechner@baylibre.com, nuno.sa@analog.com,
+ andy@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ jdelvare@suse.com, ak@it-klinger.de, linux-iio@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260524205112.26638-1-wafgo01@gmail.com>
+ <20260524205112.26638-2-wafgo01@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260524205112.26638-2-wafgo01@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [High] The fractional scale for the SLF3S-4000B variant evaluates to exac=
-tly 0.0 in sysfs due to IIO formatting logic, permanently zeroing out flow =
-readings for userspace.
-- [Medium] Concurrent initialization of the shared global `slf3x_crc_table`=
- in `probe()` causes a data race.
-- [Medium] Continuous measurement mode is not restarted after a system susp=
-end/resume cycle.
---
+On 5/24/26 13:49, Wadim Mueller wrote:
+> From: Wadim Mueller <wadim.mueller@cmblu.de>
+> 
+> Add a new IIO channel type for liquid volumetric flow sensors.  The
+> unit exposed via the standard _scale attribute is litres per second
+> (l/s), so drivers reporting smaller native units (e.g. ml/min) only
+> need to set a fractional scale.
+> 
 
-commit 2a3dbf69e1c64c32d26f6f97455487233c63c7c0
-Author: Wadim Mueller <wadim.mueller@cmblu.de>
+Two questions: Why restricting to liquid (there are also gas flow sensors),
+and why litres/second and not per minute which seems to be a more common
+unit ?
 
-iio: flow: add Sensirion SLF3x liquid flow sensor driver
+More on the latter in patch 3.
 
-Add an IIO driver for the Sensirion SLF3S family of digital
-liquid-flow sensors. The supported sub-types (SLF3S-0600F,
-SLF3S-4000B) share the same register map and command set and are
-distinguished only by the flow scale.
+Thanks,
+Guenter
 
-> diff --git a/drivers/iio/flow/slf3x.c b/drivers/iio/flow/slf3x.c
-> new file mode 100644
-> index 0000000000000..e4ee1a04a46d7
-> --- /dev/null
-> +++ b/drivers/iio/flow/slf3x.c
-
-[ ... ]
-
-> +static const struct slf3x_variant slf3x_variants[] =3D {
-> +	{ .sub_type =3D 0x03, .name =3D "slf3s-0600f",
-> +	  .scale_num =3D 1, .scale_den =3D 6000000 },
-> +	{ .sub_type =3D 0x05, .name =3D "slf3s-4000b",
-> +	  .scale_num =3D 1, .scale_den =3D 1666680000 },
-
-[Severity: High]
-Will the fractional scale for the SLF3S-4000B variant permanently zero out
-flow readings for userspace?
-
-The driver returns IIO_VAL_FRACTIONAL with val =3D 1 and val2 =3D 166668000=
-0.
-The IIO core formats fractional values for sysfs up to nanounit precision
-(9 decimal places) using the calculation (val * 1000000000LL) / val2.
-
-Because the denominator (1,666,680,000) is strictly larger than the 10^9
-multiplier, the integer division computes to exactly 0. As a result, the
-string emitted to sysfs will be 0.000000000.
-
-Userspace applications rely on this sysfs attribute to convert raw readings
-into physical units, meaning any flow rate reading will be multiplied by 0.=
-0,
-rendering the sensor's flow channel completely non-functional.
-
-> +};
-
-[ ... ]
-
-> +static int slf3x_probe(struct i2c_client *client)
-> +{
-> +	struct device *dev =3D &client->dev;
-> +	struct iio_dev *indio_dev;
-> +	struct slf3x_data *sf;
-> +	int ret;
+> Update iio-core's name table, the iio_event_monitor whitelist and
+> the sysfs-bus-iio ABI document to match.
+> 
+> Signed-off-by: Wadim Mueller <wadim.mueller@cmblu.de>
+> ---
+>   Documentation/ABI/testing/sysfs-bus-iio | 17 +++++++++++++++++
+>   drivers/iio/industrialio-core.c         |  1 +
+>   include/uapi/linux/iio/types.h          |  1 +
+>   tools/iio/iio_event_monitor.c           |  2 ++
+>   4 files changed, 21 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-bus-iio b/Documentation/ABI/testing/sysfs-bus-iio
+> index 5f87dcee7..68eb703c1 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-iio
+> +++ b/Documentation/ABI/testing/sysfs-bus-iio
+> @@ -2458,3 +2458,20 @@ Description:
+>   		seconds, expressed as:
+>   
+>   		- a range specified as "[min step max]"
 > +
-> +	ret =3D devm_regulator_get_enable_optional(dev, "vdd");
-> +	if (ret < 0 && ret !=3D -ENODEV)
-> +		return dev_err_probe(dev, ret, "failed to enable vdd\n");
+> +What:/sys/bus/iio/devices/iio:deviceX/in_volumeflow_raw
+> +What:/sys/bus/iio/devices/iio:deviceX/in_volumeflowY_raw
+> +KernelVersion:6.19
+> +Contact:linux-iio@vger.kernel.org
+> +Description:
+> +Raw (unscaled) volumetric flow rate reading from the channel.
+> +To convert to standard units (litres / second) apply the
+> +channel's _scale (and _offset, when present).
 > +
-> +	indio_dev =3D devm_iio_device_alloc(dev, sizeof(*sf));
-> +	if (!indio_dev)
-> +		return -ENOMEM;
-> +
-> +	sf =3D iio_priv(indio_dev);
-> +	sf->client =3D client;
-> +	crc8_populate_msb(slf3x_crc_table, SLF3X_CRC8_POLY);
+> +What:/sys/bus/iio/devices/iio:deviceX/in_volumeflow_scale
+> +What:/sys/bus/iio/devices/iio:deviceX/in_volumeflowY_scale
+> +KernelVersion:6.19
+> +Contact:linux-iio@vger.kernel.org
+> +Description:
+> +Scale factor applied to raw volumetric flow readings to obtain
+> +the value in litres per second (l/s).
+> diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
+> index 22eefd048..aa34fcd8e 100644
+> --- a/drivers/iio/industrialio-core.c
+> +++ b/drivers/iio/industrialio-core.c
+> @@ -98,6 +98,7 @@ static const char * const iio_chan_type_name_spec[] = {
+>   	[IIO_CHROMATICITY] = "chromaticity",
+>   	[IIO_ATTENTION] = "attention",
+>   	[IIO_ALTCURRENT] = "altcurrent",
+> +	[IIO_VOLUMEFLOW] = "volumeflow",
+>   };
+>   
+>   static const char * const iio_modifier_names[] = {
+> diff --git a/include/uapi/linux/iio/types.h b/include/uapi/linux/iio/types.h
+> index 6d269b844..49480f321 100644
+> --- a/include/uapi/linux/iio/types.h
+> +++ b/include/uapi/linux/iio/types.h
+> @@ -53,6 +53,7 @@ enum iio_chan_type {
+>   	IIO_CHROMATICITY,
+>   	IIO_ATTENTION,
+>   	IIO_ALTCURRENT,
+> +	IIO_VOLUMEFLOW,
+>   };
+>   
+>   enum iio_modifier {
+> diff --git a/tools/iio/iio_event_monitor.c b/tools/iio/iio_event_monitor.c
+> index 03ca33869..078004750 100644
+> --- a/tools/iio/iio_event_monitor.c
+> +++ b/tools/iio/iio_event_monitor.c
+> @@ -65,6 +65,7 @@ static const char * const iio_chan_type_name_spec[] = {
+>   	[IIO_CHROMATICITY] = "chromaticity",
+>   	[IIO_ATTENTION] = "attention",
+>   	[IIO_ALTCURRENT] = "altcurrent",
+> +	[IIO_VOLUMEFLOW] = "volumeflow",
+>   };
+>   
+>   static const char * const iio_ev_type_text[] = {
+> @@ -193,6 +194,7 @@ static bool event_is_known(struct iio_event_data *event)
+>   	case IIO_CHROMATICITY:
+>   	case IIO_ATTENTION:
+>   	case IIO_ALTCURRENT:
+> +	case IIO_VOLUMEFLOW:
+>   		break;
+>   	default:
+>   		return false;
 
-[Severity: Medium]
-Can this concurrent initialization of the shared global slf3x_crc_table cau=
-se
-a data race?
-
-The driver defines a global static array slf3x_crc_table and dynamically
-populates it by calling crc8_populate_msb() unconditionally during
-slf3x_probe().
-
-If multiple SLF3x sensors are present and probed concurrently on different =
-I2C
-buses, or if a newly plugged sensor is probed while an already-registered
-sensor is handling an active read, multiple threads will concurrently modify
-or read the global table without synchronization.
-
-This could result in transient -EIO errors or Kernel Concurrency Sanitizer
-warnings.
-
-> +
-> +	ret =3D slf3x_read_product_info(sf);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "product info read failed\n");
-
-[ ... ]
-
-> +static struct i2c_driver slf3x_driver =3D {
-> +	.driver =3D {
-> +		.name =3D "slf3x",
-> +		.of_match_table =3D slf3x_of_match,
-> +	},
-> +	.probe =3D slf3x_probe,
-> +	.id_table =3D slf3x_id,
-> +};
-> +module_i2c_driver(slf3x_driver);
-
-[Severity: Medium]
-Will continuous measurement mode fail to restart after a system suspend/res=
-ume
-cycle?
-
-The driver initiates the sensor's continuous measurement mode (0x36 0x08)
-exclusively in probe() and assumes the device stays in this mode indefinite=
-ly
-to fetch samples on demand in read_raw().
-
-However, the driver does not implement power management suspend and resume
-callbacks. If the system suspends and the sensor loses power (e.g., via
-regulator cutoff), it will wake up in its default idle state.
-
-Without a resume callback to re-issue the continuous measurement command,
-subsequent read operations in read_raw() will return invalid data, silently
-breaking the driver after a suspend/resume cycle.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260524205112.2663=
-8-1-wafgo01@gmail.com?part=3D3
