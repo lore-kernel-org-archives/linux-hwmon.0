@@ -1,130 +1,107 @@
-Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
+Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0DDD234964
-	for <linux-hwmon@vger.kernel.org>; Sat, 23 May 2026 17:06:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1549923507C
+	for <linux-hwmon@vger.kernel.org>; Sun, 24 May 2026 15:26:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779556016; cv=none; b=tB9h0OIgYfA8NHP89Ow8y/rczUdBb4fuXKqn9A8bSHDHUFueD1N9yI1PVZjo/rZbpp+nJC6X/oaw1Al3kB0tOjWs32qX3bZhmfxbxgi5Udu2fv2yrfyRG8TN+KtnwF5xBN7+OSmbkzIbm6pUSx+tZed5gJEOvO+1b6V4TdhECA4=
+	t=1779636365; cv=none; b=U3E5PO4tKLypE4PSiR6KS7juK6wlqnT1y6+/wpacxie19/6AvuiSX2Wi6uZ0eXPyrdry7KKA6CfzxhCOB8+u1H5hen3/eiusbCkJR4L/ouDFzUKtvexy78Sctj94UCeJ2sVLe70/1NbF+6kuJfHHmKFLNwKZfujaUnvREJiu/BA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779556016; c=relaxed/simple;
-	bh=3wbIwfwvVB3Ko+2hIk/EHSIx5B9ydYhMy+MksNh9Xhs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sYxoOyx3SgdaGkX7iuNf3VoWKo04OkXGLp1RqNIl/3jhI2DYjw7yCPRGSoWWaMFwogEFU5xarmOlGIKQm6ColLUqiZRe9xewlDtLF9YIev1NnRKA/nD8EWwwNSDuHIvIHPLm4vgCoB1qTGfmn4kpWWlIUgYdn7JES59kr8Refjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R/rSTmLA; arc=none smtp.client-ip=74.125.82.181
+	s=arc-20240116; t=1779636365; c=relaxed/simple;
+	bh=endhtLMwREnMrpsK9d6pveIWZYHLz6j+UumURqVqXgc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pIpGhlWfMYD9nV6S0Wz4rPPItQihZyTUKK38WjDSVNJYaDykg1N1zcVTXU60tEUeFvKmzq1Q5WusS5J3Ifg4lueANicY4pvITSfJCAj/JGBYsMJgLrWHDpKwap5IXZ9XkEaWZlDYVcEdKx0H6m6jZLisqFO2QkEt0jIURPUIWbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=skxpwxj2; arc=none smtp.client-ip=74.125.82.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R/rSTmLA"
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2f68f3b075fso2910514eec.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 23 May 2026 10:06:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="skxpwxj2"
+Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2f03d6cf77bso9127188eec.0
+        for <linux-hwmon@vger.kernel.org>; Sun, 24 May 2026 08:26:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779556014; x=1780160814; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=VP/Y7MIWVWGkxarjdzz0+rrburKXe9+8m7yXarRRqAI=;
-        b=R/rSTmLA+Pig0f7l82Rly2xrOz9hBGdRJ3BVorXcAmzJpVIhB/dapgwu5U2W+Jct5g
-         EEhf4wpjT4xacd0yV/dX28ojj+yOo0qr7RM97qSyzGTd9ivavnWMTp1uTApfI567Tx9W
-         TsAs8kwyprRTPjTpglElMQLNDYHDaWPlA5AJ48fMSxhdwloHodvnxhjO39Hs6LM44D4h
-         6gExZECw/KFdpwSew7GfaSvVzl31yqv/E25oTtjLX/3HuBJHhN9mnb5E84pqMeDg0JAy
-         ugOAEvnkZ9PRgD+muW6goJuX+PBbQaWP1tMSS/WJEL1WAToBJTocaoYSdZ0EquEHXclr
-         +e5Q==
+        d=gmail.com; s=20251104; t=1779636363; x=1780241163; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Vd80g3kYCb3Gm0irbMYMwyAFrBdTjDNomWG6QQeh9hU=;
+        b=skxpwxj2BUJE88xnpYuchmA85eOx1bDR2E2HSLtN/H8JvXxISxiJaSzmzTzuh7uv9N
+         4iwwpr2j7RuTRHmuXVU7DKroPtTrKiWWvlF0FWC6FgNY2TeXhOcGgn5zyA5uY2hdaYGu
+         ojlCL0E7rwhk9JfElcinR41KYYg9RV4kiGF4We2ABe2TJm/hxu9Sh5JPEUPtudUHg6Mw
+         epUgiATJkH3oh/WKXBVzfq1My9uUHkOhddjSLWTwebR1zDfCiubz6bZwz+MBBfN+O49N
+         iSGkAtvEzn2oOvyebbqoXeTOgxu/F2np9w7iXw7QJvElyoi/JJpji0amx9dK/UgfDS0v
+         fCQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779556014; x=1780160814;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VP/Y7MIWVWGkxarjdzz0+rrburKXe9+8m7yXarRRqAI=;
-        b=dLUiv1WZ7nf9u4C9iXWhE8Y6nmCoB1PXY+wj2I0+cJ+BonpEr17j3MkqWiJQ/smESf
-         tDrg8LXRzhW8ghiAwk+/LmRjyo3btxUS5Sv/pejltjJAUJSr6LH1xfQE2t3FkhVk4YZS
-         BgCq5r7rT+bUN7PVzZjpN8JItXFu5hNtj2fowfumNi3fikbbmph7/0h1SBA0UwM2bOIq
-         oElQ9WXrkcdBw9YZUAmk9WxAaUDmOzh2fhcKdjc3YC8DAhYk7d0h0BGiRs5d5D7t2Ltv
-         yKPMwxgRqsv31bHzXCSiV5qqYqpIvtFKyPprAp5bw7VUT7h7XZShZ83XrwB/XbA/taxn
-         69Gw==
-X-Gm-Message-State: AOJu0YzxL7wFi00gPJhc914gZqyTRDEEkbBeZHokQN59uKcpw61Y1p/j
-	0pyPz5g3s4OzYGAkYggw2CVwRMTiD8hfJzIjzpGY0XdGcAF72v0jkRfeD0QOaOhX
-X-Gm-Gg: Acq92OHkK2eE5SLnpOKkaIwCx1h/u4xsF99RorjEZkR/Y+2+ucghvLmd6nhPdnlvgvY
-	rhZNvfuki54wBeWD0Y/0ws1GJGXgtREGfpHHiIDZYkW4FtwiYbmmINWNg6gIlN5p9LHK9/doT97
-	LIlgOh4XMO5x5TqJxCY0HuXQ93DW+4fV9PSry9rkhRUkDnNJewUXlV0QmYUu/Rxj44IV53qNZVL
-	qFVNqNW+dzkz3kZPP88NeOZvVCqOLAeSjQ6QiVKRKk9vCVuJgohpWUPWY+VXgGco103vnL4lPbn
-	A5dyg1gDT/cczUCSjF9aehxuqZMIefPKlH31aTxS6NOzIJ95RcFAA1Hydnk6GBIoRVzNTerEMlm
-	xiAb+Y8G+HRFNRhv1hZ2sqoSoP4DMaTCbbJ9cu/hxjuhxh8rpdPlQhq2tvMwyaTAFx1e8af+Bo5
-	gX0iT1wGiQ75UGC/7qG1C9nooUA4vzaTvIIMh6FJmUmbyfR9w=
-X-Received: by 2002:a05:7300:bc97:b0:2ed:6f94:9d9d with SMTP id 5a478bee46e88-304490264femr3681425eec.8.1779556013901;
-        Sat, 23 May 2026 10:06:53 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1779636363; x=1780241163;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Vd80g3kYCb3Gm0irbMYMwyAFrBdTjDNomWG6QQeh9hU=;
+        b=lwmDrsoFRmCwJemE2PVmt2cXohJXVOwpncbuNHbDaURd2xyGfOMGreu1/XO4FAAaJO
+         PqUqqdfxD1z3URfCjHjbBUEUEPaL9mZGTOhPXk0x9dYg9hCkZo1dsVBgZGRcnastp+Cm
+         MtXp3b68kun3yteIi1rbQFjJ+83EX0oc+ornWsOBFtaaSydCin2dTMdFw1T/rl4OvRBo
+         3pSlQ+aEqn2xz2iU3mY63dSCT8ODSAV0qHQHFTznQBndn+MF7fNXACg2u9R/aOtTsb5K
+         Xe4vBmRu31U5WZ9cChm4U3lOnWRojjJU50mn4cOOgtf/xCoI1dkP+Xtnboi3Gog43rRf
+         WqNA==
+X-Forwarded-Encrypted: i=1; AFNElJ8cqNL5i7wLUpaD4rhR0JEpnO3t2Y8gYjfNoi3GDVd94a/P0BQ0juwgXcBoj2sjGyIBfw6VaHzHSBoWRw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzM4+8wRHZ8yGu14FmCyeXV2I4pZuPqizYqRHXq5K8gzUJ4T27+
+	XMRfL0tP0E6BkbXVgUJC/pPquxyxGlzOswBHZtAzvZfjLUnt0aTyFsyS
+X-Gm-Gg: Acq92OEmmh1KrVIN5kVT+x1tJcHtf3E5dS+EV7E2uUp/MjxJMY0c0n0AFTgcXXh/tOC
+	hRnALYASYP66kNaN3aH2VPLXQM5v6JhZ95oXKEJDiKfxmBk6sCt9MRof8rZ3SNVxibefB1eTydb
+	sVqi55WEG6QpsNe6dNTbaVH97+P3MdcDY22Wq5/jVBSuvabzwHl6i0Biy1h0u9ZufaP3xIi5eg2
+	ZVomxJUL9k3ruyNsHGUMMiRWqdhhNz23RacdaKKb9byJNxyL4atz19j3LpijrcISEHFrL22Dajo
+	yt2mvnIm+MqveSHN2v1EZkx57u2Aj7Kh1qsg8JrSZTMwJrhJuSea52io6IEYDBARBG24mSf/3zp
+	J/yfnQEvVAjUU6DPK4/F60iAwwwzrynftiLSsEVDyKfuxqFxQ4D0tumF/EyJWTmg1db8wdDNzdK
+	9/TSFiEMgMfsEiLfEq7cbijyKGc/MIoUGPbVfwKaHHj+D7M3I=
+X-Received: by 2002:a05:7300:ad30:b0:304:70d0:4f07 with SMTP id 5a478bee46e88-30470d05c96mr1710201eec.17.1779636362636;
+        Sun, 24 May 2026 08:26:02 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30452461cb5sm5095902eec.31.2026.05.23.10.06.52
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3045225b7b6sm7935559eec.25.2026.05.24.08.26.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 May 2026 10:06:52 -0700 (PDT)
+        Sun, 24 May 2026 08:26:01 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sun, 24 May 2026 08:26:00 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v7.1-rc5
-Date: Sat, 23 May 2026 10:06:51 -0700
-Message-ID: <20260523170651.3331559-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+To: Jan-Henrik Bruhn <kernel@jhbruhn.de>
+Cc: sashiko-bot@kernel.org, linux-hwmon@vger.kernel.org,
+	sashiko-reviews@lists.linux.dev
+Subject: Re: [PATCH v4] hwmon: (lm63) expose PWM frequency and LUT hysteresis
+ as writable
+Message-ID: <d0694fe0-16b0-45f9-b6e9-12733d489f67@roeck-us.net>
+References: <20260523105837.67B9C1F000E9@smtp.kernel.org>
+ <20260523133617.3439102-1-kernel@jhbruhn.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260523133617.3439102-1-kernel@jhbruhn.de>
 
-Hi Linus,
+On Sat, May 23, 2026 at 03:36:17PM +0200, Jan-Henrik Bruhn wrote:
+> The driver caches the PWM frequency register and the CONFIG_FAN slow-clock
+> select bit, but never lets userspace pick a different output frequency.
+> Add a pwm1_freq sysfs attribute that selects the closest SCS + PFR
+> combination for the requested value in Hz, gated by manual mode like
+> set_pwm1(). PFR is clamped to 31 so that 2*PFR fits in the chip's 6-bit
+> PWM register (matching the existing scaling assumption in show_pwm1).
+> 
+> The hardware LUT hysteresis register is shared by all LUT entries, so
+> the per-point pwm1_auto_pointN_temp_hyst attributes can't be made RW
+> without N-to-1 cross-attribute side effects. Following the max31760
+> precedent, expose a single chip-wide pwm1_auto_point_temp_hyst attribute
+> holding the hysteresis amount in millidegrees; the per-point attributes
+> stay RO and continue to show the resulting absolute trip-down
+> temperature for each entry.
+> 
+> This was tested on a Linksys LGS328MPC switch hardware where the fan
+> would not spin with the default PWM Frequency, which is why this change
+> is required.
+> 
+> Signed-off-by: Jan-Henrik Bruhn <kernel@jhbruhn.de>
 
-Please pull hwmon fixes for Linux v7.1-rc5 from signed tag:
-
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v7.1-rc5
+Applied.
 
 Thanks,
 Guenter
-------
-
-The following changes since commit 5200f5f493f79f14bbdc349e402a40dfb32f23c8:
-
-  Linux 7.1-rc4 (2026-05-17 13:59:58 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v7.1-rc5
-
-for you to fetch changes up to 4e4af55aaca7f6d7673d5f9889ad0529db86a048:
-
-  hwmon: (pmbus/adm1266) serialize sequencer_state debugfs read with pmbus_lock (2026-05-21 07:00:39 -0700)
-
-----------------------------------------------------------------
-hwmon fixes for v7.1-rc5
-
-- adm1266: Various fixes from Abdurrahman Hussain
-  The fixed issues were reported by Sashiko as part of a code review of a
-  functional change in the driver.
-
-- lenovo-ec-sensors: Convert to devm_request_region() to fix release_region
-  cleanup, and fix EC "MCHP" signature validation logic, from Kean Ren
-
-----------------------------------------------------------------
-Abdurrahman Hussain (14):
-      hwmon: (pmbus/adm1266) seed timestamp from the real-time clock
-      hwmon: (pmbus/adm1266) widen blackbox-info buffer to I2C_SMBUS_BLOCK_MAX
-      hwmon: (pmbus/adm1266) reject implausible blackbox record_count
-      hwmon: (pmbus/adm1266) include PEC byte in pmbus_block_xfer read buffer
-      hwmon: (pmbus/adm1266) include adapter number in GPIO line label
-      hwmon: (pmbus/adm1266) bounce blackbox records through a protocol-sized buffer
-      hwmon: (pmbus/adm1266) cap PDIO scan in get_multiple at ADM1266_PDIO_NR
-      hwmon: (pmbus/adm1266) don't clobber GPIO bits before PDIO read in get_multiple
-      hwmon: (pmbus/adm1266) reject short block-read responses in the GPIO accessors
-      hwmon: (pmbus/adm1266) register the gpio_chip after pmbus_do_probe()
-      hwmon: (pmbus/adm1266) register the nvmem device after pmbus_do_probe()
-      hwmon: (pmbus/adm1266) serialize GPIO PMBus accesses with pmbus_lock
-      hwmon: (pmbus/adm1266) serialize NVMEM blackbox read with pmbus_lock
-      hwmon: (pmbus/adm1266) serialize sequencer_state debugfs read with pmbus_lock
-
-Kean Ren (2):
-      hwmon: (lenovo-ec-sensors): Convert to devm_request_region()
-      hwmon: (lenovo-ec-sensors): Fix EC "MCHP" signature validation logic
-
- drivers/hwmon/lenovo-ec-sensors.c | 20 ++++++-----------
- drivers/hwmon/pmbus/adm1266.c     | 46 ++++++++++++++++++++++++++++-----------
- 2 files changed, 40 insertions(+), 26 deletions(-)
