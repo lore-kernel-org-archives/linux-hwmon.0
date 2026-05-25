@@ -1,161 +1,64 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1208F3E16B9
-	for <linux-hwmon@vger.kernel.org>; Mon, 25 May 2026 08:21:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1C3A3CFF6A;
+	Mon, 25 May 2026 08:25:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779697275; cv=none; b=qel3Ut0B9KflECt7ozVM5fEUZ4gAsTY0daFqgcKfTtF7uzNuSD9v/L4J7ZDiucbcX8M+/IUZOynzweSYmpDuqKpAesKP+WMUVddF+8UX4RIeor3l9nRVDttiYZ5hQDuSQ044zCVRsdkI639Vv1U7TK2XVOwQc3tZCotmGIO7yr8=
+	t=1779697513; cv=none; b=FwfKN9U36eAzzVyy/3BvSHEnv0R7AsQKnE6LJy2YqvECPWKyEng7tGSIPny3O0/Y3DF7OGJbv5QL/fkv/b3ic7vi2htFMMONkvfQeduhRXxD/AVK1VABawthdosf8ZFh1qhGKc4VqmiTnAbI8IEdsgJqpzIKA9Ayr+1SLPDX7Wg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779697275; c=relaxed/simple;
-	bh=cnpeNyrRTMfn71Iw1My7ZiOgcb+W5DMHV+tEtk3Jprw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=j9p0z2NcpVZ0UwqvKl8Z2xTH6Jz7OM3P987aGXBsTqfFGeDLI4n8NI+rubpKTBBUw28E7rYpTuLrKuiSkJfZ7+NrkDoe9WlSLbDVw8hCyR2jMr/GV0zllTBNDJ7vUrsdLRrAPVe77ZBuPFk8ogpLockEcop/5R/nEjRxNKGpanM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MbdoETWZ; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779697513; c=relaxed/simple;
+	bh=qK02sUtQCrBIbwZTzE/imEPtQVrAmD3WRrd6V3LryuQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=nHsqA9UfsVgxWZB9/n/mSfrscwMNkI1NucfBe5WmGW7+foD+sM2D8Frgr9WZqblKV3V/WIm16S1vtobO32o0iquNPhf0G75WibQicVol37x8PQ4Y2Mg260f8TC8Y3pEGI7yoTruk2gmR3ptByeGBw/J7kw3pjBrd3mWeOindzeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rrhr4FHc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MbdoETWZ"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c7ffe8eeaf2so3849069a12.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 25 May 2026 01:21:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779697272; x=1780302072; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=h73HPPR4b8cE2zhlXM66PdYigBOxMozGSruLRQEyEiQ=;
-        b=MbdoETWZnVu54cAdDYI+IcH7dP3KiMFUYIRxUXnG2Ab/xV7Ss0URUFR6Odm+pBRpqf
-         PekTC9McdvzdVJcyapSELOrilu+qAdhIZMQkgfX3bzBJJlSpBT6lOJBe5RnBY06WK+t2
-         XcXOt6hEq2rJaZMJP1daWYE41gC3xYCUUWXRW9vF3PdL7iu5fQyrjtJypt/BqxaRC2nl
-         ltjyta0KdmPnzj7zUjF65Er4+TvQHtZi3QA19E1SbY1lC9pjbtnhxyP5GQQTFBDbLZcw
-         D0wII5njH1rwFNM3iByK1cDPDckSOx6/yR5JW5IADz2NYgTq+koaLTdKR4mlCbSeRsuj
-         1bJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779697272; x=1780302072;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h73HPPR4b8cE2zhlXM66PdYigBOxMozGSruLRQEyEiQ=;
-        b=hEhYsa51aPxMop3nSPXVKq0APn8Z9AnH3XEACYm8tLonqED741am+1PNZz4/7eK9DX
-         SxbEKrnKVCq37P/+dAQsXLpxOFtf9ybYg2MiItXWOCzdWM/rHlw+kwmHlytRybGPQolj
-         MrsrWu0F6e++GDSEqHaCbDypM1Bbzk0xHVPZ+aZwrOG24FOraNQKhSYvWUuBfBB7ZrtG
-         HbGXSHs3LfEkUabbW2wx0fjI9nsMq39aWUZ7/50Xd4xRudfqzB4HLywzVAS38OeYbXuI
-         xtqtWRBDhdlfV6kXzQ3u1Nx1vRm0RnOkbH8Pi753XFhxnBYMNKFobduDSCju/wTrRsnO
-         ID0w==
-X-Forwarded-Encrypted: i=1; AFNElJ9bpleRpJBhEm+k0/q5br1BQNIN3ETP9/4IdJhxXwfMX7K/ax0jO0Qdpbph9qs/HVOlV1RiP1Fn9XVcUQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNTmDgehgUM8Zr0YkPSFLVChDIReanegEcmQNomI8BuvkXbMpv
-	n9u8JeavLEpDXjV2Ny+NmaB5Z3KT/r6bO6JLxL8jUsMjR5ovug5nuXgw
-X-Gm-Gg: Acq92OHrgXBQSnrEpRLAzbjnIPWKAgyuLiXAwwW4Ez/vg2hsL6vYBurGDoN80DQSU99
-	wryUbBwU6j+WXOH3PY7/VqVsoeBiaLBgN6ZobVeJ4K2MEiXmlwdTBi89S0CecA/tlFeCD3lsO5Z
-	+Kb7mCJYwPMClVyGI0yIVIdZFiTp11vi85hVl8Xxo7WjbYDkbjVUR1Psc0EyoVjI+Wzp3U0uDR6
-	kYJWRS7LPZyzPNiF5j2c/J/c0LemCJhqgY0AutdWsB+DNJyxfCZYTOBB4AL8HCHmnLwOYRy6GGc
-	GNYDBqlO5VENVFSJblYQt+hhcd/LCBWo4cbR6sjBbOW7yYxwWU4nNWAQvlhe/v3N6EfdZMtA96t
-	d69gjYYIfcBJav4z0co67S8+dke3skLVYmOz23Gpptkoo1PZUQp2Y7d9ome2euHzgz3GT5dJink
-	d0rTxXcF6ijuKEfQ/PPArwXd22GS0w1NBbZWgJX16dzGj0HH2Sz3WaQo5FVoa98R/mmw==
-X-Received: by 2002:a17:902:e74b:b0:2bc:7d09:dcef with SMTP id d9443c01a7336-2beb06bc155mr153249445ad.29.1779697272248;
-        Mon, 25 May 2026 01:21:12 -0700 (PDT)
-Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2beb58b3bb6sm88798165ad.47.2026.05.25.01.21.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 May 2026 01:21:11 -0700 (PDT)
-From: a0282524688@gmail.com
-To: tmyu0@nuvoton.com,
-	linusw@kernel.org,
-	brgl@kernel.org,
-	linux@roeck-us.net,
-	andi.shyti@kernel.org,
-	lee@kernel.org,
-	mkl@pengutronix.de,
-	mailhol@kernel.org,
-	alexandre.belloni@bootlin.com,
-	wim@linux-watchdog.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Ming Yu <a0282524688@gmail.com>
-Subject: [PATCH v5 0/7] mfd: nct6694: Refactor transport layer and add HIF (eSPI) support
-Date: Mon, 25 May 2026 16:20:49 +0800
-Message-Id: <20260525082049.2906283-1-a0282524688@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rrhr4FHc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F61F1F000E9;
+	Mon, 25 May 2026 08:25:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779697512;
+	bh=NVJkDmmbZtEPk+Kqj4uE12KrfyY9Vb1oAXv6AbMWW1o=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Rrhr4FHcA8DM5W9misj6s18CLnIev4M/mZVmBWmd69HVtoABmtEzEGjmm1BsfRH6H
+	 dL81ujhGgs582+q2EapxrG6MY5gnKdsAaen+lv6fsQ9hHJApn8hOCOEbQrAhCg7g//
+	 kRZYFJ88Yx9rTKYWVNoJlBqZT3dkLqvnBslpphByxAgrJ0zB0ocdqijXrwbFzr5Vkc
+	 X3QGeq1Ag6kp/JlqNS9ItMtrV67MwQdtfNv28IC4pixTerJRsEI2I/ShgjUCzPRweB
+	 9F6/QovZ3qH98MSOltXVTHPRh9lEtkoesqfKRxZ8wkQ+8COJF0V6DPjxNU4YxW9bXb
+	 IOFEZ2w+rvrTg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v5 1/7] mfd: nct6694: Move module type macros to shared
+ header
+Reply-To: sashiko-reviews@lists.linux.dev
+To: a0282524688@gmail.com
+Cc: linux-hwmon@vger.kernel.org, linux-watchdog@vger.kernel.org
+In-Reply-To: <20260525081736.2904310-2-a0282524688@gmail.com>
+References: <20260525081736.2904310-2-a0282524688@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 25 May 2026 08:25:12 +0000
+Message-Id: <20260525082512.9F61F1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Ming Yu <a0282524688@gmail.com>
+> From: Ming Yu <a0282524688@gmail.com>
+>=20
+> Move NCT6694_XXX_MOD  macro definitions from individual sub-device
+> drivers into the shared header include/linux/mfd/nct6694.h.
+>=20
+> This is a prerequisite for supporting multiple transport interfaces
+> (USB, HIF) without duplicating these definitions.
+>=20
+> No functional change.
+>=20
+> Signed-off-by: Ming Yu <a0282524688@gmail.com>
 
-The Nuvoton NCT6694 is a peripheral expander that provides GPIO, I2C,
-CAN-FD, Watchdog, HWMON, PWM, and RTC sub-devices. Currently, the
-driver only supports USB as the host transport interface.
+Sashiko has reviewed this patch and found no issues. It looks great!
 
-This series refactors the NCT6694 MFD core to support multiple transport
-backends and adds a new Host Interface (HIF) transport driver that
-communicates over eSPI using Super-I/O shared memory.
-
-Changes since version 4:
-- Split the monolithic refactoring and HIF support patch into a series of
-  smaller, logical commits to improve reviewability and adhere to the
-  single logical change principle.
-- Decoupled USB-specific data into a dedicated 'nct6694_usb_data' 
-  structure.
-- Abstracted device I/O operations by introducing 'read_msg' and 
-  'write_msg' function pointers in the core structure.
-- Renamed the existing driver to 'nct6694-usb.c' to strictly identify its
-  transport boundary, alongside Kconfig/Makefile updates.
-- Extracted transport-agnostic device management (IRQ domain setup, IDA
-  initialization, and MFD cell registration) into a standalone
-  'nct6694-core.c' module.
-- Added the 'nct6694-hif' eSPI transport driver clean on top of the new
-  core abstraction.
-
-Changes since version 3:
-- Remove redundant module type macro definitions from sub-device drivers
-  that are now provided by the shared header <linux/mfd/nct6694.h>,
-  fixing -Wmacro-redefined warnings.
-
-Changes since version 2:
-- Restore per-device IDA and mfd_add_hotplug_devices()/PLATFORM_DEVID_AUTO
-  to avoid child device ID conflicts with multiple NCT6694 chips.
-- Validate irq_find_mapping() return value before dispatching IRQs.
-- Check superio_enter() return value in nct6694_irq_init().
-
-Changes since version 1:
-- Reworked the Super-I/O access helpers.
-
-Ming Yu (7):
-  mfd: nct6694: Move module type macros to shared header
-  mfd: nct6694: Refactor USB-specific data into nct6694_usb_data
-  mfd: nct6694: Introduce transport abstraction with function pointers
-  mfd: nct6694: Rename static I/O functions with _usb_ prefix
-  mfd: nct6694: Rename driver to nct6694-usb and update Kconfig
-  mfd: nct6694: Extract core device management into a separate module
-  mfd: nct6694: Add Host Interface (HIF) eSPI transport driver
-
- MAINTAINERS                              |   2 +-
- drivers/gpio/gpio-nct6694.c              |   7 -
- drivers/hwmon/nct6694-hwmon.c            |  21 -
- drivers/i2c/busses/i2c-nct6694.c         |   7 -
- drivers/mfd/Kconfig                      |  38 +-
- drivers/mfd/Makefile                     |   4 +-
- drivers/mfd/nct6694-core.c               | 136 ++++++
- drivers/mfd/nct6694-hif.c                | 529 +++++++++++++++++++++++
- drivers/mfd/{nct6694.c => nct6694-usb.c} | 185 +++-----
- drivers/net/can/usb/nct6694_canfd.c      |   6 -
- drivers/rtc/rtc-nct6694.c                |   7 -
- drivers/watchdog/nct6694_wdt.c           |   7 -
- include/linux/mfd/nct6694.h              |  63 ++-
- 13 files changed, 821 insertions(+), 191 deletions(-)
- create mode 100644 drivers/mfd/nct6694-core.c
- create mode 100644 drivers/mfd/nct6694-hif.c
- rename drivers/mfd/{nct6694.c => nct6694-usb.c} (62%)
-
--- 
-2.34.1
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260525081736.2904=
+310-1-a0282524688@gmail.com?part=3D1
 
