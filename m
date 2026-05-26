@@ -1,82 +1,82 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1D6D3FE651
-	for <linux-hwmon@vger.kernel.org>; Tue, 26 May 2026 14:09:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF63B401A21
+	for <linux-hwmon@vger.kernel.org>; Tue, 26 May 2026 14:09:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779804545; cv=none; b=cAbbFTS/9v7CyinwSsXL1Af58+1SgB9qstqIsuxsQ3oqY0No3ZK8woHoCDQAjR5/SGZTJg8oZStqK/t/w5O1zsnVDkahHNe44BPc51RiYdhCG8JFKz1GhLMgpjb86xGHcfY51NyYkSWgYbaxkaJ8KBSUpV1tCP5cn382Teetgb8=
+	t=1779804548; cv=none; b=t1kxpa3FXD63nbf82uhkAvO9kirBdnb4UwkhBA6HGuc4vt3Z+5dXcOcGficeSASLUmqWKHq2jVnAxR6ZbotjdnP5KRiDEV554ycushLygp6y3WkoDAT86nMdleTZ42K9mzou2Mj/I/p5rOS22ZpihOwdsOsGFxqtp/enBM6Sdys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779804545; c=relaxed/simple;
-	bh=Lm7Ldwf/nd8XlZJk6dU2XO047n9DUPbJMPLUwvjO530=;
+	s=arc-20240116; t=1779804548; c=relaxed/simple;
+	bh=vNBmXUp+qr7T1swL568nvBKihzEO7mn9iQtvdZQjD38=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=giRLJHaibwD4ux5cGeec3DVGE2vI79XezxTJaZgmQ+vmr2WldezVxXMbfzhtpNHSBsdqUfC93qfjjvSO7QglbKfgmZ+Rlp8pab7MUsgasAYRJxJp1lT6WR2/6UOgkfzoeDJ3Mz0Ugkj3RYMnDnN5a9Vo63hYYxiIPkzzUgjH0ts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=VZaNSrmM; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=iHqSFUxm; arc=none smtp.client-ip=205.220.168.131
+	 MIME-Version; b=lZ9AAppWnFEpW2SCVnXj7ur+EPhxeORhXRZi3IByazePIWUVnP6suL4UgYbfKoURIaEXVhkSNmIpOz9q4G9fanrdMid9RKMQqqKFhYqa6dz2kNuNliUpFVPYv4D7PxhCp/zmJidvFSQ0Bx0sLCAEqeerEp0GTUv5pnJkhIfGqg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ZhqakRQh; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=eMr6blFe; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="VZaNSrmM";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="iHqSFUxm"
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64QCsX6L2496610
-	for <linux-hwmon@vger.kernel.org>; Tue, 26 May 2026 14:09:03 GMT
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ZhqakRQh";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="eMr6blFe"
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64QCsBGX2554447
+	for <linux-hwmon@vger.kernel.org>; Tue, 26 May 2026 14:09:05 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=4MjVSksU8JG
-	qo/H1NTajdTHFfOaQ/jhmT1nmEKa1hd8=; b=VZaNSrmMUNZKOSp7UY52TVYNlp9
-	1TY7ZcTrCTKZtOxhc+EAWJ6TGNQ0mDDvuKHP/Aw8lxIGBePorDdeztng5Jn7Ni+U
-	gqjXbYo8beT7M7YiNV7+TchZePII9MDr+ymNysINik6yZhSbOV7/blYTGSMARteq
-	zbRUmF3x4Wq1x69x7FrLMhcZ3v7NHKLpX/LURUOCtiwEbCCNviImsU5ei8l1qYTt
-	Dsno1zlvD0gLoRJbV0DXiTlZ1N8GTadpKpIFl2OiEe2Cff/h4R4jhQg9NmWCQcQT
-	suPxuqK29pi/NTc9gc6jLktanpdAa8s2aOzCqhlnoUZObsCRaSszYZFW87w==
-Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com [209.85.222.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ecpyqmrv8-1
+	:mime-version:references:subject:to; s=qcppdkim1; bh=sRAimFW15YZ
+	LFDJYTwa3t/Vg46FcoMMGZciPbr7L3vY=; b=ZhqakRQhVJzpZHKGl6hRcCdCBN4
+	jqN9bDL532gO/es5ZfJqGbpVfTTQ11+up4rZ3QUcxWrbMQRm+oP2adaWfOwjwoaD
+	LlP+havwX7NM3R94LEqx2h56XjCN9PVzrWQ2uNf+4i62SUvIfbqK0CiG3Bh2orRZ
+	4mDDMtGngcPflpTVT3xJJz3QRil+FIYwIJiKDCvn+dRFKGV5SKqUWtHQodOOiCTa
+	tKuVIolTsofahIxiR3E8RX6UwMzZP2E2PA+ToaUIQJgcGEv3dUz70z/7Jp2N3U4+
+	HPZYaQ4VmF4tMmy1F0GswyQZlvHUA2VxzeS8fdD7Kbpc4MU/knT1pZPrt9g==
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com [209.85.161.70])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ed5v3t7pa-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-hwmon@vger.kernel.org>; Tue, 26 May 2026 14:09:03 +0000 (GMT)
-Received: by mail-ua1-f72.google.com with SMTP id a1e0cc1a2514c-95d5e1bcb8eso5236696241.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 26 May 2026 07:09:03 -0700 (PDT)
+	for <linux-hwmon@vger.kernel.org>; Tue, 26 May 2026 14:09:05 +0000 (GMT)
+Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-69d77736830so8851363eaf.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 26 May 2026 07:09:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1779804542; x=1780409342; darn=vger.kernel.org;
+        d=oss.qualcomm.com; s=google; t=1779804545; x=1780409345; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4MjVSksU8JGqo/H1NTajdTHFfOaQ/jhmT1nmEKa1hd8=;
-        b=iHqSFUxmTZHHygeZ1oSr+9N4Oar1INAiZRs5fk6d7W5mTla2ngj+nhOASVsf82gNd5
-         Kxte6oU+c76HC8iqCAb+GyjKYudDQSEpS7q14L/zP0KLAGZwGQfLIZxgECPbKj1sU6Jz
-         W3ESj4NpujIlRbzRsUXPqCS/gZMEN5ivfn/mZMypnWMxOE6NTpMpRJrJu6xD2JX7Apn9
-         QGt6CER8JEemscepN+5/HbruX3nWLj1yasdiXN9E09KOODxV5+v5c4cP7FI0B8sm+Rwh
-         K65v4XimcHMZ8VxBphFKEwH+jZzUNqrkfOc67vS1tPuGe34g726S4MRTCSfE65sYo1j0
-         pVUA==
+        bh=sRAimFW15YZLFDJYTwa3t/Vg46FcoMMGZciPbr7L3vY=;
+        b=eMr6blFes1UPoIeZSNWD13Hc+MXmtJGTYsXXm1g42Nzrlxe1D9BZzhkgpXqztcXio/
+         un32IQdLl3/tbtr6KffI2TDTCKQVZL9aqOKjb9FSccCxBvL/y9AZPIKiXQ+EBCTUYmLz
+         Z16smRJTqV52Xf4gFzeAgTSt2e+2aWNrq1dDvI/ld+nBkecJQeycNKaizEtJx/48/1x6
+         u8jHpgFeJSJ8PXmG4yUWDvHhE1feqnc0+iHCyYxB7xQYsVPurkoR11SV32I4G32dOha0
+         3V59uV4q25ogSk9TVuBlDJCIcoS5XCc8ILcdOTwQGoY/sya3CO45//NymGdXsa7O8/bq
+         +++g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779804542; x=1780409342;
+        d=1e100.net; s=20251104; t=1779804545; x=1780409345;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=4MjVSksU8JGqo/H1NTajdTHFfOaQ/jhmT1nmEKa1hd8=;
-        b=fv79joVNP3sKgmEbOoe9y36gfpGvT8smcDF+/6kvJr+uqOlHC1ncJiekIAjW2OH9LH
-         31hlS66vrpxiuXgPYZ5hBvK1p7Gtz5ymAjvwPtR0tKFjbbs5Jk97zIRdvuyNnh1S1MCk
-         WB43k6hm+mbKDiKXuKcSnYMnMLB796Gpm1mghoMjJsKuUBbIieJ0YglSzLY1CyF/WxLC
-         tbPi/F8StgqjAzGk7eKaFBk9Pkk9p+DYuik7Woy/VDAaxXQgP4SUqL1eF88OqBRGlonm
-         SOr/LEnZFxCTWjnPLlBnRZzkLID/YYxj20BossyBPQNNSDT16sRInr5oNSJvLp2GQ+EP
-         jULg==
-X-Forwarded-Encrypted: i=1; AFNElJ8Fo+XY/cmDtwJIpUcFsjZcmsdAaubrRnQ4V6Y6Dnd9TeukY9obKWzeLTLn1cshCVZFluF6lCpOayjpWA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWh96jXPjjKbk3KYhPt+4eScMWI+h0gN9n8oRvOqmy7tZo2dwr
-	ElEzN6LpwkiQLNIu4wsDXAwY3oXEh1KeKXAtB5GZm5U7mDtYqMul7FQ17KYTuz2y8ZfGaSTmwlJ
-	yUY05hmUlZXh7+RdtZSj425NT/goH2DjgdkA569i+4uGastXyuVETkhxAy+oksSd6Ow==
-X-Gm-Gg: Acq92OEoBCIw+34GNzx4WZlLGIx5nCoshMXNVq30OHF+2USVG7Elv5Dv5RNe3JIucGR
-	akD2CBseg8kUijAz1Kn+FupTrT6MpeQ6rBudeYX7FvS6gP5WYcsHooJu2KQNwA3ZlabguKRNbCe
-	rhqx67ln39trJQ0svXCz2/mATQECcdHebHRcrhWanZTpMIEevauJRfY7ju7A4JPxM5AK5ADQahu
-	cuPYk44vkjsKpSJtLOXV1elhcdXMa0NeJ3VediIeJoG75nOhyr32itINqE98uzhLiTr4AhoSHNT
-	wgfc1FUQj2OUD0h7tiWL4DLdWGJgkySFlYgtPs/hzIQ4lEMDk8O/PZan0UboY/AZQnEtQRLvued
-	e291ogfYY7x9HvA84xXlrGNsqCMKBeXXzSocnTvSMRfzIYFZm
-X-Received: by 2002:a05:6102:5114:b0:605:4ff8:fc21 with SMTP id ada2fe7eead31-67c76f882d4mr8306004137.8.1779804542282;
-        Tue, 26 May 2026 07:09:02 -0700 (PDT)
-X-Received: by 2002:a05:6102:5114:b0:605:4ff8:fc21 with SMTP id ada2fe7eead31-67c76f882d4mr8305928137.8.1779804541681;
-        Tue, 26 May 2026 07:09:01 -0700 (PDT)
+        bh=sRAimFW15YZLFDJYTwa3t/Vg46FcoMMGZciPbr7L3vY=;
+        b=MWLtCIOFbc6Ii7ijlTWPb/1TowIVFHJV2urCNmWlPQvS3IhbRWMk+Knv4FDMHzYyfF
+         68nc0KC9IIGje5hmDqTzvjH5z+lRr1LKkRaVRcFGivITesjVWOB4vSYJzki2lbjei0nN
+         D6zRqJFGCYuPyQOcKfHDXSuiASXgYXp8wiXGCXqPx7UB7GYLxJ8RpxpPzxAZgmXxprJz
+         GXV8IUXBti2iwV40Yga16cweiU6yB9EyhuqrGQK0Fwp06Qir1giYa9lyZcBHmmShBjEw
+         7N2Xql793oLJA1CmgjBpGab63ujhSi0cKF8S4Wb5/g2zWaFkggOig8JW9XEDfaBCzntU
+         P6Vg==
+X-Forwarded-Encrypted: i=1; AFNElJ/8oP+j3qdsiq7uXvh3lSKYNATE4TVgAzV2Hw6k6d9rC+eiffBbNaKU13Ooj4qxbL7xadUMb6zKyAGyVw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyo4u59CrRwv1HvTUskFOf6UuqoUyYQ6//+mcOeGimcIXTkIewH
+	ltFcZpIWuEGNlHiot+94fFuKJmgTKDuU0nCiz9Dh23ybmvGcDoNGSMTTEgLbFn4l6It3PMiCZp6
+	LQ+A5AvgR8UiKolWZ01ApBiLuXy3d0mIEqomGwYnkomnfCbKfkFi6zGW2Rl24yjvZ6Q==
+X-Gm-Gg: Acq92OEDIUnM8QgKSTbkCJMLsyMFh0pf/U7dA6RXM0s8zZLUVDH08PqhciPnoXxBjia
+	FlUiA0kWspd1nAPzTUgrqRfr03CmLx33baFii7Mb/AH4MlS1Vnsc4xQpHKHueXhDnfNg/230juh
+	iPhLq/Lj6Qj2Tug2MIfE0cMJleXlzHJxlqeqhvo3O5UNmsF7vj6zeCh/wiAOiorbWs+qwH4pAP/
+	lZj6WckWlj1ZYzegCP21NROACHPbg84W61rW4oRHwVahQHW9whF5FEom72+8Zds1itDpcNoC28/
+	EK9S4yYzqd021TF3RSefb9eeZ5u3q0C8nnkAFLls0rccgTt5+8yOHgWUv214B1ptmCmjUScXZMR
+	a0ZXUaEGfv+5NPu3DQTM22+IRpPinKAQEVMIki+UCivMFV4fC
+X-Received: by 2002:a4a:ec4c:0:b0:69d:7a88:9cde with SMTP id 006d021491bc7-69d7ebd2540mr9712984eaf.26.1779804545082;
+        Tue, 26 May 2026 07:09:05 -0700 (PDT)
+X-Received: by 2002:a4a:ec4c:0:b0:69d:7a88:9cde with SMTP id 006d021491bc7-69d7ebd2540mr9712950eaf.26.1779804544565;
+        Tue, 26 May 2026 07:09:04 -0700 (PDT)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:9e9:6f8d:9f1c:61e1])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490424aa561sm156266605e9.5.2026.05.26.07.08.59
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490424aa561sm156266605e9.5.2026.05.26.07.09.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2026 07:09:00 -0700 (PDT)
+        Tue, 26 May 2026 07:09:03 -0700 (PDT)
 From: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
 To: rafael@kernel.org, daniel.lezcano@kernel.org
 Cc: Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
@@ -105,10 +105,13 @@ Cc: Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Neil Armstrong <neil.armstrong@linaro.org>,
         Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: [PATCH v4 09/10] thermal/of: Support cooling device ID in cooling-spec
-Date: Tue, 26 May 2026 16:08:10 +0200
-Message-ID: <20260526140802.1059293-21-daniel.lezcano@oss.qualcomm.com>
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
+Subject: [PATCH v4 10/10] dt-bindings: thermal: cooling-devices: Update support for 3 cells cooling device
+Date: Tue, 26 May 2026 16:08:11 +0200
+Message-ID: <20260526140802.1059293-22-daniel.lezcano@oss.qualcomm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260526140802.1059293-12-daniel.lezcano@oss.qualcomm.com>
 References: <20260526140802.1059293-12-daniel.lezcano@oss.qualcomm.com>
@@ -118,106 +121,101 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2370; i=daniel.lezcano@oss.qualcomm.com; h=from:subject; bh=Lm7Ldwf/nd8XlZJk6dU2XO047n9DUPbJMPLUwvjO530=; b=owEBbQGS/pANAwAIAagyI4oqT+hPAcsmYgBqFalSAy26ags4zeco9TS/S8+d7c7yS3AE8cy1w uT5a5iZ0+yJATMEAAEIAB0WIQQafc3hhXPRY1XIeySoMiOKKk/oTwUCahWpUgAKCRCoMiOKKk/o T9euB/9CrH+i79j/ckyjOltsSD1hwCzGBunUDyYta0BswdB+k31TFcee724V85VvSI72vdEFm8E JQTfpXTmZoH7euonXVWo26IvTZ0xZoHSVTFlg155xVVRXgdto6YQ7JbS4LfO5iKFcnC9VYzVxz7 QfbWLHro2RBj8wGRgRbFbD1be0QzlMwb2cwYTM9PpkaiMT7WKzZBrcXxUw5LeHY1SBMxjDolCsP b4Is/h7D28xamNMTQTpt6xRfhJv6fpltLJySwho7cc6q1aKr+G5wD0rInES7F/JlVf+UEYadLeP s7I+YNssC4LMkBrxlv7qedr+/zbRuVBG/0h3wp+ixVeVC19z
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3191; i=daniel.lezcano@oss.qualcomm.com; h=from:subject; bh=5i35tXeB+dh8TrJjTALfDVhxhzQaJ333X0Wv22iwE5E=; b=owEBbQGS/pANAwAIAagyI4oqT+hPAcsmYgBqFalU2waeZFc+uXORaM2nz9oOnxTnFcm8cpWx3 s2FzLBGue2JATMEAAEIAB0WIQQafc3hhXPRY1XIeySoMiOKKk/oTwUCahWpVAAKCRCoMiOKKk/o T5NlB/9QnwbtJvG9goEnxhkDoppxiDPtuCMvxHYkSwAc6LoSwaUAHyacygDloVTTtlYpqGKzaqa /GcKZkZq5pt9AxdsqmYnzP9lj2PMAwiExJuQlFef2O5c54WlnVHLoz/MX+2IrazFsJIui5cVLzD Srr29R4eg5f9IOItjOljWua5gVW5uMxV9NmKNAMt/9sbG9BnW+OixxEiXACIAda9LcAyC1IZqPy VjkIv4vdO7MyYSEBED9wNBF0rcYWoHcrYBZl+EDpC8V9o7Ne34lGP4iC33a1l5Jd3kWPDNfm/8/ TYN+POK8V+qJdA6BNYAXAh/3sq/J0yNtJo+uF5WdN+2gJ18W
 X-Developer-Key: i=daniel.lezcano@oss.qualcomm.com; a=openpgp; fpr=24D626F253BE9E87E6CE5BF48FF4B8D271675527
 Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=dtfrzVg4 c=1 sm=1 tr=0 ts=6a15a97f cx=c_pps
- a=ULNsgckmlI/WJG3HAyAuOQ==:117 a=xqWC_Br6kY4A:10 a=NGcC8JguVDcA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI2MDEyMSBTYWx0ZWRfX5w5uAnm918fk
+ CJB5r5gu78p52WuD8dP8vGHUiyK9XFjDJYJYzyXak6JAqi390+dex9oyz/RxcnuhExtIgn2Ybsa
+ lWzTJk5KetozPGfrxf9EjfmhA9i9MFfR1zyn7JHIdC5W7/J7yEg32KsBFNalPltVlxWY9Oz70kX
+ HMKZRyswO8UJONNxZf7AkUVqCs+EDSe+zA5SCxIIoUBe3fr4TL4P0V5e7PBeg+/AgT8xlNGnNWn
+ 3okiFigEvC7BnP3MITsp/gejAVM9VTDl/233+KiFT7xs7svSUPneTVMJfX/HPsTxXMQ7esmIvX3
+ g0/nTfY6zeLcUlr3P0gOqs4E/iivlNmrDVsLRgKy/AZx2yZ8wUTLoFs1blniXBsV8hqjn/shV9x
+ apF53iMP1j3P+5gb6dyCRXLMHJpxz+8GejYxJfCFcdDg02C64TZ/LPlSNt/SXdGOvNzKl0YVh3a
+ IV4xux5qKSBekM4bD2g==
+X-Authority-Analysis: v=2.4 cv=Zc4t8MVA c=1 sm=1 tr=0 ts=6a15a981 cx=c_pps
+ a=lkkFf9KBb43tY3aOjL++dA==:117 a=xqWC_Br6kY4A:10 a=NGcC8JguVDcA:10
  a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
- a=eoimf2acIAo5FJnRuUoq:22 a=EUspDBNiAAAA:8 a=C9wMHiVflMXd_DM0zvkA:9
- a=1WsBpfsz9X-RYQiigVTh:22
-X-Proofpoint-GUID: BDxzLYSUaJQ3QxbEbK_JOmQXSVvUPo_e
-X-Proofpoint-ORIG-GUID: BDxzLYSUaJQ3QxbEbK_JOmQXSVvUPo_e
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI2MDEyMSBTYWx0ZWRfXx3fBiQPAuxy2
- AjP9suTeYQASycm20zPfbcltXKxkQ2u2/i8Q+GIPEmdEuHhjxhVhWkHF1BNcFDC6K+dXBbj1jvo
- 7/shO5hxN36IS3L5Wb+ov1dt/V/cBcAUnmvaLS+m7tVUtMLHHxHFKuEjYWXRyhUJ8V/wTOAwQsi
- 8ppBofUh5QX8ugf6KC8I3fwuE/c3xpP2RRA3bCNtFVSg1MQYYWIsl/idgbb0rwqd5jgxLPHVMgt
- K+gnYhBB28NrRq2XL4ADxyfHABy2ev6yXnQxprJRdu4qh+x5oA989/WoLk4ncYAzCPt1m3VtAOY
- jttQJEM6gfbCVJc81IzuqllmGEzpCBufIxMezuADe1W00+FywzDY7kLP+Pmz8rDPN2yY93i+uWf
- 9ASo3N3P0BRWft1TXaBgJZ5/ra75YaPnnqwtZizDHM928IJ4hBbvtmUUwgfar/tNX/xMr9mI2ot
- u+2oDetFkjl/FplzXMQ==
+ a=gowsoOTTUOVcmtlkKump:22 a=EUspDBNiAAAA:8 a=WD-cMf_r4H3F8z8mj00A:9
+ a=k4UEASGLJojhI9HsvVT1:22
+X-Proofpoint-ORIG-GUID: GqrJRpHIxPCYVLTdBpzWBAq0FWwzgkaY
+X-Proofpoint-GUID: GqrJRpHIxPCYVLTdBpzWBAq0FWwzgkaY
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
  definitions=2026-05-26_03,2026-05-26_03,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 spamscore=0 suspectscore=0 bulkscore=0 phishscore=0
- adultscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1015
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605260121
+ malwarescore=0 spamscore=0 impostorscore=0 bulkscore=0 adultscore=0
+ phishscore=0 clxscore=1015 priorityscore=1501 lowpriorityscore=0
+ suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2605130000
+ definitions=main-2605260121
 
-Extend the cooling device specifier parsing to support an optional
-cooling device identifier (cdev_id).
+From: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
 
-Two formats are now supported:
+Extend the thermal cooling device binding to support a 3 cells specifier
+along with the 2 cells format.
 
-  - Legacy format:
-        <&cdev lower upper>
+Update #cooling-cells property to enum to support both 2 and 3 arguments.
 
-  - Indexed format:
-        <&cdev cdev_id lower upper>
+Fix pwm-fan.yaml to restrict the number of cells to 'const: 2'
 
-When the indexed format is used, both the device node and the
-cdev_id must match in order to bind a cooling device to a thermal
-zone. The legacy format continues to match on the device node only,
-preserving backward compatibility.
-
-Update the parsing logic accordingly to handle both formats and
-extract the mitigation limits from the appropriate arguments.
-
-This is a preparatory step for upcoming DT bindings describing
-cooling devices using (device node, id) tuples instead of child
-nodes.
-
-No functional change for existing device trees.
-
+Signed-off-by: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 ---
- drivers/thermal/thermal_of.c | 26 ++++++++++++++++++++++----
- 1 file changed, 22 insertions(+), 4 deletions(-)
+ Documentation/devicetree/bindings/hwmon/pwm-fan.yaml      | 3 ++-
+ .../bindings/thermal/thermal-cooling-devices.yaml         | 8 ++++++--
+ .../devicetree/bindings/thermal/thermal-zones.yaml        | 3 ++-
+ 3 files changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index 3584024b76f5..100fd8a0c8ce 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -259,16 +259,34 @@ static bool thermal_of_get_cooling_spec(struct device_node *map_np, int index,
+diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
+index a84cc3a4cfdc..6a24851fd80d 100644
+--- a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
++++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
+@@ -63,7 +63,8 @@ properties:
+     description: The PWM that is used to control the fan.
+     maxItems: 1
  
- 	of_node_put(cooling_spec.np);
+-  "#cooling-cells": true
++  "#cooling-cells":
++    const: 2
  
--	if (cooling_spec.args_count < 2) {
--		pr_err("wrong reference to cooling device, missing limits\n");
-+	/*
-+	 * There are two formats:
-+	 * - Legacy format :	<&cdev lower upper>
-+	 * - New format    :	<&cdev cdev_id lower upper>
-+	 *
-+	 * With the new format, along with the device node pointer,
-+	 * the cdev_id must match with the cooling device cdev_id in
-+	 * order to bind
-+	 */
-+	if (cooling_spec.args_count < 2 || cooling_spec.args_count > 3) {
-+		pr_err("Invalid number of cooling device parameters\n");
- 		return false;
- 	}
+ required:
+   - compatible
+diff --git a/Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml b/Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
+index b9022f1613d8..28f5818f1e60 100644
+--- a/Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
++++ b/Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
+@@ -44,10 +44,14 @@ select: true
+ properties:
+   "#cooling-cells":
+     description:
+-      Must be 2, in order to specify minimum and maximum cooling state used in
++      Must be 2 or 3. If 2, specifies minimum and maximum cooling state used in
+       the cooling-maps reference. The first cell is the minimum cooling state
+       and the second cell is the maximum cooling state requested.
+-    const: 2
++      If 3, the first cell specifies the thermal mitigation device specifier
++      index for devices that support multiple thermal mitigation mechanisms.
++      The two other cells are respectively the minimum cooling state and the
++      maximum cooling state.
++    enum: [2, 3]
  
- 	if (cooling_spec.np != cdev->np)
- 		return false;
+ additionalProperties: true
  
--	c->lower = cooling_spec.args[0];
--	c->upper = cooling_spec.args[1];
-+	if (cooling_spec.args_count == 3 &&
-+	    cooling_spec.args[0] != cdev->cdev_id)
-+		return false;
-+
-+	if (cooling_spec.args_count != 3) {
-+		c->lower = cooling_spec.args[0];
-+		c->upper = cooling_spec.args[1];
-+	} else {
-+		c->lower = cooling_spec.args[1];
-+		c->upper = cooling_spec.args[2];
-+	}
- 	c->weight = weight;
+diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+index 07d9f576ffe7..999ad40a20d5 100644
+--- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
++++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+@@ -211,7 +211,8 @@ patternProperties:
+                   device. Using the THERMAL_NO_LIMIT (-1UL) constant in the
+                   cooling-device phandle limit specifier lets the framework
+                   use the minimum and maximum cooling state for that cooling
+-                  device automatically.
++                  device automatically. If three arguments are specified,
++                  the first argument is the cooling device specifier.
  
- 	return true;
+               contribution:
+                 $ref: /schemas/types.yaml#/definitions/uint32
 -- 
 2.43.0
 
