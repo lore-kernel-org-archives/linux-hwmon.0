@@ -1,156 +1,130 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98179427A19
-	for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2026 14:35:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779892533; cv=none; b=BO4qPWhrU5HeQ6umI3CRtYRYVV1lGiuxXFDZpbCvGZuGSQQdaMWMFJ+upYbN7eWnsvgQiPv/wR27Z+GN2kAoxyq0+z0t0FvNHdaZNEAd7cdOSeBQtbrVhs+35RWt18qoZ8ru1QNpz89w92YOXK4NESTSLqMCU8aMpDEMSNGnDp4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779892533; c=relaxed/simple;
-	bh=3WvURRv+0iGdxA52spNK9Vrx/EhqkX/wdqaVWGz9pO0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=E9buMrLh05358sB+voPfSBYMMrlgoazuncmizp0taQyuWA5lCTTkIbFE2wYW1BOPFHLJR3Kr117O2I/W00+gIKyXlAWA3XNyCRWRO9gnPMYq/Sa3BcUK3hvM0vafozszmacibQewcthxW/dXQdjMPJ/1136UL4yjojNkib8aeQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=peaWFW+B; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 233E540312F
+	for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2026 14:42:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779892950; cv=pass; b=d+//wKzZntA4KNQvc9KMqgHJXeqTp6tO1nUyvlvpnSqdlsicXCzWknmVYCD23Ct2gSFqVWIQcBkV70TY2rakyQsA3faE5l+BKbTqRUu5WkS+eptgHGCwgf47Ih9xAaPYGQQlyD4XGy0d15BchwO0sKMDrgL4yrIGpB1Go8CC7r4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779892950; c=relaxed/simple;
+	bh=Wkjf0xfD0fgdDS+kPV5B88MN47vTkuZEVXzAIEFeTRY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Q4sI2bujjyMz6KVYKTGgDCmFd/n3PIC8gy1U9Uk2KsCAJr/FTkR+oY7l2GIpF7jqSrS1E4C1kgDk/pxuN/s7fw/QBKIat5WQ9mIHhQrAuT4BjuexNVFF1ktpV1pf4NDheOlNd5Dwnh69qoDyWDjTQWW/mYP4OKEyu5c0TK+ivXI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MLswE/Vs; arc=pass smtp.client-ip=74.125.224.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="peaWFW+B"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-44a74032ff8so8772729f8f.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2026 07:35:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MLswE/Vs"
+Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-65c0bda7f15so11717928d50.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2026 07:42:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779892948; cv=none;
+        d=google.com; s=arc-20240605;
+        b=fVn9+aSPV0J8ug/mY1n3HSi5uT0aUBNu2NZ6/QDClT4Tr3jtikZG8LQ0lezA2eV1dR
+         GrCfurpRRxna8ZLipgljNgDlcLXXUI+RU00ge1SKkuv/E/neAD9v5kXLamlRDe1vXW8i
+         3HyxPVHIVDPWVY5M/cBFHWWMjtWtu6/9UanUlUa+9BhATGUqkssZTWehASOxoFHRYQ7J
+         WCdJTnRlZ79z8NEveRW650slo+2oROeuo2oNkC83pqNQ/82VLY5XR5j+QSNDTHSklNor
+         DBGjThLQh5eitasIQA1waVwgqJVOK6jizeYnBFQTAUsB+KqzDI3kT1Zld9Y3Ldro2+4n
+         lsSQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=hlWIP+UVVvtbpjNyLXvxi0le4H6Qgzv6+ziP6V6KTS8=;
+        fh=uPvrR+GhnTmGuuGUOGuw9ydhq8pNcGECGDIhDr4fpd0=;
+        b=Z5O2fzL+n6EEaN5b2583BoZbQfrZ193LToxNSwykBGgYGO2cycg7b+L8+rFqromynj
+         RPN+lM2u6BvG7bc+QLAbPq4u6WfljsceZqotFmM856P1vHzFUZ0J7l557OthshATM+5/
+         KfzizdugY9u8haMd8gQspnooYexf1/zDvUdJj1QQP9+vYHg4dyk35RPDnlE60YHDLwn3
+         uGkoZ40VkUVZV3rp9gpct9a5TMUsrx/hTM2q6Ibd+Rt9PTHyv+FkeXXzSzjzxthyzeh1
+         JDJUO6xepBsP4q3wWe5Ou1R/uq6OKi8ugTGOQKRffx+SQP5w9I07JqQ1tcSCEQkAl0Zt
+         xgxg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779892526; x=1780497326; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1779892948; x=1780497748; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=96VfRnvZ0QCw3hUcAbbbU59S7RhhCddL2r3UDNMDre4=;
-        b=peaWFW+BO9b7N9ANM6TmONUvqn15q3Cuw95P3PMhYTZnIRb/26wbvozr485/vijz5+
-         7OJDujmt3TB8a5dVL2oJwXCq9DeDf5cJmVhdFih0dw2+4UKtGdXkbfDOe44hlc7cvXXE
-         7Z4w3kOUlj9PsmP7MS+kLK+dlRYdrApf3f0MtcdyCk2s+NOy0TW7TF42oHygIobSXtjF
-         NYnsMwxoITP2Be5y4K4B8/nZRm9SVu0kHHLLVdyO/FSF44OyqhMkt2YW0MY/5CShNpH/
-         le3pzH4VecRBsVmyv5mjJGrLHwaNzzRLngivDlNGXnI8rFPOWsx7J+U9mPHH886bZPG8
-         yVtQ==
+        bh=hlWIP+UVVvtbpjNyLXvxi0le4H6Qgzv6+ziP6V6KTS8=;
+        b=MLswE/Vs49DsA34EQyTLb3fN8q4HfRoJHVe7hJ3EZJHriNmCWMHWLfWdaDKqOR+Z92
+         oBxelXDr1GsvkiGRHHak5Jzg2pOPB9D+JJNo2W02ug4noNAqfIprpSzu831vJIqsoNFb
+         MNowTIjCz5SfR0XGP/hE4F3HL3wV63lBsylEOJIM3XpTX54z/Nn54MUwZcLjVvVJnU4/
+         KCYgRhL1ZsvNZpzxV9ZMfoU1sl0F2JvR24i2fTMlBTVZpA7CwU/Tog+WpbtJannhRMw7
+         n5tWgWFV9hjS4fC5AIrlLoyq5PaFrwLmZE49w0PM4Bdu5l3MZX9l7RfuAts+9gNheHrg
+         8Mjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779892526; x=1780497326;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1779892948; x=1780497748;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=96VfRnvZ0QCw3hUcAbbbU59S7RhhCddL2r3UDNMDre4=;
-        b=Clt/euAxfXjYcLxbiG3ol+IoM24XQmPtPvIrVKXTfLoR0N7AB/8DvkZZeeDpbqQ+79
-         cfjQTwECGbABG7sIvR16AEy2ESymzPSj9i3OxXehBGHKt5K48b0pLeXjLiXyw6NpuAk9
-         7/KeUlyiL+iyHK8JAp9oMk5YQkp2919icdfrD8jkQjrPfS1NEQKNVtYaUevvIIbcwxRz
-         WvtQ6tujwy2+L3O0YWoaIRVZhe4aoKTYAW0BcjtRz01iM/ll/yqEid88Smi8wKyyxAUW
-         0e7GlgfvQpzbyZnhAFBZpfJPhYphHGwOBpS9Uza0ntW21EV/efBCpIxMg9TM36Eq4BXT
-         oJ8w==
-X-Forwarded-Encrypted: i=1; AFNElJ94gA7QwqdEn+rw0YOjt0A5DvTHia/ck3hgXhvvl5bG1TXq7rjAf3+aFwii7AEKLiPlJ8URJKOpFscLuw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzrvxsfb+g+Qw1LPTmqSKMoltDskc7sCxXx3shs/1wp8Cr5r94f
-	snDD//150qhTTQYLHY9xsqxn09jcKbkdfxavhn3eb8wwsZrnwD1+Rokz
-X-Gm-Gg: Acq92OG6wWIFVqUjgeXTVD+/73MxJHEOFNsoWWoFTRI4O3n7D6urODzw3eGHgeLNobH
-	To/ngALpsSOjY298yKstsl8Fb8BwoOnhfpG/P3bGMl9DHCH5JmgA3bx+gtnTPTuJqKepqy5Cmsh
-	7Q1w/FJ/W1A6OHHDzB6X4TiBY+JPJ17Ht1z/cwgPQ7iI0qQ0L8RyS2Z4SpfZc/oI4h/CXafjghf
-	S+ZvAetC7hu4duPdXTu6Be2NPIiotFSygzQJr5AhNfEHrSFlq2FuCT/DevjC7Qg02MAl6ulaetL
-	2tFA4gx8l1HKllA0Mr/APt2pPfr7D/Z1zoBlEeDS1DdBv6WF20IbrwPLPsSUi264NhmpEmo3tZE
-	+RHFPA4qrCCnF+YW0h5q9gukFMyeyDZ7saDaeqzh64Fj+46ZGDChSTbzNr3GdLg4GMOmfJVgRyi
-	Byw1XjgnzbvLzdGo8=
-X-Received: by 2002:a05:6000:470b:b0:452:d03a:7aad with SMTP id ffacd0b85a97d-45eb38a6d8cmr39575261f8f.36.1779892526169;
-        Wed, 27 May 2026 07:35:26 -0700 (PDT)
-Received: from sefo-laptop ([2a02:8071:50c5:5c0::361b])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45edb5584b8sm6239763f8f.11.2026.05.27.07.35.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2026 07:35:25 -0700 (PDT)
-From: Wadim Mueller <wafgo01@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: jic23@kernel.org,
-	lars@metafoo.de,
-	dlechner@baylibre.com,
-	nuno.sa@analog.com,
-	andy@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	jdelvare@suse.com,
-	ak@it-klinger.de,
-	linux-iio@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1 3/4] iio: flow: add Sensirion SLF3x liquid flow sensor driver
-Date: Wed, 27 May 2026 16:35:06 +0200
-Message-ID: <20260527143515.102794-9-wafgo01@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <4349f634-dd7b-468a-912c-5ceb8a283954@roeck-us.net>
-References: <20260524205112.26638-1-wafgo01@gmail.com> <20260524205112.26638-4-wafgo01@gmail.com> <4349f634-dd7b-468a-912c-5ceb8a283954@roeck-us.net>
+        bh=hlWIP+UVVvtbpjNyLXvxi0le4H6Qgzv6+ziP6V6KTS8=;
+        b=eKHAkf8QGghPtCtNO+2uOJWfKc576Lp0Jr/XAMB7PnhTIHjWhG0H8fkB3NRwUgCRf+
+         bq2NCEtYFU5uweFvczMWEqOU5kRSqaJoyFbBSBr7gMzM/bEhGtE6BitbkLTgWqhb737I
+         fTMdRBmX4R9Deh2hTe74+w5qAzWWyob1umazfj5MRGHbMiW8lsZU+1B+1V+hck6OoFdH
+         PQubHFMRpSkYf99Ccspp7dbetdqm+892YFDe4xbx7VhXyXNwH1XosAlgstIHhLArOaJx
+         Vp5tMakIMRahOe5Q8GdBToY5imxSy6L6AQL6dA9YXteJCXkBCpHlFqrwJH2XOEHAMlMb
+         WVaQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8HkbqMftqiSTSQQBj7n1zpL+bhxqLE0maT7eT5jPmSNAFiBdz+mI+IvEfyRnWdPjsgicD1O6WKaTQBLQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywf5xXN7RYABTSmjyGlPx9iz1rt2SXfiFVaBW6Kt9qFhJzAYo9e
+	/GyrxEG1Ow129TQkUHASJzd7DpQNo9T8hwyZiGMPrJTWTrruNYfEgNaLB0Navu9VzJIR9kFwtEl
+	qDmhswIjvT0nyBOD3bX9iYyMdFi4rCD0=
+X-Gm-Gg: Acq92OGhDuAWkFrJYPaldz8zvWtaEjy6LwFPBmnOlppCqvlYpyHKVR2/XY31e6gxL71
+	kzDdYxoWVtZNduqaiNj6q5Q0CL6Qx7OpZO0WZNF0Q98wTe5Md6k3ftT3tgInfunn+1Yh8/1UrZZ
+	88OukUD+p2YCFHiDF4T3OJowxMRJYSZjhsge7gbpd2vGHN/M/SFkzSoZznKyxBS5fbFrMxSI6mj
+	HlRRP4zu6bDyDrW4vWCXA4CQmIEjKUNKH6EXdfB0+t0ngbQ5hrLIaCPfbiywMfEZh4YlMrqGe9l
+	21yLa5OxjQ==
+X-Received: by 2002:a53:d053:0:20b0:65c:5b88:84a8 with SMTP id
+ 956f58d0204a3-65ec966be89mr18424914d50.14.1779892948116; Wed, 27 May 2026
+ 07:42:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260524205112.26638-1-wafgo01@gmail.com> <20260524205112.26638-5-wafgo01@gmail.com>
+ <20260526173616.256fd535@jic23-huawei> <20260527143515.102794-3-wafgo01@gmail.com>
+In-Reply-To: <20260527143515.102794-3-wafgo01@gmail.com>
+From: Maxwell Doose <m32285159@gmail.com>
+Date: Wed, 27 May 2026 09:42:17 -0500
+X-Gm-Features: AVHnY4KqJRjrOALhnhkMuN-1YF-kxouvAtTfdFTs73jWaX1UNoZiFjbArngVtBQ
+Message-ID: <CAKqfh0GbHLALg8eEBf2EtmKXAsB=H7EXL=6D49yaNWiMutycvQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 4/4] MAINTAINERS: add entry for Sensirion SLF3x
+ flow sensor driver
+To: Wadim Mueller <wafgo01@gmail.com>
+Cc: Jonathan Cameron <jic23@kernel.org>, lars@metafoo.de, dlechner@baylibre.com, 
+	nuno.sa@analog.com, andy@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, linux@roeck-us.net, jdelvare@suse.com, ak@it-klinger.de, 
+	linux-iio@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 24 May 2026 14:40:51 -0700
-Guenter Roeck <linux@roeck-us.net> wrote:
+Hi Wadim,
 
-> Sice you are at it, it might make sense to also support SLF3S-1300F.
+On Wed, May 27, 2026 at 9:37=E2=80=AFAM Wadim Mueller <wafgo01@gmail.com> w=
+rote:
+>
+> On Tue, 26 May 2026 17:36:16 +0100
+> Jonathan Cameron <jic23@kernel.org> wrote:
+>
+> > > +SENSIRION SLF3X LIQUID FLOW SENSOR DRIVER
+> > > +M: Wadim Mueller <wafgo01@gmail.com>
+> > > +L: linux-iio@vger.kernel.org
+> > > +S: Maintained
+> > > +F: Documentation/devicetree/bindings/iio/flow/sensirion,slf3s.yaml
+> > > +F: drivers/iio/flow/slf3x.c
+> > No need for separate patch.  Bring it in with the dt entry in the bindi=
+ng
+> > patch then add the .c file in the following one.
+>
+> Done in v2.  MAINTAINERS hunk is in the driver patch (3/3); F:
+> line points at drivers/iio/flow/slf3s.c.  Series is 3 patches
+> now (types, dt-binding, driver+MAINTAINERS).
+>
 
-Done in v2.  scale_den = 30 000 000 (500 (ml/min)^-1, Table 15 of
-the LQ_DS_SLF3S-1300F datasheet) and sub_type byte 0x02 (Table 13,
-product number 0x07030202).  Re-checked 0600F (0x07030302 -> 0x03)
-and 4000B (0x07030501 -> 0x05) while I was at it, so all three
-entries now match the published product numbers.
+I was taking a look at the data sheet for this device and thought it
+was rather interesting. I'd be willing to help review patches for this
+driver if you'd like :)
 
-> > +	{ "sensirion,slf3s-0600f", "slf3s-0600f", ... }
-> > drivers/iio/flow/slf3x.c
-> What does the "X" refer to ? Why not "S" ?
-
-Done in v2.  Renamed everywhere - slf3x.c -> slf3s.c, SLF3X_* ->
-SLF3S_*, Kconfig symbol and MAINTAINERS title too.
-
-> > +static const u8 slf3x_cmd_start_water[]	= { 0x36, 0x08 };  
-> 
-> I looked at LQ_DS_SLF3S-1300F, LQ_DS_SLF3S-0600F, and LQ_DS_SLF3S-4000B.
-> They all also support Isopropyl alcohol (IPA) measurements.
-> 
-> Would it make sense to also provide support for other liquid types
-> besides water ? That could be a sysfs attribute and/or a devicetree
-> property.
-
-Picked up in v2.  All three variants are factory-calibrated for
-H2O and IPA; the scale factor and temperature interpretation are
-identical, only the start command differs (0x3608 vs 0x3615).
-v2 adds a "sensirion,medium" DT property (enum "water" / "ipa",
-default water) that selects the start command at probe time, and
-the binding (patch 2/3) documents it.  Kept this as a probe-time
-choice instead of a sysfs attribute since switching mid-run needs
-a stop anyway per the datasheet.
-
-> > +static int slf3x_verify_crc(const u8 *block)
-> > +{
-> > +	return crc8(slf3x_crc_table, block, 2, SLF3X_CRC8_INIT) == block[2] ?
-> > +		       0 :
-> > +		       -EIO;  
-> This returns -EIO on error ...
-> > +
-> > +	for (i = 0; i < SLF3X_PRODUCT_ID_LEN; i += 3) {
-> > +		if (slf3x_verify_crc(&buf[i])) {  
-> ... which is then ignored here and replaced by -EIO.
-> 
-> Why not just have it return a boolean ?
-
-Done in v2.  slf3s_crc_valid() returns bool now; the call sites
-translate false into -EIO themselves.
-
-> > +	dev_err(&client->dev, "unsupported SLF3x sub-type 0x%02x\n",
-> > +		buf[SLF3X_SUBTYPE_BYTE]);  
-> 
-> Not my call to make, but the driver is way too noisy for my liking.
-
-Toned down in v2:
-
-  - Unknown sub-type / unexpected family byte -> dev_dbg() and
-    keep going (also covers Jonathan's fallback-compatibles point).
-  - CRC mismatches -> dev_err_probe() in probe / dev_err() in
-    read_raw, one line per failure instead of per-byte spam.
-
-Thanks,
-Wadim
+best regards,
+max
