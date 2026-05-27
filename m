@@ -1,168 +1,225 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-oa1-f65.google.com (mail-oa1-f65.google.com [209.85.160.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73CF309F00
-	for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2026 15:16:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779894974; cv=none; b=fQcDwCuuq4FdKbe6iKZiPbXnCNuNk8VMeErJX7Lllep4VbBljXV/gADli7Zeo9U52Y8ilycXb6AFTjEQn4trfWxnGNcp9YT3/8gX+P+urTshsBk2ctrWL07Arzxgzs8Houwr4zszSA/C5dR2bPilJEmT5amr116B1tY0GQgD+Ww=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779894974; c=relaxed/simple;
-	bh=29D32qBpnqYOQi+eeGuZ9IeyQ7szkSEijvwc7WkdGJ4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hA1a6T05ZKryPJGg4cgEx/Xoz4eJCnZCEBHE19d80dPRrR3M7IeZ+0gIZnGc/u732xu41jyXACNN7lHbes41QohnqSPfo+Due2Iy4FfIis0qChXBJk1ECE48xWctnsYzFf0lE27pzylw+787lYPaGPMjxytIEN3CzOHzq5zP6xg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=euIsNroo; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 358E7410D24
+	for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2026 15:19:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.65
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779895148; cv=pass; b=U35I/0fNJOh9OMjkHe4BQMpHf76HdfhWS3jiTET4bOwd3tx7gF/YZIOcYBByEMTkqMoC9pOYS6sB1mGfvzMzWkSNcqyzmhO9KEVDUmrNU7hLz9e4HXj68g3LzvMpnkVSI0SN0xPVEqOQ2JBwddjKlspLVu/KqWcCVjLscc4qacg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779895148; c=relaxed/simple;
+	bh=gZ75HfUKu7WCuUbWy5Owlf4qjri2OKaycpeiPa4o2fQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fdggOGSF3erV1rGeTTTdZzudCRBjcXAh1785ewwJ1XhUNuGpHwDf+rHh1jtYo+9SwpnoXHQHJm9xWizt9GrVi1LZUV/gg1ZhUjVaZrSAqT/bTOOSt2j1ClPx2DEGs0pX6MAvLMvtzVdxd9n3QmNkdVMiuXfvvvnasNUx6oD5iKg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h/2J8h1+; arc=pass smtp.client-ip=209.85.160.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="euIsNroo"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-48e8132c6d0so75201015e9.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2026 08:16:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h/2J8h1+"
+Received: by mail-oa1-f65.google.com with SMTP id 586e51a60fabf-439712b3416so4134749fac.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2026 08:19:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779895144; cv=none;
+        d=google.com; s=arc-20240605;
+        b=LUKZJ/8a9ypxODDXod283OMI4+ytQUX2mOcvnnYZkXAym3ChKVBbC4SbmFYvfNsJ1u
+         9ho0bUKbBQt/7MY7vlnTYudnD8nCYKsEp+XbhgEyzMqWJCrGm/dUCkvNqTo3+EpIw0XW
+         hyYFENKJdAPwCgbHCG9zY4qwRngGZyau9HT2fQ8I2xYi3o/fC+dIeX+xvlZ5zSAxobFt
+         QRNre2q8zIbODVHb1+X6wjfy4g5hnD2mhYGhRL6egMsJOYQhRjEiYPFxYivJmYmqIh0M
+         FkLY3JCxSst67Xnwlp4uPWpMZTseWEtuMuLdE9CrxN4nEP2FmFaydV1Ts85SSuI6ORHx
+         EHLA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=7LRvDWq8hbZrtXlL/OzmRkuzkeMA4RIOOZP+dsA10Pw=;
+        fh=wWifvNn+zUMA3/um9raYOjfZOQM7jKu2rOa8G96qnm0=;
+        b=L1SpLdvWvosjPc+b4Yr1vTHyjrDnamID5aQXzb+zxeWXJDmrVov+jtj8SDF6/2Gk1e
+         BNl+Wvuixhc1V9HNmaIFAK6u3uqtRGXBk1N2XCFiUebXIu4dckdHEfUjd6Y7LApVuz+8
+         ZrL5QZf796s/K7oRH0xgl0K2yf/8Pk0vzLqu3sZX6pANqNXv9bHkDmjepeShMLyiRk1B
+         0W0kb9Ly8uNUth2Am/kVCRWAxRaZdZ5PrSowM2IXU3HgoeJyiKsDqaqXaHOtYoVDcFh5
+         V4yXZsvxIamgRFUi3EpWM2yC3j0i25FBPjNWUukYUFudBqAt75HtEeSEtVhJMP6948W3
+         pmeQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1779894967; x=1780499767; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1779895144; x=1780499944; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZPX/rAxkQXzz52fOkI04CG2IknB3Ap0Go8VyLZNzT00=;
-        b=euIsNroo7Gah3YuJBWGAbuwra2+RtzafZ+FUdgDUFgzXJ+53f27H18Lgc85Luv5ZRM
-         GxheC71cT5dnIuojPYZm8OMpbGRJo217AxSsRMuJVsaiHE1CtcFp0gCqapTRePHRnc3q
-         +4WPWAC7k3AE7//ZM7Q79fLetpW5GK2wVNxxThaVe2ZxEk5lvVswB5FHdLwN9KF5kJu0
-         0BGV7xg/Z/o+tD8lfjnBdvND6R+YYcMvHoqoFNH4EKXuYbMMMicPMQD/3FikW197rtWe
-         kVJyE/W1cyKKIkegKYiRMQTDS2dRybwKqrEcZMSVmy+mIkDYAptptZtJBTh6F4Y0llxo
-         QB6Q==
+        bh=7LRvDWq8hbZrtXlL/OzmRkuzkeMA4RIOOZP+dsA10Pw=;
+        b=h/2J8h1+lfXTvdbi5ehs2pbPUPH6ZqbPg/biNFieIdZnOpNQmlfOh2YMHJUzNJS6Td
+         67wFtWaGsclR4ogdvHZEJWx/uMKiGY99+nAwhdgB+Ha+2qKfYO6XJ+KLsePkBV8TyITh
+         oNYR4a85bFReLhnAiCcj/34ae26Wb8pu2JKJKlxLJf/oeTKzbGMrB+ptX8MCMQidyQVT
+         ETlSq1m9by70VOIifb/QzvAB2GPC4JYaLccMKq2oJ0d9Xs5yUMGpPi+h32Q1cF6IV2uF
+         2pTnFg+HJ4oDrVqAUxFCYEZSLs/lDX877rH1aY9UIJ3C0ku8EfZ6ziSb5YIrzAUQ6/zL
+         Y/MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779894967; x=1780499767;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1779895144; x=1780499944;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ZPX/rAxkQXzz52fOkI04CG2IknB3Ap0Go8VyLZNzT00=;
-        b=CV+Q/D2046TLOUmeWfcs2YixiH7aBD+buDx3R+wBcRxLie/KJm8g/KKaB0syC4NZZB
-         fzh+/0/i+dRJud8r95+WwXM+rPHUiwI1tVs+xWWzXCkBVK0Ki51tyYOFD5oufTt3MOPi
-         Z0fo4uFOWbvymdDzUjObx2VG7CkRKs0ZHWwHQBf8ULHfaylMAlIghscCl5IIHct4Mt0a
-         C2tIYiUPxxtASIYTPWGyWjyTkmpbEznsvqfoQqdmUO/o6QonNSUmRy7NdmJ0r6edkURc
-         yv34Qpgp1JCzTAlkB2TMj1B0JQ+PAVWfbfGmdpa19zkLU6GMbfNtN1+9LcYcHgMS9G6o
-         gF1g==
-X-Gm-Message-State: AOJu0YxqZejB1W9sbN1+27xR2QSC8bZQauhJyC2Ti6ZYHK0rPC8st4DW
-	pnmXYCEwK+KmMXJsfigVb+7rfvDPDCciGbeCUWNJV3uy/jaECDh8T10DVa1zR7ScMfk=
-X-Gm-Gg: Acq92OHHANCF1r8VBXO7Wo0duNLcquqsZdzIysF+UZRI+o23B+nJNnMR8zEQjJy6wyj
-	4rQ9EJKTypRTpYN1nJU5H5wNeahqUaODUd8rXb7+BFIe5oRf8vqUSiu9JWQ0jv/Sok790FY6Q3R
-	tBs4bHmBCK5TdEVH890Rpt/lwBFOakGGSuPM7UvkEQ7D0Zz+zaly5QlfZkDeimLIeI+CmWLvmUT
-	gQMuKmP5nlnVBFu47CUYrgnM1JE3wrVOCnuueEZwHGzjwb6WkKfqcy3zkKYoVeNIGlX00Szi9/B
-	TDIaKZeyMZf1koWnQPDAx/XWV+u1dhKD436vzsUzRzNykUKP6wDt+Tqe/pkKmSxls3cwzUmTlp4
-	cCqglwItsxp3az9rR+Z58SXGXySAuKTI62N0TeFpsGrXDIIa9Ol1UuPw6/M9fcgteyxx/FU4EF1
-	j/FKKkteWk1gKmwZVmM3JcSsLSbft7V0caeIgSGXYdp39rUqcT2WtlcyZURR99jEAdhoM6mci47
-	jMYoA4O/J/gb8fz+FU9eMVDrp6LCSjvb56S
-X-Received: by 2002:a05:600c:3f0d:b0:490:845d:652d with SMTP id 5b1f17b1804b1-490845d65b8mr40121085e9.15.1779894967414;
-        Wed, 27 May 2026 08:16:07 -0700 (PDT)
-Received: from localhost (p200300f65f47db042b54ed4dbf2ca0b5.dip0.t-ipconnect.de. [2003:f6:5f47:db04:2b54:ed4d:bf2c:a0b5])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-490809cf24csm26428925e9.6.2026.05.27.08.16.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2026 08:16:06 -0700 (PDT)
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig=20=28The=20Capable=20Hub=29?= <u.kleine-koenig@baylibre.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/2] hwmon: Use named initializers for platform_device_id arrays
-Date: Wed, 27 May 2026 17:15:53 +0200
-Message-ID:  <25d38df8db42d69f33fa30267c9fd5ea058223d0.1779894738.git.u.kleine-koenig@baylibre.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <cover.1779894738.git.u.kleine-koenig@baylibre.com>
-References: <cover.1779894738.git.u.kleine-koenig@baylibre.com>
+        bh=7LRvDWq8hbZrtXlL/OzmRkuzkeMA4RIOOZP+dsA10Pw=;
+        b=JDP4i1mp++sXHAQN3f6/gH1cpTDgffCMj2MlVqJaCC1DRWvFNiJXgd0hfYBKdQScsf
+         jW7nqURGi+b81h5SzzE+wU+0GfxmewalCPEhkoBIh0XMy/GB6FbSKBKNTtG7u+XznkL1
+         T1+/3aGloBUqmL1gxahV7V80CTT66KxnxVxC1YD9AioXEtl9D3yoNvmIUozP/GTsglkR
+         a/Hs4unihkSc2WsVorfqqqwqKCeJevHznJVyI76XCCoguEPtb4kDNI6ezqa5wCKsuDCs
+         km726aw3JhWYbhzaN5uN1hh3+Bc6ckmU2ENtpBL+nskncV7ytxI+SjjnVWljkfDwEYMb
+         Gwhg==
+X-Forwarded-Encrypted: i=1; AFNElJ+1eGHxiE51KMhd34ZdyvbUGG6yGk6/KDTG8cCIaRQxq4bZjtjW+MFgTF//JOMUWjDZjemEKMKQkvM63Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8XHBEhoFPtG/WNAfhYG+SKUfptsKdLNfjxOUg4zK9BsklBLmT
+	20Xa0rt8Zcbpec4zmg/oimXrV38JMuwH/rj4xPuBvug3ahInqd1BtfC7TAO4UTs+GDdjJKGMoFt
+	hBAScC1sEzef/OVpbBjJdqa/c5I2sxSQ=
+X-Gm-Gg: Acq92OG7guU3sMxJM5vDD8Yz2loALttEAvw4weBPQns8mOmuKW2QyFK07QeaXhIRtb+
+	djuWXiNZ/ZltlXiL0hdcL30rM7miYH/P0BNHa4xIjTykFZxYs/0JP3aezUy9D5bxq9GzPQq11AP
+	IEaF1o5NlyaCZhVGyNTOW1k44BEuhdXWQx4wLkjhhleGeI12sq8KCcqKJxrtOn7R0Uh9XgehVFw
+	aoISxB2laP8Q5amR1pl3d/kaF3Of6esop+x0H7hwTF7xhxh9Q2nOs5FNMYF/d307VaVbogg2fcI
+	cTzBzULy+w==
+X-Received: by 2002:a05:6820:178a:b0:67c:1e60:3e90 with SMTP id
+ 006d021491bc7-69d7ead7d36mr12221633eaf.6.1779895144228; Wed, 27 May 2026
+ 08:19:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3958; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=29D32qBpnqYOQi+eeGuZ9IeyQ7szkSEijvwc7WkdGJ4=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBqFwqt/T9yfpqY78VVZHzt93cSKOea7Vmtx+38g kWKWAR9HtOJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCahcKrQAKCRCPgPtYfRL+ TuvRB/9Y4NJ52JLZS0zkY1IYnZsbShttDJqAfX4KWgzSlSmbx9MvHSwKCVesuB03cbWk2ayOyhq 0mzT+eKEtZtjdWpPA7zf4UU+wTjylBZKu4Q2/usHgVZgzna7Mbt+fJIfxTw+/2vJX1KZIQtG03C 2nixze7PSZydG3iIXgEiPAENUO+NaKH4j8UX3of1kBTvWCAf82Jpraiii44FhGVnbYUShv2ixnC 05WoOV+LlHpqAdnvYXgiNrju5dDbxhUqTr2IfHEsMUpg8gKpatKJlWPey/0b9iHNuq5csHF/Dq+ lGZDtIIuPVYp2S1OPe1hgY7wq6i72/o/IzZnwvN+I6CtfHu2
-X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
+References: <20260527115311.13398-1-zhanwei919@gmail.com> <ahb3VMRCQpofblbW@black.igk.intel.com>
+In-Reply-To: <ahb3VMRCQpofblbW@black.igk.intel.com>
+From: =?UTF-8?B?5Y2gd2Vp?= <zhanwei919@gmail.com>
+Date: Wed, 27 May 2026 23:18:52 +0800
+X-Gm-Features: AVHnY4IiIrYCVLBF4XWxDARC7wP_O5GrLj1re-8BUianaKxWN4OIP872Vp02R4Y
+Message-ID: <CA+qUFcnP-XEPHJD-+djRydD92-bAz5bxxVaRHGJ3nrpwtq4m7w@mail.gmail.com>
+Subject: Re: [RFC PATCH] drm/xe/hwmon: report a single fan for DG2 instead of two
+To: Raag Jadav <raag.jadav@intel.com>
+Cc: Matthew Brost <matthew.brost@intel.com>, 
+	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, Andi Shyti <andi.shyti@linux.intel.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Guenter Roeck <linux@roeck-us.net>, 
+	intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Named initializers are better readable and more robust to changes of the
-struct definition. This robustness is relevant for a planned change to
-struct platform_device_id replacing .driver_data by an anonymous unit.
+Thanks for the detailed explanation -- that make sense
 
-While touching these arrays usage of commas.
+I can think of two paths forward:
 
-Signed-off-by: Uwe Kleine-König (The Capable Hub) <u.kleine-koenig@baylibre.com>
----
- drivers/hwmon/max197.c         |  4 ++--
- drivers/hwmon/ntc_thermistor.c | 24 ++++++++++++------------
- drivers/hwmon/sht15.c          | 10 +++++-----
- 3 files changed, 19 insertions(+), 19 deletions(-)
+1) Have fan_input_read() return -ENODATA if one channel has started
+ reporting pulses but another remains silent for, say, 30 seconds.
+ This way the phantom entry still appears in sysfs but userspace
+ tools like `sensors` can handle the "no data" case gracefully
+ instead of showing a misleading 0 RPM.
 
-diff --git a/drivers/hwmon/max197.c b/drivers/hwmon/max197.c
-index f0048ff37607..9b6ab050db1b 100644
---- a/drivers/hwmon/max197.c
-+++ b/drivers/hwmon/max197.c
-@@ -321,8 +321,8 @@ static void max197_remove(struct platform_device *pdev)
- }
- 
- static const struct platform_device_id max197_device_ids[] = {
--	{ "max197", max197 },
--	{ "max199", max199 },
-+	{ .name = "max197", .driver_data = max197 },
-+	{ .name = "max199", .driver_data = max199 },
- 	{ }
- };
- MODULE_DEVICE_TABLE(platform, max197_device_ids);
-diff --git a/drivers/hwmon/ntc_thermistor.c b/drivers/hwmon/ntc_thermistor.c
-index d6b48178343d..6f82a6c49393 100644
---- a/drivers/hwmon/ntc_thermistor.c
-+++ b/drivers/hwmon/ntc_thermistor.c
-@@ -52,18 +52,18 @@ enum {
- };
- 
- static const struct platform_device_id ntc_thermistor_id[] = {
--	[NTC_B57330V2103]     = { "b57330v2103",     TYPE_B57330V2103 },
--	[NTC_B57891S0103]     = { "b57891s0103",     TYPE_B57891S0103 },
--	[NTC_NCP03WB473]      = { "ncp03wb473",      TYPE_NCPXXWB473 },
--	[NTC_NCP03WF104]      = { "ncp03wf104",      TYPE_NCPXXWF104 },
--	[NTC_NCP15WB473]      = { "ncp15wb473",      TYPE_NCPXXWB473 },
--	[NTC_NCP15WL333]      = { "ncp15wl333",      TYPE_NCPXXWL333 },
--	[NTC_NCP15XH103]      = { "ncp15xh103",      TYPE_NCPXXXH103 },
--	[NTC_NCP18WB473]      = { "ncp18wb473",      TYPE_NCPXXWB473 },
--	[NTC_NCP21WB473]      = { "ncp21wb473",      TYPE_NCPXXWB473 },
--	[NTC_SSG1404001221]   = { "ssg1404_001221",  TYPE_NCPXXWB473 },
--	[NTC_NCP18WM474]      = { "ncp18wm474",      TYPE_NCPXXWM474 },
--	[NTC_LAST]            = { },
-+	[NTC_B57330V2103]     = { .name = "b57330v2103",    .driver_data = TYPE_B57330V2103 },
-+	[NTC_B57891S0103]     = { .name = "b57891s0103",    .driver_data = TYPE_B57891S0103 },
-+	[NTC_NCP03WB473]      = { .name = "ncp03wb473",     .driver_data = TYPE_NCPXXWB473 },
-+	[NTC_NCP03WF104]      = { .name = "ncp03wf104",     .driver_data = TYPE_NCPXXWF104 },
-+	[NTC_NCP15WB473]      = { .name = "ncp15wb473",     .driver_data = TYPE_NCPXXWB473 },
-+	[NTC_NCP15WL333]      = { .name = "ncp15wl333",     .driver_data = TYPE_NCPXXWL333 },
-+	[NTC_NCP15XH103]      = { .name = "ncp15xh103",     .driver_data = TYPE_NCPXXXH103 },
-+	[NTC_NCP18WB473]      = { .name = "ncp18wb473",     .driver_data = TYPE_NCPXXWB473 },
-+	[NTC_NCP21WB473]      = { .name = "ncp21wb473",     .driver_data = TYPE_NCPXXWB473 },
-+	[NTC_SSG1404001221]   = { .name = "ssg1404_001221", .driver_data = TYPE_NCPXXWB473 },
-+	[NTC_NCP18WM474]      = { .name = "ncp18wm474",     .driver_data = TYPE_NCPXXWM474 },
-+	[NTC_LAST]            = { }
- };
- MODULE_DEVICE_TABLE(platform, ntc_thermistor_id);
- 
-diff --git a/drivers/hwmon/sht15.c b/drivers/hwmon/sht15.c
-index 3d55047e9baf..101cebbe68e4 100644
---- a/drivers/hwmon/sht15.c
-+++ b/drivers/hwmon/sht15.c
-@@ -1036,11 +1036,11 @@ static void sht15_remove(struct platform_device *pdev)
- }
- 
- static const struct platform_device_id sht15_device_ids[] = {
--	{ "sht10", sht10 },
--	{ "sht11", sht11 },
--	{ "sht15", sht15 },
--	{ "sht71", sht71 },
--	{ "sht75", sht75 },
-+	{ .name = "sht10", .driver_data = sht10 },
-+	{ .name = "sht11", .driver_data = sht11 },
-+	{ .name = "sht15", .driver_data = sht15 },
-+	{ .name = "sht71", .driver_data = sht71 },
-+	{ .name = "sht75", .driver_data = sht75 },
- 	{ }
- };
- MODULE_DEVICE_TABLE(platform, sht15_device_ids);
--- 
-2.47.3
+2) Drop the code change entirely and instead add a short note in
+ Documentation/gpu/xe/xe_hwmon.rst explaining that on DG2 boards
+ where the OEM routes multiple physical fans through a shared tach
+ line, fan{2,3}_input may read 0, so future contributors don't end
+ up re-attempting the same v1 patch I just sent.
 
+
+What do you think?
+
+
+Raag Jadav <raag.jadav@intel.com> =E4=BA=8E2026=E5=B9=B45=E6=9C=8827=E6=97=
+=A5=E5=91=A8=E4=B8=89 21:53=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Wed, May 27, 2026 at 07:53:11PM +0800, Zhan Wei wrote:
+> > xe_hwmon_pcode_read_fan_control() currently hardcodes *uval =3D 2 when
+> > queried with FSC_READ_NUM_FANS on DG2. This causes fan2_input to be
+> > exposed via sysfs, but on the tested Arc A750 LE (DG2 G10, PCI ID
+> > 0x56a1) fan2_input reads 0 RPM permanently while fan1_input correctly
+> > reports ~800 RPM with both physical fan physically spinning.
+> >
+> > The RPM is calculated delta-based from a tach pulse counter:
+> >
+> >     rotations =3D (reg_val - fi->reg_val_prev) / 2;
+> >
+> > so a constant-zero RPM means the register at offset 0x138170
+> > (BMG_FAN_2_SPEED) simply does not accumulate pulses on DG2 silicon.
+> > The i915 driver does not expose fan2 on DG2 at all -- it only maps
+> > PCU_PWM_FAN_SPEED (0x138140, identical to BMG_FAN_1_SPEED), consistent
+> > with the observation that only one fan tach register is wired on DG2.
+>
+> i915 is for legacy cards (like DG1) which only has a single channel
+> in hardware. I just happen to extend the support to DG2 for the folks
+> that might be using it.
+>
+> > Report a single fan for DG2 to keep the phantom fan2_input out of
+> > sysfs.  Battlemage paths are unchanged.
+> >
+> > Tested on Arc A750 LE (DG2 G10): with this patch applied, fan2_input
+> > no longer appears in /sys/class/hwmon/hwmonX/ and `sensors xe-pci-0300`
+> > shows fan1 only.
+> >
+> > Fixes: 28f79ac609de ("drm/xe/hwmon: expose fan speed")
+> > Signed-off-by: Zhan Wei <zhanwei919@gmail.com>
+> > ---
+> > Open questions for reviewers: this is verified only on DG2 G10. Owners
+> > of G11 (e.g. ASRock Challenger A750) and G12 (e.g. Sparkle Titan A750
+> > with three physical fans) -- does fan2_input or fan3_input ever read
+> > non-zero in your setup? If so, the right fix is a per-subplatform
+> > table rather than a flat 1.
+>
+> There's no straight answer here :)
+>
+> root@DUT2147DG2FRD:/home/gta# cat /sys/class/drm/card0/device/device
+> 0x56a1
+>
+> root@DUT2147DG2FRD:/home/gta# sensors xe-pci-0300
+> xe-pci-0300
+> Adapter: PCI adapter
+> pkg:         758.00 mV
+> fan1:         636 RPM
+> fan2:         652 RPM
+> pkg:          +47.0=C2=B0C
+> vram:         +50.0=C2=B0C
+> pkg:              N/A  (max =3D 190.00 W)
+> pkg:          14.37 kJ
+>
+>
+> The way this works is upto the OEMs how they design their cards. Some reu=
+se
+> a single channel for multiple physical fans while some use 1:1 mapped mul=
+tiple
+> channels for each fan.
+>
+> This is unfortunately not possible to figure out from the driver without
+> FSC_READ_NUM_FANS command (which has been found to be not working on some
+> cards and hence the hardcoded value).
+>
+> Raag
+>
+> >  drivers/gpu/drm/xe/xe_hwmon.c | 10 ++++++++--
+> >  1 file changed, 8 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/xe/xe_hwmon.c b/drivers/gpu/drm/xe/xe_hwmo=
+n.c
+> > index de3f2aeffc3f..2a60a76b1971 100644
+> > --- a/drivers/gpu/drm/xe/xe_hwmon.c
+> > +++ b/drivers/gpu/drm/xe/xe_hwmon.c
+> > @@ -860,9 +860,15 @@ static int xe_hwmon_pcode_read_fan_control(const s=
+truct xe_hwmon *hwmon, u32 sub
+> >  {
+> >       struct xe_tile *root_tile =3D xe_device_get_root_tile(hwmon->xe);
+> >
+> > -     /* Platforms that don't return correct value */
+> > +     /*
+> > +      * The PCODE FAN_SPEED_CONTROL subcommands return an error on DG2=
+, so we
+> > +      * answer the FSC_READ_NUM_FANS query here. DG2 only wires a sing=
+le fan
+> > +      * tachometer register (BMG_FAN_1_SPEED =3D=3D 0x138140, shared w=
+ith i915's
+> > +      * PCU_PWM_FAN_SPEED); BMG_FAN_2/3_SPEED read 0 on DG2 silicon. R=
+eporting
+> > +      * one fan keeps a phantom fan2_input that always reads 0 out of =
+sysfs.
+> > +      */
+> >       if (hwmon->xe->info.platform =3D=3D XE_DG2 && subcmd =3D=3D FSC_R=
+EAD_NUM_FANS) {
+> > -             *uval =3D 2;
+> > +             *uval =3D 1;
+> >               return 0;
+> >       }
+> >
+> > --
+> > 2.43.0
+> >
