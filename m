@@ -1,167 +1,135 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C0EA3542F8
-	for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2026 10:36:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0C563D79FE
+	for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2026 11:09:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779878215; cv=none; b=J2xcFJOZnga02m3IHhI6FbjWqaq8wJ+a6ybgt2OKxcGDUXFjDOWPEJgUqciNqUzsUKOUfrFP0Pdbyqm3JyoeI7sfxykPT6fc0FSlbd7cQsSlkFp+9p8r/ecXjfuiY9qEe/e4UW8hgaiWU1yl/2NzAC5bv0A2DGtNjRoqx4vMd9E=
+	t=1779880165; cv=none; b=ou+9Oaq8VVbGtnulUOzPS9eGTk0SgDZN/+zMgIXR0LMu3JEAAIMrR6kjZVkoxnE0IbfAJJqwo6ZKffz3GqvMRDCKuIq09cUPWzoWwbWOAGKR2b4yVjeiK4td+sn080ck6gR0v4kl/Ghvt1BSDYSZI2xL+LT6g3J+h26s+DwS7qI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779878215; c=relaxed/simple;
-	bh=SXtRyAPYjmLBkqWK09BDVXral5MU/RL7sHaNTMGkBG4=;
+	s=arc-20240116; t=1779880165; c=relaxed/simple;
+	bh=Tgua3Ald+BsvCmXAZ8g8viq3G1amhbzcc9FW4vi7FjQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=dT8aV+7Ts3lFDqBiXt00M4BVJ+WtYzwVOwJiMBNpPXiQidlXdGOmlfs+FPI3AZr0Fx9YpJ9Fn1gok8edg3RtUdH7qauiRRElrRftuKdsRSS42gimHoapkEi3auS+34JUWdruUJ3mYYAmEuR3bfAGdTgZonr4NdKHz0yIBmXBd54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wq4UczNf; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=bQvflNIKvcQOHYBstjO89FxFVFI573Cc+frYCZCT54lBEQxamb4Wj8AMIoRYkkdm1coTqPAWm+GQIRS9nhJLjz8D11rOYGL6hjJbz0WawvELzT4vRYzcIipmGD4baq8VHTG/iHlkqh4RlsNkTl5ghpPj97icJs0DDcXbpo8cMIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kvv3yKTL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wq4UczNf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FE8C1F000E9;
-	Wed, 27 May 2026 10:36:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kvv3yKTL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 682BB1F000E9;
+	Wed, 27 May 2026 11:09:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779878214;
-	bh=Jpl63VasiIVflcrsJ7GsU09hM653EYKhYKEB+oBvQ90=;
+	s=k20260515; t=1779880163;
+	bh=RcRCtydzAhP/g9++hhQllYGzRNwi7+UIDqaRtK1RlYA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Wq4UczNfArxO1Ck0FYx668UsDEOV5159W+91tKtw1AQh5Tln+cUQlUj0eJKqu4XhE
-	 jEAIfDmxJmA4cVmgvpKZoW88LFFpfpPngR5o1Adhq1sgu0UdBue6gs6wxVQ1AqTMtM
-	 Y9CRDxUQz8bCBKwWGJ7ai+aMpaL5jPNwK40jAmWHMXKE0L6Kip4nzmjhBrp+5joAcQ
-	 xlWHHRR15aH/8DoPQPuiCc03Y2Pv/do3h3S0xXQgaR1TsV70F7JPd55lOE0aCbWIUr
-	 cBXS/5knv1XrdtmpOY00NUh2eX7SyqCoSsHHUZL03qq7C2vmM06qGPZkTNpKABfg2N
-	 ZG8h+TU+6mxOw==
+	b=Kvv3yKTLuxqO+uwzWkMZkqWYiGp5AOH2ANFz/fiiaJOmh8l0aTOuFDpON1BNtwjCz
+	 +efedf46yx77+f48QVC9RrUkZ90/93/O5ecqlradCZ+W1LzWL+mugA0iGYuCAcNpo+
+	 P3hSN1jiL8xF2qKHI8biIkeWcY6jgMwx/Va2uuQwDbsHBnUjPU3NfjPulSWWscmY1K
+	 kfpR+Bc0J4EMpsoyPQ2M5BsSZ5BUpO8FNncaJ5rMNyV8DZ7BUigVY1NR5H1YCjOS9J
+	 neAl3vcB6YDpbrfHGmEyBHtHxmWKT7ZVFX7rXGGBLFxUhq5PELkxxT9TPyOlK2pGWH
+	 +c5YCVuI5g4dg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 1/4] hwmon: (gpd-fan): drop global driver data and
- use per-device allocation
+Subject: Re: [PATCH 2/4] hwmon: (gpd-fan): Initialize EC before registering
+ hwmon device
 Reply-To: sashiko-reviews@lists.linux.dev
 To: xiaopeitux@foxmail.com
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <tencent_75F6B92FD7C3883C6E762A08C842AF971307@qq.com>
-References: <tencent_75F6B92FD7C3883C6E762A08C842AF971307@qq.com>
+In-Reply-To: <tencent_C41E4EE8E6305D772246B899A9BA2011BC09@qq.com>
+References: <tencent_C41E4EE8E6305D772246B899A9BA2011BC09@qq.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 27 May 2026 10:36:53 +0000
-Message-Id: <20260527103654.4FE8C1F000E9@smtp.kernel.org>
+Date: Wed, 27 May 2026 11:09:22 +0000
+Message-Id: <20260527110923.682BB1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Race conditions between sysfs operations and hardware access in pr=
-obe and remove due to incorrect lifecycle management.
-- [High] Arithmetic underflow in `gpd_wm2_read_pwm()` causes valid 0 PWM va=
-lues to be treated as errors.
+- [High] Arithmetic underflow in gpd_wm2_read_pwm() when the EC hardware re=
+gister returns 0, leading to a misleading -EPERM error returned to userspac=
+e.
+- [High] The driver exclusively reserves shared Super I/O ports, which can =
+cause conflicts with ACPI or other drivers.
+- [High] The driver lacks PM suspend/resume callbacks, causing the EC initi=
+alization and fan state to be lost after a sleep cycle, effectively breakin=
+g the fix applied in probe.
 --
 
-commit ea545fb4792b8155ce8756f3eaef0ff4a1ea0d74
+commit deb9d21f0612d3df813e1c0b98382347fd4bf6f2
 Author: Pei Xiao <xiaopei01@kylinos.cn>
 
-hwmon: (gpd-fan): drop global driver data and use per-device allocation
+hwmon: (gpd-fan): Initialize EC before registering hwmon device
 
-This commit replaces the global driver data with a per-device allocated
-struct. This allows the driver to support multiple instances and better
-aligns with standard kernel practices.
+Move the gpd_init_ec() call to before devm_hwmon_device_register_with_info
+in the probe function. With the previous ordering, the hwmon device was
+exposed to userspace before EC initialization completed, risking invalid
+reads.
 
 > diff --git a/drivers/hwmon/gpd-fan.c b/drivers/hwmon/gpd-fan.c
-> index 80de5f20781eb..7284babd4f5c9 100644
+> index 7284babd4f5c9..745b3fb9e3a49 100644
 > --- a/drivers/hwmon/gpd-fan.c
 > +++ b/drivers/hwmon/gpd-fan.c
-[ ... ]
-> -static int gpd_wm2_read_pwm(void)
-> +static int gpd_wm2_read_pwm(struct gpd_fan_data *data)
->  {
-> -	const struct gpd_fan_drvdata *const drvdata =3D gpd_driver_priv.drvdata;
-> +	const struct gpd_fan_drvdata *drvdata =3D data->drvdata;
->  	u8 var;
+> @@ -643,6 +643,7 @@ static int gpd_fan_probe(struct platform_device *pdev)
 > =20
-> -	gpd_ecram_read(drvdata->pwm_write, &var);
-> +	gpd_ecram_read(drvdata, drvdata->pwm_write, &var);
+>  	dev_set_drvdata(dev, data);
 > =20
->  	// Match gpd_generic_write_pwm(u8) below
->  	return DIV_ROUND_CLOSEST((var - 1) * 255, (drvdata->pwm_max - 1));
+> +	gpd_init_ec(data);
 
 [Severity: High]
-This isn't a bug introduced by this patch, but is there an arithmetic
-underflow here if the EC returns 0?
+This isn't a bug introduced by this patch, but moving this initialization
+raises a question about system suspend. The driver does not appear to
+implement PM suspend/resume callbacks.
 
-If the fan is stopped and var is 0, the expression (var - 1) promotes to an
-int and evaluates to -1. Multiplying by 255 and passing to DIV_ROUND_CLOSEST
-yields a negative result.
+After a system suspend, the EC loses its state and may return to an
+uninitialized state. Since gpd_init_ec() is only called in the probe
+function, won't the hardware fall back into the broken state where RPM
+reads return 0 and PWM writes have no effect after waking up?
 
-When this propagates back up to gpd_fan_hwmon_read(), it gets caught by the
-error check:
+[Severity: High]
+This is a pre-existing issue, but I noticed an arithmetic underflow could
+occur in another part of the driver when the EC returns 0:
 
-gpd_fan_hwmon_read()
-    ret =3D gpd_read_pwm(data);
-    if (ret < 0)
-        return ret;
+drivers/hwmon/gpd-fan.c:gpd_wm2_read_pwm() {
+	...
+	gpd_ecram_read(drvdata, drvdata->pwm_write, &var);
 
-Could this cause valid 0 PWM values to be incorrectly treated as errors
-instead of properly reporting a 0 PWM input?
+	// Match gpd_generic_write_pwm(u8) below
+	return DIV_ROUND_CLOSEST((var - 1) * 255, (drvdata->pwm_max - 1));
+}
 
-[ ... ]
-> @@ -624,24 +629,42 @@ static int gpd_fan_probe(struct platform_device *pd=
-ev)
-[ ... ]
+If the EC firmware returns 0 (for example, if uninitialized or the fan is
+stopped), (var - 1) evaluates to -1. This causes the division to return a
+negative value, which the hwmon core misinterprets as an error code like
+-EPERM or -ENOENT. Does this break sysfs PWM reads for stopped or
+uninitialized fans?
+
+[Severity: High]
+This is also a pre-existing issue, but I noticed the driver exclusively
+reserves shared Super I/O ports during probe:
+
+drivers/hwmon/gpd-fan.c:gpd_fan_probe() {
+	...
+	res =3D platform_get_resource(pdev, IORESOURCE_IO, 0);
+	...
+	region =3D devm_request_region(dev, res->start,
+				     resource_size(res), DRIVER_NAME);
+	...
+}
+
+Standard kernel practice requires using request_muxed_region() temporarily
+during each read/write transaction to serialize access across different
+subsystems. By using devm_request_region(), doesn't this permanently
+reserve these ports and risk causing conflicts and initialization failures
+for other system resources like watchdogs or ACPI?
+
 >  	hwdev =3D devm_hwmon_device_register_with_info(dev,
 >  						     DRIVER_NAME,
-> -						     NULL,
-> +						     data,
->  						     &gpd_fan_chip_info,
->  						     NULL);
->  	if (IS_ERR(hwdev))
->  		return dev_err_probe(dev, PTR_ERR(hwdev),
->  				     "Failed to register hwmon device\n");
-> =20
-> -	gpd_init_ec();
-> +	gpd_init_ec(data);
-> =20
->  	return 0;
->  }
-
-[Severity: High]
-This isn't a bug introduced by this patch, but is there a race condition
-between sysfs operations and hardware access during probe?
-
-Because devm_hwmon_device_register_with_info() is called before
-gpd_init_ec(), hwmon sysfs attributes are exposed to userspace immediately.
-Since the EC I/O involves a stateful 5-step sequence on shared index/data
-ports (0x2E/0x2F), could concurrent sysfs operations interleave with the
-unprotected outb/inb sequences in gpd_init_ec() and corrupt the index
-selection?
-
-I note that a later commit in the patch series ("hwmon: (gpd-fan): Initiali=
-ze
-EC before registering hwmon device") appears to address this issue.
-
+>  						     data,
 [ ... ]
-> -static void gpd_fan_remove(__always_unused struct platform_device *pdev)
-> +static void gpd_fan_remove(struct platform_device *pdev)
->  {
-> -	gpd_driver_priv.pwm_enable =3D AUTOMATIC;
-> -	gpd_set_pwm_enable(AUTOMATIC);
-> +	struct gpd_fan_data *data =3D dev_get_drvdata(&pdev->dev);
-> +
-> +	if (data) {
-> +		data->pwm_enable =3D AUTOMATIC;
-> +		gpd_set_pwm_enable(data, AUTOMATIC);
-> +	}
->  }
-
-[Severity: High]
-This is also a pre-existing issue, but does device removal have a similar
-race condition?
-
-The driver modifies the hardware state here via gpd_set_pwm_enable() to
-restore AUTOMATIC mode. However, because devres teardown occurs after
-remove() returns, the sysfs attributes are still registered and accessible.
-
-Could concurrent sysfs accesses during this removal window corrupt EC RAM
-offsets? I see another patch in the series ("hwmon: (gpd-fan): fix race
-condition between device removal and sysfs access") handles this, but
-wanted to point it out.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1779876412.gi=
-t.xiaopei01@kylinos.cn?part=3D1
+t.xiaopei01@kylinos.cn?part=3D2
