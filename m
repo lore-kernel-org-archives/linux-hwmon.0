@@ -1,114 +1,545 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F035F8F7D;
-	Wed, 27 May 2026 05:30:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2E393D0926;
+	Wed, 27 May 2026 08:06:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779859829; cv=none; b=GJCHGyoox5SUBXh+ktQO5TYSQKJylcecC14HjJWC0ZT0OEv1QsqzZvxEy3tDxMSO2eeCtpd12e/IMUcx5U7HUH30BE5vTz3FeMBe3x4Hqkk3VINGu67jsQenGur4w6qk9DxYIsw9Cl9shAM3KfG6PalrvSWEFxr7A2RLFsqy16g=
+	t=1779869182; cv=none; b=PvKmYSCH1zw7dj6ypgf50QM7DcGiE+lnut7irz2+hyiSLdFEpZoVNFljeor3HbgN5Wfbpl1fc4IjfA0Cav9xZUSfEru1dDxPkjLnfO/bT3ACYZe9NA6UtiZ8BiAGtinVLJY44oaS+uPdQh3pq5EVziWYYvyYvuoG0vCMM/Vs8qU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779859829; c=relaxed/simple;
-	bh=gWRR3lFZteuSwPaDP846U+sIYk+e5paPuqAtxCkrqTM=;
-	h=From:Subject:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hN+8gMI63FaD6tv5ZMekYxqZZOf4o4y7qHyMoezb7NSqWA+tr9PLTEqAfO6/x94lGbj2Sg5AWqpyU5gDDX1RFExJfLUK/82wF7PR8x6KVLb+ImrCnCDg/yuXAsHNyQ+pm8p51M7K2M9JizNYY1wpPQtpipcXbz2cWaBTbq7N0/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QSRyF5WU; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QSRyF5WU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86B171F000E9;
-	Wed, 27 May 2026 05:30:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779859827;
-	bh=N12PznAmzQFrxom6G627P217T68RYNRBF6GT196WR7U=;
-	h=From:Subject:Reply-To:Cc:In-Reply-To:References:Date;
-	b=QSRyF5WURdNug8+a3+6Ph35MPTO18iSyOBcF2IESvxd46akOJWqRiY0iHfQTlwWtt
-	 9JobSMm38p+3p0/v+D3YXj9+MQWukHiV5mmiIcQqE70DNUY0aZKbtmSOKbOzIPrcB1
-	 qNIBRH9YlY0oag5ZGIedWvG71N9fKd4NgNnJHbNHUCXnYC6/8bXJLDIEm3IPCoAaZd
-	 QtSeft+A9CVu6dcwe03j+5tKkd1tKAyszDAWU4NJUDbVQ40YDw+aC15xXqilqMb4rd
-	 AyKpHVDFHlN4u6QFqJfO3lYj0roMs/gR/NwEqwMNYt3rvH4e7RxZTWUCasHSJry2j4
-	 TsJiuJyzWgj1Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/2] hwmon: (pmbus/max20860a) Add driver for Analog
- Devices MAX20860A
-Reply-To: sashiko-reviews@lists.linux.dev
-Cc: robh@kernel.org, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, conor+dt@kernel.org
-In-Reply-To: <20260527045409.9092-3-sanman.pradhan@hpe.com>
-References: <20260527045409.9092-3-sanman.pradhan@hpe.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 27 May 2026 05:30:27 +0000
-Message-Id: <20260527053027.86B171F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1779869182; c=relaxed/simple;
+	bh=bxlT6UkHoN3c5awY2qoRi8isYI70Q6yZSGzo4+NimCQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=ZRxDXgLi+qtGD1ZH7HGcfYSoQkNBy30LIioOXmamJRellIvDcq3nV1K+ETMOfjeM+xa1pJWxjQ6yKgqkHjhsPTQDDpUnPMgLgRgfsDkeotMQw/uiSQlrJi/b7mzh1NaI8IyU9nE6skBNcwbt20d36ndyrsIfzC85a5xblVla2X4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: eca02b6c59a211f1aa26b74ffac11d73-20260527
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:81184604-cbbd-4285-97fb-c3bb8f8d28ed,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:e7bac3a,CLOUDID:74bd2b243e8e27a6526928c607e76e63,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|865|898,TC:nil,Content:0
+	|15|52,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,O
+	SI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: eca02b6c59a211f1aa26b74ffac11d73-20260527
+X-User: xiaopei01@kylinos.cn
+Received: from [10.42.12.251] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <xiaopei01@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
+	with ESMTP id 371809988; Wed, 27 May 2026 16:06:11 +0800
+Message-ID: <f57b051f-391a-47cb-999c-4803e7eabd99@kylinos.cn>
+Date: Wed, 27 May 2026 16:06:09 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] hwmon: (gpd-fan): remove global variable
+ gpd_driver_priv
+To: Guenter Roeck <linux@roeck-us.net>, cryolitia@uniontech.com,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1775378028.git.xiaopei01@kylinos.cn>
+ <8b19b6bd73d0f9659d41cbeec6fcdfd4ddf59035.1775378028.git.xiaopei01@kylinos.cn>
+ <91a16188-c95b-4d6a-b5fc-dd959aa3fc30@kylinos.cn>
+ <720aafa0-01bd-4a74-871f-cfa8fb4c4f88@roeck-us.net>
+From: Pei Xiao <xiaopei01@kylinos.cn>
+In-Reply-To: <720aafa0-01bd-4a74-871f-cfa8fb4c4f88@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Writing 0x20 to PMBUS_WRITE_PROTECT causes the PMBus core to lock =
-sysfs configuration attributes as read-only.
---
 
-commit 6a162d6f1757daa1f8dd5d77f833404928b847be
-Author: Sanman Pradhan <psanman@juniper.net>
 
-hwmon: (pmbus/max20860a) Add driver for Analog Devices MAX20860A
+在 2026/5/22 21:52, Guenter Roeck 写道:
+> On 5/21/26 22:50, Pei Xiao wrote:
+>>
+>> After all, using the global variable |gpd_driver_priv|
+>> does not comply with driver development specifications.
+>>
+>
+> I had marked this patch "changes requested", though I don't recall
+> the reason. Comment inline. Please fix and resubmit, together with
+> the next patch of the series but excluding the third patch.
+>
+> Thanks,
+> Guenter
+>
+>>   Friendly ping.
+>>
+>> Pei.
+>> Thanks!
+>> 在 2026/4/5 16:40, Pei Xiao 写道:
+>>> Replace the global state gpd_driver_priv with per-device private data
+>>> (struct gpd_fan_data) allocated in probe. This allows the driver to
+>>> support multiple instances in the future and aligns with kernel best
+>>> practices.
+>>>
+>>> Signed-off-by: Pei Xiao <xiaopei01@kylinos.cn>
+>>> ---
+>>>   drivers/hwmon/gpd-fan.c | 211 ++++++++++++++++++++++------------------
+>>>   1 file changed, 116 insertions(+), 95 deletions(-)
+>>>
+>>> diff --git a/drivers/hwmon/gpd-fan.c b/drivers/hwmon/gpd-fan.c
+>>> index 80de5f20781e..5a9d07cd29ab 100644
+>>> --- a/drivers/hwmon/gpd-fan.c
+>>> +++ b/drivers/hwmon/gpd-fan.c
+>>> @@ -40,12 +40,11 @@ enum FAN_PWM_ENABLE {
+>>>       AUTOMATIC    = 2,
+>>>   };
+>>>   -static struct {
+>>> +struct gpd_fan_data {
+>>>       enum FAN_PWM_ENABLE pwm_enable;
+>>>       u8 pwm_value;
+>>> -
+>>>       const struct gpd_fan_drvdata *drvdata;
+>>> -} gpd_driver_priv;
+>>> +};
+>>>     struct gpd_fan_drvdata {
+>>>       const char *board_name; // Board name for module param comparison
+>>> @@ -249,10 +248,10 @@ static const struct gpd_fan_drvdata *gpd_module_drvdata[] = {
+>>>   };
+>>>     // Helper functions to handle EC read/write
+>>> -static void gpd_ecram_read(u16 offset, u8 *val)
+>>> +static void gpd_ecram_read(const struct gpd_fan_drvdata *drvdata, u16 offset, u8 *val)
+>>>   {
+>>> -    u16 addr_port = gpd_driver_priv.drvdata->addr_port;
+>>> -    u16 data_port = gpd_driver_priv.drvdata->data_port;
+>>> +    u16 addr_port = drvdata->addr_port;
+>>> +    u16 data_port = drvdata->data_port;
+>>>         outb(0x2E, addr_port);
+>>>       outb(0x11, data_port);
+>>> @@ -270,10 +269,10 @@ static void gpd_ecram_read(u16 offset, u8 *val)
+>>>       *val = inb(data_port);
+>>>   }
+>>>   -static void gpd_ecram_write(u16 offset, u8 value)
+>>> +static void gpd_ecram_write(const struct gpd_fan_drvdata *drvdata, u16 offset, u8 value)
+>>>   {
+>>> -    u16 addr_port = gpd_driver_priv.drvdata->addr_port;
+>>> -    u16 data_port = gpd_driver_priv.drvdata->data_port;
+>>> +    u16 addr_port = drvdata->addr_port;
+>>> +    u16 data_port = drvdata->data_port;
+>>>         outb(0x2E, addr_port);
+>>>       outb(0x11, data_port);
+>>> @@ -291,198 +290,198 @@ static void gpd_ecram_write(u16 offset, u8 value)
+>>>       outb(value, data_port);
+>>>   }
+>>>   -static int gpd_generic_read_rpm(void)
+>>> +static int gpd_generic_read_rpm(struct gpd_fan_data *data)
+>>>   {
+>>> -    const struct gpd_fan_drvdata *const drvdata = gpd_driver_priv.drvdata;
+>>> +    const struct gpd_fan_drvdata *drvdata = data->drvdata;
+>>>       u8 high, low;
+>>>   -    gpd_ecram_read(drvdata->rpm_read, &high);
+>>> -    gpd_ecram_read(drvdata->rpm_read + 1, &low);
+>>> +    gpd_ecram_read(drvdata, drvdata->rpm_read, &high);
+>>> +    gpd_ecram_read(drvdata, drvdata->rpm_read + 1, &low);
+>>>         return (u16)high << 8 | low;
+>>>   }
+>>>   -static int gpd_wm2_read_rpm(void)
+>>> +static int gpd_wm2_read_rpm(struct gpd_fan_data *data)
+>>>   {
+>>> +    const struct gpd_fan_drvdata *drvdata = data->drvdata;
+>>> +
+>>>       for (u16 pwm_ctr_offset = GPD_PWM_CTR_OFFSET;
+>>>            pwm_ctr_offset <= GPD_PWM_CTR_OFFSET + 2; pwm_ctr_offset++) {
+>>>           u8 PWMCTR;
+>>>   -        gpd_ecram_read(pwm_ctr_offset, &PWMCTR);
+>>> +        gpd_ecram_read(drvdata, pwm_ctr_offset, &PWMCTR);
+>>>             if (PWMCTR != 0xB8)
+>>> -            gpd_ecram_write(pwm_ctr_offset, 0xB8);
+>>> +            gpd_ecram_write(drvdata, pwm_ctr_offset, 0xB8);
+>>>       }
+>>>   -    return gpd_generic_read_rpm();
+>>> +    return gpd_generic_read_rpm(data);
+>>>   }
+>>>     // Read value for fan1_input
+>>> -static int gpd_read_rpm(void)
+>>> +static int gpd_read_rpm(struct gpd_fan_data *data)
+>>>   {
+>>> -    switch (gpd_driver_priv.drvdata->board) {
+>>> +    switch (data->drvdata->board) {
+>>>       case win4_6800u:
+>>>       case win_mini:
+>>>       case duo:
+>>>       case mpc2:
+>>> -        return gpd_generic_read_rpm();
+>>> +        return gpd_generic_read_rpm(data);
+>>>       case win_max_2:
+>>> -        return gpd_wm2_read_rpm();
+>>> +        return gpd_wm2_read_rpm(data);
+>>>       }
+>>>         return 0;
+>>>   }
+>>>   -static int gpd_wm2_read_pwm(void)
+>>> +static int gpd_wm2_read_pwm(struct gpd_fan_data *data)
+>>>   {
+>>> -    const struct gpd_fan_drvdata *const drvdata = gpd_driver_priv.drvdata;
+>>> +    const struct gpd_fan_drvdata *drvdata = data->drvdata;
+>>>       u8 var;
+>>>   -    gpd_ecram_read(drvdata->pwm_write, &var);
+>>> +    gpd_ecram_read(drvdata, drvdata->pwm_write, &var);
+>>>         // Match gpd_generic_write_pwm(u8) below
+>>>       return DIV_ROUND_CLOSEST((var - 1) * 255, (drvdata->pwm_max - 1));
+>>>   }
+>>>     // Read value for pwm1
+>>> -static int gpd_read_pwm(void)
+>>> +static int gpd_read_pwm(struct gpd_fan_data *data)
+>>>   {
+>>> -    switch (gpd_driver_priv.drvdata->board) {
+>>> +    switch (data->drvdata->board) {
+>>>       case win_mini:
+>>>       case duo:
+>>>       case win4_6800u:
+>>>       case mpc2:
+>>> -        switch (gpd_driver_priv.pwm_enable) {
+>>> +        switch (data->pwm_enable) {
+>>>           case DISABLE:
+>>>               return 255;
+>>>           case MANUAL:
+>>> -            return gpd_driver_priv.pwm_value;
+>>> +            return data->pwm_value;
+>>>           case AUTOMATIC:
+>>>               return -EOPNOTSUPP;
+>>>           }
+>>>           break;
+>>>       case win_max_2:
+>>> -        return gpd_wm2_read_pwm();
+>>> +        return gpd_wm2_read_pwm(data);
+>>>       }
+>>>       return 0;
+>>>   }
+>>>     // PWM value's range in EC is 1 - pwm_max, cast 0 - 255 to it.
+>>> -static inline u8 gpd_cast_pwm_range(u8 val)
+>>> +static inline u8 gpd_cast_pwm_range(const struct gpd_fan_drvdata *drvdata, u8 val)
+>>>   {
+>>> -    const struct gpd_fan_drvdata *const drvdata = gpd_driver_priv.drvdata;
+>>> -
+>>>       return DIV_ROUND_CLOSEST(val * (drvdata->pwm_max - 1), 255) + 1;
+>>>   }
+>>>   -static void gpd_generic_write_pwm(u8 val)
+>>> +static void gpd_generic_write_pwm(struct gpd_fan_data *data, u8 val)
+>>>   {
+>>> -    const struct gpd_fan_drvdata *const drvdata = gpd_driver_priv.drvdata;
+>>> +    const struct gpd_fan_drvdata *drvdata = data->drvdata;
+>>>       u8 pwm_reg;
+>>>   -    pwm_reg = gpd_cast_pwm_range(val);
+>>> -    gpd_ecram_write(drvdata->pwm_write, pwm_reg);
+>>> +    pwm_reg = gpd_cast_pwm_range(drvdata, val);
+>>> +    gpd_ecram_write(drvdata, drvdata->pwm_write, pwm_reg);
+>>>   }
+>>>   -static void gpd_duo_write_pwm(u8 val)
+>>> +static void gpd_duo_write_pwm(struct gpd_fan_data *data, u8 val)
+>>>   {
+>>> -    const struct gpd_fan_drvdata *const drvdata = gpd_driver_priv.drvdata;
+>>> +    const struct gpd_fan_drvdata *drvdata = data->drvdata;
+>>>       u8 pwm_reg;
+>>>   -    pwm_reg = gpd_cast_pwm_range(val);
+>>> -    gpd_ecram_write(drvdata->pwm_write, pwm_reg);
+>>> -    gpd_ecram_write(drvdata->pwm_write + 1, pwm_reg);
+>>> +    pwm_reg = gpd_cast_pwm_range(drvdata, val);
+>>> +    gpd_ecram_write(drvdata, drvdata->pwm_write, pwm_reg);
+>>> +    gpd_ecram_write(drvdata, drvdata->pwm_write + 1, pwm_reg);
+>>>   }
+>>>     // Write value for pwm1
+>>> -static int gpd_write_pwm(u8 val)
+>>> +static int gpd_write_pwm(struct gpd_fan_data *data, u8 val)
+>>>   {
+>>> -    if (gpd_driver_priv.pwm_enable != MANUAL)
+>>> +    if (data->pwm_enable != MANUAL)
+>>>           return -EPERM;
+>>>   -    switch (gpd_driver_priv.drvdata->board) {
+>>> +    switch (data->drvdata->board) {
+>>>       case duo:
+>>> -        gpd_duo_write_pwm(val);
+>>> +        gpd_duo_write_pwm(data, val);
+>>>           break;
+>>>       case win_mini:
+>>>       case win4_6800u:
+>>>       case win_max_2:
+>>>       case mpc2:
+>>> -        gpd_generic_write_pwm(val);
+>>> +        gpd_generic_write_pwm(data, val);
+>>>           break;
+>>>       }
+>>>         return 0;
+>>>   }
+>>>   -static void gpd_win_mini_set_pwm_enable(enum FAN_PWM_ENABLE pwm_enable)
+>>> +static void gpd_win_mini_set_pwm_enable(struct gpd_fan_data *data, enum FAN_PWM_ENABLE pwm_enable)
+>>>   {
+>>>       switch (pwm_enable) {
+>>>       case DISABLE:
+>>> -        gpd_generic_write_pwm(255);
+>>> +        gpd_generic_write_pwm(data, 255);
+>>>           break;
+>>>       case MANUAL:
+>>> -        gpd_generic_write_pwm(gpd_driver_priv.pwm_value);
+>>> +        gpd_generic_write_pwm(data, data->pwm_value);
+>>>           break;
+>>>       case AUTOMATIC:
+>>> -        gpd_ecram_write(gpd_driver_priv.drvdata->pwm_write, 0);
+>>> +        gpd_ecram_write(data->drvdata, data->drvdata->pwm_write, 0);
+>>>           break;
+>>>       }
+>>>   }
+>>>   -static void gpd_duo_set_pwm_enable(enum FAN_PWM_ENABLE pwm_enable)
+>>> +static void gpd_duo_set_pwm_enable(struct gpd_fan_data *data, enum FAN_PWM_ENABLE pwm_enable)
+>>>   {
+>>>       switch (pwm_enable) {
+>>>       case DISABLE:
+>>> -        gpd_duo_write_pwm(255);
+>>> +        gpd_duo_write_pwm(data, 255);
+>>>           break;
+>>>       case MANUAL:
+>>> -        gpd_duo_write_pwm(gpd_driver_priv.pwm_value);
+>>> +        gpd_duo_write_pwm(data, data->pwm_value);
+>>>           break;
+>>>       case AUTOMATIC:
+>>> -        gpd_ecram_write(gpd_driver_priv.drvdata->pwm_write, 0);
+>>> +        gpd_ecram_write(data->drvdata, data->drvdata->pwm_write, 0);
+>>>           break;
+>>>       }
+>>>   }
+>>>   -static void gpd_wm2_set_pwm_enable(enum FAN_PWM_ENABLE enable)
+>>> +static void gpd_wm2_set_pwm_enable(struct gpd_fan_data *data, enum FAN_PWM_ENABLE enable)
+>>>   {
+>>> -    const struct gpd_fan_drvdata *const drvdata = gpd_driver_priv.drvdata;
+>>> +    const struct gpd_fan_drvdata *drvdata = data->drvdata;
+>>>         switch (enable) {
+>>>       case DISABLE:
+>>> -        gpd_generic_write_pwm(255);
+>>> -        gpd_ecram_write(drvdata->manual_control_enable, 1);
+>>> +        gpd_generic_write_pwm(data, 255);
+>>> +        gpd_ecram_write(drvdata, drvdata->manual_control_enable, 1);
+>>>           break;
+>>>       case MANUAL:
+>>> -        gpd_generic_write_pwm(gpd_driver_priv.pwm_value);
+>>> -        gpd_ecram_write(drvdata->manual_control_enable, 1);
+>>> +        gpd_generic_write_pwm(data, data->pwm_value);
+>>> +        gpd_ecram_write(drvdata, drvdata->manual_control_enable, 1);
+>>>           break;
+>>>       case AUTOMATIC:
+>>> -        gpd_ecram_write(drvdata->manual_control_enable, 0);
+>>> +        gpd_ecram_write(drvdata, drvdata->manual_control_enable, 0);
+>>>           break;
+>>>       }
+>>>   }
+>>>     // Write value for pwm1_enable
+>>> -static void gpd_set_pwm_enable(enum FAN_PWM_ENABLE enable)
+>>> +static void gpd_set_pwm_enable(struct gpd_fan_data *data, enum FAN_PWM_ENABLE enable)
+>>>   {
+>>>       if (enable == MANUAL)
+>>>           // Set pwm_value to max firstly when switching to manual mode, in
+>>>           // consideration of device safety.
+>>> -        gpd_driver_priv.pwm_value = 255;
+>>> +        data->pwm_value = 255;
+>>>   -    switch (gpd_driver_priv.drvdata->board) {
+>>> +    switch (data->drvdata->board) {
+>>>       case win_mini:
+>>>       case win4_6800u:
+>>>       case mpc2:
+>>> -        gpd_win_mini_set_pwm_enable(enable);
+>>> +        gpd_win_mini_set_pwm_enable(data, enable);
+>>>           break;
+>>>       case duo:
+>>> -        gpd_duo_set_pwm_enable(enable);
+>>> +        gpd_duo_set_pwm_enable(data, enable);
+>>>           break;
+>>>       case win_max_2:
+>>> -        gpd_wm2_set_pwm_enable(enable);
+>>> +        gpd_wm2_set_pwm_enable(data, enable);
+>>>           break;
+>>>       }
+>>>   }
+>>> @@ -505,15 +504,16 @@ static umode_t gpd_fan_hwmon_is_visible(__always_unused const void *drvdata,
+>>>       return 0;
+>>>   }
+>>>   -static int gpd_fan_hwmon_read(__always_unused struct device *dev,
+>>> +static int gpd_fan_hwmon_read(struct device *dev,
+>>>                     enum hwmon_sensor_types type, u32 attr,
+>>>                     __always_unused int channel, long *val)
+>>>   {
+>>> +    struct gpd_fan_data *data = dev_get_drvdata(dev);
+>>>       int ret;
+>>>         if (type == hwmon_fan) {
+>>>           if (attr == hwmon_fan_input) {
+>>> -            ret = gpd_read_rpm();
+>>> +            ret = gpd_read_rpm(data);
+>>>                 if (ret < 0)
+>>>                   return ret;
+>>> @@ -524,10 +524,10 @@ static int gpd_fan_hwmon_read(__always_unused struct device *dev,
+>>>       } else if (type == hwmon_pwm) {
+>>>           switch (attr) {
+>>>           case hwmon_pwm_enable:
+>>> -            *val = gpd_driver_priv.pwm_enable;
+>>> +            *val = data->pwm_enable;
+>>>               return 0;
+>>>           case hwmon_pwm_input:
+>>> -            ret = gpd_read_pwm();
+>>> +            ret = gpd_read_pwm(data);
+>>>                 if (ret < 0)
+>>>                   return ret;
+>>> @@ -540,27 +540,29 @@ static int gpd_fan_hwmon_read(__always_unused struct device *dev,
+>>>       return -EOPNOTSUPP;
+>>>   }
+>>>   -static int gpd_fan_hwmon_write(__always_unused struct device *dev,
+>>> +static int gpd_fan_hwmon_write(struct device *dev,
+>>>                      enum hwmon_sensor_types type, u32 attr,
+>>>                      __always_unused int channel, long val)
+>>>   {
+>>> +    struct gpd_fan_data *data = dev_get_drvdata(dev);
+>>> +
+>>>       if (type == hwmon_pwm) {
+>>>           switch (attr) {
+>>>           case hwmon_pwm_enable:
+>>>               if (!in_range(val, 0, 3))
+>>>                   return -EINVAL;
+>>>   -            gpd_driver_priv.pwm_enable = val;
+>>> +            data->pwm_enable = val;
+>>>   -            gpd_set_pwm_enable(gpd_driver_priv.pwm_enable);
+>>> +            gpd_set_pwm_enable(data, data->pwm_enable);
+>>>               return 0;
+>>>           case hwmon_pwm_input:
+>>>               if (!in_range(val, 0, 256))
+>>>                   return -EINVAL;
+>>>   -            gpd_driver_priv.pwm_value = val;
+>>> +            data->pwm_value = val;
+>>>   -            return gpd_write_pwm(val);
+>>> +            return gpd_write_pwm(data, val);
+>>>           }
+>>>       }
+>>>   @@ -584,26 +586,27 @@ static struct hwmon_chip_info gpd_fan_chip_info = {
+>>>       .info = gpd_fan_hwmon_channel_info
+>>>   };
+>>>   -static void gpd_win4_init_ec(void)
+>>> +static void gpd_win4_init_ec(struct gpd_fan_data *data)
+>>>   {
+>>> +    const struct gpd_fan_drvdata *drvdata = data->drvdata;
+>>>       u8 chip_id, chip_ver;
+>>>   -    gpd_ecram_read(0x2000, &chip_id);
+>>> +    gpd_ecram_read(drvdata, 0x2000, &chip_id);
+>>>         if (chip_id == 0x55) {
+>>> -        gpd_ecram_read(0x1060, &chip_ver);
+>>> -        gpd_ecram_write(0x1060, chip_ver | 0x80);
+>>> +        gpd_ecram_read(drvdata, 0x1060, &chip_ver);
+>>> +        gpd_ecram_write(drvdata, 0x1060, chip_ver | 0x80);
+>>>       }
+>>>   }
+>>>   -static void gpd_init_ec(void)
+>>> +static void gpd_init_ec(struct gpd_fan_data *data)
+>>>   {
+>>>       // The buggy firmware won't initialize EC properly on boot.
+>>>       // Before its initialization, reading RPM will always return 0,
+>>>       // and writing PWM will have no effect.
+>>>       // Initialize it manually on driver load.
+>>> -    if (gpd_driver_priv.drvdata->board == win4_6800u)
+>>> -        gpd_win4_init_ec();
+>>> +    if (data->drvdata->board == win4_6800u)
+>>> +        gpd_win4_init_ec(data);
+>>>   }
+>>>     static int gpd_fan_probe(struct platform_device *pdev)
+>>> @@ -611,7 +614,9 @@ static int gpd_fan_probe(struct platform_device *pdev)
+>>>       struct device *dev = &pdev->dev;
+>>>       const struct resource *region;
+>>>       const struct resource *res;
+>>> -    const struct device *hwdev;
+>>> +    struct device *hwdev;
+>>> +    struct gpd_fan_data *data;
+>>> +    const struct gpd_fan_drvdata **match_ptr;
+>>>         res = platform_get_resource(pdev, IORESOURCE_IO, 0);
+>>>       if (!res)
+>>> @@ -624,24 +629,42 @@ static int gpd_fan_probe(struct platform_device *pdev)
+>>>           return dev_err_probe(dev, -EBUSY,
+>>>                        "Failed to request region\n");
+>>>   +    data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+>>> +    if (!data)
+>>> +        return -ENOMEM;
+>>> +
+>>> +    match_ptr = dev_get_platdata(dev);
+>>> +    if (!match_ptr)
+>>> +        return -EINVAL;
+>>> +    data->drvdata = *match_ptr;
+>>> +
+>>> +    data->pwm_enable = AUTOMATIC;
+>>> +    data->pwm_value = 255;
+>>> +
+>>> +    dev_set_drvdata(dev, data);
+>>> +
+>>> +    gpd_init_ec(data);
+>>> +
+>>>       hwdev = devm_hwmon_device_register_with_info(dev,
+>>>                                DRIVER_NAME,
+>>> -                             NULL,
+>>> +                             data,
+>>>                                &gpd_fan_chip_info,
+>>>                                NULL);
+>>>       if (IS_ERR(hwdev))
+>>>           return dev_err_probe(dev, PTR_ERR(hwdev),
+>>>                        "Failed to register hwmon device\n");
+>>>   -    gpd_init_ec();
+>>> -
+>
+> This suspiciously looks like a bug fix which is not mentioned in the
+> commit description. Either explain why it is now needed before hwmon
+> registration and why that was not the case before, or submit as separate
+> bug fix. 
+ok, I will send a separate fix patch. Thanks!
+>>>       return 0;
+>>>   }
+>>>   -static void gpd_fan_remove(__always_unused struct platform_device *pdev)
+>>> +static void gpd_fan_remove(struct platform_device *pdev)
+>>>   {
+>>> -    gpd_driver_priv.pwm_enable = AUTOMATIC;
+>>> -    gpd_set_pwm_enable(AUTOMATIC);
+>>> +    struct gpd_fan_data *data = dev_get_drvdata(&pdev->dev);
+>>> +
+>>> +    if (data) {
+>>> +        data->pwm_enable = AUTOMATIC;
+>>> +        gpd_set_pwm_enable(data, AUTOMATIC);
+>>> +    }
+>>>   }
+>>>     static struct platform_driver gpd_fan_driver = {
+>>> @@ -668,6 +691,7 @@ static int __init gpd_fan_init(void)
+>>>       if (!match) {
+>>>           const struct dmi_system_id *dmi_match =
+>>>               dmi_first_match(dmi_table);
+>>> +
+>>>           if (dmi_match)
+>>>               match = dmi_match->driver_data;
+>>>       }
+>>> @@ -675,10 +699,6 @@ static int __init gpd_fan_init(void)
+>>>       if (!match)
+>>>           return -ENODEV;
+>>>   -    gpd_driver_priv.pwm_enable = AUTOMATIC;
+>>> -    gpd_driver_priv.pwm_value = 255;
+>>> -    gpd_driver_priv.drvdata = match;
+>>> -
+>>>       struct resource gpd_fan_resources[] = {
+>>>           {
+>>>               .start = match->addr_port,
+>>> @@ -690,7 +710,8 @@ static int __init gpd_fan_init(void)
+>>>       gpd_fan_platform_device = platform_create_bundle(&gpd_fan_driver,
+>>>                                gpd_fan_probe,
+>>>                                gpd_fan_resources,
+>>> -                             1, NULL, 0);
+>>> +                             1,
+>>> +                             &match, sizeof(match));
+>
+> Why &match instead of just match ? match is a pointer to driver_data which itself
+> is a pointer. Passing a pointer to a pointer just to dereference it in the probe
+> function doesn't make sense to me. 
+>
+thanks! I will modify to :  match, sizeof(*match));
 
-This commit adds a PMBus client driver for the Analog Devices MAX20860A
-step-down DC-DC switching regulator. It registers the device with the PMBus
-core and configures write protection during probe to enable configuration
-access.
+Pei.
+Thanks for your reiview and  your time!
+>>>         if (IS_ERR(gpd_fan_platform_device)) {
+>>>           pr_warn("Failed to create platform device\n");
+>>
 
-> diff --git a/drivers/hwmon/pmbus/max20860a.c b/drivers/hwmon/pmbus/max208=
-60a.c
-> new file mode 100644
-> index 0000000000000..9af6888ed07e1
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/max20860a.c
-[ ... ]
-> +/*
-> + * Writing 0x20 to WRITE_PROTECT disables all write protection except
-> + * for the WRITE_PROTECT command itself, enabling configuration access.
-> + */
-> +#define MAX20860A_WRITE_ENABLE	0x20
-[ ... ]
-> +static int max20860a_probe(struct i2c_client *client)
-> +{
-> +	int ret;
-> +
-> +	ret =3D i2c_smbus_write_byte_data(client, PMBUS_WRITE_PROTECT,
-> +					MAX20860A_WRITE_ENABLE);
-> +	if (ret < 0)
-> +		return dev_err_probe(&client->dev, ret,
-> +				     "failed to configure write protection\n");
-> +
-> +	return pmbus_do_probe(client, &max20860a_info);
-
-[Severity: High]
-Does this write to PMBUS_WRITE_PROTECT actually cause the PMBus core to lock
-the sysfs configuration attributes as read-only?
-
-The driver intentionally writes 0x20 to PMBUS_WRITE_PROTECT to allow runtime
-configuration access. However, per the PMBus specification, 0x20 corresponds
-to PB_WP_VOUT (BIT 5).
-
-When pmbus_do_probe() is subsequently called, the PMBus core (in
-pmbus_init_wp()) reads this register back. Seeing the 0x20 (PB_WP_VOUT) val=
-ue,
-the core sets the PMBUS_WRITE_PROTECTED flag in the driver's state. This
-causes the PMBus core to unconditionally export all hardware monitoring lim=
-it
-attributes as read-only (0444) in sysfs, which seems to defeat the intent of
-enabling runtime configuration.
-
-If 0x20 is indeed a device-specific value that enables writes, should the
-driver either set PMBUS_NO_WRITE_PROTECT via platform data before calling
-pmbus_do_probe(), or implement a read_byte_data hook to mask the read? Or if
-the device complies with the standard PMBus specification, should 0x00 be
-written instead to enable all writes?
-
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260527045409.9092=
--1-sanman.pradhan@hpe.com?part=3D2
