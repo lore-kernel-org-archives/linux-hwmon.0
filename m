@@ -1,356 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3895A3E8353
-	for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2026 09:34:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B48683EE1FE;
+	Wed, 27 May 2026 10:10:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779874469; cv=none; b=lpuqDz9uERIqGZIZ0yRF1G5M7B4Z+NGQxNPp/gUjZ61YnRhI2zv17l/vEg/M++z/6uq4qGrum/m9WMRBaH0YnvE9a99bY3MhR89UDVWvwZdi1GNPBmr8V9ENpy2D+Ds3eET+gWdSvchl2wJR/2Cpg/JspHMiJmNWC5r0bCHVQkk=
+	t=1779876640; cv=none; b=PYorDo6SH3mLJegBh1lCVeLd4jIn1q62pAZfTfUQoQPrwAFm1xKyuTmuPkrdLel2XTZ+8PgTcfKJ+BmBB+fkC3c77ziulAVL+WhLJSnwMNRkGrIMf5xsff+GqIZ9HO8VHeg99pQl3Nx0GAI1/s5pKzEmIWLVcVbXIFLehQeUus0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779874469; c=relaxed/simple;
-	bh=HFaBw89fynZhFDM8/DonARlUIS8aP1MWZDiDlTM9cNs=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=EBMAk08xqzlz7ak8pj1hzsprKFgGTtVyc5FjNDXUpsh80VNb+EejZgUXELj858skb+krcCwVtV02nvxsMPeYgziYzL7ogCHJwdaNOBW7YkhgY2LPvS/kG52Wz5u2WnzIg2NYp687VszIAvch9JGCIOzDZCq2sczXNVGGIczEdsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZaZbO4jO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779876640; c=relaxed/simple;
+	bh=Txfg+Hzix0HWOSwFZ1+cnaaAmWZ5u2eHDWYU3UrmbOc=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=cY7wDAyEm6NpE8vOFoLlZfKsOdgLGbiThKeN0ojvD4UYkicIH90bXU9EfNfh3yPeiOlW7mQafY+8+8UsYdiC4IPzKHw5Yu6qJikLH5d6R+3R3ML26eLvN3TIzrb/YlvuYYFpeLO5ADtlt9bCI2lY/a2Nx3oeZufaJF2KrTlynVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=Jk3PwPUq; arc=none smtp.client-ip=162.62.57.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZaZbO4jO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B33061F00A3A;
-	Wed, 27 May 2026 09:34:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779874467;
-	bh=uIaR9Z8H4vs4kj7NJAMjj+erzwl7UloDyR2tf6eljuU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ZaZbO4jOnb+TfoSzdXIuntSUlbvmIQPMzJqajcBKVt3YW3cy+awkUOzGNKmkP+njw
-	 eBexBPXXWJCT75uF0zjcO65mUTmT1dp22bE/TfvlExjV5RQcCxwP6KJxQx4eTuRazs
-	 DanfzuPmFGkSTKhPOGAO0V1/8/SvKax8UfThdXr+7llHO+hx+1v5FI23oQNlUxUZYL
-	 xOA69xLb52wMC8V+t1gdk4ydID9N5SYlvtSwBwMsDx8YerIlwQDraH5zVE4X2zYVYK
-	 u6ORXoMa2TeMWYdonGkc6Wy8yAqnOnhZzeBv8QU3NBkuN155UN3Us1pZDQNHAeKpzH
-	 8cE1MgskloNzw==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC] hwmon: add a driver for the temp/voltage sensor on
- PolarFire SoC
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Conor Dooley" <conor@kernel.org>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260527-earring-bully-eb4a268c2e68@spud>
-References: <20260527-earring-bully-eb4a268c2e68@spud>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 27 May 2026 09:34:27 +0000
-Message-Id: <20260527093427.B33061F00A3A@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="Jk3PwPUq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1779876627;
+	bh=KsgvP/X6BLRZI6bofiK589RwvRWG9YAwf3kih/ggoKA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=Jk3PwPUqK6RUk81s+XGUX5ZIfEziVsbo12pPDUacleVKM6EtrHfNQu6p/Wo6/gTa5
+	 h0T+8n6ILtYpJMRT2NKez7oEShft6hkdV2l6NV1ThIMtHZ2yb59mm1tx5EQPd2binW
+	 zzM1wvRfnCCt4WrRi+EQ+3If2HkQkZvKU8hdy4qM=
+Received: from localhost.localdomain ([116.128.244.169])
+	by newxmesmtplogicsvrsza73-0.qq.com (NewEsmtp) with SMTP
+	id 29704417; Wed, 27 May 2026 18:10:23 +0800
+X-QQ-mid: xmsmtpt1779876625tpuan9mi5
+Message-ID: <tencent_BE546590D05E58278E73E2AE41117CDC8B08@qq.com>
+X-QQ-XMAILINFO: NC/J3CrDtaBbg33Wv5T5KDBh30yJFJI9O4LXS+hj2V4QS/lcjVu+NWR5AU8Jgk
+	 T5WvHSrTs5NHht/bht53o2LagcucpFM8uMtFtxMrZcGPFWoENLF1q/gouP7XEqSOF2ZiiXP20yRK
+	 mn03Tknd4ZwCwGZy3JVog25ki9ayvlz7Lp3PF/DxsIWbJLEOz5VkTWyUw7v0U6ju1SigKcB5X/BU
+	 sa854lnGSciLZYEpN21Nq1n0fP0ula8Vddcd50ESp24zOiKuZ7SR4QYZ5nrvcn9W6RYtwBV6u1c0
+	 669YkI4kQTM+yrIWgrvgKvITi8VYu+T7Cp8O9nCNp53rDuk+Snf3Eky53l9OHR3zSYoAmN1qWm43
+	 /dbklTv2im4Nsy+CI3B9dq6yx4ypprLGq/pmVyrhEfcSfoHGDvlhrxt7kZ97vDYooBrMRMt+/GNP
+	 qKEvAINM7PwtLVgyzNnNBas7xAgZGVIQWjv+Tiw8GrG/fLoEEgio4KEez10tm7bzCDta3SPYZu9r
+	 GkLl/hNXf6KuoO00R82BYuikdPdas5Hkk3sY6kV8AiY86La0Od1cpeydQtlscr9brFnqh13MZb+2
+	 jxEmh+TViVS2+ru6M8no0vTUymr8XAPsPgCdd+eKXKEIEatjWE+a3kZisTo5jut8AxQlFwQNlOVF
+	 sB9T5IOGrxNCPPfgzPwf/RSeuyZtjQDmHCB8cOvRFa69kY/Ld26yLyVS55h/b9s91EvtOpWHOpDY
+	 dJs1KxalnBgVaLhMkzm0KnLdE3/LXhGI78x8/2howJg3Zhm6DimlbrpSlCZTijAe+j71gT2/3NJ9
+	 kI0LxOuzkek+uN25Y9liE0um4SsWfdQ4TG37cNzSgbgAcD9gD3sAn/gXlUhXmAGWmlCgu8SgUHn4
+	 BN7rNwNag3VQdwEyNWo9uSgv8kpL0m4tKKnRWnlid7BHARh4qDCri/JRQlDHgsO3nLDozrV5fF+9
+	 zxjXe5P+XT6Wcwd5yhNWtmsOV+TAcBCbHGC7RjGcgvv5YGLnovcjXa2jF4yWCp9yT2njrspW+FbK
+	 Qy4qBiBv4cR2aasBzzYSbdRXSBRV1hoGGS4cS/cZibqxcY3ln1WqXt8xFcQ9E=
+X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
+From: xiaopeitux@foxmail.com
+To: cryolitia@uniontech.com,
+	linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Pei Xiao <xiaopei01@kylinos.cn>
+Subject: [PATCH v2 3/4] hwmon: (gpd-fan): upgrade log level from warn to err for platform device creation failure
+Date: Wed, 27 May 2026 18:10:20 +0800
+X-OQ-MSGID: <5a8effec924ef3374103d762a0e62564966dd376.1779876412.git.xiaopei01@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1779876412.git.xiaopei01@kylinos.cn>
+References: <cover.1779876412.git.xiaopei01@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 10 potential issue=
-(s) to consider:
-- [High] Masking out the sign bit of a two's complement value incorrectly r=
-eports small negative voltages as massive positive spikes.
-- [High] Hardware initialization occurs after device registration and uses =
-`regmap_write`, creating a race condition and clobbering existing register =
-state.
-- [High] Missing return value checks for `regmap_read` expose uninitialized=
- kernel stack memory to userspace.
-- [High] Blind dereference of `pdev->dev.parent` in the probe function.
-- [Medium] The `update_interval` attribute is exposed and expected in micro=
-seconds, violating the hwmon sysfs ABI standard.
-- [Medium] Boolean sysfs enable attributes fail to properly reject negative=
- values.
-- [Medium] The driver uses syscon APIs but its Kconfig entry does not depen=
-d on or select `MFD_SYSCON`.
-- [Medium] The driver ignores return values from hardware write operations,=
- masking potential hardware failures.
-- [Low] Using a bitwise right shift (`>> 4`) on potentially negative temper=
-atures relies on implementation-defined behavior and rounds incorrectly.
-- [Low] The comment explaining the absolute zero constant is mathematically=
- incorrect.
---
+From: Pei Xiao <xiaopei01@kylinos.cn>
 
-commit 0cc52b7af906d819cbf1265ac544bb7d896a59da
-Author: Lars Randers <lranders@mail.dk>
+When platform_create_bundle() fails, the error is fatal and prevents the
+driver from loading. Use pr_err() instead of pr_warn() to clearly indicate
+a critical failure.
 
-hwmon: add a driver for the temp/voltage sensor on PolarFire SoC
+Signed-off-by: Pei Xiao <xiaopei01@kylinos.cn>
+---
+changes in v2: fix build error
+---
+ drivers/hwmon/gpd-fan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Add a driver for the temperature and voltage sensors on PolarFire SoC.
-The temperature reports how hot the die is, and the voltages are the
-SoC's 1.05, 1.8 and 2.5 volt rails respectively.
+diff --git a/drivers/hwmon/gpd-fan.c b/drivers/hwmon/gpd-fan.c
+index 745b3fb9e3a4..1b57a5add934 100644
+--- a/drivers/hwmon/gpd-fan.c
++++ b/drivers/hwmon/gpd-fan.c
+@@ -712,7 +712,7 @@ static int __init gpd_fan_init(void)
+ 							 match, sizeof(*match));
+ 
+ 	if (IS_ERR(gpd_fan_platform_device)) {
+-		pr_warn("Failed to create platform device\n");
++		pr_err("Failed to create platform device\n");
+ 		return PTR_ERR(gpd_fan_platform_device);
+ 	}
+ 
+-- 
+2.25.1
 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 14e4cea48acc4..194c8116fd018 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-
-[ ... ]
-
-> @@ -930,6 +930,18 @@ config SENSORS_JC42
->  	  This driver can also be built as a module. If so, the module
->  	  will be called jc42.
-> =20
-> +config SENSORS_POLARFIRE_SOC_TVS
-> +	tristate "PolarFire SoC (MPFS) temperature and voltage sensor"
-> +	depends on POLARFIRE_SOC_MAILBOX
-
-[Severity: Medium]
-Should this Kconfig entry depend on or select MFD_SYSCON?
-
-The driver explicitly calls device_node_to_regmap() which is provided by
-the syscon framework. If MFD_SYSCON is not enabled, the fallback stub
-unconditionally returns -ENOTSUPP, which would cause the driver to silently
-fail to probe at runtime without producing any build-time warnings.
-
-> +	help
-> +	  This driver adds support for the PolarFire SoC (MPFS) Temperature and
-
-[ ... ]
-
-> diff --git a/drivers/hwmon/tvs-mpfs.c b/drivers/hwmon/tvs-mpfs.c
-> new file mode 100644
-> index 0000000000000..30d7baa808c4a
-> --- /dev/null
-> +++ b/drivers/hwmon/tvs-mpfs.c
-
-[ ... ]
-
-> +/*
-> + * For all of these the value in millivolts is stored in 16 bits, with a=
-n upper
-> + * sign bit and a lower 2 bits of decimal. These masks discard the sign =
-bit and
-> + * decimal places, because if Linux is running these voltages cannot be =
-negative
-> + * and so avoid having to convert to two's complement.
-> + */
-> +#define MPFS_OUTPUT0_V1P8_MASK	GENMASK(30, 19)
-> +#define MPFS_OUTPUT0_V1P05_MASK	GENMASK(14, 3)
-> +#define MPFS_OUTPUT1_V2P5_MASK	GENMASK(14, 3)
-
-[Severity: High]
-Does discarding the sign bit cause issues with slight negative readings?
-
-If the hardware measures a slightly negative voltage due to sensor noise
-(for example, -1 mV), wouldn't the two's complement representation have the
-integer bits set to all 1s?
-
-Since the driver discards the sign bit and extracts the remaining bits via
-FIELD_GET, it seems this could result in reporting the maximum positive
-integer (4095 mV) instead of clamping to 0.
-
-> +
-> +/*
-> + * The register map claims that the temperature is stored in bits 31:16,=
- but
-> + * application note "AN4682: PolarFire FPGA Temperature and Voltage Sens=
-or"
-> + * says that 31 is reserved. Temperature is in kelvin, so what's probabl=
-y a
-> + * sign bit has no value anyway.
-> + */
-> +#define MPFS_OUTPUT1_TEMP_MASK GENMASK(30, 16)
-> +
-> +#define MPFS_TVS_INTERVAL_MASK GENMASK(15, 8)
-> +#define MPFS_TVS_INTERVAL_OFFSET 8
-> +/* The interval register is in increments of 32 us */
-> +#define MPFS_TVS_INTERVAL_SCALE 32
-> +
-> +/* 273.5 in 11.4 fixed-point notation */
-> +#define MPFS_TVS_K_TO_C 0x1112
-
-[Severity: Low]
-Is this comment mathematically accurate?
-
-The value 0x1112 represents 4370 in decimal, which is 273.125 when divided
-by 16. Absolute zero is 273.15, making 4370 the nearest integer, but the
-comment mentions 273.5.
-
-> +
-> +enum mpfs_tvs_sensors {
-
-[ ... ]
-
-> +static int mpfs_tvs_voltage_read(struct mpfs_tvs *data, u32 attr,
-> +				 int channel, long *val)
-> +{
-> +	u32 tmp, control;
-> +
-> +	if (attr !=3D hwmon_in_input && attr !=3D hwmon_in_enable)
-> +		return -EOPNOTSUPP;
-> +
-> +	regmap_read(data->regmap, MPFS_TVS_CTRL, &control);
-
-[Severity: High]
-Can a failed regmap_read() leave the control variable uninitialized?
-
-If the underlying bus read fails, the control variable remains uninitialize=
-d,
-and this function could extract bits from uninitialized kernel stack memory
-and return it to userspace via sysfs. This also appears to happen with the
-tmp variable in the other read functions below.
-
-> +
-> +	switch (channel) {
-> +	case SENSOR_V2P5:
-
-[ ... ]
-
-> +static int mpfs_tvs_voltage_write(struct mpfs_tvs *data, u32 attr,
-> +				  int channel, long val)
-> +{
-> +	u32 tmp;
-> +
-> +	if (attr !=3D hwmon_in_enable)
-> +		return -EOPNOTSUPP;
-> +
-> +	switch (channel) {
-> +	case SENSOR_V2P5:
-> +		if (val > 1)
-> +			return -EINVAL;
-
-[Severity: Medium]
-Does this check properly reject negative inputs?
-
-Because val is a signed long, negative values like -1 will bypass this
-validation. When a negative value is passed to FIELD_PREP, it could
-inadvertently set the enable bit to 1 due to the all-1s binary
-representation.
-
-> +
-> +		tmp =3D FIELD_PREP(MPFS_TVS_CTRL_V2P5_ENABLE, val);
-> +		regmap_update_bits(data->regmap, MPFS_TVS_CTRL,
-> +				   MPFS_TVS_CTRL_V2P5_ENABLE, tmp);
-
-[Severity: Medium]
-Are the return values from regmap_update_bits() intentionally ignored here?
-
-If a hardware write fails, it looks like this unconditionally returns 0,
-which would incorrectly inform userspace that the configuration was
-successfully applied. This pattern seems to occur for other write handlers
-as well.
-
-> +		break;
-> +	case SENSOR_V1P8:
-
-[ ... ]
-
-> +static int mpfs_tvs_temp_read(struct mpfs_tvs *data, u32 attr, long *val)
-> +{
-> +	u32 tmp, control;
-> +
-> +	if (attr !=3D hwmon_temp_input && attr !=3D hwmon_temp_enable)
-> +		return -EOPNOTSUPP;
-> +
-> +	regmap_read(data->regmap, MPFS_TVS_CTRL, &control);
-> +
-> +	if (attr =3D=3D hwmon_temp_enable) {
-> +		*val =3D FIELD_GET(MPFS_TVS_CTRL_TEMP_ENABLE, control);
-> +		return 0;
-> +	}
-> +
-> +	if (!(control & MPFS_TVS_CTRL_TEMP_VALID))
-> +		return -EINVAL;
-> +
-> +	regmap_read(data->regmap, MPFS_TVS_OUTPUT1, &tmp);
-> +	*val =3D FIELD_GET(MPFS_OUTPUT1_TEMP_MASK, tmp);
-> +	*val -=3D MPFS_TVS_K_TO_C;
-> +	*val =3D (1000 * *val) >> 4; /* fixed point (11.4) to millidegrees */
-
-[Severity: Low]
-Does using a bitwise right shift on a potentially negative temperature
-value rely on implementation-defined behavior?
-
-Subtracting MPFS_TVS_K_TO_C can yield a negative number. An arithmetic
-right shift rounds towards negative infinity rather than towards zero like
-standard division, which might introduce minor inaccuracies for sub-zero
-temperatures.
-
-> +
-> +	return 0;
-> +}
-
-[ ... ]
-
-> +static int mpfs_tvs_interval_read(struct mpfs_tvs *data, u32 attr, long =
-*val)
-> +{
-> +	u32 tmp;
-> +
-> +	if (attr !=3D hwmon_chip_update_interval)
-> +		return -EOPNOTSUPP;
-> +
-> +	regmap_read(data->regmap, MPFS_TVS_CTRL, &tmp);
-> +	//TODO: Guenter, update_interval, as implemented here, expects values
-> +	//in microseconds. Is that okay? Most drivers (all that I checked tbh)
-> +	//use milliseconds, but this is an 8-bit value so using ms will have
-> +	//almost no granularity at all.
-> +	*val =3D FIELD_GET(MPFS_TVS_INTERVAL_MASK, tmp) * MPFS_TVS_INTERVAL_SCA=
-LE;
-
-[Severity: Medium]
-Is this exposing the interval in microseconds?
-
-The hwmon sysfs ABI expects update_interval to be expressed in milliseconds.
-Returning microseconds directly could break standard userspace monitoring
-tools and the thermal subsystem that rely on standardized units.
-
-> +
-> +	return 0;
-> +}
-
-[ ... ]
-
-> +static int mpfs_tvs_probe(struct platform_device *pdev)
-> +{
-> +	struct device *hwmon_dev;
-> +	struct mpfs_tvs *data;
-> +
-> +	data =3D devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->regmap =3D device_node_to_regmap(pdev->dev.parent->of_node);
-
-[Severity: High]
-Could pdev->dev.parent be NULL if the platform device is instantiated
-manually?
-
-If a privileged user writes to sysfs to instantiate the device or it is
-bound such that pdev->dev.parent is NULL, would this unconditional
-dereference trigger a NULL pointer dereference?
-
-> +	if (IS_ERR(data->regmap))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(data->regmap),
-> +				     "Failed to find syscon regmap\n");
-> +
-> +	hwmon_dev =3D devm_hwmon_device_register_with_info(&pdev->dev, "mpfs_tv=
-s",
-> +							 data,
-> +							 &mpfs_tvs_chip_info,
-> +							 NULL);
-> +	if (IS_ERR(hwmon_dev))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(hwmon_dev),
-> +				     "hwmon device registration failed.\n");
-> +
-> +	regmap_write(data->regmap, MPFS_TVS_CTRL, MPFS_TVS_CTRL_ENABLE_ALL);
-
-[Severity: High]
-Does registering the device before enabling the sensors create a race windo=
-w?
-
-The thermal core or userspace might attempt to read sensors after
-devm_hwmon_device_register_with_info() completes but before they are
-enabled.=20
-
-Also, does this regmap_write() clobber the update_interval field?
-Overwriting the entire control register with MPFS_TVS_CTRL_ENABLE_ALL
-appears to zero out bits 15:8, destroying any interval settings made during
-the race window or pre-configured by the bootloader.
-
-> +
-> +	return 0;
-> +}
-> +
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260527-earring-bu=
-lly-eb4a268c2e68@spud?part=3D1
