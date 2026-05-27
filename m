@@ -1,63 +1,63 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C42F64279FE
-	for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2026 14:35:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6F79428473
+	for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2026 14:35:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779892525; cv=none; b=lp2wewIcze8PwoaIAvwLJpDHtiwpeUWWHbUbbCMFuVu7ycLCIG+dJAusm1dcJ3rh9gBIcnm2aYobap/PUGWI+EX4/VcqJpqpf6LQCnvq45ejyo/vPo8vX3eO7azvClDWnJS0zOjkeyfCxxcttsKsHLqtTAvsrAfqCMOnguZ/4HI=
+	t=1779892526; cv=none; b=dmx4SuAnMVqMIwef7FsHsUiFcYp/bqFea2YyKRQAaF0t2iGil3+s/fcqHdYQ9sg5TTVWkDPCTrh+AHf341sHBYkzRKk6gZDm5VkTP8K01syptoXGJJaxYka/cXfLrERPcx+5NNs/2i7sMxpmpl4xxKCAzGPXr3LdoRwUTeUxZkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779892525; c=relaxed/simple;
-	bh=oDWKqtDhTF1qyHxIbD15S5vg4OO35WpqEhsWVqAUDSQ=;
+	s=arc-20240116; t=1779892526; c=relaxed/simple;
+	bh=TWxFzk7O5xEuF0mHiNBBjmZM46S7a97bXD7ugdZfY7c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iJZHGn+AuAXiFulmM5tLx2cmYGn/FxUptum558mOcqXiq4AAqZw4hR/G4j6Q+tuQQ5QcBTpFXiMKk3fTwdJBeTx//KE2jn3eT+vp0jLuhHrexFZmEhOrw2r4A3xmEo1RlgU28uRO6THK/hgAsApiVQqaD1eluNugzTPP+WGRaqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RoG+FgdL; arc=none smtp.client-ip=209.85.128.45
+	 MIME-Version; b=mFq7rqye92RNs0ROfp6A46H7Y8NFZZ/Vo8hetbSe3DtKzd4K8jNWCwyLk7jBQIqft18sqdeAXx/xMsSH5dzQ5pCeBnKRCnL0SossBv6P7MF3fQ/QQPl8Ig508RZ56Ss987mkJSw0Sth9s4emLob2jbrW78AOyf7Rz/kxgrkZKrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bHy5OeV6; arc=none smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RoG+FgdL"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-49039a8851fso62667645e9.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2026 07:35:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bHy5OeV6"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-4585a116a4aso9848495f8f.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2026 07:35:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779892522; x=1780497322; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779892523; x=1780497323; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vn57LpZx1VKSH9/vRJzOE7/6rh8rI01XjeBWgZUoy7c=;
-        b=RoG+FgdLKrtK1jTsy5RAddq13AfKNprgBuI9MLyAeKup5P5xmw8HJ3YjW9zCahlmAx
-         GWjkNW4/5rdOmwYPTFC4UDU3FzPbPxjmxyo7tPBX8QHl/yew3iLA7bkhp9kTrJ6I+qZU
-         PPPyaJ90JBbEV9LgaSdCW7bvY8ZgfRIAoS9JWxXQiODESVLXX8J15XQb70q1q3wR49lV
-         OqxWjNmnuhdQ4kDkp+siSkkZlFZhFSebWys4u7EyzAzrlTdVLMBLmYH7su//GfLshYOU
-         tsiFwZqvNLbFxubfPUXUhIgH0tO7IfPdtWK6PTQRzP1qtxPUfZrc1y9alpEPzjfgf7kk
-         nh+A==
+        bh=DQu7+1RAsuU643B6dzPPjhrjJvzUIEjr3KyG0F7v8EI=;
+        b=bHy5OeV6MF4SOz2duHxQt99C7W4tfNhjzpooUYmz0Ha6c6VkTheki4JTZwN+49dtX+
+         +OOZHOcOCr7SZ/4BYyX210+iWh4pArgFOySYVOqpGJ7SSxovpRZvXsZF7WcOUAjjPTkO
+         CtCDJC4sHBVgUXuZkjVwXRV83HmTntvleFxhEoMydOWMUw5ykHK9g5vnciRQKjxiK/tS
+         lj5JLfj9KVwPGc+0hPo/8UiG3B1dYGbmAIz5ePrXJ61if4wm1xVYROG6ClS3qaE14LJ8
+         GD77rHn9XkkxjwCQsi4XnVLwzvd9i+AaL/xuy9ZnJTwsKfq6jDTJ8+MKo33rKjMhSRJG
+         0IbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779892522; x=1780497322;
+        d=1e100.net; s=20251104; t=1779892523; x=1780497323;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=vn57LpZx1VKSH9/vRJzOE7/6rh8rI01XjeBWgZUoy7c=;
-        b=lecVinZBnTL990shQYBxdCRfP2ExllZb6fBxFFQH+Wt/3zmkEntu07GGItLuJacOec
-         VRB/k75p0wgPRQnyyxuJZ8pHfcU9V456fqwrPJiNdOGkajJjICCU+/DMLHVYJ1+E5ooP
-         q43qqZA7+VGx+4OYPkWqny7H7ofFWmtgB/jzAizCGY8nLmgSGYdhpywUWIk3rp4hNMXt
-         fuLzCfjzCd/3oMFX/ae8i4Znqovicr+MUzqR9ri+Yz7qpWL4rWaqJDSOELa9K1aubQL8
-         3fZVaGQpYvIxntXEg40A46tJshH/+/ErS8qdBoZ3D+s+Ra058IsuULAYz2YHAhzeylgk
-         4YFA==
-X-Forwarded-Encrypted: i=1; AFNElJ+hSQyPbr0mJsS7sG54e42+VtNCm0YtgH2BW/VH6l3wefdIdUgy7twt/7QHVXFxY46gsAcKQYAexIovWw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywi/53ENW9i6eQEHsG1wi4TgBU1KNU2DIa77YrDsU/WY1L2Hr42
-	M26HOt15Tclnp1xtOrN24KkMBVmi8pmXvIIk/eoD7sWVRHhqF/3vidDs
-X-Gm-Gg: Acq92OHyyjY5aFTcQ+x7sHYoEOGmNETUiyglQdrKe08SyJ3ozKYp0T/eSyrFlT9L1dQ
-	Oxptj/EeF+Ki65azwk9mVFwRH7dXX1W8lQmutnWcdAaNNbPuVHqaiBDguH5bD/yuzlFezAlgvDn
-	kE2dWnaX9zG1wnatMJ9AYXIF1/5yV54R0VXz4XeOLtN4yYSSDCCF5X6Ket3/dEoQR88iACMdryT
-	UAbtOnttH6rLtrWyHuEtXVN546Ykt9lL7ZDpy6V9mHvyZ5zFE0LwmzVPyQ+Fw8rT5ti8TBpEopW
-	MyyzRLvvJ4nYxrP2Wn9a8wZm0Fya2fUnU7pSyq4xKtiqNGenN2XAM7eFfjMiydPdt4bYewYUjrB
-	YwGOGutVHBQ3Y8kgz1tDDQ0LY7nN00Pm/Y04fiVQqQEmGhTey61DHHDLTBO/yC9bWa7pRp5ifCf
-	fgg2bd
-X-Received: by 2002:a05:600c:458b:b0:490:47e3:929a with SMTP id 5b1f17b1804b1-49047e394a6mr366016045e9.6.1779892521796;
-        Wed, 27 May 2026 07:35:21 -0700 (PDT)
+        bh=DQu7+1RAsuU643B6dzPPjhrjJvzUIEjr3KyG0F7v8EI=;
+        b=TdWNANo5/Ui2hM1kBvaJP9//+DFRHb/5dO1QuClX1U78Z/xpxrLbORFzBy6dn7Dyof
+         nb7oLvRp5HXRZai3Em48HfbOEA4kiG5Smnk/c2Ty4F/yLEsV6CofwK3tD64xBDbdU3t4
+         GRPwosSdF7J4o0FHNmj9G2Rcmt6Ko0HMviPfg6BwfiHUf0n6To1k5CP/OQAx7+NG/CHO
+         7pRvlvbJabqpWzUkpgpzujfEJKHfRjQE3KkCgbtfr4EJunnjY4MPx+vXK6VZvEpBQ3i9
+         kp1unESKf8Lg2E1qNghQ1MV/o+MaSVTqLCp+GiIvaBRR/cj1Onxei7dBwDfM5/66FXC1
+         b4ww==
+X-Forwarded-Encrypted: i=1; AFNElJ8eeP/rTfshIBnMIsKfOOhdS0v4vV2g+f8Zu9fjq0gTEopS+wMexILDnz4xLQnTpQUpnoUuhETqAfgOzQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxveI/lr2WnXvd+FRj7S7EPPBzwa402Na86v/+lEu7H8b13RHq/
+	pAWmnNXtlB03AtySSDvdAs7R+zG5qofQLms19t1jKfpXP1RhLXiRQzsN
+X-Gm-Gg: Acq92OE0hzBfoqJRaiYG4TKl8rtVkst9rx5UYPRIqSGPgtILjLiczy4GvDFq7XV1XpG
+	JmRdr1S+F6F1g3eo695x/dB5iHDpw9QAfoCaKpNUyE7453VnvUf6PtpZxQ8E3mUSb/NzX0f3rLD
+	rydm6+BndemSqNB+KwNa4FzD6j70M0DY1lyZA9q5CHrw5lbrkXbQK3m0Jk9EVICkmkTw2/hojHU
+	0uBl5wMXH06n5srvvVsbd7A7HkvttFLA7RgPVwkBp6TDFjQIDuuiVMp4lPYpC8qc5R42mwcw5v2
+	Vq/uE4Sk/cRAxpCG0OugXxonBpeX3+yjUjUBeAkD+bP5tEMOmAwyIiGhb/3s7UQS00KtKOVRNPI
+	fOgfVH9qyLEoHfYQxtiob3LW2D1PiVHvKgREcKmuI56NOi5EhhlvwyEohrHShe/DZxBitrxjTse
+	2eN+3K
+X-Received: by 2002:a05:6000:2f81:b0:45a:e3dd:586b with SMTP id ffacd0b85a97d-45eb368847bmr39696399f8f.18.1779892522921;
+        Wed, 27 May 2026 07:35:22 -0700 (PDT)
 Received: from sefo-laptop ([2a02:8071:50c5:5c0::361b])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45edb5584b8sm6239763f8f.11.2026.05.27.07.35.20
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45edb5584b8sm6239763f8f.11.2026.05.27.07.35.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2026 07:35:21 -0700 (PDT)
+        Wed, 27 May 2026 07:35:22 -0700 (PDT)
 From: Wadim Mueller <wafgo01@gmail.com>
 To: Jonathan Cameron <jic23@kernel.org>
 Cc: lars@metafoo.de,
@@ -74,12 +74,12 @@ Cc: lars@metafoo.de,
 	linux-hwmon@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1 2/4] dt-bindings: iio: flow: add Sensirion SLF3x liquid flow sensor
-Date: Wed, 27 May 2026 16:35:02 +0200
-Message-ID: <20260527143515.102794-5-wafgo01@gmail.com>
+Subject: Re: [RFC PATCH v1 1/4] iio: types: add IIO_VOLUMEFLOW channel type
+Date: Wed, 27 May 2026 16:35:03 +0200
+Message-ID: <20260527143515.102794-6-wafgo01@gmail.com>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260526171930.0db4125e@jic23-huawei>
-References: <20260524205112.26638-1-wafgo01@gmail.com> <20260524205112.26638-3-wafgo01@gmail.com> <20260526171930.0db4125e@jic23-huawei>
+In-Reply-To: <20260526171350.6fadc595@jic23-huawei>
+References: <20260524205112.26638-1-wafgo01@gmail.com> <20260524205112.26638-2-wafgo01@gmail.com> <20260526171350.6fadc595@jic23-huawei>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -88,61 +88,42 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Tue, 26 May 2026 17:19:30 +0100
+On Tue, 26 May 2026 17:13:50 +0100
 Jonathan Cameron <jic23@kernel.org> wrote:
 
-> > +description: |
-> > +  Family of digital liquid-flow sensors from Sensirion with I2C interface.
-> > +  The same register map is shared by all family members; sub-types differ
-> > +  only in the flow scale factor exposed by the device and are detected at
-> > +  probe time via the product-information register.  
+> > +What:/sys/bus/iio/devices/iio:deviceX/in_volumeflow_raw
+> > +What:/sys/bus/iio/devices/iio:deviceX/in_volumeflowY_raw
+> > +KernelVersion:6.19
+> > +Contact:linux-iio@vger.kernel.org
+> > +Description:
+> > +Raw (unscaled) volumetric flow rate reading from the channel.
+> > +To convert to standard units (litres / second) apply the
+> > +channel's _scale (and _offset, when present).  
 > 
-> Because that doesn't work for fallback compatibles, we often give devices
-> their own compatibles anyway. Fine to also detect in driver but if we get
-> something that falls back to an SLF3S-0600F I don't think there is any reason
-> to think the subtype will match, so we have to trust DT to have given us
-> all the necessary info.
+> Formatting doesn't match rest of file at all.
 
-Done in v2.  Per-variant compatibles (sensirion,slf3s-0600f,
-sensirion,slf3s-1300f, sensirion,slf3s-4000b) plus a generic
-"sensirion,slf3s" fallback.  The driver picks the variant from
-compatible / id_table .data and uses the product-info sub-type
-only as a sanity hint - unknown sub-type on a recognised
-compatible is dev_dbg() now, which makes the fallback story
-work for future SLF3S parts.
+Done in v2.  The whitespace got lost when pasting from a wrapped
+editor - v2 uses tabs and the same indent as the surrounding
+blocks.
 
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - sensirion,slf3s  
-> 
-> If you don't expect to add  more sensors this in near future would be fine
-> as a const rather than an enum.
+> > +What:/sys/bus/iio/devices/iio:deviceX/in_volumeflow_scale
+> > +What:/sys/bus/iio/devices/iio:deviceX/in_volumeflowY_scale
+> > +KernelVersion:6.19
+> > +Contact:linux-iio@vger.kernel.org
+> > +Description:
+> > +Scale factor applied to raw volumetric flow readings to obtain
+> > +the value in litres per second (l/s).  
+> I'd just add this to the big block of existing _scale.
+> The units etc are all covered in _raw so we don't need to really say more than
+> this exists.
 
-The enum stays (per-variant + fallback now), expressed as
-`oneOf:` of `const:` and a list.
+Done in v2.  The separate _scale stanza is gone; the shared
+_scale block at the top of the file now has one extra line:
 
-> > +  reg:
-> > +    maxItems: 1  
-> 
-> There seems to be an irq. Given bindings should be complete that should
-> be here even if the driver doesn't use it.
+  IIO_VOLUMEFLOW    litres per second
 
-Done in v2.  Optional `interrupts:` (maxItems: 1) - active-low
-data-ready signal.  Driver doesn't use it yet, but the binding
-now matches the hardware.
-
-> > +required:
-> > +  - compatible
-> > +  - reg  
-> 
-> vdd-supply presumably needed for device to function so should be here.
-> From dt-binding point of view we don't care about the kernel providing
-> stub regulators etc.  The supply documentation should reflect what must
-> actually be supplied.
-
-Done in v2.  vdd-supply is in `required:`, paired with
-devm_regulator_get_enable() (no _optional) on the driver side.
+The _raw block stays for the per-channel-type description and
+points at the shared _scale section for the units.
 
 Thanks,
 Wadim
