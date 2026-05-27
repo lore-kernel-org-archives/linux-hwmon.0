@@ -1,163 +1,146 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A784540F8ED;
-	Wed, 27 May 2026 13:53:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 250B43BE635
+	for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2026 14:35:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779890018; cv=none; b=srzF/H/cPV5qrZKNijN0a87Y7dH9oCWq7/WDAjeZbZA2brZKn4tSdMzKq+l8z0YT9hEBOYSdBiePU4hz56ipBLenQXgP5CaZnMNfqV7q+WBcMVAYHeu35j9JJCn/vtkEBIU2O789b2pCuqdZGo2oJo25LZGWBXAJSy+irI4DuHs=
+	t=1779892520; cv=none; b=jDFDFgWDY6V2A7PUEaq0rCKk3K+KvZK9ovmJY32L3d2n9jcP/1q0JGNZgO/VLzd1SkMsAYxLR34jKEVEsbgqwfI82NDb4yL79EyabcjjOl908oxqMkWInoDVO3oP4/DgFE0S4QTutJev16wvzEp3jlkwEFnA6qhnXBxe74AAulQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779890018; c=relaxed/simple;
-	bh=HMhVZCDTnX1vcdC4g6fRFUA+elHTRzFClqwaPTSmEdQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZiiIowzBPnE3vsRs1hhNUgTkp++7POpkfDfkaVhk5mDf+G5eCsGHANLpdk6kOsz09eb7FQSxcFz01K5oS320s8FbisbXdyYVX9pebZOlcTREFLyyBFtq8mGWbDUtuEHRDdj6DksP0orShACQ6UQAFJV6RYWOk8TKC2c3ElRq4cs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LQp3VxUb; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1779892520; c=relaxed/simple;
+	bh=usrk/brkiF0gDQ4v/eaKp9rFYPDNwORJnY4Wqr4tzRM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=UCNM7Yr3uEu7ejDEK8D+DpqHg+6zgJHYqsQ/mACWaw4r6+WixZ5+wtDOYLgOM7LKoTZhPzafMc+HH3AdpzOQlrYdf9pTwx5AymWKFDsynQH9Dalsujo1oRAZy3y46s+Ja5k7unCf3dFtN+xPa5iMnZgyFweUxhsRL4JKcTxhQds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HB2kG0Cj; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LQp3VxUb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779890013; x=1811426013;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=HMhVZCDTnX1vcdC4g6fRFUA+elHTRzFClqwaPTSmEdQ=;
-  b=LQp3VxUbilAz6Pao7On7m8PFhKSqistfhGrcAraqXJK6jeP9TywY3IyG
-   TZ6hwDPLMYSG30qonEYCRUuI2+qOD8wsKnkf6GQhD/FQsC9iHArGfbQot
-   /yeDqE8z16L957r5RPo5Xk2YhaX1b2gQpjbnzcjD18RT5JmTr8Nc8oTfe
-   goHi9tthORsqwwAZcHnHy74ZFjc4Ado9bRfpb29fnv7q0BHLmWDZbIcPh
-   HDji1MKJR+dcoI5DyfbD3GBHKSM7AQxKnIxV5IxJrieF9WK2TMbliWR4n
-   z4n7vws74FNwokMMU64DHVNGyyv+E+p5recrka3oSAY3+2tme61nB6BpH
-   A==;
-X-CSE-ConnectionGUID: +dplOPb+SFmAKsigryIOzA==
-X-CSE-MsgGUID: 5Ae4YitDSdO0bJEvy6RGKA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11799"; a="80569522"
-X-IronPort-AV: E=Sophos;i="6.24,171,1774335600"; 
-   d="scan'208";a="80569522"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2026 06:53:30 -0700
-X-CSE-ConnectionGUID: ClUl9v0NRwCmss1aMoDyCg==
-X-CSE-MsgGUID: aMYHQDb4Rm6/7z5Vn6cH3w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,171,1774335600"; 
-   d="scan'208";a="246527783"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2026 06:53:27 -0700
-Date: Wed, 27 May 2026 15:53:24 +0200
-From: Raag Jadav <raag.jadav@intel.com>
-To: Zhan Wei <zhanwei919@gmail.com>
-Cc: Matthew Brost <matthew.brost@intel.com>,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Andi Shyti <andi.shyti@linux.intel.com>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Guenter Roeck <linux@roeck-us.net>, intel-xe@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HB2kG0Cj"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-45ea19f412aso3807485f8f.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2026 07:35:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779892517; x=1780497317; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kXJMeIed8n1hIt+0o9e1Q/FT5FxrTL6nQCpAB+Niu8A=;
+        b=HB2kG0CjLZb5WmMKkMT9uvRR1UZYZ7JJpYQ243kjmAk96GBg9+pKU3PVDu90hGdZJk
+         eZ5j3ejqATIG3GgqQq8xaWQM5YnZW83kmIylDWd7G+1MCcTzajB6BDywe/m2FVX+i0NK
+         EvuUzNY64JNVZiEzABJUnmPxM8DbAyTyhvycDDd/u5Cat4gJ0UwELgO4EqpcOCePtPzb
+         /uvXB5HGSGqsQz55mcsjld/B7VtcA2MBZAzOdbvr+WZcec8eaOTJF+tEaAtqoK+ixH5U
+         VQ+umW2a54l+XKX8UXupNH+Eb0B0IYpgUMrVEZN50jWXrqb0KGw5YWT4vqWxFvCBZMQ1
+         Y9Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779892517; x=1780497317;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=kXJMeIed8n1hIt+0o9e1Q/FT5FxrTL6nQCpAB+Niu8A=;
+        b=TjRuOZz/NzJYdsJ5pH8OfGM5uxpEOwbEV+QkSLuAiKd7Bpa827hk2UjGS5bbnpbDX5
+         58qAFTp73inIb+sS+fwVm9CweKHiP9sfE6UlivBzlALGFOhPEFnEG5plFXLZnRaudohM
+         8DQSa3DF0UcApxBfbavpqI6ZfmRQM3cCspAuYW6WUTTBHPGbjvjkEjk+MxZ0VvPLHQ9p
+         U+byhi7uipeLWWTpsK0l8gwfnSVd03X0Nx0AaLQluh2LVZpZWfa8EwoPvoPuY14Z1fv8
+         1TtCRNtK8/MD4kDHXRWZa2NNxRpJezrt1xBAWttO3WJpF+rvBQrMqxYRmsjeqosYo2Lk
+         KAzg==
+X-Forwarded-Encrypted: i=1; AFNElJ865XfP9UygTidNHOXQZHz1tvw8pprPXrbptvjlePwRTe8AQK4ns91uXM5QfL5NTUTcj2zSUuPQp/pDYQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2aI92z4CdJ2G20wG8kHG4955+B4qUnNiAFIc2UYyCUXploeZl
+	9a67+82T2N8WY33jD7tLIT5XJbR0sqKnbRe+hKmxUBgYDlagaXl6fTLj
+X-Gm-Gg: Acq92OEA9aTmw9IwIaDV16sqkujNpCsIKzlTe7XUdON9of860Bn5+XvXGpEyQ+d7pgn
+	GddFrFJ9gq+jR1Q0KOppYlk5jy8op+n4AkrFt3dy+ZO40lapbnSCv69/w8iDNvZf4LNIpyY/3I/
+	YJLKBp4d8/RA1P7e2FExxOsYrPeXy86Wm35jVOMx2aCZyOFmtKuZAUB1p7rihCgCvJ6PjajTbJl
+	qh+tEoU6RaRO7qcliXU8dMkJ9R0cXU04eX1tzWTXy8yLVjIcAcdHLWvsBc5oHxWKM8Ni86GFAh6
+	s85SHPQy1BtyQnv1o+vk4bLUyof8wsZu8wSgjjaOZFFiLOd+sffq6qUIRGTtFRMs16hLx9D9BNu
+	bdJX9r6jDPNp1nvFqNOeIkZyO01x/1htrV0AlJ9/VFAkht4vN/s8K+swYSJ0vhj1w24mLtuoVcX
+	4skmwSdd/lEss07do=
+X-Received: by 2002:a05:6000:41e3:b0:43d:50c:6f18 with SMTP id ffacd0b85a97d-45eb38a1687mr33364115f8f.11.1779892517326;
+        Wed, 27 May 2026 07:35:17 -0700 (PDT)
+Received: from sefo-laptop ([2a02:8071:50c5:5c0::361b])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45edb5584b8sm6239763f8f.11.2026.05.27.07.35.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 May 2026 07:35:16 -0700 (PDT)
+From: Wadim Mueller <wafgo01@gmail.com>
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: lars@metafoo.de,
+	dlechner@baylibre.com,
+	nuno.sa@analog.com,
+	andy@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	linux@roeck-us.net,
+	jdelvare@suse.com,
+	ak@it-klinger.de,
+	linux-iio@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] drm/xe/hwmon: report a single fan for DG2 instead of
- two
-Message-ID: <ahb3VMRCQpofblbW@black.igk.intel.com>
-References: <20260527115311.13398-1-zhanwei919@gmail.com>
+Subject: Re: [RFC PATCH v1 0/4] iio: add Sensirion SLF3x liquid flow sensor support
+Date: Wed, 27 May 2026 16:34:58 +0200
+Message-ID: <20260527143515.102794-1-wafgo01@gmail.com>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260526171214.750c2e25@jic23-huawei>
+References: <20260524205112.26638-1-wafgo01@gmail.com> <20260526171214.750c2e25@jic23-huawei>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260527115311.13398-1-zhanwei919@gmail.com>
 
-On Wed, May 27, 2026 at 07:53:11PM +0800, Zhan Wei wrote:
-> xe_hwmon_pcode_read_fan_control() currently hardcodes *uval = 2 when
-> queried with FSC_READ_NUM_FANS on DG2. This causes fan2_input to be
-> exposed via sysfs, but on the tested Arc A750 LE (DG2 G10, PCI ID
-> 0x56a1) fan2_input reads 0 RPM permanently while fan1_input correctly
-> reports ~800 RPM with both physical fan physically spinning.
+On Tue, 26 May 2026 17:12:14 +0100
+Jonathan Cameron <jic23@kernel.org> wrote:
+
+> > 1. Subsystem.  Liquid-flow sensors don't seem to have a home in
+> >    mainline yet.  iio/ feels like the natural place for me, but
+> >    please correct me if hwmon (or somewhere else) is prefered.  
 > 
-> The RPM is calculated delta-based from a tach pulse counter:
+> I'm fine with this type of sensor in IIO, but open to hear from others!
+
+Thanks - keeping it in iio/ for v2.
+
+> > 2. Channel type.  IIO has no flow channel type so far.  The series
+> >    adds IIO_VOLUMEFLOW with _scale in litres per second per LSB,
+> >    so drivers reporting smaller units only need a fractional scale.
+> >    IIO_MASSFLOW (for gas-flow sensors) was left out on purpose --
+> >    happy to add it in the same series if that's more usefull.  
 > 
->     rotations = (reg_val - fi->reg_val_prev) / 2;
+> Would be good to have a little more detail on difference etc to have
+> that discussion.  Superficially I'm assuming this is a compressible vs
+> non compressible thing?
+
+Right - that was the distinction I had in mind:
+
+  - IIO_VOLUMEFLOW: volumetric rate (m^3/s in SI, exposed as l/s),
+    well-defined for an incompressible fluid where the volume at the
+    sensor equals the volume delivered.  This matches all "liquid
+    flow" sensors I'm aware of (and the SLF3S family in particular).
+
+  - IIO_MASSFLOW: mass rate (kg/s), the natural unit for gases because
+    the volumetric rate depends on temperature and pressure.  Most
+    "gas flow" parts on the market (Sensirion SFM3xxx, SFC, MFC
+    devices) actually report a "standard volume flow" (e.g. slm at
+    0 degC and 1013 mbar) which is just a fixed-density restatement
+    of mass flow.
+
+I left IIO_MASSFLOW out of this series because I don't have a driver
+needing it right now, but if you'd prefer I add it as a stub here
+(name + ABI entry) so the two siblings land together, I can fold that
+in for v2 -- happy either way.
+
+> > 3. Subdirectory.  I put the driver in a new drivers/iio/flow/
+> >    since there is no flow subsytem in iio yet.  If colocating with
+> >    drivers/iio/pressure/ (next to sdp500) is preferred I'll respin.  
 > 
-> so a constant-zero RPM means the register at offset 0x138170
-> (BMG_FAN_2_SPEED) simply does not accumulate pulses on DG2 silicon.
-> The i915 driver does not expose fan2 on DG2 at all -- it only maps
-> PCU_PWM_FAN_SPEED (0x138140, identical to BMG_FAN_1_SPEED), consistent
-> with the observation that only one fan tach register is wired on DG2.
+> This is easy to change later if we make a wrong decision. For now I think
+> iio/flow is fine.
 
-i915 is for legacy cards (like DG1) which only has a single channel
-in hardware. I just happen to extend the support to DG2 for the folks
-that might be using it.
+Sticking with drivers/iio/flow/ for v2.
 
-> Report a single fan for DG2 to keep the phantom fan2_input out of
-> sysfs.  Battlemage paths are unchanged.
-> 
-> Tested on Arc A750 LE (DG2 G10): with this patch applied, fan2_input
-> no longer appears in /sys/class/hwmon/hwmonX/ and `sensors xe-pci-0300`
-> shows fan1 only.
-> 
-> Fixes: 28f79ac609de ("drm/xe/hwmon: expose fan speed")
-> Signed-off-by: Zhan Wei <zhanwei919@gmail.com>
-> ---
-> Open questions for reviewers: this is verified only on DG2 G10. Owners
-> of G11 (e.g. ASRock Challenger A750) and G12 (e.g. Sparkle Titan A750
-> with three physical fans) -- does fan2_input or fan3_input ever read
-> non-zero in your setup? If so, the right fix is a per-subplatform
-> table rather than a flat 1.
+Thanks!
 
-There's no straight answer here :)
+v2 is up, addressing the inline review feedback from you and Guenter.
+Dropping the RFC tag since the three high-level questions are
+answered.
 
-root@DUT2147DG2FRD:/home/gta# cat /sys/class/drm/card0/device/device
-0x56a1
-
-root@DUT2147DG2FRD:/home/gta# sensors xe-pci-0300
-xe-pci-0300
-Adapter: PCI adapter
-pkg:         758.00 mV
-fan1:         636 RPM
-fan2:         652 RPM
-pkg:          +47.0°C
-vram:         +50.0°C
-pkg:              N/A  (max = 190.00 W)
-pkg:          14.37 kJ
-
-
-The way this works is upto the OEMs how they design their cards. Some reuse
-a single channel for multiple physical fans while some use 1:1 mapped multiple
-channels for each fan.
-
-This is unfortunately not possible to figure out from the driver without
-FSC_READ_NUM_FANS command (which has been found to be not working on some
-cards and hence the hardcoded value).
-
-Raag
-
->  drivers/gpu/drm/xe/xe_hwmon.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/xe/xe_hwmon.c b/drivers/gpu/drm/xe/xe_hwmon.c
-> index de3f2aeffc3f..2a60a76b1971 100644
-> --- a/drivers/gpu/drm/xe/xe_hwmon.c
-> +++ b/drivers/gpu/drm/xe/xe_hwmon.c
-> @@ -860,9 +860,15 @@ static int xe_hwmon_pcode_read_fan_control(const struct xe_hwmon *hwmon, u32 sub
->  {
->  	struct xe_tile *root_tile = xe_device_get_root_tile(hwmon->xe);
->  
-> -	/* Platforms that don't return correct value */
-> +	/*
-> +	 * The PCODE FAN_SPEED_CONTROL subcommands return an error on DG2, so we
-> +	 * answer the FSC_READ_NUM_FANS query here. DG2 only wires a single fan
-> +	 * tachometer register (BMG_FAN_1_SPEED == 0x138140, shared with i915's
-> +	 * PCU_PWM_FAN_SPEED); BMG_FAN_2/3_SPEED read 0 on DG2 silicon. Reporting
-> +	 * one fan keeps a phantom fan2_input that always reads 0 out of sysfs.
-> +	 */
->  	if (hwmon->xe->info.platform == XE_DG2 && subcmd == FSC_READ_NUM_FANS) {
-> -		*uval = 2;
-> +		*uval = 1;
->  		return 0;
->  	}
->  
-> -- 
-> 2.43.0
-> 
+Wadim
