@@ -1,665 +1,204 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010061.outbound.protection.outlook.com [52.101.56.61])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BAD82EA172
-	for <linux-hwmon@vger.kernel.org>; Thu, 28 May 2026 04:07:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779941244; cv=none; b=uJl+mTWPmLZ27X/8z2p9UdKSI8Sq24FrXi8RhriZ+BNY5df00mBjJ34gr7PCRso7ueRXmsfOkXd6cQAbGgAUPZPdpEeAZLdEiUFnxzGkNSKDg1ZcYQuseSl0kXkBgrE7PCHZnlGp3ywtvpyFz71zbufaR2362VuGvTYKdESH+GQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779941244; c=relaxed/simple;
-	bh=sWvnGaaon8yLiBmBHeliFNiCfz+ssMla0bpe3tbhp3U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qfR7zRzD9VknDulWDq6CWmzeJpdobLE4kCeRHUkxxUlOslXJD4dbg8KxPVc7t/Vze16zeJqdkCoAGbSYA+3318rbus3K6pm6KWhNqdiGFdQtjkgwowh59SqVbJbMGOhOPWwvza91knBRZ8ZO8GURdjk4+nAJ4nXcwPY5Sxdbjss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YtP6ej2W; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26493302165;
+	Thu, 28 May 2026 05:49:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.56.61
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779947374; cv=fail; b=Qsvew22RxUZ2kM+sFOAsLTulSscqPWULDShlCvGJJK3Z1PzVdC1fCtngqWakHxAqCqXOMkih0Z/pVpby2WRILTq2LtXMK0YyfjpS7/cfbF07oAw2lJ16r2f2Y+DR5p5XC7NAwwObUFLkU7WHV/RLxt8PYxwQoOt+izKd1CFoCyA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779947374; c=relaxed/simple;
+	bh=OcF7qpmCHBHvjbCpXD7ilXC3KXlOmuG1tKg4OptqG/c=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=apgQtWGwrJs4vYuCT3bJzpCd3RaYzpBe94cnDG7yKTnj+46x3IJv+O2DWcQIHYoO5ZEN/t3ASUBm321WcO7MUoF2i07XMtnxB4Nq7yoB4NMraz/r3Wc5IyXQBF4C7f2ym/T3Hynbu06clNWa7NG74dc83t5GF4KeCgNPyvC1JVY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Mps3MZY3; arc=fail smtp.client-ip=52.101.56.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YtP6ej2W"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2bc763e2ba8so62957145ad.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2026 21:07:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779941242; x=1780546042; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a7tbT2QGB8W4oXWP7ioiHUgmg8UkuQiJB9BdtGDp0eI=;
-        b=YtP6ej2WGHPPHFe6xtEcOnDEFkMcs55TzjzcNPGJDcTYLlvFtA054ZitLdzO/JKbr+
-         ZEp2j8L+1uA7pLWj4TpfMfWWC5pnQ1a+y27cdRyaxTMvEuPLncX0NSbRR9uIF1hixHbV
-         2eAPBYKvl0Kcsr9nRbYlu5CqVi6nXOghB9o7r5P2fYdPzqf8FGLUlj6TzTXdDmPliU5k
-         eIG+b8O2+4Eiv9jW+f276fIPQjAWWisTk0mHb7S2AB63vO5CPPPWjf7nLtODBgQUnIXb
-         DO/t7OEPxDBQHqdC3OQy7AbeRs4aX2r7zThJyMqrSsDqQvEUDPPA2AkvUj+2Yjq/BZpS
-         iHUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779941242; x=1780546042;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=a7tbT2QGB8W4oXWP7ioiHUgmg8UkuQiJB9BdtGDp0eI=;
-        b=U7t6EzNhHX/fLMsxIuZPtnLdBFUTzK1tDFKoPytDiZqzzhHNiQGmPoiUM0R4kLI1Q4
-         lUl5nQ5hhARa0CECAR+Tu5cGqjjo7L7wz1M/13rmjlwTf3HwMS//LwiXdh6TStLaJ61e
-         xMzjJB+m676ijXV8HsmjbTShUpoJXBP3374fLPSfWWjFrI2M6bHQ8MqLq0KKe2fws4HZ
-         jpPIHOI/RZlS0nvqQV2g/RhIBeHg2pdmyr0An1Z4OLiKWft4AsHqSwRI6OnZRRG56uYJ
-         X+fF0GFy1MOgSfR6HR2uAo6jw8RByBMq882mxhy1YySaxEiVawTZCACLI3zuSL1M4nzX
-         qYlQ==
-X-Gm-Message-State: AOJu0Ywdcwu1hLm4NDDAGaeF5cjHfmQD0GFzd0vaD5WBqJUEygDPSL61
-	OQ4rc4Xowo6nOcFTveXVRloaGKV/JclRpzRaV+JQZEn0OG38jDhtvI2s
-X-Gm-Gg: Acq92OGqzHbg8ONJqcAh9YQm3hVCo+XogfWUU+U1TiW6UF8MYUzaUp3W3OJUr8x4I3U
-	VVb2Y8iKgFC3TeXXFZn/zAi6bAiBqUPIixSDr6irpLnRgBvge3ZMOcYi3LCrmZGChGeVMdK+OcY
-	gmVkVnAtBYKxW2V2pjW8gIw4Eu64JU0J9AKkoH7UNWWOi6isc3orOkFB5WA5cxopV7j5VhuWKj7
-	IRJVWdX45zHU7aBiVXII6OsjArHVvD3is+UOJvdatoD/cdYZrN1STdHTPFO/mHhZeRRl1RZDUGm
-	xTVi0JtgNhMbireZmoEJMmoSGCX7tid26oTFYAEKus7zBLwPGvyLW7EtW7NDZvgUIsocmZ4gup3
-	Z+4SvdoViMyyae7TMfSO9fY+/z+grNVW79W5kuRUmDCllbFmcZ0EQwwMf/RTNmODn17FGFGMvBn
-	ClSNx1m8p0c/50OXtzCWfYXNRTNp+DNU4Esag1zDEg6to28MM=
-X-Received: by 2002:a17:902:ef10:b0:2b0:5ae9:ee4 with SMTP id d9443c01a7336-2beb069c65fmr289612405ad.5.1779941241622;
-        Wed, 27 May 2026 21:07:21 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2beb58ff106sm158007465ad.74.2026.05.27.21.07.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2026 21:07:21 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 27 May 2026 21:07:20 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Conor Dooley <conor@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, Lars Randers <lranders@mail.dk>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	Valentina.FernandezAlanis@microchip.com
-Subject: Re: [RFC] hwmon: add a driver for the temp/voltage sensor on
- PolarFire SoC
-Message-ID: <b49d4781-0827-4f26-9ca2-ccd177f90237@roeck-us.net>
-References: <20260527-earring-bully-eb4a268c2e68@spud>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Mps3MZY3"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ne/jCIjY+/kgFqWyFznBc5bl1is/52D4eFYwiLXAG50vZKpFMXNE7NjQFPYw7oT+NeYzklKoOd9M8FJVSKChlJBDwtcmhxD4EBFHlipCIS4ZzHSSx9AoC+MQVQqcctLEGcb64PpssRmWw48Th00tZ4wz9bvt24CYxrvJP+LC72vciTSb2EIyQI0uTrtegxDZ8qF4evYQRG1C+43nhBq8dK70RZMS4dMEFhW+nqNCZWvtMhUdnqgmRORXc/coeQOEPwlEayRZPsy1W8Lt32Ky7bIOGVP/2SnZ4ZG/RxEpzRf5suIKd1mvfchYwdvTrng40q9hie6/fU1BFFQo2uwePg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iPQ1EsQIZ+dmmGVY00mb9ZXXNEXofkp2MSJ/OsFo7Fw=;
+ b=n5kE/K/WbWwO7umUSzqiglyQmDMJwa97ktyS6dp+9rqbqZqCX20Gee8ITGq0ApMtJSfmdgx/H4j/SzxWhaJwsa5SkPQObAgH0Bzoum3wQBuamA1eau/QR82zXkTrarpU7F6ZEl8fw2Raqm5MYkRMtMJsvpD3lTRNs8phDZZUFRRFeZQBu0XHEnXSRWCHP+wQjg5OvHU+ikHI/LsrpcNvr+xyy1uWAhtEyskULnhROD3YY/beDe926zIWV6K+pS8hfh4zXKM5mwYQYEr3eCIACEypdpDY1RrI8iZ4PcWSaa9VeHr7zmU2sWMwTImUcDhds29nk5OXgntDEfeYCNO1Yg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iPQ1EsQIZ+dmmGVY00mb9ZXXNEXofkp2MSJ/OsFo7Fw=;
+ b=Mps3MZY3kNy6qim4oE0zW52agHoPcvxTtc8tHeuzLZBEOtij+o2mJB88n/JuTyN3iG+JOfk0G+xPV6+6so77XU0k8VzbvwbV0RPtrbBwlgCgbeh4zvfMHCAzQEabkNdJ4+HEuHjLJrSrRunldHcY6Cg+SYC3z4PzgUJjnxdEwx8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN2PR12MB3023.namprd12.prod.outlook.com (2603:10b6:208:c8::26)
+ by DS5PPF7671D5CC0.namprd12.prod.outlook.com (2603:10b6:f:fc00::653) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.71.12; Thu, 28 May
+ 2026 05:49:28 +0000
+Received: from MN2PR12MB3023.namprd12.prod.outlook.com
+ ([fe80::dc22:f915:3ddd:11fa]) by MN2PR12MB3023.namprd12.prod.outlook.com
+ ([fe80::dc22:f915:3ddd:11fa%4]) with mapi id 15.21.0048.016; Thu, 28 May 2026
+ 05:49:27 +0000
+Message-ID: <ec31cb51-89f9-4c6a-bfa3-183dea782897@amd.com>
+Date: Thu, 28 May 2026 11:19:20 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 5/6] misc: amd-sbi: Add SBTSI ioctl register transfer
+ interface
+To: Guenter Roeck <linux@roeck-us.net>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Cc: "corbet@lwn.net" <corbet@lwn.net>,
+ "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+ "arnd@arndb.de" <arnd@arndb.de>,
+ "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "Chatradhi, Naveen Krishna" <NaveenKrishna.Chatradhi@amd.com>,
+ "L k, Prathima" <Prathima.Lk@amd.com>, "Umarji, Anand"
+ <Anand.Umarji@amd.com>, "Kevin.Tung@quantatw.com" <Kevin.Tung@quantatw.com>
+References: <20260515134506.397649-1-Akshay.Gupta@amd.com>
+ <20260515134506.397649-6-Akshay.Gupta@amd.com>
+ <54160fbb-01d9-400b-80f7-bf340997a8d0@roeck-us.net>
+Content-Language: en-US
+From: "Gupta, Akshay" <Akshay.Gupta@amd.com>
+In-Reply-To: <54160fbb-01d9-400b-80f7-bf340997a8d0@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA5PR01CA0076.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:1ad::17) To MN2PR12MB3023.namprd12.prod.outlook.com
+ (2603:10b6:208:c8::26)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260527-earring-bully-eb4a268c2e68@spud>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3023:EE_|DS5PPF7671D5CC0:EE_
+X-MS-Office365-Filtering-Correlation-Id: 79497b27-e1a8-4714-6186-08debc7ce122
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|376014|1800799024|6133799003|4143699003|11063799006|3023799007|18002099003|22082099003|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	exBxYbtJjwo2AFGZRrTtoXCOYOVw/i6nxEJzLZRJeMYLhmSgXp4r669n4N83MZxJeHPfyHoCgp9Apepi9zWAfV8diqjqvefz5k3EDOFdTN34LhbJMQxOejXPTlsy1cImkuy7qSynmmtQYH4t3X3n3UbcT/5MpHsMpaYqaXvyPHwTVklg6UncbTJLe7PhubIRMlsCSNxfq3tq5F10wotrhKJTkqmYBBYWvz6+5eYDpD0dg5jzxl36q96FFfLNnfO9r7cQ4lGIYgsgMApFPmieqAlrc1mqYndopZ0LZXUeTXM3d1PrV1pCOzulufl3RecIKBMkdZatuwwh9m7CI2OpUJY5M18skjgFqlnGjHhEvHOUA67EjxxQzJNOXkjgq2T4f2intXyE/B48MTA6qC9DwYzSQ2/yNOfW3oR+0lddLb09gg+r9jXT74YI2gfvXVnEC+dWIhIdfQYTZ5TNwGKsUdwmE43CcGAkY6e+xykdQC8gcfuDVdek8zXB7hTfRMTmb7+nQMYA8uIX6IQnk0BHP1665z5CnxKPPtzUFyaozoYAcZ19Wn7Hz9r+vNeLIea0WpkOQBz6Rx2WSbqVQHMqn/MwD7aRjpmmU3bzJhFILzcBR8b1vvsNuY0hxl6nt/rizYLs7Jaoy7INA6uCmUbFfbz4g3RTYsHRQxlydhjxnj7+IR3PLu5u1Aj4McPk9i04
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3023.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(6133799003)(4143699003)(11063799006)(3023799007)(18002099003)(22082099003)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?YTluYlFWMnpzbWdvNGZQOXk2dVZCclVmdllmb2FhcWgzb0dlN3hFd3BISmdW?=
+ =?utf-8?B?Vi80K2FocDVpRWlTenB5dlF2cXFtR0pqSTlSMnBlZ3pLZENnM0FTaWg1L0pK?=
+ =?utf-8?B?RGZQcjAwa3A5MFdPQ0VUMGJBUkNUY3I0YTRWeWV1RjJTNEdYZkdWWEYvaTVq?=
+ =?utf-8?B?MTdSTVpaV2t5NjNQekQ0M2JSaXlGc09mSmFQQWhJZ2xXbXVtR0pSV2Y0STdW?=
+ =?utf-8?B?czVRVFBkUU94b0ZBUWgvRmJ6dzBlazd3bmpYT2pvQlJKNUZlQnlVZUtSalhX?=
+ =?utf-8?B?ZUZiVTNnMSs1b2Mzb2VCczhmVTRVUTBJZFM3R2JCeERWM2xIdDVnMGNvVkdt?=
+ =?utf-8?B?SEZ1K0pBdlJvaDFORW9qQ2pYU2IwTHVVQUNzalRWVnNtK2MvT0lKVjRJNXcy?=
+ =?utf-8?B?aVBKWHVQMmdISlhkYmRabDVMeW11alZNUU1yQ0pOMjNNUHZFZHJ0Q2RBS3VG?=
+ =?utf-8?B?OWkyeC8rTUNicFlhSk56M2YzazZqU0M4ZUUwaG5nUjhrbjc3a2JOVURSU0Ux?=
+ =?utf-8?B?aHNGaWxTUitaaXpHSmlQLzVjYjFsd2dub1ZHZVRrL3FxcnF1NWFoV1hCNjdl?=
+ =?utf-8?B?MlU1SS9wbTg2bDY4OEc1UnhVR2xHYUx4NG9HM0VPRWF0aEVHTGpPWGxHdStx?=
+ =?utf-8?B?SE5Id0wxdG5kSHNaNG1ML3VhdEVkK20rcTJoV3I0Y1c1TVc1aStveGpnM3U3?=
+ =?utf-8?B?OERYRjN2UWRUM1c2QnFRdlgzT2w1WWMySFc5TzV5RlRJK2wzTU5HdmpKbG85?=
+ =?utf-8?B?bUcwUDdGNWh3QVlGdVI3b1ZKRXo2dUNSSUZyYVlMVzIydXE1dVBtMzZLd1VP?=
+ =?utf-8?B?MnpRRFE0bmdBd1kwd2NsTStPYlNOdUgyUGF1czRxS3hDUEtGWG5lR0FjVmJG?=
+ =?utf-8?B?bWllQjNGZ1JQQlljRURZc21wMzkzWGw3NzlQZ1FDR1ZKMUNYL1ZTYWpyejhx?=
+ =?utf-8?B?bmU3NTJ6SCtpcXh6SDJ3N2p6bGlTTTc2dlFQZkNtOFBjK0ZvRHl4WnZrcXVY?=
+ =?utf-8?B?cU91UnFMaml2RUhObFZJYlFHT0E4L1ZGanVrMnkxQlhOTXFnU2FpSnBSZFZi?=
+ =?utf-8?B?ZlBwa083cEtWajFRTlpTNmpxc05RZGRZNEdhZ2pZaUt3c2pYbSs4SS8zNVZJ?=
+ =?utf-8?B?WGsvYVJWbERtNDN2QmVMd293Q0wzdlZWSzgxaUJKK29ZYkthcnFEYkI3Zi9h?=
+ =?utf-8?B?dnpKN0xISEtsNDZmZmt1emlCVWVuTS93eVRxcTRPZWIwcFpOek44Y0xqM2hI?=
+ =?utf-8?B?T2poTWZ2cjR0Z2U1U0xvRG9mZDRtL29rZWx4SGk3aHBhQ3A2a1VaaHlwS3JK?=
+ =?utf-8?B?ZTVuUFlKcFE4Y1Rtbi9YWEdtRTJMR0JRd3dvT2pLckJ3aHQ1emlHWGwwRGdV?=
+ =?utf-8?B?dEFoR09DWjl0Yk5mbVR2RXVVZGc2TEZEZStxNGt5MjdjL0FjTmowc2FkdDVs?=
+ =?utf-8?B?bkFqT0J6V0JxTTRXdUxneG9Ca2lmRUZQeXFURHdmdmRjellSNnFodGlSN0J1?=
+ =?utf-8?B?RDI3elRWSEdHbDBwVTNTZ2RmVVFPTlkyYVJSRFl3NGhuSjBLZjBtNTUxbnVs?=
+ =?utf-8?B?L2Y3M2lBMnBuVndkMVA0cEdUS3AxOUtxSDhFSUxib3JIcGpad1hIeHZWcE5z?=
+ =?utf-8?B?ZUgwZC93ZE4zclBMeUNwMlNoWXo5M2VyNkNLQitGQjNGbG51a2F4L1cxVUI0?=
+ =?utf-8?B?dkFESVd3b0t5UWNaa2RTdFo2cWZiYXdMeFdOODdPbFZUcGpYTFJHMmxuME05?=
+ =?utf-8?B?WWpVK21VcHhNY3RiR0Y0d3NuZGFSL1lLcnRxS1l1THVYbHdrbmlXSjZKSW5O?=
+ =?utf-8?B?T3llRGhkMVF4TWZzS1ZYVjFuQ3NDL2VZcE9DM2dVUXpyR0xQdDFVcTJaOUk2?=
+ =?utf-8?B?WDEraTJQVmtKWWdtK3RTWTVMeG8vTStDcDFHMEVYSGJGVDEvLyt0aVY2WkNn?=
+ =?utf-8?B?SGlmRWJFbUZqckVXU0p5M2lteTVVRkVDWjhLRGVqeFNpTFA5YnNNYW1SUVZR?=
+ =?utf-8?B?STlTNzFHeWRRb01CbkhPQWlHc25TRUZ3bVRCRWZkcVhwRURCTWhJZ2w0THd0?=
+ =?utf-8?B?VklpaEp6YnkyN2tYVjN3OHNiWXRNLzhlVzBUY3FvMXA4UTVWV2xoMVdzYmVy?=
+ =?utf-8?B?RzFEK3FoOVk0MFNvYWZGZmVTOGdRWFBZaGxQRFlyajNKakJ6YlpiQXRLb092?=
+ =?utf-8?B?UHFsQWE1R3JNY0J1WitkOTY5UWZrM3I5dzVGZjBZdm8zUnFTalZadEQzb29Y?=
+ =?utf-8?B?RFV0V0JpYTJIUE5KdWNjc3YyRTc0WW5oUzRXUTB3YVpIY1BRTXlpUGRqQlBW?=
+ =?utf-8?B?STluellTZmV3eURtaG9CMGp0RlVSRGpRWFY2SlVrejJWNGJ2TUUzUT09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 79497b27-e1a8-4714-6186-08debc7ce122
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3023.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 May 2026 05:49:27.6986
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gEKjrltLC1B8bEsiAz1OkQMuBVlTrbyHbBDfDoP00h6nlu2zo6yJ7LEtqGquOXz8JLBmjx6pE7Xb/MnXaP4Tsw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS5PPF7671D5CC0
 
-On Wed, May 27, 2026 at 10:06:11AM +0100, Conor Dooley wrote:
-> From: Lars Randers <lranders@mail.dk>
-> 
-> Add a driver for the temperature and voltage sensors on PolarFire SoC.
-> The temperature reports how hot the die is, and the voltages are the
-> SoC's 1.05, 1.8 and 2.5 volt rails respectively.
-> 
-> The hardware supports alarms in theory, but there is an unconfirmed
-> erratum that prevents clearing them once triggered, so no support is
-> added.
-> 
-> The hardware measures voltage with 16 bits, of which 1 is a sign bit and
-> the remainder holds the voltage as a fixed point integer value. It's
-> improbable that the hardware will work if the voltages are negative, so
-> the driver ignores the sign bits.
-> 
-> There's no dt support etc here because this is the child of a simple-mfd
-> syscon.
-> 
-> Signed-off-by: Lars Randers <lranders@mail.dk>
-> Co-developed-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
-> Guenter, there's one question here about the unit that update_interval
-> is in, I didn't see anyone else using us, but I assume that's okay since
-> the resolution that ms would give would be 8 steps only?
-> RFC cos the question is also in the driver as a comment.
-> 
 
-That just came up in a different context. We'll add a new standard attribute
-update_interval_us. The existing attribute MUST use ms. Everything else
-would be an ABI violation.
+On 5/15/2026 7:41 PM, Guenter Roeck wrote:
+> Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
+>
+>
+> On 5/15/26 06:45, Akshay Gupta wrote:
+>> From: Prathima <Prathima.Lk@amd.com>
+>>
+>> Implement IOCTL interface for SB-TSI driver to enable userspace access
+>> to TSI register read/write operations through the AMD Advanced Platform
+>> Management Link (APML) protocol.
+>> Add an ioctl command (SBTSI_IOCTL_REG_XFER_CMD) that accepts a register
+>> address, data byte, and direction flag. Serialize access with a mutex
+>> shared between the hwmon and ioctl paths to prevent concurrent bus
+>> transactions from corrupting register state.
+>>
+>> Reviewed-by: Akshay Gupta <Akshay.Gupta@amd.com>
+>> Signed-off-by: Prathima <Prathima.Lk@amd.com>
+>> ---
+>> Changes since v1:
+>> - Use of devm_mutex_init in place of mutex_init
+>> - Use of guard_mutex in place of mutex_lock()/mutex_unlock()
+>> - Use of devm_add_action_or_reset() for clean removal
+>>
+>>    drivers/hwmon/sbtsi_temp.c      |  6 +++
+>>    drivers/misc/amd-sbi/tsi-core.c | 84 ++++++++++++++++++++++++++++++++-
+>>    drivers/misc/amd-sbi/tsi-core.h | 15 ++++++
+>>    drivers/misc/amd-sbi/tsi.c      | 20 ++++++--
+>>    include/linux/misc/tsi.h        |  8 ++++
+>>    include/uapi/misc/amd-apml.h    | 23 +++++++++
+>>    6 files changed, 151 insertions(+), 5 deletions(-)
+>>    create mode 100644 drivers/misc/amd-sbi/tsi-core.h
+>>
+>> diff --git a/drivers/hwmon/sbtsi_temp.c b/drivers/hwmon/sbtsi_temp.c
+>> index d7ae986d824c..00e982f4c716 100644
+>> --- a/drivers/hwmon/sbtsi_temp.c
+>> +++ b/drivers/hwmon/sbtsi_temp.c
+>> @@ -64,12 +64,15 @@ static inline void sbtsi_mc_to_reg(s32 temp, u8 *integer, u8 *decimal)
+>>    /*
+>>     * Read integer and decimal parts of an SB-TSI temperature register pair
+>>     * The read order is determined by the ReadOrder bit to ensure atomic latching.
+>> + * The mutex protects against concurrent access to the shared I2C/I3C bus by
+>> + * the hwmon sysfs and a userspace ioctl
+>>     */
+>>    static int sbtsi_temp_read(struct sbtsi_data *data, u8 reg1, u8 reg2,
+>>                           u8 *val1, u8 *val2)
+>>    {
+>>        int ret;
+>>
+>> +     guard(mutex)(&data->lock);
+> I would suggest to hide this behind access functions such as sbtsi_lock(),
+> sbtsi_unlock(), and the matching guard functions. That can be done in a
+> separate patch; it should not be necessary to include hwmon in the patch
+> introducing the ioctl.
+>
+> Thanks,
+> Guenter
 
-Guenter
+Thank you for the feedback, Guenter.
 
-> CC: Guenter Roeck <linux@roeck-us.net>
-> CC: Jonathan Corbet <corbet@lwn.net>
-> CC: Shuah Khan <skhan@linuxfoundation.org>
-> CC: Conor Dooley <conor.dooley@microchip.com>
-> CC: Daire McNamara <daire.mcnamara@microchip.com>
-> CC: linux-hwmon@vger.kernel.org
-> CC: linux-doc@vger.kernel.org
-> CC: linux-kernel@vger.kernel.org
-> CC: linux-riscv@lists.infradead.org
-> CC: Valentina.FernandezAlanis@microchip.com
-> ---
->  Documentation/hwmon/index.rst    |   1 +
->  Documentation/hwmon/tvs-mpfs.rst |  53 +++++
->  MAINTAINERS                      |   1 +
->  drivers/hwmon/Kconfig            |  12 +
->  drivers/hwmon/Makefile           |   1 +
->  drivers/hwmon/tvs-mpfs.c         | 396 +++++++++++++++++++++++++++++++
->  6 files changed, 464 insertions(+)
->  create mode 100644 Documentation/hwmon/tvs-mpfs.rst
->  create mode 100644 drivers/hwmon/tvs-mpfs.c
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 8b655e5d6b68..84a5339e1d6f 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -262,6 +262,7 @@ Hardware Monitoring Kernel Drivers
->     tps53679
->     tps546d24
->     tsc1641
-> +   tvs-mpfs
->     twl4030-madc-hwmon
->     ucd9000
->     ucd9200
-> diff --git a/Documentation/hwmon/tvs-mpfs.rst b/Documentation/hwmon/tvs-mpfs.rst
-> new file mode 100644
-> index 000000000000..39889c06ef0c
-> --- /dev/null
-> +++ b/Documentation/hwmon/tvs-mpfs.rst
-> @@ -0,0 +1,53 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +Kernel driver tvs-mpfs
-> +======================
-> +
-> +Supported chips:
-> +
-> +  * PolarFire SoC
-> +
-> +Authors:
-> +
-> +   - Conor Dooley <conor.dooley@microchip.com>
-> +   - Lars Randers <lranders@mail.dk>
-> +
-> +Description
-> +-----------
-> +
-> +This driver implements support for the temperature and voltage sensors on
-> +PolarFire SoC. The temperature reports how hot the die is, and the voltages are
-> +the SoC's 1.05, 1.8 and 2.5 volt rails respectively.
-> +
-> +
-> +Usage Notes
-> +-----------
-> +
-> +update_interval is in microseconds, with a permitted range of 0 to 8128.
-> +
-> +Temperatures are read in millidegrees Celsius, but the hardware measures in
-> +degrees Kelvin, storing the result as 11.4 fixed point data, for a maximum
-> +value of 2047.9375 degrees Kelvin.
-> +
-> +Voltages are read in millivolts. The hardware measures in millivolts, storing
-> +the value as 12.3 fixed point data, for a maximum of 4095.875 millivolts.
-> +The minimum value reportable by the driver is 0 volts, although the hardware
-> +is capable of measuring negative values.
-> +
-> +Sysfs entries
-> +-------------
-> +
-> +The following attributes are supported. update_interval is read-write, as are
-> +the enables. All other attributes are read only.
-> +
-> +======================= ====================================================
-> +temp1_label		Fixed name for channel.
-> +temp1_input		Measured temperature for channel.
-> +temp1_enable		Enable/disable for channel.
-> +
-> +in[0-2]_label		Fixed name for channel.
-> +in[0-2]_input		Measured voltage for channel.
-> +in[0-2]_enable		Enable/disable for channel.
-> +
-> +update_interval		The interval at which the chip will update readings.
-> +======================= ====================================================
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 2fb1c75afd16..a492cf5ad0fc 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -22938,6 +22938,7 @@ F:	drivers/char/hw_random/mpfs-rng.c
->  F:	drivers/clk/microchip/clk-mpfs*.c
->  F:	drivers/firmware/microchip/mpfs-auto-update.c
->  F:	drivers/gpio/gpio-mpfs.c
-> +F:	drivers/hwmon/tvs-mpfs.c
->  F:	drivers/i2c/busses/i2c-microchip-corei2c.c
->  F:	drivers/mailbox/mailbox-mpfs.c
->  F:	drivers/pci/controller/plda/pcie-microchip-host.c
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 14e4cea48acc..194c8116fd01 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -930,6 +930,18 @@ config SENSORS_JC42
->  	  This driver can also be built as a module. If so, the module
->  	  will be called jc42.
->  
-> +config SENSORS_POLARFIRE_SOC_TVS
-> +	tristate "PolarFire SoC (MPFS) temperature and voltage sensor"
-> +	depends on POLARFIRE_SOC_MAILBOX
-> +	help
-> +	  This driver adds support for the PolarFire SoC (MPFS) Temperature and
-> +	  Voltage Sensor.
-> +
-> +	  To compile this driver as a module, choose M here. the
-> +	  module will be called tvs-mpfs.
-> +
-> +	  If unsure, say N.
-> +
->  config SENSORS_POWERZ
->  	tristate "ChargerLAB POWER-Z USB-C tester"
->  	depends on USB
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 4788996aa137..b58d249e4cf4 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -194,6 +194,7 @@ obj-$(CONFIG_SENSORS_NZXT_SMART2) += nzxt-smart2.o
->  obj-$(CONFIG_SENSORS_PC87360)	+= pc87360.o
->  obj-$(CONFIG_SENSORS_PC87427)	+= pc87427.o
->  obj-$(CONFIG_SENSORS_PCF8591)	+= pcf8591.o
-> +obj-$(CONFIG_SENSORS_POLARFIRE_SOC_TVS)  += tvs-mpfs.o
->  obj-$(CONFIG_SENSORS_POWERZ)	+= powerz.o
->  obj-$(CONFIG_SENSORS_POWR1220)  += powr1220.o
->  obj-$(CONFIG_SENSORS_PT5161L)	+= pt5161l.o
-> diff --git a/drivers/hwmon/tvs-mpfs.c b/drivers/hwmon/tvs-mpfs.c
-> new file mode 100644
-> index 000000000000..30d7baa808c4
-> --- /dev/null
-> +++ b/drivers/hwmon/tvs-mpfs.c
-> @@ -0,0 +1,396 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Author: Lars Randers <lranders@mail.dk>
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/err.h>
-> +#include <linux/freezer.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/io.h>
-> +#include <linux/kthread.h>
-> +#include <linux/mfd/syscon.h>
-> +#include <linux/module.h>
-> +#include <linux/of_address.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +
-> +#define MPFS_TVS_CTRL 0x08
-> +#define MPFS_TVS_OUTPUT0 0x24
-> +#define MPFS_TVS_OUTPUT1 0x28
-> +
-> +#define MPFS_TVS_CTRL_TEMP_VALID	BIT(19)
-> +#define MPFS_TVS_CTRL_V2P5_VALID	BIT(18)
-> +#define MPFS_TVS_CTRL_V1P8_VALID	BIT(17)
-> +#define MPFS_TVS_CTRL_V1P05_VALID	BIT(16)
-> +
-> +#define MPFS_TVS_CTRL_TEMP_ENABLE	BIT(3)
-> +#define MPFS_TVS_CTRL_V2P5_ENABLE	BIT(2)
-> +#define MPFS_TVS_CTRL_V1P8_ENABLE	BIT(1)
-> +#define MPFS_TVS_CTRL_V1P05_ENABLE	BIT(0)
-> +#define MPFS_TVS_CTRL_ENABLE_ALL	GENMASK(3, 0)
-> +
-> +/*
-> + * For all of these the value in millivolts is stored in 16 bits, with an upper
-> + * sign bit and a lower 2 bits of decimal. These masks discard the sign bit and
-> + * decimal places, because if Linux is running these voltages cannot be negative
-> + * and so avoid having to convert to two's complement.
-> + */
-> +#define MPFS_OUTPUT0_V1P8_MASK	GENMASK(30, 19)
-> +#define MPFS_OUTPUT0_V1P05_MASK	GENMASK(14, 3)
-> +#define MPFS_OUTPUT1_V2P5_MASK	GENMASK(14, 3)
-> +
-> +/*
-> + * The register map claims that the temperature is stored in bits 31:16, but
-> + * application note "AN4682: PolarFire FPGA Temperature and Voltage Sensor"
-> + * says that 31 is reserved. Temperature is in kelvin, so what's probably a
-> + * sign bit has no value anyway.
-> + */
-> +#define MPFS_OUTPUT1_TEMP_MASK GENMASK(30, 16)
-> +
-> +#define MPFS_TVS_INTERVAL_MASK GENMASK(15, 8)
-> +#define MPFS_TVS_INTERVAL_OFFSET 8
-> +/* The interval register is in increments of 32 us */
-> +#define MPFS_TVS_INTERVAL_SCALE 32
-> +
-> +/* 273.5 in 11.4 fixed-point notation */
-> +#define MPFS_TVS_K_TO_C 0x1112
-> +
-> +enum mpfs_tvs_sensors {
-> +	SENSOR_V1P05 = 0,
-> +	SENSOR_V1P8,
-> +	SENSOR_V2P5,
-> +};
-> +
-> +static const char * const mpfs_tvs_voltage_labels[] = { "1P05", "1P8", "2P5" };
-> +
-> +struct mpfs_tvs {
-> +	struct regmap *regmap;
-> +};
-> +
-> +static int mpfs_tvs_voltage_read(struct mpfs_tvs *data, u32 attr,
-> +				 int channel, long *val)
-> +{
-> +	u32 tmp, control;
-> +
-> +	if (attr != hwmon_in_input && attr != hwmon_in_enable)
-> +		return -EOPNOTSUPP;
-> +
-> +	regmap_read(data->regmap, MPFS_TVS_CTRL, &control);
-> +
-> +	switch (channel) {
-> +	case SENSOR_V2P5:
-> +		if (attr == hwmon_in_enable) {
-> +			*val = FIELD_GET(MPFS_TVS_CTRL_V2P5_ENABLE, control);
-> +			break;
-> +		}
-> +
-> +		if (!(control & MPFS_TVS_CTRL_V2P5_VALID))
-> +			return -EINVAL;
-> +
-> +		regmap_read(data->regmap, MPFS_TVS_OUTPUT1, &tmp);
-> +		*val = FIELD_GET(MPFS_OUTPUT1_V2P5_MASK, tmp);
-> +		break;
-> +	case SENSOR_V1P8:
-> +		if (attr == hwmon_in_enable) {
-> +			*val = FIELD_GET(MPFS_TVS_CTRL_V1P8_ENABLE, control);
-> +			break;
-> +		}
-> +
-> +		if (!(control & MPFS_TVS_CTRL_V1P8_VALID))
-> +			return -EINVAL;
-> +
-> +		regmap_read(data->regmap, MPFS_TVS_OUTPUT0, &tmp);
-> +		*val = FIELD_GET(MPFS_OUTPUT0_V1P8_MASK, tmp);
-> +		break;
-> +	case SENSOR_V1P05:
-> +		if (attr == hwmon_in_enable) {
-> +			*val = FIELD_GET(MPFS_TVS_CTRL_V1P05_ENABLE, control);
-> +			break;
-> +		}
-> +
-> +		if (!(control & MPFS_TVS_CTRL_V1P05_VALID))
-> +			return -EINVAL;
-> +
-> +		regmap_read(data->regmap, MPFS_TVS_OUTPUT0, &tmp);
-> +		*val = FIELD_GET(MPFS_OUTPUT0_V1P05_MASK, tmp);
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int mpfs_tvs_voltage_write(struct mpfs_tvs *data, u32 attr,
-> +				  int channel, long val)
-> +{
-> +	u32 tmp;
-> +
-> +	if (attr != hwmon_in_enable)
-> +		return -EOPNOTSUPP;
-> +
-> +	switch (channel) {
-> +	case SENSOR_V2P5:
-> +		if (val > 1)
-> +			return -EINVAL;
-> +
-> +		tmp = FIELD_PREP(MPFS_TVS_CTRL_V2P5_ENABLE, val);
-> +		regmap_update_bits(data->regmap, MPFS_TVS_CTRL,
-> +				   MPFS_TVS_CTRL_V2P5_ENABLE, tmp);
-> +		break;
-> +	case SENSOR_V1P8:
-> +		if (val > 1)
-> +			return -EINVAL;
-> +
-> +		tmp = FIELD_PREP(MPFS_TVS_CTRL_V1P8_ENABLE, val);
-> +		regmap_update_bits(data->regmap, MPFS_TVS_CTRL,
-> +				   MPFS_TVS_CTRL_V1P8_ENABLE, tmp);
-> +		break;
-> +	case SENSOR_V1P05:
-> +		if (val > 1)
-> +			return -EINVAL;
-> +
-> +		tmp = FIELD_PREP(MPFS_TVS_CTRL_V1P05_ENABLE, val);
-> +		regmap_update_bits(data->regmap, MPFS_TVS_CTRL,
-> +				   MPFS_TVS_CTRL_V1P05_ENABLE, tmp);
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int mpfs_tvs_temp_read(struct mpfs_tvs *data, u32 attr, long *val)
-> +{
-> +	u32 tmp, control;
-> +
-> +	if (attr != hwmon_temp_input && attr != hwmon_temp_enable)
-> +		return -EOPNOTSUPP;
-> +
-> +	regmap_read(data->regmap, MPFS_TVS_CTRL, &control);
-> +
-> +	if (attr == hwmon_temp_enable) {
-> +		*val = FIELD_GET(MPFS_TVS_CTRL_TEMP_ENABLE, control);
-> +		return 0;
-> +	}
-> +
-> +	if (!(control & MPFS_TVS_CTRL_TEMP_VALID))
-> +		return -EINVAL;
-> +
-> +	regmap_read(data->regmap, MPFS_TVS_OUTPUT1, &tmp);
-> +	*val = FIELD_GET(MPFS_OUTPUT1_TEMP_MASK, tmp);
-> +	*val -= MPFS_TVS_K_TO_C;
-> +	*val = (1000 * *val) >> 4; /* fixed point (11.4) to millidegrees */
-> +
-> +	return 0;
-> +}
-> +
-> +static int mpfs_tvs_temp_write(struct mpfs_tvs *data, u32 attr, long val)
-> +{
-> +	u32 tmp;
-> +
-> +	if (attr != hwmon_temp_enable)
-> +		return -EOPNOTSUPP;
-> +
-> +	if (val > 1)
-> +		return -EINVAL;
-> +
-> +	tmp = FIELD_PREP(MPFS_TVS_CTRL_TEMP_ENABLE, val);
-> +	regmap_update_bits(data->regmap, MPFS_TVS_CTRL,
-> +			   MPFS_TVS_CTRL_TEMP_ENABLE, tmp);
-> +
-> +	return 0;
-> +}
-> +
-> +static int mpfs_tvs_interval_read(struct mpfs_tvs *data, u32 attr, long *val)
-> +{
-> +	u32 tmp;
-> +
-> +	if (attr != hwmon_chip_update_interval)
-> +		return -EOPNOTSUPP;
-> +
-> +	regmap_read(data->regmap, MPFS_TVS_CTRL, &tmp);
-> +	//TODO: Guenter, update_interval, as implemented here, expects values
-> +	//in microseconds. Is that okay? Most drivers (all that I checked tbh)
-> +	//use milliseconds, but this is an 8-bit value so using ms will have
-> +	//almost no granularity at all.
-> +	*val = FIELD_GET(MPFS_TVS_INTERVAL_MASK, tmp) * MPFS_TVS_INTERVAL_SCALE;
-> +
-> +	return 0;
-> +}
-> +
-> +static int mpfs_tvs_interval_write(struct mpfs_tvs *data, u32 attr, long val)
-> +{
-> +	unsigned long temp = val;
-> +
-> +	if (attr != hwmon_chip_update_interval)
-> +		return -EOPNOTSUPP;
-> +
-> +	temp /= MPFS_TVS_INTERVAL_SCALE;
-> +
-> +	/*
-> +	 * The value is 8 bits wide, but 255 is described as
-> +	 * "255= Do single set of transfers when scoverride set"
-> +	 * but there's no scoverride bit in the tvs register region.
-> +	 * Ban using 255 since its behaviour is suspect.
-> +	 */
-> +	if (temp > 254)
-> +		return -EINVAL;
-> +
-> +	temp <<= MPFS_TVS_INTERVAL_OFFSET;
-> +	regmap_update_bits(data->regmap, MPFS_TVS_CTRL,
-> +			   MPFS_TVS_INTERVAL_MASK, temp);
-> +
-> +	return 0;
-> +}
-> +
-> +
-> +static umode_t mpfs_tvs_is_visible(const void *data,
-> +				   enum hwmon_sensor_types type,
-> +				   u32 attr, int channel)
-> +{
-> +	if (type == hwmon_chip && attr == hwmon_chip_update_interval)
-> +		return 0644;
-> +
-> +	if (type == hwmon_temp) {
-> +		switch (attr) {
-> +		case hwmon_temp_enable:
-> +			return 0644;
-> +		case hwmon_temp_input:
-> +		case hwmon_temp_label:
-> +			return 0444;
-> +		default:
-> +			return 0;
-> +		}
-> +	}
-> +
-> +	if (type == hwmon_in) {
-> +		switch (attr) {
-> +		case hwmon_in_enable:
-> +			return 0644;
-> +		case hwmon_in_input:
-> +		case hwmon_in_label:
-> +			return 0444;
-> +		default:
-> +			return 0;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int mpfs_tvs_read(struct device *dev, enum hwmon_sensor_types type,
-> +			 u32 attr, int channel, long *val)
-> +{
-> +	struct mpfs_tvs *data = dev_get_drvdata(dev);
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		return mpfs_tvs_temp_read(data, attr, val);
-> +	case hwmon_in:
-> +		return mpfs_tvs_voltage_read(data, attr, channel, val);
-> +	case hwmon_chip:
-> +		return mpfs_tvs_interval_read(data, attr, val);
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static int mpfs_tvs_write(struct device *dev, enum hwmon_sensor_types type,
-> +			  u32 attr, int channel, long val)
-> +{
-> +	struct mpfs_tvs *data = dev_get_drvdata(dev);
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		return mpfs_tvs_temp_write(data, attr, val);
-> +	case hwmon_in:
-> +		return mpfs_tvs_voltage_write(data, attr, channel, val);
-> +	case hwmon_chip:
-> +		return mpfs_tvs_interval_write(data, attr, val);
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static int mpfs_tvs_read_labels(struct device *dev,
-> +				enum hwmon_sensor_types type,
-> +				u32 attr, int channel,
-> +				const char **str)
-> +{
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		*str = "Die Temp";
-> +		return 0;
-> +	case hwmon_in:
-> +		*str = mpfs_tvs_voltage_labels[channel];
-> +		return 0;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static const struct hwmon_ops mpfs_tvs_ops = {
-> +	.is_visible = mpfs_tvs_is_visible,
-> +	.read_string = mpfs_tvs_read_labels,
-> +	.read = mpfs_tvs_read,
-> +	.write = mpfs_tvs_write,
-> +};
-> +
-> +static const struct hwmon_channel_info *mpfs_tvs_info[] = {
-> +	HWMON_CHANNEL_INFO(chip,
-> +			   HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
-> +	HWMON_CHANNEL_INFO(temp,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_ENABLE),
-> +	HWMON_CHANNEL_INFO(in,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL | HWMON_I_ENABLE,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL | HWMON_I_ENABLE,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL | HWMON_I_ENABLE),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_chip_info mpfs_tvs_chip_info = {
-> +	.ops = &mpfs_tvs_ops,
-> +	.info = mpfs_tvs_info,
-> +};
-> +
-> +static int mpfs_tvs_probe(struct platform_device *pdev)
-> +{
-> +	struct device *hwmon_dev;
-> +	struct mpfs_tvs *data;
-> +
-> +	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->regmap = device_node_to_regmap(pdev->dev.parent->of_node);
-> +	if (IS_ERR(data->regmap))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(data->regmap),
-> +				     "Failed to find syscon regmap\n");
-> +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev, "mpfs_tvs",
-> +							 data,
-> +							 &mpfs_tvs_chip_info,
-> +							 NULL);
-> +	if (IS_ERR(hwmon_dev))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(hwmon_dev),
-> +				     "hwmon device registration failed.\n");
-> +
-> +	regmap_write(data->regmap, MPFS_TVS_CTRL, MPFS_TVS_CTRL_ENABLE_ALL);
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver mpfs_tvs_driver = {
-> +	.probe = mpfs_tvs_probe,
-> +	.driver = {
-> +		.name = "mpfs-tvs",
-> +	},
-> +};
-> +module_platform_driver(mpfs_tvs_driver);
-> +
-> +MODULE_AUTHOR("Lars Randers <lranders@mail.dk>");
-> +MODULE_DESCRIPTION("PolarFire SoC temperature & voltage sensor driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.53.0
-> 
-> 
+In the next version, we will address this by implementing the matching 
+guard function in the ioctl patch and creating a new patch for hwmon.
+
+>
