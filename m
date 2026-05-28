@@ -1,64 +1,62 @@
 Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53225409638;
-	Thu, 28 May 2026 17:35:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34346409632;
+	Thu, 28 May 2026 17:35:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.147.86
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779989718; cv=fail; b=mDJlQxnQJfEkk/83dJVDhW1ahDaXjvHBIgBa+/qkB7pkoAdGqkky/k0dMJjJU562J9ssLKEwlJ00kdhMPOzeafb71+Q8ZHZVZC8ffX+6dHhD34r7OLtPogb97UynowQdmuCSteNYNdnsUN2de2stTLj16LAuCK5e/jRStV9LHCQ=
+	t=1779989718; cv=fail; b=Oide+VaaMbEPPnJsCvnOpnqJgdmtiqTXoPX1oYb5xGoSq5bkPmM/KU6Mg4B74k8/jOTJFi/xli2T1a3Oh0GqNbWuSR9KBBKjBg17y2l9jwVVtsjZ0RLPoMXP7VPsHDWDY+lf4T4MbjovHpWCYXalVhTfgdWyl7HR+sx93R8v85g=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1779989718; c=relaxed/simple;
-	bh=DhjEByRlV7LanuPMEbaHIQstkq0rS5Uu3+Z5iQuFPOg=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=CAmULKEFLZJSYDu8iJ5I8Cfs3KqWWhzV5CGJOs4NI4dHQGbJbRyBQ9sI15MiEK0RfKAUDHJZyYnn3LdZtM46MJ9T7u3iq5PySBl7rY5Akfkzu8q8phCewMe+0tPYql9YekhN7kcBBQf9B55mBchGEl36KOLEtZXdU6uv+cfY7tM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=lb+a8xqX; arc=fail smtp.client-ip=148.163.147.86
+	bh=So6Dn4UoUm5Dn+jSi0H2Zsgqy57CRlDG31ZMKYYxL2E=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=D5ZydUqRCrh4ILkv0gXDrxCJfi6ZXxNp8LxEiLwIGxZ4WiH1gujJCaXWqaUJALXzrSJVobWThrzUTZje2wHAu0UgNFkoix479PFnaHG7bytEbneot610aTe1UG2JRzCa3QPzUVALqKpOomTT/3dSlroZ4jMdE/iWEW+BnJQvHtE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=hYjzopuN; arc=fail smtp.client-ip=148.163.147.86
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="lb+a8xqX"
-Received: from pps.filterd (m0134420.ppops.net [127.0.0.1])
-	by mx0b-002e3701.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64SG3u6H2696297;
-	Thu, 28 May 2026 17:34:58 GMT
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="hYjzopuN"
+Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
+	by mx0a-002e3701.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64SHRrRG2055929;
+	Thu, 28 May 2026 17:34:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pps0720; bh=uMfVx1zuvG2gyBcSo4tOQjfr
-	q+dwUFIu7ehIzLYowp4=; b=lb+a8xqXTJRNq0e5eNP7jbtLZbePY0WOIvc1SMRB
-	Qr54Y21uX7NordEmlVZrRGrGRP9nwd+5fLlL6A/GzTuhfO0B7WkTY96NDwBDV5M5
-	I3x81pbBZWt79ICYBOGj04CoaGqys3WWwFppx5wIyK23ccrPxXKiDHOPjrqoNUy+
-	uEtZD4Lt7VJ47QrDTz/R3TLnVR4qouzRYlrBuLPUkoSfRYnsTIDAyChxuiAb5PcL
-	6WDGFBpfLvUedRlAi01sSBWqtyoq7PWC43sE39pADs0BvOQ0B1LveKuAlVw9DzRp
-	pHJCBoPchcsDncFC833ZYiwlh+pN7GAhEUWcH978ZzVPfA==
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pps0720; bh=W7
+	Syi2JiuHBU4B5qfVVisFXT21VSOx0iboLGqGlaoaA=; b=hYjzopuNdRvoxSgtDT
+	N/wE840ON0Ncsx5ugQlwGayyUAWEf42rZTJ/kvLOzxjFYweRCaMXvSkr5T9N68DS
+	TVjbC86PxMUGZFjEawxnUI/bRTdyEHkdO0S+/wxTWT2hytERTXePTsDQOHEzmvje
+	SykWqBYGwfvzSq1jl5M8lCm38Reupx0CovMnH51Hm/oBDarZK6gyD6VIbdvE6uPq
+	0PxHkc7c94QYhhZG1Q7UV2fEk4c59BvVGGKufuoloYV68HW4zph6q8gCrlhR3Z7y
+	MH/nD8LBXZDXd8KDIkWWwBKi8gR+rOfC1TcKoZEuhk6QT90pxo8Z6X+s6gGc98Id
+	/bDA==
 Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
-	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 4eerwa99kd-1
+	by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 4eemnavx8c-1
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
 	Thu, 28 May 2026 17:34:58 +0000 (GMT)
-Received: from p1wg14923.americas.hpqcorp.net (unknown [10.119.18.111])
+Received: from p1wg14925.americas.hpqcorp.net (unknown [10.119.18.114])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by p1lg14879.it.hpe.com (Postfix) with ESMTPS id C4EDC13157;
-	Thu, 28 May 2026 17:34:57 +0000 (UTC)
-Received: from p1wg14928.americas.hpqcorp.net (10.119.18.116) by
- p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
+	by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 02C5113174;
+	Thu, 28 May 2026 17:34:58 +0000 (UTC)
+Received: from p1wg14925.americas.hpqcorp.net (10.119.18.114) by
+ p1wg14925.americas.hpqcorp.net (10.119.18.114) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Thu, 28 May 2026 05:34:34 -1200
-Received: from p1wg14928.americas.hpqcorp.net (10.119.18.116) by
- p1wg14928.americas.hpqcorp.net (10.119.18.116) with Microsoft SMTP Server
+ 15.2.2562.17; Thu, 28 May 2026 05:34:42 -1200
+Received: from p1wg14920.americas.hpqcorp.net (16.230.19.123) by
+ p1wg14925.americas.hpqcorp.net (10.119.18.114) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Thu, 28 May 2026 05:34:33 -1200
-Received: from P1WG14918.americas.hpqcorp.net (16.230.19.121) by
- p1wg14928.americas.hpqcorp.net (10.119.18.116) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17 via Frontend Transport; Thu, 28 May 2026 05:34:33 -1200
+ 15.2.2562.17 via Frontend Transport; Thu, 28 May 2026 05:34:42 -1200
 Received: from BL0PR07CU001.outbound.protection.outlook.com (192.58.206.38) by
- edge.it.hpe.com (16.230.19.121) with Microsoft SMTP Server (version=TLS1_2,
+ edge.it.hpe.com (16.230.19.123) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Thu, 28 May
- 2026 17:34:33 +0000
+ 2026 05:34:42 -1200
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=B4DZGqv6qMCkdU7eEPkRbl2wyNV1zFzpMjn/2n6FScPqcSpj37givTf/QA0SxmteaRBDyr+bHjtP7XsKyX9dzXoAGpzrkKZkXNFNHoGr+R5P78hALafJvgO4nro+wc/slpqbQg6xfehdxWLb6HNe2rngk0l4LO8DwHJPD1b/KEHtcj2/xNya84Jx0npRxG+uIo5QFDoMeJdlPkLy8fARoGfITt7uuylcH0c1/a+pzS8BG3yaJO+rcWunldWx2cWIGILW5cRv6tIZfny9pFXW/SlDgPqJqv5mI3oZr77TQ31mIHp2z8p5lK8Z0A+hadk0MvvzHz0DvUkmesfr+vLpZg==
+ b=PLSQkmqs9jFBEswkehhdo0rhyTq+yl4BMr9O3sBs74atzy6etUuYYsumX5m3evnRDg6r63AsX+qVP6N7tp9vv0kyBZr5hjnUaV202P/0R6qL0WaCr/PWfFctFe8OkjOuDNnjPGttm+0DBtiiezxmDakdYOabtsYkF2snBQmlW6ONq9tOF7HiVQDrLKQQFhcc/ZTvD3Wzzd6neBLmVsBKPPQxmVquI12iPzEMrSpUphUlkdEfUCv78O1OfLIY79R7D6rho8UP0CD2zO8YqxhTLTnOOP/36rzne62tdEp/pBSiZbL6sek6f/ADDOo6/nAff99tHlD/Knfo8az4lCsrmA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uMfVx1zuvG2gyBcSo4tOQjfrq+dwUFIu7ehIzLYowp4=;
- b=kt38QVPgj56DAeEm6VMC79yUuEGqDh0r8gCfBSez9a3HI5fcUZ5xIr1IwxGo0s+sJOF0MBTQBaSi89XQEShLelIwrV5SCEGW+ZTiyV8eUZQrbliYVCbCTt5yqC+YOB2Iw5MZI0VhG/wCp7c3uVfkI477vplYW9XH0byvbYjnksiRgM+y3GEPnV5ooK/pPr2xiMzJP+cA1NoJMarb7fyptCG35DDNbvW/W6nT02P3yPO1p18qxOeUSdPCQ0oIdTZ2O7a6cIC5cS+2eldWb2F/T9JsAQhAY3hMzTutKzZtZPt+WSlAOvYZuxewQurkXHGwKJnnL2HwIIFN7pEWH/UZYA==
+ bh=W7Syi2JiuHBU4B5qfVVisFXT21VSOx0iboLGqGlaoaA=;
+ b=JuvxY12FCgMjNEQxGujRvg9YIRP4yvDYxXhrb9Xmd0eaChasKe6oXwg+N9HSvxQebqEGsXN+qZXC0F5ng3AaTfvLuHy8oiotrnPg1M03BUUQa2erCxOhtuwrF8E89cXD8XNzWHf2eo3tLLtlXYrGtRnH8wicU12wHOb0OgXoPIIcty5NhTZ15925Uqplg/FH890cvB5oOtGVgR0Um3I9cOhnQgPuKBIzToB1WNhi3qZ6pusqZCMrzzuScmKOmQ3DmzP+8CSEBZ8DVQGtPAIpeGCMxH/U3Z+fKbToPHToKHzGe2vHHAykVti32jStzq3jn8DDSd7/PPr6cLLuvZvr1w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
  header.d=hpe.com; arc=none
@@ -66,11 +64,11 @@ Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:610:1cc::7)
  by DS0PR84MB3745.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:1a8::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.71.14; Thu, 28 May
- 2026 17:34:31 +0000
+ 2026 17:34:40 +0000
 Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
  ([fe80::2c54:3534:122f:e74f]) by CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
  ([fe80::2c54:3534:122f:e74f%4]) with mapi id 15.21.0071.011; Thu, 28 May 2026
- 17:34:31 +0000
+ 17:34:40 +0000
 From: "Pradhan, Sanman" <sanman.pradhan@hpe.com>
 To: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
 CC: "linux@roeck-us.net" <linux@roeck-us.net>,
@@ -87,58 +85,60 @@ CC: "linux@roeck-us.net" <linux@roeck-us.net>,
         "Syed, Arif"
 	<arif.syed@hpe.com>,
         Sanman Pradhan <psanman@juniper.net>
-Subject: [PATCH v2 0/2] hwmon: (pmbus/max20860a) Add driver for Analog Devices
+Subject: [PATCH v2 2/2] hwmon: (pmbus/max20860a) Add driver for Analog Devices
  MAX20860A
-Thread-Topic: [PATCH v2 0/2] hwmon: (pmbus/max20860a) Add driver for Analog
+Thread-Topic: [PATCH v2 2/2] hwmon: (pmbus/max20860a) Add driver for Analog
  Devices MAX20860A
-Thread-Index: AQHc7sg+X8ApuzzIe06wFGSHXXViBg==
-Date: Thu, 28 May 2026 17:34:31 +0000
-Message-ID: <20260528173424.87503-1-sanman.pradhan@hpe.com>
+Thread-Index: AQHc7shDezR9P+s0TkS7e8v+A9eTXg==
+Date: Thu, 28 May 2026 17:34:40 +0000
+Message-ID: <20260528173424.87503-3-sanman.pradhan@hpe.com>
+References: <20260528173424.87503-1-sanman.pradhan@hpe.com>
+In-Reply-To: <20260528173424.87503-1-sanman.pradhan@hpe.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: CH3PR84MB3523:EE_|DS0PR84MB3745:EE_
-x-ms-office365-filtering-correlation-id: 6906a5bd-68b2-4c81-331a-08debcdf609a
+x-ms-office365-filtering-correlation-id: b59950da-2b04-4fe9-dda7-08debcdf65f0
 x-ld-processed: 105b2061-b669-4b31-92ac-24d304d195dc,ExtAddr
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024|38070700021|3023799007|56012099006|18002099003;
-x-microsoft-antispam-message-info: f+aM1RBYf6d0JMEAADIsDgX61Jc+zuRSJ1nLfZcpOKGXnhEai/w4k/keJi7UszndW7XqwlvSFA3pV2M3mleU4sm2NEleQ3TPP4/oG1EWGXkqG+Y+HnTWKeZBydecNrZedJyvP/zCswF+pHcwrqNgEPSZKS3wXPN1kGPvIlcAYGHBG7u7qhw7Lm0oTe4ies/eG9ii6QX4v9fqw2qGhWiwRC7ZPs5khCCM3gmUN9eshULsvhOlrMKSem42KsuhIDxzMkWbu3UsPNGoJal0+JpZfueHKutGwGaM8rmGxscX89RqQ6fFH7l5lLq5Gz4wEGUYh76G9Zi9vpvLmc9cQWe2q+qyeusfRjmqChftPTiY/gDONETyoolRvi/GPIK8z9mQYHwtsyeEHZSLtKlv7JNAcbKvnI6OEMz4ALR6r8iAXC/tcWP4gnh6hDRZzM14ER+b2m68IzF17+qQOwlJyaT8mjU5E8hYLnXN7q7Il2ion8uLTgLy1XLgwLAIquXEAGgaRNzz1Z08XMGKjdYe+0wwbnrRaIVK3xMOl1DGY5PHd9XeKfiKPFkqf1EQtEfGwCVKXWRkfbUCaDfDOHmRxJNOzIn/lGxWzyIMlJw61aUWCOkqCEKFP6UTOveUH8/NdiAfA1v41cQ1JrsSRTXsTT14DiBs3jjFiGa01+Tyzmr2M4r90pVjUY+2LjgW5fxxbE61eAd0plnWNa/rFhbEm8IFy1T/RxsrLCh3V+fZF+EqD8+POSlaRr4WL4IdFinewoIZ
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(38070700021)(3023799007)(56012099006)(18002099003);DIR:OUT;SFP:1101;
+x-microsoft-antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024|38070700021|3023799007|56012099006|18002099003|22082099003;
+x-microsoft-antispam-message-info: cfcagI0YmqHCdzwtZZt5eRi2KR2LPPGcriw4wsDF9RaolQjbUtCXG57AdzEBR+2rXZm2kBw7B4PV2x/tW4q6CADwEmwEed/C9tsLzGERVLA+8I2n6KeK2L56amtD6zIPJw00Zt8x5W6QlBtuGSgcJvGhuFehO0VYbXKL8tzPPets2Zl9z/gH8ohLPRdPVYrBKsQ9bRvbaubLDWzg4xmt9CZmw7sfbVuUZQR6hjf3Pfgmye6zaLnxTlucJGUZMMM9fqmfGZh2ov/wgAsXALEfDRZrvYVTUqySEjwV+V6U5OIV0mymLj1+ffbqDC+lRFfNZdN4eNT2qy4MuKRW/hZnex+hAZUeKtf1aAJbbg3R6I2RvgzYVtP+13vPnviOo9opdxtnp91gNB6aLMFwbQgKsvCiSD0iRpJ5+1owQzUaAbkb7rhdt7Ks6MAJUn5uY1WmZLhoQZJwQTFj3ZAd6nE5TWdvSAJ4s01IkTWvLVKojc8P/FrpyDyRi05pz8cyCS7Ko51T7HINDF9EhylzZQCcxbv+7C1R7Be5L3BPKMw5Td0W/+SBijsjjKxitr7ats9UXvSH2mLPyx67lauNc58mjszA2vVBoCDv1WGHVz3mo625aoy7NQQprjEsw5TLoYsBZYJCvMGN+vaJU5GZpQbzI9wU3qD65efW01qxJesroPcJlw/hDsSa9O79U+jML/bYOUtJC+/tX9tdIzyOuaS1RrP2nh7voJb/qfds4b2xYH1YsERpFs0JRJ38SqpS0Jy0
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(38070700021)(3023799007)(56012099006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?Ff7Xl8BIHa2byZd5tx4hPff2yivTFmrsMbFUswFSiOzDat2jRvFW51Nj5u?=
- =?iso-8859-1?Q?PXeHNHUPyLAWQxeBU5Sgh/RkQ8jDrXtUsC8U9gY4k6KobcNYi/IqSmIOAw?=
- =?iso-8859-1?Q?miWU7oYikHuyaAxohWhKGJwke++vPDsqYmKfRsY0fGjRZqmr9SikutWCdz?=
- =?iso-8859-1?Q?jP61t/gSBkq+NeaiAsEsKinnOPl/pTPzuxVQnp6WZNsh2zaUejv+MIEkHi?=
- =?iso-8859-1?Q?ghfhflvDIwIRWrwrpc/BqS37hu4gwJzZMfN4fKpIDfT9GVdinoFPLAxokv?=
- =?iso-8859-1?Q?bQHauOQ9ed5crC64VIhca+jCJhdhliYSbL5cEMdN1KIctCX3r0Av0eUIsV?=
- =?iso-8859-1?Q?01YvxuzvkWojDiGb/KaLgXnmJS/K7GFARfVpx7E31J49ZE8ZV5qdrBC0gR?=
- =?iso-8859-1?Q?st1HE4lcmFBrv+ChdoNvnLjKPgLUcsiSJM+MYsdOr8GE1/OI07vxM3cnBP?=
- =?iso-8859-1?Q?/wjLEx+ZVOXCOsC5BJZiwrr+eqtTk2ZQCkBW3pcQlLayjHKKhwRmxtvqF/?=
- =?iso-8859-1?Q?a0weaVvII7tDpv1W8j0m8sOOiCrFGh4UDgYxvz3EKGSR2rolspsNK5runP?=
- =?iso-8859-1?Q?SuVsaooIEUM+7/WYW5ZR6WMsgyybaznUwZTSiM02UqoXYBUAWoeMkFIkCR?=
- =?iso-8859-1?Q?j0B7iYQJTBqPlGOHpEiTtPNlQZObzYs5baNryF36GXOMZdISiqf9LlmIE4?=
- =?iso-8859-1?Q?JUf+FnzYsnIP12YdHnkIOUgmbnH7XGdpIgitxxIr16qZixri0cwIGTr1Q/?=
- =?iso-8859-1?Q?nvX5IxCLU5+ZHu/01wH0w74umNFnDm482Vj4HE+UBMwic4QWP0czqsGq37?=
- =?iso-8859-1?Q?kHceek+oeUGvV9pk2t4aSV/TvqnGh9gWlW+zMDONLH+dxJic9a1GdSFNVL?=
- =?iso-8859-1?Q?nz0FyYA/rnFkd8Qsf3aHrxluaqmWMqukyo7KvGJ8jHFra0Z9wmAbv8usfz?=
- =?iso-8859-1?Q?BgheJIKaz9Sd+B4W2UQkK2SjGX6wwIKEsc/T5ENtRHh3xlJW8u/VkVZ77Y?=
- =?iso-8859-1?Q?tJ5Igl7VNG+m5QkzzOguAxHVyEdZl6cE7VqAJ1Ktxt8SUqrqL0lXzlUn0N?=
- =?iso-8859-1?Q?xPsHtGl9tG/BTvpRd3DgPmYMXf+nl2MV9kwHFotdZgY4NTv1MZzUXntg5f?=
- =?iso-8859-1?Q?azmxTe71I6yUY0rhDmwlCh8ehcXfcfLHd8TUv86YvhHIPHQQ7lIYC9fMiY?=
- =?iso-8859-1?Q?s8b0PTgoh3eqeuqQYVDaxQ07H1C8seUcCK3JtHrotYYAG4AUbrdXKVJ3yo?=
- =?iso-8859-1?Q?3/l5ZgIDYZ94Vzms8v2F4v4h2Q300IimA5A0y9wGYSlQYbvlbkaXT5Ng5T?=
- =?iso-8859-1?Q?bZBB8624NmKTmrBz/+jI22qpFjiugtQqX6xrpeofdQeTZBvi92ZQnIVnXn?=
- =?iso-8859-1?Q?m7TvRdURtH0yUx58wx7L5ydE3NxuPTiUGV5lJUnzmXpR5y3puWleYZHUPd?=
- =?iso-8859-1?Q?xUK7oileHuJ5Wd5r6j2NMMhZIhAkiUNX8XOGfbcKwg/EaHBds4X+mlb+zU?=
- =?iso-8859-1?Q?hm9l94ToFfuUEeFMm7J7COzwDINbfZsOjw7wfQuOPegL++hWZ5cnrDEygY?=
- =?iso-8859-1?Q?n0U6/iQG8FCG1XTGVbhrNFQEpavX5F1GVv8ryArpTD86/To0+8BlH0hjTl?=
- =?iso-8859-1?Q?KNXRLYD0adfhCygnTYUSKQRgfteG9Gw2HgfLOISSthg4KcEE8Eprdv7XRU?=
- =?iso-8859-1?Q?UPW7HOjQk9zyKIrcnzZMyAtlkAeRO9yAMXLTzhpcFEtSenkyRUriUnhsVM?=
- =?iso-8859-1?Q?WU8TteR4ZagQgyqBRVwyqtUEzpU+FavBMSyMuW5OysZVZaSXTLnnD5k943?=
- =?iso-8859-1?Q?T0VrQ3/Fpg=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?sTkplNI4TvkNtQk9PN7e3+2Iaw28G7UnE11528FoaAE+zY9pJUcxdwa1Mm?=
+ =?iso-8859-1?Q?ehHXW+FaUCQtyA1nZ+tlmz0mRBQxUUWwOXXDYGjvYbP2VitMatWwGLIukw?=
+ =?iso-8859-1?Q?NFx3a5ueY37ZZK5Yuyy6F2Osxl//pAUA4kjSy0YtQ5rwWzYTbCNo9X1TDI?=
+ =?iso-8859-1?Q?8wdzvXNtXg7O0/b76bZeG8UmavK+QedwIwa2fN8Vetx0Ay3XC6JNVX8TVt?=
+ =?iso-8859-1?Q?Phb0nEGhcjDthZz3eBalfkRaq8GGODtu8QCxl2PpuKopgkJ9Lgqh/yp2Ew?=
+ =?iso-8859-1?Q?VnjGejil+jVWZBHV2moUowvFWiExUY2p5aiQPZmZv7UkFp8s0V1nskDRxl?=
+ =?iso-8859-1?Q?4k7iZqhn7GQ5ubRa8UIz2kyfOgKcA8THYs/RWCM4Chz56EBmrjcshFXIp7?=
+ =?iso-8859-1?Q?aegU1umtpMJsPIVZnryA7HNh1SJCOngYzqTmKPJlIWrtUyG430yFudlk44?=
+ =?iso-8859-1?Q?Uf2N9fg4L9QsN/hNT28h9D8AH2/O6Mn8vxQqKmPP4TSggUIDLUrASknGEW?=
+ =?iso-8859-1?Q?xeck2sNoMnhMjSXH05o8wv7ksJyIS5+omKUV7hbEYECaDmE7LOhoPiWbEx?=
+ =?iso-8859-1?Q?b6IelrVfHGRR1Q31GeRxqMBRiivZ/juKolhz+aHLg7ngDKTmpr9/tTcV3J?=
+ =?iso-8859-1?Q?ZQ1erQd+rMWb3RyCe+59leEG0EKS+tjGPnWquJAGYYOTglAeQbgXm4IWom?=
+ =?iso-8859-1?Q?fnpP9xVkv0qG7xRzP+7u3IAB+x3exPnFquGRdHJ9lTTM2QpS6v/mORIPe2?=
+ =?iso-8859-1?Q?nIGhccRaVZuatHMwSzcCvFOnP5vCNjPquGhUidTauzGZ+p5JAsukA9o4oH?=
+ =?iso-8859-1?Q?gtKiyYaC0XXutgKL/2bU8N01iayQOQVlcGAx5uVuRBOjBrB0dIWz+2bKIN?=
+ =?iso-8859-1?Q?7HdhunR5T9OiukuQIfCiHQmOOK6EP0r3AtZjt9SUsB9aEOpyF3UUU2xhua?=
+ =?iso-8859-1?Q?i30SOr5Kh57PsyeWiBv6KbB4zXU277eV6pEbrPlESVpq3TslqilY3TU1Ix?=
+ =?iso-8859-1?Q?Lv37/haEkj7gTJwvY8sKg0gTnCTg/beO5l5jyQir1VzebvT21OnAA2X0Jp?=
+ =?iso-8859-1?Q?4vQXel6q3Luh7gZJ5RHNkwIxPp5OCd9vKCH+QtGSWSGYSgY1hz7IBJh15A?=
+ =?iso-8859-1?Q?LVvXE76I9Rgw8KkqII/sadnp8fAi8Pxv4RjyhCGIuzUvstfVrmQ/X70mgP?=
+ =?iso-8859-1?Q?tm6z277y12Af/iRt7tQZGSpXy+V9kHcYbMUfYSq1zgyRCi3dc+TSOhQ8dB?=
+ =?iso-8859-1?Q?PMjHYD87RJsW1/unt4izi6N5Rzek4lknC10L18gpFJ36xdcsO0BoaOwW49?=
+ =?iso-8859-1?Q?vUKOTGwE+nwmwgAENyV/ixfP3N3+Ay/TkC06mdKfzAV0hRFW+UAHXXNosl?=
+ =?iso-8859-1?Q?noATxpgrciCYSfUnIcIAHuttvTmj+GKqGoycQ01jTATN4sKTq4fz73L2X9?=
+ =?iso-8859-1?Q?+WxudTR5Pbshd09lV0eJVdefP7bpZ4nBviXOeoKmTPPObeOwLOBgYQMOMq?=
+ =?iso-8859-1?Q?v5ZEaJ14i7lsAciSGPYYpFuKNjBiMZQshDr+My2RNf4H3tkEcIus34OK5s?=
+ =?iso-8859-1?Q?nTGbX36pU3pghywTUGb8wlEEsJH+EsIDC0WEI1LfJQjRinWmFNtzaogier?=
+ =?iso-8859-1?Q?zWHelPAwCToN+cm5xut/rrva2F9wSajtgZL9SIT3izTveWK3gndlxEK61w?=
+ =?iso-8859-1?Q?4p9Ez1wpiLBFlInE2cbYaWOI3tAIjUvXawAPQPqz9AAHvrJrcUi9d7XOIK?=
+ =?iso-8859-1?Q?yg5QhRcdGCZpu4F2dTVRhY7F9yCtAQsaDOkkj2oJb/XUUK3RC90OGhTFnq?=
+ =?iso-8859-1?Q?QQ0YaswIgg=3D=3D?=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
@@ -147,88 +147,275 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked: sjubJ4qHAp5Xse99CZ+sNmuE+6/uF6GpB5h6J78IeqY3ZqQvYFOSwT4BJ+/mn5MFfu5GqyVzN7OwlEx7ijufj9Ch7opMDVdRCmKc+tPEEq9IOT9B1mmoXL2st3YUFBw1AwX/UlNSgfyUEahd/Cr9EshbPCzZlRQpAyvLF1MuOAQx5JDiRPrxnUqpb7TsxGDvYaTEH5hlTdPFw9XGjkt3UBT11dKmvm5qY+wSdlK4fW99ByJbI5gzET2NhjO6lCAK799QlfdCErjX61GcfdPA/Z9TnnEjgjER04/rWWX+1ijOjNQpkWHk6YDn+dPxjhltXw7qn9cRt9dHYf4CQMtfDQ==
+X-Exchange-RoutingPolicyChecked: lMeZdX8M2kSITx2siAFXbECbGS6mLgKOlt7RpRjwde/HmWhInPLVBlvOwxXI7OOb01XtOChubz6mSertShKE31bPy01K3bGg1lxsKrdGLunaAv1ubEGFoHX1Ry9E8iYj5/TtGOHCD/SmycijWlaiuUgOfI3kT4JIg3dD5Twhkinbl3SHSylq+CrPCJ+J1suJiuQ2h7j1hpIHWkxL4y0Jgimfe5Jbl2fnrLklDNvzISKmYBs1tcbDT05xqnOmGT1zsnoK7ISkSvSAcQbK+slMkkcKt6i0w9LOV70FuBau8Ug8mP1V4322ruqH/5Ib0Zzb8SY84IaiZcGmI/L9zYZvvA==
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6906a5bd-68b2-4c81-331a-08debcdf609a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 May 2026 17:34:31.7181
+X-MS-Exchange-CrossTenant-Network-Message-Id: b59950da-2b04-4fe9-dda7-08debcdf65f0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 May 2026 17:34:40.7000
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: tK483f0nFaqgB1ozW/KWvUO+2ukKbf61IKwE5phG0EjfAhlfDorVQyzPZXbmTbnaH9BSvHd8xWR562u3Ib7OZw==
+X-MS-Exchange-CrossTenant-userprincipalname: rRIKF6hJaLs2L1AI58Zamh4RbhZR6BKDMB/W4BncuQJgX4BwgIOrdT7EaJlgmbMP+dSQ/cHYnhmV4+IHqdJ9aA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR84MB3745
 X-OriginatorOrg: hpe.com
-X-Authority-Analysis: v=2.4 cv=A6Zc+aWG c=1 sm=1 tr=0 ts=6a187cc2 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI4MDE3NyBTYWx0ZWRfX3pZ+bcnqiNvO
+ 3PJBxQOCO6a3quDwU8fVqxKmmkqheDa31yuX17CKibdyqggt8ksXkTn6Z8/4p6RBs6aHOD7/WB8
+ uYE7JAcLqpwcCfksxaj2f8+hBQq0MxZdfXJOcScGA0OPJYlIhYFW4aboBXJQTPTStabtr96fdTC
+ e4OoMKjZW154AgUEZRtq0ddpLDCoFlo4c8SKoXPbnHxQ76CscG7RAs60eOrnt7mJlit7Lcceqlx
+ OwUEJWCBc5roG83NEKQIdIrnJmISl2GplTQWOhPnmTqwR8VyDXu+6R96sLcrJrI2TVUbuYHQ5b1
+ G1nrXUiLwA8u0+R+zhu/rY5v1bKiEzOt0XfaZDgLEttelpDMgtPmQ93R/LmEaLHuD5UFk42Rdug
+ SPSayZRGk2po6IxxpoYQdbQMw66ZL2hVonTCyOrCgsWr/u0Jvezz5SrQ8NDj/nhkxRsSdRPBSCR
+ I3Jo06ZxcRZ0uVY8Bbw==
+X-Proofpoint-GUID: RX65ShUxZIJQjEcQ4inxGg3cJ1712LLS
+X-Proofpoint-ORIG-GUID: RX65ShUxZIJQjEcQ4inxGg3cJ1712LLS
+X-Authority-Analysis: v=2.4 cv=IPUyzAvG c=1 sm=1 tr=0 ts=6a187cc2 cx=c_pps
  a=5jkVtQsCUlC8zk5UhkBgHg==:117 a=5jkVtQsCUlC8zk5UhkBgHg==:17
  a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
  a=xqWC_Br6kY4A:10 a=8nJEP1OIZ-IA:10 a=NGcC8JguVDcA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=gQcMVamqm3wCPoSYhaRC:22 a=RtSn8ETxjE2H05FtM2s8:22
- a=OUXY8nFuAAAA:8 a=0bwX27tMA4ljDho7v6AA:9 a=wPNLvfGTeEIA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=gQcMVamqm3wCPoSYhaRC:22 a=_ZmgHqWwjZUDpi_pur5s:22
+ a=gAnH3GRIAAAA:8 a=MvuuwTCpAAAA:8 a=OUXY8nFuAAAA:8 a=VwQbUJbxAAAA:8
+ a=pGLkceISAAAA:8 a=g-UD0_MmSVei7Gk8AtgA:9 a=wPNLvfGTeEIA:10
  a=cAcMbU7R10T-QSRYIcO_:22
-X-Proofpoint-GUID: 4cAYY4pIEO4oIgnK5mi1j1lN_-sljb93
-X-Proofpoint-ORIG-GUID: 4cAYY4pIEO4oIgnK5mi1j1lN_-sljb93
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI4MDE3NyBTYWx0ZWRfX//1vKpQRDet8
- LSyB4GBptYBElwTR0wAWSFDYm0lIr+f3tuKKXBc2gWYycOUe+knANZdNg1n8ab5kLZdrx8zcvtz
- vBD00ducibXtEh56IQiG57P3dCnuHZ3io3WnM6xBy+2LBJa8ZuRrs1OKTQJ/bIlnQMH7qzo4wXK
- n/MyW+j9+mHMP/VrNtGl5pJY+VzKZ7yD6qGLA57ydHR3c3NQIr1lcMlwPF87C5tQd+VhA4PO8o9
- 7jgEDkrWWbVBXmc19y7ZeDT/OuuPJyjm8vwv5TVbIweEvBVs8Bmi4QCW7we1i8ihmMbPAJ4m2ur
- XIReZiKyvmQ7279TUNzyQkQuNzotShQHfrrd8WtQKRAE0WspJpwmDu0bSgNsPxUXBJ6nQOhycA7
- kaoTuiO8wSMow/0oh8EbcnszdC2TzFBUVEShdArqJXPkGRl9bdU4lONSPe3QGxZkHuwTjw2Pcjy
- SYvbE+wdiLBbcuRak3Q==
 X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
  definitions=2026-05-28_05,2026-05-28_03,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 malwarescore=0 bulkscore=0 adultscore=0 clxscore=1015
- spamscore=0 impostorscore=0 phishscore=0 suspectscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605210000 definitions=main-2605280177
+ lowpriorityscore=0 impostorscore=0 suspectscore=0 clxscore=1015
+ malwarescore=0 spamscore=0 bulkscore=0 adultscore=0 priorityscore=1501
+ phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2605210000
+ definitions=main-2605280177
 
-From: Sanman Pradhan <psanman@juniper.net>=0A=
+From: Syed Arif <arif.syed@hpe.com>=0A=
 =0A=
-Add PMBus hwmon driver and DT binding for the Analog Devices MAX20860A=0A=
-step-down DC-DC switching regulator. The driver provides monitoring of=0A=
-input/output voltage, output current, and temperature using linear data=0A=
-format.=0A=
+Add a PMBus driver for the Analog Devices MAX20860A step-down DC-DC=0A=
+switching regulator. The MAX20860A provides monitoring of input/output=0A=
+voltage, output current, and temperature via the PMBus interface using=0A=
+linear data format.=0A=
 =0A=
-This is a monitoring-only driver. The device's hardware write-protection=0A=
-(WRITE_PROTECT register =3D 0x20) is detected and respected automatically=
+Both "adi,max20860a" and "maxim,max20860a" compatible strings are=0A=
+supported for devicetree matching.=0A=
 =0A=
-by pmbus_core via pmbus_init_wp().=0A=
+Signed-off-by: Syed Arif <arif.syed@hpe.com>=0A=
+Signed-off-by: Sanman Pradhan <psanman@juniper.net>=0A=
+---=0A=
+v2:=0A=
+  - Added "maxim,max20860a" to of_device_id table=0A=
+  - Removed WRITE_PROTECT write from probe=0A=
 =0A=
-Tested on PTX platform with MAX20860A at i2c-195/0x23:=0A=
-  - All sensors (vin, vout, iout, temp1, temp2) read correctly=0A=
-  - Limit attributes correctly read-only (HW write-protect honored)=0A=
-  - Clean dmesg (no probe errors)=0A=
-=0A=
-Changes since v1:=0A=
-  - DT binding: Added allOf regulator.yaml reference and unevaluatedPropert=
-ies=0A=
-  - DT binding: Added "maxim,max20860a" as alternative compatible=0A=
-  - Driver: Added "maxim,max20860a" to of_device_id table=0A=
-  - Driver: Removed redundant WRITE_PROTECT write from probe (pmbus_core=0A=
-    handles it via pmbus_init_wp())=0A=
-=0A=
-Syed Arif (1):=0A=
-  hwmon: (pmbus/max20860a) Add driver for Analog Devices MAX20860A=0A=
-=0A=
-Sanman Pradhan (1):=0A=
-  dt-bindings: hwmon: pmbus: Add Analog Devices MAX20860A=0A=
-=0A=
- .../bindings/hwmon/pmbus/adi,max20860a.yaml   | 47 +++++++++++++++=0A=
- Documentation/hwmon/index.rst                 |  1 +=0A=
- Documentation/hwmon/max20860a.rst             | 57 ++++++++++++++++++=0A=
- MAINTAINERS                                   |  8 +++=0A=
- drivers/hwmon/pmbus/Kconfig                   |  9 +++=0A=
- drivers/hwmon/pmbus/Makefile                  |  1 +=0A=
- drivers/hwmon/pmbus/max20860a.c               | 58 +++++++++++++++++++=0A=
- 7 files changed, 181 insertions(+)=0A=
- create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/adi,max20=
-860a.yaml=0A=
+ Documentation/hwmon/index.rst     |  1 +=0A=
+ Documentation/hwmon/max20860a.rst | 57 ++++++++++++++++++++++++++++++=0A=
+ MAINTAINERS                       |  8 +++++=0A=
+ drivers/hwmon/pmbus/Kconfig       |  9 +++++=0A=
+ drivers/hwmon/pmbus/Makefile      |  1 +=0A=
+ drivers/hwmon/pmbus/max20860a.c   | 58 +++++++++++++++++++++++++++++++=0A=
+ 6 files changed, 134 insertions(+)=0A=
  create mode 100644 Documentation/hwmon/max20860a.rst=0A=
  create mode 100644 drivers/hwmon/pmbus/max20860a.c=0A=
 =0A=
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst=
+=0A=
+index e880c6ca84f0..ffaacda416e7 100644=0A=
+--- a/Documentation/hwmon/index.rst=0A=
++++ b/Documentation/hwmon/index.rst=0A=
+@@ -163,6 +163,7 @@ Hardware Monitoring Kernel Drivers=0A=
+    max20730=0A=
+    max20751=0A=
+    max20830=0A=
++   max20860a=0A=
+    max31722=0A=
+    max31730=0A=
+    max31760=0A=
+diff --git a/Documentation/hwmon/max20860a.rst b/Documentation/hwmon/max208=
+60a.rst=0A=
+new file mode 100644=0A=
+index 000000000000..ea6d2228fafc=0A=
+--- /dev/null=0A=
++++ b/Documentation/hwmon/max20860a.rst=0A=
+@@ -0,0 +1,57 @@=0A=
++.. SPDX-License-Identifier: GPL-2.0=0A=
++=0A=
++Kernel driver max20860a=0A=
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
++=0A=
++Supported chips:=0A=
++=0A=
++  * Analog Devices MAX20860A=0A=
++=0A=
++    Prefix: 'max20860a'=0A=
++=0A=
++    Addresses scanned: -=0A=
++=0A=
++    Datasheet: https://www.analog.com/en/products/max20860a.html=0A=
++=0A=
++Author:=0A=
++=0A=
++  - Syed Arif <arif.syed@hpe.com>=0A=
++  - Sanman Pradhan <psanman@juniper.net>=0A=
++=0A=
++=0A=
++Description=0A=
++-----------=0A=
++=0A=
++This driver supports hardware monitoring for Analog Devices MAX20860A=0A=
++Step-Down Switching Regulator with PMBus Interface.=0A=
++=0A=
++The MAX20860A is a fully integrated step-down DC-DC switching regulator.=
+=0A=
++Through the PMBus interface, the device can monitor input/output voltages,=
+=0A=
++output current and temperature.=0A=
++=0A=
++The driver is a client driver to the core PMBus driver. Please see=0A=
++Documentation/hwmon/pmbus.rst for details on PMBus client drivers.=0A=
++=0A=
++Usage Notes=0A=
++-----------=0A=
++=0A=
++This driver does not auto-detect devices. You will have to instantiate=0A=
++the devices explicitly.=0A=
++=0A=
++Sysfs entries=0A=
++-------------=0A=
++=0A=
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=0A=
++in1_label         "vin"=0A=
++in1_input         Measured input voltage=0A=
++in1_alarm         Input voltage alarm=0A=
++in2_label         "vout1"=0A=
++in2_input         Measured output voltage=0A=
++in2_alarm         Output voltage alarm=0A=
++curr1_label       "iout1"=0A=
++curr1_input       Measured output current=0A=
++curr1_alarm       Output current alarm=0A=
++temp1_input       Measured temperature=0A=
++temp1_alarm       Chip temperature alarm=0A=
++temp2_input       Measured temperature (secondary)=0A=
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=0A=
+diff --git a/MAINTAINERS b/MAINTAINERS=0A=
+index b71acb130395..1d9651947ee3 100644=0A=
+--- a/MAINTAINERS=0A=
++++ b/MAINTAINERS=0A=
+@@ -15688,6 +15688,14 @@ F:	Documentation/devicetree/bindings/hwmon/pmbus/a=
+di,max20830.yaml=0A=
+ F:	Documentation/hwmon/max20830.rst=0A=
+ F:	drivers/hwmon/pmbus/max20830.c=0A=
+ =0A=
++MAX20860A HARDWARE MONITOR DRIVER=0A=
++M:	Sanman Pradhan <psanman@juniper.net>=0A=
++L:	linux-hwmon@vger.kernel.org=0A=
++S:	Maintained=0A=
++F:	Documentation/devicetree/bindings/hwmon/pmbus/adi,max20860a.yaml=0A=
++F:	Documentation/hwmon/max20860a.rst=0A=
++F:	drivers/hwmon/pmbus/max20860a.c=0A=
++=0A=
+ MAX2175 SDR TUNER DRIVER=0A=
+ M:	Ramesh Shanmugasundaram <rashanmu@gmail.com>=0A=
+ L:	linux-media@vger.kernel.org=0A=
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig=0A=
+index 64f38654f4e7..5825dda75f2c 100644=0A=
+--- a/drivers/hwmon/pmbus/Kconfig=0A=
++++ b/drivers/hwmon/pmbus/Kconfig=0A=
+@@ -402,6 +402,15 @@ config SENSORS_MAX20830=0A=
+ 	  This driver can also be built as a module. If so, the module will=0A=
+ 	  be called max20830.=0A=
+ =0A=
++config SENSORS_MAX20860A=0A=
++	tristate "Analog Devices MAX20860A"=0A=
++	help=0A=
++	  If you say yes here you get hardware monitoring support for Analog=0A=
++	  Devices MAX20860A step-down converter.=0A=
++=0A=
++	  This driver can also be built as a module. If so, the module will=0A=
++	  be called max20860a.=0A=
++=0A=
+ config SENSORS_MAX31785=0A=
+ 	tristate "Maxim MAX31785 and compatibles"=0A=
+ 	help=0A=
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile=0A=
+index 1f2c73b71953..ffc05f493213 100644=0A=
+--- a/drivers/hwmon/pmbus/Makefile=0A=
++++ b/drivers/hwmon/pmbus/Makefile=0A=
+@@ -39,6 +39,7 @@ obj-$(CONFIG_SENSORS_MAX17616)	+=3D max17616.o=0A=
+ obj-$(CONFIG_SENSORS_MAX20730)	+=3D max20730.o=0A=
+ obj-$(CONFIG_SENSORS_MAX20751)	+=3D max20751.o=0A=
+ obj-$(CONFIG_SENSORS_MAX20830)	+=3D max20830.o=0A=
++obj-$(CONFIG_SENSORS_MAX20860A)	+=3D max20860a.o=0A=
+ obj-$(CONFIG_SENSORS_MAX31785)	+=3D max31785.o=0A=
+ obj-$(CONFIG_SENSORS_MAX34440)	+=3D max34440.o=0A=
+ obj-$(CONFIG_SENSORS_MAX8688)	+=3D max8688.o=0A=
+diff --git a/drivers/hwmon/pmbus/max20860a.c b/drivers/hwmon/pmbus/max20860=
+a.c=0A=
+new file mode 100644=0A=
+index 000000000000..5274147ad3d0=0A=
+--- /dev/null=0A=
++++ b/drivers/hwmon/pmbus/max20860a.c=0A=
+@@ -0,0 +1,58 @@=0A=
++// SPDX-License-Identifier: GPL-2.0-or-later=0A=
++/*=0A=
++ * Hardware monitoring driver for Analog Devices MAX20860A=0A=
++ *=0A=
++ * SPDX-FileCopyrightText: Copyright Hewlett Packard Enterprise Developmen=
+t LP=0A=
++ */=0A=
++=0A=
++#include <linux/i2c.h>=0A=
++#include <linux/module.h>=0A=
++#include "pmbus.h"=0A=
++=0A=
++static struct pmbus_driver_info max20860a_info =3D {=0A=
++	.pages =3D 1,=0A=
++	.format[PSC_VOLTAGE_IN] =3D linear,=0A=
++	.format[PSC_VOLTAGE_OUT] =3D linear,=0A=
++	.format[PSC_CURRENT_OUT] =3D linear,=0A=
++	.format[PSC_TEMPERATURE] =3D linear,=0A=
++	.func[0] =3D PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT |=0A=
++		PMBUS_HAVE_STATUS_VOUT |=0A=
++		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |=0A=
++		PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 |=0A=
++		PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_STATUS_INPUT,=0A=
++};=0A=
++=0A=
++static int max20860a_probe(struct i2c_client *client)=0A=
++{=0A=
++	return pmbus_do_probe(client, &max20860a_info);=0A=
++}=0A=
++=0A=
++static const struct i2c_device_id max20860a_id[] =3D {=0A=
++	{"max20860a"},=0A=
++	{}=0A=
++};=0A=
++MODULE_DEVICE_TABLE(i2c, max20860a_id);=0A=
++=0A=
++static const struct of_device_id max20860a_of_match[] =3D {=0A=
++	{ .compatible =3D "adi,max20860a" },=0A=
++	{ .compatible =3D "maxim,max20860a" },=0A=
++	{}=0A=
++};=0A=
++MODULE_DEVICE_TABLE(of, max20860a_of_match);=0A=
++=0A=
++static struct i2c_driver max20860a_driver =3D {=0A=
++	.driver =3D {=0A=
++		.name =3D "max20860a",=0A=
++		.of_match_table =3D max20860a_of_match,=0A=
++	},=0A=
++	.probe =3D max20860a_probe,=0A=
++	.id_table =3D max20860a_id,=0A=
++};=0A=
++=0A=
++module_i2c_driver(max20860a_driver);=0A=
++=0A=
++MODULE_AUTHOR("Syed Arif <arif.syed@hpe.com>");=0A=
++MODULE_AUTHOR("Sanman Pradhan <psanman@juniper.net>");=0A=
++MODULE_DESCRIPTION("PMBus driver for Analog Devices MAX20860A");=0A=
++MODULE_LICENSE("GPL");=0A=
++MODULE_IMPORT_NS("PMBUS");=0A=
 -- =0A=
 2.34.1=0A=
+=0A=
