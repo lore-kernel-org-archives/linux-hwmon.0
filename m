@@ -1,79 +1,77 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7310B36A361
-	for <linux-hwmon@vger.kernel.org>; Fri, 29 May 2026 09:22:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 019BC3C1F46
+	for <linux-hwmon@vger.kernel.org>; Fri, 29 May 2026 09:30:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780046552; cv=none; b=Wa1dz1nrSPlc6kBxMm3MeHdq1tsr4oiYaIYLXUQoN8LFrLRBbn6IpssNh2VCZ2cfQ5fpzHQi4EiigsK6bvniP4aNsaoAAQpLNHWZK6wQUC2zLCLVE9s6TZ6It2Zs0NGrDIzEpDauamOH55XxZKT5CYeOayAB+lPIiqdc/rbmFiY=
+	t=1780047026; cv=none; b=UohUzvbIlQWOIPmMjgqo1ybLhbw6HBXT1ms7C7TEFYbCxI3EffO7zV/kEAzLRXEnm/CYSYTdgg2dzCU0Tb1OXGTyDKY8t6lWzYiVy3pqr9Z0kP2sd0HH+3CEIBvWUeG3+sNOLGdFzj0kXtT4zQRhOuiTI9jje7A8rFoQPQLGxAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780046552; c=relaxed/simple;
-	bh=tmV9dJLMu0sRKJzLUgwpdlqw+ZSXnLB7bB+l1ToG4zk=;
+	s=arc-20240116; t=1780047026; c=relaxed/simple;
+	bh=GV5Rm1RwGK7U8/1MVkT6I42g38w5v9VWFglOl5x0yhY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tjUuf4nbfND5aVFVfKmI9BM3yqTyA2bS42YPtfbqM9DsQkF0yvl0HirCxpOthdOqM8o80i2v0EeRITN6hxmRKkV3lXLDVDkZJ7i31+GgETV8kpvx+nhP9ZNMxIwdYhE7e0sMrTPNGuNcjSdi9G7wzkhdlUkgi26L3Pxw9nDmlwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g4ybf+qK; arc=none smtp.client-ip=209.85.208.41
+	 Content-Type:Content-Disposition:In-Reply-To; b=qh7C1/n49heG+Uwsui9hg4huSYKwp9y1HBiNWYr45L1nuIoqkfuswwM8oH0gC1H3hcH8G66WvqqKCXChxvRhE9iwhVPr1uzb/E82Pg9gWx32SDoUmw6LFnKtUiG87ObLn1ib9VMECSMwsgGh4dMSCRhbUqUNSSxqDH2dKmf+UdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b6hl8S8Y; arc=none smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g4ybf+qK"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-67c9616b4feso21323518a12.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 29 May 2026 02:22:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b6hl8S8Y"
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-bce386d5b85so2057314166b.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 29 May 2026 02:30:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780046550; x=1780651350; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780047023; x=1780651823; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=LPOdFtlxbAd+SCXAV1KKChh2WjDpaHhM9mfLcDgn5rk=;
-        b=g4ybf+qKa1VTMJdBG9uYTFQcTV9+jntB3Uiw0Pkbsu/W0LqdY5Y0wWybT3NyYI+cXH
-         3kEMpD/dbStEC8z0SOMbpW8Elu2J3/X4x+EvVGlY/Jef3tIayxKgb6r107VB+dZJnpE2
-         tH1Ic6eWkWh2eJyL9L76OvVtoOPL9NT2g2uyNAdwS3qVG+mU5cgNllkfNhA0rBDMdk5Y
-         ixelQYwrTHzvZwhtb5yY/NHop9umxe+JATUfe3QW95sk4fGkZODab8IplRPZHQS6nDvn
-         GM2MeCKP42gtGevcYUTzUveyvRhctLZA8NnRiRLx+4Cul4bDHgHLSglgg4PWn1l9+It+
-         q1eQ==
+        bh=GYSRC4x1mjQTbx6PsVvZb225HoobPmXU3KLDTDQ5/gg=;
+        b=b6hl8S8YmUL9U/oTnfIPjw8gG5G3oMdwMc/ofkHVzQrikuk4JvF34fTCz/qTHaKG8/
+         c/41V3YpoRnUrul0dQ48XFLiLnsIZBNBSRSXkWZpfjAeXS/aJWDPQH6pBqSRFiGH0nHV
+         ywVmjTVGxPwZhFOPjW8dAwO/Ofmgpl83xq/eV9R6AYSQUHz5yic8eQg/piESOqYTRr3Q
+         11Gk6gVNHbPcW6ddyRsiA10OkncvIzFY+3zokGRa19QSs8pzgwJ7vhbbVz1W8sTSsIIN
+         1GEgZAjeAiMYr+66l2AjO2ymZDyPmtheCpvaAPVZbFbAoSLncWUjRbCxjA7c/C1bgwFJ
+         PNKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780046550; x=1780651350;
+        d=1e100.net; s=20251104; t=1780047023; x=1780651823;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LPOdFtlxbAd+SCXAV1KKChh2WjDpaHhM9mfLcDgn5rk=;
-        b=Vt0NpfrBxr4iPd6R9EbaQTqv7AaTIC92ZT18kZfHK0A8JYFte4F8Caw/S6zl1iielr
-         n28fkI3ZxNlvM6F8sN63AizRV39Vj8JF6/rH2pZbeN619TButtHJF3gm6vOgRJ6sSMji
-         faGn8/qw8J6S/SDGdJ4sV0vLPbmclulnHq0PEyt05X1idyF7UgmPVr/RCsIQXM1nbTDZ
-         G8I3PeZFXhwPaRGhPp2XwaHRSatz7jVbWzEB7MJth6rIwL4jeGkne3E444j9jq/1ZLSq
-         fjUou131/MHFtSZV9EPYAhXRtzeX5wKnyZwq6ykFdZVqS1t2VaWtwqjEcf9INJE4dpFk
-         3Bfg==
-X-Forwarded-Encrypted: i=1; AFNElJ+WJPwD1eLYlJGVpOVkqeY+QRW7Nna2xgt7Qu/dAEhmkUCPus7hjZwI7PvKFhQFIx++nW4NEILCVNDGRg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzvlLkY+rVMOykUGwE1f2eqj2dO1mHghCohtyQNJzhePtq7fFAI
-	UNiM0z9yjlKnuh4H/kAzDmMeaAKI94mlfeMq6C61kCBFkqrcCF3sQAgU1TXXTw==
-X-Gm-Gg: Acq92OH+6mtPmlu68n8U38IY9ADuh+rtgS98sj1kiq//YLQQd67Zhp3/d4/ZawOda8+
-	29v56IIM12P3mZhHkpBUbrY0onVH80bES2XzJ+lUYWthjqwScvnqWOxQKvHRcxTGwdrkhr98ikb
-	tRoKuynD3uMjE+T6gedSne/vz8c0wFzUioRs+nx50oK4ZWjOpF90PLk9JloizLeXIdvpClsTdPc
-	VAgBOJgm9RVfznBmGBMxrgEW6YPFxaTvQwYvjG2ZdWWbVoGD3lC6IBKhIUICH7YCUvNYrLMrai6
-	9OfT3/+XjVFk5xzCd8eEJcpPq7ziet46rJ2Y63zFf7OBb1hAVqaFi/wTgeJuoCMXdUWrU3UkLS8
-	V3QN407dU8ZjtMZScvbUpXdbS8u9LLns5HktFMTya6CN8pEG8jiZy+PgJkSMalEaBJ19VSLp9tl
-	gdWpYjNeoPwtdZSn5GOwdZF8A=
-X-Received: by 2002:a17:907:2d29:b0:be3:a586:8b87 with SMTP id a640c23a62f3a-be9cf69ae25mr95650466b.42.1780046549756;
-        Fri, 29 May 2026 02:22:29 -0700 (PDT)
+        bh=GYSRC4x1mjQTbx6PsVvZb225HoobPmXU3KLDTDQ5/gg=;
+        b=hJi6dQJitzVEA5d6W9CkWrD6KE4M5nGZu9+DzBSSGf/00rYaTfXWr69r27sfreIk9C
+         w+iS5kX1yRbTm44zLalUl1yZHChHyRR5mTVtNWwgWwtoEVmvzK/hqtWdfGcNHK0UT3rs
+         RVjpJEEhn+UpqXs4Do6sR6v36B8lFcFt2A6/nHFI4uXy7jau4eYpecWtX+I3jKfTaB6e
+         pTKYuT92d/Q8S6d5kjIFNSgJdYWRUux/BEG57RG30Gzey/y4fVZAHf7T4p4oQ58TAI6U
+         HxZbFrA1RlFIQVcaE/zEUgPhOEJKvbQ7ogj/2eybUbpJVE356ko8lZ4mL/rwH7Ck1OVe
+         M+Pw==
+X-Gm-Message-State: AOJu0Yx+1s9BW1fea1EGkut4zA5r3waZUHu2uWUSzJD1U52H4XebzKu5
+	37RA3fLHhEz4r6uupe4RkjCZwXAq1Tq2+n7L/BROKWHiNepjcN7TEHVI
+X-Gm-Gg: Acq92OFMtUQ2PrRnB9rYGVJGneURP/QVse0Pn14Ke0o7PW6ENe0bcomm3+93/F11itu
+	M4D8oDBGGEs8pmMVqIU0AE8g5NNRahzqYhHIUHqTyWWb2mZqKnd3FgpmGrzCEyTfg1uZLxMjsd7
+	lKJ5h83ENwxT5l63VU8jHB6kDhDcf6bTybIV4C/pVO3hw+P7ob9q8ZtRCJXALxk2bLvU8Itj2XX
+	8GDurrBDibB25eohPHxHuonKqm7y414wUAAa0NUOomtqF0+0CJAeoP9qTIGcSE+jrQS0wDjSktC
+	y2JV0C0jMUWWleSoQlYfFnJN9oyPoWmfC2m8SvbiIiAgJeNs58Kx7jsGkwTsZGpxN6GzGCUtTTX
+	aygEQp/7diGY40UmzeEaG0QPbmhEXMjFoWvCa4wXhcEZA6lZMYV/V3IjeA3L6LoJhvxIPXzQKFM
+	EgQJpusm43zudo7nO9p97uytk=
+X-Received: by 2002:a17:907:2d20:b0:bde:72a9:ba83 with SMTP id a640c23a62f3a-be9cf2ae3d2mr105870766b.29.1780047022876;
+        Fri, 29 May 2026 02:30:22 -0700 (PDT)
 Received: from nsa ([45.94.208.29])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-be9d27f49a9sm49646966b.10.2026.05.29.02.22.28
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-be9d27f2207sm50349466b.2.2026.05.29.02.30.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2026 02:22:29 -0700 (PDT)
-Date: Fri, 29 May 2026 10:23:26 +0100
+        Fri, 29 May 2026 02:30:22 -0700 (PDT)
+Date: Fri, 29 May 2026 10:31:20 +0100
 From: Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>
-To: Conor Dooley <conor@kernel.org>
-Cc: "Pradhan, Sanman" <sanman.pradhan@hpe.com>, 
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, "linux@roeck-us.net" <linux@roeck-us.net>, 
-	"robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>, 
-	"conor+dt@kernel.org" <conor+dt@kernel.org>, "corbet@lwn.net" <corbet@lwn.net>, 
-	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>, "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"Syed, Arif" <arif.syed@hpe.com>, Sanman Pradhan <psanman@juniper.net>
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: Add Analog Devices
- MAX20860A
-Message-ID: <ahla7zM8f3yFYnsv@nsa>
-References: <20260528173424.87503-1-sanman.pradhan@hpe.com>
- <20260528173424.87503-2-sanman.pradhan@hpe.com>
- <20260528-paging-alfalfa-9c3837635192@spud>
+To: "Pradhan, Sanman" <sanman.pradhan@hpe.com>
+Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, 
+	"linux@roeck-us.net" <linux@roeck-us.net>, "robh@kernel.org" <robh@kernel.org>, 
+	"krzk+dt@kernel.org" <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>, 
+	"corbet@lwn.net" <corbet@lwn.net>, "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>, 
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "Syed, Arif" <arif.syed@hpe.com>, 
+	Sanman Pradhan <psanman@juniper.net>
+Subject: Re: [PATCH v3 2/2] hwmon: (pmbus/max20860a) Add driver for Analog
+ Devices MAX20860A
+Message-ID: <ahlcnlJJnLfmCZNH@nsa>
+References: <20260529001903.625737-1-sanman.pradhan@hpe.com>
+ <20260529001903.625737-3-sanman.pradhan@hpe.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -83,80 +81,229 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260528-paging-alfalfa-9c3837635192@spud>
+In-Reply-To: <20260529001903.625737-3-sanman.pradhan@hpe.com>
 
-On Thu, May 28, 2026 at 06:41:31PM +0100, Conor Dooley wrote:
-> On Thu, May 28, 2026 at 05:34:36PM +0000, Pradhan, Sanman wrote:
-> > From: Sanman Pradhan <psanman@juniper.net>
-> > 
-> > Add devicetree binding documentation for the Analog Devices MAX20860A
-> > step-down DC-DC switching regulator with PMBus interface.
-> > 
-> > Both "adi,max20860a" and "maxim,max20860a" compatible strings are
-> > supported. The MAX20860A was originally manufactured by Maxim Integrated,
-> > now part of Analog Devices.
-> > 
-> > Signed-off-by: Sanman Pradhan <psanman@juniper.net>
-> > ---
-> > v2:
-> >   - Added allOf regulator.yaml reference and unevaluatedProperties
+On Fri, May 29, 2026 at 12:19:21AM +0000, Pradhan, Sanman wrote:
+> From: Syed Arif <arif.syed@hpe.com>
 > 
-> >   - Added "maxim,max20860a" as alternative compatible
+> Add a PMBus driver for the Analog Devices MAX20860A step-down DC-DC
+> switching regulator. The MAX20860A provides monitoring of input/output
+> voltage, output current, and temperature via the PMBus interface using
+> linear data format.
 > 
-> No, please delete this.
-> I don't remember what the policy that ADI use for things that used to be
-> maxim products, but just pick one compatible for this device. I have a
-> feeling they want adi to always be used in these cases.
+> Signed-off-by: Syed Arif <arif.syed@hpe.com>
+> Signed-off-by: Sanman Pradhan <psanman@juniper.net>
+> ---
+> v3:
+>   - Removed "maxim,max20860a" from of_device_id
+> v2:
+>   - Removed WRITE_PROTECT write from probe
+> 
+>  Documentation/hwmon/index.rst     |  1 +
+>  Documentation/hwmon/max20860a.rst | 57 +++++++++++++++++++++++++++++++
+>  MAINTAINERS                       |  8 +++++
+>  drivers/hwmon/pmbus/Kconfig       |  9 +++++
+>  drivers/hwmon/pmbus/Makefile      |  1 +
+>  drivers/hwmon/pmbus/max20860a.c   | 57 +++++++++++++++++++++++++++++++
+>  6 files changed, 133 insertions(+)
+>  create mode 100644 Documentation/hwmon/max20860a.rst
+>  create mode 100644 drivers/hwmon/pmbus/max20860a.c
+> 
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index e880c6ca84f0..ffaacda416e7 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -163,6 +163,7 @@ Hardware Monitoring Kernel Drivers
+>     max20730
+>     max20751
+>     max20830
+> +   max20860a
+>     max31722
+>     max31730
+>     max31760
+> diff --git a/Documentation/hwmon/max20860a.rst b/Documentation/hwmon/max20860a.rst
+> new file mode 100644
+> index 000000000000..ea6d2228fafc
+> --- /dev/null
+> +++ b/Documentation/hwmon/max20860a.rst
+> @@ -0,0 +1,57 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +Kernel driver max20860a
+> +=======================
+> +
+> +Supported chips:
+> +
+> +  * Analog Devices MAX20860A
+> +
+> +    Prefix: 'max20860a'
+> +
+> +    Addresses scanned: -
+> +
+> +    Datasheet: https://www.analog.com/en/products/max20860a.html
+> +
+> +Author:
+> +
+> +  - Syed Arif <arif.syed@hpe.com>
+> +  - Sanman Pradhan <psanman@juniper.net>
+> +
+> +
+> +Description
+> +-----------
+> +
+> +This driver supports hardware monitoring for Analog Devices MAX20860A
+> +Step-Down Switching Regulator with PMBus Interface.
+> +
+> +The MAX20860A is a fully integrated step-down DC-DC switching regulator.
+> +Through the PMBus interface, the device can monitor input/output voltages,
+> +output current and temperature.
+> +
+> +The driver is a client driver to the core PMBus driver. Please see
+> +Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
+> +
+> +Usage Notes
+> +-----------
+> +
+> +This driver does not auto-detect devices. You will have to instantiate
+> +the devices explicitly.
+> +
+> +Sysfs entries
+> +-------------
+> +
+> +================= ========================================
+> +in1_label         "vin"
+> +in1_input         Measured input voltage
+> +in1_alarm         Input voltage alarm
+> +in2_label         "vout1"
+> +in2_input         Measured output voltage
+> +in2_alarm         Output voltage alarm
+> +curr1_label       "iout1"
+> +curr1_input       Measured output current
+> +curr1_alarm       Output current alarm
+> +temp1_input       Measured temperature
+> +temp1_alarm       Chip temperature alarm
+> +temp2_input       Measured temperature (secondary)
+> +================= ========================================
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index b71acb130395..1d9651947ee3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -15688,6 +15688,14 @@ F:	Documentation/devicetree/bindings/hwmon/pmbus/adi,max20830.yaml
+>  F:	Documentation/hwmon/max20830.rst
+>  F:	drivers/hwmon/pmbus/max20830.c
+>  
+> +MAX20860A HARDWARE MONITOR DRIVER
+> +M:	Sanman Pradhan <psanman@juniper.net>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/hwmon/pmbus/adi,max20860a.yaml
+> +F:	Documentation/hwmon/max20860a.rst
+> +F:	drivers/hwmon/pmbus/max20860a.c
+> +
+>  MAX2175 SDR TUNER DRIVER
+>  M:	Ramesh Shanmugasundaram <rashanmu@gmail.com>
+>  L:	linux-media@vger.kernel.org
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index 64f38654f4e7..5825dda75f2c 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -402,6 +402,15 @@ config SENSORS_MAX20830
+>  	  This driver can also be built as a module. If so, the module will
+>  	  be called max20830.
+>  
+> +config SENSORS_MAX20860A
+> +	tristate "Analog Devices MAX20860A"
+> +	help
+> +	  If you say yes here you get hardware monitoring support for Analog
+> +	  Devices MAX20860A step-down converter.
+> +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called max20860a.
+> +
+>  config SENSORS_MAX31785
+>  	tristate "Maxim MAX31785 and compatibles"
+>  	help
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index 1f2c73b71953..ffc05f493213 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -39,6 +39,7 @@ obj-$(CONFIG_SENSORS_MAX17616)	+= max17616.o
+>  obj-$(CONFIG_SENSORS_MAX20730)	+= max20730.o
+>  obj-$(CONFIG_SENSORS_MAX20751)	+= max20751.o
+>  obj-$(CONFIG_SENSORS_MAX20830)	+= max20830.o
+> +obj-$(CONFIG_SENSORS_MAX20860A)	+= max20860a.o
+>  obj-$(CONFIG_SENSORS_MAX31785)	+= max31785.o
+>  obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
+>  obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
+> diff --git a/drivers/hwmon/pmbus/max20860a.c b/drivers/hwmon/pmbus/max20860a.c
+> new file mode 100644
+> index 000000000000..f5feefcbe407
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/max20860a.c
+> @@ -0,0 +1,57 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Hardware monitoring driver for Analog Devices MAX20860A
+> + *
+> + * SPDX-FileCopyrightText: Copyright Hewlett Packard Enterprise Development LP
+> + */
+> +
+> +#include <linux/i2c.h>
+> +#include <linux/module.h>
+> +#include "pmbus.h"
+> +
+> +static struct pmbus_driver_info max20860a_info = {
+> +	.pages = 1,
+> +	.format[PSC_VOLTAGE_IN] = linear,
+> +	.format[PSC_VOLTAGE_OUT] = linear,
+> +	.format[PSC_CURRENT_OUT] = linear,
+> +	.format[PSC_TEMPERATURE] = linear,
+> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT |
+> +		PMBUS_HAVE_STATUS_VOUT |
+> +		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 |
+> +		PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_STATUS_INPUT,
+> +};
 
-Yes, adi should be the prefix.
+Any reason not to add regulator support? Given that the device seems to
+be a regulator...
 
 - Nuno Sá
 
+> +
+> +static int max20860a_probe(struct i2c_client *client)
+> +{
+> +	return pmbus_do_probe(client, &max20860a_info);
+> +}
+> +
+> +static const struct i2c_device_id max20860a_id[] = {
+> +	{"max20860a"},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(i2c, max20860a_id);
+> +
+> +static const struct of_device_id max20860a_of_match[] = {
+> +	{ .compatible = "adi,max20860a" },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, max20860a_of_match);
+> +
+> +static struct i2c_driver max20860a_driver = {
+> +	.driver = {
+> +		.name = "max20860a",
+> +		.of_match_table = max20860a_of_match,
+> +	},
+> +	.probe = max20860a_probe,
+> +	.id_table = max20860a_id,
+> +};
+> +
+> +module_i2c_driver(max20860a_driver);
+> +
+> +MODULE_AUTHOR("Syed Arif <arif.syed@hpe.com>");
+> +MODULE_AUTHOR("Sanman Pradhan <psanman@juniper.net>");
+> +MODULE_DESCRIPTION("PMBus driver for Analog Devices MAX20860A");
+> +MODULE_LICENSE("GPL");
+> +MODULE_IMPORT_NS("PMBUS");
+> -- 
+> 2.34.1
 > 
-> pw-bot: changes-requested
-> 
-> > 
-> >  .../bindings/hwmon/pmbus/adi,max20860a.yaml   | 47 ++++++++++++++++++++
-> >  1 file changed, 47 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/adi,max20860a.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20860a.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20860a.yaml
-> > new file mode 100644
-> > index 000000000000..f7eeb30f11b3
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20860a.yaml
-> > @@ -0,0 +1,47 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/hwmon/pmbus/adi,max20860a.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Analog Devices MAX20860A Step-Down Converter
-> > +
-> > +maintainers:
-> > +  - Sanman Pradhan <psanman@juniper.net>
-> > +
-> > +description: |
-> > +  The MAX20860A is a fully integrated step-down DC-DC switching regulator
-> > +  with PMBus interface for monitoring input/output voltage, output current
-> > +  and temperature.
-> > +
-> > +  Datasheet: https://www.analog.com/en/products/max20860a.html
-> > +
-> > +allOf:
-> > +  - $ref: /schemas/regulator/regulator.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - adi,max20860a
-> > +      - maxim,max20860a
-> 
-> And for future reference, please use fallback compatibles when dealing
-> with devices that have the same programming mode.
-> 
-> Cheers,
-> Conor.
-
-
