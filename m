@@ -1,136 +1,88 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27B7A3264E7;
-	Fri, 29 May 2026 13:28:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from exchange.fintech.ru (exchange.fintech.ru [195.54.195.159])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E64135E922;
+	Fri, 29 May 2026 14:18:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.54.195.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780061283; cv=none; b=Yxv27C7D8liTcEVRE1NGxn7/VpOd9u3U0XNu0XWrrvlOsoKTINKqC+6Bng5DzpRWP1sLyzwendIgrOJY8PHKTTNBQrZsk1xr1mMn6fB6tq+l26kodp9iQ4DZPHvXtntlu4m8JvMKBFdugUsrlmWQu6WY3rb4xh7QayNmKkfh7vc=
+	t=1780064330; cv=none; b=WYvRvVvn/lo38NkoHyDPNf5ryENC0IgoRXs6RcCxO6U8wnv1rqEQ6DfSjdLDgfdZFz7zZ1Ur1k1Ia5upOWWxBb+tK0cGRPTJlgfL8YETnQEM0st3xMk9998XsKmz3fhHuGPxt+bO84wn+Y4+WMwgoDM+HJihLSaarDSeddSGpw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780061283; c=relaxed/simple;
-	bh=8vbBA8zpJidr2ow8HudpSBHS9WleA2rXa/gnXU0xu+k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YSEoAMK7DBbFEVxO+qOrlx0XhlR09SEHXJmNLI7pJKpgOMXnQKYbBQxhienhq4hludHnUjlJh0Y1B9OU0wgXjSO/VULtENwEXhas9ffHlnT38nUnbKePQZ8fyTjoHTl+8eaM1obmiDvltMtnaTJ5unkd6X+bCOsviaeOyzroi1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=qsR1gYXM; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="qsR1gYXM"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7152220E3;
-	Fri, 29 May 2026 06:27:55 -0700 (PDT)
-Received: from [10.57.26.238] (unknown [10.57.26.238])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4021F3F905;
-	Fri, 29 May 2026 06:27:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1780061280; bh=8vbBA8zpJidr2ow8HudpSBHS9WleA2rXa/gnXU0xu+k=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qsR1gYXM1cOjWCrwsD539WkFkaY98RHzl7VCpjZgrjqNAW7Huyegj4HhtYugXsGLR
-	 ZbMqoesLcKllZwYzWyu4JIkmEfm//m0lphDtAnjBoGBb+/NFddERWGMI6itOmDUFvI
-	 Y08M7K/ly7IkzlIkgq6WVEHR7HlM17AMdd8mP0pw=
-Message-ID: <a1d2999a-7d87-42d0-ad1b-65823eca3b9f@arm.com>
-Date: Fri, 29 May 2026 14:27:52 +0100
+	s=arc-20240116; t=1780064330; c=relaxed/simple;
+	bh=iSiXxRrzhWzGZISK+Le9+bsD0Cr3fA711C3cf1cjna8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pif/pdWvmU5zPdJ8NQzc3cR0PfktCrZnp9Pi2pBoVIuZGgPxmOFipMKr+/Q+GWcPq+6s7SZZMkA1JXzhNikmpjD771RpYjFNGn5yfCT2IoZa61jF6Q7qZetJomkuQk9Jf8zoX2hfFacS7I0eIEQP8vOA6rzh2qplRGrIFryrie8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintech.ru; spf=pass smtp.mailfrom=fintech.ru; arc=none smtp.client-ip=195.54.195.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintech.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fintech.ru
+Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
+ (195.54.195.159) with Microsoft SMTP Server (TLS) id 14.3.498.0; Fri, 29 May
+ 2026 17:18:46 +0300
+Received: from localhost (10.0.253.153) by Ex16-01.fintech.ru (10.0.10.18)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Fri, 29 May
+ 2026 17:18:46 +0300
+From: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
+CC: Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
+	<linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<lvc-project@linuxtesting.org>
+Subject: [PATCH v2] hwmon: it87: Clamp negative values to zero in set_fan()
+Date: Fri, 29 May 2026 17:18:36 +0300
+Message-ID: <20260529141839.1639287-1-n.zhandarovich@fintech.ru>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 04/10] thermal/core: Make cooling device OF node
- conditional on CONFIG_THERMAL_OF
-To: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>, rafael@kernel.org,
- daniel.lezcano@kernel.org
-Cc: Zhang Rui <rui.zhang@intel.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lucas Stach <l.stach@pengutronix.de>,
- Russell King <linux+etnaviv@armlinux.org.uk>,
- Christian Gmeiner <christian.gmeiner@gmail.com>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Guenter Roeck <linux@roeck-us.net>, Joel Stanley <joel@jms.id.au>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Benson Leung <bleung@chromium.org>, =?UTF-8?Q?Pali_Roh=C3=A1r?=
- <pali@kernel.org>, Avi Fishman <avifishman70@gmail.com>,
- Tomer Maimon <tmaimon77@gmail.com>, Tali Perry <tali.perry1@gmail.com>,
- Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
- Benjamin Fair <benjaminfair@google.com>, Heiko Stuebner <heiko@sntech.de>,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Amit Daniel Kachhap <amit.kachhap@gmail.com>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Neil Armstrong <neil.armstrong@linaro.org>, Amit Kucheria
- <amitk@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org
-References: <20260526140802.1059293-12-daniel.lezcano@oss.qualcomm.com>
- <20260526140802.1059293-16-daniel.lezcano@oss.qualcomm.com>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20260526140802.1059293-16-daniel.lezcano@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: Ex16-02.fintech.ru (10.0.10.19) To Ex16-01.fintech.ru
+ (10.0.10.18)
 
+set_fan() parses user input with kstrtol() and passes the resulting
+value to FAN16_TO_REG() on chips with 16-bit fan support.
 
+Negative fan speeds are not meaningful and should be rejected before
+conversion. Worst scenario, one may be able to abuse undefined
+behaviour of signed overflow to possibly induce rpm * 2 == 0 in
+FAN16_TO_REG(), thus causing a division by zero.
 
-On 5/26/26 15:08, Daniel Lezcano wrote:
-> The device node pointer stored in struct thermal_cooling_device is
-> only used by the OF-specific thermal code to associate cooling devices
-> with thermal zones defined in device tree.
-> 
-> Now that OF and non-OF registration paths are separated and non-OF
-> users no longer rely on devm_thermal_of_cooling_device_register() with
-> a NULL device node, the np field is no longer required for non-OF
-> configurations.
-> 
-> Make this field conditional on CONFIG_THERMAL_OF to reduce memory
-> footprint and better reflect its usage.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-> ---
->   include/linux/thermal.h | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index fc3f4a098370..60e596e7d7ae 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -125,7 +125,6 @@ struct thermal_cooling_device {
->   	const char *type;
->   	unsigned long max_state;
->   	struct device device;
-> -	struct device_node *np;
->   	void *devdata;
->   	void *stats;
->   	const struct thermal_cooling_device_ops *ops;
-> @@ -133,6 +132,9 @@ struct thermal_cooling_device {
->   	struct mutex lock; /* protect thermal_instances list */
->   	struct list_head thermal_instances;
->   	struct list_head node;
-> +#ifdef CONFIG_THERMAL_OF
-> +	struct device_node *np;
-> +#endif
->   #ifdef CONFIG_THERMAL_DEBUGFS
->   	struct thermal_debugfs *debugfs;
->   #endif
+Instead, clamp val < 0 to zero and keep the conversion in its valid
+input domain, avoiding unsafe arithmetic in the register conversion
+path.
 
+Found by Linux Verification Center (linuxtesting.org) with static
+analysis tool SVACE.
 
+Fixes: 17d648bf5786 ("it87: Add support for the IT8716F")
+Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+---
+v2: as pointed out by sashiko-bot, returning with -EINVAL
+goes against hwmon guidelines - therefore, just clamp the lower
+bound and keep going. Commit description is adjusted accordingly,
+as is the subject text.
 
-I've done compilation w/o THERMAL_OF set because it
-was a bit odd...
-It triggers an issue in the thermal_core.c at:
-cdev->np which is left. This might break some bisect
-in the suture if that would be the case.
+v1: https://lore.kernel.org/all/20260529121141.1633588-1-n.zhandarovich@fintech.ru/
+Sashiko AI review: https://lore.kernel.org/all/20260529125335.A47011F00893@smtp.kernel.org/
 
-drivers/thermal/thermal_core.c: In function 
-‘thermal_of_cooling_device_register’:
-drivers/thermal/thermal_core.c:1121:13: error: ‘struct 
-thermal_cooling_device’ has no member named ‘np’
-  1121 |         cdev->np = np;
-       |             ^~
-make[4]: *** [scripts/Makefile.build:289: 
-drivers/thermal/thermal_core.o] Error 1
-make[3]: *** [scripts/Makefile.build:548: drivers/thermal] Error 2
-make[3]: *** Waiting for unfinished jobs....
+P.S. I've deliberately NOT addressed the pre-existing issues highlighted
+by sashiko - that's for another time, I think.
 
+ drivers/hwmon/it87.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Let's maybe change the order with patch 05/10 ?
+diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+index 5fd310662ee4..87edb1b6048b 100644
+--- a/drivers/hwmon/it87.c
++++ b/drivers/hwmon/it87.c
+@@ -1412,6 +1412,9 @@ static ssize_t set_fan(struct device *dev, struct device_attribute *attr,
+ 	if (kstrtol(buf, 10, &val) < 0)
+ 		return -EINVAL;
+ 
++	if (val < 0)
++		val = 0;
++
+ 	err = it87_lock(data);
+ 	if (err)
+ 		return err;
