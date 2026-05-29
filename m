@@ -1,132 +1,161 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A242C11CB
-	for <linux-hwmon@vger.kernel.org>; Fri, 29 May 2026 12:53:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EE532C3266;
+	Fri, 29 May 2026 12:55:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780059217; cv=none; b=QjC3lijnnuV/PCPrrYnO9u77qV/Q5Z53bO/iz9MMtvwkKqLTpo9Lo3xJ8ghtIIAZ/mYIrfX9/IrQQTKCGs1hg2Ujia/meT6nf3AF/KgSBXQwUSaLEOorhV7GdaECQbEN4VJiiiC6qIO6AmdbQQj/YUybDqr8zu79IrmCPSmJh48=
+	t=1780059317; cv=none; b=iUc53rfxAqVYhqrJuGK85yog/mC3LFTvSUxCZ2jJ7GILREk6au2tmexU1WTVR07yYscchiOzRi2Y3R9rije2K52eRrFBYGW9+9RV9sUnhKDz21KwQ4iktjwyHRIMBJp99TwTh6HZjC1qacZLVc9WQ0J+6htc3+aW2AAYxVBRqAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780059217; c=relaxed/simple;
-	bh=eEBw/r2nrl88uP2q0kqV+03yIwZVkOOo8j+Qhp8HoDI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=C6Vl4m7VGrcYzTNAQqksD3d2+WI2ONnvinKu1+V78qIBLRQ/xtcz2z0LZUgxcpI90X2y1ZbR5XKaMPL9KPE/1jQ2N6aXZtpu0CgEZJENKZoGqmMMVCglQ2ETQr0IbRjCfnvFClfAblTkZ+SM6toJceTmLHhbBDdifla3aFclRU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ShjeRBWa; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780059317; c=relaxed/simple;
+	bh=aMp0yllWObmstKNJEaNK+etgKQ9OJ4QVq6gAFknPaig=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=thZCm9whvzUIlm+wbgWyofFy7hB8G4WaRuTSYaE6T6pLdsp1o347evGr/1QxpajHrTNbYnnGvX5O2BaD4A9YXkUM0ubxisUr30cg/gXPC6Nh86+1UpO6He1+3psw6ysc3VYkSBghU40sauZbK4yjePwx0HEA6ASJSE3moUAjgTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=lC7AyrSA; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ShjeRBWa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A47011F00893;
-	Fri, 29 May 2026 12:53:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780059215;
-	bh=ib7bDcF45BXmv3nt8Hkn4UnTJGGemkowQ7/whleGu7g=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ShjeRBWaOMEVo/CFl/AtwU87qi4jY2Jm/8WbUMFldvV305vWqEq+Y/lHlCZ+ttctq
-	 VltHRWE2XblfbHqVUx7vtuzqYEv9kzojykipyzjj/KR2XYN/nZPztuV+NBBrdA38GH
-	 eL3f5B3VoWWDWUCaICctJNuu9q9M/oWDXXkrJqM3LxbWMj9PQhaMp+rIcnQlG7KE/P
-	 4/4WGCNZJbMTlzv0n2+wXrvWLViqPqHeHVrpGuzNkc2idL1TZhunR2if17yrv6xNnc
-	 omdWLmz8xBuwQV4NOo+icrAFxegy/w3LgXBtmIId9VBsE5dZovXyEqY7HNZQAV73CJ
-	 SqB/w+TfEJndw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: it87: Reject negative values in set_fan()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Nikita Zhandarovich" <n.zhandarovich@fintech.ru>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260529121141.1633588-1-n.zhandarovich@fintech.ru>
-References: <20260529121141.1633588-1-n.zhandarovich@fintech.ru>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 29 May 2026 12:53:35 +0000
-Message-Id: <20260529125335.A47011F00893@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="lC7AyrSA"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D0F2C20E3;
+	Fri, 29 May 2026 05:55:09 -0700 (PDT)
+Received: from [10.57.26.238] (unknown [10.57.26.238])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8FFF93F632;
+	Fri, 29 May 2026 05:55:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1780059314; bh=aMp0yllWObmstKNJEaNK+etgKQ9OJ4QVq6gAFknPaig=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=lC7AyrSAhykfji09aSXHfZTW13bMR8/6/hfUypzeffVjWx8GcwsFOMMSUfWapE4BN
+	 rDSdT6D+tARHW+TJaZMptNvRqxhu2ztQlgUvWHZ0XIAG6hce03If4P5o8VdoGDIjqU
+	 kiCgMyyVZC/z/7tqDaFtlTgZuk5ZORHJTFe+iEkY=
+Message-ID: <e22455bb-c59a-4de7-b8ba-09cb411bc3ed@arm.com>
+Date: Fri, 29 May 2026 13:55:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 02/10] thermal/core: Add
+ devm_thermal_cooling_device_register()
+To: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>, rafael@kernel.org,
+ daniel.lezcano@kernel.org
+Cc: Zhang Rui <rui.zhang@intel.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Lucas Stach <l.stach@pengutronix.de>,
+ Russell King <linux+etnaviv@armlinux.org.uk>,
+ Christian Gmeiner <christian.gmeiner@gmail.com>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Guenter Roeck <linux@roeck-us.net>, Joel Stanley <joel@jms.id.au>,
+ Andrew Jeffery <andrew@codeconstruct.com.au>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Benson Leung <bleung@chromium.org>, =?UTF-8?Q?Pali_Roh=C3=A1r?=
+ <pali@kernel.org>, Avi Fishman <avifishman70@gmail.com>,
+ Tomer Maimon <tmaimon77@gmail.com>, Tali Perry <tali.perry1@gmail.com>,
+ Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
+ Benjamin Fair <benjaminfair@google.com>, Heiko Stuebner <heiko@sntech.de>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Neil Armstrong <neil.armstrong@linaro.org>, Amit Kucheria
+ <amitk@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+References: <20260526140802.1059293-12-daniel.lezcano@oss.qualcomm.com>
+ <20260526140802.1059293-14-daniel.lezcano@oss.qualcomm.com>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20260526140802.1059293-14-daniel.lezcano@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
 
-New issues:
-- [Medium] Returning -EINVAL for out-of-range negative values breaks establ=
-ished hwmon ABI behavior, which expects out-of-bounds inputs to be clamped.
 
-Pre-existing issues:
-- [High] The patch fails to prevent signed integer overflows in `FAN16_TO_R=
-EG()` for large positive inputs, resulting in incorrectly calculated fan sp=
-eed limits.
-- [High] Other sysfs store functions (`set_in` and `set_temp`) lack upper b=
-oundary checks, leading to signed integer overflows and logically incorrect=
- limits.
---
-
-commit f17137aa0859283c1c9cba428192374fa60038f1
-Author: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-
-hwmon: it87: Reject negative values in set_fan()
-
-This patch rejects negative values inputted to set_fan() in the it87 driver
-by returning -EINVAL. It aims to prevent invalid arithmetic and undefined
-behavior from signed overflow in the register conversion path.
-
-> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-> index 5fd310662ee43..888db19758763 100644
-> --- a/drivers/hwmon/it87.c
-> +++ b/drivers/hwmon/it87.c
-> @@ -1412,6 +1412,9 @@ static ssize_t set_fan(struct device *dev, struct d=
-evice_attribute *attr,
->  	if (kstrtol(buf, 10, &val) < 0)
->  		return -EINVAL;
-> =20
-> +	if (val < 0)
-> +		return -EINVAL;
+On 5/26/26 15:08, Daniel Lezcano wrote:
+> Introduce a device-managed variant of the non-OF cooling device
+> registration API.
+> 
+> This complements devm_thermal_of_cooling_device_register() and allows
+> non-device-tree users to register cooling devices with automatic
+> cleanup tied to the device lifecycle.
+> 
+> The helper relies on devm_add_action_or_reset() to release the cooling
+> device via thermal_cooling_device_release() on driver detach or probe
+> failure.
+> 
+> This keeps the API consistent across OF and non-OF users and avoids
+> manual cleanup in error paths.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+> ---
+>   drivers/thermal/thermal_core.c | 35 ++++++++++++++++++++++++++++++++++
+>   include/linux/thermal.h        |  7 +++++--
+>   2 files changed, 40 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 0b3db889d60d..bb4fc3ff2ad5 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -1173,6 +1173,41 @@ devm_thermal_of_cooling_device_register(struct device *dev,
+>   }
+>   EXPORT_SYMBOL_GPL(devm_thermal_of_cooling_device_register);
+>   
+> +/**
+> + * devm_thermal_cooling_device_register() - register a thermal cooling device
+> + *
+> + * @dev:	a valid struct device pointer of a sensor device.
+> + * @type:	the thermal cooling device type.
+> + * @devdata:	device private data.
+> + * @ops:	standard thermal cooling devices callbacks.
+> + *
+> + * This function will register a cooling device. This interface
+> + * function adds a new thermal cooling device (fan/processor/...)  to
+> + * /sys/class/thermal/ folder as cooling_device[0-*]. It tries to bind
+> + * itself to all the thermal zone devices registered at the same time.
+> + *
+> + * Return: a pointer to the created struct thermal_cooling_device or an
+> + * ERR_PTR. Caller must check return value with IS_ERR*() helpers.
+> + */
+> +struct thermal_cooling_device *
+> +devm_thermal_cooling_device_register(struct device *dev, const char *type, void *devdata,
+> +				     const struct thermal_cooling_device_ops *ops)
+> +{
+> +	struct thermal_cooling_device *cdev;
+> +	int ret;
 > +
+> +	cdev = thermal_cooling_device_register(type, devdata, ops);
+> +	if (IS_ERR(cdev))
+> +		return cdev;
+> +
+> +	ret = devm_add_action_or_reset(dev, thermal_cooling_device_release, cdev);
+> +	if (ret)
+> +		return ERR_PTR(ret);
+> +
+> +	return cdev;
+> +}
+> +EXPORT_SYMBOL_GPL(devm_thermal_cooling_device_register);
+> +
+>   static bool thermal_cooling_device_present(struct thermal_cooling_device *cdev)
+>   {
+>   	struct thermal_cooling_device *pos = NULL;
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index 0ddc77aeeca2..fc3f4a098370 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -253,8 +253,11 @@ void thermal_zone_device_update(struct thermal_zone_device *,
+>   struct thermal_cooling_device *thermal_cooling_device_register(const char *,
+>   		void *, const struct thermal_cooling_device_ops *);
+>   struct thermal_cooling_device *
+> -thermal_of_cooling_device_register(struct device_node *np, const char *, void *,
+> -				   const struct thermal_cooling_device_ops *);
+> +devm_thermal_cooling_device_register(struct device *dev, const char *type, void *devdata,
+> +				     const struct thermal_cooling_device_ops *ops);
+> +struct thermal_cooling_device *
+> +thermal_of_cooling_device_register(struct device_node *np, const char *type, void *devdata,
+> +				   const struct thermal_cooling_device_ops *ops);
+>   struct thermal_cooling_device *
+>   devm_thermal_of_cooling_device_register(struct device *dev,
+>   				struct device_node *np,
 
-[Severity: Medium]
-Does rejecting negative values with -EINVAL break backward compatibility
-with userspace tools?
-
-The hwmon subsystem documentation dictates that out-of-range inputs for
-continuous limit attributes (like fan limits) should be clamped to their
-minimum or maximum boundaries.
-
-Would it be better to clamp the input here instead of abruptly returning
--EINVAL?
-
->  	err =3D it87_lock(data);
->  	if (err)
->  		return err;
-
-[Severity: High]
-This is a pre-existing issue, but does FAN16_TO_REG() still suffer from
-signed integer overflows for excessively large positive inputs further down
-in this function?
-
-On 32-bit systems, if val is an extremely large positive RPM (e.g.,
-2,147,000,000), the calculations in FAN16_TO_REG() can overflow to negative
-values. The subsequent division could yield a positive value that is then
-clamped and written to the register, resulting in a very low RPM limit
-instead of capping at the maximum limit.
-
-Could we clamp val to a safe upper bound before the register conversion
-to prevent these overflows?
-
-[Severity: High]
-This isn't a bug introduced by this patch, but do the sysfs store functions
-set_in() and set_temp() have similar signed integer overflow issues due to
-missing upper boundary checks?
-
-In set_in(), reading a large unsigned value into a long can cause
-val * 10 to overflow to a negative value on 32-bit systems. After division,
-it clamps to 0 instead of the maximum limit of 255.
-
-Similarly, in set_temp(), a large positive input causes val + 500 to overfl=
-ow
-to a negative value, which is then divided and clamped to -128 instead of 1=
-27.
-
-Should boundary checks or clamping be added to these functions as well to
-ensure safe arithmetic and logically correct limits?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260529121141.1633=
-588-1-n.zhandarovich@fintech.ru?part=3D1
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
