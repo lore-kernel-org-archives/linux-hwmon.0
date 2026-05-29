@@ -1,44 +1,51 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5580D3ED3A7;
-	Fri, 29 May 2026 16:41:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3116F3F39F1;
+	Fri, 29 May 2026 16:44:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780072897; cv=none; b=BdleL+7+7e+RhwebVKjWd4hQ8p65CQNbSsYDxN6sJQN+BcccoU3MM71uixisBQDZh83jEMHAHyBjqyCijNKctrA191NH0UaZ0KumNuAPASW0svQa4zKvSvAa01ZlHIWtXtLt9XRWeqURgUUD/fhbJIUMgnjDZDCBxLEagey+sNQ=
+	t=1780073074; cv=none; b=VUoD6lmVWybCWDa/oo5aHRn/nidw4GbN8w+rfbwip+GIrGDsrbxdC+/HO2RB+87RUM9JhMhLIgXuJj8tpebEQXIy3wmd0/0FvjAnhkax11u66EZfuNWcOSs3Bw7jxegjXRq+TZ628Qm8vmq2IiTdy3sVAYucgPGHpmXTOrv1jKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780072897; c=relaxed/simple;
-	bh=AXVBY2iT07f3f2JA5peWqgTcCEO+GcWGJhiMkvuU/SY=;
+	s=arc-20240116; t=1780073074; c=relaxed/simple;
+	bh=MG765tz4pOgROB9LJzV2O9IUqpE2fX3TOV6kCIWSwI0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HZVk+j5UtfRx5w4FvlGjYT2Rv7kTWk8HkfSV6WYnbFXiikX8khOU1vU3f7t0055Nkxbjs++eslwfthF3syuqI8cQ38CUAf5mjcZzkMimGZGDwl37FymbhPFWadipJ8YcmDusnw0vV62/XpM+n5RThUib5K3xUUBVwAkvKuSkzyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b2W9J7Vx; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=pJ+3ymnIjbnea4xE0LKUw1+V8hfq7T3KJQZhrZ9tH56kIc8sAHpVvFAjgMskd3GTQpr39lrnm4ivuKgcd8aAjgdIA2xwtmmIx6YdjOVoujxqczTmjUE9Bbk24Yp8GL2Ltb+RFWg3GJOE9VsUl3DuELUf9rYson9yzuoN7WaWhOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZRqBF3vm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b2W9J7Vx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 235771F00893;
-	Fri, 29 May 2026 16:41:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZRqBF3vm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 601871F00893;
+	Fri, 29 May 2026 16:44:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780072895;
-	bh=49KrXDR1ILqUktozc7Qa5FEeoJQsP+kH07MiBeiTsZA=;
+	s=k20260515; t=1780073072;
+	bh=MG765tz4pOgROB9LJzV2O9IUqpE2fX3TOV6kCIWSwI0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=b2W9J7VxuPOnbjlo+YqmNA+VtRxBPSrTzoLs3agLoJFdh65vHAZehcHfvbP3DetWQ
-	 RPIruMwbfzRGaH4YpqRMCwEdwAR8NBSiummWMrF33fzZpNX1x3gOi0lTKbFNQI3EFX
-	 1LjHgtEvx4vLJ6p0sa26lF8WlgEb2rfzFmISKjGCdojfRcnvR1nKNU6roEFZyb7QQu
-	 ZWTXRhSMrgDf1M/mmPJwuVJsVLc+Wauv8BkWWS3cydl+xHrkvIBVuzqDjAtqS8creI
-	 o2CFLD4PBsiCznktYh2To6LIA1tbw3f1ctlMojdYhuAH4jrEE5iQjpiaTAh59eTr0m
-	 3nVxv1Tq97qTA==
-Date: Fri, 29 May 2026 17:41:32 +0100
+	b=ZRqBF3vmJoiRF7QgG74Axw2Q7BlzEogTPsR6erNkDZK2odXxTbxjQtXj+rueaRWrT
+	 CtwGx+1rtdnAstLF38JA31b25nqXAvKRftaUzwh1nMi+XHrl9efwY4hBe+PaBkVE8V
+	 baUxNZE8dRqe9poAY5OcEyiYmU3O8ZtNwqegOCtqXyx/JzaLuveRu9MUXBwgGHfd4T
+	 S2FrorjsdCZtJe/3Gr16SkegHH/7KzLwHPAzvwT0h/osHHUxWza3Yj+6Cn/jk8Fnhx
+	 I6Y5FNqZ9ASMVvCjGKxjj1mmAuMdrx5YNo2iKU0ASPDf2HT7RaCQiOEF4nNwJZVWqj
+	 +kXcjFQdf24fw==
+Date: Fri, 29 May 2026 17:44:28 +0100
 From: Conor Dooley <conor@kernel.org>
-To: ASHISH YADAV <ashishyadav78@gmail.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Ashish Yadav <ashish.yadav@infineon.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon/pmbus: Add Infineon
- XDP720/XDP730
-Message-ID: <20260529-partake-myself-baa76ed4e279@spud>
-References: <20260529054218.5184-1-Ashish.Yadav@infineon.com>
- <20260529054218.5184-2-Ashish.Yadav@infineon.com>
+To: "Pradhan, Sanman" <sanman.pradhan@hpe.com>
+Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"linux@roeck-us.net" <linux@roeck-us.net>,
+	"robh@kernel.org" <robh@kernel.org>,
+	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"corbet@lwn.net" <corbet@lwn.net>,
+	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"Syed, Arif" <arif.syed@hpe.com>,
+	Sanman Pradhan <psanman@juniper.net>
+Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: pmbus: Add Analog Devices
+ MAX20860A
+Message-ID: <20260529-elaborate-scroll-d57e68c2b24d@spud>
+References: <20260529001903.625737-1-sanman.pradhan@hpe.com>
+ <20260529001903.625737-2-sanman.pradhan@hpe.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -46,210 +53,27 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="hg6KsFQl9Tz6Qhdk"
+	protocol="application/pgp-signature"; boundary="foRTfrb/RzR+apiY"
 Content-Disposition: inline
-In-Reply-To: <20260529054218.5184-2-Ashish.Yadav@infineon.com>
+In-Reply-To: <20260529001903.625737-2-sanman.pradhan@hpe.com>
 
 
---hg6KsFQl9Tz6Qhdk
+--foRTfrb/RzR+apiY
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 29, 2026 at 11:12:17AM +0530, ASHISH YADAV wrote:
-> From: Ashish Yadav <ashish.yadav@infineon.com>
->=20
-> Add documentation for the device tree binding of the XDP720/XDP730
-> eFuse Controllers.
->=20
-> Signed-off-by: Ashish Yadav <ashish.yadav@infineon.com>
-> ---
->  .../bindings/hwmon/pmbus/infineon,xdp720.yaml | 59 --------------
->  .../bindings/hwmon/pmbus/infineon,xdp730.yaml | 80 +++++++++++++++++++
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+pw-bot: not-applicable
 
-This rename just bloats out the diff, no thanks. Please do not do this,
-certainly not without a justification.
-pw-bot: changes-requested
-
-Thanks,
-Conor.
-
->  2 files changed, 80 insertions(+), 59 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infineo=
-n,xdp720.yaml
->  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infineo=
-n,xdp730.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp72=
-0.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp720.yaml
-> deleted file mode 100644
-> index 72bc3a5e7139..000000000000
-> --- a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp720.yaml
-> +++ /dev/null
-> @@ -1,59 +0,0 @@
-> -# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> -%YAML 1.2
-> ----
-> -
-> -$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,xdp720.yaml#
-> -$schema: http://devicetree.org/meta-schemas/core.yaml#
-> -
-> -title: Infineon XDP720 Digital eFuse Controller
-> -
-> -maintainers:
-> -  - Ashish Yadav <ashish.yadav@infineon.com>
-> -
-> -description: |
-> -  The XDP720 is an eFuse with integrated current sensor and digital
-> -  controller. It provides accurate system telemetry (V, I, P, T) and
-> -  reports analog current at the IMON pin for post-processing.
-> -
-> -  Datasheet:
-> -     https://www.infineon.com/assets/row/public/documents/24/49/infineon=
--xdp720-001-datasheet-en.pdf
-> -
-> -properties:
-> -  compatible:
-> -    enum:
-> -      - infineon,xdp720
-> -
-> -  reg:
-> -    maxItems: 1
-> -
-> -  infineon,rimon-micro-ohms:
-> -    description:
-> -      The value of the RIMON resistor, in micro ohms, required to enable
-> -      the system overcurrent protection.
-> -
-> -  vdd-vin-supply:
-> -    description:
-> -      Supply for the VDD_VIN pin (pin 9), the IC controller power supply.
-> -      Typically connected to the input bus (VIN) through a 100 ohm / 100=
- nF
-> -      RC filter.
-> -
-> -required:
-> -  - compatible
-> -  - reg
-> -  - vdd-vin-supply
-> -
-> -additionalProperties: false
-> -
-> -examples:
-> -  - |
-> -    i2c {
-> -        #address-cells =3D <1>;
-> -        #size-cells =3D <0>;
-> -
-> -        hwmon@11 {
-> -            compatible =3D "infineon,xdp720";
-> -            reg =3D <0x11>;
-> -            vdd-vin-supply =3D <&vdd_vin>;
-> -            infineon,rimon-micro-ohms =3D <1098000000>;  /* 1.098k ohm */
-> -        };
-> -    };
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp73=
-0.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp730.yaml
-> new file mode 100644
-> index 000000000000..fdbc577bccdd
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp730.yaml
-> @@ -0,0 +1,80 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,xdp730.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Infineon XDP720 / XDP730 Digital eFuse Controllers
-> +
-> +maintainers:
-> +  - Ashish Yadav <ashish.yadav@infineon.com>
-> +
-> +description: |
-> +  The XDP720 and XDP730 are PMBus-compliant digital eFuse controllers
-> +  with an integrated current sensor.  They provide accurate system
-> +  telemetry (V, I, P, T) and report analog current at the IMON pin for
-> +  post-processing.
-> +
-> +  Both parts share the same PMBus register map and direct-format
-> +  coefficients; they differ in the GIMON gain step exposed via the
-> +  TELEMETRY_AVG register (bit 10) and in the VDD_VIN pin number
-> +  (XDP720: pin 9, XDP730: pin 20).
-> +
-> +  Datasheets:
-> +    - XDP720: https://www.infineon.com/assets/row/public/documents/24/49=
-/infineon-xdp720-001-datasheet-en.pdf
-> +    - XDP730: https://www.infineon.com/assets/row/public/documents/24/49=
-/infineon-xdp730-001-datasheet-en.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - infineon,xdp720
-> +      - infineon,xdp730
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  infineon,rimon-micro-ohms:
-> +    description:
-> +      The value of the RIMON resistor, in micro ohms, required to enable
-> +      the system overcurrent protection.
-> +
-> +  vdd-vin-supply:
-> +    description:
-> +      Supply for the VDD_VIN pin (XDP720 pin 9, XDP730 pin 20), the IC
-> +      controller power supply.  Typically connected to the input bus
-> +      (VIN) through a 100 ohm / 100 nF RC filter.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - vdd-vin-supply
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +
-> +        efuse@11 {
-> +            compatible =3D "infineon,xdp720";
-> +            reg =3D <0x11>;
-> +            vdd-vin-supply =3D <&vdd_vin>;
-> +            infineon,rimon-micro-ohms =3D <1098000000>;  /* 1.098k ohm */
-> +        };
-> +    };
-> +
-> +  - |
-> +    i2c {
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +
-> +        efuse@12 {
-> +            compatible =3D "infineon,xdp730";
-> +            reg =3D <0x12>;
-> +            vdd-vin-supply =3D <&vdd_vin>;
-> +            infineon,rimon-micro-ohms =3D <1098000000>;  /* 1.098k ohm */
-> +        };
-> +    };
-> --=20
-> 2.39.5
->=20
-
---hg6KsFQl9Tz6Qhdk
+--foRTfrb/RzR+apiY
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCahnBvAAKCRB4tDGHoIJi
-0j/FAQCvvfwoLTjgCgmBWEX9s1FubG2bzRAJdtXGH7rKeT4LoAD8CC2/FgGfbc5I
-+PuIGebBLyVfiN9T6wJm+uBWitgplA0=
-=g1RT
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCahnCbAAKCRB4tDGHoIJi
+0u5xAP9efn1nWnm2BKbSt1GvSf7Rih59u/F2klwCAho7In616gEAjZAlXSaaUsj/
+xZAXrxYpvRSAGdxznN63G5vtpHowgQs=
+=/MPx
 -----END PGP SIGNATURE-----
 
---hg6KsFQl9Tz6Qhdk--
+--foRTfrb/RzR+apiY--
