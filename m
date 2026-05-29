@@ -1,59 +1,115 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB8A279903
-	for <linux-hwmon@vger.kernel.org>; Fri, 29 May 2026 21:00:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E859E3B3883
+	for <linux-hwmon@vger.kernel.org>; Fri, 29 May 2026 21:26:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780088446; cv=none; b=VQAdqldlneOl0x7OPSvepM1HWunqasJUr5S623HZlq6iTTt2j5MFteJPHzVhGCYxqmOu7spihj0MMWNbTunTKYjIfhQCalNhP3lcQUxUo3NPquCUptaqNQysZ7ix2S9obA2ALQKCz/+h63xhj3cl4QZACKspUW+tu9Vm6PGDLWg=
+	t=1780089963; cv=none; b=FMRWBclCrqep1/oKJUzQC8cyrBycmmQGJX+Tv6ejsoSV1LlVtFauFnCPfQg8iUCvf7sXokqd/assau6/bh2lUfoX5gFc62bt3E3daPegen3FFWWSGtmLlqhn43MhPfjvhOnpB9wgBVq/PLOHPBeM563o+w1xK098qXEWnZwPx+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780088446; c=relaxed/simple;
-	bh=WL0TzdIAky+9ZigyBppq45xMymJShrfsw59h8Eb0ZK0=;
+	s=arc-20240116; t=1780089963; c=relaxed/simple;
+	bh=hmz70jbwA4eTYpVJ7YTTBO1pYM2C3BqK4rAhGqv9wLw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=YMbvnR+KdD8qp6UpQgwEp6cXTjXZKGaeJhxkqkoTLI+jE1RCX+Fu/7s75V/BErc0qW4JEtzKGK2AbYShqbCyTqQp8iuWCmGvo5vv4vYNO9Zb/NM1UA7W/3RHUkSKfjcY7gR4vuMtlaSWfh84aYlpaAxKtA8a2+mBF6II4jvZUV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eLyvxYra; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=HaeIqv3r/XCrKhOWoTcHtPu3zSEKXDLpCARQXq7/OqjqS4A/aE4UuA6N3LBH3I5UvkaUa5igm5xwd39GDd59+b4iUyxu79/7wNTXws9pWpcRW0YEqwC+xV/Ufl9mz1ua3owu1BMdYDzHKSrzjbZGOuo5BRwgVc6ZipjLnN3d2iI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mSiCrMrl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eLyvxYra"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D778B1F00893;
-	Fri, 29 May 2026 21:00:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mSiCrMrl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AD3B1F00893;
+	Fri, 29 May 2026 21:26:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780088445;
-	bh=WL0TzdIAky+9ZigyBppq45xMymJShrfsw59h8Eb0ZK0=;
+	s=k20260515; t=1780089962;
+	bh=kKQaafutvffCuahB9d2WtpdieVNDFf0bAMf5cjUu/p8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=eLyvxYrasessW9McadtN7MU/DRaLzQLF1LJ1wwyi1pw+LkvZr2Xp1bqyyhsJqiq+J
-	 md1hrM3k6az2/aj8N/l+eTvU3sMAmnBb6OYvaLUzOSp2AUXvfFKvpiXNyk3GBF2/Sv
-	 VttKS6cGh/iGDC5dpN0IKH4ONNrQZsLOUB/jsKqGeZI4afAgynTMc5mtWcxENH4e1Q
-	 Smco7g3h+H9jtbe3/njAqbIXyksu99bgFLN9VMcpxmDHeSDbUc8/pIUhhLU1kp/Ps5
-	 IXMPBSJ1z07x8I4+Apyb9vFY/o3P1h5YoQDxGXg+4lmJoWppAp09FkM6051mPQTbyD
-	 7tYBKpgnEwO7g==
+	b=mSiCrMrl15ydxbBp6K7WtEm6a4RzEytDuvQwwzQVW+3/jE0f0Mp7t9OHw6crNuaMS
+	 6j7kCAvcyWP0DLMOseLJX1gXCLCgVmGiULpDKLwbtq9jl0QCQEvGDaehUQNiYEN0AG
+	 KDQzUTgCRt3K1Zl7sVugs9agOcLUOXRSjkJiSuvD7FhVKAcyg+k8rCJ8G2uO8PHh+A
+	 bTBBiJOHaEDDq1iFAreV3K1ZQ4IGyyxW1gy0EreVmih+5vRBjNws7nIfoqU+/56V2M
+	 m/h3232rUPW093+No6l05iLoU/cje+N+5O6yDuSvErP1tNzrYXlMz/qJEFhQ0CyhwV
+	 GqJjXUFb8ydbw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 3/5] hwmon: (cros_ec) Split out
- cros_ec_hwmon_get_thermal_config()
+Subject: Re: [PATCH 4/5] hwmon: (cros_ec) Add support for displaying fan
+ curves
 Reply-To: sashiko-reviews@lists.linux.dev
 To: =?utf-8?b?VGhvbWFzIFdlacOfc2NodWg=?= <linux@weissschuh.net>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260529-cros_ec-hwmon-fan-curve-v1-3-da6792b3830f@weissschuh.net>
-References: <20260529-cros_ec-hwmon-fan-curve-v1-3-da6792b3830f@weissschuh.net>
+In-Reply-To: <20260529-cros_ec-hwmon-fan-curve-v1-4-da6792b3830f@weissschuh.net>
+References: <20260529-cros_ec-hwmon-fan-curve-v1-4-da6792b3830f@weissschuh.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 29 May 2026 21:00:44 +0000
-Message-Id: <20260529210044.D778B1F00893@smtp.kernel.org>
+Date: Fri, 29 May 2026 21:26:01 +0000
+Message-Id: <20260529212602.6AD3B1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-> Some upcoming changes require access to the raw
-> 'struct ec_thermal_config'.
->=20
-> Split out the logic to get it from the EC into a new helper.
->=20
-> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] Missing endianness conversion for EC thermal config data and sen=
+sor_num.
+--
 
-Sashiko has reviewed this patch and found no issues. It looks great!
+commit be72df851dc1a1ab2ed2868ddf58166c69fe3c4c
+Author: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+
+hwmon: (cros_ec) Add support for displaying fan curves
+
+The automatic fan control mode of the embedded controller uses fan curves
+with two trigger points to calculate the target fan speed. All temperature
+sensors affect all fans. Expose these fan curves through the standard
+hwmon sysfs ABI.
+
+> diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
+> index a6cc909e56b7e..731143f8c6b2a 100644
+> --- a/drivers/hwmon/cros_ec_hwmon.c
+> +++ b/drivers/hwmon/cros_ec_hwmon.c
+> @@ -372,6 +375,141 @@ static umode_t cros_ec_hwmon_is_visible(const void =
+*data, enum hwmon_sensor_type
+>  	return 0;
+>  }
+
+[ ... ]
+
+> +static ssize_t temp_auto_point_temp_show(struct device *dev, struct devi=
+ce_attribute *attr,
+> +					 char *buf)
+> +{
+> +	struct sensor_device_attribute_2 *sattr =3D to_sensor_dev_attr_2(attr);
+> +	struct cros_ec_hwmon_priv *priv =3D dev_get_drvdata(dev);
+> +	struct ec_thermal_config config;
+> +	u32 temp;
+> +	int ret;
+> +
+> +	scoped_guard(hwmon_lock, dev) {
+> +		ret =3D cros_ec_hwmon_get_thermal_config(priv->cros_ec, sattr->index, =
+&config);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	if (cros_ec_hwmon_attr_is_temp_fan_off(sattr))
+> +		temp =3D config.temp_fan_off;
+> +	else /* temp_fan_max */
+> +		temp =3D config.temp_fan_max;
+
+[Severity: Medium]
+Since the Chrome OS EC wire protocol is little-endian, do these raw u32
+fields need to be converted using le32_to_cpu() to prevent corrupted values
+on big-endian hosts?
+
+It looks like the pre-existing cros_ec_hwmon_get_thermal_config() helper
+similarly fails to use cpu_to_le32() when assigning req.sensor_num, which
+could cause the EC to receive a byte-swapped sensor number.
+
+> +
+> +	if (temp =3D=3D 0)
+> +		return -ENODATA;
+> +
+> +	return sysfs_emit(buf, "%ld\n", cros_ec_hwmon_kelvin_to_millicelsius(te=
+mp));
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260529-cros_ec-hw=
-mon-fan-curve-v1-0-da6792b3830f@weissschuh.net?part=3D3
-
+mon-fan-curve-v1-0-da6792b3830f@weissschuh.net?part=3D4
