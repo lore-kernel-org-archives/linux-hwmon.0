@@ -1,58 +1,61 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD2C630C37C;
-	Fri, 29 May 2026 00:30:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6450919DF62;
+	Fri, 29 May 2026 00:50:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780014602; cv=none; b=ZtzV0uG51G+df0EmVbwdzHHVheWsWt/cZG0aROukh8f/+yT0bs3rGAaSEg7NU3NuykpfYYTgXzSemyM0+sd3Om1n89EvQZWCKh8J+IfwbWeIPi7ZYYfzMGN8N3M5oMCqUHtkDK/zZXB2aS7knlx+MPPlscFdbny117INzFCkDHM=
+	t=1780015809; cv=none; b=ekd2AvI/8Nn788COf3IKMEznePknqMj0rLs5QpI2VO8nnoNbNtKo/OhaMmz850PR6AOJmEHU30eE2TPK+59/iucKPQKXb8v2pWRwJPtjEJPLfiyWWFXL3pKaozWGkl6x1/1pHuv3/QFzR01QQAshGy0TxyMbfb5wD1GUxkoOg7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780014602; c=relaxed/simple;
-	bh=+NrPJ1ZLO5blblyKbX1WVNc2EkAFscLrrTRA3OOgpRA=;
+	s=arc-20240116; t=1780015809; c=relaxed/simple;
+	bh=tWGoIh7nGvFw1IPIkpAOjC7JqI8OoSHP0arTGd81M8g=;
 	h=From:Subject:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=bKEOMXJZva099eQeRa0bSMRFdGDgn3gs4kvkYmay8oh2G+rmf8kfWbib0KT71PTDqiu3vv42n++fkO7+abOgLPSIMMmcYNLAVJfMQwVfcWOYRgvJ/ABNhNf05CD0tOFfnxnNaN2xcDwa52hzM3HcyHdVHbAGUWNd5SRGAsy1pJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A3KguJbQ; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=I+yYLzY0a4MRg66sY43IdH/ycpp/UAiot32/lzBnf9EEMUKPZJ7pR4hKjiXlBmlwGGwVHP2hwytRM9pNsrJ0e8VLPePr//+PBXqDUYEaClx2Xcaxq8Po8HQINh1NvgxYSIpi0TMglsB+Nva2N86Jgb4IaFPfW7lkNDj//ze4oqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HRahPaWe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A3KguJbQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8334F1F000E9;
-	Fri, 29 May 2026 00:30:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HRahPaWe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCA3C1F00A3A;
+	Fri, 29 May 2026 00:50:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780014601;
-	bh=+NrPJ1ZLO5blblyKbX1WVNc2EkAFscLrrTRA3OOgpRA=;
+	s=k20260515; t=1780015808;
+	bh=tWGoIh7nGvFw1IPIkpAOjC7JqI8OoSHP0arTGd81M8g=;
 	h=From:Subject:Reply-To:Cc:In-Reply-To:References:Date;
-	b=A3KguJbQemSHyi4fHqactxDpIkaebn13cvixiLq26kWBo17+ARnSv8+ZRfLZDR5dW
-	 shTYut0AcQexli4Wf0I6ut8rEOVCbHD3hwZYnHFfzFAmQOIa4YD2yalKBjIiQH0u3O
-	 5Klt/+0HJi7Y6WZXHgE1j3hQ0UZBtx0zhELqSYUfMSooLBwY7KvZ/EAdc0eOr7MoYg
-	 DJuXRPbeVT4nNH5lnysIpqKKwJF5LpajJ1PtYuljbOh32uMYEvlDWn4k6bBGXsHDvw
-	 DqVYqwPlsBjvxZHMiC0J1iK2B9lbIQKKELpaVDYaKoe1xma+kMhQYZKD9wprLsWFd3
-	 zYgCCgtbJuUGA==
+	b=HRahPaWeSnwKyEtBI99MjXolhAxID5S3vWbXDijXbhZev5oiDD3Mqx5ytBm+M9hkk
+	 YsC5GNC/CMQaFBISlPfWFobqZ8wWZ8lnMEAHKoMVF8oZqT8ghbs45h3muqiUkZnjTo
+	 JhZo7CxMAAeNSnjJKp1gu4iagrWeSFj/dX2+T7TTutuzirU3ZaBFcnRE2EKZq/Bhg2
+	 wGa3ZZ1BZGiJihxq9WiXs7du303a5idBvkW1mjZdbA2GLbY5pl01/Wd7PrmcXqReHB
+	 gcvafUfguhW0vRK+GQggckbfaANMpxdHmMkxvZHPd1GD+UhkrA3YK1eQdgZ9K+gjgU
+	 HXRIb+sBelL2A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: pmbus: Add Analog Devices
- MAX20860A
+Subject: Re: [PATCH v3 2/2] hwmon: (pmbus/max20860a) Add driver for Analog
+ Devices MAX20860A
 Reply-To: sashiko-reviews@lists.linux.dev
-Cc: robh@kernel.org, devicetree@vger.kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <20260529001903.625737-2-sanman.pradhan@hpe.com>
-References: <20260529001903.625737-2-sanman.pradhan@hpe.com>
+Cc: devicetree@vger.kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org
+In-Reply-To: <20260529001903.625737-3-sanman.pradhan@hpe.com>
+References: <20260529001903.625737-3-sanman.pradhan@hpe.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 29 May 2026 00:30:01 +0000
-Message-Id: <20260529003001.8334F1F000E9@smtp.kernel.org>
+Date: Fri, 29 May 2026 00:50:07 +0000
+Message-Id: <20260529005007.BCA3C1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-> From: Sanman Pradhan <psanman@juniper.net>
+> From: Syed Arif <arif.syed@hpe.com>
 >=20
-> Add devicetree binding documentation for the Analog Devices MAX20860A
-> step-down DC-DC switching regulator with PMBus interface.
+> Add a PMBus driver for the Analog Devices MAX20860A step-down DC-DC
+> switching regulator. The MAX20860A provides monitoring of input/output
+> voltage, output current, and temperature via the PMBus interface using
+> linear data format.
 >=20
+> Signed-off-by: Syed Arif <arif.syed@hpe.com>
 > Signed-off-by: Sanman Pradhan <psanman@juniper.net>
 
 Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260529001903.6257=
-37-1-sanman.pradhan@hpe.com?part=3D1
+37-1-sanman.pradhan@hpe.com?part=3D2
 
