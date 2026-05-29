@@ -1,87 +1,76 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from exchange.fintech.ru (exchange.fintech.ru [195.54.195.159])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFBA93D75CF;
-	Fri, 29 May 2026 11:34:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88B163D0900;
+	Fri, 29 May 2026 12:11:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.54.195.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780054472; cv=none; b=XCLCGdVwm9mg76oeoeAI720/ySO3cg98nYzEkeECYUjpX4FNuHKkMFI9JCey6kvKIKyDKlUXeCFbIDQBU5OKl1JQUX340ZoZzEgDl5UaIxu4q7Yaa9OveJFz0+AL9E6JW2hoFEn87N3SOgy/mH1d2bMJDB84VeJMKjQnvh88T10=
+	t=1780056711; cv=none; b=Wk/MZic2STDJABwVepMW/etKHix2vUnUrgbdYwz0+0J+YodRqS7kgZA+nOYxL//7p6zrLFT6BmnAU0vDQ3V8pPyHxggdwko+diJA7OaKtUkAQ4NWSSAUeLldt5bzb3AUjcoS3lsMp4cc33kQ6rIC17qCjb/LbCouh/pQ/lerWcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780054472; c=relaxed/simple;
-	bh=5Iab6X4RhrWitUCbun54a4+F35ok7WUHKaB69LikAFw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=TWUZJT0XUm8bOgp+CIBS4CpOufwQIcuqOexMIsG12EotRxORwGO1gauI4h/Xlk24OtTgu6WR6Ngm9rWUljHIeym4XyrzhQ+Jh/Mcp5aJMgj8oTfmzew5ZtJn+Yj+RGYBu8jEV+4mS6qo8ADNIk/pcw/HgitM/DPxXzGmQYBoKSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FdQ7Ynky; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FdQ7Ynky"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E977D1F00893;
-	Fri, 29 May 2026 11:34:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780054471;
-	bh=Rva11O7unq6kogxVmk2m9YYMSdahz4e/wFC22rOT/QI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=FdQ7YnkyjWqYhwz1lydMlH76BArr9i5jmDwpHYDilathLSeNpC/YwPPW2uZUDN1jq
-	 QjiSRHdx95157iGbVwP7e9vPN90130Bj8YI+q5dxr3uKvIz3PQCFDuH+6VnESecN6U
-	 HnHQ2xO9SJSjX9nfm9pxwVrcHE0KjgdhDqEvkyD/PqfDXtcfY2gO4WtFHmBWvbvrTa
-	 S/azUSJ39+QBVxFrCeroFqqOphi6GKEqneff82lElyrGdVJYZdgXlPgPexljJ5NyQb
-	 yI3M6tjs9LgbDC4M+9XAQdavA7gBUPzgUADvTMpQhxUgIePcjgwS4By2ghV5s8278p
-	 idWA+OVOHs92A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] hwmon: (k10temp) Add thermal support for AMD 1Ah
- Family Models 80h-8Fh
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Muralidhara M K" <muralidhara.mk@amd.com>
-Cc: linux-pci@vger.kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <20260529111242.2748206-1-muralidhara.mk@amd.com>
-References: <20260529111242.2748206-1-muralidhara.mk@amd.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 29 May 2026 11:34:30 +0000
-Message-Id: <20260529113430.E977D1F00893@smtp.kernel.org>
+	s=arc-20240116; t=1780056711; c=relaxed/simple;
+	bh=NH7ZsUqrsHz50jIlS+EGCsawOoc3cw9k1jkR11u/2TA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Gbri3+p/rluWEHKL6au9Pblj7mJ4mwNcVORABrcC3Xupm2DErISXfwf3C8ur9S2BSMx4N++oYyk6U47QNjFvsHMLGi7N9+4anSQRAvhu+I98iSwdFo1nr+9Iy7uWu3ZO318fzpG74y2tpDRt+a5dsaMKn+akGnmXaWFgTZNn+2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintech.ru; spf=pass smtp.mailfrom=fintech.ru; arc=none smtp.client-ip=195.54.195.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintech.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fintech.ru
+Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
+ (195.54.195.159) with Microsoft SMTP Server (TLS) id 14.3.498.0; Fri, 29 May
+ 2026 15:11:46 +0300
+Received: from localhost (10.0.253.153) by Ex16-01.fintech.ru (10.0.10.18)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Fri, 29 May
+ 2026 15:11:46 +0300
+From: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
+CC: Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
+	<linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<lvc-project@linuxtesting.org>
+Subject: [PATCH] hwmon: it87: Reject negative values in set_fan()
+Date: Fri, 29 May 2026 15:11:39 +0300
+Message-ID: <20260529121141.1633588-1-n.zhandarovich@fintech.ru>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: Ex16-02.fintech.ru (10.0.10.19) To Ex16-01.fintech.ru
+ (10.0.10.18)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] Adding a driver-specific PCI Device ID to include/linux/pci_ids.h i=
-nstead of defining it locally, and inserting it out of numerical order.
---
+set_fan() parses user input with kstrtol() and passes the resulting
+value to FAN16_TO_REG() on chips with 16-bit fan support.
 
-commit abc89cca4a911449422a5a960303c2439a718982
-Author: Muralidhara M K <muralidhara.mk@amd.com>
+Negative fan speeds are not meaningful and should be rejected before
+conversion. Discard val < 0 to keep the conversion in its valid input
+domain and avoid invalid arithmetic in the register conversion path.
 
-hwmon: (k10temp) Add thermal support for AMD 1Ah Family Models 80h-8Fh
+Worst scenario, one may be able to abuse undefined behaviour of signed
+overflow to possibly induce rpm * 2 == 0 in FAN16_TO_REG(), thus
+causing a division by zero.
 
-This commit adds the PCI Device ID for AMD 1Ah Family 80h-8Fh Models to
-the k10temp PCI device table. This enables out-of-the-box thermal
-monitoring for these processors.
+Found by Linux Verification Center (linuxtesting.org) with static
+analysis tool SVACE.
 
-[ ... ]
+Fixes: 17d648bf5786 ("it87: Add support for the IT8716F")
+Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+---
+ drivers/hwmon/it87.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> index 24cb42f66e4b6..3301224c58454 100644
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@ -585,6 +585,7 @@
->  #define PCI_DEVICE_ID_AMD_1AH_M20H_DF_F3 0x16fb
->  #define PCI_DEVICE_ID_AMD_1AH_M60H_DF_F3 0x124b
->  #define PCI_DEVICE_ID_AMD_1AH_M70H_DF_F3 0x12bb
-> +#define PCI_DEVICE_ID_AMD_1AH_M80H_DF_F3 0x1243
-
-[Severity: Low]
-This isn't a bug, but should this device ID be defined locally in the
-driver instead of being added to include/linux/pci_ids.h?
-
-Could this ID also be placed in numerical order? It looks like 0x1243 is
-inserted after 0x12bb.
-
->  #define PCI_DEVICE_ID_AMD_MI200_DF_F3	0x14d3
->  #define PCI_DEVICE_ID_AMD_MI300_DF_F3	0x152b
->  #define PCI_DEVICE_ID_AMD_VANGOGH_USB	0x163a
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260529111242.2748=
-206-1-muralidhara.mk@amd.com?part=3D1
+diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+index 5fd310662ee4..888db1975876 100644
+--- a/drivers/hwmon/it87.c
++++ b/drivers/hwmon/it87.c
+@@ -1412,6 +1412,9 @@ static ssize_t set_fan(struct device *dev, struct device_attribute *attr,
+ 	if (kstrtol(buf, 10, &val) < 0)
+ 		return -EINVAL;
+ 
++	if (val < 0)
++		return -EINVAL;
++
+ 	err = it87_lock(data);
+ 	if (err)
+ 		return err;
