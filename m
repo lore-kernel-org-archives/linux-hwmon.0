@@ -1,33 +1,33 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 170D62EAB61;
-	Fri, 29 May 2026 12:56:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6166A1DDA18;
+	Fri, 29 May 2026 13:26:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780059371; cv=none; b=PgH5vk1dZIbrb1N0BnwYT3p3ZyXq977wbf2JB/T1mT0wySS036MWsKA326J9p/6psP/ythFYSIZ2UxOfRuhZjFSULOov2xutjoTeSHZF7mr07Xu0KdkQD7q5LjeMK0Ed2WFuNJZRlrHuXOPrUFSQfAb91e49ExXlNptjBzPmpOc=
+	t=1780061175; cv=none; b=TtMkKyiqvAeGdqL0HTTj5DMityyA7KYb7ULVdjb4Hx939uKveMtVWMKGb5DXQZ/v7Vgxzhr0EmdjcYxmBTvqCw1WEUvT5z/ZNXisiKoHWE+zlNWA3/Bvgv71reT3lg67IOAWKSxLJAF8lHSkoiqpmHA6TqYvqrq4f7bc4ctovHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780059371; c=relaxed/simple;
-	bh=0QxfIEC8qyuYWwOAb2WgzCIMH4/1O2Q1V9Anr+5ikEY=;
+	s=arc-20240116; t=1780061175; c=relaxed/simple;
+	bh=6ISuJf9Ng+C3Z3SaW7nQja5JGHkXUpGmWJi+tFkSKAA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C/jM4ZsRH7OvxE4pb43S+TbMnA1VNpx0m+EA6jCcHWgpiKmwTxVdnDTOm70iY4sOfvvhGJBtexMY4F1h6jqojyD6X8dU7BZx5mXbfg+QpCIifUcmQ4elJwEivCrd3ExeB0u4VE+n74xnvRexaBhR1bV+lvCr5QQmNijb0xMG6vw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=ocxpLU7J; arc=none smtp.client-ip=217.140.110.172
+	 In-Reply-To:Content-Type; b=Yo5AWK7nKrLus3dJnN+Egp4UUbxS3YQM2NCikPB7l9Ya32wy9j42TcPyWT+s/z9L0CLWfKBGoDBI9RQNnp9Vxx6J08i6ZYaWlOweIDKO+FIgH8FFvHbRyF8g91sETlZ9OBPcx5GtV7CasmbKef1DnOyD/w2BRXWido+NaUmwdBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=rOf+7xyO; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="ocxpLU7J"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="rOf+7xyO"
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 68DAD20E3;
-	Fri, 29 May 2026 05:56:02 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F4A022D7;
+	Fri, 29 May 2026 06:26:07 -0700 (PDT)
 Received: from [10.57.26.238] (unknown [10.57.26.238])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 19FFC3FB3E;
-	Fri, 29 May 2026 05:56:00 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7C2E13FB3E;
+	Fri, 29 May 2026 06:26:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1780059367; bh=0QxfIEC8qyuYWwOAb2WgzCIMH4/1O2Q1V9Anr+5ikEY=;
+	t=1780061172; bh=6ISuJf9Ng+C3Z3SaW7nQja5JGHkXUpGmWJi+tFkSKAA=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ocxpLU7JwcuFGJNzN52Odm0/9BAn+vFuXL4dL3SP0K9Ycz25oxgomjRgE2vfGn+7x
-	 fdUro768IWnWcg1hZ8/X6pd+pLdb+uO7r0QttFPxl3OZxgcIhKskHQ68rYS20sB8sS
-	 pe9KxdyjtNBsrE0SkjGCfY7PP+sZBiDo9TODVQYk=
-Message-ID: <312d7b76-66a4-48e1-b8dd-23082b68de41@arm.com>
-Date: Fri, 29 May 2026 13:55:59 +0100
+	b=rOf+7xyOSB8ONJPiiYATN1S3Ig6Pd1xDHEoq6gjViALAgwSjLURkzbZenWTb0uDQH
+	 /OySxo+rgQsMKle8JMCeX5b788oDWJYfvdHT0e+7MsdPS0qH7QD2frgu4yxLjz2pK0
+	 VOMW4zK9NqInNq+Ng0e3Y/pdfhfIceaFuMeMd2tI=
+Message-ID: <dc9896ac-8d7d-49eb-b435-6e2aa949f8be@arm.com>
+Date: Fri, 29 May 2026 14:26:02 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,8 +35,8 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 03/10] hwmon: Use non-OF thermal cooling device
- registration API
+Subject: Re: [PATCH v4 05/10] thermal/of: Move cooling device OF helpers out
+ of thermal core
 To: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>, rafael@kernel.org,
  daniel.lezcano@kernel.org
 Cc: Zhang Rui <rui.zhang@intel.com>, Rob Herring <robh@kernel.org>,
@@ -61,81 +61,349 @@ Cc: Zhang Rui <rui.zhang@intel.com>, Rob Herring <robh@kernel.org>,
  Viresh Kumar <viresh.kumar@linaro.org>,
  Neil Armstrong <neil.armstrong@linaro.org>, Amit Kucheria
  <amitk@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org,
- "open list:CHROMEOS EC HARDWARE MONITORING" <chrome-platform@lists.linux.dev>
+ linux-hwmon@vger.kernel.org
 References: <20260526140802.1059293-12-daniel.lezcano@oss.qualcomm.com>
- <20260526140802.1059293-15-daniel.lezcano@oss.qualcomm.com>
+ <20260526140802.1059293-17-daniel.lezcano@oss.qualcomm.com>
 Content-Language: en-US
 From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20260526140802.1059293-15-daniel.lezcano@oss.qualcomm.com>
+In-Reply-To: <20260526140802.1059293-17-daniel.lezcano@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
 On 5/26/26 15:08, Daniel Lezcano wrote:
-> Some HWMON drivers register cooling devices using the OF helper
-> devm_thermal_of_cooling_device_register() with a NULL device node.
+> The functions:
+>   - thermal_of_cooling_device_register()
+>   - devm_thermal_of_cooling_device_register()
 > 
-> With the introduction of a dedicated non-OF registration API,
-> switch these users to devm_thermal_cooling_device_register()
-> to make the intent explicit and avoid relying on OF-specific helpers.
+> are specific to device tree usage but are currently implemented in
+> thermal_core.c.
 > 
-> This is a pure refactoring with no functional change.
+> Move them to thermal_of.c to better reflect the separation between
+> generic thermal core code and OF-specific logic.
+> 
+> This change is enabled by the recent split of the cooling device
+> registration into allocation and addition phases, allowing OF-specific
+> handling (such as device node assignment) to be isolated from the core.
+> 
+> No functional change intended.
 > 
 > Signed-off-by: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
 > ---
->   drivers/hwmon/cros_ec_hwmon.c  | 4 ++--
->   drivers/hwmon/dell-smm-hwmon.c | 4 ++--
->   drivers/hwmon/mlxreg-fan.c     | 4 ++--
->   3 files changed, 6 insertions(+), 6 deletions(-)
+>   drivers/thermal/thermal_core.c | 80 +-------------------------------
+>   drivers/thermal/thermal_core.h |  5 ++
+>   drivers/thermal/thermal_of.c   | 83 ++++++++++++++++++++++++++++++++++
+>   include/linux/thermal.h        | 49 ++++++++++++--------
+>   4 files changed, 119 insertions(+), 98 deletions(-)
 > 
-> diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
-> index 6cf5ab0f4b73..77dd9f28962d 100644
-> --- a/drivers/hwmon/cros_ec_hwmon.c
-> +++ b/drivers/hwmon/cros_ec_hwmon.c
-> @@ -532,8 +532,8 @@ static void cros_ec_hwmon_register_fan_cooling_devices(struct device *dev,
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index bb4fc3ff2ad5..28a20d4b475c 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -963,7 +963,7 @@ static void thermal_cdev_release(struct device *dev)
+>   	kfree(cdev);
+>   }
 >   
->   		cpriv->hwmon_priv = priv;
->   		cpriv->index = i;
-> -		cdev = devm_thermal_of_cooling_device_register(dev, NULL, type, cpriv,
-> -							       &cros_ec_thermal_cooling_ops);
-> +		cdev = devm_thermal_cooling_device_register(dev, type, cpriv,
-> +							    &cros_ec_thermal_cooling_ops);
->   		if (IS_ERR(cdev)) {
->   			dev_warn(dev, "failed to register fan %zu as a cooling device: %pe\n", i,
->   				 cdev);
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index 038edffc1ac7..47b373ea6db4 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -1161,8 +1161,8 @@ static int dell_smm_init_cdev(struct device *dev, u8 fan_num)
->   	if (cdata) {
->   		cdata->fan_num = fan_num;
->   		cdata->data = data;
-> -		cdev = devm_thermal_of_cooling_device_register(dev, NULL, name, cdata,
-> -							       &dell_smm_cooling_ops);
-> +		cdev = devm_thermal_cooling_device_register(dev, name, cdata,
-> +							    &dell_smm_cooling_ops);
->   		if (IS_ERR(cdev)) {
->   			devm_kfree(dev, cdata);
->   			ret = PTR_ERR(cdev);
-> diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
-> index 137a90dd2075..860de6cfd8a4 100644
-> --- a/drivers/hwmon/mlxreg-fan.c
-> +++ b/drivers/hwmon/mlxreg-fan.c
-> @@ -583,8 +583,8 @@ static int mlxreg_fan_cooling_config(struct device *dev, struct mlxreg_fan *fan)
->   		pwm->fan = fan;
->   		/* Set minimal PWM speed. */
->   		pwm->last_hwmon_state = MLXREG_FAN_PWM_DUTY2STATE(MLXREG_FAN_MIN_DUTY);
-> -		pwm->cdev = devm_thermal_of_cooling_device_register(dev, NULL, mlxreg_fan_name[i],
-> -								    pwm, &mlxreg_fan_cooling_ops);
-> +		pwm->cdev = devm_thermal_cooling_device_register(dev, mlxreg_fan_name[i],
-> +								 pwm, &mlxreg_fan_cooling_ops);
->   		if (IS_ERR(pwm->cdev)) {
->   			dev_err(dev, "Failed to register cooling device\n");
->   			return PTR_ERR(pwm->cdev);
+> -static struct thermal_cooling_device *
+> +struct thermal_cooling_device *
+>   thermal_cooling_device_alloc(const char *type, const struct thermal_cooling_device_ops *ops)
+>   {
+>   	struct thermal_cooling_device *cdev;
+> @@ -1002,7 +1002,7 @@ thermal_cooling_device_alloc(const char *type, const struct thermal_cooling_devi
+>   	return ERR_PTR(ret);
+>   }
+>   
+> -static int thermal_cooling_device_add(struct thermal_cooling_device *cdev, void *devdata)
+> +int thermal_cooling_device_add(struct thermal_cooling_device *cdev, void *devdata)
+>   {
+>   	unsigned long current_state;
+>   	int ret;
+> @@ -1090,44 +1090,6 @@ thermal_cooling_device_register(const char *type, void *devdata,
+>   }
+>   EXPORT_SYMBOL_GPL(thermal_cooling_device_register);
+>   
+> -/**
+> - * thermal_of_cooling_device_register() - register an OF thermal cooling device
+> - * @np:		a pointer to a device tree node.
+> - * @type:	the thermal cooling device type.
+> - * @devdata:	device private data.
+> - * @ops:	standard thermal cooling devices callbacks.
+> - *
+> - * This interface function adds a new thermal cooling device (fan/processor/...)
+> - * to /sys/class/thermal/ folder as cooling_device[0-*]. It tries to bind itself
+> - * to all the thermal zone devices registered at the same time.
+> - * It also gives the opportunity to link the cooling device to a device tree
+> - * node, so that it can be bound to a thermal zone created out of device tree.
+> - *
+> - * Return: a pointer to the created struct thermal_cooling_device or an
+> - * ERR_PTR. Caller must check return value with IS_ERR*() helpers.
+> - */
+> -struct thermal_cooling_device *
+> -thermal_of_cooling_device_register(struct device_node *np,
+> -				     const char *type, void *devdata,
+> -				     const struct thermal_cooling_device_ops *ops)
+> -{
+> -	struct thermal_cooling_device *cdev;
+> -	int ret;
+> -
+> -	cdev = thermal_cooling_device_alloc(type, ops);
+> -	if (IS_ERR(cdev))
+> -		return cdev;
+> -
+> -	cdev->np = np;
+> -
+> -	ret = thermal_cooling_device_add(cdev, devdata);
+> -	if (ret)
+> -		return ERR_PTR(ret);
+> -
+> -	return cdev;
+> -}
+> -EXPORT_SYMBOL_GPL(thermal_of_cooling_device_register);
+> -
+>   static void thermal_cooling_device_release(void *data)
+>   {
+>   	struct thermal_cooling_device *cdev = data;
+> @@ -1135,44 +1097,6 @@ static void thermal_cooling_device_release(void *data)
+>   	thermal_cooling_device_unregister(cdev);
+>   }
+>   
+> -/**
+> - * devm_thermal_of_cooling_device_register() - register an OF thermal cooling
+> - *					       device
+> - * @dev:	a valid struct device pointer of a sensor device.
+> - * @np:		a pointer to a device tree node.
+> - * @type:	the thermal cooling device type.
+> - * @devdata:	device private data.
+> - * @ops:	standard thermal cooling devices callbacks.
+> - *
+> - * This function will register a cooling device with device tree node reference.
+> - * This interface function adds a new thermal cooling device (fan/processor/...)
+> - * to /sys/class/thermal/ folder as cooling_device[0-*]. It tries to bind itself
+> - * to all the thermal zone devices registered at the same time.
+> - *
+> - * Return: a pointer to the created struct thermal_cooling_device or an
+> - * ERR_PTR. Caller must check return value with IS_ERR*() helpers.
+> - */
+> -struct thermal_cooling_device *
+> -devm_thermal_of_cooling_device_register(struct device *dev,
+> -				struct device_node *np,
+> -				const char *type, void *devdata,
+> -				const struct thermal_cooling_device_ops *ops)
+> -{
+> -	struct thermal_cooling_device *cdev;
+> -	int ret;
+> -
+> -	cdev = thermal_of_cooling_device_register(np, type, devdata, ops);
+> -	if (IS_ERR(cdev))
+> -		return cdev;
+> -
+> -	ret = devm_add_action_or_reset(dev, thermal_cooling_device_release, cdev);
+> -	if (ret)
+> -		return ERR_PTR(ret);
+> -
+> -	return cdev;
+> -}
+> -EXPORT_SYMBOL_GPL(devm_thermal_of_cooling_device_register);
+> -
+>   /**
+>    * devm_thermal_cooling_device_register() - register a thermal cooling device
+>    *
+> diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
+> index 0acb7d9587ca..e98b0aa5aacc 100644
+> --- a/drivers/thermal/thermal_core.h
+> +++ b/drivers/thermal/thermal_core.h
+> @@ -267,6 +267,11 @@ void thermal_zone_device_critical_shutdown(struct thermal_zone_device *tz);
+>   void thermal_governor_update_tz(struct thermal_zone_device *tz,
+>   				enum thermal_notify_event reason);
+>   
+> +struct thermal_cooling_device *
+> +thermal_cooling_device_alloc(const char *type, const struct thermal_cooling_device_ops *ops);
+> +
+> +int thermal_cooling_device_add(struct thermal_cooling_device *cdev, void *devdata);
+> +
+>   /* Helpers */
+>   #define for_each_trip_desc(__tz, __td)	\
+>   	for (__td = __tz->trips; __td - __tz->trips < __tz->num_trips; __td++)
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index 75fb7663c507..8c49d449d43f 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -510,3 +510,86 @@ void devm_thermal_of_zone_unregister(struct device *dev, struct thermal_zone_dev
+>   			       devm_thermal_of_zone_match, tz));
+>   }
+>   EXPORT_SYMBOL_GPL(devm_thermal_of_zone_unregister);
+> +
+> +/**
+> + * thermal_of_cooling_device_register() - register an OF thermal cooling device
+> + * @np:		a pointer to a device tree node.
+> + * @type:	the thermal cooling device type.
+> + * @devdata:	device private data.
+> + * @ops:	standard thermal cooling devices callbacks.
+> + *
+> + * This interface function adds a new thermal cooling device (fan/processor/...)
+> + * to /sys/class/thermal/ folder as cooling_device[0-*]. It tries to bind itself
+> + * to all the thermal zone devices registered at the same time.
+> + * It also gives the opportunity to link the cooling device to a device tree
+> + * node, so that it can be bound to a thermal zone created out of device tree.
+> + *
+> + * Return: a pointer to the created struct thermal_cooling_device or an
+> + * ERR_PTR. Caller must check return value with IS_ERR*() helpers.
+> + */
+> +struct thermal_cooling_device *
+> +thermal_of_cooling_device_register(struct device_node *np,
+> +				     const char *type, void *devdata,
+> +				     const struct thermal_cooling_device_ops *ops)
+> +{
+> +	struct thermal_cooling_device *cdev;
+> +	int ret;
+> +
+> +	cdev = thermal_cooling_device_alloc(type, ops);
+> +	if (IS_ERR(cdev))
+> +		return cdev;
+> +
+> +	cdev->np = np;
+> +
+> +	ret = thermal_cooling_device_add(cdev, devdata);
+> +	if (ret)
+> +		return ERR_PTR(ret);
+> +
+> +	return cdev;
+> +}
+> +EXPORT_SYMBOL_GPL(thermal_of_cooling_device_register);
+> +
+> +static void thermal_of_cooling_device_release(void *data)
+> +{
+> +	struct thermal_cooling_device *cdev = data;
+> +
+> +	thermal_cooling_device_unregister(cdev);
+> +}
+> +
+> +/**
+> + * devm_thermal_of_cooling_device_register() - register an OF thermal cooling
+> + *                                             device
+> + * @dev:        a valid struct device pointer of a sensor device.
+> + * @np:         a pointer to a device tree node.
+> + * @type:       the thermal cooling device type.
+> + * @devdata:    device private data.
+> + * @ops:        standard thermal cooling devices callbacks.
+> + *
+> + * This function will register a cooling device with device tree node reference.
+> + * This interface function adds a new thermal cooling device (fan/processor/...)
+> + * to /sys/class/thermal/ folder as cooling_device[0-*]. It tries to bind itself
+> + * to all the thermal zone devices registered at the same time.
+> + *
+> + * Return: a pointer to the created struct thermal_cooling_device or an
+> + * ERR_PTR. Caller must check return value with IS_ERR*() helpers.
+> + */
+> +struct thermal_cooling_device *
+> +devm_thermal_of_cooling_device_register(struct device *dev,
+> +                                struct device_node *np,
+> +                                const char *type, void *devdata,
+> +                                const struct thermal_cooling_device_ops *ops)
+> +{
+> +        struct thermal_cooling_device *cdev;
+> +        int ret;
+> +
+> +        cdev = thermal_of_cooling_device_register(np, type, devdata, ops);
+> +        if (IS_ERR(cdev))
+> +                return cdev;
+> +
+> +        ret = devm_add_action_or_reset(dev, thermal_of_cooling_device_release, cdev);
+> +        if (ret)
+> +                return ERR_PTR(ret);
+> +
+> +        return cdev;
+> +}
+> +EXPORT_SYMBOL_GPL(devm_thermal_of_cooling_device_register);
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index 60e596e7d7ae..6d1862ac187f 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -200,6 +200,15 @@ struct thermal_zone_device *devm_thermal_of_zone_register(struct device *dev, in
+>   
+>   void devm_thermal_of_zone_unregister(struct device *dev, struct thermal_zone_device *tz);
+>   
+> +struct thermal_cooling_device *
+> +thermal_of_cooling_device_register(struct device_node *np, const char *type, void *devdata,
+> +				   const struct thermal_cooling_device_ops *ops);
+> +
+> +struct thermal_cooling_device *
+> +devm_thermal_of_cooling_device_register(struct device *dev,
+> +					struct device_node *np,
+> +					const char *type, void *devdata,
+> +					const struct thermal_cooling_device_ops *ops);
+>   #else
+>   
+>   static inline
+> @@ -213,6 +222,23 @@ static inline void devm_thermal_of_zone_unregister(struct device *dev,
+>   						   struct thermal_zone_device *tz)
+>   {
+>   }
+> +
+> +static inline struct thermal_cooling_device *
+> +thermal_of_cooling_device_register(struct device_node *np,
+> +				   const char *type, void *devdata,
+> +				   const struct thermal_cooling_device_ops *ops)
+> +{
+> +	return ERR_PTR(-ENODEV);
+> +}
+> +
+> +static inline struct thermal_cooling_device *
+> +devm_thermal_of_cooling_device_register(struct device *dev,
+> +					struct device_node *np,
+> +					const char *type, void *devdata,
+> +					const struct thermal_cooling_device_ops *ops)
+> +{
+> +	return ERR_PTR(-ENODEV);
+> +}
+>   #endif
+>   
+>   int for_each_thermal_trip(struct thermal_zone_device *tz,
+> @@ -254,17 +280,11 @@ void thermal_zone_device_update(struct thermal_zone_device *,
+>   
+>   struct thermal_cooling_device *thermal_cooling_device_register(const char *,
+>   		void *, const struct thermal_cooling_device_ops *);
+> +
+>   struct thermal_cooling_device *
+>   devm_thermal_cooling_device_register(struct device *dev, const char *type, void *devdata,
+>   				     const struct thermal_cooling_device_ops *ops);
+> -struct thermal_cooling_device *
+> -thermal_of_cooling_device_register(struct device_node *np, const char *type, void *devdata,
+> -				   const struct thermal_cooling_device_ops *ops);
+> -struct thermal_cooling_device *
+> -devm_thermal_of_cooling_device_register(struct device *dev,
+> -				struct device_node *np,
+> -				const char *type, void *devdata,
+> -				const struct thermal_cooling_device_ops *ops);
+> +
+>   void thermal_cooling_device_update(struct thermal_cooling_device *);
+>   void thermal_cooling_device_unregister(struct thermal_cooling_device *);
+>   struct thermal_zone_device *thermal_zone_get_zone_by_name(const char *name);
+> @@ -310,18 +330,7 @@ thermal_cooling_device_register(const char *type, void *devdata,
+>   	const struct thermal_cooling_device_ops *ops)
+>   { return ERR_PTR(-ENODEV); }
+>   static inline struct thermal_cooling_device *
+> -thermal_of_cooling_device_register(struct device_node *np,
+> -	const char *type, void *devdata,
+> -	const struct thermal_cooling_device_ops *ops)
+> -{ return ERR_PTR(-ENODEV); }
+> -static inline struct thermal_cooling_device *
+> -devm_thermal_of_cooling_device_register(struct device *dev,
+> -				struct device_node *np,
+> -				const char *type, void *devdata,
+> -				const struct thermal_cooling_device_ops *ops)
+> -{
+> -	return ERR_PTR(-ENODEV);
+> -}
+> +
+>   static inline void thermal_cooling_device_unregister(
+>   	struct thermal_cooling_device *cdev)
+>   { }
 
+
+I would change the order of patch 04/10 and this one.
+
+Other than that:
 
 Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
