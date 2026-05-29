@@ -1,236 +1,162 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2183B27E9
-	for <linux-hwmon@vger.kernel.org>; Fri, 29 May 2026 08:35:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7310B36A361
+	for <linux-hwmon@vger.kernel.org>; Fri, 29 May 2026 09:22:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780043755; cv=none; b=QZDF0rXW0+nUyisjl6To/4VNZ3gmjN77uH0GGVewpn3BEU8Qm3fxA57YDbK8plBrtfGOlA3jW2Y0f0Murtgo4kVnjAcVcAHPSfJJ0UlacDSsa6g2GjeBNhyrsXfi934V4ehwuUswQLt5a5NWI5vABqNT3sTc9hHH8BGyEpKx0+s=
+	t=1780046552; cv=none; b=Wa1dz1nrSPlc6kBxMm3MeHdq1tsr4oiYaIYLXUQoN8LFrLRBbn6IpssNh2VCZ2cfQ5fpzHQi4EiigsK6bvniP4aNsaoAAQpLNHWZK6wQUC2zLCLVE9s6TZ6It2Zs0NGrDIzEpDauamOH55XxZKT5CYeOayAB+lPIiqdc/rbmFiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780043755; c=relaxed/simple;
-	bh=IiDzUPY3ZXxHniqaREbBQdI/nhXVv0VGu3X3wzZjFjE=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Xh1jeEhwODoDlJL13nMbOrbLuZf30ksiakH3OKoTUtmf2/m9guCo84RwfUEq2/JBKT/N2Aqojf8zCPVyL+BirQMJZhgqc/pr/8ZSWH5xOGiVoCtIXqy6zAxYN/IwtxbcC+22/VsP90ICpoxtolx4Z8BUHbUkMhX8BhL1qbB4g/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=oCTBQVDz; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=KJGOw/fy; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1780046552; c=relaxed/simple;
+	bh=tmV9dJLMu0sRKJzLUgwpdlqw+ZSXnLB7bB+l1ToG4zk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tjUuf4nbfND5aVFVfKmI9BM3yqTyA2bS42YPtfbqM9DsQkF0yvl0HirCxpOthdOqM8o80i2v0EeRITN6hxmRKkV3lXLDVDkZJ7i31+GgETV8kpvx+nhP9ZNMxIwdYhE7e0sMrTPNGuNcjSdi9G7wzkhdlUkgi26L3Pxw9nDmlwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g4ybf+qK; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="oCTBQVDz";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="KJGOw/fy"
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64T62GXh562513
-	for <linux-hwmon@vger.kernel.org>; Fri, 29 May 2026 08:35:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	jQKfd+djVSHMpFmIiOUjSH6Yd0pkzc/GU2jwfOrQ2uA=; b=oCTBQVDz63d2Xxwp
-	M3ZhS0jzWsM3EW0XgyXyJrDY1KKY6gtXcN/VEHY+B4J/pp2lMq9A37yT+IScujsg
-	3zwZWms2wPk9t7NWmSHSAxqG+MI0PAvcRM2zRPRIqiapyUxnfeY0eU2T1MAU6BuP
-	50DuTXgTsnUZm2/zv2GwY5MrBS616k2d10OC6XkCoAUvt2RVl6bEfArXqiGlrpEo
-	41I2EvVzbBqSR/ExcdECB6207Hpja/3Z7mTUlBlpo5hmDPjqwfmmysHFr+INiynN
-	jTXAkkgULWncBBBgqfHDHbFTg/4upwmsVJOPg6o3PY41fuBHnw+VAhSiaqBHLfDq
-	XlH/0g==
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4eevug2ktj-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-hwmon@vger.kernel.org>; Fri, 29 May 2026 08:35:53 +0000 (GMT)
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-517288c4ed0so22204491cf.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 29 May 2026 01:35:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g4ybf+qK"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-67c9616b4feso21323518a12.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 29 May 2026 02:22:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1780043752; x=1780648552; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+        d=gmail.com; s=20251104; t=1780046550; x=1780651350; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=jQKfd+djVSHMpFmIiOUjSH6Yd0pkzc/GU2jwfOrQ2uA=;
-        b=KJGOw/fyPemZ7X3dldX7KiwwIL0rt66AP2wduS/BZOXG1dWV/hIW6UAub7WO1/PPUb
-         aEnpm6PLLp41zhOevyy9VuqkE0CMJeO/oD/o13Lr5A77G+d8ecuNg2tH88YQsLSYhpCp
-         Ox6ptlJKh/7CRnJRVf86wxB6SwyLxvDts3kvB3bij/UWLi3CtkFbJCUPiCwk+l7vVnsz
-         S+CfnuOuLEGiexFhjO0R2lF9bh6XZku98V+kwk1Zzm0JoqTOWfRSeNaDAhwnRWRpYw33
-         B2R6K/e5mfksHLBN0OheawjVfjLj26EUwjWpjlhoJLjCBpFSl/pui5lZPSPc9UujPBWd
-         79Ow==
+        bh=LPOdFtlxbAd+SCXAV1KKChh2WjDpaHhM9mfLcDgn5rk=;
+        b=g4ybf+qKa1VTMJdBG9uYTFQcTV9+jntB3Uiw0Pkbsu/W0LqdY5Y0wWybT3NyYI+cXH
+         3kEMpD/dbStEC8z0SOMbpW8Elu2J3/X4x+EvVGlY/Jef3tIayxKgb6r107VB+dZJnpE2
+         tH1Ic6eWkWh2eJyL9L76OvVtoOPL9NT2g2uyNAdwS3qVG+mU5cgNllkfNhA0rBDMdk5Y
+         ixelQYwrTHzvZwhtb5yY/NHop9umxe+JATUfe3QW95sk4fGkZODab8IplRPZHQS6nDvn
+         GM2MeCKP42gtGevcYUTzUveyvRhctLZA8NnRiRLx+4Cul4bDHgHLSglgg4PWn1l9+It+
+         q1eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780043752; x=1780648552;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
+        d=1e100.net; s=20251104; t=1780046550; x=1780651350;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jQKfd+djVSHMpFmIiOUjSH6Yd0pkzc/GU2jwfOrQ2uA=;
-        b=fd79NuIUbkwc9Vo4+OpunXuWcDuMwSq7eRABXMBr7bkuuMXGPPSQ3BvqUtDLoxY1St
-         vXhJvCL9vpkt02iT9cj1XHDwxbbHKpFzS6iyvb4zd3sqm1/WznbdpO/7dy0BxH7touK9
-         kqdq5mw2ivd0C6bWPp3EkQQzrI10WBr4MeZoEh3PQxbcfB4Ix10FeyWbTaeMQ/5Ja84t
-         PeT9JJlH4PzBMzZIXZV4i3NzXvGpePx6IA2Bdt4pFSMG1oVVyQPhQy81knooyUh77u0H
-         HN57J4nQDwPpF8RMzpjDZkuVZPXIR916b++spIVw/njJ52MoP0gnrxQhz8xiesEEfOCD
-         FdIQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9Cx69gF4vLyJR8gMrVBXWy7BkIUmtYDaWLcj1Xoh1tuta771mKWQYm6TQbLQfMkjExE5CpAKRf2OHnDA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAkzA07FGHV/A5Z07cluHJ+FoBhG8t8jp4lCvd8bAhYflJ/+mW
-	7H5Dz7hCFMxZOODFHWk3NwcVrA0S1+/TIGGpouQ/MKjABIzM/hSf+Kxc1lvjA4LWaSkMC4y/bQU
-	WgBMEbvFklUrsqh4EnaT8Qm0cVb2M6FkvM25n/Q2G/QDeJ9vEJd9waTBvKgCJErG0WQ==
-X-Gm-Gg: Acq92OGm9tCIqFMt337rJxA8EP0jDkjx1W5tfTIWwOEivDljh5iV/4X4xx3SOs6L1pR
-	Cn6CmlT2bDNuzVTGuRD6gPrgrKwh9Isniyx5hqLr3KxiZxdBhJrg6Vn6a2rlBRvu7R0Ye7heLFU
-	KAO3npep/YkXXcWJSU5thOWcj52tTmmf+uXvP4o3trxZIBSDxF2NA8JKbBsS87EGk4KQBzPuw7l
-	R6r9elEWFMNIRMdgnBVxqNrQ2NMJD2oZkpySiAl7Mta5ZYo39idKImQGeuaxeovfepjJa7fJi+2
-	gEFmK4EKykPbfGNCYon3FHnyHKOsGzlcZrg9/vsSwTasX6fKMr0vldxUkbgNh/2juYdHT00+ZSz
-	7WbXMCb+f9JzYwLBLiQ7C9Sp5j4tjoNWRyxC3pPi3jOonaOzdUG+ipMoenyYl7yl3JiZpcGBw4V
-	dDMo849xdeVgUUP79mXxQ=
-X-Received: by 2002:a05:622a:2a07:b0:516:e0c4:743a with SMTP id d75a77b69052e-5172dd240f8mr21784121cf.36.1780043752126;
-        Fri, 29 May 2026 01:35:52 -0700 (PDT)
-X-Received: by 2002:a05:622a:2a07:b0:516:e0c4:743a with SMTP id d75a77b69052e-5172dd240f8mr21783621cf.36.1780043751606;
-        Fri, 29 May 2026 01:35:51 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:ae20:597c:99b8:d161? ([2a05:6e02:1041:c10:ae20:597c:99b8:d161])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4909ca6575csm49242245e9.4.2026.05.29.01.35.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 May 2026 01:35:50 -0700 (PDT)
-Message-ID: <a943706d-d413-4ed8-a0fd-a3234c66cd8d@oss.qualcomm.com>
-Date: Fri, 29 May 2026 10:35:49 +0200
+        bh=LPOdFtlxbAd+SCXAV1KKChh2WjDpaHhM9mfLcDgn5rk=;
+        b=Vt0NpfrBxr4iPd6R9EbaQTqv7AaTIC92ZT18kZfHK0A8JYFte4F8Caw/S6zl1iielr
+         n28fkI3ZxNlvM6F8sN63AizRV39Vj8JF6/rH2pZbeN619TButtHJF3gm6vOgRJ6sSMji
+         faGn8/qw8J6S/SDGdJ4sV0vLPbmclulnHq0PEyt05X1idyF7UgmPVr/RCsIQXM1nbTDZ
+         G8I3PeZFXhwPaRGhPp2XwaHRSatz7jVbWzEB7MJth6rIwL4jeGkne3E444j9jq/1ZLSq
+         fjUou131/MHFtSZV9EPYAhXRtzeX5wKnyZwq6ykFdZVqS1t2VaWtwqjEcf9INJE4dpFk
+         3Bfg==
+X-Forwarded-Encrypted: i=1; AFNElJ+WJPwD1eLYlJGVpOVkqeY+QRW7Nna2xgt7Qu/dAEhmkUCPus7hjZwI7PvKFhQFIx++nW4NEILCVNDGRg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzvlLkY+rVMOykUGwE1f2eqj2dO1mHghCohtyQNJzhePtq7fFAI
+	UNiM0z9yjlKnuh4H/kAzDmMeaAKI94mlfeMq6C61kCBFkqrcCF3sQAgU1TXXTw==
+X-Gm-Gg: Acq92OH+6mtPmlu68n8U38IY9ADuh+rtgS98sj1kiq//YLQQd67Zhp3/d4/ZawOda8+
+	29v56IIM12P3mZhHkpBUbrY0onVH80bES2XzJ+lUYWthjqwScvnqWOxQKvHRcxTGwdrkhr98ikb
+	tRoKuynD3uMjE+T6gedSne/vz8c0wFzUioRs+nx50oK4ZWjOpF90PLk9JloizLeXIdvpClsTdPc
+	VAgBOJgm9RVfznBmGBMxrgEW6YPFxaTvQwYvjG2ZdWWbVoGD3lC6IBKhIUICH7YCUvNYrLMrai6
+	9OfT3/+XjVFk5xzCd8eEJcpPq7ziet46rJ2Y63zFf7OBb1hAVqaFi/wTgeJuoCMXdUWrU3UkLS8
+	V3QN407dU8ZjtMZScvbUpXdbS8u9LLns5HktFMTya6CN8pEG8jiZy+PgJkSMalEaBJ19VSLp9tl
+	gdWpYjNeoPwtdZSn5GOwdZF8A=
+X-Received: by 2002:a17:907:2d29:b0:be3:a586:8b87 with SMTP id a640c23a62f3a-be9cf69ae25mr95650466b.42.1780046549756;
+        Fri, 29 May 2026 02:22:29 -0700 (PDT)
+Received: from nsa ([45.94.208.29])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-be9d27f49a9sm49646966b.10.2026.05.29.02.22.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 May 2026 02:22:29 -0700 (PDT)
+Date: Fri, 29 May 2026 10:23:26 +0100
+From: Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>
+To: Conor Dooley <conor@kernel.org>
+Cc: "Pradhan, Sanman" <sanman.pradhan@hpe.com>, 
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, "linux@roeck-us.net" <linux@roeck-us.net>, 
+	"robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>, 
+	"conor+dt@kernel.org" <conor+dt@kernel.org>, "corbet@lwn.net" <corbet@lwn.net>, 
+	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>, "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"Syed, Arif" <arif.syed@hpe.com>, Sanman Pradhan <psanman@juniper.net>
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: Add Analog Devices
+ MAX20860A
+Message-ID: <ahla7zM8f3yFYnsv@nsa>
+References: <20260528173424.87503-1-sanman.pradhan@hpe.com>
+ <20260528173424.87503-2-sanman.pradhan@hpe.com>
+ <20260528-paging-alfalfa-9c3837635192@spud>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH vs/3/4/ 00/11] Support cooling device with ID in the OF
-From: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-To: rafael@kernel.org, daniel.lezcano@kernel.org
-Cc: Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Guenter Roeck <linux@roeck-us.net>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@codeconstruct.com.au>,
-        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Benson Leung <bleung@chromium.org>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?=
- <pali@kernel.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>, Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Amit Kucheria
- <amitk@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20260526140802.1059293-12-daniel.lezcano@oss.qualcomm.com>
-Content-Language: en-US
-In-Reply-To: <20260526140802.1059293-12-daniel.lezcano@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI5MDA4MyBTYWx0ZWRfX6TJUyYWgtshn
- M0A81q7y3GRnocmLgdL1UeTTmhYTMJlBDW9chP59aavmwV/9vRMs0qIKYpwbrAw4pzEn4EEsojT
- F5nEE1MXO++cdhE7uUDFsvHhAyPWeQoAjfuO7gaqX539QfPKC028Bq1xoh3oS5lBbTx3FjelhZc
- 2nqyDCfm9y9r7e6T/Eo7mcNon7k0vanqmSQw5hMDXvahpndLahZPX3xd0/7IcJVfNIBXKEcBRcQ
- 9Mvieh3Q8pJqEk8TyCfZ0kafEZGbQEecK52Gbcfu5r0lNO8SCkGZVYsmcNTr6noce6LNTNwm6i5
- ktgk1AqiONITENKWGadWVBGyxv0amYZ7QzanOXCgPr16wCM/6Lm5fEgn4G+yL1k3dEttqVhmEVD
- IckyQ2+4eDaslpHXrCed3p2sWXBVXNRFURVKBqzSfVZRJLtqi2S6XKJgEV4zOzG7IYtqMbRbwoc
- N1sk8M8be5Q+NalIHdw==
-X-Authority-Analysis: v=2.4 cv=SNBykuvH c=1 sm=1 tr=0 ts=6a194fe9 cx=c_pps
- a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=yOCtJkima9RkubShWh1s:22 a=fdR-mB4-UEK_HjMIXJsA:9
- a=QEXdDO2ut3YA:10 a=dawVfQjAaf238kedN5IG:22
-X-Proofpoint-ORIG-GUID: 5O-FQOWbPG19TJdYXKahMcwv9OX_M0vJ
-X-Proofpoint-GUID: 5O-FQOWbPG19TJdYXKahMcwv9OX_M0vJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-05-29_02,2026-05-28_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 priorityscore=1501 malwarescore=0 spamscore=0 adultscore=0
- lowpriorityscore=0 phishscore=0 impostorscore=0 clxscore=1015 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605210000 definitions=main-2605290083
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260528-paging-alfalfa-9c3837635192@spud>
 
-
-Hi Rafael,
-
-On 5/26/26 16:08, Daniel Lezcano wrote:
-
-[ ... ]
-
-> ---
-> Changelog:
->   - V4
->     - Reworked splitted functions to register a cooling device and
->       merged separately
-
-Are you fine with the thermal core changes in this series ?
-
-Is it ok if I pick the series in my branch (and may be send a early PR) ?
-
-
->   - V3
->     - Reordered and reworked the patches to be git bisect safe
->     - Reworked devm usage by using a more adequate function doing the
->       same as the group of calls to devm*
->     - Pass an init callback instead of moving
->       thermal_cooling_device_init_complete() out of the function and
->       calling it in different places
->     - Sent separetely changes to the tegra soctherm driver
->   - V2
->     - Added stubs for OF functions in order to prevent to break the git
->       bisectability compilation
->     - Added missing call to thermal_cooling_device_init_complete() in
->       devm_thermal_of_cooling_device_register()
->     - Fixed assymetry in devm_ calls for the tegra/soctherm() driver
->     - Fixed kernel documentation for API changes
->     - Added missing static inline for a API stub
->     - Hardened the test with two or three arguments in the cooling spec
->     - Narrowed const: 2 strict in pwm-fan
-> ---
+On Thu, May 28, 2026 at 06:41:31PM +0100, Conor Dooley wrote:
+> On Thu, May 28, 2026 at 05:34:36PM +0000, Pradhan, Sanman wrote:
+> > From: Sanman Pradhan <psanman@juniper.net>
+> > 
+> > Add devicetree binding documentation for the Analog Devices MAX20860A
+> > step-down DC-DC switching regulator with PMBus interface.
+> > 
+> > Both "adi,max20860a" and "maxim,max20860a" compatible strings are
+> > supported. The MAX20860A was originally manufactured by Maxim Integrated,
+> > now part of Analog Devices.
+> > 
+> > Signed-off-by: Sanman Pradhan <psanman@juniper.net>
+> > ---
+> > v2:
+> >   - Added allOf regulator.yaml reference and unevaluatedProperties
 > 
-> Daniel Lezcano (9):
->    thermal/core: Introduce non-OF thermal_cooling_device_register()
->    thermal/core: Add devm_thermal_cooling_device_register()
->    hwmon: Use non-OF thermal cooling device registration API
->    thermal/core: Make cooling device OF node conditional on
->      CONFIG_THERMAL_OF
->    thermal/of: Move cooling device OF helpers out of thermal core
->    thermal/of: Rename the devm_thermal_of_cooling_device_register()
->      function
->    thermal/of: Add cooling device ID support
->    thermal/of: Pass cdev_id and introduce devm registration helper
->    thermal/of: Support cooling device ID in cooling-spec
+> >   - Added "maxim,max20860a" as alternative compatible
 > 
-> Gaurav Kohli (1):
->    dt-bindings: thermal: cooling-devices: Update support for 3 cells
->      cooling device
+> No, please delete this.
+> I don't remember what the policy that ADI use for things that used to be
+> maxim products, but just pick one compatible for this device. I have a
+> feeling they want adi to always be used in these cases.
+
+Yes, adi should be the prefix.
+
+- Nuno Sá
+
 > 
->   .../devicetree/bindings/hwmon/pwm-fan.yaml    |   3 +-
->   .../thermal/thermal-cooling-devices.yaml      |   8 +-
->   .../bindings/thermal/thermal-zones.yaml       |   3 +-
->   drivers/gpu/drm/etnaviv/etnaviv_gpu.c         |   5 +-
->   drivers/hwmon/amc6821.c                       |   2 +-
->   drivers/hwmon/aspeed-pwm-tacho.c              |   5 +-
->   drivers/hwmon/cros_ec_hwmon.c                 |   4 +-
->   drivers/hwmon/dell-smm-hwmon.c                |   4 +-
->   drivers/hwmon/emc2305.c                       |   6 +-
->   drivers/hwmon/gpio-fan.c                      |   6 +-
->   drivers/hwmon/max6650.c                       |   6 +-
->   drivers/hwmon/mlxreg-fan.c                    |   4 +-
->   drivers/hwmon/npcm750-pwm-fan.c               |   6 +-
->   drivers/hwmon/pwm-fan.c                       |   5 +-
->   drivers/hwmon/qnap-mcu-hwmon.c                |   6 +-
->   drivers/hwmon/tc654.c                         |   5 +-
->   drivers/memory/tegra/tegra210-emc-core.c      |   4 +-
->   drivers/soc/qcom/qcom_aoss.c                  |   2 +-
->   drivers/thermal/cpufreq_cooling.c             |   2 +-
->   drivers/thermal/cpuidle_cooling.c             |   2 +-
->   drivers/thermal/devfreq_cooling.c             |   2 +-
->   drivers/thermal/khadas_mcu_fan.c              |   7 +-
->   drivers/thermal/tegra/soctherm.c              |   6 +-
->   drivers/thermal/thermal_core.c                |  85 ++--------
->   drivers/thermal/thermal_core.h                |   5 +
->   drivers/thermal/thermal_of.c                  | 148 +++++++++++++++++-
->   include/linux/thermal.h                       |  69 +++++---
->   27 files changed, 273 insertions(+), 137 deletions(-)
+> pw-bot: changes-requested
 > 
+> > 
+> >  .../bindings/hwmon/pmbus/adi,max20860a.yaml   | 47 ++++++++++++++++++++
+> >  1 file changed, 47 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/adi,max20860a.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20860a.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20860a.yaml
+> > new file mode 100644
+> > index 000000000000..f7eeb30f11b3
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20860a.yaml
+> > @@ -0,0 +1,47 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/hwmon/pmbus/adi,max20860a.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Analog Devices MAX20860A Step-Down Converter
+> > +
+> > +maintainers:
+> > +  - Sanman Pradhan <psanman@juniper.net>
+> > +
+> > +description: |
+> > +  The MAX20860A is a fully integrated step-down DC-DC switching regulator
+> > +  with PMBus interface for monitoring input/output voltage, output current
+> > +  and temperature.
+> > +
+> > +  Datasheet: https://www.analog.com/en/products/max20860a.html
+> > +
+> > +allOf:
+> > +  - $ref: /schemas/regulator/regulator.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - adi,max20860a
+> > +      - maxim,max20860a
+> 
+> And for future reference, please use fallback compatibles when dealing
+> with devices that have the same programming mode.
+> 
+> Cheers,
+> Conor.
+
 
