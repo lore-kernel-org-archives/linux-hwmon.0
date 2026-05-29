@@ -1,309 +1,211 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 019BC3C1F46
-	for <linux-hwmon@vger.kernel.org>; Fri, 29 May 2026 09:30:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20A362E738D;
+	Fri, 29 May 2026 09:47:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780047026; cv=none; b=UohUzvbIlQWOIPmMjgqo1ybLhbw6HBXT1ms7C7TEFYbCxI3EffO7zV/kEAzLRXEnm/CYSYTdgg2dzCU0Tb1OXGTyDKY8t6lWzYiVy3pqr9Z0kP2sd0HH+3CEIBvWUeG3+sNOLGdFzj0kXtT4zQRhOuiTI9jje7A8rFoQPQLGxAk=
+	t=1780048038; cv=none; b=ruAjG9SkX84ivk33qdVnXZrkvYrjckKQT8qnrz8WQBgRNIsDvk111y5dA6hU5MVDs0tgII/a64lMoeqL/01gEd77dX1qKQFoGL3atiiYCI01nfTgmoWtZEV5LpwnkuNbhCrOtUh7S1PmAMRoOAWJNZjTIKTu3gS9rntojcM69Nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780047026; c=relaxed/simple;
-	bh=GV5Rm1RwGK7U8/1MVkT6I42g38w5v9VWFglOl5x0yhY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qh7C1/n49heG+Uwsui9hg4huSYKwp9y1HBiNWYr45L1nuIoqkfuswwM8oH0gC1H3hcH8G66WvqqKCXChxvRhE9iwhVPr1uzb/E82Pg9gWx32SDoUmw6LFnKtUiG87ObLn1ib9VMECSMwsgGh4dMSCRhbUqUNSSxqDH2dKmf+UdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b6hl8S8Y; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780048038; c=relaxed/simple;
+	bh=oeKvE1HGp4+iXJ2fxLXg3Ihl6RSf1rkqVUI/7FduHlE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H0RGbdn1d6aoVnNQWCTIjsgNX8W2jJybYv7LF+AvVEUbNZYxCjUNmQC/gSac3Da1FIO0uNCLia5Ouk7Vvqk07o3nHxgKwRD/UvPuByclC1uKAwBfKq/mQ6wiOuEWOjTgqljS91pEPfh1Upvx5H5XRcu27SmmCTC1fQy1PkPeFgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=sspxgcjY; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b6hl8S8Y"
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-bce386d5b85so2057314166b.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 29 May 2026 02:30:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780047023; x=1780651823; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GYSRC4x1mjQTbx6PsVvZb225HoobPmXU3KLDTDQ5/gg=;
-        b=b6hl8S8YmUL9U/oTnfIPjw8gG5G3oMdwMc/ofkHVzQrikuk4JvF34fTCz/qTHaKG8/
-         c/41V3YpoRnUrul0dQ48XFLiLnsIZBNBSRSXkWZpfjAeXS/aJWDPQH6pBqSRFiGH0nHV
-         ywVmjTVGxPwZhFOPjW8dAwO/Ofmgpl83xq/eV9R6AYSQUHz5yic8eQg/piESOqYTRr3Q
-         11Gk6gVNHbPcW6ddyRsiA10OkncvIzFY+3zokGRa19QSs8pzgwJ7vhbbVz1W8sTSsIIN
-         1GEgZAjeAiMYr+66l2AjO2ymZDyPmtheCpvaAPVZbFbAoSLncWUjRbCxjA7c/C1bgwFJ
-         PNKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780047023; x=1780651823;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GYSRC4x1mjQTbx6PsVvZb225HoobPmXU3KLDTDQ5/gg=;
-        b=hJi6dQJitzVEA5d6W9CkWrD6KE4M5nGZu9+DzBSSGf/00rYaTfXWr69r27sfreIk9C
-         w+iS5kX1yRbTm44zLalUl1yZHChHyRR5mTVtNWwgWwtoEVmvzK/hqtWdfGcNHK0UT3rs
-         RVjpJEEhn+UpqXs4Do6sR6v36B8lFcFt2A6/nHFI4uXy7jau4eYpecWtX+I3jKfTaB6e
-         pTKYuT92d/Q8S6d5kjIFNSgJdYWRUux/BEG57RG30Gzey/y4fVZAHf7T4p4oQ58TAI6U
-         HxZbFrA1RlFIQVcaE/zEUgPhOEJKvbQ7ogj/2eybUbpJVE356ko8lZ4mL/rwH7Ck1OVe
-         M+Pw==
-X-Gm-Message-State: AOJu0Yx+1s9BW1fea1EGkut4zA5r3waZUHu2uWUSzJD1U52H4XebzKu5
-	37RA3fLHhEz4r6uupe4RkjCZwXAq1Tq2+n7L/BROKWHiNepjcN7TEHVI
-X-Gm-Gg: Acq92OFMtUQ2PrRnB9rYGVJGneURP/QVse0Pn14Ke0o7PW6ENe0bcomm3+93/F11itu
-	M4D8oDBGGEs8pmMVqIU0AE8g5NNRahzqYhHIUHqTyWWb2mZqKnd3FgpmGrzCEyTfg1uZLxMjsd7
-	lKJ5h83ENwxT5l63VU8jHB6kDhDcf6bTybIV4C/pVO3hw+P7ob9q8ZtRCJXALxk2bLvU8Itj2XX
-	8GDurrBDibB25eohPHxHuonKqm7y414wUAAa0NUOomtqF0+0CJAeoP9qTIGcSE+jrQS0wDjSktC
-	y2JV0C0jMUWWleSoQlYfFnJN9oyPoWmfC2m8SvbiIiAgJeNs58Kx7jsGkwTsZGpxN6GzGCUtTTX
-	aygEQp/7diGY40UmzeEaG0QPbmhEXMjFoWvCa4wXhcEZA6lZMYV/V3IjeA3L6LoJhvxIPXzQKFM
-	EgQJpusm43zudo7nO9p97uytk=
-X-Received: by 2002:a17:907:2d20:b0:bde:72a9:ba83 with SMTP id a640c23a62f3a-be9cf2ae3d2mr105870766b.29.1780047022876;
-        Fri, 29 May 2026 02:30:22 -0700 (PDT)
-Received: from nsa ([45.94.208.29])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-be9d27f2207sm50349466b.2.2026.05.29.02.30.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2026 02:30:22 -0700 (PDT)
-Date: Fri, 29 May 2026 10:31:20 +0100
-From: Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>
-To: "Pradhan, Sanman" <sanman.pradhan@hpe.com>
-Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, 
-	"linux@roeck-us.net" <linux@roeck-us.net>, "robh@kernel.org" <robh@kernel.org>, 
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>, 
-	"corbet@lwn.net" <corbet@lwn.net>, "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>, 
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "Syed, Arif" <arif.syed@hpe.com>, 
-	Sanman Pradhan <psanman@juniper.net>
-Subject: Re: [PATCH v3 2/2] hwmon: (pmbus/max20860a) Add driver for Analog
- Devices MAX20860A
-Message-ID: <ahlcnlJJnLfmCZNH@nsa>
-References: <20260529001903.625737-1-sanman.pradhan@hpe.com>
- <20260529001903.625737-3-sanman.pradhan@hpe.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="sspxgcjY"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6AC3C2247;
+	Fri, 29 May 2026 02:47:11 -0700 (PDT)
+Received: from [10.57.26.238] (unknown [10.57.26.238])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D3CD33FB3E;
+	Fri, 29 May 2026 02:47:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1780048036; bh=oeKvE1HGp4+iXJ2fxLXg3Ihl6RSf1rkqVUI/7FduHlE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=sspxgcjYPBiJMLU6XV2HbLdCPpE3b5KJDPqCtYKbbWsITXmYnrqIcQNPpPFpdRa1Y
+	 R5X0hRU8LzcV3CxdxsoLcAOU10Il2B6DTOaj8ej7j0kFu9IcsabnwmHNw9JOrzY7SM
+	 ieiHW34Yosu1F322f3PrwhIWrk31Q8o5OhtAM9g0=
+Message-ID: <cf13dbff-552c-43e1-9862-6b1a19c4e50f@arm.com>
+Date: Fri, 29 May 2026 10:47:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260529001903.625737-3-sanman.pradhan@hpe.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 01/10] thermal/core: Introduce non-OF
+ thermal_cooling_device_register()
+To: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>, rafael@kernel.org,
+ daniel.lezcano@kernel.org
+Cc: Zhang Rui <rui.zhang@intel.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Lucas Stach <l.stach@pengutronix.de>,
+ Russell King <linux+etnaviv@armlinux.org.uk>,
+ Christian Gmeiner <christian.gmeiner@gmail.com>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Guenter Roeck <linux@roeck-us.net>, Joel Stanley <joel@jms.id.au>,
+ Andrew Jeffery <andrew@codeconstruct.com.au>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Benson Leung <bleung@chromium.org>, =?UTF-8?Q?Pali_Roh=C3=A1r?=
+ <pali@kernel.org>, Avi Fishman <avifishman70@gmail.com>,
+ Tomer Maimon <tmaimon77@gmail.com>, Tali Perry <tali.perry1@gmail.com>,
+ Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
+ Benjamin Fair <benjaminfair@google.com>, Heiko Stuebner <heiko@sntech.de>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Neil Armstrong <neil.armstrong@linaro.org>, Amit Kucheria
+ <amitk@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+References: <20260526140802.1059293-12-daniel.lezcano@oss.qualcomm.com>
+ <20260526140802.1059293-13-daniel.lezcano@oss.qualcomm.com>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20260526140802.1059293-13-daniel.lezcano@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, May 29, 2026 at 12:19:21AM +0000, Pradhan, Sanman wrote:
-> From: Syed Arif <arif.syed@hpe.com>
+
+
+On 5/26/26 15:08, Daniel Lezcano wrote:
+> Split the cooling device registration API into OF and non-OF variants.
 > 
-> Add a PMBus driver for the Analog Devices MAX20860A step-down DC-DC
-> switching regulator. The MAX20860A provides monitoring of input/output
-> voltage, output current, and temperature via the PMBus interface using
-> linear data format.
+> Introduce thermal_cooling_device_register() for non-device-tree users
+> and rework thermal_of_cooling_device_register() to use the new
+> alloc/add split.
 > 
-> Signed-off-by: Syed Arif <arif.syed@hpe.com>
-> Signed-off-by: Sanman Pradhan <psanman@juniper.net>
+> This removes the need for the internal __thermal_cooling_device_register()
+> helper and makes the separation between OF and non-OF users explicit.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
 > ---
-> v3:
->   - Removed "maxim,max20860a" from of_device_id
-> v2:
->   - Removed WRITE_PROTECT write from probe
+>   drivers/thermal/thermal_core.c | 60 ++++++++++++++--------------------
+>   1 file changed, 24 insertions(+), 36 deletions(-)
 > 
->  Documentation/hwmon/index.rst     |  1 +
->  Documentation/hwmon/max20860a.rst | 57 +++++++++++++++++++++++++++++++
->  MAINTAINERS                       |  8 +++++
->  drivers/hwmon/pmbus/Kconfig       |  9 +++++
->  drivers/hwmon/pmbus/Makefile      |  1 +
->  drivers/hwmon/pmbus/max20860a.c   | 57 +++++++++++++++++++++++++++++++
->  6 files changed, 133 insertions(+)
->  create mode 100644 Documentation/hwmon/max20860a.rst
->  create mode 100644 drivers/hwmon/pmbus/max20860a.c
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index e880c6ca84f0..ffaacda416e7 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -163,6 +163,7 @@ Hardware Monitoring Kernel Drivers
->     max20730
->     max20751
->     max20830
-> +   max20860a
->     max31722
->     max31730
->     max31760
-> diff --git a/Documentation/hwmon/max20860a.rst b/Documentation/hwmon/max20860a.rst
-> new file mode 100644
-> index 000000000000..ea6d2228fafc
-> --- /dev/null
-> +++ b/Documentation/hwmon/max20860a.rst
-> @@ -0,0 +1,57 @@
-> +.. SPDX-License-Identifier: GPL-2.0
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index db01361569d7..0b3db889d60d 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -1059,8 +1059,7 @@ static int thermal_cooling_device_add(struct thermal_cooling_device *cdev, void
+>   }
+>   
+>   /**
+> - * __thermal_cooling_device_register() - register a new thermal cooling device
+> - * @np:		a pointer to a device tree node.
+> + * thermal_cooling_device_register() - register a new thermal cooling device
+>    * @type:	the thermal cooling device type.
+>    * @devdata:	device private data.
+>    * @ops:	standard thermal cooling devices callbacks.
+> @@ -1068,16 +1067,13 @@ static int thermal_cooling_device_add(struct thermal_cooling_device *cdev, void
+>    * This interface function adds a new thermal cooling device (fan/processor/...)
+>    * to /sys/class/thermal/ folder as cooling_device[0-*]. It tries to bind itself
+>    * to all the thermal zone devices registered at the same time.
+> - * It also gives the opportunity to link the cooling device to a device tree
+> - * node, so that it can be bound to a thermal zone created out of device tree.
+>    *
+>    * Return: a pointer to the created struct thermal_cooling_device or an
+>    * ERR_PTR. Caller must check return value with IS_ERR*() helpers.
+>    */
+> -static struct thermal_cooling_device *
+> -__thermal_cooling_device_register(struct device_node *np,
+> -				  const char *type, void *devdata,
+> -				  const struct thermal_cooling_device_ops *ops)
+> +struct thermal_cooling_device *
+> +thermal_cooling_device_register(const char *type, void *devdata,
+> +				const struct thermal_cooling_device_ops *ops)
+>   {
+>   	struct thermal_cooling_device *cdev;
+>   	int ret;
+> @@ -1086,34 +1082,12 @@ __thermal_cooling_device_register(struct device_node *np,
+>   	if (IS_ERR(cdev))
+>   		return cdev;
+>   
+> -	cdev->np = np;
+> -
+>   	ret = thermal_cooling_device_add(cdev, devdata);
+>   	if (ret)
+>   		return ERR_PTR(ret);
+>   
+>   	return cdev;
+>   }
+> -
+> -/**
+> - * thermal_cooling_device_register() - register a new thermal cooling device
+> - * @type:	the thermal cooling device type.
+> - * @devdata:	device private data.
+> - * @ops:		standard thermal cooling devices callbacks.
+> - *
+> - * This interface function adds a new thermal cooling device (fan/processor/...)
+> - * to /sys/class/thermal/ folder as cooling_device[0-*]. It tries to bind itself
+> - * to all the thermal zone devices registered at the same time.
+> - *
+> - * Return: a pointer to the created struct thermal_cooling_device or an
+> - * ERR_PTR. Caller must check return value with IS_ERR*() helpers.
+> - */
+> -struct thermal_cooling_device *
+> -thermal_cooling_device_register(const char *type, void *devdata,
+> -				const struct thermal_cooling_device_ops *ops)
+> -{
+> -	return __thermal_cooling_device_register(NULL, type, devdata, ops);
+> -}
+>   EXPORT_SYMBOL_GPL(thermal_cooling_device_register);
+>   
+>   /**
+> @@ -1121,22 +1095,36 @@ EXPORT_SYMBOL_GPL(thermal_cooling_device_register);
+>    * @np:		a pointer to a device tree node.
+>    * @type:	the thermal cooling device type.
+>    * @devdata:	device private data.
+> - * @ops:		standard thermal cooling devices callbacks.
+> + * @ops:	standard thermal cooling devices callbacks.
+>    *
+> - * This function will register a cooling device with device tree node reference.
+>    * This interface function adds a new thermal cooling device (fan/processor/...)
+>    * to /sys/class/thermal/ folder as cooling_device[0-*]. It tries to bind itself
+>    * to all the thermal zone devices registered at the same time.
+> + * It also gives the opportunity to link the cooling device to a device tree
+> + * node, so that it can be bound to a thermal zone created out of device tree.
+>    *
+>    * Return: a pointer to the created struct thermal_cooling_device or an
+>    * ERR_PTR. Caller must check return value with IS_ERR*() helpers.
+>    */
+>   struct thermal_cooling_device *
+>   thermal_of_cooling_device_register(struct device_node *np,
+> -				   const char *type, void *devdata,
+> -				   const struct thermal_cooling_device_ops *ops)
+> +				     const char *type, void *devdata,
+> +				     const struct thermal_cooling_device_ops *ops)
+>   {
+> -	return __thermal_cooling_device_register(np, type, devdata, ops);
+> +	struct thermal_cooling_device *cdev;
+> +	int ret;
 > +
-> +Kernel driver max20860a
-> +=======================
+> +	cdev = thermal_cooling_device_alloc(type, ops);
+> +	if (IS_ERR(cdev))
+> +		return cdev;
 > +
-> +Supported chips:
+> +	cdev->np = np;
 > +
-> +  * Analog Devices MAX20860A
+> +	ret = thermal_cooling_device_add(cdev, devdata);
+> +	if (ret)
+> +		return ERR_PTR(ret);
 > +
-> +    Prefix: 'max20860a'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet: https://www.analog.com/en/products/max20860a.html
-> +
-> +Author:
-> +
-> +  - Syed Arif <arif.syed@hpe.com>
-> +  - Sanman Pradhan <psanman@juniper.net>
-> +
-> +
-> +Description
-> +-----------
-> +
-> +This driver supports hardware monitoring for Analog Devices MAX20860A
-> +Step-Down Switching Regulator with PMBus Interface.
-> +
-> +The MAX20860A is a fully integrated step-down DC-DC switching regulator.
-> +Through the PMBus interface, the device can monitor input/output voltages,
-> +output current and temperature.
-> +
-> +The driver is a client driver to the core PMBus driver. Please see
-> +Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
-> +
-> +Usage Notes
-> +-----------
-> +
-> +This driver does not auto-detect devices. You will have to instantiate
-> +the devices explicitly.
-> +
-> +Sysfs entries
-> +-------------
-> +
-> +================= ========================================
-> +in1_label         "vin"
-> +in1_input         Measured input voltage
-> +in1_alarm         Input voltage alarm
-> +in2_label         "vout1"
-> +in2_input         Measured output voltage
-> +in2_alarm         Output voltage alarm
-> +curr1_label       "iout1"
-> +curr1_input       Measured output current
-> +curr1_alarm       Output current alarm
-> +temp1_input       Measured temperature
-> +temp1_alarm       Chip temperature alarm
-> +temp2_input       Measured temperature (secondary)
-> +================= ========================================
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index b71acb130395..1d9651947ee3 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -15688,6 +15688,14 @@ F:	Documentation/devicetree/bindings/hwmon/pmbus/adi,max20830.yaml
->  F:	Documentation/hwmon/max20830.rst
->  F:	drivers/hwmon/pmbus/max20830.c
->  
-> +MAX20860A HARDWARE MONITOR DRIVER
-> +M:	Sanman Pradhan <psanman@juniper.net>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/hwmon/pmbus/adi,max20860a.yaml
-> +F:	Documentation/hwmon/max20860a.rst
-> +F:	drivers/hwmon/pmbus/max20860a.c
-> +
->  MAX2175 SDR TUNER DRIVER
->  M:	Ramesh Shanmugasundaram <rashanmu@gmail.com>
->  L:	linux-media@vger.kernel.org
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 64f38654f4e7..5825dda75f2c 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -402,6 +402,15 @@ config SENSORS_MAX20830
->  	  This driver can also be built as a module. If so, the module will
->  	  be called max20830.
->  
-> +config SENSORS_MAX20860A
-> +	tristate "Analog Devices MAX20860A"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for Analog
-> +	  Devices MAX20860A step-down converter.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called max20860a.
-> +
->  config SENSORS_MAX31785
->  	tristate "Maxim MAX31785 and compatibles"
->  	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 1f2c73b71953..ffc05f493213 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -39,6 +39,7 @@ obj-$(CONFIG_SENSORS_MAX17616)	+= max17616.o
->  obj-$(CONFIG_SENSORS_MAX20730)	+= max20730.o
->  obj-$(CONFIG_SENSORS_MAX20751)	+= max20751.o
->  obj-$(CONFIG_SENSORS_MAX20830)	+= max20830.o
-> +obj-$(CONFIG_SENSORS_MAX20860A)	+= max20860a.o
->  obj-$(CONFIG_SENSORS_MAX31785)	+= max31785.o
->  obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
->  obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
-> diff --git a/drivers/hwmon/pmbus/max20860a.c b/drivers/hwmon/pmbus/max20860a.c
-> new file mode 100644
-> index 000000000000..f5feefcbe407
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/max20860a.c
-> @@ -0,0 +1,57 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Hardware monitoring driver for Analog Devices MAX20860A
-> + *
-> + * SPDX-FileCopyrightText: Copyright Hewlett Packard Enterprise Development LP
-> + */
-> +
-> +#include <linux/i2c.h>
-> +#include <linux/module.h>
-> +#include "pmbus.h"
-> +
-> +static struct pmbus_driver_info max20860a_info = {
-> +	.pages = 1,
-> +	.format[PSC_VOLTAGE_IN] = linear,
-> +	.format[PSC_VOLTAGE_OUT] = linear,
-> +	.format[PSC_CURRENT_OUT] = linear,
-> +	.format[PSC_TEMPERATURE] = linear,
-> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT |
-> +		PMBUS_HAVE_STATUS_VOUT |
-> +		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 |
-> +		PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_STATUS_INPUT,
-> +};
+> +	return cdev;
+>   }
+>   EXPORT_SYMBOL_GPL(thermal_of_cooling_device_register);
+>   
+> @@ -1173,7 +1161,7 @@ devm_thermal_of_cooling_device_register(struct device *dev,
+>   	struct thermal_cooling_device *cdev;
+>   	int ret;
+>   
+> -	cdev = __thermal_cooling_device_register(np, type, devdata, ops);
+> +	cdev = thermal_of_cooling_device_register(np, type, devdata, ops);
+>   	if (IS_ERR(cdev))
+>   		return cdev;
+>   
 
-Any reason not to add regulator support? Given that the device seems to
-be a regulator...
-
-- Nuno Sá
-
-> +
-> +static int max20860a_probe(struct i2c_client *client)
-> +{
-> +	return pmbus_do_probe(client, &max20860a_info);
-> +}
-> +
-> +static const struct i2c_device_id max20860a_id[] = {
-> +	{"max20860a"},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, max20860a_id);
-> +
-> +static const struct of_device_id max20860a_of_match[] = {
-> +	{ .compatible = "adi,max20860a" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, max20860a_of_match);
-> +
-> +static struct i2c_driver max20860a_driver = {
-> +	.driver = {
-> +		.name = "max20860a",
-> +		.of_match_table = max20860a_of_match,
-> +	},
-> +	.probe = max20860a_probe,
-> +	.id_table = max20860a_id,
-> +};
-> +
-> +module_i2c_driver(max20860a_driver);
-> +
-> +MODULE_AUTHOR("Syed Arif <arif.syed@hpe.com>");
-> +MODULE_AUTHOR("Sanman Pradhan <psanman@juniper.net>");
-> +MODULE_DESCRIPTION("PMBus driver for Analog Devices MAX20860A");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS("PMBUS");
-> -- 
-> 2.34.1
-> 
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
