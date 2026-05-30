@@ -1,64 +1,64 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C42B73769E4
-	for <linux-hwmon@vger.kernel.org>; Sat, 30 May 2026 22:14:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE36D33E344
+	for <linux-hwmon@vger.kernel.org>; Sat, 30 May 2026 22:14:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780179265; cv=none; b=oIy2ZqFcrFnZn3uPwku/Iahg+dbIj3uXxJHIkzIahpV9WNcu3hwy5ifu0JEO0C2fHYpcvQKASXp85xhkMZ89Q5dvCCivfUxX0QiklcoZP1BEHouPA6N1yAw4psBRzEeg5d+pbjj2dhIZxOVPVPrPWHBs2lFyC0IS2q6gApZU80o=
+	t=1780179272; cv=none; b=tNUKmwrzVgMDhngj/lXoS/DG4TNa70cITnLosfBEKuCo6HozRZG+ZZNOQRJ++Z2R6/yaCFPtBw07EsaZDZYe4SzW17F9720ZZDtdrRqe9ZRp60xrMenq8z9sdVrRxMqLlmgRlbX1P2YynJmDwEFX6JtBijZjwwuVBMMiFxoEZUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780179265; c=relaxed/simple;
-	bh=hV2AP1+ap8z9HTyxEQ1P/+SC3eladyH8RUAMJxtm8/4=;
+	s=arc-20240116; t=1780179272; c=relaxed/simple;
+	bh=FeHdaBBfyV4F3PeK8+YiWOaoq1RUM3CERCLEzLvj6vI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GD+U2i7xPhSs1/tJhpf1S2FzC8f4iPCH40EOngUYqqXylX0mfjbTo7xWUiJHl9Qw1U5jR968+SPE9cagU5jGpSDs3kbWjblS0Evd2DSAGChxyNP+pL7LHSYb6mIqFZR3vDJHD3U+SACpLGXlrj4z+tyaUBFwseER3TenuOhSd2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RjzxicO7; arc=none smtp.client-ip=209.85.215.172
+	 MIME-Version; b=sVJVcV/ARC6z1u2PgkKlRFtbQ7rf7dPNwoHIryM6vFmV8r+FLa+H1oaPcNVtpAuI2682LhtcHkWMkg9plBTq5/fe2qBDOpEZjnVF4vg6/anmd0KMCgqVJtpUnbcZkApLAcLXSpzK98Q9fBEMX020Y6entFsJzoGuQTM0qhcWFQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VJClpdV9; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RjzxicO7"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c858014845aso469927a12.1
-        for <linux-hwmon@vger.kernel.org>; Sat, 30 May 2026 15:14:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VJClpdV9"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-36b9d265355so1560141a91.2
+        for <linux-hwmon@vger.kernel.org>; Sat, 30 May 2026 15:14:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780179264; x=1780784064; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780179271; x=1780784071; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nQn9fbXhe8OSMhQtg1B7FiWYhRXYQP4dkFv9v1H9TPY=;
-        b=RjzxicO7v8cx8ogX2zXdSxMf6kV/HgydWuId7EQYhqKWhlhDITyqZd8DHjJ3odf/wW
-         eqokfDaA9yLoeyDFJZMNZIF3UmgSBYTMNOFhd8ABM9y8yAKHBkPxKX9BRBsT/mlEv0Rl
-         n+6SDFMVuOGRGfmQW8vZ5SjfP6+HN329+v5fSReNs+kErxhqzzvAnAaKor2uOw4UBlBL
-         YWZz9YgI2xPlogVj5lffIwmN838rpw0HjP2BEFCLgBE5jJboDaKJIzek9yl5rdqXY9lG
-         QI8k95jueiz7SymNMjvdoxvQqLOe9SeIZsbAWlikmOGfQHmz7vh0XBfHKAH/yZ2mx4J7
-         VKBw==
+        bh=aUVvVFEPyFCdwPbawuwyV/+BICpnO9Bhunehl4oYhLs=;
+        b=VJClpdV99Zkhu0zMMuwfyeCfod1IHs+QZ234KPDy6WBjtrIFIqDvIJ4PXrGyjM/HDx
+         siyNcBFwOpo1sFVsbzQfeYQGUHi9TfWsXFloQZGaY1zGibrTjyj0tVYVhZg00WlqU7pr
+         lvB6lhwQTDtSn8bicxbLuBVsNrPgDsCGk6Kl3uPRvuidMr43WKtC8/7I0D6F6xBoyU+0
+         UPlaR4LCmLcbDgfShHRNjBpUug7tOtSDiaB67Gqa9rura18fA15GqU8+JM+vebUFon4t
+         C8jYL8b5S08efLRrXivjIijR+QIdcgn+Gzozipkt6gnIbeLKpYG549vSNRkSWcmFR8WA
+         5EbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780179264; x=1780784064;
+        d=1e100.net; s=20251104; t=1780179271; x=1780784071;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=nQn9fbXhe8OSMhQtg1B7FiWYhRXYQP4dkFv9v1H9TPY=;
-        b=XRP3+hhuKaDGGKplxMNrJu8Flbrsucv+OjxmIgLn4bZrxHEDHnRnqyAGGom8iqxqM4
-         ZePo7hL/8LXXxcXs1w4OH2upQwRE3h3j2QEkk8ljA4Q1zbQkWsp/0eJAGpcoTyu9qnoL
-         fh9hiHJ5hVf/H1bgIzDgc9a4s9QbNtCdc/kv0bNR7sVPta82snTmSD1tZKxnTBJGSNI0
-         Tx5bVCwJY5QstTmNYnlhAdWlHTCJnpOtjdUhBs97x+E7DOS+wr2oNy5y6D7Nd3+mOaI8
-         hr1Ye20ULk+l1Z/01Jrgq6PZ+4UGOX1qDagl2A3mOYQiVg0L+Dx4lmT7SCeIBRbuVCx7
-         Xb8w==
-X-Forwarded-Encrypted: i=1; AFNElJ/R1F8IHAKX3NzsmZ39XINSNVapWsa7xDH7hW6W1VwMBSOfLv0UPLD+Pg+h+bUCAjiZQMETkmCD3fJ5sw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTD6bAg6PcN/dR6PzoAGnUsDdF8NguPR5mi8cbhz+lyWthr+kT
-	r6NCZbdFsXf0aqcrDZXfz3SWNW4eLTfjEFGOfMwSBLoiaZgqTB9T+KJE
-X-Gm-Gg: Acq92OEZHFCS9Bg0cAttLirFLc0Km5s/dsK9PThKaXKVEevlRF5deCwpo+mdbSGVeU/
-	XeQ7Y8w6lP8su25FK4v8Kn92DXtEfo5+FMVUwNXte4tAo3XoVM2Ncvlc5AiGVU+YT7d9hikkOhn
-	IEE9ivy1/wctMZO9WIXffgppESwkWHsNuQ39aRNF4chQZOU+MiURM5Yzk5OK4lZm+W1F+Q5UrjP
-	QrUygYhvBFg8xL5jXyAimeb+8vhjMOUgvpUwe2FBeXxTE5u7XzQPDgGTc8G33OdwlXxJNzMDvcE
-	vEXZH2NqzGmC6EYmEDqIIjrs46YSeFbHQeTrNTuc10MpiRpdorMX0zoOAM54X+z1PPyjw9koIfI
-	7JPLPbADzLdJKqkUIvolHUQk2EkNIJ1PuDRS7vCCbP51nMjV3f6gb03dovxjxKOpYQ1ZLdMRcvD
-	3CiGTfNqEIAptHdr0YxV6vcXOqMykNc2yQqlaXPIk2jnHI2B9doTPE4jvYOMA9OChSEyOV2N1PT
-	UZ5Q9o9BzMeXs8=
-X-Received: by 2002:a05:6a21:3cca:b0:3a2:ce0a:a629 with SMTP id adf61e73a8af0-3b40fbaf402mr8406477637.12.1780179263933;
-        Sat, 30 May 2026 15:14:23 -0700 (PDT)
+        bh=aUVvVFEPyFCdwPbawuwyV/+BICpnO9Bhunehl4oYhLs=;
+        b=OFfIKJVK3JZBjUqnQ7Sm+R3Iq7wQps9yjU9K9AlX99Y/XG8pPCu/l6SlH8Yk/39oQG
+         /SlS6CbutY8MH3RLJ1WZLRP6yv8nQIzs+Gruadk1V4WI1G1yTF3zFMmkGq+FuxY2NnR1
+         rL9unwXmN35VzvBrzs5gVWsOx1dNjwIJn9WGtKNWPVSA6dVWpUADtqr34lf5s5f8H8Aa
+         iUFPjbv9S3LeIRKvegKWOfhbhZf9saFYZpFGDpl9zcFHG12kE2iPTmVClo3NvhxS+63b
+         jWfSn24pusnAtEVF4ogxTH+BCwuEHRZghWfkDJ+AoGcnG3VfnYA1Kurop2POfcgNTYkT
+         NXBA==
+X-Forwarded-Encrypted: i=1; AFNElJ/ilz2OJsxn8bf6DxeD8dsnHHrznv4AI9Lly2VT/GAiDcI53KTkGfSZihL4YR/FA9bGfKraNUjbl0EB6A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0Yqv6UITPWye5s4oICt927X9ignTOJs2/ek2d/uN+YwElIajo
+	GoPNTiYNER31ejKb97X0NFOyb59Z9tIyngqy8x8PgI0WtLYzUBQ+0dV7
+X-Gm-Gg: Acq92OHrjCZVJa8pZrRzX2v1vAka1bsXHbFGyCB9M7IVh0o5vRMOiFqd5gqycLf722i
+	nb3PCLE0PZiaxlczzLcooBlTuGrkOn5LApB1lJTI0uS/q91EI2MPsquItetrt1pJBSvRU9kcmcl
+	Kj+H7B+wr+eF6GOIzZBhlORk8I50SEGW4phcbKhzW4fOBikXkjE00QyEBjlnQQBGJRsI9ndwXvi
+	+cGYSkymj0hHqlCKE5OlFfp/FbsgAEzDbOqW4rFmF4DnrKPoN7rPXYOMlBERNVr3z8msF54Llzx
+	g+BM34jJpCyIHGqMKwhPE0ImrY0GDBkkblEGooE3zqoAnqf8lvZDIZ4ebaolYEhYk8Ht2WLd81H
+	ObkAY7gir7+OdRUypaW0D9r+0Yrgv1JZaYNIeFlgos71t+aAGLBbdsJJyyjlEvTBO+GWLBKvSlq
+	7ppP11OOjmnUd03xfIFjS/KYRvL3ooaM4WtWcfrGsZ0/xoGftLC7j7NwiIZqfJEsA1G1+2uF9QG
+	n3bEGXlwsM7K5o=
+X-Received: by 2002:a05:6300:279a:10b0:3b2:92e0:99f0 with SMTP id adf61e73a8af0-3b427e62a8bmr2776268637.6.1780179271103;
+        Sat, 30 May 2026 15:14:31 -0700 (PDT)
 Received: from Ubuntu.. ([49.37.171.82])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85771a9299sm5515226a12.7.2026.05.30.15.14.19
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85771a9299sm5515226a12.7.2026.05.30.15.14.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 May 2026 15:14:23 -0700 (PDT)
+        Sat, 30 May 2026 15:14:30 -0700 (PDT)
 From: Manish Baing <manishbaing2789@gmail.com>
 To: linux@roeck-us.net,
 	jdelvare@suse.com,
@@ -71,9 +71,9 @@ Cc: abdurrahman@nexthop.ai,
 	skhan@linuxfoundation.org,
 	me@brighamcampbell.com,
 	manishbaing2789@gmail.com
-Subject: [PATCH 3/7] hwmon: ltc2947-core: Use zero-initialization instead of memset()
-Date: Sat, 30 May 2026 22:13:48 +0000
-Message-ID: <20260530221353.159461-4-manishbaing2789@gmail.com>
+Subject: [PATCH 4/7] hwmon: nct6683: Use zero-initialization instead of memset()
+Date: Sat, 30 May 2026 22:13:49 +0000
+Message-ID: <20260530221353.159461-5-manishbaing2789@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260530221353.159461-1-manishbaing2789@gmail.com>
 References: <20260530221353.159461-1-manishbaing2789@gmail.com>
@@ -85,33 +85,47 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use empty brace initialization (={}) instead of explicit memset()
-to zero-initialize stack memory to simplify the code.
+Reduce the scope of 'struct resource res' by moving it inside the for-loop
+and using empty brace initialization (= {}). This ensures the structure is
+safely zero-initialized on every iteration, allowing for the safe removal
+of explicit memset() call.
 
 No functional change.
 
 Signed-off-by: Manish Baing <manishbaing2789@gmail.com>
 ---
- drivers/hwmon/ltc2947-core.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/hwmon/nct6683.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/ltc2947-core.c b/drivers/hwmon/ltc2947-core.c
-index ad7120d1e469..d95265986b18 100644
---- a/drivers/hwmon/ltc2947-core.c
-+++ b/drivers/hwmon/ltc2947-core.c
-@@ -273,11 +273,9 @@ static int ltc2947_alarm_read(struct ltc2947_data *st, const u8 reg,
+diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
+index 0581770380cc..bd30867f9e7c 100644
+--- a/drivers/hwmon/nct6683.c
++++ b/drivers/hwmon/nct6683.c
+@@ -1437,7 +1437,6 @@ static int __init sensors_nct6683_init(void)
  {
- 	u8 offset = reg - LTC2947_REG_STATUS;
- 	/* +1 to include status reg */
--	char alarms[LTC2947_ALERTS_SIZE + 1];
-+	char alarms[LTC2947_ALERTS_SIZE + 1] = { };
- 	int ret = 0;
+ 	struct nct6683_sio_data sio_data;
+ 	int sioaddr[2] = { 0x2e, 0x4e };
+-	struct resource res;
+ 	bool found = false;
+ 	int address;
+ 	int i, err;
+@@ -1454,6 +1453,8 @@ static int __init sensors_nct6683_init(void)
+ 	 * nct6683 hardware monitor, and call probe()
+ 	 */
+ 	for (i = 0; i < ARRAY_SIZE(pdev); i++) {
++		struct resource res = { };
++
+ 		address = nct6683_find(sioaddr[i], &sio_data);
+ 		if (address <= 0)
+ 			continue;
+@@ -1471,7 +1472,6 @@ static int __init sensors_nct6683_init(void)
+ 		if (err)
+ 			goto exit_device_put;
  
--	memset(alarms, 0, sizeof(alarms));
--
- 	ret = regmap_write(st->map, LTC2947_REG_PAGE_CTRL, LTC2947_PAGE0);
- 	if (ret)
- 		return ret;
+-		memset(&res, 0, sizeof(res));
+ 		res.name = DRVNAME;
+ 		res.start = address + IOREGION_OFFSET;
+ 		res.end = address + IOREGION_OFFSET + IOREGION_LENGTH - 1;
 -- 
 2.43.0
 
