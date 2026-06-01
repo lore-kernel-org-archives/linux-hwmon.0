@@ -1,307 +1,138 @@
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7DB538399C
-	for <linux-hwmon@vger.kernel.org>; Mon,  1 Jun 2026 07:06:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780297572; cv=pass; b=ljexnVd1JeMC0F+UdQApfnhMn8kmQBdmuT1KhclV2koLXQbtpqiqpXlAs6JNK756v9ReuaDIV7033OohibNkbTf9rP/ghBaUCsI+KQYUV0DRcWvVgAz2f/mC7mXUS5zL2VK3yCLuQWOKja9zVtr0SkXuJHN23NtBXFG/GaBI5C8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780297572; c=relaxed/simple;
-	bh=zL43rRNUkROQAXRx+lI+JoRTxX9AjBpJcLNzRh35qx0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NCpSb3rqA2t+s5XybBiqzhucQuk1luS+cw38x2pFLJ8synbelUCIGUA3OVFuIXaR50rYruMxMS/Jqy89Z6441HkxEf7eVFsjH3ELQiDyIRyh/r+7aBOnW5j01iNnxt+EWe6xphIgueCyq5gFCUrv97kvPfB7nm0fqNPCSG/DhqE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aGTnmNmW; arc=pass smtp.client-ip=74.125.82.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2BA938E8A5
+	for <linux-hwmon@vger.kernel.org>; Mon,  1 Jun 2026 09:09:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780304990; cv=none; b=HUW9yUt26DsTGJr236iU0hwKnfmN0ywNLcS9mmhtKBxGves0F3/HXvQuP6y2XCzKwiwmiMCXtbdOjt3HrbiVEouc1/1Q9nAGoKVn30vGCvHhCI5AeKczi5pr+J72RcpI7pZpKXTXXpIlGbmN43PJZmSo1cmaGe/3+VgSkIJO6BE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780304990; c=relaxed/simple;
+	bh=kNCEzYPzX/rJ/SApTMGX5WH/UUkEoeCT6G51bSzeHzI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=eXNNMrXjdFVO5Fgn+NSIabP1O53d6x4XTvll9P/vp1hLBJ+XoEaTPujSYb9nH5QxJOE8XfArpej/BHE60inGUufzxCcqX2CrTr79i2rONEjVj7puIjjQSEdkyyx1A0kVj8DLnX1WnoRT1UnSNdkcInLm0VOm2VDTMLY9yWwV1V4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=r7Xh7IaE; arc=none smtp.client-ip=209.85.215.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aGTnmNmW"
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-304f0039c02so5324881eec.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 01 Jun 2026 00:06:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780297569; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Uva6bhjQKL8ztdQIwMrlHWDuJjTrjygdvBAcz26Sk2F5ZiBq/6vyph1LO2tSGuHAXf
-         2HOg+Rm6imh3i6b7DqYOg3nCs0joGym8zq6fhn/w9de6ADb8NUPuwD2efhedOq79bBdX
-         aVzQYB8oMEVfCH+HH3DQsnjAcuQ0FL8OvjfYmd6FhhPtI/TNJac9Xnq8HM2zUes8q3XR
-         B/x6EE3QsfCydxlj5jzvMWf9bnrgsUwoix93FfoVmbC9IPxdHhScpKdD44D83bF9yIGg
-         m91Nty+RGmMi1sPlHIM9W/7vskw9ZhSMuJZk2siiVzCtbvljKPTZBZFvUCbcBsNY8NDn
-         mj1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=o6x1wbXvenVeekia93enMRo3NGuqJ+euTvBULiNrpXA=;
-        fh=/wLiD456Rg90OsMIJC34JaYIkvJu/JSmPQ/U+F6PMeQ=;
-        b=OSwf+yFL9jGwkthbEVFjLCYgir9rQ4lcudhObLc9hEDbja/xwJOzfyR9twWsiyAXl7
-         +kJfy07ryGt0dlpf9rtjXTYEFt6dj2VhSfs5kSPekquyLTebPTVPvBgjkCDBjvksPcgd
-         kkEpoR5BHx4nYVKIBLPsGhBpnaV0xe+iVK+XJpqEC64vAG9/E+AdFhHFq6FjdYyLUvjD
-         RlKMvCGpY7GuwRnCrvlCnG8Hp5UsIAUSMR9TB17qFuIw0hLvV90e+BmOJepbPFExtnu+
-         gThoUvUI4gF5SOqPnabe/1Ms6+eqCP08fmCU3cHJl4nbNxbwaGx//cnQwRF7rR88nWQp
-         edYA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r7Xh7IaE"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c858cc9870aso543063a12.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 01 Jun 2026 02:09:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780297569; x=1780902369; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o6x1wbXvenVeekia93enMRo3NGuqJ+euTvBULiNrpXA=;
-        b=aGTnmNmWbnsu0mGB+qitdiaExDNjMsb8AhWrlAw4UNumOnynSTJd2hEDLVxEHT3YJy
-         nEKYBJVMF9CKmqb8ZsDE1zwu6n1b2+QAcVwCHtNmIMn1q5dZLgNWOFHO/OqNZngzyYl+
-         DYgxcerc96ABaV1nio70X+QUWg/oa+ya+NfoJOLGrtfRwXKSNR5OjXSGjvkQclodAZnC
-         ndJSKEv+IAa5/4ArFeziD0PBuFGkqqste+Yj6R1Wcm8iJxizmifSXgPe7LTW5H9ubynQ
-         7nOgEOr6xmzt0+IoWUD/GqHKFTvvSNjylJLguf3iCJgb+EstLPNrH8uxIf5GEZDyKPwG
-         obBA==
+        d=gmail.com; s=20251104; t=1780304988; x=1780909788; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wXjsaeTbGU0KvnbeQVgIVZE9uw0k1+48T90bAJpfEMc=;
+        b=r7Xh7IaEqbZLKoPwoxOyCQTCri4GqoesFBD4TCxPekqcr1Kq6a9QChdHJQrQIU8usu
+         ttbWbzKdYkRwTQHYA64xdokbQOwrW2+PQxWuPCTVhB+vaplcSp6/LbLA0jcJcGygedgW
+         w/rq3bIBukjYkoN93NmU/eITlPwgC75ZkTuTZcHTWbRiP8Mh8hKtq8hY1mm31Utw2x4P
+         VqX9ot+1Gj/m+lnKmHrL/8vxsbyF+nW5hb3Bu3WouoJAUDR3mlqEO8GTSJGtlDeDi8Zg
+         S3dd4+qPGsI2s6klc42SKqzRKHhUHv2IdudJa+Sla6amEJfd6C9wYC46pw1LqpzRWpP3
+         P/hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780297569; x=1780902369;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=o6x1wbXvenVeekia93enMRo3NGuqJ+euTvBULiNrpXA=;
-        b=abiR7r6b0yQ8OnTkwkD9VsOGb4XSEuE1LsNkQaAxfrfWpygIZQx6+t05kmbbEcF0dU
-         bL7ONO+6fx7+WxqSWIsDWbquZeeDy9N0wki66dg8Mk7OSekrCYnA5qNuKlP5EE5G7bGz
-         dev4IeTPzPTDKx3iFt8GRyJ/l7AoQhXAUoV1qtHCE84NxA3brPv/gqhfEKFAGLXyD6xF
-         JXcGfte4Ju4p8HLWCyoQfp9329Haz//Z0Rw67tpZMOGHTCEUn7oh8FB9nGEbWVXIu2UT
-         8T913o218Svm0qx0Tb2aU5sBQ9lvu8r7QsfHuh9IY4nYPHnHzauEOB2yf1oflXVbTtRr
-         AVnw==
-X-Forwarded-Encrypted: i=1; AFNElJ8LKF3hMlWGqmFwziQgbihT3M3sIVmxAhsFXpMxK5kEEE5KBAqWBT6O35w4Z8aPg1vPwVssqse1iDL0xw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIdH2tu4tdrE4IxVrULvX1A7pltgyjlfADcenP0RIk0FPC7ToL
-	UtQL43HU6jmhNMHuwGD0WZ3jPq0qFh+qFiMkEk51rQYGby/k6kjQjsLyKp6J40s+O3cKzLZxNg3
-	zQiRqiuS0oNxxEFH8QEqZF9qOO0wxSYA=
-X-Gm-Gg: Acq92OE/gd1yrM4AK2ML5v8VdKEUZfK2E5Mep+uC5RkId/sWECCCnp4txuF18E5t6GV
-	QOgEfttHqqfVYWzjIOtL2zTI4Z1qvt9D1DSxq5lgMP8NqPi0Kj8bOOicCHt/8txevMRrStTUcoX
-	wBC3Ny5dmIUY4Ch1//bmKtRZxiPj1TbtJoEejBm7D6DZDOd7pcpu37xeblXv39K8vsCrb1C42GO
-	BNLJy9/DNB0D6MJ7KNvHvy3qB29dUakdkJrpZZ30/9pwPVLPq5CAZv1Ks0U9uGC6HY+VqsbcTMh
-	Yc6eltO5YETNVlRHTSc=
-X-Received: by 2002:a05:7300:e58b:b0:2f2:5c68:5052 with SMTP id
- 5a478bee46e88-304fa508e98mr4749567eec.13.1780297568834; Mon, 01 Jun 2026
- 00:06:08 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780304988; x=1780909788;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wXjsaeTbGU0KvnbeQVgIVZE9uw0k1+48T90bAJpfEMc=;
+        b=CLWdkVh2xjXjMqmKDiKyGPSAbxilHGCHWFKG9Q1SFeMnmyimYzWRz9x6YgS9HL5sFM
+         82NwtvtVffjlITQV+g2oVhU3vvgCxSxT5yxtk5zdjHA1jgSYSdpaB1ppF+K/1vJcV488
+         VPumsat3TvhuVb8jEC08AMJ6YNrZD8apDf2+fIcVG0g3lAxAEOylTrMWoX2UxPWRW0fg
+         KHMfCS/fPk5PgSnxyDBAcp6Uv8c8p8k/TZictCXnsHwQK1fFot9UIcPfnb8B+RysnfRH
+         i2LzqLPRL6OIB0Sg4YQXUpb/qQ6wSD4vR5a6HoCzlIA3i9zso360iT7A7SPaLEdAQ4lo
+         8DRA==
+X-Gm-Message-State: AOJu0YyzxA2OuFRr/qaknDuGDEGzhNMMjq+/3SSNqpA7m39iDdkUlJ7Y
+	2ONgLsW84qa0FyhffPWp3WNfENQwbBxOrSEB3jaLm8Pp0qkUOpQ+LS8r
+X-Gm-Gg: Acq92OGZlVDYk5+w2K1gnAOT7VrkC1X9lWLlKM9utKTEVEig6V3zl6mmcHfMsEWvfhu
+	xDPbpRpm0yq9K3TiXwINbej7XQgZ0S6rvkEcKKBCmZkD62hovj+A6sE/wTH6Bwozi82PeZV5YNK
+	cG8DQXSO2t1U3y8S12GbHYAT5W+xCmZVTDHUje44umeVSuxFc1KcSdPNDmi3GtEzAshbdA54wl6
+	ts0jVRhF37qNZC3ZMdUUY4952RFcx895dBxNrDgHgYlK9B8BlV/xKz5LBch1hQSCa2s7XoRMv5J
+	NXiEFxRmo0ahmcKci/5Qe9NdgBzOveFE+YVVdUU45E7ubxrmDkkiCrjzznPRS+i3x84lr59LzPg
+	NOlL+Iamz+YYR85ETMW+J5JiPvQSveWsBTdceaD49CXSaP//a0aqXM4QN5evE0esXWly7BBJB3/
+	YiTqdFX6EeLDJs+mAtimuEfsH2YExpuvR6TO0Rizi/mXPAQcINGbsVAWy7SaKBKe4rp6Q=
+X-Received: by 2002:a05:6a21:b8c:b0:3b3:21f7:15e0 with SMTP id adf61e73a8af0-3b40fdc7d55mr13052217637.38.1780304988061;
+        Mon, 01 Jun 2026 02:09:48 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:91f7:9b52:3422:d8b9:6baf:c53f])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85772df0fasm9105827a12.30.2026.06.01.02.09.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Jun 2026 02:09:47 -0700 (PDT)
+From: ASHISH YADAV <ashishyadav78@gmail.com>
+X-Google-Original-From: ASHISH YADAV <Ashish.Yadav@infineon.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ashish Yadav <ashish.yadav@infineon.com>
+Subject: [PATCH v3 0/2] Add support for Infineon eFuse xdp730
+Date: Mon,  1 Jun 2026 14:39:23 +0530
+Message-Id: <20260601090925.3781-1-Ashish.Yadav@infineon.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260529054218.5184-1-Ashish.Yadav@infineon.com>
- <20260529054218.5184-2-Ashish.Yadav@infineon.com> <20260529-partake-myself-baa76ed4e279@spud>
-In-Reply-To: <20260529-partake-myself-baa76ed4e279@spud>
-From: ashish yadav <ashishyadav78@gmail.com>
-Date: Mon, 1 Jun 2026 12:35:57 +0530
-X-Gm-Features: AVHnY4KKIhJYyyCvubbTWvCZOWxKwkjn-0kbsOvszc7kwcg7g_uxuWN-ORBhaRQ
-Message-ID: <CAJKbuCZ09AFKqJMB+uVLY1+PC1E6rGtw=RGMG7DF4_K85GLeeQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon/pmbus: Add Infineon XDP720/XDP730
-To: Conor Dooley <conor@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Ashish Yadav <ashish.yadav@infineon.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=y
+Content-Transfer-Encoding: 8bit
 
-Hi Conor,
+From: Ashish Yadav <ashish.yadav@infineon.com>
 
-Thanks for your time & feedback.
+Hi,
 
-I will revert back the file name to infineon,xdp720.yaml.
-I hope it will resolve the issues.
+These patches add support for the Infineon XDP730 Digital eFuse Controller
+by updating the existing XDP720 driver.
 
-With Best Regards
-  Ashish Yadav
+The XDP720 and XDP730 are PMBus-compliant digital eFuse controllers
+with an integrated current sensor.They provide accurate system
+telemetry (V, I, P, T) and report analog current at the IMON pin for
+post-processing.
+
+Both parts share the same PMBus register map and direct-format
+coefficients; they differ in the GIMON gain step exposed via the
+TELEMETRY_AVG register (bit 10) and in the VDD_VIN pin number
+(XDP720: pin 9, XDP730: pin 20).
+
+The Current and Power measurement depends on the RIMON and GIMON values.
+The GIMON (microA/A) depends on the 10th bit of TELEMETRY_AVG PMBUS Register.
+The value of RIMON (kohm) can be provided by the user through device tree using
+infineon,rimon-micro-ohms  property.
+
+Datasheets:
+ - XDP720: https://www.infineon.com/assets/row/public/documents/24/49/infineon-xdp720-001-datasheet-en.pdf
+ - XDP730: https://www.infineon.com/assets/row/public/documents/24/49/infineon-xdp730-001-datasheet-en.pdf
+
+With Best Regards,
+ Ashish Yadav
+---
+Changes in v3:
+- Link to v2:
+https://lore.kernel.org/all/20260529054218.5184-1-Ashish.Yadav@infineon.com/
+- Revert back the DT info file name to infineon,xdp720.yaml and added
+  xdp730 info
+https://lore.kernel.org/all/20260529-partake-myself-baa76ed4e279@spud/
+- Revert back the driver file name to xdp720.c and added xdp730 support
+https://lore.kernel.org/all/20260529062937.646091F00893@smtp.kernel.org/
+
+Changes in v2:
+- Link to v1:
+https://lore.kernel.org/all/20260519075558.91466-1-Ashish.Yadav@infineon.com/
+- Integrated XDP720/XDP730 drivers into one driver.
+https://lore.kernel.org/all/51133193-57fb-4a22-bf9e-9817f1f52ad5@roeck-us.net/
 
 
-On Fri, May 29, 2026 at 10:11=E2=80=AFPM Conor Dooley <conor@kernel.org> wr=
-ote:
->
-> On Fri, May 29, 2026 at 11:12:17AM +0530, ASHISH YADAV wrote:
-> > From: Ashish Yadav <ashish.yadav@infineon.com>
-> >
-> > Add documentation for the device tree binding of the XDP720/XDP730
-> > eFuse Controllers.
-> >
-> > Signed-off-by: Ashish Yadav <ashish.yadav@infineon.com>
-> > ---
-> >  .../bindings/hwmon/pmbus/infineon,xdp720.yaml | 59 --------------
-> >  .../bindings/hwmon/pmbus/infineon,xdp730.yaml | 80 +++++++++++++++++++
->
-> This rename just bloats out the diff, no thanks. Please do not do this,
-> certainly not without a justification.
-> pw-bot: changes-requested
->
-> Thanks,
-> Conor.
->
-> >  2 files changed, 80 insertions(+), 59 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infin=
-eon,xdp720.yaml
-> >  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infin=
-eon,xdp730.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp=
-720.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp720.ya=
-ml
-> > deleted file mode 100644
-> > index 72bc3a5e7139..000000000000
-> > --- a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp720.yam=
-l
-> > +++ /dev/null
-> > @@ -1,59 +0,0 @@
-> > -# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > -%YAML 1.2
-> > ----
-> > -
-> > -$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,xdp720.yaml#
-> > -$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > -
-> > -title: Infineon XDP720 Digital eFuse Controller
-> > -
-> > -maintainers:
-> > -  - Ashish Yadav <ashish.yadav@infineon.com>
-> > -
-> > -description: |
-> > -  The XDP720 is an eFuse with integrated current sensor and digital
-> > -  controller. It provides accurate system telemetry (V, I, P, T) and
-> > -  reports analog current at the IMON pin for post-processing.
-> > -
-> > -  Datasheet:
-> > -     https://www.infineon.com/assets/row/public/documents/24/49/infine=
-on-xdp720-001-datasheet-en.pdf
-> > -
-> > -properties:
-> > -  compatible:
-> > -    enum:
-> > -      - infineon,xdp720
-> > -
-> > -  reg:
-> > -    maxItems: 1
-> > -
-> > -  infineon,rimon-micro-ohms:
-> > -    description:
-> > -      The value of the RIMON resistor, in micro ohms, required to enab=
-le
-> > -      the system overcurrent protection.
-> > -
-> > -  vdd-vin-supply:
-> > -    description:
-> > -      Supply for the VDD_VIN pin (pin 9), the IC controller power supp=
-ly.
-> > -      Typically connected to the input bus (VIN) through a 100 ohm / 1=
-00 nF
-> > -      RC filter.
-> > -
-> > -required:
-> > -  - compatible
-> > -  - reg
-> > -  - vdd-vin-supply
-> > -
-> > -additionalProperties: false
-> > -
-> > -examples:
-> > -  - |
-> > -    i2c {
-> > -        #address-cells =3D <1>;
-> > -        #size-cells =3D <0>;
-> > -
-> > -        hwmon@11 {
-> > -            compatible =3D "infineon,xdp720";
-> > -            reg =3D <0x11>;
-> > -            vdd-vin-supply =3D <&vdd_vin>;
-> > -            infineon,rimon-micro-ohms =3D <1098000000>;  /* 1.098k ohm=
- */
-> > -        };
-> > -    };
-> > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp=
-730.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp730.ya=
-ml
-> > new file mode 100644
-> > index 000000000000..fdbc577bccdd
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp730.yam=
-l
-> > @@ -0,0 +1,80 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +
-> > +$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,xdp730.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Infineon XDP720 / XDP730 Digital eFuse Controllers
-> > +
-> > +maintainers:
-> > +  - Ashish Yadav <ashish.yadav@infineon.com>
-> > +
-> > +description: |
-> > +  The XDP720 and XDP730 are PMBus-compliant digital eFuse controllers
-> > +  with an integrated current sensor.  They provide accurate system
-> > +  telemetry (V, I, P, T) and report analog current at the IMON pin for
-> > +  post-processing.
-> > +
-> > +  Both parts share the same PMBus register map and direct-format
-> > +  coefficients; they differ in the GIMON gain step exposed via the
-> > +  TELEMETRY_AVG register (bit 10) and in the VDD_VIN pin number
-> > +  (XDP720: pin 9, XDP730: pin 20).
-> > +
-> > +  Datasheets:
-> > +    - XDP720: https://www.infineon.com/assets/row/public/documents/24/=
-49/infineon-xdp720-001-datasheet-en.pdf
-> > +    - XDP730: https://www.infineon.com/assets/row/public/documents/24/=
-49/infineon-xdp730-001-datasheet-en.pdf
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - infineon,xdp720
-> > +      - infineon,xdp730
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  infineon,rimon-micro-ohms:
-> > +    description:
-> > +      The value of the RIMON resistor, in micro ohms, required to enab=
-le
-> > +      the system overcurrent protection.
-> > +
-> > +  vdd-vin-supply:
-> > +    description:
-> > +      Supply for the VDD_VIN pin (XDP720 pin 9, XDP730 pin 20), the IC
-> > +      controller power supply.  Typically connected to the input bus
-> > +      (VIN) through a 100 ohm / 100 nF RC filter.
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - vdd-vin-supply
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    i2c {
-> > +        #address-cells =3D <1>;
-> > +        #size-cells =3D <0>;
-> > +
-> > +        efuse@11 {
-> > +            compatible =3D "infineon,xdp720";
-> > +            reg =3D <0x11>;
-> > +            vdd-vin-supply =3D <&vdd_vin>;
-> > +            infineon,rimon-micro-ohms =3D <1098000000>;  /* 1.098k ohm=
- */
-> > +        };
-> > +    };
-> > +
-> > +  - |
-> > +    i2c {
-> > +        #address-cells =3D <1>;
-> > +        #size-cells =3D <0>;
-> > +
-> > +        efuse@12 {
-> > +            compatible =3D "infineon,xdp730";
-> > +            reg =3D <0x12>;
-> > +            vdd-vin-supply =3D <&vdd_vin>;
-> > +            infineon,rimon-micro-ohms =3D <1098000000>;  /* 1.098k ohm=
- */
-> > +        };
-> > +    };
-> > --
-> > 2.39.5
-> >
+
+Ashish Yadav (2):
+  dt-bindings: hwmon/pmbus: Add Infineon xdp730
+  hwmon:(pmbus/xdp720) Add support for efuse xdp730
+
+ .../bindings/hwmon/pmbus/infineon,xdp720.yaml |  41 +++--
+ drivers/hwmon/pmbus/Kconfig                   |   2 +-
+ drivers/hwmon/pmbus/xdp720.c                  | 167 +++++++++++-------
+ 3 files changed, 131 insertions(+), 79 deletions(-)
+
+-- 
+2.39.5
+
