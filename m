@@ -1,42 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56BF238D41C;
-	Mon,  1 Jun 2026 09:13:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D6A739061C;
+	Mon,  1 Jun 2026 09:17:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780305182; cv=none; b=MvFbFI6Mh3kDv9knLZ/dkjK54A2euv/0qPCevgyY5kvf7/yhbtQtrC2bHYFLLSAy8oFzL4TfywZbzr095OHoO1QXajMA+xMWAAT5lfDxQfQUJPIAAZ9mltY0o1cF5CSDLPFjn7K/teVg1ft/GR5sHBbIJVNh1wU9nAaCtTUS0jo=
+	t=1780305469; cv=none; b=X85pgJ68zAKvG1cN67GuD3DG1e3AnLwY7IpVMT/DRJspngo/1ftUcws/quJZrW/knn/6+lLKYIqRHbQ9O/JCdEOvpPvMiexqSmP5uePMmPszJSrin7cgW4o8QrGBey4zkcefoNpFJyQl2HFYiD/LPVizz67oDVrf6w0JEfai15s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780305182; c=relaxed/simple;
-	bh=GtQwOPZ2MUslQZ4SSmE6jL4MZMk276xclW15XL+H3Yo=;
+	s=arc-20240116; t=1780305469; c=relaxed/simple;
+	bh=5dyK72MMPz2wRuY0iUZQ/EQf6NMnrASwHShpqTcVxpI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=XQC06wLvrtCF2Z/U+MRl0LSujVSCz0Y+5+3DmVn4hW8Ql0ejoNcpAjvO5FcwRPaeAg2Zj+MWbZ/K/hTWMOGq16Jc6lNfocixm1X86tQaeUG24Onj08bOh23i1co9LFUm40oo7cKWds2GLQF0/UgN1SgYObS8q72BgDmILG8SA5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lqUTAI3z; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Yl92CsN9VWS335iunsRgrg4wxWD1ZodtKrSUhA8EWkfk9gEjD++mZ984ivsby2K2YjCghTZujNgaqu/43g/cGpBQ8QNd3aQb7IJ0WDk4+Ts5Mx1I9YNftR4e26jD0IRZN3pDOZCs5JkZ5c3ndU4E0EfVjSeeOc+hi+Nidxf6WTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IJ6yPrQF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lqUTAI3z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DDAD1F00893;
-	Mon,  1 Jun 2026 09:13:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IJ6yPrQF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 870AB1F00893;
+	Mon,  1 Jun 2026 09:17:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780305180;
-	bh=GtQwOPZ2MUslQZ4SSmE6jL4MZMk276xclW15XL+H3Yo=;
+	s=k20260515; t=1780305466;
+	bh=5dyK72MMPz2wRuY0iUZQ/EQf6NMnrASwHShpqTcVxpI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lqUTAI3zy5qluGmYo8yY0/4vmCDomQ7KZBgeYWgCeNi+YCTkXhM6b5cV9W7693Zx4
-	 DUgZvoYOj1Hw0Zn1UF85182g36ChbZRh7l/MgpqCv+yjuUSw6EQ4dhCBm727P02Kny
-	 KkxRA+DmdkzqDxL7zRq/Y2ZIZcp33nSMTTwNAxbgyCxIp14FmBZgkLRJ9miOQW4K2C
-	 52NI7i14RIpan82ZkWQlN+VtO2uTK0ATGfclUs3KdEgxsZWvx/199PX3IcgrINGohS
-	 lzAeIU9ITfM8j7RUVoxHnSCP+PUrYkW3GvcMixGhkvLkDjU0yGyVPO/xE/2oFdzv0i
-	 yCB4NIWGfjoNw==
+	b=IJ6yPrQFplMdNTTBQcwK8b2B0SzZyhCLTVA46nrTyN1/8YN3MLzB/0OrKlbBZjga5
+	 z0IFQuZogwy+vRz2bnhBp4jiZ+RbluY0S5tua4z5iikF07Ok0TQkEDyegWMQLAlPbG
+	 sp89qcH5IEBBAjUds6Q5OY0wj6wCSwW/Z21EwcVZ7WEKyX/IbStQ0blQMHFaxy7Z68
+	 DeDRl/zc++XXyHMcaYKACv3hXqJO9GdurmFEiM2fQzjHfvwKHGnVCjEZis5HavVvKZ
+	 m/Gs96+pUU/LswLLCn7Y5tpYKt3Q59xludI3Un2DYmtqO6v2T2ts4RwQXpaBIM6knL
+	 94V2yBXbhWrpg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon/pmbus: Add Infineon xdp730
+Subject: Re: [PATCH v3 2/2] hwmon:(pmbus/xdp720) Add support for efuse
+ xdp730
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "ASHISH YADAV" <ashishyadav78@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, robh@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org
-In-Reply-To: <20260601090925.3781-2-Ashish.Yadav@infineon.com>
-References: <20260601090925.3781-2-Ashish.Yadav@infineon.com>
+Cc: devicetree@vger.kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org
+In-Reply-To: <20260601090925.3781-3-Ashish.Yadav@infineon.com>
+References: <20260601090925.3781-3-Ashish.Yadav@infineon.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 01 Jun 2026 09:13:00 +0000
-Message-Id: <20260601091300.8DDAD1F00893@smtp.kernel.org>
+Date: Mon, 01 Jun 2026 09:17:46 +0000
+Message-Id: <20260601091746.870AB1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -45,7 +46,8 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
 > From: Ashish Yadav <ashish.yadav@infineon.com>
 >=20
-> Add documentation for the device tree binding of the XDP730 eFuse.
+> Adds support for the Infineon XDP730 Digital eFuse Controller by
+> updating the existing XDP720 driver.
 >=20
 > Signed-off-by: Ashish Yadav <ashish.yadav@infineon.com>
 
@@ -53,5 +55,5 @@ Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260601090925.3781=
--1-Ashish.Yadav@infineon.com?part=3D1
+-1-Ashish.Yadav@infineon.com?part=3D2
 
