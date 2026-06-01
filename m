@@ -1,78 +1,75 @@
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8108529994B;
-	Mon,  1 Jun 2026 17:03:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.147.86
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B69B4322522;
+	Mon,  1 Jun 2026 18:45:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.143.35
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780333433; cv=fail; b=HmJhT61amHzWLTliwuRW8nVr3e8jzU0QRxltEMImFwDr+CjEnnR3/BQ6u/NkvxGSv4pzMK0q2YlJu/Luc/jrQ0LMhFWZS6CWFZUBHScOrBGN437oyrgeg7LEqAgs0bjI+Vo4B4Jf8pT1Np1OUDBT7E1JpJqYgbdjavgHeUGboUA=
+	t=1780339555; cv=fail; b=unG89ln/cjyPFWhO+Gthm7a5xXRqV0xo7MRHGuxY61LzkzPEz2GlUaeozXWHCoup2BU01CAsNGrJ2qy4vK/FH7TnJCuGqKM0dWZmdgNw2HIn/xu3K1Wuy1pN7QvgtAzEiUN9u/JkqRwzYLkGKhtG/9CmQ1f9FEYRnk7To30bkc8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780333433; c=relaxed/simple;
-	bh=Rf2nIl6xCjRI28a5z5OLY6eDVrmzA40rf6XQdETvxLc=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=DfX8zAMjL9uZTDZnGaBg4pGRpMEc4As8HUDoyhwZzTJXicUyRl6wzNJvH1zW/CNxz4TNC/JW2isM6owH2zkh/+OvRaeCFpe+yQBq2kguy6cAOCo+PPeRfoGx2BoplUWkBxAlJNTl2rXkEFJxCTsIIBOmbLcmVlDJ63g5ZzH1eg4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=kNLXcwAy; arc=fail smtp.client-ip=148.163.147.86
+	s=arc-20240116; t=1780339555; c=relaxed/simple;
+	bh=Reob4W/K0TnmSU7kkbUCvO9WdXenG1p4H9GT5fQWWjM=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=ci9A7JuRCtg7sk9wDiLzQm1SQCZwnU/82CS/M+oI2Txg+6upTHW2dn6F/fnx1j3eyyzG7SclY1AQRSCdEEwiuqXyIR5a/INHQ/2rJWnF1setiDjjt3AHY2X7milNpnwtruoRuGb1eYyDC8c8W4/BZR8jVbIRnT/rlu3xFeN/ycs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=R6x7iXdR; arc=fail smtp.client-ip=148.163.143.35
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="kNLXcwAy"
-Received: from pps.filterd (m0134421.ppops.net [127.0.0.1])
-	by mx0b-002e3701.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 651Ew4sc1893243;
-	Mon, 1 Jun 2026 17:03:17 GMT
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="R6x7iXdR"
+Received: from pps.filterd (m0150244.ppops.net [127.0.0.1])
+	by mx0b-002e3701.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 651FqkZ73742067;
+	Mon, 1 Jun 2026 18:45:29 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
-	:content-id:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	pps0720; bh=Rf2nIl6xCjRI28a5z5OLY6eDVrmzA40rf6XQdETvxLc=; b=kNLX
-	cwAy7X0hiZYRD66YPf+2WTHX4GJ0zbZNCCVYQtKC+HHJpHhQ/sTK5/mwokYpe/pa
-	C9w9j0DqPnLPxnd9lQU4ecvE6rtN0NJMLRSWo/lzhEgDuShPmB7x7lKXBPu0Hd7L
-	8cOTvhiMHBx477ZV3WtcJE3A6DcXhY4N38CWerhvpLaXVZf5nE98E+LNgHT9pGJX
-	fOjtvGjvsmbZIY6zs2rhOZ3plusiKuNONz4d19wnqUDdPz78BVaqsal2ibJyQ1cT
-	E1OXN6dAt9uwabxE7bzd7GW+dWWwaL+sVK9MPdmxGlLtcPJJpaIq4xE5es/byR2w
-	ZNbC63QrD347Eihk8A==
-Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
-	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 4eh76mnuk3-1
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pps0720; bh=thPhiSKRiqVQKMrS74OHjGJ5
+	30tnqMn8hxQvUzxW7R0=; b=R6x7iXdRPH0M/8+H6gFjDYOccH7HR6B+GJ72jVhv
+	H0qyI/RpkobMUC/7qjZLxhbsaWJDdeYmvulBkH7IsmMaCw1Ef5cFubich8CPXdau
+	tmimCGoyJALL2x8TYQyX0rPL4YDv/3PB9+++uZo/6LCKHe7OpWUVc+TWh8Jo8ixX
+	kkl4wlDj7bSuIzKwxzC2+GdP3rU2Rmx3wdV38mzNqcpxlnwnOvke+86d4JKHMz0o
+	5+TqLt+uSK+rkt5U5t5XX/WdT5YS8bGSHoi7xTjDrqFBT10rIMuwqFVDYKFjyGGa
+	SzLixWp6loaKZ8qLhbEB3yLfMng63adfdHKaVGkGQuWQ7w==
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 4ehd42t586-1
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Mon, 01 Jun 2026 17:03:17 +0000 (GMT)
+	Mon, 01 Jun 2026 18:45:29 +0000 (GMT)
 Received: from p1wg14923.americas.hpqcorp.net (unknown [10.119.18.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 880F01317F;
-	Mon,  1 Jun 2026 17:03:16 +0000 (UTC)
-Received: from p1wg14923.americas.hpqcorp.net (10.119.18.111) by
+	by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 5E0268003A9;
+	Mon,  1 Jun 2026 18:45:28 +0000 (UTC)
+Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
  p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Mon, 1 Jun 2026 05:03:09 -1200
+ 15.2.2562.17; Mon, 1 Jun 2026 06:45:28 -1200
 Received: from p1wg14920.americas.hpqcorp.net (16.230.19.123) by
- p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
+ p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17 via Frontend Transport; Mon, 1 Jun 2026 05:03:09 -1200
-Received: from CO1PR08CU001.outbound.protection.outlook.com (192.58.206.35) by
+ 15.2.2562.17 via Frontend Transport; Mon, 1 Jun 2026 06:45:28 -1200
+Received: from BYAPR08CU003.outbound.protection.outlook.com (192.58.206.35) by
  edge.it.hpe.com (16.230.19.123) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Mon, 1 Jun
- 2026 05:03:09 -1200
+ 2026 06:45:27 -1200
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=v6jGsXzqKyvNKfcR7ux3hIO7CY6i36wU/Y8FfuID6nw3GU65wpRpZ+8gX9du7XsnpjHylH7cewHfgfaAnZZkP9hf73Ezt+9HJawk1Jw717y/zZ4lNjd47ZGFyLR9fkxoQCCUPxQVCIW1zpTqfpkJG47XtlMCUieB3XpeAdRjqqJQ6HvP2VC9qWcKngY8dNIKV70SU7AcJanki/hzlkJQ1fdWvu6tuC+3VJbgedHWr92uh9gKDtBs18cr0cMjmiVeiZgx9HJlguLHoRRf8WDb4ASzLkuJ3F+8hQDR+tdzUu/8wlKV//5fcWdXy2GDDnB8J39pFkqgFcvikIT8WlFXpw==
+ b=A4l9IsGwciExOGCIL1Pe66G/tbJ0yZL7ufugV6tGPMJK3+mssQC4/yWtgL2myAAeY0/q8v3iAuxw3SzPXVGM29zjUbAwyPTSmhnTAjQT624BOjF7NEGHsrs10OREU2L9UudWhWdV2ZdT8+4ps3hrw7OcHZjZSLWLx4STfGT7ikF4JaAGNrCJQoXm0HiHid9rvRbADJWtt0FakObeKWmvXRWSzqzbj5iMZOPw1eUzWEyRClM36gRTiTixukG8gA446KqTyOPad/LVMyD5T4T8B1oc17gVn2pb7DzH86p3K4LSQeSVtOKSiZ4+zyVquDCKhUOpNCG3bcq1D37TJZpA+A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Rf2nIl6xCjRI28a5z5OLY6eDVrmzA40rf6XQdETvxLc=;
- b=X151WnzKb45+B+7eqf/Ey+qR3y7q/pxXHZvdcIxcObOPqUB528bAvgVJxMqNlZMub2ZsiHWQLX2xiIDWkS/rujF1SfZrriLe2jzCAJSWJ87iWAViRuEUbtji93EJuSnTEPv05tL+1APOhVj9cK9NKQkgMEzWRjzJH+gtpYhtpcmjsAhWchgQcDueZrtfM3GB5HeIEH2lZnVqM9A/Uf0jDgJSVwl+JWvvCeZINw3USmK8fjWM0RPWpqk1cTGywFk1GWzeOi3N0EIzIxr1Et9js1M1iUk5hxoT3+pYisBZO3xJiRjd+KmCfG2v+f6t8Jn+OUhyPYRYqzEr+B6LKHz9YA==
+ bh=thPhiSKRiqVQKMrS74OHjGJ530tnqMn8hxQvUzxW7R0=;
+ b=Tb9T1iDJavyzvhVm3sHQ8JiQHdeg8VAU2zzyj+mL+sLuZQCgA3/xBK7mL1yEmDyRWZtVXkY8z9nNeAirfEs6hJHWa7hpYyCMpmpCG4gx1JbSZK9ryHnmLJpPOZGjeslH/y4WTZCKIQJeV06AGWaeVjyYWBuTlt1dIZvOSx7U4uwLM7+RpFZ4jTW9g/OjVHDl5jZTaFFyugF3CmRZzU/mXzxi3dMbDeqB9Y8B4naK+kiHXbW7KIE7uir24RByLroc4TxMt60YDLnTJxrQN7caM08Gi629ZUK3idVqeSgvedjXrhYqrsU4x4HOLJStuKvZYzhGhSHRS8W3hav/xp+xQA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
  header.d=hpe.com; arc=none
 Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:610:1cc::7)
- by PH0PR84MB2219.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:165::9) with
+ by DM4PR84MB2095.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:4e::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.92.6; Mon, 1 Jun 2026
- 17:03:06 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.71.16; Mon, 1 Jun 2026
+ 18:45:25 +0000
 Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
  ([fe80::2c54:3534:122f:e74f]) by CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
  ([fe80::2c54:3534:122f:e74f%4]) with mapi id 15.21.0071.015; Mon, 1 Jun 2026
- 17:03:06 +0000
+ 18:45:25 +0000
 From: "Pradhan, Sanman" <sanman.pradhan@hpe.com>
-To: "noname.nuno@gmail.com" <noname.nuno@gmail.com>
-CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
+To: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+CC: "linux@roeck-us.net" <linux@roeck-us.net>,
         "robh@kernel.org"
 	<robh@kernel.org>,
         "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
@@ -83,141 +80,158 @@ CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "noname.nuno@gmail.com" <noname.nuno@gmail.com>,
         "Syed, Arif"
 	<arif.syed@hpe.com>,
         Sanman Pradhan <psanman@juniper.net>
-Subject: Re: [PATCH v3 2/2] hwmon: (pmbus/max20860a) Add driver for Analog
+Subject: [PATCH v4 0/2] hwmon: (pmbus/max20860a) Add driver for Analog Devices
+ MAX20860A
+Thread-Topic: [PATCH v4 0/2] hwmon: (pmbus/max20860a) Add driver for Analog
  Devices MAX20860A
-Thread-Topic: [PATCH v3 2/2] hwmon: (pmbus/max20860a) Add driver for Analog
- Devices MAX20860A
-Thread-Index: AQHc7wDM7+FlL4i+8UaJulySqZHrIrYkvc4AgAB6/gCABDnrAIAAgEMA
-Date: Mon, 1 Jun 2026 17:03:06 +0000
-Message-ID: <20260601170256.912611-1-sanman.pradhan@hpe.com>
-References: <20260529001903.625737-1-sanman.pradhan@hpe.com>
- <20260529001903.625737-3-sanman.pradhan@hpe.com> <ahlcnlJJnLfmCZNH@nsa>
- <20260529165132.678448-1-sanman.pradhan@hpe.com> <ah1OwT0s21LTSsZI@nsa>
-In-Reply-To: <ah1OwT0s21LTSsZI@nsa>
+Thread-Index: AQHc8fbPCr/wl/967EiO72f9pbdCBw==
+Date: Mon, 1 Jun 2026 18:45:25 +0000
+Message-ID: <20260601184516.919488-1-sanman.pradhan@hpe.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH3PR84MB3523:EE_|PH0PR84MB2219:EE_
-x-ms-office365-filtering-correlation-id: 63b17580-45ac-4cc6-58d5-08debfffa659
+x-ms-traffictypediagnostic: CH3PR84MB3523:EE_|DM4PR84MB2095:EE_
+x-ms-office365-filtering-correlation-id: 075cf22c-6dd7-48f2-05d9-08dec00df1ce
 x-ld-processed: 105b2061-b669-4b31-92ac-24d304d195dc,ExtAddr
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024|38070700021|56012099006|4143699003|22082099003|18002099003;
-x-microsoft-antispam-message-info: tAf5r01luNj0rgKXKL4wSRSlReyPfzKh/J9xv5kSCkOPzvcPUY/YJEAy2uGDVf4arpwjbDHFNisLIDiWkcYjXRNs/njYumzmH9pgduSFJ0QCQ0lSb9ChWe9blkXzPXT0O5N0zDgUuRrDPmAVcib/s+gByqs/sPl97VkwmDwGCTaCfFn3ZczkTfKWAeTFBSaaB4ZQhwSCic4EBs5iBLTqxM9SqzzvJ6DMsSAJo47wxZibokSSEvLuJcEzJRtzvO/DIXVLd3ndbZ0UNwDKNkSSb2vYDt3T5BQVGnNmb5TTlbcx/pAzFRvkvDjKI5el1mglCwieiyiw5Vxblbl9hwyXIk0hdVnFK10I1hSit1KjFVllC/tsV1xLyGBrEf0toiCfg545lWQUcmAsi2Uvf2fL+96sAhhHeAIZglhXxpK7OYRxJnE9MSNTg3OkIvKlYOewTEGnCq2uPh4RSCxCHoBpv0fYROo1nK0eP9QRn3SDW2qJUIh+EjkL4RkzyOFpsGu83YQdrZruILpTMIGb6icTvknlEisrMt+gyZXvav7UW+lYE1cJms12lT+38i8UUmL6Fgw2pfrQ8jNn0ufz4BoksnRV21TuRwsht6Yz4rlCMURGRYy7emOBly7YfPHAN+o3OgNtGuOQFRdrKPNgtacrUBK3QDPwzeKMFmMrnVj3C7cAsdGwUKeZcd7kN/2pFOd75c2gtrE00LH5KdQU5DZjxA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(38070700021)(56012099006)(4143699003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016|56012099006|38070700021|3023799007|18002099003;
+x-microsoft-antispam-message-info: xLPw8cJNb/1qY6fn4mpl+OuxVm6uq0WFLZfPUvTwh3JdG78/Utyvl4YJkrTbAtYuGuzVPmodNqJhbvw7SUQHfkvKnljtgKFeUXCso6028IebTahIecwun4V2mHJw16j+sRuBTlvkgy035qVdpRzZJT+ntoT8CyhbRlT31c1IbUo/eJKgee3UI4X/kl8dvmNTNnArLAohWy6TaERF4TPdGxm6fdUtXzaP4LtaGu3bugLshDjop5OwyaZE9pzPNcobd5f7uwpfvWTGXqPRfzF+34hXeVCdccPJoBw1J+2DmHySmOf8VLyC5HnY+q446wVhvJ6jSuFybMu9O1b+1+y43CoEOnK97HlJ4z1G/z6rYv4A83xyXTuF69GGKzEOuPVi8+pR1DugNsintgKUX8nGOQM76w6k55YftvaEsbjIcB9BmN5Zp+uHqmUWN9GRUFUSSLdhJY76mz03qxrskRommVY3snhic3DaCP3KB8x/oHFAKEKNvI5c4/PkH5VQ9fB3JZvFl+Cj1uNNSpaaK1G8MJXUnsBg/F5jmvqJ5DEFTFTHicDEjlb/TXxG9Gq2hRuMwsfwrp4W08qVliYYPAd8JiefHuvbsime+ekvdpbXrTK1EJjXPJXBI/kimjR/BjS/eBLJW179YMupOrUZRxkdxw5eVEjmPIKfPTED7fNX7Rsgc+jY+kP02JLiVEB5Orixr8ipxC60S6HFq+4QuNtH+OLh74RddprzC+d4uaiUfHvQxyvZ1/n2UlvJ++yNgAG5
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(56012099006)(38070700021)(3023799007)(18002099003);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?S0JSb010ZENKY1ZvdTUrcUhMdEtKTjkvbzVVeVlXTHg3ZUliSlF5Z1E5cmdo?=
- =?utf-8?B?bTdNNXRJVmlaNzhkaERlSDRON1dTUFVMVGkzbWZNbUppdVVSMldEQ2I2MzNC?=
- =?utf-8?B?NUNPanB5b2QyMGh2R051T1c3RVd3NjcwY1FMaWh4YmozVnlWaER6ek9IZG84?=
- =?utf-8?B?L3V2d0hucTZFd3NIbHlxWFlUK0syZ1NubVVlZU5xaTk0OWdMY2NIMFlOODl6?=
- =?utf-8?B?SHpaQ1pLRXU5bWNGaVVMZG1naTIrTnl1L1AxMnNac29BSUtmNVVZeTVGR1A3?=
- =?utf-8?B?TllocDl0SWtFVDNrU3NuY05qMzlvRWVOcndGaXZLVWIxTXBNN2FJNk9zVmNo?=
- =?utf-8?B?azRKbjdJNlNhcUhVRTBEVlZHOExwaFlPMHFFV21aV0RqQmorclE4Yk8yUHdx?=
- =?utf-8?B?cm5pTjVsa0pmTVpUaGwwQldjZHNVRENtMHRkM1VmOWVhT0U3UDUydVdJZ3J1?=
- =?utf-8?B?Z3ZLeVowZjZhSG1qdFo3M2lyMjJra2VxTTZmN1UrRGxveHpENVp1dXhZMEhu?=
- =?utf-8?B?UjZjMGZSYVhhWVUvUUFJamV5T0p2cXZtN09mdWM1Si80NHhMOXNEa0tOeWhG?=
- =?utf-8?B?WWRYcTliL2xlNi8xUm02cy9HZzJ2cEJnZngwNmE4bGpDeUd6Zlp3VVFDRG1m?=
- =?utf-8?B?Wnp0dHlxa2N2RHRxNWRiOWVqeEZUeG1CczlwaS9RMG1wQ3NNTnVRUFBJc21Y?=
- =?utf-8?B?MndqTmd0OUp0VTQxZm9tM1pHY3gzVkhBRjczV2p0bVloSmpJUzQ1OEJoL0NP?=
- =?utf-8?B?UjA1aEtuVysyeXRIbDV1ajBrci8yODZ5a0p5SkI2WHo0ZW9uTkJpdE9aYVhp?=
- =?utf-8?B?SmVvREw2WU01b1pyRGJOa3BMSDJ2LzZPWHh3eE8rTXVUSVAwSHJhdE1FU3pZ?=
- =?utf-8?B?ZGJYbUgveU5FUzNaSWlQckEwaDdkbWYyR0tKZXhYVDh2dGVNdHA0UXNHUFB1?=
- =?utf-8?B?c1lHdGpiNXlacTdWaU84ODVqaTVJWFEwU2FKY1RhRityWVgwMFR4QkFZemJG?=
- =?utf-8?B?d0wyN2ZabXIzYWcxRTMyWVV1VXZmNVdKQTE1K1lFNjVQVDl3OHBIcm9weHo2?=
- =?utf-8?B?UDZZYzYvYmxTOElXRlNJaGdPWlg0dlhQdG9veDFPeDljdmlqRlRoa0RFMjVm?=
- =?utf-8?B?cGo2ZjJRb1lmSzRHQk1kV01TN2pVdHh2M3pqOEtoVDhweitMU0R5bE04WDRC?=
- =?utf-8?B?eTM5VFl2YXd5akYxTHJpQzhkUTB1aUx2YU1PZ3RuaFNxYXYzaW9ybGp6QWRn?=
- =?utf-8?B?YXhDS0M4MWFsMTcxQ0N0ZmlXdGUzZDkzVk55aDRUYW9tT3I2b0x5MEwvbXZh?=
- =?utf-8?B?T0Y5OHpSZTcwTjFDZy9LTm1aUWhRVGc0VlhMQVlMYlhpWjl4VkpCc201RS9B?=
- =?utf-8?B?REFNNzdpSFV2QkpERGpDVldpVW5kVFBMdWZiTTl5bXVBQVBNdGNaWHFaRHdj?=
- =?utf-8?B?TkdMRWs1bUZCQzA0aHhVd1c3UjRYem5vMzR3elU2MEFpcmRrZVdXZ1dzaTZ2?=
- =?utf-8?B?UFJ1M3FZY0JEODluR29tOEVRaFNsdXF2N3ZuaDErVU1ZS2YzdFJoYmt3djhs?=
- =?utf-8?B?V2dsaDBMZFI2YzFTbWZ4OGpsa1JTZ3lVRDZsdnJiM0RPYlRUclJSZm9FLzVB?=
- =?utf-8?B?L2dIRHZic1YxQWtSbzhNSGlPckx5b1ZVblVUY2hydVVML1A5R2xqUUtxWFNm?=
- =?utf-8?B?bWorL2w4WWVEOWtDeFZOaDZVTVlrV3lGbWNQbWcxR3pnUm5DdEh2VjYxMnFO?=
- =?utf-8?B?cFNRN3FYSmw4cEpGdDNyRGhMMUhZWXdWcE9ZeHJEYkdGa0liVjdaeUJ5aS9t?=
- =?utf-8?B?d1l3RGVhbXRwbkswSnkyR3VZazlZTkgzNGQzTnNyN25RZStOdW9NRjlNR1Fp?=
- =?utf-8?B?L0N0cGJtTGhPSWRhSHp1a2dBdzlDUG0yMzlIc2ZTeHpHZU5NL2FwbEJCdFI2?=
- =?utf-8?B?Z213c0g0VEdyeTlQbnEwMFJrdUw3NlZLdDM2VDZmbWM4SWVZTm8xdFpUVDJz?=
- =?utf-8?B?VGExcnZGSHJxL0JFU25iSFA3WUk0Y2lyc0lINkNLTWtCeU4vZ0lQcFNVY1Bl?=
- =?utf-8?B?SlVDdndPbUVqV2JlM1lmdXlkRkpnUzBDOHpuK284VElKbGV3M3ZlOE1FcDd3?=
- =?utf-8?B?aVNaQlpyZ29zL0hXdEtHSmorTVBVc1hrNjJaU3N4WTZUMWZBSlJ2KzNRQk1l?=
- =?utf-8?B?QTI0RE9TWTBxTnFJTWdzcEJNS3M4UFFUWEplK0daeEJybjdjNmRPUXh5alNT?=
- =?utf-8?B?RzJBSDNYU2JmU0ltSzVGdmdTN24vRmNweFlOZTF5MmRHQ2JJMTY0SUJCVVND?=
- =?utf-8?B?R2p0dWNzZWM1K1pjUVk3NGhvYTRORTk1bXlIRk5GQVJONWNBaFMwQT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F4EE16CF794FB541AB8B93C763C24166@NAMPRD84.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?Uuc7prVMiJWtM63xcXxeginfd3Eb2yLM5srFPjgbCEol92ML+zDnlb+6MY?=
+ =?iso-8859-1?Q?ISbtHexsS3m1U/DeHmd8c7JUsJjA+GmeUeCrNg8tyqUgHPZwu5lKAKVc6c?=
+ =?iso-8859-1?Q?HREhyeTmJ3L+hZn2F9vuRMuylTtBWLE4aAbtN/lFRDLYEHzV7LAp3jSQY1?=
+ =?iso-8859-1?Q?bUOoSb4StZMAQbXA6PubJcDZQlCsKTXDhrZ4dhmwdFsZADghmeX8pnmVxv?=
+ =?iso-8859-1?Q?UBvBESCu+eaSj3qpT5hJX4reVIHZHWx+EkyxU8cJOCI7D5vhOSr2E2hl9P?=
+ =?iso-8859-1?Q?piyPUZjJw4wTuX/jW2snb5FqLviOgl8/sunFwQ62nInV+YIpGE5/anhTSq?=
+ =?iso-8859-1?Q?JnWLSW9aYUeJ5bRoj2L+fd9Qp5rr4bv3jVM9Ox0apMFgTphHrRXkvYqb9+?=
+ =?iso-8859-1?Q?Bcc+cxiJQI6bmeK3Kyfbt2uvcxDGV9rkyBKqOPxfs0TUlJrWraFs5HlIYg?=
+ =?iso-8859-1?Q?sni44sJ/J/X494nUJ3iZdzi+bl32aOiHr05irOoXH0VkgKnV3XnVpZzZZA?=
+ =?iso-8859-1?Q?Bb0uK6kJ86+ws4ZiCrxyB6rm0o1e9F0QREExxrORlgK6qejMZP25TSRgWm?=
+ =?iso-8859-1?Q?xrBEZlEDBvRDEEhBlan5EySxhy+6O9UzARjHQ1n8gM+6wrhTthzXL66PVF?=
+ =?iso-8859-1?Q?uL20sHYmx/Rs8qUF4+oiL+wbcOLLmnOS3xSNuTFn5s56ZmxezISbJiBcJK?=
+ =?iso-8859-1?Q?d86I/JNbJ7DK7rCYFHx2AtK+lDsSYwQp/dsJiCSaFwRh4qskh8e6mrTM1h?=
+ =?iso-8859-1?Q?KjM+R+wFL+yKuvDOnXxHZhB4/R0uQ9gcF2sBZ5iDi16hYolG+biKZsGwPC?=
+ =?iso-8859-1?Q?Uj/3Jt8QNM7HXBmi5rsxGdevUJZlhxxWXSTd36O65iNzLOwcXtH6c5RcY9?=
+ =?iso-8859-1?Q?5PeuTen7uwTIBC+vEEssXrXS5/tV+i7rWQlVhk/DlekQfW5MINpGtUtEtl?=
+ =?iso-8859-1?Q?LOnYKLYQUhIctyk79pqBVuruEMAhuUhs/8tv4wEgraR7T6ykEzDAkjdGQn?=
+ =?iso-8859-1?Q?fbui91j2axFtL6+liH3RygAxdBBH9s2r21n0oNMFN3l6Nz33Hk01zknxxP?=
+ =?iso-8859-1?Q?1vuyVwyVNDyhiljFGsWQHEDovTnzAinHLUdPYQDxAlfltuwYPJ8Bcdyn6y?=
+ =?iso-8859-1?Q?Yha9YxEgPKowXWJ66o/dNxMcugJmGcuigjFbBGvyNFg5p7Hoco0/46K0Gg?=
+ =?iso-8859-1?Q?Lr0j67UdS6FoClFzsyrCK66wU7pMTFaNg2joROA8FSxwhwblriLKJgU5+s?=
+ =?iso-8859-1?Q?GZlJ8Fro5vrIWJNHMgQ0MBx04Sf02O3k3yAYOGZtI41gPMBANE+KQx5bdP?=
+ =?iso-8859-1?Q?TwoQ6LXZG74BD5CT0fryHXnKXsE+nQA1yAR/53RCkSWDYzbRnidAw6GdMe?=
+ =?iso-8859-1?Q?Dcaehi1gW4ApV8ZEn60DQN8osDtUMgfv1dsn11m4dl8jp4IODF3U7NFsvj?=
+ =?iso-8859-1?Q?B7tNPga1dFWsMoPg3Hvi9Bzj6HXGJi775BM8l/Vvdw7OWbyJw8DN3XsO58?=
+ =?iso-8859-1?Q?U8HTlZcxnC205/HIcfKaPpWJfKh+4bCnXUQmuRGb7KI1wZcKs1E/92+7yh?=
+ =?iso-8859-1?Q?zAqnpPFBchkHwkGoMuCkbtAhP4R75mBSW3XoNkIKFZx9k0QBLtxU5/M06N?=
+ =?iso-8859-1?Q?VkZvwtbRfEksbLcdWhhbF9JPfnLPtWO9gCWsbUzpxTfc8/a9IywxIZKVX6?=
+ =?iso-8859-1?Q?tgN7MY6ctNZ5c6h8A2pBMRRQKDX3zdw8WjEwpw3+tAya/WS5TcZSQt+V0i?=
+ =?iso-8859-1?Q?nnZEvQYKG4wyYULHPujP0PE+7jJZTGNNfJBAg08vv7EUMdmVOrrYxtMeDd?=
+ =?iso-8859-1?Q?SXGh52Cj5w=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked: cII09XJuYNMunx2afeV4Y72nM96U1nNI3gokOr7ML/wh+Y26uk0gIss2uXTsNACY2SeFPN+PXRNSeMLcLpkSYuO1k1c7pBVeLFdTvCa/KsO/ng3oyDguaPru1jY67JE6axyKk8D+8e7c3/mSEihDjddWzfqisaQwn4Un9z3YvbSuiptYRjDXbLa2bkdxwdotszKe0kv7Zbe+J2P3ZKMdzpTRmbULnOa/zZbuk78MnCJFRPEWTAh5wHU0xf5OWtZmBZEEZeIFumWuAxeG1xlLlW+bkV96Z3RggrkigqZymElpcE7s/C5XHi2rcwE3wulTEVJw2HMX9fc6yRnSVCQgCA==
+X-Exchange-RoutingPolicyChecked: HBUIWOxoxcMFAOSGAmBJM6q0vvzHE5s8jArR44LUAiQojjk/tS0dZj7/ffJ/WgyALf3KTD8s7QeaaXiNJNof/qkbydqZS2J7oVy6FQqmb+nHMmiLlHkqYQYPYE4rDHki4PfY5YmGN9Sy6zRW3eRrE502+cbza2sbO7upw4zcrUp730d70k0cMaRzhfz5gldt6vGB9O/RP1AR4lY6jjcnlLBV56/RpcP+A5iQ/B0w9FKPVxt677bC38nUr/f0QR8HkYEh8HjtV8wHmTfZRW+mjoyYiXo/Ak6xwyK+AT/uXzBTKJVh9iRskqjxBnWmi5Jlh9jcu37lRU9YuAbl2dyCzw==
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63b17580-45ac-4cc6-58d5-08debfffa659
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2026 17:03:06.1184
+X-MS-Exchange-CrossTenant-Network-Message-Id: 075cf22c-6dd7-48f2-05d9-08dec00df1ce
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2026 18:45:25.6656
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dG5HOT6qchXJlub/TPUkl4yD7C7Zegq74M4VYOITH87+RSc4m8Iid3fEHNx6mhWApj8mclQ3J4wfRl6/dCPLLQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR84MB2219
+X-MS-Exchange-CrossTenant-userprincipalname: EXVU5GlJbDwPjFWeRkWoDjM5YIz1q3j9QYZWvZIKlYx/gRSUum+45sh0FHjY56v2C78mlepZGWxC4Mlw07x+5w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR84MB2095
 X-OriginatorOrg: hpe.com
-X-Authority-Analysis: v=2.4 cv=FbgHAp+6 c=1 sm=1 tr=0 ts=6a1dbb55 cx=c_pps
- a=5jkVtQsCUlC8zk5UhkBgHg==:117 a=5jkVtQsCUlC8zk5UhkBgHg==:17
+X-Proofpoint-ORIG-GUID: P9h-wapnMF6Qgo8TMhFgWczOOf4iCO07
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjAxMDE4NCBTYWx0ZWRfXwTuoN9P2me54
+ NsH2MXdiNqOnmSH6PUWuOp2MrC9LHdWQB4IwMOevd4kEKoUM55MmVMErUNfAdKNs5lPzEqTwWOa
+ MZnDRPZ625xVrmDcIKC064uhmtoIelo/LqujNHojMEGB+e+0jBbO6wfBnwcjx5/4kXhMxoyKUkH
+ Qbt4v5D1poYvkteWojWGzUI2gfcLzsRCBjgPqTxlDicTrNQ1OMOijh6SWvmfnEqrCZLC/hMb6L7
+ B7gi4Gf8bBWhDe8z5HpptQdPS5Uys4Qvc6YU0tnAavLUi6T2ypw+vlvxibjkpjbZ7dQXkdUdJKn
+ UtzrD+Dxepds4xQJnUe1KP2x8+K3C0T1hTIQKgFQbykfHMF42gtiZbT8BMVr4c9TDp8vcr2L8cp
+ U2x6A544IGxjHWpAKPLo4vRJ20kOZMl9V1GIS8wu02BpTCnQw8JMKOq/qzMwTe+YjFBdW8spvp/
+ BYs/mBvDOtz0XvSp5nA==
+X-Proofpoint-GUID: P9h-wapnMF6Qgo8TMhFgWczOOf4iCO07
+X-Authority-Analysis: v=2.4 cv=JK8LdcKb c=1 sm=1 tr=0 ts=6a1dd349 cx=c_pps
+ a=A+SOMQ4XYIH4HgQ50p3F5Q==:117 a=A+SOMQ4XYIH4HgQ50p3F5Q==:17
  a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
- a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=FelO9ux0wxsA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=gQcMVamqm3wCPoSYhaRC:22 a=ay80y3fxfMS_JZZz1qJy:22
- a=P-IC7800AAAA:8 a=OUXY8nFuAAAA:8 a=-Xf4xuiEcWLmfucz6qgA:9 a=QEXdDO2ut3YA:10
- a=d3PnA9EDa4IxuAV0gXij:22 a=cAcMbU7R10T-QSRYIcO_:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjAxMDE2OSBTYWx0ZWRfX9ZcOTipfkLl6
- Gfo8Kkgz67afUnr6dA3lNGX9rJFJSYFqv524r5DMuQohrMiFEZ8Y75BF0G5ZkGZXBdSsYFPXo1U
- gHcV0gjHzwsLeROjXLVmx2Mf49LTpdEOZuWeSo/tHVcRszqnbqvonn6fGdxZNyNcyNhyI/tLbqa
- 6tfK/ZfvQvE6kW8es48f7GfU0gzYm6rXAytya2rYhMgYbyotYXIrq/wB1BZaqB3H1wPEdhcpZ5h
- KHPCx4e4oWgHxLRgeHOmqGT/NEfC+Zbz8dDmhiLUCd3nKKgA77pBAWXO9L+xtbkEoW/zdq78J4G
- KJBTXcpT0Oo60yHi3icLNufqlBNkMroRN/xRaNn/MnoJ2/0573jgWBQFuWa79tVCN1y4A7g7CBQ
- bUc/ub2ePXlhE2TcJ756/zlm9h9jHzmWTRcnt2FD/+/oEjFQ7NoZuRASmslRLw/MiquzsfMiDRC
- acIdbrQnR1/OYKlOJVw==
-X-Proofpoint-GUID: lwRhkozlz6YPTOThxbwd1FuzVPmZvT0G
-X-Proofpoint-ORIG-GUID: lwRhkozlz6YPTOThxbwd1FuzVPmZvT0G
+ a=xqWC_Br6kY4A:10 a=8nJEP1OIZ-IA:10 a=FelO9ux0wxsA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=gQcMVamqm3wCPoSYhaRC:22 a=k7r4yCLl9DVLXMiQTbtC:22
+ a=OUXY8nFuAAAA:8 a=0bwX27tMA4ljDho7v6AA:9 a=wPNLvfGTeEIA:10
+ a=cAcMbU7R10T-QSRYIcO_:22
 X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
  definitions=2026-06-01_05,2026-05-28_03,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 phishscore=0 clxscore=1015 impostorscore=0 spamscore=0
- priorityscore=1501 suspectscore=0 adultscore=0 bulkscore=0 lowpriorityscore=0
+ clxscore=1015 lowpriorityscore=0 impostorscore=0 bulkscore=0 phishscore=0
+ suspectscore=0 malwarescore=0 spamscore=0 priorityscore=1501 adultscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605210000 definitions=main-2606010169
+ reason=mlx scancount=1 engine=8.22.0-2605210000 definitions=main-2606010184
 
-RnJvbTogU2FubWFuIFByYWRoYW4gPHBzYW5tYW5AanVuaXBlci5uZXQ+CgpPbiBNb24sIEp1biAw
-MSwgMjAyNiBhdCAxMDoyMzo1MiArMDEwMCwgTnVubyBTw6Egd3JvdGU6Cj4gT24gRnJpLCBNYXkg
-MjksIDIwMjYgYXQgMDQ6NTE6NDBQTSArMDAwMCwgUHJhZGhhbiwgU2FubWFuIHdyb3RlOgo+ID4g
-RnJvbTogU2FubWFuIFByYWRoYW4gPHBzYW5tYW5AanVuaXBlci5uZXQ+Cj4gPgo+ID4gT24gRnJp
-LCBNYXkgMjksIDIwMjYgYXQgMTA6MzE6MjAgKzAxMDAsIE51bm8gU8OhIHdyb3RlOgo+ID4gPiA+
-ICtzdGF0aWMgc3RydWN0IHBtYnVzX2RyaXZlcl9pbmZvIG1heDIwODYwYV9pbmZvID0gewo+ID4g
-PiA+ICsJLnBhZ2VzID0gMSwKPiA+ID4gPiArCS5mb3JtYXRbUFNDX1ZPTFRBR0VfSU5dID0gbGlu
-ZWFyLAo+ID4gPiA+ICsJLmZvcm1hdFtQU0NfVk9MVEFHRV9PVVRdID0gbGluZWFyLAo+ID4gPiA+
-ICsJLmZvcm1hdFtQU0NfQ1VSUkVOVF9PVVRdID0gbGluZWFyLAo+ID4gPiA+ICsJLmZvcm1hdFtQ
-U0NfVEVNUEVSQVRVUkVdID0gbGluZWFyLAo+ID4gPiA+ICsJLmZ1bmNbMF0gPSBQTUJVU19IQVZF
-X1ZJTiB8IFBNQlVTX0hBVkVfVk9VVCB8Cj4gPiA+ID4gKwkJUE1CVVNfSEFWRV9TVEFUVVNfVk9V
-VCB8Cj4gPiA+ID4gKwkJUE1CVVNfSEFWRV9JT1VUIHwgUE1CVVNfSEFWRV9TVEFUVVNfSU9VVCB8
-Cj4gPiA+ID4gKwkJUE1CVVNfSEFWRV9URU1QIHwgUE1CVVNfSEFWRV9URU1QMiB8Cj4gPiA+ID4g
-KwkJUE1CVVNfSEFWRV9TVEFUVVNfVEVNUCB8IFBNQlVTX0hBVkVfU1RBVFVTX0lOUFVULAo+ID4g
-PiA+ICt9Owo+ID4gPgo+ID4gPiBBbnkgcmVhc29uIG5vdCB0byBhZGQgcmVndWxhdG9yIHN1cHBv
-cnQ/IEdpdmVuIHRoYXQgdGhlIGRldmljZSBzZWVtcyB0bwo+ID4gPiBiZSBhIHJlZ3VsYXRvci4u
-Lgo+ID4KPiA+IElmIHlvdSdkIHByZWZlciByZWd1bGF0b3Igc3VwcG9ydCBpbmNsdWRlZCBmcm9t
-IHRoZSBzdGFydCwKPiA+IGhhcHB5IHRvIGFkZCBpdCBpbiBhIHY0Lgo+Cj4gWW91IHNob3VsZCBi
-ZSBhYmxlIHRvIGVhc2lseSBzdXBwb3J0IHJlZ3VsYXRvcnMgdGhyb3VnaCBwbWJ1cy4gSSBtZWFu
-dAo+IHNvbWV0aGluZyBsaWtlOgo+Cj4gaHR0cHM6Ly9lbGl4aXIuYm9vdGxpbi5jb20vbGludXgv
-djcuMC4xMC9zb3VyY2UvZHJpdmVycy9od21vbi9wbWJ1cy9tcDI5NzUuYyNMOTg2Cj4KPiAtIE51
-bm8gU8OhCgpUaGFua3MsIHRoYXQgbWFrZXMgc2Vuc2UuIFdpbGwgYWRkIGluIHY0LgoKVGhhbmsg
-eW91LgoKUmVnYXJkcywKU2FubWFuIFByYWRoYW4K
+From: Sanman Pradhan <psanman@juniper.net>=0A=
+=0A=
+Add PMBus hwmon driver and DT binding for the Analog Devices MAX20860A=0A=
+step-down DC-DC switching regulator. The driver provides monitoring of=0A=
+input/output voltage, output current, and temperature using linear data=0A=
+format. Optional regulator support is available via Kconfig.=0A=
+=0A=
+The driver does not modify device write-protection state during probe and=
+=0A=
+relies on the PMBus core to handle write-protect detection and sysfs=0A=
+attribute permissions.=0A=
+=0A=
+Tested on PTX platform with MAX20860A at i2c-195/0x23:=0A=
+  - All sensors (vin, vout, iout, temp1, temp2) read correctly=0A=
+  - Limit attributes correctly read-only (HW write-protect honored)=0A=
+  - Clean dmesg (no probe errors)=0A=
+=0A=
+Changes since v3:=0A=
+  - Driver: Added optional regulator support via=0A=
+    CONFIG_SENSORS_MAX20860A_REGULATOR=0A=
+=0A=
+Changes since v2:=0A=
+  - DT binding: Drop "maxim,max20860a" and keep only "adi,max20860a"=0A=
+  - Driver: Drop matching "maxim,max20860a" OF match entry=0A=
+=0A=
+Changes since v1:=0A=
+  - DT binding: Added allOf regulator.yaml reference and unevaluatedPropert=
+ies=0A=
+  - Driver: Removed WRITE_PROTECT write from probe=0A=
+=0A=
+Sanman Pradhan (1):=0A=
+  dt-bindings: hwmon: pmbus: Add Analog Devices MAX20860A=0A=
+=0A=
+Syed Arif (1):=0A=
+  hwmon: (pmbus/max20860a) Add driver for Analog Devices MAX20860A=0A=
+=0A=
+ .../bindings/hwmon/pmbus/adi,max20860a.yaml   | 45 ++++++++++++=0A=
+ Documentation/hwmon/index.rst                 |  1 +=0A=
+ Documentation/hwmon/max20860a.rst             | 57 ++++++++++++++++=0A=
+ MAINTAINERS                                   |  8 +++=0A=
+ drivers/hwmon/pmbus/Kconfig                   | 19 ++++++=0A=
+ drivers/hwmon/pmbus/Makefile                  |  1 +=0A=
+ drivers/hwmon/pmbus/max20860a.c               | 68 +++++++++++++++++++=0A=
+ 7 files changed, 199 insertions(+)=0A=
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/adi,max20=
+860a.yaml=0A=
+ create mode 100644 Documentation/hwmon/max20860a.rst=0A=
+ create mode 100644 drivers/hwmon/pmbus/max20860a.c=0A=
+=0A=
+-- =0A=
+2.34.1=0A=
+=0A=
