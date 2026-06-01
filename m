@@ -1,108 +1,307 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3086826C385
-	for <linux-hwmon@vger.kernel.org>; Sat, 30 May 2026 22:47:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780181246; cv=none; b=WDOOcb/qDCVpv2nKp0YK5enMvd+01Eboml7oj2dGCIqVop/SpyQT1onX6ZeVxsK5VHbUPBt4KK7asjuR+CgBJbLP8oHiSzEoS+FtjF3QieoH0h5/J01iFt0o9fFS0mIvhKQUxTQqfQcx77sAtdty9Lj6LFrH6ys+00F1xbrsH7c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780181246; c=relaxed/simple;
-	bh=px4KmUl96qe5VsDFbUFU5jObhkyvW1dkvHlwL1m1XNM=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=UOrtXkqOn9YUQSXT8YOJ1x6ix6PkuxEI3ltyRBeOvAZTyBPZThMvQoNoxiAnL0BcwcxBi9KYdLDJG5ZsiKzwzRuy0pqGKjlmVumSGE1huIo5bgQWTOlg4cBYN/RJlVY/w8BzFVMk6JcCDMW4SJimBABM6zmaTVVJ/Iv/jS6WQmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gpuqYrRD; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7DB538399C
+	for <linux-hwmon@vger.kernel.org>; Mon,  1 Jun 2026 07:06:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.172
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780297572; cv=pass; b=ljexnVd1JeMC0F+UdQApfnhMn8kmQBdmuT1KhclV2koLXQbtpqiqpXlAs6JNK756v9ReuaDIV7033OohibNkbTf9rP/ghBaUCsI+KQYUV0DRcWvVgAz2f/mC7mXUS5zL2VK3yCLuQWOKja9zVtr0SkXuJHN23NtBXFG/GaBI5C8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780297572; c=relaxed/simple;
+	bh=zL43rRNUkROQAXRx+lI+JoRTxX9AjBpJcLNzRh35qx0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NCpSb3rqA2t+s5XybBiqzhucQuk1luS+cw38x2pFLJ8synbelUCIGUA3OVFuIXaR50rYruMxMS/Jqy89Z6441HkxEf7eVFsjH3ELQiDyIRyh/r+7aBOnW5j01iNnxt+EWe6xphIgueCyq5gFCUrv97kvPfB7nm0fqNPCSG/DhqE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aGTnmNmW; arc=pass smtp.client-ip=74.125.82.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gpuqYrRD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8AD11F00893;
-	Sat, 30 May 2026 22:47:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780181244;
-	bh=iYP5++8MFye1VtDfJZklcX7sepAVH4b5OW862OB5q+M=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=gpuqYrRD8IrbyGiDrrQ8K+wHrnvtktOmUxRt5Zkh9Pp+WbXOtLDRSl46BEQA5lIq8
-	 DStUDMYVR2p81huqPbaQ58Oyle3sun8S1Hh9+BdcqB0uCNJSaOfWVpPBrMKhV2iTK2
-	 6WJZKfGhwS5X7e3ll8mtBa2XGevZp99Cq0G0rPF5SnsukBHsOICLP7/0nIs0F41tgx
-	 yXakq6KUCN6KTMYUnFvDfZF4Edvxa7S7ld5KA5Wgl2sgtQa0mvqyHIdq2RknL/BLD9
-	 d4NsPRz/oqnlQoqhWdrQOGN1Ka5x/WZovMb6BS3H1SR1r8dyEQ2h/VTYFJ+EGjh/b7
-	 NlwSLQ+NUbJFA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 7/7] hwmon: it87: Use zero-initialization instead of
- memset()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Manish Baing" <manishbaing2789@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260530221353.159461-8-manishbaing2789@gmail.com>
-References: <20260530221353.159461-8-manishbaing2789@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 30 May 2026 22:47:24 +0000
-Message-Id: <20260530224724.A8AD11F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aGTnmNmW"
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-304f0039c02so5324881eec.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 01 Jun 2026 00:06:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780297569; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Uva6bhjQKL8ztdQIwMrlHWDuJjTrjygdvBAcz26Sk2F5ZiBq/6vyph1LO2tSGuHAXf
+         2HOg+Rm6imh3i6b7DqYOg3nCs0joGym8zq6fhn/w9de6ADb8NUPuwD2efhedOq79bBdX
+         aVzQYB8oMEVfCH+HH3DQsnjAcuQ0FL8OvjfYmd6FhhPtI/TNJac9Xnq8HM2zUes8q3XR
+         B/x6EE3QsfCydxlj5jzvMWf9bnrgsUwoix93FfoVmbC9IPxdHhScpKdD44D83bF9yIGg
+         m91Nty+RGmMi1sPlHIM9W/7vskw9ZhSMuJZk2siiVzCtbvljKPTZBZFvUCbcBsNY8NDn
+         mj1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=o6x1wbXvenVeekia93enMRo3NGuqJ+euTvBULiNrpXA=;
+        fh=/wLiD456Rg90OsMIJC34JaYIkvJu/JSmPQ/U+F6PMeQ=;
+        b=OSwf+yFL9jGwkthbEVFjLCYgir9rQ4lcudhObLc9hEDbja/xwJOzfyR9twWsiyAXl7
+         +kJfy07ryGt0dlpf9rtjXTYEFt6dj2VhSfs5kSPekquyLTebPTVPvBgjkCDBjvksPcgd
+         kkEpoR5BHx4nYVKIBLPsGhBpnaV0xe+iVK+XJpqEC64vAG9/E+AdFhHFq6FjdYyLUvjD
+         RlKMvCGpY7GuwRnCrvlCnG8Hp5UsIAUSMR9TB17qFuIw0hLvV90e+BmOJepbPFExtnu+
+         gThoUvUI4gF5SOqPnabe/1Ms6+eqCP08fmCU3cHJl4nbNxbwaGx//cnQwRF7rR88nWQp
+         edYA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780297569; x=1780902369; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o6x1wbXvenVeekia93enMRo3NGuqJ+euTvBULiNrpXA=;
+        b=aGTnmNmWbnsu0mGB+qitdiaExDNjMsb8AhWrlAw4UNumOnynSTJd2hEDLVxEHT3YJy
+         nEKYBJVMF9CKmqb8ZsDE1zwu6n1b2+QAcVwCHtNmIMn1q5dZLgNWOFHO/OqNZngzyYl+
+         DYgxcerc96ABaV1nio70X+QUWg/oa+ya+NfoJOLGrtfRwXKSNR5OjXSGjvkQclodAZnC
+         ndJSKEv+IAa5/4ArFeziD0PBuFGkqqste+Yj6R1Wcm8iJxizmifSXgPe7LTW5H9ubynQ
+         7nOgEOr6xmzt0+IoWUD/GqHKFTvvSNjylJLguf3iCJgb+EstLPNrH8uxIf5GEZDyKPwG
+         obBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780297569; x=1780902369;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=o6x1wbXvenVeekia93enMRo3NGuqJ+euTvBULiNrpXA=;
+        b=abiR7r6b0yQ8OnTkwkD9VsOGb4XSEuE1LsNkQaAxfrfWpygIZQx6+t05kmbbEcF0dU
+         bL7ONO+6fx7+WxqSWIsDWbquZeeDy9N0wki66dg8Mk7OSekrCYnA5qNuKlP5EE5G7bGz
+         dev4IeTPzPTDKx3iFt8GRyJ/l7AoQhXAUoV1qtHCE84NxA3brPv/gqhfEKFAGLXyD6xF
+         JXcGfte4Ju4p8HLWCyoQfp9329Haz//Z0Rw67tpZMOGHTCEUn7oh8FB9nGEbWVXIu2UT
+         8T913o218Svm0qx0Tb2aU5sBQ9lvu8r7QsfHuh9IY4nYPHnHzauEOB2yf1oflXVbTtRr
+         AVnw==
+X-Forwarded-Encrypted: i=1; AFNElJ8LKF3hMlWGqmFwziQgbihT3M3sIVmxAhsFXpMxK5kEEE5KBAqWBT6O35w4Z8aPg1vPwVssqse1iDL0xw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIdH2tu4tdrE4IxVrULvX1A7pltgyjlfADcenP0RIk0FPC7ToL
+	UtQL43HU6jmhNMHuwGD0WZ3jPq0qFh+qFiMkEk51rQYGby/k6kjQjsLyKp6J40s+O3cKzLZxNg3
+	zQiRqiuS0oNxxEFH8QEqZF9qOO0wxSYA=
+X-Gm-Gg: Acq92OE/gd1yrM4AK2ML5v8VdKEUZfK2E5Mep+uC5RkId/sWECCCnp4txuF18E5t6GV
+	QOgEfttHqqfVYWzjIOtL2zTI4Z1qvt9D1DSxq5lgMP8NqPi0Kj8bOOicCHt/8txevMRrStTUcoX
+	wBC3Ny5dmIUY4Ch1//bmKtRZxiPj1TbtJoEejBm7D6DZDOd7pcpu37xeblXv39K8vsCrb1C42GO
+	BNLJy9/DNB0D6MJ7KNvHvy3qB29dUakdkJrpZZ30/9pwPVLPq5CAZv1Ks0U9uGC6HY+VqsbcTMh
+	Yc6eltO5YETNVlRHTSc=
+X-Received: by 2002:a05:7300:e58b:b0:2f2:5c68:5052 with SMTP id
+ 5a478bee46e88-304fa508e98mr4749567eec.13.1780297568834; Mon, 01 Jun 2026
+ 00:06:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260529054218.5184-1-Ashish.Yadav@infineon.com>
+ <20260529054218.5184-2-Ashish.Yadav@infineon.com> <20260529-partake-myself-baa76ed4e279@spud>
+In-Reply-To: <20260529-partake-myself-baa76ed4e279@spud>
+From: ashish yadav <ashishyadav78@gmail.com>
+Date: Mon, 1 Jun 2026 12:35:57 +0530
+X-Gm-Features: AVHnY4KKIhJYyyCvubbTWvCZOWxKwkjn-0kbsOvszc7kwcg7g_uxuWN-ORBhaRQ
+Message-ID: <CAJKbuCZ09AFKqJMB+uVLY1+PC1E6rGtw=RGMG7DF4_K85GLeeQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon/pmbus: Add Infineon XDP720/XDP730
+To: Conor Dooley <conor@kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Ashish Yadav <ashish.yadav@infineon.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Replacing memset() with empty brace initialization leaves struct=
- padding bytes uninitialized, causing a KMSAN uninit-value warning when cop=
-ied via platform_device_add_data().
---
+Hi Conor,
 
-commit 429f8b305f54cb034b99374e3bdaa61a1ba8f424
-Author: Manish Baing <manishbaing2789@gmail.com>
+Thanks for your time & feedback.
 
-hwmon: it87: Use zero-initialization instead of memset()
+I will revert back the file name to infineon,xdp720.yaml.
+I hope it will resolve the issues.
 
-This commit reduces the scope of 'sio_data' by moving it inside the for-loop
-and replacing the explicit memset() with empty brace initialization.
+With Best Regards
+  Ashish Yadav
 
-> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-> index 5fd310662ee43..f3f8d835ff92a 100644
-> --- a/drivers/hwmon/it87.c
-> +++ b/drivers/hwmon/it87.c
-> @@ -3777,7 +3777,6 @@ MODULE_DEVICE_TABLE(dmi, it87_dmi_table);
->  static int __init sm_it87_init(void)
->  {
->  	int sioaddr[2] =3D { REG_2E, REG_4E };
-> -	struct it87_sio_data sio_data;
->  	unsigned short isa_address[2];
->  	bool found =3D false;
->  	int i, err;
-> @@ -3789,7 +3788,7 @@ static int __init sm_it87_init(void)
->  	dmi_check_system(it87_dmi_table);
-> =20
->  	for (i =3D 0; i < ARRAY_SIZE(sioaddr); i++) {
-> -		memset(&sio_data, 0, sizeof(struct it87_sio_data));
-> +		struct it87_sio_data sio_data =3D { };
 
-[Severity: Medium]
-Does replacing memset() with empty brace initialization leave struct padding
-bytes uninitialized?
-
-Empty brace initialization is often lowered by compilers to member-wise
-zeroing, which skips padding bytes.
-
-When this structure is passed to it87_device_add(), it is copied
-byte-by-byte via platform_device_add_data():
-
-drivers/hwmon/it87.c:it87_device_add() {
-	...
-	err =3D platform_device_add_data(pdev, sio_data,
-				       sizeof(struct it87_sio_data));
-	...
-}
-
-Because platform_device_add_data() uses kmemdup() to copy the entire size of
-the structure, won't reading the uninitialized padding bytes trigger a KMSAN
-uninitialized-value warning during driver probe?
-
->  		isa_address[i] =3D 0;
->  		err =3D it87_find(sioaddr[i], &isa_address[i], &sio_data, i);
->  		if (err || isa_address[i] =3D=3D 0)
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260530221353.1594=
-61-1-manishbaing2789@gmail.com?part=3D7
+On Fri, May 29, 2026 at 10:11=E2=80=AFPM Conor Dooley <conor@kernel.org> wr=
+ote:
+>
+> On Fri, May 29, 2026 at 11:12:17AM +0530, ASHISH YADAV wrote:
+> > From: Ashish Yadav <ashish.yadav@infineon.com>
+> >
+> > Add documentation for the device tree binding of the XDP720/XDP730
+> > eFuse Controllers.
+> >
+> > Signed-off-by: Ashish Yadav <ashish.yadav@infineon.com>
+> > ---
+> >  .../bindings/hwmon/pmbus/infineon,xdp720.yaml | 59 --------------
+> >  .../bindings/hwmon/pmbus/infineon,xdp730.yaml | 80 +++++++++++++++++++
+>
+> This rename just bloats out the diff, no thanks. Please do not do this,
+> certainly not without a justification.
+> pw-bot: changes-requested
+>
+> Thanks,
+> Conor.
+>
+> >  2 files changed, 80 insertions(+), 59 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infin=
+eon,xdp720.yaml
+> >  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infin=
+eon,xdp730.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp=
+720.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp720.ya=
+ml
+> > deleted file mode 100644
+> > index 72bc3a5e7139..000000000000
+> > --- a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp720.yam=
+l
+> > +++ /dev/null
+> > @@ -1,59 +0,0 @@
+> > -# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > -%YAML 1.2
+> > ----
+> > -
+> > -$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,xdp720.yaml#
+> > -$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > -
+> > -title: Infineon XDP720 Digital eFuse Controller
+> > -
+> > -maintainers:
+> > -  - Ashish Yadav <ashish.yadav@infineon.com>
+> > -
+> > -description: |
+> > -  The XDP720 is an eFuse with integrated current sensor and digital
+> > -  controller. It provides accurate system telemetry (V, I, P, T) and
+> > -  reports analog current at the IMON pin for post-processing.
+> > -
+> > -  Datasheet:
+> > -     https://www.infineon.com/assets/row/public/documents/24/49/infine=
+on-xdp720-001-datasheet-en.pdf
+> > -
+> > -properties:
+> > -  compatible:
+> > -    enum:
+> > -      - infineon,xdp720
+> > -
+> > -  reg:
+> > -    maxItems: 1
+> > -
+> > -  infineon,rimon-micro-ohms:
+> > -    description:
+> > -      The value of the RIMON resistor, in micro ohms, required to enab=
+le
+> > -      the system overcurrent protection.
+> > -
+> > -  vdd-vin-supply:
+> > -    description:
+> > -      Supply for the VDD_VIN pin (pin 9), the IC controller power supp=
+ly.
+> > -      Typically connected to the input bus (VIN) through a 100 ohm / 1=
+00 nF
+> > -      RC filter.
+> > -
+> > -required:
+> > -  - compatible
+> > -  - reg
+> > -  - vdd-vin-supply
+> > -
+> > -additionalProperties: false
+> > -
+> > -examples:
+> > -  - |
+> > -    i2c {
+> > -        #address-cells =3D <1>;
+> > -        #size-cells =3D <0>;
+> > -
+> > -        hwmon@11 {
+> > -            compatible =3D "infineon,xdp720";
+> > -            reg =3D <0x11>;
+> > -            vdd-vin-supply =3D <&vdd_vin>;
+> > -            infineon,rimon-micro-ohms =3D <1098000000>;  /* 1.098k ohm=
+ */
+> > -        };
+> > -    };
+> > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp=
+730.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp730.ya=
+ml
+> > new file mode 100644
+> > index 000000000000..fdbc577bccdd
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,xdp730.yam=
+l
+> > @@ -0,0 +1,80 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +
+> > +$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,xdp730.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Infineon XDP720 / XDP730 Digital eFuse Controllers
+> > +
+> > +maintainers:
+> > +  - Ashish Yadav <ashish.yadav@infineon.com>
+> > +
+> > +description: |
+> > +  The XDP720 and XDP730 are PMBus-compliant digital eFuse controllers
+> > +  with an integrated current sensor.  They provide accurate system
+> > +  telemetry (V, I, P, T) and report analog current at the IMON pin for
+> > +  post-processing.
+> > +
+> > +  Both parts share the same PMBus register map and direct-format
+> > +  coefficients; they differ in the GIMON gain step exposed via the
+> > +  TELEMETRY_AVG register (bit 10) and in the VDD_VIN pin number
+> > +  (XDP720: pin 9, XDP730: pin 20).
+> > +
+> > +  Datasheets:
+> > +    - XDP720: https://www.infineon.com/assets/row/public/documents/24/=
+49/infineon-xdp720-001-datasheet-en.pdf
+> > +    - XDP730: https://www.infineon.com/assets/row/public/documents/24/=
+49/infineon-xdp730-001-datasheet-en.pdf
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - infineon,xdp720
+> > +      - infineon,xdp730
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  infineon,rimon-micro-ohms:
+> > +    description:
+> > +      The value of the RIMON resistor, in micro ohms, required to enab=
+le
+> > +      the system overcurrent protection.
+> > +
+> > +  vdd-vin-supply:
+> > +    description:
+> > +      Supply for the VDD_VIN pin (XDP720 pin 9, XDP730 pin 20), the IC
+> > +      controller power supply.  Typically connected to the input bus
+> > +      (VIN) through a 100 ohm / 100 nF RC filter.
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - vdd-vin-supply
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    i2c {
+> > +        #address-cells =3D <1>;
+> > +        #size-cells =3D <0>;
+> > +
+> > +        efuse@11 {
+> > +            compatible =3D "infineon,xdp720";
+> > +            reg =3D <0x11>;
+> > +            vdd-vin-supply =3D <&vdd_vin>;
+> > +            infineon,rimon-micro-ohms =3D <1098000000>;  /* 1.098k ohm=
+ */
+> > +        };
+> > +    };
+> > +
+> > +  - |
+> > +    i2c {
+> > +        #address-cells =3D <1>;
+> > +        #size-cells =3D <0>;
+> > +
+> > +        efuse@12 {
+> > +            compatible =3D "infineon,xdp730";
+> > +            reg =3D <0x12>;
+> > +            vdd-vin-supply =3D <&vdd_vin>;
+> > +            infineon,rimon-micro-ohms =3D <1098000000>;  /* 1.098k ohm=
+ */
+> > +        };
+> > +    };
+> > --
+> > 2.39.5
+> >
