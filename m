@@ -1,142 +1,117 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADB24266BA;
-	Wed,  3 Jun 2026 16:50:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D423E2756;
+	Wed,  3 Jun 2026 17:21:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780505416; cv=none; b=GePT03789aV/bY8S5GicizdCAKlvEEKUPBIhgxgf7qPP46xg0Q/g0UBwCyMKKljYdQMIAFnkLMde0dCHgBE5MTZ70nI3gs61pqk45v5BQOjHnfuEPceCAf9tlQ0jbQbl7bnVTjZaTjq+p3y1KrSWI70XAxPVMGGQZVEX/M6pZXo=
+	t=1780507280; cv=none; b=g7pWtHhMf0O0iGNdd36VMpvNXdYZD2TBObJu+1s1FhyR7RR0FDqupRKr3xtIquVu0ZrsfUQt9a1IdEJznGmnHbQosoUZQEjZxxU9N8mLC2H2OZdZg7jgjzvT9To7Zc2hZOm4wlnOQYWnRoczOCzflaos4j5VaBXrToTHB8PlmoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780505416; c=relaxed/simple;
-	bh=DnA2JJz5trPES1DFKq8aSZziMagCnw0o1qTisz8fKiE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nua2HLr7Hm/UP+dWbVFaK2dzNMXP0i+PeMWlSqmDgezFLQRifOiLDoHdVhjjv7arMOqOLgIJkltu0XkQT5obPAFmC91rWQ9BCHa1uQ53OQPmyeRNkV2v+koYHRL+31zM7boWkGzXrytin40d7Ln3TZHJa55dY1iTn6M168fQOlI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UFEizWzh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780507280; c=relaxed/simple;
+	bh=Gxx19LdDTz6T+j/ZXP+pzENHKb9KQ9gFUO3WnCcEAmg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=feSZkWqT/TmUJbsOkZnDmJS1HsxQliCkldQqTYA/bcSk3sW0dn7jh+75XI4tjfKLqJvwgAiSzTX85m4XrQnqWyN+kxq8m6wCcXZSc0e8z8IoueqqNx+EDTpbhpu7pYV8VMdbdRuE89d5WGODkM3E4EvAHUBHRREJIVt1Zekpdzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c18sJ7aS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UFEizWzh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46F5D1F00893;
-	Wed,  3 Jun 2026 16:50:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c18sJ7aS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A9B71F00893;
+	Wed,  3 Jun 2026 17:20:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780505415;
-	bh=vG2BviYc/C+MDKHIkeN902tisDjjqwsCpaMZr0/n/NI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=UFEizWzhvrAPdwvfrVrrm2pxizZW5BnXpsG+1r/8Z65vNQuUI0dshzxkfck0K/PNk
-	 O3AkFM1n8imanlDuEzm9goAMREiiSNUM4dpqpzyyJoXB6JV3Iu5GRMIY0QwKza5zHr
-	 QiFHYZs9hY2Mx/a7yW7di0/1bw4cVgA/Efngm1DltKY7VPgkH/hjPOUeuc4fGS5Gv5
-	 jty0Up4HUSx5m/d2iBAInQXvgPf8hJUfJL5s6n+uRLG1GNEywwHHAussS7/ZcvEjer
-	 HlJg48Efw8GPOOfnQPYyEpxjcqxc4rRTlzDjGyEicDpXAjYgNUSJ9rujYNKfuK9zrM
-	 JCTkdQ0XvYWqg==
-Date: Wed, 3 Jun 2026 17:50:11 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Naresh Solanki <naresh.solanki@9elements.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Grant Peltier <grantpeltier93@gmail.com>,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	Patrick Rudolph <patrick.rudolph@9elements.com>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: isl68137: Add RAA228234
- compatible
-Message-ID: <20260603-staring-cubbyhole-8f803b3ab30f@spud>
-References: <20260603110127.23930-1-naresh.solanki@9elements.com>
- <20260603-deskwork-perch-ae4eaf92368f@spud>
- <CABqG17jzv03U5=1zhVd57zDDWFXpt=mX030HVyLUpm5q0LRW1Q@mail.gmail.com>
+	s=k20260515; t=1780507278;
+	bh=Ig4zCGf7+4ptZbdZZMypwYARwR0YB1sgjeMspwVj9PE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=c18sJ7aSoq9r+i0IlOMIyM+kePG9Og4QNfkKdmvW9i9gHt/nkcyz7wt3X6sQ55+PN
+	 9FCuhhMNrZDZj6AiihMI5VZ5eSGx75aw2BHqp+z8eJPDKPiawLxyWYNdzegnzvTLP4
+	 SUK0v0AV8YpRWsaQN9Z7bVQvVxyvbFJIooaNjoNYh0o8y8mjZWNbqaH/2nGiGRSSjv
+	 yhGhdlantZDthW2N7NtTDXBDCNyfOloZ32O+IlYOTFWGg3Gt/jq7bLRmckBoFSWC6R
+	 Go6HqJDXVno0Uqebslcwu+6uFCc6/BDhadZDjKwxPxloA2uOX2Cy1qIxjyq10GIpqT
+	 8FjWPlNqvKQSg==
+Date: Wed, 3 Jun 2026 18:20:52 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Romain Gantois <romain.gantois@bootlin.com>, MyungJoo Ham
+ <myungjoo.ham@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, Guenter
+ Roeck <linux@roeck-us.net>, Peter Rosin <peda@axentia.se>, David Lechner
+ <dlechner@baylibre.com>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Andy
+ Shevchenko <andy@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Michael
+ Hennerich <Michael.Hennerich@analog.com>, Mariel Tinaco
+ <Mariel.Tinaco@analog.com>, Kevin Tsai <ktsai@capellamicro.com>, Linus
+ Walleij <linus.walleij@linaro.org>, Eugen Hristev
+ <eugen.hristev@linaro.org>, Vinod Koul <vkoul@kernel.org>, Kishon Vijay
+ Abraham I <kishon@kernel.org>, Sebastian Reichel <sre@kernel.org>, Chen-Yu
+ Tsai <wens@csie.org>, Hans de Goede <hansg@kernel.org>, Support Opensource
+ <support.opensource@diasemi.com>, Paul Cercueil <paul@crapouillou.net>,
+ Iskren Chernev <me@iskren.info>, Krzysztof Kozlowski <krzk@kernel.org>,
+ Marek Szyprowski <m.szyprowski@samsung.com>, Matheus Castello
+ <matheus@castello.eng.br>, Saravanan Sekar <sravanhome@gmail.com>, Matthias
+ Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+ <angelogioacchino.delregno@collabora.com>, Casey Connolly
+ <casey.connolly@linaro.org>, Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+ Orson Zhai <orsonzhai@gmail.com>, Baolin Wang
+ <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>, Amit
+ Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
+ <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+ <lukasz.luba@arm.com>, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Sylwester
+ Nawrocki <s.nawrocki@samsung.com>, Olivier Moysan
+ <olivier.moysan@foss.st.com>, Arnaud Pouliquen
+ <arnaud.pouliquen@foss.st.com>, Maxime Coquelin
+ <mcoquelin.stm32@gmail.com>, Alexandre Torgue
+ <alexandre.torgue@foss.st.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ Sebastian Reichel <sebastian.reichel@collabora.com>, Andy Shevchenko
+ <andriy.shevchenko@intel.com>
+Subject: Re: [PATCH v2 2/2] iio: inkern: Use namespaced exports
+Message-ID: <20260603182052.7d23c067@jic23-huawei>
+In-Reply-To: <acBr-W2ILu9tnMyd@google.com>
+References: <20251209-iio-inkern-use-namespaced-exports-v2-0-9799a33c4b7f@bootlin.com>
+	<20251209-iio-inkern-use-namespaced-exports-v2-2-9799a33c4b7f@bootlin.com>
+	<acBr-W2ILu9tnMyd@google.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="dB8g81isTGQRJxN6"
-Content-Disposition: inline
-In-Reply-To: <CABqG17jzv03U5=1zhVd57zDDWFXpt=mX030HVyLUpm5q0LRW1Q@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Sun, 22 Mar 2026 15:24:21 -0700
+Dmitry Torokhov <dmitry.torokhov@gmail.com> wrote:
 
---dB8g81isTGQRJxN6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Tue, Dec 09, 2025 at 09:25:56AM +0100, Romain Gantois wrote:
+> > Use namespaced exports for IIO consumer API functions.
+> > 
+> > This will make it easier to manage the IIO export surface. Consumer drivers
+> > will only be provided access to a specific set of functions, thereby
+> > restricting usage of internal IIO functions by other parts of the kernel.
+> > 
+> > This change cannot be split into several parts without breaking
+> > bisectability, thus all of the affected drivers are modified at once.
+> > 
+> > Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com> # for power-supply
+> > Acked-by: Guenter Roeck <linux@roeck-us.net>
+> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+> > Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>  
+> 
+> For input:
+> 
+> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> 
+> Thanks.
+> 
 
-On Wed, Jun 03, 2026 at 10:10:14PM +0530, Naresh Solanki wrote:
-> Hi
->=20
->=20
-> On Wed, 3 Jun 2026 at 21:39, Conor Dooley <conor@kernel.org> wrote:
-> >
-> > On Wed, Jun 03, 2026 at 11:01:26AM +0000, Naresh Solanki wrote:
-> > > From: Patrick Rudolph <patrick.rudolph@9elements.com>
-> > >
-> > > Add the compatible string for the Renesas RAA228234 8-phase PWM
-> > > controller, which shares the same PMBus interface as the RAA228228.
-> >
-> > Given this, and what the driver change looks like, why is a fallback
-> > compatible not used?
-> Are you suggesting that the binding should use renesas,raa228228 as a
-> fallback compatible, similar to how renesas,raa228942 and
-> renesas,raa228943 fall back to renesas,raa228244?
+For anyone wondering what happened to this... I forgot to apply this at the
+beginning of the cycle and by the time I remembered we had too much queued up
+so it would have been messy to do an immutable branch.   Anyhow, I plan to
+sort this at start of next cycle.
 
-I didn't see that at the time (I commented on this diff alone), but yes.
- 	{ .compatible =3D "renesas,raa228228", .data =3D (void *)raa_dmpvr2_2rail=
-_nontc },
-+	{ .compatible =3D "renesas,raa228234", .data =3D (void *)raa_dmpvr2_2rail=
-_nontc },
- 	{ .compatible =3D "renesas,raa228244", .data =3D (void *)raa_dmpvr2_2rail=
-_nontc },
- 	{ .compatible =3D "renesas,raa228246", .data =3D (void *)raa_dmpvr2_2rail=
-_nontc },
-driver change suggests you're compatible with the ..44 device.
-
-I expect that you'll use a fallback in the next iteration then?
-pw-bot: changes-requested
-
-Cheers,
-Conor.
-
-> Or is there a
-> specific reason you'd expect it not to be used here?
->=20
-> Regards,
-> Naresh
->=20
-> >
-> > >
-> > > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> > > Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
-> > > ---
-> > >  Documentation/devicetree/bindings/hwmon/pmbus/isil,isl68137.yaml | 1=
- +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/isil,isl68=
-137.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/isil,isl68137.yaml
-> > > index 8216cdf758d8..2988bc6300ae 100644
-> > > --- a/Documentation/devicetree/bindings/hwmon/pmbus/isil,isl68137.yaml
-> > > +++ b/Documentation/devicetree/bindings/hwmon/pmbus/isil,isl68137.yaml
-> > > @@ -55,6 +55,7 @@ properties:
-> > >            - renesas,raa228004
-> > >            - renesas,raa228006
-> > >            - renesas,raa228228
-> > > +          - renesas,raa228234
-> > >            - renesas,raa228244
-> > >            - renesas,raa228246
-> > >            - renesas,raa229001
-> > > --
-> > > 2.43.0
-> > >
-
---dB8g81isTGQRJxN6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaiBbQwAKCRB4tDGHoIJi
-0mQMAQCGJi8T5FIPVvVa+N8QhldtoUD7PcyQabO+Bj51wRxBTAD+IUs8jZSqjEXW
-Dws1Sdwpfjd1OR7qW1NmAMkiBuWyRA4=
-=vj0j
------END PGP SIGNATURE-----
-
---dB8g81isTGQRJxN6--
+Jonathan
