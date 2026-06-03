@@ -1,119 +1,168 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F16093A9624
-	for <linux-hwmon@vger.kernel.org>; Wed,  3 Jun 2026 14:10:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1F20383C65;
+	Wed,  3 Jun 2026 14:23:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780495860; cv=none; b=XjbP4GIH24epFyng1j4GggKLbNqYgC1z/NlFqBVAaVzcgjev2dyAJBdu1y95yUQ7mHTAht0F8f/Qh2qN5FjaighkrGqmlqHJF98ynmSJiKNkdUc9po7cOVBfeAWaLdgh6QswhtZybHmHdCjES2Fsju6zBx1G3v1xA/DnZP2s0xk=
+	t=1780496601; cv=none; b=CgkUrdciuXfGWG4EfAZwOd7AJRiBiP/WULCMZIIHeRvpXv8P26633x2CfDOQT0lRZfWo7hCL4ht84SJOdI8cHjoKYKcpVLbNX2GgWAs0v5UdbDdez1SUjwlLRlX6rEoR+Z+srdZxSEtFDbzc1dF7iUNTn42v4tiyYxjddzXHjro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780495860; c=relaxed/simple;
-	bh=PXGq2oJHYuR07tw/Kib0nF1l7MnIdzNMgPKwVCmcgYc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QX+RTOAWOtin8bpyVGuI/DKxWChX/5aK2p5+wmRB2zNVU9otV4tA+sfrxN4kTmx288PbJN9g98ThYbNKdneePPGHp6h509TcTXilcSC1L1uXSwDMDMtnv5sgM6hkHz/LbcYttY378TrXKw7VNc6e97AMYGrjUDbp9gQf0gB0J60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xm6J9c/o; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780496601; c=relaxed/simple;
+	bh=kGbPyo8fXJsXOF4kC6/8eqnZ+Q+5lTSF/QptwAArjhs=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=j9W/5RPfc1V9zs2Ul6VPwbsfitjBgm4m86uLbqPGkihtfvOWjVfZDXgCMZuogSQRUMy5kclwwirfhgcmLN2awhZl/wz+UfPCd618h1HX+iNzvyRbb1Q56qpmc6cK2at/n9AVLBDcFnCyJJxwMAIPM2Heq1YF02oqxL5XF/2EuF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FRZus5fa; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xm6J9c/o"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-45ee5cdbd28so499588f8f.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 03 Jun 2026 07:10:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780495856; x=1781100656; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GuOo/Hx++0VnvuJWbrTH7yLIcehi5V7tCIyNywrXIck=;
-        b=Xm6J9c/oq79QOkr/PNtuYb7s1JGKCN6BoGsPgZp0s7Obb35s/CABVTgfPv1h0FNQiv
-         jV2/vs5c1G0sM7po7jWOh5wmtW6/7UbzJJjIARCR3sgYbMTRUMMM5JlzzAp4CWCNADJi
-         KZ1knv6x1N+M2vy0l+QH9JyYhtzFiOrgUeegBQAbumqz37wmH0fGjysH8xhJ0uUuG8v0
-         APrQLSsugtZ9K1+MuQBs7xY0oDPQA3gIC+kDbauYw5s4r4WBA1cbz98WdJQLypssUYFm
-         4sR3oJwjKvLwuks8hgbwKrfYCEYIu+K75tvbneer+hQtTQyBSt9DiVqDKdvU3LMcktkK
-         U/fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780495856; x=1781100656;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=GuOo/Hx++0VnvuJWbrTH7yLIcehi5V7tCIyNywrXIck=;
-        b=dqS8754zFkwjjW7Noi1H7HNOUKmnKmnINz6KkohpOTLuHGuHzjsNN79dqAi5YdH7YM
-         OQ0ezbPI3N6nAqrAcNoOR848yOdTfr4fVrX8dooF7qVtVOe9j98WucOBgLwyuFSYDv0a
-         5dMVZa8aVlSgsanmatrqulKenkGD7ftq49GEfjPnyk40PCKmDGXVFeIUh6ohYr4ITyt5
-         0IWUtZO+fR8K1JH5pQMkW14WQfWN9U1di4tFYNe6eXE8CS7FQpFXWW+Z7Bpm3bxRV4eQ
-         XW/0NOWiQwFfn0jhy80D221Vh7iT+a3+V8adslEfwHQcPUOaHaYFo/CP2zoQh2xsYVhx
-         fgnw==
-X-Gm-Message-State: AOJu0YyNMOuszKXja4H13EWKnXMe/9gSkhBw8GpOxYI/gShBKc0dbu8p
-	tCZ73Sxztqtbpq7DNyFJp6hdrovu1Yd09pX02hu1IfvG175J1KQ6eM+e
-X-Gm-Gg: Acq92OGAfQFC1FVdMFUlBgmV3kYSeCZ+b1yNMyUhdNV7jsRrbmKII730shmlsYQlUub
-	qk0AxwMdS0n/QXiTZSuPpsmTGTDPiCgJZCGLdhnfhB9dZEp11bMz+qvK6UDf270nnnm/+lbV55d
-	o/1SCZ0WCEtqOGPTq2xab/HBQQWGaPhXRBsk2itSvW8n890AOYD+mSmkRImiCu5zWRA6bUPztOY
-	Fsijf05cSGmxbdiVuXzeUw6VxWtFN3r1SWOawEeecBLq2JlaKhKhjcX+4kvBfwFgJL1+vvou5mM
-	9fYWjwbuJYMSo8GriiGOS0nGIhU7ZP51d/JF8g3gjQWkXjZZsBu7XNuVfdqFEro35mUqDzWBPBH
-	hjBpX4P7BpVVsoQV9hsEVUUuCCOcd0LF0ESOhenMYmW0vc/CdFtRtR1o54w5NcPpBXqVXmAFKMJ
-	hXVrlBOVfd64tc6bbXxmVFXFg=
-X-Received: by 2002:adf:e0c4:0:b0:446:708e:1e8d with SMTP id ffacd0b85a97d-4602134325fmr3929718f8f.30.1780495856085;
-        Wed, 03 Jun 2026 07:10:56 -0700 (PDT)
-Received: from xeon ([188.163.112.61])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f2dcb13sm7217131f8f.2.2026.06.03.07.10.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jun 2026 07:10:55 -0700 (PDT)
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 3/3] hwmon: (emc1403) Add regulator support
-Date: Wed,  3 Jun 2026 17:10:33 +0300
-Message-ID: <20260603141033.111300-4-clamor95@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260603141033.111300-1-clamor95@gmail.com>
-References: <20260603141033.111300-1-clamor95@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FRZus5fa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ABFF1F00893;
+	Wed,  3 Jun 2026 14:23:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780496600;
+	bh=A3Zbp8bg/8TwgNuV+aZWHIOV1U+jXBCtOs6RBJ5FSLk=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=FRZus5fayrH/y+tgQZ39Ujxf0iOQC2KNmtXSN72112+tEqigjiUB5vzft99XD4+q/
+	 JhHTEdaMrmrlt6Ej6TMVwePlekLQaGmMDtKl3m7bBryR97YEGnaLEKrsLU2ABlZVBM
+	 Lxz6OtmukgOMmMUL/Wu64zr02uq6uIbunOmMvD8Rnc605y6XH/+g0GDVC7PjYhpZaY
+	 kUIh7ESex6UXI832IfuIyW/M+zACEeQQXrSXog33afdxt2KrnUDIp7B2hVkOxogqke
+	 dRyTrfFFSlVapfjV6dJH1aFKdBtGtBNR440rYIeSMWO9HSd0jvHJS4FSYAvT2sGOD8
+	 ESJihmY6IQKdA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v1 1/3] dt-bindings: hwmon: lm90: Document SMSC
+ EMC1402/1403/1404/1428
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Svyatoslav Ryhel" <clamor95@gmail.com>
+Cc: robh@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org
+In-Reply-To: <20260603141033.111300-2-clamor95@gmail.com>
+References: <20260603141033.111300-2-clamor95@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 03 Jun 2026 14:23:19 +0000
+Message-Id: <20260603142320.4ABFF1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add support for VCC power supply for this sensor. It is required on some
-devices for the sensor to start up and work properly.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] The schema artificially restricts the number of allowed channels=
+, rejecting valid hardware configurations for the newly added SMSC EMC1404 =
+and EMC1428 devices.
+- [Medium] The dt-binding incorrectly applies maximum temperature threshold=
+ limits to the 'temperature-offset-millicelsius' property.
+--
 
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
----
- drivers/hwmon/emc1403.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+commit 7ac2109c4a63c7879d955565cef8a4c30bd05436
+Author: Svyatoslav Ryhel <clamor95@gmail.com>
 
-diff --git a/drivers/hwmon/emc1403.c b/drivers/hwmon/emc1403.c
-index ac84200be71a..dfdd3982efb7 100644
---- a/drivers/hwmon/emc1403.c
-+++ b/drivers/hwmon/emc1403.c
-@@ -19,6 +19,7 @@
- #include <linux/mod_devicetable.h>
- #include <linux/sysfs.h>
- #include <linux/regmap.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/util_macros.h>
- 
- #define THERMAL_PID_REG		0xfd
-@@ -660,6 +661,12 @@ static int emc1403_probe(struct i2c_client *client)
- {
- 	struct thermal_data *data;
- 	struct device *hwmon_dev;
-+	int ret;
-+
-+	ret = devm_regulator_get_enable(&client->dev, "vcc");
-+	if (ret)
-+		return dev_err_probe(&client->dev, ret,
-+				     "Failed to enable regulator\n");
- 
- 	data = devm_kzalloc(&client->dev, sizeof(struct thermal_data),
- 			    GFP_KERNEL);
--- 
-2.53.0
+dt-bindings: hwmon: lm90: Document SMSC EMC1402/1403/1404/1428
 
+Document SMSC (now Microchip) EMC1402/1403/1404/1428 thermal sensors.
+
+> diff --git a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml b=
+/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
+> index 164068ba069d7..a1de96e0b87f3 100644
+> --- a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
+> @@ -12,38 +12,67 @@ maintainers:
+> =20
+>  properties:
+>    compatible:
+> -    enum:
+[ ... ]
+> +    oneOf:
+> +      - enum:
+[ ... ]
+> +          - smsc,emc1402
+> +          - smsc,emc1403
+> +          - smsc,emc1404
+> +          - smsc,emc1428
+
+[Severity: Medium]
+Does adding smsc,emc1404 and smsc,emc1428 here without expanding the global
+channel limits cause schema validation failures for valid hardware?
+
+The emc1403 driver supports up to 4 channels for the EMC1404 and up to 8
+channels for the EMC1428. However, the base schema in
+Documentation/devicetree/bindings/hwmon/national,lm90.yaml globally restric=
+ts
+channels:
+
+  patternProperties:
+    "^channel@([0-2])$":
+      type: object
+      ...
+      properties:
+        reg:
+          items:
+            minimum: 0
+            maximum: 2
+
+With additionalProperties: false at the root, defining channel@3 for EMC1404
+or channel@7 for EMC1428 will fail schema validation.
+
+Can we expand the global channel regex and reg bounds, and use if-then bloc=
+ks
+to restrict legacy devices to fewer channels?
+
+[ ... ]
+> @@ -169,6 +198,7 @@ allOf:
+>                - national,lm99
+>                - nuvoton,nct7718
+>                - nxp,sa56004
+> +              - smsc,emc1428
+
+[Severity: Medium]
+Are we confusing the maximum temperature threshold limits with the maximum
+offset limit here?
+
+By adding smsc,emc1428 to this block, it inherits a maximum value of 127875
+for temperature-offset-millicelsius. In the emc1403.c driver's
+emc1403_set_temp() function, temperature thresholds are clamped using
+val =3D clamp_val(val, -128000, 127875) for the emc1428. However, these are
+bounds for thresholds (tempX_max, tempX_min, tempX_crit), not temperature
+offsets.
+
+The emc1403 driver doesn't seem to support an offset register. Should these
+compatibles be added to the block that explicitly sets
+temperature-offset-millicelsius: false instead?
+
+>                - winbond,w83l771
+>      then:
+>        patternProperties:
+[ ... ]
+> @@ -191,6 +221,21 @@ allOf:
+>              temperature-offset-millicelsius:
+>                maximum: 127937
+> =20
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - smsc,emc1402
+> +              - smsc,emc1403
+> +              - smsc,emc1404
+> +    then:
+> +      patternProperties:
+> +        "^channel@([0-2])$":
+> +          properties:
+> +            temperature-offset-millicelsius:
+> +              maximum: 255875
+
+[Severity: Medium]
+Does this block also incorrectly apply temperature threshold maximums to the
+offset property?
+
+In the emc1403.c driver's emc1403_set_temp() function, temperature threshol=
+ds
+for these devices are clamped using val =3D clamp_val(val, 0, 255875). This
+limit applies to threshold registers rather than the offset register.
+
+If the hardware lacks offset support, should
+temperature-offset-millicelsius be disabled for these compatibles as well?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260603141033.1113=
+00-1-clamor95@gmail.com?part=3D1
