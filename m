@@ -1,149 +1,628 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504B2472771;
-	Wed,  3 Jun 2026 12:02:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 080A72EBB86;
+	Wed,  3 Jun 2026 13:20:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780488166; cv=none; b=c/9xB1pS1X3wRGVGqaeDBkCQzZ8oMb+CtenoSRMFSts6jASOYiWi7STDQa0cNF+t0/HmEa6DZjijfvopjzPGME3Yz8zAS8kGSkQV8sGIA+CZDNrbqROCEpO1FmaV5XYbQogYPurLrL3+tuQXRDErVTumm6MMsuaF0WxHM7Mst3w=
+	t=1780492827; cv=none; b=HMbLxKKbOx8T+qVSRpjXFIXALuFGeopE70/jdgfr7XoZ7dtf5fX/VJzAZrvGKJ+4DqFE/UUp2BsqkrydiZxffLzKAgmx1hEOcBTFafkz0Btzse4JY3splE/kfnTQSRqTKN54zMH1Yyzl0ZiBLEyD7qfT1tO7bM+MwcidQTkdC6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780488166; c=relaxed/simple;
-	bh=4hAvxFKZHSSYDu4jd5tgpaEVXw4jjuLOgjT1fSUJXdU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ujL3vSeKYZutoPqOWkSAA1r6t27CO6EGBcb4+UkLfaoGKYDLiApZheo6rpVZWaxLJ1QY+DRL8n7jGECQ5Ucmq7BSh8PMhclumHALw4yZNjRSZh51dbzEsb6TcBLLgS0vz+VDJOJAtYV4Gcdo3RYTVZxSy9YE7krYa5gEKHf8P3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=zOHk/Hi8; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1780492827; c=relaxed/simple;
+	bh=MJZSyegV6uFqxBTDdb3BsUJWo3gcEUD0ZmczvLg1ud8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Q2dqKLpzdzj8ZYD0E4PS9ln70/gKroCdac69QIyn2wEt34aNb1IL/hrcWfk5U5rja6FfTWfXmRfhFC7rh9P+IyJrgtRGfabUQx1xfHo9GHRst0wV+EytbaMIuIzRrzi3K1FvmP+b3WOD/HKe0HlYdCftRijJgui6iEq/XcF09gw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V7oSOS/o; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="zOHk/Hi8"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id C7BFD1A02F4;
-	Wed,  3 Jun 2026 12:02:42 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 9CF906029E;
-	Wed,  3 Jun 2026 12:02:42 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 6B2E010888CC6;
-	Wed,  3 Jun 2026 14:02:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1780488159; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=GoX6DBzQK3bxyZ5OdVtosgZMLBjxal2wLwkY1xIOuVY=;
-	b=zOHk/Hi8JD/C9VtAkNDNIJVHHA+Zy+7bjj/cIUNKDZ62QTyUW0bI7M+zGWVR2El8BqSBDS
-	Hl2PFZzOVOPBcXjT0UkBBVZO0b+KGHO0cOTpI6xDWarmjH0cs6sjsqkh4HUprnZiQNbdwl
-	Oan14+IAe13dthCR8ygFKoQGkEaKSFtRnZxOFc0hR0DOxtMrd+RZys80XwKffH8FtJEYv4
-	rP0gwpnvXX/iV4mjVw6xezVqRCi+VOb1f+00fM2j1STaGyFs5bltFqntdDxyVpjZ71nCsS
-	fDQBmEO5ud3P9i2YAM2S4ioRLnsZyGidZ1a9WAeeHS+LnmeAh85csLIvMkdZZA==
-From: Romain Gantois <romain.gantois@bootlin.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: linux-hwmon@vger.kernel.org, conor+dt@kernel.org, robh@kernel.org,
- devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-binding: hwmon: Add binding for ADT7462
-Date: Wed, 03 Jun 2026 14:02:33 +0200
-Message-ID: <2eAABoDhQ5ih8u_5nmvpxw@bootlin.com>
-In-Reply-To: <20260603113526.232F61F00898@smtp.kernel.org>
-References:
- <20260603-adt7462-bindings-v1-1-301304bcf774@bootlin.com>
- <20260603113526.232F61F00898@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V7oSOS/o"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3198A1F00893;
+	Wed,  3 Jun 2026 13:20:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780492824;
+	bh=BuaFc7qVtrUvu2ysL/1ozS0+LeQLgaY2q2nTE35SIc8=;
+	h=From:To:Cc:Subject:Date;
+	b=V7oSOS/oSI3hHzzr47gwEk085CoantTP9UmjrWenp7R2ocAl+3cnWrq3M6jfP45Xq
+	 e0pwJenyIl4EqC5V0qX/zsk3RXKdQkegBecjYAJL4ZLvIhMCc6B3zhG62aZjC0GaC9
+	 BFagewmvNdmWdmr43FIYPu3nob/7XEb2J3rZbPokbU7jdhENLEG91OfHXKnJN7c+4i
+	 v0LQErCb+WaiCHHNudzpKNG3JTflgiyjLzWlPKmFB5aNm0CX01dv8m8tJKGTpWttdm
+	 FKlFrK0fnAnvVYFiTbjvhNTiOIvHWuO6c3MjUm/TS5w/olIRRlm1IDMkpvFRGbp7Nd
+	 2yEPn58qTz54Q==
+From: Conor Dooley <conor@kernel.org>
+To: linux-hwmon@vger.kernel.org
+Cc: conor@kernel.org,
+	Lars Randers <lranders@mail.dk>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	Valentina.FernandezAlanis@microchip.com
+Subject: [PATCH v2] hwmon: add a driver for the temp/voltage sensor on PolarFire SoC
+Date: Wed,  3 Jun 2026 14:19:35 +0100
+Message-ID: <20260603-ongoing-brunette-51e35be6d93e@spud>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart_tMOLV3iRx26hmmL8Ybxbw";
- micalg="pgp-sha512"; protocol="application/pgp-signature"
-X-Last-TLS-Session-Version: TLSv1.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=16765; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=SFFN2OYG9K316HSNbAgZJSh8Kk2ROUbYdV4PWQXsgkM=; b=owGbwMvMwCVWscWwfUFT0iXG02pJDFkKms+nh060TzZo0GzLaTmv9UJVdHPo90l3BR0b5p369 Ke+4GZXRykLgxgXg6yYIkvi7b4WqfV/XHY497yFmcPKBDKEgYtTACZyfiLDXyE7HZbJp24fsrs+ Z3bf0stnn/LfSGlSnW85Pd/gn/85uUxGhrnPtv+9s12LJyf3r8BZa5djj3dxCIdvenRmTtF0oa5 XcUwA
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Transfer-Encoding: 8bit
 
---nextPart_tMOLV3iRx26hmmL8Ybxbw
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
-From: Romain Gantois <romain.gantois@bootlin.com>
-To: sashiko-reviews@lists.linux.dev
-Subject: Re: [PATCH 1/2] dt-binding: hwmon: Add binding for ADT7462
-Date: Wed, 03 Jun 2026 14:02:33 +0200
-Message-ID: <2eAABoDhQ5ih8u_5nmvpxw@bootlin.com>
-In-Reply-To: <20260603113526.232F61F00898@smtp.kernel.org>
-MIME-Version: 1.0
+From: Lars Randers <lranders@mail.dk>
 
-On Wednesday, 3 June 2026 13:35:25 CEST sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue(s) to consider: - [Medium] Incomplete binding migration:
-> `onnn,adt7462` is not migrated to the new schema and remains in
-> `trivial-devices.yaml`. --
-> 
-> commit 8e3b73cf675c7a9534a713ae61c15469f85f0d06
-> Author: Kory Maincent <kory.maincent@bootlin.com>
-> 
-> dt-binding: hwmon: Add binding for ADT7462
-> 
-> This commit adds the ADT7462 hwmon Controller device tree bindings
-> documentation.
-> 
-> > diff --git a/Documentation/devicetree/bindings/hwmon/adt7462.yaml
-> > b/Documentation/devicetree/bindings/hwmon/adt7462.yaml new file mode
-> > 100644
-> > index 0000000000000..745a371affd65
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/adt7462.yaml
-> 
-> [ ... ]
-> 
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - adi,adt7462
-> 
-> [Severity: Medium]
-> Should the existing onnn,adt7462 compatible string be migrated into this
-> new schema?
-> 
-> The ADT7462 device is already documented in trivial-devices.yaml under
-> the compatible string onnn,adt7462, which is actively used in existing
-> device trees.
-> 
-> By introducing this new schema without including onnn,adt7462 and without
-> removing it from trivial-devices.yaml, existing device trees will not
-> benefit from the detailed schema validation. This also leaves the subsystem
-> with two conflicting, fragmented representations of the same hardware.
+Add a driver for the temperature and voltage sensors on PolarFire SoC.
+The temperature reports how hot the die is, and the voltages are the
+SoC's 1.05, 1.8 and 2.5 volt rails respectively.
 
-I've just done a bit of research and it looks like this component is now 
-commercialized by Onsemi, so the existing compatible would be the correct one.
+The hardware supports alarms in theory, but there is an erratum that
+prevents clearing them once triggered, so no support is added for them.
 
-Furthermore, the suggested binding only has a "reg" property and a 
-"compatible" property, so it seems like the trivial-devices binding is enough 
-to describe it for now.
+The hardware measures voltage with 16 bits, of which 1 is a sign bit and
+the remainder holds the voltage as a fixed point integer value. It's
+improbable that the hardware will work if the voltages are negative, so
+the driver ignores the sign bits.
 
-I'll drop patch 1/2 in version 2.
+There's no dt support etc here because this is the child of a simple-mfd
+syscon.
 
-Thanks,
+Signed-off-by: Lars Randers <lranders@mail.dk>
+Co-developed-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
 
+v2:
+- Fix some minor things pointed out by Sashiko including inaccurate
+  comments, bounds checking of values read from sysfs and Kconfig
+  dependencies.
+- Make update_interval use milliseconds instead of microseconds
+  (I'll add update_interval_us support when that lands, there's a
+  proposed workaround for the erratum circulating internally, so it'll
+  probably come alongside alarm support).
+
+CC: Guenter Roeck <linux@roeck-us.net>
+CC: Jonathan Corbet <corbet@lwn.net>
+CC: Shuah Khan <skhan@linuxfoundation.org>
+CC: Conor Dooley <conor.dooley@microchip.com>
+CC: Daire McNamara <daire.mcnamara@microchip.com>
+CC: linux-hwmon@vger.kernel.org
+CC: linux-doc@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+CC: linux-riscv@lists.infradead.org
+CC: Valentina.FernandezAlanis@microchip.com
+---
+ Documentation/hwmon/index.rst    |   1 +
+ Documentation/hwmon/tvs-mpfs.rst |  53 +++++
+ MAINTAINERS                      |   1 +
+ drivers/hwmon/Kconfig            |  13 +
+ drivers/hwmon/Makefile           |   1 +
+ drivers/hwmon/tvs-mpfs.c         | 394 +++++++++++++++++++++++++++++++
+ 6 files changed, 463 insertions(+)
+ create mode 100644 Documentation/hwmon/tvs-mpfs.rst
+ create mode 100644 drivers/hwmon/tvs-mpfs.c
+
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index 8b655e5d6b68..84a5339e1d6f 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -262,6 +262,7 @@ Hardware Monitoring Kernel Drivers
+    tps53679
+    tps546d24
+    tsc1641
++   tvs-mpfs
+    twl4030-madc-hwmon
+    ucd9000
+    ucd9200
+diff --git a/Documentation/hwmon/tvs-mpfs.rst b/Documentation/hwmon/tvs-mpfs.rst
+new file mode 100644
+index 000000000000..ff445844d07c
+--- /dev/null
++++ b/Documentation/hwmon/tvs-mpfs.rst
+@@ -0,0 +1,53 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++Kernel driver tvs-mpfs
++======================
++
++Supported chips:
++
++  * PolarFire SoC
++
++Authors:
++
++   - Conor Dooley <conor.dooley@microchip.com>
++   - Lars Randers <lranders@mail.dk>
++
++Description
++-----------
++
++This driver implements support for the temperature and voltage sensors on
++PolarFire SoC. The temperature reports how hot the die is, and the voltages are
++the SoC's 1.05, 1.8 and 2.5 volt rails respectively.
++
++
++Usage Notes
++-----------
++
++update_interval has a permitted range of 0 to 8.
++
++Temperatures are read in millidegrees Celsius, but the hardware measures in
++degrees Kelvin, storing the result as 11.4 fixed point data, for a maximum
++value of 2047.9375 degrees Kelvin.
++
++Voltages are read in millivolts. The hardware measures in millivolts, storing
++the value as 12.3 fixed point data, for a maximum of 4095.875 millivolts.
++The minimum value reportable by the driver is 0 volts, although the hardware
++is capable of measuring negative values.
++
++Sysfs entries
++-------------
++
++The following attributes are supported. update_interval is read-write, as are
++the enables. All other attributes are read only.
++
++======================= ====================================================
++temp1_label		Fixed name for channel.
++temp1_input		Measured temperature for channel.
++temp1_enable		Enable/disable for channel.
++
++in[0-2]_label		Fixed name for channel.
++in[0-2]_input		Measured voltage for channel.
++in[0-2]_enable		Enable/disable for channel.
++
++update_interval		The interval at which the chip will update readings.
++======================= ====================================================
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 2fb1c75afd16..a492cf5ad0fc 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -22938,6 +22938,7 @@ F:	drivers/char/hw_random/mpfs-rng.c
+ F:	drivers/clk/microchip/clk-mpfs*.c
+ F:	drivers/firmware/microchip/mpfs-auto-update.c
+ F:	drivers/gpio/gpio-mpfs.c
++F:	drivers/hwmon/tvs-mpfs.c
+ F:	drivers/i2c/busses/i2c-microchip-corei2c.c
+ F:	drivers/mailbox/mailbox-mpfs.c
+ F:	drivers/pci/controller/plda/pcie-microchip-host.c
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 14e4cea48acc..2b9622b1db95 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -930,6 +930,19 @@ config SENSORS_JC42
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called jc42.
+ 
++config SENSORS_POLARFIRE_SOC_TVS
++	tristate "PolarFire SoC (MPFS) temperature and voltage sensor"
++	depends on POLARFIRE_SOC_SYSCONS || COMPILE_TEST
++	depends on MFD_SYSCON
++	help
++	  This driver adds support for the PolarFire SoC (MPFS) Temperature and
++	  Voltage Sensor.
++
++	  To compile this driver as a module, choose M here. the
++	  module will be called tvs-mpfs.
++
++	  If unsure, say N.
++
+ config SENSORS_POWERZ
+ 	tristate "ChargerLAB POWER-Z USB-C tester"
+ 	depends on USB
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 4788996aa137..b58d249e4cf4 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -194,6 +194,7 @@ obj-$(CONFIG_SENSORS_NZXT_SMART2) += nzxt-smart2.o
+ obj-$(CONFIG_SENSORS_PC87360)	+= pc87360.o
+ obj-$(CONFIG_SENSORS_PC87427)	+= pc87427.o
+ obj-$(CONFIG_SENSORS_PCF8591)	+= pcf8591.o
++obj-$(CONFIG_SENSORS_POLARFIRE_SOC_TVS)  += tvs-mpfs.o
+ obj-$(CONFIG_SENSORS_POWERZ)	+= powerz.o
+ obj-$(CONFIG_SENSORS_POWR1220)  += powr1220.o
+ obj-$(CONFIG_SENSORS_PT5161L)	+= pt5161l.o
+diff --git a/drivers/hwmon/tvs-mpfs.c b/drivers/hwmon/tvs-mpfs.c
+new file mode 100644
+index 000000000000..f086f178b4ba
+--- /dev/null
++++ b/drivers/hwmon/tvs-mpfs.c
+@@ -0,0 +1,394 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Author: Lars Randers <lranders@mail.dk>
++ */
++
++#include <linux/bitfield.h>
++#include <linux/err.h>
++#include <linux/freezer.h>
++#include <linux/hwmon.h>
++#include <linux/io.h>
++#include <linux/kthread.h>
++#include <linux/mfd/syscon.h>
++#include <linux/module.h>
++#include <linux/of_address.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++
++#define MPFS_TVS_CTRL 0x08
++#define MPFS_TVS_OUTPUT0 0x24
++#define MPFS_TVS_OUTPUT1 0x28
++
++#define MPFS_TVS_CTRL_TEMP_VALID	BIT(19)
++#define MPFS_TVS_CTRL_V2P5_VALID	BIT(18)
++#define MPFS_TVS_CTRL_V1P8_VALID	BIT(17)
++#define MPFS_TVS_CTRL_V1P05_VALID	BIT(16)
++
++#define MPFS_TVS_CTRL_TEMP_ENABLE	BIT(3)
++#define MPFS_TVS_CTRL_V2P5_ENABLE	BIT(2)
++#define MPFS_TVS_CTRL_V1P8_ENABLE	BIT(1)
++#define MPFS_TVS_CTRL_V1P05_ENABLE	BIT(0)
++#define MPFS_TVS_CTRL_ENABLE_ALL	GENMASK(3, 0)
++
++/*
++ * For all of these the value in millivolts is stored in 16 bits, with an upper
++ * sign bit and a lower 3 bits of decimal. These masks discard the sign bit and
++ * decimal places, because if Linux is running these voltages cannot be negative
++ * and so avoid having to convert to two's complement.
++ */
++#define MPFS_OUTPUT0_V1P8_MASK	GENMASK(30, 19)
++#define MPFS_OUTPUT0_V1P05_MASK	GENMASK(14, 3)
++#define MPFS_OUTPUT1_V2P5_MASK	GENMASK(14, 3)
++
++/*
++ * The register map claims that the temperature is stored in bits 31:16, but
++ * application note "AN4682: PolarFire FPGA Temperature and Voltage Sensor"
++ * says that 31 is reserved. Temperature is in kelvin, so what's probably a
++ * sign bit has no value anyway.
++ */
++#define MPFS_OUTPUT1_TEMP_MASK GENMASK(30, 16)
++
++#define MPFS_TVS_INTERVAL_MASK GENMASK(15, 8)
++#define MPFS_TVS_INTERVAL_OFFSET 8
++/* The interval register is in increments of 32 us */
++#define MPFS_TVS_INTERVAL_SCALE 32
++
++/* 273.1875 in 11.4 fixed-point notation */
++#define MPFS_TVS_K_TO_C 0x1113
++
++enum mpfs_tvs_sensors {
++	SENSOR_V1P05 = 0,
++	SENSOR_V1P8,
++	SENSOR_V2P5,
++};
++
++static const char * const mpfs_tvs_voltage_labels[] = { "1P05", "1P8", "2P5" };
++
++struct mpfs_tvs {
++	struct regmap *regmap;
++};
++
++static int mpfs_tvs_voltage_read(struct mpfs_tvs *data, u32 attr,
++				 int channel, long *val)
++{
++	u32 tmp, control;
++
++	if (attr != hwmon_in_input && attr != hwmon_in_enable)
++		return -EOPNOTSUPP;
++
++	regmap_read(data->regmap, MPFS_TVS_CTRL, &control);
++
++	switch (channel) {
++	case SENSOR_V2P5:
++		if (attr == hwmon_in_enable) {
++			*val = FIELD_GET(MPFS_TVS_CTRL_V2P5_ENABLE, control);
++			break;
++		}
++
++		if (!(control & MPFS_TVS_CTRL_V2P5_VALID))
++			return -EINVAL;
++
++		regmap_read(data->regmap, MPFS_TVS_OUTPUT1, &tmp);
++		*val = FIELD_GET(MPFS_OUTPUT1_V2P5_MASK, tmp);
++		break;
++	case SENSOR_V1P8:
++		if (attr == hwmon_in_enable) {
++			*val = FIELD_GET(MPFS_TVS_CTRL_V1P8_ENABLE, control);
++			break;
++		}
++
++		if (!(control & MPFS_TVS_CTRL_V1P8_VALID))
++			return -EINVAL;
++
++		regmap_read(data->regmap, MPFS_TVS_OUTPUT0, &tmp);
++		*val = FIELD_GET(MPFS_OUTPUT0_V1P8_MASK, tmp);
++		break;
++	case SENSOR_V1P05:
++		if (attr == hwmon_in_enable) {
++			*val = FIELD_GET(MPFS_TVS_CTRL_V1P05_ENABLE, control);
++			break;
++		}
++
++		if (!(control & MPFS_TVS_CTRL_V1P05_VALID))
++			return -EINVAL;
++
++		regmap_read(data->regmap, MPFS_TVS_OUTPUT0, &tmp);
++		*val = FIELD_GET(MPFS_OUTPUT0_V1P05_MASK, tmp);
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return 0;
++}
++
++static int mpfs_tvs_voltage_write(struct mpfs_tvs *data, u32 attr,
++				  int channel, long val)
++{
++	u32 tmp;
++
++	if (attr != hwmon_in_enable)
++		return -EOPNOTSUPP;
++
++	switch (channel) {
++	case SENSOR_V2P5:
++		if (val > 1 || val < 0)
++			return -EINVAL;
++
++		tmp = FIELD_PREP(MPFS_TVS_CTRL_V2P5_ENABLE, val);
++		regmap_update_bits(data->regmap, MPFS_TVS_CTRL,
++				   MPFS_TVS_CTRL_V2P5_ENABLE, tmp);
++		break;
++	case SENSOR_V1P8:
++		if (val > 1 || val < 0)
++			return -EINVAL;
++
++		tmp = FIELD_PREP(MPFS_TVS_CTRL_V1P8_ENABLE, val);
++		regmap_update_bits(data->regmap, MPFS_TVS_CTRL,
++				   MPFS_TVS_CTRL_V1P8_ENABLE, tmp);
++		break;
++	case SENSOR_V1P05:
++		if (val > 1 || val < 0)
++			return -EINVAL;
++
++		tmp = FIELD_PREP(MPFS_TVS_CTRL_V1P05_ENABLE, val);
++		regmap_update_bits(data->regmap, MPFS_TVS_CTRL,
++				   MPFS_TVS_CTRL_V1P05_ENABLE, tmp);
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return 0;
++}
++
++static int mpfs_tvs_temp_read(struct mpfs_tvs *data, u32 attr, long *val)
++{
++	u32 tmp, control;
++
++	if (attr != hwmon_temp_input && attr != hwmon_temp_enable)
++		return -EOPNOTSUPP;
++
++	regmap_read(data->regmap, MPFS_TVS_CTRL, &control);
++
++	if (attr == hwmon_temp_enable) {
++		*val = FIELD_GET(MPFS_TVS_CTRL_TEMP_ENABLE, control);
++		return 0;
++	}
++
++	if (!(control & MPFS_TVS_CTRL_TEMP_VALID))
++		return -EINVAL;
++
++	regmap_read(data->regmap, MPFS_TVS_OUTPUT1, &tmp);
++	*val = FIELD_GET(MPFS_OUTPUT1_TEMP_MASK, tmp);
++	*val -= MPFS_TVS_K_TO_C;
++	*val = (1000 * *val) >> 4; /* fixed point (11.4) to millidegrees */
++
++	return 0;
++}
++
++static int mpfs_tvs_temp_write(struct mpfs_tvs *data, u32 attr, long val)
++{
++	u32 tmp;
++
++	if (attr != hwmon_temp_enable)
++		return -EOPNOTSUPP;
++
++	if (val > 1 || val < 0)
++		return -EINVAL;
++
++	tmp = FIELD_PREP(MPFS_TVS_CTRL_TEMP_ENABLE, val);
++	regmap_update_bits(data->regmap, MPFS_TVS_CTRL,
++			   MPFS_TVS_CTRL_TEMP_ENABLE, tmp);
++
++	return 0;
++}
++
++static int mpfs_tvs_interval_read(struct mpfs_tvs *data, u32 attr, long *val)
++{
++	u32 tmp;
++
++	if (attr != hwmon_chip_update_interval)
++		return -EOPNOTSUPP;
++
++	regmap_read(data->regmap, MPFS_TVS_CTRL, &tmp);
++	*val = FIELD_GET(MPFS_TVS_INTERVAL_MASK, tmp);
++	*val *= MPFS_TVS_INTERVAL_SCALE;
++	*val /= 1000;
++
++	return 0;
++}
++
++static int mpfs_tvs_interval_write(struct mpfs_tvs *data, u32 attr, long val)
++{
++	unsigned long temp = val;
++
++	if (attr != hwmon_chip_update_interval)
++		return -EOPNOTSUPP;
++
++	temp *= 1000;
++	temp /= MPFS_TVS_INTERVAL_SCALE;
++
++	/*
++	 * The value is 8 bits wide, but 255 is described as
++	 * "255= Do single set of transfers when scoverride set"
++	 * but there's no scoverride bit in the tvs register region.
++	 * Ban using 255 since its behaviour is suspect.
++	 */
++	if (temp > 254)
++		return -EINVAL;
++
++	temp <<= MPFS_TVS_INTERVAL_OFFSET;
++	regmap_update_bits(data->regmap, MPFS_TVS_CTRL,
++			   MPFS_TVS_INTERVAL_MASK, temp);
++
++	return 0;
++}
++
++static umode_t mpfs_tvs_is_visible(const void *data,
++				   enum hwmon_sensor_types type,
++				   u32 attr, int channel)
++{
++	if (type == hwmon_chip && attr == hwmon_chip_update_interval)
++		return 0644;
++
++	if (type == hwmon_temp) {
++		switch (attr) {
++		case hwmon_temp_enable:
++			return 0644;
++		case hwmon_temp_input:
++		case hwmon_temp_label:
++			return 0444;
++		default:
++			return 0;
++		}
++	}
++
++	if (type == hwmon_in) {
++		switch (attr) {
++		case hwmon_in_enable:
++			return 0644;
++		case hwmon_in_input:
++		case hwmon_in_label:
++			return 0444;
++		default:
++			return 0;
++		}
++	}
++
++	return 0;
++}
++
++static int mpfs_tvs_read(struct device *dev, enum hwmon_sensor_types type,
++			 u32 attr, int channel, long *val)
++{
++	struct mpfs_tvs *data = dev_get_drvdata(dev);
++
++	switch (type) {
++	case hwmon_temp:
++		return mpfs_tvs_temp_read(data, attr, val);
++	case hwmon_in:
++		return mpfs_tvs_voltage_read(data, attr, channel, val);
++	case hwmon_chip:
++		return mpfs_tvs_interval_read(data, attr, val);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int mpfs_tvs_write(struct device *dev, enum hwmon_sensor_types type,
++			  u32 attr, int channel, long val)
++{
++	struct mpfs_tvs *data = dev_get_drvdata(dev);
++
++	switch (type) {
++	case hwmon_temp:
++		return mpfs_tvs_temp_write(data, attr, val);
++	case hwmon_in:
++		return mpfs_tvs_voltage_write(data, attr, channel, val);
++	case hwmon_chip:
++		return mpfs_tvs_interval_write(data, attr, val);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int mpfs_tvs_read_labels(struct device *dev,
++				enum hwmon_sensor_types type,
++				u32 attr, int channel,
++				const char **str)
++{
++	switch (type) {
++	case hwmon_temp:
++		*str = "Die Temp";
++		return 0;
++	case hwmon_in:
++		*str = mpfs_tvs_voltage_labels[channel];
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static const struct hwmon_ops mpfs_tvs_ops = {
++	.is_visible = mpfs_tvs_is_visible,
++	.read_string = mpfs_tvs_read_labels,
++	.read = mpfs_tvs_read,
++	.write = mpfs_tvs_write,
++};
++
++static const struct hwmon_channel_info *mpfs_tvs_info[] = {
++	HWMON_CHANNEL_INFO(chip,
++			   HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
++	HWMON_CHANNEL_INFO(temp,
++			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_ENABLE),
++	HWMON_CHANNEL_INFO(in,
++			   HWMON_I_INPUT | HWMON_I_LABEL | HWMON_I_ENABLE,
++			   HWMON_I_INPUT | HWMON_I_LABEL | HWMON_I_ENABLE,
++			   HWMON_I_INPUT | HWMON_I_LABEL | HWMON_I_ENABLE),
++	NULL
++};
++
++static const struct hwmon_chip_info mpfs_tvs_chip_info = {
++	.ops = &mpfs_tvs_ops,
++	.info = mpfs_tvs_info,
++};
++
++static int mpfs_tvs_probe(struct platform_device *pdev)
++{
++	struct device *hwmon_dev;
++	struct mpfs_tvs *data;
++
++	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	data->regmap = device_node_to_regmap(pdev->dev.parent->of_node);
++	if (IS_ERR(data->regmap))
++		return dev_err_probe(&pdev->dev, PTR_ERR(data->regmap),
++				     "Failed to find syscon regmap\n");
++
++	regmap_write(data->regmap, MPFS_TVS_CTRL, MPFS_TVS_CTRL_ENABLE_ALL);
++
++	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev, "mpfs_tvs",
++							 data,
++							 &mpfs_tvs_chip_info,
++							 NULL);
++	if (IS_ERR(hwmon_dev))
++		return dev_err_probe(&pdev->dev, PTR_ERR(hwmon_dev),
++				     "hwmon device registration failed.\n");
++
++	return 0;
++}
++
++static struct platform_driver mpfs_tvs_driver = {
++	.probe = mpfs_tvs_probe,
++	.driver = {
++		.name = "mpfs-tvs",
++	},
++};
++module_platform_driver(mpfs_tvs_driver);
++
++MODULE_AUTHOR("Lars Randers <lranders@mail.dk>");
++MODULE_DESCRIPTION("PolarFire SoC temperature & voltage sensor driver");
++MODULE_LICENSE("GPL");
 -- 
-Romain Gantois, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
---nextPart_tMOLV3iRx26hmmL8Ybxbw
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEIcCsAScRrtr7W0x0KCYAIARzeA4FAmogF9kACgkQKCYAIARz
-eA565BAAiUnofwPG57qpJi2HrG9yKzAvGwJBZIJyDsTJFLIYkI+HdkbsrBpxRml/
-i6x3Lp4p2CCXpzua1RrMGoxlz+t7CrkS1OxrS6vC0j6nIsU3iR/r9KNkX4SU6t3A
-zMCTivlr2ZG0zgHy05XAlpa30KGba3uNYAcJQozET9f+165S7M1euv9vzt1aMLQ3
-r6lQP0NcpNAJ898f01vD5cIUj6ZF1iuK4eGBoCvTiLRvj24c9wddkjmBEI7+nZ1G
-/XFMSg2UIHwLl6HqWgJGE/UheElE8qzHvr6VpGYND0lHnczvfpqQJgb93wTYAakf
-gDC131Ep/5AX7oPI3pQ+hio9iTeb5qtqVkZN7d3NSXdJj6ONvi2mS3+2qyGvWBBH
-1XVU6t3ZEMvctbs5BDliWqkg1/gxJrHdyFaEfsLyBbiCu8dtpyz1QL3IxzCVLk3g
-1VuJORSl5cEuezkgp/Z8KjQQRCdhS8W8oFKnUtSOjgT8vvph7r732UI/DRO7AvNw
-dTSqj5gelVEOsGeDxbZNbEFIV+eUxM8xeqS7blkanXTxLWjuXoJyoITj8zzbKsuU
-12RlIurihXQhK52pQjM//LEzLmmeX2+5mLjJvHAJ6aPXVd2iSygv3vr/vK9B483g
-DU2Xh2BUn8dewzdMzkgUIphPyMWJZNtUCUAbWsP9ZgCm7R3NBbE=
-=8wQ0
------END PGP SIGNATURE-----
-
---nextPart_tMOLV3iRx26hmmL8Ybxbw--
-
-
+2.53.0
 
