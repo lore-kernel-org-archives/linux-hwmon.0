@@ -1,211 +1,227 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BCC32FDC20
-	for <linux-hwmon@vger.kernel.org>; Wed,  3 Jun 2026 13:32:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A737F3AA4EB
+	for <linux-hwmon@vger.kernel.org>; Wed,  3 Jun 2026 14:10:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780493560; cv=none; b=OP93nSfYSXIwR6NjMH/hyrfViE+li9HUNWJlxX1/KITvumwJqSpGx5Q2n3vQuCmU2gAKypGN+GclhcedRbAerushCO+wrOYnCs5nrfOG9S815iBq/L18dFJg4ThvG/RLT5y4RAOcv0z1Ew4ltmeSejRog7LGUxzBPDM6FbqaGvk=
+	t=1780495858; cv=none; b=C+e0IARnBIJfNjhC4W2+NBHdYidoTsaanu+hHC/RouU3EGcNNzzsIXE8fKo6jJJybfQ4Q1U93tmQzCxKxSZ9Fzn8pRVa8c9ul+JwMXiaB+st4LLmjwTQCvNXwRtJiZNfHeCcp6XwyhI+BVD4m20gFyca2ByLmezTTmK071azy30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780493560; c=relaxed/simple;
-	bh=fK22uHVuameMGkFepUVhAIXHg/sYgqdSYfM8bGvZwzY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=olgX41y1mdzSqFIskxNsKfYMfBn16l7tZ8CLLgYzvf69gSiTLk9s3TyYU94niN9uzfmTH2yb0z/L5ndEQ8/+dcLTG0P+0QloFHdNRFGxIz92NlnwStNJrS/H+Xk968L3fvj0PVM2MZsCNU6oVp3TNj9WA705AN2kXT8N1HuwP5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lk+bA1wR; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780495858; c=relaxed/simple;
+	bh=CGFF+18t2BhBOdyiWzPFWns80o+l2buwNiedN7HApsQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=FevJhkT7VpbO+gwOYrRoCW+2ox6rBtMiMNDJ6hMYKazkcPMZPT53MoIIxx5/WS8E0YZ21EImdWEeo5mBpHoQqdOKMsG5PZQN6NIggY/OIBTcBDyw6bXN6HhB+GsCGo1DcQN7HSaHgm83ohBWRjlk6Ip67Hc78qMu4DeEZPHDWIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j+hDu9ja; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lk+bA1wR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6B261F00898;
-	Wed,  3 Jun 2026 13:32:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780493559;
-	bh=M7/MGQURRgtlQN5Kftp3DEq60UW0ogtWL2OsR3l3r+g=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lk+bA1wRztc61pnmOm2tj5ip4uLcgouxBdZ83w3Wsfzx8QWpJc/p1NhuvTd8S7Bxh
-	 z/7HwppIkVc1uKs19CWUaw0GzlkgqmtpzREup/RgMhFuH5B2Z7dZdxrwf53Nx0RV+l
-	 i8m1uj3T5NqLaaRvzzd79iuWF/XP6IQ5PNpWvQhRtv6VHbbBs6mPKNwtgSHzWU3ooZ
-	 Y4I/CVBgXeLVB6OJeush3hqsiXhEd8t2R5XkgPwkrWGUKXEx/YHs2dJJ5WFIz/cvUC
-	 Bw8ciz2gUXoG0IGIeua5sEojjYaDzngapQ7KDMkU+oqVhcl+RaQj9ky2zHfACJVcGu
-	 eHsek33xggg+g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] hwmon: add a driver for the temp/voltage sensor on
- PolarFire SoC
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Conor Dooley" <conor@kernel.org>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260603-ongoing-brunette-51e35be6d93e@spud>
-References: <20260603-ongoing-brunette-51e35be6d93e@spud>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 03 Jun 2026 13:32:38 +0000
-Message-Id: <20260603133238.E6B261F00898@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j+hDu9ja"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-45ef1629ff4so4244169f8f.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 03 Jun 2026 07:10:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780495854; x=1781100654; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FmuRKl9fxrcF6ArlWkpcPVYc+ox+WNl3WD2EPf+Twng=;
+        b=j+hDu9jawN7jluH59UMi2n8JXBCcETONR/kwacZo1q+01NNxjxbjQGB7JZebzkuIBN
+         wCYX2eX6QfUrl0evIHyNEsbHMMbTgRTGbQu3eEprLNkOyGVlQwv7t3z43I+z5qfo+2W5
+         Aaw6RJsv5nAfgo+72Iu8mIFHWrvdQbGrzYvclnfWjvtBNRziIehybTs3B8Kbs+KlM5np
+         hgFBs71JQcik6Lu9vlK5+Dzp2xiXC6ud4fwmc4+nTkrq0vW2oMGsidiI8LZ8yrk0X4Bz
+         y+B5MOxQIR/WDxuhvW/wAY3ZOxydpZnb7W3hp0bdzh8YHjJs7E6VlGYYM9c7h1IeptTa
+         dacQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780495854; x=1781100654;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=FmuRKl9fxrcF6ArlWkpcPVYc+ox+WNl3WD2EPf+Twng=;
+        b=S9fWN9Wty91/8vr+5YFCMNUWh43TJiC4qM6zXo3cEZs3BUQAl7rmXcJlt53TIlOuhd
+         a1qNbSlrHCByyXlGi6Rkkk87hccVtDZxshdJEXGBKRxrTnfrgQT3Vzf472W63Lekkdy2
+         YaB/RCzp7QvWmpzGflUB0TGDVVpBPupqSODABQ6GHL4NfokohZEdy5lOw7tfAT/pdM8x
+         vz4sSpx75Ne78ROOCj0zoT/Mj/dqLfOZq11bzn0s9Z6VewoUeDZ58/SFhz++h7qf/e5y
+         RKxChzB/etKHLs4aatBfcJKkGuVmiOVn7sJofhFZcZ1dTmDZLtzLCCTbHCC1NOu8dCyR
+         7YuQ==
+X-Gm-Message-State: AOJu0YzIX/YRs01+2729kZdQM4saDy01Yg1QLgKOMbK6rngM4ZOSnG2/
+	x+XBC3qR1MJFtTG0lUyYh+KF/4KhOpMoVNMK4Mvl4PMsBYx5ILT520KlpvYT3Q==
+X-Gm-Gg: Acq92OHC/stZC4TOkAgaFNHFcQl1FzUMrKNQOqVdnDEi0OE4iMKifCPscvg1EIkkeaD
+	8VkNL7je7AogguWiWnGuneOZ1dXGGX2qwf+uQsq7UgCOIl5FctY9IOfyfhQhxzHlvEzHzJfejJj
+	jFIMzbt1Y9x/YCflWPmM+OXqTC8JCaRFtbhLoix7Fo9pgPub0gmlCu35BqKMgnRr5jl8we1SdlN
+	v/t+oP2fx/tb3i5AL1aPZnAHm+UzjEVaHvmJOBQk5yQDiJVQXIvwlrbhB8tAprTu7OcdnhsBtQp
+	ymoqoo+Ebf2DGOiPQt4sxhSe4dfaEyOTmUYWVTXu+2oNsPUTMHJG45s4j9C+T1GWftbHLz6TKkK
+	rDgZj6iByxGQjpgleo3YSQRx/z2xOhKkqj6mmwNm0lCEWpadwLj9AtdmP9ikm9N5pmP48CDjIXO
+	S81kJodhirEW5lm329gL5RlI4=
+X-Received: by 2002:a05:6000:4694:b0:454:35b9:803 with SMTP id ffacd0b85a97d-4602184cademr3759686f8f.30.1780495853866;
+        Wed, 03 Jun 2026 07:10:53 -0700 (PDT)
+Received: from xeon ([188.163.112.61])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f2dcb13sm7217131f8f.2.2026.06.03.07.10.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Jun 2026 07:10:53 -0700 (PDT)
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1 1/3] dt-bindings: hwmon: lm90: Document SMSC EMC1402/1403/1404/1428
+Date: Wed,  3 Jun 2026 17:10:31 +0300
+Message-ID: <20260603141033.111300-2-clamor95@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260603141033.111300-1-clamor95@gmail.com>
+References: <20260603141033.111300-1-clamor95@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
-- [High] Ignored `regmap_read()` return values lead to the use of uninitial=
-ized stack variables, potentially leaking kernel memory.
-- [Medium] Arithmetic overflow in `mpfs_tvs_interval_write` bypasses interv=
-al bounds checking.
-- [Medium] The driver ignores the return values of hardware write operation=
-s, masking errors from the hwmon core and userspace.
-- [Medium] Destructive `regmap_write()` to the control register overwrites =
-existing configuration, such as the update interval.
---
+Document SMSC (now Microchip) EMC1402/1403/1404/1428 thermal sensors.
 
-commit 3e2d5f8cc5d07efdc63c9af851354b4ce076c3a4
-Author: Lars Randers <lranders@mail.dk>
-Subject: hwmon: add a driver for the temp/voltage sensor on PolarFire SoC
+Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+---
+ .../bindings/hwmon/national,lm90.yaml         | 109 +++++++++++++-----
+ 1 file changed, 77 insertions(+), 32 deletions(-)
 
-Add a driver for the temperature and voltage sensors on PolarFire SoC.
-The temperature reports how hot the die is, and the voltages are the
-SoC's 1.05, 1.8 and 2.5 volt rails respectively.
+diff --git a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
+index 164068ba069d..a1de96e0b87f 100644
+--- a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
++++ b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
+@@ -12,38 +12,67 @@ maintainers:
+ 
+ properties:
+   compatible:
+-    enum:
+-      - adi,adm1032
+-      - adi,adt7461
+-      - adi,adt7461a
+-      - adi,adt7481
+-      - dallas,max6646
+-      - dallas,max6647
+-      - dallas,max6649
+-      - dallas,max6654
+-      - dallas,max6657
+-      - dallas,max6658
+-      - dallas,max6659
+-      - dallas,max6680
+-      - dallas,max6681
+-      - dallas,max6695
+-      - dallas,max6696
+-      - gmt,g781
+-      - national,lm86
+-      - national,lm89
+-      - national,lm90
+-      - national,lm99
+-      - nuvoton,nct7716
+-      - nuvoton,nct7717
+-      - nuvoton,nct7718
+-      - nxp,sa56004
+-      - onnn,nct72
+-      - onnn,nct214
+-      - onnn,nct218
+-      - onnn,nct1008
+-      - ti,tmp451
+-      - ti,tmp461
+-      - winbond,w83l771
++    oneOf:
++      - enum:
++          - adi,adm1032
++          - adi,adt7461
++          - adi,adt7461a
++          - adi,adt7481
++          - dallas,max6646
++          - dallas,max6647
++          - dallas,max6649
++          - dallas,max6654
++          - dallas,max6657
++          - dallas,max6658
++          - dallas,max6659
++          - dallas,max6680
++          - dallas,max6681
++          - dallas,max6695
++          - dallas,max6696
++          - gmt,g781
++          - national,lm86
++          - national,lm89
++          - national,lm90
++          - national,lm99
++          - nuvoton,nct7716
++          - nuvoton,nct7717
++          - nuvoton,nct7718
++          - nxp,sa56004
++          - onnn,nct72
++          - onnn,nct214
++          - onnn,nct218
++          - onnn,nct1008
++          - smsc,emc1402
++          - smsc,emc1403
++          - smsc,emc1404
++          - smsc,emc1428
++          - ti,tmp451
++          - ti,tmp461
++          - winbond,w83l771
++
++      - items:
++          - enum:
++              - smsc,emc1412
++              - smsc,emc1422
++              - smsc,emc1442
++          - const: smsc,emc1402
++
++      - items:
++          - enum:
++              - smsc,emc1413
++              - smsc,emc1423
++          - const: smsc,emc1403
++
++      - items:
++          - enum:
++              - smsc,emc1414
++              - smsc,emc1424
++          - const: smsc,emc1404
++
++      - items:
++          - enum:
++              - smsc,emc1438
++          - const: smsc,emc1428
+ 
+   interrupts:
+     items:
+@@ -169,6 +198,7 @@ allOf:
+               - national,lm99
+               - nuvoton,nct7718
+               - nxp,sa56004
++              - smsc,emc1428
+               - winbond,w83l771
+     then:
+       patternProperties:
+@@ -191,6 +221,21 @@ allOf:
+             temperature-offset-millicelsius:
+               maximum: 127937
+ 
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - smsc,emc1402
++              - smsc,emc1403
++              - smsc,emc1404
++    then:
++      patternProperties:
++        "^channel@([0-2])$":
++          properties:
++            temperature-offset-millicelsius:
++              maximum: 255875
++
+ additionalProperties: false
+ 
+ examples:
+-- 
+2.53.0
 
-> diff --git a/drivers/hwmon/tvs-mpfs.c b/drivers/hwmon/tvs-mpfs.c
-> new file mode 100644
-> index 0000000000000..f086f178b4bab
-> --- /dev/null
-> +++ b/drivers/hwmon/tvs-mpfs.c
-
-[ ... ]
-
-> +static int mpfs_tvs_voltage_read(struct mpfs_tvs *data, u32 attr,
-> +				 int channel, long *val)
-> +{
-> +	u32 tmp, control;
-> +
-> +	if (attr !=3D hwmon_in_input && attr !=3D hwmon_in_enable)
-> +		return -EOPNOTSUPP;
-> +
-> +	regmap_read(data->regmap, MPFS_TVS_CTRL, &control);
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-[Severity: High]
-Does this code leak uninitialized stack memory if the hardware read fails?
-
-Because the return value of regmap_read() is ignored, control (and tmp
-below) could remain uninitialized on a read failure. This uninitialized
-data is then used in bitwise operations and potentially returned to
-userspace via *val.
-
-The same pattern appears in mpfs_tvs_temp_read() and mpfs_tvs_interval_read=
-().
-
-> +
-> +	switch (channel) {
-> +	case SENSOR_V2P5:
-
-[ ... ]
-
-> +static int mpfs_tvs_voltage_write(struct mpfs_tvs *data, u32 attr,
-> +				  int channel, long val)
-> +{
-> +	u32 tmp;
-> +
-> +	if (attr !=3D hwmon_in_enable)
-> +		return -EOPNOTSUPP;
-> +
-> +	switch (channel) {
-> +	case SENSOR_V2P5:
-> +		if (val > 1 || val < 0)
-> +			return -EINVAL;
-> +
-> +		tmp =3D FIELD_PREP(MPFS_TVS_CTRL_V2P5_ENABLE, val);
-> +		regmap_update_bits(data->regmap, MPFS_TVS_CTRL,
-> +				   MPFS_TVS_CTRL_V2P5_ENABLE, tmp);
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-[Severity: Medium]
-Should this check the return value of regmap_update_bits()?
-
-By unconditionally returning 0 at the end of the function, hardware write=20
-failures are masked from the hwmon core and userspace.
-
-The same pattern appears in mpfs_tvs_temp_write() and=20
-mpfs_tvs_interval_write().
-
-> +		break;
-
-[ ... ]
-
-> +static int mpfs_tvs_interval_write(struct mpfs_tvs *data, u32 attr, long=
- val)
-> +{
-> +	unsigned long temp =3D val;
-> +
-> +	if (attr !=3D hwmon_chip_update_interval)
-> +		return -EOPNOTSUPP;
-> +
-> +	temp *=3D 1000;
-        ^^^^^^^^^^^^^
-
-[Severity: Medium]
-Could this multiplication overflow before bounds validation occurs?
-
-If a large value is passed (e.g., val =3D 4294968 on a 32-bit architecture),
-temp * 1000 could wrap around to a small value like 480. Divided by=20
-MPFS_TVS_INTERVAL_SCALE (32), this gives 15, which would successfully pass=
-=20
-the temp > 254 upper-bound check below and silently write an invalid=20
-interval to the hardware.
-
-> +	temp /=3D MPFS_TVS_INTERVAL_SCALE;
-> +
-> +	/*
-> +	 * The value is 8 bits wide, but 255 is described as
-> +	 * "255=3D Do single set of transfers when scoverride set"
-> +	 * but there's no scoverride bit in the tvs register region.
-> +	 * Ban using 255 since its behaviour is suspect.
-> +	 */
-> +	if (temp > 254)
-> +		return -EINVAL;
-> +
-> +	temp <<=3D MPFS_TVS_INTERVAL_OFFSET;
-> +	regmap_update_bits(data->regmap, MPFS_TVS_CTRL,
-> +			   MPFS_TVS_INTERVAL_MASK, temp);
-> +
-> +	return 0;
-> +}
-
-[ ... ]
-
-> +static int mpfs_tvs_probe(struct platform_device *pdev)
-> +{
-> +	struct device *hwmon_dev;
-> +	struct mpfs_tvs *data;
-> +
-> +	data =3D devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->regmap =3D device_node_to_regmap(pdev->dev.parent->of_node);
-> +	if (IS_ERR(data->regmap))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(data->regmap),
-> +				     "Failed to find syscon regmap\n");
-> +
-> +	regmap_write(data->regmap, MPFS_TVS_CTRL, MPFS_TVS_CTRL_ENABLE_ALL);
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-[Severity: Medium]
-Does this destructively overwrite existing configuration in the control reg=
-ister?
-
-Because this uses regmap_write() rather than a read-modify-write operation
-like regmap_update_bits(), it replaces the entire register contents. This=20
-clears the INTERVAL bits (15:8) to 0 and zeroes out other status bits, whic=
-h=20
-might erase configuration previously set by the bootloader.
-
-> +
-> +	hwmon_dev =3D devm_hwmon_device_register_with_info(&pdev->dev, "mpfs_tv=
-s",
-> +							 data,
-> +							 &mpfs_tvs_chip_info,
-> +							 NULL);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260603-ongoing-br=
-unette-51e35be6d93e@spud?part=3D1
