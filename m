@@ -1,96 +1,87 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7387644D022
-	for <linux-hwmon@vger.kernel.org>; Wed,  3 Jun 2026 11:11:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2133388881;
+	Wed,  3 Jun 2026 11:35:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780485069; cv=none; b=ebjcFrw1Y+iQXci5K24GMNTooTiBumk9Ma2gNoFaqDb8j1GPWV95lvPbtSs8wZh1OazHx7EekZqO0/VDn4892C/zmQ32YN58TW/uPfyOaw0ehC9rxoBK4s262GvbPg8aj8Jap7Wqy1iAqX5bxh5aCuIBsqb8CgOAbHFhpFtmRqo=
+	t=1780486527; cv=none; b=cVSRPFf6DwbdObabLvoAndPvCZEdhwHHWKE5hzCsJCGb0K5Zlt16orV5cL2mwk0m/wPq3gBIdCDOmC2rYQvcNnqPY58F6Q1I7K+yo7imRPEtw6qTedAmGug+FFXzKXR66xiCZAURvdL1LqWsMDcnF9Ugdg8Gc9wghJiOFcQblsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780485069; c=relaxed/simple;
-	bh=WcNNAU1CzyMhLQPUzeNOT5YaIzTDhHnYSoCbUL6lcwo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DpRHXRgqFZTNespKgpy+YATkaSmstr4BiU+zw/Dv4BiIA/i6D4Jk0Dx2Mht+mQieIfnIEnLp0fiA634dd+hDWY8eQ9m8hmAOcOX8yFbalN4mxPGU11Q07wWOEmBFpZ9wcjaJh+ViXJ/r7CeVAuD0kpczQqJti5uqUQcC9Hfn8ug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=BuQm/JuQ; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1780486527; c=relaxed/simple;
+	bh=L+fggEAvnIpbpkWXrZHlhCs7DGtNIhS8gj32wbrU9mw=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=hvQ0w4DbV/VrWySqn6dQxJIDUSayha3hKYvJ8FP5t28hyxLo7xCohTlKESaqjffBbjx9MhVukYsReEarmku2djX2wPoe42IvKJ+J499DEh1eBey0SbjN/ktAPoUoH3WGs3gqLdjZIoKyTfgBrEjyxXXyt17m1dpYpcM2HGpBwg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=koRQZrNf; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BuQm/JuQ"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 610131A37CC;
-	Wed,  3 Jun 2026 11:11:00 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 246635FFA8;
-	Wed,  3 Jun 2026 11:11:00 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C600B10888CCF;
-	Wed,  3 Jun 2026 13:10:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1780485059; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=vpmnkRxwaFT80g54LLIDsA4yY78yN17CLdroSULW1gc=;
-	b=BuQm/JuQurOaZbLp8umCk4vqfPARaLPvYmGVr2qwWpk1cO+igAviTmpN9Mr0qlTmCsXSKv
-	VxjhCs97yaB3uEJuWIADBbri7nMJV1CCrNHQScxwmTGTHDhPrl9MVzbor6+S2td+WRcE5P
-	VIHsccMydyS36+rCGJ4x5CWakHkA3bil9gs+B/f9vtcRTbVLqj4wNDKUFQD1rvMgd2MiUp
-	RIAidtr0BQ8uiUOQk0/9ax7iGu7zvii7ZPV4+5K2uDLpTsgCMXPKNEuNWhkr/AQlcyEZA7
-	f1AKf+8JaiP1UwWq7mB2Rd1RogYWvVT8rvdlvNCIDXT3hEBAC+d1uoSYhyfCrQ==
-From: Romain Gantois <romain.gantois@bootlin.com>
-Date: Wed, 03 Jun 2026 13:10:50 +0200
-Subject: [PATCH 2/2] hwmon: (adt7462) Add of_match_table to support
- devicetree
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="koRQZrNf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 232F61F00898;
+	Wed,  3 Jun 2026 11:35:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780486526;
+	bh=+QXiOfQEcvS7oD+1LooOvWTQClhyD757X2KRZLIKvFw=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=koRQZrNfVfMw+kTCtYRxZYXN/yRw9AoNmFkpAtzz5DkbN8aF6FprTFLN1jONShNj6
+	 7BaRu06PivBBFpdn3vtmwZOWkvk+0Hh5k2pIIdsAStbfy3rRMzGssaL11LxtgYyf+L
+	 NdyIY4HQNNIaxOnyo29cA4U6kAwTcOD1FdaNpQA890+BjQ+65JMVgE06Yjh8S89CVM
+	 MuWAVJ9xziw0MBbT9xkQC14kgnTqiqaZ6fe7PYNtYu+D/vcVYxGKIAjHhqP4kyiuXB
+	 +JRxcpUgzKuxtHBBoik5ngHOUzUUQRih1lOaafboPB9zZODI4pdAS3BzuyVQyDQutj
+	 0Uw8r8l96Gy9A==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 1/2] dt-binding: hwmon: Add binding for ADT7462
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Romain Gantois" <romain.gantois@bootlin.com>
+Cc: linux-hwmon@vger.kernel.org, conor+dt@kernel.org, robh@kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20260603-adt7462-bindings-v1-1-301304bcf774@bootlin.com>
+References: <20260603-adt7462-bindings-v1-1-301304bcf774@bootlin.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 03 Jun 2026 11:35:25 +0000
+Message-Id: <20260603113526.232F61F00898@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260603-adt7462-bindings-v1-2-301304bcf774@bootlin.com>
-References: <20260603-adt7462-bindings-v1-0-301304bcf774@bootlin.com>
-In-Reply-To: <20260603-adt7462-bindings-v1-0-301304bcf774@bootlin.com>
-To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Kory Maincent <kory.maincent@bootlin.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Romain Gantois <romain.gantois@bootlin.com>
-X-Mailer: b4 0.15.2
-X-Last-TLS-Session-Version: TLSv1.3
 
-From: Kory Maincent <kory.maincent@bootlin.com>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] Incomplete binding migration: `onnn,adt7462` is not migrated to =
+the new schema and remains in `trivial-devices.yaml`.
+--
 
-Add of_match_table to add support of devicetree probing.
+commit 8e3b73cf675c7a9534a713ae61c15469f85f0d06
+Author: Kory Maincent <kory.maincent@bootlin.com>
 
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
-Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
----
- drivers/hwmon/adt7462.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+dt-binding: hwmon: Add binding for ADT7462
 
-diff --git a/drivers/hwmon/adt7462.c b/drivers/hwmon/adt7462.c
-index 174dfee47f7a7..ef6e5252dc0a4 100644
---- a/drivers/hwmon/adt7462.c
-+++ b/drivers/hwmon/adt7462.c
-@@ -1814,10 +1814,17 @@ static const struct i2c_device_id adt7462_id[] = {
- };
- MODULE_DEVICE_TABLE(i2c, adt7462_id);
- 
-+static const struct of_device_id __maybe_unused adt7462_of_match[] = {
-+	{ .compatible = "adi,adt7462" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, adt7462_of_match);
-+
- static struct i2c_driver adt7462_driver = {
- 	.class		= I2C_CLASS_HWMON,
- 	.driver = {
- 		.name	= "adt7462",
-+		.of_match_table = of_match_ptr(adt7462_of_match),
- 	},
- 	.probe		= adt7462_probe,
- 	.id_table	= adt7462_id,
+This commit adds the ADT7462 hwmon Controller device tree bindings
+documentation.
 
--- 
-2.54.0
+> diff --git a/Documentation/devicetree/bindings/hwmon/adt7462.yaml b/Docum=
+entation/devicetree/bindings/hwmon/adt7462.yaml
+> new file mode 100644
+> index 0000000000000..745a371affd65
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/adt7462.yaml
+[ ... ]
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,adt7462
 
+[Severity: Medium]
+Should the existing onnn,adt7462 compatible string be migrated into this
+new schema?
+
+The ADT7462 device is already documented in trivial-devices.yaml under
+the compatible string onnn,adt7462, which is actively used in existing
+device trees.
+
+By introducing this new schema without including onnn,adt7462 and without
+removing it from trivial-devices.yaml, existing device trees will not
+benefit from the detailed schema validation. This also leaves the subsystem
+with two conflicting, fragmented representations of the same hardware.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260603-adt7462-bi=
+ndings-v1-0-301304bcf774@bootlin.com?part=3D1
