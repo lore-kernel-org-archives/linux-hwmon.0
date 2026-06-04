@@ -1,115 +1,111 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A1E13F0AA4;
-	Thu,  4 Jun 2026 09:04:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18CF53F7A8B
+	for <linux-hwmon@vger.kernel.org>; Thu,  4 Jun 2026 09:12:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780563852; cv=none; b=i3dwUeaV+e5FueRdvnjDpti4NOTvzaObwv46dFknLamxWtw5hfXjOZBOMjt4YJWL/pdjIKwDNKjxihjsNqxmDzg5WFm7kJcQiqnx3xIo8L2KD+CTfmDvM9lbsSfCI/srmhY0uiywWbWbRIqwkydEZ3288a5me6fLpgsho4kJwDQ=
+	t=1780564359; cv=none; b=TQtzkwWh6KPPUH00R9YWP2nl7zt/15T1Q0QLAitND4dyHpYllqVSQAYYGCIvHvKlt8Wxn4fDO3rHlQ6rJlPNWuX9UK06tnCnBCyrI2fHfbOrOrV/ZKHoLXZQMFq8OTAGyVIkEf9GUHotCwLJVhcOrBZHUc0H2XLFsOllHNCYzGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780563852; c=relaxed/simple;
-	bh=HZBFPt3AHs032vytSSq82zqyY8ui1J8IKqNS5bkFEYg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fvlSC2KvInARhSM4TGTds7WKYAzLWeGWFL2QM1cUFPidy9uAD0vBvYwNE8B7rF2Iqyxz5gG9/YVamVFWWX8QQxhJfJW8FPAMOuFr0aRd2WMW9O8vFR5a8SMVsMPjaXN5MJsfKpPeW2H368S958ooDvKhnhSm6UpT81E21jwHzAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=XZuvmnYB; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="XZuvmnYB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1780563842;
-	bh=HZBFPt3AHs032vytSSq82zqyY8ui1J8IKqNS5bkFEYg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XZuvmnYB9kIIXSt9CtsuK5/ULfpziWeWrKpTh7NnFxMW8v79O+mqTkZ43bLhY1xVo
-	 EoBKOaRQBTKdMbnVab0uxYegkB2jnLHFZ7Cce4bYXQzWvUvOPfqdNI67SQj2seAX1B
-	 D49FtvNcPc+tSRG0TMO/PU6I9sabxMIXzPVoD15M=
-Date: Thu, 4 Jun 2026 11:04:02 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: Guenter Roeck <linux@roeck-us.net>, Benson Leung <bleung@chromium.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Guenter Roeck <groeck@chromium.org>, 
-	chrome-platform@lists.linux.dev, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] hwmon: (cros_ec) Allow modification of fan curves
-Message-ID: <6a4a2d2c-4717-4cc9-8dd3-05f8b0905865@t-8ch.de>
-References: <20260529-cros_ec-hwmon-fan-curve-v1-0-da6792b3830f@weissschuh.net>
- <20260529-cros_ec-hwmon-fan-curve-v1-5-da6792b3830f@weissschuh.net>
- <87825203-0bbb-46a4-8939-a904f5a546ab@gmx.de>
+	s=arc-20240116; t=1780564359; c=relaxed/simple;
+	bh=hBi4w4J5cSDPvWKthcdaYZoF8WVOaCNp9Vr9DAsf5u0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=K7hNwkxiIq/8kzlCKNZ3sY0uis4Zf2U14NfSeOJVaAodycTyztPTmfiLrP3gIDgpgf/cXLXISSmpkbW1kWGxSTKsXflrSF1iEW3wNKyU5oMBfbH+ONpJ1zIrxfcAAX1xbwvAtJHuwoilJU2B0YEWDhpGpOeubDGfV/7bDAaWXJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1wV47i-0003qU-4b; Thu, 04 Jun 2026 11:12:22 +0200
+Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1wV47g-0013L4-2k;
+	Thu, 04 Jun 2026 11:12:20 +0200
+Received: from pza by lupine with local (Exim 4.98.2)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1wV47g-000000003X3-3Emk;
+	Thu, 04 Jun 2026 11:12:20 +0200
+Message-ID: <85e630579d97172e9bc64bce082b2d7b763a1263.camel@pengutronix.de>
+Subject: Re: [PATCH v6 2/2] hwmon: Add Eswin EIC7700 PVT sensor driver
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: hehuan1@eswincomputing.com, linux@roeck-us.net, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: ningyu@eswincomputing.com, linmin@eswincomputing.com, 
+	pinkesh.vaghela@einfochips.com, luyulin@eswincomputing.com
+Date: Thu, 04 Jun 2026 11:12:20 +0200
+In-Reply-To: <20260604080552.169-1-hehuan1@eswincomputing.com>
+References: <20260604080430.126-1-hehuan1@eswincomputing.com>
+	 <20260604080552.169-1-hehuan1@eswincomputing.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-0+deb13u1 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87825203-0bbb-46a4-8939-a904f5a546ab@gmx.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-On 2026-05-30 18:37:32+0200, Armin Wolf wrote:
-> Am 29.05.26 um 22:31 schrieb Thomas Weißschuh:
+On Do, 2026-06-04 at 16:05 +0800, hehuan1@eswincomputing.com wrote:
+> From: Huan He <hehuan1@eswincomputing.com>
+>=20
+> Add support for ESWIN EIC7700 Voltage and Temperature sensor. The driver
+> supports temperature and voltage monitoring with polynomial conversion,
+> and provides sysfs interface for sensor data access.
+>=20
+> The PVT IP contains one temperature sensor and one voltage sensor.
+>=20
+> Signed-off-by: Yulin Lu <luyulin@eswincomputing.com>
+> Signed-off-by: Huan He <hehuan1@eswincomputing.com>
+> ---
+>  drivers/hwmon/Kconfig       |  12 +
+>  drivers/hwmon/Makefile      |   1 +
+>  drivers/hwmon/eic7700-pvt.c | 495 ++++++++++++++++++++++++++++++++++++
+>  drivers/hwmon/eic7700-pvt.h |  99 ++++++++
+>  4 files changed, 607 insertions(+)
+>  create mode 100644 drivers/hwmon/eic7700-pvt.c
+>  create mode 100644 drivers/hwmon/eic7700-pvt.h
+>=20
+[...]
+> diff --git a/drivers/hwmon/eic7700-pvt.c b/drivers/hwmon/eic7700-pvt.c
+> new file mode 100644
+> index 000000000000..ea0f1299cd29
+> --- /dev/null
+> +++ b/drivers/hwmon/eic7700-pvt.c
+> @@ -0,0 +1,495 @@
+[...]
+> +static int eic7700_pvt_probe(struct platform_device *pdev)
+> +{
+> +	struct pvt_hwmon *pvt;
+> +	int ret;
+> +
+> +	pvt =3D eic7700_pvt_create_data(pdev);
+> +	if (IS_ERR(pvt))
+> +		return PTR_ERR(pvt);
+> +
+> +	platform_set_drvdata(pdev, pvt);
+> +
+> +	pvt->regs =3D devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(pvt->regs))
+> +		return PTR_ERR(pvt->regs);
+> +
+> +	pvt->clk =3D devm_clk_get(&pdev->dev, NULL);
+> +	if (IS_ERR(pvt->clk))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(pvt->clk),
+> +				     "Couldn't get clock\n");
+> +
+> +	pvt->rst =3D devm_reset_control_get_exclusive_deasserted(&pdev->dev,
+> +							       NULL);
 
-(...)
+Why store this in struct pvt_hwmon? It's not used anywhere else.
 
-> > +static ssize_t temp_auto_point_temp_store(struct device *dev, struct device_attribute *attr,
-> > +					  const char *buf, size_t size)
-> > +{
-> > +	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-> > +	struct cros_ec_hwmon_priv *priv = dev_get_drvdata(dev);
-> > +	struct ec_thermal_config config;
-> > +	u32 *temp_field;
-> > +	s64 temp;
-> > +	int ret;
-> > +
-> > +	ret = kstrtos64(buf, 10, &temp);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	temp = cros_ec_hwmon_millicelsius_to_kelvin(temp);
-> > +
-> > +	if (overflows_type(temp, config.temp_fan_off))
-> > +		return -ERANGE;
-> > +
-> > +	guard(hwmon_lock)(dev);
-> > +
-> > +	ret = cros_ec_hwmon_get_thermal_config(priv->cros_ec, sattr->index, &config);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	if (cros_ec_hwmon_attr_is_temp_fan_off(sattr))
-> > +		temp_field = &config.temp_fan_off;
-> > +	else /* temp_fan_max */
-> > +		temp_field = &config.temp_fan_max;
-> > +
-> > +	/* Only allow values which are more aggressive than the current ones */
-> > +	if (temp > *temp_field)
-> > +		return -EINVAL;
-> 
-> i think it would be more practical for users to increase and later decrease the fan curve values.
-> Could the driver copy the original fan curve configuration and use that instead? This would also
-> require to restore the original fan curve during shutdown and removal.
-
-That would be possible. We would would have to expose these limits
-through a new UAPI as otherwise the user has no way to know about them.
-Restoring the original on shutdown shouldn't be necessary, as the EC
-will reset the curves at shutdown anyways.
-
-I am not so sure that it would be generally useful though. Let's hear
-what other people think about it.
-
-> Thanks,
-> Armin Wolf
-> 
-> > +
-> > +	*temp_field = temp;
-> > +
-> > +	if (config.temp_fan_off > config.temp_fan_max)
-> > +		return -EINVAL;
-> > +
-> > +	ret = cros_ec_hwmon_set_thermal_config(priv->cros_ec, sattr->index, &config);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	return size;
-> > +}
-
-(...)
+regards
+Philipp
