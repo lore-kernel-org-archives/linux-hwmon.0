@@ -1,248 +1,223 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30F133FFAB5;
-	Thu,  4 Jun 2026 10:33:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54EA24219EA;
+	Thu,  4 Jun 2026 13:51:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780569217; cv=none; b=TQwiA4+6/4NKETu9/fcK0dP6V+2xDQdzDpqa7fHb52aQyr8tUyWZ9bNE60h6qg3Zn3L/OISdn/mpmtZdMHt6vgmsP1SYT0fDLZW3lWdKA0eP2F5NVDxMzZ9twjfW7TaSF1IEs/1FJaOg000bkETHzK9N5W/IbXDL7R1fm6XUW98=
+	t=1780581115; cv=none; b=UUKlEX45iP1J5AmOv/ngxapgiKnmM4hmt6sMyZGQ8b9d2bOGsoG9ZgYnCGvSgsd+mPNoIj3exWud1owllW+y75srlpjnfv65mDiSlkH/Q36jamTSKDKhATCvOHIBJ6K9KtOl+N/YGSn5lKIMPtMGA/67TjRZByASGLlFpuOAVWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780569217; c=relaxed/simple;
-	bh=3nwdCQ3zaD1JqgjGGQOezS8GRGUjfU8Do8N2eAP1PaA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LSqBd4p2vIhEM3VfFM6r6D62q6PCIMwMOZF0kNw+MtHn+MYppmlBPh8r4GDtr643nzuRrWO0aNwzgyOnVCgRNNk4hhGfAA8I8Mad+VhMtR8miA/tjE8H4QgvhdBC47hojA+n42d/UZ9iYFltyqnQKKPYPXnCAz8ShJl/VRsSmTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=HAPtL0u2; arc=none smtp.client-ip=212.227.15.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	s=arc-20240116; t=1780581115; c=relaxed/simple;
+	bh=cTdmqpJieRKHGaZXowXNPlqGx2BALwhboDTiLWTpksw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N7ELi01t1SqZslR9NW7zpLHRfwpoOj9eAzhxYpKyoInG1n+YO8baQov3td8ZMqvaxmw60qT8+v82kbyELDeCy9M2v5rW6OI2eMz0d2o9GmLMV3KPCH9uisRO5i34WScMHQ8eIg+TieulT4I/hUozH2K1wHx5c2tyBhnOUDHu4UQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TgxsEfmZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="HAPtL0u2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1780569209; x=1781174009; i=w_armin@gmx.de;
-	bh=NOkA9QgwCzYWgXGxpZvQo61c+kmOYZsIGFDwD1r0Cjk=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=HAPtL0u22OI4pNxSSSEqUgpRC/SnbMxHCa6f+7D0LOVq1fMjj5EvyFtVdQrZ/PWG
-	 99YQ/h9J8v5u2rq7WSUKDRh4XPkK8Zah+GYNft8bq4JTaGu7aBy9JZApIaHJCx74G
-	 SvGh0XyGVcMOaX7226mMmPTIvZjpT+NDIGmNVIM5KekMm/gBczOVGBSsYfXHsRZ2Q
-	 DxK0YAYA3UeuGeAqIRxH7kw9ui93cDtmuG5uSZ8HjR4jn28GC+qu1hFavx/BpD+AM
-	 /Hjgm2Thhmslz67M3I8cg+zY/rbDoos0POshCQPpGmfKL7JmyHcE6ZZfk62iHlzzt
-	 vaYtvWnQBHM8yRTn1w==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M3lc9-1wVMdf2iQN-0081ec; Thu, 04
- Jun 2026 12:33:28 +0200
-Message-ID: <8b8f5a9f-4a44-4e93-9ff6-c2e13a6b8797@gmx.de>
-Date: Thu, 4 Jun 2026 12:33:27 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TgxsEfmZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 326F11F00893;
+	Thu,  4 Jun 2026 13:51:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780581114;
+	bh=lRF+QmqB9DlPbjnMDVrl0P136gkTPbDYComnEEWDIUE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=TgxsEfmZ4NYxI2WgZWB6KZAEe45x4gh3wuEIFdH86ADbvWvROezwVQcLo/c4zJpDP
+	 RYYwgBC2erYIPLQ95A2xrcXOrgaR9YqSVa40fHOKMUm6d44ReBCKtXJAppkNbwXrl2
+	 yCqEWiLUe/EU/ITFsuFEvmLMoWpGTjfFgYGPLLZ1OJslAf6UjBJEoylwlfdOeKsocu
+	 8D4BpKYb8VWaQOhT/xyRtgc2ewSZxKqxiU4zFF6glWtQWrdqVGR9XRbbd7NOipTlyg
+	 WnEOTmePNhOrrtGXK5G8w18rfuXNUPByAQvcu7l6AG4zG7L0wUk/lXIOHUtRLx4Hyb
+	 3Xh7npHfrAAcQ==
+Date: Thu, 4 Jun 2026 14:51:48 +0100
+From: Lee Jones <lee@kernel.org>
+To: Oleksij Rempel <o.rempel@pengutronix.de>
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Peter Rosin <peda@axentia.se>,
+	Linus Walleij <linusw@kernel.org>, kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org,
+	David Jander <david@protonic.nl>
+Subject: Re: [PATCH v12 2/6] mfd: add NXP MC33978/MC34978 core driver
+Message-ID: <20260604135148.GB4151951@google.com>
+References: <20260515160537.115808-1-o.rempel@pengutronix.de>
+ <20260515160537.115808-3-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/5] hwmon: (cros_ec) Allow modification of fan curves
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Guenter Roeck <linux@roeck-us.net>, Benson Leung <bleung@chromium.org>,
- Shuah Khan <skhan@linuxfoundation.org>, Guenter Roeck <groeck@chromium.org>,
- chrome-platform@lists.linux.dev, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260529-cros_ec-hwmon-fan-curve-v1-0-da6792b3830f@weissschuh.net>
- <20260529-cros_ec-hwmon-fan-curve-v1-5-da6792b3830f@weissschuh.net>
- <87825203-0bbb-46a4-8939-a904f5a546ab@gmx.de>
- <6a4a2d2c-4717-4cc9-8dd3-05f8b0905865@t-8ch.de>
-Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <6a4a2d2c-4717-4cc9-8dd3-05f8b0905865@t-8ch.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:+uFlDecc9QOKyoVde3RIsrK7maIt8VNx7/TA95IeSfx2j18WkxU
- hFKlwLf+08gSMRHF5mzCag5NIlq7L1WF7V787aD/YvU5caBaeYrmJT3+yU7ZgL54Y8vYYRQ
- SI7lvGPAsT+CE5vGHOlUsxou/5iKtVnu9DCp0WThrnnYIeQkIAFEgbI6tymUqrQwO+XKu1A
- VtSi8PnPpXx7lLYWI5m6Q==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:rLxSn2090xs=;k4M3hS6QWBJ3gh0erGc5Z8Jl2z/
- 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
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260515160537.115808-3-o.rempel@pengutronix.de>
 
-Am 04.06.26 um 11:04 schrieb Thomas Wei=C3=9Fschuh:
-> On 2026-05-30 18:37:32+0200, Armin Wolf wrote:
->> Am 29.05.26 um 22:31 schrieb Thomas Wei=C3=9Fschuh:
->=20
-> (...)
->=20
->>> +static ssize_t temp_auto_point_temp_store(struct device *dev, struct =
-device_attribute *attr,
->>> +					  const char *buf, size_t size)
->>> +{
->>> +	struct sensor_device_attribute_2 *sattr =3D to_sensor_dev_attr_2(att=
-r);
->>> +	struct cros_ec_hwmon_priv *priv =3D dev_get_drvdata(dev);
->>> +	struct ec_thermal_config config;
->>> +	u32 *temp_field;
->>> +	s64 temp;
->>> +	int ret;
->>> +
->>> +	ret =3D kstrtos64(buf, 10, &temp);
->>> +	if (ret)
->>> +		return ret;
->>> +
->>> +	temp =3D cros_ec_hwmon_millicelsius_to_kelvin(temp);
->>> +
->>> +	if (overflows_type(temp, config.temp_fan_off))
->>> +		return -ERANGE;
->>> +
->>> +	guard(hwmon_lock)(dev);
->>> +
->>> +	ret =3D cros_ec_hwmon_get_thermal_config(priv->cros_ec, sattr->index=
-, &config);
->>> +	if (ret)
->>> +		return ret;
->>> +
->>> +	if (cros_ec_hwmon_attr_is_temp_fan_off(sattr))
->>> +		temp_field =3D &config.temp_fan_off;
->>> +	else /* temp_fan_max */
->>> +		temp_field =3D &config.temp_fan_max;
->>> +
->>> +	/* Only allow values which are more aggressive than the current ones=
- */
->>> +	if (temp > *temp_field)
->>> +		return -EINVAL;
->>
->> i think it would be more practical for users to increase and later decr=
-ease the fan curve values.
->> Could the driver copy the original fan curve configuration and use that=
- instead? This would also
->> require to restore the original fan curve during shutdown and removal.
->=20
-> That would be possible. We would would have to expose these limits
-> through a new UAPI as otherwise the user has no way to know about them.
-> Restoring the original on shutdown shouldn't be necessary, as the EC
-> will reset the curves at shutdown anyways.
+On Fri, 15 May 2026, Oleksij Rempel wrote:
 
-(And what about kexec?)
+> Add core Multi-Function Device (MFD) driver for the NXP MC33978 and
+> MC34978 Multiple Switch Detection Interfaces (MSDI).
+> 
+> The MC33978/MC34978 devices provide 22 switch detection inputs, analog
+> multiplexing (AMUX), and comprehensive hardware fault detection.
+> 
+> This core driver handles:
+> - SPI communications via a custom regmap bus to support the device's
+>   pipelined two-frame MISO response requirement.
+> - Power sequencing for the VDDQ (logic) and VBATP (battery) regulators.
+> - Interrupt demultiplexing, utilizing an irq_domain to provide 22 virtual
+>   IRQs for switch state changes and 1 virtual IRQ for hardware faults.
+> - Inline status harvesting from the SPI MSB to detect and trigger events
+>   without requiring dedicated status register polling.
+> 
+> Child devices (pinctrl, hwmon, mux) are instantiated by the core driver
+> from match data.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+> changes v12:
+> - Split monolithic MFD driver into two modules per maintainer feedback:
+>   * drivers/mfd/mc33978.c: Thin wrapper for SPI binding, power sequencing,
+>     and child device registration
+>   * drivers/platform/misc/mc33978-core.c: Complex core functionality
+>     including custom regmap bus, IRQ domain, and event handling
+> - Add mc33978_core_init() API exported by core module for MFD initialization
+> - Introduce CONFIG_MC33978_CORE in drivers/platform/misc/Kconfig
+> - Update CONFIG_MFD_MC33978 to select CONFIG_MC33978_CORE
+> - Add MODULE_SOFTDEP("pre: mc33978-core") to ensure correct module load order
+> - Rename struct mc33978_mfd_priv to context-specific names:
+>   * mc33978_ddata in MFD driver
+>   * mc33978_core_data in core module
+> - Rename local variables from 'mc' to 'ddata'/'cdata' for clarity
+> - Replace MC33978_DRV_NAME macro with string literal "mc33978"
+> - Convert kerneldoc (/** */) on static functions to regular comments (/* */)
+> - Adopt 100-character line limit throughout
+> - Fix misleading cacheline alignment comment ("must be at end" -> "prevent
+>   DMA corruption from adjacent fields")
+> - Document IRQ locking strategy explicitly (irq_lock mutex for regmap/SPI,
+>   irq_state_lock raw spinlock for atomic state access)
+> - Reformat header file comments from inline style to preceding style for
+>   improved readability
+> - Enhance interrupt behavior documentation with detailed datasheet references
+>   explaining INT_flg clear timing and FAULT_STAT latching behavior
+> - add .suppress_bind_attrs = true
+> changes v11:
+> - Introduce synthetic wakeup bit to prevent hardware bit overloading and
+>   avoid phantom transient faults.
+> - Add smp_mb__before_atomic() to ensure memory visibility before
+>   updating harvested_flags.
+> - Update event processing to mask synthetic bits before evaluating
+>   hardware fault conditions.
+> - Introduce fault_lock spinlock to protect fault state members.
+> - Replace manual memory barriers and READ_ONCE/WRITE_ONCE with
+>   spinlock-protected access.
+> - Introduce irq_state_lock raw spinlock to protect IRQ state fields.
+> - Replace irq_lock mutex with raw spinlock in IRQ callbacks and event
+>   handling paths.
+> - Include MC33978_REG_ENTER_LPM in volatile and precious ranges.
+> - Mark MC33978_REG_ENTER_LPM as readable to avoid regcache sync writes.
+> changes v10:
+> - Refactor IRQ setup into a common helper to unify the .map and .alloc
+>   code paths.
+> - Enable hierarchical IRQ support to allow integration with the
+>   pinctrl/GPIO child domain.
+> - Simplify event handling by removing redundant boolean return values
+>   from internal handlers.
+> - Fix IRQ cleanup by disposing of all active mappings before removing
+>   the IRQ domain.
+> - Standardize IRQ constants using MC33978_NUM_IRQS for consistent domain
+>   sizing and bounds checks.
+> changes v9:
+> - Fix null irq_domain dereference from debugfs race by initializing IRQ domain
+>   early before regmap initialization.
+> - Refactor mc33978_handle_fault_condition() to improve readability by keeping
+>   variable declarations at the top and adding inline comments.
+> - Fix spurious transient fault events caused by redundant STAT_FAULT flags
+>   during event loop.
+> - Fix spurious interrupt loops by explicitly returning -ENODATA in
+>   mc33978_rx_decode() for registers without status bits.
+> - Validate hwirq bounds in mc33978_irq_domain_alloc() to prevent corruption
+>   of irq_rise/irq_fall bitmasks by malformed device tree inputs.
+> - set DOMAIN_BUS_NEXUS
+> - Protect work on teardown
+> - remove IRQF_SHARED
+> changes v8:
+> - Fix TOCTOU race condition in SPI event harvesting loop by grabbing
+>   harvested_flags before hardware reads.
+> - Fix broken hierarchical IRQ allocation by replacing
+>   irq_domain_set_hwirq_and_chip() with irq_domain_set_info() and passing
+>   the handle_simple_irq flow handler.
+> - Fix out-of-bounds stack read and endianness bug in for_each_set_bit() by
+>   typing fired_pins as unsigned long instead of casting u32.
+> - Prevent DMA cacheline corruption by explicitly aligning rx_frame with
+>   ____cacheline_aligned to separate it from tx_frame.
+> - Prevent spurious IRQs by verifying irq_find_mapping() returns non-zero
+>   before calling handle_nested_irq().
+> - Prevent missed transient hardware faults by explicitly evaluating
+>   hw_flags in mc33978_handle_fault_condition().
+> - Fix missing memory barrier in mc33978_harvest_status() with
+>   smp_mb__after_atomic() to ensure harvested_flags visibility.
+> - Fix devres use-after-free teardown race by using INIT_WORK and a custom
+>   cancel action after the IRQ domain is destroyed, instead of
+>   devm_work_autocancel.
+> - Prevent spurious pin interrupts on boot by priming cached_pin_state via
+>   a regmap_read() during probe before enabling IRQs.
+> - Implement .irq_set_wake callback to support system wake from
+>   hardware faults and switch state changes.
+> changes v7:
+> - Fix event handling race condition with smp_mb()
+> - Replace INIT_WORK() with devm_work_autocancel()
+> changes v6:
+> - Remove the hardcoded bypass in irq_set_type to allow child drivers to
+>   configure the FAULT line for edge-triggering.
+> - Implement software edge-detection for FAULT interrupt.
+> - Add MC33978_FAULT_ALARM_MASK to the shared header for child devices
+> - Use READ_ONCE() and WRITE_ONCE() for lockless shared state variables
+>   (cached_pin_mask, irq_rise, irq_fall, bus_fault_active,
+>   cached_fault_active) accessed across the SPI harvesting context and
+>   the event worker.
+> - Add an if (hwirq < MC33978_NUM_PINS) guard in irq_mask() and
+>   irq_unmask() to prevent the FAULT hwirq (22) from altering the
+>   physical pin mask registers.
+> - Lowercase the error strings in dev_err_probe()
+> - Add inline comments explaining the irq_map fallback behavior
+> changes v5:
+> - no changes
+> changes v4:
+> - Removed .of_compatible strings from the mfd_cell arrays
+> changes v3:
+> - Select IRQ_DOMAIN_HIERARCHY in Kconfig
+> - Add .alloc and .free callbacks to irq_domain_ops to support hierarchical
+>   IRQ domains
+> - Set IRQ_DOMAIN_FLAG_HIERARCHY flag on the core MFD irq_domain
+> - replace manual lock/unlock with guard()
+> changes v2:
+> - Rewrite the driver header comment
+> - Explicitly reject IRQ_TYPE_LEVEL_HIGH and IRQ_TYPE_LEVEL_LOW in
+>   mc33978_irq_set_type() to correctly reflect the hardware's edge-only
+>   interrupt capabilities.
+> - Pass the hardware fault IRQ to the hwmon child driver via mfd_cell
+>   resources, rather than requiring the child to parse the parent's irq_domain.
+> - Ensure the Kconfig strictly depends on OF and SPI
+> ---
+>  drivers/mfd/Kconfig                  |   15 +
+>  drivers/mfd/Makefile                 |    2 +
+>  drivers/mfd/mc33978.c                |  187 +++++
+>  include/linux/mfd/mc33978.h          |  160 ++++
 
-Ok, i myself would also interested in having a UAPI for communicating=20
-fan curve constraints to userspace as i am planning to add a similar=20
-feature to the uniwill-laptop driver.
+This is one patch.
 
-I can think of two approaches:
+>  drivers/platform/Kconfig             |    2 +
+>  drivers/platform/Makefile            |    1 +
+>  drivers/platform/misc/Kconfig        |   10 +
+>  drivers/platform/misc/Makefile       |    6 +
+>  drivers/platform/misc/mc33978-core.c | 1106 ++++++++++++++++++++++++++
 
-1. Clamp the values into the supported range, userspace will have to=20
-read back the written value to know the current setting.
+This should be in another.
 
-2. Introducing a new tempX_auto_pointY_temp_min attribute to communicate=
-=20
-the constraint to userspace.
+>  9 files changed, 1489 insertions(+)
+>  create mode 100644 drivers/mfd/mc33978.c
+>  create mode 100644 drivers/platform/misc/Kconfig
+>  create mode 100644 drivers/platform/misc/Makefile
+>  create mode 100644 drivers/platform/misc/mc33978-core.c
+>  create mode 100644 include/linux/mfd/mc33978.h
 
-Guenter, do you have a preference for one of the approaches? Personally
-i would prefer approach number 2.
-
->=20
-> I am not so sure that it would be generally useful though. Let's hear
-> what other people think about it.
-
-The uniwill-laptop driver will (likely) gain support for a similar=20
-feature in the future, so having such a UAPI would be beneficial.
-
-Thanks,
-Armin Wolf
-
->> Thanks,
->> Armin Wolf
->>
->>> +
->>> +	*temp_field =3D temp;
->>> +
->>> +	if (config.temp_fan_off > config.temp_fan_max)
->>> +		return -EINVAL;
->>> +
->>> +	ret =3D cros_ec_hwmon_set_thermal_config(priv->cros_ec, sattr->index=
-, &config);
->>> +	if (ret)
->>> +		return ret;
->>> +
->>> +	return size;
->>> +}
->=20
-> (...)
->=20
-
+-- 
+Lee Jones
