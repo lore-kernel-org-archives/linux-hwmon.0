@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2097C3D47D9
-	for <linux-hwmon@vger.kernel.org>; Fri,  5 Jun 2026 18:52:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691BD409E0A
+	for <linux-hwmon@vger.kernel.org>; Fri,  5 Jun 2026 19:01:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780685569; cv=none; b=OHRBsuzYBYiz582Un/4x6eGLl00239vRZ3NFW1BZVmDcSar5ajVEvWG26ILBvpZYYtR8OzprTxQSMSPZUhWPGjmyYK9jRHHKfxNyA5PpsqGjGtkYBxUjCCem45ZNmDLbIn43sHKxy6GiPmIKaq6hLoz5KCCjWHUyXi4Zisb131A=
+	t=1780686111; cv=none; b=fJ0r2GzoWsYxdXuuEFd9gi/72GxRbEFYT/+CNgBVoZTmrF0ZBYgxKBkJ1YexdSCiNEda41AS/UzbrTx2T8wTTx4AxnvRC5WYYQAppP5JsOKCrAZGaj3ZyDb//iICoCL+Z7+cNRi0BGHBDZT5zxhBAtFbKn/+x4z9ZF29BYnOcBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780685569; c=relaxed/simple;
-	bh=/Q2p0gVkhBjgkHUgnr3Ir0nNnQSTusifZsVdw+xP2RI=;
+	s=arc-20240116; t=1780686111; c=relaxed/simple;
+	bh=Y/Na9Gmk3Wd/Gt0/0mdbEtIYATx73hliQRw2Wk5XHoU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=aJZu49plSoxP1c+c9aGjcdXhVySLBzeE38ohoe5uPxRgqjM6MsfYjodnABnBYNejMWOZV303yMonOcjqzcF82XcyigXCd76xXJ7iNO4dEBDSzkPIruPpsSH3eIJYVMFFB+bzFYuSLVAwN3yYu0yJ1bR20EYEviAYbkbLXZ/erNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VjPCdp5M; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=WXz1J6JentASkkBybjLqRN+avKlHLY+qityppVnjK+UvpkBX6W5HYhR7vR0YJB2UjaaZeB5og3GreocmJEZZ0zMF9K4qpejYfxb8IeACfV4WD1b+7xg1+kwNf7/prZDuV6ckjJyzLRjVDISsPWFKWotk4eINkkv1oPtgTrgMVWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e7FOWqla; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VjPCdp5M"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BCCB1F00893;
-	Fri,  5 Jun 2026 18:52:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e7FOWqla"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A0D81F00893;
+	Fri,  5 Jun 2026 19:01:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780685567;
-	bh=Gmg2qhh/eTH6qpqMy+rKgn9d5+BjnSuwRorv/ZcXWHA=;
+	s=k20260515; t=1780686106;
+	bh=MJh9414+mmde2DarDvT5I0be/nOZIxCMpMdxH8OzA88=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=VjPCdp5MzuYKm0/OWoYbCMNxP07QFd6p7AhWeRYoaRbYmgr/TXshety3KwJKFcztZ
-	 aUkl3s0Q3vHDafRiqIxPPS+wYH9QNme4xhWRkhvwe7eDaU0BlG22+MZtxHZ1FPB3j2
-	 /DpuZ2vBgFVjuE6kFI8Qg5gHgfFgEb66xBfjQ0qM+upXHQy3ROTx4FYwl9JLj/ZSvI
-	 ALITRy2C0kIYA3DloOhvkE/l94X/OPTEAoVW+V6IpvlQjJqXywE6xuSd0yy/MstWl+
-	 4vi95n3VklbhnD+vnRL6ScAnf1BhE8FT/NE5kZDv4o3i/URmS3ZJw4riZNAGlnpmn5
-	 tUUgOol/EnbaA==
+	b=e7FOWqla7vQ8OTZFXatHUEqxkHg3UPVrdTlbGXU46E86JmX2VdWN5IIOqIApWf6K7
+	 lyjBugaE9TKkwN70EdMhBYzXUzbqm3RsEnkpCK7kwRxPzIxueiLR6lY6pIyKs+ZvRN
+	 t9At9HnMyscjlxhUtlhwG9HqE33rGfqK3OtZDSnvyQ8/rIHOUn/UIANoYgVybhnHjd
+	 8MreX6QfAB7xoXMTeqMMtWoNosB4SI7A+fiKM5+QlSIpkeZIELPXdm3RinwhB5QXrt
+	 0mp/M1QTMFiUe74zd6fpcmwgllvEx0pK/Lw0sIewwyr+irtx+VjAkN5gGC1TWjfgo5
+	 pWIJmEaMh6BJA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 4/9] platform/x86: dell-wmi-base: Use new
- buffer-based WMI API
+Subject: Re: [PATCH v4 5/9] platform/x86: dell-ddv: Use new buffer-based WMI
+ API
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Armin Wolf" <W_Armin@gmx.de>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260605181433.188847-5-W_Armin@gmx.de>
-References: <20260605181433.188847-5-W_Armin@gmx.de>
+In-Reply-To: <20260605181433.188847-6-W_Armin@gmx.de>
+References: <20260605181433.188847-6-W_Armin@gmx.de>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 05 Jun 2026 18:52:46 +0000
-Message-Id: <20260605185247.3BCCB1F00893@smtp.kernel.org>
+Date: Fri, 05 Jun 2026 19:01:46 +0000
+Message-Id: <20260605190146.9A0D81F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -46,62 +46,137 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] Out-of-bounds memory read in `dell_wmi_process_key()` when process=
-ing eprivacy events with short buffers.
+- [High] WMI query wrapper functions crash when the underlying ACPI method =
+returns no data (ZERO_SIZE_PTR dereference).
 --
 
-commit 24a36598ab5922d657cacfad988fd975e31c5cd6
+commit 9a4b15969c05e28f24a154f47da550f56ba01716
 Author: Armin Wolf <W_Armin@gmx.de>
 
-platform/x86: dell-wmi-base: Use new buffer-based WMI API
-
+platform/x86: dell-ddv: Use new buffer-based WMI API
+   =20
 Use the new buffer-based WMI API to also support ACPI firmware
-implementations that do not use ACPI buffers for the event data.
+implementations that do not use ACPI intergers/strings/packages
+for exchanging data.
 
-> diff --git a/drivers/platform/x86/dell/dell-wmi-base.c b/drivers/platform=
-/x86/dell/dell-wmi-base.c
-> --- a/drivers/platform/x86/dell/dell-wmi-base.c
-> +++ b/drivers/platform/x86/dell/dell-wmi-base.c
-
+> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/=
+x86/dell/dell-wmi-ddv.c
+> index 62e3d060f0385..c2120d8ae2988 100644
+> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
+> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
 [ ... ]
-
-> @@ -446,15 +448,15 @@ static int dell_wmi_process_key(struct wmi_device *=
-wdev, int type, int code, u16
->  	} else if (type =3D=3D 0x0011 && code =3D=3D 0xe070 && remaining > 0) {
->  		dell_wmi_switch_event(&priv->tabletswitch_dev,
->  				      "Dell tablet mode switch",
-> -				      SW_TABLET_MODE, !buffer[0]);
-> +				      SW_TABLET_MODE, !le16_to_cpu(buffer[0]));
->  		return 1;
->  	} else if (type =3D=3D 0x0012 && code =3D=3D 0x000c && remaining > 0) {
->  		/* Eprivacy toggle, switch to "on" key entry for on events */
-> -		if (buffer[0] =3D=3D 2)
-> +		if (le16_to_cpu(buffer[0]) =3D=3D 2)
->  			key++;
->  		used =3D 1;
->  	} else if (type =3D=3D 0x0012 && code =3D=3D 0x000d && remaining > 0) {
-> -		value =3D (buffer[2] =3D=3D 2);
-> +		value =3D (le16_to_cpu(buffer[2]) =3D=3D 2);
+> @@ -158,105 +164,96 @@ static const char * const fan_dock_labels[] =3D {
+[ ... ]
+>  static int dell_wmi_ddv_query_integer(struct wmi_device *wdev, enum dell=
+_ddv_method method,
+>  				      u32 arg, u32 *res)
+>  {
+> -	union acpi_object *obj;
+> +	__le32 *argr __free(kfree) =3D NULL;
+> +	struct wmi_buffer output;
+>  	int ret;
+> =20
+> -	ret =3D dell_wmi_ddv_query_type(wdev, method, arg, &obj, ACPI_TYPE_INTE=
+GER);
+> +	ret =3D dell_wmi_ddv_query(wdev, method, arg, &output, sizeof(*argr));
+>  	if (ret < 0)
+>  		return ret;
+> =20
+> -	if (obj->integer.value <=3D U32_MAX)
+> -		*res =3D (u32)obj->integer.value;
+> -	else
+> -		ret =3D -ERANGE;
+> -
+> -	kfree(obj);
+> +	argr =3D output.data;
+> +	*res =3D le32_to_cpu(*argr);
 
 [Severity: High]
-This is a pre-existing issue, but does this bounds check fully protect
-against an out-of-bounds read?
+Can this result in a ZERO_SIZE_PTR dereference?
 
-The condition checks if remaining > 0, but the code then accesses buffer[2].
+If wmidev_invoke_method() evaluates the ACPI method successfully but it
+returns no object, it returns 0 (success) and sets output.data to
+ZERO_SIZE_PTR. Since this function only checks if ret < 0, does this
+unconditionally dereference ZERO_SIZE_PTR if the firmware returns no data?
 
-If dell_wmi_notify() encounters an event with len =3D=3D 4, it will call
-dell_wmi_process_key() with a remaining length of 1. This satisfies the
-check here, but causes the assignment to read two words past the end of the
-WMI event boundary.
+> =20
+> -	return ret;
+> +	return 0;
+>  }
+> =20
+>  static int dell_wmi_ddv_query_buffer(struct wmi_device *wdev, enum dell_=
+ddv_method method,
+> -				     u32 arg, union acpi_object **result)
+> +				     u32 arg, struct dell_wmi_buffer **result)
+>  {
+> -	union acpi_object *obj;
+> -	u64 buffer_size;
+> +	struct dell_wmi_buffer *buffer;
+> +	struct wmi_buffer output;
+> +	size_t buffer_size;
+>  	int ret;
+> =20
+> -	ret =3D dell_wmi_ddv_query_type(wdev, method, arg, &obj, ACPI_TYPE_PACK=
+AGE);
+> +	ret =3D dell_wmi_ddv_query(wdev, method, arg, &output, sizeof(*buffer));
+>  	if (ret < 0)
+>  		return ret;
+> =20
+> -	if (obj->package.count !=3D 2 ||
+> -	    obj->package.elements[0].type !=3D ACPI_TYPE_INTEGER ||
+> -	    obj->package.elements[1].type !=3D ACPI_TYPE_BUFFER) {
+> -		ret =3D -ENOMSG;
+> -
+> -		goto err_free;
+> -	}
+> -
+> -	buffer_size =3D obj->package.elements[0].integer.value;
+> -
+> -	if (!buffer_size) {
+> +	buffer =3D output.data;
+> +	if (!le32_to_cpu(buffer->raw_size)) {
 
-Could an unexpectedly short WMI event trigger a page fault here?
+[Severity: High]
+Similarly, does this dereference buffer->raw_size when buffer is ZERO_SIZE_=
+PTR
+if the underlying ACPI method returns no data?
 
->  		used =3D 1;
->  	}
->
+[ ... ]
+> -static int dell_wmi_ddv_query_string(struct wmi_device *wdev, enum dell_=
+ddv_method method,
+> -				     u32 arg, union acpi_object **result)
+> +static ssize_t dell_wmi_ddv_query_string(struct wmi_device *wdev, enum d=
+ell_ddv_method method,
+> +					 u32 arg, char *buf, size_t length)
+>  {
+> -	return dell_wmi_ddv_query_type(wdev, method, arg, result, ACPI_TYPE_STR=
+ING);
+> +	struct wmi_string *str __free(kfree) =3D NULL;
+> +	struct wmi_buffer output;
+> +	size_t str_size;
+> +	int ret;
+> +
+> +	ret =3D dell_wmi_ddv_query(wdev, method, arg, &output, sizeof(*str));
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	str =3D output.data;
+> +	str_size =3D sizeof(*str) + le16_to_cpu(str->length);
+
+[Severity: High]
+Could str->length crash here for the same reason, if wmidev_invoke_method()
+returns 0 but sets output.data to ZERO_SIZE_PTR?
+
+> +	if (str_size > output.length) {
+> +		dev_warn(&wdev->dev,
+> +			 FW_WARN "WMI string size (%zu) exceeds WMI buffer size (%zu)\n",
+> +			 str_size, output.length);
+> +		return -EMSGSIZE;
+> +	}
+> +
+> +	return wmi_string_to_utf8s(str, buf, length);
+>  }
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260605181433.1888=
-47-1-W_Armin@gmx.de?part=3D4
+47-1-W_Armin@gmx.de?part=3D5
