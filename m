@@ -1,111 +1,157 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD423368299;
-	Fri,  5 Jun 2026 14:39:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11FC73C4B77
+	for <linux-hwmon@vger.kernel.org>; Fri,  5 Jun 2026 14:43:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780670393; cv=none; b=h9uBj7otwSdKHfotJh70vJhKDLFz1mUd7yKS137DLDmnVZlr9ehp7/lz72UdgWtIH7mzqlehib3BpV/PAkrX8unC6b3VZLpv4KyBwL6xNsacbvMdqqzk6bzrrEuPkE02JWkhBTx/AR9LQRi3HwOwvyDiyZFjbgjOluh3s4Ak3RY=
+	t=1780670606; cv=none; b=d11nG19AhqvcGEVpKEIIAzeXijhBLHUsR8M4z6r0Yi/kcF4Wjj5ZapyD0L6P+ochfM2UYkIs4rcKx9tFB+5WfTJ1twEQSfQ67y1k3th25KXAh4pyCn6B0BI3WWd4r2qKdCMCJufy1O0+DoEAyWtNnAcgooUX8urQpZ/NIITni2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780670393; c=relaxed/simple;
-	bh=tGGVYQWaG2DkpvWm3JrwEukHfVKBSZrMyMDbAqGqXa0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RLdnLQHNRBxnFI7Xgx94GbpdHLnMFNDe1cOqdaIf1n8FFm+zInjRDzCxvVpc5YOeGKb093GtTobz7wgCtZNBKQbiMnqnmFxyRuUg5HiL18Nk63nqBcskarKnLK5Y1hxdgSGe83nZMfl/l2Ri4I1p65EO6SsWoDv9MX60tqaUYQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MYdLEsKM; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1780670606; c=relaxed/simple;
+	bh=JqbgTnbghYa1+fRv7NPNAXfW9K3kAyCUafNN0Cy4GTw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=McbB1tWmZAc9e/v4AKoBRTrbrhW+fiF+0IrQ3yUXD9HOKLiGNOjDYKz80IpJqWcOhF6lBTPc6xSIgVIKcBSB7qaG7qPfcrl0dX6JTDRTmjUPelktPyuAtiVUd275RCbsFymlOWf5G1Y9aT9LH6wxVvq7Hzsht+fKH5PaF2ZJ0xA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Z6VtePlh; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Z6VtePlh; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MYdLEsKM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780670392; x=1812206392;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tGGVYQWaG2DkpvWm3JrwEukHfVKBSZrMyMDbAqGqXa0=;
-  b=MYdLEsKMAqbTa4aKqEHxpM/oR79ik/0dM1Z/3IX8uDUhR1xIdTTyXvM9
-   ktHX4THYksJCerxzIg8iITVZC7fdxrhFV0OF+JXJrtJoI0AQ+PHQKO0S4
-   jf9r3XbLLj9r6+OKWRa+jUp3QWaN1b1jVFpbMTfFTFTxqlbJ2TZWWTSeM
-   +zOZixWA0NOTJx/+DSPZQ2/1ONzCFH5VMXaAK2j1+EV1CH2ncynBxePfW
-   JtKvajmQfI1RQv4ybk7sTxqOBFxr8MP12ERy3nZif7ua0/8vPqqPHkeKp
-   9tI47IfqfELK9r5/uCD/iPMSqHvLroi5tKw3mTayoXSZgLKmZNOPfUeK1
-   Q==;
-X-CSE-ConnectionGUID: Xp+yHLk4S++88eR1ua9Jdw==
-X-CSE-MsgGUID: And7iO9ASHa5DIYRr/+VJA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11807"; a="81564161"
-X-IronPort-AV: E=Sophos;i="6.24,188,1774335600"; 
-   d="scan'208";a="81564161"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2026 07:39:51 -0700
-X-CSE-ConnectionGUID: 91cfdvQtTb6Sjw2BUk+p+A==
-X-CSE-MsgGUID: Ko5gEoa1TfK7dQiOOQDf6w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,188,1774335600"; 
-   d="scan'208";a="238505062"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 05 Jun 2026 07:39:47 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wVVi4-00000000G82-1jKW;
-	Fri, 05 Jun 2026 14:39:44 +0000
-Date: Fri, 5 Jun 2026 22:39:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Adam Young <admiyo@os.amperecomputing.com>,
-	Sudeep Holla <sudeep.holla@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Z6VtePlh";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Z6VtePlh"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 3EEA075994;
+	Fri,  5 Jun 2026 14:43:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1780670598; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=HpEOzfpzcjzuP0x4lxSBQMRU2YmRM4anktQcV8bpWBY=;
+	b=Z6VtePlhr3n+CGOw77JXL7ecovNWHrwVnpWnqln7iXDvVvsb2E5V7l69oXNBNOIcbgWfJR
+	WKssSG1wBKeCWHnV/U7kFE/V2rp1lse9tdbd18o49yDH8ul/X8T5+7/mIcCA8K4SNn3Q5q
+	sV+f0+smO5b9SbavaiChS5d35Wz8YWk=
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1780670598; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=HpEOzfpzcjzuP0x4lxSBQMRU2YmRM4anktQcV8bpWBY=;
+	b=Z6VtePlhr3n+CGOw77JXL7ecovNWHrwVnpWnqln7iXDvVvsb2E5V7l69oXNBNOIcbgWfJR
+	WKssSG1wBKeCWHnV/U7kFE/V2rp1lse9tdbd18o49yDH8ul/X8T5+7/mIcCA8K4SNn3Q5q
+	sV+f0+smO5b9SbavaiChS5d35Wz8YWk=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 86193779A8;
+	Fri,  5 Jun 2026 14:43:17 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id LLeIH4XgImrdWwAAD6G6ig
+	(envelope-from <jgross@suse.com>); Fri, 05 Jun 2026 14:43:17 +0000
+From: Juergen Gross <jgross@suse.com>
+To: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	x86@kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-perf-users@vger.kernel.org
+Cc: Juergen Gross <jgross@suse.com>,
+	Huang Rui <ray.huang@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Perry Yuan <perry.yuan@amd.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Saket Dumbre <saket.dumbre@intel.com>, Len Brown <lenb@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-acpi@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Tony Luck <tony.luck@intel.com>,
 	Guenter Roeck <linux@roeck-us.net>,
-	Huisong Li <lihuisong@huawei.com>,
-	MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v01] mailbox/pcc.c:  add query channel function
-Message-ID: <202606052232.LAlOTWJr-lkp@intel.com>
-References: <20260604203749.168752-1-admiyo@os.amperecomputing.com>
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>
+Subject: [PATCH v2 00/10] x86/msr: Drop 32-bit variants of *_on_cpu() MSR functions
+Date: Fri,  5 Jun 2026 16:43:04 +0200
+Message-ID: <20260605144314.3031049-1-jgross@suse.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260604203749.168752-1-admiyo@os.amperecomputing.com>
+Content-Transfer-Encoding: 8bit
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[32];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	R_RATELIMIT(0.00)[to_ip_from(RLfdszjqhz8kzzb9uwpzdm8png)];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:mid,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Level: 
+X-Spam-Score: -2.80
 
-Hi Adam,
+Drop the variants using 2 32-bit values instead of a single 64-bit one
+of the *_on_cpu() MSR access functions.
 
-kernel test robot noticed the following build warnings:
+Changes in V2:
+- patches 1+2 split out from other patch
+- keep the *q() variants instead of those without suffix
 
-[auto build test WARNING on jassibrar-mailbox/for-next]
-[also build test WARNING on rafael-pm/linux-next rafael-pm/bleeding-edge soc/for-next linus/master v7.1-rc6 next-20260603]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Juergen Gross (10):
+  x86/msr: Switch rdmsrl_on_cpu() users to rdmsrq_on_cpu()
+  x86/msr: Remove rdmsrl_on_cpu()
+  x86/msr: Switch rdmsr_on_cpu() users to rdmsrq_on_cpu()
+  x86/msr: Remove rdmsr_on_cpu()
+  x86/msr: Switch wrmsr_on_cpu() users to wrmsrq_on_cpu()
+  x86/msr: Remove wrmsr_on_cpu()
+  x86/msr: Switch rdmsr_safe_on_cpu() users to rdmsrq_safe_on_cpu()
+  x86/msr: Remove rdmsr_safe_on_cpu()
+  x86/msr: Switch wrmsr_safe_on_cpu() users to wrmsrq_safe_on_cpu()
+  x86/msr: Remove wrmsr_safe_on_cpu()
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Adam-Young/mailbox-pcc-c-add-query-channel-function/20260605-044323
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jassibrar/mailbox.git for-next
-patch link:    https://lore.kernel.org/r/20260604203749.168752-1-admiyo%40os.amperecomputing.com
-patch subject: [PATCH v01] mailbox/pcc.c:  add query channel function
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260605/202606052232.LAlOTWJr-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 7917772d7d61384696c61102c08c2ea158e610fa)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260605/202606052232.LAlOTWJr-lkp@intel.com/reproduce)
+ arch/x86/events/intel/ds.c                   | 11 +--
+ arch/x86/include/asm/msr.h                   | 28 +-----
+ arch/x86/kernel/cpu/mce/amd.c                |  6 +-
+ arch/x86/kernel/cpu/mce/inject.c             |  8 +-
+ arch/x86/kernel/msr.c                        |  8 +-
+ arch/x86/lib/msr-smp.c                       | 89 +++-----------------
+ drivers/cpufreq/amd-pstate.c                 |  2 +-
+ drivers/cpufreq/amd_freq_sensitivity.c       |  6 +-
+ drivers/cpufreq/p4-clockmod.c                | 32 +++----
+ drivers/cpufreq/speedstep-centrino.c         | 27 +++---
+ drivers/hwmon/coretemp.c                     | 44 +++++-----
+ drivers/hwmon/via-cputemp.c                  | 16 ++--
+ drivers/thermal/intel/intel_tcc.c            | 43 +++++-----
+ drivers/thermal/intel/x86_pkg_temp_thermal.c | 25 +++---
+ 14 files changed, 128 insertions(+), 217 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606052232.LAlOTWJr-lkp@intel.com/
+-- 
+2.54.0
 
-All warnings (new ones prefixed by >>):
-
->> Warning: drivers/mailbox/pcc.c:358 function parameter 'q_chan' not described in 'pcc_mbox_query_channel'
->> Warning: drivers/mailbox/pcc.c:358 function parameter 'subspace_id' not described in 'pcc_mbox_query_channel'
->> Warning: drivers/mailbox/pcc.c:358 function parameter 'q_chan' not described in 'pcc_mbox_query_channel'
->> Warning: drivers/mailbox/pcc.c:358 function parameter 'subspace_id' not described in 'pcc_mbox_query_channel'
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
