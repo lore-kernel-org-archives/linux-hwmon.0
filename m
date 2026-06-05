@@ -1,80 +1,77 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB4C543E490
-	for <linux-hwmon@vger.kernel.org>; Fri,  5 Jun 2026 07:08:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91733451062
+	for <linux-hwmon@vger.kernel.org>; Fri,  5 Jun 2026 07:09:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780643320; cv=none; b=u1mgp7+xEgm+WFtR0bbdQ86lPVVmY2pKiuizvxMld/ZGVR2i59evlBbPKSsEKZbsKubDAMEXhMZ3wl90olZ0Kwbjdkx+xRoSkuIIeL5NOWctBHtRCepy9tkpFEyCj0E9CGQ35xvL6aq5/c3NpBOe5LQ8YGwSlO2BtCuIG04CTks=
+	t=1780643342; cv=none; b=MUXFmiMRSG15gzl7D8oH6r7PCSC+/6xB/jBhTURN3piLhu9SI8mP7Cv6+naxt1qTjhqaBPlLyWtEL68pawv1N4yeCtMFU6h7aNnF8V7itXZE6qjXwfHPdEKI5xC7GO8DYRKWhoa2QOAm5iklFQSFC1klcktROQya3I0RWbrNCJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780643320; c=relaxed/simple;
-	bh=0UIoTA1YuIW30MLWvLQU5LibaAvWdP8+36sx1PTKlNQ=;
+	s=arc-20240116; t=1780643342; c=relaxed/simple;
+	bh=+b5lGI6OTJTQ7WSlKvVClDFgkU4sotHuXgHob7e3i2E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qys3CYidlZDh0IMtdE5xGV7mbK3fCDiwc/F3EO8qFDvLRt5JxabRhvzu8tgS/jSdG9MROrnyMmzlfasGWG44Rqe0Swx6FAANdoEYQTDxlqU8EnQ85SI0X70n6ykcz7Yc93xiDnjEVeJSKxCvlB80YUxaDpX/8x3+twxTLFB42Is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=neI8fkSj; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=neI8fkSj; arc=none smtp.client-ip=195.135.223.131
+	 MIME-Version; b=rH+KVSGnAvpJI17Me3T8mQ1vn8Ln1xXxK8RcElfB3fvTyBhfiwsJlkGHajTXa4A3q/SeaM5+T8BfzHYZKv1Vk2VsyoKe0BqhklXffUPqlRpvXqVOoZV8kLrA0HZUCwQv5buIa1J6pdvGs03gIQGYh69F0gdZYkpvzeD3Quw0HDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=s89kP9nI; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=s89kP9nI; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="neI8fkSj";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="neI8fkSj"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="s89kP9nI";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="s89kP9nI"
 Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id AF7B775948;
-	Fri,  5 Jun 2026 07:08:35 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 0EE286B110;
+	Fri,  5 Jun 2026 07:08:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1780643315; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1780643339; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=l4vezP+lFLGv9IP4Nt7OS53rqpYibW0DLuxP0s0h1R8=;
-	b=neI8fkSjonCMFSS0coMyUjQPxIdJIShxOg1A8BTVhV3yEAyWKj2SK3PDCEHvd6vesV5NeK
-	YXzPAfF/uRsv9I54b0Dk14xbX28HnNOVDBs95zICOagYURHDeYaAPi5yJwbQ+yJW0jJijO
-	LSyALk1vpbSUYoz6Yd0tyTPt5KQkdMA=
-Authentication-Results: smtp-out2.suse.de;
+	bh=OaT2986d2XxWzbkPzCUz6hTv5fv0fneF2wP8FdAGb+E=;
+	b=s89kP9nIosYJHb96H5s7M+a7j58p5h9w0a6kz5ZUmD+NevpTZe18ZvlPQhKv3cqNNeG1uB
+	aVTo7VeAyfzO3hmahDHFoYzw5njO24bil1r5jLqDK4Qwg7KqcVkvL5IVaHb6Ks17ph9R9b
+	JDhPf2H7YxOd0gyi7kp6wh7nIK9x7U0=
+Authentication-Results: smtp-out1.suse.de;
 	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1780643315; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1780643339; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=l4vezP+lFLGv9IP4Nt7OS53rqpYibW0DLuxP0s0h1R8=;
-	b=neI8fkSjonCMFSS0coMyUjQPxIdJIShxOg1A8BTVhV3yEAyWKj2SK3PDCEHvd6vesV5NeK
-	YXzPAfF/uRsv9I54b0Dk14xbX28HnNOVDBs95zICOagYURHDeYaAPi5yJwbQ+yJW0jJijO
-	LSyALk1vpbSUYoz6Yd0tyTPt5KQkdMA=
+	bh=OaT2986d2XxWzbkPzCUz6hTv5fv0fneF2wP8FdAGb+E=;
+	b=s89kP9nIosYJHb96H5s7M+a7j58p5h9w0a6kz5ZUmD+NevpTZe18ZvlPQhKv3cqNNeG1uB
+	aVTo7VeAyfzO3hmahDHFoYzw5njO24bil1r5jLqDK4Qwg7KqcVkvL5IVaHb6Ks17ph9R9b
+	JDhPf2H7YxOd0gyi7kp6wh7nIK9x7U0=
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 4F7E8779A8;
-	Fri,  5 Jun 2026 07:08:35 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id AEE9B779A8;
+	Fri,  5 Jun 2026 07:08:58 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 6+JbEvN1ImqIHQAAD6G6ig
-	(envelope-from <jgross@suse.com>); Fri, 05 Jun 2026 07:08:35 +0000
+	id 0up/KQp2ImojHgAAD6G6ig
+	(envelope-from <jgross@suse.com>); Fri, 05 Jun 2026 07:08:58 +0000
 From: Juergen Gross <jgross@suse.com>
 To: linux-kernel@vger.kernel.org,
 	x86@kernel.org,
-	linux-edac@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
+	linux-hwmon@vger.kernel.org,
+	linux-pm@vger.kernel.org
 Cc: Juergen Gross <jgross@suse.com>,
 	Thomas Gleixner <tglx@kernel.org>,
 	Ingo Molnar <mingo@redhat.com>,
 	Borislav Petkov <bp@alien8.de>,
 	Dave Hansen <dave.hansen@linux.intel.com>,
 	"H. Peter Anvin" <hpa@zytor.com>,
-	Tony Luck <tony.luck@intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
 	Guenter Roeck <linux@roeck-us.net>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
 	Daniel Lezcano <daniel.lezcano@kernel.org>,
 	Zhang Rui <rui.zhang@intel.com>,
 	Lukasz Luba <lukasz.luba@arm.com>
-Subject: [PATCH 1/8] x86/msr: Switch rdmsr_on_cpu() to return a 64-bit quantity
-Date: Fri,  5 Jun 2026 09:08:19 +0200
-Message-ID: <20260605070826.2995913-2-jgross@suse.com>
+Subject: [PATCH 5/8] x86/msr: Switch rdmsr_safe_on_cpu() to return a 64-bit quantity
+Date: Fri,  5 Jun 2026 09:08:23 +0200
+Message-ID: <20260605070826.2995913-6-jgross@suse.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260605070826.2995913-1-jgross@suse.com>
 References: <20260605070826.2995913-1-jgross@suse.com>
@@ -95,11 +92,11 @@ X-Spamd-Result: default: False [-6.80 / 50.00];
 	R_MISSING_CHARSET(0.50)[];
 	NEURAL_HAM_SHORT(-0.20)[-1.000];
 	MIME_GOOD(-0.10)[text/plain];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.com:email,suse.com:mid];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.com:mid,intel.com:url,imap1.dmz-prg2.suse.org:helo];
 	ARC_NA(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[18];
+	RCPT_COUNT_TWELVE(0.00)[15];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FUZZY_RATELIMITED(0.00)[rspamd.com];
 	FROM_HAS_DN(0.00)[];
@@ -111,420 +108,408 @@ X-Spamd-Result: default: False [-6.80 / 50.00];
 	RCVD_TLS_ALL(0.00)[]
 X-Spam-Level: 
 
-In order to prepare retiring rdmsrq_on_cpu() switch rdmsr_on_cpu() to
-have the same interface as rdmsrq_on_cpu().
+In order to prepare retiring rdmsrq_safe_on_cpu() switch
+rdmsr_safe_on_cpu() to have the same interface as rdmsrq_safe_on_cpu().
 
-Switch all rdmsr_on_cpu() callers to use the new interface.
+Switch all rdmsr_safe_on_cpu() callers to use the new interface.
 
 Signed-off-by: Juergen Gross <jgross@suse.com>
 ---
- arch/x86/include/asm/msr.h                   |  8 ++---
- arch/x86/kernel/cpu/mce/amd.c                |  6 ++--
- arch/x86/kernel/cpu/mce/inject.c             |  8 ++---
- arch/x86/lib/msr-smp.c                       |  5 ++-
- drivers/cpufreq/amd_freq_sensitivity.c       |  4 +--
- drivers/cpufreq/p4-clockmod.c                | 32 ++++++++++----------
- drivers/cpufreq/speedstep-centrino.c         | 27 +++++++++--------
- drivers/hwmon/coretemp.c                     | 12 ++++----
- drivers/thermal/intel/x86_pkg_temp_thermal.c | 22 ++++++++------
- 9 files changed, 63 insertions(+), 61 deletions(-)
+ arch/x86/include/asm/msr.h        |  7 +++--
+ arch/x86/kernel/msr.c             |  4 +--
+ arch/x86/lib/msr-smp.c            |  9 +++----
+ drivers/hwmon/coretemp.c          | 32 +++++++++++------------
+ drivers/hwmon/via-cputemp.c       | 16 ++++++------
+ drivers/thermal/intel/intel_tcc.c | 43 ++++++++++++++++---------------
+ 6 files changed, 54 insertions(+), 57 deletions(-)
 
 diff --git a/arch/x86/include/asm/msr.h b/arch/x86/include/asm/msr.h
-index 9c2ea29e12a9..fcdaeddf4337 100644
+index c0a3bfba6b56..b3b43bc04b69 100644
 --- a/arch/x86/include/asm/msr.h
 +++ b/arch/x86/include/asm/msr.h
-@@ -256,7 +256,7 @@ int msr_set_bit(u32 msr, u8 bit);
- int msr_clear_bit(u32 msr, u8 bit);
- 
- #ifdef CONFIG_SMP
--int rdmsr_on_cpu(unsigned int cpu, u32 msr_no, u32 *l, u32 *h);
-+int rdmsr_on_cpu(unsigned int cpu, u32 msr_no, u64 *q);
- int wrmsr_on_cpu(unsigned int cpu, u32 msr_no, u32 l, u32 h);
- int rdmsrq_on_cpu(unsigned int cpu, u32 msr_no, u64 *q);
- int wrmsrq_on_cpu(unsigned int cpu, u32 msr_no, u64 q);
-@@ -269,9 +269,9 @@ int wrmsrq_safe_on_cpu(unsigned int cpu, u32 msr_no, u64 q);
- int rdmsr_safe_regs_on_cpu(unsigned int cpu, u32 regs[8]);
- int wrmsr_safe_regs_on_cpu(unsigned int cpu, u32 regs[8]);
- #else  /*  CONFIG_SMP  */
--static inline int rdmsr_on_cpu(unsigned int cpu, u32 msr_no, u32 *l, u32 *h)
-+static inline int rdmsr_on_cpu(unsigned int cpu, u32 msr_no, u64 *q)
+@@ -260,7 +260,7 @@ int rdmsr_on_cpu(unsigned int cpu, u32 msr_no, u64 *q);
+ int wrmsr_on_cpu(unsigned int cpu, u32 msr_no, u64 q);
+ void rdmsr_on_cpus(const struct cpumask *mask, u32 msr_no, struct msr __percpu *msrs);
+ void wrmsr_on_cpus(const struct cpumask *mask, u32 msr_no, struct msr __percpu *msrs);
+-int rdmsr_safe_on_cpu(unsigned int cpu, u32 msr_no, u32 *l, u32 *h);
++int rdmsr_safe_on_cpu(unsigned int cpu, u32 msr_no, u64 *q);
+ int wrmsr_safe_on_cpu(unsigned int cpu, u32 msr_no, u32 l, u32 h);
+ int rdmsrq_safe_on_cpu(unsigned int cpu, u32 msr_no, u64 *q);
+ int wrmsrq_safe_on_cpu(unsigned int cpu, u32 msr_no, u64 q);
+@@ -287,10 +287,9 @@ static inline void wrmsr_on_cpus(const struct cpumask *m, u32 msr_no,
  {
--	rdmsr(msr_no, *l, *h);
-+	rdmsrq(msr_no, *q);
- 	return 0;
+ 	wrmsr_on_cpu(0, msr_no, raw_cpu_read(msrs->q));
  }
- static inline int wrmsr_on_cpu(unsigned int cpu, u32 msr_no, u32 l, u32 h)
-@@ -292,7 +292,7 @@ static inline int wrmsrq_on_cpu(unsigned int cpu, u32 msr_no, u64 q)
- static inline void rdmsr_on_cpus(const struct cpumask *m, u32 msr_no,
- 				struct msr __percpu *msrs)
+-static inline int rdmsr_safe_on_cpu(unsigned int cpu, u32 msr_no,
+-				    u32 *l, u32 *h)
++static inline int rdmsr_safe_on_cpu(unsigned int cpu, u32 msr_no, u64 *q)
  {
--	rdmsr_on_cpu(0, msr_no, raw_cpu_ptr(&msrs->l), raw_cpu_ptr(&msrs->h));
-+	rdmsr_on_cpu(0, msr_no, raw_cpu_ptr(&msrs->q));
+-	return rdmsr_safe(msr_no, l, h);
++	return rdmsrq_safe(msr_no, q);
  }
- static inline void wrmsr_on_cpus(const struct cpumask *m, u32 msr_no,
- 				struct msr __percpu *msrs)
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 6605a0224659..580e90e74e9e 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -969,13 +969,13 @@ store_threshold_limit(struct threshold_block *b, const char *buf, size_t size)
- 
- static ssize_t show_error_count(struct threshold_block *b, char *buf)
+ static inline int wrmsr_safe_on_cpu(unsigned int cpu, u32 msr_no, u32 l, u32 h)
  {
--	u32 lo, hi;
-+	struct msr val;
- 
- 	/* CPU might be offline by now */
--	if (rdmsr_on_cpu(b->cpu, b->address, &lo, &hi))
-+	if (rdmsr_on_cpu(b->cpu, b->address, &val.q))
- 		return -ENODEV;
- 
--	return sprintf(buf, "%u\n", ((hi & THRESHOLD_MAX) -
-+	return sprintf(buf, "%u\n", ((val.h & THRESHOLD_MAX) -
- 				     (THRESHOLD_MAX - b->threshold_limit)));
- }
- 
-diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-index d02c4f556cd0..fa13a8a4946b 100644
---- a/arch/x86/kernel/cpu/mce/inject.c
-+++ b/arch/x86/kernel/cpu/mce/inject.c
-@@ -316,18 +316,18 @@ static struct notifier_block inject_nb = {
-  */
- static int toggle_hw_mce_inject(unsigned int cpu, bool enable)
+diff --git a/arch/x86/kernel/msr.c b/arch/x86/kernel/msr.c
+index 4469c784eaa0..c9429a718810 100644
+--- a/arch/x86/kernel/msr.c
++++ b/arch/x86/kernel/msr.c
+@@ -53,7 +53,7 @@ static ssize_t msr_read(struct file *file, char __user *buf,
+ 			size_t count, loff_t *ppos)
  {
--	u32 l, h;
-+	struct msr val;
- 	int err;
+ 	u32 __user *tmp = (u32 __user *) buf;
+-	u32 data[2];
++	u64 data;
+ 	u32 reg = *ppos;
+ 	int cpu = iminor(file_inode(file));
+ 	int err = 0;
+@@ -63,7 +63,7 @@ static ssize_t msr_read(struct file *file, char __user *buf,
+ 		return -EINVAL;	/* Invalid chunk size */
  
--	err = rdmsr_on_cpu(cpu, MSR_K7_HWCR, &l, &h);
-+	err = rdmsr_on_cpu(cpu, MSR_K7_HWCR, &val.q);
- 	if (err) {
- 		pr_err("%s: error reading HWCR\n", __func__);
- 		return err;
- 	}
- 
--	enable ? (l |= BIT(18)) : (l &= ~BIT(18));
-+	enable ? (val.l |= BIT(18)) : (val.l &= ~BIT(18));
- 
--	err = wrmsr_on_cpu(cpu, MSR_K7_HWCR, l, h);
-+	err = wrmsr_on_cpu(cpu, MSR_K7_HWCR, val.l, val.h);
- 	if (err)
- 		pr_err("%s: error writing HWCR\n", __func__);
- 
+ 	for (; count; count -= 8) {
+-		err = rdmsr_safe_on_cpu(cpu, reg, &data[0], &data[1]);
++		err = rdmsr_safe_on_cpu(cpu, reg, &data);
+ 		if (err)
+ 			break;
+ 		if (copy_to_user(tmp, &data, 8)) {
 diff --git a/arch/x86/lib/msr-smp.c b/arch/x86/lib/msr-smp.c
-index b8f63419e6ae..6e04aabda863 100644
+index 42d42641f2aa..0dc3921e0259 100644
 --- a/arch/x86/lib/msr-smp.c
 +++ b/arch/x86/lib/msr-smp.c
-@@ -31,7 +31,7 @@ static void __wrmsr_on_cpu(void *info)
- 	wrmsr(rv->msr_no, reg->l, reg->h);
+@@ -131,7 +131,7 @@ static void __wrmsr_safe_on_cpu(void *info)
+ 	rv->err = wrmsr_safe(rv->msr_no, rv->reg.l, rv->reg.h);
  }
  
--int rdmsr_on_cpu(unsigned int cpu, u32 msr_no, u32 *l, u32 *h)
-+int rdmsr_on_cpu(unsigned int cpu, u32 msr_no, u64 *q)
+-int rdmsr_safe_on_cpu(unsigned int cpu, u32 msr_no, u32 *l, u32 *h)
++int rdmsr_safe_on_cpu(unsigned int cpu, u32 msr_no, u64 *q)
  {
- 	int err;
- 	struct msr_info rv;
-@@ -40,8 +40,7 @@ int rdmsr_on_cpu(unsigned int cpu, u32 msr_no, u32 *l, u32 *h)
- 
- 	rv.msr_no = msr_no;
- 	err = smp_call_function_single(cpu, __rdmsr_on_cpu, &rv, 1);
--	*l = rv.reg.l;
--	*h = rv.reg.h;
-+	*q = rv.reg.q;
+ 	struct msr_info_completion rv;
+ 	call_single_data_t csd;
+@@ -148,8 +148,7 @@ int rdmsr_safe_on_cpu(unsigned int cpu, u32 msr_no, u32 *l, u32 *h)
+ 		wait_for_completion(&rv.done);
+ 		err = rv.msr.err;
+ 	}
+-	*l = rv.msr.reg.l;
+-	*h = rv.msr.reg.h;
++	*q = rv.msr.reg.q;
  
  	return err;
  }
-diff --git a/drivers/cpufreq/amd_freq_sensitivity.c b/drivers/cpufreq/amd_freq_sensitivity.c
-index 13fed4b9e02b..63896478dcab 100644
---- a/drivers/cpufreq/amd_freq_sensitivity.c
-+++ b/drivers/cpufreq/amd_freq_sensitivity.c
-@@ -52,9 +52,9 @@ static unsigned int amd_powersave_bias_target(struct cpufreq_policy *policy,
- 		return freq_next;
+@@ -189,11 +188,9 @@ EXPORT_SYMBOL(wrmsrq_safe_on_cpu);
  
- 	rdmsr_on_cpu(policy->cpu, MSR_AMD64_FREQ_SENSITIVITY_ACTUAL,
--		&actual.l, &actual.h);
-+		&actual.q);
- 	rdmsr_on_cpu(policy->cpu, MSR_AMD64_FREQ_SENSITIVITY_REFERENCE,
--		&reference.l, &reference.h);
-+		&reference.q);
- 	actual.h &= 0x00ffffff;
- 	reference.h &= 0x00ffffff;
- 
-diff --git a/drivers/cpufreq/p4-clockmod.c b/drivers/cpufreq/p4-clockmod.c
-index 69c19233fcd4..393c4a5d2021 100644
---- a/drivers/cpufreq/p4-clockmod.c
-+++ b/drivers/cpufreq/p4-clockmod.c
-@@ -51,24 +51,24 @@ static unsigned int cpufreq_p4_get(unsigned int cpu);
- 
- static int cpufreq_p4_setdc(unsigned int cpu, unsigned int newstate)
+ int rdmsrq_safe_on_cpu(unsigned int cpu, u32 msr_no, u64 *q)
  {
--	u32 l, h;
-+	struct msr val;
+-	u32 low, high;
+ 	int err;
  
- 	if ((newstate > DC_DISABLE) || (newstate == DC_RESV))
- 		return -EINVAL;
+-	err = rdmsr_safe_on_cpu(cpu, msr_no, &low, &high);
+-	*q = (u64)high << 32 | low;
++	err = rdmsr_safe_on_cpu(cpu, msr_no, q);
  
--	rdmsr_on_cpu(cpu, MSR_IA32_THERM_STATUS, &l, &h);
-+	rdmsr_on_cpu(cpu, MSR_IA32_THERM_STATUS, &val.q);
- 
--	if (l & 0x01)
-+	if (val.l & 0x01)
- 		pr_debug("CPU#%d currently thermal throttled\n", cpu);
- 
- 	if (has_N44_O17_errata[cpu] &&
- 	    (newstate == DC_25PT || newstate == DC_DFLT))
- 		newstate = DC_38PT;
- 
--	rdmsr_on_cpu(cpu, MSR_IA32_THERM_CONTROL, &l, &h);
-+	rdmsr_on_cpu(cpu, MSR_IA32_THERM_CONTROL, &val.q);
- 	if (newstate == DC_DISABLE) {
- 		pr_debug("CPU#%d disabling modulation\n", cpu);
--		wrmsr_on_cpu(cpu, MSR_IA32_THERM_CONTROL, l & ~(1<<4), h);
-+		wrmsr_on_cpu(cpu, MSR_IA32_THERM_CONTROL, val.l & ~(1<<4), val.h);
- 	} else {
- 		pr_debug("CPU#%d setting duty cycle to %d%%\n",
- 			cpu, ((125 * newstate) / 10));
-@@ -77,9 +77,9 @@ static int cpufreq_p4_setdc(unsigned int cpu, unsigned int newstate)
- 		 * bits 3-1	: duty cycle
- 		 * bit  0	: reserved
- 		 */
--		l = (l & ~14);
--		l = l | (1<<4) | ((newstate & 0x7)<<1);
--		wrmsr_on_cpu(cpu, MSR_IA32_THERM_CONTROL, l, h);
-+		val.l = (val.l & ~14);
-+		val.l = val.l | (1<<4) | ((newstate & 0x7)<<1);
-+		wrmsr_on_cpu(cpu, MSR_IA32_THERM_CONTROL, val.l, val.h);
- 	}
- 
- 	return 0;
-@@ -205,18 +205,18 @@ static int cpufreq_p4_cpu_init(struct cpufreq_policy *policy)
- 
- static unsigned int cpufreq_p4_get(unsigned int cpu)
- {
--	u32 l, h;
-+	struct msr val;
- 
--	rdmsr_on_cpu(cpu, MSR_IA32_THERM_CONTROL, &l, &h);
-+	rdmsr_on_cpu(cpu, MSR_IA32_THERM_CONTROL, &val.q);
- 
--	if (l & 0x10) {
--		l = l >> 1;
--		l &= 0x7;
-+	if (val.l & 0x10) {
-+		val.l = val.l >> 1;
-+		val.l &= 0x7;
- 	} else
--		l = DC_DISABLE;
-+		val.l = DC_DISABLE;
- 
--	if (l != DC_DISABLE)
--		return stock_freq * l / 8;
-+	if (val.l != DC_DISABLE)
-+		return stock_freq * val.l / 8;
- 
- 	return stock_freq;
+ 	return err;
  }
-diff --git a/drivers/cpufreq/speedstep-centrino.c b/drivers/cpufreq/speedstep-centrino.c
-index 3e6e85a92212..b74c85128377 100644
---- a/drivers/cpufreq/speedstep-centrino.c
-+++ b/drivers/cpufreq/speedstep-centrino.c
-@@ -322,11 +322,11 @@ static unsigned extract_clock(unsigned msr, unsigned int cpu, int failsafe)
- /* Return the current CPU frequency in kHz */
- static unsigned int get_cur_freq(unsigned int cpu)
- {
--	unsigned l, h;
-+	struct msr val;
- 	unsigned clock_freq;
- 
--	rdmsr_on_cpu(cpu, MSR_IA32_PERF_STATUS, &l, &h);
--	clock_freq = extract_clock(l, cpu, 0);
-+	rdmsr_on_cpu(cpu, MSR_IA32_PERF_STATUS, &val.q);
-+	clock_freq = extract_clock(val.l, cpu, 0);
- 
- 	if (unlikely(clock_freq == 0)) {
- 		/*
-@@ -335,8 +335,8 @@ static unsigned int get_cur_freq(unsigned int cpu)
- 		 * P-state transition (like TM2). Get the last freq set 
- 		 * in PERF_CTL.
- 		 */
--		rdmsr_on_cpu(cpu, MSR_IA32_PERF_CTL, &l, &h);
--		clock_freq = extract_clock(l, cpu, 1);
-+		rdmsr_on_cpu(cpu, MSR_IA32_PERF_CTL, &val.q);
-+		clock_freq = extract_clock(val.l, cpu, 1);
- 	}
- 	return clock_freq;
- }
-@@ -417,7 +417,8 @@ static void centrino_cpu_exit(struct cpufreq_policy *policy)
-  */
- static int centrino_target(struct cpufreq_policy *policy, unsigned int index)
- {
--	unsigned int	msr, oldmsr = 0, h = 0, cpu = policy->cpu;
-+	unsigned int	msr, cpu = policy->cpu;
-+	struct msr oldmsr = { .q = 0 };
- 	int			retval = 0;
- 	unsigned int		j, first_cpu;
- 	struct cpufreq_frequency_table *op_points;
-@@ -459,22 +460,22 @@ static int centrino_target(struct cpufreq_policy *policy, unsigned int index)
- 		msr = op_points->driver_data;
- 
- 		if (first_cpu) {
--			rdmsr_on_cpu(good_cpu, MSR_IA32_PERF_CTL, &oldmsr, &h);
--			if (msr == (oldmsr & 0xffff)) {
-+			rdmsr_on_cpu(good_cpu, MSR_IA32_PERF_CTL, &oldmsr.q);
-+			if (msr == (oldmsr.l & 0xffff)) {
- 				pr_debug("no change needed - msr was and needs "
--					"to be %x\n", oldmsr);
-+					"to be %x\n", oldmsr.l);
- 				retval = 0;
- 				goto out;
- 			}
- 
- 			first_cpu = 0;
- 			/* all but 16 LSB are reserved, treat them with care */
--			oldmsr &= ~0xffff;
-+			oldmsr.l &= ~0xffff;
- 			msr &= 0xffff;
--			oldmsr |= msr;
-+			oldmsr.l |= msr;
- 		}
- 
--		wrmsr_on_cpu(good_cpu, MSR_IA32_PERF_CTL, oldmsr, h);
-+		wrmsr_on_cpu(good_cpu, MSR_IA32_PERF_CTL, oldmsr.l, oldmsr.h);
- 		if (policy->shared_type == CPUFREQ_SHARED_TYPE_ANY)
- 			break;
- 
-@@ -490,7 +491,7 @@ static int centrino_target(struct cpufreq_policy *policy, unsigned int index)
- 		 */
- 
- 		for_each_cpu(j, covered_cpus)
--			wrmsr_on_cpu(j, MSR_IA32_PERF_CTL, oldmsr, h);
-+			wrmsr_on_cpu(j, MSR_IA32_PERF_CTL, oldmsr.l, oldmsr.h);
- 	}
- 	retval = 0;
- 
 diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index 6a0d94711ead..fa02960ffff5 100644
+index fa02960ffff5..506e79eb4d76 100644
 --- a/drivers/hwmon/coretemp.c
 +++ b/drivers/hwmon/coretemp.c
-@@ -356,15 +356,15 @@ static ssize_t show_label(struct device *dev,
- static ssize_t show_crit_alarm(struct device *dev,
- 				struct device_attribute *devattr, char *buf)
- {
+@@ -169,7 +169,7 @@ static int adjust_tjmax(struct cpuinfo_x86 *c, u32 id, struct device *dev)
+ 	int tjmax_ee = 85000;
+ 	int usemsr_ee = 1;
+ 	int err;
 -	u32 eax, edx;
-+	struct msr val;
- 	struct temp_data *tdata = container_of(devattr, struct temp_data,
- 						sd_attrs[ATTR_CRIT_ALARM]);
- 
- 	mutex_lock(&tdata->update_lock);
--	rdmsr_on_cpu(tdata->cpu, tdata->status_reg, &eax, &edx);
-+	rdmsr_on_cpu(tdata->cpu, tdata->status_reg, &val.q);
- 	mutex_unlock(&tdata->update_lock);
- 
--	return sprintf(buf, "%d\n", (eax >> 5) & 1);
-+	return sprintf(buf, "%d\n", (val.l >> 5) & 1);
- }
- 
- static ssize_t show_tjmax(struct device *dev,
-@@ -398,7 +398,7 @@ static ssize_t show_ttarget(struct device *dev,
- static ssize_t show_temp(struct device *dev,
- 			struct device_attribute *devattr, char *buf)
- {
--	u32 eax, edx;
-+	struct msr val;
- 	struct temp_data *tdata = container_of(devattr, struct temp_data, sd_attrs[ATTR_TEMP]);
- 	int tjmax;
- 
-@@ -407,14 +407,14 @@ static ssize_t show_temp(struct device *dev,
- 	tjmax = get_tjmax(tdata, dev);
- 	/* Check whether the time interval has elapsed */
- 	if (time_after(jiffies, tdata->last_updated + HZ)) {
--		rdmsr_on_cpu(tdata->cpu, tdata->status_reg, &eax, &edx);
-+		rdmsr_on_cpu(tdata->cpu, tdata->status_reg, &val.q);
- 		/*
- 		 * Ignore the valid bit. In all observed cases the register
- 		 * value is either low or zero if the valid bit is 0.
- 		 * Return it instead of reporting an error which doesn't
- 		 * really help at all.
++	u64 val;
+ 	int i;
+ 	u16 devfn = PCI_DEVFN(0, 0);
+ 	struct pci_dev *host_bridge = pci_get_domain_bus_and_slot(0, 0, devfn);
+@@ -220,14 +220,14 @@ static int adjust_tjmax(struct cpuinfo_x86 *c, u32 id, struct device *dev)
+ 		 * http://softwarecommunity.intel.com/Wiki/Mobility/720.htm
+ 		 * For Core2 cores, check MSR 0x17, bit 28 1 = Mobile CPU
  		 */
--		tdata->temp = tjmax - ((eax >> 16) & 0xff) * 1000;
-+		tdata->temp = tjmax - ((val.l >> 16) & 0xff) * 1000;
- 		tdata->last_updated = jiffies;
+-		err = rdmsr_safe_on_cpu(id, 0x17, &eax, &edx);
++		err = rdmsr_safe_on_cpu(id, 0x17, &val);
+ 		if (err) {
+ 			dev_warn(dev,
+ 				 "Unable to access MSR 0x17, assuming desktop"
+ 				 " CPU\n");
+ 			usemsr_ee = 0;
+ 		} else if (c->x86_vfm < INTEL_CORE2_PENRYN &&
+-			   !(eax & 0x10000000)) {
++			   !(val & 0x10000000)) {
+ 			/*
+ 			 * Trust bit 28 up to Penryn, I could not find any
+ 			 * documentation on that; if you happen to know
+@@ -235,8 +235,8 @@ static int adjust_tjmax(struct cpuinfo_x86 *c, u32 id, struct device *dev)
+ 			 */
+ 			usemsr_ee = 0;
+ 		} else {
+-			/* Platform ID bits 52:50 (EDX starts at bit 32) */
+-			platform_id = (edx >> 18) & 0x7;
++			/* Platform ID bits 52:50 */
++			platform_id = (val >> 50) & 0x7;
+ 
+ 			/*
+ 			 * Mobile Penryn CPU seems to be platform ID 7 or 5
+@@ -255,12 +255,12 @@ static int adjust_tjmax(struct cpuinfo_x86 *c, u32 id, struct device *dev)
  	}
  
-diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-index 540109761f0a..fc7dbba4f9ca 100644
---- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
-+++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-@@ -125,8 +125,9 @@ sys_set_trip_temp(struct thermal_zone_device *tzd,
+ 	if (usemsr_ee) {
+-		err = rdmsr_safe_on_cpu(id, 0xee, &eax, &edx);
++		err = rdmsr_safe_on_cpu(id, 0xee, &val);
+ 		if (err) {
+ 			dev_warn(dev,
+ 				 "Unable to access MSR 0xEE, for Tjmax, left"
+ 				 " at default\n");
+-		} else if (eax & 0x40000000) {
++		} else if (val & 0x40000000) {
+ 			tjmax = tjmax_ee;
+ 		}
+ 	} else if (tjmax == 100000) {
+@@ -278,7 +278,7 @@ static int get_tjmax(struct temp_data *tdata, struct device *dev)
  {
- 	struct zone_device *zonedev = thermal_zone_device_priv(tzd);
- 	unsigned int trip_index = THERMAL_TRIP_PRIV_TO_INT(trip->priv);
--	u32 l, h, mask, shift, intr;
-+	u32 mask, shift, intr;
- 	int tj_max, val, ret;
-+	struct msr v;
+ 	struct cpuinfo_x86 *c = &cpu_data(tdata->cpu);
+ 	int err;
+-	u32 eax, edx;
++	u64 msrval;
+ 	u32 val;
  
- 	if (temp == THERMAL_TEMP_INVALID)
- 		temp = 0;
-@@ -142,7 +143,7 @@ sys_set_trip_temp(struct thermal_zone_device *tzd,
- 		return -EINVAL;
+ 	/* use static tjmax once it is set */
+@@ -289,11 +289,11 @@ static int get_tjmax(struct temp_data *tdata, struct device *dev)
+ 	 * A new feature of current Intel(R) processors, the
+ 	 * IA32_TEMPERATURE_TARGET contains the TjMax value
+ 	 */
+-	err = rdmsr_safe_on_cpu(tdata->cpu, MSR_IA32_TEMPERATURE_TARGET, &eax, &edx);
++	err = rdmsr_safe_on_cpu(tdata->cpu, MSR_IA32_TEMPERATURE_TARGET, &msrval);
+ 	if (err) {
+ 		dev_warn_once(dev, "Unable to read TjMax from CPU %u\n", tdata->cpu);
+ 	} else {
+-		val = (eax >> 16) & 0xff;
++		val = (msrval >> 16) & 0xff;
+ 		if (val)
+ 			return val * 1000;
+ 	}
+@@ -314,7 +314,7 @@ static int get_tjmax(struct temp_data *tdata, struct device *dev)
  
- 	ret = rdmsr_on_cpu(zonedev->cpu, MSR_IA32_PACKAGE_THERM_INTERRUPT,
--			   &l, &h);
-+			   &v.q);
- 	if (ret < 0)
+ static int get_ttarget(struct temp_data *tdata, struct device *dev)
+ {
+-	u32 eax, edx;
++	u64 val;
+ 	int tjmax, ttarget_offset, ret;
+ 
+ 	/*
+@@ -324,14 +324,14 @@ static int get_ttarget(struct temp_data *tdata, struct device *dev)
+ 	if (tdata->tjmax)
+ 		return -ENODEV;
+ 
+-	ret = rdmsr_safe_on_cpu(tdata->cpu, MSR_IA32_TEMPERATURE_TARGET, &eax, &edx);
++	ret = rdmsr_safe_on_cpu(tdata->cpu, MSR_IA32_TEMPERATURE_TARGET, &val);
+ 	if (ret)
  		return ret;
  
-@@ -155,20 +156,20 @@ sys_set_trip_temp(struct thermal_zone_device *tzd,
- 		shift = THERM_SHIFT_THRESHOLD0;
- 		intr = THERM_INT_THRESHOLD0_ENABLE;
- 	}
--	l &= ~mask;
-+	v.l &= ~mask;
- 	/*
- 	* When users space sets a trip temperature == 0, which is indication
- 	* that, it is no longer interested in receiving notifications.
- 	*/
- 	if (!temp) {
--		l &= ~intr;
-+		v.l &= ~intr;
- 	} else {
--		l |= val << shift;
--		l |= intr;
-+		v.l |= val << shift;
-+		v.l |= intr;
- 	}
+-	tjmax = (eax >> 16) & 0xff;
++	tjmax = (val >> 16) & 0xff;
  
- 	return wrmsr_on_cpu(zonedev->cpu, MSR_IA32_PACKAGE_THERM_INTERRUPT,
--			l, h);
-+			    v.l, v.h);
+ 	/* Read the still undocumented bits 8:15 of IA32_TEMPERATURE_TARGET. */
+-	ttarget_offset = (eax >> 8) & 0xff;
++	ttarget_offset = (val >> 8) & 0xff;
+ 
+ 	return (tjmax - ttarget_offset) * 1000;
+ }
+@@ -560,7 +560,7 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
+ 	struct temp_data *tdata;
+ 	struct platform_data *pdata = platform_get_drvdata(pdev);
+ 	struct cpuinfo_x86 *c = &cpu_data(cpu);
+-	u32 eax, edx;
++	u64 val;
+ 	int err;
+ 
+ 	if (!housekeeping_cpu(cpu, HK_TYPE_MISC))
+@@ -571,7 +571,7 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
+ 		return -ENOMEM;
+ 
+ 	/* Test if we can access the status register */
+-	err = rdmsr_safe_on_cpu(cpu, tdata->status_reg, &eax, &edx);
++	err = rdmsr_safe_on_cpu(cpu, tdata->status_reg, &val);
+ 	if (err)
+ 		goto err;
+ 
+diff --git a/drivers/hwmon/via-cputemp.c b/drivers/hwmon/via-cputemp.c
+index a5c03ed59c1f..e239e0a388f7 100644
+--- a/drivers/hwmon/via-cputemp.c
++++ b/drivers/hwmon/via-cputemp.c
+@@ -65,28 +65,28 @@ static ssize_t temp_show(struct device *dev, struct device_attribute *devattr,
+ 			 char *buf)
+ {
+ 	struct via_cputemp_data *data = dev_get_drvdata(dev);
+-	u32 eax, edx;
++	u64 val;
+ 	int err;
+ 
+-	err = rdmsr_safe_on_cpu(data->id, data->msr_temp, &eax, &edx);
++	err = rdmsr_safe_on_cpu(data->id, data->msr_temp, &val);
+ 	if (err)
+ 		return -EAGAIN;
+ 
+-	return sprintf(buf, "%lu\n", ((unsigned long)eax & 0xffffff) * 1000);
++	return sprintf(buf, "%lu\n", ((unsigned long)val & 0xffffff) * 1000);
  }
  
- /* Thermal zone callback registry */
-@@ -277,7 +278,8 @@ static int pkg_temp_thermal_trips_init(int cpu, int tj_max,
- 				       struct thermal_trip *trips, int num_trips)
+ static ssize_t cpu0_vid_show(struct device *dev,
+ 			     struct device_attribute *devattr, char *buf)
  {
- 	unsigned long thres_reg_value;
--	u32 mask, shift, eax, edx;
-+	u32 mask, shift;
+ 	struct via_cputemp_data *data = dev_get_drvdata(dev);
+-	u32 eax, edx;
++	u64 val;
+ 	int err;
+ 
+-	err = rdmsr_safe_on_cpu(data->id, data->msr_vid, &eax, &edx);
++	err = rdmsr_safe_on_cpu(data->id, data->msr_vid, &val);
+ 	if (err)
+ 		return -EAGAIN;
+ 
+-	return sprintf(buf, "%d\n", vid_from_reg(~edx & 0x7f, data->vrm));
++	return sprintf(buf, "%d\n", vid_from_reg(~(val >> 32) & 0x7f, data->vrm));
+ }
+ 
+ static SENSOR_DEVICE_ATTR_RO(temp1_input, temp, SHOW_TEMP);
+@@ -112,7 +112,7 @@ static int via_cputemp_probe(struct platform_device *pdev)
+ 	struct via_cputemp_data *data;
+ 	struct cpuinfo_x86 *c = &cpu_data(pdev->id);
+ 	int err;
+-	u32 eax, edx;
++	u64 val;
+ 
+ 	data = devm_kzalloc(&pdev->dev, sizeof(struct via_cputemp_data),
+ 			    GFP_KERNEL);
+@@ -143,7 +143,7 @@ static int via_cputemp_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	/* test if we can access the TEMPERATURE MSR */
+-	err = rdmsr_safe_on_cpu(data->id, data->msr_temp, &eax, &edx);
++	err = rdmsr_safe_on_cpu(data->id, data->msr_temp, &val);
+ 	if (err) {
+ 		dev_err(&pdev->dev,
+ 			"Unable to access TEMPERATURE MSR, giving up\n");
+diff --git a/drivers/thermal/intel/intel_tcc.c b/drivers/thermal/intel/intel_tcc.c
+index ab61fb122937..9a8f2f101efc 100644
+--- a/drivers/thermal/intel/intel_tcc.c
++++ b/drivers/thermal/intel/intel_tcc.c
+@@ -181,17 +181,17 @@ static u32 get_temp_mask(bool pkg)
+  */
+ int intel_tcc_get_tjmax(int cpu)
+ {
+-	u32 low, high;
++	struct msr msrval;
+ 	int val, err;
+ 
+ 	if (cpu < 0)
+-		err = rdmsr_safe(MSR_IA32_TEMPERATURE_TARGET, &low, &high);
++		err = rdmsr_safe(MSR_IA32_TEMPERATURE_TARGET, &msrval.l, &msrval.h);
+ 	else
+-		err = rdmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, &low, &high);
++		err = rdmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, &msrval.q);
+ 	if (err)
+ 		return err;
+ 
+-	val = (low >> 16) & 0xff;
++	val = (msrval.l >> 16) & 0xff;
+ 
+ 	return val ? val : -ENODATA;
+ }
+@@ -208,17 +208,17 @@ EXPORT_SYMBOL_NS_GPL(intel_tcc_get_tjmax, "INTEL_TCC");
+  */
+ int intel_tcc_get_offset(int cpu)
+ {
+-	u32 low, high;
 +	struct msr val;
- 	int ret, i;
+ 	int err;
  
- 	for (i = 0; i < num_trips; i++) {
-@@ -291,11 +293,11 @@ static int pkg_temp_thermal_trips_init(int cpu, int tj_max,
- 		}
+ 	if (cpu < 0)
+-		err = rdmsr_safe(MSR_IA32_TEMPERATURE_TARGET, &low, &high);
++		err = rdmsr_safe(MSR_IA32_TEMPERATURE_TARGET, &val.l, &val.h);
+ 	else
+-		err = rdmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, &low, &high);
++		err = rdmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, &val.q);
+ 	if (err)
+ 		return err;
  
- 		ret = rdmsr_on_cpu(cpu, MSR_IA32_PACKAGE_THERM_INTERRUPT,
--				   &eax, &edx);
-+				   &val.q);
- 		if (ret < 0)
- 			return ret;
+-	return (low >> 24) & intel_tcc_temp_masks.tcc_offset;
++	return (val.l >> 24) & intel_tcc_temp_masks.tcc_offset;
+ }
+ EXPORT_SYMBOL_NS_GPL(intel_tcc_get_offset, "INTEL_TCC");
  
--		thres_reg_value = (eax & mask) >> shift;
-+		thres_reg_value = (val.l & mask) >> shift;
+@@ -235,7 +235,7 @@ EXPORT_SYMBOL_NS_GPL(intel_tcc_get_offset, "INTEL_TCC");
  
- 		trips[i].temperature = thres_reg_value ?
- 			tj_max - thres_reg_value * 1000 : THERMAL_TEMP_INVALID;
+ int intel_tcc_set_offset(int cpu, int offset)
+ {
+-	u32 low, high;
++	struct msr val;
+ 	int err;
+ 
+ 	if (!intel_tcc_temp_masks.tcc_offset)
+@@ -245,23 +245,23 @@ int intel_tcc_set_offset(int cpu, int offset)
+ 		return -EINVAL;
+ 
+ 	if (cpu < 0)
+-		err = rdmsr_safe(MSR_IA32_TEMPERATURE_TARGET, &low, &high);
++		err = rdmsr_safe(MSR_IA32_TEMPERATURE_TARGET, &val.l, &val.h);
+ 	else
+-		err = rdmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, &low, &high);
++		err = rdmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, &val.q);
+ 	if (err)
+ 		return err;
+ 
+ 	/* MSR Locked */
+-	if (low & BIT(31))
++	if (val.l & BIT(31))
+ 		return -EPERM;
+ 
+-	low &= ~(intel_tcc_temp_masks.tcc_offset << 24);
+-	low |= offset << 24;
++	val.l &= ~(intel_tcc_temp_masks.tcc_offset << 24);
++	val.l |= offset << 24;
+ 
+ 	if (cpu < 0)
+-		return wrmsr_safe(MSR_IA32_TEMPERATURE_TARGET, low, high);
++		return wrmsr_safe(MSR_IA32_TEMPERATURE_TARGET, val.l, val.h);
+ 	else
+-		return wrmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, low, high);
++		return wrmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, val.l, val.h);
+ }
+ EXPORT_SYMBOL_NS_GPL(intel_tcc_set_offset, "INTEL_TCC");
+ 
+@@ -279,7 +279,8 @@ EXPORT_SYMBOL_NS_GPL(intel_tcc_set_offset, "INTEL_TCC");
+ int intel_tcc_get_temp(int cpu, int *temp, bool pkg)
+ {
+ 	u32 msr = pkg ? MSR_IA32_PACKAGE_THERM_STATUS : MSR_IA32_THERM_STATUS;
+-	u32 low, high, mask;
++	u32 mask;
++	struct msr val;
+ 	int tjmax, err;
+ 
+ 	tjmax = intel_tcc_get_tjmax(cpu);
+@@ -287,19 +288,19 @@ int intel_tcc_get_temp(int cpu, int *temp, bool pkg)
+ 		return tjmax;
+ 
+ 	if (cpu < 0)
+-		err = rdmsr_safe(msr, &low, &high);
++		err = rdmsr_safe(msr, &val.l, &val.h);
+ 	else
+-		err = rdmsr_safe_on_cpu(cpu, msr, &low, &high);
++		err = rdmsr_safe_on_cpu(cpu, msr, &val.q);
+ 	if (err)
+ 		return err;
+ 
+ 	/* Temperature is beyond the valid thermal sensor range */
+-	if (!(low & BIT(31)))
++	if (!(val.l & BIT(31)))
+ 		return -ENODATA;
+ 
+ 	mask = get_temp_mask(pkg);
+ 
+-	*temp = tjmax - ((low >> 16) & mask);
++	*temp = tjmax - ((val.l >> 16) & mask);
+ 
+ 	return 0;
+ }
 -- 
 2.54.0
 
