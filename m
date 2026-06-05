@@ -1,76 +1,93 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54EAD224234;
-	Fri,  5 Jun 2026 04:36:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0217248F7C;
+	Fri,  5 Jun 2026 05:56:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780634181; cv=none; b=ttWv85xjYSpqGJKaPeX6t4oSnNlBJulG+EW79aw4eMsVdpVNRzg7ylWNewrfx/aMiuIZK8cegbxeW5uVWbxYv3RREkJOLwzBJUu0j3br70+N5ta0qTGnpmPocbO+qLKn7yk8Vp5NFTwzBloHH7savVV4nqMWKJpXoIssz2PiONU=
+	t=1780639005; cv=none; b=mJccmVCfe3C1iAV79IXvRPcvx0Bb5ubpQAmskgtfKk88Q0zK7kNmv4L6lO76/QPZ45yqBZLNcKEydSvJzVHt4y/NvVMaF8DDiQN5omZxaQJZJ7wljiBOKRupXdWVynJtlAi9CJBwW2lp1FTxBGH7/zHbtjuc/8QFFhwYmwlmKdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780634181; c=relaxed/simple;
-	bh=oxduxq9szg4PERgzx+80PHE84fuVUetm7puv7+IDhbA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lqgn2qrmrRJlEOQCbqVxRH/sHDP5oze3wiX5A/s/G7mmg8H9xstxRX2d0ZqtSaMhfvG3dbzFcByDAj6k5vhPi5REuNKr5xaCm40W7cdvJOvfDVim2WqwZA/99BCGrUZePZ/xK8z2MqgsSU6elLKSgrV5qYGhLqWZO8vQ4Van80U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=VG16cajz; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="VG16cajz"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=8yg29xdfWEix29X7YVI5IhW6C7s2qrb4kLGfBOiza4w=; b=VG16cajz50ByIGB0wS4MuR43n1
-	F54JyWb6zi5Fvo22iwAx4s09ss7fhwiPdzlmmqU4Cm0TZHHkld6fipejjJBneTWZSk5Kjt9Ryxjg0
-	vg9HPuGsMycJWyX8h505+WGLsuXrOuZy2ObFoa7Esr28n+XkSpThmtUoJAvAt1JtDGbmgKWR8LD9M
-	dXJkGOpojRsOCDI3uP6afLPUvYF230Bo9YP54SJFiBKAGcZ5ZdmXp/l8DSeKEBL0HgKbBes7uJ3jS
-	oJ8EkkPLLqrLQFsfFF5IneKZWg+GZTiw8zcqDiHeIxEguE9X5QWrgjHl+Sn/BdCQQj/U9HQAqb6Uq
-	J3VUnSwQ==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wVMI4-000000004i1-4AW6;
-	Fri, 05 Jun 2026 04:36:17 +0000
-Message-ID: <e0193699-e5b2-4400-b55e-5dd0bd62b16a@infradead.org>
-Date: Thu, 4 Jun 2026 21:36:16 -0700
+	s=arc-20240116; t=1780639005; c=relaxed/simple;
+	bh=/fN376ZNt9a79pgv05JEdDMk0j0Xf0LIct2Pg2qiJbA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=NAooZbzAMl5pSEHMnLuf0jSt7+8f9/LtJfUXgxqydK/P3dtMlJp5CX7PmCx1341tAXjt9fKXTiDrdQ9TAUT9QWtAAVDuZufEhc9RxMIEC6fndaZjg7zigGIX3mBmpk7TquANZyxxMIbQFkkxBaF1fXb/AI0NLl9l7GwL5qWNPKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=13.75.44.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
+Received: from hehuan1$eswincomputing.com ( [10.12.96.103] ) by
+ ajax-webmail-app2 (Coremail) ; Fri, 5 Jun 2026 13:56:33 +0800 (GMT+08:00)
+Date: Fri, 5 Jun 2026 13:56:33 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: "Huan He" <hehuan1@eswincomputing.com>
+To: "Philipp Zabel" <p.zabel@pengutronix.de>
+Cc: linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	ningyu@eswincomputing.com, linmin@eswincomputing.com,
+	pinkesh.vaghela@einfochips.com, luyulin@eswincomputing.com
+Subject: Re: Re: [PATCH v6 2/2] hwmon: Add Eswin EIC7700 PVT sensor driver
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2024.2-cmXT6 build
+ 20241203(6b039d88) Copyright (c) 2002-2026 www.mailtech.cn
+ mispb-72143050-eaf5-4703-89e0-86624513b4ce-eswincomputing.com
+In-Reply-To: <85e630579d97172e9bc64bce082b2d7b763a1263.camel@pengutronix.de>
+References: <20260604080430.126-1-hehuan1@eswincomputing.com>
+ <20260604080552.169-1-hehuan1@eswincomputing.com>
+ <85e630579d97172e9bc64bce082b2d7b763a1263.camel@pengutronix.de>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] hwmon: Add documentation for SQ24860
-To: Ziming Zhu <zmzhu0630@163.com>, Guenter Roeck <linux@roeck-us.net>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, Ziming Zhu <ziming.zhu@silergycorp.com>
-References: <20260605020450.89638-1-zmzhu0630@163.com>
- <20260605020450.89638-4-zmzhu0630@163.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20260605020450.89638-4-zmzhu0630@163.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Message-ID: <3cd3955b.6ff2.19e965acb49.Coremail.hehuan1@eswincomputing.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:TQJkCgA3TJ8RZSJqPToiAA--.5281W
+X-CM-SenderInfo: 5khk3tzqr6v25zlqu0xpsx3x1qjou0bp/1tbiAQEJCmohqKAFYQAD
+	sn
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+	daVFxhVjvjDU=
 
-
-
-On 6/4/26 7:04 PM, Ziming Zhu wrote:
-> From: Ziming Zhu <ziming.zhu@silergycorp.com>
-> 
-> Document the supported sysfs attributes for the Silergy SQ24860 PMBus
-> hwmon driver.
-> 
-> Signed-off-by: Ziming Zhu <ziming.zhu@silergycorp.com>
-> ---
->  Documentation/hwmon/index.rst   |  1 +
->  Documentation/hwmon/sq24860.rst | 96 +++++++++++++++++++++++++++++++++
->  2 files changed, 97 insertions(+)
->  create mode 100644 Documentation/hwmon/sq24860.rst
-> 
-
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-
--- 
-~Randy
+SGkgUGhpbGlwcCwKClRoYW5rIHlvdSB2ZXJ5IG11Y2ggZm9yIHlvdXIgZGV0YWlsZWQgcmV2aWV3
+LiBXZSBhcHByZWNpYXRlIHRoZSBmZWVkYmFjay4KCj4gPiAKPiA+IEFkZCBzdXBwb3J0IGZvciBF
+U1dJTiBFSUM3NzAwIFZvbHRhZ2UgYW5kIFRlbXBlcmF0dXJlIHNlbnNvci4gVGhlIGRyaXZlcgo+
+ID4gc3VwcG9ydHMgdGVtcGVyYXR1cmUgYW5kIHZvbHRhZ2UgbW9uaXRvcmluZyB3aXRoIHBvbHlu
+b21pYWwgY29udmVyc2lvbiwKPiA+IGFuZCBwcm92aWRlcyBzeXNmcyBpbnRlcmZhY2UgZm9yIHNl
+bnNvciBkYXRhIGFjY2Vzcy4KPiA+IAo+ID4gVGhlIFBWVCBJUCBjb250YWlucyBvbmUgdGVtcGVy
+YXR1cmUgc2Vuc29yIGFuZCBvbmUgdm9sdGFnZSBzZW5zb3IuCj4gPiAKPiA+IFNpZ25lZC1vZmYt
+Ynk6IFl1bGluIEx1IDxsdXl1bGluQGVzd2luY29tcHV0aW5nLmNvbT4KPiA+IFNpZ25lZC1vZmYt
+Ynk6IEh1YW4gSGUgPGhlaHVhbjFAZXN3aW5jb21wdXRpbmcuY29tPgo+ID4gLS0tCj4gPiAgZHJp
+dmVycy9od21vbi9LY29uZmlnICAgICAgIHwgIDEyICsKPiA+ICBkcml2ZXJzL2h3bW9uL01ha2Vm
+aWxlICAgICAgfCAgIDEgKwo+ID4gIGRyaXZlcnMvaHdtb24vZWljNzcwMC1wdnQuYyB8IDQ5NSAr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysKPiA+ICBkcml2ZXJzL2h3bW9uL2Vp
+Yzc3MDAtcHZ0LmggfCAgOTkgKysrKysrKysKPiA+ICA0IGZpbGVzIGNoYW5nZWQsIDYwNyBpbnNl
+cnRpb25zKCspCj4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvaHdtb24vZWljNzcwMC1w
+dnQuYwo+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2h3bW9uL2VpYzc3MDAtcHZ0LmgK
+PiA+IAo+IFsuLi5dCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9od21vbi9laWM3NzAwLXB2dC5j
+IGIvZHJpdmVycy9od21vbi9laWM3NzAwLXB2dC5jCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+
+ID4gaW5kZXggMDAwMDAwMDAwMDAwLi5lYTBmMTI5OWNkMjkKPiA+IC0tLSAvZGV2L251bGwKPiA+
+ICsrKyBiL2RyaXZlcnMvaHdtb24vZWljNzcwMC1wdnQuYwo+ID4gQEAgLTAsMCArMSw0OTUgQEAK
+PiBbLi4uXQo+ID4gK3N0YXRpYyBpbnQgZWljNzcwMF9wdnRfcHJvYmUoc3RydWN0IHBsYXRmb3Jt
+X2RldmljZSAqcGRldikKPiA+ICt7Cj4gPiArCXN0cnVjdCBwdnRfaHdtb24gKnB2dDsKPiA+ICsJ
+aW50IHJldDsKPiA+ICsKPiA+ICsJcHZ0ID0gZWljNzcwMF9wdnRfY3JlYXRlX2RhdGEocGRldik7
+Cj4gPiArCWlmIChJU19FUlIocHZ0KSkKPiA+ICsJCXJldHVybiBQVFJfRVJSKHB2dCk7Cj4gPiAr
+Cj4gPiArCXBsYXRmb3JtX3NldF9kcnZkYXRhKHBkZXYsIHB2dCk7Cj4gPiArCj4gPiArCXB2dC0+
+cmVncyA9IGRldm1fcGxhdGZvcm1faW9yZW1hcF9yZXNvdXJjZShwZGV2LCAwKTsKPiA+ICsJaWYg
+KElTX0VSUihwdnQtPnJlZ3MpKQo+ID4gKwkJcmV0dXJuIFBUUl9FUlIocHZ0LT5yZWdzKTsKPiA+
+ICsKPiA+ICsJcHZ0LT5jbGsgPSBkZXZtX2Nsa19nZXQoJnBkZXYtPmRldiwgTlVMTCk7Cj4gPiAr
+CWlmIChJU19FUlIocHZ0LT5jbGspKQo+ID4gKwkJcmV0dXJuIGRldl9lcnJfcHJvYmUoJnBkZXYt
+PmRldiwgUFRSX0VSUihwdnQtPmNsayksCj4gPiArCQkJCSAgICAgIkNvdWxkbid0IGdldCBjbG9j
+a1xuIik7Cj4gPiArCj4gPiArCXB2dC0+cnN0ID0gZGV2bV9yZXNldF9jb250cm9sX2dldF9leGNs
+dXNpdmVfZGVhc3NlcnRlZCgmcGRldi0+ZGV2LAo+ID4gKwkJCQkJCQkgICAgICAgTlVMTCk7Cj4g
+Cj4gV2h5IHN0b3JlIHRoaXMgaW4gc3RydWN0IHB2dF9od21vbj8gSXQncyBub3QgdXNlZCBhbnl3
+aGVyZSBlbHNlLgoKVGhlIHJlc2V0IGNvbnRyb2wgaXMgb25seSBuZWVkZWQgZHVyaW5nIHByb2Jl
+IHRvIGRlYXNzZXJ0IHRoZSByZXNldCBsaW5lLAphbmQgaXQgaXMgbm90IHVzZWQgYWZ0ZXJ3YXJk
+cy4KCkkgd2lsbCBjaGFuZ2UgaXQgdG8gYSBsb2NhbCB2YXJpYWJsZSBpbiBlaWM3NzAwX3B2dF9w
+cm9iZSgpIGFuZCByZW1vdmUgdGhlCnJzdCBmaWVsZCBmcm9tIHN0cnVjdCBwdnRfaHdtb24uCgpU
+aGUgY29kZSB3aWxsIGJlIGNoYW5nZWQgYWxvbmcgdGhlc2UgbGluZXM6CgrCoCDCoCBzdHJ1Y3Qg
+cmVzZXRfY29udHJvbCAqcnN0OwoKwqAgwqAgcnN0ID0gZGV2bV9yZXNldF9jb250cm9sX2dldF9l
+eGNsdXNpdmVfZGVhc3NlcnRlZCgmcGRldi0+ZGV2LCBOVUxMKTsKwqAgwqAgaWYgKElTX0VSUihy
+c3QpKQrCoCDCoCDCoCDCoCByZXR1cm4gZGV2X2Vycl9wcm9iZShwdnQtPmRldiwgUFRSX0VSUihy
+c3QpLArCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCJDb3VsZG4n
+dCBnZXQgcmVzZXQgY29udHJvbFxuIik7CgpCZXN0IHJlZ2FyZHMsCkh1YW4gSGUK
