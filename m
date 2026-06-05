@@ -1,30 +1,30 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59F5C40758F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59FF9407592;
 	Fri,  5 Jun 2026 06:31:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780641116; cv=none; b=jA900WpbYBTy8O63xc8Scktf0FQIc3fmAnoNCjne57wZAPJ1ue1BtrmBltx9merTuJAyOZs7zhdK8WaMypQtM4nlMpcKW42yujV+CDzCpEaMaNqdbDXQr874VHkj/UstfhDscIjT2MgrhozjMcxqzDajEOJdx1AWhqQ3nG8cDfQ=
+	t=1780641117; cv=none; b=kbkJCKWRTDfyhrA+iRz6nv1cqnGmRP97pBJZwc0/uTvq98UaBeg8FIZ2a64TEXJCj3VaWr9KyGIgVWH0Y/PKzC/ZfR6214gd11qWnQwOsWQvgxRR0lDNGvXkTSuDB7uHwuOS2aQSv6UY8sHSJontu+UD00PzyVubsdvq9Bxy9BY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780641116; c=relaxed/simple;
-	bh=wfZixIpM8oc/drRUVburnx4hJviXARDaeGZECaDZ1Wg=;
+	s=arc-20240116; t=1780641117; c=relaxed/simple;
+	bh=hKtJBj6NbpM+g6kmjkW4KSom4gFoNvlMbMdPkKuqkbg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=kaxiLNdp5w6hfKC70/3A3FrPNex7Sn5tGQroCMvfuibgjrzXFhJvls2a+38l5rNazxXjgoEXaJbYyvchA0/NSA3rbNHp07nbXplYGB4uXhU45519BJjjaOn+iLJsBwmL++pIFJkiEi0ZdJJ7/E8gs1FISHQDbCCZSf5XhsbvsLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=WT7HMdhl; arc=none smtp.client-ip=117.135.210.2
+	 MIME-Version; b=dn3rW1/+jUdYnFcwieJs8ctlWZhjBv6Zj6O+/znG6w2Nn58DRyq1Vbd26nW+FS/8DlpOfCLw4cBHjcblzhl6XGwci4VSoC+Rz6/W4mqmagtCtVX1ZHkdXOBee8mg+eY+sKRJKeiglVd5ZVKdZ4oMHe7EI5skLpZ/x1luFyA13qk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=g2U8A9g2; arc=none smtp.client-ip=117.135.210.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="WT7HMdhl"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="g2U8A9g2"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Z8
-	Nptqq4wNOfaE1HQs8SON1B5R40ZYajOMIfxodq8oE=; b=WT7HMdhlLmkQJCGlf5
-	CdapN8i2810AkwUAdFkrJ+5QJUd6qiVB8Je+AeLNRn4jMc7VizHoVkKRl1YxKimj
-	nLSpLmSqe+CkX1t4HVyvbWX/6kfQPsTmmXEmt2OnjEkEoYafc9SXuXmEF1x6do6C
-	FyCEkIbnqqzFDgn4NRVMSsHEg=
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=PQ
+	iPGhl1R3XE1rfbgWoU/FE0wGrBbGWg/k63y7WgUeQ=; b=g2U8A9g2S2tEs91pqU
+	RYd9y9qFCXAkJktT5ZkS+iQArE6fTTJmyxvOXxnV1HKugnkUuW3qlWMboeL2QmoM
+	zwjI83at4KiDakmDUtQIEHTUU0ScXoSMrNFKw5Clf+hjz9GaH3hJ6TLRfXkHsTiW
+	he0wUCOF/Io+eGTzID9o+JgGM=
 Received: from ZM.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wDnl3AjbSJqJU+5BQ--.9698S5;
-	Fri, 05 Jun 2026 14:31:11 +0800 (CST)
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wDnl3AjbSJqJU+5BQ--.9698S3;
+	Fri, 05 Jun 2026 14:31:06 +0800 (CST)
 From: Ziming Zhu <zmzhu0630@163.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: Rob Herring <robh@kernel.org>,
@@ -37,9 +37,9 @@ Cc: Rob Herring <robh@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	Ziming Zhu <ziming.zhu@silergycorp.com>
-Subject: [PATCH v2 3/3] hwmon: Add documentation for SQ24860
-Date: Fri,  5 Jun 2026 14:30:42 +0800
-Message-Id: <20260605063042.91776-4-zmzhu0630@163.com>
+Subject: [PATCH v2 1/3] dt-bindings: hwmon: pmbus: Add bindings for Silergy SQ24860
+Date: Fri,  5 Jun 2026 14:30:40 +0800
+Message-Id: <20260605063042.91776-2-zmzhu0630@163.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20260605063042.91776-1-zmzhu0630@163.com>
 References: <20260605063042.91776-1-zmzhu0630@163.com>
@@ -50,139 +50,107 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDnl3AjbSJqJU+5BQ--.9698S5
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJF1DXry3Kw47urW5KFW8Crg_yoWruw4xpF
-	93GrySkw1UXrW7WFW3tw18Zr45Gay8Ar43AF1kJryrZFn8Ar1vkrnrKr13Ja4DKrn5AFWr
-	KF4UtrWUJw4jkFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UZAwsUUUUU=
-X-CM-SenderInfo: x2p2x3aqwtiqqrwthudrp/xtbCwBCKg2oibTDULAAA30
+X-CM-TRANSID:_____wDnl3AjbSJqJU+5BQ--.9698S3
+X-Coremail-Antispam: 1Uf129KBjvJXoWxJr18KF18uF15Xr4kWFy3Arb_yoW8Kw1DpF
+	Z5uF9rJr48XryxWw47GFykZ3W5Zr1kAa1j9r9xJw1SyF98XFsYvrZIkrW5XF1UCr10yFy3
+	ZFWqyryxt3s7Cr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07je-erUUUUU=
+X-CM-SenderInfo: x2p2x3aqwtiqqrwthudrp/xtbCwAyJgmoibSzT1wAA3K
 
 From: Ziming Zhu <ziming.zhu@silergycorp.com>
 
-Document the supported sysfs attributes for the Silergy SQ24860 PMBus
-hwmon driver.
+Add devicetree binding documentation for the Silergy SQ24860 eFuse.
+
+The device is a PMBus hardware monitoring device which reports voltage,
+current, power, and temperature telemetry. The board-specific IMON
+resistor value is described with silergy,rimon-micro-ohms.
 
 Signed-off-by: Ziming Zhu <ziming.zhu@silergycorp.com>
 ---
- Documentation/hwmon/index.rst   |  1 +
- Documentation/hwmon/sq24860.rst | 96 +++++++++++++++++++++++++++++++++
- 2 files changed, 97 insertions(+)
- create mode 100644 Documentation/hwmon/sq24860.rst
+ .../bindings/hwmon/pmbus/silergy,sq24860.yaml | 74 +++++++++++++++++++
+ 1 file changed, 74 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/silergy,sq24860.yaml
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 8b655e5d6b68..1888905cd234 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -242,6 +242,7 @@ Hardware Monitoring Kernel Drivers
-    smsc47m192
-    smsc47m1
-    sparx5-temp
-+   sq24860
-    spd5118
-    stpddc60
-    surface_fan
-diff --git a/Documentation/hwmon/sq24860.rst b/Documentation/hwmon/sq24860.rst
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/silergy,sq24860.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/silergy,sq24860.yaml
 new file mode 100644
-index 000000000000..f0182b955d8a
+index 000000000000..03ef82c11e1a
 --- /dev/null
-+++ b/Documentation/hwmon/sq24860.rst
-@@ -0,0 +1,96 @@
-+.. SPDX-License-Identifier: GPL-2.0
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/silergy,sq24860.yaml
+@@ -0,0 +1,74 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
 +
-+Kernel driver sq24860
-+=====================
++$id: http://devicetree.org/schemas/hwmon/pmbus/silergy,sq24860.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+Supported chips:
++title: Silergy SQ24860 eFuse
 +
-+  * Silergy SQ24860
++maintainers:
++  - Ziming Zhu <ziming.zhu@silergycorp.com>
 +
-+    Prefix: 'sq24860'
++description:
++  The Silergy SQ24860 is an integrated, high-current circuit protection and
++  power management device with PMBus interface.
 +
-+Author:
++properties:
++  compatible:
++    const: silergy,sq24860
 +
-+	Ziming Zhu <ziming.zhu@silergycorp.com>
++  reg:
++    maxItems: 1
 +
-+Description
-+------------
++  silergy,rimon-micro-ohms:
++    description:
++      Micro-ohms value of the resistance installed between the IMON pin and
++      the ground reference.
 +
-+This driver implements support for the Silergy SQ24860 eFuse. The device is an
-+integrated circuit protection and power management device with a PMBus
-+interface.
++  interrupts:
++    description: PMBus SMBAlert interrupt.
++    maxItems: 1
 +
-+The device supports direct format for reading input voltage, output voltage,
-+auxiliary voltage, input current, input power, and temperature.
++  regulators:
++    type: object
++    description:
++      List of regulators provided by this controller.
 +
-+The current and power measurement scale depends on the resistor connected
-+between the IMON pin and ground. The resistor value can be configured with the
-+``silergy,rimon-micro-ohms`` device tree property. See
-+``Documentation/devicetree/bindings/hwmon/pmbus/silergy,sq24860.yaml`` for details.
++    properties:
++      vout:
++        $ref: /schemas/regulator/regulator.yaml#
++        type: object
++        unevaluatedProperties: false
 +
-+Due to the specificities of the chip, all history reset attributes are tied
-+together. Resetting the history of one sensor resets the history of all sensors.
++    additionalProperties: false
 +
-+Sysfs entries
-+-------------
++required:
++  - compatible
++  - reg
++  - silergy,rimon-micro-ohms
 +
-+The following attributes are supported. Limits are read-write; all other
-+attributes are read-only.
++additionalProperties: false
 +
-+======================= ======================================================
-+in1_label               "vin"
-+in1_input               Measured input voltage.
-+in1_average             Average measured input voltage.
-+in1_min                 Minimum input voltage limit.
-+in1_lcrit               Critical low input voltage limit.
-+in1_max                 Maximum input voltage limit.
-+in1_crit                Critical high input voltage limit.
-+in1_min_alarm           Input voltage low warning alarm.
-+in1_lcrit_alarm         Input voltage low fault alarm.
-+in1_max_alarm           Input voltage high warning alarm.
-+in1_crit_alarm          Input voltage high fault alarm.
-+in1_highest             Historical maximum input voltage.
-+in1_lowest              Historical minimum input voltage.
-+in1_reset_history       Write any value to reset history.
++examples:
++  - |
 +
-+in2_label               "vmon"
-+in2_input               Measured auxiliary input voltage.
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
 +
-+in3_label               "vout1"
-+in3_input               Measured output voltage.
-+in3_average             Average measured output voltage.
-+in3_min                 Minimum output voltage limit.
-+in3_min_alarm           Output voltage low alarm.
-+in3_lowest              Historical minimum output voltage.
-+in3_reset_history       Write any value to reset history.
++        hw-monitor@40 {
++            compatible = "silergy,sq24860";
++            reg = <0x40>;
 +
-+curr1_label             "iin"
-+curr1_input             Measured input current.
-+curr1_average           Average measured input current.
-+curr1_max               Maximum input current warning limit.
-+curr1_crit              Critical input over-current fault limit.
-+curr1_max_alarm         Input current warning alarm.
-+curr1_crit_alarm        Input over-current fault alarm.
-+curr1_highest           Historical maximum input current.
-+curr1_reset_history     Write any value to reset history.
++            interrupt-parent = <&gpio>;
++            interrupts = <42 8>;
++            silergy,rimon-micro-ohms = <1600000000>;
 +
-+power1_label            "pin"
-+power1_input            Measured input power.
-+power1_average          Average measured input power.
-+power1_max              Maximum input power warning limit.
-+power1_alarm            Input power warning alarm.
-+power1_input_highest    Historical maximum input power.
-+power1_reset_history    Write any value to reset history.
-+
-+temp1_input             Measured temperature.
-+temp1_average           Average measured temperature.
-+temp1_max               Maximum temperature warning limit.
-+temp1_crit              Critical temperature fault limit.
-+temp1_max_alarm         Temperature warning alarm.
-+temp1_crit_alarm        Temperature fault alarm.
-+temp1_highest           Historical maximum temperature.
-+temp1_reset_history     Write any value to reset history.
-+
-+samples                 Number of samples used for average values.
-+======================= ======================================================
-+
++            regulators {
++                cpu0_vout: vout {
++                    regulator-name = "main_cpu0";
++                };
++            };
++        };
++    };
 -- 
 2.25.1
 
