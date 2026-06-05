@@ -1,111 +1,130 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22BD3413245;
-	Fri,  5 Jun 2026 06:54:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC62A42E00D;
+	Fri,  5 Jun 2026 06:57:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780642455; cv=none; b=P8y0M+jWBcUyU71hPriy68NzywdYo02xxBPRO+7X3q6dU+Z6NKBAcF7e7KVTP/yEVU5dRVR2Vs3bVj/Z2QVXKsuOVqXfNgNil7KB5M2+vyrH5ZZID2WGRm5x0avFHy0EeJmcKHZEwXn+6hTq35MfuDqUII8Ikpzc0P6H+sXzpEc=
+	t=1780642658; cv=none; b=gW3UgA99+8B1JFfSEZQcIEqWVDDf/GhUmb6CiVDklJ7HpyBdAYI3J+RbhV00Qn3ZquydTml8EQp1oNHJNdaUsvxZRsnHxa2GqZ1PgLG/37LmYcEZkAmvKqYDlsArYXwVecwSOXlJ7GN7bL9lcTg1FRRtD3DcePwCoO2oCMOePSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780642455; c=relaxed/simple;
-	bh=Bfhxyeh0I+nLYaM2G8L9iOBrMI/5fCXfZhtYUW4UmJY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YRLAOcsYGOKBZHE2+4zcXWzFBqOAFHOZYvPLv7sWZzICwYG4u1KXUl1OjEaTbzvq0HotSCPu6I+5EqbrIVM4i4Jc3KYsPV0oZHzZ4p0gCS8sIINEkwAslJ2O9P9UaErUEUm8r2mnmHNre+CkxsiuXi5Fi3fRgHAtze1d+anlDLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jGkmUauh; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jGkmUauh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780642455; x=1812178455;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Bfhxyeh0I+nLYaM2G8L9iOBrMI/5fCXfZhtYUW4UmJY=;
-  b=jGkmUauhpQllDyd4WzK+AsTEOcZoUXdOAKQFYjpE5kk5EAdE1HVpqfBy
-   r9pDMlUNkr9ih9uYvzfrPQFYa7N3cdhMUMN/vm88zZDzrLZtg8hx2OowR
-   fdTrs7klng3ecvsfzNauJZ7z6NFnlWVluixzblvjL5kyiWHrH4A+NlPV6
-   apGR2+UyV6HVdBS/wURk9a0Y2rv4hHxUjlO8v/+Gxnbtu+ZV0opQeik5H
-   909bOPPiUOkzb5qYfvdhLzEHcINFx8UO3Sl7yfoH3B/R8hOZrIHKIGIz7
-   mVCx6PQBUTjsVKudRzhqIfJSea3bVoasJaKPRQfsOkXwle6YelHJ1YX42
-   g==;
-X-CSE-ConnectionGUID: Eniqpp1aQhCKaaz/J41XOA==
-X-CSE-MsgGUID: vIH7jGkJQueSVo867jDpuw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11807"; a="81474441"
-X-IronPort-AV: E=Sophos;i="6.24,188,1774335600"; 
-   d="scan'208";a="81474441"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2026 23:54:14 -0700
-X-CSE-ConnectionGUID: igsVH0E/Q920RoFFPu5r2g==
-X-CSE-MsgGUID: Mv2TdVCjQlahbFrWexy6Vg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,188,1774335600"; 
-   d="scan'208";a="238412207"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by fmviesa009.fm.intel.com with ESMTP; 04 Jun 2026 23:54:10 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wVORU-000000002Uv-18Ka;
-	Fri, 05 Jun 2026 06:54:08 +0000
-Date: Fri, 5 Jun 2026 08:54:01 +0200
-From: kernel test robot <lkp@intel.com>
-To: Adam Young <admiyo@os.amperecomputing.com>,
-	Sudeep Holla <sudeep.holla@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Saket Dumbre <saket.dumbre@intel.com>, Len Brown <lenb@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-acpi@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Huisong Li <lihuisong@huawei.com>,
-	MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v01] mailbox/pcc.c:  add query channel function
-Message-ID: <202606050825.2uv1FZrY-lkp@intel.com>
-References: <20260604203749.168752-1-admiyo@os.amperecomputing.com>
+	s=arc-20240116; t=1780642658; c=relaxed/simple;
+	bh=c2n8HfFJZWyE3FfVuV4d0gFPUl0N2KB4g/8imvsfJ0s=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=JQhbLdOmgx8DPnV0AJeHVRULMoqmy2NeuxcnQzL6hX4tLtbOHa1jDLeJkFrCVrp+yxG/l4onS8k6XGYL/BpCXeFGSncXLac2kvgHCxGwlMuLjb4Vu2yO83lyZH/28hhUkIVhvkEZ9SkeDlpr2ARXRSEogXkbsAUTLpQcRHFAg8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=206.189.21.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
+Received: from hehuan1$eswincomputing.com ( [10.12.96.103] ) by
+ ajax-webmail-app2 (Coremail) ; Fri, 5 Jun 2026 14:57:19 +0800 (GMT+08:00)
+Date: Fri, 5 Jun 2026 14:57:19 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: "Huan He" <hehuan1@eswincomputing.com>
+To: sashiko-reviews@lists.linux.dev
+Cc: linux-hwmon@vger.kernel.org, robh@kernel.org, devicetree@vger.kernel.org,
+	conor+dt@kernel.org, linux@roeck-us.net, krzk+dt@kernel.org,
+	p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+	ningyu@eswincomputing.com, linmin@eswincomputing.com,
+	luyulin@eswincomputing.com, pinkesh.vaghela@einfochips.com
+Subject: Re: Re: [PATCH v6 2/2] hwmon: Add Eswin EIC7700 PVT sensor driver
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2024.2-cmXT6 build
+ 20241203(6b039d88) Copyright (c) 2002-2026 www.mailtech.cn
+ mispb-72143050-eaf5-4703-89e0-86624513b4ce-eswincomputing.com
+In-Reply-To: <20260604081720.5D5251F00893@smtp.kernel.org>
+References: <20260604080552.169-1-hehuan1@eswincomputing.com>
+ <20260604081720.5D5251F00893@smtp.kernel.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260604203749.168752-1-admiyo@os.amperecomputing.com>
+Message-ID: <5d095049.700f.19e96926fec.Coremail.hehuan1@eswincomputing.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:TQJkCgAnPqFPcyJqtUQiAA--.7352W
+X-CM-SenderInfo: 5khk3tzqr6v25zlqu0xpsx3x1qjou0bp/1tbiAQEJCmohqKAkwAAB
+	sl
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VW3Jw
+	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+	daVFxhVjvjDU=
 
-Hi Adam,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on jassibrar-mailbox/for-next]
-[also build test WARNING on rafael-pm/linux-next rafael-pm/bleeding-edge soc/for-next linus/master v6.16-rc1 next-20260604]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Adam-Young/mailbox-pcc-c-add-query-channel-function/20260605-044323
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jassibrar/mailbox.git for-next
-patch link:    https://lore.kernel.org/r/20260604203749.168752-1-admiyo%40os.amperecomputing.com
-patch subject: [PATCH v01] mailbox/pcc.c:  add query channel function
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260605/202606050825.2uv1FZrY-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260605/202606050825.2uv1FZrY-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606050825.2uv1FZrY-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> Warning: drivers/mailbox/pcc.c:358 function parameter 'q_chan' not described in 'pcc_mbox_query_channel'
->> Warning: drivers/mailbox/pcc.c:358 function parameter 'subspace_id' not described in 'pcc_mbox_query_channel'
->> Warning: drivers/mailbox/pcc.c:358 function parameter 'q_chan' not described in 'pcc_mbox_query_channel'
->> Warning: drivers/mailbox/pcc.c:358 function parameter 'subspace_id' not described in 'pcc_mbox_query_channel'
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+SGkgU2FzaGlrbywKClRoYW5rIHlvdSB2ZXJ5IG11Y2ggZm9yIHlvdXIgZGV0YWlsZWQgcmV2aWV3
+LsKgV2UgYXBwcmVjaWF0ZSB0aGUgZmVlZGJhY2suCgo+IAo+IFRoYW5rIHlvdSBmb3IgeW91ciBj
+b250cmlidXRpb24hIFNhc2hpa28gQUkgcmV2aWV3IGZvdW5kIDIgcG90ZW50aWFsIGlzc3VlKHMp
+IHRvIGNvbnNpZGVyOgo+IC0gW0hpZ2hdIENsZWFyaW5nIHRoZSBpbnRlcnJ1cHQgc3RhdHVzIGJl
+Zm9yZSBkaXNhYmxpbmcgc2Vuc29yIGNvbnZlcnNpb25zIGluIGluaXRfaWZhY2UoKSBjcmVhdGVz
+IGEgcmFjZSBjb25kaXRpb24gdGhhdCBjYW4gbGVhZCB0byBhbiB1bmhhbmRsZWQgaW50ZXJydXB0
+IHN0b3JtLgo+IC0gW01lZGl1bV0gTWlzc2luZyBwbV9ydW50aW1lX2Rpc2FibGUoKSBpbiB0aGUg
+ZGV2aWNlIGNsZWFudXAgcGF0aCBjYXVzZXMgYW4gdW5iYWxhbmNlZCBQTSBydW50aW1lIHN0YXRl
+Lgo+IC0tCj4gCj4gY29tbWl0IDU4NDJhZDMyMjcxZjdkOTY3ZTlmMWUxMGMxMzQ3NGE1YjU3ZGE4
+YWQKPiBBdXRob3I6IEh1YW4gSGUgPGhlaHVhbjFAZXN3aW5jb21wdXRpbmcuY29tPgo+IAo+IGh3
+bW9uOiBBZGQgRXN3aW4gRUlDNzcwMCBQVlQgc2Vuc29yIGRyaXZlcgo+IAo+IEFkZCBzdXBwb3J0
+IGZvciBFU1dJTiBFSUM3NzAwIFZvbHRhZ2UgYW5kIFRlbXBlcmF0dXJlIHNlbnNvci4gVGhlIGRy
+aXZlcgo+IHN1cHBvcnRzIHRlbXBlcmF0dXJlIGFuZCB2b2x0YWdlIG1vbml0b3Jpbmcgd2l0aCBw
+b2x5bm9taWFsIGNvbnZlcnNpb24sCj4gYW5kIHByb3ZpZGVzIHN5c2ZzIGludGVyZmFjZSBmb3Ig
+c2Vuc29yIGRhdGEgYWNjZXNzLgo+IAo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvaHdtb24vZWlj
+NzcwMC1wdnQuYyBiL2RyaXZlcnMvaHdtb24vZWljNzcwMC1wdnQuYwo+ID4gbmV3IGZpbGUgbW9k
+ZSAxMDA2NDQKPiA+IC0tLSAvZGV2L251bGwKPiA+ICsrKyBiL2RyaXZlcnMvaHdtb24vZWljNzcw
+MC1wdnQuYwo+IFsgLi4uIF0KPiA+ICtzdGF0aWMgaW50IGVpYzc3MDBfcHZ0X2luaXRfaWZhY2Uo
+c3RydWN0IHB2dF9od21vbiAqcHZ0KQo+ID4gK3sKPiA+ICsJLyoKPiA+ICsJICogTWFrZSBzdXJl
+IGNvbnRyb2xsZXIgYXJlIGRpc2FibGVkIHNvIG5vdCB0byBhY2NpZGVudGFsbHkgaGF2ZSBJU1IK
+PiA+ICsJICogZXhlY3V0ZWQgYmVmb3JlIHRoZSBkcml2ZXIgZGF0YSBpcyBmdWxseSBpbml0aWFs
+aXplZC4gQ2xlYXIgdGhlIElSUQo+ID4gKwkgKiBzdGF0dXMgYXMgd2VsbC4KPiA+ICsJICovCj4g
+PiArCWVpYzc3MDBfcHZ0X3VwZGF0ZShwdnQtPnJlZ3MgKyBQVlRfSU5ULCBQVlRfSU5UX0NMUiwg
+UFZUX0lOVF9DTFIpOwo+ID4gKwllaWM3NzAwX3B2dF91cGRhdGUocHZ0LT5yZWdzICsgUFZUX0VO
+QSwgUFZUX0VOQV9FTiwgMCk7Cj4gCj4gW1NldmVyaXR5OiBIaWdoXQo+IENvdWxkIHRoaXMgY2xl
+YXItdGhlbi1kaXNhYmxlIHNlcXVlbmNlIGNhdXNlIGFuIHVuaGFuZGxlZCBpbnRlcnJ1cHQgc3Rv
+cm0/Cj4gCj4gSWYgYSBib290bG9hZGVyIGxlZnQgdGhlIHNlbnNvciBhY3RpdmUsIGEgY29udmVy
+c2lvbiBtaWdodCBjb21wbGV0ZSBpbiB0aGUKPiBzbWFsbCB3aW5kb3cgYmV0d2VlbiBjbGVhcmlu
+ZyBQVlRfSU5UX0NMUiBhbmQgZGlzYWJsaW5nIFBWVF9FTkFfRU4uIFRoaXMKPiB3b3VsZCBhc3Nl
+cnQgdGhlIElSUSBsaW5lLgo+IAo+IFdoZW4gdGhlIElSUSBpcyBsYXRlciByZXF1ZXN0ZWQgaW4g
+cHJvYmUoKSwgdGhlIElTUiBlaWM3NzAwX3B2dF9oYXJkX2lzcigpCj4gd2lsbCBmaXJlIGltbWVk
+aWF0ZWx5LiBIb3dldmVyLCBzaW5jZSB0aGUgZGV2aWNlIGlzIHN1c3BlbmRlZCwKPiBwbV9ydW50
+aW1lX2dldF9pZl9hY3RpdmUoKSByZXR1cm5zIDw9IDAsIGNhdXNpbmcgdGhlIElTUiB0byByZXR1
+cm4gSVJRX05PTkUKPiB3aXRob3V0IGNsZWFyaW5nIHRoZSBpbnRlcnJ1cHQuCj4gCj4gQmVjYXVz
+ZSB0aGUgaW50ZXJydXB0IGlzIGxldmVsLXRyaWdnZXJlZCAoSVJRRl9UUklHR0VSX0hJR0gpLCB3
+b3VsZCB0aGlzCj4gcmVzdWx0IGluIGEgY29udGludW91cyBpbnRlcnJ1cHQgc3Rvcm0gdGhhdCB1
+bHRpbWF0ZWx5IGZvcmNlcyB0aGUga2VybmVsCj4gdG8gcGVybWFuZW50bHkgZGlzYWJsZSB0aGUg
+SVJRIGxpbmU/Cj4gCj4gU2hvdWxkIHRoZSBjb252ZXJzaW9uIGVuZ2luZSBiZSBkaXNhYmxlZCBi
+ZWZvcmUgdGhlIGludGVycnVwdCBpcyBjbGVhcmVkPwoKSSB3aWxsIGZpeCB0aGlzIGJ5IGRpc2Fi
+bGluZyB0aGUgY29udmVyc2lvbiBlbmdpbmUgZmlyc3QsIGFuZCBvbmx5IHRoZW4KY2xlYXJpbmcg
+dGhlIHBlbmRpbmcgaW50ZXJydXB0IHN0YXR1cy4KClRoZSBpbml0aWFsaXphdGlvbiBzZXF1ZW5j
+ZSB3aWxsIGJlIGNoYW5nZWQgYWxvbmcgdGhlc2UgbGluZXM6CgrCoCDCoCBlaWM3NzAwX3B2dF91
+cGRhdGUocHZ0LT5yZWdzICsgUFZUX0VOQSwgUFZUX0VOQV9FTiwgMCk7CsKgIMKgIGVpYzc3MDBf
+cHZ0X3VwZGF0ZShwdnQtPnJlZ3MgKyBQVlRfSU5ULCBQVlRfSU5UX0NMUiwgUFZUX0lOVF9DTFIp
+OwrCoCDCoCByZWFkbChwdnQtPnJlZ3MgKyBQVlRfSU5UKTsKCj4gCj4gWyAuLi4gXQo+ID4gK3N0
+YXRpYyB2b2lkIGVpYzc3MDBfcHZ0X2Rpc2FibGVfcG1fcnVudGltZSh2b2lkICpkYXRhKQo+ID4g
+K3sKPiA+ICsJc3RydWN0IHB2dF9od21vbiAqcHZ0ID0gZGF0YTsKPiA+ICsKPiA+ICsJcG1fcnVu
+dGltZV9kb250X3VzZV9hdXRvc3VzcGVuZChwdnQtPmRldik7Cj4gPiArCXBtX3J1bnRpbWVfZm9y
+Y2Vfc3VzcGVuZChwdnQtPmRldik7Cj4gPiArCj4gPiArCWlmICghSVNfRU5BQkxFRChDT05GSUdf
+UE0pKQo+ID4gKwkJY2xrX2Rpc2FibGVfdW5wcmVwYXJlKHB2dC0+Y2xrKTsKPiA+ICt9Cj4gCj4g
+W1NldmVyaXR5OiBNZWRpdW1dCj4gRG9lcyB0aGlzIGRldmljZSBjbGVhbnVwIHBhdGggbmVlZCBh
+IGNhbGwgdG8gcG1fcnVudGltZV9kaXNhYmxlKCk/Cj4gCj4gSW4gZWljNzcwMF9wdnRfcHJvYmUo
+KSwgcG1fcnVudGltZV9lbmFibGUoKSBpcyBjYWxsZWQsIHdoaWNoIGFsdGVycyB0aGUKPiBQTSBj
+b3JlJ3MgZGlzYWJsZV9kZXB0aCBjb3VudC4gU2luY2UgcG1fcnVudGltZV9kaXNhYmxlKCkgaXMg
+bWlzc2luZyBoZXJlLAo+IGlmIHRoZSBkcml2ZXIgaXMgdW5ib3VuZCBhbmQgbGF0ZXIgcmVib3Vu
+ZCwgdGhlIG5leHQgcG1fcnVudGltZV9lbmFibGUoKQo+IHdpbGwgZW5jb3VudGVyIGFuIHVuYmFs
+YW5jZWQgZGVwdGguCj4gCj4gQ291bGQgdGhpcyB0cmlnZ2VyIGFuICJVbmJhbGFuY2VkIHBtX3J1
+bnRpbWVfZW5hYmxlISIgd2FybmluZyBhbmQgY2F1c2UKPiBpbmNvbnNpc3RlbnQgUE0gc3RhdGUg
+dHJhY2tpbmc/CgpJIGRvbid0IHRoaW5rIHRoaXMgaXMgYW4gYWN0dWFsIGlzc3VlLgoKSSByZS1j
+aGVja2VkIHRoZSBydW50aW1lIFBNIHBhaXJpbmcgaGVyZS4KClRoZSBwcm9iZSBwYXRoIGVuYWJs
+ZXMgcnVudGltZSBQTSB3aXRoIHBtX3J1bnRpbWVfZW5hYmxlKCkuIFRoZSBkZXZpY2UKY2xlYW51
+cCBwYXRoIGNhbGxzIHBtX3J1bnRpbWVfZm9yY2Vfc3VzcGVuZCgpLCBhbmQKcG1fcnVudGltZV9m
+b3JjZV9zdXNwZW5kKCkgYWxyZWFkeSBkaXNhYmxlcyBydW50aW1lIFBNIGludGVybmFsbHk6Cgpp
+bnQgcG1fcnVudGltZV9mb3JjZV9zdXNwZW5kKHN0cnVjdCBkZXZpY2UgKmRldikKewrCoCDCoCAu
+Li4KwqAgwqAgcG1fcnVudGltZV9kaXNhYmxlKGRldik7CsKgIMKgIC4uLgp9CgpUaGlzIGNsZWFu
+dXAgcGF0aCBpbnRlbnRpb25hbGx5IHVzZXMgcG1fcnVudGltZV9mb3JjZV9zdXNwZW5kKCkgcmF0
+aGVyCnRoYW4gYSBzdGFuZGFsb25lIHBtX3J1bnRpbWVfZGlzYWJsZSgpLgoKQSBzdGFuZGFsb25l
+IHBtX3J1bnRpbWVfZGlzYWJsZSgpIG9ubHkgZGlzYWJsZXMgcnVudGltZSBQTS4gSXQgZG9lcyBu
+b3QKZm9yY2UgYW4gUlBNX0FDVElWRSBkZXZpY2UgdGhyb3VnaCB0aGUgZHJpdmVyJ3MgcnVudGlt
+ZV9zdXNwZW5kKCkKY2FsbGJhY2ssIHNvIHRoZSBjbG9jayBjb3VsZCByZW1haW4gZW5hYmxlZCBp
+ZiB0aGUgZHJpdmVyIGlzIHVuYm91bmQKZHVyaW5nIHRoZSBhdXRvc3VzcGVuZCBkZWxheSB3aW5k
+b3cuCgpwbV9ydW50aW1lX2ZvcmNlX3N1c3BlbmQoKSBoYW5kbGVzIHRoYXQgY2FzZSBieSBkaXNh
+YmxpbmcgcnVudGltZSBQTQppbnRlcm5hbGx5IGFuZCwgaWYgdGhlIGRldmljZSBpcyBzdGlsbCBh
+Y3RpdmUsIGludm9raW5nIHRoZSBkcml2ZXIncwpydW50aW1lX3N1c3BlbmQoKSBjYWxsYmFjayBz
+byB0aGUgY2xvY2sgaXMgYWN0dWFsbHkgdHVybmVkIG9mZi4KClRoZXJlZm9yZSwgYWRkaW5nIGFu
+b3RoZXIgZXhwbGljaXQgcG1fcnVudGltZV9kaXNhYmxlKCkgYWZ0ZXIKcG1fcnVudGltZV9mb3Jj
+ZV9zdXNwZW5kKCkgd291bGQgcmVzdWx0IGluIGFuIGV4dHJhIGRpc2FibGVfZGVwdGgKaW5jcmVt
+ZW50IGFuZCBjb3VsZCBsZWF2ZSB0aGUgcnVudGltZSBQTSBzdGF0ZSB1bmJhbGFuY2VkLgoKUGxl
+YXNlIGxldCBtZSBrbm93IGlmIHlvdSB3b3VsZCBwcmVmZXIgYSBkaWZmZXJlbnQgcnVudGltZSBQ
+TSBjbGVhbnVwCmFwcHJvYWNoIGhlcmUuCgpCZXN0IHJlZ2FyZHMsCkh1YW4gSGUK
