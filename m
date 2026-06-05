@@ -1,302 +1,263 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11021080.outbound.protection.outlook.com [52.101.52.80])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0549D3F5BE3
-	for <linux-hwmon@vger.kernel.org>; Fri,  5 Jun 2026 10:06:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780653993; cv=none; b=ut6R1VbcSO5+cHHa4eqZWwzV7aNjOgkdjDxWtKYLtg/VNV9Z1VbKlAPnRnzwOSC4aGqBP+NAB7PjkYFQ7+hkxA5uS5aFkROYTclf/p592G2xY0VJ52J1MlmlaYQ90h4rk+Sj433yxQ4/PQuSfcUknejZpch4Lg0saQXZ7OgURn8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780653993; c=relaxed/simple;
-	bh=cRhepLsRkNAd6d/Dkyuf2TN0aczQ9ChDd+Shad/mEO0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NNJ1sBjUf9evj+sVHS0keinv9sw8EgA9feiKY4Sufg9p2fkznubSk07dY6ukdNcH5YWh9idhsJiLgTt9HMzuTSyl3trhTgaIMx+Xj4KehTrqA4bAU/e5A1z7XGq0wfEwUOD9ja6Eimi/liqo0gj5nfjG7TY70Sym1bvNI8fT2LE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=FblYBSmB; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36C0D194AE6;
+	Fri,  5 Jun 2026 14:19:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.80
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780669187; cv=fail; b=OTuz0Bu2RohQbQAuHxbAv9cAMQdkEqX87UgqG+9i8vgVyA97nr6wQe2A5bf6mjVCG0FEawNsX23DR60uiWNmX1KYuRZhSXISM3q1p3SOAo+Ood2HcXwJNma15/CPI7iFKEMZ3fLoEcgqDp96n0Mu85O6QGXc6heZzLVK0YWH+ag=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780669187; c=relaxed/simple;
+	bh=f4NUaCLTr0cwTuvVYsjSI0Pqyg1ZLCiu8J4iNiQEKpc=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=uDBXzmYBWhfDkJu4dTFsS/3WYMrBkWEVXmk9O5xKuzaFyluO8Z1DE+O0g9mVNLhEXO3f7Mpb2Qbo27VpFWcMz93UOcf3UEFNFX3v6YepPKcd6xHNgJKmbaSJ0hZdMCiyg6rqobpi2FK95eFUpdNqXC7nZbAnFtdIdFQ1qxZdj7U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=fail (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b=RXdlgPwo reason="key not found in DNS"; arc=fail smtp.client-ip=52.101.52.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="FblYBSmB"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-687e7edaafeso3404916a12.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 05 Jun 2026 03:06:30 -0700 (PDT)
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b="RXdlgPwo"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=kkRUiH9D/GkDLrzYxj/rTp/ZZnxiGW2uZo3KLyZOK84lb2mLBov6sLDFOcf1qjF+WdZ2T/7S+9cUFyFP22RvI0AudGR2v+44p2XeRwNsWjm4tw+pgu9FTP6viJQY5C5sr2fYRJmP2USe//XHIP2das1a4ACz4bpIdBDHLilMzBX/3ljtpNH6RCUlhYr3jfDToaTtI87t5Xd9k/BRMXCrOZ/+64rm4Y5Fh06vgG0n1afWYKKFDVj3dk1L45lPZrBrVvayhV4mA0Mg29wFy6eeWFHUW787QL7iAH3C/3amH61Kosdwvv36GbpwGT59VwmcRaekIOa6ONDyPMSwMuL2Eg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IRYbGOjbP9SLjeZ6uBWt3gbp+e4gEjiWXBHOZOvJV5k=;
+ b=GQVg9qoDPu01TWvjb4A0WA/04JdN1QWL10agbStsEeSTpm4ZH5VJhaAAXRyTValE3A6d+WHisitDnXxaoVbODcPKcAbaftl2OjvHw9pKpXIvK244atkkDz/ycVjz/z6VvnYaxgNsjZaPTUga9AyYzXJ1GCuKjPFA5lac0k8QXMi/b3CUqi7Md1/bXSjjZgmU/WUBfP7HoUKsAFst3vP+TY4VSy3rZcPijy2091VVcTY8V9wtnVJhPVZk4K1yG9wz1K/qO3nybgF8PkXJW17+Jk2lLeSpyOD7ED0byO1w+kNKybL8vqleId6p/j/xXK75pw5g15uRZJs1ArYafxg+9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=amperemail.onmicrosoft.com; dkim=pass
+ header.d=amperemail.onmicrosoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1780653989; x=1781258789; darn=vger.kernel.org;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=cRhepLsRkNAd6d/Dkyuf2TN0aczQ9ChDd+Shad/mEO0=;
-        b=FblYBSmBPPbL0YMuGZO+e+b2Qz6L8M9PrgH58I0PQQLnCG7RNpU71qtKyflhLGZB+w
-         K+8rZwEgi/aCeEM0j0bX0IiFDMl4/kRHXpE1aLniLbmzTrWgOB4CEul7QLCTjBSeGC0C
-         MNBPaNszKOmQWGbn5z2b2nq2Y8iK2kPdla9OIflhMAgK+SAztPmwnNm8yyy0LbXNwUgc
-         iXorNJuOR2JZesYlnDbp+E7BrCce8oWiQwdNojHVHIJOaKX4ot4Lfc9Utm4bwuMlM/Ov
-         DSAzql8mkE1lZZdhOuyrlBwObg3w4UhV1JX0T58GlafQszPrZpQq/tbKNLJ+Mya3WR5/
-         pZXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780653989; x=1781258789;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cRhepLsRkNAd6d/Dkyuf2TN0aczQ9ChDd+Shad/mEO0=;
-        b=M1A4pKR4exP73gDj/meQLg+bWrluDpFg9A9scAR2JKdO2mIgBD4qAdEJ2u3GCtYvL7
-         hH+IzdUumcVO289HcZD6YbNtoGw4TuxelHVsU/FrmjO9Iy56UNwEyRvhLWtPaFM/4OnI
-         n363Ich+NG6TVT8ddqSKvlrYajpCoqCB+ocBJViQfu/ec5u3MNULRMsB8h1bJZJecpUZ
-         tWiiZWyryL/3FiAAcvrp3G26xI3zS6Mn2bqKypMniPtyBFp4aHLZyvWbKag8+Un1q6J5
-         p1inCg1VwEGVuvvJneE1H6GJBBnPVJIVKXinhSqiyI8k7ilch3G2FvrveEUfCrl2dBBR
-         s7kQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/qZsSyXewD+ZAT27NVZDxNzHaHt2LO0JY1ZbIj5dyg66T4LxV45WQaBuixrAKhlZl75UzefyMhaX+HqA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPBInHvjrH7hv7s8h3k46cyHgBGyPMXESOEYWnARHc78ssaY5h
-	3pIKKJQtaDxyT80pl9e3btYAjL9p1uopJp88Yk2X7r8KEN53OUSNLa/Rp/TxFOX+J6Y=
-X-Gm-Gg: Acq92OEmYNaG4qQ6RLPy1EqCmKdF9MhceeUksrwAssSMoE11p9LQn0d1tkxVsYQXEqv
-	M3OFWL/nSy5sZ1HNJWfWyHlyXcVUyHcKWgqPKV6BwfWnw+o/QzdNPY3eBjEqG0h6MsuON6Xi2gU
-	JhtkOJd4tGxPZUN6KmpFql1IAep9RblliEm0WHmll0cu4RdBD2xQZLhOJ2u+aV09a4n7vW/+MAY
-	UikjCXyhHfG5gepTezficlC8QDZ2F/4WG4DLtxezRG4yb+ktlAvI9KaRlAimLrM4X1nCw3ORbOZ
-	cKsO+Z36bVJXA2eIE+fs9BRH7SN/jjltFzRr/3h6FXZMg46NTCZeY975229YA9JlJO4TTbuvdGr
-	vmQErl+UufdW9a9hKUiCa9JXX1xttLbsT42Z8CexRVdz1iBQfDAJdDaNE8P95jK5TisEZR29jsY
-	vwRNwh/HWpYCLDzEZcJNAFzD9LhKoTUiG8W9iqUIhI/MojKj2DjsvStz418WXutHCa2W5QHZ7bU
-	K4pvZYLrxA5hiaAQxTpDuZo79cMUCq6aGKyka0F7pZa246MBaO7T6BmGidQ69eX
-X-Received: by 2002:a05:6402:5201:b0:687:f18:c37f with SMTP id 4fb4d7f45d1cf-68fa514b053mr1541082a12.22.1780653989412;
-        Fri, 05 Jun 2026 03:06:29 -0700 (PDT)
-Received: from ?IPV6:2a00:12d0:af5d:ad01:5d3f:14e6:9bcb:5112? (2a00-12d0-af5d-ad01-5d3f-14e6-9bcb-5112.ip.tng.de. [2a00:12d0:af5d:ad01:5d3f:14e6:9bcb:5112])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-68e65b4d988sm3565186a12.25.2026.06.05.03.06.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Jun 2026 03:06:19 -0700 (PDT)
-Message-ID: <6f989d86-bbb8-47fd-8367-b2c8a3c5f6f5@suse.com>
-Date: Fri, 5 Jun 2026 12:06:12 +0200
+ d=amperemail.onmicrosoft.com; s=selector1-amperemail-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IRYbGOjbP9SLjeZ6uBWt3gbp+e4gEjiWXBHOZOvJV5k=;
+ b=RXdlgPwooX4btNZO50IiRfd7tZsvj/B5rFjOIazzkPIYDtNb8EXcY6W5t6gNAt+VsgEvhIdzJePWTqUMJ/pQ/0ByiL2LsBgJbihwDwV8+TRRGEWKTwHx1FRTxMLqsqcDRVLAXjvHV606wLlpVquhIyVLAaBppi0PaOjYd+AlH6Q=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amperemail.onmicrosoft.com;
+Received: from CY3PR01MB9194.prod.exchangelabs.com (2603:10b6:930:109::7) by
+ MW6PR01MB8577.prod.exchangelabs.com (2603:10b6:303:24b::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.92.7; Fri, 5 Jun 2026 14:19:33 +0000
+Received: from CY3PR01MB9194.prod.exchangelabs.com
+ ([fe80::4005:a1db:71b8:dc8c]) by CY3PR01MB9194.prod.exchangelabs.com
+ ([fe80::4005:a1db:71b8:dc8c%5]) with mapi id 15.21.0092.007; Fri, 5 Jun 2026
+ 14:19:28 +0000
+Message-ID: <345d17ed-2795-4c28-8027-8b680c644b34@amperemail.onmicrosoft.com>
+Date: Fri, 5 Jun 2026 10:19:26 -0400
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v01] mailbox/pcc.c: add query channel function
+To: Sudeep Holla <sudeep.holla@kernel.org>,
+ Adam Young <admiyo@os.amperecomputing.com>
+Cc: Jassi Brar <jassisinghbrar@gmail.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Saket Dumbre <saket.dumbre@intel.com>, Len Brown <lenb@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-acpi@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>,
+ Guenter Roeck <linux@roeck-us.net>, Huisong Li <lihuisong@huawei.com>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>, linux-arm-kernel@lists.infradead.org
+References: <20260604203749.168752-1-admiyo@os.amperecomputing.com>
+ <20260605-undetectable-polecat-of-wonder-f817c0@sudeepholla>
+Content-Language: en-US
+From: Adam Young <admiyo@amperemail.onmicrosoft.com>
+In-Reply-To: <20260605-undetectable-polecat-of-wonder-f817c0@sudeepholla>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CY8PR12CA0033.namprd12.prod.outlook.com
+ (2603:10b6:930:49::12) To CY3PR01MB9194.prod.exchangelabs.com
+ (2603:10b6:930:109::7)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/8] x86/msr: Drop 32-bit variants of *_on_cpu() MSR
- functions
-To: Ingo Molnar <mingo@kernel.org>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org, linux-edac@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-perf-users@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- linux-acpi@vger.kernel.org, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
- Tony Luck <tony.luck@intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Guenter Roeck <linux@roeck-us.net>,
- Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, James Clark
- <james.clark@linaro.org>, Huang Rui <ray.huang@amd.com>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Perry Yuan <perry.yuan@amd.com>, K Prateek Nayak <kprateek.nayak@amd.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Len Brown <lenb@kernel.org>, Hans de Goede <hansg@kernel.org>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-References: <20260605070826.2995913-1-jgross@suse.com>
- <aiKRbRHyDCjmqvGB@gmail.com> <a477aefe-e1c8-4652-b263-86c4cce09eba@suse.com>
- <aiKUenaT9VD0DrpW@gmail.com> <b7e799a6-1f1a-49ef-8aac-0d5fd4a06dc7@suse.com>
- <aiKcz6I8GO-TG8uq@gmail.com> <aiKdSPS-YT6KZV81@gmail.com>
-Content-Language: en-US
-From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-Autocrypt: addr=jgross@suse.com; keydata=
- xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOB
- ycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJve
- dYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJ
- NwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvx
- XP3FAp2pkW0xqG7/377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEB
- AAHNH0p1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT7CwHkEEwECACMFAlOMcK8CGwMH
- CwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgAAKCRCw3p3WKL8TL8eZB/9G0juS/kDY9LhEXseh
- mE9U+iA1VsLhgDqVbsOtZ/S14LRFHczNd/Lqkn7souCSoyWsBs3/wO+OjPvxf7m+Ef+sMtr0
- G5lCWEWa9wa0IXx5HRPW/ScL+e4AVUbL7rurYMfwCzco+7TfjhMEOkC+va5gzi1KrErgNRHH
- kg3PhlnRY0Udyqx++UYkAsN4TQuEhNN32MvN0Np3WlBJOgKcuXpIElmMM5f1BBzJSKBkW0Jc
- Wy3h2Wy912vHKpPV/Xv7ZwVJ27v7KcuZcErtptDevAljxJtE7aJG6WiBzm+v9EswyWxwMCIO
- RoVBYuiocc51872tRGywc03xaQydB+9R7BHPzsBNBFOMcBYBCADLMfoA44MwGOB9YT1V4KCy
- vAfd7E0BTfaAurbG+Olacciz3yd09QOmejFZC6AnoykydyvTFLAWYcSCdISMr88COmmCbJzn
- sHAogjexXiif6ANUUlHpjxlHCCcELmZUzomNDnEOTxZFeWMTFF9Rf2k2F0Tl4E5kmsNGgtSa
- aMO0rNZoOEiD/7UfPP3dfh8JCQ1VtUUsQtT1sxos8Eb/HmriJhnaTZ7Hp3jtgTVkV0ybpgFg
- w6WMaRkrBh17mV0z2ajjmabB7SJxcouSkR0hcpNl4oM74d2/VqoW4BxxxOD1FcNCObCELfIS
- auZx+XT6s+CE7Qi/c44ibBMR7hyjdzWbABEBAAHCwF8EGAECAAkFAlOMcBYCGwwACgkQsN6d
- 1ii/Ey9D+Af/WFr3q+bg/8v5tCknCtn92d5lyYTBNt7xgWzDZX8G6/pngzKyWfedArllp0Pn
- fgIXtMNV+3t8Li1Tg843EXkP7+2+CQ98MB8XvvPLYAfW8nNDV85TyVgWlldNcgdv7nn1Sq8g
- HwB2BHdIAkYce3hEoDQXt/mKlgEGsLpzJcnLKimtPXQQy9TxUaLBe9PInPd+Ohix0XOlY+Uk
- QFEx50Ki3rSDl2Zt2tnkNYKUCvTJq7jvOlaPd6d/W0tZqpyy7KVay+K4aMobDsodB3dvEAs6
- ScCnh03dDAFgIq5nsB11j3KPKdVoPlfucX2c7kGNH+LUMbzqV6beIENfNexkOfxHfw==
-In-Reply-To: <aiKdSPS-YT6KZV81@gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------TqpVRvHG9JxgX9GL0sRxBCyG"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY3PR01MB9194:EE_|MW6PR01MB8577:EE_
+X-MS-Office365-Filtering-Correlation-Id: 19b72792-001a-4006-a965-08dec30d743c
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|366016|1800799024|10070799003|55112099003|6133799003|22082099003|18002099003|4143699003|11063799006|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	Jj1JBxQMHlLHqYka9piRxCg7+NIoB8KFNphz7lFscGrPM0Bt00bxxqpGVSv3vpV5fOkkfCTW6BnzttSNHaIuNmzkR0Y6wTQGRiGai8wO1XxKu4PpSfDnhmyoDAAjjKhEWu/HatxxLlORITBzWakMzttaVAIKztflomzfeOwV2/thhrio5Dv38RA9SHj/+2uJAzoXLfHTqMulktexA5cSmJRoqgstS0NfHWib4FeOZglCxsRPIvr/4rr1Z7jy3Swz1a/4qQphbC8nIyuoPQ7dEsyRuPA2lKMcyBVUqMZjWEk/HnseUHwjvxVxuHszHOC7sSaMJzAXnuxCCSulEWKAjivV3xuPEvEBh1G8s5PuXHv0bwb/ch0oFi7oyFV/mz0m86IiVu5LVrWDZgy1g8mC8YVoLfzHRj4UZT4iydZD6MHvuvyMIm0pMCHD6DFeWzlIXBIzJh1q73UAj7/b9++69+PW2LfXpinm2sj0QyItE098hr+hmsCsuw9+2xdoetXmNVJGzLVZsM5iWUDsYj3PXfcQWakjE+9kjMVGeAxkj9Gxlq0movidB0+eCK2ROZXX8coghgQC+k+T2T5Sgxte9uAmBKzBfQLgkBl1ikTpD+bFcLfjA65NRc4bHAyXqf/coGzmV7VSI5KNL3xMMSxGrZ5su8ws2K2FOn9Oke90Wo5mtya4StthVaIDg8CeBsATII6qMa/R/8Bfu20C4exJbg==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY3PR01MB9194.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(10070799003)(55112099003)(6133799003)(22082099003)(18002099003)(4143699003)(11063799006)(56012099006);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?dWdrKzk3U0JSSGRmZEltSGlmbWxOUmI0YmdNZEZnTk41WWNlSVdub0c1VjBO?=
+ =?utf-8?B?bDdUanNIV0JOZWZWV1M4N2pVcmc0M3laSE1NMWR5NjNVKy9kNXNWUmsrMjA2?=
+ =?utf-8?B?Z3c4N1JiWUVHT1lTSGRLWXJRWVJBWWVwRWpUUkNsdExvK1BxUTlMR1RTMm9L?=
+ =?utf-8?B?S21acHhUckVRTW5PaE14dlRPUzBuR0RTeWJTcnkzNGdKV2d3cHpuaFpueFNJ?=
+ =?utf-8?B?R3dyTy9qWFhYN1c0NWE1Y2luYkhPMGJtK2pjUXpxWDI5YzN2dzQ2T04vY09r?=
+ =?utf-8?B?SmJQSTcxZmlxL1NzeWVGKzRUQlA1TnV1L2NCTG9vUklnZGxzMzFreVhLancx?=
+ =?utf-8?B?U0FISVF3K1lzcnZYR0ptSm40QU9MOVd4dHlrV2F2TkQvMnpUNmJGVHE2dzBn?=
+ =?utf-8?B?dFZnbWo4VkhKUWtLL0RESFFDUVo4WDRPblRyY29NeE9XVkhaM21kZmNSODdn?=
+ =?utf-8?B?ZFZITy9Rc3lYdDlwamFXc3JCOGlCOFN6NkZtMEZTQU8wV0NjL21IRjkxMjh5?=
+ =?utf-8?B?bUg5MmhCd1lrUXd4emZ2Q0RMK20xQSt6dWh6MHVOU2g3SnNyWW44Q1dHWWRp?=
+ =?utf-8?B?SWxyb0I3Vy9mYlVqSWV0enE3aytVTVJTang1eEoxb0w5eUFlZ1JuVlJyVUJy?=
+ =?utf-8?B?dzAxdzkvbExuRGpkOXBKN0dmVkYyQWtuMlpoMWYrRXJ6QzlkaHZwUWl2MFBp?=
+ =?utf-8?B?ckxmWGdISzJLUERTTEZUWUtieEdKNmlaeU91WWNwdDVjMDIxaDlPbUR2Qkxj?=
+ =?utf-8?B?UGdwbDVwOFpCbkplbnNBY25Kc1FtcDBWVStwbnBRMkZBZnNJR1VYNWdVNDI2?=
+ =?utf-8?B?VmRXWWwwbGN3R0JLRXlRZzlybmdXR0l6R0lLMFV5VURIaXp1L2QxU3RWUElJ?=
+ =?utf-8?B?ZG9oQkNFTzJiQzFSRUF1RkswWVd5ZUNXSVZuM0NjVzQ2RkdyeVEwbVlHM2tS?=
+ =?utf-8?B?YXA1YndicEhjUHZKc2hCYTZ6M1lacVplVC8zL2JxN251SFhDb1J1bFF0VWoy?=
+ =?utf-8?B?YlA3c2RESmZXVGxPWlRCbkxzSjhzVi9VWkNialFjT1hZWXpMUUhmOERIT0Yr?=
+ =?utf-8?B?UEpxTXVkQkNUWVdIakFteUtHN0JUT25ydVM4UUhRSkVCMUJDaUpaa1NHMkFM?=
+ =?utf-8?B?R21EOXBmMU1vZ2ZPanA1eDFyK1I4YU9kbkZKb05EVm05NG93NTdkOGFScEtV?=
+ =?utf-8?B?WWQ0dDl2bjl3d3FseHpldnFWWGk3QVN0UjRCQzY2Z1dsanp6ZVNrMUpTRUJs?=
+ =?utf-8?B?QkFpQUNqbU5vSVJJVnNKbHh5OWpJd2djckNrSVhPSWVBRzdLUkEyUFZRWHpD?=
+ =?utf-8?B?QW9PQXZHWmhEZVk2WXhZTXduT2gyL3BOQ1hBaEhYeGlSRWZqanFxdUU1Tk9q?=
+ =?utf-8?B?QUc3QkZ6ZjVWS2thbDgwRkdNWFNXWit6S2NxY28xdjIyYjRIU2NsVlNTRXgy?=
+ =?utf-8?B?emZjL254bEpCd1hjaXk0THBqZkNpWk1PT2MrcjhaTEpyQUJyUy9UZGE2aGRT?=
+ =?utf-8?B?RWFlVHU2eTNEVUhiQklHNVVnOXp6YjE4Uis2SjdZWVJjK0Z0Rlc5d0xyV2gv?=
+ =?utf-8?B?dDVwZUQ4WGNHNE5sRGVuQjVkenQvVlkzRS81UFFUUUZvSFBSK1B0SWppUklV?=
+ =?utf-8?B?cGFRWHRhaTRtbGh1MzRGenYvck0vN1NOMEJmQkhvdkMvbjN4Y0EyYkEzQ2lV?=
+ =?utf-8?B?VGE4Mi9CaU5FWmNiQlROdjhETktRL2ZOU0dPZ1ZIWFhtb25zOHFORWJRQXky?=
+ =?utf-8?B?aXhyNnhZVnp4Y2t6eDJCUkNHQ0N1MFptcmFYYWkwN3R2M29FREY1SWlJRmZ3?=
+ =?utf-8?B?M3JoM2ZSdFRuUzk3b0hZSWNjZTEzakxOOXhHNkhpc0k1M1VYM2NrTjhGRG9T?=
+ =?utf-8?B?T0R6OWVMQ2RkNmdsTlJqTnFSVnMvMDZ5aW9mTUxPTjUybWRQR3BDMGJhdHdQ?=
+ =?utf-8?B?YVRyUVFqUWdqVWdEcUYwcHY1THQ4VW1PNWZrbVFGOVBhMnowKzFlRzJmbjJ3?=
+ =?utf-8?B?VWJkZHJGcnEwMUpTdC9DRzVYcXRuOVY0WVBIL3hGL3RsMzh2TmttS1hPdmZa?=
+ =?utf-8?B?MHl0MHJNa3o2OVNuSW8vNnlMc1JaWXhNQURnRXVlak8wd3BHYVJOMHZSR0xF?=
+ =?utf-8?B?a1cxbDhxdTBZYmR1NzZQOVFkdVRCejRxM3kwWk1mTUl3aHh2eWRkRXBnNTA3?=
+ =?utf-8?B?MVBNdGZGU29ObmFXY1dON29wMStPTXlYYis3YThDRDY2Mnd5Z1RxamFESHNE?=
+ =?utf-8?B?V3FjaXpRaFF0VW5SbVNMalBaWFlLdmpRS2Fsck1SNUgyTlVxRUxDRnNTOXQw?=
+ =?utf-8?B?QStwei9GVXNPM1ZzY1BJbG9sQ2hiaGI0aGNLdW01WTl6a1pLVGR3WEkzVFJG?=
+ =?utf-8?Q?5MMfkxY5eJsGDciMnIfNERs7nioBNsUR5zPHJrNAGanaP?=
+X-MS-Exchange-AntiSpam-MessageData-1:
+	wQNapukJHB8sNJictABQMXlVwgnxAyOO6Yicab9j7CR/zxV8pBl+Cuy3
+X-OriginatorOrg: amperemail.onmicrosoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 19b72792-001a-4006-a965-08dec30d743c
+X-MS-Exchange-CrossTenant-AuthSource: CY3PR01MB9194.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2026 14:19:28.7407
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: t8Uhr92NgBpAVtJGmUI9193hgfwtmnj1/Q80UTXL6mauB03ZXeGM7yayiWb6U8tr7X4kC2PJxtKr5yrZ2SDsIzYyMFOYxbNhySv29cTlVGs9py8jPCLXTht5U088qsQ1
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR01MB8577
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------TqpVRvHG9JxgX9GL0sRxBCyG
-Content-Type: multipart/mixed; boundary="------------Da1SKvb0yQ6c70iODbaa72pf";
- protected-headers="v1"
-From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-To: Ingo Molnar <mingo@kernel.org>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org, linux-edac@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-perf-users@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- linux-acpi@vger.kernel.org, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
- Tony Luck <tony.luck@intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Guenter Roeck <linux@roeck-us.net>,
- Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, James Clark
- <james.clark@linaro.org>, Huang Rui <ray.huang@amd.com>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Perry Yuan <perry.yuan@amd.com>, K Prateek Nayak <kprateek.nayak@amd.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Len Brown <lenb@kernel.org>, Hans de Goede <hansg@kernel.org>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Message-ID: <6f989d86-bbb8-47fd-8367-b2c8a3c5f6f5@suse.com>
-Subject: Re: [PATCH 0/8] x86/msr: Drop 32-bit variants of *_on_cpu() MSR
- functions
-References: <20260605070826.2995913-1-jgross@suse.com>
- <aiKRbRHyDCjmqvGB@gmail.com> <a477aefe-e1c8-4652-b263-86c4cce09eba@suse.com>
- <aiKUenaT9VD0DrpW@gmail.com> <b7e799a6-1f1a-49ef-8aac-0d5fd4a06dc7@suse.com>
- <aiKcz6I8GO-TG8uq@gmail.com> <aiKdSPS-YT6KZV81@gmail.com>
-In-Reply-To: <aiKdSPS-YT6KZV81@gmail.com>
+MCTP-PCC.  I was not sure if I should ad the Patch to this one or not, 
+as the MCTP-PCC is still going through review.
 
---------------Da1SKvb0yQ6c70iODbaa72pf
-Content-Type: multipart/mixed; boundary="------------wGgS4ganA3WbEq7JPL9B9fB0"
+Essentially, it need two pieces of information before start up. 1, it 
+needs to be able to check the sizes of the two shared memory buffers in 
+order to set the MTU.  2, it confirms that the Channels are indeed Type3 
+and Type4.
 
---------------wGgS4ganA3WbEq7JPL9B9fB0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+The base patch for that is
 
-T24gMDUuMDYuMjYgMTE6NTYsIEluZ28gTW9sbmFyIHdyb3RlOg0KPiANCj4gKiBJbmdvIE1v
-bG5hciA8bWluZ29Aa2VybmVsLm9yZz4gd3JvdGU6DQo+IA0KPj4NCj4+ICogSsO8cmdlbiBH
-cm/DnyA8amdyb3NzQHN1c2UuY29tPiB3cm90ZToNCj4+DQo+Pj4+IFdlbGwsIHdlIGhhZCBh
-IHNpbWlsYXIgZGlzY3Vzc2lvbiBiYWNrIHdoZW4gd2Ugc3RhbmRhcmRpemVkIG9uDQo+Pj4+
-IHJkbXNycSgpIGFuZCB3cm1zcnEoKSwgYW5kIHdlIHVzZSB0aGVtIGFzIG91ciBwcmltYXJ5
-IDY0LWJpdA0KPj4+PiBNU1IgaGFuZGxpbmcgQVBJcy4gV2h5IGhhdmUgYSBkaWZmZXJlbnQg
-cGF0dGVybiBpbiBhbnkgb2YgdGhlDQo+Pj4+IGRlcml2ZWQgQVBJcz8gSXQgc2hvdWxkIHJl
-YWxseSB1c2UgdGhlIHNhbWUgY29uY2VwdHVhbCBuYW1lc3BhY2UsDQo+Pj4+IG5vdCBzb21l
-IGNvbmZ1c2luZyBtaXh0dXJlIG9mIHR3byBuYW1pbmcgc2NoZW1lcy4NCj4+Pg0KPj4+IElu
-IHRoZSBsb25nIHJ1biBJJ2QgbGlrZSB0byBkbyB0aGUgc2FtZSBjb252ZXJzaW9uIGZvciB0
-aGUgcmRtc3IqKCkgYW5kDQo+Pj4gd3Jtc3IqKCkgaW50ZXJmYWNlcywgdG9vIChzbyBvbmx5
-IG9mZmVyaW5nIGFuZCB1c2luZyB0aGUgNjQtYml0IHZhcmlhbnRzKS4NCj4+DQo+PiBXaHk/
-IFdlIGhhZCB0aGlzIGRpc2N1c3Npb24gZm9yIHRoZSBvcmlnaW5hbCBNU1IgQVBJIG5hbWVz
-cGFjZQ0KPj4gY2xlYW51cCBhIHllYXIgYWdvLCBhbmQgZGVjaWRlZCB0byBzdGFuZGFyZGl6
-ZSBvbiB0aGUgcmRtc3JxKCkvd3Jtc3JxKCkNCj4+IG5hbWVzcGFjZToNCj4+DQo+PiAgICBj
-NDM1ZTYwOGNmNTkgeDg2L21zcjogUmVuYW1lICdyZG1zcmwoKScgdG8gJ3JkbXNycSgpJw0K
-Pj4gICAgNzgyNTVlYjIzOTczIHg4Ni9tc3I6IFJlbmFtZSAnd3Jtc3JsKCknIHRvICd3cm1z
-cnEoKScNCj4+ICAgIDZmZTIyYWJhY2Q0MCB4ODYvbXNyOiBSZW5hbWUgJ3JkbXNybF9zYWZl
-KCknIHRvICdyZG1zcnFfc2FmZSgpJw0KPj4gICAgNmZhMTdlZmU0NTQ0IHg4Ni9tc3I6IFJl
-bmFtZSAnd3Jtc3JsX3NhZmUoKScgdG8gJ3dybXNycV9zYWZlKCknDQo+PiAgICA1ZTQwNGNi
-N2FjNGMgeDg2L21zcjogUmVuYW1lICdyZG1zcmxfc2FmZV9vbl9jcHUoKScgdG8gJ3JkbXNy
-cV9zYWZlX29uX2NwdSgpJw0KPj4gICAgMjdhMjNhNTQ0YTU1IHg4Ni9tc3I6IFJlbmFtZSAn
-d3Jtc3JsX3NhZmVfb25fY3B1KCknIHRvICd3cm1zcnFfc2FmZV9vbl9jcHUoKScNCj4+ICAg
-IGQ3NDg0YmFiZDJjNCB4ODYvbXNyOiBSZW5hbWUgJ3JkbXNybF9vbl9jcHUoKScgdG8gJ3Jk
-bXNycV9vbl9jcHUoKScNCj4+ICAgIGM4OTVlY2RhYjJlNCB4ODYvbXNyOiBSZW5hbWUgJ3dy
-bXNybF9vbl9jcHUoKScgdG8gJ3dybXNycV9vbl9jcHUoKScNCj4+ICAgIGViZTI5MzA5YzRk
-MiB4ODYvbXNyOiBSZW5hbWUgJ21jZV9yZG1zcmwoKScgdG8gJ21jZV9yZG1zcnEoKScNCj4+
-ICAgIDhlNDRlODNmNTdjMyB4ODYvbXNyOiBSZW5hbWUgJ21jZV93cm1zcmwoKScgdG8gJ21j
-ZV93cm1zcnEoKScNCj4+ICAgIGUyYjhhZjBjNjkzOSB4ODYvbXNyOiBSZW5hbWUgJ3JkbXNy
-bF9hbWRfc2FmZSgpJyB0byAncmRtc3JxX2FtZF9zYWZlKCknDQo+PiAgICA2MDRkMTVkMTVl
-YmQgeDg2L21zcjogUmVuYW1lICd3cm1zcmxfYW1kX3NhZmUoKScgdG8gJ3dybXNycV9hbWRf
-c2FmZSgpJw0KPj4gICAgN2NiYzJiYTdjMTA3IHg4Ni9tc3I6IFJlbmFtZSAnbmF0aXZlX3dy
-bXNybCgpJyB0byAnbmF0aXZlX3dybXNycSgpJw0KPj4gICAgZWVmNDc2ZjE1YzgzIHg4Ni9t
-c3I6IFJlbmFtZSAnd3Jtc3JsX2NzdGFyKCknIHRvICd3cm1zcnFfY3N0YXIoKScNCj4+DQo+
-PiBUaGVyZSdzIHNldmVyYWwgZ29vZCByZWFzb25zIHRvIHVzZSB0aGUgJ3EnIHN1ZmZpeCBp
-biB0aGUgQVBJIG5hbWVzLA0KPj4gd2h5IHJlbGl0aWdhdGUgdGhpcz8gOi0pDQo+IA0KPiBB
-bmQganVzdCB0byBiZSBjbGVhcjogSSBoYXZlIG5vIG9iamVjdGlvbnMgd2hhdHNvZXZlciB0
-bw0KPiBwaGFzaW5nIG91dCBhbGwgdGhlIG9sZCAzMi1iaXQgQVBJcywgbGlrZSB5b3VyIHNl
-cmllcyBkb2VzLg0KDQpUaGFua3MgZm9yIHRoZSBjb25maXJtYXRpb24uIDotKQ0KDQpBbmQg
-cmVnYXJkaW5nIHRoZSAicSIgc3VmZml4OiBJJ20gbm90IGluc2lzdGluZyB0byBkcm9wIGl0
-LCBJIGp1c3QgZmVsdCBpdCB3b3VsZA0Kbm8gbG9uZ2VyIGJlIG5lZWRlZCB3aGVuIHRoZSB2
-YXJpYW50cyB3aXRob3V0IHN1ZmZpeCBubyBsb25nZXIgZXhpc3QuIElmIHlvdQ0KbGlrZSB0
-byBrZWVwIGl0LCB0aGVuIGJlIGl0IHNvLg0KDQoNCkp1ZXJnZW4NCg==
---------------wGgS4ganA3WbEq7JPL9B9fB0
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+https://lore.kernel.org/lkml/20260522193610.234166-1-admiyo@os.amperecomputing.com/
 
-xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjri
-oyspZKOBycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2
-kaV2KL9650I1SJvedYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i
-1TXkH09XSSI8mEQ/ouNcMvIJNwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/B
-BLUVbDa4+gmzDC9ezlZkTZG2t14zWPvxXP3FAp2pkW0xqG7/377qptDmrk42GlSK
-N4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEBAAHNHEp1ZXJnZW4gR3Jvc3Mg
-PGpnQHBmdXBmLm5ldD7CwHkEEwECACMFAlOMcBYCGwMHCwkIBwMCAQYVCAIJCgsE
-FgIDAQIeAQIXgAAKCRCw3p3WKL8TL0KdB/93FcIZ3GCNwFU0u3EjNbNjmXBKDY4F
-UGNQH2lvWAUy+dnyThpwdtF/jQ6j9RwE8VP0+NXcYpGJDWlNb9/JmYqLiX2Q3Tye
-vpB0CA3dbBQp0OW0fgCetToGIQrg0MbD1C/sEOv8Mr4NAfbauXjZlvTj30H2jO0u
-+6WGM6nHwbh2l5O8ZiHkH32iaSTfN7Eu5RnNVUJbvoPHZ8SlM4KWm8rG+lIkGurq
-qu5gu8q8ZMKdsdGC4bBxdQKDKHEFExLJK/nRPFmAuGlId1E3fe10v5QL+qHI3EIP
-tyfE7i9Hz6rVwi7lWKgh7pe0ZvatAudZ+JNIlBKptb64FaiIOAWDCx1SzR9KdWVy
-Z2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+wsB5BBMBAgAjBQJTjHCvAhsDBwsJ
-CAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey/HmQf/RtI7kv5A2PS4
-RF7HoZhPVPogNVbC4YA6lW7DrWf0teC0RR3MzXfy6pJ+7KLgkqMlrAbN/8Dvjoz7
-8X+5vhH/rDLa9BuZQlhFmvcGtCF8eR0T1v0nC/nuAFVGy+67q2DH8As3KPu0344T
-BDpAvr2uYM4tSqxK4DURx5INz4ZZ0WNFHcqsfvlGJALDeE0LhITTd9jLzdDad1pQ
-SToCnLl6SBJZjDOX9QQcyUigZFtCXFst4dlsvddrxyqT1f17+2cFSdu7+ynLmXBK
-7abQ3rwJY8SbRO2iRulogc5vr/RLMMlscDAiDkaFQWLoqHHOdfO9rURssHNN8WkM
-nQfvUewRz80hSnVlcmdlbiBHcm9zcyA8amdyb3NzQG5vdmVsbC5jb20+wsB5BBMB
-AgAjBQJTjHDXAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/
-Ey8PUQf/ehmgCI9jB9hlgexLvgOtf7PJnFOXgMLdBQgBlVPO3/D9R8LtF9DBAFPN
-hlrsfIG/SqICoRCqUcJ96Pn3P7UUinFG/I0ECGF4EvTE1jnDkfJZr6jrbjgyoZHi
-w/4BNwSTL9rWASyLgqlA8u1mf+c2yUwcGhgkRAd1gOwungxcwzwqgljf0N51N5Jf
-VRHRtyfwq/ge+YEkDGcTU6Y0sPOuj4Dyfm8fJzdfHNQsWq3PnczLVELStJNdapwP
-OoE+lotufe3AM2vAEYJ9rTz3Cki4JFUsgLkHFqGZarrPGi1eyQcXeluldO3m91NK
-/1xMI3/+8jbO0tsn1tqSEUGIJi7ox80eSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1
-c2UuZGU+wsB5BBMBAgAjBQJTjHDrAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgEC
-F4AACgkQsN6d1ii/Ey+LhQf9GL45eU5vOowA2u5N3g3OZUEBmDHVVbqMtzwlmNC4
-k9Kx39r5s2vcFl4tXqW7g9/ViXYuiDXb0RfUpZiIUW89siKrkzmQ5dM7wRqzgJpJ
-wK8Bn2MIxAKArekWpiCKvBOB/Cc+3EXE78XdlxLyOi/NrmSGRIov0karw2RzMNOu
-5D+jLRZQd1Sv27AR+IP3I8U4aqnhLpwhK7MEy9oCILlgZ1QZe49kpcumcZKORmzB
-TNh30FVKK1EvmV2xAKDoaEOgQB4iFQLhJCdP1I5aSgM5IVFdn7v5YgEYuJYx37Io
-N1EblHI//x/e2AaIHpzK5h88NEawQsaNRpNSrcfbFmAg987ATQRTjHAWAQgAyzH6
-AOODMBjgfWE9VeCgsrwH3exNAU32gLq2xvjpWnHIs98ndPUDpnoxWQugJ6MpMncr
-0xSwFmHEgnSEjK/PAjppgmyc57BwKII3sV4on+gDVFJR6Y8ZRwgnBC5mVM6JjQ5x
-Dk8WRXljExRfUX9pNhdE5eBOZJrDRoLUmmjDtKzWaDhIg/+1Hzz93X4fCQkNVbVF
-LELU9bMaLPBG/x5q4iYZ2k2ex6d47YE1ZFdMm6YBYMOljGkZKwYde5ldM9mo45mm
-we0icXKLkpEdIXKTZeKDO+Hdv1aqFuAcccTg9RXDQjmwhC3yEmrmcfl0+rPghO0I
-v3OOImwTEe4co3c1mwARAQABwsBfBBgBAgAJBQJTjHAWAhsMAAoJELDendYovxMv
-Q/gH/1ha96vm4P/L+bQpJwrZ/dneZcmEwTbe8YFsw2V/Buv6Z4Mysln3nQK5ZadD
-534CF7TDVft7fC4tU4PONxF5D+/tvgkPfDAfF77zy2AH1vJzQ1fOU8lYFpZXTXIH
-b+559UqvIB8AdgR3SAJGHHt4RKA0F7f5ipYBBrC6cyXJyyoprT10EMvU8VGiwXvT
-yJz3fjoYsdFzpWPlJEBRMedCot60g5dmbdrZ5DWClAr0yau47zpWj3enf1tLWaqc
-suylWsviuGjKGw7KHQd3bxALOknAp4dN3QwBYCKuZ7AddY9yjynVaD5X7nF9nO5B
-jR/i1DG86lem3iBDXzXsZDn8R3/CwO0EGAEIACAWIQSFEmdy6PYElKXQl/ew3p3W
-KL8TLwUCWt3w0AIbAgCBCRCw3p3WKL8TL3YgBBkWCAAdFiEEUy2wekH2OPMeOLge
-gFxhu0/YY74FAlrd8NAACgkQgFxhu0/YY75NiwD/fQf/RXpyv9ZX4n8UJrKDq422
-bcwkujisT6jix2mOOwYBAKiip9+mAD6W5NPXdhk1XraECcIspcf2ff5kCAlG0DIN
-aTUH/RIwNWzXDG58yQoLdD/UPcFgi8GWtNUp0Fhc/GeBxGipXYnvuWxwS+Qs1Qay
-7/Nbal/v4/eZZaWs8wl2VtrHTS96/IF6q2o0qMey0dq2AxnZbQIULiEndgR625EF
-RFg+IbO4ldSkB3trsF2ypYLij4ZObm2casLIP7iB8NKmQ5PndL8Y07TtiQ+Sb/wn
-g4GgV+BJoKdDWLPCAlCMilwbZ88Ijb+HF/aipc9hsqvW/hnXC2GajJSAY3Qs9Mib
-4Hm91jzbAjmp7243pQ4bJMfYHemFFBRaoLC7ayqQjcsttN2ufINlqLFPZPR/i3IX
-kt+z4drzFUyEjLM1vVvIMjkUoJs=3D
-=3DeeAB
------END PGP PUBLIC KEY BLOCK-----
+This is the diff that would use them.
 
---------------wGgS4ganA3WbEq7JPL9B9fB0--
 
---------------Da1SKvb0yQ6c70iODbaa72pf--
+commit c02159450cf38cb778105f10a11708d358a3b633 
+(admiyo/mctp-pcc-v45-net-next, mctp-pcc-v45-net-next)
+Author: Adam Young <admiyo@os.amperecomputing.com>
+Date:   Thu Apr 30 10:48:41 2026 -0700
 
---------------TqpVRvHG9JxgX9GL0sRxBCyG
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+     mctp-pcc query channel information without opening channel.
 
------BEGIN PGP SIGNATURE-----
+     Opening the channel can trigger the sending of
+     a message from the remote side before the driver
+     is ready to read it.  Take advantage of the API that allows
+     querying of the channel data without opening the channel.
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmoin5QFAwAAAAAACgkQsN6d1ii/Ey+B
-tQgAnalu6YDwl7RAxP1bHeyoU9ECkDR1tBNBsYxRi0JmwByzbS3zzWmmvqA4PCeVfGzSVvuIim2f
-ExvmQqBRKkssFdrolUukjdn8/bKTnGxf7uqzAsVaxkvBvioFPCUVSn7c1aZYQnXdbEHawXmxdR68
-zsBgnUFbsY6NW/IlHx2OyBFJtbgvDazWEweozfMFxlB4hjLnWlsvxjelQz7Yrjlw36KaCzZrdA1E
-3TT8GSe/HIAF9q+xZChDMoFOz1P5RPibCLkAKF5Xz29ffrwptZRoulmnaJcPWdgbRf6GU0/yTTJa
-bHrx+Rc/0cmS1RHN9zjZWco/831obneQ169TBKcYzw==
-=nXsn
------END PGP SIGNATURE-----
+diff --git a/drivers/net/mctp/mctp-pcc.c b/drivers/net/mctp/mctp-pcc.c
+index bb5d53ee3d7c..01a9966eddd2 100644
+--- a/drivers/net/mctp/mctp-pcc.c
++++ b/drivers/net/mctp/mctp-pcc.c
+@@ -318,25 +318,50 @@ static void mctp_cleanup_netdev(void *data)
+         mctp_unregister_netdev(ndev);
+  }
 
---------------TqpVRvHG9JxgX9GL0sRxBCyG--
++static int check_channel_types(struct mctp_pcc_ndev *mctp_pcc_ndev)
++{
++       struct mctp_pcc_mailbox *outbox;
++       struct mctp_pcc_mailbox *inbox;
++       struct pcc_mbox_chan chan;
++       int actual_type;
++
++       outbox = &mctp_pcc_ndev->outbox;
++        if (pcc_mbox_query_channel(&chan, outbox->index))
++               return -EINVAL;
++       actual_type = chan.type;
++       if (actual_type != ACPI_PCCT_TYPE_EXT_PCC_MASTER_SUBSPACE){
++               pr_err("MCTP-PCC outbox channel wrong type: 
+%d",actual_type);
++               return -EINVAL;
++       }
++
++       inbox = &mctp_pcc_ndev->inbox;
++        if (pcc_mbox_query_channel(&chan, inbox->index))
++               return -EINVAL;
++       actual_type = chan.type;
++       if (actual_type != ACPI_PCCT_TYPE_EXT_PCC_SLAVE_SUBSPACE){
++               pr_err("MCTP-PCC inbox channel wrong type: %d",actual_type);
++               return -EINVAL;
++       }
++
++       return 0;
++}
++
+  static int initialize_mtu(struct net_device *ndev)
+  {
+         struct mctp_pcc_ndev *mctp_pcc_ndev;
+         struct mctp_pcc_mailbox *outbox;
+         struct pcc_mbox_chan *pchan;
++       struct pcc_mbox_chan chan;
+         int mctp_pcc_max_mtu;
+
+         mctp_pcc_ndev = netdev_priv(ndev);
+         outbox = &mctp_pcc_ndev->outbox;
+-       pchan = pcc_mbox_request_channel(&outbox->client, outbox->index);
+-       if (IS_ERR(pchan))
+-               return PTR_ERR(pchan);
+-       if (pchan->shmem_size < MCTP_MIN_MTU + sizeof(struct 
+acpi_pcct_ext_pcc_shared_memory)) {
+-               pcc_mbox_free_channel(pchan);
++       if (pcc_mbox_query_channel(&chan, outbox->index))
++               return -EINVAL;
++       if (chan.shmem_size < MCTP_MIN_MTU + sizeof(struct 
+acpi_pcct_ext_pcc_shared_memory)) {
+                 return -EINVAL;
+         }
+-       mctp_pcc_max_mtu = pchan->shmem_size - sizeof(struct 
+acpi_pcct_ext_pcc_shared_memory);
+-       pcc_mbox_free_channel(pchan);
+-
++       mctp_pcc_max_mtu = chan.shmem_size - sizeof(struct 
+acpi_pcct_ext_pcc_shared_memory);
+         ndev->mtu = MCTP_MIN_MTU;
+         ndev->max_mtu = mctp_pcc_max_mtu;
+         ndev->min_mtu = MCTP_MIN_MTU;
+@@ -378,7 +403,6 @@ static int mctp_pcc_driver_add(struct acpi_device 
+*acpi_dev)
+                 return -ENOMEM;
+
+         mctp_pcc_ndev = netdev_priv(ndev);
+-
+         mctp_pcc_ndev->inbox.index = context.inbox_index;
+         mctp_pcc_ndev->inbox.client.dev = dev;
+         mctp_pcc_ndev->outbox.index = context.outbox_index;
+
+
+
+On 6/5/26 03:55, Sudeep Holla wrote:
+> On Thu, Jun 04, 2026 at 04:37:48PM -0400, Adam Young wrote:
+>> Drivers need information about a channel prior to creating a channel
+>> or they risk triggering message delivery on the remote side of a
+>> connection.
+>>
+>> One of those pieces of infomration is the type of channel.
+>>
+>> Add PCC channel type to records and expose PCC channel type to client.
+>>
+> Please point me to the user of this interface.
+>
