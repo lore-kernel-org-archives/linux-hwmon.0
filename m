@@ -1,130 +1,172 @@
-Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC62A42E00D;
-	Fri,  5 Jun 2026 06:57:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79AE93AEF2E
+	for <linux-hwmon@vger.kernel.org>; Fri,  5 Jun 2026 07:08:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780642658; cv=none; b=gW3UgA99+8B1JFfSEZQcIEqWVDDf/GhUmb6CiVDklJ7HpyBdAYI3J+RbhV00Qn3ZquydTml8EQp1oNHJNdaUsvxZRsnHxa2GqZ1PgLG/37LmYcEZkAmvKqYDlsArYXwVecwSOXlJ7GN7bL9lcTg1FRRtD3DcePwCoO2oCMOePSw=
+	t=1780643312; cv=none; b=Uy9eIOnT/bPQPlmy40ZeI9ypBxdGhPtQEffiFscWESW/fFzznHLtJfULT10C75Y6TvJszKSmq3/eDUkfWwRTpSRh3/3NbQ/M8w1TApo+XPXkNVk3KzC/Tcc84FORwLEuxUnE55TfwgIu3IG3mEmCDqZWue2kCrclpXKZT8+JAhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780642658; c=relaxed/simple;
-	bh=c2n8HfFJZWyE3FfVuV4d0gFPUl0N2KB4g/8imvsfJ0s=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=JQhbLdOmgx8DPnV0AJeHVRULMoqmy2NeuxcnQzL6hX4tLtbOHa1jDLeJkFrCVrp+yxG/l4onS8k6XGYL/BpCXeFGSncXLac2kvgHCxGwlMuLjb4Vu2yO83lyZH/28hhUkIVhvkEZ9SkeDlpr2ARXRSEogXkbsAUTLpQcRHFAg8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=206.189.21.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
-Received: from hehuan1$eswincomputing.com ( [10.12.96.103] ) by
- ajax-webmail-app2 (Coremail) ; Fri, 5 Jun 2026 14:57:19 +0800 (GMT+08:00)
-Date: Fri, 5 Jun 2026 14:57:19 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: "Huan He" <hehuan1@eswincomputing.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: linux-hwmon@vger.kernel.org, robh@kernel.org, devicetree@vger.kernel.org,
-	conor+dt@kernel.org, linux@roeck-us.net, krzk+dt@kernel.org,
-	p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-	ningyu@eswincomputing.com, linmin@eswincomputing.com,
-	luyulin@eswincomputing.com, pinkesh.vaghela@einfochips.com
-Subject: Re: Re: [PATCH v6 2/2] hwmon: Add Eswin EIC7700 PVT sensor driver
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.2-cmXT6 build
- 20241203(6b039d88) Copyright (c) 2002-2026 www.mailtech.cn
- mispb-72143050-eaf5-4703-89e0-86624513b4ce-eswincomputing.com
-In-Reply-To: <20260604081720.5D5251F00893@smtp.kernel.org>
-References: <20260604080552.169-1-hehuan1@eswincomputing.com>
- <20260604081720.5D5251F00893@smtp.kernel.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	s=arc-20240116; t=1780643312; c=relaxed/simple;
+	bh=4hvsRn9Kp2CzHPwth+eNDSeQOsWa/Ckcpaciuv5v3HU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RFgkN2/fqiVi7R/GSKfhJaBB718f173Mdi/N9gy8BQxcwPb7OgCh8cjh7mShhO9PZMn7qYt8lfLOmKRG0oyDLs6JZD8FiivAa9IClz9NyMTfP7xOJyuLMD/SZu9mNRgs1NkjAPLer4qX0M1pGxlnYJ/eo9o/RtKBmSbNflYsxv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=iKjYggke; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=iKjYggke; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="iKjYggke";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="iKjYggke"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id D92917593A;
+	Fri,  5 Jun 2026 07:08:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1780643309; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=WN+1EqgKbEGm+Jlqz5BJMqJKAPMrZfGWpmYbaOaSum4=;
+	b=iKjYggkeyd0GZUzAqkFLB4pGtPXBaZx1IpDKUVmqabC2LXYHwd8cAz/lMSJhTNLRDz9g8g
+	WTjB7GUVsJ+bh6Z/izkQLAcxuwkp0XFoNejvkxa6k1y17q+fOyPepOPVR7+PK5t/W5JQy3
+	ZOdYdIo1fEJ6ZuGbWmbYAdHMt3mUxH8=
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1780643309; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=WN+1EqgKbEGm+Jlqz5BJMqJKAPMrZfGWpmYbaOaSum4=;
+	b=iKjYggkeyd0GZUzAqkFLB4pGtPXBaZx1IpDKUVmqabC2LXYHwd8cAz/lMSJhTNLRDz9g8g
+	WTjB7GUVsJ+bh6Z/izkQLAcxuwkp0XFoNejvkxa6k1y17q+fOyPepOPVR7+PK5t/W5JQy3
+	ZOdYdIo1fEJ6ZuGbWmbYAdHMt3mUxH8=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 142B2779A8;
+	Fri,  5 Jun 2026 07:08:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 5/G9A+11ImqDHQAAD6G6ig
+	(envelope-from <jgross@suse.com>); Fri, 05 Jun 2026 07:08:29 +0000
+From: Juergen Gross <jgross@suse.com>
+To: linux-kernel@vger.kernel.org,
+	x86@kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-acpi@vger.kernel.org
+Cc: Juergen Gross <jgross@suse.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Tony Luck <tony.luck@intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Huang Rui <ray.huang@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Perry Yuan <perry.yuan@amd.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Len Brown <lenb@kernel.org>,
+	Hans de Goede <hansg@kernel.org>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 0/8] x86/msr: Drop 32-bit variants of *_on_cpu() MSR functions
+Date: Fri,  5 Jun 2026 09:08:18 +0200
+Message-ID: <20260605070826.2995913-1-jgross@suse.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <5d095049.700f.19e96926fec.Coremail.hehuan1@eswincomputing.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:TQJkCgAnPqFPcyJqtUQiAA--.7352W
-X-CM-SenderInfo: 5khk3tzqr6v25zlqu0xpsx3x1qjou0bp/1tbiAQEJCmohqKAkwAAB
-	sl
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VW3Jw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+Content-Transfer-Encoding: 8bit
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[38];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:mid,imap1.dmz-prg2.suse.org:helo];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	R_RATELIMIT(0.00)[to_ip_from(RLfdszjqhz8kzzb9uwpzdm8png)];
+	RCVD_TLS_ALL(0.00)[]
+X-Spam-Level: 
+X-Spam-Score: -2.80
 
-SGkgU2FzaGlrbywKClRoYW5rIHlvdSB2ZXJ5IG11Y2ggZm9yIHlvdXIgZGV0YWlsZWQgcmV2aWV3
-LsKgV2UgYXBwcmVjaWF0ZSB0aGUgZmVlZGJhY2suCgo+IAo+IFRoYW5rIHlvdSBmb3IgeW91ciBj
-b250cmlidXRpb24hIFNhc2hpa28gQUkgcmV2aWV3IGZvdW5kIDIgcG90ZW50aWFsIGlzc3VlKHMp
-IHRvIGNvbnNpZGVyOgo+IC0gW0hpZ2hdIENsZWFyaW5nIHRoZSBpbnRlcnJ1cHQgc3RhdHVzIGJl
-Zm9yZSBkaXNhYmxpbmcgc2Vuc29yIGNvbnZlcnNpb25zIGluIGluaXRfaWZhY2UoKSBjcmVhdGVz
-IGEgcmFjZSBjb25kaXRpb24gdGhhdCBjYW4gbGVhZCB0byBhbiB1bmhhbmRsZWQgaW50ZXJydXB0
-IHN0b3JtLgo+IC0gW01lZGl1bV0gTWlzc2luZyBwbV9ydW50aW1lX2Rpc2FibGUoKSBpbiB0aGUg
-ZGV2aWNlIGNsZWFudXAgcGF0aCBjYXVzZXMgYW4gdW5iYWxhbmNlZCBQTSBydW50aW1lIHN0YXRl
-Lgo+IC0tCj4gCj4gY29tbWl0IDU4NDJhZDMyMjcxZjdkOTY3ZTlmMWUxMGMxMzQ3NGE1YjU3ZGE4
-YWQKPiBBdXRob3I6IEh1YW4gSGUgPGhlaHVhbjFAZXN3aW5jb21wdXRpbmcuY29tPgo+IAo+IGh3
-bW9uOiBBZGQgRXN3aW4gRUlDNzcwMCBQVlQgc2Vuc29yIGRyaXZlcgo+IAo+IEFkZCBzdXBwb3J0
-IGZvciBFU1dJTiBFSUM3NzAwIFZvbHRhZ2UgYW5kIFRlbXBlcmF0dXJlIHNlbnNvci4gVGhlIGRy
-aXZlcgo+IHN1cHBvcnRzIHRlbXBlcmF0dXJlIGFuZCB2b2x0YWdlIG1vbml0b3Jpbmcgd2l0aCBw
-b2x5bm9taWFsIGNvbnZlcnNpb24sCj4gYW5kIHByb3ZpZGVzIHN5c2ZzIGludGVyZmFjZSBmb3Ig
-c2Vuc29yIGRhdGEgYWNjZXNzLgo+IAo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvaHdtb24vZWlj
-NzcwMC1wdnQuYyBiL2RyaXZlcnMvaHdtb24vZWljNzcwMC1wdnQuYwo+ID4gbmV3IGZpbGUgbW9k
-ZSAxMDA2NDQKPiA+IC0tLSAvZGV2L251bGwKPiA+ICsrKyBiL2RyaXZlcnMvaHdtb24vZWljNzcw
-MC1wdnQuYwo+IFsgLi4uIF0KPiA+ICtzdGF0aWMgaW50IGVpYzc3MDBfcHZ0X2luaXRfaWZhY2Uo
-c3RydWN0IHB2dF9od21vbiAqcHZ0KQo+ID4gK3sKPiA+ICsJLyoKPiA+ICsJICogTWFrZSBzdXJl
-IGNvbnRyb2xsZXIgYXJlIGRpc2FibGVkIHNvIG5vdCB0byBhY2NpZGVudGFsbHkgaGF2ZSBJU1IK
-PiA+ICsJICogZXhlY3V0ZWQgYmVmb3JlIHRoZSBkcml2ZXIgZGF0YSBpcyBmdWxseSBpbml0aWFs
-aXplZC4gQ2xlYXIgdGhlIElSUQo+ID4gKwkgKiBzdGF0dXMgYXMgd2VsbC4KPiA+ICsJICovCj4g
-PiArCWVpYzc3MDBfcHZ0X3VwZGF0ZShwdnQtPnJlZ3MgKyBQVlRfSU5ULCBQVlRfSU5UX0NMUiwg
-UFZUX0lOVF9DTFIpOwo+ID4gKwllaWM3NzAwX3B2dF91cGRhdGUocHZ0LT5yZWdzICsgUFZUX0VO
-QSwgUFZUX0VOQV9FTiwgMCk7Cj4gCj4gW1NldmVyaXR5OiBIaWdoXQo+IENvdWxkIHRoaXMgY2xl
-YXItdGhlbi1kaXNhYmxlIHNlcXVlbmNlIGNhdXNlIGFuIHVuaGFuZGxlZCBpbnRlcnJ1cHQgc3Rv
-cm0/Cj4gCj4gSWYgYSBib290bG9hZGVyIGxlZnQgdGhlIHNlbnNvciBhY3RpdmUsIGEgY29udmVy
-c2lvbiBtaWdodCBjb21wbGV0ZSBpbiB0aGUKPiBzbWFsbCB3aW5kb3cgYmV0d2VlbiBjbGVhcmlu
-ZyBQVlRfSU5UX0NMUiBhbmQgZGlzYWJsaW5nIFBWVF9FTkFfRU4uIFRoaXMKPiB3b3VsZCBhc3Nl
-cnQgdGhlIElSUSBsaW5lLgo+IAo+IFdoZW4gdGhlIElSUSBpcyBsYXRlciByZXF1ZXN0ZWQgaW4g
-cHJvYmUoKSwgdGhlIElTUiBlaWM3NzAwX3B2dF9oYXJkX2lzcigpCj4gd2lsbCBmaXJlIGltbWVk
-aWF0ZWx5LiBIb3dldmVyLCBzaW5jZSB0aGUgZGV2aWNlIGlzIHN1c3BlbmRlZCwKPiBwbV9ydW50
-aW1lX2dldF9pZl9hY3RpdmUoKSByZXR1cm5zIDw9IDAsIGNhdXNpbmcgdGhlIElTUiB0byByZXR1
-cm4gSVJRX05PTkUKPiB3aXRob3V0IGNsZWFyaW5nIHRoZSBpbnRlcnJ1cHQuCj4gCj4gQmVjYXVz
-ZSB0aGUgaW50ZXJydXB0IGlzIGxldmVsLXRyaWdnZXJlZCAoSVJRRl9UUklHR0VSX0hJR0gpLCB3
-b3VsZCB0aGlzCj4gcmVzdWx0IGluIGEgY29udGludW91cyBpbnRlcnJ1cHQgc3Rvcm0gdGhhdCB1
-bHRpbWF0ZWx5IGZvcmNlcyB0aGUga2VybmVsCj4gdG8gcGVybWFuZW50bHkgZGlzYWJsZSB0aGUg
-SVJRIGxpbmU/Cj4gCj4gU2hvdWxkIHRoZSBjb252ZXJzaW9uIGVuZ2luZSBiZSBkaXNhYmxlZCBi
-ZWZvcmUgdGhlIGludGVycnVwdCBpcyBjbGVhcmVkPwoKSSB3aWxsIGZpeCB0aGlzIGJ5IGRpc2Fi
-bGluZyB0aGUgY29udmVyc2lvbiBlbmdpbmUgZmlyc3QsIGFuZCBvbmx5IHRoZW4KY2xlYXJpbmcg
-dGhlIHBlbmRpbmcgaW50ZXJydXB0IHN0YXR1cy4KClRoZSBpbml0aWFsaXphdGlvbiBzZXF1ZW5j
-ZSB3aWxsIGJlIGNoYW5nZWQgYWxvbmcgdGhlc2UgbGluZXM6CgrCoCDCoCBlaWM3NzAwX3B2dF91
-cGRhdGUocHZ0LT5yZWdzICsgUFZUX0VOQSwgUFZUX0VOQV9FTiwgMCk7CsKgIMKgIGVpYzc3MDBf
-cHZ0X3VwZGF0ZShwdnQtPnJlZ3MgKyBQVlRfSU5ULCBQVlRfSU5UX0NMUiwgUFZUX0lOVF9DTFIp
-OwrCoCDCoCByZWFkbChwdnQtPnJlZ3MgKyBQVlRfSU5UKTsKCj4gCj4gWyAuLi4gXQo+ID4gK3N0
-YXRpYyB2b2lkIGVpYzc3MDBfcHZ0X2Rpc2FibGVfcG1fcnVudGltZSh2b2lkICpkYXRhKQo+ID4g
-K3sKPiA+ICsJc3RydWN0IHB2dF9od21vbiAqcHZ0ID0gZGF0YTsKPiA+ICsKPiA+ICsJcG1fcnVu
-dGltZV9kb250X3VzZV9hdXRvc3VzcGVuZChwdnQtPmRldik7Cj4gPiArCXBtX3J1bnRpbWVfZm9y
-Y2Vfc3VzcGVuZChwdnQtPmRldik7Cj4gPiArCj4gPiArCWlmICghSVNfRU5BQkxFRChDT05GSUdf
-UE0pKQo+ID4gKwkJY2xrX2Rpc2FibGVfdW5wcmVwYXJlKHB2dC0+Y2xrKTsKPiA+ICt9Cj4gCj4g
-W1NldmVyaXR5OiBNZWRpdW1dCj4gRG9lcyB0aGlzIGRldmljZSBjbGVhbnVwIHBhdGggbmVlZCBh
-IGNhbGwgdG8gcG1fcnVudGltZV9kaXNhYmxlKCk/Cj4gCj4gSW4gZWljNzcwMF9wdnRfcHJvYmUo
-KSwgcG1fcnVudGltZV9lbmFibGUoKSBpcyBjYWxsZWQsIHdoaWNoIGFsdGVycyB0aGUKPiBQTSBj
-b3JlJ3MgZGlzYWJsZV9kZXB0aCBjb3VudC4gU2luY2UgcG1fcnVudGltZV9kaXNhYmxlKCkgaXMg
-bWlzc2luZyBoZXJlLAo+IGlmIHRoZSBkcml2ZXIgaXMgdW5ib3VuZCBhbmQgbGF0ZXIgcmVib3Vu
-ZCwgdGhlIG5leHQgcG1fcnVudGltZV9lbmFibGUoKQo+IHdpbGwgZW5jb3VudGVyIGFuIHVuYmFs
-YW5jZWQgZGVwdGguCj4gCj4gQ291bGQgdGhpcyB0cmlnZ2VyIGFuICJVbmJhbGFuY2VkIHBtX3J1
-bnRpbWVfZW5hYmxlISIgd2FybmluZyBhbmQgY2F1c2UKPiBpbmNvbnNpc3RlbnQgUE0gc3RhdGUg
-dHJhY2tpbmc/CgpJIGRvbid0IHRoaW5rIHRoaXMgaXMgYW4gYWN0dWFsIGlzc3VlLgoKSSByZS1j
-aGVja2VkIHRoZSBydW50aW1lIFBNIHBhaXJpbmcgaGVyZS4KClRoZSBwcm9iZSBwYXRoIGVuYWJs
-ZXMgcnVudGltZSBQTSB3aXRoIHBtX3J1bnRpbWVfZW5hYmxlKCkuIFRoZSBkZXZpY2UKY2xlYW51
-cCBwYXRoIGNhbGxzIHBtX3J1bnRpbWVfZm9yY2Vfc3VzcGVuZCgpLCBhbmQKcG1fcnVudGltZV9m
-b3JjZV9zdXNwZW5kKCkgYWxyZWFkeSBkaXNhYmxlcyBydW50aW1lIFBNIGludGVybmFsbHk6Cgpp
-bnQgcG1fcnVudGltZV9mb3JjZV9zdXNwZW5kKHN0cnVjdCBkZXZpY2UgKmRldikKewrCoCDCoCAu
-Li4KwqAgwqAgcG1fcnVudGltZV9kaXNhYmxlKGRldik7CsKgIMKgIC4uLgp9CgpUaGlzIGNsZWFu
-dXAgcGF0aCBpbnRlbnRpb25hbGx5IHVzZXMgcG1fcnVudGltZV9mb3JjZV9zdXNwZW5kKCkgcmF0
-aGVyCnRoYW4gYSBzdGFuZGFsb25lIHBtX3J1bnRpbWVfZGlzYWJsZSgpLgoKQSBzdGFuZGFsb25l
-IHBtX3J1bnRpbWVfZGlzYWJsZSgpIG9ubHkgZGlzYWJsZXMgcnVudGltZSBQTS4gSXQgZG9lcyBu
-b3QKZm9yY2UgYW4gUlBNX0FDVElWRSBkZXZpY2UgdGhyb3VnaCB0aGUgZHJpdmVyJ3MgcnVudGlt
-ZV9zdXNwZW5kKCkKY2FsbGJhY2ssIHNvIHRoZSBjbG9jayBjb3VsZCByZW1haW4gZW5hYmxlZCBp
-ZiB0aGUgZHJpdmVyIGlzIHVuYm91bmQKZHVyaW5nIHRoZSBhdXRvc3VzcGVuZCBkZWxheSB3aW5k
-b3cuCgpwbV9ydW50aW1lX2ZvcmNlX3N1c3BlbmQoKSBoYW5kbGVzIHRoYXQgY2FzZSBieSBkaXNh
-YmxpbmcgcnVudGltZSBQTQppbnRlcm5hbGx5IGFuZCwgaWYgdGhlIGRldmljZSBpcyBzdGlsbCBh
-Y3RpdmUsIGludm9raW5nIHRoZSBkcml2ZXIncwpydW50aW1lX3N1c3BlbmQoKSBjYWxsYmFjayBz
-byB0aGUgY2xvY2sgaXMgYWN0dWFsbHkgdHVybmVkIG9mZi4KClRoZXJlZm9yZSwgYWRkaW5nIGFu
-b3RoZXIgZXhwbGljaXQgcG1fcnVudGltZV9kaXNhYmxlKCkgYWZ0ZXIKcG1fcnVudGltZV9mb3Jj
-ZV9zdXNwZW5kKCkgd291bGQgcmVzdWx0IGluIGFuIGV4dHJhIGRpc2FibGVfZGVwdGgKaW5jcmVt
-ZW50IGFuZCBjb3VsZCBsZWF2ZSB0aGUgcnVudGltZSBQTSBzdGF0ZSB1bmJhbGFuY2VkLgoKUGxl
-YXNlIGxldCBtZSBrbm93IGlmIHlvdSB3b3VsZCBwcmVmZXIgYSBkaWZmZXJlbnQgcnVudGltZSBQ
-TSBjbGVhbnVwCmFwcHJvYWNoIGhlcmUuCgpCZXN0IHJlZ2FyZHMsCkh1YW4gSGUK
+Drop the variants using 2 32-bit values instead of a single 64-bit one
+of the *_on_cpu() MSR access functions.
+
+Juergen Gross (8):
+  x86/msr: Switch rdmsr_on_cpu() to return a 64-bit quantity
+  x86/msr: Switch all callers of rdmsrq_on_cpu() to use rdmsr_on_cpu()
+  x86/msr: Switch wrmsr_on_cpu() to use a 64-bit quantity
+  x86/msr: Switch all callers of wrmsrq_on_cpu() to use wrmsr_on_cpu()
+  x86/msr: Switch rdmsr_safe_on_cpu() to return a 64-bit quantity
+  x86/msr: Switch all callers of rdmsrq_safe_on_cpu() to use
+    rdmsr_safe_on_cpu()
+  x86/msr: Switch wrmsr_safe_on_cpu() to use a 64-bit quantity
+  x86/msr: Switch all callers of wrmsrq_safe_on_cpu() to use
+    wrmsr_safe_on_cpu()
+
+ arch/x86/events/intel/ds.c                    | 11 +--
+ arch/x86/events/intel/pt.c                    |  2 +-
+ arch/x86/events/intel/uncore_discovery.c      |  2 +-
+ arch/x86/events/intel/uncore_snbep.c          |  2 +-
+ arch/x86/include/asm/msr.h                    | 44 +++--------
+ arch/x86/kernel/acpi/cppc.c                   |  8 +-
+ arch/x86/kernel/cpu/intel_epb.c               |  8 +-
+ arch/x86/kernel/cpu/mce/amd.c                 |  6 +-
+ arch/x86/kernel/cpu/mce/inject.c              | 12 +--
+ arch/x86/kernel/cpu/microcode/intel.c         |  2 +-
+ arch/x86/kernel/msr.c                         |  8 +-
+ arch/x86/lib/msr-smp.c                        | 79 ++-----------------
+ drivers/cpufreq/acpi-cpufreq.c                |  4 +-
+ drivers/cpufreq/amd-pstate-ut.c               |  2 +-
+ drivers/cpufreq/amd-pstate.c                  | 21 +++--
+ drivers/cpufreq/amd_freq_sensitivity.c        |  4 +-
+ drivers/cpufreq/intel_pstate.c                | 64 +++++++--------
+ drivers/cpufreq/p4-clockmod.c                 | 32 ++++----
+ drivers/cpufreq/speedstep-centrino.c          | 27 ++++---
+ drivers/hwmon/coretemp.c                      | 44 +++++------
+ drivers/hwmon/via-cputemp.c                   | 16 ++--
+ drivers/platform/x86/amd/hfi/hfi.c            |  4 +-
+ .../intel/speed_select_if/isst_if_common.c    | 13 ++-
+ .../intel/uncore-frequency/uncore-frequency.c | 12 +--
+ drivers/powercap/intel_rapl_msr.c             |  2 +-
+ drivers/thermal/intel/intel_tcc.c             | 43 +++++-----
+ drivers/thermal/intel/x86_pkg_temp_thermal.c  | 22 +++---
+ 27 files changed, 203 insertions(+), 291 deletions(-)
+
+-- 
+2.54.0
+
