@@ -1,93 +1,85 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0217248F7C;
-	Fri,  5 Jun 2026 05:56:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCA7023C503;
+	Fri,  5 Jun 2026 06:31:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780639005; cv=none; b=mJccmVCfe3C1iAV79IXvRPcvx0Bb5ubpQAmskgtfKk88Q0zK7kNmv4L6lO76/QPZ45yqBZLNcKEydSvJzVHt4y/NvVMaF8DDiQN5omZxaQJZJ7wljiBOKRupXdWVynJtlAi9CJBwW2lp1FTxBGH7/zHbtjuc/8QFFhwYmwlmKdI=
+	t=1780641111; cv=none; b=rgKkLkwSBpNg/MHmDp+Ou7NNrtge1/o0goUwMFdiOaHzIVDTL3+fyqOk6rgToQ4bmVhA6onpJpUEMhLuPJKJkeAhlfNNMFz5OGToIO7FlLWnrJUH85wAoqv/zNnSxn9iv0FWzbG95buLliEvezYQUxP/gF9xW7E1gYxs/iSUyRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780639005; c=relaxed/simple;
-	bh=/fN376ZNt9a79pgv05JEdDMk0j0Xf0LIct2Pg2qiJbA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=NAooZbzAMl5pSEHMnLuf0jSt7+8f9/LtJfUXgxqydK/P3dtMlJp5CX7PmCx1341tAXjt9fKXTiDrdQ9TAUT9QWtAAVDuZufEhc9RxMIEC6fndaZjg7zigGIX3mBmpk7TquANZyxxMIbQFkkxBaF1fXb/AI0NLl9l7GwL5qWNPKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=13.75.44.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
-Received: from hehuan1$eswincomputing.com ( [10.12.96.103] ) by
- ajax-webmail-app2 (Coremail) ; Fri, 5 Jun 2026 13:56:33 +0800 (GMT+08:00)
-Date: Fri, 5 Jun 2026 13:56:33 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: "Huan He" <hehuan1@eswincomputing.com>
-To: "Philipp Zabel" <p.zabel@pengutronix.de>
-Cc: linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	ningyu@eswincomputing.com, linmin@eswincomputing.com,
-	pinkesh.vaghela@einfochips.com, luyulin@eswincomputing.com
-Subject: Re: Re: [PATCH v6 2/2] hwmon: Add Eswin EIC7700 PVT sensor driver
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.2-cmXT6 build
- 20241203(6b039d88) Copyright (c) 2002-2026 www.mailtech.cn
- mispb-72143050-eaf5-4703-89e0-86624513b4ce-eswincomputing.com
-In-Reply-To: <85e630579d97172e9bc64bce082b2d7b763a1263.camel@pengutronix.de>
-References: <20260604080430.126-1-hehuan1@eswincomputing.com>
- <20260604080552.169-1-hehuan1@eswincomputing.com>
- <85e630579d97172e9bc64bce082b2d7b763a1263.camel@pengutronix.de>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	s=arc-20240116; t=1780641111; c=relaxed/simple;
+	bh=73FRZF/4c5P/OZbkjqs2tZHoVESwbh4x8lUlyv4D1eo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bf8fqBnf1L59CVlg7F1myelUVIUa6HjYlWXefadwFU1p3ToyNEOfCNjd/cR1vYBXj0Lhl5oqQan2+adJ8+d37eXw6z9oHHORj1ezL2n9+l0LJ4JifpaRodLEIMUpuTbNeUukzT2H4HHqmFqDgE+38lXuDAUZFwGVbVPSg9in2QY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=QPPPQNve; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="QPPPQNve"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=mP
+	mjgmrJvCvzzYdz1q5RdVyg+H4wTZTIoBitYWi6j5Y=; b=QPPPQNve0NTpEwqb+l
+	+KM7tbC1L+7j6t9PpTDO2fYA+/HAT/5a3jeF7cJC3m5Tv5OrfgzIQDdzUuXps1KZ
+	H9tEtm63mp7i8xghwXyJSANDsqEmNPfIxwpUQRyWpADFleBz1MHTNpeo0ZOMk3FC
+	HXW/iB5CXiQtXVeqvwEktNgnk=
+Received: from ZM.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wDnl3AjbSJqJU+5BQ--.9698S2;
+	Fri, 05 Jun 2026 14:31:00 +0800 (CST)
+From: Ziming Zhu <zmzhu0630@163.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	Ziming Zhu <ziming.zhu@silergycorp.com>
+Subject: [PATCH v2 0/3] Add support for Silergy SQ24860
+Date: Fri,  5 Jun 2026 14:30:39 +0800
+Message-Id: <20260605063042.91776-1-zmzhu0630@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <3cd3955b.6ff2.19e965acb49.Coremail.hehuan1@eswincomputing.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:TQJkCgA3TJ8RZSJqPToiAA--.5281W
-X-CM-SenderInfo: 5khk3tzqr6v25zlqu0xpsx3x1qjou0bp/1tbiAQEJCmohqKAFYQAD
-	sn
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDnl3AjbSJqJU+5BQ--.9698S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7GFWrZr47Xr17Gw4xJFykAFb_yoWkWFgE9w
+	4fWa9Fyw17JF45Wayjyr4ru398Xr45K3Z7Z3WDta9xZr43XanxWFykJry7J3W7WrWxuFy3
+	Zan7Xws5JF47WjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU1smR5UUUUU==
+X-CM-SenderInfo: x2p2x3aqwtiqqrwthudrp/xtbCwASHgGoibSTTCAAA3Z
 
-SGkgUGhpbGlwcCwKClRoYW5rIHlvdSB2ZXJ5IG11Y2ggZm9yIHlvdXIgZGV0YWlsZWQgcmV2aWV3
-LiBXZSBhcHByZWNpYXRlIHRoZSBmZWVkYmFjay4KCj4gPiAKPiA+IEFkZCBzdXBwb3J0IGZvciBF
-U1dJTiBFSUM3NzAwIFZvbHRhZ2UgYW5kIFRlbXBlcmF0dXJlIHNlbnNvci4gVGhlIGRyaXZlcgo+
-ID4gc3VwcG9ydHMgdGVtcGVyYXR1cmUgYW5kIHZvbHRhZ2UgbW9uaXRvcmluZyB3aXRoIHBvbHlu
-b21pYWwgY29udmVyc2lvbiwKPiA+IGFuZCBwcm92aWRlcyBzeXNmcyBpbnRlcmZhY2UgZm9yIHNl
-bnNvciBkYXRhIGFjY2Vzcy4KPiA+IAo+ID4gVGhlIFBWVCBJUCBjb250YWlucyBvbmUgdGVtcGVy
-YXR1cmUgc2Vuc29yIGFuZCBvbmUgdm9sdGFnZSBzZW5zb3IuCj4gPiAKPiA+IFNpZ25lZC1vZmYt
-Ynk6IFl1bGluIEx1IDxsdXl1bGluQGVzd2luY29tcHV0aW5nLmNvbT4KPiA+IFNpZ25lZC1vZmYt
-Ynk6IEh1YW4gSGUgPGhlaHVhbjFAZXN3aW5jb21wdXRpbmcuY29tPgo+ID4gLS0tCj4gPiAgZHJp
-dmVycy9od21vbi9LY29uZmlnICAgICAgIHwgIDEyICsKPiA+ICBkcml2ZXJzL2h3bW9uL01ha2Vm
-aWxlICAgICAgfCAgIDEgKwo+ID4gIGRyaXZlcnMvaHdtb24vZWljNzcwMC1wdnQuYyB8IDQ5NSAr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysKPiA+ICBkcml2ZXJzL2h3bW9uL2Vp
-Yzc3MDAtcHZ0LmggfCAgOTkgKysrKysrKysKPiA+ICA0IGZpbGVzIGNoYW5nZWQsIDYwNyBpbnNl
-cnRpb25zKCspCj4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvaHdtb24vZWljNzcwMC1w
-dnQuYwo+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2h3bW9uL2VpYzc3MDAtcHZ0LmgK
-PiA+IAo+IFsuLi5dCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9od21vbi9laWM3NzAwLXB2dC5j
-IGIvZHJpdmVycy9od21vbi9laWM3NzAwLXB2dC5jCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+
-ID4gaW5kZXggMDAwMDAwMDAwMDAwLi5lYTBmMTI5OWNkMjkKPiA+IC0tLSAvZGV2L251bGwKPiA+
-ICsrKyBiL2RyaXZlcnMvaHdtb24vZWljNzcwMC1wdnQuYwo+ID4gQEAgLTAsMCArMSw0OTUgQEAK
-PiBbLi4uXQo+ID4gK3N0YXRpYyBpbnQgZWljNzcwMF9wdnRfcHJvYmUoc3RydWN0IHBsYXRmb3Jt
-X2RldmljZSAqcGRldikKPiA+ICt7Cj4gPiArCXN0cnVjdCBwdnRfaHdtb24gKnB2dDsKPiA+ICsJ
-aW50IHJldDsKPiA+ICsKPiA+ICsJcHZ0ID0gZWljNzcwMF9wdnRfY3JlYXRlX2RhdGEocGRldik7
-Cj4gPiArCWlmIChJU19FUlIocHZ0KSkKPiA+ICsJCXJldHVybiBQVFJfRVJSKHB2dCk7Cj4gPiAr
-Cj4gPiArCXBsYXRmb3JtX3NldF9kcnZkYXRhKHBkZXYsIHB2dCk7Cj4gPiArCj4gPiArCXB2dC0+
-cmVncyA9IGRldm1fcGxhdGZvcm1faW9yZW1hcF9yZXNvdXJjZShwZGV2LCAwKTsKPiA+ICsJaWYg
-KElTX0VSUihwdnQtPnJlZ3MpKQo+ID4gKwkJcmV0dXJuIFBUUl9FUlIocHZ0LT5yZWdzKTsKPiA+
-ICsKPiA+ICsJcHZ0LT5jbGsgPSBkZXZtX2Nsa19nZXQoJnBkZXYtPmRldiwgTlVMTCk7Cj4gPiAr
-CWlmIChJU19FUlIocHZ0LT5jbGspKQo+ID4gKwkJcmV0dXJuIGRldl9lcnJfcHJvYmUoJnBkZXYt
-PmRldiwgUFRSX0VSUihwdnQtPmNsayksCj4gPiArCQkJCSAgICAgIkNvdWxkbid0IGdldCBjbG9j
-a1xuIik7Cj4gPiArCj4gPiArCXB2dC0+cnN0ID0gZGV2bV9yZXNldF9jb250cm9sX2dldF9leGNs
-dXNpdmVfZGVhc3NlcnRlZCgmcGRldi0+ZGV2LAo+ID4gKwkJCQkJCQkgICAgICAgTlVMTCk7Cj4g
-Cj4gV2h5IHN0b3JlIHRoaXMgaW4gc3RydWN0IHB2dF9od21vbj8gSXQncyBub3QgdXNlZCBhbnl3
-aGVyZSBlbHNlLgoKVGhlIHJlc2V0IGNvbnRyb2wgaXMgb25seSBuZWVkZWQgZHVyaW5nIHByb2Jl
-IHRvIGRlYXNzZXJ0IHRoZSByZXNldCBsaW5lLAphbmQgaXQgaXMgbm90IHVzZWQgYWZ0ZXJ3YXJk
-cy4KCkkgd2lsbCBjaGFuZ2UgaXQgdG8gYSBsb2NhbCB2YXJpYWJsZSBpbiBlaWM3NzAwX3B2dF9w
-cm9iZSgpIGFuZCByZW1vdmUgdGhlCnJzdCBmaWVsZCBmcm9tIHN0cnVjdCBwdnRfaHdtb24uCgpU
-aGUgY29kZSB3aWxsIGJlIGNoYW5nZWQgYWxvbmcgdGhlc2UgbGluZXM6CgrCoCDCoCBzdHJ1Y3Qg
-cmVzZXRfY29udHJvbCAqcnN0OwoKwqAgwqAgcnN0ID0gZGV2bV9yZXNldF9jb250cm9sX2dldF9l
-eGNsdXNpdmVfZGVhc3NlcnRlZCgmcGRldi0+ZGV2LCBOVUxMKTsKwqAgwqAgaWYgKElTX0VSUihy
-c3QpKQrCoCDCoCDCoCDCoCByZXR1cm4gZGV2X2Vycl9wcm9iZShwdnQtPmRldiwgUFRSX0VSUihy
-c3QpLArCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCJDb3VsZG4n
-dCBnZXQgcmVzZXQgY29udHJvbFxuIik7CgpCZXN0IHJlZ2FyZHMsCkh1YW4gSGUK
+From: Ziming Zhu <ziming.zhu@silergycorp.com>
+
+Changes in v2:
+- Validate silergy,rimon-micro-ohms before programming the current
+  calibration gain.
+- Avoid underflow when programming PMBUS_IIN_OC_FAULT_LIMIT.
+- Replace brittle samples limit calculation with SQ24860_MAX_SAMPLES.
+- Update the current/power scaling comment to match the implementation.
+- Fix the documented DT property name in sq24860.rst.
+
+Ziming Zhu (3):
+  dt-bindings: hwmon: pmbus: Add bindings for Silergy SQ24860
+  hwmon: pmbus: Add support for Silergy SQ24860
+  hwmon: Add documentation for SQ24860
+
+ .../bindings/hwmon/pmbus/silergy,sq24860.yaml |  74 +++
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/sq24860.rst               |  96 ++++
+ drivers/hwmon/pmbus/Kconfig                   |  19 +
+ drivers/hwmon/pmbus/Makefile                  |   1 +
+ drivers/hwmon/pmbus/sq24860.c                 | 432 ++++++++++++++++++
+ 6 files changed, 623 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/silergy,sq24860.yaml
+ create mode 100644 Documentation/hwmon/sq24860.rst
+ create mode 100644 drivers/hwmon/pmbus/sq24860.c
+
+-- 
+2.25.1
+
