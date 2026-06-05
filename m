@@ -1,51 +1,65 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2AC34A33EC;
-	Fri,  5 Jun 2026 08:55:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5B9F4BCAB5;
+	Fri,  5 Jun 2026 09:05:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780649728; cv=none; b=sapQ+KmubPmvpb3g4P9Mnyako8wWIr9y5fIqKRouaNtd7+vcC8iHgKdxA5242J3oyRptGWn1Wb2FUEAUdXM+UW2HwrDJr+pJNlZC5VjDT9oYzqQrcP2LOTd2rsEvOqnkFdz3DPE2ggQj10huzx8rPqnC2QR6nAtjgNUTXMaxu8c=
+	t=1780650364; cv=none; b=eQaPSZhczbBFnqJyazxwJbX+/VStu5cQfWsDRBIrwPfY0fPxovap11f0XL1Yyx92+MWBlWl3C6JpPmY7crGhBwnq2p/bwrFfr+DV/IrKE8NSb+g3Nn0IXNdqHvVSldKw4eNqvQFuh+bxq61p0fD+8QIf6Os1/Z5sNcbgcSx/JZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780649728; c=relaxed/simple;
-	bh=Rpl2Za7dofjcWGzRUUqPYTAcNHnqkkIvfjXwZwi0IMc=;
+	s=arc-20240116; t=1780650364; c=relaxed/simple;
+	bh=MQ8RMr+sA/65OqRDZ4k+MqdUzcCiQH+pyjaKE1PlXWo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j/9z8JFTgBfSnqTYnFilH6kzrNJTB9HmUVJ6ORF8k+Weqzxd4A2Gox9l1g3+eoc3cK6rBBQndWXpeXdAy/aBZw0+xERT5AXSPLdGUg/pANyuf+qm7JH7Pp1YQ2OIs3E5NHEppv/E8cr/K9VImd4ffSTbvarcXGQzLQuCn5Om01g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TcbFt4dL; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=Za/3zgrlCaDbmsSog4hZdM121aazM664K7lA1gHTmlkg49SJXSbxzty6m8wkSipsY8iEPB9vxyb2xTTzhQk27K1YxIFNGxh89Z/5bTDbIVKs7ArU3Iom4TjVAscFNkJxKS8CXRCn0Z9mO6JSDT+whqOoSrDl8UfpiYVTi0WBelw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lcdAt2kE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TcbFt4dL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D58CE1F00893;
-	Fri,  5 Jun 2026 08:55:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lcdAt2kE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 449D61F00893;
+	Fri,  5 Jun 2026 09:05:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780649726;
-	bh=KayeETGnQJsWcIfVh4r9XzwjlxK0G+EeHaWt/yDRsv0=;
+	s=k20260515; t=1780650359;
+	bh=sJJhAg4PWCTaRcX8C397xf+tmwaDzx5IRuaMqyN4zYc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=TcbFt4dLf5aKET6Xbu7fYmRzQMW0flh99MVQXZ1PY3HW7Pw7U1bDjY4V2srg2diNs
-	 uFGRErphe/HfsFxgeQuC1N5D/wQbY0hmyv8MmAkp6LcQGkUv1PHWbV8TQrj93SDJyD
-	 RjX9vkbL9A6mOzRH80WGklpOocNW3FfzUawjmLpSZnz5L0Dm7LqCjeMF/nwVBbk9/7
-	 nedvHJDc2JIg8Wy90V59/xoYa+8s+RxSFWcXE69RBHGHS50xg3G4pMdsG60kDv2SMw
-	 7EPe/x1yxGBJxa2mL87O/UAJJBMWVOQmk4hSDtnAwKK6O9p/SGhg9JIiccq8fZm08N
-	 2fgyTOKMUv2OQ==
-Date: Fri, 5 Jun 2026 10:55:20 +0200
+	b=lcdAt2kEMmrGkL+FX9F8igykf+TwdTI+VgyH6uOQ/UYhoKQupdlxtx1F5cyHTdw33
+	 DLWYJN6GG/UrVaPb7zeiupgO/wtIbYELTXtAW65PkDf8wEFH+pQ+kFQgXQBieyheFr
+	 SUASoaU/cMYd6Spj8d6EyYrWRL+W5izABxoJFvlr2opY8lOat+FWnPGPEHpWJUafB1
+	 deccz+VV+YD0e4A6bayY8xkD7SunD4u8EKPInMiIHBie1DvQf+Ag41sebzOUCHLpyE
+	 5TtUAj4wgmlSHM8xJ4pqO/EZznN20O1i1HjbAWE7e+cKRZ22oSsc8eVO48CMgwpSBh
+	 XScghkPUt9WaA==
+Date: Fri, 5 Jun 2026 11:05:49 +0200
 From: Ingo Molnar <mingo@kernel.org>
 To: Juergen Gross <jgross@suse.com>
 Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
-	linux-hwmon@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org, linux-acpi@vger.kernel.org,
 	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
 	Borislav Petkov <bp@alien8.de>,
 	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Guenter Roeck <linux@roeck-us.net>,
+	"H. Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Guenter Roeck <linux@roeck-us.net>,
 	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>
-Subject: Re: [PATCH 5/8] x86/msr: Switch rdmsr_safe_on_cpu() to return a
- 64-bit quantity
-Message-ID: <aiKO-FJcXhLhebyU@gmail.com>
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>, Huang Rui <ray.huang@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Perry Yuan <perry.yuan@amd.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Len Brown <lenb@kernel.org>, Hans de Goede <hansg@kernel.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: Re: [PATCH 0/8] x86/msr: Drop 32-bit variants of *_on_cpu() MSR
+ functions
+Message-ID: <aiKRbRHyDCjmqvGB@gmail.com>
 References: <20260605070826.2995913-1-jgross@suse.com>
- <20260605070826.2995913-6-jgross@suse.com>
- <aiKMytZNGHj0epSn@gmail.com>
- <aiKOEDblINFcKZzu@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -54,52 +68,45 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aiKOEDblINFcKZzu@gmail.com>
+In-Reply-To: <20260605070826.2995913-1-jgross@suse.com>
 
 
-* Ingo Molnar <mingo@kernel.org> wrote:
+* Juergen Gross <jgross@suse.com> wrote:
 
+> Drop the variants using 2 32-bit values instead of a single 64-bit one
+> of the *_on_cpu() MSR access functions.
 > 
-> * Ingo Molnar <mingo@kernel.org> wrote:
-> 
-> > 
-> > * Juergen Gross <jgross@suse.com> wrote:
-> > 
-> > > In order to prepare retiring rdmsrq_safe_on_cpu() switch
-> > > rdmsr_safe_on_cpu() to have the same interface as rdmsrq_safe_on_cpu().
-> > 
-> > Patch #1.
-> 
-> Note that to do this, a new name should be introduced,
-> such as rdmsrq_safe_on_cpu() or so. This principle applies
-> to the other patches as well.
-> 
-> Ie. since we are changing the function signature anyway,
-> do not keep 32-bit API names, and introduce the new ones
-> cleanly in 3 patches:
-> 
->   - introduce rdmsrq_safe_on_cpu()
->   - change users from rdmsr_safe_on_cpu() => rdmsrq_safe_on_cpu()
->   - remove obsolete rdmsr_safe_on_cpu()
-> 
-> This will make it easier to bisect any breakages, and will
-> make it easier to transition the APIs.
+> Juergen Gross (8):
+>   x86/msr: Switch rdmsr_on_cpu() to return a 64-bit quantity
+>   x86/msr: Switch all callers of rdmsrq_on_cpu() to use rdmsr_on_cpu()
+>   x86/msr: Switch wrmsr_on_cpu() to use a 64-bit quantity
+>   x86/msr: Switch all callers of wrmsrq_on_cpu() to use wrmsr_on_cpu()
+>   x86/msr: Switch rdmsr_safe_on_cpu() to return a 64-bit quantity
+>   x86/msr: Switch all callers of rdmsrq_safe_on_cpu() to use rdmsr_safe_on_cpu()
+>   x86/msr: Switch wrmsr_safe_on_cpu() to use a 64-bit quantity
+>   x86/msr: Switch all callers of wrmsrq_safe_on_cpu() to use  wrmsr_safe_on_cpu()
 
-Addendum #2:
+To sum up my review feedback for the invididual patches, we want
+to do this instead:
 
-So instead of doing:
+  x86/msr: Convert rdmsrl_on_cpu() users to rdmsrq_on_cpu()
+  x86/msr: Drop the rdmsrl_on_cpu() alias to rdmsrq_on_cpu()
 
-  x86/msr: Switch rdmsr_safe_on_cpu() to return a 64-bit quantity
-  x86/msr: Switch all callers of rdmsrq_safe_on_cpu() to use rdmsr_safe_on_cpu()
+  x86/msr: Switch all callers of rdmsr_on_cpu() to use rdmsrq_on_cpu()
+  x86/msr: Remove the unused rdmsr_on_cpu() API
 
-We want something like:
+  x86/msr: Switch all callers of wrmsr_on_cpu() to use wrmsrq_on_cpu()
+  x86/msr: Remove unused wrmsr_on_cpu() API
 
   x86/msr: Switch all callers of rdmsr_safe_on_cpu() to use rdmsrq_safe_on_cpu()
   x86/msr: Remove unused rdmsr_safe_on_cpu() API
 
-Ie. instead of having this confusing mixture of 32-bit and 64-bit
-API names and transition, just transition to the 64-bit API cleanly,
-and remove the 32-bit API in a separate patch once it's unused.
+  x86/msr: Switch all callers of wrmsr_safe_on_cpu() to use wrmsrq_safe_on_cpu()
+  x86/mrs: Remove unused wrmsrq_safe_on_cpu() API
+
+Note how there's no "conversion" of the 32-bit API itself in this
+approach, we just do a straightforward migration of the users to
+the already existing 64-bit APIs, then remove any unused APIs.
 
 Thanks,
 
