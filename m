@@ -1,68 +1,67 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EC52E1C4E
-	for <linux-hwmon@vger.kernel.org>; Sun,  7 Jun 2026 23:49:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A72F72E1C4E
+	for <linux-hwmon@vger.kernel.org>; Sun,  7 Jun 2026 23:56:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780876154; cv=none; b=s6XWuD5H3CmPGHuZQbjOTHgSn2iSPQq314DWgKRW/9ziaUJVd6F1pZ0zpmM7lnvdtOlWLWLMn89vYOXJzubbPBGlh3+cQGf51F/EemvqkUZHva1tWliCZ/612AzhScaLFMF+Z4BDEeoBvhZAQAkaK+uDeCxQAUUfLmurwfMquwc=
+	t=1780876602; cv=none; b=bmCiyR8uADqDms7Y2OhcpSdbef3oH136wC4M6Coyh5Y8yu00S3CWzKCdU4bZpQao12fw3MxLwK9Hp4ztv9B+dDPpjEpH/Uf5qWBA7VpD7TAycHkgY5U4z/LPUYaXS4h0jD9EbkQtH3UBH0w7nVjlgVGIDSFBly68rprgY9UUkwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780876154; c=relaxed/simple;
-	bh=u6FEkW6VPrOCPX0MrAyAcl+3svpdt7POOZ4vIL47YZM=;
+	s=arc-20240116; t=1780876602; c=relaxed/simple;
+	bh=H59OzCN5fIKPbGRUUfb6m96s+QF56Qf+23fBb/qM9tA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KOZOLfrQOfYwBI6FLEAxDjow7QBEh1wwnT4bgyFU+xk7jRa2xOvt6MjeHOuyWxetXtaj1sirwcbSxHTNECgKgvKRuEgM+j4HFNZ+eDYRPT7pi7mXOAy2h7MdFPNqvvvGNy76ujeNDOOU8bL2OUkg6ahQ8nqakyPocMcAafyJd50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KQ1Dwjd+; arc=none smtp.client-ip=209.85.214.175
+	 In-Reply-To:Content-Type; b=hV1BORHR7V4gwc935V8y2f9194J2yFscxU7fPkxfjBzuhj5GJ4mNQAOP3BWp72r1kNjQ8UoqNIM+02HEpF8zZYU6PErqCiOyOxAB2n91fBAiPWpkz56sfKp+A5SgPsNWD+wbFQsu9hQi1T00RdDf6tEjsDI5YNp1h3Omoec8kVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UuD6m58S; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KQ1Dwjd+"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2bf2e8ccca1so25600725ad.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 07 Jun 2026 16:49:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UuD6m58S"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2c0c2d8b95bso25032735ad.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 07 Jun 2026 16:56:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780876153; x=1781480953; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780876601; x=1781481401; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=EQ3eehjXkfEBwiu5H8ny1+j5TYHERbwiNQwC5YJI0i0=;
-        b=KQ1Dwjd+GJ5PqXZwOMzWtfVfrpFdQyWWclz25j/vULpSFSInvLL1CjlFNLvsU1C4cE
-         +OufaMzT481AKK17CY6vNkN7RE8taaLK0TgDJr3ebfLCJiySvxspYjW02DNV+cIyld4D
-         mlDwMYWI6CRRis3IfXXiWo/RaYbOSeGUnhEjDUkiwGmRyNxBcCUDrTVBAXzBWGCNwR0v
-         xyOnHSC98L/EurhtjLyyQFE2WIKlD1h5/HcP6rwqP8K2YYQMw3jPGLR+8UnC3gs9ROan
-         yNDIL4nheZGPTmu4djw8klKfzEXo+9Gkm2Ysmco2cfYFdF11K+YN+HCPAIe89urchZmr
-         fNyg==
+        bh=mQEY43TKXmVzVuz2rt6OfQ1VUbuizVngZzaF2qvwCqk=;
+        b=UuD6m58SIs51PHcr6efon6ynkzT+sRxt/muslvmjHiKH34BuIBpiE5UyqNhODvpZ77
+         +ZU+SZCmPUa96+Pb2AnQD+no8yMGtOXFn1IzY2m0W5D5/oit1hkgC1FaYauk35GfJLa1
+         ikip2sZXXv+Qj2vEXw3CrFjgyKQgKV4CAbcJrwGXDzLyujFtgUU7lZj+40fRkLKRgrVu
+         n2BbiOaUnTdpJOMDvhfb7fUcCSWflgjuz/Tqwzd5uRx3ODV94s9zOoXNczWsJwz2kAIc
+         gcAxHAxauS7sQ8131mUrKOZwUfVksJh3zzGwnr5F5YE/+9CmCLIcruYW6kuce1rpXMQh
+         ZZmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780876153; x=1781480953;
+        d=1e100.net; s=20251104; t=1780876601; x=1781481401;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EQ3eehjXkfEBwiu5H8ny1+j5TYHERbwiNQwC5YJI0i0=;
-        b=phhzed4DCvxTXHWnq+FSx8F0+JYmEMXxfify9f9dP+8Z/4PcIY0E17sbDWNvNP65Bn
-         4dPO2DCkohoHZZxfePHmlOELF4U59i8IIf4WHS/IMOs3QFVeRC5ve2fTrO0MZVqX9gAr
-         jBuJToLgdv7XI7yrJm8gAWRul9v/4WeSeku6dkLqJ+OX/mItcriX9lv9LZsoVrXezZlb
-         rO150Fj6ANmANfqAaBykfuo0jQLg+r5k//FXD/mfO+H0pyuN9FmIdML1/Nb6fDdPR1Zj
-         cL2j30wOapoq3vIioA4c1po22hQYW33vPmiVSABysn/5g+GkIlCf/rNmr6W0bT4zqWv8
-         D0Kw==
-X-Forwarded-Encrypted: i=1; AFNElJ/3GnuBSVvyXwZZGP51hS7/el1l2YPBsDV91mEJoblc3szTBN5PrECrsTABJ5+s3L7iLGvoxJbgLlTinA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyzbTwMNG74Bx9K5M/h+PxG84pGRXts1yr8/CUzMGmE/vmkFD9g
-	ETrBnE0a6RmgGo4hiOPPXS0g9usWEH33fI/BRgfAgkQAUas/wgPgmbcI
-X-Gm-Gg: Acq92OHD60bmd609RHyMHWWCqXXNJYLma8931E1ay/kBvTraK56WHfJmGWovGp4KiTN
-	pmw/lvPkmjAP9Mg3EAo61fnmZvGc4zuf/81tO/mB+R5qcwM88izBRHiYcq/qf4Lat9ELcUYw6LU
-	uzhks0KrfjfEVsEJkncWvDRg/WDMwO/yunlIrm3kuuFXnljQs3KjJIDPKNe3elcE1iYwP4U815X
-	IDr9W19TWUY76K/6GDsLkACNA0wQ2XSlAOSVq8ti02V7+hjiOe/qNrC8EbsL1DqaHdS4jZ7afFy
-	OxpuuihSdRI+CEtnQZ9eXZkE6rSqfCROR82BKarvImG4QzNW/4tf3lA5pSatAap4tQ0aykCCHRC
-	WgPuTzkA474K5u6sfAsvQmRZt3p0ykZoDtFctRjnH65s6GYVuU6zs/5w5IxptHnG1/fd5cGgW/F
-	AXfmyDU1cRERssjQdcAVgowS5pbCh2tZSjnEXH8ZGBtm0zS3DeVYa4AmkmlMp5kEzjzmILeLOp6
-	J2jeS/baeENnoBdd8U0pw==
-X-Received: by 2002:a17:903:291:b0:2c0:bcff:e191 with SMTP id d9443c01a7336-2c1e8332c1amr154212455ad.36.1780876152944;
-        Sun, 07 Jun 2026 16:49:12 -0700 (PDT)
+        bh=mQEY43TKXmVzVuz2rt6OfQ1VUbuizVngZzaF2qvwCqk=;
+        b=V0ME0SuJbno9nl1HFFeG7VrhOxVcfIa3ozp4luj3KCqa99Tg2L1008e31uYtdPMZlY
+         Pyp0GihaSHhWul5U4vcroZf4am106zD9mAEKaIEP5f1Lt8RurwsViVlt5+mJtgyW+Jxz
+         KlhN8arwl+2n9GUu4WLxS10+5bV5zV3I/AkgDEa+ET+36QHwzkP9qClgINUGz4g338jg
+         VXdqWlTmVBAYZOx49KBOdJ+PoVUE/fXX4rZyP9mUPew4fZ8zFMPfhYeNU2xa2y3ItzMK
+         2ZO8Y+JGYjKSviByitDI0VW6o5Fx29fI8wlZS+Q4uu+E/EpnHhIeFyL3NdfREAGHYlXM
+         g5rQ==
+X-Gm-Message-State: AOJu0YwmtYbEVZxFwZxyEitrLUl1WI64sOM2Wcj1S3R/gTuMSsu6db6c
+	bw0zd8msqvmMZN6B4tUurjeVd2g33VRkLuWDhRi3rP80xDjeIUN/5IZs
+X-Gm-Gg: Acq92OFsxVy4mRichIkGeCR6MknGp2O4ED6XiQiFhkQkVU/IINIVP3eaHS7MCqn3RG9
+	SXx+99RCvPQh/A3J9XBi9EGgIlis9S8+SvWFiumKp7psSYLnaOkVk9zE2jM9uNwXSVoisaMoYKK
+	6VMJc0J1V9AcB6lmnTnUg2f/l2XyQlEmW+FJ2U920dffGHeQD628ETPRe9V2ojhVWbVTqxJS02I
+	nm/7NWjwdHN9sZ1sV0jW59IRsKJko84oep2sWnE8wb+txcxZVOjp/rzKPEKOQBL4sNWZ8F2shkB
+	AW+SBpPzi/yd5aa3DAxODMDrg3PC/gWcSQW+D0fGDjoq9deb+CgTgz/3fY1Jg3zRR7DBCY2pX4P
+	x98jklwdzzLsvg7eWKPaFquQbkI7cEh3UJuoW0IdGh1RGLVwYwX8ovKD4z4bTeXD/GhZ46z8HP1
+	x+Ugmtdfudx8lKU2Rdobwv0KbRxo4QeSHPejMSumIz+e0WtGzYjrB/oNg0r6Jl+QMef8RBXivtj
+	cqXDlAoyUQ=
+X-Received: by 2002:a17:903:4b28:b0:2b0:7d3d:756a with SMTP id d9443c01a7336-2c1e89579ccmr133614095ad.35.1780876600973;
+        Sun, 07 Jun 2026 16:56:40 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c16609df6esm172438635ad.48.2026.06.07.16.49.12
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c16609e2e2sm156389165ad.49.2026.06.07.16.56.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 Jun 2026 16:49:12 -0700 (PDT)
+        Sun, 07 Jun 2026 16:56:40 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ea749740-6f19-4e34-ac88-c0f985e087c6@roeck-us.net>
-Date: Sun, 7 Jun 2026 16:49:11 -0700
+Message-ID: <73557336-94d6-4eef-bcc3-da59af188f86@roeck-us.net>
+Date: Sun, 7 Jun 2026 16:56:39 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,11 +69,18 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/4] some cleanup and fix in gpd-fan
-To: xiaopeitux@foxmail.com, cryolitia@uniontech.com,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: Pei Xiao <xiaopei01@kylinos.cn>
-References: <tencent_D01DBC324E22E6A05DA32244B807A89A2109@qq.com>
+Subject: Re: [RFC] hwmon: add a driver for the temp/voltage sensor on
+ PolarFire SoC
+To: Conor Dooley <conor@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, Lars Randers <lranders@mail.dk>,
+ Conor Dooley <conor.dooley@microchip.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Daire McNamara <daire.mcnamara@microchip.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+ Valentina.FernandezAlanis@microchip.com
+References: <20260527-earring-bully-eb4a268c2e68@spud>
+ <b49d4781-0827-4f26-9ca2-ccd177f90237@roeck-us.net>
+ <20260528-defog-lasso-84891a72775a@spud>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -120,37 +126,63 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <tencent_D01DBC324E22E6A05DA32244B807A89A2109@qq.com>
+In-Reply-To: <20260528-defog-lasso-84891a72775a@spud>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/27/26 03:10, xiaopeitux@foxmail.com wrote:
-> From: Pei Xiao <xiaopei01@kylinos.cn>
+On 5/28/26 15:34, Conor Dooley wrote:
+> On Wed, May 27, 2026 at 09:07:20PM -0700, Guenter Roeck wrote:
+>> On Wed, May 27, 2026 at 10:06:11AM +0100, Conor Dooley wrote:
+>>> From: Lars Randers <lranders@mail.dk>
+>>>
+>>> Add a driver for the temperature and voltage sensors on PolarFire SoC.
+>>> The temperature reports how hot the die is, and the voltages are the
+>>> SoC's 1.05, 1.8 and 2.5 volt rails respectively.
+>>>
+>>> The hardware supports alarms in theory, but there is an unconfirmed
+>>> erratum that prevents clearing them once triggered, so no support is
+>>> added.
+>>>
+>>> The hardware measures voltage with 16 bits, of which 1 is a sign bit and
+>>> the remainder holds the voltage as a fixed point integer value. It's
+>>> improbable that the hardware will work if the voltages are negative, so
+>>> the driver ignores the sign bits.
+>>>
+>>> There's no dt support etc here because this is the child of a simple-mfd
+>>> syscon.
+>>>
+>>> Signed-off-by: Lars Randers <lranders@mail.dk>
+>>> Co-developed-by: Conor Dooley <conor.dooley@microchip.com>
+>>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>>> ---
+>>> Guenter, there's one question here about the unit that update_interval
+>>> is in, I didn't see anyone else using us, but I assume that's okay since
+>>> the resolution that ms would give would be 8 steps only?
+>>> RFC cos the question is also in the driver as a comment.
+>>>
+>>
+>> That just came up in a different context. We'll add a new standard attribute
+>> update_interval_us. The existing attribute MUST use ms. Everything else
+>> would be an ABI violation.
 > 
-> some cleanup and fix in gpd-fan
+> Cool. Sounds like Ferdinand is working on that based on the other
+> thread.
 > 
-> Pei Xiao (4):
->    hwmon: (gpd-fan): drop global driver data and use per-device
->      allocation
->    hwmon: (gpd-fan): Initialize EC before registering hwmon device
->    hwmon: (gpd-fan): upgrade log level from warn to err for platform
->      device creation failure
->    hwmon: (gpd-fan): fix race condition between device removal and sysfs
->      access
-> 
->   drivers/hwmon/gpd-fan.c | 226 ++++++++++++++++++++++------------------
->   1 file changed, 125 insertions(+), 101 deletions(-)
+> Do you think I should support both update_interval and update_interval_us in
+> this driver?
 > 
 
-This patch series is a mess.
+I have been thinking about only supporting one for a given driver, but that
+doesn't work because there are existing drivers which would benefit from
+supporting microsecond-based intervals, so both it is (unless you want to
+wait for _us support to be available and then just support that).
 
-I received a v2 of this series before this summary, the series sent after
-v2 has a mix of "v2" and no versioning tags, and it includes four instead
-of the three patches from the original v2.
+> If yes, should I do the ms version now and add the us version later once
+> Ferdinand's work is complete?
+> 
 
-If you want this series applied, please send v3 with all patches tagged
-as v3 and a complete version change log. I will not even try to figure
-out which patches to apply from which series.
+Yes, that is what I would recommend.
 
+Thanks,
 Guenter
 
