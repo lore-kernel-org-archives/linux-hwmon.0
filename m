@@ -1,68 +1,67 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02BF2372062
-	for <linux-hwmon@vger.kernel.org>; Mon,  8 Jun 2026 13:34:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1DEE36CE14
+	for <linux-hwmon@vger.kernel.org>; Mon,  8 Jun 2026 13:49:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780925687; cv=none; b=l7cA6id8NTkgphrXkcMhM/fd1f+vYl4uwF2kGlPDm0zuPSnAbj3VGd6SLNf5/ZJC0Qwj+hD6GvIvR/uXGzizxeZCAnLNqouPvGFsZMbUkx1yDiGAY28ugZ9a0UKiOXpp6IMB0L2IGc9nM0uhEttLHIaGFqZ9LUrD6/jVaahOFR0=
+	t=1780926546; cv=none; b=sY9PSM4/9KUhBEqNFtYt17UVKz4/RPSqX9LQe4xwLFuIuofq1qbvH2eZFQVrontLp4QCNRD/14Xqd7iogeDwzJNNm5QP3H9mRJbdXcXpBybT9+h3ylMgqEBnDGpc/1HXg17zF2VkqtUNQjdUGc/LeP+egi4gM+q2lG6nju6jfto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780925687; c=relaxed/simple;
-	bh=gS4N3bt4SVHbO+5q7Gyq7cev2WeoXC9xRlW4wfhJ+rc=;
+	s=arc-20240116; t=1780926546; c=relaxed/simple;
+	bh=WKdnKt8uVSNPulYJchYSeIt746GgXLZCDsr7dlvwG8g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oUYoctt0alNWm1e9PrQI0AbH2YZ15QgfLxAcea1T3F5Mc9o26zqCuZi0uoVxbspKbVidcECOPOrSNhNjgKTPFP7x9prl3mcn1aQ4EEZUpajapZzBe15Z6ra2JM5sAjrukIw1mQTU1+WPr8otrwKcLld1YieK7xaZYFW8xXuVl2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m2YQDcc8; arc=none smtp.client-ip=209.85.216.41
+	 In-Reply-To:Content-Type; b=Rr7+3J9lzcNdpn4HhqEDI6lAkBxJbJmfMVxyX5xvQGgXmcrFwdOQwmXBy7u6abqDEiPMP0KJm8oQhtTTb4KWeC8OD6EqYTu/RAGqapdvcUb0diRfNUrYdt5NulpqxdQlvHcHsO/1l1NTZFr88XfMOAJIYd19PaIfTsVGo72OR5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IPPhPYLY; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m2YQDcc8"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-36da8439078so3792503a91.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 08 Jun 2026 06:34:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IPPhPYLY"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2bf20f6be6bso33099315ad.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 08 Jun 2026 06:49:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780925685; x=1781530485; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780926544; x=1781531344; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=G1yQGY/sxND8Z06ZcpOvc+uP5p9kqbh4/uD3ugDSS8I=;
-        b=m2YQDcc8SbhkpNMgsi4Epr2Pbhe9ei8V8xZVxdP77NOawD2kb5/stl8OruBCUW+NcR
-         w2+psZBFfeJkhiV8biPnSA0OY+pMxxDuEvmCFp7Drd+lTQEHssS5boXWXUkIfvmvE6fZ
-         D6OVVv94Ifa1P57zTob+8NG1VB8A9u8qbKwLidc4wWEBCcKle5y3xv+l52Yx43F0p1Cv
-         WRgBbUmdG49tiH0N9/We9JK6lBdvR18IULUdq2h3D0E+5hedfG/MjBi8KnFO5Lyw3q+x
-         5HVcXxLMRPBASgG/b1wkILangy0GZdMAZRaWLNTKIFe0ippfM06MXZbAnGeBovVcaSIw
-         3ZbQ==
+        bh=dP80yCRxSazdInPQLjGyNhGAqwlp9fjz0KW2XAV0D0w=;
+        b=IPPhPYLYKzb3yUyZgl0Svi/eTaRavz0/rh0n45TjEDS9Tztvw76KLfBlCPkhhKCAeS
+         i2ukgeAeCBoUvNo8XuYg9UfZC1ij2uIhgJY16UuTy+CCYVxv/bT8N8rho/OwDrF7tLd9
+         5uD84fFbVbACE3IPnZB3m0wPV9rg/oC8IMjGjWFRaJpsGJ6yBT0uGpUoD3kijNQy+tn/
+         MdT1iM0NRqBIxYSg2cGcqcvy97UTUwh9QdkG5GRKPAlAMJ1f+3m6/oj3AaXe6Fl6XZTs
+         qc/V8LtV48lax+CPSYvQgJKjUF+HGf6L3xDNWQ6qsZnj2GCNxVNuwkdDS/G0vFNTQIR3
+         vhtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780925685; x=1781530485;
+        d=1e100.net; s=20251104; t=1780926544; x=1781531344;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=G1yQGY/sxND8Z06ZcpOvc+uP5p9kqbh4/uD3ugDSS8I=;
-        b=kWJ5D0swnsa3byFi2D5D7AvVcsiBzuAfRjMLLe/MwtSrInZhUFWY755h/otESPjPhg
-         W92E5uvAGjeicPtxR6AQY3bThL2ZXx+PI0b/5Fw3BQv06OKM4VqFBk3SVk/zohf6g1WS
-         Kc/DJGwjGtPUmvDeHC1zeDCVmWjcYU698OcADL7mm84/AstKVHxh8UlSpeNmPsJ05QGv
-         sZ1k8azRD49feeHXvOdWNvQskrtXuvbxaKuvJ6KjxoH/WVeeULzPY4xLGxG7fuSzEdxQ
-         B4GRWmuMtkA1CbCmDj0NVqy/YcBO+GMzii15rBW6lZeLjqyXedtdyoIDTq4fZ+GPDGR0
-         kfig==
-X-Forwarded-Encrypted: i=1; AFNElJ8mA6ukSnS2cstrBSJXgUUo78CJnB5Lu6qrYwokO3zlCS1tLbUpNPqiUooszqHfkgqSUa2b4vrRMaDGjg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWeQ9iFNV++WfmlL50g/tmrg8YHnONi7KSUnbmrSwZTxWMWrC9
-	R8dPQ+8RJ828uZ10yxqI+8OoOHbYjPvxVZV0+c23hZ7RuWIFRFis6b61
-X-Gm-Gg: Acq92OHiGTPHEsqki9nX3GdUxc7kCRuC1XQ3kPR4/e+69uCgR9hl17hVQlVMbmEByY7
-	gc1QnISIYkhzg2MKc4glY8OgSWpZcj3sMx/7sXZxh879auCLpoNbXejUq1e/wVGOYpl3myZ0H5c
-	yTnB4WBOAgDo6XWvvO/IXwYh9guMqMuuU3rmTpmbcbZPAjDt9GXvShojaXgAOo+/S/RW6Cu8QXm
-	4KirF8pIMZF/x7cwHccQyneFe8+lsHWAzjoFqPcB+Z3NZXO9WkK4WILCbK8dXLK0xBbyTtesaZw
-	N0hwp4hTLAHkx1Uruw1KOReGz/lpuJXNXKliBxqkHzc5FCish6onvOuaC+BCLnuBx0WgL2GMOTY
-	JBM/RX82BJrbEPvRBfx+yYdgtpVTbU8fAqHHZNgqEMG9/oAHID+yUlNCtgAkQ3RCl9X/4bfcroq
-	y9Jwxe/baPN3Mby14EYyjTGQzxlEkkcpAvhgOJg01Z1OAx5xwErjmX7omI0LGL+o6ePAQI/0gbl
-	zmG0One003jj16TW96OGg==
-X-Received: by 2002:a17:90b:1d89:b0:368:ea0c:1b75 with SMTP id 98e67ed59e1d1-370ee82fe25mr16446630a91.6.1780925685333;
-        Mon, 08 Jun 2026 06:34:45 -0700 (PDT)
+        bh=dP80yCRxSazdInPQLjGyNhGAqwlp9fjz0KW2XAV0D0w=;
+        b=JAPrQZydydiqZTLKPdYWBeZ/OD3lVhzVKZ+w3CThgPxeP+kphjiyslYaa/DSpFgzah
+         FpchqbSFV1me+mXbxipPfdIOHIKPWQPPyAykJ8Cc4pYZGGT7Xo61zWtCoJtxA78gxef4
+         lg31hpcD5AFwanGugsydLwLLTtZBpw9ZLMVKD7k6PW3kxMaEAcwTVul4eg4xccPFhLRn
+         6DfMTibRbPperXdi+1ly9eewQvxNvpadeAVKCuuEfBVKvftT7EZdQreSMsyAkpFevWVm
+         fPfX31QDIOeVBY49lOacdL7UJZEbSz+TmErXM/q15vh5lk7JHxnl50ftM8TkVgEi7XxS
+         gAxA==
+X-Gm-Message-State: AOJu0Yy29nQL5eQI6avAvBYFSgwb0qy227AXpmT5Mo1e8wXxPS1ki+4w
+	/v2isI1LK3HzxmeGNxkmZbvlo6oZaraVbg5ysJ4sMQhLdf+7Vh8juzpW
+X-Gm-Gg: Acq92OGYWru+cf0f9zrGM7l7CaLt1MJonXrXGx/I5IfAKoC0A3gYW11jmSWF3QDiqrC
+	RDL3dCShTkvOx3MVJhuSlbuvGlhGbH33ZjUlFaHfiHO/IPMWsxVsuprSf7Xa6Oh7eFbXpnRyL0c
+	KhYXDDrN/CnRIMN1FZGe0DWsTumuQYrc0u4ThfNj7/UvN/YO4D4Wqq9rtdoABfK0tfRV/OYtgBI
+	sWnBr38itGI5CK2RAhsJLOfh8SEC39fuLv24r/aa6pPT0eyxUddnxxe3i9fJKeoZ0kcKIbCZy3t
+	bZ4qQ5w72sWq/hVAkveBzeKWNG/Et2t5xwspdmI6bjRolS//dKJ2/QyGhU0+bNG7mJzBlzCE1kp
+	sDWLqYHrtN2dZ3xImYXY05emysD3CjYx3FdIk8QYdGeLF0Ss+HbeWaoRZkgh1zZcAcEhPUvEXEw
+	lr8WeVKiinFHmUaK3vNHqITyMAAfoW9y0Sb1VgWTQSE+6lyANO1cDxhlYnthZzFTMRJVKxhKzwJ
+	e3760GJHQ0=
+X-Received: by 2002:a17:902:f24d:b0:2c0:d9b7:b7b0 with SMTP id d9443c01a7336-2c1e8220afbmr115307245ad.31.1780926543810;
+        Mon, 08 Jun 2026 06:49:03 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36f6bf82fecsm16305333a91.3.2026.06.08.06.34.44
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164f6d389sm179766245ad.16.2026.06.08.06.49.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Jun 2026 06:34:44 -0700 (PDT)
+        Mon, 08 Jun 2026 06:49:03 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <243e6f71-b777-478c-802a-d8f3ed47b3fc@roeck-us.net>
-Date: Mon, 8 Jun 2026 06:34:43 -0700
+Message-ID: <f03b52b2-1193-4127-ae5e-bd4a954f8e3e@roeck-us.net>
+Date: Mon, 8 Jun 2026 06:49:02 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,18 +69,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/5] hwmon: (cros_ec) Allow modification of fan curves
-To: Armin Wolf <W_Armin@gmx.de>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
- <linux@weissschuh.net>
-Cc: Benson Leung <bleung@chromium.org>, Shuah Khan
- <skhan@linuxfoundation.org>, Guenter Roeck <groeck@chromium.org>,
- chrome-platform@lists.linux.dev, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260529-cros_ec-hwmon-fan-curve-v1-0-da6792b3830f@weissschuh.net>
- <20260529-cros_ec-hwmon-fan-curve-v1-5-da6792b3830f@weissschuh.net>
- <87825203-0bbb-46a4-8939-a904f5a546ab@gmx.de>
- <6a4a2d2c-4717-4cc9-8dd3-05f8b0905865@t-8ch.de>
- <8b8f5a9f-4a44-4e93-9ff6-c2e13a6b8797@gmx.de>
+Subject: Re: [PATCH v4 2/2] hwmon:(pmbus/xdp720) Add support for efuse xdp730
+To: ASHISH YADAV <ashishyadav78@gmail.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Ashish Yadav <ashish.yadav@infineon.com>
+References: <20260608061544.5613-1-Ashish.Yadav@infineon.com>
+ <20260608061544.5613-3-Ashish.Yadav@infineon.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -127,106 +121,237 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <8b8f5a9f-4a44-4e93-9ff6-c2e13a6b8797@gmx.de>
+In-Reply-To: <20260608061544.5613-3-Ashish.Yadav@infineon.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 6/4/26 03:33, Armin Wolf wrote:
-> Am 04.06.26 um 11:04 schrieb Thomas Weißschuh:
->> On 2026-05-30 18:37:32+0200, Armin Wolf wrote:
->>> Am 29.05.26 um 22:31 schrieb Thomas Weißschuh:
->>
->> (...)
->>
->>>> +static ssize_t temp_auto_point_temp_store(struct device *dev, struct device_attribute *attr,
->>>> +                      const char *buf, size_t size)
->>>> +{
->>>> +    struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
->>>> +    struct cros_ec_hwmon_priv *priv = dev_get_drvdata(dev);
->>>> +    struct ec_thermal_config config;
->>>> +    u32 *temp_field;
->>>> +    s64 temp;
->>>> +    int ret;
->>>> +
->>>> +    ret = kstrtos64(buf, 10, &temp);
->>>> +    if (ret)
->>>> +        return ret;
->>>> +
->>>> +    temp = cros_ec_hwmon_millicelsius_to_kelvin(temp);
->>>> +
->>>> +    if (overflows_type(temp, config.temp_fan_off))
->>>> +        return -ERANGE;
->>>> +
->>>> +    guard(hwmon_lock)(dev);
->>>> +
->>>> +    ret = cros_ec_hwmon_get_thermal_config(priv->cros_ec, sattr->index, &config);
->>>> +    if (ret)
->>>> +        return ret;
->>>> +
->>>> +    if (cros_ec_hwmon_attr_is_temp_fan_off(sattr))
->>>> +        temp_field = &config.temp_fan_off;
->>>> +    else /* temp_fan_max */
->>>> +        temp_field = &config.temp_fan_max;
->>>> +
->>>> +    /* Only allow values which are more aggressive than the current ones */
->>>> +    if (temp > *temp_field)
->>>> +        return -EINVAL;
->>>
->>> i think it would be more practical for users to increase and later decrease the fan curve values.
->>> Could the driver copy the original fan curve configuration and use that instead? This would also
->>> require to restore the original fan curve during shutdown and removal.
->>
->> That would be possible. We would would have to expose these limits
->> through a new UAPI as otherwise the user has no way to know about them.
->> Restoring the original on shutdown shouldn't be necessary, as the EC
->> will reset the curves at shutdown anyways.
+On 6/7/26 23:15, ASHISH YADAV wrote:
+> From: Ashish Yadav <ashish.yadav@infineon.com>
 > 
-> (And what about kexec?)
+> Adds support for the Infineon XDP730 Digital eFuse Controller by
+> updating the existing XDP720 driver.
 > 
-> Ok, i myself would also interested in having a UAPI for communicating fan curve constraints to userspace as i am planning to add a similar feature to the uniwill-laptop driver.
+> Signed-off-by: Ashish Yadav <ashish.yadav@infineon.com>
+> ---
+> XDP720/XDP730 Digital eFuse Controllers provides accurate system telemetry
+> (V, I, P, T) and reports analog current at the IMON pin for post-processing.
 > 
-> I can think of two approaches:
+> Both parts share the same PMBus register map and direct-format
+> coefficients; they differ in the GIMON gain step exposed via the
+> TELEMETRY_AVG register (bit 10) and in the VDD_VIN pin number
+> (XDP720: pin 9, XDP730: pin 20).
 > 
-> 1. Clamp the values into the supported range, userspace will have to read back the written value to know the current setting.
+> The Current and Power measurement depends on the RIMON and GIMON values.
+> The GIMON (microA/A) depends on the 10th bit of TELEMETRY_AVG PMBUS Register.
+> The value of RIMON (kohm) can be provided by the user through device tree using
+> infineon,rimon-micro-ohms  property.
+> ---
+>   drivers/hwmon/pmbus/Kconfig  |  2 +-
+>   drivers/hwmon/pmbus/xdp720.c | 97 ++++++++++++++++++++++++------------
+>   2 files changed, 65 insertions(+), 34 deletions(-)
 > 
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index 8f4bff375ecb..a9e86d92b044 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -715,7 +715,7 @@ config SENSORS_XDP720
+>   	tristate "Infineon XDP720 family"
+>   	help
+>   	  If you say yes here you get hardware monitoring support for Infineon
+> -	  XDP720.
+> +	  XDP720 and XDP730 Digital eFuse Controllers.
+>   
+>   	  This driver can also be built as a module. If so, the module will
+>   	  be called xdp720.
+> diff --git a/drivers/hwmon/pmbus/xdp720.c b/drivers/hwmon/pmbus/xdp720.c
+> index 8729a771f216..9bdeac2d82f5 100644
+> --- a/drivers/hwmon/pmbus/xdp720.c
+> +++ b/drivers/hwmon/pmbus/xdp720.c
+> @@ -1,27 +1,46 @@
+>   // SPDX-License-Identifier: GPL-2.0+
+>   /*
+> - * Hardware monitoring driver for Infineon XDP720 Digital eFuse Controller
+> + * Hardware monitoring driver for Infineon XDP720 / XDP730 Digital
+> + * eFuse Controllers.
+> + *
+> + * Both parts share the same PMBus register map and direct-format
+> + * coefficients; they differ in the GIMON gain step exposed via
+> + * the TELEMETRY_AVG register and in the VDD_VIN pin number.
+>    *
+>    * Copyright (c) 2026 Infineon Technologies. All rights reserved.
+>    */
+>   
+> +#include <linux/bitops.h>
+>   #include <linux/i2c.h>
+> -#include <linux/module.h>
+>   #include <linux/init.h>
+>   #include <linux/kernel.h>
+> -#include <linux/of_device.h>
+> -#include <linux/bitops.h>
+>   #include <linux/math64.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/property.h>
+> +#include <linux/regulator/consumer.h>
 
-... which is widely used in hwmon drivers, so it is not special.
-We don't usually expect userspace to know the valid attribute range.
+Reordering include files and adding the regulator include
+is an unrelated change and would need to be done in a separate patch.
 
-> 2. Introducing a new tempX_auto_pointY_temp_min attribute to communicate the constraint to userspace.
-> 
-> Guenter, do you have a preference for one of the approaches? Personally
-> i would prefer approach number 2.
-> 
+>   #include "pmbus.h"
+>   
+>   /*
+>    * The IMON resistor required to generate the system overcurrent protection.
+>    * Arbitrary default Rimon value: 2k Ohm
+>    */
+> -#define XDP720_DEFAULT_RIMON 2000000000 /* 2k ohm */
+> +#define XDP720_DEFAULT_RIMON 2000000000U /* 2k ohm */
 
-Again, we don't usually provide constraints for limit attributes
-to userspace. Otherwise we would need separate _min and _max attributes
-for literally every limit attribute. That would add a lot of complexity
-for little if any gain.
+Is this preference or needed ? Either case, it is an unrelated change.
 
-Worse, almost all attributes do not just have min/max constraints but
-step size constraints as well. Hardware does not typically accept values
-in millisecond/millivolt etc. but have varying step sizes. How would you
-express that ? The hardware won't accept a temperature of, say, 27.123
-degrees C. Hwmon drivers are expected to adjust that to the next supported
-value. That means userspace has to read the value back to know that value
-anyway. Or do you plan to provide the step size to userspace as well ?
-What would you do if the step size is non-linear ?
+>   #define XDP720_TELEMETRY_AVG 0xE9
+> +#define XDP720_TELEMETRY_AVG_GIMON BIT(10) /* high/low GIMON select */
+> +
+> +/* Chip identifiers carried in OF match-data and i2c_device_id->driver_data. */
+> +enum xdp720_chip_id {
+> +	CHIP_XDP720 = 0,
+> +	CHIP_XDP730,
+> +};
+>   
+> -static struct pmbus_driver_info xdp720_info = {
+> +struct xdp720_data {
+> +	enum xdp720_chip_id	 id;
+> +	struct pmbus_driver_info info;
+> +};
+> +
+> +static const struct pmbus_driver_info xdp720_info = {
+>   	.pages = 1,
+>   	.format[PSC_VOLTAGE_IN] = direct,
+>   	.format[PSC_VOLTAGE_OUT] = direct,
+> @@ -56,57 +75,69 @@ static struct pmbus_driver_info xdp720_info = {
+>   
+>   static int xdp720_probe(struct i2c_client *client)
+>   {
+> -	struct pmbus_driver_info *info;
+> +	struct xdp720_data *data;
+>   	int ret;
+> -	u32 rimon;
+>   	int gimon;
+> +	u32 rimon;
 
-On top of that, _min and _max attributes are already associated with
-limits. I would find it confusing if new attributes would redefine that
-naming scheme to supported ranges.
+Why this change ?
 
->>
->> I am not so sure that it would be generally useful though. Let's hear
->> what other people think about it.
-> 
-> The uniwill-laptop driver will (likely) gain support for a similar feature in the future, so having such a UAPI would be beneficial.
-> 
+>   
+> -	info = devm_kmemdup(&client->dev, &xdp720_info, sizeof(*info),
+> -			    GFP_KERNEL);
+> -	if (!info)
+> +	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+>   		return -ENOMEM;
+>   
+> +	data->id = (enum xdp720_chip_id)(uintptr_t)i2c_get_match_data(client);
+> +	data->info = xdp720_info;
+> +
+>   	ret = devm_regulator_get_enable(&client->dev, "vdd-vin");
+>   	if (ret)
+>   		return dev_err_probe(&client->dev, ret,
+>   			"failed to enable vdd-vin supply\n");
+>   
+>   	ret = i2c_smbus_read_word_data(client, XDP720_TELEMETRY_AVG);
+> -	if (ret < 0) {
+> -		dev_err(&client->dev, "Can't get TELEMETRY_AVG\n");
+> -		return ret;
+> +	if (ret < 0)
+> +		return dev_err_probe(&client->dev, ret,
+> +			"failed to read TELEMETRY_AVG\n");
 
-FWIW, as long as it does not reside in drivers/hwmon/, you can add any attribute
-you want, and even violate the documented UAPI. That is one of the "advantages"
-of having hwmon drivers reside outside drivers/hwmon/.
+Another unrelated change.
 
+Please, if you want to clean up the driver, that is fine, but please do it
+with separate patches. It is ok to make a simple cleanup change as part of
+a patch like this, but it needs to be mentioned in the commit message.
+But this goes beyond "simple". The patch
+
+- Reorders include files to alphabetic order
+- Adds the missing regulator include
+- Declares XDP720_DEFAULT_RIMON as unsigned constant
+- Changes error return to dev_err_probe()
+- (unnecessarily) changes the rimon/gimon declaration order
+
+in addition to adding support for the new chip. This is just too much.
+Please split that out.
+
+Thanks,
 Guenter
+
+> +
+> +	/* Bit 10 of TELEMETRY_AVG selects the GIMON gain step in microA/A */
+> +	switch (data->id) {
+> +	case CHIP_XDP720:
+> +		gimon = (ret & XDP720_TELEMETRY_AVG_GIMON) ? 18200 : 9100;
+> +		dev_info(&client->dev, "Initialised XDP720 instance\n");
+> +		break;
+> +	case CHIP_XDP730:
+> +		gimon = (ret & XDP720_TELEMETRY_AVG_GIMON) ? 20000 : 10000;
+> +		dev_info(&client->dev, "Initialised XDP730 instance\n");
+> +		break;
+> +	default:
+> +		return -EINVAL;
+>   	}
+>   
+> -	ret >>= 10; /* 10th bit of TELEMETRY_AVG REG for GIMON Value */
+> -	ret &= GENMASK(0, 0);
+> -	if (ret == 1)
+> -		gimon = 18200; /* output gain 18.2 microA/A */
+> -	else
+> -		gimon = 9100; /* output gain 9.1 microA/A */
+> -
+> -	if (of_property_read_u32(client->dev.of_node,
+> -				 "infineon,rimon-micro-ohms", &rimon))
+> -		rimon = XDP720_DEFAULT_RIMON; /* Default if not set via DT */
+> +	if (device_property_read_u32(&client->dev,
+> +				     "infineon,rimon-micro-ohms", &rimon))
+> +		rimon = XDP720_DEFAULT_RIMON;	/* Default if not in FW */
+>   	if (rimon == 0)
+>   		return -EINVAL;
+>   
+>   	/* Adapt the current and power scale for each instance */
+> -	info->m[PSC_CURRENT_OUT] = DIV64_U64_ROUND_CLOSEST((u64)
+> -		info->m[PSC_CURRENT_OUT] * rimon * gimon, 1000000000000ULL);
+> -	info->m[PSC_POWER] = DIV64_U64_ROUND_CLOSEST((u64)
+> -		info->m[PSC_POWER] * rimon * gimon, 1000000000000000ULL);
+> -
+> -	return pmbus_do_probe(client, info);
+> +	data->info.m[PSC_CURRENT_OUT] = DIV64_U64_ROUND_CLOSEST((u64)
+> +		data->info.m[PSC_CURRENT_OUT] * rimon * gimon,
+> +		1000000000000ULL);
+> +	data->info.m[PSC_POWER] = DIV64_U64_ROUND_CLOSEST((u64)
+> +		data->info.m[PSC_POWER] * rimon * gimon,
+> +		1000000000000000ULL);
+> +
+> +	return pmbus_do_probe(client, &data->info);
+>   }
+>   
+>   static const struct of_device_id xdp720_of_match[] = {
+> -	{ .compatible = "infineon,xdp720" },
+> +	{ .compatible = "infineon,xdp720", .data = (void *)CHIP_XDP720 },
+> +	{ .compatible = "infineon,xdp730", .data = (void *)CHIP_XDP730 },
+>   	{}
+>   };
+>   MODULE_DEVICE_TABLE(of, xdp720_of_match);
+>   
+>   static const struct i2c_device_id xdp720_id[] = {
+> -	{ "xdp720" },
+> +	{ "xdp720", CHIP_XDP720 },
+> +	{ "xdp730", CHIP_XDP730 },
+>   	{}
+>   };
+>   MODULE_DEVICE_TABLE(i2c, xdp720_id);
+> @@ -123,6 +154,6 @@ static struct i2c_driver xdp720_driver = {
+>   module_i2c_driver(xdp720_driver);
+>   
+>   MODULE_AUTHOR("Ashish Yadav <ashish.yadav@infineon.com>");
+> -MODULE_DESCRIPTION("PMBus driver for Infineon XDP720 Digital eFuse Controller");
+> +MODULE_DESCRIPTION("PMBus driver for Infineon XDP720/XDP730 Digital eFuse Controllers");
+>   MODULE_LICENSE("GPL");
+>   MODULE_IMPORT_NS("PMBUS");
 
