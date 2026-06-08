@@ -1,453 +1,143 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012020.outbound.protection.outlook.com [52.101.48.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3A363546C1
-	for <linux-hwmon@vger.kernel.org>; Mon,  8 Jun 2026 05:18:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780895913; cv=none; b=sp9rxrfwAruMbmhGefAVUHJC1wza7b13E9eUp2UQCHE6L82eimuoAV1b4O6xNKl6osxPKV/rIYZP+nh6WF/AbAwYkRURTbQBjPmbKop8ha/CkhRX8msVjt8FUR0xOFsix3QxOU4aZ7ClOwfqE7odJ31I766oVtLXDa8gitUNahY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780895913; c=relaxed/simple;
-	bh=yLAYC9rwUMzfygC3ZN37wBG2n0LVAeQEJOBmB2R/BaM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X9olbh2/k/wx+luApAuAh/7BjjPn6XdToYPC2EOGxFwwe2j/6aWOnpaWhmGF2IPQleVUkSiWfIegI/QbX/GfCSZtw5zEKXRVtJmZ8Eyamwcw2MJExQMNbRHVv9jenL9SXXh/MKWHxQzZdxHyhrDlKAadmzrS/1EKdosb4rRE98s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Biub5MnD; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Biub5MnD; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964EFEEA8;
+	Mon,  8 Jun 2026 05:59:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.20
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780898383; cv=fail; b=EwniyX7F7QXrDJDk+RrnTgHASR/d/KlO2YlLjQDXkfVUatOIfRCNrvAszmA0t/OL3EZSyfi5AS7gGO+wYBNoqJU5R3LkXmiZUdP4Da7UGTjeTFvbc/eITWL3LhSCHJ9pOEXs2zxsn9kO+C0lDrlC6iytPAxVocIy1HWZ6WjETF0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780898383; c=relaxed/simple;
+	bh=mTK1cS/i95OXNIz1NhHB0d5+2CdEk46TsTQPUGLUj1U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=YznVVmHfNR0vfWhK0iCCHWIIezBtC4I1qCGXz858S/5jLvXtr4Hv9N2u30QF/woHsKwcs6b4axJwfpsqeUj55d9BojbIBJP62L4DYPdbQ+TqqCtf1aMq/gEAm2EzHtWG+XmRE7UEnKVgMCy6cR8IhpfaTzvEWU3pUefZwj1z0F8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=j5EsOoDL; arc=fail smtp.client-ip=52.101.48.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Biub5MnD";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Biub5MnD"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 469576B5C9;
-	Mon,  8 Jun 2026 05:18:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1780895909; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TFEbREzR5iqeTOMUqyw9L1/xvoJ90/X69vhp/m4YJu0=;
-	b=Biub5MnDnksIjW7Xk8qBzt9HF2wkMuuC8Se4UhCiT068M2I+wmDdlP+X/sCxgMRBGJeeRb
-	FKw0HDft/KO9UGnMCBckNTZEtSdBoGsWwrVyHsl4hOzdwkoPrE6ubzAu9CkHpkJzSrQwFr
-	Ebf5HTM0LZ25mebusDykX64UBXUWNYs=
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1780895909; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TFEbREzR5iqeTOMUqyw9L1/xvoJ90/X69vhp/m4YJu0=;
-	b=Biub5MnDnksIjW7Xk8qBzt9HF2wkMuuC8Se4UhCiT068M2I+wmDdlP+X/sCxgMRBGJeeRb
-	FKw0HDft/KO9UGnMCBckNTZEtSdBoGsWwrVyHsl4hOzdwkoPrE6ubzAu9CkHpkJzSrQwFr
-	Ebf5HTM0LZ25mebusDykX64UBXUWNYs=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E693E779A7;
-	Mon,  8 Jun 2026 05:18:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 5DkzN6RQJmp+dQAAD6G6ig
-	(envelope-from <jgross@suse.com>); Mon, 08 Jun 2026 05:18:28 +0000
-From: Juergen Gross <jgross@suse.com>
-To: linux-kernel@vger.kernel.org,
-	x86@kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Cc: Juergen Gross <jgross@suse.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>
-Subject: [PATCH v3 08/11] x86/msr: Switch rdmsr_safe_on_cpu() users to rdmsrq_safe_on_cpu()
-Date: Mon,  8 Jun 2026 07:17:38 +0200
-Message-ID: <20260608051741.3207435-9-jgross@suse.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260608051741.3207435-1-jgross@suse.com>
-References: <20260608051741.3207435-1-jgross@suse.com>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="j5EsOoDL"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=K85uI9LYEmNlSGJrxRchX5PyzyQWCqBUoZ5x5N2fNxpAiUzZO7DzJqYRW/lNxaawq2yT1xav3rmSs906szgcTrk1MAmcwSJMQ02/RuNSC3rmOgNCucwo69DcLZtdOK2TBVpEeS+/341MpyD/RpOWXxPIa0HgpgCXB5dsBS7g9R6w1kRv7sk0vQgagysv8rBnlLDJ4K5dGl4IHjQhPzPG785nQtLTvM6ENKPrcopNAeN/F1CUm74uOAe81teI1ds7e9C0AEiwJKFWGo+t8kOoWu9ldbTKt2SCznE1rNu49dO3y8fJsAPstxEkJlaVC1JvAq6qigbqY0Q55lUXL5XKNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ISm32uXki15YLZWNAgHQK9SeMhqob+4MMMYRaRcMZSk=;
+ b=qT6Oi0rkTJOOaRiW1dQ3qeLZQwPKXwBqc9/s2CiVZCHyjHjd8uNYHRhetcmK1v/TqLbwh4c0mfgw5EeFsJRycOVlf+5rNz3sRWziR5skSDCZ4zbOAFRsb9ov7AdtyySE+AeFvCdMODuR+TMl+Z/JJkwSrequVtph1RvX/ps0Z/XCipdNfnN51Hn7dKN9d5az4AOFft/LA3ou4zGOyJbKDgkDUIx5qbf2RToBCVldMWAz0iO+hVC+dldu8o8QY5ECEczMGlScO/HomW1p01o0P+U58SrGorE+P7pcRITGANMUGDjv+e3BxGy8Oqa2X0AAdAsMMvJ8vOG+TExbwyXfFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=suse.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ISm32uXki15YLZWNAgHQK9SeMhqob+4MMMYRaRcMZSk=;
+ b=j5EsOoDLfFwFUi0Kxxwy+O7R/X1ZgY7VeJmNMLI45aiAWIbCpbHOyeR4yL2J9OV3gjGlUeHE9y3f3vfuNmT31ILcl3vsySf71BKaYS+OblXUu15cbVCJ2jFJSDxTFYIuI7xKWQvKVx3m5pP0D3uf/B8f+ThC4hCIvAy7P1Gmnlo=
+Received: from DS7P220CA0084.NAMP220.PROD.OUTLOOK.COM (2603:10b6:8:259::14) by
+ CH8PR12MB9741.namprd12.prod.outlook.com (2603:10b6:610:27a::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.92.13; Mon, 8 Jun 2026
+ 05:59:36 +0000
+Received: from SA2PEPF000015CD.namprd03.prod.outlook.com
+ (2603:10b6:8:259:cafe::25) by DS7P220CA0084.outlook.office365.com
+ (2603:10b6:8:259::14) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.25.21 via Frontend Transport; Mon, 8
+ Jun 2026 05:59:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ SA2PEPF000015CD.mail.protection.outlook.com (10.167.241.203) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.113.7 via Frontend Transport; Mon, 8 Jun 2026 05:59:36 +0000
+Received: from satlexmb07.amd.com (10.181.42.216) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.41; Mon, 8 Jun
+ 2026 00:59:17 -0500
+Received: from [10.136.43.95] (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.41 via Frontend
+ Transport; Mon, 8 Jun 2026 00:59:09 -0500
+Message-ID: <36b574d7-2958-4f5e-8cb2-af371c490dc9@amd.com>
+Date: Mon, 8 Jun 2026 11:29:03 +0530
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:url,imap1.dmz-prg2.suse.org:helo,suse.com:email,suse.com:mid];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	R_RATELIMIT(0.00)[to_ip_from(RLfdszjqhz8kzzb9uwpzdm8png)];
-	RCVD_TLS_ALL(0.00)[]
-X-Spam-Level: 
-X-Spam-Score: -2.80
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 00/11] x86/msr: Drop 32-bit variants of *_on_cpu() MSR
+ functions
+To: Juergen Gross <jgross@suse.com>, <linux-kernel@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <x86@kernel.org>, <linux-edac@vger.kernel.org>,
+	<linux-hwmon@vger.kernel.org>, <linux-perf-users@vger.kernel.org>
+CC: Huang Rui <ray.huang@amd.com>, Mario Limonciello
+	<mario.limonciello@amd.com>, Perry Yuan <perry.yuan@amd.com>, "Rafael J.
+ Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, "Thomas
+ Gleixner" <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin"
+	<hpa@zytor.com>, Tony Luck <tony.luck@intel.com>, Guenter Roeck
+	<linux@roeck-us.net>, Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui
+	<rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra
+	<peterz@infradead.org>, Arnaldo Carvalho de Melo <acme@kernel.org>, "Namhyung
+ Kim" <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, "Alexander
+ Shishkin" <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>
+References: <20260608051741.3207435-1-jgross@suse.com>
+Content-Language: en-US
+From: K Prateek Nayak <kprateek.nayak@amd.com>
+In-Reply-To: <20260608051741.3207435-1-jgross@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF000015CD:EE_|CH8PR12MB9741:EE_
+X-MS-Office365-Filtering-Correlation-Id: 78fd8164-a7a6-40cb-354d-08dec5231eac
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700016|7416014|376014|82310400026|22082099003|18002099003|6133799003|11063799006|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	dVgnQgkOyR0LZliHS3WL8bDoLSoY9YTKtkBJ4cLK55lPFjuRRe8GiJaES5oJ38barGgm97OzRYmO/YAhhSw7dypZ2gPdUzIkHt57xe5BZNeCiuyXBesQPHklCi4DENSec8YzUttvIHnkF3XYbjNnO9oqfrubRc/FNxD7Hoa90eK3x5GejeftyvNPE+XQ3qlPREWJx1dKepAg7Pmg/wlNcQ053y9559iMxDU40V5TrrF+u0tB0R4DzimM2akN0dLGP7aIfaXZKA+UlFbJFlutVk2IweDaXvXla+/Hg411ljk9FSBDG6j8Ah5l8Om8/KnJ9jYRHPd8H4ni+M/J5hnLO0jFcCq7Ci/C2xXdBEvmVonkyLINm7Q3biDUGETcduPdmTvaS4mf/XCY2qCJjzdqNkO7+A4GWN6B/z1DYBaKYfw8WYnK6EpVzYhwXkzKKBwN/sJ1y9qz1xGlJfhMej1hhpF/7FU9gYPbFZcpKM9T6Lu2CRpNPEb63J7lXfi0rldFh01uT83kL/diMyw4BZ0ssyIPPVfFUiD1ao95rlvpbfEEYCt3kt0h0nC1QTUofqrytVckw3jNOfqC6jTLta/5JFtzU4mfbFQRvs72OWWEEzHmDjfYoJ1vJqDQg6KxUTiQK/60rr0ZgA7TX/nx8grXD7WSHeVzU5VL4yQhVrbOHqNYLEKsSmB6R8uhnM1MZZQhOSIWB+0yyhhF/nhtDkLWXt1kU9SJIahn3QGVqT3WO5I=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700016)(7416014)(376014)(82310400026)(22082099003)(18002099003)(6133799003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	Xp9KISuGy/8/wl23SIkQ5iVLwprLYLOoXhTzM6PYMN5fTM+FITlYYDBEqWRDYyneSs5RKyrH4cMtiAdcxFSL9QPcEIADX6mo8whZUZJkieGrj4Pfy6Fcz9zfP3laGnZJtJ7k9ScLlBfv+xjLkZ6e3EhJ7ePZGxE1r76ID7pJwK/rDaYPAQpqs4iIg+DW2+G7Vv7nj+kZgfsmVBTNR97THvPrL6c4fpkxCfxRE8Dm4ke7mjwYG6ePgcOpsUXqImTX0cP+vTHcl32hOmn082GDlMsw/lLQxWf7/EwMsLeflD/w3z2z+9WNPhlFVYp8/nQdFWma0VRmIorpJMUtHaJbbudfKkULGWMxG65Cf5ZqIQJ6NSy0Z+/y4TPRQdyVcQKn2njcB8gL4VKUDmT8ZxL+bCKZN7S5GplQOerztQmOzRoaK2Dv+bmf/vTA32FdmpzV
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2026 05:59:36.1623
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 78fd8164-a7a6-40cb-354d-08dec5231eac
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SA2PEPF000015CD.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH8PR12MB9741
 
-In order to prepare retiring rdmsr_safe_on_cpu() switch
-rdmsr_safe_on_cpu() users to rdmsrq_safe_on_cpu().
+Hello Juergen,
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
----
-V2:
-- instead of changing rdmsr_safe_on_cpu(), use rdmsrq_safe_on_cpu()
-  (Ingo Molnar)
----
- arch/x86/kernel/msr.c             |  4 +--
- drivers/hwmon/coretemp.c          | 32 +++++++++++------------
- drivers/hwmon/via-cputemp.c       | 16 ++++++------
- drivers/thermal/intel/intel_tcc.c | 43 ++++++++++++++++---------------
- 4 files changed, 48 insertions(+), 47 deletions(-)
+On 6/8/2026 10:47 AM, Juergen Gross wrote:
+> Drop the variants using 2 32-bit values instead of a single 64-bit one
+> of the *_on_cpu() MSR access functions.
+> 
+> Changes in V2:
+> - patches 1+2 split out from other patch
+> - keep the *q() variants instead of those without suffix
+> 
+> Changes in V3:
+> - V3 patch 7 split out from V2 patch 7
 
-diff --git a/arch/x86/kernel/msr.c b/arch/x86/kernel/msr.c
-index 4469c784eaa0..60334317f30b 100644
---- a/arch/x86/kernel/msr.c
-+++ b/arch/x86/kernel/msr.c
-@@ -53,7 +53,7 @@ static ssize_t msr_read(struct file *file, char __user *buf,
- 			size_t count, loff_t *ppos)
- {
- 	u32 __user *tmp = (u32 __user *) buf;
--	u32 data[2];
-+	u64 data;
- 	u32 reg = *ppos;
- 	int cpu = iminor(file_inode(file));
- 	int err = 0;
-@@ -63,7 +63,7 @@ static ssize_t msr_read(struct file *file, char __user *buf,
- 		return -EINVAL;	/* Invalid chunk size */
- 
- 	for (; count; count -= 8) {
--		err = rdmsr_safe_on_cpu(cpu, reg, &data[0], &data[1]);
-+		err = rdmsrq_safe_on_cpu(cpu, reg, &data);
- 		if (err)
- 			break;
- 		if (copy_to_user(tmp, &data, 8)) {
-diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index 1259c78c95c6..70711a7cca12 100644
---- a/drivers/hwmon/coretemp.c
-+++ b/drivers/hwmon/coretemp.c
-@@ -169,7 +169,7 @@ static int adjust_tjmax(struct cpuinfo_x86 *c, u32 id, struct device *dev)
- 	int tjmax_ee = 85000;
- 	int usemsr_ee = 1;
- 	int err;
--	u32 eax, edx;
-+	u64 val;
- 	int i;
- 	u16 devfn = PCI_DEVFN(0, 0);
- 	struct pci_dev *host_bridge = pci_get_domain_bus_and_slot(0, 0, devfn);
-@@ -220,14 +220,14 @@ static int adjust_tjmax(struct cpuinfo_x86 *c, u32 id, struct device *dev)
- 		 * http://softwarecommunity.intel.com/Wiki/Mobility/720.htm
- 		 * For Core2 cores, check MSR 0x17, bit 28 1 = Mobile CPU
- 		 */
--		err = rdmsr_safe_on_cpu(id, 0x17, &eax, &edx);
-+		err = rdmsrq_safe_on_cpu(id, 0x17, &val);
- 		if (err) {
- 			dev_warn(dev,
- 				 "Unable to access MSR 0x17, assuming desktop"
- 				 " CPU\n");
- 			usemsr_ee = 0;
- 		} else if (c->x86_vfm < INTEL_CORE2_PENRYN &&
--			   !(eax & 0x10000000)) {
-+			   !(val & 0x10000000)) {
- 			/*
- 			 * Trust bit 28 up to Penryn, I could not find any
- 			 * documentation on that; if you happen to know
-@@ -235,8 +235,8 @@ static int adjust_tjmax(struct cpuinfo_x86 *c, u32 id, struct device *dev)
- 			 */
- 			usemsr_ee = 0;
- 		} else {
--			/* Platform ID bits 52:50 (EDX starts at bit 32) */
--			platform_id = (edx >> 18) & 0x7;
-+			/* Platform ID bits 52:50 */
-+			platform_id = (val >> 50) & 0x7;
- 
- 			/*
- 			 * Mobile Penryn CPU seems to be platform ID 7 or 5
-@@ -255,12 +255,12 @@ static int adjust_tjmax(struct cpuinfo_x86 *c, u32 id, struct device *dev)
- 	}
- 
- 	if (usemsr_ee) {
--		err = rdmsr_safe_on_cpu(id, 0xee, &eax, &edx);
-+		err = rdmsrq_safe_on_cpu(id, 0xee, &val);
- 		if (err) {
- 			dev_warn(dev,
- 				 "Unable to access MSR 0xEE, for Tjmax, left"
- 				 " at default\n");
--		} else if (eax & 0x40000000) {
-+		} else if (val & 0x40000000) {
- 			tjmax = tjmax_ee;
- 		}
- 	} else if (tjmax == 100000) {
-@@ -278,7 +278,7 @@ static int get_tjmax(struct temp_data *tdata, struct device *dev)
- {
- 	struct cpuinfo_x86 *c = &cpu_data(tdata->cpu);
- 	int err;
--	u32 eax, edx;
-+	u64 msrval;
- 	u32 val;
- 
- 	/* use static tjmax once it is set */
-@@ -289,11 +289,11 @@ static int get_tjmax(struct temp_data *tdata, struct device *dev)
- 	 * A new feature of current Intel(R) processors, the
- 	 * IA32_TEMPERATURE_TARGET contains the TjMax value
- 	 */
--	err = rdmsr_safe_on_cpu(tdata->cpu, MSR_IA32_TEMPERATURE_TARGET, &eax, &edx);
-+	err = rdmsrq_safe_on_cpu(tdata->cpu, MSR_IA32_TEMPERATURE_TARGET, &msrval);
- 	if (err) {
- 		dev_warn_once(dev, "Unable to read TjMax from CPU %u\n", tdata->cpu);
- 	} else {
--		val = (eax >> 16) & 0xff;
-+		val = (msrval >> 16) & 0xff;
- 		if (val)
- 			return val * 1000;
- 	}
-@@ -314,7 +314,7 @@ static int get_tjmax(struct temp_data *tdata, struct device *dev)
- 
- static int get_ttarget(struct temp_data *tdata, struct device *dev)
- {
--	u32 eax, edx;
-+	u64 val;
- 	int tjmax, ttarget_offset, ret;
- 
- 	/*
-@@ -324,14 +324,14 @@ static int get_ttarget(struct temp_data *tdata, struct device *dev)
- 	if (tdata->tjmax)
- 		return -ENODEV;
- 
--	ret = rdmsr_safe_on_cpu(tdata->cpu, MSR_IA32_TEMPERATURE_TARGET, &eax, &edx);
-+	ret = rdmsrq_safe_on_cpu(tdata->cpu, MSR_IA32_TEMPERATURE_TARGET, &val);
- 	if (ret)
- 		return ret;
- 
--	tjmax = (eax >> 16) & 0xff;
-+	tjmax = (val >> 16) & 0xff;
- 
- 	/* Read the still undocumented bits 8:15 of IA32_TEMPERATURE_TARGET. */
--	ttarget_offset = (eax >> 8) & 0xff;
-+	ttarget_offset = (val >> 8) & 0xff;
- 
- 	return (tjmax - ttarget_offset) * 1000;
- }
-@@ -560,7 +560,7 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
- 	struct temp_data *tdata;
- 	struct platform_data *pdata = platform_get_drvdata(pdev);
- 	struct cpuinfo_x86 *c = &cpu_data(cpu);
--	u32 eax, edx;
-+	u64 val;
- 	int err;
- 
- 	if (!housekeeping_cpu(cpu, HK_TYPE_MISC))
-@@ -571,7 +571,7 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
- 		return -ENOMEM;
- 
- 	/* Test if we can access the status register */
--	err = rdmsr_safe_on_cpu(cpu, tdata->status_reg, &eax, &edx);
-+	err = rdmsrq_safe_on_cpu(cpu, tdata->status_reg, &val);
- 	if (err)
- 		goto err;
- 
-diff --git a/drivers/hwmon/via-cputemp.c b/drivers/hwmon/via-cputemp.c
-index a5c03ed59c1f..ec421201049d 100644
---- a/drivers/hwmon/via-cputemp.c
-+++ b/drivers/hwmon/via-cputemp.c
-@@ -65,28 +65,28 @@ static ssize_t temp_show(struct device *dev, struct device_attribute *devattr,
- 			 char *buf)
- {
- 	struct via_cputemp_data *data = dev_get_drvdata(dev);
--	u32 eax, edx;
-+	u64 val;
- 	int err;
- 
--	err = rdmsr_safe_on_cpu(data->id, data->msr_temp, &eax, &edx);
-+	err = rdmsrq_safe_on_cpu(data->id, data->msr_temp, &val);
- 	if (err)
- 		return -EAGAIN;
- 
--	return sprintf(buf, "%lu\n", ((unsigned long)eax & 0xffffff) * 1000);
-+	return sprintf(buf, "%lu\n", ((unsigned long)val & 0xffffff) * 1000);
- }
- 
- static ssize_t cpu0_vid_show(struct device *dev,
- 			     struct device_attribute *devattr, char *buf)
- {
- 	struct via_cputemp_data *data = dev_get_drvdata(dev);
--	u32 eax, edx;
-+	u64 val;
- 	int err;
- 
--	err = rdmsr_safe_on_cpu(data->id, data->msr_vid, &eax, &edx);
-+	err = rdmsrq_safe_on_cpu(data->id, data->msr_vid, &val);
- 	if (err)
- 		return -EAGAIN;
- 
--	return sprintf(buf, "%d\n", vid_from_reg(~edx & 0x7f, data->vrm));
-+	return sprintf(buf, "%d\n", vid_from_reg(~(val >> 32) & 0x7f, data->vrm));
- }
- 
- static SENSOR_DEVICE_ATTR_RO(temp1_input, temp, SHOW_TEMP);
-@@ -112,7 +112,7 @@ static int via_cputemp_probe(struct platform_device *pdev)
- 	struct via_cputemp_data *data;
- 	struct cpuinfo_x86 *c = &cpu_data(pdev->id);
- 	int err;
--	u32 eax, edx;
-+	u64 val;
- 
- 	data = devm_kzalloc(&pdev->dev, sizeof(struct via_cputemp_data),
- 			    GFP_KERNEL);
-@@ -143,7 +143,7 @@ static int via_cputemp_probe(struct platform_device *pdev)
- 	}
- 
- 	/* test if we can access the TEMPERATURE MSR */
--	err = rdmsr_safe_on_cpu(data->id, data->msr_temp, &eax, &edx);
-+	err = rdmsrq_safe_on_cpu(data->id, data->msr_temp, &val);
- 	if (err) {
- 		dev_err(&pdev->dev,
- 			"Unable to access TEMPERATURE MSR, giving up\n");
-diff --git a/drivers/thermal/intel/intel_tcc.c b/drivers/thermal/intel/intel_tcc.c
-index ab61fb122937..c6772a5e073a 100644
---- a/drivers/thermal/intel/intel_tcc.c
-+++ b/drivers/thermal/intel/intel_tcc.c
-@@ -181,17 +181,17 @@ static u32 get_temp_mask(bool pkg)
-  */
- int intel_tcc_get_tjmax(int cpu)
- {
--	u32 low, high;
-+	struct msr msrval;
- 	int val, err;
- 
- 	if (cpu < 0)
--		err = rdmsr_safe(MSR_IA32_TEMPERATURE_TARGET, &low, &high);
-+		err = rdmsr_safe(MSR_IA32_TEMPERATURE_TARGET, &msrval.l, &msrval.h);
- 	else
--		err = rdmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, &low, &high);
-+		err = rdmsrq_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, &msrval.q);
- 	if (err)
- 		return err;
- 
--	val = (low >> 16) & 0xff;
-+	val = (msrval.l >> 16) & 0xff;
- 
- 	return val ? val : -ENODATA;
- }
-@@ -208,17 +208,17 @@ EXPORT_SYMBOL_NS_GPL(intel_tcc_get_tjmax, "INTEL_TCC");
-  */
- int intel_tcc_get_offset(int cpu)
- {
--	u32 low, high;
-+	struct msr val;
- 	int err;
- 
- 	if (cpu < 0)
--		err = rdmsr_safe(MSR_IA32_TEMPERATURE_TARGET, &low, &high);
-+		err = rdmsr_safe(MSR_IA32_TEMPERATURE_TARGET, &val.l, &val.h);
- 	else
--		err = rdmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, &low, &high);
-+		err = rdmsrq_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, &val.q);
- 	if (err)
- 		return err;
- 
--	return (low >> 24) & intel_tcc_temp_masks.tcc_offset;
-+	return (val.l >> 24) & intel_tcc_temp_masks.tcc_offset;
- }
- EXPORT_SYMBOL_NS_GPL(intel_tcc_get_offset, "INTEL_TCC");
- 
-@@ -235,7 +235,7 @@ EXPORT_SYMBOL_NS_GPL(intel_tcc_get_offset, "INTEL_TCC");
- 
- int intel_tcc_set_offset(int cpu, int offset)
- {
--	u32 low, high;
-+	struct msr val;
- 	int err;
- 
- 	if (!intel_tcc_temp_masks.tcc_offset)
-@@ -245,23 +245,23 @@ int intel_tcc_set_offset(int cpu, int offset)
- 		return -EINVAL;
- 
- 	if (cpu < 0)
--		err = rdmsr_safe(MSR_IA32_TEMPERATURE_TARGET, &low, &high);
-+		err = rdmsr_safe(MSR_IA32_TEMPERATURE_TARGET, &val.l, &val.h);
- 	else
--		err = rdmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, &low, &high);
-+		err = rdmsrq_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, &val.q);
- 	if (err)
- 		return err;
- 
- 	/* MSR Locked */
--	if (low & BIT(31))
-+	if (val.l & BIT(31))
- 		return -EPERM;
- 
--	low &= ~(intel_tcc_temp_masks.tcc_offset << 24);
--	low |= offset << 24;
-+	val.l &= ~(intel_tcc_temp_masks.tcc_offset << 24);
-+	val.l |= offset << 24;
- 
- 	if (cpu < 0)
--		return wrmsr_safe(MSR_IA32_TEMPERATURE_TARGET, low, high);
-+		return wrmsr_safe(MSR_IA32_TEMPERATURE_TARGET, val.l, val.h);
- 	else
--		return wrmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, low, high);
-+		return wrmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, val.l, val.h);
- }
- EXPORT_SYMBOL_NS_GPL(intel_tcc_set_offset, "INTEL_TCC");
- 
-@@ -279,7 +279,8 @@ EXPORT_SYMBOL_NS_GPL(intel_tcc_set_offset, "INTEL_TCC");
- int intel_tcc_get_temp(int cpu, int *temp, bool pkg)
- {
- 	u32 msr = pkg ? MSR_IA32_PACKAGE_THERM_STATUS : MSR_IA32_THERM_STATUS;
--	u32 low, high, mask;
-+	u32 mask;
-+	struct msr val;
- 	int tjmax, err;
- 
- 	tjmax = intel_tcc_get_tjmax(cpu);
-@@ -287,19 +288,19 @@ int intel_tcc_get_temp(int cpu, int *temp, bool pkg)
- 		return tjmax;
- 
- 	if (cpu < 0)
--		err = rdmsr_safe(msr, &low, &high);
-+		err = rdmsr_safe(msr, &val.l, &val.h);
- 	else
--		err = rdmsr_safe_on_cpu(cpu, msr, &low, &high);
-+		err = rdmsrq_safe_on_cpu(cpu, msr, &val.q);
- 	if (err)
- 		return err;
- 
- 	/* Temperature is beyond the valid thermal sensor range */
--	if (!(low & BIT(31)))
-+	if (!(val.l & BIT(31)))
- 		return -ENODATA;
- 
- 	mask = get_temp_mask(pkg);
- 
--	*temp = tjmax - ((low >> 16) & mask);
-+	*temp = tjmax - ((val.l >> 16) & mask);
- 
- 	return 0;
- }
+I've taken this series for a spin on top of tip/master and haven't
+notices anything unusual on both baremetal and on an i386 QEMU
+guest. Feel free to include:
+
+Tested-by: K Prateek Nayak <kprateek.nayak@amd.com>
+
 -- 
-2.54.0
+Thanks and Regards,
+Prateek
 
