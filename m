@@ -1,180 +1,629 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD0D8346781
-	for <linux-hwmon@vger.kernel.org>; Mon,  8 Jun 2026 03:11:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5A732E1EE0
+	for <linux-hwmon@vger.kernel.org>; Mon,  8 Jun 2026 03:34:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780888295; cv=none; b=IaO+Ld8mj9AYOrB4SofFnKM4yjg8KGqHrAgkzUL3YXyr1Wrgz6MAxxnUC8sNaqUar7wrfwI+OugUfn6ECReh9C7E/tfLd25dySU0yPkv3WhBOhpY8hgIMw9VjPYH+3UQoy2TqZaTd3Sc1bZ1NpIB9f1XK8dG8PrvkgIO94MJO/I=
+	t=1780889653; cv=none; b=WhA0GGZVnXaCIWuKgnqiYZb2eGxRWq9hV+ysUxrWpKZ0kP9bEHigMINYqwK0Yu6VF5UNUyTV9n39Y+0/AT0EwfYmNnEAc9MK7cDlZGYEROpm3bzGKmzHu6Has6P44kY4RxqA0bEDmGPvYpqioYbYdLO84WUDbi0dT6/MHW5BLHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780888295; c=relaxed/simple;
-	bh=eMMFZ7PoTVFU+HtZAfAiBJKr6ct6C46CfD1rFsryOhY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gXddmjo1AH8cJ97nkT65Q9G6TNEbawdI6fnDtKSq9d2zebLxv/Y97XyfReMwMDt9b8A1zUNLJM/seRXSTxGeUTrcVgDGcHjC7UTv3byxm8LnozFLAmjkzFhenGqw2m+QBc35hkF0mhHqmHfKNR6j+wos4C8eKK+aveRBSHj+kO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QiRr2Q7p; arc=none smtp.client-ip=209.85.214.181
+	s=arc-20240116; t=1780889653; c=relaxed/simple;
+	bh=cJY46STgIA6TyAenxOUlDlnzysrmflNCaD5Gv0ZZ5wo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u+aLXk2OB2pcHBe5tKCJ64Vq8NbhWKYsKNBmLNnNFJhCFx9SspOaAv1OWbJF/FgcpLgKWzckZnrsItgPAK9PJ2Z5jJOniitVHZ6pDIklOuYn3jGkxQNHYOxXE/3xPEM0/uH+sbk5KyYZ7yZV5YhXQTnESmhZ1GRA2v7JR8d01hk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZCO+h2uU; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QiRr2Q7p"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2bf237e1433so43743935ad.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 07 Jun 2026 20:11:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZCO+h2uU"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2bf30d530bdso39265415ad.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 07 Jun 2026 20:34:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780888291; x=1781493091; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=o6AQpyw9cz+Q5RmbdlhznksmZIhCHg9E+Gub5iwssz8=;
-        b=QiRr2Q7p0y2f4g1k4E5KY4bzGMkFqOSApjsrwGPZWT5kR+Ye2F2Fp5zlEUj+DMGinC
-         o9DojXxLRJig6k1r7HwcMgozLQCnsw4zR3onKu+MR/ur+aydWXoTVVoEOJ9qBYMK4jWE
-         17QQrdS+n26QxtvYi6qhu5c6whgbqvFkROksQfL4bl9ilfzS5wnUOeDz4bHNFkqGkIEv
-         oriz3sl5MyJlo+Q3RS5h0YbOqfsG7LtTxTnkSaIm9t/Ba7obTAH9f9CFlU9JNljBHVog
-         Y9ZW/Q2/fxFUAlzMvzDoptERzLOZhBhLUcmHso2cYAtFLxmSR17X2QOTeFCZlSiFMYWP
-         ylqA==
+        d=gmail.com; s=20251104; t=1780889651; x=1781494451; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mjptvaqMFpkJ5ciR5zDYcgVGEGYgvQ+MyYxJKKdThD0=;
+        b=ZCO+h2uUaWUNELAcPkZX/+EZW9Cbr7v2FHGnFymNbxxCrpwUCgWy5ayp93tMawaTNK
+         2mJDzcwFIs1NAmovoS6rbA60greN+D3Qqs+JQdjx/BpXB6Ycv2xT0GxwlC5ZVHWkJy/I
+         griFLS+WLFDDbqbyYFWzt3vuNZPK/bmtk6vbUbhZMgxKdh0iRq6DlFqiDrQAq8h8rpqi
+         RxS07vlOp6zH6yHVqCWR/mdXKdFyyDqbmX1u7Xpvx72liqbhr5Db2KVqkrDLTNPyRo4Z
+         xM9cZAc8dJYU4EkiUsLz8spK3lTBV4dIvzVxC5v9C9sfrIP9mMy9F/czU5ntbab4iMhA
+         SSrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780888291; x=1781493091;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o6AQpyw9cz+Q5RmbdlhznksmZIhCHg9E+Gub5iwssz8=;
-        b=ESxVyddfq6mXYMHiUTRMPLfX1mTPptWCG5Quf+G0nSLvu5Nx5YL1vipC96rbTFwqle
-         A8oHtAI4desigIgK7Xcq+mkEUMDirQNUdNLI7DEu2bqQjdmhKzhqkZSxPWCovUQC9WHz
-         SwUZfK6+S5bwQo6RFsSGmSgt8iBnADrZKKApNa+otzoav92I8LEvHF5l4U89p6v+iCNP
-         mkH3CJ7AbDRWQi0BdSPvHonUOjqafeycZu8Nr5oEcsXOYy2bL4KDpjC4O2yk1iucN+5a
-         3e7jf0sv7e5uK+u031J+Y431+veO86BBq+aEaKgwKZuC+KtF5ZB3syy7eqF6kUsl0KE1
-         caVQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+aGczv0eJpWC/lFgTekD3tyz0TNmKsVhUmVdTOBbVe64MH4c+Qr3Z7G3P8t98Y1xXxwsnAb43cNA+MwA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHx+TUA/lOn5sFyo50ClXCOCpuyRINkb0nwKNe39yqwe57LHtJ
-	Hdggb87JjDjxvrUZhT7ot2YkTf68PR0OlwQ9eC+gCWisdinz+DFa3VHsS1gA3YgV
-X-Gm-Gg: Acq92OETHsfWv/xdVkve/UxXa+PfRt9ZUJ3dQS1G8687RFPts2oGBagYH7vtjqcIIRl
-	w1x4Xkl51vT4pi1jmpOlcBUCik6ZqELDdbPJ2t4DkUY1+6oFD7SYi7TnnhVTFalLrbZ9r/JNVxW
-	8m9pC5a8pNwZVOP9/TMM01hZPCwCuHeLHKrqSsQ6qnJAvfcf8k+x7mKSayC0pbKAQCdy9gA5cKF
-	owEGgyP0BMUmQFVBj8PzX9XXSNYAUiVhhffBkZT+uKbwxmdhRPBwCp6qNdbc6SVCuWSCcwFagmc
-	EBY7+XRYasQLgM4dVSNh3AtB5FiKxxw3gmBQK/gNhWQTjisYyUT5j1PGGa887fRCs8GBS0Kqo2W
-	TajmTVJpbO4bnnUHomT2vr/pgFxW6GL+H4e3WqvknLdznOfsKkgw6weuucO+AdOINxzAOJll1CI
-	twz0+N7YrHQ5LKW6pWQu/xPl4aaf+BPlat5W5sxDE7vFHMUEgWidCzBguNOQb2BnJm29Blubhyl
-	J7bEYKPIK8=
-X-Received: by 2002:a17:902:f711:b0:2c0:ab82:6ba7 with SMTP id d9443c01a7336-2c1e85ad8d7mr154959505ad.33.1780888290954;
-        Sun, 07 Jun 2026 20:11:30 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164f6d395sm218827905ad.17.2026.06.07.20.11.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 Jun 2026 20:11:30 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780889651; x=1781494451;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=mjptvaqMFpkJ5ciR5zDYcgVGEGYgvQ+MyYxJKKdThD0=;
+        b=FT8gbuUmQbG46BrymuRb6YJWXf7Q/VBJlB2nA3cJEWBxzhtTWPuvqmKKRteWINnoQu
+         tbfDBhiLz2rSdQ7i3mjlQZ0rdjQSfPbFERRQRCfq8MRS1cCWxugwryeHxsAxajKZajSY
+         JQ0nA2yJ2SOrQdWBmmUbSEwjlEiQmy3MoUmQ8wzdzcA1iMfdw+CJAEYVMOJ4FQLhhf0e
+         SmgbJFAQQNlI2LPcFFufSEeiH9i+DpPZarEmjdtV4KMyCpDufbn6r8phNyj29jWcTDOM
+         d3I7//6bd8wt5zaropeHXl9B5rStGlvEjjnMd/V3MSXZeNjzMl2dZuBtrROD4jDqiDf2
+         5ZSw==
+X-Forwarded-Encrypted: i=1; AFNElJ/iAXLCB/7p+8T6brzvdmKOQ8kfz74AVTFWJ2m0TYLFgTb+i2hqtsH1HU4GBg7kwVA3qHjy2XbxSzuDAA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzX4GsSm0jCkIRvqk/66P9SfflMM7yHbexNdI0M60i/qeHMiUK8
+	R1ZPstZpQDIjIfPIaOKIcPvHyMVn6NeUBaX1kvJzeriUgoE607iaP48X
+X-Gm-Gg: Acq92OEEI61YnCJmgQArF7WmqREJGEaBpRhjh1ux1C5b7ClhkUxZDzu4HW0dTBPA7XY
+	rM+Aa5c0856PsQJoPVq3yaXukt1vBSDvViKReyUgkLKLVpF+PWA0xnlPmSJlp03+DkiTliQZ5CL
+	WVUFNswuQ3ezyNbpW8MGuD3Nmr8yBC3FIedy6y1bhkQOOZ+CqbznibHifEeckn4qrMTTGPKRjSI
+	XmugkR7r5Tp4aki5OY6lMPhmi1zPSnnE1ccpDSnAi6FbY7sVoUsDnq7Zv3aJZEkjgEwAuQGlKma
+	oNLg4LgZl2vhyrcWJ7diLI7jHfJifiVW383+26/5cbh4CSfOQPd+yMNRsMlQDZ1s58tDiAAhdDy
+	lHvsiET9h8X5PrgR0QuLloA50Bz8KUR+D7tJ3Y986wHSgZt0jLbBxF9dQlX8ThykwTDsIamYAeM
+	+HUm4IKnEXUQKSXETjmPB+lGIA+iGT7NP2Oi+2QN6oKJFS5Lw=
+X-Received: by 2002:a17:902:ecc8:b0:2be:39bd:8dd8 with SMTP id d9443c01a7336-2c1e83455c4mr147137575ad.33.1780889650914;
+        Sun, 07 Jun 2026 20:34:10 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164f6e86dsm166052735ad.8.2026.06.07.20.34.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Jun 2026 20:34:10 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3ed9e0ed-d6fe-4b9f-aca9-590290a78f4a@roeck-us.net>
-Date: Sun, 7 Jun 2026 20:11:29 -0700
+Date: Sun, 7 Jun 2026 20:34:09 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Ziming Zhu <zmzhu0630@163.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, Ziming Zhu <ziming.zhu@silergycorp.com>
+Subject: Re: [PATCH v2 2/3] hwmon: pmbus: Add support for Silergy SQ24860
+Message-ID: <c1c7e115-b490-4859-873d-e48d19054ba4@roeck-us.net>
+References: <20260605063042.91776-1-zmzhu0630@163.com>
+ <20260605063042.91776-3-zmzhu0630@163.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] hwmon: (adt7462) Add of_match_table to support
- devicetree
-To: sashiko-reviews@lists.linux.dev,
- Romain Gantois <romain.gantois@bootlin.com>
-Cc: robh@kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org
-References: <20260603-adt7462-bindings-v1-2-301304bcf774@bootlin.com>
- <20260603114026.709611F00893@smtp.kernel.org>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260603114026.709611F00893@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260605063042.91776-3-zmzhu0630@163.com>
 
-On 6/3/26 04:40, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Low] Using `of_match_ptr()` prevents the driver from being matched via ACPI PRP0001 when `CONFIG_OF` is disabled.
-> --
+On Fri, Jun 05, 2026 at 02:30:41PM +0800, Ziming Zhu wrote:
+> From: Ziming Zhu <ziming.zhu@silergycorp.com>
 > 
-> commit c2691e00dcd763957c6a2291880ea9079be2bbda
-> Author: Kory Maincent <kory.maincent@bootlin.com>
+> Add PMBus hwmon support for the Silergy SQ24860 eFuse.
 > 
-> hwmon: (adt7462) Add of_match_table to support devicetree
+> The driver reports input voltage, output voltage, auxiliary voltage,
+> input current, input power, and temperature. It also exposes peak,
+> average, and minimum history attributes, sample count configuration,
+> and maps the manufacturer-specific VIREF register to the generic input
+> over-current fault limit attribute.
 > 
-> This commit adds an of_match_table to the adt7462 driver to enable
-> devicetree probing.
+> The IMON resistor value is read from the silergy,rimon-micro-ohms device
+> property and used to configure the input current calibration gain.
 > 
->> diff --git a/drivers/hwmon/adt7462.c b/drivers/hwmon/adt7462.c
->> index 174dfee47f7a7..ef6e5252dc0a4 100644
->> --- a/drivers/hwmon/adt7462.c
->> +++ b/drivers/hwmon/adt7462.c
-> [ ... ]
->> @@ -1814,10 +1814,17 @@ static const struct i2c_device_id adt7462_id[] = {
->>   };
->>   MODULE_DEVICE_TABLE(i2c, adt7462_id);
->>   
->> +static const struct of_device_id __maybe_unused adt7462_of_match[] = {
->> +	{ .compatible = "adi,adt7462" },
->> +	{ },
->> +};
->> +MODULE_DEVICE_TABLE(of, adt7462_of_match);
->> +
->>   static struct i2c_driver adt7462_driver = {
->>   	.class		= I2C_CLASS_HWMON,
->>   	.driver = {
->>   		.name	= "adt7462",
->> +		.of_match_table = of_match_ptr(adt7462_of_match),
-> 
-> [Severity: Low]
-> Does using of_match_ptr() here prevent the driver from being matched via
-> ACPI PRP0001 when CONFIG_OF is disabled?
-> 
-> When CONFIG_OF is disabled, of_match_ptr() evaluates to NULL, hiding the
-> of_match_table from the driver core. This prevents the driver from being
-> matched using ACPI PRP0001, which relies on OF compatible strings even on
-> systems without Device Tree.
-> 
-> Would it be better to drop of_match_ptr() and assign the table directly,
-> along with removing the __maybe_unused attribute from adt7462_of_match?
-> 
+> Signed-off-by: Ziming Zhu <ziming.zhu@silergycorp.com>
 
-I agree.
+checkpatch --strict says:
 
-Guenter
+total: 0 errors, 3 warnings, 6 checks, 464 lines checked
 
+The MAINTAINERS and the DT warning can be ignored, but I expect the rest
+to be fixed.
+
+> ---
+>  drivers/hwmon/pmbus/Kconfig   |  19 ++
+>  drivers/hwmon/pmbus/Makefile  |   1 +
+>  drivers/hwmon/pmbus/sq24860.c | 432 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 452 insertions(+)
+>  create mode 100644 drivers/hwmon/pmbus/sq24860.c
+> 
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index 8f4bff375ecb..a905b5af137c 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -612,6 +612,25 @@ config SENSORS_STEF48H28
+>  	  This driver can also be built as a module. If so, the module will
+>  	  be called stef48h28.
+>  
+> +config SENSORS_SQ24860
+> +	tristate "Silergy SQ24860"
+> +	help
+> +	  If you say yes here you get hardware monitoring support for Silergy
+> +	  SQ24860 eFuse.
+> +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called sq24860.
+> +
+> +config SENSORS_SQ24860_REGULATOR
+> +	bool "Regulator support for SQ24860"
+> +	depends on SENSORS_SQ24860 && REGULATOR
+> +	default SENSORS_SQ24860
+> +	help
+> +	  If you say yes here you get regulator support for Silergy SQ24860.
+> +	  The regulator is registered through the PMBus regulator framework and
+> +	  can be used to control the output exposed by the device.
+> +	  This option is only useful if regulator framework support is needed.
+> +
+>  config SENSORS_STPDDC60
+>  	tristate "ST STPDDC60"
+>  	help
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index 7129b62bc00f..86bc93c6c091 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -60,6 +60,7 @@ obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
+>  obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
+>  obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
+>  obj-$(CONFIG_SENSORS_STEF48H28)	+= stef48h28.o
+> +obj-$(CONFIG_SENSORS_SQ24860)	+= sq24860.o
+>  obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
+>  obj-$(CONFIG_SENSORS_TDA38640)	+= tda38640.o
+>  obj-$(CONFIG_SENSORS_TPS25990)	+= tps25990.o
+> diff --git a/drivers/hwmon/pmbus/sq24860.c b/drivers/hwmon/pmbus/sq24860.c
+> new file mode 100644
+> index 000000000000..43a2cb542169
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/sq24860.c
+> @@ -0,0 +1,432 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +//
+> +// Copyright (c) 2024.
+> +// Author: Ziming Zhu <ziming.zhu@silergycorp.com>
+
+Please do not mix C++ and C comments. Yes, I understand that the first
+line must be a C++ comment. The rest of the driver must use a consistent
+comment style.
+
+> +#include <linux/bitfield.h>
+> +#include <linux/debugfs.h>
+
+I do not see where this include file is used.
+
+> +#include <linux/err.h>
+> +#include <linux/hwmon-sysfs.h>
+
+I do not see where this include file is used.
+
+> +#include <linux/i2c.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +
+> +#include "pmbus.h"
+> +
+> +#define SQ24860_IIN_CAL_GAIN		0x38
+> +#define SQ24860_READ_VAUX		0xd0
+> +#define SQ24860_READ_VIN_MIN		0xd1
+> +#define SQ24860_READ_VIN_PEAK		0xd2
+> +#define SQ24860_READ_IIN_PEAK		0xd4
+> +#define SQ24860_READ_PIN_PEAK		0xd5
+> +#define SQ24860_READ_TEMP_AVG		0xd6
+> +#define SQ24860_READ_TEMP_PEAK		0xd7
+> +#define SQ24860_READ_VOUT_MIN		0xda
+> +#define SQ24860_READ_VIN_AVG		0xdc
+> +#define SQ24860_READ_VOUT_AVG		0xdd
+> +#define SQ24860_READ_IIN_AVG		0xde
+> +#define SQ24860_READ_PIN_AVG		0xdf
+> +#define SQ24860_VIREF			0xe0
+> +#define SQ24860_PK_MIN_AVG		0xea
+> +#define PK_MIN_AVG_RST_PEAK		BIT(7)
+> +#define PK_MIN_AVG_RST_AVG		BIT(6)
+> +#define PK_MIN_AVG_RST_MIN		BIT(5)
+> +#define PK_MIN_AVG_AVG_CNT		GENMASK(2, 0)
+> +#define SQ24860_MFR_WRITE_PROTECT	0xf8
+> +#define SQ24860_UNLOCKED		BIT(7)
+> +
+> +#define SQ24860_8B_SHIFT		2
+> +#define SQ24860_IIN_OCF_NUM		1000000
+> +#define SQ24860_IIN_OCF_DIV		129278
+> +#define SQ24860_IIN_OCF_OFF		165
+> +
+> +#define PK_MIN_AVG_RST_MASK		(PK_MIN_AVG_RST_PEAK | \
+> +					 PK_MIN_AVG_RST_AVG  | \
+> +					 PK_MIN_AVG_RST_MIN)
+> +#define SQ24860_MAX_SAMPLES		BIT(FIELD_MAX(PK_MIN_AVG_AVG_CNT))
+> +/*
+> + * Arbitrary default Rimon value: 1.6kOhm
+> + */
+> +#define SQ24860_DEFAULT_RIMON		1600000000
+> +#define SQ24860_DEFAULT_GIMON		18180
+> +
+> +#define SQ24860_VAUX_DIV		20
+> +
+> +static int sq24860_write_iin_cal_gain(struct i2c_client *client, u32 rimon,
+> +					u32 gimon)
+> +{
+> +	u64 temp = (u64)6400 * 1000000000 * 1000;
+> +	u64 denom;
+> +	u64 word;
+> +
+> +	if (!rimon || !gimon)
+> +		return -EINVAL;
+> +
+> +	denom = (u64)rimon * gimon;
+> +	word = div_u64(temp, denom);
+> +	if (word > U16_MAX)
+> +		return -ERANGE;
+
+This is not "Math result not representable". Return -EINVAL.
+
+Also, please make sure to fix the problem reported by Sashiko, or explain
+why it does not apply.
+
+> +
+> +	return i2c_smbus_write_word_data(client, SQ24860_IIN_CAL_GAIN,
+> +						(u16)word);
+> +}
+> +
+> +static int sq24860_mfr_write_protect_set(struct i2c_client *client,
+> +					  u8 protect)
+> +{
+> +	u8 val;
+> +
+> +	switch (protect) {
+> +	case 0:
+> +		val = 0xa2;
+> +		break;
+> +	case PB_WP_ALL:
+> +		val = 0x0;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return pmbus_write_byte_data(client, -1, SQ24860_MFR_WRITE_PROTECT,
+> +				     val);
+> +}
+> +
+> +static int sq24860_mfr_write_protect_get(struct i2c_client *client)
+> +{
+> +	int ret = pmbus_read_byte_data(client, -1, SQ24860_MFR_WRITE_PROTECT);
+> +
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return (ret & SQ24860_UNLOCKED) ? 0 : PB_WP_ALL;
+> +}
+> +
+> +static int sq24860_read_word_data(struct i2c_client *client,
+> +				   int page, int phase, int reg)
+> +{
+> +	int ret;
+> +
+> +	switch (reg) {
+> +	case PMBUS_VIRT_READ_VIN_MAX:
+> +		ret = pmbus_read_word_data(client, page, phase,
+> +					   SQ24860_READ_VIN_PEAK);
+> +		break;
+> +
+> +	case PMBUS_VIRT_READ_VIN_MIN:
+> +		ret = pmbus_read_word_data(client, page, phase,
+> +					   SQ24860_READ_VIN_MIN);
+> +		break;
+> +
+> +	case PMBUS_VIRT_READ_VIN_AVG:
+> +		ret = pmbus_read_word_data(client, page, phase,
+> +					   SQ24860_READ_VIN_AVG);
+> +		break;
+> +
+> +	case PMBUS_VIRT_READ_VOUT_MIN:
+> +		ret = pmbus_read_word_data(client, page, phase,
+> +					   SQ24860_READ_VOUT_MIN);
+> +		break;
+> +
+> +	case PMBUS_VIRT_READ_VOUT_AVG:
+> +		ret = pmbus_read_word_data(client, page, phase,
+> +					   SQ24860_READ_VOUT_AVG);
+> +		break;
+> +
+> +	case PMBUS_VIRT_READ_IIN_AVG:
+> +		ret = pmbus_read_word_data(client, page, phase,
+> +					   SQ24860_READ_IIN_AVG);
+> +		break;
+> +
+> +	case PMBUS_VIRT_READ_IIN_MAX:
+> +		ret = pmbus_read_word_data(client, page, phase,
+> +					   SQ24860_READ_IIN_PEAK);
+> +		break;
+> +
+> +	case PMBUS_VIRT_READ_TEMP_AVG:
+> +		ret = pmbus_read_word_data(client, page, phase,
+> +					   SQ24860_READ_TEMP_AVG);
+> +		break;
+> +
+> +	case PMBUS_VIRT_READ_TEMP_MAX:
+> +		ret = pmbus_read_word_data(client, page, phase,
+> +					   SQ24860_READ_TEMP_PEAK);
+> +		break;
+> +
+> +	case PMBUS_VIRT_READ_PIN_AVG:
+> +		ret = pmbus_read_word_data(client, page, phase,
+> +					   SQ24860_READ_PIN_AVG);
+> +		break;
+> +
+> +	case PMBUS_VIRT_READ_PIN_MAX:
+> +		ret = pmbus_read_word_data(client, page, phase,
+> +					   SQ24860_READ_PIN_PEAK);
+> +		break;
+> +
+> +	case PMBUS_VIRT_READ_VMON:
+> +		ret = pmbus_read_word_data(client, page, phase,
+> +					   SQ24860_READ_VAUX);
+> +		if (ret < 0)
+> +			break;
+> +		ret = DIV_ROUND_CLOSEST(ret, SQ24860_VAUX_DIV);
+> +		break;
+> +
+> +	case PMBUS_VIN_UV_WARN_LIMIT:
+> +	case PMBUS_VIN_UV_FAULT_LIMIT:
+> +	case PMBUS_VIN_OV_WARN_LIMIT:
+> +	case PMBUS_VIN_OV_FAULT_LIMIT:
+> +	case PMBUS_VOUT_UV_WARN_LIMIT:
+> +	case PMBUS_IIN_OC_WARN_LIMIT:
+> +	case PMBUS_OT_WARN_LIMIT:
+> +	case PMBUS_OT_FAULT_LIMIT:
+> +	case PMBUS_PIN_OP_WARN_LIMIT:
+> +		/*
+> +		 * These registers provide an 8 bits value instead of a
+> +		 * 10bits one. Just shifting twice the register value is
+> +		 * enough to make the sensor type conversion work, even
+> +		 * if the datasheet provides different m, b and R for
+> +		 * those.
+> +		 */
+> +		ret = pmbus_read_word_data(client, page, phase, reg);
+> +		if (ret < 0)
+> +			break;
+> +		ret <<= SQ24860_8B_SHIFT;
+> +		break;
+> +
+> +	case PMBUS_IIN_OC_FAULT_LIMIT:
+> +		/*
+> +		 * VIREF directly sets the over-current limit at which the eFuse
+> +		 * will turn the FET off and trigger a fault. Expose it through
+> +		 * this generic property instead of a manufacturer specific one.
+> +		 */
+> +		ret = pmbus_read_byte_data(client, page, SQ24860_VIREF);
+> +		if (ret < 0)
+> +			break;
+> +		ret = DIV_ROUND_CLOSEST(ret * SQ24860_IIN_OCF_NUM,
+> +					SQ24860_IIN_OCF_DIV);
+> +		ret += SQ24860_IIN_OCF_OFF;
+> +		break;
+> +
+> +	case PMBUS_VIRT_SAMPLES:
+> +		ret = pmbus_read_byte_data(client, page, SQ24860_PK_MIN_AVG);
+> +		if (ret < 0)
+> +			break;
+> +		ret = BIT(FIELD_GET(PK_MIN_AVG_AVG_CNT, ret));
+> +		break;
+> +
+> +	case PMBUS_VIRT_RESET_TEMP_HISTORY:
+> +	case PMBUS_VIRT_RESET_VIN_HISTORY:
+> +	case PMBUS_VIRT_RESET_IIN_HISTORY:
+> +	case PMBUS_VIRT_RESET_PIN_HISTORY:
+> +	case PMBUS_VIRT_RESET_VOUT_HISTORY:
+> +		ret = 0;
+> +		break;
+> +
+> +	default:
+> +		ret = -ENODATA;
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int sq24860_write_word_data(struct i2c_client *client,
+> +				    int page, int reg, u16 value)
+> +{
+> +	int ret;
+> +
+> +	switch (reg) {
+> +	case PMBUS_VIN_UV_WARN_LIMIT:
+> +	case PMBUS_VIN_UV_FAULT_LIMIT:
+> +	case PMBUS_VIN_OV_WARN_LIMIT:
+> +	case PMBUS_VIN_OV_FAULT_LIMIT:
+> +	case PMBUS_VOUT_UV_WARN_LIMIT:
+> +	case PMBUS_IIN_OC_WARN_LIMIT:
+> +	case PMBUS_OT_WARN_LIMIT:
+> +	case PMBUS_OT_FAULT_LIMIT:
+> +	case PMBUS_PIN_OP_WARN_LIMIT:
+> +		value >>= SQ24860_8B_SHIFT;
+> +		value = clamp_val(value, 0, 0xff);
+> +		ret = pmbus_write_word_data(client, page, reg, value);
+> +		break;
+> +
+> +	case PMBUS_IIN_OC_FAULT_LIMIT:
+> +		value -= SQ24860_IIN_OCF_OFF;
+
+What if value is < SQ24860_IIN_OCF_OFF ?
+
+(also reported by Sashiko)
+
+> +		value = DIV_ROUND_CLOSEST(((unsigned int)value) * SQ24860_IIN_OCF_DIV,
+> +					  SQ24860_IIN_OCF_NUM);
+> +		value = clamp_val(value, 0, 0x3f);
+> +		ret = pmbus_write_byte_data(client, page, SQ24860_VIREF, value);
+> +		break;
+> +
+> +	case PMBUS_VIRT_SAMPLES:
+> +		value = clamp_val(value, 1, SQ24860_MAX_SAMPLES);
+> +		value = ilog2(value);
+> +		ret = pmbus_update_byte_data(client, page, SQ24860_PK_MIN_AVG,
+> +					     PK_MIN_AVG_AVG_CNT,
+> +					     FIELD_PREP(PK_MIN_AVG_AVG_CNT, value));
+> +		break;
+> +
+> +	case PMBUS_VIRT_RESET_TEMP_HISTORY:
+> +	case PMBUS_VIRT_RESET_VIN_HISTORY:
+> +	case PMBUS_VIRT_RESET_IIN_HISTORY:
+> +	case PMBUS_VIRT_RESET_PIN_HISTORY:
+> +	case PMBUS_VIRT_RESET_VOUT_HISTORY:
+> +		/*
+> +		 * SQ24860 has history resets based on MIN/AVG/PEAK instead of per
+> +		 * sensor type. Exposing this quirk in hwmon is not desirable so
+> +		 * reset MIN, AVG and PEAK together. Even is there effectively only
+> +		 * one reset, which resets everything, expose the 5 entries so
+> +		 * userspace is not required map a sensor type to another to trigger
+> +		 * a reset
+> +		 */
+> +		ret = pmbus_update_byte_data(client, 0, SQ24860_PK_MIN_AVG,
+> +					     PK_MIN_AVG_RST_MASK,
+> +					     PK_MIN_AVG_RST_MASK);
+> +		break;
+> +
+> +	default:
+> +		ret = -ENODATA;
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int sq24860_read_byte_data(struct i2c_client *client,
+> +				   int page, int reg)
+> +{
+> +	int ret;
+> +
+> +	switch (reg) {
+> +	case PMBUS_WRITE_PROTECT:
+> +		ret = sq24860_mfr_write_protect_get(client);
+> +		break;
+> +
+> +	default:
+> +		ret = -ENODATA;
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int sq24860_write_byte_data(struct i2c_client *client,
+> +				    int page, int reg, u8 byte)
+> +{
+> +	int ret;
+> +
+> +	switch (reg) {
+> +	case PMBUS_WRITE_PROTECT:
+> +		ret = sq24860_mfr_write_protect_set(client, byte);
+> +		break;
+> +
+> +	default:
+> +		ret = -ENODATA;
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +#if IS_ENABLED(CONFIG_SENSORS_SQ24860_REGULATOR)
+> +static const struct regulator_desc sq24860_reg_desc[] = {
+> +	PMBUS_REGULATOR_ONE_NODE("vout"),
+> +};
+> +#endif
+> +
+> +static const struct pmbus_driver_info sq24860_base_info = {
+> +	.pages = 1,
+> +	.format[PSC_VOLTAGE_IN] = direct,
+> +	.m[PSC_VOLTAGE_IN] = 64,
+> +	.b[PSC_VOLTAGE_IN] = 0,
+> +	.R[PSC_VOLTAGE_IN] = 0,
+> +	.format[PSC_VOLTAGE_OUT] = direct,
+> +	.m[PSC_VOLTAGE_OUT] = 64,
+> +	.b[PSC_VOLTAGE_OUT] = 0,
+> +	.R[PSC_VOLTAGE_OUT] = 0,
+> +	.format[PSC_TEMPERATURE] = direct,
+> +	.m[PSC_TEMPERATURE] = 1,
+> +	.b[PSC_TEMPERATURE] = 0,
+> +	.R[PSC_TEMPERATURE] = 0,
+> +	/*
+> +	* Current and power measurements depend on the calibration gain
+> +	* programmed from the board-specific IMON resistor value.
+> +	*/
+
+Comment alignment is off (see checkpatch results).
+
+> +	.format[PSC_CURRENT_IN] = direct,
+> +	.m[PSC_CURRENT_IN] = 16,
+> +	.b[PSC_CURRENT_IN] = 0,
+> +	.R[PSC_CURRENT_IN] = 0,
+> +	.format[PSC_POWER] = direct,
+> +	.m[PSC_POWER] = 2,
+> +	.b[PSC_POWER] = 0,
+> +	.R[PSC_POWER] = 0,
+> +	.func[0] = (PMBUS_HAVE_VIN |
+> +		    PMBUS_HAVE_VOUT |
+> +		    PMBUS_HAVE_VMON |
+> +		    PMBUS_HAVE_IIN |
+> +		    PMBUS_HAVE_PIN |
+> +		    PMBUS_HAVE_TEMP |
+> +		    PMBUS_HAVE_STATUS_VOUT |
+> +		    PMBUS_HAVE_STATUS_IOUT |
+> +		    PMBUS_HAVE_STATUS_INPUT |
+> +		    PMBUS_HAVE_STATUS_TEMP |
+> +		    PMBUS_HAVE_SAMPLES),
+
+Unnecessary ( ).
+
+> +	.read_word_data = sq24860_read_word_data,
+> +	.write_word_data = sq24860_write_word_data,
+> +	.read_byte_data = sq24860_read_byte_data,
+> +	.write_byte_data = sq24860_write_byte_data,
+> +
+> +#if IS_ENABLED(CONFIG_SENSORS_SQ24860_REGULATOR)
+> +	.reg_desc = sq24860_reg_desc,
+> +	.num_regulators = ARRAY_SIZE(sq24860_reg_desc),
+> +#endif
+> +};
+> +
+> +static const struct i2c_device_id sq24860_i2c_id[] = {
+> +	{ "sq24860" },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(i2c, sq24860_i2c_id);
+> +
+> +static const struct of_device_id sq24860_of_match[] = {
+> +	{ .compatible = "silergy,sq24860" },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, sq24860_of_match);
+> +
+> +static int sq24860_probe(struct i2c_client *client)
+> +{
+> +	struct device *dev = &client->dev;
+> +	struct pmbus_driver_info *info;
+> +	u32 rimon = SQ24860_DEFAULT_RIMON;
+> +	u32 gimon = SQ24860_DEFAULT_GIMON;
+
+gimon is a constant. Why pass it as parameter to sq24860_write_iin_cal_gain(),
+and why validate it there instead of just using a constant ?
+
+> +	int ret;
+> +
+> +	ret = device_property_read_u32(dev, "silergy,rimon-micro-ohms", &rimon);
+> +	if (ret < 0 && ret != -EINVAL)
+> +		return dev_err_probe(dev, ret, "failed to get rimon\n");
+
+I am a bit lost here. Why accept -EINVAL (invalid arguments) ?
+
+> +
+> +	ret = sq24860_write_iin_cal_gain(client, rimon, gimon);
+> +	if (ret < 0)
+> +		return dev_err_probe(&client->dev, ret,
+> +					     "Failed to set gain\n");
+> +	info = devm_kmemdup(dev, &sq24860_base_info, sizeof(*info), GFP_KERNEL);
+> +	if (!info)
+> +		return -ENOMEM;
+> +
+> +	return pmbus_do_probe(client, info);
+> +}
+> +
+> +static struct i2c_driver sq24860_driver = {
+> +	.driver = {
+> +		.name = "sq24860",
+> +		.of_match_table = sq24860_of_match,
+> +	},
+> +	.probe = sq24860_probe,
+> +	.id_table = sq24860_i2c_id,
+> +};
+> +module_i2c_driver(sq24860_driver);
+> +
+> +MODULE_AUTHOR("Ziming Zhu <ziming.zhu@silergycorp.com>");
+> +MODULE_DESCRIPTION("PMBUS driver for SQ24860 eFuse");
+> +MODULE_LICENSE("GPL");
+> +MODULE_IMPORT_NS("PMBUS");
