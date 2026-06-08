@@ -1,89 +1,171 @@
 Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5462F872
-	for <linux-hwmon@vger.kernel.org>; Mon,  8 Jun 2026 00:33:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D243E29B8CF
+	for <linux-hwmon@vger.kernel.org>; Mon,  8 Jun 2026 00:37:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780878797; cv=none; b=X1rxcboeZMfUAI2ExLCckoC7wnM2rRcJQmdqyexUiJkcTZJI3BewP6IET3qR9+lJRtVXI2kes/3GDy60NwWrAH7H4MmQ/G+oaPH2+kMj+5vpeEJkJexUChPYIJuF2KU7LqSBks9gsenKxMSpi2FmXE/uUXltBuvb+Syiu6z5m7g=
+	t=1780879040; cv=none; b=M9yuc5zh5m15kCSBqvCGt2H/DQz0lkzvdBCai6sa3cHYMNVP3bl2pJAG+Z45tE7fQsSSTdsTHTsGgfWMyobVIF3Q3hxiyhI/ID2+nv5c71u+q67TlLHBa0FVTcjWfv90rzqGxareDQJank5m23StGdUeTUEKPw0HB5QDegCJcr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780878797; c=relaxed/simple;
-	bh=DCN2dixGveWJ8JBeiJV94aW7x3ZprGIEEJJO+J1UQDw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PgdXitrBUpRbYyquSHRmCxh8gvT+xga6p+aWKrT+olParivbrWwncqsTv7IwWiGyjDlV8g0rvb23RxijjVvzu1WZtiqCnlgur5QsbErKwPKfMBE+rZjb+Vzq7hOHxCJRmI9MgChG7SOPZ0R7xZw5m4BvDSOfVkyDoTugHIbeThE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CD0NH9SQ; arc=none smtp.client-ip=74.125.82.49
+	s=arc-20240116; t=1780879040; c=relaxed/simple;
+	bh=cbQSqd5uL2iKZXD9QIiW866G8yMZD7yl2KWSR4aU6x8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HQMNKrKMeRpxebC160SOkrSwoBw6aa+rGjuq0hWJ+AzYbuoPgYaouQFX7FAeely8Y1BRhMAY7D3vuRwi+CIykTYWlnuPE8v162H46kMmbNMNFKfZUHI6z7xpCpy2M38GbEjX3kDa4D3YlNREPkq6F1vuedbydiC3XzArPAKfBeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ti+ZYGtR; arc=none smtp.client-ip=74.125.82.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CD0NH9SQ"
-Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-1370417c01cso4960335c88.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 07 Jun 2026 17:33:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ti+ZYGtR"
+Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-1370417c01cso4962322c88.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 07 Jun 2026 17:37:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780878795; x=1781483595; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EIOstC8qlFPGk/t627biNiR4nt5ZUsFZR6LOUF+Z1M0=;
-        b=CD0NH9SQoHjxHC7S7SyvKw4vJkiv6On1FaaEfjEdvcacV+rfW6uOBbNzhAV9TznGDO
-         pdQpK612rVgrEmK/XFLNpBJL2++XG1bdCdN6KqbItq/WCR+oOJXYzzEj3bVks6C+sAaP
-         yKC/06gHLiC7p2p2yPWCxdRWHxfTWtYakYYJnv59BUoByLiTRZWJJblKKTobDuDZgtNL
-         jspfDTBNUGxnNtYPWqb1M3k1IiOjyXStsvH6B2mMSBfwE4d67d7HwkB5ESXvjPc0xh+U
-         1bMiRdGChHJeDYvb2ogN/Ys4E860X2TgJDqOxcIhMbZX6yCdOTbuoxTG2vXo/XsTX0yo
-         reNA==
+        d=gmail.com; s=20251104; t=1780879038; x=1781483838; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=rsDQ4UZzRAQ5obFtcMk+V/ytcJzk5rFjcVjggi4FGCA=;
+        b=Ti+ZYGtRLhjL8aVorvlO8o2ZpCEQcTqP2lpt9cn4hCJw6sJuOuqCMXBWSZhvYMLE8w
+         uUi9sPSe3bV0Py33IqDnsJnXs2wnvpikJX7FWBbNZC/H8fl8W3C0ukmVx9QEXGStj7gd
+         xZDLVZMVEFcghdZEbEzNW2lJSGg2zk8sJil+7Dt8MkQMq0UqTWueO9bwyER5U2jzZqoY
+         RamrcWoUpia/VgZpElllISVYf+2aQbcM40+97wPIypOhCB8AZOiRPNc1GRDi1e3dYw/q
+         uzQgtHoAnL44J1d2cA4FqSv7iF7Xeh3IS366yvLGBh8fKs5zEJXmad4//xLb1uZ6JVp7
+         jynA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780878795; x=1781483595;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=EIOstC8qlFPGk/t627biNiR4nt5ZUsFZR6LOUF+Z1M0=;
-        b=ests/l6TTyji3dRb5PhjYreOK5/TFH/OXQDQbIHMsnmPCah2JpG/ieGIb5CQaxU2Dt
-         jktzxML7HTzVB3WWK3T9x03Ng2SqnPsKthI0kHe4QJhu7P9cv+NNTJn7oV345NxBu3F+
-         bYAAHHfQQEjUJY+0o/RVBTlOR/G7XF1C7Q2Xl8aNIix9taOy/5ooeK+OC/K336sidOgy
-         1DqsFbfWM1YRS/Rbk1dDe0/EcUiu/of/0by7Uk+eVy6gDqb0AF8AfIzjSIe25CVYMBPf
-         1b7snp9x8llc2ossl+3UiYvw8VP04eNOMUTuMUzRAsJt4YofEKxBuPl8W9gl0Pe/0RpA
-         l94g==
-X-Gm-Message-State: AOJu0YzQuk7RRx5r/c8EFZzUeSMkWlxl716/8tznh4b1GyFMFYJLWzHG
-	J1SiD5w1BUnVU+YJNTgo1qrWtAwjBFNMQNJp0Hq4z3Sl+czHSGeJBd1kVKJvI3x4
-X-Gm-Gg: Acq92OHw6z6xu3WJ+gesNKdwCy58ofdnnkMkafjKfB66CLWk9v0zrmVUQ93yDLAT2g6
-	ZTi/7QerxP8XlOZ6vmuul5sMeKwO5ShKxK3i4wYwC9xHMMt2Oi8wpVK9GXR2wr0dEua6CAX9QgW
-	wmw+6wpt1n92aqmeCZ0Nj3EOttUfkVZ18TDa2D8f1A2Xkg2K4mC1DigyRlrE/uarsFriM4cWAjK
-	Vne2wvxNDuYGLxzfu33Qapb0Ox8LEldDAKyAXmLRcvHDytqEhHcr19AwDB8Ahn7q6N5xjPFFNRj
-	gygXJiCfLlXTryDpbawg32kVI3Fd965iqjQGeg/gRPt8dfR+9FtUVu5vDHaXxudDxWaDZf0cxV/
-	XtD2eyua67ymvcKBHi7Wg04qU7Z3UQ9XhfQ/RGyb+R9PyZgNm+EO9Y3ZocT22J94f/CYq+XbHXA
-	zYIHnbn2G/SFNjaXDfJg2jv8QTl3QT4WZyIRdo5L/PKhOqDhA=
-X-Received: by 2002:a05:7022:103:b0:136:3520:7234 with SMTP id a92af1059eb24-1380667a022mr6697312c88.12.1780878795258;
-        Sun, 07 Jun 2026 17:33:15 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-137f5550bcdsm11421111c88.14.2026.06.07.17.33.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Jun 2026 17:33:14 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780879038; x=1781483838;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rsDQ4UZzRAQ5obFtcMk+V/ytcJzk5rFjcVjggi4FGCA=;
+        b=qpjmX/8fHlZb2Mq+CJ5s5cde0jdFtoiRgzaXGdt/b6YGpX7itEeRK4c4vTcRWZ44K1
+         zDAVC4a34jvIiXiv4JK6TNFAEw19GZxehQZ6fAoWZcn//xVjK/Jj76wYWcELMxEe/ZNc
+         ytj/br90FBv4p+v1BiEaOpwcuoRjtcNywYmovSVJORHtxr3AXl1dKWSD3dyuNZATcNnt
+         yFOwzo22DRv5Xkn7PDIVxIhHkgrd6FTOuZcArJfGlkQhwlEPn9EzHqij26aasFIDL5Jl
+         2h/ysLEPIhsMjYNBl2wrt81b7D94py4cj0TF0cHe8XOUAHcx+SlFELRzohZa5/yFWnGe
+         oyGw==
+X-Forwarded-Encrypted: i=1; AFNElJ+GVTZkhFcTApt7BJOpuXr53IRWgPsLlgN60Vjlqgrtw1PCMTxFa2DOL+jswanKPGcV6R/U0Ks9ZYTYEQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwS782yJ9mVM3Z2Nqzaa6/FY+C0e1/dIa3mn82uUsTicBotwJYz
+	qy1hg2AdqJvxhd7+CuWF1R1qYkkY2mXk6gYEPI97ggXzLny0TdTpMoQg
+X-Gm-Gg: Acq92OF6H218nfhGP99dfMQToSI2cRaHze/7s6TeEy2Axaq97RiSqlRR1Wjx7arEzDF
+	KU1MttywDW8xCKv//t5T/XDkRFT4H6oR0wuaBllYnzKJIiZZc2niCOPeX/EZA9yDVhAkjV4OLrE
+	gHMQczOK9No3zHk68yENwuBlCakj63X+1WfL7aVnRV/UNL0bRQ0jt4kQjLYEACemXDwzgwSYao5
+	HBSRHSzzgCDmmh/xIhDyBIGZxITpROsOV6SKNvjdH0EIXD/S/fW1G16G39nLhozgd/hvaAnEDlX
+	c5KcjcwbgNAgFIWHx2TgKYFxrj27UVEWkPT54olDwew+OSvOJD0IGOOSiaoBtNI694daX4sBs6r
+	e+d+IX46vWW3SmNMBe4Yge6SRPEQcBGW9g1SWRIo1mcwWIe2ZS0Qh8aXqLlNo+COMpS2H0KogKD
+	DEsd26NOdplEtZLVTmHpTtd1DlwPERsQlUtGff6X6uxPKEj5FjQk4RANGXOKR1+gLS5rBaWAN2J
+	daJprOk+Eeis8XujCfpsQ==
+X-Received: by 2002:a05:7300:d70d:b0:304:c520:4e14 with SMTP id 5a478bee46e88-3077b32888bmr8065408eec.11.1780879037946;
+        Sun, 07 Jun 2026 17:37:17 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074db528dcsm18102986eec.3.2026.06.07.17.37.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 Jun 2026 17:37:17 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 7 Jun 2026 17:33:14 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Daniel Nilsson <linux@erq.se>
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 1/1] hwmon: (pmbus) Add support for Flex BMR316, BMR321,
- BMR350 and BMR351
-Message-ID: <91719187-e4e2-4303-9b39-b2bb924ec507@roeck-us.net>
-References: <20260603085712.659432-1-linux@erq.se>
- <20260603085712.659432-2-linux@erq.se>
+Message-ID: <ea12eccf-a35a-4e1d-8837-83d85dc0d679@roeck-us.net>
+Date: Sun, 7 Jun 2026 17:37:16 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260603085712.659432-2-linux@erq.se>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] hwmon: (k10temp) Add thermal support for AMD 1Ah
+ Family Models 80h-8Fh
+To: Muralidhara M K <muralidhara.mk@amd.com>, clemens@ladisch.de,
+ bhelgaas@google.com, bp@alien8.de
+Cc: linux-pci@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260529111242.2748206-1-muralidhara.mk@amd.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260529111242.2748206-1-muralidhara.mk@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jun 03, 2026 at 10:57:12AM +0200, Daniel Nilsson wrote:
-> Add support for BMR316, BMR321, BMR350 and BMR351 DC/DC converter
-> modules from Flex to the pmbus driver.
+On 5/29/26 04:12, Muralidhara M K wrote:
+> Add the new PCI Device ID for AMD 1Ah Family 80h-8Fh Models and wire
+> it into the k10temp PCI device table so that thermal monitoring works
+> out of the box on these processors.
 > 
-> Signed-off-by: Daniel Nilsson <linux@erq.se>
+> Signed-off-by: Muralidhara M K <muralidhara.mk@amd.com>
+> ---
+>   drivers/hwmon/k10temp.c | 1 +
+>   include/linux/pci_ids.h | 1 +
+>   2 files changed, 2 insertions(+)
+> 
+> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+> index a5d8f45b7881..8e8614cdfcda 100644
+> --- a/drivers/hwmon/k10temp.c
+> +++ b/drivers/hwmon/k10temp.c
+> @@ -568,6 +568,7 @@ static const struct pci_device_id k10temp_id_table[] = {
+>   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M50H_DF_F3) },
+>   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M60H_DF_F3) },
+>   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M70H_DF_F3) },
+> +	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M80H_DF_F3) },
+>   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M90H_DF_F3) },
+>   	{ PCI_VDEVICE(HYGON, PCI_DEVICE_ID_AMD_17H_DF_F3) },
+>   	{}
+> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> index 24cb42f66e4b..3301224c5845 100644
+> --- a/include/linux/pci_ids.h
+> +++ b/include/linux/pci_ids.h
+> @@ -585,6 +585,7 @@
+>   #define PCI_DEVICE_ID_AMD_1AH_M20H_DF_F3 0x16fb
+>   #define PCI_DEVICE_ID_AMD_1AH_M60H_DF_F3 0x124b
+>   #define PCI_DEVICE_ID_AMD_1AH_M70H_DF_F3 0x12bb
+> +#define PCI_DEVICE_ID_AMD_1AH_M80H_DF_F3 0x1243
+>   #define PCI_DEVICE_ID_AMD_MI200_DF_F3	0x14d3
+>   #define PCI_DEVICE_ID_AMD_MI300_DF_F3	0x152b
+>   #define PCI_DEVICE_ID_AMD_VANGOGH_USB	0x163a
 
-Applied.
 
-Thanks,
+As Sashiko pointed out, this device ID should be defined in
+drivers/hwmon/k10temp.c (unless it is used elsewhere, and then it
+should be defined in a separate patch).
+
 Guenter
+
