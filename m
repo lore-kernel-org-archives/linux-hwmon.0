@@ -1,78 +1,62 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out203-205-221-221.mail.qq.com (out203-205-221-221.mail.qq.com [203.205.221.221])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB452EAB72
-	for <linux-hwmon@vger.kernel.org>; Mon,  8 Jun 2026 06:16:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4153D2FC01B;
+	Mon,  8 Jun 2026 06:20:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.221
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780899384; cv=none; b=Lv3p2hrpoYVVHtyWTNlTG/c1/gHd5iLmWXshXSfIOFvkginvGgZpzcs6UICe1Ml2z1bqtc9ozbgoKVowlnPPMJ7RnUohUQFJs4HD0ACmMLBW//kr3Yovnmb4lu2lxFtsbEUX1WduPc0o7j4whMuwVT8oiM6x1ayfGBdeFmzqCnE=
+	t=1780899640; cv=none; b=gGp5Hs+MmuJIapn5VJuAT/tN8VkWo9SYRCuK7nku2FhdWkhpWNtlsYI7YpLDX0uWPXy1J//CDKFu2OyyFtz69IWsHgS7lAVnxYU83WIGVg5QE+2kU6lEwF7w1yvhXMi6KHUJZNHC+8MHNP8QkVui/yyHTJS5lBTcDG+R0j52ZtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780899384; c=relaxed/simple;
-	bh=xbM/2WzkK5HS8lvEHLhlY7SIJXrEpe8Tbc7EW+MeFxE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=VMjDl5530Dnh2wIpOT7cj2sycnDGnZXkPfvzzgKnNB0nxRsEp5VPhvSwVycIXxEw8icpqAqdtRuwPJ1FZjdvyJk/xFxCapsebd09Vs1VrnRvfy9+0ATLVmohBSp6NvagGFmnZic7chxFmlEY2z7Wpe5Vh+Gbi4kXS3EAcKTEOWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LqgvSK74; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780899640; c=relaxed/simple;
+	bh=7YhjvNgxS3flergW+n/2oP4NYiAbIg7ZOduVIJwydnE=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=Q/EoCois/wZ5/O8f/P/uqJ+00RfwT9Qh3DU+uz7tU8G3OhLMQCX0PN3GN6shfpo+0UIY8h7yznR5FsBurdxJZ1pucR90aVpUPnr++fMnUJucONbyUpcVkAJgzOE/rrYnKn48nt/xxTvG3q5LMSHoDUDoIpsf0veJZmT+URIhWBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=tFknSs47; arc=none smtp.client-ip=203.205.221.221
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LqgvSK74"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2c0b944f6edso41102795ad.2
-        for <linux-hwmon@vger.kernel.org>; Sun, 07 Jun 2026 23:16:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780899382; x=1781504182; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AjWUXj+heXGcA4AnuFAwW33oYwo0QFJERzR79tHEGeY=;
-        b=LqgvSK74kymrnim0G+xfAUACJ92zfX2f+SL2wqlp/ZeoRsDXl7aqs2CtuxYrfmQFV/
-         oLjuU+p99DW/nS4SF7NgRvSzBo4XIOBxfVsvSKvOaUad29JvtSxLbeMhFileoy4INAfe
-         WUCYI41qwtVTMAQFrjx9ttVjLNZX96UjR9GYhp10+W50Rp4Rc+L8W7PX4Y/ghnBTywjt
-         oYsiZjnA/hPZ8PvGtGfhyZPdBOqrJxQTzOxw7GZYbNFxqW2ZywdT0FKhgdA30Cl31x8v
-         jIEPPCNQHYePydmIPjDk080uj+6yI0qTVep0yqeFzwxENeK77iAqUhNZpkg4k8Rw58La
-         xWzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780899382; x=1781504182;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=AjWUXj+heXGcA4AnuFAwW33oYwo0QFJERzR79tHEGeY=;
-        b=A21l7XR0yAJJFXJcgae5RBqcZAdbKyPI/9RNpBfoEojMucgDfS3UXD03iVsZMGsCFn
-         hjbBG6h7ropxYtUit3nEi+4XZqOT8kFWZx2jYn78C3g2NVgsN+mXZSKoxu64F77iPicI
-         uEA7NZpnVApx7kLuNIRYSbhn4InexQfchGpeHUOQdvrCMuSXohOS8ZwGF8Kvnz8mLet9
-         oKAjto1qW+cc1SHYq6wUZaZ+vLwAIPnCetDhmwagsnRa0tgll0FUbIravnzBZ4d7sLDJ
-         tOVgxehyILp1FSuEsLa2s/1DERtLnsKz5wKOvROyVeOZ7m5zbAt5BnwFhItOy6Vjv44M
-         hT7g==
-X-Gm-Message-State: AOJu0YxRYiNG3huZY83KllyjvQ0GkDzAmc0XlZ/vbArwL3kC2hskHThf
-	CeHfwUMW3AXnVeo2EcLtUehEXVVa9T5XbIj9fWdBgMdIjbCJTpjUMcB0
-X-Gm-Gg: Acq92OFGGLce/MVMF2WTXAoj0Tb1y/hShGz9Oj0RQ3az8VzH/w/e96xxx642+uWflqY
-	n7Pq5KDztW5D381LwiiTIioOIOgNuok1kerOiCteE3JoxplMz8Pc12F/BRI3mAomJDYRboMRtTa
-	fgchnI5NNNIrUjca5fWvOQeAhTMOdDJkLW7P8WNDetJj/gPw/ptDXl62yRk9lBlq6E+txRyUFpu
-	A+ZisyHELFxd9euWlm/Uu2NZSWxwIzPYDmYJii2K2ERlyoGgXtXjjfYS2UxlBcllvxGVPAgDm3T
-	+Xsh1jwlOg5D6jt2AlEga7FWzuEagXfpkna+0YgAbEsvI5ngKAliSAVmDVk8w/PHmN4+DWMzb3g
-	hkPcgLi++MOYwnnYHauxwvv0rYRPKHl4Ndf8Qhh5a9veuEOM43jBicKJ0LCSmdfNUU/DISW4J+Y
-	Vh4kgvCctbDdssrvEtE/JmR0H4eH/NFx7W9g1WpzvGcADgU/uLDpKYgEQQ
-X-Received: by 2002:a17:903:3d06:b0:2bf:2114:ecbe with SMTP id d9443c01a7336-2c1e8209435mr160510935ad.23.1780899382243;
-        Sun, 07 Jun 2026 23:16:22 -0700 (PDT)
-Received: from localhost.localdomain ([2401:4900:9004:8bfa:6dac:310c:dd97:e630])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c1664ad138sm173856925ad.82.2026.06.07.23.16.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Jun 2026 23:16:21 -0700 (PDT)
-From: ASHISH YADAV <ashishyadav78@gmail.com>
-X-Google-Original-From: ASHISH YADAV <Ashish.Yadav@infineon.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="tFknSs47"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1780899628; bh=+bozLRv1G18r0cA43VR1uBBsViRSEUk0zMCfOuQKsTM=;
+	h=From:To:Cc:Subject:Date;
+	b=tFknSs47ftHa62xZD8IBxSbEiLi5hdQdtb8GtHw3YTuYdnyXk95bHMo6N+HvgpO1A
+	 TrbEOq1fcronFyDgHemikTW8GOgfh1V6aORn+MZXmFonvTckhv5IIqQ4PlOSk2lGEO
+	 M4AHrjHPB1t4Swy+vYwR/nv9ffE+WEaTMOMVswcs=
+Received: from NTT-kernel-dev ([60.247.85.88])
+	by newxmesmtplogicsvrsza73-0.qq.com (NewEsmtp) with SMTP
+	id 517BE8CA; Mon, 08 Jun 2026 14:20:23 +0800
+X-QQ-mid: xmsmtpt1780899623tqjcyimc8
+Message-ID: <tencent_53D6CAB7A20BCE168EA9DF22F0E78EF14509@qq.com>
+X-QQ-XMAILINFO: OeJ9zRfntlNPK35NgtXDxWQkmsYLqUjrWSdAAkqXII8ejL7M8g6OFZZFAGR1TG
+	 Bmx/taKijvvMzPalQykCmCOVFI4R7+d63Z3Pb/mjVeZQBoNBAMyv+w2PlkTuFMq4QU6gUvIYVpnF
+	 4kNsSsfRkcZiqGlLpDxOtujR+Nvff1PzaEJ/ckG5Dge5mzSOmySYDWrptYHrxdhZBjFYsY52ajOp
+	 jLCjnw1JXX74IaP2pMRThgVd//CNhTLnZQiV2nEC+hRVG3gElGrjMUYZxie/jJCvMr2+GVKUFpzQ
+	 Ku6C/1WWUZiTB0cahlKIkpPjAuNT92ZIkFMJv3Acc1tF3fQmQmOfIH3iXpA9ECyDpGkio+9N2BiS
+	 HTumek5arHKN/C2uwGFA3wabGCOj7zmolP4mQTBflxr0mhomwfILmdlyD+Fy6ZQEKY2MC+Lzf+cb
+	 itu6rakpMo5MncoAfrZOzUfRB2EICc8sSTUUUmx1S73rlSNMtBvwLIEJpS9zdkJspw7a3K7aRdnQ
+	 zIXi/JmEsOr1ytlG2XB9GQT9Li5wK9e8I4nzrighv964Pj1nF3ZBi8zBnsn4l3Om6x8a6Fb8+szN
+	 497gU/a7mm19F4vSbmrVgcDjXl7W4+sp4ndMR+mfaJEjznQKA6Kv2dXPgHNMG4dt2OZ6l/SgX73X
+	 cVZQL2tsOnBQKLb45hmo8610/1VhUp2xW4iwfc0uMC/rsN8rDHmy19H8qWKTcRzW4/YSXZkobf1y
+	 /S4nbKhgFo4gqlq+NEp5LKGUs8ed0A4A0mplWlkw4aWo35u9f7Ck5E0TJKL3YlyZMmISxbrv/5Q3
+	 YkwRDvhQsLwFwuIs7wcWa9wrlwO4gQ6j60QiBHl2GIStMVXlYUK3pnUptlivcUIhZ6RUpu7ZDqRy
+	 XaaSqLKO166R35scvOSuzkULENhHudNJTA8CMTblQnf5lmkS3Z+Q2Uwq1Nhte+HppwwqVOJR2Oto
+	 wVlsiNaUP+Mi8Jg5OynVQd4au8d6DNDVUgzX9+wpMMalnQ34kNriE29TfhK/by7T6+esRbueSyY6
+	 Awp3uVTXvJwaxVo1UYo/NggjemlfM=
+X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
+From: Fang Wang <32840572@qq.com>
+To: gregkh@linuxfoundation.org,
+	stable@vger.kernel.org,
+	linux@roeck-us.net
+Cc: patches@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
-	Ashish Yadav <ashish.yadav@infineon.com>
-Subject: [PATCH v4 2/2] hwmon:(pmbus/xdp720) Add support for efuse xdp730
-Date: Mon,  8 Jun 2026 11:45:44 +0530
-Message-Id: <20260608061544.5613-3-Ashish.Yadav@infineon.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20260608061544.5613-1-Ashish.Yadav@infineon.com>
-References: <20260608061544.5613-1-Ashish.Yadav@infineon.com>
+	jdelvare@suse.com,
+	atull@opensource.altera.com,
+	broonie@kernel.org,
+	linux-hwmon@vger.kernel.org,
+	psanman@juniper.net
+Subject: [PATCH 6.6.y] hwmon: (pmbus/core) Protect regulator operations with mutex
+Date: Mon,  8 Jun 2026 14:20:22 +0800
+X-OQ-MSGID: <20260608062022.2822031-1-32840572@qq.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -81,204 +65,258 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Ashish Yadav <ashish.yadav@infineon.com>
+From: Guenter Roeck <linux@roeck-us.net>
 
-Adds support for the Infineon XDP730 Digital eFuse Controller by
-updating the existing XDP720 driver.
+[ Upstream commit 754bd2b4a084b90b5e7b630e1f423061a9b9b761 ]
 
-Signed-off-by: Ashish Yadav <ashish.yadav@infineon.com>
+The regulator operations pmbus_regulator_get_voltage(),
+pmbus_regulator_set_voltage(), and pmbus_regulator_list_voltage()
+access PMBus registers and shared data but were not protected by
+the update_lock mutex. This could lead to race conditions.
+
+However, adding mutex protection directly to these functions causes
+a deadlock because pmbus_regulator_notify() (which calls
+regulator_notifier_call_chain()) is often called with the mutex
+already held (e.g., from pmbus_fault_handler()). If a regulator
+callback then calls one of the now-protected voltage functions,
+it will attempt to acquire the same mutex.
+
+Rework pmbus_regulator_notify() to utilize a worker function to
+send notifications outside of the mutex protection. Events are
+stored as atomics in a per-page bitmask and processed by the worker.
+
+Initialize the worker and its associated data during regulator
+registration, and ensure it is cancelled on device removal using
+devm_add_action_or_reset().
+
+While at it, remove the unnecessary include of linux/of.h.
+
+Cc: Sanman Pradhan <psanman@juniper.net>
+Fixes: ddbb4db4ced1b ("hwmon: (pmbus) Add regulator support")
+Reviewed-by: Sanman Pradhan <psanman@juniper.net>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Fang Wang <32840572@qq.com>
 ---
-XDP720/XDP730 Digital eFuse Controllers provides accurate system telemetry
-(V, I, P, T) and reports analog current at the IMON pin for post-processing.
+ drivers/hwmon/pmbus/pmbus_core.c | 117 ++++++++++++++++++++++++-------
+ 1 file changed, 91 insertions(+), 26 deletions(-)
 
-Both parts share the same PMBus register map and direct-format
-coefficients; they differ in the GIMON gain step exposed via the
-TELEMETRY_AVG register (bit 10) and in the VDD_VIN pin number
-(XDP720: pin 9, XDP730: pin 20).
-
-The Current and Power measurement depends on the RIMON and GIMON values.
-The GIMON (microA/A) depends on the 10th bit of TELEMETRY_AVG PMBUS Register.
-The value of RIMON (kohm) can be provided by the user through device tree using
-infineon,rimon-micro-ohms  property.
----
- drivers/hwmon/pmbus/Kconfig  |  2 +-
- drivers/hwmon/pmbus/xdp720.c | 97 ++++++++++++++++++++++++------------
- 2 files changed, 65 insertions(+), 34 deletions(-)
-
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 8f4bff375ecb..a9e86d92b044 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -715,7 +715,7 @@ config SENSORS_XDP720
- 	tristate "Infineon XDP720 family"
- 	help
- 	  If you say yes here you get hardware monitoring support for Infineon
--	  XDP720.
-+	  XDP720 and XDP730 Digital eFuse Controllers.
- 
- 	  This driver can also be built as a module. If so, the module will
- 	  be called xdp720.
-diff --git a/drivers/hwmon/pmbus/xdp720.c b/drivers/hwmon/pmbus/xdp720.c
-index 8729a771f216..9bdeac2d82f5 100644
---- a/drivers/hwmon/pmbus/xdp720.c
-+++ b/drivers/hwmon/pmbus/xdp720.c
-@@ -1,27 +1,46 @@
- // SPDX-License-Identifier: GPL-2.0+
- /*
-- * Hardware monitoring driver for Infineon XDP720 Digital eFuse Controller
-+ * Hardware monitoring driver for Infineon XDP720 / XDP730 Digital
-+ * eFuse Controllers.
-+ *
-+ * Both parts share the same PMBus register map and direct-format
-+ * coefficients; they differ in the GIMON gain step exposed via
-+ * the TELEMETRY_AVG register and in the VDD_VIN pin number.
-  *
-  * Copyright (c) 2026 Infineon Technologies. All rights reserved.
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 019c5982ba56..a61e2fb176da 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -6,6 +6,7 @@
+  * Copyright (c) 2012 Guenter Roeck
   */
  
-+#include <linux/bitops.h>
- #include <linux/i2c.h>
--#include <linux/module.h>
- #include <linux/init.h>
++#include <linux/atomic.h>
+ #include <linux/debugfs.h>
  #include <linux/kernel.h>
--#include <linux/of_device.h>
--#include <linux/bitops.h>
  #include <linux/math64.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/property.h>
-+#include <linux/regulator/consumer.h>
+@@ -19,8 +20,8 @@
+ #include <linux/pmbus.h>
+ #include <linux/regulator/driver.h>
+ #include <linux/regulator/machine.h>
+-#include <linux/of.h>
+ #include <linux/thermal.h>
++#include <linux/workqueue.h>
  #include "pmbus.h"
  
  /*
-  * The IMON resistor required to generate the system overcurrent protection.
-  * Arbitrary default Rimon value: 2k Ohm
-  */
--#define XDP720_DEFAULT_RIMON 2000000000 /* 2k ohm */
-+#define XDP720_DEFAULT_RIMON 2000000000U /* 2k ohm */
- #define XDP720_TELEMETRY_AVG 0xE9
-+#define XDP720_TELEMETRY_AVG_GIMON BIT(10) /* high/low GIMON select */
+@@ -102,6 +103,11 @@ struct pmbus_data {
+ 
+ 	struct mutex update_lock;
+ 
++#if IS_ENABLED(CONFIG_REGULATOR)
++	atomic_t regulator_events[PMBUS_PAGES];
++	struct work_struct regulator_notify_work;
++#endif
 +
-+/* Chip identifiers carried in OF match-data and i2c_device_id->driver_data. */
-+enum xdp720_chip_id {
-+	CHIP_XDP720 = 0,
-+	CHIP_XDP730,
-+};
+ 	bool has_status_word;		/* device uses STATUS_WORD register */
+ 	int (*read_status)(struct i2c_client *client, int page);
  
--static struct pmbus_driver_info xdp720_info = {
-+struct xdp720_data {
-+	enum xdp720_chip_id	 id;
-+	struct pmbus_driver_info info;
-+};
-+
-+static const struct pmbus_driver_info xdp720_info = {
- 	.pages = 1,
- 	.format[PSC_VOLTAGE_IN] = direct,
- 	.format[PSC_VOLTAGE_OUT] = direct,
-@@ -56,57 +75,69 @@ static struct pmbus_driver_info xdp720_info = {
+@@ -3056,12 +3062,19 @@ static int pmbus_regulator_get_voltage(struct regulator_dev *rdev)
+ 		.class = PSC_VOLTAGE_OUT,
+ 		.convert = true,
+ 	};
++	int ret;
  
- static int xdp720_probe(struct i2c_client *client)
- {
--	struct pmbus_driver_info *info;
-+	struct xdp720_data *data;
- 	int ret;
--	u32 rimon;
- 	int gimon;
-+	u32 rimon;
++	mutex_lock(&data->update_lock);
+ 	s.data = _pmbus_read_word_data(client, s.page, 0xff, PMBUS_READ_VOUT);
+-	if (s.data < 0)
+-		return s.data;
++	if (s.data < 0) {
++		ret = s.data;
++		goto unlock;
++	}
  
--	info = devm_kmemdup(&client->dev, &xdp720_info, sizeof(*info),
--			    GFP_KERNEL);
--	if (!info)
-+	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
- 		return -ENOMEM;
- 
-+	data->id = (enum xdp720_chip_id)(uintptr_t)i2c_get_match_data(client);
-+	data->info = xdp720_info;
-+
- 	ret = devm_regulator_get_enable(&client->dev, "vdd-vin");
- 	if (ret)
- 		return dev_err_probe(&client->dev, ret,
- 			"failed to enable vdd-vin supply\n");
- 
- 	ret = i2c_smbus_read_word_data(client, XDP720_TELEMETRY_AVG);
--	if (ret < 0) {
--		dev_err(&client->dev, "Can't get TELEMETRY_AVG\n");
--		return ret;
-+	if (ret < 0)
-+		return dev_err_probe(&client->dev, ret,
-+			"failed to read TELEMETRY_AVG\n");
-+
-+	/* Bit 10 of TELEMETRY_AVG selects the GIMON gain step in microA/A */
-+	switch (data->id) {
-+	case CHIP_XDP720:
-+		gimon = (ret & XDP720_TELEMETRY_AVG_GIMON) ? 18200 : 9100;
-+		dev_info(&client->dev, "Initialised XDP720 instance\n");
-+		break;
-+	case CHIP_XDP730:
-+		gimon = (ret & XDP720_TELEMETRY_AVG_GIMON) ? 20000 : 10000;
-+		dev_info(&client->dev, "Initialised XDP730 instance\n");
-+		break;
-+	default:
-+		return -EINVAL;
- 	}
- 
--	ret >>= 10; /* 10th bit of TELEMETRY_AVG REG for GIMON Value */
--	ret &= GENMASK(0, 0);
--	if (ret == 1)
--		gimon = 18200; /* output gain 18.2 microA/A */
--	else
--		gimon = 9100; /* output gain 9.1 microA/A */
--
--	if (of_property_read_u32(client->dev.of_node,
--				 "infineon,rimon-micro-ohms", &rimon))
--		rimon = XDP720_DEFAULT_RIMON; /* Default if not set via DT */
-+	if (device_property_read_u32(&client->dev,
-+				     "infineon,rimon-micro-ohms", &rimon))
-+		rimon = XDP720_DEFAULT_RIMON;	/* Default if not in FW */
- 	if (rimon == 0)
- 		return -EINVAL;
- 
- 	/* Adapt the current and power scale for each instance */
--	info->m[PSC_CURRENT_OUT] = DIV64_U64_ROUND_CLOSEST((u64)
--		info->m[PSC_CURRENT_OUT] * rimon * gimon, 1000000000000ULL);
--	info->m[PSC_POWER] = DIV64_U64_ROUND_CLOSEST((u64)
--		info->m[PSC_POWER] * rimon * gimon, 1000000000000000ULL);
--
--	return pmbus_do_probe(client, info);
-+	data->info.m[PSC_CURRENT_OUT] = DIV64_U64_ROUND_CLOSEST((u64)
-+		data->info.m[PSC_CURRENT_OUT] * rimon * gimon,
-+		1000000000000ULL);
-+	data->info.m[PSC_POWER] = DIV64_U64_ROUND_CLOSEST((u64)
-+		data->info.m[PSC_POWER] * rimon * gimon,
-+		1000000000000000ULL);
-+
-+	return pmbus_do_probe(client, &data->info);
+-	return (int)pmbus_reg2data(data, &s) * 1000; /* unit is uV */
++	ret = (int)pmbus_reg2data(data, &s) * 1000; /* unit is uV */
++unlock:
++	mutex_unlock(&data->update_lock);
++	return ret;
  }
  
- static const struct of_device_id xdp720_of_match[] = {
--	{ .compatible = "infineon,xdp720" },
-+	{ .compatible = "infineon,xdp720", .data = (void *)CHIP_XDP720 },
-+	{ .compatible = "infineon,xdp730", .data = (void *)CHIP_XDP730 },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, xdp720_of_match);
+ static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uv,
+@@ -3078,16 +3091,22 @@ static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uv,
+ 	};
+ 	int val = DIV_ROUND_CLOSEST(min_uv, 1000); /* convert to mV */
+ 	int low, high;
++	int ret;
  
- static const struct i2c_device_id xdp720_id[] = {
--	{ "xdp720" },
-+	{ "xdp720", CHIP_XDP720 },
-+	{ "xdp730", CHIP_XDP730 },
- 	{}
- };
- MODULE_DEVICE_TABLE(i2c, xdp720_id);
-@@ -123,6 +154,6 @@ static struct i2c_driver xdp720_driver = {
- module_i2c_driver(xdp720_driver);
+ 	*selector = 0;
  
- MODULE_AUTHOR("Ashish Yadav <ashish.yadav@infineon.com>");
--MODULE_DESCRIPTION("PMBus driver for Infineon XDP720 Digital eFuse Controller");
-+MODULE_DESCRIPTION("PMBus driver for Infineon XDP720/XDP730 Digital eFuse Controllers");
- MODULE_LICENSE("GPL");
- MODULE_IMPORT_NS("PMBUS");
++	mutex_lock(&data->update_lock);
+ 	low = pmbus_regulator_get_low_margin(client, s.page);
+-	if (low < 0)
+-		return low;
++	if (low < 0) {
++		ret = low;
++		goto unlock;
++	}
+ 
+ 	high = pmbus_regulator_get_high_margin(client, s.page);
+-	if (high < 0)
+-		return high;
++	if (high < 0) {
++		ret = high;
++		goto unlock;
++	}
+ 
+ 	/* Make sure we are within margins */
+ 	if (low > val)
+@@ -3097,7 +3116,10 @@ static int pmbus_regulator_set_voltage(struct regulator_dev *rdev, int min_uv,
+ 
+ 	val = pmbus_data2reg(data, &s, val);
+ 
+-	return _pmbus_write_word_data(client, s.page, PMBUS_VOUT_COMMAND, (u16)val);
++	ret = _pmbus_write_word_data(client, s.page, PMBUS_VOUT_COMMAND, (u16)val);
++unlock:
++	mutex_unlock(&data->update_lock);
++	return ret;
+ }
+ 
+ static int pmbus_regulator_list_voltage(struct regulator_dev *rdev,
+@@ -3105,7 +3127,9 @@ static int pmbus_regulator_list_voltage(struct regulator_dev *rdev,
+ {
+ 	struct device *dev = rdev_get_dev(rdev);
+ 	struct i2c_client *client = to_i2c_client(dev->parent);
++	struct pmbus_data *data = i2c_get_clientdata(client);
+ 	int val, low, high;
++	int ret;
+ 
+ 	if (selector >= rdev->desc->n_voltages ||
+ 	    selector < rdev->desc->linear_min_sel)
+@@ -3115,18 +3139,29 @@ static int pmbus_regulator_list_voltage(struct regulator_dev *rdev,
+ 	val = DIV_ROUND_CLOSEST(rdev->desc->min_uV +
+ 				(rdev->desc->uV_step * selector), 1000); /* convert to mV */
+ 
++	mutex_lock(&data->update_lock);
++
+ 	low = pmbus_regulator_get_low_margin(client, rdev_get_id(rdev));
+-	if (low < 0)
+-		return low;
++	if (low < 0) {
++		ret = low;
++		goto unlock;
++	}
+ 
+ 	high = pmbus_regulator_get_high_margin(client, rdev_get_id(rdev));
+-	if (high < 0)
+-		return high;
++	if (high < 0) {
++		ret = high;
++		goto unlock;
++	}
+ 
+-	if (val >= low && val <= high)
+-		return val * 1000; /* unit is uV */
++	if (val >= low && val <= high) {
++		ret = val * 1000; /* unit is uV */
++		goto unlock;
++	}
+ 
+-	return 0;
++	ret = 0;
++unlock:
++	mutex_unlock(&data->update_lock);
++	return ret;
+ }
+ 
+ const struct regulator_ops pmbus_regulator_ops = {
+@@ -3141,12 +3176,42 @@ const struct regulator_ops pmbus_regulator_ops = {
+ };
+ EXPORT_SYMBOL_NS_GPL(pmbus_regulator_ops, PMBUS);
+ 
++static void pmbus_regulator_notify_work_cancel(void *data)
++{
++	struct pmbus_data *pdata = data;
++
++	cancel_work_sync(&pdata->regulator_notify_work);
++}
++
++static void pmbus_regulator_notify_worker(struct work_struct *work)
++{
++	struct pmbus_data *data =
++		container_of(work, struct pmbus_data, regulator_notify_work);
++	int i, j;
++
++	for (i = 0; i < data->info->pages; i++) {
++		int event;
++
++		event = atomic_xchg(&data->regulator_events[i], 0);
++		if (!event)
++			continue;
++
++		for (j = 0; j < data->info->num_regulators; j++) {
++			if (i == rdev_get_id(data->rdevs[j])) {
++				regulator_notifier_call_chain(data->rdevs[j],
++							      event, NULL);
++				break;
++			}
++		}
++	}
++}
++
+ static int pmbus_regulator_register(struct pmbus_data *data)
+ {
+ 	struct device *dev = data->dev;
+ 	const struct pmbus_driver_info *info = data->info;
+ 	const struct pmbus_platform_data *pdata = dev_get_platdata(dev);
+-	int i;
++	int i, ret;
+ 
+ 	data->rdevs = devm_kzalloc(dev, sizeof(struct regulator_dev *) * info->num_regulators,
+ 				   GFP_KERNEL);
+@@ -3170,20 +3235,20 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+ 					     info->reg_desc[i].name);
+ 	}
+ 
++	INIT_WORK(&data->regulator_notify_work, pmbus_regulator_notify_worker);
++
++	ret = devm_add_action_or_reset(dev, pmbus_regulator_notify_work_cancel, data);
++	if (ret)
++		return ret;
++
+ 	return 0;
+ }
+ 
+ static int pmbus_regulator_notify(struct pmbus_data *data, int page, int event)
+ {
+-		int j;
+-
+-		for (j = 0; j < data->info->num_regulators; j++) {
+-			if (page == rdev_get_id(data->rdevs[j])) {
+-				regulator_notifier_call_chain(data->rdevs[j], event, NULL);
+-				break;
+-			}
+-		}
+-		return 0;
++	atomic_or(event, &data->regulator_events[page]);
++	schedule_work(&data->regulator_notify_work);
++	return 0;
+ }
+ #else
+ static int pmbus_regulator_register(struct pmbus_data *data)
 -- 
-2.39.5
+2.34.1
 
