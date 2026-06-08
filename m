@@ -1,94 +1,89 @@
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
+Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B507221540
-	for <linux-hwmon@vger.kernel.org>; Mon,  8 Jun 2026 00:26:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5462F872
+	for <linux-hwmon@vger.kernel.org>; Mon,  8 Jun 2026 00:33:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780878399; cv=none; b=KHXe3/7Iiy3Jfk4EOhb3zywfwgjVSpGXmIzg0eO0V1cyVadu+yjVgb/sEIIgK2i4xia8yCq+p//AMxGx1MGXYZFsPdEoUsKnSQbNord4mk5cIuzBRRUvqlz0hqnUZTjTuhF9KQZ43vWRHeDfNWx4OXMt+YnpL6ulf6NPernRFS0=
+	t=1780878797; cv=none; b=X1rxcboeZMfUAI2ExLCckoC7wnM2rRcJQmdqyexUiJkcTZJI3BewP6IET3qR9+lJRtVXI2kes/3GDy60NwWrAH7H4MmQ/G+oaPH2+kMj+5vpeEJkJexUChPYIJuF2KU7LqSBks9gsenKxMSpi2FmXE/uUXltBuvb+Syiu6z5m7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780878399; c=relaxed/simple;
-	bh=1dRoznK/VTj3OQFZQkwRe4Djlb9mPVbPD+VPPJ6ABa4=;
+	s=arc-20240116; t=1780878797; c=relaxed/simple;
+	bh=DCN2dixGveWJ8JBeiJV94aW7x3ZprGIEEJJO+J1UQDw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b8KK10lz0wPKQQev+ASZb96n/OCv7qUkg8zYJPqSb6VoQHwkyDwCIcQBQq6Qiyfhi5iQLks3KxztvU064uk9A7Ik7guyowCqVyQF8yQBKjAyZh/6VyQbYY8Lnof8HPu97iYdSkt0hEjp65rz+PLIlQzeID+Tjx7kgNQLKGO1paY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f0eDuIex; arc=none smtp.client-ip=74.125.82.41
+	 Content-Type:Content-Disposition:In-Reply-To; b=PgdXitrBUpRbYyquSHRmCxh8gvT+xga6p+aWKrT+olParivbrWwncqsTv7IwWiGyjDlV8g0rvb23RxijjVvzu1WZtiqCnlgur5QsbErKwPKfMBE+rZjb+Vzq7hOHxCJRmI9MgChG7SOPZ0R7xZw5m4BvDSOfVkyDoTugHIbeThE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CD0NH9SQ; arc=none smtp.client-ip=74.125.82.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f0eDuIex"
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-137335bc3caso4410893c88.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 07 Jun 2026 17:26:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CD0NH9SQ"
+Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-1370417c01cso4960335c88.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 07 Jun 2026 17:33:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780878398; x=1781483198; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wowHEPEKD5v1QyaBsiHTy32gevG3QPn/2xj8ddr2K2M=;
-        b=f0eDuIexaJ3vmvHyH0alRtY2KgdzhLDLQUhazEh/N3aeE0lPk3a2u8E7cFpJhmGhO7
-         pVx28e1DgefR1L8fC50mnOPCGZEGxMX4K6GYlubVn+K23yUSPIPtqAJiyNGZz/GWJGFD
-         UxUMM/ui3sjtr8NoxGi+/f5lutChKsu+DJQNh61CmWPhqzzJbpDaYPW1eX202xpP9MI8
-         +xIoxdoE4rNADxpnVXmK4F5rqmwElA1lirUtHLDB5gWxxvK165v3/UJuTE5FxEn21XNF
-         tK1C4U5y9IpKH/GJcpHCp58LmtHbv2f7qzDN876n/Z0Au0nTBvUiXR3lZcduIm7rQL3r
-         3fWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780878398; x=1781483198;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20251104; t=1780878795; x=1781483595; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wowHEPEKD5v1QyaBsiHTy32gevG3QPn/2xj8ddr2K2M=;
-        b=Ss6YbwctUvrsJ6rFQOmrY2GAvry/9nbPb4T7+sJz5cKb7MO12gUumm5cY9HVg10YkQ
-         3H7aVDZaaDtRioeEWkUeI6k4/DzywCYY3h6CssuJredr2tNf9m+bMzDjd/sU8SQGzh8D
-         GRUfJ/CJF0y8s0FVhjwb+dCK71SRpqDXE5qcjX6e7KIgLxEFv5z1ufyNVnZmGGBpJBOA
-         T2KZg/XGW8lYfHPWDfZV2tI4QtoAJ8PiLIkYAm3uYN0IrW2FP+FQG4YH2S9+dmgrBgSt
-         D48Lwvy57dfsITR2prKdqLtHeLMgCzjqdJXN/PsF+AqOjOGhBkE0m6PqOMzmdoB/qgWY
-         qFRw==
-X-Gm-Message-State: AOJu0YwXwn/ToUqNuUUIai5M/BS1VtC2uYIoQxNc5AB/N0mJ/l/PxRBP
-	CrRShzLtN/A0grA138I6Gom+s0iwZn1ZCgvKMYGisGkWObK8wVow07Sqo1N/8pCv
-X-Gm-Gg: Acq92OHRlZRC+Ievr/Uc7F49a2x/TSyA9FH9UQW8IQQP4MsN3utSOVet8uCl6P/l0A4
-	AcJc69NhaSCrkKZEyCbDz77GUcPe6i+CK8lMnZoCAA1JEzRs6lGtBePYAoZWzGtSfoUXd5GvIHt
-	cr5HroVtNQRmXEoMnTnByKGrvb/+JeTIgknwA6dWpWtMYXKPExZb1CE4ZhVNTIIaDL6BXXl+8oG
-	U+GlrSy7kDOg3aUIo61h/TzpvsC4f2B+jfzokLhmeCNNEUkwaB8zdYo8hFeQsqETTKzm+fDRcpU
-	Ah1ac0Ay+zUPkH6MQtZG/29TweKFtbAq4okuCZ2FDluR5YkTiaCnHwjpzG/oz4A+835LbGNZG20
-	5jNz+Lf5e0omi+K76sIhM4tQfS6fxF8gNWy3vnLgw6bY03p+RrVevHVG0kbdmHDILebmPdVfWDa
-	uMVy7h86enRuQXwk3ZriuPQw32WquSNipbxMiKD0rARidcZw8=
-X-Received: by 2002:a05:7301:9f0f:b0:303:f295:4db2 with SMTP id 5a478bee46e88-3077ae8e8femr7706616eec.0.1780878397494;
-        Sun, 07 Jun 2026 17:26:37 -0700 (PDT)
+        bh=EIOstC8qlFPGk/t627biNiR4nt5ZUsFZR6LOUF+Z1M0=;
+        b=CD0NH9SQoHjxHC7S7SyvKw4vJkiv6On1FaaEfjEdvcacV+rfW6uOBbNzhAV9TznGDO
+         pdQpK612rVgrEmK/XFLNpBJL2++XG1bdCdN6KqbItq/WCR+oOJXYzzEj3bVks6C+sAaP
+         yKC/06gHLiC7p2p2yPWCxdRWHxfTWtYakYYJnv59BUoByLiTRZWJJblKKTobDuDZgtNL
+         jspfDTBNUGxnNtYPWqb1M3k1IiOjyXStsvH6B2mMSBfwE4d67d7HwkB5ESXvjPc0xh+U
+         1bMiRdGChHJeDYvb2ogN/Ys4E860X2TgJDqOxcIhMbZX6yCdOTbuoxTG2vXo/XsTX0yo
+         reNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780878795; x=1781483595;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EIOstC8qlFPGk/t627biNiR4nt5ZUsFZR6LOUF+Z1M0=;
+        b=ests/l6TTyji3dRb5PhjYreOK5/TFH/OXQDQbIHMsnmPCah2JpG/ieGIb5CQaxU2Dt
+         jktzxML7HTzVB3WWK3T9x03Ng2SqnPsKthI0kHe4QJhu7P9cv+NNTJn7oV345NxBu3F+
+         bYAAHHfQQEjUJY+0o/RVBTlOR/G7XF1C7Q2Xl8aNIix9taOy/5ooeK+OC/K336sidOgy
+         1DqsFbfWM1YRS/Rbk1dDe0/EcUiu/of/0by7Uk+eVy6gDqb0AF8AfIzjSIe25CVYMBPf
+         1b7snp9x8llc2ossl+3UiYvw8VP04eNOMUTuMUzRAsJt4YofEKxBuPl8W9gl0Pe/0RpA
+         l94g==
+X-Gm-Message-State: AOJu0YzQuk7RRx5r/c8EFZzUeSMkWlxl716/8tznh4b1GyFMFYJLWzHG
+	J1SiD5w1BUnVU+YJNTgo1qrWtAwjBFNMQNJp0Hq4z3Sl+czHSGeJBd1kVKJvI3x4
+X-Gm-Gg: Acq92OHw6z6xu3WJ+gesNKdwCy58ofdnnkMkafjKfB66CLWk9v0zrmVUQ93yDLAT2g6
+	ZTi/7QerxP8XlOZ6vmuul5sMeKwO5ShKxK3i4wYwC9xHMMt2Oi8wpVK9GXR2wr0dEua6CAX9QgW
+	wmw+6wpt1n92aqmeCZ0Nj3EOttUfkVZ18TDa2D8f1A2Xkg2K4mC1DigyRlrE/uarsFriM4cWAjK
+	Vne2wvxNDuYGLxzfu33Qapb0Ox8LEldDAKyAXmLRcvHDytqEhHcr19AwDB8Ahn7q6N5xjPFFNRj
+	gygXJiCfLlXTryDpbawg32kVI3Fd965iqjQGeg/gRPt8dfR+9FtUVu5vDHaXxudDxWaDZf0cxV/
+	XtD2eyua67ymvcKBHi7Wg04qU7Z3UQ9XhfQ/RGyb+R9PyZgNm+EO9Y3ZocT22J94f/CYq+XbHXA
+	zYIHnbn2G/SFNjaXDfJg2jv8QTl3QT4WZyIRdo5L/PKhOqDhA=
+X-Received: by 2002:a05:7022:103:b0:136:3520:7234 with SMTP id a92af1059eb24-1380667a022mr6697312c88.12.1780878795258;
+        Sun, 07 Jun 2026 17:33:15 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074df191d0sm22469998eec.21.2026.06.07.17.26.36
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-137f5550bcdsm11421111c88.14.2026.06.07.17.33.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Jun 2026 17:26:37 -0700 (PDT)
+        Sun, 07 Jun 2026 17:33:14 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 7 Jun 2026 17:26:36 -0700
+Date: Sun, 7 Jun 2026 17:33:14 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig_=28The_Capable_Hub=29?= <u.kleine-koenig@baylibre.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] hwmon: Use named initializers for
- platform_device_id arrays
-Message-ID: <3fec337c-9d51-4af2-9376-ab5db1495d95@roeck-us.net>
-References: <cover.1779894738.git.u.kleine-koenig@baylibre.com>
- <25d38df8db42d69f33fa30267c9fd5ea058223d0.1779894738.git.u.kleine-koenig@baylibre.com>
+To: Daniel Nilsson <linux@erq.se>
+Cc: linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/1] hwmon: (pmbus) Add support for Flex BMR316, BMR321,
+ BMR350 and BMR351
+Message-ID: <91719187-e4e2-4303-9b39-b2bb924ec507@roeck-us.net>
+References: <20260603085712.659432-1-linux@erq.se>
+ <20260603085712.659432-2-linux@erq.se>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <25d38df8db42d69f33fa30267c9fd5ea058223d0.1779894738.git.u.kleine-koenig@baylibre.com>
+In-Reply-To: <20260603085712.659432-2-linux@erq.se>
 
-On Wed, May 27, 2026 at 05:15:53PM +0200, Uwe Kleine-König (The Capable Hub) wrote:
-> Named initializers are better readable and more robust to changes of the
-> struct definition. This robustness is relevant for a planned change to
-> struct platform_device_id replacing .driver_data by an anonymous unit.
+On Wed, Jun 03, 2026 at 10:57:12AM +0200, Daniel Nilsson wrote:
+> Add support for BMR316, BMR321, BMR350 and BMR351 DC/DC converter
+> modules from Flex to the pmbus driver.
 > 
-> While touching these arrays usage of commas.
-> 
-> Signed-off-by: Uwe Kleine-König (The Capable Hub) <u.kleine-koenig@baylibre.com>
+> Signed-off-by: Daniel Nilsson <linux@erq.se>
 
-Applied (and updated description).
+Applied.
 
 Thanks,
 Guenter
