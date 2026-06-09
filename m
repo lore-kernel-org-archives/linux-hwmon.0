@@ -1,105 +1,109 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2278048C3FE
-	for <linux-hwmon@vger.kernel.org>; Tue,  9 Jun 2026 15:30:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B82B948AE37;
+	Tue,  9 Jun 2026 15:42:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.22.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781019052; cv=none; b=iJl2PC7eXPOe0IqXf8nbflPngjsn3DBNmSPIrcpOF4O+so73x26cdcoUhPb5hyyAuP1YHFeZ7pkpqdcon75hjWx/0ddGmmjCbMZSspc7Gs5GaZNNCw4GvtHxEEeAHGakurCpiO2PjmugVAnydaEBaMmNK7vb7jRRfthrXPpbDXI=
+	t=1781019735; cv=none; b=RLqxmgcy5C3Pe0fhFql9M3zV1Nke/HecMLOWQQxAC0LocxoJuqtoAwMVHpERJL0pZrptgAhEJt6zZMayys2NDwHekwY0dfZY8SMaZpD8xXcxPniY7MSiHZkYNLmWx6+evgVIH/bt3JhTWogZ+SCvVVTa/PICyg2ejrjX9aRNHQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781019052; c=relaxed/simple;
-	bh=11WhgqEt9zgT+ZWXS7ElY2GogLk4HG1AB68dGIPIaxc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uO3akO8kL4+98SKgwEIGPWPbGwhB1LEkLxV1hXg68ImEhOAx5vbjI2CAf3LSlmWuISzunlz1dZkZRtARdx4gHRfduHPcRskm1faQgbczMRTe7G1LNg8Y7yaISEbj5AgiAueLZe4WwVKGkv1G8I+Da6NPML8ve6tKSIJBU5EgBXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wg0j8zQz; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781019735; c=relaxed/simple;
+	bh=/0rV9UOBIR0nQRVCyW105xjlqpgPDHkvAhTYw6sYHyk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=HJeWrxi+QOiczC4RKj9NmkXM2bOKNWHIsRF+iaSIRsfJoRRh1M9i8ejNqVZsmNKXD++W2RuAsr5hhSHwuU2OmNNhXyjpu2mV0FVAHJcOskp6bxyP2urUdGBmV11Cztoez3HDAoEuJe4gOkOVWnWsJabdyo7WdTb7M+HZZ5zD1hY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=BCpKGQQU; arc=none smtp.client-ip=54.207.22.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wg0j8zQz"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c859878eb48so2241618a12.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 09 Jun 2026 08:30:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781019050; x=1781623850; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tfoL8NhaievxojnidDqV0SnsthszxSn+iRp8X4DAOXY=;
-        b=Wg0j8zQzHW+KSie6yZ/U++pU00g4DfbwbKgfhdhwDo+L8alXDCAoKCDwdR35iNGHd3
-         NR9fXMEv+dCP+Ye8xUVd0lPBk0DvAgflS9t4X4JbxNBlitoSjqihqYgL6It5FfZOFVaT
-         OzuVWZvpt+IJzRLTUitlgechxgoDbhqVGrpQk+L6fCH/R3/9WI8ojLk7a1aqW1XpLur7
-         LvJerYtEkxvA6LhVp6mEp8ZnDdsq6LN4vYbcUnbbSl41KCpiDgPVDbQn7RQ14sO3ke2S
-         TdVx1J+/3Vj2xx+YTWx4flEGhJgQEuipu6YUfq9FmOTQY3wB95M/wirg6gH7DgjXTgnC
-         rCvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781019050; x=1781623850;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tfoL8NhaievxojnidDqV0SnsthszxSn+iRp8X4DAOXY=;
-        b=oFQQVQLi9WWqSZjPItLXO+PE9+vr89Ux+HEso7cBBC42uf/QHRDWtGiZSWEU7xmTbu
-         uJfxa9ixZkbfR5aIWxOABv0gE1YxM2A8l2U9H4/3aJJ3f1cL5kTstj39K977fLD0zcLn
-         pMQgMuuIYfwdjy3Eqto0ldEaJe3ccDj3NW+nkGyicqtS+ftgaqisYm0xyjFQTrRtX/1W
-         jQM3rpHmsGd8K6+LmPXI/Iftj7Q638bWRKs2lTFtbbMwRrehsa/Gi0wx7dpdTM5yIMCc
-         ixt3+I2lkVLeNhOcVowkeBToPojfTEOeb7ZDMhYuHdwoCvdWV5+EdxEfrGkkaiYrASmS
-         pACg==
-X-Forwarded-Encrypted: i=1; AFNElJ+okfFNM7hSFt2oIfwwfbH5zrlQjdzgVAg1tPWw0tAgC9NdRuk30mJFDyUs/1OwAMDLCHjqv3K+XI7IDw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJVTT/UJ7D3yku1k/OhGt3xMMx9C7SWlPtc3/2nHHaovbUZ3ou
-	8TrkCQyV/qRW/DEaUnKxwpmIV2rfDMiy47qWYWwhDMeMwavi7sn//Xix
-X-Gm-Gg: Acq92OFFEqFcmpuB9Bya7ZqBDKRcIGByDuVrmWgZfoUd9gxuy/TCcso16MKSugn0Cro
-	BmWn9yJRXqDm+FLud4tFHIGYf8OPZZNXyE2ppX+2wc65J6yEMaw5zMnj9F3RvhnmQG1B4kYRhv4
-	mHkPZgjAsdUu9WUoXjb1iyNZ2sU9w5UQh0/n4HUai+F/akOKq6zAoN5gB+2ZsSP2t/nuMu6JjBv
-	Ciaqk+XNshv44QLxwGnJn8HlT2oqAUTfTQLHkWMOT3Shsg0roieMXIFah6ghKClgFgC3c5/dgY4
-	w8kpWeXK33Gc4tqHiTN/cGsmdY2jIN7aLQTsAz6Voj+pqXyWpQysl6fG3EtdPvpfEVhklB0Mdvy
-	BmRG4vd+lnMwVShsLtvsNs5pAeqiDcN3cSBbhF6RHjgsVYdxEmyt0xO0dSDO7h5P82StUXVwFYI
-	Bx84FiMimt3xkLeO/YS+xXXojnrU5MBkvzAdPh3JEq+SQOUZw=
-X-Received: by 2002:a05:6a00:928a:b0:842:5a8d:3036 with SMTP id d2e1a72fcca58-842b0fb6e13mr21005108b3a.35.1781019050176;
-        Tue, 09 Jun 2026 08:30:50 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8428221c3e4sm22494788b3a.5.2026.06.09.08.30.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 08:30:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 9 Jun 2026 08:30:48 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
-Cc: linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>
-Subject: Re: [PATCH v13 3/3] gpio: gpio-ltc4283: Add support for the LTC4283
- Swap Controller
-Message-ID: <6a33cc01-e6a4-4e3b-a629-66fda71d8ef7@roeck-us.net>
-References: <20260502-ltc4283-support-v13-0-1c206542e652@analog.com>
- <20260502-ltc4283-support-v13-3-1c206542e652@analog.com>
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="BCpKGQQU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1781019690;
+	bh=spY7S6aZAIPuK4hchIF+zhAL2BvYsjnqz/rbatsS4Lg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=BCpKGQQUJCiL5gDY6mf2rYBKl9RjvvgSg/l02E6Tgx1youvYsYQjqxVHdo3z6kH7m
+	 ayuzoX2hUR7n1hd6Ru/w9DOx64VNVFyl4EQBwNM3fNIDAlWxqNLsWLXtLDgejReOfV
+	 5WOusrN47ul6QYzuEfHg3O+lAaDOiLIT1o84wcq8=
+X-QQ-mid: zesmtpip3t1781019685t6acd76f7
+X-QQ-Originating-IP: FQWazpGncmpY9D2WLn4QpZjxDO5L/vKsamlBRAf0xMo=
+Received: from [IPV6:2409:8a4c:840:3635:da00:9 ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 09 Jun 2026 23:41:24 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 9153680702463427982
+Message-ID: <305E2395B7027B5B+e851d97c-2af5-4752-8c1c-7f92884fe874@uniontech.com>
+Date: Tue, 9 Jun 2026 15:41:24 +0000
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260502-ltc4283-support-v13-3-1c206542e652@analog.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: (gpd-fan) Reject EC PWM value 0 as invalid
+To: Pei Xiao <xiaopei01@kylinos.cn>, linux@roeck-us.net,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cbdc1df2ed3443b08cbd1fc2652638deaf798c4b.1780990542.git.xiaopei01@kylinos.cn>
+Content-Language: en-US
+From: Cryolitia PukNgae <cryolitia@uniontech.com>
+In-Reply-To: <cbdc1df2ed3443b08cbd1fc2652638deaf798c4b.1780990542.git.xiaopei01@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz3a-1
+X-QQ-XMAILINFO: MwQdfXoP8nuzJAZVa54HSlDpiQIOddz3simCKZVPk88IH8rD/Y0mYv5R
+	MCHWOU7mQhqmEeLiutY9TG674kFgzLQgQnb9VSdhvMQjw8ifG3yhtKFToIYL+DeR7byDeml
+	YvxdrStecd4c/q9gK/4MFUMeji4EaJDcK0DvErUVkAMh/WFEJlDxN2rj3EESkueShAKwfop
+	yPfu78uip2M5j09G1vcCF2RkHLNSv/SbngpUkcRGxqJ/806a11DqTie6GED9uULvDlLBprl
+	UuXNuGSXI/KyLpBvUnbBr6j1Elejc89E2awDgjd+yazQ/ij22CtZJTRzxwU8425Z/1dIQ1z
+	EMih3n4YB8v9tC4C+ulDVitks+ITKBEngoKghCXSmW7YrMYG2hqT7oIC88YKmOEolzYreMZ
+	lfG0kR+ks0qo2iI7xCSKCzK07s3E28+ktzQ8AICqnHp+P3xNnCVoQbUeFCd2hWalNCHjm2P
+	lBl2DzVXQzAKfhiuw/lKO1e5AQKSA5Hrhi96HKi9ttkKMc8snn6eXKoKUdGhdUgAmen5nuH
+	fqLrraX67ThUT8jjb0pQO7VuEZQZqIzm0TwN0Owbboi5TnmLNYun9VjRF0OE5GxvdSUm+yG
+	Ns1f9QyCl137l/SnSB1Yd1QFttm1u3jjPiiKP389EV6QKtzm7p1Dc4T7RH5UCp+HV84W9la
+	cbhxjAeho07Uxr15idkVyv64VCgpHODkkeQjDCXODFBkjeOSGxnZTBctaHbf6ksqYoqu1f3
+	A7Ds+617NI2RZbCRzj1GsIkNbTDUON5hrYptD2JecFs6RZVCAMOZNhMj5vS4osMwE0QLYaQ
+	WHcdywJP3JLzKyralsFA+MXrn7w83hZQwzh2ElHnnzb2h2/KzF1UmnscXJMPC9VOARnhcZi
+	e/B+S3zBp5Kfeh+tibtQ9WeUWJPhw8OulrSwqdrSd9GI21IwoAH2CxyKqvX4Kq7P7BMe3xJ
+	5YifB63EOJIXePCjcdWfwrnbvGLr4jCZxiI3TXdpDs8Pm7bzILzaNyEJSiR7ssE84V3BdVO
+	bFLtDHn8Hw+BuJ3YglkqT3qXpco/2AVVV+ol581gYs8dgcD8ML4nOQNv3xHME=
+X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
+X-QQ-RECHKSPAM: 0
 
-On Sat, May 02, 2026 at 10:56:54AM +0100, Nuno Sá wrote:
-> From: Nuno Sá <nuno.sa@analog.com>
-> 
-> The LTC4283 device has up to 8 pins that can be configured as GPIOs.
-> 
-> Note that PGIO pins are not set as GPIOs by default so if they are
-> configured to be used as GPIOs we need to make sure to initialize them
-> to a sane default. They are set as inputs by default.
-> 
-> Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> Reviewed-by: Linus Walleij <linusw@kernel.org>
-> Signed-off-by: Nuno Sá <nuno.sa@analog.com>
 
-Applied.
+On 6/9/26 07:41, Pei Xiao wrote:
+> The EC firmware is expected to return values in [1, pwm_max]. A read of 0
+> is illegal and would cause underflow in the conversion formula. Explicitly
+> check for 0 and return -EIO.
+>
+> Signed-off-by: Pei Xiao <xiaopei01@kylinos.cn>
+> ---
+>   drivers/hwmon/gpd-fan.c | 6 +++++-
+>   1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/hwmon/gpd-fan.c b/drivers/hwmon/gpd-fan.c
+> index d1993cd645cb..decb61936b95 100644
+> --- a/drivers/hwmon/gpd-fan.c
+> +++ b/drivers/hwmon/gpd-fan.c
+> @@ -341,7 +341,11 @@ static int gpd_wm2_read_pwm(struct gpd_fan_data *data)
+>   
+>   	gpd_ecram_read(drvdata, drvdata->pwm_write, &var);
+>   
+> -	// Match gpd_generic_write_pwm(u8) below
+> +	/* EC PWM register valid range is 1 ~ pwm_max; 0 is an invalid state */
+> +	if (unlikely(!var))
+> +		return -EIO;
+> +
+> +	/* Match gpd_generic_write_pwm() below */
+>   	return DIV_ROUND_CLOSEST((var - 1) * 255, (drvdata->pwm_max - 1));
+>   }
+>   
 
-Thanks,
-Guenter
+Have you ever tested the behavior on a real device? When it returns 0, 
+what state is the device in?
+
+
+thanks,
+
+Cryolitia PukNgae
+
