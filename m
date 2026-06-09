@@ -1,68 +1,68 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 334DB421880
-	for <linux-hwmon@vger.kernel.org>; Tue,  9 Jun 2026 13:04:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8608A3C2BBD
+	for <linux-hwmon@vger.kernel.org>; Tue,  9 Jun 2026 13:07:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781010263; cv=none; b=YdMCIvlJlcL0zsJD5hJ7SzagknSEzxQdJ4INzqq5Vy9f7QN2RWkw7oO0JOx5auXP1GQPLkprJ1Vwry6w3cVuWBvK8nsmcXdsfzkzzRBZUYlwcqKYrasbl/qBYUYnbdFeYrCbJL/5pcZGeUYHcSHb5WDMiiz5T1tztkBumkSW4UE=
+	t=1781010461; cv=none; b=DqWhnRqW+uOxZ+bnQYbQXXuCVqMWEKRFQWvi7SJPaZk+XqhktVtETs52UAL7/9E3GSiBBONVfninMGUOwir4c7iXjymEGAKvbe80jDoDjx1C1i2888UHjPQPZy70xALlC+E82225OPln3hTOhB2os58NpWXKAE6LPBN1ogthRAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781010263; c=relaxed/simple;
-	bh=j6bMKHmag/NjfkCjzMD375pS3+9k/1A+z/l1a1FBrTE=;
+	s=arc-20240116; t=1781010461; c=relaxed/simple;
+	bh=3ycMzXX52tu1hH8aX5OAJ02tW/bfleA9mi59j9i47dM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Oz2GSYuCw0HSYKsLqMy2oFmj7ImUqsw1X+UijDDlzpBfbnAGI6c21s17WHRBNlCl4IDdp377hjpcE0uEsOzWredaoAQmrc+IHIvSYyoShflprOy9G0y4l5b55S75k/aJO/rAX6awuvPCY/nxFJphX0YiljlRXhI0mORm4mIc/js=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RysMlNtX; arc=none smtp.client-ip=209.85.214.169
+	 In-Reply-To:Content-Type; b=HtBor233b/kuAkOhxxkZrPc0NOarNSa5oNs8Ep5oNOMRltBqL2vy9+WCUOQzgLB5/8HIoXPQST5mX0Q6YUfvyPZwR6wkvgJHJl2osTV+onbYTIxDY+r2gTUhy8JHT54xI4NPkR5bHTKYWod7yW09ESTlK6kjJF86P/e1WHxLqts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LqsKVgjU; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RysMlNtX"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2c0c20f0c0aso41763375ad.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 09 Jun 2026 06:04:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LqsKVgjU"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-36b7b7b7a80so3476806a91.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 09 Jun 2026 06:07:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781010261; x=1781615061; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781010460; x=1781615260; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=AFSRA57sXKLlEMGOh13mH9O3WdT4M5EIVdDK4eMznIU=;
-        b=RysMlNtXGKWSJ8zkAqM+XcUafqNHi13NgG1/uUHB3BzsvbHIvd6nb0xmUaU6wpJrnz
-         smxOvVoz0lzgxmcS8NYQC1DMIWdiU80xoPLWYPe0uxhYalvg2fp2ONunGWd0R3xq6Wn8
-         a3VO2tNWmUFDSKavIJj+OVqv5KPPYcoKMfEJJvKpZhgtzMBuP4acdHXlLC8UVZkHDhmK
-         sJXI+woG+7ssqM8aEdYN0pj4pMJtCCy659DIYRUCvLqZbYmKAPqQlObP1fh2NY2LFDYu
-         9O+Eb1YMHab/yxmcOYlEOiD3hT1eQtHvJn69Rli8zSydNfA3yYdcA7IvIoHTaoTJlz5X
-         UxHQ==
+        bh=WCW/Qzq8M64DMdQXUlGLAakjwDS5MWfgbwD4SQdmfEU=;
+        b=LqsKVgjUsYdyUMlKgDUbOtnPVgwe7PB3prOAhEztUZrYZghQRNk6nsBwIq/MnJTjKp
+         d0zNSIRgYQQNmQm5coMgKF5p2pqri+jL39RBlGlMeVJH2vRdBzHfqipIExo3SoipJs9Z
+         7g/kKt762k1L88m0DLBXp8ihFcKL3DToAWLFNftDZzuLNaXJ8s186xFMzU9VavTpODDB
+         KGEwO2SUEmLFk0y3wgBABQ1WmxnljzXRVBN/NdYj6c2p4iFSYIf8+lxw5FZcDEw3lu92
+         VkC65z4Vzw+g9OSNaqXwUSOJMyTYyXekJo57+IMZyThPfzezfY7b8P/uJmWf/mUEOpBR
+         euCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781010261; x=1781615061;
+        d=1e100.net; s=20251104; t=1781010460; x=1781615260;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AFSRA57sXKLlEMGOh13mH9O3WdT4M5EIVdDK4eMznIU=;
-        b=bvGbRKAGSjIOHx046F4XOVXDKTyRHW0SS2gRHtHXE41DGTMTddhjjzEbbULyILid6H
-         GpORV22dHGi8J7X5g1rRgrO7/zZpUb8EYEE0UPHxkMHGXPYY32vTdenIVR18C0m3bG/W
-         fxGGy97isZf4KyTewySRnbEpmkFrK3V92IA7RRfqcmNCcIfWFoy4OYKecXwN63daeoV8
-         ZNs9ffMoX25mnJ/BO7dMC7LCtU1ZEaxiQ13bsZ40eqY6H4nLOmVhhYDoFwiaecEIGCTS
-         JF5jy7Ak+u0axNFCgl9EBg4p9m7yrUn9TovrHkUGEahRqpmCDo+L3gXP8ttRU+7W9oQH
-         YuHQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/wusaHdeyMmxfysjt6Fs90KNGDBjQBEL67Bk4UZsf/ldLJQjZBBM9ViuQ/3WPIjBW9KLUQUIhDb93S+Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWS5F0tFEG3zJLQZtQipYhYVnnOrePnxPv0H+cwOlSUJ2l4gtr
-	tsEInZF0mHhiGRcUXZP9JeT9N3BCsAuegaWq5ZVN2QFP/eNem3KvfV5UB1zEnGjx
-X-Gm-Gg: Acq92OEEnapbd3zL3183XnYSEHEF3zMkYfiSDQQFZTauOVNPvV2FcJysGZ7qyD50Jgd
-	iUQzLh2Y635ankQc2srLrdQoYaaJ6c0eLHN6OuSkd6lYIwv8cZ9tbgsAFfNDjjXKTWjWFqGL5b3
-	BytJ+1nR3p8T7U89XLUOSYrP8Z7PRz6y5ALkNtD7HY3U3P1+H3XczCmjAS/xAshXFHEl9daFZW0
-	rzOudKAx7RU8mxD3vBlP8jm0AFQMvngAvUvMZhqyGTkhhOi5/Td6eNp/ZegHbbfmAnopNp9A9eZ
-	VjZaN6ED5tK/3uQmRSsSOemgULfBSf59PiA+bUhRZIUYr5mmHQcHYPvdd1SbiljJ+Zt9N+/mLty
-	yBGj5q75dyCXq7BUyMppb2tXvIUByq7WrazITVmuuKwTqrFS7928SuzuqqFSYFcPZnptjGyRHKj
-	0BZFfDtpMyI+5skX4TpwkVEp7XTKIAmIo+DYXIFawNkLsIP2igd3KP1dPPWK8rC8ceO68yyzbVR
-	GFjj+ub4UU=
-X-Received: by 2002:a17:903:46c3:b0:2c1:13b5:6c24 with SMTP id d9443c01a7336-2c1e7f922a9mr214749825ad.20.1781010261352;
-        Tue, 09 Jun 2026 06:04:21 -0700 (PDT)
+        bh=WCW/Qzq8M64DMdQXUlGLAakjwDS5MWfgbwD4SQdmfEU=;
+        b=XRCoL37BCHHm/gs4+NubSlF6sVAdE4cyp9X2BwVRnS0sG/hDifVeuRJwrHFoSN10oU
+         erObjaf01pHejBOQip/xTI5R51jbei55jQeK/lFuvvmJBZfO4Ky/FDOHTH1N3RucX1kL
+         LKXuqot9haL4eA5arikQ3xNmvxshqwwkFviSQuJX16ID+butWBbSjPT/b0TP/XY7z9TH
+         5p6PNVE48pskadUk4k447Hnw1OniCRk4dsqDhpzGQfyCRxIlTHaksQcX4FOxY7WxdJCF
+         fePnzQ05QF3ZG/IWSydJ0d4xZjrXNBAhYhcKLg4KQynq8ewQtEeydve16rkBuZJvQIG+
+         wnZQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+is7Ys1fPJrfYd8vp43k91oS78+nnsxpGzvk9V6/Y0KCqTU5NZT39WvWTrflTbzQCa70xUx07LmR/jng==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz47sRjoKN/xbB96DTa1zUi0CXj2ZeJzJTqNG/fiVFvlspepJ2l
+	xiW1YuSHSTgJhm4bvgAUFTxV1IufnI6/xxzhkQhpGKHoHMJPH8d59T90
+X-Gm-Gg: Acq92OF/hD5ATzHgm716EVGZgTugcVQ0zndK7yIGRMXLur/fYwUojU5PGHz0JBOlFhn
+	JLVpfk3qrpeaE2014imbrTrW6PLr3HqytpPZ6E3r1HUFi4hadRCk4L1EkuQjK7EUAID5/XwTvK1
+	EeqxfiScO6h8Q3gpvj+cx8yGD2kj+QY4XUTcUcFZZ2ijKsMhCd1mwL7IoBZqL5ymjWf7ovZ+yBp
+	m0cRumcfNAQwwBissw8ZpRqteTLxzuxa0e8hETLGqGdaRCwGDpF0LJjSZDI+q93TXMn1dmgHeDj
+	/MKBl09QudIem3AXjCwo8SUvXCqsSbjt4cRBow2xeYJWKmG62/3U29yC8cm+UfLYvj5oZVxtfsm
+	9O7zkHjM+6eM8cwjFols0FQPZL5u+dn8utFhgazDuFNR33fA06TGzccTdLuvo61EHWTpMhDPSvl
+	ZKBpddf9nsw08t/+DtjnIyPeckj+Qu43TO/FkgAVBW+qKPFbjUY8KoEG4LPQ46+9BtQbb8VM0aL
+	iAVmDiL6rU=
+X-Received: by 2002:a17:90b:4fc6:b0:36a:8254:8eb1 with SMTP id 98e67ed59e1d1-3713113c245mr15187614a91.6.1781010459727;
+        Tue, 09 Jun 2026 06:07:39 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c16649d2dfsm212949015ad.75.2026.06.09.06.04.20
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36f6bf827e6sm24133477a91.1.2026.06.09.06.07.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jun 2026 06:04:20 -0700 (PDT)
+        Tue, 09 Jun 2026 06:07:39 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e10eb414-082e-4747-8083-77b1a3b8c934@roeck-us.net>
-Date: Tue, 9 Jun 2026 06:04:20 -0700
+Message-ID: <85185e61-f9fa-4183-927d-8d7f4e8d4a2e@roeck-us.net>
+Date: Tue, 9 Jun 2026 06:07:38 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,13 +70,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/4] hwmon: (gpd-fan): drop global driver data and use
- per-device allocation
-To: xiaopeitux@foxmail.com, cryolitia@uniontech.com,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: Pei Xiao <xiaopei01@kylinos.cn>
-References: <cover.1780880972.git.xiaopei01@kylinos.cn>
- <tencent_E4CE09DC1CB1AB4C0411F71B9507E4A49706@qq.com>
+Subject: Re: [PATCH v13 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap
+ Controller
+To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>
+Cc: =?UTF-8?Q?Nuno_S=C3=A1_via_B4_Relay?=
+ <devnull+nuno.sa.analog.com@kernel.org>, linux-hwmon@vger.kernel.org
+References: <20260502-ltc4283-support-v13-2-1c206542e652@analog.com>
+ <20260502104311.0D48EC19425@smtp.kernel.org>
+ <3044ffed-b9a8-4a30-852e-2689b0cf0118@roeck-us.net> <afhpmO_FW6nYtHXK@nsa>
+ <aigLddl1zeqM3gX0@nsa>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -122,31 +124,111 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <tencent_E4CE09DC1CB1AB4C0411F71B9507E4A49706@qq.com>
+In-Reply-To: <aigLddl1zeqM3gX0@nsa>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 6/7/26 18:40, xiaopeitux@foxmail.com wrote:
-> From: Pei Xiao <xiaopei01@kylinos.cn>
+On 6/9/26 05:50, Nuno Sá wrote:
+> On Mon, May 04, 2026 at 10:51:12AM +0100, Nuno Sá wrote:
+>> On Sat, May 02, 2026 at 09:21:15AM -0700, Guenter Roeck wrote:
+>>> On 5/2/26 03:43, sashiko-bot@kernel.org wrote:
+>>>> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+>>>> - [Medium] Read-modify-write operations on hardware alarm and fault log registers will cause concurrent events to be lost.
+>>>> --
+>>>>
+>>>> commit 768d24f774b79f50e1444b93b756d7bda5873159
+>>>> Author: Nuno Sá <nuno.sa@analog.com>
+>>>>
+>>>> hwmon: ltc4283: Add support for the LTC4283 Swap Controller
+>>>>
+>>>> This commit introduces driver support for the Analog Devices LTC4283
+>>>> Negative Voltage Hot Swap Controller. It adds functionality to monitor
+>>>> voltage, current, power, and various hardware faults via an I2C interface.
+>>>>
+>>>>> diff --git a/drivers/hwmon/ltc4283.c b/drivers/hwmon/ltc4283.c
+>>>>> new file mode 100644
+>>>>> index 000000000000..d8931c9a4685
+>>>>> --- /dev/null
+>>>>> +++ b/drivers/hwmon/ltc4283.c
+>>>>
+>>>> [ ... ]
+>>>>
+>>>>> +static int ltc4283_read_alarm(struct ltc4283_hwmon *st, u32 reg,
+>>>>> +			      u32 mask, long *val)
+>>>>> +{
+>>>>> +	u32 alarm;
+>>>>> +	int ret;
+>>>>> +
+>>>>> +	ret = regmap_read(st->map, reg, &alarm);
+>>>>> +	if (ret)
+>>>>> +		return ret;
+>>>>> +
+>>>>> +	*val = !!(alarm & mask);
+>>>>> +
+>>>>> +	/* If not status/fault logs, clear the alarm after reading it. */
+>>>>> +	if (reg != LTC4283_FAULT_STATUS && reg != LTC4283_FAULT_LOG)
+>>>>> +		return regmap_write(st->map, reg, alarm & ~mask);
+>>>>
+>>>> Could this read-modify-write sequence cause concurrent hardware events to be
+>>>> lost?
+>>>>
+>>>> If these alarm registers use write-0-to-clear semantics, writing back
+>>>> alarm & ~mask will inadvertently write a 0 to any new alarm bits that were
+>>>> asserted by the hardware between the regmap_read() and regmap_write() calls.
+>>>> Usually, a direct atomic write of ~mask without reading first is preferred
+>>>> to avoid clearing unrelated active alarms.
+>>>>
+>>>
+>>> Sashiko comes back to this one. Looking this up in the datasheet, it says
+>>> that alarm bits are reset by writing 0 into the alarm bit. That isn't
+>>> what is done here, though. It will write 0 into any alarm bits which were
+>>> not set when the register was read.
+>>>
+>>> Should this be something like the following instead ?
+>>>
+>>> 	alarm &= mask;
+>>> 	*val = !!alarm;
+>>>
+>>> 	if (reg != LTC4283_FAULT_STATUS && reg != LTC4283_FAULT_LOG && alarm)
+>>> 		return regmap_write(st->map, reg, ~alarm & 0xff);
+>>>
+>>> That would ensure that only the checked bit is cleared, and that it is only
+>>> cleared if the bit was set when it was read.
+>>
+>> I'll have to check the above. I gave it a bit more thought and as it is, it
+>> should not be a problem. Because even if we (in the edge case) end up
+>> clearing an alarm that came after that regmap_read(), if the condition
+>> persists in the next conversion, we'll have it set again. Yes, we still
+>> loose one historical alarm but not something will be forever lost at
+>> least.
+>>
+>> Having said the above I do agree with your proposed change, but I need
+>> to see how the HW "behaves". I'm afraid that if we just write 1's into all
+>> of the alarms we're not checking we create a window where reading the
+>> register again will, falsely, indicate the alarm is present. If the
+>> read happens before a new conversion was done (note that if all the
+>> channels are enabled we actually have seconds for a new conversion to
+>> go though all channels).
 > 
-> replace the global state gpd_driver_priv with per-device private data
-> (struct gpd_fan_data) allocated in probe. This allows the driver to
-> support multiple instances in the future and aligns with kernel best
-> practices.
+> Hi Guenter,
 > 
-> No functional change intended.
-> ---
+> I got time for this again and apparently my concerns were valid. As it
+> turns out the chip is not "smart" enough:
+> 
+> root@analog:/sys/class/hwmon/hwmon1# cat in5_max_alarm
+> 0
+> root@analog:/sys/class/hwmon/hwmon1# cat in5_max_alarm
+> 1
+> 
+> And you can imagine the outcome of running `sensors` :)
+> 
+> So I guess we have to leave this as-is.
+> 
 
-I got:
+Outch :-(.
 
-Commit
+Oh well, that can't be helped. Should I apply the series as-is (v13) ?
 
-   beb0e2d1add1e2 ("hwmon: (gpd-fan): drop global driver data and use per-device allocation")
-
-is missing a Signed-off-by from its author
-
-Since it is the first patch of the series I had to drop the entire series.
-Please resend with proper tags.
-
+Thanks,
 Guenter
 
