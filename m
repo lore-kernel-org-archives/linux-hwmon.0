@@ -1,67 +1,68 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 359DA407CDC
-	for <linux-hwmon@vger.kernel.org>; Tue,  9 Jun 2026 12:56:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 334DB421880
+	for <linux-hwmon@vger.kernel.org>; Tue,  9 Jun 2026 13:04:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781009764; cv=none; b=rMJoLEHZp7VOWALwxjcBry1BhUO8r5GIdHwU95nFHP0wuirFaPFOvsC5c8uiYi0iLo5Qd/tlySjkLicGCCRIK3dSWxbnWVNMxv9BG5cRuKkzzuWJdANrRze61/CfPx0Sj5YpDfhFQaRO+mDQ/bqxFCMPL9glUOPitDO4HQ1jkiU=
+	t=1781010263; cv=none; b=YdMCIvlJlcL0zsJD5hJ7SzagknSEzxQdJ4INzqq5Vy9f7QN2RWkw7oO0JOx5auXP1GQPLkprJ1Vwry6w3cVuWBvK8nsmcXdsfzkzzRBZUYlwcqKYrasbl/qBYUYnbdFeYrCbJL/5pcZGeUYHcSHb5WDMiiz5T1tztkBumkSW4UE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781009764; c=relaxed/simple;
-	bh=jxFHhMrA7cT4OQhAjjGP+coknNZz/PyhxcDuiGcOgRU=;
+	s=arc-20240116; t=1781010263; c=relaxed/simple;
+	bh=j6bMKHmag/NjfkCjzMD375pS3+9k/1A+z/l1a1FBrTE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ipbLYfkzo9gBAZDPCo9voyN/60s1kmTMkM6iDaqOBU/38zyDMv/AoiXH1ZDcIYhK+2UATMopVK/I0F4ap+SfEM/lQtnsdaEojRuRo03YB8HJsnQuQAxQLYQgpvY2uJL9p+/eqsB5uAyzeWRf34TMycmLAkvRr7g30+EPLqm6/U0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rcr6FKei; arc=none smtp.client-ip=209.85.210.180
+	 In-Reply-To:Content-Type; b=Oz2GSYuCw0HSYKsLqMy2oFmj7ImUqsw1X+UijDDlzpBfbnAGI6c21s17WHRBNlCl4IDdp377hjpcE0uEsOzWredaoAQmrc+IHIvSYyoShflprOy9G0y4l5b55S75k/aJO/rAX6awuvPCY/nxFJphX0YiljlRXhI0mORm4mIc/js=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RysMlNtX; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rcr6FKei"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-842848fd613so4503636b3a.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 09 Jun 2026 05:56:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RysMlNtX"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2c0c20f0c0aso41763375ad.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 09 Jun 2026 06:04:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781009763; x=1781614563; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781010261; x=1781615061; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=OPsd5p+bgGWj9idOjFXHdxR+Xw6jiD+Pwhu8ahFJY28=;
-        b=rcr6FKei2JQZQgqSMmJSCiIjo/H8JAjjZJdU6S7nAEnYAuLpkZMVbt/Ix2RlU44Xvw
-         uBp07V5TYoHJhfMDLBHO7QOoxRG/MPfYZIkdGOzS8eziVcgJoqim0s/NXK+tmiOuz96N
-         1ZvQpFHHBJzsdXzkEn0Pp4EfHJCg/woVZV+q7MEkdMIiU4ayM8N0kz7UNFnAmn8LvbFd
-         ZQbUSXAFdVw8GD3uNk5G+5W2Nws83VomolrGUfmqTvO3Mh/h8l0mChiBucWHJNPLg9EH
-         wNZoDvNLyHHI0zZkqKZ5/SZ2aAX6krPSX1IaSRfKQmf09V1zqbL3xFg5IaRo43VZXBYc
-         yCuA==
+        bh=AFSRA57sXKLlEMGOh13mH9O3WdT4M5EIVdDK4eMznIU=;
+        b=RysMlNtXGKWSJ8zkAqM+XcUafqNHi13NgG1/uUHB3BzsvbHIvd6nb0xmUaU6wpJrnz
+         smxOvVoz0lzgxmcS8NYQC1DMIWdiU80xoPLWYPe0uxhYalvg2fp2ONunGWd0R3xq6Wn8
+         a3VO2tNWmUFDSKavIJj+OVqv5KPPYcoKMfEJJvKpZhgtzMBuP4acdHXlLC8UVZkHDhmK
+         sJXI+woG+7ssqM8aEdYN0pj4pMJtCCy659DIYRUCvLqZbYmKAPqQlObP1fh2NY2LFDYu
+         9O+Eb1YMHab/yxmcOYlEOiD3hT1eQtHvJn69Rli8zSydNfA3yYdcA7IvIoHTaoTJlz5X
+         UxHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781009763; x=1781614563;
+        d=1e100.net; s=20251104; t=1781010261; x=1781615061;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OPsd5p+bgGWj9idOjFXHdxR+Xw6jiD+Pwhu8ahFJY28=;
-        b=Smq5b15L2Ker0Q4E8STQKGZZA63UaEr6IcPHhKnKJNmEJNqnWwiHlBJkqUaKq6Zfrl
-         yM06l7pHnQGr6XfQDBDOCqQoJSZE5C679B/GS/nR4jfRg7jAMW1MBdmLr1O5Qvcahpiq
-         RFGdpf+zps5frzsQmVQfkWSlu4c7BNJPkmXQq549wz5bxzhvP/P6MC2sjhWMl1M154b2
-         gJS9jBvXaFvFiBhNCkn8ha3TL6EA4HSI5QbipfVVNhZ1EpEQlNhI9XDJPZs+BVc+jHP0
-         a3V1SnnsmIRBhH7SCarIv19ucuUcf6hJxL/Ni9vBri1CgvGaFpE+uAdk/ZWV7BCnLhPp
-         0fdg==
-X-Gm-Message-State: AOJu0YxXqGDDchLbHQqWsIhVdKVS5A5SLmplR6JCrtWANwThkQZI8Rxu
-	tnHc9myfzyvnrbHF59A6u1Rto6T9lLAYBOm9D/S0bI62zEVRZEay4V9D
-X-Gm-Gg: Acq92OGEW5cgDQYpiH7ijfcghZ+c2OLPuOHfNfUZibCY3Q4aqK802ypy/0bsYLY7h+u
-	29auZy6P5knlXaN8OXEJimCW3GxPR2T4l0GC2mWJxILq50pVEQL4a7EazBWa8VOuB8MGcLES9Aj
-	FdXavOMYy8hO7kYIV4gj9bKHBP+TAtv19miXf8UIHSZhhYIYSGK7E3yTvkWxV+4ME0aeJGPQJrA
-	NquQk1xMsDPJZyD/eBeWjWryy0SNiH30WoDf4jvVkA2IdtvFAv+YjTLlAogf2ks1f38sYOJ8xgV
-	l5F/RbeMJdSn4r6+J9LpY/8AkNzNhSylnq2gBKBYIh1Pr1gEfvQivxUPmy5Zy7Up9qzrmlnnMsD
-	AeBAbQRGviBoXjsXZbXkZnyOfpHqRDL4YC0N9PI8iIG/weC5NHXbUeV3CI75aajOel89VzGaw9V
-	0TP9MsxrPsTDupiWxGwOP+RcNQ8+g17MVYGMhKq51o6Y1qS7XdfI76d1QuV3WFCgnK7w7cCUl4T
-	VWvBEnQ8uM=
-X-Received: by 2002:a05:6a00:3e1e:b0:82d:556b:7a01 with SMTP id d2e1a72fcca58-8430a6731a4mr3004260b3a.16.1781009762535;
-        Tue, 09 Jun 2026 05:56:02 -0700 (PDT)
+        bh=AFSRA57sXKLlEMGOh13mH9O3WdT4M5EIVdDK4eMznIU=;
+        b=bvGbRKAGSjIOHx046F4XOVXDKTyRHW0SS2gRHtHXE41DGTMTddhjjzEbbULyILid6H
+         GpORV22dHGi8J7X5g1rRgrO7/zZpUb8EYEE0UPHxkMHGXPYY32vTdenIVR18C0m3bG/W
+         fxGGy97isZf4KyTewySRnbEpmkFrK3V92IA7RRfqcmNCcIfWFoy4OYKecXwN63daeoV8
+         ZNs9ffMoX25mnJ/BO7dMC7LCtU1ZEaxiQ13bsZ40eqY6H4nLOmVhhYDoFwiaecEIGCTS
+         JF5jy7Ak+u0axNFCgl9EBg4p9m7yrUn9TovrHkUGEahRqpmCDo+L3gXP8ttRU+7W9oQH
+         YuHQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/wusaHdeyMmxfysjt6Fs90KNGDBjQBEL67Bk4UZsf/ldLJQjZBBM9ViuQ/3WPIjBW9KLUQUIhDb93S+Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWS5F0tFEG3zJLQZtQipYhYVnnOrePnxPv0H+cwOlSUJ2l4gtr
+	tsEInZF0mHhiGRcUXZP9JeT9N3BCsAuegaWq5ZVN2QFP/eNem3KvfV5UB1zEnGjx
+X-Gm-Gg: Acq92OEEnapbd3zL3183XnYSEHEF3zMkYfiSDQQFZTauOVNPvV2FcJysGZ7qyD50Jgd
+	iUQzLh2Y635ankQc2srLrdQoYaaJ6c0eLHN6OuSkd6lYIwv8cZ9tbgsAFfNDjjXKTWjWFqGL5b3
+	BytJ+1nR3p8T7U89XLUOSYrP8Z7PRz6y5ALkNtD7HY3U3P1+H3XczCmjAS/xAshXFHEl9daFZW0
+	rzOudKAx7RU8mxD3vBlP8jm0AFQMvngAvUvMZhqyGTkhhOi5/Td6eNp/ZegHbbfmAnopNp9A9eZ
+	VjZaN6ED5tK/3uQmRSsSOemgULfBSf59PiA+bUhRZIUYr5mmHQcHYPvdd1SbiljJ+Zt9N+/mLty
+	yBGj5q75dyCXq7BUyMppb2tXvIUByq7WrazITVmuuKwTqrFS7928SuzuqqFSYFcPZnptjGyRHKj
+	0BZFfDtpMyI+5skX4TpwkVEp7XTKIAmIo+DYXIFawNkLsIP2igd3KP1dPPWK8rC8ceO68yyzbVR
+	GFjj+ub4UU=
+X-Received: by 2002:a17:903:46c3:b0:2c1:13b5:6c24 with SMTP id d9443c01a7336-2c1e7f922a9mr214749825ad.20.1781010261352;
+        Tue, 09 Jun 2026 06:04:21 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84282379db0sm20259163b3a.24.2026.06.09.05.56.01
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c16649d2dfsm212949015ad.75.2026.06.09.06.04.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jun 2026 05:56:01 -0700 (PDT)
+        Tue, 09 Jun 2026 06:04:20 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <35577504-76cf-4dd3-8f98-5fde03fc0a1f@roeck-us.net>
-Date: Tue, 9 Jun 2026 05:56:00 -0700
+Message-ID: <e10eb414-082e-4747-8083-77b1a3b8c934@roeck-us.net>
+Date: Tue, 9 Jun 2026 06:04:20 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,18 +70,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] hwmon: add a driver for the temp/voltage sensor on
- PolarFire SoC
-To: Conor Dooley <conor@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, Lars Randers <lranders@mail.dk>,
- Conor Dooley <conor.dooley@microchip.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>,
- Daire McNamara <daire.mcnamara@microchip.com>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- Valentina.FernandezAlanis@microchip.com
-References: <20260603-ongoing-brunette-51e35be6d93e@spud>
- <fd92d7c9-9594-47b9-bd84-a6bd5ebae66d@roeck-us.net>
- <20260609-estrogen-entangled-da00ac932481@spud>
+Subject: Re: [PATCH v3 1/4] hwmon: (gpd-fan): drop global driver data and use
+ per-device allocation
+To: xiaopeitux@foxmail.com, cryolitia@uniontech.com,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Pei Xiao <xiaopei01@kylinos.cn>
+References: <cover.1780880972.git.xiaopei01@kylinos.cn>
+ <tencent_E4CE09DC1CB1AB4C0411F71B9507E4A49706@qq.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -126,51 +122,31 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260609-estrogen-entangled-da00ac932481@spud>
+In-Reply-To: <tencent_E4CE09DC1CB1AB4C0411F71B9507E4A49706@qq.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 6/9/26 02:43, Conor Dooley wrote:
-> On Mon, Jun 08, 2026 at 10:03:48AM -0700, Guenter Roeck wrote:
->> On 6/3/26 06:19, Conor Dooley wrote:
->>> From: Lars Randers <lranders@mail.dk>
->>>
->>> Add a driver for the temperature and voltage sensors on PolarFire SoC.
->>> The temperature reports how hot the die is, and the voltages are the
->>> SoC's 1.05, 1.8 and 2.5 volt rails respectively.
->>>
->>> The hardware supports alarms in theory, but there is an erratum that
->>> prevents clearing them once triggered, so no support is added for them.
->>>
->>> The hardware measures voltage with 16 bits, of which 1 is a sign bit and
->>> the remainder holds the voltage as a fixed point integer value. It's
->>> improbable that the hardware will work if the voltages are negative, so
->>> the driver ignores the sign bits.
->>>
->>> There's no dt support etc here because this is the child of a simple-mfd
->>> syscon.
->>>
->>> Signed-off-by: Lars Randers <lranders@mail.dk>
->>> Co-developed-by: Conor Dooley <conor.dooley@microchip.com>
->>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->>
->> Comments inline.
+On 6/7/26 18:40, xiaopeitux@foxmail.com wrote:
+> From: Pei Xiao <xiaopei01@kylinos.cn>
 > 
-> Cheers.
+> replace the global state gpd_driver_priv with per-device private data
+> (struct gpd_fan_data) allocated in probe. This allows the driver to
+> support multiple instances in the future and aligns with kernel best
+> practices.
 > 
-...
->>
->> If regmap never returns errors this needs to be documented in the driver.
-> 
-> It's an mmio regmap via a syscon, it evaluates to readl()/writel() so
-> there's nothing that can fail /and/ return an error.
-> I mean, I can add if (ret) return ret, there's not a clean place to put
-> a comment about it I don't think.
-> 
+> No functional change intended.
+> ---
 
-No, there is no need to add dummy error checks.  Just add a comment
-either at the top of the driver or maybe even better where the regmap
-is initialized and explain the above.
+I got:
+
+Commit
+
+   beb0e2d1add1e2 ("hwmon: (gpd-fan): drop global driver data and use per-device allocation")
+
+is missing a Signed-off-by from its author
+
+Since it is the first patch of the series I had to drop the entire series.
+Please resend with proper tags.
 
 Guenter
 
