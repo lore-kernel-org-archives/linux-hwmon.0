@@ -1,42 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96DF3411665
-	for <linux-hwmon@vger.kernel.org>; Tue,  9 Jun 2026 19:49:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43DA2381AEF
+	for <linux-hwmon@vger.kernel.org>; Tue,  9 Jun 2026 19:50:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781034585; cv=none; b=S0UTGxedDbmjFVcTthgL8cP2CM+ptFn6Tf+Axxg5qSEtstyS8jI6PGus1cQs4ks4H0mCwFkcyoAdeJtDjZ0eFjWIY5j9fT1Fh548vxiTK2GwtnDLeqMYvUZUgU8D7dWmLSX1xcWE3DSErzFQagRDEYdiD1hXR1dPScKPSEiruYE=
+	t=1781034637; cv=none; b=Yr5zuHH2CcD04Xitd/LSua+gKVLXLeZh+ucxemVfk6LEKUsFGHpEYIX6BmhJt9id6dlX/U+Alev3qociYI3RGyGw4Tci1+DfFsVkZKEr5u21sQSnV7t7FeSyA1honxO7SvbrJlRApzpG6TErS4K9VGXytmWp/YRUZPeiTDNnAXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781034585; c=relaxed/simple;
-	bh=OdG2Pzeif2F140kGGDqnSWYhAEub+U2ptO8TWTCjJU0=;
+	s=arc-20240116; t=1781034637; c=relaxed/simple;
+	bh=jPYoPC38/T38VCqf4QadWb/x8SxzacFj7GC2w5vfqMY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=biXqCb2w3tfIJJVoOFSyxvKARnOLDrkWABNxTT550xLwaYH9/qFDgav+2ssUQRin4iR+fHAPu+VmML4nd2XCNCG0iP0KWPZFo+pd8ek1ByajfRSjz3psl0fIwMI4Ncugd6tGRGC4uJSQS1zeroD2vodfc6Bh6gOfDnOszM17Ux0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cGpgABxa; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=D37v6/6JiiudwTf9yBJeHvartgt24JBYfo3MxfPrVuB2Khq8BSMrRPuYiWT7ES2Vu1ArWQsnJtpwVZB1Pl48IQkTjWhvSr/32fHOwVcLBDnGDNGIWmODK74Jv4Py9DLAQePUVcot/HwpCgPsgE0IicFS5uoHx+Ivk/rDBtr0uSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BWUdP7Wv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cGpgABxa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAF851F00899;
-	Tue,  9 Jun 2026 19:49:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BWUdP7Wv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13C241F00898;
+	Tue,  9 Jun 2026 19:50:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781034580;
-	bh=OdG2Pzeif2F140kGGDqnSWYhAEub+U2ptO8TWTCjJU0=;
+	s=k20260515; t=1781034632;
+	bh=HGmH/toiexWqEmY6GetsmCOC6/5P67SpuflKB8wedlk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=cGpgABxaD1NkZFjV+Y1n/e03OcI4xbC/edeS8NbOxBezlATLnQNp9A+fIpFcSv5oq
-	 vY1x6QiGPgG9NJC9ebQMpGpflkvqau2HQDGSNZK6yvp81y4DikJyYN9rjPATB6O7GE
-	 fRpyPh2FR+JPA1vROebUAO5mjU91JgTc2/tF4MtE37uVXSIe5gZz76MWX4gQ4BWot4
-	 UGkZn80P/7kUP7d4lGaZqubwadiTx8cbRd9VjN9vKxpRJkaEiEM+e7dOWmUsuL+4QJ
-	 MxLpG/8eI0v9kRhj+VHn8Vd0MfpJsEOi2akq2+Yd6RGJgDzxe94uRji2JVBBbuc3+2
-	 cDnSnqjEU25uQ==
+	b=BWUdP7WvFLQRI3/bgToNMDm+oHhw0ReVkcJ3oB/VEpcb29RP65zrj9INlmfOZcvZ+
+	 p1xF1wZD7a3IXTq9vkXe3gIGlqDapp2fxVPEFGKOOAIG/6f0Uyu18nW2dFBf/d884k
+	 aBNEi7ZNKoHgGD4P6/NM4y1s5N1aWxrSxmb5ZqDV/qYEUX3KzI6EI49Gi15CI6obpM
+	 vsSjbVWeCfUr2JtiiBCjIjIKSvaMSNbeNzde4/qnXjPjqKGN0HzmA7r0TY5DB42Ekq
+	 7pHesjx9Fn2GaVcP6PtU3hQqn2Aa6HLf9NIrRwVZa1YUFvoJVIOGRfytE14fp4cdcW
+	 +mPQ1uWgm+AAw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 3/3] hwmon: ina238: add update_interval_us attribute
+Subject: Re: [PATCH v3 1/3] hwmon: ina238: add support for samples and
+ update_interval
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Ferdinand Schwenk via B4 Relay" <devnull+ferdinand.schwenk.advastore.com@kernel.org>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260609-hwmon-ina238-update-interval-us-v2-v3-3-016b55567950@advastore.com>
-References: <20260609-hwmon-ina238-update-interval-us-v2-v3-3-016b55567950@advastore.com>
+In-Reply-To: <20260609-hwmon-ina238-update-interval-us-v2-v3-1-016b55567950@advastore.com>
+References: <20260609-hwmon-ina238-update-interval-us-v2-v3-1-016b55567950@advastore.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 09 Jun 2026 19:49:40 +0000
-Message-Id: <20260609194940.AAF851F00899@smtp.kernel.org>
+Date: Tue, 09 Jun 2026 19:50:31 +0000
+Message-Id: <20260609195032.13C241F00898@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -45,19 +46,27 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
 > From: Ferdinand Schwenk <ferdinand.schwenk@advastore.com>
 >=20
-> The INA238 family supports eight conversion time steps from 50 us to
-> 4120 us (SQ52206: 66 us to 8230 us). At the millisecond granularity of
-> update_interval, the four shortest steps (50, 84, 150, 280 us) all
-> round to the same value and cannot be individually selected.
+> Expose INA238 ADC averaging count (AVG) and conversion timing
+> (VBUSCT/VSHCT/VTCT) through chip-level hwmon attributes:
 >=20
-> Add support for the generic update_interval_us attribute, which reports
-> and programs the same ADC cycle time as update_interval but in
-> microseconds, giving userspace full access to all conversion time steps.
+>   chip/samples
+>   chip/update_interval
 >=20
-> Both attributes reflect the total cycle time including the active
-> averaging count: the reported value is the raw conversion time
-> multiplied by the number of averaged samples, and writes apply the
-> inverse mapping.
+> Use per-chip conversion-time lookup tables so the same helpers work
+> for INA228/INA237/INA238/INA700/INA780 and SQ52206. Cache ADC_CONFIG
+> in driver data and update it on writes to avoid extra register reads
+> during read-modify-write updates.
+>=20
+> Report update_interval in milliseconds as required by the hwmon ABI.
+> Compute it from raw ADC cycle time multiplied by the active averaging
+> count, and apply the inverse mapping on writes so programmed conversion
+> time tracks the selected sample count.
+>=20
+> Clamp user-provided update_interval before unit scaling to prevent
+> overflow in arithmetic conversions.
+>=20
+> Also combine chip attributes in HWMON_CHANNEL_INFO using a bitwise OR
+> for a single logical chip channel.
 >=20
 > Signed-off-by: Ferdinand Schwenk <ferdinand.schwenk@advastore.com>
 
@@ -65,5 +74,5 @@ Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260609-hwmon-ina2=
-38-update-interval-us-v2-v3-0-016b55567950@advastore.com?part=3D3
+38-update-interval-us-v2-v3-0-016b55567950@advastore.com?part=3D1
 
