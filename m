@@ -1,131 +1,197 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0AA6419300
-	for <linux-hwmon@vger.kernel.org>; Tue,  9 Jun 2026 13:15:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36302820A9
+	for <linux-hwmon@vger.kernel.org>; Tue,  9 Jun 2026 14:12:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781010905; cv=none; b=Hrhk3Oo5s76GNAlKsMEsTkHlq45iDK09aMklZGRUHTbk4ndmeRI21uxQasFbDSBaSvb8ikuHSeGoRQUvwZs/HdoFk/8BkS6zRJ+cA9/TEIFnJdsI9f2ze/lGkKaxW+3KFQdMGRLIjneAy27AV6pJvF0avCaB0zUMaXZPEZmE7ac=
+	t=1781014323; cv=none; b=q/l2NZVDC0ztM3iXLhUjMnAGfFvEJHzFAAfa7ETFjiXw61P8eKLMx3DMiV+5BXJnHvkpZd17MjpxeNGTavF6MQ0yalIdugMlVnpdKt1+plbx+WUwjaXvKTiMQekoG4Ne329IFPV3a5NKbqTNiigIw/+IBRkzZuf5CqDypnkpVO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781010905; c=relaxed/simple;
-	bh=C8Z23G5fMKOxO2zCb/NuJRS28VYirRrmBHN0fhhaHfw=;
+	s=arc-20240116; t=1781014323; c=relaxed/simple;
+	bh=liLv5N2bL+FfpA5Vm5jgN7lGjBHXeU529zM3wEud9/k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZPAVA8K4z60A7iHYCILuRxZxNUAR9/vzWneJyRriOqoVR8RfZ/N9BNOUvMEB/s/EjUTzMUzgy1n5OITh2rCh+7i4dkay1IDs8MbQAhtKv4uhp/0jIwjcfu4cmhUDQ+OO7UK81S6J+iFOi4PRVBvCQ7dVCncUes5qiARX6ojNj+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G+1q2anC; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	 Content-Type:Content-Disposition:In-Reply-To; b=bgMU9R+6cQlAEx0u/En/ocjylbaFMnxv2iCjTf7F6dTg2++y5bbglt1HxwELDfH0v44CfoI6bwGGZYi+yEerDllLOd0u+GBD7L2YQ0GukDGyq/GKV0S2xjjfZQc43+A6ssOwBFsrKE06VfVnljDE0vFguhkVHSN0UfHhruaufEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KwsSfPeB; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G+1q2anC"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2c0c2d8b95bso39302945ad.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 09 Jun 2026 06:15:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KwsSfPeB"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-490aaeabdb4so35591185e9.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 09 Jun 2026 07:12:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781010904; x=1781615704; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OEDbW2E0jYhxmhbQRn8cH1fVwccIh6hf9EUZ/KlZ/NE=;
-        b=G+1q2anCkxtIlfRoZ13Mr+J6nWfZ55dOIZBEeObvSApqL0Zdqc5dspaCNJcQoeHWLg
-         1K1bPl2kRJ/6Fiy8D9Fa2BnkcoXMVao+RL5/b9EHU3hg/HK745UcDk6B/StIziZTkm7O
-         ye9NRAyl34ZowYZmwyz2WWTq2HzE6LbCXsV5Ggf6SfkUyaEd3S1NOZGfwkUKfQ9uInju
-         VzVP1j4wByJAabZ4NWl3/JHbMSEFyYx/xB2Ht0kKZY6rIQqyr3YJQ1fU3H0DiBkRyrxt
-         ME8t8d/jrArCW1dWnDwalMVQS07ug0dBY+bemQlqBJtom65AWRDhNdmkoeUo/BG19llY
-         W8EA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781010904; x=1781615704;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+        d=gmail.com; s=20251104; t=1781014320; x=1781619120; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=OEDbW2E0jYhxmhbQRn8cH1fVwccIh6hf9EUZ/KlZ/NE=;
-        b=SkjvlqcsygyzjXje+XPeysoFLEhjmaDDWyHT8X/2Vn+gd5cDWIOCvXkWWqWnezwBk4
-         AIniwTMcip94zZCgX/Ihl2pxb46Q+BQF+UoiPTTLvhjg7GM/0+Nie2jy1yOY5tO9SbBz
-         l/akaN3sLcR353QtQkIYhBW1nCn5o6uUBkaskuSlEL6TFZZHZzam6NIq3hQ8WEAR6R0N
-         vNLMS1HjpPTK2nGVlnBA0hySG/O7NcPtJgeE+keGhV+QkXdGYhLS2LdmVaxyZIFiy/Lo
-         H8zb5Pam0rfD5pjZass+K2uSmGeyaldH1Wk+tHvoMi3lPuKp7KwcBshxHr+sA35ZI3zL
-         XCQw==
-X-Forwarded-Encrypted: i=1; AFNElJ98zhkGl3dw7ZxbfikmZMDPHKx0uolcUkF3qzWe+pgznAvGwuESIxqCkWFO+PPr7271yusJWu6OnfyfNw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxh9UROIbhp6LIl+YEIv8rs/n+jbl/ynsOdntEdcuoOP3ZvpmyH
-	4BJYQFdQGG28ETD25fTVmC6CqJ48AlmSQWLyxvWi5TVwnbq49V6OPP3T
-X-Gm-Gg: Acq92OH3SYcCzVDwqVB7vgeNYRkJvI6LENVEx6bFsoOuyLhcroJCU0uGcRTDtCpSXxD
-	0fM4H1FJDRYrJLRd7sgzfY4bOiVIO9VC2noiipfp6b4PiQ+qKd4Hz0/V8dMx8R8NclTKyTW7Wzd
-	ogwt0Ix80A07MZIGjrJEZnl04TnQvBQCbTiqPDL6FPTRUwnhdZUwh/qpi424hyBA7F5wV5HQ9VA
-	m4O6mIFXQKHVRsdDWfCkguuULWfRH5Jxl5EvDoafxHTcSpTDVRX8lfbld5TmJaFCk87NKzSWraa
-	bgiwB434lPdLj75/llSPOws15RKq6AQM7Gj1ZPmgiadIsFS7NRNr2RViQ1+XBEp2WdYcdXh0QB4
-	jEV1GlX7wmYFu8cR5CY8l/5hgkIiAJ3vCNjhl4Zht7rBvYbnNfcn2G+0q+gnwcx6PRVhLXHqn9t
-	IC0JAodDH0yiOrjZ/jO1XAY1yhajLH1fWW4tWYd1tZMa09uMhCMfGa3Uuqlg==
-X-Received: by 2002:a17:903:27cd:b0:2bf:2243:d4e9 with SMTP id d9443c01a7336-2c1e8233854mr149248775ad.13.1781010904032;
-        Tue, 09 Jun 2026 06:15:04 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164f8429fsm264175375ad.18.2026.06.09.06.15.03
+        bh=1mLmTJSo8tO087S3+3tOfvhvQVhTG6wQbPzavlDU/Ew=;
+        b=KwsSfPeBPNBsBtWEAs6Ih9wwiOj+aZVzrT5tKByvGtXdv+Ich3KnUgcviche7f93ed
+         HF475eJ4UwZhGl/+YNgCauxtM18CL7edecl4xILw+uf8VIVNaQokQ+k60ifg0zFx3Kha
+         v32PUaUD9F+YbmYpH7qFVJooHTmcvJgQz9hHkR/K5N+L3FcVA5npc7xyl27jjEh7yIH2
+         gzJIX8MZpxdsVyPR68eRUo7wdokJFNXHFO3Y8kqFjnflYbhv5rXzms2uL1xEtPs47C9R
+         paf5V3pyJCegWbT0mmbC+VSJ0SDDiIhcg+wZEiFeP8jVzVtU8SDDXU341JAeOtc9XELY
+         l4qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781014320; x=1781619120;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1mLmTJSo8tO087S3+3tOfvhvQVhTG6wQbPzavlDU/Ew=;
+        b=OUel0hPCUV7pT/u5+f2ZDI3LrHEEvI4UV8Cob80h6wJ947lPGvKtBqM6B+fWScJBw2
+         5sGAgymgFfTDquzGxBOUO9n7+nTC0Zaf/xXofsgACpaihquIYVXdrYguz21PgNNfcSjJ
+         GHzlHzZ03v8aowzVsbiV+IhdTaGcrZwaRv8/ooI9CwwuSS78HW30JAW7vSJQnJtpwXt3
+         gGgmc1QZrqD+89LjhIYdbAW5Cc+5SzHh9IPfRT5XlvMrBIDIS9E/skfBg3qHSg/HiCBG
+         Ypw2Diz6QuWpSLgzTxy20uY2MVy3ynkAVFHXIlGIW6XQjI5fLif2AIT9LVJVnYyXPmAG
+         xjog==
+X-Forwarded-Encrypted: i=1; AFNElJ+woV6nOQRpExH62+athRE81FDX6TWJ46mShfTbZ4gnJZgKG7JvDMff9quqQupy7oWnfDAuX0qGuh8ypQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjHwFSC7aCpm6lP7CRqvLOiZouS/km9FIuW1OY+8WOZyepoFm4
+	MgNx8Jo2Boda4+ZJWG1Hh6sf6tHNDhQcwo1sX6trsfjozcnJNDdmMNCL
+X-Gm-Gg: Acq92OEl1u6o9ZGnwxYAp101seKH/SxiZHYBQQKMrMtHPXU+2IrNzivtHQf4Ewzxxuy
+	ioo/48X3OZjQrzhVZhOSvr/VgClDOHZvtPaU/lvIpB4cgCLBCt36F4fDIIeg6VxXrIxheWyHX7d
+	LshV2/tgUscRwEl7JWke582rcQQyKvppvJa0fsGElJCl8mTljt1+on3AlmWDAUttNeWht7ePoGo
+	TZoKDw2wrJP9Ft8fpGgsCjU7zFA3xCV62qUhlZkmggwRbjIImfMYksQ2npydW3rs2cg5qMXE87+
+	RAXhK2dcIgYm4ntajEeIfJCIb8PYT+5fzKf6dTd9X8LDXlLRZkeebv/5fA045Vrjt88Iacm8hPT
+	S8iCUGH64VHUAvHeQKeLJXvIgxNYvq3sVc7r+QWEO9N6XK9czx6Mkxc2FnvJkLoyNzI8Q72dsny
+	ouqlHh5OMbe+FMx9U30yOAaFWljA==
+X-Received: by 2002:a05:600c:470c:b0:490:3c15:7146 with SMTP id 5b1f17b1804b1-490c25dd118mr346103595e9.19.1781014319938;
+        Tue, 09 Jun 2026 07:11:59 -0700 (PDT)
+Received: from nsa ([148.63.225.166])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490c2d5d2b4sm321305665e9.2.2026.06.09.07.11.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 06:15:03 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 9 Jun 2026 06:15:03 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: ASHISH YADAV <ashishyadav78@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Ashish Yadav <ashish.yadav@infineon.com>
-Subject: Re: [PATCH v5 3/3] hwmon:(pmbus/xdp720) Fix driver issues xdp720/730
-Message-ID: <e8dee0c9-7cc6-4687-ac0b-a81ac759ca41@roeck-us.net>
-References: <20260609072231.15486-1-Ashish.Yadav@infineon.com>
- <20260609072231.15486-4-Ashish.Yadav@infineon.com>
+        Tue, 09 Jun 2026 07:11:59 -0700 (PDT)
+Date: Tue, 9 Jun 2026 15:12:58 +0100
+From: Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Nuno =?utf-8?B?U8Oh?= via B4 Relay <devnull+nuno.sa.analog.com@kernel.org>, 
+	linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v13 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap
+ Controller
+Message-ID: <aige5END74wK3ENh@nsa>
+References: <20260502-ltc4283-support-v13-2-1c206542e652@analog.com>
+ <20260502104311.0D48EC19425@smtp.kernel.org>
+ <3044ffed-b9a8-4a30-852e-2689b0cf0118@roeck-us.net>
+ <afhpmO_FW6nYtHXK@nsa>
+ <aigLddl1zeqM3gX0@nsa>
+ <85185e61-f9fa-4183-927d-8d7f4e8d4a2e@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260609072231.15486-4-Ashish.Yadav@infineon.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <85185e61-f9fa-4183-927d-8d7f4e8d4a2e@roeck-us.net>
 
-On Tue, Jun 09, 2026 at 12:52:31PM +0530, ASHISH YADAV wrote:
-> From: Ashish Yadav <ashish.yadav@infineon.com>
+On Tue, Jun 09, 2026 at 06:07:38AM -0700, Guenter Roeck wrote:
+> On 6/9/26 05:50, Nuno Sá wrote:
+> > On Mon, May 04, 2026 at 10:51:12AM +0100, Nuno Sá wrote:
+> > > On Sat, May 02, 2026 at 09:21:15AM -0700, Guenter Roeck wrote:
+> > > > On 5/2/26 03:43, sashiko-bot@kernel.org wrote:
+> > > > > Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> > > > > - [Medium] Read-modify-write operations on hardware alarm and fault log registers will cause concurrent events to be lost.
+> > > > > --
+> > > > > 
+> > > > > commit 768d24f774b79f50e1444b93b756d7bda5873159
+> > > > > Author: Nuno Sá <nuno.sa@analog.com>
+> > > > > 
+> > > > > hwmon: ltc4283: Add support for the LTC4283 Swap Controller
+> > > > > 
+> > > > > This commit introduces driver support for the Analog Devices LTC4283
+> > > > > Negative Voltage Hot Swap Controller. It adds functionality to monitor
+> > > > > voltage, current, power, and various hardware faults via an I2C interface.
+> > > > > 
+> > > > > > diff --git a/drivers/hwmon/ltc4283.c b/drivers/hwmon/ltc4283.c
+> > > > > > new file mode 100644
+> > > > > > index 000000000000..d8931c9a4685
+> > > > > > --- /dev/null
+> > > > > > +++ b/drivers/hwmon/ltc4283.c
+> > > > > 
+> > > > > [ ... ]
+> > > > > 
+> > > > > > +static int ltc4283_read_alarm(struct ltc4283_hwmon *st, u32 reg,
+> > > > > > +			      u32 mask, long *val)
+> > > > > > +{
+> > > > > > +	u32 alarm;
+> > > > > > +	int ret;
+> > > > > > +
+> > > > > > +	ret = regmap_read(st->map, reg, &alarm);
+> > > > > > +	if (ret)
+> > > > > > +		return ret;
+> > > > > > +
+> > > > > > +	*val = !!(alarm & mask);
+> > > > > > +
+> > > > > > +	/* If not status/fault logs, clear the alarm after reading it. */
+> > > > > > +	if (reg != LTC4283_FAULT_STATUS && reg != LTC4283_FAULT_LOG)
+> > > > > > +		return regmap_write(st->map, reg, alarm & ~mask);
+> > > > > 
+> > > > > Could this read-modify-write sequence cause concurrent hardware events to be
+> > > > > lost?
+> > > > > 
+> > > > > If these alarm registers use write-0-to-clear semantics, writing back
+> > > > > alarm & ~mask will inadvertently write a 0 to any new alarm bits that were
+> > > > > asserted by the hardware between the regmap_read() and regmap_write() calls.
+> > > > > Usually, a direct atomic write of ~mask without reading first is preferred
+> > > > > to avoid clearing unrelated active alarms.
+> > > > > 
+> > > > 
+> > > > Sashiko comes back to this one. Looking this up in the datasheet, it says
+> > > > that alarm bits are reset by writing 0 into the alarm bit. That isn't
+> > > > what is done here, though. It will write 0 into any alarm bits which were
+> > > > not set when the register was read.
+> > > > 
+> > > > Should this be something like the following instead ?
+> > > > 
+> > > > 	alarm &= mask;
+> > > > 	*val = !!alarm;
+> > > > 
+> > > > 	if (reg != LTC4283_FAULT_STATUS && reg != LTC4283_FAULT_LOG && alarm)
+> > > > 		return regmap_write(st->map, reg, ~alarm & 0xff);
+> > > > 
+> > > > That would ensure that only the checked bit is cleared, and that it is only
+> > > > cleared if the bit was set when it was read.
+> > > 
+> > > I'll have to check the above. I gave it a bit more thought and as it is, it
+> > > should not be a problem. Because even if we (in the edge case) end up
+> > > clearing an alarm that came after that regmap_read(), if the condition
+> > > persists in the next conversion, we'll have it set again. Yes, we still
+> > > loose one historical alarm but not something will be forever lost at
+> > > least.
+> > > 
+> > > Having said the above I do agree with your proposed change, but I need
+> > > to see how the HW "behaves". I'm afraid that if we just write 1's into all
+> > > of the alarms we're not checking we create a window where reading the
+> > > register again will, falsely, indicate the alarm is present. If the
+> > > read happens before a new conversion was done (note that if all the
+> > > channels are enabled we actually have seconds for a new conversion to
+> > > go though all channels).
+> > 
+> > Hi Guenter,
+> > 
+> > I got time for this again and apparently my concerns were valid. As it
+> > turns out the chip is not "smart" enough:
+> > 
+> > root@analog:/sys/class/hwmon/hwmon1# cat in5_max_alarm
+> > 0
+> > root@analog:/sys/class/hwmon/hwmon1# cat in5_max_alarm
+> > 1
+> > 
+> > And you can imagine the outcome of running `sensors` :)
+> > 
+> > So I guess we have to leave this as-is.
+> > 
 > 
-> Fix driver issues:
-> - Adds the missing regulator and property files in include
-> - Declares XDP720_DEFAULT_RIMON as unsigned constant
-> - Declares struct pmbus_driver_info xdp720_info as constant
+> Outch :-(.
 > 
-> Signed-off-by: Ashish Yadav <ashish.yadav@infineon.com>
-
-Applied.
-
-Thanks,
-Guenter
-
-> ---
->  drivers/hwmon/pmbus/xdp720.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> Oh well, that can't be helped. Should I apply the series as-is (v13) ?
 > 
-> diff --git a/drivers/hwmon/pmbus/xdp720.c b/drivers/hwmon/pmbus/xdp720.c
-> index 0f106c13e7ca..b273e53a01f3 100644
-> --- a/drivers/hwmon/pmbus/xdp720.c
-> +++ b/drivers/hwmon/pmbus/xdp720.c
-> @@ -17,13 +17,15 @@
->  #include <linux/of_device.h>
->  #include <linux/bitops.h>
->  #include <linux/math64.h>
-> +#include <linux/property.h>
-> +#include <linux/regulator/consumer.h>
->  #include "pmbus.h"
->  
->  /*
->   * The IMON resistor required to generate the system overcurrent protection.
->   * Arbitrary default Rimon value: 2k Ohm
->   */
-> -#define XDP720_DEFAULT_RIMON 2000000000 /* 2k ohm */
-> +#define XDP720_DEFAULT_RIMON 2000000000U /* 2k ohm */
->  #define XDP720_TELEMETRY_AVG 0xE9
->  #define XDP720_TELEMETRY_AVG_GIMON BIT(10) /* high/low GIMON select */
->  
-> @@ -38,7 +40,7 @@ struct xdp720_data {
->  	struct pmbus_driver_info info;
->  };
->  
-> -static struct pmbus_driver_info xdp720_info = {
-> +static const struct pmbus_driver_info xdp720_info = {
->  	.pages = 1,
->  	.format[PSC_VOLTAGE_IN] = direct,
->  	.format[PSC_VOLTAGE_OUT] = direct,
+
+If there's no more concerns from you, I would say so. If I eventually
+have the time, I should apply some of the outcome from this series to
+the ltc4282 driver.
+
+- Nuno Sá
+
+> Thanks,
+> Guenter
+> 
