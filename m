@@ -1,134 +1,141 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 862D0405844
-	for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 12:02:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B6C54028E8
+	for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 13:08:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781092972; cv=none; b=hjMUNeEHUdwspjSzydMzS4USO7Zw0xZCOgM+qk9w/5EIb5JxG8G67KbR8ZrRqN66GKUWLjbZmcs5LsTETEy8oKUCq7I6Ev7Ua/mR9szmOwy6UdpWvNLKcCuiv+3IVmExLTPRdI39vvWXSiYWcKmv0PZW1vTnyPa83OhTVGGmzKg=
+	t=1781096920; cv=none; b=nUu46Y0WoLWju5pEFXxWRY34y+sIOiPkKM2raeORbOjLZWFxFd8/6z8aqkbrTTJzEdg/gyQxDgsDlxSEzg4pwHHwDYZu4Sn79JobYD3ITTOihLOtdq+7Wm3NsGdo2+XwvcPLHaHubOHgpJT7zr7RoyHcKTPkgAjh+snNEQo5I7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781092972; c=relaxed/simple;
-	bh=tIbUR0O2eIN5egP+g/eD4rND0lSNhGFGyzKyCRatP3M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tgt+uu4ICdaVYJTuUUlKtvUX/1KJZs0auEVzS98tdxq8AHNEHspooHezcKGPCtsLrqWaOqUbKwOLF+j617h+UVfeasB6OcwZhHRyjmcrQ64iHWFr6vvJ8Qeogl+UDGZ69OrzG9PKB0wpcsr1/JpD563qWWWsLQ1Q4CvOVn3ThwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=fkxmkE2Z; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1781096920; c=relaxed/simple;
+	bh=EEOinw6CGZW45SAkE1xhJG+ynpqqAjNakg6bnKB2A/Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gUnCIUehgT72ddspUMGpjOrbDQCg75ioGdmvmvw/cGKlaGFBods46S2FYFZcRQFx5Z80k9453j0Jr66+YQ6oerpX+cGf76kj6tz9sWXaHghhRJG04oZ8LcgsRWd4loF2oWCUqq7GLL8NJmskGCFh4t2HmAfilcPPZSO6Y9xeX9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A3ovgjMt; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="fkxmkE2Z"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1781092960;
-	bh=tIbUR0O2eIN5egP+g/eD4rND0lSNhGFGyzKyCRatP3M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fkxmkE2Zj4ag9Jm5KSvcOhxKh+dbTs/xnkBkwlQvdgHW8AtQwiyutOSlPSDxVwCmP
-	 BR7BPiEKRvpZwxZWH2W3hyWZUYZf+B9SJABIJTWPQeeUYjzVA14AbTxV7HwX+7iumG
-	 Ow8lbk186DxZwm7jyQMAl/usJpXf6YMF6yvt0OcM=
-Date: Wed, 10 Jun 2026 14:02:39 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: sashiko-reviews@lists.linux.dev, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 5/5] hwmon: (cros_ec) Allow modification of fan curves
-Message-ID: <263a9a98-c427-4d3a-8971-b42a27dab976@t-8ch.de>
-References: <20260529-cros_ec-hwmon-fan-curve-v1-5-da6792b3830f@weissschuh.net>
- <20260529213842.354A51F00893@smtp.kernel.org>
- <20159ced-3959-47da-9245-8d562d656f43@t-8ch.de>
- <81dc547c-7c62-4e34-aa90-5a48ebe46b9b@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A3ovgjMt"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2c0c3315c5dso70229385ad.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 06:08:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781096918; x=1781701718; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=JqJZ+prysRbXkAdz3gPAp6FWqtuUCNOsHZgjBYdDszw=;
+        b=A3ovgjMtuiET47Hz9XwxTOZ9NTcU3NP+xhflt4yB+hXjyAzQYSbM/nQwo7z5OKrPH8
+         h8rZK97EyV1xm9zNHFhFMWfHiNkjNsM3ulRHsWEci50bMC6mVnGjZzqPBkKtOvLGrgY5
+         1avDLf+05rqx5Pw6tnaEoS+1HKSnYOmdAHT+dctfX2a3WQ4aXuINtvfF4B5d7SYoNZHJ
+         UhRARrG+FfmIdGAxKi/5j00kTn0M7IjFX9qDuUGyo8qteYG/V28A5qHDyyaTJrMxVk0k
+         086/dEg3rP4A4tXydWEguxIcaLVsqzqNlHndOWRu65+vRdwZluob60aQL9VDIy0Fx8rC
+         oyOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781096918; x=1781701718;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JqJZ+prysRbXkAdz3gPAp6FWqtuUCNOsHZgjBYdDszw=;
+        b=a9OGA7cWCHDr5GdPpf0odKnvcHkrdCVo50IsVrv79kPGZ8FwCnfwPytCsLZJ/52Nd7
+         F63vwZu5CENUOGO4KA6ujDfNuJay5Hoi4Lzs8JO2AUar4nVHr7am7A2aXyH6lbnVwvoo
+         5zMk3zJlZ/yqw0DCLjZIdsITUohq3Ve4SQF5zuZTDU3etmCBrUHYXUxH8VgP41HHs0hV
+         JwHFC2za6DyRX+CMYIN6FJk5ynZfkfFZWKcwb/8IbRNyH422R93OV48NNztBhKZwGLZK
+         rOxaurZvE/qnEd4MJvXOcqTfbN0XXapugdpTPwLB9OgWA4V2RUoktwZIbUofuO1+5CyX
+         VVlg==
+X-Forwarded-Encrypted: i=1; AFNElJ/N3G+RKGQ1MlXIU61GmCrn8oOfnzw43EYHp2eJ2adlNB5460ubXBxSvy2XrsONK/vW4C47Elojwztggg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIj8mlLe/6vqwz9joEvQTjLsKFwU9kwzR1HaDjmkBQOOFRH/xt
+	wO48RLuEaLzr6tElC8GYF9tIquWsD5CsANyDLDjFedqelthB8atrFKixLeq7PbF9
+X-Gm-Gg: Acq92OEhIt1QKr7a7EO5/GAC6aOQqrvdR+O8ca9ErHp4kSZoPZ5OzvxXSbRP6xlpURp
+	TV3jEr0jI5HGbuU2W/qls62r3DcBqURrMLm2fVc/L6bGC0ObCZmBtr+buQ290YWUlf9w+uJHrqF
+	0AGZRtcqIeq9dazRCIMA8k7rl+hEauxqJCLYdG+1Nakc66xnmxJHdDy+y+jb7Im48Y/vkI/MHrR
+	TWIcgizoXT8/pMx+zmYmLUNS7VfgoKeS1F9i3cWnRyzJFPpeOfoZ9xa6qNE6cb6I75XJEE1g72+
+	FbLevFjXWxWZO1YJNje4/O1Ye3OC74eUIwWdoK+OGQIYoKpFVZx39SYGShVZno7mUYYhbzGGJhs
+	nj8UbBCnszDti0uHKN7VGMvS58WypvO/oHJKW16mAe9AL0AT4HkFhZu1lKcEgdYrBqCT0iz/K9k
+	CaX1e9scTBu34ydzojxQgVrzGE7VA0lUQC7mKU2qZc66X60KKf0A9Qge5weXKdd7wZAcMR2RXgt
+	AomzboXd3k=
+X-Received: by 2002:a17:903:2348:b0:2c2:33a4:aaa2 with SMTP id d9443c01a7336-2c233a4adcemr215193425ad.35.1781096918304;
+        Wed, 10 Jun 2026 06:08:38 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164f8bc5asm258608485ad.27.2026.06.10.06.08.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Jun 2026 06:08:37 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <bd3085f3-3797-4bca-8520-bed0d67684e0@roeck-us.net>
+Date: Wed, 10 Jun 2026 06:08:36 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 5/5] hwmon: (cros_ec) Allow modification of fan curves
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: sashiko-reviews@lists.linux.dev, linux-hwmon@vger.kernel.org
+References: <20260529-cros_ec-hwmon-fan-curve-v1-5-da6792b3830f@weissschuh.net>
+ <20260529213842.354A51F00893@smtp.kernel.org>
+ <20159ced-3959-47da-9245-8d562d656f43@t-8ch.de>
+ <81dc547c-7c62-4e34-aa90-5a48ebe46b9b@roeck-us.net>
+ <263a9a98-c427-4d3a-8971-b42a27dab976@t-8ch.de>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <263a9a98-c427-4d3a-8971-b42a27dab976@t-8ch.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <81dc547c-7c62-4e34-aa90-5a48ebe46b9b@roeck-us.net>
 
-On 2026-06-08 15:13:09-0700, Guenter Roeck wrote:
-> On 5/30/26 04:12, Thomas Weißschuh wrote:
-> > On 2026-05-29 21:38:41+0000, sashiko-bot@kernel.org wrote:
-> > > Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> > > - [High] Aggressiveness check incorrectly handles the disabled state (0 K), permanently locking unconfigured sensors and allowing fans to be disabled.
-> > > - [Medium] Integer truncation on 32-bit architectures bypasses input bounds validation.
-> > > --
-> > > 
-> > > commit 84e7ddf64f7f5ac65172c3a7ccc4e158bbb73094
-> > > Author: Thomas Weißschuh <linux@weissschuh.net>
-> > > 
-> > > hwmon: (cros_ec) Allow modification of fan curves
-> > > 
-> > > This commit exposes the EC fan curves through the standard hwmon sysfs
-> > > ABI, allowing both reading and writing. It includes logic to ensure
-> > > the curves can only be made more aggressive than their current state.
-> > > 
-> > > > diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
-> > > > index 731143f8c6b2a..fb73a00ebeebd 100644
-> > > > --- a/drivers/hwmon/cros_ec_hwmon.c
-> > > > +++ b/drivers/hwmon/cros_ec_hwmon.c
-> > > 
-> > > [ ... ]
-> > > 
-> > > > @@ -417,14 +435,60 @@ static ssize_t temp_auto_point_temp_show(struct device *dev, struct device_attri
-> > > >   	return sysfs_emit(buf, "%ld\n", cros_ec_hwmon_kelvin_to_millicelsius(temp));
-> > > >   }
-> > > > +static ssize_t temp_auto_point_temp_store(struct device *dev, struct device_attribute *attr,
-> > > > +					  const char *buf, size_t size)
-> > > > +{
-> > > > +	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-> > > > +	struct cros_ec_hwmon_priv *priv = dev_get_drvdata(dev);
-> > > > +	struct ec_thermal_config config;
-> > > > +	u32 *temp_field;
-> > > > +	s64 temp;
-> > > > +	int ret;
-> > > > +
-> > > > +	ret = kstrtos64(buf, 10, &temp);
-> > > > +	if (ret)
-> > > > +		return ret;
-> > > > +
-> > > > +	temp = cros_ec_hwmon_millicelsius_to_kelvin(temp);
-> > > 
-> > > [Severity: Medium]
-> > > Does this silently truncate values on 32-bit platforms?
-> > > 
-> > > The cros_ec_hwmon_millicelsius_to_kelvin() function takes a long parameter:
-> > > 
-> > > static long cros_ec_hwmon_millicelsius_to_kelvin(long t)
-> > > 
-> > > Since temp is parsed as an s64, passing an extremely large out-of-bounds
-> > > value on a 32-bit architecture might truncate to a small valid value.
-> > 
-> > We don't care about overflows anywhere else, so I am not sure that we
-> > should do so here. I'll switch the millicelsius to kelvin conversions
+On 6/10/26 05:02, Thomas Weißschuh wrote:
+
 > 
-> Oh help. "The driver already has bugs, so introducing more bugs should
-> be acceptable".
+> Given that patch 1 of this series introduces a compiler warning,
+> could you drop the whole series and I'll resend it after -rc1?
+> (I'll have to doublecheck why I didn't notice the warning before)
 > 
-> Who said that we (whoever that is) don't care about overflows ? Did you
-> consider the possibility that maybe we (or at least I) do care, but
-> that code reviews are not perfect and tend to overlook them ?
 
-"We", all the users of linux/units.h who haven't bothered for years to
-even implement overflow-aware variants.
+I already dropped it.
 
-> Sashiko is explicitly directed to look for overflows in hardware monitoring
-> drivers because its maintainer _does_ care.
+Guenter
 
-Nice! This was not obvious. I am happy to fix it up properly.
-
-> No, it is not ok to introduce new bugs to a driver because the driver is
-> already buggy.
-
-Technically it would have been the same bug that already existed before.
-
-> Why kstrtos64() in the first place ? That is completely pointless.
-
-The idea was consistency. So that the same inputs produce the same
-result (or error) on all systems. I am fine with not doing that.
-
-
-Given that patch 1 of this series introduces a compiler warning,
-could you drop the whole series and I'll resend it after -rc1?
-(I'll have to doublecheck why I didn't notice the warning before)
-
-
-Thomas
