@@ -1,243 +1,139 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392C9374A15
-	for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 21:01:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D50E337DEB5;
+	Wed, 10 Jun 2026 21:05:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781125309; cv=none; b=m7bDDHsJ2BrDc/3yddEo9+rjLxE5L4hOQO61nEtoIXXmQgBSromw/IZpLkmefV93t+EH569JeymNGkxgZ1VCbdF8xhd8GOQcf0CA5AS3ZDN30YTcdjyRxTPPWyVJdUDds9u6scaOKH0/gPhb8dKprqL7uwwP0QUbUdwh4VBCRPQ=
+	t=1781125508; cv=none; b=oY2ce3N92hv958RoLMho8iOMKVlWEowMvNlU1IGqxuonf/pgK8ZYzfz3B/U3SHnzQWo4WIp5EEefOAwgSxpwqLHsLbEL+tQ8PQjP36eLV687Zp4gcPOYSPhGK5Dcgw5X37Im/mSGLk2k3Q6NLznQhe+qP31VQmV3k+iA0BNH3A8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781125309; c=relaxed/simple;
-	bh=q4trmAQ6LLoAm43y6W9Antd2744AQAobRBGNcV28PIo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Xysm7DqVo3kcMj/5kKYhy0cah6LQX1TkqohA42mAXO4MR/LVzsavwxY92J5KI8TeKP8CB41x8CVOioRRyimMzCcHfP8ktLWWZJyqU1Xqe7lnDRTSsa9eXa8UWWAqSBTfci07xx9xbeilta1ZYm+e1aPgs5fhOxIR/Lq1U8cQRYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y3rjaxu4; arc=none smtp.client-ip=209.85.215.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781125508; c=relaxed/simple;
+	bh=e1XyesHhSSdOepF9XMl7M84a2qn+asoqmkCv4+T0A88=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E4CgGBURIYZScMYfkI171qoW1vMg+qqJH+N6y84bvzSrfhhGbYDnZiekYZ4/SY74nTfcyXeRryFN6R/wGJP8OzRolc9Fqk55F1P52Wvn8mMZflBwJuRSjYqc+gvNLr2IswtD0nMCl2+kkWNLatVGGTx1SbePiUJhpBDfNK9rzmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RRulwjSJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y3rjaxu4"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-c85a297d2d2so4318860a12.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 14:01:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781125307; x=1781730107; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZtzBtVxVPt1IG/GbVBEIECLPxTXtqMIn5bbzEMkUJx0=;
-        b=Y3rjaxu4VZfBBpD7taybbNqk71uytmaWnCG5XrdbdCl8EKPl38IdJOhaqZ2o+dYwlc
-         JIBi5ocUhAPGyuQLtNagx3ilsi3Rv/sw+541JxR5LUHzIFQwNapvq1w3nYjwv/KTRKfR
-         bMWb7oCUnJRKQRFTOh16yxytiXilTzLExq6WIK4fEge7N2P938ma4KT7qgLosKWtVT/9
-         MuoFOKuJNDk9pHwrEZOT65RMDnHgYfdtSQyf1vWGgf/zGAyf/tNkL5cL6yNTxlY0EeCs
-         vTusHZRHdEIG8rxt6rto3bha32rZ6yBWp9fNuug1VcpbHoqHl2HHCqYHL/dE6DUhi0/8
-         cncg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781125307; x=1781730107;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZtzBtVxVPt1IG/GbVBEIECLPxTXtqMIn5bbzEMkUJx0=;
-        b=q8M6u6M7uk824GUbCPETpRSJbLXVutpX5JCrGd66k6XiCk9UmttNiCuFmxnmH19NoG
-         +vnCq22AIPPLrrF9zfAk1l+jjLE+ZwFJiDjC9e8eHJkEsfhwhOskMG3pU8M1j4UICMvZ
-         jRwhStPjKB/ska2Qt+G92Dtm90UABVxPBGOWwektgIE7aV5ENG5cRG/A5VpumRWd8+TI
-         biGgd03H4Ur5VizLf+V/nN3vTut0dI6YSUVyqT/KAbbv2cwgPSYlFYs1FpQNsnPq7q6G
-         /p7i2pBUFMRHKeBCEK/+YVLbRNEpZ5BOqivSYyqt4uXw/OOGSLn3nmUjgh+DZwTzJBX9
-         C8lg==
-X-Gm-Message-State: AOJu0YzhT60foTcJd2shtBrUkWzkeUgAMpux4/0qybpNyMg+IXtc5nWx
-	8Tm862uXmbNcSqlTbYxr0RNETQMw/hSkzcLW7m77AI6sxv/wMfaRElG/A6PXyrkV
-X-Gm-Gg: Acq92OFz5StcJHDU3OYv7ULl5z9rmSN/Rsy3Nd/MREczwu4s7FJ9R1F+/4shNCptNo2
-	Mella0tcyetOnkbBO42hdmhmnL3RJJPiRT/m4ezV1UZqOCZRzPaoIS0vqm8XyhNKgDGoHwL8suY
-	Uer/CmjIcAxjM3jOVBNrgYv3FxHHKg95he5GlASDJv0BdSTKNPTwRBRqBZXorNdgmJJ+k5YKCmO
-	6wr8RlERU9US+qZ1bJug9YhNFHumQFm040uAF3zti1N0YCUN3/D9lsSJnBMHHJnWXU+usyO6TAS
-	mM51WjQ6P24RuD54yjeVQfsm0XVcs4nsfqnfsYz0e3T0mKNwH59xqaU46u/nUnVl2wbKWzAnRR9
-	d05jn00svYbNQEkdzf512At8USgwuGTVUu+2/fWqfBCrgV4396Snj/DKFCkzJuaITx1c32o/u3k
-	Dm9jAbLr+epLgK2vscQ3Uc+eEScy7KO2r1UQuq2chhitxCC7KmDv+UWeeoJg==
-X-Received: by 2002:a05:6a21:47c1:b0:3b5:6b5a:4f29 with SMTP id adf61e73a8af0-3b56b5a88c9mr899129637.30.1781125307293;
-        Wed, 10 Jun 2026 14:01:47 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85df04311bsm21615874a12.9.2026.06.10.14.01.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jun 2026 14:01:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Loic Poulain <loic.poulain@oss.qualcomm.com>
-Subject: [PATCH v2] hwmon: (ina2xx) Fix overflow issues
-Date: Wed, 10 Jun 2026 14:01:40 -0700
-Message-ID: <20260610210140.43657-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RRulwjSJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 435101F00893;
+	Wed, 10 Jun 2026 21:05:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781125507;
+	bh=ttBln2PDL/uIcc1HpCs5xCPbYiV9X8m2KmOBCOPnBp8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=RRulwjSJEkhkhmLvhk2iBUtFjWQGBozMUdwRAblhO3E7Te37OTAc66S/Ta6piTLAT
+	 PjEoVEdGz9g9ggiVpfka9YOOn4o7MET3YvhTbOE/zDTbsopB2Z3iJetACVlWnG77s5
+	 GRQlGy/tGbiRyQMoQpZvcSPdnKhStgnimw12kNlos4rXKm9jpjv1fAKxwTswV/kHJa
+	 Kx3LV7RijpSK0mPbRdDSnNubMFB05UEddNkhLeZfDyDdWQ8ppX1hiqSXJx/rDlD23y
+	 zBV77nbuAHOuymBWriyMzZryBiJ0M+gvybRGj5fcqdIhA8PBvpSsUT9bflty69IeAv
+	 b/j8zsRzVu5LQ==
+Received: by pali.im (Postfix)
+	id CF9195E0; Wed, 10 Jun 2026 23:05:03 +0200 (CEST)
+Date: Wed, 10 Jun 2026 23:05:03 +0200
+From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To: Armin Wolf <W_Armin@gmx.de>
+Cc: Dell.Client.Kernel@dell.com, mjg59@srcf.ucam.org, soyer@irl.hu,
+	hansg@kernel.org, ilpo.jarvinen@linux.intel.com,
+	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+	mario.limonciello@amd.com
+Subject: Re: [PATCH v6 9/9] modpost: Handle malformed WMI GUID strings
+Message-ID: <20260610210503.u2fcxq5qnrdtcdxf@pali>
+References: <20260610203453.816254-1-W_Armin@gmx.de>
+ <20260610203453.816254-10-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260610203453.816254-10-W_Armin@gmx.de>
+User-Agent: NeoMutt/20180716
 
-Sashiko reports the following overflow problems:
+On Wednesday 10 June 2026 22:34:53 Armin Wolf wrote:
+> Some WMI GUIDs found inside binary MOF files contain both
+> uppercase and lowercase characters. Blindly copying such
+> GUIDs will prevent the associated WMI driver from loading
+> automatically because the WMI GUID found inside WMI device ids
+> always contains uppercase characters.
+> 
+> Avoid this issue by always converting WMI GUID strings to
+> uppercase. Also verify that the WMI GUID string actually looks
+> like a valid GUID.
 
-In ina2xx_get_value(), the INA2XX_POWER calculation is:
-    val = regval * data->power_lsb_uW;
-The result is returned as a signed 32-bit int. For the INA232 with a common
-2mOhm shunt, power_lsb_uW becomes 40,000. When the 16-bit regval exceeds
-53,687, the product exceeds INT_MAX. This overflows the 32-bit signed math,
-wrapping to a negative integer and reporting erroneous negative power
-readings to userspace.
+Hello! Maybe different idea: Would not it be better to check in
+do_wmi_entry() if all letters are really upper case?
 
-For INA2XX_POWER, the upper bound is clamped:
-    val = clamp_val(val, 0, UINT_MAX - data->power_lsb_uW);
-clamp_val() implicitly casts the upper bound to a 32-bit signed long on
-32-bit platforms. This results in a negative number, meaning any valid
-power limit is clamped to a negative value and ultimately programmed as 0.
-Similarly, for INA2XX_SHUNT_VOLTAGE, the initial clamp uses SHRT_MAX *
-shunt_div instead of division. The subsequent multiplication:
-    val *= data->config->shunt_div;
-overflows LONG_MAX on 32-bit platforms for high inputs, wrapping to a
-negative value and also programming the hardware limit to 0.
+Mixing lowercase and uppercase is a mess. And if somebody blindly copy
+lowercase from MOF files to some kernel wmi driver, we can check for
+this mistake in file2alias.c and throw an error.
 
-For INA2XX_BUS_VOLTAGE on parts with bus_voltage_shift > 0, the calculation
-(val * 1000) << shift can exceed LONG_MAX for limits over ~134V, wrapping
-to negative and setting the limit to 0.
-
-For INA2XX_CURRENT:
-On 32-bit systems, long is 32-bit signed. For configurations with small
-shunts, current_lsb_uA can be very large (e.g., 40,000,000). When
-multiplied by a large regval, the product can reach 1.3 trillion, massively
-exceeding LONG_MAX (2.14 billion).
-This will silently overflow the 32-bit signed math, wrapping to a negative
-value.
-
-If a large limit is provided to effectively disable the alert (e.g.,
-INT_MAX / 1000), the intermediate value after DIV_ROUND_CLOSEST can be
-large (e.g., 200,000,000). When left-shifted by current_shift (e.g., 4 for
-INA234), it becomes 3.2 billion, exceeding LONG_MAX and wrapping to a
-negative number.
-
-In sy24655_average_power_read(), the accumulator quotient multiplied by
-power_lsb_uW can overflow the 32-bit signed math before the assignment.
-
-Have ina2xx_get_value() return a long variable to improve the supported
-value range on 64-bit systems and to match the type of values returned
-to the hwmon core.
-
-Clamp the result of 'regval * data->power_lsb_uW' to LONG_MAX to fix the
-INA2XX_POWER calculation overflow.
-
-Change the initial clamp for INA2XX_SHUNT_VOLTAGE to SHRT_MAX / shunt_div
-to fix the shunt limit overflow.
-
-For INA2XX_BUS_VOLTAGE, limit the initial clamp to 130V instead of 200V
-to avoid the overflow.
-
-For INA2XX_CURRENT, improve clamping to avoid the overflow.
-
-To address the INA2XX_CURRENT problem in ina226_alert_to_reg(), take
-current_shift into acount for the initial clamp to avoid the overflow.
-
-In sy24655_average_power_read, use a temporary 64-bit variable to store
-the multiplication result and clamp the result against LONG_MAX.
-
-Cc: Loic Poulain <loic.poulain@oss.qualcomm.com>
-Fixes: ab7fbee452be ("hwmon: (ina2xx) Fix various overflow issues")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-v2: Fixed several additional overflow conditions reported by Sashiko
-    after v1
-
- drivers/hwmon/ina2xx.c | 29 ++++++++++++++++++-----------
- 1 file changed, 18 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
-index c4742e84b999..1ba46c9c3e20 100644
---- a/drivers/hwmon/ina2xx.c
-+++ b/drivers/hwmon/ina2xx.c
-@@ -16,6 +16,7 @@
- #include <linux/i2c.h>
- #include <linux/init.h>
- #include <linux/kernel.h>
-+#include <linux/limits.h>
- #include <linux/module.h>
- #include <linux/property.h>
- #include <linux/regmap.h>
-@@ -266,10 +267,11 @@ static u16 ina226_interval_to_reg(long interval)
- 	return FIELD_PREP(INA226_AVG_RD_MASK, avg_bits);
- }
- 
--static int ina2xx_get_value(struct ina2xx_data *data, u8 reg,
--			    unsigned int regval)
-+static long ina2xx_get_value(struct ina2xx_data *data, u8 reg,
-+			     unsigned int regval)
- {
--	int val;
-+	s64 val64;
-+	long val;
- 
- 	switch (reg) {
- 	case INA2XX_SHUNT_VOLTAGE:
-@@ -283,13 +285,13 @@ static int ina2xx_get_value(struct ina2xx_data *data, u8 reg,
- 		val = DIV_ROUND_CLOSEST(val, 1000);
- 		break;
- 	case INA2XX_POWER:
--		val = regval * data->power_lsb_uW;
-+		val = clamp_val((u64)regval * data->power_lsb_uW, 0, LONG_MAX);
- 		break;
- 	case INA2XX_CURRENT:
- 		/* signed register, result in mA */
--		val = ((s16)regval >> data->config->current_shift) *
-+		val64 = (s64)((s16)regval >> data->config->current_shift) *
- 		  data->current_lsb_uA;
--		val = DIV_ROUND_CLOSEST(val, 1000);
-+		val = clamp_val(DIV_ROUND_CLOSEST(val64, 1000), LONG_MIN, LONG_MAX);
- 		break;
- 	case INA2XX_CALIBRATION:
- 		val = regval;
-@@ -378,23 +380,26 @@ static int ina2xx_read_init(struct device *dev, int reg, long *val)
-  */
- static u16 ina226_alert_to_reg(struct ina2xx_data *data, int reg, long val)
- {
-+	long limit;
-+
- 	switch (reg) {
- 	case INA2XX_SHUNT_VOLTAGE:
--		val = clamp_val(val, 0, SHRT_MAX * data->config->shunt_div);
-+		val = clamp_val(val, 0, DIV_ROUND_CLOSEST(SHRT_MAX, data->config->shunt_div));
- 		val *= data->config->shunt_div;
- 		val <<= data->config->shunt_voltage_shift;
- 		return clamp_val(val, 0, SHRT_MAX);
- 	case INA2XX_BUS_VOLTAGE:
--		val = clamp_val(val, 0, 200000);
-+		val = clamp_val(val, 0, 130000);
- 		val = (val * 1000) << data->config->bus_voltage_shift;
- 		val = DIV_ROUND_CLOSEST(val, data->config->bus_voltage_lsb);
- 		return clamp_val(val, 0, USHRT_MAX);
- 	case INA2XX_POWER:
--		val = clamp_val(val, 0, UINT_MAX - data->power_lsb_uW);
-+		val = clamp_val(val, 0, LONG_MAX - data->power_lsb_uW);
- 		val = DIV_ROUND_CLOSEST(val, data->power_lsb_uW);
- 		return clamp_val(val, 0, USHRT_MAX);
- 	case INA2XX_CURRENT:
--		val = clamp_val(val, INT_MIN / 1000, INT_MAX / 1000);
-+		limit = (INT_MAX / 1000) >> data->config->current_shift;
-+		val = clamp_val(val, -limit, limit);
- 		/* signed register, result in mA */
- 		val = DIV_ROUND_CLOSEST(val * 1000, data->current_lsb_uA);
- 		val <<= data->config->current_shift;
-@@ -537,6 +542,7 @@ static int sy24655_average_power_read(struct ina2xx_data *data, u8 reg, long *va
- 	u8 template[6];
- 	int ret;
- 	long accumulator_24, sample_count;
-+	u64 val64;
- 
- 	/* 48-bit register read */
- 	ret = i2c_smbus_read_i2c_block_data(data->client, reg, 6, template);
-@@ -555,7 +561,8 @@ static int sy24655_average_power_read(struct ina2xx_data *data, u8 reg, long *va
- 		return 0;
- 	}
- 
--	*val = DIV_ROUND_CLOSEST(accumulator_24, sample_count) * data->power_lsb_uW;
-+	val64 = (u64)DIV_ROUND_CLOSEST(accumulator_24, sample_count) * data->power_lsb_uW;
-+	*val = clamp_val(val64, 0, LONG_MAX);
- 
- 	return 0;
- }
--- 
-2.45.2
-
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ---
+>  .../wmi/driver-development-guide.rst          |  2 +-
+>  scripts/mod/file2alias.c                      | 28 ++++++++++++++++++-
+>  2 files changed, 28 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/wmi/driver-development-guide.rst b/Documentation/wmi/driver-development-guide.rst
+> index 387f508d57ad..6290c448f5e7 100644
+> --- a/Documentation/wmi/driver-development-guide.rst
+> +++ b/Documentation/wmi/driver-development-guide.rst
+> @@ -54,7 +54,7 @@ to matching WMI devices using a struct wmi_device_id table:
+>  ::
+>  
+>    static const struct wmi_device_id foo_id_table[] = {
+> -         /* Only use uppercase letters! */
+> +         /* Using only uppercase letters is recommended */
+>           { "936DA01F-9ABD-4D9D-80C7-02AF85C822A8", NULL },
+>           { }
+>    };
+> diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
+> index 4e99393a35f1..20e542a888c4 100644
+> --- a/scripts/mod/file2alias.c
+> +++ b/scripts/mod/file2alias.c
+> @@ -1253,6 +1253,8 @@ static void do_tee_entry(struct module *mod, void *symval)
+>  static void do_wmi_entry(struct module *mod, void *symval)
+>  {
+>  	DEF_FIELD_ADDR(symval, wmi_device_id, guid_string);
+> +	char result[sizeof(*guid_string)];
+> +	int i;
+>  
+>  	if (strlen(*guid_string) != UUID_STRING_LEN) {
+>  		warn("Invalid WMI device id 'wmi:%s' in '%s'\n",
+> @@ -1260,7 +1262,31 @@ static void do_wmi_entry(struct module *mod, void *symval)
+>  		return;
+>  	}
+>  
+> -	module_alias_printf(mod, false, WMI_MODULE_PREFIX "%s", *guid_string);
+> +	for (i = 0; i < UUID_STRING_LEN; i++) {
+> +		char value = (*guid_string)[i];
+> +		bool valid = false;
+> +
+> +		if (i == 8 || i == 13 || i == 18 || i == 23) {
+> +			if (value == '-')
+> +				valid = true;
+> +		} else {
+> +			if (isxdigit(value))
+> +				valid = true;
+> +		}
+> +
+> +		if (!valid) {
+> +			warn("Invalid character %c inside WMI GUID string '%s' in '%s'\n",
+> +			     value, *guid_string, mod->name);
+> +			return;
+> +		}
+> +
+> +		/* Some GUIDs from BMOF definitions contain lowercase characters */
+> +		result[i] = toupper(value);
+> +	}
+> +
+> +	result[i] = '\0';
+> +
+> +	module_alias_printf(mod, false, WMI_MODULE_PREFIX "%s", result);
+>  }
+>  
+>  /* Looks like: mhi:S */
+> -- 
+> 2.39.5
+> 
