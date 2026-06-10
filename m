@@ -1,99 +1,147 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 717FD38CFF8
-	for <linux-hwmon@vger.kernel.org>; Tue,  9 Jun 2026 20:53:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 145AA20ED;
+	Wed, 10 Jun 2026 00:12:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781038436; cv=none; b=tY9J86oyg8apTEDhZ+TVg3eAC+ayRDtiJd+wiDRm7QarHTWiPTFdR+3+6mZCEa0xvt0NTDphyMySbfsaNjoFACQJPYWCYxUxOweupHD30pEUkpGRLnNXLGQVNj8+ZHiCB3pREYOTTHfUy0Cqk05jvXkS3n72osaYBDL+t46cxCw=
+	t=1781050346; cv=none; b=Gu8ZrxU8g6gl20nfNX/peS/hxkU4EvGD8SjHP+lKBrmIRT29qCOxLIThns9BABchKlIgbyqXE4SJZaCTWI8uNaQMsxuQcPg6Yk417pO04psx/5bG7YYFHOEx6+JcpdKjwlX+6B7tSQ++lyTf9LHI3fkU4L8xrAkHr3Z11akbzGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781038436; c=relaxed/simple;
-	bh=Qw/3uIxuvhR9pkkQn0Fun90WWrW+XXIONdsi/Hw7s9A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r0pv7onMnQjVEMA6TOJwGVWrsJ8i/Ct/d65rd4N+sRx4jfQI0FlKO9Zs3LFsqVxYE1SJwzm+HyqkgdyIR8+rP8YLYBHcsX6cvwr39Lkng+o+HWzlvhnPwCDWaSu8RzxPC26RUE0Bpxj6b4ff/YboIf6iZ4M/BfmwwriH0XnYZq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eBhtEbrp; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781050346; c=relaxed/simple;
+	bh=nUAWGPannloqxsFPiE+8Hz2I7zLcDjiAJao4e/vobD0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GQwrGYtbz2AjOBhzUvF2Jkqg3zRYvNJK9IxRLteksweS2tJLJpsBy/c6TzrlEvR5DMb4KygYi+2UgvvISafmcqwXdn7C6sBAVOrUFvjYe5JYeKMo+ufZrBryxtMb/WrLfMof3seeNwXO2T0BS0NjjNxQMNuNnA9LOGid7okrtz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aW7NNo+e; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eBhtEbrp"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-36d5fd50d20so3933633a91.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 09 Jun 2026 13:53:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781038435; x=1781643235; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RZ90DIeQT+39qjB/FIaskdYlqdzdVSYmD3rl7EwwUds=;
-        b=eBhtEbrp9jCU6iSVGB6KhNTQ2Vo40juvWc12jf0iFPx3tMaPy+3lKTpuDHOi5V5DQd
-         t9i9IiAE0jRYs5pFdAHz0fbE5nXy9jrMN77yjrrGxc2lVwf7dXjqYVw48dZs+ojCgfLZ
-         kHxH7tre0XYwwRaXeTJylvO2x2FbWQtDDh62cbz5kGDP4qvUdmDiqMYVjOkZPxNv62Aw
-         3VaqPnxaShOKN62reyqtPZuPZgUxvx2k9UId+Cm+aKVxrWeHkMz0EwWOuvaFvxknbuhE
-         O6e+lhI7XIYhc6DEBEA6mw/LuGCrMqOOmKdWLdHDj7dmILr8YE4dHUyScd5gBCLssGDn
-         ApSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781038435; x=1781643235;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RZ90DIeQT+39qjB/FIaskdYlqdzdVSYmD3rl7EwwUds=;
-        b=CfWpRCMLI9uxGb5nV2eoB/57nAEJGRPr37RYUfXEsQWAlSxM9B52ZrtmZc9lgcFby8
-         a/EMAiXeB64Kt5UFPvAAgI7TMkFBBQ51iDjW41E6W5TVmzWrX96aue6RKJfRVkObBSiK
-         tdOI75mMZdRswKtDfLakrQLPcmCn7kgQgT9WQAIoGWLvB80EQ5mldvIjx1RVbV+F5oZS
-         hURvYkiXbTU4TdipFnz4zxHyDuDoRA7H6uzntWrjTRurhj2C5ne2Jq5/afLR0e0XwR1R
-         TYGo6VSxLB6JJTDnq8qEx7aCUaKlnixPeXHgSJ1G42AajZzWmvotXxXwCw++8+6BqaKQ
-         tDWQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9AkwGmPjfmi3kG/NH7btGzxzJ3qzWs6UOkbVMBeuzHWYcIkarX4N+SQJU6mzEpWuJx6C+KvGIE3AvCuQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YycojqPVekBnv+cRZFIB6V4QKXqLnIW+zj0GbkisxFBB1fRb4pB
-	nWCnQzTzaeXTWKAc4r5DjYU8OgUkjEVei9ls0O1twDuJKI9w989E3tVX
-X-Gm-Gg: Acq92OGF2FO1NpJ2qOpe8IFWWNnOcaWBADsU85YvI3XbNjh1yBjXr2+tT3Zizxtqp/e
-	zcfdV03BB7NawIcleALYNpUXOfYNsqCX5Y1lZlCHx8jZRPYmJWAK1j5ezLZKDh96F2CmV9C1FtP
-	DvdqmuxFDhVeddHlqnAd3mEWqaknEi1SeekggTuj/lxs8jAmRUYGhvDgrXz6ucOGeqcy6u4LR7K
-	2fecMELehrRIU87J7c7O0zgvFyib6rsgTP2w/TUwwN7ztQ+YbTfxzcX3E6+5r+Dg3BPO/ZnGUbq
-	nLNq7u8X637EIQUoOcsPGNlVws2cY/+avhz9qUSLmx8alyoflJ2nY9pZzIiiED2gvxj+Tm3iKCW
-	4tLjAyZ5cQS95NhSCsUO60xvEcorLdrkljYXz+p6Q7X0HNcK/GRW6sdAn0gFhY1WiW+kevtMKly
-	kM/0EFKQWSZJeMWA1StljD6tEdAE0L0zZvFlX+V5YEqRmGbDE=
-X-Received: by 2002:a17:90b:5890:b0:36b:bb66:fbc3 with SMTP id 98e67ed59e1d1-370eec11205mr22415053a91.4.1781038434724;
-        Tue, 09 Jun 2026 13:53:54 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36f710ee4f3sm21059611a91.13.2026.06.09.13.53.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 13:53:54 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 9 Jun 2026 13:53:53 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Benson Leung <bleung@chromium.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Guenter Roeck <groeck@chromium.org>,
-	chrome-platform@lists.linux.dev, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/5] hwmon: (cros_ec) Add support for displaying fan
- curves
-Message-ID: <3a3a7d58-010f-4754-bd07-a7f34b21a83e@roeck-us.net>
-References: <20260529-cros_ec-hwmon-fan-curve-v1-0-da6792b3830f@weissschuh.net>
- <20260529-cros_ec-hwmon-fan-curve-v1-4-da6792b3830f@weissschuh.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aW7NNo+e"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57D941F00893;
+	Wed, 10 Jun 2026 00:12:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781050344;
+	bh=uAtYpqDNK5brSycLgQonyxM4I0BkARS3Uny+BYBoDaE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=aW7NNo+e2EhKUuO3Q+5T8gO2wrP4aIrC1f6sQSgTqqAoBQeoY3pTdc8AsFYSOwRf7
+	 kFW/mXfZfNB12lgKOh7fjBMuThHTLNfBB+TPKglOn4SyoT99PpXZg3wHOisEWybfYq
+	 bB19Gw0Pj/5Ijg2M0OajNt31tzaMXh56/YMZX1zpbJzmq0e06GZyuYNxqz8Sk11Le1
+	 mhxl+eLkxUWHHitQgSW4BBGBw/6Y37ySlVEIcruchEQFHdKDOyeLjH5R72tbriFNT5
+	 Mf/u/KsF3UtLHnjFNhr8o/T3/H14rxxLSBho/RM0BE45YtJ7S5dZa2MN33mMZDMYlA
+	 B5aoSv0Oeq73Q==
+Message-ID: <5effba66-0d42-4d42-9833-f2c0be6874ad@kernel.org>
+Date: Wed, 10 Jun 2026 08:12:05 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260529-cros_ec-hwmon-fan-curve-v1-4-da6792b3830f@weissschuh.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 RESEND 1/2] scsi: mpt3sas: add IO Unit Page 7 config
+ accessor
+To: Louis Sautier <sautier.louis@gmail.com>,
+ Sathya Prakash <sathya.prakash@broadcom.com>,
+ Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+ Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+ Ranjan Kumar <ranjan.kumar@broadcom.com>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, MPT-FusionLinux.pdl@broadcom.com,
+ linux-scsi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260609164423.2829699-1-sautier.louis@gmail.com>
+ <20260609164423.2829699-2-sautier.louis@gmail.com>
+Content-Language: en-US
+From: Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <20260609164423.2829699-2-sautier.louis@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, May 29, 2026 at 10:31:55PM +0200, Thomas Weiﬂschuh wrote:
-> The automatic fan control mode of the embedded controller uses fan
-> curves with two trigger points to calculate the target fan speed.
-> All temperature sensors affect all fans.
+On 2026/06/10 0:44, Louis Sautier wrote:
+> Add mpt3sas_config_get_iounit_pg7(), mirroring the existing iounit
+> page accessors. Used by the hwmon driver added in the following patch
+> to read the IOC and board temperatures.
 > 
-> Expose these fan curves through the standard hwmon sysfs ABI.
+> Assisted-by: Claude:claude-opus-4-7
+> Signed-off-by: Louis Sautier <sautier.louis@gmail.com>
+> ---
+>  drivers/scsi/mpt3sas/mpt3sas_base.h   |  2 ++
+>  drivers/scsi/mpt3sas/mpt3sas_config.c | 36 +++++++++++++++++++++++++++
+>  2 files changed, 38 insertions(+)
 > 
-> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+> diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.h b/drivers/scsi/mpt3sas/mpt3sas_base.h
+> index d4597d058705..c655742d0dde 100644
+> --- a/drivers/scsi/mpt3sas/mpt3sas_base.h
+> +++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
+> @@ -1904,6 +1904,8 @@ int mpt3sas_config_get_iounit_pg3(struct MPT3SAS_ADAPTER *ioc,
+>  	Mpi2ConfigReply_t *mpi_reply, Mpi2IOUnitPage3_t *config_page, u16 sz);
+>  int mpt3sas_config_set_iounit_pg1(struct MPT3SAS_ADAPTER *ioc, Mpi2ConfigReply_t
+>  	*mpi_reply, Mpi2IOUnitPage1_t *config_page);
+> +int mpt3sas_config_get_iounit_pg7(struct MPT3SAS_ADAPTER *ioc,
+> +	Mpi2ConfigReply_t *mpi_reply, Mpi2IOUnitPage7_t *config_page);
+>  int mpt3sas_config_get_iounit_pg8(struct MPT3SAS_ADAPTER *ioc, Mpi2ConfigReply_t
+>  	*mpi_reply, Mpi2IOUnitPage8_t *config_page);
+>  int mpt3sas_config_get_sas_iounit_pg1(struct MPT3SAS_ADAPTER *ioc,
+> diff --git a/drivers/scsi/mpt3sas/mpt3sas_config.c b/drivers/scsi/mpt3sas/mpt3sas_config.c
+> index 45ac853e1289..ef07825046bc 100644
+> --- a/drivers/scsi/mpt3sas/mpt3sas_config.c
+> +++ b/drivers/scsi/mpt3sas/mpt3sas_config.c
+> @@ -991,6 +991,42 @@ mpt3sas_config_get_iounit_pg3(struct MPT3SAS_ADAPTER *ioc,
+>  	return r;
+>  }
+>  
+> +/**
+> + * mpt3sas_config_get_iounit_pg7 - obtain iounit page 7
+> + * @ioc: per adapter object
+> + * @mpi_reply: reply mf payload returned from firmware
+> + * @config_page: contents of the config page
+> + * Context: sleep.
+> + *
+> + * Return: 0 for success, non-zero for failure.
+> + */
+> +int
+> +mpt3sas_config_get_iounit_pg7(struct MPT3SAS_ADAPTER *ioc,
 
-Applied.
+Please do not break the line after "int"
 
-Thanks,
-Guenter
+> +	Mpi2ConfigReply_t *mpi_reply, Mpi2IOUnitPage7_t *config_page)
+> +{
+> +	Mpi2ConfigRequest_t mpi_request;
+> +	int r;
+> +
+> +	memset(&mpi_request, 0, sizeof(Mpi2ConfigRequest_t));
+> +	mpi_request.Function = MPI2_FUNCTION_CONFIG;
+> +	mpi_request.Action = MPI2_CONFIG_ACTION_PAGE_HEADER;
+> +	mpi_request.Header.PageType = MPI2_CONFIG_PAGETYPE_IO_UNIT;
+> +	mpi_request.Header.PageNumber = 7;
+> +	mpi_request.Header.PageVersion = MPI2_IOUNITPAGE7_PAGEVERSION;
+> +	ioc->build_zero_len_sge_mpi(ioc, &mpi_request.PageBufferSGE);
+> +	r = _config_request(ioc, &mpi_request, mpi_reply,
+> +	    MPT3_CONFIG_PAGE_DEFAULT_TIMEOUT, NULL, 0);
+
+	r = _config_request(ioc, &mpi_request, mpi_reply,
+			    MPT3_CONFIG_PAGE_DEFAULT_TIMEOUT, NULL, 0);
+
+is a lot nicer to read.
+
+> +	if (r)
+> +		goto out;
+> +
+> +	mpi_request.Action = MPI2_CONFIG_ACTION_PAGE_READ_CURRENT;
+> +	r = _config_request(ioc, &mpi_request, mpi_reply,
+> +	    MPT3_CONFIG_PAGE_DEFAULT_TIMEOUT, config_page,
+> +	    sizeof(*config_page));
+
+Same here, please align the arguments.
+
+	r = _config_request(ioc, &mpi_request, mpi_reply,
+			    MPT3_CONFIG_PAGE_DEFAULT_TIMEOUT,
+			    config_page, sizeof(*config_page));
+
+With that, looks OK to me.
+
+Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
+
+
+-- 
+Damien Le Moal
+Western Digital Research
