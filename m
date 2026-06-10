@@ -1,43 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9CE6421A12
-	for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 20:45:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57A2C331EC2
+	for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 20:45:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781124319; cv=none; b=PItN2qQLOEloTt40KogQd1iy+B2/kfkHunBIxVLDaR+cLvo/eqLXtmGPQNSLNQXJxb7cqGbhnw9FPq5O5kWvWOrjSV7v4sa0jNF1GMzTxdBvmSITGeJoR6odavaol5oFxkfJCuivaeXsfZoqUrUb3iDdI/ra1iWuYuSwL/Gg9h4=
+	t=1781124352; cv=none; b=CCFkROD5E/iKdtsiHlL03kWcElHR1BE+0LnxdlP+Utlqe0O85p/QN335DF4rxTOw8MZGPt24Ta4Ad3p+YIA9WI5acfkoHPoDEMRt8ladBmUpyCli+/I/12vWCg3bdq5aKAaW+CKoY7ppr7fz2+tjIVh75dLNy11BAqSwYohQq/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781124319; c=relaxed/simple;
-	bh=p1uG4uRDNX1M8vjd1NTMOfGb2ovzb0yWJXHphc9tdCM=;
+	s=arc-20240116; t=1781124352; c=relaxed/simple;
+	bh=a6q+sXQnScHanpVg6xaPrULdd773KzG2iuVbWLLSUGw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=lgcPg0j0Q/pZis6qXlLNpQcrgt4cM8n+RWjEKSOfehpxo6sY4ttUTdtfbl60tV13bZTel3fe9D+NgzxIdvwWQeIxVpfpGkfgmXc2R26WL0sD/9mbyfjbkOUPWN2dR1tridqkoNB822Blqm3JicxbkftuMVoB55C1x2vTIUmvnpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WgU8kiMx; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=nUEs7zz2yMzGq/MpUdhEF0D34FJXEdqte7h4gGgHR6uKo16Jv2SuN2t6J/GoaTF0h68Jocg1GxTz9EdW5i21pqmgDJHC+MOFbSmPjMnrkqUEyzmgLAF+bvE7JeH+0ZV/EwwRaDdD4KhriXBYmTzstNzbsPmCmcgiC0SYLaat22c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VIKdIMoS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WgU8kiMx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33F021F00893;
-	Wed, 10 Jun 2026 20:45:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VIKdIMoS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 853551F00898;
+	Wed, 10 Jun 2026 20:45:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781124318;
-	bh=1DY4IhHEEtDBiL4o9s21LliRjghGmFfCrJwxaotwjx8=;
+	s=k20260515; t=1781124349;
+	bh=b7fKPrvsBgdMklfYRYWEhyncflaf8ZVTcsEIVZ6M/gw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=WgU8kiMxUNJLAMwrk+Z2pONt2oJ8zU4MVB3xVadkLIhkNSlUKhFsPM7eZRhUU33MM
-	 e2ote5e2vgFrdzkcVOkBxzOvR5rxZujFJju4ynNWYl/S0eTwtUQIrvhpIQ59ceRqa4
-	 cSZowNJlrg+2OwwtmjiAVz6pvrdoOaEB3OEI5AOhjJgVYVMGIYwKyFKqGvRREri/J6
-	 YMfKirslFV9PZCQ8sW7ZzFyQDyw6IIkcTbXj6+wKEuyZSvQDaKz47SfLPWlAa/NBc+
-	 EJzTja4uh79mzR4r9Z/O6gAM6VuzF6eyYq4Z9dxkfM/CdhqA1uuBXvTDgpZCegWi9Z
-	 N2rdaOirSh6Gg==
+	b=VIKdIMoS1BJP1ep/LrlzvRe6VyaAmhn47becs89XQ6egvKY8J7p/ukrsDBme8DO/l
+	 /nM2Gn/rkyef+9c8CpOo7WU5kivrj9HLexB9zC9PfuJjg86mzHQwZ7Sga6NppLZyCT
+	 tBXSWU98ErN7gKMxcRI2ep5uVhpEyocfY/C2ATxfdizSnvVgJwnJ1CIRdirdNQdwG/
+	 5eo7GR+v2c3Xnv4KyhOwG/9o7qoNAb6OT0R3Isn8tA/YnoxotCTTcCWuZ+HWNijoZZ
+	 TM1ytqo5mkKwFj+JPSPAfmnvD8X5dvtT1h4O/SMOZf7VdFWnbYLm7SZ3P5DXL2Tt67
+	 oKNSKjLXmSyyw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v6 2/9] platform/x86: dell-privacy: Use new buffer-based
- WMI API
+Subject: Re: [PATCH v6 6/9] hwmon: (dell-smm) Use new buffer-based WMI API
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Armin Wolf" <W_Armin@gmx.de>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260610203453.816254-3-W_Armin@gmx.de>
-References: <20260610203453.816254-3-W_Armin@gmx.de>
+In-Reply-To: <20260610203453.816254-7-W_Armin@gmx.de>
+References: <20260610203453.816254-7-W_Armin@gmx.de>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 10 Jun 2026 20:45:17 +0000
-Message-Id: <20260610204518.33F021F00893@smtp.kernel.org>
+Date: Wed, 10 Jun 2026 20:45:49 +0000
+Message-Id: <20260610204549.853551F00898@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -46,67 +45,77 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] dell_privacy_has_mic_mute() accesses `priv->features_present` afte=
-r releasing `list_mutex`, risking a Use-After-Free if the device is concurr=
-ently unbound.
+- [High] wmi_parse_response incorrectly fails with -ENODATA when the firmwa=
+re returns fewer than 4 registers, breaking support for valid short SMM res=
+ponses.
 --
 
-commit c9150394b4cc5e06aab976ccc95fd348e2c66514
+commit 5defcd15874af970946561c0d13ad1b0850d56ca
 Author: Armin Wolf <W_Armin@gmx.de>
+hwmon: (dell-smm) Use new buffer-based WMI API
 
-platform/x86: dell-privacy: Use new buffer-based WMI API
+This commit updates the dell-smm-hwmon driver to use the new buffer-based W=
+MI
+API. This allows the driver to also support ACPI firmware implementations t=
+hat
+do not use ACPI buffers for returning the results of a SMM call.
 
-Use the new buffer-based WMI API to also support ACPI firmware
-implementations that do not use ACPI buffers for the device state.
-
-> diff --git a/drivers/platform/x86/dell/dell-wmi-privacy.c b/drivers/platf=
-orm/x86/dell/dell-wmi-privacy.c
-> index ed099a431ea4d..f9d275b2f900c 100644
-> --- a/drivers/platform/x86/dell/dell-wmi-privacy.c
-> +++ b/drivers/platform/x86/dell/dell-wmi-privacy.c
-[ ... ]
-> @@ -185,60 +208,28 @@ static struct attribute *privacy_attrs[] =3D {
->  };
->  ATTRIBUTE_GROUPS(privacy);
+> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmo=
+n.c
+> index 038edffc1ac74..6ca2ea4bfe7d3 100644
+> --- a/drivers/hwmon/dell-smm-hwmon.c
+> +++ b/drivers/hwmon/dell-smm-hwmon.c
+> @@ -261,22 +263,19 @@ static int wmi_parse_response(u8 *buffer, u32 lengt=
+h, struct smm_regs *regs)
+>  		&regs->ecx,
+>  		&regs->edx
+>  	};
+> -	u32 offset =3D 0;
+> +	size_t offset =3D 0;
+>  	ssize_t ret;
+>  	int i;
 > =20
+>  	for (i =3D 0; i < ARRAY_SIZE(registers); i++) {
+>  		if (offset >=3D length)
+>  			return -ENODATA;
+> =20
+>  		ret =3D wmi_parse_register(buffer + offset, length - offset, registers=
+[i]);
+>  		if (ret < 0)
+>  			return ret;
+> =20
+> -		offset +=3D ret;
+> +		/* WMI aligns u32 integers on a 4 byte boundary */
+> +		offset =3D ALIGN(offset + ret, 4);
+>  	}
+> =20
+> -	if (offset !=3D length)
+> -		return -ENOMSG;
+> -
+>  	return 0;
+>  }
 
 [Severity: High]
-This isn't a bug introduced by this patch, but while reviewing the file
-I noticed a potential use-after-free in dell_privacy_has_mic_mute().
+Does wmi_parse_response() incorrectly fail with -ENODATA when the firmware
+returns fewer than 4 registers, breaking support for valid short SMM respon=
+ses?
 
-dell_privacy_has_mic_mute() accesses priv->features_present after
-releasing list_mutex:
+Based on the changes, it appears the parsing loop previously allowed a short
+response to be fully consumed (where offset =3D=3D length), eventually veri=
+fying
+it and successfully returning 0 while leaving any unprovided registers
+unchanged.
 
-bool dell_privacy_has_mic_mute(void)
-{
-	struct privacy_wmi_data *priv;
+With the updated code, if a BIOS legitimately returns a valid WMI response
+containing 1, 2, or 3 registers (e.g., 8, 16, or 24 bytes), the loop parses
+the provided registers and increments offset to equal length. On the
+subsequent iteration, it evaluates offset >=3D length as true.=20
 
-	mutex_lock(&list_mutex);
-	priv =3D list_first_entry_or_null(&wmi_list,
-			struct privacy_wmi_data,
-			list);
-	mutex_unlock(&list_mutex);
+Instead of succeeding, will this now fail the entire SMM call with -ENODATA?
 
-	return priv && (priv->features_present & BIT(DELL_PRIVACY_TYPE_AUDIO));
-}
-
-If dell_privacy_wmi_remove() executes concurrently (e.g., via sysfs unbind)
-and removes priv from the list, the devres core will automatically free the
-devm_kzalloc-backed priv structure.
-
-If the thread running dell_privacy_has_mic_mute() is preempted immediately
-after unlocking list_mutex, will the subsequent dereference of
-priv->features_present read freed memory?
-
-> -/*
-> - * Describes the Device State class exposed by BIOS which can be consume=
-d by
-> - * various applications interested in knowing the Privacy feature capabi=
-lities.
-[ ... ]
+Could this functional regression break hardware monitoring (e.g., fan speed,
+temperatures) on Dell systems whose BIOS provides short WMI SMM responses?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260610203453.8162=
-54-1-W_Armin@gmx.de?part=3D2
+54-1-W_Armin@gmx.de?part=3D6
