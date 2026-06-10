@@ -1,136 +1,228 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 915F331716B
-	for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 21:12:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8436332D43C
+	for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 21:29:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781125927; cv=none; b=lwiEmitsEzuRxkCGNXbVNO2SYw4Tr1MnphRC42yNA2wASEUOUgIx3mYa8t4z+Kc3x7TRRGKYqMxFa5Pqlmr/j9n9rj/XmEJQa9ROrpFZyTCyY1GWOfjicaH3i2eHOR/TrwaVVg4TncG5vhHWaZdsQawwvqEbdQ9wN4Y/Pbw1lYc=
+	t=1781126964; cv=none; b=qli636oSRABkNjfi7RpMSKi9depz8/qMB2/F6XSZR9FUv7IXvN0v8lhc3/vlZj4U0A+u0XPEFSqi7aI1R/Xw7HxvV+dPQnKmuD8fbYi4b4v3crRGQaqDbI84JjJu95NQYWpIiYgeAprp7+z+9a2mQg3D4uDWTHeHyU0REyQ4A8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781125927; c=relaxed/simple;
-	bh=14eGUkoK50jimC8L+wnpVmrvZetGRaAxZcppij4hPuI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=NBiCtMrzUfpKOcA/TobrRPFRThdCfN2ZVsjok5PYCgKuaVLZIn/0kuHeDVwI+j+tFFwnpLWmkkJJVkOSlJjXjZK2UzqwCzYItt3waaSR90xAREsZN3kLdhaKcKkgBhvsmDqRS3StN+7AFIvA5dnsQtM9Ydfs/Ar9IAh9Fjh6Jow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R++lc0aP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781126964; c=relaxed/simple;
+	bh=QY8Q7r2ishNwriCRtEuVXD5vPfNzHMw+RacurcwwRNA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XQc4b+rCWdh6VeMcOl0j3xkBC+HE4akdt1Uaa7n3oAquHyu3IwNqbwmfGVmqdN+l3GlGpsm9NNNQPObM7PwJdmvuVHr+cv0XL6WRzqtEuUalB7U4XHq5KeSD7OmESb6mfs+vnmS2y1hOetHjFouds8NhxEj0XsI5nBnQQd+y/po=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=kTNFvmW/; arc=none smtp.client-ip=212.227.17.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R++lc0aP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CDD01F00893;
-	Wed, 10 Jun 2026 21:12:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781125926;
-	bh=h6iNfyzcZP7v2D5eWvx75azX4l4eI9Cf/7YW2ZqnxA8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=R++lc0aPiLzqzod9JaDVVdTjahEHOxVXkLgNyDetHSN1os8BzAT3uDyOlnJ1ScIOr
-	 XX2els38CBHQoPAUmQ2N3gOsbhnrIQIpZ2WSvUTGs/WONdMwuXalddbDde6pGp4pJm
-	 KHEUp11xbcErlE6GLchqs9gW2hyJayr0ba//OhaJ5zwtzaL1kmcn9ZZ6bWrFo2nFIA
-	 lfV4vec/5iOsNt4Nt/V7UQkhz9Kloe4UQb7pi0NTDSQLz6wmDYeDZoQxWbm8V7c/s3
-	 51cCX29hiXYvfP3Bb/ERVU0J/EQr8qnqiNx1QIKkWpUOd3jr+CVAxElwKFR3qq1fSb
-	 DajraLF96EWfg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] hwmon: (ina2xx) Fix overflow issues
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Guenter Roeck" <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260610210140.43657-1-linux@roeck-us.net>
-References: <20260610210140.43657-1-linux@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 10 Jun 2026 21:12:05 +0000
-Message-Id: <20260610211206.1CDD01F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="kTNFvmW/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1781126960; x=1781731760; i=w_armin@gmx.de;
+	bh=5UM6t9tV13+ruLlXDb50JgISJij66rit8E8x9cNiGGE=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=kTNFvmW/H/H754BmY0NxBB0JRBcvBeLIIimDHrp9E2gg1Ea+ednbaFIFwkerQxh/
+	 Xl0uN2Xq9+HnLFfK1njuq9OlDoKUQC5SziGBPRNXzxzYtJefpLwoTFDdiZ01LUalq
+	 1Wu6lznLuMYBcrtYumavHuJz6T35AVQgwLiezNZfdLMX32/We4L9blpbj5jzIfFxj
+	 oRdy9xC0YtlBQa4gDKM8VKY8CZSLSmcREKfcvYAkpYhSPMsHcf50C6s9JSEH3NlBC
+	 VQ37ekZnsfQcAIVPu4Jf/JoHdazW9ssGpuk8aonz+RWiDVbFkY4ZAvM4PoxftMinA
+	 cdxju92YwogWrnao8g==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MLzBp-1wogFt0uMD-00TboF; Wed, 10
+ Jun 2026 23:29:20 +0200
+Message-ID: <3ecc798e-bc90-44b1-80e3-e25c2bbb23d7@gmx.de>
+Date: Wed, 10 Jun 2026 23:29:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 6/9] hwmon: (dell-smm) Use new buffer-based WMI API
+To: sashiko-reviews@lists.linux.dev
+Cc: linux-hwmon@vger.kernel.org
+References: <20260610203453.816254-7-W_Armin@gmx.de>
+ <20260610204549.853551F00898@smtp.kernel.org>
+Content-Language: en-US
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <20260610204549.853551F00898@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:VsxaNp3rvTDvDTgqcf0P8Qej5XFm/+yPxeTvRUGYjgvffzTFKvj
+ bBA9EkG1XFO7GscFD7EbNBS0O82VTBgLaWVG/wIDoVZEHZLcnZnjtImcD/UvUAs8WslIOs7
+ rKxHvwGUU4L9RyNQp/sTgvWqxkiKDPLBitNs97zmTYA+h/zFK2+2zteZdkac35JEQMn24u4
+ yvy0QnTuBPZPDbRCgD51Q==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:KOOtTGhtbK8=;fLLT6nqM+xyqafv69+9OYYSHFyY
+ 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
+ syH/TMmMElNEr9yKrQ=
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+Am 10.06.26 um 22:45 schrieb sashiko-bot@kernel.org:
 
-New issues:
-- [Low] Build breakage: Using `DIV_ROUND_CLOSEST()` with an `s64` dividend =
-causes a linker error (`undefined reference to '__divdi3'`) on 32-bit platf=
-orms.
+> Thank you for your contribution! Sashiko AI review found 1 potential iss=
+ue(s) to consider:
+> - [High] wmi_parse_response incorrectly fails with -ENODATA when the fir=
+mware returns fewer than 4 registers, breaking support for valid short SMM=
+ responses.
+> --
+>
+> commit 5defcd15874af970946561c0d13ad1b0850d56ca
+> Author: Armin Wolf <W_Armin@gmx.de>
+> hwmon: (dell-smm) Use new buffer-based WMI API
+>
+> This commit updates the dell-smm-hwmon driver to use the new buffer-base=
+d WMI
+> API. This allows the driver to also support ACPI firmware implementation=
+s that
+> do not use ACPI buffers for returning the results of a SMM call.
+>
+>> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hw=
+mon.c
+>> index 038edffc1ac74..6ca2ea4bfe7d3 100644
+>> --- a/drivers/hwmon/dell-smm-hwmon.c
+>> +++ b/drivers/hwmon/dell-smm-hwmon.c
+>> @@ -261,22 +263,19 @@ static int wmi_parse_response(u8 *buffer, u32 len=
+gth, struct smm_regs *regs)
+>>   		&regs->ecx,
+>>   		&regs->edx
+>>   	};
+>> -	u32 offset =3D 0;
+>> +	size_t offset =3D 0;
+>>   	ssize_t ret;
+>>   	int i;
+>>  =20
+>>   	for (i =3D 0; i < ARRAY_SIZE(registers); i++) {
+>>   		if (offset >=3D length)
+>>   			return -ENODATA;
+>>  =20
+>>   		ret =3D wmi_parse_register(buffer + offset, length - offset, regist=
+ers[i]);
+>>   		if (ret < 0)
+>>   			return ret;
+>>  =20
+>> -		offset +=3D ret;
+>> +		/* WMI aligns u32 integers on a 4 byte boundary */
+>> +		offset =3D ALIGN(offset + ret, 4);
+>>   	}
+>>  =20
+>> -	if (offset !=3D length)
+>> -		return -ENOMSG;
+>> -
+>>   	return 0;
+>>   }
+> [Severity: High]
+> Does wmi_parse_response() incorrectly fail with -ENODATA when the firmwa=
+re
+> returns fewer than 4 registers, breaking support for valid short SMM res=
+ponses?
+>
+> Based on the changes, it appears the parsing loop previously allowed a s=
+hort
+> response to be fully consumed (where offset =3D=3D length), eventually v=
+erifying
+> it and successfully returning 0 while leaving any unprovided registers
+> unchanged.
+>
+> With the updated code, if a BIOS legitimately returns a valid WMI respon=
+se
+> containing 1, 2, or 3 registers (e.g., 8, 16, or 24 bytes), the loop par=
+ses
+> the provided registers and increments offset to equal length. On the
+> subsequent iteration, it evaluates offset >=3D length as true.
+>
+> Instead of succeeding, will this now fail the entire SMM call with -ENOD=
+ATA?
+>
+> Could this functional regression break hardware monitoring (e.g., fan sp=
+eed,
+> temperatures) on Dell systems whose BIOS provides short WMI SMM response=
+s?
 
-Pre-existing issues:
-- [High] Arithmetic overflow in `ina226_alert_to_reg()` during `DIV_ROUND_C=
-LOSEST` intermediate calculation on 32-bit platforms.
---
+Short responses where never valid and where never accepted before.
 
-commit 2efec75618467bc75c51301a14034dc4018a9013
-Author: Guenter Roeck <linux@roeck-us.net>
+Thanks,
+Armin Wolf
 
-hwmon: (ina2xx) Fix overflow issues
-
-This patch aims to fix multiple overflow issues in the ina2xx driver,
-specifically when calculating power, voltage, and current values on 32-bit
-platforms. It introduces 64-bit variables and clamped limits to prevent
-numbers from wrapping around.
-
-> diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
-> index 613ffb622b7c4..b2f543b89f9e8 100644
-> --- a/drivers/hwmon/ina2xx.c
-> +++ b/drivers/hwmon/ina2xx.c
-
-[ ... ]
-
-> @@ -283,13 +285,13 @@ static int ina2xx_get_value(struct ina2xx_data *dat=
-a, u8 reg,
->  		val =3D DIV_ROUND_CLOSEST(val, 1000);
->  		break;
->  	case INA2XX_POWER:
-> -		val =3D regval * data->power_lsb_uW;
-> +		val =3D clamp_val((u64)regval * data->power_lsb_uW, 0, LONG_MAX);
->  		break;
->  	case INA2XX_CURRENT:
->  		/* signed register, result in mA */
-> -		val =3D ((s16)regval >> data->config->current_shift) *
-> +		val64 =3D (s64)((s16)regval >> data->config->current_shift) *
->  		  data->current_lsb_uA;
-> -		val =3D DIV_ROUND_CLOSEST(val, 1000);
-> +		val =3D clamp_val(DIV_ROUND_CLOSEST(val64, 1000), LONG_MIN, LONG_MAX);
-
-[Severity: Low]
-Does this cause a build failure on 32-bit platforms?
-
-The variable val64 is an s64, and DIV_ROUND_CLOSEST relies on the native
-division operator. Doing a 64-bit signed division by a non-power-of-2
-constant like 1000 typically causes a linker error (undefined reference to
-__divdi3) because the kernel does not link against libgcc.
-
-Should this use div_s64() instead?
-
-[ ... ]
-
-> @@ -378,23 +380,26 @@ static u16 ina226_alert_to_reg(struct ina2xx_data *=
-data, int reg, long val)
->  	case INA2XX_POWER:
-> -		val =3D clamp_val(val, 0, UINT_MAX - data->power_lsb_uW);
-> +		val =3D clamp_val(val, 0, LONG_MAX - data->power_lsb_uW);
->  		val =3D DIV_ROUND_CLOSEST(val, data->power_lsb_uW);
->  		return clamp_val(val, 0, USHRT_MAX);
->  	case INA2XX_CURRENT:
-> -		val =3D clamp_val(val, INT_MIN / 1000, INT_MAX / 1000);
-> +		limit =3D (INT_MAX / 1000) >> data->config->current_shift;
-> +		val =3D clamp_val(val, -limit, limit);
->  		/* signed register, result in mA */
->  		val =3D DIV_ROUND_CLOSEST(val * 1000, data->current_lsb_uA);
-
-[Severity: High]
-This is a pre-existing issue, but can the intermediate calculation inside
-DIV_ROUND_CLOSEST overflow the 32-bit signed integer?
-
-The macro internally performs:
-(val * 1000) + (data->current_lsb_uA / 2)
-
-On 32-bit systems where long is 32-bit, val * 1000 can be up to
-2,147,483,000. If data->current_lsb_uA is large (e.g., 40,000,000 as noted
-in the commit message), adding current_lsb_uA / 2 (20,000,000) yields
-2,167,483,000.
-
-This exceeds LONG_MAX (2,147,483,647) and silently wraps to a negative
-value. Will this result in a large positive limit requested by the user
-being incorrectly programmed as a negative limit in hardware?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260610210140.4365=
-7-1-linux@roeck-us.net?part=3D1
+>
