@@ -1,73 +1,73 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A2C1D54FA
-	for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 13:14:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 890C023C4F3
+	for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 13:14:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781097242; cv=none; b=Y30iBNwc5Kuw6tYqVYxYWeJqEqefqP6y2WyLUIFA8LxEW8yet/gk5nnfEOLKcRhv2Mhd8Wm4eDcTUhyC8zp4bPwm0KPOkmp8vFGRG8VBUjRRoLpxdm7bjfA8jzbKL/pa4UGaQmT9tXXOPc5ZKNF5B+W1bDooNPoPv/4XeoIjQPw=
+	t=1781097275; cv=none; b=fa04i2Rk6LI/lI4AZhC1Xsxq8rASI60uCPAChTZh3SIWpdCs4pY2f79uvV6zk1aOHJkdJDjZMJl2Tl1O3E5bA0hzesMzSmXUVx7oqbxjU1n9mK1IqhjV9iqXKZ0WQBW4QcOIOU57XtKNajA4QcY/bOnz0tLLbthTml33UMGvfcg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781097242; c=relaxed/simple;
-	bh=tNAc/loCl5kOlD0qhM/WMCdXqv4BnuV6cvs1WQmeKgc=;
+	s=arc-20240116; t=1781097275; c=relaxed/simple;
+	bh=8W+0hThKAZc6wDLK7nhSYHduijnCeiUXGq6A9UZ/gv0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cRzdUAEyl+HW93uphwedLAMyr7X6tW88ptXjOdfo+GbzkIYq9FCrlI3XA+8RI+xrlJLMJ2py1yjfvTMPqie8iOI/CriS9DQQnrmbmaWvdzddGUgvIWdoOorrE4djOgd5w/0TBBeVpsRUUthI3eEDesrbYsvhNFkieO7oQ6NPYMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YGRLIqij; arc=none smtp.client-ip=209.85.214.173
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fc9dtx+LwJ+utYA20e4yFGjOFoLLV8kN/GQk/h2FzbQYEE9fYPdtmJJgLMkWqsF4+d5xZxJyzE/EpLYN0LeY75Gg9QwvdNhdlXGpTgw+1SpdJNc9dTrD2wc1aOwGUW5P85JCvQD62KJ2cDdy368+K8yt1hMy584GT7ngmTrCK/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LFiY08zv; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YGRLIqij"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2bf22d29dabso45009935ad.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 06:14:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LFiY08zv"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-84229481d44so2754196b3a.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 06:14:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781097241; x=1781702041; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781097272; x=1781702072; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HN3yGzEWKyMqsUGamUwuOFjLur3IPcZYrJH+AltN/Ls=;
-        b=YGRLIqijQK2/U0n6Bo0WmE0Roz1YlnmIaYm5z6NjlEKGQdgEUWfvJEPJ59Fz3U7M7r
-         c2Js4BBtZPHqrl1mIhFK12Xw+WXLH4v/SLs7kk787LFoyaxOvZLjBbjiTpyEx6uD3Dz5
-         1Cm3xu4Iamcn5bsB1ZM7eXIL7j7FfwHxWw2Dfk0G2/y+Zs1a2VyHxgLRISwbKSKQYdxo
-         hO/LgkDrgWOso2Nn2hS3Y11H7Qv+OTMf60v4O+hWrNTWQEuBnv+LTQTksAXfJsuRWcKY
-         zyDmxxEzSnhKbMKFXjrtE5TKO2XQCAn7MGMCaAU6+xlHASdThq/httmjMUPusYqB+Qjv
-         OfLw==
+        bh=WmCiNke9CNNPNgybTGSAGuI43T7yC5Pi1R1N6f3/7Iw=;
+        b=LFiY08zvYTPmFXsIqgAaYw5In+/AZAdJHzS8T6sHmqzrppb6kmI8oSfqdfKSytnZBa
+         mpA3tLze4hgyGo5umXoHQSg1K2kWY4CQCI0upyr3pJxu+IwA+2Rzjx2xZD6vYWu26Ah2
+         RuUlWnSDegB/C6yalbMW5yRpoVdWll7BYglyWzicGv5jdbrNCnZpqsgBVYAcijLE4Ef9
+         wsrsBYJ6PpiBYa1sUdNZBe2FLu4Q+d4r7un6dl5mw3MNK3xEYTTDgnHSLDQNqSjdj6ln
+         qt3TJ1f4L8M/mHFjZTwmcM9UQK340Npu+nNR4wmBPMMTGN2kgGpID8++rbEGRVZNaJMA
+         /Cwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781097241; x=1781702041;
+        d=1e100.net; s=20251104; t=1781097272; x=1781702072;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=HN3yGzEWKyMqsUGamUwuOFjLur3IPcZYrJH+AltN/Ls=;
-        b=XZgVFdlUHeLNd6JI660NA0Sw0MXTXNwsKoCrzRb4AXx99INd6OAnk6u/ncr6dfoa3A
-         xp8HRUBMRcXPGlU+VlgWAhdoc96LXA2kU4wgcg6v//ysRsKwQgicdw2UFG9Ed6KlCPO1
-         hIgTNqfK3QRYclGUQLwXhyTOL91XPMkgguWJ/pX330FXhhbiJjiKYvggr/Kg0DdOMGoh
-         CPHXYT0CDL/huDjst6s97QJsa3cMdzXQPEH6xM2BJpixvCn2yrk18X4NQPC1F5c7DKDf
-         Us1OmtLRqxTBNGZo79qeYgLeeolia99kNilbe6wDmicVBp1MRDJNue6SULCCPc6m63QK
-         99Kw==
-X-Gm-Message-State: AOJu0YxD2PcMjV123GgPMeWNrFFi6r9PAAhDsm77NZTbiFPbEFvacqR0
-	nl2Otwu6JmdZGFCHbYs6CeUNztCmTDYPxfja2cIqBCAugV4ehwc9O+ne
-X-Gm-Gg: Acq92OEMGM8eCqTUY/xWl7R5KFYaJmAeyEH77IUPkSWdKaAqYgrE43XQWKrD5rtdRG0
-	91fA1GaalKJCLYXQWVTPy13Xg9ztrwv7rzFAvgiaVVnAbxyGWOOnuZEufJWIbxmQDtTNPLGURPA
-	jey773Qr+elNfdm9lER5sliJ8hMioYXDljbxZ1PNYljOQRtI/1f47JFQXSrJtSyOOhA4SvkD1bB
-	9G3Y3y94wbVrkuxrD4se8NUyA+Cy2Y/0NY4SaJ/2DaZk7JCBTolJrM5nyxJ1h3G1CqxZYdMXK6x
-	ei6O0iTvZe8yXbDOmWdNQ8HGfejKnOYFf9cxuh88yQt+uCpfyUGlw1aQm3eT+Q5mipPpAZLICGe
-	Dj0uQcxT9kYH+OdmJzhm/Mb+RCE3YRpfm10E1GVeEZpqvjZ8heZR8NqqmpjNtS6ncpHtL3PBcvb
-	LljV09n9HCN2HjNNCvjqMd/qKIH7nnopbOlQwwwBYiQw8N5QQ=
-X-Received: by 2002:a17:903:2448:b0:2c2:27be:39a5 with SMTP id d9443c01a7336-2c2a1cb5759mr85750975ad.33.1781097240974;
-        Wed, 10 Jun 2026 06:14:00 -0700 (PDT)
+        bh=WmCiNke9CNNPNgybTGSAGuI43T7yC5Pi1R1N6f3/7Iw=;
+        b=KMl903L0pFH9rnEThjJi8WZidrk48jIKZd/+u5TGbdBFsmDX1RxGRzCtckoXEqUQeF
+         gj2M/0gGv+QVYBZMIeqL7ly9ZrSvKn7x0clOqUZ4QZdyPBV+eCj8GimixFFCtm1jZjhP
+         GQcWMDsISJ9vuJYU1UfJjMkgwhbkBlw/L6pvDgsiuxYYiJS5rNl/1uImt7KMSQrZicYa
+         f3r1bV2jB0DZmmrAIb5EDi/NSjU1DLx3x3N3IalTr/5jjqILAAXSfbwDMmNrLaSyCDkR
+         x4ZIXrL5wAfBTWhHjotWgv2yVNRakF0bc74rSlIJgH/T8UVB5Ap8rINynNdWrgntl3S3
+         sdvg==
+X-Gm-Message-State: AOJu0Yyo6POquKz00VhGTws9uaTsItTX/QBQMuDdHrrPyyiMTDoJ6mx8
+	HLZAf6sas2jfV4tnr9YSARQhcOxgATeFNYaV3aVhz2Ky+vfmJfTKRvAyOIbIv/v/
+X-Gm-Gg: Acq92OGoDTLooY2ihrUnitGe16XZea55hI7OUIX+lrwvylK65uIasndep9A3PGfbFHr
+	Sv/4USn5j1cLb7HYeJES1SwGlHza2s8hyVJFGYEbQ9mp9uLDfV7S2rzJDsfbOXlRK7mUnebI2V0
+	VoNAu5pCSdmW6cgQtcInK4D8AgEtM83Mm2ZTnbhtascrqeFilwekviOa0G2HbngRkCBIvkIG3ix
+	pE4eDr2lhqolOoKYdeE8a7eC9Wv/It95hJ/AUlMMkShWySmDh4XxkzdPN7ZKrIeXxSj5yC6E5Eo
+	M2yhBCf6zyhuQPNJowf9piQic7EbYRPP1IC2yEvfb5+4zw4H7CUoREVwTQ4XRPX/kWdESLvAvqu
+	+L0C00nIFjXFl+EZaV3ilZvMKe6e0S/DnDW3sAx7CBHnDEd2PjNkz8KHeBLEQ0DiyQMsyITUzjK
+	41+ejh1ciN4W21JGBPnZWOR6XDNsM4AK0t4buJqBVZnCZJEvCluxAj+lzr7g==
+X-Received: by 2002:a05:6a00:4288:b0:842:5b63:6112 with SMTP id d2e1a72fcca58-842b0f49abfmr26684930b3a.32.1781097272354;
+        Wed, 10 Jun 2026 06:14:32 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c24edc8acasm123535715ad.45.2026.06.10.06.14.00
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84282221086sm25034213b3a.10.2026.06.10.06.14.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jun 2026 06:14:00 -0700 (PDT)
+        Wed, 10 Jun 2026 06:14:32 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 10 Jun 2026 06:13:59 -0700
+Date: Wed, 10 Jun 2026 06:14:31 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Pei Xiao <xiaopei01@kylinos.cn>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
 	cryolitia@uniontech.com
-Subject: Re: [PATCH v4 2/4] hwmon: (gpd-fan): Initialize EC before
- registering hwmon device
-Message-ID: <52314162-fc11-4a4f-9be4-5651a3b1796a@roeck-us.net>
+Subject: Re: [PATCH v4 3/4] hwmon: (gpd-fan): upgrade log level from warn to
+ err for platform device creation failure
+Message-ID: <62cbbb04-d8dc-4547-9d15-2dcba63d8a4e@roeck-us.net>
 References: <cover.1781055639.git.xiaopei01@kylinos.cn>
- <4be3734b135c8013157979ab5e80c7ee51243ddd.1781055639.git.xiaopei01@kylinos.cn>
+ <aeb2eaa6df90178b18057a8022a0eccde7bbc82c.1781055639.git.xiaopei01@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -76,19 +76,13 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4be3734b135c8013157979ab5e80c7ee51243ddd.1781055639.git.xiaopei01@kylinos.cn>
+In-Reply-To: <aeb2eaa6df90178b18057a8022a0eccde7bbc82c.1781055639.git.xiaopei01@kylinos.cn>
 
-On Wed, Jun 10, 2026 at 09:49:10AM +0800, Pei Xiao wrote:
-> Move the gpd_init_ec() call to before devm_hwmon_device_register_with_info
-> in the probe function. With the previous ordering the hwmon device was
-> registered and exposed to userspace before the EC initialization
-> completes, creating a window where sysfs reads could return invalid values.
+On Wed, Jun 10, 2026 at 09:49:11AM +0800, Pei Xiao wrote:
+> When platform_create_bundle() fails, the error is fatal and prevents the
+> driver from loading. Use pr_err() instead of pr_warn() to clearly indicate
+> a critical failure.
 > 
-> Some buggy firmware won't initialize EC properly on boot. Before its
-> initialization, reading RPM will always return 0, and writing PWM will have
-> no effect. So move gpd_init_ec to before hwmon device register.
-> 
-> Fixes: 0ab88e239439 ("hwmon: add GPD devices sensor driver")
 > Signed-off-by: Pei Xiao <xiaopei01@kylinos.cn>
 
 Applied.
