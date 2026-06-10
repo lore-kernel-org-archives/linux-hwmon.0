@@ -1,258 +1,158 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 667814A3408;
-	Wed, 10 Jun 2026 20:35:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39CC739FCB1;
+	Wed, 10 Jun 2026 20:36:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781123751; cv=none; b=oJH9++FbuWMLGX/+ZsNK1FrKmvfVH3s+j7qJ7M+0pR1qweRFEsGG8U+eKUuRr7rVFUsnTIkiuRC7ysIgBrVXG8DjyeOG4DahdXS3AnSCjqkHxW5ItgQayzcOQb0IRN4EbNmlXukWNUARoZoHf83nPkLkL1XTXYSbGn2KECMVAiY=
+	t=1781123780; cv=none; b=keA+k9VMa2EhWPtKuBJ0t/YXxJ6WKzva72YcKUyRfXxlE3uwxTz9dkOgr9GyyY7xwd+yBsedZQy3CHqr82wRh66RgvZpyKC6iniYYNY5zu1oKA9IL5RFFcmjaLVlePn+O8kkWB0uINsFibxc8ksUirwBS70KFgTPVzIxPQcfZoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781123751; c=relaxed/simple;
-	bh=d/IOYNxIlo1LWsz7aRqw83vBTwWl+u8A9zvyqzGvu6c=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=n16jaPCN7AiYVKMBBVCYknx1QSO3tvxg6QQ6Zh72RFDnAM0j0sTlkdmZn8RfWFUdjDasJSOm2lqU4wVYgKQAcP115N4ghgWj44vMVpdBBQCX8ws08Hd28xLo1GoesFdhslKmvQw4AhNQ7a0UZJcaR++DJWrm5tmRRNk5FExEkKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=NjXsPRSn; arc=none smtp.client-ip=212.227.17.21
+	s=arc-20240116; t=1781123780; c=relaxed/simple;
+	bh=XAniaRdUycTELUW+FzQvgVN9Oaxj6R0sMNkFgs9C6+8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W78Kj9MLRQOLd/SkR4dLNR939uhY0A1+Y/aII8+rmzbKYGDbGHPkjKjHQo0OZQulAFN/mFY7q/Ta4dSixcB4AtXsuhlz7jtNfjiKUIl6AscxymsM41ZZoBHeDfhfjkFmD+86PMvEh7rhwJ2V653hx05mZ8skIz2jjfKsHi4LcFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=lTXTZOgM; arc=none smtp.client-ip=212.227.15.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="NjXsPRSn"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="lTXTZOgM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1781123722; x=1781728522; i=w_armin@gmx.de;
-	bh=y6l6/Ju0nABAtnlCYb81NgYQM4++QeKmo8eRBorIrW8=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
-	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=NjXsPRSnItlJhQxAtdQSdEYFQux3GEUz4jd2z4ypvp0sF1WTcdkycv9ByQRthXLI
-	 E+6JQjhCDkBqO9RS51TAItTX53+VZiZbod0JIZiW/oHIEw2b2uAGeu1l57lUsvzFJ
-	 60BnpiugI+Xf94KZhgqJKjBPT00jYp4NON5YQHXfNUh/3CpoCrFprqr/GIiDvvw+W
-	 KwFYxx3nxFTutMm0kxccPHGnfj1rbD2iulZM1bfyXZmHpFdYp7OEJypQBXhb5lqPe
-	 kHYrW6+NJx6ZO97HIpMepOEfw7xO2ADYchVpyuUt118z8RZVip0Am3GWE36xLpEGh
-	 3eAKEiFfq4YgYyMx2w==
+	s=s31663417; t=1781123777; x=1781728577; i=w_armin@gmx.de;
+	bh=XAniaRdUycTELUW+FzQvgVN9Oaxj6R0sMNkFgs9C6+8=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=lTXTZOgMU9VhcYzLfiRpkTUOOS/2Sb7GsWLvZnXn/isG2OG3yQIHnIEYPy3Uh8Dy
+	 VGkZl/pFJuyaq3XG8DcwwIRzEg4rVY5dNfKkS2zI9MCBCMquGS9O2nAAlR0hOO6pK
+	 B4IpaqaVzgsY3rkprhVr9Nnrgf03a5p8A4EpEtu9nkjNGdHxr5Yd2wDsU26tkL2Z5
+	 yJI00Rq6uehwAB0nTty303D7YvvT/CaRsqTti9bGV8aBTYNQqz2p0kDpdeZqCj/Mh
+	 AuhZLBwSt2XLrOh9oiPUzwoJGT51Pd3g62Z5Go0JHEjyQiCQ87eDuut/BsCvwFAHw
+	 ypVlSXLen+EzWGcXUg==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MqJmF-1x2Oks4AVf-00gBk8; Wed, 10
- Jun 2026 22:35:22 +0200
-From: Armin Wolf <W_Armin@gmx.de>
-To: Dell.Client.Kernel@dell.com,
-	pali@kernel.org,
-	mjg59@srcf.ucam.org
-Cc: soyer@irl.hu,
-	hansg@kernel.org,
-	ilpo.jarvinen@linux.intel.com,
-	platform-driver-x86@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org,
-	mario.limonciello@amd.com
-Subject: [PATCH v6 8/9] platform/wmi: Make sysfs attributes const
-Date: Wed, 10 Jun 2026 22:34:52 +0200
-Message-Id: <20260610203453.816254-9-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20260610203453.816254-1-W_Armin@gmx.de>
-References: <20260610203453.816254-1-W_Armin@gmx.de>
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MfpOd-1x8PJA0McD-00eonM; Wed, 10
+ Jun 2026 22:36:17 +0200
+Message-ID: <b8c40adf-a7f3-4121-92a3-474df5364bac@gmx.de>
+Date: Wed, 10 Jun 2026 22:36:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: (dell-smm) Add Dell Latitude 7530 to fan control
+ whitelist
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: pali@kernel.org, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260610180141.311503-1-W_Armin@gmx.de>
+ <43b8b294-ceb8-4d30-9a6b-09aa836f7ff3@roeck-us.net>
+Content-Language: en-US
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <43b8b294-ceb8-4d30-9a6b-09aa836f7ff3@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:J4etl/HkjOLof/T4EoJimiVyRX621s8E1V6B/FFb/PLYzbuh5yH
- yGheo31brMNpm9qw1M+AVZMBpEBkhFWqOHgqrJMSKGXUYZIQd1AS49aHBaZbL9mUIB1fdbA
- PgWZztQNIsn/zefx6P248jCbob1BsM4Sw+78GV4aORT0iZvyeSC4rVuCEbTjVhcKDhS3sYP
- dWnhBgBa3fkwxh3k84jqQ==
+X-Provags-ID: V03:K1:m420DT0cFCSXAwNINQ7OjeUl5D9qI+tZ9yNcM2X9BFC+MAjCIfA
+ V7x9zMLvMjU/Yt/ScavakWMNrXw9rhgVtZho5VJsQGMzRiFrPGuuFPRUlYuJcY/t1pWGOHw
+ 7lD1tFZstgUMUpLLcziXk2zmF8kj0q5pVHzEAyx6jED93om6tCi4oi7I6gbRtNRadEG8QE2
+ G0DSecHx+OpTEnE3i8I6w==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:lX3+Sl5CVTY=;tM9It95qvWc/wxTZNsgv+WH24OG
- 3RgADU1IaURFNoYe5WnBxqHluio0TFv7h/JwC2QSEfZIdaZ3cef4u1BAlegQ92SFfOXVPm+Mi
- Dxn50C3Ayn09rn1vdRQc1XW2a0CbW4NNu5OLfD5e8cCOEe9ZPhA2rj1PHIAEV2yT+G3EypPA7
- x4lmVF73efHrdBIffQOgKhjwCs+QLsXpGEcB3ZYfv0+rusBoVa/Xl7jITFfgw7woJ4F3ijuKi
- 7gD4K5SdGk9BYoc5GUANgOY+yv/ePKHSQzedWRXAdrz3IinHG8Y926Ec0Wpe03Dh07uQGa/OV
- 6ibbxftQ9EDox/ONYjEC7qOPgnIW/dpCvTMNR6f1aL92WewSTkfi8AQ1609G+NVMibeWzxSq+
- /DBMgLsSMLVAQasSaooeNzvj2/OSNk4dWSPtW/81QRRC6cm21FR6IwGXPm1AYO65hGhymOeE0
- hlwcXFMR0pbD6XLYmmsAK8lipZcffzZQaAvzrrFIoOno0C/tc2eU6O56k+hkDzrFCK02IsOAy
- Wj8SC9hSWA3yKOvxWDWDOVfFwgrDgtRIyrONZGYb2rcFhb3GSCFOx2+cdaokSGgYCo8VKShil
- cSaMIz1RzegxLrDi7a8A95bYx+VR43TCzOnbvs4mWIXloShLTZFFa+xvXYNS8m5+zjiGL7bou
- N7SfsMBL4l/2MxuIMATXGLHRnyGupNB9pQMAaicu7/zN4AenhI9Jz8pQ4jiaaUdJAsNbnc8fr
- OxFPCXM4duuhyIimX9bD+9h1gmygzDqEmlXRPGY1uqWfNyAf8MsEh+gAg8cb19grLPiMKPFMZ
- qI2FeE5ENxhHa1OcJ6TlFEQR+FdrN1WbtwPTGWtsXmt7RW2VaWFz/UscbNLPEgjnvnGfChzfe
- FIaF6dQ0NiNN7gMg79q6B8IbrculH8pp+gBcfijP7edSORu+Cu/nazv2m0N/d2a4t67TNrnFj
- 2DXPVN+VTvx+7zp68BocY4O5h9w+BFUYN1ObnxYSL65PnYcxlL2k+yDgYQDOGgJUxacFbQsuz
- 5cJhzrsWzZ3mCOE5WPbzs3y5lDDlmTAC/Eag10rkfe2cycyhZKsIT92L5R5RHoirVi4BUelrM
- lqU0IGrP+GGfsg/XY9jjBNoLMW95q6iU6J28yBXak9zocZE6nVp5Kduog4YLeu9uUqTLXSvZs
- Mzg2MPpHMO4PCRVMDFcrsIrFG8I/s8v2Lt49I+TrfqHnlSCtnA5rmWxaOQcR2P1d8QyjFhoD6
- peTUV9C25KMMXjQTKzJ0HkHoJ6DZGO3F0r42hsnR8NzFOA91yqyw4Jw6dX/V1Hk4eLikTV2YM
- w8HVrRDW1PaOfvSHciskNotSA6qi4sfVt4JkRb/tA4BR+kbFZnhGSC3lu7qQNGGnMM42v1sbq
- L9S0EiK3CAFQXmWgz6P9wH5Cyoot6Lj6CKLnT/udDm0ZaWpKHBoc++W9xRJoAYIItsg2JS6Gn
- ZGxIADW8pTLq96r7aDpffAGL3uph7IgkZ4d0vElKZfiOjGUgw+jYEJQJLQ6myvRm7DD/Jp88/
- ch/9odWAZPmwN7ztVYcpV7e54UleEB43xZmIgDdlQaFxqZreZDVknd1B3uL2yS65UJqLRqHCS
- pFg3FWC/VIxybU9y+U14n7Um8gR6/S9J+i0Cx7DYIF/nYNYat/o+blebOIkcevk+3VzH/FH5E
- 6QgvgIm0SEg8uhuflW2kYZ5HX2Vb7vma5v2lv6MVQoZ4+qN0m9pQwDmHpNe6URPWHQh/FvOWP
- dV+ClOB5weYUvwMag7RWqkXCrWK5nVoMt5dL2Y9KGSOuNdXyQPeFWUrzBOvPNr9HfynZnvJ37
- gMnk4BqoVKACGA0k6uBCAEiMatW5PsfTNK7uJKyqp7oZ0T3XP0aW6X/i8kGbvj8lqLdzGiUxo
- wAwoU8armAzHCaDdNVd1fRCoz7o/SZRfyAPHnhbtPeTNWw1UnPnseEvn6XCSBcRcv/J/Px4Rq
- 3++yHDTLau9BH6yUHz9Z9KMhvMG6Rzrz8PnAFVZRs0l666kT9rO2sRGEr/z2GSSvEZ/eZjSS5
- Q+DolsiQwDQugCCtF3rpACVCrNJt3IRCVX69X15p+ZiY+IlNO84ZIR5cibRQM/qiCAOu4HEVX
- ao+bAVxRlL6DWK35D5yzmeqNVHa9S3E7JxNoJd6qI7UlxJgBG2BARuOuZkxg/3ew29fFba5AY
- P6Jt5Kq4d3RKFclnuBYL530ypQlqv6I+62uws5sAECB/6xGgGpJoe+I6H4zU5tOCzJBAZTsmq
- OYJdbMz36WGAoVUuWSotYrgz6+GYI3vx0tDslhjs2oyzdnannMzHXqNXd2Ws6G+r8hj4cKxPP
- TwzGvzXEjoPQNIqkT10hFy7HVKxLXK4NFxsLVf2bhuSarinokeKScjAsPH2pj5UHuvKQl0A9a
- S1nbIq+mjxEuNuUpd+8uTPaTNjNW8Z+KH1OES0C+6oEH+Ui9PSz/8CjBXlksIjQRr5hPWg4gz
- cP+HE3APIoMlg5H9Ya9YSl0oRad/spwKXpXQ3RWAI2jj6vi5hw3Km2F1EGxK2sOxEkL3HwR0K
- kbgMpdkeyHDv+XllzVVqCC4gNv6eQdYwg3KmB6vTfPfIoMMDpi6RbBeCKaEZ14iJw0+cXoTKW
- cXFJIN25qiI6Q0VXwRZxcYemU9vNXB/xfvroXgyLfs5BjLa6pIjznxnBf3EG2DlUVk4yJ+X6M
- 8mUunPKs/zBIe6nT1xXEhSHL00VP4EBSlH/FCjWzE4y8TZD+FpxJeXYPjhfWzF5RAQtBhGqEH
- Heb7EueXWSsSuuF6bFEklraF1ciW8qaBM/wkIOzISLHeqvEs9A22J8NYq3s3y616i3wkC67Xi
- vTy1apNOl7EtWkbRmcxIFafNsqqa24Mz7X4RDeQQrThQk40eMUEWI+XY3UzOIPePkrod6qbhN
- 5o5lcfRcHJKIRZoG5LS9Z6oJ0Bwxk9hJt00SGsfB2x1f8R20eUh0LktpMXteskzXiGCbTHnUK
- MiUTBfuo2KPLkjcvgDhtIxfmCdiJddyrzYBrRciYL+wlURMrlHnNCIrHOi40iUwhm8azgQxuD
- /mkZ5bX4iaVTngwIHfJUzqVXQSX4OHb6sE41gtIezjHXS55rHqScV7Op0wn31Qag7E/zsjOr/
- oWFyPrllOGFeHK5vJtu++972fB9bd1c8rg/ulIH9UHakGC6oGftl/y0z3BzPvsJnsDMSN01q5
- byZU5TAP4TyuBJ7SkfZE9BZc4L3bO6cUAer4m96HIPpdnf2xUI5Azyd/i0VX1s4GbnqsvV6mG
- wtJh+eEdMlS1exPRYH05XthavxMt7t7Wdgi3xJi4MfoxywIFuHWBedkXPnZv69kAkO2NNRBAW
- Ta+gjPKjPULKFXDeXzw2f2Xs82dQHEfsxKNlSq9pv7Uz5VcB5T/HwXqFFE9ID0kFt9XWqGJom
- mbBw7ao+LpTxBvCc6Jd6ZaVYzsU4zmQ1RwQlTM6Ck66LuozlKQHlQoa6lmU31QKYsq4S+kc+w
- C7QY2cKJK4IgvbHGvq9WPcY7oNeKib9XalZ/kctO/mVswjoG5fJqitJ+E1+gmxpS6ebPH1lhM
- RljEmgX/Q6nC7Ar/tMwgyCkegX/iw5KSO+kfr/Nlk1PWDY1EtpVMo7HYOJBtj/ygxSwoUhdPi
- dNNyT/mLDdft6Gq2vimWr+Ns+MqMWmo1SgLw+30ybEXqRB3jSsBQIsy0XpXz0tGRILXfchDqi
- mXR8B49BanfzcQPgwFRcaCSq9cBWQIchxohAyAFZbVXvMZkEZe2o+taeuxEO3tbI0/RFw04vo
- JYrpqq/t9ifETKiMzsabI1NP+M9T7c4qd+dgg5YBVj7Iy1bYu7gff9l7fI3D83w09kEyS0+xV
- 2XAVUL+VmP/0zfu/9qENB6ghGcv1EkWaGq4HK0iK5RnxIIM3yGTcFJ37rEyTeh6e94WYHaZ0S
- E6lpZ476LWN7zsfsSzQYTgasmfoFBE9L5IIPaM7LzQzpDo9zxkTiSkHQpNN9wxUzN48OMC6bg
- Rty0v4QQh+CWtw4Kj56S9AzalPoEWBJPachBjhRELdKp+tGE1NamEXyYH7saYtpoEMQDkVbMl
- J8VPdElLjZifvAAtOvY58FoZ/38+rT8GqbQICf8+FQxa7xYgBQ8yYIvxqrRjWZt825WkavFPt
- Vtk31IbDbJ5bu/I3V7wH4btnAWZSJsejern+J2CCgpqEHiKdRBbgvc7Ggcgo1fOt7TLFAPRq4
- p+fLVHAQAC0BR7xt0ZHfp4dew68d7JmmVCkdMBmF1bGnef0BX+jn80VX2xqStkF529xgAb+O7
- nRZHSAshhgyoON0v9RFewgPfY96DVl1fRw+fpQb2dRUhFszESdEfj+aW7Yk0wyOuVBi0Hb+88
- cH8xs/RXCKLtBD9OtTuuk3NWVEwEaFvCEdNW2l4Uzy/PLAHGevwDJOKFClgkXdX3jeHUDw+VZ
- O/G3MXgzeTK5NKBEKH8hWJBPZ/2G5+EQG1IPZk4ii7mCHhqcBDN67E510msABvsa89wa8BhzA
- QMk9QeppUwi9dXTZJCG4btBTK9DXf878FGq0MFSTY9eWVBqrGPEDkyQAP4E+1Gay01Qmt4KCe
- 2NctguT3hL/RuAV1i5S64qJX5OdnbdBVwtoqK6UFYvd3SWecr2JRllxjhobv0Nq/jPym5EC4k
- iwcRTQq6Rc/NL8qrTHhqo8b2toFJHk7VNw7Nrn/lVpFo+A40M/bKMhiO5ziIiH/8aTbdQZiKX
- nGzWT/pqWxncYoCX1BYOMC4Qkxw2j44Tp4njU7XPbemRAzbQsDodPHlGDpJSk4JGf9jPkYeZ6
- aClR5zF6cxh41iIYJHhDdmcRvzhxC/Xmf9sOfjX41eJ6/ZlmOldeMzLEW81pa8Daf8UWmKkMV
- X7l8v3kkueKhhnskxGu4WbSXtL4T+5JbNVbtf5C6+MsYwU43ZbaaTCzu8RzvHCBb4lppETfy/
- +tP6t3u8w26dHTqUgvE/p/QZqsNCeU0u8l1fdN3++pP/D29u0GAU8aeccO/jwNQ2QA5HQ8q90
- GJ338XdvGuyo1CfVNlPQPOKwDLChkJ+FdlQrzLX/wxaLnWBe6SPK3gW1C7CCKBp/GTQGwEVmn
- RnP1A98uoPeMbIf0JaL1LzWbFQMuTsGnu9hLw1a9xddYWA8h8E/+l2M7Fhmgq5I/b8CbhgwB+
- /BRAzg8P3GJxH6WbWK5DgUxE4/jbs1nz4+zlQRbi6mhs/mRTVdS3iPZzKCkHQGApSxbw/D/0H
- v+5jvm9loxIIIjVF6RF3hR9/EEdBrWMSRcCLvQzodge4nwWQpqq0OZTZjH47zEMLlGowCk5dR
- xRbpc1AzxxklfV7R+DGLCpUTG+U1cbusXXe2Woo2tPtsL/74vmJh/ukGp3eIhDuWEg7NTGsAs
- 3Vdiv8n5fTEDrY4ogYKrctJv01G6Dh4lKl+xNE5+t2CTaZt7oOJfxBnR/iOd9N692CsCtguY7
- ACwNzSUj0SPADKrBRn/eb9C80dmCZiV595x7aFZH14zkJSII57zgDvS2UmA7/BN2zUlAwQ1a6
- gk3eopXXIipJgxOzA9oHA5ulbtdHezGAO0AUaR2ziCghC+V+3a0i5IdAYkVE3gYZ7H29KiNWg
- A8q71q08vYv4pGASfQvW9cqCUXw=
+UI-OutboundReport: notjunk:1;M01:P0:XDYk7iq0E6g=;yFK76yi5hBZKQrZ9iYL4WuqM3hQ
+ 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
 
-The sysfs core supports const attributes. Use this to mark all
-sysfs attributes as const so that they can be placed into read-only
-memory for better security.
+Am 10.06.26 um 21:50 schrieb Guenter Roeck:
 
-Reviewed-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/platform/wmi/core.c | 29 ++++++++++++++++++-----------
- 1 file changed, 18 insertions(+), 11 deletions(-)
+> On Wed, Jun 10, 2026 at 08:01:41PM +0200, Armin Wolf wrote:
+>> A user reported that the Dell Latitude 7530 needs to be whitelisted
+>> for the special SMM calls necessary for globally enabling/disabling
+>> BIOS fan control.
+>>
+>> Closes: https://github.com/Wer-Wolf/i8kutils/issues/17
+>> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+>> Acked-by: Pali Roh=C3=A1r <pali@kernel.org>
+> Applied.
+>
+> Thanks,
+> Guenter
 
-diff --git a/drivers/platform/wmi/core.c b/drivers/platform/wmi/core.c
-index 0782ebc33c00..529825dcfbfe 100644
-=2D-- a/drivers/platform/wmi/core.c
-+++ b/drivers/platform/wmi/core.c
-@@ -858,7 +858,8 @@ static ssize_t modalias_show(struct device *dev, struc=
-t device_attribute *attr,
-=20
- 	return sysfs_emit(buf, "wmi:%pUL\n", &wblock->gblock.guid);
- }
--static DEVICE_ATTR_RO(modalias);
-+
-+static const DEVICE_ATTR_RO(modalias);
-=20
- static ssize_t guid_show(struct device *dev, struct device_attribute *att=
-r,
- 			 char *buf)
-@@ -867,7 +868,8 @@ static ssize_t guid_show(struct device *dev, struct de=
-vice_attribute *attr,
-=20
- 	return sysfs_emit(buf, "%pUL\n", &wblock->gblock.guid);
- }
--static DEVICE_ATTR_RO(guid);
-+
-+static const DEVICE_ATTR_RO(guid);
-=20
- static ssize_t instance_count_show(struct device *dev,
- 				   struct device_attribute *attr, char *buf)
-@@ -876,7 +878,8 @@ static ssize_t instance_count_show(struct device *dev,
-=20
- 	return sysfs_emit(buf, "%d\n", (int)wblock->gblock.instance_count);
- }
--static DEVICE_ATTR_RO(instance_count);
-+
-+static const DEVICE_ATTR_RO(instance_count);
-=20
- static ssize_t expensive_show(struct device *dev,
- 			      struct device_attribute *attr, char *buf)
-@@ -886,9 +889,10 @@ static ssize_t expensive_show(struct device *dev,
- 	return sysfs_emit(buf, "%d\n",
- 			  (wblock->gblock.flags & ACPI_WMI_EXPENSIVE) !=3D 0);
- }
--static DEVICE_ATTR_RO(expensive);
-=20
--static struct attribute *wmi_attrs[] =3D {
-+static const DEVICE_ATTR_RO(expensive);
-+
-+static const struct attribute * const wmi_attrs[] =3D {
- 	&dev_attr_modalias.attr,
- 	&dev_attr_guid.attr,
- 	&dev_attr_instance_count.attr,
-@@ -904,9 +908,10 @@ static ssize_t notify_id_show(struct device *dev, str=
-uct device_attribute *attr,
-=20
- 	return sysfs_emit(buf, "%02X\n", (unsigned int)wblock->gblock.notify_id)=
-;
- }
--static DEVICE_ATTR_RO(notify_id);
-=20
--static struct attribute *wmi_event_attrs[] =3D {
-+static const DEVICE_ATTR_RO(notify_id);
-+
-+static const struct attribute * const wmi_event_attrs[] =3D {
- 	&dev_attr_notify_id.attr,
- 	NULL
- };
-@@ -920,7 +925,8 @@ static ssize_t object_id_show(struct device *dev, stru=
-ct device_attribute *attr,
- 	return sysfs_emit(buf, "%c%c\n", wblock->gblock.object_id[0],
- 			  wblock->gblock.object_id[1]);
- }
--static DEVICE_ATTR_RO(object_id);
-+
-+static const DEVICE_ATTR_RO(object_id);
-=20
- static ssize_t setable_show(struct device *dev, struct device_attribute *=
-attr,
- 			    char *buf)
-@@ -929,16 +935,17 @@ static ssize_t setable_show(struct device *dev, stru=
-ct device_attribute *attr,
-=20
- 	return sysfs_emit(buf, "%d\n", (int)wdev->setable);
- }
--static DEVICE_ATTR_RO(setable);
-=20
--static struct attribute *wmi_data_attrs[] =3D {
-+static const DEVICE_ATTR_RO(setable);
-+
-+static const struct attribute * const wmi_data_attrs[] =3D {
- 	&dev_attr_object_id.attr,
- 	&dev_attr_setable.attr,
- 	NULL
- };
- ATTRIBUTE_GROUPS(wmi_data);
-=20
--static struct attribute *wmi_method_attrs[] =3D {
-+static const struct attribute * const wmi_method_attrs[] =3D {
- 	&dev_attr_object_id.attr,
- 	NULL
- };
-=2D-=20
-2.39.5
+Thank you :)
 
