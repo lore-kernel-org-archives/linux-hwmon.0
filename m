@@ -1,58 +1,68 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B3B41F03D9
-	for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 01:54:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03CF516132A
+	for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 01:59:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781056476; cv=none; b=tgzdbHJOhGPvecZTZy23BWR1G4rVKLFAeg6Lmym6na3I2X/JmJ5A9ed42khiIxPBV6Tz/I4AYG8XGeHmhQtRq16up2VnZkkwTzrYdF5d2G1CqoeZ4fH8BCgGtFrn+54shpwfi72BfRCs01NhESvwCIDmc9u9x+t8zAas7Uzj5Ck=
+	t=1781056767; cv=none; b=neEp8aCAWYm8LLIrY3vIJB7vojAxoc9UgVFitYgqs8y7cq/6p6Iky/AXbM9nESkAiU7TQSPvO7NmsvEya1pJVCMaKeC5sL/qokDCM+2lvNNwL0jLJ6F1kjOKVLiedJBsiAyh1Ow0XoF4+IZL3YfF5OktV71IIli9ffRffxyOazU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781056476; c=relaxed/simple;
-	bh=dficSiNNPsH6XpS3O2P/aULaXzlnjoYIr/pvp0afwlc=;
+	s=arc-20240116; t=1781056767; c=relaxed/simple;
+	bh=PXfucc5rEQmtJkf0eN8p0n/+ROBJ23vHGffBJbsNsMU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=GBawfZuWtPYVWGAjCecqX2UjId0ID45f1fhIF2Bt8u5ShrqrLXR8A+PHTCTjwCr5aJ093K2kFGDa/wqpwn3F5uyxZhQ+BGF714zS0RvGpoh1tFwQg+JLEwTQbIjYquOse73sygQoTJUGhxx5C2nbjJmDaCZ6EBUoQJfL5fwzbHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xzz5x00x; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=BBu9ZNOAev/ypC0aV3BBlzJepW6sDW7j7xoDFPxlKzDfQce62M9FQAniKQZ9re7jJ5hwYJo5dax4RUH+eNeHA2iKDnTPRrRm7/x6k3gs1BFvmorTnJwx01PsoDVPPV49UMkmouY2uPmIC+3wmV58RT4rFzVqLChx7rTe1ovqwI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GSRavRiS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xzz5x00x"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FBEB1F00893;
-	Wed, 10 Jun 2026 01:54:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GSRavRiS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A2C61F00893;
+	Wed, 10 Jun 2026 01:59:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781056470;
-	bh=dficSiNNPsH6XpS3O2P/aULaXzlnjoYIr/pvp0afwlc=;
+	s=k20260515; t=1781056766;
+	bh=PXfucc5rEQmtJkf0eN8p0n/+ROBJ23vHGffBJbsNsMU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Xzz5x00xy8wTkt4WY8DQ7mk2x7G+j+rqD/sHgLSLogkBhXGQIsTaGxnYeS738n08i
-	 H3ilZMwr2dEWU3vjfvZ3OSoqYcm/atWVfS4IVtmmGzUQNt9RrfAz1YOcvd9ONUEffL
-	 4rkBu2QjoJmkwitDBoyeqGKoy6wj9nj1b377U/XUH+ieJvZ+ER1PBcA1EAZMKPZZsW
-	 xIquaID+AcQcb8A4d3na268xjmVaQNBPvIhXghndSLevFqpnpdherwejPsd15GtfHy
-	 MqbeJXbrySZ3OPFgC2pUoShX61J8xb12yhvKl/VlCAglnh5NKd7pJ65M4kGQfnLX9P
-	 znEFsEeldIJZw==
+	b=GSRavRiSLNr+4BjS5PSWF0kphvYObgpxaWr4SjDYGP2psRUN5YlXPZ1TODuatPl6+
+	 CV/TzqvFtfMj7R+03OgbmI7um2gBpS34tZNw/w+svls6gQnqONKAPvKM+QUmhiUdW4
+	 9I8M7i69cOhJWEdlx721Z1DtEYVGrErfwVfzREGU9ErL9sD9JyZboqhfnVSmj8LDiD
+	 KkX+hd5H7jJ8cmOk6P0BZ/Qop1CBwoGfPBSSQJPgdJ7TweJVM4Xr8Crspa/gJtjtVw
+	 mUmvf31gdo5laMmgT2sSuW0llpZwaB9kfc5TxN0Mn7Zztyg34uBe3xvHSkBfpakLPZ
+	 /FE7Ltgq0JRtA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 3/4] hwmon: (gpd-fan): upgrade log level from warn to
- err for platform device creation failure
+Subject: Re: [PATCH v4 4/4] hwmon: (gpd-fan): fix race condition between
+ device removal and sysfs access
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Pei Xiao" <xiaopei01@kylinos.cn>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <aeb2eaa6df90178b18057a8022a0eccde7bbc82c.1781055639.git.xiaopei01@kylinos.cn>
-References: <aeb2eaa6df90178b18057a8022a0eccde7bbc82c.1781055639.git.xiaopei01@kylinos.cn>
+In-Reply-To: <4400828422cf3a88adad4db224d9efccdb1049d2.1781055639.git.xiaopei01@kylinos.cn>
+References: <4400828422cf3a88adad4db224d9efccdb1049d2.1781055639.git.xiaopei01@kylinos.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 10 Jun 2026 01:54:28 +0000
-Message-Id: <20260610015429.5FBEB1F00893@smtp.kernel.org>
+Date: Wed, 10 Jun 2026 01:59:26 +0000
+Message-Id: <20260610015926.8A2C61F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-> When platform_create_bundle() fails, the error is fatal and prevents the
-> driver from loading. Use pr_err() instead of pr_warn() to clearly indicate
-> a critical failure.
+> Replace the manual gpd_fan_remove() callback with a devres-managed
+> action using devm_add_action_or_reset(). The original remove hook
+> resets the fan to AUTOMATIC mode, but the hwmon sysfs interface
+> (registered with devm_hwmon_device_register_with_info()) remains
+> active until after the remove callback completes. This creates a
+> race window where a concurrent userspace sysfs access can interleave
+> with the EC I/O sequence, potentially corrupting EC registers.
 >=20
+> Using devm_add_action_or_reset() registers the reset function as a
+> devres action. Due to the LIFO release order of devres, the hwmon
+> device is unregistered (sysfs removed) before the reset action
+> executes, eliminating the race condition.
+>=20
+> Fixes: 0ab88e239439 ("hwmon: add GPD devices sensor driver")
 > Signed-off-by: Pei Xiao <xiaopei01@kylinos.cn>
 
 Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1781055639.gi=
-t.xiaopei01@kylinos.cn?part=3D3
+t.xiaopei01@kylinos.cn?part=3D4
 
