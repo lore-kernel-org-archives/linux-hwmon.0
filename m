@@ -1,192 +1,304 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A70C717A303
-	for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 03:58:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29DCC3446C4
+	for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 08:22:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781063886; cv=none; b=Y5KQp0Qdkz+XFtCPbqBjv5k3/TT+RfHTza7dKDxMb8zculASbUO7O7lk2o1lVMq0OK5br3PeCxgfsisQsdFCC3hC6VWcZhtqopvtZAVJs7drbGUbSBm0WWbNXnHO01xqzdbNJzrFta7pl8pBT3OCfqkIv7oGmQ2XK/OKDlpthOk=
+	t=1781079749; cv=none; b=d/EwB2Jmd9Osi/Qm7nA3T7S1ZNPw5ZTnO5xaeUeiAz63qFp9GqzJDhD2h0/PeP1zxiUvqIaDIXqKBws/7JRP4mJWWdQgxfXeknBGBnSdR4PxnEGtv4CMR9Gb6Oo3lbpWlBqQ9HD67W+FZl2QhH4b8F1xv/XTYE0NgJnHJ/ka/l0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781063886; c=relaxed/simple;
-	bh=CU0PV2vGoubSkyPgwbhc7/8o/vSXv3qOFrp4R/22mMo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Px13LhVYYC/ZH3I/Sb+rsdjIbusYftZtj+HCCdx2Tz8MKbEcfgZVyQnEYd9O9+uAqciNttQWMdRqT1hguxLlm2mA/4VJVy01IjAMngl7LJhLuc9uvjtDiCT4e/p1wGvbJbYCEFSNv53CJ7wqBdwVaReSxV+7Ktwt6vl0bkVZVOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qQ1Mjm2S; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1781079749; c=relaxed/simple;
+	bh=vvXwFej9lj1lAXWCrG5lZjXXoPyaHSlpldTcl2itE9A=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=QpWhRZrjwr1rluIu0rxFBcQkGf2VVgABcJTniQiMXdkaw2A0MZznRuQFrINuoTW/JPoJ1S0Dqp6gMAEMObYZuN/HPqEHpdA30fmmoHUWS2TZXHCLGxCWGXr4zIHexvxAhe5SpWSXSR58CswnmnC3Qw7MiDOX1TvuTuvMRg7ZAiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aipd9aq/; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qQ1Mjm2S"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-36b8d414666so3552679a91.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 09 Jun 2026 20:58:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aipd9aq/"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-490b8a97b11so71705525e9.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 01:22:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781063884; x=1781668684; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=enJMOywcB6oAh1mHHSf6tEl1XWGQ4tcQCZDpp6DiYQU=;
-        b=qQ1Mjm2SZPN4ANHc0z1uYO82Bm9O0UdHWJt+KmDsAEjEjMExGgw0/+nNwgcqKFeAcB
-         xsk0ftjWf5sQVYxWm58fNj+1Lyu5mzLsiEqOuUJGQ7PkVUqCRQMS2TFDaGu+80V9cUJW
-         rd6hVl4uLE/pOuy0lXRXlP5X0U6l9IzLrV/IBk6ajJYlV8BzRoBkRUN8Y6NQZEXIhkmW
-         sKj39grzbg3I9F9FOyiXrxbZDFD+U4/ot3obI3nH7YNJTcxyZxO8XuCCqCT5zOBtUuLt
-         IlPoiEzD2uE3iOHnxkMNXSpf1HzPoUk2RUH2CIQmaHizl6HnD2wUeYpi7tKwWHVqx0Ul
-         sq/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781063884; x=1781668684;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1781079747; x=1781684547; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=enJMOywcB6oAh1mHHSf6tEl1XWGQ4tcQCZDpp6DiYQU=;
-        b=UEauFTIIWcTWAOFI+50aHM7q+ZW6snqZDb5QOPkUs7A5y6RFsV1DaaAUR+1e3GW9CV
-         DvznQGQedTJGC+iXM86numeaeNRMNopQfquRAAMHnVlStQmo6d8zhXjq+ONi1ia8zGFb
-         RlR/E5/kP85e1HG4JTrst6WBL0lKhR9YA+RhY4B6mBUUQFicWAe0X9PFpPqzRtj9Imr8
-         kMmlM5XWhLc0MkqrpZM/hCqhHJ1WpY5hy+XzJ0R4t2OM8OZkuOrzt7p5PK9ahRY0VB5/
-         3LeFNMOVLLrfO2yMpHUZci9KLQ/UgGRVXJrseNWEox6+KXViF9c6bXQicv4IQDr7Uube
-         F/PQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+HzQEa4hCQ6x4DGEpAciZImo8QQDYL7MTs84sncy60fPfrkdXDifIMExhEF/IooDC2Myem4E4ITKNRGA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwaqQQYkW5hPNYqkLn3pzpst0W4RapWQ+NoXMcRBd13GnfNTAbG
-	a/Vw2bPcKbWaQCuMGKXh42ieB6EAJ/6ivK2wri66weTSTQyoHgtiKr+s
-X-Gm-Gg: Acq92OGUsecHWKPt9Yr/4uec2tk46bRexCkKeukJ9XmBmgBEvLMKb2NPPNwh/Eq5ix6
-	kab9hZW2veOkmc6nOgXzZDb/XFmlzqjcPdrmlrZg4/70qqTB1C9W/lxnz44P/M/etcBFiporH1M
-	j5kksszt+tFLWDtnSdOpNOslnIuSmmrG8q5kPQBq53AtJM2Z5gWaDWvgr/hVMdaeW8z7ANm11h9
-	/egJINhW37GmhpRj9mT69rVcK3xSQfu5kR4LqNrrvdjuXgCd7NdsU4UBWYsdx88eMHQs0QdrGjw
-	yQwNf/KxondlFzb9jvJYWGWf0XYYnwmDBN+kpmC9qZ+b3xTl1GbiLfGUSkweM3G6XxJx7+cKpSk
-	N5Ek9MHLsbqBK4HA3c2n/rVA2Ls25H8aP+1k8lO9QxjDIZhCkK3g7zJTYHpB8n5rXOI5qck7Eiq
-	YbmlkpuneZLDE2PHSa62RC6m1gop6s9YGmHPfF1RO0GzjVQNWA8TTPhCZlGH2Hj+yGCkUnsO3Sm
-	BtM7sB4Ou0=
-X-Received: by 2002:a17:90b:5747:b0:368:3d3e:efa6 with SMTP id 98e67ed59e1d1-375212a2eebmr6290346a91.20.1781063883796;
-        Tue, 09 Jun 2026 20:58:03 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37625ecfe47sm702153a91.0.2026.06.09.20.58.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jun 2026 20:58:03 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <390d34f5-3467-4364-9a79-047aa779a026@roeck-us.net>
-Date: Tue, 9 Jun 2026 20:58:02 -0700
+        bh=XxoZFC5RwuU1AtzTTwLIZclxEbkhraC7dqE6/SFyZN8=;
+        b=aipd9aq/H7OWGOBhXhCu+dbd5jMq03pRY4SJnPMdt85vnVmIrSzgoaVoubUceYZG7H
+         tZ6qUW9PC7V0ML05yCYY12ZcuDKHQ46qfFVD7b54I5cssyYnscprStZL/4R+woQckgfx
+         r1szP2qn/edEnXacEImkz5uD8kDkxs1mQBQ53n7Uw4twYRpBh/Sij1y7gcI3r1f3N6xX
+         6C8H2a+Z1XEaRYUq54J10esIwc3U2Du4s7vzqLn7BqTurYzXOeKb+Qs1ARu1Gb5prE+B
+         wXkzeXJGpZxDHunzvHB/GbZQr81Mf3bt77EpKoGKxFVIogMRPgAMPgDSWhHzz8Q/bXuN
+         x3nA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781079747; x=1781684547;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XxoZFC5RwuU1AtzTTwLIZclxEbkhraC7dqE6/SFyZN8=;
+        b=jsNZFG8OWVc5nhB0hBvrvnuoqukeinJybOU3NSairlSxKKKkaR17zO4hLYuskOKQ92
+         nE4B0N/7ZZyb3sYXCqId7xZniW1Wd7af4ThkFoz/QEa2rQK1CW/mPmSwWvTgiYcYzotB
+         4OcNvtvShjoEjDWmX21jLyd95jhEfjhaVChNGgygimRCEX9FWFSG/p5/hNiPadopxQgS
+         d0ZJuyJW9yboJkAn+aaZmxKvkN895mk3U05kRoLxAxkXxTzzdrV7EIlI1E2Tr25urmOG
+         kkdhCXgJzpkSKB5QRCPTFdEDXPE4/iPsFuGadJnB7NaQglazRh34SAKEMZPdFNs0gkx7
+         ZXKA==
+X-Gm-Message-State: AOJu0Yz70M6jRPzfMAAeB9g094CK3PiikrJ8oiIMq7FuXgyMGXlkhlh8
+	qzHjaKn6g/16K5j8HxN1vogwHKJ2nJbvqyfkGDsK4C9XOuoGi1lKViHk
+X-Gm-Gg: Acq92OEZv9tqXD5QGmBXfpZvPbyeIn1pMvC6nnYyNfJ5RiRbeZzeEwrO9spZPX7hSYM
+	+8wxIflTK0VNfI3cJ8LVHRjW7y3/8P+DzUNvI11lbMnY7NBi1lhJv8gpPBII0Om6v0Lu1lqeBaM
+	bYn9shV4OSfg7QL5zHsPQo86Mlzetuj1ob4Uk+KGox7h7PdJd+3UYQJKe1qnh4vGloB1B165nLc
+	0O1dWHjGneLfCCd+3fiWeEkHkkNqIbBKeGFhjBmn7l8PwwYKKKn3EOZdy/oe5ASDHLeWbWnsGZW
+	wCe9WCAzhYBQxz+4vpD03jMka0JgFlfLBW8WrySQsZh2khpfYKbjCUy52eGNaCSlN9L2j064iNB
+	+jcN3Z+1zT4476rKJT7qkGFuedOpkCTHbAEy73v6OlSJgm66plEmfD6llhAw1gDIe+ju7vf1arL
+	tHW8NrsC7ieU7hDrDMB2GW9v7Ja7zGBRij7OddEtp+ULjY8KdEOUppo5NFodh8cW7oMWGRzfLZ3
+	TdVQ/F9aWVVx8QA+CuZ8Vo=
+X-Received: by 2002:a05:600c:1d27:b0:490:add9:7f88 with SMTP id 5b1f17b1804b1-490c25dd709mr412096945e9.21.1781079746405;
+        Wed, 10 Jun 2026 01:22:26 -0700 (PDT)
+Received: from ?IPv6:2001:818:ea56:d000:56e0:ceba:7da4:6673? ([2001:818:ea56:d000:56e0:ceba:7da4:6673])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490dca8fcfbsm31123815e9.1.2026.06.10.01.22.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2026 01:22:26 -0700 (PDT)
+Message-ID: <22d2d0733485cb904eb3f53c9bb891d64435def7.camel@gmail.com>
+Subject: Re: [PATCH] hwmon: (pmbus/max34440): add support adpm12250
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>, Guenter Roeck
+	 <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+	 <skhan@linuxfoundation.org>
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Date: Wed, 10 Jun 2026 09:23:32 +0100
+In-Reply-To: <20260610-dev-adpm12250-v1-1-422760bb80da@analog.com>
+References: <20260610-dev-adpm12250-v1-1-422760bb80da@analog.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (gpd-fan) Reject EC PWM value 0 as invalid
-To: Pei Xiao <xiaopei01@kylinos.cn>,
- Cryolitia PukNgae <cryolitia@uniontech.com>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <cbdc1df2ed3443b08cbd1fc2652638deaf798c4b.1780990542.git.xiaopei01@kylinos.cn>
- <305E2395B7027B5B+e851d97c-2af5-4752-8c1c-7f92884fe874@uniontech.com>
- <e8bb6993-e533-406e-a389-5bf5d670a93e@kylinos.cn>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <e8bb6993-e533-406e-a389-5bf5d670a93e@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
-On 6/9/26 18:10, Pei Xiao wrote:
-> 
-> 
-> 在 2026/6/9 23:41, Cryolitia PukNgae 写道:
->>
->> On 6/9/26 07:41, Pei Xiao wrote:
->>> The EC firmware is expected to return values in [1, pwm_max]. A read of 0
->>> is illegal and would cause underflow in the conversion formula. Explicitly
->>> check for 0 and return -EIO.
->>>
->>> Signed-off-by: Pei Xiao <xiaopei01@kylinos.cn>
->>> ---
->>>    drivers/hwmon/gpd-fan.c | 6 +++++-
->>>    1 file changed, 5 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/hwmon/gpd-fan.c b/drivers/hwmon/gpd-fan.c
->>> index d1993cd645cb..decb61936b95 100644
->>> --- a/drivers/hwmon/gpd-fan.c
->>> +++ b/drivers/hwmon/gpd-fan.c
->>> @@ -341,7 +341,11 @@ static int gpd_wm2_read_pwm(struct gpd_fan_data *data)
->>>          gpd_ecram_read(drvdata, drvdata->pwm_write, &var);
->>>    -    // Match gpd_generic_write_pwm(u8) below
->>> +    /* EC PWM register valid range is 1 ~ pwm_max; 0 is an invalid
->>> state */
->>> +    if (unlikely(!var))
->>> +        return -EIO;
->>> +
->>> +    /* Match gpd_generic_write_pwm() below */
->>>        return DIV_ROUND_CLOSEST((var - 1) * 255, (drvdata->pwm_max - 1));
->>>    }
->>>    
->>
->> Have you ever tested the behavior on a real device? When it returns 0,
->> what state is the device in?
->>
-> Hi Cryolitia,
-> 
-> Thanks for your  messages!
-> Yes, this is not an issue, but this problem was reported during the Sashiko
-> AI review.
+On Wed, 2026-06-10 at 09:12 +0800, Alexis Czezar Torreno wrote:
+> ADPM12250 is a quarter brick DC/DC Power Module. It is a high power
+> non-isolated converter capable of delivering regulated 12V with
+> continuous power level of 2500W. Uses PMBus.
+>=20
+> Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+> ---
+> ADPM12250 is a quarter brick DC/DC Power Module. It is a high power
+> non-isolated converter capable of delivering regulated 12V with continuou=
+s
+> power level of 2500W. Uses PMBus.
+> ---
 
-I disagree: it is an issue. We can not assume that the EC never returns 0,
-and the case must be handled, either by returning an error as implemented above
-or by returning 0.
+Reviewed-by: Nuno S=C3=A1 <nuno.sa@analog.com>
 
-Guenter
-
->   The maintainer suggested I take a look. After checking, I think it might
-> be better to add a check:
-> if it's 0, just return directly. In case some EC returns 0 someday, causing
-> an underflow,
-> returning an error code would be more intuitive than returning an incorrect
-> value.
-> 
-> https://sashiko.dev/#/patchset/cover.1780880972.git.xiaopei01@kylinos.cn?part=1
-> 
-> Pei.
->>
->> thanks,
->>
->> Cryolitia PukNgae
-> 
-> 
-
+> =C2=A0Documentation/hwmon/max34440.rst | 27 ++++++++++++++++--------
+> =C2=A0drivers/hwmon/pmbus/max34440.c=C2=A0=C2=A0 | 45 +++++++++++++++++++=
+++++++++++++++++++---
+> =C2=A02 files changed, 60 insertions(+), 12 deletions(-)
+>=20
+> diff --git a/Documentation/hwmon/max34440.rst b/Documentation/hwmon/max34=
+440.rst
+> index
+> d6d4fbc863d96c1008a1971d3e3245d9ce1ef688..e7421f4dbf38fc1436bbaeba71d4461=
+a00f8cefb
+> 100644
+> --- a/Documentation/hwmon/max34440.rst
+> +++ b/Documentation/hwmon/max34440.rst
+> @@ -19,6 +19,14 @@ Supported chips:
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0 Datasheet: -
+> =C2=A0
+> +=C2=A0 * ADI ADPM12250
+> +
+> +=C2=A0=C2=A0=C2=A0 Prefixes: 'adpm12250'
+> +
+> +=C2=A0=C2=A0=C2=A0 Addresses scanned: -
+> +
+> +=C2=A0=C2=A0=C2=A0 Datasheet: -
+> +
+> =C2=A0=C2=A0 * Maxim MAX34440
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0 Prefixes: 'max34440'
+> @@ -87,11 +95,11 @@ This driver supports multiple devices: hardware monit=
+oring for
+> Maxim MAX34440
+> =C2=A0PMBus 6-Channel Power-Supply Manager, MAX34441 PMBus 5-Channel Powe=
+r-Supply
+> =C2=A0Manager and Intelligent Fan Controller, and MAX34446 PMBus Power-Su=
+pply Data
+> =C2=A0Logger; PMBus Voltage Monitor and Sequencers for MAX34451, MAX34460=
+, and
+> -MAX34461; PMBus DC/DC Power Module ADPM12160, and ADPM12200. The MAX3445=
+1
+> -supports monitoring voltage or current of 12 channels based on GIN pins.=
+ The
+> -MAX34460 supports 12 voltage channels, and the MAX34461 supports 16 volt=
+age
+> -channels. The ADPM12160, and ADPM12200 also monitors both input and outp=
+ut
+> -of voltage and current.
+> +MAX34461; PMBus DC/DC Power Module ADPM12160, ADPM12200, and ADPM12250. =
+The
+> +MAX34451 supports monitoring voltage or current of 12 channels based on =
+GIN
+> +pins. The MAX34460 supports 12 voltage channels, and the MAX34461 suppor=
+ts 16
+> +voltage channels. The ADPM12160, ADPM12200, and ADPM12250 also monitors =
+both
+> +input and output of voltage and current.
+> =C2=A0
+> =C2=A0The driver is a client driver to the core PMBus driver. Please see
+> =C2=A0Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
+> @@ -149,7 +157,7 @@ in[1-6]_reset_history	Write any value to reset histor=
+y.
+> =C2=A0.. note::
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0 - MAX34446 only supports in[1-4].
+> -=C2=A0=C2=A0=C2=A0 - ADPM12160, and ADPM12200 only supports in[1-2]. Lab=
+el is "vin1"
+> +=C2=A0=C2=A0=C2=A0 - ADPM12160, ADPM12200, and ADPM12250 only supports i=
+n[1-2]. Label is "vin1"
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 and "vout1" respectively.
+> =C2=A0
+> =C2=A0Curr
+> @@ -172,8 +180,9 @@ curr[1-6]_reset_history	Write any value to reset hist=
+ory.
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0 - in6 and curr6 attributes only exist for MAX344=
+40.
+> =C2=A0=C2=A0=C2=A0=C2=A0 - MAX34446 only supports curr[1-4].
+> -=C2=A0=C2=A0=C2=A0 - For ADPM12160, and ADPM12200, curr[1] is "iin1" and=
+ curr[2-6]
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 are "iout[1-5]".
+> +=C2=A0=C2=A0=C2=A0 - For ADPM12160, ADPM12200, and ADPM12250, curr[1] is=
+ "iin1"
+> +=C2=A0=C2=A0=C2=A0 - For ADPM12160, and ADPM12200 curr[2-6] are "iout[1-=
+5]".
+> +=C2=A0=C2=A0=C2=A0 - For ADPM12250, curr[2-4] are "iout[1-3]".
+> =C2=A0
+> =C2=A0Power
+> =C2=A0~~~~~
+> @@ -209,7 +218,7 @@ temp[1-8]_reset_history	Write any value to reset hist=
+ory.
+> =C2=A0.. note::
+> =C2=A0=C2=A0=C2=A0 - temp7 and temp8 attributes only exist for MAX34440.
+> =C2=A0=C2=A0=C2=A0 - MAX34446 only supports temp[1-3].
+> -=C2=A0=C2=A0 - ADPM12160, and ADPM12200 only supports temp[1].
+> +=C2=A0=C2=A0 - ADPM12160, ADPM12200, and ADPM12250 only supports temp[1]=
+.
+> =C2=A0
+> =C2=A0
+> =C2=A0.. note::
+> diff --git a/drivers/hwmon/pmbus/max34440.c b/drivers/hwmon/pmbus/max3444=
+0.c
+> index
+> 4525b9fc56267479534251a1444aa09181615ac6..74876d2207fbe4014b8b54a9fd96823=
+70fc3bbed
+> 100644
+> --- a/drivers/hwmon/pmbus/max34440.c
+> +++ b/drivers/hwmon/pmbus/max34440.c
+> @@ -18,6 +18,7 @@
+> =C2=A0enum chips {
+> =C2=A0	adpm12160,
+> =C2=A0	adpm12200,
+> +	adpm12250,
+> =C2=A0	max34440,
+> =C2=A0	max34441,
+> =C2=A0	max34446,
+> @@ -97,7 +98,8 @@ static int max34440_read_word_data(struct i2c_client *c=
+lient, int
+> page,
+> =C2=A0		break;
+> =C2=A0	case PMBUS_VIRT_READ_IOUT_AVG:
+> =C2=A0		if (data->id !=3D max34446 && data->id !=3D max34451 &&
+> -		=C2=A0=C2=A0=C2=A0 data->id !=3D adpm12160 && data->id !=3D adpm12200)
+> +		=C2=A0=C2=A0=C2=A0 data->id !=3D adpm12160 && data->id !=3D adpm12200 =
+&&
+> +		=C2=A0=C2=A0=C2=A0 data->id !=3D adpm12250)
+> =C2=A0			return -ENXIO;
+> =C2=A0		ret =3D pmbus_read_word_data(client, page, phase,
+> =C2=A0					=C2=A0=C2=A0 MAX34446_MFR_IOUT_AVG);
+> @@ -182,7 +184,8 @@ static int max34440_write_word_data(struct i2c_client=
+ *client,
+> int page,
+> =C2=A0		ret =3D pmbus_write_word_data(client, page,
+> =C2=A0					=C2=A0=C2=A0=C2=A0 MAX34440_MFR_IOUT_PEAK, 0);
+> =C2=A0		if (!ret && (data->id =3D=3D max34446 || data->id =3D=3D max34451=
+ ||
+> -			=C2=A0=C2=A0=C2=A0=C2=A0 data->id =3D=3D adpm12160 || data->id =3D=3D=
+ adpm12200))
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 data->id =3D=3D adpm12160 || data->id =3D=3D=
+ adpm12200 ||
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 data->id =3D=3D adpm12250))
+> =C2=A0			ret =3D pmbus_write_word_data(client, page,
+> =C2=A0					MAX34446_MFR_IOUT_AVG, 0);
+> =C2=A0
+> @@ -399,6 +402,40 @@ static struct pmbus_driver_info max34440_info[] =3D =
+{
+> =C2=A0		.read_word_data =3D max34440_read_word_data,
+> =C2=A0		.write_word_data =3D max34440_write_word_data,
+> =C2=A0	},
+> +	[adpm12250] =3D {
+> +		.pages =3D 19,
+> +		.format[PSC_VOLTAGE_IN] =3D direct,
+> +		.format[PSC_VOLTAGE_OUT] =3D direct,
+> +		.format[PSC_CURRENT_IN] =3D direct,
+> +		.format[PSC_CURRENT_OUT] =3D direct,
+> +		.format[PSC_TEMPERATURE] =3D direct,
+> +		.m[PSC_VOLTAGE_IN] =3D 125,
+> +		.b[PSC_VOLTAGE_IN] =3D 0,
+> +		.R[PSC_VOLTAGE_IN] =3D 0,
+> +		.m[PSC_VOLTAGE_OUT] =3D 125,
+> +		.b[PSC_VOLTAGE_OUT] =3D 0,
+> +		.R[PSC_VOLTAGE_OUT] =3D 0,
+> +		.m[PSC_CURRENT_IN] =3D 250,
+> +		.b[PSC_CURRENT_IN] =3D 0,
+> +		.R[PSC_CURRENT_IN] =3D -1,
+> +		.m[PSC_CURRENT_OUT] =3D 250,
+> +		.b[PSC_CURRENT_OUT] =3D 0,
+> +		.R[PSC_CURRENT_OUT] =3D -1,
+> +		.m[PSC_TEMPERATURE] =3D 1,
+> +		.b[PSC_TEMPERATURE] =3D 0,
+> +		.R[PSC_TEMPERATURE] =3D 2,
+> +		/* absent func below [18] are not for monitoring */
+> +		.func[2] =3D PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+> +		.func[4] =3D PMBUS_HAVE_STATUS_IOUT,
+> +		.func[5] =3D PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+> +		.func[6] =3D PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+> +		.func[9] =3D PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT,
+> +		.func[10] =3D PMBUS_HAVE_IIN | PMBUS_HAVE_STATUS_INPUT,
+> +		.func[14] =3D PMBUS_HAVE_IOUT,
+> +		.func[18] =3D PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+> +		.read_word_data =3D max34440_read_word_data,
+> +		.write_word_data =3D max34440_write_word_data,
+> +	},
+> =C2=A0	[max34440] =3D {
+> =C2=A0		.pages =3D 14,
+> =C2=A0		.format[PSC_VOLTAGE_IN] =3D direct,
+> @@ -635,7 +672,8 @@ static int max34440_probe(struct i2c_client *client)
+> =C2=A0		rv =3D max34451_set_supported_funcs(client, data);
+> =C2=A0		if (rv)
+> =C2=A0			return rv;
+> -	} else if (data->id =3D=3D adpm12160 || data->id =3D=3D adpm12200) {
+> +	} else if (data->id =3D=3D adpm12160 || data->id =3D=3D adpm12200 ||
+> +		=C2=A0=C2=A0 data->id =3D=3D adpm12250) {
+> =C2=A0		data->iout_oc_fault_limit =3D PMBUS_IOUT_OC_FAULT_LIMIT;
+> =C2=A0		data->iout_oc_warn_limit =3D PMBUS_IOUT_OC_WARN_LIMIT;
+> =C2=A0	}
+> @@ -646,6 +684,7 @@ static int max34440_probe(struct i2c_client *client)
+> =C2=A0static const struct i2c_device_id max34440_id[] =3D {
+> =C2=A0	{ .name =3D "adpm12160", .driver_data =3D adpm12160 },
+> =C2=A0	{ .name =3D "adpm12200", .driver_data =3D adpm12200 },
+> +	{ .name =3D "adpm12250", .driver_data =3D adpm12250 },
+> =C2=A0	{ .name =3D "max34440", .driver_data =3D max34440 },
+> =C2=A0	{ .name =3D "max34441", .driver_data =3D max34441 },
+> =C2=A0	{ .name =3D "max34446", .driver_data =3D max34446 },
+>=20
+> ---
+> base-commit: 1723bc01ecc7ca2f30272685121314379ba5eb18
+> change-id: 20260610-dev-adpm12250-4ce6fc8c82ac
+>=20
+> Best regards,
