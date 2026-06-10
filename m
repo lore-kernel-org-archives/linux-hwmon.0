@@ -1,178 +1,181 @@
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142DE42883B
-	for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 15:57:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9586342DFF4
+	for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 16:12:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781107058; cv=none; b=cx2C0pxEUGGCUwUjoQ0PH7nO9Q0E6+9QNsMFGgsYaaechpZ0NCvAgerofqiv9mvgTrCG5dHCcLLtUJ8QRDq+ztdlMagzN3YJhhHEi1rMDTrUQBUr9zuQk8TSvQQcJVvhH8/iAtyQnqK9UuI+/hbTo+WXokdHLrYE+Nk53jMSGTc=
+	t=1781107949; cv=none; b=evsk2QsT/aLmzTpJyObkp85s8AD0Um1XOR7rL4KbpIBdbcS3Hf4kxtJ3bJsXJCiKTTqDdZdxUxPd++NQhhQyqJPNbJ7NB1TMlyoEbV2Mvcr9gZgu2O2hol485/A4+XJ2VeOAJN4jkUMFdbaZKEi0eTtJ/lM7O7QMCaghM9QbWX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781107058; c=relaxed/simple;
-	bh=oTSaQY+9D5qhLcY1Wf9pqn6FEBc7ivW9+Td1eoJV7gM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Hcfl+i030i9WfYudCvE6+pY5UcYEaCNKcgLDz9DpmOaSqAus6651WHu2nMFm7UMnoZFPuDevD/qgM+DC8DdtkT2aNWIxXO9NTr6/eQXkZ3UTkv1SEvaOEg9HTp093Bqrwzvpez6ah5U8lIo8wz+timvo7xtsmcCEjmOki/9cMY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tpqg89JO; arc=none smtp.client-ip=74.125.82.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781107949; c=relaxed/simple;
+	bh=ZP51grzLqX2IyA03ooRGLusMnPJAzMJMoRqVC5fo8UQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=L6UEAJvXwVVQzk8dY/QNUfvIjgwzqXag1sJqCG+T6kd6xrX5GOS/uKiO+Z486hYajAwMkydTsuFJY5JqQaTYhHwIFuu+t6ohps4EC/5GYLfyxxMzoA/swna/Ir4KCrCdCq6AZlcDLWjOpCkTx11UJfiLbsbheu17Zz/jN45rdhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SZpHD+Z8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tpqg89JO"
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-304d8362a58so3103eec.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 08:57:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781107056; x=1781711856; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=j3Y+Zhn4vDDB0roEdMHVYjzPSRem/jkfPJO2WcDGHXM=;
-        b=Tpqg89JOV0ME1frJaUh6d91V4QSFq/yKgUkSgl0/9a9/5bzgyPM55qdhonYiWX9IIl
-         Bdd9e0dhw85qJykHSDApWxPuDmpv3tkmCXertAlVjKNWN1d86Qg2QXcZnzPAAGkzTZcm
-         iCoUky8O3ITyKuT6MmTgQuXgwhRH0g9dleomiBx6hpL0G3TcGRHkTOeSPKn41H0y/t3i
-         daQog69vorVzRgqO/YxPbxLrPx54bq6pygVNl/nMnzauaofuYUmSt7X3FSu3j1gllw8z
-         CbtRzdhkm4AwuNNhNu0DZPhpraqm+y1bnw9wprmDPXUZrE6nfaJc8+r+oIEJu38dgdhh
-         zRJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781107056; x=1781711856;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j3Y+Zhn4vDDB0roEdMHVYjzPSRem/jkfPJO2WcDGHXM=;
-        b=mzcy2ac6QxuAZmGpc5Q651l/SOpVo0/5UrfNIQ8uHtFhV5884dGSvPFZGmxy3AZftM
-         AJNi4ROgkBt3vj2NgDlCARf4isZlStbFdyUcjzt8dpsZS5KWCfw4wW8htQs2DmVz28wZ
-         pD6EbBIIPERf5XZFSOc86V5cBFAq6r5dKGpfvxFiCjz8vkP+xblIJjKZ8vatC0cdnpDh
-         mw7N+P28vOXBqnCFDnUeHdXqo0mAqGm3N6VjWzH5+pwhozkIft9QgjmgoiTw2h/g4ryn
-         zev3cfQyOBazYBCzX26HRqoNILLr5Ns9dNcXh+HTHozI6aC+PoHcL2qW3+W0jOEGehRP
-         yfSA==
-X-Gm-Message-State: AOJu0Yx/Z+AtbVBgnOqNrMYaza93V1DIFRSdnmBgPYLkFh9iy14K2Ct3
-	uS5HFetYF/gAJiTecnboFuT+Zez8sv9oK9uj2/DL6Go4uJNg5FmqmqbrT9P+6oaf
-X-Gm-Gg: Acq92OHLblqDjwybAWJ4Qp2EnrXghv5B+bR8bDOVbPAllLP7EFfHQjdphg7omM/uELF
-	fWsuVe751SO7DWzuUTceIk8zqbs9jEScWAtguChB8SlLzdYXxQXpug341WhaEjX6mAgCn5lbr7w
-	ouishH6B+Rd6YnVSXKGwWegES6mvUBnYHhKkH/HMJxqKPkXD+db4HTqAQxCZzQ7YUR3p6/GAhyv
-	9+3Zj+5okLM4G1db4UgYuDRqtDuhKoBMNGUbZ3Pzg3LxHr5nQUncXrG6LdgS3yB6pPbeveiw7iI
-	W/cWYo5+/N6HbXjX4P/bhFn1ZuAPICFQIsMkU3/R5vpBJdcc0KfqilYa1wOjfNIMTcyx7zRW/eu
-	QYu4cZabNhYhwTxdd+R4wkOR2epzPKvrc9xk6W3k5hmhwD0r86h+fjCHOSgVaZOjss6nvR8mi3K
-	oVb89dGlhV0cx76pHC5BHPSmiWtQc37Q3vJ5ax6w6wtlhvViQ=
-X-Received: by 2002:a05:7301:b0b:b0:304:e587:50b8 with SMTP id 5a478bee46e88-3078011bbd5mr8472835eec.18.1781107055967;
-        Wed, 10 Jun 2026 08:57:35 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074dcbe995sm33570077eec.13.2026.06.10.08.57.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jun 2026 08:57:35 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Loic Poulain <loic.poulain@oss.qualcomm.com>
-Subject: [PATCH] hwmon: (ina2xx) Fix overflow issues
-Date: Wed, 10 Jun 2026 08:57:31 -0700
-Message-ID: <20260610155732.12686-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SZpHD+Z8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 208061F00899;
+	Wed, 10 Jun 2026 16:12:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781107948;
+	bh=rSnaiaMtmaNlBWtjQ7O95p+oa6X1s9L/JeMVeGksFwY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=SZpHD+Z8TXzW9xrXees0fK5JovREoGR08Sz/0b3SVHKE/7lAWFEUzthaWDhf57y1K
+	 ODkWPCVOstqgUwPwiTbGT0vNTYJrvjwENejF1LoPou1kiUXZKs2Qhs97guqMma9ZZE
+	 P9GwihX5j0bAv8sbi08+OiFRK7SqLyV4K6Cz8PSkzD5Wu/dTJk7fp0eeo0t9Z5sK1p
+	 W0Xk/0MTcWpQjyQkbirJZidtl95L8xnQv2/TtiGy0EmJvezHmYJpTZuhw67iEVccRG
+	 J7Za+vFeldH28U7TwfBzCTabiyJta0V80v9sslg/fHyYwtuWDlWFd1RlUOVsacdshd
+	 osN4PEH0MnxWg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] hwmon: (ina2xx) Fix overflow issues
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Guenter Roeck" <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260610155732.12686-1-linux@roeck-us.net>
+References: <20260610155732.12686-1-linux@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 10 Jun 2026 16:12:27 +0000
+Message-Id: <20260610161228.208061F00899@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Sashiko reports the following overflow problems:
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
 
-In ina2xx_get_value(), the INA2XX_POWER calculation is:
-    val = regval * data->power_lsb_uW;
-The result is returned as a signed 32-bit int. For the INA232 with a common
-2mOhm shunt, power_lsb_uW becomes 40,000. When the 16-bit regval exceeds
-53,687, the product exceeds INT_MAX. This overflows the 32-bit signed math,
-wrapping to a negative integer and reporting erroneous negative power
-readings to userspace.
+Pre-existing issues:
+- [High] Pre-existing integer overflow in INA2XX_CURRENT read calculation o=
+n 32-bit platforms.
+- [High] Pre-existing integer overflow in INA2XX_CURRENT alert limit conver=
+sion on 32-bit platforms.
+- [High] Pre-existing integer overflow in sy24655_average_power_read calcul=
+ation on 32-bit platforms.
+--
 
-For INA2XX_POWER, the upper bound is clamped:
-    val = clamp_val(val, 0, UINT_MAX - data->power_lsb_uW);
-clamp_val() implicitly casts the upper bound to a 32-bit signed long on
-32-bit platforms. This results in a negative number, meaning any valid
-power limit is clamped to a negative value and ultimately programmed as 0.
-Similarly, for INA2XX_SHUNT_VOLTAGE, the initial clamp uses SHRT_MAX *
-shunt_div instead of division. The subsequent multiplication:
-    val *= data->config->shunt_div;
-overflows LONG_MAX on 32-bit platforms for high inputs, wrapping to a
-negative value and also programming the hardware limit to 0.
+commit 9e5ee5483a3c4bc84b89199266642adb73bf1c08
+Author: Guenter Roeck <linux@roeck-us.net>
 
-For INA2XX_BUS_VOLTAGE on parts with bus_voltage_shift > 0, the calculation
-(val * 1000) << shift can exceed LONG_MAX for limits over ~134V, wrapping
-to negative and setting the limit to 0.
+hwmon: (ina2xx) Fix overflow issues
 
-Have ina2xx_get_value() return a long variable to improve the supported
-value range on 64-bit systems and to match the type os values returned
-to the hwmon core.
+This commit fixes multiple integer overflow issues in the ina2xx driver
+that occurred on 32-bit platforms. It addresses incorrect clamping and
+signed 32-bit arithmetic overflows when calculating power, shunt voltage,
+and bus voltage, and updates the return type of ina2xx_get_value() to long.
 
-Clamp the result of 'regval * data->power_lsb_uW' to LONG_MAX to fix the
-INA2XX_POWER calculation overflow.
+> diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
+> index 613ffb622b7c4..12ae874d0e197 100644
+> --- a/drivers/hwmon/ina2xx.c
+> +++ b/drivers/hwmon/ina2xx.c
+> @@ -283,7 +284,7 @@ static int ina2xx_get_value(struct ina2xx_data *data,=
+ u8 reg,
+>  		val =3D DIV_ROUND_CLOSEST(val, 1000);
+>  		break;
+>  	case INA2XX_POWER:
+> -		val =3D regval * data->power_lsb_uW;
+> +		val =3D clamp_val((u64)regval * data->power_lsb_uW, 0, LONG_MAX);
+>  		break;
+>  	case INA2XX_CURRENT:
+>  		/* signed register, result in mA */
+>  		val =3D ((s16)regval >> data->config->current_shift) *
+>  		  data->current_lsb_uA;
 
-Change the initial clamp for INA2XX_SHUNT_VOLTAGE to SHRT_MAX / shunt_div
-to fix the shunt limit overflow.
+[Severity: High]
+This isn't a bug introduced by this patch, but does this calculation overfl=
+ow
+on 32-bit platforms?
 
-For INA2XX_BUS_VOLTAGE, limit the initial clamp to 130V instead of 200V
-to avoid the overflow.
+On 32-bit systems, long is 32-bit signed. For configurations with small
+shunts, current_lsb_uA can be very large (e.g., 40,000,000). When multiplied
+by a large regval, the product can reach 1.3 trillion, massively exceeding
+LONG_MAX (2.14 billion).
 
-Cc: Loic Poulain <loic.poulain@oss.qualcomm.com>
-Fixes: ab7fbee452be ("hwmon: (ina2xx) Fix various overflow issues")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/ina2xx.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+This will silently overflow the 32-bit signed math, wrapping to a negative
+value, which causes the subsystem to report radically incorrect (negative)
+currents, potentially causing automated power capping or thermal safety scr=
+ipts
+to fail to throttle the system under load.
 
-diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
-index c4742e84b999..0615666e430e 100644
---- a/drivers/hwmon/ina2xx.c
-+++ b/drivers/hwmon/ina2xx.c
-@@ -16,6 +16,7 @@
- #include <linux/i2c.h>
- #include <linux/init.h>
- #include <linux/kernel.h>
-+#include <linux/limits.h>
- #include <linux/module.h>
- #include <linux/property.h>
- #include <linux/regmap.h>
-@@ -266,10 +267,10 @@ static u16 ina226_interval_to_reg(long interval)
- 	return FIELD_PREP(INA226_AVG_RD_MASK, avg_bits);
- }
- 
--static int ina2xx_get_value(struct ina2xx_data *data, u8 reg,
--			    unsigned int regval)
-+static long ina2xx_get_value(struct ina2xx_data *data, u8 reg,
-+			     unsigned int regval)
- {
--	int val;
-+	long val;
- 
- 	switch (reg) {
- 	case INA2XX_SHUNT_VOLTAGE:
-@@ -283,7 +284,7 @@ static int ina2xx_get_value(struct ina2xx_data *data, u8 reg,
- 		val = DIV_ROUND_CLOSEST(val, 1000);
- 		break;
- 	case INA2XX_POWER:
--		val = regval * data->power_lsb_uW;
-+		val = clamp_val((u64)regval * data->power_lsb_uW, 0, LONG_MAX);
- 		break;
- 	case INA2XX_CURRENT:
- 		/* signed register, result in mA */
-@@ -380,17 +381,17 @@ static u16 ina226_alert_to_reg(struct ina2xx_data *data, int reg, long val)
- {
- 	switch (reg) {
- 	case INA2XX_SHUNT_VOLTAGE:
--		val = clamp_val(val, 0, SHRT_MAX * data->config->shunt_div);
-+		val = clamp_val(val, 0, DIV_ROUND_CLOSEST(SHRT_MAX, data->config->shunt_div));
- 		val *= data->config->shunt_div;
- 		val <<= data->config->shunt_voltage_shift;
- 		return clamp_val(val, 0, SHRT_MAX);
- 	case INA2XX_BUS_VOLTAGE:
--		val = clamp_val(val, 0, 200000);
-+		val = clamp_val(val, 0, 130000);
- 		val = (val * 1000) << data->config->bus_voltage_shift;
- 		val = DIV_ROUND_CLOSEST(val, data->config->bus_voltage_lsb);
- 		return clamp_val(val, 0, USHRT_MAX);
- 	case INA2XX_POWER:
--		val = clamp_val(val, 0, UINT_MAX - data->power_lsb_uW);
-+		val = clamp_val(val, 0, LONG_MAX - data->power_lsb_uW);
- 		val = DIV_ROUND_CLOSEST(val, data->power_lsb_uW);
- 		return clamp_val(val, 0, USHRT_MAX);
- 	case INA2XX_CURRENT:
--- 
-2.45.2
+>  		val =3D DIV_ROUND_CLOSEST(val, 1000);
+>  		break;
 
+[ ... ]
+
+> @@ -380,17 +381,17 @@ static u16 ina226_alert_to_reg(struct ina2xx_data *=
+data, int reg, long val)
+>  {
+>  	switch (reg) {
+
+[ ... ]
+
+>  	case INA2XX_BUS_VOLTAGE:
+> -		val =3D clamp_val(val, 0, 200000);
+> +		val =3D clamp_val(val, 0, 130000);
+>  		val =3D (val * 1000) << data->config->bus_voltage_shift;
+>  		val =3D DIV_ROUND_CLOSEST(val, data->config->bus_voltage_lsb);
+>  		return clamp_val(val, 0, USHRT_MAX);
+>  	case INA2XX_POWER:
+> -		val =3D clamp_val(val, 0, UINT_MAX - data->power_lsb_uW);
+> +		val =3D clamp_val(val, 0, LONG_MAX - data->power_lsb_uW);
+>  		val =3D DIV_ROUND_CLOSEST(val, data->power_lsb_uW);
+>  		return clamp_val(val, 0, USHRT_MAX);
+>  	case INA2XX_CURRENT:
+>  		val =3D clamp_val(val, INT_MIN / 1000, INT_MAX / 1000);
+>  		/* signed register, result in mA */
+>  		val =3D DIV_ROUND_CLOSEST(val * 1000, data->current_lsb_uA);
+>  		val <<=3D data->config->current_shift;
+
+[Severity: High]
+This is a pre-existing issue, but can this left-shift silently overflow the
+32-bit signed long before the final hardware clamp?
+
+If a large limit is provided to effectively disable the alert (e.g.,
+INT_MAX / 1000), the intermediate value after DIV_ROUND_CLOSEST can be large
+(e.g., 200,000,000). When left-shifted by current_shift (e.g., 4 for INA234=
+),
+it becomes 3.2 billion, exceeding LONG_MAX and wrapping to a negative numbe=
+r.
+
+The subsequent clamp_val() incorrectly clamps this negative value to
+SHRT_MIN (-32768) rather than saturating at the maximum positive limit, whi=
+ch
+would program a permanent false alert into the hardware and cause continuous
+spurious interrupts that can trigger unwanted system shutdowns.
+
+>  		return clamp_val(val, SHRT_MIN, SHRT_MAX);
+>  	default:
+
+I also noticed a pre-existing issue in sy24655_average_power_read()
+where a similar multiplication overflow occurs on 32-bit systems:
+
+drivers/hwmon/ina2xx.c:sy24655_average_power_read() {
+    ...
+	if (sample_count <=3D 0) {
+		*val =3D 0;
+		return 0;
+	}
+
+	*val =3D DIV_ROUND_CLOSEST(accumulator_24, sample_count) * data->power_lsb=
+_uW;
+    ...
+}
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does the accumulator quotient
+multiplied by power_lsb_uW overflow the 32-bit signed math before
+assignment?
+
+The accumulator can reach 16,777,215. When multiplied by a typical
+power_lsb_uW (e.g., 25,000), the product reaches ~419 billion, far
+exceeding LONG_MAX (2.14 billion).
+
+Because average power readings are critical for thermal and power managemen=
+t,
+returning invalid or wrapped negative data could cause the system to fail to
+throttle under heavy load.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260610155732.1268=
+6-1-linux@roeck-us.net?part=3D1
