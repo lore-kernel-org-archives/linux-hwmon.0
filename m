@@ -1,150 +1,247 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9732D3A7F75
-	for <linux-hwmon@vger.kernel.org>; Thu, 11 Jun 2026 20:27:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED9BE36CE03
+	for <linux-hwmon@vger.kernel.org>; Thu, 11 Jun 2026 21:26:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781209664; cv=none; b=DoL2K43ZFEtcHIn83AAfRdHq2U4Wdt8pQP4TUUm7A5C3yeRair6suqHiwK7WUFtkEV3V0cfoxyFHwhaiuWWwRNxQVyOpzzQ5w9OUk93rgDzrl/34Uzknh6hoGilbvgHUW9Cbcy432VSHZbm9aqhwI2tJ4HPdvw/rWvuMW73eBRI=
+	t=1781213200; cv=none; b=GgzpJ3ZCrazpew9zKQP5nG5C5UL1P2g125Y5E5VD+mfleK9X0IpRXjx7FyfDXUDWog/wQsNVf6j9FLK/tOEa+uTQNzKzoSwKny+KZZCCfBaqqLF+7u+isGS56xe/Y2kYqXCua5tHBcnAjKEofwt1uWwqaIdR3jKyAUunpn03eOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781209664; c=relaxed/simple;
-	bh=qk3lT3olDBBLokiRR2lO7JyOH7ODkiiWpCLirs3Cqb8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iLEigl4Lk08lhpOxq6Wg/LFTodXwLNIPW7ZOwl8LJcLzdzg6eVsGKRssvaf4pgR3CGcT7vQFdH7BdsjujGwhjjgbfO9gUZ9aF2CtHFSxRoJA2/01uy8A6Xu6tNVuqMbqn/piu26O+iHF9SN3xfij3j/mvLnL6+9UiS2svaHpPWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=e61j/WiX; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=bJoU1gVy; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1781213200; c=relaxed/simple;
+	bh=G2OIABeTvWXw/Bmn/6YKg+oTVd+l072kQzePBe91tyA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mx9E81EBulibO9VRGTkVPEDxkMDTzSLmVLVRcfk3mj+Czlle7Zk7qsm97i430+IiP/L6l2v93eHBx0+02SvPKZxPb8qC/tvPYubHNDIBY+CCIz2fKzIrIu3l1UA0ZW5lIPhGi62T4A+NStI8q/Z2VG+9cHbWL2+Q7kvJnJhrpgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OnP7cTRV; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="e61j/WiX";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="bJoU1gVy"
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65BJ3Em81526481
-	for <linux-hwmon@vger.kernel.org>; Thu, 11 Jun 2026 20:27:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=wj06zXyDmvIwudcWq/amFKW9
-	T7c/rNpW6WT3H/BxWHk=; b=e61j/WiXDqo48wdSrw1+vlefafJpV4HEgMuNyGe/
-	BvpGA6tTKsx3aMhAtNXxnoFxQuoy/8f7OZt+cDe0ES1hn95LncnqK9WWY2VPh6Kg
-	RUJaxlzaLbYKjMDqZRNYJrak7n+mf5HzEtpjClyUxJlAuGKFN+5lH3eZZ0KkafDn
-	cO2Jg60r+VSESbFtBYiQcmD9BVrHMVk1DxDrdsU6jzdtROFtVg2Svfb4opS7JWSr
-	OHxKqUD007jJ6ECa3VbV9zRGzg5fV0KL3VXfpD9dw/uwSw7EfT4KEpPTcIMJ3Qnm
-	VSkBWVojWYcSb2xvYHBaoydaP1DWiLA4JSJAKRiIUuGTsg==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4er29urexr-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-hwmon@vger.kernel.org>; Thu, 11 Jun 2026 20:27:42 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-51768072950so2413641cf.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 11 Jun 2026 13:27:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OnP7cTRV"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c8583b8fd89so170208a12.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 11 Jun 2026 14:26:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1781209662; x=1781814462; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wj06zXyDmvIwudcWq/amFKW9T7c/rNpW6WT3H/BxWHk=;
-        b=bJoU1gVyT005qE0RX37zTVC7O/K0BzTZONDyVwwveV2YlXG7JKPDNVN+JvF3ZTz2pc
-         Hl4CQVA746VT6sDiqIMwKJZHKQzPXzFJUgw6RCpBTT2VaQBGnTVvU6r7m5dLC8t+RlPn
-         wPRDwf4e7JD8AeWvlGBG7XhU35sC6iaqxtvhJ4O+gZsjzy00tf/h3Z9x4Ew4N2u/UxrM
-         z+D/ghhtcNBFKie88gEw0Uty95PBmGXZ45toc4QPUOtIhoEjCG2DQ/X1lFOiQS57GdOV
-         GWHFD+r6+Avi773Kvdq/uF0ziGDHYLpUW0A8oNMQkwTICM2cB+myEDbrTllozTMxONg1
-         eBHA==
+        d=gmail.com; s=20251104; t=1781213198; x=1781817998; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=/M3qonAYgq5C9at7seb6uw9RpiPwU0yanAscnkaK56g=;
+        b=OnP7cTRVx05JHX5yUN0mZE4/vZfXd268G8J1pjTK+8IbSm1SJ592f/kjTSJn4p9vPI
+         jQjAD2v0epmQYhwx5Re+y6wYlIs3rZ96I/0hV4pIaxAU92xstg/ifHGxQ5JGc2+Iegbl
+         l0xbHNVeQ9ZWtd8CSPOL4nYalUYYJ8T28BGzHCV3sl7yBpUUB/P/NoCVac7BfPH+swyk
+         wyHdpu60Ky5Uhv6gDuppyc1OzecWyWyVgP8Bg74T5RV3ngKgRd08/3oTwweI4NI8S5Pq
+         KgzbkVB0n3WiTWQhFtWiVkp/a+4pB7uSlpjnYYxcIqUIpgAJD4o1ttWt01X0eKDnMVSW
+         Q4hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781209662; x=1781814462;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wj06zXyDmvIwudcWq/amFKW9T7c/rNpW6WT3H/BxWHk=;
-        b=l+UcNGBAjhBe+n17W2PanLvPWnkNJqcUluiEt576K59493uNb/pla+sKFfo9s+4ITH
-         wkPuRaZRBgjTud3HLRSf4WZKT/ujlj3xvXbKBE1M5hlarI2UzriL+jNCYTa3slY2Ns9H
-         sV6QF6axLQUZPzaa8HPEsHhkI/ct5yU3hFH+tuyTnjroKkeNbHF8RCBvFAqvpCGpaLt1
-         WIiQj1l0rC1WhD5it8tmJRC6OzsIoXKmveqbdsc57m6hYZyHHjO0OIutZtE4MdShYI4V
-         srRoOcc8TEqmSTluncf4elD0l/HZJpHOXE5qI0jWUrQCx5j7QUSUbzmJlxt+KIL4J+DB
-         GwMg==
-X-Forwarded-Encrypted: i=1; AFNElJ/w5/7cVspf42lzL6kwNVL40/6PjnCNCg1FBpiczQM5B4ZOZ3z2Sjwu927XxpuVhkdRnzecJsfqNaXJfQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3t1NsXRebyAsnGe7n8mCR6nB+SNMCSXCbQu+z+cK6ZHjpOIGd
-	5dGnQHG4KNJ/Wcwr45iTRHDmnG3i1XCaTKPFeSaOYEzB66HZMIUHZhIiN3Sl/+aj//GYR+/VL3z
-	hT+Tqqj1VNGtgvK60/5jlsBosbgGyue0xAUl+vAQjXT09RLDXOgoyVgfmiBnzGmQlaw==
-X-Gm-Gg: Acq92OE5sl8A/3xwdqxfifireMZLdhXqnpaOT1gpVhMGMNRsPOpeFA8kHDRhJlaPqVf
-	60PBVYXNpwP6PnrPaJniVjYNwtiU+0TXMDQLSkuQ176JNn7DKL2KQBzKXI7RN7ivCO4qcwnh9o6
-	YH/LKt8i8osedTobw3a/EIIb7PEnBn7K3zIVHQUfic7BT7uZNdtt/KAtZTp9QKGk5i0y77cgc1c
-	bPTfNmKfnM4pkbW89sUIyuheL+OSxFWatyiVgYJQR0MZ70XXTTrzviLLewUQe3D37AUD9q3W17L
-	eI7Oyozw/aGl4oLBo9vmwtIAGBrTrxhY8fGL+OH2WggDTvckC+UL1m8qp77H1MdUQ7bl2jbLYga
-	T+AdTwQ3PkTEHSqNq8gw4E5BBsAw5OSAezsdRjsKK++ujE/w8aYRCq9YDoPFKvQq4LN0C1IV4eK
-	v1StFo7FhctJuxnQABOxFUOtOoiepgsgQrnyM=
-X-Received: by 2002:a05:622a:28b:b0:517:a9ef:ce3c with SMTP id d75a77b69052e-517ede505c5mr69204251cf.24.1781209661828;
-        Thu, 11 Jun 2026 13:27:41 -0700 (PDT)
-X-Received: by 2002:a05:622a:28b:b0:517:a9ef:ce3c with SMTP id d75a77b69052e-517ede505c5mr69203861cf.24.1781209661412;
-        Thu, 11 Jun 2026 13:27:41 -0700 (PDT)
-Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5ad2cb3ea19sm126223e87.18.2026.06.11.13.27.38
+        d=1e100.net; s=20251104; t=1781213198; x=1781817998;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/M3qonAYgq5C9at7seb6uw9RpiPwU0yanAscnkaK56g=;
+        b=UHyMnDYQwrMkTcGFmxn15fFkAWlJkqlRYdpC33kKFJWN4IWeh38FcQpsin77EU9xhk
+         4KwyW3gtN0pcFKdgbKR/0T2BzF2RWAni5yYSOOtpROZ/nmbDyz7UTuIUT2i6+AxB3Q0a
+         xqxlSIEUzzGJSvxfPYvOhwK4OClHnyZfgqQJEr99jTNDk8VZUHgvDSKHIQG3MTqslB/Q
+         bnM3cofUwznVhuXl2RdsYJGRmbHPaCdGZeIvwGGucbMNdyDo1iaCNQrfleUDXfEoGqh1
+         oQ4Fk2uf5xT4bb9J3dHCJjYGbjKhobex6IB+2WokcM7PqQ+diP/RuED2FlT8wMBf54oj
+         eoqQ==
+X-Gm-Message-State: AOJu0Yz5jLOkmZtbq3NrMfniyli9eTh6K0RA/SJqijXr99DWvty0m2iy
+	Jvk5e8kM80rIF+fUw4GsRK83CLjP4Dm0nV36O1g+sKaFu23opbtg2Z15YrNfH/x1
+X-Gm-Gg: Acq92OGB8d/7au2t55QmfUKWYF3uz19o9PXK0gLnjcmE7qmn7VcM7DNgI1bfQGsVvT1
+	trcBUO/tfQXOXBUIwQH9jqYzlV2rv3ta3/1JdzaZIm16uW0eldKzlt4EgIkziWLfNcCg66bjc0v
+	M54qyGQqCVaX0CGxEBY963rKVOMinAUSzUKnCXr1frQjTst50bEC4BsBIG2aWFicLo7YFcFuDuZ
+	8gtiNyW0Pzi6L4hK637ToCKtYqXfjUP2yc4X7xE9oxq/qdQ+nvBkMfs1raYB1y2ynT+mzATsQLA
+	0q8F6ZEiEin7tSVBk03rDgVEIJmSb0UV+7yI7h7R4ghAO7wGdwYKxDXry430vN5jon0NI0+yYyQ
+	YnBzXGm0BpWK68jveIbtAAv3AgvM9lT/BI3atZ8NWwGeiIH19qKFoLAKVVP8cW6tLj2tH27cbEc
+	H4Yxl+BAAWZcDAm3aYNUkMp+g1WugpVUezbxCA
+X-Received: by 2002:a05:6300:2285:b0:3b3:f46:1eea with SMTP id adf61e73a8af0-3b783c755d9mr45942637.7.1781213198189;
+        Thu, 11 Jun 2026 14:26:38 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c866325e477sm187280a12.10.2026.06.11.14.26.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jun 2026 13:27:40 -0700 (PDT)
-Date: Thu, 11 Jun 2026 23:27:37 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Loic Poulain <loic.poulain@oss.qualcomm.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, Martino Facchin <m.facchin@arduino.cc>
-Subject: Re: [PATCH v2 2/3] hwmon: ina2xx: support ina232
-Message-ID: <zdb5uxiwny434mkz3jmllgy6iivlspslycjxpiz4otqvwpdpvg@rpofwue2zmbn>
-References: <20260611-monza-ina232-v2-0-e4375ce652d0@oss.qualcomm.com>
- <20260611-monza-ina232-v2-2-e4375ce652d0@oss.qualcomm.com>
+        Thu, 11 Jun 2026 14:26:37 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Loic Poulain <loic.poulain@oss.qualcomm.com>
+Subject: [PATCH v4] hwmon: (ina2xx) Fix overflow issues
+Date: Thu, 11 Jun 2026 14:26:34 -0700
+Message-ID: <20260611212634.846262-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260611-monza-ina232-v2-2-e4375ce652d0@oss.qualcomm.com>
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjExMDIwNSBTYWx0ZWRfX/w8/tAfj5X70
- cAhuR2urUvfv9QQ1BJMYLleKdRuCx28NGx1U2f37+dI/oyDp3nIAvG13efygMuYo1z5fGJM259Z
- Ii/Ug2atylloW5k6i2eBWGkQvksgF/w=
-X-Proofpoint-GUID: BTbtINysPHIQzl5BHh3MUzes15bVOEsU
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjExMDIwNSBTYWx0ZWRfX5CBoupeiZ5zG
- eotiJ2spKVjnyOODzKqMMqB7JdjqALCxFJt0e/c8KMrbgPS1k/02uCxLXCKh2w0FREkPCWBwwu+
- p2xZ3XwnFEvHNY9V21/FuEUNyRjALzJLGgyGA9Psmbz7CedysxUj/HUVBqQbZg3+ff5mdP1mny3
- ZYgLVPUSZt3phBByanjKp9qI5+gLAGTD6syI5BPu9ucO1KmeJjX5qErdU2WQnMHDmWg5M1JqRbn
- sUaaRnCbizAjazQkUCEHfwUuAJib6SB7DfF9Zo+/Gg5qqPzKbpxsFAFOXeCOoYAb+ZYuF12J5OI
- 2K/TP3VfGnUZSYfH1rumzJsr+GHhSAninwYQofgPUJqb0beHP1p5RfVMCB8m/lWaeQ38kfR7+0g
- ey5CGgj2izdIxkLsxwh3eyBZkoBuB/dwhiZsQfpB+lIcdGwcL1vJ+SPbUVWVT6NlqpxLuh2S8D/
- 9QJu+DZwBK0YskVMPNw==
-X-Authority-Analysis: v=2.4 cv=DppmPm/+ c=1 sm=1 tr=0 ts=6a2b1a3e cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=FelO9ux0wxsA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=rJkE3RaqiGZ5pbrm-msn:22 a=EUspDBNiAAAA:8
- a=WU7lJWFF_htWD4kKYEAA:9 a=CjuIK1q_8ugA:10 a=kacYvNCVWA4VmyqE58fU:22
-X-Proofpoint-ORIG-GUID: BTbtINysPHIQzl5BHh3MUzes15bVOEsU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-06-11_04,2026-06-11_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 adultscore=0 phishscore=0 priorityscore=1501 lowpriorityscore=0
- malwarescore=0 spamscore=0 clxscore=1011 impostorscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606040000 definitions=main-2606110205
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 11, 2026 at 04:05:25PM +0200, Loic Poulain wrote:
-> From: Martino Facchin <m.facchin@arduino.cc>
-> 
-> The INA232 is a current/power monitor. It shares the same register
-> layout as the INA2xx and uses the INA226 default configuration, but
-> differs in its electrical characteristics:
-> 
-> Signed-off-by: Martino Facchin <m.facchin@arduino.cc>
-> Signed-off-by: Loic Poulain <loic.poulain@oss.qualcomm.com>
-> ---
->  drivers/hwmon/ina2xx.c | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
-> 
+Sashiko reports the following overflow problems:
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+In ina2xx_get_value(), the INA2XX_POWER calculation is:
+    val = regval * data->power_lsb_uW;
+The result is returned as a signed 32-bit int. For the INA232 with a common
+2mOhm shunt, power_lsb_uW becomes 40,000. When the 16-bit regval exceeds
+53,687, the product exceeds INT_MAX. This overflows the 32-bit signed math,
+wrapping to a negative integer and reporting erroneous negative power
+readings to userspace.
 
+For INA2XX_POWER, the upper bound is clamped:
+    val = clamp_val(val, 0, UINT_MAX - data->power_lsb_uW);
+clamp_val() implicitly casts the upper bound to a 32-bit signed long on
+32-bit platforms. This results in a negative number, meaning any valid
+power limit is clamped to a negative value and ultimately programmed as 0.
+Similarly, for INA2XX_SHUNT_VOLTAGE, the initial clamp uses SHRT_MAX *
+shunt_div instead of division. The subsequent multiplication:
+    val *= data->config->shunt_div;
+overflows LONG_MAX on 32-bit platforms for high inputs, wrapping to a
+negative value and also programming the hardware limit to 0.
 
+For INA2XX_BUS_VOLTAGE on parts with bus_voltage_shift > 0, the calculation
+(val * 1000) << shift can exceed LONG_MAX for limits over ~134V, wrapping
+to negative and setting the limit to 0.
+
+For INA2XX_CURRENT:
+On 32-bit systems, long is 32-bit signed. For configurations with small
+shunts, current_lsb_uA can be very large (e.g., 40,000,000). When
+multiplied by a large regval, the product can reach 1.3 trillion, massively
+exceeding LONG_MAX (2.14 billion).
+This will silently overflow the 32-bit signed math, wrapping to a negative
+value.
+
+If a large limit is provided to effectively disable the alert (e.g.,
+INT_MAX / 1000), the intermediate value after DIV_ROUND_CLOSEST can be
+large (e.g., 200,000,000). When left-shifted by current_shift (e.g., 4 for
+INA234), it becomes 3.2 billion, exceeding LONG_MAX and wrapping to a
+negative number.
+
+In sy24655_average_power_read(), the accumulator quotient multiplied by
+power_lsb_uW can overflow the 32-bit signed math before the assignment.
+
+Have ina2xx_get_value() return a long variable to improve the supported
+value range on 64-bit systems and to match the type of values returned
+to the hwmon core.
+
+Clamp the result of 'regval * data->power_lsb_uW' to LONG_MAX to fix the
+INA2XX_POWER calculation overflow.
+
+Change the initial clamp for INA2XX_SHUNT_VOLTAGE to SHRT_MAX / shunt_div
+to fix the shunt limit overflow.
+
+For INA2XX_BUS_VOLTAGE, limit the initial clamp to 130V instead of 200V
+to avoid the overflow.
+
+For INA2XX_CURRENT, improve clamping to avoid the overflow.
+
+To address the INA2XX_CURRENT problem in ina226_alert_to_reg(), take
+current_shift into acount for the initial clamp to avoid the overflow.
+
+In sy24655_average_power_read, use a temporary 64-bit variable to store
+the multiplication result and clamp the result against LONG_MAX.
+
+Cc: Loic Poulain <loic.poulain@oss.qualcomm.com>
+Fixes: ab7fbee452be ("hwmon: (ina2xx) Fix various overflow issues")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+v4: Fix another clamping issue when reading INA2XX_CURRENT
+v3: Fix additional problems in INA2XX_CURRENT handling
+    (avoid possible 64-bit divide operation and overflow when using
+     DIV_ROUND_CLOSEST)
+v2: Fixed several additional overflow conditions reported by Sashiko
+    after v1
+
+ drivers/hwmon/ina2xx.c | 29 +++++++++++++++++++----------
+ 1 file changed, 19 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
+index c4742e84b999..e84e7ad26b6f 100644
+--- a/drivers/hwmon/ina2xx.c
++++ b/drivers/hwmon/ina2xx.c
+@@ -16,6 +16,7 @@
+ #include <linux/i2c.h>
+ #include <linux/init.h>
+ #include <linux/kernel.h>
++#include <linux/limits.h>
+ #include <linux/module.h>
+ #include <linux/property.h>
+ #include <linux/regmap.h>
+@@ -266,10 +267,11 @@ static u16 ina226_interval_to_reg(long interval)
+ 	return FIELD_PREP(INA226_AVG_RD_MASK, avg_bits);
+ }
+ 
+-static int ina2xx_get_value(struct ina2xx_data *data, u8 reg,
+-			    unsigned int regval)
++static long ina2xx_get_value(struct ina2xx_data *data, u8 reg,
++			     unsigned int regval)
+ {
+-	int val;
++	s64 val64;
++	long val;
+ 
+ 	switch (reg) {
+ 	case INA2XX_SHUNT_VOLTAGE:
+@@ -283,12 +285,13 @@ static int ina2xx_get_value(struct ina2xx_data *data, u8 reg,
+ 		val = DIV_ROUND_CLOSEST(val, 1000);
+ 		break;
+ 	case INA2XX_POWER:
+-		val = regval * data->power_lsb_uW;
++		val = clamp_val((u64)regval * data->power_lsb_uW, 0, LONG_MAX);
+ 		break;
+ 	case INA2XX_CURRENT:
+ 		/* signed register, result in mA */
+-		val = ((s16)regval >> data->config->current_shift) *
++		val64 = (s64)((s16)regval >> data->config->current_shift) *
+ 		  data->current_lsb_uA;
++		val = clamp_val(val64, LONG_MIN + 500, LONG_MAX - 500);
+ 		val = DIV_ROUND_CLOSEST(val, 1000);
+ 		break;
+ 	case INA2XX_CALIBRATION:
+@@ -378,23 +381,27 @@ static int ina2xx_read_init(struct device *dev, int reg, long *val)
+  */
+ static u16 ina226_alert_to_reg(struct ina2xx_data *data, int reg, long val)
+ {
++	long limit;
++
+ 	switch (reg) {
+ 	case INA2XX_SHUNT_VOLTAGE:
+-		val = clamp_val(val, 0, SHRT_MAX * data->config->shunt_div);
++		val = clamp_val(val, 0, DIV_ROUND_CLOSEST(SHRT_MAX, data->config->shunt_div));
+ 		val *= data->config->shunt_div;
+ 		val <<= data->config->shunt_voltage_shift;
+ 		return clamp_val(val, 0, SHRT_MAX);
+ 	case INA2XX_BUS_VOLTAGE:
+-		val = clamp_val(val, 0, 200000);
++		val = clamp_val(val, 0, 130000);
+ 		val = (val * 1000) << data->config->bus_voltage_shift;
+ 		val = DIV_ROUND_CLOSEST(val, data->config->bus_voltage_lsb);
+ 		return clamp_val(val, 0, USHRT_MAX);
+ 	case INA2XX_POWER:
+-		val = clamp_val(val, 0, UINT_MAX - data->power_lsb_uW);
++		val = clamp_val(val, 0, LONG_MAX - data->power_lsb_uW);
+ 		val = DIV_ROUND_CLOSEST(val, data->power_lsb_uW);
+ 		return clamp_val(val, 0, USHRT_MAX);
+ 	case INA2XX_CURRENT:
+-		val = clamp_val(val, INT_MIN / 1000, INT_MAX / 1000);
++		limit = ((INT_MAX - data->current_lsb_uA) / 1000) >>
++		  data->config->current_shift;
++		val = clamp_val(val, -limit, limit);
+ 		/* signed register, result in mA */
+ 		val = DIV_ROUND_CLOSEST(val * 1000, data->current_lsb_uA);
+ 		val <<= data->config->current_shift;
+@@ -537,6 +544,7 @@ static int sy24655_average_power_read(struct ina2xx_data *data, u8 reg, long *va
+ 	u8 template[6];
+ 	int ret;
+ 	long accumulator_24, sample_count;
++	u64 val64;
+ 
+ 	/* 48-bit register read */
+ 	ret = i2c_smbus_read_i2c_block_data(data->client, reg, 6, template);
+@@ -555,7 +563,8 @@ static int sy24655_average_power_read(struct ina2xx_data *data, u8 reg, long *va
+ 		return 0;
+ 	}
+ 
+-	*val = DIV_ROUND_CLOSEST(accumulator_24, sample_count) * data->power_lsb_uW;
++	val64 = (u64)DIV_ROUND_CLOSEST(accumulator_24, sample_count) * data->power_lsb_uW;
++	*val = clamp_val(val64, 0, LONG_MAX);
+ 
+ 	return 0;
+ }
 -- 
-With best wishes
-Dmitry
+2.45.2
+
