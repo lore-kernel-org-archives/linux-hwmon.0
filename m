@@ -1,80 +1,46 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B6B330651
-	for <linux-hwmon@vger.kernel.org>; Thu, 11 Jun 2026 16:38:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB932332635;
+	Thu, 11 Jun 2026 16:38:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781195892; cv=none; b=o7yD69uT6QvYRxorLAOHjbY788nMUslPVk6RkSJh+XkeuqUFzPwk61Q1s/m8jgMRDPfBftN5cgKxVeRkzNcNWyUpYh4VMHX1LVW8QBPLw7RzlD74dI2YDmBiStLff3d2SjUAs6TmMsZZPf6fZOn9oWCf+V/wAhrzPQJsM3Yf79c=
+	t=1781195929; cv=none; b=tiJrEWgKxn/8Y31MYRwFuj0BxatWd560o0pjqb+O8RJls/88B2R3yYGFB10GAFC2+GBnYRFej/2ciU6JeFqMcjBeS3rluGxdDQb1VjhwbAkpm5GhV1hSpa2dtPTkvNvg0adlbZAKjRFWmKXDhEjpYuATiUo3o+hN2jyMXzDgImQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781195892; c=relaxed/simple;
-	bh=eijCJIWCzE7dOaaMhC6ytwZ56c0ngQs/vO7TF7uckw4=;
+	s=arc-20240116; t=1781195929; c=relaxed/simple;
+	bh=6FySkG+glYjf4ZDyk3xou1Yfjb1g720YZhbquuf5Z/M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ue3uaEHhk73mEH1Xd+hpLTOs7FvZKmxpC1RqrLnioRniKgBrFRkP8kTkJm6ZhihHg3BLXUZA1znamzH40gdP0p2adR8CAeSdn8tAtojMhYiHM3/oiIRXO2AaSWyw+7E5xMQWxiEJC6M32Iz2jdMic3XpxRyhDaU2E3o4m7v+Ow0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b4WJaeE6; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=KecMpqM8LWqyWIXF5azUGVShCc+9Kdftyvex+diehvScERefSidMs4X4fbXsPJ17TLDgmVQXv3Y9rGvV0OajA1ZMBuQSzMCd92aviOKKsxud+L9Bkd33GW1b4U4x4zB+LjOsBHj9FrD6E8gabIhe0wyYAgpdIaEc1ENCp2P/na8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ixT5j+fc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b4WJaeE6"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-490afc47455so43913655e9.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 11 Jun 2026 09:38:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781195889; x=1781800689; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/slxkBaga7WdFYUIk+bpf71i1yduik1uqRPXNyL7qIk=;
-        b=b4WJaeE6pdENyvdjptJtoSyd6Lmr08PZTlPH8VYoRNetEVFqxAUuviMFCJHXdNjUJF
-         4JbtiVnkdAumsYLd5RjqE0ekopAvlYvzaJARHjuJB1TNk9NMFO0AzJP0e4syIvYE35Pv
-         yCarcKe9bqDLhJQ7wnbCYBg2anRxJcxg0UxCfBEFrgKIKMVnYiESguzniNEykK1MprOB
-         VVtHoqqD+A5KRlt71ynUCQFPqUWWXKHKvHJ04F+NAqa/BOJhLyKuRuLjFdIu7gtzWOjH
-         DSqGcoV+VyPUKyoR/1asmxBW68Fm69chXCNDdovENvF27//1R0BqW4+l4x/a0xIIIUDd
-         Td6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781195889; x=1781800689;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/slxkBaga7WdFYUIk+bpf71i1yduik1uqRPXNyL7qIk=;
-        b=jG/Tj45vPKsY0oIw9rEt20M8FXg2NXccyDo21TSeyRzO0Z2N67ZalC/2Ja9tvV/egR
-         6iC4O19haRT3TVvwIQi/wD+r4yhz67XRiuZAjdq4K/DbjLJYAmjFzaOfd7a+m8MEms8G
-         NLdY/5L49VcOAIJl2Jbw05MOOT+v8oljCFkj+izY9Qf6BFu/SN3k9TxdxUXyEV84dJo/
-         nJ8bQBRJLTt6vWsm6R7LOLyulpLLymEG5eWSs3HT86s1FuRpNwWNX0ObE9SWdn3Ga+8P
-         kI0CbQ2ZSs7zTlPzHL+zcquCp6IzJMw/UE0cN0jWNQ7T4aMunYN6dcomBxUx4KIpPO1L
-         ZTfQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+PBahfBtCq+2HfqX0phfBewcsl+On9U1qMvuIsIToL6cNITCQZmyZLkH0rnd16yqYCwCjBG+x2b2e0Zg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0ScUdyRtchfq6U/hDHaOjYf+lDke5Zb/sxPAAZOi0MhsVW2ka
-	Yr6Fms8hd0WwEsqzqpaNM/PwHmvLXsXDHy5x8/uhzhOnwO1mAsX44JO/
-X-Gm-Gg: Acq92OHZarmHx6Vo72kDOfGHyzpMEA4ARxG0OvCU8SZC/Z+3KV6ErZhXd9nvm505MV+
-	zqjJfednVRTG2JlcnuYsIt5bR0txMQrQt/Of3LdV+wDXuM5l+pPGVLHBG/4pdeWJV8XvhdWeORt
-	mvYcxk5CaBskDOgUMrPMYsdrpWpvUeMRNTJjnWzfspIbTOLrUJsW0hthOuo16QwZ84S8Pms5m4/
-	kyLrU9h2oN8sJa4VAgG1oboFsNMvRbFcpXsI4vOnDo1hS6DqbsKinthhG2B7TFFJIpsINl3PsmG
-	DFivDGWw0qE3nyDEM9GT7L/9gVJNe+cEr9XIphiFnFseqeIKvbT+lyaHUyJYYRl6o7iW1pfJgUT
-	R9XZhfGB8IjNMYXJoKXq8iiPAs5IqsZycZarBsd3xXQRz8ebVhiKz4R5uFGAyAZ807K7hYtBQcI
-	WEtypwjg==
-X-Received: by 2002:a05:600c:8b51:b0:490:e5c1:b8b9 with SMTP id 5b1f17b1804b1-490e5d0ff6dmr48188685e9.0.1781195889065;
-        Thu, 11 Jun 2026 09:38:09 -0700 (PDT)
-Received: from localhost ([2603:c027:c000:3cde::f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490ea4a4db2sm266015e9.1.2026.06.11.09.38.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jun 2026 09:38:08 -0700 (PDT)
-Date: Thu, 11 Jun 2026 18:38:06 +0200
-From: Louis Sautier <sautier.louis@gmail.com>
-To: Damien Le Moal <dlemoal@kernel.org>
-Cc: Sathya Prakash <sathya.prakash@broadcom.com>,
-	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
-	Ranjan Kumar <ranjan.kumar@broadcom.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 RESEND 1/2] scsi: mpt3sas: add IO Unit Page 7 config
- accessor
-Message-ID: <airkbg8-kDC0Gyv9@localhost>
-References: <20260609164423.2829699-1-sautier.louis@gmail.com>
- <20260609164423.2829699-2-sautier.louis@gmail.com>
- <5effba66-0d42-4d42-9833-f2c0be6874ad@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ixT5j+fc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 445EB1F00893;
+	Thu, 11 Jun 2026 16:38:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781195928;
+	bh=aFyaJd3eEW45BpXIfUcCpGEEeHbiAowOimlNIYOftnI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ixT5j+fc79ElnHBbkZm4Qv3VhNah4swHI8cpb5qkPYT24274Dr9oTtS/eNEEjuaoz
+	 qiIVA3zODlWzGZA+I+23mPnIbRqa8Y+d/H6FttGvH9pqPP5mT97omZ5me8a2MC4yfl
+	 a1JtF+GDqCADINHP9u7Q4zSmwuhEjIlJPS1dLKjs3VUMnu+scmYE3wHWmqlbjTVWg7
+	 wMelUVDFkvWrJGSJvz0p52l/jZIpZXUtqD5bH0S7ewp6CBaLR67Pg8CJzSlkgC9rxu
+	 uPDBxLP3ZONFFgiMNCLmlMXKTAMSwTAlp4Xz47p36SiJOduUMTS0lAUtl1CQB//WYe
+	 fpLj6z2oWghCg==
+Date: Thu, 11 Jun 2026 11:38:47 -0500
+From: Rob Herring <robh@kernel.org>
+To: Ziming Zhu <zmzhu0630@163.com>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, Ziming Zhu <ziming.zhu@silergycorp.com>
+Subject: Re: [PATCH v3 1/3] dt-bindings: hwmon: pmbus: Add bindings for
+ Silergy SQ24860
+Message-ID: <20260611163847.GA2925321-robh@kernel.org>
+References: <20260611074335.4415-1-zmzhu0630@163.com>
+ <20260611074335.4415-2-zmzhu0630@163.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -83,43 +49,22 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5effba66-0d42-4d42-9833-f2c0be6874ad@kernel.org>
+In-Reply-To: <20260611074335.4415-2-zmzhu0630@163.com>
 
-On Wed, 10 Jun 2026 08:12:05 +0800, Damien Le Moal wrote:
-> > +int
-> > +mpt3sas_config_get_iounit_pg7(struct MPT3SAS_ADAPTER *ioc,
+On Thu, Jun 11, 2026 at 03:43:33PM +0800, Ziming Zhu wrote:
+> From: Ziming Zhu <ziming.zhu@silergycorp.com>
 > 
-> Please do not break the line after "int"
-
-Hi and thanks for the review.
-
-Sure, I can change this. Can you confirm we want to diverge from the
-convention used by neighbouring functions such as
-mpt3sas_config_get_iounit_pg8?
-
-> > +	Mpi2ConfigReply_t *mpi_reply, Mpi2IOUnitPage7_t *config_page)
-> > +{
-> > +	Mpi2ConfigRequest_t mpi_request;
-> > +	int r;
-> > +
-> > +	memset(&mpi_request, 0, sizeof(Mpi2ConfigRequest_t));
-> > +	mpi_request.Function = MPI2_FUNCTION_CONFIG;
-> > +	mpi_request.Action = MPI2_CONFIG_ACTION_PAGE_HEADER;
-> > +	mpi_request.Header.PageType = MPI2_CONFIG_PAGETYPE_IO_UNIT;
-> > +	mpi_request.Header.PageNumber = 7;
-> > +	mpi_request.Header.PageVersion = MPI2_IOUNITPAGE7_PAGEVERSION;
-> > +	ioc->build_zero_len_sge_mpi(ioc, &mpi_request.PageBufferSGE);
-> > +	r = _config_request(ioc, &mpi_request, mpi_reply,
-> > +	    MPT3_CONFIG_PAGE_DEFAULT_TIMEOUT, NULL, 0);
+> Add devicetree binding documentation for the Silergy SQ24860 eFuse.
 > 
-> 	r = _config_request(ioc, &mpi_request, mpi_reply,
-> 			    MPT3_CONFIG_PAGE_DEFAULT_TIMEOUT, NULL, 0);
+> The device is a PMBus hardware monitoring device which reports voltage,
+> current, power, and temperature telemetry. The board-specific IMON
+> resistor value is described with silergy,rimon-micro-ohms.
 > 
-> is a lot nicer to read.
+> Signed-off-by: Ziming Zhu <ziming.zhu@silergycorp.com>
 
-Do I also align the signature like so in both the source file and the
-header?
+Missing Conor's reviewed-by.
 
-int mpt3sas_config_get_iounit_pg7(struct MPT3SAS_ADAPTER *ioc,
-				  Mpi2ConfigReply_t *mpi_reply,
-				  Mpi2IOUnitPage7_t *config_page)
+> ---
+>  .../bindings/hwmon/pmbus/silergy,sq24860.yaml | 74 +++++++++++++++++++
+>  1 file changed, 74 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/silergy,sq24860.yaml
