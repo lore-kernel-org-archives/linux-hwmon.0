@@ -1,183 +1,447 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9E931D74B
-	for <linux-hwmon@vger.kernel.org>; Thu, 11 Jun 2026 12:20:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C4F3CAE7F;
+	Thu, 11 Jun 2026 13:40:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781180433; cv=none; b=pY3qKm01S64/2w8Q4/FTkPb0S4yGtvDXRniFYlNsQIDtadbba0/9JANARG0KtXXxbGRmnICjLR7+pUgGBbgkLbGW2h8qm5Cq3BzeKr0rwH8HIi7UmJ5KL8swbdYBlc0+SKVQHcyeN7ZMUlys2JQnmKOJ/fdMfqD8NbNzjTG1FMQ=
+	t=1781185207; cv=none; b=enArTeCv29HGuFa6y+EdkLUQhEU4CApwnwSEO3iLWDjSbioHre9oTEq5ELkuvqAI+k96946yertyApYPYLEDSug2aeGIwVlKlgQTW5QFbHCAiGtT1hHZ6inhLEDru6hOd6iIBISZdyUF9YGALSKaZ5ygcFGi9dFEa08NRpRgabA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781180433; c=relaxed/simple;
-	bh=B1wxz+0Np9sLSAVTR6MifFCXLq0dVzmxSBUJgRXPIl8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qFglQy0IZFLafWSHaYQhtlZ5Ax0CHm+uap1QE6nGnfGYMUOWkO3nhybQlvthAKlHpQ9aY57cdJEEwJABYnOgqVFWJikBT0xk1qVVAUX8x2NC3nV4kYtGIO0FFdc/ciRgbJ/s+4rhh6oCdYSvItbDOuoyduBQfZK/+ccOZ8GbX2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jY4R4q/D; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781185207; c=relaxed/simple;
+	bh=EDfZjUwLPtHk9Da/3k5nYUO3YVcfcP5vkTLxj+jtvXY=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=T5mOP2Bvc8ajILnJf7JSjDurlZgQ+oSmLKn0BkBgO1kluzbx+mttaSzzKox5UJjZASnPFXW/xyTf8fckVLRknHFI5YCLLDMd0JuW07DmF11j8hYxFBESZV0NGr1f5YpuVopItd/HMS0BqI2an4+jwMWzVa7a+AnSyqN8WCVlXJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eg/ElI+h; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jY4R4q/D"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2c0c1e0d00bso75284055ad.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 11 Jun 2026 05:20:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781180431; x=1781785231; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=MXNKXMLzWIjU2Ycb8dhzGFNxNx32Scj3Bq4ZZZi3acg=;
-        b=jY4R4q/DKFXSyEWuFYbQvnBGlfgMMsdQSlBbzKLi4PZdcQXur1Y3aMK62hcT6wMwQC
-         LBooskrt0xgKx2qzoP+4gA1cv7747KTeXaC6wg9Dox186eHCq0KNfhcLImPX9+2N3dum
-         Ymr4pyRprZfabnZ+6DEMyCBRLRJ4MYMRm9OacWiXi8Gy/xHPyO72VGzg4w7R0hJsp2+K
-         87Z0i0WeSzDjKhKKaV/NFpj+dnv6mg85DRHfJatofL7dCO4iv6czD20dTV3lrbIV/7xw
-         PIiDrp67k9NToZw6dYG09/K6yJSk1+KoOll9a6qGbuIfA2Y36kVWQ8IQdO/jNmegQa7y
-         PYAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781180431; x=1781785231;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MXNKXMLzWIjU2Ycb8dhzGFNxNx32Scj3Bq4ZZZi3acg=;
-        b=qmwzP71Ai9JbtVofrATSSqRiIc4ykplSUv52QEiShpyBDTSK2ibOMBTYErawT4VcjJ
-         /gNacGb3qtZJFklDnA0OPU8pXAHemK6Wy+uXWVLDiBWa54IsUlecuCzsCL9h4UWhbIF7
-         Ed4bAy5UpcaCzeknPkerQvJn14HZKy+FvXVMxijcDqFdFOZs+fEIKWliIZTM5Xjew0Uk
-         4YCT3+RiX4yJ71o3qYB0nc96fqLz6YAqRzpiFVsNJ+7+suueMx1Y+7VAVBccQ+AwUmwM
-         EFCgRg5QqU3nLOK1myLyipVxNHRxtKyLjUrYsiU6HRkA+LXsrJCJ6NBzFrMCxz57X6b5
-         qsrA==
-X-Gm-Message-State: AOJu0YyeNNhAjZTyWX1UNxpuwGXhRVLn/uWlc3DM4rWboN++6eabRX6Z
-	9ch20NfUB22qUDNtvUcgXxG3rhPX0jU2IV9bR/2r4kSe6K/cu3UsUKJo
-X-Gm-Gg: Acq92OHvxfJYiXhWg6/4yFbyP9spYx41T36CzUluJrDp8mAPMGnCp58gEHB54e4NbD8
-	w8fCixizzOVDyT9yFRBzBC33Znli4uilTDB8E43yc3VS6LVCOSditDYoRkEvSkLUiyGiwU4QHfX
-	Dsouvr9dQe8XKuqolizjs+X7l1xYdia0vi2LEIADdhJ4JTd2PfCFnSSagAI5nOB7CA1vAFkustx
-	/tcIYDgom2r3/nTONn+tubCKQE0Mz5CAKsb3lHRSts4pTwfHL6D5bGvg7fE2iYCKiEZ2QlfYIqV
-	/K6muEyxbITpZwRHlRpuR+0l2knUAydu3WNOBpLM+IX0QAzB2AV84eVG8z2FZ9goMaYUkoP13W2
-	ZjgHv2cZVKDq9/FP8SvNyJG7z+E94PuOqatvpSH/uUE4rgSZWArd9JbgGvJnD67SpWpOaArkcFd
-	jQUah9KXLRFKAa2a0GFhh/F3sEvUAH851OmHHqloYrhix14bDo+qubtjMD78obTVnwKxR5gYY9F
-	MBsAeeDbpiBEs+AkRzJYw==
-X-Received: by 2002:a17:903:1a88:b0:2bf:2e06:2ebf with SMTP id d9443c01a7336-2c2f3054645mr32066765ad.31.1781180431415;
-        Thu, 11 Jun 2026 05:20:31 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164f6e294sm276802375ad.6.2026.06.11.05.20.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Jun 2026 05:20:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6b99683d-5030-4c4f-a37c-7c1328b8f08f@roeck-us.net>
-Date: Thu, 11 Jun 2026 05:20:29 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eg/ElI+h"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781185205; x=1812721205;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=EDfZjUwLPtHk9Da/3k5nYUO3YVcfcP5vkTLxj+jtvXY=;
+  b=eg/ElI+hkB1YiawwA6GGV76M/fsRAyNe2iMOVRkMHCCP+1hCkmb97UGo
+   3OkNc/ijQEPlC8mZD3pffPLpXiX/vg+Cb4kCuVKR9Q9drPpy0L4NUfXEW
+   4bVUarC0SU3XYAWZ3KNvIeE2Gi0sMBAdY9DeV+nFy2q/3kgQhtAXpbmfK
+   /EpwZS8O3bZNJa+2glagNU0BzIBw6erNBxueGtghrNhBY3T5XmQyY02Bt
+   s++3skgmxtPHMpss6p6ZoP88uLRVK2vS7MmNyXWJoOEITf7ryBv4q3j1w
+   x0etEnW+ZsoSHVeDb7CNKxG+xyW9LItmq9Z87wmOBOhN2lYlQ+8zRU5LC
+   w==;
+X-CSE-ConnectionGUID: 3ChDG76OTI624ilJl0sxyA==
+X-CSE-MsgGUID: MyprM9cyQR6/8ro2N7XRyA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11813"; a="82003504"
+X-IronPort-AV: E=Sophos;i="6.24,199,1774335600"; 
+   d="scan'208";a="82003504"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2026 06:40:04 -0700
+X-CSE-ConnectionGUID: rTH5eBMWSv6lafjMxun2yA==
+X-CSE-MsgGUID: z3ZfaMEnQdmhMa2iqT7dWQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,199,1774335600"; 
+   d="scan'208";a="251569494"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.157])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2026 06:39:59 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Thu, 11 Jun 2026 16:39:55 +0300 (EEST)
+To: Armin Wolf <W_Armin@gmx.de>
+cc: Dell.Client.Kernel@dell.com, pali@kernel.org, mjg59@srcf.ucam.org, 
+    soyer@irl.hu, Hans de Goede <hansg@kernel.org>, 
+    platform-driver-x86@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    linux@roeck-us.net, linux-hwmon@vger.kernel.org, mario.limonciello@amd.com
+Subject: Re: [PATCH v6 5/9] platform/x86: dell-ddv: Use new buffer-based WMI
+ API
+In-Reply-To: <20260610203453.816254-6-W_Armin@gmx.de>
+Message-ID: <a283a0a2-f897-ae2e-7588-819583edc1d3@linux.intel.com>
+References: <20260610203453.816254-1-W_Armin@gmx.de> <20260610203453.816254-6-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] hwmon: (pmbus/lm25066) add SMBus current limit
- configuration support
-To: Potin Lai <potin.lai.pt@gmail.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Zev Weiss <zev@bewilderbeest.net>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Cosmo Chou <cosmo.chou@quantatw.com>,
- Mike Hsieh <Mike_Hsieh@quantatw.com>, Potin Lai <potin.lai@qunatatw.com>
-References: <20260611-lm25066-cl-config-v1-0-02e567bf3d91@gmail.com>
- <20260611-lm25066-cl-config-v1-2-02e567bf3d91@gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAmgrMyQFCSbODQkACgkQyx8mb86fmYGcWRAA
- oRwrk7V8fULqnGGpBIjp7pvR187Yzx+lhMGUHuM5H56TFEqeVwCMLWB2x1YRolYbY4MEFlQg
- VUFcfeW0OknSr1s6wtrtQm0gdkolM8OcCL9ptTHOg1mmXa4YpW8QJiL0AVtbpE9BroeWGl9v
- 2TGILPm9mVp+GmMQgkNeCS7Jonq5f5pDUGumAMguWzMFEg+Imt9wr2YA7aGen7KPSqJeQPpj
- onPKhu7O/KJKkuC50ylxizHzmGx+IUSmOZxN950pZUFvVZH9CwhAAl+NYUtcF5ry/uSYG2U7
- DCvpzqOryJRemKN63qt1bjF6cltsXwxjKOw6CvdjJYA3n6xCWLuJ6yk6CAy1Ukh545NhgBAs
- rGGVkl6TUBi0ixL3EF3RWLa9IMDcHN32r7OBhw6vbul8HqyTFZWY2ksTvlTl+qG3zV6AJuzT
- WdXmbcKN+TdhO5XlxVlbZoCm7ViBj1+PvIFQZCnLAhqSd/DJlhaq8fFXx1dCUPgQDcD+wo65
- qulV/NijfU8bzFfEPgYP/3LP+BSAyFs33y/mdP8kbMxSCjnLEhimQMrSSo/To1Gxp5C97fw5
- 3m1CaMILGKCmfI1B8iA8zd8ib7t1Rg0qCwcAnvsM36SkrID32GfFbv873bNskJCHAISK3Xkz
- qo7IYZmjk/IJGbsiGzxUhvicwkgKE9r7a1rOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAmgrMyQFCSbODQkACgkQyx8mb86fmYHlgg/9
- H5JeDmB4jsreE9Bn621wZk7NMzxy9STxiVKSh8Mq4pb+IDu1RU2iLyetCY1TiJlcxnE362kj
- njrfAdqyPteHM+LU59NtEbGwrfcXdQoh4XdMuPA5ADetPLma3YiRa3VsVkLwpnR7ilgwQw6u
- dycEaOxQ7LUXCs0JaGVVP25Z2hMkHBwx6BlW6EZLNgzGI2rswSZ7SKcsBd1IRHVf0miwIFYy
- j/UEfAFNW+tbtKPNn3xZTLs3quQN7GdYLh+J0XxITpBZaFOpwEKV+VS36pSLnNl0T5wm0E/y
- scPJ0OVY7ly5Vm1nnoH4licaU5Y1nSkFR/j2douI5P7Cj687WuNMC6CcFd6j72kRfxklOqXw
- zvy+2NEcXyziiLXp84130yxAKXfluax9sZhhrhKT6VrD45S6N3HxJpXQ/RY/EX35neH2/F7B
- RgSloce2+zWfpELyS1qRkCUTt1tlGV2p+y2BPfXzrHn2vxvbhEn1QpQ6t+85FKN8YEhJEygJ
- F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
- FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260611-lm25066-cl-config-v1-2-02e567bf3d91@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 
-On 6/11/26 02:58, Potin Lai wrote:
-> Add support for the mutually exclusive 'ti,cl-smbus-high' and
-> 'ti,cl-smbus-low' devicetree properties. When present, these properties
-> override the hardware configuration pins via the DEVICE_SETUP (0xD9)
-> register to set the Current Limit Configuration bit (bit 2) and
-> Current Limit Setting bit (bit 4) to SMBus settings.
+On Wed, 10 Jun 2026, Armin Wolf wrote:
+
+> Use the new buffer-based WMI API to also support ACPI firmware
+> implementations that do not use ACPI intergers/strings/packages
+> for exchanging data.
 > 
-> The Bit 4 mapping to High/Low current limit is handled dynamically on
-> probe because it is swapped for lm25056 and lm25066 compared to other
-> supported chips (lm5064, lm5066, and lm5066i).
-> 
-> Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 > ---
->   drivers/hwmon/pmbus/lm25066.c | 25 +++++++++++++++++++++++++
->   1 file changed, 25 insertions(+)
+>  drivers/platform/x86/dell/dell-wmi-ddv.c | 179 +++++++++++------------
+>  1 file changed, 85 insertions(+), 94 deletions(-)
 > 
-> diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
-> index dd7275a67a0a..20e114bdc882 100644
-> --- a/drivers/hwmon/pmbus/lm25066.c
-> +++ b/drivers/hwmon/pmbus/lm25066.c
-> @@ -34,6 +34,7 @@ enum chips { lm25056, lm25066, lm5064, lm5066, lm5066i };
->   #define LM25066_READ_AVG_PIN		0xdf
->   
->   #define LM25066_DEV_SETUP_CL		BIT(4)	/* Current limit */
-> +#define LM25066_DEV_SETUP_CL_CFG	BIT(2)	/* Current limit configuration */
->   
->   #define LM25066_SAMPLES_FOR_AVG_MAX	4096
->   
-> @@ -464,6 +465,8 @@ MODULE_DEVICE_TABLE(of, lm25066_of_match);
->   static int lm25066_probe(struct i2c_client *client)
->   {
->   	int config;
-> +	int config_new;
+> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> index 62e3d060f038..736d9b1fdcfb 100644
+> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
+> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> @@ -7,8 +7,9 @@
+>  
+>  #define pr_format(fmt) KBUILD_MODNAME ": " fmt
+>  
+> -#include <linux/acpi.h>
+>  #include <linux/bitfield.h>
+> +#include <linux/cleanup.h>
+> +#include <linux/compiler_attributes.h>
+>  #include <linux/debugfs.h>
+>  #include <linux/device.h>
+>  #include <linux/device/driver.h>
+> @@ -99,6 +100,11 @@ enum dell_ddv_method {
+>  	DELL_DDV_THERMAL_SENSOR_INFORMATION	= 0x22,
+>  };
+>  
+> +struct dell_wmi_buffer {
+> +	__le32 raw_size;
+> +	u8 raw_data[];
+> +} __packed;
+> +
+>  struct fan_sensor_entry {
+>  	u8 type;
+>  	__le16 rpm;
+> @@ -126,7 +132,7 @@ struct dell_wmi_ddv_sensors {
+>  	bool active;
+>  	struct mutex lock;	/* protect caching */
+>  	unsigned long timestamp;
+> -	union acpi_object *obj;
+> +	struct dell_wmi_buffer *buffer;
+>  	u64 entries;
+>  };
+>  
+> @@ -158,105 +164,96 @@ static const char * const fan_dock_labels[] = {
+>  	"Docking Chipset Fan",
+>  };
+>  
+> -static int dell_wmi_ddv_query_type(struct wmi_device *wdev, enum dell_ddv_method method, u32 arg,
+> -				   union acpi_object **result, acpi_object_type type)
+> +static int dell_wmi_ddv_query(struct wmi_device *wdev, enum dell_ddv_method method, u32 arg,
+> +			      struct wmi_buffer *output, size_t min_size)
+>  {
+> -	struct acpi_buffer out = { ACPI_ALLOCATE_BUFFER, NULL };
+> -	const struct acpi_buffer in = {
+> -		.length = sizeof(arg),
+> -		.pointer = &arg,
+> +	__le32 arg2 = cpu_to_le32(arg);
+> +	const struct wmi_buffer input = {
+> +		.length = sizeof(arg2),
+> +		.data = &arg2,
+>  	};
+> -	union acpi_object *obj;
+> -	acpi_status ret;
+> -
+> -	ret = wmidev_evaluate_method(wdev, 0x0, method, &in, &out);
+> -	if (ACPI_FAILURE(ret))
+> -		return -EIO;
+> -
+> -	obj = out.pointer;
+> -	if (!obj)
+> -		return -ENODATA;
+> -
+> -	if (obj->type != type) {
+> -		kfree(obj);
+> -		return -ENOMSG;
+> -	}
+> -
+> -	*result = obj;
+>  
+> -	return 0;
+> +	return wmidev_invoke_method(wdev, 0x0, method, &input, output, min_size);
+>  }
+>  
+>  static int dell_wmi_ddv_query_integer(struct wmi_device *wdev, enum dell_ddv_method method,
+>  				      u32 arg, u32 *res)
+>  {
+> -	union acpi_object *obj;
+> +	struct wmi_buffer output;
+>  	int ret;
+>  
+> -	ret = dell_wmi_ddv_query_type(wdev, method, arg, &obj, ACPI_TYPE_INTEGER);
+> +	ret = dell_wmi_ddv_query(wdev, method, arg, &output, sizeof(__le32));
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	if (obj->integer.value <= U32_MAX)
+> -		*res = (u32)obj->integer.value;
+> -	else
+> -		ret = -ERANGE;
+> +	__le32 *argr __free(kfree) = output.data;
+>  
+> -	kfree(obj);
+> +	*res = le32_to_cpu(*argr);
+>  
+> -	return ret;
+> +	return 0;
+>  }
+>  
+>  static int dell_wmi_ddv_query_buffer(struct wmi_device *wdev, enum dell_ddv_method method,
+> -				     u32 arg, union acpi_object **result)
+> +				     u32 arg, struct dell_wmi_buffer **result)
+>  {
+> -	union acpi_object *obj;
+> -	u64 buffer_size;
+> +	struct dell_wmi_buffer *buffer;
+> +	struct wmi_buffer output;
+> +	size_t buffer_size;
+>  	int ret;
+>  
+> -	ret = dell_wmi_ddv_query_type(wdev, method, arg, &obj, ACPI_TYPE_PACKAGE);
+> +	ret = dell_wmi_ddv_query(wdev, method, arg, &output, sizeof(*buffer));
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	if (obj->package.count != 2 ||
+> -	    obj->package.elements[0].type != ACPI_TYPE_INTEGER ||
+> -	    obj->package.elements[1].type != ACPI_TYPE_BUFFER) {
+> -		ret = -ENOMSG;
+> -
+> -		goto err_free;
+> -	}
+> -
+> -	buffer_size = obj->package.elements[0].integer.value;
+> -
+> -	if (!buffer_size) {
+> +	buffer = output.data;
+> +	if (!le32_to_cpu(buffer->raw_size)) {
+>  		ret = -ENODATA;
+>  
+>  		goto err_free;
+>  	}
+>  
+> -	if (buffer_size > obj->package.elements[1].buffer.length) {
+> +	buffer_size = struct_size(buffer, raw_data, le32_to_cpu(buffer->raw_size));
+> +	if (buffer_size > output.length) {
+>  		dev_warn(&wdev->dev,
+> -			 FW_WARN "WMI buffer size (%llu) exceeds ACPI buffer size (%d)\n",
+> -			 buffer_size, obj->package.elements[1].buffer.length);
+> +			 FW_WARN "Dell WMI buffer size (%zu) exceeds WMI buffer size (%zu)\n",
+> +			 buffer_size, output.length);
+>  		ret = -EMSGSIZE;
+>  
+>  		goto err_free;
+>  	}
+>  
+> -	*result = obj;
+> +	*result = buffer;
+
+This could use __free() and no_free_ptr() to simplify the code flow.
+
+>  
+>  	return 0;
+>  
+>  err_free:
+> -	kfree(obj);
+> +	kfree(output.data);
+>  
+>  	return ret;
+>  }
+>  
+> -static int dell_wmi_ddv_query_string(struct wmi_device *wdev, enum dell_ddv_method method,
+> -				     u32 arg, union acpi_object **result)
+> +static ssize_t dell_wmi_ddv_query_string(struct wmi_device *wdev, enum dell_ddv_method method,
+> +					 u32 arg, char *buf, size_t length)
+>  {
+> -	return dell_wmi_ddv_query_type(wdev, method, arg, result, ACPI_TYPE_STRING);
+> +	struct wmi_buffer output;
+> +	size_t str_size;
 > +	int ret;
->   	u32 shunt;
->   	struct lm25066_data *data;
->   	struct pmbus_driver_info *info;
-> @@ -484,6 +487,28 @@ static int lm25066_probe(struct i2c_client *client)
->   
->   	data->id = (enum chips)(unsigned long)i2c_get_match_data(client);
->   
-> +	config_new = config;
-> +	if (of_property_read_bool(client->dev.of_node, "ti,cl-smbus-high")) {
-> +		config_new |= LM25066_DEV_SETUP_CL_CFG;
-> +		if (data->id == lm25056 || data->id == lm25066)
+> +
+> +	ret = dell_wmi_ddv_query(wdev, method, arg, &output, sizeof(struct wmi_string));
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	struct wmi_string *str __free(kfree) = output.data;
+> +
+> +	str_size = sizeof(*str) + le16_to_cpu(str->length);
+> +	if (str_size > output.length) {
+> +		dev_warn(&wdev->dev,
+> +			 FW_WARN "WMI string size (%zu) exceeds WMI buffer size (%zu)\n",
+> +			 str_size, output.length);
+> +		return -EMSGSIZE;
+> +	}
+> +
+> +	return wmi_string_to_utf8s(str, buf, length);
+>  }
+>  
+>  /*
+> @@ -265,28 +262,26 @@ static int dell_wmi_ddv_query_string(struct wmi_device *wdev, enum dell_ddv_meth
+>  static int dell_wmi_ddv_update_sensors(struct wmi_device *wdev, enum dell_ddv_method method,
+>  				       struct dell_wmi_ddv_sensors *sensors, size_t entry_size)
+>  {
+> +	struct dell_wmi_buffer *buffer;
+>  	u64 buffer_size, rem, entries;
+> -	union acpi_object *obj;
+> -	u8 *buffer;
+>  	int ret;
+>  
+> -	if (sensors->obj) {
+> +	if (sensors->buffer) {
+>  		if (time_before(jiffies, sensors->timestamp + HZ))
+>  			return 0;
+>  
+> -		kfree(sensors->obj);
+> -		sensors->obj = NULL;
+> +		kfree(sensors->buffer);
+> +		sensors->buffer = NULL;
+>  	}
+>  
+> -	ret = dell_wmi_ddv_query_buffer(wdev, method, 0, &obj);
+> +	ret = dell_wmi_ddv_query_buffer(wdev, method, 0, &buffer);
+>  	if (ret < 0)
+>  		return ret;
+>  
+>  	/* buffer format sanity check */
+> -	buffer_size = obj->package.elements[0].integer.value;
+> -	buffer = obj->package.elements[1].buffer.pointer;
+> +	buffer_size = le32_to_cpu(buffer->raw_size);
+>  	entries = div64_u64_rem(buffer_size, entry_size, &rem);
+> -	if (rem != 1 || buffer[buffer_size - 1] != 0xff) {
+> +	if (rem != 1 || buffer->raw_data[buffer_size - 1] != 0xff) {
+>  		ret = -ENOMSG;
+>  		goto err_free;
+>  	}
+> @@ -296,14 +291,14 @@ static int dell_wmi_ddv_update_sensors(struct wmi_device *wdev, enum dell_ddv_me
+>  		goto err_free;
+>  	}
+>  
+> -	sensors->obj = obj;
+> +	sensors->buffer = buffer;
+>  	sensors->entries = entries;
+>  	sensors->timestamp = jiffies;
+>  
+>  	return 0;
+>  
+>  err_free:
+> -	kfree(obj);
+> +	kfree(buffer);
+>  
+>  	return ret;
+>  }
+> @@ -328,7 +323,7 @@ static int dell_wmi_ddv_fan_read_channel(struct dell_wmi_ddv_data *data, u32 att
+>  	if (channel >= data->fans.entries)
+>  		return -ENXIO;
+>  
+> -	entry = (struct fan_sensor_entry *)data->fans.obj->package.elements[1].buffer.pointer;
+> +	entry = (struct fan_sensor_entry *)data->fans.buffer->raw_data;
+>  	switch (attr) {
+>  	case hwmon_fan_input:
+>  		*val = get_unaligned_le16(&entry[channel].rpm);
+> @@ -354,7 +349,7 @@ static int dell_wmi_ddv_temp_read_channel(struct dell_wmi_ddv_data *data, u32 at
+>  	if (channel >= data->temps.entries)
+>  		return -ENXIO;
+>  
+> -	entry = (struct thermal_sensor_entry *)data->temps.obj->package.elements[1].buffer.pointer;
+> +	entry = (struct thermal_sensor_entry *)data->temps.buffer->raw_data;
+>  	switch (attr) {
+>  	case hwmon_temp_input:
+>  		*val = entry[channel].now * 1000;
+> @@ -411,7 +406,7 @@ static int dell_wmi_ddv_fan_read_string(struct dell_wmi_ddv_data *data, int chan
+>  	if (channel >= data->fans.entries)
+>  		return -ENXIO;
+>  
+> -	entry = (struct fan_sensor_entry *)data->fans.obj->package.elements[1].buffer.pointer;
+> +	entry = (struct fan_sensor_entry *)data->fans.buffer->raw_data;
+>  	type = entry[channel].type;
+>  	switch (type) {
+>  	case 0x00 ... 0x07:
+> @@ -442,7 +437,7 @@ static int dell_wmi_ddv_temp_read_string(struct dell_wmi_ddv_data *data, int cha
+>  	if (channel >= data->temps.entries)
+>  		return -ENXIO;
+>  
+> -	entry = (struct thermal_sensor_entry *)data->temps.obj->package.elements[1].buffer.pointer;
+> +	entry = (struct thermal_sensor_entry *)data->temps.buffer->raw_data;
+>  	switch (entry[channel].type) {
+>  	case 0x00:
+>  		*str = "CPU";
+> @@ -553,8 +548,8 @@ static void dell_wmi_ddv_hwmon_cache_invalidate(struct dell_wmi_ddv_sensors *sen
+>  		return;
+>  
+>  	mutex_lock(&sensors->lock);
+> -	kfree(sensors->obj);
+> -	sensors->obj = NULL;
+> +	kfree(sensors->buffer);
+> +	sensors->buffer = NULL;
+>  	mutex_unlock(&sensors->lock);
+>  }
+>  
+> @@ -564,7 +559,7 @@ static void dell_wmi_ddv_hwmon_cache_destroy(void *data)
+>  
+>  	sensors->active = false;
+>  	mutex_destroy(&sensors->lock);
+> -	kfree(sensors->obj);
+> +	kfree(sensors->buffer);
+>  }
+>  
+>  static struct hwmon_channel_info *dell_wmi_ddv_channel_init(struct wmi_device *wdev,
+> @@ -750,7 +745,7 @@ static void dell_wmi_battery_invalidate(struct dell_wmi_ddv_data *data,
+>  static ssize_t eppid_show(struct device *dev, struct device_attribute *attr, char *buf)
+>  {
+>  	struct dell_wmi_ddv_data *data = container_of(attr, struct dell_wmi_ddv_data, eppid_attr);
+> -	union acpi_object *obj;
+> +	ssize_t count;
+>  	u32 index;
+>  	int ret;
+>  
+> @@ -758,19 +753,19 @@ static ssize_t eppid_show(struct device *dev, struct device_attribute *attr, cha
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	ret = dell_wmi_ddv_query_string(data->wdev, DELL_DDV_BATTERY_EPPID, index, &obj);
+> -	if (ret < 0)
+> -		return ret;
+> -
+> -	if (obj->string.length != DELL_EPPID_LENGTH && obj->string.length != DELL_EPPID_EXT_LENGTH)
+> -		dev_info_once(&data->wdev->dev, FW_INFO "Suspicious ePPID length (%d)\n",
+> -			      obj->string.length);
+> +	count = dell_wmi_ddv_query_string(data->wdev, DELL_DDV_BATTERY_EPPID, index, buf,
+> +					  PAGE_SIZE);
+> +	if (count < 0)
+> +		return count;
+>  
+> -	ret = sysfs_emit(buf, "%s\n", obj->string.pointer);
+> +	if (count != DELL_EPPID_LENGTH && count != DELL_EPPID_EXT_LENGTH)
+> +		dev_info_once(&data->wdev->dev, FW_INFO "Suspicious ePPID length (%zd)\n", count);
+>  
+> -	kfree(obj);
+> +	ret = sysfs_emit_at(buf, count, "\n");
 
-LM25056 does not support setting the gain via software, and bit 2 of this
-register is reserved. These properties need to be disabled for that chip.
-That will have to be reflected both here and in the devicetree file.
+What's going on with this change? I see it printing nothing but a newline 
+character anymore?
 
-Thanks,
-Guenter
+--
+ i.
 
+> +	if (ret < 0)
+> +		return ret;
+>  
+> -	return ret;
+> +	return count + ret;
+>  }
+>  
+>  static int dell_wmi_ddv_get_health(struct dell_wmi_ddv_data *data, u32 index,
+> @@ -994,19 +989,15 @@ static int dell_wmi_ddv_buffer_read(struct seq_file *seq, enum dell_ddv_method m
+>  {
+>  	struct device *dev = seq->private;
+>  	struct dell_wmi_ddv_data *data = dev_get_drvdata(dev);
+> -	union acpi_object *obj;
+> -	u64 size;
+> -	u8 *buf;
+> +	struct dell_wmi_buffer *buffer;
+>  	int ret;
+>  
+> -	ret = dell_wmi_ddv_query_buffer(data->wdev, method, 0, &obj);
+> +	ret = dell_wmi_ddv_query_buffer(data->wdev, method, 0, &buffer);
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	size = obj->package.elements[0].integer.value;
+> -	buf = obj->package.elements[1].buffer.pointer;
+> -	ret = seq_write(seq, buf, size);
+> -	kfree(obj);
+> +	ret = seq_write(seq, buffer->raw_data, le32_to_cpu(buffer->raw_size));
+> +	kfree(buffer);
+>  
+>  	return ret;
+>  }
+> 
