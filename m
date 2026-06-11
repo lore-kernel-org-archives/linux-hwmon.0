@@ -1,154 +1,628 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26E1A18FC97;
-	Thu, 11 Jun 2026 14:19:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1F0231842;
+	Thu, 11 Jun 2026 15:01:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781187546; cv=none; b=CND55zlNqzurR8HXPUcRooHBB8BJJli+NhvzPzwkQG7/NLZjN6DHOWLG8r/lIxMUz5xI+wzRiNaHLkHhwdL64mZ0U3P8LnF4yo/Zf2OGAYYa5iggVSKveIz6PuPF9+YL5LaRJ0BNqs8G2c7nsGMqk3bq+a1a//ScQJk21B7D98U=
+	t=1781190098; cv=none; b=Prgjpzkm4mgxkOobQ7NeiP0yHztDqAHYH1GMbfDRlQBDark4d0zjKyXqG2F+hThEeiVnW9Eylah7ZYneiA0X015ybIxRwQgLJYcMKtnjHVcCQO0t2semrvjVeFzPb1BXca+B0MDq671p3bapniI5u3FLsDTzxBLKy0izdL08ggI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781187546; c=relaxed/simple;
-	bh=BEP8vt47lMibPi5rraOMux9WZgsqrDGbpToFR83WiLU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=qyXJNMgcWzeZ5r95WOFxFKCUaX6ga7B6puIdp2Ynl08HBi/+/3R61xwj2VxA/kSZTrVTQiGw5AQJcCX/Gmmnx8VA4umJ/8v8/fRL9gGwrdLBG0/Tkj4EW56uHoUlMOo6FTdUrH7owsSo9hjbuFKX5L8SBGvOHvMNWwsFYZNfE4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fuNTYufQ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781190098; c=relaxed/simple;
+	bh=zVg9O0B1hNvvh2oXVlL70jC52p79nwRXiTyT1+TWm0g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gjwzR8Y0InBO/rLGKYx51pfBO1YmLjAPDFzpdejdHf01ASuyWjXD56gTs/zyFMBTMs9z9zuHTRXiwqdV8m5enGB52yCViJlwz9cDtE8jLtEGAtWSETLUv8QXoFJZKGVuDcLiMenLptt3m+ppZUa+dqVMNihfAq/U4gj/RO/QCSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VKScpbVN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fuNTYufQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8821C1F00893;
-	Thu, 11 Jun 2026 14:19:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VKScpbVN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 636D21F00898;
+	Thu, 11 Jun 2026 15:01:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781187544;
-	bh=UfLlXnqFthU2IAGGsWz5h/p8ob89v+Kkme73oAvJqOw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=fuNTYufQMznXm7mLbg6X5DaPb4I1aQE8Elei2qcEKpASzV0gVaejanguuyPykC1o5
-	 tHF2aGfX+YNLJHhDRS6Cw+HFKw8cMM28OS50qnAKfE6CBn2t6v1ghdOlhbdMrh9kTY
-	 hukLN8j+KU/m2mW2NDF+c7NwTvtIQ+YgokV/tKTXhK32Kx3jHPhgITY1j4+HJTYl5j
-	 kdsc8jE8zkMgU6Xb+x9OqrK6vltzCYRL13SPL+AZ/qTM0kB6NQ37OqnpHtLE0j6qLj
-	 9pvyq748QW6+xM4cpezc3yQX9/GhN968z+B3GaCzLZaYfmdaoY6tsyAgB2bgm/Bi4A
-	 GjkRXkRlrTi6Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 2/3] hwmon: ina2xx: support ina232
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Loic Poulain" <loic.poulain@oss.qualcomm.com>
-Cc: robh@kernel.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, conor+dt@kernel.org
-In-Reply-To: <20260611-monza-ina232-v2-2-e4375ce652d0@oss.qualcomm.com>
-References: <20260611-monza-ina232-v2-2-e4375ce652d0@oss.qualcomm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 11 Jun 2026 14:19:03 +0000
-Message-Id: <20260611141904.8821C1F00893@smtp.kernel.org>
+	s=k20260515; t=1781190096;
+	bh=Z0GqAAPTQKBPzIIt8uafV8BDYHl2vHkEVMrjmDmaxGE=;
+	h=From:To:Cc:Subject:Date;
+	b=VKScpbVNCk6sDIkegam5ps5HgPFy8FMGqebxBD7jp0amyveZ7/1cjO4pnXETtL9YY
+	 HninzylNzJNiwZSOVEP/BUq0LD0DoWJtsssV7iX5WbtX6v3fK7V3UL1N5FwXM3UmBQ
+	 cVstckZ4wTA5ShWO+qAzV2IE3JM6J+xDGKMMb4DUCFgAsSWeOaCh9RNRijsNbN1gNq
+	 5PThwsxdWKQqJAzYgmcJST0cUPKVOrRbzYkCDqxvtSDf9pTUXrijBIhncIfS0FlDG9
+	 6I0lK+cunT54p7+lRCqnzBc9mLZ7yfK90uNMAlJg1RtuTWSkkBBGV1CncO9LRjHY0u
+	 6bB1cj4VeUCsw==
+From: Conor Dooley <conor@kernel.org>
+To: linux-hwmon@vger.kernel.org
+Cc: conor@kernel.org,
+	Lars Randers <lranders@mail.dk>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	Valentina.FernandezAlanis@microchip.com
+Subject: [PATCH v3] hwmon: add a driver for the temp/voltage sensor on PolarFire SoC
+Date: Thu, 11 Jun 2026 16:00:42 +0100
+Message-ID: <20260611-blank-footprint-5504b819baec@spud>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=16852; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=qtmy05In3vdCzGWaGfNJEe5AhieGnHLdbOqAXu/bJdQ=; b=owGbwMvMwCVWscWwfUFT0iXG02pJDFlaZ2fZzrH3Pe9YmGJ8i4eVp/PhO7kZO9YL6v1lt8vqu FSza15aRykLgxgXg6yYIkvi7b4WqfV/XHY497yFmcPKBDKEgYtTACYyI4GRoWH5gkdqpb9P/LC0 K6hu+9HHeqpiV/Y87uSUn4n3n3nevsXIMPVXDOOzE7v/KfPdVBdk7S8Oa7/7yMpZZqfOAfFL66Y mMwMA
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
+From: Lars Randers <lranders@mail.dk>
 
-Pre-existing issues:
-- [High] Power alert limit calculation always evaluates to 0 on 32-bit syst=
-ems due to `UINT_MAX` underflow when cast to a signed long.
-- [High] Setting a high bus voltage alert limit on 32-bit systems causes si=
-gned integer overflow for chips with a high `bus_voltage_shift`.
-- [High] Arithmetic overflow and truncation in power and current reading ca=
-lculations due to 32-bit signed integer limits.
---
+Add a driver for the temperature and voltage sensors on PolarFire SoC.
+The temperature reports how hot the die is, and the voltages are the
+SoC's 1.05, 1.8 and 2.5 volt rails respectively.
 
-commit 1860bedc8e47e2aefaa388ad7ade74649ff17da9
-Author: Martino Facchin <m.facchin@arduino.cc>
+The hardware supports alarms in theory, but there is an erratum that
+prevents clearing them once triggered, so no support is added for them.
 
-hwmon: ina2xx: support ina232
+The hardware measures voltage with 16 bits, of which 1 is a sign bit and
+the remainder holds the voltage as a fixed point integer value. It's
+improbable that the hardware will work if the voltages are negative, so
+the driver ignores the sign bits.
 
-The INA232 is a current/power monitor. It shares the same register
-layout as the INA2xx and uses the INA226 default configuration, but
-differs in its electrical characteristics.
+There's no dt support etc here because this is the child of a simple-mfd
+syscon.
 
-> diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
-> index 613ffb622b7c4..fc2319ad99fc3 100644
-> --- a/drivers/hwmon/ina2xx.c
-> +++ b/drivers/hwmon/ina2xx.c
-> @@ -196,6 +197,20 @@ static const struct ina2xx_config ina2xx_config[] =
-=3D {
->  		.current_shift =3D 4,
->  		.has_update_interval =3D true,
->  	},
-> +	[ina232] =3D {
-> +		.config_default =3D INA226_CONFIG_DEFAULT,
-> +		.calibration_value =3D 2048,
-> +		.shunt_div =3D 400,
-> +		.shunt_voltage_shift =3D 0,
-> +		.bus_voltage_shift =3D 0,
-> +		.bus_voltage_lsb =3D 1600,
-> +		.power_lsb_factor =3D 32,
-> +		.has_alerts =3D true,
-> +		.has_ishunt =3D false,
-> +		.has_power_average =3D false,
-> +		.current_shift =3D 0,
-> +		.has_update_interval =3D true,
-> +	},
+Signed-off-by: Lars Randers <lranders@mail.dk>
+Co-developed-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+v3:
+- clamp interval values
+- note that 0-8 ms is the range for update_interval
+- return -ENODATA for invalid data
+- do write bounds checking once
+- comment on MMIO regmap return value checks
 
-[Severity: High]
-This is a pre-existing issue, but does power alert configuration work corre=
-ctly
-on 32-bit systems?
+v2:
+- Fix some minor things pointed out by Sashiko including inaccurate
+  comments, bounds checking of values read from sysfs and Kconfig
+  dependencies.
+- Make update_interval use milliseconds instead of microseconds
+  (I'll add update_interval_us support when that lands, there's a
+  proposed workaround for the erratum circulating internally, so it'll
+  probably come alongside alarm support).
 
-In ina226_alert_to_reg() for INA2XX_POWER, the limit is clamped using:
+CC: Guenter Roeck <linux@roeck-us.net>
+CC: Jonathan Corbet <corbet@lwn.net>
+CC: Shuah Khan <skhan@linuxfoundation.org>
+CC: Conor Dooley <conor.dooley@microchip.com>
+CC: Daire McNamara <daire.mcnamara@microchip.com>
+CC: linux-hwmon@vger.kernel.org
+CC: linux-doc@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+CC: linux-riscv@lists.infradead.org
+CC: Valentina.FernandezAlanis@microchip.com
+---
+ Documentation/hwmon/index.rst    |   1 +
+ Documentation/hwmon/tvs-mpfs.rst |  53 +++++
+ MAINTAINERS                      |   1 +
+ drivers/hwmon/Kconfig            |  13 ++
+ drivers/hwmon/Makefile           |   1 +
+ drivers/hwmon/tvs-mpfs.c         | 388 +++++++++++++++++++++++++++++++
+ 6 files changed, 457 insertions(+)
+ create mode 100644 Documentation/hwmon/tvs-mpfs.rst
+ create mode 100644 drivers/hwmon/tvs-mpfs.c
 
-        val =3D clamp_val(val, 0, UINT_MAX - data->power_lsb_uW);
-        val =3D DIV_ROUND_CLOSEST(val, data->power_lsb_uW);
-        return clamp_val(val, 0, USHRT_MAX);
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index 8b655e5d6b68..84a5339e1d6f 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -262,6 +262,7 @@ Hardware Monitoring Kernel Drivers
+    tps53679
+    tps546d24
+    tsc1641
++   tvs-mpfs
+    twl4030-madc-hwmon
+    ucd9000
+    ucd9200
+diff --git a/Documentation/hwmon/tvs-mpfs.rst b/Documentation/hwmon/tvs-mpfs.rst
+new file mode 100644
+index 000000000000..1035812f363a
+--- /dev/null
++++ b/Documentation/hwmon/tvs-mpfs.rst
+@@ -0,0 +1,53 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++Kernel driver tvs-mpfs
++======================
++
++Supported chips:
++
++  * PolarFire SoC
++
++Authors:
++
++   - Conor Dooley <conor.dooley@microchip.com>
++   - Lars Randers <lranders@mail.dk>
++
++Description
++-----------
++
++This driver implements support for the temperature and voltage sensors on
++PolarFire SoC. The temperature reports how hot the die is, and the voltages are
++the SoC's 1.05, 1.8 and 2.5 volt rails respectively.
++
++
++Usage Notes
++-----------
++
++update_interval has a permitted range of 0 to 8 milliseconds.
++
++Temperatures are read in millidegrees Celsius, but the hardware measures in
++degrees Kelvin, storing the result as 11.4 fixed point data, for a maximum
++value of 2047.9375 degrees Kelvin.
++
++Voltages are read in millivolts. The hardware measures in millivolts, storing
++the value as 12.3 fixed point data, for a maximum of 4095.875 millivolts.
++The minimum value reportable by the driver is 0 volts, although the hardware
++is capable of measuring negative values.
++
++Sysfs entries
++-------------
++
++The following attributes are supported. update_interval is read-write, as are
++the enables. All other attributes are read only.
++
++======================= ====================================================
++temp1_label		Fixed name for channel.
++temp1_input		Measured temperature for channel.
++temp1_enable		Enable/disable for channel.
++
++in[0-2]_label		Fixed name for channel.
++in[0-2]_input		Measured voltage for channel.
++in[0-2]_enable		Enable/disable for channel.
++
++update_interval		The interval at which the chip will update readings.
++======================= ====================================================
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 2fb1c75afd16..a492cf5ad0fc 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -22938,6 +22938,7 @@ F:	drivers/char/hw_random/mpfs-rng.c
+ F:	drivers/clk/microchip/clk-mpfs*.c
+ F:	drivers/firmware/microchip/mpfs-auto-update.c
+ F:	drivers/gpio/gpio-mpfs.c
++F:	drivers/hwmon/tvs-mpfs.c
+ F:	drivers/i2c/busses/i2c-microchip-corei2c.c
+ F:	drivers/mailbox/mailbox-mpfs.c
+ F:	drivers/pci/controller/plda/pcie-microchip-host.c
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 14e4cea48acc..2b9622b1db95 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -930,6 +930,19 @@ config SENSORS_JC42
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called jc42.
+ 
++config SENSORS_POLARFIRE_SOC_TVS
++	tristate "PolarFire SoC (MPFS) temperature and voltage sensor"
++	depends on POLARFIRE_SOC_SYSCONS || COMPILE_TEST
++	depends on MFD_SYSCON
++	help
++	  This driver adds support for the PolarFire SoC (MPFS) Temperature and
++	  Voltage Sensor.
++
++	  To compile this driver as a module, choose M here. the
++	  module will be called tvs-mpfs.
++
++	  If unsure, say N.
++
+ config SENSORS_POWERZ
+ 	tristate "ChargerLAB POWER-Z USB-C tester"
+ 	depends on USB
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 4788996aa137..b58d249e4cf4 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -194,6 +194,7 @@ obj-$(CONFIG_SENSORS_NZXT_SMART2) += nzxt-smart2.o
+ obj-$(CONFIG_SENSORS_PC87360)	+= pc87360.o
+ obj-$(CONFIG_SENSORS_PC87427)	+= pc87427.o
+ obj-$(CONFIG_SENSORS_PCF8591)	+= pcf8591.o
++obj-$(CONFIG_SENSORS_POLARFIRE_SOC_TVS)  += tvs-mpfs.o
+ obj-$(CONFIG_SENSORS_POWERZ)	+= powerz.o
+ obj-$(CONFIG_SENSORS_POWR1220)  += powr1220.o
+ obj-$(CONFIG_SENSORS_PT5161L)	+= pt5161l.o
+diff --git a/drivers/hwmon/tvs-mpfs.c b/drivers/hwmon/tvs-mpfs.c
+new file mode 100644
+index 000000000000..48de8d98b344
+--- /dev/null
++++ b/drivers/hwmon/tvs-mpfs.c
+@@ -0,0 +1,388 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Author: Lars Randers <lranders@mail.dk>
++ */
++
++#include <linux/bitfield.h>
++#include <linux/err.h>
++#include <linux/freezer.h>
++#include <linux/hwmon.h>
++#include <linux/io.h>
++#include <linux/kthread.h>
++#include <linux/mfd/syscon.h>
++#include <linux/minmax.h>
++#include <linux/module.h>
++#include <linux/of_address.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++
++#define MPFS_TVS_CTRL 0x08
++#define MPFS_TVS_OUTPUT0 0x24
++#define MPFS_TVS_OUTPUT1 0x28
++
++#define MPFS_TVS_CTRL_TEMP_VALID	BIT(19)
++#define MPFS_TVS_CTRL_V2P5_VALID	BIT(18)
++#define MPFS_TVS_CTRL_V1P8_VALID	BIT(17)
++#define MPFS_TVS_CTRL_V1P05_VALID	BIT(16)
++
++#define MPFS_TVS_CTRL_TEMP_ENABLE	BIT(3)
++#define MPFS_TVS_CTRL_V2P5_ENABLE	BIT(2)
++#define MPFS_TVS_CTRL_V1P8_ENABLE	BIT(1)
++#define MPFS_TVS_CTRL_V1P05_ENABLE	BIT(0)
++#define MPFS_TVS_CTRL_ENABLE_ALL	GENMASK(3, 0)
++
++/*
++ * For all of these the value in millivolts is stored in 16 bits, with an upper
++ * sign bit and a lower 3 bits of decimal. These masks discard the sign bit and
++ * decimal places, because if Linux is running these voltages cannot be negative
++ * and so avoid having to convert to two's complement.
++ */
++#define MPFS_OUTPUT0_V1P8_MASK	GENMASK(30, 19)
++#define MPFS_OUTPUT0_V1P05_MASK	GENMASK(14, 3)
++#define MPFS_OUTPUT1_V2P5_MASK	GENMASK(14, 3)
++
++/*
++ * The register map claims that the temperature is stored in bits 31:16, but
++ * application note "AN4682: PolarFire FPGA Temperature and Voltage Sensor"
++ * says that 31 is reserved. Temperature is in kelvin, so what's probably a
++ * sign bit has no value anyway.
++ */
++#define MPFS_OUTPUT1_TEMP_MASK GENMASK(30, 16)
++
++#define MPFS_TVS_INTERVAL_MASK GENMASK(15, 8)
++#define MPFS_TVS_INTERVAL_OFFSET 8
++/* The interval register is in increments of 32 us */
++#define MPFS_TVS_INTERVAL_SCALE 32
++/* with 254 usable increments of 32 us available, 8 ms is the integer limit */
++#define MPFS_TVS_INTERVAL_MAX_MS 8U
++
++/* 273.1875 in 11.4 fixed-point notation */
++#define MPFS_TVS_K_TO_C 0x1113
++
++enum mpfs_tvs_sensors {
++	SENSOR_V1P05 = 0,
++	SENSOR_V1P8,
++	SENSOR_V2P5,
++};
++
++static const char * const mpfs_tvs_voltage_labels[] = { "1P05", "1P8", "2P5" };
++
++struct mpfs_tvs {
++	struct regmap *regmap;
++};
++
++static int mpfs_tvs_voltage_read(struct mpfs_tvs *data, u32 attr,
++				 int channel, long *val)
++{
++	u32 tmp, control;
++
++	if (attr != hwmon_in_input && attr != hwmon_in_enable)
++		return -EOPNOTSUPP;
++
++	regmap_read(data->regmap, MPFS_TVS_CTRL, &control);
++
++	switch (channel) {
++	case SENSOR_V2P5:
++		if (attr == hwmon_in_enable) {
++			*val = FIELD_GET(MPFS_TVS_CTRL_V2P5_ENABLE, control);
++			break;
++		}
++
++		if (!(control & MPFS_TVS_CTRL_V2P5_VALID))
++			return -ENODATA;
++
++		regmap_read(data->regmap, MPFS_TVS_OUTPUT1, &tmp);
++		*val = FIELD_GET(MPFS_OUTPUT1_V2P5_MASK, tmp);
++		break;
++	case SENSOR_V1P8:
++		if (attr == hwmon_in_enable) {
++			*val = FIELD_GET(MPFS_TVS_CTRL_V1P8_ENABLE, control);
++			break;
++		}
++
++		if (!(control & MPFS_TVS_CTRL_V1P8_VALID))
++			return -ENODATA;
++
++		regmap_read(data->regmap, MPFS_TVS_OUTPUT0, &tmp);
++		*val = FIELD_GET(MPFS_OUTPUT0_V1P8_MASK, tmp);
++		break;
++	case SENSOR_V1P05:
++		if (attr == hwmon_in_enable) {
++			*val = FIELD_GET(MPFS_TVS_CTRL_V1P05_ENABLE, control);
++			break;
++		}
++
++		if (!(control & MPFS_TVS_CTRL_V1P05_VALID))
++			return -ENODATA;
++
++		regmap_read(data->regmap, MPFS_TVS_OUTPUT0, &tmp);
++		*val = FIELD_GET(MPFS_OUTPUT0_V1P05_MASK, tmp);
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return 0;
++}
++
++static int mpfs_tvs_voltage_write(struct mpfs_tvs *data, u32 attr,
++				  int channel, long val)
++{
++	u32 tmp;
++
++	if (attr != hwmon_in_enable)
++		return -EOPNOTSUPP;
++
++	if (val > 1 || val < 0)
++		return -EINVAL;
++
++	switch (channel) {
++	case SENSOR_V2P5:
++		tmp = FIELD_PREP(MPFS_TVS_CTRL_V2P5_ENABLE, val);
++		regmap_update_bits(data->regmap, MPFS_TVS_CTRL,
++				   MPFS_TVS_CTRL_V2P5_ENABLE, tmp);
++		break;
++	case SENSOR_V1P8:
++		tmp = FIELD_PREP(MPFS_TVS_CTRL_V1P8_ENABLE, val);
++		regmap_update_bits(data->regmap, MPFS_TVS_CTRL,
++				   MPFS_TVS_CTRL_V1P8_ENABLE, tmp);
++		break;
++	case SENSOR_V1P05:
++		tmp = FIELD_PREP(MPFS_TVS_CTRL_V1P05_ENABLE, val);
++		regmap_update_bits(data->regmap, MPFS_TVS_CTRL,
++				   MPFS_TVS_CTRL_V1P05_ENABLE, tmp);
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return 0;
++}
++
++static int mpfs_tvs_temp_read(struct mpfs_tvs *data, u32 attr, long *val)
++{
++	u32 tmp, control;
++
++	if (attr != hwmon_temp_input && attr != hwmon_temp_enable)
++		return -EOPNOTSUPP;
++
++	regmap_read(data->regmap, MPFS_TVS_CTRL, &control);
++
++	if (attr == hwmon_temp_enable) {
++		*val = FIELD_GET(MPFS_TVS_CTRL_TEMP_ENABLE, control);
++		return 0;
++	}
++
++	if (!(control & MPFS_TVS_CTRL_TEMP_VALID))
++		return -ENODATA;
++
++	regmap_read(data->regmap, MPFS_TVS_OUTPUT1, &tmp);
++	*val = FIELD_GET(MPFS_OUTPUT1_TEMP_MASK, tmp);
++	*val -= MPFS_TVS_K_TO_C;
++	*val = (1000 * *val) >> 4; /* fixed point (11.4) to millidegrees */
++
++	return 0;
++}
++
++static int mpfs_tvs_temp_write(struct mpfs_tvs *data, u32 attr, long val)
++{
++	u32 tmp;
++
++	if (attr != hwmon_temp_enable)
++		return -EOPNOTSUPP;
++
++	if (val > 1 || val < 0)
++		return -EINVAL;
++
++	tmp = FIELD_PREP(MPFS_TVS_CTRL_TEMP_ENABLE, val);
++	regmap_update_bits(data->regmap, MPFS_TVS_CTRL,
++			   MPFS_TVS_CTRL_TEMP_ENABLE, tmp);
++
++	return 0;
++}
++
++static int mpfs_tvs_interval_read(struct mpfs_tvs *data, u32 attr, long *val)
++{
++	u32 tmp;
++
++	if (attr != hwmon_chip_update_interval)
++		return -EOPNOTSUPP;
++
++	regmap_read(data->regmap, MPFS_TVS_CTRL, &tmp);
++	*val = FIELD_GET(MPFS_TVS_INTERVAL_MASK, tmp);
++	*val *= MPFS_TVS_INTERVAL_SCALE;
++	*val /= 1000;
++
++	return 0;
++}
++
++static int mpfs_tvs_interval_write(struct mpfs_tvs *data, u32 attr, long val)
++{
++	unsigned long temp = val;
++
++	if (attr != hwmon_chip_update_interval)
++		return -EOPNOTSUPP;
++
++	temp = clamp(temp, 0U, MPFS_TVS_INTERVAL_MAX_MS);
++
++	temp *= 1000;
++	temp /= MPFS_TVS_INTERVAL_SCALE;
++
++	temp <<= MPFS_TVS_INTERVAL_OFFSET;
++	regmap_update_bits(data->regmap, MPFS_TVS_CTRL,
++			   MPFS_TVS_INTERVAL_MASK, temp);
++
++	return 0;
++}
++
++static umode_t mpfs_tvs_is_visible(const void *data,
++				   enum hwmon_sensor_types type,
++				   u32 attr, int channel)
++{
++	if (type == hwmon_chip && attr == hwmon_chip_update_interval)
++		return 0644;
++
++	if (type == hwmon_temp) {
++		switch (attr) {
++		case hwmon_temp_enable:
++			return 0644;
++		case hwmon_temp_input:
++		case hwmon_temp_label:
++			return 0444;
++		default:
++			return 0;
++		}
++	}
++
++	if (type == hwmon_in) {
++		switch (attr) {
++		case hwmon_in_enable:
++			return 0644;
++		case hwmon_in_input:
++		case hwmon_in_label:
++			return 0444;
++		default:
++			return 0;
++		}
++	}
++
++	return 0;
++}
++
++static int mpfs_tvs_read(struct device *dev, enum hwmon_sensor_types type,
++			 u32 attr, int channel, long *val)
++{
++	struct mpfs_tvs *data = dev_get_drvdata(dev);
++
++	switch (type) {
++	case hwmon_temp:
++		return mpfs_tvs_temp_read(data, attr, val);
++	case hwmon_in:
++		return mpfs_tvs_voltage_read(data, attr, channel, val);
++	case hwmon_chip:
++		return mpfs_tvs_interval_read(data, attr, val);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int mpfs_tvs_write(struct device *dev, enum hwmon_sensor_types type,
++			  u32 attr, int channel, long val)
++{
++	struct mpfs_tvs *data = dev_get_drvdata(dev);
++
++	switch (type) {
++	case hwmon_temp:
++		return mpfs_tvs_temp_write(data, attr, val);
++	case hwmon_in:
++		return mpfs_tvs_voltage_write(data, attr, channel, val);
++	case hwmon_chip:
++		return mpfs_tvs_interval_write(data, attr, val);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int mpfs_tvs_read_labels(struct device *dev,
++				enum hwmon_sensor_types type,
++				u32 attr, int channel,
++				const char **str)
++{
++	switch (type) {
++	case hwmon_temp:
++		*str = "Die Temp";
++		return 0;
++	case hwmon_in:
++		*str = mpfs_tvs_voltage_labels[channel];
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static const struct hwmon_ops mpfs_tvs_ops = {
++	.is_visible = mpfs_tvs_is_visible,
++	.read_string = mpfs_tvs_read_labels,
++	.read = mpfs_tvs_read,
++	.write = mpfs_tvs_write,
++};
++
++static const struct hwmon_channel_info *mpfs_tvs_info[] = {
++	HWMON_CHANNEL_INFO(chip,
++			   HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
++	HWMON_CHANNEL_INFO(temp,
++			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_ENABLE),
++	HWMON_CHANNEL_INFO(in,
++			   HWMON_I_INPUT | HWMON_I_LABEL | HWMON_I_ENABLE,
++			   HWMON_I_INPUT | HWMON_I_LABEL | HWMON_I_ENABLE,
++			   HWMON_I_INPUT | HWMON_I_LABEL | HWMON_I_ENABLE),
++	NULL
++};
++
++static const struct hwmon_chip_info mpfs_tvs_chip_info = {
++	.ops = &mpfs_tvs_ops,
++	.info = mpfs_tvs_info,
++};
++
++static int mpfs_tvs_probe(struct platform_device *pdev)
++{
++	struct device *hwmon_dev;
++	struct mpfs_tvs *data;
++
++	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	data->regmap = device_node_to_regmap(pdev->dev.parent->of_node);
++	if (IS_ERR(data->regmap))
++		return dev_err_probe(&pdev->dev, PTR_ERR(data->regmap),
++				     "Failed to find syscon regmap\n");
++
++	/*
++	 * It's an MMIO regmap with no resources, there's nothing that can fail
++	 * and return an error
++	 */
++	regmap_write(data->regmap, MPFS_TVS_CTRL, MPFS_TVS_CTRL_ENABLE_ALL);
++
++	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev, "mpfs_tvs",
++							 data,
++							 &mpfs_tvs_chip_info,
++							 NULL);
++	if (IS_ERR(hwmon_dev))
++		return dev_err_probe(&pdev->dev, PTR_ERR(hwmon_dev),
++				     "hwmon device registration failed.\n");
++
++	return 0;
++}
++
++static struct platform_driver mpfs_tvs_driver = {
++	.probe = mpfs_tvs_probe,
++	.driver = {
++		.name = "mpfs-tvs",
++	},
++};
++module_platform_driver(mpfs_tvs_driver);
++
++MODULE_AUTHOR("Lars Randers <lranders@mail.dk>");
++MODULE_DESCRIPTION("PolarFire SoC temperature & voltage sensor driver");
++MODULE_LICENSE("GPL");
+-- 
+2.53.0
 
-The clamp_val() macro casts its limit arguments to the type of val, which is
-a signed long. On 32-bit systems, UINT_MAX - data->power_lsb_uW evaluates to
-a negative value.
-
-Because the maximum limit is negative, clamp_val() forces any positive input
-to this negative limit, and the final clamp_val(..., 0, USHRT_MAX) will
-unconditionally return 0, silently disabling or instantly triggering alerts.
-
-[Severity: High]
-This isn't a bug introduced by this patch, but could setting high bus volta=
-ge
-alerts on 32-bit systems cause an integer overflow?
-
-In ina226_alert_to_reg() for INA2XX_BUS_VOLTAGE, the value is calculated as:
-
-        val =3D clamp_val(val, 0, 200000);
-        val =3D (val * 1000) << data->config->bus_voltage_shift;
-
-For chips with a high bus_voltage_shift like the INA234 (shift =3D 4), a va=
-lid
-high input limit such as 150,000 mV evaluates to (150,000 * 1000) << 4,
-which equals 2,400,000,000.
-
-On 32-bit architectures, this exceeds the maximum positive value for a
-signed long, overflowing into a negative number. The subsequent clamp to
-USHRT_MAX then limits this to 0, converting legitimate high voltage limits
-to 0.
-
-[Severity: High]
-This is a pre-existing issue, but does this calculation overflow for systems
-measuring high loads with low-value shunt resistors?
-
-In ina2xx_get_value(), the calculation is stored in a 32-bit signed integer:
-
-static int ina2xx_get_value(struct ina2xx_data *data, u8 reg,
-                            unsigned int regval)
-{
-        int val;
-        ...
-        case INA2XX_POWER:
-                val =3D regval * data->power_lsb_uW;
-                break;
-
-For a system using a 1 mOhm shunt, power_lsb_uW might be 80,000. If regval
-is large (e.g., 65535), the product exceeds INT_MAX.
-
-This overflows on 32-bit systems or truncates when assigned to the 32-bit
-integer val on 64-bit systems, causing the driver to report completely
-incorrect and often large negative values.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260611-monza-ina2=
-32-v2-0-e4375ce652d0@oss.qualcomm.com?part=3D2
