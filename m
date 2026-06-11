@@ -1,167 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCEB02D3EF2;
-	Thu, 11 Jun 2026 16:21:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B6B330651
+	for <linux-hwmon@vger.kernel.org>; Thu, 11 Jun 2026 16:38:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781194905; cv=none; b=dwmaDSKcehFjDnjwcAVZ4n4rUrGiFokuxGdPH+FsQQjLRZ1OUO8iDwJUeRrwEtcClexHRDPTlCyoSseY81/SbKEqAE3quoDTH/HqfdiLMi6EHUKfbuzTqK0W8uuMbZTWvklNKN6e49mvNxLm2ZiCVo7+TLCUUy0bTHmwEXABAsU=
+	t=1781195892; cv=none; b=o7yD69uT6QvYRxorLAOHjbY788nMUslPVk6RkSJh+XkeuqUFzPwk61Q1s/m8jgMRDPfBftN5cgKxVeRkzNcNWyUpYh4VMHX1LVW8QBPLw7RzlD74dI2YDmBiStLff3d2SjUAs6TmMsZZPf6fZOn9oWCf+V/wAhrzPQJsM3Yf79c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781194905; c=relaxed/simple;
-	bh=BgVKRcXjVzM9bwO7eHBXO6b+o4i2MMpKZIpzdDUd80U=;
+	s=arc-20240116; t=1781195892; c=relaxed/simple;
+	bh=eijCJIWCzE7dOaaMhC6ytwZ56c0ngQs/vO7TF7uckw4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MJWnTIM9u2VJjaMenU3XFknp3BftTS8MTYXiMXb/ruEO2fvkxeFtvk+TtafXaSOSfa9JEDuDALmKwLpCqxfGGepuQcBM0VTObUxzi78SoGB/Y600vhSOqlP1OnwJ4OwO57g92bSD84oXfsW4/XdiDaaPYLtPHeu2VW6h2yWPs4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V+iAU2+U; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=ue3uaEHhk73mEH1Xd+hpLTOs7FvZKmxpC1RqrLnioRniKgBrFRkP8kTkJm6ZhihHg3BLXUZA1znamzH40gdP0p2adR8CAeSdn8tAtojMhYiHM3/oiIRXO2AaSWyw+7E5xMQWxiEJC6M32Iz2jdMic3XpxRyhDaU2E3o4m7v+Ow0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b4WJaeE6; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V+iAU2+U"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF2351F00898;
-	Thu, 11 Jun 2026 16:21:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781194904;
-	bh=rN0eZlPmK8jd/FUpsjZiMOwKDCLuIbQbAOYjVQ6GEiY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=V+iAU2+UdPTN2UrVxlQO1h5Dyxfha9HgMuV45HLslDJiE27Lbii2x5XxK5ggzAA8f
-	 H+mSqGHiti4uX2Det3TPZWjbuP0S7EvBa+uoPo94dXMxgYN9scfo0ZAHamRLlhzRAb
-	 b6h0d2zlMMDYSZ5/ywfTCgIhCGgTAcBJpMqgXFleNSZYLP3EEl+cLlr+pEtieRWqWR
-	 3S0UkezBk7To4agX6MawiNTSGltG8+j/Jy9rPGIlGpyZyQvtrYBzt9rpjsDLqiQJQa
-	 GrM/c8K+0Q4OUdZbsMehX39VoORo77vngCYwY+xNz10+ard8IKmT56WjAD0+XZT4Qx
-	 3TGmVhB7WOg1Q==
-Date: Thu, 11 Jun 2026 17:21:41 +0100
-From: Conor Dooley <conor@kernel.org>
-To: sashiko-reviews@lists.linux.dev
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3] hwmon: add a driver for the temp/voltage sensor on
- PolarFire SoC
-Message-ID: <20260611-disaster-cadmium-91745bc1931d@spud>
-References: <20260611-blank-footprint-5504b819baec@spud>
- <20260611151316.685561F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b4WJaeE6"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-490afc47455so43913655e9.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 11 Jun 2026 09:38:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781195889; x=1781800689; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/slxkBaga7WdFYUIk+bpf71i1yduik1uqRPXNyL7qIk=;
+        b=b4WJaeE6pdENyvdjptJtoSyd6Lmr08PZTlPH8VYoRNetEVFqxAUuviMFCJHXdNjUJF
+         4JbtiVnkdAumsYLd5RjqE0ekopAvlYvzaJARHjuJB1TNk9NMFO0AzJP0e4syIvYE35Pv
+         yCarcKe9bqDLhJQ7wnbCYBg2anRxJcxg0UxCfBEFrgKIKMVnYiESguzniNEykK1MprOB
+         VVtHoqqD+A5KRlt71ynUCQFPqUWWXKHKvHJ04F+NAqa/BOJhLyKuRuLjFdIu7gtzWOjH
+         DSqGcoV+VyPUKyoR/1asmxBW68Fm69chXCNDdovENvF27//1R0BqW4+l4x/a0xIIIUDd
+         Td6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781195889; x=1781800689;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/slxkBaga7WdFYUIk+bpf71i1yduik1uqRPXNyL7qIk=;
+        b=jG/Tj45vPKsY0oIw9rEt20M8FXg2NXccyDo21TSeyRzO0Z2N67ZalC/2Ja9tvV/egR
+         6iC4O19haRT3TVvwIQi/wD+r4yhz67XRiuZAjdq4K/DbjLJYAmjFzaOfd7a+m8MEms8G
+         NLdY/5L49VcOAIJl2Jbw05MOOT+v8oljCFkj+izY9Qf6BFu/SN3k9TxdxUXyEV84dJo/
+         nJ8bQBRJLTt6vWsm6R7LOLyulpLLymEG5eWSs3HT86s1FuRpNwWNX0ObE9SWdn3Ga+8P
+         kI0CbQ2ZSs7zTlPzHL+zcquCp6IzJMw/UE0cN0jWNQ7T4aMunYN6dcomBxUx4KIpPO1L
+         ZTfQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+PBahfBtCq+2HfqX0phfBewcsl+On9U1qMvuIsIToL6cNITCQZmyZLkH0rnd16yqYCwCjBG+x2b2e0Zg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0ScUdyRtchfq6U/hDHaOjYf+lDke5Zb/sxPAAZOi0MhsVW2ka
+	Yr6Fms8hd0WwEsqzqpaNM/PwHmvLXsXDHy5x8/uhzhOnwO1mAsX44JO/
+X-Gm-Gg: Acq92OHZarmHx6Vo72kDOfGHyzpMEA4ARxG0OvCU8SZC/Z+3KV6ErZhXd9nvm505MV+
+	zqjJfednVRTG2JlcnuYsIt5bR0txMQrQt/Of3LdV+wDXuM5l+pPGVLHBG/4pdeWJV8XvhdWeORt
+	mvYcxk5CaBskDOgUMrPMYsdrpWpvUeMRNTJjnWzfspIbTOLrUJsW0hthOuo16QwZ84S8Pms5m4/
+	kyLrU9h2oN8sJa4VAgG1oboFsNMvRbFcpXsI4vOnDo1hS6DqbsKinthhG2B7TFFJIpsINl3PsmG
+	DFivDGWw0qE3nyDEM9GT7L/9gVJNe+cEr9XIphiFnFseqeIKvbT+lyaHUyJYYRl6o7iW1pfJgUT
+	R9XZhfGB8IjNMYXJoKXq8iiPAs5IqsZycZarBsd3xXQRz8ebVhiKz4R5uFGAyAZ807K7hYtBQcI
+	WEtypwjg==
+X-Received: by 2002:a05:600c:8b51:b0:490:e5c1:b8b9 with SMTP id 5b1f17b1804b1-490e5d0ff6dmr48188685e9.0.1781195889065;
+        Thu, 11 Jun 2026 09:38:09 -0700 (PDT)
+Received: from localhost ([2603:c027:c000:3cde::f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490ea4a4db2sm266015e9.1.2026.06.11.09.38.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jun 2026 09:38:08 -0700 (PDT)
+Date: Thu, 11 Jun 2026 18:38:06 +0200
+From: Louis Sautier <sautier.louis@gmail.com>
+To: Damien Le Moal <dlemoal@kernel.org>
+Cc: Sathya Prakash <sathya.prakash@broadcom.com>,
+	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+	Ranjan Kumar <ranjan.kumar@broadcom.com>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 RESEND 1/2] scsi: mpt3sas: add IO Unit Page 7 config
+ accessor
+Message-ID: <airkbg8-kDC0Gyv9@localhost>
+References: <20260609164423.2829699-1-sautier.louis@gmail.com>
+ <20260609164423.2829699-2-sautier.louis@gmail.com>
+ <5effba66-0d42-4d42-9833-f2c0be6874ad@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Sl4InEI04TzV+JzJ"
-Content-Disposition: inline
-In-Reply-To: <20260611151316.685561F00893@smtp.kernel.org>
-
-
---Sl4InEI04TzV+JzJ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <5effba66-0d42-4d42-9833-f2c0be6874ad@kernel.org>
 
-On Thu, Jun 11, 2026 at 03:13:16PM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 3 potential issu=
-e(s) to consider:
-> - [Medium] Negative values written to `update_interval` are incorrectly c=
-lamped to the maximum interval instead of returning an error or clamping to=
- 0.
-> - [Medium] Reading `update_interval` inconsistently under-reports the con=
-figured value due to integer division truncation.
-> - [Medium] Hardware sensors are enabled in `probe` but are not disabled o=
-n probe failure or driver unbind.
-> --
->=20
-> commit 91a403f5c5eef9fbcfcab3857179dc2f03ad3c89
-> Author: Lars Randers <lranders@mail.dk>
->=20
-> hwmon: add a driver for the temp/voltage sensor on PolarFire SoC
->=20
-> Add a driver for the temperature and voltage sensors on PolarFire SoC.
-> The temperature reports how hot the die is, and the voltages are the
-> SoC's 1.05, 1.8 and 2.5 volt rails respectively.
->=20
-> > diff --git a/drivers/hwmon/tvs-mpfs.c b/drivers/hwmon/tvs-mpfs.c
-> > new file mode 100644
-> > index 0000000000000..48de8d98b3444
-> > --- /dev/null
-> > +++ b/drivers/hwmon/tvs-mpfs.c
->=20
-> [ ... ]
->=20
-> > +static int mpfs_tvs_interval_read(struct mpfs_tvs *data, u32 attr, lon=
-g *val)
+On Wed, 10 Jun 2026 08:12:05 +0800, Damien Le Moal wrote:
+> > +int
+> > +mpt3sas_config_get_iounit_pg7(struct MPT3SAS_ADAPTER *ioc,
+> 
+> Please do not break the line after "int"
+
+Hi and thanks for the review.
+
+Sure, I can change this. Can you confirm we want to diverge from the
+convention used by neighbouring functions such as
+mpt3sas_config_get_iounit_pg8?
+
+> > +	Mpi2ConfigReply_t *mpi_reply, Mpi2IOUnitPage7_t *config_page)
 > > +{
-> > +	u32 tmp;
+> > +	Mpi2ConfigRequest_t mpi_request;
+> > +	int r;
 > > +
-> > +	if (attr !=3D hwmon_chip_update_interval)
-> > +		return -EOPNOTSUPP;
-> > +
-> > +	regmap_read(data->regmap, MPFS_TVS_CTRL, &tmp);
-> > +	*val =3D FIELD_GET(MPFS_TVS_INTERVAL_MASK, tmp);
-> > +	*val *=3D MPFS_TVS_INTERVAL_SCALE;
-> > +	*val /=3D 1000;
->=20
-> [Severity: Medium]
-> Will this return an incorrectly truncated value for certain intervals?
->=20
-> Since integer division is used both here and in mpfs_tvs_interval_write()=
-,=20
-> the truncation can cause the readback value to be lower than what was wri=
-tten.
-> For example, writing 7 ms calculates `(7 * 1000) / 32 =3D 218`. Reading i=
-t back
-> computes `(218 * 32) / 1000 =3D 6` ms.=20
->=20
-> Should DIV_ROUND_CLOSEST be used for these conversions to ensure the value
-> survives the round trip?
+> > +	memset(&mpi_request, 0, sizeof(Mpi2ConfigRequest_t));
+> > +	mpi_request.Function = MPI2_FUNCTION_CONFIG;
+> > +	mpi_request.Action = MPI2_CONFIG_ACTION_PAGE_HEADER;
+> > +	mpi_request.Header.PageType = MPI2_CONFIG_PAGETYPE_IO_UNIT;
+> > +	mpi_request.Header.PageNumber = 7;
+> > +	mpi_request.Header.PageVersion = MPI2_IOUNITPAGE7_PAGEVERSION;
+> > +	ioc->build_zero_len_sge_mpi(ioc, &mpi_request.PageBufferSGE);
+> > +	r = _config_request(ioc, &mpi_request, mpi_reply,
+> > +	    MPT3_CONFIG_PAGE_DEFAULT_TIMEOUT, NULL, 0);
+> 
+> 	r = _config_request(ioc, &mpi_request, mpi_reply,
+> 			    MPT3_CONFIG_PAGE_DEFAULT_TIMEOUT, NULL, 0);
+> 
+> is a lot nicer to read.
 
-Hmm, this is actually a good point that I overlooked.
-What is the desired rounding behaviour here?
-IOW, should asking for 7 ms produce the closest interval less than 7 ms or
-the closest interval greater than 7 ms?
+Do I also align the signature like so in both the source file and the
+header?
 
-A consistent rounding is better than rounding to the closest IMO, if both
-update_interval and update_interval_us are going to be supported
-
->=20
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int mpfs_tvs_interval_write(struct mpfs_tvs *data, u32 attr, lo=
-ng val)
-> > +{
-> > +	unsigned long temp =3D val;
-> > +
-> > +	if (attr !=3D hwmon_chip_update_interval)
-> > +		return -EOPNOTSUPP;
-> > +
-> > +	temp =3D clamp(temp, 0U, MPFS_TVS_INTERVAL_MAX_MS);
->=20
-> [Severity: Medium]
-> Does this correctly handle negative input values?
->=20
-> The parameter `val` is signed, but it is assigned to `unsigned long temp`=
-=2E If
-> a negative value is passed (e.g., -1), it undergoes an unsigned conversio=
-n and
-> becomes a large positive number like ULONG_MAX.=20
->=20
-> When clamp() evaluates this against 8 ms, it incorrectly clamps to 8 inst=
-ead of
-> returning -EINVAL or properly clamping to 0.
-
-I can definitely clamp this without casting. I considered that inputting
--1 to get the maximum was not really problematic given the documented
-range and that common sense doesn't permit negative times, but since I
-have to submit a v4 anyway, I'll just make this operate on the signed
-value.
-
-Cheers,
-Conor.
-
---Sl4InEI04TzV+JzJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCairglQAKCRB4tDGHoIJi
-0mjbAP0SuPpWUyxMlG5hvn+oqbV7KYYaF8un5QrKT9aIGWlS/wD/YEY8kUjDI1Hk
-1/8anCACCJgYUeH3HpVSRzM4bU5DngY=
-=CVAV
------END PGP SIGNATURE-----
-
---Sl4InEI04TzV+JzJ--
+int mpt3sas_config_get_iounit_pg7(struct MPT3SAS_ADAPTER *ioc,
+				  Mpi2ConfigReply_t *mpi_reply,
+				  Mpi2IOUnitPage7_t *config_page)
