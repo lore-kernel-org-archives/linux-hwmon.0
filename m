@@ -1,46 +1,79 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB932332635;
-	Thu, 11 Jun 2026 16:38:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F61332EBC
+	for <linux-hwmon@vger.kernel.org>; Thu, 11 Jun 2026 16:39:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781195929; cv=none; b=tiJrEWgKxn/8Y31MYRwFuj0BxatWd560o0pjqb+O8RJls/88B2R3yYGFB10GAFC2+GBnYRFej/2ciU6JeFqMcjBeS3rluGxdDQb1VjhwbAkpm5GhV1hSpa2dtPTkvNvg0adlbZAKjRFWmKXDhEjpYuATiUo3o+hN2jyMXzDgImQ=
+	t=1781196000; cv=none; b=X42w3lAqQ8TRMXD0+7mZi0lg1wC1QxQyhK/HEkviefvc/D4Rn5I0v3y67FRAycBcYU59cOcXcbzLxL402hW1bikj4l1bJ2/JLdi3mW9Z5efHPIIrg+jlRGrcsmLJ4ZR9aGtyry4PbQe5LNbLo78VvnxZeEITGGDArlle8/2N83A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781195929; c=relaxed/simple;
-	bh=6FySkG+glYjf4ZDyk3xou1Yfjb1g720YZhbquuf5Z/M=;
+	s=arc-20240116; t=1781196000; c=relaxed/simple;
+	bh=2a9cuN712vVqrsGbJylXLw3RxwasxEHAXA5P2t2Zs2I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KecMpqM8LWqyWIXF5azUGVShCc+9Kdftyvex+diehvScERefSidMs4X4fbXsPJ17TLDgmVQXv3Y9rGvV0OajA1ZMBuQSzMCd92aviOKKsxud+L9Bkd33GW1b4U4x4zB+LjOsBHj9FrD6E8gabIhe0wyYAgpdIaEc1ENCp2P/na8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ixT5j+fc; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=s5qyd9EJm75RR7ScJBoODsdTmc3HLdO797Vdz0VkLaXgMKVB5ydhDnoiG2hIwDx/hEeP+BGmZO2rXhZQ+2kdU7lO+Y+Ka+Qtfbjo5u94ntMiv1tR+vW6Ct+SUHrc/Ty9HsOKe5XFU+jJDAGwuS0v7oDsA+fDW/GqusgazgOaR3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D7M2rIvJ; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ixT5j+fc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 445EB1F00893;
-	Thu, 11 Jun 2026 16:38:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781195928;
-	bh=aFyaJd3eEW45BpXIfUcCpGEEeHbiAowOimlNIYOftnI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ixT5j+fc79ElnHBbkZm4Qv3VhNah4swHI8cpb5qkPYT24274Dr9oTtS/eNEEjuaoz
-	 qiIVA3zODlWzGZA+I+23mPnIbRqa8Y+d/H6FttGvH9pqPP5mT97omZ5me8a2MC4yfl
-	 a1JtF+GDqCADINHP9u7Q4zSmwuhEjIlJPS1dLKjs3VUMnu+scmYE3wHWmqlbjTVWg7
-	 wMelUVDFkvWrJGSJvz0p52l/jZIpZXUtqD5bH0S7ewp6CBaLR67Pg8CJzSlkgC9rxu
-	 uPDBxLP3ZONFFgiMNCLmlMXKTAMSwTAlp4Xz47p36SiJOduUMTS0lAUtl1CQB//WYe
-	 fpLj6z2oWghCg==
-Date: Thu, 11 Jun 2026 11:38:47 -0500
-From: Rob Herring <robh@kernel.org>
-To: Ziming Zhu <zmzhu0630@163.com>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, Ziming Zhu <ziming.zhu@silergycorp.com>
-Subject: Re: [PATCH v3 1/3] dt-bindings: hwmon: pmbus: Add bindings for
- Silergy SQ24860
-Message-ID: <20260611163847.GA2925321-robh@kernel.org>
-References: <20260611074335.4415-1-zmzhu0630@163.com>
- <20260611074335.4415-2-zmzhu0630@163.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D7M2rIvJ"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-490acbb0f89so127525e9.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 11 Jun 2026 09:39:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781195998; x=1781800798; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=siXDPwMtJVGXiYb4vYM49WpVCt548BrdN6XowbmkPpY=;
+        b=D7M2rIvJs2/rDqfgU9gYhfnJ3uWHThsn+nWqnyrBZxuPCeSyhLsF/AFk97I5nwDial
+         rYxtHhLgShrUxGYqMlm43YOpF45jGUCgG//C07rzsSpuTVjSKyd5roNsq1LUG59pylHQ
+         KZlC41plM4B9GaHTxNsmTwL4/mTyzX4iSSyNnsh0YtK4ANshplyHOQVNq+jLSFcjydL/
+         2Pt0j816rKfUc5UKc8sOPup/o9yXVacm0dD6R0ubGSx9SgWqMXO4g6kTxS0zHyfW/hQi
+         wTYqGvEHTL8QPZHMQ74MzRuhTTBwd1RPLjJuOWqzhrARtXXEbzHo0cyPdgvsI4z6yNmB
+         XKJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781195998; x=1781800798;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=siXDPwMtJVGXiYb4vYM49WpVCt548BrdN6XowbmkPpY=;
+        b=FuRSy3jAT+LybfzUHLHlyhVWo0iv9aHhnW+1ArSQUtbYpmWgbJzZwfYVp0jRJcwvOq
+         vmdzZEDWyCcR51f4GaqB49C7S9z2aWLyv/bbfPc8foLB/M3yDNlY60VacQY4xsvzuFP5
+         PPYb7LELR+b/lXLS123qFidpfm9Kyn9+YZEFMRHEg6xqqHhw9RBba0Pa6ma91INGC3yF
+         fnn5uul/rrZg6b00+ZGqIQ65cZqBVOw3abtmacH63BKK7/hCp8tvTdXXY8iD6Fe52qf0
+         2v8Gur/28J+EHSAM8O3mi6BOATXb4HsBgumYEAKAMOaYwptwOYsT+09qjQPzia2eTXQj
+         mZcg==
+X-Forwarded-Encrypted: i=1; AFNElJ84fNePUKV9f+IwrRqHa7sWmDsZfMcIDx/6DER5lt+SKgZrw0cw0EnteB9Si9LFU3xSxEFLqeieaM4nFA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgiMzUHHyJsVsmJvyzlCYtstdCqKakgLEzhp0CB5fwZLpxXFve
+	KBMdiuqKUPZ+Qod9Zxasx6Crso26kr1PcExEQ9jdejdBJkUo9FbqyJQD
+X-Gm-Gg: Acq92OHKo24m927oCtn37bJ0aSQ/KjV7L6XIjAQjP4/DUQi+VG6hgcDzJzRWpwc/TwC
+	FhDPMl50jAr0aFY2iQH8e7GxSTRAwWbVL0i56jUwCJOOEseDZPtS8xgdAx8R6vtbCaHyUnvOnRa
+	oWTPnCKAKPMPnYUfUHuBQOGb/HJSj0agZ17e72yRsgsTgiUHbqWN7NK4fEb+obqcue85Mt9n+ro
+	s+il1xx207cibxoEPlLUtvLLT0ooSd5SJTHZXkoy733LDgGswu8+/kfkrnD0BLTaP8J80QZOq9G
+	mGLE2CAKFpD/yzIHvo484vchctHF3omBum9e4umsy8asjy+dF3EOrrDBhgbyYQNsMwAjDx8UkxP
+	VXEQFKk8NB044c55gOeWB8ZS+OF9vh7TNltJCw3GtYRcvaI3yvUJQIYvuRNWJCjbEl+pw4khjLr
+	504gbk/sY=
+X-Received: by 2002:a05:600c:6994:b0:490:b724:5085 with SMTP id 5b1f17b1804b1-490e5619ae2mr49924405e9.33.1781195997918;
+        Thu, 11 Jun 2026 09:39:57 -0700 (PDT)
+Received: from localhost ([2603:c027:c000:3cde::f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490e2c907ddsm76572415e9.6.2026.06.11.09.39.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jun 2026 09:39:57 -0700 (PDT)
+Date: Thu, 11 Jun 2026 18:39:56 +0200
+From: Louis Sautier <sautier.louis@gmail.com>
+To: Damien Le Moal <dlemoal@kernel.org>
+Cc: Sathya Prakash <sathya.prakash@broadcom.com>,
+	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+	Ranjan Kumar <ranjan.kumar@broadcom.com>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 RESEND 2/2] scsi: mpt3sas: add hwmon support
+Message-ID: <airk3Os03wPV0rvW@localhost>
+References: <20260609164423.2829699-1-sautier.louis@gmail.com>
+ <20260609164423.2829699-3-sautier.louis@gmail.com>
+ <93542109-2101-4d62-aae4-bbf058029663@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -49,22 +82,35 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260611074335.4415-2-zmzhu0630@163.com>
+In-Reply-To: <93542109-2101-4d62-aae4-bbf058029663@kernel.org>
 
-On Thu, Jun 11, 2026 at 03:43:33PM +0800, Ziming Zhu wrote:
-> From: Ziming Zhu <ziming.zhu@silergycorp.com>
+On Wed, 10 Jun 2026 08:22:22 +0800, Damien Le Moal wrote:
+> > +config SCSI_MPT3SAS_HWMON
+> > +	bool "LSI MPT Fusion SAS hwmon support"
+> > +	depends on SCSI_MPT3SAS && HWMON
+> > +	depends on !(SCSI_MPT3SAS=y && HWMON=m)
+> > +	help
+> > +	Say Y here to expose the IOC and board temperature sensors of
+> > +	LSI / Broadcom SAS HBAs (such as the 9300, 9400, and 9500 series)
+> > +	through hwmon.
 > 
-> Add devicetree binding documentation for the Silergy SQ24860 eFuse.
-> 
-> The device is a PMBus hardware monitoring device which reports voltage,
-> current, power, and temperature telemetry. The board-specific IMON
-> resistor value is described with silergy,rimon-micro-ohms.
-> 
-> Signed-off-by: Ziming Zhu <ziming.zhu@silergycorp.com>
+> Why do you need this ?
 
-Missing Conor's reviewed-by.
+I was following the logic used by NVME_HWMON to prevent issues with
+SCSI_MPT3SAS=y and HWMON=m.
 
-> ---
->  .../bindings/hwmon/pmbus/silergy,sq24860.yaml | 74 +++++++++++++++++++
->  1 file changed, 74 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/silergy,sq24860.yaml
+> > +	struct mpt3sas_hwmon *hwmon;
+> 
+> This should be conditionally defined with "#ifdef CONFIG_HWMON". Then you can
+> simply drop the config entry you added.
+
+If I dropped SCSI_MPT3SAS_HWMON, I would use
+"#if IS_REACHABLE(CONFIG_HWMON)" to match what i915_hwmon.h and
+xe_hwmon.h do and properly handle the SCSI_MPT3SAS=y and HWMON=m case.
+What do you think?
+
+> > +static int
+> 
+> Again... Not going to comment on the others.
+
+Noted, I will fix all of them in v4.
