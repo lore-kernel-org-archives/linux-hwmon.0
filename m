@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CE0032938D;
-	Thu, 11 Jun 2026 23:32:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2609B3537CD;
+	Thu, 11 Jun 2026 23:34:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781220743; cv=none; b=SSRZUBhe30CfVnxo8YYCMsk8LqFSBdF48xzR6sSX774cFSx0saZ73ckl1AvlmddgfQI23U8FNyu/YeaS0O+BJK4wBD0V9ACruyR3Fvjf+WpL3yES9yMhVwIHOLqac38L9X7LfDkS+k/7srwvrSnK5ESWnXy+UuVE9f7+yGdDFOI=
+	t=1781220858; cv=none; b=A5d6N+LfhhLFfNxrCgiG3l8zJ1SLXTpwVNlKisQ4HkTc8y1pMk3W6mhcwfGr20MQawsi7cw1WwHvoLnVd41mQYAJTZ2ONLFrqfwGzDQsak7JzsLDaq2y2+MJSTCR12hhc7bnWWuVX36Q0udQgGqzfT7fHQ9au3/EqaioF4rso6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781220743; c=relaxed/simple;
-	bh=h+KBinhNiXy2ebHi7hoVnnRYtG1vDCeiSp9x7aGY+as=;
+	s=arc-20240116; t=1781220858; c=relaxed/simple;
+	bh=K9EjqlJm5wZmDxJ9dqndu5PvBOsEi4TUXqgUnMU00oo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i6mzOB4sgKvTyQbk2yA1sfx3nKodFXNCb4D0SE2Tb+C5yTjtV9qSUm7cMN567UvDI+37aVVerT24Ghi3wtljZXhL7M0bc9800zzmX850XoLRRTyP/ntGTUIelpkiMIrJr32JKLtwIAKjb3JroQliSD2fFzuNIDg+purArjwTJIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hk9q+YiF; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=AynOgOVnY9xHx3yB+SJHJXZQrT66GPsuE4EnYQ4ja+urNzy18JQKG6LDSQeXUh1hC3CL1n1vObO/42EMxVD+ncDiG/D9WW7+v2JtPJY/Oz0XR6yX55uFqnk+QvqKXiEi3Relgf6QyO9BWQS/sqyZ0MsPklRH3BrUVMAcuE2jJeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jE7VweGc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hk9q+YiF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A7D71F000E9;
-	Thu, 11 Jun 2026 23:32:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jE7VweGc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BCBD1F000E9;
+	Thu, 11 Jun 2026 23:34:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781220741;
-	bh=Cwe5AFKFgyX3A2tnZLz300MxtXADjcDySyH4Nf0UHNA=;
+	s=k20260515; t=1781220857;
+	bh=9Bap6l9i4ZQz5pn/Hk42rWgxj93JiOlztKrjDzdgYHo=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=hk9q+YiFl9Mj5Si0qJD9jsIV+7j5D16drEP6Oba4uNQxjUj+JALutYf3E5ITKDn8c
-	 5zrww6ciifnFBq8jh8P+lzWpgbmNVWpM4DnGTIxzlo4yHGuV8qCjJzTs98tWERlpWn
-	 F03wCsd6E8D+xkFmHewbWwcpwwn51jRfgjeQoNBAd2Ra0oLBDuTIwGHi/02qk7mSj3
-	 wafQy6Ts6LEdVKuCz52FPNiHHO6ZIU7CXfhQhHnoXyWuMnqtIJiXqmxmnMQXu3TBJi
-	 00CZXFfTxmF3fdMgDzhBt4AEMFEl+CCXZ+MCmJMlsQ5u1TnZjkMk7t5RFFXpzooeCA
-	 24at1Ijyo4QVQ==
-Message-ID: <8171d9e5-e347-403a-bc3c-79a89a8e45d3@kernel.org>
-Date: Fri, 12 Jun 2026 08:32:17 +0900
+	b=jE7VweGcc2A1ga6JUZEIkSRB9X6pyTI0EcO6Y0xVl01ZwP6Fk7aBHatOQO5Wa4vmn
+	 hP1DaUNvo/RzTTJZHsBbNcO+/60Gr4JbJSF634L1sOaJP5wioZ7ewXUCbOPO9rtorc
+	 td5I4ZGgvyOoHbQ7rxory7liLgDYGHYGOV4iW0DCeLJc+tAUOog+OQaxIUDkt4sCnC
+	 K2RLqlTvdXVFYFTp+O8zLh3WtitNwdpCvOGOrHE1cw8WeMEGG/OlMvKHelical6fSW
+	 vSWnmwozfbYViUG+8vZzA3oTG62ZanVdx4SoH+A9s/mdlg7XQGD8ApP2sUfx0gzEc5
+	 mWxatn4h34KEg==
+Message-ID: <fdea1a8b-d631-43d8-bcf0-1c79e635782c@kernel.org>
+Date: Fri, 12 Jun 2026 08:34:13 +0900
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,8 +35,7 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 RESEND 1/2] scsi: mpt3sas: add IO Unit Page 7 config
- accessor
+Subject: Re: [PATCH v3 RESEND 2/2] scsi: mpt3sas: add hwmon support
 To: Louis Sautier <sautier.louis@gmail.com>
 Cc: Sathya Prakash <sathya.prakash@broadcom.com>,
  Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
@@ -48,61 +47,47 @@ Cc: Sathya Prakash <sathya.prakash@broadcom.com>,
  linux-scsi@vger.kernel.org, linux-hwmon@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20260609164423.2829699-1-sautier.louis@gmail.com>
- <20260609164423.2829699-2-sautier.louis@gmail.com>
- <5effba66-0d42-4d42-9833-f2c0be6874ad@kernel.org>
- <airkbg8-kDC0Gyv9@localhost>
+ <20260609164423.2829699-3-sautier.louis@gmail.com>
+ <93542109-2101-4d62-aae4-bbf058029663@kernel.org>
+ <airk3Os03wPV0rvW@localhost>
 Content-Language: en-US
 From: Damien Le Moal <dlemoal@kernel.org>
 Organization: Western Digital Research
-In-Reply-To: <airkbg8-kDC0Gyv9@localhost>
+In-Reply-To: <airk3Os03wPV0rvW@localhost>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 6/12/26 01:38, Louis Sautier wrote:
-> On Wed, 10 Jun 2026 08:12:05 +0800, Damien Le Moal wrote:
->>> +int
->>> +mpt3sas_config_get_iounit_pg7(struct MPT3SAS_ADAPTER *ioc,
+On 6/12/26 01:39, Louis Sautier wrote:
+> On Wed, 10 Jun 2026 08:22:22 +0800, Damien Le Moal wrote:
+>>> +config SCSI_MPT3SAS_HWMON
+>>> +	bool "LSI MPT Fusion SAS hwmon support"
+>>> +	depends on SCSI_MPT3SAS && HWMON
+>>> +	depends on !(SCSI_MPT3SAS=y && HWMON=m)
+>>> +	help
+>>> +	Say Y here to expose the IOC and board temperature sensors of
+>>> +	LSI / Broadcom SAS HBAs (such as the 9300, 9400, and 9500 series)
+>>> +	through hwmon.
 >>
->> Please do not break the line after "int"
+>> Why do you need this ?
 > 
-> Hi and thanks for the review.
-> 
-> Sure, I can change this. Can you confirm we want to diverge from the
-> convention used by neighbouring functions such as
-> mpt3sas_config_get_iounit_pg8?
+> I was following the logic used by NVME_HWMON to prevent issues with
+> SCSI_MPT3SAS=y and HWMON=m.
 
-My comment is based on the standard kernel coding style, which we should follow.
+Ah, yes, indeed. I did not thought of this case.
 
 > 
->>> +	Mpi2ConfigReply_t *mpi_reply, Mpi2IOUnitPage7_t *config_page)
->>> +{
->>> +	Mpi2ConfigRequest_t mpi_request;
->>> +	int r;
->>> +
->>> +	memset(&mpi_request, 0, sizeof(Mpi2ConfigRequest_t));
->>> +	mpi_request.Function = MPI2_FUNCTION_CONFIG;
->>> +	mpi_request.Action = MPI2_CONFIG_ACTION_PAGE_HEADER;
->>> +	mpi_request.Header.PageType = MPI2_CONFIG_PAGETYPE_IO_UNIT;
->>> +	mpi_request.Header.PageNumber = 7;
->>> +	mpi_request.Header.PageVersion = MPI2_IOUNITPAGE7_PAGEVERSION;
->>> +	ioc->build_zero_len_sge_mpi(ioc, &mpi_request.PageBufferSGE);
->>> +	r = _config_request(ioc, &mpi_request, mpi_reply,
->>> +	    MPT3_CONFIG_PAGE_DEFAULT_TIMEOUT, NULL, 0);
+>>> +	struct mpt3sas_hwmon *hwmon;
 >>
->> 	r = _config_request(ioc, &mpi_request, mpi_reply,
->> 			    MPT3_CONFIG_PAGE_DEFAULT_TIMEOUT, NULL, 0);
->>
->> is a lot nicer to read.
+>> This should be conditionally defined with "#ifdef CONFIG_HWMON". Then you can
+>> simply drop the config entry you added.
 > 
-> Do I also align the signature like so in both the source file and the
-> header?
+> If I dropped SCSI_MPT3SAS_HWMON, I would use
+> "#if IS_REACHABLE(CONFIG_HWMON)" to match what i915_hwmon.h and
+> xe_hwmon.h do and properly handle the SCSI_MPT3SAS=y and HWMON=m case.
+> What do you think?
 
-I think so, as in my opinion, that makes for a nicer reading.
-
-> 
-> int mpt3sas_config_get_iounit_pg7(struct MPT3SAS_ADAPTER *ioc,
-> 				  Mpi2ConfigReply_t *mpi_reply,
-> 				  Mpi2IOUnitPage7_t *config_page)
+That seems appropriate. If there is a clean way to avoid adding the new config
+option, we should use that method.
 
 
 -- 
