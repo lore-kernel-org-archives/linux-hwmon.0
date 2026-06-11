@@ -1,167 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15502346FA0;
-	Thu, 11 Jun 2026 09:17:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 055A13C9EEF
+	for <linux-hwmon@vger.kernel.org>; Thu, 11 Jun 2026 10:01:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781169470; cv=none; b=HWqPXVfPklzNtTKRKhD0gtS+6U9Ljhad6xfNX/NUsbpBPpC3rosUFPtYiO8IXM8wnvHbB8FPEK84xNORS7osH8wE2Eyk0GERBeOG7Gbt6oADN+RAeKJdQT2ffnfXY5QmWW/GY4S0V1hYA+s37LMo0gauqfmStgx+v0BZnEO9EvQ=
+	t=1781172070; cv=none; b=Z2nj7n3Uta+eM/tNQtNp3jGvxGYNiNXjf/fTAuZSjl15MiILR/YZoZTKWAkmznCcalYNOwqYD43umtkRnBSAOn0dyZilLfNXswPLjUwLtQnh0YRVZpLbBxZq1asNj7/6vEbf3OiR3qZuDETjnZbmOP0jchipD4x5hIl+MxiNPEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781169470; c=relaxed/simple;
-	bh=8+py1khzw68T54j2tBlj+Cr/UoMeaavBHaXTmQilBVU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ucaCV5ZHpVpDn44sws/A2p2yD1Y3N7MEGoj1dsBcJm679Zwy7Iyn3t0p0+baa3+m47P6iQe8QgMV0pqXoNYsKwn/AFJQBhKD0VHwy0gFDTxy57ZHLMB8drpo1rz/hyhkIAawWoT0XOBrfMwh66EWUzSM2VPQzAAspEerY0JecAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rzw7nWe9; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781172070; c=relaxed/simple;
+	bh=QyXGOSCMhNFMYsXpPKcOvXoQAJoVbNEMyk1T1kn3M2g=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=jFL1nGTU5f77PzoGyMNZfSIEY6L/sPfb1R/SxiiRsLoEO7nupME/PZA5iI+ouU7nutSRY5iC3cCbL/s6VXxoScQCRjAL4D8SdRFPC5jkz39+ld5yviEODLQkPIG+s3/1w1y6iAszwdSbZe/uefCjl2P9FcnaysZNNbmngmxkMeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M+vw0V7A; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rzw7nWe9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6EAC1F00898;
-	Thu, 11 Jun 2026 09:17:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781169468;
-	bh=PRnK6ge20270ePEYW6Cg3LQgqEfp82CmA+Pdgj+oKhE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Rzw7nWe9mlmcEWibexYmkA3O3O75E61OzLcO+PW4cH78odY7LX0d0sy1rA+vHOgwY
-	 smZV+W1Qg3isLTXy6lk1/4vJLVoPuhwDDtBUuaIlCH0K+qy1ec+GDtpP4sYRf1+yDW
-	 vyuRB0VptjuYl0ncrd1xt9w0INEnom/ccQFOi1fSRT7awZ+mDtpIC94UyqVF/a6+mg
-	 /nfobPsuNXvnWvqZY4MHFBQ8cMdG4nbazd0aM2qF+VvInOlUl0M/DxTp2wKydiciIv
-	 4jN5touNKnXlbFGguVZB1kj+14RIwgUeg2gzf1Atuo2VXuUssnvDwQW4IFmFEj7bT3
-	 HZ/+gsds7ENdA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v7 2/2] hwmon: Add Eswin EIC7700 PVT sensor driver
-Reply-To: sashiko-reviews@lists.linux.dev
-To: hehuan1@eswincomputing.com
-Cc: robh@kernel.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, conor+dt@kernel.org
-In-Reply-To: <20260611090639.777-1-hehuan1@eswincomputing.com>
-References: <20260611090639.777-1-hehuan1@eswincomputing.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 11 Jun 2026 09:17:48 +0000
-Message-Id: <20260611091748.A6EAC1F00898@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M+vw0V7A"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-84234c83142so3277824b3a.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 11 Jun 2026 03:01:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781172067; x=1781776867; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9BCmmGp98tP7vpTLYAGl0cPpmP2dXSe3pZaGWlv+WcE=;
+        b=M+vw0V7Arx980+SHOfNCDSyqUDQGKKH5ZyYMPwDXi+Av/pP29TOjOe345/oYvKhuNe
+         qq3vrN/6m4bUo8SyLVasCFFwBvbYnqXjJe3K0VqgF/GL8logty/gXdMybfRGHFFEtEWM
+         r4l1C0CbuRTPzDGDieiemeU+60uOPlKmE34j7dkxJvJLHJ3UE+N6g+UvEFZAv+gkxV9/
+         UGJLKqUT/YExjCTuA3X2XYdnNGMD9lHDw5au1a17bRJYBjG+7KsBfs9btKpGbALzmhzL
+         aYmNdUDD0T7a/NntfWdGh0FeqCokacocBTNhZdl6G2E5GzMiW+ySsc/KA6+3BSHNQLkk
+         EHeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781172067; x=1781776867;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9BCmmGp98tP7vpTLYAGl0cPpmP2dXSe3pZaGWlv+WcE=;
+        b=mIYlbB8xa62cia+2K4LTpiRLDHQUbhjdUS9do+UeY2b6nYLmv0pZPI2nLRjpMEXinJ
+         FnL20T8WuLn8wwkTH6eUYAlRf90wn2hheertktBLdpR2P54FExCnrFKHBlLU3A//jiet
+         wbZt6F1xfKTTVEpHIQLO/a9Ke5mIJVP6Ix6jbkvdZiUYGdKzjk0/c00MoBzPfUCpZPA8
+         uRuLMzqrIeKHUfLYT23aDPAGrj07Ed8AogjhFAda2yVjHYTWFhOe5vaf6IgaQH4izklJ
+         ApHgCxh/kwoiPTOJYGB+1nzb+eJs2p9g2CsACHuzAC9+IFb+9QeqYLdIl2nHNkA6XIO8
+         oBqQ==
+X-Gm-Message-State: AOJu0YzQCyV8OZEj6sldWnlnZVTqqbEX8If2AVNpDdoN0N5sxreBct+f
+	NGjVs0W6TPnD6oJUGf+AWYk6iphelPjcW2XU45TnKffm3OiZe1eRROQ3
+X-Gm-Gg: Acq92OFWxT5Zoqg0xt9gaXgaNf2y5ENbgdpPiCh59WjjCO40oSq5ZlwzA4BodbVR2h5
+	rxkz0WrxSSupRuBrTWun4btACXIKbGNa6lOl/IZqm7F/lPW+88CIeDm0S8iBM+ZcKSVX+uKZMEq
+	wK7qcvLNC6gB4nR06sKf7oMWAAhHJtjGtHleSQ3gV7tkVtohncR4eE9B0VQHduMnZxoZsPN64+R
+	dZnN9PO3KQZXCdzP9+2LHNveRzCf1hLXXPxUv7/RQ6nnGjuJO9ej1bZYqESE/ek740MXLmhDKwH
+	sLYrtImykWH8Gxhrutb0LTaXnNES0aFSv5Cx7JisFCG3XTb7nLQio0HarqAedpBzQh5CnzP2/Xe
+	WmFNSRwvbv7DCT3wdkrk3f9OwAz9bePjpnMVGaVeHJoDg+Jl9X21Lk4mHe5tbSSbVnB4md6dO8c
+	4miG1P3A8rWPZnhKIsvOJfBG1VPLJw2Ir4KmpefNExLnc3fhGe92xL8bIWdivYxiOnBCltIAUdO
+	hR5Sdc3ksOKtZA=
+X-Received: by 2002:a05:6a00:390b:b0:837:a211:4ee2 with SMTP id d2e1a72fcca58-84336df7ea7mr2358672b3a.38.1781172067225;
+        Thu, 11 Jun 2026 03:01:07 -0700 (PDT)
+Received: from [10.10.15.228] (61-220-246-151.hinet-ip.hinet.net. [61.220.246.151])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-843380c92edsm1458228b3a.32.2026.06.11.03.01.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jun 2026 03:01:06 -0700 (PDT)
+From: Potin Lai <potin.lai.pt@gmail.com>
+Subject: [PATCH 0/2] hwmon: (pmbus/lm25066) Support SMBus Current Limit
+ configuration
+Date: Thu, 11 Jun 2026 17:58:43 +0800
+Message-Id: <20260611-lm25066-cl-config-v1-0-02e567bf3d91@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANOGKmoC/yXMTQ7CIBBA4as0s3YSfgJYr2K6UBxwTEsNtMaEc
+ HdRl9/ivQqFMlOB01Ah04sLr6lDHgbw90uKhHzrBiWUFVZKnBdlhLXoZ/RrChwxHOWoTHBaO4L
+ ePTMFfv+e5+nvsl8f5LfvCFr7ABw/BZZ1AAAA
+X-Change-ID: 20260611-lm25066-cl-config-f81925f7337e
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Zev Weiss <zev@bewilderbeest.net>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Cosmo Chou <cosmo.chou@quantatw.com>, 
+ Mike Hsieh <Mike_Hsieh@quantatw.com>, Potin Lai <potin.lai@qunatatw.com>, 
+ Potin Lai <potin.lai.pt@gmail.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781172064; l=1224;
+ i=potin.lai.pt@gmail.com; s=20260522; h=from:subject:message-id;
+ bh=QyXGOSCMhNFMYsXpPKcOvXoQAJoVbNEMyk1T1kn3M2g=;
+ b=Jm65z9PjYXe3Kw48Woq8SPQDkDDjqvOdDF9/YhrKoC7y4aPXtJmIBWK8ovy39qCX2XfhAqhfi
+ aKEUvgX6l4wAI+m0Rh/S1aSRTirdGLidQT/Envcn3fU8BIabB15F5vs
+X-Developer-Key: i=potin.lai.pt@gmail.com; a=ed25519;
+ pk=j3/nMxzz1ZPpp1revghyZ8IqOnwi6RWfuxXN2XrNMRE=
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] The IRQ is requested before the PM runtime cleanup action is regis=
-tered, leading to a possible use-after-disable of the hardware clock in the=
- ISR on driver removal.
-- [Medium] The interrupt handler `eic7700_pvt_hard_isr` does not check the =
-hardware interrupt status bit to verify if the device actually generated th=
-e interrupt.
---
+This patch series adds support for configuring the Current Limit (CL)
+behavior of the TI LM25066 and compatible devices (LM25056, LM5064,
+LM5066, LM5066I) using SMBus settings instead of physical hardware pins.
 
-commit 0f4c8aefb83780ee09652639eb2843f01c2baf38
-Author: Huan He <hehuan1@eswincomputing.com>
+The first patch documents the mutually exclusive Devicetree properties
+'ti,cl-smbus-high' and 'ti,cl-smbus-low'.
 
-hwmon: Add Eswin EIC7700 PVT sensor driver
+The second patch implements the driver changes to configure the DEVICE_SETUP
+(0xD9) register based on these DT properties. It handles the dynamic differences
+in the CL bit (bit 4) mapping where LM25056 and LM25066 have swapped logic for
+High/Low settings compared to LM5064, LM5066, and LM5066i.
 
-Add support for ESWIN EIC7700 Voltage and Temperature sensor. The driver
-supports temperature and voltage monitoring with polynomial conversion,
-and provides sysfs interface for sensor data access.
+Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
+---
+Potin Lai (2):
+      dt-bindings: hwmon: pmbus: ti,lm25066: add current limit properties
+      hwmon: (pmbus/lm25066) add SMBus current limit configuration support
 
-> diff --git a/drivers/hwmon/eic7700-pvt.c b/drivers/hwmon/eic7700-pvt.c
-> new file mode 100644
-> index 0000000000000..3b3aed74c3941
-> --- /dev/null
-> +++ b/drivers/hwmon/eic7700-pvt.c
+ .../bindings/hwmon/pmbus/ti,lm25066.yaml           | 20 +++++++++++++++++
+ drivers/hwmon/pmbus/lm25066.c                      | 25 ++++++++++++++++++++++
+ 2 files changed, 45 insertions(+)
+---
+base-commit: 05f7e89ab9731565d8a62e3b5d1ec206485eeb0b
+change-id: 20260611-lm25066-cl-config-f81925f7337e
 
-[ ... ]
+Best regards,
+--  
+Potin Lai <potin.lai.pt@gmail.com>
 
-> +static irqreturn_t eic7700_pvt_hard_isr(int irq, void *data)
-> +{
-> +	struct pvt_hwmon *pvt =3D data;
-> +	int active;
-> +	u32 val;
-> +
-> +	if (IS_ENABLED(CONFIG_PM)) {
-> +		active =3D pm_runtime_get_if_active(pvt->dev);
-> +		if (active <=3D 0)
-> +			return IRQ_NONE;
-> +	}
-> +
-> +	eic7700_pvt_update(pvt->regs + PVT_INT, PVT_INT_CLR, PVT_INT_CLR);
-> +	/*
-> +	 * Read the data, update the cache and notify a waiter of this event.
-> +	 */
-> +	val =3D readl(pvt->regs + PVT_DATA);
-> +	WRITE_ONCE(pvt->data_cache, FIELD_GET(PVT_DATA_OUT, val));
-> +	complete(&pvt->conversion);
-
-[Severity: Medium]
-Does this unconditionally process the interrupt without checking if the dev=
-ice
-actually generated it?
-
-If a spurious interrupt occurs, the ISR will prematurely clear the interrup=
-t,
-read whatever stale value is in PVT_DATA, and call complete(&pvt->conversio=
-n).
-This will cause the waiting thread in eic7700_pvt_read_data() to wake up ea=
-rly
-and return stale or garbage data to userspace.
-
-Should the ISR read the status register and return IRQ_NONE if its device d=
-id
-not assert the interrupt?
-
-[ ... ]
-
-> +	ret =3D eic7700_pvt_request_irq(pvt);
-> +	if (ret) {
-> +		if (!IS_ENABLED(CONFIG_PM))
-> +			clk_disable_unprepare(pvt->clk);
-> +		return ret;
-> +	}
-> +
-> +	pm_runtime_enable(&pdev->dev);
-> +	pm_runtime_set_autosuspend_delay(&pdev->dev, 3000);
-> +	pm_runtime_use_autosuspend(&pdev->dev);
-> +	pm_runtime_get_noresume(&pdev->dev);
-> +
-> +	ret =3D devm_add_action_or_reset(pvt->dev, eic7700_pvt_disable_pm_runti=
-me,
-> +				       pvt);
-
-[Severity: High]
-Can this devres setup lead to accessing unclocked registers during device
-removal?
-
-Because devres executes teardown callbacks in reverse order of their
-registration, eic7700_pvt_disable_pm_runtime() will run before the IRQ
-is freed by devm_request_threaded_irq()'s teardown.
-
-During removal, eic7700_pvt_disable_pm_runtime() disables the clock:
-
-eic7700_pvt_disable_pm_runtime() {
-    ...
-    if (!pm_runtime_status_suspended(pvt->dev)) {
-        clk_disable_unprepare(pvt->clk);
-        pm_runtime_set_suspended(pvt->dev);
-    }
-}
-
-If an interrupt fires concurrently and the ISR executes past the
-pm_runtime_get_if_active() check before the clock is disabled, the ISR
-will attempt to access hardware registers while unclocked, which can lead
-to an external abort or kernel panic:
-
-eic7700_pvt_hard_isr() {
-    ...
-    eic7700_pvt_update(pvt->regs + PVT_INT, ...);
-}
-
-Should the PM runtime cleanup action be registered before the IRQ is reques=
-ted?
-
-> +	if (ret) {
-> +		pm_runtime_put_noidle(&pdev->dev);
-> +		return dev_err_probe(&pdev->dev, ret,
-> +				     "Can't register PM cleanup\n");
-> +	}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260611090505.734-=
-1-hehuan1@eswincomputing.com?part=3D2
