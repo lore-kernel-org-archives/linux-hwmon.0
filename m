@@ -1,82 +1,241 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D9F43597B;
-	Thu, 11 Jun 2026 00:44:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680C11F2380
+	for <linux-hwmon@vger.kernel.org>; Thu, 11 Jun 2026 02:02:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781138670; cv=none; b=Dd2TrxGenGBSWlgIVub/iWaHx8Zawy1cTOz2t9X3OXcYmcUtWXZ6bcT1IMQay66wcbghEXVS0rRV/pZLl9KV2MnbZYLnqGpNnob6c4aqLpLlQeZik6iTTKSZTPRwHKS408h2JBJGLm1Qj9gL1KhUAx5MFOdNJaK4leg/3zNr9LE=
+	t=1781143330; cv=none; b=SRFoaKagx+1T3Em9DPE7GfIbOXocl8DJKFEcQ69JlmWtRzjaG8Go5tOlOzFiLkTNK8aNOMgCa1copShY5n2Bvd/QejfO59iC2ITgRcK6lNS5ymnYwlvL2qqyh7KOVlOkpb8xaIQfncz2L4UJbz20Dz5JWcFn+KqNrO7fwMRXTkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781138670; c=relaxed/simple;
-	bh=C5kjerUoUSMhtL1FY++9cjG9ruASZOP78AInFfdyY5A=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=nOr60Cy0Kpeb8qO/YWx+xoPZCF+hA9XX4iba0Xy35jPCJTroSLhaHBhL8x1yuvuoVfX2WsnoNIeJdsiJsjl/sibx0evMfJ1UHoVd1MpMW0NzweVTITJMlkc0OHxtuyWWrvLXVUyN80Dviyy3YkmumDyecLyXTTWChs6FAu2qlY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: ad8e8b0c652e11f1aa26b74ffac11d73-20260611
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:6bc981bc-56f5-47e6-8dd0-6bd50499f766,IP:0,U
-	RL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:25
-X-CID-META: VersionHash:e7bac3a,CLOUDID:f8b0965145fce219b7961412b396200e,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102|850|865|898,TC:nil,Content:0|15|50,E
-	DM:5,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:
-	0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: ad8e8b0c652e11f1aa26b74ffac11d73-20260611
-X-User: xiaopei01@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <xiaopei01@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 969716503; Thu, 11 Jun 2026 08:44:17 +0800
-From: Pei Xiao <xiaopei01@kylinos.cn>
-To: linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: cryolitia@uniontech.com,
-	Pei Xiao <xiaopei01@kylinos.cn>
-Subject: [PATCH v2] hwmon: (gpd-fan) Reject EC PWM value 0 as invalid
-Date: Thu, 11 Jun 2026 08:44:14 +0800
-Message-Id: <1c2ffa0d832ae3a74f6d4ffa7cc7b7e6cced69e3.1781138459.git.xiaopei01@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1781143330; c=relaxed/simple;
+	bh=N5GrfwoJlJUhgcp/5C8O+PoFHkF4S+0rcw6GH4/Xu2Y=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=X3KGMfmckzgfc1U8fp/47Kefiy4LzVsViKNtTYUTGs1IG0A/bqKPaFntv/JYJ6osMoPkFgxfXjz3sYqY7+lowUqJxBRi119q1NHstwBFoJAl81oLIo0Qp3M/xfA+p8dOxazUaNC0fSZ0JYJrdPL/IUeuHqu0jkQmfiVLO0ZYZMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VweoZVEf; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VweoZVEf"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2bf0ddaf50fso51388035ad.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2026 19:02:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781143329; x=1781748129; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9e+7AoMN65MH5I2imL0Q/phclbM34ML09rP5yMAnKlg=;
+        b=VweoZVEfYQp7YZjPzfDfCTqLnvES5XCVQSeRBsNKG/DSJoTaZ71/CbY1p/lh1rhOo3
+         lbududfqZR7h5dsfbhldXlrNxp5Avklr6wMJsmNg4D1F69x5Ewkz3SAaM5h3FWeGvZbm
+         DmemgK/fjkDo2GyjuSqDjHdq3nIMxkWkgR7EPM53MKi/WjTzO6Msv524GMDWdmP3M7fE
+         b329e+GzUo+Zl4hRbXMgVhSUK7aR8Ibf0d96hNZ819IXN8Iy2OP8ucebYh+z3eoD7ZMe
+         W4SMvcHA1ix8PbG/x/Zdc1rWFgdJuQqj6kev+DJvaEuZ0eZHnbJMYPgte+M7XHoTkKwC
+         1/Zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781143329; x=1781748129;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9e+7AoMN65MH5I2imL0Q/phclbM34ML09rP5yMAnKlg=;
+        b=WFpzxmEMjZYvRXESWX8m+WEJhuLoXlLC1e8b9MUAm8WHRlGXjxaUDlWNMeBM4t/A05
+         04znZ4kUg3RYcaoCLI1IkyjJcvZMPRHMPGtte6exqlxexyQ8LDVRKwDDY5sGJ+W5TPEp
+         QIik9HiWl2rTbUwMhEQMHNDKbzu6/4CKqczP+wal8+tkM70va/l9Jbk92JtH1pldUT2h
+         1LNGm4M9m9fwonda7VdQA4FgYUrXxxR5JvTyGF4epZ1cOzNsHeGVcVUvjcBdKdGkv3Rv
+         mx72faUDA2GdCqgFiwK0q14+Hgar37JyzYGQaiT8VzLQe0zaLfYzz6FXLMsVqi2xxI2S
+         xbRw==
+X-Gm-Message-State: AOJu0YwwiB4n36T3HobQ9DJSzj5I9Gs30QK/30sLT1c9E2hJwyk4SJq3
+	QlH9b5wV/g79paNOQPQxLuksxs+QRymhZJwhjGQnh0AR98jSqH8UuTCg
+X-Gm-Gg: Acq92OFird9o7U53Jg7oM4raDaXXO/JmSqbJv6UXOYf7hT06QRsx2wt8eJzXRgGGRuu
+	gD+EfqCLeCiVgSzMKtgLA+VS5DIp56d5+Ku05m2jF1wx8Q4WnzBBUnYTEDR9rhEioTJHiTD1FTd
+	6zX7A+UECdAG0Ih/+Q3gQ8HG69gwRA94y5SYhpFAD610yUzFWkkmvSpMXEymyZvCtJJdbSPqdyq
+	LwQ8+NkP5mYYanwmq30mll1zU/3IO4wEIESF5HMttpC8mLDxi13hC9XJZLIHJ1BC0JvuojWEyJN
+	GnfS8jfpYgNqpW/FapkGc0+NakEeZgfVEdfiYruAX5J5ozDJbvbjqR/dYXS5UtXYH3k1PWCjzKk
+	Y9de3acug+J2grJAyffiOxBqknvfqHkAhtsdJGiJUlEqKXSoWDCEQsRO9p53bhGloHaKIB2ihfW
+	HaknT+807wtBynM+ghO6V5kPjtydUiylTmDEK7MZlZ3DcK7npnZuy9pEK12gc1WQinbZQXEr0gQ
+	pQw0YJWEngcGw8=
+X-Received: by 2002:a17:903:fa5:b0:2b2:5503:1b8c with SMTP id d9443c01a7336-2c2f1dc1e4amr7388505ad.11.1781143328590;
+        Wed, 10 Jun 2026 19:02:08 -0700 (PDT)
+Received: from [10.10.15.228] (61-220-246-151.hinet-ip.hinet.net. [61.220.246.151])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c16609e0bbsm262044005ad.50.2026.06.10.19.02.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2026 19:02:08 -0700 (PDT)
+From: Potin Lai <potin.lai.pt@gmail.com>
+X-Google-Original-From: Potin Lai <potin.lai@quantatw.com>
+Date: Thu, 11 Jun 2026 09:59:48 +0800
+Subject: [PATCH v2] hwmon: (pmbus/lm25066) Fix PMBus coefficients for
+ LM5064/5066/5066i
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260611-lm25066-driver-fix-v2-1-5d28861b0d8e@quantatw.com>
+X-B4-Tracking: v=1; b=H4sIAJQWKmoC/32Nyw6CMBREf4V07TVtkRJc+R+GRSm3co08bEvVE
+ P7dgnuXZzIzZ2EeHaFn52xhDiN5GocE8pAx0+nhhkBtYia5VFwJDo9eFlwpaB1FdGDpDRpPeVG
+ UpTUoWBpODlO8n17rH/u5uaMJ29PW6MiH0X12axRb768gChBgbdXkVaWElvrynPUQdHgdzdize
+ l3XL8hbb7nJAAAA
+X-Change-ID: 20260610-lm25066-driver-fix-ae435577fce1
+To: Guenter Roeck <linux@roeck-us.net>, 
+ Patrick Williams <patrick@stwcx.xyz>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Cosmo Chou <cosmo.chou@quantatw.com>, Mike Hsieh <Mike_Hsieh@quantatw.com>, 
+ Potin Lai <potin.lai.pt@gmail.com>, Potin Lai <potin.lai@quantatw.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781143326; l=3980;
+ i=potin.lai@quantatw.com; s=20260522; h=from:subject:message-id;
+ bh=N5GrfwoJlJUhgcp/5C8O+PoFHkF4S+0rcw6GH4/Xu2Y=;
+ b=SfQmihP66IDC+AeldnS3TVHvn4DkuN2Kse5D7VxCl8xqKIQPIZbyFNG4wxi8NiMATjbs3i67D
+ 0Rkj1lbDKY5ACqGxu9G3QftvZQHweXOBgJDCjgSZuoGfQdjPmtiWUnA
+X-Developer-Key: i=potin.lai@quantatw.com; a=ed25519;
+ pk=j3/nMxzz1ZPpp1revghyZ8IqOnwi6RWfuxXN2XrNMRE=
 
-The EC firmware is expected to return values in [1, pwm_max]. A read of 0
-is illegal and would cause underflow in the conversion formula. Explicitly
-check for 0 and return -EIO.
+Swap the high setting and low setting coefficients in the lm25066_coeff
+table for LM5064, LM5066, and LM5066i. The coefficients were previously
+mapped incorrectly, resulting in inverted current and power scaling.
 
-Signed-off-by: Pei Xiao <xiaopei01@kylinos.cn>
+Additionally, dynamically assign the exponent (R) registers inside the
+probe's LM25066_DEV_SETUP_CL check. This ensures that the proper
+exponent is applied (e.g., for LM25056, high setting power exponent
+is -4, but low setting power exponent is -3).
+
+Signed-off-by: Potin Lai <potin.lai@quantatw.com>
 ---
-changlogs in v2
-1.Use the same comment format as the original driver.
+Changes in v2:
+- based on comment in v1, only swap the coefficients setting for LM5064/5066/5066i
+- Link to v1: https://patch.msgid.link/20260610-lm25066-driver-fix-v1-1-ff9b39961a2a@quantatw.com
 ---
- drivers/hwmon/gpd-fan.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/hwmon/pmbus/lm25066.c | 54 ++++++++++++++++++++++---------------------
+ 1 file changed, 28 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/hwmon/gpd-fan.c b/drivers/hwmon/gpd-fan.c
-index d1993cd645cb..ed212615b2fe 100644
---- a/drivers/hwmon/gpd-fan.c
-+++ b/drivers/hwmon/gpd-fan.c
-@@ -341,6 +341,10 @@ static int gpd_wm2_read_pwm(struct gpd_fan_data *data)
+diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
+index dd7275a67a0a..6e23ada64e2f 100644
+--- a/drivers/hwmon/pmbus/lm25066.c
++++ b/drivers/hwmon/pmbus/lm25066.c
+@@ -132,23 +132,23 @@ static const struct __coeff lm25066_coeff[][PSC_NUM_CLASSES + 2] = {
+ 			.R = -2,
+ 		},
+ 		[PSC_CURRENT_IN] = {
+-			.m = 10742,
+-			.b = 1552,
++			.m = 5456,
++			.b = 2118,
+ 			.R = -2,
+ 		},
+ 		[PSC_CURRENT_IN_L] = {
+-			.m = 5456,
+-			.b = 2118,
++			.m = 10742,
++			.b = 1552,
+ 			.R = -2,
+ 		},
+ 		[PSC_POWER] = {
+-			.m = 1204,
+-			.b = 8524,
++			.m = 612,
++			.b = 11202,
+ 			.R = -3,
+ 		},
+ 		[PSC_POWER_L] = {
+-			.m = 612,
+-			.b = 11202,
++			.m = 1204,
++			.b = 8524,
+ 			.R = -3,
+ 		},
+ 		[PSC_TEMPERATURE] = {
+@@ -167,23 +167,23 @@ static const struct __coeff lm25066_coeff[][PSC_NUM_CLASSES + 2] = {
+ 			.R = -2,
+ 		},
+ 		[PSC_CURRENT_IN] = {
+-			.m = 10753,
+-			.b = -1200,
++			.m = 5405,
++			.b = -600,
+ 			.R = -2,
+ 		},
+ 		[PSC_CURRENT_IN_L] = {
+-			.m = 5405,
+-			.b = -600,
++			.m = 10753,
++			.b = -1200,
+ 			.R = -2,
+ 		},
+ 		[PSC_POWER] = {
+-			.m = 1204,
+-			.b = -6000,
++			.m = 605,
++			.b = -8000,
+ 			.R = -3,
+ 		},
+ 		[PSC_POWER_L] = {
+-			.m = 605,
+-			.b = -8000,
++			.m = 1204,
++			.b = -6000,
+ 			.R = -3,
+ 		},
+ 		[PSC_TEMPERATURE] = {
+@@ -202,23 +202,23 @@ static const struct __coeff lm25066_coeff[][PSC_NUM_CLASSES + 2] = {
+ 			.R = -2,
+ 		},
+ 		[PSC_CURRENT_IN] = {
+-			.m = 15076,
+-			.b = -504,
++			.m = 7645,
++			.b = 100,
+ 			.R = -2,
+ 		},
+ 		[PSC_CURRENT_IN_L] = {
+-			.m = 7645,
+-			.b = 100,
++			.m = 15076,
++			.b = -504,
+ 			.R = -2,
+ 		},
+ 		[PSC_POWER] = {
+-			.m = 1701,
+-			.b = -4000,
++			.m = 861,
++			.b = -965,
+ 			.R = -3,
+ 		},
+ 		[PSC_POWER_L] = {
+-			.m = 861,
+-			.b = -965,
++			.m = 1701,
++			.b = -4000,
+ 			.R = -3,
+ 		},
+ 		[PSC_TEMPERATURE] = {
+@@ -519,18 +519,20 @@ static int lm25066_probe(struct i2c_client *client)
+ 	info->m[PSC_VOLTAGE_OUT] = coeff[PSC_VOLTAGE_OUT].m;
+ 	info->b[PSC_VOLTAGE_OUT] = coeff[PSC_VOLTAGE_OUT].b;
+ 	info->R[PSC_VOLTAGE_OUT] = coeff[PSC_VOLTAGE_OUT].R;
+-	info->R[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN].R;
+-	info->R[PSC_POWER] = coeff[PSC_POWER].R;
+ 	if (config & LM25066_DEV_SETUP_CL) {
+ 		info->m[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN_L].m;
+ 		info->b[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN_L].b;
++		info->R[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN_L].R;
+ 		info->m[PSC_POWER] = coeff[PSC_POWER_L].m;
+ 		info->b[PSC_POWER] = coeff[PSC_POWER_L].b;
++		info->R[PSC_POWER] = coeff[PSC_POWER_L].R;
+ 	} else {
+ 		info->m[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN].m;
+ 		info->b[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN].b;
++		info->R[PSC_CURRENT_IN] = coeff[PSC_CURRENT_IN].R;
+ 		info->m[PSC_POWER] = coeff[PSC_POWER].m;
+ 		info->b[PSC_POWER] = coeff[PSC_POWER].b;
++		info->R[PSC_POWER] = coeff[PSC_POWER].R;
+ 	}
  
- 	gpd_ecram_read(drvdata, drvdata->pwm_write, &var);
- 
-+	// EC PWM register valid range is 1 ~ pwm_max; 0 is an invalid state
-+	if (unlikely(!var))
-+		return -EIO;
-+
- 	// Match gpd_generic_write_pwm(u8) below
- 	return DIV_ROUND_CLOSEST((var - 1) * 255, (drvdata->pwm_max - 1));
- }
--- 
-2.25.1
+ 	/*
+
+---
+base-commit: 05f7e89ab9731565d8a62e3b5d1ec206485eeb0b
+change-id: 20260610-lm25066-driver-fix-ae435577fce1
+
+Best regards,
+--  
+Potin Lai <potin.lai@quantatw.com>
 
