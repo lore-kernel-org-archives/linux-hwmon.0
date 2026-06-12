@@ -1,178 +1,109 @@
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A3D3A7193
-	for <linux-hwmon@vger.kernel.org>; Fri, 12 Jun 2026 09:06:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781255213; cv=pass; b=L++X8uQvNAaYgyVZf7Fv7kJGKMlhQhj3EymuINdcBu8J+JbM0kbGCq1mXZ9fFSgZBeaiB8WA+UTL8DHeTOrs7b4UVDdZyUmlgB2HWAxLn9QpryxGHJSIB7FHo4WPx0zppQ9lx0sg89C8IH2djDifxvS93nFjGyBFiNfFGC7eHm4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781255213; c=relaxed/simple;
-	bh=IsojegjKAwdLgtUNQObWKq5Q0mjssDHUxhr29/dEiVY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EIn96nQ7gmWQocOb6WHxX7K0sYvP2739SSeyg3tn2dk3gQLkoC0NXJeMUR07nw/1CLX8xwPOQbM5kR6PfWjU5UnJAMjZecmwgfuII0VrzxucWqyGz/GDva5r3K5draH54Ys78uidWCMTyn3KGUM2JgC0inN2MevSqvo5cE/o5Yo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XwGVSarp; arc=pass smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE4B3EC2E1;
+	Fri, 12 Jun 2026 13:16:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781270207; cv=none; b=LUG7AuV2DiqaeHrkglM1T1l/zn6gThXTz+eSeDGPr46S4XXI69OvkuaXboAFGhANc+xYlGcA/qWtxHnq7DD2uwYOjdWZx44q3aNzQ1WmAv1nQfIXVkKoOWJghLED5XRiFNXRV383+V1N2jwZPo1PInBF3KrYszD0x96rxzScZ8A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781270207; c=relaxed/simple;
+	bh=8jRBM/T7N/RLxQzA/gLPQTyvnY2bDOp6HFMSk/mC13c=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=tUiJ19Z4rBIkwtHLJm/HvxhC5AddaxszTaaIdPLX0UoYgpn/2piHLoWBzAzEdHe/YBpendiaPmEmThf71PcTvltgK8mBSogA+I7V+b153ywNW3B+mPxKRss3HX2ElU2wkavCDtoxAIIyDlnEDA9yQRAJea1gdd1SCea+snBiSwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YdViKkFw; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XwGVSarp"
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-8ce9df31130so12093566d6.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 12 Jun 2026 02:06:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781255207; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ig2SvE/PozdGi25MQKNb5cTOcE4NPsUb3zHSHwgFwuzc34WFsQ7BPv1Cg7/kfi5V5g
-         s2EqxQtrzm2656S3mDrKGNO6iYSGYrJfIUyYFbWIfa7F/gFHti0thMeeP5QUY2WF/NPN
-         V0Zymf9t6FlXNlg1kFDKMqIRLyLnDo9wn/qjWdk1oCklpLUG6DkzQezKvs4cUhv5cm5H
-         lwq0dJup4nB1gj5u8TEtYfMdehwJooXOLsSPiwcaeuJw4gnOEf4O9UaIVeEoji9XEh1z
-         TXzL090F50UdEtrmzDzTpp1ECof2Q6N2QI34FS/sQJnNpstbG5fad4hBEVPawfvcY8zb
-         COHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=jWwQjl84zpgSaQa4jqoTy8ry+T8ZHf8hg3Nkjy1g20A=;
-        fh=w8ZtSd7gV9d2UeK6tm4xOm+hGjsTLjb9r0jL+Y4qDeM=;
-        b=TrA6sQ+J9Xk+ASH3Ji61GqVxsFG4EmGPOt+JcjH4ijgBIW0THwvV9X+Xj7ZF1nXQzr
-         QHEphnJTco8ky3IGAm3XCgdRQ+l7d36aajHktFhHhAuvGpc24nFfst4TfCsIHXUueIyv
-         0UmhQlB5u9QXb1ENhPj1eoVO4a+fHYw0XMJqVJOboSJIoeFz7+6JWRytOm8rne7CeiGj
-         Nsg1T610ez/U61XOsCNMA20IwZAcGwPIKWqgt3vouB1RmYmCn2A12Npve4cMMTpsYUP3
-         wxLI+KF5Xmkt/AcN24wHwe6uPNVc/xT98jSAUZVAQSAYuoK+V0V0ma6AWXu0iGuZfnKl
-         d+VQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781255207; x=1781860007; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jWwQjl84zpgSaQa4jqoTy8ry+T8ZHf8hg3Nkjy1g20A=;
-        b=XwGVSarpY5KHHgERiE6pBCGc94GK1IoXCcBCcnVYBRBvyj2Wt0A+T5qIvLFwU+r41J
-         JGOMgnfMlpdqI1IxHZbtXPwFo2QRMJaPco7bUL3SGvB1MmyDtl8Q4BP7NSQ61FvJL5rn
-         Ir0+mF4R63nc0On+F0D0eXpJmRg4zpyFnEUWaZUu+QckELQIfk+DaVZtF6SERJTjrJGQ
-         W3zWsV9U6t3tD0ba91oy4rfcUOfVR+r7+vBp+g3YmdYDr4KNH2ip3g8TPsYsENcLmn3/
-         vBctj+esOEYd5hWE1p3mTFLYpuF0AWlGgkCR0looUoHIta1lyYdaXeJiWt/VhZjyNDxH
-         lJ/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781255207; x=1781860007;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=jWwQjl84zpgSaQa4jqoTy8ry+T8ZHf8hg3Nkjy1g20A=;
-        b=FuYnINYmkB0vsXqG5SNMp/yY13il9XIIHpVDkquxeHSgEztZcMhUjNY1JxlUPuT+OC
-         N2aObDXhi9nAnjkQaQvSZ3XuUU8lOATJdyl7b27ScnZAtvSpf2GUG6qgIwtvPU2RBd3L
-         RWrooIDM/ppZ5BzJkvByiR+rykRGX+YF/mekHMSx4kReQ/aX4j2eJCRyXJHQ9ySGsc78
-         ZT2xJCnLCVxOSHauIWGk6zAkwJVzuqqe/Eqx/myzsvP0syuLEg4SqZA7HGp99V7vNexx
-         GHPPFEeaLkp6j0Hs7KnIlX1spufnjwi8Z1LNH4c4g+AWb5bFXRIsJpYf+amEppkL94Kx
-         fHKA==
-X-Forwarded-Encrypted: i=1; AFNElJ+JMugi24xTaHsr96vZDi0P2OXFOMssIbTGFu0X3hKrpJMM0K1ZguC31QKBGzgm08A86cGDEOS3eK5o5g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQ0MSVtGwT4hyaSFxkRAmGx9eqQUCFw0APLa2XLeyef3mLtPNE
-	hMSwdV5+Qy+vyR0jZxlZI8OTBp3dvJGwTKqpTlQjHBqcTQIVJCbOTes9zXeZdB471lLHdU/M0W5
-	kX7icu+KWMbRI502m2VJGRksOWMOzJCWY5kVQ
-X-Gm-Gg: Acq92OGWK2aJxUEg7M71keHSjIbrHWlmMwhIr9Lr2yCDB+RenWiHLYUzJU3G7aDcggC
-	2HYzN/5Ulk18uQOSO7N3GSgXEds6W5A9rzG/ztfV2mNui/+cDbWxZfgCkAG0C3V3R5qnmeH5j5O
-	uRm1sAHtiqPehyhZDWTGwDGXZhZL3L9PxYIAlqTJ4RoHify1M8hCfb79zHqBHT/HJDNQUmGaxFa
-	xhwJg96FSi/vD7rUeo+xhexUlBfZfTw2CQsev+6eWR2n/4Vv/50DLDlDRuyBJB/WdBqQdyll3xz
-	8dgAzHf9
-X-Received: by 2002:a05:6214:3383:b0:8ce:e416:610c with SMTP id
- 6a1803df08f44-8d32cabe370mr33975566d6.19.1781255207244; Fri, 12 Jun 2026
- 02:06:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YdViKkFw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781270206; x=1812806206;
+  h=from:to:cc:in-reply-to:references:subject:message-id:
+   date:mime-version:content-transfer-encoding;
+  bh=8jRBM/T7N/RLxQzA/gLPQTyvnY2bDOp6HFMSk/mC13c=;
+  b=YdViKkFwCvI+bMh0tuQNx1nWRvrIZxQwRDEEcpwhwakHs7k5+xUG0Txd
+   1fQ+5iaESb10XCGb7yo8v+oawomeHQcp1xFuIuzD/4q8HUM0HsZxVAmZX
+   h4Di0ng5L7nlSIqisVxZVaUDBviLHNw95pKNQ8jEScPrPoFcbIwJuQmXu
+   kx7WfsxCNrbV5KCxcqaYrjChJFXtFOLgvSXlZdD5KGsjLjKn1NlKwe4Z5
+   0PsHoOlH/4UzcKbMSsbn1tMsowZOj/P45TuKR563DXi1VnWMKaqg195Yz
+   86A4p2Pdh/H78WOP6zb2yUt5hTxPxKw9xYPHPZltnkCzQy8lzW3JE6ppR
+   Q==;
+X-CSE-ConnectionGUID: BizGWw4TSBu2DYWTvfyq8Q==
+X-CSE-MsgGUID: uUAAzskBSNiLaCSkdHg+lA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11813"; a="82290039"
+X-IronPort-AV: E=Sophos;i="6.24,200,1774335600"; 
+   d="scan'208";a="82290039"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2026 06:16:46 -0700
+X-CSE-ConnectionGUID: MP2BuGy3TZu/Bc+LtQJeGQ==
+X-CSE-MsgGUID: +4z1A0/oR0uYWiVMjs10UA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,200,1774335600"; 
+   d="scan'208";a="243885091"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.78])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2026 06:16:41 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: Dell.Client.Kernel@dell.com, pali@kernel.org, mjg59@srcf.ucam.org, 
+ Armin Wolf <W_Armin@gmx.de>
+Cc: soyer@irl.hu, hansg@kernel.org, platform-driver-x86@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux@roeck-us.net, 
+ linux-hwmon@vger.kernel.org, mario.limonciello@amd.com
+In-Reply-To: <20260610203453.816254-1-W_Armin@gmx.de>
+References: <20260610203453.816254-1-W_Armin@gmx.de>
+Subject: Re: [PATCH v6 0/9] Convert most Dell WMI drivers to use the new
+ buffer-based API
+Message-Id: <178127019722.31486.6141646420423582072.b4-ty@b4>
+Date: Fri, 12 Jun 2026 16:16:37 +0300
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260611-lm25066-cl-config-v1-0-02e567bf3d91@gmail.com>
- <20260611-lm25066-cl-config-v1-1-02e567bf3d91@gmail.com> <20260611-mocha-strive-a7f3265dd3f4@spud>
-In-Reply-To: <20260611-mocha-strive-a7f3265dd3f4@spud>
-From: Potin Lai <potin.lai.pt@gmail.com>
-Date: Fri, 12 Jun 2026 17:10:38 +0800
-X-Gm-Features: AVVi8CcNLcTbD6v5Tw0D33_UI0Q9NrseU5jWT3dG2q2Uo9P-neDK5VnFrDmIZiY
-Message-ID: <CAGfYmwWPhdpTLGhOdddJ0hSj-H86+XOVGTR9eDkZSVqGRLfJvQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pmbus: ti,lm25066: add current
- limit properties
-To: Conor Dooley <conor@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Zev Weiss <zev@bewilderbeest.net>, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Cosmo Chou <cosmo.chou@quantatw.com>, Mike Hsieh <Mike_Hsieh@quantatw.com>, 
-	Potin Lai <potin.lai@qunatatw.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15.2
 
-On Fri, Jun 12, 2026 at 1:27=E2=80=AFAM Conor Dooley <conor@kernel.org> wro=
-te:
->
-> On Thu, Jun 11, 2026 at 05:58:44PM +0800, Potin Lai wrote:
-> > Add mutually exclusive 'ti,cl-smbus-high' and 'ti,cl-smbus-low' boolean
-> > properties to configure the device's Current Limit (CL) behavior using
-> > SMBus settings instead of physical pins.
-> >
-> > Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
-> > ---
-> >  .../devicetree/bindings/hwmon/pmbus/ti,lm25066.yaml  | 20 ++++++++++++=
-++++++++
-> >  1 file changed, 20 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/ti,lm25066.y=
-aml b/Documentation/devicetree/bindings/hwmon/pmbus/ti,lm25066.yaml
-> > index a20f140dc79a..95ea7c26dec2 100644
-> > --- a/Documentation/devicetree/bindings/hwmon/pmbus/ti,lm25066.yaml
-> > +++ b/Documentation/devicetree/bindings/hwmon/pmbus/ti,lm25066.yaml
-> > @@ -46,6 +46,26 @@ properties:
-> >
-> >      additionalProperties: false
-> >
-> > +  ti,cl-smbus-high:
-> > +    description: |
-> > +      Configure the Current Limit (CL) to use the SMBus high setting.
-> > +    type: boolean
-> > +
-> > +  ti,cl-smbus-low:
-> > +    description: |
-> > +      Configure the Current Limit (CL) to use the SMBus low setting.
-> > +    type: boolean
->
-> What's smbus specific about this? If the pin was connected to a GPIO,
-> you'd then need to have different properties or use these ones with an
-> inaccurate name.
->
+On Wed, 10 Jun 2026 22:34:44 +0200, Armin Wolf wrote:
 
-The "smbus" in the property name was originally meant to indicate
-that the setting is configured via the internal register over the SMBus (I2=
-C)
-interface, rather than physical pins.
+> The new buffer-based WMI API improves the compatibility between
+> different ACPI firmware implementations by performing marshalling/
+> unmarshalling of WMI buffers like the original Windows driver.
+> 
+> Convert most Dell WMI drivers to use this new API. This also
+> removes all ACPI-related code from those drivers because the
+> new buffer-based WMI API uses abstract WMI buffer objects instead
+> of ACPI objects.
+> 
+> [...]
 
-> Please also spell out "current-limit".
->
 
-I will rename the properties to "ti,current-limit-high" and
-"ti,current-limit-low"
-in the next version.
+Thank you for your contribution, it has been applied to my local
+review-ilpo-next branch. Note it will show up in the public
+platform-drivers-x86/review-ilpo-next branch only once I've pushed my
+local branch there, which might take a while.
 
-Thanks,
-Potin
+The list of commits applied:
+[1/9] platform/x86: dell-descriptor: Use new buffer-based WMI API
+      commit: 0f2d6a308210caaa5e0ebf9c085d87f4a2c06bfa
+[2/9] platform/x86: dell-privacy: Use new buffer-based WMI API
+      commit: 1719340487e63da13f2ac25e488c72737a545772
+[3/9] platform/x86: dell-smbios-wmi: Use new buffer-based WMI API
+      commit: 6f918e3d95c9b0b4e6a6881692a9b5f9bf0f36b0
+[4/9] platform/x86: dell-wmi-base: Use new buffer-based WMI API
+      commit: 982b0e683aa3b1d20b1512cde53207ba1c80e22b
+[5/9] platform/x86: dell-ddv: Use new buffer-based WMI API
+      commit: 7fced293bbd00ee8d20eaf4654849ac9ff332973
+[6/9] hwmon: (dell-smm) Use new buffer-based WMI API
+      commit: ab1eb37dd63ff3555e4f98918f1bd3498522f765
+[7/9] platform/wmi: Make wmi_bus_class const
+      commit: b79ad5e8ba5cfda93a83e0cf71d4743829cc9f83
+[8/9] platform/wmi: Make sysfs attributes const
+      commit: c3cbac4be03d769571f32e7f27241b2c58f722f5
+[9/9] modpost: Handle malformed WMI GUID strings
+      commit: 3429ae7b2f02a4a6ad40d36ee06641d433d75a1b
 
-> pw-bot: changes-requested
->
-> Thanks,
-> Conor.
->
-> > +
-> > +dependencies:
-> > +  ti,cl-smbus-high:
-> > +    not:
-> > +      required:
-> > +        - ti,cl-smbus-low
-> > +  ti,cl-smbus-low:
-> > +    not:
-> > +      required:
-> > +        - ti,cl-smbus-high
-> > +
-> >  required:
-> >    - compatible
-> >    - reg
-> >
-> > --
-> > 2.52.0
-> >
+--
+ i.
+
