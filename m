@@ -1,30 +1,30 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049081D61B7;
-	Fri, 12 Jun 2026 03:03:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43AD23393C;
+	Fri, 12 Jun 2026 03:03:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781233439; cv=none; b=EsUve6BmQ/ScfDHjXbx/P83bCfbXXvjiU8FChTkiKNLv0W+3id6kd+orq/UBAX0zb8LMneUgb/C0PXtvbjrkrmdRR3bJirWOZdeQ9JuSY+utACVr7vrE9UlyDCDzxAzG4oc0Pw2u3zFH7x0r76ft+Iac06xKZ6ubVfdHISDZ6kI=
+	t=1781233440; cv=none; b=VwU+vWzCPxGHgzwQ4+XC4U9eKV9SLHRsBo3ML1hwEVx+ALmpjtx3etPmnYPP+9s48FdbTqAUXtmvaTvm6M6DvT3rbry/7EKfHYTY+CqAb9wsffYh6R+DL1XHqp7ymxiJFAfxGUCxxhS84LvnvREIKgkwLs9iOiJEtTa0ZhnKi3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781233439; c=relaxed/simple;
-	bh=j2X+MA84vAwBRu3ivgpQi5hMeG3DjxwkdB24V8JcI00=;
+	s=arc-20240116; t=1781233440; c=relaxed/simple;
+	bh=r4vTAa4lFUpQgzrqnK+yuhhrem0KrZBzLkJ76gZcUsk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=BIOyxQvcofciuPqF37aPjHZQVVLEUr63CXRKEKglJLtBCrwgZivh10hF8cfOHoNqyWLp7Q+UoDFYw65ikZtGbOZAYlV7VFyYhKIHENgJbjgDraiH9rUM9zPkbRZTHtMqHUkoXJ0bP3RblYWvNdhoe+XQ6nIOkRTRHDjgH8Iyrgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=eA5+EoCF; arc=none smtp.client-ip=117.135.210.2
+	 MIME-Version; b=p+cADf4g6qe0h8fI6/QOnM9WAe58OSx1ZvATwyhK3rYB0kQ3/4tzaAGHM2ZjtNg8h8abEwtR/azQNzsrdQUer4Uq869kom9+ja9Cziw/23Fv8n7dbv3477EBTT7r67E0Wybod/1ofZqeZjkf7mj43czZ1D2JA6/FmPSQbTPHi00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=KPTpnwmz; arc=none smtp.client-ip=117.135.210.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="eA5+EoCF"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="KPTpnwmz"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=46
-	RsvdeETWrOH09RJ+ySWRL5LGyqtE6DLhYTz+CUvSg=; b=eA5+EoCFBlTtu+c0Qa
-	bMOSzxLXwEx+7on4xbH9KbY7B8N+NKN6wmU/8qnaAqyGsAQLl70XgeUet4+9BD4f
-	6M+q7vkZsEU0JNioNQLlF7qtlRVRyG1VdF8zCDuVdT6LjLxVJVkW0v5eZGdQUzbF
-	V+9NihQtDg4xTRxKizNfqfMdA=
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=j0
+	SF+1Uu2ItTtBLzavvvRGx/ic089fLpAjapTVRA+7c=; b=KPTpnwmzSWIwiZd0kZ
+	g5UuJKhTUqiYN041JOZkVIR0ei9IXvQcIK37go2bKtYHtVPrgJoMfrvxKZQz+0bu
+	8iJMXjj2aA2NyyU0gyO499oiEf90tDe/0UtoedwSlttkv26WgyDRfcB8SOj7CMmg
+	xA+EBxMXml+mPcNJMuB0TXRSs=
 Received: from ZM.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wDHAqHqditqPP4wDA--.45071S3;
-	Fri, 12 Jun 2026 11:03:10 +0800 (CST)
+	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wDHAqHqditqPP4wDA--.45071S4;
+	Fri, 12 Jun 2026 11:03:12 +0800 (CST)
 From: Ziming Zhu <zmzhu0630@163.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: Rob Herring <robh@kernel.org>,
@@ -36,11 +36,10 @@ Cc: Rob Herring <robh@kernel.org>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org,
-	Ziming Zhu <ziming.zhu@silergycorp.com>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v4 1/3] dt-bindings: hwmon: pmbus: Add bindings for Silergy SQ24860
-Date: Fri, 12 Jun 2026 11:03:02 +0800
-Message-Id: <20260612030304.5165-2-zmzhu0630@163.com>
+	Ziming Zhu <ziming.zhu@silergycorp.com>
+Subject: [PATCH v4 2/3] hwmon: pmbus: Add support for Silergy SQ24860
+Date: Fri, 12 Jun 2026 11:03:03 +0800
+Message-Id: <20260612030304.5165-3-zmzhu0630@163.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20260612030304.5165-1-zmzhu0630@163.com>
 References: <20260612030304.5165-1-zmzhu0630@163.com>
@@ -51,109 +50,512 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDHAqHqditqPP4wDA--.45071S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJr18KF18uF15Xr4kWFy3Arb_yoW5JrWkpF
-	Z5uF9rGrW8XryxW3y7GFy8Z3W5Zr1kCa1jgr9xJw1SyF98XFsYvrZIkrW5XF1UCr10yFy3
-	ZFWqyryxt3s7CF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jb73kUUUUU=
-X-CM-SenderInfo: x2p2x3aqwtiqqrwthudrp/xtbC6A8+N2ordu80rgAA3s
+X-CM-TRANSID:_____wDHAqHqditqPP4wDA--.45071S4
+X-Coremail-Antispam: 1Uf129KBjvAXoW3uF15Ar4fXr4rCF45ZFWxtFb_yoW8GFyfto
+	ZxWFyIq3WDJr1UCrZY9r4I9FySqF4UXw1vya13trsFgayayF4Y9Fy3Aw4Yq3W7JF4ruw4D
+	Zay0yFyFy39Fvw15n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxU7EdyUUUUU
+X-CM-SenderInfo: x2p2x3aqwtiqqrwthudrp/xtbCwBE-OGordvHrnwAA3k
 
 From: Ziming Zhu <ziming.zhu@silergycorp.com>
 
-Add devicetree binding documentation for the Silergy SQ24860 eFuse.
+Add PMBus hwmon support for the Silergy SQ24860 eFuse.
 
-The device is a PMBus hardware monitoring device which reports voltage,
-current, power, and temperature telemetry. The board-specific IMON
-resistor value is described with silergy,rimon-micro-ohms.
+The driver reports input voltage, output voltage, auxiliary voltage,
+input current, input power, and temperature. It also exposes peak,
+average, and minimum history attributes, sample count configuration,
+and maps the manufacturer-specific VIREF register to the generic input
+over-current fault limit attribute.
+
+The IMON resistor value is read from the silergy,rimon-micro-ohms device
+property and used to configure the input current calibration gain.
 
 Signed-off-by: Ziming Zhu <ziming.zhu@silergycorp.com>
-
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- .../bindings/hwmon/pmbus/silergy,sq24860.yaml | 74 +++++++++++++++++++
- 1 file changed, 74 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/silergy,sq24860.yaml
+ drivers/hwmon/pmbus/Kconfig   |  19 ++
+ drivers/hwmon/pmbus/Makefile  |   1 +
+ drivers/hwmon/pmbus/sq24860.c | 430 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 450 insertions(+)
+ create mode 100644 drivers/hwmon/pmbus/sq24860.c
 
-diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/silergy,sq24860.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/silergy,sq24860.yaml
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 8f4bff375ecb..a905b5af137c 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -612,6 +612,25 @@ config SENSORS_STEF48H28
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called stef48h28.
+ 
++config SENSORS_SQ24860
++	tristate "Silergy SQ24860"
++	help
++	  If you say yes here you get hardware monitoring support for Silergy
++	  SQ24860 eFuse.
++
++	  This driver can also be built as a module. If so, the module will
++	  be called sq24860.
++
++config SENSORS_SQ24860_REGULATOR
++	bool "Regulator support for SQ24860"
++	depends on SENSORS_SQ24860 && REGULATOR
++	default SENSORS_SQ24860
++	help
++	  If you say yes here you get regulator support for Silergy SQ24860.
++	  The regulator is registered through the PMBus regulator framework and
++	  can be used to control the output exposed by the device.
++	  This option is only useful if regulator framework support is needed.
++
+ config SENSORS_STPDDC60
+ 	tristate "ST STPDDC60"
+ 	help
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index 7129b62bc00f..86bc93c6c091 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -60,6 +60,7 @@ obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
+ obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
+ obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
+ obj-$(CONFIG_SENSORS_STEF48H28)	+= stef48h28.o
++obj-$(CONFIG_SENSORS_SQ24860)	+= sq24860.o
+ obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
+ obj-$(CONFIG_SENSORS_TDA38640)	+= tda38640.o
+ obj-$(CONFIG_SENSORS_TPS25990)	+= tps25990.o
+diff --git a/drivers/hwmon/pmbus/sq24860.c b/drivers/hwmon/pmbus/sq24860.c
 new file mode 100644
-index 000000000000..03ef82c11e1a
+index 000000000000..30202a4b34cf
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/pmbus/silergy,sq24860.yaml
-@@ -0,0 +1,74 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
++++ b/drivers/hwmon/pmbus/sq24860.c
+@@ -0,0 +1,430 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Author: Ziming Zhu <ziming.zhu@silergycorp.com>
++ */
 +
-+$id: http://devicetree.org/schemas/hwmon/pmbus/silergy,sq24860.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++#include <linux/bitfield.h>
++#include <linux/err.h>
++#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/math64.h>
 +
-+title: Silergy SQ24860 eFuse
++#include "pmbus.h"
 +
-+maintainers:
-+  - Ziming Zhu <ziming.zhu@silergycorp.com>
++#define SQ24860_IIN_CAL_GAIN		0x38
++#define SQ24860_READ_VAUX		0xd0
++#define SQ24860_READ_VIN_MIN		0xd1
++#define SQ24860_READ_VIN_PEAK		0xd2
++#define SQ24860_READ_IIN_PEAK		0xd4
++#define SQ24860_READ_PIN_PEAK		0xd5
++#define SQ24860_READ_TEMP_AVG		0xd6
++#define SQ24860_READ_TEMP_PEAK		0xd7
++#define SQ24860_READ_VOUT_MIN		0xda
++#define SQ24860_READ_VIN_AVG		0xdc
++#define SQ24860_READ_VOUT_AVG		0xdd
++#define SQ24860_READ_IIN_AVG		0xde
++#define SQ24860_READ_PIN_AVG		0xdf
++#define SQ24860_VIREF			0xe0
++#define SQ24860_PK_MIN_AVG		0xea
++#define PK_MIN_AVG_RST_PEAK		BIT(7)
++#define PK_MIN_AVG_RST_AVG		BIT(6)
++#define PK_MIN_AVG_RST_MIN		BIT(5)
++#define PK_MIN_AVG_AVG_CNT		GENMASK(2, 0)
++#define SQ24860_MFR_WRITE_PROTECT	0xf8
++#define SQ24860_UNLOCKED		BIT(7)
 +
-+description:
-+  The Silergy SQ24860 is an integrated, high-current circuit protection and
-+  power management device with PMBus interface.
++#define SQ24860_8B_SHIFT		2
++#define SQ24860_IIN_OCF_NUM		1000000
++#define SQ24860_IIN_OCF_DIV		129278
++#define SQ24860_IIN_OCF_OFF		165
 +
-+properties:
-+  compatible:
-+    const: silergy,sq24860
++#define PK_MIN_AVG_RST_MASK		(PK_MIN_AVG_RST_PEAK | \
++					 PK_MIN_AVG_RST_AVG  | \
++					 PK_MIN_AVG_RST_MIN)
++#define SQ24860_MAX_SAMPLES		BIT(FIELD_MAX(PK_MIN_AVG_AVG_CNT))
++/*
++ * Arbitrary default Rimon value: 1.6kOhm
++ */
++#define SQ24860_DEFAULT_RIMON		1600000000
++#define SQ24860_GIMON			18180
 +
-+  reg:
-+    maxItems: 1
++#define SQ24860_VAUX_DIV		20
 +
-+  silergy,rimon-micro-ohms:
-+    description:
-+      Micro-ohms value of the resistance installed between the IMON pin and
-+      the ground reference.
++static int sq24860_write_iin_cal_gain(struct i2c_client *client, u32 rimon)
++{
++	u64 temp = 6400ULL * 1000000000ULL * 1000ULL;
++	u64 denom;
++	u64 word;
 +
-+  interrupts:
-+    description: PMBus SMBAlert interrupt.
-+    maxItems: 1
++	if (!rimon)
++		return -EINVAL;
 +
-+  regulators:
-+    type: object
-+    description:
-+      List of regulators provided by this controller.
++	denom = (u64)rimon * SQ24860_GIMON;
++	word = div64_u64(temp, denom);
++	if (!word || word > U16_MAX)
++		return -EINVAL;
 +
-+    properties:
-+      vout:
-+        $ref: /schemas/regulator/regulator.yaml#
-+        type: object
-+        unevaluatedProperties: false
++	return i2c_smbus_write_word_data(client, SQ24860_IIN_CAL_GAIN,
++					(u16)word);
++}
 +
-+    additionalProperties: false
++static int sq24860_mfr_write_protect_set(struct i2c_client *client,
++					 u8 protect)
++{
++	u8 val;
 +
-+required:
-+  - compatible
-+  - reg
-+  - silergy,rimon-micro-ohms
++	switch (protect) {
++	case 0:
++		val = 0xa2;
++		break;
++	case PB_WP_ALL:
++		val = 0x0;
++		break;
++	default:
++		return -EINVAL;
++	}
 +
-+additionalProperties: false
++	return pmbus_write_byte_data(client, -1, SQ24860_MFR_WRITE_PROTECT,
++				     val);
++}
 +
-+examples:
-+  - |
++static int sq24860_mfr_write_protect_get(struct i2c_client *client)
++{
++	int ret = pmbus_read_byte_data(client, -1, SQ24860_MFR_WRITE_PROTECT);
 +
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
++	if (ret < 0)
++		return ret;
 +
-+        hw-monitor@40 {
-+            compatible = "silergy,sq24860";
-+            reg = <0x40>;
++	return (ret & SQ24860_UNLOCKED) ? 0 : PB_WP_ALL;
++}
 +
-+            interrupt-parent = <&gpio>;
-+            interrupts = <42 8>;
-+            silergy,rimon-micro-ohms = <1600000000>;
++static int sq24860_read_word_data(struct i2c_client *client,
++				  int page, int phase, int reg)
++{
++	int ret;
 +
-+            regulators {
-+                cpu0_vout: vout {
-+                    regulator-name = "main_cpu0";
-+                };
-+            };
-+        };
-+    };
++	switch (reg) {
++	case PMBUS_VIRT_READ_VIN_MAX:
++		ret = pmbus_read_word_data(client, page, phase,
++					   SQ24860_READ_VIN_PEAK);
++		break;
++
++	case PMBUS_VIRT_READ_VIN_MIN:
++		ret = pmbus_read_word_data(client, page, phase,
++					   SQ24860_READ_VIN_MIN);
++		break;
++
++	case PMBUS_VIRT_READ_VIN_AVG:
++		ret = pmbus_read_word_data(client, page, phase,
++					   SQ24860_READ_VIN_AVG);
++		break;
++
++	case PMBUS_VIRT_READ_VOUT_MIN:
++		ret = pmbus_read_word_data(client, page, phase,
++					   SQ24860_READ_VOUT_MIN);
++		break;
++
++	case PMBUS_VIRT_READ_VOUT_AVG:
++		ret = pmbus_read_word_data(client, page, phase,
++					   SQ24860_READ_VOUT_AVG);
++		break;
++
++	case PMBUS_VIRT_READ_IIN_AVG:
++		ret = pmbus_read_word_data(client, page, phase,
++					   SQ24860_READ_IIN_AVG);
++		break;
++
++	case PMBUS_VIRT_READ_IIN_MAX:
++		ret = pmbus_read_word_data(client, page, phase,
++					   SQ24860_READ_IIN_PEAK);
++		break;
++
++	case PMBUS_VIRT_READ_TEMP_AVG:
++		ret = pmbus_read_word_data(client, page, phase,
++					   SQ24860_READ_TEMP_AVG);
++		break;
++
++	case PMBUS_VIRT_READ_TEMP_MAX:
++		ret = pmbus_read_word_data(client, page, phase,
++					   SQ24860_READ_TEMP_PEAK);
++		break;
++
++	case PMBUS_VIRT_READ_PIN_AVG:
++		ret = pmbus_read_word_data(client, page, phase,
++					   SQ24860_READ_PIN_AVG);
++		break;
++
++	case PMBUS_VIRT_READ_PIN_MAX:
++		ret = pmbus_read_word_data(client, page, phase,
++					   SQ24860_READ_PIN_PEAK);
++		break;
++
++	case PMBUS_VIRT_READ_VMON:
++		ret = pmbus_read_word_data(client, page, phase,
++					   SQ24860_READ_VAUX);
++		if (ret < 0)
++			break;
++		ret = DIV_ROUND_CLOSEST(ret, SQ24860_VAUX_DIV);
++		break;
++
++	case PMBUS_VIN_UV_WARN_LIMIT:
++	case PMBUS_VIN_UV_FAULT_LIMIT:
++	case PMBUS_VIN_OV_WARN_LIMIT:
++	case PMBUS_VIN_OV_FAULT_LIMIT:
++	case PMBUS_VOUT_UV_WARN_LIMIT:
++	case PMBUS_IIN_OC_WARN_LIMIT:
++	case PMBUS_OT_WARN_LIMIT:
++	case PMBUS_OT_FAULT_LIMIT:
++	case PMBUS_PIN_OP_WARN_LIMIT:
++		/*
++		 * These registers provide an 8 bits value instead of a
++		 * 10bits one. Just shifting twice the register value is
++		 * enough to make the sensor type conversion work, even
++		 * if the datasheet provides different m, b and R for
++		 * those.
++		 */
++		ret = pmbus_read_word_data(client, page, phase, reg);
++		if (ret < 0)
++			break;
++		ret <<= SQ24860_8B_SHIFT;
++		break;
++
++	case PMBUS_IIN_OC_FAULT_LIMIT:
++		/*
++		 * VIREF directly sets the over-current limit at which the eFuse
++		 * will turn the FET off and trigger a fault. Expose it through
++		 * this generic property instead of a manufacturer specific one.
++		 */
++		ret = pmbus_read_byte_data(client, page, SQ24860_VIREF);
++		if (ret < 0)
++			break;
++		ret = DIV_ROUND_CLOSEST(ret * SQ24860_IIN_OCF_NUM,
++					SQ24860_IIN_OCF_DIV);
++		ret += SQ24860_IIN_OCF_OFF;
++		break;
++
++	case PMBUS_VIRT_SAMPLES:
++		ret = pmbus_read_byte_data(client, page, SQ24860_PK_MIN_AVG);
++		if (ret < 0)
++			break;
++		ret = BIT(FIELD_GET(PK_MIN_AVG_AVG_CNT, ret));
++		break;
++
++	case PMBUS_VIRT_RESET_TEMP_HISTORY:
++	case PMBUS_VIRT_RESET_VIN_HISTORY:
++	case PMBUS_VIRT_RESET_IIN_HISTORY:
++	case PMBUS_VIRT_RESET_PIN_HISTORY:
++	case PMBUS_VIRT_RESET_VOUT_HISTORY:
++		ret = 0;
++		break;
++
++	default:
++		ret = -ENODATA;
++		break;
++	}
++
++	return ret;
++}
++
++static int sq24860_write_word_data(struct i2c_client *client,
++				   int page, int reg, u16 value)
++{
++	int ret;
++
++	switch (reg) {
++	case PMBUS_VIN_UV_WARN_LIMIT:
++	case PMBUS_VIN_UV_FAULT_LIMIT:
++	case PMBUS_VIN_OV_WARN_LIMIT:
++	case PMBUS_VIN_OV_FAULT_LIMIT:
++	case PMBUS_VOUT_UV_WARN_LIMIT:
++	case PMBUS_IIN_OC_WARN_LIMIT:
++	case PMBUS_OT_WARN_LIMIT:
++	case PMBUS_OT_FAULT_LIMIT:
++	case PMBUS_PIN_OP_WARN_LIMIT:
++		value = max_t(s16, (s16)value, 0);
++		value >>= SQ24860_8B_SHIFT;
++		value = clamp_val(value, 0, 0xff);
++		ret = pmbus_write_word_data(client, page, reg, value);
++		break;
++
++	case PMBUS_IIN_OC_FAULT_LIMIT:
++		value = max_t(s16, (s16)value, SQ24860_IIN_OCF_OFF);
++		value -= SQ24860_IIN_OCF_OFF;
++		value = DIV_ROUND_CLOSEST(((unsigned int)value) * SQ24860_IIN_OCF_DIV,
++					  SQ24860_IIN_OCF_NUM);
++		value = clamp_val(value, 0, 0x3f);
++		ret = pmbus_write_byte_data(client, page, SQ24860_VIREF, value);
++		break;
++
++	case PMBUS_VIRT_SAMPLES:
++		value = clamp_val(value, 1, SQ24860_MAX_SAMPLES);
++		value = ilog2(value);
++		ret = pmbus_update_byte_data(client, page, SQ24860_PK_MIN_AVG,
++					     PK_MIN_AVG_AVG_CNT,
++					     FIELD_PREP(PK_MIN_AVG_AVG_CNT, value));
++		break;
++
++	case PMBUS_VIRT_RESET_TEMP_HISTORY:
++	case PMBUS_VIRT_RESET_VIN_HISTORY:
++	case PMBUS_VIRT_RESET_IIN_HISTORY:
++	case PMBUS_VIRT_RESET_PIN_HISTORY:
++	case PMBUS_VIRT_RESET_VOUT_HISTORY:
++		/*
++		 * SQ24860 has history resets based on MIN/AVG/PEAK instead of per
++		 * sensor type. Exposing this quirk in hwmon is not desirable so
++		 * reset MIN, AVG and PEAK together. Even is there effectively only
++		 * one reset, which resets everything, expose the 5 entries so
++		 * userspace is not required map a sensor type to another to trigger
++		 * a reset
++		 */
++		ret = pmbus_update_byte_data(client, 0, SQ24860_PK_MIN_AVG,
++					     PK_MIN_AVG_RST_MASK,
++					     PK_MIN_AVG_RST_MASK);
++		break;
++
++	default:
++		ret = -ENODATA;
++		break;
++	}
++
++	return ret;
++}
++
++static int sq24860_read_byte_data(struct i2c_client *client,
++				  int page, int reg)
++{
++	int ret;
++
++	switch (reg) {
++	case PMBUS_WRITE_PROTECT:
++		ret = sq24860_mfr_write_protect_get(client);
++		break;
++
++	default:
++		ret = -ENODATA;
++		break;
++	}
++
++	return ret;
++}
++
++static int sq24860_write_byte_data(struct i2c_client *client,
++				   int page, int reg, u8 byte)
++{
++	int ret;
++
++	switch (reg) {
++	case PMBUS_WRITE_PROTECT:
++		ret = sq24860_mfr_write_protect_set(client, byte);
++		break;
++
++	default:
++		ret = -ENODATA;
++		break;
++	}
++
++	return ret;
++}
++
++#if IS_ENABLED(CONFIG_SENSORS_SQ24860_REGULATOR)
++static const struct regulator_desc sq24860_reg_desc[] = {
++	PMBUS_REGULATOR_ONE_NODE("vout"),
++};
++#endif
++
++static const struct pmbus_driver_info sq24860_base_info = {
++	.pages = 1,
++	.format[PSC_VOLTAGE_IN] = direct,
++	.m[PSC_VOLTAGE_IN] = 64,
++	.b[PSC_VOLTAGE_IN] = 0,
++	.R[PSC_VOLTAGE_IN] = 0,
++	.format[PSC_VOLTAGE_OUT] = direct,
++	.m[PSC_VOLTAGE_OUT] = 64,
++	.b[PSC_VOLTAGE_OUT] = 0,
++	.R[PSC_VOLTAGE_OUT] = 0,
++	.format[PSC_TEMPERATURE] = direct,
++	.m[PSC_TEMPERATURE] = 1,
++	.b[PSC_TEMPERATURE] = 0,
++	.R[PSC_TEMPERATURE] = 0,
++	/*
++	 * Current and power measurements depend on the calibration gain
++	 * programmed from the board-specific IMON resistor value.
++	 */
++	.format[PSC_CURRENT_IN] = direct,
++	.m[PSC_CURRENT_IN] = 16,
++	.b[PSC_CURRENT_IN] = 0,
++	.R[PSC_CURRENT_IN] = 0,
++	.format[PSC_POWER] = direct,
++	.m[PSC_POWER] = 2,
++	.b[PSC_POWER] = 0,
++	.R[PSC_POWER] = 0,
++	.func[0] = PMBUS_HAVE_VIN |
++		   PMBUS_HAVE_VOUT |
++		   PMBUS_HAVE_VMON |
++		   PMBUS_HAVE_IIN |
++		   PMBUS_HAVE_PIN |
++		   PMBUS_HAVE_TEMP |
++		   PMBUS_HAVE_STATUS_VOUT |
++		   PMBUS_HAVE_STATUS_IOUT |
++		   PMBUS_HAVE_STATUS_INPUT |
++		   PMBUS_HAVE_STATUS_TEMP |
++		   PMBUS_HAVE_SAMPLES,
++	.read_word_data = sq24860_read_word_data,
++	.write_word_data = sq24860_write_word_data,
++	.read_byte_data = sq24860_read_byte_data,
++	.write_byte_data = sq24860_write_byte_data,
++
++#if IS_ENABLED(CONFIG_SENSORS_SQ24860_REGULATOR)
++	.reg_desc = sq24860_reg_desc,
++	.num_regulators = ARRAY_SIZE(sq24860_reg_desc),
++#endif
++};
++
++static const struct i2c_device_id sq24860_i2c_id[] = {
++	{ "sq24860" },
++	{}
++};
++MODULE_DEVICE_TABLE(i2c, sq24860_i2c_id);
++
++static const struct of_device_id sq24860_of_match[] = {
++	{ .compatible = "silergy,sq24860" },
++	{}
++};
++MODULE_DEVICE_TABLE(of, sq24860_of_match);
++
++static int sq24860_probe(struct i2c_client *client)
++{
++	struct device *dev = &client->dev;
++	struct pmbus_driver_info *info;
++	u32 rimon;
++	int ret;
++
++	if (device_property_read_u32(dev, "silergy,rimon-micro-ohms", &rimon))
++		rimon = SQ24860_DEFAULT_RIMON;
++	ret = sq24860_write_iin_cal_gain(client, rimon);
++	if (ret < 0)
++		return dev_err_probe(&client->dev, ret,
++					     "Failed to set gain\n");
++	info = devm_kmemdup(dev, &sq24860_base_info, sizeof(*info), GFP_KERNEL);
++	if (!info)
++		return -ENOMEM;
++
++	return pmbus_do_probe(client, info);
++}
++
++static struct i2c_driver sq24860_driver = {
++	.driver = {
++		.name = "sq24860",
++		.of_match_table = sq24860_of_match,
++	},
++	.probe = sq24860_probe,
++	.id_table = sq24860_i2c_id,
++};
++module_i2c_driver(sq24860_driver);
++
++MODULE_AUTHOR("Ziming Zhu <ziming.zhu@silergycorp.com>");
++MODULE_DESCRIPTION("PMBUS driver for SQ24860 eFuse");
++MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS("PMBUS");
 -- 
 2.25.1
 
