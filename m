@@ -1,116 +1,113 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C13A3793AD;
-	Fri, 12 Jun 2026 08:53:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42B7C37C915;
+	Fri, 12 Jun 2026 08:54:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781254419; cv=none; b=RZqyev3rIl7wkDf8UgKIpzcJbwFTPKDiNF8HzFRYpk9a4F1CmlTuwAu2y4S9glVpMRz5l+kvRa1W1HUpKYi4zhd0Ey5kXAXdifI82UqBuVEBvOKmHUjLM5VXO4umwIx2VQ45/LjkqwakGI3ypGwD8CTt9Zm40QkB6jpWnSCPcMc=
+	t=1781254493; cv=none; b=PYBWvh6f4fSM+b5oQHnEXR0wBfiYeXXGgttULcNAlocTRuJC2EMJFQoC+KOwdYAOm9+v5LmHaSh9r/U1C+1mB5n46LJD/VGEcGxtv/WGVCKCjpte/YCdIQaGJP2r1bUlkwBbYnZPmiZTWC2QBgXSRGf/+RAg2KqNt424mz/fnS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781254419; c=relaxed/simple;
-	bh=uGH+AK/+/uFo8/TTB+L2s/0uaI8gpZqLM33LrkG6r2M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Eqxs9J+hpc9CEtjNaGMe9Q5bXmkfFM1lulhfEhLZw+E40RLhARDUEIqjbTpzxsKOP+B7FAL1efb9Eptox9VRJ3bHavkJB5ooqq0ySJH+srxiHxjBRsHA79dIKy/6InR4YqWAPpCVCI4FZTcIYuk1SFk6YNiRNg+9uoFC86Qo5IE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ct31lijB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781254493; c=relaxed/simple;
+	bh=j9sRoEVZ6No8VVMoYl1GJ/rfgBxoJNms8458XTM0AKI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Eq89woCW3UfCJSCXG3L4fmXXCMKWPVYfFYaHv0hUPxyRfTgn0nszSHOPn1GoVQppSk+wnAlLPUTXN5Fha4kOVvzpgPJNuVidLuBqgUunWWvwszs5K4Hrvhj5u5+RK+rTJJjJpd5zdc8UajQuyMOTqEFBeAq3RR2K2a8/7rbVFWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=km0XxNm6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ct31lijB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A59751F000E9;
-	Fri, 12 Jun 2026 08:53:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="km0XxNm6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 145731F00A3A;
+	Fri, 12 Jun 2026 08:54:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781254418;
-	bh=mtf0IquBGXiIidIU1CGAyAVk1Qsu4DM+fxc2zCo7xH0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Ct31lijBq0C+9xc2OLsJo/ai66t20muhZ7mKzwcQL63wgLe+z8G6i1UU9RKn7Eeu2
-	 6OmEXbCcbskdInLXFDNmJE0JOalHLp5/uOty9ZPQXoAy+KuL4LEP/e/KcCCQQ5PwbE
-	 UvfsWjGxD5MzWPVkixofYruxM+krie1zEghckYCFgUm5b4DsPufdM+aSBgnwOah4Du
-	 mSPe4nef1Dfxzm77kXmYNEe9MXbbK8HXtCs5U3APOFovVIKq1uH3yy8Nph7Z0o5/R5
-	 1MmLOqsWblbfRtnwIuYE0wmVOr4TX6CVsRDdV6YeIaemhjYB1lYXA49SCbk2nn++jv
-	 yoSSbLRUGaAjA==
-Date: Fri, 12 Jun 2026 10:53:35 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Ziming Zhu <zmzhu0630@163.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, Ziming Zhu <ziming.zhu@silergycorp.com>, 
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: pmbus: Add bindings for
- Silergy SQ24860
-Message-ID: <20260612-cherubic-exuberant-binturong-35b7ee@quoll>
-References: <20260612030304.5165-1-zmzhu0630@163.com>
- <20260612030304.5165-2-zmzhu0630@163.com>
+	s=k20260515; t=1781254491;
+	bh=wI1pwPgnWwdIdUT0C/L8q8k1jeXEND89Wms5g6bg084=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=km0XxNm6Fmy8GZpLuVbDSzloB2sfUGJ+lv0LQ54fA2mFROyj5zrBW91Mbm1NaRp2t
+	 G84Hr5Uc56EnlrFFmpCTmBU6JsIOEABFksEPigqj6PMgaVI2OJtQ85dXkCNzV0ZG1l
+	 2AteePlHAar7jbvHNtAkbTNbnVhjcqv6djVWMcVMgG6KTFWfJI6tX17AUEPkLF8Z71
+	 z8BfBF/kNxkxWE2VotLjpfj4GRzHLiz3HM9oWmoW21NpgBhS/v67FwPg2j2BNqnkeB
+	 eZThjCbXIXOlioKPeUuXLy7FvdIHuUffYaqLnUzb95BbXuwROqKjPbuEXy9K/a4IQl
+	 9yEcrT85WDQsQ==
+Message-ID: <aa5becc6-f47f-4e96-bc64-fd84d78c7aa7@kernel.org>
+Date: Fri, 12 Jun 2026 10:54:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260612030304.5165-2-zmzhu0630@163.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] dt-bindings: hwmon: ina2xx: add ina232 compatible
+To: Loic Poulain <loic.poulain@oss.qualcomm.com>,
+ Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ Martino Facchin <m.facchin@arduino.cc>
+References: <20260611-monza-ina232-v2-0-e4375ce652d0@oss.qualcomm.com>
+ <20260611-monza-ina232-v2-1-e4375ce652d0@oss.qualcomm.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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
+In-Reply-To: <20260611-monza-ina232-v2-1-e4375ce652d0@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jun 12, 2026 at 11:03:02AM +0800, Ziming Zhu wrote:
-> From: Ziming Zhu <ziming.zhu@silergycorp.com>
+On 11/06/2026 16:05, Loic Poulain wrote:
+> From: Martino Facchin <m.facchin@arduino.cc>
 > 
-> Add devicetree binding documentation for the Silergy SQ24860 eFuse.
+> The INA232 is a current/power monitor from Texas Instruments sharing
+> the same register map as the other INA2xx.
 > 
-> The device is a PMBus hardware monitoring device which reports voltage,
-> current, power, and temperature telemetry. The board-specific IMON
-> resistor value is described with silergy,rimon-micro-ohms.
-> 
-> Signed-off-by: Ziming Zhu <ziming.zhu@silergycorp.com>
-> 
-
-Do not add blank lines between tags. I recommend to use b4 to handle
-this - it would solve your problems, including the missing tag in
-previous version.
-
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
+> Signed-off-by: Martino Facchin <m.facchin@arduino.cc>
+> Signed-off-by: Loic Poulain <loic.poulain@oss.qualcomm.com>
 > ---
->  .../bindings/hwmon/pmbus/silergy,sq24860.yaml | 74 +++++++++++++++++++
->  1 file changed, 74 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/silergy,sq24860.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/silergy,sq24860.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/silergy,sq24860.yaml
-> new file mode 100644
-> index 000000000000..03ef82c11e1a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/silergy,sq24860.yaml
-> @@ -0,0 +1,74 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/hwmon/pmbus/silergy,sq24860.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Silergy SQ24860 eFuse
-> +
-> +maintainers:
-> +  - Ziming Zhu <ziming.zhu@silergycorp.com>
-> +
-> +description:
-> +  The Silergy SQ24860 is an integrated, high-current circuit protection and
-> +  power management device with PMBus interface.
-> +
-> +properties:
-> +  compatible:
-> +    const: silergy,sq24860
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  silergy,rimon-micro-ohms:
+>  Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
 
-Isn't this just shunt-resistor-micro-ohms? IOW, didn't you just describe
-the shunt?
-
-> +    description:
-> +      Micro-ohms value of the resistance installed between the IMON pin and
-> +      the ground reference.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
 Best regards,
 Krzysztof
-
