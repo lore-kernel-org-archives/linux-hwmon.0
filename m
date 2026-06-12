@@ -1,95 +1,159 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2609B3537CD;
-	Thu, 11 Jun 2026 23:34:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049081D61B7;
+	Fri, 12 Jun 2026 03:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781220858; cv=none; b=A5d6N+LfhhLFfNxrCgiG3l8zJ1SLXTpwVNlKisQ4HkTc8y1pMk3W6mhcwfGr20MQawsi7cw1WwHvoLnVd41mQYAJTZ2ONLFrqfwGzDQsak7JzsLDaq2y2+MJSTCR12hhc7bnWWuVX36Q0udQgGqzfT7fHQ9au3/EqaioF4rso6g=
+	t=1781233439; cv=none; b=EsUve6BmQ/ScfDHjXbx/P83bCfbXXvjiU8FChTkiKNLv0W+3id6kd+orq/UBAX0zb8LMneUgb/C0PXtvbjrkrmdRR3bJirWOZdeQ9JuSY+utACVr7vrE9UlyDCDzxAzG4oc0Pw2u3zFH7x0r76ft+Iac06xKZ6ubVfdHISDZ6kI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781220858; c=relaxed/simple;
-	bh=K9EjqlJm5wZmDxJ9dqndu5PvBOsEi4TUXqgUnMU00oo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AynOgOVnY9xHx3yB+SJHJXZQrT66GPsuE4EnYQ4ja+urNzy18JQKG6LDSQeXUh1hC3CL1n1vObO/42EMxVD+ncDiG/D9WW7+v2JtPJY/Oz0XR6yX55uFqnk+QvqKXiEi3Relgf6QyO9BWQS/sqyZ0MsPklRH3BrUVMAcuE2jJeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jE7VweGc; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781233439; c=relaxed/simple;
+	bh=j2X+MA84vAwBRu3ivgpQi5hMeG3DjxwkdB24V8JcI00=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=BIOyxQvcofciuPqF37aPjHZQVVLEUr63CXRKEKglJLtBCrwgZivh10hF8cfOHoNqyWLp7Q+UoDFYw65ikZtGbOZAYlV7VFyYhKIHENgJbjgDraiH9rUM9zPkbRZTHtMqHUkoXJ0bP3RblYWvNdhoe+XQ6nIOkRTRHDjgH8Iyrgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=eA5+EoCF; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jE7VweGc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BCBD1F000E9;
-	Thu, 11 Jun 2026 23:34:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781220857;
-	bh=9Bap6l9i4ZQz5pn/Hk42rWgxj93JiOlztKrjDzdgYHo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=jE7VweGcc2A1ga6JUZEIkSRB9X6pyTI0EcO6Y0xVl01ZwP6Fk7aBHatOQO5Wa4vmn
-	 hP1DaUNvo/RzTTJZHsBbNcO+/60Gr4JbJSF634L1sOaJP5wioZ7ewXUCbOPO9rtorc
-	 td5I4ZGgvyOoHbQ7rxory7liLgDYGHYGOV4iW0DCeLJc+tAUOog+OQaxIUDkt4sCnC
-	 K2RLqlTvdXVFYFTp+O8zLh3WtitNwdpCvOGOrHE1cw8WeMEGG/OlMvKHelical6fSW
-	 vSWnmwozfbYViUG+8vZzA3oTG62ZanVdx4SoH+A9s/mdlg7XQGD8ApP2sUfx0gzEc5
-	 mWxatn4h34KEg==
-Message-ID: <fdea1a8b-d631-43d8-bcf0-1c79e635782c@kernel.org>
-Date: Fri, 12 Jun 2026 08:34:13 +0900
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="eA5+EoCF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=46
+	RsvdeETWrOH09RJ+ySWRL5LGyqtE6DLhYTz+CUvSg=; b=eA5+EoCFBlTtu+c0Qa
+	bMOSzxLXwEx+7on4xbH9KbY7B8N+NKN6wmU/8qnaAqyGsAQLl70XgeUet4+9BD4f
+	6M+q7vkZsEU0JNioNQLlF7qtlRVRyG1VdF8zCDuVdT6LjLxVJVkW0v5eZGdQUzbF
+	V+9NihQtDg4xTRxKizNfqfMdA=
+Received: from ZM.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wDHAqHqditqPP4wDA--.45071S3;
+	Fri, 12 Jun 2026 11:03:10 +0800 (CST)
+From: Ziming Zhu <zmzhu0630@163.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	Ziming Zhu <ziming.zhu@silergycorp.com>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v4 1/3] dt-bindings: hwmon: pmbus: Add bindings for Silergy SQ24860
+Date: Fri, 12 Jun 2026 11:03:02 +0800
+Message-Id: <20260612030304.5165-2-zmzhu0630@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20260612030304.5165-1-zmzhu0630@163.com>
+References: <20260612030304.5165-1-zmzhu0630@163.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 RESEND 2/2] scsi: mpt3sas: add hwmon support
-To: Louis Sautier <sautier.louis@gmail.com>
-Cc: Sathya Prakash <sathya.prakash@broadcom.com>,
- Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
- Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
- Ranjan Kumar <ranjan.kumar@broadcom.com>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Guenter Roeck <linux@roeck-us.net>, MPT-FusionLinux.pdl@broadcom.com,
- linux-scsi@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260609164423.2829699-1-sautier.louis@gmail.com>
- <20260609164423.2829699-3-sautier.louis@gmail.com>
- <93542109-2101-4d62-aae4-bbf058029663@kernel.org>
- <airk3Os03wPV0rvW@localhost>
-Content-Language: en-US
-From: Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <airk3Os03wPV0rvW@localhost>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDHAqHqditqPP4wDA--.45071S3
+X-Coremail-Antispam: 1Uf129KBjvJXoWxJr18KF18uF15Xr4kWFy3Arb_yoW5JrWkpF
+	Z5uF9rGrW8XryxW3y7GFy8Z3W5Zr1kCa1jgr9xJw1SyF98XFsYvrZIkrW5XF1UCr10yFy3
+	ZFWqyryxt3s7CF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jb73kUUUUU=
+X-CM-SenderInfo: x2p2x3aqwtiqqrwthudrp/xtbC6A8+N2ordu80rgAA3s
 
-On 6/12/26 01:39, Louis Sautier wrote:
-> On Wed, 10 Jun 2026 08:22:22 +0800, Damien Le Moal wrote:
->>> +config SCSI_MPT3SAS_HWMON
->>> +	bool "LSI MPT Fusion SAS hwmon support"
->>> +	depends on SCSI_MPT3SAS && HWMON
->>> +	depends on !(SCSI_MPT3SAS=y && HWMON=m)
->>> +	help
->>> +	Say Y here to expose the IOC and board temperature sensors of
->>> +	LSI / Broadcom SAS HBAs (such as the 9300, 9400, and 9500 series)
->>> +	through hwmon.
->>
->> Why do you need this ?
-> 
-> I was following the logic used by NVME_HWMON to prevent issues with
-> SCSI_MPT3SAS=y and HWMON=m.
+From: Ziming Zhu <ziming.zhu@silergycorp.com>
 
-Ah, yes, indeed. I did not thought of this case.
+Add devicetree binding documentation for the Silergy SQ24860 eFuse.
 
-> 
->>> +	struct mpt3sas_hwmon *hwmon;
->>
->> This should be conditionally defined with "#ifdef CONFIG_HWMON". Then you can
->> simply drop the config entry you added.
-> 
-> If I dropped SCSI_MPT3SAS_HWMON, I would use
-> "#if IS_REACHABLE(CONFIG_HWMON)" to match what i915_hwmon.h and
-> xe_hwmon.h do and properly handle the SCSI_MPT3SAS=y and HWMON=m case.
-> What do you think?
+The device is a PMBus hardware monitoring device which reports voltage,
+current, power, and temperature telemetry. The board-specific IMON
+resistor value is described with silergy,rimon-micro-ohms.
 
-That seems appropriate. If there is a clean way to avoid adding the new config
-option, we should use that method.
+Signed-off-by: Ziming Zhu <ziming.zhu@silergycorp.com>
 
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ .../bindings/hwmon/pmbus/silergy,sq24860.yaml | 74 +++++++++++++++++++
+ 1 file changed, 74 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/silergy,sq24860.yaml
 
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/silergy,sq24860.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/silergy,sq24860.yaml
+new file mode 100644
+index 000000000000..03ef82c11e1a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/silergy,sq24860.yaml
+@@ -0,0 +1,74 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++
++$id: http://devicetree.org/schemas/hwmon/pmbus/silergy,sq24860.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Silergy SQ24860 eFuse
++
++maintainers:
++  - Ziming Zhu <ziming.zhu@silergycorp.com>
++
++description:
++  The Silergy SQ24860 is an integrated, high-current circuit protection and
++  power management device with PMBus interface.
++
++properties:
++  compatible:
++    const: silergy,sq24860
++
++  reg:
++    maxItems: 1
++
++  silergy,rimon-micro-ohms:
++    description:
++      Micro-ohms value of the resistance installed between the IMON pin and
++      the ground reference.
++
++  interrupts:
++    description: PMBus SMBAlert interrupt.
++    maxItems: 1
++
++  regulators:
++    type: object
++    description:
++      List of regulators provided by this controller.
++
++    properties:
++      vout:
++        $ref: /schemas/regulator/regulator.yaml#
++        type: object
++        unevaluatedProperties: false
++
++    additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - silergy,rimon-micro-ohms
++
++additionalProperties: false
++
++examples:
++  - |
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        hw-monitor@40 {
++            compatible = "silergy,sq24860";
++            reg = <0x40>;
++
++            interrupt-parent = <&gpio>;
++            interrupts = <42 8>;
++            silergy,rimon-micro-ohms = <1600000000>;
++
++            regulators {
++                cpu0_vout: vout {
++                    regulator-name = "main_cpu0";
++                };
++            };
++        };
++    };
 -- 
-Damien Le Moal
-Western Digital Research
+2.25.1
+
