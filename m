@@ -1,156 +1,140 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC0A29B79B
-	for <linux-hwmon@vger.kernel.org>; Sun, 14 Jun 2026 20:56:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C8B128816
+	for <linux-hwmon@vger.kernel.org>; Mon, 15 Jun 2026 03:09:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781470578; cv=none; b=DBFsFZOFuv367oZU8rIQ+lwm5MAdubqUqCceTcq7zAaoizo++te5vg5wzaPxUb83VcuX8/9bSwVDvd1T5sMHAG4yfvaNx2aSevlN+2+RD4bR8GBwAFGl0e2HkEiX4RKs7JHUhHsC/jrMmeGTFPtL8jEJ6/maNv1wb5WkUkUjypM=
+	t=1781493000; cv=none; b=C9Eli/TzLXN86kHTSY7ixHGsHaFoNCOCdfDkOqg8302rg7ItgrQ/5rOjr84lZRgC96QznfYFIzi6tAwSP61q0tSO7WgBApjHxHHvUE58mCVMGZpIutfcyzjid+cCTPr6tSbtB8/rW8ea40qOAiGMYh+RAY4JvmgZ0NmXlH8SiX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781470578; c=relaxed/simple;
-	bh=k2TwFRVIGo3UAuKkEeMphcyHzyDfz5boVP642BqB7Cw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qyWGlofsqOeDiZIiOSY0ryTYzdQ9Ojcx763SuGBkjn3r7s5hSyd0P67pRDIjHY/kWF9rIJzxlnEl9cKlwnj9Q1hQNTh2Jl4GZg8ZYKHBgeYAg5Obj46RK4PnDBYMJoRusCga2qrgzMzuonJOz0ctONcfwicDYrIp9khJMqqlBpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=UtciRf7y; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1781493000; c=relaxed/simple;
+	bh=v0Z7PIY+mX/+RL3QyIzsYuLVn2ukFlDgmlMoLq5x8+g=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=gJ9RfeWrQtDTN0YFxW67sn++NAULCn7d1+Iw84YLIpiE6ImtN3fdfNoE01bHbXqtMLMo2BU0gJiG/01U20rkCR21vUrz3lL1tbZx+nL3466S1DhMhaAB6kxpKWvJfH9M9A7212255+bPeLCUGINk2+DzIdoDW1dx9RLpqXcqMHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XN49NFpn; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="UtciRf7y"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id C30D2C2BB2A;
-	Sun, 14 Jun 2026 20:56:18 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id D89E260014;
-	Sun, 14 Jun 2026 20:56:14 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7971E106C8A10;
-	Sun, 14 Jun 2026 22:56:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1781470573; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=1s1sT/c6GY/MY7ZVSH3SGCUIl59lEqQG0Hqj2B2xQT8=;
-	b=UtciRf7y+G/d7pfxrZk1IlUaUbXDpp2k8dQXrpLeAjNf2O8ktUpBHnQAgy52argPBpPzsK
-	ePID2nUloK8aMJsFsRJA50rAKX+xuLB3wBNvdwdZAH29K6w9cZ3ftdI0xF8TKIagm7jMhh
-	a4AaPWhm1RH3e0FyXX4DFz0KMr0AKwxFAbNhoqRqHhdNDjtye7kkmXwj3M2cD0o2CHM/WW
-	hNRn9yS0sYXHEUZepQ9eLYnfZHGllSN/7kRptBXX5ZUkvoG9gr+UJmFFEJvSqBh/9Poopm
-	acBAjonS+9lmPIlUIT4emxxr1P9x6eWxGB3JzZAsnG0UeXXqVBdQDNdh2768dg==
-Date: Sun, 14 Jun 2026 22:56:06 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Akhil R <akhilrajeev@nvidia.com>
-Cc: Frank Li <Frank.Li@nxp.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Saket Dumbre <saket.dumbre@intel.com>, Len Brown <lenb@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Arnd Bergmann <arnd@arndb.de>, Eric Biggers <ebiggers@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	Thierry Reding <treding@nvidia.com>, linux-tegra@vger.kernel.org,
-	linux-i3c@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-	acpica-devel@lists.linux.dev, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 00/13] Support ACPI and SETAASA device discovery
-Message-ID: <2026061420560674ab6fb9@mail.local>
-References: <20260423085718.70762-1-akhilrajeev@nvidia.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XN49NFpn"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2bf125989f2so20504145ad.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 14 Jun 2026 20:09:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781492999; x=1782097799; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cSGwU+Hsjf+p3YpunxSqmiWp7EnaNjmp/qUqKeITdgE=;
+        b=XN49NFpn6GSFIRpCk30yfK8GioTQnuRqMbY+z4G0+WYQQE1hzpTwDOy9khN7AmOs4i
+         owkSTDGPTo00Zp7zyskxN9HRSLiPEL8bGozOTvuebZ/3B/z26G1khhuTamJ3O85Kqai2
+         o9hR4MQcyhqahdn0Ido3pkXqEH/nYHSRhVSMcJ/n3PZlBFFvy00zjixmlf7Pc9q48aIt
+         OYkkCLJzm+dPDa9beBYN7Mv2Fw4b7pCPMt85AdUau6uvwqLGh/sCFi6m16BtSr3iVidu
+         S0qmM2k6YgHAUeb6N9NaAQ8KpLOOKQS6+wEQ65vux9hQubqxHqqr7jtBTIL9gePiTFxQ
+         GTTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781492999; x=1782097799;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cSGwU+Hsjf+p3YpunxSqmiWp7EnaNjmp/qUqKeITdgE=;
+        b=OAUJYmnBMGB2rP16U+Qp1rUysWaRi4IBQBCvUM+bEvhzRy3NlfYlRZE3Z2RjZ3HUI3
+         Y9R+WG08210PHf/YXsBLXdpfZhsPaUe9K8jiXaXo/wvzQBcvAd2RIjcIH/GrQaXlrJrX
+         i/DwEeX6kmMfMipDrO2PRNf/ylSwMhM2NOxHF6gSzO6OrHqUqf0SC3PhKrFS7R9JL86T
+         ONm7Bf6CPM+cRs9laIzqXRBjwEwh7Ubcm8H9bPHTlBjyj/EuywFB2EhJtY54d0RBZCqj
+         IxjthKLSX0Dld+AjdM1yCgVMTJ/OCkNSyzTToLDoXNE4qGNVufXgsCFZQH6ZSIeCfkF2
+         jnFw==
+X-Gm-Message-State: AOJu0YzbFGo3EQjy8Y8YW34XwkE/jjHB3MOLZ5LgpFj10UCzaPktBNfn
+	KQXKhJ698HpxnNS+zyujTusxPBpjTuH7BmP6OGD6U3w49jNuCMJJAiTq
+X-Gm-Gg: Acq92OGzs2o6JoZol2lij/tABuasfwhAs6eKAjqq9wTwfykkBHKZb1WY1Vj6EBDhR0M
+	9cmr91cT0yPApX+6QQeCFYUNNAoQiQUQPy+ehIYSVP7I5KF7vK9pI6emPRcCo7Q3XHTWXiFAOt7
+	XjtbqxQZXB0abQIP9HvBLw2cyu7eh1WfptOC+ZcXwsCBFyGDvnWeW7YpBUNyTmhZ7JtJPSk8bC8
+	kvgJmo0n1ngmPYk2Eb1WtHliAPEhTY1oj/I/KRaJ/vJ+CVCTdzKijMWwBBF5CSlGuf7scabZ+g7
+	JCJYPylFxeTzIixffODCaw5fzFYGXDBH4c6sEtCuPP0LjJMa6CxK5v4ohXyu593ZyHaBfz49/tD
+	XTKdDLZq6xoum76V+WPHhtQkAGJGeOF6tG+PIyQEIWz7n/46pQf96dBBkEjIGv4N9rttSiXQ8C8
+	N2FfrAHogmTR6OClmtL2K8/6t90pw8AzOJy305abbqK0XEJSMltEP4hrvd546PGzv7UA==
+X-Received: by 2002:a17:902:e78e:b0:2bc:b80f:677e with SMTP id d9443c01a7336-2c4137e49c1mr124323815ad.25.1781492999119;
+        Sun, 14 Jun 2026 20:09:59 -0700 (PDT)
+Received: from [10.10.15.228] (61-220-246-151.hinet-ip.hinet.net. [61.220.246.151])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c433460a60sm99211095ad.76.2026.06.14.20.09.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Jun 2026 20:09:58 -0700 (PDT)
+From: Potin Lai <potin.lai.pt@gmail.com>
+Subject: [PATCH v2 0/2] hwmon: (pmbus/lm25066) Support SMBus Current Limit
+ configuration
+Date: Mon, 15 Jun 2026 11:07:12 +0800
+Message-Id: <20260615-lm25066-cl-config-v2-0-59be46e67d5a@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260423085718.70762-1-akhilrajeev@nvidia.com>
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGBsL2oC/32Nyw6CMBBFf4XM2jF9pEVc+R+GBZQpjAFqWiQaw
+ r8LuHd5knPPXSBRZEpwzRaINHPiMG6gThm4rhpbQm42BiWUFVZK7AdlhLXoenRh9Nyiv8hCGZ9
+ rnRNsu2ckz++jeS9/nF71g9y0h3aj4zSF+DlOZ7l7//qzRIFCkbF57XVTyFs7VNyfXRigXNf1C
+ z55Q2bEAAAA
+X-Change-ID: 20260611-lm25066-cl-config-f81925f7337e
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Zev Weiss <zev@bewilderbeest.net>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Cosmo Chou <cosmo.chou@quantatw.com>, 
+ Mike Hsieh <Mike_Hsieh@quantatw.com>, Potin Lai <potin.lai@quantatw.com>, 
+ Potin Lai <potin.lai.pt@gmail.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781492996; l=2017;
+ i=potin.lai.pt@gmail.com; s=20260522; h=from:subject:message-id;
+ bh=v0Z7PIY+mX/+RL3QyIzsYuLVn2ukFlDgmlMoLq5x8+g=;
+ b=8jBjNoDgtbqIn10yoWlK5lI5bjsbBBXfQ4gJjoqlc79NBqxy/3tkuYX8cREOx9pVmkO7kEeAE
+ 83IGcT80yJJA0zAmJr9lcFxwIIVUmHCpvI875Yb+XERQ0ec61zYfkBw
+X-Developer-Key: i=potin.lai.pt@gmail.com; a=ed25519;
+ pk=j3/nMxzz1ZPpp1revghyZ8IqOnwi6RWfuxXN2XrNMRE=
 
-Hello,
+This series adds support for configuring the current limit behavior via
+software override on LM25066-compatible devices (excluding LM25056) using
+the DEVICE_SETUP (0xD9) register.
 
-On 23/04/2026 14:26:59+0530, Akhil R wrote:
-> This patch series adds SETAASA device discovery to the I3C subsystem,
-> enabling support for SPD5118 temperature sensors found on DDR5 memory
-> modules. The changes also add ACPI support for all existing DAA
-> methods like SETDASA, SETNEWDA as well as I2C devices on I3C bus.
-> 
-> SPD5118 and similar devices on DDR5 memory modules differ from typical
-> I3C devices in their initialization. They use SETAASA broadcast CCC
-> instead of ENTDAA for address assignment, and per JEDEC specification,
-> are not required to have a Provisioned ID or implement standard device
-> information CCC commands (GETPID, GETDCR, GETBCR).
-> 
-> The series enables to describe all I3C and I2C devices on both Device
-> Tree and the ACPI table, using unified device property APIs throughout
-> the I3C core and the Synopsys DesignWare I3C master driver.
-> 
-> Please note that the series modifies drivers across multiple subsystems,
-> like Device Tree bindings, ACPI, I3C and HWMON.
-> 
-> v2->v3:
->   * Fix maximum value and indent bit list for mipi-i3c-static-method.
->   * Move I3C_ADDR_METHOD_* macros to dt-bindings header.
->   * Drop ACPICA commit IDs, keep only the Link: tags.
->   * Revert the change which proceeds to register other devices if SETAASA
->     is not supported so that it aligns with the rest of the driver and to
->     avoid the issues pointed by Sashiko.
->   * Rework multiple commit messages.
-> 
-> v1->v2:
->   * Added patch to remove 16-bit addressing support for SPD5118
->   * Guard ACPI calls with #ifdef CONFIG_ACPI
->   * Remove CONFIG_OF guard for of_alias_get_highest_id()
->   * Mask mipi-i3c-static-method in the driver to select only valid values.
->   * Proceed to register other devices if SETAASA is not supported.
->   * Update commit message and links in the description of multiple commits.
-> 
-> 
-> Akhil R (13):
->   dt-bindings: i3c: Add mipi-i3c-static-method to support SETAASA
->   ACPICA: Read LVR from the I2C resource descriptor
->   i3c: master: Use unified device property interface
->   i3c: master: Support ACPI enumeration of child devices
->   i3c: master: Add support for devices using SETAASA
->   i3c: master: Add support for devices without PID
->   i3c: master: match I3C device through DT and ACPI
->   i3c: dw-i3c-master: Add SETAASA as supported CCC
->   i3c: dw-i3c-master: Add a quirk to skip clock and reset
->   i3c: dw-i3c-master: Add ACPI ID for Tegra410
->   hwmon: spd5118: Remove 16-bit addressing
->   hwmon: spd5118: Add I3C support
->   arm64: defconfig: Enable I3C and SPD5118 hwmon
-> 
+When the 'ti,current-limit' property is specified in the device tree,
+the driver configures the DEVICE_SETUP register's Current Limit Configuration
+bit (bit 2) to activate SMBus/software override and sets the Current Limit
 
-I'd really like to apply this but I would have preferred having an
-actual ack from Rob on patch 1. Also, you are going to have to rebase on
-the current i3c-next. Can you do this?
+Setting bit (bit 4) to "low" or "high" threshold accordingly.
+Since LM25056 does not support software override (bit 2 of DEVICE_SETUP is
+reserved), it is explicitly excluded from this support in both the device
+tree binding schema and the driver.
 
-Thanks!
+---
+Changes in v2:
+- Replaced the boolean properties ('ti,cl-smbus-high' and 'ti,cl-smbus-low')
+  with a single string property 'ti,current-limit' ('low' or 'high')
+- Excluded lm25056 in the driver from parsing/setting the current limit property.
+- Link to v1: https://patch.msgid.link/20260611-lm25066-cl-config-v1-0-02e567bf3d91@gmail.com
 
->  .../devicetree/bindings/i3c/i3c.yaml          |  31 +-
->  arch/arm64/configs/defconfig                  |   3 +
->  drivers/acpi/acpica/rsserial.c                |   6 +-
->  drivers/hwmon/Kconfig                         |   9 +-
->  drivers/hwmon/spd5118.c                       | 119 +++---
->  drivers/i3c/master.c                          | 354 +++++++++++++++---
->  drivers/i3c/master/dw-i3c-master.c            |  66 ++--
->  include/acpi/acrestyp.h                       |   1 +
->  include/dt-bindings/i3c/i3c.h                 |   3 +
->  include/linux/i3c/ccc.h                       |   1 +
->  include/linux/i3c/master.h                    |  20 +-
->  11 files changed, 463 insertions(+), 150 deletions(-)
-> 
-> -- 
-> 2.50.1
-> 
-> 
-> -- 
-> linux-i3c mailing list
-> linux-i3c@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-i3c
+To: Guenter Roeck <linux@roeck-us.net>
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Zev Weiss <zev@bewilderbeest.net>
+Cc: linux-hwmon@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Cosmo Chou <cosmo.chou@quantatw.com>
+Cc: Mike Hsieh <Mike_Hsieh@quantatw.com>
+Cc: Potin Lai <potin.lai@quantatw.com>
+Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+---
+Potin Lai (2):
+      dt-bindings: hwmon: pmbus: ti,lm25066: add current limit properties
+      hwmon: (pmbus/lm25066) add current limit configuration support
+
+ .../bindings/hwmon/pmbus/ti,lm25066.yaml           | 18 +++++++++++
+ drivers/hwmon/pmbus/lm25066.c                      | 37 ++++++++++++++++++++++
+ 2 files changed, 55 insertions(+)
+---
+base-commit: 05f7e89ab9731565d8a62e3b5d1ec206485eeb0b
+change-id: 20260611-lm25066-cl-config-f81925f7337e
+
+Best regards,
+--  
+Potin Lai <potin.lai.pt@gmail.com>
+
