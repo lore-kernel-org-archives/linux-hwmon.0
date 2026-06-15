@@ -1,194 +1,147 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6F543B71C8
-	for <linux-hwmon@vger.kernel.org>; Mon, 15 Jun 2026 07:02:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19B1C3DB62A
+	for <linux-hwmon@vger.kernel.org>; Mon, 15 Jun 2026 09:51:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781506968; cv=none; b=eq1+M/4I4V0y77I1OUgjCmqMhBC4GwV72RqNurr5qzsBtVA4uKqXKLMSJ+/7rFfmZwKgR86Q3R9i0J+Ibb9okYJwF+/hN3bYP8eumP91filmNkMfK58ThSD/+TxtPSpfhDQm+yWTN0zVCezU7odvqjPlbJnFJIqAcnsh2+XrlS0=
+	t=1781517106; cv=none; b=muU99MZJdlit/wTpUHLUPiNqe5gIkLSQnbM/Zoedu80Q9sLCt5GZkks0RmxqT5TF65z6WuF8DaRU5Iz1TgHJim3GNVw1mN+VvDzIVi/WwCqUf8cWkj0aZBWY8jz+Bi6DxHHotj66zW2sqmfcKvKkySZtBOQG5Gzi2UDCEdQuHOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781506968; c=relaxed/simple;
-	bh=JJoh/jmUIbgCGv3zXC472llgwxLDY2JJlzUjgLCVlog=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=rhO9fbAF9/5yZrKrFUNSF55aKDEd1KSchCneYdsx+zPeMYcYPobxqra2BwwgFdscXP3Bpn3ZdBYCTP6r8WGaXK5BbPU6mfmR2AuvTa0WVLXehG2hq/3ClVpizdYrWhNMMSr/CY48/m8iB2XNCOZjM4yv5XDZEcR8E7/o0yj2PHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HzUFzjZj; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781517106; c=relaxed/simple;
+	bh=SZ/wHLIOELYXj1BkfDO54LOub+1NpNKFcJ9ebiUXs9M=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=N+bZNFOwO9ZPpUlWPZt4Ts89aOGoe4YeNpGAXxbDEinEqgWP1wuUkriBPBAb2NZlLaaQ2wKFBDU2Cjf+SRJ/EAi6vGszDqvJXMJSOqIfWHYgE8YYBvvFoKWYzioUTpZfwVddqK+eNMWZou1z3Kh9v3Ggiha+3QbbzayrJeqSyJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=slCXWFC8; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HzUFzjZj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3F201F000E9;
-	Mon, 15 Jun 2026 07:02:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781506962;
-	bh=x+dvp0yhljTdHF9b83D6NSPK2V5d4ynIhhwsdtvnxaI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=HzUFzjZj9d72jo5pM5op4kuQyd6Ru7clVZX0tlZeWyXFfQMFGXGSkHU4HAeofi1Q9
-	 qeeyVGo1PmpmzImMcZkQXIDkbf9WwfbpSi8zLOrdmhAmx4oAcGJSxu7CoqpxRWrTco
-	 L1XWC4S9UkeGsetI8dZFD0MI9+ONpJxrLf6r9Lq0R0qAg0itA+960AjIDvsnHT/Jl3
-	 9vb8tBv3OH9foMyo4tm2CfDiGfltDdy/CreQAQkbg6GVDORnrXg3h7t0n+Mj8mDypS
-	 6rHR4UEcVJXdt4teoU3VT44J34F4toxPPL+dlp4+ersoJE2E/tG09HiGLmmmg4rQFK
-	 7ZUk0b+Nle3cA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (w83793) remove vrm sysfs file on probe failure
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Pengpeng Hou" <pengpeng@iscas.ac.cn>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260615064806.51139-1-pengpeng@iscas.ac.cn>
-References: <20260615064806.51139-1-pengpeng@iscas.ac.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 15 Jun 2026 07:02:41 +0000
-Message-Id: <20260615070241.E3F201F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="slCXWFC8"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-84231305a80so1831046b3a.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 15 Jun 2026 02:51:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781517104; x=1782121904; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kEjlUSEiDp8boCv0TcDQDfb4ZA9nJAiPrgVG8p7VH5E=;
+        b=slCXWFC80gu/KW7G1dYaMWD5xOxgXCZqcbBOERhIGVq3RwUZ8fVQFd6h/VJAXiKjPE
+         y+wQXo7xlCqca9Ctp5yp6WGfLfJI+SEZ1bCoPz5BrgUrwn8WahWGSEZZ9QaiR6+BEdmz
+         pVIiwF44ns4n6872EajV32Umro5tWfv9/ryLZ1vnJkVTjRCPJd7kqMRoDDe1bOPun2R8
+         9yC1Hl8pygrxyWE122VVgkhgItmdK4yZzvQL4xpV3fL7xHJ7oAX/dofqThlNfwg62vyg
+         +CKtzCUGbvsvYBWgm9I4HrRAWI4ZcgQ6kQYnjOPIkznHpHr8btq5TYxMgsYKQiizl+db
+         r7tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781517104; x=1782121904;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kEjlUSEiDp8boCv0TcDQDfb4ZA9nJAiPrgVG8p7VH5E=;
+        b=d3c9YL8r0rQjfCigemZmx4Dz+hKSgZdNHL2DVBmvOaPxfrZS5WfOD6+0i7yBeeS91i
+         y028h8QMpnjN6sgcF4gzBt9ISJwHANr8hhR2sKbwL5L/7cj5Cb55UBJfnjjWcJqJ/RJi
+         9Ql7Pj4ASYoYk+rEWIX/Lt7hPSV/wwnP+Kn4g8w/F1xXPKxwx7+VpF3FIEjUd5qhVUxu
+         1PI83ac2IOGD7qUHmyM6WCuhdSjcJaIF6964vsj0r60shQZVlUxV1uIoRD0CnrgSN2a6
+         FOXNH9AF1A3kx/V87khgEGPUzoTQY4D6p9CAofMbnPA0UNOWglYa4E/tUtfGbka3liFN
+         g/8A==
+X-Gm-Message-State: AOJu0YwVnxJZOqfka/MjMD8+0asv54+pO+HcElGyhCXt+gCsYy5adtmV
+	E7OOz/7pjl6R7Hn6oYwiEzijRqN52mHcyqOqS5VEfzqjV8sH0NBbhBRx
+X-Gm-Gg: Acq92OHg8gCc6RGrfXPuLogUxxd/f35lZrimMZbziN6TVrEGI9M1WICwaayaIO4N05f
+	IU9wMH3ewn8+d9/8SqIK0ph4s/3hpd+LLL447R51JVTTXe/3iddftf48L2nu5SxsnxG3dfPdRDs
+	El+Gw66z1rPHlU9qZ1fzHHOnsJsRp3oMBpynwqoCVKYYRYuW+Vkefjc7nNd7Ez5SUj3GAZKwvuE
+	SrXP6XiM5DHHBZCTIZyYsT0DS6aGyfnhTU3ONqZiwHj/2TFCvyHD6URtzwLTg4xplHP1ouKC98B
+	OY4aGcazK4g7f8c7cpOzu14IWx0+aXW31r+sdhcfe6NSyFv6yCdm+KMpsY0h+D2pQVBG42YsmbU
+	eolxNkdibQYwTVLebB6ywHF7f8cMueXMOSFRtUQdDqwXPYQZ1rEN6H5DnbOQZ2AF54h9k2Kt68O
+	OiAMI8q31hLcehWnsdMlAWG+FHmhQvepO4syMb0otLoVbnN/AZ9mEU9RfflurWrgB5YA==
+X-Received: by 2002:a05:6a00:760d:b0:842:5712:c29e with SMTP id d2e1a72fcca58-844e19663cfmr8661591b3a.14.1781517104519;
+        Mon, 15 Jun 2026 02:51:44 -0700 (PDT)
+Received: from [10.10.15.228] (61-220-246-151.hinet-ip.hinet.net. [61.220.246.151])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8434afc8a5bsm9922207b3a.33.2026.06.15.02.51.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jun 2026 02:51:44 -0700 (PDT)
+From: Potin Lai <potin.lai.pt@gmail.com>
+Subject: [PATCH v3 0/2] hwmon: (pmbus/lm25066) Support SMBus Current Limit
+ configuration
+Date: Mon, 15 Jun 2026 17:49:15 +0800
+Message-Id: <20260615-lm25066-cl-config-v3-0-decb4f5b0b77@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJvKL2oC/33NTQ6CMBCG4auYrq3pjy3iynsYF1CmMAaoabHRE
+ O5uixsWxuWbfPPMTAJ4hEDOu5l4iBjQjSnkfkdMV40tUGxSE8GEZppz2g9CMa2p6alxo8WW2hM
+ vhbKFlAWQdPfwYPG1mtfbt8OzvoOZMpQXHYbJ+ff6NPK8++dHThllApQuaiubkl/aocL+YNxAs
+ h/FVlC/BJEEVdZw1KCLRlVbYVmWD77TW0oGAQAA
+X-Change-ID: 20260611-lm25066-cl-config-f81925f7337e
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Zev Weiss <zev@bewilderbeest.net>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Cosmo Chou <cosmo.chou@quantatw.com>, 
+ Mike Hsieh <Mike_Hsieh@quantatw.com>, Potin Lai <potin.lai@quantatw.com>, 
+ Potin Lai <potin.lai.pt@gmail.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781517101; l=2392;
+ i=potin.lai.pt@gmail.com; s=20260522; h=from:subject:message-id;
+ bh=SZ/wHLIOELYXj1BkfDO54LOub+1NpNKFcJ9ebiUXs9M=;
+ b=zl8/mxU2Bzi73qtSMZe0V2qWwzxLrDJ7lL14T9uQF7vCk7qUxK9E+8T7QawNp+Tg3duzBqwf8
+ 5MS2xpx/vxnB244YKkK8mfc4KAMgQ4qE68vPTzKqBANACZttQjDnMNH
+X-Developer-Key: i=potin.lai.pt@gmail.com; a=ed25519;
+ pk=j3/nMxzz1ZPpp1revghyZ8IqOnwi6RWfuxXN2XrNMRE=
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
+This series adds support for configuring the current limit behavior via
+software override on LM25066-compatible devices (excluding LM25056) using
+the DEVICE_SETUP (0xD9) register.
 
-Pre-existing issues:
-- [High] Potential NULL pointer dereference in watchdog_close() when closin=
-g the watchdog after the I2C client is unbound.
-- [High] Missing serialization in watchdog operations causing I2C bank swit=
-ching corruption.
-- [Medium] Arithmetic overflows and underflows in sysfs store functions res=
-ult in severely incorrect hardware limit configurations.
-- [Medium] Global reboot notifier breaks when removing multiple device inst=
-ances.
---
+When the 'ti,current-range' property is specified in the device tree,
+the driver configures the DEVICE_SETUP register's Current Limit Configuration
+bit (bit 2) to activate SMBus/software override and sets the Current Limit
 
-commit 2a161651efd66233c91e9cba273ace1907f39461
-Author: Pengpeng Hou <pengpeng@iscas.ac.cn>
+Setting bit (bit 4) to "low" or "high" threshold accordingly.
+Since LM25056 does not support software override (bit 2 of DEVICE_SETUP is
+reserved), it is explicitly excluded from this support in both the device
+tree binding schema and the driver.
 
-hwmon: (w83793) remove vrm sysfs file on probe failure
+---
+Changes in v3:
+- Renamed property from 'ti,current-limit' to 'ti,current-range' to
+  resolve the global schema type conflict.
+- Updated commit messages and bindings description to document supported
+  devices and their physical voltage mappings for the low/high settings.
+- Link to v2: https://patch.msgid.link/20260615-lm25066-cl-config-v2-0-59be46e67d5a@gmail.com
 
-This commit updates the probe error path in the w83793 driver to correctly
-remove the vrm sysfs file. This matches the normal remove path and prevents
-leaving the vrm file behind if probe fails after creating the VID files.
+Changes in v2:
+- Replaced the boolean properties ('ti,cl-smbus-high' and 'ti,cl-smbus-low')
+  with a single string property 'ti,current-limit' ('low' or 'high')
+- Excluded lm25056 in the driver from parsing/setting the current limit property.
+- Link to v1: https://patch.msgid.link/20260611-lm25066-cl-config-v1-0-02e567bf3d91@gmail.com
 
-> diff --git a/drivers/hwmon/w83793.c b/drivers/hwmon/w83793.c
-> --- a/drivers/hwmon/w83793.c
-> +++ b/drivers/hwmon/w83793.c
-> @@ -1917,6 +1917,7 @@ static int w83793_probe(struct i2c_client *client)
-> =20
->  	for (i =3D 0; i < ARRAY_SIZE(w83793_vid); i++)
->  		device_remove_file(dev, &w83793_vid[i].dev_attr);
-> +	device_remove_file(dev, &dev_attr_vrm);
-> =20
->  	for (i =3D 0; i < ARRAY_SIZE(w83793_left_fan); i++)
->  		device_remove_file(dev, &w83793_left_fan[i].dev_attr);
+To: Guenter Roeck <linux@roeck-us.net>
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Zev Weiss <zev@bewilderbeest.net>
+Cc: linux-hwmon@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Cosmo Chou <cosmo.chou@quantatw.com>
+Cc: Mike Hsieh <Mike_Hsieh@quantatw.com>
+Cc: Potin Lai <potin.lai@quantatw.com>
+Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
 
-[Severity: Medium]
-This is a pre-existing issue, but does the use of a global reboot notifier
-break when removing multiple device instances?
+---
+Potin Lai (2):
+      dt-bindings: hwmon: pmbus: ti,lm25066: add current limit properties
+      hwmon: (pmbus/lm25066) add current limit configuration support
 
-The driver registers a shared static watchdog_notifier block during probe:
+ .../bindings/hwmon/pmbus/ti,lm25066.yaml           | 20 ++++++++++++
+ drivers/hwmon/pmbus/lm25066.c                      | 37 ++++++++++++++++++++++
+ 2 files changed, 57 insertions(+)
+---
+base-commit: 05f7e89ab9731565d8a62e3b5d1ec206485eeb0b
+change-id: 20260611-lm25066-cl-config-f81925f7337e
 
-drivers/hwmon/w83793.c:w83793_probe()
-    ...
-    err =3D register_reboot_notifier(&watchdog_notifier);
-    ...
+Best regards,
+--  
+Potin Lai <potin.lai.pt@gmail.com>
 
-When removing a device, w83793_remove() unconditionally deregisters it:
-
-drivers/hwmon/w83793.c:w83793_remove()
-    ...
-    unregister_reboot_notifier(&watchdog_notifier);
-    ...
-
-If the driver is bound to multiple I2C devices, won't removing the first
-device globally unregister the notifier, tearing down reboot events for all
-remaining active device instances?
-
-[Severity: High]
-This isn't a bug introduced by this patch, but is there a potential NULL
-pointer dereference in watchdog_close() when closing the watchdog after the
-I2C client is unbound?
-
-In w83793_remove(), data->client is set to NULL to detach the hardware:
-
-drivers/hwmon/w83793.c:w83793_remove()
-    ...
-    data->client =3D NULL;
-    ...
-
-If a user application holds the open file descriptor, w83793_data remains
-alive. When the user later closes the file without sending the 'V' magic
-character, watchdog_close() enters an else block to log a warning:
-
-drivers/hwmon/w83793.c:watchdog_close()
-    ...
-    } else {
-        dev_crit(&data->client->dev, "unexpected close...\n");
-    ...
-
-Since data->client is NULL, could accessing data->client->dev crash the
-kernel?
-
-[Severity: Medium]
-This is a pre-existing issue, but do the sysfs store functions fail to
-prevent arithmetic overflows and underflows, leading to incorrect hardware
-limit configurations?
-
-In store_in(), if a user provides an input of 0 for a channel with a
-voltage offset (like 5VDD and 5VSB), subtracting the offset underflows
-the unsigned long value:
-
-drivers/hwmon/w83793.c:store_in()
-    ...
-    val -=3D scale_in_add[index] / scale_in[index];
-    ...
-
-This wraps around to ULONG_MAX, which incorrectly clamps the voltage limit
-to the maximum limit (255) instead of 0.
-
-Similarly, in TEMP_TO_REG(), the macro adds 500 to the parsed long input:
-
-drivers/hwmon/w83793.c:TEMP_TO_REG()
-    ...
-    return clamp_val((val + (val < 0 ? -500 : 500)) / 1000, min, max);
-
-Could extreme positive user values cause a signed overflow here, producing a
-negative limit?
-
-Finally, in FAN_TO_REG():
-
-drivers/hwmon/w83793.c:FAN_TO_REG()
-    ...
-    if (rpm <=3D 0)
-        return 0x0fff;
-
-Since sysfs inputs are parsed as unsigned long but the rpm argument is a
-signed long, inputs exceeding LONG_MAX become negative. Does this cause the
-driver to disable the fan warning entirely instead of clamping to the upper
-bound?
-
-[Severity: High]
-This isn't a bug introduced by this patch, but is there missing serializati=
-on
-in the watchdog operations that could cause I2C bank switching corruption?
-
-The w83793_write_value() function is documented as requiring
-data->update_lock because it modifies data->bank:
-
-drivers/hwmon/w83793.c:w83793_write_value()
-/* Must be called with data->update_lock held, except during initialization=
- */
-static int w83793_write_value(struct i2c_client *client, u16 reg, u8 value)
-
-However, watchdog_trigger() calls this function while only holding
-data->watchdog_lock:
-
-drivers/hwmon/w83793.c:watchdog_trigger()
-    ...
-    w83793_write_value(data->client, W83793_REG_WDT_TIMEOUT,
-                       data->watchdog_timeout);
-    ...
-
-If watchdog operations and sysfs accesses run concurrently, could they
-interleave their I2C commands, corrupt data->bank, and cause reads or
-writes to hit the wrong hardware bank registers?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260615064806.5113=
-9-1-pengpeng@iscas.ac.cn?part=3D1
