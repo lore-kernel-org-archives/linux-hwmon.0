@@ -1,79 +1,79 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF87146AEC5
-	for <linux-hwmon@vger.kernel.org>; Tue, 16 Jun 2026 15:59:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D16FD44DB64
+	for <linux-hwmon@vger.kernel.org>; Tue, 16 Jun 2026 16:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781625579; cv=none; b=bgTNbiCl2D0jc7R2MlSqohAOot13+tKDIWWhv3aVzpzCCwG1f9gTvEuJOeH91JezHe3yBgUx6bK8lme0K9CyMzB0xkoMydvvENHnujDe+ogj16UUt/CA9cVW4uwzVJxQCdCIap0rkE4j/7VBWkTHcoVAjpPyS8UOueguGDaPJW4=
+	t=1781625836; cv=none; b=TVcya6RMO+57T3LOtLLhxhoLP6TjodfEKYkHVpJp9pAMk+HiES7seE6IqaToYtPkIzCiP0KaOHTG+g9GRe3cjfTbhNzYGyGC4kCcYoAc+HSHUXt61pK0oUTtOc4V0kb616yLWNg55aCxHJoQewYsGFTMPx1dhjhZprebMN0sDdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781625579; c=relaxed/simple;
-	bh=wfos8YW46l2Yhc+nFwbs7u+gPmq7+1EZsokr/nRJRBY=;
+	s=arc-20240116; t=1781625836; c=relaxed/simple;
+	bh=w+HrTFr0z+tqsQh2Xdwmp0XrVFet51gpeHWW0S6I9aQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Iaqbv+rPSwi7JHIXS/UQxew99NUmeQdKBQ6uzaG2ODx6FMHjOT3o30gdA+97daRN78tvxWlDrPqqxOWcx0e6/lhib+ikoNCOlH7pVbBQzAjFSudJE+vkCim1TRbc0XBmEFr00Oz04gBZtp13xm0SzCLFKPWFi4pzyn/gJBxPMZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JA+grj0K; arc=none smtp.client-ip=209.85.215.180
+	 Content-Type:Content-Disposition:In-Reply-To; b=swduI/2OmkKDfcjeMbEWz8Uru3ShPIbefaWqNsIptgLtBF8zlk7Vo3Zh7G2GmbXynaO0mkx77kmk6bqgt9E3jPHVTFbj5SNqKNDO+W/3meBdnQwUmpzewZaQ1vmhSCphctXtDuPzZS1uTGS0smBoPQmZUbko13EzSrTluE0rgKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AtKPOqRL; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JA+grj0K"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c858014845aso1406a12.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 16 Jun 2026 08:59:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AtKPOqRL"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-36dd65b95f2so41388a91.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 16 Jun 2026 09:03:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781625577; x=1782230377; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781625834; x=1782230634; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=uSWVqVYBFNIaFXIOlsv9h9TEbEq9eBULKt8+LrdjY+M=;
-        b=JA+grj0KsFOooI53z4jrpYsay0ElP3YHZbQfnSWlPpPoVCjBkFN/7Q+b3qo2aLrBOh
-         bPlokCLdlmDXYdRNEcVLEw7W/cE5s86fR6PRjstY2LB132Zr/dqHEa4e04BwR+2ionsc
-         sgwdaH4jX/ZiLaM+kll2CBQSluyIA1bzSMU7By7izMNgTSmfuYENRfP9i9wUsHdvFC8n
-         OKvvwIf3asHzIyLl89Q4qW6uGpcU+drdZoZBQ6j4kQwBZNWCZlv8qlrCXg9bNAeTL6AT
-         vvsIsrEs7dr4ftuogBgpTg9YXcVoh5vrsUWrJKyGiiwsn/6wc5oJrfA/ek8YePAbZ8Z2
-         vNOA==
+        bh=SsBsTPxJdQQQDp4kGeaeLy+dHUagTpgcZ8ic13rhyUU=;
+        b=AtKPOqRLjOPhR2zANpQAjIMlhjo0aPKVZcyMuZssHYTC2l75iFy6Bo2tRptaa6y6Rq
+         Gy6CRKpnIG0pojUGzMemtlySuygOZ8etCiGJxxofOnzUo2fKC1Rjw66i+xCgwp0bbldQ
+         XFvHTMxwnqNDQSPVXnIT1tPAmdkH0Sm/2M7mTEXII3UvR0fgNCSpCGf77GWbTa3wxvVO
+         9Y5FTsCqL631uYErWh/B7yw5iE4bIeD4biDl73ckbSZ+GzZd9W8MLeGOuGi0WI9h5hrt
+         Nmw2JyEcBG/VBo3vF1n2PhrKsG4vwcYAebQvF7UldJ2OGgmvNZPSgE+OKGKYKvzoquS8
+         W7Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781625577; x=1782230377;
+        d=1e100.net; s=20251104; t=1781625834; x=1782230634;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=uSWVqVYBFNIaFXIOlsv9h9TEbEq9eBULKt8+LrdjY+M=;
-        b=TmF1qLUJ5/CuwhDn1TMFRe/wo+IqoJb+nSeQjMg2TH73KTnXWH7uG4VtlVDk8a1Muo
-         GCRI/c4+AzCUihb73q2vIb8nPgR+xMEUp4U3+bnIqw5wEpV7SuCWN64FhuNOuidAdGyZ
-         cUF62lyccu0pZUArZMJUSBDC+JDvsg/AlH1N6MJVwk2eoBjlRYKXaWvc4K4OcCxf0pm9
-         1jaeFcOFUIiXIf4VkXXptmrOPWf0K83O3wiJ/aSZLuPe/T53SVbuc2ccmr7KrF+GvHSU
-         vBGQvW4E1BDnuS1gYe/l8U7piwfEQPTJIh6cLZSKoVkv4MeqOXDON7GEQy/vQkt7DDFC
-         dblw==
-X-Forwarded-Encrypted: i=1; AFNElJ+mt7XDbWJmzyVNpH5wnHN+UJ1F9qYTy5HL5tFTuOFUGgzP8rzT43EZiheCnD8tbf10vZt22EygFwRmHA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyU57CdaNib8H6bG3gh0fY3RuNkuW77R53gmd0ZbSqxmY68M8Zl
-	f9exWa1QdpIa55V4kT2RS5G4cUPpRdrYtZIVergJaYm0e9/ohOc5pwKc
-X-Gm-Gg: Acq92OHJbM1mM0R5hIbIqXfQFP/SpK9419gN5JFbqlAk1/PuisQfhpODDc5EWPaWkPQ
-	JshA8VRAwnWi/BnOx38I/Wu9w4S4IWGmu0c9INlz86Q/xSoozQnTKxmBPu268Xfr9zQsIQA8Nl3
-	Qd4TRZS8Id4a5ACZ9Mugn5x8o3JkI7h3mOwmeklz7Av0I51h1QScFgm2PY431yOdyzs9PEVHHIs
-	hCzH26NdDPDL9ilbcqxrlF8BvdkZA1HpSeY3sA4bLAOBynoKzH/mxHc0tlaCDTZfnzrFeZnRBce
-	cKygKGDzK0W7E0x/0dCaAb7ALCv8etbOlSfbBMBvq2I80W7d5tkWn03tuJKHUno0IwavBDz9ufl
-	09WRsXBcKqjDcv8Kl7vRnTYm5oKPB9F5/pEzn2O5on9F+kL6s9tcIEERHZ4HfkEoK8itS2AEL0r
-	4baz22mTGHSCjieszcMX7IvJNOZQlXDKA1XzxR
-X-Received: by 2002:a05:6a21:490d:b0:3b4:6921:5665 with SMTP id adf61e73a8af0-3b7e2242adamr3765102637.9.1781625577305;
-        Tue, 16 Jun 2026 08:59:37 -0700 (PDT)
+        bh=SsBsTPxJdQQQDp4kGeaeLy+dHUagTpgcZ8ic13rhyUU=;
+        b=CJFD+YZJtaQuaPHlO702LwtoGPh/FoC7BqgMf/6+8K3IKVvKig5oc9J3+cZX8QPsak
+         InAKPf5053vG6X0zrIJ21vEPwBj5HTqF6e+tJX1B24/ghVgVWH5WxmtdL2UNMQoczsl3
+         uCFmlXT7GpnVlleltHIj7TYsJ7Kgtv5xC6oJYUNuLQORsFbKdFJUxwfdvY6wRyUV/pss
+         v4kEHNPVLC+rcF2HjogzqKZxShgURg+QYDbVxoy4PjK+BWy4D95W84j/AN8g7sMq6F96
+         ypHqG8rK3SRgVEn6CQJuaiuiTdQ1jczTvKaL8sJ0Sq+mqWCBFnm2kUzvuMd2iVvPGUp1
+         L25w==
+X-Forwarded-Encrypted: i=1; AFNElJ8G6OroyQfcMSbIB3iILZ676eD/z5I343QaoZt7mkIwMEh/iOu5Pk556FNlklD8FnaQdzZ11N9/tSOgwQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8su9Reg+70PQyyWpfG/FmcNI2zo1jtQhnfn1m9udrTZUqGg61
+	4Mc5TTWNS7pk2FNDGf54Hc5INbdQlazsdyeoMS996PXh9aCWe2FpAAe+
+X-Gm-Gg: Acq92OH8xqAroS+T9Akw8uimLAAwCWjrdL4U5mUVho3bHVPrBPyIQe7Fp1u6m/v81H2
+	JG/Er1U4h4cWTpgEmRMmNW7v8siawQLvdcCPLeEFZpUgukoYa7CbUZQvdXO8QPBTYhCvquVPF7t
+	mxPEaxDeqdNPRF5EkM+DjGbQ9EHcyhMUT1cMiTRjMLgsPg9swDT93e729BOoRZT1pQwmy4IdcfZ
+	2xXYvPCmBNKUduaSWFMZcKAabKkKvDb3I0W/0CJaRTzgheezaFmJvWkDwje1dmfJz32GEss+qsp
+	zGBLWoLTpt0KMs3y/H+ps50oQfCsZ8fim8fh2CTHK3LZgsGQm5r7917fUMLTB6cGPXNcCwNEeBa
+	aDAPXVRUyrTkqWQG7xK0cFepDRMoPHJEfhUWoK37COkpD/tL3tW3rtGm1plXsYvkiznlDBPkUQ3
+	StFAzmPfa1FtOKoNwy7tbTa/VVnIc+GGha77xt
+X-Received: by 2002:a17:90a:ec8b:b0:369:742a:4259 with SMTP id 98e67ed59e1d1-37c52225167mr3687652a91.0.1781625834282;
+        Tue, 16 Jun 2026 09:03:54 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c8665186d98sm11759708a12.16.2026.06.16.08.59.36
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37c955ae559sm6127a91.1.2026.06.16.09.03.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jun 2026 08:59:36 -0700 (PDT)
+        Tue, 16 Jun 2026 09:03:53 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 16 Jun 2026 08:59:36 -0700
+Date: Tue, 16 Jun 2026 09:03:53 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Loic Poulain <loic.poulain@oss.qualcomm.com>
+To: Ziming Zhu <zmzhu0630@163.com>
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>, linux-hwmon@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	Martino Facchin <m.facchin@arduino.cc>
-Subject: Re: [PATCH v2 2/3] hwmon: ina2xx: support ina232
-Message-ID: <8ca66c86-c8cb-4e92-abcb-c4d68eedf0e1@roeck-us.net>
-References: <20260611-monza-ina232-v2-0-e4375ce652d0@oss.qualcomm.com>
- <20260611-monza-ina232-v2-2-e4375ce652d0@oss.qualcomm.com>
+	linux-doc@vger.kernel.org, Ziming Zhu <ziming.zhu@silergycorp.com>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: pmbus: Add bindings for
+ Silergy SQ24860
+Message-ID: <46ecddcf-c452-409e-aa2e-4b562b096425@roeck-us.net>
+References: <20260612030304.5165-1-zmzhu0630@163.com>
+ <20260612030304.5165-2-zmzhu0630@163.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -82,20 +82,22 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260611-monza-ina232-v2-2-e4375ce652d0@oss.qualcomm.com>
+In-Reply-To: <20260612030304.5165-2-zmzhu0630@163.com>
 
-On Thu, Jun 11, 2026 at 04:05:25PM +0200, Loic Poulain wrote:
-> From: Martino Facchin <m.facchin@arduino.cc>
+On Fri, Jun 12, 2026 at 11:03:02AM +0800, Ziming Zhu wrote:
+> From: Ziming Zhu <ziming.zhu@silergycorp.com>
 > 
-> The INA232 is a current/power monitor. It shares the same register
-> layout as the INA2xx and uses the INA226 default configuration, but
-> differs in its electrical characteristics:
+> Add devicetree binding documentation for the Silergy SQ24860 eFuse.
 > 
-> Signed-off-by: Martino Facchin <m.facchin@arduino.cc>
-> Signed-off-by: Loic Poulain <loic.poulain@oss.qualcomm.com>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+> The device is a PMBus hardware monitoring device which reports voltage,
+> current, power, and temperature telemetry. The board-specific IMON
+> resistor value is described with silergy,rimon-micro-ohms.
+> 
+> Signed-off-by: Ziming Zhu <ziming.zhu@silergycorp.com>
+> 
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Applied to hwmon-next.
+Applied to hwmon-next (after dropping the extra blank line above).
 
 Thanks,
 Guenter
