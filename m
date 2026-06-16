@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94B6D428828;
-	Tue, 16 Jun 2026 10:17:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E3D5324B31;
+	Tue, 16 Jun 2026 10:17:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781605030; cv=none; b=D1IGd5PAf00YdXwszaVJEqS3ltgDZpXHbxKhyKZODBMLLU5y66lKOLOcjWkxy5QppbUZFjTMjBG8R+2dZv9wANWj3mhOQtUZEVfJX6qyVH/tsvlC9cCUQeheDQRNYG4DzM/zCTxf4ypBCFIrf6MM63jEGaBASmUCDcBITugBc4Y=
+	t=1781605060; cv=none; b=ZWgfcOQHe+RN8Li2ukDaYJGjP8pA3fMzRrM3JUW2FG/1CZ6D8E8S0y3jCUHw5vqc0Xxohn/S8Dw7k5JPOvHfCj/JS8XCfdumbSzHgUEd7y05jEC5MK6Jv+pCXZwk8qSTAOcp62XXix30Xupr3NJgT/YggiExCIywXRl3RjTuplM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781605030; c=relaxed/simple;
-	bh=3G1b1u1mhyqIsPwQuBGQ0BRkQlCXxKVSs3nG/7kw2cg=;
+	s=arc-20240116; t=1781605060; c=relaxed/simple;
+	bh=3Df0h30B5pdDIgPwrDp5lOb9fhohdDeWpWmslIihrGo=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=UWA9KJ5LROGkbDdI0EgoofbdOZyuMHmUaxNlMl7nW+R4T5JUD5BZxPnWbsOiJAG7LY/PtLMH+lqX0OLhRoiKwSLNu5Sb0EypAdS9AdR63y8aQWKgUxiI4Qh4hgu301tnFaU+UJPXav1VosaYKYSvgokXrq8nHvwlCNcQpmzBrGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WSLKqiCR; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=BBymxTtDLz0cMGoZeIk/Ajp/jJy9YBAaB+glOubmRCw93qC8xz97bERWp4KOuRN03EHF7enxL5cn0LK3xEpRfMjv+OioiGF8xcTGrSwdQfSRO2zF60HBuVEC1nA0lDuCiwmA8ZQNv0sHolpiLwr8Nd5T/onhDN0hfp1hrouiziE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g26xIRdj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WSLKqiCR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B2BD1F000E9;
-	Tue, 16 Jun 2026 10:17:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g26xIRdj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF6891F00A3E;
+	Tue, 16 Jun 2026 10:17:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781605029;
-	bh=EKmMWJCcYI6rOjOLTtJx1zGlMKl2tGx/GPxF/7QCcCI=;
+	s=k20260515; t=1781605059;
+	bh=m9fvRfvFkE7880z8gjqTj4HICoZgZjnRQdAV/h+A+Oc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=WSLKqiCRyOrS+TzBfjgTLfPE3Fmg/xqAYhJLw0KJpA6wXkmYrMhTFDN2bnE0B25Y4
-	 LZ8rcimc4AsHbFCwWSKR7By8PBKkyw766gPNgeMYJraGOSnpUaG8D3flurJqjTHgKi
-	 eAHUh/wdTME8WkjuBUhxTtVeT8rcuGb5AlrcU/59+CjsaicOCO2OmzAYF2nMS+QXKh
-	 6YRdAoY2///IfsjDhDmaX2x7Kel75x0jFfgkCVr5s3hOerh1wl8JBOI7rf233SFqmy
-	 nkm43YFZDc2iZim+p67YnvT34/bBbte+vB4vEHc0/fFP/j/glpKTRwUJQ1xWAOT6yw
-	 r3oaVSJ9xadaA==
+	b=g26xIRdjQcF/oS9JPexpO07kEyekl4nXTm2DcEgU7vX6poYAZmj6kMwYMUUGgk2dD
+	 lDi7smwhf7a6FRNocUdDiCG3rWVDMUZEd+89FCEbOCKD0ykUMuOPKt2UZmED5y7LHf
+	 52UO4ecWMey2fQHUDvWOne3G/dlB/dM3S1czCAothPKV5QOx9sIWGGHF5P1ar6MGCe
+	 B4dOIaZxN2ZvdkPQbdYqmoPEZUh+jnFGhygVQoMA1W2p7t9bHAdhGrtkf8lBLaISII
+	 8pVYFpjbB8ej4RbxsPuIZMXfAeC73FsIRF+PoxqCP0/q1jLEdwqeAJcPM7pkmqDfq6
+	 i/2M4D9ZF9Iwg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 02/12] i3c: master: Use unified device property
- interface
+Subject: Re: [PATCH v4 05/12] i3c: master: Add support for devices without
+ PID
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Akhil R" <akhilrajeev@nvidia.com>
-Cc: devicetree@vger.kernel.org, Frank.Li@kernel.org, linux-i3c@lists.infradead.org, conor+dt@kernel.org, robh@kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <20260616095429.3947205-3-akhilrajeev@nvidia.com>
-References: <20260616095429.3947205-3-akhilrajeev@nvidia.com>
+Cc: linux-i3c@lists.infradead.org, conor+dt@kernel.org, robh@kernel.org, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, Frank.Li@kernel.org
+In-Reply-To: <20260616095429.3947205-6-akhilrajeev@nvidia.com>
+References: <20260616095429.3947205-6-akhilrajeev@nvidia.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 16 Jun 2026 10:17:08 +0000
-Message-Id: <20260616101709.1B2BD1F000E9@smtp.kernel.org>
+Date: Tue, 16 Jun 2026 10:17:38 +0000
+Message-Id: <20260616101738.CF6891F00A3E@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -48,107 +48,108 @@ Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
 
 New issues:
-- [Medium] Permanent leak of firmware node references in I2C and I3C boardi=
-nfo structures.
+- [Low] The fallback logic added to `i3c_master_attach_boardinfo` for match=
+ing devices without a PID is completely unreachable dead code.
 
 Pre-existing issues:
-- [High] Dangling pointer `desc->dev` causes Use-After-Free on device unreg=
-istration if device_register() fails.
+- [High] Dangling pointer in `i3c_master_register_new_i3c_devs()` error pat=
+h leads to Use-After-Free and Double-Free.
 --
 
-commit 89419216775e33fb2b850943aa4a2781f19278a1
+commit 02ce08803703bc5626ea5224b66caedd628224e4
 Author: Akhil R <akhilrajeev@nvidia.com>
 
-i3c: master: Use unified device property interface
-
-Replace all OF-specific functions with unified device property functions
-as a prerequisite to support both ACPI and device tree.
+i3c: master: Add support for devices without PID
+   =20
+Devices using SETAASA for address assignment are not required to have
+a 48-bit PID according to the I3C specification. Allow such devices to
+register and use the static address where PID was required.
 
 > diff --git a/drivers/i3c/master.c b/drivers/i3c/master.c
-> index 109aa50eb1f8f..3b19a5e8f46d0 100644
+> index 557332d932576..bcc9c2d29c342 100644
 > --- a/drivers/i3c/master.c
 > +++ b/drivers/i3c/master.c
-[ ... ]
-> @@ -1902,7 +1904,8 @@ i3c_master_register_new_i3c_devs(struct i3c_master_=
-controller *master)
->  			     desc->info.pid);
+> @@ -1963,8 +1963,17 @@ i3c_master_register_new_i3c_devs(struct i3c_master=
+_controller *master)
+>  		desc->dev->dev.type =3D &i3c_device_type;
+>  		desc->dev->dev.bus =3D &i3c_bus_type;
+>  		desc->dev->dev.release =3D i3c_device_release;
+> -		dev_set_name(&desc->dev->dev, "%d-%llx", master->bus.id,
+> -			     desc->info.pid);
+> +
+> +		/*
+> +		 * For devices without PID (e.g., SETAASA devices), use
+> +		 * static address for naming instead.
+> +		 */
+> +		if (desc->info.pid)
+> +			dev_set_name(&desc->dev->dev, "%d-%llx", master->bus.id,
+> +				     desc->info.pid);
+> +		else
+> +			dev_set_name(&desc->dev->dev, "%d-%02x", master->bus.id,
+> +				     desc->info.static_addr);
 > =20
 >  		if (desc->boardinfo)
-> -			desc->dev->dev.of_node =3D desc->boardinfo->of_node;
-> +			device_set_node(&desc->dev->dev,
-> +					fwnode_handle_get(desc->boardinfo->fwnode));
+>  			device_set_node(&desc->dev->dev,
+>  					fwnode_handle_get(desc->boardinfo->fwnode));
 > =20
 >  		ret =3D device_register(&desc->dev->dev);
 >  		if (ret) {
+>  			dev_err(&master->dev,
+>  				"Failed to add I3C device (err =3D %d)\n", ret);
+>  			put_device(&desc->dev->dev);
+>  		}
 
 [Severity: High]
-This is a pre-existing issue, but can this error path cause a use-after-free
-and double-free?
+This is a pre-existing issue, but does this error path leave a dangling
+pointer that can cause memory corruption?
 
-If device_register() fails, put_device() is called which frees the memory
-backing desc->dev, but the desc->dev pointer is not set to NULL.
+If device_register() fails, put_device() drops the reference and frees
+desc->dev. However, desc->dev is not set to NULL.
 
-Later during cleanup, the dangling pointer bypasses the NULL check:
+When the I3C master later unregisters, i3c_master_unregister_i3c_devs()
+iterates through the bus devices. Since the pointer is left dangling, it
+passes the if (!i3cdev->dev) check, leading to write-after-free when
+setting i3cdev->dev->desc =3D NULL, followed by a double-free when calling
+put_device() again.
 
-i3c_master_unregister_i3c_devs() {
-    ...
-    if (!i3cdev->dev)
-        continue;
-
-    i3cdev->dev->desc =3D NULL;
-    ...
-}
-
-Does desc->dev need to be set to NULL after put_device() to prevent this?
+Should desc->dev be set to NULL after calling put_device() here?
 
 [ ... ]
-> @@ -2623,14 +2630,14 @@ of_i3c_master_add_i2c_boardinfo(struct i3c_master=
-_controller *master,
->  	boardinfo->lvr =3D reg[2];
+
+> @@ -2357,8 +2366,18 @@ static void i3c_master_attach_boardinfo(struct i3c=
+_dev_desc *i3cdev)
+>  	struct i3c_dev_boardinfo *i3cboardinfo;
 > =20
->  	list_add_tail(&boardinfo->node, &master->boardinfo.i2c);
-> -	of_node_get(node);
-> +	fwnode_handle_get(fwnode);
-> =20
->  	return 0;
->  }
+>  	list_for_each_entry(i3cboardinfo, &master->boardinfo.i3c, node) {
+> -		if (i3cdev->info.pid !=3D i3cboardinfo->pid)
+> -			continue;
+> +		/*
+> +		 * For devices without PID (e.g., SETAASA devices), match by
+> +		 * static address. For devices with PID, match by PID.
+> +		 */
+> +		if (i3cboardinfo->pid) {
+> +			if (i3cdev->info.pid !=3D i3cboardinfo->pid)
+> +				continue;
+> +		} else {
+> +			if (!i3cboardinfo->static_addr ||
+> +			    i3cdev->info.static_addr !=3D i3cboardinfo->static_addr)
+> +				continue;
+> +		}
 
-[Severity: Medium]
-Does this code leak the fwnode reference?
+[Severity: Low]
+Is this else block reachable?
 
-The result of fwnode_handle_get() is completely discarded. Since
-i2c_new_client_device() separately takes and drops its own fwnode reference,
-does this initial reference remain unreleased?
+Looking at i3c_master_add_i3c_boardinfo(), it requires a valid PID for all
+non-SETAASA devices. Since SETAASA devices bypass
+i3c_master_attach_boardinfo() entirely as they are attached early via
+i3c_master_early_i3c_dev_add(), wouldn't i3cboardinfo->pid be strictly
+non-zero for any device reaching this function?
 
-[ ... ]
-> @@ -2670,14 +2677,14 @@ of_i3c_master_add_i3c_boardinfo(struct i3c_master=
-_controller *master,
->  		return -EINVAL;
-> =20
->  	boardinfo->init_dyn_addr =3D init_dyn_addr;
-> -	boardinfo->of_node =3D of_node_get(node);
-> +	boardinfo->fwnode =3D fwnode_handle_get(fwnode);
->  	list_add_tail(&boardinfo->node, &master->boardinfo.i3c);
-> =20
->  	return 0;
->  }
-
-[Severity: Medium]
-Does this also leak the fwnode reference?
-
-The reference is acquired and stored in the devres-managed boardinfo
-structure, but there seems to be no teardown logic for the master->boardinfo
-lists to drop it before devres frees them.
-
-As seen earlier in i3c_master_register_new_i3c_devs():
-
-device_set_node(&desc->dev->dev, fwnode_handle_get(desc->boardinfo->fwnode)=
-);
-
-A second reference is taken there which is properly dropped by
-i3c_device_release(), but does the first reference stored in
-boardinfo->fwnode remain stranded?
+Additionally, for dynamically discovered devices, wouldn't
+i3cdev->info.static_addr be 0 prior to this call, causing
+i3cdev->info.static_addr !=3D i3cboardinfo->static_addr to always be true
+anyway?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260616095429.3947=
-205-1-akhilrajeev@nvidia.com?part=3D2
+205-1-akhilrajeev@nvidia.com?part=3D5
