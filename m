@@ -1,70 +1,72 @@
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65AA53F5BFA
-	for <linux-hwmon@vger.kernel.org>; Tue, 16 Jun 2026 23:04:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E71BE39768C
+	for <linux-hwmon@vger.kernel.org>; Tue, 16 Jun 2026 23:09:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781651055; cv=none; b=uD0tGDJkavFITYcbCvspstc3UhBu4vQxVtPLlvhUdQRD1721S/f/ms+zh2FrZBho1ZRvHbqKLQqXji8Lg59IHT4Dmzi3esHAHn37nHRk+zzdo74ydVHg8cbT8oRxFUZQPjC6Ga1Yx9F7SUC9yCCT7lTdPCKtVkYMXYnql4YklUA=
+	t=1781651366; cv=none; b=thpg5bvdOZPYpfNztAMdBuSYoB3XlQnUcc9CtLT3nOWBJ1GFEuTfZK+QbTYTXUmuZMn+Cl2TNBrRAebbSJEgF/WsuOIlA4WlZySbVlDDJGr2+KdpvD8DBq44mtYmbg+8tULzkQfAoLVCbSEppL68R8x2s3XSnCurN7TH9KZ7HiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781651055; c=relaxed/simple;
-	bh=Egf1TNJVCp1qsA4CxNzOFFLZCIMtWTzZtOkuoF7vf1U=;
+	s=arc-20240116; t=1781651366; c=relaxed/simple;
+	bh=O820Q4lCe2dBUZQ2ZOmijlv2yQB0OwdH93pbJLnP998=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gdTWcM0xf4fAO+STcBgA+Ub/vwaChByABggP2K0inzlFZPVQmr4viJa7+0BpQR8LTn06eYX1gGwu/T9HZ3QRIE3FI2RJlMZZXY1DfwKdKeBXQC4MXX8coXZDTo52LdB20b8cX4T7IVv7aIRTUZ4wAmXLq2jVzOKoJf5UZthCWOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qo0yhz5J; arc=none smtp.client-ip=74.125.82.176
+	 Content-Type:Content-Disposition:In-Reply-To; b=OIlRCqFku/kHHIw9T8pLkNK8NgKOQON3h8bKJngu2G9OmgrE8y0xq6SK3s08Rsx2ZgUae/TJ944K7V4Vp1Vl4/tl3/3FT66l/5RH+phyD716bgEF8euiHJr6fCnE2zA5/2eLNvDnnWKA3F7iKN20ejRgy5HDzH5wxJkmFHfVZPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a5XzxLl8; arc=none smtp.client-ip=74.125.82.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qo0yhz5J"
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-30bcf74e617so358607eec.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 16 Jun 2026 16:04:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a5XzxLl8"
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-30b6dad2382so5525006eec.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 16 Jun 2026 16:09:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781651049; x=1782255849; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781651364; x=1782256164; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=q6ZAICOGGMkSvj3UFmPFyaMXy3D0XGzchb585QqUnoU=;
-        b=qo0yhz5JyRXpsjVk6USehdcj8rDinC9JO+GRZAz+lkBcfs2MDQHWGkAMCOAaNJVp5v
-         pcXaTKsiOfNhmR66nmVcZ+QvgQHta4malXHUDbzmmR3nlgotv3x0Zvo3tPM4B5O3QblP
-         TVCs7h8KIkjafRtIWuAdZLgKxcPhrDuE/6WSdgmNbHV/qEbDLGUanXM/aFINHIXnJeeP
-         QnDwQpVbOYE8gMctNsE1wGNmvh1Hr6YzRY2udYigu/a1gVhtWr9v8//R0szjoL2veD1J
-         61gzXEjY/OGBNAMvSNw+2z9g0yC8Q6wXi2w7uK6xZYtpn+CKvS/fN+z5B+OFU8aDLngz
-         r7eQ==
+        bh=4g2qnOZaS9vdoUeNo75JgZbLIYCofMDc8Qj0YR5f7ak=;
+        b=a5XzxLl8ivjJB30uih+zjESr7JoiSJiJlmxlegaOat6+BGc8D3+K5DBOWl9w8a+ODb
+         bRy9EHVia6u6+HxnHptSC0oO1if26CdUc9IqGj6qg3BV6uSkJMW4yR2zenbrNGov9XMO
+         KKr2juD0aT4mu0g6tXzERTBHxPw94fCR1z+HZKfkosEiWKWVWJFNwohVOpg3F7ndHt/5
+         IiUoZTgeC2kN4VUivU4TSEkYydgUG2tgSw8uDVO0gFHJeH7AJwR3dOekS8ArYAOC0g0y
+         Nku4DxAeIjnxIwwtA54nneDFqNpBWsx3rC8M8zyJDLDNSIC+irBQQa/YVj8tT4yHFbQL
+         64KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781651049; x=1782255849;
+        d=1e100.net; s=20251104; t=1781651364; x=1782256164;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=q6ZAICOGGMkSvj3UFmPFyaMXy3D0XGzchb585QqUnoU=;
-        b=AxBIZ0xWWEgWgHL6L+z3gqphtAM4sHpkiarFV1d/G7SMyuEIjo4QtFHPxlLNXHTxlc
-         h5uYORzcBdEzFkRax9WfswINsP4uDP5H0LayW8BZx1nxa34Tz04l+DkxQIiDrs+sCeKm
-         a/ImN8d334/C4Zryaax7mLIG1h7JxFps0495JkArX8w+hGm4+PCt41gsXubEFZK3rb/1
-         q3NT4wXsGC+iLQBmbiSvWIvaMkbenirjfwRf2EX8hriNiQ5eus6a1y6vJEWji+rFeqFm
-         Tqa1nBNkRm/46Zx9AcTqKHpB2JhmaTUtZptMBNmEnKRKs0xiKggE8KQzStckSJkycmxO
-         u0Pg==
-X-Gm-Message-State: AOJu0YyW7Q0yDT2CsTm8st7Xy5eHMGAzQI1Q5msYLC3yoK5Xhh5Z2Yn6
-	fMpB4tINeO9V671hN6Gok/cvSLLjXJ/0UKh/LobgatcuJw5xIBo65ziN
-X-Gm-Gg: AfdE7ckuIMQO+D7TWZPNcHSB7+PnkywX6TY+qo4Lao4eIJqVjPQ860ATsbSWFyGZR6i
-	4wU95Ek158pM5yM3BDshEi10exPVZXEdjMDvOGBDTxSeTMqUW10VyAQLa2rpjlZxWIwf9x+qzyf
-	/mOrGKCwWJOTvb1i7RLsIg4rSkqmmj4KwhJCbOtJof2oCWEJL/Q7SRt2Ib+70lguBYgVCa688c2
-	rep+A3BE/Opx+Yh0xRumzj2fFsKnxV8mDFS4e5ooF6OabQY+yU++fSDQpkmY21rhwfpTqsrF3tj
-	C9mFnq/ZmQXAwRiypyKplqPzHu0MnaQuPRW0yfZLd05zx1U56OkfQAhcwePirq6gs0s9xwtjXLZ
-	SrSzidi0xRZ+Pprs6/EuTo+Tp5dE2n+gtkDpvoZQXYpuW09oPIUIzCH5PmFOK8nQBrnSrj3iD3e
-	BHgVRi60Y/21UnoCxddw3kgt3GBl5HzjoO9PMd
-X-Received: by 2002:a05:7300:cb82:b0:30a:e531:31f9 with SMTP id 5a478bee46e88-30bc9ef94c0mr871993eec.10.1781651049201;
-        Tue, 16 Jun 2026 16:04:09 -0700 (PDT)
+        bh=4g2qnOZaS9vdoUeNo75JgZbLIYCofMDc8Qj0YR5f7ak=;
+        b=qLh4zOyssYelPL9bv+fzM9N19/hi6wHra4S/SZTvvWtj53bn2bjjaJTUFU3IYYcrUA
+         BBTwkQgQQcQTIw0i5nB0lAvgMkcmIDUrZcIsO4HEIQRIdEUcKuRcbNmbrzodUHArq4dz
+         gyIVq4K79ok/MLymnXcaQXQMoDkIvcx9nSM1xOcf3lzcSyHUrVwhzduxIk2ONUop180E
+         J2QTencynoye6tXMm0ed4MgNOmCAadDJCK+zfX+G+GlCP56Dj3iNM/f0m2Dx7xeqG8oj
+         Ly9XAdAchI5wnTodKVGWhA0uyFFnaDPNbIC8mssiVGM3iyG3cq76uZaUtF4EzjUTAufA
+         snqQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+3NhdxV+E1lqvn2oxy9AHMT7St9ztkNCj7dRFp6dPzYLGKJGliQgt8EhlmNKrDSM2IJsyRbAEYyAByaQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjJwEeFvtEVe9RNIEC4FLjNoXmuFueJ0Zc3PsDsYT4QMWHdiVo
+	9GLCmV4zTstAIeU6oP+zcb0YAVfR92GTAe3iBGmzK7bE+HC5dMLxXPlT
+X-Gm-Gg: AfdE7cma2okE8bvkq9FFOuC4+nilMkQwC2akcDnwzlYkFHO0q1awPrVMBuP7PsiXtiC
+	Rs7yRQRA+tqK8/oro+fCTvLyR/ASYXMeYUBGdow9BW8jTEAae9Uft9xeeOTWP7xYb6wYcQTFecN
+	dQLLY5nMtqjKpxpeh3157wdbGqtxb5bVmUTSBrB5BFIWRzH+6Q3UDHBm4oRpYX8UZj6xd0Hz/iW
+	Jou4OQkfyrH0p66h4UHYhsPvBthBAjB9plti2kyIlSnR4dn7BbZNJnDIWPo7k0n8tBQY07Lmbdx
+	OGF1oXCBfhvSfs3gXSAjFV3zlkr50EQGWEDiDvIgxGFft0xx/3+KJf5DtifwEZK2Tu9bbCFva+u
+	9IN+A4+ETqBsZ89SwkC/H3yz4x9VmHKdc2wP6/QZRXmsZsdQFpjB7lnxrHAjFbl1iZoUtWUKCIl
+	KmeF6XfOEQ38bplKM5oV12W8YKR1e8NrSa/7Vb
+X-Received: by 2002:a05:7301:608b:b0:304:bce8:fa30 with SMTP id 5a478bee46e88-30bca90ba42mr957048eec.5.1781651363996;
+        Tue, 16 Jun 2026 16:09:23 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30b6191bf9asm15037538eec.31.2026.06.16.16.04.08
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3081eb95450sm25552833eec.28.2026.06.16.16.09.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jun 2026 16:04:08 -0700 (PDT)
+        Tue, 16 Jun 2026 16:09:23 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 16 Jun 2026 16:04:08 -0700
+Date: Tue, 16 Jun 2026 16:09:22 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Ximing Zhang <xzhangjr@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (coretemp) Clarify attr_size comment
-Message-ID: <4e831941-8df1-4b45-a612-33457e569fe8@roeck-us.net>
-References: <20260616125631.35537-1-xzhangjr@gmail.com>
+To: Pengpeng Hou <pengpeng@iscas.ac.cn>
+Cc: Rudolf Marek <r.marek@assembler.cz>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (w83793) remove vrm sysfs file on probe failure
+Message-ID: <a651e9b2-7b76-4223-ac9a-6978b27e9a93@roeck-us.net>
+References: <20260615064806.51139-1-pengpeng@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -73,17 +75,45 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260616125631.35537-1-xzhangjr@gmail.com>
+In-Reply-To: <20260615064806.51139-1-pengpeng@iscas.ac.cn>
 
-On Tue, Jun 16, 2026 at 04:56:31PM +0400, Ximing Zhang wrote:
-> The attr_size field stores the number of sysfs attributes created for a
-> temperature data group. Clarify the comment to describe the field directly.
+On Mon, Jun 15, 2026 at 02:48:06PM +0800, Pengpeng Hou wrote:
+> w83793_probe() creates the vrm sysfs file after creating the VID files
+> when VID support is present.
 > 
-> No functional change intended.
+> The normal remove path deletes vrm, but the probe error path only
+> removes the sensor, SDA, VID, fan, PWM and temperature files.  A later
+> probe failure can therefore leave vrm behind after the driver data has
+> been freed.
 > 
-> Signed-off-by: Ximing Zhang <xzhangjr@gmail.com>
+> Remove vrm in the probe error path next to the VID files, matching the
+> normal remove path.
+> 
+> Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
 
-Applied to hwmon-next.
+Applied, but this is a typical case of fixing a minor issue while ignoring
+all the big problems in the code. That entire driver would need an overhaul
+to fix it for good (I am sure that Sashiko did not report all its problems),
+but that only makes sense if the result is tested on real hardware. Please
+leave it alone in the future unless you have real hardware, and then consider
+converting it to use the latest watchdog and hwmon APIs.
 
 Thanks,
 Guenter
+
+> ---
+>  drivers/hwmon/w83793.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/hwmon/w83793.c b/drivers/hwmon/w83793.c
+> index 24772cfbecb3..8726c5fe8a95 100644
+> --- a/drivers/hwmon/w83793.c
+> +++ b/drivers/hwmon/w83793.c
+> @@ -1917,6 +1917,7 @@ static int w83793_probe(struct i2c_client *client)
+>  
+>  	for (i = 0; i < ARRAY_SIZE(w83793_vid); i++)
+>  		device_remove_file(dev, &w83793_vid[i].dev_attr);
+> +	device_remove_file(dev, &dev_attr_vrm);
+>  
+>  	for (i = 0; i < ARRAY_SIZE(w83793_left_fan); i++)
+>  		device_remove_file(dev, &w83793_left_fan[i].dev_attr);
