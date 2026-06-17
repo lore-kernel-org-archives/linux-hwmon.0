@@ -1,185 +1,244 @@
-Received: from mail-m49197.qiye.163.com (mail-m49197.qiye.163.com [45.254.49.197])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EC3A3101A6;
-	Wed, 17 Jun 2026 15:14:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0DE83101B0
+	for <linux-hwmon@vger.kernel.org>; Wed, 17 Jun 2026 20:18:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781709268; cv=none; b=pu1yu+RXASsJ4NBTIhg69XprIY412fZno1nk/ak+AC8ptHjt6PdK+TT2p/bARQCZ9VRnyUa/xM+wGpnxPVE1vcAAK9925CyQh3M1bJzMCwDalNxUoz8D5W+Rr/U5iMiKaj/aviC+SPpIlA7uhUUD+dvgvhRm3uxueCRY+VFsbOo=
+	t=1781727504; cv=none; b=tAjHOjJQd/Talj2iS/HFn65gHpEVdzOGhHFKMih0sN1qxnpxgsGtJfisSr1rDUYrwqwW78RXNNHXEWoB2MDBS0zzKDi0Tf6l7zC45DNFKBDOrZkAYyGi2F9/XMIOpxPQ0NwTMLLoB3vNst9DNZ0vy9FFhduqalZsjiKCWE19q94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781709268; c=relaxed/simple;
-	bh=GMSkdwKwwvN36qMoWsVT2yLCvb+VwQ5Tnb7iL6tpNpQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TzutdzX7KOvqXCtvkYVDWYR+wHTjQSZgzKOr4WfoYco0+SHKtYBawPTQz6Y4Wmhy8CsHfchq8Pwr/dtQbYZfVGyfmNtx4BtdN4O94nGFEt6nAVqbur08eDbM1FnCph1UcsEFonfn2fQ9cCM2Kn/FZdA3IJf+XGvHpmWj9NYtMDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=Iv7D5zQQ; arc=none smtp.client-ip=45.254.49.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seu.edu.cn
+	s=arc-20240116; t=1781727504; c=relaxed/simple;
+	bh=j+lr9joQCDT9BGga/fS0GkqanS3MkFCCgQ3p7a9PhhU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=QSv9vp1UMqpNLS5ftBnV2ptG3SNwLhZeMxqz2C8kgAV40TZptLJa+7HeTlkw7VwQeLFS++FkokiN/+EwvJ8xkw/Cas9zqiIg7U/2H5SofYDwYP0dgB6aKl6o6TFFMghLenc4pYZ6fW2yv06LbfQLUbkGK89J6uwi+0EMCCaY46E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Po3TZTF4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="Iv7D5zQQ"
-Received: from PC-202605011814.localdomain (unknown [58.241.16.34])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 42c703c95;
-	Wed, 17 Jun 2026 23:09:13 +0800 (GMT+08:00)
-From: Runyu Xiao <runyu.xiao@seu.edu.cn>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Eddie James <eajames@linux.ibm.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	jianhao.xu@seu.edu.cn,
-	runyu.xiao@seu.edu.cn,
-	stable@vger.kernel.org
-Subject: [PATCH] hwmon: (occ) unregister hwmon device outside occ lock
-Date: Wed, 17 Jun 2026 23:08:59 +0800
-Message-Id: <20260617150859.741453-1-runyu.xiao@seu.edu.cn>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Po3TZTF4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B46E1F000E9;
+	Wed, 17 Jun 2026 20:18:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781727502;
+	bh=bJ5Hxvuv/M7LPvegMQXZqJJOGW68ryVKE222aOCSKpc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Po3TZTF4vo10cwF0WJUlB0saCGy7I+TYKXdRgrEnzNJFNpGhs1qWdsfeZv/RmFRg9
+	 d54tHE16IG/oqfMUqyDuT3eY04tr3V0I6NfdQmbJ3bu7btJ35j2v9uOMZTkf9s3mzv
+	 lSWbdwgMjGa2NUlyvtflSwTjS8gQKTSHjz38Kvs1zqwEhRlZ7O69nGpDDXipuM4wBd
+	 Cv4HC6Ej5Lckgws6leEPqMo9htQK8NM/0XZmJv/sB3a4hP66N00ktUsamHxVWeCCEZ
+	 MhQbtJu2JOcW93XWGr7oaSM1dWseYmHpcgBPn1FepMHBxdQV3n/V5eXmhfkDZ9x0MW
+	 ypopz3iXw7ltA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] hwmon: (occ) unregister hwmon device outside occ lock
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Runyu Xiao" <runyu.xiao@seu.edu.cn>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260617150859.741453-1-runyu.xiao@seu.edu.cn>
+References: <20260617150859.741453-1-runyu.xiao@seu.edu.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 17 Jun 2026 20:18:21 +0000
+Message-Id: <20260617201822.3B46E1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9ed621159103a1kunm16e6a07772443
-X-HM-MType: 10
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkaTUwdVk1DHxhNSUIYTEoYGFYeHw
-	5VEwETFhoSFyQUDg9ZV1kYEgtZQVlOQ1VJT0pVSk1VSE9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpPSE
-	xVSktLVUpCS0tZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=Iv7D5zQQ71MG0Dhb+gC9gE89+Gyrsv1HzTj7mA7/KUVqjLd/btbiYm2qxDBHBG+ws7HsaICdeFqeg9aJ9dvBcfzWdmeDXqQiH4WFNnmpbHL8m/Of1ibIEbeNMOAZJSWahuQX0KSRaQXR09inW1+rYW+aM4DxLCE7eygqdlTJH+s=; s=default; c=relaxed/relaxed; d=seu.edu.cn; v=1;
-	bh=ZWA+6aQnuueaEeg7IzTAGsIcPfG41MO3NK5SCC3HElg=;
-	h=date:mime-version:subject:message-id:from;
 
-occ_active(false) and occ_shutdown() call hwmon_device_unregister() while
-occ->lock is held.  hwmon_device_unregister() waits for sysfs callbacks to
-drain, and those callbacks can enter the OCC update path and try to take
-occ->lock again.  That gives the unregister paths the lock ordering
-occ->lock -> sysfs callback drain, while a callback has the opposite edge
-sysfs callback -> occ->lock.
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+s) to consider:
 
-This issue was found by our static analysis tool and then manually
-reviewed against the current tree.
+New issues:
+- [High] Sysfs callbacks can initiate hardware polling after the device has=
+ been deactivated.
 
-The grounded PoC kept the real unregister and callback carrier:
+Pre-existing issues:
+- [High] The patch fixes an ABBA deadlock for hwmon sysfs attributes but le=
+aves an identical deadlock for the driver's own occ_sysfs attributes.
+- [High] Unbounded memory leak when toggling the OCC active state via sysfs.
+- [High] A NULL pointer dereference crash occurs during sysfs group creatio=
+n if the hardware reports multiple capability sensors.
+- [High] Malformed device responses can cause an out-of-bounds kernel memor=
+y read when parsing sensor data blocks.
+--
 
-  occ_shutdown()
-  hwmon_device_unregister()
-  occ_show_temp_1()
-  occ_update_response()
+commit c52f29d2e70bdddb1a59be767e0322ae3c29585d
+Author: Runyu Xiao <runyu.xiao@seu.edu.cn>
 
-Lockdep reported the circular dependency with occ_shutdown() already
-holding the OCC mutex and hwmon_device_unregister() waiting on the sysfs
-side:
-
-  WARNING: possible circular locking dependency detected
-  ... (sysfs_lock) ... at: hwmon_device_unregister+0x12/0x30 [vuln_msv]
-  ... (&test_occ.lock) ... at: occ_shutdown.constprop.0+0xe/0x40 [vuln_msv]
-  occ_update_response.isra.0+0xb/0x20 [vuln_msv]
-  occ_show_temp_1.constprop.0.isra.0+0x23/0x40 [vuln_msv]
-  *** DEADLOCK ***
+hwmon: (occ) unregister hwmon device outside occ lock
 
 Serialize hwmon registration and removal with a separate hwmon_lock.
 Under that lock, detach occ->hwmon and update occ->active while occ->lock
 is held so concurrent OCC state changes still see a stable state, then
-drop occ->lock before calling hwmon_device_unregister().  This keeps the
-double-unregister protection while avoiding the unregister-versus-callback
-lock inversion.
+drop occ->lock before calling hwmon_device_unregister().
 
-Fixes: 849b0156d996 ("hwmon: (occ) Delay hwmon registration until user request")
-Fixes: ac6888ac5a11 ("hwmon: (occ) Lock mutex in shutdown to prevent race with occ_active")
 Cc: stable@vger.kernel.org
 Signed-off-by: Runyu Xiao <runyu.xiao@seu.edu.cn>
----
- drivers/hwmon/occ/common.c | 28 ++++++++++++++++++++++------
- drivers/hwmon/occ/common.h |  1 +
- 2 files changed, 23 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-index 89928d38831b..43dfea14d2ef 100644
---- a/drivers/hwmon/occ/common.c
-+++ b/drivers/hwmon/occ/common.c
-@@ -1106,11 +1106,16 @@ static void occ_parse_poll_response(struct occ *occ)
- 
- int occ_active(struct occ *occ, bool active)
- {
--	int rc = mutex_lock_interruptible(&occ->lock);
-+	struct device *hwmon = NULL;
-+	int rc = mutex_lock_interruptible(&occ->hwmon_lock);
- 
- 	if (rc)
- 		return rc;
- 
-+	rc = mutex_lock_interruptible(&occ->lock);
-+	if (rc)
-+		goto unlock_hwmon;
-+
- 	if (active) {
- 		if (occ->active) {
- 			rc = -EALREADY;
-@@ -1155,14 +1160,17 @@ int occ_active(struct occ *occ, bool active)
- 			goto unlock;
- 		}
- 
--		if (occ->hwmon)
--			hwmon_device_unregister(occ->hwmon);
-+		hwmon = occ->hwmon;
- 		occ->active = false;
- 		occ->hwmon = NULL;
- 	}
- 
- unlock:
- 	mutex_unlock(&occ->lock);
-+	if (hwmon)
-+		hwmon_device_unregister(hwmon);
-+unlock_hwmon:
-+	mutex_unlock(&occ->hwmon_lock);
- 	return rc;
- }
- 
-@@ -1171,6 +1179,7 @@ int occ_setup(struct occ *occ)
- 	int rc;
- 
- 	mutex_init(&occ->lock);
-+	mutex_init(&occ->hwmon_lock);
- 	occ->groups[0] = &occ->group;
- 
- 	rc = occ_setup_sysfs(occ);
-@@ -1191,15 +1200,22 @@ EXPORT_SYMBOL_GPL(occ_setup);
- 
- void occ_shutdown(struct occ *occ)
- {
--	mutex_lock(&occ->lock);
-+	struct device *hwmon;
- 
-+	mutex_lock(&occ->hwmon_lock);
-+	mutex_lock(&occ->lock);
-+
- 	occ_shutdown_sysfs(occ);
- 
--	if (occ->hwmon)
--		hwmon_device_unregister(occ->hwmon);
-+	hwmon = occ->hwmon;
-+	occ->active = false;
- 	occ->hwmon = NULL;
- 
- 	mutex_unlock(&occ->lock);
-+
-+	if (hwmon)
-+		hwmon_device_unregister(hwmon);
-+	mutex_unlock(&occ->hwmon_lock);
- }
- EXPORT_SYMBOL_GPL(occ_shutdown);
- 
-diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
-index 7ac4b2febce6..82f600093c7f 100644
---- a/drivers/hwmon/occ/common.h
-+++ b/drivers/hwmon/occ/common.h
-@@ -101,6 +101,7 @@ struct occ {
- 
- 	unsigned long next_update;
- 	struct mutex lock;		/* lock OCC access */
-+	struct mutex hwmon_lock;		/* serialize hwmon registration/removal */
- 
- 	struct device *hwmon;
- 	struct occ_attribute *attrs;
--- 
-2.34.1
+> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+> index 42cc6068bb08b..b8461da29e36f 100644
+> --- a/drivers/hwmon/occ/common.c
+> +++ b/drivers/hwmon/occ/common.c
+> @@ -1105,11 +1105,16 @@ static void occ_parse_poll_response(struct occ *o=
+cc)
+> =20
+>  int occ_active(struct occ *occ, bool active)
+>  {
+> -	int rc =3D mutex_lock_interruptible(&occ->lock);
+> +	struct device *hwmon =3D NULL;
+> +	int rc =3D mutex_lock_interruptible(&occ->hwmon_lock);
+> =20
+>  	if (rc)
+>  		return rc;
+> =20
+> +	rc =3D mutex_lock_interruptible(&occ->lock);
+> +	if (rc)
+> +		goto unlock_hwmon;
+> +
+
+[Severity: High]
+This is a pre-existing issue, but can this cause an unbounded memory leak w=
+hen
+toggling the OCC active state via sysfs?
+
+When the device is activated, occ_setup_sensor_attrs() unconditionally
+allocates the sensor attribute arrays using devm_kzalloc(). Because devres
+allocations are bound to the device's lifetime, the memory is not freed when
+occ_active() is called with active set to false.
+
+Will repeatedly writing '1' and '0' to the occ_active sysfs file continuous=
+ly
+allocate new memory and overwrite the pointers?
+
+[Severity: High]
+This is a pre-existing issue, but does the hardware reporting multiple
+capability sensors cause a NULL pointer dereference during sysfs group
+creation?
+
+In occ_setup_sensor_attrs(), the driver expects sensors->caps.num_sensors
+attributes and allocates array space accordingly, but it only populates the
+first capability sensor because it uses an
+if (sensors->caps.num_sensors >=3D 1) condition instead of a loop:
+
+occ_setup_sensor_attrs() {
+    ...
+    if (sensors->caps.num_sensors >=3D 1) {
+        snprintf(attr->name, sizeof(attr->name), "power%d_label", s);
+    ...
+}
+
+Are the remaining attributes left zero-initialized, causing
+sysfs_create_group() to read a NULL attr->name and crash?
+
+[Severity: High]
+This is a pre-existing issue, but can malformed device responses cause an
+out-of-bounds kernel memory read when parsing sensor data blocks?
+
+In occ_parse_poll_response(), the bounds check is performed after reading t=
+he
+block header:
+
+occ_parse_poll_response() {
+    ...
+    offset =3D (block->header.num_sensors * block->header.sensor_length) +
+             sizeof(block->header);
+    size +=3D offset;
+
+    if ((size + sizeof(*header)) >=3D OCC_RESP_DATA_BYTES) {
+    ...
+}
+
+If the response buffer is almost full, will the next iteration read the blo=
+ck
+header out of bounds?
+
+Additionally, the driver trusts the hardware-provided sensor_length without
+verifying it matches the C struct size. Could a malicious or faulty OCC
+provide a large num_sensors and small sensor_length, passing the bounds
+check but causing sysfs functions like occ_show_power_a0() to read arbitrary
+out-of-bounds kernel memory?
+
+[ ... ]
+
+> @@ -1154,14 +1159,17 @@ int occ_active(struct occ *occ, bool active)
+>  			goto unlock;
+>  		}
+> =20
+> -		if (occ->hwmon)
+> -			hwmon_device_unregister(occ->hwmon);
+> +		hwmon =3D occ->hwmon;
+>  		occ->active =3D false;
+>  		occ->hwmon =3D NULL;
+>  	}
+> =20
+>  unlock:
+>  	mutex_unlock(&occ->lock);
+> +	if (hwmon)
+> +		hwmon_device_unregister(hwmon);
+> +unlock_hwmon:
+> +	mutex_unlock(&occ->hwmon_lock);
+>  	return rc;
+>  }
+
+[Severity: High]
+Can sysfs callbacks initiate hardware polling after the device has been
+deactivated?
+
+By moving hwmon_device_unregister() outside of occ->lock and occ->hwmon_loc=
+k,
+pending hwmon sysfs callbacks that were waiting for occ->lock can execute
+after occ->active is set to false.
+
+Since functions like occ_update_response() do not verify occ->active inside
+their critical sections:
+
+occ_update_response() {
+    ...
+    if (time_after(jiffies, occ->next_update)) {
+        rc =3D occ_poll(occ);
+    ...
+}
+
+will they proceed to call occ_poll() and send hardware commands to the OCC
+after it has been deactivated?
+
+[ ... ]
+
+> @@ -1190,15 +1199,22 @@ EXPORT_SYMBOL_GPL(occ_setup);
+> =20
+>  void occ_shutdown(struct occ *occ)
+>  {
+> +	struct device *hwmon;
+> +
+> +	mutex_lock(&occ->hwmon_lock);
+>  	mutex_lock(&occ->lock);
+> =20
+>  	occ_shutdown_sysfs(occ);
+
+[Severity: High]
+This is a pre-existing issue, but does holding both occ->hwmon_lock and
+occ->lock before draining sysfs callbacks in occ_shutdown_sysfs() create
+a deadlock?
+
+If occ_shutdown_sysfs() blocks in kernfs_drain() waiting for active sysfs
+references to drop, and concurrently a read/write to driver attributes
+(like occ_active_store()) holds a kernfs active reference and attempts to
+acquire occ->lock or occ->hwmon_lock, will this result in an unresolvable
+circular dependency during driver unbind/shutdown?
+
+> =20
+> -	if (occ->hwmon)
+> -		hwmon_device_unregister(occ->hwmon);
+> +	hwmon =3D occ->hwmon;
+> +	occ->active =3D false;
+>  	occ->hwmon =3D NULL;
+> =20
+>  	mutex_unlock(&occ->lock);
+> +
+> +	if (hwmon)
+> +		hwmon_device_unregister(hwmon);
+> +	mutex_unlock(&occ->hwmon_lock);
+>  }
+>  EXPORT_SYMBOL_GPL(occ_shutdown);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260617150859.7414=
+53-1-runyu.xiao@seu.edu.cn?part=3D1
