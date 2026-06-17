@@ -1,66 +1,66 @@
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EDB126059D
-	for <linux-hwmon@vger.kernel.org>; Wed, 17 Jun 2026 05:58:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 880CB3B14BD
+	for <linux-hwmon@vger.kernel.org>; Wed, 17 Jun 2026 06:00:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781675885; cv=none; b=ffBi9mwF2ofF1yQVFlzq+PsQRP5CJruD6FJXred424QY+7Jkb59sheQVsLkU0qJa5107MuFqXRsTTg4rtOZOCGHyEc/og/wXG9AuLpFqgOmZvBe+BjkAmsgKlG9l+/h7T924LFlqIXibgwL93xTkpMRHl+EuZnQeHfGIksRPXkM=
+	t=1781676019; cv=none; b=V+ouCmPTOyBFc1aC8p4zmQfWunYDQ5xHa7cmFhsOWpPN60nmBVFQ3PGY+NMqCOgitAT704y8/tPuVOsZEt71IUKettApZ6tGobaWfxXuKygSIeJ7Y88HfAqSm3dr2afu+US6MNGCK+p7VkD7gnMwYbvobwVvjmcKSvjnjAIKjZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781675885; c=relaxed/simple;
-	bh=ifP1Jm9pQSvr4BBArcOmxENG+EW9+nj1rdJ9cv+TplY=;
+	s=arc-20240116; t=1781676019; c=relaxed/simple;
+	bh=EPp3+y8U+wDZQ2t1aRvjrkpD6kQKVPXuQaessSYJEI8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s7eM73yeK2rELBNKjGWAU2cANy4DVcZizZtS8OFpZfVGYdDI15RzTO6yf0Qb5xu61oaLHYdvWlrI7rD71t54jlknY/Y5GB0EoUGeGnWawnjyh79U3/yftmxgR6pN0I9r6Ncfy33SzXgQP5KSrs2jYH32AdSsbbDTlcM45kOkZF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CehtRShK; arc=none smtp.client-ip=209.85.167.44
+	 In-Reply-To:Content-Type; b=IT+99OpHRXOP17C0MK1g15t0DgRi3p+AfxEAHDbAsn3s9ZrtSCHmpIX9ZjOTQWYQRDgu5n6kht3njY2efk97s3kSPcv0CoBwCf834XR6WDfBbqa+Nh40eGhUJojvb/cBQ2Jb79vqtgXS86A3QpVg9QsP/N1EhqHRzZdEEqwetVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eBc2S9g/; arc=none smtp.client-ip=209.85.208.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CehtRShK"
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5aa68d9dc18so7355025e87.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 16 Jun 2026 22:58:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eBc2S9g/"
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-396779b9a7fso47193761fa.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 16 Jun 2026 23:00:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781675882; x=1782280682; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781676016; x=1782280816; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=lVtSo+MU4Z53OtbGrnPGc6UwBuGxvobCSSEYgeFvA3c=;
-        b=CehtRShK2t1SxqRDb131sNl0Uu2ULwdKTO3KRBErhU7LcHaSMQcVan4XsU8Abt6ACI
-         iD8Pzn1RJHwLa3jflFdg9oeHbirC7FP7jkEP3Pi0QPHbOBbKJg2NFCrHiYal+5qLx+08
-         i2RqGKTbTJdUxjPZqGEANV7PDD3YCCjq4HKrKsPeWTPHXxOAaYv+ttBUx+6uyeULroem
-         InoNfMJdgNUcI5jbfDG82tptFfb79jXcLrykfyo4pG2lR67kCApKeGjvihok+rIVSfbd
-         HrV2RlgZPzNw6EEl7joeX19ZEpyj4KjEUB3zr8lTzd58JKYJCOdbIqYUwxjiUWJNU0L/
-         kIKw==
+        bh=Cs8qvTgnQoJy3gVauu2STPsPcaY4YlG12CSyBpLnw6c=;
+        b=eBc2S9g/WVG1RAN4zKzecPQNVMmioA1GaCYMMDOdguMwD/2cQFoW6bPJN2KhjPicoX
+         QR5GwyYGZmDU5P67emxguityVFNvwywFhKcSKbqj95lbibNMfgub8QC9g94uyqD+OqEa
+         rZaH69EBdQIcw/lHlab+TtPSlUigQQa0Z1GrfbuXbvfEgUyqCklT3cAynbTDui17z7sE
+         WnbISAMY4AJqWfSFo6EpdZ/1S2AqTPP3PJ2Q6cUimiDaRf7Czo8o/lUDHl8BIAWDe/7k
+         h66gm+xo16DHTetu5lV26LuC6eMZndolcyJvQyQX1tD7ZIckG493fwwDQbwzGptjS/aB
+         sYng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781675882; x=1782280682;
+        d=1e100.net; s=20251104; t=1781676016; x=1782280816;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=lVtSo+MU4Z53OtbGrnPGc6UwBuGxvobCSSEYgeFvA3c=;
-        b=UM8Wftt/zSSEZr1Ls/HBhMQE4ZJBh1HIsU/6UpByGY6fq8YpJJjNakpa0VV7l380x+
-         oIQG1QMCCxNrFU7YBoyFCOXICy7l8a+dICZ+NRykUHeoUagp6RkF34thgMRFFPRKUOIT
-         MLFzBIudjuSMElTNKCjZ6wEVqMfPF91rGjfJpX4DvTUutqRRAiEBxmDUSqQd91t5ZcHB
-         Zzr9afaUhEZcOeM2fgKbJ/PahfQ2Msca2B9e2oBokRGv2d9wGv7Zk+tEuXDeB+4HlZTX
-         QPcYuslSKlkZw+98R1ZwqWY4BFJQ0GjFe+v81vS/Ar8JvAniL00CVpWyKHpUZNr5IYvF
-         +eIg==
-X-Forwarded-Encrypted: i=1; AFNElJ/DrQrpYaghGnf7V3E8ZxXl+d8MsLWdaDwEe9gg/3nEZmLc/pNDJnfzkjbPOWDFwRJhZGHpvkRc9e0SWw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzThYYVBi6L1h1ZfpdMlxw//93D4VKpYYoWxDapH0eYoK7aaMDC
-	MOsTA7o/Od6dUiXx0ZIDk9h8fyD7rs1SAXlCZNNXy+JZ3rHTt4b0eiDc
-X-Gm-Gg: Acq92OHwXvVj1CeQBZ/0tU6psDDw2vT4DqIUixMWI7nA1MYwecjrV5YAe9j0tXPDjm7
-	d0qqrWtkXsMHqrnGcgJ3hDoGa/CgX6Oe6RFlWsJiWNxxZgtO2vCoC3I+wh/3qscCLKPJaVRHgrf
-	Ap07yk6Ah7+XnWBaQIFQZe8o27rL5HE0NopTHPDuyYhEwHfiOtFLtxxFmR0klsko85uUJkENGGp
-	R2YTFAhd7sxG4EsQM5HbCeMROLO7Bi30W3fioYo5FoBpylt/wF2j+M+ITlSUnWb7fFXb9Hgo5Ks
-	o6kB/tCTCP86HEZTGXNzcmP60/VmTpLguLpw88kyeNPRLnMvdbSD/uyLfhjSR3n9IG4N3rzRWsC
-	GVcxSFWVmBA9VG/8vKRtvxLl2RxOcw5GR5Dfx6kJwgBOi7BVkGnEh+rtZ5/kBcQEr5jhxA2q1uw
-	Jzhn69fcyiyETtRSsDGMdt+ZOlA4lPS085EONpcJhTMwmbOLSQIAkU2hxnrofWUaMLsC9iqw==
-X-Received: by 2002:ac2:547b:0:b0:5aa:517b:65bb with SMTP id 2adb3069b0e04-5ad47ffe467mr313621e87.37.1781675882037;
-        Tue, 16 Jun 2026 22:58:02 -0700 (PDT)
+        bh=Cs8qvTgnQoJy3gVauu2STPsPcaY4YlG12CSyBpLnw6c=;
+        b=mYK2Th/drS0rgEXD05KDnVvb8LM5h4FZu4RPAV34/zMF6Y3jNHZVERPqL8x7Itc6UW
+         rXElDbU3VqHa20Xro+rsztGNbOXjGLpmdC3vXZIQ9e1YojMX8omtrFvl1Zz9qCbWbk73
+         Hpncfb6EWVIRdKhVGGzPF2v4ogrbC5bUIMXRG87NEvWXRDdfEYCWtON8CrlVntw4/hSE
+         WhZHyxYhMHfTJxFIdZtgUdVN+sIEdGfp6b2F/KSyuSxfnjqTZPlELQiL13jGOOEuobtp
+         NtL1r7WcjGG1UCRy6+0Qai5I/7OS0ZJ4XYetNxmF6TorLasFCTjiQjGuAuEmESZsYWF4
+         rfbQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8q6I6RuaFc8riSDx37WfXLdBqtF19syF8bYm90TGtO7nfGxxJMRhXWDU4fjiyM6xRulL0kOZ8O2TBqpA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGQWoUtta5UbgIEFJJPd725euhbd5gBe9qnfoZKO5jPdb7j/NK
+	u+mcLQlGb6zfyfj5WWM9a2Snv/0LuINJuhlGCOCeD6ehogN8cMAF9N3N
+X-Gm-Gg: Acq92OFxtIc6QJDBqpCR+XRXJPWF5e+gmHHrI3FbF1pSkaDR+dGmotlYq+iobkIdX9X
+	s2ekH2xKWJKC3fLHM+89A4wCZUpEkuUAbVnCcAY+RCvjawWpgMHBicfIkmF2ZA5cYpPCtt1mEtA
+	V3XjHDopmi0K3rEwLEWsgsjHV17RVOa06ndk9dPAQU1S9WlbvEAiaQlCvyC1hdOiPi/TrCbuRQR
+	MWoSA2uLxkkrPal0D8ODgeD1ukywjXW7beCKdgGXwB9BZxlFRhn5nC32Bje3RqrD7oDDNGyBR/D
+	ZUcJzuEhU9Oo4uffuMjU33tT4yzqFLc/3FcySvGYtCkIudZ81KuOFLnv79IThj5AKciqVj15Izs
+	M1Ipz5mwMkxYuOSuWwFLBZFs2qMkZejLgNFeblkPj64gY0kVGOD6O7rYtJg6BSTDOOxLNCoSVx3
+	TFHGMWbE7tJN9njU4r07qNi/1B0QTzsKPVKRXje+3JDdWYRSTslLKT9s1HmB7NE5DrER4poA==
+X-Received: by 2002:a05:651c:2124:b0:38b:e464:f047 with SMTP id 38308e7fff4ca-39969ad94b1mr4694531fa.12.1781676015350;
+        Tue, 16 Jun 2026 23:00:15 -0700 (PDT)
 Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3995c19ad3asm12697871fa.31.2026.06.16.22.57.59
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3995c04d8b2sm12250531fa.2.2026.06.16.23.00.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Jun 2026 22:58:00 -0700 (PDT)
-Message-ID: <a7f0ca96-d6bb-4106-ac47-b9f646fa26cf@gmail.com>
-Date: Wed, 17 Jun 2026 08:57:58 +0300
+        Tue, 16 Jun 2026 23:00:13 -0700 (PDT)
+Message-ID: <f3562874-1c82-4ba3-b37d-dbb50bb54977@gmail.com>
+Date: Wed, 17 Jun 2026 09:00:12 +0300
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/7] hwmon: adm1275: Support ROHM BD12790
+Subject: Re: [PATCH 7/7] hwmon: adm1275: Support module auto-loading
 To: Guenter Roeck <linux@roeck-us.net>,
  Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
  Matti Vaittinen <matti.vaittinen@linux.dev>
@@ -84,49 +84,52 @@ Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
 References: <cover.1781591132.git.mazziesaccount@gmail.com>
- <8ca875d21f2d9a4d53a87b47a5e6efab48266178.1781591132.git.mazziesaccount@gmail.com>
- <d66b9de3-db06-4f83-9c2a-b45e341bfc9c@roeck-us.net>
+ <634e76680ed93e58ebeb35db080138b791cb6c27.1781591132.git.mazziesaccount@gmail.com>
+ <f080e20e-6ec7-4744-9794-0a92d03f48d8@roeck-us.net>
 Content-Language: en-US, en-AU, en-GB, en-BW
 From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <d66b9de3-db06-4f83-9c2a-b45e341bfc9c@roeck-us.net>
+In-Reply-To: <f080e20e-6ec7-4744-9794-0a92d03f48d8@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 16/06/2026 17:15, Guenter Roeck wrote:
-> On 6/15/26 23:44, Matti Vaittinen wrote:
+On 16/06/2026 17:04, Guenter Roeck wrote:
+> On 6/15/26 23:47, Matti Vaittinen wrote:
 >> From: Matti Vaittinen <mazziesaccount@gmail.com>
 >>
->> Add support for ROHM BD12790 hot-swap controller which is largely
->> similar to Analog Devices adm1272.
+>> Populating the spi_device_id -table is not enough to make the
+>> driver module automatically load when device-tree node for the bd12780
+>> is parsed at boot.
 >>
->> The BD12790 uses the same selectable 60V/100V voltage ranges and
->> 15mV/30mV current-sense ranges as the ADM1272, and the same VRANGE
->> (bit 5) and IRANGE (bit 0) layout in PMON_CONFIG. It therefore uses
->> a dedicated coefficient table that mirrors adm1272_coefficients, with
->> the following differences derived from BD12790 datasheet Table 1 (p.18):
->> - power 60V/30mV: m=17560 (vs. 17561)
->> - power 100V/30mV: m=10536 (vs. 10535)
->> - temperature: b=31880 (vs. 31871, reflecting T[11:0] = 4.2*T + 3188)
+>> Adding the of_device_id tables causes the driver module to be
+>> automatically load at boot. Testing has been done with rather old Debian
+>> system.
+>>
+>> When inspecting the generated module-aliases with the insmod, following
+>> entries seem to be the difference:
+>>
+>> alias:          of:N*T*Crohm,bd12780C*
+>> alias:          of:N*T*Crohm,bd12780
+>>
+>> I suspect these are required for the module loading to work.
 >>
 >> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
->> Assisted-by: GitHub Copilot:claude-sonnet-4.6
 >>
 >> ---
-
-// snip
-
->> -/* The BD12780 data sheets mark TSFILT bit as reserved. */
->> -#define BD12780_PMON_DEFCONFIG        (ADM1278_VOUT_EN | 
->> ADM1278_TEMP1_EN)
->> +/* The BD127x0 data sheets mark TSFILT bit as reserved. */
->> +#define BD127X0_PMON_DEFCONFIG        (ADM1278_VOUT_EN | 
->> ADM1278_TEMP1_EN)
+>>
+>> I did not add of_device_ids for other supported ICs as I can't verify it
+>> doesn't cause side-effects. Please let me know if you think those IDs
+>> should be added as well. I would be glad if I got more educated opinion
+>> on adding the of-IDs :) (I can squash this to 3/7 and 6/7 in next
+>> revision, and add own patch for adding of-IDs for other ICs if
+>> required).
+>>
 > 
-> Please don't use such placeholders. Just use BD12780_PMON_DEFCONFIG
-> for both chips, similar to how the defines for all other chips
-> are handled.
-
-Ok, thanks.
+> I don't know what those side effects might be. I am much more concerned
+> about side effects of having some of the devices in adm1275_of_match
+> and some in adm1275_id. So, yes, please add a patch to provide
+> adm1275_of_match for all chips supported by the driver.
+It's nice to have an opinion on this as I was really unsure what is the 
+right way forward. Thanks for all the help this far. I'll do that in v2.
 
 Yours,
 	-- Matti
