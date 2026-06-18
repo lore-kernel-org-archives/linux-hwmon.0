@@ -1,192 +1,250 @@
-Received: from mx1.white.stw.pengutronix.de (mx1.white.stw.pengutronix.de [185.203.200.13])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ABA4368287;
-	Thu, 18 Jun 2026 13:12:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.200.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16B382F6591
+	for <linux-hwmon@vger.kernel.org>; Thu, 18 Jun 2026 15:56:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781788370; cv=none; b=pnif7n2MR+8TBYZmzi3ecUOPKk5fZ0AsNBMwi7B9RONuEsuQx1vX2zYgCr/W8mPdIgEgd/XDmWscN5l2cvH+/sI/lsCkZnoxPFiFcSUhfZJcnjFTgE323glzfuZkwBPoB6I8usCfKord4+T2mdDtZNw6QgwjdA7FRC0TDOngF20=
+	t=1781798204; cv=none; b=GSSJCfNGmvOXINPsd7aZbGBtwuXGzgFiG0EJr/8pnpCKSQjhnjbsBiLMs0INStqzXEsIZ7AQhAGaqWqpUedDbm+pUaSBPM4RJvqidVCMGq4gjzOUYN7CwBVNbky7tCtkfZkWw4yXlm60N7/gOqpumhLkoBSdL7ZFlV/p2PVuaes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781788370; c=relaxed/simple;
-	bh=o+hWvHSHJKjbm+xQUPcCIEkB7/6jEEPh/7kR3Xc2ed4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=c78a5nhV6qJFRjkmj8xHfmHOgDziJ2Tz5Ai94gOrBqAMiqc9SiRfc+vaEwyOe3E8CUQvKvumsQWDtra5mO5KecCO3i1jB1+83P8Dn0uYUla0ZD1hoLwqscHvunxXB3drAmXNtC6VYM5/fZX6bo2pUOJ9GYf58xAoDimxSBjzsgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.200.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de (drehscheibe.grey.stw.pengutronix.de [IPv6:2a0a:edc0:0:c01:1d::a2])
-	(Authenticated sender: relay-from-drehscheibe.grey.stw.pengutronix.de)
-	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id 5440220071A;
-	Thu, 18 Jun 2026 15:12:41 +0200 (CEST)
-Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1waCXx-003RXD-0m;
-	Thu, 18 Jun 2026 15:12:41 +0200
-Received: from pza by lupine with local (Exim 4.98.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1waCXx-00000000B3O-0Xsr;
-	Thu, 18 Jun 2026 15:12:41 +0200
-Message-ID: <b84c8940187da3a493c8334bb50a992be7553092.camel@pengutronix.de>
-Subject: Re: [PATCH v4 08/12] i3c: dw-i3c-master: Add a quirk to skip clock
- and reset
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Akhil R <akhilrajeev@nvidia.com>, Alexandre Belloni
-	 <alexandre.belloni@bootlin.com>
-Cc: Frank Li <Frank.Li@nxp.com>, Miquel Raynal <miquel.raynal@bootlin.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,  Guenter Roeck <linux@roeck-us.net>,
- Jon Hunter <jonathanh@nvidia.com>, Thierry Reding	
- <thierry.reding@kernel.org>, linux-i3c@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Thu, 18 Jun 2026 15:12:40 +0200
-In-Reply-To: <20260616095429.3947205-9-akhilrajeev@nvidia.com>
-References: <20260616095429.3947205-1-akhilrajeev@nvidia.com>
-	 <20260616095429.3947205-9-akhilrajeev@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-0+deb13u1 
+	s=arc-20240116; t=1781798204; c=relaxed/simple;
+	bh=mjHNFjrSpakQHraKQgU4+H6bL9gQu4hB14FwBpqmgUw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=G9LppaoxdtU3/rlF9e1FUQtEkjLau4uiM8m449lAXKqtZJjcpi7xWFAzCoSV4ROSyKGPYAjs/yOCJf+smdGLTcjm/zz9isRYGw7oQ86qQcLAtcacoDzT1z+Ad3ulxiC6IDEkGdNmRkju3iZa3i/s4YhjhbPOtpixmmGMSNR36Qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=j+4Ad/TB; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=bWtzS7iJ; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="j+4Ad/TB";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="bWtzS7iJ"
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65IFFroO1914232
+	for <linux-hwmon@vger.kernel.org>; Thu, 18 Jun 2026 15:56:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=VcLPpasNEX3QJRIY2M0aIP
+	dRTeqR6PucNCShGuq0DT4=; b=j+4Ad/TBxE32rfAqTZbpyHo5FViecn7R35vhpr
+	74BEHSF2/qdDmvm+fklFofRMit2uIn8MmjvJl8YgZ6xNgVsThjmZ3BotCkH1eI9/
+	louLIg+7SUtah9lg6M0uCp8iZqtFJmlAfKBc7eKX9IpNO1aniohq8rz/FLdjaToH
+	q7kBJcoz7BpzIU/SlKHazaORgfwxy/S8vwaDPEh9tr8ApsE73xuAhFNOP+A79pYs
+	aeeaKmUMq662gL1I5bm5ogAQ5V2KGJy43PV6w8gdvypO6/lBeIuaHAp4E7ywCsxo
+	YnoF/lH5og/tG4XxnDctQi2cLkFhXY389TcmW3IlWx1nC4uw==
+Received: from mail-dl1-f71.google.com (mail-dl1-f71.google.com [74.125.82.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ev1wc3xmr-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-hwmon@vger.kernel.org>; Thu, 18 Jun 2026 15:56:41 +0000 (GMT)
+Received: by mail-dl1-f71.google.com with SMTP id a92af1059eb24-139553dd8acso4460521c88.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 18 Jun 2026 08:56:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1781798201; x=1782403001; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VcLPpasNEX3QJRIY2M0aIPdRTeqR6PucNCShGuq0DT4=;
+        b=bWtzS7iJBPg6n5tq0TOSnESMpc3T0W2ufYl5B9KuujEnNfbYaQli4ptSgZ0rYBLajr
+         BUSiUDWqiF1EII64iNl3cFZKMKeCyvRVfXVZksddCGE+zUA1hy0P9NDWyM7zGie+YIKc
+         /bsk1b98YUwbD4uqYOSPb/ldAYnu7eMU2uEuaxXRL4o+NbDaNOqUJ9pTSy1vPG9TbxDo
+         6/d6muaqZa4gmCJ8mEGP4RX/ZJp88hdUb0FMFhhWozKmkA74Cs4lrn13tlNKgZOVnk73
+         oGgOLJrmMr4S6VMRvb4cuNHhdnm13FlXFDly+i53Slyc7AkAQS65Nre8rRY1TqxbKkpW
+         ahzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781798201; x=1782403001;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VcLPpasNEX3QJRIY2M0aIPdRTeqR6PucNCShGuq0DT4=;
+        b=DgVrvLQoxLV/YFzctEYggVDslpVSZOgDzsuWuQYjqTJxJqUr0rf6y6s9RIjX2Rzc3i
+         wrdoTirxFEE5OB0dOIkA7f+N+cTgkzg1QDUfDV2Y6KfdMQs2s/cDAPNjSEpd315mPKiM
+         Bjcwn93fIAP3SRC45vqBvvi1O/Y4floHY8Ykb1x2VsnISIc5SQcgQ8GYIralcGx4Bs4H
+         y62Hj8qzJeWwmGLXDW7lMOkl+XiVL9w74rIjoo/k8gNDDUarW2X+0t9gUwEdATit/L6q
+         oKECG4cRa9t9vsMtj3X5pwt+KqDqw6ph/xRswOXVbW9mnVSURh/FXOBe4enGJxlWaEUj
+         eT3g==
+X-Forwarded-Encrypted: i=1; AFNElJ8y06fzynk2phn2ht//Uwdnk5LGtdUnYNHrA6pwqAzk33vnqJIvP7C9UoUicoQV6POIMLxybdrRvo+k+Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyB7W2FWK79iYt9pdfdo/OSDnyrb11K6lZ1QTAdUBuoR/kT48ow
+	MncZ28USBk2Mc4xn9Miex6lobIQKfnPycwTkZwWTwpEOk6oFbR1yNZxAgo7fxmZAjaRyiFqC7+p
+	zKxC+unI8+yZEbwzwZzpl93vKF3gLKc5p9kiZK1OSf1Ka80uk18h0PXWPpHEbZAyRYA==
+X-Gm-Gg: AfdE7cnBnR8khQrE4M6oaahCID7UI4BHYi+b3hV6Kphk0s2h43Ky9tu9Fh/21VWLECH
+	SCJ2vcn+1lw+NN/eIwu8JXbZPHh0ZRcjObcErK3cegdpLiA1/KgfvKOFVp+jm9PDmR8mdpIdrmI
+	dzI8vsZYTQ9rRf+OUFZRQbh0huis64xAGIQRxOfEONbPttG96/fNV7+MYorQY4dBrm2wZ+nbN1E
+	UOANkRNXXwYellr0BFgK2eZ5Rx3Pkd+096adE6BL2aus1mpuyeTYb0VU3EtGHEbDZQ6TpPYF/SV
+	Eoy8bVwEMZvc2CBv9tIxG4XWwQhhBSmn8oHzGe5QOFYuQlYHZYbJGFY2pR43i1vFdYP407I3qzj
+	WIf0mLbDpIA64PGbUAw7Nzx8mTLGpw/QmCuGVc1knM9JRM5nvK8gE
+X-Received: by 2002:a05:7022:624:b0:137:eb21:eafb with SMTP id a92af1059eb24-139a210d950mr184917c88.13.1781798200901;
+        Thu, 18 Jun 2026 08:56:40 -0700 (PDT)
+X-Received: by 2002:a05:7022:624:b0:137:eb21:eafb with SMTP id a92af1059eb24-139a210d950mr184876c88.13.1781798200388;
+        Thu, 18 Jun 2026 08:56:40 -0700 (PDT)
+Received: from [169.254.0.13] (Global_NAT1.qualcomm.com. [129.46.96.20])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1384b9110d3sm19671267c88.5.2026.06.18.08.56.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Jun 2026 08:56:39 -0700 (PDT)
+From: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
+Subject: [PATCH v2 0/2] firmware: arm_scmi: Ensure automatic module loading
+Date: Thu, 18 Jun 2026 15:56:33 +0000
+Message-Id: <20260618-scmi-modalias-v2-0-8c7547c1be21@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIADEVNGoC/3WNyw6CMBREf4V0bUl7hca48j8Mi76QayjFXiAaw
+ r9bcO1mkpPMnFkZ+YSe2LVYWfILEsYhA5wKZjs9PDxHl5mBACWUVJxsQB6i0z1q4qI9QwXSuKo
+ Gljdj8i2+D9+9+THN5unttEv2Roc0xfQ5Dhe59/65F8kFVwrMxbkatIFbJCpfs+5tDKHMwZpt2
+ 741G+bgwwAAAA==
+X-Change-ID: 20260616-scmi-modalias-0f32421bd452
+To: Sudeep Holla <sudeep.holla@kernel.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc: arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        Hans de Goede <johannes.goede@oss.qualcomm.com>,
+        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+        Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>, Frank Li <Frank.Li@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>, Guenter Roeck <linux@roeck-us.net>,
+        Jyoti Bhayana <jbhayana@google.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        David Lechner <dlechner@baylibre.com>,
+        =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulfh@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        imx@lists.linux.dev, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781798198; l=3732;
+ i=bjorn.andersson@oss.qualcomm.com; s=20230915; h=from:subject:message-id;
+ bh=mjHNFjrSpakQHraKQgU4+H6bL9gQu4hB14FwBpqmgUw=;
+ b=hBg6Nk9j8qta0n05zkLply061xcL+eKoogc7g6U/ddVe3HybQC8J6n/rGWlCHlG6Rs3u3pXA1
+ tTC1mEfs4N3BHALIzXBsVdWzGKEoLUmiZW+sPGVEdal1Zj/Blud0IQn
+X-Developer-Key: i=bjorn.andersson@oss.qualcomm.com; a=ed25519;
+ pk=VkhObtljigy9k0ZUIE1Mvr0Y+E1dgBEH9WoLQnUtbIM=
+X-Authority-Analysis: v=2.4 cv=TMt1jVla c=1 sm=1 tr=0 ts=6a341539 cx=c_pps
+ a=JYo30EpNSr/tUYqK9jHPoA==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=IkcTkHD0fZMA:10 a=FelO9ux0wxsA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=yx91gb_oNiZeI1HMLzn7:22
+ a=bC-a23v3AAAA:8 a=EUspDBNiAAAA:8 a=VwQbUJbxAAAA:8 a=7CQSdrXTAAAA:8
+ a=IpJZQVW2AAAA:8 a=20KFwNOVAAAA:8 a=KKAkSRfTAAAA:8 a=8AirrxEcAAAA:8
+ a=pGLkceISAAAA:8 a=_jlGtV7tAAAA:8 a=1XWaLZrsAAAA:8 a=gAnH3GRIAAAA:8
+ a=P-IC7800AAAA:8 a=JfrnYn6hAAAA:8 a=Bhy_3RDnOwLV862tVBkA:9 a=3ZKOabzyN94A:10
+ a=QEXdDO2ut3YA:10 a=Fk4IpSoW4aLDllm1B1p-:22 a=FO4_E8m0qiDe52t0p3_H:22
+ a=a-qgeE7W1pNrGK8U0ZQC:22 a=IawgGOuG5U0WyFbmm1f5:22 a=cvBusfyB2V15izCimMoJ:22
+ a=ST-jHhOKWsTCqRlWije3:22 a=nlm17XC03S6CtCLSeiRr:22 a=d3PnA9EDa4IxuAV0gXij:22
+ a=1CNFftbPRP8L7MoqJWF3:22
+X-Proofpoint-GUID: Ib5CzRJw9s7WEvfR8uDpkgTHZKYCuVxw
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjE4MDE0NyBTYWx0ZWRfXxJPLuw+XM0Sj
+ CdeIwfMfGc69WrV1PC/2hFErzYW8JG3yoVzYkd2ns/xi9g0yhMsIDzvPpIzsmaWtz+6zFWBaGE6
+ iPCJJL4t67QIFHuxqfEDvrscVLErJQE=
+X-Proofpoint-ORIG-GUID: Ib5CzRJw9s7WEvfR8uDpkgTHZKYCuVxw
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjE4MDE0NyBTYWx0ZWRfXzyLmLGN14VkN
+ O/aUx2oNw4lbB4fBxXsmGaZxn7eUfF7GIiuqcL+1tXPROU1MRBG0Pb7s7nos+hWdx8CQCzzXr5a
+ 3bSURC8kR30BXh8jzWFoKndLYzNzM/T0aXpeyT1/9YQRRQNd4pLzyq/LPm8rVS+XcYrDtxX7XOf
+ 7j1yUHbbeW5xVs9QV7MAuqXyO6uwjkgCYQNg5jXxgkdrcPf1n7CXn39mPzPeFTUwROXLl6q7qsl
+ YbKKAkVmuHdK+cKZHHH1zo/PGwdjVycpIrtRRTte5Uvh8aUZPFZxTH40+yzLhxH565qaLC5HQ3U
+ Jg1rX99BNGv+fuuBMC5OgYU91A+OwXCUxCwzSd6J/HWWSc54Fo0PvHGdhLjbLks7czyLEePK+9F
+ TIy2KJ1eKiYzhfapVl97l6GrTlqk2wU7hcTvy3GnfFErGkjlSAL9Ws495wiB8AD6VR2BqQjLOS/
+ e5h9yAZw5lmJd3YdhVA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-06-18_02,2026-06-18_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 bulkscore=0 adultscore=0 impostorscore=0 priorityscore=1501
+ suspectscore=0 lowpriorityscore=0 spamscore=0 clxscore=1011 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2606180147
 
-On Di, 2026-06-16 at 09:54 +0000, Akhil R wrote:
-> Some ACPI-enumerated devices like Tegra410 do not have clock and reset
-> resources exposed via the clk/reset frameworks. Unlike device tree,
-> ACPI on Arm does not model such provider functions. The hardware is
-> expected to be brought out of reset and have its clocks enabled by the
-> firmware before the OS takes over. Any data to be shared with the OS is
-> passed using the _DSD property.
->=20
-> Add match data for such devices to skip acquiring clock and reset control=
-s
-> during probe and read the clock rate from the "clock-frequency" _DSD
-> property. Note that the "clock-frequency" here is the controller's core
-> clock and not the bus speed. I3C specifies the bus speed separately using
-> "i3c-scl-hz" and "i2c-scl-hz" and hence this should not cause any conflic=
-t.
->=20
-> Also, move match data parsing before clock/reset acquisition so the quirk
-> is available early enough.
->=20
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> ---
->  drivers/i3c/master/dw-i3c-master.c | 66 ++++++++++++++++++++----------
->  1 file changed, 44 insertions(+), 22 deletions(-)
->=20
-> diff --git a/drivers/i3c/master/dw-i3c-master.c b/drivers/i3c/master/dw-i=
-3c-master.c
-> index 3e510fddf06c..a2a4b88c2017 100644
-> --- a/drivers/i3c/master/dw-i3c-master.c
-> +++ b/drivers/i3c/master/dw-i3c-master.c
-> @@ -242,6 +242,7 @@
->  /* List of quirks */
->  #define AMD_I3C_OD_PP_TIMING		BIT(1)
->  #define DW_I3C_DISABLE_RUNTIME_PM_QUIRK	BIT(2)
-> +#define DW_I3C_ACPI_SKIP_CLK_RST		BIT(3)
-> =20
->  struct dw_i3c_cmd {
->  	u32 cmd_lo;
-> @@ -556,13 +557,28 @@ static void dw_i3c_master_set_intr_regs(struct dw_i=
-3c_master *master)
->  	writel(IBI_REQ_REJECT_ALL, master->regs + IBI_MR_REQ_REJECT);
->  }
-> =20
-> +static unsigned long dw_i3c_master_get_core_rate(struct dw_i3c_master *m=
-aster)
-> +{
-> +	unsigned int core_rate_prop;
-> +
-> +	if (!(master->quirks & DW_I3C_ACPI_SKIP_CLK_RST))
-> +		return clk_get_rate(master->core_clk);
-> +
-> +	if (device_property_read_u32(master->dev, "clock-frequency", &core_rate=
-_prop)) {
-> +		dev_err(master->dev, "missing clock-frequency property\n");
-> +		return 0;
-> +	}
-> +
-> +	return core_rate_prop;
-> +}
-> +
->  static int dw_i3c_clk_cfg(struct dw_i3c_master *master)
->  {
->  	unsigned long core_rate, core_period;
->  	u32 scl_timing;
->  	u8 hcnt, lcnt;
-> =20
-> -	core_rate =3D clk_get_rate(master->core_clk);
-> +	core_rate =3D dw_i3c_master_get_core_rate(master);
->  	if (!core_rate)
->  		return -EINVAL;
-> =20
-> @@ -615,7 +631,7 @@ static int dw_i2c_clk_cfg(struct dw_i3c_master *maste=
-r)
->  	u16 hcnt, lcnt;
->  	u32 scl_timing;
-> =20
-> -	core_rate =3D clk_get_rate(master->core_clk);
-> +	core_rate =3D dw_i3c_master_get_core_rate(master);
->  	if (!core_rate)
->  		return -EINVAL;
-> =20
-> @@ -1577,18 +1593,33 @@ int dw_i3c_common_probe(struct dw_i3c_master *mas=
-ter,
->  	if (IS_ERR(master->regs))
->  		return PTR_ERR(master->regs);
-> =20
-> -	master->core_clk =3D devm_clk_get_enabled(&pdev->dev, NULL);
-> -	if (IS_ERR(master->core_clk))
-> -		return PTR_ERR(master->core_clk);
-> -
-> -	master->pclk =3D devm_clk_get_optional_enabled(&pdev->dev, "pclk");
-> -	if (IS_ERR(master->pclk))
-> -		return PTR_ERR(master->pclk);
-> +	if (has_acpi_companion(&pdev->dev)) {
-> +		quirks =3D (unsigned long)device_get_match_data(&pdev->dev);
-> +	} else if (pdev->dev.of_node) {
-> +		drvdata =3D device_get_match_data(&pdev->dev);
-> +		if (drvdata)
-> +			quirks =3D drvdata->flags;
-> +	}
-> +	master->quirks =3D quirks;
-> =20
-> -	master->core_rst =3D devm_reset_control_get_optional_exclusive_deassert=
-ed(&pdev->dev,
-> -										"core_rst");
-> -	if (IS_ERR(master->core_rst))
-> -		return PTR_ERR(master->core_rst);
-> +	if (master->quirks & DW_I3C_ACPI_SKIP_CLK_RST) {
-> +		master->core_clk =3D NULL;
-> +		master->pclk =3D NULL;
-> +		master->core_rst =3D NULL;
-> +	} else {
-> +		master->core_clk =3D devm_clk_get_enabled(&pdev->dev, NULL);
-> +		if (IS_ERR(master->core_clk))
-> +			return PTR_ERR(master->core_clk);
-> +
-> +		master->pclk =3D devm_clk_get_optional_enabled(&pdev->dev, "pclk");
-> +		if (IS_ERR(master->pclk))
-> +			return PTR_ERR(master->pclk);
-> +
-> +		master->core_rst =3D devm_reset_control_get_optional_exclusive_deasser=
-ted(&pdev->dev,
-> +											"core_rst");
-> +		if (IS_ERR(master->core_rst))
-> +			return PTR_ERR(master->core_rst);
+SCMI drivers such as the Arm SCMI CPUfreq driver are allowed to built as
+modules, but they are then not automatically loaded. Rework the SCMI
+device table alias support to make modpost consume the information from
+MODULE_DEVICE_TABLE(scmi, ...) and allow drivers to be loaded based on
+this information, if known. Also add a protocol-based alias to also
+trigger driver loading when only the SCMI protocol id is known.
 
-Why does this need to move around at all?
+Signed-off-by: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
+---
+Changes in v2:
+- Use request_module_nowait()
+- Drop #include <linux/mod_devicetable.h> from scmi_protocol.h
+- Link to v1: https://patch.msgid.link/20260616-scmi-modalias-v1-0-662b8dd52ab2@oss.qualcomm.com
 
-The reset control is already optional, so I would expect this to set
-core_rst to NULL on missing reset, no quirk necessary.
+To: Sudeep Holla <sudeep.holla@kernel.org>
+To: Cristian Marussi <cristian.marussi@arm.com>
+To: Michael Turquette <mturquette@baylibre.com>
+To: Nicolas Schier <nsc@kernel.org>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Brian Masney <bmasney@redhat.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Frank Li <Frank.Li@nxp.com>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Jyoti Bhayana <jbhayana@google.com>
+Cc: Jonathan Cameron <jic23@kernel.org>
+Cc: David Lechner <dlechner@baylibre.com>
+Cc: Nuno Sá <nuno.sa@analog.com>
+Cc: Andy Shevchenko <andy@kernel.org>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Ulf Hansson <ulfh@kernel.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: arm-scmi@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-clk@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: imx@lists.linux.dev
+Cc: linux-hwmon@vger.kernel.org
+Cc: linux-iio@vger.kernel.org
+Cc: linux-input@vger.kernel.org
+Cc: linux-rtc@vger.kernel.org
+Cc: linux-kbuild@vger.kernel.org
 
-Same question for pclk. Wouldn't it be enough to make core_clk optional
-as well?
+---
+Bjorn Andersson (2):
+      module: add SCMI device table alias support
+      firmware: arm_scmi: request modules for discovered protocols
 
-regards
-Philipp
+ drivers/clk/clk-scmi.c                         |  1 +
+ drivers/cpufreq/scmi-cpufreq.c                 |  1 +
+ drivers/firmware/arm_scmi/bus.c                | 20 ++++++++++----------
+ drivers/firmware/arm_scmi/driver.c             |  3 +++
+ drivers/firmware/arm_scmi/scmi_power_control.c |  1 +
+ drivers/firmware/imx/sm-cpu.c                  |  1 +
+ drivers/firmware/imx/sm-lmm.c                  |  1 +
+ drivers/firmware/imx/sm-misc.c                 |  1 +
+ drivers/hwmon/scmi-hwmon.c                     |  1 +
+ drivers/iio/common/scmi_sensors/scmi_iio.c     |  1 +
+ drivers/input/keyboard/imx-sm-bbm-key.c        |  1 +
+ drivers/pmdomain/arm/scmi_perf_domain.c        |  1 +
+ drivers/pmdomain/arm/scmi_pm_domain.c          |  1 +
+ drivers/powercap/arm_scmi_powercap.c           |  1 +
+ drivers/regulator/scmi-regulator.c             |  1 +
+ drivers/reset/reset-scmi.c                     |  1 +
+ drivers/rtc/rtc-imx-sm-bbm.c                   |  1 +
+ include/linux/mod_devicetable.h                | 12 ++++++++++++
+ include/linux/scmi_protocol.h                  |  5 +----
+ scripts/mod/devicetable-offsets.c              |  4 ++++
+ scripts/mod/file2alias.c                       | 13 +++++++++++++
+ 21 files changed, 58 insertions(+), 14 deletions(-)
+---
+base-commit: 8d6dbbbe3ba62de0a63e962ee004afb848c8e3ac
+change-id: 20260616-scmi-modalias-0f32421bd452
+
+Best regards,
+--  
+Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
+
