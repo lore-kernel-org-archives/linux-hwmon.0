@@ -1,244 +1,192 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx1.white.stw.pengutronix.de (mx1.white.stw.pengutronix.de [185.203.200.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0DE83101B0
-	for <linux-hwmon@vger.kernel.org>; Wed, 17 Jun 2026 20:18:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ABA4368287;
+	Thu, 18 Jun 2026 13:12:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.200.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781727504; cv=none; b=tAjHOjJQd/Talj2iS/HFn65gHpEVdzOGhHFKMih0sN1qxnpxgsGtJfisSr1rDUYrwqwW78RXNNHXEWoB2MDBS0zzKDi0Tf6l7zC45DNFKBDOrZkAYyGi2F9/XMIOpxPQ0NwTMLLoB3vNst9DNZ0vy9FFhduqalZsjiKCWE19q94=
+	t=1781788370; cv=none; b=pnif7n2MR+8TBYZmzi3ecUOPKk5fZ0AsNBMwi7B9RONuEsuQx1vX2zYgCr/W8mPdIgEgd/XDmWscN5l2cvH+/sI/lsCkZnoxPFiFcSUhfZJcnjFTgE323glzfuZkwBPoB6I8usCfKord4+T2mdDtZNw6QgwjdA7FRC0TDOngF20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781727504; c=relaxed/simple;
-	bh=j+lr9joQCDT9BGga/fS0GkqanS3MkFCCgQ3p7a9PhhU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=QSv9vp1UMqpNLS5ftBnV2ptG3SNwLhZeMxqz2C8kgAV40TZptLJa+7HeTlkw7VwQeLFS++FkokiN/+EwvJ8xkw/Cas9zqiIg7U/2H5SofYDwYP0dgB6aKl6o6TFFMghLenc4pYZ6fW2yv06LbfQLUbkGK89J6uwi+0EMCCaY46E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Po3TZTF4; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Po3TZTF4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B46E1F000E9;
-	Wed, 17 Jun 2026 20:18:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781727502;
-	bh=bJ5Hxvuv/M7LPvegMQXZqJJOGW68ryVKE222aOCSKpc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Po3TZTF4vo10cwF0WJUlB0saCGy7I+TYKXdRgrEnzNJFNpGhs1qWdsfeZv/RmFRg9
-	 d54tHE16IG/oqfMUqyDuT3eY04tr3V0I6NfdQmbJ3bu7btJ35j2v9uOMZTkf9s3mzv
-	 lSWbdwgMjGa2NUlyvtflSwTjS8gQKTSHjz38Kvs1zqwEhRlZ7O69nGpDDXipuM4wBd
-	 Cv4HC6Ej5Lckgws6leEPqMo9htQK8NM/0XZmJv/sB3a4hP66N00ktUsamHxVWeCCEZ
-	 MhQbtJu2JOcW93XWGr7oaSM1dWseYmHpcgBPn1FepMHBxdQV3n/V5eXmhfkDZ9x0MW
-	 ypopz3iXw7ltA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (occ) unregister hwmon device outside occ lock
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Runyu Xiao" <runyu.xiao@seu.edu.cn>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260617150859.741453-1-runyu.xiao@seu.edu.cn>
-References: <20260617150859.741453-1-runyu.xiao@seu.edu.cn>
-Content-Type: text/plain; charset=utf-8
+	s=arc-20240116; t=1781788370; c=relaxed/simple;
+	bh=o+hWvHSHJKjbm+xQUPcCIEkB7/6jEEPh/7kR3Xc2ed4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=c78a5nhV6qJFRjkmj8xHfmHOgDziJ2Tz5Ai94gOrBqAMiqc9SiRfc+vaEwyOe3E8CUQvKvumsQWDtra5mO5KecCO3i1jB1+83P8Dn0uYUla0ZD1hoLwqscHvunxXB3drAmXNtC6VYM5/fZX6bo2pUOJ9GYf58xAoDimxSBjzsgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.200.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de (drehscheibe.grey.stw.pengutronix.de [IPv6:2a0a:edc0:0:c01:1d::a2])
+	(Authenticated sender: relay-from-drehscheibe.grey.stw.pengutronix.de)
+	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id 5440220071A;
+	Thu, 18 Jun 2026 15:12:41 +0200 (CEST)
+Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1waCXx-003RXD-0m;
+	Thu, 18 Jun 2026 15:12:41 +0200
+Received: from pza by lupine with local (Exim 4.98.2)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1waCXx-00000000B3O-0Xsr;
+	Thu, 18 Jun 2026 15:12:41 +0200
+Message-ID: <b84c8940187da3a493c8334bb50a992be7553092.camel@pengutronix.de>
+Subject: Re: [PATCH v4 08/12] i3c: dw-i3c-master: Add a quirk to skip clock
+ and reset
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: Akhil R <akhilrajeev@nvidia.com>, Alexandre Belloni
+	 <alexandre.belloni@bootlin.com>
+Cc: Frank Li <Frank.Li@nxp.com>, Miquel Raynal <miquel.raynal@bootlin.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,  Guenter Roeck <linux@roeck-us.net>,
+ Jon Hunter <jonathanh@nvidia.com>, Thierry Reding	
+ <thierry.reding@kernel.org>, linux-i3c@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Thu, 18 Jun 2026 15:12:40 +0200
+In-Reply-To: <20260616095429.3947205-9-akhilrajeev@nvidia.com>
+References: <20260616095429.3947205-1-akhilrajeev@nvidia.com>
+	 <20260616095429.3947205-9-akhilrajeev@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 17 Jun 2026 20:18:21 +0000
-Message-Id: <20260617201822.3B46E1F000E9@smtp.kernel.org>
+User-Agent: Evolution 3.56.2-0+deb13u1 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
-s) to consider:
-
-New issues:
-- [High] Sysfs callbacks can initiate hardware polling after the device has=
- been deactivated.
-
-Pre-existing issues:
-- [High] The patch fixes an ABBA deadlock for hwmon sysfs attributes but le=
-aves an identical deadlock for the driver's own occ_sysfs attributes.
-- [High] Unbounded memory leak when toggling the OCC active state via sysfs.
-- [High] A NULL pointer dereference crash occurs during sysfs group creatio=
-n if the hardware reports multiple capability sensors.
-- [High] Malformed device responses can cause an out-of-bounds kernel memor=
-y read when parsing sensor data blocks.
---
-
-commit c52f29d2e70bdddb1a59be767e0322ae3c29585d
-Author: Runyu Xiao <runyu.xiao@seu.edu.cn>
-
-hwmon: (occ) unregister hwmon device outside occ lock
-
-Serialize hwmon registration and removal with a separate hwmon_lock.
-Under that lock, detach occ->hwmon and update occ->active while occ->lock
-is held so concurrent OCC state changes still see a stable state, then
-drop occ->lock before calling hwmon_device_unregister().
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Runyu Xiao <runyu.xiao@seu.edu.cn>
-
-> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-> index 42cc6068bb08b..b8461da29e36f 100644
-> --- a/drivers/hwmon/occ/common.c
-> +++ b/drivers/hwmon/occ/common.c
-> @@ -1105,11 +1105,16 @@ static void occ_parse_poll_response(struct occ *o=
-cc)
+On Di, 2026-06-16 at 09:54 +0000, Akhil R wrote:
+> Some ACPI-enumerated devices like Tegra410 do not have clock and reset
+> resources exposed via the clk/reset frameworks. Unlike device tree,
+> ACPI on Arm does not model such provider functions. The hardware is
+> expected to be brought out of reset and have its clocks enabled by the
+> firmware before the OS takes over. Any data to be shared with the OS is
+> passed using the _DSD property.
+>=20
+> Add match data for such devices to skip acquiring clock and reset control=
+s
+> during probe and read the clock rate from the "clock-frequency" _DSD
+> property. Note that the "clock-frequency" here is the controller's core
+> clock and not the bus speed. I3C specifies the bus speed separately using
+> "i3c-scl-hz" and "i2c-scl-hz" and hence this should not cause any conflic=
+t.
+>=20
+> Also, move match data parsing before clock/reset acquisition so the quirk
+> is available early enough.
+>=20
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> ---
+>  drivers/i3c/master/dw-i3c-master.c | 66 ++++++++++++++++++++----------
+>  1 file changed, 44 insertions(+), 22 deletions(-)
+>=20
+> diff --git a/drivers/i3c/master/dw-i3c-master.c b/drivers/i3c/master/dw-i=
+3c-master.c
+> index 3e510fddf06c..a2a4b88c2017 100644
+> --- a/drivers/i3c/master/dw-i3c-master.c
+> +++ b/drivers/i3c/master/dw-i3c-master.c
+> @@ -242,6 +242,7 @@
+>  /* List of quirks */
+>  #define AMD_I3C_OD_PP_TIMING		BIT(1)
+>  #define DW_I3C_DISABLE_RUNTIME_PM_QUIRK	BIT(2)
+> +#define DW_I3C_ACPI_SKIP_CLK_RST		BIT(3)
 > =20
->  int occ_active(struct occ *occ, bool active)
->  {
-> -	int rc =3D mutex_lock_interruptible(&occ->lock);
-> +	struct device *hwmon =3D NULL;
-> +	int rc =3D mutex_lock_interruptible(&occ->hwmon_lock);
-> =20
->  	if (rc)
->  		return rc;
-> =20
-> +	rc =3D mutex_lock_interruptible(&occ->lock);
-> +	if (rc)
-> +		goto unlock_hwmon;
-> +
-
-[Severity: High]
-This is a pre-existing issue, but can this cause an unbounded memory leak w=
-hen
-toggling the OCC active state via sysfs?
-
-When the device is activated, occ_setup_sensor_attrs() unconditionally
-allocates the sensor attribute arrays using devm_kzalloc(). Because devres
-allocations are bound to the device's lifetime, the memory is not freed when
-occ_active() is called with active set to false.
-
-Will repeatedly writing '1' and '0' to the occ_active sysfs file continuous=
-ly
-allocate new memory and overwrite the pointers?
-
-[Severity: High]
-This is a pre-existing issue, but does the hardware reporting multiple
-capability sensors cause a NULL pointer dereference during sysfs group
-creation?
-
-In occ_setup_sensor_attrs(), the driver expects sensors->caps.num_sensors
-attributes and allocates array space accordingly, but it only populates the
-first capability sensor because it uses an
-if (sensors->caps.num_sensors >=3D 1) condition instead of a loop:
-
-occ_setup_sensor_attrs() {
-    ...
-    if (sensors->caps.num_sensors >=3D 1) {
-        snprintf(attr->name, sizeof(attr->name), "power%d_label", s);
-    ...
-}
-
-Are the remaining attributes left zero-initialized, causing
-sysfs_create_group() to read a NULL attr->name and crash?
-
-[Severity: High]
-This is a pre-existing issue, but can malformed device responses cause an
-out-of-bounds kernel memory read when parsing sensor data blocks?
-
-In occ_parse_poll_response(), the bounds check is performed after reading t=
-he
-block header:
-
-occ_parse_poll_response() {
-    ...
-    offset =3D (block->header.num_sensors * block->header.sensor_length) +
-             sizeof(block->header);
-    size +=3D offset;
-
-    if ((size + sizeof(*header)) >=3D OCC_RESP_DATA_BYTES) {
-    ...
-}
-
-If the response buffer is almost full, will the next iteration read the blo=
-ck
-header out of bounds?
-
-Additionally, the driver trusts the hardware-provided sensor_length without
-verifying it matches the C struct size. Could a malicious or faulty OCC
-provide a large num_sensors and small sensor_length, passing the bounds
-check but causing sysfs functions like occ_show_power_a0() to read arbitrary
-out-of-bounds kernel memory?
-
-[ ... ]
-
-> @@ -1154,14 +1159,17 @@ int occ_active(struct occ *occ, bool active)
->  			goto unlock;
->  		}
-> =20
-> -		if (occ->hwmon)
-> -			hwmon_device_unregister(occ->hwmon);
-> +		hwmon =3D occ->hwmon;
->  		occ->active =3D false;
->  		occ->hwmon =3D NULL;
->  	}
-> =20
->  unlock:
->  	mutex_unlock(&occ->lock);
-> +	if (hwmon)
-> +		hwmon_device_unregister(hwmon);
-> +unlock_hwmon:
-> +	mutex_unlock(&occ->hwmon_lock);
->  	return rc;
+>  struct dw_i3c_cmd {
+>  	u32 cmd_lo;
+> @@ -556,13 +557,28 @@ static void dw_i3c_master_set_intr_regs(struct dw_i=
+3c_master *master)
+>  	writel(IBI_REQ_REJECT_ALL, master->regs + IBI_MR_REQ_REJECT);
 >  }
-
-[Severity: High]
-Can sysfs callbacks initiate hardware polling after the device has been
-deactivated?
-
-By moving hwmon_device_unregister() outside of occ->lock and occ->hwmon_loc=
-k,
-pending hwmon sysfs callbacks that were waiting for occ->lock can execute
-after occ->active is set to false.
-
-Since functions like occ_update_response() do not verify occ->active inside
-their critical sections:
-
-occ_update_response() {
-    ...
-    if (time_after(jiffies, occ->next_update)) {
-        rc =3D occ_poll(occ);
-    ...
-}
-
-will they proceed to call occ_poll() and send hardware commands to the OCC
-after it has been deactivated?
-
-[ ... ]
-
-> @@ -1190,15 +1199,22 @@ EXPORT_SYMBOL_GPL(occ_setup);
 > =20
->  void occ_shutdown(struct occ *occ)
+> +static unsigned long dw_i3c_master_get_core_rate(struct dw_i3c_master *m=
+aster)
+> +{
+> +	unsigned int core_rate_prop;
+> +
+> +	if (!(master->quirks & DW_I3C_ACPI_SKIP_CLK_RST))
+> +		return clk_get_rate(master->core_clk);
+> +
+> +	if (device_property_read_u32(master->dev, "clock-frequency", &core_rate=
+_prop)) {
+> +		dev_err(master->dev, "missing clock-frequency property\n");
+> +		return 0;
+> +	}
+> +
+> +	return core_rate_prop;
+> +}
+> +
+>  static int dw_i3c_clk_cfg(struct dw_i3c_master *master)
 >  {
-> +	struct device *hwmon;
+>  	unsigned long core_rate, core_period;
+>  	u32 scl_timing;
+>  	u8 hcnt, lcnt;
+> =20
+> -	core_rate =3D clk_get_rate(master->core_clk);
+> +	core_rate =3D dw_i3c_master_get_core_rate(master);
+>  	if (!core_rate)
+>  		return -EINVAL;
+> =20
+> @@ -615,7 +631,7 @@ static int dw_i2c_clk_cfg(struct dw_i3c_master *maste=
+r)
+>  	u16 hcnt, lcnt;
+>  	u32 scl_timing;
+> =20
+> -	core_rate =3D clk_get_rate(master->core_clk);
+> +	core_rate =3D dw_i3c_master_get_core_rate(master);
+>  	if (!core_rate)
+>  		return -EINVAL;
+> =20
+> @@ -1577,18 +1593,33 @@ int dw_i3c_common_probe(struct dw_i3c_master *mas=
+ter,
+>  	if (IS_ERR(master->regs))
+>  		return PTR_ERR(master->regs);
+> =20
+> -	master->core_clk =3D devm_clk_get_enabled(&pdev->dev, NULL);
+> -	if (IS_ERR(master->core_clk))
+> -		return PTR_ERR(master->core_clk);
+> -
+> -	master->pclk =3D devm_clk_get_optional_enabled(&pdev->dev, "pclk");
+> -	if (IS_ERR(master->pclk))
+> -		return PTR_ERR(master->pclk);
+> +	if (has_acpi_companion(&pdev->dev)) {
+> +		quirks =3D (unsigned long)device_get_match_data(&pdev->dev);
+> +	} else if (pdev->dev.of_node) {
+> +		drvdata =3D device_get_match_data(&pdev->dev);
+> +		if (drvdata)
+> +			quirks =3D drvdata->flags;
+> +	}
+> +	master->quirks =3D quirks;
+> =20
+> -	master->core_rst =3D devm_reset_control_get_optional_exclusive_deassert=
+ed(&pdev->dev,
+> -										"core_rst");
+> -	if (IS_ERR(master->core_rst))
+> -		return PTR_ERR(master->core_rst);
+> +	if (master->quirks & DW_I3C_ACPI_SKIP_CLK_RST) {
+> +		master->core_clk =3D NULL;
+> +		master->pclk =3D NULL;
+> +		master->core_rst =3D NULL;
+> +	} else {
+> +		master->core_clk =3D devm_clk_get_enabled(&pdev->dev, NULL);
+> +		if (IS_ERR(master->core_clk))
+> +			return PTR_ERR(master->core_clk);
 > +
-> +	mutex_lock(&occ->hwmon_lock);
->  	mutex_lock(&occ->lock);
-> =20
->  	occ_shutdown_sysfs(occ);
-
-[Severity: High]
-This is a pre-existing issue, but does holding both occ->hwmon_lock and
-occ->lock before draining sysfs callbacks in occ_shutdown_sysfs() create
-a deadlock?
-
-If occ_shutdown_sysfs() blocks in kernfs_drain() waiting for active sysfs
-references to drop, and concurrently a read/write to driver attributes
-(like occ_active_store()) holds a kernfs active reference and attempts to
-acquire occ->lock or occ->hwmon_lock, will this result in an unresolvable
-circular dependency during driver unbind/shutdown?
-
-> =20
-> -	if (occ->hwmon)
-> -		hwmon_device_unregister(occ->hwmon);
-> +	hwmon =3D occ->hwmon;
-> +	occ->active =3D false;
->  	occ->hwmon =3D NULL;
-> =20
->  	mutex_unlock(&occ->lock);
+> +		master->pclk =3D devm_clk_get_optional_enabled(&pdev->dev, "pclk");
+> +		if (IS_ERR(master->pclk))
+> +			return PTR_ERR(master->pclk);
 > +
-> +	if (hwmon)
-> +		hwmon_device_unregister(hwmon);
-> +	mutex_unlock(&occ->hwmon_lock);
->  }
->  EXPORT_SYMBOL_GPL(occ_shutdown);
+> +		master->core_rst =3D devm_reset_control_get_optional_exclusive_deasser=
+ted(&pdev->dev,
+> +											"core_rst");
+> +		if (IS_ERR(master->core_rst))
+> +			return PTR_ERR(master->core_rst);
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260617150859.7414=
-53-1-runyu.xiao@seu.edu.cn?part=3D1
+Why does this need to move around at all?
+
+The reset control is already optional, so I would expect this to set
+core_rst to NULL on missing reset, no quirk necessary.
+
+Same question for pclk. Wouldn't it be enough to make core_clk optional
+as well?
+
+regards
+Philipp
