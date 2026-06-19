@@ -1,145 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 962E8368D69;
-	Fri, 19 Jun 2026 09:51:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C3A373C1E
+	for <linux-hwmon@vger.kernel.org>; Fri, 19 Jun 2026 10:32:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781862715; cv=none; b=ZPO3VzA07R8tNM84Hsp0uWayat0Zax1AOCf20Yn98Rp64ROzZRegMps1T2nCD9f/+Ls8k1wjV5pIf3Yn4jj7LX0y5AUFUP+jvEamX5dVP67U6thqngBj3qLT1Wa1CNsdnVs+ELKL0TJ2/NlezzYvH0u2N5xWx6FG5+YlxVauaSE=
+	t=1781865149; cv=none; b=rIXG8FfLgSdYcV5yHgYqC4klZ7wYdBhjz82b5Ky+Uf8qCI8l2imVKPiFbdRiQsrmKqQ0MuH8cY6im5MWNDVBI8EOg7V2Tri4dI1hiRReTcN3ZrLHKFbPScvob5U9rx+MeSRHzw+R7u6MCwdvwi8MZ6KFCVttp5gG36qObSeasXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781862715; c=relaxed/simple;
-	bh=K9V0+es7J6611wdIvhhIxplw2vGBmrbyZnyaR9KHXTo=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pahA4D7yDxTfXKv0cbnF9wD//m4OqBb+ijVRz5AN/XZRrOr9cfXke2ARxMjvZ2ZbA35fmijY6LAO0J7IXeGRhk0Kzh14i7Esc4b+B+Ldu1LqFazyAFNXFV4AkViVe9YLS1dwKXwPGkgLvmZsHcULZIOVMUUlEjMhADHffzDKizI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gOl0Gre+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781865149; c=relaxed/simple;
+	bh=VEnQVtwZkIU7RBSHiSyT7NGob5OOuJi2SIKdnJrA1CE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=T4aVCyBubO6J4CcFrGY/0oHV9bjLAH9wBI8RKP9aoY1HmiWcQxjE4qkDPTD/sL0jSNyZdit1fd+nXpC2XrEBjqXVqDD9BDSH2IklCPWvykFwXvufz0g8afRyM/kc8pHLJFVWNyaLeJMDuen2maZnw0K6gbmcI4rYcfew3bRlAB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZFR7WXAJ; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gOl0Gre+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB1021F00A3E;
-	Fri, 19 Jun 2026 09:51:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781862709;
-	bh=zqS10yjZsSeXUxoZWR076xkJuUUKKUnmT/ArAgwFojE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=gOl0Gre+0WXOffW1XR++LvcMLJSldHwLyqDt/g+W1lZZEP5BfTY9mGp8DuMY5P129
-	 WDWC4vlENOIM0QQfcsvZdxqVglrsr6FLwENsMyWBmUk7KvrfDCw7v19M2sutZwfkGh
-	 78O3fIvGKoaO5vAGVucA8ItfT2N7puoc/NUtVSVrF5nQEZCxqhAZf5GOxDslzzA+XN
-	 rYmEiqETA3OdxQo22n1MBQ1xmolWlK9SD7Bvx3s0jk0kpp5qXR30MpTuo0TAj8RSof
-	 t5KHXgjCy7IeX2qpiEkg1YhrNbIUsb1DxeAbpvIJi+HouFE4/rCMl/3V2CT9rlo0XY
-	 M4l2d0AEtyWVA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 3/5] firmware: stratix10-svc: add async HWMON read
- commands
-Reply-To: sashiko-reviews@lists.linux.dev
-To: tze.yee.ng@altera.com
-Cc: devicetree@vger.kernel.org, conor+dt@kernel.org, robh@kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <69a0f1b93e1dc5b5b8993f8649704c6be60dc1a3.1781861409.git.tze.yee.ng@altera.com>
-References: <cover.1781861409.git.tze.yee.ng@altera.com>
- <69a0f1b93e1dc5b5b8993f8649704c6be60dc1a3.1781861409.git.tze.yee.ng@altera.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 19 Jun 2026 09:51:47 +0000
-Message-Id: <20260619095148.AB1021F00A3E@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZFR7WXAJ"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-c07a6520cafso210205866b.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 19 Jun 2026 03:32:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781865145; x=1782469945; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yWdatNxPt/OSZnGzSt5RKlWyXLWzuEupMhedHxPLM4I=;
+        b=ZFR7WXAJpO6xikfbQnyaz4HBl9CSM5PhdFfUa1IhzVoR2UW3hMt8Xgwgzc5BFayI2S
+         cUXt6o0NKBrdSeKOZ1j1mpBDKYI0DTb3WKZ3cJZY/H8VWAjymYAsk2ziN2SXJzZuY6AQ
+         fDsNvhIDBhl8sZounmG3rQ2xjaRC5h5KmZtu/kvcyZGEfewsh3beTUZTw4Q3Drzxoln2
+         xxwJLTSLjpLYOTd9sQt4eKG9FBeWn6bWbISIknWXrmJulbV5oZQsI0H4vq4WIY/70RyH
+         dCYFfY5h3CJ6qvZtxsa7A1RpCc0HIOUkf2mT8io5KIUKYt50XtTXlzHuEvbZVLfaymF/
+         x4Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781865145; x=1782469945;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yWdatNxPt/OSZnGzSt5RKlWyXLWzuEupMhedHxPLM4I=;
+        b=WjTLXvOaLwk5vfznXeycXAdY8O29824LPqSGYJgKG2zsyimdiMrFFih0aD13fWLOai
+         6rB3y+ZLJpy71K2yMFa6XBV9yScUCtUapRb4IOphg8BEO4iw8iRufY2QxJpgnZPji6yz
+         LR3CRpcPPh7OWm+GzZ7uV/4lfkBF6cKLIvxF34s7132opKvuWaUSO7PLEPi+XehWYFeE
+         BnO990CiDgrDfeVLWiiN5rA/4YpSuKl5Jjt6LivDXRpl2fOGF9Qi5VbsRpR5hucAt2y/
+         b5G8rTe9/vKtqSZEM9wZWsu/UePPpKnuBhrl5bbMpxjyim+RnTAVxthLnGEbQ1T8o5qV
+         geOQ==
+X-Gm-Message-State: AOJu0Yzaj6X99Q7oSc0+SvAQMsKiV4afBEppm71y8WNaIYllcZNsMHE1
+	qDrGJB3FYWv+eV5dR/S/5QV9rxYktYhgG86hSbe6jAr3BX0uWnifjHQ4
+X-Gm-Gg: AfdE7cnjBnYZR+4xfToKa9d2Sa20U8fICcsJWcOzoNiysd0SQ9z1mF0kqXs7NiqnmzD
+	b/UasVxUiaKT5GiAmOZEMHnu+pRB3mtswvpgQ73RzVGn6tvhGSvvu+4Ay3MlA5XPqtZ8d9BDlG0
+	bI9OOVQE+NaVY+tLGYXXwqSb4aqxedoZeLSBmXA6SOoO6FlU+o8Jz4z8pYA7DmH/jXr/05tdKUe
+	nerpol7EhOQ0nSIfbCPJSnRanupMd9+hAhmkzN8kGTmLtTcmFaIXPDf74fvyAXO+1UaPDVbKGQc
+	BNzYt2J1ffizgvcoSy2H5X+u1gU4XRzCwCySE4H7xkLqAWJkf1AY4TK0BV6q1MI0wVNo2UraGIN
+	RH2n9PhCmKxaXvchyWBB9Sig0Z0L7y9InhtoH9YLUXcakdXl+/JaAts6Gr+1+74CDQ1ZOcIbtJu
+	N3BbNVpbi6S+jNG+KIFNfK+L3D0c41oCkkRA==
+X-Received: by 2002:a17:907:9302:b0:c07:5319:4c32 with SMTP id a640c23a62f3a-c097ae487b4mr145500666b.8.1781865144713;
+        Fri, 19 Jun 2026 03:32:24 -0700 (PDT)
+Received: from xeon ([188.163.112.61])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c0a8490cd59sm76702466b.16.2026.06.19.03.32.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Jun 2026 03:32:24 -0700 (PDT)
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] hwmon: emc1403: Convert to use OF bindings and add regulator support
+Date: Fri, 19 Jun 2026 13:31:50 +0300
+Message-ID: <20260619103153.216444-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+Document, add OF and regulator support to EMC14XX thermal sensor family.
 
-Pre-existing issues:
-- [High] Missing cleanup of async client on driver removal causes memory le=
-ak and breaks subsequent probes.
-- [High] Abandoning async transactions via `stratix10_svc_async_done()` wit=
-hout notifying EL3 firmware causes transaction ID desynchronization.
---
+Schema file was separated from LM90 since according to Guenter Roeck[1]
+these sensors are incompatible with LM90. Proposed schema has basic
+hardware description. All registers Guenter Roeck mentioned may be added
+later on, when/if driver would need to work with them. As for now driver
+successfully works as is.
 
-commit 6e40e51555b4f357bf75d356699813e67712ecca
-Author: Tze Yee Ng <tze.yee.ng@altera.com>
+[1] https://lore.kernel.org/lkml/a0c5c1e8-9a36-4835-a5d9-7bafda79c36f@roeck-us.net/
 
-firmware: stratix10-svc: add async HWMON read commands
+---
+Changes in v2:
+- schema separated into a dedicated file
+- dropped chip id check
+- fixed match data casting
+- adjusted regulator name
+---
 
-This commit adds asynchronous Stratix 10 service layer support for hardware
-monitor temperature and voltage read commands. It updates the service
-layer functions stratix10_svc_async_send() and
-stratix10_svc_async_prepare_response() to process the new messages.
+Jonas Schwöbel (1):
+  hwmon: (emc1403) Convert to use OF bindings
 
-> diff --git a/drivers/firmware/stratix10-svc.c b/drivers/firmware/stratix1=
-0-svc.c
-> index 39eb78f5905b3..ca2e354fc20fe 100644
-> --- a/drivers/firmware/stratix10-svc.c
-> +++ b/drivers/firmware/stratix10-svc.c
-> @@ -1317,6 +1317,14 @@ int stratix10_svc_async_send(struct stratix10_svc_=
-chan *chan, void *msg,
->  		args.a0 =3D INTEL_SIP_SMC_ASYNC_RSU_NOTIFY;
->  		args.a2 =3D p_msg->arg[0];
->  		break;
-> +	case COMMAND_HWMON_READTEMP:
-> +		args.a0 =3D INTEL_SIP_SMC_ASYNC_HWMON_READTEMP;
-> +		args.a2 =3D p_msg->arg[0];
-> +		break;
-> +	case COMMAND_HWMON_READVOLT:
-> +		args.a0 =3D INTEL_SIP_SMC_ASYNC_HWMON_READVOLT;
-> +		args.a2 =3D p_msg->arg[0];
-> +		break;
->  	default:
+Svyatoslav Ryhel (2):
+  dt-bindings: hwmon: Document SMSC EMC1402/1403/1404/1428
+  hwmon: (emc1403) Add regulator support
 
-[Severity: High]
-This is a pre-existing issue, but does abandoning asynchronous transactions
-via stratix10_svc_async_done() without notifying the EL3 firmware cause a
-transaction ID desynchronization?
+ .../bindings/hwmon/smsc,emc1403.yaml          | 191 ++++++++++++++++++
+ drivers/hwmon/emc1403.c                       |  23 ++-
+ 2 files changed, 212 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/smsc,emc1403.yaml
 
-When an async transaction times out in stratix10_hwmon_async_read() or
-rsu_send_async_msg(), the driver abandons the transaction and frees the ID:
+-- 
+2.53.0
 
-drivers/firmware/stratix10-svc.c:stratix10_svc_async_done() {
-    ...
-	ida_free(&achan->job_id_pool,
-		 STRATIX10_GET_JOBID(handle->transaction_id));
-	kfree(handle);
-}
-
-Since there is no SMC cancellation command sent to the firmware, the firmwa=
-re
-might still process the timed-out request. If a new command allocates the
-same recycled transaction ID, polling the firmware could return the delayed
-completion of the original stale transaction.
-
-Will this result in desynchronization between the driver and secure firmwar=
-e,
-potentially returning stale hwmon sensor readings or incorrect statuses?
-
-
-[Severity: High]
-This is a pre-existing issue, but does the missing cleanup of the async
-client on driver removal cause a memory leak and break subsequent probes?
-
-Looking at stratix10_rsu_remove() in drivers/firmware/stratix10-rsu.c:
-
-drivers/firmware/stratix10-rsu.c:stratix10_rsu_remove() {
-	struct stratix10_rsu_priv *priv =3D platform_get_drvdata(pdev);
-
-	stratix10_svc_free_channel(priv->chan);
-}
-
-It calls stratix10_svc_free_channel() but completely omits calling
-stratix10_svc_remove_async_client(). This leaves chan->async_chan
-populated on the shared channel array and leaks the asynchronous channel
-object and its associated IDA pool.
-
-If the module is unloaded and reloaded, will the next call to
-stratix10_svc_add_async_client() inside stratix10_rsu_probe() encounter
-a non-NULL async_chan and immediately return -EALREADY?
-
-While the new hwmon driver introduced in this patchset appears to handle
-this correctly, it seems the rsu driver remains permanently unable to
-probe after a single removal until the system is rebooted.
-
->  		dev_err(ctrl->dev, "Invalid command ,%d\n", p_msg->command);
->  		ret =3D -EINVAL;
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1781861409.gi=
-t.tze.yee.ng@altera.com?part=3D3
