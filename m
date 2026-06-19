@@ -1,277 +1,218 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mail-m155101.qiye.163.com (mail-m155101.qiye.163.com [101.71.155.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2257B3438A4
-	for <linux-hwmon@vger.kernel.org>; Thu, 18 Jun 2026 20:31:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E5281548C;
+	Fri, 19 Jun 2026 02:05:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781814679; cv=none; b=lP8r1FokLc0WJu3qgW2NUffiDAZpo2QIox6+EH3fbZf0sxUT8HLzWcuuSKNmFw1ANCjo5mAMjcd6DARw9gVuafZYqvLxhbg728Pdy/BdREqs0sAD6VyZOL5WpOC82sbC8W+rYYb1HHINLLucPjaQPz9WGUsT9aNkJ17QRKZSazk=
+	t=1781834709; cv=none; b=cfgbqSkwCYOQwKQdncokISBAToMj/IVbO9wVJpnUX/VF1gfCmSndArvAjz0R86jCmgQWnC2kK+mUNNB8hiunHX1F+ERhOsDOTw04wtShHaMiolNDVzetI+ytGoUyleisTGvJV//Jks4JslFrG82utusfKjb9P7qKEiXxqX2FXyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781814679; c=relaxed/simple;
-	bh=HLxQCCXxvKkwoegsbUnC3g4wlzqBB87zcGLg24R2AW4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uMHfWSRR0JkwmzHglvby1vY6t92Sf0k1TlQAAuOsWXfAL4Dh+nZkLLQtwQ3+N2yBUyt00rgR2EoIWaratCo+euFyISeop4hs5QIExtdrVqH3xKdsYJSpbbLswDGC1sh4j4677qZ5MMPvOP3Ur4auk7KPR7hw+YibjdGprFhKYNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=A9i66YWd; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=cKDgJ9Kr; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1781834709; c=relaxed/simple;
+	bh=dBGD6jqabAV3PJuOsDR1qavK5IMRs0aRj2Us+y8GoO4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=O/ZUcDkIyTS3EyY7pcL+GMScTA5GjO86BO4rQHp8J6feVF43XgAeifDkhgfdnIXr37M0UQvcwKUGZDtXW1RTX3bIevqy965oGMUsAcpxRh0kBxDAQoykaB0Fi7iPsuoMxzwVTQg2OE7a/vLK89IuCIA2QxEjrRc/qBU0O6JzCAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=fy0c414V; arc=none smtp.client-ip=101.71.155.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seu.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="A9i66YWd";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="cKDgJ9Kr"
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65IHrpxk1922254
-	for <linux-hwmon@vger.kernel.org>; Thu, 18 Jun 2026 20:31:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	mMV94ArRUWNb5oU3/kS47SDy5ZbaBXLZRnnNKRvZXFA=; b=A9i66YWdpU6YBRKd
-	Y/MBdL3leGrrJahi74KTM4KDUukQ+j5qURMvDHv/h26fAMH3YQ7DGji15TAnMGwL
-	USEPfEP8AD8iQcYvd1iG1lfmSmz7UW+zAngX+q6y2E0CUnCSI7j/tqtfhJrqkhqe
-	Bb7YKc+I5KSThSi349qRKDQodq8XXrVZwF8jlfC8noswCAbuAmfFSXFNt6pILgF2
-	eX7GqmBqg+WDX9b4uCvVGCkgfKaMMi1FrJfZJo0n6j3P5s0uMfYxkHKqzunR9kjq
-	QH8VKdbeCj2Uku3j8+w1XmjnU3du0rg0dmLmftvJ50lp7ioEz2fD83urICNDRRJs
-	2WsO5Q==
-Received: from mail-vs1-f72.google.com (mail-vs1-f72.google.com [209.85.217.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4evdn42sts-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-hwmon@vger.kernel.org>; Thu, 18 Jun 2026 20:31:17 +0000 (GMT)
-Received: by mail-vs1-f72.google.com with SMTP id ada2fe7eead31-726ff8540e6so671833137.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 18 Jun 2026 13:31:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1781814676; x=1782419476; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mMV94ArRUWNb5oU3/kS47SDy5ZbaBXLZRnnNKRvZXFA=;
-        b=cKDgJ9KrjXfgYkuAz0ahLGqygx6y96tTuM5gD3C6jnlyEPsEzOJG6rZPFM8HnOjgUr
-         mUUny6jmwB4C/3MTNm+teD5GdMiZP4WuTn4qqsJ5IwzrdGdmc1LMEd6BrdJug9uYUOH5
-         UjwoYLe660iDTEj3y+WbBF7B1rOWE/xxbvbgUh+iJNROoAE4T1ZJDGBbAOWbP0g0TKgS
-         TqF2WQuS+7G1kv8+QSLOrPaiarGne3IBo0DlY8/mkZYSMvM0Eu9mMTxPIJznjIbl4ekn
-         g6vBVFmRWSKHwZr6T7cU8YN0opsqUwy6g/ine6B3F6pss1S7DEZRDUXbkiD0E2sLaYvZ
-         V4tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781814676; x=1782419476;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mMV94ArRUWNb5oU3/kS47SDy5ZbaBXLZRnnNKRvZXFA=;
-        b=Ot6qrGrkwF0bLOn0S8SVQB0TaqhxNBR+Ds7T6nrvclccaJVJOweZ6PE7Iv3Mo9f2as
-         dZz+DjpbeeCGI6Pa5nmAeILC4zzCHyKxI+zHbIwD9mbcPQN6Wz5HNfCp2ZyMJz44amaJ
-         6YXHS+VVIB7G9etNrmNf2A2jnBuaXz9LECcAeG2r6Kf7I5K9wwPJNruV6UaCuZg9YgI+
-         juMGhSX0jgM5rXa1ErpUgdwFFH0jD8viB2Q5YGHwizZx1Bg1+Rgq5CZ2thVYtGXHwCf/
-         qxY1Z6+nwIoAn2ad4HoT8vS03iUXoqMjVeqHAbS5ztNj/U8G0RPZt9/LpKLC6lFJ7mY1
-         Lflg==
-X-Forwarded-Encrypted: i=1; AFNElJ/SFndCR8F4Opk6f4QaPT5KrnctMzITgrZqvu4cX+0/YZzGWyp6xJMmS37CEKGsJ9FMvdKoaxnZO1kYEw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzvcj4lfMX3DJAYMYNwgx+fpyjcUqe6H67fqbFEwEufUUhf1rKU
-	HWgXOFNj+ySMAUcvwxQdEEEiHpk3rSnxogTPA4GN7lkbEh7LdhXWcaNcxdm4O7dfh1LqyugaQqP
-	+zdg/qcK2i1x9+B0ZMKdhsTMwspELLxhgpV62r08/zL+vEH4MBAU5DISMc5rh+uVyxA==
-X-Gm-Gg: AfdE7ckh45y5Gxh1B/QoVh4ZYtB2SDRvY7cw4vBDoxnNVsX/daGbaI/Wq0EkEiDZ9sV
-	Zkz0cCRqrxS1ufs6CROhshcQWx7z/wmJST2kIRJC580X+MLaWticV3twBU56OIxyNCQJxcpB9Ge
-	FH2tWKVwmWIX2f3KE0B72GG/+ZfukiAX6n54NgvUbWdgQp5C5YFmf+/qioVN7ObvmNg0wwsAnl9
-	mTiWWIKkw20S+8AXF4/s0KZ9zlDEYLZ9wxrw+K6qDdUXYj8SoNaFNWASO7ZFVHOewZ0s8KcwG0q
-	lofXSgvdKuE09OPvradL/vgQzhietrvuwPOO3RXs4jGzvQSBBLzxNzC6ajEII4e92zQabP61RKo
-	aiwatsjQt83PnCA71vd97M72GBi+t9ZPAKgNWI9mGaVzcckaygX3+h+kC731nGpniLlrBH4j5gC
-	PNIwDoVj3vKwpbZyqPbREjAruWwXCS4tO4Wtty8jkTuvJ9HwrM/CGtsnKdT5WMf2CZY46Fvh4jQ
-	5TPmw==
-X-Received: by 2002:a05:6102:448b:b0:650:aa33:5dd7 with SMTP id ada2fe7eead31-72a01884599mr1095680137.2.1781814676208;
-        Thu, 18 Jun 2026 13:31:16 -0700 (PDT)
-X-Received: by 2002:a05:6102:448b:b0:650:aa33:5dd7 with SMTP id ada2fe7eead31-72a01884599mr1095628137.2.1781814675743;
-        Thu, 18 Jun 2026 13:31:15 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c0a8490b104sm2351966b.14.2026.06.18.13.31.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Jun 2026 13:31:14 -0700 (PDT)
-Message-ID: <8c2a4ae3-95cc-489a-a7a4-90a3ee2597e9@oss.qualcomm.com>
-Date: Thu, 18 Jun 2026 22:31:12 +0200
+	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="fy0c414V"
+Received: from PC-202605011814.localdomain (unknown [58.241.16.34])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 42fb20a2d;
+	Fri, 19 Jun 2026 09:59:43 +0800 (GMT+08:00)
+From: Runyu Xiao <runyu.xiao@seu.edu.cn>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Eddie James <eajames@linux.ibm.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	jianhao.xu@seu.edu.cn,
+	runyu.xiao@seu.edu.cn,
+	stable@vger.kernel.org
+Subject: [PATCH v2] hwmon: (occ) unregister sysfs devices outside occ lock
+Date: Fri, 19 Jun 2026 09:59:38 +0800
+Message-Id: <20260619015938.494464-1-runyu.xiao@seu.edu.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260617150859.741453-1-runyu.xiao@seu.edu.cn>
+References: <20260617150859.741453-1-runyu.xiao@seu.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] firmware: arm_scmi: Ensure automatic module
- loading
-To: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
-        Sudeep Holla <sudeep.holla@kernel.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc: arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>, Frank Li <Frank.Li@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>, Guenter Roeck <linux@roeck-us.net>,
-        Jyoti Bhayana <jbhayana@google.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        David Lechner <dlechner@baylibre.com>,
-        =?UTF-8?Q?Nuno_S=C3=A1?=
- <nuno.sa@analog.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulfh@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        imx@lists.linux.dev, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-References: <20260618-scmi-modalias-v2-0-8c7547c1be21@oss.qualcomm.com>
-From: Hans de Goede <johannes.goede@oss.qualcomm.com>
-Content-Language: en-US, nl
-In-Reply-To: <20260618-scmi-modalias-v2-0-8c7547c1be21@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjE4MDE4NyBTYWx0ZWRfXwGl5aS5wnGI5
- AvNb5XPNQAMmzEh/HXChSm1uI1SxWLlqnd6tDv1w9McRAmMMeaBEkh3XgufGB7SmzIhLn3N8RpP
- 7ZBCrnymx6hdPn+UV7pF4ML9UCfg8yFBu6J6KKo8cLOSOwuCf4um4YOGEbmG/0HrZz8WqlF+RQ9
- xGRF5bsr4e+kbuQVnU1Vq48ihai0vB/EkxQLN6EfpdwN8xqWApSVa6mTEpNI2aeTjxeIoaek3JA
- 3tBRPwCLA6x4+phQkS1jGs5Ep9pIAuXvaSoepV03xpwvrDGIYt7uZbXD0nAMk+W4MeWS8uSWERn
- nOIbYvpeEJjdJqRhTfBxMA1kRTiS1R/jjj82Y7zint8wfw598OtnWXcmLATVCTVlnEAhoAldJwu
- Q0Zz1Ivwf5B7swMc/Vzjud4EtA2/YYQw58Vn+3F8c5G4DHEGPun+majhcKW/EowFyJsZhMSgvqQ
- cJtblOWuVF5Xwto6oqQ==
-X-Proofpoint-ORIG-GUID: dtLdpJO0hhOfXswsqK9ZJQvxsOCT41k6
-X-Authority-Analysis: v=2.4 cv=FN4rAeos c=1 sm=1 tr=0 ts=6a345595 cx=c_pps
- a=DUEm7b3gzWu7BqY5nP7+9g==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=FelO9ux0wxsA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=DJpcGTmdVt4CTyJn9g5Z:22 a=bC-a23v3AAAA:8
- a=EUspDBNiAAAA:8 a=VwQbUJbxAAAA:8 a=7CQSdrXTAAAA:8 a=IpJZQVW2AAAA:8
- a=20KFwNOVAAAA:8 a=KKAkSRfTAAAA:8 a=8AirrxEcAAAA:8 a=pGLkceISAAAA:8
- a=_jlGtV7tAAAA:8 a=1XWaLZrsAAAA:8 a=gAnH3GRIAAAA:8 a=P-IC7800AAAA:8
- a=JfrnYn6hAAAA:8 a=5KGQkzpS6Bu23flkvY0A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=-aSRE8QhW-JAV6biHavz:22 a=FO4_E8m0qiDe52t0p3_H:22 a=a-qgeE7W1pNrGK8U0ZQC:22
- a=IawgGOuG5U0WyFbmm1f5:22 a=cvBusfyB2V15izCimMoJ:22 a=ST-jHhOKWsTCqRlWije3:22
- a=nlm17XC03S6CtCLSeiRr:22 a=d3PnA9EDa4IxuAV0gXij:22 a=1CNFftbPRP8L7MoqJWF3:22
-X-Proofpoint-GUID: dtLdpJO0hhOfXswsqK9ZJQvxsOCT41k6
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjE4MDE4NyBTYWx0ZWRfX2LCb6HwwymZD
- X+6bBbMpYXrgd7Z2AoN5k1FNZzGqjvGGR2hfBPMtztTWZIhUP8pUQuwt4U/Zx/By0VtQxGs1/uP
- JQfRe0LUsGnEevVfEpKCPIrgHRj/gFE=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-06-18_03,2026-06-18_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 malwarescore=0 bulkscore=0 lowpriorityscore=0
- impostorscore=0 adultscore=0 phishscore=0 suspectscore=0 clxscore=1011
- spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
- definitions=main-2606180187
+X-HM-Tid: 0a9edd9b01fd03a1kunm407e3cffb962f
+X-HM-MType: 10
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCHh0dVhlDTUxJSkJCGhpCSFYeHw
+	5VEwETFhoSFyQUDg9ZV1kYEgtZQVlOQ1VJT0pVSk1VSE9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpPSE
+	xVSktLVUpCS0tZBg++
+DKIM-Signature: a=rsa-sha256;
+	b=fy0c414Vr0flsxKyALO8vYtp8YHpxw8kNdpaqO8IunFWr/bYJ4juu2UxZjRVKB24jb2BBKcC225FKtMkZmOgqijfdVIEDFdzI0R5cCkfGEvaH8FgL32N5T6YL7zVemzxyI4JtyGbHUXB53sC95G6/dBW91CdSO0oj/pbIlRxIm8=; s=default; c=relaxed/relaxed; d=seu.edu.cn; v=1;
+	bh=u9SMLR0PZ6Z1EAlfD6iQJLrvEepdpOGcGg64ZwNBXOU=;
+	h=date:mime-version:subject:message-id:from;
 
-Hi,
+occ_active(false) and occ_shutdown() unregister sysfs-backed devices while
+occ->lock is held.  hwmon_device_unregister() and sysfs_remove_group() can
+wait for active sysfs callbacks to drain, and those callbacks can enter the
+OCC update path and try to take occ->lock again.  That gives the unregister
+paths the lock ordering occ->lock -> sysfs callback drain, while a callback
+has the opposite edge sysfs callback -> occ->lock.
 
-On 18-Jun-26 17:56, Bjorn Andersson wrote:
-> SCMI drivers such as the Arm SCMI CPUfreq driver are allowed to built as
-> modules, but they are then not automatically loaded. Rework the SCMI
-> device table alias support to make modpost consume the information from
-> MODULE_DEVICE_TABLE(scmi, ...) and allow drivers to be loaded based on
-> this information, if known. Also add a protocol-based alias to also
-> trigger driver loading when only the SCMI protocol id is known.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
+This issue was found by our static analysis tool and then manually
+reviewed against the current tree.
 
-So I just gave this a test spin and unfortunately it does not work.
+The grounded PoC kept the real unregister and callback carrier:
 
-The problem with Fedora's kernel-config / setup is that the
-request_module() from patch 2/2 runs from the initramfs, but
-the scmi_cpufreq module is only available in the rootfs.
+  occ_shutdown()
+  hwmon_device_unregister()
+  occ_show_temp_1()
+  occ_update_response()
 
-It does work if I explictly add the scmi_cpufreq module to
-the initramfs, then it does get autoloaded.
+Lockdep reported the circular dependency with occ_shutdown() already
+holding the OCC mutex and hwmon_device_unregister() waiting on the sysfs
+side:
 
-We really need some place to put a uevent sysfs attr which then
-gets replayed when udev is restarted from the rootfs and then
-re-reads all the uevent files as part of its coldplug
-enumeration.
+  WARNING: possible circular locking dependency detected
+  ... (sysfs_lock) ... at: hwmon_device_unregister+0x12/0x30 [vuln_msv]
+  ... (&test_occ.lock) ... at: occ_shutdown.constprop.0+0xe/0x40 [vuln_msv]
+  occ_update_response.isra.0+0xb/0x20 [vuln_msv]
+  occ_show_temp_1.constprop.0.isra.0+0x23/0x40 [vuln_msv]
+  *** DEADLOCK ***
 
-I wonder if it is ok for a single uevent file to have
-multiple MODALIAS= lines in there.
+Serialize hwmon registration and removal with a separate hwmon_lock.
+Under that lock, detach occ->hwmon and update occ->active while occ->lock
+is held so concurrent OCC state changes still see a stable state, then
+drop occ->lock before calling hwmon_device_unregister().  Remove the
+driver sysfs group before taking occ->lock in occ_shutdown(), so draining
+the driver attributes cannot wait while the OCC mutex is held.  Also make
+OCC update callbacks return -ENODEV after deactivation, so callbacks that
+already passed sysfs active protection do not poll the hardware after
+teardown has detached the hwmon device.
 
-Regards,
+Fixes: 849b0156d996 ("hwmon: (occ) Delay hwmon registration until user request")
+Fixes: ac6888ac5a11 ("hwmon: (occ) Lock mutex in shutdown to prevent race with occ_active")
+Cc: stable@vger.kernel.org
+Signed-off-by: Runyu Xiao <runyu.xiao@seu.edu.cn>
+---
+Changes in v2:
+- Return -ENODEV from occ_update_response() after OCC deactivation so
+  already-active sysfs callbacks do not poll hardware after teardown.
+- Move occ_shutdown_sysfs() outside occ->lock so driver sysfs callback
+  draining does not run while the OCC mutex is held.
 
-Hans
+ drivers/hwmon/occ/common.c | 34 ++++++++++++++++++++++++++++------
+ drivers/hwmon/occ/common.h |  1 +
+ 2 files changed, 29 insertions(+), 6 deletions(-)
 
+diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+index 89928d38831b..567b7bc2a6e9 100644
+--- a/drivers/hwmon/occ/common.c
++++ b/drivers/hwmon/occ/common.c
+@@ -214,6 +214,11 @@ int occ_update_response(struct occ *occ)
+ 	if (rc)
+ 		return rc;
+ 
++	if (!occ->active) {
++		rc = -ENODEV;
++		goto unlock;
++	}
++
+ 	/* limit the maximum rate of polling the OCC */
+ 	if (time_after(jiffies, occ->next_update)) {
+ 		rc = occ_poll(occ);
+@@ -222,6 +227,7 @@ int occ_update_response(struct occ *occ)
+ 		rc = occ->last_error;
+ 	}
+ 
++unlock:
+ 	mutex_unlock(&occ->lock);
+ 	return rc;
+ }
+@@ -1106,11 +1112,16 @@ static void occ_parse_poll_response(struct occ *occ)
+ 
+ int occ_active(struct occ *occ, bool active)
+ {
+-	int rc = mutex_lock_interruptible(&occ->lock);
++	struct device *hwmon = NULL;
++	int rc = mutex_lock_interruptible(&occ->hwmon_lock);
+ 
+ 	if (rc)
+ 		return rc;
+ 
++	rc = mutex_lock_interruptible(&occ->lock);
++	if (rc)
++		goto unlock_hwmon;
++
+ 	if (active) {
+ 		if (occ->active) {
+ 			rc = -EALREADY;
+@@ -1155,14 +1166,17 @@ int occ_active(struct occ *occ, bool active)
+ 			goto unlock;
+ 		}
+ 
+-		if (occ->hwmon)
+-			hwmon_device_unregister(occ->hwmon);
++		hwmon = occ->hwmon;
+ 		occ->active = false;
+ 		occ->hwmon = NULL;
+ 	}
+ 
+ unlock:
+ 	mutex_unlock(&occ->lock);
++	if (hwmon)
++		hwmon_device_unregister(hwmon);
++unlock_hwmon:
++	mutex_unlock(&occ->hwmon_lock);
+ 	return rc;
+ }
+ 
+@@ -1171,6 +1185,7 @@ int occ_setup(struct occ *occ)
+ 	int rc;
+ 
+ 	mutex_init(&occ->lock);
++	mutex_init(&occ->hwmon_lock);
+ 	occ->groups[0] = &occ->group;
+ 
+ 	rc = occ_setup_sysfs(occ);
+@@ -1191,15 +1206,22 @@ EXPORT_SYMBOL_GPL(occ_setup);
+ 
+ void occ_shutdown(struct occ *occ)
+ {
+-	mutex_lock(&occ->lock);
++	struct device *hwmon;
+ 
+ 	occ_shutdown_sysfs(occ);
+ 
+-	if (occ->hwmon)
+-		hwmon_device_unregister(occ->hwmon);
++	mutex_lock(&occ->hwmon_lock);
++	mutex_lock(&occ->lock);
++
++	hwmon = occ->hwmon;
++	occ->active = false;
+ 	occ->hwmon = NULL;
+ 
+ 	mutex_unlock(&occ->lock);
++
++	if (hwmon)
++		hwmon_device_unregister(hwmon);
++	mutex_unlock(&occ->hwmon_lock);
+ }
+ EXPORT_SYMBOL_GPL(occ_shutdown);
+ 
+diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
+index 7ac4b2febce6..82f600093c7f 100644
+--- a/drivers/hwmon/occ/common.h
++++ b/drivers/hwmon/occ/common.h
+@@ -101,6 +101,7 @@ struct occ {
+ 
+ 	unsigned long next_update;
+ 	struct mutex lock;		/* lock OCC access */
++	struct mutex hwmon_lock;		/* serialize hwmon registration/removal */
+ 
+ 	struct device *hwmon;
+ 	struct occ_attribute *attrs;
 
-
-> ---
-> Changes in v2:
-> - Use request_module_nowait()
-> - Drop #include <linux/mod_devicetable.h> from scmi_protocol.h
-> - Link to v1: https://patch.msgid.link/20260616-scmi-modalias-v1-0-662b8dd52ab2@oss.qualcomm.com
-> 
-> To: Sudeep Holla <sudeep.holla@kernel.org>
-> To: Cristian Marussi <cristian.marussi@arm.com>
-> To: Michael Turquette <mturquette@baylibre.com>
-> To: Nicolas Schier <nsc@kernel.org>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Brian Masney <bmasney@redhat.com>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: Frank Li <Frank.Li@nxp.com>
-> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-> Cc: Fabio Estevam <festevam@gmail.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Jyoti Bhayana <jbhayana@google.com>
-> Cc: Jonathan Cameron <jic23@kernel.org>
-> Cc: David Lechner <dlechner@baylibre.com>
-> Cc: Nuno Sá <nuno.sa@analog.com>
-> Cc: Andy Shevchenko <andy@kernel.org>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Ulf Hansson <ulfh@kernel.org>
-> Cc: Liam Girdwood <lgirdwood@gmail.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: arm-scmi@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-clk@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: imx@lists.linux.dev
-> Cc: linux-hwmon@vger.kernel.org
-> Cc: linux-iio@vger.kernel.org
-> Cc: linux-input@vger.kernel.org
-> Cc: linux-rtc@vger.kernel.org
-> Cc: linux-kbuild@vger.kernel.org
-> 
-> ---
-> Bjorn Andersson (2):
->       module: add SCMI device table alias support
->       firmware: arm_scmi: request modules for discovered protocols
-> 
->  drivers/clk/clk-scmi.c                         |  1 +
->  drivers/cpufreq/scmi-cpufreq.c                 |  1 +
->  drivers/firmware/arm_scmi/bus.c                | 20 ++++++++++----------
->  drivers/firmware/arm_scmi/driver.c             |  3 +++
->  drivers/firmware/arm_scmi/scmi_power_control.c |  1 +
->  drivers/firmware/imx/sm-cpu.c                  |  1 +
->  drivers/firmware/imx/sm-lmm.c                  |  1 +
->  drivers/firmware/imx/sm-misc.c                 |  1 +
->  drivers/hwmon/scmi-hwmon.c                     |  1 +
->  drivers/iio/common/scmi_sensors/scmi_iio.c     |  1 +
->  drivers/input/keyboard/imx-sm-bbm-key.c        |  1 +
->  drivers/pmdomain/arm/scmi_perf_domain.c        |  1 +
->  drivers/pmdomain/arm/scmi_pm_domain.c          |  1 +
->  drivers/powercap/arm_scmi_powercap.c           |  1 +
->  drivers/regulator/scmi-regulator.c             |  1 +
->  drivers/reset/reset-scmi.c                     |  1 +
->  drivers/rtc/rtc-imx-sm-bbm.c                   |  1 +
->  include/linux/mod_devicetable.h                | 12 ++++++++++++
->  include/linux/scmi_protocol.h                  |  5 +----
->  scripts/mod/devicetable-offsets.c              |  4 ++++
->  scripts/mod/file2alias.c                       | 13 +++++++++++++
->  21 files changed, 58 insertions(+), 14 deletions(-)
-> ---
-> base-commit: 8d6dbbbe3ba62de0a63e962ee004afb848c8e3ac
-> change-id: 20260616-scmi-modalias-0f32421bd452
-> 
-> Best regards,
-> --  
-> Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-> 
-> 
-
+base-commit: 44c944a679974c2d18ee9b87070456d34193f3d4
