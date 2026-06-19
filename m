@@ -1,173 +1,145 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C30318B96;
-	Fri, 19 Jun 2026 09:49:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 962E8368D69;
+	Fri, 19 Jun 2026 09:51:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781862577; cv=none; b=XO5cbgpq0RM+MQ9z42cs/jjhUd1eZoZHcV45ESNSs9XTe252+l1p+Mg3OGwixKqEme+tK6E1t/gldhIiSEGPK7KQQQblC12Cgi7BTsmOQ1rJRiSv8n0bn3K3O+9YCBdW4L4TzDjYGNpCTsvdfgK8KQYYtkovMLlV8DKL6ziXccs=
+	t=1781862715; cv=none; b=ZPO3VzA07R8tNM84Hsp0uWayat0Zax1AOCf20Yn98Rp64ROzZRegMps1T2nCD9f/+Ls8k1wjV5pIf3Yn4jj7LX0y5AUFUP+jvEamX5dVP67U6thqngBj3qLT1Wa1CNsdnVs+ELKL0TJ2/NlezzYvH0u2N5xWx6FG5+YlxVauaSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781862577; c=relaxed/simple;
-	bh=YLjFzPTEF9LCv85DmutXDKpOdwBlw9pFxGDhLmA8U+w=;
+	s=arc-20240116; t=1781862715; c=relaxed/simple;
+	bh=K9V0+es7J6611wdIvhhIxplw2vGBmrbyZnyaR9KHXTo=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=niKkVz7UdZhZoGIhjDWKxDENIDw3Cn6d7luryBRTlKMcZECCVbo6urBY99CUGBj9FZPkobLBecHd1MO+V793wZvHxMMFL2z6ra4xT0lXy3k037h5UZAVe+uOVgDryM8SjqX4uqcxU6vMqc9BJX+AWyz5114tuvyuqlFX59eAwGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wp6+fEtM; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=pahA4D7yDxTfXKv0cbnF9wD//m4OqBb+ijVRz5AN/XZRrOr9cfXke2ARxMjvZ2ZbA35fmijY6LAO0J7IXeGRhk0Kzh14i7Esc4b+B+Ldu1LqFazyAFNXFV4AkViVe9YLS1dwKXwPGkgLvmZsHcULZIOVMUUlEjMhADHffzDKizI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gOl0Gre+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wp6+fEtM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 902981F000E9;
-	Fri, 19 Jun 2026 09:49:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gOl0Gre+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB1021F00A3E;
+	Fri, 19 Jun 2026 09:51:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781862575;
-	bh=iZqf7eFBFgAirw9JlX0+V8FLBiZ3leIya1QCsPtIxE8=;
+	s=k20260515; t=1781862709;
+	bh=zqS10yjZsSeXUxoZWR076xkJuUUKKUnmT/ArAgwFojE=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Wp6+fEtM+inXOIzd25+pHZRvWYp2UNZm6CDx51e7NA0mQKqJEZLZMuXp88NIEMDij
-	 PonT8bMP7amsy8AyMG3hevNMt53LeUmKjAPPQyEVQz23Ivd92RuSuwTbMwT3SVoacN
-	 t/8aP4u3anvVhMDPtp9DUTBHze5DYG6SpcJNu/571O+1M3mtlO4JKOuoz2RTJFsNt6
-	 rS+Be0/BQCVEsU8bvbs/wzqEXpLqVSte/LRJWuBxIB1IPCNu5C/hVfEzh8CKsan+OD
-	 TYGjWtAtaxufIXiCKZdCe9im2UoMezlQWR/KZAAWipIZrpKnmMA0OegjJcG5tJDPrf
-	 cS3D3mx7pPRpQ==
+	b=gOl0Gre+0WXOffW1XR++LvcMLJSldHwLyqDt/g+W1lZZEP5BfTY9mGp8DuMY5P129
+	 WDWC4vlENOIM0QQfcsvZdxqVglrsr6FLwENsMyWBmUk7KvrfDCw7v19M2sutZwfkGh
+	 78O3fIvGKoaO5vAGVucA8ItfT2N7puoc/NUtVSVrF5nQEZCxqhAZf5GOxDslzzA+XN
+	 rYmEiqETA3OdxQo22n1MBQ1xmolWlK9SD7Bvx3s0jk0kpp5qXR30MpTuo0TAj8RSof
+	 t5KHXgjCy7IeX2qpiEkg1YhrNbIUsb1DxeAbpvIJi+HouFE4/rCMl/3V2CT9rlo0XY
+	 M4l2d0AEtyWVA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 5/5] arm64: dts: socfpga: stratix10: add hwmon node
+Subject: Re: [PATCH 3/5] firmware: stratix10-svc: add async HWMON read
+ commands
 Reply-To: sashiko-reviews@lists.linux.dev
 To: tze.yee.ng@altera.com
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, conor+dt@kernel.org, robh@kernel.org
-In-Reply-To: <d62c4188cd936883bc14c95dcd27555ec94df7cf.1781861409.git.tze.yee.ng@altera.com>
+Cc: devicetree@vger.kernel.org, conor+dt@kernel.org, robh@kernel.org, linux-hwmon@vger.kernel.org
+In-Reply-To: <69a0f1b93e1dc5b5b8993f8649704c6be60dc1a3.1781861409.git.tze.yee.ng@altera.com>
 References: <cover.1781861409.git.tze.yee.ng@altera.com>
- <d62c4188cd936883bc14c95dcd27555ec94df7cf.1781861409.git.tze.yee.ng@altera.com>
+ <69a0f1b93e1dc5b5b8993f8649704c6be60dc1a3.1781861409.git.tze.yee.ng@altera.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 19 Jun 2026 09:49:35 +0000
-Message-Id: <20260619094935.902981F000E9@smtp.kernel.org>
+Date: Fri, 19 Jun 2026 09:51:47 +0000
+Message-Id: <20260619095148.AB1021F00A3E@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Hardware monitoring sysfs attributes remain active after the servi=
-ce channel is freed during driver removal, leading to a kernel panic.
-- [High] Incorrect temperature scaling calculation reports temperatures 100=
-0 times too small to the hwmon subsystem.
-- [High] Asynchronous sysfs reads are effectively broken and will always bl=
-ock for the full 2-second timeout before falling back to manual polling.
+- [High] Missing cleanup of async client on driver removal causes memory le=
+ak and breaks subsequent probes.
+- [High] Abandoning async transactions via `stratix10_svc_async_done()` wit=
+hout notifying EL3 firmware causes transaction ID desynchronization.
 --
 
-commit a3baf92605bf6c042e451ccdb74f299304cebf79
+commit 6e40e51555b4f357bf75d356699813e67712ecca
 Author: Tze Yee Ng <tze.yee.ng@altera.com>
 
-arm64: dts: socfpga: stratix10: add hwmon node
-   =20
-Add an hwmon child node under the Stratix 10 service layer and describe
-the SoCDK voltage and temperature sensors using the altr,stratix10-hwmon
-compatible.
+firmware: stratix10-svc: add async HWMON read commands
 
-> diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts b/arc=
-h/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
-> index e2a1cea7f3da9..01a8ffe430ed0 100644
-> --- a/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
-> +++ b/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
-[ ... ]
-> @@ -134,3 +134,36 @@ root: partition@4200000 {
->  		};
->  	};
->  };
-> +
-> +&temp_volt {
-> +	status =3D "okay";
+This commit adds asynchronous Stratix 10 service layer support for hardware
+monitor temperature and voltage read commands. It updates the service
+layer functions stratix10_svc_async_send() and
+stratix10_svc_async_prepare_response() to process the new messages.
 
-[Severity: High]
-This isn't a bug introduced by this patch, but enabling this hwmon node exp=
-oses
-a pre-existing lifecycle issue during driver removal that can lead to a ker=
-nel
-panic.
-
-The stratix10-hwmon driver uses devm_hwmon_device_register_with_info() for
-registration, meaning the sysfs attributes are only unregistered during dev=
-res
-cleanup after stratix10_hwmon_remove() returns. However, the remove function
-synchronously frees the service channel (stratix10_svc_free_channel), which
-sets chan->scl to NULL.
-
-If a userspace process reads a sysfs attribute concurrently, the service th=
-read
-might unconditionally dereference chan->scl in svc_thread_recv_status_ok():
-
-drivers/firmware/stratix10-svc.c:svc_thread_recv_status_ok() {
-    ...
-    p_data->chan->scl->receive_cb(p_data->chan->scl, cb_data);
-    ...
-}
-
-Should the driver manage the service channel lifecycle via
-devm_add_action_or_reset() so the channel strictly outlives the sysfs
-attributes?
+> diff --git a/drivers/firmware/stratix10-svc.c b/drivers/firmware/stratix1=
+0-svc.c
+> index 39eb78f5905b3..ca2e354fc20fe 100644
+> --- a/drivers/firmware/stratix10-svc.c
+> +++ b/drivers/firmware/stratix10-svc.c
+> @@ -1317,6 +1317,14 @@ int stratix10_svc_async_send(struct stratix10_svc_=
+chan *chan, void *msg,
+>  		args.a0 =3D INTEL_SIP_SMC_ASYNC_RSU_NOTIFY;
+>  		args.a2 =3D p_msg->arg[0];
+>  		break;
+> +	case COMMAND_HWMON_READTEMP:
+> +		args.a0 =3D INTEL_SIP_SMC_ASYNC_HWMON_READTEMP;
+> +		args.a2 =3D p_msg->arg[0];
+> +		break;
+> +	case COMMAND_HWMON_READVOLT:
+> +		args.a0 =3D INTEL_SIP_SMC_ASYNC_HWMON_READVOLT;
+> +		args.a2 =3D p_msg->arg[0];
+> +		break;
+>  	default:
 
 [Severity: High]
-This is a pre-existing issue, but enabling this hwmon node exposes an incor=
-rect
-temperature scaling calculation.
+This is a pre-existing issue, but does abandoning asynchronous transactions
+via stratix10_svc_async_done() without notifying the EL3 firmware cause a
+transaction ID desynchronization?
 
-The hwmon subsystem strictly requires temperature attributes to be reported=
- in
-millidegrees Celsius. The hardware reports the temperature in Q8.8 format.
+When an async transaction times out in stratix10_hwmon_async_read() or
+rsu_send_async_msg(), the driver abandons the transaction and frees the ID:
 
-In stratix10_hwmon_parse_temp(), the driver shifts the value right by 8 bit=
-s,
-effectively returning raw degrees Celsius:
-
-drivers/hwmon/stratix10-hwmon.c:stratix10_hwmon_parse_temp() {
+drivers/firmware/stratix10-svc.c:stratix10_svc_async_done() {
     ...
-    *val =3D (long)(s32)temperature / STRATIX10_HWMON_TEMP_FRAC_DIV;
-    ...
+	ida_free(&achan->job_id_pool,
+		 STRATIX10_GET_JOBID(handle->transaction_id));
+	kfree(handle);
 }
 
-Because it fails to multiply the result by 1000, a temperature of 50 degrees
-Celsius is reported as 50 instead of 50000. Monitoring tools will mistakenly
-display this as 0.050 degrees Celsius.
+Since there is no SMC cancellation command sent to the firmware, the firmwa=
+re
+might still process the timed-out request. If a new command allocates the
+same recycled transaction ID, polling the firmware could return the delayed
+completion of the original stale transaction.
 
-Could the conversion logic be updated to multiply the result by 1000 to
-satisfy the hwmon core requirements?
+Will this result in desynchronization between the driver and secure firmwar=
+e,
+potentially returning stale hwmon sensor readings or incorrect statuses?
+
 
 [Severity: High]
-This is a pre-existing issue, but enabling this hwmon node exposes a broken
-asynchronous read path that induces a 2-second latency spike per read.
+This is a pre-existing issue, but does the missing cleanup of the async
+client on driver removal cause a memory leak and break subsequent probes?
 
-The stratix10_hwmon_async_read() function waits on a completion:
+Looking at stratix10_rsu_remove() in drivers/firmware/stratix10-rsu.c:
 
-drivers/hwmon/stratix10-hwmon.c:stratix10_hwmon_async_read() {
-    ...
-    wait_ret =3D wait_for_completion_io_timeout(&completion, HWMON_TIMEOUT);
-    ...
+drivers/firmware/stratix10-rsu.c:stratix10_rsu_remove() {
+	struct stratix10_rsu_priv *priv =3D platform_get_drvdata(pdev);
+
+	stratix10_svc_free_channel(priv->chan);
 }
 
-It expects the callback stored in handle->cb by stratix10_svc_async_send()
-to be executed. However, the stratix10-svc driver never actually invokes th=
-is
-callback anywhere in the service layer.
+It calls stratix10_svc_free_channel() but completely omits calling
+stratix10_svc_remove_async_client(). This leaves chan->async_chan
+populated on the shared channel array and leaks the asynchronous channel
+object and its associated IDA pool.
 
-As a result, the completion is never signaled. Every sysfs read incurs a
-mandatory 2-second timeout delay before it falls back to manual polling via
-stratix10_svc_async_poll().
+If the module is unloaded and reloaded, will the next call to
+stratix10_svc_add_async_client() inside stratix10_rsu_probe() encounter
+a non-NULL async_chan and immediately return -EALREADY?
 
-Is it possible to either implement the callback invocation in the service l=
-ayer,
-or adjust the async read approach to avoid this latency?
+While the new hwmon driver introduced in this patchset appears to handle
+this correctly, it seems the rsu driver remains permanently unable to
+probe after a single removal until the system is rebooted.
 
-> +
-> +	voltage {
-> +		#address-cells =3D <1>;
-> +		#size-cells =3D <0>;
-> +		input@2 {
-> +			label =3D "0.8V VCC";
-> +			reg =3D <2>;
-> +		};
+>  		dev_err(ctrl->dev, "Invalid command ,%d\n", p_msg->command);
+>  		ret =3D -EINVAL;
 [ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1781861409.gi=
-t.tze.yee.ng@altera.com?part=3D5
+t.tze.yee.ng@altera.com?part=3D3
