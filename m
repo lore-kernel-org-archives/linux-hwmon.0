@@ -1,205 +1,173 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 050E52C11F9;
-	Fri, 19 Jun 2026 09:46:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C30318B96;
+	Fri, 19 Jun 2026 09:49:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781862372; cv=none; b=ojU582jZnxktQWq2q35YsaMV0dCIGJJN9Djvcxo5Yky+BFRm6tk/Qa5s2zPe4+2KcSLP5hpX4ZWD6g+6okPGiHBZRlvjJPFIbO03BJwYgLl2EoLs06l2zD0GwVt04//7kXEi1bsRMgb7QJmQFT6TW4V/PBv5SmleiQcefdQ8gfo=
+	t=1781862577; cv=none; b=XO5cbgpq0RM+MQ9z42cs/jjhUd1eZoZHcV45ESNSs9XTe252+l1p+Mg3OGwixKqEme+tK6E1t/gldhIiSEGPK7KQQQblC12Cgi7BTsmOQ1rJRiSv8n0bn3K3O+9YCBdW4L4TzDjYGNpCTsvdfgK8KQYYtkovMLlV8DKL6ziXccs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781862372; c=relaxed/simple;
-	bh=WZajdgffR6G7RhVh2pSANB6xHRwJLUx0qj0fmaFCS/E=;
+	s=arc-20240116; t=1781862577; c=relaxed/simple;
+	bh=YLjFzPTEF9LCv85DmutXDKpOdwBlw9pFxGDhLmA8U+w=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ToOQ0Dkl13IsLuYt7Vs9cxvasKFS/HCupI1qocP7R/hO0jE5wEAUcFMpuIWX4osfmfr1JF3L8EG+5MhDLTcsnvp6w238qLpRx4TPEZrj1Tc9vt3wU3SZbdcR7FbcB7pHhDHrkRBpIzMzTZ0fD+f50LO53vyaOHV/EmZpiU4SbdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n//g08HV; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=niKkVz7UdZhZoGIhjDWKxDENIDw3Cn6d7luryBRTlKMcZECCVbo6urBY99CUGBj9FZPkobLBecHd1MO+V793wZvHxMMFL2z6ra4xT0lXy3k037h5UZAVe+uOVgDryM8SjqX4uqcxU6vMqc9BJX+AWyz5114tuvyuqlFX59eAwGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wp6+fEtM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n//g08HV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8167A1F000E9;
-	Fri, 19 Jun 2026 09:46:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wp6+fEtM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 902981F000E9;
+	Fri, 19 Jun 2026 09:49:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781862368;
-	bh=r6vlm7miECol73NfoJOubyCBbQNVJsbfn82mBnUCbE8=;
+	s=k20260515; t=1781862575;
+	bh=iZqf7eFBFgAirw9JlX0+V8FLBiZ3leIya1QCsPtIxE8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=n//g08HVP/XG6zVPncPbpp6s8WCQUX+nrdOj2KG26+x/WwXKed8N/pdICpapZwBZA
-	 06UP+dk6oV7xRrLrfCzQUwWjDR/L/NnwG2GuDDlVKXiGX0Y/F7p+lt505g6W2jn7VK
-	 5mRqNAVv/YLuqRBJW3Nlai4msjN1n7kLmxc/1WPDYZRVOQHWt1yqEIN2qGH5eGtmw1
-	 jLQXjq2SCUSCAGzLA/gg10guhFhiIOipLiXsUJIf+iW4FMA/MOHnszSERlnZKWIjsQ
-	 Ex4VCjRazXkIv4fCounkcltxtr8dLmLu5MjQVdqqZpTCzBzCxuPv0vrK+pVu1l79SH
-	 Zx0OhvYvTpzxQ==
+	b=Wp6+fEtM+inXOIzd25+pHZRvWYp2UNZm6CDx51e7NA0mQKqJEZLZMuXp88NIEMDij
+	 PonT8bMP7amsy8AyMG3hevNMt53LeUmKjAPPQyEVQz23Ivd92RuSuwTbMwT3SVoacN
+	 t/8aP4u3anvVhMDPtp9DUTBHze5DYG6SpcJNu/571O+1M3mtlO4JKOuoz2RTJFsNt6
+	 rS+Be0/BQCVEsU8bvbs/wzqEXpLqVSte/LRJWuBxIB1IPCNu5C/hVfEzh8CKsan+OD
+	 TYGjWtAtaxufIXiCKZdCe9im2UoMezlQWR/KZAAWipIZrpKnmMA0OegjJcG5tJDPrf
+	 cS3D3mx7pPRpQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/5] dt-bindings: hwmon: add Altera Stratix 10 hardware
- monitor binding
+Subject: Re: [PATCH 5/5] arm64: dts: socfpga: stratix10: add hwmon node
 Reply-To: sashiko-reviews@lists.linux.dev
 To: tze.yee.ng@altera.com
-Cc: linux-hwmon@vger.kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org, robh@kernel.org
-In-Reply-To: <ac5a118394e96f707823463fedd32b6a484c1ceb.1781861409.git.tze.yee.ng@altera.com>
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, conor+dt@kernel.org, robh@kernel.org
+In-Reply-To: <d62c4188cd936883bc14c95dcd27555ec94df7cf.1781861409.git.tze.yee.ng@altera.com>
 References: <cover.1781861409.git.tze.yee.ng@altera.com>
- <ac5a118394e96f707823463fedd32b6a484c1ceb.1781861409.git.tze.yee.ng@altera.com>
+ <d62c4188cd936883bc14c95dcd27555ec94df7cf.1781861409.git.tze.yee.ng@altera.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 19 Jun 2026 09:46:08 +0000
-Message-Id: <20260619094608.8167A1F000E9@smtp.kernel.org>
+Date: Fri, 19 Jun 2026 09:49:35 +0000
+Message-Id: <20260619094935.902981F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Medium] The pattern property `^input(@[0-9a-f]+)?$` allows child nodes w=
-ith a `reg` property to omit the unit-address, violating Devicetree specifi=
-cations.
-- [Medium] The `reg` property in the child input nodes is missing `maxItems=
-: 1`, allowing multiple register entries.
-- [Low] The MAINTAINERS file entries are not sorted alphabetically.
-- [Low] The Signed-off-by chain does not match the patch authorship.
+
+Pre-existing issues:
+- [High] Hardware monitoring sysfs attributes remain active after the servi=
+ce channel is freed during driver removal, leading to a kernel panic.
+- [High] Incorrect temperature scaling calculation reports temperatures 100=
+0 times too small to the hwmon subsystem.
+- [High] Asynchronous sysfs reads are effectively broken and will always bl=
+ock for the full 2-second timeout before falling back to manual polling.
 --
 
-commit d11da1e6aa7b26667b6a632670fdfdcc9fd27dee
+commit a3baf92605bf6c042e451ccdb74f299304cebf79
 Author: Tze Yee Ng <tze.yee.ng@altera.com>
 
-dt-bindings: hwmon: add Altera Stratix 10 hardware monitor binding
+arm64: dts: socfpga: stratix10: add hwmon node
+   =20
+Add an hwmon child node under the Stratix 10 service layer and describe
+the SoCDK voltage and temperature sensors using the altr,stratix10-hwmon
+compatible.
 
-This commit documents the device tree binding for the Altera Stratix 10
-SoC FPGA hardware monitor. It adds bindings for temperature and voltage
-sensor nodes.
-
-> Author: Tze Yee Ng <tze.yee.ng@altera.com>
-> Date:   Fri Jun 19 09:38:52 2026 +0000
->=20
->     dt-bindings: hwmon: add Altera Stratix 10 hardware monitor binding
->    =20
->     Document the device tree binding for the Altera Stratix 10 SoC FPGA
->     hardware monitor, including temperature and voltage sensor nodes.
->    =20
->     Signed-off-by: Nazim Amirul <muhammad.nazim.amirul.nazle.asmade@alter=
-a.com>
->     Signed-off-by: Tze Yee Ng <tze.yee.ng@altera.com>
-
-[Severity: Low]
-The commit author is Tze Yee Ng, but the first Signed-off-by tag belongs
-to Nazim Amirul.
-
-According to the patch submission guidelines, the primary author must be
-the first person to sign off on the patch.
-
-Should the authorship be corrected with a From: line in the commit message
-body, or should the Signed-off-by order be fixed?
-
-> diff --git a/Documentation/devicetree/bindings/hwmon/altr,stratix10-hwmon=
-.yaml b/Documentation/devicetree/bindings/hwmon/altr,stratix10-hwmon.yaml
-> new file mode 100644
-> index 0000000000000..5bd98660ee7b0
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/altr,stratix10-hwmon.yaml
-
+> diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts b/arc=
+h/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
+> index e2a1cea7f3da9..01a8ffe430ed0 100644
+> --- a/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
+> +++ b/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
 [ ... ]
-
-> +  temperature:
-> +    description:
-> +      The temperature node specifies mappings of temperature sensor diod=
-es on
-> +      the Stratix 10 SoC FPGA main die and tile die.
-> +    type: object
-> +    properties:
-> +      '#address-cells':
-> +        const: 1
-> +      '#size-cells':
-> +        const: 0
-> +    patternProperties:
-> +      "^input(@[0-9a-f]+)?$":
-
-[Severity: Medium]
-The Devicetree specification requires that if a node has a reg property,
-its name must include a unit-address matching the first address in reg.
-
-The regex ^input(@[0-9a-f]+)?$ makes the unit-address optional, which
-allows dt-validate to pass syntactically invalid device trees.
-
-Could this be updated to require the unit-address when a reg property
-is present?
-
-> +        description:
-> +          The input node specifies each individual temperature sensor.
-> +        type: object
-> +        properties:
-> +          reg:
-> +            description:
-
-[Severity: Medium]
-The reg property in the child input nodes is missing maxItems: 1.
-
-Because dt-schema treats reg as an array of arrays, omitting this allows
-a device tree to specify an arbitrary number of register pairs, which
-would erroneously pass schema validation.
-
-Should maxItems be added here to restrict it to a single entry?
-
-[ ... ]
-
-> +  voltage:
-> +    description:
-> +      The voltage node specifies mappings of voltage sensors on the Stra=
-tix 10
-> +      SoC FPGA analog to digital converter of the Secure Device Manager =
-(SDM).
-> +    type: object
-> +    properties:
-> +      '#address-cells':
-> +        const: 1
-> +      '#size-cells':
-> +        const: 0
-> +    patternProperties:
-> +      "^input(@[0-9a-f]+)?$":
-
-[Severity: Medium]
-Similar to the temperature node, this regex makes the unit-address optional.
-
-Does this pattern allow child nodes with a reg property to omit the
-unit-address, violating Devicetree specifications?
-
-> +        description:
-> +          The input node specifies each individual voltage sensor.
-> +        type: object
-> +        properties:
-> +          reg:
-> +            description:
-
-[Severity: Medium]
-The reg property here is also missing maxItems: 1.
-
-Can we add a maximum item constraint to ensure multiple register entries
-are not allowed for voltage sensors?
-
-[ ... ]
-
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index bcd09e02337b8..5a07cefe3aeee 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -938,6 +938,13 @@ ALPS PS/2 TOUCHPAD DRIVER
->  R:	Pali Roh=C3=A1r <pali@kernel.org>
->  F:	drivers/input/mouse/alps.*
-> =20
-> +ALTERA STRATIX 10 SoC FPGA HWMON DRIVER
-> +M:	Nazim Amirul <muhammad.nazim.amirul.nazle.asmade@altera.com>
-> +M:	Tze Yee Ng <tze.yee.ng@altera.com>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/hwmon/altr,stratix10-hwmon.yaml
+> @@ -134,3 +134,36 @@ root: partition@4200000 {
+>  		};
+>  	};
+>  };
 > +
->  ALTERA MAILBOX DRIVER
+> +&temp_volt {
+> +	status =3D "okay";
 
-[Severity: Low]
-The MAINTAINERS file entries are typically sorted alphabetically to
-maintain organization and avoid merge conflicts.
+[Severity: High]
+This isn't a bug introduced by this patch, but enabling this hwmon node exp=
+oses
+a pre-existing lifecycle issue during driver removal that can lead to a ker=
+nel
+panic.
 
-Here, ALTERA STRATIX 10 SoC FPGA HWMON DRIVER is placed before
-ALTERA MAILBOX DRIVER.
+The stratix10-hwmon driver uses devm_hwmon_device_register_with_info() for
+registration, meaning the sysfs attributes are only unregistered during dev=
+res
+cleanup after stratix10_hwmon_remove() returns. However, the remove function
+synchronously frees the service channel (stratix10_svc_free_channel), which
+sets chan->scl to NULL.
 
-Should this block be moved further down to maintain alphabetical order?
+If a userspace process reads a sysfs attribute concurrently, the service th=
+read
+might unconditionally dereference chan->scl in svc_thread_recv_status_ok():
+
+drivers/firmware/stratix10-svc.c:svc_thread_recv_status_ok() {
+    ...
+    p_data->chan->scl->receive_cb(p_data->chan->scl, cb_data);
+    ...
+}
+
+Should the driver manage the service channel lifecycle via
+devm_add_action_or_reset() so the channel strictly outlives the sysfs
+attributes?
+
+[Severity: High]
+This is a pre-existing issue, but enabling this hwmon node exposes an incor=
+rect
+temperature scaling calculation.
+
+The hwmon subsystem strictly requires temperature attributes to be reported=
+ in
+millidegrees Celsius. The hardware reports the temperature in Q8.8 format.
+
+In stratix10_hwmon_parse_temp(), the driver shifts the value right by 8 bit=
+s,
+effectively returning raw degrees Celsius:
+
+drivers/hwmon/stratix10-hwmon.c:stratix10_hwmon_parse_temp() {
+    ...
+    *val =3D (long)(s32)temperature / STRATIX10_HWMON_TEMP_FRAC_DIV;
+    ...
+}
+
+Because it fails to multiply the result by 1000, a temperature of 50 degrees
+Celsius is reported as 50 instead of 50000. Monitoring tools will mistakenly
+display this as 0.050 degrees Celsius.
+
+Could the conversion logic be updated to multiply the result by 1000 to
+satisfy the hwmon core requirements?
+
+[Severity: High]
+This is a pre-existing issue, but enabling this hwmon node exposes a broken
+asynchronous read path that induces a 2-second latency spike per read.
+
+The stratix10_hwmon_async_read() function waits on a completion:
+
+drivers/hwmon/stratix10-hwmon.c:stratix10_hwmon_async_read() {
+    ...
+    wait_ret =3D wait_for_completion_io_timeout(&completion, HWMON_TIMEOUT);
+    ...
+}
+
+It expects the callback stored in handle->cb by stratix10_svc_async_send()
+to be executed. However, the stratix10-svc driver never actually invokes th=
+is
+callback anywhere in the service layer.
+
+As a result, the completion is never signaled. Every sysfs read incurs a
+mandatory 2-second timeout delay before it falls back to manual polling via
+stratix10_svc_async_poll().
+
+Is it possible to either implement the callback invocation in the service l=
+ayer,
+or adjust the async read approach to avoid this latency?
+
+> +
+> +	voltage {
+> +		#address-cells =3D <1>;
+> +		#size-cells =3D <0>;
+> +		input@2 {
+> +			label =3D "0.8V VCC";
+> +			reg =3D <2>;
+> +		};
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1781861409.gi=
-t.tze.yee.ng@altera.com?part=3D1
+t.tze.yee.ng@altera.com?part=3D5
