@@ -1,119 +1,102 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC96634167B
-	for <linux-hwmon@vger.kernel.org>; Fri, 19 Jun 2026 10:32:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF96375F7B;
+	Fri, 19 Jun 2026 10:40:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781865152; cv=none; b=rkMcLrO1g+4S0hnEE5+2Yzw7w1KgP3WJmpvyth2FLzzagDe6Mu8c2fdEXRV2W06SNRiBUvvBl5rxoW1BiC14yrZaj4R7e0demzAArcy2HYPEtIs03BLBaH5AiDKwpjWRG3RuwCtC+FniN8eQe0cFbWAnqYSGnPkR27RkLXnUZ+Q=
+	t=1781865643; cv=none; b=VB+pmQvLEBW2QIjg5MGAi+eOl+rJMzFS8EhPSmdw2J5f256gLKADolt5gHVV6PVilaec3MeEW2s/dbzHzUtpt5HGBMa7WCsAJzLXx4wVRlyJSkId7Nx7+tLnaYpXVG3VfwDoyQ9ymCTdTCllV5sNJQnaOfRfkMsK48WlKsHDCTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781865152; c=relaxed/simple;
-	bh=J9wG/Cdl4USpUhFpFKP+Y2sEB08duLUmbk9/DdufrWk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iCa0xIFYLJZ15gEy5YerZc5dtFdsoAms1+P5o0QiOvZbwWQQXgd09Tl180dPVUvE56XJyfPy3ZKzUz7sOn8NUyuDXmBVWqTlSDYgWDQMoHQjnQTLTmM/MVukfSyrehNyYrkMiBDTX5MkqAv+IMxxLOB3dfpiyfQLcwiE2qn1qn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hb/DZ/Ge; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781865643; c=relaxed/simple;
+	bh=G5S3yYiin/z0EOfr+MSWdQ7+d2ulY5cBDUQ8yp63oDw=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=WraZa4K49d0/khFZkyfct152rblWFIQ3bEHdeSy5Y8k5+btehB3UtwqMVd7hhGKsPsNBu7NGrgP1pcviPXhAb4DMutIMm1mnrCGJwf9fMkN+1s9M4TQt5BZsZbt9Q+nMG2JwZIgTzy32AdDoJ9a2xUMt0aKoLL8ryV9mh+VICUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DAWDVJR9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hb/DZ/Ge"
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-6974a6e54dbso1151360a12.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 19 Jun 2026 03:32:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781865148; x=1782469948; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kRx+fJTG2hf5P891qLhNE1tVHHb4cammpBgE+COZX/Q=;
-        b=Hb/DZ/GemoxwhjrP5vxR0ieXRg1tbzDJz1wViX+lXsK9YNqj1beTDyLM9ipcPhW+qG
-         0gj7qL0I8hfVqY7zRe1YfT3oipSKsrtPQpTthWQMfewx9anXp2OGmXpNG8ZyD68etUPQ
-         10E72Fr7HhoYaWAYWWXSS4N9dK6md0AkRT12Lug3KSpv0WqZQi1MAESYTyYPZz3pRNUN
-         J7OJJLgzoegPYMcQ2MfWdQqMCKCQ/HbKZd6Csb2K7dOszvA5hCczmzxjgV/vfEaS3hGP
-         ZzL1ULWCLMI0oJ40VslQJLMXXLpS67QnHD5G70nQS5F16RtJ8cfehIkjMQ/BYYON0lhN
-         5Pvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781865148; x=1782469948;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=kRx+fJTG2hf5P891qLhNE1tVHHb4cammpBgE+COZX/Q=;
-        b=FHzChphzfAZDqR0aNovxy5vGnkCP56rYqfCvM6zyD25C7Cz7CFgpiH9qQEHIQKT8Fb
-         by0mRf+qojGscYK1k8UpmvyseJDVDcsDR4uLfzZHx7lkvNsHx1WSwmvelK4Xg1DmTuv8
-         C2Ji2DHu4u3l5ARtEd+fCNvebV5SPetOhyhnrUnqxtzjdXriSQGpgoo1soQlwgaLp4PS
-         Km2Orybg54qYqBspdD9FyUyanvPYgDUa4mfVbnW7ZikAYD1gPUrBRAJyW2jmVfmrnUJs
-         BSsdHVwzbuoOwrAetbi7l+Yi1pqEMMTfm3e4UnkA2ZMBdHFE+7eia5WY5FqN4iUgwlzh
-         Xxyg==
-X-Gm-Message-State: AOJu0YwJ+BF3Vgl2wjP1V1P3Kv30xmUY+1Icwt+vT5J5PUc+oM98OwoQ
-	Iv/LHjc4S+WW+uk86d0QRId2PokxZue0QLAqZWz+36ZZoIbM4PKh9HaS
-X-Gm-Gg: AfdE7cka1+Qkoii9kwVSEj9SzA78fR/QdFOk8Ey/egKGBfpwbuh9Pu0Xj9TwRqEku+3
-	pRwpWK++DQ91+ZK1bP2BTxx9+p7oZHMf0jPaDfXCLKTDjAY7t1oHAiBvzXnTJrb7ikFni6R7ZK9
-	ABD0wIoufWkjt1ZfkEucln7k22KioaFvk/EeSGvYNwT3EvBgKNDcij+xmJztmncm3VRP/J9++cp
-	1dxHnjgfRj0HugVzELHYbfxrHkHZY7Udv9P0aDF5977pnXCpXzkJTwz4qPk+EQfC2jsf/4kZKnI
-	AX93zhleWoFNECbbBQWXxiNPgTxWyNQr7L8V+n23wJnY4Eb7v9V0hOrkpQyyI2yxrjuDSNjUw2+
-	qoEExAh/7MgT3cqmU0a2yoqWjdXrpW12NTqEXdqrWn7SpEnNN4Sg7DSPzrBTER3ySnaWAxCG5Ce
-	UITb/AbBFrqSAESFB7Sse/f/BFJ5b2uxg6QA==
-X-Received: by 2002:a17:907:a0a:b0:bd9:20b:5117 with SMTP id a640c23a62f3a-c097cccb107mr151829666b.41.1781865147946;
-        Fri, 19 Jun 2026 03:32:27 -0700 (PDT)
-Received: from xeon ([188.163.112.61])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c0a8490cd59sm76702466b.16.2026.06.19.03.32.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jun 2026 03:32:27 -0700 (PDT)
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] hwmon: (emc1403) Add regulator support
-Date: Fri, 19 Jun 2026 13:31:53 +0300
-Message-ID: <20260619103153.216444-4-clamor95@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260619103153.216444-1-clamor95@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DAWDVJR9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ED151F000E9;
+	Fri, 19 Jun 2026 10:40:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781865641;
+	bh=I6nYe2KbGP2oRm9jLDA21qTDRbxOSiqz77dbI6yQWkI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=DAWDVJR9Vons3bOyrOF1WNtKRIIdfl1Ixm/bZoIbfEaZCtoGIni4999QTl3Fcw8fd
+	 J2go863/3Ho2o/aHhdEkUEdNjzRQZoOf3ObZu+CdFjqKKiRGXpPItM40AMg1XKO5Rr
+	 5lQMgL9KvTww95Xc7nh6WEgXGiGGZzuEISsoFr8fXBLDeRuN+tHc/IGHzr4Tf/I6fx
+	 ywyHrkM1Kbmfk/jtrCH3HR42IXTANWRi11uSEBKOuNhB3E5K83zTka5n9P04ds1KOn
+	 ophDW8inJzk/F9u5Yjp1X8Y5ZNhyGHHa+wy0jMfYqpq3PWkKPPtFYopIQk7o0QxbhY
+	 vnxWVZuGfmtgA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: hwmon: Document SMSC
+ EMC1402/1403/1404/1428
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Svyatoslav Ryhel" <clamor95@gmail.com>
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org, conor+dt@kernel.org
+In-Reply-To: <20260619103153.216444-2-clamor95@gmail.com>
 References: <20260619103153.216444-1-clamor95@gmail.com>
+ <20260619103153.216444-2-clamor95@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 19 Jun 2026 10:40:41 +0000
+Message-Id: <20260619104041.8ED151F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add support for VDD power supply for this sensor. It is required on some
-devices for the sensor to start up and work properly.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] The device tree binding schema fails to correctly restrict the maxi=
+mum number of channels for the `smsc,emc1402` and its variants (emc1412, em=
+c1422, emc1442). By grouping it alongside `emc1403` under the `not` conditi=
+on for `emc1404`/`emc1428`, it inadvertently sets the channel `reg` maximum=
+ to 2 instead of 1.
+--
 
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
----
- drivers/hwmon/emc1403.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+commit 5a834c50ed998e304e4c00fb64e4e434cbd93896
+Author: Svyatoslav Ryhel <clamor95@gmail.com>
 
-diff --git a/drivers/hwmon/emc1403.c b/drivers/hwmon/emc1403.c
-index ef1ccb40ed6c..d14bd90ce424 100644
---- a/drivers/hwmon/emc1403.c
-+++ b/drivers/hwmon/emc1403.c
-@@ -19,6 +19,7 @@
- #include <linux/mod_devicetable.h>
- #include <linux/sysfs.h>
- #include <linux/regmap.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/util_macros.h>
- 
- #define THERMAL_PID_REG		0xfd
-@@ -660,6 +661,12 @@ static int emc1403_probe(struct i2c_client *client)
- {
- 	struct thermal_data *data;
- 	struct device *hwmon_dev;
-+	int ret;
-+
-+	ret = devm_regulator_get_enable(&client->dev, "vdd");
-+	if (ret)
-+		return dev_err_probe(&client->dev, ret,
-+				     "Failed to enable regulator\n");
- 
- 	data = devm_kzalloc(&client->dev, sizeof(struct thermal_data),
- 			    GFP_KERNEL);
--- 
-2.53.0
+dt-bindings: hwmon: Document SMSC EMC1402/1403/1404/1428
 
+This commit documents the basic hardware layout of SMSC (now Microchip)
+EMC1402/1403/1404/1428 thermal sensors.
+
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/smsc,emc1403.yaml
+
+[ ... ]
+
+> +allOf:
+> +  - if:
+> +      not:
+> +        properties:
+> +          compatible:
+> +            contains:
+> +              enum:
+> +                - smsc,emc1404
+> +                - smsc,emc1428
+> +    then:
+> +      patternProperties:
+> +        "^channel@([0-7])$":
+> +          properties:
+> +            reg:
+> +              items:
+> +                maximum: 2
+
+[Severity: Low]
+Does this conditional block correctly restrict the channel limits for the
+smsc,emc1402 device and its variants (emc1412, emc1422, emc1442)?
+
+By grouping the emc1402 variants with the emc1403 under the fallback
+condition (not containing emc1404/emc1428), it applies a maximum reg value
+of 2. This appears to allow up to 3 channels (0, 1, 2) to pass schema
+validation.
+
+Since the emc1402 hardware only supports 2 channels (local and 1 remote),
+should there be a separate conditional for the emc1402 family setting the
+maximum to 1?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260619103153.2164=
+44-1-clamor95@gmail.com?part=3D1
