@@ -1,133 +1,145 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E186133C19E;
-	Mon, 22 Jun 2026 16:57:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23196346FDA
+	for <linux-hwmon@vger.kernel.org>; Mon, 22 Jun 2026 18:56:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782147429; cv=none; b=JHAXKoNIsztwoytK6G4cpsJhwQ7sDt5SlAMg59UdfX9oH8GI/oFYOry0cqN1PgwNKsT/hvyr5Kxoi6nFx37gGBaaytlsqxO5HJRMeSpqKqRCKIKKR5DoYX+yEFf3E1tFQXK4fMm1McaiipueZI6Krh1BywwfOQ6osMffvtPaL/w=
+	t=1782154595; cv=none; b=BD8vpJMtV7ldFCWWxnaMly/rSzXwALFCTIfWAxCbyGW3cLRkrqouLtBCJgWZlY6GDO+Fg3TXzDqzElxTPKk84DvBtP7Mtf6Bl34zPtibJ5JlY2081FLQrX+4838sJ2LEVUAOIg9VJlaNZ3xDIl33z10m7F1ONCKd8pRxUKq9mq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782147429; c=relaxed/simple;
-	bh=rtkOS3wzz5t5JNfgvaBXMa2LClojRP4BcFTM7XFMAew=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aucy7YFBuySXuXAXbU1CLewO+OtJrm3iu4kl5EoQoSDY6j78+c3vToFISCW0tTCgcNx9goxWZn8N3PNNNdbjMzWcn++6EEtjVJqpm7VBiF2oI1wEPnNCWcjcnxJAwEQS9kMUniS/ItnitfQ3IStXx7HoKASlNipvH59kip66U14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=h6vXaZg3; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1782154595; c=relaxed/simple;
+	bh=b/5AxKlfDLljDsOspE5bNyi8aD14GKd8wsmsXO7uUO4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=Zz1aaXnrd3WUIDrq6JHqG2ql0r0Izp0u3ktfQgbKtzV5qLXbS5vsB2TUdtfeCyaJmmUM3qZoz0gQRKnMa5lkI+8Hg8cyrkKapH4xOYa2i+L1TB6LcGZLRxy5yhSUTDTXn+km+BcxMpRQ5ewqjWV+y0vJpesFXYDDyWEjWKLmB9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o3EHu3Fu; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="h6vXaZg3"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=rsZ0a0no8Hi5G5pDevm2EXTGdOfCsKANMAV3RQE3hCg=; b=h6vXaZg3xO8rpw8c63zx/uTt/i
-	BWjunKTvnr5Vk+IKXOExP/z1GsZxs74FSHk0bjXwh1xOT6i7d15Lqfz6kOaqM/VqTuSunBCKGpH9I
-	E+peONIyea2otP3SV7Cf2rWYXbm7COo2pRrNzIHBIgsUKCR10z0u1OKr8oQa+UEMlM8lmismE0iEZ
-	/EgAy/82lTBBbX0BNBmQ+7acMS7VKlv+PhP787Ey1daDtbrt5ScRsJSj3ziNlLhYo/rA68bjkLqhv
-	pvTX2/68yx8je5xrzNqK8DcTcwO0o2D51fUKJjq/V81vlJQJ4p68U1y43zZvA5rGwwU442LN8Q8no
-	oLTe5cOw==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wbhxL-00000005DxQ-0HdR;
-	Mon, 22 Jun 2026 16:57:07 +0000
-Message-ID: <f1e4c8f7-b3d9-46a3-b42f-710dcbcf15c0@infradead.org>
-Date: Mon, 22 Jun 2026 09:57:06 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o3EHu3Fu"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-490b8ac62baso2073595e9.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 22 Jun 2026 11:56:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782154592; x=1782759392; darn=vger.kernel.org;
+        h=in-reply-to:references:from:to:cc:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BGuX+WBhfDluwNW0VRTh1DIO03lIg15lXv1EuQn3pcA=;
+        b=o3EHu3FuGVLJy2NdSRuaJIUlCIQGi10Gza8g644Ko9vPVRpc+bNR3Za5emoJo4XUwG
+         9a+SOPj8puD57apqDOEwPdKj4sht6FD2qxr2VEK7iYwVyfs7qJs3fHFQdSuWnL15VwYh
+         swqUZxrGU70WWDOzWWjtUVIyfJDtd3he3E0L74EkyvuMPdErh9ibROUQ3EmyRV5xASeM
+         3iyinrNuuQepNtCQtHINo2M7+m82tc13GjYDDnMnbDg6LYMh/hyrVle10hKMgWgJYD0/
+         Goft9siQnnB03S92e7UeIGq+l6yYTYlhFGlZ2rDf9zhKwsND6Ai3uZjHixTr9IbGa6l5
+         S+4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782154592; x=1782759392;
+        h=in-reply-to:references:from:to:cc:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BGuX+WBhfDluwNW0VRTh1DIO03lIg15lXv1EuQn3pcA=;
+        b=Ur8ZuLMW350/EmGnkaa+9qsutVGjI05tMrJ6NPh6+0W9th65ptCYY9881DG35cKRb1
+         jtgGSCDzrYXg1+l9UYu/aarh8c16K/ng4J9tIE+RapK1C8vUDOiddDFhol7cm734Hlw5
+         4Uqnpreg2Zuo6cuJvCLpWBEfe4eQFam4wz5h/2ajUaZ6dv4u4PyUvg+jJiXNEUL04aBf
+         auTBnM4bfNUSDMTN4XAQmAYf3Z9yOiNM0dCtjsnE4R9xTzAmlMHrqoZ1sCUAoLCjgpe8
+         hkMdFmJRVjkwr+5DUDRzoGCR5iWbyLYGaK2kWaUCrnwodzkhP0EOy+04KqrUY+8LvBmJ
+         Y5gQ==
+X-Gm-Message-State: AOJu0Yxttu7kzgkMEwdQH/WYSySzDUYFY0Ul0U7Ei+WMnN30BfNtUg06
+	ApA05s1z5YErfzfZqADZYW6emz3rUvnBuMaHHcLbm61Mq4XUcYgF4Z9MbZ1GzwLF
+X-Gm-Gg: AfdE7ckS/fgsayIgxziLSRSzZE5pPGB5ZpZpbTYyvJjiTfqeSKkE8VQomM4RlQN7XIW
+	DFZWs5bUjhJI1oO1sswF5lKarGcVlAAkXr6xs178eX3W/G8Et8iikP8xGQmLRHj0FGnt2bjVwPe
+	7JO2aOLt2EqYbgAS6KuuvBhxioxhZWAwuiXPS7/eyov6V9TQxSOGtpPFHCgDkUGDX0IxECPX/bR
+	E0JR4R+JJt2aJpUPpoL5gGlg59iNMyaT5JocqgM9PLkuHIGD2CLocLZ4xZsbaKmZlfu0i87ZQuZ
+	JT5TlTxiZv8VdBYkSoMctHpi0BHcOIj7snPKBMY398p9kWIjoADWSOsNxMCpKec03gFOzekJhLh
+	o58Gwrfd1jzfQnL3SDJdab5v071/BaXRYnFeNysDqY8umBgfPxvGdYrRcLHtt7m0rEquZxu8Hnk
+	ZRR2lLwu1MrG5hPJrXMB7aCCHHvQ==
+X-Received: by 2002:a05:600c:3e0a:b0:489:32b:ac0b with SMTP id 5b1f17b1804b1-4925a0a9ad9mr9493665e9.6.1782154592309;
+        Mon, 22 Jun 2026 11:56:32 -0700 (PDT)
+Received: from localhost ([2001:4bb8:19f:d19a:c1d2:e9fd:1b2b:136b])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49245bba787sm193141475e9.1.2026.06.22.11.56.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Jun 2026 11:56:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 8/8] docs: misc: amd-sbi: Document SBTSI userspace
- interface
-To: Akshay Gupta <Akshay.Gupta@amd.com>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Cc: corbet@lwn.net, skhan@linuxfoundation.org, linux@roeck-us.net,
- arnd@arndb.de, gregkh@linuxfoundation.org, NaveenKrishna.Chatradhi@amd.com,
- Anand.Umarji@amd.com, Prathima.Lk@amd.com
-References: <20260622135821.2190260-1-Akshay.Gupta@amd.com>
- <20260622135821.2190260-9-Akshay.Gupta@amd.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20260622135821.2190260-9-Akshay.Gupta@amd.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Date: Mon, 22 Jun 2026 20:56:29 +0200
+Message-Id: <DJFT2RVYEMKU.3UA5K39W4GNAQ@gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: chipcap2: Add label property
+Cc: <linux-hwmon@vger.kernel.org>
+To: <sashiko-reviews@lists.linux.dev>, "Flaviu Nistor"
+ <flaviu.nistor@gmail.com>
+From: "Javier Carrasco" <javier.carrasco.cruz@gmail.com>
+X-Mailer: aerc 0.21.0-143-g2f3a2e260c09
+References: <20260622122200.14245-1-flaviu.nistor@gmail.com>
+ <20260622123206.593E41F000E9@smtp.kernel.org>
+In-Reply-To: <20260622123206.593E41F000E9@smtp.kernel.org>
 
+On Mon Jun 22, 2026 at 2:32 PM CEST, sashiko-bot wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issu=
+e(s) to consider:
+>
+...
+> Pre-existing issues:
+> - [High] Threaded interrupt handlers modify shared state without holding =
+any locks, violating hwmon subsystem guidelines and causing potential loss =
+of alarm events.
+> --
+> [Severity: High]
+> This is a pre-existing issue, but does drivers/hwmon/chipcap2.c lack
+> locking between the threaded interrupt handlers and the sysfs paths, whic=
+h
+> could lead to lost alarm events?
+>
+> The threaded interrupt handlers modify shared state without holding any
+> locks, which violates hwmon subsystem guidelines.
+>
+> If an interrupt fires between the sysfs read and write:
+>
+> CPU1 in drivers/hwmon/chipcap2.c:cc2_humidity_min_alarm_status() {
+> 	...
+> 	if (data->rh_alarm.low_alarm) {
+> 		*val =3D (measurement < min_hyst) ? 1 : 0;
+>
+> CPU2 in drivers/hwmon/chipcap2.c:cc2_low_interrupt() {
+> 		cc2->rh_alarm.low_alarm =3D true;
+> }
+>
+> CPU1 continues:
+> 		data->rh_alarm.low_alarm =3D *val;
+> 	} else {
+> 		*val =3D 0;
+> 	}
+> 	...
+> }
+>
+> The interrupt's update will be overwritten with 0 and permanently lost. T=
+he
+> hwmon subsystem guidelines require drivers to implement locking for inter=
+rupt
+> handling and sysfs attributes, recommending the use of hwmon_lock() and
+> hwmon_unlock().
+>
+> Could this concurrent access to data->rh_alarm.low_alarm be protected?
 
+I agree with Sashiko's report about the concurrency issue. If an
+interrupt is triggered right after checking data->rh_alarm.low_alarm,
+the status would be 0 instead of 1, if no prior interrupts were
+triggered.
 
-On 6/22/26 6:58 AM, Akshay Gupta wrote:
-> From: Prathima <Prathima.Lk@amd.com>
-> 
-> - Document AMD sideband IOCTL description defined
->   for SBTSI and its usage.
->   User space C-APIs are made available by esmi_oob_library [1],
->   which is provided by the E-SMS project [2].
-> 
->   Link: https://github.com/amd/esmi_oob_library [1]
->   Link: https://www.amd.com/en/developer/e-sms.html [2]
-> 
-> Include a user-space open example for /dev/sbtsi-* and list auxiliary
-> bus sysfs paths.
-> 
-> Reviewed-by: Akshay Gupta <Akshay.Gupta@amd.com>
-> Signed-off-by: Prathima <Prathima.Lk@amd.com>
-> ---
-> Changes since v2:
-> - Update misc node names info as per socket
-> 
-> Changes since v1:
-> - Elaborate the document
->  Documentation/misc-devices/amd-sbi.rst | 68 ++++++++++++++++++++++++++
->  1 file changed, 68 insertions(+)
-> 
-> diff --git a/Documentation/misc-devices/amd-sbi.rst b/Documentation/misc-devices/amd-sbi.rst
-> index f91ddadefe48..fbbbc504119f 100644
-> --- a/Documentation/misc-devices/amd-sbi.rst
-> +++ b/Documentation/misc-devices/amd-sbi.rst
-> @@ -48,6 +48,60 @@ Access restrictions:
->   * APML Mailbox messages and Register xfer access are read-write,
->   * CPUID and MCA_MSR access is read-only.
->  
-> +SBTSI device
-> +============
-> +
-> +sbtsi driver under the drivers/misc/amd-sbi creates miscdevice
+Sashiko only reported this issue for the low alarm, but the same applies
+for the high alarm, which is independent and has a dedicated signal.
+I am not sure about using hwmon_lock()/hwmon_unlock() for this, as it
+serializes all kind of accesses and not only the ones concerning the
+interrupt status. That might add some extra delay with many accesses at
+the same time, although the fix would be simpler.
 
-   The sbtsi driver in the drivers/misc/amd-sbi/ directory creates a miscdevice
+The most optimal way might be using 2 different locks for the two
+interrupts, as they happen in different lanes and don't share data.
+If that is ok, I can prepare a patch to test it on real hardware and send
+it upstream.
 
-> +/dev/sbtsi-* to let user space programs run APML TSI register xfer
-
-                                                                 transfer
-?
-
-> +commands.
-> +
-> +The driver supports both I2C and I3C transports for SB-TSI targets.
-> +The transport is selected by the bus where the device is enumerated.
-> +
-> +Misc device:
-> + * In 1P socket 0: /dev/sbtsi-4c
-> + * In 2P socket 0: /dev/sbtsi-4c, socket 1: /dev/sbtsi-48
-> +
-> +.. code-block:: bash
-> +
-> +   $ ls -al /dev/sbtsi-4c
-> +   crw-------    1 root     root       10, 116 Apr  2 05:22 /dev/sbtsi-4c
-> +
-> +
-> +Access restrictions:
-> + * Only root user is allowed to open the file.
-> + * APML TSI Register xfer access is read-write.
-
-                        transfer
-?
-
-> +
-> +SBTSI hwmon interface
-> +=====================
-[snip]
-
--- 
-~Randy
-
+Best regards,
+Javier
