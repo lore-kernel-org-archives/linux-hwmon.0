@@ -1,132 +1,133 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5457433B6E8
-	for <linux-hwmon@vger.kernel.org>; Mon, 22 Jun 2026 16:29:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E186133C19E;
+	Mon, 22 Jun 2026 16:57:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782145786; cv=none; b=X+iGXLWVdvlK2zFm/iofuAgF6TZ9oBRwhDdmeZIRZTVykE1nGugeOUkY4HSR2mtUV0lg+70tFZemh6d50kFywftRk0NlT92qruszai9MnbqQYex+WoEV15j4kqfobc2AofS/U8UOhMjLa4+tBh8a2gH9an3k08XRyZANQKvsXYU=
+	t=1782147429; cv=none; b=JHAXKoNIsztwoytK6G4cpsJhwQ7sDt5SlAMg59UdfX9oH8GI/oFYOry0cqN1PgwNKsT/hvyr5Kxoi6nFx37gGBaaytlsqxO5HJRMeSpqKqRCKIKKR5DoYX+yEFf3E1tFQXK4fMm1McaiipueZI6Krh1BywwfOQ6osMffvtPaL/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782145786; c=relaxed/simple;
-	bh=mvGpKlrwFHncD5jl964V4rj3HmMHhcnqhB2Wf1vJ2q8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=VDJ+yilospL0xjCsUfN6XP+9A8rEXpE/2NcDyYABSmXozPuKNm62hcRLk6mm23jkQbeHlOaH0AC7s1kJTVrnrMSHzb8BL29gkVx77ZDU6Mle5mvg2O0q70s8jYVv4VkzB/A9d+JfVuRW4AnWV/PUs7x4oE4xPnCwRf4cXiipwk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VSfIdpPZ; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782147429; c=relaxed/simple;
+	bh=rtkOS3wzz5t5JNfgvaBXMa2LClojRP4BcFTM7XFMAew=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aucy7YFBuySXuXAXbU1CLewO+OtJrm3iu4kl5EoQoSDY6j78+c3vToFISCW0tTCgcNx9goxWZn8N3PNNNdbjMzWcn++6EEtjVJqpm7VBiF2oI1wEPnNCWcjcnxJAwEQS9kMUniS/ItnitfQ3IStXx7HoKASlNipvH59kip66U14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=h6vXaZg3; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VSfIdpPZ"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-49222b6e871so39759395e9.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 22 Jun 2026 09:29:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782145784; x=1782750584; darn=vger.kernel.org;
-        h=in-reply-to:references:to:cc:subject:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GT4x9AYClT9t28+ozEWKPRC7uYmzULjZEqq+oeNUuIc=;
-        b=VSfIdpPZUJAkSGCIwK4lc66oUqaaZ/ASg4NFZcmPx61DCf32+U7NWWFoFMngZxdqwm
-         gzx7185jIe5oWVl8MUt67eyfEnixBWqBDulfiVs16VTs6zbOsC4XWX+B/9hwnZyr8bbd
-         kZ6FJOKn8IJQtZbgpdNaJDaZvAOiJ9GSYjQpAXQnmOqeGeUcS+DZ7nb2sBp/m2sEg+Hm
-         NqyzlQ1OMb/GljNANQXmfYJlmMqhmWFfht/k6anc7+KH9Age9wf4LQdEQpSwhCyo4kC4
-         KmlexAkrxCrD5KjVo5H/4VcmRoXsK1YIeAjfc2aVYfMs6EohRyb78dj5xGcPtiPWNool
-         4DaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782145784; x=1782750584;
-        h=in-reply-to:references:to:cc:subject:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GT4x9AYClT9t28+ozEWKPRC7uYmzULjZEqq+oeNUuIc=;
-        b=T9UcpO1g/so9Q+wLmtGOKkuIjz4Gj756arBcFSUY3Ov9PIgp9KKdGwO5rabScXcnpO
-         ZLnSbJciK/m9BDpBluHU7dmsSvpwDgmFJoNQLkMKXKWlcT+shGq5hVIJpBfupAerg1sx
-         UlLgcWcV9dw5051pH+zmgRsaf9/q2ldtDrMAvJmS7o7hvjrFy3akze881fnziXAOGWdc
-         Yxi+z2H1ISPKTNJI3hfCwRtIul+yuhSKm340kM+KHjkUqtyyyPZ3sqs9jmCn2aoYRv9X
-         iqBJ85eB56VdIGNX+K2bHYp/GGx1DCPag+PgcAitiuat14zvKzKTrdVBe/3gjcJ3VF9E
-         C2fw==
-X-Gm-Message-State: AOJu0YyRISMyXp4N2XRi3XmFLTRcpZXg7lbv9kqy1teepWZv+jZp9kEl
-	JdULeh8t6ABxR73kCcfHHBm2LceRIY+qNOJ0iP2Wvg83g4jl0OnStmDvl3Ejmaj7
-X-Gm-Gg: AfdE7cm1ZL7sE+yAJ2K8n4cIBWOYjoWBmPXYOtfG0JDT/U83t/kVCRR4M9zFzruqyKo
-	YhEnyA7AoEuBXbOXcc0zDo9RK4HI/AO+ygzdqGpvGPbzd/07KiRdO4uM1dD16dgiTAXsBEOaJtf
-	QXV9wPHaUWO3yKc8s5q0rRxvaXP2/AtNRGLgIl9bsLXEtCg2DLiTOZaRSzOMbO1spJOk3iiOOaE
-	nVuK9QN28wsQWdxGVG8oq6VENw/P1IFJUP1gCTC1UD95R7LvT34kXz0Op4JMi07tuJsInU8IQHj
-	VDoTlqXnrTqV+C76tt703ZQYvXkgUlEwQO9lm+jzJBEfLQRGwTYdVizA16AYQ8LuWZ8LDmUwWEZ
-	s2WhiYYPYFQTO3KCy+lx5uUPbwluydCkcdjAj5QtWs2sbKJ/eRJReAju4f9fVGUsQpku0Jmk5vb
-	nho09i2tvSeEqCi4H79KRMzjh1PQ==
-X-Received: by 2002:a05:600c:4fc4:b0:490:b58a:dcc1 with SMTP id 5b1f17b1804b1-49242582235mr223592595e9.29.1782145783378;
-        Mon, 22 Jun 2026 09:29:43 -0700 (PDT)
-Received: from localhost ([2001:4bb8:19f:d19a:c1d2:e9fd:1b2b:136b])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-466648c5ddbsm28998960f8f.12.2026.06.22.09.29.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Jun 2026 09:29:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="h6vXaZg3"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=rsZ0a0no8Hi5G5pDevm2EXTGdOfCsKANMAV3RQE3hCg=; b=h6vXaZg3xO8rpw8c63zx/uTt/i
+	BWjunKTvnr5Vk+IKXOExP/z1GsZxs74FSHk0bjXwh1xOT6i7d15Lqfz6kOaqM/VqTuSunBCKGpH9I
+	E+peONIyea2otP3SV7Cf2rWYXbm7COo2pRrNzIHBIgsUKCR10z0u1OKr8oQa+UEMlM8lmismE0iEZ
+	/EgAy/82lTBBbX0BNBmQ+7acMS7VKlv+PhP787Ey1daDtbrt5ScRsJSj3ziNlLhYo/rA68bjkLqhv
+	pvTX2/68yx8je5xrzNqK8DcTcwO0o2D51fUKJjq/V81vlJQJ4p68U1y43zZvA5rGwwU442LN8Q8no
+	oLTe5cOw==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wbhxL-00000005DxQ-0HdR;
+	Mon, 22 Jun 2026 16:57:07 +0000
+Message-ID: <f1e4c8f7-b3d9-46a3-b42f-710dcbcf15c0@infradead.org>
+Date: Mon, 22 Jun 2026 09:57:06 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 8/8] docs: misc: amd-sbi: Document SBTSI userspace
+ interface
+To: Akshay Gupta <Akshay.Gupta@amd.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Cc: corbet@lwn.net, skhan@linuxfoundation.org, linux@roeck-us.net,
+ arnd@arndb.de, gregkh@linuxfoundation.org, NaveenKrishna.Chatradhi@amd.com,
+ Anand.Umarji@amd.com, Prathima.Lk@amd.com
+References: <20260622135821.2190260-1-Akshay.Gupta@amd.com>
+ <20260622135821.2190260-9-Akshay.Gupta@amd.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20260622135821.2190260-9-Akshay.Gupta@amd.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 22 Jun 2026 18:29:39 +0200
-Message-Id: <DJFPYCV2FXW7.1BFG9DURPZRCC@gmail.com>
-From: "Javier Carrasco" <javier.carrasco.cruz@gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: chipcap2: Add label property
-Cc: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-doc@vger.kernel.org>
-To: "Flaviu Nistor" <flaviu.nistor@gmail.com>, "Guenter Roeck"
- <linux@roeck-us.net>, "Javier Carrasco" <javier.carrasco.cruz@gmail.com>,
- "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski"
- <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>, "Jonathan
- Corbet" <corbet@lwn.net>, "Shuah Khan" <skhan@linuxfoundation.org>
-X-Mailer: aerc 0.21.0-143-g2f3a2e260c09
-References: <20260622122200.14245-1-flaviu.nistor@gmail.com>
-In-Reply-To: <20260622122200.14245-1-flaviu.nistor@gmail.com>
+Content-Transfer-Encoding: 7bit
 
-On Mon Jun 22, 2026 at 2:21 PM CEST, Flaviu Nistor wrote:
-> Add support for an optional label property similar to other hwmon devices=
-.
-> This allows, in case of boards with multiple CHIPCAP2 sensors, to assign
-> distinct names to each instance.
->
-> Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
+
+
+On 6/22/26 6:58 AM, Akshay Gupta wrote:
+> From: Prathima <Prathima.Lk@amd.com>
+> 
+> - Document AMD sideband IOCTL description defined
+>   for SBTSI and its usage.
+>   User space C-APIs are made available by esmi_oob_library [1],
+>   which is provided by the E-SMS project [2].
+> 
+>   Link: https://github.com/amd/esmi_oob_library [1]
+>   Link: https://www.amd.com/en/developer/e-sms.html [2]
+> 
+> Include a user-space open example for /dev/sbtsi-* and list auxiliary
+> bus sysfs paths.
+> 
+> Reviewed-by: Akshay Gupta <Akshay.Gupta@amd.com>
+> Signed-off-by: Prathima <Prathima.Lk@amd.com>
 > ---
->  .../devicetree/bindings/hwmon/amphenol,chipcap2.yaml         | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/hwmon/amphenol,chipcap2.ya=
-ml b/Documentation/devicetree/bindings/hwmon/amphenol,chipcap2.yaml
-> index 17351fdbefce..f00b5a4b14dd 100644
-> --- a/Documentation/devicetree/bindings/hwmon/amphenol,chipcap2.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/amphenol,chipcap2.yaml
-> @@ -33,6 +33,10 @@ properties:
->    reg:
->      maxItems: 1
->
-> +  label:
-> +    description:
-> +      A descriptive name for this channel, like "ambient" or "psu".
+> Changes since v2:
+> - Update misc node names info as per socket
+> 
+> Changes since v1:
+> - Elaborate the document
+>  Documentation/misc-devices/amd-sbi.rst | 68 ++++++++++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+> 
+> diff --git a/Documentation/misc-devices/amd-sbi.rst b/Documentation/misc-devices/amd-sbi.rst
+> index f91ddadefe48..fbbbc504119f 100644
+> --- a/Documentation/misc-devices/amd-sbi.rst
+> +++ b/Documentation/misc-devices/amd-sbi.rst
+> @@ -48,6 +48,60 @@ Access restrictions:
+>   * APML Mailbox messages and Register xfer access are read-write,
+>   * CPUID and MCA_MSR access is read-only.
+>  
+> +SBTSI device
+> +============
 > +
->    interrupts:
->      items:
->        - description: measurement ready indicator
-> @@ -72,6 +76,7 @@ examples:
->                           <5 IRQ_TYPE_EDGE_RISING>,
->                           <6 IRQ_TYPE_EDGE_RISING>;
->              interrupt-names =3D "ready", "low", "high";
-> +            label =3D "somelabel";
->              vdd-supply =3D <&reg_vdd>;
->          };
->      };
+> +sbtsi driver under the drivers/misc/amd-sbi creates miscdevice
 
-Hello Falviu, thank you for your patch.
+   The sbtsi driver in the drivers/misc/amd-sbi/ directory creates a miscdevice
 
-Should we not add a reference to hwmon-common.yaml (with
-unevelautedProperties instead of additionalProperties), as label is
-defined there? I believe that Krzysztof Kozlowski did something similar
-for the shunt-resistor-micro-ohms property. Could we follow suit here?
+> +/dev/sbtsi-* to let user space programs run APML TSI register xfer
 
-I am also not a big fan of a name like "somelabel", and a more
-meaningful name from a "real" example would look better. I know that
-some examples have already used "somelabel" as an example, but others
-have used more meaningful names too.
+                                                                 transfer
+?
 
-Best regards,
-Javier Carrasco
+> +commands.
+> +
+> +The driver supports both I2C and I3C transports for SB-TSI targets.
+> +The transport is selected by the bus where the device is enumerated.
+> +
+> +Misc device:
+> + * In 1P socket 0: /dev/sbtsi-4c
+> + * In 2P socket 0: /dev/sbtsi-4c, socket 1: /dev/sbtsi-48
+> +
+> +.. code-block:: bash
+> +
+> +   $ ls -al /dev/sbtsi-4c
+> +   crw-------    1 root     root       10, 116 Apr  2 05:22 /dev/sbtsi-4c
+> +
+> +
+> +Access restrictions:
+> + * Only root user is allowed to open the file.
+> + * APML TSI Register xfer access is read-write.
+
+                        transfer
+?
+
+> +
+> +SBTSI hwmon interface
+> +=====================
+[snip]
+
+-- 
+~Randy
+
