@@ -1,46 +1,46 @@
-Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013011.outbound.protection.outlook.com [40.93.196.11])
+Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11012029.outbound.protection.outlook.com [40.107.200.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 135EC3B5F48;
-	Mon, 22 Jun 2026 13:59:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD9BD3B5F48;
+	Mon, 22 Jun 2026 13:59:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.200.29
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782136742; cv=fail; b=W9r81OLwxS7V767/E7Hlhsy9pyoX9UgROYXPPA236zTvMS+NVTmjPCudbJ8Kg8ynVWMBm7/Wpp6s/EDNL+BiCBjrl/YeqtA9RLvQmv2AEFIee7Sk8+poYKGpcFlfILlMnFLpqIET50jig00xx1XHw/3qQgeZ9WA8v7iPaqfIXCo=
+	t=1782136749; cv=fail; b=lHZi5FkofAZuPh+8m3uzvaQNHEvPfqBuTXCasfF8uGwK8iJMDTefnkH0yyOyU94VuyUPvszENeUlbSs/rjKvqqTePQuvowiIVrE2wdDF8wTPjSpJnBlCHx+o0q2FDFC0nvRJWVeuDH4IR6JapDvTvmn4q7d2Ljc0MdrpS+3+ubM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782136742; c=relaxed/simple;
-	bh=+PFBSNCmekxCUdNbiJQgWPlzKbMFRC9CP/BW4wMJt70=;
+	s=arc-20240116; t=1782136749; c=relaxed/simple;
+	bh=crvJDUvbMemhfIfoTkUx9Wr+i9WO4dTeVXpIY7DnTMQ=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=C9rJ3s1NosKLIbMQ89qvVvj/Iy8QeHvUiaxSpVEmuRM7iwQ4uM7iXFuzRIxFlLV3A/kVqK7K2Px3IHnQBMGbD0kpcEXlSS5uWg5pc4CY39wCcBX0SslvPmzUJ5+6omjTGXeU6GWGiw6VuViqAkxqKRXU2CRLlRhQ+IR+yRCk7lU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=OT8cKqKX; arc=fail smtp.client-ip=40.93.196.11
+	 MIME-Version:Content-Type; b=uNUcwyoTv13jhG3I7Yl4ttDmhBZuKAk4Nh3s3LTpWzFQaNv3bh0g/sKMUUB0hcRt7PfhHRGjLi3O7qnz1ce+xT5XO8SisZdqIAwZjz19YyeA1pqwXYX3iTDGV/+sVgfFfapwnmgvcltOjR2f0pqEplDNuNKNwVZILvYFqxJMD+s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=WTU+5E2E; arc=fail smtp.client-ip=40.107.200.29
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="OT8cKqKX"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="WTU+5E2E"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=PXaYQY2mph183PLWyjGzJJGRHk8ytLASggJv70eUK3Ez6wDkWhu1sWSHkDpOUhJPSHa5UHTNNM4+n1WTwZUkGiIv2neB5Fho2B5J5vB6kWbruP53bJNl3NnC/4fszIYIqjC0GiG0zkwTyBl0bByLCPVFtJ9wRE9LQpbN1Sd63tZvktgzv3kYDxqWRK1egYOGX48j9MxuYvwI56DYOWHUwUjcChMYmH6NFoPjPkCvm6nwV4sMqQWXu+HRCJuqfKDheRVJRMLfHDsSS929rG1S6jnF7b/Y+s7Jq4ek7O1d9Hrh/o160XojOfEojuyBf4e9/MROgdp8/Dg0te3DQDFEAA==
+ b=WskDOgotRid95aSTBE6HcWEUp4F180hNKCK2iXS1MPCQzWtulfXvWcmjVl6FhqI1AT/frzHD9tPmVSLPJoUsnkiDgMHzP71vGZli0hXeN2JATHuRDX10UJmWmqIZ+QrZh97QocadYKHNpxMmeDQ7XBy/jwgKh2rBbue6ntGEhMxw31viLRhyMkdgl4/NiIOCe25ZbOkwjuPgo8g8hMFFpvStzNWbGIu3YTE2gy+FpM3orMAzUaRjBny5bAsPe4XP5mrIlHRuvENzkjrayX7jvcscBQj1KaeWsjBWVjIfxb0Ioei0K3Uk9C90KDJowaOKfKQ02jce2gv972NJE9FOSg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=R7eQ5xfOtCBAdverK09YxFMMbry1u7K2YfZOSgBlo94=;
- b=F/X4NXYeEgedQLJeE++Hy55GPHSbHzpADNZRbPHFj9oFbOu+ZNfZc3t51ZViB+jyQeHV7Sis17mpi80vyZJIi8Yr5SfmBKBbzi3EBzuXhWWAt2UxcvcwuK5NgdstPOiQ01SoVEI4y/tvMbVVkfmcmQkpx4GzETu/MYRJwmeahUFDSQdjqhlWZADHz3044GSOdRB5DL2Kjudqil6LIDNg6w6GntT2TBUGwC7Q75CzAd4xC7mGJyso2CnCiO7q4luvqN8ATephF4i0l+CvRGTEIj0iGZpTUFT89u/cJkyfzupYRFZ75FvGRsZO0KSorsXXCyn8Yoa53aHJyvSV8b9CNA==
+ bh=EI/i37O7sFj74GTx0BUx1vJjH4h2N0bdcaei7Iqal2c=;
+ b=fmSQK5rd4Hb0jI+gALdBiuI2+aHvtwehNoPTNjIEyI7dAFDLxS4gVNryWOImLCEcKBAhvoPtdh80zmqowii1B5b3JCaFUK7yiQgJaYTTatI9XamQeD4IlyfhNZFMFGQHJhro32+mYkOayhoiM9raSRw6HwU7dT7nb1ACiL0G0/9kW1YDPVqXXsf4W2kmQdS6rSSvdi90LrCTQSIkv3wiFvEJLJlmuiN5Acs5+lNMmZoJEsuVqYfjQ4gSmpidZXtNkmd64bx8L6ivUqEi1MlEF4bt/cplhVpa3lQEM/bg4trmn9pkf/bXcalCKbeupfqmBDszn+J9kygHaOvlCtjaMg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R7eQ5xfOtCBAdverK09YxFMMbry1u7K2YfZOSgBlo94=;
- b=OT8cKqKXLilIr49NBiVUBS1OsTJH304AzxpJN3wXHpv6K+l5O18BMI3UGVblk72qFIkpy/q4nADy/OaTtH0pUY49iiqbTfds9zkug89A+1oTcp8h8Ov/RelrRFbElisj7qnGNiqnL/7EI4WWEO/luJ+H7/dUXTfq5LwjzagQqfE=
-Received: from SJ0PR03CA0118.namprd03.prod.outlook.com (2603:10b6:a03:333::33)
- by MN0PR12MB6368.namprd12.prod.outlook.com (2603:10b6:208:3d2::15) with
+ bh=EI/i37O7sFj74GTx0BUx1vJjH4h2N0bdcaei7Iqal2c=;
+ b=WTU+5E2EN/M3zH9nRTNLR/+p5+ioNKftK6X2Rvnr2wvSfCCSU1gLVn7yIjyVB5rYlDPfvzoaL3CElz6Isgdvqf6Ttbqzwo+OdBe8B8lDH3I3DX8NOjo9+fT9ZU0eFM1Hx6KZPog4ytyfLGjGjBCCg6GwSHz7Aiaohb866fTXiAE=
+Received: from SJ0PR03CA0119.namprd03.prod.outlook.com (2603:10b6:a03:333::34)
+ by CH3PR12MB9193.namprd12.prod.outlook.com (2603:10b6:610:195::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.139.11; Mon, 22 Jun
- 2026 13:58:56 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.139.20; Mon, 22 Jun
+ 2026 13:59:01 +0000
 Received: from MWH0EPF000C618F.namprd02.prod.outlook.com
- (2603:10b6:a03:333:cafe::18) by SJ0PR03CA0118.outlook.office365.com
- (2603:10b6:a03:333::33) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.139.11 via Frontend Transport; Mon,
- 22 Jun 2026 13:58:56 +0000
+ (2603:10b6:a03:333:cafe::82) by SJ0PR03CA0119.outlook.office365.com
+ (2603:10b6:a03:333::34) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.139.16 via Frontend Transport; Mon,
+ 22 Jun 2026 13:59:00 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -50,11 +50,11 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from satlexmb07.amd.com (165.204.84.17) by
  MWH0EPF000C618F.mail.protection.outlook.com (10.167.249.103) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.139.8 via Frontend Transport; Mon, 22 Jun 2026 13:58:55 +0000
+ 15.21.139.8 via Frontend Transport; Mon, 22 Jun 2026 13:58:59 +0000
 Received: from dcsm-trdripper1.amd.com (10.180.168.240) by satlexmb07.amd.com
  (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.41; Mon, 22 Jun
- 2026 08:58:51 -0500
+ 2026 08:58:56 -0500
 From: Akshay Gupta <Akshay.Gupta@amd.com>
 To: <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<linux-hwmon@vger.kernel.org>
@@ -62,9 +62,9 @@ CC: <corbet@lwn.net>, <skhan@linuxfoundation.org>, <linux@roeck-us.net>,
 	<arnd@arndb.de>, <gregkh@linuxfoundation.org>,
 	<NaveenKrishna.Chatradhi@amd.com>, <Anand.Umarji@amd.com>,
 	<Akshay.Gupta@amd.com>, <Prathima.Lk@amd.com>
-Subject: [PATCH v3 3/8] hwmon/misc: amd-sbi: Move sbtsi register transfer to core abstraction
-Date: Mon, 22 Jun 2026 19:28:16 +0530
-Message-ID: <20260622135821.2190260-4-Akshay.Gupta@amd.com>
+Subject: [PATCH v3 4/8] misc: amd-sbi: Consolidate Common SBTSI Probe Path for I2C and I3C
+Date: Mon, 22 Jun 2026 19:28:17 +0530
+Message-ID: <20260622135821.2190260-5-Akshay.Gupta@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260622135821.2190260-1-Akshay.Gupta@amd.com>
 References: <20260622135821.2190260-1-Akshay.Gupta@amd.com>
@@ -80,161 +80,118 @@ X-ClientProxiedBy: satlexmb07.amd.com (10.181.42.216) To satlexmb07.amd.com
  (10.181.42.216)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000C618F:EE_|MN0PR12MB6368:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7f29a4eb-40df-465c-8840-08ded0666696
+X-MS-TrafficTypeDiagnostic: MWH0EPF000C618F:EE_|CH3PR12MB9193:EE_
+X-MS-Office365-Filtering-Correlation-Id: 50c57faa-26e4-41cd-f7b6-08ded0666902
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700016|23010399003|1800799024|376014|82310400026|56012099006|11063799006|6133799003|22082099003|18002099003|3023799007;
+	BCL:0;ARA:13230040|1800799024|23010399003|376014|36860700016|82310400026|22082099003|18002099003|11063799006|56012099006|6133799003;
 X-Microsoft-Antispam-Message-Info:
-	SW+g1VOGSmHCH3cT5a40dOkQINUgc+W86iRoBoLRkXCgA+Whk+aRMcs3ghEHL0dXNi8dlTZh4kzthN/5B8VQXw/mmDwrqBoFJZ27soMLQYk8B8olgpznkOzc04/f2R8C1G+u1ERr9CRAjElj6mv4uqgSfczw1bzEbrOdcxqMBCSmZBUehFoOemJiZX1Xdhml8VbNLU5vTeAg0Oq4su/O063PN5norBg5ZuXzzrXfMaVtyBsAISTnGwANFnuu5DcNMtSsYzWBj6mNUyrChUJvThzmpWpzYLN2C90eakeIuzQnXCzPcIS1F1fyNxVCZdSfonjmOzQzdd2NY504GKl/ZtRlE6bVWnRJ+OOWLTFW5Nfq1afbdUSiA2YYZ1AQf83ZgyAKuORPeevs1sQzRJwhBHz7zHGIWpNtu8deg4iOZFuGaOMkYZkJivyrXLoqdXJNEDFWBqHsqHNWyrSNkt35eOi0T2JSVUKi/5YAmLq/pyw71fyg+yw6IrVrBJ/P21v5DPjjKX4fnhjgnN5LCHp1sbB7Rpsrr6UravnmAAhO94Yl3PjNFxJf1T2xgOlL0UZqOLPYvYGeJmKPQn+iHWsHtJMH3tNYriAnDmKKW5kh8en+e2t9GoXx80C0nM3lPWpMpU/Z0cDVLatWHR8YdAfB8XHewt33a/LF09z4B073hFTEyl02A2+0+bu1Cg7URxw0XWNLSVR+U7p/DKWpqFsyow==
+	Vqn+5R2O5ErMZ4NnKHPgMffViVsWbJrTfOBeYkMUiFjeZ1riieiXTUqyt1Vd/4kgjZ9wzp8KQJxAWuqw3m6ns7RyASwRbrm8MAsyn3BN6ZNwsNOZ3VDRo8LnlAQlWble+BiQcOKHdXBvgXs7S2+Hs5v+cSTJkWqtUm56rZHLnVZfp3lpCGIPl9PaFSZO5ThepBk8jq00vxT/0QY/MMWjx/b0CnlYCz+0qAbDwnRmpXFCeAoJk/NnKcKh4P6bUriq//Do+pfsEKlfE6apHsj9HuoSlUVIwVQRQ9nwAthHEbOzUGqC5Gxq5ddeesRuh5oELxWu2X8yNaqc1Lg0oOj6R/dqa4q5RnKCmy8qV9CSz0PxExpVPHI9ZfFEika7g48s7+OuJNbXgRua7bgKx7RzGREs9INvwzD2qxzCL5ngQ6/Izesc/Wt+KHSzXTVzKuDdPG58Z6g6N9ENeuTiSTnVA6nGH8xA6aTXCGAQR/1i/E1EiyyrAh/vCUCLWnRPtf1+ibyakdGJkgsRvvecCMbSsvoEQN+mtPJpwFL/h1yWz1/9cQ0NwgWk0D2jp+DkNLBPSPTMIfhXOZqCGPuovkcWP0ylLRJyNZ8NPei5bXCLDR+zgx3RDRgEp86L1daf8BWvC73nFw5wnIdjilEjpa4mnuVcdrrLoIh4GfdPgGgQiDHKJilgUKA8p9DbAOXYComoIWKLFGcEwr1OcTuCk68Vpw==
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(23010399003)(1800799024)(376014)(82310400026)(56012099006)(11063799006)(6133799003)(22082099003)(18002099003)(3023799007);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(23010399003)(376014)(36860700016)(82310400026)(22082099003)(18002099003)(11063799006)(56012099006)(6133799003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	EivntpF1Zwp9WzR8Uof2h41fdmc0CKsitJZG/IsiQunFbp7R4YClLVNLabvuveZ2sdkpRynKC6cmrHDgx7sget4vmnvmIMuPvE9gYK4zJUhxsXt5BNFHb61NI9Z9A/xoweav3pv7Gi4dKTRRDRlBPKwfbwSTyDCYJ1qlg7LQkMG0UZxVQzNVH7jONz8EyNv6/6Lo5DxqQrSY5Hc/cD3Aj5qgezQ0heu/zA8rdUk7QocNPhFBHiM7L/X79iFOhtao8JZDAr2LUpAnWzYLlUXrjGm00lFJE+eGf4FEQ5/somCqkBYl0dw8NxtlnU1qFvq+L3fNGR3HQsf+te+j3IUsIOiA6JY0BPyzL2JUMhPVvaSAYbYpTHgBeY1L4EQHYNvJu0n1Rx0OIGg4Ah/8dh2Cl8pop0BP8cLl51hmiAsLbzwJ42QwZ8fjFP15xbe3vxfG
+	WDpOrc7dMjGY06Y3vHqfYPl697l0B45ozHaxn/6XiG6e8NV1usWffvVXYv6lahYu1DgFL38Kn22bV8CNrdTtnBmfD2uET8Jqo08f85BRuCxj1Q+3Pw+oacrUdGnUds4VtnXEirp29Iu9zs55aoG7889qgcpQ9Asg35rV5r/PkQ6Cr3ksNwuqCn17QQ+Mrzov5kpCEPK50YGL6hfpz+F8cNxWtrLp+92C77Em7dBl1/IkgiBlHu162T/IemoiyjfY4HNEMw52sy0OA3P2JcSvP9VE0Xu4DwOPsJJg64uVRZXWSs2nBTvAKAUIhExD3oZ4QIUIYda3pRrnyjCBnUSxLUb/Wv6eK4kG3UGpV4es9pBFQrr9tw6JOXGpUAu1e22ts2JR5vI4p1U5oE78Jqs7ZVmGkNvHgE211k0xP4WcLtsFbMmSUAGTV1qfZ1f9USKp
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2026 13:58:55.8230
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2026 13:58:59.8885
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7f29a4eb-40df-465c-8840-08ded0666696
+X-MS-Exchange-CrossTenant-Network-Message-Id: 50c57faa-26e4-41cd-f7b6-08ded0666902
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	MWH0EPF000C618F.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6368
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9193
 
 From: Prathima <Prathima.Lk@amd.com>
 
-Move the I2C read/write byte operations from the sbtsi hwmon driver into
-a common sbtsi_xfer() function in tsi-core.c.
-This decouples the hwmon sensor driver from the underlying bus transport,
-preparing for I3C support in a subsequent patch.
-This patch does not introduce any functional changes. The updates are
-limited to code organization/cleanup and should not affect the runtime
-behavior of the driver
+Refactor shared probe procedures into sbtsi_probe_common() to ensure
+that I2C and I3C probes focus solely on bus-specific allocation and
+device configuration.
+The utility function reads the configuration register via sbtsi_xfer(),
+initializes ext_range_mode and read_order, assigns the driver data,
+and registers the hwmon auxiliary device.
+Utilizing sbtsi_xfer() for both buses eliminates the need to duplicate
+the I2C SMBus and I3C transfer paths within tsi.c.
 
 Reviewed-by: Akshay Gupta <Akshay.Gupta@amd.com>
 Signed-off-by: Prathima <Prathima.Lk@amd.com>
 ---
 Changes since v2:
-- Name change for header inclusion guard to misc specific 
+- New patch to refactor SBTSI common probe
 
-Changes since v1:
-- New patch
- drivers/hwmon/sbtsi_temp.c      | 17 ++++++-----------
- drivers/misc/amd-sbi/Makefile   |  2 +-
- drivers/misc/amd-sbi/tsi-core.c | 30 ++++++++++++++++++++++++++++++
- include/linux/misc/tsi.h        | 13 +++++++++++++
- 4 files changed, 50 insertions(+), 12 deletions(-)
- create mode 100644 drivers/misc/amd-sbi/tsi-core.c
+ drivers/misc/amd-sbi/tsi.c | 26 ++++++++++++++++++--------
+ include/linux/misc/tsi.h   |  2 ++
+ 2 files changed, 20 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/hwmon/sbtsi_temp.c b/drivers/hwmon/sbtsi_temp.c
-index 078f4ab25bde..d7ae986d824c 100644
---- a/drivers/hwmon/sbtsi_temp.c
-+++ b/drivers/hwmon/sbtsi_temp.c
-@@ -70,15 +70,10 @@ static int sbtsi_temp_read(struct sbtsi_data *data, u8 reg1, u8 reg2,
- {
- 	int ret;
- 
--	ret = i2c_smbus_read_byte_data(data->client, reg1);
--	if (ret < 0)
--		return ret;
--	*val1 = ret;
--	ret = i2c_smbus_read_byte_data(data->client, reg2);
--	if (ret < 0)
--		return ret;
--	*val2 = ret;
--	return 0;
-+	ret = sbtsi_xfer(data, reg1, val1, true);
-+	if (!ret)
-+		ret = sbtsi_xfer(data, reg2, val2, true);
-+	return ret;
+diff --git a/drivers/misc/amd-sbi/tsi.c b/drivers/misc/amd-sbi/tsi.c
+index dfdd730b906a..a4c7e1be5624 100644
+--- a/drivers/misc/amd-sbi/tsi.c
++++ b/drivers/misc/amd-sbi/tsi.c
+@@ -84,25 +84,35 @@ static int sbtsi_create_hwmon_adev(struct device *dev, u8 dev_addr)
+ 	return devm_add_action_or_reset(dev, sbtsi_unregister_hwmon_adev, adev);
  }
  
- /*
-@@ -89,9 +84,9 @@ static int sbtsi_temp_write(struct sbtsi_data *data, u8 reg_int, u8 reg_dec,
++static int sbtsi_probe_common(struct device *dev, struct sbtsi_data *data)
++{
++	u8 val;
++	int err;
++
++	err = sbtsi_xfer(data, SBTSI_REG_CONFIG, &val, true);
++	if (err)
++		return err;
++
++	data->ext_range_mode = FIELD_GET(BIT(SBTSI_CONFIG_EXT_RANGE_SHIFT), val);
++	data->read_order = FIELD_GET(BIT(SBTSI_CONFIG_READ_ORDER_SHIFT), val);
++
++	dev_set_drvdata(dev, data);
++	return sbtsi_create_hwmon_adev(dev, data->dev_addr);
++}
++
+ static int sbtsi_i2c_probe(struct i2c_client *client)
  {
- 	int ret;
+ 	struct device *dev = &client->dev;
+ 	struct sbtsi_data *data;
+-	int err;
  
--	ret = i2c_smbus_write_byte_data(data->client, reg_int, val_int);
-+	ret = sbtsi_xfer(data, reg_int, &val_int, false);
- 	if (!ret)
--		ret = i2c_smbus_write_byte_data(data->client, reg_dec, val_dec);
-+		ret = sbtsi_xfer(data, reg_dec, &val_dec, false);
- 	return ret;
+ 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+ 	if (!data)
+ 		return -ENOMEM;
+ 
+ 	data->client = client;
+-	err = i2c_smbus_read_byte_data(data->client, SBTSI_REG_CONFIG);
+-	if (err < 0)
+-		return err;
+-	data->ext_range_mode = FIELD_GET(BIT(SBTSI_CONFIG_EXT_RANGE_SHIFT), err);
+-	data->read_order = FIELD_GET(BIT(SBTSI_CONFIG_READ_ORDER_SHIFT), err);
++	data->dev_addr = client->addr;
+ 
+-	dev_set_drvdata(dev, data);
+-	return sbtsi_create_hwmon_adev(dev, client->addr);
++	return sbtsi_probe_common(dev, data);
  }
  
-diff --git a/drivers/misc/amd-sbi/Makefile b/drivers/misc/amd-sbi/Makefile
-index 28f95b9e204f..ce9321f5c601 100644
---- a/drivers/misc/amd-sbi/Makefile
-+++ b/drivers/misc/amd-sbi/Makefile
-@@ -3,5 +3,5 @@ sbrmi-i2c-objs  		+= rmi-i2c.o rmi-core.o
- sbrmi-i2c-$(CONFIG_AMD_SBRMI_HWMON)	+= rmi-hwmon.o
- obj-$(CONFIG_AMD_SBRMI_I2C)	+= sbrmi-i2c.o
- # SBTSI Configuration
--sbtsi-objs	+= tsi.o
-+sbtsi-objs	+= tsi.o tsi-core.o
- obj-$(CONFIG_AMD_SBTSI)	+= sbtsi.o
-diff --git a/drivers/misc/amd-sbi/tsi-core.c b/drivers/misc/amd-sbi/tsi-core.c
-new file mode 100644
-index 000000000000..6ef1831515bb
---- /dev/null
-+++ b/drivers/misc/amd-sbi/tsi-core.c
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * tsi-core.c - file defining SB-TSI protocols compliant
-+ *              AMD SoC device.
-+ *
-+ * Copyright (C) 2026 Advanced Micro Devices, Inc.
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/misc/tsi.h>
-+
-+/* I2C transfer function */
-+static int sbtsi_i2c_xfer(struct sbtsi_data *data, u8 reg, u8 *val, bool is_read)
-+{
-+	if (is_read) {
-+		int ret = i2c_smbus_read_byte_data(data->client, reg);
-+
-+		if (ret < 0)
-+			return ret;
-+		*val = ret;
-+		return 0;
-+	}
-+	return i2c_smbus_write_byte_data(data->client, reg, *val);
-+}
-+
-+int sbtsi_xfer(struct sbtsi_data *data, u8 reg, u8 *val, bool is_read)
-+{
-+	return sbtsi_i2c_xfer(data, reg, val, is_read);
-+}
-+EXPORT_SYMBOL_GPL(sbtsi_xfer);
+ static const struct i2c_device_id sbtsi_id[] = {
 diff --git a/include/linux/misc/tsi.h b/include/linux/misc/tsi.h
-index befdc2d14160..2d2709f1ff32 100644
+index 2d2709f1ff32..55ee7e42a65d 100644
 --- a/include/linux/misc/tsi.h
 +++ b/include/linux/misc/tsi.h
-@@ -31,4 +31,17 @@ struct sbtsi_data {
- #define AMD_SBTSI_ADEV		"amd-sbtsi"
- #define AMD_SBTSI_AUX_HWMON	"temp-sensor"
- 
-+/**
-+ * sbtsi_xfer - Perform a register read or write transfer on an AMD SB-TSI device.
-+ *
-+ * @data:    Pointer to the sbtsi_data structure containing the device context
-+ * @reg:     Register address to access.
-+ * @val:     Pointer to the value to read into or write from.
-+ * @is_read: If true, performs a read transfer and stores the result in @val.
-+ *           If false, performs a write transfer using the value in @val.
-+ *
-+ * Returns 0 on success, or a negative error code on failure.
-+ */
-+int sbtsi_xfer(struct sbtsi_data *data, u8 reg, u8 *val, bool is_read);
-+
- #endif /* _LINUX_MISC_TSI_H_ */
+@@ -14,11 +14,13 @@
+ /**
+  * struct sbtsi_data - driver private data for an AMD SB-TSI device
+  * @client:	underlying I2C client
++ * @dev_addr:	I2C device address, used to name the misc device node
+  * @ext_range_mode:	sensor uses extended temperature range
+  * @read_order:	if set, decimal part must be read before integer part
+  */
+ struct sbtsi_data {
+ 	struct i2c_client *client;
++	u8 dev_addr;
+ 	bool ext_range_mode;
+ 	bool read_order;
+ };
 -- 
 2.34.1
 
