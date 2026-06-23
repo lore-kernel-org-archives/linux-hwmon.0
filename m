@@ -1,162 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A64D38C2C3;
-	Tue, 23 Jun 2026 17:36:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F8830C158
+	for <linux-hwmon@vger.kernel.org>; Tue, 23 Jun 2026 17:45:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782236171; cv=none; b=fFHppYQtf+BuePB2kwjIlQGiD0r3acv62WeeXWXe9OaJWwa0yxqtA1vpmuUxsrYbJijqfK4px7HNge4Z4ouWy9C/EhteaqQPZRogIoCQfN8v2meNRbwLlklr/5YdXtDOoYF/na8Wm4+x61fiApUYR7hQEwst4MkNoeLe2nqt6ks=
+	t=1782236743; cv=none; b=r2gg93Ody7XkIpYkgo7blq6AS9yqAVeN2qIujXBkxPL9Yb39rd4+e/luXkIkP0UGJq2Va8bS33ClnsdT1fZIaOMDdp0gj2hiWupu6bdm1GWz/8hQQ8rhoNmrg/KrpJobrHh96SlN0Ezhm7HY6kHUHCcERubLRmQdtKJL0aRRgSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782236171; c=relaxed/simple;
-	bh=y1qJtc7ng0dCOWVbMwEhMDR6b3x8Nv5erfwUmiM2oWA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MEVZBjAw5xxoZtU2BaBTSxPOpOfAW7ATNnyPYgJWbhxywUxf+3fMO+uFiB6fjsnufhEmIM6O9PjZCKN/c9BNcG3tGjMbDlscermjF9VcnshnKL0tsXQ8NnuyyGy6nUyLx9Ti2Y/TPGRI5qtE1uIkzFO6edC8jfc5JCl7oxzSxAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UbZp2Md/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782236743; c=relaxed/simple;
+	bh=Y/TrHXqYhN6giqN4nIX4vTAAckNg4SJe7VnJ/4idkNk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bWDfbc397ouKPset1OiSj7aeSABK/qqOrshF7bkXdXJrUxaBWNfCelazwRnPkLewXbW7kTHWYKzb1FEa0E8vzvUKLnmb6nDnSxXMNBI/ALaaAYUmZZegolAhv/loaZ2M8znZGJqHxciiUVAjCPSP5C9CzEl+ptYhWJJTorwvjRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YabTfO8R; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UbZp2Md/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9D611F000E9;
-	Tue, 23 Jun 2026 17:36:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782236170;
-	bh=qi/jSwvOEDOKKa14c7iFr4Cmv7LaMJ54Xw33KCqa6os=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=UbZp2Md/QsJASeGKrBovcPDcCCYLG8px709WAnSRLfE7DEbiYZiWp/Q9VEnSb5r6q
-	 GVpQqBP/L2ZDWWVp5m3EVuxVZCxVCGp7fkTEbpbU+NrS7J6gDV3C/7W0SCLcmp6jb3
-	 5gOj+yx8SCPLVOfDENBtCmEas/VSbrrIeassoWT6TN8iR0GdSgTrL8Gwqk1aWXYY0D
-	 dd6RxdoRf0st3Ofj0IMZmWV1TLBM6Qm9nNkaH9Zaad6R7UoLKPjnnq+uTn2/9OZalx
-	 B0OuP5axqT/iX5HPgJKrRBlboQ8X1svEbIxE+iKmGp38YhR53RKpkc48dyUhK/6/dl
-	 IW07PMKNmLJBw==
-Date: Tue, 23 Jun 2026 18:36:06 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Selvamani.Rajagopal@onsemi.com
-Cc: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/3] dt-bindings: hwmon: pmbus: Support for onsemi's
- FD5121
-Message-ID: <20260623-anybody-gutter-e6ca04f53bdb@spud>
-References: <20260622-support-fd5121-from-onsemi-v1-0-b31767689c65@onsemi.com>
- <20260622-support-fd5121-from-onsemi-v1-2-b31767689c65@onsemi.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YabTfO8R"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4908b92904fso1998205e9.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 23 Jun 2026 10:45:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782236739; x=1782841539; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=whIEu6zBxCHV6H/RXHReQNaO8uDBn39hRq+aalCpQ+E=;
+        b=YabTfO8RA2Ueo9yfU5O0SoOF4m+k5HyvEkGsPE2KhncK+nnkVj+l3FDRLVt++2nkPu
+         Vgid4K4qbRFvr5vM2rjlacgC9lfhLEN5/v+uYnul72qua8o3jBGES9YW0W+PPbd6q+nf
+         iol2KQ9+P+/88cMbvYrWWJbbwm1MKJcaCtYUuugvsp3YEeZqq2rG96L59miocRIlYJ+Q
+         fy8kZGNv2Obv2keCx98YBRb3m/KcmbhEvauoMApiHKO7m9Wu6fP01VRkFjzUtiZgGddp
+         Xg5kgdjkrbXomEkuuxTcgjuD5k39qoYwGsh5PTsgZc0hPv0wGcKO1o72THTHoAOFlELf
+         ozYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782236739; x=1782841539;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=whIEu6zBxCHV6H/RXHReQNaO8uDBn39hRq+aalCpQ+E=;
+        b=NAU6bsNG55Ccm8iqqpgqI9Q+t8emT5VCJcQImU4r/DCAEol+zsfrA6PRa6NbkY/o2N
+         e95MuOWGno2iWCLNqPSNfJ74XcM5W55oJZ1GHxj0IjoUaMCPpv5+cDGzpYGUGX+k2N5u
+         uiF7uzOdlVbE8XO2X++BXF7gspslkBhx7qk/1eohrN4xdgpRktPOhqOsJOxWzTVKshFM
+         12oNV6tZF03bdlXRyfMpepXHfjXwzth2e+mA3Ev2tceVz1gfwJjLCAxOUAWQH6JrXpWB
+         QcaGHZw188o791uBKIr6tysVXjcS9Jk3rDL4BJpmwzcJD6s55RiV/3gsDFpj1xxoXs5A
+         YJow==
+X-Forwarded-Encrypted: i=1; AFNElJ80Ap1dI3XY9CQvahi32S+St72QjDcvI+Se3i/9lOfnWGmGifpK+kmHI9Wp520uf1YNzQB6kXNj4h0RVg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxyoF5I3H59zKL0PBB/wv8GsH4zO9Uzkobgn/Id461pnzIFDu9y
+	/Bq96wSgebhgVQkX1OnupSGUwZId3UQE4j8CMo8yzksdSvjhS77XFp+h
+X-Gm-Gg: AfdE7ck6WB11c7S2OgHrjzdfZrAl8gHTx1GpWs+xqHqDjQHfUibQhD4lHNHkS1Dp2NE
+	HP2HnVsxFl43DdXsQO4CbYNZvxE6ZUMBIDZK300LJI4P9RtHA0+GO2jPhOSixhptuCJt6ld37I5
+	4v0e4Fat7TnKfwhqYbc50t0S7gDzos7G4rDH02W/oOcb5W/N7Llx+H2V106d2LXtT+ewqTvNagN
+	wAgSxmFjyEO5PlgbOpq89GkFTVu/fyOt7AjYzH+Qv9WU+vlTdkgeGPlGHETcyFrJkDAYyHiN6xm
+	9jjN9GgBvNXTcwWh/iSU0IifvGST/QWdZWxC9Vwkay9/jbeNiLM7YZoOd5jXMRYsvD7rol589ik
+	tCitzuBco76Uo8FVIM/N+iSPEy7/nBPejJ5Kdg7P1B7jkPG2ht96RNvHd4NUApspOHbqWTsP6qN
+	ZManCcuebrnngCjqj6uXQ7T9InKyi/goifeIGwJ68nLC2PMXzGt6gMWVwV8Ik56obny9lioZ0r9
+	n2X6Z7e
+X-Received: by 2002:a05:600c:6207:b0:492:523f:a3df with SMTP id 5b1f17b1804b1-4925b34a37fmr62017935e9.5.1782236739046;
+        Tue, 23 Jun 2026 10:45:39 -0700 (PDT)
+Received: from [10.128.11.131] (195-23-151-163.net.novis.pt. [195.23.151.163])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4923fe7b9e5sm377581445e9.10.2026.06.23.10.45.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Jun 2026 10:45:38 -0700 (PDT)
+Sender: Julian Braha <julian.braha@gmail.com>
+Message-ID: <458e0f2f-9997-42b5-8f43-68799ff9d4e7@gmail.com>
+Date: Tue, 23 Jun 2026 18:45:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="nNUv3Ue/fcUdZ8T0"
-Content-Disposition: inline
-In-Reply-To: <20260622-support-fd5121-from-onsemi-v1-2-b31767689c65@onsemi.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/8] hwmon/misc: amd-sbi: Move core sbtsi support from
+ hwmon to misc
+To: Akshay Gupta <Akshay.Gupta@amd.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Cc: corbet@lwn.net, skhan@linuxfoundation.org, linux@roeck-us.net,
+ arnd@arndb.de, gregkh@linuxfoundation.org, NaveenKrishna.Chatradhi@amd.com,
+ Anand.Umarji@amd.com, Prathima.Lk@amd.com
+References: <20260622135821.2190260-1-Akshay.Gupta@amd.com>
+ <20260622135821.2190260-2-Akshay.Gupta@amd.com>
+Content-Language: en-US
+From: Julian Braha <julianbraha@gmail.com>
+In-Reply-To: <20260622135821.2190260-2-Akshay.Gupta@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+Hi Akshay,
 
---nNUv3Ue/fcUdZ8T0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 6/22/26 14:58, Akshay Gupta wrote:
 
-On Mon, Jun 22, 2026 at 10:55:38PM -0700, Selvamani Rajagopal via B4 Relay =
-wrote:
-> From: Selvamani Rajagopal <Selvamani.Rajagopal@onsemi.com>
->=20
-> Add devicetree schema for onsemi FD5121, FD5123, and
-> FD5125 dual rail, multi-phase digital controllers.
->=20
-> Signed-off-by: Selvamani Rajagopal <Selvamani.Rajagopal@onsemi.com>
-> ---
->  .../bindings/hwmon/pmbus/onnn,fd5121.yaml          | 41 ++++++++++++++++=
-++++++
->  1 file changed, 41 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/onnn,fd5121.ya=
-ml b/Documentation/devicetree/bindings/hwmon/pmbus/onnn,fd5121.yaml
-> new file mode 100644
-> index 000000000000..b0453b0634f0
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/onnn,fd5121.yaml
-> @@ -0,0 +1,41 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/pmbus/onnn,fd5121.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index e4c4f2b09732..8f204cf49b6e 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1963,7 +1963,7 @@ config SENSORS_SL28CPLD
+>  
+>  config SENSORS_SBTSI
+>  	tristate "Emulated SB-TSI temperature sensor"
+> -	depends on I2C
+> +	select AMD_SBTSI
+>  	help
+>  	  If you say yes here you get support for emulated temperature
+>  	  sensors on AMD SoCs with SB-TSI interface connected to a BMC device.
+
+> diff --git a/drivers/misc/amd-sbi/Kconfig b/drivers/misc/amd-sbi/Kconfig
+> index 30e7fad7356c..512251690e0e 100644
+> --- a/drivers/misc/amd-sbi/Kconfig
+> +++ b/drivers/misc/amd-sbi/Kconfig
+> @@ -20,3 +20,16 @@ config AMD_SBRMI_HWMON
+>  	  This provides support for RMI device hardware monitoring. If enabled,
+>  	  a hardware monitoring device will be created for each socket in
+>  	  the system.
 > +
-> +title: onsemi's multi-phase digital controllers
-
-Can someone explain to me what a "digital controller" actually is?
-Seems very generi and that a word may have been left out, were it not
-for the fact that this wording is used several times in the patch.
-
+> +config AMD_SBTSI
+> +	tristate "AMD side band TSI support"
+> +	depends on I2C
+> +	depends on ARM || ARM64 || COMPILE_TEST
+> +	select AUXILIARY_BUS
+> +	help
+> +	  Enables support for the AMD SB-TSI (Side Band Temperature Sensor
+> +	  Interface) driver, which provides access to emulated CPU temperature
+> +	  sensors on AMD SoCs via an I2C connected BMC device.
 > +
-> +maintainers:
-> +  - Selvamani Rajagopal <selvamani.rajagopal@onsemi.com>
-> +
-> +description:
-> +  onsemi multi-phase digital controllers with PMBus.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - onnn,fd5121
-> +      - onnn,fd5123
-> +      - onnn,fd5125
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called sbtsi.
 
-Your /OF/ match data in your driver suggests that you intended to permit
-fallback compatibles here?
+Your kconfig changes introduce an unmet dependency bug. When I enable
+SENSORS_SBTSI without enabling COMPILE_TEST on x86, I get this:
 
-|+#ifdef CONFIG_OF
-|+static const struct of_device_id fd5121_of_match[] =3D {
-|+       { .compatible =3D "onnn,fd5121" },
-|+       { }
-|+};
-|+MODULE_DEVICE_TABLE(of, fd5121_of_match);
-|+#endif
+WARNING: unmet direct dependencies detected for AMD_SBTSI
+  Depends on [n]: I2C [=y] && (ARM || ARM64 || COMPILE_TEST [=n])
+  Selected by [y]:
+  - SENSORS_SBTSI [=y] && HWMON [=y]
 
-pw-bot: changes-requested
+- Julian Braha
 
-Cheers,
-Conor.
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +      #address-cells =3D <1>;
-> +      #size-cells =3D <0>;
-> +
-> +      fd5121@50 {
-> +        compatible =3D "onnn,fd5121";
-> +        reg =3D <0x50>;
-> +      };
-> +    };
->=20
-> --=20
-> 2.43.0
->=20
->=20
->=20
-
---nNUv3Ue/fcUdZ8T0
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCajrEBQAKCRB4tDGHoIJi
-0hHeAP4oKgrpS2qCVz/7ODVGFkKjS9WeVrY9WRU2VoFRwu94LAD/cWvC5fHHab1e
-08TsiaHzIQKJUchGnnu1pP0VNTlNvwQ=
-=+IXw
------END PGP SIGNATURE-----
-
---nNUv3Ue/fcUdZ8T0--
