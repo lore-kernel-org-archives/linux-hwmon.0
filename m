@@ -1,128 +1,162 @@
-Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4519F2E7386;
-	Tue, 23 Jun 2026 07:24:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A64D38C2C3;
+	Tue, 23 Jun 2026 17:36:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782199490; cv=none; b=rqgd1aYLDSG4Esyx6hXfJA7OBMOpoPoIyDS03GLPdkhuDQrzqjVDz5vI0an0SmZSW1wgJ+Hjej7E4mbSyATC+5azlzid48kx2hSx9LCLIUfzu09OH3ADRsMgiNbbi8egrYUpSVRPkJ/ucNhaQ5eBL02HtLU66i9cI4taguwKMVQ=
+	t=1782236171; cv=none; b=fFHppYQtf+BuePB2kwjIlQGiD0r3acv62WeeXWXe9OaJWwa0yxqtA1vpmuUxsrYbJijqfK4px7HNge4Z4ouWy9C/EhteaqQPZRogIoCQfN8v2meNRbwLlklr/5YdXtDOoYF/na8Wm4+x61fiApUYR7hQEwst4MkNoeLe2nqt6ks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782199490; c=relaxed/simple;
-	bh=dwOAONM4VSkVjAb5ai7ToI6VLipoy3Y2BDmxfiEC13o=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=m4LLbJoPcmAXfkDXUYavmhkeRpIGxr7igsWWVe5iHWsOGwPLOzkhyfBFffKS12ySDSM4Jd6+KW6fsugzfJFDbVUlCwGK5+1KkNNumLzyWyzCibV5c9OqbsZ3xV52dexI0Gy7OwJAIVe7lAiDdjvU3OIddyC9y8WJ71aVwdW4kc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=209.97.182.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
-Received: from hehuan1$eswincomputing.com ( [10.12.96.103] ) by
- ajax-webmail-app2 (Coremail) ; Tue, 23 Jun 2026 15:24:31 +0800 (GMT+08:00)
-Date: Tue, 23 Jun 2026 15:24:31 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: "Huan He" <hehuan1@eswincomputing.com>
-To: "Guenter Roeck" <linux@roeck-us.net>
-Cc: sashiko-reviews@lists.linux.dev, robh@kernel.org,
-	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	conor+dt@kernel.org
-Subject: Re: Re: [PATCH v7 2/2] hwmon: Add Eswin EIC7700 PVT sensor driver
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.2-cmXT6 build
- 20241203(6b039d88) Copyright (c) 2002-2026 www.mailtech.cn
- mispb-72143050-eaf5-4703-89e0-86624513b4ce-eswincomputing.com
-In-Reply-To: <2d1ae3b5-bc52-4043-9090-a78f30390024@roeck-us.net>
-References: <20260611090639.777-1-hehuan1@eswincomputing.com>
- <20260611091748.A6EAC1F00898@smtp.kernel.org>
- <2d1ae3b5-bc52-4043-9090-a78f30390024@roeck-us.net>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	s=arc-20240116; t=1782236171; c=relaxed/simple;
+	bh=y1qJtc7ng0dCOWVbMwEhMDR6b3x8Nv5erfwUmiM2oWA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MEVZBjAw5xxoZtU2BaBTSxPOpOfAW7ATNnyPYgJWbhxywUxf+3fMO+uFiB6fjsnufhEmIM6O9PjZCKN/c9BNcG3tGjMbDlscermjF9VcnshnKL0tsXQ8NnuyyGy6nUyLx9Ti2Y/TPGRI5qtE1uIkzFO6edC8jfc5JCl7oxzSxAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UbZp2Md/; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UbZp2Md/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9D611F000E9;
+	Tue, 23 Jun 2026 17:36:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782236170;
+	bh=qi/jSwvOEDOKKa14c7iFr4Cmv7LaMJ54Xw33KCqa6os=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=UbZp2Md/QsJASeGKrBovcPDcCCYLG8px709WAnSRLfE7DEbiYZiWp/Q9VEnSb5r6q
+	 GVpQqBP/L2ZDWWVp5m3EVuxVZCxVCGp7fkTEbpbU+NrS7J6gDV3C/7W0SCLcmp6jb3
+	 5gOj+yx8SCPLVOfDENBtCmEas/VSbrrIeassoWT6TN8iR0GdSgTrL8Gwqk1aWXYY0D
+	 dd6RxdoRf0st3Ofj0IMZmWV1TLBM6Qm9nNkaH9Zaad6R7UoLKPjnnq+uTn2/9OZalx
+	 B0OuP5axqT/iX5HPgJKrRBlboQ8X1svEbIxE+iKmGp38YhR53RKpkc48dyUhK/6/dl
+	 IW07PMKNmLJBw==
+Date: Tue, 23 Jun 2026 18:36:06 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Selvamani.Rajagopal@onsemi.com
+Cc: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: hwmon: pmbus: Support for onsemi's
+ FD5121
+Message-ID: <20260623-anybody-gutter-e6ca04f53bdb@spud>
+References: <20260622-support-fd5121-from-onsemi-v1-0-b31767689c65@onsemi.com>
+ <20260622-support-fd5121-from-onsemi-v1-2-b31767689c65@onsemi.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <1a34da2b.799b.19ef35dcc08.Coremail.hehuan1@eswincomputing.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:TQJkCgAnPqGvNDpq9XstAA--.8269W
-X-CM-SenderInfo: 5khk3tzqr6v25zlqu0xpsx3x1qjou0bp/1tbiAQEHCmo5Y6MvMQAA
-	sA
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="nNUv3Ue/fcUdZ8T0"
+Content-Disposition: inline
+In-Reply-To: <20260622-support-fd5121-from-onsemi-v1-2-b31767689c65@onsemi.com>
 
-SGkgU2FzaGlrbywgR3VlbnRlciwKClRoYW5rIHlvdSB2ZXJ5IG11Y2ggZm9yIHlvdXIgZGV0YWls
-ZWQgcmV2aWV3LiBXZSBhcHByZWNpYXRlIHRoZSBmZWVkYmFjay4KCj4gCj4gT24gNi8xMS8yNiAw
-MjoxNywgc2FzaGlrby1ib3RAa2VybmVsLm9yZyB3cm90ZToKPiA+IFRoYW5rIHlvdSBmb3IgeW91
-ciBjb250cmlidXRpb24hIFNhc2hpa28gQUkgcmV2aWV3IGZvdW5kIDIgcG90ZW50aWFsIGlzc3Vl
-KHMpIHRvIGNvbnNpZGVyOgo+ID4gLSBbSGlnaF0gVGhlIElSUSBpcyByZXF1ZXN0ZWQgYmVmb3Jl
-IHRoZSBQTSBydW50aW1lIGNsZWFudXAgYWN0aW9uIGlzIHJlZ2lzdGVyZWQsIGxlYWRpbmcgdG8g
-YSBwb3NzaWJsZSB1c2UtYWZ0ZXItZGlzYWJsZSBvZiB0aGUgaGFyZHdhcmUgY2xvY2sgaW4gdGhl
-IElTUiBvbiBkcml2ZXIgcmVtb3ZhbC4KPiA+IC0gW01lZGl1bV0gVGhlIGludGVycnVwdCBoYW5k
-bGVyIGBlaWM3NzAwX3B2dF9oYXJkX2lzcmAgZG9lcyBub3QgY2hlY2sgdGhlIGhhcmR3YXJlIGlu
-dGVycnVwdCBzdGF0dXMgYml0IHRvIHZlcmlmeSBpZiB0aGUgZGV2aWNlIGFjdHVhbGx5IGdlbmVy
-YXRlZCB0aGUgaW50ZXJydXB0Lgo+ID4gLS0KPiA+IAo+ID4gY29tbWl0IDBmNGM4YWVmYjgzNzgw
-ZWUwOTY1MjYzOWViMjg0M2YwMWMyYmFmMzgKPiA+IEF1dGhvcjogSHVhbiBIZSA8aGVodWFuMUBl
-c3dpbmNvbXB1dGluZy5jb20+Cj4gPiAKPiA+IGh3bW9uOiBBZGQgRXN3aW4gRUlDNzcwMCBQVlQg
-c2Vuc29yIGRyaXZlcgo+ID4gCj4gPiBBZGQgc3VwcG9ydCBmb3IgRVNXSU4gRUlDNzcwMCBWb2x0
-YWdlIGFuZCBUZW1wZXJhdHVyZSBzZW5zb3IuIFRoZSBkcml2ZXIKPiA+IHN1cHBvcnRzIHRlbXBl
-cmF0dXJlIGFuZCB2b2x0YWdlIG1vbml0b3Jpbmcgd2l0aCBwb2x5bm9taWFsIGNvbnZlcnNpb24s
-Cj4gPiBhbmQgcHJvdmlkZXMgc3lzZnMgaW50ZXJmYWNlIGZvciBzZW5zb3IgZGF0YSBhY2Nlc3Mu
-Cj4gPiAKPiA+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9od21vbi9laWM3NzAwLXB2dC5jIGIvZHJp
-dmVycy9od21vbi9laWM3NzAwLXB2dC5jCj4gPj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiA+PiBp
-bmRleCAwMDAwMDAwMDAwMDAwLi4zYjNhZWQ3NGMzOTQxCj4gPj4gLS0tIC9kZXYvbnVsbAo+ID4+
-ICsrKyBiL2RyaXZlcnMvaHdtb24vZWljNzcwMC1wdnQuYwo+ID4gCj4gPiBbIC4uLiBdCj4gPiAK
-PiA+PiArc3RhdGljIGlycXJldHVybl90IGVpYzc3MDBfcHZ0X2hhcmRfaXNyKGludCBpcnEsIHZv
-aWQgKmRhdGEpCj4gPj4gK3sKPiA+PiArCXN0cnVjdCBwdnRfaHdtb24gKnB2dCA9IGRhdGE7Cj4g
-Pj4gKwlpbnQgYWN0aXZlOwo+ID4+ICsJdTMyIHZhbDsKPiA+PiArCj4gPj4gKwlpZiAoSVNfRU5B
-QkxFRChDT05GSUdfUE0pKSB7Cj4gPj4gKwkJYWN0aXZlID0gcG1fcnVudGltZV9nZXRfaWZfYWN0
-aXZlKHB2dC0+ZGV2KTsKPiA+PiArCQlpZiAoYWN0aXZlIDw9IDApCj4gPj4gKwkJCXJldHVybiBJ
-UlFfTk9ORTsKPiA+PiArCX0KPiA+PiArCj4gPj4gKwllaWM3NzAwX3B2dF91cGRhdGUocHZ0LT5y
-ZWdzICsgUFZUX0lOVCwgUFZUX0lOVF9DTFIsIFBWVF9JTlRfQ0xSKTsKPiA+PiArCS8qCj4gPj4g
-KwkgKiBSZWFkIHRoZSBkYXRhLCB1cGRhdGUgdGhlIGNhY2hlIGFuZCBub3RpZnkgYSB3YWl0ZXIg
-b2YgdGhpcyBldmVudC4KPiA+PiArCSAqLwo+ID4+ICsJdmFsID0gcmVhZGwocHZ0LT5yZWdzICsg
-UFZUX0RBVEEpOwo+ID4+ICsJV1JJVEVfT05DRShwdnQtPmRhdGFfY2FjaGUsIEZJRUxEX0dFVChQ
-VlRfREFUQV9PVVQsIHZhbCkpOwo+ID4+ICsJY29tcGxldGUoJnB2dC0+Y29udmVyc2lvbik7Cj4g
-PiAKPiA+IFtTZXZlcml0eTogTWVkaXVtXQo+ID4gRG9lcyB0aGlzIHVuY29uZGl0aW9uYWxseSBw
-cm9jZXNzIHRoZSBpbnRlcnJ1cHQgd2l0aG91dCBjaGVja2luZyBpZiB0aGUgZGV2aWNlCj4gPiBh
-Y3R1YWxseSBnZW5lcmF0ZWQgaXQ/Cj4gPiAKPiA+IElmIGEgc3B1cmlvdXMgaW50ZXJydXB0IG9j
-Y3VycywgdGhlIElTUiB3aWxsIHByZW1hdHVyZWx5IGNsZWFyIHRoZSBpbnRlcnJ1cHQsCj4gPiBy
-ZWFkIHdoYXRldmVyIHN0YWxlIHZhbHVlIGlzIGluIFBWVF9EQVRBLCBhbmQgY2FsbCBjb21wbGV0
-ZSgmcHZ0LT5jb252ZXJzaW9uKS4KPiA+IFRoaXMgd2lsbCBjYXVzZSB0aGUgd2FpdGluZyB0aHJl
-YWQgaW4gZWljNzcwMF9wdnRfcmVhZF9kYXRhKCkgdG8gd2FrZSB1cCBlYXJseQo+ID4gYW5kIHJl
-dHVybiBzdGFsZSBvciBnYXJiYWdlIGRhdGEgdG8gdXNlcnNwYWNlLgo+ID4gCj4gPiBTaG91bGQg
-dGhlIElTUiByZWFkIHRoZSBzdGF0dXMgcmVnaXN0ZXIgYW5kIHJldHVybiBJUlFfTk9ORSBpZiBp
-dHMgZGV2aWNlIGRpZAo+ID4gbm90IGFzc2VydCB0aGUgaW50ZXJydXB0PwoKSSB3aWxsIG1vZGlm
-eSB0aGUgSVNSIHRvIHJlYWQgUFZUX0lOVCBmaXJzdCBhbmQgcmV0dXJuIElSUV9OT05FIHdoZW4K
-UFZUX0lOVF9TVEFUIGlzIG5vdCBzZXQuCgo+ID4gCj4gPiBbIC4uLiBdCj4gPiAKPiA+PiArCXJl
-dCA9IGVpYzc3MDBfcHZ0X3JlcXVlc3RfaXJxKHB2dCk7Cj4gPj4gKwlpZiAocmV0KSB7Cj4gPj4g
-KwkJaWYgKCFJU19FTkFCTEVEKENPTkZJR19QTSkpCj4gPj4gKwkJCWNsa19kaXNhYmxlX3VucHJl
-cGFyZShwdnQtPmNsayk7Cj4gPj4gKwkJcmV0dXJuIHJldDsKPiA+PiArCX0KPiA+PiArCj4gPj4g
-KwlwbV9ydW50aW1lX2VuYWJsZSgmcGRldi0+ZGV2KTsKPiA+PiArCXBtX3J1bnRpbWVfc2V0X2F1
-dG9zdXNwZW5kX2RlbGF5KCZwZGV2LT5kZXYsIDMwMDApOwo+ID4+ICsJcG1fcnVudGltZV91c2Vf
-YXV0b3N1c3BlbmQoJnBkZXYtPmRldik7Cj4gPj4gKwlwbV9ydW50aW1lX2dldF9ub3Jlc3VtZSgm
-cGRldi0+ZGV2KTsKPiA+PiArCj4gPj4gKwlyZXQgPSBkZXZtX2FkZF9hY3Rpb25fb3JfcmVzZXQo
-cHZ0LT5kZXYsIGVpYzc3MDBfcHZ0X2Rpc2FibGVfcG1fcnVudGltZSwKPiA+PiArCQkJCSAgICAg
-ICBwdnQpOwo+ID4gCj4gPiBbU2V2ZXJpdHk6IEhpZ2hdCj4gPiBDYW4gdGhpcyBkZXZyZXMgc2V0
-dXAgbGVhZCB0byBhY2Nlc3NpbmcgdW5jbG9ja2VkIHJlZ2lzdGVycyBkdXJpbmcgZGV2aWNlCj4g
-PiByZW1vdmFsPwo+ID4gCj4gPiBCZWNhdXNlIGRldnJlcyBleGVjdXRlcyB0ZWFyZG93biBjYWxs
-YmFja3MgaW4gcmV2ZXJzZSBvcmRlciBvZiB0aGVpcgo+ID4gcmVnaXN0cmF0aW9uLCBlaWM3NzAw
-X3B2dF9kaXNhYmxlX3BtX3J1bnRpbWUoKSB3aWxsIHJ1biBiZWZvcmUgdGhlIElSUQo+ID4gaXMg
-ZnJlZWQgYnkgZGV2bV9yZXF1ZXN0X3RocmVhZGVkX2lycSgpJ3MgdGVhcmRvd24uCj4gPiAKPiA+
-IER1cmluZyByZW1vdmFsLCBlaWM3NzAwX3B2dF9kaXNhYmxlX3BtX3J1bnRpbWUoKSBkaXNhYmxl
-cyB0aGUgY2xvY2s6Cj4gPiAKPiA+IGVpYzc3MDBfcHZ0X2Rpc2FibGVfcG1fcnVudGltZSgpIHsK
-PiA+ICAgICAgLi4uCj4gPiAgICAgIGlmICghcG1fcnVudGltZV9zdGF0dXNfc3VzcGVuZGVkKHB2
-dC0+ZGV2KSkgewo+ID4gICAgICAgICAgY2xrX2Rpc2FibGVfdW5wcmVwYXJlKHB2dC0+Y2xrKTsK
-PiA+ICAgICAgICAgIHBtX3J1bnRpbWVfc2V0X3N1c3BlbmRlZChwdnQtPmRldik7Cj4gPiAgICAg
-IH0KPiA+IH0KPiA+IAo+ID4gSWYgYW4gaW50ZXJydXB0IGZpcmVzIGNvbmN1cnJlbnRseSBhbmQg
-dGhlIElTUiBleGVjdXRlcyBwYXN0IHRoZQo+ID4gcG1fcnVudGltZV9nZXRfaWZfYWN0aXZlKCkg
-Y2hlY2sgYmVmb3JlIHRoZSBjbG9jayBpcyBkaXNhYmxlZCwgdGhlIElTUgo+ID4gd2lsbCBhdHRl
-bXB0IHRvIGFjY2VzcyBoYXJkd2FyZSByZWdpc3RlcnMgd2hpbGUgdW5jbG9ja2VkLCB3aGljaCBj
-YW4gbGVhZAo+ID4gdG8gYW4gZXh0ZXJuYWwgYWJvcnQgb3Iga2VybmVsIHBhbmljOgo+ID4gCj4g
-PiBlaWM3NzAwX3B2dF9oYXJkX2lzcigpIHsKPiA+ICAgICAgLi4uCj4gPiAgICAgIGVpYzc3MDBf
-cHZ0X3VwZGF0ZShwdnQtPnJlZ3MgKyBQVlRfSU5ULCAuLi4pOwo+ID4gfQo+ID4gCj4gPiBTaG91
-bGQgdGhlIFBNIHJ1bnRpbWUgY2xlYW51cCBhY3Rpb24gYmUgcmVnaXN0ZXJlZCBiZWZvcmUgdGhl
-IElSUSBpcyByZXF1ZXN0ZWQ/Cj4gPiAKCkkgd2lsbCBtb2RpZnkgdGhlIHByb2JlIHNlcXVlbmNl
-IHRvIHJlZ2lzdGVyIHRoZSBQTSBydW50aW1lIGNsZWFudXAgYWN0aW9uCmJlZm9yZSByZXF1ZXN0
-aW5nIHRoZSBJUlEuCgpCZXN0IHJlZ2FyZHMsCkh1YW4gSGUKCj4gCj4gSWYgbm90IHNvbHZlZCwg
-dGhlc2UgcXVlc3Rpb25zIHdpbGwgYXQgbGVhc3QgaGF2ZSB0byBiZSBhbnN3ZXJlZC4KPiAKPiBU
-aGFua3MsCj4gR3VlbnRlcgo+IAo+ID4+ICsJaWYgKHJldCkgewo+ID4+ICsJCXBtX3J1bnRpbWVf
-cHV0X25vaWRsZSgmcGRldi0+ZGV2KTsKPiA+PiArCQlyZXR1cm4gZGV2X2Vycl9wcm9iZSgmcGRl
-di0+ZGV2LCByZXQsCj4gPj4gKwkJCQkgICAgICJDYW4ndCByZWdpc3RlciBQTSBjbGVhbnVwXG4i
-KTsKPiA+PiArCX0KPiA+IAo=
+
+--nNUv3Ue/fcUdZ8T0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Jun 22, 2026 at 10:55:38PM -0700, Selvamani Rajagopal via B4 Relay =
+wrote:
+> From: Selvamani Rajagopal <Selvamani.Rajagopal@onsemi.com>
+>=20
+> Add devicetree schema for onsemi FD5121, FD5123, and
+> FD5125 dual rail, multi-phase digital controllers.
+>=20
+> Signed-off-by: Selvamani Rajagopal <Selvamani.Rajagopal@onsemi.com>
+> ---
+>  .../bindings/hwmon/pmbus/onnn,fd5121.yaml          | 41 ++++++++++++++++=
+++++++
+>  1 file changed, 41 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/onnn,fd5121.ya=
+ml b/Documentation/devicetree/bindings/hwmon/pmbus/onnn,fd5121.yaml
+> new file mode 100644
+> index 000000000000..b0453b0634f0
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/onnn,fd5121.yaml
+> @@ -0,0 +1,41 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/pmbus/onnn,fd5121.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: onsemi's multi-phase digital controllers
+
+Can someone explain to me what a "digital controller" actually is?
+Seems very generi and that a word may have been left out, were it not
+for the fact that this wording is used several times in the patch.
+
+> +
+> +maintainers:
+> +  - Selvamani Rajagopal <selvamani.rajagopal@onsemi.com>
+> +
+> +description:
+> +  onsemi multi-phase digital controllers with PMBus.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - onnn,fd5121
+> +      - onnn,fd5123
+> +      - onnn,fd5125
+
+Your /OF/ match data in your driver suggests that you intended to permit
+fallback compatibles here?
+
+|+#ifdef CONFIG_OF
+|+static const struct of_device_id fd5121_of_match[] =3D {
+|+       { .compatible =3D "onnn,fd5121" },
+|+       { }
+|+};
+|+MODULE_DEVICE_TABLE(of, fd5121_of_match);
+|+#endif
+
+pw-bot: changes-requested
+
+Cheers,
+Conor.
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +      #address-cells =3D <1>;
+> +      #size-cells =3D <0>;
+> +
+> +      fd5121@50 {
+> +        compatible =3D "onnn,fd5121";
+> +        reg =3D <0x50>;
+> +      };
+> +    };
+>=20
+> --=20
+> 2.43.0
+>=20
+>=20
+>=20
+
+--nNUv3Ue/fcUdZ8T0
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCajrEBQAKCRB4tDGHoIJi
+0hHeAP4oKgrpS2qCVz/7ODVGFkKjS9WeVrY9WRU2VoFRwu94LAD/cWvC5fHHab1e
+08TsiaHzIQKJUchGnnu1pP0VNTlNvwQ=
+=+IXw
+-----END PGP SIGNATURE-----
+
+--nNUv3Ue/fcUdZ8T0--
