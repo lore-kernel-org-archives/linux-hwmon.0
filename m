@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA1C93A7F69;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA25B3A9622;
 	Tue, 23 Jun 2026 05:56:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782194165; cv=none; b=GVD5S/VqE3OyrPwqSLsr+axN2z8gRQswWcBhf9lErkxtDhNF4vLfTZMiPplfWUv+Qz5DtfvP8dWGbQTSL91k5HHVtrCf9z8QEIpzgAqZ2cdsrwiyqi6pIO46xHE4L6R5X94FSv4hv4ZmPK/fx5AakfGLqWHLf6xImQvhZD9GGfU=
+	t=1782194165; cv=none; b=tmQ1DyCmHKis82kiiGL61mb+0pz4PHRx3Wd9ffc32slwKSQuACmfBrHcKEWA5haEylq+v14EXnpv/CtwZxTfPm2IBQloYx907aoxx8GEpnHNSbWvKs52nI1uvpeR6IQPmIolwlMJxYej++H/DHZwb//au9uRA6/GvaEkXjZJvgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1782194165; c=relaxed/simple;
-	bh=XxHC+WBSkAS51ORVmSx/YM7z+DWofPW1mqwUDLPdqdM=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=cg8/KEwM1yzz6roDZkLPZ8o6RDkVl08mdTQG/DLi8/kGs2ZAMrqv80RrKlgLIYvJO1+k2ug97pveOgUlIeBxaiPJ6E75SWi7Q/hBOOFoeGQ0A3p1TAJkGJTx9WyyaIUZ624lFD7/Y/c1OvQFvF+NqLdh8pAQjebVkUIV8Og1AVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ore5ZPac; arc=none smtp.client-ip=10.30.226.201
+	bh=m4OrtqCXPBUWfHjtzRUrWD0LAKMUcdetJENuV5F8VBg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=IhXSEmkhljMFqgoZw/oFJVx1OlkMszCDH6gJFew2nSDMBQmY1T0VHYaxrhAnlvyvA5UesVx2MVY+cbwuZ9/tyc+ILI8esrlVIflYeMUqADwEUrYMJDQOiaSnFOFwlKGCZgkwujm087u5vW9FFMAtNDa80rXnP91ijuhjXvoelLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qyGChj2A; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ore5ZPac"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 53D7FC2BCB8;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qyGChj2A"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 70589C2BCC6;
 	Tue, 23 Jun 2026 05:56:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1782194165;
-	bh=XxHC+WBSkAS51ORVmSx/YM7z+DWofPW1mqwUDLPdqdM=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=ore5ZPac2OeoiimpPdp8rG1eK3SzKmzvuC44yS2FujE4Utbw3S/q/7EfBu1XzYTsw
-	 +RE6nrl/yb3uSUmBjQrdPaSMVeD79o+xOmygZRZhvpcKdtnk/sxJ2guTwlP3/AVROG
-	 qW2s5blWnXUqUsfEDX8Pag8x4lK9cDHOXwcKBZ9UQEYNy02OIvQ46Nm2+Nw9ppdF20
-	 AMIRsrWmi9fYn2EmBIfTJngTU0x3V3IBLUaZV8jHvnP07q9FQSc3UZSvusAfcyH+c0
-	 Wo7AiUls/B/IBf+pyNYR51vAUZ3OajHPVuQJaIT5hY5vEPfd0m9GpsPNHWiU+gprDi
-	 VUiR1nj8shpOw==
+	bh=m4OrtqCXPBUWfHjtzRUrWD0LAKMUcdetJENuV5F8VBg=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=qyGChj2AiqTKBGYN2c9X9gbuKOnxZXWJS3Fq2K+QQ5QRxPR0n6xN/LcrSe/I2p1Gd
+	 axPkI33kKYeOUo4vt7AOAkmiLSEF42tL/6Z3tAjFDH5lGJfN/sxtk9e5U6Ji8p3B+W
+	 t5PY7//fXOT2OXSclY9TIiJORnmTWLtDtTOzq5J4ns4tS4eLDWBAzlzEZ2nclDzT43
+	 CjW9/liDCi19FQR4zlyOE2JG1OH3MSTwj/kn97KGsZPPKADcvQLHutkb1wjxgtshUU
+	 FFhrhZWbM7Yi7sR8BNQWvmWuZjp7GsW/9q9tr5VJRRCt7c3U1GzWD8HjFnri/dQj+S
+	 eFyAOVZPEqSBg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E543CDB470;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60962CDB471;
 	Tue, 23 Jun 2026 05:56:05 +0000 (UTC)
 From: Selvamani Rajagopal via B4 Relay <devnull+Selvamani.Rajagopal.onsemi.com@kernel.org>
-Subject: [PATCH 0/3] Support onsemi's FD5121 multiphase digital controller
-Date: Mon, 22 Jun 2026 22:55:36 -0700
-Message-Id: <20260622-support-fd5121-from-onsemi-v1-0-b31767689c65@onsemi.com>
+Date: Mon, 22 Jun 2026 22:55:38 -0700
+Subject: [PATCH 2/3] dt-bindings: hwmon: pmbus: Support for onsemi's FD5121
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -40,9 +40,9 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIANgfOmoC/x3MOwrDMAwA0KsEzRXYgpgmVwkd8pFaDbGN1JZCy
- N1jOr7lHeBsyg5jd4DxV11Lboi3DtbXnJ+MujUDBUohEaF/ai32Rtn6SBHFyo4lO++KSeZBhvv
- SLxKgBdVY9PfPp8d5XqV2fBNsAAAA
+Message-Id: <20260622-support-fd5121-from-onsemi-v1-2-b31767689c65@onsemi.com>
+References: <20260622-support-fd5121-from-onsemi-v1-0-b31767689c65@onsemi.com>
+In-Reply-To: <20260622-support-fd5121-from-onsemi-v1-0-b31767689c65@onsemi.com>
 To: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
  Shuah Khan <skhan@linuxfoundation.org>, 
  Selva Rajagopal <selvamani.rajagopal@onsemi.com>, 
@@ -52,11 +52,11 @@ Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
  Selvamani Rajagopal <Selvamani.Rajagopal@onsemi.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1782194144; l=1270;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1782194144; l=1429;
  i=Selvamani.Rajagopal@onsemi.com; s=20260531; h=from:subject:message-id;
- bh=XxHC+WBSkAS51ORVmSx/YM7z+DWofPW1mqwUDLPdqdM=;
- b=O+5KQ40A0TgaP9oDBztyUxV5bx3S4eld/u7bTs2DIoewQ62OMXYw1Teqm/wZU2hGyUq1sWYER
- WIeYGdvs3CHCJgve+f30LSywGE3AVupaO6zFCZc4ze9WtXQ13Cfl/KO
+ bh=Zw1KdNLpVYL6UZplq8A+h3jDYYOHRawnuaZFGAXmcFg=;
+ b=5LwwDnJZbiIpKvcgN54cRezHu4qz681+0HrvqBMRvst7oLKuB54J8cRxlp0EyDzKDr9brEFXz
+ r8spVsYORlJAjyxA4sFeFKc7xyY2n8ljxvfke9MxCY9eZUiyx0shcx1
 X-Developer-Key: i=Selvamani.Rajagopal@onsemi.com; a=ed25519;
  pk=5QRdM0HS/LGWWcUZZ9hVfZ+qbPQGZCumcTXOiN7Fyug=
 X-Endpoint-Received: by B4 Relay for
@@ -64,35 +64,65 @@ X-Endpoint-Received: by B4 Relay for
 X-Original-From: Selvamani Rajagopal <Selvamani.Rajagopal@onsemi.com>
 Reply-To: Selvamani.Rajagopal@onsemi.com
 
-FD5121 is a dual rail, multi-phase controller designed to
-power CPU, ASIC or SoC with fully configurable rails.
+From: Selvamani Rajagopal <Selvamani.Rajagopal@onsemi.com>
 
-This driver adds support for FD5121, FD5123 and FD5125. These
-controllers configurability through PMBus 1.4.1. 
-
-Added documents for these controllers.
+Add devicetree schema for onsemi FD5121, FD5123, and
+FD5125 dual rail, multi-phase digital controllers.
 
 Signed-off-by: Selvamani Rajagopal <Selvamani.Rajagopal@onsemi.com>
 ---
-Selvamani Rajagopal (3):
-      Documentation/hwmon: Add onsemi's FD5121 controllers' documentation
-      dt-bindings: hwmon: pmbus: Support for onsemi's FD5121
-      hwmon: (pmbus/fd5121): Add support FD5121, FD5123 and FD5125
+ .../bindings/hwmon/pmbus/onnn,fd5121.yaml          | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
- .../bindings/hwmon/pmbus/onnn,fd5121.yaml          |   41 +
- Documentation/hwmon/fd5121.rst                     |   93 ++
- Documentation/hwmon/index.rst                      |    1 +
- MAINTAINERS                                        |    8 +
- drivers/hwmon/pmbus/Kconfig                        |    9 +
- drivers/hwmon/pmbus/Makefile                       |    1 +
- drivers/hwmon/pmbus/fd5121.c                       | 1004 ++++++++++++++++++++
- 7 files changed, 1157 insertions(+)
----
-base-commit: 1a3746ccbb0a97bed3c06ccde6b880013b1dddc1
-change-id: 20260622-support-fd5121-from-onsemi-6fa9f98b5bf0
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/onnn,fd5121.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/onnn,fd5121.yaml
+new file mode 100644
+index 000000000000..b0453b0634f0
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/onnn,fd5121.yaml
+@@ -0,0 +1,41 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/pmbus/onnn,fd5121.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: onsemi's multi-phase digital controllers
++
++maintainers:
++  - Selvamani Rajagopal <selvamani.rajagopal@onsemi.com>
++
++description:
++  onsemi multi-phase digital controllers with PMBus.
++
++properties:
++  compatible:
++    enum:
++      - onnn,fd5121
++      - onnn,fd5123
++      - onnn,fd5125
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      fd5121@50 {
++        compatible = "onnn,fd5121";
++        reg = <0x50>;
++      };
++    };
 
-Best regards,
 -- 
-Selvamani Rajagopal <Selvamani.Rajagopal@onsemi.com>
+2.43.0
 
 
