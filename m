@@ -1,175 +1,292 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F06112DC79A;
-	Wed, 24 Jun 2026 10:45:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B4D524676D;
+	Wed, 24 Jun 2026 10:45:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782297919; cv=none; b=FUGErgt84ZIxfT7vHSzBsl7guuSgEUXSRxgO6gN06hhSI1DAhR2NAx4ttLur7n15r0BuG97llY6kUgiUbV1Kfm4AI3ouq7SKECOiUMCm6w9dqy2huFALGzD5xXCYPeFNmaAy9aZXg8x+zpRgIoSrMwyIfY4FaklfGP4YiMUqQyo=
+	t=1782297956; cv=none; b=SO5L74aJc2j18EFXHbRlS/c7TuuYdxIOdPXVoNSwUkr5gGKn43fZ/4hzGKG4/+0Lfdt5FFNb7T2ELVAxAiEFvPkwGU7MV8tvzu9W3TI0V2r0F2EFs6AWf4Nt15yQaTbdMHvm2siVT+l0OanZGhvOjC6t0DIJdiEqPKYpwzYV1eo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782297919; c=relaxed/simple;
-	bh=G1tVP3Q0mfNHODWgvs+xQ3MvD26uccJXVWxkCd+IlyI=;
+	s=arc-20240116; t=1782297956; c=relaxed/simple;
+	bh=vZVfmvw9xB2HuoyqqYJItu4LS2lP2wWNbBJJpDqkOKw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=K+rvCPNfWvTkv0RNyrs5+iInZ75bqPI5/mI68h/yNhPq46/zALmEgKl+eZdPewjPnTs4mhK74v+6FdVSsZa5scr1+JVgRXmhMgXH4FBmH2ZrS3l1+ocVakRkvnuaI40zuu1WjGB20nZRKF0FxFejieNTO781WO+dyuBhgZyKuLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F2xH55t3; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=PaP/FOkpHlZIW7vXt2/WzyVdKCXyewX0oj0u8vz/HAGRTLOhHnb4LEXK6DXox58Xa66HDXmgj+94OPF3Xm5yr/Us5yGNTQC40F7c+xOcztiGYu7YnT85z28U/+5STuOlF6sFZtfYJzi7PE37m2XIvPMaapWHcWLbMNfV1+FENCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T9LRnklb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F2xH55t3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BDA41F00A3D;
-	Wed, 24 Jun 2026 10:45:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T9LRnklb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98EF71F000E9;
+	Wed, 24 Jun 2026 10:45:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782297917;
-	bh=16UUvhPcdf75gFkTxBVtAW1KWMj7bxFajreMUHfHwPU=;
+	s=k20260515; t=1782297954;
+	bh=jKgs/HAdxm66fJBTL5AbFOaCH3Dsrsjs1Xn5W2bk2uc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=F2xH55t3Gf++FnT7+5apbeIg3jy/dN33O6wVnwNfCmBPKOzphFxyhArxEW+fpbFOD
-	 IUKYKH1xBem3fCZ6Wyv8/CJTZtX+7maE7mRAMZ3YfMTJ7JX2Xples1czRoY73zaZYw
-	 6ZLizvZFNrWfzRM4Ag1ynJInr3rndWAlQr+cIZg/vRnvBicjm89EHQa57dK2SS8yCq
-	 X7AFjP0YlVAoqd9X1rIZX2giLKcLO6o54T2/WCCwBYLoO+EFRyOzff/rmysAqwbq/e
-	 59WSTBt2Heji6ds6wzf4h8LWb1ydkJlJS9xq9zp9fH1woUXe1VUk8glxDeHOLtPJ97
-	 lVrTHtKAP0Ybg==
+	b=T9LRnklbFBzDyZ4eOOjBx+K4b8XigR6393mpFcGCRyqGNm7JOyLOHNXb/E8jAulRl
+	 b7zJd4XLYHlAbaS96to9YylCDUztHUZwOyUOT47y6iyaI6ZUBjReM5UjEPW43qGMdI
+	 osVrlzzrX+By8WTcI6gTornVcSAPDoceAIJt1zzuhvsy5+y63rrFh66xqaA6nnTNZw
+	 KCQ6oQjRiK5ZCAq0H8Q+Li3fJv8vg37alYfn3rJU+yrK/w2TyKY43+t13UmQuiSQ2M
+	 j5IRmjzzdL+ZWRekB+ZeAfGxgF5HrVKKOIbe+sabJvgYXuRkekau0ttFNx2ePB3gKp
+	 n4silM0x/kElw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 08/12] i3c: dw-i3c-master: Add ACPI core clock
- frequency quirk
+Subject: Re: [PATCH v5 05/12] i3c: master: Add support for devices without
+ PID
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Akhil R" <akhilrajeev@nvidia.com>
-Cc: robh@kernel.org, Frank.Li@kernel.org, linux-i3c@lists.infradead.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, conor+dt@kernel.org
-In-Reply-To: <20260624102153.1770072-9-akhilrajeev@nvidia.com>
+Cc: Frank.Li@kernel.org, robh@kernel.org, conor+dt@kernel.org, linux-i3c@lists.infradead.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org
+In-Reply-To: <20260624102153.1770072-6-akhilrajeev@nvidia.com>
 References: <20260624102153.1770072-1-akhilrajeev@nvidia.com>
- <20260624102153.1770072-9-akhilrajeev@nvidia.com>
+ <20260624102153.1770072-6-akhilrajeev@nvidia.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 24 Jun 2026 10:45:16 +0000
-Message-Id: <20260624104517.4BDA41F00A3D@smtp.kernel.org>
+Date: Wed, 24 Jun 2026 10:45:54 +0000
+Message-Id: <20260624104554.98EF71F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 6 potential issue(=
 s) to consider:
 
 New issues:
-- [High] Changing `core_clk` from mandatory to optional delays missing cloc=
-k validation, leading to unclocked hardware register accesses that can trig=
-ger a synchronous external abort (system crash) on misconfigured platforms.
+- [High] Devices returning a PID of 0 during Dynamic Address Assignment (DA=
+A) bypass duplicate detection, leading to sysfs naming collisions that reli=
+ably trigger a preexisting Use-After-Free.
+- [Medium] The driver incorrectly allows non-SETAASA I3C devices to be defi=
+ned in the device tree with a PID of 0, permanently breaking device matchin=
+g upon Hot-Join re-attachment.
+- [Low] The newly added static address matching logic in `i3c_master_attach=
+_boardinfo()` will never successfully match any device, rendering the `else=
+` branch dead code.
+- [Low] Redundant boolean check for `i3cdev->info.pid` inside the duplicate=
+ search loop.
 
 Pre-existing issues:
-- [High] The workqueue `master->wq` is destroyed during unregistration, but=
- the devres-managed hardware IRQ remains active without being masked, allow=
-ing a late interrupt to queue work on the destroyed workqueue.
-- [High] The driver unconditionally casts the pointer returned by `device_g=
-et_match_data()` to an `unsigned long` when binding an ACPI companion, lead=
-ing to garbage quirk flags if the device is bound via the PRP0001 ACPI-OF f=
-allback.
+- [High] Dangling pointer in `desc->dev` leads to a Use-After-Free and Doub=
+le Free if `device_register()` fails.
+- [High] Calling `device_register()` while holding a read lock on the bus r=
+wsem can lead to a deadlock if the driver's probe function attempts an I3C =
+transfer.
 --
 
-commit d5fbc1910ed540d2be9a4cb57886399f9c4f9b04
+commit 76e7c85069f65f75e5476a13e6f4ab2ae705589f
 Author: Akhil R <akhilrajeev@nvidia.com>
 
-i3c: dw-i3c-master: Add ACPI core clock frequency quirk
+i3c: master: Add support for devices without PID
 
-Some ACPI-enumerated devices like Tegra410 do not expose the controller
-core clock through the clk framework. Unlike device tree, ACPI on Arm does
-not model clock providers. The hardware is expected to have its clocks
-enabled by firmware before the OS takes over.
+Devices using SETAASA for address assignment are not required to have
+a 48-bit PID according to the I3C specification. Allow such devices to
+register and use the static address where PID was required.
 
-Make the core clock optional and allow selected ACPI devices to provide the
-core clock rate through the "clock-frequency" _DSD property when the core
-clock is absent.
+> diff --git a/drivers/i3c/master.c b/drivers/i3c/master.c
+> index 3deae8cdae525..bd0dc76c7ba1e 100644
+> --- a/drivers/i3c/master.c
+> +++ b/drivers/i3c/master.c
+> @@ -1989,8 +1989,17 @@ i3c_master_register_new_i3c_devs(struct i3c_master=
+_controller *master)
+>  		desc->dev->dev.type =3D &i3c_device_type;
+>  		desc->dev->dev.bus =3D &i3c_bus_type;
+>  		desc->dev->dev.release =3D i3c_device_release;
+> -		dev_set_name(&desc->dev->dev, "%d-%llx", master->bus.id,
+> -			     desc->info.pid);
+> +
+> +		/*
+> +		 * For devices without PID (e.g., SETAASA devices), use
+> +		 * static address for naming instead.
+> +		 */
+> +		if (desc->info.pid)
+> +			dev_set_name(&desc->dev->dev, "%d-%llx", master->bus.id,
+> +				     desc->info.pid);
+> +		else
+> +			dev_set_name(&desc->dev->dev, "%d-%02x", master->bus.id,
+> +				     desc->info.static_addr);
+> =20
+>  		if (desc->boardinfo)
+>  			device_set_node(&desc->dev->dev,
 
-> diff --git a/drivers/i3c/master/dw-i3c-master.c b/drivers/i3c/master/dw-i=
-3c-master.c
-> index 29030fd9594aa..8e40d178d500a 100644
-> --- a/drivers/i3c/master/dw-i3c-master.c
-> +++ b/drivers/i3c/master/dw-i3c-master.c
+[Severity: High]
+This is a pre-existing issue, but does failing to clear desc->dev when
+device_register() fails lead to a double free and use-after-free later?
+
+Looking at i3c_master_register_new_i3c_devs():
+
+    ret =3D device_register(&desc->dev->dev);
+    if (ret) {
+        dev_err(&master->dev, "Failed to add I3C device (err =3D %d)\n", re=
+t);
+        put_device(&desc->dev->dev);
+    }
+
+If device_register() fails, put_device() is called which frees the i3c_devi=
+ce
+structure, but desc->dev is left dangling. Later, when the master is
+unregistered in i3c_master_unregister_i3c_devs(), the loop checks:
+
+    if (!i3cdev->dev)
+        continue;
+    i3cdev->dev->desc =3D NULL;
+    if (device_is_registered(&i3cdev->dev->dev))
+        device_unregister(&i3cdev->dev->dev);
+    else
+        put_device(&i3cdev->dev->dev);
+
+Since desc->dev is not NULL, this writes to the freed memory and then calls
+put_device() again, resulting in a use-after-free and double free.
+
+[Severity: High]
+This is also a pre-existing issue, but can calling device_register() while
+holding a read lock on the bus rwsem lead to a deadlock?
+
+In i3c_master_reg_work_fn():
+
+    i3c_bus_normaluse_lock(&master->bus);
+    if (!master->shutting_down)
+        i3c_master_register_new_i3c_devs(master);
+
+The device_register() call inside i3c_master_register_new_i3c_devs()
+synchronously triggers the driver's probe function. If the probe attempts an
+I3C transfer, it calls i3c_device_do_priv_xfers(), which recursively reques=
+ts
+the read lock on the bus.
+
+If a concurrent thread, such as a Hot Join, requests a write lock between
+these two read lock attempts, the rwsem blocks the second read lock to prev=
+ent
+writer starvation. The writer blocks waiting for the first read lock to be
+released, which won't happen until device_register() returns, resulting in =
+an
+ABBA deadlock.
 
 [ ... ]
 
-> @@ -1577,7 +1598,7 @@ int dw_i3c_common_probe(struct dw_i3c_master *maste=
-r,
->  	if (IS_ERR(master->regs))
->  		return PTR_ERR(master->regs);
+> @@ -2383,8 +2392,18 @@ static void i3c_master_attach_boardinfo(struct i3c=
+_dev_desc *i3cdev)
+>  	struct i3c_dev_boardinfo *i3cboardinfo;
 > =20
-> -	master->core_clk =3D devm_clk_get_enabled(&pdev->dev, NULL);
-> +	master->core_clk =3D devm_clk_get_optional_enabled(&pdev->dev, NULL);
+>  	list_for_each_entry(i3cboardinfo, &master->boardinfo.i3c, node) {
+> -		if (i3cdev->info.pid !=3D i3cboardinfo->pid)
+> -			continue;
+> +		/*
+> +		 * For devices without PID (e.g., SETAASA devices), match by
+> +		 * static address. For devices with PID, match by PID.
+> +		 */
+> +		if (i3cboardinfo->pid) {
+> +			if (i3cdev->info.pid !=3D i3cboardinfo->pid)
+> +				continue;
+> +		} else {
+> +			if (!i3cboardinfo->static_addr ||
+> +			    i3cdev->info.static_addr !=3D i3cboardinfo->static_addr)
+> +				continue;
+> +		}
 
-[Severity: High]
-If the device tree is missing the core clock, this will now return NULL
-instead of an error. Could this lead to unclocked MMIO accesses?
+[Severity: Low]
+Will this newly added else block ever successfully match a device?
 
-In dw_i3c_common_probe():
+i3c_master_attach_boardinfo() is called from
+__i3c_master_add_i3c_dev_locked() to handle devices discovered dynamically =
+via
+DAA or Hot-Join. For these devices, the hardware does not provide a static
+address during DAA, so i3cdev->info.static_addr is strictly 0.
 
-    master->core_clk =3D devm_clk_get_optional_enabled(&pdev->dev, NULL);
-    ...
-    writel(INTR_ALL, master->regs + INTR_STATUS);
+Because of this, the condition
+i3cdev->info.static_addr !=3D i3cboardinfo->static_addr
+will evaluate to 0 !=3D non_zero, which is always true. This causes the loop
+to unconditionally continue, making this fallback dead code.
 
-If the clock is missing, the MMIO access to INTR_STATUS will happen
-unconditionally, which can trigger a synchronous external abort on some
-systems.
-
-The missing clock is checked later in dw_i3c_master_get_core_rate():
-
-    if (!(master->quirks & DW_I3C_ACPI_SKIP_CLK_RST)) {
-        dev_err(master->dev, "missing core clock\n");
-        return 0;
-    }
-
-Is it possible to validate the missing clock earlier to prevent the kernel
-panic during the probe sequence?
-
->  	if (IS_ERR(master->core_clk))
->  		return PTR_ERR(master->core_clk);
 > =20
+>  		i3cdev->boardinfo =3D i3cboardinfo;
+>  		i3cdev->info.static_addr =3D i3cboardinfo->static_addr;
+> @@ -2398,8 +2417,12 @@ i3c_master_search_i3c_dev_duplicate(struct i3c_dev=
+_desc *refdev)
+>  	struct i3c_master_controller *master =3D i3c_dev_get_master(refdev);
+>  	struct i3c_dev_desc *i3cdev;
+> =20
+> +	if (!refdev->info.pid)
+> +		return NULL;
+> +
 
 [Severity: High]
-This isn't a bug introduced by this patch, but does the removal path
-destroy the workqueue while hardware interrupts are still active?
+Does returning NULL when PID is 0 allow devices to bypass duplicate detecti=
+on
+and trigger the pre-existing use-after-free bug?
 
-In drivers/i3c/master/dw-i3c-master.c:dw_i3c_common_remove():
+If a dynamically discovered device reports a PID of 0, this check
+unconditionally bypasses duplicate rejection, so the device is repeatedly
+added.
 
-    i3c_master_unregister(&master->base);
+Because static_addr is also 0 for DAA-discovered devices, the new naming
+fallback in i3c_master_register_new_i3c_devs():
 
-This unregisters the device and eventually triggers:
+    dev_set_name(&desc->dev->dev, "%d-%02x", master->bus.id,
+                 desc->info.static_addr);
 
-drivers/i3c/master.c:i3c_masterdev_release():
-    if (master->wq)
-        destroy_workqueue(master->wq);
+will name multiple devices the same (e.g., %d-00). The first instance will
+register successfully, but subsequent ones will fail device_register() due =
+to
+sysfs name collisions. This perfectly triggers the desc->dev use-after-free
+on the error path.
 
-Since INTR_STATUS_EN is never cleared to mask interrupts and the devres
-managed IRQ is not yet freed, could a delayed IBI or Hot-Join interrupt
-still fire?
+>  	i3c_bus_for_each_i3cdev(&master->bus, i3cdev) {
+> -		if (i3cdev !=3D refdev && i3cdev->info.pid =3D=3D refdev->info.pid)
+> +		if (i3cdev !=3D refdev && i3cdev->info.pid &&
+> +		    i3cdev->info.pid =3D=3D refdev->info.pid)
 
-If it does, the still-active IRQ handler will attempt to queue work on
-the destroyed workqueue:
+[Severity: Low]
+Is the check for i3cdev->info.pid redundant here?
 
-drivers/i3c/master/dw-i3c-master.c:dw_i3c_master_irq_handle_ibis():
-    } else if (IBI_TYPE_HJ(reg)) {
-        i3c_master_queue_hotjoin(&master->base);
-    }
+Since refdev->info.pid was explicitly checked for being non-zero right befo=
+re
+this loop, the equality check i3cdev->info.pid =3D=3D refdev->info.pid alre=
+ady
+guarantees that i3cdev->info.pid is non-zero. The boolean check isn't stric=
+tly
+necessary.
 
-Can this result in a use-after-free?
+>  			return i3cdev;
+>  	}
 
-[Severity: High]
-This is a pre-existing issue, but does this unconditionally cast the match
-data pointer to an integer?
+[ ... ]
 
-In drivers/i3c/master/dw-i3c-master.c:dw_i3c_common_probe():
+> @@ -2832,9 +2855,15 @@ i3c_master_add_i3c_boardinfo(struct i3c_master_con=
+troller *master,
+> =20
+>  	boardinfo->pid =3D ((u64)reg[1] << 32) | reg[2];
+> =20
+> -	if ((boardinfo->pid & GENMASK_ULL(63, 48)) ||
+> -	    I3C_PID_RND_LOWER_32BITS(boardinfo->pid))
+> -		return -EINVAL;
+> +	/* For SETAASA devices, validate the static address instead of PID */
+> +	if (boardinfo->static_addr_method & I3C_ADDR_METHOD_SETAASA) {
+> +		if (!boardinfo->static_addr)
+> +			return -EINVAL;
+> +	} else {
+> +		if ((boardinfo->pid & GENMASK_ULL(63, 48)) ||
+> +		    I3C_PID_RND_LOWER_32BITS(boardinfo->pid))
+> +			return -EINVAL;
+> +	}
 
-    if (has_acpi_companion(&pdev->dev)) {
-        quirks =3D (unsigned long)device_get_match_data(&pdev->dev);
-    } else if (pdev->dev.of_node) {
-        drvdata =3D device_get_match_data(&pdev->dev);
-        if (drvdata)
-            quirks =3D drvdata->flags;
-    }
+[Severity: Medium]
+Could this logic incorrectly allow non-SETAASA I3C devices in the device tr=
+ee
+to have a PID of 0, permanently breaking device matching upon Hot-Join?
 
-If the device uses the PRP0001 ACPI-OF fallback, has_acpi_companion() will
-be true, and device_get_match_data() will return a pointer to the OF table
-struct dw_i3c_drvdata.
+If a device is configured with mipi-i3c-static-method =3D SETDASA, it will =
+reach
+this else block. If its PID is 0, both boardinfo->pid & GENMASK_ULL(63, 48)
+and I3C_PID_RND_LOWER_32BITS(boardinfo->pid) evaluate to 0, which bypasses
+validation, and the device registers with PID 0.
 
-Does this cast the pointer address directly into the quirks bitmask, causing
-unpredictable feature toggles?
+If the device later Hot-Joins, DAA will retrieve its real, non-zero PID. Wh=
+en
+i3c_master_attach_boardinfo() runs, it sees i3cboardinfo->pid =3D=3D 0 and =
+falls
+back to matching by static_addr. Because static_addr is 0 during DAA, it
+fails to match and the device permanently loses its DT properties.
+
+> =20
+>  	boardinfo->init_dyn_addr =3D init_dyn_addr;
+>  	boardinfo->fwnode =3D fwnode_handle_get(fwnode);
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260624102153.1770=
-072-1-akhilrajeev@nvidia.com?part=3D8
+072-1-akhilrajeev@nvidia.com?part=3D5
