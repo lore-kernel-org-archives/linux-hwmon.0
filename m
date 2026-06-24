@@ -1,221 +1,204 @@
-Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011022.outbound.protection.outlook.com [52.101.52.22])
+Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010068.outbound.protection.outlook.com [40.93.198.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2679A22126C;
-	Wed, 24 Jun 2026 10:03:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0880F2036E9;
+	Wed, 24 Jun 2026 10:22:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.68
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782295394; cv=fail; b=pR/t7nllrrOr7fFBfBHYKs1xFCe5F6DJbaT5vTM5tYVKDgt3iN4WJsMXoQxO4KfFNEPKxw1cFEbR+H7mrwd024nMWRccb8Z+mYq7TUrCH+JIW1BOPA/PrMrbZZy8QY/kqlJxH3T/VMfmpNOx0dGWoMhQ3L+4NwbIHKYB5Xi/b30=
+	t=1782296568; cv=fail; b=i4BVWLKizBsiaCqJLHJ92HHnY3B0c3WIfMHkA7qYvJiTwLARwhwEMlBec225F7XP/im+ud8CkBBwoAkGwu2Sr/0j0Xlrv5aaJFhl4XZDt9SiVhiw40J8Iibhf4qIBo2JdNEFn/R/kaE3NtcHzs014y5dNDneHkiYrVvhRjkgZNM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782295394; c=relaxed/simple;
-	bh=wbDtlVWUzj3oeY/wLaRx5vvux5Xxs5qI0mSL86SC4UI=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=l1k5gIzChTWB5ljr0EuGbnPfddSnXc0n63aWOq2C7pmz2ZMllyZLIHVnO0b9TP9poF61XK7QsFLmXjGCFnyhv3BNaAepJjgvvlbDNSWRqGWI6Dmj+uWvzabDng2O2eb4AIsdM59jE056VfLi3f3PyVUF2H1mDZT9p1RvDAEDvXU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Z4nG47xS; arc=fail smtp.client-ip=52.101.52.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	s=arc-20240116; t=1782296568; c=relaxed/simple;
+	bh=0GSfU0TxDjtKb3TzubXvRDiVjURiNyXYeOhtk/3CRaM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=eFUTh5cqm5tjePfs5+DvnWrmRDdS9Im/MJvFh/8MqHIFmaIhFw5NnA/9tzxq8wCsMBgr4gCygmDnY5T+lpJ/+/rJVE+kLxfcwPvn+ZQQFJUoDaGZHNMX5eLFPnvItYeK5rAZnLT057JeoPnxpVqrmMrXAR/P+6BAa48aA5ZCKTM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=UHW/b8ML; arc=fail smtp.client-ip=40.93.198.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Z4nG47xS"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="UHW/b8ML"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=NS+TCZErov7QiNSk0GI+LxG2CJiANuYRysE7Hlw8zboMFKX/2BwRuQsI/XX6wGQY7K36DqctlxFo8v+gWe+2xf49pBEyB0QS57O5la8+Qgl0yjpKfiFm8xFRw5HuEDy8buqvk9shzQytoXmyukUJv5ByBIb2j29PSF2FIf4dpnVT1eUXkhI/T5kOVZdMw5Tu0UTwM4vNoQjzSDf6BStp5D5kMEcQpElBs6wkfJ4EFGCiFbIT04tbc39HPXMEFXSJzxFnJ7IbxwqsgMPhUALRMyVL0acJvu6y8CoRb86m/gNgWOnJGQ/jfld1DHdnjjOgnGjBz6cZUs4H7SdP/ZqugA==
+ b=GSLSY23usZRAS97pZ68vonZbTWj1FMYQr8Pfvofl/8xu7CA6WroV2eQHdYXINda0ga9L/tXU4LHQZOp8Hg2ljLbP6ZwnhaeET2kJRICSsk36Yo5jfYob0uRqizAhwh6YxJWg/piM4ZcdfLFRq56+GHJA7550QtvYxRcNWUhO9nSZrTMJQZNBUUMQhOSFAWUNFg0WP/84Ia0RCHOBIL77VuhdEg8DQ+OI5zVcU6zze0FP0Lzgl46EYeKwcBF8QxtYxUCUmH85c5gFsYGR5SNVQJ8c24h9+mbO1N2HccTjXLoPdEv4D1yzsNOrZuFKkT5uRL4KI+Cx10cCxWXwuDBUSQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rVzFdpLHHp//lzX/njWUkdFDmv1gFKiw08aJYS4gWuE=;
- b=xno3oKPNdJItQwbHpI4IRhR2yGt8fof0YgM8KI2jupMkJjIMsO0qTvXR2Jqoi/bwa/igzxUPwVR1XoTPgImNAXBOr+ehP1wBJYQKwiHcmoNjdQH7PQJG8EFEy+z7XEuGy7Hznsf9u5HRCAsKuAk4ygxzbss1dWK+QVpEWVKquTAss92aXUbon6okj+aT6w7kPhdWUnheW7fOs52mPNXh9WnHKo1TL7ughsDYg1gCm4p1cGtLpy3hvjjxJiI1i4eNaf7GAK3sqKmFMQJjJqnHqQL+qGyG/hiy6k/rPAt39YjI0T6CfNUWfyKTVDxcdKMyWMCANrYodZyvCr2SRP2jwg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=9o3LHgMobZ5vATvWePlAuCkfutTJt8MSpWFRnC3+oG8=;
+ b=P1t6jCux0Gf5DtG4HeFRyqRjuLHC4mBCBC0IOcIQze4Ccn1195G9uHMErDCUueqfcP6xAAfKcxS0uH2XAy/Hsszpm/Oj6ZiNDkpPz6zLOvjY0xjEZEfC98j3k1y2zfVXub5pq7LUnf6u7MA0dHHvQw9Wmg+AdXCJCE1cflPh1tVfNBSXymxIwTgWm/33nPQcYhzGHLk79s3HNiJx3nqrkF8WRoUoOPsurLXJ3mpk4QAORfRLZWIa4rHcE1+ymWOk+1tPFQzOB9C9v+6iMFMjnBOsnOxx9qk4RR7Z2uLMb5g9VF3r5uLr2d/wyjl7kLGUXo9j4Mfnc3z/Trtz0WXf+Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=bootlin.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rVzFdpLHHp//lzX/njWUkdFDmv1gFKiw08aJYS4gWuE=;
- b=Z4nG47xSAt4zNP2hCOuOb+FCX0KheN2H4srzFa9CSQ9vH4997BsD76KukaqhFH33aEjynVCHhsYCUImD1lY6NQXmTsxWjLvJgQ1t9w/0xmKM+KfR/9EEOt43RsI49Ec+cRPfsnYgDYVvblxOjoil6LHY79NfAsQQd/n/jWn4LI8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN2PR12MB3023.namprd12.prod.outlook.com (2603:10b6:208:c8::26)
- by PH8PR12MB6940.namprd12.prod.outlook.com (2603:10b6:510:1bf::8) with
+ bh=9o3LHgMobZ5vATvWePlAuCkfutTJt8MSpWFRnC3+oG8=;
+ b=UHW/b8MLLIVpZUmu55RgKv6jYypQG6G1qN8O35pZpF+sjuAVu4tWsXYxEUHrghmh3+yB3wRjsBNKYQx4P7rPs2qMAV27i8tW0CelxtORzRhw5HOtsK7tS7QSOcUZRqXtgKt3N3NVl2j5puaX4TNMXVs0TGDHglhVsuIsq0PR5BtDtiBrOwMQhrfmPt8dN2oqPVyGawQteS4ROhJ9O0EB7wej98DzYukGU8Wrq+2Y8d89ALBUt4pHRtByZhkQawld9NsVlOgbgTecq8Om02y72PVlqVFXkAz0yoI05mYaFImjpB0qq+waavzeuRvfqU4Q+vm3D0rJ7MmV5Ovaaq33wg==
+Received: from PH8PR22CA0009.namprd22.prod.outlook.com (2603:10b6:510:2d1::25)
+ by CY8PR12MB7516.namprd12.prod.outlook.com (2603:10b6:930:94::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.139.20; Wed, 24 Jun
- 2026 10:03:08 +0000
-Received: from MN2PR12MB3023.namprd12.prod.outlook.com
- ([fe80::dc22:f915:3ddd:11fa]) by MN2PR12MB3023.namprd12.prod.outlook.com
- ([fe80::dc22:f915:3ddd:11fa%4]) with mapi id 15.21.0139.018; Wed, 24 Jun 2026
- 10:03:08 +0000
-Message-ID: <a77e8e56-f290-49cd-a636-16dada60390f@amd.com>
-Date: Wed, 24 Jun 2026 15:33:02 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 8/8] docs: misc: amd-sbi: Document SBTSI userspace
- interface
-To: Randy Dunlap <rdunlap@infradead.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Cc: "corbet@lwn.net" <corbet@lwn.net>,
- "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
- "linux@roeck-us.net" <linux@roeck-us.net>, "arnd@arndb.de" <arnd@arndb.de>,
- "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
- "Chatradhi, Naveen Krishna" <NaveenKrishna.Chatradhi@amd.com>,
- "Umarji, Anand" <Anand.Umarji@amd.com>, "L k, Prathima" <Prathima.Lk@amd.com>
-References: <20260622135821.2190260-1-Akshay.Gupta@amd.com>
- <20260622135821.2190260-9-Akshay.Gupta@amd.com>
- <f1e4c8f7-b3d9-46a3-b42f-710dcbcf15c0@infradead.org>
-Content-Language: en-US
-From: "Gupta, Akshay" <Akshay.Gupta@amd.com>
-In-Reply-To: <f1e4c8f7-b3d9-46a3-b42f-710dcbcf15c0@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN4P287CA0059.INDP287.PROD.OUTLOOK.COM
- (2603:1096:c01:270::10) To MN2PR12MB3023.namprd12.prod.outlook.com
- (2603:10b6:208:c8::26)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.159.15; Wed, 24 Jun
+ 2026 10:22:41 +0000
+Received: from CY4PEPF0000EE38.namprd03.prod.outlook.com
+ (2603:10b6:510:2d1:cafe::50) by PH8PR22CA0009.outlook.office365.com
+ (2603:10b6:510:2d1::25) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.159.14 via Frontend Transport; Wed,
+ 24 Jun 2026 10:22:40 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CY4PEPF0000EE38.mail.protection.outlook.com (10.167.242.10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.159.10 via Frontend Transport; Wed, 24 Jun 2026 10:22:38 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 24 Jun
+ 2026 03:22:19 -0700
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 24 Jun
+ 2026 03:22:17 -0700
+Received: from build-akhilrajeev-noble-20260602.internal (10.127.8.11) by
+ mail.nvidia.com (10.129.68.8) with Microsoft SMTP Server id 15.2.2562.20 via
+ Frontend Transport; Wed, 24 Jun 2026 03:22:12 -0700
+From: Akhil R <akhilrajeev@nvidia.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC: Frank Li <Frank.Li@nxp.com>, Miquel Raynal <miquel.raynal@bootlin.com>,
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+	Philipp Zabel <p.zabel@pengutronix.de>, Jon Hunter <jonathanh@nvidia.com>,
+	Thierry Reding <thierry.reding@kernel.org>, <linux-i3c@lists.infradead.org>,
+	<devicetree@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+	<linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Akhil R
+	<akhilrajeev@nvidia.com>
+Subject: [PATCH v5 00/12] Support ACPI and SETAASA device discovery
+Date: Wed, 24 Jun 2026 10:20:54 +0000
+Message-ID: <20260624102153.1770072-1-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3023:EE_|PH8PR12MB6940:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2c02eb13-6fb9-4674-6247-08ded1d7caad
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE38:EE_|CY8PR12MB7516:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8c391520-7ea0-4553-185b-08ded1da8465
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|23010399003|376014|22082099003|11063799006|56012099006|4143699003|6133799003|18002099003|3023799007;
+	BCL:0;ARA:13230040|82310400026|36860700016|7416014|376014|1800799024|23010399003|18002099003|11063799006|56012099006|6133799003|3023799007;
 X-Microsoft-Antispam-Message-Info:
-	NXy16pK+lw5ilRrfaAAQJPbsahnIduXpT4SeFxa6Qew+sNmOl60Ih9+c+CVqnu1dhlik62IfruQ/dY305FWG/uzUk47tSytEpadr63+kGhcJp5I08TDO5f6RNx4fNdGJim1fpdCJE/mFzbTzqg06yyoxCKHy4voBATW4KLY0h1HTKFV7HSQ1X0n88IigXEm6kuSmQX7ghvrNvrQOM89+t1kuywUdABH8/bK/nYbhXOtgyt6uZHt9h91NWK6TzICShlrnD5k0ln+sBmLJhNcTWdIrjleNiUnIajR6k79BqWGzUcZ7uBEfo4ILQrdbbNai5sSxkDG0OOn0KElDxoVjtjHV39pn0icIFTRp0zTzv983zuaxxC7dQac8hwXuSAUNOZY5Iv83O/vU+vmcw/VkBkvzy9Jio8amcG0tKVpa7IXq6EsXKUbYNlQMpvjptEow1mUfnVPvmz4wbtOKCMepIOJphCONFsbOTiSKA4eMP+vTVhnmjk6I9/MoAR3yUz53qCSOI+chFN4JX0LmtbATBtRtmf+KmgTo5wdT73o3j6ZLApwX51JSnQFo6PB9F9zMKWncBAnwwcJ/szAOE/AGySUz2fYLJiSpMH3r24u94pLueiXU7W/l8/UQIAq2kgsBtMRvJFYBGPzuVprQ1BBsD2Q9vaIjVjaJEGLZOtjzesI=
+	5BMw7ziXKFf3KR6uxT4wG6AG1Y17vsAOGtLfp9lLGKLhsATuoAVSC2jEr3/TjRvPw9UwlW9AAxMtupW3jqQ+36RhodJqPjBAOk/kCyH8i+Ox9NIx9b9DX6AGwkGgsGj3BW9cX5nBs052yhRf/yAhluBQILtiDHISNsT7XD+V4bMEzD3ljE8vjfrmuIYr37gI3Q7iXJlEZ6ZU9cy/6eZ0w3QLfYvfTMZlOrp6cFo0U4UlbW7DHW7EaH8WBF2XApRlrIPVF5KcBMKYDUch9FsMkN9fHFtbOOmUDdGLH1ycCpasmz0o2hNnD/XvjQ7/UZSfVP7Kbos3zj93TQP9geVZ69H5iGRjpDGsvryoJyxF8wlTWfNrb53vO+B/em/tm/NrvzmepbohQrLSAWrr4X4LlDLXnJE2IM5zoLcighii/pzKQmkgee/QIfF+aIIrJ+rYBB4YMYzFLtSVMaxWUBj8WCAZKY+1N2EU6gKtBz8A9MfzqMl8voy9PnGR9OGb2ETau0NPiQ23zD3iVaeHtRiy7g1IcVPndgPOf0CVtLEaHYjCrPbtqKUnYnjX3YrmEZ+b2tMWGg2z6REZUWJnuZVLMFWvw90cy+743Rd+rWg4EgBAkvFikTV2Eg13749tvsAjscZoLldkOpfe6+JoidGhKpGrCeR6SD4G0FJNyquS9C4xHhH5I4m/ju8pHFNlf3Y4eZ5uCvOWQGowAkxmh7P7bw==
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3023.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(23010399003)(376014)(22082099003)(11063799006)(56012099006)(4143699003)(6133799003)(18002099003)(3023799007);DIR:OUT;SFP:1101;
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(36860700016)(7416014)(376014)(1800799024)(23010399003)(18002099003)(11063799006)(56012099006)(6133799003)(3023799007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?UVdjb3BFRVdqazhmNEJlMmhhbjJtY1dNNU1WdUg2QlIyZ0NJbUVZRGZEQXo0?=
- =?utf-8?B?WUxHaDNMZ01WNm5HYUJVSmd3L2JwWjlSdGdDb3pIbTZiTnZrazNMenlKdmhp?=
- =?utf-8?B?QUVwYjdLTUVUVWI0eUpxc01WNGFpVVJrK1ZYQitJTmUzaFp3b05UeUdtKzUr?=
- =?utf-8?B?RHlaNVUxMWZoNXNob1pNNkQ5NEtxeDNDdUsxdm1YeTE5TXBDdFd3SmJtL2tW?=
- =?utf-8?B?V0JRME1xQzlTcENaMURIR0p0emE4UGFQcFRzZ2dhaVpieWprT1ZYNDBiM1Iw?=
- =?utf-8?B?bFlMejVZME5PSFpRTzlZWGtrZXl0SzVHZ3R5M1FucDY2cmhqYWZxaWVCMEV0?=
- =?utf-8?B?T2FZcFhSM3dtRzVSQ3hJd3RPNnFUK3dNTlNWd2g2RjZ5RzBHUndWK3pkOWZH?=
- =?utf-8?B?TzR0Q1V1ZmxFZnhTNHhJYWcxeFYwa0RZK0NneEROcDlHRFpYWlNIWFI4STVk?=
- =?utf-8?B?V1BoSzlVY04vWjc0WmdlUDBKRjJIcDdtdlNqV0E2d1RpT0tHWEROWU9JTzgv?=
- =?utf-8?B?eTNmcGEvL2M4djFhWjFxMUtwOXpDU1UzNzZGcEtGdjFhV0VzcWI4QUhnaUxY?=
- =?utf-8?B?dXZWK2xGQ1RoTDZwdlY5Qlh1djFaWXEvemZudHFpd0N6c0JHNVVjaDJBaXAz?=
- =?utf-8?B?QTBNUy9JSWdvVWg3Zkk3ai82MTAwTmlteWtnYTZYcTkvdGhmdnR5WUp4SXJD?=
- =?utf-8?B?N002Nk1uZ2RFbW9meEFKbDdOVXQwT20zNjBxRmwxNDF6MW5CYnI2ZklMTjkx?=
- =?utf-8?B?ejRkaFZOU1RXWDJiZDNWbVpnQ0tjMmc5Ykd3UzArcWYzSy93VG1VM3dldkRS?=
- =?utf-8?B?NzVzNTRiOVlwWk9PYk15eHFmR2p5VVV5Ykl0N0JCVUI0U0lYSTNWenpTUjdl?=
- =?utf-8?B?WDFQaDU4VkdPa09pWHVkUXFFM1V1ZmxmSmErM3dvVGtRdVgzTXQ4UC9ncm5B?=
- =?utf-8?B?aGQ4bUdVSFcxSUdJSWdQaUZ5SEtOcmFOVFozb09TK1k4N1R6QXBzRTRmbVdk?=
- =?utf-8?B?WmMrd2RmZnlNUmlpWkY0WHpEblp0aEFOU0JaRFh5Q2J2UVkwdFNpNFdFSCtq?=
- =?utf-8?B?blhLNnJNYmdwZjYrNUJWWUhsNmZMSTBIOUtSekFEb3lRMHlEWEM2QXVaeHcz?=
- =?utf-8?B?bnF5UjRkYWw4aUpKV0M1RVhjMmh6NkNwMEhCYnNORHRxK0hGbHJDVWo3dWJQ?=
- =?utf-8?B?aDYvQXR2TlNRSHJoZllZZDhrMDJGRjNjKytQZ0pCbk5Zekc3MERsaW14QWty?=
- =?utf-8?B?d2xvb083YXFMcmxlaFVZOTcxUndVSmVQVldqejFUc0VqMDg2WW9XYitKK1pO?=
- =?utf-8?B?NzQrTUE4NmZSK1pCNjluQUJkUVhFOXMrOVhuanJFcWp5NW1XNmVIOVcvV1RC?=
- =?utf-8?B?eSt3T1I3RExxTUN4b2lQbS9yZnlmOWJ0VTgxeWhTZEZNREZTNUlHOXhZdzJP?=
- =?utf-8?B?U29WQjdGbWJVekpERStNWTVMNVZ1QitIcmF4Qk9jRjdKUVg1RkJXUUlxUGVs?=
- =?utf-8?B?UVp0MVVlMm1QMjduVVZ0SHhZWEdOeTdaTzRwOEVpSFBSajlEd2F3Z0lPVVIw?=
- =?utf-8?B?NHNMekoyaHpmRjBZeUVGMTVUZ1czb2JQY2tueldnV3VDR3piQXBmQzF6MExE?=
- =?utf-8?B?UTVLU0MvRHBvMHk1Z2hHVURad3N0azhmK3o5a3J2bTIrWTR3eURHS1duOVhV?=
- =?utf-8?B?OHg3cmdQL0MrSzVaSkhraTcvdnV2VFdOck1pV3pGYUEwRStENWZNM05uT1lW?=
- =?utf-8?B?RFZYQW8zMkcwUWdKTFJUT0xBOTQxTXBzb281K2pwYUE5dW5aSENHS2VoMjhT?=
- =?utf-8?B?a2Y4NXVJM3NGZ1VHU1NacXAxNUpNbTYyMnFuU3UxeVYzZWtIU0gxV3UzRW1Y?=
- =?utf-8?B?T2ZNMEhEZXNIN2NKditmUGt0bHZTdEJQaC9ud2ZJVDNVY1A4UDk0dEliaXJv?=
- =?utf-8?B?ZFB5S25GWXdremlQcDR2MWFsZVUwazc1TC95MW1kaVFqdGRKSUt4aU5nakhS?=
- =?utf-8?B?VkJ5TG9qUHFKRGFnRjdpS0hEYTNEZkVsbkwyNDdvVW1IQjdrUkhZSGFuZGJ0?=
- =?utf-8?B?KzVjNmZyMGNoVzBlL3lVQXR0ckxPSTJhOEMzSjJvM25rQXV6eWszSk9NUURB?=
- =?utf-8?B?UFA0Ukc0bWtVMmNHSS9MNXh2eVdYMmZ5UERDUnRWUkRxaitHMjdIQWpDOWZu?=
- =?utf-8?B?MVhKR2ZURmdTQWZCUzZodkZ6YVdVRGtiTGJoMGRwZWRUQzJ0eGMwRk5uUkdN?=
- =?utf-8?B?YUJGNFp5eXdPYlk5eDNUbm8rY0UxYlpRTEFlWnFLNFg1L3hYd0lZc3lrNDdi?=
- =?utf-8?B?eUYrQ0Y5U3QrUUdGY1VhUTcyT1dSdDd5VGpMcnlPTEpiRUdCdzMrdz09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c02eb13-6fb9-4674-6247-08ded1d7caad
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3023.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2026 10:03:08.3150
+	MFZ3EC7BVMuo4QyJkCKCxcRuqhlPzD0Uk6X7RiwohakWdhkJn1XAGlRkbg5BavbkmRKL457hc1T5HU49gsni7nNGp0jKsqQVTCTudVEpuS8U5/yjvTpGVy10iIAztdTPFlGGORfz2DNNPxZ1qhX4g67pxBK4UK8Gy1CijxscWfWlI6C3zJ1AbjO6fQ742Gk00j2r2AG3kiXrlRIaUORRUdNRZcCngeBr3fEFJQOcPxCkn27bc1aE6QU7scKu+NqUWXsPp0aSQ6Ach6v3HicLytFmo1ASwCsCueeAaDQ5FRB+KJB36V+LH87nMCWlti4MF6CDK3OO5oPFhLfnU4hjc0w6xRqCUWlFMbE+9Hd+qcvT613tzvy3/hlLQG/X60GrAGlU+yz1URvCUoPD/XHcQAzAxdelJo8AxBQUvrWs+u4d9RpolmY+7byDPjwu9KsO
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2026 10:22:38.6108
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ho0bUptdayvgkuXRkW16rLqLKnnbdkx1jOdLbpIz9NW3s9BYhcM/srFoiE9/E9rPQeP7tRVswlcAw15/wCMyhw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6940
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8c391520-7ea0-4553-185b-08ded1da8465
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000EE38.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7516
 
+This patch series adds SETAASA device discovery to the I3C subsystem,
+enabling support for SPD5118 temperature sensors found on DDR5 memory
+modules. The changes also add ACPI support for all existing DAA
+methods like SETDASA, SETNEWDA as well as I2C devices on I3C bus.
 
-On 6/22/2026 10:27 PM, Randy Dunlap wrote:
-> Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
->
->
-> On 6/22/26 6:58 AM, Akshay Gupta wrote:
->> From: Prathima <Prathima.Lk@amd.com>
->>
->> - Document AMD sideband IOCTL description defined
->>    for SBTSI and its usage.
->>    User space C-APIs are made available by esmi_oob_library [1],
->>    which is provided by the E-SMS project [2].
->>
->>    Link: https://github.com/amd/esmi_oob_library [1]
->>    Link: https://www.amd.com/en/developer/e-sms.html [2]
->>
->> Include a user-space open example for /dev/sbtsi-* and list auxiliary
->> bus sysfs paths.
->>
->> Reviewed-by: Akshay Gupta <Akshay.Gupta@amd.com>
->> Signed-off-by: Prathima <Prathima.Lk@amd.com>
->> ---
->> Changes since v2:
->> - Update misc node names info as per socket
->>
->> Changes since v1:
->> - Elaborate the document
->>   Documentation/misc-devices/amd-sbi.rst | 68 ++++++++++++++++++++++++++
->>   1 file changed, 68 insertions(+)
->>
->> diff --git a/Documentation/misc-devices/amd-sbi.rst b/Documentation/misc-devices/amd-sbi.rst
->> index f91ddadefe48..fbbbc504119f 100644
->> --- a/Documentation/misc-devices/amd-sbi.rst
->> +++ b/Documentation/misc-devices/amd-sbi.rst
->> @@ -48,6 +48,60 @@ Access restrictions:
->>    * APML Mailbox messages and Register xfer access are read-write,
->>    * CPUID and MCA_MSR access is read-only.
->>
->> +SBTSI device
->> +============
->> +
->> +sbtsi driver under the drivers/misc/amd-sbi creates miscdevice
->     The sbtsi driver in the drivers/misc/amd-sbi/ directory creates a miscdevice
->
->> +/dev/sbtsi-* to let user space programs run APML TSI register xfer
->                                                                   transfer
-> ?
+SPD5118 and similar devices on DDR5 memory modules differ from typical
+I3C devices in their initialization. They use SETAASA broadcast CCC
+instead of ENTDAA for address assignment, and per JEDEC specification,
+are not required to have a Provisioned ID or implement standard device
+information CCC commands (GETPID, GETDCR, GETBCR).
 
-Hi,
+The series enables describing all I3C and I2C devices on both Device
+Tree and the ACPI table, using unified device property APIs throughout
+the I3C core and the Synopsys DesignWare I3C master driver.
 
-yes, will update to "transfer" in next version. Thank you.
+Please note that the series modifies drivers across multiple subsystems,
+like Device Tree bindings, ACPI, I3C and HWMON.
 
->
->> +commands.
->> +
->> +The driver supports both I2C and I3C transports for SB-TSI targets.
->> +The transport is selected by the bus where the device is enumerated.
->> +
->> +Misc device:
->> + * In 1P socket 0: /dev/sbtsi-4c
->> + * In 2P socket 0: /dev/sbtsi-4c, socket 1: /dev/sbtsi-48
->> +
->> +.. code-block:: bash
->> +
->> +   $ ls -al /dev/sbtsi-4c
->> +   crw-------    1 root     root       10, 116 Apr  2 05:22 /dev/sbtsi-4c
->> +
->> +
->> +Access restrictions:
->> + * Only root user is allowed to open the file.
->> + * APML TSI Register xfer access is read-write.
->                          transfer
-> ?
->
->> +
->> +SBTSI hwmon interface
->> +=====================
-> [snip]
->
-> --
-> ~Randy
->
+v4->v5:
+  * Free ACPI I2C boardinfo when an ACPI child without an I2C resource is
+    ignored.
+  * Issue RSTDAA if SETAASA device attach fails after the static address is
+    used as the dynamic address.
+  * Emit OF and ACPI modaliases for firmware-matched I3C devices.
+  * Make the DesignWare core clock optional and use "clock-frequency" as
+    the fallback when core_clk is absent.
+  * Keep DesignWare pclk, reset, and match-data handling on their existing
+    optional paths.
+
+v3->v4:
+  * Clarify mipi-i3c-static-method bit semantics and assigned-address
+  * Add I3C_ADDR_METHOD_VENDOR
+  * Fix fwnode reference handling while converting child property parsing
+    to use unified firmware-node APIs.
+  * Align ACPI child enumeration with the I2C core for multiple
+    I2cSerialBus resources, ignore ACPI child entries without an I2C
+    resource, and populate I2C modalias information from ACPI.
+  * Update SETAASA handling to use the static address as the dynamic
+    address, skip device-info retrieval for SETAASA devices, and tolerate
+    M2 for SETHID/SETAASA similarly to ENTDAA.
+  * Reorder DesignWare I3C clock/reset to include optional clock in the
+    ACPI skip clock/reset quirk.
+  * Add prints for missing ACPI clock-frequency and SPD5118 I3C
+    device type read failures.
+  * Fix grammar in comments and commit messages.
+
+v2->v3:
+  * Fix maximum value and indent bit list for mipi-i3c-static-method.
+  * Move I3C_ADDR_METHOD_* macros to dt-bindings header.
+  * Drop ACPICA commit IDs, keep only the Link: tags.
+  * Revert the change which proceeds to register other devices if SETAASA
+    is not supported so that it aligns with the rest of the driver and to
+    avoid the issues pointed by Sashiko.
+  * Rework multiple commit messages.
+
+v1->v2:
+  * Added patch to remove 16-bit addressing support for SPD5118
+  * Guard ACPI calls with #ifdef CONFIG_ACPI
+  * Remove CONFIG_OF guard for of_alias_get_highest_id()
+  * Mask mipi-i3c-static-method in the driver to select only valid values.
+  * Proceed to register other devices if SETAASA is not supported.
+  * Update commit message and links in the description of multiple commits.
+
+Akhil R (12):
+  dt-bindings: i3c: Add mipi-i3c-static-method to support SETAASA
+  i3c: master: Use unified device property interface
+  i3c: master: Support ACPI enumeration of child devices
+  i3c: master: Add support for devices using SETAASA
+  i3c: master: Add support for devices without PID
+  i3c: master: match I3C device through DT and ACPI
+  i3c: dw-i3c-master: Add SETAASA as supported CCC
+  i3c: dw-i3c-master: Add ACPI core clock frequency quirk
+  i3c: dw-i3c-master: Add ACPI ID for Tegra410
+  hwmon: spd5118: Remove 16-bit addressing
+  hwmon: spd5118: Add I3C support
+  arm64: defconfig: Enable I3C and SPD5118 hwmon
+
+ .../devicetree/bindings/i3c/i3c.yaml          |  36 +-
+ arch/arm64/configs/defconfig                  |   3 +
+ drivers/hwmon/Kconfig                         |   9 +-
+ drivers/hwmon/spd5118.c                       | 119 +++---
+ drivers/i3c/master.c                          | 382 +++++++++++++++---
+ drivers/i3c/master/dw-i3c-master.c            |  36 +-
+ include/dt-bindings/i3c/i3c.h                 |   4 +
+ include/linux/i3c/ccc.h                       |   1 +
+ include/linux/i3c/master.h                    |  20 +-
+ 9 files changed, 476 insertions(+), 134 deletions(-)
+
+-- 
+2.43.0
