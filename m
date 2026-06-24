@@ -1,63 +1,66 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DCB41DE4FB;
-	Wed, 24 Jun 2026 10:33:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 409D82594B9;
+	Wed, 24 Jun 2026 10:34:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782297212; cv=none; b=X255w61yKiwh0PZk9mAj1gIAUownhFywL7D5H3CP70gHvxCokF3aGLZ8a9f3ltIrC+VN4dliNLj1TU9RkYNr4M2WlsNJ9v92NTWi6LaSxBcB43+9pX2XjgDZtTJsvFrqZ8LBv0D21+cen76aDYhpj55IqwaIrxnDKt7h4JXQF94=
+	t=1782297289; cv=none; b=hQ1i+5jrWV9c4lDuyPIDT9uMZTikag8U86/elnanl1V1ryja/zr5ObYLukRcuZznR5VJR2CKAV6F1EgYATxVeTyD4FeJoTKkut5jg+A3ztMas9S1AwgfOgyw5bHgnS6L3M5EoUI5LlO7SkTxMf7kzmhiiywrtvs6vG7y8vQc2ts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782297212; c=relaxed/simple;
-	bh=QprwepZLXAT5gLHrE6GyGbBtV3tiGZlNVbTYKnjkiTY=;
+	s=arc-20240116; t=1782297289; c=relaxed/simple;
+	bh=5u2mB94KU/2aCCKO6pwMVLkSA/uhHZfjjiATcfwE2bw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=husmrcxmvhyw3X7IEQDuYZ+I1WESDfEGaJzKEvMTX9pVf7U8vIDKSFJKqgXlorz5bLV4LoYivTxFt2DTKMTsPMiIGyJl/JHTUBfn1abBd/noitUbTSiayui7RU7pw5MzEZX3X+CzwP3m2ktLPRKgQVJlzIfEjab38Ai1kl/+JIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dNhkwowD; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=uWFsYCWvltsnrfq19HVsIFRNVugS5Xw1VJt8ScZPl1Q1i+WaAhNz9x8PlFWMxIKZxfPxPXgIqVzuu4dLbrv/4MYS/WwIDeBI5+k+1ae6IaEQnOXePGModLGnfvdhqbtJHZa1lOMpLKAzE5AC2S/FYQhs/kF3xg+YTFvAVgA1yvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iyV62ObD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dNhkwowD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 683E61F000E9;
-	Wed, 24 Jun 2026 10:33:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iyV62ObD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 843941F000E9;
+	Wed, 24 Jun 2026 10:34:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782297210;
-	bh=QprwepZLXAT5gLHrE6GyGbBtV3tiGZlNVbTYKnjkiTY=;
+	s=k20260515; t=1782297287;
+	bh=5u2mB94KU/2aCCKO6pwMVLkSA/uhHZfjjiATcfwE2bw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=dNhkwowDOt9/KRWv/v+jfYQ105T376d5r+js8Ad/wMjK6PZeVGhMRB0QjNcx2PPEq
-	 bTJGvSiZ9rwmcoGx0YjmlHWqi3hve8XeJoolUjuOSduPy9t0CpJWeHsEU5BxEXRlOd
-	 jMAK2oQJ03gutlhdfUdBrSvHGOG61T3o8TAFAEnKMNxrwZQTymOEPNhwZJVb39hhdo
-	 xNUJWYVNNoZ+x5MGs/IcXj/nn0BcdnA/o7FtGuW5UsFE4zGYGOfgqwmduzzUD514Ls
-	 FdZ0XiKS+nrrqGlIJP4Yo3TWLoxVsxSk51pzVV9nqOObvMVzRMKw0govJXpeNcmPbA
-	 LnP9jUw022FQA==
+	b=iyV62ObDp4dxEdmUYA4X5Oh8V+3WtK+NzB731X8YQLYaiVth+7mKwGvHUWpqwOTp0
+	 mVmlbiP/Gd19+e3Fv5KtIoSj5BjINeJXguO0943jJGLOa7fqB6dh/1SwF1DYNDHqer
+	 lQ22As/S1pEMzjjPSDeshMWENWqU0OkqNaH31RKbCmXYg6HyXLLeWXGHaI1MMdcUag
+	 +ae2jYtIkFYYXgtDrQYGf1beZgYh417ns1GpCbAzabH1g7tQT6GAD35Z2vHnTLkss7
+	 nb3ccWo14soBr/Rx+EROnAF4Z6z+/2YpcbKlJfiE5fhHMtzGOD6X5v2cZagkwySSDT
+	 9HM0JUauCfSaA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 10/12] hwmon: spd5118: Remove 16-bit addressing
+Subject: Re: [PATCH v5 07/12] i3c: dw-i3c-master: Add SETAASA as supported
+ CCC
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Akhil R" <akhilrajeev@nvidia.com>
-Cc: linux-i3c@lists.infradead.org, devicetree@vger.kernel.org, conor+dt@kernel.org, robh@kernel.org, linux-hwmon@vger.kernel.org, Frank.Li@kernel.org
-In-Reply-To: <20260624102153.1770072-11-akhilrajeev@nvidia.com>
+Cc: linux-i3c@lists.infradead.org, robh@kernel.org, Frank.Li@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org
+In-Reply-To: <20260624102153.1770072-8-akhilrajeev@nvidia.com>
 References: <20260624102153.1770072-1-akhilrajeev@nvidia.com>
- <20260624102153.1770072-11-akhilrajeev@nvidia.com>
+ <20260624102153.1770072-8-akhilrajeev@nvidia.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 24 Jun 2026 10:33:29 +0000
-Message-Id: <20260624103330.683E61F000E9@smtp.kernel.org>
+Date: Wed, 24 Jun 2026 10:34:47 +0000
+Message-Id: <20260624103447.843941F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-> The intent of introducing 16-bit addressing was to support I3C, but it
-> turns out that I3C does not require reading the Legacy Mode register,
-> nor any specific encoding for page translation. The testing of 16-bit
-> code was limited and there are no known users for this feature. Remove
-> the sections that support 16-bit addressing and prepare the driver to
-> support I3C appropriately.
+> Add SETAASA and SETHID to the supported list of CCC commands for
+> DesignWare I3C host controller.
 >=20
-> Suggested-by: Guenter Roeck <linux@roeck-us.net>
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> SETAASA is a broadcast command that assigns predefined static addresses
+> to all I3C devices on the bus.
+>=20
+> SETHID is to stop HID bit flipping by the SPD Hub to which the SPD devices
+> are connected. It is a prerequisite command to be sent before SETAASA as
+> recommended by JESD300-5 and JESD403 sideband bus specifications.
+>=20
+> Reviewed-by: Frank Li <Frank.Li@nxp.com>
 > Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
 
 Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260624102153.1770=
-072-1-akhilrajeev@nvidia.com?part=3D10
+072-1-akhilrajeev@nvidia.com?part=3D7
 
