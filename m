@@ -1,206 +1,173 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC45F2FFDCC
-	for <linux-hwmon@vger.kernel.org>; Thu, 25 Jun 2026 13:20:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782393623; cv=none; b=YAn3gV3UDayyOi6v4zEy3H5RGzxmJVbhr4v9MX+XZ4zf1F3+rLzatSJNWIbjUwhS+f9NdpmYkejxwg+RAh7CB12CL6b4a4uv9aIELToQDJT9ckRavOySDU3d8GLj87anbm7Mqzrqrs1BkDSnKuZrZyQfypuHmB+Iga+rEQGP9ek=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782393623; c=relaxed/simple;
-	bh=hVd/9vBlCbyUh6zt9JM7gQXmP2qyxhw6kvFctofIbA8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YYk7aTmTgzxu2+GDwfjvUd+EXAVyMtF1AzwDk2xDMapFjWODLjjzkQGoHV2+ZIrfyJQTLQS4tFFqeZ3Zl/JD6y3pT1zZYdisePthMNpuEW+GS3rwtrgr1SLC6V7AO6Al/hCQ4GQNZa+e3Rzgr+ZZhyfKzHwRClg5s4mAMahZdPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=bKLgbtVx; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=atcpNZN+; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 477F53E717F
+	for <linux-hwmon@vger.kernel.org>; Thu, 25 Jun 2026 16:04:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782403484; cv=pass; b=TKZhv3CGhWkyBF+eAqkLdzD4pYZSZnlTGevsdNnn5/78Y1NUfP6Uauqeqs3dSc4wSaAwLZQFTwOeIm8MwVe/o1EbGZM7rLh2F2bTIniNpLHnZDdyUwJ3SLBR5OCmAgzGYuciC4wVXYgGlEwISdy8RVEXjDLGcZOWWvdjunYloJI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782403484; c=relaxed/simple;
+	bh=OfvEi/GLRJa9YhH5tmTVYk7/tOLSNMemoAfg8QOWVrg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YOZXfXizIFBCpOAme3PkLBbxfK6jgEnjMcXYll9m9TIURHf7myoofyD10lAYmfzQDqgm0RyacIb61DAfHUIz/4QWd7Ehy57gtKqFSjT2WWeK1TMUTVhbQzAkNViu457Hzhy5ftd/7grPpTQsvxBNBdwarldAIBlMusLamj0NQPA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JBaaJfRC; arc=pass smtp.client-ip=209.85.219.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="bKLgbtVx";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="atcpNZN+"
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65P9jw9m1371466
-	for <linux-hwmon@vger.kernel.org>; Thu, 25 Jun 2026 13:20:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	GjQjuigvKFd+Z+gtUv1havxbgca7I7GsAQ/BjMMTbQk=; b=bKLgbtVx0zgQeLSv
-	RG1K0NCDSfXhwbVrQCu7661cFTEtJXNLKoLoiURkPowe/nqyPIwyo00TJRxo51s8
-	HHQ2uiLRacNOz/oBMAzEh2/6tII4Vc5P2n8D3ySTeQrSpD1PXG6aJVQsZqSbDwuZ
-	zL2Ufs/1h5DdLyiCCpQXALBFA7Rb+RfsDYq9QrHLVmSDKuN1gk6rGa6/tScSbuWg
-	+oiY3ycPk2u2i8bHvNfUGdAa0BEkwfz8pl/Z42rg58DoXDmisvjPf4F3bfPv1hy3
-	EtN771a5eopr8Bsi3rVECixyuDK2Bx1x9UzrhsEOLiFEPaH9dZ+MrZtC4SQ+DxXs
-	v9midA==
-Received: from mail-vs1-f71.google.com (mail-vs1-f71.google.com [209.85.217.71])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4f0ymv1bpy-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-hwmon@vger.kernel.org>; Thu, 25 Jun 2026 13:20:20 +0000 (GMT)
-Received: by mail-vs1-f71.google.com with SMTP id ada2fe7eead31-72745cb2c3dso2015014137.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 25 Jun 2026 06:20:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JBaaJfRC"
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-8e066990ff9so13594556d6.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 25 Jun 2026 09:04:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782403474; cv=none;
+        d=google.com; s=arc-20260327;
+        b=qa8vl91sO3YGtGVD8gIlfJeJl55IeWs/zasIUSvpxMugOv4BgSGxzFN2g0Jtfy5v6C
+         t19LNp/mJuzzi+3KDbSzwb4/G3SGoG20wwcefuOzEefgWuCMU64HznRAt9Uk7zffDiL1
+         3CEn0UgO+cJeR+J/hG9KyBo45WutGHlj3pPMmeTUZxqXDaQOPWmwudOMy+AhHMN11TAC
+         I5ucmu8Li+0HUNIc17jolTBIqwvwl4gR44nlRp4/jFkVPqF56pFSmKw9Gm1N6it2TTDB
+         uJG9bZqtKmhaFOuAgS0pvdnyg2ferGnBS5XV54t4P6RZ+cCh7EhaLnOHuiWmSMgpcqWT
+         v/kA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=x/16BHJYDgl6JP15s3G73M0aD/c7KtSLlOfC5o62QAo=;
+        fh=MEtEky7vHTNiLIUvixIsUtBtjTxXKtzL3l5wS5rUu7c=;
+        b=B8PAXgIDqGr+H4DbWf3xeBRdgN0nIVzZ+eLSPktJA/t19xbk0/BbLxtY5ZlrEo0I/G
+         sm1FkgUvVNtXhJBmIFVtulUKEnI1VzpJtZsNad7BNWQDBqzuxDDWByaiN4hxvrXuAo3+
+         XJ9PpQbzdVQ91PSlMH2of20EzneXTc8hSyGegiQ5pjUv4Iuhtyw0CyrtNYOpay0bnNGq
+         qQ+PCvXcpSOzgiaE1M3v+Be1wI2PA8sggT0FL/LYInJwE8oj9omS6akKqB66XTf42Tdf
+         Fw5CCyAbRBTsfgvnDzt94KXN673Sy21CyQg7GAJKcA90JF4ghsYthIkwcfw8MOcDlKqs
+         OyTg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1782393619; x=1782998419; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GjQjuigvKFd+Z+gtUv1havxbgca7I7GsAQ/BjMMTbQk=;
-        b=atcpNZN+8lkAjt0PwmUuwTWJPnUEvnXZnOUbuPt2k4hV7h4B7iFeI+Hp10efe4cNpB
-         b2aOcSwfIvprWhrFhRuGcFHVrME12y0xgXn2YsnxlwX8bQA34xBT5iwZsMa7oUAcJsy8
-         /jUoWv0m210v+tHSuAJQjMjXfeJfoVXhLsjO+GzlP1HP9RWJ88gUROKCmVgZJNhkyIzD
-         Kfs52xGjcU803NuVZuARZ94vonSisJSwN41LF9m+ww/go59/xc4mFQx0JnKde/6FVGFf
-         /ACJ/L/FZDmRfppL6ZdwrSbwMdh5o275ulw8Tg4kgMShFS7Vt5G34HPgCN48CKzwJJ1D
-         wm6A==
+        d=gmail.com; s=20251104; t=1782403474; x=1783008274; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x/16BHJYDgl6JP15s3G73M0aD/c7KtSLlOfC5o62QAo=;
+        b=JBaaJfRCKuows+Oz8pxm/TdJiAHYypncbW8V9N5+Po6PO3LYBKDkkPOqXEjYVpDIPJ
+         wScWxUOPELgshbdCLAr6E2Q6Opuqqj3hUIpo6RRUWjAl5T2RuQ0Mvx60tlpWyG5Dwqdn
+         HbOhISMwgaT2lIPKUBBkA/G5/ZSyyLJSQXs4REdrYp+JIWEmz28WShb+VOt+JXKiPBD8
+         QsmL8tRugmTlyxQG/fkZ2P5tNd9HUntGVxzzSPBOXTp7lV/WKzbdJRhRE86a5pDmgmxO
+         GTZFtJ+7Ap+B4HzjKa760asBKE4M/lvLKN0SkN6hhH5hThyQtPdEXFxNxykyWmWmr4Aq
+         TCjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782393619; x=1782998419;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GjQjuigvKFd+Z+gtUv1havxbgca7I7GsAQ/BjMMTbQk=;
-        b=d5QF6VfeBjoKDSdjKeWGz0MqHZdWdKTtlnBx+HkvOxrDrlwEBhsTnssOtEv6mr8n//
-         z+0mmhIqAa0vZeJM6X7y7F6SUf9XiKLRZmgEY+qTA8MJdq5ZmgXIGUhohkT0OLrXpVZv
-         /si8b669VY4iQGouOVJb8u4hpJgwnekm7WqbvEZenP+ZIzgV+H7rCaIwG/O2+PivHLGB
-         tsbpvM4BtvpxrMIEFFNuq/o1JesMTTBRf/2VLFJhmxHUT4UwWZXCKIJolz+9BfeNsbzq
-         sz2sTN/j33yI9TXl4ALY+bnc1erzcjdrnshm9VXTWMPj8HfMMOeTty/KLSbJUW5DxlxH
-         GUfA==
-X-Forwarded-Encrypted: i=1; AHgh+RqGWTV5rk4WAkQ8Xc5+gXgJK3ylXGCtwLcaW6FP84AMPCTNZnOFp21+ZX4EH7otHtEUSmhMNAfIVJTc2A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywa1tBc4MYsjZ56+G0zOVAFaQGRDGzwSnpOfbet6Kn3E/hlXCxS
-	SnRp4SY/Kk2rH8k5aB8X9hQxiP/TVcNqNYVavHL2mCqObGBXvjYV9X8AMas7PPJ4OoX13NOlR10
-	6OunWlMVKdCSFmlhUBz+HBNfcp0Yu373ZEUCt+/DKN4PhGxRtrjYdQUpbdCIO0dtsIA==
-X-Gm-Gg: AfdE7cn+o/l2M7mlfjhPGY9PMWbchkEGQon7F/fOqsdeypeKnVhqDVUVtrVd7xNeAdg
-	J0wysjxJ2TA7C2KYq5WHVYzq2WKprD8OFJnDuIhraUz9B3HQqF5Cprdg5ObMUxc8InHkskHgSsf
-	gK3qT6r22ldFPYm12nEDS09kF9SoXbt/dBi3gBqlRWXTBTit9ehw6ZEs4R7pg3iLfA4I9LvGYrf
-	/xSmWZzHxBJDe8BJVM4W5hjBe75cAJRlW4rAzwB6UPhZ3ttgcNS5GwFSKILD4GIF7EXYGcRCOlr
-	7aGOFave2QG9MiKclbSFlEdoKE5ZE8Vj6Sbz9f42bTX+YQzd+qYPQaHZHDv0kM9YJa2DQURqtnl
-	2o/HzYZFPN6+hNNvtyuaB4mr1p2aAjoJoUv+QAIodGgxLPYnP7ELFpkAMoHdmD3NuSQbULP8=
-X-Received: by 2002:a05:6102:80aa:b0:650:94b2:b209 with SMTP id ada2fe7eead31-73433e36b9amr1057823137.4.1782393619063;
-        Thu, 25 Jun 2026 06:20:19 -0700 (PDT)
-X-Received: by 2002:a05:6102:80aa:b0:650:94b2:b209 with SMTP id ada2fe7eead31-73433e36b9amr1057791137.4.1782393618631;
-        Thu, 25 Jun 2026 06:20:18 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:fce5:aedd:3ea4:36f? ([2a05:6e02:1041:c10:fce5:aedd:3ea4:36f])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-46c221d93cdsm19126758f8f.18.2026.06.25.06.20.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Jun 2026 06:20:17 -0700 (PDT)
-Message-ID: <638eebb6-c03e-4071-8aad-a5da30ddfe3d@oss.qualcomm.com>
-Date: Thu, 25 Jun 2026 15:20:15 +0200
+        d=1e100.net; s=20251104; t=1782403474; x=1783008274;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=x/16BHJYDgl6JP15s3G73M0aD/c7KtSLlOfC5o62QAo=;
+        b=e9AgqvRLNlsL4s78tYNLO8ZxALhHFGbDkIuR8niwboEhBL/isVXbMA8CG1rlqukXxL
+         bR7BBD43eNodF05/ntGDciYBUWHMMa6ZfBTeW/274u8g2L+dfd9eN2omPHX1gf2f9AeD
+         rXDDfyY9vvoWq0sos7+1ZwzYFDMGGgNqwb9QT9BkEyCTohlX2zIpYiNuRNy0l8xM7RMN
+         Ct8ZvrW/RTSIFnTM/AULlqmFLLGs4yzKqTZMZUAYuXIb7HkmzoqC/HNQKYZ7dmL1vJg7
+         7zoqBl72yMNw8jWcpZF2jUOE6gHVGqmiLFgn7LmehOSus1cJA4r7K73CEDusruQzClsV
+         U9mw==
+X-Forwarded-Encrypted: i=1; AHgh+RpQtizqb41UgzWAJJG7qF2SBPKmN49kzCQg0C60CsGOUsTd8JFewuAfJeNgVysO9KWGtSIv5riPVUSiSg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwflZf4Nh1nSX/YHNM6KcmhSvREVQmI+MerBbV82J8AraPLXaZb
+	gcJ2RPI36jC802PtFK+WUmhZ8BgbiqeEJieP7eN4FxH6+SgYfS2DpSa2sx6LVVI0wXmf47u8Fkv
+	Wzu3QdNLmOj14CgPBlcDtE+o6PwoyxgI=
+X-Gm-Gg: AfdE7ckNdrh+sdwun1z1uQMU+JnIfPUezKQrmUoiv/WSC2mAByErJhy9uMQYzhHRUIE
+	wneSt///TXwCYTwvJHuZXTRIntdZUQ6K0V++9JiIT7Md5CnOlyYqJRwSEoJx/4vRmY7qA2ZDXmK
+	tVWiZ0o/FNA1GaaowhnNa+lIEXjyGkpqb2GFXChBiBLkyCPr7uTstthf5ifIRdL0qsGflRifEss
+	ls+CKY/dKEMi/F1PHTvF+NRJalKdro7pvWd/OOz/Q+CZiLI7QBnSZ3Mj+JdBjJQdBP7asci4v4S
+	So9zapEfurHzUBAC+47UhiV1NajN5PYjQIcQcGd+udKVFWMlKRB732d68jwaQRvX3es=
+X-Received: by 2002:a05:6214:130d:b0:8cc:d6a6:f54d with SMTP id
+ 6a1803df08f44-8e6dc53bb25mr43850836d6.8.1782403473815; Thu, 25 Jun 2026
+ 09:04:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 3/3] arm64: dts: qcom: x1e78100-t14s: Add thermal zones
- for keyboard skin and charging sensors
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, sre@kernel.org,
-        hansg@kernel.org, ilpo.jarvinen@linux.intel.com, linux@roeck-us.net,
-        andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
-        krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: bryan.odonoghue@linaro.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-References: <20260624210825.264454-1-daniel.lezcano@oss.qualcomm.com>
- <20260624210825.264454-4-daniel.lezcano@oss.qualcomm.com>
- <ea233160-505d-496d-a321-dc23e7f69d80@oss.qualcomm.com>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-In-Reply-To: <ea233160-505d-496d-a321-dc23e7f69d80@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=DqBmPm/+ c=1 sm=1 tr=0 ts=6a3d2b14 cx=c_pps
- a=P2rfLEam3zuxRRdjJWA2cw==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=FelO9ux0wxsA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=DJpcGTmdVt4CTyJn9g5Z:22 a=EUspDBNiAAAA:8
- a=jUCef7gqdSedP1EdzSYA:9 a=QEXdDO2ut3YA:10 a=ODZdjJIeia2B_SHc_B0f:22
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjI1MDExNCBTYWx0ZWRfX+zj0lELIfeGA
- nvk7/+5w9QBKrpf2ZVzOSKr/X3MEWa7AIUAdbdQHwJnlET6BKw5ORdrDz5L9Mhsrlk6L1bG6z2A
- lvYIZH/MLGdH2yHT2zXCs8mlh6P8OKk=
-X-Proofpoint-ORIG-GUID: 74djsc1jkkmhwL6kT9yhIRB9r6oXVwyP
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjI1MDExNCBTYWx0ZWRfX4qeaBJI2kFSx
- F9nUNcbzwuz96S7VAXksm+nhktT2XjC3n76gi64OB7opYKYRQMOTHMxMM32Vc+jO8iCvx6jvZTt
- 3k2J/T/a/vPjmhIufEgm23YtW7u4t6OZm8VftCGjxxaqhqyNAKTcaMzS3pR16rOp0j4rly8EZut
- 4yTWX9yo9hfpmgbWwvSumLkruKrhsk7NNqTKzE+OVptLrJ+ljON9ArU/wApB+sU6WsszDXVof1r
- L6Q7ydjgRjvxUYExGdL8H5bZI0rSFTyhe/Y1nwuGeSry3EvT3E85UJgAP8DczetV1yiotxtP575
- EeofO/RY+ulmBaqli95jGJjpmKfcNBOq7HSx8tFYyYC7MyIPPJ1z6/UaTTJ06DSQI10NlhEs9cS
- H1UjqYEEGrUn52q+enPrZB99TUrcHWRrTeun33+qGSmPJvaCXDXHxiKqZGAkhscuNhvbQ5/34pR
- uDcQWpafmalr83beKkg==
-X-Proofpoint-GUID: 74djsc1jkkmhwL6kT9yhIRB9r6oXVwyP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-06-25_01,2026-06-24_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 lowpriorityscore=0 priorityscore=1501 malwarescore=0
- suspectscore=0 bulkscore=0 adultscore=0 spamscore=0 impostorscore=0
- phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
- definitions=main-2606250114
+References: <20260530221353.159461-1-manishbaing2789@gmail.com> <9d78023d-9a00-4bd5-839f-2a79aef4b7a8@roeck-us.net>
+In-Reply-To: <9d78023d-9a00-4bd5-839f-2a79aef4b7a8@roeck-us.net>
+From: Manish Baing <manishbaing2789@gmail.com>
+Date: Thu, 25 Jun 2026 21:34:21 +0530
+X-Gm-Features: AVVi8CdO2ocbpBxnquW0hlKDHHMVtwatwgAo7J6Cu29lxCzRQSdkhbkVT-OesVo
+Message-ID: <CAJvdc_fpMR1T-p0YWOcmFEZ+YB+LHAQtxRSgMCaDti3E0cLqGg@mail.gmail.com>
+Subject: Re: [PATCH 0/7] hwmon: zero-initialization instead of memset
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: jdelvare@suse.com, nuno.sa@analog.com, abdurrahman@nexthop.ai, 
+	bartosz.golaszewski@oss.qualcomm.com, linusw@kernel.org, 
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	skhan@linuxfoundation.org, me@brighamcampbell.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 6/25/26 13:36, Konrad Dybcio wrote:
-> On 6/24/26 11:08 PM, Daniel Lezcano wrote:
->> Add thermal zone descriptions for the keyboard skin temperature and
->> battery charging circuitry sensors exposed by the embedded controller.
->>
->> Expose the EC as a thermal sensor provider and define two thermal zones
->> using the temperatures reported by the EC:
->>
->>    - a keyboard skin temperature zone with passive and hot trip points,
->>    - a charging circuitry temperature zone with multiple passive trip
->>      points and CPU frequency mitigation levels.
->>
->> The charging thermal zone progressively throttles the different CPU
->> clusters as the charging circuitry temperature rises and triggers a hot
->> condition at the highest trip point.
->>
->> This provides thermal framework integration for the EC temperature
->> sensors and enables platform thermal management through standard thermal
->> zone definitions.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
->> ---
-> 
-> [...]
-> 
->> +	ec-charging-thermal {
->> +		polling-delay = <5000>;
->> +		polling-delay-passive = <2000>;
->> +
->> +		thermal-sensors = <&ec 3>;
->> +
->> +		trips {
->> +			psv0: trip-point0 {
-> 
-> "ec_charging_tripN", please - these labels are file-wide, so it's
-> better if they're not overly short
-> 
->> +				temperature = <55000>;
->> +				hysteresis = <0>;
->> +				type = "passive";
->> +			};
->> +
->> +			alert0: trip-point1 {
->> +				temperature = <63000>;
->> +				hysteresis = <0>;
->> +				type = "hot";
->> +			};
->> +		};
->> +
->> +		cooling-maps {
->> +			map0 {
->> +				trip = <&psv0>;
->> +				cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu8 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu9 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu10 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu11 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->> +
->> +			};
-> 
-> Stray \n above, might also possibly want to throttle the GPU.
+Hi Guenter,
 
-At this point, I don't think GPU throttling is needed
+Thank you for catching the struct padding risk. You are completely
+right=E2=80=94Patch 7 (it87.c) would trigger a KMSAN uninit-value warning d=
+ue
+to the kmemdup() copy in platform_device_add_data(). I will drop that
+patch entirely.
 
+I have audited the other six drivers in this series and verified that
+their variables are never passed to memcmp(), kmemdup(), or hashed, so
+the =3D {} initialization is perfectly safe there.
+
+While this does not fix an active bug, the goal is to follow a cleanup
+pattern  recently discussed for the IIO subsystem [1],[2]
+1.Better performance: It removes the need for an extra function call.
+Instead, the compiler clears the memory directly and more efficiently.
+2.Safer code: It prevents accidental memory leaks that happen when
+developers make a typo in the sizeof() calculation.
+
+Would you be open to a v2 that includes just the six safe patches to
+modernize these initializations?
+
+[1] https://lore.kernel.org/all/20250611-iio-zero-init-stack-with-instead-o=
+f-memset-v1-0-ebb2d0a24302@baylibre.com/
+[2] https://lore.kernel.org/linux-iio/202505090942.48EBF01B@keescook/
+
+Thanks for your time and guidance,
+
+Thanks & Regards,
+Manish
+
+On Sun, Jun 7, 2026 at 9:42=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> w=
+rote:
+>
+> On 5/30/26 15:13, Manish Baing wrote:
+> > Hi all,
+> >
+> > This patch series cleans up memory initialization across several
+> > hardware monitoring (hwmon) drivers by replacing explicit memset() call=
+s
+> > with empty brace initialization (=3D {}).
+> >
+> > Following similar cleanups in the IIO subsystem [1], this series update=
+s
+> > these drivers to stop using memset() for stack memory initialization.
+> > As noted in those discussions [2], using empty brace initialization (=
+=3D {})
+> > is the preferred approach.
+> >
+> > Beyond simple replacements, a few drivers (nct6683, nct6775-platform, i=
+t87)
+> > were using memset() inside a for-loop. To fix this, the variable
+> > declarationwas moved directly inside the loop and zero-initialized ther=
+e.
+> > This safely resets the data on every iteration and makes the code much
+> > cleaner.
+> >
+> > Testing:
+> > - Compiled all modified files using `make W=3D1` with no warnings or er=
+rors.
+> >
+> > [1]: https://lore.kernel.org/all/20250611-iio-zero-init-stack-with-inst=
+ead-of-memset-v1-0-ebb2d0a24302@baylibre.com/
+> > [2]: https://lore.kernel.org/linux-iio/202505090942.48EBF01B@keescook/
+>
+> That discussion does not fully address a problem I had seen previously,
+> where {} did _not_ zero-fill all holes, causing subsequent memcmp()
+> failures on affected data structures. It took a lot a lot of debugging
+> to find and fix that problem. Given that, I am not inclined to accept
+> this series unless someone convinces me that it fixes an actual problem
+> _and_ that each and every instance of the changes is not used in a
+> subsequent memcmp().
+>
+> Guenter
+>
