@@ -1,19 +1,20 @@
-Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A2353BD22C;
-	Thu, 25 Jun 2026 06:11:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [4.193.249.245])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6558B30676A;
+	Thu, 25 Jun 2026 06:12:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.193.249.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782367887; cv=none; b=iLPMIptSkn+uIRKWV2SQBCL6pOo04ox3uy9R3CQjJaOXdROswq+tSVuLGK7gpgOgyS/596ledCQIdpYnJA1YTGWw4JVJYMFA9FMqnI8KNV+z3IbRn3lnWLKPatEyD/t+ehKSITia3PDC2OsEWKZOp+j9fMi+foze6U1w3cBW0ZA=
+	t=1782367926; cv=none; b=GBjeMPC4c43xGyfM+5MDfKTo8G9JRF/KOg/0LYsj7DpDZ1uPir6PIZdtjfFX3PRzahceIRuRpfhdENceY6oSUnYUoCnXBeM4O2cuU2J+t84y9Q4RKF2R+uVXolxD4xSQJPVo4H0MOvNIpYbq+1iCgHDQ8AtSb29zsX7RB2tgFEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782367887; c=relaxed/simple;
-	bh=y8f5gItlkqHxO86WtsIrPXPLunR/6VCk8uiLcNGrm1g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YJQxWd7tOn4irKUskG6iXbPAcDofpfxV03XpmOqpgIIb80TXipe6J09mKZH7CxFf5eyVN7HUEkf3yM4c7zmghKuY/pPaCHS6muNzNol/BD56c3diZsfpAqJbdlYDgNV6TgJM/FwUj9IKUn+NLA65I02f/BMgriBEAL9wy6wO2wc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=209.97.182.222
+	s=arc-20240116; t=1782367926; c=relaxed/simple;
+	bh=iuB46UZdgapFhx1Puyf62XJCCaIBLTSicHKKFybvaoE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=erUEOOg9OdYI/TJ59VE/UppDrqN8bEBpbbYCjHddJFvO8WlCSsktqXjKHYOcYtcSlg17MS15WD8X0xy4qiJ1ACZPj0Ks+EWTIN2NbQhgxHFrXa9Ds/k/yle6ZY2YD4XLA2N0brQg7UU5aq1cnrgHlS4LrBQhsFnmakQu0hJxFUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=4.193.249.245
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
 Received: from E0005156LT.eswin.cn (unknown [10.12.96.79])
-	by app2 (Coremail) with SMTP id TQJkCgBHXaBsxjxq7lwuAA--.30215S2;
-	Thu, 25 Jun 2026 14:10:57 +0800 (CST)
+	by app2 (Coremail) with SMTP id TQJkCgDX656lxjxq8FwuAA--.48901S2;
+	Thu, 25 Jun 2026 14:11:51 +0800 (CST)
 From: hehuan1@eswincomputing.com
 To: linux@roeck-us.net,
 	robh@kernel.org,
@@ -29,10 +30,12 @@ Cc: ningyu@eswincomputing.com,
 	luyulin@eswincomputing.com,
 	dongxuyang@eswincomputing.com,
 	Huan He <hehuan1@eswincomputing.com>
-Subject: [PATCH v8 0/2] Add driver support for ESWIN EIC7700 PVT controller
-Date: Thu, 25 Jun 2026 14:10:48 +0800
-Message-ID: <20260625061049.1614-1-hehuan1@eswincomputing.com>
+Subject: [PATCH v8 1/2] dt-bindings: hwmon: Add Eswin EIC7700 PVT sensor
+Date: Thu, 25 Jun 2026 14:11:46 +0800
+Message-ID: <20260625061147.1631-1-hehuan1@eswincomputing.com>
 X-Mailer: git-send-email 2.47.1.windows.2
+In-Reply-To: <20260625061049.1614-1-hehuan1@eswincomputing.com>
+References: <20260625061049.1614-1-hehuan1@eswincomputing.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -40,183 +43,118 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:TQJkCgBHXaBsxjxq7lwuAA--.30215S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3Jw1DKF1DWF1fZFy8Jry5urg_yoW3JF13pF
-	W8W34Ykw4DXrWSqFWDt3W09rWfJan3JFW3Ar4fWw18Zw15t340vFWfK3WYvFyDurn3X3ZI
-	va4Yqr17Ca4qyrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:TQJkCgDX656lxjxq8FwuAA--.48901S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kw43XrWrXF4fKrW3WFyrCrg_yoW8Kw1UpF
+	s7CFyUGr1IqryxZ3y3tF109F1ftws5CFW7Arn2q3WrKF1Dtas0qa13KFy5ua4fCr1fXFW3
+	uFyaqry7A3WDA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUBv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
 	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
 	1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
 	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
 	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
 	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
 	Y2ka0xkIwI1lw4CEc2x0rVAKj4xxMxkF7I0En4kS14v26r1q6r43MxkIecxEwVCm-wCF04
 	k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
 	MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr4
 	1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l
 	IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
-	A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUmjgxUUUUU=
+	A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUXJ5wUUUUU=
 X-CM-SenderInfo: 5khk3tzqr6v25zlqu0xpsx3x1qjou0bp/
 
 From: Huan He <hehuan1@eswincomputing.com>
 
-Add support for the ESWIN EIC7700 PVT (Voltage, Temperature) sensor
+Add device tree binding documentation for ESWIN EIC7700 Voltage and
+Temperature sensor.
 
-Features:
-The driver supports monitoring of voltage and temperature parameters
-through the hardware monitoring subsystem. It provides an access to the
-sampled Temperature and Voltage.
+The EIC7700 SoC integrates two PVT instances for monitoring SoC and DDR
+power domains respectively.
 
-Test:
-Tested this patch on the SiFive HiFive Premier P550 (which uses the ESWIN
-EIC7700 SoC).
-
-Updates:
-
-  Changes in v8:
-  - Update eswin,eic7700-pvt.yaml
-    - Delete reviewed-by tag of Krzysztof Kozlowski due to functional
-      changes. Add the APB clock because when the kernel is booted with
-      CMDLINE option "clk_ignore_unused", the APB clock remains enabled by
-      default; without this option, the APB clock may be gated and the PVT
-      driver will not operate correctly
-  - Update eic7700-pvt.c and eic7700-pvt.h
-    - Add APB clock support and retrieve clocks using devm_clk_bulk_get()
-    - Update eic7700_pvt_hard_isr() to verify PVT_INT_STAT before clearing
-      the interrupt and completing a conversion, preventing spurious
-      interrupts from returning stale data or completing a conversion early
-    - Update eic7700_pvt_probe() to register the PM runtime cleanup action
-      before requesting the IRQ, so the IRQ is torn down before clocks are
-      disabled during driver removal, preventing a possible
-      use-after-disable of the hardware clock in the ISR
-
-  Changes in v7:
-  - Remove the unused reset control pointer from struct pvt_hwmon and keep
-    the reset control handle local to eic7700_pvt_probe()
-  - Update eic7700_pvt_init_iface() to disable PVT_ENA_EN before clearing
-    the interrupt status, preventing a possible level-triggered interrupt
-    storm if the bootloader leaves the conversion engine running
-  - Update eic7700_pvt_disable_pm_runtime() to explicitly disable runtime
-    PM and avoid an unbalanced disable_depth
-
-  Changes in v6:
-  - Fix the !CONFIG_PM probe error path by disabling the clock if IRQ
-    request fails before the PM cleanup action is registered
-  - Replace pm_runtime_put_noidle() with pm_runtime_put() in the IRQ
-    handler to avoid a runtime PM reference-count race with the read path
-  - Remove the unused pvt_clear_data() devres action and its associated
-    devm_add_action() registration
-
-  Changes in v5:
-  - Update eswin,eic7700-pvt.yaml
-    - Drop the label enum constraint and remove label from the required
-      list
-    - Add '#thermal-sensor-cells' to the required list
-    - Rename the example node to the generic sensor@... form
-    - Update the binding description to describe one temperature sensor
-      and one voltage sensor
-  - Update eic7700-pvt.c
-    - Register the hwmon device with the fixed name "pvt"
-    - Remove label-based instance identification from the driver
-    - Fix CONFIG_PM=n support by keeping the clock enabled when runtime PM
-      is unavailable
-    - Add pm_runtime_force_suspend() in the cleanup path to avoid leaving
-      the device active during unbind
-    - Switch system sleep callbacks to pm_runtime_force_suspend() and
-      pm_runtime_force_resume()
-    - Guard ISR register accesses with pm_runtime_get_if_active()
-    - Add synchronize_irq() on the timeout path to avoid stale completion
-      races
-    - Remove temp_offset support because the raw trim register does not
-      match the hwmon ABI
-    - Align the commit message with the implementation (one temperature
-      sensor, one voltage sensor)
-
-  Changes in v4:
-  - Update eswin,eic7700-pvt.yaml
-    - Delete reviewed-by tag of Conor Dooley, because the label enum
-      constraint is introduced
-  - Update eic7700-pvt.c and eic7700-pvt.h
-    - Remove the unused LVT/ULVT/SVT process-monitoring channels
-    - Remove the probe-time power check since the PVT block is always
-      powered on EIC7700 and the extra verification is unnecessary
-    - Stop requesting the interrupt as shared and use the dedicated PVT IRQ
-      only
-    - Reorder probe initialization so the interface is initialized before
-      the clock is disabled, avoiding register accesses with the clock gated
-    - Fix runtime PM reference handling on error paths by balancing
-      pm_runtime_get_noresume() with pm_runtime_put_noidle()
-    - Add pm_runtime_put_noidle() handling for failed pm_runtime_get_sync()
-      calls in hwmon read/write paths
-    - Switch the PM callback registration from pm_sleep_ptr() to pm_ptr()
-
-  Changes in v3:
-  - Update eswin,eic7700-pvt.yaml
-    - Remove redundant label property description and use 'label: true' to
-      reference the definition in hwmon-common.yaml
-    - Replace 'additionalProperties: false' with
-      'unevaluatedProperties: false'
-    - Remove the description for '#thermal-sensor-cells'
-  - Update eic7700-pvt.c and eic7700-pvt.h
-    - Fix clock reference count imbalance with Runtime PM:
-      Replace devm_clk_get_enabled() with devm_clk_get() and manually
-      manage clock enable/disable to avoid double-disable in remove() when
-      Runtime PM is active. Clock is now enabled only during probe for
-      eic7700_pvt_check_pwr(), then disabled before enabling Runtime PM,
-      which takes full control of the clock thereafter
-    - Add detailed comment explaining the spurious interrupt risk in
-      eic7700_pvt_check_pwr()
-    - Replace wait_for_completion_interruptible() with
-      wait_for_completion_timeout() to prevent infinite wait
-
-  Changes in v2:
-  - Update eswin,eic7700-pvt.yaml
-    - Reference the hwmon-common.yaml file
-    - Remove the clock-names and reset-names properties
-    - Move additionalProperties: false after the required block
-    - Remove one example node to avoid redundancy
-  - Update eic7700-pvt.c and eic7700-pvt.h
-    - Remove unused sensor macros (PVT_SENSOR_FIRST, PVT_SENSOR_LAST,
-      PVT_SENSORS_NUM)
-    - Drop the unnecessary hwmon-sysfs.h header
-    - Replace dynamic sensor info allocation with a static array and unify
-      sensor labels
-    - Remove unused hwmon_temp_type attribute
-    - Eliminate redundant validation checks
-    - Remove mutex and related locking, relying on hwmon core
-      serialization
-    - Replace per-sensor caches and completions with a single data cache
-      and completion object
-    - Remove pvt->sensor tracking. ISR no longer depends on the currently
-      selected sensor
-    - Move devm_add_action() registration after init_completion() for
-      safer cleanup, and update cleanup function (pvt_clear_data)
-    - Replace devm_reset_control_get_optional_exclusive() with
-      devm_reset_control_get_exclusive_deasserted()
-    - Replace eic7700_pvt_remove() with eic7700_pvt_disable_pm_runtime()
-      and move it after PM runtime enable to avoid resource leaks on probe
-      failure and remove clock disable and reset assert from
-      eic7700_pvt_disable_pm_runtime() as it is already handled by devm_*
-      framework
-    - Remove redundant clock presence check in runtime_resume
-
-  - Link to v1: https://lore.kernel.org/all/20260109090718.442-1-hehuan1@eswincomputing.com/
-
-Huan He (2):
-  dt-bindings: hwmon: Add Eswin EIC7700 PVT sensor
-  hwmon: Add Eswin EIC7700 PVT sensor driver
-
- .../bindings/hwmon/eswin,eic7700-pvt.yaml     |  72 +++
- drivers/hwmon/Kconfig                         |  12 +
- drivers/hwmon/Makefile                        |   1 +
- drivers/hwmon/eic7700-pvt.c                   | 507 ++++++++++++++++++
- drivers/hwmon/eic7700-pvt.h                   |  99 ++++
- 5 files changed, 691 insertions(+)
+Signed-off-by: Yulin Lu <luyulin@eswincomputing.com>
+Signed-off-by: Huan He <hehuan1@eswincomputing.com>
+---
+ .../bindings/hwmon/eswin,eic7700-pvt.yaml     | 72 +++++++++++++++++++
+ 1 file changed, 72 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/hwmon/eswin,eic7700-pvt.yaml
- create mode 100644 drivers/hwmon/eic7700-pvt.c
- create mode 100644 drivers/hwmon/eic7700-pvt.h
 
+diff --git a/Documentation/devicetree/bindings/hwmon/eswin,eic7700-pvt.yaml b/Documentation/devicetree/bindings/hwmon/eswin,eic7700-pvt.yaml
+new file mode 100644
+index 000000000000..58ec8635dce3
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/eswin,eic7700-pvt.yaml
+@@ -0,0 +1,72 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/eswin,eic7700-pvt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ESWIN EIC7700 PVT Sensor
++
++maintainers:
++  - Yulin Lu <luyulin@eswincomputing.com>
++  - Huan He <hehuan1@eswincomputing.com>
++
++description:
++  ESWIN EIC7700 SoC integrates embedded voltage and temperature sensors to
++  monitor the internal SoC environment. The system includes two PVT sensor
++  instances. The PVT0 monitors the main SoC power domain. The PVT1 sensor
++  monitors the DDR core power domain.
++
++allOf:
++  - $ref: /schemas/hwmon/hwmon-common.yaml#
++
++properties:
++  compatible:
++    const: eswin,eic7700-pvt
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: PVT enable clock
++      - description: APB bus clock
++
++  clock-names:
++    items:
++      - const: enable
++      - const: apb
++
++  interrupts:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  '#thermal-sensor-cells':
++    const: 0
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - interrupts
++  - resets
++  - '#thermal-sensor-cells'
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    sensor@50b00000 {
++      compatible = "eswin,eic7700-pvt";
++      reg = <0x50b00000 0x10000>;
++      clocks = <&clocks 244>, <&clocks 234>;
++      clock-names = "enable", "apb";
++      interrupts = <349>;
++      interrupt-parent = <&plic>;
++      label = "pvt0";
++      resets = <&reset 111>;
++      #thermal-sensor-cells = <0>;
++    };
++...
 -- 
 2.34.1
 
