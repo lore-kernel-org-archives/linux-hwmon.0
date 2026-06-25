@@ -1,66 +1,33 @@
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17AB3C278A
-	for <linux-hwmon@vger.kernel.org>; Thu, 25 Jun 2026 07:05:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA8F92F8EB5;
+	Thu, 25 Jun 2026 07:22:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782371145; cv=none; b=NQ2iZNcK6kdqqwBnxbjmnZYlwwqhxJOJLC57Z3HlAJcdk4Tt3wSXGzpFtG2cX2C5umGXd4XFAFZDotGuNn1nJ8lnxTeJlFaD5Pio7S/wHozXeR66abzqWi+JBrcmBmZe+3do4M4w6kJGr9ZUPCSUNq+AbcWDFH6dwDY9fUORp3U=
+	t=1782372126; cv=none; b=jPtNcdqhyTyvIL8pYxhH6PtGVEzqDgptz3aWIdC42o7hWyZmj+lGs7lDelbKBZIV4GzKhjCHAMZCyuWXy2WOb8EJjLWuJ5Gu073EFuzeFSMDHQtW0CCeHKCmaBQ0W26PbaHYPqO6iCeEhbAXXIKRDaGJWbGspCNMpXKJt7DJMVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782371145; c=relaxed/simple;
-	bh=hMwm8OC6yMV7o6k5gEjXCIGVhLhyVKJEh/qwAVYMJDs=;
+	s=arc-20240116; t=1782372126; c=relaxed/simple;
+	bh=6DT46PpihlAbr2sz3jxZTbqZaGztT7B2k3gM79yp31E=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GlXnj+oq8GjTeEh0Q5WrSehZXPyQRWSpV9xu6mDjAuIwCUKEmrSFFGoZwBKZGvgz9AefqEjAEy5o15DT8ctMG5AYSM7Q+P2SPVlkWaVK2YYmBomeH9NndmK5bt2koujK09RpcR553tci2FPmlGvPeO8IvCP1wUXPKpl4/Z0WAHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kjGa/KDT; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=NqBU8D0gAYi6iUX51Nis7HP38IrpP3IZGhrmzV7huhgPcK888GFRrqfDhv9iBi1+7bH0OanODeKT8vcVS+bd2MvcOx6/q5Qop/Kly00btue3vCd1kUMEGKQprmx5z56XCKt2/L7C7W0TM/AXR2X0UXJg1HB1gna+H/qXBODU+/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hxN8kbbp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kjGa/KDT"
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5ad583dc41eso1860092e87.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 25 Jun 2026 00:05:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782371141; x=1782975941; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lpu3IC4RSA2zDkdsuH0CS1/1RfLLmW5/oNEdfMnmxUI=;
-        b=kjGa/KDTab7ZHSnmJiwCEfT9thordCzwXAsK6WjDJ6nO8gQJtu7E3aMtdgw9grXakZ
-         bqHhoAQs9BKoAdFB9bdnnQ0rFphHeXshPfRmZx07hBXT3dw1tVRoHYfw5fDAYrJytNNb
-         K965hKhwDQzh2G9bHsbTfIA9sDDU+2/qEAfR3dVSRmsFQ/mfRDBrayq46jQFhRV7VIXI
-         6rXt4hqMbsxY6altS3ptbYrKqZoMvIPFY5SxNjyiLU4RI4pfc86alkqSsmdyF4KlZRA3
-         t1+F+8B91m42b6s5zg0FE0eZAGvlxMpWk4ij3bMOCPCn67AJm2mYFyCabNjcpkdDGRuX
-         vwrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782371141; x=1782975941;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lpu3IC4RSA2zDkdsuH0CS1/1RfLLmW5/oNEdfMnmxUI=;
-        b=T6qNB7mIOIQtD7Mki68RSplW7PDa5fXgSII05Y0sxGKraZbfySSLmFoRv0nwpEvxRZ
-         eiTRl6IB0geR2fOTfDp0JczWuu0GeuW3xqvJvk+YeRGZsvT/grj2QDawAeWi18VLXgYU
-         bzwhF5rdqzfmUG4cGwYD0kIYaJx7dU8C0tPYgyopfW3A3wGyqJmADwy83QUjuQHhKKvA
-         K0rG5/NPWiNmq4dq7awWR02Aq9MBv7XOhFkBP1ypfTKb/Go/7Lmqt93qLGtqviHZ4CWc
-         MQTadAKV2jUrKyibvf2vLlJu5h8T8H5H9KQvfPGfR7P4qC+3GnvTcI8gI4aOjrbcgAG6
-         cslg==
-X-Forwarded-Encrypted: i=1; AHgh+RqOSvznxcRldQZpFQymoRna1F23NSyrLaDdY6LqFtA0BFxIk3254U7RzhBA/bTOWW405AcWHPzJhb/0EQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4hTMpXIvCm5cmBHRRbcpX/TjT7v47PHkCS8hToV4K1rzoR9uM
-	oKVYgAlfvqy5vxnxzYXbfO6TzbGWQUBnXkdNCplcf9K3rj+RVX2uAPgf
-X-Gm-Gg: AfdE7clJhazXZldmG31m/fhmJzzpllZJrFZOpwG/PN1n1GNaGgDQIWC27jyIjBDZQLZ
-	qvkMKXciTbo3p1LTnZNZwNdb9ejVxxc0PgQa/JwbRKIFE4HZ77XruWVuodwj+5GeKHLO7hCsP0e
-	DbI5fjtSHdIPhC02T3wylWCciZozJtMEBwsytGefeIeR/eosxHX/otIv7i9qHzCs03IxUeKNgVE
-	/wMdJlKTFH+0/Nzf2hGECW40dQr36U9E2TJhVe4x4bBHZWX7d1DSmdj2y3GNEJ+ZyNdnPM7SBeP
-	k1jLfMD8RPFMIuT+xJMPhMPR2KHuqr/eCOQx+UgnPqhNOto+ZzoClmgSk83/LkqDXPPxgh1ALnS
-	JrTnX0wHLCh+UEik1v9QUoQqz3+zDK42f8dffUrEDfgn3dTQSrNEu/fIdDLjqwVN34WnwJhKnWv
-	xFcS63mWcR+qwQYuQ7qDL6zg==
-X-Received: by 2002:a05:6512:4405:b0:5aa:7779:803b with SMTP id 2adb3069b0e04-5aea1f2a590mr336006e87.5.1782371139184;
-        Thu, 25 Jun 2026 00:05:39 -0700 (PDT)
-Received: from [10.38.18.54] ([213.255.186.37])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5ad6954a538sm2433685e87.7.2026.06.25.00.05.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Jun 2026 00:05:36 -0700 (PDT)
-Message-ID: <bd9419aa-1a21-4ca2-990b-ad1bebf5c9c8@gmail.com>
-Date: Thu, 25 Jun 2026 10:05:35 +0300
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hxN8kbbp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 849C91F000E9;
+	Thu, 25 Jun 2026 07:21:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782372125;
+	bh=4UhTcXpPkZ3XHz7roCKeMEghqzpysHMo5igEDiexgo0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=hxN8kbbp3Ttd+l1fTOt5/yW5Q/7K+JHZg28efjahiVnlZ1TNHQpfDoequPT4YP1ky
+	 v6JqxhHjObOIPt0Gk+ojQ8uJYKRu87DSxCOLTOOFCJ248X5gzAw1qx1k2uK6JnUfyf
+	 VzKdfXtitf1TobZYY6V/doKFA2U8yth96O+osj82jHIsV91i9Nds4mBgJg2T2iQRFX
+	 T0k3w8I9+x14S5fwlbyuFRqXqMJUrepBk8JtMZJeq8Z7VT4+flUIMs+TpF52vxYPCu
+	 rs6z3Qah1yE8EDGABfWMF10A0eNLkT75jRRXOvmWlpmYybqLMO0/ipZNUcRdVW4rCL
+	 DRxCeFrUJx3YA==
+Message-ID: <67aed58a-46f6-4a7b-b8e3-428ec8a69444@kernel.org>
+Date: Thu, 25 Jun 2026 09:21:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,7 +37,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 1/7] dt-bindings: adm1275: ROHM BD12780 hot-swap
  controller
-To: Krzysztof Kozlowski <krzk@kernel.org>
+To: Matti Vaittinen <mazziesaccount@gmail.com>
 Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
  Matti Vaittinen <matti.vaittinen@linux.dev>,
  Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
@@ -88,88 +55,84 @@ Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
 References: <cover.1781591132.git.mazziesaccount@gmail.com>
  <d63c4df5e9df845bc4f94b4abdcd068a23929974.1781591132.git.mazziesaccount@gmail.com>
  <20260617-uptight-sexy-hippo-f4bc62@quoll>
-Content-Language: en-US, en-AU, en-GB, en-BW
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20260617-uptight-sexy-hippo-f4bc62@quoll>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <bd9419aa-1a21-4ca2-990b-ad1bebf5c9c8@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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
+In-Reply-To: <bd9419aa-1a21-4ca2-990b-ad1bebf5c9c8@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-I think I (almost) missed this review... Sorry for the belated reply.
-
-On 17/06/2026 13:28, Krzysztof Kozlowski wrote:
-> On Tue, Jun 16, 2026 at 09:35:35AM +0300, Matti Vaittinen wrote:
->   +
->> +  Datasheets:
->> +    https://fscdn.rohm.com/en/products/databook/datasheet/ic/power/power_switch/bd12780muv-lb-e.pdf
->> +    https://fscdn.rohm.com/en/products/databook/datasheet/ic/power/power_switch/bd12780amuv-lb-e.pdf
->> +
->>   properties:
->>     compatible:
->> -    enum:
->> -      - adi,adm1075
->> -      - adi,adm1272
->> -      - adi,adm1273
->> -      - adi,adm1275
->> -      - adi,adm1276
->> -      - adi,adm1278
->> -      - adi,adm1281
->> -      - adi,adm1293
->> -      - adi,adm1294
->> -      - silergy,mc09c
->> +    oneOf:
->> +      - items:
->> +          enum:
+On 25/06/2026 09:05, Matti Vaittinen wrote:
+>>> +            - adi,adm1075
+>>> +            - adi,adm1272
+>>> +            - adi,adm1273
+>>> +            - adi,adm1275
+>>> +            - adi,adm1276
+>>> +            - adi,adm1278
+>>> +            - adi,adm1281
+>>> +            - adi,adm1293
+>>> +            - adi,adm1294
+>>> +            - rohm,bd12780
+>>> +            - silergy,mc09c
+>>> +
+>>> +# Require BD12780 as a fall-back for BD12780A.
+>>
+>> No need for the comment, schema is quite explicit.
 > 
-> 
-> s/items/enum/, so:
-> 
-> oneOf:
->    - enum:
->    ....
+> Eh... I know it is explicit for one who fluently reads yaml. Not all of 
+> us do that :| (See my reply to the previous comment...) I am not sure 
+> the comment hurts - while I am sure it helps occasional binding reader 
+> like me. Can you please reconsider keeping the comment?
 
-Thanks Krzysztof. I am always so lost with these bindings. Giving the 
-concrete suggestion(s) helps a lot!
+This one does not, but if people take the existing code as a starting
+point or even as an example in arguments ("he did like that, so I am
+allowed as well"), it gets multiplied and we have more bindings with
+redundant data.
 
-> 
->> +            - adi,adm1075
->> +            - adi,adm1272
->> +            - adi,adm1273
->> +            - adi,adm1275
->> +            - adi,adm1276
->> +            - adi,adm1278
->> +            - adi,adm1281
->> +            - adi,adm1293
->> +            - adi,adm1294
->> +            - rohm,bd12780
->> +            - silergy,mc09c
->> +
->> +# Require BD12780 as a fall-back for BD12780A.
-> 
-> No need for the comment, schema is quite explicit.
+That's said, if you insist then fine with me, keep it.
 
-Eh... I know it is explicit for one who fluently reads yaml. Not all of 
-us do that :| (See my reply to the previous comment...) I am not sure 
-the comment hurts - while I am sure it helps occasional binding reader 
-like me. Can you please reconsider keeping the comment?
-
-Although, I am not sure if Guenter suggested me to drop the compatible 
-for the bd12780a and only use the bd12780 - or if his comment only 
-applied to the i2c IDs.
-
-https://lore.kernel.org/all/751cd5eb-104f-4445-a6d2-8119ad5d5660@roeck-us.net/
-
-Well, I will keep the bd12780a compatible and drop the I2C ID unless 
-something else is suggested. Again, the BD12780 and BD12780A do have 
-different hardware properties (at least in I2C slave address selection 
-pins), and while it doesn't really matter for the Linux drivers, the DT 
-bindings should ideally be generic and not Linux specific.
-
-Yours,
-	-- Matti.
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+Best regards,
+Krzysztof
