@@ -1,434 +1,148 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1168C3537F9
-	for <linux-hwmon@vger.kernel.org>; Sat, 27 Jun 2026 08:41:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30CFF17D6
+	for <linux-hwmon@vger.kernel.org>; Sat, 27 Jun 2026 08:49:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782549717; cv=none; b=BqcDiTrqaKC/pRLBf4Pd8OoD8l9jhwVlI85txhRJGB1qNFrkqOC38pPsjGJKILXk0ncuho4l5c6ECbYiwTefvHeR28nMhe5LcIc3ANlhlOLZbd/GWJ8EmkKViJO2P31jLEMU6/mr6UrpF8RX+03prznLJYaeDplq1oikPiORbWk=
+	t=1782550176; cv=none; b=YcAHVUPDpCHs8mCa0Uu2BFsJqFxOQ2icZYV/zXXUwhBnC1hNUO1umxfkXnQkJv51EXKMc86kxNyuX/ixU283Mjjs2sqKscXt05T7JL3hyK5m073jlGgx/McjMl18pYiGRNjSj/XR90CVB/+VKI85rRgR4FqSn3neT1vJBcejObU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782549717; c=relaxed/simple;
-	bh=+/tmu2iZfFEYrasnN4G5bl7/n5ppeLg8ovPkj7wpohk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kZrrcogvvt49H408Vwi4qPjNf8WvY2y+fGih7qQqLQ7SjhbAUQ1K6WLGYqkvboEkgqiPRdXi8AE/qosi+rZLbTPB4WohV8DnhIkGtnn+elm75OLQB/6WNRdsNgsyvwDmHMQxbcJnj/i3GZfmRj0ChDU3r8u3a10/Jg5RNf37EQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AwAY5erA; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782550176; c=relaxed/simple;
+	bh=ykPX2eVs2+6Whqo/tZpXce/GZEcanXzVYLve3DYXujI=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=p0arQzthDjMKSk4e2M55ysz/NKuS6eZ+bfHKe9aLDBsrWCfOoPbL3yht6azEpcUuZG6M0o/CWeet43lqWTanR8lh93zpcKIx7rYV9BAkhKkDutmRvmTNoKibByrjs3zuhp0lcvmVCTVDu14Rtcz1WIs/30L82maxT9JuxO6AGPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Aqsx/8UZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AwAY5erA"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-4626fdc829aso1068544f8f.3
-        for <linux-hwmon@vger.kernel.org>; Sat, 27 Jun 2026 01:41:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782549714; x=1783154514; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CALIp1+Q8ktF+IIOGV1Cs+Je/B85B6g9HRsvBPmUajQ=;
-        b=AwAY5erAx3FvtIb+HcF3ckxSVS2GFKMAaUKxI76cxbiLg71KHtaWoySmFsZtPw+Ua9
-         JWsW/kesYJWeRWj4W51ES8BxXjg2uYLQj1nv6iYPF06wzbY8VnfNuJMxDIVVdjLXH/lb
-         N4bO/jBZKrbbJMbXyst3E0c77G+4vrJSRUfN7pg5wVs2NidYEW8Eyg9swxg1ZJlhrUqD
-         HF1InLzXx21mM24Jw/0OkJwPLVYTE85Ern7LRfXltUTH2pYFofU8D9Pz8w0yVOrG7PLJ
-         pQYdvqt0gBRZ2Lx2XRLjX41GUKYiAmtFRjFevJFGXIfzazPDs7gPPTzs9/GGBd4HaCrO
-         j35w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782549714; x=1783154514;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CALIp1+Q8ktF+IIOGV1Cs+Je/B85B6g9HRsvBPmUajQ=;
-        b=tL2Am4yU0M3ruOir6EJRbaLwATzO8OXeF4ZttnEo/orb32V7oCub+lPPg/f4WAA/ET
-         49+0TWtESeApmAfpfFgR+mz4TMZK2+CGspcutcjIxMvP5ar3lkzywOrAcJvRBnpCkka+
-         82aSThy4oexx3HXuzz+MKfOzFyk1KTSyuAnFIIw1TV4S0gGTOHlAMxCbORP9fd6hEI6B
-         AaPcCCtaM9xoiRYDPmvhHQ2Fem34U7YKRRLWmoBG8A1bJFJyTMA9NlMHa011KL+W897h
-         4+w722Lx/cO75gvEAONSitn8TKB2VkQL4/oSIrSH8XW11vH5ZIa9j3ALTuOSXIBXLsYz
-         Z1IA==
-X-Gm-Message-State: AOJu0Yyxvz0BZH5l+zAGm7g/pCgN/NpUlTG07M8efttW6WiynDmpdJJy
-	Uu1qkLfmhQkIHfKfkmjIfoSzl6arbVxg8thAetu6qHUsZ+rOqZD5kTzj
-X-Gm-Gg: AfdE7cnPyP/I6vhcMWW02jp5bffraf+UJBGbi0GJiKOBByFRgqdzBPbbhDe1HRRrM+J
-	S50KJnyRl4laBGIwfn2VfZ+uuj04MQjZtNFlOewOIRHVpkxu7qsxwH+ZmLiYQdDi9iNTg4qjA6b
-	0dRjyp3MV1G8PxmGSn4hyzsPTovL8o85liVtGBq/NcrVXlxkHiBoNgNAP8hL5sDj6LLTHKNazQZ
-	ZcwmPK50LPt1YoDkql+plWLLxX0xgh5tqrO10UkprMKjKCfDNXB4n1/jkQLi87yLReBp880hnxD
-	ZiK/Y8WyKRtcSk00W6Wdqd01gAGcmPRaiDthyjUJnBqhTTbOydaOZ88V7fruHEKAdzYXnlzlP1N
-	BBP2bIA9xBymhGKcwDDzefnzBh3Lf7xJXu9DKX8DNTCkcgttlLpqf7ZFf3l2NtkOJgua9rxAvA5
-	43OzRMb5ULoFH6Ce1S7qER8Ky0VA==
-X-Received: by 2002:a05:6000:41f7:b0:43f:dbbf:6d93 with SMTP id ffacd0b85a97d-46dc20762c7mr16617880f8f.27.1782549714063;
-        Sat, 27 Jun 2026 01:41:54 -0700 (PDT)
-Received: from sergio-82n7.fritz.box ([149.22.91.78])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-46f978dc0a9sm8620281f8f.15.2026.06.27.01.41.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Jun 2026 01:41:53 -0700 (PDT)
-From: Sergio Melas <sergiomelas@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sergio Melas <sergiomelas@gmail.com>
-Subject: [PATCH v1] hwmon: (yogafan) Add support for Lenovo Yoga/Legion fan monitoring
-Date: Sat, 27 Jun 2026 10:40:39 +0200
-Message-ID: <20260627084039.47158-1-sergiomelas@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Aqsx/8UZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A75111F000E9;
+	Sat, 27 Jun 2026 08:49:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782550174;
+	bh=J2VAlmShmW4Cwujr1fgyePgUivKiiWYThPOUd6eSSEw=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Aqsx/8UZ+hYK/ZAoOfh4+ScT0fYoQYQP9X2cZA2/EFJ2uochrpCit0Y03gmWdnn1K
+	 jt2OmjvmCUg31av3oOJNTHzFMGLvf1kebHJI8mggHfVk+chWnuvxIW8PKOAZvQH6k1
+	 DNNADxdZuTjwKhbMr4nEcbq3V/RkTOi2s57wKWsyhs7FTcd9UNO+nopLBKfaR/ZhEr
+	 +cJVVuKe0EQ2crquUfn/hncn8CnTATOV+qAEfNBKlJ/lp2Mz3zHnmX1sFLiySgxQjR
+	 VKFtwZMoIj6Y23itinJr2XARhkKeaeXiy4xF6+Z3GbIcPdhPbcPfVJDfjcZG0D8ckq
+	 0f5ANa6j/sXXw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v1] hwmon: (yogafan) Add support for Lenovo Yoga/Legion
+ fan monitoring
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Sergio Melas" <sergiomelas@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260627084039.47158-1-sergiomelas@gmail.com>
+References: <20260627084039.47158-1-sergiomelas@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 27 Jun 2026 08:49:33 +0000
+Message-Id: <20260627084934.A75111F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] Unprivileged Denial of Service of the RLLag telemetry filter via f=
+ast polling (shared state pollution).
+- [Medium] Silent bypass of WMI Coexistence Guard due to Kconfig mismatch (=
+`IS_REACHABLE` misuse).
+--
+
+commit db32fd276d89299ba906703e55172f8ec3415249
+Author: Sergio Melas <sergiomelas@gmail.com>
+
+hwmon: (yogafan) Add support for Lenovo Yoga/Legion fan monitoring
 
 This driver provides fan speed monitoring for Lenovo Yoga, Legion, and
 IdeaPad laptops by interfacing with the Embedded Controller (EC) via ACPI.
+It implements a Rate-Limited Lag filter to smooth out low-resolution sampli=
+ng
+in the embedded controller.
 
-To address low-resolution sampling in Lenovo EC firmware, a Rate-Limited
-Lag (RLLag) filter is implemented. The filter ensures a consistent physical
-curve regardless of userspace polling frequency.
+> diff --git a/drivers/hwmon/yogafan.c b/drivers/hwmon/yogafan.c
+> index 605cc928f21f3..7d66d563ec236 100644
+> --- a/drivers/hwmon/yogafan.c
+> +++ b/drivers/hwmon/yogafan.c
 
-Hardware identification is performed via DMI-based quirk tables, which
-map specific ACPI object paths and register widths (8-bit vs 16-bit)
-deterministically.
+[ ... ]
 
-Signed-off-by: Sergio Melas <sergiomelas@gmail.com>
----
-v1:
-  - Initial patch for the new driver series.
-  - Prepared the unified Hardware Abstraction Layer (HAL) framework.
-  - Implemented the dynamic Nmax/Rmax hybrid scaling engine logic for discrete ECs.
-  - Added a WMI Coexistence Guard to automatically yield control WMI GUIDs are detected.
-  - Added deterministic DMI quirk tables mapping explicit ACPI object paths.
-  - Integrated 12-bit fixed-point RLLag filtering with 1500 RPM/s slew limiting.
-  - Ensured 32-bit architecture compliance using div64_s64 for division.
----
- Documentation/hwmon/yogafan.rst |  35 +++++---
- drivers/hwmon/yogafan.c         | 139 ++++++++++++++++++++++++++++----
- 2 files changed, 149 insertions(+), 25 deletions(-)
+> @@ -50,48 +62,109 @@ struct yoga_fan_data {
+>  static void apply_rllag_filter(struct yoga_fan_data *data, int idx, long=
+ raw_rpm)
+>  {
+>  	ktime_t now =3D ktime_get_boottime();
+> -	s64 dt_ms =3D ktime_to_ms(ktime_sub(now, data->last_sample[idx]));
+> +	s64 raw_dt_ms;
+>  	long delta, step, limit, alpha;
+>  	s64 temp_num;
+> +	u32 dt_ms;
 
-diff --git a/Documentation/hwmon/yogafan.rst b/Documentation/hwmon/yogafan.rst
-index 68761947a..000fe032d 100644
---- a/Documentation/hwmon/yogafan.rst
-+++ b/Documentation/hwmon/yogafan.rst
-@@ -23,6 +23,9 @@ Embedded Controller (EC) and exposed via ACPI.
- The driver implements a **Rate-Limited Lag (RLLag)** filter to handle
- the low-resolution and jittery sampling found in Lenovo EC firmware.
- 
-+The driver includes a WMI Coexistence Guard that automatically yields hardware
-+register control to lenovo-wmi-other when modern gaming GUID blocks are active.
-+
- Hardware Identification and Multiplier Logic
- --------------------------------------------
- 
-@@ -69,10 +72,11 @@ Usage
- 
- The driver exposes standard hwmon sysfs attributes:
- 
--===============   ============================
--Attribute         Description
--fanX_input        Filtered fan speed in RPM.
--===============   ============================
-+===============  ======================================================
-+Attribute        Description
-+fanX_input       Filtered fan speed in RPM.
-+fanX_max         Maximum design capability threshold limit in RPM.
-+===============  ======================================================
- 
- 
- Note: If the hardware reports 0 RPM, the filter is bypassed and 0 is reported
-@@ -99,7 +103,7 @@ immediately to ensure the user knows the fan has stopped.
-  82XV / 83DV    | LOQ 15/16        | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.FANS /FA2S  | 16-bit | 1
-  83AK           | ThinkBook G6     | 0x06      | \_SB.PCI0.LPC0.EC0.FAN0        |  8-bit | 100
-  81X1           | Flex 5           | 0x06      | \_SB.PCI0.LPC0.EC0.FAN0        |  8-bit | 100
-- *Legacy*       | Pre-2020 Models  | 0x06      | \_SB.PCI0.LPC.EC.FAN0          |  8-bit | 100
-+ *Legacy* | Pre-2020 Models  | 0x06      | \_SB.PCI0.LPC.EC.FAN0          |  8-bit | 100
-  ----------------------------------------------------------------------------------------------------
- 
- METHODOLOGY & IDENTIFICATION:
-@@ -122,17 +126,30 @@ References
- ----------
- 
- 1. **ACPI Specification (Field Objects):** Documentation on how 8-bit vs 16-bit
--   fields are accessed in OperationRegions.
-+   [cite_start]fields are accessed in OperationRegions[cite: 57].
-    https://uefi.org/specs/ACPI/6.5/05_ACPI_Software_Programming_Model.html#field-objects
- 
- 2. **NBFC Projects:** Community-driven reverse engineering
--   of Lenovo Legion/LOQ EC memory maps (16-bit raw registers).
-+   [cite_start]of Lenovo Legion/LOQ EC memory maps (16-bit raw registers)[cite: 58].
-    https://github.com/hirschmann/nbfc/tree/master/Configs
- 
- 3. **Linux Kernel Timekeeping API:** Documentation for ktime_get_boottime() and
--   handling deltas across suspend states.
-+   [cite_start]handling deltas across suspend states[cite: 59].
-    https://www.kernel.org/doc/html/latest/core-api/timekeeping.html
- 
- 4. **Lenovo IdeaPad Laptop Driver:** Reference for DMI-based hardware
--   feature gating in Lenovo laptops.
-+   [cite_start]feature gating in Lenovo laptops[cite: 60].
-    https://github.com/torvalds/linux/blob/master/drivers/platform/x86/lenovo/ideapad-laptop.c
-+
-+5. **Lenovo Product Specifications Reference (PSREF):** Official hardware layout index
-+   [cite_start]and spec sheets for active and withdrawn Lenovo laptop models[cite: 68].
-+   https://psref.lenovo.com/l/withdrawn/
-+
-+6. **Yogafan Master Quirk Database:** Master spreadsheet mapping Lenovo Product
-+   [cite_start]Specifications Reference (PSREF) to explicit EC offsets, register widths, paths, and multipliers[cite: 68].
-+   https://github.com/sergiomelas/lenovo-linux-drivers/blob/main/Lenovo_Drivers/Prototype/PSREF/yogafan_v3_quirks_database.ods
-+
-+7. **Yogafan ACPI DSDT Repository:** Central repository containing user-contributed raw
-+   [cite_start]and decompiled ACPI DSDT firmware dumps used for path verification and hardware expansions[cite: 61].
-+   https://github.com/sergiomelas/lenovo-linux-drivers/tree/main/Lenovo_Drivers/Prototype/DSDT
-+
-diff --git a/drivers/hwmon/yogafan.c b/drivers/hwmon/yogafan.c
-index 605cc928f..7d66d563e 100644
---- a/drivers/hwmon/yogafan.c
-+++ b/drivers/hwmon/yogafan.c
-@@ -24,10 +24,13 @@
- #include <linux/platform_device.h>
- #include <linux/slab.h>
- #include <linux/math64.h>
-+#include <linux/minmax.h>
-+#include <linux/hwmon-sysfs.h>
-+#include <linux/wmi.h>
- 
- /* Driver Configuration Constants */
- #define DRVNAME			"yogafan"
--#define MAX_FANS		8
-+#define MAX_FANS		5
- 
- /* Filter Configuration Constants */
- #define TAU_MS			1000	/* Time constant for the first-order lag (ms) */
-@@ -36,11 +39,20 @@
- #define MIN_SAMPLING		100	/* Minimum interval between filter updates (ms) */
- 
- /* RPM Sanitation Constants */
--#define RPM_FLOOR_LIMIT		50	/* Snap filtered value to 0 if raw is 0 */
-+#define MIN_THRESHOLD_RPM	10	/* Minimum safety floor for per-model stop thresholds */
-+
-+/* GUID of WMI interface Lenovo */
-+#define LENOVO_WMI_OTHER_MODE_GUID	"DC2A8805-3A8C-41BA-A6F7-092E0089CD3B"
-+#define LENOVO_CAPABILITY_DATA_00_GUID	"362A3AFE-3D96-4665-8530-96DAD5BB300E"
-+#define LENOVO_FAN_TEST_DATA_GUID	"B642801B-3D21-45DE-90AE-6E86F164FB21"
- 
- struct yogafan_config {
- 	int multiplier;
- 	int fan_count;
-+	int r_max;		        /* Maximum physical RPM for UI scaling */
-+	unsigned int tau_ms;		/* To store the smoothing speed */
-+	unsigned int slew_time_s;	/* To store the acceleration limit */
-+	unsigned int stop_threshold;	/* To store the RPM floor */
- 	const char *paths[2];
- };
- 
-@@ -50,48 +62,109 @@ struct yoga_fan_data {
- 	ktime_t last_sample[MAX_FANS];
- 	int multiplier;
- 	int fan_count;
-+	int device_max_rpm;	/* Stores the active maximum RPM ceiling */
-+	unsigned int internal_tau_ms;
-+	unsigned int internal_max_slew_rpm_s;
-+	const struct yogafan_config *config;
- };
- 
- /* Specific configurations mapped via DMI */
- static const struct yogafan_config yoga_8bit_fans_cfg = {
- 	.multiplier = 100,
- 	.fan_count = 1,
-+	.r_max = 5500,
-+	.tau_ms = 1000,
-+	.slew_time_s = 4,
-+	.stop_threshold = 50,
- 	.paths = { "\\_SB.PCI0.LPC0.EC0.FANS", NULL }
- };
- 
- static const struct yogafan_config ideapad_8bit_fan0_cfg = {
- 	.multiplier = 100,
- 	.fan_count = 1,
-+	.r_max = 4500,
-+	.tau_ms = 1000,
-+	.slew_time_s = 4,
-+	.stop_threshold = 50,
- 	.paths = { "\\_SB.PCI0.LPC0.EC0.FAN0", NULL }
- };
- 
- static const struct yogafan_config legion_16bit_dual_cfg = {
- 	.multiplier = 1,
- 	.fan_count = 2,
-+	.r_max = 6500,
-+	.tau_ms = 1300,
-+	.slew_time_s = 5,
-+	.stop_threshold = 50,
- 	.paths = { "\\_SB.PCI0.LPC0.EC0.FANS", "\\_SB.PCI0.LPC0.EC0.FA2S" }
- };
- 
-+/*
-+ * Filter Physics (RLLag) - Deterministic Telemetry
-+ * ---------------------
-+ * To address low-resolution tachometer sampling in the Embedded Controller,
-+ * the driver implements a passive discrete-time first-order lag filter
-+ * with slew-rate limiting (RLLag).
-+ *
-+ * The filter update equation is:
-+ * RPM_state[t+1] = RPM_state[t] + Clamp(Alpha * (raw_RPM[t] - RPM_state[t]),
-+ * -limit[t], limit[t])
-+ * Where:
-+ * Ts[t]    = Sys_time[t+1] - Sys_time[t]  (Time delta between reads)
-+ * Alpha    = 1 - exp(-Ts[t] / Tau)        (Low-pass smoothing factor)
-+ * limit[t] = Slew_Limit * Ts[t]           (Time-normalized slew limit)
-+ *
-+ * To avoid expensive floating-point exponential calculations in the kernel,
-+ * we use a first-order Taylor/Bilinear approximation:
-+ * Alpha = Ts / (Tau + Ts)
-+ *
-+ * Implementing this in the driver state machine:
-+ * Ts             = current_time - last_sample_time
-+ * Alpha          = Ts / (Tau + Ts)
-+ * Physics Principles:
-+ * step           = Alpha * (raw_RPM - RPM_old)
-+ * limit          = Slew_Limit * Ts
-+ * step_clamped   = clamp(step, -limit, limit)
-+ * RPM_new        = RPM_old + step_clamped
-+ *
-+ * Attributes of the RLLag model:
-+ * - Smoothing: Low-resolution step increments are smoothed into 1-RPM increments.
-+ * - Slew-Rate Limiting: Capping change to ~1500 RPM/s to match physical inertia.
-+ * - Polling Independence: Math scales based on Ts, ensuring a consistent physical
-+ * curve regardless of userspace polling frequency.
-+ * Fixed-point math (2^12) is used to maintain precision without floating-point
-+ * overhead, ensuring jitter-free telemetry for thermal management.
-+ */
- static void apply_rllag_filter(struct yoga_fan_data *data, int idx, long raw_rpm)
- {
- 	ktime_t now = ktime_get_boottime();
--	s64 dt_ms = ktime_to_ms(ktime_sub(now, data->last_sample[idx]));
-+	s64 raw_dt_ms;
- 	long delta, step, limit, alpha;
- 	s64 temp_num;
-+	u32 dt_ms;
-+
-+	/* 1. PHYSICAL CLAMP: Use per-device device_max_rpm */
-+	if (raw_rpm > (long)data->device_max_rpm)
-+		raw_rpm = (long)data->device_max_rpm;
- 
--	if (raw_rpm < RPM_FLOOR_LIMIT) {
-+	/* 2. Threshold logic: Deterministic safe-state */
-+	if (raw_rpm < (long)max_t(u32, MIN_THRESHOLD_RPM, data->config->stop_threshold)) {
- 		data->filtered_val[idx] = 0;
- 		data->last_sample[idx] = now;
- 		return;
- 	}
- 
--	if (data->last_sample[idx] == 0 || dt_ms > MAX_SAMPLING) {
-+	/* 3. Auto-Reset Logic: Snap to hardware value after long gaps (>5s) */
-+	/*   Ref: [TAG: INIT_STATE, STALE_DATA_THRESHOLD] */
-+	raw_dt_ms = ktime_to_ms(ktime_sub(now, data->last_sample[idx]));
-+
-+	if (data->last_sample[idx] == 0 || raw_dt_ms < MIN_SAMPLING || raw_dt_ms > MAX_SAMPLING) {
- 		data->filtered_val[idx] = raw_rpm;
- 		data->last_sample[idx] = now;
- 		return;
- 	}
- 
--	if (dt_ms < MIN_SAMPLING)
--		return;
-+	dt_ms = (u32)raw_dt_ms;
- 
- 	delta = raw_rpm - data->filtered_val[idx];
- 	if (delta == 0) {
-@@ -99,14 +172,20 @@ static void apply_rllag_filter(struct yoga_fan_data *data, int idx, long raw_rpm
- 		return;
- 	}
- 
--	temp_num = dt_ms << 12;
--	alpha = (long)div64_s64(temp_num, (s64)(TAU_MS + dt_ms));
-+	/* 4. Physics Engine: Discretized RLLAG filter (Fixed-Point 2^12) */
-+	/* Ref: [TAG: MODEL_CONST, ALPHA_DERIVATION, ANTI_STALL_LOGIC] */
-+	temp_num = (s64)dt_ms << 12;
-+	alpha = div64_u64(temp_num, data->internal_tau_ms + dt_ms);
- 	step = (delta * alpha) >> 12;
- 
-+	/* Ensure minimal movement for small deltas */
- 	if (step == 0 && delta != 0)
- 		step = (delta > 0) ? 1 : -1;
- 
--	limit = (MAX_SLEW_RPM_S * (long)dt_ms) / 1000;
-+	/* 5. Dynamic Slew Limiting: Applied per-model inertia ramp */
-+	/* Ref: [TAG: SLEW_RATE_MAX, SLOPE_CALC, MIN_SLEW_LIMIT] */
-+	limit = (data->internal_max_slew_rpm_s * dt_ms) / 1000;
-+
- 	if (limit < 1)
- 		limit = 1;
- 
-@@ -115,6 +194,7 @@ static void apply_rllag_filter(struct yoga_fan_data *data, int idx, long raw_rpm
- 	else if (step < -limit)
- 		step = -limit;
- 
-+	/* 6. Update internal state */
- 	data->filtered_val[idx] += step;
- 	data->last_sample[idx] = now;
- }
-@@ -126,7 +206,16 @@ static int yoga_fan_read(struct device *dev, enum hwmon_sensor_types type,
- 	unsigned long long raw_acpi;
- 	acpi_status status;
- 
--	if (type != hwmon_fan || attr != hwmon_fan_input)
-+	if (type != hwmon_fan)
-+		return -EOPNOTSUPP;
-+
-+	/* Intercept MAX attribute queries to feed the UI scale framework */
-+	if (attr == hwmon_fan_max) {
-+		*val = (long)data->device_max_rpm;
-+		return 0;
-+	}
-+
-+	if (attr != hwmon_fan_input)
- 		return -EOPNOTSUPP;
- 
- 	status = acpi_evaluate_integer(data->active_handles[channel], NULL, NULL, &raw_acpi);
-@@ -155,12 +244,15 @@ static const struct hwmon_ops yoga_fan_hwmon_ops = {
- 	.read = yoga_fan_read,
- };
- 
--static const struct hwmon_channel_info *yoga_fan_info[] = {
-+/* Static configuration for the hwmon core */
-+static const struct hwmon_channel_info *const yoga_fan_info[] = {
- 	HWMON_CHANNEL_INFO(fan,
--			   HWMON_F_INPUT, HWMON_F_INPUT,
--			   HWMON_F_INPUT, HWMON_F_INPUT,
--			   HWMON_F_INPUT, HWMON_F_INPUT,
--			   HWMON_F_INPUT, HWMON_F_INPUT),
-+			   HWMON_F_INPUT | HWMON_F_MAX,
-+			   HWMON_F_INPUT | HWMON_F_MAX,
-+			   HWMON_F_INPUT | HWMON_F_MAX,
-+			   HWMON_F_INPUT | HWMON_F_MAX,
-+			   HWMON_F_INPUT | HWMON_F_MAX,
-+			   HWMON_F_INPUT | HWMON_F_MAX),
- 	NULL
- };
- 
-@@ -206,6 +298,17 @@ static int yoga_fan_probe(struct platform_device *pdev)
- 	struct device *hwmon_dev;
- 	int i;
- 
-+	/* Check for WMI interfaces that handle fan/thermal management. */
-+	/*  If present, we yield to the WMI driver to prevent double-reporting. */
-+#if IS_REACHABLE(CONFIG_ACPI_WMI)
-+	if (wmi_has_guid(LENOVO_WMI_OTHER_MODE_GUID) &&
-+	    wmi_has_guid(LENOVO_CAPABILITY_DATA_00_GUID) &&
-+	    wmi_has_guid(LENOVO_FAN_TEST_DATA_GUID)) {
-+		dev_info(&pdev->dev, "Lenovo WMI management interface detected; yielding to WMI driver\n");
-+		return -ENODEV;
-+	}
-+#endif
-+
- 	dmi_id = dmi_first_match(yogafan_quirks);
- 	if (!dmi_id)
- 		return -ENODEV;
-@@ -215,7 +318,11 @@ static int yoga_fan_probe(struct platform_device *pdev)
- 	if (!data)
- 		return -ENOMEM;
- 
-+	data->config = cfg;
- 	data->multiplier = cfg->multiplier;
-+	data->device_max_rpm = cfg->r_max ?: 5000; /* Fallback safety baseline */
-+	data->internal_tau_ms = cfg->tau_ms ?: 1000; /* Robustness: Prevent zero-division */
-+	data->internal_max_slew_rpm_s = data->device_max_rpm / (cfg->slew_time_s ?: 1);
- 
- 	for (i = 0; i < cfg->fan_count; i++) {
- 		acpi_status status;
--- 
-2.53.0
+[ ... ]
 
+> -	if (data->last_sample[idx] =3D=3D 0 || dt_ms > MAX_SAMPLING) {
+> +	/* 3. Auto-Reset Logic: Snap to hardware value after long gaps (>5s) */
+> +	/*   Ref: [TAG: INIT_STATE, STALE_DATA_THRESHOLD] */
+> +	raw_dt_ms =3D ktime_to_ms(ktime_sub(now, data->last_sample[idx]));
+> +
+> +	if (data->last_sample[idx] =3D=3D 0 || raw_dt_ms < MIN_SAMPLING || raw_=
+dt_ms > MAX_SAMPLING) {
+>  		data->filtered_val[idx] =3D raw_rpm;
+>  		data->last_sample[idx] =3D now;
+>  		return;
+>  	}
+
+[Severity: High]
+Does combining the MIN_SAMPLING check into this auto-reset block create an
+unintended bypass of the filter?
+
+If an unprivileged user queries the fanX_input sysfs attribute faster than
+MIN_SAMPLING (100ms), raw_dt_ms < MIN_SAMPLING evaluates to true.
+
+Because this block sets data->last_sample[idx] =3D now, the time delta never
+accumulates to exceed 100ms on continuous fast polling. This seems to snap
+filtered_val to raw_rpm repeatedly, entirely defeating the filter's smoothi=
+ng
+logic.
+
+[ ... ]
+
+> @@ -206,6 +298,17 @@ static int yoga_fan_probe(struct platform_device *pd=
+ev)
+>  	struct device *hwmon_dev;
+>  	int i;
+> =20
+> +	/* Check for WMI interfaces that handle fan/thermal management. */
+> +	/*  If present, we yield to the WMI driver to prevent double-reporting.=
+ */
+> +#if IS_REACHABLE(CONFIG_ACPI_WMI)
+> +	if (wmi_has_guid(LENOVO_WMI_OTHER_MODE_GUID) &&
+> +	    wmi_has_guid(LENOVO_CAPABILITY_DATA_00_GUID) &&
+> +	    wmi_has_guid(LENOVO_FAN_TEST_DATA_GUID)) {
+> +		dev_info(&pdev->dev, "Lenovo WMI management interface detected; yieldi=
+ng to WMI driver\n");
+> +		return -ENODEV;
+> +	}
+> +#endif
+
+[Severity: Medium]
+Is IS_REACHABLE the correct macro to use here for the WMI coexistence guard?
+
+If the driver is built-in (CONFIG_YOGAFAN=3Dy) but ACPI WMI is built as a
+module (CONFIG_ACPI_WMI=3Dm), IS_REACHABLE(CONFIG_ACPI_WMI) will evaluate to
+false.
+
+This silently compiles out the guard, which could lead to hardware race
+conditions between this driver and the WMI driver once the module loads.
+
+Would it be safer to use IS_ENABLED() alongside a Kconfig dependency like
+depends on ACPI_WMI || ACPI_WMI=3Dn?
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260627084039.4715=
+8-1-sergiomelas@gmail.com?part=3D1
