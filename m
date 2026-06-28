@@ -1,67 +1,87 @@
-Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B380211466
-	for <linux-hwmon@vger.kernel.org>; Sun, 28 Jun 2026 14:03:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4730F2D94B0
+	for <linux-hwmon@vger.kernel.org>; Sun, 28 Jun 2026 17:31:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782655382; cv=none; b=Me93zakhe9cJE+afMNpu1cTEcRqhpN4M3RcMy4y2xxEt6IkaOYwd3DkyJ0rfShq+t+ZhDkruD8wXdPbC+liI6g7IefrC1T6BD3v4PUddmjDFq3UwBHXBkvB+NjNef5Mft7fGmewmbpKgiEcyBco5PM7+Au7TBu/oLs5HtMHuVRo=
+	t=1782667868; cv=none; b=RvXheSeHOSHkozZ6KZiRgpqRr7hPA1A9gSKjPhevw7/NUneW4BCeaJaXJmMoQmCVlbxHh9zHlDUlsb1U7jLwrDlzcLMdFXvp9EhIq7ymebzFyQqsDEmkSKAUFgdv+xOM8fpSlgYmnebyKz5RSBWsZF2tpStxOmRSHfJgUjmZRFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782655382; c=relaxed/simple;
-	bh=OQ5yhZ1oEV14Y+jT/b/a7GaOoJ1UaVSImFMvRqg9/0U=;
+	s=arc-20240116; t=1782667868; c=relaxed/simple;
+	bh=ZT4Oi48MQ2edPaWjW8khM1ET81+4j1v2TQ4M0MI6hX4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K3f8ksRxJf4DqAABxVvJ7cXBguzkyZzlKHS3oqsvVc0IAFW6Ya4Fh+GEhyYjlpQs8kbFXWTrtYcabE8a8Y7i+yg+bU90DRl2nRfnAXqmBbElXhA90/ljbDD0QoNWqz/jZggGjz9fJ8O/8FnFUMFXK6Hf1TZnE7x0PtWnvqHkI6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FV4Dj4pp; arc=none smtp.client-ip=74.125.82.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=nytEzB/PwV8KMeWnGFWgaAyDw0Ye9aR/vfHltnocmOwUXNNgPBOSW/uKDw2coS4vHHJSgOZ26oCCLMkd+QBnBC2QlIpu9rNn7dZZIBqlyi3eFX0i9IazXJuoXMLyMdjdDhBHhRc6hqV1NcULjgyzyOzVQK+nMsQ4xJzqBzgjVmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=NzVjkylx; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=SIcOwEyw; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FV4Dj4pp"
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-30c6874d295so1544976eec.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 28 Jun 2026 07:03:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="NzVjkylx";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="SIcOwEyw"
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65SES7Un018480
+	for <linux-hwmon@vger.kernel.org>; Sun, 28 Jun 2026 17:31:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	/LYGGwI5goWOdRY7GIiaFjBfkoZM/HlIDwQhWdcH2Ro=; b=NzVjkylxUjSWlaA4
+	g03Tq7LAV2Yhm3AjQYZWm/oEjfM1/OvIFu7/0RbkV+K5MY8GVoELRGPrnkxclIFV
+	cTuuQVXx1t2jrD+DSSPff1jpUChZyG+DsaZ5+XgeYObuDVxXLJyGa4ou7oUNM09X
+	3N9r/nuPYEw/Piu7NUaakINNB0pvBtBdIir9P7MebKCZhIeF1oedKH5ljMsH8L9X
+	YqozeKwYCVBe6J/4YeWiyVkFPms85ZVLFikjExrXM0Edsg1RLGiWOKRAXbs3GMcD
+	WZ8/IZe7BlVyKBLaCSkiRc/w4zwqs2QJPCXsAYeNDdBJZ/rIBJx3kDxpEGfRoYU2
+	5RAvvg==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4f27333bdv-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-hwmon@vger.kernel.org>; Sun, 28 Jun 2026 17:31:05 +0000 (GMT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-92e538afe65so4906085a.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 28 Jun 2026 10:31:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782655381; x=1783260181; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=EUdgbv53aIghJCqB+1zZYKm53UkH3WojYHbSrrOE1g0=;
-        b=FV4Dj4pp8b59tLfg6UmspixnluCSyr955+S2NMP1CCBF1mLYCHdx74S1OdbkHDRxTk
-         v7I2JgK/MN4UfhZChWBbSsMXO/9JLH9m5GprRPfJ+SaUQpEZxZ+l4i0Kv2hmxL2/KjK1
-         DafRGU9j0/0T5InFKXkrYT0AMq+DCzk00pRmCI4GEEdCM0uqf2L0dOX5NAIPiHeVs+kZ
-         quOtuLZxPyisFjYz+Ylq4pG1vzJmigSOGieT16rKRH+kTTx39MKPMh9pKuWqMwppNB1I
-         FjcWwEyHod34xoTHz4sogv/fLALrOAR0Ak7TyvpmBu6VmwKm0eNz2kp0rndoWPSNILbt
-         uBWw==
+        d=oss.qualcomm.com; s=google; t=1782667865; x=1783272665; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/LYGGwI5goWOdRY7GIiaFjBfkoZM/HlIDwQhWdcH2Ro=;
+        b=SIcOwEywy1Te/GgqNXn6bHF5kw7QSqMqSoaILKbi0lcEX8QyKKCnPz7ShpktRsS8+b
+         uj5JtMyj4PkFxCbIltPetDmkUmjeGcAUrdyAglSIKSywPNrToDGwUvvw5dzrPwMgZvHv
+         zC4lcPau41OcpaTiq5TaruzPU/bUjbw9646obGhyuQaLGs5ieKl/s3MqIgPBtqOCEWgs
+         Cem6X5yA+XTgEPocjUaIZ7dVkE16VbcjPby2YauRBuR3dz3a3Jlv/cjgepoLhg6CUBmX
+         SKpmU0Hoh4p6HwffMdTNFCnZZWp7EQRKyB6kjJFg0rU5WlCADxt7XwItKr/yuJGVlr3P
+         n9og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782655381; x=1783260181;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EUdgbv53aIghJCqB+1zZYKm53UkH3WojYHbSrrOE1g0=;
-        b=epC6O26Ib9IgaE69r+xz1zer1MuTH6GAkdDwZAp3QKwVl9uAZuehTsutytqXzdiFrm
-         CZ1Vh91edq1U10FI7Tot0+ZQCKnMg0Nvw5oWUu90jb4JDscW1aSktfK5DGax/uE7U5qb
-         59xWfR3fpyr6V05MKw8qihPgMBzaNxtKUFTRnKSET38U+TkAchoT65lpizkF6l5A8jlt
-         c4w4ORm3ih3nsskRDsTy7ow8ruF5n5ZdyMmjiSS/Gcm2XwWfpZzNnQKeH7pu+ctlyLyV
-         9+RoxUYAOA4tjCcx5Sq50dzVj+EgeYk7/zRbJOjFzVI2l12b0XrUlxBlATJL5TDUUrgE
-         maag==
-X-Forwarded-Encrypted: i=1; AHgh+Rp4lnAxvmF0oxzR0gPhU/A/WE12eRxQJlGoJAdxLJNrgmzdIAEW1RIPpkcxpJiDobXxNtfOLNFvWdl4XQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzlz1zUFdmk5wpT1hqecNhee6Q+X9Blml8UwdZ32CS2Qnxp0zpR
-	GJen9LIZSb7OyqueiDiYefORdU1xs0Y0y4+6hee+DET9HkCeH+S5G6X7
-X-Gm-Gg: AfdE7cl1L1pEMNh54Nq0Qkk3w4BcxJmuYedJHBQyTCwTGlCQcV/Oly1tW1Jhsf/5xQ1
-	n2x9z7t1kWDkQ75lhg7E3fIpXVb7voeBH0Ed6cxLo649zJINJiDs6iGNx8zDqJN/TTX5ZUj/RIS
-	iUQLwLYMI4zMZHKpuokJvYUM2/cIo44wIuHPh7HCjCli8VmPSPvtL9U6YANhWK9iFU3dE/zLgTN
-	45I3k3WUAJ5sKFElyfi2c56jNIy+hCqD/nlfOlxgBtFvCZg5/FN01D/+eEG5uoH7GxvtpF/1Gbe
-	mZD7Oz3a8yRFm+4KgXACgUdGxJrn1gM6mAUf9qMIbqhCs74AC6n8DmVVZp+zEEpGytuxcq/vJZ4
-	w/eaZAQxe/QU1GQFxkVElQfGMvF42eG2cjCz0JckfnbKTbGUsnkiWddGkQS3zte9SUd05+nANMB
-	GWgEREM/Ks7rBKK6qGQ8yewNbBDVcRxQy1GjrQe3504xzJR2ZOlC5KjzG60al0HMGK6Pj3BlG3
-X-Received: by 2002:a05:7300:aca8:b0:304:70d0:4f03 with SMTP id 5a478bee46e88-30c858d23aamr11142737eec.6.1782655379179;
-        Sun, 28 Jun 2026 07:02:59 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c7c8b1a75sm36165406eec.19.2026.06.28.07.02.57
+        d=1e100.net; s=20251104; t=1782667865; x=1783272665;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/LYGGwI5goWOdRY7GIiaFjBfkoZM/HlIDwQhWdcH2Ro=;
+        b=Ch2XIwBlRmZaGgx8iuNlFOCFnchEQbHDSunuFoWShv0BFcm0RDglhV/ipA3OrCIBaP
+         LiNdelwfxmCzDJ3RvQ86DPMP5E5W0bZI1g7lVN0EQTNhdQkkKznVfnVGXWxKWe96HhBN
+         R1CYN8jFWmOLU1IRJhVWKPouHnV7GIh3dYcZZTJw/dpYojW5YPRZBGKRDJINDUs+RsBA
+         izXVaxnej1C7Pab+7/+S7lDNG4jU7n4LYKUYFrLMSwjVL169Q+3EtvIbqLDjCzlYN5ur
+         UFTK7T7nGSusLxGH8AhZrwT7RFSyvMssGGUGcsWtvk7n06WFKOjfQ80wnoDyCJFGNIsU
+         5RIw==
+X-Forwarded-Encrypted: i=1; AFNElJ9CoyFvBHMyoI8lgOrTkeG2H42BMAtKQQimvGqNAXrMhYaP0G937L0+eiFxs5cKorHutS65uMuGKQhHKg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFn7+EjtXJp4U1/6neXsykG24KPQ7R9Xs1NHIquRdeMyh8fvVd
+	MElxCqFod8+uW7sDuEl+wbd9lq/kYsYrN17UaBVmbAsyyRAvDG/8sKdInfNThp5bbZyHsnmAzD5
+	XNkv0zrV+o/zYS3vmrhyjpx4L5lM7Ly9l68j8Xo9ivQMD/b70zqPV6EaQ58dMUeZEJz27syGFG0
+	v/
+X-Gm-Gg: AfdE7cmsXviBXml7FrlPwWb9AZ2o66cfvszMxVz8qfFbwgmTsgXPknkA+dOk0q52RE+
+	EFC/8Mi7FIxTzsXLffdAx65O3mr3jn48qiisuqqskSjpXWZaIOal8qPlakTTI27oZyLI4MgRkmy
+	Og9kJzHr1nFgqSnvGr6iNqMVHdGQvq+akH8SGHbRODMQ0Je0kovd09ShFwyE/RzIhVPysJX7J4/
+	MiU93yzfS76NfZP0f+qLrHFs7TmkCpZjVbhyPzrbkr7YOj6CsDHwc+5TsUvFMu27QVyv50iLgDa
+	rrLUnSzM+9vJ6aX2Dd+6SSljNU2vhC4OgC9iEJWw0maNH4+J3WExmQBEEY3ED/wEftPf9buYciN
+	T8yDDgsuu3pnviud97oZtCMDXYp5fxhKT8fCzjV/s8eHr/WyC1nVpA0WLHhZbQKebrfOboq8=
+X-Received: by 2002:a05:620a:4808:b0:915:7e22:6f1f with SMTP id af79cd13be357-9293a8a8bd6mr2058532885a.22.1782667864517;
+        Sun, 28 Jun 2026 10:31:04 -0700 (PDT)
+X-Received: by 2002:a05:620a:4808:b0:915:7e22:6f1f with SMTP id af79cd13be357-9293a8a8bd6mr2058528285a.22.1782667863990;
+        Sun, 28 Jun 2026 10:31:03 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:670:107a:d931:c86f? ([2a05:6e02:1041:c10:670:107a:d931:c86f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4932f100e4asm144355955e9.1.2026.06.28.10.31.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 Jun 2026 07:02:58 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <faebd355-a9f4-4360-b123-87103ac512e8@roeck-us.net>
-Date: Sun, 28 Jun 2026 07:02:56 -0700
+        Sun, 28 Jun 2026 10:31:03 -0700 (PDT)
+Message-ID: <8e7a604a-4cd2-40ec-b1a1-ae5ac68c4189@oss.qualcomm.com>
+Date: Sun, 28 Jun 2026 19:31:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,67 +91,49 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v1 1/3] drivers/platform: lenovo-t14s-ec: Add hwmon
  support for temperatures and fan speed
-To: Sebastian Reichel <sre@kernel.org>,
- Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-Cc: hansg@kernel.org, ilpo.jarvinen@linux.intel.com, andersson@kernel.org,
- konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, bryan.odonoghue@linaro.org,
- platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org
+To: Sebastian Reichel <sre@kernel.org>
+Cc: hansg@kernel.org, ilpo.jarvinen@linux.intel.com, linux@roeck-us.net,
+        andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
+        krzk+dt@kernel.org, conor+dt@kernel.org, bryan.odonoghue@linaro.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org
 References: <20260624210825.264454-1-daniel.lezcano@oss.qualcomm.com>
  <20260624210825.264454-2-daniel.lezcano@oss.qualcomm.com>
  <akEj6XEByCOkuJaY@venus>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+From: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
 In-Reply-To: <akEj6XEByCOkuJaY@venus>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=F+FnsKhN c=1 sm=1 tr=0 ts=6a415a59 cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=FelO9ux0wxsA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=gowsoOTTUOVcmtlkKump:22 a=EUspDBNiAAAA:8
+ a=bjHr9k4kyxrlvEBRdikA:9 a=QEXdDO2ut3YA:10 a=IoWCM6iH3mJn3m4BftBB:22
+X-Proofpoint-GUID: maQhGbANC51UoVl6tY7IA5VY1k6FfEPg
+X-Proofpoint-ORIG-GUID: maQhGbANC51UoVl6tY7IA5VY1k6FfEPg
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjI4MDE1NiBTYWx0ZWRfX+dWe3K5qEFzu
+ glS1rxRxUSL8bSIywPGhU+o9tCHE/gcNz9i/Lo9RlKWMv0I41URpQ7Xu+MoqaTRyNZNBSe6AdDy
+ 5fDkMbo+zsxklpP7fTIa/EK8oXfDFMNj9MQZqwkT7mwksV8Z3qlWf2BkxWD72ghAKoCIbJAUo5+
+ o8GADcq6z5ijWeWlR1oZeKNT3BOVnL/S4sEgCQwxpqcE2zMRNgsxGDm9c+YH9b4ffS7sbLc6wqo
+ kpsQ0H0j+lZ7Y4gED0FAxjc1nRM4NDADXHMTPuSZrozcu52qDa/YVXV763z68A5Zf87pnc3XnbT
+ 0qSLGyVuQwyDSgS/GDzpnL5n24lYlvUGj9tPYqKdSbc/d5ZbNxXksDB6mMjb/gPb2KM/00RRmUO
+ svpu8wZ4sqgIWK3RSTd+9HSxG3sIIJwpIPdCxwsB+WzKJM5XGTX0WQWoDM5NLiDHf54Cgi37Ljg
+ QmPiHr2Fcawd5r42yyw==
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjI4MDE1NiBTYWx0ZWRfX6ohJpJypeVeN
+ PmyROeu/d/OHALlmgUM6GopOJREo0qnIxp196p3APVsj0hJpaBdvLGHlPRnVS0h695HSuAeQ3Me
+ IKx3aHpeVe9Sjpmjj4zBjvQcnKbqeG0=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-06-28_04,2026-06-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 spamscore=0 malwarescore=0 priorityscore=1501 adultscore=0
+ lowpriorityscore=0 clxscore=1015 phishscore=0 suspectscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2606280156
 
-On 6/28/26 06:50, Sebastian Reichel wrote:
+On 6/28/26 15:50, Sebastian Reichel wrote:
 > Hi,
 > 
 > On Wed, Jun 24, 2026 at 11:08:23PM +0200, Daniel Lezcano wrote:
@@ -157,20 +159,69 @@ On 6/28/26 06:50, Sebastian Reichel wrote:
 > $ cat /sys/class/hwmon/hwmon66/{name,fan1_input}
 > t14s_ec
 > 65535
-> 
+
+Strange, I have:
+
+fan speed=0, temp=40000
+fan speed=0, temp=41000
+fan speed=0, temp=41000
+fan speed=0, temp=43000
+fan speed=0, temp=43000
+fan speed=0, temp=44000
+fan speed=0, temp=44000
+fan speed=0, temp=45000
+fan speed=0, temp=46000
+fan speed=0, temp=46000
+fan speed=65535, temp=48000
+           ^^^
+fan speed=1903, temp=48000
+fan speed=2345, temp=49000
+fan speed=2367, temp=49000
+fan speed=2417, temp=50000
+fan speed=2431, temp=50000
+fan speed=2430, temp=51000
+fan speed=2441, temp=51000
+fan speed=2450, temp=52000
+fan speed=2457, temp=52000
+fan speed=2458, temp=53000
+fan speed=2458, temp=53000
+fan speed=2458, temp=54000
+fan speed=2460, temp=54000
+fan speed=2572, temp=55000
+fan speed=2788, temp=55000
+fan speed=3009, temp=55000
+fan speed=3229, temp=56000
+fan speed=3424, temp=56000
+fan speed=3610, temp=56000
+fan speed=3631, temp=56000
+fan speed=3597, temp=56000
+fan speed=3594, temp=56000
+fan speed=3592, temp=56000
+fan speed=3592, temp=56000
+fan speed=3588, temp=56000
+fan speed=3588, temp=56000
+fan speed=3594, temp=56000
+fan speed=3594, temp=56000
+fan speed=3597, temp=56000
+fan speed=3597, temp=56000
+fan speed=3594, temp=56000
+fan speed=3597, temp=55000
+fan speed=3594, temp=55000
+fan speed=3594, temp=55000
+fan speed=3592, temp=55000
+fan speed=3592, temp=54000
+fan speed=3588, temp=54000
+fan speed=3592, temp=53000
+fan speed=3590, temp=53000
+fan speed=3592, temp=52000
+fan speed=3590, temp=52000
+fan speed=3588, temp=52000
+fan speed=3588, temp=52000
+
+
 > This is with the fan running:
 > 
 > $ cat /sys/class/hwmon/hwmon57/{name,fan1_input}
 > fan-controller
 > 2564
-> 
-
-Not really my concern, but those names really add zero value,
-and I would argue that they do not "allow user space to identify
-each measurement".
-
-Also, do you really have 66 hwmon devices on those systems ?
-Seems unusual.
-
-Guenter
 
