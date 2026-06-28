@@ -1,125 +1,323 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9F6A231827
-	for <linux-hwmon@vger.kernel.org>; Sun, 28 Jun 2026 08:54:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782636870; cv=pass; b=d6Jf+rs5P7zzzJWBZzA6/r9TY6MxOdnItGjJqApbUBGiBHeSlg++v4/dYMAevpRIH6ZdVVA9QOf4btGNrDK6sRH8Wv+/VhCgXtnQmIDojA0iQur0uiB/kX30+RUedA+aoNF9ien4ZfnQz12FYnqEhOH14oUBhs2rTJR1EECJf0A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782636870; c=relaxed/simple;
-	bh=kDRw7b6eryh8adlChih1K4e/44/BuDXe2dwWDJBGDU4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CK1tklQ0xkJaEVXCCe9xy4V63eeDHssx0Hu/WU3ZMYCthcmz8DSr3SOqvdb2i99I+5A0jD1l3s+dPlgnypKNV+pyzkdxtj5HAPl1dmTn5gWI9ehVuCJ06bZuxdNgI2LmgfkRDqF6Rql27viRveBSZD9XXlt9WUzkBCvs2Q/X/Lc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dn930Hub; arc=pass smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FC5E3A7F66;
+	Sun, 28 Jun 2026 13:50:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782654642; cv=none; b=lsMjVrQ8CXUhQahK9gLq0hmFS6KJDPaBlnoXmUJO0k1sf2HKe5ahAVLdQx79c9rSyhP/FNWkbkWZvciS4d/FfhkvActwxe1C9hWReEl63bQo0E5Qjd7EDrJBsYsPAq1MjlFQ2ExkISNgFWfXbULiFJGV0jH3uU7fDnngVlTia5k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782654642; c=relaxed/simple;
+	bh=24czFDNexFqMTV9H7FJ9X6RRb8NwHRNjErZxoVFkYyI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YoiPJM+PnYdPpODkFkNDoFGcVfEmkCbmms3oMsOMVGNIp5UgwtdCHetd+JpsIPlWhS4LaAKD20ynxGqYD+cyWadNdX4Wfr/+QHmMbDrECox+8sHjmCEq0UG7Rc5Baz+rmciIWMiMbvuuiOgdLWaj0Dgkg6jKP9z+5tmHLPjVjKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WnItMHFJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dn930Hub"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-845ea8924a2so161824b3a.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 28 Jun 2026 01:54:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782636869; cv=none;
-        d=google.com; s=arc-20260327;
-        b=riDWJJupS8G59zQ8sVMnR1eUk2xqN3TBdcFYg5UG6HXWuQ1YC3ylzmTW2c9/0Buhw8
-         8ast4BJ1rbgor3S5zJEVB/lbQBrocUpAqqaUaQ7kNU/W7nP5hTmsVTtdB0jebBf2klcp
-         I5BEjCSKA0/HJ9jSboCQAIndSn/ObnKaKCAiF5wb+yfatz+0/WZ9rmZPeQFsCp1RlL1R
-         DjYCwSxa9wXCXZPomnczaSF9Eobu3dEZ1sSyOAR30RkjqeLUIoptFxRNPekbtM7aXUWb
-         VHypIE81yFLsOBeuJ58ns13v7VsI3BxyzwI/JdLkQgylW1eHmYW0TjvhNHUDb8dn1pqM
-         fR2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=kDRw7b6eryh8adlChih1K4e/44/BuDXe2dwWDJBGDU4=;
-        fh=2EDuiq0OlEPVOLrR6Tnwe6T4lTB9G+GKTEK9GoAZaDA=;
-        b=f5uXuauZViNXNxU7bYIm9A4VR6sf7rytSIo45E2eB2KgiWNzEJs8m7skIgY58Cz/rq
-         QT1hsm+RphdiCX9mmuP4M1CO/szI969tU14vI7Ji03wbIKqe6DT+9zIx5Yq3HJA7c5S8
-         nEWDN1zv65UVqEvCLOvVC5ghjnl2h3yLZYJ0tA4GldV9TH0nNs9FLV6KhGlmvfyjuO/K
-         VQfoHzBgKC/tArbsYOvIc+HqUFuDjqbW+5PIPHK3fjhMkbiMG0d1N0YeIsPTmgKnHQdx
-         2mZ8CbYUhWAabb9yZ7AFDliYDzo42ToBoRz2A4pU/k9Y4VQ2zn6whygZpxlCB5nKcNyi
-         muxA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782636869; x=1783241669; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kDRw7b6eryh8adlChih1K4e/44/BuDXe2dwWDJBGDU4=;
-        b=Dn930HubjkxrWQwUcxisnPvgSLatNv/cZX0+Nxi49sdoxq4IPXaFBqF9BLCWSUXhSa
-         jb4g4hMDsw+lsgjxUQj0TSr6ItNFrq0mzTl/Gs5H3J22+qNTc72F0uEsIkJ/DE8Gn5Zi
-         UuV6/2luQU3qdUS+gU0H3RcBYf6HswdDP1cJSvZfeZvMoYBhAgaxPaof5/u2tV0ufjqn
-         2rP5JYAhP0A0JGWtSgc81EAzDGT27Tzv5GLb7iL7lS1LV6Y3xpjy8kuWHKse1+kOjc/n
-         rP6eN/fPBAY1kmlt7BcioZUKDKIq7Omu5rStE6Xo7c7bN9V9OkC0JleUdQ5/mQfafzyB
-         cMWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782636869; x=1783241669;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kDRw7b6eryh8adlChih1K4e/44/BuDXe2dwWDJBGDU4=;
-        b=DyRVxYAMiPlq/wjsg8W3Aj4uYjLzyiJBsJkdJDzRJZmh4Y1IUMQyK0qu8cwedq593K
-         fUCNLQKzOTAVg72CJ5q40jglCNOVyPVGIvgBOUWiapwgo6N3qv9dfrouFnBVUetX6J+n
-         eZdIIC08nD8i7PN1B+qvrdtw+K43wtE+MNcWYZBCNY/VmDH48dG+327tp41VAYqcCS3k
-         TMsaPC1OL4pyKkVoTMCixT1t/19jH8pQE4vJJG4QfIvGSSslrWFIHAgZg3eOuF+emCJi
-         DYUpqfgTowkDRt+UB+4sPhRBhpkTY0Vz6IuHAmTsB4NE29Z7uzGRoM8jdtXeeZ4BtN4r
-         VLyg==
-X-Gm-Message-State: AOJu0Ywo6kHfKvMAWPR79ogWM0p7EMxIIizymICUF7Kg8ZiQH3lVTI6G
-	DHwyC6CLqsadxLKIeATGo5UUstvhCvzcYGex1dsFBCJKqGpbe3TCcOJf/US8fmbsWLBaGK2Rmst
-	9aE4sFqL7sn8akfmoWkJWkEQlW0GVboo=
-X-Gm-Gg: AfdE7clGqFzC7eXe8/4QlfxPeeBuC54MHzL7u3HpFGaZ7EFSJSgJPL5BrVWo9gjAm1b
-	iWUrngjT8mSRiFG45pqZvtURUu3WY5DlE1ATqprh1NkwFppYobJITwDs6lKHjFsnt1OBNO6tD6u
-	LmcmLWblFQJdsoFqSOHq3E8n79ARnc6SdOEE7oj6pukl7zr9/664EHhIdaOTl+hmgKwAkOpq56i
-	4UC9WY06P2BkWYdUIdY542+3SId0VTZQ9aG/gKXRgHBIS4Fx4GuJGdmU7Z7J4XA84sUAOshQWk=
-X-Received: by 2002:a05:6a20:ef01:b0:3bf:6c05:ac with SMTP id
- adf61e73a8af0-3bf6c0549cemr5398370637.59.1782636868773; Sun, 28 Jun 2026
- 01:54:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WnItMHFJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9FCC1F000E9;
+	Sun, 28 Jun 2026 13:50:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782654638;
+	bh=xlQc4S5S+9+7oM3k3C085Mj7tgc995soVZru600tbR4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=WnItMHFJAHtjmWZhO48zXDsStZ3cBBFzCsGUaN+Y1rhBt+sz8K3qpjo1+gn45q29p
+	 Bra7CK/JyNtor0zhjodF9pEofqvJz7gEoixlGZCMrYFpbKnKHOOoO+Hr/HaM2XqcNU
+	 yyP5Jq4LMO0gHKSeTlu/NLN1NjXhQlX55NzL/7vp/DphM+gJ1lKIOLP+ulE4khTmvE
+	 /0Dqt6ciI0bzixdTsiBHOJ0fL1Mf6qXOV2+v5KeEEL0cVKF7zn5nJ7nohhYRxtJfrb
+	 V38GDp2vSbrO32TA3ktx5A711z2uSxPnNaPJ+UvrlBnoU1aisf3Jswuax9xey1HCFT
+	 y4RGKp13Dq67Q==
+Received: by venus (Postfix, from userid 1000)
+	id 79AFD1806EB; Sun, 28 Jun 2026 15:50:36 +0200 (CEST)
+Date: Sun, 28 Jun 2026 15:50:36 +0200
+From: Sebastian Reichel <sre@kernel.org>
+To: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+Cc: hansg@kernel.org, ilpo.jarvinen@linux.intel.com, linux@roeck-us.net, 
+	andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, bryan.odonoghue@linaro.org, platform-driver-x86@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v1 1/3] drivers/platform: lenovo-t14s-ec: Add hwmon
+ support for temperatures and fan speed
+Message-ID: <akEj6XEByCOkuJaY@venus>
+References: <20260624210825.264454-1-daniel.lezcano@oss.qualcomm.com>
+ <20260624210825.264454-2-daniel.lezcano@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <trinity-1da5540c-e8bb-4481-aa98-829f4cc27b43-1782556154552@trinity-msg-rest-gmx-gmx-live-6674dcf44b-psb5m>
-In-Reply-To: <trinity-1da5540c-e8bb-4481-aa98-829f4cc27b43-1782556154552@trinity-msg-rest-gmx-gmx-live-6674dcf44b-psb5m>
-From: Eugene Shalygin <eugene.shalygin@gmail.com>
-Date: Sun, 28 Jun 2026 10:54:16 +0200
-X-Gm-Features: AVVi8Ce_RG7SZ0bWhg0zYhYO5k8k-zHLCktHDXvjNy2eediwb1Kp8_hays2A3FI
-Message-ID: <CAB95QARP4oY8k_A3TS7noFFDmEk7JJbiPSD1kNDV5F1ARsRYog@mail.gmail.com>
-Subject: Re: Water Temp T_Sensor z690 Pro Art
-To: Maurice Jean Mehlhaff <maurice.mehlhaff@gmx.de>
-Cc: linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="eicngpqne546liam"
+Content-Disposition: inline
+In-Reply-To: <20260624210825.264454-2-daniel.lezcano@oss.qualcomm.com>
 
-Hi Maurice Jean,
 
-On Sat, 27 Jun 2026 at 12:29, Maurice Jean Mehlhaff
-<maurice.mehlhaff@gmx.de> wrote:
-> I own an ASUS ProArt Z690-CREATOR WIFI motherboard and noticed that it is currently not supported by the asus_ec_sensors driver.
+--eicngpqne546liam
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v1 1/3] drivers/platform: lenovo-t14s-ec: Add hwmon
+ support for temperatures and fan speed
+MIME-Version: 1.0
 
-for a quick local test you can simly change the DMI board name for the
-existing z690 formula in:
+Hi,
 
-DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG MAXIMUS Z690 FORMULA",
-&board_info_maximus_z690_formula),
+On Wed, Jun 24, 2026 at 11:08:23PM +0200, Daniel Lezcano wrote:
+> Expose the Lenovo ThinkPad T14s EC environmental sensors through
+> the hwmon subsystem.
+>=20
+> The driver now registers a hwmon device providing access to six EC
+> temperature sensors corresponding to the SoC, keyboard area, base
+> cover, PMIC/charging circuitry, QTM module and SSD. Sensor labels
+> are exported to allow user space to identify each measurement.
+>=20
+> Additionally, expose the system fan speed by reading the fan RPM
+> registers from the embedded controller.
+>=20
+> This allows standard monitoring tools such as lm-sensors to report
+> platform temperatures and fan speed.
+>=20
+> Signed-off-by: Daniel Lezcano daniel.lezcano@oss.qualcomm.com
+> ---
 
-Replacing "ROG MAXIMUS Z690 FORMULA" with "ProArt Z690-CREATOR WIFI"
-(name from dmidecode) will make the driver use the
-board_info_maximus_z690_formula struct for your model. Or you
-duplicate that struct under a suitable name (like
-board_proart_z690_creator_wifi), clean up the sensor (ProArt provides
-no water cooling support):
+I gave this a try and for me the fan data is always 65535 (i.e. -1):
 
-static const struct ec_board_info board_proart_z690_creator_wifi = {
-.sensors = SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM,
-.mutex_path = ASUS_HW_ACCESS_MUTEX_RMTW_ASMX,
-.family = family_intel_600_series,
-};
+$ cat /sys/class/hwmon/hwmon66/{name,fan1_input}
+t14s_ec
+65535
 
-and add another DMI record:
-DMI_EXACT_MATCH_ASUS_BOARD_NAME("ProArt Z690-CREATOR WIFI"",
-&board_proart_z690_creator_wifi),
+This is with the fan running:
 
-If that works and you want to submit a patch, please also share DSDT
-dump, which allows to check if .mutex_path is correct.
+$ cat /sys/class/hwmon/hwmon57/{name,fan1_input}
+fan-controller
+2564
 
-Cheers,
-Eugene
+The thermal data looks good.
+
+Greetings,
+
+-- Sebastian
+
+>  drivers/platform/arm64/lenovo-thinkpad-t14s.c | 147 ++++++++++++++++++
+>  1 file changed, 147 insertions(+)
+>=20
+> diff --git a/drivers/platform/arm64/lenovo-thinkpad-t14s.c b/drivers/plat=
+form/arm64/lenovo-thinkpad-t14s.c
+> index 5590302a5694..142464623f0e 100644
+> --- a/drivers/platform/arm64/lenovo-thinkpad-t14s.c
+> +++ b/drivers/platform/arm64/lenovo-thinkpad-t14s.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/delay.h>
+>  #include <linux/dev_printk.h>
+>  #include <linux/err.h>
+> +#include <linux/hwmon.h>
+>  #include <linux/i2c.h>
+>  #include <linux/input.h>
+>  #include <linux/input/sparse-keymap.h>
+> @@ -67,6 +68,16 @@
+>  #define T14S_EC_EVT_KEY_FN_F11			0x7a
+>  #define T14S_EC_EVT_KEY_FN_G			0x7e
+> =20
+> +#define T14S_EC_SYS_THERM0 0x78 /* SoC (CPU+GPU)  */
+> +#define T14S_EC_SYS_THERM1 0x79 /* Keyboard       */
+> +#define T14S_EC_SYS_THERM2 0x7a /* Back cover     */
+> +#define T14S_EC_SYS_THERM3 0x7b /* Charger / PMIC */
+> +#define T14S_EC_SYS_THERM6 0x7c /* QTM West       */
+> +#define T14S_EC_SYS_THERM7 0x7d /* SSD            */
+> +
+> +#define T14S_EC_FAN_RPM_LSB 0x84
+> +#define T14S_EC_FAN_RPM_MSB 0x85
+> +
+>  /* Hardware LED blink rate is 1 Hz (500ms off, 500ms on) */
+>  #define T14S_EC_BLINK_RATE_ON_OFF_MS		500
+> =20
+> @@ -93,9 +104,19 @@ struct t14s_ec_led_classdev {
+>  	struct t14s_ec *ec;
+>  };
+> =20
+> +struct t14s_ec_hwmon_sys_thermx {
+> +	const char *label;
+> +	int reg;
+> +};
+> +
+> +struct t14s_ec_hwmon {
+> +	struct t14s_ec_hwmon_sys_thermx *sys_thermx;
+> +};
+> +
+>  struct t14s_ec {
+>  	struct regmap *regmap;
+>  	struct device *dev;
+> +	struct t14s_ec_hwmon ec_hwmon;
+>  	struct t14s_ec_led_classdev led_pwr_btn;
+>  	struct t14s_ec_led_classdev led_chrg_orange;
+>  	struct t14s_ec_led_classdev led_chrg_white;
+> @@ -555,6 +576,128 @@ static irqreturn_t t14s_ec_irq_handler(int irq, voi=
+d *data)
+>  	return IRQ_HANDLED;
+>  }
+> =20
+> +static umode_t t14s_ec_hwmon_is_visible(const void *drvdata,
+> +					enum hwmon_sensor_types type,
+> +					u32 attr, int channel)
+> +{
+> +	switch (type) {
+> +	case hwmon_temp:
+> +		return 0444;
+> +	case hwmon_fan:
+> +		return 0444;
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +static int t14s_ec_hwmon_read_string(struct device *dev, enum hwmon_sens=
+or_types type,
+> +				     u32 attr, int channel, const char **str)
+> +{
+> +	struct t14s_ec *ec =3D dev_get_drvdata(dev);
+> +	switch (type) {
+> +	case hwmon_temp:
+> +		if (attr =3D=3D hwmon_temp_label) {
+> +			*str =3D ec->ec_hwmon.sys_thermx[channel].label;
+> +			return 0;
+> +		}
+> +		break;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static int t14s_ec_hwmon_read(struct device *dev, enum hwmon_sensor_type=
+s type,
+> +			      u32 attr, int channel, long *val)
+> +{
+> +	struct t14s_ec *ec =3D dev_get_drvdata(dev);
+> +	unsigned int value;
+> +	int ret;
+> +
+> +	switch (type) {
+> +	case hwmon_temp:
+> +		if (attr =3D=3D hwmon_temp_input) {
+> +			ret =3D t14s_ec_read(ec, ec->ec_hwmon.sys_thermx[channel].reg, &value=
+);
+> +			if (ret)
+> +				return ret;
+> +			*val =3D value * 1000;
+> +
+> +			return 0;
+> +		}
+> +		break;
+> +
+> +	case hwmon_fan:
+> +		if (attr =3D=3D hwmon_fan_input) {
+> +			int lsb, msb;
+> +			ret =3D t14s_ec_read(ec, T14S_EC_FAN_RPM_LSB, &lsb);
+> +			if (ret)
+> +				return ret;
+> +
+> +			ret =3D t14s_ec_read(ec, T14S_EC_FAN_RPM_MSB, &msb);
+> +			if (ret)
+> +				return ret;
+> +
+> +			*val =3D 0;
+> +			*val =3D lsb + (msb << 8);
+> +
+> +			return 0;
+> +		}
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static const struct hwmon_ops t14s_ec_hwmon_ops =3D {
+> +	.is_visible =3D t14s_ec_hwmon_is_visible,
+> +	.read =3D t14s_ec_hwmon_read,
+> +	.read_string =3D t14s_ec_hwmon_read_string,
+> +};
+> +
+> +static const struct hwmon_channel_info *t14s_ec_hwmon_info[] =3D {
+> +	HWMON_CHANNEL_INFO(temp,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL),
+> +	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_chip_info t14s_ec_chip_info =3D {
+> +	.ops =3D &t14s_ec_hwmon_ops,
+> +	.info =3D t14s_ec_hwmon_info,
+> +};
+> +
+> +static int t14s_ec_hwmon_probe(struct t14s_ec *ec)
+> +{
+> +	struct device *dev;
+> +	struct t14s_ec_hwmon_sys_thermx sys_thermx[] =3D {
+> +		{ T14S_EC_SYS_THERM0, "soc" },
+> +		{ T14S_EC_SYS_THERM1, "keyboard" },
+> +		{ T14S_EC_SYS_THERM2, "base" },
+> +		{ T14S_EC_SYS_THERM3, "pmbm" },
+> +		{ T14S_EC_SYS_THERM6, "qtm" },
+> +		{ T14S_EC_SYS_THERM7, "ssd" },
+> +	};
+> +
+> +	ec->ec_hwmon.sys_thermx =3D devm_kmemdup_array(ec->dev, sys_thermx,
+> +						     ARRAY_SIZE(sys_thermx),
+> +						     sizeof(sys_thermx[0]), GFP_KERNEL);
+> +	if (!ec->ec_hwmon.sys_thermx)
+> +		return -ENOMEM;
+> +
+> +	dev =3D devm_hwmon_device_register_with_info(ec->dev, "t14s_ec", ec,
+> +						   &t14s_ec_chip_info, NULL);
+> +
+> +	return PTR_ERR_OR_ZERO(dev);
+> +}
+> +
+>  static int t14s_ec_probe(struct i2c_client *client)
+>  {
+>  	struct device *dev =3D &client->dev;
+> @@ -590,6 +733,10 @@ static int t14s_ec_probe(struct i2c_client *client)
+>  	if (ret < 0)
+>  		return ret;
+> =20
+> +	ret =3D t14s_ec_hwmon_probe(ec);
+> +	if (ret < 0)
+> +		return ret;
+> +
+>  	ret =3D devm_request_threaded_irq(dev, client->irq, NULL,
+>  					t14s_ec_irq_handler,
+>  					IRQF_ONESHOT, dev_name(dev), ec);
+> --=20
+> 2.53.0
+>=20
+
+--eicngpqne546liam
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmpBJqUACgkQ2O7X88g7
++ppHLw/+KxjxxxXrhvZJHN8tV3E92FRDa4fXs+Rvpp5uHpbmxHLBIZ0Pc2PuX1JD
+2DHnkJstJl0kfKJdZ+A6Vel/GDni1sJgWSLl7XnZOzF/RBznz2wUZL9DwJBnyeNl
+RzgOOrPPB7NPDeMH6tiTt09SNOfI2971nxMLItx4RKozkbJM41yVt8H13mnSIRgY
+F8xpa1Zcv6DZ6u7q8DkHT4+238QsH2iToNxf16qI6QsbzAyMVfE8RSNDgLrCwe3M
+ez+lm1uJl4nOHMUlUsyBGJEnwOGJt6S7e6A3UlWJaWWVyOnXGm1Cf862GT0VyNgd
+BAMnABwn1VLzoMjWhzbQ/ZPGNkMoAYxERy0QLqRsaa/cvO1enWKySm7HQii5Z063
+djpjU7YJ9sjojdingAML7dbeARuqPH7a4Oa6JiugsAUf3l3o7w+HllfnlAdOOrR3
+Wh+vXB24ZlSvoqIeSuzCotOGrTfnmcD84CyIfXFSLnckoEJ48wv6I6vmFlgyQ2SS
+Y4bSiQh8+y8XQnX/jDtO8YbXW1oQ2B4J0L2v7okQFYkMfKZH/vP2T4qOVSYLstdw
+YBDpCjWSYr+nWEqSg1fvHOThTGlDmWFadtpa4OTOW4ScXAnU6Qfl2MXiDsrwu4xt
+k4NeTt3t7ESVQc/Wp9RO3HSUqGu1WCpMvvzXwvWFV7sdZ4R3lt0=
+=gklp
+-----END PGP SIGNATURE-----
+
+--eicngpqne546liam--
