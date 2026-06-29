@@ -1,110 +1,96 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4F33E639E
-	for <linux-hwmon@vger.kernel.org>; Mon, 29 Jun 2026 19:26:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782761182; cv=pass; b=Kfny5VOuVEiaRhrDmQhyacbjbgStlK7puTvnSKj+NyuEDaHLyfoPxnmwoG3xrP+Wyv2IHx9aal05BOzDeWE6tLfoMSXZ2h7KqaRa8gInE4dClaL7jtb+r7ktqyiyTLEeA5yBF9fah0tvujsiz03m3qCe2OcxdIZitHwMC6R+dGo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782761182; c=relaxed/simple;
-	bh=hqeITJcmzESdb8H22X37VmV0f9rGwZrzNOxw/dDpThg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IDgaUyBEJBUkVOxQsLltbjX/5JUGJ3c0IOONDPb4+OiTvRHCbUfFdnFZprV+XisB8Vs8kw8gtLr4yKeJqHr6EzOUwDXE/4Rf1iaT0ETHxdrNN3H2Y7WMV1rcwMhw8jG/1b0/kKHr/jICqjVcZCwwo8+dpH45rr4YxhHjEcBWimw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HJhwnM+s; arc=pass smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AC19332612
+	for <linux-hwmon@vger.kernel.org>; Mon, 29 Jun 2026 20:35:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782765354; cv=none; b=bv/lvrFhvzBpv6Zmhb6ctuUPUQxbGmoiCFR3j92ws6atQmFTc4pg6zmTxRiogM24maRH2Xv7Xt7kn+Vk+mFRCdr/Gzj/KmyDNoJc6uJa8SyMC2EZYRV2ZLsb+DuPjbf0lT2mB38/X70YqmYVnxVikSEVjT+FQHP0ku1H+ysLEts=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782765354; c=relaxed/simple;
+	bh=GCkRijoG9BNGbYpuyEvzcF76JMbdLKs8xL0i85od9YE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JdrUcVoMT2Iu0KkDcpCJO42GBSaLaqp66IAAuly9AH2WCLVpTj4EM//+E0isgc9DCXo/zU4gHeidHRdQiYhXqCntjV35Uf027WQBbx08+t/6Aiu17nMe+xLJ/wp/VXSbf4Mvs0tzXydcmE8f3Ou9+YScCyb7+MsaJ8yvneWhdkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UwRLG+5y; arc=none smtp.client-ip=74.125.82.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HJhwnM+s"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-4720d22c94aso1679730f8f.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 29 Jun 2026 12:26:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782761177; cv=none;
-        d=google.com; s=arc-20260327;
-        b=iWH3em/H9+O7ApAdDkIhX1jioelY/UXqqwFD3/EwlsqS5cRaHbnQ19nd56/Ip7Hj5c
-         bdt6hnnqvpoUVWVUBks2qjEWV7+pcXCfMc+2sZg9E/mSxVGJ06WWfJANuB1EpBlJ6Sx4
-         oeyMeX6rGHUijL7pcgxUoFjms0tyjK9TgJZmqvDNw6Js9mHQsCKPDcXW6ivEztRG2or0
-         Jw3ELFgNEThwQLEYFNdGwifki30dMyalcSHbNbXVUcF9573+urOlvWnAWW1kO5q0r3J1
-         0yzjHSxjAW6LPOGTwgE0qs6JbuRFnpMlcpHQyAJr9/L2bWOMz0VMEypGzmzjlQn3CYdt
-         S7mA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=ikcNibTeUf+UPMUiFV8fQCysHoWKcq3FilBwnxi5AHA=;
-        fh=EYZyMVpywMhrJaESXaGMhTTmyxumX3NVtGwPhwDaCJM=;
-        b=EbENEJB/wPGm9kQi56gQYBw44YRWZAjdMAgwl2AytNINUDjVGTfvzhyaNfmTGi0t+O
-         eobEkRNeP7N7hw1Ydz9NoBCiNyRri2/Cv9g8PMQs8qp8eUbJdQIonpOiLXGa+rZZF6q4
-         AWFtZKNaT5xtM7zaTZVDpWNYZH8i15Hc8pISym5Bxw2s9rF7IZdFZFaKIJ5bjiCVB1Ld
-         O5x1j/BIYl9bYMrGzKv69gche1aec7LZZwuviHyjiG4c64bau9mNR7OTcjaKh7B5WaT6
-         Qg9SojqxNyOs1UACtOycXD9dKmrpqRVR33+2T1+e8RcIigVdQ1Pvx5o431RNzfgDbeFy
-         hL2w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UwRLG+5y"
+Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-13b2b92b0bfso23439c88.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 29 Jun 2026 13:35:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782761177; x=1783365977; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ikcNibTeUf+UPMUiFV8fQCysHoWKcq3FilBwnxi5AHA=;
-        b=HJhwnM+staapGFHwqM808eeWNnUJZe5blKYBHytAshQ0R4cD0s/2bIoY7UPdFNHzWN
-         8Lzhz40YD/asdAi/2VM1/lpYEkIGW82FSK1CepGND16DwoImx9o2vaeBU/7MazJl+2hW
-         9enHuZY1BYbPqDDbYvYcM9K6Vu+yEZoOFi3YmMiiw1JchXIhHC4tjOWFwf+VUVNZarAr
-         gSyHzfMozR6b08+MS8JH647bbcGooDHe1Y6QGk2AoBBjZMHFh+Q703hU4khl4WjOCmGA
-         nwu4zPNKSN99x6VUtk/b93lZpMI7QfSJPLRmgm2XKds6De2peb2dXQfpwLr/iTF7U3cv
-         xI5g==
+        d=gmail.com; s=20251104; t=1782765352; x=1783370152; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fUL654ezc/90NPCUZ/g4JqvtVBcPucQUCRqJ7rGnxFE=;
+        b=UwRLG+5yVfhPcGqPRdBRIMmXk6kmT8shTMm5WKMlgW7ePZuWwelSGPLJ/h8puxuIjg
+         zccnSsmrvmQOjW1ICcy4HkiD3MC4ZejVHxDFD9BhHmi4lr2VnDxudzgcZlypSNo8Py/X
+         oFW/1kBDsNkWx0aZqsUPz6DOCRiK5gRZXbagNOjPOxq3W85vf3OFJEKEO5+PpjgIADkx
+         zfppDnuiGIFmeHuh7UtlRiSgRkuLvmL9bmZrDI2/QCnujS9jSzdt2g5rUMS+4TrDdZ68
+         +g2DQ4odz1AHKKAJIYIFAba7+3T8NC+wpdZ64ZqZTON2dgAbNmfBAujymn5dgjlxEYIW
+         OiJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782761177; x=1783365977;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ikcNibTeUf+UPMUiFV8fQCysHoWKcq3FilBwnxi5AHA=;
-        b=KuzuLoTdNhYAQGqJOsw3hRjmQj8I+DYxQezBHRHuvv0bP0rPDdRpOmvve6vHk/hiRH
-         cYWoFoK8irheHtptMkXri4ngsmcm3/XGW5tuaTEjGtXqm+xlLgMrIn8GHrclVncNf7/X
-         lksLW3jHYVaaV3aBAYdbo71YeFt9SysNe9GXfjz4ah2q4rEBXHWHxVqFUOe96LNSd/ei
-         afthun7XnRwb8QrLSePxpNPJNgH0IXtT+P3WxZK4kkYiUeKWn8nlXhcmSobTdhBZIb03
-         s0cysThONBvPPYpZPFeTo2BzTyyiPGotxLrsFOBhO5NLrw6n9mekXLR+U9RMh6MxWy8f
-         h47Q==
-X-Gm-Message-State: AOJu0YzXOUPI0n2A/AJmEvGKPYvEeDXDkUJpUNqqORQKJZs6dNeKaM+b
-	xCCKcIQqD+EeNeZCHV26pRBZErqQGzrqvOzeuYWO0LDxiIwxMG73591Y9Ei6ZixpjooNyP63fqm
-	Af0NTpTJreDNfS0fCNP7Ivk7tUJOnJCo=
-X-Gm-Gg: AfdE7clg3wRuDvVXrQ825BZnpBCbcqE2nV+83wXjdfpGHnfHBJKXlH8NEoIjP8TiKbC
-	RDUfiNIuwfZAgknKTT/s4A8LdvOGPxvjQwaYy074YAH+4zM3oGO4Kpj8op/V41Q2EDeML8xsouM
-	Xxf+Vz67BGVvqQSIjehdXSKXhBUlf2u4YWDOjO67adaCg+xscNrN6kylXntXASV9eRBTjdHWKvB
-	fpqPxg9Ir0o5J/1taBA+tIF2GDjRVJuZQHI4kDMLkWweHiNKOIUZ3s4A6JW/2t+qRHCH5ccFueC
-	D+jV5GQ9m+v5Dbf/dz37Wosp09OiDxMS8WGqmgAs5EWs+yjPjzSQv3d4DVW2iIxVtVDioPE/jN3
-	q3NkuQ1MDGQ6y5XXsXTyOIDSb5miwrwMaEp+VCoDc23PmSVcw7nuaZpX9z3qdx+oWMk0Kuk01XD
-	dw3Pe186Gg
-X-Received: by 2002:a05:6000:1889:b0:473:1ccc:15be with SMTP id
- ffacd0b85a97d-47553028b4bmr602442f8f.39.1782761177156; Mon, 29 Jun 2026
- 12:26:17 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782765352; x=1783370152;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=fUL654ezc/90NPCUZ/g4JqvtVBcPucQUCRqJ7rGnxFE=;
+        b=rxdGgwu98GEj3EkyfE3Vyw2vV2JMM5fT94ZbuQbLpr7RewwhaHEzy3BwTEkdNCYB5g
+         OLiuARKfDzcOZMQZY2Tjqd++dMiuvH4eGj572DPG3fwuWc7CBU1Qaqh+aO+8qSITazct
+         Kqxqx57cJwpRyE/e/ONIHBhYcMgLxaynKKwesc4wiJ13v7qMpgzrsTFtBScP568M/2J0
+         3ksPhTnq8ksqPktgztEviLxRcb6+bFch4aVHK/7U8eUatxv9jOxL1Lajn3LNxclJengU
+         mSo51ihJXalbv9JC6pXy+gDcUdIWIeGEpE0CuVNZyxcY7bXSO399Xkf00gU5YwghYbK2
+         h7uQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8XEyjJdRMWRcf/R4aG8AneOdqaZ1ZCLf4ZZi7mrJJ7pGXGRj1+r8Em7CBw5PszE8okkyWW2lHrEpK/IA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0BVTBfGQqzUOWPHw2h0mVXXov7VokaDkjZNAl05XObN34/Dtd
+	kDx/0DSzoX7o7gC17dlK4F6S3QOp7WpcTLeFRGKKWhYz/lS8cW2NMVen
+X-Gm-Gg: AfdE7cmlLT+LO9MdteAkJ3wYVlPOrheM1NeqFp9rjqrBunfnejVgpjiU3eDfkXihZG2
+	B6/oA9LRN5Ffz7UCDW2FxlLTr5Mtaapi09duEv5y6BD3bPd6agPgl30XuT9YSP7bomjUJAQGj5Q
+	W+PaxnjyFh/FszS3MJLAZA6nlcLrsGeD295NSQr5qyQZBfU7S50iI1zXQRN0rt0+ypdE+1xAgkp
+	aOmqat2khOeBAQnuMKThKRES69qNjrdnYFDueGrvLtR1egC5t+VVaeCV6pS2LUNEnRZW4j/fT1T
+	vFRGCOPYoquGu08Ka6ZGFF1OSoroW9MeqF41I75dnAkld3dd0Kqn+w/He0zg+p6fRqh4puTtPP5
+	WCe05scOXWIJKNwSBw3MWXSb0k13YLIdOo9KHlmRWys6masmkICS/d1A1kzqdNh7dVWgk3QXzaV
+	vZOreuiYKJsE4rP07RiPwSVniaDw==
+X-Received: by 2002:a05:7022:2389:b0:139:78a4:f57a with SMTP id a92af1059eb24-13b2a1c4ecfmr571385c88.23.1782765352356;
+        Mon, 29 Jun 2026 13:35:52 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b2ab30047sm803621c88.8.2026.06.29.13.35.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2026 13:35:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 29 Jun 2026 13:35:50 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Joshua Crofts <joshua.crofts1@gmail.com>
+Cc: Tzung-Bi Shih <tzungbi@kernel.org>,
+	Alexandru Tachici <alexandru.tachici@analog.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH 1/3] hwmon: (max1619) add missing 'select REGMAP' to
+ Kconfig
+Message-ID: <f1738266-5d64-4e42-8f88-71a9126de021@roeck-us.net>
+References: <20260629-add-kconfig-deps-v1-0-8104df929b1a@gmail.com>
+ <20260629-add-kconfig-deps-v1-1-8104df929b1a@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260629-add-kconfig-deps-v1-0-8104df929b1a@gmail.com> <20260629-add-kconfig-deps-v1-3-8104df929b1a@gmail.com>
-In-Reply-To: <20260629-add-kconfig-deps-v1-3-8104df929b1a@gmail.com>
-From: Joshua Crofts <joshua.crofts1@gmail.com>
-Date: Mon, 29 Jun 2026 21:26:05 +0200
-X-Gm-Features: AVVi8CfEl_y46MafrE7csTYiPyLlcXEigCUk7Ai-r1lwTXi99wRl7GGWu2NrwYs
-Message-ID: <CALoEA-yewRwGCVKUS02m3WqPsVF5amF83HZTsk0H+QW=8fKKvw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] hwmon: (max6679) add missing 'select REGMAP_I2C' to Kconfig
-To: Guenter Roeck <linux@roeck-us.net>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	Alexandru Tachici <alexandru.tachici@analog.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260629-add-kconfig-deps-v1-1-8104df929b1a@gmail.com>
 
-On Mon, 29 Jun 2026 at 21:17, Joshua Crofts <joshua.crofts1@gmail.com> wrote:
->
-> The Kconfig entry for the MAX6679 sensor doesn't contain a
-> `select REGMAP_I2C` parameter, causing build failures if regmap
+On Mon, Jun 29, 2026 at 09:17:39PM +0200, Joshua Crofts wrote:
+> The Kconfig entry for the MAX1619 sensor doesn't contain a
+> `select REGMAP` parameter, causing build failures if regmap
 > isn't selected previously during the build process.
+> 
+> Fixes: f8016132ce49 ("hwmon: (max1619) Convert to use regmap")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Joshua Crofts <joshua.crofts1@gmail.com>
 
-Oops, typo in the commit message, it should be 6697 in the title and
-body. Shall I send
-a new version or can it be tweaked when applying?
+Applied.
 
--- 
-Kind regards
-
-CJD
+Thanks,
+Guenter
