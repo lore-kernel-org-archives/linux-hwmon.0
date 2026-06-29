@@ -1,288 +1,204 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from flow-a2-smtp.messagingengine.com (flow-a2-smtp.messagingengine.com [103.168.172.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3A933D9DB9
-	for <linux-hwmon@vger.kernel.org>; Mon, 29 Jun 2026 07:42:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC7DE3E5EF6;
+	Mon, 29 Jun 2026 08:07:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782718972; cv=none; b=UVFkpaa0xwPE1qgB9BHeiWdWSaIcLuZZJjXbXeyLoABkwLhzW9MHB1/epgTOUIR3a7kyBzWGodosH9EM5xoIKv+yPO7Ta/W4YRALYkT1q6gV9ixBszM+NnwqifaXOIMv0HNxqcQHy9WmEU80YsaWvrbiTdYv+uceFRMyhXnlQas=
+	t=1782720464; cv=none; b=U1VdrIJBosm2H0u7AjBnVALTqtwXXhAYwq5FrroOvYl+rtn3fpl4Fh3HowHQWuIGFcLo/rI6gTExpwk5UKUaz2fa8crmjaasLSxKWisGMjAkImd859Xz7tWCkq41PvfZWa6NIbGj1clQZaLQNo86Lo3SGW9b3p/CFKQK94g+wvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782718972; c=relaxed/simple;
-	bh=3UpejLBOgMii/hPogNpNRtAPl4xGgPXtXjU7NjjtUcs=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=YoYr7BcS5a0TzLrOjij/+15XOQ0KDRLSbmIQ+STp76yHJug3uviLQRvSkLGvk2yYeyf18E/26GaTPktspqotkCr0++CFcR2RDd17F2wTo/zCGmCzV3TUNirK9mjXHRwSha2jG8p1ErZC0+uelRD2uOjbF2iDlnUouIEY/DSySNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ethaSz1K; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782720464; c=relaxed/simple;
+	bh=JlQUQE0x6pAsBcJIhVnxetBcQ3/zlQq0fX7Yw1HEuNM=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=YVrdCSFkdpENE45zlLCHhc5P07toTPdk6bCxxwldfpEzMCZvoG1PWUI8oE6RAVEvslvr527WH8f6B/x3t8ugFypXErELd0y2Wn4RkfJwoktXD9I7ztufserM+0E4lCUaG3Yx6YwLxxPR/wbkifst6n2ln6NKUFFH9vE/1CmafcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=TEpYlNln; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=c24Brf1S; arc=none smtp.client-ip=103.168.172.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ethaSz1K"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2759D1F000E9;
-	Mon, 29 Jun 2026 07:42:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782718965;
-	bh=BOLatCr//rUi/dWjWnPkCjBeEKfUAsTw5Gt8eN5zops=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ethaSz1KjfO/FaL96euxAa+XTDZmDNu3F7R+I98caMIXc3RMfA1tzh2JKj6ontp1C
-	 P7S+az02CoDs+qeBBiIf2mjSOYpvvCcgx4vz0Wk6FejFKeGQtCgx/mgRX7lo3+L+GE
-	 pIRI846eb2qJuK1PtoGZrJhzDqqROB/tV6FD+N7h1qMymyA9SkOqEtSiXmPb3SJq/6
-	 q5aEnJEeWL2AW7RwAtE5CACXcYqXP8CmPbRGmehnFUc619qfF0g+WNYFEEK88xRDan
-	 9dehMXYduCPcjOBDTmkZV8TqFThPHYD6mpCHA45oyG1JCNPqHrTetyZ0p5fmGA9d8l
-	 +sOKGo0CZJXVA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon: add Altera SoC FPGA hardware monitoring
- driver
-Reply-To: sashiko-reviews@lists.linux.dev
-To: tze.yee.ng@altera.com
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <793342c7e73a87484fa0e476eadc41886cc34f0d.1782715159.git.tze.yee.ng@altera.com>
-References: <cover.1782715159.git.tze.yee.ng@altera.com>
- <793342c7e73a87484fa0e476eadc41886cc34f0d.1782715159.git.tze.yee.ng@altera.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 29 Jun 2026 07:42:44 +0000
-Message-Id: <20260629074245.2759D1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="TEpYlNln";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="c24Brf1S"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailflow.phl.internal (Postfix) with ESMTP id 95552138020B;
+	Mon, 29 Jun 2026 04:07:38 -0400 (EDT)
+Received: from phl-imap-05 ([10.202.2.95])
+  by phl-compute-04.internal (MEProxy); Mon, 29 Jun 2026 04:07:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1782720458;
+	 x=1782727658; bh=/WIe7fhbq6CJNEEuiOwk3r/zWUSncZp6R6QFRwJ6sZY=; b=
+	TEpYlNln6M/GwjHpSnfu7rcdvzFIRDl8PaPZdTR79bfu+93tv92bHNDr8ENAoz0o
+	I+3XOz+pyki2rkkp/RkwXg8QRaJpJiIvR1f0tt8I+SaQuvnEJlOAQI6CC1z6yuZ0
+	cVgd/4iHRc6MLkND4uxVIRG0nvMRx4MGsgfInhPlnKeJM8pUkN12VG8ueW2PsOxW
+	4MefLznfvAN244lHNATTmj+ua+WwiZat+gfP8BGqjCXRdi0M/+5lN5Uzmi8DBRk9
+	qOZeAPBpKTz28WGmYMtNgUnS3AhyykTIUnN8T+m0kvmDFl4Aj7gFAV/TTmsNx+r6
+	Jtg81SkeOZQVOe1HWz4Juw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1782720458; x=
+	1782727658; bh=/WIe7fhbq6CJNEEuiOwk3r/zWUSncZp6R6QFRwJ6sZY=; b=c
+	24Brf1SGc6bjX+gJggjD7fmSOT+iM2lF24wJCuV8s2Amdzt3Twtd0vjLYD7Kbt7Z
+	+kQoptcHz/VtGk8XGv79LNoCZacAq5R7BAxPksArO05cBqn1akZdOx6QMuzHyKsp
+	jZ5aPv2lk/STvMi4lhBu2oUJ3KD+K5F5xqv9MBLZ6CU0PGJ3KI+fRCvE0f+e7q5T
+	uEQZkmuOQpm6EKiGmWuLksFY8y18pLeUcAz299olDRkgTanwR4wU8CSDkLsduURr
+	qyrnHb9qvfpeWKz95/irIS1jl+HSEg0BQDlK7TA+5DM9R3tqbP934xrod3JsNeCN
+	bn6beHziPLZyr1RaQBnnQ==
+X-ME-Sender: <xms:yCdCapri6_Fghw3mlaxsy_gFSSzhIwFXsDsNSMOFs66NbUuvHEYu7g>
+    <xme:yCdCamerjDzu3SkJsJt3qEPErm5Jr5VIrDx-XCtfJMJEoOf5pYL1aPAL4K1m0ol0d
+    u21Y6WhZ3M90bX6VcOFH8qU30t4-5iJBk_D2YIapVkzsHqYJk_o71YS>
+X-ME-Proxy-Cause: dmFkZTGqoTHHYaCI7RURCJhbWHvAkwwtWLTme13LzQ5hLxT15nHz8y1KVwyjgVqWxzHrQs
+    ToUxEitfKDOpnMGHxJtxeXXfPwSpUOYKCbLG3DvDrtRiFisamjIvbRYQ8eHCu3vuqKkFV+
+    oGsvHlqt2QnvGfcOvmRuOO3Rgzas4qMskWtx3Scnrrx20Qj6yj3iPd9+zKy3qioo1rB1kC
+    NbqXUUQhwk7CbH9jPKcbA4qnRTFNBVVyitidRmU/FN7E7sMWO92pJbypgI30pCru3tSGoX
+    4d3jRIE5+wGTHtOqlpEwsN0x3RyunobmR8KafNHjr3b8znb/Ht8a7MfJTFEzr6ZVtoIPkp
+    YEm/Y5IKpJ7BR9D7SOhiAKZmz+xhjw+Rj3xZl+UuPyzGO/ptf2uS48xftDP82jFSPGfW1i
+    WUFvAhWp7rn6kmw50O2IbqNmMpIJJk3N6j0QnhkZxe9rSsCXY+yz3p4OT2eGCGDnr01Arj
+    1sqDxkxM7AGOwRp2cqGArUzSLYhPKHqfyQLHeEzDtqWWPt2AfNkUlUPb4ugsBXY3ifDHcm
+    rEin2AiU1hzBEGVpJXGUq8YO8ASTb7YaAQ4Ms9TA2vnH06i8XtAwN9VbW6ypBxduNhUPiP
+    nLczW/MyU9OJ2FdWXbqKiIb/kfE3CMT7L0MTJSderW3WxiiH9wuQPU0UShyg
+X-ME-Proxy: <xmx:yCdCaqfbNNdmOfirtwC33qahd0NFGOxhg_dXK8UoYrkmnnmFjgFULw>
+    <xmx:yCdCakdFbzk9KweAfKAiLwLQgD4racV8i02VE4-Fx5JTJvZq9isCqw>
+    <xmx:yCdCakb8QFZewQ3ezXiHAUYXU4zyjwrQ2jNwpx7JVpowCgaV4w9SdQ>
+    <xmx:yCdCar0ySJMq0u8YC5UhoDauKTq85d7kaWxynrhTGphqhhBu2OB0Rg>
+    <xmx:yidCaoHTNZ_VOhE49MHuA-FguNtgyjgUdDsWkzp50DUo55mdeNXYC66h>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 4D341182007E; Mon, 29 Jun 2026 04:07:36 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-ThreadId: ApSqBjiSqQZ-
+Date: Mon, 29 Jun 2026 10:06:54 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Juergen Gross" <jgross@suse.com>, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org,
+ "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>, x86@kernel.org,
+ linux-acpi@vger.kernel.org, kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+ linux-pci@vger.kernel.org, virtualization@lists.linux.dev,
+ linux-ide@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-fbdev@vger.kernel.org, linux-crypto@vger.kernel.org,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ linux-hyperv@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, linux-mtd@lists.infradead.org,
+ platform-driver-x86@vger.kernel.org
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+ "Daniel Lezcano" <daniel.lezcano@kernel.org>,
+ "Zhang Rui" <rui.zhang@intel.com>,
+ "lukasz.luba@arm.com" <lukasz.luba@arm.com>,
+ "Jason Baron" <jbaron@akamai.com>, "Borislav Petkov" <bp@alien8.de>,
+ "Tony Luck" <tony.luck@intel.com>,
+ "Yazen Ghannam" <yazen.ghannam@amd.com>, "Len Brown" <lenb@kernel.org>,
+ "Pavel Machek" <pavel@kernel.org>, "Thomas Gleixner" <tglx@kernel.org>,
+ "Ingo Molnar" <mingo@redhat.com>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>,
+ "Sean Christopherson" <seanjc@google.com>,
+ "Paolo Bonzini" <pbonzini@redhat.com>,
+ "Kirill A. Shutemov" <kas@kernel.org>,
+ "Rick Edgecombe" <rick.p.edgecombe@intel.com>, "Pu Wen" <puwen@hygon.cn>,
+ "Bjorn Helgaas" <bhelgaas@google.com>,
+ "Ajay Kaher" <ajay.kaher@broadcom.com>,
+ "Alexey Makhalov" <alexey.makhalov@broadcom.com>,
+ "Broadcom internal kernel review list"
+ <bcm-kernel-feedback-list@broadcom.com>,
+ "Viresh Kumar" <viresh.kumar@linaro.org>,
+ "Reinette Chatre" <reinette.chatre@intel.com>,
+ "Dave Martin" <Dave.Martin@arm.com>, "James Morse" <james.morse@arm.com>,
+ "Babu Moger" <babu.moger@amd.com>,
+ "Tony W Wang-oc" <TonyWWang-oc@zhaoxin.com>,
+ "Damien Le Moal" <dlemoal@kernel.org>,
+ "Niklas Cassel" <cassel@kernel.org>, "Dave Airlie" <airlied@redhat.com>,
+ "Helge Deller" <deller@gmx.de>, linux-geode@lists.infradead.org,
+ "Olivia Mackall" <olivia@selenic.com>,
+ "Herbert Xu" <herbert@gondor.apana.org.au>,
+ "Linus Walleij" <linusw@kernel.org>,
+ "Bartosz Golaszewski" <brgl@kernel.org>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "K. Y. Srinivasan" <kys@microsoft.com>,
+ "Haiyang Zhang" <haiyangz@microsoft.com>, "Wei Liu" <wei.liu@kernel.org>,
+ "Dexuan Cui" <decui@microsoft.com>, "Long Li" <longli@microsoft.com>,
+ "Guenter Roeck" <linux@roeck-us.net>,
+ "Peter Zijlstra" <peterz@infradead.org>,
+ "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+ "Namhyung Kim" <namhyung@kernel.org>,
+ "Mark Rutland" <mark.rutland@arm.com>,
+ "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
+ "Jiri Olsa" <jolsa@kernel.org>, "Ian Rogers" <irogers@google.com>,
+ "Adrian Hunter" <adrian.hunter@intel.com>,
+ "James Clark" <james.clark@linaro.org>,
+ "Josh Poimboeuf" <jpoimboe@kernel.org>,
+ "Pawan Gupta" <pawan.kumar.gupta@linux.intel.com>,
+ "Vitaly Kuznetsov" <vkuznets@redhat.com>,
+ "Andy Lutomirski" <luto@kernel.org>,
+ "Boris Ostrovsky" <boris.ostrovsky@oracle.com>,
+ "Huang Rui" <ray.huang@amd.com>,
+ "Mario Limonciello" <mario.limonciello@amd.com>,
+ "Perry Yuan" <perry.yuan@amd.com>,
+ "K Prateek Nayak" <kprateek.nayak@amd.com>,
+ "srinivas.pandruvada@linux.intel.com"
+ <srinivas.pandruvada@linux.intel.com>,
+ "Artem Bityutskiy" <artem.bityutskiy@linux.intel.com>,
+ "Artem Bityutskiy" <dedekind1@gmail.com>,
+ "Miquel Raynal" <miquel.raynal@bootlin.com>,
+ "Richard Weinberger" <richard@nod.at>,
+ "Vignesh Raghavendra" <vigneshr@ti.com>,
+ "Ashok Raj" <ashok.raj.linux@gmail.com>,
+ "Hans de Goede" <hansg@kernel.org>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ "Rajneesh Bhardwaj" <irenic.rajneesh@gmail.com>,
+ "David E Box" <david.e.box@intel.com>, xen-devel@lists.xenproject.org
+Message-Id: <7332feff-2649-496c-8e49-b0a19eb54a32@app.fastmail.com>
+In-Reply-To: <c1608c48-13c2-4290-826b-28b5ca51eaf7@suse.com>
+References: <20260629060526.3638272-1-jgross@suse.com>
+ <d7c1db52-529a-43cc-ac7d-38b52627e8bc@app.fastmail.com>
+ <c1608c48-13c2-4290-826b-28b5ca51eaf7@suse.com>
+Subject: Re: [PATCH 00/32] x86/msr: Drop 32-bit MSR interfaces
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
-s) to consider:
-- [High] Mixing devm_hwmon_device_register_with_info with manual cleanup in=
- remove() creates a Use-After-Free race condition during device unbind.
-- [High] Asynchronous hardware monitoring reads always time out, introducin=
-g a severe 2-second blocking delay per read.
-- [High] Incorrect error code check causes probe failure on firmware lackin=
-g async support instead of falling back to sync mode.
-- [High] A timeout or signal interruption during a synchronous read abandon=
-s a pending SMC call, causing its late response to prematurely complete and=
- corrupt a subsequent read.
-- [Medium] Incorrect sign extension of Q8.8 temperature values will misinte=
-rpret negative temperatures.
---
+On Mon, Jun 29, 2026, at 09:01, J=C3=BCrgen Gro=C3=9F wrote:
+> On 29.06.26 08:52, Arnd Bergmann wrote:
+>> On Mon, Jun 29, 2026, at 08:04, Juergen Gross wrote:
+>>=20
+>> I assume this is fine, but since you don't mention it explicitly here,
+>> please clarify what this means for 32-bit CPUs without the rdmsrq
+>> instruction. Those will continue using the same instructions as before
+>> and just change the calling conventions, right?
+>
+> Yes. I thought this would be clear from the following:
+>
+>    - They are based on primitives using 64-bit sized values anyway.
 
-commit afeb154cb3aefd3ae7be5eaa69494d4428dd9007
-Author: Tze Yee Ng <tze.yee.ng@altera.com>
+Right, that was my reading of it as well, but it's not entirely
+clear when the function name is the same as the mnemonic of an
+instruction that only exists on newer CPUs and the later patch
+descriptions (e.g. 25/32 that I was Cc's on) have a much shorter
+explanation.
 
-hwmon: add Altera SoC FPGA hardware monitoring driver
+>>> Note that most patches of this series are independent from each othe=
+r.
+>>> Only the patches removing a specific interface (patches 7, 15, 26 and
+>>> 30) and the last two patches of the series depend on all previous
+>>> patches.
+>>=20
+>> It looks like you are touching most files twice or more here, to
+>> first convert from rdmsr to rdmsrq and then to change the
+>> two-argument rdmsrq() macro to a single-argument inline. If you
+>> introduce the inline version of rdmsrq() first, you should be
+>> able to skip the second step (patch 31) as they could be able
+>> to coexist.
+>
+> I've discussed how to structure the series with Ingo Molnar before [1]=
+. The
+> current approach was his preference.
 
-Add a hardware monitor driver for Altera SoC FPGA devices using the
-Stratix 10 service layer. Sensor channels are selected based on the
-service layer compatible string.
+Ok.
 
-> diff --git a/drivers/hwmon/socfpga-hwmon.c b/drivers/hwmon/socfpga-hwmon.c
-> new file mode 100644
-> index 0000000000000..1104b603f5b41
-> --- /dev/null
-> +++ b/drivers/hwmon/socfpga-hwmon.c
-
-[ ... ]
-
-> +static int socfpga_hwmon_parse_temp(long *val, u32 temperature)
-> +{
-> +	switch (temperature) {
-> +	case ETEMP_INACTIVE:
-> +	case ETEMP_NOT_PRESENT:
-> +	case ETEMP_CORRUPT:
-> +	case ETEMP_NOT_INITIALIZED:
-> +		return -EOPNOTSUPP;
-> +	case ETEMP_TIMEOUT:
-> +	case ETEMP_BUSY:
-> +	case ETEMP_TOO_OLD:
-> +		return -EAGAIN;
-> +	default:
-> +		/* Convert Q8.8 degrees Celsius to millidegrees for hwmon. */
-> +		*val =3D (long)(s32)temperature * SOCFPGA_HWMON_TEMP_MDEG_SCALE /
-> +			SOCFPGA_HWMON_TEMP_FRAC_DIV;
-> +		return 0;
-> +	}
-> +}
-
-[Severity: Medium]
-Does this correctly sign-extend negative temperatures?=20
-
-The Stratix 10 SDM firmware returns temperature as a 16-bit signed Q8.8 val=
-ue
-inside a u32. Since negative values aren't sign-extended to 32 bits before
-this cast (for example, -1.0 is returned as 0x0000FF00), casting directly to
-s32 evaluates to 65280 instead of -256.=20
-
-Could we cast to s16 first to ensure the sign bit is properly extended?
-
-[ ... ]
-
-> +static int socfpga_hwmon_async_read(struct device *dev,
-> +				    enum hwmon_sensor_types type,
-> +				    struct stratix10_svc_client_msg *msg)
-> +{
-> +	struct socfpga_hwmon_priv *priv =3D dev_get_drvdata(dev);
-> +	struct stratix10_svc_cb_data data =3D {};
-> +	struct completion completion;
-> +	unsigned long wait_ret;
-> +	void *handle =3D NULL;
-> +	int status, index, ret;
-> +
-> +	init_completion(&completion);
-> +
-> +	for (index =3D 0; index < HWMON_ASYNC_MSG_RETRY; index++) {
-> +		status =3D stratix10_svc_async_send(priv->chan, msg, &handle,
-> +						  socfpga_hwmon_async_callback,
-> +						  &completion);
-> +		if (status =3D=3D 0)
-> +			break;
-> +		dev_warn(dev, "Failed to send async message: %d", status);
-> +		msleep(HWMON_RETRY_SLEEP_MS);
-> +	}
-> +
-> +	if (status && !handle) {
-> +		dev_err(dev, "Failed to send async message after %u retries: %d\n",
-> +			HWMON_ASYNC_MSG_RETRY, status);
-> +		return status;
-> +	}
-> +
-> +	wait_ret =3D wait_for_completion_io_timeout(&completion, HWMON_TIMEOUT);
-
-[Severity: High]
-Does the service layer ever invoke the provided callback?
-
-Looking at stratix10_svc_async_send() in the firmware driver, it saves
-socfpga_hwmon_async_callback but it appears the service layer never actually
-calls it anywhere in its execution path.
-
-Will this cause wait_for_completion_io_timeout() to always block for the fu=
-ll
-2-second timeout before falling back to stratix10_svc_async_poll() below?
-
-[ ... ]
-
-> +static int socfpga_hwmon_sync_read(struct device *dev,
-> +				   enum hwmon_sensor_types type,
-> +				   struct stratix10_svc_client_msg *msg)
-> +{
-> +	struct socfpga_hwmon_priv *priv =3D dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	reinit_completion(&priv->completion);
-> +
-> +	if (type =3D=3D hwmon_temp)
-> +		priv->client.receive_cb =3D socfpga_hwmon_readtemp_cb;
-> +	else
-> +		priv->client.receive_cb =3D socfpga_hwmon_readvolt_cb;
-> +
-> +	ret =3D stratix10_svc_send(priv->chan, msg);
-> +	if (ret < 0)
-> +		goto status_done;
-> +
-> +	ret =3D wait_for_completion_interruptible_timeout(&priv->completion,
-> +							HWMON_TIMEOUT);
-> +	if (!ret) {
-> +		dev_err(priv->client.dev, "timeout waiting for SMC call\n");
-> +		ret =3D -ETIMEDOUT;
-> +		goto status_done;
-> +	}
-> +	if (ret < 0) {
-> +		dev_err(priv->client.dev, "error %d waiting for SMC call\n", ret);
-> +		goto status_done;
-> +	}
-> +
-> +	ret =3D priv->last_err;
-> +
-> +status_done:
-> +	stratix10_svc_done(priv->chan);
-> +	return ret;
-> +}
-
-[Severity: High]
-If this wait is interrupted by a signal, does this leave a pending firmware
-response that could corrupt a subsequent read?
-
-When stratix10_svc_done() is called on the error paths, it stops the kthrea=
-d=20
-but does not cancel the in-flight hardware command or flush chan->svc_fifo.
-
-When a subsequent sensor read calls reinit_completion() and spawns a new
-kthread, couldn't the old abandoned response unconditionally call the active
-receive_cb and trigger a premature completion with stale data?
-
-[ ... ]
-
-> +static int socfpga_hwmon_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev =3D &pdev->dev;
-> +	struct device *parent =3D dev->parent;
-> +	const struct socfpga_hwmon_board_data *board;
-> +	struct socfpga_hwmon_priv *priv;
-> +	struct device *hwmon_dev;
-> +	int ret;
-> +
-> +	if (!parent || !parent->of_node) {
-> +		dev_err(dev, "missing parent device node\n");
-> +		return -ENODEV;
-> +	}
-
-[ ... ]
-
-> +	ret =3D stratix10_svc_add_async_client(priv->chan, false);
-> +	switch (ret) {
-> +	case 0:
-> +		priv->async =3D true;
-> +		break;
-> +	case -EINVAL:
-> +		dev_dbg(dev, "async operations not supported, using sync mode\n");
-> +		priv->async =3D false;
-> +		break;
-> +	default:
-> +		dev_err(dev, "failed to add async client: %d\n", ret);
-> +		stratix10_svc_free_channel(priv->chan);
-> +		return ret;
-> +	}
-
-[Severity: High]
-Is this checking the correct error code for unsupported async operations?
-
-When the firmware lacks async support, stratix10_svc_add_async_client()
-returns -EOPNOTSUPP. Since this switch statement checks for -EINVAL, will
-the driver fall into the default case and fail to probe entirely on
-unsupported hardware instead of correctly falling back to synchronous mode?
-
-> +
-> +	hwmon_dev =3D devm_hwmon_device_register_with_info(dev, "socfpga_hwmon",
-> +							 priv,
-> +							 &socfpga_hwmon_chip_info,
-> +							 NULL);
-> +	if (IS_ERR(hwmon_dev)) {
-> +		if (priv->async)
-> +			stratix10_svc_remove_async_client(priv->chan);
-> +		stratix10_svc_free_channel(priv->chan);
-> +		return PTR_ERR(hwmon_dev);
-> +	}
-> +
-> +	platform_set_drvdata(pdev, priv);
-> +	return 0;
-> +}
-> +
-> +static void socfpga_hwmon_remove(struct platform_device *pdev)
-> +{
-> +	struct socfpga_hwmon_priv *priv =3D platform_get_drvdata(pdev);
-> +
-> +	if (priv->async)
-> +		stratix10_svc_remove_async_client(priv->chan);
-> +	stratix10_svc_free_channel(priv->chan);
-> +}
-
-[Severity: High]
-Can this mixture of devm and manual cleanup cause a use-after-free during
-device unbind?
-
-The hwmon device is registered with devm_hwmon_device_register_with_info(),
-so its unregistration is delayed until after socfpga_hwmon_remove() returns.
-
-This allows concurrent sysfs reads to continue while socfpga_hwmon_remove()
-frees the async client and channel. A concurrent socfpga_hwmon_async_read()
-could then attempt to allocate from the freed achan->job_id_pool.
-
-Should the channel cleanup be deferred via devm_add_action_or_reset() to
-ensure it runs strictly after the hwmon device is unregistered?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1782715159.gi=
-t.tze.yee.ng@altera.com?part=3D2
+      Arnd
