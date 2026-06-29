@@ -1,155 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD8B43B8948;
-	Mon, 29 Jun 2026 11:20:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 633A9425CE6
+	for <linux-hwmon@vger.kernel.org>; Mon, 29 Jun 2026 15:05:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782732006; cv=none; b=AQUCzp2xsBU1nnGV+HaviC22xpOF1GGEAxURWdcIrLKeMLnmfPoSd1yPVBh63bOKqsEkbx5LSaJvquUBp6cZajbWNFlhB23UqXDRCFg6j2zrUEt95Mphl4gFx5C5fi1rAZZdPp/P4cNcEBwp7tUTNchyLT788bPvfbTtjW6NE/U=
+	t=1782745534; cv=none; b=OUsZMAidrKG17mT82Nt4npKZS8waD4pvbeYcD26niAPrz4ZssPQf5/YVerd8Od4923rtZMb6HBw3gMomTAb8Q86pFyZ0qlbmYpAkol5vhM88w7B1R3AaxmsGgD0v4YriRD5ryWMT+fu6GuhXOa6MSm5paIxD+zr9U/fflEW57NE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782732006; c=relaxed/simple;
-	bh=4ntW/eGBOAgwWct2JF7ceVQci1kOYLbrbc3lwI4NGbU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yi493zA2eZmShK767t9J5JoWU+8oKznaSeP8J5PBZ7gBRBboFClU++tc8CQtxbLGUq0WIU2Vtug0TUtgLP/XUfbwGNjvCSgd2mpyWzOTggD2pfaXi/UF05qR+y1rG1y1KntCPeM7Irv1RvQpdIljArzmlQ+QAYcaTsJRe1TRwmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=isRnHms0; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782745534; c=relaxed/simple;
+	bh=R5yESF37uyiJLMIqeCkmW+Szda+HXq94RJQkE8KMVdA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=O1umkaX1PvzAYYbHDy6eTZBYmslMWBxTvecVTqXkJaH/baswK+jiUCEIFiHlPpGLNVTt8Jgi9uamfFidzfkHVa6LHU7lHQttrw+Y3rrvfPPN2ieQGO80V5lXRuPAp+95WaLtO+NbBHEF6luiDFwdpBNTOW3veiks18vYaKhEkMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wq2QpSFi; arc=none smtp.client-ip=74.125.82.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="isRnHms0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 785D81F00A3E;
-	Mon, 29 Jun 2026 11:19:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782732005;
-	bh=B6cSgDNUNCaJrq5YwzbaI3oA+4ARO04BNnR9PnfFHCo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=isRnHms082rD0YpFSEFNAirC9nvfh4Nn4Wukfgndq3I2Za6wZ3cZIX3OAtKqyJ7Jk
-	 QbxmpIhxp4Zme+ZJuosxaLE4+d9zsfz/skW1tPR2ZZfSPRqJmpRppDTWUgZyVS1CHB
-	 5QsW3n3TKw6RWILA0r+sB1OCe6Mi/a2ArdZ+CsZawVZxFaC5s8Q66AfZ53Z96KwYuW
-	 uZGsBXS1+y0VFETJSXBfuVdng+45W1oD9ZySufSdDejxCtS40h2780fAI1q4GM1Tvr
-	 c3+dPOqi24Z4+uI+6dYF9faK4Re6IYH+Fd0D81x/uqCCnIeztFgIByQ88ta8CCLLl0
-	 zIbUQJ18s/EdQ==
-Date: Mon, 29 Jun 2026 13:19:43 +0200
-From: Ingo Molnar <mingo@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	x86@kernel.org, linux-acpi@vger.kernel.org, kvm@vger.kernel.org,
-	linux-coco@lists.linux.dev, linux-pci@vger.kernel.org,
-	virtualization@lists.linux.dev, linux-ide@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-	linux-hyperv@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, linux-mtd@lists.infradead.org,
-	platform-driver-x86@vger.kernel.org,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	"lukasz.luba@arm.com" <lukasz.luba@arm.com>,
-	Jason Baron <jbaron@akamai.com>, Borislav Petkov <bp@alien8.de>,
-	Tony Luck <tony.luck@intel.com>,
-	Yazen Ghannam <yazen.ghannam@amd.com>, Len Brown <lenb@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	"Kirill A. Shutemov" <kas@kernel.org>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Pu Wen <puwen@hygon.cn>, Bjorn Helgaas <bhelgaas@google.com>,
-	Ajay Kaher <ajay.kaher@broadcom.com>,
-	Alexey Makhalov <alexey.makhalov@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Dave Martin <Dave.Martin@arm.com>,
-	James Morse <james.morse@arm.com>, Babu Moger <babu.moger@amd.com>,
-	Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>, Dave Airlie <airlied@redhat.com>,
-	Helge Deller <deller@gmx.de>, linux-geode@lists.infradead.org,
-	Olivia Mackall <olivia@selenic.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>, Guenter Roeck <linux@roeck-us.net>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	James Clark <james.clark@linaro.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-	Huang Rui <ray.huang@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Perry Yuan <perry.yuan@amd.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	"srinivas.pandruvada@linux.intel.com" <srinivas.pandruvada@linux.intel.com>,
-	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-	Artem Bityutskiy <dedekind1@gmail.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Ashok Raj <ashok.raj.linux@gmail.com>,
-	Hans de Goede <hansg@kernel.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-	David E Box <david.e.box@intel.com>, xen-devel@lists.xenproject.org
-Subject: Re: [PATCH 00/32] x86/msr: Drop 32-bit MSR interfaces
-Message-ID: <akJUz0kYkEBdLSZ3@gmail.com>
-References: <20260629060526.3638272-1-jgross@suse.com>
- <d7c1db52-529a-43cc-ac7d-38b52627e8bc@app.fastmail.com>
- <c1608c48-13c2-4290-826b-28b5ca51eaf7@suse.com>
- <7332feff-2649-496c-8e49-b0a19eb54a32@app.fastmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wq2QpSFi"
+Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-3078e0dcd67so6000167eec.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 29 Jun 2026 08:05:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782745532; x=1783350332; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=QYvP9PAw8UYGTVLrD+rBWIPpUa7RTaFHp2HUYWLIfQc=;
+        b=Wq2QpSFiWulIAFEPp4apzDoU7SW5uF1oWFV1g8PPrY9yYZcF9yN6ZDrv1HmpjcXstg
+         65GI216/vuTKindPNlwIOa5CjYBdgTJRGXiWi1o+CwHSB3ric4d/b+ygTrH53veEZBqu
+         tg0hvjN8xGhGWtt5RQ+DnwCV/5rYE2NR69/e7ca47JMVA/cX3xgNfl5Jos6MZOkSiRQX
+         DN59vWieN7i2mMS0iWMKSbRMKZurqkH0ykh4tatY+YINsBHiQE/REIuBMQ4PXmhrGCq7
+         QiVaptbCiO7/nYdIR1GKeAQiZwAhwI3/U5mK02xPmR/m3FlOKFoPE8DnMyJHSRc495VK
+         54+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782745532; x=1783350332;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=QYvP9PAw8UYGTVLrD+rBWIPpUa7RTaFHp2HUYWLIfQc=;
+        b=Bkbo2agq+0qwy7wOBRA+w1b1Lerh1IdX0dwOMi6eFFz7O/mP4fikWJ8w1e5wmcosEC
+         DpQelHPaVMSWFJlkc5lTvSdGZ1C/TE216nQOYhNFZxDy6FK1PODnbKJAbltakHTnSwms
+         bVU74GrRtYSEbZeVkbFaOicCTJUbCxLjEiY+mX6uY+0aj2lbVWcOziI+Yy3ZtedlBDah
+         yZwnzxCLalQz+OaKKxIPwp9FocP/CGtWSvX40gK4EQ3PPiY+J94P3RF5Vn6J+gB+BUcv
+         WsBpqkb1OpPrbAGGLdktT4irD7F1BuInrJlKvGELdeB66ijeTJXVU5+x6xvS9pdhRvpz
+         50Yg==
+X-Forwarded-Encrypted: i=1; AHgh+Rr2TVrjuu2cfgMW7gRNiWthNw1ddbFRQSpSnGw3EOxrhxPLRKXGg0PmuvRwN6ERHUIXZoExGeT6/N7sFg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzm1rYIXa26uI+9orxEcCKG9p/E9rgEb2ewbvPN5ofAMpExHUdP
+	rZfX4HOjkCqtg/rbsT7XK6I7fIs/1ZL+ipDbxP57a5edJUF5o7bVekjQRWwZrw==
+X-Gm-Gg: AfdE7ckp4BOJqymqylIBzXzmNfOi+8xXFSVsWQetCLHGCTZTkHR+uyR76vWUUXcR2eG
+	YJCPsNXXFialBISNQVncYHYzAoNDR9D7AcMRmdMjbMbA0tejz+RiXVUMl2C4gIFGrqk88cfAbDu
+	4Q+PWz++7H6rXOqW8f7YQsz5UPauEkajdNXcXFIwmrBgtCTj4XNRWJ6Wo7W6RBDsItCOVgKldg2
+	M6htPrCmKcCqG8hfwwdvfEhdqqqRrlwOEmbBTXGnCdpDUkamRZTo/P9+RXUwfvKetlD5wqn133f
+	8w/0ryPPkrcH7FDYW4QFL7b/+gOtZKoU0gg3dKM23Idn7WCdHwnmQk0c4Ed3MqMjcsghzmowXcm
+	N0SEt9XHo26qv20WJG5iOcEQiGjPOhfvYipkJCR2lRmfhHauQ8mzbcSefPamqIoqj8GL5LjGkpF
+	VTEax1UntlPvgyzpO1J9rhIm06hEhS0YBjGdwxMOnEUhWlVCdkyzJSi+sIpp8cDw==
+X-Received: by 2002:a05:7301:3d17:b0:30c:ab4d:381f with SMTP id 5a478bee46e88-30cab4d3f58mr8954863eec.43.1782745532243;
+        Mon, 29 Jun 2026 08:05:32 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30ed34b4146sm8530856eec.12.2026.06.29.08.05.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Jun 2026 08:05:31 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <7eadfb2b-8667-4fb0-80c3-4047bcf05de7@roeck-us.net>
+Date: Mon, 29 Jun 2026 08:05:30 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7332feff-2649-496c-8e49-b0a19eb54a32@app.fastmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 29/32] hwmon: Stop using 32-bit MSR interfaces
+To: Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+References: <20260629060526.3638272-1-jgross@suse.com>
+ <20260629060526.3638272-30-jgross@suse.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260629060526.3638272-30-jgross@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-* Arnd Bergmann <arnd@arndb.de> wrote:
-
-> >>> Note that most patches of this series are independent from each other.
-> >>> Only the patches removing a specific interface (patches 7, 15, 26 and
-> >>> 30) and the last two patches of the series depend on all previous
-> >>> patches.
-> >> 
-> >> It looks like you are touching most files twice or more here, to
-> >> first convert from rdmsr to rdmsrq and then to change the
-> >> two-argument rdmsrq() macro to a single-argument inline. If you
-> >> introduce the inline version of rdmsrq() first, you should be
-> >> able to skip the second step (patch 31) as they could be able
-> >> to coexist.
-> >
-> > I've discussed how to structure the series with Ingo Molnar before [1]. The
-> > current approach was his preference.
+On 6/28/26 23:05, Juergen Gross wrote:
+> The 32-bit MSR interface rdmsr() is planned to be removed. Use the
+> related 64-bit variant instead.
 > 
-> Ok.
+> Signed-off-by: Juergen Gross <jgross@suse.com>
 
-Note that the individual patches are IMO significantly easier to review
-through the actual 32-bit => 64-bit variable assignment changes done
-in isolation (which sometimes include minor cleanups), while
-the Coccinelle semantic patch:
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-   { a(b,c) => c = a(b) }
-
-which changes both the function signature and the order of terms as
-well, is just a single add-on treewide patch.
-
-Thanks,
-
-	Ingo
