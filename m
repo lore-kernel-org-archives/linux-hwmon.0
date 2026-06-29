@@ -1,65 +1,65 @@
-Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A70D1388369
-	for <linux-hwmon@vger.kernel.org>; Mon, 29 Jun 2026 20:55:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 404253A83AC
+	for <linux-hwmon@vger.kernel.org>; Mon, 29 Jun 2026 20:56:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782766531; cv=none; b=Y5zP3kDdxFIni8OGB6Mgh6iIZNndE1WzzEe3riwnroiwT+WGCohADju9XBTQNEC4AMqj/OyOfjf3Dr26Bh9Nv+5W7fC545YmUsAicyAJKKejgWFDCGri4TIYXlVrqnGDRhoFuBaY/Hw8A5jLp1adUZroSOjsi29fP6rozOs+014=
+	t=1782766586; cv=none; b=M4BFEtQxmSBom8A5zFQWctVNO6OS76OKNvU8L/VFrikBa98pLO4UFS606X2x1f2KJJudhDAORMwmfAhE+DnfYpGESA4Bfod9NufdGTbLZcbVvVi0vTcAhe19yy1XBZWun8OJB6OAwTIt3Tm16ysuqJxq1gWoOXSdMSQlUagSXew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782766531; c=relaxed/simple;
-	bh=KJ5qYDAXbSZpW+fxlXr7C8SDvTtYGZaUAly4G7f3Q74=;
+	s=arc-20240116; t=1782766586; c=relaxed/simple;
+	bh=hOjA7jyxnCOr2nR/iV5EM553jiCr0R6uUQ7dUhFldgk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BxFTz1bOGoG72S4oIM8TE3Fyot2ibiIx1OnGwvidlaURtC3vuo+pr/tXH1rrK0xQpP83SWEfxb/SKh2lQxe48VpV8KXqh2IYFGWU5GriVt04gavh0YAaElS82RT9fe+VWwpQrH2DgsXuiLm+ZbZy42lZwvrO6ENa6vAsgZwUOns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UIyWFdod; arc=none smtp.client-ip=74.125.82.182
+	 Content-Type:Content-Disposition:In-Reply-To; b=NpYR55zKUeULjW1LH837Y06issrcDpqgARNZbJtzK/cqJuCOB7VyUSQ08LOu2Ins3jeUz4DxARz9blUDlJEWy3v/6RKzGDVL6fJnOIuUUkWAK2s8fcToutfJIydzN2vPhSmeaQm1GfrEWMMra3y10f6CPx4WLrSiKn85RE1rBI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tCyy0+Ek; arc=none smtp.client-ip=74.125.82.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UIyWFdod"
-Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-30eac9abd79so2882308eec.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 29 Jun 2026 13:55:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tCyy0+Ek"
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-30eac9abd79so2883413eec.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 29 Jun 2026 13:56:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782766530; x=1783371330; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782766582; x=1783371382; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=I6ju4JjRWVYXUbqVktnuuryEIlFiwEfbWXQylb3NQO0=;
-        b=UIyWFdod2gJqPYQVneVn8EHGglC2FRTBgHOdi+vlI1aDN3M1k2lm5BNKfVNplZrq5Q
-         pAwroLMnS20hackqPZWWZcSoRn1lrFbpOUAvXGy5ujThAx9M+i5QGoNfLAj8ysho9Ep6
-         bIKA9GyHCrH2gjZckvwRe9MxpaxHvew9G14kiV+vaS26sPoimldqvGoCbP0hV6VOJzNV
-         kmNw0vgTEn1rxEwJxxB8XQaedhvNVjQZopHGzu0ZKImlZXFzowH4aHE0Jt5MJRXf0FDj
-         sAUaBw4XjV7TetXgfrMPwyZNC1kerI8UQlTFC/nQ+LlCz6v3hEwc2ncWNvRye7Ujdthn
-         ciVg==
+        bh=KUIpMiKwcHQA8nQw5M6D2Ujl90hrTvX4L+5YziVwAGA=;
+        b=tCyy0+EkYc4eYY1TlhVukkRRUYhzDE6rf0LeSGOStApRRiChrbISOIM7LY/8yh0c7C
+         0v/th3IJXs1ovn+OuYJjUCKmOGJzKXpyndQzFMd0K8ukdCJ+41em1RxZFd2OZiJQvjtA
+         mZXrh22ZX78xgnKMjoeOyNdsxTUy+nRZuk+jOMFF8IowbpwEr6lC/kpKcCuPL6Q05MoE
+         dAK3fA6pZakp0C7zx4176ISguU1WhAPneVCSpz8tO0rzPGfjtgXtTsSG6IQAHuZL2h7K
+         vGxwgMqxs/uWVYQw7kUOPkwawM8aPgNe4RLXvVhmROt10mK9+0xBDgAq1S1n3WDd4B3U
+         CEeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782766530; x=1783371330;
+        d=1e100.net; s=20251104; t=1782766582; x=1783371382;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=I6ju4JjRWVYXUbqVktnuuryEIlFiwEfbWXQylb3NQO0=;
-        b=lrwsxWIfM12Or/E1CHgj48+67FVFv1JKdaqnfwVUXazqQ9Fns8OHYFPsoBmKSJDyOP
-         V1w6smDc7BEix+9zF9rkRiG7wkwypR3OR8OwnuP4tgL3mkQ09phDYVzgWJPQJBqzwl3f
-         6K//DhEuPURS6CuRN/tV2kq/YLTq6opM9nQE7lyDTGA1FzRrnlkN7n7b5FqJCXB+blXz
-         nrb/DeRrOr8kqFK08wlGY70vep11lCc5Te3PIrjOrL0wfEPgnfMXnyX3yYf+4vlBgU5D
-         PtFtfMKFyubBQ5uGIENCiRugXx/BbWzf3JzXtaKY5+ckWzJa3D52xR2sGBuBdceAesuX
-         7ztQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rq3Y3xPlhHJu7NzIIDijnbjFiDKfTQGSrO+I9BDqa1sszFY5Th30nsvhrQwo4F4zKyRCcdxHbuenqVUkA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuEEr3DlAhCoqY4bXmB1k6BAAi2Bej/dMv1mDbOVQeUc3trhzD
-	zx6f+KVaPerWPHbrIM4Aky9CtXbsUXmwpwqCsferwDyzm2zZFTOh402d
-X-Gm-Gg: AfdE7clD92HSxeEaK9PgIMPTdEBr0/dMvRuUuE5uvNnR/MJ8pqBhiXeJmM5hlLAJiXp
-	QjymNKhqVkmsUw6xgOUOh45Aep9pXlxCy0PlwsER5ppNXMSDjhjj5YgLy2uOAtjr5i5u5CwcqPC
-	LkAo5Mwdeq3Ac8Wn+C9YLq2KUK+WsAjNQux7ubjIKeAEMdFQ1Fa+wf7uuyE//lB1Ey6dHudJhmx
-	XhzMwvTx/+XZX0S1aLV4fFCJfN1SY+nPCx+GtRNgt5KB4h9wE+m5FrHZ5YOM1QNxilLH+pHjbWm
-	t40dGhoPj4Cs3uVy6fjBH7+yDsrywPybFrLgccDsibZziyMrWjU9xYkK5EKsSKjPPGzFgNZplAh
-	NKHxobO5BJejg8SRXSLx0Sqd6p4xEejzq7BiZSHRNyxrbFPjPaeKpIYavuuif8yRCqZ0E4YUC7C
-	TOSIZ38hq/VnJVJtbQlHAH4zexEA==
-X-Received: by 2002:a05:7300:6c2b:b0:30c:ab97:d7b0 with SMTP id 5a478bee46e88-30ee140767dmr604274eec.42.1782766529668;
-        Mon, 29 Jun 2026 13:55:29 -0700 (PDT)
+        bh=KUIpMiKwcHQA8nQw5M6D2Ujl90hrTvX4L+5YziVwAGA=;
+        b=kKpAqugEzurnFHwzSEP8v7KHK4Sz+qsrw7gVG+VYzEyVRwxckr+/Mbzxtc1SpK5DOl
+         JYpuIr8cUm4cJ6cEWnjh1A+OsSsl1E3ORidtzJWgf4xDmqcT3ydXVIPp5VB+mK6tyK/V
+         wof0s4JsyCM6cjVnU10eBuS6EFU0gz+6L2tG/6GppwpWh1QdgFE6krz5YE/6/GHo5z2U
+         d7XvQ3/NsLn1vUb2AIM0zCWDg6Pg1bQnPaW8V4g5LRaBISH0yQISY787TumSYMzMCoGW
+         H2XgAdm0SiD1/qEXw7XJ5fD6iCGSf6aSw6GL7UGS50x0pjibWMCe5foi6baJYZbBkdLT
+         VORw==
+X-Forwarded-Encrypted: i=1; AHgh+RphwcNSlYUFNg7ZEZZcgWYo2RntCZnGzDqrPcs1JJpVpA7FmbzPYxlojPsUetCYT07anlkkuseZd88w0g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtJxrLt/Fo5aRQ84p0H8PyB7QE/+owiKV9e4dgdIw/JpS90Nn1
+	YrmpPVvc1P5pODJNDX1DKm3+P2a1aoqJ++4dpVGfsRki6P0Asydz8dN7
+X-Gm-Gg: AfdE7cnyPoKw6p8A10YeRNl4LM/lI5Bsl79xck1IjVy4fcFxuuLU9QQkwdcL2svt8sc
+	wjENGpQLbF5jTM+k7YzXqm5dx5VtWNIB8c/XMLSgms5TWi2UWB+1nYQcEl5JV69lFJYRSDxEhwd
+	UrM0/avQqrVlqzlWSvHZ+KjT+MwGxTKOZSi5QvBRqICrJWRhiIsXlE8hbx8qs3WOt/xgsFyn89P
+	9Ih+doHP0w/C5Jsyewc13djHs2i6gMxtvVJhAe0hDowArxZlCvXuL3E7TTfdU2fX9vaVA64WFi5
+	QM+CQbw0+PT+hjjd0WMeQcYJVrzg0fCQXJzRasMedplu6hymdD8Sc4ZleJM1OkP3/ClavT+kwwh
+	KOqTEqTLxRITQ/3Py14Oulqz3/2z2T8jk+1AEDzz5Trx/t0RedM+mLEjlDt3BfgEq0ArpzU1zIe
+	fX9cX7AnqgAJYNCeaIDAaS6/zP5Q==
+X-Received: by 2002:a05:693c:25c1:b0:30c:ab97:d7ac with SMTP id 5a478bee46e88-30ee13e74a1mr681617eec.38.1782766581779;
+        Mon, 29 Jun 2026 13:56:21 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30ee31da63asm847354eec.21.2026.06.29.13.55.29
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30ee317095dsm1083869eec.15.2026.06.29.13.56.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2026 13:55:29 -0700 (PDT)
+        Mon, 29 Jun 2026 13:56:21 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 29 Jun 2026 13:55:28 -0700
+Date: Mon, 29 Jun 2026 13:56:20 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Matti Vaittinen <mazziesaccount@gmail.com>
 Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
@@ -78,10 +78,10 @@ Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
 	Robert Coulson <robert.coulson@ericsson.com>,
 	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 6/9] hwmon: adm1275: Support ROHM BD12780
-Message-ID: <af694b9a-fa31-4665-aa47-a7822931058d@roeck-us.net>
+Subject: Re: [PATCH v2 8/9] doc: adm1275: Add ROHM BD12790
+Message-ID: <819714dc-0193-4667-9885-67f30b4b0bff@roeck-us.net>
 References: <cover.1782458224.git.mazziesaccount@gmail.com>
- <e1e6e6218c08b562311356ef9c57378d32c26b08.1782458224.git.mazziesaccount@gmail.com>
+ <9bafcfe37190b5a3925e8dcfa3b59f8d240234ba.1782458224.git.mazziesaccount@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -90,20 +90,13 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e1e6e6218c08b562311356ef9c57378d32c26b08.1782458224.git.mazziesaccount@gmail.com>
+In-Reply-To: <9bafcfe37190b5a3925e8dcfa3b59f8d240234ba.1782458224.git.mazziesaccount@gmail.com>
 
-On Fri, Jun 26, 2026 at 10:24:55AM +0300, Matti Vaittinen wrote:
+On Fri, Jun 26, 2026 at 10:25:33AM +0300, Matti Vaittinen wrote:
 > From: Matti Vaittinen <mazziesaccount@gmail.com>
 > 
-> ROHM BD12780 and BD12780A are hot-swap controllers. They are largely
-> similar to Analog Devices ADM1278. Besides the ID registers and some
-> added functionality, the BD12780 and BD12780A mark PMON_CONFIG bits
-> [15:14] as reserved. Hence TSFILT setting must be omitted on these ICs.
-> 
-> The BD12780 has 3 pins usable for configuring the I2C address. The
-> BD12780A lists the ADDR3-pin as "not connect".
-> 
-> Support ROHM BD12780 and BD12780A controllers.
+> Add the ROHM BD12790 to the list of the ICs supported by the adm1275
+> driver.
 > 
 > Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
