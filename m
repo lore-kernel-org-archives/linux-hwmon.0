@@ -1,69 +1,39 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E8228C86C;
-	Mon, 29 Jun 2026 06:24:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F7D5394E91
+	for <linux-hwmon@vger.kernel.org>; Mon, 29 Jun 2026 06:25:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782714294; cv=none; b=g/IQi/Lt3VGEFL2YELW4eRzLDATEUt+MdMOezIbliY3tLckOi+EPHwc48VPGtw7MJFb8yIin38FCZQYV6TaDpM8uJ8HWgtqG4+PD0g2d0AoY4mFjn+8UqyY02uJbTK6QrvGXab3VNIkZtEmjYnv01HWtNWjST4m7riwqD2MTMV0=
+	t=1782714341; cv=none; b=Q6LQOR36wSnKWD8pvjRewQs7z1W0l9FTtWPFz4mw2Pjisww3yautPTNHlWbDPAdvx/Q1xEQ5B5un8sqWy84u8iiGRzxF0Q8kGWCq40HeVJ4GwmQkj+VdU6Z1QS5Hdbz3JenblDL9P7G9YhsKV2sSlllL0Fiyh2vTovYRe5Pflq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782714294; c=relaxed/simple;
-	bh=gnb858Rm7GrMh702A4NS8Nje13i23mUpj7S8mCYrx6M=;
+	s=arc-20240116; t=1782714341; c=relaxed/simple;
+	bh=ZFD6+fcLzWmNTia1hkgqM3jV7PtNNrAJ3z5rRboaEH4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=SwQc7ibKb6hlmKd59IyJA6NJCups4xvufN8cakhw1QONND9Sye5UwMpyB9/2vCac7bsVMOpMzu7x665x3WKq34OXcc8vAh1GVFUcAv9SjIe0qsFW4BaaPDiB7j87S2dHHMmxY5RlZZgzatyUqMdSZEXN+2hi3s5ZeRhQHUrMSkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dLOAGF/z; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dLOAGF/z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DFEA1F000E9;
-	Mon, 29 Jun 2026 06:24:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782714293;
-	bh=aM/fEHBwOE0lymo4oDwfQufex/DqafXe9rPrJOipAI0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=dLOAGF/zWXVpvbByDN51dBCN04lFjULPGmO1TrJJXfr9mpg5POkpw+J9O6JKN26IL
-	 bOhRyDSpSrJCTjQdC1DcGXd134nSy7sZIy+ylcvZ1LLOsFZRYvOP3d/ETRe6//8CWB
-	 hZbMjtCUY551GbR+jYfFTBdHRl5bk7uRPyxGon5mffPtfcCQ3G41mBcpWlicljyMIR
-	 QzhNPdP+DAabiI6i6dN1hYKD27A1iCv1Wr/uuNjMKlZ/JOUXBnRkjNFmTPvaL+F7fa
-	 i4tVWI+nsZA719wCMn3m9W8SK6A7IQTMrHeu4CJcqN9h9MQGvkZEqCnwomB0AyuR41
-	 ec1SdnX1yqfCg==
+	 Message-Id; b=NR5/VJ1cdcBmySnIHGtIy0LHpLGRJTrUg68zUKWwqMmAfVTm97RFJ7he1kMbmfSJrFJEyOy14kVAfl0oRzgPeERkwQd+YNLN+MGTMQTI1ty69obyMinqAM7I4l6azR0h9FhsAlrN4Yv6iruPz/fUu2BvR2skWLvIpAb0NSOPvc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5FE71F000E9;
+	Mon, 29 Jun 2026 06:25:39 +0000 (UTC)
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 31/32] treewide: convert rdmsrq() from a macro to an
- inline function
+Subject: Re: [PATCH 29/32] hwmon: Stop using 32-bit MSR interfaces
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Juergen Gross" <jgross@suse.com>
-Cc: dri-devel@lists.freedesktop.org, linux-hyperv@vger.kernel.org, kvm@vger.kernel.org, dlemoal@kernel.org, linux-ide@vger.kernel.org, linux-hwmon@vger.kernel.org, cassel@kernel.org, linux-perf-users@vger.kernel.org, linux-pci@vger.kernel.org
-In-Reply-To: <20260629060526.3638272-32-jgross@suse.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260629060526.3638272-30-jgross@suse.com>
 References: <20260629060526.3638272-1-jgross@suse.com>
- <20260629060526.3638272-32-jgross@suse.com>
+ <20260629060526.3638272-30-jgross@suse.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 29 Jun 2026 06:24:49 +0000
-Message-Id: <20260629062452.8DFEA1F000E9@smtp.kernel.org>
+Date: Mon, 29 Jun 2026 06:25:38 +0000
+Message-Id: <20260629062539.B5FE71F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-> Today rdmsrq() is a macro using its second parameter as the target for
-> storing the read MSR value.
->=20
-> Convert rdmsrq() to an inline function returning the MSR value.
->=20
-> The users have been converted using the following semantic patch:
->=20
->   // Options: --include-headers
->=20
->   virtual patch
->   virtual report
->=20
->   @@
->   expression msr, val;
->   @@
->   (
->   - rdmsrq(msr,val)
->   + val =3D rdmsrq(msr)
->   )
+> The 32-bit MSR interface rdmsr() is planned to be removed. Use the
+> related 64-bit variant instead.
 >=20
 > Signed-off-by: Juergen Gross <jgross@suse.com>
 
@@ -71,5 +41,5 @@ Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260629060526.3638=
-272-1-jgross@suse.com?part=3D31
+272-1-jgross@suse.com?part=3D29
 
