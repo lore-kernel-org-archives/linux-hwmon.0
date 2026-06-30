@@ -1,103 +1,174 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24FC219C553
-	for <linux-hwmon@vger.kernel.org>; Tue, 30 Jun 2026 21:21:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F83832AAA7
+	for <linux-hwmon@vger.kernel.org>; Tue, 30 Jun 2026 22:50:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782854487; cv=none; b=cTU7bEgg98K/qgg65Gz7qrYwsdPq8dAR3LvQR5wN8mgCa0GrC0MFOJ7gQasnon8bUoIUvwZDkrmZOx9lRBX2a7OUnARHfHQy8eqHgsoVy0sj8qQvM4yj4Ty+TBTzWv5k06zAhrD99q7AY6DDCfXQWkUq2ZqzrLzto1XkpjHDgSs=
+	t=1782859827; cv=none; b=G6cfMrCq6zME+eEToXTO/xjXqVeCqIRii2rcsDQvHYNb1C1RHdq6sKMKHiLWJJ9MlmrG79aI06v8iFvtbbP9cMQ7fJ2GRiRUVtI+1ptNhPs+gi/Io7LngOMvVxve10thAPJIArnC01LwzEMSkqfIOdsLsFJFIKd53g2eyKK3Wvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782854487; c=relaxed/simple;
-	bh=FRMd5OI4LJv2i3m9weFAH1wMNxpiw/W4YgAGijey6+s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TeStlHlA/SMHLgUb84lHaB8eyp3fz6ogfqlq9iRVnZfSAXrJahUouCy1VdCgbEQeGqfzduzbJKSBI1SYnN3txnRPC+HgRdn4x1It0V30R41GZIpA2e/10L5l6yNI1+tiiG9Gg7L7ukBrsidddAjmpLm1nMBdmFWZVFGaETYaU+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=FcMWE7Jm; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1782859827; c=relaxed/simple;
+	bh=h0nEkFK5iCINNRXs0tKxBk8KKC+Staf8nUhpt5lNdKw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=i2/p2+Zu3n9XY2BPHCN+562fhnl5lim2Vsb448vPZVtcYs13vtr5c6ZPCeND1HmNuInpcGvIe/Vplfbal4n1CUuOcEGU+0Oc1TV9H2I5k/jhglASGmCK4zU9/WojGsOixZuHWX4ifCABlkiXkM1/L3oEg4Mxv8Mhu/VmrEoif7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L/7CJw2f; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="FcMWE7Jm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1782854483;
-	bh=FRMd5OI4LJv2i3m9weFAH1wMNxpiw/W4YgAGijey6+s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FcMWE7Jmm/ju3EsDCHhj9O7xY3HSukMgCMpOdBp5csGrzlxlHVnBPznF+hXo5MAiP
-	 VIQ164efTHu5O6Dp53FTQ2eGLiX/InwNNh57j/facgUSLTt+5Tmzr79KzzdWeO92NS
-	 51qtZ22ckzk3pw/+akolOR25G+m1phQIyNtkm68E=
-Date: Tue, 30 Jun 2026 23:21:23 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: linux-hwmon@vger.kernel.org
-Cc: sashiko-reviews@lists.linux.dev
-Subject: Re: [PATCH 2/2] hwmon: (cros_ec) Handle temperature conversion
- overflows
-Message-ID: <5e04ce9b-61b9-4ea8-bb2e-1563c88a1dde@t-8ch.de>
-References: <20260630-cros_ec-hwmon-overflow-v1-0-3d2ecd3eb0f2@weissschuh.net>
- <20260630-cros_ec-hwmon-overflow-v1-2-3d2ecd3eb0f2@weissschuh.net>
- <20260630211028.69BA21F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L/7CJw2f"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4924593f45dso116325e9.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 30 Jun 2026 15:50:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782859824; x=1783464624; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1MCTcDd/YFCbUyBVWxYxg2TqJHV+16IIRIXuz+3T4+4=;
+        b=L/7CJw2f07dJw6Hzr/oDiupaYSd8Y7hR/FVYulMU6DuuVBMzueLTIaugZjS+vjgWnI
+         pBpawlivoQ8V9sLg8qobAPlQEC/xyCfwAfevJv+v4F6ZR3S+VwSuYNUHJMX+m8D+WyNr
+         3jrS0koCcrdL691UiL8DlIs4+vXlsIw5NyydzdOEia9bzDOINmBlewVEvllBU6z2dvya
+         8R+sVUWywv1DpjSAPBG3bQoNFDnURIPKBJRuJDk3BUKRzboakpvK+HnzHpud+EFgmohq
+         Vg1SZQ3FNAeyo7A4q6S2ZBuTCVnyW+AQASr1c/A+D+TFWhFzOCtRvUAi4vH+OB5+Tvv9
+         B5fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782859824; x=1783464624;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1MCTcDd/YFCbUyBVWxYxg2TqJHV+16IIRIXuz+3T4+4=;
+        b=BtF1cY3q3pQvgQSYxIBjV0sO2vN3pi/3tMJbs3Cx730xEVAvv2wxMzc7lUUjvXT//Q
+         KMWbhlTGIQnN8PAPxn6izfPzrN0b4hFuk2sWQw1pp1ipgiBFRNHfKIRC4LJqAT+/6mUL
+         rJXI8j3vpdm7H5uQQnktsV3WUu7oekgqdaNJ8IMGQmAgoXLkxHPGsi4FwUmqGV76PU/O
+         3ZH26PIt/kq++HkHY6f+L8g8MCMCdSL3ov14lwadFBaoXkIwT6A2K2xyAWR+6uZHpjzz
+         kJpErSZcAM0U+a1JoYN6dySRBrYPkmJGQowTk+2Ck4ekF6aLZSjWOeU8/XaePfJ+HPTk
+         Mgyw==
+X-Forwarded-Encrypted: i=1; AFNElJ/jtsoxyyCZnMrjKj17JzwD/DPbhZLg/eZEYJ3Hip7nLrHg3SBhKOPWKIw+qAzJy8t4WwCDLp0dHDdRLQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxz2H/PJQGP9z9VsY1sd4M4X9juCW0L5jh0OmpHsPMO4yQEVN8G
+	WxP7pwEyrgrvgRsyJy817HiQ1GR8i4tSA6tfwpVCb3ao6XzRzmtq1QJv
+X-Gm-Gg: AfdE7cn/bH7lqNIHrHYQw/TRUcd53WN8FinAP2R4lAfUNxaCmd6BU7f7EHOzFwOgn7M
+	2FiIVyy3YQYEW1c2D0aerLK2R8G35zVOp0ChcnMxCF6OD6os4RIOUlxWvEl3SL5vORGREosB95T
+	7zXi1+QB2nVDnBvZMoFAOdM9A8qFlDvoHGcnSp5vHV7rrquNghFHYDKve120jkQeT5u4GET8gNF
+	BWnU0s2LeGr4OEgH4EGqVq7sNwabxeDeiH9EVIdAFJFXjqv+tXDpsYbhdBbZRe7Bi+5V1uCvCHd
+	GGXrSoVTjxHl0PkCXhGJ1p5dkKwkVILQNmZF81DvHkIvi1JihhzYVLdBlPGMlgyib5JjZ32py8G
+	WFSPzF+Y8UtciESDjSu9zESdFkACuyw+07NHnVlYTAEiFZd6wMARQkPYEUYyOM3UsAiVM7CW6gs
+	ErtYvyp4Y=
+X-Received: by 2002:a05:600c:4e8f:b0:492:67df:3dfa with SMTP id 5b1f17b1804b1-493bda87dffmr35891265e9.34.1782859823475;
+        Tue, 30 Jun 2026 15:50:23 -0700 (PDT)
+Received: from localhost ([2603:c027:c000:3cde::f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493be81fca5sm31793945e9.14.2026.06.30.15.50.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jun 2026 15:50:22 -0700 (PDT)
+From: Louis Sautier <sautier.louis@gmail.com>
+To: Sathya Prakash <sathya.prakash@broadcom.com>,
+	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+	Ranjan Kumar <ranjan.kumar@broadcom.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	MPT-FusionLinux.pdl@broadcom.com,
+	linux-scsi@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Damien Le Moal <dlemoal@kernel.org>
+Subject: [PATCH v5 0/2] scsi: mpt3sas: add hwmon support
+Date: Wed,  1 Jul 2026 00:49:20 +0200
+Message-ID: <20260630224922.2543096-1-sautier.louis@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260630211028.69BA21F000E9@smtp.kernel.org>
 
-On 2026-06-30 21:10:27+0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Low] Using `BUILD_BUG()` with runtime variables introduces build fragility because it relies on compiler Value Range Propagation (VRP) to eliminate the branch.
-> --
-> 
-> commit a22cd7f1036247302ddc232e1cbd36ceb641e202
-> Author: Thomas Weißschuh <linux@weissschuh.net>
-> 
-> hwmon: (cros_ec) Handle temperature conversion overflows
-> 
-> The calculations converting between the different temperature units can
-> overflow, resulting in incorrect data. Detect these overflows and report them.
-> 
-> > diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
-> > index 44291799dd8e4..4b402142b46f3 100644
-> > --- a/drivers/hwmon/cros_ec_hwmon.c
-> > +++ b/drivers/hwmon/cros_ec_hwmon.c
-> 
-> [ ... ]
-> 
-> > @@ -150,14 +152,28 @@ static bool cros_ec_hwmon_is_error_temp(u8 temp)
-> >  /* This differs slightly from the variant in units.h to avoid rounding inconsistencies. */
-> >  #define CROS_EC_HWMON_ABSOLUTE_ZERO_MILLICELSIUS (-273000)
-> 
-> [ ... ]
-> 
-> > -static long cros_ec_hwmon_temp_to_millicelsius(u8 temp)
-> > +static long __flatten cros_ec_hwmon_temp_to_millicelsius(u8 temp)
-> >  {
-> > -	return cros_ec_hwmon_kelvin_to_millicelsius((((long)temp) + EC_TEMP_SENSOR_OFFSET));
-> > +	long ret;
-> > +
-> > +	if (check_add_overflow(temp, EC_TEMP_SENSOR_OFFSET, &ret))
-> > +		BUILD_BUG();
-> 
-> [Severity: Low]
-> Does the use of BUILD_BUG() with the runtime variable temp risk spurious build
-> failures?
-> Relying on the compiler's Value Range Propagation (VRP) to eliminate the
-> check_add_overflow() branch can lead to broken builds when compiling with
-> CONFIG_CC_OPTIMIZE_FOR_DEBUGGING (which uses -Og) or on older toolchains where
-> VRP fails to eliminate the branch.
+Expose the IOC and board temperature sensors of LSI / Broadcom / Avago
+SAS HBAs that bind to mpt3sas through the hwmon interface. The data
+lives in MPI IO Unit Page 7.
 
-CC_OPTIMIZE_FOR_DEBUGGING is not a thing (anymore?).
+The same fields are exposed by Broadcom's userspace tooling through
+the /dev/mpt[23]ctl ioctl path (typically root-only): IOCTemperature
+and BoardTemperature in lsiutil; ROC and Controller in storcli.
+With this driver, sensors(1) shows them unprivileged:
 
-This patch passed the 0day build farm, so all relevant compilers should
-be handling this correctly.
+  $ sensors mpt3sas-pci-0200
+  mpt3sas-pci-0200
+  Adapter: PCI adapter
+  IOC:          +42.0°C
 
-> > +
-> > +	if (cros_ec_hwmon_kelvin_to_millicelsius_overflow(ret, &ret))
-> > +		BUILD_BUG();
-> > +
-> > +	return ret;
-> >  }
-> 
-> -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20260630-cros_ec-hwmon-overflow-v1-0-3d2ecd3eb0f2@weissschuh.net?part=2
+v4 -> v5:
+  v4: https://lore.kernel.org/r/20260613023833.3163507-1-sautier.louis@gmail.com
+  * In mpt3sas_hwmon_register(), read IO Unit Page 7 and test sensor
+    presence before allocating, so the no-sensor and error paths no
+    longer allocate and free (Damien Le Moal).
+  * Added Damien Le Moal's Reviewed-by to patch 2.
+
+v3 -> v4:
+  v3: https://lore.kernel.org/r/20260524210545.1333637-1-sautier.louis@gmail.com
+  v3 (resend): https://lore.kernel.org/r/20260609164423.2829699-1-sautier.louis@gmail.com
+  * Dropped the SCSI_MPT3SAS_HWMON Kconfig option as suggested by
+    Damien Le Moal; the hwmon code is now built whenever CONFIG_HWMON
+    is enabled. Used IS_REACHABLE() rather than IS_ENABLED() so
+    SCSI_MPT3SAS=y with HWMON=m still builds, same pattern as i915/xe.
+  * No line breaks after function return types; aligned multi-line
+    call arguments to the opening parenthesis (Damien Le Moal).
+  * Dropped unused #include <linux/kernel.h> from mpt3sas_hwmon.c.
+  * Added Damien Le Moal's Reviewed-by to patch 1.
+
+v2 -> v3:
+  v2: https://lore.kernel.org/r/20260518184109.770185-1-sautier.louis@gmail.com
+  * Removed stale Documentation/hwmon/mpt3sas.rst reference from
+    Kconfig help text.
+
+v1 -> v2:
+  v1: https://lore.kernel.org/r/20260512214703.655633-1-sautier.louis@gmail.com
+  * Dropped misleading Documentation/hwmon/mpt3sas.rst.
+  * Dropped inaccurate concurrency-wait figure from Testing;
+    corrected empirical data is in the on-list discussion.
+
+Testing
+-------
+
+Build-tested all four SCSI_MPT3SAS x HWMON combinations (=y and =m
+each), including the SCSI_MPT3SAS=y with HWMON=m case that requires
+IS_REACHABLE().
+
+Validated across three Broadcom SAS chip generations. None of the
+cards had a board sensor present, so the testing only covers the
+IOC channel:
+
+  * LSI 9500-8i / SAS3816, SAS-3:
+    - hwmon device registers as "mpt3sas" with only temp1 (IOC) exposed
+    - IOC reading matches `storcli /c0 show temperature` and
+      `lsiutil -p1 -a 25,2,0,0`
+    - rmmod / modprobe cycle goes through the explicit
+      unregister/register paths cleanly
+
+  * LSI 9305-24i / SAS3224, SAS-3: same behaviour.
+
+  * LSI 9211-4i / SAS2004, SAS-2: firmware reports both
+    *TemperatureUnits = NOT_PRESENT, no hwmon device registered
+    (graceful-skip path).
+
+Not verified (no available hardware):
+  * Path with both IOC and board sensors present.
+  * Fahrenheit-units conversion.
+  * Sub-zero readings (signed-cast path).
+
+Louis Sautier (2):
+  scsi: mpt3sas: add IO Unit Page 7 config accessor
+  scsi: mpt3sas: add hwmon support
+
+ drivers/scsi/mpt3sas/Makefile         |   2 +
+ drivers/scsi/mpt3sas/mpt3sas_base.h   |  20 +++
+ drivers/scsi/mpt3sas/mpt3sas_config.c |  36 +++++
+ drivers/scsi/mpt3sas/mpt3sas_hwmon.c  | 191 ++++++++++++++++++++++++++
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c  |   6 +
+ 5 files changed, 255 insertions(+)
+ create mode 100644 drivers/scsi/mpt3sas/mpt3sas_hwmon.c
+
+
+base-commit: 5d6919055dec134de3c40167a490f33c74c12581
+-- 
+2.54.0
+
