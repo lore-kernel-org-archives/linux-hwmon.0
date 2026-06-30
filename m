@@ -1,66 +1,67 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98722374A09
-	for <linux-hwmon@vger.kernel.org>; Tue, 30 Jun 2026 15:34:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD40345BD60
+	for <linux-hwmon@vger.kernel.org>; Tue, 30 Jun 2026 15:48:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782833673; cv=none; b=QKIEJOtnc6p2QOndXDe72CJwFxcYFFnoLBtfr6Riac6np6pZ544fMsPr+dtloAnkMN9URu98l2MUoqriaKPNL/G/eylawD7qu8UYyzTLBtIJLGjX3cOHaTqoJ/fNbSz7bUVEtqaZPvYayFMyeWmv6pTjGc1ZOuEObmMfb5uJfJY=
+	t=1782834508; cv=none; b=pHwcsvjuhQv+39FkDE+iDHNRHYBpp9oxf/zeB7NpLNh6XEmM4R8JD+woipdBAUQxdPkTwMnebn5AHKmXEVonA8ejtoNM4vxj/uFfr8dOUzZz5c/Sn9gmVKMen0hP6glBuAoEGilX6iHjpFV/96AqQXIigMekLHn8uTBQzKGMx+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782833673; c=relaxed/simple;
-	bh=2ia29FOid9DCDBJThMX7SXehlTFT2aAD2DcITn7t53k=;
+	s=arc-20240116; t=1782834508; c=relaxed/simple;
+	bh=5daw7GHF082XZFOBtpOcz+XZJghpPd5rcNaXIs/Gqfo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aPVGtAnfhndt8NSxYscL/qYBqCQd26xITQhcVfEL+2KmduwT9yX4DSYilIMfPTtm67kGLqz3XmMQD8QSIAEr9WWBlBclc0VpDnYCWBmtSFJTvUQse4HaOTo4GrZee6LcgM39h0MqMncV3E0BZsmlXIgoqKwj2KriQ5Ts2dDk9TU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G799Hw+8; arc=none smtp.client-ip=74.125.82.180
+	 In-Reply-To:Content-Type; b=lDirmBXV+KztOJt4yjFEC8qYW/2u/2+/AmIpVZKNewJP38oQ+G4Xt5eTZ3qjqtC3AGi96j+6BnGnlkZV4qjzhR6G+KBLED/ceSoRu0Cxz3NPaOYu/Fi0Ueb+P6CH6hu4m0e2rfo58yUavIzxAgcKCbB/7kji8aF5bphaCyVb7Vo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VnbjuEFR; arc=none smtp.client-ip=74.125.82.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G799Hw+8"
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-30c965eab27so860884eec.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 30 Jun 2026 08:34:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VnbjuEFR"
+Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-137335bc3caso9838817c88.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 30 Jun 2026 08:48:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782833672; x=1783438472; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782834506; x=1783439306; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=NloBhb9YEdTOJQ3ljenyQY8tI50jHNC+E9yq8lpQGk4=;
-        b=G799Hw+8jbSMZS0iusfJmNF0o2dmgibwoE9hcyVOAE5lLHfSoTqhORjN1/cI2tk2XE
-         H5iCXv8AST3M7uWhaxlwPMxEQWN2F6Ymv+efcRfYF32OIFozTv7kJtqVXPkZogmBnSWN
-         IW0st2XzcumreVBzpWmfb1824nScW8z6NAoSHmxu9qN738cW9esBxLDkR2VUAKyhDZbV
-         RzZwpamAZ9ddzVs6e4xR2sAccSuZ18xuupw4Wcr3EGfHCyFrHIERAE3L6uJa6OGuz/sV
-         z9mQJo3WtbKtK92oUh90qO8UB0eEMgf+8o4GRxSsrRKG2hDkGYH3X/WVxUcvomsoc/gY
-         DzJw==
+        bh=UxCj86Vqc8nQPo8juJb5HDgI5Ftj5c58cIVgplQr+NU=;
+        b=VnbjuEFRE3gvIfQcvUsm6IxIqPkhKen7u7C4QKPO/ANzDUwqrBXme0hGI1s+Wh9JLU
+         k5F5KvSXArAxlX4iwduWiSXH4cThMZ2Fj5G9Km5bcPGurQtgTWTND5H2es2klNJYTDL5
+         xfmy8C1r7WD93i26rGgE7sI/ni7Q3Q+3MvtRvnIhIkq5dEa85so+bgMUn65wDhybQare
+         shftXkHlbSQwUYVCEOWXM9rq5PLHh14zl9oOYjzZNBbR0Z7plDyxscEWeIUvWacdidZ+
+         zT6GBBnah4d59T7uwC8iAdrPwpuWXp7zqYa3ESHfGSz7kcjvLrjoEAF9gnLlC2WQGv6l
+         UIBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782833672; x=1783438472;
+        d=1e100.net; s=20251104; t=1782834506; x=1783439306;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NloBhb9YEdTOJQ3ljenyQY8tI50jHNC+E9yq8lpQGk4=;
-        b=Lff/vaoFH6jEkKqFmvYz8w611vUUIpRwhWc/3YHBxDlQ0IqYYxkhk5q8RQ6qcMYe/x
-         by3CpsW4SZ7NqqmjFUr4M/QHcLXMvcaKFy+eQo9irKIqB/g0/KIsbxPy59tYtYdF+sN/
-         djx776XJS2Y4pRoqczxqiCJwyW1mPRgnS9Bev2U9CrO10e+5mdACmnrLyTtnwVBlPUx6
-         kQHuBStmb2oy1aqAnwZLyokNEVxO+hVR+99v7sXBo0TS1fAUoSluLLNFFU1nqomCirsL
-         8X0VlpuxsFWtBdVxzreq5pBJBaZk0DoLK2P6r2Ypfzx1uWFMBP2KgQjBju4+j495I1tL
-         BQfg==
-X-Gm-Message-State: AOJu0YzprcJtfLedCDU1vmoa0VCOlZHXN9cB1h0rtDgLCLXP+bVkNshh
-	Xe4u7jUGkEFS4slR9WIYHJamByHEusjjfThGAtGsBTC3Ea7vh2JCHMM/RULr+A==
-X-Gm-Gg: AfdE7clMFPYXz73aElOegXBiFlNYkKlHIFVEe3AYa5g8wzfipfxb+x0ZvrOAoFGjwcu
-	pnM1hdPBAyh1RzKv6uCggLZiGH1AFN8iK59By2dq2d6hZmqMpmsbk7k9V6oTcX9xb/JT7kOpyrQ
-	0rFKrDO2HGvJtwDbmHSj+mi5L5cDN/kVgbB8x3NvMUE/YrwPHctsfPwglNQ/b2est59ML328TxV
-	cB7A6f8QDfYoxKtR5+Z8eSpm+LWGH9IkwWNpyjtwVM8MULy0M3akOX+2AfsaRBYcHJKJIajnPsP
-	OhK5mrwPwqmt23G5blO6GZJ1pnnc2l6+q/GDhZHA12NgwJbKoQcmfK1YmPuiosyhvKv6GV3X5kK
-	WFFjqDYHk4FvD2jqeSO6MPL7vNdsr03d4WhTDlDYBYkZGlOoCZl5viOm9CQ/APEdcqgDrClGVCx
-	eaQ6ZE5MHnZ3hFT76F86wAjhh88ufkqBjTYiKkaHm4o4aoOAJA44IeXclgU5Kd5A==
-X-Received: by 2002:a05:7300:df09:b0:30c:536e:3a8e with SMTP id 5a478bee46e88-30ef07fecdfmr775365eec.7.1782833671691;
-        Tue, 30 Jun 2026 08:34:31 -0700 (PDT)
+        bh=UxCj86Vqc8nQPo8juJb5HDgI5Ftj5c58cIVgplQr+NU=;
+        b=VhvkztcQRZpE7xBGTb4LxC964CIo0vpTGAiEjeFF7bz/wQF/hz0flDvihEPEBCyfhS
+         zSJPXoA9tJJ+pNrolvzI+2OTWztOe8dBmxGH7G2ieMC5Cw6KXB38riZXTlT9WKGxqVnF
+         R0Krn5u26UwR33w+9Y8vJpEi7ywfyCrdX8OwLRrmmAUWRfHvMB7ZoPUTVX/lNvVXUgje
+         Os7AJ4iz1q/zzXLbNiZ+qX8lVcDK04CUBrwbCot2wpdQD/5KVmTrmI4mUnhV8eiNBly8
+         EmoXY9ZrXAaIVoe3NTWKMvWmCH/WohGSAl2M3j/xjejT4hvdj5RCUgec6aYG0mPfdBNs
+         GFog==
+X-Forwarded-Encrypted: i=1; AHgh+Rqe1UK42EWkYOplrgNxx550b53K/Hy/IaldLAjyL1NsYKNvSQECYlbShQb/etAOXSZx3Bm1DcG1tMiSLA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbVo5x4aO68yZjjseQIrGvSaX6Nj4bmPZALnTKKGNnPvgGEtf3
+	m9azYkweBzaPNhzr+nSPXIS+GdEarOl8IM3tFxRICt/2hSKny6YmC8sO
+X-Gm-Gg: AfdE7cnJRmEki5MVDrnWpSBedGjTwPNbdQjLCaLyy5bejKTrDX6d6vqCNghfTw9Rz6f
+	jcmu0WKdbJIeYlZn7lY7t4Kg6tscQaBV+HKZ8OSQYSo2le9cIFnIdi2Z0uSCxpdb+ozX0IoddU4
+	3czDnVYpukW2nRgmtJGQE2lXpJwu1omm+ZitwPVzY2hb5TjApCq8RRHjeQX+dsw1RohtcGjmZw2
+	kDOLoQe+63tBOT6FvaiY9wgLmoZci7Jv9Y6Sd8rDmbxaFjyK7ENNhH+NO3eWiB0mmVP32ybw/Ok
+	U694MQCcCTg0iPbhTK9JR2ZLLaiZn1pieSlV6DVTm7CtXxI5DzGEp8Mj0jNWzHvNU2bv/+18srZ
+	H/BEsPXigfw0ub4ZVHeBieOvdu6Un27wj0DmS0t4f4IWqeDfVfPDFaPtqboZVkHikLyiVtrzohO
+	vxscFSxKL+/nsGsgxAU67VxRQIwEmsKn+8KPlBRgDsZ6Nqykz5cl/ESb6iI++ZdA==
+X-Received: by 2002:a05:7300:5bab:b0:30a:e530:ebc6 with SMTP id 5a478bee46e88-30ee12f0e92mr2823150eec.12.1782834505729;
+        Tue, 30 Jun 2026 08:48:25 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30ee2f5e4dcsm9551992eec.5.2026.06.30.08.34.30
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30ee2f5e4d1sm9007145eec.6.2026.06.30.08.48.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jun 2026 08:34:31 -0700 (PDT)
+        Tue, 30 Jun 2026 08:48:25 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3e5fe838-6c2b-4bd7-9248-7879403e6f34@roeck-us.net>
-Date: Tue, 30 Jun 2026 08:34:29 -0700
+Message-ID: <d6e011d7-ef9b-4cc8-91c6-3f329017d213@roeck-us.net>
+Date: Tue, 30 Jun 2026 08:48:23 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,20 +69,21 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/6] hwmon: (pmbus/max20830): add VOUT feedback resistor
- scaling support
+Subject: Re: [PATCH 1/6] dt-bindings: hwmon: (pmbus/max20830): add
+ enable-gpios property
 To: "Torreno, Alexis Czezar" <AlexisCzezar.Torreno@analog.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>
-Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
  "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
  "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
 References: <20260630-dev-max20830c-v1-0-a02786bde470@analog.com>
- <20260630-dev-max20830c-v1-4-a02786bde470@analog.com>
- <d306dab2-efcb-4626-b480-c4e8779cdeed@roeck-us.net>
- <PH0PR03MB6351C114AA65A11F2E133B8EF1F72@PH0PR03MB6351.namprd03.prod.outlook.com>
+ <20260630-dev-max20830c-v1-1-a02786bde470@analog.com>
+ <20260630-cuddly-quiet-jackdaw-b7ab3d@quoll>
+ <PH0PR03MB63514D6ACDFF20DF4D1A4855F1F72@PH0PR03MB6351.namprd03.prod.outlook.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -127,43 +129,39 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <PH0PR03MB6351C114AA65A11F2E133B8EF1F72@PH0PR03MB6351.namprd03.prod.outlook.com>
+In-Reply-To: <PH0PR03MB63514D6ACDFF20DF4D1A4855F1F72@PH0PR03MB6351.namprd03.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 On 6/30/26 01:07, Torreno, Alexis Czezar wrote:
-> 
 >> [External]
 >>
->> On 6/29/26 19:46, Alexis Czezar Torreno wrote:
->>> Implement support for external voltage divider scaling using the
->>> adi,vout-rfb1-ohms and adi,vout-rfb2-ohms device tree properties.
->>>
->>> When the desired output voltage exceeds VREF, a resistor divider
->>> (RFB1 and RFB2) is used to scale down the feedback voltage. The driver
->>> reads these resistor values from device tree and applies the scaling
->>> formula: VOUT_actual = VOUT_measured × (1 + RFB1/RFB2)
->>>
->>> The properties are optional. If not specified, the driver assumes no
->>> voltage divider is present and reports the raw VOUT reading.
->>>
+>> On Tue, Jun 30, 2026 at 10:46:43AM +0800, Alexis Czezar Torreno wrote:
+>>> Adding a missing entry for the MAX20830 EN (enable) pin.
 >>
->> This will require a detailed explanation why only PMBUS_READ_VOUT would
->> require scaling but not any of the other vout related commands.
->>
->> Guenter
+>> ... because? Device has it? Was missing?
 > 
-> Will add it.
-> For reference, the device only has 3 vout related commands. The other 2
-> is referred to a feedback/reference voltage rather than a scaled output value.
-> Hence only read_vout has scaling.
+> Yes, device has it and I forgot to include it in the past.
+> 
 
-The other two commands are VOUT_COMMAND and VOUT_MAX. While they are currently
-not used, VOUT_COMMAND _would_ be used if someone adds regulator support to the
-driver in the future. Thus, even though those two commands are currently not
-used, you have to at least add a note into the driver that the register values
-will have to be adjusted if regulator support is added to the driver in the
-future.
+Pretty much every PMBus chip has it. Many non-PMBus hardware
+monitoring chips have it. Problem is that there is no practical
+use case that I am aware of to connect it to a GPIO pin,
+especially for PMBus chips because PMBus (and the chip) has
+a command to override it. Connecting the Enable pin to a GPIO
+output would mean another extra and unnecessary wire on a board
+plus the need for additional software to support - in a more
+complex way - what is already supported by the chip itself.
+
+This will even more complicated if anyone ever adds regulator
+support to the driver. In order to fully support this, the driver
+would have to add support for enabling the chip through the
+GPIO pin (or to override it permanently, making it pointless
+to have it) even though it is highly unlikely that this code
+can ever be tested on real hardware.
+
+That is why I was asking for a use case. "The chip has the
+pin" is not a use case.
 
 Thanks,
 Guenter
