@@ -1,190 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1975340D562
-	for <linux-hwmon@vger.kernel.org>; Tue, 30 Jun 2026 00:06:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4300D40D587
+	for <linux-hwmon@vger.kernel.org>; Tue, 30 Jun 2026 00:13:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782777986; cv=none; b=qWnTOmEXV1r+pGCNx1IVsVav1fYWvJfpa4EBztjt2dzpyHvG9s8qeS4A+5QuRY4dfhFqvzsu9ELZk13Jg3TkbcUR3QEXQ9RvcHGnNusRwHlk7TrV6q/7D+oi7rABywJNDQM4XHbaLIdkd3giTVLuq3gKu4dbaTur4RkNwLzFq7g=
+	t=1782778407; cv=none; b=hU2a3FKRkHQSQNpbgu6bRwMucG6mq8gibU4mp7gyJAfz1IOr5rHy2xo7rPnEoonmSJI7b2FoEjyilmS3f3VSsLBe7NBwzluaidlIu8RIfLwUoPAkH4Pfs3lb7CxNTbSnwRHzjs75ik9LHcv9rC6lCIwsVxVvLS+kzl5SDmR4Kn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782777986; c=relaxed/simple;
-	bh=LBhcYPVgws2P8FCfkZhkzMB5zpeSc5Xb6aLB3JAokrs=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=iPZB3YMTz94m5w2h2OmIC4JYK8SyOikLO5sPvbgPZqU8HZ7xwSNvjxezC2r72tMRdEi7vGUxoE9C6t49i3HCL95KSWxt0U0nlBLSEztovctkvCielF6I/Y6/lakai394kzgkn99huYWJ+I4KfS+tkJYg/n46PaE3i2Zy+O21Kwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YwGrE5dB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782778407; c=relaxed/simple;
+	bh=YzT6k0EGsst81hJuYFKjei7Dd3McRdeNasg42zktoT4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X4GQfyDZzgbx5w8oj40MMHY2AVmGzixoZv//IF+JWPYB8hxMbg+EMgpXOBMte20+6LkaEkiIv5CY/lcMCw+EsMeqyyeUQ/hzD1lyHI4sqSQI2SkK7vsIU9dKKQwp3McSyZ4n1OqF2CHRu9oK2lWaI1TIWrPU1Q7KdLzq1vqEa1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VBZX1ppd; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YwGrE5dB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91F091F000E9;
-	Tue, 30 Jun 2026 00:06:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782777984;
-	bh=dJSODQ/8QMNEahR+ppe6QSBNXKNLFS/g1zulI9foVSY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=YwGrE5dBtyYvYPVIqO6vDNhxVI8EURBFFMS9jEpXtb/0LE9vpvyZa9FGAF3eCEOUX
-	 QgXkHt68Y2ab+26ZaRDnM1m2uAxt/yKxLAZWNcheoPk4zvlx+McBLH1g2wULEA3pwW
-	 WuUx84ejNGsf37WLznrqFYaeOWUmgWsOTKhiD24clzh9s3g31Ut4NbRdit1Uf/mwvq
-	 MOumUP2HlaRfIKoJZg/bCUdBBCVS5YvLRBO2vcC/dtHSS8qPNKzMWZwMPyzNvc6Gr8
-	 nIZwtrTDwfffCmYk7u8pJeWYJ5+1XZfR9vom2zsC4bT6wmfNIcbVMiAGpQPoUGnzwr
-	 vm3vrYRDfCCFQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (aspeed-g6-pwm-tach) Validate the number of tach
- channels
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Guenter Roeck" <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260629235503.2019362-1-linux@roeck-us.net>
-References: <20260629235503.2019362-1-linux@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 30 Jun 2026 00:06:24 +0000
-Message-Id: <20260630000624.91F091F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VBZX1ppd"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4938d5f86f3so337355e9.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 29 Jun 2026 17:13:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782778405; x=1783383205; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YzT6k0EGsst81hJuYFKjei7Dd3McRdeNasg42zktoT4=;
+        b=VBZX1ppdv1Ch/ePVpn7n5kNNoV11fHwxBiIONMkZIpExZTIwcziaxr2qW/rWiZJd+5
+         ImqUhRBxhLY6mfx3nxdG7JpLFhpPJ/hnOJ1BcCddLnx/J/S4wMwp1zlkPY/fQvEzeME4
+         fB7HGSJKskBQYwNWqgUwahQp4czV5xd2uyP7EDV4/MkFUpouDxwsMYhXM+jGE89hlU4X
+         2uHlsGi2ElLPMzyP24jogZXU/9/V8rd5iVkghd27DKPZA+G/jxEyFj+Cs6cje3mGSdJD
+         aequTOK9d0obhsrbaWrrEYEhAfnur8ClLYBZQy1509a2+M9FJNdfXg0qB+kVT26l8DqQ
+         QJkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782778405; x=1783383205;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YzT6k0EGsst81hJuYFKjei7Dd3McRdeNasg42zktoT4=;
+        b=RrZVBN7zn9dmsYjrKkTDPcIcRt2KXjgZTa2V0KaJcgkOZX1cwV3XIbIol92SPknmbn
+         taF4icrFcWgpdk1WpxKXYEfBGRt2HQpBpDTYb7MKtAo8KfQf1VRtSfEIKSEVGsqMrLvp
+         qe+4rH8xFaLOWq8jo32KER2BahIsHUWVfo8lAY/sWVtc5dyxLAyFB1j3sNpvgy1x4YYi
+         UWu4+fWkbXqp+z+PcZTi/in3+YGy6m9+U7qnc4P2cTo9CepL7aF4A9tLK6O0gy9LWNw/
+         fl6u+z6zzF6iRsofuhW6eFmRqgCV+fUFRaT/MijvAr6PlXOR9WvR9PndSV27d2+jojAQ
+         4FmQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9UXlXdsnxUnVKhsfx78bSZPZijamtWxPpl/QJDoQm2kv2ip/EZ166hyx6wuZsAbkK15o7J9raAo7vAJg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBEd1Z6PI7+mkflbQ4eS0khu+SbnCIOKXc2DA+g409D+WBvW4v
+	AVcbcTENGkQUf+j+lMZhGrXF/pC2/FUOsbu/pUYBoIekafnAGBke7JrZ
+X-Gm-Gg: AfdE7cmDJVl9StrDyWLBlKovy1XocCtNnFC7x1ZXEA4AogG/zy+oRyfZqEP3qydqwY0
+	whqoe7boOhv1ZmqTnHSU100vZR6FfAjvShfUt787xQ2sGZcVWoP8MHfFo0L9RebOED6aAZ7RYVC
+	Zqi35tTMaUYQWWjZXqs2u+pRP7gABxHeiRsoDnvK7dERoRcRkNJ/zqnZA9AGskOTuEc23x47TX5
+	oenHFD+eV2XuV7Lia7Ru8wPz8y56MXsAuOPC7INUb/VoosxWLOdsV5OaYDyjkKZDPqacmVf7uwz
+	oXEkAo9/bsyj7JORi/HlUK1RLPJF/fRO7QxI8D5HGl7+lvrSkNsGy/JVtteOB/agdsPdGIFoVA8
+	q58ZD2cTXpJz4Y9Ds/4Y0WKRmdi8K0KqXAn71dcUO31UtGMjivO8vMbQimlSLliUYtqTmhhjL
+X-Received: by 2002:a05:600c:3485:b0:490:af63:2cb1 with SMTP id 5b1f17b1804b1-493b8d1bd68mr13488525e9.7.1782778404375;
+        Mon, 29 Jun 2026 17:13:24 -0700 (PDT)
+Received: from localhost ([2603:c027:c000:3cde::f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493b8ccc7casm25222505e9.1.2026.06.29.17.13.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2026 17:13:23 -0700 (PDT)
+Date: Tue, 30 Jun 2026 02:13:22 +0200
+From: Louis Sautier <sautier.louis@gmail.com>
+To: Damien Le Moal <dlemoal@kernel.org>
+Cc: Sathya Prakash <sathya.prakash@broadcom.com>,
+	Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+	Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+	Ranjan Kumar <ranjan.kumar@broadcom.com>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 RESEND 2/2] scsi: mpt3sas: add hwmon support
+Message-ID: <akMKIk8JN8REuYVB@localhost>
+References: <20260609164423.2829699-1-sautier.louis@gmail.com>
+ <20260609164423.2829699-3-sautier.louis@gmail.com>
+ <93542109-2101-4d62-aae4-bbf058029663@kernel.org>
+ <airk3Os03wPV0rvW@localhost>
+ <fdea1a8b-d631-43d8-bcf0-1c79e635782c@kernel.org>
+ <ajkaf0aa0TWXdRZW@localhost>
+ <841e8ff7-12db-4ca4-aaa5-fb8accfc9df0@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <841e8ff7-12db-4ca4-aaa5-fb8accfc9df0@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
-s) to consider:
+On Mon, 22 Jun 2026 20:28:48 +0900, Damien Le Moal wrote:
+> I saw only patch 1/2... I was waiting for the new version of the full series.
 
-New issues:
-- [Medium] Input validation is performed mid-loop during hardware state mut=
-ation, leaving previously processed fan channels permanently enabled in har=
-dware if a later channel fails validation.
+Hi again Damien,
 
-Pre-existing issues:
-- [High] A single global `priv->tach_divisor` variable is incorrectly share=
-d across all fan channels, corrupting RPM calculations for independent chan=
-nels.
-- [High] Integer overflow and lack of zero-checks in `aspeed_tach_val_to_rp=
-m` can lead to division by zero panics or wildly incorrect RPM values.
-- [Medium] Probe error handling returns `0` when fan monitor creation fails=
-, silently abandoning hardware monitoring registration while leaving the de=
-vice successfully bound.
-- [Medium] Duty cycle calculations in `aspeed_pwm_apply` can overflow a 64-=
-bit integer, resulting in a near-zero duty cycle for very large requested p=
-eriods.
---
-
-commit 1d7e6c15019c0fdc2af8d78d76b900c9f2bb4d7e
-Author: Guenter Roeck <linux@roeck-us.net>
-Subject: hwmon: (aspeed-g6-pwm-tach) Validate the number of tach channels
-
-This commit adds validation for the number of tachometer channels parsed
-from the device tree to prevent out-of-bounds array accesses. It also
-validates individual channel numbers before enabling hardware features.
-
-Closes: https://sashiko.dev/#/patchset/20260629232305.2013406-1-linux%40roe=
-ck-us.net
-
-> diff --git a/drivers/hwmon/aspeed-g6-pwm-tach.c b/drivers/hwmon/aspeed-g6=
--pwm-tach.c
-> --- a/drivers/hwmon/aspeed-g6-pwm-tach.c
-> +++ b/drivers/hwmon/aspeed-g6-pwm-tach.c
-
-[ ... ]
-
-> @@ -399,13 +399,16 @@ static const struct hwmon_chip_info aspeed_tach_chi=
-p_info =3D {
->  	.info =3D aspeed_tach_info,
->  };
-> =20
-> -static void aspeed_present_fan_tach(struct aspeed_pwm_tach_data *priv, u=
-8 *tach_ch, int count)
-> +static int aspeed_present_fan_tach(struct aspeed_pwm_tach_data *priv, u8=
- *tach_ch, int count)
->  {
->  	u8 ch, index;
->  	u32 val;
-> =20
->  	for (index =3D 0; index < count; index++) {
->  		ch =3D tach_ch[index];
-> +		if (ch >=3D TACH_ASPEED_NR_TACHS)
-> +			return -EINVAL;
-> +
-
-[Severity: Medium]
-If the device tree array contains a valid channel followed by an invalid
-channel, does returning early here leave the previously processed valid
-channels permanently enabled in hardware?=20
-
-It looks like the earlier iterations would have already called
-aspeed_tach_ch_enable(priv, ch, true) without disabling them on this error
-path.
-
->  		priv->tach_present[ch] =3D true;
->  		priv->tach_divisor =3D DEFAULT_TACH_DIV;
-
-[Severity: High]
-This is a pre-existing issue, but is priv->tach_divisor a single global
-variable shared across all fan channels?=20
-
-Looking at aspeed_tach_hwmon_write():
-
-drivers/hwmon/aspeed-g6-pwm-tach.c:aspeed_tach_hwmon_write() {
-    ...
-    priv->tach_divisor =3D val;
-    reg_val =3D readl(priv->base + TACH_ASPEED_CTRL(channel));
-    ...
-}
-
-Does this mean modifying the divisor for one fan channel overwrites the
-global state, corrupting RPM calculations in aspeed_tach_val_to_rpm() for
-other independent channels?
-
-[ ... ]
-
-[Severity: Medium]
-This isn't a bug introduced by this patch, but does the probe function
-silently mask failures when fan monitor creation fails?
-
-drivers/hwmon/aspeed-g6-pwm-tach.c:aspeed_pwm_tach_probe() {
-    ...
-    ret =3D aspeed_create_fan_monitor(dev, child, priv);
-    if (ret) {
-        dev_warn(dev, "Failed to create fan %d", ret);
-        return 0;
-    }
-    ...
-}
-
-If the fan channel configuration in the device tree is invalid, this returns
-0 instead of the error code. Could this leave the driver in a partially
-functional state where hardware monitoring is completely missing without
-signaling a probe failure to the driver core?
-
-[Severity: High]
-This is a pre-existing issue, but can the RPM calculations in
-aspeed_tach_val_to_rpm() lead to a division by zero panic?
-
-drivers/hwmon/aspeed-g6-pwm-tach.c:aspeed_tach_val_to_rpm() {
-    ...
-    tach_div =3D tach_val * priv->tach_divisor * DEFAULT_FAN_PULSE_PR;
-    ...
-    do_div(rpm, tach_div);
-    ...
-}
-
-If the hardware legitimately reports 0 for tach_val, or if the 32-bit
-multiplication overflows and wraps to 0, wouldn't the subsequent do_div()
-trigger a division by zero?
-
-[Severity: Medium]
-This is a pre-existing issue, but can the duty cycle calculations in
-aspeed_pwm_apply() overflow a 64-bit integer?
-
-drivers/hwmon/aspeed-g6-pwm-tach.c:aspeed_pwm_apply() {
-    ...
-    duty_pt =3D div64_u64(state->duty_cycle * priv->clk_rate,
-                        (u64)NSEC_PER_SEC * (div_l + 1) << div_h);
-    ...
-}
-
-When a very large PWM state is requested, the period is limited to avoid
-overflow, but duty_cycle doesn't appear to be capped. Could the
-state->duty_cycle * priv->clk_rate evaluation overflow u64, resulting in a
-near-zero hardware duty cycle instead of the requested value?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260629235503.2019=
-362-1-linux@roeck-us.net?part=3D1
+The whole series is there, including 2/2. I sent it all on June 13:
+https://lore.kernel.org/linux-hwmon/20260613023833.3163507-3-sautier.louis@gmail.com/
