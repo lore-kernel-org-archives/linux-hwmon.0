@@ -1,193 +1,247 @@
-Received: from mx0b-00128a01.pphosted.com (mx0b-00128a01.pphosted.com [148.163.139.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD923BB69E;
-	Tue, 30 Jun 2026 08:07:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.139.77
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782806881; cv=fail; b=M+qMeKoY/AZZHuh6B3zUVIdOZELWDkBPjcv7VXb7gnH7o/DUJAr58dQAwqSAXW8LQpHDCd1hQeL4S82FsT6PVCuP7IvyCsBbGgYzpgdRDUOcxY3dHNvsSsE79D+0LI6BgSV1LfcAjBFvsbMixo2GJNDUe44J0sAVyeRC0jw5uXA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782806881; c=relaxed/simple;
-	bh=6GmKtYhi57fuluwx1i+v7OvuZ6GuO87bPFqQJZKeB9E=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=nlzg1A1/AA7QxB1CDlNWuW/+EtUohhjtqKKT8KZIF3Gr56Ekp+x0rGAAYy5uhHOAg8ui4HKmT7h7X8gOdjs/nbNjvP2Z8S/nEgakMD08rErM/x9cxYxF4hUeSUnZmP46+YyjAVSrVlGjt9XDoIkAlEutIYtSo7ldlMw4LIG781I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=NiPxBWu8; arc=fail smtp.client-ip=148.163.139.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="NiPxBWu8"
-Received: from pps.filterd (m0375854.ppops.net [127.0.0.1])
-	by mx0b-00128a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65U5iB0R3988098;
-	Tue, 30 Jun 2026 04:07:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=DKIM; bh=AE+Lj
-	DFhfXOGCn3te5NMwm7V4nKSES+9JGBwBYzBWWM=; b=NiPxBWu87yJv2rIT0Vcro
-	30WAy8Q2evAEtwl0SM72WkxBZ2eyyJfo0wDqfs5JVpcozKu/iN7Pc/fifhht4df3
-	W8QvJ94bnsFriRlvQJ4m6T8t4qkAsK13NT/8JLujEFTqZjK4AsBqdSr3etjMXdrS
-	H5x8YG5ez0tqAzWNyiFvsW1bg0fnmlprCIcxVRWR5Gt8bh/1BshxC181b+N3BLDQ
-	RJNt+sFoQ5zMs4cSoYkLfiZ62JrTU30Yg8+c0U1QkcVXeyuTCp/F2vxJYWbtvjQF
-	h7q61B9u1xWPkkC1Xvfp/LrbA+6RqhdWn8zuQR2fadrbupB8lG16Xz4QqYt1chIC
-	A==
-Received: from sn4pr2101cu001.outbound.protection.outlook.com (mail-southcentralusazon11012014.outbound.protection.outlook.com [40.93.195.14])
-	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 4f47wpgnkc-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Tue, 30 Jun 2026 04:07:31 -0400 (EDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cjze/qEWXRbwkOBynCOs3XWR9FE6wVwlIB1qQJ+gzbA8hvihYRiF6qi6995/hiK5VrgE//05EZdBIJbCEDcvBU/O+ApweqK4OLEH0eLBKzzVtzExfSfTKs99sQjJUnvrhQNVZosVTjBxxnPnYF+K0qXeKPBwawKVLAOwc4d+5eUCcgh6Ak76Y+NWBqBPfZ4NI8clQljI52rlfiOuyM4MuShcmcbC5u+TXsjB/9ogS3NRRcXwwEIT7XdtI+NuLfhFtCU7gf94LPSgddrNlWc4ITJ/0PqeroauqF/wfOlhQx43dt0Ym4OxS+3/5sPTKS344S/eHCAbife+1nnBSBqbzA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AE+LjDFhfXOGCn3te5NMwm7V4nKSES+9JGBwBYzBWWM=;
- b=LUZTNYPdfSKwMLP2TS6m05NQGwiF8lTvJE6JgzJ7hA3x7DMUp3Mn10cx28NjH4ZxeOYg5qLq3NszOULgOKQOujNrSpVwUuh5fm7nn1Bm/K7mWDVDjOlxKiCOk6VqtHwF7YgILL+Hc3u4d0S4l+acdGOUDV51VcqpJuE088predmWgyzdgCcSUqLGpfVpW+9WgtcUKlmXT0DADIR3vSk1rktdU9YMjhq9tY0xZQ6vSTo+0NpuevNjF3k2kjAJKqEUryCXKRmgWpcq7LF+kC+PZYYKb9zI8j7efWT0ITLuFX71jagtWQLYS171hwhkpU1HCCttEPwSEl6rlCL5dkdRLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
- dkim=pass header.d=analog.com; arc=none
-Received: from PH0PR03MB6351.namprd03.prod.outlook.com (2603:10b6:510:ab::18)
- by BY1PR03MB7214.namprd03.prod.outlook.com (2603:10b6:a03:530::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.159.19; Tue, 30 Jun
- 2026 08:07:27 +0000
-Received: from PH0PR03MB6351.namprd03.prod.outlook.com
- ([fe80::1578:4572:29b5:2442]) by PH0PR03MB6351.namprd03.prod.outlook.com
- ([fe80::1578:4572:29b5:2442%4]) with mapi id 15.21.0181.008; Tue, 30 Jun 2026
- 08:07:27 +0000
-From: "Torreno, Alexis Czezar" <AlexisCzezar.Torreno@analog.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-CC: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: RE: [PATCH 5/6] dt-bindings: hwmon: (pmbus/max20830): add max20830c
- and max20840c support
-Thread-Topic: [PATCH 5/6] dt-bindings: hwmon: (pmbus/max20830): add max20830c
- and max20840c support
-Thread-Index: AQHdCDrV9DcJHzJAJkShiqvkOjk0BLZWt0GAgAADMOA=
-Date: Tue, 30 Jun 2026 08:07:27 +0000
-Message-ID:
- <PH0PR03MB63512440FF07E171477CD42BF1F72@PH0PR03MB6351.namprd03.prod.outlook.com>
-References: <20260630-dev-max20830c-v1-0-a02786bde470@analog.com>
- <20260630-dev-max20830c-v1-5-a02786bde470@analog.com>
- <20260630-gerbil-of-phenomenal-jest-4dce8b@quoll>
-In-Reply-To: <20260630-gerbil-of-phenomenal-jest-4dce8b@quoll>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR03MB6351:EE_|BY1PR03MB7214:EE_
-x-ms-office365-filtering-correlation-id: 4a4aadd5-8158-4543-2b13-08ded67ea05a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|23010399003|7416014|376014|1800799024|38070700021|22082099003|4143699003|11063799006|18002099003|56012099006;
-x-microsoft-antispam-message-info:
- 2uxJz6ItJT6a1X9SItd9XQ90mEbwg4yjf3mpd3bgLrOso/i0vaUVPqKPUcoiED3hnbI8lr6JPk7ERVfR8yi02TgmvDdXTFUaGKhGhDPg0w26HDxWIMmxm7chr4dmGNOP1JZQjkDmlxSTb5GEdkXKy7EAR1VvlByWdbTlHpuvio+eAziLI95VPy9xOUlWftyW6+iqOw8w+yVcP5GreAJ9wgParmLipCN3sCPl9JZStgy8Avn/c4rC7vA2rMtL8w7luTwAmIS1+ij2UWSMKM9OmK/WdjC0nQhirG8BujL6FeEfPEaVAu+nGUSQTePwYs9Zp5be3gencw1qsxD50K3WDq7cDCsIFLxXNi9CIEPOHH7+y6mFHlvfVzPSKzQI3M9ptq3glXQa2aWoBStHF2z8uZo+PJAddC3hDDuIfpFbvwXF9s1ApO5I7xinoOClpIcOkd82hH1OznO0h2uGizmtSk4JiXSYpUXlgfrDg/qqrzv26oU+z9h8H9vwj4QbQOAWsyWFYDXow5CJxWpW2vwAT2HmI5P1SriPBUGugDwDig2JhcHGsceH+/9Wf9afIX8+F2P+ouRZ51ZSLy6C+2W0x76fAg4o0HF+WgYPcyXfuwBSrb9N6fLgfbveDdw/wecCeX93VyfntXiGE797ahq3MJG8JwAsRDyGHKIr4LwHmy5FDpu2cs/X2cWzoxXucBtXCI5TdyKVe2kzzB6EOVDnkYUKCtKCG5In6exw0H69yi4=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR03MB6351.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(7416014)(376014)(1800799024)(38070700021)(22082099003)(4143699003)(11063799006)(18002099003)(56012099006);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?l6hKQ6tNG74L5xpXjnnltUUKM3npTCE6Xkdt4tI4n8bBbyCe0cxlhA7mX3sj?=
- =?us-ascii?Q?WKPdNkuXREtJXP3qTVrkh+jmkSAhLNO6mRyIR6QY0tBHqre27SLqtdDJVzMf?=
- =?us-ascii?Q?O46F/ig70uBJO8C4K6ziFpJMV5uBmOGSxf+h/21II2ky4fImIDmhbPgh7kR4?=
- =?us-ascii?Q?1HaoyMmNUrdHxfCCKh8Wy+OYEzF+z0eGYleqjj+EIMheOqbTcOg/34wGNqjR?=
- =?us-ascii?Q?VO9URL+l7EYkgedM2baTUYLap2/RxTJ0QpZwQv4gWyNk/WNZb3OHLkp4v9AP?=
- =?us-ascii?Q?k/jhORh6rAVo6Ij2eYuQpCMfqF27V+UPuZ3HxbqWvdkFFwbGfbOL5Qi/omlC?=
- =?us-ascii?Q?tTF8FlQsmGctK8zxU2bav5vLz1QSpBBugZBzPzOfP03cSXZnd6OmVCCln7/z?=
- =?us-ascii?Q?jtGn5/E80HnepkrsRtuPBA5Ilgom1ZKd8jNiUErBypculsphad7sy52SLBuG?=
- =?us-ascii?Q?AeoDK1WGZvUmAxcbXPhS8bgCYuQEGaf8pHreozjPrZVKPIW/Hyz98EhW5t5g?=
- =?us-ascii?Q?wsCf1/1N+Wn7HhCXzP7Tm1sXzaBQd+LwRXThAHwjw3X4XiJhAIJmkQ9AKVKG?=
- =?us-ascii?Q?3tsP8Et39DxK4mcUWf308i3PdfUJSe5sZLsjPxAbv6+430maxXCy2mni6MO2?=
- =?us-ascii?Q?axJ0BKPQpMRIKNsNHC7JAF7+wOWQIHxS3ZuNJgPB1PHLM1/+xnaFhG1TWE2D?=
- =?us-ascii?Q?qIZLMxPmyzuQpj4f/qJtqnYeuAlZPsLiK/gNnT/gjKs0oTpOznNBwZJB4J5d?=
- =?us-ascii?Q?xv3QjzjU2fkoUbxoypjkJK5R+Rj0bq4pSViJu+yRhqPI54gQfRHXAKeo5uyt?=
- =?us-ascii?Q?AtlUu8FHD01NBd1kFzKd2mWxdfKiFpPp27cdHCMAY2Z/rsVuHdvwHgzOUlEf?=
- =?us-ascii?Q?RgGnVbP1ghkh9CFPZIFPdqAS16GDz8DLcMZ5jNiYJA9LblsyidnVL0WLNain?=
- =?us-ascii?Q?XiGa2uBPhc7GRjH6TcqOyvjLLyPk/ObJhYEFwM16c+iYZi8CkAlRZsP5qXw6?=
- =?us-ascii?Q?QRvxOqzoVKwOxWM3ji5DdREXTNTzfHDeeOa1uZ45Sc6hZ0/i4y2uzh5S9nIi?=
- =?us-ascii?Q?1zcGMSD2qONLhD/VeYDkuhh7FNGG4iGLDMEQprfUuxD44AsR5SIazmWZhU58?=
- =?us-ascii?Q?tZOcn1ahh+whCvrV9ZLrkfXa2zbwn38zYr6S7x/bITtwWNhZVD5wdwFHKfNR?=
- =?us-ascii?Q?6y0XtUCQ1dfvy5Xe/QP7MOPBoR3UwKmqbNBv+h1Lo/yitWi+Iq/BeLzznQuF?=
- =?us-ascii?Q?wsXKtSikgYse5TJpsxKSa7Kul1gc6U6lYjJFPycfQ8ivGQbjhhcUBQtZNqRQ?=
- =?us-ascii?Q?3/MFyqwKfcuD3zKgB+/TA4oKji3iDamRRGHHMe92S8ospS2AIMtLCTBdBg/X?=
- =?us-ascii?Q?Wu2ptD2/DnkzBsxQ4XAuxg/+mUVKlzDIa6yIIXS0G4JI90lg9YVLt9PnmFds?=
- =?us-ascii?Q?37nsl+ySdS0nvMsUA6OzMC6+Mv4uJkvw5lCb6lo8IKteblPeRR1eUDDNLEh5?=
- =?us-ascii?Q?zdw59c/xEnyfLrldHhfYd1OtMxzWyhezmLnccjET8ksEsaeTAiiAq5BRq7XP?=
- =?us-ascii?Q?RfN1mcrR/NsDRQYBE5MH3xmQ1cf/aq/2sCdkxWEtwhjzLNz6Egp2b9BuOKUb?=
- =?us-ascii?Q?IQbY177WmLScVC5KRU4kG59AtrLLheYP9isPhtzKRG3zgkYTisbDeJYGLLlf?=
- =?us-ascii?Q?C27nqv15Mm7XdqqAaa9ARILK7Xi3FaauP2n1AKmFRIacDOcw7/lO3igpEYJu?=
- =?us-ascii?Q?LxvYN108AKrmdhN8QVUnDFjSskH5lPU=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00C143E168F;
+	Tue, 30 Jun 2026 09:10:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.164.118
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782810653; cv=none; b=PbkEwxZ7WzIeONhV/7Jo0pnAGU7xqNGCNW8HfqjJKrB1Khxt6Ll3VNt9VqzhGWCY2kOO07SBhoKTUyITMZw3qXXRmw8532OSOK70hGCLhTuXy9YaI4G+3o5MyXOKaH20KQkFef2hsij2phnGcfAYXRdyRDJBLmYhIUj5Yh5iThI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782810653; c=relaxed/simple;
+	bh=6GsS91VDm5XJTxBx9/v0Ih9NThZHJONJTviT5aFAdC0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qxqzu/2jBKVwfqQb+m8cZk3d80NQWrIemKZZAWyiYtUL548pT6BHwPoI8PLCkIi4bfHenqJmsAZ5SgGlbSCQAlkGBHiyySnZLWchPd/AaLZVrGeouQnfJg7dDecNdnTGUe+gyNcZMrQRWnhhXILA28I+cw0UzdYgrO3Lbs1ytiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=162.243.164.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
+Received: from E0005152DT.eswin.cn (unknown [10.12.96.41])
+	by app2 (Coremail) with SMTP id TQJkCgAXLaAQiENqkyUwAA--.30595S2;
+	Tue, 30 Jun 2026 17:10:41 +0800 (CST)
+From: dongxuyang@eswincomputing.com
+To: linux@roeck-us.net,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	p.zabel@pengutronix.de
+Cc: ningyu@eswincomputing.com,
+	linmin@eswincomputing.com,
+	pinkesh.vaghela@einfochips.com,
+	luyulin@eswincomputing.com,
+	dongxuyang@eswincomputing.com
+Subject: [PATCH v9 0/2] Add driver support for ESWIN EIC7700 PVT controller
+Date: Tue, 30 Jun 2026 17:10:40 +0800
+Message-Id: <20260630091040.1407-1-dongxuyang@eswincomputing.com>
+X-Mailer: git-send-email 2.31.1.windows.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked:
-	VrqfvSywe68cKzOt7Le/LiDqBN41pipyffQc0GHRpMFfztd0o6QBpzefpMZAmL2sYw/rpuvxIo2D4uFylycQ6cwrR9f1pgOZehxP4JRSpcjzGuQieIEu+QftkSV9UAb3YAshjlQD+c2mB0/O3JZpT2J434CqHTcNRdhrSRD9FivLy0o6peNixB288P/RdVJmsQPmHPGAD6XcAQOPnKUDR0c8J2grfZeG9VuyLWQW5CBI37Yttar3H5v9R8gzVsaO41cLmurnjQ9ii4gqQPoxxxC6B/mxna2345wck+wIxYTb7s80FTsRckyK03245u7t0ISDxtI977RUApDNoDP4rA==
-X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR03MB6351.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4a4aadd5-8158-4543-2b13-08ded67ea05a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jun 2026 08:07:27.7123
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0k5DrliynGK3/OfQeMiWriH0cbls0Zq7sJg9m+++WBJ6COfXmdd5IOOk3qyIxzCw1/KO8/VPSJzvSqaaMCfPvr5Sc41OzwXgGHJCIKDTqWA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY1PR03MB7214
-X-Authority-Analysis: v=2.4 cv=UoRT8ewB c=1 sm=1 tr=0 ts=6a437943 cx=c_pps
- a=C5q/T6pJLpFJxMBEEzTjbA==:117 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=0sLvza09kfJOxVLZPwjg:22
- a=iZSIUCweCk2Oy3QsdGPA:22 a=X4gfy60VziH7o14k9qoA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-ORIG-GUID: 60i90cH12UjK4-OM9_h3oSBCYcq7PV5P
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjMwMDA3MCBTYWx0ZWRfX+d8UPLKYFE2c
- W2b7ke+ygQWOwaXczuqWW9HIjO06T6ezq/WVvwpJ/OLJ7jfQ+fIUwQnq+Xgh0IVjBNRJzSXOjD5
- 6lKaXtqo5uDP5oz32ELJu5qQJGhdTwVtqQwYYD/4wP8dUGKjmlGR
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjMwMDA3MCBTYWx0ZWRfX6KIIRHuzgGZd
- T3C8OGmruOwpswWi3tLlInOS/B4+9YqzCpn/f8J/1BVKVYv9LEICQX+hISQszWUKTO9sykWflYf
- Y7YWR6147Q+hkxtKlQCc+Jglkz5VLzxWgkRrUx8ms9QIzDjaUGtvrANGBGMpbUGLBJlP0yzeTYf
- iiFCGQlU7nYHGN/xOBRH+amSFcA7AukblDt++nOJlxITxkBRcdz6+idfwjlLtGKvY8CvGRb+LZn
- 8qqULjHK58MCud56bcEk4lXXtFCO3Yp8dBbtkc6g1Lzbaa9f3N/6Yt1LNCmRT1YZMQqUH5Exqv4
- jqfc4l9UKrCjd1+/DvtHRq0aP+PEuGIIDEq7PSuX2NuATERnNXNTabMKXey9OpnB4lZYHcVo726
- fVw0uEXUQS1vHsRPPlCrVvDeb7JDXe3gwf3YlKCz9vD0x84LaRAaG/Uo0KbhRAhg1JT5EIDvXtI
- JlzYxVXpqpbjVxyObuA==
-X-Proofpoint-GUID: 60i90cH12UjK4-OM9_h3oSBCYcq7PV5P
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-06-30_02,2026-06-26_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 malwarescore=0 lowpriorityscore=0 adultscore=0 spamscore=0
- clxscore=1011 bulkscore=0 priorityscore=1501 impostorscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2606300070
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:TQJkCgAXLaAQiENqkyUwAA--.30595S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Jw1DKF1rWrW3urWUKFWktFb_yoWfGF1rpF
+	W8KryYkw4DXrWSq3yDt3W09F1ftan3JFWayr4xWw18Zw15t34j9FWfKF1Y9FyDArn3X3Zx
+	ta4Yqr47Aa4qyrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+	Y2ka0xkIwI1lw4CEc2x0rVAKj4xxMxkF7I0En4kS14v26r1q6r43MxkIecxEwVCm-wCF04
+	k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
+	MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr4
+	1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l
+	IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
+	A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUXJ5wUUUUU=
+X-CM-SenderInfo: pgrqw5xx1d0w46hv4xpqfrz1xxwl0woofrz/
 
+From: Xuyang Dong <dongxuyang@eswincomputing.com>
 
-> >
-> >  properties:
-> >    compatible:
-> > -    const: adi,max20830
-> > +    oneOf:
-> > +      - const: adi,max20830
-> > +      - items:
-> > +          - enum:
-> > +              - adi,max20830c
-> > +              - adi,max20840c
-> > +          - const: adi,max20830  # Fallback compatible
->=20
-> Drop the comment, it is obvious. Can this be not a fallback compatible?
->=20
+Add support for the ESWIN EIC7700 PVT (Voltage, Temperature) sensor
 
-After considering the feedback from patch 6/6 regarding this fallback, I th=
-ink I
-would not make this fallback compatible. Will edit out.
+Features:
+The driver supports monitoring of voltage and temperature parameters
+through the hardware monitoring subsystem. It provides an access to the
+sampled Temperature and Voltage.
 
-Regards,
-Alexis
+Test:
+Tested this patch on the SiFive HiFive Premier P550 (which uses the ESWIN
+EIC7700 SoC).
+
+Updates:
+  Changes in v9:
+  - Taking over from Huan He <hehuan1@eswincomputing.com>, who has left the 
+    company and whose email is no longer reachable. 
+    Huan He's Signed-off-by tag is retained to acknowledge the original 
+    contribution.
+  - Update eswin,eic7700-pvt.yaml
+    - Add 'Reviewed-by: Conor Dooley <conor.dooley@microchip.com>' tag.
+  - Update eic7700-pvt.c and eic7700-pvt.h
+    - Remove config HWMON.
+    - Add eic7700_pvt_set_trim(pvt, PVT_TRIM_DEF) in
+      eic7700_pvt_runtime_resume(). Re-apply the trim values to prevent
+      incorrect sensor readings upon wake (Sashiko review of v8).
+
+  - Link to v8: https://lore.kernel.org/all/20260625061049.1614-1-hehuan1@eswincomputing.com/
+
+  Changes in v8:
+  - Update eswin,eic7700-pvt.yaml
+    - Delete reviewed-by tag of Krzysztof Kozlowski due to functional
+      changes. Add the APB clock because when the kernel is booted with
+      CMDLINE option "clk_ignore_unused", the APB clock remains enabled by
+      default; without this option, the APB clock may be gated and the PVT
+      driver will not operate correctly
+  - Update eic7700-pvt.c and eic7700-pvt.h
+    - Add APB clock support and retrieve clocks using devm_clk_bulk_get()
+    - Update eic7700_pvt_hard_isr() to verify PVT_INT_STAT before clearing
+      the interrupt and completing a conversion, preventing spurious
+      interrupts from returning stale data or completing a conversion early
+    - Update eic7700_pvt_probe() to register the PM runtime cleanup action
+      before requesting the IRQ, so the IRQ is torn down before clocks are
+      disabled during driver removal, preventing a possible
+      use-after-disable of the hardware clock in the ISR
+
+  - Link to v7: https://lore.kernel.org/all/20260611090505.734-1-hehuan1@eswincomputing.com/
+
+  Changes in v7:
+  - Remove the unused reset control pointer from struct pvt_hwmon and keep
+    the reset control handle local to eic7700_pvt_probe()
+  - Update eic7700_pvt_init_iface() to disable PVT_ENA_EN before clearing
+    the interrupt status, preventing a possible level-triggered interrupt
+    storm if the bootloader leaves the conversion engine running
+  - Update eic7700_pvt_disable_pm_runtime() to explicitly disable runtime
+    PM and avoid an unbalanced disable_depth
+
+  - Link to v6: https://lore.kernel.org/all/20260604080430.126-1-hehuan1@eswincomputing.com/
+
+  Changes in v6:
+  - Fix the !CONFIG_PM probe error path by disabling the clock if IRQ
+    request fails before the PM cleanup action is registered
+  - Replace pm_runtime_put_noidle() with pm_runtime_put() in the IRQ
+    handler to avoid a runtime PM reference-count race with the read path
+  - Remove the unused pvt_clear_data() devres action and its associated
+    devm_add_action() registration
+
+  - Link to v5: https://lore.kernel.org/all/20260515091942.449-1-hehuan1@eswincomputing.com/
+
+  Changes in v5:
+  - Update eswin,eic7700-pvt.yaml
+    - Drop the label enum constraint and remove label from the required
+      list
+    - Add '#thermal-sensor-cells' to the required list
+    - Rename the example node to the generic sensor@... form
+    - Update the binding description to describe one temperature sensor
+      and one voltage sensor
+  - Update eic7700-pvt.c
+    - Register the hwmon device with the fixed name "pvt"
+    - Remove label-based instance identification from the driver
+    - Fix CONFIG_PM=n support by keeping the clock enabled when runtime PM
+      is unavailable
+    - Add pm_runtime_force_suspend() in the cleanup path to avoid leaving
+      the device active during unbind
+    - Switch system sleep callbacks to pm_runtime_force_suspend() and
+      pm_runtime_force_resume()
+    - Guard ISR register accesses with pm_runtime_get_if_active()
+    - Add synchronize_irq() on the timeout path to avoid stale completion
+      races
+    - Remove temp_offset support because the raw trim register does not
+      match the hwmon ABI
+    - Align the commit message with the implementation (one temperature
+      sensor, one voltage sensor)
+
+  - Link to v4: https://lore.kernel.org/all/20260430064107.1598-1-hehuan1@eswincomputing.com/
+
+  Changes in v4:
+  - Update eswin,eic7700-pvt.yaml
+    - Delete reviewed-by tag of Conor Dooley, because the label enum
+      constraint is introduced
+  - Update eic7700-pvt.c and eic7700-pvt.h
+    - Remove the unused LVT/ULVT/SVT process-monitoring channels
+    - Remove the probe-time power check since the PVT block is always
+      powered on EIC7700 and the extra verification is unnecessary
+    - Stop requesting the interrupt as shared and use the dedicated PVT IRQ
+      only
+    - Reorder probe initialization so the interface is initialized before
+      the clock is disabled, avoiding register accesses with the clock gated
+    - Fix runtime PM reference handling on error paths by balancing
+      pm_runtime_get_noresume() with pm_runtime_put_noidle()
+    - Add pm_runtime_put_noidle() handling for failed pm_runtime_get_sync()
+      calls in hwmon read/write paths
+    - Switch the PM callback registration from pm_sleep_ptr() to pm_ptr()
+
+  - Link to v3: https://lore.kernel.org/all/20260306094312.1043-1-hehuan1@eswincomputing.com/
+
+  Changes in v3:
+  - Update eswin,eic7700-pvt.yaml
+    - Remove redundant label property description and use 'label: true' to
+      reference the definition in hwmon-common.yaml
+    - Replace 'additionalProperties: false' with
+      'unevaluatedProperties: false'
+    - Remove the description for '#thermal-sensor-cells'
+  - Update eic7700-pvt.c and eic7700-pvt.h
+    - Fix clock reference count imbalance with Runtime PM:
+      Replace devm_clk_get_enabled() with devm_clk_get() and manually
+      manage clock enable/disable to avoid double-disable in remove() when
+      Runtime PM is active. Clock is now enabled only during probe for
+      eic7700_pvt_check_pwr(), then disabled before enabling Runtime PM,
+      which takes full control of the clock thereafter
+    - Add detailed comment explaining the spurious interrupt risk in
+      eic7700_pvt_check_pwr()
+    - Replace wait_for_completion_interruptible() with
+      wait_for_completion_timeout() to prevent infinite wait
+
+  - Link to v2: https://lore.kernel.org/all/20260128101400.859-1-hehuan1@eswincomputing.com/
+
+  Changes in v2:
+  - Update eswin,eic7700-pvt.yaml
+    - Reference the hwmon-common.yaml file
+    - Remove the clock-names and reset-names properties
+    - Move additionalProperties: false after the required block
+    - Remove one example node to avoid redundancy
+  - Update eic7700-pvt.c and eic7700-pvt.h
+    - Remove unused sensor macros (PVT_SENSOR_FIRST, PVT_SENSOR_LAST,
+      PVT_SENSORS_NUM)
+    - Drop the unnecessary hwmon-sysfs.h header
+    - Replace dynamic sensor info allocation with a static array and unify
+      sensor labels
+    - Remove unused hwmon_temp_type attribute
+    - Eliminate redundant validation checks
+    - Remove mutex and related locking, relying on hwmon core
+      serialization
+    - Replace per-sensor caches and completions with a single data cache
+      and completion object
+    - Remove pvt->sensor tracking. ISR no longer depends on the currently
+      selected sensor
+    - Move devm_add_action() registration after init_completion() for
+      safer cleanup, and update cleanup function (pvt_clear_data)
+    - Replace devm_reset_control_get_optional_exclusive() with
+      devm_reset_control_get_exclusive_deasserted()
+    - Replace eic7700_pvt_remove() with eic7700_pvt_disable_pm_runtime()
+      and move it after PM runtime enable to avoid resource leaks on probe
+      failure and remove clock disable and reset assert from
+      eic7700_pvt_disable_pm_runtime() as it is already handled by devm_*
+      framework
+    - Remove redundant clock presence check in runtime_resume
+
+  - Link to v1: https://lore.kernel.org/all/20260109090718.442-1-hehuan1@eswincomputing.com/
+
+Huan He (2):
+  dt-bindings: hwmon: Add Eswin EIC7700 PVT sensor
+  hwmon: Add Eswin EIC7700 PVT sensor driver
+
+ .../bindings/hwmon/eswin,eic7700-pvt.yaml     |  72 +++
+ drivers/hwmon/Kconfig                         |  11 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/eic7700-pvt.c                   | 509 ++++++++++++++++++
+ drivers/hwmon/eic7700-pvt.h                   |  99 ++++
+ 5 files changed, 692 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/eswin,eic7700-pvt.yaml
+ create mode 100644 drivers/hwmon/eic7700-pvt.c
+ create mode 100644 drivers/hwmon/eic7700-pvt.h
+
+--
+2.34.1
+
