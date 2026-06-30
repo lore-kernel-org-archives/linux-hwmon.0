@@ -1,66 +1,66 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D9B3CF211
-	for <linux-hwmon@vger.kernel.org>; Tue, 30 Jun 2026 03:43:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B423140D58A
+	for <linux-hwmon@vger.kernel.org>; Tue, 30 Jun 2026 03:50:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782791012; cv=none; b=ENyrpQnSIbzLT9QhqWHzaP0Xh0voRX8pcjWbOt4ZAkXBmmiVhRDE4IqT2wyfbGR7kqBrTL0E6KSEhnIDk5N6psvdOzvBps8hfKD2KsV6T6sVvFLQbPhPLzkmAFHWB6FLYgfks1F8tYIQd9o+MkkB+i/zwpYzVA93X8wWdeW3fp0=
+	t=1782791405; cv=none; b=QidRI4P8WjR8E50IQaua/wtS7siBxb6ZO8ZTSOHaz01tRVA05PAVsd+1eRBgKu1SLbxovE8sbQ79noy76c+E67WemAJcMVpGDl4VqLU/KphVVaMu0MFifuE7U3Kd8PgI2DFYo76sWiM7O6xI/IqUuxsIhomyR+U0lXSBrY+ycw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782791012; c=relaxed/simple;
-	bh=7qZ7BD/kPdntbjx284SKm6xDphVUDw2P3Dj9RXsLrTw=;
+	s=arc-20240116; t=1782791405; c=relaxed/simple;
+	bh=JvndTcbdQfQeO0UnijpOjRGRT/07a4Eg6ZYoroFiGBo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QSKj9FJknKtZI0Hl14nererf+ujj2lgEjJs76L0t1kCRRjCUI2kSH7WtEef/PyNbBsHoWXqO3BvMPtkSDWyU5X2d9AQxzcRXg5Ym2AsBUwNW6mN1vWZWnzpYcm5h5D/Jzd+9gM4IPSYIsENVfSCV/0xPtGdAFzmho1OAQLh3p6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mE7FxRQT; arc=none smtp.client-ip=209.85.215.176
+	 In-Reply-To:Content-Type; b=SBwFaxOLrD9XIaw1p8ywK6z+5dSHvqsQ001UYW7OBDI3NMnc848oFGmFzExBSXukrhGjFhOkjpKeMsw46VeyuSjM27C/l9K4rZOvMauDCC2fFkMHYKscEohTqcsw6n0rfbYQxTSA8Qjrk9CocugrKG71oGpwhZK8DdvFiXoZJYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=laZqm1hP; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mE7FxRQT"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c85d4b4245aso2370421a12.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 29 Jun 2026 20:43:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="laZqm1hP"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2c8c30492a0so33830985ad.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 29 Jun 2026 20:50:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782791010; x=1783395810; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782791404; x=1783396204; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=RFyykPXnuU8lpZ43+6F/IaAIeDAQiIIJTgb29BGSmF4=;
-        b=mE7FxRQTLBd/TqwRWjUCsk83vO3/THTKAIi22Y0r0vi19n4GuxQE1M4ejEk+ejkG0l
-         B0BTFLOkD+KH0W2qOEgMBQEjwrqLuv2DE11qnj5FNnBwfCsxhXcMgKdNqqG78jnRNDTr
-         ybLBwqlkYYGJnaoI+fs7LKT++UknGSAAO1Py0T7C7+/YlWk1EfTy1GvE0b+tb+QFuioo
-         YDkOaUJdsfmw/RMqZaE5LFD6i7BOcxG3wHqXxu4FG4M6ELbkTqpOhRBdDX7leKNo5zb+
-         OK5dGzsbI6QyeuRnr45hmWMRTX1oE1RJR0Zr4D8/CwH+88PRg3lXElbKiZzbJW0TzKns
-         fojA==
+        bh=9jNn6l3C++B0B2TNE2QWEt8huvRiKl6q6nWK2b2vEJo=;
+        b=laZqm1hPkItOWfi9zs+hKCr+qvAuSZrXwpEx826JGy17VjyoAe1hW5/WSrWn18Xa45
+         nQDfbrWP4Jtw5Ol5GYLuJSD10Ag132ycKqV13TfvgZWD7TmXvM75E42rTzr33nTtJTTn
+         twE+L/94qwLif5jK2NWTGTz3UcppBdXR8YAM6rnwW2COTqaQoq8+Ej/Qq1uowDIIZkHx
+         sPhryP3I9JwjLrkDogbVSJNAr8U5ftrvFA8dOCSpgXX/lQhxO5Ar/Bnx+DZzGQ3OOV09
+         AVD4zuSpyHz1jKJS9GQByyPKOSYSflrqwehjI7ZHF5xeGIvZjlRwUYtYySGEqUSgyffU
+         Fg9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782791010; x=1783395810;
+        d=1e100.net; s=20251104; t=1782791404; x=1783396204;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RFyykPXnuU8lpZ43+6F/IaAIeDAQiIIJTgb29BGSmF4=;
-        b=sWEr5s2YQflWUQVpxPPOwJMFzro47lt1CnXAqFcDdvGnaJuNWEoi+gUvFoo5n2lfgb
-         AfNa98MsBdVmOi21BVMr3cgAt6rXkPQAV6fqqLtsHQGnaOKM3dLjj/AGEmo/pynfeZZy
-         AG9z3Wui3JT1pg+ZNE8ewhNV0xZ8Dh0mTvpWC/uQmLzNG+464voiHFe/fyhFH5Z0V6cJ
-         JYvkZgX+nnQ/2guZKHZE59+yNwvQ161dKEpezHDC8HwBjgOI3hszy0WPn1Osowx8m2WZ
-         blM9uWUmToL8crGw6JJFQUJgzbrqiaT+fOi1ORugBNuNR2ORfph8sjSVGQLnOZBfWzmF
-         lYFw==
-X-Gm-Message-State: AOJu0YwmM9v4DdBZhgk0WzxztcLn0A2vNQUYdvtudOAS1yd2fFUTcII3
-	GUB6X8h8ELBdMNMzLx2InvaW0ld51RvIf/0mtWq0RqRqEYNOMEyGma2J
-X-Gm-Gg: AfdE7ckKn+IknOa75MXGckEtIA6v0iX67YuErW0jLq1r9EWuBETDCDQGkV7NIvEE3Iy
-	PyJcKEWHhiltIkEXyD7p3SihuBXhOdrQHcnTXNVJB0fQXTgRUUvSFANuVWa556hXq0iT2jIF+EE
-	+ylk3TVqhDB4/Yki/+J6yQ72w5nPJc2igtxPSKaNrazU4O4cqfjQPjXMGbKm16xxjXNw19EjEAh
-	E4fQJ6tLm8eeHO/sYhYmm43dD1Ty38lLCoYrXT7zsDfi7eIlq4ottBAGgTgxyQWG50WeeH9WF6T
-	l0bsEn0VlXa2sFtw6T0zpoG+OnKQre4BpA0+WC3LO2xvzF8P/ybkxTdUVkP3Cdh6gZMOPS5Z3S/
-	Cn0pv1p7MTLsWe9VNgyO3MlfWwq7AVWjYn00QZ/VyfhtPk94Xq3XUCFVvfMJGNJ+nisTjhEkrpW
-	s3bqcufiGPxbo1qxwZ0wdd+l80rmabP5XmjPbDAyv82fo4vPUeMuJJFuWLmjhJ6A==
-X-Received: by 2002:a05:6a21:1506:b0:3bf:6c08:fb95 with SMTP id adf61e73a8af0-3bfc532ebbemr1804293637.55.1782791009663;
-        Mon, 29 Jun 2026 20:43:29 -0700 (PDT)
+        bh=9jNn6l3C++B0B2TNE2QWEt8huvRiKl6q6nWK2b2vEJo=;
+        b=cu8QVJQLF1nt/0dvnBDUKfm8wylKAJFD90OwxJR5s3GLznRW0wx/jzo66kqTYrENut
+         FpWmlSPIVTD8Mik3AbMXfrH5UlBJlgxTAKxJuMLzY8zt8XNK8NpHJ6r27C+3fHq0QW0i
+         hz76N+UZG69amvsx/7s9P7/brm0orsWt+qPNujfGS9FFNNOnLsJQSJrY//nhvXDE2R0u
+         vyI20uNtpvbwhAWCGgF6v1TJPWkqob+rUGwMcd9pksfJ9BOv+EWIbQB1pC5wYezBKUnO
+         VvaMAuV6+Sd8rLq30rGTGj3G97orzW6tJPz0Ws8BwUaYLdGMNFL5oTtTy0fFsM6yVd3j
+         vM5Q==
+X-Gm-Message-State: AOJu0YzEmJv/LPWULZX641/OuNqGOFg4cal3AJbVwAa+/a7rLlPOmUZq
+	oIldTXAfTcqxCmORN9gvq8Y7BMbWfpZj2Fuw6ub2bkWEHvpCD0d534bn
+X-Gm-Gg: AfdE7ckzJPjnGtowLd/hIIsHSgTSoAJ184fEctRJr5QhZwyp+nvb+nQ2WJoNd1ankmi
+	8w456ZO8Vu4wuU12XSm7QH0q5X/c0NGi9ogR6LVeOju7VO/0FdDT5wRtr2n+Xwl4rqGMi6kzZQP
+	80ppKqx3epAgFi33gYs94Zd+xZg28z91Lly8dJFUfix0tKUfVMEt0yZaPgEEIilRIiIgCqYS5Uq
+	D9KNR1Y4D283uY3RM35hF+lc0bCsQV2FqmcDMFOtg+kSel6Vwu8enJOyL1DJbOGY5Rjtblewd6l
+	DKRgh1cDN9V4vduaVZoCxarFk1pxp+Sf5xDoB1pVjbSZEj6qd6vbT7SVuuYqpjwr2SIuURMdXKx
+	G/YXc7KZhVKxq0C0rBbMoCT4GPqoVP9TRO7k1RW1ChTJm0nbSW/bY5pSsgkuCztbkEvAC5WDMN9
+	F1AL8q439kO4kcC1iaCC8fyHj1GWzBSIgga01IE1hyrsU5W05gTrAzu6zHROI70Q==
+X-Received: by 2002:a17:902:f607:b0:2c9:97a7:3275 with SMTP id d9443c01a7336-2ca2ea334b3mr15260325ad.38.1782791403973;
+        Mon, 29 Jun 2026 20:50:03 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c9bbf95be56sm678099a12.16.2026.06.29.20.43.27
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ca37c738easm4553965ad.20.2026.06.29.20.50.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Jun 2026 20:43:29 -0700 (PDT)
+        Mon, 29 Jun 2026 20:50:03 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e5c7fcae-57aa-4461-987d-7f004d066873@roeck-us.net>
-Date: Mon, 29 Jun 2026 20:43:26 -0700
+Message-ID: <836b833e-e503-4cbb-92f7-3574f3fb430f@roeck-us.net>
+Date: Mon, 29 Jun 2026 20:50:02 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,8 +68,7 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/6] hwmon: (pmbus/max20830): add support for max20830c
- and max20840c
+Subject: Re: [PATCH 2/6] hwmon: (pmbus/max20830): add support for enable GPIO
 To: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
@@ -77,7 +76,7 @@ To: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
 Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
 References: <20260630-dev-max20830c-v1-0-a02786bde470@analog.com>
- <20260630-dev-max20830c-v1-6-a02786bde470@analog.com>
+ <20260630-dev-max20830c-v1-2-a02786bde470@analog.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -123,199 +122,56 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260630-dev-max20830c-v1-6-a02786bde470@analog.com>
+In-Reply-To: <20260630-dev-max20830c-v1-2-a02786bde470@analog.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 6/29/26 19:46, Alexis Czezar Torreno wrote:
-> Add support for MAX20830C and MAX20840 step-down DC-DC switching
-> regulator with PMBus interface. MAX20830C is a different packaging
-> for MAX20830, and MAX20840C supports 40A regulation compared to
-> MAX20830 that is only 30A.
+> Add support for the GPIO controlled EN pin. The EN pin is asserted high
+> for device to operate.
 > 
 > Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
 > ---
->   Documentation/hwmon/max20830.rst | 27 +++++++++++++---
->   drivers/hwmon/pmbus/max20830.c   | 68 ++++++++++++++++++++++++++++------------
->   2 files changed, 70 insertions(+), 25 deletions(-)
+>   drivers/hwmon/pmbus/max20830.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
 > 
-> diff --git a/Documentation/hwmon/max20830.rst b/Documentation/hwmon/max20830.rst
-> index 936e409dcc5c0898dde27d782308d4a7e1357e73..b850f3b6e40d1f1d0cec944be40af02265aced59 100644
-> --- a/Documentation/hwmon/max20830.rst
-> +++ b/Documentation/hwmon/max20830.rst
-> @@ -13,6 +13,22 @@ Supported chips:
->   
->       Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/max20830.pdf
->   
-> +  * Analog Devices MAX20830C
-> +
-> +    Prefix: 'max20830c'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet:
-> +
-> +  * Analog Devices MAX20840C
-> +
-> +    Prefix: 'max20840c'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet:
-> +
->   Author:
->   
->     - Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-> @@ -21,12 +37,13 @@ Author:
->   Description
->   -----------
->   
-> -This driver supports hardware monitoring for Analog Devices MAX20830
-> -Step-Down Switching Regulator with PMBus Interface.
-> +This driver supports hardware monitoring for Analog Devices MAX20830, MAX20830C
-> +and MAX20840C. These are Step-Down Switching Regulator with PMBus Interface.
->   
-> -The MAX20830 is a 2.7V to 16V, 30A fully integrated step-down DC-DC switching
-> -regulator. Through the PMBus interface, the device can monitor input/output
-> -voltages, output current and temperature.
-> +MAX20830, and MAX20830C are 2.7V to 16V, 30A fully integrated step-down DC-DC
-> +switching regulators. MAX20840C is similar but can reach 40A. Through the PMBus
-> +interface, these devices can monitor input/output voltages, output current and
-> +temperature.
->   
->   The driver is a client driver to the core PMBus driver. Please see
->   Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
 > diff --git a/drivers/hwmon/pmbus/max20830.c b/drivers/hwmon/pmbus/max20830.c
-> index a3abd24437e8e7560264aad55fc4f456d30ae235..252c77beb243c5a2d90fcf96941605ff31439383 100644
+> index cb2c23672166d641852199ca07eb716924f4f286..cb3a39d747edee3aefb0fb4051ef957436b3c15b 100644
 > --- a/drivers/hwmon/pmbus/max20830.c
 > +++ b/drivers/hwmon/pmbus/max20830.c
-> @@ -14,7 +14,30 @@
->   #include <linux/string.h>
->   #include "pmbus.h"
+> @@ -6,6 +6,7 @@
+>    */
 >   
-> -#define MAX20830_IC_DEVICE_ID_LENGTH	9
-> +struct max20830_chip_info {
-> +	const char *id_str;
-> +	u8 id_length;
-> +};
-> +
-> +static const struct max20830_chip_info max20830_chip = {
-> +	/*
-> +	 * MAX20830 IC_DEVICE_ID has a byte length of 9 despite being an 8
-> +	 * character string, as it includes a null terminator. The other
-> +	 * devices do not include null.
-> +	 */
-> +	.id_str = "MAX20830\0",
-> +	.id_length = 9,
-> +};
-> +
-> +static const struct max20830_chip_info max20830c_chip = {
-> +	.id_str = "MAX20830C",
-> +	.id_length = 9,
-> +};
-> +
-> +static const struct max20830_chip_info max20840c_chip = {
-> +	.id_str = "MAX20840C",
-> +	.id_length = 9,
-> +};
->   
->   struct max20830_data {
->   	struct pmbus_driver_info info;
-> @@ -60,11 +83,14 @@ static struct pmbus_driver_info max20830_info = {
->   
+>   #include <linux/errno.h>
+> +#include <linux/gpio/consumer.h>
+>   #include <linux/i2c.h>
+>   #include <linux/mod_devicetable.h>
+>   #include <linux/module.h>
+> @@ -29,8 +30,14 @@ static struct pmbus_driver_info max20830_info = {
 >   static int max20830_probe(struct i2c_client *client)
 >   {
-> +	const struct max20830_chip_info *chip;
 >   	u8 buf[I2C_SMBUS_BLOCK_MAX + 1] = {};
->   	struct max20830_data *data;
->   	struct gpio_desc *enable_gpio;
+> +	struct gpio_desc *enable_gpio;
 >   	int ret;
 >   
-> +	chip = i2c_get_match_data(client);
+> +	enable_gpio = devm_gpiod_get_optional(&client->dev, "enable", GPIOD_OUT_HIGH);
+> +	if (IS_ERR(enable_gpio))
+> +		return dev_err_probe(&client->dev, PTR_ERR(enable_gpio),
+> +				     "Failed to get enable GPIO\n");
 > +
->   	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
->   	if (!data)
->   		return -ENOMEM;
-> @@ -90,16 +116,14 @@ static int max20830_probe(struct i2c_client *client)
->   	 * which do not support SMBus block reads.
->   	 */
->   	if (i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_READ_BLOCK_DATA)) {
-> -		/* Reads 9 Data bytes from MAX20830 */
->   		ret = i2c_smbus_read_block_data(client, PMBUS_IC_DEVICE_ID, buf);
->   		if (ret < 0)
->   			return dev_err_probe(&client->dev, ret,
->   					     "Failed to read IC_DEVICE_ID\n");
->   	} else {
-> -		/* Reads 1 length byte + 9 Data bytes from MAX20830 */
-> +		/* Reads 1 length byte + data bytes */
->   		ret = i2c_smbus_read_i2c_block_data(client, PMBUS_IC_DEVICE_ID,
-> -						    MAX20830_IC_DEVICE_ID_LENGTH + 1,
-> -						    buf);
-> +						    chip->id_length + 1, buf);
->   		if (ret < 0)
->   			return dev_err_probe(&client->dev, ret,
->   					     "Failed to read IC_DEVICE_ID\n");
-> @@ -108,36 +132,40 @@ static int max20830_probe(struct i2c_client *client)
->   		 * match the format of i2c_smbus_read_block_data().
->   		 * Also adjust return value to reflect length byte removal.
->   		 */
-> -		memmove(buf, buf + 1, MAX20830_IC_DEVICE_ID_LENGTH);
-> +		memmove(buf, buf + 1, chip->id_length);
->   		ret = ret - 1;
->   	}
->   
-> -	/*
-> -	 * MAX20830 IC_DEVICE_ID sends string data "MAX20830\0".
-> -	 * Return value should at least be 9 bytes of data.
-> -	 */
-> -	if (ret < MAX20830_IC_DEVICE_ID_LENGTH)
-> +	/* Verify we read the expected number of bytes */
-> +	if (ret < chip->id_length)
->   		return dev_err_probe(&client->dev, -ENODEV,
-> -				     "IC_DEVICE_ID too short: expected at least 9 bytes, got %d\n",
-> -				     ret);
-> +				     "IC_DEVICE_ID too short: expected %d bytes, got %d\n",
-> +				     chip->id_length, ret);
-> +
-> +	/* Null-terminate the string */
-> +	buf[chip->id_length] = '\0';
->   
-> -	/* 9 bytes of data, buf[0]-buf[7] = "MAX20830", buf[8] = '\0' */
-> -	buf[MAX20830_IC_DEVICE_ID_LENGTH - 1] = '\0';
-> -	if (strncmp(buf, "MAX20830", MAX20830_IC_DEVICE_ID_LENGTH - 1))
-> +	/* Verify the device ID matches what we expect */
-> +	if (strncmp(buf, chip->id_str, chip->id_length))
->   		return dev_err_probe(&client->dev, -ENODEV,
-> -				     "Unsupported device: '%s'\n", buf);
-> +				     "Device mismatch: expected '%s', got '%s'\n",
-> +				     chip->id_str, buf);
->   
-> -	return pmbus_do_probe(client, &max20830_info);
-> +	return pmbus_do_probe(client, &data->info);
->   }
->   
->   static const struct i2c_device_id max20830_id[] = {
-> -	{"max20830"},
-> +	{ "max20830", (kernel_ulong_t)&max20830_chip },
-> +	{ "max20830c", (kernel_ulong_t)&max20830c_chip },
-> +	{ "max20840c", (kernel_ulong_t)&max20840c_chip },
->   	{ }
->   };
->   MODULE_DEVICE_TABLE(i2c, max20830_id);
->   
->   static const struct of_device_id max20830_of_match[] = {
-> -	{ .compatible = "adi,max20830" },
-> +	{ .compatible = "adi,max20830", .data = &max20830_chip },
-> +	{ .compatible = "adi,max20830c", .data = &max20830c_chip },
-> +	{ .compatible = "adi,max20840c", .data = &max20840c_chip },
 
-"adi,max20830" is a fallback for the other two chips, but that
-is not how the code is implemented.
+The above code gets the gpio reference, and then it doesn't do anything
+with it. What exactly is the point of this exercise ? Where is the
+chip actually enabled ?
+
+Do you have an actual customer with such a set-up or is this
+"just in case" ? Have you tested this code to ensure that the chip
+is actually enabled in this setup ?
+
+If there is indeed a use case where a customer indeed connects the
+enable pin to a gpio output, wouldn't that same customer also want
+to connect the "pgood" output to a gpio pin ? And what about
+the LDOIN pin ? Shouldn't that be connected to a power supply ?
 
 Guenter
-
->   	{ }
->   };
->   MODULE_DEVICE_TABLE(of, max20830_of_match);
-> 
 
