@@ -1,67 +1,66 @@
 Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC51B34040D
-	for <linux-hwmon@vger.kernel.org>; Wed,  1 Jul 2026 14:19:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E05A3403EF
+	for <linux-hwmon@vger.kernel.org>; Wed,  1 Jul 2026 14:21:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782915570; cv=none; b=AlF6/+a9oBFzaP08K7NmhH0jUpBPdbYT5bwhV1TkzaeKJnL/0c6389a7b2AJNlqIjV33dY21Bni7kHeQYs2u60bvU203tdujNDW8JUqjyYlvzTcRktbYPX9fK7iZ80Pk/fheJGXeHrxWiFoyYkf9YbMdPQu0nckNbHaC3CsyK/Q=
+	t=1782915672; cv=none; b=GoswNmMTGt8WZDKFe9eov8S3gywrnB0K/6bdKjBVVJK4t2IvQzYVYt2+/z4q7W5ZYZ3Lxr8sR4jZrV5+z6JDyLzJwV+XF0WdmbrceGFvJ4EmZLSQMdVEZaBFpkUOeM1fnsYlDUKMf87/D6zwaEadGXhcRs8EAXN2jCbfYohCtTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782915570; c=relaxed/simple;
-	bh=vH8nvZeHSmN2/0es/LDZtMNIDHkJrInk6Hj1SdBcrE4=;
+	s=arc-20240116; t=1782915672; c=relaxed/simple;
+	bh=q4UMIkL3pHI1T1cC8daARSV7NQfTPKtbGVkANf4E56c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hBzaU/QlAlc9eVMBA8QjIUjD5F0Uo3mdITwYyeQE5/2CUiq8t6+Je+qey6hL91bnJkypmVrTW9hLHX59FAsKPCY3iWHBGSUjFNoiIm7nVLscgHwDj/Y/ozX9zMhiWm3rnn97E2IQD2DnksV6mL/kkGQ9X3l7uo5sQRZpjIuFpgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lwx6xUrp; arc=none smtp.client-ip=209.85.210.172
+	 In-Reply-To:Content-Type; b=aHvW97fENHQlxaXhVGNnYEfehirZStfC6KWD8i/13oJ0XzKGNNPoJSHfp+hmkk8/0Ax64dbqhHUIpXAl7MTzFjoE+7MReOdijP/Wk89OHqaGwmR0W/7HxcbSlN38rvA0Kvk82/1fDzWBc53WtSHZz+e+sfTki5onulJawThBoVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HMSxZrFz; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lwx6xUrp"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8478fe07f0fso532738b3a.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 01 Jul 2026 07:19:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HMSxZrFz"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-845ea8924a2so305495b3a.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 01 Jul 2026 07:21:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782915568; x=1783520368; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782915670; x=1783520470; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=6U+/o0tXXBCTuwlnimqkfxQsRgMwYtbQ9Z14+685ECQ=;
-        b=lwx6xUrpMIxYooSy42nVx9T1M0j1gjHyZ16ZANuJdD+3YbTdoILI8EvqCwlbSmBMV3
-         wJyWvONKxMXdMU1GzjdVPVkYOmqy83+eDJYhKpvFMRQmP5x3NJEfNdS9gZdl+MLERoD+
-         91ndmXoRz4WTn7C937I+Qzxdi9GH8Kb2O+QqDuD5oBy4qw3ljbc79LnEYxqaQJgLVVpn
-         QH9NXTg4yj5OtHKimHYnJ2qWUR/4XIT2JNrV5Zmx3ZJtV0suTlLGdKlw9Bi1zZTXP7Bu
-         xDkkGDTezPFA3JFyV7tRNygWNGB6J5hcA/neBGqDT7dKY4KOrp3KmwP5g3Ru4BK2vMWZ
-         IzOQ==
+        bh=F4j0r6lGZlp22dAIjqHgmQ7+XjePNxdYrAwoeEfQPtc=;
+        b=HMSxZrFzTycaEd58vyMmPMICKzFZGL6OBJ0Hh4yMIJgJ+On/pwgDwSYSM+QYhRzhJv
+         jTlFflxKGzB6c2dLS40ORH9b4IaMQ92C86p9GVx6vUfoqlSA6wTeq3BGBQhhMVv3kSFC
+         Ao7uCTnyIx4xoZJn38e2eYx9tjrwYaz/T4bRq4xKqFVZ/Uq2dwCvcWiGPCeF7S3rJTcd
+         XfKbSTrVx7vzefPAKOFowqsrFAYdR42i0KihUfWJz5PZ6Yh4H6KHKVaMpN7n0qbX5+gs
+         MRBOx/cXEkcf1eJJ+I0OV9NkWKl7FLhLRf1FKuYTtnFIgNZNkpEE/sCrheiv8PMuA/lo
+         tLzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782915568; x=1783520368;
+        d=1e100.net; s=20251104; t=1782915670; x=1783520470;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6U+/o0tXXBCTuwlnimqkfxQsRgMwYtbQ9Z14+685ECQ=;
-        b=eDz1oytiP+cFMue0CYblDvkrr7VEl8ER3EVu/81Sm7gwfBlBz7qJ5y3Jr93UDxOGG3
-         WP4ZfEMavxA7penxzYMKg5KFWyrE4cK7BT56u7clRNS8e5WG160hWn4vJTyR8K7/sR1R
-         7IVb3emJwk2Ydrrx6X3T+VqpRVC8ben5ekfMft7rhQmBP0VTxJj5JCtqMj3JmzYUf33j
-         HnKEQELagCmWX0c7IRlmCE1d9f12CA1rhnrH3GzrUdGIk2ryBFIQh2s4kVKAxcK0bJZU
-         4DHkWmuJxi4SS8YwAIbUv9gswVioDOjGWyS1gUoqipDvQEAof5/ZB5PM25dCczT7HS97
-         4NLQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/GySZpmDC8nSfzl/5MsvFQrQGZGbNsjithXTpCMKGdbE8ZzSevp1wJ/D7qO3oB0RdeHySMF5+/1WJ5AQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxFiJIHXiKyavAwkOEcCRljk6P2xvWW3j0cGpgBfEZcB/dW+4Cx
-	9R+yY06unBFttPVmTqcZHqYutxMFC8WgLXMaHGSfprdtm9QchX2pMT6Z
-X-Gm-Gg: AfdE7clbPd+CURL4cMkUqzi0jTtzyNx9yuVm812kSBKvd4oSvWVhSb1iGyc9oxAGqhT
-	GIgxgbrOfK0S2ngwC4Va420I/nI+iX7CUz4xIk6QUBwARVGpxf1TA3TEuWJsyu8Z7qFyxlwIGDQ
-	HCd3VTNq3qRPYREZnqjoPmMsU1hGvD00PU29rZ7OPwqqQYu/9W7t8/9aHozkMDe+EAF+tL71/Vz
-	6/hZxM2CLTvJw1NhHuAOKhzb1VzeqIujmOYHAsFEY80Hc55/Gv4gXMnn8+5rTZR3S39BHntL3kn
-	P2ZLGdeybe7pqb/YiCNYjasHmUakLluoiVxRRGGhj/VT2pmV1ZOBpkvS2G97CvBJBPXoRRwW2d9
-	ziVaxgY2uGLJowZxvM/SvkFk9eD7gvuRAWEJYoac/ZDjVZ5dN4qSqk9qXX+qdi23J6a0wkp7xg7
-	ZFnTJWnelHhOUmK6U90V6X5/G6zpQV1lNFo+634IxcavixnwT8Z/5LRENIy7HA4Fhegcefaq9K
-X-Received: by 2002:a05:6a00:98d:b0:847:85b6:1f53 with SMTP id d2e1a72fcca58-847c08822b1mr1757403b3a.44.1782915568012;
-        Wed, 01 Jul 2026 07:19:28 -0700 (PDT)
+        bh=F4j0r6lGZlp22dAIjqHgmQ7+XjePNxdYrAwoeEfQPtc=;
+        b=BRebM6rWCYNjsJHfRUudES/EWUFRYuXAPun7ZKvFJ0R2gC2sNfx35ldqg29ur/GMTM
+         RU4K6YsaIgss/xx5jTV1Kz4m576sxoy1aFUVC+xrGHNQOoGJysS6MLELwNOH9w8X0ISh
+         Lc+ljE+16tbbgj1MNtZBKkhABcZ3QVkO7VbgYhKCYaxDLHM/iO2O615thNr21Q9jhqwa
+         7boMacsTqjCeTLWzx2hPsl/nkDG7WWGBR+iDzBjE5LwmMVDEKRQVzA1ILT+0K+GTA025
+         IMm2vgG8V/9gfdsU/c/5e72Lb8MKtKj/SY7MEKAwep22Ar6Tsd3heDH773THpGIohKDi
+         vzXQ==
+X-Gm-Message-State: AOJu0YxbdqumACteWp6WYFC3zgY3cdvIL14bnRDP4jP0a8Yite3La8Ju
+	NHOdXQ7kNyVJmesnu77idp5+H0Zvv1VTkZUMkLTEMMy2zBJLq17w55YD
+X-Gm-Gg: AfdE7cnu8NY4AspgCCloepr0CZjYj9XSVUQi6+Zhar0A0ZFKCcVKlN0gzdNGsO3Ucu4
+	5MKk29IYEKCySA86ORuq+ICjpJiCqJ1NK+IWz//k8jhG4r6zenWHVMkAoYMK0Nt8/h6quiCOFMd
+	/PxedMyrQPRls+8AHg6xhwB9IAL8+2/9cDdb6JrVpeQn/OJn1pKK5PGCpOj2iQpiY3lFl6idpyM
+	YIVYTso5D1XhnRSj6K71FzIGTMUZmljqXfyNuvDhJ5jVoqchhO1kb6oi7zkqc0271omPF8nb4cw
+	fJJkrgPutG3f2mCzkk15QlC7j+HgYx6ujtSZhEZVb6smjP5kDkaF1Uuvzg5bP2nF7SfHS+HHgK1
+	ZyUKM2pCUQXQxRM03O+kG6AcoKpFD9SeNwQcii6RoZQNcovrNSQds6aCyx++ZGRr/9wmk6q0UEr
+	9lbCAeff9b1ZjHSsinxeI/JKdPQAS7U+tH92IZ3bm2163erqBekmUNV0w21NA4Vg==
+X-Received: by 2002:a05:6a00:464f:b0:845:ebbf:e7be with SMTP id d2e1a72fcca58-847c07424a8mr1621253b3a.23.1782915670237;
+        Wed, 01 Jul 2026 07:21:10 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-847a03a9185sm4242095b3a.55.2026.07.01.07.19.26
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-847a02cd382sm4162882b3a.35.2026.07.01.07.21.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jul 2026 07:19:26 -0700 (PDT)
+        Wed, 01 Jul 2026 07:21:09 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <86b84aaf-a5ad-41db-a765-eddfbfdb07f8@roeck-us.net>
-Date: Wed, 1 Jul 2026 07:19:25 -0700
+Message-ID: <42717caa-4cee-4b32-af24-6767ab9f9b45@roeck-us.net>
+Date: Wed, 1 Jul 2026 07:21:08 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,14 +68,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/3] dt-bindings: hwmon: Document SMSC
- EMC1402/1403/1404/1428
-To: sashiko-reviews@lists.linux.dev, Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org,
- conor+dt@kernel.org
+Subject: Re: [PATCH v2 2/3] hwmon: (emc1403) Convert to use OF bindings
+To: Svyatoslav Ryhel <clamor95@gmail.com>, Jean Delvare <jdelvare@suse.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 References: <20260619103153.216444-1-clamor95@gmail.com>
- <20260619103153.216444-2-clamor95@gmail.com>
- <20260619104041.8ED151F000E9@smtp.kernel.org>
+ <20260619103153.216444-3-clamor95@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -122,62 +121,76 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260619104041.8ED151F000E9@smtp.kernel.org>
+In-Reply-To: <20260619103153.216444-3-clamor95@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 6/19/26 03:40, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Low] The device tree binding schema fails to correctly restrict the maximum number of channels for the `smsc,emc1402` and its variants (emc1412, emc1422, emc1442). By grouping it alongside `emc1403` under the `not` condition for `emc1404`/`emc1428`, it inadvertently sets the channel `reg` maximum to 2 instead of 1.
-> --
+On 6/19/26 03:31, Svyatoslav Ryhel wrote:
+> From: Jonas Schwöbel <jonasschwoebel@yahoo.de>
 > 
-> commit 5a834c50ed998e304e4c00fb64e4e434cbd93896
-> Author: Svyatoslav Ryhel <clamor95@gmail.com>
+> Add OF match compatible table to be able to use this driver with Device
+> Trees.
 > 
-> dt-bindings: hwmon: Document SMSC EMC1402/1403/1404/1428
-> 
-> This commit documents the basic hardware layout of SMSC (now Microchip)
-> EMC1402/1403/1404/1428 thermal sensors.
-> 
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/hwmon/smsc,emc1403.yaml
-> 
-> [ ... ]
-> 
->> +allOf:
->> +  - if:
->> +      not:
->> +        properties:
->> +          compatible:
->> +            contains:
->> +              enum:
->> +                - smsc,emc1404
->> +                - smsc,emc1428
->> +    then:
->> +      patternProperties:
->> +        "^channel@([0-7])$":
->> +          properties:
->> +            reg:
->> +              items:
->> +                maximum: 2
-> 
-> [Severity: Low]
-> Does this conditional block correctly restrict the channel limits for the
-> smsc,emc1402 device and its variants (emc1412, emc1422, emc1442)?
-> 
-> By grouping the emc1402 variants with the emc1403 under the fallback
-> condition (not containing emc1404/emc1428), it applies a maximum reg value
-> of 2. This appears to allow up to 3 channels (0, 1, 2) to pass schema
-> validation.
-> 
-> Since the emc1402 hardware only supports 2 channels (local and 1 remote),
-> should there be a separate conditional for the emc1402 family setting the
-> maximum to 1?
-> 
+> Signed-off-by: Jonas Schwöbel <jonasschwoebel@yahoo.de>
+> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 
-I am by no means a devicetree expert, but it seems to me that Sashiko
-has a point. Please take a look.
+For my reference:
 
-Thanks,
-Guenter
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>   drivers/hwmon/emc1403.c | 16 ++++++++++++++--
+>   1 file changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/emc1403.c b/drivers/hwmon/emc1403.c
+> index 964a8cb278f1..ef1ccb40ed6c 100644
+> --- a/drivers/hwmon/emc1403.c
+> +++ b/drivers/hwmon/emc1403.c
+> @@ -16,6 +16,7 @@
+>   #include <linux/hwmon.h>
+>   #include <linux/hwmon-sysfs.h>
+>   #include <linux/err.h>
+> +#include <linux/mod_devicetable.h>
+>   #include <linux/sysfs.h>
+>   #include <linux/regmap.h>
+>   #include <linux/util_macros.h>
+> @@ -659,14 +660,14 @@ static int emc1403_probe(struct i2c_client *client)
+>   {
+>   	struct thermal_data *data;
+>   	struct device *hwmon_dev;
+> -	const struct i2c_device_id *id = i2c_match_id(emc1403_idtable, client);
+>   
+>   	data = devm_kzalloc(&client->dev, sizeof(struct thermal_data),
+>   			    GFP_KERNEL);
+>   	if (!data)
+>   		return -ENOMEM;
+>   
+> -	data->chip = id->driver_data;
+> +	data->chip = (uintptr_t)i2c_get_match_data(client);
+> +
+>   	data->regmap = devm_regmap_init_i2c(client, &emc1403_regmap_config);
+>   	if (IS_ERR(data->regmap))
+>   		return PTR_ERR(data->regmap);
+> @@ -682,10 +683,21 @@ static const unsigned short emc1403_address_list[] = {
+>   	0x18, 0x1c, 0x29, 0x3c, 0x4c, 0x4d, 0x5c, I2C_CLIENT_END
+>   };
+>   
+> +static const struct of_device_id emc1403_of_match[] = {
+> +	{ .compatible = "smsc,emc1402", .data = (void *)emc1402 },
+> +	{ .compatible = "smsc,emc1403", .data = (void *)emc1403 },
+> +	{ .compatible = "smsc,emc1404", .data = (void *)emc1404 },
+> +	{ .compatible = "smsc,emc1428", .data = (void *)emc1428 },
+> +	{ }
+> +
+> +};
+> +MODULE_DEVICE_TABLE(of, emc1403_of_match);
+> +
+>   static struct i2c_driver sensor_emc1403 = {
+>   	.class = I2C_CLASS_HWMON,
+>   	.driver = {
+>   		.name = "emc1403",
+> +		.of_match_table = emc1403_of_match,
+>   	},
+>   	.detect = emc1403_detect,
+>   	.probe = emc1403_probe,
 
