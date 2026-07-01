@@ -1,66 +1,86 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4DD13438B5
-	for <linux-hwmon@vger.kernel.org>; Wed,  1 Jul 2026 14:24:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA1D3AF676
+	for <linux-hwmon@vger.kernel.org>; Wed,  1 Jul 2026 20:15:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782915867; cv=none; b=VvBtjOU591GcOTTWaVetss4XUq1rAlSIVdJJ+iXOUMA41uYhk/ny1hXzQdu/wMBa5nWJ5EDm3u4Auk3NIeK74vYdLXWuMZ53QXrFbzET5Ih2D70Uto1lfjvyoyoqAADmi7R9eb+8PPlGifSeAspo8dUWqXwSzQKzkU5vE5k1Kb4=
+	t=1782936919; cv=none; b=cXP8Bo5c99Sp632Y1TVwCideljsXIhma1Kw6t3ZyVsS+wykBlDdmYTNA6U5aiJg8lOhTPFdSLN7XCT/L5dCtoZ+ByGA6WU8kng4yALdmQuRfyCqIbbgoSlUvRPXHBKDPrVrkDNKYRLTFQTbScx4CZP00tTQaMdJmZtftZ6gd4Qw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782915867; c=relaxed/simple;
-	bh=WjX6Uv6PwaQ78oIsHVOsGi1i4g+J/hD1ZX6kfwXpHoQ=;
+	s=arc-20240116; t=1782936919; c=relaxed/simple;
+	bh=qbknqAYZmPxfRwbqcU3Sz00LFa87wd+S4zJeOJIzXSg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pvAurlRlHMBKR4zWS4j9HYoKCRKcW+1FqYymTU84vsNasNrz7RQMzVwCNc9wGAbJNqi0JRzoGd4b0CrPMJrBdWpwPa0AfdLwbCik0ZJVwMW8axOAnZC7PYZ15hH1jv2N4dHzT5ouz9qwhfRAHNgOXr5Cd99nHEWo5TPkpj9KhUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XJnFtCaL; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=svBbg9zr90gePrcr2TXBkQRnbmDh7XOzAlazwshYBqbvwiZBokGsQ2ypla+g0lalu9SGujfkp2bJ7ySis7YWoGK7IHfmP+85W5UUL66X79CZQ8galNriW5f2F1Sy3y3R5kEPWyWe2sPRQeAK8Zr8osCOBTOMfyLwY1dYN+CtlsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=VJMD/e9z; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=BZ13DhTp; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XJnFtCaL"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-84794e800f4so364209b3a.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 01 Jul 2026 07:24:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="VJMD/e9z";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="BZ13DhTp"
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 661Is9JD2046429
+	for <linux-hwmon@vger.kernel.org>; Wed, 1 Jul 2026 20:15:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	qbknqAYZmPxfRwbqcU3Sz00LFa87wd+S4zJeOJIzXSg=; b=VJMD/e9z7HUThUD2
+	L5GjT4qqw3dMF7M310mF7xsS6p0DOG5vuvctFE30BDECahkwx10QRUoRQ5EOfh8G
+	Um2bGmtC0UxJx3Ep2kcZw9U72hmyDIcp0WtXq0U6eleoVFGubytVTqNSyOkPBpjJ
+	TxOmt9KfIxnhpDoizQvnC/kr6hlp0+nOrPuMN8aUh17YUDL3tLvTzX6FwDYuIq22
+	I28OIlygKKqLvsIGWWKPlRTb4skRNPPhofsOSWx0PAeWLppy93RqnXuZRdDIrswB
+	jcWHyHZi2BHl/0PuMdK3rMuI+TFJIu2nGF7DoXehJRyH4eBFwdI0quB2/29l+SYY
+	iPhylg==
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4f58k38agd-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-hwmon@vger.kernel.org>; Wed, 01 Jul 2026 20:15:16 +0000 (GMT)
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-37fbdbc4d03so1292148a91.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 01 Jul 2026 13:15:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782915866; x=1783520666; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=cQgE5Coeqhf4kFtxJ/8eUiYVdplw0+IBrf+l7oeSMjE=;
-        b=XJnFtCaLSV2bv8m2YP8NcQeuzF2zKi8y1XSs1fG3HAzYKxaCKNyf3rB0HDyfFvGX+R
-         mz3wrlnNNCNxKgsesAciCJoGxstDGsHiBgKkHnXEZi52Q/DgH9rI8xIFqjJB1Arrs/t0
-         3KUu6kKAE7WKswf6yrD7q5U5F+AktYWezMVfaV8VLBEy9/08UPo9JYU6dGEjjvJF/Hff
-         hOhyQRo9R/HFaFzQbXj3RmBHo8gdFPcG+b7hXb1/SZpUBBSUWXy2IrTb8oqiddVCrfLD
-         1rN6RtGGl0TvgSkeubKfQs3z7TzusB56qbXCb1EnpnEf7W8N1Y6P1tB1nuNESIp/RRGI
-         ZKfQ==
+        d=oss.qualcomm.com; s=google; t=1782936915; x=1783541715; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qbknqAYZmPxfRwbqcU3Sz00LFa87wd+S4zJeOJIzXSg=;
+        b=BZ13DhTpB05mvoFmjf7dXjhhkN+iOSro341hQqAxxpje4t5ET985ZXYji+wkiaUXxQ
+         aKtr16KYEWkxvSA0cPmW/R8cJJ39kZeTFjA5V70FeVQfB98g/zXx9Nb6VhKyO3YP760n
+         5P+W7suInigpqjCpMeTiWrDnEBhBfPbTLr/pbA5Q2I6KvH4TZCnbjHqWIzzWqSGREMS0
+         QJsXt2AfwKTFbZjwROV29ZlIkTSngKX81h0XJS8inZKcDDoOU0pl7JSz/i1cYlI5li45
+         be1j5Z+8dAG64D1KiprClPzwrSRK0KY0Qm6+4EP+YXZ0OkyabUVw1r9G0MpOVROzH6o+
+         LXvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782915866; x=1783520666;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cQgE5Coeqhf4kFtxJ/8eUiYVdplw0+IBrf+l7oeSMjE=;
-        b=ji2DG9OJGFvGOPs7Vjet4t35Axz7MkXn0uSAzId4vVygO0zKMM5+RN8avwrL2NuQ6G
-         vLJbVG5AkkBgc8BY8ky3y7XfwpJ8tOiT3r9JInTtOqKHYFw2gv5WOF/LEG7mtz/wzBZ0
-         AjkYNXZWE98MetyZnE8GrpB0AzDuTxYQVb3q06LKJGeCEf6HGm/ljwENK18Bq6+XncvE
-         td/3oBQokm8MWxzeJceXdxNzwa3kRAehuD3X4Q/10hYJu7cvueY8pssN1+5Ed9okB/+n
-         29mddRyskNjwjWwXPXO86Oi/qgCZFW3P5ZNQVatOMqPg3xTXEmxR5N2cDIh8oAmfsY+8
-         tpSQ==
-X-Gm-Message-State: AOJu0Yzy4vrImdiKVBsXoBCk3Q4E0gjntCl7WplpNg6ENVr7hcL5ic5s
-	G/ZgbXxaJIFxZtNQ0fSVun575Y1xYW36MNc7+mkohQ+7h39tSD/2TwPz
-X-Gm-Gg: AfdE7cmnwYUsGmrEt+xF+zghs1JF3gosmBOmWzId+wvX6ShTa0YhjBUUBkHy5b7ueBx
-	f1uttgU9lqsPv4UBRabYLFxN3qhShVESVtr5YaaQmfr0zAQqwHr4UAOQRawPLexMyJfpObKOkyP
-	7k78MuVbgdxlLT+Ttp62a7kRA6Nf2VZXx0gjg1s9GHJZGVHQEBV+4NROT7bowUOLYNq9Scztn9J
-	WtcfmZuOhslLpGdbPg1LGS+ACCky6yf31KKdhKU52xwx5LbPcf+NVDqYPJo1mRbTPLi0wLaj9jV
-	qJmb4NIjFhpGYeh7wyvquvHyHkB2w6b4faeP7JB9abzcgcLkzXj59GG2gmI4dAM0OA1ZeEYx3b4
-	57n+KUiQtjeCjd8/pEkwsBEHCVlabYuzN8dSF/u53RHSb8LGdTWRpvI+RBuJ2cS+MzaChEh1XaR
-	EVnQP7DMnMY+5Rr66qAGrkhCOtH8khaQDSxzKciidcHahENL/p1zfb5GE0nHKQlw==
-X-Received: by 2002:a05:6a00:2986:b0:845:e3af:dde9 with SMTP id d2e1a72fcca58-847c51415e4mr953263b3a.38.1782915865802;
-        Wed, 01 Jul 2026 07:24:25 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-847a0003615sm4160058b3a.17.2026.07.01.07.24.24
+        d=1e100.net; s=20251104; t=1782936915; x=1783541715;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qbknqAYZmPxfRwbqcU3Sz00LFa87wd+S4zJeOJIzXSg=;
+        b=HK6BC0VdHVW/svzOll0Z8CPJOwxsjcT/Ao+A5ywGN4C2qnzKGDlHGY+t99IJMR9WbH
+         ITT3GQOqOr45z/Rr3sayKObUcWyPI/edijR15nXc0A1pDWSkcfVPpAqZ9GSh0NE7eNC0
+         EYR+zesjtYZJ+NIarVq6ohHluNs+fdreOmAyksvgTVmxghIWoaEyr1+eCIzoBe18ubTU
+         UdedO9E9o29g/tf6eiDZrtY0rXXJGWu2vggqgATXzNnfBOZzfF/XMeKD2OTJgGSe9ee1
+         v94L7YmFk1HxjZz94Keej4LCnJOy4v3DPELaQotsI5HtnNOKJzzoHwPJlySjxTz/8sCu
+         R5Dw==
+X-Forwarded-Encrypted: i=1; AHgh+RqFGYIOGCyeBKik2ByrzwOoAKrSEYkaayu1Oo2QHbhENjgkRuNSGJH7z03P1PgS/jpcI/ATO783jQHAuw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyY3FGbUtdEaaTgEEdHcifZDJc4sT2ZYK4mxzlM0rIlJz9P2rBL
+	Dh5RJwaiA79r77lAH6sQ9Vm3r8vuN8m7YVf+3003upLgAgrB4p0m/XjpgB+kzXUimuVm3qnZUwl
+	mnGxHu4Sh6dvlPNiA2EhUwyuonZJO0GDjQcnnXSvVmuGJFiHRato7Ofglnqg6Soueag==
+X-Gm-Gg: AfdE7clk8PZ9GecO8cJta5NN98gz+BfFc8rvW2u8AsKgJ/J82pQoaoK3bjlSvvYu82a
+	COrLN7zoldbRJ/1DJkN/xwAK28D/n4ora1qQ4YEH1oEdgN6T2zsmoSIBnd8jq3V5m5A3uLOuGXO
+	6JckFtVyIZd5E/vMZNrdLKV0/V5uOLTFtM88/ilvH+DQJilPbh70mvGZIzNHi3aKqMU06SBPip6
+	e9ZUsRJyIe2xNWgW1etZpeRv+6eXP0ZZFAS5NUEbuQ118hulUBaR6/7/GnD/be2Pqrgr7dc2EkX
+	uWLmqUoCJe+U8hOOdmOJAc87cRWn9nYXLf/H9eWOojn+10z4CmURzVcvNJUULBm2yRXACDJIYRx
+	boDzeoINMXE5jQZEV0QVscRdjDWFZ0lHTTEWUGTfX+xWR2MbMrBNqcvY=
+X-Received: by 2002:a17:90b:3e8b:b0:36a:caf2:3815 with SMTP id 98e67ed59e1d1-38069c56f8dmr6708429a91.15.1782936915326;
+        Wed, 01 Jul 2026 13:15:15 -0700 (PDT)
+X-Received: by 2002:a17:90b:3e8b:b0:36a:caf2:3815 with SMTP id 98e67ed59e1d1-38069c56f8dmr6708381a91.15.1782936914545;
+        Wed, 01 Jul 2026 13:15:14 -0700 (PDT)
+Received: from [10.73.235.220] (pat_11.qualcomm.com. [192.35.156.11])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30f0bc27e0dsm872064eec.27.2026.07.01.13.15.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jul 2026 07:24:25 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <648a6df5-56ae-4e50-b1be-5ebc834d6866@roeck-us.net>
-Date: Wed, 1 Jul 2026 07:24:24 -0700
+        Wed, 01 Jul 2026 13:15:13 -0700 (PDT)
+Message-ID: <50fa76ba-91a9-4bab-ae85-46f7a8a9f1ed@oss.qualcomm.com>
+Date: Wed, 1 Jul 2026 13:15:12 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,100 +88,97 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] hwmon: (emc1403) Add regulator support
-To: Svyatoslav Ryhel <clamor95@gmail.com>, Jean Delvare <jdelvare@suse.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260619103153.216444-1-clamor95@gmail.com>
- <20260619103153.216444-4-clamor95@gmail.com>
+Subject: Re: [PATCH v2 0/5] scmi: Log client subsystem entity counts
+To: Sudeep Holla <sudeep.holla@kernel.org>
+Cc: Jonathan Cameron <jic23@kernel.org>, Jyoti Bhayana <jbhayana@google.com>,
+        David Lechner <dlechner@baylibre.com>,
+        =?UTF-8?Q?Nuno_S=C3=A1?=
+ <nuno.sa@analog.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Linus Walleij <linusw@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org
+References: <20260513-scmi-client-probe-log-v2-0-36607e9dd540@oss.qualcomm.com>
+ <20260514164422.0eba9a61@jic23-huawei>
+ <8857fc71-aec6-4682-b4f4-0bd463f367c4@oss.qualcomm.com>
+ <20260515-strong-lionfish-of-effort-f74c7a@sudeepholla>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260619103153.216444-4-clamor95@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Alex Tran <alex.tran@oss.qualcomm.com>
+In-Reply-To: <20260515-strong-lionfish-of-effort-f74c7a@sudeepholla>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzAxMDIxNiBTYWx0ZWRfXxM7GGAP9/JTT
+ XEFJSjqpIfgepZ8wwNKOxWff4FyIprZhpHsfZk+X3t5wh0ccjboek41EoK/nxXN1Z0cghJ4p0uR
+ XfojAjZdbroL9mMTBkpgAWpva21xTwsZ4ag5us14WWv7f6tFyAyXEDLO+zp3DuYIooWpCx3SEyz
+ 68z3EuGw+dVerIHlXip4oUOJwxy2uE672xSaiuUV8VXX6bPnXgfLoi/Z5AEZEMpkAjGHntAU43E
+ QuKsYQR9IGa/Wkf16+ejdfR1/rmXEqHDMB+f7vg4GWlIoErNhKJWJlgAaWbgG1JcVymFDxNnYNs
+ KRWpBA1xAFtZ8mjuuXYkwcJI+8nrhuONmpOxXxBGkLnsriGHfPkcMOA/Tw0yrlDQZSkLCv3+aF7
+ Ym3V2sXNn+2VWncISLOOvboj83T/2C3Q4zRPYLBljxDGc/RWw/5bu7cGnCDtROmEV58Gm6qcbJ6
+ ryrOtJUNSSXFc2wY7Zg==
+X-Authority-Analysis: v=2.4 cv=SuGgLvO0 c=1 sm=1 tr=0 ts=6a457554 cx=c_pps
+ a=0uOsjrqzRL749jD1oC5vDA==:117 a=ZdW6uxA9NKXbfdqeeS2OGA==:17
+ a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=3WHJM1ZQz_JShphwDgj5:22
+ a=EUspDBNiAAAA:8 a=vxRzfglfhILO5636UqgA:9 a=QEXdDO2ut3YA:10
+ a=mQ_c8vxmzFEMiUWkPHU9:22
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzAxMDIxNiBTYWx0ZWRfXxt4VX88GAvLg
+ 74ppWGtjmz0IkylvQVt1Ip0cRwjOGlMggq3KinqCzvgLQPayTosxiE1pHZrk7ojlYpyMQwF4bPV
+ jQe541N9gTqlZPATg5WPGOeex5TZVnQ=
+X-Proofpoint-ORIG-GUID: Y-YqHU6YtU3TEB8WBoRyRqyELGoD-L3C
+X-Proofpoint-GUID: Y-YqHU6YtU3TEB8WBoRyRqyELGoD-L3C
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-07-01_04,2026-06-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 spamscore=0 adultscore=0 impostorscore=0 phishscore=0
+ malwarescore=0 suspectscore=0 bulkscore=0 clxscore=1015 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607010216
 
-On 6/19/26 03:31, Svyatoslav Ryhel wrote:
-> Add support for VDD power supply for this sensor. It is required on some
-> devices for the sensor to start up and work properly.
-> 
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+On 5/15/2026 1:29 AM, Sudeep Holla wrote:
 
-For my reference:
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->   drivers/hwmon/emc1403.c | 7 +++++++
->   1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/hwmon/emc1403.c b/drivers/hwmon/emc1403.c
-> index ef1ccb40ed6c..d14bd90ce424 100644
-> --- a/drivers/hwmon/emc1403.c
-> +++ b/drivers/hwmon/emc1403.c
-> @@ -19,6 +19,7 @@
->   #include <linux/mod_devicetable.h>
->   #include <linux/sysfs.h>
->   #include <linux/regmap.h>
-> +#include <linux/regulator/consumer.h>
->   #include <linux/util_macros.h>
->   
->   #define THERMAL_PID_REG		0xfd
-> @@ -660,6 +661,12 @@ static int emc1403_probe(struct i2c_client *client)
->   {
->   	struct thermal_data *data;
->   	struct device *hwmon_dev;
-> +	int ret;
-> +
-> +	ret = devm_regulator_get_enable(&client->dev, "vdd");
-> +	if (ret)
-> +		return dev_err_probe(&client->dev, ret,
-> +				     "Failed to enable regulator\n");
->   
->   	data = devm_kzalloc(&client->dev, sizeof(struct thermal_data),
->   			    GFP_KERNEL);
+> On Thu, May 14, 2026 at 02:23:56PM -0700, Alex Tran wrote:
+>> On 5/14/2026 8:44 AM, Jonathan Cameron wrote:
+>>
+>>> On Wed, 13 May 2026 10:16:53 -0700
+>>> Alex Tran <alex.tran@oss.qualcomm.com> wrote:
+>>>
+>>>> SCMI client drivers do not consistently log the number of supported
+>>>> entities discovered from firmware. This information is useful during
+>>>> debugging because it shows which domains or resources were exposed by
+>>>> firmware during probe.
+>>>>
+>>>> Add logging of the number of supported entities to the SCMI cpufreq,
+>>>> pinctrl, reset, hwmon, and powercap client drivers after a successful
+>>>> probe. This aligns these drivers with the existing logging in the SCMI
+>>>> power and performance domain drivers.
+>>>>
+>>>> Signed-off-by: Alex Tran <alex.tran@oss.qualcomm.com>
+>>> Hi Alex,
+>>>
+>>> Just curious but why +CC linux-iio and IIO folk?
+>>>
+>>> May be you had a false suggestion to add them from get maintainers.
+>>> If so be sure to check it's suggestions make sense!
+>>>
+>>> Not to worry - we can all hit the delete button ;)
+>>>
+>>> Jonathan
+>> Hi Jonathan,
+>>
+>> Originally, there was another patch in this series to add the same
+>> functionality to scmi_iio probe but it was dropped. Apparently running b4
+>> prep --auto-to-cc does not prune stale entries from the cover letter. Will
+>> manually remove all entries and rerun the command in the future.
+>>
+> I guessed so, but why was it dropped ? I don't agree to adding them elsewhere
+> just curious about why it was dropped in this case.
+>
+We could not determine whether to log the sensor count provided by SCMI or the number of sensors that were registered in probe since the driver appears to only support 3-axis accel and gyro sensors, skipping the rest.
 
