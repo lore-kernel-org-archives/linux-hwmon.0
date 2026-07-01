@@ -1,67 +1,67 @@
 Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B681A199949
-	for <linux-hwmon@vger.kernel.org>; Wed,  1 Jul 2026 14:07:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC51B34040D
+	for <linux-hwmon@vger.kernel.org>; Wed,  1 Jul 2026 14:19:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782914864; cv=none; b=KpjUflehI7kEubZt4qK0rdzyXu0NjDgoFfN9lF0fhZjnv51/7TevpefU7c+E9NYJrFiqISbUqHsyz6kpEYGjkvnIz2w3Ai10HCdqCrMQmjm/cPCWjIskrz4jHzKTdFH+8U06hCimhgUhuygX4LWXwh5dSz+tBxg89wMqCXRo/t8=
+	t=1782915570; cv=none; b=AlF6/+a9oBFzaP08K7NmhH0jUpBPdbYT5bwhV1TkzaeKJnL/0c6389a7b2AJNlqIjV33dY21Bni7kHeQYs2u60bvU203tdujNDW8JUqjyYlvzTcRktbYPX9fK7iZ80Pk/fheJGXeHrxWiFoyYkf9YbMdPQu0nckNbHaC3CsyK/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782914864; c=relaxed/simple;
-	bh=SkYBEpbjqOZxUGc7QG4RqBkayD5PvlrnO1BY/nGQSu4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=RamumJX2bFnyMvOvfPX6dLvz4X3Lay+GrQOSCh29zR5ipe/zKsjt9nrlRSCcCxkBPcS19p/OQO4Jah9iEN/YvSp92gaV5rWJ63jGs3756kXSnCG+aLKxRICbraX0Gukmm90CPodNAyJLx3lf+t0oXgKWLsUOximFWYdhbpegTkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jb8Munhw; arc=none smtp.client-ip=209.85.210.172
+	s=arc-20240116; t=1782915570; c=relaxed/simple;
+	bh=vH8nvZeHSmN2/0es/LDZtMNIDHkJrInk6Hj1SdBcrE4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hBzaU/QlAlc9eVMBA8QjIUjD5F0Uo3mdITwYyeQE5/2CUiq8t6+Je+qey6hL91bnJkypmVrTW9hLHX59FAsKPCY3iWHBGSUjFNoiIm7nVLscgHwDj/Y/ozX9zMhiWm3rnn97E2IQD2DnksV6mL/kkGQ9X3l7uo5sQRZpjIuFpgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lwx6xUrp; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jb8Munhw"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-84536ecfc5bso526144b3a.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 01 Jul 2026 07:07:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lwx6xUrp"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8478fe07f0fso532738b3a.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 01 Jul 2026 07:19:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782914862; x=1783519662; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782915568; x=1783520368; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=4t5eL4t0fhdWKpboOV6idGNh3csreO6heKw2RXkWK9c=;
-        b=jb8MunhwXFx20pU3bULB0Hzj3jyhYMN1TboJBwor98t+3Zjqsm+ILxweZorNy8KQ9s
-         LFkqX+8r2YYc5Bis3caMxcYMN3E2EfKqy2060Lm50OupPoMKfj/g+t49UsAuDZuJLvoA
-         rzA2IysFgEnlR8soFppoMGbj5HdLfSnh/Ohj2mbAtWP82/vE8F2LphpNOtOkImvy1S5Y
-         qkuqFm7gbccnEvo/zgtXxAp2QG6SxzvuddupUK1b1TJ+R+z2oTJYe35wdNrtP+HX4Oyx
-         o7lfFpFHGd9jXcQk6ymalvjXvbg+E7b9y6I1FL4BQE5/xFkSSSGd4eyQtJ9X64YpzYL5
-         dqUw==
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=6U+/o0tXXBCTuwlnimqkfxQsRgMwYtbQ9Z14+685ECQ=;
+        b=lwx6xUrpMIxYooSy42nVx9T1M0j1gjHyZ16ZANuJdD+3YbTdoILI8EvqCwlbSmBMV3
+         wJyWvONKxMXdMU1GzjdVPVkYOmqy83+eDJYhKpvFMRQmP5x3NJEfNdS9gZdl+MLERoD+
+         91ndmXoRz4WTn7C937I+Qzxdi9GH8Kb2O+QqDuD5oBy4qw3ljbc79LnEYxqaQJgLVVpn
+         QH9NXTg4yj5OtHKimHYnJ2qWUR/4XIT2JNrV5Zmx3ZJtV0suTlLGdKlw9Bi1zZTXP7Bu
+         xDkkGDTezPFA3JFyV7tRNygWNGB6J5hcA/neBGqDT7dKY4KOrp3KmwP5g3Ru4BK2vMWZ
+         IzOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782914862; x=1783519662;
+        d=1e100.net; s=20251104; t=1782915568; x=1783520368;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=4t5eL4t0fhdWKpboOV6idGNh3csreO6heKw2RXkWK9c=;
-        b=LRzMkzE332Rl6z4as+Rt9zpDWQdZ/LKQhw4nlYIoD8PN/bLS6hgaVU/BRsg4Bku28u
-         yuXg0+svP76HvK8bT0kP7WJcf1FKTDlZRCzOle9gzqFCqMXybpPMDFjeoaDCinoX3XoO
-         4UMhHgpklhfCXrcG0N+DuX+EKMm1OzpfIxYzVXSfwZxT+PwylwNyVPd6pnI/dT3XUiDE
-         7eh9Cbw8aCyZQX98keAxODWqyshZxHtuv0xhXaVIqxmTjycJOjEj7GyoZp3PLmgPQkWP
-         HLmdZIIfo1PWYZFlv9LO+eLiwfZsA+WSiZ88yO6LFkQB6Bh7UpP7p0yx2jO06twQf2mw
-         WW9w==
-X-Forwarded-Encrypted: i=1; AFNElJ9gIAcNx09YvtKfhvS3wWjWF0HDp4NSn1uOoqYvjOrRVqOVjpIUCQ9BKJpgn0dWWizjKaIpXzlqkSGM6w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoRzG69lgXXpbIW1hcCPHqBA2V3oDmgrVNRJtkRYDsUkJ4/fds
-	tawpvVwRUNtqZVGBgDt5PbDmo4kuaCYS1qpm4n4iNA8gTgGh14qUOl8p
-X-Gm-Gg: AfdE7ckmHq8uoTG6tL/VvcyXfJAqO4TJOFqwVT18GTLSw7ksUyaWcTYaiQA5jRWjF1v
-	/6DTdGUS6wN2TjGQhzvN3+IOhjy3Vx4ego8lQZV2gzr+ezojRBkIB1Vc+6yl11vWCJysM+uEmAq
-	vQITXH5fefoTEM5WHiKQyQbf/XvcpjV4hBjwSxJh31fMSTbytaxbjoQWAgwjnA5AZij0AM8ngLk
-	O1tO34r2Ui6HZgbS0zcolbcKzcG7pI45vot2BHLfvqW0XqZJBjDXVMtEbSQ2oVHmIR5lS0zopZn
-	U8yegd/cpKi7S2w5UdkMySB0w5JmJ9TF/MRNmLuwjJb9/tl0ivGdSeIkqDSfifOrSmNpytAnjO2
-	cY0fYbfnk+EsC6h+4lK+TamyWAaL9VCZj7kkT5RJbZNn2f1gI06+a5GkUfz/VyKni3tInSuGhac
-	o3yXXa+eani5Orm3gJY5VLl/jUirSsRJy4utkhiGLxlZJX2C4vKbwnzStWPoSebQ==
-X-Received: by 2002:a05:6a00:94e3:b0:847:9aa8:d3bb with SMTP id d2e1a72fcca58-847c074eef8mr1721257b3a.12.1782914861788;
-        Wed, 01 Jul 2026 07:07:41 -0700 (PDT)
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6U+/o0tXXBCTuwlnimqkfxQsRgMwYtbQ9Z14+685ECQ=;
+        b=eDz1oytiP+cFMue0CYblDvkrr7VEl8ER3EVu/81Sm7gwfBlBz7qJ5y3Jr93UDxOGG3
+         WP4ZfEMavxA7penxzYMKg5KFWyrE4cK7BT56u7clRNS8e5WG160hWn4vJTyR8K7/sR1R
+         7IVb3emJwk2Ydrrx6X3T+VqpRVC8ben5ekfMft7rhQmBP0VTxJj5JCtqMj3JmzYUf33j
+         HnKEQELagCmWX0c7IRlmCE1d9f12CA1rhnrH3GzrUdGIk2ryBFIQh2s4kVKAxcK0bJZU
+         4DHkWmuJxi4SS8YwAIbUv9gswVioDOjGWyS1gUoqipDvQEAof5/ZB5PM25dCczT7HS97
+         4NLQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/GySZpmDC8nSfzl/5MsvFQrQGZGbNsjithXTpCMKGdbE8ZzSevp1wJ/D7qO3oB0RdeHySMF5+/1WJ5AQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFiJIHXiKyavAwkOEcCRljk6P2xvWW3j0cGpgBfEZcB/dW+4Cx
+	9R+yY06unBFttPVmTqcZHqYutxMFC8WgLXMaHGSfprdtm9QchX2pMT6Z
+X-Gm-Gg: AfdE7clbPd+CURL4cMkUqzi0jTtzyNx9yuVm812kSBKvd4oSvWVhSb1iGyc9oxAGqhT
+	GIgxgbrOfK0S2ngwC4Va420I/nI+iX7CUz4xIk6QUBwARVGpxf1TA3TEuWJsyu8Z7qFyxlwIGDQ
+	HCd3VTNq3qRPYREZnqjoPmMsU1hGvD00PU29rZ7OPwqqQYu/9W7t8/9aHozkMDe+EAF+tL71/Vz
+	6/hZxM2CLTvJw1NhHuAOKhzb1VzeqIujmOYHAsFEY80Hc55/Gv4gXMnn8+5rTZR3S39BHntL3kn
+	P2ZLGdeybe7pqb/YiCNYjasHmUakLluoiVxRRGGhj/VT2pmV1ZOBpkvS2G97CvBJBPXoRRwW2d9
+	ziVaxgY2uGLJowZxvM/SvkFk9eD7gvuRAWEJYoac/ZDjVZ5dN4qSqk9qXX+qdi23J6a0wkp7xg7
+	ZFnTJWnelHhOUmK6U90V6X5/G6zpQV1lNFo+634IxcavixnwT8Z/5LRENIy7HA4Fhegcefaq9K
+X-Received: by 2002:a05:6a00:98d:b0:847:85b6:1f53 with SMTP id d2e1a72fcca58-847c08822b1mr1757403b3a.44.1782915568012;
+        Wed, 01 Jul 2026 07:19:28 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8479fff4c7csm4145210b3a.16.2026.07.01.07.07.40
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-847a03a9185sm4242095b3a.55.2026.07.01.07.19.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jul 2026 07:07:41 -0700 (PDT)
+        Wed, 01 Jul 2026 07:19:26 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6370a4b3-9fa5-47b4-b53d-7b8fb6d69de4@roeck-us.net>
-Date: Wed, 1 Jul 2026 07:07:40 -0700
+Message-ID: <86b84aaf-a5ad-41db-a765-eddfbfdb07f8@roeck-us.net>
+Date: Wed, 1 Jul 2026 07:19:25 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,13 +69,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] hwmon: add Altera SoC FPGA hardware monitoring
- support
-To: tze.yee.ng@altera.com, Dinh Nguyen <dinguyen@kernel.org>,
- linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org
-References: <cover.1782715159.git.tze.yee.ng@altera.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: hwmon: Document SMSC
+ EMC1402/1403/1404/1428
+To: sashiko-reviews@lists.linux.dev, Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org,
+ conor+dt@kernel.org
+References: <20260619103153.216444-1-clamor95@gmail.com>
+ <20260619103153.216444-2-clamor95@gmail.com>
+ <20260619104041.8ED151F000E9@smtp.kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,75 +122,62 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <cover.1782715159.git.tze.yee.ng@altera.com>
+In-Reply-To: <20260619104041.8ED151F000E9@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi,
+On 6/19/26 03:40, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Low] The device tree binding schema fails to correctly restrict the maximum number of channels for the `smsc,emc1402` and its variants (emc1412, emc1422, emc1442). By grouping it alongside `emc1403` under the `not` condition for `emc1404`/`emc1428`, it inadvertently sets the channel `reg` maximum to 2 instead of 1.
+> --
+> 
+> commit 5a834c50ed998e304e4c00fb64e4e434cbd93896
+> Author: Svyatoslav Ryhel <clamor95@gmail.com>
+> 
+> dt-bindings: hwmon: Document SMSC EMC1402/1403/1404/1428
+> 
+> This commit documents the basic hardware layout of SMSC (now Microchip)
+> EMC1402/1403/1404/1428 thermal sensors.
+> 
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/hwmon/smsc,emc1403.yaml
+> 
+> [ ... ]
+> 
+>> +allOf:
+>> +  - if:
+>> +      not:
+>> +        properties:
+>> +          compatible:
+>> +            contains:
+>> +              enum:
+>> +                - smsc,emc1404
+>> +                - smsc,emc1428
+>> +    then:
+>> +      patternProperties:
+>> +        "^channel@([0-7])$":
+>> +          properties:
+>> +            reg:
+>> +              items:
+>> +                maximum: 2
+> 
+> [Severity: Low]
+> Does this conditional block correctly restrict the channel limits for the
+> smsc,emc1402 device and its variants (emc1412, emc1422, emc1442)?
+> 
+> By grouping the emc1402 variants with the emc1403 under the fallback
+> condition (not containing emc1404/emc1428), it applies a maximum reg value
+> of 2. This appears to allow up to 3 channels (0, 1, 2) to pass schema
+> validation.
+> 
+> Since the emc1402 hardware only supports 2 channels (local and 1 remote),
+> should there be a separate conditional for the emc1402 family setting the
+> maximum to 1?
+> 
 
-On 6/29/26 00:24, tze.yee.ng@altera.com wrote:
-> From: Tze Yee Ng <tze.yee.ng@altera.com>
-> 
-> This series adds hardware monitor support for Altera SoC FPGA devices.
-> Temperature and voltage sensors are accessed through the Stratix 10
-> service layer and Secure Device Manager (SDM).
-> 
-> In v1, sensor channels were described in device tree under an
-> altr,stratix10-hwmon child node of the service layer. Review feedback
-> noted that this is not a discrete hardware block with its own resources,
-> and that a dedicated hwmon DT binding was not appropriate.
-> 
-> v2 removes all hwmon-related device tree bindings and DTS changes.
-> Instead, stratix10-svc registers a socfpga-hwmon platform device when
-> CONFIG_SENSORS_ALTERA_SOCFPGA_HWMON is enabled, similar to stratix10-rsu.
-> The hwmon driver binds by platform device name only and selects sensor
-> channels from hardcoded tables based on the parent service layer
-> compatible string (intel,stratix10-svc or intel,agilex-svc).
-> 
-> Patch 1 adds async HWMON SMC support to stratix10-svc and registers the
-> socfpga-hwmon platform device.
-> 
-> Patch 2 adds the socfpga-hwmon driver, documentation, Kconfig, and
-> MAINTAINERS entry.
-> 
-
-Sashiko reports a number of issues with both patches. Please address or
-respond explaining why the reported issues are false positives.
+I am by no means a devicetree expert, but it seems to me that Sashiko
+has a point. Please take a look.
 
 Thanks,
 Guenter
-
-> Changes in v2:
-> - Drop altr,stratix10-hwmon DT binding and intel,stratix10-svc hwmon
->    child property
-> - Drop Stratix 10 SoCDK DTS hwmon node
-> - Register socfpga-hwmon from stratix10-svc (RSU-style)
-> - Replace DT channel parsing with hardcoded Stratix 10 and Agilex tables
-> - Rename driver/module to socfpga-hwmon
->    (CONFIG_SENSORS_ALTERA_SOCFPGA_HWMON)
-> - Add Agilex channel support
-> - Fix SDM value conversion (Q8.8 degrees Celsius and Q16 volts to hwmon
->    millidegrees/millivolts)
-> - Improve sync-mode error handling via last_err
-> 
-> Previous version:
->    https://lore.kernel.org/all/cover.1781861409.git.tze.yee.ng@altera.com/
-> 
-> Tze Yee Ng (2):
->    firmware: stratix10-svc: add async HWMON read commands and register
->      socfpga-hwmon device
->    hwmon: add Altera SoC FPGA hardware monitoring driver
-> 
->   Documentation/hwmon/index.rst                |   1 +
->   Documentation/hwmon/socfpga-hwmon.rst        |  34 ++
->   MAINTAINERS                                  |   8 +
->   drivers/firmware/stratix10-svc.c             |  46 +-
->   drivers/hwmon/Kconfig                        |  10 +
->   drivers/hwmon/Makefile                       |   1 +
->   drivers/hwmon/socfpga-hwmon.c                | 596 +++++++++++++++++++
->   include/linux/firmware/intel/stratix10-smc.h |  38 ++
->   8 files changed, 731 insertions(+), 3 deletions(-)
->   create mode 100644 Documentation/hwmon/socfpga-hwmon.rst
->   create mode 100644 drivers/hwmon/socfpga-hwmon.c
-> 
 
