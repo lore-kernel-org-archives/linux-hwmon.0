@@ -1,66 +1,66 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E05A3403EF
-	for <linux-hwmon@vger.kernel.org>; Wed,  1 Jul 2026 14:21:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4DD13438B5
+	for <linux-hwmon@vger.kernel.org>; Wed,  1 Jul 2026 14:24:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782915672; cv=none; b=GoswNmMTGt8WZDKFe9eov8S3gywrnB0K/6bdKjBVVJK4t2IvQzYVYt2+/z4q7W5ZYZ3Lxr8sR4jZrV5+z6JDyLzJwV+XF0WdmbrceGFvJ4EmZLSQMdVEZaBFpkUOeM1fnsYlDUKMf87/D6zwaEadGXhcRs8EAXN2jCbfYohCtTk=
+	t=1782915867; cv=none; b=VvBtjOU591GcOTTWaVetss4XUq1rAlSIVdJJ+iXOUMA41uYhk/ny1hXzQdu/wMBa5nWJ5EDm3u4Auk3NIeK74vYdLXWuMZ53QXrFbzET5Ih2D70Uto1lfjvyoyoqAADmi7R9eb+8PPlGifSeAspo8dUWqXwSzQKzkU5vE5k1Kb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782915672; c=relaxed/simple;
-	bh=q4UMIkL3pHI1T1cC8daARSV7NQfTPKtbGVkANf4E56c=;
+	s=arc-20240116; t=1782915867; c=relaxed/simple;
+	bh=WjX6Uv6PwaQ78oIsHVOsGi1i4g+J/hD1ZX6kfwXpHoQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aHvW97fENHQlxaXhVGNnYEfehirZStfC6KWD8i/13oJ0XzKGNNPoJSHfp+hmkk8/0Ax64dbqhHUIpXAl7MTzFjoE+7MReOdijP/Wk89OHqaGwmR0W/7HxcbSlN38rvA0Kvk82/1fDzWBc53WtSHZz+e+sfTki5onulJawThBoVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HMSxZrFz; arc=none smtp.client-ip=209.85.210.172
+	 In-Reply-To:Content-Type; b=pvAurlRlHMBKR4zWS4j9HYoKCRKcW+1FqYymTU84vsNasNrz7RQMzVwCNc9wGAbJNqi0JRzoGd4b0CrPMJrBdWpwPa0AfdLwbCik0ZJVwMW8axOAnZC7PYZ15hH1jv2N4dHzT5ouz9qwhfRAHNgOXr5Cd99nHEWo5TPkpj9KhUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XJnFtCaL; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HMSxZrFz"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-845ea8924a2so305495b3a.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 01 Jul 2026 07:21:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XJnFtCaL"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-84794e800f4so364209b3a.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 01 Jul 2026 07:24:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782915670; x=1783520470; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782915866; x=1783520666; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=F4j0r6lGZlp22dAIjqHgmQ7+XjePNxdYrAwoeEfQPtc=;
-        b=HMSxZrFzTycaEd58vyMmPMICKzFZGL6OBJ0Hh4yMIJgJ+On/pwgDwSYSM+QYhRzhJv
-         jTlFflxKGzB6c2dLS40ORH9b4IaMQ92C86p9GVx6vUfoqlSA6wTeq3BGBQhhMVv3kSFC
-         Ao7uCTnyIx4xoZJn38e2eYx9tjrwYaz/T4bRq4xKqFVZ/Uq2dwCvcWiGPCeF7S3rJTcd
-         XfKbSTrVx7vzefPAKOFowqsrFAYdR42i0KihUfWJz5PZ6Yh4H6KHKVaMpN7n0qbX5+gs
-         MRBOx/cXEkcf1eJJ+I0OV9NkWKl7FLhLRf1FKuYTtnFIgNZNkpEE/sCrheiv8PMuA/lo
-         tLzw==
+        bh=cQgE5Coeqhf4kFtxJ/8eUiYVdplw0+IBrf+l7oeSMjE=;
+        b=XJnFtCaLSV2bv8m2YP8NcQeuzF2zKi8y1XSs1fG3HAzYKxaCKNyf3rB0HDyfFvGX+R
+         mz3wrlnNNCNxKgsesAciCJoGxstDGsHiBgKkHnXEZi52Q/DgH9rI8xIFqjJB1Arrs/t0
+         3KUu6kKAE7WKswf6yrD7q5U5F+AktYWezMVfaV8VLBEy9/08UPo9JYU6dGEjjvJF/Hff
+         hOhyQRo9R/HFaFzQbXj3RmBHo8gdFPcG+b7hXb1/SZpUBBSUWXy2IrTb8oqiddVCrfLD
+         1rN6RtGGl0TvgSkeubKfQs3z7TzusB56qbXCb1EnpnEf7W8N1Y6P1tB1nuNESIp/RRGI
+         ZKfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782915670; x=1783520470;
+        d=1e100.net; s=20251104; t=1782915866; x=1783520666;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=F4j0r6lGZlp22dAIjqHgmQ7+XjePNxdYrAwoeEfQPtc=;
-        b=BRebM6rWCYNjsJHfRUudES/EWUFRYuXAPun7ZKvFJ0R2gC2sNfx35ldqg29ur/GMTM
-         RU4K6YsaIgss/xx5jTV1Kz4m576sxoy1aFUVC+xrGHNQOoGJysS6MLELwNOH9w8X0ISh
-         Lc+ljE+16tbbgj1MNtZBKkhABcZ3QVkO7VbgYhKCYaxDLHM/iO2O615thNr21Q9jhqwa
-         7boMacsTqjCeTLWzx2hPsl/nkDG7WWGBR+iDzBjE5LwmMVDEKRQVzA1ILT+0K+GTA025
-         IMm2vgG8V/9gfdsU/c/5e72Lb8MKtKj/SY7MEKAwep22Ar6Tsd3heDH773THpGIohKDi
-         vzXQ==
-X-Gm-Message-State: AOJu0YxbdqumACteWp6WYFC3zgY3cdvIL14bnRDP4jP0a8Yite3La8Ju
-	NHOdXQ7kNyVJmesnu77idp5+H0Zvv1VTkZUMkLTEMMy2zBJLq17w55YD
-X-Gm-Gg: AfdE7cnu8NY4AspgCCloepr0CZjYj9XSVUQi6+Zhar0A0ZFKCcVKlN0gzdNGsO3Ucu4
-	5MKk29IYEKCySA86ORuq+ICjpJiCqJ1NK+IWz//k8jhG4r6zenWHVMkAoYMK0Nt8/h6quiCOFMd
-	/PxedMyrQPRls+8AHg6xhwB9IAL8+2/9cDdb6JrVpeQn/OJn1pKK5PGCpOj2iQpiY3lFl6idpyM
-	YIVYTso5D1XhnRSj6K71FzIGTMUZmljqXfyNuvDhJ5jVoqchhO1kb6oi7zkqc0271omPF8nb4cw
-	fJJkrgPutG3f2mCzkk15QlC7j+HgYx6ujtSZhEZVb6smjP5kDkaF1Uuvzg5bP2nF7SfHS+HHgK1
-	ZyUKM2pCUQXQxRM03O+kG6AcoKpFD9SeNwQcii6RoZQNcovrNSQds6aCyx++ZGRr/9wmk6q0UEr
-	9lbCAeff9b1ZjHSsinxeI/JKdPQAS7U+tH92IZ3bm2163erqBekmUNV0w21NA4Vg==
-X-Received: by 2002:a05:6a00:464f:b0:845:ebbf:e7be with SMTP id d2e1a72fcca58-847c07424a8mr1621253b3a.23.1782915670237;
-        Wed, 01 Jul 2026 07:21:10 -0700 (PDT)
+        bh=cQgE5Coeqhf4kFtxJ/8eUiYVdplw0+IBrf+l7oeSMjE=;
+        b=ji2DG9OJGFvGOPs7Vjet4t35Axz7MkXn0uSAzId4vVygO0zKMM5+RN8avwrL2NuQ6G
+         vLJbVG5AkkBgc8BY8ky3y7XfwpJ8tOiT3r9JInTtOqKHYFw2gv5WOF/LEG7mtz/wzBZ0
+         AjkYNXZWE98MetyZnE8GrpB0AzDuTxYQVb3q06LKJGeCEf6HGm/ljwENK18Bq6+XncvE
+         td/3oBQokm8MWxzeJceXdxNzwa3kRAehuD3X4Q/10hYJu7cvueY8pssN1+5Ed9okB/+n
+         29mddRyskNjwjWwXPXO86Oi/qgCZFW3P5ZNQVatOMqPg3xTXEmxR5N2cDIh8oAmfsY+8
+         tpSQ==
+X-Gm-Message-State: AOJu0Yzy4vrImdiKVBsXoBCk3Q4E0gjntCl7WplpNg6ENVr7hcL5ic5s
+	G/ZgbXxaJIFxZtNQ0fSVun575Y1xYW36MNc7+mkohQ+7h39tSD/2TwPz
+X-Gm-Gg: AfdE7cmnwYUsGmrEt+xF+zghs1JF3gosmBOmWzId+wvX6ShTa0YhjBUUBkHy5b7ueBx
+	f1uttgU9lqsPv4UBRabYLFxN3qhShVESVtr5YaaQmfr0zAQqwHr4UAOQRawPLexMyJfpObKOkyP
+	7k78MuVbgdxlLT+Ttp62a7kRA6Nf2VZXx0gjg1s9GHJZGVHQEBV+4NROT7bowUOLYNq9Scztn9J
+	WtcfmZuOhslLpGdbPg1LGS+ACCky6yf31KKdhKU52xwx5LbPcf+NVDqYPJo1mRbTPLi0wLaj9jV
+	qJmb4NIjFhpGYeh7wyvquvHyHkB2w6b4faeP7JB9abzcgcLkzXj59GG2gmI4dAM0OA1ZeEYx3b4
+	57n+KUiQtjeCjd8/pEkwsBEHCVlabYuzN8dSF/u53RHSb8LGdTWRpvI+RBuJ2cS+MzaChEh1XaR
+	EVnQP7DMnMY+5Rr66qAGrkhCOtH8khaQDSxzKciidcHahENL/p1zfb5GE0nHKQlw==
+X-Received: by 2002:a05:6a00:2986:b0:845:e3af:dde9 with SMTP id d2e1a72fcca58-847c51415e4mr953263b3a.38.1782915865802;
+        Wed, 01 Jul 2026 07:24:25 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-847a02cd382sm4162882b3a.35.2026.07.01.07.21.09
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-847a0003615sm4160058b3a.17.2026.07.01.07.24.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jul 2026 07:21:09 -0700 (PDT)
+        Wed, 01 Jul 2026 07:24:25 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <42717caa-4cee-4b32-af24-6767ab9f9b45@roeck-us.net>
-Date: Wed, 1 Jul 2026 07:21:08 -0700
+Message-ID: <648a6df5-56ae-4e50-b1be-5ebc834d6866@roeck-us.net>
+Date: Wed, 1 Jul 2026 07:24:24 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,14 +68,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] hwmon: (emc1403) Convert to use OF bindings
+Subject: Re: [PATCH v2 3/3] hwmon: (emc1403) Add regulator support
 To: Svyatoslav Ryhel <clamor95@gmail.com>, Jean Delvare <jdelvare@suse.com>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>
 Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20260619103153.216444-1-clamor95@gmail.com>
- <20260619103153.216444-3-clamor95@gmail.com>
+ <20260619103153.216444-4-clamor95@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,17 +121,14 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260619103153.216444-3-clamor95@gmail.com>
+In-Reply-To: <20260619103153.216444-4-clamor95@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 On 6/19/26 03:31, Svyatoslav Ryhel wrote:
-> From: Jonas Schwöbel <jonasschwoebel@yahoo.de>
+> Add support for VDD power supply for this sensor. It is required on some
+> devices for the sensor to start up and work properly.
 > 
-> Add OF match compatible table to be able to use this driver with Device
-> Trees.
-> 
-> Signed-off-by: Jonas Schwöbel <jonasschwoebel@yahoo.de>
 > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 
 For my reference:
@@ -139,58 +136,32 @@ For my reference:
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->   drivers/hwmon/emc1403.c | 16 ++++++++++++++--
->   1 file changed, 14 insertions(+), 2 deletions(-)
+>   drivers/hwmon/emc1403.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
 > 
 > diff --git a/drivers/hwmon/emc1403.c b/drivers/hwmon/emc1403.c
-> index 964a8cb278f1..ef1ccb40ed6c 100644
+> index ef1ccb40ed6c..d14bd90ce424 100644
 > --- a/drivers/hwmon/emc1403.c
 > +++ b/drivers/hwmon/emc1403.c
-> @@ -16,6 +16,7 @@
->   #include <linux/hwmon.h>
->   #include <linux/hwmon-sysfs.h>
->   #include <linux/err.h>
-> +#include <linux/mod_devicetable.h>
+> @@ -19,6 +19,7 @@
+>   #include <linux/mod_devicetable.h>
 >   #include <linux/sysfs.h>
 >   #include <linux/regmap.h>
+> +#include <linux/regulator/consumer.h>
 >   #include <linux/util_macros.h>
-> @@ -659,14 +660,14 @@ static int emc1403_probe(struct i2c_client *client)
+>   
+>   #define THERMAL_PID_REG		0xfd
+> @@ -660,6 +661,12 @@ static int emc1403_probe(struct i2c_client *client)
 >   {
 >   	struct thermal_data *data;
 >   	struct device *hwmon_dev;
-> -	const struct i2c_device_id *id = i2c_match_id(emc1403_idtable, client);
+> +	int ret;
+> +
+> +	ret = devm_regulator_get_enable(&client->dev, "vdd");
+> +	if (ret)
+> +		return dev_err_probe(&client->dev, ret,
+> +				     "Failed to enable regulator\n");
 >   
 >   	data = devm_kzalloc(&client->dev, sizeof(struct thermal_data),
 >   			    GFP_KERNEL);
->   	if (!data)
->   		return -ENOMEM;
->   
-> -	data->chip = id->driver_data;
-> +	data->chip = (uintptr_t)i2c_get_match_data(client);
-> +
->   	data->regmap = devm_regmap_init_i2c(client, &emc1403_regmap_config);
->   	if (IS_ERR(data->regmap))
->   		return PTR_ERR(data->regmap);
-> @@ -682,10 +683,21 @@ static const unsigned short emc1403_address_list[] = {
->   	0x18, 0x1c, 0x29, 0x3c, 0x4c, 0x4d, 0x5c, I2C_CLIENT_END
->   };
->   
-> +static const struct of_device_id emc1403_of_match[] = {
-> +	{ .compatible = "smsc,emc1402", .data = (void *)emc1402 },
-> +	{ .compatible = "smsc,emc1403", .data = (void *)emc1403 },
-> +	{ .compatible = "smsc,emc1404", .data = (void *)emc1404 },
-> +	{ .compatible = "smsc,emc1428", .data = (void *)emc1428 },
-> +	{ }
-> +
-> +};
-> +MODULE_DEVICE_TABLE(of, emc1403_of_match);
-> +
->   static struct i2c_driver sensor_emc1403 = {
->   	.class = I2C_CLASS_HWMON,
->   	.driver = {
->   		.name = "emc1403",
-> +		.of_match_table = emc1403_of_match,
->   	},
->   	.detect = emc1403_detect,
->   	.probe = emc1403_probe,
 
