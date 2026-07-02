@@ -1,222 +1,193 @@
-Received: from mx0b-00128a01.pphosted.com (mx0b-00128a01.pphosted.com [148.163.139.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15E902C187;
-	Thu,  2 Jul 2026 02:50:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.139.77
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782960650; cv=fail; b=qLDZt7ZYYcj5wwvJarVxmWirBY+W5dzrQe2dNNTWSIhR9pGtDHg5m370s0FTlBr2knEof79FseS6pyShBzaWNj+Qhv5QupxYYlYkbZRFhiA2boIpturXYI7sMYcSODAUSJD7ilkzGPnT3n5vHQ7W2eYtg/rfEx2ADJvvIqSf6EI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782960650; c=relaxed/simple;
-	bh=tYmugNZALu04rKNZgUOGi8of3NKbGG8mXTx1Lhh7XPc=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=twpV5U87VxlFChNMmdXSYJzmDo83wsVvUoyvmJPGwPYAGoI0TY9y8fQ3KEU8MCEPs36aspEPRGy6dv6Kppdz5Thdr6CUu3yQyGFMkRf9qnE4zSUDVqx6Sf1IKBtRpfAid/IgMEuCKqEfv/0s9+/8cM24mEkoAeXXp61LdhN70dQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=kyaFnYJQ; arc=fail smtp.client-ip=148.163.139.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB880DDA9
+	for <linux-hwmon@vger.kernel.org>; Thu,  2 Jul 2026 04:43:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782967401; cv=none; b=lekvkEUz7v+nSpiu34VkFzPrRIi+iiVqGxLSarUweYfprJAL+zQ//SCfFZXyV+lgB1GZEIHPmG+Qv3XTc+UfuDuYBBE4k0bSJIefF00dWnyA4A489J9l3Eft7Wx38nUQBPZ3tS2AXaeM2kpv3gRxO0gwZsTCjU7b+/u/Y8koOBA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782967401; c=relaxed/simple;
+	bh=nuU7t0L2HznSrHjK2ALfSgiuuimRQFaOHhMQCUrMSZQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ss4x47BreEbnvxc8j5uInwg5QF6rg8xBpBlEn17qcl9+gEKLOokNtVSWdvorjH3DSQjSD88o+JHtgBU1wEmJrUHvW3AL7I3yoOT1vCeHM5nw0+80NBlwzw50H85gN9WJ2yCVpKLH7cmyTCDlrPU3NZTDOq6Rpr5T3jRXGoCywuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qvDwqEwT; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="kyaFnYJQ"
-Received: from pps.filterd (m0516786.ppops.net [127.0.0.1])
-	by mx0b-00128a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6621Mcsq804212;
-	Wed, 1 Jul 2026 22:50:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=DKIM; bh=Xs/oH
-	2349xGhuKe/F+RR+o4i2ciFgjr4sUtNUciHS7w=; b=kyaFnYJQov6FDGdGbaX01
-	ya+G3+r+EpI78J3a3gXnXx6PTQVcHwObJST4fa6rg8xZb+9M/rAm1hI4fmpHsu2y
-	cD5v8+tdIeWp35ribWTUUHCPvDKasfZqIgC3C6FqKPslP7AiC+8H5roZAh/tqoZX
-	Unx5cHXvDkJNFup+d5JLEompa+ShoV/bLs1W23p3wtthdFElWnYbIpEg5CGWf/44
-	si863SCIR2wicbLR/Q4L+ipldVgQtMxz397FvkAN9Gj6cXpuAYM2x7W7PrfxSgnr
-	SSfCSZQb2YQzzzrUqcY9lhGGmCr2DEz5kjI0p4sRGA2QCZIVCZNGcVUwsSifqVk/
-	g==
-Received: from bl0pr03cu003.outbound.protection.outlook.com (mail-eastusazon11012020.outbound.protection.outlook.com [52.101.53.20])
-	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 4f5e9307rv-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Wed, 01 Jul 2026 22:50:15 -0400 (EDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=SNcK6pIxdz/26k+bR/DoyZeeaiN4N3yMp2Y6Ood/bZuYVFvzAce9f39eMiEbzH+HU/+UdCqYn+QTMWYy9VxeXSDlvj4LEWC+JqcHBSUYQiD194+mhW8lX33TRxipqvHBhGfCvuPVVFOrni6u5s6NZmOY7sSfXGHYvLvlbf9bCkSepc35owT4ipW6vS12pYs8PnSW7E0fMuWh84ijLBTlKZvqOEzLp6O8e9bIDEd6sC9UKj8y+3ehWRNB5vOAmkIRqiMK1jTgYpBrevpcRrUhE+iW/6XC/d8GVcp64tpqJF8oDFqQVA4iB69xc/gHJy/oAXnotW8jY8VjuA/b2Jc7Tg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Xs/oH2349xGhuKe/F+RR+o4i2ciFgjr4sUtNUciHS7w=;
- b=GXbiiUkyNU5W51+p4MycUk7obWSNnTeQxK0FPJ5de7mX5RjIWX+5Z9/u5hUUYZBYINLig28FqriAYzAkx3diJtY7EDtV++rwNrUE8c1BtjVTv4JoOXqJE+3dlGuSggY2zhe/KeiA5/3KaZjolGSggfRI0BBTTleCyTivve93w9yQNfmYrsTy11OL1QCDKhw8h+VN9LVdtOG2dl+2LbV5r+aTUgBTACshKoUaxpah2fUzZVcKb4Ei7nOTjsOTt2MlDckmLu8SjgBd/Dnds2ULK30QlxTyNZgC6HjdL922w/10AridqxuqhZwbSU7WreXeQCsYIILIjx3mxE/PwVMQ+Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
- dkim=pass header.d=analog.com; arc=none
-Received: from PH0PR03MB6351.namprd03.prod.outlook.com (2603:10b6:510:ab::18)
- by DSVPR03MB989637.namprd03.prod.outlook.com (2603:10b6:8:41f::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.10; Thu, 2 Jul
- 2026 02:50:13 +0000
-Received: from PH0PR03MB6351.namprd03.prod.outlook.com
- ([fe80::1578:4572:29b5:2442]) by PH0PR03MB6351.namprd03.prod.outlook.com
- ([fe80::1578:4572:29b5:2442%4]) with mapi id 15.21.0181.008; Thu, 2 Jul 2026
- 02:50:13 +0000
-From: "Torreno, Alexis Czezar" <AlexisCzezar.Torreno@analog.com>
-To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>
-CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: RE: [PATCH 6/6] hwmon: (pmbus/max20830): add support for max20830c
- and max20840c
-Thread-Topic: [PATCH 6/6] hwmon: (pmbus/max20830): add support for max20830c
- and max20840c
-Thread-Index: AQHdCDrPjQujEK8MeUujhrP1WqLJTLZWdMEAgABEj/CAAHm5gIACUkyA
-Date: Thu, 2 Jul 2026 02:50:13 +0000
-Message-ID:
- <PH0PR03MB63510E27A6F22742D526C244F1F52@PH0PR03MB6351.namprd03.prod.outlook.com>
-References: <20260630-dev-max20830c-v1-0-a02786bde470@analog.com>
- <20260630-dev-max20830c-v1-6-a02786bde470@analog.com>
- <e5c7fcae-57aa-4461-987d-7f004d066873@roeck-us.net>
- <PH0PR03MB63514C57CA17984F0B6FEEC8F1F72@PH0PR03MB6351.namprd03.prod.outlook.com>
- <adfd2c4d-6d42-4aeb-9eff-6a059550ec80@roeck-us.net>
-In-Reply-To: <adfd2c4d-6d42-4aeb-9eff-6a059550ec80@roeck-us.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR03MB6351:EE_|DSVPR03MB989637:EE_
-x-ms-office365-filtering-correlation-id: 779d48fb-b665-4d74-2d48-08ded7e4a3ca
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|23010399003|366016|1800799024|7416014|376014|38070700021|11063799006|4143699003|56012099006|18002099003|22082099003;
-x-microsoft-antispam-message-info:
- KesUkSXJ3rzKynMkAEizJQpDvWeahdcVy539f7sxUiTp30jLVrZ4TPAVS/TZCZO9hyI9B6gbef923UvZ81pXA8N0ZXGIujo+kIHlwBlXUIr1lsPvfLBrOjDlROPeWpAlPP2StdaVVpN73FLYeVAmbDAOOuAxT8HRi1CGI7qoyzhjalukgGiflebd+lPeMImWfCzgCcSd2lo253AYH38l0tcfKu1CV8neYZV6mwbvZ5LPwpTkuTrpr8KSrqJN5bglX/83Jx4hoXtOx8ig1UVrDGqhP4F49WCBSIfZMEWO3dmpQLFREc/D3kWhVCvhLYiE9gWvmMCAKnmG9GXecv91fhEH192A21wq0roN5jEBmHhN5UqzO0JrcQgimGY94GdY3AB58cRAAvSmd56tBaQ8di3lXYKSwwtWxAkv2pQbsvwJXj8jrLnZndNHRyw+TT8xO1GxOOdVEJHluIvZWsEjMLTLtt8K/Nt7jwhHC665m9/NEHE6QlQ+xg1jakKrotVWJLsQdeQ3OIafL41AHeENSDZy3Z+pNnVrKXF073N7fXZ114Lndf6224gMHTeeR2HrltUlM7qRczRxiqtbT3+AvWyfMqimsK0a9/hFznLHh6j2fpmHV9AgSP1lfVqyT/SYEBWFn3iGLMpq4Ae2Py48rMPC7zjq4/EXca8r1VArxHIuarwBMaG4xyqu4lqHCdc0BxiDR65dNy8Hfx9ASDvm/IfAtLPk/5icJIKz7YKBLks=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR03MB6351.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(7416014)(376014)(38070700021)(11063799006)(4143699003)(56012099006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?FL0TQwe6c8vZnjhItzz0UU0ORhAd9GlEI6UN2j4vXYRDeTqxjzvkpvPlG/rW?=
- =?us-ascii?Q?3hdXRMwwl7erLY+dWGFBF5QGZdqPWRsQ/KDgQ4zB2HJpI3LSxMQRZKRsKRZB?=
- =?us-ascii?Q?Lp5/vJlpH8ZSkMpL5z4q21gPIsFD0lEXKGnUuvC70plVlKpOj8P8bkoMz416?=
- =?us-ascii?Q?FpmCecVgsVhv3SX1UnOM1AhLpgShJh0GS6qduVj3j6/k8fim0fItPNUYrz2Z?=
- =?us-ascii?Q?ucA3JNod62wSGsz8TBSw58vz3a9AZvYqmox+yUPJ3UmxkIhR9pZ4nj7Sr7kK?=
- =?us-ascii?Q?YuI41BzAhkvIEjGKIKOnAVBB5ZZtiPpo/qVkCB+btr8tXBTHY4458/uI9Npi?=
- =?us-ascii?Q?Nr5lhd3bkteMcrjSffVQgfCjzKtLWchA0E4i7xaOEbt2aZzBVvspHGs76NBG?=
- =?us-ascii?Q?5XDvvr+El/eMLfvM2Ct1ozXMdynPXNJpVX+jfWBzQSWEFhQN8FHqpLB2cpcL?=
- =?us-ascii?Q?r0fJRusxNZZn4WekhzGarSuV9jfQiN2GXb+BdxI3YtT05LFri/OPeM/jyp4n?=
- =?us-ascii?Q?LmP0qsgfiry9sg1cyX3tnC0FN1zJlsU+K7Yde0mPF2o/3bdtU3WR/s3cx8Lt?=
- =?us-ascii?Q?jnu0/yDmxifUEbddY/w+Y1j9kqk8TA2oBtGV6xFh/7i79c2Z3+RQtqlFco5L?=
- =?us-ascii?Q?Len5kgo1eVsjBnucILtgHSgKFbzfWoxVXXeuRFR0A3Wh4TBnvj+RVif2//CF?=
- =?us-ascii?Q?Ro2DHd/GEv0SgO3TEurX5HnrWG0re83wLrX/iv4ZVlJxHny1851odszFFlw8?=
- =?us-ascii?Q?dPGlFgYQq/Gs02X9PiBEPbKU9jDFcX13MGtegz/vHlpvT9VhwK1z3MQoqsn9?=
- =?us-ascii?Q?YOuJ4bzH1a+yNWz28fzLeyzH+QFc4CZ0tAvLtfvy7kyYuLGr2hvEx5e/1QFF?=
- =?us-ascii?Q?+850AEo7B4ljAe7H5yVw4nxXFJNbYV1m/uj+n+cpI/YXdxUdAKb4HkP8Iluw?=
- =?us-ascii?Q?HXIhu5yXCYmPGZ+mT/VAut/w+wIjgeVJh4HDZk+hOV18sSSl/UIMvXi3oZPA?=
- =?us-ascii?Q?suMUQC2v015MWdhirXcFWCeZlWprF8CmCHGZzSK7CGb7ln3/7N9zufVHcSyb?=
- =?us-ascii?Q?ZLDA8Vm/2MIywocgbW7B39745134GQJzc/21auouS+GCPWBsuYV0K3mxOH1I?=
- =?us-ascii?Q?6OCAOxewF9JnZ35ykVDhtMUYKSlSYnjSN08f7QrimPJfKa+sV2TJN+zC2b8O?=
- =?us-ascii?Q?PpU2Rz9HMaw3BEUL6klIsEBSKMhMe5A67+Bg9iKMoZAYQciH0LYF5KX3UIvn?=
- =?us-ascii?Q?1tSs2X12FHg6HNSmwsq/UqV80MvJdyBBz4/AkzMRHGZcetwmbtvUESeuJ5/1?=
- =?us-ascii?Q?d3znGJwnS/VYP89nWcwinTtuefFOgqVmAfohKz4Eloel8GELjQJv8j0IYyB8?=
- =?us-ascii?Q?u3mTyOpTEF3NjhNV83rt2jNUr0WTubZ7B4TfTucvpFalxVqIIDLPCSCzEH6t?=
- =?us-ascii?Q?m29sgNzCLSK1vgouu/PWd03tw+GiuKncMIAEBOBkgAbh7h2iYKc3NRKzG0zS?=
- =?us-ascii?Q?D5g4YeS55c9qltCtZ1ckyMOnSppDD2le51ZNQ4VS1oyWbT7aeaAaHRYzg3Y4?=
- =?us-ascii?Q?Scyhc1CW38w7ug6SOKP4XtwouKRD/HIOlaAThHVkNtc4eErUcXX4hTEdteZz?=
- =?us-ascii?Q?o60BgreArbQTJZcdZAV1dyw5LVL5vTkxL3qusiHUNvJCT12O/FuR+6ltP0J8?=
- =?us-ascii?Q?CGtW8PqxhWLkBdRnF8eMR5DXThOi+XSPitBX9Cb5aU/tg32lQJdL9cp2ToW/?=
- =?us-ascii?Q?b4mD2HWwrwP0gH2JKsylAhB/TPCB/xo=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qvDwqEwT"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-37febcda057so598417a91.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 01 Jul 2026 21:43:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782967399; x=1783572199; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ON9QUT0SWKiLVqBMoH9mO2rPj7igk0r77PEm2hgCxG0=;
+        b=qvDwqEwTD0sbedQCgh1FT4InaNpiR1OY2kTXj6/ZvtXRV2ZBGlf5CyXwD5TMAJzuyt
+         xVU57IEWETX9YCmo3yerF67RVVGoeZoTBDnK/RXS/RNxt28cTctM0jcrJ2dJn8ISTjfn
+         jgy9+jTEqmgy4FMtYJWPzb5E7ipZe8lGEXRcx4TRBAJA1hcjxwhC0p1Sl/jAvouiSOKu
+         9bAIAoGqaVcrcB3Uy2ezaUUxTcqlA3W/S5IxeMqnHAvQzA+ZsUV0owEIuG6GiDcj4Y0H
+         jAJdSQvtVwu0/2bxeJ06tNlIIx6TUYFX2EWr/Rsg6b9SuejV1MTiwqWCigW6jZaOCQye
+         YE3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782967399; x=1783572199;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=ON9QUT0SWKiLVqBMoH9mO2rPj7igk0r77PEm2hgCxG0=;
+        b=HPb9fS5OZxMTCZBqblLdUYe6dZZAMN+PwrUImDwA4OIQRXr+wOibi2q/0kUJNkaxM4
+         TYIiT6edby2/vxWmXW5JvzFxP+MjbcyHx5FfFkTONBD3Ie9Gw1DCNYvYn0AJQRW+1fup
+         pMirMGO7tjeBYAQ6KRkrIYm0VSt2r/BZdl7Ry1fyZHx+3I01phpyYoYqAYeV940LJmdS
+         7v5ddrerv9pXo2+6PAstPkpzpmz7zwwbQsj32/kh7GRAOxtFjgXiCf81ABw343FlWuh8
+         kdWiFX3UXvi5zmxHB1drIazUA184YwTrKEMnx+WVnwWW674QZ3UQL4d1QJi2Gi6viG5Z
+         neqA==
+X-Gm-Message-State: AOJu0YwxhQgOaq/qVbShj+YXYRI0V1naCN0YZ1/W61WkCjSG/soar3Xg
+	KrWdM7oMj/ADWheSfrkvGf3kzUcXGKWklKW0gXtDvTp5o1HwGGH0u3Mn
+X-Gm-Gg: AfdE7cklaJiCYbtOToORQ3oUXEEuJs/M4lqsTviB/pyZ1Wp/cYP9BbJ46lE4rWBaaUA
+	RrrgnskaubIPTV81loXTpSJO2C6wt7G+ryrITDbxiE2Xt90oFAnJqwsvpdlA7ViWIc8YYGpH3wh
+	K5M5OrwxqaZwph18pMK65RQvZxRcWGQSdiXnUhqbogM3sDTzw4HYtGWRqWOntQusfDmjsrpSBFt
+	QTq8wxgby4etJ+mji9iiyMVjqZIysC+w5FT3+a2q1yis9Hy45UVSRfDcAMj4sfUINRZMYfgFa1J
+	z1c7u7ykqZW2PZTvAKWCcJhNEV32ZbVhSpvNFmLx13JM+TlcgPQtkGvbB8N3IE0tV90U1dVNnZm
+	mjgwYzwF5h0nfNYZ+RDDjXz4KPB/1DU5+L6I7xI5kdduhxTcG+H9Ed+btliDScgK93za6JQScvT
+	NYO4w4UZPUG3ztu5L+n2TC1PvQ/Ip8w58CNVo1Vcly01FRRuq6hhxB/TRQx52toQ==
+X-Received: by 2002:a05:6a21:38c:b0:3bf:735d:7fb7 with SMTP id adf61e73a8af0-3bff40a5200mr4087286637.13.1782967398808;
+        Wed, 01 Jul 2026 21:43:18 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b3ececfe4sm1852677c88.8.2026.07.01.21.43.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jul 2026 21:43:17 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d3053a4a-98a0-4dfe-8999-11fc64fad584@roeck-us.net>
+Date: Wed, 1 Jul 2026 21:43:16 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked:
-	SpGsDwCFlRTOgxoaHaY9JhrSefsoB8YAPLxw0Kby01jXKlbz8CtQN4ty4PveaPDoEw9NLh8LZovIe43T3pjL5vMDXDCj/RAPUuwCpej2Knef9FQRpw7tFfYJoczGY+QJ9/g4QV6k3liLUnMJ6kb7/a78+PCYw23iZxAW94rXe8TvbIbZBMwqpleV8Io4VJGYk1XmMzUh9gGex8z7T/PufxJYH/+Wy4LThn8sFWHf+OpuYmrhm8XOwnJy3NvKrt0g70Wg2aSOys+VYOfoRwYotcCu1WNdn+zxmSr3kGB0eJTlS3teAO2FqXH+Daer2UR18NO0ob64XEpphFANiJMxPQ==
-X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR03MB6351.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 779d48fb-b665-4d74-2d48-08ded7e4a3ca
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jul 2026 02:50:13.3086
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hiRoAJstVe8FfuX4npnQV2yfoeTcNgO+wFr7PVDBEp7CL7gTIoq0S6efCD05JJZOmdP97T7oCGhJ6h70GP59r+1VsoQH2YMxqPrnH54WNWY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DSVPR03MB989637
-X-Proofpoint-GUID: I7tpu8zx-WtnAUFx9JPa4Z2VhxvH2GgF
-X-Authority-Analysis: v=2.4 cv=W4MIkxWk c=1 sm=1 tr=0 ts=6a45d1e7 cx=c_pps
- a=3tfckwpITFtzIurveUQz+Q==:117 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=0sLvza09kfJOxVLZPwjg:22
- a=ZQxX5BWu6Z8IJBb2zLX7:22 a=QbS9kZC1mrf120kMGuMA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-ORIG-GUID: I7tpu8zx-WtnAUFx9JPa4Z2VhxvH2GgF
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzAyMDAyNiBTYWx0ZWRfX0A8gjMaI2YOG
- 1oU+Vtd8xU6vVS5qsU8onbmN5QhKy4tKs1L1vMlfnuSJCGSqRju3LOZJu7e7J07+a4CKgPDMOBt
- Jqg1MtdAJKVoyoMm7DeAC+2PUw+Gk2fEKdx20GtfEmkpXRL1NKh6i8SLBnrirdb8hyqFJjCA7kW
- 2AbouyDDkXBoadKdOdqlLJywAe26mIMyGrWM+BXYZcNqrdDfPGIK0Jv8STtYFPGn1aaNQ8xxJ5O
- KJa6QxBtU4aSrvf5BPk+x4mDyC2PUSZAH+13GcbQO0/x1dJ50tG834EUMUygs0HQh/kUMzrXOoA
- /9dvH1FGYXsNJlvoRVOJuxOxC9+qxEJRWD0wdlXzBlB88IF227/Ky7oF9tY0Sx4c+qGKL+UUQ+m
- 517z2++OMiytc1xzcgs9CY3fuyq8p1S1weouLF1+f7OIpUQUfVLHQ9Eec1/jjDCysKg1BlewJMs
- y6fWQri4x5PVtf41Hsg==
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzAyMDAyNiBTYWx0ZWRfXyleaytUmQ8zw
- cwg0K+N4R+G/9capN6HPdGJB3C7gY5cAS28KCsBqvbTejpKmaSsa3XraomAFBYs4nYdycuxmyza
- ilkKRgNCckNhfnXY1hN23TR8pHtEXmFagi89bRpAxzsQzmrz9iob
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-07-02_01,2026-06-26_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 suspectscore=0 clxscore=1015 adultscore=0 priorityscore=1501
- spamscore=0 phishscore=0 malwarescore=0 bulkscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607020026
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 6/6] hwmon: (pmbus/max20830): add support for max20830c
+ and max20840c
+To: "Torreno, Alexis Czezar" <AlexisCzezar.Torreno@analog.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>
+Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+References: <20260630-dev-max20830c-v1-0-a02786bde470@analog.com>
+ <20260630-dev-max20830c-v1-6-a02786bde470@analog.com>
+ <e5c7fcae-57aa-4461-987d-7f004d066873@roeck-us.net>
+ <PH0PR03MB63514C57CA17984F0B6FEEC8F1F72@PH0PR03MB6351.namprd03.prod.outlook.com>
+ <adfd2c4d-6d42-4aeb-9eff-6a059550ec80@roeck-us.net>
+ <PH0PR03MB63510E27A6F22742D526C244F1F52@PH0PR03MB6351.namprd03.prod.outlook.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <PH0PR03MB63510E27A6F22742D526C244F1F52@PH0PR03MB6351.namprd03.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 7/1/26 19:50, Torreno, Alexis Czezar wrote:
+> 
+>>>>>
+>>>>>     static const struct of_device_id max20830_of_match[] = {
+>>>>> -	{ .compatible = "adi,max20830" },
+>>>>> +	{ .compatible = "adi,max20830", .data = &max20830_chip },
+>>>>> +	{ .compatible = "adi,max20830c", .data = &max20830c_chip },
+>>>>> +	{ .compatible = "adi,max20840c", .data = &max20840c_chip },
+>>>>
+>>>> "adi,max20830" is a fallback for the other two chips, but that is not
+>>>> how the code is implemented.
+>>>>
+>>>
+>>> I may be inclined to just not use fallback as it seems to be more
+>>> complicated and a bit unnecessary. There's also other devices that may
+>>> be added on top of this so it lessens the complexity. Will edit the bindings
+>> regarding this.
+>>>
+>>
+>> You are missing the point. The fallback is perfectly valid. Technically the driver
+>> does not even need to support adi,max20830c and adi,max20840c.
+>> That is only used to validate that the chip is supported. That does not need a
+>> separate devicetree entry.
+>>
+> 
+> Checking if I understand this. I need to add a check that if DT chip->id = max20830,
+> and if the HW returns string of either nmax20830c or max20840c, device still probes
+> 
+> if ((buf == "max20830c" || buf  == "max20840c) && chip->id != "max20830""
+>          // then it's an error...
+> }
+> 
 
-> >>>
-> >>>    static const struct of_device_id max20830_of_match[] =3D {
-> >>> -	{ .compatible =3D "adi,max20830" },
-> >>> +	{ .compatible =3D "adi,max20830", .data =3D &max20830_chip },
-> >>> +	{ .compatible =3D "adi,max20830c", .data =3D &max20830c_chip },
-> >>> +	{ .compatible =3D "adi,max20840c", .data =3D &max20840c_chip },
-> >>
-> >> "adi,max20830" is a fallback for the other two chips, but that is not
-> >> how the code is implemented.
-> >>
-> >
-> > I may be inclined to just not use fallback as it seems to be more
-> > complicated and a bit unnecessary. There's also other devices that may
-> > be added on top of this so it lessens the complexity. Will edit the bin=
-dings
-> regarding this.
-> >
->=20
-> You are missing the point. The fallback is perfectly valid. Technically t=
-he driver
-> does not even need to support adi,max20830c and adi,max20840c.
-> That is only used to validate that the chip is supported. That does not n=
-eed a
-> separate devicetree entry.
->=20
+Technically, you don't even have to check the device ID in the first place.
+You could drop all the device ID checking code.
 
-Checking if I understand this. I need to add a check that if DT chip->id =
-=3D max20830,
-and if the HW returns string of either nmax20830c or max20840c, device stil=
-l probes
+Checking the device ID is just a safety feature that ensure that the
+physical chip is supported by the driver. You could do something similar
+to the max31785 driver, i.e., read the device ID and do a length check and
+hard-coded string comparison. Separate compatible entries are not needed
+at all.
 
-if ((buf =3D=3D "max20830c" || buf  =3D=3D "max20840c) && chip->id !=3D "ma=
-x20830""
-        // then it's an error...
-}
+Something like
 
+	buf[ret] = '\0';
+	if (ret != MAX20830_IC_DEVICE_ID_LENGTH ||
+	    (strcmp(buf, "MAX20830") &&
+	     strcmp(buf, "MAX20830C") &&
+	     strcmp(buf, "MAX20840C"))
+		return dev_err_probe(&client->dev, -ENODEV,
+                                      "Unsupported device: '%*pE'\n", buf);
 
+should do (using %*pE because the unknown device might not necessarily
+have printable characters).
 
-and
-
-"That does not need a separate devicetree entry."
-
-does this mean I shouldn't add to the bindings and max20830_id[]/max20830_o=
-f_match[]
-entries, and keep it as is that it only takes max20830?=20
-
-To add support for the 830c and 840c variants, the code discussed above is =
-enough?
+Guenter
 
