@@ -1,188 +1,160 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD8A274652
-	for <linux-hwmon@vger.kernel.org>; Thu,  2 Jul 2026 13:35:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E08BA48124B
+	for <linux-hwmon@vger.kernel.org>; Thu,  2 Jul 2026 13:39:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782999328; cv=none; b=ax+VV3LEwgjrHoHYnpCHU1+vOnGhncKArpYQDgGP2LE5vRuicfiUpAr1pgzkGd5u/0uF+G8scR8G3aYxiQ+7y/Tf7Qt/tw4ianSUjHhgZ7nGlaL+9bPYhMgsnjq3jkPsk/90jf5tUBX88SEnSVL2CBy3v3VXkaujBkn7g3LacX8=
+	t=1782999572; cv=none; b=slJDTLMUR8tSjl4rDei7lvaqcPjH3IV6ggjn3wmnFpD3buq3eIInZiMD13s4u5ETUmdyHeYFwPVz81KiTOEp/N48bESLzHH+8meuxErLHEdfmNZ/+UO/NIlOipnVbnJfNMgTpQGU/hyKx+Y51675g2y9qYs1ZIGLrBnkPWkwPgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782999328; c=relaxed/simple;
-	bh=E1/9DIDIMVTroh6AZSTdy0KhiA6AI5YzqTm9giWRgZE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rL2+6kuUfv3b+rgZhnuXSe14je0zkOG8L/us4FC6mW0oZJUZGPs2f8bLB6sqoI1WmsQ1dS96u9VHgYmWTKrsxKVIhvK5wak4J3qh8efHue8Z2NlqOFl+2bGCJ8NPu8WBPLS+D1Xl/P2SO+zR8gOvEMuwHwmIDAn1QW1K4b6kwFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=X4VR7ffB; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=EMsWFrj3; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1782999572; c=relaxed/simple;
+	bh=GrCO02068PRXJNOHsLPkuPj/0cPXAgIc/5NGy3rMc7M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AK7hoAiwNbTjDECZNvEzZrYD1huVm8okYE8GGbQ+o40bgjEG03Tc1FYgfBODlks+I/LDa4zeV2FjsYg1K9/qIrnhbX+8hJpRUQ6zyhXA0+mCkGu/kOfJjDDV7VsgMf/yRly5SpYGi9l3srYZXlkNDWsyrNNg6lqWC4aGbxX9nzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nncZlzP3; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="X4VR7ffB";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="EMsWFrj3"
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 662D0Wgg518207
-	for <linux-hwmon@vger.kernel.org>; Thu, 2 Jul 2026 13:35:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	iP2L90DYVRpyRK2MWL9L9i4kUeULtc7huFI/8WNOEOU=; b=X4VR7ffBpKxKPjAV
-	GAgRko8DSXI4y62ewp/0IhUfj/Yvv6lsC8NLfTDi8rf7PAqyoUnqgtL8IpQpbGF5
-	heHLgxa7V37vo+/RfGsoF+choyY4DWvUK3evZ+KSO3pLOvyziTpRiMAuvcLzA7/x
-	X02PzURiKbChtswGdXkxMJnmOx0qE0rY5AVxklDJQmVdFGbrEmdPw4U11URLWkB0
-	+gk5utfZanMaK9xEcxoyPJYbAF0HbV44bbL6v9ViZrJ9FJTOC+WbR7nQ1o8SVbSl
-	tMqreavqMJq55igFmCbwuAvkYfEY6oMo0ifFAyRyXCP1LKtniX7nM/Uc0vOAE63/
-	BdY1XQ==
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4f5qfc0dqb-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-hwmon@vger.kernel.org>; Thu, 02 Jul 2026 13:35:24 +0000 (GMT)
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-91ed0e140c5so383969185a.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 02 Jul 2026 06:35:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nncZlzP3"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2c9d87b1f9eso17941295ad.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 02 Jul 2026 06:39:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1782999324; x=1783604124; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iP2L90DYVRpyRK2MWL9L9i4kUeULtc7huFI/8WNOEOU=;
-        b=EMsWFrj3i0JcZ0hs3z+3/zxo0co42g5COc1dGKSdR7YGuJicZ7iWEb6v1nwJBDAibI
-         P+W+HLEEsxoBDUSx6Wmw6zOGJdcLzhYEgH+HFLUJyvH+amR10hF7Y13awXk8a8+y8Y2Q
-         venSReUDCG04u5f9q+Cxek+9Uh6ckt13Kt+cjByYjCcO9LEW1xb8g5l3SGHRR07IqgQV
-         xHKO/5myr5d3zN6QEb3nBNsbIqIJbGqV7G+CrGlDnyqGJkof2e+x1rLHMy+CdpWZNs0V
-         9rrqWRdXBxTthwrKz/D4Bao1z99x4RLZpc+Rib8DuYs0lUaRbCspRKI+39hKgUj9NR5K
-         p9mw==
+        d=gmail.com; s=20251104; t=1782999569; x=1783604369; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZtITEhoW7RhCkoX4SOK3i5zrM+vLOvCUNC0WJX/x9KY=;
+        b=nncZlzP3AOvfiLmmUAIqgKbgWBKgIRaFJ5nE3aKDSOmCckWhjFmxzRZ57Sc6KoeoZa
+         J5z++mcK5tTMhUXsAZP61qzWAxbiMWnCDRcnh2hYElQVbtAThs5zjMo+vCJhaGwVXqrr
+         2ReOmR2ZkG/AL4ly+gZGaHJo59l6rEiBtVMwChOBKUx7U9qEBRD5zEi5At/XLoTM37pB
+         SYwOkEXzu/p3Sd6hdTF4rWExCDOBjX928PF0N9Ldo4GCPf6FLnmbbC0fG73FbcqFkf28
+         a5SqgTB5fD6M22tZALUnBROvUr4J2Dhm7WPBDlwv61SJYueL6ygIrRDSQEl/LhLS99+i
+         Uv1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782999324; x=1783604124;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iP2L90DYVRpyRK2MWL9L9i4kUeULtc7huFI/8WNOEOU=;
-        b=q47c3vv0iBfoXq4EOEQoZYNnfY9JIwjYkRbzqNLH9+cnWBOrtYsKXtjzidTCZc3QNm
-         4BZiaGpNND44BwDIUe3oqm5gchHe413DsPiNAkQxxpc1sLP2PkPUTkWjkpwB1fyVnf+f
-         nR8xndhoPr+PvJWkrqHOTLkDRRQk4TLq6rytY/gIkYT8aZLzNnfrwBMjP8IN0793Oxop
-         yLiZOet/HCslKIqs8P0q1bKXOLjR+D88iRgXB5ZCce5307mg57AjtzPUsOwme5AIOPNO
-         Z3K/FK7voSPWJ9/ya7y5TKk9i43Jr1Zl6WkCLPF4WcQoC065mtr4whQ8OE7szndeJl08
-         fG9A==
-X-Forwarded-Encrypted: i=1; AFNElJ95S7umgwkNVbdWi4zeqFJ8DSne0LSIb75FwoBYGhcuGCqh2EQ/Vr5cUjRV86JiiUqyxxZrdfLmQNs5iw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzObM2vbRrauAbFOHHqlT6S54scDlaJRGYoHis1YU/hwMZhWc6j
-	+7GmR7DTLtTJHkbBet/T88661kUGnHGfMDK5MAbtjDNVIduzHynzs06tQPv8CTO4tOVVGKKx+dn
-	OxXlox5Z081qVMveZl3JbF/v1dyUF2R619YrKwIjmtzkuR7sKLsfGEdeoODtoD/z/VQ==
-X-Gm-Gg: AfdE7cmuQs2Wf0Vpiu6e7Quc0pmeQXpd5Ucgvlu6ZoPC3ViPPG+Ud0EVoGAI7kQqCWB
-	qA49ewTj+xhCrgqWaKgAUMkkO+/0nD+IRs7Jtrf1V6Rl3Jj2LBXafXoJogYHExYtg+gnvN4vb8s
-	oIVzrGJrjygrJfFDmHxn/kBAlii/rzfjE9BbFd9kZixPC85NU1iWDRCcUCx6o2t7EkFMb2Xc2VA
-	ZmEPhEYUMbROo/gbqoMn/OIkdE+bsAd+pXTf1rcb5TGIPSn8BrGJeWvLLiPXEWeXowLLVjrJLe5
-	lHHGOrLikjsElAzRg4JUO44g2Gd2yB3mdf5gsrIeTfmne27DXhao7xdHjcT1v37wBcR8vo3ExBf
-	kCL4Yp6snjkNkyDJFsIef387Jy83bMJI9q/3Bz3m5ODorJSzeHjJaefzQ+VCQGkijyQ11neiztw
-	==
-X-Received: by 2002:a05:620a:2a12:b0:91c:d0b6:13f5 with SMTP id af79cd13be357-92e782408a0mr785674885a.19.1782999323791;
-        Thu, 02 Jul 2026 06:35:23 -0700 (PDT)
-X-Received: by 2002:a05:620a:2a12:b0:91c:d0b6:13f5 with SMTP id af79cd13be357-92e782408a0mr785670185a.19.1782999323377;
-        Thu, 02 Jul 2026 06:35:23 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:7d20:e20f:a77f:4ef7? ([2a05:6e02:1041:c10:7d20:e20f:a77f:4ef7])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493c635c41dsm95373005e9.5.2026.07.02.06.35.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jul 2026 06:35:22 -0700 (PDT)
-Message-ID: <2b51d68d-9f13-4b21-a0cd-32b78ceb5755@oss.qualcomm.com>
-Date: Thu, 2 Jul 2026 15:35:21 +0200
+        d=1e100.net; s=20251104; t=1782999569; x=1783604369;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZtITEhoW7RhCkoX4SOK3i5zrM+vLOvCUNC0WJX/x9KY=;
+        b=Zqo03Os4QqxS9G437DA3M7O3bq+t6flFulumEth4VsuXS4POGGGcC1BXgqwK/6j8xG
+         fU1NGAN7FGyfFi2duuFSyskjkVaaFwyhbp9Fg2fY0fc7YGaOi1/U/ssQ+9vXQm9zsOwM
+         TJ8D97QQ1iv3cmc6gujFAnGmXb4fnbnWYyAPxwn+yhfVXrya3h/PYEopuB5kZyfCLPtZ
+         rouRxsT+HSakDq02SzSrooYIGPvJwH9tX58ePYeJbrBRDIJbVl/kLvEWmpeLR6vhTRrg
+         0ZxlZqPzxJ7m5/CCmMsFFl2QQ39P2DhaOB392iwJyVrhaYCo0GGkKgaoSsVSMmmwaBZH
+         F/Ug==
+X-Gm-Message-State: AOJu0YydEMGqrMCWOUU3tNpZKoswMGptdbPiw42VUfz3QmlAHTdM49HD
+	/FJyygM0qSUGVas4zooQv28eq4tk8d2hcu724mdGL0vF1W/jIxYWrCcLtGTYbA==
+X-Gm-Gg: AfdE7cm+Bp6aLew0PJIUUPsP3cwkwsFWfAKvhpiXg8M2jmQ3U7u4BD0nk4SxBHXK4qD
+	ItoVvmuscfdWlvm6VyWvWtASe1kYIA4zJunOqEYGt9HjM7HtGAj8sUeGXcsZJlfJLoXCAILdtVk
+	FgjAN+LYUIk379Wc88HiSxq3KZCkCgQuWzk/x7qvAANnShOZfELONbaUCmJ3sh6a3Cv7bypkZeq
+	y/kAmorbyEZde4f4gK3VBbKA5vT2gTIbuwmLFo00pJ3Rb1bWc78w1VeXvHRYajV/YO6/paCeWMi
+	YNjuVT/zIgvfAb2FZdWhiyHKhjjVktWB/9/3B3IX/hkJppS7amxssIwJTYvmn9BnHBaePvT43ur
+	kXCzt0aN7KtwDCh45vFezFHjjT4RlnCh8iW8+U4nKacSVxvzZmbICOxPYQZAQqOD0utleciMxrm
+	VK+i+l2FishAX/1ymEI52ZEerkT8SFD0IYAqqE
+X-Received: by 2002:a17:903:40d1:b0:2c9:97a7:328c with SMTP id d9443c01a7336-2ca7e8b77a5mr68618105ad.46.1782999569036;
+        Thu, 02 Jul 2026 06:39:29 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ca9aa01bbasm13545955ad.72.2026.07.02.06.39.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jul 2026 06:39:28 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v7.2-rc2
+Date: Thu,  2 Jul 2026 06:39:27 -0700
+Message-ID: <20260702133927.1489938-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] arm64: dts: qcom: x1e78100-t14s: Add thermal zones
- for keyboard skin and charging sensors
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, sre@kernel.org,
-        hansg@kernel.org, ilpo.jarvinen@linux.intel.com, linux@roeck-us.net,
-        andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
-        krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: bryan.odonoghue@linaro.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-References: <20260701103714.22583-1-daniel.lezcano@oss.qualcomm.com>
- <20260701103714.22583-3-daniel.lezcano@oss.qualcomm.com>
- <6bcfcd62-d831-4262-9ce9-66e12a72b3f2@oss.qualcomm.com>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-In-Reply-To: <6bcfcd62-d831-4262-9ce9-66e12a72b3f2@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: XxU7jAMOYf5Nbirf0e-3syJQ8uXEraZ9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzAyMDE0MiBTYWx0ZWRfX/d1i1h8B8wCN
- N8zDawrxhq9Bk42WkpFY9LwMLMtF97CLKRCUaWWRD2ll5pkrF2SvL47cKPknDliNSf47xy5mUcN
- 5J6+MZ7szOcPE/C3UdxcFD7ahhnF4WRMlHNrjB3wJzk+Gwhop/CL4vqkt7HyoAZrW/AnWZHGx/v
- NlFuuu2IFhyndl7ujmEDqe+aDZVIS9TjTa3m02ZpXxxRG5PsMBToSThCnqwWnlPzEA4caCQDaqZ
- 6cv7RNkS/VUCi47DN90mnDPjFe4Q1Jea4wd3Hlnr0BKMPz5IhK+3bCUnBXM/lrVC5HVp2Pfg2hD
- SddXFBclMHHUis6H/hKttakdxLoppgfr4WTFM3ZmHoitRaApVbypo8LkJY2y7JteClI/fcWK/s0
- NCYNB1bU3OJ4RARLu+ENF3EaT3MpQQuzmS21A4JSSzBtMbSzZDs0F+zeznhGHjLizFABe5pDRLP
- NFAW8qQm5Oyxnn9dLDA==
-X-Authority-Analysis: v=2.4 cv=dvXrzVg4 c=1 sm=1 tr=0 ts=6a46691c cx=c_pps
- a=qKBjSQ1v91RyAK45QCPf5w==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=RAioF0-LDSMA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22 a=EUspDBNiAAAA:8
- a=3fF9mxJG-zv1VSP5w2IA:9 a=QEXdDO2ut3YA:10 a=NFOGd7dJGGMPyQGDc5-O:22
-X-Proofpoint-GUID: XxU7jAMOYf5Nbirf0e-3syJQ8uXEraZ9
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzAyMDE0MiBTYWx0ZWRfX0oEjnhJeluxb
- Yzh89HMYXnq2w7bMN2vnQ1MHNotAuSyUo46xmSkNdWUKeZfZ7bwXqCJkoV9gROlIvnEFACdCg/C
- aON1Yl29qs01rNiwiYWO8lan/i0Zmnk=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-07-02_01,2026-06-26_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 phishscore=0 priorityscore=1501 adultscore=0 impostorscore=0
- bulkscore=0 lowpriorityscore=0 clxscore=1015 suspectscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607020142
+Content-Transfer-Encoding: 8bit
 
-On 7/2/26 14:17, Konrad Dybcio wrote:
-> On 7/1/26 12:37 PM, Daniel Lezcano wrote:
->> The Lenovo ThinkPad T14s embedded controller exposes several platform
->> temperature sensors that are already used by the firmware for thermal
->> management.
->>
->> Expose the EC as a thermal sensor provider and describe the keyboard
->> skin and charging circuitry sensors as thermal zones in the device
->> tree.
-> 
-> [...]
-> 
->> +&thermal_zones {
->> +	ec-keyboard-thermal {
->> +		polling-delay = <5000>;
->> +		polling-delay-passive = <1000>;
->> +
->> +		thermal-sensors = <&ec 1>;
-> 
-> Do you think it'd be worth to add dt-bindings defines to avoid raw
-> numbers here?
+Hi Linus,
 
-No it is not worth. Usually we put raw numbers and they are untouched.
+Please pull hwmon fixes for Linux v7.2-rc2 from signed tag:
 
-> [...]
-> 
->> +		cooling-maps {
->> +			map0 {
->> +				trip = <&ec_charging_psv0>;
->> +				cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu8 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu9 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu10 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->> +						 <&cpu11 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->> +			};
->> +		};
->> +
->> +	};
-> 
-> Stray \n above
-> 
-> Otherwise:
-> 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v7.2-rc2
 
-Thanks for your review
+Thanks,
+Guenter
+------
+
+The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
+
+  Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v7.2-rc2
+
+for you to fetch changes up to fe87b8dc67f1b2c64e76a66e78468c533d3c44ca:
+
+  hwmon: (aspeed-g6-pwm-tach) Guard fan RPM calculation against divide-by-zero (2026-06-29 16:37:43 -0700)
+
+----------------------------------------------------------------
+hwmon fixes for v7.2-rc2
+
+- adm1275: Detect coefficient overflow, and prevent reading uninitialized
+  stack
+
+- aspeed-g6-pwm-tach: Guard fan RPM calculation against divide-by-zero
+
+- asus_atk0110: Check package count before accessing element
+
+- ltc4283: fix malformed table docs build error
+
+- occ: Unregister sysfs devices outside occ lock to avoid lockdep warning
+
+- pmbus core: Fix passing events to regulator core, and honor vrm_version in
+  pmbus_data2reg_vid()
+
+- w83627hf: Remove VID sysfs files on error and remove
+
+- w83793: remove vrm sysfs file on probe failure
+
+- Various: Add missing 'select REGMAP_I2C' to Kconfig
+
+----------------------------------------------------------------
+Abdurrahman Hussain (1):
+      hwmon: (pmbus/core) honor vrm_version in pmbus_data2reg_vid()
+
+Guenter Roeck (2):
+      hwmon: (pmbus) Fix passing events to regulator core
+      hwmon: (aspeed-g6-pwm-tach) Guard fan RPM calculation against divide-by-zero
+
+HyeongJun An (1):
+      hwmon: (asus_atk0110) Check package count before accessing element
+
+Joshua Crofts (3):
+      hwmon: (max1619) add missing 'select REGMAP' to Kconfig
+      hwmon: (ltc2992) add missing 'select REGMAP_I2C' to Kconfig
+      hwmon: (max6697) add missing 'select REGMAP_I2C' to Kconfig
+
+Matti Vaittinen (2):
+      hwmon: adm1275: Prevent reading uninitialized stack
+      hwmon: adm1275: Detect coefficient overflow
+
+Pengpeng Hou (2):
+      hwmon: (w83793) remove vrm sysfs file on probe failure
+      hwmon: (w83627hf) remove VID sysfs files on error and remove
+
+Randy Dunlap (1):
+      docs: hwmon: ltc4283: fix malformed table docs build error
+
+Runyu Xiao (1):
+      hwmon: (occ) unregister sysfs devices outside occ lock
+
+ Documentation/hwmon/ltc4283.rst    |  4 ++--
+ drivers/hwmon/Kconfig              |  3 +++
+ drivers/hwmon/aspeed-g6-pwm-tach.c |  5 ++++-
+ drivers/hwmon/asus_atk0110.c       |  3 +++
+ drivers/hwmon/occ/common.c         | 34 ++++++++++++++++++++++++++++------
+ drivers/hwmon/occ/common.h         |  1 +
+ drivers/hwmon/pmbus/adm1275.c      | 20 +++++++++++++++-----
+ drivers/hwmon/pmbus/pmbus_core.c   | 37 ++++++++++++++++++++++++++++++-------
+ drivers/hwmon/w83627hf.c           |  4 ++++
+ drivers/hwmon/w83793.c             |  1 +
+ 10 files changed, 91 insertions(+), 21 deletions(-)
