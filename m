@@ -1,67 +1,67 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFDD33D647C
-	for <linux-hwmon@vger.kernel.org>; Fri,  3 Jul 2026 14:09:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED3803D9DC3
+	for <linux-hwmon@vger.kernel.org>; Fri,  3 Jul 2026 14:11:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783087759; cv=none; b=BCCvp+12mAKDiNlXERwheBMVc8CPCCkF+r7DJWQbZ4by8GFWLD2cf0dBdqQ+3tK+oI8htpUdrHTIbYxKZvugO1nwrK6YLYZgMsyhlTfwD5DXMfWug0ixWeTd592qpXk58RKY/+y9HViLfrRd8/rXLgA25xudAq0U+8yt5IboN9g=
+	t=1783087896; cv=none; b=OWkFQJzZZLZW3fQDHDVCkiRNhCX+if67N+uRmpX3IaDzbt90iEP4G6irsXaFS2s27ayfLtJ5TfgxEuN94fXVJ7xdWub/mHbxX70t0EBWjRZQdD1vSNwlyAeRge6otWRYt28rsWWyGqxc2wzzklRVvUSJQSry4I0MlOzFsP+t22w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783087759; c=relaxed/simple;
-	bh=d+OXytV2ebkUyD2yp+ya6NCaRMIez7CYGr9oi6b7Unc=;
+	s=arc-20240116; t=1783087896; c=relaxed/simple;
+	bh=XFguk+/29BmKnygKi86AdinFHkPeP2Rz3S+/Z8GHQNc=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Mqg5dxlSSDmrVkZLj8mxf9eJte184c91txCSkfyU3oQaE5pxGYZOJv2ytWUizqkfiTVGBVoY1Cr4xNvfOdBdvq4+uI4dxasv2FlYgOo3Poey4yQFhHWROTqh19DxyF70g8F/ODvMJvBMCvmPcsqIVwJviYBTR5APRcGOX8Rseh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=C6brIbdR; arc=none smtp.client-ip=209.85.128.44
+	 In-Reply-To:Content-Type; b=mWEokth1bOxMkZ8SOw2ubYQaoTTIEr9rdXo1ZHl4EdVy0j0unOSEiTNssqMDeuArtCc21jppR83J7pPz6VlQtOdOthbOCIKj1roMzfDmzB7xImSrYZm1bNh0EyBHylI9995W208PWfKeBLSnTskUGvtFloW9auiqxhZzuVImgPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=q1mfpm5P; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="C6brIbdR"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-493b779003fso2920715e9.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 03 Jul 2026 07:09:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="q1mfpm5P"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-493b7612475so5931055e9.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 03 Jul 2026 07:11:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1783087756; x=1783692556; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1783087893; x=1783692693; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:references:cc:to:from:subject:reply-to:user-agent
          :mime-version:date:message-id:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=lfO1X26POMkNONMKCAH4khlnd1ko4GHBpFbhLRAY8BA=;
-        b=C6brIbdR7AaVCl3n4ymNz7qiHFQms2ygBgyAqoD0Qj+NQ56i2dZqz/1EbqsEe9rhxV
-         FqXke+oQ0Hr28SM4pZDf9nXXU+/JAQzjCXpvNqtejxgpfAu5DxIW9hYNcyoyynGGT69Q
-         JJrWWeIMw4NZAKcdGbM4nybU1pW3d0lcaFM6eXKNodNcCNz4vCZbNaDTEeaKzOfO2ZDH
-         kWTU3k29ZJCjU8aq21o4hpGi1OtHmVppVH8AnL48nrdscASHN+Fl54FFe0OkUZfHs3f2
-         /r7W7RKjnMQURaG38Ot/XZJpT59uDGMvsnuiCMSXqbvGBQ0Bhl6UvXK3bbhZEdImRXPF
-         jcDg==
+        bh=Ni8iUi7jACzIQAQDv2pQjWB3ArBVYn1ELAUGfxQKnY8=;
+        b=q1mfpm5PDeEshAO8kkqhv/CIslldqVFl18/8aZGRP3cnl4BmELOtNUaxY6L1WKlNvs
+         nLI1X7SdeRw3Osd0IlAyN2v8AOQaJzqWUWwBFdTmCt6C6Pg1f8dC1UEpnVfJgnFzup32
+         ef2JrPQ8FxzU0G77VGXWr1MpuDs8M3qLpgwqHenWK2AH4Gos7U5qNv+MpgxQNSkGMl3L
+         mfJWUSwH7ffnkD0PbELdwfItZN7mDap733IaRIV4ijFw2pfrIJ1WqPIzJm2gWFM8n//f
+         q0h/gSPSTTVqrhi3oDfDRlhAM+2O+utLHkmqnES6JwJcEjFgQ8NMTBnafyXOhUZrwOeZ
+         Ep3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783087756; x=1783692556;
+        d=1e100.net; s=20251104; t=1783087893; x=1783692693;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:references:cc:to:from:subject:reply-to:user-agent
          :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lfO1X26POMkNONMKCAH4khlnd1ko4GHBpFbhLRAY8BA=;
-        b=S82qoNSi17XYyyTkfxmIuT9wB5L+sacGjEh4Qp6bRsmfBZTUhRQckhoEcD9jtndm9T
-         bvdkZVZRoUx/baLPM+Pod0igkepEhksWc/XjKlfPxz9x1pxx6ouraTl+65sAQgb9KhPJ
-         er0fFv2bJGllwIqz9i24RruHrl8iLuzCfm3h4cPY3IZfIpT0AXulQjCzviug1kP25I3d
-         bj3X06idm1K/QLc9lDdstioLhoqoNwf3yUpbPa/7qTrG0zLzxex8WU/i2aW+biPVIWNB
-         UyNKT+xKO6qpt+TTV5WfiYWK6/bFvX6BhV4mrxOrmqz5fvFfzlDD9rxbjCsn4toWJf2+
-         0fww==
-X-Forwarded-Encrypted: i=1; AFNElJ8WpAw/ko7wJTXeJpvfV0x3UAdkFj215nOeAi4VoKJp4HXun2qDJJ7lhEaaQrnOk8Z/J+zbrVjzISSWYg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyrtoHjDP7wYLbOLhHlkYaCRQ69JRf2flPwS1ptrzcgcjM1455C
-	Dx4VSjPK2b+PB1xWBXuhGOqR6knTTJ2uLwsXUbB8g6qhF2fufoaXwDbUzD+naVlIZUc=
-X-Gm-Gg: AfdE7cmMXMm20tj8vPlsdzg5Tq3Ed84nRt22WPl+XbrX2e4pVJry4m0uRGIoeI7k0lo
-	a7Vfgs5h+56Ksd1f387gC3/KBJ3KOILJP+7bPQ/L199pN5FphrEzgzQE8p6qmBhHeBf3X4pdKn5
-	3lKeYIJX4lC2IbpWRKMZfSLCj3fjKagvuOo6hcSQZLS4BfkxLck5fH30x7WoAfU7YC+Am87wU5x
-	ToIdxo8rkkZx30+odLctiiE+iuQpw2WGvzvBnsodXLymdOx3pgRTAdNTh2jkCQQp67tn+Bt+grh
-	8fRGTvzSwMCKjnG+ItNSSjZMA34n3IyUeLuC2+dWbJmpGTzSg3GLRbb29AlNhOHKTYyOFkYMZA4
-	y/ffPdHpQdHYt9FYl5cv3EkEg8TsFMFleszeGurLfwSs0F2bwh57yw9zcWEL/JZKU2dFCOsgUgL
-	Px9aKNpcwItDGO4JqtIyd4cZq0DRaQ8ngXzoDY+NfaZHhFlpvpzj6cdKloBtAc+5soFKXt
-X-Received: by 2002:a05:600c:c3c1:20b0:492:4363:e7eb with SMTP id 5b1f17b1804b1-493d0f3ca40mr3345e9.32.1783087755967;
-        Fri, 03 Jul 2026 07:09:15 -0700 (PDT)
+        bh=Ni8iUi7jACzIQAQDv2pQjWB3ArBVYn1ELAUGfxQKnY8=;
+        b=KWp7Mvs8sQD9DEucc8vbqM+LEDHz0Wv/9ieHpNtdZxF4hvChiO+gWWL5Q4WOw6nlzK
+         Ykis/Oij/S6IESoIS+fiW7nMuv3M9fsNge1lbQfHX8pf3z9O8huupnARSjGpQJVUKglL
+         HnpnJyVZUVkx7iIH5h3zM+d24c43Yd/AztwFYWdIZNhJnpGQ3/oo9HH7dvIfaZKXld+u
+         xknhh5jdpiO7gnyC9g59zEiLQdPZ3L88DSe4wP+7NPU4Sd7EEGLCJ7a7i5DWPkdgNJx8
+         EdHa5vkyIgptL1pQiqJdTSMerDc/Jd0YV04f54SFTbT2nqACqmZC11g2Qnj55G6QMju6
+         460g==
+X-Forwarded-Encrypted: i=1; AFNElJ8usGmaf2JTykz9wvCi6gs+DI9Ry9YhD1/FNkKT8ibaWqkPplt8tdK89YWrKZD62+sTQo5efiijOaN6dQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzY7x7ib5d3zX0VFU9ag759btXoCUjCfANhWRa0H/du891OPORL
+	34hOPvLcTrajSDxbtNZ6cV+FZHy1qgwEFdGwubsLTVKliymZ5HzCu9T0IwUpHDbjQfw=
+X-Gm-Gg: AfdE7clfSdqE0PFvbm4mz5s3QegrFB+XI7CJ1toYGomiMJvHNXMtBJc8u+tyoYhc/+k
+	26BifineTcQqFplU2iqMhMro1TTu914qOKrYHKhxwBiJrT+KVr0fETmUf6ldF0H0FZaccOsQNFO
+	ELOnDPk2oRl/pZVJ2DXtgnk/t3eHRSamH7p5UHQdbeXP5BB1wRA3TCQdZasyokU+kASifPaWcxq
+	wckuEFjG+VZ/66YrpfdHnthY/naNuTj2P2l4VnLG/lM+aVV2boCMATTPFCpcRKoPYNVDetiw6Ce
+	qY9iFzPCiIrUoFs81wVZ6HpT1AzFGbhj/BxeqfjCRltqZv+uEA8kcUJjPLxNgoi0wCLi9DZaY+l
+	3bpJo/MMmebIWjgA16lC/xiXayKNp8jSiWBmmdLbfqIAjNoxPE7QU9Eu8bkxg63QAkd8CM7Lzqt
+	XMkvFq5cAlzsmt5rt1JMHLr2h2DavBSKnM/FbUOYUrqMHu7N622ktz6L4KqRAhpEo2Eug6
+X-Received: by 2002:a05:600c:5286:b0:492:40df:d49c with SMTP id 5b1f17b1804b1-493d0f39e9cmr189465e9.23.1783087893252;
+        Fri, 03 Jul 2026 07:11:33 -0700 (PDT)
 Received: from ?IPV6:2a01:e0a:106d:1080:9b13:921f:4f13:6cbb? ([2a01:e0a:106d:1080:9b13:921f:4f13:6cbb])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-477ddf0fb15sm16668205f8f.29.2026.07.03.07.09.14
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493bf11eba5sm141272515e9.0.2026.07.03.07.11.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Jul 2026 07:09:15 -0700 (PDT)
-Message-ID: <45736af3-cdd4-4398-8509-a3593af989e1@linaro.org>
-Date: Fri, 3 Jul 2026 16:09:13 +0200
+        Fri, 03 Jul 2026 07:11:32 -0700 (PDT)
+Message-ID: <e04bc2aa-11d8-4e5d-a4b2-bdb5c3f7e8f5@linaro.org>
+Date: Fri, 3 Jul 2026 16:11:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -82,6 +82,7 @@ Cc: bryan.odonoghue@linaro.org, platform-driver-x86@vger.kernel.org,
  linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
 References: <20260701103714.22583-1-daniel.lezcano@oss.qualcomm.com>
  <5edfa760-b5b1-4f0e-8a14-2a39d2b99090@linaro.org>
+ <45736af3-cdd4-4398-8509-a3593af989e1@linaro.org>
 Content-Language: en-US, fr
 Autocrypt: addr=neil.armstrong@linaro.org; keydata=
  xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
@@ -108,80 +109,87 @@ Autocrypt: addr=neil.armstrong@linaro.org; keydata=
  4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
  QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
 Organization: Linaro
-In-Reply-To: <5edfa760-b5b1-4f0e-8a14-2a39d2b99090@linaro.org>
+In-Reply-To: <45736af3-cdd4-4398-8509-a3593af989e1@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 7/3/26 12:32, Neil Armstrong wrote:
-> On 7/1/26 12:37, Daniel Lezcano wrote:
->> Hi,
+On 7/3/26 16:09, Neil Armstrong wrote:
+> On 7/3/26 12:32, Neil Armstrong wrote:
+>> On 7/1/26 12:37, Daniel Lezcano wrote:
+>>> Hi,
+>>>
+>>> This series extends the Lenovo ThinkPad T14s embedded controller driver
+>>> with environmental monitoring capabilities and integrates the exposed
+>>> sensors into the Linux thermal framework.
+>>>
+>>> The EC provides access to several platform temperature sensors
+>>> covering the SoC, keyboard area, bottom cover, charging circuitry, QTM
+>>> module and SSD. These sensors are currently used by the firmware for
+>>> thermal management but are not exposed to Linux.
+>>>
+>>> The first patch adds hwmon support for the EC temperature sensors.
+>>>
+>>> The second patch exposes the EC as a thermal sensor provider in the
+>>> device tree and defines thermal zones for the keyboard skin
+>>> temperature and the charging circuitry temperature. This allows the
+>>> generic thermal framework to react to EC-reported temperatures and
+>>> apply standard Linux thermal mitigation policies.
+>>>
+>>> As the EC protocol is not fully decoded, the passive trip points
+>>> get/set actions are missing, so it is not possible to program a
+>>> threshold and receive an interrupt when crossed the way up or
+>>> down. Consequently, the thermal zone related to the charging circuitry
+>>> is polled every two seconds until we can set the trip points in the
+>>> EC.
+>>>
+>>> This series fixes critical thermal issues happening on this platform
+>>> where a kernel compilation, or heavy workloads, lead to a system
+>>> reboot.
+>>>
+>>> Tested on a Lenovo ThinkPad T14s Gen 6 (Snapdragon X Elite).
+>>>
+>>> Thanks,
+>>>
+>>> Daniel
+>>>
+>>> ---
+>>>   Changelog:
+>>>     v3:
+>>>      - Removed event based because trip point are not yet well supported
+>>>      - Added an empty line after variable declaration (Ilpo Järvinen)
+>>>      - Used MILLIDEGREE_PER_DEGREE from units.h (Ilpo Järvinen)
+>>>      - Made switch consistent (Ilpo Järvinen)
+>>>     v2:
+>>>      - Fixed patch 1 subject prefix
+>>>      - Removed the fan information part
+>>>      - Added HWMON_T_ALARM
+>>>      - Fixed DT change description to reflect what it does really
+>>>
+>>> Daniel Lezcano (2):
+>>>    platform: arm64: lenovo-thinkpad-t14s-ec: Add hwmon support for
+>>>      temperatures
+>>>    arm64: dts: qcom: x1e78100-t14s: Add thermal zones for keyboard skin
+>>>      and charging sensors
+>>>
+>>>   .../qcom/x1e78100-lenovo-thinkpad-t14s.dtsi   |  68 ++++++++-
+>>>   drivers/platform/arm64/lenovo-thinkpad-t14s.c | 130 ++++++++++++++++++
+>>>   2 files changed, 197 insertions(+), 1 deletion(-)
+>>>
 >>
->> This series extends the Lenovo ThinkPad T14s embedded controller driver
->> with environmental monitoring capabilities and integrates the exposed
->> sensors into the Linux thermal framework.
->>
->> The EC provides access to several platform temperature sensors
->> covering the SoC, keyboard area, bottom cover, charging circuitry, QTM
->> module and SSD. These sensors are currently used by the firmware for
->> thermal management but are not exposed to Linux.
->>
->> The first patch adds hwmon support for the EC temperature sensors.
->>
->> The second patch exposes the EC as a thermal sensor provider in the
->> device tree and defines thermal zones for the keyboard skin
->> temperature and the charging circuitry temperature. This allows the
->> generic thermal framework to react to EC-reported temperatures and
->> apply standard Linux thermal mitigation policies.
->>
->> As the EC protocol is not fully decoded, the passive trip points
->> get/set actions are missing, so it is not possible to program a
->> threshold and receive an interrupt when crossed the way up or
->> down. Consequently, the thermal zone related to the charging circuitry
->> is polled every two seconds until we can set the trip points in the
->> EC.
->>
->> This series fixes critical thermal issues happening on this platform
->> where a kernel compilation, or heavy workloads, lead to a system
->> reboot.
->>
->> Tested on a Lenovo ThinkPad T14s Gen 6 (Snapdragon X Elite).
->>
->> Thanks,
->>
->> Daniel
->>
->> ---
->>   Changelog:
->>     v3:
->>      - Removed event based because trip point are not yet well supported
->>      - Added an empty line after variable declaration (Ilpo Järvinen)
->>      - Used MILLIDEGREE_PER_DEGREE from units.h (Ilpo Järvinen)
->>      - Made switch consistent (Ilpo Järvinen)
->>     v2:
->>      - Fixed patch 1 subject prefix
->>      - Removed the fan information part
->>      - Added HWMON_T_ALARM
->>      - Fixed DT change description to reflect what it does really
->>
->> Daniel Lezcano (2):
->>    platform: arm64: lenovo-thinkpad-t14s-ec: Add hwmon support for
->>      temperatures
->>    arm64: dts: qcom: x1e78100-t14s: Add thermal zones for keyboard skin
->>      and charging sensors
->>
->>   .../qcom/x1e78100-lenovo-thinkpad-t14s.dtsi   |  68 ++++++++-
->>   drivers/platform/arm64/lenovo-thinkpad-t14s.c | 130 ++++++++++++++++++
->>   2 files changed, 197 insertions(+), 1 deletion(-)
->>
+>> Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on T14s OLED
 > 
-> Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on T14s OLED
+> The charging sensor can go very high aswell and when cpu load is high the charging
+> is throttled down, so perhaps it would be nice to also have a thermal zone for the
+> charging sensors.
 
-The charging sensor can go very high aswell and when cpu load is high the charging
-is throttled down, so perhaps it would be nice to also have a thermal zone for the
-charging sensors.
-
-On my setup when charging the battery at 60W the charging sensor reports ~63C but
-goes up to 80C when building a kernel, but stays around ~70C if the charger is not
-connected.
+Ignore this sentence as there's already a charging thermal node...
 
 Neil
+
+> 
+> On my setup when charging the battery at 60W the charging sensor reports ~63C but
+> goes up to 80C when building a kernel, but stays around ~70C if the charger is not
+> connected.
+> 
+> Neil
+
