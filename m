@@ -1,162 +1,176 @@
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013053.outbound.protection.outlook.com [40.107.201.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1636384CC1;
-	Fri,  3 Jul 2026 09:09:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783069764; cv=fail; b=uZclV+dhnho0S5LonWtbg21vdJRDMhhNkqDtxbvcVy4cbw0clTxBk1QhrnWhpjdPszEZPxzO8zlhT5adAPZnGIFSrr13wD/I4YtsEPx04HCwb8jB78O1kA/UnvyfB9vUOIeSWB0QBhttmllcLBPgvaShWz3gVCYHIYa3joM42XI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783069764; c=relaxed/simple;
-	bh=KUpn94OhrkeLrPLpSF0ijpxWajXpR9OGECK78PRr+YQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UtRXAVm3paEPt4ym1Yhy4EB9yS8KqKIjy7bKhdaDSqTtJjc7NEYn8h25XWYNU+ybRt3xtrZ73oXYy30FRklvhCbY9hKjRcOVorK10GG6TFVJQvEYTwSYJ3ALywnZVT/x67DPvATq/gE9z3SzjhoUuQrFwBL5F9AryBo9JOCQkb0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=dEPt/RPt; arc=fail smtp.client-ip=40.107.201.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 851E93D9526
+	for <linux-hwmon@vger.kernel.org>; Fri,  3 Jul 2026 10:32:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783074757; cv=none; b=BCH35nE71Ff2WvecdEAmtttEdAkILpJAeftrIBkpqLvbVnot0JkpBVorCs8nPqgdCFf3RofU0LnxCdlXKsS0HACirOOkGHAdmsF5Z3FQ50Gp38MUb5Cf3HM1knoaV2pR3MMow0aDVDcfjhkwOquNXZ4/1NsMNximXSfRmQiqae0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783074757; c=relaxed/simple;
+	bh=D5ijQV3bUdGx6RAeOYDDyhV2oxFHO7V4Y7ge4JRyKaw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CuTZNBxZfxU2o7dW9kjR/WWPdNCJHCQCa+BBE9S6iiTvx34Am1QCmnYzQbf9iJ3kECIjrrnVcpnrqhgi0/xa/iE13wnErQ95M9g9pc/YshRMB1QtpgtjZEF5WsRG+OicgbYRE/46p7Kyc3bbuFRS0cbzf+eK/cM2VNS7Umkbe1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oGbcWFTh; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="dEPt/RPt"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cZVNPM7HZO54B0Z03IewH9h/w1b7NP9MupMX21MdDYWb/F3lY92uNdwf3dq4JFs1Z5FshsbtpvMKK0dCUFIwi4nBVbVH8RRW5J/3tbKLnpC+ncm4WvBOlNfH8M8lBfSFHXECybWYFx9iiuAdqHZtgqQ8XdgQpZll7/zOoa6BS94uULr+aB+jBeISPSk+ER6BY96HMA/XuQa7yGSLFXXGSmSQ8kUbm6AZo4hAm2O/15n+BFoKQ7AbHp3sUrx/+YOEwtcF+qiVHJqSn7hve9hL295DWSTiO/VvfwknGoJ0gHflejDNSen8uMYy7kc3LpRCYTYeU+GH5vUk3V51izKOnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8Exft41be9H3fTpkjBZf1GxTMCejqeC8UyAjMIlOUC0=;
- b=w5/NuPM82PvUH+vlwSA4nmgQyFQdbBlaKsnH6vZn1bnpQcSZEFGA7FP5qKLbJdaA8ItAl7OQi8vZnPqdQY2X6qL3l0F9jyTFatMs0di/64tSaziRXyYhjAhbT2qny4AneOpstbw0YZtzE7iuPkTfBDcjKfn1MENVGlAqtedgvPNAm0NTs2n4WTV/YXA8Tlm0tYwWIaxGssBjuYarB+CLBxu2veeQL4PJeoaKaXI7DtIwzX19Typdyll6ln/E0S3CNEpfYTFxYtMgnJ+pXeWbsiER6R23lbLy1bdwSfCXacKdZ06djCjskN4ohnk275tm3TfQw46hBRFYnfuXMr4MTQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=oss.nxp.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8Exft41be9H3fTpkjBZf1GxTMCejqeC8UyAjMIlOUC0=;
- b=dEPt/RPtixmBB6QhsxYM11iIhL6jgM0HM28tbO5zOrqWJTgny3ByxJHOMwKKr2omuDMbYryElspt19sKfu5D1R+YeSD56ABoiYQRKR8bfrtqdBxh3k90VX7Adlx3IjxhbbzNbuSiWY/g7fI7vobFN1rvLO8u0+Eqaqqpqh2fqKhm0s25BgAebD8dTNi5cfIGijM+3CyP8iKirHIM+8btQwE9fmWg6TRCYRrXRVjYip1H5AKR+VYsg9an3y1cPcjlU806OPNWAedtRjrMg3Z+UjQT4wUGdrLkbBNMTZUWi10wEkS8EYjcbwHq1KLKMBW/JE0dwCHna2XUYcamZNKuYw==
-Received: from CH0PR03CA0010.namprd03.prod.outlook.com (2603:10b6:610:b0::15)
- by DS0PR12MB6605.namprd12.prod.outlook.com (2603:10b6:8:d3::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.9; Fri, 3 Jul 2026
- 09:09:16 +0000
-Received: from CH2PEPF00000140.namprd02.prod.outlook.com
- (2603:10b6:610:b0:cafe::6b) by CH0PR03CA0010.outlook.office365.com
- (2603:10b6:610:b0::15) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.181.9 via Frontend Transport; Fri, 3
- Jul 2026 09:09:15 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CH2PEPF00000140.mail.protection.outlook.com (10.167.244.72) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.181.6 via Frontend Transport; Fri, 3 Jul 2026 09:09:15 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 3 Jul
- 2026 02:09:00 -0700
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 3 Jul
- 2026 02:08:59 -0700
-Received: from build-akhilrajeev-noble-20260602.internal (10.127.8.11) by
- mail.nvidia.com (10.129.68.7) with Microsoft SMTP Server id 15.2.2562.20 via
- Frontend Transport; Fri, 3 Jul 2026 02:08:56 -0700
-From: Akhil R <akhilrajeev@nvidia.com>
-To: <frank.li@oss.nxp.com>
-CC: <Frank.Li@kernel.org>, <akhilrajeev@nvidia.com>, <conor+dt@kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
-	<linux-i3c@lists.infradead.org>, <robh@kernel.org>,
-	<sashiko-reviews@lists.linux.dev>
-Subject: Re: [PATCH v5 04/12] i3c: master: Add support for devices using SETAASA
-Date: Fri, 3 Jul 2026 09:08:55 +0000
-Message-ID: <20260703090855.1519255-1-akhilrajeev@nvidia.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <aj0iG5xplWPWc6m_@SMW015318>
-References: <aj0iG5xplWPWc6m_@SMW015318>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oGbcWFTh"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-47362928f65so413008f8f.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 03 Jul 2026 03:32:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1783074754; x=1783679554; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xXqnKE5BVSq5meuyy3aSxrzRU5PavHRibtLm4NqA0hs=;
+        b=oGbcWFTheGuatgzxnFFH6wuCsl5Qb0XbSOH9emVtGr4Wp/p5s+9UGaT95T1+QNp7ON
+         OjOMktfU4yUNmVI4+pIrLqLCBkk0FE6P4Ta8ytqAkknc2s4WZtR6c7+C0imbjlcez0X8
+         dASoyUvGlF1CG5/vebFc49OJPPn9VTc5aabfhIRDhy/GDoAyyIWjFAI+P5FQzJ9B60nZ
+         cqVW28q5hG/KiFo1ghr7nsW6YugyyvvIqIvRN86V9ioulgmGEL7vt/p/LuKHkfsYfxtB
+         RyvccYfrVkfssvIPiALGePd+e2g2UY8nuXHA9rk48upBsR+KjS3nV6PCFR1ckRIp3CpU
+         +nXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783074754; x=1783679554;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xXqnKE5BVSq5meuyy3aSxrzRU5PavHRibtLm4NqA0hs=;
+        b=NIkXUwOBw9dO6GXYb4bsSZkU/PLzKZD+tPpgY8uq4KM0qqfBxtsosz8x7CE3Ptc+iJ
+         rCtjedbSxSKc9ikVutqh4yIIiNEe7ppqbgJcRyN8w0s3xnZUTn4zH8h+VLOmrciCNAdf
+         rbsbLsvXc6bTbQ/YDZV571nP9REomOj83AnkxNt9FmVD8mF4WenQS3w/X1COCNF2O9A2
+         9J9N+p3nPSa7K062tHJ42e8zbtWMRHREPdvWbxDUfonmYo/YaEISVxqG35ER10yneNCl
+         A3fgoObCoEZsEbhPohvFp4HwrCyEgmIs2rej0LSJwh6OTJwFCTVTgiwM3ZIaqTsG8S1S
+         u6ZQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpgZg1qdwhp2r+3LKtNJTcJG7nzdVjORCJowVdm3DjlL0YDuNOo+pqUqIiI4kXBjKI+ShbawwzscszRJQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDll8Ph+P0e2RiMRSC315dKvUm8puD2gcKOM1aMK8oSxny1qS/
+	LMuHvh6uVH5ff9JPlKTNjjKeJdUK7S+9cB+9Q1EbKFH8KWn+9HlCqRX+VFg/6xnGlJA=
+X-Gm-Gg: AfdE7cmggV1xWWiWihAfT3mkTrZ5QJwIril50jmmhUfWj8+t9pBJTzk0T2lznzsVWZs
+	NHBV9Bl8+YIjOmOs8w2PstFAcf5zQkeUuaSn0jFC+2gLZy3rp6eqR2th85lag0SoaWZomnlSUyV
+	ZnUQ77YQEZ0dfDrftMzWpb5mMoHZzERjKjU9RQHi5739zGpg8NZCJca7hnxzYC+u6sTFfISfJkI
+	MFts1TLLeIvbthMXF33WrrHnJzgt2I+KgdaPviMSL1m7RwM8jQQzt/CF9vab4/BdCPpLDxuNXx6
+	nOU34Qh9V9jxA/4tlBXU7h92BTfiPVN3fQKir0lNa/OgBL/K2qHXqMdHmv+ID/7tu5VskYi9aQn
+	CtldkauU2ExJrqooooPNWnOZM4vN+p47ch/yCE5z1kF9XLDolZs92If8BbQfTBq1nKmKGKOoWOj
+	APm9NlP3I0AySz/Km1jYtzp1njCVu1K5Z4ivYM0RusER/KbKPtMMM5DtYL2bEIIuunDhfmNs4j2
+	HO4ur4=
+X-Received: by 2002:a05:6000:601:b0:476:5eec:309c with SMTP id ffacd0b85a97d-4775a7cb888mr13583163f8f.24.1783074753843;
+        Fri, 03 Jul 2026 03:32:33 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:106d:1080:9b13:921f:4f13:6cbb? ([2a01:e0a:106d:1080:9b13:921f:4f13:6cbb])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-477db8a4ad4sm18103306f8f.11.2026.07.03.03.32.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Jul 2026 03:32:33 -0700 (PDT)
+Message-ID: <5edfa760-b5b1-4f0e-8a14-2a39d2b99090@linaro.org>
+Date: Fri, 3 Jul 2026 12:32:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v3 0/2] Lenovo ThinkPad T14s EC thermal monitoring and
+ thermal zone integration
+To: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>, sre@kernel.org,
+ hansg@kernel.org, ilpo.jarvinen@linux.intel.com, linux@roeck-us.net,
+ andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org
+Cc: bryan.odonoghue@linaro.org, platform-driver-x86@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+References: <20260701103714.22583-1-daniel.lezcano@oss.qualcomm.com>
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <20260701103714.22583-1-daniel.lezcano@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF00000140:EE_|DS0PR12MB6605:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3a89b163-bfe8-46fc-4e87-08ded8e2c1c2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|82310400026|376014|1800799024|36860700016|6133799003|11063799006|56012099006|22082099003|18002099003|3023799007;
-X-Microsoft-Antispam-Message-Info:
-	0OBafjpWb/8ADt2IZ+YaDBmLzAM4nqNQHfYKQ5YDcvpNiqW768/d30WPj0h+9SZfz/5gve9l9ix0F2GJPlYwVlnl8RZAZbfUmAQfAbZh9mmOGz9Hc1w3q4JOELvo7CBfqw5CWJBsYrY5aJ7KBL42UbsEsvpCcKKTnFYLgKoLZgidQ8ENUDPJkEsmVIPqv8d2wctT2zt4J5wWCZW1dt9Ysk3DU94QIJwCbVlEj9fslVCGDzPzd4IfVJrV7QEUXcxpSyBLmR508xfZx0+KUwfQkdQjyNj3xYRDH+C12fhShpu4UJFYjsu4UBM4IDlQvecKcEGc57oFTW7TXFaHKfMXoISsq9wAsYkXmLQoILbohrSAUlrK8zrNmdHnxIMThLly37sjblwtX28hWwBKAqrcI/cyvTsEQ7uMe5Qrvf8wqgoGXHC8eFjm3oqapSsS0DzB8hknTJgRw9sWiKpGc1a/jhzHTFnbW0dtBTeYt2Fj1vH2esedlG/1nQmMYRTDs/BRMmd9C6h/wvoOXIoIzYsD5iDLjU1/FFJtWJQ1sEc1cX2G6/2U+rywHrqq1D8KZAUNB3oQxjdL9dwL1cs4mxWKa0Wu7RI2wyPheCxCLcUtBuhU4ranaYu4KBr1INWhD/phlmpyMcZoBQFfQ7ETJqd3vuSr4FBos9QQXkF0SQVbmDmEu5Sj/+bPElHTg9Bcbn9CGba4Uu6QWyWGwSxIoWWdxQ==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(23010399003)(82310400026)(376014)(1800799024)(36860700016)(6133799003)(11063799006)(56012099006)(22082099003)(18002099003)(3023799007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	pV6QeB8jYIlSxAQhp8aHz0JEANKV8T71eg0kKiA6DW4X+FM5SUO+PskUoRV+8/q99AocWTQ/m12HY3/wj+vTFx9X8WpPnkW6pSZsa2VDYF1n6DLJuDWnfnhYc4w7Q0s5poxF6M2eOvmLQZVlgwtleZxvGSOGBO7CfQF0MN4NhZayBUEai7xRPXpIsj5mzj5dI+bXBUiO+Uph9YCwilzOtUvwdjgchD4JD2eSfTLw9YvEmcDKqHwqm6E4qMeyKJLZoNFOXcuAcK+nyL4zJbVqcoWHom5+gN1WozkzeCVquhbnmatuyQXbw1hjnH77QC5KfxGpTqB1ZUn8RQTd58vV8ubO5ECs4X/h98dKRGCf3hF0AgYkSik5rotqaW+jeFYmAoH4Cph5g28LCs1Qp26g8O8ObwZigigGQR5MNYKmH4X1WV29e0mtkFYFDk7HzSKg
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2026 09:09:15.6461
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a89b163-bfe8-46fc-4e87-08ded8e2c1c2
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH2PEPF00000140.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6605
 
-On Thu, 25 Jun 2026 07:42:03 -0500 Frank Li wrote:
-> On Thu, Jun 25, 2026 at 09:38:15AM +0000, Akhil R wrote:
->> On Wed, 24 Jun 2026 13:57:46 -0400, Frank Li wrote:
->> ...
->> ...
->> >> [Severity: High]
->> >> Is it possible that sending the SETAASA broadcast before direct SETDASA
->> >> assignments breaks initialization for devices that natively support SETAASA
->> >> but are configured for SETDASA?
->> >>
->> >> According to the I3C specification, any device on the bus natively supporting
->> >> SETAASA will respond to this broadcast by adopting its static address as its
->> >> dynamic address.
->> >>
->> >> After this broadcast, the driver iterates through devices and attempts to
->> >> assign custom dynamic addresses via direct SETDASA commands:
->> >>
->> >> drivers/i3c/master.c:i3c_master_early_i3c_dev_add() {
->> >>     ...
->> >> 	ret = i3c_master_setdasa_locked(master, i3cdev->info.static_addr,
->> >> 					i3cdev->boardinfo->init_dyn_addr);
->> >>     ...
->> >> }
->> >>
->> >> Since the target device already adopted its dynamic address during the
->> >> SETAASA broadcast, it is no longer in the unassigned state and will NACK
->> >> the subsequent SETDASA command.
->> >
->> > Look like correct, but I am not sure if target will NACK SETDASA. Or should
->> > use SETNEWDA for SETAASA method.
->>
->> Yes, this looks valid for mixed device buses. I can move
->> i3c_master_setaasa_locked() after the SETDASA handling and before
->> i3c_master_do_daa() in the same function, so SETDASA-assigned devices will
->> ignore the later SETAASA broadcast. Does that sound good to you?
+On 7/1/26 12:37, Daniel Lezcano wrote:
+> Hi,
 > 
-> yes, try it to follow spec.
+> This series extends the Lenovo ThinkPad T14s embedded controller driver
+> with environmental monitoring capabilities and integrates the exposed
+> sensors into the Linux thermal framework.
+> 
+> The EC provides access to several platform temperature sensors
+> covering the SoC, keyboard area, bottom cover, charging circuitry, QTM
+> module and SSD. These sensors are currently used by the firmware for
+> thermal management but are not exposed to Linux.
+> 
+> The first patch adds hwmon support for the EC temperature sensors.
+> 
+> The second patch exposes the EC as a thermal sensor provider in the
+> device tree and defines thermal zones for the keyboard skin
+> temperature and the charging circuitry temperature. This allows the
+> generic thermal framework to react to EC-reported temperatures and
+> apply standard Linux thermal mitigation policies.
+> 
+> As the EC protocol is not fully decoded, the passive trip points
+> get/set actions are missing, so it is not possible to program a
+> threshold and receive an interrupt when crossed the way up or
+> down. Consequently, the thermal zone related to the charging circuitry
+> is polled every two seconds until we can set the trip points in the
+> EC.
+> 
+> This series fixes critical thermal issues happening on this platform
+> where a kernel compilation, or heavy workloads, lead to a system
+> reboot.
+> 
+> Tested on a Lenovo ThinkPad T14s Gen 6 (Snapdragon X Elite).
+> 
+> Thanks,
+> 
+> Daniel
+> 
+> ---
+>   Changelog:
+> 	v3:
+> 	 - Removed event based because trip point are not yet well supported
+> 	 - Added an empty line after variable declaration (Ilpo Järvinen)
+> 	 - Used MILLIDEGREE_PER_DEGREE from units.h (Ilpo Järvinen)
+> 	 - Made switch consistent (Ilpo Järvinen)
+> 	v2:
+> 	 - Fixed patch 1 subject prefix
+> 	 - Removed the fan information part
+> 	 - Added HWMON_T_ALARM
+> 	 - Fixed DT change description to reflect what it does really
+> 
+> Daniel Lezcano (2):
+>    platform: arm64: lenovo-thinkpad-t14s-ec: Add hwmon support for
+>      temperatures
+>    arm64: dts: qcom: x1e78100-t14s: Add thermal zones for keyboard skin
+>      and charging sensors
+> 
+>   .../qcom/x1e78100-lenovo-thinkpad-t14s.dtsi   |  68 ++++++++-
+>   drivers/platform/arm64/lenovo-thinkpad-t14s.c | 130 ++++++++++++++++++
+>   2 files changed, 197 insertions(+), 1 deletion(-)
+> 
 
-I just noticed that the specification says: if both bits 0 and 1 are set,
-meaning both SETDASA and SETAASA are supported, the I3C Bus Controller should
-use SETDASA first.
-
-So moving i3c_master_setaasa_locked() after SETDASA handling follows the spec.
-
-I will wait a few more days before sending v6, to see if there are any other
-concerns.
-
-Best Regards,
-Akhil
+Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on T14s OLED
