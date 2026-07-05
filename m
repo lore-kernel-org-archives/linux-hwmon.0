@@ -1,73 +1,73 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7071FF1B5
-	for <linux-hwmon@vger.kernel.org>; Sun,  5 Jul 2026 11:31:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A561C283C82
+	for <linux-hwmon@vger.kernel.org>; Sun,  5 Jul 2026 11:33:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783251114; cv=none; b=Kpr6a8d/6+meVGcYv0NrLq54Op8qvf6S07CqSIEH/pGBCcpLawc13OyYbbNFeOO07wsK/2C7mwEg4FebDQUWHxhmDNwKA8je64/tRQBZRQCH2uhshgrwWySIZbLrEG8pD9JXb9GnaLFP1icXN3Uub5at6/YOOm8bdzqMrgFr1kc=
+	t=1783251190; cv=none; b=kWSbiOmp8lSNHlxURqvvxGd2kCzo6v/2nvNGK6LyMaKeQlVTOsXm3aQB08NE9kj8L1BHPJHqRorY/Z+/2OT8HSuN/L8eHUYzaDhX0DLLAxtNXMOEkf34FVqj+umIE2stcfq3QlPmWgrhfvlfkbVwGjcG9UwpwZMB+4IKCAhgndo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783251114; c=relaxed/simple;
-	bh=ysh6ReeHvJe9TwyiaXD20oAVatLGkl/mCNQ5S1j0pt4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XEYwaCuQUvpaPMh7HM4PTsmo1poFMUPkpi+KHLC/vqUjBNCabdzNNxNBKBU5Hz5FKg6I6D4E7zJqhShePqVgQwLpkx68nWB/4zRkf2NR4IS3MEXXcSiZ4tTCII5jauULsCQJ5p9rjZ4FsEB6pjanEzNyXsVhhv8MzIAFsmQhC9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=drySj0NI; arc=none smtp.client-ip=209.85.128.53
+	s=arc-20240116; t=1783251190; c=relaxed/simple;
+	bh=8P0QNjJlcHI6HgxOlg6IUhN5+Kup9IuekanC4zCHlFg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MmKF32q+vjzpD4wWFel3EM5bnWvmOUlGLHA60Vx40MiLTAhRUvk35uyWsnH8mw9e7EQWmg0wb+aJf5pVBkbWN0WyIWAeaM/XpCUw7bzsOXeSCKBlZ8OjeDYOHxug2oSr2fl2wzxtCVxpxL8d5ElOOdVMkFUPH5i6y5BMYa5wnfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SpzKUKJr; arc=none smtp.client-ip=209.85.221.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="drySj0NI"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-493d1e8aa46so8183985e9.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 05 Jul 2026 04:31:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SpzKUKJr"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-4758b2a9e2aso1201022f8f.2
+        for <linux-hwmon@vger.kernel.org>; Sun, 05 Jul 2026 04:33:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783251112; x=1783855912; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783251186; x=1783855986; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=v5BS4AAszkEfCLhT3vHbqa6KSd2l7Qvz7/ajSmqfW3c=;
-        b=drySj0NIUigj8gy9zfWJrmLr0ZqWPwv3DcsfDZRXbRXYDmbzo1LhY5NweGWiMQQqzG
-         +IDBd5L9cVgD94N1nWtrtKl2qMuhQHJrSls188t3tXmSUxf5RDhOYgUwkmi995Sh9cPF
-         s4SDXq7Z0CQMdLiL1WxIeFu51vNW2vuSwFIyFygT+XjUgpfCbkxEHB/TONamwphvCs9h
-         cKL1S8OAuc6qzUYrDnW2ihf2tJFghhtduYWUeUxggDhymIJC0OLIsk1z8H2n7NzioDXC
-         O0ed6Is9nZvq9FgQZiP5NhxdTqhII/fN1sxEcDbCIWWyEM5Q1QEvibIyZrFgfp4Q3A/r
-         aeOw==
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1GKZD8suZHUX72iEyA8RIZIB5/2RWsYR7LLY9AUUTX8=;
+        b=SpzKUKJruAOg2GVpiB237sKO4JuTh1iRi/Lye8ltFtX2rQtgHKXsOZsOb82EdIHAYH
+         yDgc4vlDhP9gF/xodzQoBlwCIh5TqODVskp9GaOgl50/h2bsajvTBXvZcPJmLTiLxdW3
+         Pn4m1Rx/dNuSZbk5esj/5XMi1B0MNToMNEF7TzQAc7qlYfSJQxhM8nBfO9lnFP+ZTezm
+         5KtpoHv7loVAbbEGx8JGlLnb4PZcwPuW90BkPXHZdcsMRFVabwCLMRY0H/6xcUHu6ER6
+         jWLZpt0dfv89fqukFjvOzsNUqCJsEzFNCxgMWxChhdAuLU8Lxr9yoifxR9gIw7aewG2X
+         k4ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783251112; x=1783855912;
+        d=1e100.net; s=20251104; t=1783251186; x=1783855986;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=v5BS4AAszkEfCLhT3vHbqa6KSd2l7Qvz7/ajSmqfW3c=;
-        b=b/UQyeursXn6vAiubtY1dU5wChjpvzHbjk8AsWi/on/TagZoDvUbORvRRev3qtC9UA
-         chuui/OMjEMZHtjQL+U+8wpqAwFHBP2d+KGR0806TtDoxeQwUztooiQVWkDIWi+LUKKv
-         QjkFMp3rjD4UxXMKmFRFN+Go0klATbiQBb0kldozCFsrD846m0ayVQydknGgnMWSfZQr
-         S02UrP9wZIJbShFIvXLB6ltDE1oct6oxSnc5FBfogZ4/ke1MrbvBcG00cu36edN9QPwa
-         V9B6K+pwKUgs1EJKJm6GzwAf/qK1hd4mj1jJFV/sf6BC2bdITwtlcqSr240gMpgp6hHl
-         vmAA==
-X-Forwarded-Encrypted: i=1; AFNElJ+R/LfI2bmR5r8RHuYOrOJisvKLL4roGx+kvtAsD/NRpgr8D+y48u1Yl+HB7lhJ+/JOFKAZfWIZMTwMPQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5WSXR2+66p1lYifnLj+JmKvr13W7kRBJpii+47nHp6GTKZxIv
-	Tq8JGYldMoefx9RUJtj6XXgSS+WmTUZB4LDd1Ijk/VYy5dDIVZ9kkrai9C3ktuw7
-X-Gm-Gg: AfdE7cl+PWEYRxY6lSD6g6O8aDmDgsYiC5cxjsp931tonBAiJIfSGk2wltSlJ2VBPIL
-	Kfk2SNuUc6TLrRAal9/ma7ffersibAtrIEONGQujELIO8312V0hatA/ju5X3TYKXVykJup840k7
-	2PdS3XzKyXDkp+9QfmWbn/gPhBvZJG2swl4AuffoLzk1+Rg+wADLlCewfmfS+t0TqJJE9X2ugxk
-	QPRIDYzgDCuapOPCN2nmlXvdJ5UGTbxDud6GxvxnUizr2/YCKP1CoUDRfDZteO4YzlZolM8FQWd
-	eApMowW0uQCKFZjgbw2uJyOYB+ewqjfaT6R1LkXcVlRnNdJCi0/OlmXEiW6nmw73qV/Xg8Lk12T
-	6AVQ5+Y1gVw3kZE9q0eK+apQwiwDiocvHtgd5FP+lOQ/YmTCTALYCF3RF5KMpmPaDuMVzewOUh0
-	PQtScF06rjFyXwBmk0xEypEx4ZcLwqrq0=
-X-Received: by 2002:a05:600c:6288:b0:493:bef8:ba8 with SMTP id 5b1f17b1804b1-493d1201f26mr69773425e9.39.1783251111668;
-        Sun, 05 Jul 2026 04:31:51 -0700 (PDT)
+         :message-id:reply-to;
+        bh=1GKZD8suZHUX72iEyA8RIZIB5/2RWsYR7LLY9AUUTX8=;
+        b=oCUVVMSkyCquN4O3uYxAKfXovKfyKivwcHCfukd8xJ0W/KhPow0Cn5X8dGL4fQVdgv
+         T6QsCzEWDiukFXBhRRn6M0XtvxL1Q5fxxyX52V9QZss3Wpo3vvx7Pvs1fXm6AFSBxS1g
+         3/vgHyF9mxPa2RVawnR1uzx+OvPOHAtBqDBN89XDofYR+5jN6U+RR0o4mQIKTTmcJITd
+         eV/luGpSHxscbXinwNxvsPL1B/ijWTOvl1I3bb60rZgbvS9qT1tXsDDaOam9CoDEqewc
+         FAuc9pvzpBtokwll9f0brzmgLPhhHD8609MfN+qEgTTZMsDFK0/YbK3bvhtiCpJodkCQ
+         Ea+g==
+X-Forwarded-Encrypted: i=1; AHgh+RoVNhLlMt/ZcQdxut0uLBwS4Oh0HR+sPo64IZvr3jSIPuSIZNhkWNZppqcizu6BpTcGYICXkffyvKH8rw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqmL7HvydVwNM5OVyAL6fULkILBk8RCQryCZBANfVFPeRAtHhY
+	FO0ZoMFGmrWiWD3M5kIno5VD7aj72tljkD+lPqr8GEgc3KCcxeLcTEl9HJpyPale
+X-Gm-Gg: AfdE7clAXylg6PMHoz95XYq6nuM9yMmYd2Gu7k0LwfkljaC4pjO8TrBADlmqz8DmO0N
+	TFnS5Qf3o/szLp4BbisqOlMiVS76gqk/piW41NUgbdYXZ9YU4M22h+5J1TXUgnWfFl9afGBLXNq
+	i9XEZh6+DuX2QUl9RjBoT2VfyaqDDyMaEv82URNCAIgY4mJxkn6Rd3Xs9ttnsY89+WV9mjGfxNp
+	5DPq5lD6tLB/Y3WzHZV6kzUW0zivA4+sT8cmeErelG+nt/oYREz5oe+EKNmru7MgnUBw1gFxFQF
+	YIGCfS9DYI8Hwspl16r2j+HCFhi4RfOB8pMCNeZD/qbVrxjhkEaMJ16NW33OJ7ln+KtC6Hrz4In
+	48qtwnNi34K9Y/2FYD35gx9eGLWV4A0TnsTlF9lIondw1ObMC/IOBePP1aMOR8mTzozY82gtlQr
+	PlFEgjD3twv3fY1koumH4glcikmwMKfhc=
+X-Received: by 2002:adf:e391:0:b0:475:f0c2:5b07 with SMTP id ffacd0b85a97d-47aad8304d0mr5378708f8f.61.1783251185783;
+        Sun, 05 Jul 2026 04:33:05 -0700 (PDT)
 Received: from puma.museclub.art ([2a00:6020:b326:d300:d19:a765:d8d7:bedc])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493c636ec8asm237235895e9.1.2026.07.05.04.31.50
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47a9e4d7801sm15860984f8f.16.2026.07.05.04.33.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jul 2026 04:31:50 -0700 (PDT)
+        Sun, 05 Jul 2026 04:33:05 -0700 (PDT)
 From: Eugene Shalygin <eugene.shalygin@gmail.com>
 To: eugene.shalygin@gmail.com
-Cc: Florian Schut <mail@florianschut.nl>,
+Cc: =?UTF-8?q?Miska=20H=C3=A4m=C3=A4l=C3=A4inen?= <miska.hamalainen@hotmail.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Jonathan Corbet <corbet@lwn.net>,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	linux-hwmon@vger.kernel.org (open list:HARDWARE MONITORING),
 	linux-doc@vger.kernel.org (open list:DOCUMENTATION),
 	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] hwmon: (asus-ec-sensors) add ROG Maximus Z790 Hero
-Date: Sun,  5 Jul 2026 13:31:15 +0200
-Message-ID: <20260705113125.812045-1-eugene.shalygin@gmail.com>
+Subject: [PATCH] hwmon: (asus-ec-sensors) add ROG CROSSHAIR X870E HERO
+Date: Sun,  5 Jul 2026 13:32:36 +0200
+Message-ID: <20260705113246.812500-1-eugene.shalygin@gmail.com>
 X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -75,13 +75,14 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Florian Schut <mail@florianschut.nl>
+From: Miska Hämäläinen <miska.hamalainen@hotmail.com>
 
-Add support for ROG Maximus Z790 Hero.
+Add support for ROG CROSSHAIR X870E HERO
 
-Signed-off-by: Florian Schut <mail@florianschut.nl>
+Signed-off-by: Miska Hämäläinen <miska.hamalainen@hotmail.com>
 Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 ---
  Documentation/hwmon/asus_ec_sensors.rst |  1 +
@@ -89,45 +90,45 @@ Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
  2 files changed, 11 insertions(+)
 
 diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-index 77a709517437..ccf43fd1fa9f 100644
+index ccf43fd1fa9f..84c9160efdd2 100644
 --- a/Documentation/hwmon/asus_ec_sensors.rst
 +++ b/Documentation/hwmon/asus_ec_sensors.rst
-@@ -30,6 +30,7 @@ Supported boards:
+@@ -25,6 +25,7 @@ Supported boards:
+  * ROG CROSSHAIR X670E EXTREME
+  * ROG CROSSHAIR X670E HERO
+  * ROG CROSSHAIR X670E GENE
++ * ROG CROSSHAIR X870E HERO
+  * ROG MAXIMUS X HERO
+  * ROG MAXIMUS XI HERO
   * ROG MAXIMUS XI HERO (WI-FI)
-  * ROG MAXIMUS Z690 FORMULA
-  * ROG MAXIMUS Z790 EXTREME
-+ * ROG MAXIMUS Z790 HERO
-  * ROG STRIX B550-E GAMING
-  * ROG STRIX B550-I GAMING
-  * ROG STRIX B650E-E GAMING WIFI
 diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 29a23484cbe7..4ec2028f7dfe 100644
+index 4ec2028f7dfe..381c399963e8 100644
 --- a/drivers/hwmon/asus-ec-sensors.c
 +++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -527,6 +527,14 @@ static const struct ec_board_info board_info_maximus_z790_extreme = {
- 	.family = family_intel_700_series,
+@@ -487,6 +487,14 @@ static const struct ec_board_info board_info_crosshair_x670e_hero = {
+ 	.family = family_amd_600_series,
  };
  
-+static const struct ec_board_info board_info_maximus_z790_hero = {
-+	.sensors = SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
-+		SENSOR_SET_TEMP_WATER | SENSOR_FAN_WATER_FLOW |
-+		SENSOR_FAN_CPU_OPT,
-+	.mutex_path = ASUS_HW_ACCESS_MUTEX_RMTW_ASMX,
-+	.family = family_intel_700_series,
++static const struct ec_board_info board_info_crosshair_x870e_hero = {
++	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
++		SENSOR_TEMP_MB | SENSOR_TEMP_VRM |
++		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CPU_OPT,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_SB_PCI0_SBRG_SIO1_MUT0,
++	.family = family_amd_800_series,
 +};
 +
- static const struct ec_board_info board_info_prime_x470_pro = {
+ static const struct ec_board_info board_info_maximus_vi_hero = {
  	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
- 		SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
-@@ -893,6 +901,8 @@ static const struct dmi_system_id dmi_table[] = {
- 					&board_info_maximus_z690_formula),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG MAXIMUS Z790 EXTREME",
- 					&board_info_maximus_z790_extreme),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG MAXIMUS Z790 HERO",
-+					&board_info_maximus_z790_hero),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-E GAMING",
- 					&board_info_strix_b550_e_gaming),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-I GAMING",
+ 		SENSOR_TEMP_T_SENSOR |
+@@ -891,6 +899,8 @@ static const struct dmi_system_id dmi_table[] = {
+ 					&board_info_crosshair_x670e_gene),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR X670E HERO",
+ 					&board_info_crosshair_x670e_hero),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR X870E HERO",
++					&board_info_crosshair_x870e_hero),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG MAXIMUS XI HERO",
+ 					&board_info_maximus_xi_hero),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG MAXIMUS XI HERO (WI-FI)",
 -- 
 2.55.0
 
