@@ -1,133 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43AA2288B8;
-	Sun,  5 Jul 2026 01:08:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7071FF1B5
+	for <linux-hwmon@vger.kernel.org>; Sun,  5 Jul 2026 11:31:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783213692; cv=none; b=BYEgfV6F9Kq1hjmWKdaW234gDnWqhjhECztYcW/bxlMHSWLhhPN3BWtWpe3iE8DOl0ypWOauf9zyrEOG4IzBWLm0gLZ5x0g091G2Da70ahe2sqjkNpMXt3E3iRBh2bl1egSpprPHd8uTYdH2N6eCmcrR0VcFte32Qj66wLH2N+w=
+	t=1783251114; cv=none; b=Kpr6a8d/6+meVGcYv0NrLq54Op8qvf6S07CqSIEH/pGBCcpLawc13OyYbbNFeOO07wsK/2C7mwEg4FebDQUWHxhmDNwKA8je64/tRQBZRQCH2uhshgrwWySIZbLrEG8pD9JXb9GnaLFP1icXN3Uub5at6/YOOm8bdzqMrgFr1kc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783213692; c=relaxed/simple;
-	bh=awuH/XulbEDqs59Vh0utt3MvxPA6suHkTxBELRtA09I=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tF4uzpFTD985dSIxGFi5YmZ8XEGIf4E8jPtpsQ4opIR5ZlIrfzltVVUfuzrtSfMaaDKP+ScrpF0gYs8Pw2pNVRTCpyrVKmwdc+HvCT+uiJ+cl4gELQjhj3pD+Q2UyzjiXWoBd/bG8hfeJ4Ebc39IVUF0P+kxYI8zwuJLidr41mE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RBkPSMZz; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783251114; c=relaxed/simple;
+	bh=ysh6ReeHvJe9TwyiaXD20oAVatLGkl/mCNQ5S1j0pt4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XEYwaCuQUvpaPMh7HM4PTsmo1poFMUPkpi+KHLC/vqUjBNCabdzNNxNBKBU5Hz5FKg6I6D4E7zJqhShePqVgQwLpkx68nWB/4zRkf2NR4IS3MEXXcSiZ4tTCII5jauULsCQJ5p9rjZ4FsEB6pjanEzNyXsVhhv8MzIAFsmQhC9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=drySj0NI; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RBkPSMZz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F2BF1F000E9;
-	Sun,  5 Jul 2026 01:08:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783213690;
-	bh=3duzwyHdi6RgshCaFz1ynAPla1JdMO1NFXgABI7Eh3s=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=RBkPSMZz/BRsU6kDJgLsvltCHl/7nmfEQhY9exVykMN2oKxRiBkjx0bffH+fLPUYH
-	 2ck3iltRsWHYzSENjgVtJrOJreGEUuUNSVj3Lw6/17RResfLk3hMjVq8SFBY9BhwDf
-	 sKGEtqWnoWO1tu5pP6nXAc6xmwVh8UNIja+d2sdcRPZaulrROXaGk/79+rxatMNbsr
-	 c2v95I5UOD7pAE9DXeaUhAJJOM+Z8Ue+In01tEjX7ZGwWogIhtIPwhvb1sf0fVcC/Q
-	 IwJtuFvlG/z8wx2ctp0O4Cx1DHR5NHBJURe7Lg72aFRhuLvN9Mldzb+6xKPfPOkOCm
-	 T0vQCQ2/MHtEg==
-Date: Sun, 5 Jul 2026 02:07:58 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: Romain Gantois <romain.gantois@bootlin.com>, MyungJoo Ham
- <myungjoo.ham@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, Guenter
- Roeck <linux@roeck-us.net>, Peter Rosin <peda@axentia.se>, David Lechner
- <dlechner@baylibre.com>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Andy
- Shevchenko <andy@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Michael
- Hennerich <Michael.Hennerich@analog.com>, Mariel Tinaco
- <Mariel.Tinaco@analog.com>, Kevin Tsai <ktsai@capellamicro.com>, Linus
- Walleij <linus.walleij@linaro.org>, Eugen Hristev
- <eugen.hristev@linaro.org>, Vinod Koul <vkoul@kernel.org>, Kishon Vijay
- Abraham I <kishon@kernel.org>, Sebastian Reichel <sre@kernel.org>, Chen-Yu
- Tsai <wens@csie.org>, Hans de Goede <hansg@kernel.org>, Support Opensource
- <support.opensource@diasemi.com>, Paul Cercueil <paul@crapouillou.net>,
- Iskren Chernev <me@iskren.info>, Krzysztof Kozlowski <krzk@kernel.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>, Matheus Castello
- <matheus@castello.eng.br>, Saravanan Sekar <sravanhome@gmail.com>, Matthias
- Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
- <angelogioacchino.delregno@collabora.com>, Casey Connolly
- <casey.connolly@linaro.org>, Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
- Orson Zhai <orsonzhai@gmail.com>, Baolin Wang
- <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>, Amit
- Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
- <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
- <lukasz.luba@arm.com>, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Sylwester
- Nawrocki <s.nawrocki@samsung.com>, Olivier Moysan
- <olivier.moysan@foss.st.com>, Arnaud Pouliquen
- <arnaud.pouliquen@foss.st.com>, Maxime Coquelin
- <mcoquelin.stm32@gmail.com>, Alexandre Torgue
- <alexandre.torgue@foss.st.com>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-input@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- Sebastian Reichel <sebastian.reichel@collabora.com>, Andy Shevchenko
- <andriy.shevchenko@intel.com>
-Subject: Re: [PATCH v2 2/2] iio: inkern: Use namespaced exports
-Message-ID: <20260705020758.011f4f3c@jic23-huawei>
-In-Reply-To: <20260603182052.7d23c067@jic23-huawei>
-References: <20251209-iio-inkern-use-namespaced-exports-v2-0-9799a33c4b7f@bootlin.com>
-	<20251209-iio-inkern-use-namespaced-exports-v2-2-9799a33c4b7f@bootlin.com>
-	<acBr-W2ILu9tnMyd@google.com>
-	<20260603182052.7d23c067@jic23-huawei>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="drySj0NI"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-493d1e8aa46so8183985e9.0
+        for <linux-hwmon@vger.kernel.org>; Sun, 05 Jul 2026 04:31:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783251112; x=1783855912; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=v5BS4AAszkEfCLhT3vHbqa6KSd2l7Qvz7/ajSmqfW3c=;
+        b=drySj0NIUigj8gy9zfWJrmLr0ZqWPwv3DcsfDZRXbRXYDmbzo1LhY5NweGWiMQQqzG
+         +IDBd5L9cVgD94N1nWtrtKl2qMuhQHJrSls188t3tXmSUxf5RDhOYgUwkmi995Sh9cPF
+         s4SDXq7Z0CQMdLiL1WxIeFu51vNW2vuSwFIyFygT+XjUgpfCbkxEHB/TONamwphvCs9h
+         cKL1S8OAuc6qzUYrDnW2ihf2tJFghhtduYWUeUxggDhymIJC0OLIsk1z8H2n7NzioDXC
+         O0ed6Is9nZvq9FgQZiP5NhxdTqhII/fN1sxEcDbCIWWyEM5Q1QEvibIyZrFgfp4Q3A/r
+         aeOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783251112; x=1783855912;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=v5BS4AAszkEfCLhT3vHbqa6KSd2l7Qvz7/ajSmqfW3c=;
+        b=b/UQyeursXn6vAiubtY1dU5wChjpvzHbjk8AsWi/on/TagZoDvUbORvRRev3qtC9UA
+         chuui/OMjEMZHtjQL+U+8wpqAwFHBP2d+KGR0806TtDoxeQwUztooiQVWkDIWi+LUKKv
+         QjkFMp3rjD4UxXMKmFRFN+Go0klATbiQBb0kldozCFsrD846m0ayVQydknGgnMWSfZQr
+         S02UrP9wZIJbShFIvXLB6ltDE1oct6oxSnc5FBfogZ4/ke1MrbvBcG00cu36edN9QPwa
+         V9B6K+pwKUgs1EJKJm6GzwAf/qK1hd4mj1jJFV/sf6BC2bdITwtlcqSr240gMpgp6hHl
+         vmAA==
+X-Forwarded-Encrypted: i=1; AFNElJ+R/LfI2bmR5r8RHuYOrOJisvKLL4roGx+kvtAsD/NRpgr8D+y48u1Yl+HB7lhJ+/JOFKAZfWIZMTwMPQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5WSXR2+66p1lYifnLj+JmKvr13W7kRBJpii+47nHp6GTKZxIv
+	Tq8JGYldMoefx9RUJtj6XXgSS+WmTUZB4LDd1Ijk/VYy5dDIVZ9kkrai9C3ktuw7
+X-Gm-Gg: AfdE7cl+PWEYRxY6lSD6g6O8aDmDgsYiC5cxjsp931tonBAiJIfSGk2wltSlJ2VBPIL
+	Kfk2SNuUc6TLrRAal9/ma7ffersibAtrIEONGQujELIO8312V0hatA/ju5X3TYKXVykJup840k7
+	2PdS3XzKyXDkp+9QfmWbn/gPhBvZJG2swl4AuffoLzk1+Rg+wADLlCewfmfS+t0TqJJE9X2ugxk
+	QPRIDYzgDCuapOPCN2nmlXvdJ5UGTbxDud6GxvxnUizr2/YCKP1CoUDRfDZteO4YzlZolM8FQWd
+	eApMowW0uQCKFZjgbw2uJyOYB+ewqjfaT6R1LkXcVlRnNdJCi0/OlmXEiW6nmw73qV/Xg8Lk12T
+	6AVQ5+Y1gVw3kZE9q0eK+apQwiwDiocvHtgd5FP+lOQ/YmTCTALYCF3RF5KMpmPaDuMVzewOUh0
+	PQtScF06rjFyXwBmk0xEypEx4ZcLwqrq0=
+X-Received: by 2002:a05:600c:6288:b0:493:bef8:ba8 with SMTP id 5b1f17b1804b1-493d1201f26mr69773425e9.39.1783251111668;
+        Sun, 05 Jul 2026 04:31:51 -0700 (PDT)
+Received: from puma.museclub.art ([2a00:6020:b326:d300:d19:a765:d8d7:bedc])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493c636ec8asm237235895e9.1.2026.07.05.04.31.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jul 2026 04:31:50 -0700 (PDT)
+From: Eugene Shalygin <eugene.shalygin@gmail.com>
+To: eugene.shalygin@gmail.com
+Cc: Florian Schut <mail@florianschut.nl>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-hwmon@vger.kernel.org (open list:HARDWARE MONITORING),
+	linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] hwmon: (asus-ec-sensors) add ROG Maximus Z790 Hero
+Date: Sun,  5 Jul 2026 13:31:15 +0200
+Message-ID: <20260705113125.812045-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Wed, 3 Jun 2026 18:20:52 +0100
-Jonathan Cameron <jic23@kernel.org> wrote:
+From: Florian Schut <mail@florianschut.nl>
 
-> On Sun, 22 Mar 2026 15:24:21 -0700
-> Dmitry Torokhov <dmitry.torokhov@gmail.com> wrote:
-> 
-> > On Tue, Dec 09, 2025 at 09:25:56AM +0100, Romain Gantois wrote:  
-> > > Use namespaced exports for IIO consumer API functions.
-> > > 
-> > > This will make it easier to manage the IIO export surface. Consumer drivers
-> > > will only be provided access to a specific set of functions, thereby
-> > > restricting usage of internal IIO functions by other parts of the kernel.
-> > > 
-> > > This change cannot be split into several parts without breaking
-> > > bisectability, thus all of the affected drivers are modified at once.
-> > > 
-> > > Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com> # for power-supply
-> > > Acked-by: Guenter Roeck <linux@roeck-us.net>
-> > > Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-> > > Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>    
-> > 
-> > For input:
-> > 
-> > Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > 
-> > Thanks.
-> >   
-> 
-> For anyone wondering what happened to this... I forgot to apply this at the
-> beginning of the cycle and by the time I remembered we had too much queued up
-> so it would have been messy to do an immutable branch.   Anyhow, I plan to
-> sort this at start of next cycle.
+Add support for ROG Maximus Z790 Hero.
 
-Immutable branch created as: iio-inkern-namespace-ib based on v7.2-rc1
-on https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git
+Signed-off-by: Florian Schut <mail@florianschut.nl>
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+---
+ Documentation/hwmon/asus_ec_sensors.rst |  1 +
+ drivers/hwmon/asus-ec-sensors.c         | 10 ++++++++++
+ 2 files changed, 11 insertions(+)
 
-I've merged it into the testing branch of iio.git so if anyone else does
-need to merge this to avoid conflicts, perhaps wait a day or two until
-I've pushed it out as togreg for linux-next to pick up.
-
-Thanks,
-
-Jonathan
-> 
-> Jonathan
+diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
+index 77a709517437..ccf43fd1fa9f 100644
+--- a/Documentation/hwmon/asus_ec_sensors.rst
++++ b/Documentation/hwmon/asus_ec_sensors.rst
+@@ -30,6 +30,7 @@ Supported boards:
+  * ROG MAXIMUS XI HERO (WI-FI)
+  * ROG MAXIMUS Z690 FORMULA
+  * ROG MAXIMUS Z790 EXTREME
++ * ROG MAXIMUS Z790 HERO
+  * ROG STRIX B550-E GAMING
+  * ROG STRIX B550-I GAMING
+  * ROG STRIX B650E-E GAMING WIFI
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index 29a23484cbe7..4ec2028f7dfe 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -527,6 +527,14 @@ static const struct ec_board_info board_info_maximus_z790_extreme = {
+ 	.family = family_intel_700_series,
+ };
+ 
++static const struct ec_board_info board_info_maximus_z790_hero = {
++	.sensors = SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
++		SENSOR_SET_TEMP_WATER | SENSOR_FAN_WATER_FLOW |
++		SENSOR_FAN_CPU_OPT,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_RMTW_ASMX,
++	.family = family_intel_700_series,
++};
++
+ static const struct ec_board_info board_info_prime_x470_pro = {
+ 	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+ 		SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
+@@ -893,6 +901,8 @@ static const struct dmi_system_id dmi_table[] = {
+ 					&board_info_maximus_z690_formula),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG MAXIMUS Z790 EXTREME",
+ 					&board_info_maximus_z790_extreme),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG MAXIMUS Z790 HERO",
++					&board_info_maximus_z790_hero),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-E GAMING",
+ 					&board_info_strix_b550_e_gaming),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-I GAMING",
+-- 
+2.55.0
 
