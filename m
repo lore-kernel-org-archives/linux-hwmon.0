@@ -1,212 +1,195 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 492533ACA70
-	for <linux-hwmon@vger.kernel.org>; Mon,  6 Jul 2026 16:04:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 131D63F4827
+	for <linux-hwmon@vger.kernel.org>; Mon,  6 Jul 2026 16:08:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783353843; cv=none; b=kDawZvdkdL5Hw8uBEGB+029srozi0NcRSUjVxgOyUm/WFowkhxeFYlyGfPfrKgZFfg53FSqOu99WwSn94oOwlbDmR/aBOX8RA+5VY2QQiZE3aYHGy+amakU6JifXHgmDCcBkr5olYL8ReL/xnKLNHkZzLHBnCmxlzsqOiIYueXM=
+	t=1783354121; cv=none; b=XtIuPj8DSGRu8PmMxVgJHNE2zR1f8eNUOu9Q0/Ae15QpmDdBih3MtnNUacIG1hwXW+NjfTnnRx6dpMjUUa6/mjhRxILkzWx3RqJcqgSWviHizG4/eLbQj/pbzYAxYUjHS4vrdNFuuFjkxrzm96rcO4zDn1kDkphfGF/DBJ09Xds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783353843; c=relaxed/simple;
-	bh=1pEQzK0WF5/785k/T7XTlqu5jZxHDtonjdYKw1Fu0fo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WFp838tDLaSzn6H/excxP+j2emhhiqBCCd3iJJ3GpRnVlXb/fSU2MuTakOKy8Ql9I7ciKtUk20hmqeEw53ZfxbdETLdm4ikA/nAQHzENQHQXf21/1rYFwKy65GWTdaEagRYUEU7D3aDCfwo+THYxyMMSKmQwVruoGEkftPwgjEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ghlTA32E; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783354121; c=relaxed/simple;
+	bh=csBCDgH3M6DZ4OQcPp6xjLvnA/f4U6oeBWnobJdNGXA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=myjErIXzTRsQTCliWFvliZLsXkdp4DR1WAAeOO0ervvACwQbNZi5UnDuGjGkjNkTB+uo3B+DGdK9NNcN/2cV9ZHZoij5G2TjK2eef03zSMNGneduv9N9juN2qOWWnzL5kjz7eSyXJFGRqbwKQWcAl3hFEErQJ50hklrUpf2Arh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=XTtGgCGv; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=dU5b1OnI; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ghlTA32E"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2cca0c5799eso11002475ad.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 06 Jul 2026 09:04:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="XTtGgCGv";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="dU5b1OnI"
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 666FF61K947319
+	for <linux-hwmon@vger.kernel.org>; Mon, 6 Jul 2026 16:08:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=Pf9tIRdfDyri9p8ozQjkuW
+	mmRnclsJ800KP5REMMFqI=; b=XTtGgCGvGdLie3cMoJt2TWHkM60JPxucgH2NKQ
+	m3eOHlToTMrTqcRPG31j2BvMX/MAJ/BjralgXjuEkxaaZPRCcD9oLcqpHShg6eui
+	AvJ7rLhVB/k9L/pOGHZCn2AQygYlVc8ek0C+byEVtHxJObWkb2EvNzWpIq2VQH5k
+	F1/+ALVQnnEb7+VsWpe+e2IpcyNCGJaw7V98tVBzwAs3d7cxH02mc4dK/KqCN6o2
+	hZH33woLbRo8cT67vkba1ATPeo/zDukD/m/2jnwxeKsZBwc4wD60/YOYMKqQhkYp
+	bWD3HhZAqhdqa2RJrt1PjxN2TYlfLuMlLuHXX3Vzjh3GBOZg==
+Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com [209.85.221.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4f88h525hc-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-hwmon@vger.kernel.org>; Mon, 06 Jul 2026 16:08:38 +0000 (GMT)
+Received: by mail-vk1-f197.google.com with SMTP id 71dfb90a1353d-5be3d6de82dso197659e0c.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 06 Jul 2026 09:08:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783353842; x=1783958642; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=dI9mMky87Y6sbaEIXudUF0U1R+oiPY5jBKcaW4/toq4=;
-        b=ghlTA32ECN5QDprA3U1qW0zHoRYjCAygN7UApSSK9Yi4W3SAQGI6wdMQCcSgC0hKci
-         EAdIoz82ih5oU+ZteTXeBkOa+c7zLmJkuv1Dg/Qim2K3OcEBJRNQf/w7xREk65woq7FV
-         h6n8nrpF3go3mrdyP2fE2bfwH1TcIwrnNM9bLFZeqs2wP5PqL0hauXC8vUL2vnr/tX9m
-         xZ4b7wqIdLrTn4lXLG5YZNvf49D3BqvkAY+yhS28hwB7WIwGUJMWoc0sCJIXMQCkRe/b
-         yUBP4TedG4g19u5N/+5xHZnFsWsjuBwFj9FUy6O7TtxGdPpwImXpvp6Bp4Hii8vz0ofh
-         sFCA==
+        d=oss.qualcomm.com; s=google; t=1783354118; x=1783958918; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pf9tIRdfDyri9p8ozQjkuWmmRnclsJ800KP5REMMFqI=;
+        b=dU5b1OnINFzA0L2L9K8Kkp5c946mtYMl+tN7rdVUGZQ1tHfb1skI5wcADZyLbLLuHf
+         C6RUvbZXVW3C6OKcUoREdyfNzTm2B8zUT7V+uTzu2tmASQ79gJoC8DYPMDKq4fSfb5bp
+         5JRUjm7wzNyW+UPso+9nhxdcur5Z/HZgmruA/KkKLlqrn0sBgpNgjOwj7SbOoibNaSC6
+         pAhiu7mBAiCxjhLuOqJuF86916Gr1hslQzr7tZo0T6ybt5xY4KV9vmo/Xv3jHXGO4I5I
+         IZYwMXyTqD8tXfPnTNKWn/WDj+R8LdFY4fGlIJfnb4Fgw00NV+VXoWk7kphEp6Qb90gl
+         qlLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783353842; x=1783958642;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=dI9mMky87Y6sbaEIXudUF0U1R+oiPY5jBKcaW4/toq4=;
-        b=WbTvjPtnNyJ94ztWgvnKP4MVr9WkJRCpEz/+2rb1LUcAc86rw2P3A41c6mIAe7uu+n
-         wzFL96n7TKmZERNbUlF7tUa3cWy52MXvLXrBSdeaHK3SXOAxHno96bvC00+XKf43WtmQ
-         6QJPNLjZ+9TaC/uSqqjwwQ57woCV9POKQL85M/Cs47mKWcrgdsx1pzAqkTSSODs03DAQ
-         UD1iHa9NLOhwifO0c4Ky0tubE0jFxXzOLinfgGC42Yb74Fo/gSP4CPY1ru5Mi0gtBW5h
-         fW4PR8QHOw+UeVv9ctwvkDuFR1n6LxDZlm0CizMeSLcpbCZAu/CmtEy7yCQzSVUwvfiL
-         1S5A==
-X-Forwarded-Encrypted: i=1; AHgh+Rrn+TGqblb7oTxMW/DTzh8hE0pUjIu960AwA/p1eJagBxEdb7eJdEY3uWgYxdIFawTgoxERKYHhQiy2Cg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9YviKypzKO83Nhcfk4gSVBN0Y/XScPGBzkz2g3GbJ3Td3GswU
-	LYWRHcr104TwCCS0OJDzDjc7VLFqoZNgJJblQvducdhxKZ4bi+7J497O
-X-Gm-Gg: AfdE7clizwX9UG8jFu1HEV4PzwOwiw0C2pLYwjz62WYveIHxAMFSIoZvyRxMwFrGLYd
-	2/r7k5FJyYARMX064opR+E8iPsdJmprT2f5X8hxeqKPUj4Pwvh301H8IaEUobM42A56RfRwirUM
-	XH2p11biXhX3LQN8EwSpZi9QPQnvKfWSXl8iaYXP76fTtH1tlAi7NL+p+UmRtBQiv2dadpPvXde
-	jAta9VWM/vk0Hieowq6+nIc723mDBZUNb+Dme7PXBJ9UPytV1/VX4nfj2oXgb+J6jhSDAaVfKvV
-	HQKGkY6HoUcwZqw5sa+MGuA0d4wpFinNbcpzCTjaOyhwFEeRhKphwa422j3f59252JAYYjrzedF
-	YLykBqlmC4fBh73Jx4PEadWc8tqr72330qr7JEZnJ4ibeq6WW1BlF6wU1UrbNlW/qTyDWzFoXeh
-	JgM+6+po+tsBRQhXo5xpPVLuAmBDCndy9riAcbxYmK8VuIPkgqXNlb0ryfrv++eVFdoXiSUHot
-X-Received: by 2002:a17:902:ce12:b0:2c9:97a8:aff3 with SMTP id d9443c01a7336-2ccbf1ae951mr12558905ad.44.1783353841450;
-        Mon, 06 Jul 2026 09:04:01 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cad6f25e15sm52865625ad.13.2026.07.06.09.04.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jul 2026 09:04:00 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <619e2d5c-84dd-4143-9061-019491b3130f@roeck-us.net>
-Date: Mon, 6 Jul 2026 09:03:59 -0700
+        d=1e100.net; s=20251104; t=1783354118; x=1783958918;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pf9tIRdfDyri9p8ozQjkuWmmRnclsJ800KP5REMMFqI=;
+        b=EzqXGHlkPcMpX4in74X+pHnRmCpbUoHRngNru9ei6JCRm9IrCM/6MMJcWvzHG+SRPU
+         uIo2m4RLo6Js5ANO4ZfP4HlRBwS/8swcGHKJ3wCkIXwc0v1tMoWVvFqrBj/bXdR9WjMw
+         mRi3juPN+40HDFLtUE12QIewHLePRuHNwHaWd/NyYna+y1MbG4xyUWLpWFxEDpEGm43j
+         eckDroIR76j01GMKgG7yeX2rsAt88qjp/dqW4gK6v/DbIo/PT5Dwoty6aihCkSy+mrT0
+         kbZ9ZkaBFOTLo3PNW/4+y4alfP01pfEYRMXc0FFxl34jIfVlQXqojVEcEa0gb75zrHKs
+         HFeQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrNPLsaTg0i4zUZWohZfHLg2K7j5Svp1bek9P1KVghfUY46NGRsM0Dm3cnkqG6BPc3ObMKDh3gS7ssYzg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7d0pofUSrsm5EIxz65hqDIicFUuLFQo2IIV1KSJBt0rV6VDbO
+	MQBo01SNozMWN/UaWGGUG8uVseCfFXKToRKYkeqS0z0uArTXuQNmGET/VpuBaNJNpNSDDd6J9at
+	0n4pChR/aHOE/Z3z0H4TQOCanNBG5GjYaA/gM9pE1v0pWgwX//6udIHdTa3QV2cKTwQ==
+X-Gm-Gg: AfdE7clhV+itx8Z/XKI4/8QoEda7TOnrE2cMALjMV5Vhl+fCNNgBho+cy6BxG0XAAd0
+	oACpSkr+skT+hY0iKnG8lmBWE1+uiZc0lHmpUbS+LSUh0egvJHhN0BQfZMEUM2Bd5GmxT9L2vOa
+	PM5NqS3uDLz/eYhruyIvtKQ2J4iReWt/Wu7Kv/wLHWZIpFZJvGGzVTMQi/eFz2eJEqm9nHOZJtK
+	qbDjDKfBz8nMk4njVhOVEApplaosV0ptp2Bu6OuNIkRVTz5jqs2bO8bhSnkQpz9XdtHajLsvZCJ
+	52CS36TW9MothK5dJCMh5UmMil8zfo2M0jt4nTXPqs4FRL8D+LYUCeOim7XErYEF2mOLloq3z9S
+	rL/paZKYR6t+7nreHfqH/F9AsL3Gikg6sLZV59hvqCkHa4g==
+X-Received: by 2002:a05:6122:8288:b0:575:352f:eac0 with SMTP id 71dfb90a1353d-5be907a7cd9mr685205e0c.7.1783354118310;
+        Mon, 06 Jul 2026 09:08:38 -0700 (PDT)
+X-Received: by 2002:a05:6122:8288:b0:575:352f:eac0 with SMTP id 71dfb90a1353d-5be907a7cd9mr685142e0c.7.1783354117748;
+        Mon, 06 Jul 2026 09:08:37 -0700 (PDT)
+Received: from juillet.box.freepro.com ([2a05:6e02:1041:c10:8405:4a9c:95fc:4b8f])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47a9e3e2702sm26071966f8f.9.2026.07.06.09.08.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jul 2026 09:08:36 -0700 (PDT)
+From: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+To: sre@kernel.org, hansg@kernel.org, ilpo.jarvinen@linux.intel.com,
+        linux@roeck-us.net, andersson@kernel.org, konradybcio@kernel.org,
+        robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
+Cc: bryan.odonoghue@linaro.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        neil.armstrong@linaro.org, gaurav.kohli@oss.qualcomm.com,
+        manaf.pallikunhi@oss.qualcomm.com, priyansh.jain@oss.qualcomm.com
+Subject: [PATCH v4 0/2] Lenovo ThinkPad T14s EC thermal monitoring and thermal zone integration
+Date: Mon,  6 Jul 2026 18:08:27 +0200
+Message-ID: <20260706160830.17698-1-daniel.lezcano@oss.qualcomm.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] iio: temperature: Add STS30 temperature sensor
- driver
-To: Jonathan Cameron <jic23@kernel.org>, Maxwell Doose <m32285159@gmail.com>
-Cc: David Lechner <dlechner@baylibre.com>, =?UTF-8?Q?Nuno_S=C3=A1?=
- <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
- linux-hwmon@vger.kernel.org
-References: <20260621004626.66629-1-m32285159@gmail.com>
- <20260621004626.66629-3-m32285159@gmail.com>
- <20260703010532.4fc0f46b@jic23-huawei> <20260704144503.2347331b@linuxescape>
- <20260705000053.6e8fc3f0@jic23-huawei> <20260704205717.137c506e@linuxescape>
- <20260706165334.69846485@jic23-huawei>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260706165334.69846485@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: TaynxIL5oHLjVocQrzVx65Y2rij1Z6pM
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzA2MDE2NCBTYWx0ZWRfX03jxWbEOu/4T
+ 0bASepHXJllbND61o+BUlzrziVr/LOvHkxpc3XmsdiT/5Br1EFD9v1yVJMvajsPwkggmMpgQ/rs
+ mRdm4B8XxZdL3DsVSF2abOUY692mr54=
+X-Authority-Analysis: v=2.4 cv=EPU2FVZC c=1 sm=1 tr=0 ts=6a4bd306 cx=c_pps
+ a=JIY1xp/sjQ9K5JH4t62bdg==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=RAioF0-LDSMA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=gowsoOTTUOVcmtlkKump:22 a=Jz99LMs1rTwwAPREzXgA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=tNoRWFLymzeba-QzToBc:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzA2MDE2NCBTYWx0ZWRfXwLsO+xR/nwEe
+ QAu55blW05qstMkq6igUYA/xGNyvkYF8bCopCFV9b1I39AXp7zlKKB6qFo50squviT1eAd7Ld5b
+ si2h533lLyYcKwoZQ+d/6rZuHlygtW1K+OFCPWOhiQqK25YTYqaZVVow7jgQmxWn6YYyl5T1i+K
+ C36pRV1Xyx9IAaT2PbmXVUqWhbfKqoHqJ2/VjfK4mAC9Pc3nUtjBiuvmkfS4CQH9uLV1txtH/8R
+ TRG11yhDjrnsu/LRYSg9vx2o/ME4IYFryY/PBZQa7r+H04KgtQpva6jjCRmI4xNkiPpDYgkmzkm
+ ZFAhS3OJse6yw5rsfnw9LOduhtucXF5Wh2TfY9sUhpVaUtcbzmfz1Lblxg1JLLqS3xlWVfieOn2
+ M8G91vwaEnF9zRvFo/XAnoW8KXlZpW48Am8vbNqXPV2dd4Iovv/uGWvnN0i5VONe2ltT/5ODudj
+ MweM4O/isZwpet11Yyw==
+X-Proofpoint-ORIG-GUID: TaynxIL5oHLjVocQrzVx65Y2rij1Z6pM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-06_02,2026-07-06_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 priorityscore=1501 lowpriorityscore=0 malwarescore=0
+ spamscore=0 adultscore=0 suspectscore=0 phishscore=0 bulkscore=0
+ impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
+ definitions=main-2607060164
 
-On 7/6/26 08:53, Jonathan Cameron wrote:
-> On Sat, 4 Jul 2026 20:57:17 -0500
-> Maxwell Doose <m32285159@gmail.com> wrote:
-> 
->> On Sun, 5 Jul 2026 00:00:53 +0100
->> Jonathan Cameron <jic23@kernel.org> wrote:
->>
->>> On Sat, 4 Jul 2026 14:45:03 -0500
->>> Maxwell Doose <m32285159@gmail.com> wrote:
->>>    
->>>> Hi Jonathan,
->>>>
->>>> On Fri, 3 Jul 2026 01:05:32 +0100
->>>> Jonathan Cameron <jic23@kernel.org> wrote:
->>>>      
->>>>> On Sat, 20 Jun 2026 19:46:24 -0500
->>>>> Maxwell Doose <m32285159@gmail.com> wrote:
->>>>>        
->>>>>> Add a driver for the Sensirion STS30 family of temperature sensor
->>>>>> drivers over I2C. The STS30 family of sensors includes the STS30, STS31,
->>>>>> and STS35, all of which are supported by this driver, since they all
->>>>>> share the same commands, etc. and only differ in accuracy and tolerance.
->>>>>>
->>>>>> The driver currently supports single-shot non-clock stretched readings,
->>>>>> by using a specified delay based on the repeatability/delay specified
->>>>>> by the user. The repeatability/delay can be changed at any time through
->>>>>> sysfs.
->>>>>>
->>>>>> Additionally add Kconfig and Makefile entries for the driver as well as
->>>>>> a MAINTAINERS entry.
->>>>>>
->>>>>> Signed-off-by: Maxwell Doose <m32285159@gmail.com>
->>>>>
->>>>> Big question first.  Why IIO? These are fairly basic temperature sensors
->>>>> which typically means hwmon is more appropriate.  What does it need
->>>>> that hwmon doesn't provide?
->>>>>        
->>>>
->>>> The datasheet says that the STS30 supports continuous reads which means
->>>> that we can read it into a triggered buffer (which hwmon doesn't
->>>> support) and at some point I'd like to implement that.
->>>
->>> Hmm. For a temperature chip that is often more about the monitors running
->>> continuously than the ability to gather signals fast.  Temperature changes
->>> tend to be fairly slow when it's a physical sensor - gets less obvious when
->>> infrared remote sensors are involved.
->>>
->>> Even more relevant - there is an existing driver I think.
->>> See drivers/hwmon/sht3x.c which supports things under the wildcard sts3x as well.
->>> Check if that covers this part.
->>>    
->>
->> I think the last time I checked the sts30 series wasn't listed in the
->> dt-bindings but it may have changed since then. Oh well. I'll still go
->> check it out. If it's (very very) similar I would probably consider
->> dropping this one, otherwise I'll improve this one and resubmit once I
->> get the hardware.
->>
-> 
-> 
-> Unless that other driver is for a very different part, then it is a non
-> starter to have a driver in IIO.  Perhaps there are features missing in
-> the hwmon driver though. +CC Guenter and hwmon so they are aware of
-> this discussion.
-> 
+Hi,
 
-I have no idea what might be missing, or why the existing hwmon driver
-would not be sufficient. Lack of explicit devicetree support, as
-suggested above ? That would require a few lines of code and an odd
-reason to duplicate the driver in the iio subsystem. Triggered buffer ?
-That makes sense for high speed ADCs, but not for low speed sensors
-like this one.
+This series extends the Lenovo ThinkPad T14s embedded controller driver
+with environmental monitoring capabilities and integrates the exposed
+sensors into the Linux thermal framework.
 
-Guenter
+The EC provides access to several platform temperature sensors
+covering the SoC, keyboard area, bottom cover, charging circuitry, QTM
+module and SSD. These sensors are currently used by the firmware for
+thermal management but are not exposed to Linux.
+
+The first patch adds hwmon support for the EC temperature sensors.
+
+The second patch exposes the EC as a thermal sensor provider in the
+device tree and defines thermal zones for the keyboard skin
+temperature and the charging circuitry temperature. This allows the
+generic thermal framework to react to EC-reported temperatures and
+apply standard Linux thermal mitigation policies.
+
+As the EC protocol is not fully decoded, the passive trip points
+get/set actions are missing, so it is not possible to program a
+threshold and receive an interrupt when crossed the way up or
+down. Consequently, the thermal zone related to the charging circuitry
+is polled every two seconds until we can set the trip points in the
+EC.
+
+This series fixes critical thermal issues happening on this platform
+where a kernel compilation, or heavy workloads, lead to a system
+reboot.
+
+Tested on a Lenovo ThinkPad T14s Gen 6 (Snapdragon X Elite).
+
+Please make sure scmi-cpufreq.ko is loaded before testing
+
+Thanks,
+
+Daniel
+
+---
+ Changelog:
+	v4:
+ 	 - Added the missing HWMON_C_REGISTER_TZ attribute (Sashiko)
+	 - Fixed dependency with HWMON (Sashiko)
+	 - Added tags
+	v3:
+	 - Removed event based because trip point are not yet well supported
+	 - Added an empty line after variable declaration (Ilpo Järvinen)
+	 - Used MILLIDEGREE_PER_DEGREE from units.h (Ilpo Järvinen)
+	 - Made switch consistent (Ilpo Järvinen)
+	v2:
+	 - Fixed patch 1 subject prefix
+	 - Removed the fan information part
+	 - Added HWMON_T_ALARM
+	 - Fixed DT change description to reflect what it does really
+
+Daniel Lezcano (2):
+  platform: arm64: lenovo-thinkpad-t14s-ec: Add hwmon support for
+    temperatures
+  arm64: dts: qcom: x1e78100-t14s: Add thermal zones for keyboard skin
+    and charging sensors
+
+ .../qcom/x1e78100-lenovo-thinkpad-t14s.dtsi   |  67 ++++++++-
+ drivers/platform/arm64/Kconfig                |   1 +
+ drivers/platform/arm64/lenovo-thinkpad-t14s.c | 131 ++++++++++++++++++
+ 3 files changed, 198 insertions(+), 1 deletion(-)
+
+-- 
+2.53.0
 
