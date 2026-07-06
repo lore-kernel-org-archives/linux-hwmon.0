@@ -1,68 +1,67 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30CFB3DDB07
-	for <linux-hwmon@vger.kernel.org>; Mon,  6 Jul 2026 14:31:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF83B4218B6
+	for <linux-hwmon@vger.kernel.org>; Mon,  6 Jul 2026 14:58:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783348267; cv=none; b=F1VaD95GHy/PmBABK+3bOlTNefE/axV2JEbYKLIzbWB7+BF1AtfwESQYazv3mYmPhzFFswAxfO1sfap+ztl498wqHbZ1tCq8Uan6qNhz4wNODl3tIs9kLxg2U7p8KgLJLBwChT6D7pLBF0C3seLawKH+9xg+fanCX/sje/rPhdw=
+	t=1783349891; cv=none; b=baTa3mUH8Hwe5qxbACA6vMV52ISddVFo+kj+ba9W8kRXn/NIANK5BWUaI4rkE7fhAR+raTABvdXWf2OAfz1AQZIEPj8mkVXURKXrgFGwbRtNhHmEf7Y9vhDFW0J8TlHUD48t4tccaWO0ZJOm9onGN8LplSCDb530DuUL3xDSTHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783348267; c=relaxed/simple;
-	bh=w+ezLx8DcFVn3ydf3SZCnrwVI2j1LA6W1gk0f4A09l8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OPCx3en6yUCgnoVuNC7wYBovVVS514Bb0mK8zYMlz0gSrmo6W5eRMbNmibSDKnvli426W2d0XO4FGD8+NKYlngVLi5MUfVL0z4wdHv2E0M5vp8VpBzP/8mw4rdzzNoRKah8sLIoPTFuVtZPsjA3POK8r3l+OVSIGMShcfWyiFpM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V8s128rn; arc=none smtp.client-ip=209.85.214.173
+	s=arc-20240116; t=1783349891; c=relaxed/simple;
+	bh=0nAurCx+2HLKDovwWCKAtT5IEziSKOyaTEJTFAez43g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=EedTDuF3zFOix5pkVNUTOyE5DmrLHOuN/Tbnq+WIC4/Vfe1EjNj+DvnstLu7EtR+hbHzh91Ao8UJ62xWt8Zc0kCaAxnJ9JGgStcbHkV2rdiyl15W49GuITBsKq0dhH6bfyzkq67IfZTfAf44wcyaZ8G4wdfEBKs27wrYobyAjqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DSupx7rB; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V8s128rn"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2cae134bdc8so16406545ad.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 06 Jul 2026 07:31:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DSupx7rB"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8478cc93299so3424053b3a.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 06 Jul 2026 07:58:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783348265; x=1783953065; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ynAASN/UWzfxTQNGbtwhIlwR73V0JB4yYjP/huaKh6s=;
-        b=V8s128rnYinTm9Av2p7kHikAa6c2Ws8Oab+FIHYuJG+2xUqoSPcqkyk1ws91dciNnM
-         oP3TtxekAD8NQNzBu7C3bBnJ3a2jvGM55qE+GbAB8YL2Qcc9CBevA5rTZDkt4X1NyAUo
-         +67BehqCsiC49JAM7XetOAbil7dzeXk0vc4EptfvwaSbxmhZC5orSupsBxxfzplywQgv
-         orrJTsn2Ec/Uz6JVOReWZpZICUwXhOJQ0F9cMYSgtholYJFPBiMI3JCHDK+IAxAt/h/+
-         t7/R/B8v+0OVosSmzQ/pxpVh5c7ERJEZHdlh5IaZsHiZH9OgtZb0k0Od0niBzPoOhl4f
-         H0EA==
+        d=gmail.com; s=20251104; t=1783349889; x=1783954689; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=QwBq5u7bFEHwJF5T0zRXgqkbC9myofYieZIJN4GwjB8=;
+        b=DSupx7rBFyQO7O+IxNUPb6d9WS5IulJmC1wlDOGFDK2qQRwQcYrV5nYe1KwSmhB9r3
+         1bAA5Aych0C+/DGm7pctuf0Plep6TqP3KfecvOfl2iBqJAKMCGnEM48LlLADPE77JGpM
+         +yvLEgvktyC564wM3wS3XO80ML3jQ4jcvLvnQvzznafULJ8ZUWHC/Km17TlETKlFxBr/
+         3pqGAgmF64ynIxpUZ5H/5HNhdh1E/Ge6eU8ndQdAtSpDE3c+8rrRNC2I5QRWLwM8ejgE
+         XmVA/9zU1UYRAiu750KYsL5EAvlMwEoc+qD4avokLuvMt+lLjGVzSj5epSfxsxyKJjMS
+         CnQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783348265; x=1783953065;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=ynAASN/UWzfxTQNGbtwhIlwR73V0JB4yYjP/huaKh6s=;
-        b=XwhfaUw4Dl1RJDrZcnw2sS9h4JvONMnHpwpOzI5XZgNu17rpQ6lErIrvPqaWjNky1P
-         Y0ytsjoAXFAhK645tbDN+5VAtsGfK6sdo1wFSkroqIReONQqqBI+/7/eEkV6puGeng8p
-         GC7J0v83KjHe9NPTSk1ia8XVSr5ZgiT1D+FSX+1suK8oQwTIsIMNAErjQ5dbYCdFn9Hj
-         ulE5+aFg7cLvetKE0suLC3JGyIVMHJPHKKH40nLXclvOIBhBgjFwh6hXpov+IIEXJDTr
-         LFzGrJ3Lhf4k/rwb5JEaQrTx6zp5nL7M7avB+IdhVDMwHvlAxl/kD/MVPnT2X+3Epn9k
-         Mn+Q==
-X-Forwarded-Encrypted: i=1; AHgh+RrzJ21OYgoUNikwjpFATU9XCFTloUbrFoUjvjgdIDU13k5YKEZr4adZgRsRWY1xNn7zzquN2B7FNX0qhg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwYFnQVolKA4iTEFpLldGDe7HTYPcZf91TGYoolF5l7To9i6kwU
-	mbU4fJMxa5m9P2daUItQhVijG9KqukcMF0N8AKjxt/M/woJVN1gpRpfy
-X-Gm-Gg: AfdE7cnS4h16y9S0EpGr1viePqUXo7g6PrtZxlHczCT0vP6TSY1JXH2e1ymbsn9NAJa
-	GGmsI3emNbRGptaZ+YqsSdSBSsTBdxEPZodN7j744LqsS9bDcOegEURxJ44jK9xnInVuz/QABkN
-	4X0BETM5GoMhkXoYC/oWTmeZbtBnUbgC1MUNVdftWIOMPyR/eAkEqOV6MPuEPWuxYu8DjdLfOIh
-	BH8kIgKQJ1ZQ6L3cWyVBUNbQIqd3O09W8eeTJJtY55G3/lb4l2wRFfWW8iho7EB/Az09HE6nPGu
-	ivPlvhHNWGd/o4rEv23UvDQdSqAP/WTxS7vwhk/2rsHx/TkKUMuq78KLbDMuiNXnA8j03sPKo4d
-	1FPoHJlEObkMGHDjCniY/j4/IB/r1KSTGOeYwUgZBY6hFrWyjiVhzqDUcxUJ27XSfve2OMgNOQ7
-	FXU5JzhlruB4jx5AZGyThn1MMx7vVdQEny3DqcfSYE4wR39bboWfjqmsPzQDQR7A==
-X-Received: by 2002:a05:6a20:a111:b0:3bf:7498:9cd1 with SMTP id adf61e73a8af0-3c08eeb269bmr1062420637.45.1783348264863;
-        Mon, 06 Jul 2026 07:31:04 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1783349889; x=1783954689;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=QwBq5u7bFEHwJF5T0zRXgqkbC9myofYieZIJN4GwjB8=;
+        b=Lns+wyiVqcRwk4VrtDNr1lPvl6PUvOVlGnlAUKe1QbyxAbr/V0yVupq7HP0KQLLV44
+         yxQ5R/UHhaz/7ZR0FDkQTgVWQJEpk6ImpJwGcLv8vspTLwi5t9GuLctzSYdnyv9FBtLu
+         cD21fXYzmITN//OmW1KJ26yfPnfZRuJM1S6WxsJjUCQhsbr1UUECD2ZBSZH1daDPMHGG
+         xBoeG1ZA3E8ataw33D24wfpWJW4sGywBEakrSGn6VlnUI2zxK1Xo/qIONxlrYzOGtnJ0
+         tzpuz8OAqjoIiath5rpVNheBwtdqea8QEjHgx4GzEnZaMVuzL6xbIy+y2XOh3qGq70wK
+         2zAw==
+X-Forwarded-Encrypted: i=1; AHgh+RrNqFJ3TtlN+nwBzYqhXVLmVgaLr00QXRCGNj6wNvBPVfiQupVWq0DJOPfBaeSK2vSMQMts7vNdelsXaA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxev4kuq9jU+PXDN0e4O1px8mowr+a9L1k7VsYe3VbCr4waF+ug
+	kt78KQKt8vu4FOVpivOK2xj+6MBH669wF2+vCrK2bSDDT/IJtDvCqQWQLX0maQ==
+X-Gm-Gg: AfdE7cnTQ1BWTu5UTsyhftTnaUk2FhfitxoTsOgWXJIXWzyW5wA1mXDe+FDP9sDPWa9
+	JGJ6ns81qxnJ8puzVlK7ElHgQ0vF8CH6TfVKpXfBSFlfpKZ+bGmsejZ2+HYgKUIQQ64bPKrcc4n
+	SOCL4kplPSFUiDa9YfyPb8qN32hd6IFYn4eWmRRV8QWuOBWAAVIqZooklUZZQNuHluSpRr2FO1c
+	i1Gkk+cAzcf+pU8QoiKRFpyE5Uq2O90unbA6/G/5v1uNlNpzVTs6k2KsHHaztAqRemmVrb9th4z
+	Qo4Sh2bYWB00EMIbWRqDL9OrIFKw6e6oUhnLHCaBGqZEvtb/03dXtixCnIleEKPn92gl1bQ1bJF
+	5IOBxvipQfF5Enu45hkwyJBjiBBcbNwnBBJ9E+rZ2n7jjq9kQk3Rr3MGqAMVXs2NKZwCR5lKPHP
+	MLYaDDxY0vYcq6FmAwoPjeEL+nHwRCnrSEHCY6QgKmad4yVHO9g9hUZ2FnepN0GMEdMM4tVBDX
+X-Received: by 2002:a05:6a00:1488:b0:847:7ffd:ce35 with SMTP id d2e1a72fcca58-84826bf907emr1019058b3a.8.1783349889044;
+        Mon, 06 Jul 2026 07:58:09 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c9e927a1152sm6269993a12.29.2026.07.06.07.31.02
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-847f6d7a96fsm3957292b3a.46.2026.07.06.07.58.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jul 2026 07:31:03 -0700 (PDT)
+        Mon, 06 Jul 2026 07:58:08 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7f42fcab-5139-45bb-a344-1ef249aae6f2@roeck-us.net>
-Date: Mon, 6 Jul 2026 07:31:02 -0700
+Message-ID: <fb69c193-cbb3-47a9-a315-7828bcd4f51f@roeck-us.net>
+Date: Mon, 6 Jul 2026 07:58:07 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,12 +69,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: occ: validate poll response sensor blocks
-To: Pengpeng Hou <pengpeng@iscas.ac.cn>
-Cc: Sanman Pradhan <psanman@juniper.net>, Arnd Bergmann <arnd@arndb.de>,
- Runyu Xiao <runyu.xiao@seu.edu.cn>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260706093317.80867-1-pengpeng@iscas.ac.cn>
+Subject: Re: [PATCH v3 2/2] hwmon: add Altera SoC FPGA hardware monitoring
+ driver
+To: "NG, TZE YEE" <tze.yee.ng@altera.com>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>
+References: <cover.1783062999.git.tze.yee.ng@altera.com>
+ <577acf0d5355db7d9b73c78e142649aefaf92d28.1783062999.git.tze.yee.ng@altera.com>
+ <20260703081848.C5A831F000E9@smtp.kernel.org>
+ <4b5bd901-44c7-415a-88c0-461217c0a9df@altera.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,56 +123,150 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260706093317.80867-1-pengpeng@iscas.ac.cn>
+In-Reply-To: <4b5bd901-44c7-415a-88c0-461217c0a9df@altera.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 7/6/26 02:33, Pengpeng Hou wrote:
-> The OCC poll response parser walks a counted list of sensor data blocks.
-> It used the static response buffer size as the parse boundary, but the
-> transport only guarantees the bytes declared by the current response
-> length. A malformed or truncated response can therefore make the parser
-> read a block header or block payload beyond the current response data.
+On 7/6/26 01:59, NG, TZE YEE wrote:
+> On 3/7/2026 4:18 pm, sashiko-bot@kernel.org wrote:
+>> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+>> - [High] Incorrect devm registration order causes a Use-After-Free vulnerability during device unbind or probe failure.
+>> - [Medium] Unreferenced `completion` causes a guaranteed maximum timeout delay on every asynchronous sensor read.
+>> --
+>>
+>> commit 9e088a070299b309352aa9a88006e3927d0c50bd
+>> Author: Tze Yee Ng <tze.yee.ng@altera.com>
+>>
+>> hwmon: add Altera SoC FPGA hardware monitoring driver
+>>
+>> Add a hardware monitor driver for Altera SoC FPGA devices using the Stratix 10
+>> service layer. Sensor channels are selected based on the service layer
+>> compatible string.
+>>
+>>> diff --git a/drivers/hwmon/socfpga-hwmon.c b/drivers/hwmon/socfpga-hwmon.c
+>>> new file mode 100644
+>>> --- /dev/null
+>>> +++ b/drivers/hwmon/socfpga-hwmon.c
+>> [ ... ]
+>>> +static int socfpga_hwmon_async_read(struct device *dev,
+>>> +				    enum hwmon_sensor_types type,
+>>> +				    struct stratix10_svc_client_msg *msg)
+>>> +{
+>>> +	struct socfpga_hwmon_priv *priv = dev_get_drvdata(dev);
+>>> +	struct stratix10_svc_cb_data data = {};
+>>> +	struct completion completion;
+>>> +	unsigned long wait_ret;
+>>> +	void *handle = NULL;
+>>> +	int status, index, ret;
+>>> +
+>>> +	init_completion(&completion);
+>>> +
+>>> +	for (index = 0; index < HWMON_ASYNC_MSG_RETRY; index++) {
+>>> +		status = stratix10_svc_async_send(priv->chan, msg, &handle,
+>>> +						  NULL, NULL);
+>>> +		if (status == 0)
+>>> +			break;
+>>> +		dev_warn(dev, "Failed to send async message: %d", status);
+>>> +		msleep(HWMON_RETRY_SLEEP_MS);
+>>> +	}
+>>> +
+>>> +	if (status && !handle) {
+>>> +		dev_err(dev, "Failed to send async message after %u retries: %d\n",
+>>> +			HWMON_ASYNC_MSG_RETRY, status);
+>>> +		return status;
+>>> +	}
+>>> +
+>>> +	/*
+>>> +	 * The service layer never invokes the async callback, but wait
+>>> +	 * before polling anyway: RSU uses the same pattern and the firmware
+>>> +	 * needs time to complete the transaction after async_send().
+>>> +	 */
+>>> +	wait_ret = wait_for_completion_io_timeout(&completion, HWMON_TIMEOUT);
+>>
+>> [Severity: Medium]
+>> Will this cause a guaranteed timeout delay on every sensor read?
+>>
+>> In socfpga_hwmon_async_read(), a local completion is initialized but is
+>> never passed to any asynchronous function or callback (the function
+>> stratix10_svc_async_send() receives NULL for the callback).
+>>
+>> Because the completion can never be signaled, the execution will
+>> unconditionally block in an uninterruptible sleep for the entire
+>> HWMON_TIMEOUT duration on every single sensor read. Only after this maximum
+>> timeout expires does the function proceed to poll for the response.
+>>
+>>> +	if (wait_ret > 0)
+>>> +		dev_dbg(dev, "Received async interrupt\n");
+>> [ ... ]
+>>> +static int socfpga_hwmon_probe(struct platform_device *pdev)
+>>> +{
+>> [ ... ]
+>>> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, "socfpga_hwmon",
+>>> +							 priv,
+>>> +							 &socfpga_hwmon_chip_info,
+>>> +							 NULL);
+>>> +	if (IS_ERR(hwmon_dev)) {
+>>> +		if (priv->async)
+>>> +			stratix10_svc_remove_async_client(priv->chan);
+>>> +		stratix10_svc_free_channel(priv->chan);
+>>> +		return PTR_ERR(hwmon_dev);
+>>> +	}
+>>> +
+>>> +	ret = devm_add_action_or_reset(dev, socfpga_hwmon_release_svc, priv);
+>>
+>> [Severity: High]
+>> Does this devres registration order create a use-after-free vulnerability
+>> during device unbind?
+>>
+>> In socfpga_hwmon_probe(), the hwmon device is registered via
+>> devm_hwmon_device_register_with_info() before the cleanup action
+>> socfpga_hwmon_release_svc is added via devm_add_action_or_reset().
+>>
+>> Because devres unwinds actions in reverse order of addition (LIFO), upon
+>> device unbind, socfpga_hwmon_release_svc will execute first, freeing the
+>> service layer channel (priv->chan).
+>>
+>> However, the hwmon device will still be active and its sysfs attributes
+>> accessible to user space during this time. A concurrent sysfs read can
+>> invoke socfpga_hwmon_read(), which will attempt to use the already-freed
+>> priv->chan, resulting in a use-after-free.
+>>
+>>> +	if (ret)
+>>> +		return ret;
+>>> +
+>>> +	platform_set_drvdata(pdev, priv);
+>>> +	return 0;
+>>> +}
+>>
 > 
-> Use the response data_length as the parent boundary for the poll payload.
-> Reject responses that cannot contain the fixed poll header, prove that
-> each sensor block header is present before reading its item fields, and
-> then prove that the complete block fits before advancing to the next
-> block.
+> Hi maintainers,
 > 
-> Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
-> ---
->   drivers/hwmon/occ/common.c | 32 +++++++++++++++++++++++++-------
->   1 file changed, 25 insertions(+), 7 deletions(-)
+> 1. [High] Incorrect devm registration order causes a Use-After-Free
+> vulnerability during device unbind or probe failure.
 > 
-> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-> index e18e80e832fd..fa92ae6ec4f0 100644
-> --- a/drivers/hwmon/occ/common.c
-> +++ b/drivers/hwmon/occ/common.c
-> @@ -1052,9 +1052,10 @@ static int occ_setup_sensor_attrs(struct occ *occ)
->   }
->   
->   /* only need to do this once at startup, as OCC won't change sensors on us */
-> -static void occ_parse_poll_response(struct occ *occ)
-> +static int occ_parse_poll_response(struct occ *occ)
->   {
->   	unsigned int i, old_offset, offset = 0, size = 0;
-> +	u16 data_length;
->   	struct occ_sensor *sensor;
->   	struct occ_sensors *sensors = &occ->sensors;
->   	struct occ_response *resp = &occ->resp;
-> @@ -1063,21 +1064,34 @@ static void occ_parse_poll_response(struct occ *occ)
->   	struct occ_poll_response_header *header = &poll->header;
->   	struct occ_sensor_data_block *block = &poll->block;
->   
-> +	data_length = get_unaligned_be16(&resp->data_length);
-> +	if (data_length < sizeof(*header) || data_length > OCC_RESP_DATA_BYTES) {
-> +		dev_warn(occ->bus_dev, "invalid OCC poll response length %u\n",
-> +			 data_length);
+> Agreed. v4 will register devm_add_action_or_reset() before
+> devm_hwmon_device_register_with_info(), matching other hwmon drivers
+> (e.g. pwm-fan, qnap-mcu-hwmon). On hwmon registration failure, probe
+> returns and devm runs the release action automatically, so manual
+> channel cleanup on that path is no longer needed.
+> 
+> 2. [Medium] Unreferenced `completion` causes a guaranteed maximum
+> timeout delay on every asynchronous sensor read.
+> 
+> Agreed that the completion is never signaled because the service layer
+> does not invoke the async callback. rsu_send_async_msg() in
+> stratix10-rsu.c uses the same send → wait → poll pattern, so we followed
+> RSU for consistency with the existing Stratix 10 async SVC client.
+> 
 
-The warning messages in this function now result in aborting the registration
-and thus need to be converted to dev_err().
+Sorry, I am not willing to accept the "other code is buggy, therefore
+it is ok to introduce the same bug here" argument (Is that some new
+trend ? I hear it so often lately that I am getting tired of it).
+You'll have to provide a better argument explaining why it would make
+sense to call wait_for_completion_io_timeout() if it is known to always
+time out. You might as well just call usleep_range() or similar; while
+that would still be bad code, at least it would not be misleading.
+Just add a comment explaining the reason when you do that.
 
-Thanks,
 Guenter
 
