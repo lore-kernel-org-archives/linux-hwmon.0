@@ -1,99 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 355A931B101;
-	Mon,  6 Jul 2026 16:16:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA4933BC69C
+	for <linux-hwmon@vger.kernel.org>; Mon,  6 Jul 2026 16:25:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783354563; cv=none; b=L7riSwXqUQ5rCN5A83Kllkk0K4YKEjfnDuUNusaSAAh5UK18uajsxlreu37tnvI0X6xy1E6VFANPKFMCNhyWbD3g5A8HRIrpa/weD9MWHYxT+9YMvdYDKIYZ/DR3uljBf7fmuukK0E6wptxJBAzIe01u/ahG5bnymqp1mEuMLaE=
+	t=1783355136; cv=none; b=VmcXFzT6JmUCrXhZJvUeTlogp0aLNM5Y6jcEvLE5UFDC138duqpKZBOWFEePIPOInD3YQgNla7vVpehs+x9O/eUl5xBAqc/ZFoWJLK1tPFP+GHDYsuZo8H/6A9eIltKCDjXEJyp9eQpDVb4OPw1ReoadmUrA24Y7v4VFM9fYE3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783354563; c=relaxed/simple;
-	bh=N91VeW+ubG7x5vnljqP+WP6nDnCalzi8wLn+azKCEkc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ZnzkNpiI8I4BqrUo+riI7alaC8TUZ0hKw1WS3TSBOQCwGt6wcHTo+nD07H4NDG1AcrgSXVRQVKxX7Ud0lrFhTvUOX4BTnyvhOPLCqR23rFBzvtz1Xd+xLe5RuBMtHa0f6Zk2bApz34KmrTse3Ui6K0pQYUoihwMuOwGr234m3oU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BrtDmefA; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783355136; c=relaxed/simple;
+	bh=+KUVBe36DlwRvJazWxV7Oiad5UiGSEX7yKSxWTBhIpk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BCp7/+5S2+gCNpDJu8BFNjzLXK+rEOW+aR28ZQrK5XNbUDGxdvHZnL0YfYSLL+GS0719eU5tqHGOqmcRvCG5oZKBouLFAOgP372mUlwMMI1fFS+hc6OemujpY772vshVggleoagTNSj22Ibp8gSRM3rVpVxjaKNP6eYtyLvdDMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bJRQNmxd; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BrtDmefA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22FE31F000E9;
-	Mon,  6 Jul 2026 16:16:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783354562;
-	bh=26eQQ0ZLM1UldWuXMtiJ00Vxg17kW/7dE/yA5OpapZ4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=BrtDmefAIUaxTaOimph5oLyrhhyKLlvWnWcX3wP132DFrYy2+nCPcQ0Lxmn4ePl/P
-	 C4VqkZ+stua1g4t9QqfZJ5TIA28rnAkKYUzwoqcKLQSPE4PesmHir3PgPeOaNKP/f4
-	 WGm/bUObabyBUVwsOaOc9T7duHVPsytTevrnemHNanNpG0qoVLWdrEOQ2qQmSsbAke
-	 +iusuRrWLuZrLZ4n6TWxGUQ6gJEu6sjX2wpDCJ1QbAeJ3Ou+Flb6ga9/BAX/2DF2cr
-	 vQop1dxCC64hLyWuRXaTg8Z2SVEJBupTFnR8WD61p2oWmeEdO8XH24Yk53snNz6l4M
-	 qXpsim9nOT9iw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 2/2] arm64: dts: qcom: x1e78100-t14s: Add thermal
- zones for keyboard skin and charging sensors
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Daniel Lezcano" <daniel.lezcano@oss.qualcomm.com>
-Cc: conor+dt@kernel.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org
-In-Reply-To: <20260706160830.17698-3-daniel.lezcano@oss.qualcomm.com>
-References: <20260706160830.17698-1-daniel.lezcano@oss.qualcomm.com>
- <20260706160830.17698-3-daniel.lezcano@oss.qualcomm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 06 Jul 2026 16:16:00 +0000
-Message-Id: <20260706161601.22FE31F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bJRQNmxd"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-383adaa461fso1566876a91.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 06 Jul 2026 09:25:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783355130; x=1783959930; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=PfgReSC75VPZrCd7nNifeyozJvRY+Pip4pWwlMLjiuI=;
+        b=bJRQNmxd78bVRZcd5OYIChlC6CGpZU78cMjlPRjtddJFCzoB4Tlkd4XBnteog/QcjG
+         4HzNihDNvBLUodnw1bSr86Nm0SBIuvewxiAwWFaLo1yzQ31Ac7l5i/oOPX2CW6TqFlC5
+         Gdvk9+zfvR0+dhJ7RtDyTEqrlFxguuzRrgdPVS2A5grNYPoPqObyB9eKrRm34xNv7rdU
+         OC5gTAMcMtTn2Z0SE7IfchDdJ7yALo9aajr4dfDDXihefedAd0EvLZfLSWiPCCADDui5
+         OVHAyuiQmAsRFzp69CxZiftI8F0Io5fYYutClxi0cNAp67bMB+2PwRAIgjX4HJP79ayj
+         9iAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783355130; x=1783959930;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=PfgReSC75VPZrCd7nNifeyozJvRY+Pip4pWwlMLjiuI=;
+        b=rGLRuUgzMQd4xou8lapXDqwkCjxr/Ow9DujB9wUKTI+QD0SnZT2hSI7HAMwQSuoiqz
+         DGxc9h4xeBfJws7bMKO+SGYv2nuwlgHUivuiLAI01FpxDjTv4bMNcEMmUgjKd1aZUVqD
+         x9etfzMOcggB8yDno5J0AzP7KZTEoK68ivoy3LS6qET2GDloTU8vj4QxgdSLsHq0uoUX
+         Et1IASjb4jXNuNWAZ28h+tey96KdYyR+O8YZBQ+20JM2KolE6pVCs9qzV91Yf1Fqb8eA
+         sMSkq7QISaaktYYGpspenQ4vdqxJAIH/XJ3SImYMFEjtu10qEu4KQ6AdYZdOD/KCMO4U
+         PsBQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpeSqDssARZAw/ax6G3QSRYo9e/aMBSKyVQMeLPv+vowa3YEN79DASR88NgTLAEYk6bog+9b7pYValinQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfiDJjo/ZDGWpf7u3OncVMyl/vNSPhuNiyM5o5ME420vW0XKl5
+	HPEvWKHcmqSNqu6lVfl0S4elnEQbQrnx1kIEK5TbiZLkXAPWvIKL7Is=
+X-Gm-Gg: AfdE7clC2/611T31/pF8mFZzZWsp1IGss+8UUmyKACR8YrKFDoDBy8Gt8LNpEjWm6an
+	CiKIM4ZktnYULtSl3MfhJkCnraz8+X8dTrsgMZU0zbXnMkF1xzt1DjoCmKlFnNO9GdnL9voasP0
+	q/jB8jU622S4mizN999p1bpQ0hS1w+Y1/bm6a4rNVbt9EQRJQ9eZx1n38w4FL/313COdXTZ2OOT
+	nFO8s4Rys9w1OAeThsw3pXnvG85ihFIzxAug6B11GfFSoCP8wlAi8O4wdnaGDaFgoVU/9Ri8HyG
+	ESEabveTlsSMOBPsURGC6+Fpx/nKF3U1NJH0ZnQD/RvUcbETiEHTgVWSgR4X3alciHy8SZDK7+b
+	mlw9ekbB6gghEWIWwCbCjGkw6CJkD6GZKgocgzTC4w+6EII1A2FVJX6/ewf8eCLdf5UjNo7vut/
+	MD5CyzHzkteX052sTo95g=
+X-Received: by 2002:a17:90a:c2c8:b0:37c:8628:f79e with SMTP id 98e67ed59e1d1-38756ce1500mr1268323a91.16.1783355129573;
+        Mon, 06 Jul 2026 09:25:29 -0700 (PDT)
+Received: from devubuntu.. ([2402:e280:3e9d:20a:d3b2:4175:fcc0:34c3])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3114fe08b1bsm19075461eec.26.2026.07.06.09.25.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jul 2026 09:25:29 -0700 (PDT)
+From: Animesh Rai <animeshrai853@gmail.com>
+To: steve.glendinning@shawell.net,
+	linux-hwmon@vger.kernel.org
+Cc: linux@roeck-us.net,
+	linux-kernel@vger.kernel.org,
+	Animesh Rai <animeshrai853@gmail.com>
+Subject: [PATCH] hwmon: emc2103: use min_t() for explicit type in fan target clamp
+Date: Mon,  6 Jul 2026 21:55:19 +0530
+Message-ID: <20260706162519.6087-1-animeshrai853@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] The patch adds the `#thermal-sensor-cells =3D <1>;` property to the=
- `embedded-controller@28` node without a corresponding update to the device=
- tree binding document (`lenovo,thinkpad-t14s-ec.yaml`), violating the DT s=
-chema.
---
+Using min() with an explicit cast on one operand is fragile. Replace
+with min_t(u16, ...) to make the intended comparison type explicit and
+avoid implicit type conversion.
 
-commit 6785b707e0b11ce8dd5032f0c96a9debef8c413f
-Author: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+Signed-off-by: Animesh Rai <animeshrai853@gmail.com>
+---
+ drivers/hwmon/emc2103.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-arm64: dts: qcom: x1e78100-t14s: Add thermal zones for keyboard skin and ch=
-arging sensors
+diff --git a/drivers/hwmon/emc2103.c b/drivers/hwmon/emc2103.c
+index 27dc149a3ed9..fbb1b4025eb7 100644
+--- a/drivers/hwmon/emc2103.c
++++ b/drivers/hwmon/emc2103.c
+@@ -348,7 +348,7 @@ static ssize_t fan1_div_store(struct device *dev, struct device_attribute *da,
+ 	/* update fan target if high byte is not disabled */
+ 	if ((data->fan_target & 0x1fe0) != 0x1fe0) {
+ 		u16 new_target = (data->fan_target * old_div) / new_div;
+-		data->fan_target = min(new_target, (u16)0x1fff);
++		data->fan_target = min_t(u16, new_target, 0x1fff);
+ 		write_fan_target_to_i2c(client, data->fan_target);
+ 	}
+ 
+-- 
+2.43.0
 
-This commit exposes the Lenovo ThinkPad T14s embedded controller as a therm=
-al
-sensor provider and adds thermal zones for the keyboard skin and charging
-sensors in the device tree. It allows the thermal framework to apply CPU
-throttling when the charging circuitry exceeds passive thresholds.
-
-> diff --git a/arch/arm64/boot/dts/qcom/x1e78100-lenovo-thinkpad-t14s.dtsi =
-b/arch/arm64/boot/dts/qcom/x1e78100-lenovo-thinkpad-t14s.dtsi
-> index 5d49df41be02a..ed5ba3a428a8d 100644
-> --- a/arch/arm64/boot/dts/qcom/x1e78100-lenovo-thinkpad-t14s.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/x1e78100-lenovo-thinkpad-t14s.dtsi
-> @@ -979,7 +979,7 @@ &i2c6 {
-> =20
->  	status =3D "okay";
-> =20
-> -	embedded-controller@28 {
-> +	ec: embedded-controller@28 {
->  		compatible =3D "lenovo,thinkpad-t14s-ec";
->  		reg =3D <0x28>;
-> =20
-> @@ -988,6 +988,8 @@ embedded-controller@28 {
->  		pinctrl-0 =3D <&ec_int_n_default>;
->  		pinctrl-names =3D "default";
-> =20
-> +		#thermal-sensor-cells =3D <1>;
-
-[Severity: Low]
-Does adding this property to the embedded-controller@28 node without a
-corresponding update to the binding schema cause make dtbs_check to emit
-validation warnings?
-
-Since the lenovo,thinkpad-t14s-ec.yaml binding does not define this property
-and uses additionalProperties: false, it seems that adding it here will
-trigger a warning. Should the schema be updated to allow this property?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260706160830.1769=
-8-1-daniel.lezcano@oss.qualcomm.com?part=3D2
