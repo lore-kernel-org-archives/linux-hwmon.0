@@ -1,235 +1,171 @@
-Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012027.outbound.protection.outlook.com [52.101.48.27])
+Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E460C4C8FF7
-	for <linux-hwmon@vger.kernel.org>; Mon,  6 Jul 2026 08:59:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.27
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783328406; cv=fail; b=eKwBSfJL+3MHsSjAGa9SkeRk9VXpqy8Qn3r6ygz1iN9aBS6VjIaprgW4abVPYfG9ge1KEIUOiM8+tmnjbVIWmPy+KfgnsrBrrU2661qbcNVztJbLiE4UdwMe9FWz6D+pvr4uyTbVVx8n7gfJYlUqlzA1IFRBbF+RxgffC8rfEgk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783328406; c=relaxed/simple;
-	bh=EV3wRa3SK11I9+dnQbdRW4UQWf/ELaHSJw1MnkPsY0c=;
-	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=pyYiaS91J+HUv8gI6pV7YU7nzHqHdDZkvEYQ9DOdoe1JqvHraszbQ1/vnodU+vB4pE/zWA0QcnAVJQtKFMO6QRbqD/DCwwY0XaJNVFXvr/4poOggUhvFBTlf4t44geLCzWH7yJK13CaAcQbe6iGqmXf7DUrYw5UlfegMK1u04aw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com; spf=pass smtp.mailfrom=altera.com; dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b=iVrRoqIt; arc=fail smtp.client-ip=52.101.48.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altera.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 780B94DD6DC;
+	Mon,  6 Jul 2026 09:02:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783328582; cv=none; b=rLJh/qZQTL9ymjtsdgVCEvo7UbuB8N4F3RsH8g7vgpxuJgXK9VVDvnl8ta6fk3cOvdkZPuQF1vZTrZmJwTgjKl8K2HLoF794/Pev6f76KZg7sFs7LsvK+oBYWyHKSloydvY4bf2AYsupIiE9RsRKJWycFv4X7IKll3fAvJNElGE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783328582; c=relaxed/simple;
+	bh=yufmUSY40R4RXPo6K7fEa4KIhnrAK13kSTYa5kuGUP8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=DEZro42zNxj9UqrIY643v6/4W3Ee/uOWE2BTc2uyHnvmfSLwiQ7feUp1u1Q4BrHCZwXVzrR28D9lYtEYJ0HtupFJp82NGIekqCAdtNckcHQRvOJz6o5nE4MbalUIboEeV3ELXP6yaHcsPm/DpV1Htu9hNO7hEcLNlAj/uyMa4/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=eqNX7Nqc; arc=none smtp.client-ip=113.46.200.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b="iVrRoqIt"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=iH8tj7Wb78jnoqFJ9UtBZTt/J+AwRP6dsnVq12L+h/M/CsznU3CrNNzY3gAGYdRnecVmcSynqOrlFY8BhXiyHL5qIto27SWhKJV6JtbXmddhw3plJKcBxaiyFBMSNfSK109BPlmHxAbP3K0YEflZ6GCcfHp+SA8elvGgbCF6tpihW5MWH2rVLIjxh7bSnbZo17Zm+0UjD1DhvDQnbhbCndwbSI8mzdHFQgyjOD6qsLuqW+QQ4EyDs0Pr890BAbX+WCQCzQ24ULiPI9bCvkeMsV3bZkcqQI/tLBVYGXfd4adq2ge5SB9tNuYQAzTEybCZdFZ8JrtjUCdMaP07VebNmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EV3wRa3SK11I9+dnQbdRW4UQWf/ELaHSJw1MnkPsY0c=;
- b=sikKa6qrRskILjUx/C5UQAAiL/o7FXYK9V0F729imf7D9pGMJP12o3B+2k6MQLVCO7q3XYcC6YitCc+D60Mf934I/MYRh/GYgCQIn6UCQfEeUw/4+RPiXNbOlUPr9cNXIU/GzcJZAitrcQC8wa5nO/E4qrZ8cUqAgNfUz3TIZSeGLniRccdcLW5/UB4GpIzlpZnfY02utNnWZ0qfHN20AJK4Gsn3TIZ0x+dJzpBtG51k7/UgpTgGBdSH2ew0KmId0DO19cm/b0iD2MKTnaL9LaziEE91excj+OuPyzEjL+htsvk0xzJ6uOmUjWUI327KseR4iGiPKVFJyYneua+oMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=altera.com; dmarc=pass action=none header.from=altera.com;
- dkim=pass header.d=altera.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=altera.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EV3wRa3SK11I9+dnQbdRW4UQWf/ELaHSJw1MnkPsY0c=;
- b=iVrRoqItaNOWOSHKHnnsy7uVa+jS7wCb6kjjp0zcFo0A0tvco93XHwSWDmygfKTUF4PDMihcN25XGtrd5+YFmdtaBYpY4l2e7B1evEE79XpxErQl6KAYArnOvljI7n2irud7R0Yb7tXegj/oFH88gT1ygeEBOtKYkOKEz1czri+JNfouCb6zlU2bUvYQueIoBbdeFNB6/SbuFyM/urX66Xp/S1fHJxINUl/5Rj5Fwb25mmL4i41g2YT0/R4l834IoNpKi47y1wCqnzrdoz8W2HMMM7gr2hLIEIGvtRP8ybmm+3UPCPvSN6oQeprE3HMJnia+n2zyjB6pTq4PLVZQDw==
-Received: from SJ0PR03MB5950.namprd03.prod.outlook.com (2603:10b6:a03:2d3::20)
- by CO1PR03MB7938.namprd03.prod.outlook.com (2603:10b6:303:270::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.10; Mon, 6 Jul
- 2026 08:59:51 +0000
-Received: from SJ0PR03MB5950.namprd03.prod.outlook.com
- ([fe80::53a0:bf93:6b6b:de01]) by SJ0PR03MB5950.namprd03.prod.outlook.com
- ([fe80::53a0:bf93:6b6b:de01%5]) with mapi id 15.21.0181.012; Mon, 6 Jul 2026
- 08:59:51 +0000
-From: "NG, TZE YEE" <tze.yee.ng@altera.com>
-To: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, Guenter Roeck
-	<linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
-	<skhan@linuxfoundation.org>
-Subject: Re: [PATCH v3 2/2] hwmon: add Altera SoC FPGA hardware monitoring
- driver
-Thread-Topic: [PATCH v3 2/2] hwmon: add Altera SoC FPGA hardware monitoring
- driver
-Thread-Index: AQHdCsMymIe8wqVkOECCOpo8jOQ217Zbc54AgATCdgA=
-Date: Mon, 6 Jul 2026 08:59:51 +0000
-Message-ID: <4b5bd901-44c7-415a-88c0-461217c0a9df@altera.com>
-References: <cover.1783062999.git.tze.yee.ng@altera.com>
- <577acf0d5355db7d9b73c78e142649aefaf92d28.1783062999.git.tze.yee.ng@altera.com>
- <20260703081848.C5A831F000E9@smtp.kernel.org>
-In-Reply-To: <20260703081848.C5A831F000E9@smtp.kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=altera.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ0PR03MB5950:EE_|CO1PR03MB7938:EE_
-x-ms-office365-filtering-correlation-id: a033d08c-3e31-47a5-5e41-08dedb3cf061
-x-ms-exchange-atpmessageproperties: SA
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|1800799024|23010399003|366016|4143699003|5023799004|11063799006|38070700021|18002099003|55112099003|22082099003|56012099006|6133799003;
-x-microsoft-antispam-message-info:
- 1Ufjl5Mx1mHvF5ecjpAFUunsrNlMvR8BCtMa5SeP9MYdDQpCKH8f0FNtfnR/l1p75NSzFm6jX2pt5Th1DULTVvCZfwckkpbDXbIj8knkQetRVcj6a4Fw+0aHJRSklAQCwHE2fdoPlNexxaynOjTvqcM5fAcvYRc11PgNOIAavXzl7oWwv3lJdPCG71TV490ik+pLv49GNYd4ju8eWGTyzI216yERPwymmFzEuhDNrPolsQkOwlaVGZfTQJfd7rOEgcrtKvcO/zCs2fr0H6m6iEPGFtayQ3ubJC48Xq/ZGyzsrDSTfSm6AbP7PQZa3OweYdkHZd6lNJMH1ure+FA83y73la0IRI/X+Dvgm88d8Tf/dlK1hyxLoDoDSKrkHgMBrf0rRVMpvKVPH7wG86OUpJI3C0xV1OOdcw2jbBiDQoJHmg6IBBsbHtLoDeM+xK1I9pWZMbE6bt20+xWjPVG3tQup2SXnCUqbRchRPNq5eMQ9t7WCO6HaGR4w712WXXo9knBT2W6v/QQaBeKNK9dD/DxyPqXQIGtLMROWe8HYKQcnq7rh7kdnao+o4e3HnFKKkqAHYSNHdUyi4V+JQe5YgDhU2HVEMiiPXGjbUD2CIJ6IucEAA+10JxNdYUC9koHJylFKwN23L2vdi7lp6UXGjFcDqAAyCnjnqRXvW1RNVz86cvhmLo99ooSyItmiEiCEl2onu6d2vIE9Lk5ojG2J+Dgl4rkUrmCmlfvY2oTLRHo=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR03MB5950.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(23010399003)(366016)(4143699003)(5023799004)(11063799006)(38070700021)(18002099003)(55112099003)(22082099003)(56012099006)(6133799003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?aU5uek9HWmljU2FBcjVLbWRhRG5VakM4ZjRyMXc5c2F2UEwwOWNyNlhIZlUv?=
- =?utf-8?B?bUdSdjl5dmFIeGhUYXBpMUY5RlhnWndVekFUbytOcWtWVURZWXdrRXNrWU9K?=
- =?utf-8?B?amFFUmVCWWFmamVKY2FoNjdiMVc2blA1cmNCc0loTjNtTXk1ekdtNFlBZTlX?=
- =?utf-8?B?RzNjS2cxY1dUR2JvYVFtZVdTRFhKV3lZUk5xUmQvZzBPQ0llVG9mSlZQMjhN?=
- =?utf-8?B?VzFrVE15MTBkZ3VkQ2s0OHErNU41NjIvN3pPbkZOQnVqMUlsQTliWDhSUFJI?=
- =?utf-8?B?UjJSWTF2S2VUYlJTckt0V1c5QzJJZXQxMmJ3VjVsTWhOTFNJSDVVSGdkbUh0?=
- =?utf-8?B?bGNxUVU0ay9BMTJQWU5jZ1dWdUcrUE9MK0lDamFKc2RVTmR1S2JVbHNKK0xz?=
- =?utf-8?B?ckZra0tKdVlWSit3ZklDUWpLV05UTk1FbitoR3RmcVd6RlMxNThEdEZaa2N5?=
- =?utf-8?B?bkc4VGVwSVRxYkp3d1BOcHNqQ0pKbWFHdlByOS90MmM5NE9aWGRYSmsxQXFJ?=
- =?utf-8?B?WUJibGUrS0NnZXE2UHNXTWE3TXNjOUh1cXFDTU1MUW8vUXBZeXdlallrSUZV?=
- =?utf-8?B?ZWE4b3BObkVGRWlsb2htUSthYnBWVU1IOUEybUc4akt4bDdneXNVTTZuUlEr?=
- =?utf-8?B?emVtaWw5WE1UdEVQUjNiTkJxcE9uSGo5Uk1nV0lqa3BNbCtVQVpDdDdyTFh6?=
- =?utf-8?B?aUNkK1Bmb3FjckpkNUs1THNaQTA2blJsTUs1Rk5CZkQ4L0VrSGdSY2lvU3VD?=
- =?utf-8?B?Snp5RVdvSWpScTlldklOejREZ1laZmg4MjZLZ0Z0TUIyR01QREdHL3B6dmJM?=
- =?utf-8?B?STQwWUErQlFnTlQ0ZkwxbWlHKy9GVDJhdU5wbEREcTRqVmNNN0pJVzc2cHZ3?=
- =?utf-8?B?cyt5YWRMVkJ1Zk8zWnVJaUM0dmhERTF1N1l0SGJ1cUU2dnJlYXphZWYvQVc3?=
- =?utf-8?B?d1o3L1kxRi9TcnJSV3ZTOEQ5TkZ0TTI3RlliNmNpTnpXU3RuS1E0S2FPYlI5?=
- =?utf-8?B?eloyb0VnYU5ST3JUVXdWUWpQNGxqbmNud0N0ZWtZYnJ4YWtMbjZRODJUTXRu?=
- =?utf-8?B?Z2hZclJ5a3VEbnk5a0RrVExtK3o3aWthK3VlMklwWm9WM2N3NHVhczhlN1BU?=
- =?utf-8?B?cFlhUEpsSk5rSXN5UVhpMkhycTFEVzAyNlZtNFVIUXNDNU5XK2VlRXhJb1Jr?=
- =?utf-8?B?ZnJKS3ZKaW82d2Fydjl2cEdtTmxyeU54MGxqeWJhVzgxU1g4UFg5MjVtZDAw?=
- =?utf-8?B?bTZnRjA0RGFMbzhlaXhoZW1aUGxKVy9JWGd5NkxVVFdFSU9EdktURWE4cUxx?=
- =?utf-8?B?WDUrdWV6MG9MSGZDT2k1TWlUSTRzRC9EV0M3eUdZZUFobzNUVlRQQlR6ZWxw?=
- =?utf-8?B?QlNiSi8vOFQyZlQwQlZLR0NnQStYUnAwWnBuUU5MNnBJR0cyV0ozVkZGdkta?=
- =?utf-8?B?c2xJalQyVm5mQmZlS3dCNkhkcmJLNkw3NTRETVVJcmdjaWsrUDBLSFRCZGs0?=
- =?utf-8?B?bnh6YVF0dGs3ckFGSm9zT0NsUHUxRVVuL295b0QzY1V0bVRSMXlhekVlam9n?=
- =?utf-8?B?eWpJcnZpWTZkN1c0US9rMmljVjNPQTBkSCt0ZWdYalRCdXNMMTlOZXo1QnFT?=
- =?utf-8?B?elhkYUZKYkduYkUvcEoxUi8vZFQrb0V3amtSdzN2em9HTjNFUjhTckliSURu?=
- =?utf-8?B?K1l5eDRnaHdSM0dDdEZMNHVEczMyS1ZVNk5TZ2pURThFV3M1OFZzcVJ6TnVw?=
- =?utf-8?B?QXhKNlJ3RFJBSGI2N204YlBZbUxIanhlajFkWEZFeUMvelRGYlExelp6eDk3?=
- =?utf-8?B?Q0dpRVFsdlJnaVViV0Q0czlQK1QzbDlhV0I2NzRlRDBLK0pxd0dEQkFoNHBM?=
- =?utf-8?B?eXRrUmNBUGxKUUlhdUZJWVZtTHVXS2lJUEJLVXpiL0dNcWdyZGZ3WnQvdGd0?=
- =?utf-8?B?WEtyRTJJMmdqT0JvRlNOOXVYaytMWnQyQTVxdjJYWDlkeFQ3b0ZQUXRVS3BZ?=
- =?utf-8?B?U0xURFBvUEIzcGxkSFVDTmFjemNCRHJ0ZFRzYTFKWHdid3hhTkxvN1E3cUV0?=
- =?utf-8?B?cG12VFpVZVBkWU4xZHQ1Z2pJT3R3V3Y3cUp0REFOK1kvUEs5dEsvcWM2V1VX?=
- =?utf-8?B?RGRoYmJ1STEzYUtIM1lJOTVjTHJEYU10QkxXbWNhTCtreVY0VUV0a3JqVmNl?=
- =?utf-8?B?QkpvN3hGc0VOY01DejRKWmZXL1JuTTZRRGFhWE9oYS9VdnNZd29RRDdsSzVR?=
- =?utf-8?B?eTZCQS9JejM0aDc3cURTV2VWaVpqODRPYUZvMWY4UHpEeEs5ZkRwRG92Ly81?=
- =?utf-8?B?T3JOdGR0NEJEQys1SEg4K3VpRFB6dGo2RlRLYldXOTlTLzJlRkoyS1VNc0NC?=
- =?utf-8?Q?yR67mG3Fd4GPgrA4=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C99DB6BD24042F4B9CB718CE1490A245@namprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b="eqNX7Nqc"
+dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=2qCqXzWRyJgWX/jnAd9V4kg/326uEay1uq2VZP4DJJE=;
+	b=eqNX7NqcRHulodn1DGKmrAwPngvL/KEnkDj8rjacXwchLellJkmB/BXCciys5pPKEq9G0tk0l
+	DyRH5AWM9/lX0/hkoxc5uLE84SI60mkFD9M7Yk9/uBrBtMOxfVLbdv3jmUpEkc6jodJD3UOEFpL
+	K3E8ZyyBpWhy4Oyv+nKQCK4=
+Received: from mail.maildlp.com (unknown [172.19.162.144])
+	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4gtynF0fYnz1prqF;
+	Mon,  6 Jul 2026 16:53:21 +0800 (CST)
+Received: from kwepemo100005.china.huawei.com (unknown [7.202.195.212])
+	by mail.maildlp.com (Postfix) with ESMTPS id CFCF54056E;
+	Mon,  6 Jul 2026 17:02:35 +0800 (CST)
+Received: from [10.67.121.59] (10.67.121.59) by kwepemo100005.china.huawei.com
+ (7.202.195.212) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Mon, 6 Jul
+ 2026 17:02:35 +0800
+Message-ID: <9e351fa5-e4ad-42a6-b4e8-daf43b8b4251@huawei.com>
+Date: Mon, 6 Jul 2026 17:02:34 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: altera.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR03MB5950.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a033d08c-3e31-47a5-5e41-08dedb3cf061
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jul 2026 08:59:51.0602
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: fbd72e03-d4a5-4110-adce-614d51f2077a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SeJ3jvERVeLClNf20VWFFSVR54oNLugfBFuQJ17WPoJ2WkdAPXc+4JIF1sctxChkQHvBePlVmLstHcMHGN2v9A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR03MB7938
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/6] ACPI/PCC: Preserve platform-populated PCC signatures
+To: Sudeep Holla <sudeep.holla@kernel.org>
+CC: <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Rafael J.
+ Wysocki" <rafael@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>, Guenter
+ Roeck <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>, Andi Shyti
+	<andi.shyti@kernel.org>, <linux-i2c@vger.kernel.org>, MyungJoo Ham
+	<myungjoo.ham@samsung.com>, Kyungmin Park <kyungmin.park@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>, <linux-pm@vger.kernel.org>,
+	<lihuisong@huawei.com>
+References: <20260627-acpi_pcc_signature-v1-0-c1b7268d4fdc@kernel.org>
+ <10fb88e6-02f8-46b8-9665-db94a4035c5d@huawei.com>
+ <20260630-loyal-gray-polecat-a68c0d@sudeepholla>
+ <6e5e36e0-c470-469e-bb16-a5faaf055463@huawei.com>
+ <20260702-secret-gifted-pheasant-34be3a@sudeepholla>
+From: "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <20260702-secret-gifted-pheasant-34be3a@sudeepholla>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ kwepemo100005.china.huawei.com (7.202.195.212)
 
-T24gMy83LzIwMjYgNDoxOCBwbSwgc2FzaGlrby1ib3RAa2VybmVsLm9yZyB3cm90ZToNCj4gVGhh
-bmsgeW91IGZvciB5b3VyIGNvbnRyaWJ1dGlvbiEgU2FzaGlrbyBBSSByZXZpZXcgZm91bmQgMiBw
-b3RlbnRpYWwgaXNzdWUocykgdG8gY29uc2lkZXI6DQo+IC0gW0hpZ2hdIEluY29ycmVjdCBkZXZt
-IHJlZ2lzdHJhdGlvbiBvcmRlciBjYXVzZXMgYSBVc2UtQWZ0ZXItRnJlZSB2dWxuZXJhYmlsaXR5
-IGR1cmluZyBkZXZpY2UgdW5iaW5kIG9yIHByb2JlIGZhaWx1cmUuDQo+IC0gW01lZGl1bV0gVW5y
-ZWZlcmVuY2VkIGBjb21wbGV0aW9uYCBjYXVzZXMgYSBndWFyYW50ZWVkIG1heGltdW0gdGltZW91
-dCBkZWxheSBvbiBldmVyeSBhc3luY2hyb25vdXMgc2Vuc29yIHJlYWQuDQo+IC0tDQo+IA0KPiBj
-b21taXQgOWUwODhhMDcwMjk5YjMwOTM1MmFhOWE4ODAwNmUzOTI3ZDBjNTBiZA0KPiBBdXRob3I6
-IFR6ZSBZZWUgTmcgPHR6ZS55ZWUubmdAYWx0ZXJhLmNvbT4NCj4gDQo+IGh3bW9uOiBhZGQgQWx0
-ZXJhIFNvQyBGUEdBIGhhcmR3YXJlIG1vbml0b3JpbmcgZHJpdmVyDQo+IA0KPiBBZGQgYSBoYXJk
-d2FyZSBtb25pdG9yIGRyaXZlciBmb3IgQWx0ZXJhIFNvQyBGUEdBIGRldmljZXMgdXNpbmcgdGhl
-IFN0cmF0aXggMTANCj4gc2VydmljZSBsYXllci4gU2Vuc29yIGNoYW5uZWxzIGFyZSBzZWxlY3Rl
-ZCBiYXNlZCBvbiB0aGUgc2VydmljZSBsYXllcg0KPiBjb21wYXRpYmxlIHN0cmluZy4NCj4gDQo+
-PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9od21vbi9zb2NmcGdhLWh3bW9uLmMgYi9kcml2ZXJzL2h3
-bW9uL3NvY2ZwZ2EtaHdtb24uYw0KPj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4+IC0tLSAvZGV2
-L251bGwNCj4+ICsrKyBiL2RyaXZlcnMvaHdtb24vc29jZnBnYS1od21vbi5jDQo+IFsgLi4uIF0N
-Cj4+ICtzdGF0aWMgaW50IHNvY2ZwZ2FfaHdtb25fYXN5bmNfcmVhZChzdHJ1Y3QgZGV2aWNlICpk
-ZXYsDQo+PiArCQkJCSAgICBlbnVtIGh3bW9uX3NlbnNvcl90eXBlcyB0eXBlLA0KPj4gKwkJCQkg
-ICAgc3RydWN0IHN0cmF0aXgxMF9zdmNfY2xpZW50X21zZyAqbXNnKQ0KPj4gK3sNCj4+ICsJc3Ry
-dWN0IHNvY2ZwZ2FfaHdtb25fcHJpdiAqcHJpdiA9IGRldl9nZXRfZHJ2ZGF0YShkZXYpOw0KPj4g
-KwlzdHJ1Y3Qgc3RyYXRpeDEwX3N2Y19jYl9kYXRhIGRhdGEgPSB7fTsNCj4+ICsJc3RydWN0IGNv
-bXBsZXRpb24gY29tcGxldGlvbjsNCj4+ICsJdW5zaWduZWQgbG9uZyB3YWl0X3JldDsNCj4+ICsJ
-dm9pZCAqaGFuZGxlID0gTlVMTDsNCj4+ICsJaW50IHN0YXR1cywgaW5kZXgsIHJldDsNCj4+ICsN
-Cj4+ICsJaW5pdF9jb21wbGV0aW9uKCZjb21wbGV0aW9uKTsNCj4+ICsNCj4+ICsJZm9yIChpbmRl
-eCA9IDA7IGluZGV4IDwgSFdNT05fQVNZTkNfTVNHX1JFVFJZOyBpbmRleCsrKSB7DQo+PiArCQlz
-dGF0dXMgPSBzdHJhdGl4MTBfc3ZjX2FzeW5jX3NlbmQocHJpdi0+Y2hhbiwgbXNnLCAmaGFuZGxl
-LA0KPj4gKwkJCQkJCSAgTlVMTCwgTlVMTCk7DQo+PiArCQlpZiAoc3RhdHVzID09IDApDQo+PiAr
-CQkJYnJlYWs7DQo+PiArCQlkZXZfd2FybihkZXYsICJGYWlsZWQgdG8gc2VuZCBhc3luYyBtZXNz
-YWdlOiAlZCIsIHN0YXR1cyk7DQo+PiArCQltc2xlZXAoSFdNT05fUkVUUllfU0xFRVBfTVMpOw0K
-Pj4gKwl9DQo+PiArDQo+PiArCWlmIChzdGF0dXMgJiYgIWhhbmRsZSkgew0KPj4gKwkJZGV2X2Vy
-cihkZXYsICJGYWlsZWQgdG8gc2VuZCBhc3luYyBtZXNzYWdlIGFmdGVyICV1IHJldHJpZXM6ICVk
-XG4iLA0KPj4gKwkJCUhXTU9OX0FTWU5DX01TR19SRVRSWSwgc3RhdHVzKTsNCj4+ICsJCXJldHVy
-biBzdGF0dXM7DQo+PiArCX0NCj4+ICsNCj4+ICsJLyoNCj4+ICsJICogVGhlIHNlcnZpY2UgbGF5
-ZXIgbmV2ZXIgaW52b2tlcyB0aGUgYXN5bmMgY2FsbGJhY2ssIGJ1dCB3YWl0DQo+PiArCSAqIGJl
-Zm9yZSBwb2xsaW5nIGFueXdheTogUlNVIHVzZXMgdGhlIHNhbWUgcGF0dGVybiBhbmQgdGhlIGZp
-cm13YXJlDQo+PiArCSAqIG5lZWRzIHRpbWUgdG8gY29tcGxldGUgdGhlIHRyYW5zYWN0aW9uIGFm
-dGVyIGFzeW5jX3NlbmQoKS4NCj4+ICsJICovDQo+PiArCXdhaXRfcmV0ID0gd2FpdF9mb3JfY29t
-cGxldGlvbl9pb190aW1lb3V0KCZjb21wbGV0aW9uLCBIV01PTl9USU1FT1VUKTsNCj4gDQo+IFtT
-ZXZlcml0eTogTWVkaXVtXQ0KPiBXaWxsIHRoaXMgY2F1c2UgYSBndWFyYW50ZWVkIHRpbWVvdXQg
-ZGVsYXkgb24gZXZlcnkgc2Vuc29yIHJlYWQ/DQo+IA0KPiBJbiBzb2NmcGdhX2h3bW9uX2FzeW5j
-X3JlYWQoKSwgYSBsb2NhbCBjb21wbGV0aW9uIGlzIGluaXRpYWxpemVkIGJ1dCBpcw0KPiBuZXZl
-ciBwYXNzZWQgdG8gYW55IGFzeW5jaHJvbm91cyBmdW5jdGlvbiBvciBjYWxsYmFjayAodGhlIGZ1
-bmN0aW9uDQo+IHN0cmF0aXgxMF9zdmNfYXN5bmNfc2VuZCgpIHJlY2VpdmVzIE5VTEwgZm9yIHRo
-ZSBjYWxsYmFjaykuDQo+IA0KPiBCZWNhdXNlIHRoZSBjb21wbGV0aW9uIGNhbiBuZXZlciBiZSBz
-aWduYWxlZCwgdGhlIGV4ZWN1dGlvbiB3aWxsDQo+IHVuY29uZGl0aW9uYWxseSBibG9jayBpbiBh
-biB1bmludGVycnVwdGlibGUgc2xlZXAgZm9yIHRoZSBlbnRpcmUNCj4gSFdNT05fVElNRU9VVCBk
-dXJhdGlvbiBvbiBldmVyeSBzaW5nbGUgc2Vuc29yIHJlYWQuIE9ubHkgYWZ0ZXIgdGhpcyBtYXhp
-bXVtDQo+IHRpbWVvdXQgZXhwaXJlcyBkb2VzIHRoZSBmdW5jdGlvbiBwcm9jZWVkIHRvIHBvbGwg
-Zm9yIHRoZSByZXNwb25zZS4NCj4gDQo+PiArCWlmICh3YWl0X3JldCA+IDApDQo+PiArCQlkZXZf
-ZGJnKGRldiwgIlJlY2VpdmVkIGFzeW5jIGludGVycnVwdFxuIik7DQo+IFsgLi4uIF0NCj4+ICtz
-dGF0aWMgaW50IHNvY2ZwZ2FfaHdtb25fcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRl
-dikNCj4+ICt7DQo+IFsgLi4uIF0NCj4+ICsJaHdtb25fZGV2ID0gZGV2bV9od21vbl9kZXZpY2Vf
-cmVnaXN0ZXJfd2l0aF9pbmZvKGRldiwgInNvY2ZwZ2FfaHdtb24iLA0KPj4gKwkJCQkJCQkgcHJp
-diwNCj4+ICsJCQkJCQkJICZzb2NmcGdhX2h3bW9uX2NoaXBfaW5mbywNCj4+ICsJCQkJCQkJIE5V
-TEwpOw0KPj4gKwlpZiAoSVNfRVJSKGh3bW9uX2RldikpIHsNCj4+ICsJCWlmIChwcml2LT5hc3lu
-YykNCj4+ICsJCQlzdHJhdGl4MTBfc3ZjX3JlbW92ZV9hc3luY19jbGllbnQocHJpdi0+Y2hhbik7
-DQo+PiArCQlzdHJhdGl4MTBfc3ZjX2ZyZWVfY2hhbm5lbChwcml2LT5jaGFuKTsNCj4+ICsJCXJl
-dHVybiBQVFJfRVJSKGh3bW9uX2Rldik7DQo+PiArCX0NCj4+ICsNCj4+ICsJcmV0ID0gZGV2bV9h
-ZGRfYWN0aW9uX29yX3Jlc2V0KGRldiwgc29jZnBnYV9od21vbl9yZWxlYXNlX3N2YywgcHJpdik7
-DQo+IA0KPiBbU2V2ZXJpdHk6IEhpZ2hdDQo+IERvZXMgdGhpcyBkZXZyZXMgcmVnaXN0cmF0aW9u
-IG9yZGVyIGNyZWF0ZSBhIHVzZS1hZnRlci1mcmVlIHZ1bG5lcmFiaWxpdHkNCj4gZHVyaW5nIGRl
-dmljZSB1bmJpbmQ/DQo+IA0KPiBJbiBzb2NmcGdhX2h3bW9uX3Byb2JlKCksIHRoZSBod21vbiBk
-ZXZpY2UgaXMgcmVnaXN0ZXJlZCB2aWENCj4gZGV2bV9od21vbl9kZXZpY2VfcmVnaXN0ZXJfd2l0
-aF9pbmZvKCkgYmVmb3JlIHRoZSBjbGVhbnVwIGFjdGlvbg0KPiBzb2NmcGdhX2h3bW9uX3JlbGVh
-c2Vfc3ZjIGlzIGFkZGVkIHZpYSBkZXZtX2FkZF9hY3Rpb25fb3JfcmVzZXQoKS4NCj4gDQo+IEJl
-Y2F1c2UgZGV2cmVzIHVud2luZHMgYWN0aW9ucyBpbiByZXZlcnNlIG9yZGVyIG9mIGFkZGl0aW9u
-IChMSUZPKSwgdXBvbg0KPiBkZXZpY2UgdW5iaW5kLCBzb2NmcGdhX2h3bW9uX3JlbGVhc2Vfc3Zj
-IHdpbGwgZXhlY3V0ZSBmaXJzdCwgZnJlZWluZyB0aGUNCj4gc2VydmljZSBsYXllciBjaGFubmVs
-IChwcml2LT5jaGFuKS4NCj4gDQo+IEhvd2V2ZXIsIHRoZSBod21vbiBkZXZpY2Ugd2lsbCBzdGls
-bCBiZSBhY3RpdmUgYW5kIGl0cyBzeXNmcyBhdHRyaWJ1dGVzDQo+IGFjY2Vzc2libGUgdG8gdXNl
-ciBzcGFjZSBkdXJpbmcgdGhpcyB0aW1lLiBBIGNvbmN1cnJlbnQgc3lzZnMgcmVhZCBjYW4NCj4g
-aW52b2tlIHNvY2ZwZ2FfaHdtb25fcmVhZCgpLCB3aGljaCB3aWxsIGF0dGVtcHQgdG8gdXNlIHRo
-ZSBhbHJlYWR5LWZyZWVkDQo+IHByaXYtPmNoYW4sIHJlc3VsdGluZyBpbiBhIHVzZS1hZnRlci1m
-cmVlLg0KPiANCj4+ICsJaWYgKHJldCkNCj4+ICsJCXJldHVybiByZXQ7DQo+PiArDQo+PiArCXBs
-YXRmb3JtX3NldF9kcnZkYXRhKHBkZXYsIHByaXYpOw0KPj4gKwlyZXR1cm4gMDsNCj4+ICt9DQo+
-IA0KDQpIaSBtYWludGFpbmVycywNCg0KMS4gW0hpZ2hdIEluY29ycmVjdCBkZXZtIHJlZ2lzdHJh
-dGlvbiBvcmRlciBjYXVzZXMgYSBVc2UtQWZ0ZXItRnJlZSANCnZ1bG5lcmFiaWxpdHkgZHVyaW5n
-IGRldmljZSB1bmJpbmQgb3IgcHJvYmUgZmFpbHVyZS4NCg0KQWdyZWVkLiB2NCB3aWxsIHJlZ2lz
-dGVyIGRldm1fYWRkX2FjdGlvbl9vcl9yZXNldCgpIGJlZm9yZSANCmRldm1faHdtb25fZGV2aWNl
-X3JlZ2lzdGVyX3dpdGhfaW5mbygpLCBtYXRjaGluZyBvdGhlciBod21vbiBkcml2ZXJzIA0KKGUu
-Zy4gcHdtLWZhbiwgcW5hcC1tY3UtaHdtb24pLiBPbiBod21vbiByZWdpc3RyYXRpb24gZmFpbHVy
-ZSwgcHJvYmUgDQpyZXR1cm5zIGFuZCBkZXZtIHJ1bnMgdGhlIHJlbGVhc2UgYWN0aW9uIGF1dG9t
-YXRpY2FsbHksIHNvIG1hbnVhbCANCmNoYW5uZWwgY2xlYW51cCBvbiB0aGF0IHBhdGggaXMgbm8g
-bG9uZ2VyIG5lZWRlZC4NCg0KMi4gW01lZGl1bV0gVW5yZWZlcmVuY2VkIGBjb21wbGV0aW9uYCBj
-YXVzZXMgYSBndWFyYW50ZWVkIG1heGltdW0gDQp0aW1lb3V0IGRlbGF5IG9uIGV2ZXJ5IGFzeW5j
-aHJvbm91cyBzZW5zb3IgcmVhZC4NCg0KQWdyZWVkIHRoYXQgdGhlIGNvbXBsZXRpb24gaXMgbmV2
-ZXIgc2lnbmFsZWQgYmVjYXVzZSB0aGUgc2VydmljZSBsYXllciANCmRvZXMgbm90IGludm9rZSB0
-aGUgYXN5bmMgY2FsbGJhY2suIHJzdV9zZW5kX2FzeW5jX21zZygpIGluIA0Kc3RyYXRpeDEwLXJz
-dS5jIHVzZXMgdGhlIHNhbWUgc2VuZCDihpIgd2FpdCDihpIgcG9sbCBwYXR0ZXJuLCBzbyB3ZSBm
-b2xsb3dlZCANClJTVSBmb3IgY29uc2lzdGVuY3kgd2l0aCB0aGUgZXhpc3RpbmcgU3RyYXRpeCAx
-MCBhc3luYyBTVkMgY2xpZW50Lg0KDQpXZSBhcmUgaGFwcHkgdG8gY2hhbmdlIHRoaXMgaWYgeW91
-IHByZWZlciDigJQgZm9yIGV4YW1wbGUgYSBkZWFkbGluZS1iYXNlZCANCnBvbGwgbG9vcCB3aXRo
-b3V0IHRoZSBmaXhlZCB3YWl0LCBvciBhIHByb3BlciBmaXggaW4gc3RyYXRpeDEwLXN2YyB0byAN
-Cmludm9rZSB0aGUgY2FsbGJhY2suIFBsZWFzZSBsZXQgdXMga25vdyB5b3VyIHByZWZlcmVuY2Uu
-DQoNCldlIHdpbGwgc2VuZCB2NCB3aXRoIHRoZSBkZXZtIGZpeDsgdGhlIGFzeW5jIHdhaXQgYXBw
-cm9hY2ggY2FuIGZvbGxvdyANCnlvdXIgZ3VpZGFuY2UgYWJvdmUuDQoNClRoYW5rcywNClR6ZSBZ
-ZWUNCg==
+
+On 7/2/2026 6:21 PM, Sudeep Holla wrote:
+> On Wed, Jul 01, 2026 at 03:38:21PM +0800, lihuisong (C) wrote:
+>> On 6/30/2026 6:49 PM, Sudeep Holla wrote:
+>>> On Tue, Jun 30, 2026 at 05:25:20PM +0800, lihuisong (C) wrote:
+>>>> Hi Sudeep,
+>>>>
+>>>> On 6/28/2026 12:37 AM, Sudeep Holla wrote:
+>>>>> ACPI PCC shared memory layouts reserve the first dword for the PCC
+>>>>> signature. ACPI specification defines the signature as 0x50434300 ORed
+>>>>> with the PCC subspace ID, and ACPI 6.6 clarify that the signature is
+>>>>> populated by the platform and verified by OSPM.
+>>>>>
+>>>>> This series centralizes PCC shared memory signature validation in the PCC
+>>>>> mailbox controller and stops PCC users from rewriting the signature before
+>>>>> each command. Clients that previously copied complete local PCC headers
+>>>>> now update only the mutable command/status/flags/length/payload fields.
+>>>> I am concerned that this may affect the functionality of drivers on some
+>>>> existed platforms.
+>>> One other option I was thinking is to not issue error but just log the error
+>>> message and let the client driver add that additional check if required.
+>> The patch 1/6 is not good to our platform.
+>> Yeah, suggest to use gentle approach to do this if we have to clarify this
+>> signature.
+> Fair enough, we can just log the warning for now.
+Ack.
+>
+>> After all, all client drivers work well before.
+> Sure, but not doing anything will just make the bug carry on for ever in
+> the firmware. SO logging warning is minimum we should do IMO.
+Agree. We need to clearify this based on spec.
+>
+>>>> This largely depends on the implementation of the platform firmware.
+>>>>
+>>> Sure. However I always expected it to be taken care by the platform, v6.6
+>>> just adds that clarification explicitly. It was never clear that the sender
+>>> or the OSPM needs to write that signature, so I disagree that it is platform
+>>> firmware dependent entirely. The clarification wouldn't have got added if
+>>> there was any disagreement on that fact.
+>> The reasons I say this largely depends on the firmware are as follows:
+>> 1> The previous ACPI spec did not clearly require that the platform firmware
+>> needs to fill in this signature first.
+>>       The client driver working on these platform doesn't work anymore if use
+>> the way in patch 1/6.
+> Fair enough.
+>
+>> 2> We are not sure if some firmware verify this signature or clear this
+>> signature field in shared memory.
+> Anyways, better to check that for current and future platforms if not the
+> legacy ones.
+>
+>>>> I think it's good for the signature to be filled in by the command initiator
+>>>> and then verified by the recipient, as this is how this field can serve its
+>>>> purpose.
+>>>> Otherwise, I really don't see what use it has.
+>>> Please get the spec updated accordingly, we can just change in the kernel
+>>> based on what we think is the best way to use it. It needs to be clearly
+>>> specified, otherwise it may cause issue for non-Linux OSVs.
+>> Agree.
+>>
+>> Yeah, I found spec v6.5 just said how to compute it and didn't specify how
+>> to use it for platform and OSPM.
+>> I saw the update of v6.6 for the signature field in "Generic Communications
+>> Channel Shared Memory Region" and "Extended PCC Subspace Shared Memory
+>> Region".
+>> like: "The signature is populated by the platform and is verified by OSPM."
+>> But please note v6.6 didn't say above words in "Reduced PCC Subspace Shared
+>> Memory Region".
+>>
+> Ah, that's just inconsistency I believe. I will raise a defect.
+Nice.
+>
+>> I don't know why v6.6 specify like that.
+>> After all. all PCC application parties (client drivers) in Linux have
+>> already filled this field.
+>>
+> I don't think what Linux drivers should be the reference as there are other
+> OSVs.
+Agree.
+>> According to my understanding of normal signature in communication,
+>> it is generally filled by the initiator (sender) and verified by the
+>> responder (receiver).
+>> In this way, the data is valid, and the signature is meaningful.
+>>
+>> If it is only initialized by firmware, and OSPM verifies it, its lifecycle
+>> ends there.
+>> I don't think this signature has much significance.
+>>
+>> The signature field is just in shared memory and may be cleared due to some
+>> other exception.
+>> Some similar case also need to be considered.
+>> How to make it work better and more resilient may also be something we need
+>> to consider.
+> Not sure if I follow that. The way I expect is platform won't populate the
+> signature if everything is not initialised and running at it's end which
+> implies it is not ready to accept the request.
+It can also be defined this way.
+But platform firmware is generally ready to accept request when OS is 
+running.
+If platform isn't ready to accept the request from OSPM, the command 
+will execute failed.
+So it seems that the signature is a bit redundant if it is only used to 
+indicate that the platform is ready to receive data.
+
+Anyway, I follow spec, just does not understand the signature usage spec 
+6.6 added.
