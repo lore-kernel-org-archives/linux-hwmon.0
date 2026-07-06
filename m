@@ -1,67 +1,68 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F22533F4105
-	for <linux-hwmon@vger.kernel.org>; Mon,  6 Jul 2026 16:33:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F243A3E9287
+	for <linux-hwmon@vger.kernel.org>; Mon,  6 Jul 2026 16:51:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783355616; cv=none; b=l4TtIkUSrxl1SNY7d9eToqu/0mFhRLsAhoe8XoTQzAEG4aK7ieITZ48eKl/KBTho61di14ahw0+rHTlW8ZWLsDinTYHrPwDReaRKuxL77la3m1V0uHoxxnXx+8NdAW0qQ36YwoygQImMJxMVVLLJK2577wJc39VkdbpmW+zR5+0=
+	t=1783356694; cv=none; b=eoNVdSE7N+rlw10muLqnfGqyy7ovW5bQgUewG8e8sZDP1i3AJd4qmsyLzD+KdTr8ibLijkbzpWsO567u76sIZooFjOHCwKzeTVTX4KwjMs04tX4zeKa8UmPKDNtgsBWWEZzZ4OQpeVpToiZo74RQ7YdjypkwQiiSd5sgaGPm0B8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783355616; c=relaxed/simple;
-	bh=6NMmYy62ZFXZlbxjQZjcsrKWVKzo16auoFFByfnuD1g=;
+	s=arc-20240116; t=1783356694; c=relaxed/simple;
+	bh=QryJy5X/pq1M/8aPlp2uX+jXK7FcV5hVFFwpTtvblns=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JxSG1fgHSee2BPr7af8Uo8LqYC8rUyVr7UlEE8UTYjGGfWVB+XCI67fTKH0gUifNI3pFtcamE5gWx2DqB2+quYCM9TOok9GBj3OnXPEcGzSpXdRLCVNWKVUDNh7R7QdXQnoS/YtVS5xlVqteYYQAFGV2wm5366OjAL2xXJFxpr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X/nx5YcL; arc=none smtp.client-ip=209.85.214.171
+	 In-Reply-To:Content-Type; b=nKszIiywWpGPSQ2Z64hppHgqMhSjCI59UHVQAGC62gN5JGNrokyJnlGexcwoqhSJPM9g+wSigYmZ34zgn5HMCvixAIRHsC1UtOIGTJ3qEXqGKBSop1gqvXgyRVOB/3GPWcSfu1olnHJSExpkQaZfoJTuMhdcm+VXtbt9exwHSW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ksmdEOwA; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X/nx5YcL"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2cca24023edso16254595ad.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 06 Jul 2026 09:33:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ksmdEOwA"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-38125cebfdaso4353148a91.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 06 Jul 2026 09:51:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783355614; x=1783960414; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
+        d=gmail.com; s=20251104; t=1783356692; x=1783961492; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=rxxY2BfHIcCLRUYump74eH/fMlKZQi/IR8VG2OQVFJ4=;
-        b=X/nx5YcL4mtmhlQ/O2jbueNc0xl8UGKK6rlU7Z+w+MJtGVz/q/WVtFUW8qkV00LdVw
-         mVNfImcOHK65jIqUp+kxUuX5lrP+S56fPA0nmnfM3iqcSYFQLJXuv3qY61aoqVgk1i5I
-         nu1EMq5W5xXCIS6k/Dl+BNAwQU2GxI3+7pagGt8W3Mhs+5CNTQ/34Pf/VKIJLSKTWfqP
-         z0zJXj4n3WwxzxQzjm7AdEsrMr+Fis/EYLgvHu1UVRSGhvubIBilQXBx13NPAdfaVAxI
-         uida0+Ehu6w8WNSb0+P7BbX9ijWWpN+Ype/8Sqz1FLlmrJP8L6aaPE/EMkqUDieRL87A
-         4/MQ==
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=/gHYPO6Hmln8s8emIzU3WAqi7i4TZ26A9EJUpruVUFY=;
+        b=ksmdEOwAlxbck9AUlPquWfrmSpE99vRNecyr1lj8+UF4ZEOMRVZRxeMO+5SELc9+Pg
+         kXqM1NpmqOdXdVh1hQjCqNKDGjbaXFC1FzOD8qiTfijrVZy77uPAjgYgJNYGRrEK4qW2
+         h7q8vFlXq6W0+LvLkZ8VJZ2cjhDhId3CNyF+lrQLeFJ1Nj6j+e1Q54PNLhxbdtQNHAzU
+         0B9EKr+sC4aaiurXNJknKZ2t71Aqtgj4KVeGLU2XYdJRlGekmCLDu0OjG59GN+iSzpLj
+         0fW2jzOycXDrg+BmVf50BibX0fOoAr/Ena53m52Nx/1imxoHAUb0OIM4W6UYffEGb80W
+         O+YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783355614; x=1783960414;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
+        d=1e100.net; s=20251104; t=1783356692; x=1783961492;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rxxY2BfHIcCLRUYump74eH/fMlKZQi/IR8VG2OQVFJ4=;
-        b=PSqf+2KztBrx24zzr0sjKImBfhsDQwmTQOt0wJCN1mCLywcY3FeH5dlQti0IompMjY
-         ZtGemnMmJ12TYTMFrVDw9cvoymAwmhqRQVvZqIMpakfHm3+vpOPDCDniJfD0LINSHfPM
-         Jtair9+YBUEXIXCPbbEusUfwrzRsWD2kpJRTB573AfK6NEzGAk4bniE073GJkMlM7dNZ
-         W6H2W/QHyYAhmh0krry/sqQpBbK4PuSCMu6FLUIMuzdH6JZNSwVv5yGJcAKpPLci07nS
-         FguQlTwgRLbgKU+u5xtK0LMrXwa5e9P/tVQv/wCA8amRTmcncZJs+I+vRjFGfxDMrGK+
-         HVrw==
-X-Forwarded-Encrypted: i=1; AHgh+RoQZgnxoy5yv87XTgSmm3mCxuAiI2LJjthsfCsUpffD+UxOc1SltMHvVJNCBYwyh6lwcEKGE+sf0jeFGg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyW3kI1GtCOAC9qcNBCcZ87V46YDAe4DjDrceMp+9W7eCg3hk82
-	rHxUSsdIc7OVpQiwaDVYy10+IMWeS24qRudeWeoLXrulbYZmV+MeX4XQ
-X-Gm-Gg: AfdE7cllSeksZkUpIqDt7UJk9bk3X9EzskNI8en23rl1ZLdwvaN8tg/t3oBkgsfcd7h
-	Uf2dajh3aI+HjG1XdOyGaII6fiyymipU4+ZSyxeLNNodmFSmwE8E8hh3JICtovmmoF5cB8xi3Zi
-	NyEhbdV36sO1N0+QgErXf0ViohkU0VwR78i70VzuVo6Nos0srypx/0c7PXDsOxuU00lLRNHilvp
-	2ERvfZB3TAjBCeYmdVK9yUxfHfyHvr7M6WCSYAZA8y8/5lGXxQ701lxqWTiibgvuzASO8EfYR8Z
-	/CUsURn9e4JIYRNX2gvbKOOrZYaPjt/FPygrGnXjRbIcqsfiyE6exKJTKfv2aeqvPUSpfysmd69
-	3G1Eu3zOTQ44xh+CHHcGVltQiWhMdVmqbYZMHNl4RBn6+DNTV3pqVka+K+ZhlRFCGTBkNOAM79Q
-	PKDt5JmusCauHXFdgwRWV1EgfN9eaoR1Up3wOWWackg4HWhLLclmRR+y2iPlPlcO9mjUsn5WZg
-X-Received: by 2002:a17:902:d2cf:b0:2cc:6329:b7ba with SMTP id d9443c01a7336-2ccbe615a2emr14691785ad.16.1783355614326;
-        Mon, 06 Jul 2026 09:33:34 -0700 (PDT)
+         :subject:date:message-id:reply-to:content-type;
+        bh=/gHYPO6Hmln8s8emIzU3WAqi7i4TZ26A9EJUpruVUFY=;
+        b=ne3QzDVCAkNynpnqjUfhsGasUWBVqPXwHebM3+yYhr+aq3yGmAAki6cDNyHoQN66bZ
+         W2dO/Abknys4YgzTtXrrGy0i+5B2SKs53aQnKd5bugPozq3x3tYhQm7V7mknQRi02Gdx
+         PoUg+pgFxC7BurkvvfSaG+iQodHqb4ccQSjyCdjEO2c9RSEEWo9h8btK8cOfMiy8OUj9
+         XfeRv7kmT9bRWO4R7TKbjoY1AzAOrwDp2TQLii3OgEWjBZNFLz/BOvl8PO2AbQMsgbGp
+         fUGk+ubvI9Rkd5kK11CR8ieSP7uo8rxt3nh8IbKqqB4RxR1v+pSX9GO58ACAxKhh7Dvk
+         GwDQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rpb/FC7gleWLCU1uZ+NLKHr7oT1LCnMSh9pevOKL5JB6QZm0NvVtEBH8hcKQkA27CnGp9tksy4hG61FPQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUJLAyfwOm9eEviKtj/NuYLOpaifJIIGbkUmNjahzmA91g8SER
+	lv14Y9FMxHwPPxd6M1Qvst0y6k0QyoWQkoINOWHtOzM2nv8f0B7Ww2LG
+X-Gm-Gg: AfdE7cnPu2us7MaPlPIqEWj56jXnWMHyH3qUGs2WpsxVvTdrj8CnNdo6IPuhnu4Y02R
+	ysan+Yfj+v7TzaoUdmpfMDGuoFrU6X3Mq4A25vE6orbzwM/k1Z/YeVKHm796wieHmDrm3FYpw3B
+	fMkxvpaefbPi91T8m0o/HF/h750HW9Hdu4nCgOoSe5hIT1fR81ZabCyH9eoBTGket3DaKMI8jML
+	qbIVKO1HbhMlkTU7vfFMoSVNY0ASyJqo8gYX7U3Kdb4OOILE8ZZVV2myDvs2Lu7diDoOVKaf+zF
+	ib4/VFlLwebF1t04wPgyYkUvR4+vrxfLYPBjxtTxvjV5dCKb1LC3c74PXgCowzucAc6KgEHwEzU
+	mh0yZ6CE8Zze2caPhU4wS/sdoksRFGjNcB8N8zHVAdctpu6EkitWR6a6ZMv4FKccAR0viRPRde2
+	WVSyO3Fj2cUcErhZL+AyFEEoxKqGCivOC1+R5XRYrmoDg3yFdjdYDDy67oTwkDvg==
+X-Received: by 2002:a17:90b:53c3:b0:381:abcc:c8e9 with SMTP id 98e67ed59e1d1-3875650be6bmr1436934a91.7.1783356692124;
+        Mon, 06 Jul 2026 09:51:32 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cad6f25f87sm54027575ad.3.2026.07.06.09.33.32
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3812801e8d6sm5441077a91.12.2026.07.06.09.51.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jul 2026 09:33:33 -0700 (PDT)
+        Mon, 06 Jul 2026 09:51:31 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <65ebf21f-5a23-43b5-b10c-684fe421b0dc@roeck-us.net>
-Date: Mon, 6 Jul 2026 09:33:32 -0700
+Message-ID: <34f8c1fb-e23f-41c8-9327-1646fb4ec84b@roeck-us.net>
+Date: Mon, 6 Jul 2026 09:51:30 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,21 +70,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/5] dt-bindings: hwmon: (pmbus/max20830): add
- enable-gpios property and complete examples
-To: "Torreno, Alexis Czezar" <AlexisCzezar.Torreno@analog.com>,
- Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-References: <20260706-dev-max20830c-v2-0-37761e89bb5f@analog.com>
- <20260706-dev-max20830c-v2-1-37761e89bb5f@analog.com>
- <20260706-neat-perky-malamute-7518b7@quoll>
- <PH0PR03MB6351C4B212D2CCBA3F1BF113F1F12@PH0PR03MB6351.namprd03.prod.outlook.com>
+Subject: Re: [PATCH] hwmon: emc2103: use min_t() for explicit type in fan
+ target clamp
+To: Animesh Rai <animeshrai853@gmail.com>, steve.glendinning@shawell.net,
+ linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+References: <20260706162519.6087-1-animeshrai853@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -129,41 +121,37 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <PH0PR03MB6351C4B212D2CCBA3F1BF113F1F12@PH0PR03MB6351.namprd03.prod.outlook.com>
+In-Reply-To: <20260706162519.6087-1-animeshrai853@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 7/6/26 00:13, Torreno, Alexis Czezar wrote:
-> 
->> On Mon, Jul 06, 2026 at 10:08:41AM +0800, Alexis Czezar Torreno wrote:
->>> Adding an entry for the MAX20830 EN (enable) pin. This pin exist but
->>> was not included before. Also edited examples entry to be more complete.
->>>
->>> Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
->>> ---
->>>   .../devicetree/bindings/hwmon/pmbus/adi,max20830.yaml         | 11
->> +++++++++++
->>>   1 file changed, 11 insertions(+)
->>>
->>
->> How did you address previous feedback?
->>
-> 
-> Regarding the enable pin, I added this since I know bindings like being complete
-> and saw that I didn't add it the first time I submitted max20830.
-> I added driver code for the gpio but learned that it wasn't really a use case so
-> I simply dropped the patch for it.
+On 7/6/26 09:25, Animesh Rai wrote:
+> Using min() with an explicit cast on one operand is fragile. Replace
+> with min_t(u16, ...) to make the intended comparison type explicit and
+> avoid implicit type conversion.
 > 
 
-I guess I am completely missing the point here. I can not imagine a situation
-where one would want to connect the enable pin to a driver-controlled GPIO pin,
-or why would one connect the chip's PGOOD output pin to a GPIO input pin
-and connect that back to the driver.
+Sorry, I have no idea what you are trying to fix here. Both parameters
+are u16. There is nothing "fragile" about that.
 
-I think we will need guidance from devicetree maintainers explaining what
-"complete" means in such a context to avoid having to repeat this discussion
-for every driver going forward.
-
-Thanks,
 Guenter
+
+> Signed-off-by: Animesh Rai <animeshrai853@gmail.com>
+> ---
+>   drivers/hwmon/emc2103.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/emc2103.c b/drivers/hwmon/emc2103.c
+> index 27dc149a3ed9..fbb1b4025eb7 100644
+> --- a/drivers/hwmon/emc2103.c
+> +++ b/drivers/hwmon/emc2103.c
+> @@ -348,7 +348,7 @@ static ssize_t fan1_div_store(struct device *dev, struct device_attribute *da,
+>   	/* update fan target if high byte is not disabled */
+>   	if ((data->fan_target & 0x1fe0) != 0x1fe0) {
+>   		u16 new_target = (data->fan_target * old_div) / new_div;
+> -		data->fan_target = min(new_target, (u16)0x1fff);
+> +		data->fan_target = min_t(u16, new_target, 0x1fff);
+>   		write_fan_target_to_i2c(client, data->fan_target);
+>   	}
+>   
 
