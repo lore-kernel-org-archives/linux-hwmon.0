@@ -1,145 +1,176 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 026E8373BF4
-	for <linux-hwmon@vger.kernel.org>; Mon,  6 Jul 2026 14:02:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30CFB3DDB07
+	for <linux-hwmon@vger.kernel.org>; Mon,  6 Jul 2026 14:31:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783346523; cv=none; b=Nj7ADqK9Nr66QrcQjj3oZrMhLJixgOG1EBWS7HGgo5NOjysUWWjZByCEJ0uUfkBSrIFs0XOU/0nthlA5GnLaGDxgs/3kAXDtHIHRAALiT1aQuiqV/lsPWhNWDkzVxtqs17AwdPuKZyTUASnHJ+NIxM9V5YrJyCf+BMzIY1X5rLA=
+	t=1783348267; cv=none; b=F1VaD95GHy/PmBABK+3bOlTNefE/axV2JEbYKLIzbWB7+BF1AtfwESQYazv3mYmPhzFFswAxfO1sfap+ztl498wqHbZ1tCq8Uan6qNhz4wNODl3tIs9kLxg2U7p8KgLJLBwChT6D7pLBF0C3seLawKH+9xg+fanCX/sje/rPhdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783346523; c=relaxed/simple;
-	bh=Oe/MLWXP8dChzX5k64XMZnBbFfYNd+emFyTl3KNJkIU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DNFAFs0a8pPVwhu1uTH19gBh4iJA8OQKZxsxgzGD6v3zRxOCDYMLQYXVHAVXEY94A4Xrgy8KRDHhBkORmq1jSGqOSus+oPBUAX2OvZcrh8ayZGN2I5PRWt39wbTExu1dI2iuMN6v6/ZtkvVmBokFlhcR5PkfiKG1KP5k5I29mbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RwCJ7qny; arc=none smtp.client-ip=209.85.214.172
+	s=arc-20240116; t=1783348267; c=relaxed/simple;
+	bh=w+ezLx8DcFVn3ydf3SZCnrwVI2j1LA6W1gk0f4A09l8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OPCx3en6yUCgnoVuNC7wYBovVVS514Bb0mK8zYMlz0gSrmo6W5eRMbNmibSDKnvli426W2d0XO4FGD8+NKYlngVLi5MUfVL0z4wdHv2E0M5vp8VpBzP/8mw4rdzzNoRKah8sLIoPTFuVtZPsjA3POK8r3l+OVSIGMShcfWyiFpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V8s128rn; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RwCJ7qny"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2cac59f8b64so36634075ad.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 06 Jul 2026 07:02:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V8s128rn"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2cae134bdc8so16406545ad.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 06 Jul 2026 07:31:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783346521; x=1783951321; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8W5+jx7bPjLG+4tJL2jHIRG3oW7oM+42HpDCfJqGjPw=;
-        b=RwCJ7qnyMny8Vxzcwf+qYHt8vY8Pq8QK+74PZZ8HVBNr181u+ID0pb5BzUkoIZ9TRh
-         XUII5n2CbmE/2wSkC42EYhHdAziVCN49WoZX0qLqFDhzkVuUOJfF2+Gtlhjo+arygzkM
-         IlZ1OnXHG9YdVJRsiHyQKOYJlkFADszaouYjhorbeUbQ3xHHuG5XISDgDCPDUKx6jQWc
-         Ncytk8Vj7VkQSEm0J3cSUxK3c8a288swVcDs7bTTMdmrUySm4NlbenA4RMmoalovC/92
-         bHixk0Ga15FiYPZa50PZ7g5NrPZTNCMUZeDhwHrGL6250nbxwIwdUVb3bh5dmHuQ3IPF
-         H6Dg==
+        d=gmail.com; s=20251104; t=1783348265; x=1783953065; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ynAASN/UWzfxTQNGbtwhIlwR73V0JB4yYjP/huaKh6s=;
+        b=V8s128rnYinTm9Av2p7kHikAa6c2Ws8Oab+FIHYuJG+2xUqoSPcqkyk1ws91dciNnM
+         oP3TtxekAD8NQNzBu7C3bBnJ3a2jvGM55qE+GbAB8YL2Qcc9CBevA5rTZDkt4X1NyAUo
+         +67BehqCsiC49JAM7XetOAbil7dzeXk0vc4EptfvwaSbxmhZC5orSupsBxxfzplywQgv
+         orrJTsn2Ec/Uz6JVOReWZpZICUwXhOJQ0F9cMYSgtholYJFPBiMI3JCHDK+IAxAt/h/+
+         t7/R/B8v+0OVosSmzQ/pxpVh5c7ERJEZHdlh5IaZsHiZH9OgtZb0k0Od0niBzPoOhl4f
+         H0EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783346521; x=1783951321;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=8W5+jx7bPjLG+4tJL2jHIRG3oW7oM+42HpDCfJqGjPw=;
-        b=BBA+3cT4am8a2zrHZs1JUa4RgpkY23c340k1KEBiYUQfMrHkXAWeLs9Qgseo7LoYvR
-         0NmaN2YSnizaWydoXN6gRFzaXOsGHDEvMdll0t5sMoqK911FGwSVa1YVWtfuqUIDmASy
-         xVzav+X3FtImF30mcRZXOVo4dcbbEO78onbx3J5AJhcfUBgx328zEGtLvghRqEYptAdb
-         +QYgwS1pE92EF8oB88biZzfFh5WNg6bXns9UbLgpHtj9xyk0vfbC8JsqvaeUWdWq0/H6
-         Mds+lHfK/zTlzUhyzDO43n13EPRs1+Qsq0y+4L97KV9naZsLunCccny5rrGlmEczpi3Q
-         5qHw==
-X-Forwarded-Encrypted: i=1; AHgh+RpvD15JLGVcowuhJyoNWldPQvnmvDhbRyIOXVgrLB/6V+N11P2rRk8Uy2Xkc0GstCj87nTAWwOu4NoJwg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YymLAxsW5egezMZj7sZBWe8k76d8TSpyWCi82t/PMUrYvtzUUKY
-	GggzdBIAGkhUQmriMaAewNZiFxllxZt6URd6otzO4e1W07NJr9e6M0P1
-X-Gm-Gg: AfdE7cnTyqAAt2d2NMI4+vq6rDrkxiaXHpUnWVz+aplgVGRJuwJRvAzsINhS2teEuqw
-	7pOXagIao90HkHwjDnJ1F/R1HKBwJ92JPaQ45s49vhZqb9XCbPA08pUMf38qKKCqypIOz4O7pLq
-	P9cqBjsJT/enZE9LSxxGCNygGlDiPzv3GVsjpL9b04l9UaNEvng3ITyeIzIcmTzpmdNjb8YjcxQ
-	yYd4+aDf6Q4J/NQPS1n1QtKnQ+yvhaI/N3mdAg0FQdps96Xn8BFqQQwk55kSHPymfv2yjJskzfE
-	bBPXRJ1na17F7BL4T8InFit/gxjAKiNnbfj/ps5qY+tlzS7uZLWQF2H5we+ipgotKKRBJJvufbV
-	FvjkIcHcLTASIY1OpcN0bVVEVuVGo/TT89mDSkv7MdLA23Hws5iJ2b3DR1i+OO/Y1IXhXCA7fF0
-	RewWMxv1/+SmYq9d2Ntk6UBQFwhQ==
-X-Received: by 2002:a17:902:e5c8:b0:2c9:cf5d:d9bc with SMTP id d9443c01a7336-2ccbf043d9cmr5925765ad.35.1783346520520;
-        Mon, 06 Jul 2026 07:02:00 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cad7894b20sm51246705ad.78.2026.07.06.07.01.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 07:01:58 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1783348265; x=1783953065;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=ynAASN/UWzfxTQNGbtwhIlwR73V0JB4yYjP/huaKh6s=;
+        b=XwhfaUw4Dl1RJDrZcnw2sS9h4JvONMnHpwpOzI5XZgNu17rpQ6lErIrvPqaWjNky1P
+         Y0ytsjoAXFAhK645tbDN+5VAtsGfK6sdo1wFSkroqIReONQqqBI+/7/eEkV6puGeng8p
+         GC7J0v83KjHe9NPTSk1ia8XVSr5ZgiT1D+FSX+1suK8oQwTIsIMNAErjQ5dbYCdFn9Hj
+         ulE5+aFg7cLvetKE0suLC3JGyIVMHJPHKKH40nLXclvOIBhBgjFwh6hXpov+IIEXJDTr
+         LFzGrJ3Lhf4k/rwb5JEaQrTx6zp5nL7M7avB+IdhVDMwHvlAxl/kD/MVPnT2X+3Epn9k
+         Mn+Q==
+X-Forwarded-Encrypted: i=1; AHgh+RrzJ21OYgoUNikwjpFATU9XCFTloUbrFoUjvjgdIDU13k5YKEZr4adZgRsRWY1xNn7zzquN2B7FNX0qhg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYFnQVolKA4iTEFpLldGDe7HTYPcZf91TGYoolF5l7To9i6kwU
+	mbU4fJMxa5m9P2daUItQhVijG9KqukcMF0N8AKjxt/M/woJVN1gpRpfy
+X-Gm-Gg: AfdE7cnS4h16y9S0EpGr1viePqUXo7g6PrtZxlHczCT0vP6TSY1JXH2e1ymbsn9NAJa
+	GGmsI3emNbRGptaZ+YqsSdSBSsTBdxEPZodN7j744LqsS9bDcOegEURxJ44jK9xnInVuz/QABkN
+	4X0BETM5GoMhkXoYC/oWTmeZbtBnUbgC1MUNVdftWIOMPyR/eAkEqOV6MPuEPWuxYu8DjdLfOIh
+	BH8kIgKQJ1ZQ6L3cWyVBUNbQIqd3O09W8eeTJJtY55G3/lb4l2wRFfWW8iho7EB/Az09HE6nPGu
+	ivPlvhHNWGd/o4rEv23UvDQdSqAP/WTxS7vwhk/2rsHx/TkKUMuq78KLbDMuiNXnA8j03sPKo4d
+	1FPoHJlEObkMGHDjCniY/j4/IB/r1KSTGOeYwUgZBY6hFrWyjiVhzqDUcxUJ27XSfve2OMgNOQ7
+	FXU5JzhlruB4jx5AZGyThn1MMx7vVdQEny3DqcfSYE4wR39bboWfjqmsPzQDQR7A==
+X-Received: by 2002:a05:6a20:a111:b0:3bf:7498:9cd1 with SMTP id adf61e73a8af0-3c08eeb269bmr1062420637.45.1783348264863;
+        Mon, 06 Jul 2026 07:31:04 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c9e927a1152sm6269993a12.29.2026.07.06.07.31.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jul 2026 07:31:03 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 6 Jul 2026 07:01:57 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] dt-bindings: hwmon: (pmbus/max20830): add
- enable-gpios property and complete examples
-Message-ID: <a502e1e2-f2c3-4851-b0d5-934b18e92f84@roeck-us.net>
-References: <20260706-dev-max20830c-v2-0-37761e89bb5f@analog.com>
- <20260706-dev-max20830c-v2-1-37761e89bb5f@analog.com>
+Message-ID: <7f42fcab-5139-45bb-a344-1ef249aae6f2@roeck-us.net>
+Date: Mon, 6 Jul 2026 07:31:02 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260706-dev-max20830c-v2-1-37761e89bb5f@analog.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: occ: validate poll response sensor blocks
+To: Pengpeng Hou <pengpeng@iscas.ac.cn>
+Cc: Sanman Pradhan <psanman@juniper.net>, Arnd Bergmann <arnd@arndb.de>,
+ Runyu Xiao <runyu.xiao@seu.edu.cn>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260706093317.80867-1-pengpeng@iscas.ac.cn>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260706093317.80867-1-pengpeng@iscas.ac.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jul 06, 2026 at 10:08:41AM +0800, Alexis Czezar Torreno wrote:
-> Adding an entry for the MAX20830 EN (enable) pin. This pin exist but
-> was not included before. Also edited examples entry to be more complete.
+On 7/6/26 02:33, Pengpeng Hou wrote:
+> The OCC poll response parser walks a counted list of sensor data blocks.
+> It used the static response buffer size as the parse boundary, but the
+> transport only guarantees the bytes declared by the current response
+> length. A malformed or truncated response can therefore make the parser
+> read a block header or block payload beyond the current response data.
 > 
-> Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+> Use the response data_length as the parent boundary for the poll payload.
+> Reject responses that cannot contain the fixed poll header, prove that
+> each sensor block header is present before reading its item fields, and
+> then prove that the complete block fits before advancing to the next
+> block.
+> 
+> Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
+> ---
+>   drivers/hwmon/occ/common.c | 32 +++++++++++++++++++++++++-------
+>   1 file changed, 25 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+> index e18e80e832fd..fa92ae6ec4f0 100644
+> --- a/drivers/hwmon/occ/common.c
+> +++ b/drivers/hwmon/occ/common.c
+> @@ -1052,9 +1052,10 @@ static int occ_setup_sensor_attrs(struct occ *occ)
+>   }
+>   
+>   /* only need to do this once at startup, as OCC won't change sensors on us */
+> -static void occ_parse_poll_response(struct occ *occ)
+> +static int occ_parse_poll_response(struct occ *occ)
+>   {
+>   	unsigned int i, old_offset, offset = 0, size = 0;
+> +	u16 data_length;
+>   	struct occ_sensor *sensor;
+>   	struct occ_sensors *sensors = &occ->sensors;
+>   	struct occ_response *resp = &occ->resp;
+> @@ -1063,21 +1064,34 @@ static void occ_parse_poll_response(struct occ *occ)
+>   	struct occ_poll_response_header *header = &poll->header;
+>   	struct occ_sensor_data_block *block = &poll->block;
+>   
+> +	data_length = get_unaligned_be16(&resp->data_length);
+> +	if (data_length < sizeof(*header) || data_length > OCC_RESP_DATA_BYTES) {
+> +		dev_warn(occ->bus_dev, "invalid OCC poll response length %u\n",
+> +			 data_length);
 
-I still do not see the point of these properties. The driver can extract
-the power good information from its registers, and it can set the enable
-value from there as well. It does not need either.
-In practice the power good output is likely to be connected to an LED or
-to the enable pin of another power controller. Neither would need
-devicetree properties.
-
-Again, please provide a use case. The mere presence of these pins (which
-exist on pretty much all PMBus chips) does not warrant devicetree
-properties for them.
+The warning messages in this function now result in aborting the registration
+and thus need to be converted to dev_err().
 
 Thanks,
 Guenter
 
-> ---
->  .../devicetree/bindings/hwmon/pmbus/adi,max20830.yaml         | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20830.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20830.yaml
-> index 1625dd59417f1b3ca689a9c86ca266da913d1217..f3ba6351aa5d657590d92a538910fd6b787e7a3a 100644
-> --- a/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20830.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20830.yaml
-> @@ -39,6 +39,11 @@ properties:
->      description:
->        Optional 2.5V to 5.5V LDO input supply.
->  
-> +  enable-gpios:
-> +    description:
-> +      GPIO connected to the EN (enable) pin.
-> +    maxItems: 1
-> +
->    pwr-good-gpios:
->      description:
->        GPIO connected to the power-good status output pin.
-> @@ -53,6 +58,8 @@ unevaluatedProperties: false
->  
->  examples:
->    - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
->      i2c {
->          #address-cells = <1>;
->          #size-cells = <0>;
-> @@ -61,6 +68,10 @@ examples:
->              compatible = "adi,max20830";
->              reg = <0x30>;
->              vddh-supply = <&vddh>;
-> +            avdd-supply = <&avdd>;
-> +            ldoin-supply = <&ldoin>;
-> +            enable-gpios = <&gpio 1 GPIO_ACTIVE_HIGH>;
-> +            pwr-good-gpios = <&gpio 2 GPIO_ACTIVE_HIGH>;
->          };
->      };
->  ...
