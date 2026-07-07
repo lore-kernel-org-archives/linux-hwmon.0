@@ -1,98 +1,75 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 108A538D40B;
-	Tue,  7 Jul 2026 19:30:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B9CC1F7569;
+	Tue,  7 Jul 2026 19:30:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783452607; cv=none; b=vDEn/Ph3dVfhCnuGZwybh8ZiOyITC6oUbgz2m7aSpSKiXfbdZ8uiTbyvZxzWLc9G7WSm3JbEEw4AcPYrywGpomdXOb7cLTs+YGjumbM19UeUnogod0quTiqzuduLs5fg8CbFx2cM/mTmzT5ieErG2TR3gH3dv55qPlbmEapPrnQ=
+	t=1783452648; cv=none; b=XJ7nOgYNE0HlRnTe7SrCxwBK54YUdv+eYdszMeAROlymIKJzHQsCeFXa7oDePA6PshbFCXMADYZpU8VPOFFR0JdRnlFpZfgQ7ySulNkIah30tSqbQ/jAbAt5dgqjsi5sEvFV0uLPpbwTz4HLBm6IrryJag92Cnj25SEFuJALlUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783452607; c=relaxed/simple;
-	bh=CB+Y4Ms9vphYKvftVxqNjLeLGAcACIdAFFMUega6VDc=;
+	s=arc-20240116; t=1783452648; c=relaxed/simple;
+	bh=QE6xOwkPJpFPr8J80BaVj2EFL6HzCTojUjxwhhiQpvo=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=i+ce0pI266MXed4QJr8oTv9hOILpV3PnUrzMeJMdoeQFaWQxjgl56TbumJJzS11SD9vHj64OAUMYWXbbH7slXA8F7pulAiOglryFniTqPyd8qa6Gcti0K0xVVxg8k4rm5oiXnPSxQUX8z7mCGhXkeV6wAXBMHn2ZoNMhfRbgk28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V4fOIIjv; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=DWO1ex8klUbP99lZx5Pp2dvtUtThe9qssRXSfCji36jHNocQKTe81nkxOUUvCaBzkfKDrW+l2d1L8h29baG4WQtY4l7qX3n7/ofFnL6AIACad/EXwyCExoguKITM51NNvg0dwDNLtj7Pa9MZY4ifr0ZuDznI8C4CiuCxiyVBqVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CiidqUme; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V4fOIIjv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CEA11F000E9;
-	Tue,  7 Jul 2026 19:30:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CiidqUme"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D4621F000E9;
+	Tue,  7 Jul 2026 19:30:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783452605;
-	bh=64XhVuPvDN/gBsxtlVK8mCz4xOGjTZ6PNmYgP1CqIGQ=;
+	s=k20260515; t=1783452646;
+	bh=QE6xOwkPJpFPr8J80BaVj2EFL6HzCTojUjxwhhiQpvo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=V4fOIIjvJkS0PP/o59y3qHVN1IZYz4wBqF9oODSJbMbIQpKxb+dty7oelm4dTdXQg
-	 LmcoY9xlH/xGNIpqTN01NNycA9tcOj0UPXlQNNagVgiWgkQ1+lqrCzy5vkFDgCniQK
-	 HoT+JqXRzCjhFieigkO9kW25s5T3CQFwi2gyWFZyJmFJq1cH33klDwAby6V1jkTNKF
-	 pGqPr+lajkm6H7/0eIJYyKK/LgqCXUcyopH1EU1th9EaPF+uO2rBFlrkklDzMVm8o7
-	 7sePFUQOxeG04fZTi8rhtqMJq58opPdKZk4fBlewBEMaLyibWqEAXdm9ZLXzk6XGqZ
-	 g07njHz1myRFw==
+	b=CiidqUmexCG6pNsOQzuDzcXFNlmn8X5rZ6IIV1/Sq/BYGames8+80jU6xQzf8vyLM
+	 pYt565n7cBhOp/vNNySVCf1c2n4qJ6dB6tIiJpeFJP4nGZu4JjuWC0qa+0y/PnF/VV
+	 Bx14HvcoY0r1cT3+zyNFO0/HACtEB2GIZ/97+cR8nuCLd9QTG9QI4ittVppgzc9WRZ
+	 3+ERoGxQngPOZtpUjdfWfRMytZy6ECXmTu6ox47qUAZK+X4Yau846uCQDL3gbfubhB
+	 CslcdSt5zkigcfDxKlY3sl09AkMK1ZOIhyfLgRZb8EA0psH9Ej/ItVQj/vKpKFFI46
+	 2lSW/1u6i4pUg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v6 1/3] dt-bindings: embedded-controller: Add Lenovo
- ThinkPad T14s thermal sensor provider support
+Subject: Re: [PATCH v6 3/3] arm64: dts: qcom: x1e78100-t14s: Add thermal
+ zones for keyboard skin and charging sensors
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Daniel Lezcano" <daniel.lezcano@oss.qualcomm.com>
-Cc: devicetree@vger.kernel.org, robh@kernel.org, linux-hwmon@vger.kernel.org, conor+dt@kernel.org
-In-Reply-To: <20260707192228.14647-2-daniel.lezcano@oss.qualcomm.com>
+Cc: conor+dt@kernel.org, robh@kernel.org, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20260707192228.14647-4-daniel.lezcano@oss.qualcomm.com>
 References: <20260707192228.14647-1-daniel.lezcano@oss.qualcomm.com>
- <20260707192228.14647-2-daniel.lezcano@oss.qualcomm.com>
+ <20260707192228.14647-4-daniel.lezcano@oss.qualcomm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 07 Jul 2026 19:30:04 +0000
-Message-Id: <20260707193005.3CEA11F000E9@smtp.kernel.org>
+Date: Tue, 07 Jul 2026 19:30:45 +0000
+Message-Id: <20260707193046.4D4621F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The newly added '#thermal-sensor-cells' property is missing from=
- the 'required' list.
---
+> The Lenovo ThinkPad T14s embedded controller exposes several platform
+> temperature sensors that are already used by the firmware for thermal
+> management.
+>=20
+> Expose the EC as a thermal sensor provider and describe the keyboard
+> skin and charging circuitry sensors as thermal zones in the device
+> tree.
+>=20
+> The keyboard thermal zone defines passive and hot trip points, while
+> the charging thermal zone also associates a cooling map with the CPU
+> clusters, allowing the generic thermal framework to apply CPU
+> throttling when the charging circuitry temperature exceeds the passive
+> threshold.
+>=20
+> This integrates the EC temperature sensors with the Linux thermal
+> [ ... ]
+>=20
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+> Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on T14s OLED
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
 
---- Patch [1]: [PATCH v6 1/3] dt-bindings: embedded-controller: Add Lenovo =
-ThinkPad T14s thermal sensor provider support ---
-commit 48ae118884c307667e25a720a62e87b8e32443c5
-Author: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-
-dt-bindings: embedded-controller: Add Lenovo ThinkPad T14s thermal sensor p=
-rovider support
-
-This commit documents the Lenovo ThinkPad T14s Embedded Controller as a
-thermal sensor provider by adding the #thermal-sensor-cells property. This
-allows the EC temperature sensors to be referenced from thermal zones.
-
-> diff --git a/Documentation/devicetree/bindings/embedded-controller/lenovo=
-,thinkpad-t14s-ec.yaml b/Documentation/devicetree/bindings/embedded-control=
-ler/lenovo,thinkpad-t14s-ec.yaml
-> --- a/Documentation/devicetree/bindings/embedded-controller/lenovo,thinkp=
-ad-t14s-ec.yaml
-> +++ b/Documentation/devicetree/bindings/embedded-controller/lenovo,thinkp=
-ad-t14s-ec.yaml
-> @@ -26,6 +26,9 @@ properties:
-> =20
->    wakeup-source: true
-> =20
-> +  "#thermal-sensor-cells":
-> +    const: 1
-> +
->  required:
->    - compatible
->    - reg
-
-[Severity: Medium]
-Should #thermal-sensor-cells be added to this required list?
-
-When hardware gains new provider capabilities, omitting the corresponding
-standard properties from the required list allows incomplete device tree
-nodes to pass schema validation. Dependent thermal zones could fail at
-runtime if they attempt to reference the embedded controller and the proper=
-ty
-is missing.
-
-[ ... ]
+Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260707192228.1464=
-7-1-daniel.lezcano@oss.qualcomm.com?part=3D1
+7-1-daniel.lezcano@oss.qualcomm.com?part=3D3
+
