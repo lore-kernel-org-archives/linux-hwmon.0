@@ -1,62 +1,64 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D3D53FDBF5
-	for <linux-hwmon@vger.kernel.org>; Tue,  7 Jul 2026 12:25:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39E6D3FF885
+	for <linux-hwmon@vger.kernel.org>; Tue,  7 Jul 2026 12:26:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783427156; cv=none; b=NS+yOlZfsJ18+VCSqqRD+JxYckXEydnf3lfEC0StMnLwnJ1jsYnTlF2Ijp7/FNzVg7oOh2nKAptRveWqKTgITKcqYsKcDEyC5MIdrNy+GgiXoLj6Bz8jSmauiDbpCBjr6jo+HKljeCj5Ot05d+dCxE47LficleWL74cSl2BxWjo=
+	t=1783427167; cv=none; b=Jj1Z3ziJXfU8y9LDsoD/K2ov+rE3ELml2xfIAxHo5afSYa5zJ1cXcCQ7N1u7l6L35HH1Hq/ndV/EqMQDxw64xAGF/yWPbDPaak6qtDMM4qCBumNlJPSvitz7/7rRsDARt3aPhHMhQvdgDJ3/n5gUFE6+m3aogytrop7QtWd/pJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783427156; c=relaxed/simple;
-	bh=G8k2dlXjt0dLe90/5TVs36FBriLIb1uJtIxBcEBwrSE=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=m7ad6T2EWAH4PPrvikajVxRfEATQf0+s+X1kzSM9dvf1BRxXHrXWyirCrWz7J/kJtbHqZuDOAjxypg94dREVM8fdztyvuEvE4ww7LoivIxJD29KOSMXhgRPZ9HsenoR5dtWoe2O/gMgZcNG6/Jf+kzCZyw6Nh3TDa3XDCi3zaTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dDoQnHds; arc=none smtp.client-ip=209.85.214.182
+	s=arc-20240116; t=1783427167; c=relaxed/simple;
+	bh=FH8tcHR+Kf/Q4WoeEbtw1NyA3aDEhztHlh0tNOOUXJk=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ikPfmWccpeLclO/slsRH2U+TgooNEMJJ1sBc/yeR6x8af03JLAciPRDN5hWzQVln8GY3pAfmi6Ntgcsak377fZCNqD0Ag7OX989hDjUBbHhGG+/dvGdO9ckJ1OyMLOhKOLORJ8b4K/TVqcEsejXe4prpCbbKyST/eXIKGjXwohw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o7FdmV2i; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dDoQnHds"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2cc97653887so24733235ad.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 07 Jul 2026 05:25:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o7FdmV2i"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2c7c61b5292so58862865ad.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 07 Jul 2026 05:26:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783427154; x=1784031954; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=26bYGBBUuDRN4zMcNcg/2GhRbjV+wNXZETCzG6QZQtA=;
-        b=dDoQnHds6W63tH1uxUN3gRkykNDvHn3wLy7Ft+Q4GoN7pfYJk/yH0cK3BxAiW6xOEJ
-         emZZlXc+vWjISq3XUCg1Ulbc0FM3b/K/n72Nf5xRfHYqFRzHq+P8FF9j99rhvT2KPCyi
-         qZ9rlYL3MMPt46eCEVRbZHckxS6RIzqc3Omll+MYJ0f7ds//eO/ma+7LtRXcj6bSqBVJ
-         k1Fwu1PS0A31msdz61Q/HEBlErZ+Qin4sXciGmg9U8aDQoR3JdQT6f3GWSzahLbXZfJ2
-         kESHH/YU60dq3XzX530MXeimvQ+fd09uohkhZn6bwgAm8M3/+wOsRsWwYiiwhzOjfIUO
-         68Ag==
+        d=gmail.com; s=20251104; t=1783427165; x=1784031965; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=IgLtos+kVckpvEahUESh1dXWtYuNLZ70j+TeV2rQ4j8=;
+        b=o7FdmV2iz1KaHdVLavYCaIRIISC/kCF8tM22letnR4qRyL4Zw7/ApG3Zz0EeTngp/0
+         NfNcqYYher43e35vSpifNA5sgX8b8OHo5aWJS3VlBA594YUqE7JqlD3/M1zIc0glYzWH
+         6wQLsEPgzE9Wzvzdf39Dn+VEjGhk2YlRZkTSG8gVzFyZHCAGx4erkjksjNXaZrEECOIS
+         04E3gRICbwRNSzKVCs5Ukj0Azyo/IpIZf8j1Di32uma0iW4K+dsOBvEV2zhIgwk71Qqp
+         fK5B5M6//dwwMqUlf1GoV/Jo3WcrOkmM7TFeaEflB6TUtKBTW09ZNpZPrES2xi/4hEmj
+         inGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783427154; x=1784031954;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=26bYGBBUuDRN4zMcNcg/2GhRbjV+wNXZETCzG6QZQtA=;
-        b=WRWTI8hJkzX5DWnnL5JXKYEB51iijtzEpwUEruvaYYz3ou6AQcywUcXLUAGdWYaoz3
-         owZfqW7GApk3J6HtS36XJfljIXPCkHM87CLl6PdPWK8rbO9mFcthbpdFU4eTJqP4sgBD
-         wcoaYsaGsiPxk3UZ21Z355XBtE1qxIlysj0NkMB4hQngABjy5SWyouJobzMBbm5zm7sk
-         iQeS7K24p1x8pYbzdUxLl6QClCdvluT6rMDvNtX9bBOt8kRzfoMVwK0UErAv9qjXaJPA
-         xUbAv9zcy7aUK9Ubx46MUhVqnMFd4pKbvRJ6pqXixQ5QRU4frz+9a/u8Fe7lM/Ksn6ZN
-         RF9g==
-X-Forwarded-Encrypted: i=1; AHgh+Ro8AVjE5D7+rNi2WlBPYWAL0A0S13iwr42E60xaNsLbqYAUEGMLfknzhoUmqZ3UdUG3Exn6u8KLuQtFuw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxFVfhpyY+W9cmeOnhFHlLoHy0Ve4pTpeiqltdMLkHQ4iAAu6Nl
-	V6rYeOdWJtf4nsWUne9NmK9XFHti76I0xVY0BJeedvr8dfmxToewEF3g
-X-Gm-Gg: AfdE7cmIRO2CfWLodX1LPwhWR81eXuNcQICSt/o7BHPXQHVgOb5Hi+qrPFFRoinkvwO
-	K5y9Yz9rgWssjWtZciNPxXEXDh4ucI7FmOGNoUum0djY40qqMflwk1LO20Q60wkwIsTYvvtC+4l
-	a7lU6wXySX+tPgOIGMfzh2QVZ5BZ1YgAcBafv9AMGnW9fLtOFzyN1/VFDNDZY8kgusQxo9NLi3f
-	5t46QpcH0xIAQuDr9cxPvm4O/bDafcc8aPAzojyN3CaSUazskItXc/pJwvUGeET4AOzGY7EJPDp
-	c6VPYdg+tOCRKz5sL4kdpd8ZOkMnZWv9I4A1GQiQnSRWI9sq1L88ZOJadbvSJddIs6sED28r+nW
-	+jirTqv6m37Oyioh06iB5vggJ+1adxn2nrwNMBBvPy4VkB0IcKjsttzgbu1rqv3peFNRvbyx5t0
-	xTEfxg2+LacPuAH5sAf4nxW6DjiehHv83rNbKu+65ZLCtJm/EMBEiDU2pu6Jey4lsjxYCE+w/YQ
-	Q==
-X-Received: by 2002:a17:902:e74c:b0:2ca:6c8:abd8 with SMTP id d9443c01a7336-2ccbe625b96mr46458745ad.12.1783427154327;
-        Tue, 07 Jul 2026 05:25:54 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1783427165; x=1784031965;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=IgLtos+kVckpvEahUESh1dXWtYuNLZ70j+TeV2rQ4j8=;
+        b=Bc7+VErOSP7fzsFwKuMi0HKe+nkY5yalQM4ellVM+G/6w3gLk5yi6w5lTKKYrACyDm
+         bx9mc5RiW99NJJdS5Ri/5mHDw/7O7QjX69CPkvnOtqSdsJvHZNYQVK1BRY6XgETdf3B3
+         Ec6/X3bJKefLiFsF+gKPjtsBYJTRxjenQW3UDHyaJWdlDbimRIb1zTg0m+99F1RgPSxI
+         4Pu4SznOrCsD+Pr3N+uG54hwFsi2vKF+NblJb0jhAFEGCVRKy3z5OwrWdONXmsXkAXfP
+         +9K1rcKZ71/HgFNzex7KSHFTUB6JwFCH6nQpZUw3iRajhrfwH+zir9h90BiiFO3xPNUd
+         3FfQ==
+X-Forwarded-Encrypted: i=1; AHgh+RoPyKaGuFnLuJW9AKApZIMPn+X+l5eQWfbkIwB9H+4iMlSfK7l+yHmVmYEtHHrPMbmxuJPU23behMns7A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAj5RQy5lkfyCNl4MRy1/Uh/R+1ji3cBCRGx3tinhtpVlX6vns
+	ucOpRfLB4rcwHwowWz2q+d+xgckMAf7aufq4xRcYs7swGdNsQmC5Co8C
+X-Gm-Gg: AfdE7cmNtxTrID6Hmjh3b1uhXCdtWA0uEy3q2zwkZL0JpelZ2aaYpdpsOGIxPgAvI+2
+	gJIia8ZECOZo/P67qRbSzahYpT5sXMxG5ttuMfXd5Ae+WB2G/PesNIuJfgSPMEZT54/dB8TPydd
+	5WjlRX+hlYPRB9IVXZ8VQ4+vttzW2o+FZIp3qrZ0Zs0R8P+WpqUi7JcqcbxZT+1Y8FyJen5nhyq
+	Lpyugr/qUD8ObNC4CjoocmwrC5N1yRQgd3MyUaDQJ1Ox9QlHywYxXA1vKIyyfHI9nC/HyhqcDBq
+	UB4+J4PCTuOa7FEzyVp0B88hdYOam8/BR4kwqHlVjl0ApuScUsW0aou4VLLeYYUR/NvNsu2fW2Q
+	lqCHbIiG7io93B1+NmVpef6iob6aGEstc7erH08+2NbPGZxIkLxg/v/lIaf/vHTowMlU2KXXagL
+	S9k8eyTAhEBMol9Mwv0Mtwwsloo/X+FL7wFMH0mSn4y7UA8QCWePl5Oh0sb5QzMaJsi1Xg4tL9P
+	A==
+X-Received: by 2002:a17:903:1c2:b0:2ca:b8fd:1a8f with SMTP id d9443c01a7336-2ccbf184d59mr49746515ad.39.1783427165522;
+        Tue, 07 Jul 2026 05:26:05 -0700 (PDT)
 Received: from fred-System-Product-Name (61-220-246-151.hinet-ip.hinet.net. [61.220.246.151])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9c21429sm11078765ad.37.2026.07.07.05.25.49
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9c21429sm11078765ad.37.2026.07.07.05.26.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 05:25:53 -0700 (PDT)
+        Tue, 07 Jul 2026 05:26:05 -0700 (PDT)
 From: Fred Chen <fredchen.openbmc@gmail.com>
 To: Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -65,29 +67,33 @@ To: Rob Herring <robh@kernel.org>,
 	Jonathan Corbet <corbet@lwn.net>,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Frank Li <Frank.Li@nxp.com>,
 	Wensheng Wang <wenswang@yeah.net>,
-	Colin Huang <u8813345@gmail.com>,
+	Frank Li <Frank.Li@nxp.com>,
+	Cosmo Chou <chou.cosmo@gmail.com>,
 	Brian Chiang <chiang.brian@inventec.com>,
-	Eddie James <eajames@linux.ibm.com>,
 	Antoni Pokusinski <apokusinski01@gmail.com>,
 	Dixit Parmar <dixitparmar19@gmail.com>,
+	Eddie James <eajames@linux.ibm.com>,
 	Thorsten Blum <thorsten.blum@linux.dev>,
 	Ashish Yadav <ashish.yadav@infineon.com>,
 	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
 	Syed Arif <arif.syed@hpe.com>,
 	ChiShih Tsai <tomtsai764@gmail.com>,
-	Cosmo Chou <chou.cosmo@gmail.com>,
+	Sanman Pradhan <psanman@juniper.net>,
+	Kim Seer Paller <kimseer.paller@analog.com>,
+	Abdurrahman Hussain <abdurrahman@nexthop.ai>,
 	Vasileios Amoiridis <vasileios.amoiridis@cern.ch>,
-	Yuxi Wang <Yuxi.Wang@monolithicpower.com>,
+	Colin Huang <u8813345@gmail.com>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
 	linux-doc@vger.kernel.org
-Subject: [PATCH 0/2] hwmon: Add support for Analog Devices MAX20912 and MAX20916
-Date: Tue,  7 Jul 2026 20:26:36 +0800
-Message-ID: <20260707122701.751878-1-fredchen.openbmc@gmail.com>
+Subject: [PATCH 1/2] dt-bindings: trivial-devices: Add adi max20912 and max20916
+Date: Tue,  7 Jul 2026 20:26:37 +0800
+Message-ID: <20260707122701.751878-2-fredchen.openbmc@gmail.com>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260707122701.751878-1-fredchen.openbmc@gmail.com>
+References: <20260707122701.751878-1-fredchen.openbmc@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -96,29 +102,29 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add PMBus hardware monitoring support for the Analog Devices MAX20912
-and MAX20916 dual-output multiphase voltage regulators.
+Add device tree bindings for Analog Devices MAX20912 and MAX20916
+Dual-Output Voltage Regulator.
 
-Both devices expose two independently regulated output voltage rails,
-Rail A and Rail B, using the VR12 VID interface. Each rail reports input
-current, output current, temperature, input power, and output power.
-Input voltage is reported on Rail A only.
+Signed-off-by: Fred Chen <fredchen.openbmc@gmail.com>
+---
+ Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Fred Chen (2):
-  dt-bindings: trivial-devices: Add adi max20912 and max20916
-  hwmon: (pmbus) Add driver for Analog Devices MAX20912 and MAX20916
-
- .../devicetree/bindings/trivial-devices.yaml  |   4 +
- Documentation/hwmon/index.rst                 |   1 +
- Documentation/hwmon/max20912.rst              | 156 ++++++++++++++++++
- MAINTAINERS                                   |   7 +
- drivers/hwmon/pmbus/Kconfig                   |   9 +
- drivers/hwmon/pmbus/Makefile                  |   1 +
- drivers/hwmon/pmbus/max20912.c                |  70 ++++++++
- 7 files changed, 248 insertions(+)
- create mode 100644 Documentation/hwmon/max20912.rst
- create mode 100644 drivers/hwmon/pmbus/max20912.c
-
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 435c4baab436..5e7fb4edb82a 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -57,6 +57,10 @@ properties:
+           - adi,adt7468
+             # Analog Devices LT7182S Dual Channel 6A, 20V PolyPhase Step-Down Silent Switcher
+           - adi,lt7182s
++            # Analog Devices MAX20912 Dual-Output Voltage Regulator
++          - adi,max20912
++            # Analog Devices MAX20916 Dual-Output Voltage Regulator
++          - adi,max20916
+             # AMS iAQ-Core VOC Sensor
+           - ams,iaq-core
+             # Aosong temperature & humidity sensors with I2C interface
 -- 
 2.52.0
 
