@@ -1,70 +1,70 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34EE832E141
-	for <linux-hwmon@vger.kernel.org>; Wed,  8 Jul 2026 03:05:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6427132E692
+	for <linux-hwmon@vger.kernel.org>; Wed,  8 Jul 2026 03:05:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783479916; cv=none; b=k55q1wd9VYJr0Xrlx5Of+t14LMFDQnOMAGazeP4ouemOjudZ1Hro9S2b/8aFzVkXXNPKtmh9G5on5w7itcocIVPllnrgpp1DyIGn+u9LBeYWI6IUWbsinBHXwtrJjJJk9zFS8vIeymzh65FXOgIIxEumD+o921RYlZNpJisHgdA=
+	t=1783479917; cv=none; b=QOaLI8h6mvcLkk490qBOlEnxNvnVfTv2izMRczndYjilAiPaNv9sTh/MMqSGXQCvSIQH4DyVYnh5Oal2rLgpK8q/vqXDNIGYFB86nTXUMO/feOO38LxjHoE1loqGem+e1YLlBwiGSFyLb37Js6lDu2pfuC7M7slzyhsbhPnm9C4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783479916; c=relaxed/simple;
-	bh=sNwic/lAZRxSrh0xUjUwoZjp5XD4/UiRxMXXRuS1p3w=;
+	s=arc-20240116; t=1783479917; c=relaxed/simple;
+	bh=wH5QSSoAqPbX2tmMg0e5EFTbatz56LsjOi5InHTQUXA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QcL3u0W+2rTCUL9Y62L5qvTYqPEL3gwb5xUujkNxGBQUSe36RJsy4Gqkn1YPpiEz9jmodtjYoQzhTKGzISM0iugPuSJvzjCavOntWspF1ioqWPqfNPWu70RkPWSw11HNaNGW6tjK1NZ4Vc8XfYrxkqrvSYLJ08ToJfCMVF2L3SA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=djTQpyQV; arc=none smtp.client-ip=209.85.216.46
+	 MIME-Version; b=pBsxY+oK30Kpku0uu+o95fAG5poFBtuyRs8SRHDT2yL8EcN5wisWrj/W2PPic9XoFx4IdD0B+CfGzh3LezfbcG0hIpG+sZyMoS9PmEb80sG+S++SMJuTq3a9UyDNK9bD/jnBWqNA66JAFU5Ql6MggkT7veSRfHzlG7Q7ABF8/MM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nCw19g5m; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="djTQpyQV"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-381018b9375so221499a91.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 07 Jul 2026 20:05:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nCw19g5m"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-847a69ba83dso159189b3a.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 07 Jul 2026 20:05:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783479914; x=1784084714; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783479916; x=1784084716; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=7u2IHPVHeT7NQRwXOg4WKjBdJH88qst8Wh6/zb5wQB4=;
-        b=djTQpyQVgcWzeorFrj+UR1Ul6TrwpK3uMUwrqBGqUk+/dU3s2Rk82U0kBL0l3I6pSm
-         O1qv8CrD906r1XBHRNlHwHmYeuZ1Tuxd/PmVM8JgR7O02z1dXtcobRqv1TShp+VSOI39
-         XXdCUPurdi2eAuWif94hXiyfyRpyy4QivLEM3kRO6h4/NJjLw5wBk+U08Uak/SHcH1LB
-         /4kRM2iwaaJxDF2IhZ3vK3LhJYlfazZUetrb6xMQQJKpqpT64UE24QhktwrwEod4JgTc
-         7yvXC+U4oyozAXv1A67UkJTa2IMcBcMnCbFVYa6JZdZ7wH/45DpEEgPiuWAZ035rbC+H
-         2zCA==
+        bh=GIl63poj7X/Nhh2L1dYOezNKQVt9zOylHR2k5r0pyvw=;
+        b=nCw19g5mir70CWn4bh9C9ZAVs1ex2R9QQsnlrOL0uO0O1kL3nt3i0VPSVAvAFBTP32
+         gct6NEMFkz+m6ygkRoSEtbDPnQMDbn2JpwXEeInlOtQEZJ1PI34Itq4xNbLoX7l/UlRB
+         lunEAfgf5VMOrcSx/uY5UAcj2rtdmh6eVXIG130qlfQzNXe8Mdfkjb+2EwbKY+onnCJG
+         zfGxqCCKVSU5TimpNnjNrgY0KBYKFPODaEwTSoEtmSJFhB0ZHv6jdI4PG0+fSZG4FY5W
+         Xga4aDo4HzMpjA1TJh1ZCar6w8bYhRjxkqwE6dBb8TgF2kcmtyZ9l/rJKvTPb7TpWvHu
+         Wezg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783479914; x=1784084714;
+        d=1e100.net; s=20251104; t=1783479916; x=1784084716;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=7u2IHPVHeT7NQRwXOg4WKjBdJH88qst8Wh6/zb5wQB4=;
-        b=ARr6EGW4/EADvMVMsf1DAT7aPLpmU4IfLT53gK8gbRv56GJWfy9b2Ba+2DFhiIsnBL
-         pOC0P33L5DL++rFc3wgavnKwEILBfO/68FHKIhQwaJGNrfnvBOkHqTPWk65sPkqggcXf
-         i2CalFGOOkjlhzUSH5XeMW5aEYVkBQsV+afTnk+l3ICxOOe4IEfWo2A9Zaunu2kvIHhF
-         dFyAyxVyyKO2M5VSt2Fc9u8Vec+Mb/D1ixf08AiqGIXh9MxlEYoV2/wy93zVOYnZK1Ex
-         WNb2uSjzTepzfciEJIN67AIHvDRN0YmCgIUFXH4ooR8Lew0Rgnlt53Tg1JZ543LpvhsB
-         JOZg==
-X-Gm-Message-State: AOJu0YyccgM3VK3wFoHUNAmlkcU0YnafVcRMJEIgeVb5ExyUjSohkjXi
-	30naxhss+sZ4YFCCZRwND0m3as7hsjiEGzgdyzeejp7ycMa+ALfy0iXXDrtDWQ==
-X-Gm-Gg: AfdE7ckEJEhKF2vMLEQ4XoydAVErV6i7YvYNJFCLIXnL7gxX+e8qNL8Woh/9rDJWowH
-	KWWvj/i/rn8bk8AupxQDz2IlJKrxUtGN4tO8bxjsJC6UN7XSDPYmHMqZI42JlsnPsrfDYeHX28N
-	1ybieAKsfGvGsOqTFhedoFbaTG45kYU00JfFDtB03SxxNED23w2tcQpSQ6+lPPHA47wuNtCD7LL
-	el4IxL1Xsmzw5XIsBWi0XuSnY9nepuQ67v73Zqe5jvwwZKAj1lA7MtXGPSWheNB/7dxsn6u879e
-	n9p0kRL2vvPZsw2c/9WdJ6HpoyM1A9mkdrXiqOmttEhxaQTVXJUnHGpJpKBl3aTwf9LgF2UYKHQ
-	7qQ1zFbfT/aTHqebOUH2NfLfV2KKyWuJKImQpunDsx+F9VahVj07ZAjwW5MTpcxjVcNZqys9feb
-	DMjclDi+kIaXCwXJhPtCFwg9a4RQ==
-X-Received: by 2002:a17:90b:560b:b0:37f:eafd:3505 with SMTP id 98e67ed59e1d1-38940058217mr594030a91.6.1783479914251;
-        Tue, 07 Jul 2026 20:05:14 -0700 (PDT)
+        bh=GIl63poj7X/Nhh2L1dYOezNKQVt9zOylHR2k5r0pyvw=;
+        b=nVgYBZI+M5D0RggsEdJCZhjoHMMn2tV52sOLjpHS/yyPxvIFfhtdmNryGzwPdRosHe
+         5bWMHSmUy/7AAONsCu4+PGJHF6OybTSPZoT/j3p+Nu6tRD2tt6HcXeG7RDxS7Ca6qm4c
+         5yWipyOnadtwk9HQPXwo+B6IQx1bW9ZbsET9wRzXaIdtu0nEDBI3rLDTgrkz/wMU+KFU
+         uJO8KZHti4WTwdAsttyMmwhPJ+WNwFAX8iH/4Aj/2FylVWj2R+2NDeZtPZqn5iy2neQc
+         w778wPCeH+qAvaHKc3KhJE0r000rMZ4jOWDUQBuesEau++A6vxkXYXyYkRfiPPEJ5cms
+         xmoA==
+X-Gm-Message-State: AOJu0YyeXB/7iQYPoIoZoV15C/++pGRtLj5J9nV+PJBgBnLZ8VSGM/Ln
+	wWeQqQVWKyCEuMBO4Tp9SA0wuHxIaLmtE2T1T39jUw5wR2AZMMx72hx/1wehrQ==
+X-Gm-Gg: AfdE7cm8o0DZfKbYPZevO6KlBrl8BQScwZGQzaCjvTeQomeWU7dFIc2HCtuUOrhU5Cq
+	6ohmQ2Z6DEAorqyVBAOOw2NnkV9TeIin4yiVvN1561TNCRlzV/hJofzt9jlFNzrDj0FQ7JzGc3S
+	1uyk7L8GXRsxnAII0t72Hp2PIln1YuTHBzfhoEkOpRl/AQl5/mgJjr0WAkLpj2rWVGzZRX9ASze
+	3p6uZms1ET9Xj0oAMFefIGEXKnbCrezuGj13L+0nmh/6TFGPyxwTuNYaUQFlFyVfINEzcsdXurw
+	bp3N9TQaOcSCrToixr2xnf2F+jG4X23QN55iUiPYS3ebnhd/u5AN6T7iYlEQhed/9zLCx+av/Q/
+	/Bq7+kahpx1nmTPM06p9xyYQBptJ9Spl+a2qQGoW4lnWGmf0emifd86YqC8w/kXosEkb5QK6c0I
+	A2i2PbY4+xkV112PLIJX8boP007w==
+X-Received: by 2002:a05:6a20:6a27:b0:3ba:e5e2:73bf with SMTP id adf61e73a8af0-3c0bd0fa3e2mr509158637.43.1783479915757;
+        Tue, 07 Jul 2026 20:05:15 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3117d847e17sm10943840eec.18.2026.07.07.20.05.13
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b659c8572sm13891128c88.9.2026.07.07.20.05.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 20:05:13 -0700 (PDT)
+        Tue, 07 Jul 2026 20:05:15 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v2 2/4] hwmon: (gigabyte_waterforce) Stop device IO before calling hid_hw_stop
-Date: Tue,  7 Jul 2026 20:05:05 -0700
-Message-ID: <20260708030507.227193-3-linux@roeck-us.net>
+Subject: [PATCH v2 3/4] hwmon: (nzxt-smart2) Stop device IO before calling hid_hw_stop
+Date: Tue,  7 Jul 2026 20:05:06 -0700
+Message-ID: <20260708030507.227193-4-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20260708030507.227193-1-linux@roeck-us.net>
 References: <20260708030507.227193-1-linux@roeck-us.net>
@@ -86,35 +86,27 @@ Fix the problem by calling hid_device_io_stop() before calling
 hid_hw_stop().
 
 Reported-by: Sashiko <sashiko-bot@kernel.org>
-Fixes: 42ac68e3d4ba0 ("hwmon: Add driver for Gigabyte AORUS Waterforce AIO coolers")
+Fixes: 53e68c20aeb1e ("hwmon: add driver for NZXT RGB&Fan Controller/Smart Device v2")
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
 v2: Call hid_device_io_stop() only if hid_device_io_start() has been called
 
- drivers/hwmon/gigabyte_waterforce.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/hwmon/nzxt-smart2.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/gigabyte_waterforce.c b/drivers/hwmon/gigabyte_waterforce.c
-index 27487e215bdd..4eea05f8b569 100644
---- a/drivers/hwmon/gigabyte_waterforce.c
-+++ b/drivers/hwmon/gigabyte_waterforce.c
-@@ -371,13 +371,15 @@ static int waterforce_probe(struct hid_device *hdev, const struct hid_device_id
- 	if (IS_ERR(priv->hwmon_dev)) {
- 		ret = PTR_ERR(priv->hwmon_dev);
- 		hid_err(hdev, "hwmon registration failed with %d\n", ret);
--		goto fail_and_close;
-+		goto fail_and_io_stop;
- 	}
+diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
+index 58ef9fa0184b..e2316c46629d 100644
+--- a/drivers/hwmon/nzxt-smart2.c
++++ b/drivers/hwmon/nzxt-smart2.c
+@@ -768,7 +768,7 @@ static int nzxt_smart2_hid_probe(struct hid_device *hdev,
  
- 	waterforce_debugfs_init(priv);
- 
- 	return 0;
- 
-+fail_and_io_stop:
-+	hid_device_io_stop(hdev);
- fail_and_close:
+ out_hw_close:
  	hid_hw_close(hdev);
- fail_and_stop:
+-
++	hid_device_io_stop(hdev);
+ out_hw_stop:
+ 	hid_hw_stop(hdev);
+ 	return ret;
 -- 
 2.45.2
 
