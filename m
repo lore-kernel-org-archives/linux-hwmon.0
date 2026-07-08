@@ -1,160 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E46DCA4E
-	for <linux-hwmon@vger.kernel.org>; Wed,  8 Jul 2026 02:11:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0CC5255F2D
+	for <linux-hwmon@vger.kernel.org>; Wed,  8 Jul 2026 03:05:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783476678; cv=none; b=UYbQETMPgVwi6quFfRH52NHnkGJQtvaFYZo38fxQ4GHQZTxX4lPUcU7mAx1uUEbmS/sQ4P8E4FPvn1ALgn1vMkZAguqQ2TL0TrBhVm3iayxkOgGUt7qjgAETJ4FRoy4e3wPyBbXiY3gmPzzNz3rB8BUqa3LF73iHT0Zx3fEjtdM=
+	t=1783479912; cv=none; b=mn9yr3TMzlSbYT8A4F4HBXJpOXXCshQalYAc0pGisASZ90keKZqPDP8NImhQczlhJM/TZZLfavjBlv+tFuwb1BLH+awGGF6j/Tm8/C34ngLthD3qZOKGoBbRZRqdgv/Vzxa40ZCykzN5g07lwobky5uPzh3H9rcn4M6FFemwGs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783476678; c=relaxed/simple;
-	bh=TWBTF3qHcg6c18CgR/xUWrxZLJb50caLV49L3+VgZs4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=nopSpz5C3cG8Of5RohSNkFJ4XXbr9QBxd81MH/FMPLZP71b/DLxAre3PZSwwq9ykF6XkZr2dxp+P8idEIkbrQg4WtkLaxYZgAYuvucqaU+fmLe3QTnz8ftOvwy/Ss64FN8q+Bnc6R6sJAMnW/3kS7CzlTTn0kF3TB2A7+lcB27g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iRcgcw45; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783479912; c=relaxed/simple;
+	bh=oIrgGebe4Uz5qIt36uBo7TqIEvJpwlb7BT1rwIY0nPI=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=lpRGnqxydTcdNZF5whdOMfCdUT5ODxDP0d13UBnrUjZv8tp0aT0RtkDaqhd5NR/7Lhbg+rNl+gduuBj65H97LTtxDklqc2dJCAT5MEwfqUVV25rTgyhLS4ho0YWm7gsc+Ye7GJRpFKzcSEFKBOtl7VPD8Tad79G9DIDfM93LHGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RdkpzLfB; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iRcgcw45"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CC251F000E9;
-	Wed,  8 Jul 2026 02:11:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783476677;
-	bh=Mvfj08BWU/brKsrlJNOwT+Z7ZnfxOFSpHl/wgzmWI4E=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=iRcgcw45JlP9Mwg2NZbU9xNXuGBA6tEYQd26HEMev/F5oTHJwtfnSG2H00dRRTXA9
-	 gYE/vHmI6pds03hdqJ22f7Oj6k7k4uP8Eropa3YP+93VNcPSy95DEfUjNARPEb5bUx
-	 khS1elHooANRVpPDskZTiXHKcHisIiVooQGmVnuF6CZdMWmYMIYDWeOuMfdQ7s4Qbi
-	 Fs3fJ3m0kTMrmBSJ7fmBRwMdUtG1pn3wo193wjygpte2jrRJkXYifw91f19bFhy5Dw
-	 zdrhzCJNm6yCXNrEyQmdKk8E+lHmyL9JD+xwNDnXOlAPgi7P6qaETbdZNJZfF6Gh9v
-	 N1oKQvSCMFAwA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 3/4] hwmon: (nzxt-smart2) Stop device IO before calling
- hid_hw_stop
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Guenter Roeck" <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260708015806.213790-4-linux@roeck-us.net>
-References: <20260708015806.213790-1-linux@roeck-us.net>
- <20260708015806.213790-4-linux@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 08 Jul 2026 02:11:16 +0000
-Message-Id: <20260708021117.0CC251F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RdkpzLfB"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-38175907a56so1134307a91.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 07 Jul 2026 20:05:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783479910; x=1784084710; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=WFsetDj3RzXGvHphofVRkj5Usv498A8zFSmgO/cSQxY=;
+        b=RdkpzLfBfFcAOZjtXmsZkNgTReLResBV9ffUlbZza2ACEzAT/K0i6Vz/mr7sGSWwTQ
+         sip8bOsArdkSMTLWuT0OzfCDrF+s6qc9aHNtF3aek6js4e1BN7ZkymtZV3KDFStRADzi
+         sgdOZIHCcyf+FKUROEwp0f+zynKuRq66NwxzhoGjUT40OgyyuzPIg5SYKUZPNU4tZoR8
+         GG6YRj9ICG93L0zdpJH/Nu5izfSPoEfgfMXr6tVejvTOb1RRti9DcFqaeEFXO+jKsZnz
+         tw0MZaOkgBxm2QgxTvzPgPJBEYQqvOJsl2olFLV5+go4vUh/k6/sdp+gZMrTd8wTCqcW
+         fv2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783479910; x=1784084710;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=WFsetDj3RzXGvHphofVRkj5Usv498A8zFSmgO/cSQxY=;
+        b=Wn4ssvg43AdITYU0IjMx/DAAX6JwyBqe97rynhrniEbVq/tCTbIDwHgI1eTI4gZYTP
+         WIl7Wn1O0dc89l2E+OVXTD8A0N3k4WLflutgmPMciCTffRVi4aaTqFyn873yqiYWCKg/
+         a8/5Hy21TMDgPrquBjW41Whkd5RcmcdIgQnnkmtl3QWDHsoZ1/DrsmvPtVJA22HsQ1RY
+         cEfNG/FcObBq8eiO8MbwcUxMtehdTdGlBQGAUs0R3cI6rSyR714EDCmbgPvQqtjJFT4U
+         DWlRHsTTMVIq+iPI4D1FpPdHQeDVf7K9ZVyMkKjutSfy2qh3dEgxcmM1xrGkYLmLHs+b
+         +++g==
+X-Gm-Message-State: AOJu0YzVg7GV7QfvhzUxcnqp/Wb3WyYa/nP7QhejiJhf3+yTUs5zz+Cw
+	iAm/2zT1btjuBFWvjj1Quowdqi9vdbuOxmg4ApUMvUtlZ+AQo/Q4RS+XjYuSjg==
+X-Gm-Gg: AfdE7cl33l83o6x6CIzFq7MA2BUu0xikxw5qBCtP0yZZee9EnWPyj5by5zrW5A0Pqor
+	0Bj5BezsPx5edX+aIJ0AYCXwsiZIY2jY5lrc0k6FUp0F4cQ3+8iSq9tL+/xWXfpnP+6Dv/mxY5T
+	/CVSpQ1g0K0skDkC5TfujP2tRBNYZmq31A8Qw9zt7ZiPPbBBekKi2zcTSMAgiJOVEwo1KF2sojw
+	EN3cga9YlCqBAqxLXmuklSVgVHGNX1wzHqEupaMFgGY7agT/z8xXia35uGrGbsmIJsRNbZeCiXd
+	/fDN1h35eyLus7k49Wnwux8LXNoIXl1U1PacRXNWkPL4vOFxhrQSzXUfIgEcktfRJecbaYYXsud
+	tNfR3V9UURr3I8NPdKO+mK5u0xzoNAC+lHziIEw3gJppBM9XHgd6hk/FUSC4ESXAhkfmmPldjbh
+	cyVkNG+pVEtfyq4x3ZFkwMmBLOBQ==
+X-Received: by 2002:a17:90b:55cf:b0:36b:b903:994 with SMTP id 98e67ed59e1d1-387d6b963a4mr5626652a91.4.1783479909908;
+        Tue, 07 Jul 2026 20:05:09 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31189cd8234sm3720364eec.9.2026.07.07.20.05.09
+        for <linux-hwmon@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jul 2026 20:05:09 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Subject: [PATCH v2 0/4] Fix error handling in HID device probe functions
+Date: Tue,  7 Jul 2026 20:05:03 -0700
+Message-ID: <20260708030507.227193-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
+Calling hid_hw_stop() does not stop the device IO.
+This results in a race condition between hid_input_report() and the point
+immediately following the execution of hid_device_io_start() within
+driver probe functions. If the probe operation fails after "io start"
+has been initiated, this race condition will result in a UAF vulnerability.
 
-New issues:
-- [Low] Unconditional call to `hid_device_io_stop()` on the error path trig=
-gers a spurious kernel warning when `hid_hw_open()` fails.
+Fix the problem by calling hid_device_io_stop() before calling
+hid_hw_stop() in affected hardware monitoring drivers.
 
-Pre-existing issues:
-- [Critical] The same Use-After-Free (UAF) vulnerability exists in other HI=
-D hwmon drivers (nzxt-kraken3.c and corsair-psu.c) and was missed by this p=
-atch series.
-- [High] Device removal can hang indefinitely if a user process is blocked =
-reading sysfs attributes.
-- [High] The return value of init_device() is silently ignored during probe=
-, leading to permanent hangs on sysfs reads.
---
+v2: Call hid_device_io_stop() only if hid_device_io_start() has been called
 
---- Patch [3]: [PATCH 3/4] hwmon: (nzxt-smart2) Stop device IO before calli=
-ng hid_hw_stop ---
-commit f577839ac93bb28ac70b3214f4e4ddca1a015f5a
-Author: Guenter Roeck <linux@roeck-us.net>
+----------------------------------------------------------------
+Guenter Roeck (4):
+      hwmon: (corsair-cpro) Stop device IO before calling hid_hw_stop
+      hwmon: (gigabyte_waterforce) Stop device IO before calling hid_hw_stop
+      hwmon: (nzxt-smart2) Stop device IO before calling hid_hw_stop
+      hwmon: (nzxt-kraken3) Stop device IO before calling hid_hw_stop
 
-hwmon: (nzxt-smart2) Stop device IO before calling hid_hw_stop
-
-Calling hid_hw_stop() does not stop the device IO, causing a race condition
-between hid_input_report() and probe failure. Fix this by calling
-hid_device_io_stop() before calling hid_hw_stop().
-
-> diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
-> index 58ef9fa0184be..286de15cedc7d 100644
-> --- a/drivers/hwmon/nzxt-smart2.c
-> +++ b/drivers/hwmon/nzxt-smart2.c
-> @@ -770,6 +770,7 @@ static int nzxt_smart2_hid_probe(struct hid_device *h=
-dev,
->  	hid_hw_close(hdev);
-> =20
->  out_hw_stop:
-> +	hid_device_io_stop(hdev);
-
-[Severity: Low]
-If hid_hw_open() fails earlier in the probe function, we jump to out_hw_stop
-and call hid_device_io_stop():
-
-drivers/hwmon/nzxt-smart2.c:nzxt_smart2_hid_probe()
-        ret =3D hid_hw_open(hdev);
-        if (ret)
-                goto out_hw_stop;
-
-Since hid_device_io_start() hasn't been called yet, does this trigger the
-dev_warn("io already stopped") in hid_device_io_stop()?
-
->  	hid_hw_stop(hdev);
->  	return ret;
->  }
-
-[Severity: High]
-This is a pre-existing issue, but does ignoring the return value of
-init_device() cause sysfs reads to hang?
-
-If init_device() fails to send the 'detect fans' command during
-nzxt_smart2_hid_probe(), it appears fan_config_received is never set to tru=
-e.
-Will subsequent sysfs reads block forever in
-wait_event_interruptible_locked_irq() waiting for that condition?
-
-
-[Severity: High]
-This is a pre-existing issue, but does device removal hang if a user
-process is currently blocked reading sysfs attributes?
-
-When a process accesses sysfs attributes, nzxt_smart2_hwmon_read() blocks:
-
-drivers/hwmon/nzxt-smart2.c:nzxt_smart2_hwmon_read()
-        res =3D wait_event_interruptible_locked_irq(drvdata->wq,
-                                                  drvdata->fan_config_recei=
-ved);
-
-If the device is unplugged, nzxt_smart2_hid_remove() calls
-hwmon_device_unregister(), which waits for active readers to finish:
-
-drivers/hwmon/nzxt-smart2.c:nzxt_smart2_hid_remove()
-        hwmon_device_unregister(drvdata->hwmon);
-
-Since the waitqueue is never woken up during remove(), does the reader
-process stay blocked indefinitely, causing the unregister to hang?
-
-
-[Severity: Critical]
-This isn't a bug introduced by this patch, but does the same use-after-free
-vulnerability exist in the probe error paths of other HID hwmon drivers?
-
-Both nzxt-kraken3.c and corsair-psu.c appear to call hid_device_io_start()
-during probe, but omit hid_device_io_stop() in their fail_and_stop error
-paths:
-
-drivers/hwmon/nzxt-kraken3.c:kraken3_probe()
-fail_and_close:
-        hid_hw_close(hdev);
-fail_and_stop:
-        hid_hw_stop(hdev);
-
-drivers/hwmon/corsair-psu.c:corsairpsu_probe()
-fail_and_close:
-        hid_hw_close(hdev);
-fail_and_stop:
-        hid_hw_stop(hdev);
-
-Do these drivers also need to call hid_device_io_stop(hdev) to prevent
-hid_input_report() from executing after device structures are freed?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260708015806.2137=
-90-1-linux@roeck-us.net?part=3D3
+ drivers/hwmon/corsair-cpro.c        | 1 +
+ drivers/hwmon/gigabyte_waterforce.c | 4 +++-
+ drivers/hwmon/nzxt-kraken3.c        | 6 ++++--
+ drivers/hwmon/nzxt-smart2.c         | 2 +-
+ 4 files changed, 9 insertions(+), 4 deletions(-)
