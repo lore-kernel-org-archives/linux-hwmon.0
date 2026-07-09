@@ -1,150 +1,200 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 081143FF1B1
-	for <linux-hwmon@vger.kernel.org>; Thu,  9 Jul 2026 09:11:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A76593FE364
+	for <linux-hwmon@vger.kernel.org>; Thu,  9 Jul 2026 09:15:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783588319; cv=none; b=E48rc2eRO3+out+37Q8FNGptVU+vs0Oxiugm27DJbMY4MHN/iQsVJu5twDPsqV4HXZU43BoUZnhJnvXo/Jz9rgAopySpDcfCn46plPCQwqITTxXwMQSeZysAht+OTtLaELB2bFXiUD01cq13RMBxPyj8sgcDMYf1cj+XGpCrjIA=
+	t=1783588504; cv=none; b=pVK1NK1WnsGzsGM4G4lN2z/HPu9M86vdJxYP0IScXjX72DSV+8zgqEgBHcgKwUPmGZ86/lrWvuMfx7LRTQ3xYs6V8L0qasGDDTOcJDmxiDSwVkqtWt/qgheAILP0E90of4244FZwS8W9nG5ONCgvMLrzkTQcaf/a7J++KwD9EBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783588319; c=relaxed/simple;
-	bh=qB5KvR0HwHniWWWu4/r0nnUQ+U/9Wtbv95Xccy14Sqs=;
+	s=arc-20240116; t=1783588504; c=relaxed/simple;
+	bh=PpKC5B12U7uALTbWJ8U7rrdB51VVcbsLnCBxvU+LJFg=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=OZ14FC5xmygzuuoRSGMYKJaRtHEyVYX4AjC7ylPygCmtXRr5N1SVhnqfbPyI/soYzmGE5IaoIGE51+HTs2z3RsooElcqmw9l4lJuThOdmVyg6D5AVOmjZmgl5pzhJjb42dvyX2OIp1PoCq6FXASrUH/uMyL2KbvehJj//qd/XRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C4lFS6cV; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=bcI0McV91SEwOcEc24bNnfV+YqPz/t20JrjQp1TDrxieuZ1Z9RJg8p5nZBfUk6c8fKX7wpItVzQSImyydEr/kk+ze1KQRPi4TgW/Y7/dHCYJZiw8MDJdljEerg98js+gaCC9bFWFlRQK5a7k5mxwo2RkcXSTNov49GUinE8qETQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F67OrrsY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C4lFS6cV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D4E11F000E9;
-	Thu,  9 Jul 2026 09:11:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F67OrrsY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EB2A1F000E9;
+	Thu,  9 Jul 2026 09:15:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783588317;
-	bh=uQYJiMWwDZ+Zm9CTuBh2LowjGbr4dm4MPRdFHM5rfgk=;
+	s=k20260515; t=1783588502;
+	bh=5QEbEUiGZ0ARNp9A4NlvSaxpn56OLbl2NICRUwhu9YI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=C4lFS6cV/80yo/OLGFMKKzQbYSWhQZangLT0nywsS7SOaVyVv2EeTDKooUWJGd6Ou
-	 tDcaShEWjQqCPpp/iuQM16y03ZGh85qY8BnHUYA5X7bY3y34csg1llP3B7oJW7wVsI
-	 1tV6IXCR5cIKwqF8KAe50j+9yZhXWJJv7330ZH36+o9FIdIBTxWW8e0L2i76/xnyEv
-	 TOl2V5TK1nh/i+G09K9KM4zoOA+r26miC4GlsCgm77UCNoWh2JAfH78UaiDgR91kxG
-	 hqh+nI6BNE8JF8e/WyJVycXJ2y0QzjpPAbkvK14jAtdHbnZYS1LbkJBT50fudP4eSb
-	 z7th0JJ1Ocl2g==
+	b=F67OrrsYcsdCJVtJB23liqHB5LQ2H8iwqVMhONpoIpaFsSeVDS64N1Q5juwB9IDlk
+	 Ji85Klp26ZUaJqN9mz1den0WqQVAGqToWonwzjlFzayH9RqNWxIM8XLgDPlM6n8nFK
+	 i5lPU/s6yqkFaNGE7NXUvMBkOdkbMg5PN59pLNPXLB56S012GC8WVbdvCaWq8k5//W
+	 B6/io7vNZuibJ9P28Or7WN5t4eUpx5IEfu2kM/nZHZMyP7wOZd4TD6x66rAO7tLlbt
+	 LRcKyWUURag1mNPOxtWRaGp2TTETiJ5+Dah7TxGnWsCmJT/GoR2al6obzz3dpTtK0f
+	 M1X0nPMD6cMAg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 1/2] firmware: stratix10-svc: add async HWMON read
- commands and register socfpga-hwmon device
+Subject: Re: [PATCH v4 2/2] hwmon: add Altera SoC FPGA hardware monitoring
+ driver
 Reply-To: sashiko-reviews@lists.linux.dev
 To: tze.yee.ng@altera.com
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260709090153.21675-2-tze.yee.ng@altera.com>
+In-Reply-To: <20260709090153.21675-3-tze.yee.ng@altera.com>
 References: <20260709090153.21675-1-tze.yee.ng@altera.com>
- <20260709090153.21675-2-tze.yee.ng@altera.com>
+ <20260709090153.21675-3-tze.yee.ng@altera.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 09 Jul 2026 09:11:57 +0000
-Message-Id: <20260709091157.9D4E11F000E9@smtp.kernel.org>
+Date: Thu, 09 Jul 2026 09:15:01 +0000
+Message-Id: <20260709091502.2EB2A1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] The driver removal sequence incorrectly destroys the async transac=
-tion backend before unregistering the child client devices, leading to pote=
-ntial Use-After-Free and NULL pointer dereferences.
-- [High] ida_alloc_max() is called with an inclusive maximum of 16, which o=
-verflows the 4-bit bitfields for client and job IDs.
+- [High] The asynchronous read path times out prematurely and frees the SMC=
+ transaction ID while the Secure Device Manager (SDM) may still be processi=
+ng the request, causing ID reuse and state confusion.
+- [Medium] Missing MODULE_ALIAS prevents automatic module loading.
+- [Medium] Voltage readings lack SDM error code validation, leading to mass=
+ive bogus voltage values being exported to userspace upon sensor error.
 --
 
---- Patch [1]: [PATCH v4 1/2] firmware: stratix10-svc: add async HWMON read=
- commands and register socfpga-hwmon device ---
-commit 525d10487a60f1d84c17127378990a4a611c8881
+--- Patch [2]: [PATCH v4 2/2] hwmon: add Altera SoC FPGA hardware monitorin=
+g driver ---
+commit 356596525564df534eb70c8e10fde9c433f2dafd
 Author: Tze Yee Ng <tze.yee.ng@altera.com>
+Subject: hwmon: add Altera SoC FPGA hardware monitoring driver
 
-firmware: stratix10-svc: add async HWMON read commands and register socfpga=
--hwmon device
-   =20
-This commit adds asynchronous Stratix 10 service layer support for hardware
-monitor temperature and voltage read commands. It also registers a
-socfpga-hwmon platform device from the service layer driver when hardware
-monitor support is enabled.
+Adds a hardware monitor driver for Altera SoC FPGA devices using the
+Stratix 10 service layer. Sensor channels are selected based on the
+service layer compatible string.
 
-> diff --git a/drivers/firmware/stratix10-svc.c b/drivers/firmware/stratix1=
-0-svc.c
-> index c24ca5823078f..716b58f5a6170 100644
-> --- a/drivers/firmware/stratix10-svc.c
-> +++ b/drivers/firmware/stratix10-svc.c
+> diff --git a/drivers/hwmon/socfpga-hwmon.c b/drivers/hwmon/socfpga-hwmon.c
+> new file mode 100644
+> index 0000000000000..1cd3a06fec42b
+> --- /dev/null
+> +++ b/drivers/hwmon/socfpga-hwmon.c
+
 [ ... ]
-> @@ -1329,6 +1332,14 @@ int stratix10_svc_async_send(struct stratix10_svc_=
-chan *chan, void *msg,
->  		args.a0 =3D INTEL_SIP_SMC_ASYNC_RSU_NOTIFY;
->  		args.a2 =3D p_msg->arg[0];
->  		break;
-> +	case COMMAND_HWMON_READTEMP:
-> +		args.a0 =3D INTEL_SIP_SMC_ASYNC_HWMON_READTEMP;
-> +		args.a2 =3D p_msg->arg[0];
-> +		break;
-> +	case COMMAND_HWMON_READVOLT:
-> +		args.a0 =3D INTEL_SIP_SMC_ASYNC_HWMON_READVOLT;
-> +		args.a2 =3D p_msg->arg[0];
-> +		break;
->  	default:
->  		dev_err(ctrl->dev, "Invalid command ,%d\n", p_msg->command);
->  		ret =3D -EINVAL;
+
+> +static int socfpga_hwmon_async_read(struct device *dev,
+> +				    enum hwmon_sensor_types type,
+> +				    struct stratix10_svc_client_msg *msg)
+> +{
+> +	struct socfpga_hwmon_priv *priv =3D dev_get_drvdata(dev);
+> +	struct stratix10_svc_cb_data data =3D {};
+> +	void *handle =3D NULL;
+> +	int status, index, ret;
+
+[ ... ]
+
+> +	ret =3D -ETIMEDOUT;
+> +	for (index =3D 0; index < HWMON_ASYNC_MSG_RETRY; index++) {
+> +		status =3D stratix10_svc_async_poll(priv->chan, handle, &data);
 
 [Severity: High]
-This is a pre-existing issue and was not introduced by this patch, but does
-the job ID allocation earlier in stratix10_svc_async_send() wrap around when
-assigning the maximum ID?
+The synchronous path uses a 2000ms timeout, but this loop times out after j=
+ust
+3 iterations (with a 1ms sleep), allowing only ~3ms. Is this polling durati=
+on
+sufficient for the worst-case response time from the Secure Device Manager
+(SDM)?
 
-In stratix10_svc_async_send():
-	ret =3D ida_alloc_max(&achan->job_id_pool, MAX_SDM_JOB_IDS,
-			    GFP_KERNEL);
-
-ida_alloc_max() can allocate an ID up to MAX_SDM_JOB_IDS (16) inclusive.
-Because both the job ID and client ID are stored in 4-bit bitfields,
-allocating ID 16 (0x10) will be truncated to 0 when packed.
-
-When the transaction completes, ida_free() would receive ID 0 instead of 16,
-which could unexpectedly free an active job's ID while ID 16 is leaked.
-A similar issue appears in stratix10_svc_add_async_client() with
-MAX_SDM_CLIENT_IDS.
-
-[ ... ]
-> @@ -2050,6 +2087,9 @@ static void stratix10_svc_drv_remove(struct platfor=
-m_device *pdev)
-> =20
->  	of_platform_depopulate(ctrl->dev);
-> =20
-> +	if (svc->stratix10_svc_hwmon)
-> +		platform_device_unregister(svc->stratix10_svc_hwmon);
+> +		if (status =3D=3D -EAGAIN) {
+> +			dev_dbg(dev, "Async message is still in progress\n");
+> +		} else if (status < 0) {
+> +			dev_alert(dev, "Failed to poll async message: %d\n", status);
+> +			ret =3D -ETIMEDOUT;
+> +		} else if (status =3D=3D 0) {
+> +			ret =3D 0;
+> +			break;
+> +		}
+> +		msleep(HWMON_RETRY_SLEEP_MS);
+> +	}
 > +
->  	platform_device_unregister(svc->stratix10_svc_rsu);
-> =20
->  	for (i =3D 0; i < SVC_NUM_CHANNEL; i++) {
+> +	if (ret) {
+> +		dev_err(dev, "Failed to get async response\n");
+> +		goto done;
+> +	}
+> +
+> +	if (data.status) {
+> +		dev_err(dev, "%s returned 0x%x from SDM\n", __func__,
+> +			data.status);
+> +		ret =3D -EFAULT;
+> +		goto done;
+> +	}
+> +
+> +	if (type =3D=3D hwmon_temp)
+> +		priv->temperature =3D (u32)*(unsigned long *)data.kaddr1;
+> +	else
+> +		priv->voltage =3D (u32)*(unsigned long *)data.kaddr1;
+> +
+> +	ret =3D 0;
+> +
+> +done:
+> +	stratix10_svc_async_done(priv->chan, handle);
 
 [Severity: High]
-This is a pre-existing issue and was not introduced by this patch, but does
-this driver removal sequence destroy the async transaction backend before
-unregistering the child devices?
+If the async read times out, calling stratix10_svc_async_done() frees the
+transaction ID immediately.=20
 
-Looking at stratix10_svc_drv_remove():
+Can this cause the ID to be reused for a new request while the SDM is still
+processing the original delayed request, violating the SMC protocol and
+potentially causing corrupted data to be returned?
 
-	stratix10_svc_async_exit(ctrl);
-	of_platform_depopulate(ctrl->dev);
-	if (svc->stratix10_svc_hwmon)
-		platform_device_unregister(svc->stratix10_svc_hwmon);
-	platform_device_unregister(svc->stratix10_svc_rsu);
+> +	return ret;
+> +}
 
-Because stratix10_svc_async_exit() is called first, it frees all active
-transaction handlers and sets actrl->invoke_fn to NULL. However, the child
-devices (socfpga-hwmon, stratix10-rsu) are still registered and could initi=
-ate
-or poll requests during this window.
+[ ... ]
 
-Could concurrent accesses to the child devices trigger a use-after-free on
-handler->next or a NULL pointer dereference on actrl->invoke_fn?
+> +static int socfpga_hwmon_read(struct device *dev, enum hwmon_sensor_type=
+s type,
+> +			      u32 attr, int chan, long *val)
+> +{
+> +	struct socfpga_hwmon_priv *priv =3D dev_get_drvdata(dev);
+> +	struct stratix10_svc_client_msg msg =3D {0};
+> +	int ret;
+
+[ ... ]
+
+> +	if (type =3D=3D hwmon_temp)
+> +		ret =3D socfpga_hwmon_parse_temp(val, priv->temperature);
+> +	else
+> +		/* Convert Q16 volts to millivolts for hwmon. */
+> +		*val =3D (long)priv->voltage * SOCFPGA_HWMON_VOLT_MV_SCALE /
+> +			SOCFPGA_HWMON_VOLT_FRAC_DIV;
+
+[Severity: Medium]
+The temperature reading path explicitly validates against generic SDM error
+codes (like ETEMP_INACTIVE or 0x80000000U).=20
+
+Since voltage readings lack this check, will a sensor error code here be
+blindly converted and exported as a massive bogus voltage value to userspace
+instead of returning a proper Linux error code?
+
+> +	return ret;
+> +}
+
+[ ... ]
+
+> +static struct platform_driver socfpga_hwmon_driver =3D {
+> +	.probe =3D socfpga_hwmon_probe,
+> +	.driver =3D {
+> +		.name =3D "socfpga-hwmon",
+> +	},
+> +};
+
+[Severity: Medium]
+Since this driver binds to a platform device dynamically registered by the
+service layer (and lacks an id_table or of_match_table), is a MODULE_ALIAS
+declaration (like MODULE_ALIAS("platform:socfpga-hwmon")) needed here so th=
+at
+udev can automatically load the module when the device is registered?
+
+> +module_platform_driver(socfpga_hwmon_driver);
+> +
+> +MODULE_AUTHOR("Nazim Amirul <muhammad.nazim.amirul.nazle.asmade@altera.c=
+om>");
+> +MODULE_AUTHOR("Tze Yee Ng <tze.yee.ng@altera.com>");
+> +MODULE_DESCRIPTION("Altera SoC FPGA hardware monitoring driver");
+> +MODULE_LICENSE("GPL");
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260709090153.2167=
-5-1-tze.yee.ng@altera.com?part=3D1
+5-1-tze.yee.ng@altera.com?part=3D2
