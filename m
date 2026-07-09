@@ -1,160 +1,149 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 306B93F5BF3
-	for <linux-hwmon@vger.kernel.org>; Thu,  9 Jul 2026 16:07:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B35354307B2
+	for <linux-hwmon@vger.kernel.org>; Thu,  9 Jul 2026 16:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783613245; cv=none; b=V1IrfY3hscaDKSwcsCD7rVKqB/pP/lOuDzVFatm1GneosSgiNU2hKyh/zWenLyeRwJFj6Jtr7RqHVZ1mZfnvjoGpqKLQ+1C9YDZKFzVKbJJb4bKB2E7xipa5O9+LEYd7iUGfGLLNgMLqIPUppft1okeEFbTt38p82S4FXVaXM5o=
+	t=1783613302; cv=none; b=GRr3tsNW6C+yUKWYUZiLrh4unDeRRoxQielmZdgKSEm3iovDZzD6KqM4NJaiZtCGm6coJBhxg9nV7EEu867dS3R9L9aJaS+zhHmgnBK+eKBFU0dEGBAK4RHYD/HdhNycmNM1nq6IEACEXLkstCJFXa0pXx8drx4j3cvyFZ0aRJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783613245; c=relaxed/simple;
-	bh=TfiHSLMBjZ80AM2O04NWCaLK29aZWfR88RfiqOuVlcw=;
+	s=arc-20240116; t=1783613302; c=relaxed/simple;
+	bh=O4qNM2C0nbt2VbBlFC31/e1eUeaxHOXJ2oTMrSmpe0E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IM4lXe5IM4ENM6vtekPWVIYnwfs+oHRNcWhlmVVSmXdCvlMHx5lstm92/2mKebq63fFoiK39IEnkC7opBmd3JlswOC0aEeMhz8hSK4FiZEE76QvlL+g0UX4dDiz1TM0AbnKyCU80yGzlSBEhGytizCQwnoYYfVrhdQTfKcZPIEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cBDFzVUC; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	 Content-Type:Content-Disposition:In-Reply-To; b=XHcnsebvW/ynpDURHp64AIXbAg8YK8Ja8mdMJZ1VIvui5EMzg00k55B455/lClLZAla+hF+1QsHAr07IZc/XBSnpxJQRDHNt9NLdJGFiiAk5uqhU18meDQPrgANRr2REErgm8CJB9wY4daVrg3696AI1X04WgSUruhBqCI+EYDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q3CX03Bo; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cBDFzVUC"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-84867f07d63so538282b3a.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 09 Jul 2026 09:07:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q3CX03Bo"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-493e497643fso11635495e9.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 09 Jul 2026 09:08:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783613243; x=1784218043; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=ysgGA9FNs2LC6p8SRgBycN6NLmY0OUHVJV77+UK20Sc=;
-        b=cBDFzVUCfbVwT+blU5hStVzsUa9sb8BUQReUAD95t+v/joFsWgfLfXi/KIYxD8YffC
-         G44nohEBHc4A/nR7D7lCwVu7n7m6GnBUohblqBMtnNboRz9jv1s3T8fqiNn0YFZSb8Ei
-         GU6IEyMzABSKWr4Ez79eNWQhkEsGMiYNZMzFIp5S/zi2DtL5fYYZ0Gt5+yUI30u63f8P
-         LT3Rbbx/a38OCfPOodVXurkG7rdcLGcZNX4Rn59NbE/aP/hB3OCL7Dc6xvPuPMNgplfq
-         wVWIlSkYSqo5m2elj56+rgscbhddEMk5vloWmpLVBaZ54LgZb3Vo765+eLawjm4pdJbY
-         Shkw==
+        d=gmail.com; s=20251104; t=1783613296; x=1784218096; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=E6idM/+ud/Xn7x4a5piPI4eTdbJ2+tm5HROj0RrFqGw=;
+        b=q3CX03Bo1EI6Xj17QBACUu2hZO9GeMn6jlSukLMs8bE2/Iarf+HuJ+nCuuKLX5QbMn
+         9Qd/ntD2Iq2J8lS4XEiA6AtJvZo5+rNeKthQtJ9Vk/6xdypBYmX30pObmjxoZ3IeCBg/
+         QElwVDrqKoR/SwVA4At4rg5b47OidgzvcOLVRKsRTrfqggsFMnwywQ5G4znG+nQ/AH/X
+         h7PBPMlfPXXL7abEc/NBFZHROrh9g4X8+XBdWdxYtM06oA6rY6i3K6zn+n6nUfFgeQdz
+         LT8jT4aEcBC1bKq/LNGmPXYlWz58fJLfq5guTIfwgCSWlNb5XmNmT6pEsXo2ccUdNMuY
+         awMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783613243; x=1784218043;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ysgGA9FNs2LC6p8SRgBycN6NLmY0OUHVJV77+UK20Sc=;
-        b=SXDZjMVjhJY8dtupMTTLT8qCkQMncFgun+HBdy02hTkd8d71z8kFndgPSdO/VL0kEZ
-         KVqDUB+9YZBdtpOdwY/VOneDsOVnmYsUq/i4DA4vCLkQmTrORCOstT002lR2PWbn0Ap0
-         uyy/AnkYXmDmPOWZ/Up1lfsWSTEatbhakQKknhJTlkt5IjgIU6iStZ244wAdlsZDvOo8
-         TWQkVoFhJ4lF8cgKWHPsrlKnoDanqBFB4xdoT5mGMZyDcLtg+MYhQo9DTQph4VqMR9f5
-         +UVdUtspdxIMZV1Cp7NeIBGj/81++FbxrBTwHbhWv6l0HibM4MchiM/ADVhQZMjlkmQX
-         o6hQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rq7mKykCM5+31HlZ4gm7PpmWUerOBsIhyOSe4vmuJkg8Y8SWnxqiuG5jRJihGo7IC4E6IZpti+rHv/eyQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YywUOQSmpRTp97IFb/Sdjdb1UAliQnO+90rGz7crs47ZvcHeuRD
-	/8DmsGMwnjK08i7MEI7SI2PsnL2hCmwCjMQaEGFK6H4SJjPUEmGbrpwc
-X-Gm-Gg: AfdE7clIOgOHKvJjp9ne7IGy7ShcZX3XSRyo9f1eMjnFzvkjCAk4aPdCqwQyZhF+Y/2
-	ndW8qAZxQ2ZN1KWvbxANFs1X3TL2n7lTyo5xnhSZXjW46HPEP4wIIQotne8gSO8M0VSMvUSaOMf
-	P4vRl7KRQFSqGmBl39AcDr6cAZKARwVQDZhP9bq1jaa4kLsP1YFlAin/LTqUovXdNkbFganilw3
-	stJWx/rHvlk8vK0snc91SohZmKYm2pXFRXL1H9M/A2ItCkFoxSsF7IsAwWDSeGpN/4fCtd4lPSb
-	ATpz29h0bn3oa7JEXU5gETkiDfeuWd00okK04HC/cC4p5zJKxw0COVBjll0s4Iu1kOUONuCEeYM
-	JzVMnmU+98jEcOTwPp87XFyFBzApdD/krmg1Crq/9h0vegv0skiHbSIPxi49NkqfFtng1M+IJS3
-	5FpO9d5cfgsTJxeolXdZR3gF9APA==
-X-Received: by 2002:a05:6a00:91a9:b0:848:44d2:72a2 with SMTP id d2e1a72fcca58-84844d2940fmr6740302b3a.27.1783613242449;
-        Thu, 09 Jul 2026 09:07:22 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8484d465991sm2206257b3a.47.2026.07.09.09.07.21
+        d=1e100.net; s=20251104; t=1783613296; x=1784218096;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=E6idM/+ud/Xn7x4a5piPI4eTdbJ2+tm5HROj0RrFqGw=;
+        b=hltGWkb80qT1nl7ePMq6Zq648zX6tcrWeSxd6N3b4jUjf0of/UsdDHeRdMVmy2FynE
+         aaodAQ3yIKZmwTR/J7IzcSy0AVgjag0GGmuSF8U9cGD5wNgc5Mu2B/yTJ9Tp2+JKn0WG
+         Ke0AkyBdO18FzpsA9VtxCRW7BzZDmC5jDhAXZqlLaAWIvLM7UOuwzt6vdkBrRAJlmJ+r
+         7wf8Y5rD/yEG8iYwYKyeePVMIfBpdo+biY9uvxCX3qF1IxI20YTHf/EbD2W33JSVVDAI
+         eAOseTEXvxIVxBpVNHLa1r/xVm/f7UFzRmjiojVoIpD+JA8Nkwq7/0vVMdxqegtHKc/J
+         BpVQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqxGCPl2XMw5tpIm3KY6xXVrvWmVPToZhq1+dxL/vB557uMjgLZBcJfhPp2yAfhxi2Muus+MT6nhwtrQw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7rCPbjAAJcS/ZkLgLhyYe6KHB6V2i7wwBBUHyXiTHHrhDQ0bI
+	0fmoTXcfIGvZ2b1EfsQ1UXTqhbfkWcsQCw2nt9tGVt7V1100El6FnFU2
+X-Gm-Gg: AfdE7ckWepelxOY81YSnKbEr9fWeHVmQtYPdD/DFx2WQ3pyFfgMHQUEmZiNtWU43ZW2
+	cQOiA2P2fHG1o8YeWNtThWzmzBKEID8sh4o8zxKQwfpoJz06X3p1mvToB0GM3W4cPngB7+VO6xw
+	jZLZAr2H/VKvxrXyyfaSbZ/+mLms4UEzfsJRgmBVhN90C4KnqsZxRWmGGxnuqM6KIHve8E6FRMr
+	GuVvUGtJqP6J6nDEGKH3JLw0KIK5cOnNVd8StkmS4jDEpTpgOkH72zHJogyz+TXOD0gnXiqDrN7
+	Jss1Le7b5vRSeMGcKhyCkjZUjzEf1Niy47laFR8++pegWWEsbx8+ekWgq2kdG8ku0XdMq/G8YR6
+	MQYgi71VIdlWo9TRkn6M6nXioKT/fgDdNXXuCSDtrkNq6Z/U6wv2LmFOhSWkE1e3BxJ4G6fsh4G
+	KyUc1bV1QVMZsRsc8=
+X-Received: by 2002:a05:600c:a00d:b0:493:a96b:fa0b with SMTP id 5b1f17b1804b1-493e68beea6mr80777025e9.24.1783613295994;
+        Thu, 09 Jul 2026 09:08:15 -0700 (PDT)
+Received: from nsa ([148.63.225.166])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47aa0960b06sm51644492f8f.28.2026.07.09.09.08.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 09:07:21 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 9 Jul 2026 09:07:21 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Michal Simek <michal.simek@amd.com>
-Cc: linux-kernel@vger.kernel.org, monstr@monstr.eu, git@amd.com,
-	vincent.guittot@linaro.org, Souvik.Chakravarty@arm.com,
-	Alex Shi <alexs@kernel.org>, Andy Shevchenko <andy@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Brian Masney <bmasney@redhat.com>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	David Lechner <dlechner@baylibre.com>,
-	Dongliang Mu <dzm91@hust.edu.cn>,
-	Fabio Estevam <festevam@gmail.com>, Frank Li <Frank.Li@nxp.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Len Brown <lenb@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Linus Walleij <linusw@kernel.org>,
-	Lukasz Luba <lukasz.luba@arm.com>, Mark Brown <broonie@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Pavel Machek <pavel@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Sudeep Holla <sudeep.holla@kernel.org>,
-	Ulf Hansson <ulfh@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Yanteng Si <si.yanteng@linux.dev>, arm-scmi@vger.kernel.org,
-	"open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <imx@lists.linux.dev>,
-	linux-arm-kernel@lists.infradead.org,
-	"open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-	"open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
-	"open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-	"open list:ENERGY MODEL" <linux-pm@vger.kernel.org>
-Subject: Re: [RFC PATCH] firmware: scmi: Make SCMI arch independent
-Message-ID: <6cc90547-a3d6-40b4-8914-a1ff60944cdf@roeck-us.net>
-References: <d7f7e8c9589d937b60e43168845ab4fda15037a3.1783603600.git.michal.simek@amd.com>
+        Thu, 09 Jul 2026 09:08:15 -0700 (PDT)
+Date: Thu, 9 Jul 2026 17:09:20 +0100
+From: Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Fred Chen <fredchen.openbmc@gmail.com>, 
+	"Torreno, Alexis Czezar" <AlexisCzezar.Torreno@analog.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
+	Wensheng Wang <wenswang@yeah.net>, Frank Li <Frank.Li@nxp.com>, 
+	Brian Chiang <chiang.brian@inventec.com>, Cosmo Chou <chou.cosmo@gmail.com>, 
+	Dixit Parmar <dixitparmar19@gmail.com>, Eddie James <eajames@linux.ibm.com>, 
+	Antoni Pokusinski <apokusinski01@gmail.com>, Thorsten Blum <thorsten.blum@linux.dev>, 
+	Ashish Yadav <ashish.yadav@infineon.com>, Syed Arif <arif.syed@hpe.com>, 
+	ChiShih Tsai <tomtsai764@gmail.com>, Abdurrahman Hussain <abdurrahman@nexthop.ai>, 
+	"Paller, Kim Seer" <KimSeer.Paller@analog.com>, Colin Huang <u8813345@gmail.com>, 
+	Yuxi Wang <Yuxi.Wang@monolithicpower.com>, "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, 
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH 2/2] hwmon: (pmbus) Add driver for Analog Devices
+ MAX20912 and MAX20916
+Message-ID: <ak_G4_eAUYflt9M3@nsa>
+References: <20260707122701.751878-3-fredchen.openbmc@gmail.com>
+ <f9e32dd1-7c2c-4055-83fa-94683777e30b@roeck-us.net>
+ <ak4QO9uhKOt68dl1@nsa>
+ <20260708-true-carp-of-champagne-a0dcca@quoll>
+ <ak41BRQBNdsQrYww@nsa>
+ <b2a5e99c-6d4d-454e-8ecd-8638e4dc0ddb@roeck-us.net>
+ <PH0PR03MB63512A19C32B7722D17D0FD4F1FE2@PH0PR03MB6351.namprd03.prod.outlook.com>
+ <CABOy65_GqKiZLM+soZUK_34T8MYZS3dRX38-CMf_Bd1EmG0jhA@mail.gmail.com>
+ <ak9gFKkfEgkU_q1G@nsa>
+ <5b865eed-ae58-47fc-8d80-e14a76a93050@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <d7f7e8c9589d937b60e43168845ab4fda15037a3.1783603600.git.michal.simek@amd.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5b865eed-ae58-47fc-8d80-e14a76a93050@roeck-us.net>
 
-On Thu, Jul 09, 2026 at 03:27:00PM +0200, Michal Simek wrote:
-> On heterogenious systems like AMD/Xilinx FPGA there is a need to talk to
-> SCMI server from different architectures than ARM that's why remove
-> ARM/ARM64 Kconfig dependency with also remove ARM from description and
-> rename folder to reflect it.
-> From specification perspective only ARM specific transport layers should be
-> available on ARM/ARM64 architectures.
+On Thu, Jul 09, 2026 at 08:54:09AM -0700, Guenter Roeck wrote:
+> On Thu, Jul 09, 2026 at 09:54:22AM +0100, Nuno Sá wrote:
+> > > 
+> > > Based on the MAX20912/16 specs on my hand, these chips do not support
+> > > PMBUS_PHASE (0x04). Furthermore, the spec only indicates support for VID mode
+> > > and does not provide m/b/r. Therefore, some of the features you mentioned might
+> > > be specific to the MAX20826 series.
+> > 
+> > I see, phases are not supported using standard PMBUS.
+> > 
 > 
-> That's why get rid of ARM prefix and description from documentation, file
-> names, folder names, MODULE description, module names, Kconfig and
-> comments.
-> But keep origin Kconfig symbols not to break existing users.
+> As mentioned in my other e-mail, it can still be supported by the driver.
+> That is what the chip drivers are for, after all.
 > 
-> Hwmon, pinctrl, powercap, regulator, reset, clk and cpufreq scmi drivers
-> already miss arm prefix that's why synchronize all of them to be without
-> arm prefix.
-> 
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
-> ---
-> 
-> Likely I missed other locations but I wanted to send this RFC to have a
-> discussion about it.
-> ---
-...
->  drivers/hwmon/Kconfig                                 |  2 +-
-...
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 2bfbcc033d59..cda0aedb36ca 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -401,7 +401,7 @@ config SENSORS_ARCTIC_FAN_CONTROLLER
->  	  will be called arctic_fan_controller.
->  
->  config SENSORS_ARM_SCMI
-> -	tristate "ARM SCMI Sensors"
-> +	tristate "SCMI Sensors"
->  	depends on ARM_SCMI_PROTOCOL
->  	depends on THERMAL || !THERMAL_OF
->  	help
+> > > 
+> > > Regarding enabling VOUT via GPIO, our platform handles this via the CPLD as
+> > > part of the hardware power sequencing. Managing this pin through the driver is
+> > > not a requirement for our system.
+> > 
+> > But we cannot assume all systems will behave like the above. But now i
+> > do wonder about controlling the GPIOs in the driver. In your system you
+> > clearly did not need to do it. In mine (testing with a rpi) I had to
+> > use a GPIO (well I could have used hogs or pinctrl). But if you control the pin
+> > you do gain the ability to turn off the regulator. If you don't it's always on
+> > (which might be indeed the bulk of the real usecases for these systems).
+> > 
+> Agreed. I don't really like it, but if the chip and some specific hardware
+> mandate it, it should be supported. However, that code also needs to be
+> tested - an untested implementation would be worse than no implementation.
 
-I agree in principle, but I don't see why this would have to be done
-in a single patch. Also, both the Kconfig file (SENSORS_ARM_SCMI,
-ARM_SCMI_PROTOCOL) and the driver itself (""ARM SCMI HWMON interface
-driver") still reference ARM.
+That's how I tested it :). So from what I understand the preferred way
+is to support these pins as optional? If they are not there we just
+assume the pins are always enabled by some other means? In contrast to
+what I have today which makes these pins mandatory!
 
-Thanks,
-Guenter
+> 
+> Note to anyone from Analog listening: It is really unfortunate that I,
+> as subsystem maintainer, do not have access to datasheets. That means I have
+> to rely on assumptions and can not really provide actionable feedback other
+> than guesswork based on the PMBus standard. That feedback may and likely
+> will miss essential details.
+
+I cannot make any promises but can at least raise this internally.
+
+- Nuno Sá
+
