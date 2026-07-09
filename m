@@ -1,212 +1,191 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012047.outbound.protection.outlook.com [40.93.195.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 085253EC2DB
-	for <linux-hwmon@vger.kernel.org>; Thu,  9 Jul 2026 08:53:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783587200; cv=none; b=EREAAk7ZeI+PIlTwmKHntJ4f5xw76XJB1zCFoRZDghpPDOzZb2ldUdCBsa6LO7z82T0vvOD/1SzYbrmNT/ChW/8gxHRVII29TyjYp2MKLOMql/s+L+4QP0FQNFmTNdcWm4S3Hx3Dy7/PQ+i0Cic5LZKP+sM3xphja6IrBeaNbF8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783587200; c=relaxed/simple;
-	bh=gJH9guXcAfNJ6SsL+eO4i7xE/NDXFjDkDL6cAwmmE40=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cb4qR/gGhXoNsz/swklGj/iLKwiDWOdIlA4cCspmEitHNhjNWjpZD56SD9x1aLyk2vTARBwkY6x8s0qjMIKmoInfsbMtNMGhEe1LEVw86OPxSHVHNk054HID7mUz3+hTy4BWxBikUPgcIUoa1l5RRuOlUpwUX9KUEzlgUtGbaKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jksxRTYV; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A07F3F39EB;
+	Thu,  9 Jul 2026 09:01:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783587721; cv=fail; b=KPcZF+QlV9akGXs97n6BevjtPuEx25R6L0Ja9uJN5lHo01OVSp//RIsoaaOVDyKGVulN/7Ati8Da2i+lfey5Pr1HnPEbHvtqX4LOwLBrCDrKwEl0+2CtHixl+8Iw+M3j38E/Z9F7Xqv6kkVmNxCeXtLZQGrfygvZwbR+ZHWSCbg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783587721; c=relaxed/simple;
+	bh=zDGDJy1tyRVHWSYKDBV+zvpwfgwYnjTXHoHne9gofXs=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=Wqx05YPZK8VE6a/FTd69L1gyoQOk+hFf7FP0bsfMRYmG7UWkqtNBvziH0pn8kpzhsz5HsVzNGba35eVYb001Of8/UajfMsiHYgzCtpS3kYogJpRvKJfiYpzbP5aDECyOkA5QcK2LkF+vtTNnX6b1XT99r+qXma7BgOkkd+hQ93Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com; spf=pass smtp.mailfrom=altera.com; dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b=ehKFEcsR; arc=fail smtp.client-ip=40.93.195.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altera.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jksxRTYV"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-4758bd3731bso425812f8f.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 09 Jul 2026 01:53:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783587197; x=1784191997; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=W3WCN+xm9Ku357SP4qkc2nLAhmJTaNSJBwAXmI/hZS4=;
-        b=jksxRTYVH0bOAxQiQT5u/DZMQ87Z5qlltniQc8dywmvycj0i62hJ82UpiEgeDT5lGF
-         fjJdfEoRk6maqbwwKW+gitrKyTMdZcsMT4k1KouHq3RMglWYp7QmJti6wyqQTjboYLTN
-         uz6Ol20xtiYyiA49JlWk220H5bL/spsLxhpkHG7+sSD6X0xTV+HdemhFyq3QRaKgwBWB
-         Dr9b5PVzl+ZQCPzw1OR8pl1xfm25sqEUZVCzDHik84Q38dMYZe6naoR/k0v1erEHHW+z
-         A6ZcQ819qVKNcva8PgADxK5dwwlwDMRXeVW3fhmZs9Nd2x/l/W7wGkTEwdBillnXvNGI
-         7uqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783587197; x=1784191997;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=W3WCN+xm9Ku357SP4qkc2nLAhmJTaNSJBwAXmI/hZS4=;
-        b=KMSxpxG/d/7gprmWjF9Edkh/Edc1J2B+tORyI7Y3RBIkft+Swya/pV0qqKBAP79Bgd
-         uM9EQxd71+IJkw1srbvbyY2ME+LjCYc8lLyM90N1iGeFSmaLZuOAmV+cnLVR6wdsvst7
-         2Gw3UHhHj9OZOl1vpytTdrOv1jqujzI5S436JBo5ID1+dILsgfNAP/3XUoWaz6aN1jZ0
-         mw/Kc1LqvW3NChRMEauLUn+eBeWadtbhVb1gcMRKHdKlWXKFU133qh37+xQ4xjtcrvbR
-         QuqVMtlzucL6OHs6vX2OBDvU4UH6lGwNNkV5sbJzCCLdA7miG0deS0nFyMF5KpxsE8eb
-         769A==
-X-Forwarded-Encrypted: i=1; AHgh+RoLdIyl75pU5hwpatgs8TPMfeT8riTCKB71pvrTequpYqpTDWAv/Fe1PXEFj4F3pvq0ufCIQ0n9jqzqTQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YymoOzAIAA+Zjo3H41OH/TeIUR3cTzj66B1WZB0yh/59yMjCsP8
-	PLFpAFopdPLQJi+AhHG3m2ddfROuTq8y+MxSHHuCutYAeoumu3CPpweg
-X-Gm-Gg: AfdE7ckIERv3bKt9SX+rQGPlhcUP6vOV9cRxPD7fw2jeOporjD4RfPXDhfSARskv9wQ
-	GKsc3O+FiFpv73PMX1fOlLwsvTkK7ppaQtPqFxoATH77lVOZvryQp7doyPLAqvDRhEmZj3uIkAg
-	CPwd43kP+bWpzH+oHRRhcguUY4XRRIQC79oLXHEjvmwoEXwFjx5QC3ZCRAeDdWrNQmAo63rOqYP
-	Ofm11gg82AHxJh0I68d+AAC8NXBwqq/kZ4/zvEp2zwsKj0GMCpabw5xBocWfTuQPEj3OA8Bf4Wy
-	2PrLwHB99ZzT5RfHwe4tBSJYO8Mxb/mqLPIHxcX2ppT8MQGWnTnisdjOXsLa5Wwzr+eOUm67oqr
-	ErHpDYMFIrfQcNFui4FyApHzoifyJsbEWHNoa0awJcOb4+utVlHcDIOI5KhNk/UiCTSE2LH7PZE
-	637Xxk
-X-Received: by 2002:a05:6000:2509:b0:475:da0e:744d with SMTP id ffacd0b85a97d-47df754dbc2mr2043290f8f.8.1783587197256;
-        Thu, 09 Jul 2026 01:53:17 -0700 (PDT)
-Received: from nsa ([148.63.225.166])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47aa039ae44sm47621073f8f.23.2026.07.09.01.53.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 01:53:16 -0700 (PDT)
-Date: Thu, 9 Jul 2026 09:54:22 +0100
-From: Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>
-To: Fred Chen <fredchen.openbmc@gmail.com>
-Cc: "Torreno, Alexis Czezar" <AlexisCzezar.Torreno@analog.com>, 
-	Guenter Roeck <linux@roeck-us.net>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
-	Wensheng Wang <wenswang@yeah.net>, Frank Li <Frank.Li@nxp.com>, 
-	Brian Chiang <chiang.brian@inventec.com>, Cosmo Chou <chou.cosmo@gmail.com>, 
-	Dixit Parmar <dixitparmar19@gmail.com>, Eddie James <eajames@linux.ibm.com>, 
-	Antoni Pokusinski <apokusinski01@gmail.com>, Thorsten Blum <thorsten.blum@linux.dev>, 
-	Ashish Yadav <ashish.yadav@infineon.com>, Syed Arif <arif.syed@hpe.com>, 
-	ChiShih Tsai <tomtsai764@gmail.com>, Abdurrahman Hussain <abdurrahman@nexthop.ai>, 
-	"Paller, Kim Seer" <KimSeer.Paller@analog.com>, Colin Huang <u8813345@gmail.com>, 
-	Yuxi Wang <Yuxi.Wang@monolithicpower.com>, "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, 
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH 2/2] hwmon: (pmbus) Add driver for Analog Devices
- MAX20912 and MAX20916
-Message-ID: <ak9gFKkfEgkU_q1G@nsa>
-References: <20260707122701.751878-1-fredchen.openbmc@gmail.com>
- <20260707122701.751878-3-fredchen.openbmc@gmail.com>
- <f9e32dd1-7c2c-4055-83fa-94683777e30b@roeck-us.net>
- <ak4QO9uhKOt68dl1@nsa>
- <20260708-true-carp-of-champagne-a0dcca@quoll>
- <ak41BRQBNdsQrYww@nsa>
- <b2a5e99c-6d4d-454e-8ecd-8638e4dc0ddb@roeck-us.net>
- <PH0PR03MB63512A19C32B7722D17D0FD4F1FE2@PH0PR03MB6351.namprd03.prod.outlook.com>
- <CABOy65_GqKiZLM+soZUK_34T8MYZS3dRX38-CMf_Bd1EmG0jhA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b="ehKFEcsR"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=gJom2l5F+mXGbNGQVOq0Soq5AfPwDZ7v77olsaAWQMOqW+njFoMKvAsX128aoVS36zWUJ116zfyJtJGxmzXXrz0ngz7D+81uwZLkSL5+tvQQvbXHuecvlkbbA7rS1QUIb66PWepvcFbnDxdeBgKxPZRngN4eeLfMwZn2ftEM3fRqva7SxWqXA2CGXG7aqafx001HbxVXBPXauSznh77IehJdox5Z2/PiKnlH7XLyzNaWK81iFlEUNHjHd7IOeuruOrb1rsk9tqy95iZfyf1ZTzs1z7hQUa9O5sZFotR6ILWlAqe72qSommYqr/vCRyTBLALHF7p6BP3gRuEKuURq6w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=v3pU1n1X1q8fWMFXiSLsCszqUm1WrLL61bwNg+jZeL4=;
+ b=L2pjzR2QKB0Jkl6Q6kULfWPgK0mLgZHqtLeX97D+WtLBHjVRoHTkYrhn2kKrz5zzp/RAFyTvpFGDRMpJkfacBXdOjPQ+bEXaQmmF3FuoN7uSkm4FhFBaF4kLbzrLirtpyJnqs9AyhbkEkJeQ45GX4f4dBpbi/iFiyraihJgMZs4Aiki2cd+gw+eIIryJDLF37NY2Wtos0lyjI+/SA+L2xEvL1wF0xHkOwkd0TxkkTot4/8YAn/A/P6e8c7sM2ZoTyKKMh4fbZpMKSP0lFj7JkjW9dKyN6YzELqm6Xz81/+9FDOpKFkWefXdGTTUxi7u911rbVgH4NTzla16RbIi88Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=altera.com; dmarc=pass action=none header.from=altera.com;
+ dkim=pass header.d=altera.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=altera.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=v3pU1n1X1q8fWMFXiSLsCszqUm1WrLL61bwNg+jZeL4=;
+ b=ehKFEcsR6f7HCk+/b2c9e2FivKrC7KiVkjnMATA105oclp8UzAOGcpzfpoHnuwqO6yJJOpete7qsdVq40LXWKXITOhQRFpGUUAVwHc1zuIX7JpCdXzvaKNCUe96PaGyz3JvgtW/YASOmPhlHyLVgsMDoTVSVFH0xSfv2xlwIfOeD7Y/l5B1PfFTctA3DPRWSGHPdIuUEpY0uzZrmbDMS7eHz6El2lhIVdmDY25jE1voeFleL78n8uVMHZucH8ld65+egaXsXNT15+BMgqx44grQstlGnc5Twb0qZZlpArieHT7dk61NQJ0HbL7Sx5PjC9cu5Q6AyElHNr9y1xHh3pA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=altera.com;
+Received: from SJ0PR03MB5950.namprd03.prod.outlook.com (2603:10b6:a03:2d3::20)
+ by PH0PR03MB6351.namprd03.prod.outlook.com (2603:10b6:510:ab::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.16; Thu, 9 Jul
+ 2026 09:01:56 +0000
+Received: from SJ0PR03MB5950.namprd03.prod.outlook.com
+ ([fe80::53a0:bf93:6b6b:de01]) by SJ0PR03MB5950.namprd03.prod.outlook.com
+ ([fe80::53a0:bf93:6b6b:de01%5]) with mapi id 15.21.0181.014; Thu, 9 Jul 2026
+ 09:01:56 +0000
+From: tze.yee.ng@altera.com
+To: Dinh Nguyen <dinguyen@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: [PATCH v4 0/2] hwmon: add Altera SoC FPGA hardware monitoring support
+Date: Thu,  9 Jul 2026 02:01:51 -0700
+Message-ID: <20260709090153.21675-1-tze.yee.ng@altera.com>
+X-Mailer: git-send-email 2.43.7
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR13CA0232.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c1::27) To SJ0PR03MB5950.namprd03.prod.outlook.com
+ (2603:10b6:a03:2d3::20)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABOy65_GqKiZLM+soZUK_34T8MYZS3dRX38-CMf_Bd1EmG0jhA@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ0PR03MB5950:EE_|PH0PR03MB6351:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5cc7410a-e53b-4746-500e-08dedd98ba6f
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|23010399003|376014|56012099006|11063799006|6133799003|18002099003|3023799007|55112099003;
+X-Microsoft-Antispam-Message-Info:
+	c5cx+vmxc61t1zXBlcnJvndneUoOZ9MYWQC5ZScm4nAAfAPJqLrwQfSMoP9nE4uhm59JpXv+xgKuTmyVAi5yWHQ8ubDku208F2KfNuLGX6gPqR6atuZ9jrY1BXFuVh0wJk8upapAvq4rPWwawGtddR0JnMfAdpzX/+EvxWCmkNLJKz4Nd8A/v3C/nMK8xKfq8GY2DYWx5YVnShKQ+RMQMHtg5sP4VVCi7J3I2mDQ/VywCBDlK8tt5aIiJpnlJ9d4z5NtYR94OL79bdpGmCuVapaYo60j3nLaTwptdjcImyAEDxjpYoY6CeBX9qkqyhzZZHQbv9GbVSQThRWjybT2fMc6bRWV9ENSQbYRCutNLYhD5GhnBQaNkFhXucgr8aZetRCf7gjqz7Qgu5Q9HdAYfr2EBab5f2ZBW7yuSiE8fXecHo/5R7YgZvR45Wlgg9we1QQaNj7DX+IGxwpR/6PDI5+7R6vaKdiJ+M0sG8/U6ADqSliwUQ3+CN4wSe6rsCK9BQroXGrw1umjNIP/kYGgtPOxO0071UPpPTK4fvEGXMvZy1yWwaVn+4Gxebw5V0Bk61VfFxFIgN9k88Kd/2WkRtA0tw9SMWFwzG5yVIsSJxDOJOZiUoaSco+pvgI6UMishOpeU2gEZBJH7zUUAtpyZDWc3X7QeaULBjfiIlHVMlQ=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR03MB5950.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(23010399003)(376014)(56012099006)(11063799006)(6133799003)(18002099003)(3023799007)(55112099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?9UBp9fhiXWSYaF8U8WoLVmQCLnNRRbIVj9gzJRvxknYv/Fw/HVa3T0Cv6EI2?=
+ =?us-ascii?Q?dYY6seaLM8MiLMD+lfquP5XhQ5z/NQCYSLlr3G2+JFXPgiUMdT1g7kqnJCVN?=
+ =?us-ascii?Q?oEiqDFrO3D115zX0AxhLom5KfTDB7kybW3SDo0IOBFWJFSX41HwkRd0Z/V0G?=
+ =?us-ascii?Q?m7yJjKpcQGS7VFLAYgb40sh4/jherFxweZN3+fLlwAzh49W4dtoefi7qL4X4?=
+ =?us-ascii?Q?T4Y21PZFESs4aqpPZN2cZ52JSTdWvVV0khbgYyFNSgHkW/ldemDmuSzku69n?=
+ =?us-ascii?Q?AkNTKRQmEu0/29UvaDYUxfz05kTBzMJKUPm0Yi1Da3te6YTinsweiG/tC9nK?=
+ =?us-ascii?Q?/l5iajJFa9ZKmwsT5WZpGZOg1rNf/BWzwPw+rHDe97ItEtGX7BWP7w1Ax6gf?=
+ =?us-ascii?Q?nAckq4HZFqn2/PelbqNTKnrlw/ugcP10PZuT4SNskTU7FubabBdAN+RDzNv+?=
+ =?us-ascii?Q?4zEu2PqCtTc7V6/wR4KWkhBfofdI6vUbxGzzfwTBhld3mIAGejuxPiw47i28?=
+ =?us-ascii?Q?4ZdIDeiVb0lz92XVkG5luLIoM0u9x10WTYo+2vTrQoWdBQR7QHenCAvEcj3H?=
+ =?us-ascii?Q?myKMGnnL8W2MOGM/sYy7P4pW3GLGw3gKuG9nLm+8OST+tzADMyxFPGM1wMtC?=
+ =?us-ascii?Q?z7nJiXZWQ38LFLjNyBGtxpKsFa2T/u1WbAbNycg4zM0cTWBahWJhhCcJRl9l?=
+ =?us-ascii?Q?oTf71WNuraKYX3CxLwIZmgPykBPsArKyxYEcUMKL5TvI7NBYpAGXFvEGhSCz?=
+ =?us-ascii?Q?D/Wt1GcYOfKVxeIMqw6au3nTe+HkZeO7kvl61y3j3qGrJPITDly3fbQO8p3A?=
+ =?us-ascii?Q?QObqkBaEFlgOWwoY1Tr9gep1Awai+bayE8nGysaCrMp4i3hhHLPDh9F2Kty/?=
+ =?us-ascii?Q?9UDBCjqDNPVSMJLAPxTkXB2fO0nVE+SiBeybdgRhFMxyjdoauTX8Q0RvkCGB?=
+ =?us-ascii?Q?/2KU7Sq0bXpjXdb6wrsUx/Aqlp11L5ydHbI1pJf0CJ4NMpjRJ0Ux3nmws0Yy?=
+ =?us-ascii?Q?S6eSt+UUdLOfQk6uf6dgE/37uArNCO4AdRimmfkBMielIKwkOIrMyEo+adUN?=
+ =?us-ascii?Q?gBhABNOsW7KPp8H6QfeJuKMjIUFojphDZ6y0W7ZrN4xpTvR1vTVCqK2nXpou?=
+ =?us-ascii?Q?p4KHsxdNUUH4UU8aKeV2a92gougVCaXtsl+qIRNJj2iPVilinK0Wdx/Lpjg3?=
+ =?us-ascii?Q?u0NZ81behUVY6Q+4o9w5tnf2aWNZR2MM7bveMeal5tFpx9AiTp9ZZQLvLsOG?=
+ =?us-ascii?Q?1FXX+smHI4ae50jyH9zmqr0BLPEnBU37Wk3QNPJsLVbCkxSYi1V4Y4n12XcG?=
+ =?us-ascii?Q?NR8/fDxWbAzgwrCxRgDPNFfWkdsJfZ4plQ0o0w6xtYU8OtFrqRv2Zol0+V3U?=
+ =?us-ascii?Q?775MJbUk/yKy5MrncjF/yECFam3gPb8i2fGxbsEcfj476UpUG4b07L+0hlvb?=
+ =?us-ascii?Q?ae3ZnfMOfT0HZsFpY3dA4B3t/zM7uKUhQ0OLo5trxTESkGuv265rbVtGd1PY?=
+ =?us-ascii?Q?+94zgtifc1cKrB0nn/H4tAm43MxWDrNuMnHOAMq0wvLaTRQsEreKR33e04PB?=
+ =?us-ascii?Q?ZqsKvya8sZxbrgo5PrYGgHZYZLWPGaGniHZ2Aknmj/OTMED0Z77l5tTH929P?=
+ =?us-ascii?Q?Wf7DX5BYTNjC/ybC/hGV5x0gv5j3k+36dCrKKQUh2RzdtOJZoTtO+S5/QGUu?=
+ =?us-ascii?Q?06ynAK65BHDsIM/bGs4KFGXZC4RM1+a73/EQHTe8HFcHc1hiTi6DYfl9R19i?=
+ =?us-ascii?Q?5jJyNgP0/Q=3D=3D?=
+X-OriginatorOrg: altera.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5cc7410a-e53b-4746-500e-08dedd98ba6f
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR03MB5950.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jul 2026 09:01:56.7159
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fbd72e03-d4a5-4110-adce-614d51f2077a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: v3TX89SElSBx3Vjsv1jRjwiSGDkQWcyJ0mZ/eTZa/VJ1Zcc5rPFaw5jF2H/miAts6rSsanKQLgyA6rfKgbN2eA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR03MB6351
 
-On Thu, Jul 09, 2026 at 03:23:55PM +0800, Fred Chen wrote:
-> Torreno, Alexis Czezar <AlexisCzezar.Torreno@analog.com> 於 2026年7月9日週四 上午8:59寫道：
-> >
-> > > On 7/8/26 04:32, Nuno Sá wrote:
-> > > > On Wed, Jul 08, 2026 at 12:50:25PM +0200, Krzysztof Kozlowski wrote:
-> > > >> On Wed, Jul 08, 2026 at 10:19:56AM +0100, Nuno Sá wrote:
-> > > >>> On Tue, Jul 07, 2026 at 06:52:48AM -0700, Guenter Roeck wrote:
-> > > >>>> On 7/7/26 05:26, Fred Chen wrote:
-> > > >>>>> Add support for the Analog Devices MAX20912 and MAX20916
-> > > >>>>> dual-output multiphase voltage regulators with PMBus interfaces.
-> > > >>>>>
-> > > >>>>> Signed-off-by: Fred Chen <fredchen.openbmc@gmail.com>
-> > > >>>>
-> > > >>>> Please provide evidence that those chips actually exist.
-> > > >>>> Internet search comes up blank. I'll need confirmation from someone
-> > > >>>> at Analog.
-> > > >>>
-> > > >>> Hi Guenter,
-> > > >>>
-> > > >>> Well, in fact I'm in the middle of preparing a series that adds
-> > > >>> support
-> > > >>> for:
-> > > >>>
-> > > >>> "max20826"
-> > > >>> "max20855b"
-> > > >>> "max20908"
-> > > >>> "max20912"
-> > > >>> "max20916"
-> > > >>>
-> > > >>> All the above parts have the datasheet under NDA. But before we had
-> > > >>> a one page "datasheet" in analog.com but I guess that is gone! For
-> > > >>> context I mainly did the base (core) driver for max20826 and then
-> > > >>> Alexis added the other ones.
-> > > >>>
-> > > >>> Not sure how to proceed... I can wait and then work on top of what
-> > > >>> Fred has but this patch is very minimal when compared with what we have.
-> > > >>> Like:
-> > > >>>
-> > > >>> * No regulator support;
-> > > >>> * No direct mode. The chip has two ways to access registers (paging
-> > > >>> and
-> > > >>> * direct mode).
-> > > >>> * No way to count how many phases we have or if RAIL_B (func[1]) is
-> > > >>> being used at all.
-> > > >>>
-> > > >>>
-> > > >>> Some other things more intriguing is that these chips, as far as I'm
-> > > >>> aware (at least for max20826), always have bit 2 set in
-> > > >>> ON_OFF_CONFIG so a gpio vout. Also we needed some special handling
-> > > >>> to read phase current which I'm not seeing in the driver. So I would
-> > > >>> like to understand how the chip was tested?
-> > > >>>
-> > > >>> Anyways, if Fred is ok with it I can just finish what I'm doing and
-> > > >>> send the patches. It would make sense to have something more
-> > > >>> complete on submission but I don't want to just "steal" the work already
-> > > done.
-> > > >>
-> > > >> Binding should be in such case posted complete, so probably not a
-> > > >> trivial device.
-> > > >
-> > > > Yes, in my series bindings are not in trivial as we support the enable
-> > > > gpios.
-> > > >
-> > >
-> > > Same question I asked before: What is your use case ?
-> > >
-> >
-> > Hi Guenter,
-> >
-> > Unlike my MAX20830 patches, for some reason these chips (not only Nuno's max20826)
-> > hardwired the bit 2 in ON_OFF_CONFIG to '1'. This makes the use of gpio to enable the
-> > device a requirement.  (as of the latest info given to us)
-> >
-> > Regards,
-> > Alexis
-> 
-> Hi Nuno,
-> 
-> Based on the MAX20912/16 specs on my hand, these chips do not support
-> PMBUS_PHASE (0x04). Furthermore, the spec only indicates support for VID mode
-> and does not provide m/b/r. Therefore, some of the features you mentioned might
-> be specific to the MAX20826 series.
+From: Tze Yee Ng <tze.yee.ng@altera.com>
 
-I see, phases are not supported using standard PMBUS.
+This series adds hardware monitor support for Altera SoC FPGA devices.
+Temperature and voltage sensors are accessed through the Stratix 10
+service layer and Secure Device Manager (SDM).
 
-> 
-> Regarding enabling VOUT via GPIO, our platform handles this via the CPLD as
-> part of the hardware power sequencing. Managing this pin through the driver is
-> not a requirement for our system.
+Patch 1 adds async HWMON SMC support to stratix10-svc and registers the
+socfpga-hwmon platform device.
 
-But we cannot assume all systems will behave like the above. But now i
-do wonder about controlling the GPIOs in the driver. In your system you
-clearly did not need to do it. In mine (testing with a rpi) I had to
-use a GPIO (well I could have used hogs or pinctrl). But if you control the pin
-you do gain the ability to turn off the regulator. If you don't it's always on
-(which might be indeed the bulk of the real usecases for these systems).
+Patch 2 adds the socfpga-hwmon driver, documentation, Kconfig, and
+MAINTAINERS entry.
 
-> 
-> As for the testing, I have verified that the telemetry readings for both Rail A
-> and Rail B behave as expected. The driver reports valid data after system
-> power-on, and the readings drop to 0 properly after power-off.
-> 
-> It's possible my specs are outdated or that I'm missing some use cases. If
-> you plan to submit your more complete driver covering the MAX20912/16
-> soon, I'm more than willing to hold off on sending v2 patch.
->
+Changes in v4:
+- Address maintainer and review feedback on socfpga-hwmon (Patch 2):
+  - Register devm_add_action_or_reset() before
+    devm_hwmon_device_register_with_info() to fix devres teardown order
+  - Remove unreferenced completion and pre-poll
+    wait_for_completion_io_timeout() from async reads; poll directly
+    with a retry loop after async_send()
+- No functional changes in Patch 1
 
-Sure, soon enough :)
+Changes in v3:
+- Address review feedback on socfpga-hwmon (Patch 2):
+  - Fix 16-bit Q8.8 temperature sign extension
+  - Drop unused async callback; pass NULL to stratix10_svc_async_send()
+  - Document and retain pre-poll wait (RSU pattern; firmware needs time
+    before async_poll())
+  - Align async poll retry behaviour with RSU
+  - Use uninterruptible wait_for_completion_timeout() for sync reads
+  - Handle -EINVAL and -EOPNOTSUPP when falling back to sync mode
+  - Defer SVC channel cleanup via devm_add_action_or_reset()
+- No functional changes in Patch 1
 
-- Nuno Sá
+Changes in v2:
+- Drop altr,stratix10-hwmon DT binding and intel,stratix10-svc hwmon
+  child property
+- Drop Stratix 10 SoCDK DTS hwmon node
+- Register socfpga-hwmon from stratix10-svc (RSU-style)
+- Replace DT channel parsing with hardcoded Stratix 10 and Agilex tables
+- Rename driver/module to socfpga-hwmon 
+  (CONFIG_SENSORS_ALTERA_SOCFPGA_HWMON)
+- Add Agilex channel support
+- Fix SDM value conversion (Q8.8 degrees Celsius and Q16 volts to hwmon
+  millidegrees/millivolts)
+- Improve sync-mode error handling via last_err
+
+Previous version:
+  https://lore.kernel.org/all/cover.1783062999.git.tze.yee.ng@altera.com/
+
+Tze Yee Ng (2):
+  firmware: stratix10-svc: add async HWMON read commands and register
+    socfpga-hwmon device
+  hwmon: add Altera SoC FPGA hardware monitoring driver
+
+ Documentation/hwmon/index.rst                |   1 +
+ Documentation/hwmon/socfpga-hwmon.rst        |  34 ++
+ MAINTAINERS                                  |   8 +
+ drivers/firmware/stratix10-svc.c             |  46 +-
+ drivers/hwmon/Kconfig                        |  10 +
+ drivers/hwmon/Makefile                       |   1 +
+ drivers/hwmon/socfpga-hwmon.c                | 577 +++++++++++++++++++
+ include/linux/firmware/intel/stratix10-smc.h |  38 ++
+ 8 files changed, 712 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/hwmon/socfpga-hwmon.rst
+ create mode 100644 drivers/hwmon/socfpga-hwmon.c
+
+-- 
+2.43.7
+
