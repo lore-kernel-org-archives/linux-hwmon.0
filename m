@@ -1,67 +1,68 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 065C42E1C4E
-	for <linux-hwmon@vger.kernel.org>; Fri, 10 Jul 2026 14:01:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 405F023ED5B
+	for <linux-hwmon@vger.kernel.org>; Fri, 10 Jul 2026 14:20:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783692101; cv=none; b=CJrluDEjHHitDvlKYrEXtgZY3jJwJXr0al9QAOjhbBCE78eo8rjuFUBb5/jyolNrNJLqGdFbp2Hl03P4HGXrRXJ6bVT7shMzcld8H0krPsKSkA5lcS+Kt2H03Di/bnX4KEAbXYKYSeDh91fWCtUR276H/QpgqzoWcSvW3mOF60c=
+	t=1783693254; cv=none; b=A1PWC85wieuXbbKyx7r+8E560qnJErBI+6YzwfTK4hQAXVPJfgHyBeXUvlQ3+HVIyazR8thBmN8tZ8g09FFEChz2DksTmaw+QJdYNnIy6ljUyHdclYtYpNFapXmeYFSns2tPw8OI0kRITCDIDiOPWJTtwzFhmaJoybm9FM7qtCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783692101; c=relaxed/simple;
-	bh=J5KhfHbAcCyPwu8i6GaPe5TFLUQwg3eDvMY0dJ8fI98=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oUP3JgqPpfUvenLcioRVtRuJX55jCyzS9D2od+CHzxEE3kw+bnfNuJ3CDSGqYPbOQwrqVWHAQqHFVIBtFs1LzrelA2qMMo602nP82rr7nn+NIazOe4puBCPZbFKtvvr/kUK4lgk4Sh55I+HFI5jgfmyLwgPfxj32u4tC7RO/40M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gsjvXh7v; arc=none smtp.client-ip=209.85.215.178
+	s=arc-20240116; t=1783693254; c=relaxed/simple;
+	bh=O/0iK7xmhFFoTChSvGcFfHyPMkCTxkCl1nbuqxMvMA4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=LhflNXrVoGHG+p0PkI47MyWUqG1ZtkYAMzMARZPildQn2i97vOIo0ZkO3L8RCtAlDDh7ZORkboYFl6wFY25zZPq4cCp3NWAkiWMzvi7qGMX+QQCKGomiBbuJhiR5ubj5cPVRYYYctwi92NlNIGxqTa0ZVwqLJB6y+KNhvKnsBDo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YH0s3CLj; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gsjvXh7v"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-c999f162c9aso523664a12.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 10 Jul 2026 07:01:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YH0s3CLj"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2cc6ae3e7f1so5703865ad.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 10 Jul 2026 07:20:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783692099; x=1784296899; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783693252; x=1784298052; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=1Q+blbOuY4CPEX29G3F1xX+mj+/hhPJrs7ehYrVQ3zs=;
-        b=gsjvXh7vIk1KtSlpaYWXcQsNxGYWMbK/0cT25wjn52bXOmb+5SG4i3cNqDvwX8znl9
-         r6FcEmCK3Gx11mo8l8HF5p99VC3FFfIEiRcNsBbzAHwoHpfQrTNj7zUEcoJGTRt8XyDT
-         PkUJqoYvKRSMAlupnR9b0X1LtnTXRC0anIM5ibIuyQztoQizItFvGPgYBV1gUeb0pG1X
-         wqUgZM1eHEJSsYhy6KCX1vTgNIupFJ0rsfKcJok3sIVG22cXVJjmMOOjMzjqXPxM6oay
-         KKzdEFhCEkaxHLLBXPgEWNyH62sRwgBUSEXHbP2+BIx6D0MJfaOdWxLgfFcn4kzs6hLF
-         zCBw==
+        bh=Ccewgus7tVkvh0J2tEPy956/0MoI4Eu/LcfaX8IBtms=;
+        b=YH0s3CLjVu7Z6pmFfP7LzKVGNEnaWKargI4YKCTjshVeELd8E3peRxETi2ZeO5CzSK
+         5ZWemnlV0BqsFnwREpLm0h501JwbnnSKJ2ZR3dy9oruvQjLfpkk4OtOLse5z4Wp54Fss
+         mseOKF6iPiuEZ+0bSHsTHJ2JO7VpOAnPT2+/VNlVQzWmSElOzJ7sbRY4yDvi7R+j/hpB
+         UOSWYF+P0baY/mcWoMu5kB3r4eIL2wSufP1Ur0ICxlmXEfrC7rn5+QGmz8BM6/zDy5/L
+         zd46AUepVdRJQtMASCdvOYlKoT5o+ncIu3sshIj+zSTzxe3cxfiNO9tvsmMKPtUOqiSn
+         vbTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783692099; x=1784296899;
+        d=1e100.net; s=20251104; t=1783693252; x=1784298052;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=1Q+blbOuY4CPEX29G3F1xX+mj+/hhPJrs7ehYrVQ3zs=;
-        b=FdBdPmxSTnFXTMtM13K/D+F9ThO/vlgj9OfVnpINsvHY0ffWLylz6U8mU9JXJtm8QE
-         Ax5csHDFc69ripE0epH7H64p43IAUnM575E7zyH8dcscPc5ObJNBpsBa3s7yaZrHJmTb
-         dQloP9nR97gNeL+bRC1mp+zCt0EqBTwE/KRZEJ+uglsPmMn3OnaynDbt3OnREPSYthAD
-         Yk7/+cjdiiDZIm80lnuJ89zfHDd2FwdGaQU8gkLGUUkzD36tQP5sToZSEIbCPbwrhUU6
-         GKZao2c9kdkpwUo8BjKEDBrCoATQgb+nP2D5fj57AXVqhn0GmWlED+z3ROklHGIh/3DS
-         JiSA==
-X-Gm-Message-State: AOJu0YwEdPMGDDjuYHKND1o/XCiipsU4vAyldYPSECbyJTmwOp7J9uEd
-	j+ftzjaTf7oSoO6HpsE3l6XE0PGYjG4ZWAyHJtCcaf4dOjwzzVn5Qawz
-X-Gm-Gg: AfdE7ckF5fJCf4Xm6EpaaohwGXdiQOgzbPqMf/UBLA1r4X7RMvHsxAb/R8g/WE65kTR
-	vqY0XKpTk3b94U97J9Lqqr3LWDJi076p95VFVJ3E87BAy7yhL8D1YcecEcCqyd3vQpr1zX2Gl5u
-	HPkezrhJahEA2kCUBvnzIt2kx6gWQhO5IW1du/M1RUVuYb75WnCZ1BHs9GiqJ9gwSJspXuh/NBa
-	1T7MTsOBBhWvHWSmrTUOMrcBuCMaL4+DweUb3IVqNnmNr7j0HWfPBEmRlAfH4RCeq2XVQFzI6mG
-	5ZUEU0KoVd7d0vR7vr6QICqJ9B7p7rF4t40Z3kje5DYzuAEcK//A4iO1WNkp4urkmxu954o6Cw5
-	8rQ1D3CjixRI8edZAxjjxnbars6NGnhrC7bZAzNqNp4DLrTONRqjYzg3KEp4uNi4k48Nh8R23sA
-	XrKhS2kaPlFx7BI8zmrvusL4CCv7sAPpK/kIjq2SN9Wj663wphFg0me1iM4an8/A==
-X-Received: by 2002:a05:6a20:6a21:b0:3c0:9c1a:8939 with SMTP id adf61e73a8af0-3c0bccbae8emr13775826637.65.1783692099125;
-        Fri, 10 Jul 2026 07:01:39 -0700 (PDT)
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Ccewgus7tVkvh0J2tEPy956/0MoI4Eu/LcfaX8IBtms=;
+        b=fidZKuANzjLbS4VvVzfUPX2JTZd0SrIEQnuqBiE3OaztVIGUn3D/uEkmhcqkyPj5xd
+         +gx/nAnu/bpg0oM1Rh4tFpmoiOKBd6IVN3yTdJSlNDVqq147D6qcCTMXe90N/WOEZazK
+         T79Nhtcyk2fbSl7X4GEPsjpAN8KmvrEmNsM0UDnAgdKWUz/CSRI2lVwsqlGhMoGFrT6o
+         4SmT/sLBsuSKuA7oYO6lSdZ2hs1qn7lD+zI4r7KWpxLykncM8eovd6Bj0H2lxGeB4jjF
+         4PXaX0GvM3DQ8JDMF6qFkiQax0Nl0lGxJYMWj5lmewYqeEXl+qFxK7J/QlpzX2CbROcI
+         MD9g==
+X-Forwarded-Encrypted: i=1; AHgh+RqcU23ZnXqTOc55IgPj7096AUvf3XUW+wQnYhSRtVufZBvDH1Tvx8h6OiebIfpSFx53+MV4BDi+9MSw9w==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzg+0v9D3IfH72NWRPp2zs8bE4MSSfJD/Kk+FPSF4/cRtZ+eS5n
+	eYzGNXaaZiFEWZpAmksgm9M6aeVb9eFAwBd2UUpd2oXyCGbCOeijec4Z4E3P+A==
+X-Gm-Gg: AfdE7ckhGhF1WKBo5/JoA+xH40CiR4nQigCsvrczPDfugBewotc1M4a/ixG++XXacBq
+	oMyQo365ZDgdgdJIr9GDRN9M+ke/9A+2NvyMUjzUBOvtzxEOIaMQotKGE3ZpQSIEz0ap4zWE05l
+	F/NRSQL7RbdAGEY1d7Dual6t7DbloXiTSZBRNzlZitQfyacppzya2+2F866+LhF9w3hkKNOG21O
+	KqBlIC611+GBrJl7T49X0Re1OIFamI2O9OvkIQabkwFIP9tmLc0lSeR/AVhbb5K9nXFegIV9uN+
+	6BgBxHxK8FWj+rTHJviTM2T8aNljHeZ3loVTJrQ+RH81xC9O81Qk394TSXjkQwgTyYXp5QLh5ID
+	HMhF30uB7ghhoF5Nf+wmA1uM/91n7PhUb/wCL7Xq5uNZokVfKhLoNOD5TdHC3rmI/zuZdgtOg0B
+	1HYeaQyKFnnvhfJrE4ZA5jQCn8ny90HLEUKBZQkWJoMRcbctriEvN//lWYdfVHaQ==
+X-Received: by 2002:a17:902:c94e:b0:2ca:bf8e:35fe with SMTP id d9443c01a7336-2ccea369f67mr127097995ad.16.1783693252261;
+        Fri, 10 Jul 2026 07:20:52 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ca5b31628c1sm5136553a12.19.2026.07.10.07.01.37
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9d3bbaesm60083965ad.57.2026.07.10.07.20.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jul 2026 07:01:38 -0700 (PDT)
+        Fri, 10 Jul 2026 07:20:51 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <99c83d9e-129a-4db1-b0bc-dba75c07708e@roeck-us.net>
-Date: Fri, 10 Jul 2026 07:01:36 -0700
+Message-ID: <db210121-33b6-438b-be25-7282e76f7275@roeck-us.net>
+Date: Fri, 10 Jul 2026 07:20:50 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,13 +70,9 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/1] hwmon: (applesmc) Convert to
- hwmon_device_register_with_info
-To: Shih-Yuan Lee <fourdollars@debian.org>,
- Henrik Rydberg <rydberg@bitmath.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260710123236.10508-1-fourdollars@debian.org>
- <20260710123236.10508-2-fourdollars@debian.org>
+Subject: Re: [PATCH] hwmon: emc2305: Add missing device tree compatibles
+To: Peter Robinson <pbrobinson@gmail.com>, linux-hwmon@vger.kernel.org
+References: <20260710112110.466240-1-pbrobinson@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,29 +118,46 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260710123236.10508-2-fourdollars@debian.org>
+In-Reply-To: <20260710112110.466240-1-pbrobinson@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 7/10/26 05:32, Shih-Yuan Lee wrote:
-> The legacy hwmon_device_register() function is deprecated and triggers a
-> warning in dmesg during driver initialization:
+On 7/10/26 04:21, Peter Robinson wrote:
+> Add the missing device tree compatibles for all the variants
+> so they can be specified. There's at least the use of emc2301
+> already.
 > 
-> [   24.706091] applesmc: key=620 fan=0 temp=37 index=36 acc=0 lux=2 kbd=0
-> [   24.706270] applesmc applesmc.768: hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().
+> Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
+> ---
+>   drivers/hwmon/emc2305.c | 3 +++
+>   1 file changed, 3 insertions(+)
 > 
-> To silence this warning, convert the driver to use the modern
-> hwmon_device_register_with_info() API.
-> 
-> Because the driver creates all its sysfs attributes dynamically on the platform
-> device, we define a minimal struct hwmon_chip_info with a single temperature
-> channel and implement a visibility callback that returns 0 (hidden) for it.
-> This satisfies the new API requirements while keeping all existing sysfs paths
-> and attributes completely unchanged, ensuring backwards compatibility.
-> 
+> diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c
+> index eef3b021671b0..38034d7a30901 100644
+> --- a/drivers/hwmon/emc2305.c
+> +++ b/drivers/hwmon/emc2305.c
+> @@ -762,6 +762,9 @@ static void emc2305_shutdown(struct i2c_client *client)
+>   }
+>   
+>   static const struct of_device_id of_emc2305_match_table[] = {
+> +	{ .compatible = "microchip,emc2301", },
+> +	{ .compatible = "microchip,emc2302", },
+> +	{ .compatible = "microchip,emc2303", },
+>   	{ .compatible = "microchip,emc2305", },
+>   	{},
+>   };
 
-Novel, but that would completely defeat the purpose of the new API.
-NACK.
+The bindings are supposed to always use "microchip,emc2305" together with
+a compatible for the real chip. That is how it is defined in the yaml
+file. The existing bindings do that.
+
+arch/arm64/boot/dts/freescale/imx943-evk.dts:
+	compatible = "microchip,emc2301", "microchip,emc2305";
+arch/arm64/boot/dts/rockchip/rk3568-radxa-cm3j-rpi-cm4.dts:
+	compatible = "microchip,emc2301", "microchip,emc2305";
+
+The driver auto-identifies the actual chip in the probe function,
+There is nothing missing, and there is no need for this patch.
 
 Guenter
 
