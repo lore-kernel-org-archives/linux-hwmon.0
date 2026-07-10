@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60FEE4192E5
-	for <linux-hwmon@vger.kernel.org>; Fri, 10 Jul 2026 11:26:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E9AB41B35C
+	for <linux-hwmon@vger.kernel.org>; Fri, 10 Jul 2026 11:28:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783682803; cv=none; b=VjjqVcHbv5WRjnbJVPDVXJgmfu/zF4cFq1vN+slbdYSGFQEpXp2Y+qSztcEe9fA2IReG2DHLF2olhawpI06SpAPkZlA7KVFWUnF88RHCwceEKHjzpV3FE/of06lPjo1aR2V8ACaLIWjtUFaDDMeKHaTMOYoq+Ox+aC1nbBnT8t0=
+	t=1783682900; cv=none; b=IlVIv/89rFBZdrWz1Y0l2klx800xA1Mqo79MEX9mwMgNfPL7QgsOnhoSr6ly3dl5L/SxpH2n89dZKfEBM0qvzmZ/R9rLFy4W/evfZ3efwJTlZsp/M3Fjz27mKaYrkaTgPdLvAsquUUyj5byrCARE6EnpxLL0rVnRuGM6v2SIbTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783682803; c=relaxed/simple;
-	bh=fw1yhJgH4dE10gIfVyww8+R5+pxFoaFQ6M9mGdEyGUc=;
+	s=arc-20240116; t=1783682900; c=relaxed/simple;
+	bh=SmYWqxviij9HFGWDIDtYQvDEHoUV8sC1BARFiZ+psJk=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=SK4QTiqaxjo4xVO31Zfcq7QUpYmK8HSyAZ7Wy2DWUijP6T3+RwiFR+V7/RGHJntJeXn32IaYSXSjNye/Y3gizFweaBq/nnvGNmcTPtjx9R9fRM46SEDq4VFfU11ixW9zqEJFXdqsxjgmxStD3hvW5ggcsZ+D/t/RJLERA88Upds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NcIQUwAb; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=rfNTtV5JwZudPRc4xAHufVgI8xNgwoy+MfMasPMsPi4K24Kx7BEIe1zP42cMDqYtxmsJd123i97clBxFtrsxGozOSuhEa1V+UcdXOEPvM2cGtpiIQ7AnBavM44T1Yh09hmlJ9DANZemzikqNr/NPDuqq9EjUbdN3sErzjqlCSvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T4UwEuV9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NcIQUwAb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE0161F00A3A;
-	Fri, 10 Jul 2026 11:26:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T4UwEuV9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE5AF1F00A3A;
+	Fri, 10 Jul 2026 11:28:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783682796;
-	bh=HX1pNP9d+3wN1PbiFe2eRyPWL95lxiSrTThlhlLo6Ig=;
+	s=k20260515; t=1783682890;
+	bh=ydg2VWoD+LNR21+MCLpbeg3+/ofEcseGj9syUsB0RKU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=NcIQUwAbO9aGh+/sTmUtCTDEQyO2xYsJbVuPEs0rvaAh5FST6FSRnLGNIoU5taN6b
-	 5uI5Y+noGoDndN1wO7KLoV1euDPj/FkCDGayuF5g0E2iDHYEfIPFODo0SimdgcZWAu
-	 JAPwVJyrtD9F0a6GDN/JkIr6onjPfC5N/pDSsHbGanR99hxEFb/14HmqHAuTFtQ9zS
-	 JHeSjZH0IJZWJsH42Gfpxtqf67kqOAYzybEWFIobkWbolr1RWcdqbnebHGT/mQ1/Gf
-	 AU1pr05D8LxzxRq855FiDzSl7qJ00dCaSPbHkeFgUe/60KCfqmBirdM8dnggK34JZb
-	 QQ3agBFu37FMA==
+	b=T4UwEuV97C78yDuTSsavXLFn0P3raK2gIk34/EmlsHXtDKtFChmeKs/EbK2aEZwS9
+	 hDjM425UUAhwHgKfjmFAONWcql0V9li/nunDdXcoHe1NFfYIY8l/vdmzij27rLSzvj
+	 bQ61aOfoJg8om55kFhlihfI+Z07JlsGaKoP0U0XE19ukoa8Xs5wt9qBiE24p+Bg47t
+	 fA94h6OtV61515MJ13kW+RwqPmmNqkQqllSS6GDBMk72kN3OSbaTWubiKEtUh9RwpJ
+	 y39LOfIbvvMC1Hz1eWVxVrSXevFuCbhHSj/Zu+41GEQmvqztT4pB2Gya2LkZ1cCKKN
+	 elRWYpU5MRsdg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 1/8] hwmon/misc: amd-sbi: Move core sbtsi support
- from hwmon to misc
+Subject: Re: [PATCH v4 6/8] misc: amd-sbi: Add SBTSI ioctl register transfer
+ interface
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Akshay Gupta" <Akshay.Gupta@amd.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260710111642.850022-2-Akshay.Gupta@amd.com>
+In-Reply-To: <20260710111642.850022-7-Akshay.Gupta@amd.com>
 References: <20260710111642.850022-1-Akshay.Gupta@amd.com>
- <20260710111642.850022-2-Akshay.Gupta@amd.com>
+ <20260710111642.850022-7-Akshay.Gupta@amd.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 10 Jul 2026 11:26:35 +0000
-Message-Id: <20260710112635.EE0161F00A3A@smtp.kernel.org>
+Date: Fri, 10 Jul 2026 11:28:09 +0000
+Message-Id: <20260710112809.DE5AF1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -47,91 +47,79 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] Using the I2C client address directly as the auxiliary device in=
-stance ID causes sysfs name collisions and probe failures if identical devi=
-ces reside at the same address on different I2C buses.
+- [High] Data race, DMA buffer corruption, and TOCTOU vulnerability due to =
+concurrent hwmon and ioctl access to shared I3C buffers.
 --
 
---- Patch [1]: [PATCH v4 1/8] hwmon/misc: amd-sbi: Move core sbtsi support =
-from hwmon to misc ---
-commit 00ce49f593f00850072fde683389c8cb1954ee34
+--- Patch [6]: [PATCH v4 6/8] misc: amd-sbi: Add SBTSI ioctl register trans=
+fer interface ---
+commit 01a49ea8ef63627c7743953c52073396818f7f3a
 Author: Prathima <Prathima.Lk@amd.com>
 
-hwmon/misc: amd-sbi: Move core sbtsi support from hwmon to misc
+misc: amd-sbi: Add SBTSI ioctl register transfer interface
 
-This commit moves the SBTSI core functionality out of the hwmon-only path
-and into drivers/misc/amd-sbi so it can be reused. It creates an auxiliary
-device for the hwmon driver to bind to and adds the appropriate build
-dependencies.
+Implement IOCTL interface for SB-TSI driver to enable userspace access
+to TSI register read/write operations through the AMD Advanced Platform
+Management Link (APML) protocol.
 
-> diff --git a/drivers/misc/amd-sbi/tsi.c b/drivers/misc/amd-sbi/tsi.c
-> new file mode 100644
-> index 0000000000000..67d08df28429d
-> --- /dev/null
-> +++ b/drivers/misc/amd-sbi/tsi.c
-
+> diff --git a/drivers/misc/amd-sbi/tsi-core.c b/drivers/misc/amd-sbi/tsi-c=
+ore.c
+> index 1c6f37f26d945..5c178702c67ab 100644
+> --- a/drivers/misc/amd-sbi/tsi-core.c
+> +++ b/drivers/misc/amd-sbi/tsi-core.c
 [ ... ]
-
-> +static int sbtsi_create_hwmon_adev(struct device *dev, u8 dev_addr)
+> @@ -77,7 +92,116 @@ int sbtsi_xfer(struct sbtsi_data *data, u8 reg, u8 *v=
+al, bool is_read)
+>  	if (data->is_i3c)
+>  		return is_read ? sbtsi_i3c_read(data, reg, val)
+>  			       : sbtsi_i3c_write(data, reg, *val);
+> -
+>  	return sbtsi_i2c_xfer(data, reg, val, is_read);
+>  }
+>  EXPORT_SYMBOL_GPL(sbtsi_xfer);
+> +
+> +/*
+> + * The mutex protects against concurrent register transfers to the device
+> + * over the shared bus.
+> + */
+> +static int sbtsi_xfer_ioctl(struct sbtsi_data *data, u8 reg, u8 *val, bo=
+ol is_read)
 > +{
-> +	struct auxiliary_device *adev;
-> +	int ret;
+> +	guard(sbtsi)(data);
 > +
-> +	adev =3D kzalloc_obj(*adev);
-> +	if (!adev)
-> +		return -ENOMEM;
+> +	if (data->detached)
+> +		return -ENODEV;
 > +
-> +	adev->name =3D AMD_SBTSI_AUX_HWMON;
-> +	adev->id =3D dev_addr;
-
-[Severity: Medium]
-Could using the I2C client address directly as the auxiliary device instance
-ID cause sysfs name collisions and probe failures if identical devices resi=
-de
-at the same address on different I2C buses?
-
-If multiple sensors are present on different I2C buses but share the same I=
-2C
-address, the driver assigns them identical auxiliary device IDs. The auxili=
-ary
-bus subsystem aggregates all devices into a single virtual namespace
-(/sys/bus/auxiliary/devices/amd-sbtsi.temp-sensor.<id>), so device_add()
-could return -EEXIST and cause subsequent probes to fail.
-
-While the comments below mention that multi-socket systems provide unique I=
-2C
-addresses even across different buses, relying on platform-specific hardware
-strapping assumptions for globally unique software identifiers can be fragi=
-le.
-
-Would it make sense to use the IDA framework here to dynamically allocate
-globally unique instance IDs?
-
-> +	adev->dev.parent =3D dev;
-> +	adev->dev.release =3D sbtsi_adev_release;
-> +
-> +	ret =3D auxiliary_device_init(adev);
-
-[ ... ]
-
-> +static int sbtsi_i2c_probe(struct i2c_client *client)
-> +{
-> +	struct device *dev =3D &client->dev;
-> +	struct sbtsi_data *data;
-> +	int err;
-
-[ ... ]
-
-> +	dev_set_drvdata(dev, data);
-> +	/* In a multi-socket system, devices that are otherwise identical do not
-> +	 * share the same static address; each instance resides at a unique I2C
-> +	 * client address on the same or different bus. Use the I2C client
-> +	 * address as the auxiliary device instance ID to ensure each socket
-> +	 * receives a distinct auxiliary device name.
-> +	 */
-> +	return sbtsi_create_hwmon_adev(dev, client->addr);
+> +	return sbtsi_xfer(data, reg, val, is_read);
 > +}
+
+[Severity: High]
+The commit message mentions that the hwmon path is placed under the same
+lock in the next patch, completing the serialization.
+
+Since this patch introduces the ioctl path before the hwmon path is locked,
+can an unprivileged user reading the hwmon sysfs attribute (temp1_input)
+concurrently with the new SBTSI_IOCTL_REG_XFER_CMD ioctl cause data
+corruption?
+
+For I3C devices, sbtsi_xfer() calls sbtsi_i3c_read() and sbtsi_i3c_write(),
+which use the shared priv->tx and priv->rx arrays for DMA transfers:
+
+drivers/misc/amd-sbi/tsi-core.c:sbtsi_i3c_read() {
+	...
+	priv->tx[0] =3D reg;
+
+	/* Write the register address (DMA_TO_DEVICE). */
+	xfers[0].rnw =3D false;
+	xfers[0].len =3D 1;
+	xfers[0].data.out =3D priv->tx;
+	...
+}
+
+Will this allow concurrent access to overwrite priv->tx while a privileged
+ioctl is preparing or executing a DMA transfer, leading to buffer
+corruption during git bisect?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260710111642.8500=
-22-1-Akshay.Gupta@amd.com?part=3D1
+22-1-Akshay.Gupta@amd.com?part=3D6
