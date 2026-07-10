@@ -1,195 +1,175 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 745BE41C2E4
-	for <linux-hwmon@vger.kernel.org>; Fri, 10 Jul 2026 11:33:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84C3E41F7F3
+	for <linux-hwmon@vger.kernel.org>; Fri, 10 Jul 2026 11:35:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783683230; cv=none; b=V17mk3ftAWp427AiLNZd2p6Ow9tXrXq6tTho4GDNneAG4ZqpoiWZKMy9sVp7GiGGSf8hfieRS6zNHZINs+Co7mLj+ANfa0AEN3w/IOtIRYd2j6VmvKmbve3c2jKSY3UHsze4SjrSxKg+WZCA7KGkrZ3EXUp/9nRpvVzsZp4Hmjg=
+	t=1783683306; cv=none; b=spOZnMnHugJBmbT1ARPRVVexkOF2CcF0myHlM7Q2kuYgVODVQJy0haRGUOFgs23Xpgd5v3zCOAe09w64uKJYv9uv0n5Uxfrixl47WbPOOG3YQs2T+VS967lQUnBY46IXMm5vcglg4/DT0C+fcAvtcQnczg2gLSbEUeljilnpBV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783683230; c=relaxed/simple;
-	bh=dEhBYMfVIq5AG3q1Xwlc9KvM0rQxVMtvLGVmkZnL1Cc=;
+	s=arc-20240116; t=1783683306; c=relaxed/simple;
+	bh=VUL5zuuUlykHNb6n3Mxny67pW9N9tVzZWAyJU2ZnJLQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=beEC23Wm3RNkcArK7Yzedf6gmP/rqy+VRBUwqLgVuZYHra/EAfWv4/bAqGxfeb2unIWVsSILbWZ1Bb2VA2jvZIubwcHC36cBZUWuAcDXbQQ9XE/HJHUu5yUmB7V6g3Us11nZk6M6ik1wQyjBpQJYBmeH9uHL625Z5aSuZhkxeWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fY970SDC; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=kP8UWOIdhae3roO82w/GIIS1kmqjDy50byBV7upmgXanUYw/9/+sHV8Rtj8BB2eauMiPT27+cV8u8+l9w0CiPcV+r9MWClTIxpDw75qu0JZ1V4/dzjgXO7BNfYF+y3vTWbfhGomrdUTk2GnpDAOGDwEgmo2oHQ/rHlCDYol1NHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ee5L9CZ2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fY970SDC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E78B11F000E9;
-	Fri, 10 Jul 2026 11:33:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ee5L9CZ2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FB501F00A3A;
+	Fri, 10 Jul 2026 11:34:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783683218;
-	bh=/Iy3rt0g90U93XvEW1D1qp56Ztiu6W7PBOZCnVGEsik=;
+	s=k20260515; t=1783683296;
+	bh=Sw/ETUmGXENS4YZhfNMd7WZY2UNB9ZOlYxROEwGNjzs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=fY970SDCGXQghgq5IBsKGVEZ0yz+0YZN6UEf38w/LLcJCqifG8e6ENLA/LAUfGGL1
-	 cvSBZbPb8shO/KwJHRZ3WSTlWC/NtIo1RXqBPjUDCkrTnzO/dSvz9I9tE3tNQovALE
-	 kSun8+wQopqJk3NixagRlYOH3cV9uBok978TLe2NEkIMONxCRSuCEITsLDgRiRcI40
-	 xR2lktD8cENfeJ8cDQehN4IFp0KutxWN75n7apgLzkJSPURqQVzEahTJwtFXBWXg0a
-	 OjfEBJJDeyNjBYUOlLqfgTb5KIcn7Jx5ViD+OHQO4aP2FRrLehNKWtYp3D7oUbfQ9Q
-	 mGdkvKBfOGkjg==
+	b=ee5L9CZ2sGtxHL3YFS0LLdHtD43qIxcVt93ESjdZ4F+fXwN1wOaC3J3UCIxa+RKV/
+	 NF6PHAcyM4w8wRjdHmDzvf0YjFFdw23kb4I3TWbcvbP0sMz6SggtuEwnQjcb7qS9zJ
+	 eHsSa0VFT6bKgV+JILgztmZYiHiH2LQct/pchAozYqMdPV9YHn328V6a7XaTJekyW6
+	 2BT+IRvQZOD+0i+nQKGek3loSzv8QEpk4kn63youe4aDiWbcTbqds+iJ/ae6IHfRP4
+	 hbr5sYgYt/3uQ43bFEi+GJtyTSt/HnhLSm2QSdrVuA/xnXL8SP2O15A6uQWdUG4uxa
+	 vgI/d03THpXag==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: emc2305: Add missing device tree compatibles
+Subject: Re: [PATCH v4 5/8] misc: amd-sbi: Add support for SB-TSI over I3C
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Peter Robinson" <pbrobinson@gmail.com>
+To: "Akshay Gupta" <Akshay.Gupta@amd.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260710112110.466240-1-pbrobinson@gmail.com>
-References: <20260710112110.466240-1-pbrobinson@gmail.com>
+In-Reply-To: <20260710111642.850022-6-Akshay.Gupta@amd.com>
+References: <20260710111642.850022-1-Akshay.Gupta@amd.com>
+ <20260710111642.850022-6-Akshay.Gupta@amd.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 10 Jul 2026 11:33:37 +0000
-Message-Id: <20260710113337.E78B11F000E9@smtp.kernel.org>
+Date: Fri, 10 Jul 2026 11:34:55 +0000
+Message-Id: <20260710113456.5FB501F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
 
+New issues:
+- [High] Concurrent hwmon sysfs accesses cause data races on the shared I3C=
+ DMA buffers (`priv->tx` and `priv->rx`) due to missing locking.
+- [Medium] The I3C transmit buffer `tx` in `struct sbtsi_i3c_priv` is not c=
+acheline aligned, violating DMA mapping requirements.
+
 Pre-existing issues:
-- [High] The driver fails to use `hwmon_lock()` to protect shared state and=
- hardware registers during thermal cooling device operations, violating hwm=
-on subsystem concurrency rules.
-- [High] A division by zero vulnerability exists when reading the fan tacho=
-meter input if the hardware returns a small non-zero value between 1 and 7.
-- [High] When thermal management is enabled, user inputs for PWM sysfs attr=
-ibutes bypass bounds checking, leading to massive integer underflow and unp=
-redictable PWM duty cycles.
-- [High] Device tree parsing hardcodes `pwm_separate =3D false` when multip=
-le PWM children exist, breaking independent cooling zones.
+- [High] Temperature register reads are performed non-atomically without a =
+device lock, breaking the SB-TSI hardware latching mechanism on concurrent =
+accesses.
 --
 
---- Patch [1]: [PATCH] hwmon: emc2305: Add missing device tree compatibles =
----
-commit f16b37d8579458e0cc2f0b0ac6e79ec7dd8c69ac
-Author: Peter Robinson <pbrobinson@gmail.com>
+--- Patch [5]: [PATCH v4 5/8] misc: amd-sbi: Add support for SB-TSI over I3=
+C ---
+commit f466305c592ff454f903d27fc9a9ef283f005d66
+Author: Prathima <Prathima.Lk@amd.com>
 
-hwmon: emc2305: Add missing device tree compatibles
+misc: amd-sbi: Add support for SB-TSI over I3C
 
-Add the missing device tree compatibles for all the variants
-so they can be specified. There's at least the use of emc2301
-already.
+This commit extends the AMD SB-TSI driver to support both I2C and I3C bus
+interfaces. It selects the appropriate transport based on the probed bus ty=
+pe
+and registers both drivers using module_i3c_i2c_driver() while maintaining
+backward compatibility with existing I2C deployments.
 
-> diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c
-> index eef3b021671b0..38034d7a30901 100644
-> --- a/drivers/hwmon/emc2305.c
-> +++ b/drivers/hwmon/emc2305.c
-> @@ -762,6 +762,9 @@ static void emc2305_shutdown(struct i2c_client *clien=
-t)
+> diff --git a/drivers/misc/amd-sbi/tsi-core.c b/drivers/misc/amd-sbi/tsi-c=
+ore.c
+> index 6ef1831515bbb..1c6f37f26d945 100644
+> --- a/drivers/misc/amd-sbi/tsi-core.c
+> +++ b/drivers/misc/amd-sbi/tsi-core.c
+[ ... ]
+> @@ -23,8 +28,56 @@ static int sbtsi_i2c_xfer(struct sbtsi_data *data, u8 =
+reg, u8 *val, bool is_read
+>  	return i2c_smbus_write_byte_data(data->client, reg, *val);
 >  }
 > =20
->  static const struct of_device_id of_emc2305_match_table[] =3D {
-> +	{ .compatible =3D "microchip,emc2301", },
-> +	{ .compatible =3D "microchip,emc2302", },
-> +	{ .compatible =3D "microchip,emc2303", },
->  	{ .compatible =3D "microchip,emc2305", },
->  	{},
->  };
+> +/* I3C read transfer function */
+> +static int sbtsi_i3c_read(struct sbtsi_data *data, u8 reg, u8 *val)
+> +{
+> +	struct sbtsi_i3c_priv *priv =3D to_sbtsi_i3c_priv(data);
+> +	struct i3c_xfer xfers[2] =3D { };
+> +	int ret;
+> +
+> +	priv->tx[0] =3D reg;
 
 [Severity: High]
-This isn't a bug introduced by this patch, but could the lack of locking he=
-re
-cause race conditions?
+Does this sequence need synchronization to protect the shared priv->tx and=
+=20
+priv->rx buffers?
 
-The hwmon subsystem core serializes sysfs operations using its internal loc=
-k,
-which protects emc2305_write(). However, the thermal subsystem callback can
-execute concurrently:
+The hwmon subsystem does not serialize reads and writes to sysfs attributes.
+Without a lock protecting these buffers during the bus transfer, concurrent
+sysfs reads from multiple threads could race, causing threads to overwrite
+the transmit payload or read incorrect response values before or after
+i3c_device_do_xfers() completes.
 
-drivers/hwmon/emc2305.c:emc2305_set_cur_state() {
-	/* Save thermal state. */
-	data->cdev_data[cdev_idx].last_thermal_state =3D state;
-	ret =3D __emc2305_set_cur_state(data, cdev_idx, state);
-	if (ret < 0)
-		return ret;
-}
-
-Should emc2305_set_cur_state() use hwmon_lock() and hwmon_unlock() to preve=
-nt
-corrupting logical fan states and interleaving I2C transactions with
-emc2305_write()?
-
-[Severity: High]
-This is a pre-existing issue, but is it possible for this code to trigger a
-division by zero?
-
-If the hardware returns a small non-zero value between 1 and 7, the shift
-operation evaluates to 0:
-
-drivers/hwmon/emc2305.c:emc2305_show_fan() {
-...
-	ret =3D i2c_smbus_read_word_swapped(client, EMC2305_REG_FAN_TACH(channel));
-	if (ret <=3D 0)
-		return ret;
-
-	ret =3D ret >> EMC2305_TACH_REGS_UNUSE_BITS;
-	ret =3D EMC2305_RPM_FACTOR / ret;
-...
-}
-
-Might we need an additional check to ensure ret is not zero after the shift
-before performing the division?
+> +
+> +	/* Write the register address (DMA_TO_DEVICE). */
+> +	xfers[0].rnw =3D false;
+> +	xfers[0].len =3D 1;
+> +	xfers[0].data.out =3D priv->tx;
+[ ... ]
+> +/* I3C write transfer function */
+> +static int sbtsi_i3c_write(struct sbtsi_data *data, u8 reg, u8 val)
+> +{
+> +	struct sbtsi_i3c_priv *priv =3D to_sbtsi_i3c_priv(data);
+> +	struct i3c_xfer xfers =3D {
+> +		.rnw =3D false,
+> +		.len =3D 2,
+> +		.data.out =3D priv->tx,
+> +	};
+> +
+> +	priv->tx[0] =3D reg;
+> +	priv->tx[1] =3D val;
 
 [Severity: High]
-This isn't a bug introduced by this patch, but does emc2305_write() lack
-bounds checking for val when thermal management is active?
+Similarly, could concurrent sysfs writes overwrite priv->tx here before
+the i3c_device_do_xfers() call finishes?
 
-When a user writes to the PWM sysfs attribute, the input val is used direct=
-ly
-in EMC2305_PWM_DUTY2STATE:
+> +
+> +	return i3c_device_do_xfers(data->i3cdev, &xfers, 1, I3C_SDR);
+> +}
+> +
+> diff --git a/drivers/misc/amd-sbi/tsi-core.h b/drivers/misc/amd-sbi/tsi-c=
+ore.h
+> new file mode 100644
+> index 0000000000000..7e8c0e7c3bcfa
+> --- /dev/null
+> +++ b/drivers/misc/amd-sbi/tsi-core.h
+[ ... ]
+> +struct sbtsi_i3c_priv {
+> +	struct sbtsi_data data;
+> +	u8 tx[2];
+> +	u8 rx __aligned(ARCH_DMA_MINALIGN);
 
-drivers/hwmon/emc2305.c:emc2305_write() {
-...
-			if (IS_REACHABLE(CONFIG_THERMAL)) {
-...
-				data->cdev_data[cdev_idx].last_hwmon_state =3D
-					EMC2305_PWM_DUTY2STATE(val, data->max_state,
-							       EMC2305_FAN_MAX);
-...
-}
+[Severity: Medium]
+Should the tx array also have the __aligned(ARCH_DMA_MINALIGN) attribute?
 
-If val is negative, could the macro EMC2305_PWM_DUTY2STATE evaluate to a
-negative integer that underflows the unsigned long field last_hwmon_state?
+Without it, tx might share a cacheline with the preceding struct sbtsi_data
+fields. When tx is mapped for DMA to device transfers during I3C operations,
+this violates the DMA mapping rules preventing cacheline sharing and can
+trigger kernel warnings.
 
-This appears to bypass the validation naturally present in emc2305_set_pwm(=
-).
+> +};
 
 [Severity: High]
-This is a pre-existing issue, but does device tree parsing correctly support
-independent cooling zones?
+This isn't a bug introduced by this patch, but does the lack of a device-le=
+vel
+lock around temperature register reads break the hardware latching mechanis=
+m?
 
-When pwm_childs is greater than 0, the driver hardcodes pwm_separate to fal=
-se:
+Looking at drivers/hwmon/sbtsi_temp.c in sbtsi_temp_read(), the integer and
+decimal registers are read sequentially:
 
-drivers/hwmon/emc2305.c:emc2305_probe() {
-...
-	pwm_childs =3D emc2305_probe_childs_from_dt(dev);
-...
-	if (!pwm_childs) {
-...
-	} else {
-		data->max_state =3D EMC2305_FAN_MAX_STATE;
-		data->pwm_separate =3D false;
-...
-	}
-...
-}
+    ret =3D sbtsi_xfer(data, reg1, val1, true);
+    if (!ret)
+        ret =3D sbtsi_xfer(data, reg2, val2, true);
 
-Because pwm_separate is forced to false, it looks like emc2305_get_cdev_idx=
-()
-bypasses channel indexing:
-
-drivers/hwmon/emc2305.c:emc2305_get_cdev_idx() {
-...
-	if (!data->pwm_separate)
-		return 0;
-...
-}
-
-Will independent cooling devices mapped to separate fans incorrectly write
-their thermal states to channel 0 and broadcast their PWM values to all fan=
-s?
+If multiple threads concurrently access sysfs, these non-atomic transfers
+could interleave on the bus. This might cause one thread to receive a
+mismatched latched decimal value triggered by another thread's integer read,
+resulting in corrupted temperature reports.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260710112110.4662=
-40-1-pbrobinson@gmail.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260710111642.8500=
+22-1-Akshay.Gupta@amd.com?part=3D5
