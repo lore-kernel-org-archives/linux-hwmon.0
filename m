@@ -1,77 +1,72 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22173349CC2
-	for <linux-hwmon@vger.kernel.org>; Fri, 10 Jul 2026 14:36:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4818348C6E
+	for <linux-hwmon@vger.kernel.org>; Fri, 10 Jul 2026 14:37:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783694219; cv=none; b=Nu+nPIpdJXEdLDV1u755XsUlKfPvwQb272Yxc+pDBgeC5IK0bKKzyEeslTfEibuRVNrRcvCHMmlPbRTKKpqTKd+szQSyExdkboc8Z8I3Ow7cDWahDAT1WKJxWFdOp/MNw6qp0DAyjtUbrkPBQwflgclopT8em2uDHFAAPOdHDz4=
+	t=1783694268; cv=none; b=bl39IjlkSIwZLs4Ys92wlKq7LB1UZZmm2LwKS8BI0gDpQ861qDFgQLe9UjQFIVnQqmLZOYlwNbzFQk5oawhhkCNIAJXqMUi66SQ80OP3CxVB/D1bxiL7KNAjtYpV4ScS8xAj52LZnWQaieoAHcmELDGCj/wMs+38eMkTKB5W13g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783694219; c=relaxed/simple;
-	bh=N0TIROp2trl2RBha1xvvqYGNlJ8YuyPd8ww5wOB3aNE=;
+	s=arc-20240116; t=1783694268; c=relaxed/simple;
+	bh=I0FGiWLBFt5px18T+h2u02DuXF422Q2h2dIDAXT+9d4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ApgYO4zcoxfdNSX5q+gTGtVbIf3suKghrDoAs4ekDCSTGgjesYNpolhawoj0TiIhFaJ4e/GaK5S/4Y/msFLjJDpplGr4UdQXCGia5Uz811oHXvjyTJTXFYDVEmTI4qlKVfHRRx6qo6vRsTXD0oLfT+EYBwbMYMeLq86xiy1Y74c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZrQwKkxv; arc=none smtp.client-ip=209.85.215.181
+	 Content-Type:Content-Disposition:In-Reply-To; b=WDw9RL/8EmwWZAfXsaQazAzN9GxaGct23pPmyZ7mK3LdZ74YRJQVU3J7DFnA+iGaTUS4O8IzvzS58JKOwhQWe4jXSJHuBdfQDQMrbOp5OaIIfDjxQa4Td/a6mxVEgcfocNTmnpR3skAMwu5PWTXvoSQWHZi4wLXHZ2rBFdRwACI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VfMyAdX4; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZrQwKkxv"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c999f162c9aso545157a12.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 10 Jul 2026 07:36:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VfMyAdX4"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-38759bcd877so826327a91.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 10 Jul 2026 07:37:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783694217; x=1784299017; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783694267; x=1784299067; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=6iu6OCaBtR+lMmPhSTRqqa1hHf/yoHoZhIbh3h+vUR0=;
-        b=ZrQwKkxv43nH4UZT6PqdjcpcbdpQFPfiKiON1odHtHGsE+GtFo4JGtqZdYSxoz9BD6
-         SUc/SqTvJjGQOlrs5/0vrPP965S5AnOt37K7nOAsVbrR+cvMN/RLeSK+1IN1w+zEWRj6
-         6qdOvgaQmMd/8YIS5P62UDjdHX6IijjktC7hLVtkXrSOh0hx/oUlJneq58cpMdzHm+5n
-         MQOFm8nEdIn8111Y3UcgeCa+iICCtlWOk7g7cwWzMh1YP1FgnCZEPDibRWPaAoCsjmc8
-         aNx0HJWR6NXlDlk/UFlPXt6m1ek0SipzJN/MtuBOZuU55f+iX5wNsH2mwBRMjaTyM1SZ
-         PjFg==
+        bh=f1EAbgqCofbf0UacpqguLpk9PQP81OggCyfKLGDrUok=;
+        b=VfMyAdX4KZWEC6IlPfkz1hss+MI+MNdYGWC+YTdes2Zl4YUmVtE+O87pQIUjSeFZpy
+         M1T7Fh9U6Ij996ao5yXX9+hCO5NqicewCcwsz2w/3Oaa+W4Tf7Wtb4PHwikqFsA/qtvW
+         TXaLv8zMA3i3uocPXsTHV0DbTkd5RtPfFIkWEQdaxWZgxEYRinxotTr+NI+QE4m/3MFM
+         2AJfz7DYbcCn1yqjDONbcuZpVW6uAMVKic1F1zBPpufKIyDWK4R1qrdskyb/q1wwfboQ
+         +IDP/JMXjCKB9Ykv/E5qyt71KSWESrxGci459eRVlRtnwidyPxX0yZ+2DQ2OVK1BDcj2
+         9LeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783694217; x=1784299017;
+        d=1e100.net; s=20251104; t=1783694267; x=1784299067;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=6iu6OCaBtR+lMmPhSTRqqa1hHf/yoHoZhIbh3h+vUR0=;
-        b=Tl4WMd2FYKM750kyYuvbz3py5imyvAfcgxjn0YMVCH0Ve4Bi0gJgJ2eWvDR7wqGhMv
-         Dl2nanQgLMC0GW26UT5anN9Xa2tUDRMiHuSMqMxOgVjskhELD9NPK9uw57ZV83Zt/m6I
-         pUxJsYH6mWBANhSQVzjaYGMQMropgwPTB2N79ceTdNmXnzm0eKnv2o/U3NCxyApNCuky
-         ZfoTPmSM2gEWlT3UN4L2Puzg0DMnyXA+US2tT+1HmuyPY+/lFEKRZdPbr1RGfnE1nluk
-         IXYe/0pofEqiFFNzU19BK6tOX8LLydCQ3pG/u4n8kERBQgrwzgFyF/g78MwyHvJqBGa2
-         wgnQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoQNaW2F1/XEaha+t0HBfGTVx3KEX9x8ke4Ex8K6RMnKjT0A1A9+ESnT/6RHlCG1XYeJs4KiaNM8Brzpw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlWDViqrSsSrl2vE4f6niLSnsfie8nam/YwpxNERPiUkjz/CEm
-	z5llk/VmQZGGI+VedGqMNgbPHWdVYJYGWKanRyezn8dL2b15Z3Qd3cNS
-X-Gm-Gg: AfdE7cnNgi3ZUtyOosCLym5ndOX31i3hdiiBk79ajHbbUgeCFicP0C6JDMC4m1UwwlV
-	n49HEmqr9KNXhIVqckCPca8vCmWSXRzNel2qKSBoXeHio6bONDGRDI3UeL6mAMxtxJBOtcqxoJy
-	PCiB7ZKOBwgYL9V1m9dEPVbrwrLq77olb0clyAljIULqQa3CD6xb0QZVWY9xr626xm0oucrXfPR
-	l5QI4kMJv6mxY189xFp41Ob/XwkKvGs0PrX7qwJjQt9lTbbNkKGZDLPgTbcrYxlCW7fJsi5lS46
-	Ks1eFiMWFx59MAleZfM9GWTGNEZCH7jQ+a1iAC+Ysh3BqO4c+0Ona7oytqYgphq6E0fN11Nb7bp
-	2wFG5fNE25gv7RQOIOQift0WrT8J2K+qnIePDBSJRpiHU7WxlDHj3MmYjecBZa4yGua3HOZpLBi
-	wJXlZHhzmyuQTvwT0XYTGC2Xaj9Q==
-X-Received: by 2002:a05:6a20:cd95:b0:3b2:a8cd:ef4e with SMTP id adf61e73a8af0-3c0bc9da64amr14293496637.28.1783694217401;
-        Fri, 10 Jul 2026 07:36:57 -0700 (PDT)
+        bh=f1EAbgqCofbf0UacpqguLpk9PQP81OggCyfKLGDrUok=;
+        b=fcR+v/TFpvC4Qs0phzTda6CAPAtcCjfrPiF0QklG1LpORN8yRp6UUGE3sHuWW0VOjK
+         0MZF+loedUji19BUpDbKeunh3jf2TP74sOTESJkXd2CR+WjAkFRn3juzdGwC0DwtUbnu
+         wQTF1q5K8f3WzI6puntb2lMMshEwzK/1uZRSA9S/CKC2wckrmwCRqzCWgyjSBnqyfQNZ
+         WCbF0ltTZCCt7zRG6NeGiCCPb5tsiqUBRyy+yhyiUPPhQEh6L5tTWafhzG/qf3nKmi5f
+         GexsG8Goa9HUW+cTKteD1S7beJG9L2q0qT7n1F+5tfsw7TsdPfMmWOto783Arezeojej
+         obXA==
+X-Forwarded-Encrypted: i=1; AHgh+RpTrMl0l9WmcMe2dWLdZztbUd1vLzSzbQHKdeYSGe85WuJWTRugc6TcGaW3waNK/dSQQ6rqxWchgAj29g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzB7LSKtJzcXKrN4cEeKyM2kYT2z64cEBElc4NoQIZm39KEsWcf
+	My2dWsJ3qICqIFuOXYLyAZpgx/DglvHINicoxsSDXNp82/KEG8/W8gxv
+X-Gm-Gg: AfdE7cm/dFQJDCnyZJx8HH9DvWDyw4VrwvDQ3Y3elspUWYu6s3XJjqgKR1ej8tEltJI
+	zSUhUw5/1Ldsj/kaq1hNAniKxTgyeHVbJgABfYZFrQHXsUUxM2pUu1AKjNHcxJATbBwploPFCz1
+	Y3IdoGFNMuE1KZAUgS99piwVglllO9++3hY1LyLRNf8w7fexUhkXED9/z2XAIzE72XCakwc5FbE
+	5iSC0ymvR85eFJEjEKhkxgvUID6u1FNWQYUm9Im2P5fxs4hknZLtIA9m0XInP4U2kuEhCt3waYy
+	xsnF45b697+EYtJ/xUMcu3ELCXfiT/F63vWYdebVOT8qqLYEle+pFdHJVzsdJMa7j6dRMJ8PljS
+	FBQNbBppaqHEoaUoja18hekzKQA5zaWvSk6QKzgnN/v876xuVxQRWsakIDpkXGUUQdecYVFVrp0
+	0tdV3oncd51p+pNPehppsabJAu0g==
+X-Received: by 2002:a17:90a:d887:b0:37f:9ce0:af36 with SMTP id 98e67ed59e1d1-389421ad646mr12688787a91.33.1783694266923;
+        Fri, 10 Jul 2026 07:37:46 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b6593c76dsm41782795c88.3.2026.07.10.07.36.56
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-313b3206aaasm6581894eec.13.2026.07.10.07.37.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jul 2026 07:36:56 -0700 (PDT)
+        Fri, 10 Jul 2026 07:37:46 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 10 Jul 2026 07:36:55 -0700
+Date: Fri, 10 Jul 2026 07:37:45 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc: Vishaal Saraiya <vishaal.saraiya@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: (asus-ec-sensors) add ROG STRIX X870E-E
- GAMING WIFI7 R2
-Message-ID: <8d0a9350-ff37-4acf-88e5-7b4dfaad17d8@roeck-us.net>
-References: <20260709204037.1998433-1-eugene.shalygin@gmail.com>
- <20260709204037.1998433-3-eugene.shalygin@gmail.com>
+To: Sarbajit Sarkar <sarbajitsarkar16108@gmail.com>
+Cc: sergiomelas@gmail.com, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (yogafan) Add support for Lenovo LOQ 15IAX9
+Message-ID: <69c9530e-66f5-4948-9cdb-04896c09fdf3@roeck-us.net>
+References: <20260709183500.13761-1-sarbajitsarkar16108@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -80,16 +75,19 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260709204037.1998433-3-eugene.shalygin@gmail.com>
+In-Reply-To: <20260709183500.13761-1-sarbajitsarkar16108@gmail.com>
 
-On Thu, Jul 09, 2026 at 10:38:35PM +0200, Eugene Shalygin wrote:
-> From: Vishaal Saraiya <vishaal.saraiya@gmail.com>
+On Fri, Jul 10, 2026 at 12:05:00AM +0530, Sarbajit Sarkar wrote:
+> Add the Lenovo LOQ 15IAX9 product family to the yogafan dmi_system_id
+> table. Unlike the Legion series, ACPI table extraction reveals this LOQ
+> utilizes an 8-bit EC architecture with a 100x multiplier, but maintains
+> a dual-fan setup via the \_SB.PC00.LPCB.EC0.FA1S and FA2S paths.
 > 
-> The board sensors is a copy of ROG STRIX X870E-E GAMING WIFI7, thus we
-> simply reuse its board_info struct.
+> A new loq_15iax9_8bit_dual_cfg structure was added to properly map these
+> hardware registers and calculate RPMs correctly while avoiding path
+> conflicts with AMD-based LOQ variants.
 > 
-> Signed-off-by: Vishaal Saraiya <vishaal.saraiya@gmail.com>
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+> Signed-off-by: Sarbajit Sarkar <sarbajitsarkar16108@gmail.com>
 
 Applied.
 
