@@ -1,32 +1,32 @@
 Received: from mx1.white.stw.pengutronix.de (mx1.white.stw.pengutronix.de [185.203.200.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 931AE3D7D94;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92FCE3A59B3;
 	Fri, 10 Jul 2026 10:14:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.200.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783678451; cv=none; b=cb2G7uBh7XYTF1o0y9xdVvWbpqEo/7jsLRreS03IWHDhKea12Q0+oXHdaKZJz2WAem/pjcTc5NKpH9sVoZFpekhBbE4mSzth2qfPZHVuTWZkqnbtDapKzloG2RGf7+cLo/Gnibonei9GXBdYE8kcCEbVz83neVw9xRC5cw+gkk0=
+	t=1783678452; cv=none; b=cj4nvPIlqSPUykVQTB/OEn0j1liXlHb8dFsS3Pg3WcXHpocc6cYS4kRqfn5ykAr9DpPSpN59PeonZb+6EiwqjlXIA/gBjYisqks4I9gX25gVL/DUbVKebNNiSpYJPMB6RgvMWsqtFnAfCdbqo/NlTCB5gBPepZGLzV3T43SecOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783678451; c=relaxed/simple;
-	bh=kckKLZTlLLaIYYQY/kr99rIcIuaXh/GlZBFqt3AvhAc=;
+	s=arc-20240116; t=1783678452; c=relaxed/simple;
+	bh=5dbQK/suPJ8ZmFPk4oGbRCuFX1L0Gq/LpJt+3tsZ8Ck=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gJAui0vjpcFXJPTPJYN5r6t3AmfEGTTK+neeM54VBMHl4cFFd66KYCRp3xQSsMqIwG73wyy0p1bA+z7edLQZaRXsyHdOTM4V6eJplydYxn2sy8EQ/ZCP2k5fMOb3wCeJgRRsmLVRI38Uglv5hK8V9ZpNoPl30E4ihw3qKyRV42k=
+	 MIME-Version:Content-Type; b=iaIBG81nQ1CiifVFIQTxhNC+4u87anV+gTwTv3u7+q/+CgkUT1QfDyjBVuK+2mG9S6Gv73fnRG6Ul6VEqbuC1IoBe0jIz+m2jF66OhNjcObld/c5j65/3P4zFe6QuzAYjx28PAcNyRiPQ4DidypqOc304AvD32H3d/ZcAcTsj68=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.200.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from drehscheibe.grey.stw.pengutronix.de (drehscheibe.grey.stw.pengutronix.de [IPv6:2a0a:edc0:0:c01:1d::a2])
 	(Authenticated sender: relay-from-drehscheibe.grey.stw.pengutronix.de)
-	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id 18377202016;
+	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id 271D8202018;
 	Fri, 10 Jul 2026 12:14:00 +0200 (CEST)
 Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac] helo=dude04)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <ore@pengutronix.de>)
-	id 1wi8F5-001425-2w;
+	id 1wi8F5-001427-3A;
 	Fri, 10 Jul 2026 12:13:59 +0200
 Received: from ore by dude04 with local (Exim 4.98.2)
 	(envelope-from <ore@pengutronix.de>)
-	id 1wi8F5-0000000AwDA-3TZL;
+	id 1wi8F5-0000000AwDU-3hzw;
 	Fri, 10 Jul 2026 12:13:59 +0200
 From: Oleksij Rempel <o.rempel@pengutronix.de>
 To: Guenter Roeck <linux@roeck-us.net>,
@@ -43,9 +43,9 @@ Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
 	linux-hwmon@vger.kernel.org,
 	linux-gpio@vger.kernel.org,
 	David Jander <david@protonic.nl>
-Subject: [PATCH v15 1/6] dt-bindings: pinctrl: add NXP MC33978/MC34978 MSDI
-Date: Fri, 10 Jul 2026 12:13:50 +0200
-Message-ID: <20260710101358.2606941-2-o.rempel@pengutronix.de>
+Subject: [PATCH v15 3/6] mfd: mc33978: Add NXP MC33978/MC34978 MSDI support
+Date: Fri, 10 Jul 2026 12:13:52 +0200
+Message-ID: <20260710101358.2606941-4-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260710101358.2606941-1-o.rempel@pengutronix.de>
 References: <20260710101358.2606941-1-o.rempel@pengutronix.de>
@@ -55,258 +55,285 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add device tree binding documentation for the NXP MC33978 and MC34978
-Multiple Switch Detection Interface (MSDI) devices.
+Add the Multi-Function Device (MFD) driver for the NXP MC33978 and
+MC34978 Multiple Switch Detection Interfaces (MSDI).
 
-The MC33978 and MC34978 differ primarily in their operating temperature
-ranges. While not software-detectable, providing specific compatible
-strings allows the hwmon subsystem to correctly interpret thermal
-thresholds and hardware faults.
-
-These ICs monitor up to 22 mechanical switch contacts in automotive and
-industrial environments. They provide configurable wetting currents to
-break through contact oxidation and feature extensive hardware
-protection against thermal overload and voltage transients (load
-dumps/brown-outs).
-
-The device interfaces via SPI. While it provides multiple functions, its
-primary hardware purpose is pin/switch control. To accurately represent
-the hardware as a single physical integrated circuit without unnecessary
-DT overhead, all functions are flattened into a single pinctrl node:
-- pinctrl: Exposing the 22 switch inputs (SG/SP pins) as a GPIO controller
-  and managing their pin configurations.
-- hwmon: Exposing critical hardware faults (OT, OV, UV) and static
-  voltage/temperature thresholds.
-- mux: Controlling the 24-to-1 analog multiplexer to route pin voltages,
-  internal temperature, or battery voltage to an external SoC ADC.
+This driver binds to the SPI device, sequences the VDDQ (logic) and VBATP
+(battery) regulators, delegates bus, regmap and irq_domain setup to
+mc33978_core_init() from the core module added in the previous patch, and
+instantiates the child devices (pinctrl, hwmon, mux) from match data.
 
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-Reviewed-by: Linus Walleij <linusw@kernel.org>
 ---
-changes v14:
-- add /schemas/mux/mux-controller.yaml# to fix idle-state validation
-changes v13:
-- no changes
-changes v12:
-- no changes
-changes v11:
-- no changes
-changes v10:
-- no changes
-changes v9:
-- no changes
-changes v8:
-- Update IRQ_TYPE_* macros include path reference in documentation from
-  interrupt-controller.h to dt-bindings/interrupt-controller/irq.h.
-- Add bias-disable, drive-open-drain, drive-open-source, and drive-strength
-  to the list of supported pin configuration properties.
-changes v7:
-- no changes
-changes v6:
-- add Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-- add Reviewed-by: Linus Walleij <linusw@kernel.org>
-changes v5:
-- Commit Message: Added justification for distinct compatible strings
-  based on temperature ranges.
-- Restricted pins property to an explicit enum of valid hardware pins
-changes v4:
-- Drop the standalone mfd/nxp,mc33978.yaml schema entirely.
-- Move the unified device binding to bindings/pinctrl/nxp,mc33978.yaml,
-- Remove the dedicated child node compatible strings (nxp,mc33978-pinctrl).
-- Flatten the pinctrl/gpio properties directly into the main SPI device
-  node.
-changes v3:
-- Drop regular expression pattern from pinctrl child node and define
-  it as a standard property
-- Reorder required properties list in MFD binding
-- Remove stray blank line from the MFD binding devicetree example
-- Replace unevaluatedProperties with additionalProperties in the pinctrl
-  binding
-changes v2:
-- Squashed MFD, pinctrl, hwmon, and mux bindings into a single patch
-- Removed the empty hwmon child node
-- Folded the mux-controller node into the parent MFD node
-- Added vbatp-supply and vddq-supply to the required properties block
-- Changed the example node name from mc33978@0 to gpio@0
-- Removed unnecessary literal block scalars (|) from descriptions
-- Documented SG, SP, and SB pin acronyms in the pinctrl description
-- Added consumer polarity guidance (GPIO_ACTIVE_LOW/HIGH) for SG/SB
-  inputs, with a note on output circuit dependency
-- Updated commit message
----
- .../bindings/pinctrl/nxp,mc33978.yaml         | 160 ++++++++++++++++++
- 1 file changed, 160 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,mc33978.yaml
+This patch depends on the preceding "platform: misc: add NXP MC33978/MC34978
+core driver" patch, which provides mc33978_core_init() and the register
+definitions in include/linux/mfd/mc33978.h. Without it this driver neither
+builds nor links.
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/nxp,mc33978.yaml b/Documentation/devicetree/bindings/pinctrl/nxp,mc33978.yaml
+The child devices registered here (pinctrl, hwmon, mux) are added by the
+follow-up patches in this series, so the devices stay unbound until those
+are applied.
+
+changes v15:
+- Split from the core driver patch, as requested by Lee Jones. This patch
+  now carries only the SPI binding, regulator power sequencing and child
+  device registration.
+- Follow the drivers/mfd/ subject convention: "mfd: <driver>: <Description>".
+- Drop the "mfd" infix from the probe function, match tables and spi_driver
+  names: mc33978_mfd_probe() -> mc33978_probe(), mc33978_mfd_of_match ->
+  mc33978_of_match, mc33978_mfd_spi_id -> mc33978_spi_id and
+  mc33978_mfd_driver -> mc33978_driver.
+---
+ drivers/mfd/Kconfig   |  16 ++++
+ drivers/mfd/Makefile  |   2 +
+ drivers/mfd/mc33978.c | 195 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 213 insertions(+)
+ create mode 100644 drivers/mfd/mc33978.c
+
+diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+index 763ce6a34782..f5eb315d705b 100644
+--- a/drivers/mfd/Kconfig
++++ b/drivers/mfd/Kconfig
+@@ -2559,6 +2559,22 @@ config MFD_UPBOARD_FPGA
+ 	  To compile this driver as a module, choose M here: the module will be
+ 	  called upboard-fpga.
+ 
++config MFD_MC33978
++	tristate "NXP MC33978/MC34978 MFD driver"
++	depends on OF && SPI
++	select MFD_CORE
++	select MC33978_CORE
++	help
++	  MFD driver for NXP MC33978/MC34978 industrial input controllers.
++
++	  The MC33978/MC34978 devices provide 22 switch detection inputs,
++	  analog multiplexing (AMUX), and comprehensive hardware fault
++	  detection. This driver provides IRQ domain, event processing,
++	  and interfaces for child devices (pinctrl, hwmon, mux).
++
++	  To compile this driver as a module, choose M here: the module
++	  will be called mc33978.
++
+ config MFD_MAX7360
+ 	tristate "Maxim MAX7360 I2C IO Expander"
+ 	depends on I2C
+diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+index dd4bb7e77c33..690838edbe77 100644
+--- a/drivers/mfd/Makefile
++++ b/drivers/mfd/Makefile
+@@ -122,6 +122,8 @@ obj-$(CONFIG_MFD_MC13XXX)	+= mc13xxx-core.o
+ obj-$(CONFIG_MFD_MC13XXX_SPI)	+= mc13xxx-spi.o
+ obj-$(CONFIG_MFD_MC13XXX_I2C)	+= mc13xxx-i2c.o
+ 
++obj-$(CONFIG_MFD_MC33978)	+= mc33978.o
++
+ obj-$(CONFIG_MFD_PF1550)	+= pf1550.o
+ 
+ obj-$(CONFIG_MFD_NCT6694)	+= nct6694.o
+diff --git a/drivers/mfd/mc33978.c b/drivers/mfd/mc33978.c
 new file mode 100644
-index 000000000000..27eea3d03341
+index 000000000000..541a391152ef
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/pinctrl/nxp,mc33978.yaml
-@@ -0,0 +1,160 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/pinctrl/nxp,mc33978.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/mfd/mc33978.c
+@@ -0,0 +1,195 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2024 David Jander <david@protonic.nl>, Protonic Holland
++ * Copyright (C) 2026 Oleksij Rempel <kernel@pengutronix.de>, Pengutronix
++ *
++ * MC33978/MC34978 MFD Driver - Device binding and power sequencing only.
++ * Core logic (regmap/IRQ/events) lives in separate mc33978-core module to
++ * isolate complex SPI protocol from simple MFD device registration.
++ */
 +
-+title: NXP MC33978/MC34978 Multiple Switch Detection Interface
++#include <linux/delay.h>
++#include <linux/irqdomain.h>
++#include <linux/mfd/core.h>
++#include <linux/mfd/mc33978.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/regulator/consumer.h>
++#include <linux/spi/spi.h>
 +
-+maintainers:
-+  - David Jander <david@protonic.nl>
-+  - Oleksij Rempel <o.rempel@pengutronix.de>
++/*
++ * MC33978 vs MC34978: Identical register map and pin configuration; only
++ * temperature range differs (MC33978: -40°C to +125°C, MC34978: -40°C to
++ * +105°C). Both variants share IRQ layout and resources. Device type
++ * preserved for potential errata handling and hwmon-specific attributes.
++ */
++enum mc33978_device_type {
++	MC33978 = 1,  /* Must be non-zero: used as match_data pointer value */
++	MC34978 = 2,
++};
 +
-+description: |
-+  The MC33978 and MC34978 are Multiple Switch Detection Interface (MSDI)
-+  devices with 22 switch inputs, integrated fault detection, and analog
-+  multiplexer (AMUX) for voltage/temperature monitoring.
++static const struct resource mc33978_hwmon_resources[] = {
++	DEFINE_RES_IRQ(MC33978_HWIRQ_FAULT),
++};
 +
-+  Pin numbering:
-+  - Pins 0-13: SG0-SG13 (Switch-to-Ground inputs). These pins monitor
-+    contacts closed to ground and typically require GPIO_ACTIVE_LOW
-+    flags when used as digital inputs.
-+  - Pins 14-21: SP0-SP7 (Programmable inputs). These can be configured
-+    as SG (Switch-to-Ground) or SB (Switch-to-Battery) inputs. SB
-+    inputs monitor contacts closed to the battery voltage and typically
-+    require GPIO_ACTIVE_HIGH flags when used as digital inputs.
++static const struct mfd_cell mc33978_cells[] = {
++	MFD_CELL_NAME("mc33978-pinctrl"),
++	MFD_CELL_RES("mc33978-hwmon", mc33978_hwmon_resources),
++	MFD_CELL_NAME("mc33978-mux"),
++};
 +
-+  Output Emulation:
-+  The hardware lacks standard push-pull output drivers. Outputs are emulated
-+  by toggling the programmable wetting current sources (acting as pull-ups
-+  or pull-downs) and the hardware tri-state registers. Because of this
-+  physical constraint:
-+  - Consumers using pins as outputs MUST flag them with GPIO_OPEN_DRAIN or
-+    GPIO_OPEN_SOURCE in the device tree.
-+  - Push-pull configurations are physically unsupported.
-+  - The active polarity depends entirely on the external circuit (e.g., how
-+    an LED is wired) and must be flagged accordingly by the consumer.
++static const struct mfd_cell mc34978_cells[] = {
++	MFD_CELL_NAME("mc34978-pinctrl"),
++	MFD_CELL_RES("mc34978-hwmon", mc33978_hwmon_resources),
++	MFD_CELL_NAME("mc34978-mux"),
++};
 +
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-+  - $ref: /schemas/mux/mux-controller.yaml#
++struct mc33978_ddata {
++	struct irq_domain *domain;
++};
 +
-+properties:
-+  compatible:
-+    enum:
-+      - nxp,mc33978
-+      - nxp,mc34978
++static int mc33978_probe(struct spi_device *spi)
++{
++	unsigned long type;
++	const struct mfd_cell *cells;
++	struct device *dev = &spi->dev;
++	struct mc33978_ddata *ddata;
++	int num_cells;
++	int ret;
 +
-+  reg:
-+    maxItems: 1
-+    description: SPI chip select number
++	ddata = devm_kzalloc(dev, sizeof(*ddata), GFP_KERNEL);
++	if (!ddata)
++		return -ENOMEM;
 +
-+  spi-max-frequency:
-+    maximum: 8000000
-+    description: Maximum SPI clock frequency (up to 8 MHz)
++	spi_set_drvdata(spi, ddata);
 +
-+  interrupts:
-+    maxItems: 1
-+    description:
-+      INT_B pin interrupt. Active-low, indicates pin state changes or
-+      fault conditions.
++	/* Power up chip: VDDQ first per datasheet sequencing requirements */
++	ret = devm_regulator_get_enable(dev, "vddq");
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to enable VDDQ supply\n");
 +
-+  interrupt-controller: true
++	ret = devm_regulator_get_enable(dev, "vbatp");
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to enable VBATP supply\n");
 +
-+  '#interrupt-cells':
-+    const: 2
-+    description:
-+      First cell is the IRQ number (0-21 for pins, 22 for faults).
-+      Second cell is the trigger type (IRQ_TYPE_* from dt-bindings/interrupt-controller/irq.h).
++	/*
++	 * Wait for power-on reset to complete. Datasheet specifies t_ACTIVE
++	 * (time from power-up to device operational) as max 450µs.
++	 */
++	fsleep(450);
 +
-+  '#mux-control-cells':
-+    const: 0
-+    description:
-+      Present if the device AMUX selector is used as a mux provider.
-+      Consumers (e.g. io-channel-mux) must provide settle-time-us for the
-+      external ADC sampling path.
++	/*
++	 * Core module creates regmap/IRQ domain/event handling. Separated
++	 * because custom SPI protocol needs complex regmap_bus implementation.
++	 *
++	 * API contract: mc33978_core_init() initializes domain_out to NULL on
++	 * entry. On success (return 0), domain_out is guaranteed to point to a
++	 * valid IRQ domain. On error, domain_out remains NULL. This allows
++	 * safe dereference of ddata->domain below without NULL check after
++	 * verifying ret == 0.
++	 */
++	ret = mc33978_core_init(dev, spi, &ddata->domain);
++	if (ret)
++		return ret;
 +
-+  vddq-supply:
-+    description: Digital supply voltage
++	/*
++	 * Validate IRQ domain size before passing to child devices.
++	 * hwirq_max is exclusive (represents size), we need MC33978_NUM_IRQS
++	 * entries (0..22, total 23).
++	 */
++	if (ddata->domain->hwirq_max < MC33978_NUM_IRQS)
++		return dev_err_probe(dev, -EINVAL,
++				     "IRQ domain has insufficient hwirqs (need %d)\n",
++				     MC33978_NUM_IRQS);
 +
-+  vbatp-supply:
-+    description: Battery/power supply
++	/*
++	 * Device type stored as pointer value in OF/SPI ID tables.
++	 * Explicit zero-check: spi_get_device_match_data() won't return NULL
++	 * since probe matched, but .data could be NULL if table misconfigured.
++	 */
++	type = (unsigned long)spi_get_device_match_data(spi);
++	if (!type)
++		return dev_err_probe(dev, -EINVAL, "missing device match data\n");
 +
-+  gpio-controller: true
++	switch (type) {
++	case MC33978:
++		cells = mc33978_cells;
++		num_cells = ARRAY_SIZE(mc33978_cells);
++		break;
++	case MC34978:
++		cells = mc34978_cells;
++		num_cells = ARRAY_SIZE(mc34978_cells);
++		break;
++	default:
++		return dev_err_probe(dev, -ENODEV, "unknown device type\n");
++	}
 +
-+  '#gpio-cells':
-+    const: 2
++	/*
++	 * Child devices inherit IRQ domain for platform_get_irq(). devm cleanup
++	 * order is critical (LIFO - Last In, First Out):
++	 *
++	 * Teardown sequence:
++	 * 1. THIS: devm_mfd_add_devices() cleanup
++	 *    - Child devices removed, child devm_request_irq() freed
++	 * 2. Core: devm_request_threaded_irq() cleanup in mc33978_core_init()
++	 *    - Parent IRQ handler freed, no new events triggered
++	 * 3. Core: devm_add_action(mc33978_teardown) cleanup
++	 *    - event_work canceled via cancel_work_sync()
++	 * 4. Core: devm_regmap_init() cleanup
++	 *    - Regmap destroyed (safe: work stopped, IRQ freed)
++	 * 5. Core: devm_add_action(mc33978_irq_domain_remove) in mc33978_irq_init()
++	 *    - IRQ domain removed (safe: children gone, work stopped)
++	 *
++	 * Step 3 is critical: event_work accesses both regmap and IRQ domain.
++	 * cancel_work_sync() in mc33978_teardown() ensures the worker completes
++	 * before steps 4-5 destroy the resources it uses.
++	 *
++	 * Core module manually calls irq_dispose_mapping() for all hwirqs before
++	 * irq_domain_remove() because free_irq() doesn't dispose mappings, and
++	 * irq_domain_remove() expects an empty radix tree.
++	 */
++	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO,
++				   cells, num_cells,
++				   NULL, 0, ddata->domain);
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to add MFD child devices\n");
 +
-+  ngpios:
-+    const: 22
++	return 0;
++}
 +
-+patternProperties:
-+  '^.*-grp$':
-+    type: object
-+    $ref: /schemas/pinctrl/pincfg-node.yaml#
-+    additionalProperties: false
-+    description: Pin configuration subnodes.
-+    properties:
-+      pins:
-+        items:
-+          enum: [sg0, sg1, sg2, sg3, sg4, sg5, sg6, sg7, sg8, sg9,
-+                 sg10, sg11, sg12, sg13, sp0, sp1, sp2, sp3,
-+                 sp4, sp5, sp6, sp7]
++static const struct of_device_id mc33978_of_match[] = {
++	{ .compatible = "nxp,mc33978", .data = (void *)MC33978 },
++	{ .compatible = "nxp,mc34978", .data = (void *)MC34978 },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, mc33978_of_match);
 +
-+      bias-pull-up: true
-+      bias-pull-down: true
-+      bias-high-impedance: true
-+      bias-disable: true
-+      drive-open-drain: true
-+      drive-open-source: true
-+      drive-strength:
-+        enum: [2, 6, 8, 10, 12, 14, 16, 20]
++static const struct spi_device_id mc33978_spi_id[] = {
++	{ .name = "mc33978", .driver_data = MC33978 },
++	{ .name = "mc34978", .driver_data = MC34978 },
++	{ }
++};
++MODULE_DEVICE_TABLE(spi, mc33978_spi_id);
 +
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-controller
-+  - '#interrupt-cells'
-+  - vddq-supply
-+  - vbatp-supply
-+  - gpio-controller
-+  - '#gpio-cells'
++static struct spi_driver mc33978_driver = {
++	.driver = {
++		.name = "mc33978",
++		.of_match_table = mc33978_of_match,
++		/*
++		 * Suppress bind/unbind via sysfs. The pinctrl child driver has
++		 * suppress_bind_attrs=true due to a pinctrl subsystem bug, which
++		 * means this MFD parent cannot be unbound either (device links
++		 * require all children to unbind first).
++		 */
++		.suppress_bind_attrs = true,
++	},
++	.probe = mc33978_probe,
++	.id_table = mc33978_spi_id,
++};
++module_spi_driver(mc33978_driver);
 +
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        msdi: gpio@0 {
-+            compatible = "nxp,mc33978";
-+            reg = <0>;
-+            spi-max-frequency = <4000000>;
-+
-+            interrupt-parent = <&gpiog>;
-+            interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
-+            interrupt-controller;
-+            #interrupt-cells = <2>;
-+
-+            vddq-supply = <&reg_3v3>;
-+            vbatp-supply = <&reg_12v>;
-+
-+            #mux-control-cells = <0>;
-+            idle-state = <22>;
-+
-+            gpio-controller;
-+            #gpio-cells = <2>;
-+            ngpios = <22>;
-+
-+            door-grp {
-+                pins = "sg0";
-+                bias-high-impedance;
-+            };
-+        };
-+    };
++MODULE_AUTHOR("David Jander <david@protonic.nl>");
++MODULE_AUTHOR("Oleksij Rempel <o.rempel@pengutronix.de>");
++MODULE_DESCRIPTION("NXP MC33978/MC34978 MFD driver");
++MODULE_LICENSE("GPL");
++MODULE_SOFTDEP("pre: mc33978-core");
 -- 
 2.47.3
 
