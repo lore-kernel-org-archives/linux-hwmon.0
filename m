@@ -1,110 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC6A39E9D6
-	for <linux-hwmon@vger.kernel.org>; Sat, 11 Jul 2026 10:18:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2F43BB9EF
+	for <linux-hwmon@vger.kernel.org>; Sat, 11 Jul 2026 12:29:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783765126; cv=none; b=O2GUoMU5j/QrML/AN9flnucVXdABXiJLv25CGovnS02xrhgrI2DcfbeJXYjJdN9GOFoACvIJz8AyDXEn1Fhdri4YvipJJM+vhQmDpvcqFVO7Q3/ihZs3c3WSU4cwL6bM44FUJksh7MK/hneAxrB6+Bbxnq4j2Bx0Ip3OmWz+Sl8=
+	t=1783772992; cv=none; b=GojaACoYYb8MAqdWPIkX2XhpsWC7Ru5tFXe+xltaLrJsL+EhnKTqoEX9+q2eH1+rX2b0QVbC61I8y36xNpPupB/P771WTpoMl+q3N9KmhdMV+chBzoKueQlpL5qdzg3ftgHngJfMH0lIkl9rHsM0gMIyqxqAukjyWyj5oVcqd7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783765126; c=relaxed/simple;
-	bh=bJ35nC1bjGd8m2IosJgzNfzqjq+xqP3WFIEKE3jdN+g=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ks1gWHV/Ut0M2RWVVs0zjpDVr+tK1KhWp26j+f7RTLj8JqCkKSERb6Uns/appJeHo5IfeCL68nSdOMnG6XmIYjHP+f2pX59KBsInkBBFqGhC7dCJ2DeQ53SJml1GaDzruGtZjZQLatjLoexl9fcMtASLsFKfN2AI8W+Ak9nKI3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SCRDZg6G; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783772992; c=relaxed/simple;
+	bh=ryYcUF8ZEGtCcLlptxCoVjdI6mO2AD5GoZb6OhWHpYA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=q3qS3PbHI/R2iWdI4gEwppzzsA9qWP5r31QuFxEbeda9hnwuVcPVYxeNzXQRQD++ivwNseedrCukFLXljCmWa8mKI/G22ag6qQuaiVjM8sYIWaKlD0/mXAxHNK4dMPMFvFO0Jm+PkYY84uF3TS52tkX9bcaqRwBaex/D4fQKo0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nyl9TXjD; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SCRDZg6G"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1885F1F000E9;
-	Sat, 11 Jul 2026 10:18:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783765125;
-	bh=5pG1UIznZRFaG4xm16FY/JHAUi9a/KYHYUSd+3cIxbU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=SCRDZg6GwC/a1mEj5fER0rkxQcFfmbQ/iqdiDzsd8qzFE/fCXI8xd4J/BhBDWXlJZ
-	 A4yfSwlt+lY0+kC2Tac0cWvULB38l8tWGt2NbNLjKmrWB6y/9CrZn24Ttb9TpaS9fk
-	 7Xtx0Sx+5fOfsMcQZK3q81zGPOuMMPKw6xuLgzMrBx2sL8igeOaVeed7gHEmUB9lp+
-	 RZ9/Au/en15tDMsNss8QhFRj2liM9GNObWEop1hJp7Km9BmubKswdfzwAJ5FNXflb9
-	 DABc6iuG4hQ98O5j6gMaROKYNBIp6OBSMTSX29dI10IfaE54izZITAkbemhvyeZnaG
-	 3tvOQ5DCLZ3ug==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 1/1] hwmon: (asus-ec-sensors) detect unconnected
- physical sensors
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Eugene Shalygin" <eugene.shalygin@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260711101143.571191-2-eugene.shalygin@gmail.com>
-References: <20260711101143.571191-1-eugene.shalygin@gmail.com>
- <20260711101143.571191-2-eugene.shalygin@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 11 Jul 2026 10:18:44 +0000
-Message-Id: <20260711101845.1885F1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nyl9TXjD"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-4720d22c94aso1480863f8f.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 11 Jul 2026 05:29:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783772990; x=1784377790; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Wm+/anItRPAOMTZB8F871YqoZpwcZIgSLOZ4N8FvHYo=;
+        b=nyl9TXjDzZrMmQAAoBdOgsXR/uiCNvHLjg0dqAPIyKlj+r511+vTPjeWNW8f7KvQKh
+         w2UJWQPU4ajXJblhz2+SI794o2qtsAPphzGmuUbnI8QcA+TF47/UU8U3iWID4c4mEkK2
+         Gz66YqpUXpe914WifJYcHXzbpejnGlAE/CTMMlTMkFRer/yXFiG3ihg27qu+qZ5uNdH2
+         O2pBZgFIYwWWxoQT8GsJEZPCbJvzwmbLtCKFuLbQRd89DSbuqd1TTuSuXAUR24UM6Ab3
+         Z+fVKj2S+X7cxDJk/+9/j2eZHw2FNGpVBvsMp/ara/ryktimcQPgVHeKLS5Q1QvWkGr4
+         wYSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783772990; x=1784377790;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Wm+/anItRPAOMTZB8F871YqoZpwcZIgSLOZ4N8FvHYo=;
+        b=T8AuioWbIJ/KJNH/gEMO2Xdx+an+AA+TT8ijjRDAo6ASzVFl+aGl4qgUKEkr0XnZDD
+         lW/eW6U4F/fdmzhtqspYyrlvu/x50rJRCHhtz5TG/yStp3hZrdYLTDgLqVPHQu57KEVc
+         w6a0pvwJDdxishZe1fiEKTaa3YBw1SinsIgtp7NW4Zr2/1SX12MMnrGBcWcB18M7E22W
+         UKxcqQ9QKKAx/sUYh+3LtEIdDbq253ygJh0naAWDzm5OSN3wxKool8oNuinScAcBTkf/
+         4Z9JSUnTIEkcVxhIoKHP716lUa5tbupftwKeJgRhPJWJUWxnFasVOOnATGvOn+8NGaG/
+         bzoQ==
+X-Forwarded-Encrypted: i=1; AHgh+RoYGvre7EM/OcLWQvCN6sXqG7GI0nyNpkPLVK7GQFt9ZWGC83rp5Zx4s4uRjjaJBtHYuXfvAEveJcOMOw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTkgoM7NfUfbbPhmcGob4VAE+VHLt13VtkVy8sVbv/fy+/3zA6
+	pBb7rooW/639qqwt1aZZR/R6B26HQaSZpFGdKLjkvZUoEGfwWmgSPr+2
+X-Gm-Gg: AfdE7cnW35BHVMjYzHxoiKeCBBeBUFhcubJIH+3BJZhXl3C1REYyGig+cYv3wGcJwG5
+	9/J67/MBSLIJGpE19Sg4iIWGhDfD8B6lyXnazgdqNPFvxcNCoX+xDOi01R3LANRPRB5GmNp3y1M
+	w/Ifh5SDQVAAVaOqHfNJzdOD9xmrWWwe9agugIUMAh84b7DqMwVCwyTn8oUt91vBi4UV+1EUbnc
+	WtaSAFLiw8jyk/MuIJQp/ccQJRuM+uD67wbD8fbjnd2jGl3EypO4Hgsfm3Ej+98WJXIZmEMBIo8
+	XiLvdIDe087/iCl6FDXYPFGSHhe6N8nkWuEECPKxDyynVCi7Fujcf5RnQSm1cKjM2ulpd/3H9zt
+	hB2btWd3+GpBskYtFElzaWW6SPMw0WbmqAKKwJIh5l0VjkrQMmLVaO+iZRFzU9Bj7hmErQxKP9e
+	LEbGbLoh+fniJ5Oli6YjCm27nOT8e7njU=
+X-Received: by 2002:a05:6000:40ca:b0:47d:fc20:e7b4 with SMTP id ffacd0b85a97d-47f2dcb5c7amr2939381f8f.10.1783772989883;
+        Sat, 11 Jul 2026 05:29:49 -0700 (PDT)
+Received: from puma.museclub.art ([2a00:6020:b326:d300:d19:a765:d8d7:bedc])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47a9e4d8410sm68964718f8f.15.2026.07.11.05.29.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Jul 2026 05:29:49 -0700 (PDT)
+From: Eugene Shalygin <eugene.shalygin@gmail.com>
+To: eugene.shalygin@gmail.com
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org (open list:ASUS EC HARDWARE MONITOR DRIVER),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v3 0/1] hwmon: (asus-ec-sensors) detect unconnected physical sensors
+Date: Sat, 11 Jul 2026 14:26:43 +0200
+Message-ID: <20260711122937.594989-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Blank temperature check applies to all thermal sensors, causing =
-false `-ENODATA` errors during extreme subzero cooling.
---
+v3: apply this detection only to environment temperature sensors
+(T_Sensor, water, etc.), but not to the VRM and CPU ones.
 
---- Patch [1]: [PATCH v2 1/1] hwmon: (asus-ec-sensors) detect unconnected p=
-hysical sensors ---
-commit a1732d7627cd4596df1c72251d94e446dc0be771
-Author: Eugene Shalygin <eugene.shalygin@gmail.com>
+v2: make temperature_blank_values array const.
 
-hwmon: (asus-ec-sensors) detect unconnected physical sensors
+Eugene Shalygin (1):
+  hwmon: (asus-ec-sensors) detect unconnected physical sensors
 
-This commit adds a check for specific special values (-62, -60, -40)
-returned by the EC when a temperature sensor is unconnected. When these
-values are detected, the driver now returns -ENODATA instead of the raw
-value to the hwmon subsystem.
+ drivers/hwmon/asus-ec-sensors.c | 49 ++++++++++++++++++++++++++++++---
+ 1 file changed, 45 insertions(+), 4 deletions(-)
 
-> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sens=
-ors.c
-> index 29a23484cbe7b..d805de5da7b24 100644
-> --- a/drivers/hwmon/asus-ec-sensors.c
-> +++ b/drivers/hwmon/asus-ec-sensors.c
+-- 
+2.55.0
 
-[ ... ]
-
-> @@ -1310,8 +1329,12 @@ static int asus_ec_hwmon_read(struct device *dev, =
-enum hwmon_sensor_types type,
-> =20
->  	ret =3D get_cached_value_or_update(dev, sidx, state, &value);
->  	if (!ret) {
-> -		*val =3D scale_sensor_value(value,
-> -					  get_sensor_info(state, sidx)->type);
-> +		sensor_info =3D get_sensor_info(state, sidx);
-> +		if (sensor_info->type =3D=3D hwmon_temp &&
-> +		    is_blank_temperature_value(value)) {
-> +			return -ENODATA;
-> +		}
-
-[Severity: Medium]
-Could this check inadvertently cause false read errors for legitimate subze=
-ro
-temperatures?
-
-Because this filter applies broadly to all hwmon_temp sensors in
-asus_ec_hwmon_read(), it appears it would intercept valid extreme negative
-temperatures, such as those seen during Liquid Nitrogen cooling setups. For
-fixed onboard sensors like the CPU and VRM, values like -40, -60, or -62
-might represent either genuine readings or the minimum clamped value of the
-sensor's thermistor table.
-
-Does this code risk disrupting monitoring tools and fan control daemons
-during extreme subzero cooling by returning -ENODATA instead of the valid
-clamped temperature?
-
-> +		*val =3D scale_sensor_value(value, sensor_info->type);
->  	}
-> =20
->  	return ret;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260711101143.5711=
-91-2-eugene.shalygin@gmail.com?part=3D1
