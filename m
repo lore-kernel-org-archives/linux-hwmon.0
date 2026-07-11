@@ -1,173 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx1.white.stw.pengutronix.de (mx1.white.stw.pengutronix.de [185.203.200.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 161A41FD4
-	for <linux-hwmon@vger.kernel.org>; Sat, 11 Jul 2026 03:47:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1379921CA0D;
+	Sat, 11 Jul 2026 05:21:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.200.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783741663; cv=none; b=Pd7Q1SNt4zyK6GIjNFGIaQx92Zb8FxRkx6Uinf9uBdha1DSiYX1Sl2GWhLBzxVjQ0Zetvsp7vWGrFnjKQMfHh6bC+1WDCGjUEfgkSNPfxbYNiI7enQGLVOrMlhFuHXzs0EY14N79KYBD0PU8fv7JBPU+zpGIko6vZTp/OHAqwqc=
+	t=1783747280; cv=none; b=qpxsbql3TmkcJLZ1ZlDcBMvydC52U05W73fGCspc6iqPA6HHIr6rkkFLlDqKW2gV+QJBk8kIU2I2bXHpfxAD/mvMoSVm09Qz1Pv7P2nI7Qxb8DADMWYNgOqhjkBiVigY+B9N6bw/tXoxWz6WQWyR7kZ3aog6jPfuyy5UFaSSzVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783741663; c=relaxed/simple;
-	bh=WVAyt3D1PG/WIgKT16xBSPyWCF5P+x3XcdtVEXPtJTQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=h6fU4jiUFsaSn9C9zExLXuuDfyLvhMch28rSoHhI95A2ryjk7a/YFgWMDycSwyyXep5ZjZc6P+ISJYVw6AjxHZFpx6l+uiwVi/NmVj2NLwo82f0dSQDnAxXHhJ4/YN8Mx6RaOfPFmAOBYYWKoPq+PO/fxHEUlY/CuiWMT7NQxfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FPZBDL+B; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FPZBDL+B"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A1081F000E9;
-	Sat, 11 Jul 2026 03:47:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783741661;
-	bh=x0fPZAnXHaJCEfCwSLO16PLkUrdeeSOjuyxfINkFCgo=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=FPZBDL+Bg1ybfwnB3lyHjZhJTHrPYeEvbA67qFg1WhPDTQBfDq/vFczncPoTpOl99
-	 RG7u/8qS3Nth8OMtsSyybbiy05uFVo60PZSDkMbM/pmjjlhT0WKkl2d/yrp8s1xPIW
-	 1bVs+mNhec6+GQJcLHzK7T9K4SmF94cQbaMZxO+eW5nCWi8Y/LOwhmh9IBmfcvo/rx
-	 aqpw5DDOLCLccqiudv7PljPyohUAfD5YyIRyA+XNSRx71AiWgI0ey0uOk2CedJ16yb
-	 BUiZxozJG2t3B/u7DPupWGeOrWCS8lwmyFABByxNJRaPtjjQotLFrIoH0LWX8IujnS
-	 Y/6JyaVPRk/4A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 1/1] hwmon: (applesmc) Convert to
- hwmon_device_register_with_info
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Shih-Yuan Lee" <fourdollars@debian.org>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260711033700.3693-2-fourdollars@debian.org>
-References: <20260710123236.10508-1-fourdollars@debian.org>
- <20260711033700.3693-1-fourdollars@debian.org>
- <20260711033700.3693-2-fourdollars@debian.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 11 Jul 2026 03:47:41 +0000
-Message-Id: <20260711034741.7A1081F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1783747280; c=relaxed/simple;
+	bh=v6pgne0CunJw6PsDTbGYzgCWF0Y8IDDivA3XawDoXGg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zuv5uE9YCKXXRG7iNtOTOQsHBjSGTHzaj6lZBtwFb+dF2/Y5mrLWU8Nrv15IIcB/HWHCXPHYa7rGO3nhtZC1LowoEjYCcEA8/MRHf/6YxAWGI4rryKgoUIGAdcXoLsznrKpaKm4eFtTs6bubhGr2FmVtiub7cOX0TXpdS0b/BOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.200.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de (drehscheibe.grey.stw.pengutronix.de [IPv6:2a0a:edc0:0:c01:1d::a2])
+	(Authenticated sender: relay-from-drehscheibe.grey.stw.pengutronix.de)
+	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id B334A20205E;
+	Sat, 11 Jul 2026 07:21:14 +0200 (CEST)
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1wiQ9K-001C43-25;
+	Sat, 11 Jul 2026 07:21:14 +0200
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.98.2)
+	(envelope-from <ore@pengutronix.de>)
+	id 1wiQ9K-000000014Wg-2Czl;
+	Sat, 11 Jul 2026 07:21:14 +0200
+Date: Sat, 11 Jul 2026 07:21:14 +0200
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>
+Cc: Guenter Roeck <linux@roeck-us.net>, Lee Jones <lee@kernel.org>,
+	Linus Walleij <linusw@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Peter Rosin <peda@axentia.se>,
+	David Jander <david@protonic.nl>, kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v15 4/6] pinctrl: add NXP MC33978/MC34978 pinctrl driver
+Message-ID: <alHSylCU0RISGVn-@pengutronix.de>
+References: <20260710101358.2606941-1-o.rempel@pengutronix.de>
+ <20260710101358.2606941-5-o.rempel@pengutronix.de>
+ <alEKklx_X4cP3Ire@pqrs.dk>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <alEKklx_X4cP3Ire@pqrs.dk>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] Writing to `hwmon_pwm_enable` causes an immediate deadlock due to =
-recursive acquisition of `smcreg.mutex`.
-- [Low] The fallback string for fan labels is incorrectly truncated when re=
-ad from sysfs due to an unconditional pointer offset.
---
+Hi Alvin,
 
---- Patch [1]: [PATCH v2 1/1] hwmon: (applesmc) Convert to hwmon_device_reg=
-ister_with_info ---
-commit 319a71a13f69cd2d1c53e88a04e2585bea47d8ab
-Author: Shih-Yuan Lee <fourdollars@debian.org>
+On Fri, Jul 10, 2026 at 05:22:30PM +0200, Alvin Šipraga wrote:
+> Hi Oleksij,
+> 
+> On Fri, Jul 10, 2026 at 12:13:53PM +0200, Oleksij Rempel wrote:
+> > +/*
+> > + * Defensive wrappers for hierarchical IRQ proxying.
+> > + *
+> > + * gpiolib's hierarchical allocation exposes a lifecycle gap: the child
+> > + * descriptor is registered before irq_domain_alloc_irqs_parent() fully
+> > + * instantiates the parent chip.
+> > + *
+> > + * During consumer probe (e.g., gpiod_to_irq()), irq_create_fwspec_mapping()
+> > + * allocates the hierarchy. As part of this, irq_domain_set_info() initializes
+> > + * the top-level irq_desc and calls __irq_set_handler(). If the irq_desc
+> > + * requires locking, __irq_get_desc_lock() will invoke the child's
+> > + * .irq_bus_lock before the parent allocation is complete.
+> > + *
+> > + * Upstream generic helpers (e.g., irq_chip_mask_parent) blindly dereference
+> > + * data->parent_data->chip, causing an immediate NULL pointer panic during
+> > + * this gap. These wrappers check for a valid parent chip to safely drop
+> > + * premature locking or masking events while the legacy subsystem hierarchy
+> > + * is still assembling itself.
+> > + */
+> 
+> I encountered the same problem while working on a pinctrl/GPIO driver
+> this week. While searching lore to see if I'm doing it wrong, I found
+> this series. Such wrappers fix the problem for me too (although in my
+> case, it's not a slow bus, so it crashes in .irq_mask instead of
+> .irq_bus_lock).
+> 
+> But I see that in a previous version, you were reordering things in
+> gpiochip_hierarchy_irq_domain_alloc(). Why did you abandon this
+> approach?
+> 
+> Just wondering if we can find a more generic solution which doesn't
+> require such drivers to add this defensive boilerplate. Another option
+> might be to move such checks into the generic helpers.
 
-hwmon: (applesmc) Convert to hwmon_device_register_with_info
+My previous attempts to address it in the core were simply too fragile
+and caused other regressions.
 
-This patch converts the deprecated hwmon_device_register() function to the
-modern hwmon_device_register_with_info() API. It moves the registration of
-standard sensor attributes to the HWMON core and dynamically registers
-non-standard ones.
+To be honest, I have already run out of budget for this task. A lot of
+that time was spent just learning how to deal with the new upstreaming
+reality. With sashiko.dev, it is much harder to upstream any moderate to
+large amount of code now. You either have to use public sashiko and spam
+everyone until all issues are addressed, or learn to set up and use your
+own sashiko instance.
 
-> diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
-> index 90a14a7f2c4c0..3470912649c4d 100644
-> --- a/drivers/hwmon/applesmc.c
-> +++ b/drivers/hwmon/applesmc.c
-> @@ -597,6 +598,16 @@ static int applesmc_init_smcreg_try(void)
->  	if (s->fan_count > 10)
->  		s->fan_count =3D 10;
-> =20
-> +	for (i =3D 0; i < s->fan_count; i++) {
-> +		char newkey[5];
-> +
-> +		scnprintf(newkey, sizeof(newkey), FAN_ID_FMT, i);
-> +		ret =3D applesmc_read_key(newkey, s->fan_positions[i], 16);
-> +		s->fan_positions[i][16] =3D 0;
-> +		if (ret)
-> +			scnprintf(s->fan_positions[i], 17, "Fan %d", i);
-> +	}
-> +
+Because of that, these driver-level wrappers are the most practical way
+forward for me right now.
 
-[ ... ]
-
-> +static int applesmc_hwmon_write(struct device *dev, enum hwmon_sensor_ty=
-pes type,
-> +				u32 attr, int channel, long val)
-> +{
-> +	int ret;
-> +
-> +	switch (type) {
-> +	case hwmon_fan:
-
-[ ... ]
-
-> +		break;
-> +	case hwmon_pwm:
-> +		if (attr =3D=3D hwmon_pwm_enable) {
-> +			u8 buffer[2];
-> +			u16 manual_val;
-> +
-> +			if (val !=3D 0 && val !=3D 1)
-> +				return -EINVAL;
-> +			mutex_lock(&smcreg.mutex);
-> +			ret =3D applesmc_read_key(FANS_MANUAL, buffer, 2);
-
-[Severity: High]
-Will this cause a deadlock due to recursive mutex acquisition?
-
-The code explicitly acquires smcreg.mutex here, but applesmc_read_key()
-and applesmc_write_key() both unconditionally attempt to acquire the same
-mutex again through their underlying applesmc_read_entry() and
-applesmc_write_entry() calls.
-
-Since this is a standard non-recursive mutex, will this freeze the
-calling task when a user writes to hwmon_pwm_enable?
-
-> +			if (ret)
-> +				goto out_unlock;
-> +			manual_val =3D (buffer[0] << 8 | buffer[1]);
-> +			if (val)
-> +				manual_val |=3D (0x01 << channel);
-> +			else
-> +				manual_val &=3D ~(0x01 << channel);
-> +			buffer[0] =3D (manual_val >> 8) & 0xff;
-> +			buffer[1] =3D manual_val & 0xff;
-> +			ret =3D applesmc_write_key(FANS_MANUAL, buffer, 2);
-> +out_unlock:
-> +			mutex_unlock(&smcreg.mutex);
-> +			return ret;
-> +		}
-> +		break;
-
-[ ... ]
-
-> +static int applesmc_hwmon_read_string(struct device *dev, enum hwmon_sen=
-sor_types type,
-> +				      u32 attr, int channel, const char **str)
-> +{
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		if (attr =3D=3D hwmon_temp_label) {
-> +			*str =3D smcreg.index[channel];
-> +			return 0;
-> +		}
-> +		break;
-> +	case hwmon_fan:
-> +		if (attr =3D=3D hwmon_fan_label) {
-> +			*str =3D smcreg.fan_positions[channel] + 4;
-
-[Severity: Low]
-Will this unconditionally truncate the fallback string generated during ini=
-t?
-
-If applesmc_read_key() fails in applesmc_init_smcreg_try(), the driver
-generates a fallback string formatted as "Fan %d".
-
-When this sysfs attribute is read, the + 4 pointer arithmetic will skip
-the "Fan " prefix and only expose the digit to userspace (e.g., exposing
-"0" instead of "Fan 0").
-
-> +			return 0;
-> +		}
-> +		break;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260711033700.3693=
--2-fourdollars@debian.org?part=3D1
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
