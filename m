@@ -1,146 +1,80 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B302233CEBB
-	for <linux-hwmon@vger.kernel.org>; Sat, 11 Jul 2026 09:59:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B40F139280D;
+	Sat, 11 Jul 2026 09:59:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783763970; cv=none; b=FM5q5vjqsr0HBrfLHOwar6y73UEhrEQSbQ4Q/hWYWc1Ahmb9ijVx/e5lj3Yqds1ws3oSdIO6Mc1kGgtbF75TYRB5wBNo87S+wt2DxrXRvhLMYLkNtq3etJ3ohxU5k0s30U9BGQpgdif0AXXU2lEyjoRij+51xmJaCuujDLU9630=
+	t=1783763971; cv=none; b=KWMGg0XmFs9OUTS2iJlX9f8j3fW+VoXc/kGBaQ/jLkP6IYXNZ8lCmkk8Np06tJk/2GZt+jOZfb0lBgN7h73DqSpD46KIQyUkIC78U110d/Zjz3MSzy+zRQBEecLzea03wloMzTMZREwgvnwFtZ2tfCjDWcburZGGrMWyMSVr9OI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783763970; c=relaxed/simple;
-	bh=MQv1Im6q1ZDIoGs634gs2OJhyDreY1op9/i7+Nm/sg4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b4S362pE6M6fiYs2qloJefoYQ4p4WGLx6yi3Fvf6gGZ+puupQs0sUBLs4T9AfY8cjpP9EgMcxczocF3N/6YxhJwUhugVHXp9/Uqdatme6GdkC/zn4BltiSBOoNe/zcGKygVsD9YARzgC0ytrCR7eK2NuRJt8sXBzu+Fjg8KbK4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=swmnLsmf; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783763971; c=relaxed/simple;
+	bh=tqbkpfATa5Revg8z89qrY8SWITwBCXJC91QU01Py5EI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=SBPKmb0QbzIWfQs3pX082ysgvZwpOylRhAw83P+n4E8c62ra7QOysnBHIdCGCjDxK6JQsr/1u5mJWYOrpuOuOMJsqcNM1e6X1q5rNXcL0qteAQKZop/VwWtKl5pdKLEmpXdDkvDD5CW8GeVZZ8R7XbWVVSqcm1TKAJx/IDd8Mjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=MbLARKB1; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="swmnLsmf"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-493f4638f4aso15784355e9.3
-        for <linux-hwmon@vger.kernel.org>; Sat, 11 Jul 2026 02:59:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783763967; x=1784368767; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=IVaPeTyfcpBJhAAXDO8eOHgGRk03bxxebt8a54R0GGE=;
-        b=swmnLsmfGGJDXmaQnm1pCyM1V2QJ2tvt75Onr1uvDAm0MB0Mkkfmdlw8L/UsnNS/Kf
-         HZn8CkYUu1dJWIzhY6dasQx3Tp0xM5AbF+T1cVr5Xc5SpSVTT5onxwK1r5bqYW5Dbh9M
-         /1vXbQKwJjsJM/dFhVMK508DtGNKLEtp3NAhl1N+u0qPm1YNVYYcNBF5te9ODhGx8BM7
-         znStFx9pUekj7SiBiWuAybbRp1YlMgvQU1aZKBtU9ZipQ5P6nzBkjzS6U+QIPp2q7sx5
-         Rltx9Soi+lRZ1hDBHMoJaSbV2Yn3J1EDrcHFCrpvHdfP8KAE/JL8BaOBjPV7yY+bB6dJ
-         M9Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783763967; x=1784368767;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=IVaPeTyfcpBJhAAXDO8eOHgGRk03bxxebt8a54R0GGE=;
-        b=NB11qdcBcDeGIQtjVODP9V1XrLy2u7pNqkZeEF7r9GZOPknp88qpTtK2k7osyrXjNe
-         P1SyLn3mPjo9Vf+VN+BnRMWbpF8aBvzbqxqd61hvsx5ZP3hyQFD4wiEDLOptOJTjWXvs
-         yzRfiFjBGWPgNv3hpjqAMIiJw20olQ2GK9mt919VpTh8GP95BBKdH0wBXwWgjUJnQoZd
-         Qxw8jd8e+5iw6KLt/MYUWcG6ZB5iwdT483LEr0vLCEdUshtXLDsdyoBcb9OZ2he2MaxN
-         18gMX+yKct9SnOPTxiNU4Sj6ECIzvk8sqPJYQUjM/YeQ+/K157rNRg+cCP8sSrFsuEG8
-         qIiA==
-X-Forwarded-Encrypted: i=1; AHgh+RrqwS+NNGEA4mZx9pRI7PSmZEzTo5WCDq3XGQuVHTr94ZiAiieaaVLJ8iKgpvRLITlA6riGhwAtTApQYg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywi/5VMZOboVX7t/XluGRxgGkpOE7bhvU+MSrMdnoA/HzGza/tu
-	DRewH01ns5h7G+Tm96WbqYVQ8cQ+51hxze2lfFE18CW4nQreexelx7KHHulPaQ==
-X-Gm-Gg: AfdE7ckd0Gu6S3MJ9SV/DGxZaTjgk4r2LaKk6EyBmf2m1ojk/BAY0DhWGfzLJf4oiH8
-	A8/sN90Rx57OHrA+HAyQsJLOIkFHa26YkfBaEejCWAbCdCo62oxK5K/8dRK1WIhEGBcZzlC7e6h
-	7V86HSMJkczUTQaNyS96tbh1W2sXjnxOWfRa7wJU/hYkuEFfwq+soVDjwk70t8/Lf5zD9FXoifn
-	7jXl79ouv83/vFjOWnfCMToxCgAF70xMIkQ0oqJoRGktDo44P0IijY6y4UfEjLU8k/tD816FjOK
-	8egnrXVSiEw0GkuyneqGE+G5PJ4cpUvA2vrX8L792qYl9MbTF42KoGcANwKml5FDB7oIf7gPDIf
-	8KmLGbIt9cyZOmElrIVBR6nxYKeFRABAkzkHT9g1aQZlXbCyYvgT/tZLWbP75E/p4F6W+qMOeyI
-	duyxz8e5qHun89lA0cUspks8ruoI5Tz64=
-X-Received: by 2002:a05:600c:8b52:b0:493:fa66:4839 with SMTP id 5b1f17b1804b1-493fa6649e4mr13652245e9.3.1783763966892;
-        Sat, 11 Jul 2026 02:59:26 -0700 (PDT)
-Received: from puma.museclub.art ([2a00:6020:b326:d300:d19:a765:d8d7:bedc])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47a9de1e6ccsm67464937f8f.5.2026.07.11.02.59.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jul 2026 02:59:26 -0700 (PDT)
-From: Eugene Shalygin <eugene.shalygin@gmail.com>
-To: eugene.shalygin@gmail.com
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	linux-hwmon@vger.kernel.org (open list:ASUS EC HARDWARE MONITOR DRIVER),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] hwmon: (asus-ec-sensors) detect unconnected physical sensors
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="MbLARKB1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1783763961;
+	bh=tqbkpfATa5Revg8z89qrY8SWITwBCXJC91QU01Py5EI=;
+	h=From:Subject:Date:To:Cc:From;
+	b=MbLARKB1xgqVlouaRo9v84KtFReQMLWOelIh/qYKiS4tThjXYf0/qmSl0iyqBDbQf
+	 nOWDfe6VWy/Kzzzd5IJh+ijY1V4B0D/ttT//GA7LMeCc1N5gyu+JcMJAFkn2ujwTlL
+	 fywu6f55jrgTRXFM8XjeYxYbb4WpZaQ84KlJ8TRI=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH 0/3] hwmon: (cros_ec) Synchronize EC access from the
+ thermal device callbacks
 Date: Sat, 11 Jul 2026 11:59:04 +0200
-Message-ID: <20260711095917.568925-1-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.55.0
+Message-Id: <20260711-cros_ec-hwmon-locking-v1-0-cb6d0fdbb2d3@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMTQ6CMBBA4auQWTtJaU0TvIoxBqYDjD+t6SiYE
+ O5uheW3eG8B5SyscKoWyDyJSooF9aECGts4MEooBmusN94ZpJz0yoTj/EwRH4nuEgcMzlrvQld
+ Tc4TSvjL38t2+58tu/XQ3pvd/Buv6A+Kem/Z5AAAA
+X-Change-ID: 20260630-cros_ec-hwmon-locking-d32263db1c94
+To: Guenter Roeck <linux@roeck-us.net>, Benson Leung <bleung@chromium.org>
+Cc: Sung-Chi Li <lschyi@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
+ chrome-platform@lists.linux.dev, linux-hwmon@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1783763961; l=871;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=tqbkpfATa5Revg8z89qrY8SWITwBCXJC91QU01Py5EI=;
+ b=PdzLrfLh8xtkU54YjkUln9KILAI0hxnXceLaNYjFd64hXFV+IkOoIxjWQlWx08NM0pH2Jvjcf
+ TtowSya0G8eC0TAnOIY2/GR4Ysi5KOPKQy8APUDAewNvFr+2ul5XAb5
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-When there is no temperature sensor connected, reading EC register
-returns one of the special values (-62, -60, -40). Test for them
-and return -ENODATA to hwmon.
+To guarantee consistency for the read-modify-write access in
+cros_ec_hwmon_cooling_set_cur_state(), locking is necessary.
 
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+Use the existing hwmon device lock to do so.
+
+Sung-Chi: Could you test this? I do not have access to hardware which
+triggers this code path.
+
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- drivers/hwmon/asus-ec-sensors.c | 27 +++++++++++++++++++++++++--
- 1 file changed, 25 insertions(+), 2 deletions(-)
+Thomas Weißschuh (3):
+      hwmon: (cros_ec) Register the thermal devices after the hwmon ones
+      hwmon: (cros_ec) Store the hwmon device in cros_ec_hwmon_priv
+      hwmon: (cros_ec) Synchronize EC access from the thermal device callbacks
 
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 29a23484cbe7..f178570110c1 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -67,6 +67,13 @@ static char *mutex_path_override;
- /* Moniker for the ACPI global lock (':' is not allowed in ASL identifiers) */
- #define ACPI_GLOBAL_LOCK_PSEUDO_PATH	":GLOBAL_LOCK"
- 
-+/*
-+ * The values for temperature sensor readings without physical sensors connected.
-+ * The value varies across generations and is seemingly defined by the EC chip
-+ * used in the given board.
-+ */
-+static s32 temperature_blank_values[] = {-62, -60, -40};
-+
- typedef union {
- 	u32 value;
- 	struct {
-@@ -1291,6 +1298,17 @@ static int get_cached_value_or_update(const struct device *dev,
- 	return 0;
- }
- 
-+static bool is_blank_temperature_value(s32 value)
-+{
-+	size_t i;
-+
-+	for (i = 0; i < ARRAY_SIZE(temperature_blank_values); ++i) {
-+		if (value == temperature_blank_values[i])
-+			return true;
-+	}
-+	return false;
-+}
-+
- /*
-  * Now follow the functions that implement the hwmon interface
-  */
-@@ -1298,6 +1316,7 @@ static int get_cached_value_or_update(const struct device *dev,
- static int asus_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
- 			      u32 attr, int channel, long *val)
- {
-+	const struct ec_sensor_info *sensor_info;
- 	int ret;
- 	s32 value = 0;
- 
-@@ -1310,8 +1329,12 @@ static int asus_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
- 
- 	ret = get_cached_value_or_update(dev, sidx, state, &value);
- 	if (!ret) {
--		*val = scale_sensor_value(value,
--					  get_sensor_info(state, sidx)->type);
-+		sensor_info = get_sensor_info(state, sidx);
-+		if (sensor_info->type == hwmon_temp &&
-+		    is_blank_temperature_value(value)) {
-+			return -ENODATA;
-+		}
-+		*val = scale_sensor_value(value, sensor_info->type);
- 	}
- 
- 	return ret;
--- 
-2.55.0
+ drivers/hwmon/cros_ec_hwmon.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
+---
+base-commit: ca078d004cf58137bcf8cb24a8b271397431ba58
+change-id: 20260630-cros_ec-hwmon-locking-d32263db1c94
+
+Best regards,
+--  
+Thomas Weißschuh <linux@weissschuh.net>
 
