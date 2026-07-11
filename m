@@ -1,200 +1,153 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E2B23D297
-	for <linux-hwmon@vger.kernel.org>; Sat, 11 Jul 2026 08:10:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 447EE3815E4
+	for <linux-hwmon@vger.kernel.org>; Sat, 11 Jul 2026 08:12:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783757434; cv=none; b=gSFRZVpY+bs7UxxdaXKo/+w2MvSGbs0pMiRXVe3JhNJapkncuvYkaaCy/mHiLYa2o+H9xoRz9nzRnq+Hn47STROxEiTyPFqCKxMBA7zp0uCBXOLQd6qDwQdNXj7in4b2DPDruWi1MMCM8GpyPzd1hYcagW/apE4nO8Xa/B8mjuc=
+	t=1783757559; cv=none; b=elEoKzESmTB8Spy9epvkhme7I5Ad4pi9jd0wwWNJzBbfNfPNAepqY97sHR7VrW422MUHdyQ+Z9sf/i5jTnVG2sTnzHFWyX0B6UEiGjiL+4plYXBhLPF94tylWpDElxCWrhaPl2JPw4/PBHSbGnG9kBId/WLblrTqL20L7NBodpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783757434; c=relaxed/simple;
-	bh=J7NZc7/GaN94GKFxYNTZBWSX9DOI1V/QiW1sIlpCDVU=;
+	s=arc-20240116; t=1783757559; c=relaxed/simple;
+	bh=ZfhCc4RBeV7neL1aTIZfn++0J9LcMigmsjKAKnv9df0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=P+tVYprP2WoTJR9BXMP7MZoJHdgpd5hYBW74o0xxA5vO8Mfa5awzfiT9fdv7EAsqvk0vkbiCXVfnRnXLQX6HFuVJuYK2umYxmzVAzIJC1POXCq/T+xEbsoIX76P2HzZd01JhlbzIMx+E/HIm9jL8EoBKnY0NAIC9u3aJTgl4CCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kaGwEBoG; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=UjCWPnac0w3c1wYoYveAwM1qTW6/RYsPM4ZCMCKgrUJOEvEDjTmF8PEUPr/zGVF1oVdid6CxOVr+KFRAtb9mGa43Or0QhvBqGG9SCSRsQTBpUt1ODdJ4ncq1wd1mkylEFR6lKWamaIwDil0ayIHtaj9LAEo6N6MfZX096v4O3/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MZf7cZT/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kaGwEBoG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB2A21F000E9;
-	Sat, 11 Jul 2026 08:10:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MZf7cZT/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8A121F000E9;
+	Sat, 11 Jul 2026 08:12:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783757433;
-	bh=Hu/fohblA+HEz1UalDzpBcM/Y6QTignnV1MyTATHX2U=;
+	s=k20260515; t=1783757557;
+	bh=HAdfnXbP5mLH7jM7/6hMCFMQa4NKXOZrOAydNX9D1KU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kaGwEBoG0JvTdqug4ntUpsVSKxrpEDKd2V1exBG8g82TLPxcy1dhSlZm/zNV8PEY9
-	 xWpiOcs/FznkibJhb3XJCqlx4zqEbXo8KPG5xo7+8rsuVmFbpqXSI+MEXu4Pb/X1Ff
-	 YSetT8sH5CkdetQr3kCOhbV3OpnhjTXwY3jEcN+xsKmiMQBTzYjq3FvhmHtyRvJar3
-	 1ASFyskJs/yjOpsHdYMbpXBYo65qnjjihzy67OH2LfDEM9vqzVNDLe1Pug9TsFNrSI
-	 EQyVeH0SAnqNQ4nL102rEwmnmWti8TCtICCDKaiE5TDZh0wEPrHGa5H6ae8XwFPrLi
-	 R1+QhxcMxK0OQ==
+	b=MZf7cZT/O66KFOjxpwYmpdyw+MgUrJAtvf5WJ5fyc20dLvyAvyfN/tH2aK+kur9yO
+	 s69bBvIp27JTIa/LWp4bQ5HXOChBPexwGi+HAA6v+kKwyjryYJ9EFziszJD5pxFxTH
+	 /nD3AtgqFXXdJujwFnj0tiJTtVIU8A5IwX3mS5G0+W6taSZ041jzKYc01e5jDAjMZS
+	 F3u7E1zEQdXoOmsvfkqVMajLCVEtsh06tcbSagE1JKC564vh4BSBJblAfVLNzb1/60
+	 PVoOrWOORuWXMj4l5lam8DyfbngVLKQIIxKeZaLOkRQaUdtBRGe+Q3d4fIJ6HkDhEi
+	 +mcuFYu38ktLg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 2/3] hwmon: (applesmc) Fix lockless cache validation
- data race
+Subject: Re: [PATCH v5 3/3] hwmon: (applesmc) Convert to
+ hwmon_device_register_with_info
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Shih-Yuan Lee" <fourdollars@debian.org>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260711075754.11358-3-fourdollars@debian.org>
+In-Reply-To: <20260711075754.11358-4-fourdollars@debian.org>
 References: <20260710123236.10508-1-fourdollars@debian.org>
  <20260711075754.11358-1-fourdollars@debian.org>
- <20260711075754.11358-3-fourdollars@debian.org>
+ <20260711075754.11358-4-fourdollars@debian.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 11 Jul 2026 08:10:32 +0000
-Message-Id: <20260711081032.EB2A21F000E9@smtp.kernel.org>
+Date: Sat, 11 Jul 2026 08:12:37 +0000
+Message-Id: <20260711081237.A8A121F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] Race condition in `applesmc_calibrate()` exposes intermediate inva=
-lid state for coordinates
-- [High] Unprotected read-modify-write cycle in `applesmc_store_fan_manual`=
- can lose configuration updates
-- [High] Missing error handling in `applesmc_calibrate()` permanently corru=
-pts resting baseline
-- [High] Kernel stack information leak in `applesmc_light_show`
+- [High] The new `pwmX_enable` attribute implementation violates the standa=
+rd hwmon ABI by mapping automatic mode to `0` and explicitly rejecting `2`.
 --
 
---- Patch [2]: [PATCH v5 2/3] hwmon: (applesmc) Fix lockless cache validati=
-on data race ---
-commit ad485314bce775beb0b1efb51243bec0e40a88b0
+--- Patch [3]: [PATCH v5 3/3] hwmon: (applesmc) Convert to hwmon_device_reg=
+ister_with_info ---
+commit 5c6fadffca7be1d46d146ede611dc2b9077f542a
 Author: Shih-Yuan Lee <fourdollars@debian.org>
 
-hwmon: (applesmc) Fix lockless cache validation data race
+hwmon: (applesmc) Convert to hwmon_device_register_with_info
 
-This commit addresses a data race in applesmc_get_entry_by_index() where the
-valid flag was checked locklessly. It introduces smp_load_acquire() and
-smp_store_release() to ensure cache contents are safely committed before
-being marked valid.
+This commit converts the legacy hwmon_device_register() function in the
+applesmc driver to the modern hwmon_device_register_with_info() API. It
+dynamically allocates standard hwmon channels and standardizes attribute
+naming, such as mapping the legacy fanX_manual attributes to the standard
+pwmX_enable ABI.
 
 > diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
-> index 9b2d9ecb20c09..317135fc4b73b 100644
+> index 317135fc4b73b..bec9e9e988969 100644
 > --- a/drivers/hwmon/applesmc.c
 > +++ b/drivers/hwmon/applesmc.c
 
 [ ... ]
 
-> @@ -392,7 +394,8 @@ static const struct applesmc_entry *applesmc_get_entr=
-y_by_index(int index)
->  	cache->len =3D info[0];
->  	memcpy(cache->type, &info[1], 4);
->  	cache->flags =3D info[5];
-> -	cache->valid =3D true;
-> +	/* Pairs with smp_load_acquire() to commit cache contents before settin=
-g valid */
-> +	smp_store_release(&cache->valid, true);
-> =20
->  out:
->  	mutex_unlock(&smcreg.mutex);
+> @@ -1321,8 +1186,238 @@ static const struct dmi_system_id applesmc_whitel=
+ist[] __initconst =3D {
+> +static int applesmc_hwmon_read(struct device *dev, enum hwmon_sensor_typ=
+es type,
+> +			       u32 attr, int channel, long *val)
+> +{
+> +	int ret;
+> +
+> +	switch (type) {
+
+[ ... ]
+
+> +	case hwmon_pwm:
+> +		if (attr =3D=3D hwmon_pwm_enable) {
+> +			u8 buffer[2];
+> +
+> +			ret =3D applesmc_read_key(FANS_MANUAL, buffer, 2);
+> +			if (ret)
+> +				return ret;
+> +			*val =3D ((buffer[0] << 8 | buffer[1]) >> channel) & 0x01;
 
 [Severity: High]
-This isn't a bug introduced by this patch, but I noticed a race condition
-in applesmc_calibrate() that exposes an intermediate invalid state:
+Does returning 0 when the fan is in automatic control mode conflict with the
+standard hwmon ABI?
 
-drivers/hwmon/applesmc.c:applesmc_calibrate() {
-	...
-	applesmc_read_s16(MOTION_SENSOR_X_KEY, &rest_x);
-	applesmc_read_s16(MOTION_SENSOR_Y_KEY, &rest_y);
-	rest_x =3D -rest_x;
-	...
-}
+The standard hwmon ABI defines 2 as automatic control, while 0 typically
+means 'no control' or 'full speed'. Returning 0 here might cause standard
+userspace tools like fancontrol or pwmconfig from lm-sensors to incorrectly
+assume the fan has no speed control.
 
-Since rest_x is updated without any locking, could concurrent readers obser=
-ve
-the raw positive value before it gets negated? If applesmc_idev_poll()
-executes in this window, it computes the input event using the non-negated
-value:
+> +			return 0;
+> +		}
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static int applesmc_hwmon_write(struct device *dev, enum hwmon_sensor_ty=
+pes type,
+> +				u32 attr, int channel, long val)
+> +{
+> +	int ret;
+> +
+> +	switch (type) {
 
-drivers/hwmon/applesmc.c:applesmc_idev_poll() {
-	...
-	input_report_abs(idev, ABS_X, x - rest_x);
-	...
-}
+[ ... ]
 
-[Severity: High]
-This is a pre-existing issue, but there appears to be missing error handling
-in applesmc_calibrate() that could corrupt the resting baseline:
-
-drivers/hwmon/applesmc.c:applesmc_calibrate() {
-	...
-	applesmc_read_s16(MOTION_SENSOR_X_KEY, &rest_x);
-	applesmc_read_s16(MOTION_SENSOR_Y_KEY, &rest_y);
-	rest_x =3D -rest_x;
-	...
-}
-
-If the hardware read fails (e.g., transient I/O error), applesmc_read_s16()
-leaves rest_x unmodified and returns an error code. Because the return value
-is ignored, does this unconditionally execute rest_x =3D -rest_x and
-arbitrarily flip the sign of the baseline on every failed read?
+> +	case hwmon_pwm:
+> +		if (attr =3D=3D hwmon_pwm_enable) {
+> +			u8 buffer[2];
+> +			u16 manual_val;
+> +			const struct applesmc_entry *entry;
+> +
+> +			if (val !=3D 0 && val !=3D 1)
+> +				return -EINVAL;
 
 [Severity: High]
-This is a pre-existing issue, but I noticed an unprotected read-modify-write
-cycle in applesmc_store_fan_manual():
+Will rejecting standard hwmon ABI values like 2 break userspace tools?
 
-drivers/hwmon/applesmc.c:applesmc_store_fan_manual() {
-	...
-	ret =3D applesmc_read_key(FANS_MANUAL, buffer, 2);
-	if (ret)
-		goto out;
+By explicitly returning -EINVAL for values other than 0 or 1, attempts to
+restore automatic mode by writing 2 (the standard hwmon ABI value for
+automatic control) will fail. This could leave the fan stuck in manual mode
+at an arbitrary speed, risking system overheating.
 
-	val =3D (buffer[0] << 8 | buffer[1]);
+Since this patch standardizes the attribute name to pwmX_enable, should this
+function accept 2 and translate it into the hardware's automatic mode?
 
-	if (input)
-		val =3D val | (0x01 << to_index(attr));
-	else
-		val =3D val & ~(0x01 << to_index(attr));
+> +
+> +			entry =3D applesmc_get_entry_by_key(FANS_MANUAL);
+> +			if (IS_ERR(entry))
+> +				return PTR_ERR(entry);
 
-	buffer[0] =3D (val >> 8) & 0xFF;
-	buffer[1] =3D val & 0xFF;
-
-	ret =3D applesmc_write_key(FANS_MANUAL, buffer, 2);
-	...
-}
-
-Since smcreg.mutex is acquired and released internally by applesmc_read_key=
-()
-and applesmc_write_key(), the lock is dropped during the modification. Could
-concurrent calls for different fans read the same initial bitmask and
-subsequently overwrite each other's configuration updates?
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does applesmc_light_show()
-leak uninitialized kernel stack memory?
-
-drivers/hwmon/applesmc.c:applesmc_light_show() {
-	...
-	ret =3D applesmc_read_key(LIGHT_SENSOR_LEFT_KEY, buffer, data_length);
-	if (ret)
-		goto out;
-	/* newer macbooks report a single 10-bit bigendian value */
-	if (data_length =3D=3D 10) {
-		left =3D be16_to_cpu(*(__be16 *)(buffer + 6)) >> 2;
-		goto out;
-	}
-	left =3D buffer[2];
-	...
-	ret =3D applesmc_read_key(LIGHT_SENSOR_RIGHT_KEY, buffer, data_length);
-	if (ret)
-		goto out;
-	right =3D buffer[2];
-
-out:
-	if (ret)
-		return ret;
-
-	return sysfs_emit(sysfsbuf, "(%d,%d)\n", left, right);
-}
-
-If the hardware reports a data_length of 1 or 2 bytes, only those bytes are
-written into the uninitialized stack array buffer. Since the code then
-unconditionally reads buffer[2], is it emitting uninitialized stack memory
-to userspace via sysfs_emit()?
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260711075754.1135=
-8-1-fourdollars@debian.org?part=3D2
+8-1-fourdollars@debian.org?part=3D3
