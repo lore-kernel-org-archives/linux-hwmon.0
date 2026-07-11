@@ -1,149 +1,87 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E423F231A23
-	for <linux-hwmon@vger.kernel.org>; Sat, 11 Jul 2026 06:17:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B400239085
+	for <linux-hwmon@vger.kernel.org>; Sat, 11 Jul 2026 07:34:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783750630; cv=none; b=icmiKH4nVmd5iTHHm6iBQp1bseBDnHaV2DiWxUM9VbUlOAY/Rz8odTFlCF6+3jB7uisN0cdCK8EoJNqghEzwq8H81vFV+aOMeBKqDrQ+Ki5Ang5WJMpTSzuAVH0PBq0OVbxGSQCBuEIkMlL8q+WlVihYodINZHtm0c6N9axvkaE=
+	t=1783755257; cv=none; b=suuKx1fMfu7qaij6niYkRvV0p0POM5RoDsJhjijzANPCkwf0/A7LkTXCo7h1GxCm1eAz1oRNwWcVPkH+Zfi8GdBSnFvEwFbgSR9g1hyMwUHjuO7FWqlBBI4uVNf8dt7buYfoxPGYCFRolTv1BOSw9itbFeDZu0u8AsVSHT1WS5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783750630; c=relaxed/simple;
-	bh=d9ADNE7Zvk8M0WbgojeQK9OWEbIc1kJmqf/tVbAYQMU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=CiaQddknCkXMX3C8ydj++Xxcko0hcdfVIb0kgzMbDDwyVZWZFBiDAij2DeIdrIkn2ZUXNh1kTDvh0ClWIQHXgOuL4wk50wU+mwSFxP794q0ml62WhbeXmDEjvaZfTcVMZVjUjsoFePpXW/v8Yhyw3XB1lrwTq1Lpzh/XULlXdu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ovf6z/je; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783755257; c=relaxed/simple;
+	bh=ZP2JO3fElePND2pQ0KOwxEFSV9MB1DRtXS6NkApK+2E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uy1doQMsj6ObdaNhSOHMZE0JoguXNltMccb/sPy1alqGJZfh9UMPsY5yagp9OdHVLZJskIZzKPdOxKYl3hPnviKNvRaCeSaBPmwG7xr1oa/oam0WYflM73DKv3m6USc6C4xYHN/LBWct3A3jmfgoHarAuouhfAfWY8FBRRQ6BtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QTJkfO8s; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ovf6z/je"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACD321F00A3A;
-	Sat, 11 Jul 2026 06:17:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783750628;
-	bh=g257Zd88VeHeUoXWFdt8DDJa60T3pudpkDRFrk+FRCk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Ovf6z/jeK3SM8V/LFSzQnIDkTtP71IULcmHrNjx1MWLK3m1JSwviOvVaR1FQPI/oe
-	 ubkAlk5kAdrYvkc8zhb3txjdnetl/EEVfUYmbmBt/q5f5Sp3UIAjTJkehuoXTN/ERj
-	 uUj7GscXMNhJV8X3tWz9uWdG/DQq+2/gSi7F7/xQBjzXffVqFpu+xQycKelcIqArhK
-	 fLFzPTclbgoOZ8ulSEEBew+RqSB6XoxXuZB+Hu853HmWmVdpb2jnqlXzYA/5A3p+Hu
-	 juJJazaVTByvSL+DixZcbWfqNDfondJUqJGhHQSbBeRc9/zG956p99VUjQ7pcSsz6k
-	 whdwNRFQ830kA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 1/1] hwmon: (applesmc) Convert to
- hwmon_device_register_with_info
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Shih-Yuan Lee" <fourdollars@debian.org>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260711060634.5794-2-fourdollars@debian.org>
-References: <20260710123236.10508-1-fourdollars@debian.org>
- <20260711060634.5794-1-fourdollars@debian.org>
- <20260711060634.5794-2-fourdollars@debian.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 11 Jul 2026 06:17:08 +0000
-Message-Id: <20260711061708.ACD321F00A3A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QTJkfO8s"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-493f4638f4aso14875945e9.3
+        for <linux-hwmon@vger.kernel.org>; Sat, 11 Jul 2026 00:34:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783755255; x=1784360055; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=fD/CwBLnEVLUY6MgvUkwlUV/G9yM3Q7N8JsNXnAMXo4=;
+        b=QTJkfO8sWV90TtnWx4Yx8bCcbSg7pXSxHr4zxPTrYz2vl8P2o6Djs7MzPNNNaFrzyb
+         F+kfgK6Og4jTslLh2Ri5cQDDnWns2NY/iX8J9KoM8ZkV8Vvwy8zaPtK6Nh/0WiHaizbL
+         Pfgun4TKLi1H76W9QcyNPvzasiMLvYRKrEjeRz709Qp5047/W4PKerh1AwpODHo4q2C5
+         qUfuMmbMXbWrRuJsSCgaTMrST3RHQEQtuRkyFunNozvhQkp9jiCF46NL74cSgN9U1wdx
+         75AXh4TV4tGWr52inOwUuKuU3BsCJh4ayk+SwCgc5d3rIGkIBE4G5GNpNG1F0dXg8wZp
+         kHEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783755255; x=1784360055;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=fD/CwBLnEVLUY6MgvUkwlUV/G9yM3Q7N8JsNXnAMXo4=;
+        b=Z4DiJ1n4CKZQVM0cw+HQGqNwvoeK8ih/nnW2njpcGt52OLFFROG1VOPuGTDK7VbZwo
+         mY3XpGAZq3aN5DfpvJlt8n36oS8bHMKbilagADnYgdiEu9sDqzlv2FuIrQz6UftUFyGI
+         SNi7BawH+KPqJwaGicOad8i2jxFcVYvYnDQEfn0C/aoNPsPwJ1LETWP5H64vv81VoDPX
+         6jIeIRH+nSQBXA3dkY+IOB1hAbLlV/tV3UbcCcmqjUI4tK3/QY1450d9ydnP1GDY7vS8
+         eW3FaOsSlgFQlXDj1JoYpISHFZlUuFTtJQT5ajc8L1gjfDwsAKr/q1YpMxMffBw6F5/k
+         U7wg==
+X-Forwarded-Encrypted: i=1; AHgh+RooOQ60mTKZljSAk5tei3ZvdUEB+okUwmzV/PtkHT1PgdA25U+A6uYJsTuLuA7VNhv+l6qKSYXhD6C7AQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtrRUsL/nyTgNKFauLUHpkqNF8VYArE89mekDTXKNrfCY03g5E
+	OY1Nuntmn50LA4kFM91zSbXJFlqSfl0SZ3eAdg0xjB5Cho1TR0w1RYIV
+X-Gm-Gg: AfdE7ckuUlIX2RB+qPmOaA4xdW/W3jQHJBwMXRteDKJCoQh2/TJE2sfRPBYyZAyYvq1
+	ms2IPq+vlCoRduPwFqtBVJxcq9ECv2tUyVNExfmJYJBnHIJCNuGCV1XNw6IAn/beA/onsH9skM0
+	0toHZMIQG/kJVoST6ysSXzrmcTr1A51a6sseSKL14mmPt3C2pFt1RcMYBYNghTTr8PMv6TteJz0
+	B3zNWuD83QCCb/n+vc8hjBQ/oz6TbN8nkf/zyXBfXCvbgiNBU4nIrbjTGRe5cNytPl3/+PkHd0Q
+	eocD+ZfC99+8Mp32C+XsFSdCuLzjXOIHY14le3oS+cwJACSvAmbyrdGCpcDhxO9QMYVC7snN9AI
+	laY1Uh9XE6t6uWiF4XEmh4SmwfYBqZx+DNG/jzvkKTV3VC0Zi0DnDDgusmAxCTMECyg3MZaQMXE
+	l6T8fy/jQggtEs9RkRfzilNzyveaIIYY0=
+X-Received: by 2002:a05:600c:1d15:b0:493:ee2b:c8c7 with SMTP id 5b1f17b1804b1-493f87d5819mr15567725e9.4.1783755254670;
+        Sat, 11 Jul 2026 00:34:14 -0700 (PDT)
+Received: from puma.museclub.art ([2a00:6020:b326:d300:d19:a765:d8d7:bedc])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493eb6df417sm204733245e9.8.2026.07.11.00.34.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Jul 2026 00:34:14 -0700 (PDT)
+From: Eugene Shalygin <eugene.shalygin@gmail.com>
+To: eugene.shalygin@gmail.com
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org (open list:ASUS EC HARDWARE MONITOR DRIVER),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2 0/1] add T_Sensor for ROG STRIX X870E-E GAMING WIFI
+Date: Sat, 11 Jul 2026 09:31:51 +0200
+Message-ID: <20260711073319.553163-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] Migrating to `devm_hwmon_device_register_with_info()` inverts the =
-teardown order, causing a NULL pointer dereference race condition on module=
- exit.
-- [Medium] Using `devm` allocations in `module_init` incorrectly ties the h=
-wmon device lifecycle to the driver bind/unbind lifecycle rather than the m=
-odule lifecycle.
---
+v2 changes: elaborated commit messages
 
---- Patch [1]: [PATCH v4 1/1] hwmon: (applesmc) Convert to hwmon_device_reg=
-ister_with_info ---
-commit 64b6fb798f7a912d4278236bbe004e5659b03109
-Author: Shih-Yuan Lee <fourdollars@debian.org>
+Vishaal Saraiya (1):
+  hwmon: (asus-ec-sensors) add T_Sensor for ROG STRIX X870E-E GAMING
+    WIFI
 
-hwmon: (applesmc) Convert to hwmon_device_register_with_info
-   =20
-Convert the driver to use the modern hwmon_device_register_with_info()
-API. This migration moves the registration of standard sensor attributes
-to the HWMON core.
+ drivers/hwmon/asus-ec-sensors.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
-> index 90a14a7f2c4c0..a93b1f91a35dd 100644
-> --- a/drivers/hwmon/applesmc.c
-> +++ b/drivers/hwmon/applesmc.c
-[ ... ]
-> @@ -1343,17 +1434,97 @@ static int __init applesmc_init(void)
->  	if (ret)
->  		goto out_smcreg;
-> =20
-> -	ret =3D applesmc_create_nodes(fan_group, smcreg.fan_count);
-> -	if (ret)
-> +	/* allocate hwmon channel configs */
-> +	temp_config =3D devm_kcalloc(&pdev->dev, smcreg.index_count + 1,
-> +				   sizeof(*temp_config), GFP_KERNEL);
+-- 
+2.55.0
 
-[Severity: Medium]
-Does using devm_ allocations in a module initialization function cause issu=
-es
-if the driver is unbound via sysfs?
-
-Since this driver performs its setup in applesmc_init() rather than a stand=
-ard
-probe() function, the devm_ allocations are tied to the device-driver bindi=
-ng.
-
-If an admin unbinds the driver via sysfs, devres_release_all() will free the
-devm_kcalloc memory and the devm_hwmon device, but will leave non-devm mana=
-ged
-resources like the input device active. Additionally, without a probe()
-function, rebinding won't recreate the hwmon device, leaving the driver bro=
-ken
-until a full module reload.
-
-[ ... ]
-> @@ -1398,12 +1566,9 @@ static int __init applesmc_init(void)
-> =20
->  static void __exit applesmc_exit(void)
->  {
-> -	hwmon_device_unregister(hwmon_dev);
-
-[Severity: High]
-Can this lead to a NULL pointer dereference during module exit?
-
-By replacing the manual hwmon_device_unregister() with a devm managed hwmon
-device, the sysfs teardown order is delayed until platform_device_unregiste=
-r()
-is called at the very end of this function.
-
->  	applesmc_release_key_backlight();
->  	applesmc_release_light_sensor();
->  	applesmc_release_accelerometer();
-> -	applesmc_destroy_nodes(temp_group);
-> -	applesmc_destroy_nodes(fan_group);
->  	applesmc_destroy_nodes(info_group);
->  	applesmc_destroy_smcreg();
->  	platform_device_unregister(pdev);
-
-However, applesmc_destroy_smcreg() is called right before the platform devi=
-ce
-is unregistered, which frees and nullifies smcreg.index and smcreg.cache. T=
-his
-creates a window where the hwmon sysfs files are still active and accessibl=
-e,
-but their backing structures are gone.
-
-If a concurrent read to a sysfs file occurs during this window, it could
-call into the new hwmon read callbacks and dereference the null pointer:
-
-applesmc_hwmon_read() {
-    ...
-    case hwmon_temp:
-        if (attr =3D=3D hwmon_temp_input) {
-            const char *key =3D smcreg.index[channel];
-            s16 value;
-    ...
-}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260711060634.5794=
--2-fourdollars@debian.org?part=3D1
