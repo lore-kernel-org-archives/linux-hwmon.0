@@ -1,69 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F094E39280A
-	for <linux-hwmon@vger.kernel.org>; Sat, 11 Jul 2026 09:43:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B302233CEBB
+	for <linux-hwmon@vger.kernel.org>; Sat, 11 Jul 2026 09:59:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783762990; cv=none; b=sU/7L7XgFEZWZQ2UiDoJKT71fSVXKIpBMZWL3tzLP4/KXWiss0PkrxpOhNs0zbcjyHRE4CL5MSmgd6lFJp+4epp3q5xCP8BvirUTMro96eaqGflsFMKJhCXkEoT3uDJu8r3JLvkiWkaqfHmrA/AX0pYZxccJQdsj+DhgFZszncQ=
+	t=1783763970; cv=none; b=FM5q5vjqsr0HBrfLHOwar6y73UEhrEQSbQ4Q/hWYWc1Ahmb9ijVx/e5lj3Yqds1ws3oSdIO6Mc1kGgtbF75TYRB5wBNo87S+wt2DxrXRvhLMYLkNtq3etJ3ohxU5k0s30U9BGQpgdif0AXXU2lEyjoRij+51xmJaCuujDLU9630=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783762990; c=relaxed/simple;
-	bh=0CDnEZm2HbiZOwb6MRj97MRfAPBXxwikIyykKmS4T7Y=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=POdaO6YaJQKbyQylb0pQ47PH5iGbzSCjCECfzoVWAk7IuD5Y3MniFuhWRpuMNH+fUPLWDKFug1CCu09ztK3iTNaV0BJ32o/fngTOkP5RwFU3ZIw7LTIP94Jm4hXdygFShKzey75Re8JG70CWjQOzEo99NcARRrr1Bc9sLLSKL5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c/Q7aNpF; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783763970; c=relaxed/simple;
+	bh=MQv1Im6q1ZDIoGs634gs2OJhyDreY1op9/i7+Nm/sg4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b4S362pE6M6fiYs2qloJefoYQ4p4WGLx6yi3Fvf6gGZ+puupQs0sUBLs4T9AfY8cjpP9EgMcxczocF3N/6YxhJwUhugVHXp9/Uqdatme6GdkC/zn4BltiSBOoNe/zcGKygVsD9YARzgC0ytrCR7eK2NuRJt8sXBzu+Fjg8KbK4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=swmnLsmf; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c/Q7aNpF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22C5B1F00A3D;
-	Sat, 11 Jul 2026 09:43:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783762987;
-	bh=0CDnEZm2HbiZOwb6MRj97MRfAPBXxwikIyykKmS4T7Y=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=c/Q7aNpFUMJGwE4X7DKVs4Vaamtnh1JOwwePxbnZZ90B0/kTBCs3sOFG0tLYEblgy
-	 FfaYhdKTW7ZOpEWY3ajG1hXxNvv/V4O72E07xg0yCi35PpB1Xc3Q2+6AF9MCQLnMXD
-	 p9+Zow449i6lSvzy8i307v3StlCh1MT8+CuIak5I2AKn7VXJusZQJOxoRSBtIHmtLO
-	 U+afwjYKDdOGePLgyLOTK40MzlW5DWH29oh1fNV3g9FR1AUgnPxOt3/R/8PwIrf73n
-	 BVLabvcULbpmOVoKUMtWmcYBqRNOobljji6SdX1HfTAK4G53UyarVYmzLdpAf9J0Ov
-	 OUNI00VxHAhww==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v6 2/3] hwmon: (applesmc) Fix lockless cache validation
- data race
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Shih-Yuan Lee" <fourdollars@debian.org>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260711093323.14529-3-fourdollars@debian.org>
-References: <20260710123236.10508-1-fourdollars@debian.org>
- <20260711093323.14529-1-fourdollars@debian.org>
- <20260711093323.14529-3-fourdollars@debian.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 11 Jul 2026 09:43:06 +0000
-Message-Id: <20260711094307.22C5B1F00A3D@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="swmnLsmf"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-493f4638f4aso15784355e9.3
+        for <linux-hwmon@vger.kernel.org>; Sat, 11 Jul 2026 02:59:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783763967; x=1784368767; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=IVaPeTyfcpBJhAAXDO8eOHgGRk03bxxebt8a54R0GGE=;
+        b=swmnLsmfGGJDXmaQnm1pCyM1V2QJ2tvt75Onr1uvDAm0MB0Mkkfmdlw8L/UsnNS/Kf
+         HZn8CkYUu1dJWIzhY6dasQx3Tp0xM5AbF+T1cVr5Xc5SpSVTT5onxwK1r5bqYW5Dbh9M
+         /1vXbQKwJjsJM/dFhVMK508DtGNKLEtp3NAhl1N+u0qPm1YNVYYcNBF5te9ODhGx8BM7
+         znStFx9pUekj7SiBiWuAybbRp1YlMgvQU1aZKBtU9ZipQ5P6nzBkjzS6U+QIPp2q7sx5
+         Rltx9Soi+lRZ1hDBHMoJaSbV2Yn3J1EDrcHFCrpvHdfP8KAE/JL8BaOBjPV7yY+bB6dJ
+         M9Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783763967; x=1784368767;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=IVaPeTyfcpBJhAAXDO8eOHgGRk03bxxebt8a54R0GGE=;
+        b=NB11qdcBcDeGIQtjVODP9V1XrLy2u7pNqkZeEF7r9GZOPknp88qpTtK2k7osyrXjNe
+         P1SyLn3mPjo9Vf+VN+BnRMWbpF8aBvzbqxqd61hvsx5ZP3hyQFD4wiEDLOptOJTjWXvs
+         yzRfiFjBGWPgNv3hpjqAMIiJw20olQ2GK9mt919VpTh8GP95BBKdH0wBXwWgjUJnQoZd
+         Qxw8jd8e+5iw6KLt/MYUWcG6ZB5iwdT483LEr0vLCEdUshtXLDsdyoBcb9OZ2he2MaxN
+         18gMX+yKct9SnOPTxiNU4Sj6ECIzvk8sqPJYQUjM/YeQ+/K157rNRg+cCP8sSrFsuEG8
+         qIiA==
+X-Forwarded-Encrypted: i=1; AHgh+RrqwS+NNGEA4mZx9pRI7PSmZEzTo5WCDq3XGQuVHTr94ZiAiieaaVLJ8iKgpvRLITlA6riGhwAtTApQYg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywi/5VMZOboVX7t/XluGRxgGkpOE7bhvU+MSrMdnoA/HzGza/tu
+	DRewH01ns5h7G+Tm96WbqYVQ8cQ+51hxze2lfFE18CW4nQreexelx7KHHulPaQ==
+X-Gm-Gg: AfdE7ckd0Gu6S3MJ9SV/DGxZaTjgk4r2LaKk6EyBmf2m1ojk/BAY0DhWGfzLJf4oiH8
+	A8/sN90Rx57OHrA+HAyQsJLOIkFHa26YkfBaEejCWAbCdCo62oxK5K/8dRK1WIhEGBcZzlC7e6h
+	7V86HSMJkczUTQaNyS96tbh1W2sXjnxOWfRa7wJU/hYkuEFfwq+soVDjwk70t8/Lf5zD9FXoifn
+	7jXl79ouv83/vFjOWnfCMToxCgAF70xMIkQ0oqJoRGktDo44P0IijY6y4UfEjLU8k/tD816FjOK
+	8egnrXVSiEw0GkuyneqGE+G5PJ4cpUvA2vrX8L792qYl9MbTF42KoGcANwKml5FDB7oIf7gPDIf
+	8KmLGbIt9cyZOmElrIVBR6nxYKeFRABAkzkHT9g1aQZlXbCyYvgT/tZLWbP75E/p4F6W+qMOeyI
+	duyxz8e5qHun89lA0cUspks8ruoI5Tz64=
+X-Received: by 2002:a05:600c:8b52:b0:493:fa66:4839 with SMTP id 5b1f17b1804b1-493fa6649e4mr13652245e9.3.1783763966892;
+        Sat, 11 Jul 2026 02:59:26 -0700 (PDT)
+Received: from puma.museclub.art ([2a00:6020:b326:d300:d19:a765:d8d7:bedc])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47a9de1e6ccsm67464937f8f.5.2026.07.11.02.59.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Jul 2026 02:59:26 -0700 (PDT)
+From: Eugene Shalygin <eugene.shalygin@gmail.com>
+To: eugene.shalygin@gmail.com
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org (open list:ASUS EC HARDWARE MONITOR DRIVER),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] hwmon: (asus-ec-sensors) detect unconnected physical sensors
+Date: Sat, 11 Jul 2026 11:59:04 +0200
+Message-ID: <20260711095917.568925-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-> In applesmc_get_entry_by_index(), the cache->valid flag is checked
-> locklessly, but setting it to true lacks memory barriers. This can lead to
-> a data race (TOCTOU) where another thread sees cache->valid as true
-> before the actual cache contents (cache->key, cache->len, cache->type, et=
-c.)
-> are fully committed and visible to that CPU, potentially causing it to re=
-ad
-> uninitialized data and send incorrect keys to the Apple SMC hardware.
->=20
-> Introduce memory barriers (smp_load_acquire and smp_store_release) with
-> explanatory comments to ensure cache synchronization is thread-safe and
-> fully visible across all CPUs.
->=20
-> Signed-off-by: Shih-Yuan Lee <fourdollars@debian.org>
+When there is no temperature sensor connected, reading EC register
+returns one of the special values (-62, -60, -40). Test for them
+and return -ENODATA to hwmon.
 
-Sashiko has reviewed this patch and found no issues. It looks great!
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+---
+ drivers/hwmon/asus-ec-sensors.c | 27 +++++++++++++++++++++++++--
+ 1 file changed, 25 insertions(+), 2 deletions(-)
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260711093323.1452=
-9-1-fourdollars@debian.org?part=3D2
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index 29a23484cbe7..f178570110c1 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -67,6 +67,13 @@ static char *mutex_path_override;
+ /* Moniker for the ACPI global lock (':' is not allowed in ASL identifiers) */
+ #define ACPI_GLOBAL_LOCK_PSEUDO_PATH	":GLOBAL_LOCK"
+ 
++/*
++ * The values for temperature sensor readings without physical sensors connected.
++ * The value varies across generations and is seemingly defined by the EC chip
++ * used in the given board.
++ */
++static s32 temperature_blank_values[] = {-62, -60, -40};
++
+ typedef union {
+ 	u32 value;
+ 	struct {
+@@ -1291,6 +1298,17 @@ static int get_cached_value_or_update(const struct device *dev,
+ 	return 0;
+ }
+ 
++static bool is_blank_temperature_value(s32 value)
++{
++	size_t i;
++
++	for (i = 0; i < ARRAY_SIZE(temperature_blank_values); ++i) {
++		if (value == temperature_blank_values[i])
++			return true;
++	}
++	return false;
++}
++
+ /*
+  * Now follow the functions that implement the hwmon interface
+  */
+@@ -1298,6 +1316,7 @@ static int get_cached_value_or_update(const struct device *dev,
+ static int asus_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+ 			      u32 attr, int channel, long *val)
+ {
++	const struct ec_sensor_info *sensor_info;
+ 	int ret;
+ 	s32 value = 0;
+ 
+@@ -1310,8 +1329,12 @@ static int asus_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+ 
+ 	ret = get_cached_value_or_update(dev, sidx, state, &value);
+ 	if (!ret) {
+-		*val = scale_sensor_value(value,
+-					  get_sensor_info(state, sidx)->type);
++		sensor_info = get_sensor_info(state, sidx);
++		if (sensor_info->type == hwmon_temp &&
++		    is_blank_temperature_value(value)) {
++			return -ENODATA;
++		}
++		*val = scale_sensor_value(value, sensor_info->type);
+ 	}
+ 
+ 	return ret;
+-- 
+2.55.0
 
