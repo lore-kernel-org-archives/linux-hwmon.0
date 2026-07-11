@@ -1,99 +1,62 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAFEB3932DC;
-	Sat, 11 Jul 2026 09:59:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CCC93932DC
+	for <linux-hwmon@vger.kernel.org>; Sat, 11 Jul 2026 10:04:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783763972; cv=none; b=dFsLJCTIfAS79ZcgJw7LrywFsegLfYu/RxE2Sofsip6icJvN1663m5zklPOQpYl6DArysm0Av1HhFCWBwLjvAhsEQ0XVOAhkSp4+vF9oPa8O2lfqfRFSBGuRR31qbiZ+WmUZbea9rDdGEnDmvdJjzDUmr8FJiRWpvJJD3YzNN54=
+	t=1783764275; cv=none; b=f3Z+LY199VmgVEm80ev0ydnCjM1dSCxh0KqLZ8hR9AKMmmIKEKGUyQ1lYOBqWrtyYLUcFNRsCtP/0Ukh3DD6ZoIFWLgJ4h0m656LkCfLCPpxNjjmZbaOJy20Cbv1hbRvcq+eJqMDkmVQv5UTwcMeP3LTaiBbZLSpsGEO6ihk4HA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783763972; c=relaxed/simple;
-	bh=1glqh3NKjLr4HSQMMiqeuVdFfYOD/vKOcJ+KkT72tPo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RJ09JvMbkgJ38aBA0QZ/IH2CwV2UbEG278K2xcODL70JCXn4df2wa17UCy6opoSfTzWQ9ACnBSgSSuInYlcr9byooZFYVnRYcZBhYZ1Ii9y6AMstVvKPXCWh9/w2OJsUbBoLg7b6EMivewKGMlItmke4XYaOBDqn7esBvE0qu6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=RFQYiVZq; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1783764275; c=relaxed/simple;
+	bh=0JLySWnX1bhQ3BGczxKfTvLvsGw6MCF8AIzq+KTunQs=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=aeMvD3OyLkU8dtEsjyXyRDyA5O85ANlTKO61AFVfr2ZFJ9IOzzpgh1gDHdGd6PWIkhK8Jfg3T8UOpqBgOECnqDUNHXUav7qKajj8n6v10rk0agxAq2Aq6PH6jObOa1qyHzN83oyFUTAh+f29t6LXfGgfLa6CQkVMtwnwv98yGS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZdKTdTB0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="RFQYiVZq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1783763961;
-	bh=1glqh3NKjLr4HSQMMiqeuVdFfYOD/vKOcJ+KkT72tPo=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=RFQYiVZqQVDvOswygHZxE5vjeTAAgnzYxjJ4IcRvawLai+Bw1OCv0fNAkuUkJRDam
-	 pTpfSvg7h1BfTRNsWIKog/T48dP1F36745BsEZIfwuZZbUss5v73lxF13Ty80kLXp6
-	 zw1z9W/63bziQuHWbSoTuiOy39tXpYeKQStUK9so=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sat, 11 Jul 2026 11:59:07 +0200
-Subject: [PATCH 3/3] hwmon: (cros_ec) Synchronize EC access from the
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZdKTdTB0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABB8D1F000E9;
+	Sat, 11 Jul 2026 10:04:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783764271;
+	bh=0JLySWnX1bhQ3BGczxKfTvLvsGw6MCF8AIzq+KTunQs=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ZdKTdTB094ZGQUskruMYrhJ8HwsawWYvaHCBuB/GLLNeIA9YlBv2Ffy8chpAIqDH+
+	 vjQRO62PBEWioaBLYI7p5MlGNDqAzdytlmZ8oYxv0+Av74m9po8TM13J6Vp2NJQUNH
+	 /1gkDUSMLiu0ib7I4MLMypd10j59QgUH/Z/tBEemqQIOEXb/siCkxw3ruLYpq3iPcS
+	 899VX0S1ruLXrkeA8GT3JrgbgGTfoeWYAIQCH9RfKlq1MsPbNbkXqI4h8Qhogt1pOF
+	 C9okvZyafWUhOBjaI66HoJLId8MyjVS4zU+Oy9b6PjUJM/RHWaDqwq2M+nXB3zExCD
+	 LZT/5Zs1UpjUQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 3/3] hwmon: (cros_ec) Synchronize EC access from the
  thermal device callbacks
+Reply-To: sashiko-reviews@lists.linux.dev
+To: =?utf-8?b?VGhvbWFzIFdlacOfc2NodWg=?= <linux@weissschuh.net>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260711-cros_ec-hwmon-locking-v1-3-cb6d0fdbb2d3@weissschuh.net>
+References: <20260711-cros_ec-hwmon-locking-v1-0-cb6d0fdbb2d3@weissschuh.net>
+ <20260711-cros_ec-hwmon-locking-v1-3-cb6d0fdbb2d3@weissschuh.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 11 Jul 2026 10:04:31 +0000
+Message-Id: <20260711100431.ABB8D1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260711-cros_ec-hwmon-locking-v1-3-cb6d0fdbb2d3@weissschuh.net>
-References: <20260711-cros_ec-hwmon-locking-v1-0-cb6d0fdbb2d3@weissschuh.net>
-In-Reply-To: <20260711-cros_ec-hwmon-locking-v1-0-cb6d0fdbb2d3@weissschuh.net>
-To: Guenter Roeck <linux@roeck-us.net>, Benson Leung <bleung@chromium.org>
-Cc: Sung-Chi Li <lschyi@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
- chrome-platform@lists.linux.dev, linux-hwmon@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1783763961; l=1444;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=1glqh3NKjLr4HSQMMiqeuVdFfYOD/vKOcJ+KkT72tPo=;
- b=oiodRxfkJhMc/PP1eC1YX7FMjKP8QE5nFYj0zvQA42EzAvnPrCe1MUPI8K2AD1X4r+T71hRPM
- zCpzjI/SQ0gAJAaoQTTWjZbzS6zL0eRNAnS66CvLmfoTW1RzbZq4AaI
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-To guarantee consistency for the read-modify-write access in
-cros_ec_hwmon_cooling_set_cur_state(), locking is necessary.
+> To guarantee consistency for the read-modify-write access in
+> cros_ec_hwmon_cooling_set_cur_state(), locking is necessary.
+>=20
+> Use the existing hwmon device lock to do so.
+>=20
+> Fixes: 5798b62867b4 ("hwmon: (cros_ec) register fans into thermal framewo=
+rk cooling devices")
+> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
 
-Use the existing hwmon device lock to do so.
+Sashiko has reviewed this patch and found no issues. It looks great!
 
-Fixes: 5798b62867b4 ("hwmon: (cros_ec) register fans into thermal framework cooling devices")
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- drivers/hwmon/cros_ec_hwmon.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
-index fb5daa9f80d1..76d83e1c68cf 100644
---- a/drivers/hwmon/cros_ec_hwmon.c
-+++ b/drivers/hwmon/cros_ec_hwmon.c
-@@ -5,6 +5,7 @@
-  *  Copyright (C) 2024 Thomas Weißschuh <linux@weissschuh.net>
-  */
- 
-+#include <linux/cleanup.h>
- #include <linux/device.h>
- #include <linux/hwmon.h>
- #include <linux/math.h>
-@@ -411,6 +412,8 @@ static int cros_ec_hwmon_cooling_get_cur_state(struct thermal_cooling_device *cd
- 	u8 read_val;
- 	int ret;
- 
-+	guard(hwmon_lock)(priv->hwmon_priv->hwmon_dev);
-+
- 	ret = cros_ec_hwmon_read_pwm_value(priv->hwmon_priv->cros_ec, priv->index, &read_val);
- 	if (ret)
- 		return ret;
-@@ -424,6 +427,8 @@ static int cros_ec_hwmon_cooling_set_cur_state(struct thermal_cooling_device *cd
- {
- 	const struct cros_ec_hwmon_cooling_priv *priv = cdev->devdata;
- 
-+	guard(hwmon_lock)(priv->hwmon_priv->hwmon_dev);
-+
- 	return cros_ec_hwmon_write_pwm_input(priv->hwmon_priv->cros_ec, priv->index, val);
- }
- 
-
--- 
-2.55.0
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260711-cros_ec-hw=
+mon-locking-v1-0-cb6d0fdbb2d3@weissschuh.net?part=3D3
 
