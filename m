@@ -1,110 +1,57 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C73F3385B6
-	for <linux-hwmon@vger.kernel.org>; Sun, 12 Jul 2026 15:00:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2A21263C8F
+	for <linux-hwmon@vger.kernel.org>; Sun, 12 Jul 2026 15:07:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783868454; cv=none; b=n4zZgiGyfddbmo2VeFdQAwkBaoVk2nZPQfDC86l+x9kqCvbPhqnwNYfblv58j1ObkVl3xE7n4suLF4JGv4bHe7hIiNuUo1t4u6lZE2avmnGHl4PTBfP2ww/CHaS+Idij265m/3oINGdvWC470HIQcJMg+aGhgfAg97hPBlwTG9g=
+	t=1783868851; cv=none; b=pXEWWx30tQJF+xwliIMf1tYHK0IFLhYEmGliiQsSsdEwXkUnVnHHA2/awfXW5yWFu10ucBZu4MharMvg+2NMSu2A4AkppJElrj50M7LWk3Opabmr8meHWLykRmsSdchCEg58oJ4yUkPMsH8cEfAWkHOizWVTOnvNi86NEiaRrxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783868454; c=relaxed/simple;
-	bh=BWfkWqkRlQKzl8mKCq2A9KQ/GkMIzCJhbc4vJsP9mDw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=L7JYC0t7RxL4MYa2i5DpTgBgWqYmdZNSA8DVVVYszDk4TuO7FWBCp9X6E3MLxG4qmprPq4PBpvcq9wK29CbQh5VlOYhV6K9z5xtCXztgFb7FHfSetZCOyaR3s6XvBRxkcPhFlaDoLoa/znRc1bZDe0MrmX8YwNCLRIsIlIHhoXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sMG8L5hP; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783868851; c=relaxed/simple;
+	bh=ZSB4Elf0rRVtvLUXxlHu8xNkwNCNSUD6s3xXtjmCl4U=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=jAnWzYxbvp2PZLQj7oeebXwe2zS/yXmqE9hi8Ei4emYGiM5Bk/h+m4RhRWvZTAhWkCkYTMOLrpg60FY2X4M7F0cuXIVX+j9VBgtgR8Qt9dAwTgZSmfx9qpUlH/vT1N/t98Z+7IB9xqKkOPC6XzswA1r22d/iiNbZoFaJpkSUg0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jd/cs1i+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sMG8L5hP"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-493f45e20cdso13662955e9.2
-        for <linux-hwmon@vger.kernel.org>; Sun, 12 Jul 2026 08:00:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783868452; x=1784473252; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=cDKf75qrR4FnYkRe8a57ykunyT8bvCyYnpQW7qx2SrM=;
-        b=sMG8L5hPfHL0bswXHZ8ynUv6bFY72blMKdQ6Ns55bUaZhbIDz9mnnv6siJEjbWpOcD
-         /QcG0rxKnvf5+H/CgJ5dxxFUvTxl6/wRAtSNv89pQTBnT0dshfkdvDIf69p+yy8SHw4n
-         KTqg7XPJrPYvdCxQ30/mAzUz8Jw4H9gd6gyAWQQSbNdGSyAFpBtLZuTI21hSJuvH8xju
-         w8yscLcGJB478sL5A+Brmd9m8pbi6a1pCLlMH70YF7oIPjgeJc6jLl3vpUYao0eOSara
-         HV+mXDujTGB1Y98di9X5WYGI3tBrZNB3KB9eDPM1o5EK4KZQvGyOEI+RWcK5pf+9IGMi
-         M5CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783868452; x=1784473252;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=cDKf75qrR4FnYkRe8a57ykunyT8bvCyYnpQW7qx2SrM=;
-        b=U/KkH0m3y0lFExkHXcdVlrTIFQn9cEIT5kKJkKLmem6JlSwVkITpEXJHzLI5hgFZnz
-         AMAiJfXZDPxq9wNS3qkuwWTnRdr2+lBzGUmwQ6pQJo2GXc5MOsCX8TD35OJmvqpN6irI
-         0dCaKZheHGexAf7uwUEnVQemmeukgYrddTkob+1JW+88AFfR8naL7K4GmCLIpDA4FicS
-         L/QvNJIKwMm2H/BktNjm404k+04UficQW7Yjdi4LrNegPn51/tsveCUznHUHkQDJ7csz
-         B7twvJvMKZAWli9ZALeqdpgLnd1TUN+hKokXe2zvbQC9i+DTb8S7yPb4bOoNTS+8VSVG
-         coSw==
-X-Forwarded-Encrypted: i=1; AHgh+RobMK0bURsqfyi80fI2S5een2/Ytvz2kFfqoAojdG+ko3dp5QjaP7u89rOalOebiQUiWb9VHOhWhv79zg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCLYHT3ygIsGpVhZUuOjEs8RwQIt8E7+JeXZJsdsaCw/ykx7GP
-	QCKnd/lMBDn8BqnQb4yTTtyOlYUoQKoiRL0fDUe/9Y4iGJS3MEUZy4uggFeAkmHP
-X-Gm-Gg: AfdE7cmqzkFJqVOwn9wUnKZded0ayDV4g5cTrZ2BH5q4FLsaxcFQrYNac5au6GxDIdI
-	KLBwSmKzq0wQRQSv0QDmeosGvAqcgZk/oRfDe9XGe1aOyBmnknzkUb7v/4bf0FEg5YMA8Ghz9ff
-	SN4BtjkXJMG0qUAJ6IaF4JmT0p2SQb2DMyfmqdRthciKoJQlm6qkTWYiNPFDnxDL8ubxmYFmSqJ
-	EhceusCjblcFy6E/a3MfACr/Y6QIg1C8Zlb7dVNRU2oG8LP3jJNOq1Lgz8GFOov1hFJOtkc448e
-	LPp3NuCgUn5fRL0RvKVNJwfG+EvtBq9T418UGTpzYP0R6XRimntaceHs2JtSgV9fws1tZwDQfXX
-	S14Q3xYadeDO1lMXhZnRTkAW15a7Z5as0E2EPwf3vKudo6hhKdc5JHCUUcOpsTRYJyquu86DBy1
-	bOcQF92dNpdJwhJhG2zl7UHuGA
-X-Received: by 2002:a05:600c:858e:b0:493:be08:c372 with SMTP id 5b1f17b1804b1-493f88b5d6amr56139475e9.17.1783868451645;
-        Sun, 12 Jul 2026 08:00:51 -0700 (PDT)
-Received: from puma.museclub.art ([94.31.117.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493eb6e0e5asm296017845e9.9.2026.07.12.08.00.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jul 2026 08:00:51 -0700 (PDT)
-From: Eugene Shalygin <eugene.shalygin@gmail.com>
-To: eugene.shalygin@gmail.com
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	linux-hwmon@vger.kernel.org (open list:ASUS EC HARDWARE MONITOR DRIVER),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3 1/1] hwmon: (asus-ec-sensors) add missed handle for ENOMEM
-Date: Sun, 12 Jul 2026 15:05:05 +0200
-Message-ID: <20260712130602.1256700-2-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260712130602.1256700-1-eugene.shalygin@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jd/cs1i+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 699B01F000E9;
+	Sun, 12 Jul 2026 15:07:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783868849;
+	bh=ZSB4Elf0rRVtvLUXxlHu8xNkwNCNSUD6s3xXtjmCl4U=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=jd/cs1i+kFczT5MKNaNIxc6TgSvypnTueDqy+Y1spiTatbZCslwXYrYTEmvxeg6jP
+	 f9HmTyKSFC7JnJzy3Oh7VOBfzlEu8S+k4geRJ7rj+l4iHEL3nMi12NHu7hDB67pQJU
+	 yB/SqW4RlDryfHBxJcY1fndl86MgXZ+kAGTKx+Ca1ppkB4HJZniPdIY06ylbjSMM5r
+	 UkgfFkolVxxpdDhUZpHVGuBp4+8OnkxTDJwn3XpVvFql5zli/XKnr92/VBSHuqy/nD
+	 S07H/Z3LTPQJxNVVlujrZJ5hJHEAl2z+ILV3i3Uxe0sz0eKTh8E97Uz+kdJjLg03fX
+	 X2+NQR2ArfSiQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v3 1/1] hwmon: (asus-ec-sensors) add missed handle for
+ ENOMEM
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Eugene Shalygin" <eugene.shalygin@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260712130602.1256700-2-eugene.shalygin@gmail.com>
 References: <20260712130602.1256700-1-eugene.shalygin@gmail.com>
+ <20260712130602.1256700-2-eugene.shalygin@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 12 Jul 2026 15:07:29 +0000
+Message-Id: <20260712150729.699B01F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add missing return value check in the setup function.
+> Add missing return value check in the setup function.
+>=20
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+Sashiko has reviewed this patch and found no issues. It looks great!
 
-Fixes: d0ddfd241e57 ("hwmon: (asus-ec-sensors) add driver for ASUS EC")
----
- drivers/hwmon/asus-ec-sensors.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index eb71e41fd4f4..65d2bb1aa8ff 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -1495,9 +1495,11 @@ static int asus_ec_probe(struct platform_device *pdev)
- 		if (!nr_count[type])
- 			continue;
- 
--		asus_ec_hwmon_add_chan_info(asus_ec_hwmon_chan, dev,
--					     nr_count[type], type,
--					     hwmon_attributes[type]);
-+		status = asus_ec_hwmon_add_chan_info(asus_ec_hwmon_chan, dev,
-+						     nr_count[type], type,
-+						     hwmon_attributes[type]);
-+		if (status)
-+			return status;
- 		*ptr_asus_ec_ci++ = asus_ec_hwmon_chan++;
- 	}
- 
--- 
-2.55.0
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260712130602.1256=
+700-2-eugene.shalygin@gmail.com?part=3D1
 
