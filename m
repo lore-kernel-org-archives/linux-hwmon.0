@@ -1,135 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 897B954723
-	for <linux-hwmon@vger.kernel.org>; Sun, 12 Jul 2026 11:16:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E72C1A724C
+	for <linux-hwmon@vger.kernel.org>; Sun, 12 Jul 2026 12:51:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783854982; cv=none; b=KE5y/vwCRzCSa5hk06l4EiuxO50/DrJenVUVFQt9XEthtxWtN0auviKXi6tlwoWXHXB1QUDpNOhgUhNFgfnVFSSmBNGGR5RA0Vr884mfE6kP7BQ1FLRnX05LZ4CcNdVffOftNkYX8jBVwt7UbJ0UIRDB5JDFDS3bWJRYcitcL1U=
+	t=1783860719; cv=none; b=ANObE6fRkaZTn7HNaxOqte4v61bbhJtzLba7HTY1Sircw26wD3O/KihibafQdHM3ZLgqokXA+GyP/dPzVk2VhrDrKKPyxO/xOGhBvIWzwWGpYJPta1FE52c7S9BBXMh7Y2moa/r7FqdXTt9ljLMaqx53PTUEcyguc40S55F8l+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783854982; c=relaxed/simple;
-	bh=A5l3fSjDJSt7U0rjVnlPQ8TWWgv0UHFcAsE4c2T4GBA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=dhw2HtiTiuFsgZ4rZtumsuf/3dgMmJZ8me8BV/tTvUIaTMLh5/RoTbDCEyJOeSbDbbZYUfzUMzJiEUWCnKm/o4HxQiuzKGNxenk3/UMZQbSnPrQuZIdb7pSgp16AcI8W+H7m1egC+h09xnZVtLTNMzsmjcZf43Xy8Tl/7S85x5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mALKj1w5; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783860719; c=relaxed/simple;
+	bh=AhmVDzOZEfTRdUkpFP7ufAUfHLiFovckdlg7IXGkf04=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BEcehjVLDf+RNkq4AqEToybbjoyOQSUixul7PqCx17ZgfyMWf+SXCBANbvfLIA95+XbD5/SnZMuK+zLJNGpiIAy61UXssqHwt8DipKkteqx6/5mcICCK9aAgFSWxXkizn6vOBDXleTjMtV1DEujU0jijS9MBCbqXsRyXbYuBTaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m6jqJoHn; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mALKj1w5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDE5A1F000E9;
-	Sun, 12 Jul 2026 11:16:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783854981;
-	bh=R0ZFNN4L+xf/EaA8WSHHIO4+0bkpbG2UkTm1iA13ijc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=mALKj1w5dgysmUDpoh8vARdtYgaESTRZ/IuQsNqyFF/Cw1un0xBZOkW0gOlmescn+
-	 mj1Fz7HCvsQXI7uIACt6z+WY2MaX183P6CWd7QSvBgkShD7JbW4BmHWEwTDo71LyUc
-	 gNWdTxhH2Z2jKjpIFa/RV5/W5Y5lHmtPehrSJVcH3RS+G7ORFByguKRhT6z8KWELPR
-	 3lObL+O8HlyAjDwppBi1SPQfNbWBxe8MKDx/ZDTvl6ifzImqJ5U6iqAmzSV+uXCs2u
-	 /MmQ+oV/VjEyHIa39dc0n9wxD7By/m65KQGVVj87dglBieBrGT7yvOpeNjZeQgD3mc
-	 3vLqGjRy/pp7A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 1/1] hwmon: (asus-ec-sensors) fix EC read intervals
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Eugene Shalygin" <eugene.shalygin@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260712110650.1240071-2-eugene.shalygin@gmail.com>
-References: <20260712110650.1240071-1-eugene.shalygin@gmail.com>
- <20260712110650.1240071-2-eugene.shalygin@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 12 Jul 2026 11:16:20 +0000
-Message-Id: <20260712111620.EDE5A1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m6jqJoHn"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-4703bc0a99aso1210497f8f.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 12 Jul 2026 05:51:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783860717; x=1784465517; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=IvR1EpkK0j0+5UkcT4876Jxi8k4p/8jVOH70oWDaAow=;
+        b=m6jqJoHn5QnxM8rcRVGv4wX8oje9dTxEQHcUo4/5yAkF9wVWgUd5UNQ+s/cbcLfcaa
+         eYMplXc08393XaY29uPskqnr4q2+q2JdtK+1dB4XR0cxjQNJNw4lKncEtZLgOYgUDozd
+         tTbDgyfKF9UEJDCJKPWeFhzAAK/45wdAPKujRnI8be2yCVEoEmn8n0QoTAuP4q9nhd6h
+         uV1WxP4tHU/9FCoNv+xFAIBpqJPmipWzDs7+nGpetMGMUugeC/QcDxIJyaH8joWP7+kF
+         rsmV4iRAy2C5PhrqwsEg7MbSRKRHHqH5xgbFO5NHJ0Rd4Pb8+829LRmRaOQhhsUaWbHD
+         KnYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783860717; x=1784465517;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=IvR1EpkK0j0+5UkcT4876Jxi8k4p/8jVOH70oWDaAow=;
+        b=IQLzpmpelgeJIQomUCM0QOxk7Fr9MtxM0qDD25rpv+H+ZMNHoIIU4gwg9P6XYwdF2d
+         RkgcmBgMQzgOoGZkGDvmLFm9yuCoubt/gRqJyGnycRkSJH9kcShTPF4seNdaupJnGrvn
+         xpTwuPwWLob417UQ6s2Ntex9qNRmv5ffvUmh0HaP1Wnha2nrxbS+OiaX6E9KHybBU5EF
+         +szRqF4XpuqCmfGlFuDw38F7MUorNqsXzHWCnKAXbxseEt7rloF1TXlCm0UxdetLyfjj
+         ClRVTi0rK3busPKdOpFq3PooHiOdBFeRx8d0ln9OX2JNfisyQBV/S008uc/uJ0Qt68eE
+         0DLw==
+X-Forwarded-Encrypted: i=1; AHgh+RrECDyWjk88LUu9bcgKqdDX8zEMFS2E2fynzlO5xyizQXfThv8+dyuA26UyONIZ6w94pA7Uot0ISfyddQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDCvmT/Rwz3Vq7I1uI+OwxdzIV4awHou5orOkxb14sdoMQwUdW
+	mOziDbUGjZ7EVtaeyHWYxfTtar3Z3oj0/7r4dEKxKYXsNcSqQ3DogkI9jb0FbA==
+X-Gm-Gg: AfdE7cmh8YOagUcX0fHB1hH7cL1X631M7R00MrwIfukGtOMZHKJie4IOivljiPWG34d
+	ifkTEtk7r551T8hwREzyJLy3NlYPSMHWMcsNKr8Ihfq1ZGxRKyRTims9NNyRpFhWsxZWk5kxLaR
+	HfNFqoa4YWxMORfWyi4EzBNNFLGw/J5097gW272ROf/ErpvSJ5nEiP27p3xszV+tiwnV8uSUkAo
+	zJgZNhcJbwEbqUmWd0yoAKkUrqqHeYmV22SLng6l2o0/d8ZOx/bPz6XaN0scdrP9jGGHgL7OU2C
+	N09yUu5UVWbpYmuvquFrnmqDbt2nxBIohiukJDtTuSo7Ppf9dG74v+EtqcGLojeo7fhhV+z+uNm
+	zqMLaO8mzKj2R4lFpL95FN9FHDb+nKVAqPishztbU1oeqJY5E0lXB+vAQ7dA6Qw9ggWLG7uhbZm
+	5qLLiPbtmRxBXCZv4aEkzoLBpDvhmPddlnl+NNC+QMlw==
+X-Received: by 2002:a05:6000:2dc2:b0:46e:624e:3c2f with SMTP id ffacd0b85a97d-47f2dd029dfmr5955171f8f.47.1783860716596;
+        Sun, 12 Jul 2026 05:51:56 -0700 (PDT)
+Received: from puma.museclub.art ([2a00:6020:b326:d300:d19:a765:d8d7:bedc])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47aa039bcdasm80165227f8f.21.2026.07.12.05.51.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Jul 2026 05:51:56 -0700 (PDT)
+From: Eugene Shalygin <eugene.shalygin@gmail.com>
+To: eugene.shalygin@gmail.com
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org (open list:ASUS EC HARDWARE MONITOR DRIVER),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] hwmon: (asus-ec-sensors) add missed handle for ENOMEM
+Date: Sun, 12 Jul 2026 14:51:39 +0200
+Message-ID: <20260712125147.1254339-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+Add missing return value check in the setup function.
 
-Pre-existing issues:
-- [High] The driver ignores the memory allocation failure from asus_ec_hwmo=
-n_add_chan_info(), causing a NULL pointer dereference in the hwmon core.
-- [High] Missing rate-limiting timestamp update on EC read failure allows l=
-og flooding and ACPI EC spam by unprivileged userspace.
---
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 
---- Patch [1]: [PATCH v2 1/1] hwmon: (asus-ec-sensors) fix EC read interval=
-s ---
-commit 22e0613e28eceb6562850cc438cb81f20f1fefaa
-Author: Eugene Shalygin <eugene.shalygin@gmail.com>
+Fixes: d0ddfd241e57 ("hwmon: (asus-ec-sensors) add driver for ASUS EC")
+---
+ drivers/hwmon/asus-ec-sensors.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-hwmon: (asus-ec-sensors) fix EC read intervals
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index eb71e41fd4f4..2be8824e3c62 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -1495,9 +1495,10 @@ static int asus_ec_probe(struct platform_device *pdev)
+ 		if (!nr_count[type])
+ 			continue;
+ 
+-		asus_ec_hwmon_add_chan_info(asus_ec_hwmon_chan, dev,
+-					     nr_count[type], type,
+-					     hwmon_attributes[type]);
++		if (asus_ec_hwmon_add_chan_info(asus_ec_hwmon_chan, dev,
++						nr_count[type], type,
++						hwmon_attributes[type]))
++			return status;
+ 		*ptr_asus_ec_ci++ = asus_ec_hwmon_chan++;
+ 	}
+ 
+-- 
+2.55.0
 
-This commit updates the EC read interval logic to take INITIAL_JIFFIES into
-account when setting up the next update time, using a 64-bit jiffies value
-for next_update.
-
-> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sens=
-ors.c
-> index 29a23484cbe7b..eb71e41fd4f4b 100644
-> --- a/drivers/hwmon/asus-ec-sensors.c
-> +++ b/drivers/hwmon/asus-ec-sensors.c
-
-[ ... ]
-
-> @@ -1278,13 +1278,12 @@ static int get_cached_value_or_update(const struc=
-t device *dev,
->  				      int sensor_index,
->  				      struct ec_sensors_data *state, s32 *value)
->  {
-> -	if (time_after(jiffies, state->last_updated + HZ)) {
-> +	if (time_after64(get_jiffies_64(), state->next_update)) {
->  		if (update_ec_sensors(dev, state)) {
->  			dev_err(dev, "update_ec_sensors() failure\n");
->  			return -EIO;
->  		}
-
-[Severity: High]
-This is a pre-existing issue, but does returning early on error here cause
-unbounded log spam?
-
-If update_ec_sensors() fails (e.g., due to a hardware timeout), it returns
--EIO without updating state->next_update. Since the timestamp remains in the
-past, subsequent reads from userspace will immediately retry the failing
-operation, potentially spamming the log and the ACPI EC.
-
-Should state->next_update be advanced even on failure to maintain rate
-limiting?
-
-> -
-> -		state->last_updated =3D jiffies;
-> +		state->next_update =3D get_jiffies_64() + HZ;
->  	}
-> =20
->  	*value =3D state->sensors[sensor_index].cached_value;
-
-[ ... ]
-
-> @@ -1488,8 +1488,8 @@ static int asus_ec_probe(struct platform_device *pd=
-ev)
->  	for (type =3D 0; type < hwmon_max; ++type) {
->  		if (!nr_count[type])
->  			continue;
-> =20
->  		asus_ec_hwmon_add_chan_info(asus_ec_hwmon_chan, dev,
->  					     nr_count[type], type,
->  					     hwmon_attributes[type]);
->  		*ptr_asus_ec_ci++ =3D asus_ec_hwmon_chan++;
->  	}
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does this loop ignore memory
-allocation failures?
-
-If devm_kcalloc() fails inside asus_ec_hwmon_add_chan_info(), it returns
--ENOMEM and leaves asus_ec_hwmon_chan->config as NULL.
-
-Since the return value is ignored here, the uninitialized struct is passed
-to devm_hwmon_device_register_with_info(). The hwmon core unconditionally
-dereferences the config pointer in hwmon_num_channel_attrs(), which could
-cause a kernel oops on probe during memory pressure.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260712110650.1240=
-071-2-eugene.shalygin@gmail.com?part=3D1
