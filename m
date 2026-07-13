@@ -1,138 +1,122 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CACFA353A7D
-	for <linux-hwmon@vger.kernel.org>; Mon, 13 Jul 2026 15:13:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783955620; cv=none; b=CrFjrcL1H5z2tXkM2Q2N7eyLnivClq9ai/Rw6zMrSIUjoWp503ad2M6rsKV4h0BwtiO/UdIbzQA25RhCa0vIBN4ZQhgBmDoZ+0D6grRm3eWQHDQSiTBlKVzxO3bhMe8wbOocE4l9RYOJdsgnAYUD09yZuZ9pkUTelIsaisFLBqI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783955620; c=relaxed/simple;
-	bh=NqBUMuN62l5N2Nf1UtzR+VlT4Ju3NnVcgiOFc6mKLQ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RQwUSkixtU3kSl6jc/1eU+bYlpKgcqHiNMebBxUpwomtywKpZzXRoD38CAfelsXTrCuw68VZeGsQmTNfFBS4jKcJ/C9vSTKEsh1QrhtCsY0h2nTiMBT13nGwQdEmG70If3k134wUnFoeF04LvORnfjwWbu3zpX2Ypy73xLLXdfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=XvdxBJZi; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB953336897
+	for <linux-hwmon@vger.kernel.org>; Mon, 13 Jul 2026 16:24:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783959857; cv=pass; b=Wyu0folHuCTUdni/vZpSnzpj7ywUGXpuP5HFNL4lESdmB6j3kej5h3o9OGsnwxenQt2PR2o7Qh76+wC+70+dQLrlnBTKfJjVJx8F3X6Pw7qQRnArYX/+r3zgP2yAihSESYpRzt8aIKjJjXxi+v82dHqNwSGOUoZyFYUqqbxhjEk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783959857; c=relaxed/simple;
+	bh=ZEQgOof9NIG4nWczbdDkgmiipCAUqlv4TKuXzT2h/lo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=A4NG6vZaZ3fABBbC9S9E+Vfqpr9hUeQS9MRuVYmJHxYmWfFcQuFthowBG5cFWXFdZQUIqPSTm3r9IibvAeVHYugeAlgYNJHaMYzE0agq/bdDFyobmazPg/Duqx5rGalUMz1AS+LgzZSypD+a6V/ihGf5J97ZinYWd4ZDowsb59o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c8Xy3sze; arc=pass smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="XvdxBJZi"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-493f4638f4aso237835e9.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 13 Jul 2026 08:13:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c8Xy3sze"
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5aeae771c49so3851873e87.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 13 Jul 2026 09:24:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783959854; cv=none;
+        d=google.com; s=arc-20260327;
+        b=GuWKC1eKr1inlycAqS/kNyNgjQm1O7DzJFj+LXKZQOVWAb149c26uWfHTPRb1wRLRu
+         n9BwBeE3rlkWc0YBlm/njOFqxqBDJLVIhYMrYSbknB53ZbqUllzOHj0r1iMGlIrhCmR5
+         vtAKSpxRsGGU7VXfkgFfDr9mYOX5l7/BBJXezsXcvh2nlFSwTCZNS/CNeO5FhMxGiFNc
+         L5TuiDGjPGWwmIPJgjbgO1V0IvyvWJ0DVxg7vZvZv6O8X/1dzPbp3y2jOJ1buwS0cYCf
+         gzNjJ3ybDK3yqC3mQAQO04HqRgRxNOMfAOFnH5Gm1CKSVtC0evssIqRPKRpcTKRRF+BB
+         bN7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ZEQgOof9NIG4nWczbdDkgmiipCAUqlv4TKuXzT2h/lo=;
+        fh=k6wnWgoeBANTfg1j16+f++PW6LVd+rAqkUGlohFSQyQ=;
+        b=ofwm7v3WEzEY1z/4bubCTbCyO+v3YCy6vhwqt1bP5D+oLkHH320hlzb2r1Fz1233i2
+         3IhpWzlx1GWNScs/xlFUFpDxez5Dp5N8L336kpQBl7Vv9gYTywHn/z+KogranPb6mBbu
+         eESqaAX9aInbtku374NaCyiMJE2KdJZVisPSdVw9GQpgjp2iclAg0VT7CXpmovaIDOCf
+         Tec76etH+LLM/f3s062FGJ/mAFCr8vUeLRJ3fh1ylZndsqagj6GGFn4rUNL7lO/uZFeI
+         xepotMoxMIrExIwFW3qoYyoGb+8uEYhD2Q50BmdyqBuAPrzUAsmEeD+MvLkQ2ad6x/eu
+         SZrQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1783955617; x=1784560417; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1783959854; x=1784564654; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=NqBUMuN62l5N2Nf1UtzR+VlT4Ju3NnVcgiOFc6mKLQ4=;
-        b=XvdxBJZiGOn9DYNXobKCx2I1xUNkxnaPpPOJPhtY4NqsnJRHQ1TtSipMtIIkQlU4cD
-         p3XjlgqHYDCEWs8aiAhMK+JuUsM1WjMnCuoysmDv/dbC+FmcwuarSChgOlOBxU60c4qL
-         81TyXSGmXG/bk9SB3pgwyjlad7iS/ZYCnjseZyM+n265+vDedRHuv5erkE55uYYyib3e
-         defNPDl2ho8eSknuLipDb4Je/LjWaGox0e3S8GqfypSw8SkPM5IgwYut7WontUfK1HZK
-         R+Hc6q2fkNDkhRA6Ae7A18nOvSkGbmNOzhDkf2+j1/P7GMdxYwvn95jk0w+s+xCGTraw
-         /Cvw==
+        bh=ZEQgOof9NIG4nWczbdDkgmiipCAUqlv4TKuXzT2h/lo=;
+        b=c8Xy3szes3K3bTc08VRIGf1lXNnxU/qWUvkicys7zA1nr5LiZJnCcD/gHu9Eo3/Z2a
+         VuEA79boansV1iDECSiJRFM3xsbD8ahDCpxt0QPiNrT7OljuI+zsZJlQcl7Xd6foP3gd
+         f9r+5wl0tpuZthhKt75pHFKpG6q2T11d4SJF8UAwYR19bkP6SpSzj+Abzyr8ykFBOdCj
+         HLBk8EFkheatadkZbeU0d9AqxJAjWW/M4d51ZwQ7XB/GMKatK1p0N23vKACb9q1pU/5h
+         iJa8eWJArAn5FkQGVAt8qs+WMnAx3UemJfyEfBYDRKWj0N3FotIPuRX+up7gEQmIrdEL
+         P9GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783955617; x=1784560417;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1783959854; x=1784564654;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=NqBUMuN62l5N2Nf1UtzR+VlT4Ju3NnVcgiOFc6mKLQ4=;
-        b=hVfSwxeDc9fJMNanPspuAUqviwTmG0zSCFBQ5GZmsXwT0FwLr/pCHpYamcSKgiehAx
-         IuEmPrDiZCQl0+HQOMkbi/BM3+vzqkbn+OJaUgfWhKysvhge6n92cAGquc9OjbK5sFo6
-         yC7zRqV1/iOMfMYHcU3Aeb5IS+KI8UigoMox/ZD4iJcR5a59Dxqvn7Wtq8yg7tbI0cT3
-         4OViZwtenRnwsksW3nz0nTjNOlNuay1dOG9Jl+5DF5b2Bm6CoA+ic6Ms1rJoy24DFk+u
-         DOXlGC3Klw3IRLQOsGb3dbrSpyEDJftxQ4Zaexl71jnVv3RDdd1TPZEVTW2c8pOGlAHz
-         xdzQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rr5rs6CM++7mA0w/PUJ3qEvtuTN7zxiO9DQiaQoc9ZsO2Vj++Y7ZaBKzl11dd3I+NctptxsM6gtQH9ZoA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxWMtFkuVqkVcrR+9u36aU2xHzC/Qxqw9rRme0ywKUIK9R5pKM
-	lr6Ya0PK5wY1OMIweEQuwiZuwDo5i9wMjfeRT5SfxOfMU0rISUIF/H5LC3LuoVCz034=
-X-Gm-Gg: AfdE7cmBklldYwg48GICOnxULIg3cD80JMqBR2//ZYxP+ot9qMlXqiMXE7sD5JqHvmr
-	vcSa+TKIUQyG+MOZiIMVN16YzcHC+KtLlyJ7iHvQCZ05/x/+WReCcM470zOlwSQNU4qLofsgRhx
-	HIS0fylh4yRzEDKNh0levZ2n7fTYBJmD8jFjhFtXJAqJ+2A6wilerKi4qtMZ5mXM4OJC/YDBHAa
-	32XIEWtOHHS7u0c91fegGRkZOvyU2waTYP0/FfPPrd+7HovQF8pgDTijeis+yU/oiWFp5AsG6n0
-	JtK6GH2ybWclDqg12t7LWoDIEIBQjUOEoS0FEI8Yzr9V3demDGYXPQ5VfdJ3XMNB50wpyb1BdCS
-	4uXqvGLlk5CfpfsveRsS5itshRTdLrwTE5/h/wcMVX5LDO/gbJyGpCYLL/MIJ/mJOEwnJUjNo/4
-	6Vqq/HissisdJiTOdbG3WDcSqOX8+7YVUcZESjBtUP3K7a+KufuMRCftPw9z93Z3ERCCWfAc7Vf
-	LCAquE8vrL23FE=
-X-Received: by 2002:a05:600c:310f:b0:493:d115:d835 with SMTP id 5b1f17b1804b1-493f87d5800mr97585625e9.8.1783955617181;
-        Mon, 13 Jul 2026 08:13:37 -0700 (PDT)
-Received: from localhost (p200300f65f47db04916e789240f263e3.dip0.t-ipconnect.de. [2003:f6:5f47:db04:916e:7892:40f2:63e3])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4950a32c65asm1588755e9.14.2026.07.13.08.13.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2026 08:13:36 -0700 (PDT)
-Date: Mon, 13 Jul 2026 17:13:35 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>, Lee Jones <lee@kernel.org>, 
-	Linus Walleij <linusw@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Peter Rosin <peda@axentia.se>, kernel@pengutronix.de, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	David Jander <david@protonic.nl>
-Subject: Re: [PATCH v15 5/6] hwmon: add NXP MC33978/MC34978 driver
-Message-ID: <alT_Scg-gKCvnx-M@monoceros>
-References: <20260710101358.2606941-1-o.rempel@pengutronix.de>
- <20260710101358.2606941-6-o.rempel@pengutronix.de>
- <alQS61NF-jIPf9c3@monoceros>
- <6fa34460-7753-42cc-b88c-4e5aa58a8e90@roeck-us.net>
+        bh=ZEQgOof9NIG4nWczbdDkgmiipCAUqlv4TKuXzT2h/lo=;
+        b=mPMPMDcgQ+LoiKnCPhDJ5772bAzjCK5h4f63URMsQSpzI5l/m1YsHkjoy45CVMahML
+         bEh4SVNUQSk7BkV0pCBk5SZeGjd35OfMHXnUJEtfQlMwEbDeo0/fdQ2UpO+em3fipYCp
+         n0bozff7Eq9v2J0Ay1l6SEK7bA+vmDU7wteii4E6Hbv8eMqhImYNxdzpVbmrIMqnmONF
+         r1Sy65oc8fWgLQhOtMSN/lORS6kJAG1Pg4GwTUXnahcNBlAoTwCZ+qI9AjnH0sFqPLg5
+         bgrtRed4De8XyfAOSocUnbhncgR2MLTP6YPt9bjxiio0NxqERRAm2D7mBY0zOFq8kUHs
+         73dw==
+X-Forwarded-Encrypted: i=1; AHgh+RpLy+zfEsD71azkSqpCxVou2ummftIrdlOZVoP7FMwYOE47GDzx8jq9WlEE3rkbfuWbdLoGhUKp/efZUw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4gJ6ZQqaIbjYcUY+RnRoABaBQYDQviqGzlYqhYirftw5IbxAN
+	34G2QsRP6qH9Z2uaC9wwHuz4xswt2efK84T4/qEAPdF7KFU6atGCSmTH7q8vaj75TVLbzqsG9XU
+	E9GjnM8iIIlSFWE8Pemh/UtsmRPjp3tg=
+X-Gm-Gg: AfdE7ck2xmy6O4gtXzkItcrawMa1MvyGNWe1t9bKBgGGIes+LulyAjLjTK4NjhquSRR
+	VR/yWbjnsW9wfGOuSO8eC/gVxBAedcQ4Kk40fWwBgJ36Mrp9QlRa91iacqUEuedEGxqUhxkwWEa
+	KbUzJkQSKo4jbQI7OJqLo+jCKBwLtA8OjtdX492t0aDQHWp2BSCPkCkg7G78wzKmxduatEkmE9Q
+	ai4Hf+X5VfPom7G8ZEvvmdefC/BxHq9XXsmqwcP7Js+wZWHd/9TXjUWUcMD3G2yQ7r47LjUA/0I
+	+WdzzLFYwSMEThWyeS3Cz/Ltpw2DYYgQke/FGQ==
+X-Received: by 2002:a05:6512:61a9:b0:5b1:534c:5309 with SMTP id
+ 2adb3069b0e04-5b1534c53c0mr744873e87.17.1783959853561; Mon, 13 Jul 2026
+ 09:24:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="fnnztlncnaaigsvj"
-Content-Disposition: inline
-In-Reply-To: <6fa34460-7753-42cc-b88c-4e5aa58a8e90@roeck-us.net>
-
-
---fnnztlncnaaigsvj
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
+References: <20260709183500.13761-1-sarbajitsarkar16108@gmail.com> <69c9530e-66f5-4948-9cdb-04896c09fdf3@roeck-us.net>
+In-Reply-To: <69c9530e-66f5-4948-9cdb-04896c09fdf3@roeck-us.net>
+From: Sergio Melas <sergiomelas@gmail.com>
+Date: Mon, 13 Jul 2026 18:24:01 +0200
+X-Gm-Features: AUfX_my78Fifvh9xTWIZEj05RBI1S68h2_-Y182yKEIc5JM7aaXm3iFnBogyoc0
+Message-ID: <CAP8e=sJbnGe7K=4v9DqRMEhWSM2pL6kk4xf3d7dp53L2rAe9wQ@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (yogafan) Add support for Lenovo LOQ 15IAX9
+To: Sarbajit Sarkar <sarbajitsarkar16108@gmail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v15 5/6] hwmon: add NXP MC33978/MC34978 driver
-MIME-Version: 1.0
 
-Hello Guenter,
+Hi Sarbajit, Thanks for submitting the LOQ 15IAX9 support and mapping
+the 8-bit dual-fan paths. It's a great addition to the driver. I will
+rebase my local workspace to include your changes for the next
+refactor. Best regards, Sergio Melas
 
-On Mon, Jul 13, 2026 at 06:20:48AM -0700, Guenter Roeck wrote:
-> On 7/12/26 15:20, Uwe Kleine-K=F6nig wrote:
-> > Hallo again,
-> >=20
-> > On Fri, Jul 10, 2026 at 12:13:54PM +0200, Oleksij Rempel wrote:
-> > > +#include <linux/mod_devicetable.h>
-> >=20
-> > As for patch 6/6: Please use the <linux/device-id/*.h> you actually need
-> > only instead of this catch-all header that I want to get rid of.
-> >=20
->=20
-> This was only introduced in v7.2-rc2. Not all contributor branches
-> (including my hwmon-next branch, which is based off v7.2-rc1)
-> are synchronized to that release candidate.
 
-In most cases device drivers don't need to #include
-<linux/mod_devicetable.h> explicitly. In this case the driver uses
-platform_device_id, and its definition is provided by
-<linux/platform_device.h>, so the #include can just be dropped without
-needing to be based on -rc2.
-
-Best regards
-Uwe
-
---fnnztlncnaaigsvj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmpVAJwACgkQj4D7WH0S
-/k6XiwgAgXFXSkiO5tdspT8X0L+4tJrphihgjuzS1A2yZJ9tMyfIvhcg/eiXPZSL
-DWoqAABbSTdxTvxvOW6IIptwPVfkVSRE6pw38mmzCOa6Uqa9ClQiPwM8kJl5A7GQ
-aVxOaEKxIaq5SUS2mzzZ1G57e6DDCK3T9kEAydlf5d5D2gSjfm35CmyFElLfLwsH
-SsvdxTDjsnmfHke5OKhgFXgyTUDJ756s7YmmOH/9RByitjtSPEgcZjoz9SrXqWfF
-Wg1G9bzYGoY3SO38PsRu3hwGtkBSxrSkSuReMIHTdgm9cQiNHdq7VjBvKztmsz0u
-o5cEjK8RfXLOMD4EaqpaVl5hJvDTXg==
-=ac6S
------END PGP SIGNATURE-----
-
---fnnztlncnaaigsvj--
+On Fri, Jul 10, 2026 at 4:37=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
+wrote:
+>
+> On Fri, Jul 10, 2026 at 12:05:00AM +0530, Sarbajit Sarkar wrote:
+> > Add the Lenovo LOQ 15IAX9 product family to the yogafan dmi_system_id
+> > table. Unlike the Legion series, ACPI table extraction reveals this LOQ
+> > utilizes an 8-bit EC architecture with a 100x multiplier, but maintains
+> > a dual-fan setup via the \_SB.PC00.LPCB.EC0.FA1S and FA2S paths.
+> >
+> > A new loq_15iax9_8bit_dual_cfg structure was added to properly map thes=
+e
+> > hardware registers and calculate RPMs correctly while avoiding path
+> > conflicts with AMD-based LOQ variants.
+> >
+> > Signed-off-by: Sarbajit Sarkar <sarbajitsarkar16108@gmail.com>
+>
+> Applied.
+>
+> Thanks,
+> Guenter
