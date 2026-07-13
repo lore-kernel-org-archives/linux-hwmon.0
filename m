@@ -1,105 +1,63 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8084778F3A;
-	Mon, 13 Jul 2026 21:07:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9FD2253EB
+	for <linux-hwmon@vger.kernel.org>; Mon, 13 Jul 2026 21:16:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783976875; cv=none; b=hiGBgPYnU2UZD40E23B0RD4+0d//cFTmpZVpny4t5IClHQPPp5gwETP+xnXwfuPD5cvq2rZmJEBtVeydrIVCdbsrgB8wqIlx9fxNFZ3jzYymycTwfhHkydbVnOOGbNXD8odQJaSRfpdCgPVFcDJ0e1nDKNpCeHZgfPvsXZqU3EA=
+	t=1783977364; cv=none; b=EZh+ae0tOPP0ThtLqvRStMJ3KM0kjQvplh8ejHQZW+5Zg6sm37zWXsgGRHN2PC7Fhp91bQeW5qT2yJ0os03pnWKQ7WBJrZBBXj54E213/MSvWfcBI+Ffs+AhZZE2gJotic/3wZHwWuUNYfM4r0UZX5G3L9/IhYLLtslUcrjyb0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783976875; c=relaxed/simple;
-	bh=VDWmE7Fa1F2vT3xKe0ocMykZFpmZprSW0/qbwJAKmeY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=p8GbW4oOe+qM9zavQhknNeNPhb7SSskQxloOQYB/Zg4XNvdFOgJfM8GYDXJHIKDtwZqHGKR7d7jMd9bN0ONy+WkB/h53hGmPmAwGFhJtMiEF+xr6QTYM1nIfNXlcH3sPMA74NYzXGiextTOjq6Dd+VJ6SQElWigExJl5/cCZ5F4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XKMjxLdX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1783977364; c=relaxed/simple;
+	bh=Nce2RMpK60p2h0+/KhqKynUjddmuEEyuCWKx7lYdv9s=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=UA6i4sT5f/2tYlW8Awa5SuW+KwEeKR9HmB77bKU/EbnAnQkCtEpmMY7g6IN/CL/21+KCRhWFZFUpGHlP/oY8F2p7g5DxOD9rKbxwmi1MVpE4B0aTL8HEUTIIdQVMOhRYbu5J271aykEYlOcUzx1BX5ceyKwtDbQ60Q9oKPqMQwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AiE6Vkes; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XKMjxLdX"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1074EC2BCB8;
-	Mon, 13 Jul 2026 21:07:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1783976875;
-	bh=VDWmE7Fa1F2vT3xKe0ocMykZFpmZprSW0/qbwJAKmeY=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=XKMjxLdXz4HIerjr1kRkjM/TePHTFEbpzajccga5ewkQIC9rEvpTkz9I7APG3LtHK
-	 O1K7yLtLQQrYxlLSkqipNTJ7eFsp4UOKH8CUAlICNSkY9x9tQs5E4d2tsFtiYAAKwx
-	 TuhTg9hHR4MAAjCWnM1GCrTe4CRUPrssdUuaTF3skb+uyn9gWljaYXPTr8MQOjtWCy
-	 KlPs9SEfurxZgZaw3/edudix0FWZDcCw/naWLy5gI+PUPJnLnARYNbin/TJNXUPJO9
-	 H6RAMXtDkvFOv6V1HK42D0BfOPpli/cD8el3Nl461K+nlKRFG1jMozmJbbM0u4fMyZ
-	 Cfx8bE6bXU2HA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0740C43458;
-	Mon, 13 Jul 2026 21:07:54 +0000 (UTC)
-From: Vincent Jardin via B4 Relay <devnull+vjardin.free.fr@kernel.org>
-Date: Mon, 13 Jul 2026 23:07:54 +0200
-Subject: [PATCH] hwmon: (tmp401) register with thermal subsystem
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AiE6Vkes"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD45C1F000E9;
+	Mon, 13 Jul 2026 21:16:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783977362;
+	bh=Nce2RMpK60p2h0+/KhqKynUjddmuEEyuCWKx7lYdv9s=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=AiE6VkesCZuUP+AIE2QdfLQZo1MBsinsJP3R+8fehngnn7H1CelHQZhb9aa0Dc+LU
+	 +WIMS8IuL20Z4Wcg8rVMjbPkxyxBmuEw1iFasJnxbK3pQwNVBl/fqxmMP81dUkGIst
+	 x+xHWct6ffJZWYcehgMslq+MxIcs5y9sH57yWcjQR/XVMEEaxl7Svyj+T8ZZcoPM3a
+	 NwEgoedBYlxPHb5jsa4K1LYy6tqKlS32xv+MRi3hxOA+DHLRM5ivsdXdZVdvVr9htP
+	 9UA6J1YvIGijn2sUXwRnnf61u0flQuX0Iv0+kF7bpzAicWI912tFqZE40JtEBlzVOA
+	 qCt8oAHYrDxtQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] hwmon: (tmp401) register with thermal subsystem
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Vincent Jardin" <vjardin@free.fr>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260713-for-upstream-hwmon-tmp401-register-tz-v1-1-47315d8617bc@free.fr>
+References: <20260713-for-upstream-hwmon-tmp401-register-tz-v1-1-47315d8617bc@free.fr>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 13 Jul 2026 21:16:02 +0000
+Message-Id: <20260713211602.BD45C1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260713-for-upstream-hwmon-tmp401-register-tz-v1-1-47315d8617bc@free.fr>
-X-B4-Tracking: v=1; b=H4sIAKlTVWoC/x2NywqDQAwAf0VybiCrpWJ/pfSgNWoO+yBZtVT89
- 257HBhmDjBWYYN7dYDyJiYxFHCXCl5LH2ZGGQtDTfWNWtfgFBXXZFm597jsPgbMPl3JofIsllk
- xf3D8uTR0AzcEpZWUJ3n/P4/neX4BN85exXcAAAA=
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Vincent Jardin <vjardin@free.fr>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1783976874; l=1435;
- i=vjardin@free.fr; s=20260525; h=from:subject:message-id;
- bh=KjziWIi0OltnNwCWGxqiR9hdiO69mfw90Ja+vvlTw18=;
- b=PDafruWlxKd+Zk51eUp/TVu8YihLTuQ1OXVy5lEYlD4EGX56l8xI9Rc7l+XmakcCc4uzGaSOD
- 6QfYJZ+60K1BsFQzdVXe3DW1b6luC+aK8F+ix0TKYXJNGLduKOoiTnI
-X-Developer-Key: i=vjardin@free.fr; a=ed25519;
- pk=hppgLeFpGpKOi7LNwGEZ4jOYofJCoGd4Jf1ltAabiLw=
-X-Endpoint-Received: by B4 Relay for vjardin@free.fr/20260525 with
- auth_id=871
-X-Original-From: Vincent Jardin <vjardin@free.fr>
-Reply-To: vjardin@free.fr
 
-From: Vincent Jardin <vjardin@free.fr>
+> From: Vincent Jardin <vjardin@free.fr>
+>=20
+> tmp401 is missing HWMON_C_REGISTER_TZ. So a devicetree thermal
+> zone referencing a such sensor ('thermal-sensors =3D <&tmp411 N>')
+> fails to register it. Then its cooling-maps is not set, which means
+> that the fans are not managed.
+>=20
+> Same as lm90 or jc42, set HWMON_C_REGISTER_TZ.
+> Boards without the property into the DT keep the same behavior.
+>=20
+> Signed-off-by: Vincent Jardin <vjardin@free.fr>
 
-tmp401 is missing HWMON_C_REGISTER_TZ. So a devicetree thermal
-zone referencing a such sensor ('thermal-sensors = <&tmp411 N>')
-fails to register it. Then its cooling-maps is not set, which means
-that the fans are not managed.
+Sashiko has reviewed this patch and found no issues. It looks great!
 
-Same as lm90 or jc42, set HWMON_C_REGISTER_TZ.
-Boards without the property into the DT keep the same behavior.
-
-Signed-off-by: Vincent Jardin <vjardin@free.fr>
----
-It was checked on a LX2160A board that uses a TMP411 for the chassis ambient
-input of a fan thermal zone.
-Without this patch the zone silently never registers.
-With this patch, the zone registers and the cooling-map drives the EMC2305
-fans.
----
- drivers/hwmon/tmp401.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/tmp401.c b/drivers/hwmon/tmp401.c
-index ca0ff525ea29..83aafe4bd3e7 100644
---- a/drivers/hwmon/tmp401.c
-+++ b/drivers/hwmon/tmp401.c
-@@ -695,7 +695,7 @@ static int tmp401_probe(struct i2c_client *client)
- 	info->type = hwmon_chip;
- 	info->config = data->chip_channel_config;
- 
--	data->chip_channel_config[0] = HWMON_C_UPDATE_INTERVAL;
-+	data->chip_channel_config[0] = HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL;
- 
- 	info = &data->temp_info;
- 	info->type = hwmon_temp;
-
----
-base-commit: ca078d004cf58137bcf8cb24a8b271397431ba58
-change-id: 20260713-for-upstream-hwmon-tmp401-register-tz-d07130b9be30
-
-Best regards,
--- 
-Vincent Jardin <vjardin@free.fr>
-
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260713-for-upstre=
+am-hwmon-tmp401-register-tz-v1-1-47315d8617bc@free.fr?part=3D1
 
