@@ -1,63 +1,63 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82F503939BD
-	for <linux-hwmon@vger.kernel.org>; Mon, 13 Jul 2026 07:46:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FBB9396B76
+	for <linux-hwmon@vger.kernel.org>; Mon, 13 Jul 2026 07:46:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783928794; cv=none; b=h8ZfVNyMCnZ4hTlkMm5qUlhVZ45bW1NhbkhPCbMu1kbOxlMj+XVXKsN/Bv1GAfxUME4PHqdgvEIyYuvMnNm0T9Hzerb8DpPBEd9bkaf+qmnhQ5m0WDk7qeJN/wKrEj3IJYF++JPnVs9WGfV6cjHXy9dgQyJuqzjJILOyf+NT/Ys=
+	t=1783928796; cv=none; b=YrDscgjexATdsqciY38i8y6/SFDfefIkX3Byb2DbfPancomFozZHHYAJqccQ3GpD1zKEqrNxC9BQYFKHRIt/SvTs5FwrzpPauVIHtNSPyRTWJ4XKx2tls8Z3uWhKabeBd9/Ug/s2tKa3xc+OAV80GVB/sKfosDThPx0zMkr6h/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783928794; c=relaxed/simple;
-	bh=qNUzWMILPAZO0p4szJmpre9sZOFFrs7wKaz01ErPF64=;
+	s=arc-20240116; t=1783928796; c=relaxed/simple;
+	bh=8D3HkhAmphdUEpR1RhwzMh9d4uJOL7QA8i4LNDI3qZo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=m5pll7kOKVFFLH6eZZkMc20JDv3yxPSNSzX+ujTIdgVTTS//XUjhbTN8WkEnHKGIvXgjTit+fTVZb9uDbz5EMLRDhMA0eD94/t3+aDFOPinzRukXlzAA9gr/5T0SmG5boirM/K0vtScUPzX9CXQTSwpqJfyt1rMWycLZmKUcXqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JeYFemyg; arc=none smtp.client-ip=209.85.214.175
+	 MIME-Version; b=YwNb1XDrfJl0QQ7GGtCumXXFeIGcEUpq8BNWikK8PNnm3kwX+eZ4L4/m9no397DurrRaG6h9dlIYdULjlZMJZt6JFWZMJ7jLKLV2B029iI4ftvmmWOHjuS1zNEF2TZhZCBvbOuZ9h8enUwnS7jqtKYJsJuLCW5v5vum1PV0UDIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UlPjOUq0; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JeYFemyg"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2cea3004256so20419545ad.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 13 Jul 2026 00:46:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UlPjOUq0"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2cc6dd436c6so34866165ad.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 13 Jul 2026 00:46:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783928792; x=1784533592; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783928795; x=1784533595; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ekqLWa6qOCBXZnPyawtHFyqbZUfQTxYgXo+F6hxou6w=;
-        b=JeYFemygWih8CNTk/rn7JCSEDqhYr5hIReKF/CVYGudemfie6i/5/ocI1VT5xBdnss
-         WFSG43PSUuqSsMExtWsTuI6/HGG+ZmKa1yjtYN+D3fxsMZEkTQA56Q3l8uhRsFurDaDT
-         MqTl5MaeVcjZBE4rdLPVhRoBKLBopOgQkFReMibWk7RTDio5Q2lps3sR3GNNVdgFs9Ht
-         mRtwfbq6vF/2vmX3iQlBcHzkgcQXaq9vtagxTse2ixEmycZdRtwci1VwXYhju6A8+VGm
-         MHb21+WCUyv85EYDVKE16yj0EfOVE5WkSWQmpoTyZ+WpeFOafVuSSIy8UGzPrMH0vdCO
-         Miqg==
+        bh=ShwAbMygzjU0orOp/b1DdaJ5AXEffvG0rYavMQ4hKrQ=;
+        b=UlPjOUq0viziSGGIGPghFbWJycTZ+O6k7ho7G001rPe6/2iu2OjjUtlGVFs6KWA5s+
+         vfd15hUYMBDFh+dJMtV3OCpCarrT8kyPtdCVXdKAR1Cibiz2q6DaaDNslsbXOLJSRwmv
+         pFtjkV0wp+SXolSQqHTnZdTHGeau2NsogD1R7ZXy62SOBYrz2RmshO08bbM+Ad/LhvT2
+         UdR/JB8P0qW0wj07g2V9TK4NbhaVzlx/txKPrd+5Znki+N5nWesg32kyd79GYOojsF2i
+         DS3XEruc1c1bZpRUW+eg4VrnROjS/45KkY70JRCDeakjg8oV54oE3nXvFHcCh1jpTBkF
+         dNcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783928792; x=1784533592;
+        d=1e100.net; s=20251104; t=1783928795; x=1784533595;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ekqLWa6qOCBXZnPyawtHFyqbZUfQTxYgXo+F6hxou6w=;
-        b=C25oL3IaGIPyrBoKeg98uxTA2y+MMvMOTmB8cc5XEnrxA/rNbOasewP2k3rvRP7q9j
-         3EPIOeDnDRpTRINYk1bJ5uaRzsd1+hms0LfKPGK6gGngV3NPwtI/mPhg2Ue/jilsDek2
-         89PfwzAg5WgQ73HZ60ncTWed9qNegvYKEIv1mIRNIgPa6YikEygcEYcVUzxzipf1aNKE
-         0on7M3VVZU0cDxmvw1qaPdRxacyO0j0SRnyqPeSQYbS+EOp18Aea4RnnAzmTrO8baKZn
-         46+7DVO+x0gHVgxrNYaMIC8g8pwSNqduXkvSoOjGhc3UGerfV00ZXi6KtVJaMIkuV3x/
-         6ziw==
-X-Forwarded-Encrypted: i=1; AHgh+RpqI2P+W0OAMGqMqoagRCPK/idI+3qssR/i4ogFsl9R3NEA2PRV/hpTdcozkpLmsj5irmAFXBQc7PM00A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBOjLMOd5r5LaiFN/SXgQOB1U4v9NG8/O+jxOaDrwfRp3tIEys
-	lotYzSd9BnW2BjuJViFY60vW80vvLTti7AchEjod71DI3NV8cjH8YQi+
-X-Gm-Gg: AfdE7cm3Z1+y0yOvYL+RvSRlRvMefH4x2kpFcpuolf1LsVxn+iW2aRgxAxJzjceQV/R
-	tjDHwDeSjkK805E5n+AwIUSm9XJcFxD5kbi+II8M/b1F4iaBGaqbFPad9cbKhHDXWLH2xugqkeW
-	bDzsSRrCCnPZAn+8eRrWPA7T8NcRdvnaRo5iOZX0xlwhBo0L6rVXXLtipUOrBaD4puh9VrmViVg
-	SYFYDsbqOgPIVpJdOVhDQQe/3udaFPM7gpib2xQ466yhczGZInXGZdxFMprqS2ig04Z1KNX0CHx
-	C/gkudILVBATFJBcNlYmKQLZQIhAWp0WUWloRlUp48ppReHaFgfoZ5KsFWhgRdc6wfGK5G/sZgV
-	y1t7XdiZnHtT1415PMcOil2xc7115DjaQuZK1A7UKDkeRO4NsFkSB5lGff2oLMvTV7BHqU31hwV
-	QyhBdi/+GPyh4oc3qwK8NasA==
-X-Received: by 2002:a17:902:d988:b0:2ca:bad4:33a2 with SMTP id d9443c01a7336-2ce9e9ac01emr86979945ad.11.1783928791635;
-        Mon, 13 Jul 2026 00:46:31 -0700 (PDT)
+        bh=ShwAbMygzjU0orOp/b1DdaJ5AXEffvG0rYavMQ4hKrQ=;
+        b=julBZIEflEJrsMFitDtwcM7c3YECkHv3qXNIa8jDq/AYJ6JBKA5Pz1+cApZ2Yu6gvP
+         8f7pdNTObBdowOSNCxXw0oqoibW+6F2PNixPcJdUtzjQnjvrSJIlqYQEx+CeMZ/avgGo
+         erbyCS68ue+PLcc5hdizIiR5itYsJhupONQ7Xrbsk70aleQJadMZPVV+RweE6m5jn97e
+         cKzmi6rFwkE4pCYJTUGehAjpzDqvsG6Xt81c7EDR0H1jv9J2UFReXWxq7PkZMOcHQe55
+         niF1K9RqAbfni4CPcIg0r2rEQojp6LUMwnFF2KJbGukh6lYIoFs60pFJgXXw1BAPOMMg
+         HwBg==
+X-Forwarded-Encrypted: i=1; AHgh+RpmAy41bDlpiQ63ezKpkxI5P6Yzd/IGG0+5aJ+CsAeoL6/nXpE4AWmELOB753WoSc23PxJcVLEfzFJuZQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yybepq+dP6MkoVIi9f0yVlSTEut6Z8/cNnDyQwEePEGtIH5JN/v
+	AcdWo7aD4/SpUOiV78n9oz4s7snfX/1hThiw+CrgrE2lflkn+efjjcj5
+X-Gm-Gg: AfdE7clihfP5BSL37N4gn+Q5priROXrbXgohyZIqnydmJQWiVwMjJIGCm9MqC2eEWGB
+	deAhxyJMN/ley/m8R/vPfiMzCa8Lrvb4c5LU5h9teQgFjb89JX7wDvwkCzTW+hdwf9gC1kb/hn4
+	CpVbMjzPNgfC/VAAYCZmLaFbMFwaXeSziQ1a+0/UhSJlrcwEqzI1MXBzoadVS7fwTv2n2QgHSXR
+	xCPm1hBRgV3hxGew7NnRJjS/hn9tim5KRyg2YCB/QtJ+NQOnbT58AgrWGMfjQXJ3Fwc5jw6OpFP
+	9tL/zQuLuvEePIk2hg2gMJHe9Fy8CKW8xgtY1nqazPeFo1TBSsPXAaFftfbbxpPV/Fz+r1gu81O
+	0p0U6tDG/iUcCLAWHJ3WVN0oqUeTSV3/QtMWZGlNrDeSdf5axADcTnCevBa6l2IPl5FngRF4GSb
+	VnZ/L9iycw4ti2iP/uGo+IZg==
+X-Received: by 2002:a17:903:388c:b0:2cc:9773:1313 with SMTP id d9443c01a7336-2ce9ebf84f7mr74433375ad.11.1783928794600;
+        Mon, 13 Jul 2026 00:46:34 -0700 (PDT)
 Received: from HP.localdomain ([27.217.83.168])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9d5bde9sm94960105ad.79.2026.07.13.00.46.28
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9d5bde9sm94960105ad.79.2026.07.13.00.46.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2026 00:46:31 -0700 (PDT)
+        Mon, 13 Jul 2026 00:46:34 -0700 (PDT)
 From: Zaixiang Xu <zaixiang.xu.dev@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: Rob Herring <robh@kernel.org>,
@@ -67,9 +67,9 @@ Cc: Rob Herring <robh@kernel.org>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Zaixiang Xu <zaixiang.xu.dev@gmail.com>
-Subject: [PATCH v7 3/4] hwmon: (sht3x) Add devicetree support
-Date: Mon, 13 Jul 2026 15:45:58 +0800
-Message-Id: <20260713074559.12196-4-zaixiang.xu.dev@gmail.com>
+Subject: [PATCH v7 4/4] hwmon: (sht3x) Document support for GXCAS GXHT30
+Date: Mon, 13 Jul 2026 15:45:59 +0800
+Message-Id: <20260713074559.12196-5-zaixiang.xu.dev@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260713074559.12196-1-zaixiang.xu.dev@gmail.com>
 References: <20260713074559.12196-1-zaixiang.xu.dev@gmail.com>
@@ -81,61 +81,71 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add an of_device_id table to support devicetree based instantiation
-of the supported sensors.
+The GXCAS GXHT30 is a humidity and temperature sensor that is a
+drop-in replacement for and fully software compatible with the
+Sensirion SHT30.
 
-The devicetree binding models all higher accuracy parts with a
-fallback to the base part of their group, so only the two base
-compatibles need to be listed. The match data distinguishes the
-humidity and temperature parts (SHT3x) from the temperature-only
-parts (STS3x), which require different configuration.
-
-Start enum sht3x_chips at 1: with sht3x equal to 0, the OF match
-data for the SHT devices would be NULL, causing i2c_get_match_data()
-to fall back to i2c_device_id name matching, which fails for
-devicetree names. The devices would then only work because the
-resulting chip id 0 happens to equal sht3x. Non-zero match data
-avoids relying on that coincidence.
+It is handled by the "sensirion,sht30" fallback compatible without
+any driver changes; manual instantiation works with the existing
+sht3x device name. Document the chip as supported.
 
 Signed-off-by: Zaixiang Xu <zaixiang.xu.dev@gmail.com>
 ---
- drivers/hwmon/sht3x.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ Documentation/hwmon/sht3x.rst | 17 ++++++++++++++---
+ drivers/hwmon/Kconfig         |  5 +++--
+ 2 files changed, 17 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
-index c2f6b73aa7f3..6d47cfd340f8 100644
---- a/drivers/hwmon/sht3x.c
-+++ b/drivers/hwmon/sht3x.c
-@@ -61,7 +61,7 @@ static const unsigned char sht3x_cmd_read_serial_number[]      = { 0x37, 0x80 };
- #define SHT3X_MAX_HUMIDITY     100000
+diff --git a/Documentation/hwmon/sht3x.rst b/Documentation/hwmon/sht3x.rst
+index ea1642920295..4f67671eb0cd 100644
+--- a/Documentation/hwmon/sht3x.rst
++++ b/Documentation/hwmon/sht3x.rst
+@@ -31,6 +31,14 @@ Supported chips:
  
- enum sht3x_chips {
--	sht3x,
-+	sht3x = 1,
- 	sts3x,
- };
+     Datasheet: https://sensirion.com/media/documents/4B40CEF3/640B2346/Sensirion_Humidity_Sensors_SHT85_Datasheet.pdf
  
-@@ -939,8 +939,19 @@ static const struct i2c_device_id sht3x_ids[] = {
- 
- MODULE_DEVICE_TABLE(i2c, sht3x_ids);
- 
-+static const struct of_device_id sht3x_of_match[] = {
-+	{ .compatible = "sensirion,sht30", .data = (void *)(uintptr_t)sht3x },
-+	{ .compatible = "sensirion,sts30", .data = (void *)(uintptr_t)sts3x },
-+	{ }
-+};
++  * GXCAS GXHT30
 +
-+MODULE_DEVICE_TABLE(of, sht3x_of_match);
++    Prefix: 'sht3x'
 +
- static struct i2c_driver sht3x_i2c_driver = {
--	.driver.name = "sht3x",
-+	.driver = {
-+		.name = "sht3x",
-+		.of_match_table = sht3x_of_match,
-+	},
- 	.probe       = sht3x_probe,
- 	.id_table    = sht3x_ids,
- };
++    Addresses scanned: none
++
++    Datasheet: https://www.galaxy-cas.com/uploads/files/202509/GXHT30_datasheet_V3.9_20250919170350.pdf
++
+ Author:
+ 
+   - David Frey <david.frey@sensirion.com>
+@@ -40,9 +48,12 @@ Description
+ -----------
+ 
+ This driver implements support for the Sensirion SHT3x-DIS, STS3x-DIS and SHT85
+-series of humidity and temperature sensors. Temperature is measured in degrees
+-celsius, relative humidity is expressed as a percentage. In the sysfs interface,
+-all values are scaled by 1000, i.e. the value for 31.5 degrees celsius is 31500.
++series of humidity and temperature sensors, as well as the compatible GXCAS
++GXHT30. The GXHT30 is a drop-in replacement for the SHT30: instantiate it from
++devicetree with the "gxcas,gxht30", "sensirion,sht30" compatibles, or manually
++using the sht3x device name. Temperature is measured in degrees celsius,
++relative humidity is expressed as a percentage. In the sysfs interface, all
++values are scaled by 1000, i.e. the value for 31.5 degrees celsius is 31500.
+ 
+ The device communicates with the I2C protocol. SHT3x sensors can have the I2C
+ addresses 0x44 or 0x45 (0x4a or 0x4b for sts3x), depending on the wiring. SHT85
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 08c29685126a..64fc00ade5ca 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -2023,8 +2023,9 @@ config SENSORS_SHT3x
+ 	depends on I2C
+ 	select CRC8
+ 	help
+-	  If you say yes here you get support for the Sensiron SHT30, SHT31 and
+-	  SHT85 humidity and temperature sensors.
++	  If you say yes here you get support for the Sensiron SHT30, SHT31,
++	  SHT85 and the compatible GXCAS GXHT30 humidity and temperature
++	  sensors.
+ 
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called sht3x.
 -- 
 2.34.1
 
