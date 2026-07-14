@@ -1,236 +1,161 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8529A2F6920;
-	Tue, 14 Jul 2026 16:14:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D351B39CCFF
+	for <linux-hwmon@vger.kernel.org>; Tue, 14 Jul 2026 17:09:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784045687; cv=none; b=CouUORMyH950O2SaZMvBtYWpk8/QQLuRINhkKuP9tHTar2ryho6C2TYdRhqgv0ENSKkHj+unQwG0UQ0oPXjm9CuXCH3ETCFhfn0uCuVKo61/q/bkkd5WhXqOF7/VfdxpoFywM8vuGseDjFMccCBzrPlZ3Uexi+ItOcYsMK56aUA=
+	t=1784048957; cv=none; b=mQDuGmtVFnJQVJvf5rKG8T3w9RxUXEeCIQV+Tzc6C6nYqGj98h+OzCDDJdAhzq0plks5vo1iN3kgBgMyKvZnEkq7Y/mD3A0vCrisZt0XSPXvohFlsRbubyEkxijLEQIZxpNCxMriJ6ysSnaKuA7EoiqvzqP68Ugs+ZLGnhMJlIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784045687; c=relaxed/simple;
-	bh=zIY2aMUEOiopzWsgQEWZGxfuk3w7gXKJKNyDmur8U8Y=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=jSge5Xybpb5L615IvkNgkmglaMnfea49gjllRZWHhL3CQ5NgPtn/8Q5t9zRNzXMvE9XEzvRTNg0e1I+8H6fiGw5DE18bMetJ3IR9JPa9LC13TWtKanBGImWcsMT8JaV0owxesj/bQDMM/SG9DbMGNxYkzdY3rrHxlWGtTq7mswk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N+wUyMc4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784048957; c=relaxed/simple;
+	bh=WxjKhm4bXqb1u5k7AfWGErLZRYGcCQ0DKtR2CPH2VSk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ad8ptveqQUu3J+O2hpWFkwktsaXK3V7Xdgtvxf1UE1n1KWJbu0EuuS68WN8R9glFbhAVr3m4SNQ2WbtMOb8QjwkIeHVM0bylPr5AIdZDiJROLVYIsAAAs8zX590bWP78/XLHF1Z/UgjoW/vaMDAiwnIBrsw18SvAUhgeuJgj7t8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=FeBCzUFg; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N+wUyMc4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C72751F000E9;
-	Tue, 14 Jul 2026 16:14:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784045686;
-	bh=n6fpDDchRl+qTg8OO7QXdYt/sgsAvifY2+jx9NRSV4g=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=N+wUyMc4eIE7HHVn2QsheBZWQDtxw81r5IlOfhtJSWa1qsGXIsZHAIw7o4hMfCXyf
-	 WgEKlBx94zUkkhowkncSl9AyUzT9/8wVPYdg0SxcoqGppI3V+VQYzIMpQaeN1LZzNf
-	 kcNCsEI/kv9wIQWO0D+6gSyQdK8nFRgf4wda/pM8Od1k49qM2j/A61NjHtk2Fe4BcS
-	 vraLJKlrL/qav0A7LDCd0Ab6Y9eAxobnPnpnc1i6OTNonm6wXXi+dyULu1uryKRGQD
-	 saw7SV8bEMONQwyK6n0GSaiKQezIdFKMhZb60Jyjvf88VdQePCmKUp122Su0X2bibg
-	 AryqMegkqt3cw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 8/8] Add Advantech EIO Fan driver
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ramiro Oliveira" <ramiro.oliveira@advantech.com>
-Cc: linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, dri-devel@lists.freedesktop.org, mfd@lists.linux.dev, lee@kernel.org
-In-Reply-To: <20260714-upstream-v2-v2-8-76e5e41026db@advantech.com>
-References: <20260714-upstream-v2-v2-0-76e5e41026db@advantech.com>
- <20260714-upstream-v2-v2-8-76e5e41026db@advantech.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 14 Jul 2026 16:14:45 +0000
-Message-Id: <20260714161445.C72751F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="FeBCzUFg"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-493c19bad03so41364455e9.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Jul 2026 10:09:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1784048952; x=1784653752; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=wmvTM4kKQclmnuTjf5INwpa0cW/U4YQPx7uaHT1J05U=;
+        b=FeBCzUFghxNUCaA+Tnspo2GcArQVoHou4iqU/X3CWuu/xsXkrj/IaUqEYAihXnZI57
+         cFxmzbEjVNoNdUJRXNjqqINcTlFmsL2v2JSplk3gwBDcsTlUwN1yESpdy+UM44agYSU/
+         zZ2h02HtirDa29GDfz75/BGSWkfyeAEPszMqUdMVez+DXzj6eO566c6OKmazapJGYEJp
+         PTuDJjNGfmkvGdb1dBHrBM0cMsxs+dsDZapAfnREmqGosuDSQgvs5gTmjyOMZddxuoXu
+         U5fOG9aOoLeaD/eeyoed46S/rO4zdWOAZMDrZmm9PSk4Z45MNcMZjSyK4WhueROu1oMa
+         Co1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784048952; x=1784653752;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=wmvTM4kKQclmnuTjf5INwpa0cW/U4YQPx7uaHT1J05U=;
+        b=JW2mRIJ52BxzYch35TKbkqle5L+P6DK9BHZ+TY219UYE6WtGIeDk9azDgxXsCigNsP
+         uBj7hMlH6PV2MjumypAPH8bd2JOCYpSndU3zvUn+e/j1Q+9sO4uY8YUJ6SlPTO++HIx6
+         aQZwYrpMLkKni3UeN3vJ1NzcgOamxsTjbb5OcxQ1md/qWWyRIl152CbJ+xLVm6aVJlxU
+         Mbp1GYLSZMKsIddb3P/pwF5ihdJfdbm37RrnLiNiwFNh67ZENLnqv4JTJfS1kMENmSMX
+         I03C6Z/iVgDFIom0YTgPFmS4ORrXdUfCYN+g07yQmWB0HyObMNLHEY+jQ7pZs1wUKV+F
+         NhUA==
+X-Forwarded-Encrypted: i=1; AHgh+RotjIG+v+DE06HJmcYkMkzXxOUYWimotDRsfl+M2vwZiiVGHduvmXlt6XF/TWiMx8RusgLgRxuK+9H4Sw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQqwnI/Uek3errvUXhVlc64njPI+hGUuxQWxLMk8cORT784bs/
+	KSIYnivHspkEodDSuRZrcYPG2hLTxvAvf8A6ZpdcEAXH/oaTyOU4qoJKVvGtD3ups7c=
+X-Gm-Gg: AfdE7cmTVtIao+p7vm0fkvYXmO3jpzdaddqd5A2Yw2xRlWHaOk/V4uF8sbt8Lg/HGjr
+	d3ulooQhPnW9aeIsSJ7PUprUkrGhGukG+V2c/++8jKMAffBKEIcw2W6LMsgB4omaSIz5PU1cEKC
+	hU5edLX81aVAmEh68/HXKkss1HCoco0/PjEn5pJu5lw1Xm3t7wKQylEpVYjO7qx4ieeeCkmXKhk
+	oN+H8dl2jCC15MDjhh7ZA3vlrLb9nKZFXvtb/u2loww4t8qfWL3FVyGIt+GP0wYkfZJfgE0thPg
+	jdd4AnwHgRuukU/PxyQTL/a+JzwjgZtMJLnxA6TypF5W9aJgEDkRrJnss/LyZnwC26sds9TtKJH
+	c5u6r1fpshxrTyf194+4lLNJxQD3t2XGQPhX6S8FkTByd5Lj5zXGzBNIwFLToIOaCVx4I4Uqa/D
+	jVIJXlL1AHt3NCwNJMxg==
+X-Received: by 2002:a05:600c:37cf:b0:493:c4e1:40a6 with SMTP id 5b1f17b1804b1-493f882e97fmr123207855e9.32.1784048952148;
+        Tue, 14 Jul 2026 10:09:12 -0700 (PDT)
+Received: from localhost ([2a02:8071:56d1:2de0:1d24:d58d:2b65:c291])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4953bbd7eb2sm665125e9.0.2026.07.14.10.09.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jul 2026 10:09:11 -0700 (PDT)
+Date: Tue, 14 Jul 2026 19:09:07 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Flaviu Nistor <flaviu.nistor@gmail.com>, 
+	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (lm90) Switch channel parsing to fwnode APIs
+Message-ID: <alZqpRFoMIsxfgS7@monoceros>
+References: <20260713190659.4511-1-flaviu.nistor@gmail.com>
+ <alYpqifR8RHXZWZ5@monoceros>
+ <9b8a49f4-2632-4984-a617-66f4161a3c5f@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="hsid2ik4lsvckpps"
+Content-Disposition: inline
+In-Reply-To: <9b8a49f4-2632-4984-a617-66f4161a3c5f@roeck-us.net>
 
-Thank you for your contribution! Sashiko AI review found 6 potential issue(=
-s) to consider:
-- [High] Missing `.remove` callback and incomplete probe error unwinding le=
-ads to thermal zone leaks and use-after-free vulnerabilities.
-- [High] Array index out-of-bounds when accessing the `fan_name` array usin=
-g an unvalidated hardware index.
-- [High] `eio_fan_should_bind` casts `cdev->devdata` to `struct eio_fan_dev=
- *` without verifying the cooling device type.
-- [Medium] `eio_fan_set_trip_temp` constantly fails because it incorrectly =
-double-adds the `CTRL_THERM_HIGH` offset.
-- [Medium] Passing pointers to 32-bit `int` variables for 1- or 2-byte hard=
-ware reads results in endianness corruption on big-endian architectures.
-- [Medium] Violation of MFD subsystem rules by using a custom parent-child =
-accessor function.
---
 
---- Patch [8]: [PATCH v2 8/8] Add Advantech EIO Fan driver ---
-commit 0e6353f2bcc96ca0d70e6ec50a52311c0213d5ad
-Author: Ramiro Oliveira <ramiro.oliveira@advantech.com>
+--hsid2ik4lsvckpps
+Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] hwmon: (lm90) Switch channel parsing to fwnode APIs
+MIME-Version: 1.0
 
-Add Advantech EIO Fan driver
+Hello Guenter,
 
-This commit adds the driver to control the Advantech EIO Fan block,
-which is included in the Advantech EIO Embedded Controller.
+On Tue, Jul 14, 2026 at 07:43:13AM -0700, Guenter Roeck wrote:
+> On 7/14/26 05:22, Uwe Kleine-K=F6nig wrote:
+> > On Mon, Jul 13, 2026 at 10:06:59PM +0300, Flaviu Nistor wrote:
+> > > Replace OF property handling with fwnode API in the probe function to=
+ read
+> > > the channels properties, improving the driver compatibility since this
+> > > method is not limited to Device Tree only.
+> > > Add also the needed headers for explicit include and clean up related
+> > > function naming.
+> > >=20
+> > > Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
+> > > ---
+> > >   drivers/hwmon/lm90.c | 48 +++++++++++++++++++++--------------------=
+---
+> > >   1 file changed, 23 insertions(+), 25 deletions(-)
+> > >=20
+> > > diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+> > > index 4b9c0ccdf260..045977e30cf4 100644
+> > > --- a/drivers/hwmon/lm90.c
+> > > +++ b/drivers/hwmon/lm90.c
+> > > @@ -101,14 +101,16 @@
+> > >   #include <linux/bits.h>
+> > >   #include <linux/device.h>
+> > >   #include <linux/err.h>
+> > > +#include <linux/fwnode.h>
+> > >   #include <linux/i2c.h>
+> > >   #include <linux/init.h>
+> > >   #include <linux/interrupt.h>
+> > >   #include <linux/jiffies.h>
+> > >   #include <linux/hwmon.h>
+> > >   #include <linux/kstrtox.h>
+> > > +#include <linux/mod_devicetable.h>
+> >=20
+> > <linux/mod_devicetable.h> is going away soon. Please rely on
+> > <linux/i2c.h> to provide of_device_id.
+>=20
+> My hwmon-next branch is based off v7.2-rc1 and of_device_id
+> is declared in mod_devicetable.h.
 
-> diff --git a/drivers/thermal/eio_fan.c b/drivers/thermal/eio_fan.c
-> new file mode 100644
-> index 0000000000000..e07b18c2ec44a
-> --- /dev/null
-> +++ b/drivers/thermal/eio_fan.c
+That sounds factual correct.
 
-[ ... ]
+If you want to imply with that statement that my recommendation is
+wrong, annoying or in other ways unsuitable to you I guess you either
+have to be more explicit or live with it.
 
-> +static int pmc_write(struct device *mfd, u8 ctrl, u8 id, void *data)
-> +{
-> +	if (ctrl >=3D ARRAY_SIZE(pmc_len))
-> +		return -EINVAL;
-> +
-> +	struct pmc_op op =3D {
-> +		.cmd       =3D CMD_FAN_WRITE,
-> +		.control   =3D ctrl,
-> +		.device_id =3D id,
-> +		.size	   =3D pmc_len[ctrl],
-> +		.payload   =3D (u8 *)data,
-> +	};
-> +	return eio_core_pmc_operation(mfd, &op);
+<linux/i2c.h> provides i2c_driver which uses of_device_id (via struct
+device_driver) and thus includes a header that provides that struct.
+That won't change in the foreseeable future. If that is not good enough
+for you, find means to handle that in another way.
 
-[Severity: Medium]
-Does using eio_core_pmc_operation() directly bypass standard kernel subsyst=
-em
-APIs like regmap? According to MFD guidelines, child drivers should retrieve
-parent driver data using standard APIs rather than custom parent-child
-accessors.
+Best regards
+Uwe
 
-[ ... ]
+--hsid2ik4lsvckpps
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +static int eio_fan_get_temp(struct thermal_zone_device *tzd, int *temp)
-> +{
-> +	struct eio_fan_dev *fan =3D thermal_zone_device_priv(tzd);
-> +	struct device *mfd =3D fan->mfd;
-> +	u8 ch =3D fan->id;
-> +	int sensor =3D 0;
-> +	u16 val =3D 0;
-> +	int ret;
-> +
-> +	ret =3D pmc_read(mfd, CTRL_CTRL, ch, &sensor);
+-----BEGIN PGP SIGNATURE-----
 
-[Severity: Medium]
-Since pmc_read() seems to read a 1-byte value based on pmc_len[CTRL_CTRL],
-does passing a pointer to a 32-bit integer write only to the most-significa=
-nt
-byte on big-endian platforms?
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmpWbTAACgkQj4D7WH0S
+/k4v6gf8CbKocLZWdTkDRzyhhLVuU5NemXPdLKbJQJFOBL66QV0y7tnHGVwSm5zJ
+QKZkZVx6HVdQ4DGdIRLA4gosw0SAR/oOdCKRnslolbpo9WOldzsGh/c3Bqj8T1R5
+YXX6vIyyLolJiOF7w3OVoxmKW6CiS6TNOzoxMIccAW1sRRZCGiu5mUtqrrKySg0q
+Tndo/JbFAeuze68svKdGnylXaudPFGHVnrKhw0kqWkfsBEtZj/FYR+/uqM7xF2wH
+uQIGjl4a851sVIu7/uTIRiXlrMSrbsdjjWdfQkzus8g+EJ80DJZbknWvnuh7yqnR
+GLmA37OxO/KnAaIYGy1PlBzjJ8+EOQ==
+=hwf7
+-----END PGP SIGNATURE-----
 
-[ ... ]
-
-> +static int eio_fan_set_trip_temp(struct thermal_zone_device *tzd,
-> +				 const struct thermal_trip *trip, int temp)
-> +{
-> +	struct eio_fan_dev *fan =3D thermal_zone_device_priv(tzd);
-> +	const struct eio_fan_trip *fan_trip =3D trip->priv;
-> +	u8 ctl =3D CTRL_THERM_HIGH + fan_trip->trip_ctl;
-
-[Severity: Medium]
-Since fan_trip->trip_ctl was already initialized to CTRL_THERM_HIGH during
-probe, does adding CTRL_THERM_HIGH again cause the offset to exceed the
-ARRAY_SIZE(pmc_len) limit of 33, making pmc_write() always return -EINVAL?
-
-[ ... ]
-
-> +static bool eio_fan_should_bind(struct thermal_zone_device *tzd,
-> +				const struct thermal_trip *trip,
-> +				struct thermal_cooling_device *cdev,
-> +				struct cooling_spec *spec)
-> +{
-> +	struct eio_fan_dev *tz_fan  =3D thermal_zone_device_priv(tzd);
-> +	struct eio_fan_dev *cd_fan  =3D cdev->devdata;
-> +
-> +	if (!tz_fan || !cd_fan)
-> +		return false;
-> +
-> +	if (tz_fan->mfd !=3D cd_fan->mfd || tz_fan->id !=3D cd_fan->id)
-
-[Severity: High]
-Is it safe to cast cdev->devdata to struct eio_fan_dev* here without first
-verifying that the cooling device actually belongs to this driver (for
-example, by checking cdev->ops)? Could this lead to out-of-bounds memory
-access if the thermal framework invokes this for a cooling device belonging=
- to
-another driver?
-
-[ ... ]
-
-> +static int eio_fan_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev =3D &pdev->dev;
-> +	unsigned int fan_id;
-> +	int ret;
-> +
-> +	if (!dev_get_drvdata(dev->parent)) {
-> +		dev_err(dev, "eio_core not present\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	for (fan_id =3D 0; fan_id < FAN_MAX; fan_id++) {
-> +		u8 state =3D 0, name =3D 0;
-> +		int trip_hi =3D 0, trip_lo =3D 0, trip_stop =3D 0;
-> +		int pwm_hi =3D 0, pwm_lo =3D 0;
-> +		struct eio_fan_dev *fan;
-> +		struct thermal_zone_device *tzd;
-> +		struct thermal_cooling_device *cdev;
-> +
-> +		if (pmc_read(dev->parent, CTRL_STATE, fan_id, &state) ||
-> +		    pmc_read(dev->parent, CTRL_TYPE, fan_id, &name) ||
-> +		    pmc_read(dev->parent, CTRL_THERM_HIGH, fan_id, &trip_hi) ||
-
-[Severity: Medium]
-Similar to eio_fan_get_temp(), does passing pointers to 32-bit integers for
-these hardware reads cause endianness corruption on big-endian architecture=
-s?
-
-[ ... ]
-
-> +		if (!(state & 0x1)) {
-> +			dev_info(dev, "fan%u: firmware reports disabled\n", fan_id);
-> +			continue;
-> +		}
-> +
-> +		if (!fan_name[name][0]) {
-
-[Severity: High]
-The 'name' index is read from hardware as a u8. Does this code need to check
-if 'name' exceeds the 32-element bounds of the fan_name[] array to prevent =
-an
-out-of-bounds read?
-
-[ ... ]
-
-> +		cdev =3D thermal_cooling_device_register(fan_name[name], fan, &cooling=
-_ops);
-> +		if (IS_ERR(cdev)) {
-> +			thermal_zone_device_unregister(tzd);
-> +			dev_err(dev, "fan%u: cdev register failed: %ld\n",
-> +				fan_id, PTR_ERR(cdev));
-> +			return PTR_ERR(cdev);
-> +		}
-
-[Severity: High]
-If this loop fails on a subsequent fan iteration, does returning directly
-here leave previously registered thermal zones and cooling devices active?
-Should this failure path unwind the already registered instances?
-
-[ ... ]
-
-> +static struct platform_driver eio_fan_driver =3D {
-> +	.probe  =3D eio_fan_probe,
-> +	.driver =3D {
-> +		.name =3D "eio_fan",
-> +	},
-> +};
-
-[Severity: High]
-Does the lack of a .remove callback mean that unbinding the driver via sysfs
-abandons the registered thermal zones and cooling devices? Because
-devm_kzalloc() frees the memory on unbind, could this leave dangling pointe=
-rs
-in the thermal subsystem?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260714-upstream-v=
-2-v2-0-76e5e41026db@advantech.com?part=3D8
+--hsid2ik4lsvckpps--
