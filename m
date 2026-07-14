@@ -1,169 +1,253 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11023132.outbound.protection.outlook.com [52.101.127.132])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61E04480DD2
-	for <linux-hwmon@vger.kernel.org>; Tue, 14 Jul 2026 14:43:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784040209; cv=none; b=Vv3Vwp5cUm7EQ1mZc8TAQBtAVxO/omSmP2vTF8VwVMhkewr4Jr8CdFxAY0Hzlse4AL68STGZoOE+Vh5pPn/reF5UfrYYzPlm5aShFFV6iO0/gTXSxIm/OoCdDUBjZouWi+dtjxKmkK141X3+r8a8rQj+f8l4Dv7MLA/1mIMO+nw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784040209; c=relaxed/simple;
-	bh=RxMbX2oIcOHEOx3nrqO/Q/x4kiEhHqEOHWMjKG7C6gs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rc4CpaPrNKoF7dQ05n3N16iQy7gMbzg4Y0qEfEKC784CQqYDAgkfeEs+VSRidG4RtGyJmzEZAUQN3TgMOxw/h1KrsEdSaxnoO2NlYicNE+9B477/nNKFQtD62ZVPfuXfnokWvCLR0/pe4a1ybXY1VLD3X+kgpnxI0xG5pN5i4rY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fBQuocF7; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1872C466B7B;
+	Tue, 14 Jul 2026 15:54:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.132
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784044488; cv=fail; b=f5N+XvKSGuACGPAJPZxtE6lc8Q13r/QseDl827gjDxzwW9bMYEX8jisqDHuvQlj2O+5oZUXmbuUUUeai6RJZ37lZuU+Lyyurc25mFE1ar0GTr4+dpSffflYeKs1Yyg0efrsgXg9eOJdPnoU2ROg6ug4oUDOub7XZbqHN6bKYtU4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784044488; c=relaxed/simple;
+	bh=wMMp4npTjkgvcvtY7cVHFmd8fOZPZ2Gt0CxGmbxMXGs=;
+	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=fVJUUxU3awcw6MWM6UU2tsBdSqLVutDureOFfuN81pxlP+DWB5I85VIPpbUTGJcsQid3NKNuCF+wscZhwKAGDp7FcmMGgXuK3+parxRkngvQIsbKol1JWtNYygpEfwI14gYjwg4UR6Bshjeodx8FjOdJtpf6DNtrS6qwLPacsD8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=advantech.com; spf=pass smtp.mailfrom=advantech.de; dkim=pass (2048-bit key) header.d=advantech.com header.i=@advantech.com header.b=X0K0w1xs; arc=fail smtp.client-ip=52.101.127.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=advantech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=advantech.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fBQuocF7"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-38dc4553f62so3059878a91.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 14 Jul 2026 07:43:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784040195; x=1784644995; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=SW/KsMgZYOFzQnmI+iQwbH4NV7NBkMtaLDUlJWVVryM=;
-        b=fBQuocF7nbxN0uumOZcqNhKT4bNKR95sISDjw7BZ3Y1uJoxfTrbAbibuKwgZj2wWIs
-         uAhV5Tl8i53fepXQ1oDtwEkWeJOiQDBj7HRXHLBqNdpPl73fMYQifrNsN5R7iVA2quC6
-         QX7on1ygF5VOsI775XACfj92cYix7Nbk/dytl2XmTHGyLJg5excJnAQu9KJcL0c3P3CS
-         Zf99dZhF5IDlfoaKfgFLaXinFPCYeR553wfXyYMW/orJLMs3Q6Oab5poB9M4WS4I4b7M
-         zDaWxHaqsY0NbTZBqskInlf6ZpgGkQdTI20jYuRXFrzlF+btON//Z6CpvljprkSPZQEi
-         iJqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784040195; x=1784644995;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=SW/KsMgZYOFzQnmI+iQwbH4NV7NBkMtaLDUlJWVVryM=;
-        b=SwB8tdQaS05SAorhWr2TZ/4O7HurOftFFf2ESqAlczuMLV5cat98vHgFUhDJwYkvR7
-         OtYzXP2BerbJVTtNO+mN6jfGjdcnYSsfnF9PXOqY1RUX4O586J6XQOpu9cEHOSQy8qLS
-         68KykWNVbvzE0Z3nCWyaiR8quqpBgExyNnHZN/rpWacWtCN29ZLyIPzsn1QPVhNHJgyU
-         //hjzYLTs2uG57k/jHE2LC0nDrgtUDb0ad2OLn2KDpQj26Pfe1WuHegPg0QyXX+Hmeav
-         svnTE2HUNSji0WQAABkkGHbI700wgNyW9MCwP7d7h1CgQIe6d43cVqgLw1jnPKLZB1OI
-         h6Hg==
-X-Forwarded-Encrypted: i=1; AHgh+RqU4AHsQAvoaEoYblLRRk7IbeagEUG1X0Zfdv1psiGrlVoWbBWkK1oeOxxrRm8rPzjRtr4WF3/959FCGg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQHUxoyNFpwmSakOV4v+n5Er1EQsLgHK7wbN40+1ZRHL+iny2l
-	9zMo+p9PkEZKqfXmbt6OixG4P63i7h2kNAt/IlcGJ+IQcDmuyEPtZKq8
-X-Gm-Gg: AfdE7ckB4VnzRMFeKi+JNO72qEKAB3Mx7auYnmO/Ba8Ld8qG6EtlsaEetgwh5yyRVxm
-	AqPk7Ro0hqJbhhJLf4dClUR5tjcv7r+9FwNFMkAnC/N6jnoBNb/BE3uxzZgTdrElzb8lIq0URcX
-	2yMLv9BW5RomkgNbJgyIim+4Ii6qqBml7NqLbhyZKWstl7W+Goag/I9nHsp3dKrBu3bw/rjo4Wr
-	3T2eF20z6vPOX46JwYLgu7X8tSZFniFPJl/zZXByCc5Zhbc61qvroeqm95pctQdrVTjbUkWUbWF
-	jac9VEJ2zotKMqdHLFIlRjPPw03dI1BSF4BsdaOAqFwyPmNZDEBEPh5ib6LfW3t0Txr5lwTLvxE
-	Z35Rui13mfsuu9gVWKmBUzD9IH4HKte6zn7zM/MsYCDTwbVMF53sK/OE+tGuq4IH2YasN73zDWK
-	35mgELCeBULEY2svNsRM1TKkVdKCIOtJQhQk+E9lVFC06u1Kje45TAmU+esCK94A==
-X-Received: by 2002:a17:90b:2246:b0:37f:ad36:8fc5 with SMTP id 98e67ed59e1d1-38e1afbf3b1mr3030162a91.23.1784040195371;
-        Tue, 14 Jul 2026 07:43:15 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-311747f7293sm78665441eec.3.2026.07.14.07.43.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jul 2026 07:43:14 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9b8a49f4-2632-4984-a617-66f4161a3c5f@roeck-us.net>
-Date: Tue, 14 Jul 2026 07:43:13 -0700
+	dkim=pass (2048-bit key) header.d=advantech.com header.i=@advantech.com header.b="X0K0w1xs"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=inDDIDp3KUkutCqEVN1a/xU7s1AdeeJNJ452uRf83yeC0LRKFmt8Vg1y/XzdsXVWZdoDS2Cnx1PjAae5xQLJqE2IvZTW4Vn5/EL1nVCYcAYwaOYpR86y/wgh2N2dPmPVEZ/GKEq9C6l1Wt+C1tVZ6uxzy1Aj2bfY7tBN9t3RK462KPy6j4SCw+jXjKdneN+3xZqjugsZKPLPo38l9yP/woThuo2YqHn050WVsUqX6XoObXI6CWX3d86zVY70F23rC1JsIz2uRLR/D0jbXS9NOsyboQVBK+/djpFf3FXY54ND/OfCBqxMN7esl1amhe5EMcY2EoPqjU35Xh9AY9ulMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/3mqKVxxuf7JSBBvFbFVIH2js7NM9iwRn3cPt4+Uql8=;
+ b=f7Pu9gJj+l6YEJDyTjHFsZPPS6l7Smu07Mboqkf6crCJ4z44ZkSsaUpROFduJ7o4iHXBH63NArZN5hhVNmIencF3LMOdnD9Nz1bZY9hLLw/HLyvO4y/+frt38o0/SjsZb3zRDePO1B5DNB4mhCWPRz8tVZhSLsTzaoOtmvxp5S0xHTcwF5ufCHES1SFzC+IOEWE8cYDxO26bpvJDhEjNvmCsrCeUCQZ5WKquUzSlMpPcM/eRViTrs6Y9ilC2dYkF5j/pk8aELiZ9gPnVZ4fSRa35D6iILaRmwhnvAFyxLmHjzfuojiRFQv65whgX4VJF3zce7A/xpXiJf+ZZSNueBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=advantech.de; dmarc=pass action=none header.from=advantech.com;
+ dkim=pass header.d=advantech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=advantech.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/3mqKVxxuf7JSBBvFbFVIH2js7NM9iwRn3cPt4+Uql8=;
+ b=X0K0w1xsdDDdPYdpai6byqk7dDd8Ie8IVn3xu24jOrISw88VWls3EgxsZD0KzDYpxHsGjfFs9xms1kNmW5AZwbxf5IvKb4FMn56KXAwyrgOoa12gnd4tQ/cHfhITnDDBNJLqM6082bv9LyBwZexP9/hygmDDQD7jCT921s29Jrsdb2qnUkTaP79jWqqe8CNwzKQduqb3zRfEriNgolu6Gh4q4cFMU6QWlvyoH69hSDFP2X99c6whlwH1rizpwPxeNeZL28TFxbpFH40ZHMNNp5gU0HBcZsp3e5TU2WdmwYsqNppfpyT25i6R3Tl6s9uS2u0yVqb4YNzoCBys3R+0Bw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=advantech.com;
+Received: from PSAPR02MB4502.apcprd02.prod.outlook.com (2603:1096:301:21::6)
+ by KL1PR02MB6189.apcprd02.prod.outlook.com (2603:1096:820:bd::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.202.20; Tue, 14 Jul
+ 2026 15:54:40 +0000
+Received: from PSAPR02MB4502.apcprd02.prod.outlook.com
+ ([fe80::44e6:6433:8000:35aa]) by PSAPR02MB4502.apcprd02.prod.outlook.com
+ ([fe80::44e6:6433:8000:35aa%3]) with mapi id 15.21.0202.018; Tue, 14 Jul 2026
+ 15:54:40 +0000
+From: Ramiro Oliveira <ramiro.oliveira@advantech.com>
+Subject: [PATCH v2 0/8] Add support for Advantech EIO MFD series devices
+Date: Tue, 14 Jul 2026 17:54:14 +0200
+Message-Id: <20260714-upstream-v2-v2-0-76e5e41026db@advantech.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKdbVmoC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyjHQUlJIzE
+ vPSU3UzU4B8JSMDIzMDc0MT3dKC4pKi1MRc3TIj3aTUxNRko6TExGSDFCWgjoKi1LTMCrBp0bG
+ 1tQCpQqb1XQAAAA==
+To: Lee Jones <lee@kernel.org>, Linus Walleij <linusw@kernel.org>, 
+ Bartosz Golaszewski <brgl@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
+ Andi Shyti <andi.shyti@kernel.org>, Daniel Thompson <danielt@kernel.org>, 
+ Jingoo Han <jingoohan1@gmail.com>, Helge Deller <deller@gmx.de>, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-kernel@vger.kernel.org, mfd@lists.linux.dev, 
+ linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+ linux-pm@vger.kernel.org, Wenkai Chung <wenkai.chung@advantech.com.tw>, 
+ Francisco Aragon-Trivino <francisco.aragon-trivino@advantech.com>, 
+ Hongzhi Wang <hongzhi.wang@advantech.com>, 
+ Mikhail Tsukerman <mikhail.tsukerman@advantech.com>, 
+ Thomas Kastner <thomas.kastner@advantech.com>, 
+ Ramiro Oliveira <ramiro.oliveira@advantech.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3220;
+ i=ramiro.oliveira@advantech.com; h=from:subject:message-id;
+ bh=wMMp4npTjkgvcvtY7cVHFmd8fOZPZ2Gt0CxGmbxMXGs=;
+ b=owEB7QES/pANAwAKAc7t0Ke8vbAJAcsmYgBqVlu0YNkY9NL15znGwiha+i99kJxcm8VHDOWO6
+ mBdLSae/7qJAbMEAAEKAB0WIQS1Nkng0ZvJmBKh6GLO7dCnvL2wCQUCalZbtAAKCRDO7dCnvL2w
+ CatIDADES7J1HWpYc5Ps303bGjQL4SJgqtfQJpvm4xRxTWSiNjZRFRSqnE3gxFX7F5fhIPkqYJQ
+ dOFDsuct3gpKr5gPJjQzhbWouKVbZCeYh9Llcv+kzt2ZX6E3oUSThQFavGpmXBQpmKwHVIAhuXf
+ 4r+yS0sgdREg3pGQaLZKQIDSN6BW+IUSAOf8+h0g6QD3fiiSwZp6K80N4m95WFQnvAUQIXTht5B
+ LT9M+QEtIlhIlzHYpz9IRfUodeDXeUV20rimtAt661TbxUrtHrPcmEG7OBKUascd1u1epGcbZJt
+ JXTFURjRycnQWiYkwsX97Z6kkWspjeMoas8hr2zMHWVZlhmnr1PR/hxfsUtFDypO6pWdcGXknUA
+ DrjtYU+fq9YbXMkVY7flialTN/NBeuuM8Hquvcui4h/sZrVZK0EAccrx7hRfQXIbb0KVxWXgNc1
+ wK1qi+ZotzICdh8jyglJR3+yCs7kWhWN8FBIWEzNDY1Y6vMo+KFGETFDKSdezftC8cp8s=
+X-Developer-Key: i=ramiro.oliveira@advantech.com; a=openpgp;
+ fpr=B53649E0D19BC99812A1E862CEEDD0A7BCBDB009
+X-ClientProxiedBy: FR2P281CA0086.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9b::14) To PSAPR02MB4502.apcprd02.prod.outlook.com
+ (2603:1096:301:21::6)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (lm90) Switch channel parsing to fwnode APIs
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
- Flaviu Nistor <flaviu.nistor@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260713190659.4511-1-flaviu.nistor@gmail.com>
- <alYpqifR8RHXZWZ5@monoceros>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <alYpqifR8RHXZWZ5@monoceros>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PSAPR02MB4502:EE_|KL1PR02MB6189:EE_
+X-MS-Office365-Filtering-Correlation-Id: a3d789a8-8bad-44d3-df20-08dee1c036c1
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|23010399003|52116014|7416014|376014|921020|38350700014|56012099006|11063799006|6133799003|55112099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	LONwMRbhfH9gmoT6wAIqYPzk+jHRg3lBFs6rlJppS4+hOBehzV0A+Sjyb7VlRimYoHDUcDdzOQK98cf8k4Cl/DFZfxorw9qu8ON9Sp4tnR9fxmNApKSV+2qy1vkk9JYe00iQKfloRFg5EONwddH634vli6M+4VE8dDidSFkexCYUtjoBABRMgvJA2zgs/zPiTg8ZeaPIUvQOHAecJVFZwy+5BhT33r3ByXtxIoiSSpi0BZ+WGdO0akTzJ5rwyvSdTxuC7qkgCZJQx7NKsoPvShHrGpLQJjjtpLNVCYbOVm0KBm3pl3dyd+MM2edhgy5UE2BW37+v5PdUXQsoLDHJY13LGEtov5KaapE/Zr9fcJ/NMdxfwV/CtO80+FsESZnZUZ/Nk6X738/wLDXVv3B13gMD1LkNHAmFB7skT0sikrMSUPqjGvtnya+8AXiSPpxaA9KVjgtTWH190/KllyeYZzTu/xCuB1CdRUCNCaFC3WqK5Ub9803AJCe3Sp0M03k6N0gDUsgo4pR/86ZKEUi4THluj35ZKkwvYzLnE5yMFaRE0b695psD3T82PPm/WTomrh58zVwcpUk0ASLWutGq26xuKdBdrEVcULTmxMs5l8BnDWbg6pKl/+E2fnUwLSu8K0uozUIKrZDLrQt4NMwISPY0M74jWOLdgX0nPe8KSgUp4RNfJGvW9rNLC5F7kqV9H3ItCZJBMMntphSDV8nLYi4lPiZecc9juDRATDE98hIUPb4Bpc6ss4rhsKDiZB95
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PSAPR02MB4502.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(23010399003)(52116014)(7416014)(376014)(921020)(38350700014)(56012099006)(11063799006)(6133799003)(55112099003)(18002099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?RG1IemxJZFhVZXg5N0VBWGNRTXlGZkVRRFI3NE9nNkdYTVI4bDd0ZGxZRjVv?=
+ =?utf-8?B?aVpJWm8rNVVCaUVxaHN6NldqMUE3Y1dMRm9uQXZSSFlFMi90bUdsM1VsVkxQ?=
+ =?utf-8?B?UnI5UDM3TEJLSGlRL2FqNUx6NHhFWG5rWUxjOUcwUzNWRjlVdnV5TW0yWjNR?=
+ =?utf-8?B?YUVNcmU5eDJmenhHeFdYYk1oSzFSRTJLNmhQaWIvck5WTkhYeWhnN2YvczE5?=
+ =?utf-8?B?elowTWRRRENDWncwOVlwVUJYV3JqRnNVZCsyZVlkMTNKekVQTGRMT2xJOXJX?=
+ =?utf-8?B?RzZUa2Rydnc3MjRoVXpCSUJrRjBZb1dkbWprV1paK2JHS0JlWmdkOVBWK2NR?=
+ =?utf-8?B?aUpHUnIvN1phN1hPR3BLTmJwZnd5RmhYamtWQ0RjcHhmTVA2Q2dSLzVMeWtk?=
+ =?utf-8?B?NWIvQXZ4am0wZmVwaWRtaThHdWRRRndwSEN4d2xCRkZIaXE4cmFZeXIrUGVn?=
+ =?utf-8?B?YWlDOEdXY3V4YnZvYzltVjRuTG4xV2c3RTNjNWpXQXhzR2w1bWdGN0JHbTBJ?=
+ =?utf-8?B?TXdHS1g3R2ltZWdGMndIblMvRUNkY0gwRkdJNjVQRGp5MXV6TGF6WC9RODE3?=
+ =?utf-8?B?aDl0MmlKKzRma1VJa2pCd1VxQ3RYS0N0eW5Edy9oTXNFaStrZXFDV2g0cmFG?=
+ =?utf-8?B?WSthQ3E1WGJNVzdONkVYZ2RwYXNEeWlWeDRHUkM4d1c5czc5M0RodUtmblE5?=
+ =?utf-8?B?VW5mMFU0RDdCSmNkRWJQd3QrLy9FZ3VZcGJFa2ZXMzdIVzBiSzFkQm13c2dR?=
+ =?utf-8?B?OXF2RG1VRER1a0ZHRGJkaVdRdE13M2lGWHowTS9uaENHekFaOVg5Q2RtVHMw?=
+ =?utf-8?B?b0FFQTh3a1YzbHRFUm9FbWlSc3JDVUt0eVJ3eitxSUI3UGxEcWd4UnZKaWlo?=
+ =?utf-8?B?a1JoTVNoN1RTK09XVHZqT0MvcG8xam41MFNaeEFpOTM2SWhkdmd5b0lCWTdB?=
+ =?utf-8?B?QS9IM1ZsWDJXKzVBSHJ0aGpRV0dpeHpEQjcvaG9OYldtbXhGQXB6Q3g4Tklh?=
+ =?utf-8?B?ZU82YzZEalR6U3Zpdy94d3hqcXR6TFlyNXFJR2FBOS9pNDU2OTQzNktlQmx1?=
+ =?utf-8?B?UHVKeS9NcTh2SGEvTGtuU3VoYURKdGZteUhNZ3RQSFMramFpa283MDhaMmFk?=
+ =?utf-8?B?dlhwbnBrL0xmczZ1bmptNFZ4dkR4WFdEZFhlREtUNThmOUlQVm82cWRrcW1y?=
+ =?utf-8?B?UStNZlpHdEJSblF0UGpzSkE1MitQTEgrZ0dQNzJhdjgwSy9kdlhZbTVtYWJm?=
+ =?utf-8?B?L1ZzY1pyQnAwZHBERlUxeTU4NDdnR1o0ZVdLcGsyZ0QzSm1pMm5xREdNMkI3?=
+ =?utf-8?B?WU82cmsrMkFWWHcrWWliVjlrdGdnSVJwNGFVOVNjL2loVkM5NzQwZWRLL01o?=
+ =?utf-8?B?d0tYdEEvK3RrVHZUTmYxQUxJUDhCY29iT1U5OFJLM2l5a3RGYUpEUW9XWDhF?=
+ =?utf-8?B?c2xJR2p3UnBqK2QycHVDTlQxYXJwOWg5U0NQSDJidSt1TFZrME9TQUI0WkN2?=
+ =?utf-8?B?bmkvRytGZnFoQ3RGR3prSXRCU2tLQkJucnBHTmZJdE1LRG9mMUhIQ1FPWVlH?=
+ =?utf-8?B?cnhveFg2V29nVXpIVWlseFF0SEhsb0lrMEF6S2MyRHZHWkRYaFFibElFc0Zy?=
+ =?utf-8?B?QnNEWi9DZnBrNHlOdDJpdTNRcHNjeFB6ZjNONCtEMkNYN1hKWTRLU0pIOE11?=
+ =?utf-8?B?K3Z6TS80cFpkM3FvWWQ2aDhMMkJsYS9oK09XSDlGeWRuOUU0TFhFY0xHZE5N?=
+ =?utf-8?B?ejR2NDZnbXNuT0ZhVnNNWUNmL0h1blBYeGRJTnE5QXkra01ZQWxEbW5Fcjk2?=
+ =?utf-8?B?R2pFa3ArMFJpNDZ6TmttTHpsaDVpOW9XcFFQNXEvbkF2U1pkbW1KdFczQ0hH?=
+ =?utf-8?B?bTY2aXIxQkJrNUtndUxuNzF5TTRzQXFoMGlSV2I4WGZrYmFJWHFReHdoMDZu?=
+ =?utf-8?B?OGI3aEVkZzF5OGhIMDhwUGVlWlJNd2pSTVM4WTZBWG5zL0lHN2xwRnBVN1JV?=
+ =?utf-8?B?ZmF6d0oxckdoR2t2azFMSnV3NllzTk1jalBhUXFUQVJlK3NWdkZKSmdCbnNP?=
+ =?utf-8?B?TjJ2WjhKak9VRFhGZGJYU2l6NS84ZHFwczM2LzdweWtPZVZHWnF6N2MyeXRP?=
+ =?utf-8?B?czUxNGRKajRJZE1wbmdqS2U3N25NYXZ4OW5LcW9lMUlrYmc5Mm04V1FmTThs?=
+ =?utf-8?B?aTVnRzVjNkhJZmtsQXhBN2tjeDFTb1JCc29ianBpcjJsLy83SUJPMm92eUlL?=
+ =?utf-8?B?a1FHbjVNb0UzaWxkWGxmRmVIMk1pMFZTZ1I4MUNoalBObE9mMXprMW4rZ3Jh?=
+ =?utf-8?B?NVNTL1h6UzZ6OXFsRUlKTHE4TnpmU0E1QTBtaWxpdFhoVGRoT0hwOVhVaHpO?=
+ =?utf-8?Q?Jf/hf8GI919nm3h0=3D?=
+X-OriginatorOrg: advantech.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a3d789a8-8bad-44d3-df20-08dee1c036c1
+X-MS-Exchange-CrossTenant-AuthSource: PSAPR02MB4502.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2026 15:54:40.3579
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: a77d40d9-dcba-4dda-b571-5f18e6da853f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VwIhwrgJz7k/mIzQ8vDOMVvJxUNyY3KVUPvq9GetXsj4tzG7nyfQ58RqhThPqoTVfUUFKZ/EcA70/rf/aZ9GqzRgV5whWh9HL+PAEdUd94E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR02MB6189
 
-On 7/14/26 05:22, Uwe Kleine-König wrote:
-> Hello,
-> 
-> On Mon, Jul 13, 2026 at 10:06:59PM +0300, Flaviu Nistor wrote:
->> Replace OF property handling with fwnode API in the probe function to read
->> the channels properties, improving the driver compatibility since this
->> method is not limited to Device Tree only.
->> Add also the needed headers for explicit include and clean up related
->> function naming.
->>
->> Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
->> ---
->>   drivers/hwmon/lm90.c | 48 +++++++++++++++++++++-----------------------
->>   1 file changed, 23 insertions(+), 25 deletions(-)
->>
->> diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
->> index 4b9c0ccdf260..045977e30cf4 100644
->> --- a/drivers/hwmon/lm90.c
->> +++ b/drivers/hwmon/lm90.c
->> @@ -101,14 +101,16 @@
->>   #include <linux/bits.h>
->>   #include <linux/device.h>
->>   #include <linux/err.h>
->> +#include <linux/fwnode.h>
->>   #include <linux/i2c.h>
->>   #include <linux/init.h>
->>   #include <linux/interrupt.h>
->>   #include <linux/jiffies.h>
->>   #include <linux/hwmon.h>
->>   #include <linux/kstrtox.h>
->> +#include <linux/mod_devicetable.h>
-> 
-> <linux/mod_devicetable.h> is going away soon. Please rely on
-> <linux/i2c.h> to provide of_device_id.
-> 
+This series implements a set of drivers allowing to support the
+Advantech EIO-2xx series of devices.
 
-My hwmon-next branch is based off v7.2-rc1 and of_device_id
-is declared in mod_devicetable.h.
+This includes GPIO, hwmon, I2C bus, backlight controller, watchdog,
+thermal and a fan driver.
 
-Guenter
+This series of patches targets several different subsystems, but the MFD
+subsystem is the main target.
+
+Changes in v2:
+- Rebased on v7.2
+MFD
+- code cleanup
+- Remove timeout from sysfs
+- Propagate errors
+- Remove version.h
+GPIO
+- Code cleanup
+- Move gpio_chip to probe
+- Remove timeout from sysfs
+HWMON
+- Code cleanup
+- Refactor to use hwmon register with info
+- Remove tacho, same interfaces as fan
+I2C
+- Remove timeout from sysfs
+Backlight
+- Code cleanup, remove ununsed max parameter
+- Remove timeout sysfs
+- Use helper functions instead of direct calls
+- Correct return value in bl_init
+- Initializing scal ein backlight_properties
+- Return correct value when no backlight is enabled
+- Remove log on successful probe
+Watchdog
+- Remove timeout and IRQ from sysfs
+- Remove unnecessary logging from set_timeout/pretimeout wdt_get_type
+- Remove timeleft function
+- Rewrite wdt_set_irq_io to correctly handle return codes
+- Remove unneeded watchdog_init_timeout
+Thermal
+- Remote timeout from sysfs
+Fan
+- Remove timeout from sysfs
+- Remove unused variable temps_mc
+
+- Link to v1: https://lore.kernel.org/all/20251212-upstream-v1-v1-0-d50d40ec8d8a@advantech.com/
+
+Signed-off-by: Ramiro Oliveira <ramiro.oliveira@advantech.com>
+---
+Ramiro Oliveira (8):
+      Add Advantech EIO driver
+      Add Advantech EIO GPIO driver
+      Add Advantech EIO Hardware Monitor driver
+      Add Advantech EIO I2C driver
+      Add Advantech EIO Backlight driver
+      Add Advantech EIO Watchdog driver
+      Add Advantech EIO Thermal driver
+      Add Advantech EIO Fan driver
+
+ MAINTAINERS                      |   19 +
+ drivers/gpio/Kconfig             |    6 +
+ drivers/gpio/Makefile            |    1 +
+ drivers/gpio/gpio-eio.c          |  252 +++++++++
+ drivers/hwmon/Kconfig            |   10 +
+ drivers/hwmon/Makefile           |    1 +
+ drivers/hwmon/eio-hwmon.c        |  461 ++++++++++++++++
+ drivers/i2c/busses/Kconfig       |    6 +
+ drivers/i2c/busses/Makefile      |    1 +
+ drivers/i2c/busses/i2c-eio.c     | 1135 ++++++++++++++++++++++++++++++++++++++
+ drivers/mfd/Kconfig              |   10 +
+ drivers/mfd/Makefile             |    1 +
+ drivers/mfd/eio_core.c           |  644 +++++++++++++++++++++
+ drivers/thermal/Kconfig          |   17 +
+ drivers/thermal/Makefile         |    2 +
+ drivers/thermal/eio_fan.c        |  478 ++++++++++++++++
+ drivers/thermal/eio_thermal.c    |  346 ++++++++++++
+ drivers/video/backlight/Kconfig  |    6 +
+ drivers/video/backlight/Makefile |    1 +
+ drivers/video/backlight/eio_bl.c |  243 ++++++++
+ drivers/watchdog/Kconfig         |    7 +
+ drivers/watchdog/Makefile        |    1 +
+ drivers/watchdog/eio_wdt.c       |  641 +++++++++++++++++++++
+ include/linux/mfd/eio.h          |  124 +++++
+ 24 files changed, 4413 insertions(+)
+---
+base-commit: 50c051a08a731c52933608fa8e9174cd9875fcc4
+change-id: 20260714-upstream-v2-beaec2baac0d
+
+Best regards,
+-- 
+Ramiro Oliveira <ramiro.oliveira@advantech.com>
 
