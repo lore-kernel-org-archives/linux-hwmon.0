@@ -1,118 +1,108 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB6CA37CD47
-	for <linux-hwmon@vger.kernel.org>; Wed, 15 Jul 2026 14:26:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BC492E2EEE
+	for <linux-hwmon@vger.kernel.org>; Thu, 16 Jul 2026 00:25:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784125571; cv=none; b=UxBRJGYEqzagfkE8HP9Xz6IyzerawvCRKHRdIGDZbfcRG714xh+dMwf8MqxHptz4xCgdDW0U4R7E99n5HgYWqwjNsxI7W9ia4/v+j32CwCgWaoBxGvBzLAyeup3jJ6SSqmajvQ1u+hSX3IrCyawP4Kw7HYFF8YAD9O/Yqf1zo+c=
+	t=1784161561; cv=none; b=Q2SCCy7DHSroPpr2ZvuOoROPx7XL6rS4ra11NEkTXlStqZOdBN5BdZo6vuLMZqgMNH6ukpON21vrika5+q2/HaAkvgLyWB8OBY3Rsv2dMglxev0iKmKig7EvqjOdiP3q7UYglQCdj1kDEAlCMQIbB2rAqJhAMtHRhxO1FizSEt8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784125571; c=relaxed/simple;
-	bh=hpdwsiNEjfNuFjFxJ0I5g9WSEg2XgVxEx2/9Y8ipd8o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F54Dwe1B/gNaXNsNHsDI4qnKS+3JlDnmG4gGDjXyqSApBpQcqHpEHVRzvopqs5fsbZl4wGIz9b/x0Ar7WG7v6hZ2C8+UTiFpmPWfqbMjLW2JLyYpo3DpEfrUeW75aLRC3M44IK+owY5S64dkImjnSjNBZYiBP34bM8/9HULwEG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pqrs.dk; spf=pass smtp.mailfrom=pqrs.dk; dkim=pass (2048-bit key) header.d=pqrs.dk header.i=@pqrs.dk header.b=PXdEp3KE; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pqrs.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pqrs.dk
+	s=arc-20240116; t=1784161561; c=relaxed/simple;
+	bh=1e1N6xH7vqyO+MHhocu8Qhs6l+hP4MaAsyqHKWudrgk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SqnfV4fIaJCld1FklLzrHgs7M4A8djvtL/t6df75X9C9aSZ9aiOIcOId1q4LCI6vANtit+hLrUtQWI4z8AKS4K+NdBKLbs58BO4kgLqHZ8/M3clOooggcYVN8y2hy3yC0KgJRHlD/capDZBx8yaHsFfjrqQ6HaHXxfgZKYpbFDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NpR2IrzN; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pqrs.dk header.i=@pqrs.dk header.b="PXdEp3KE"
-Date: Wed, 15 Jul 2026 16:25:47 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pqrs.dk; s=key1;
-	t=1784125564;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fi0qgS6ZyNxP8nvy1wv+zBNMPjMZLrFGACMYGND39aQ=;
-	b=PXdEp3KEhpLj7alz/9kL5ajjnbh6NVDQM8xgT8Xa83yu3bkVH8a3wDgwPI3Vde5itVPDca
-	j1sq64vJc9+XH9O3k4/9//cgiRaEfCwfD07S2MSVdalWuDjUsRiGe2EQjOjqSalnucGb/8
-	L8R17WT96u8dHU6hVqltEKwXyKrEhPMaSGoQr/jHuYY4VnC17X0zlyZgGbS2ji8HyTmZDZ
-	eF/cEnEKePiTT+sn21Z4/EWT0aAX1sUcC9OTbJROShTl0B+QBexi4wAs+CfMZrm6d9ctDP
-	xMbYD1BCYgjegf006x5I6p8K/9cKRLXTzh/jZL6SRs+9PLm/Uw7lYyfTbvy1Xw==
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>
-To: Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: Guenter Roeck <linux@roeck-us.net>, Lee Jones <lee@kernel.org>, 
-	Linus Walleij <linusw@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Peter Rosin <peda@axentia.se>, David Jander <david@protonic.nl>, kernel@pengutronix.de, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v15 4/6] pinctrl: add NXP MC33978/MC34978 pinctrl driver
-Message-ID: <aleRFBOTDDByuT8g@pqrs.dk>
-References: <20260710101358.2606941-1-o.rempel@pengutronix.de>
- <20260710101358.2606941-5-o.rempel@pengutronix.de>
- <alEKklx_X4cP3Ire@pqrs.dk>
- <alHSylCU0RISGVn-@pengutronix.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NpR2IrzN"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8485bd28dd0so7013814b3a.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 15 Jul 2026 17:25:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784161553; x=1784766353; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=T08FRuPIa7+44bxWiq0MXIRsXwFq6punNAYb/5OuNU0=;
+        b=NpR2IrzNBqVsGmR4l0n2dDDXAeteHyX1LukgaRYb2MJtQBWx5JVKBlICcYaVshBSf1
+         JwN56nlgS0SknwLoQ9Gu3xwReAG+GDYSHOyP/yfsEcR5rc2EcrHjnQVff7nwRcrXV9hr
+         FmXzhIvxl+oNjdYZRFY4WtKtJH0rXGHmu0IsUX7OoWiVInQzmr2NuMTDAzSFotzyIzIg
+         QVGRHJTUNxKq3dh6FS/sZV+Iu7axZ0IZMwh0epnjvwtnXzvGbClJKytMhEARHADNWSjG
+         4WvP0D3D/CY+XRmDLw9Keq6QLS9wBsk2svsFtQcLG51yoF98CQxwY/SAlkYndOZGw4zw
+         DKiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784161553; x=1784766353;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=T08FRuPIa7+44bxWiq0MXIRsXwFq6punNAYb/5OuNU0=;
+        b=dhHyY9okKVDwDErlUZibffodrS903SCrbChPu2q4BmfBQioaAt5cSyPC0XceCNOf/q
+         lLf2seisLnsJdI1h4QGenLZrR0uLlMwdTECe5Uizz8HG8VJ90sO8o0ahSpj1ccz9WGYu
+         oRl3/JvM+Ao0ycLqjKs7MqCKXhJ0pNtFi4oto35f0Af8zex1xai5kH4WhEQb++qSomdt
+         i5tM6LuzqF1NQp3sP1FAmv7jYC0GY5YyAJ+hrb/Z7FxVy7oMEI1E0uhvk+kHsqSaqNM5
+         MO0XSs4eLkczqv46QT4bJXNt7+8UQyNseTXL2z6xiVtY+ozckqMT9oUzp5+7aFbWuhn/
+         enkQ==
+X-Gm-Message-State: AOJu0YxRn67zsQO2cSAFPOGbZlzHJqr6FS0tbMWtlY0k6PvWaBzyRsRK
+	yUW9y/PjgsSN9yv7m+9l3jyJV8inGDQ3/zqm6mRf4Cs2knW9pmygDZOt
+X-Gm-Gg: AfdE7cmlHJR/ed+2ekpSjJphj1KEPRAUyufM0EpuSwFMlwd85NVqW1hMDbb0XCXYDlL
+	8KhB5ShbyMv8M1bZtwmvxXMeZyXPDr55/8tlSdy73gYnHoYsM5MKDbI4QehtS9waBap58IpMJEp
+	mwQcX6OA11Ps0g4QFYFSZidlxQ+Hjl6eNNnLUXsuTGumZRbxW7F9H/N/x0uvXommj1KuWF+3nhp
+	LKbHlUBQkp8unLstQLg/CU740ev/16X/9Xm1XA16f1wMWVSvmTE0qFiScV7OiOqCi3oqcUeIQFq
+	PiosT0kpaTcJNgRVppmEQse16DN/sSwD6+QubdleIqDjFkGY29rpCH3IuteH2grUTdnPAKT8I/l
+	NxuhNjiF8iAjqLUCEwvhuivnQB7g1d88cFOdofzakjUmCUpvIjB0/4xoHyUFYawIP41+YMATq0t
+	7XqmH4FCWssfSZkW5XPHkuEIVzULtRC0h5xsuBtrJ7dyGiSfzrEuKXM0fDSseLTyELFIFdV9o8v
+	M/VvSU+E2JO
+X-Received: by 2002:a05:6a00:2d03:b0:847:5ec6:3afe with SMTP id d2e1a72fcca58-84a5146e82dmr8476286b3a.31.1784161552958;
+        Wed, 15 Jul 2026 17:25:52 -0700 (PDT)
+Received: from bloom.localdomain ([2604:3d09:178e:e100::9dab])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84a4f6bf5ecsm3898485b3a.29.2026.07.15.17.25.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jul 2026 17:25:52 -0700 (PDT)
+From: Ivy Lopez <skunkolee@gmail.com>
+To: marius.cristea@microchip.com,
+	linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ivy Lopez <skunkolee@gmail.com>
+Subject: [PATCH] hwmon: emc1812: reject channel index 0 in device tree config
+Date: Wed, 15 Jul 2026 18:25:43 -0600
+Message-ID: <20260716002543.26711-1-skunkolee@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <alHSylCU0RISGVn-@pengutronix.de>
-X-Migadu-Flow: FLOW_OUT
 
-On Sat, Jul 11, 2026 at 07:21:14AM +0200, Oleksij Rempel wrote:
-> Hi Alvin,
-> 
-> On Fri, Jul 10, 2026 at 05:22:30PM +0200, Alvin Šipraga wrote:
-> > Hi Oleksij,
-> > 
-> > On Fri, Jul 10, 2026 at 12:13:53PM +0200, Oleksij Rempel wrote:
-> > > +/*
-> > > + * Defensive wrappers for hierarchical IRQ proxying.
-> > > + *
-> > > + * gpiolib's hierarchical allocation exposes a lifecycle gap: the child
-> > > + * descriptor is registered before irq_domain_alloc_irqs_parent() fully
-> > > + * instantiates the parent chip.
-> > > + *
-> > > + * During consumer probe (e.g., gpiod_to_irq()), irq_create_fwspec_mapping()
-> > > + * allocates the hierarchy. As part of this, irq_domain_set_info() initializes
-> > > + * the top-level irq_desc and calls __irq_set_handler(). If the irq_desc
-> > > + * requires locking, __irq_get_desc_lock() will invoke the child's
-> > > + * .irq_bus_lock before the parent allocation is complete.
-> > > + *
-> > > + * Upstream generic helpers (e.g., irq_chip_mask_parent) blindly dereference
-> > > + * data->parent_data->chip, causing an immediate NULL pointer panic during
-> > > + * this gap. These wrappers check for a valid parent chip to safely drop
-> > > + * premature locking or masking events while the legacy subsystem hierarchy
-> > > + * is still assembling itself.
-> > > + */
-> > 
-> > I encountered the same problem while working on a pinctrl/GPIO driver
-> > this week. While searching lore to see if I'm doing it wrong, I found
-> > this series. Such wrappers fix the problem for me too (although in my
-> > case, it's not a slow bus, so it crashes in .irq_mask instead of
-> > .irq_bus_lock).
-> > 
-> > But I see that in a previous version, you were reordering things in
-> > gpiochip_hierarchy_irq_domain_alloc(). Why did you abandon this
-> > approach?
-> > 
-> > Just wondering if we can find a more generic solution which doesn't
-> > require such drivers to add this defensive boilerplate. Another option
-> > might be to move such checks into the generic helpers.
-> 
-> My previous attempts to address it in the core were simply too fragile
-> and caused other regressions.
-> 
-> To be honest, I have already run out of budget for this task. A lot of
-> that time was spent just learning how to deal with the new upstreaming
-> reality. With sashiko.dev, it is much harder to upstream any moderate to
-> large amount of code now. You either have to use public sashiko and spam
-> everyone until all issues are addressed, or learn to set up and use your
-> own sashiko instance.
-> 
-> Because of that, these driver-level wrappers are the most practical way
-> forward for me right now.
+Channel index 0 is reserved for the internal diode and is set
+unconditionally before parsing child nodes. If a child node specifies
+reg = 0, it silently overwrites the internal diode label
 
-Yeah, that sounds perfectly reasonable. Thank you for
-clarifying. Interesting also to hear your (perhaps frustrating)
-experience sending a bigger series. I hope the situation will improve.
+Reject reg = 0 in child nodes and improve the error message to
+include the invalid index value.
 
-Kind regards,
-Alvin
+Signed-off-by: Ivy Lopez <skunkolee@gmail.com>
+---
+ drivers/hwmon/emc1812.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/emc1812.c b/drivers/hwmon/emc1812.c
+index 68575c27d090..143c3c07dbaa 100644
+--- a/drivers/hwmon/emc1812.c
++++ b/drivers/hwmon/emc1812.c
+@@ -809,9 +809,10 @@ static int emc1812_parse_fw_config(struct emc1812_data *data, struct device *dev
+ 
+ 	device_for_each_child_node_scoped(dev, child) {
+ 		ret = fwnode_property_read_u32(child, "reg", &reg_nr);
+-		if (ret || reg_nr >= data->chip->phys_channels)
++		if (ret || reg_nr == 0 || reg_nr >= data->chip->phys_channels)
+ 			return dev_err_probe(dev, -EINVAL,
+-					     "The index is higher then the chip supports\n");
++					"Invalid channel index %u\n",
++					reg_nr);
+ 		/* Mark channel as active */
+ 		set_bit(reg_nr, &data->active_ch_mask);
+ 
+-- 
+2.55.0
+
