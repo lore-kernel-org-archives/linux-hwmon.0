@@ -1,68 +1,67 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C632D1907
-	for <linux-hwmon@vger.kernel.org>; Thu, 16 Jul 2026 00:29:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E95D2F8EB0
+	for <linux-hwmon@vger.kernel.org>; Thu, 16 Jul 2026 00:34:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784161746; cv=none; b=ZV6NzUaz2nypGClmt+ycgzPQzmtwzFLzMnUgZqR0A/PXbytUfpANzyU0zzVXM+fPV23fMCgnSMUyFWeBc5uBL/s1RcDrlMwttrCUgo6at08vWY1yr6zRXc4xkpXmZZkJX45AW7i/YdTBdOhiPQ0+BJmD4WgIqBlJx0qSu1yXe0A=
+	t=1784162080; cv=none; b=n8DsHa/c6s7iSkjmVtqB+8+927yvGLxXWOtRm9Fi3Ch60Aujr8Ka2MSGLby3nBoWSz2qkgWGJltlNeTxrete325/7iWXGVKfJYQYhMNNd0d8nfbHcEzlzhTBgS0iYQzftQwH3fRfA0uoVkJwV4Qb6r+FccPNCOpDDcbxWMeEvUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784161746; c=relaxed/simple;
-	bh=Pn412DYiAzxCT+4OPjStksFO/tbSj/zMlkHkGBtPatE=;
+	s=arc-20240116; t=1784162080; c=relaxed/simple;
+	bh=CkM9n05E1JJV18aPmEQArMI/CFcr1QAuKsnppFuHYTs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Efv0+Pg/7P9epfAmB5IKSHYtsFboliFJ1eJ+HsjERCRfzrKToxSnwspOOb52EnG3vc0Zb4JEieHWuQd+BoCdlk16bZu8bDXSqqXO0B5Qgi2Mrtu1GL92PSGIu9G/q6wBOZWAx++4xrTvqzQsd1YjxF9FPn+Z8JolXbYtM1sexMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cmd+edKm; arc=none smtp.client-ip=209.85.214.174
+	 In-Reply-To:Content-Type; b=L2ZEvSNGs8VG3DumFMJkUNDrpCkAKTlCMulIMytWKjzq8vzEVaYjd4sB5GFqo8ozh7sh3ZUtj1MTS/3vRbao0cmt3RtyBii4v5foLZYRsNZpv0t6mQ7QRZqK+IcGRKPT17pVjODVFGQGHFa2b63h+EgWSJWCD7rcPaeDreUZHtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U01WBPd9; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cmd+edKm"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2cad4170e8eso76073775ad.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 15 Jul 2026 17:29:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U01WBPd9"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-848743155bcso1167191b3a.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 15 Jul 2026 17:34:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784161744; x=1784766544; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784162078; x=1784766878; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=OGQ6x2eWb0kXOAnv/GgXof7PDNge2C09gVvctRHhkCQ=;
-        b=cmd+edKmzKMPZggls0FDrWBDODabc9rJtrdobsoPsNoxEc9BKSZfGXCLzcTJq0+cHK
-         e1WfPqWDtA3jFpxSy+obtSQv5BrATtpz6kjW8Qlt29gcpr1uuZCKHtWtIWif0ceuh67Q
-         Zflci0J8UK88Ldd3y09dIo2emaskL5z+h+oLZarokmgaHnO4ZDq0XV0bTq8UxG07/ofk
-         rbNeLajf8Uz0xN0EZPtmTXjB86HFwRehGK6o+RhddP/xtNshX8tAKvwkl02w+ewCQqKy
-         iTZBcCh8uaalgOUBAfBdvSkGpIWTqXHmME8X1X0waha3N9gNd3m96MqQp49luQ/q/Udf
-         UWYQ==
+        bh=KLH47Bsvp6OcohDkOWI4H8aLbKmYqkgNg0YQkcC0sus=;
+        b=U01WBPd9m8qkf6K9aDLXEdVT+lM3Ivodw57JEmBx6yYVZsSbuKWcU2Uiv04nAIjrNu
+         cl7dyB4sr6JVFaQfP3tvPp8k4M+RIdzqTcfxc2kuTehMOYMu6mwCc0Y1S97ji1rfFLLx
+         DfblQAHUg9uFk54DxHqzbXtLuzCttMYouvUGw6qqhxdwvQzvDUNmz6I844uLekk/o955
+         HvNatXp29TTPB3PQ1Mg4Wpuor6AM2UGu//O8FEVeoE4UIcLPsIdGMMITyQOgA63IuPv6
+         iT/vkaqV3/bRkFCr7d6Q2HqqoChkQKdhRKQWQLV2Qq7382qso/IlyImcpOMX5nD4kA0I
+         mWxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784161744; x=1784766544;
+        d=1e100.net; s=20251104; t=1784162078; x=1784766878;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=OGQ6x2eWb0kXOAnv/GgXof7PDNge2C09gVvctRHhkCQ=;
-        b=rK/nknYeawF3ovyfZl+igl3WwiyCWFqNbT/RX73bIbqnNdOcksVBABuFNIFTP1fHnc
-         khpgm4Ng9ZW40K8W1bmZ2UG6A9fOuHdQCS6RGJcuGMt3iRKUeDvJhfc8TLqcE+5UOdbn
-         BxdU4W1rtwM0JerXPvVYMMnfVV4pyfRFUpf+5E8s2mbIR3Qh0TGybMP3NqY7e4cZpcFh
-         Ew69c7Xu0pmuaddYo4d+MLIlaFYlvwdoqwFgPINuCYPKM/Ss8eCoD0b09Ohk6XkPiguv
-         AUA0dzduA5NCRXEDHQc56aM7zlWmmlEpNFBmLeaD+dG8fYDCnuCWeSELQA1afBKkVonp
-         6rTQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqzSvooVTjoG5ETchQWfhjO9hGiHttuHXiPyjuPgLWnwgDTpt+kYmvRze6UcKvIty0ctHyC9SqsAQWIPQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzreauukKDP2L0EA+HVALf7I+z83EWoT0/upTbk2LUHigC6Oczw
-	8QTUN8gHrQzKdFlyVxWcamqVWcHK17kACsq8rZpiWOZ8Mm0/vTTYSet4
-X-Gm-Gg: AfdE7cnmgiZRd7n6Yq2ZFSP4hG5E0wjQmXbO6cusd7ckGOsc8RPS9SNxl7LaymejK7k
-	E0MwFJE35tiOOWltOElCN/cggCgnmtK/9qfi41f1KWgEz1tG+LRdVBVc2efHzbehACC6C1fzVno
-	Vgmd7ES2U+jva5fYd5uko2gSki/vRC9ZOj555C1lHi8BsJ0AVD2rUYXR5EM/kQJvrv9vHkAarDZ
-	qik3ETEgzOS2PTVvGUlgh51mMfl8DDVPfNhFzpW7l0z3VIFd3p/XtJrM1gFflN7qEW02O6onvOz
-	z6yx/5SMrkAnvP5ah7XlOosRt528zafqmtCwGjdjtuGqriQMFP+PS8jKdRe7y/HY1qqfU4x41qF
-	V3QGlZXFcoR4WmCPGbGNQpjLQu/cUsD2FSU0O7bM1GB43EAa4SQX7Wnb/bElblR4AEtYS5GsV8w
-	p7m6twVJGVRrn2TsJCED/K8OE4Em0E2wv9Fkb1L7D4Ify1ICHinAM=
-X-Received: by 2002:a17:902:f683:b0:2ca:1479:d9dc with SMTP id d9443c01a7336-2cef1326596mr78291255ad.12.1784161744012;
-        Wed, 15 Jul 2026 17:29:04 -0700 (PDT)
+        bh=KLH47Bsvp6OcohDkOWI4H8aLbKmYqkgNg0YQkcC0sus=;
+        b=eUOvonJwtdZ3bKORXDAwCAgtOzMDxTqfIBKLDHk36bCNVvr69hi/GLtJNCP4dbikwl
+         4AY/ENLnCgcn1zT3C1qveOdDMo+XV9aASdcm4qzqm5G2IGxjgig2+dgLkjWY8Ao/Xm1h
+         UPcc1OTalDyqww55bD5OHuzDdM6pQ0B7hu5o40U0l/2EM4anw2doYOamSR+qZn46CV/7
+         JrzAf/dYXzHRNuARReJaLVQ/9CtSbDHfuB1W7PGFPXczHkNBLeYI0BIAOtD3pX/3MIo0
+         /inoOUM3AS3HC4aTt1+4r0H9JdeMq6yLZ/+aSEc9BmHMU+hfxUK4VwcznXlDcT/k8wf8
+         2ZTw==
+X-Gm-Message-State: AOJu0Yy2pIZk2vnu9MnKIGhRse8MEm1gwYMHITTMFGc0+NRMKtfe8xxQ
+	POLDH3wCohQ7u2Eh2MCSZnd0CdL4rzIDp4rXsPoLv2s7ZbNZNwGaIlta
+X-Gm-Gg: AfdE7cm7LmC3jw7v4mmPjPN4ou1mYAAgZejXiBWBRPpOzluOgXKnzjv0rl3AbZKKtyW
+	hvf3z4gaAGK46JL+tIGMELZlzO7vdIF1srxofJLjjUBtam98KCukowMOX9kN3QywRh5emMXyWTB
+	ERgXByh4cLOM9A1JUDDo75roEJ9BgWEB93FlQiFJ75x6zDcjoRt1wXfsmLTcfv8hOTvUZXgPA7N
+	jT9e2QwdZynt53HkhgMRz/hWHWEYLZHZsk6+sLvsb5LteSzOewnNggB3/6kfkUrgse8XO4Pzldl
+	nY5E/WGeg7qOxL9Wr4T+J+50oBkPkhAFwm09a/nU89CTq/s1BNeJgn3dmb0w1v+8yMvCHa27ej+
+	bdEZDy0uiORnrRtiEGKpD755B2U06r3xx0tnT9Yv8mYdYo6cQes7W3zZci8Agn7Mx+D8O+UwhfK
+	oYs9ygqihwpXdHEFBOmgh5gbd2n07Oy6yU8KmUBzVAvrFgszktEa8=
+X-Received: by 2002:a05:6a00:bd8a:b0:847:8b11:596d with SMTP id d2e1a72fcca58-848896b9d6cmr16954941b3a.41.1784162078527;
+        Wed, 15 Jul 2026 17:34:38 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf10591d3dsm10278195ad.56.2026.07.15.17.29.02
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84a4f6be5dasm3911662b3a.31.2026.07.15.17.34.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jul 2026 17:29:03 -0700 (PDT)
+        Wed, 15 Jul 2026 17:34:38 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b7171173-aa64-4393-b9cf-77d92f2ec932@roeck-us.net>
-Date: Wed, 15 Jul 2026 17:29:01 -0700
+Message-ID: <05fd58a3-ba71-49e9-afd8-c31a17c9e3bb@roeck-us.net>
+Date: Wed, 15 Jul 2026 17:34:36 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,26 +69,11 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/8] Add Advantech EIO Hardware Monitor driver
-To: Ramiro Oliveira <ramiro.oliveira@advantech.com>,
- Lee Jones <lee@kernel.org>, Linus Walleij <linusw@kernel.org>,
- Bartosz Golaszewski <brgl@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
- Daniel Thompson <danielt@kernel.org>, Jingoo Han <jingoohan1@gmail.com>,
- Helge Deller <deller@gmx.de>, Wim Van Sebroeck <wim@linux-watchdog.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-kernel@vger.kernel.org, mfd@lists.linux.dev,
- linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-i2c@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-pm@vger.kernel.org, Wenkai Chung <wenkai.chung@advantech.com.tw>,
- Francisco Aragon-Trivino <francisco.aragon-trivino@advantech.com>,
- Hongzhi Wang <hongzhi.wang@advantech.com>,
- Mikhail Tsukerman <mikhail.tsukerman@advantech.com>,
- Thomas Kastner <thomas.kastner@advantech.com>
-References: <20260714-upstream-v2-v2-0-76e5e41026db@advantech.com>
- <20260714-upstream-v2-v2-3-76e5e41026db@advantech.com>
+Subject: Re: [PATCH] hwmon: emc1812: reject channel index 0 in device tree
+ config
+To: Ivy Lopez <skunkolee@gmail.com>, marius.cristea@microchip.com
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260716002543.26711-1-skunkolee@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -135,28 +119,21 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260714-upstream-v2-v2-3-76e5e41026db@advantech.com>
+In-Reply-To: <20260716002543.26711-1-skunkolee@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 7/14/26 08:54, Ramiro Oliveira wrote:
-> This driver controls the Hardware Monitor block of the Advantech EIO chip.
+On 7/15/26 17:25, Ivy Lopez wrote:
+> Channel index 0 is reserved for the internal diode and is set
+> unconditionally before parsing child nodes. If a child node specifies
+> reg = 0, it silently overwrites the internal diode label
 > 
-> There is a separate driver for the thermal device driver
-> since it's a use case we support currently, but if it's
-> really necessary we can move it to the same driver.
-> 
-> Signed-off-by: Ramiro Oliveira <ramiro.oliveira@advantech.com>
 
-Normally there would be a hwmon driver instantiating the thermal zone(s)
-using HWMON_C_REGISTER_TZ. If the driver actively controls thermal zones
-since it also handles fans, that would be instantiated from the hwmon driver.
+The label string "internal_diode" is completely meaningless.
+If anything, it should be dropped. I see it as a good thing,
+not as a bug, that it can be overwritten.
 
-Since you have both thermal temperature and thermal fan drivers, I am very
-concerned that there is functionality overlap andor even conflicts. You
-should drop this driver and configure the thermal temperature driver
-to instantiate a hwmon device from it if so desired.
+NACK.
 
-Thanks,
 Guenter
 
