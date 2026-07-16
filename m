@@ -1,188 +1,123 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE01541736D
-	for <linux-hwmon@vger.kernel.org>; Thu, 16 Jul 2026 11:36:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6D1B320A37
+	for <linux-hwmon@vger.kernel.org>; Thu, 16 Jul 2026 21:21:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784201771; cv=none; b=eu+ichgif4kA8YhREHWPk1pSHYqM/nEkZMhOesYmxOO8zqgR5vF7Ffbz9U+GLMJZafWR6+XZpzFIjQ3lfNr7zEd1z4JNQPJY45E3/HxOImgJuk/lKv3rdEeDbLIUpMyUYYbddQPVy74xqZsQUKhu4chJEVGcLYHE+TD9nA369bQ=
+	t=1784236912; cv=none; b=XOdfb6tQSV1hNFXiVwHYlu2y9SLIILGPQitVZQRVKRCR2Zm2Dh+t9YmYiaRQbgpso2ycFYRbzH/mMnr9Tn5ShaatAapmzFnSThIsSWCb/V0buSWZdHhWURMlvkJzyun/Gn/dTa7HRQFyJlD1E3dcRe3NjWiWwAIjad3Ftr1/Q+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784201771; c=relaxed/simple;
-	bh=zetSJ0c59ByWOy2eXS5poYreELcox54ZDL3f0xEL8w0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QGJqHQWyzHXauZCURui6G7C82URhKgEaWssqfCWQKRaxrdFs5lZeyfKwyttliDwo+hTguFDA9av846EtAZyTEGNd898PThckBZSdHJBtILpjxmdR9vSt/8Rl41E+2f/2/t1FckMUrsrXpzy2+eTFcl2E/KhZdM9urCCv94vQ7Gc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QiQ5rI0e; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1784236912; c=relaxed/simple;
+	bh=whLSJ0SXgzimztpsKVgsGzpL60EQPO24JOkuA65lomM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=RpmTnvLU04UtU8kbHWzrozLgGeYvI1rcFGkaeXnmv5CByEYTLnXPbcOI+ggLwLPyo484EbV2S3pvrOm0L0a18OWOX5kkt6qJCQZ3eyxshSLJnmg30+k+52j1j13Sfr9WFWfkjDRf8/2jmYiiJ+GOTa6gr+hmHUA832tDIoOqfi0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S7QB04ph; arc=none smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QiQ5rI0e"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-38deea72eebso4374140a91.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 16 Jul 2026 04:36:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S7QB04ph"
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-81e851aebeeso81926347b3.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 16 Jul 2026 14:21:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784201769; x=1784806569; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=NS5iPB2mRTWBqt3tZiXGx3hLWOV6ZMr66GfCmNpO9k8=;
-        b=QiQ5rI0eRFGxigFyJXsU8AJRJFGM+m1kwajLqIBu8QKY9W1T8CcjBgZbbFG7Zvubnz
-         LjKwMXvSvyqBJXzFDuVpjG3EuYPLv6ckm8zYKMM3v+qbaL/jXBK9A/CyQjeApKIHNq2M
-         xInFmKF5QSFAQGUyQ56Sdjvbl6Z2svlckcTjuavCn9cYBd6eIQFpmPCXyd8EJg505BKw
-         r3HIsYIGk8f71xYJwhummZAqSwbVBcIOBOXrHohssS0nESIU6uhI/fBYcuZf5no5N0G1
-         Qs2qlf+IeN0bCMszcOMkIAEP73YQlGE1AkeSfXZ6aIIxdrBDFH0V112YvPWi3QLV0Yl5
-         Lfqg==
+        d=gmail.com; s=20251104; t=1784236910; x=1784841710; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=HW/7zZX9KkXVW8FPnb8sMDZrgAlTfKu+h2QMjwPAaqQ=;
+        b=S7QB04phfG3I90XNLqnVIBhZnUjaYFnUCB/YUjAFNrw1DWIDXB3SJXsHsSoZgh44Dn
+         X+e0Vj/UzRJEpKo1S0WBurlid7sdGUObYkrhGVVhaOqdMOZoJmSgaRaDfK/F+WGv/viQ
+         YYYDusCnIzkF6tRN+WVfQVLGJOAi4LsXuDv/8ltxXx3M4u/pXC5ytkDUaagbozmgU6RX
+         As3GTwxFLKt7Ah5DtiuMT2Pi5T+wdjvKviEt6iaHZXGe8gmmHJaXkZZ5Z7gWV+qAMWkU
+         FGDhjn7865ksDJJvDNrcW1BhNx1KrmgkYA4+bh+pSoCZxKihBeodMLEasOFxi1nLoH18
+         naZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784201769; x=1784806569;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20251104; t=1784236910; x=1784841710;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=NS5iPB2mRTWBqt3tZiXGx3hLWOV6ZMr66GfCmNpO9k8=;
-        b=EsrvHy0+JsslWtxqYuuhUEIIwJ8RWTTRs/DxhVWMSa4hpnIDLhZnrBTJ2LpBAsT6KC
-         88U8iGN6A2L6bK0GU3gkhWKYHV6DQxOhzEOmiG+WleqUoriBegHg4zUkQmQHOl59Co/o
-         y6hNkrC6sbqh9SJh/NDQyq/764L5yqw3Xq2K4qs7NIkXj3iiaZEZAMqvbZjqZ5O/hwxq
-         UKULrjwJt1Rwz1SdBdzjmCMas59bgH7pkfQ2XY7P42IDOxE5tu00Ao/aR1p6yfvYPLUr
-         nKuhMdn2Zy39vB4CgEesPjJi0XlFaTuyCRQiNwh4boY2x3UZ7nx+y1LTE1V/H1LzfHjH
-         wYeg==
-X-Forwarded-Encrypted: i=1; AHgh+Ro7Ci/q1OMB0A9H65bX8hVAK/r/b+JxKsmzAIWmvicOchzKFU1uaRaPPGgxLyUxzSZoQ6nU/+hnu1opJw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMXSmzrywnp+1sZJtZNAh6Knr7UfTzUZGPK92EMI2oQCVlgv26
-	DwOkNv4pg9Bsfma4kt+BkTn0l8KDshBfk7Nt6pUDWFbjPIn2A4hLBX1FHrG7tg==
-X-Gm-Gg: AfdE7ckbsdtNtPhybTGBpgjNy82lrOC+dFvt/cEsGwsshxwu3uD7Ity/GapyjilRcft
-	3KxLkkhxwMEFmrKu0jNplikuY3/iTVM1E3pHyntqKlp0RM1uImZyooAqYaoMPZ7eEjpVpK9QjBd
-	eTKhqVv3N6KH/MFm5xxMI/tNgk64DunTUcZ7AWbPfKZBQXGWQHAsb5LA26aTu6GgJLmOjdX6OJW
-	6mRMeSXxVPDXi3e0ODp83/xbYdFiQ/TaGpxOXy2AUy4foOT42unemhnnyFPZv9i3n6ZQbHYG5CW
-	jCDBP29WllYVPYkpqAg9szsts0oX85P+TpnNSV26f9zZxOtwUcXhMNAf0yZCG1BeictFlJpAVNA
-	KgH4/OkUemfmQ4SQMoQkD4mw17P2SXHOJd4IPiTGArcV3KMlniZFc0lsZeQ0+ytTbkGWKc17SB7
-	9u1BqP/x0u3Mj9PMIkG4djAhXyOF6axUwr0js5yESzZaWnDRWIyKU=
-X-Received: by 2002:a05:6a20:158e:b0:3c0:b766:74f4 with SMTP id adf61e73a8af0-3c36c1f13cfmr6949530637.31.1784201769130;
-        Thu, 16 Jul 2026 04:36:09 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13cd426b36asm9053465c88.2.2026.07.16.04.36.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jul 2026 04:36:08 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <16f3837d-b416-4d5d-8876-4e08d5a9ef26@roeck-us.net>
-Date: Thu, 16 Jul 2026 04:36:06 -0700
+        bh=HW/7zZX9KkXVW8FPnb8sMDZrgAlTfKu+h2QMjwPAaqQ=;
+        b=fxayqz27cNVOC5/ucbM3eQnqcs0fL78mUpjMtW86pavC0Cvu2syz2E7v40xnNbhOK5
+         F/lTkD07W4E12seSYlt5rlLoJ3Um9rVIs+0a0FX2pxfu3lp1OeY6D9BZUd6lccHfdbsT
+         Pl7IHMT4ozrIjsMj1yj2D2F/uAHRv7hRCLrNOxQzi5BY9xuP/Gd9zjInmiVfYZBhBiVB
+         h0GgiXTRoHIPrYcEdyVgA3z8AWp34x8FnEKkdYYkz0jzVa6swPYJkmab6Ys0GOfupQid
+         K39HgHU/w5Pg3aR50C3Nhei9k8NOYtlG7FRdJnVJ+nYTM6izN9o3VHqQNQcPY1eZj2X/
+         qxEg==
+X-Gm-Message-State: AOJu0YxdwyXW9cITfL8UsCm/AGU2Fg0/Ei4Kdp1QOQNur+oTyK6C+302
+	CTPDihBwj27wuELrMbhEylPsiw8RPTCnuoRvRdmMB2cyRWnnBdB/geGt
+X-Gm-Gg: AfdE7cmD6RJtoxrSHr4QFfx1do8MosPhZhV4qShbPFFzCnvGdsyWUGghPIk9wNDRUTS
+	DbqLPEk6VLt6NMQPvF0jsH7q8MoJaSscT3jdv2lo1n0JaAFJYMgKjd/jAedPAkbV+vtKbe0emt2
+	DwKYCgVsBieorHySCPbZwLskUTtijFTzHIWV4BC5xfIrl0gMpErAm12vv42bEZzYk2vDRT/rZsD
+	G0C5jEQC8lMfFLks1i897oG+mUhoWOeprdlJ0Q0JfWEJy18YiSOUmSc6YlQtB76u9NnRhK2QC+y
+	/S1uQ5BywE9Z957Z1dTOCXRMvMDXCm0E0d3aF5UtXHlrqDVcgp6k71NjWaB4KAwH0TBbyQXPAfB
+	wIUZUKL15RuGwB2pDzbFNBq+pTjxQGzSRZbfNq13uhvgPxj4Q68ypvtF2a1ZSNZMZWzTcA9EZmE
+	rdr8eb139lBAh9G6DV
+X-Received: by 2002:a05:690c:6203:b0:7fd:add6:f271 with SMTP id 00721157ae682-81ebb2890f9mr105015797b3.49.1784236909541;
+        Thu, 16 Jul 2026 14:21:49 -0700 (PDT)
+Received: from tresc054937.tre-sc.gov.br ([187.94.103.218])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-81eee7fde39sm5026477b3.36.2026.07.16.14.21.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jul 2026 14:21:48 -0700 (PDT)
+From: Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Subject: [PATCH 0/4] hwmon: (adt7470) Add thermal framework support
+Date: Thu, 16 Jul 2026 18:21:37 -0300
+Message-Id: <20260716-adt7470_thermalzone-v1-0-cc55ef35edde@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/8] Add Advantech EIO Hardware Monitor driver
-To: Ramiro Manuel Silva Oliveira <Ramiro.Oliveira@advantech.de>,
- Lee Jones <lee@kernel.org>, Linus Walleij <linusw@kernel.org>,
- Bartosz Golaszewski <brgl@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
- Daniel Thompson <danielt@kernel.org>, Jingoo Han <jingoohan1@gmail.com>,
- Helge Deller <deller@gmx.de>, Wim Van Sebroeck <wim@linux-watchdog.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "mfd@lists.linux.dev" <mfd@lists.linux.dev>,
- "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
- "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
- "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
- "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- "Wenkai.Chung" <Wenkai.Chung@advantech.com.tw>,
- Francisco Aragon-Trivino <Francisco.Aragon@advantech.de>,
- Hongzhi Wang <hongzhi.wang@advantech.de>,
- Mikhail Tsukerman <Mikhail.Tsukerman@advantech.de>,
- "Thomas.Kastner" <Thomas.Kastner@advantech.eu>
-References: <20260714-upstream-v2-v2-0-76e5e41026db@advantech.com>
- <20260714-upstream-v2-v2-3-76e5e41026db@advantech.com>
- <b7171173-aa64-4393-b9cf-77d92f2ec932@roeck-us.net>
- <PSAPR02MB4502BBD659D7C4FCDDCABB6294C72@PSAPR02MB4502.apcprd02.prod.outlook.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <PSAPR02MB4502BBD659D7C4FCDDCABB6294C72@PSAPR02MB4502.apcprd02.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGFLWWoC/yXMQQ6CMBBA0auQWduknSijXsUQU+kAY7SQthBjw
+ 92tsHyL/zNEDsIRrlWGwItEGX2BOVTQDtb3rMQVA2qsNZlaWZfoSPqeBg5v+/qOntXpYo1GpLM
+ jhFJOgTv5bNdbszvOjye36b+Cdf0BBI1ppHcAAAA=
+X-Change-ID: 20260716-adt7470_thermalzone-59a102278d72
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, de Luca <luizluca@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+X-Mailer: b4 0.15.2
 
-On 7/16/26 01:10, Ramiro Manuel Silva Oliveira wrote:
->> On 7/14/26 08:54, Ramiro Oliveira wrote:
->>> This driver controls the Hardware Monitor block of the Advantech EIO chip.
->>>
->>> There is a separate driver for the thermal device driver since it's a
->>> use case we support currently, but if it's really necessary we can
->>> move it to the same driver.
->>>
->>> Signed-off-by: Ramiro Oliveira <ramiro.oliveira@advantech.com>
->>
->> Normally there would be a hwmon driver instantiating the thermal zone(s)
->> using HWMON_C_REGISTER_TZ. If the driver actively controls thermal zones
->> since it also handles fans, that would be instantiated from the hwmon driver.
->>
->> Since you have both thermal temperature and thermal fan drivers, I am very
->> concerned that there is functionality overlap andor even conflicts. You should
->> drop this driver and configure the thermal temperature driver to instantiate a
->> hwmon device from it if so desired.
-> 
-> But this hwmon driver doesn't control any setting, it just displays values. Fan
-> and Thermal Zone control is handled in the thermal fan and thermal
-> temperature drivers.
-> 
-> Also this hwmon shows values not related to temperature, like voltage,
-> current and intrusion.
-> 
-> Would it be ok if I kept the HW Monitor since it only displays values, and if
-> not can I keep it to show the other non-temperature values?
-> 
+The ADT7470 is a temperature monitor and PWM fan controller capable of
+monitoring up to 10 external temperature sensors and controlling up to 4
+PWM outputs.
 
-All other similar drivers implement a hwmon driver and instantiate the thermal
-subsystem from it. You decided to implement thermal drivers. You should only
-have thermal or hwmon drivers, not both.
+Currently, the driver exposes these sensors and PWM controls solely via
+the standard hwmon sysfs interface. This patch series integrates the
+ADT7470 driver with the kernel's thermal subsystem, allowing its
+temperature sensors to be referenced by Device Tree thermal zones.
 
-Having both would essentially implement two drivers with overlapping functionality.
-Since you decided that you want separate thermal drivers, and two of them, you
-should drop the hwmon driver.
+To avoid saturating the I2C bus during frequent polling by the thermal
+core, the thermal callbacks are designed to read from the driver's
+internal cache.
 
-Guenter
+Patch 1 adds the YAML device tree binding documentation, defining
+the necessary #cooling-cells and #thermal-sensor-cells properties.
+Patch 2 performs a minor refactoring to introduce the ADT7470_PWM_MAX
+macro, replacing hardcoded values.
+Patch 3 registers the 4 PWM channels as optional thermal cooling
+devices.
+Patch 4 registers the external temperature sensors as optional thermal
+zones.
+
+Signed-off-by: Luiz Angelo Daros de Luca <luizluca@gmail.com>
+
+---
+Luiz Angelo Daros de Luca (4):
+      dt-bindings: hwmon: add binding for adi,adt7470
+      hwmon: (adt7470) Add ADT7470_PWM_MAX macro
+      hwmon: (adt7470) Add thermal cooling device support
+      hwmon: (adt7470) Add thermal zone sensor support
+
+ .../devicetree/bindings/hwmon/adi,adt7470.yaml     |  53 ++++++
+ drivers/hwmon/adt7470.c                            | 180 ++++++++++++++++++++-
+ 2 files changed, 230 insertions(+), 3 deletions(-)
+---
+base-commit: ca078d004cf58137bcf8cb24a8b271397431ba58
+change-id: 20260716-adt7470_thermalzone-59a102278d72
+
+Best regards,
+--  
+Luiz Angelo Daros de Luca <luizluca@gmail.com>
 
