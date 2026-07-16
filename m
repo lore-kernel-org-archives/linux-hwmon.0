@@ -1,108 +1,162 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BC492E2EEE
-	for <linux-hwmon@vger.kernel.org>; Thu, 16 Jul 2026 00:25:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C632D1907
+	for <linux-hwmon@vger.kernel.org>; Thu, 16 Jul 2026 00:29:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784161561; cv=none; b=Q2SCCy7DHSroPpr2ZvuOoROPx7XL6rS4ra11NEkTXlStqZOdBN5BdZo6vuLMZqgMNH6ukpON21vrika5+q2/HaAkvgLyWB8OBY3Rsv2dMglxev0iKmKig7EvqjOdiP3q7UYglQCdj1kDEAlCMQIbB2rAqJhAMtHRhxO1FizSEt8=
+	t=1784161746; cv=none; b=ZV6NzUaz2nypGClmt+ycgzPQzmtwzFLzMnUgZqR0A/PXbytUfpANzyU0zzVXM+fPV23fMCgnSMUyFWeBc5uBL/s1RcDrlMwttrCUgo6at08vWY1yr6zRXc4xkpXmZZkJX45AW7i/YdTBdOhiPQ0+BJmD4WgIqBlJx0qSu1yXe0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784161561; c=relaxed/simple;
-	bh=1e1N6xH7vqyO+MHhocu8Qhs6l+hP4MaAsyqHKWudrgk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SqnfV4fIaJCld1FklLzrHgs7M4A8djvtL/t6df75X9C9aSZ9aiOIcOId1q4LCI6vANtit+hLrUtQWI4z8AKS4K+NdBKLbs58BO4kgLqHZ8/M3clOooggcYVN8y2hy3yC0KgJRHlD/capDZBx8yaHsFfjrqQ6HaHXxfgZKYpbFDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NpR2IrzN; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1784161746; c=relaxed/simple;
+	bh=Pn412DYiAzxCT+4OPjStksFO/tbSj/zMlkHkGBtPatE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Efv0+Pg/7P9epfAmB5IKSHYtsFboliFJ1eJ+HsjERCRfzrKToxSnwspOOb52EnG3vc0Zb4JEieHWuQd+BoCdlk16bZu8bDXSqqXO0B5Qgi2Mrtu1GL92PSGIu9G/q6wBOZWAx++4xrTvqzQsd1YjxF9FPn+Z8JolXbYtM1sexMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cmd+edKm; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NpR2IrzN"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8485bd28dd0so7013814b3a.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 15 Jul 2026 17:25:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cmd+edKm"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2cad4170e8eso76073775ad.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 15 Jul 2026 17:29:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784161553; x=1784766353; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=T08FRuPIa7+44bxWiq0MXIRsXwFq6punNAYb/5OuNU0=;
-        b=NpR2IrzNBqVsGmR4l0n2dDDXAeteHyX1LukgaRYb2MJtQBWx5JVKBlICcYaVshBSf1
-         JwN56nlgS0SknwLoQ9Gu3xwReAG+GDYSHOyP/yfsEcR5rc2EcrHjnQVff7nwRcrXV9hr
-         FmXzhIvxl+oNjdYZRFY4WtKtJH0rXGHmu0IsUX7OoWiVInQzmr2NuMTDAzSFotzyIzIg
-         QVGRHJTUNxKq3dh6FS/sZV+Iu7axZ0IZMwh0epnjvwtnXzvGbClJKytMhEARHADNWSjG
-         4WvP0D3D/CY+XRmDLw9Keq6QLS9wBsk2svsFtQcLG51yoF98CQxwY/SAlkYndOZGw4zw
-         DKiw==
+        d=gmail.com; s=20251104; t=1784161744; x=1784766544; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=OGQ6x2eWb0kXOAnv/GgXof7PDNge2C09gVvctRHhkCQ=;
+        b=cmd+edKmzKMPZggls0FDrWBDODabc9rJtrdobsoPsNoxEc9BKSZfGXCLzcTJq0+cHK
+         e1WfPqWDtA3jFpxSy+obtSQv5BrATtpz6kjW8Qlt29gcpr1uuZCKHtWtIWif0ceuh67Q
+         Zflci0J8UK88Ldd3y09dIo2emaskL5z+h+oLZarokmgaHnO4ZDq0XV0bTq8UxG07/ofk
+         rbNeLajf8Uz0xN0EZPtmTXjB86HFwRehGK6o+RhddP/xtNshX8tAKvwkl02w+ewCQqKy
+         iTZBcCh8uaalgOUBAfBdvSkGpIWTqXHmME8X1X0waha3N9gNd3m96MqQp49luQ/q/Udf
+         UWYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784161553; x=1784766353;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=T08FRuPIa7+44bxWiq0MXIRsXwFq6punNAYb/5OuNU0=;
-        b=dhHyY9okKVDwDErlUZibffodrS903SCrbChPu2q4BmfBQioaAt5cSyPC0XceCNOf/q
-         lLf2seisLnsJdI1h4QGenLZrR0uLlMwdTECe5Uizz8HG8VJ90sO8o0ahSpj1ccz9WGYu
-         oRl3/JvM+Ao0ycLqjKs7MqCKXhJ0pNtFi4oto35f0Af8zex1xai5kH4WhEQb++qSomdt
-         i5tM6LuzqF1NQp3sP1FAmv7jYC0GY5YyAJ+hrb/Z7FxVy7oMEI1E0uhvk+kHsqSaqNM5
-         MO0XSs4eLkczqv46QT4bJXNt7+8UQyNseTXL2z6xiVtY+ozckqMT9oUzp5+7aFbWuhn/
-         enkQ==
-X-Gm-Message-State: AOJu0YxRn67zsQO2cSAFPOGbZlzHJqr6FS0tbMWtlY0k6PvWaBzyRsRK
-	yUW9y/PjgsSN9yv7m+9l3jyJV8inGDQ3/zqm6mRf4Cs2knW9pmygDZOt
-X-Gm-Gg: AfdE7cmlHJR/ed+2ekpSjJphj1KEPRAUyufM0EpuSwFMlwd85NVqW1hMDbb0XCXYDlL
-	8KhB5ShbyMv8M1bZtwmvxXMeZyXPDr55/8tlSdy73gYnHoYsM5MKDbI4QehtS9waBap58IpMJEp
-	mwQcX6OA11Ps0g4QFYFSZidlxQ+Hjl6eNNnLUXsuTGumZRbxW7F9H/N/x0uvXommj1KuWF+3nhp
-	LKbHlUBQkp8unLstQLg/CU740ev/16X/9Xm1XA16f1wMWVSvmTE0qFiScV7OiOqCi3oqcUeIQFq
-	PiosT0kpaTcJNgRVppmEQse16DN/sSwD6+QubdleIqDjFkGY29rpCH3IuteH2grUTdnPAKT8I/l
-	NxuhNjiF8iAjqLUCEwvhuivnQB7g1d88cFOdofzakjUmCUpvIjB0/4xoHyUFYawIP41+YMATq0t
-	7XqmH4FCWssfSZkW5XPHkuEIVzULtRC0h5xsuBtrJ7dyGiSfzrEuKXM0fDSseLTyELFIFdV9o8v
-	M/VvSU+E2JO
-X-Received: by 2002:a05:6a00:2d03:b0:847:5ec6:3afe with SMTP id d2e1a72fcca58-84a5146e82dmr8476286b3a.31.1784161552958;
-        Wed, 15 Jul 2026 17:25:52 -0700 (PDT)
-Received: from bloom.localdomain ([2604:3d09:178e:e100::9dab])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84a4f6bf5ecsm3898485b3a.29.2026.07.15.17.25.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2026 17:25:52 -0700 (PDT)
-From: Ivy Lopez <skunkolee@gmail.com>
-To: marius.cristea@microchip.com,
-	linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ivy Lopez <skunkolee@gmail.com>
-Subject: [PATCH] hwmon: emc1812: reject channel index 0 in device tree config
-Date: Wed, 15 Jul 2026 18:25:43 -0600
-Message-ID: <20260716002543.26711-1-skunkolee@gmail.com>
-X-Mailer: git-send-email 2.55.0
+        d=1e100.net; s=20251104; t=1784161744; x=1784766544;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=OGQ6x2eWb0kXOAnv/GgXof7PDNge2C09gVvctRHhkCQ=;
+        b=rK/nknYeawF3ovyfZl+igl3WwiyCWFqNbT/RX73bIbqnNdOcksVBABuFNIFTP1fHnc
+         khpgm4Ng9ZW40K8W1bmZ2UG6A9fOuHdQCS6RGJcuGMt3iRKUeDvJhfc8TLqcE+5UOdbn
+         BxdU4W1rtwM0JerXPvVYMMnfVV4pyfRFUpf+5E8s2mbIR3Qh0TGybMP3NqY7e4cZpcFh
+         Ew69c7Xu0pmuaddYo4d+MLIlaFYlvwdoqwFgPINuCYPKM/Ss8eCoD0b09Ohk6XkPiguv
+         AUA0dzduA5NCRXEDHQc56aM7zlWmmlEpNFBmLeaD+dG8fYDCnuCWeSELQA1afBKkVonp
+         6rTQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqzSvooVTjoG5ETchQWfhjO9hGiHttuHXiPyjuPgLWnwgDTpt+kYmvRze6UcKvIty0ctHyC9SqsAQWIPQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzreauukKDP2L0EA+HVALf7I+z83EWoT0/upTbk2LUHigC6Oczw
+	8QTUN8gHrQzKdFlyVxWcamqVWcHK17kACsq8rZpiWOZ8Mm0/vTTYSet4
+X-Gm-Gg: AfdE7cnmgiZRd7n6Yq2ZFSP4hG5E0wjQmXbO6cusd7ckGOsc8RPS9SNxl7LaymejK7k
+	E0MwFJE35tiOOWltOElCN/cggCgnmtK/9qfi41f1KWgEz1tG+LRdVBVc2efHzbehACC6C1fzVno
+	Vgmd7ES2U+jva5fYd5uko2gSki/vRC9ZOj555C1lHi8BsJ0AVD2rUYXR5EM/kQJvrv9vHkAarDZ
+	qik3ETEgzOS2PTVvGUlgh51mMfl8DDVPfNhFzpW7l0z3VIFd3p/XtJrM1gFflN7qEW02O6onvOz
+	z6yx/5SMrkAnvP5ah7XlOosRt528zafqmtCwGjdjtuGqriQMFP+PS8jKdRe7y/HY1qqfU4x41qF
+	V3QGlZXFcoR4WmCPGbGNQpjLQu/cUsD2FSU0O7bM1GB43EAa4SQX7Wnb/bElblR4AEtYS5GsV8w
+	p7m6twVJGVRrn2TsJCED/K8OE4Em0E2wv9Fkb1L7D4Ify1ICHinAM=
+X-Received: by 2002:a17:902:f683:b0:2ca:1479:d9dc with SMTP id d9443c01a7336-2cef1326596mr78291255ad.12.1784161744012;
+        Wed, 15 Jul 2026 17:29:04 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf10591d3dsm10278195ad.56.2026.07.15.17.29.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jul 2026 17:29:03 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b7171173-aa64-4393-b9cf-77d92f2ec932@roeck-us.net>
+Date: Wed, 15 Jul 2026 17:29:01 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/8] Add Advantech EIO Hardware Monitor driver
+To: Ramiro Oliveira <ramiro.oliveira@advantech.com>,
+ Lee Jones <lee@kernel.org>, Linus Walleij <linusw@kernel.org>,
+ Bartosz Golaszewski <brgl@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Daniel Thompson <danielt@kernel.org>, Jingoo Han <jingoohan1@gmail.com>,
+ Helge Deller <deller@gmx.de>, Wim Van Sebroeck <wim@linux-watchdog.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-kernel@vger.kernel.org, mfd@lists.linux.dev,
+ linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-i2c@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-pm@vger.kernel.org, Wenkai Chung <wenkai.chung@advantech.com.tw>,
+ Francisco Aragon-Trivino <francisco.aragon-trivino@advantech.com>,
+ Hongzhi Wang <hongzhi.wang@advantech.com>,
+ Mikhail Tsukerman <mikhail.tsukerman@advantech.com>,
+ Thomas Kastner <thomas.kastner@advantech.com>
+References: <20260714-upstream-v2-v2-0-76e5e41026db@advantech.com>
+ <20260714-upstream-v2-v2-3-76e5e41026db@advantech.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260714-upstream-v2-v2-3-76e5e41026db@advantech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Channel index 0 is reserved for the internal diode and is set
-unconditionally before parsing child nodes. If a child node specifies
-reg = 0, it silently overwrites the internal diode label
+On 7/14/26 08:54, Ramiro Oliveira wrote:
+> This driver controls the Hardware Monitor block of the Advantech EIO chip.
+> 
+> There is a separate driver for the thermal device driver
+> since it's a use case we support currently, but if it's
+> really necessary we can move it to the same driver.
+> 
+> Signed-off-by: Ramiro Oliveira <ramiro.oliveira@advantech.com>
 
-Reject reg = 0 in child nodes and improve the error message to
-include the invalid index value.
+Normally there would be a hwmon driver instantiating the thermal zone(s)
+using HWMON_C_REGISTER_TZ. If the driver actively controls thermal zones
+since it also handles fans, that would be instantiated from the hwmon driver.
 
-Signed-off-by: Ivy Lopez <skunkolee@gmail.com>
----
- drivers/hwmon/emc1812.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Since you have both thermal temperature and thermal fan drivers, I am very
+concerned that there is functionality overlap andor even conflicts. You
+should drop this driver and configure the thermal temperature driver
+to instantiate a hwmon device from it if so desired.
 
-diff --git a/drivers/hwmon/emc1812.c b/drivers/hwmon/emc1812.c
-index 68575c27d090..143c3c07dbaa 100644
---- a/drivers/hwmon/emc1812.c
-+++ b/drivers/hwmon/emc1812.c
-@@ -809,9 +809,10 @@ static int emc1812_parse_fw_config(struct emc1812_data *data, struct device *dev
- 
- 	device_for_each_child_node_scoped(dev, child) {
- 		ret = fwnode_property_read_u32(child, "reg", &reg_nr);
--		if (ret || reg_nr >= data->chip->phys_channels)
-+		if (ret || reg_nr == 0 || reg_nr >= data->chip->phys_channels)
- 			return dev_err_probe(dev, -EINVAL,
--					     "The index is higher then the chip supports\n");
-+					"Invalid channel index %u\n",
-+					reg_nr);
- 		/* Mark channel as active */
- 		set_bit(reg_nr, &data->active_ch_mask);
- 
--- 
-2.55.0
+Thanks,
+Guenter
 
