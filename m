@@ -1,109 +1,236 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A2422A80D
-	for <linux-hwmon@vger.kernel.org>; Fri, 17 Jul 2026 02:48:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784256512; cv=pass; b=NuqJu49O5v79WUJ8wm9qwA292JSoP72yjjp/1KXdsRvkEGULGNS4MA6uux9NtWrgEAjNpGO9DKjhvNcKAfqUXiYgLKW+1u4CZ1jXhQwmKy9obSTMknKkT4A7M8mYO2ye5hSOLmDxYBQzLFdyn3LsVix8KZWWnKcF9qpQkljBZPY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784256512; c=relaxed/simple;
-	bh=Xeh0/cpIX++YPWKoD+NWyrftViTAmvcFGOAmCGY5v7Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DLb4QW32RbMbuEadPW7ifAoPoYW5Nti6WpTQ2d71VOYtiWfKACbSgoprBwzuwgOdOKFeHtIdUO95k8nU0TSUjTpwkv64p+SGE1zKXG5dZUL20OeC3+sON2wOM2APWP8wsHEzCAAPgkSTQZPXhyPLIHiGQRnEQePqf1oYy8aOSew=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mE01Zffm; arc=pass smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584F63BED7F
+	for <linux-hwmon@vger.kernel.org>; Fri, 17 Jul 2026 06:37:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784270270; cv=none; b=DfNucSMMDGUMnj0LIEaHoXrK6lhHsmHOVy7SSy81SWmk2HwG7fvo8vvpHzYwOAP5DV/BjtbxokyRVh73y4lor36Yy1DC1wW++JGZUlRAXXJIydxHY7ZI60E1TsWhMst3ssJKPG6f5k+Gdh6FkiLJgHGLGGhsISErv7/GX/6CtfA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784270270; c=relaxed/simple;
+	bh=ReeEoEQsYvmBjZWQgRR92CM+SJ2darMxK748g9KMECo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=todR3M4UDkKPZX3fhIQSFvE/45LHda/zpd8zMLN1WMZSgfc6S+MkO064frmWQ/ZrI741M848Bqucw/SIxgMTw8/bAl2sxbwHYYstb4MeHHjdKDXaVoyoWtT6v7IcXGjfVF6P94oKVTn733nyFKyWxbFvlKB+ZFNiEM0G45Mz21E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H0R723zm; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mE01Zffm"
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-c1677c91969so321737866b.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 16 Jul 2026 19:48:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784256509; cv=none;
-        d=google.com; s=arc-20260327;
-        b=HuixJvr8/UNzPVrVRaGswBtC7mbSF+WzKLiqhql7ht9raDhf7dDSVoSxcKRIRY+zAk
-         jHYk+Tr/6ThHMI9vYNmS5EP9SnwuFd+joKT5treq2zide52NesK7g+rGl+NnQOXzPMid
-         ZhrK1AbO6lWysBmoR6/NCPry675x+GCLjK/vT7QWxJmtk1N8jTPakguxCfYILosG6ntb
-         eXD42LgQ5a50PnLsPy9jLOwTijV6tWsrK4HfM0IX0CZSwjeY5jOpO/nhWx+XAATcaGc2
-         6CMNmog4CwblMBHav58BFXbY9IU9IR2OZuuKLvTecLfVPf1gjM+8+RULsn8/v+h1JfTp
-         sbow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=Xeh0/cpIX++YPWKoD+NWyrftViTAmvcFGOAmCGY5v7Y=;
-        fh=Ad6qDDjrtQXzFxoLrXURrC72oVIOza4tGR/I5Qyk72s=;
-        b=oUgnu3zijNJz4hkLQsWnTpN5RVX5ZhB/LqX287A4mCjdipdyTNvLRXZLbtX944eHH+
-         LV6aJ6cfoAC0dDlgQ4oozsoyDzbUnPH1qbbGXJgRJYED4OSBAt3tCvjdKGk9jQcykHvG
-         YAqPWSZ8qRwepsc9gH5gPXcbu+vVG6kUpT/cOh0bKLV+9PsRekphnDY1+rjY9hwOWlZk
-         nsB7B9sxHrEpRKeqjAML99A8bQVJwx12o1G34fvPBlJQ31jEIHWhGmm901RRszj/iJ1H
-         dMxui0qgC8LUFYmaHPdia3zHbmH+QRDr2cAS4dBS4cq3b54f7NYfq+t0vbVXxo1OMFs4
-         qARg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H0R723zm"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-493f75f7172so55388105e9.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 16 Jul 2026 23:37:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784256509; x=1784861309; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Xeh0/cpIX++YPWKoD+NWyrftViTAmvcFGOAmCGY5v7Y=;
-        b=mE01Zffmh8ckiAJA0rMP+NKoiIIbrCnec5AJxiLlmmc1M72Dyg8PoQvF+yfrVnzTTJ
-         PrySwLxxeAy+JdGZnc8IhjxtOk/gDP35V3Rf5TIcoFSF3mCEojKUKQgykAVLv2gNnUJn
-         lF2Q3g8fS/2YPG+HN5qMNC0P+SD3Jax4XeGNk2XrRDW7hmT9yKw0v2sJorf9rH8OXuik
-         S6sajYmh3BIqhkHme4CDjJfhFwjeRZvcg7PzL+/Pa5C4SAzZgL92nMJmcmWqf1JLqU3k
-         5rxvbcZ9Pu8/YL1ycsFMYtQ4Q/A1DGnMIjWxtr2WA5ezu78mJgFwfr5iXLxxP82aYXZ+
-         VmmQ==
+        d=gmail.com; s=20251104; t=1784270264; x=1784875064; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=3qM+aWftc8PoPosfqPaRZSyph/d44ipOqM5LtqJstHI=;
+        b=H0R723zmyHOIEHqyYTOh3zNncEhoxP3/7awfTjIxkx1HD5cscfPOOaEtSWnGP0LQPf
+         N2To9o/oStummgCJpPHwIW56cEfFnimJUPMFyZElsA5pRKTK4vFgFYnmZnPNE2xiK0OF
+         YGEO7K5XEYdSstTh4P66v0EL9/xHRnYUSOHGHQLLHfP9cV53xPjN7Y7j5t4VMpJWRiYA
+         XJfN9HJjs5EeHSVrEkaCswOwyBjeVp7RaH04gUDVA7Udh6rS3JZu2+3AowsDzecma2e2
+         27Yh2R2JTs9nTUsYjLe7LFxMuai90hKQY+zoXX8toiYq3AGI9x+M7UtZEUNB/C6efwc6
+         I30Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784256509; x=1784861309;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Xeh0/cpIX++YPWKoD+NWyrftViTAmvcFGOAmCGY5v7Y=;
-        b=F4BA4YibhJLaih7KV+j+iEOlMN1zIBUOrJnHHSDTUrxab/E8n1re+ZAysUdrf+W8s5
-         IyQt1ekfviBP6DC4feXdxScE9+UEAEMeqUUC7ncM0YRle7TdQPs3SFx4zVNs/T8I6iH9
-         5sfkhoSiSNU+idsUiVbzuNWQ456k+boXW7GocJiFhsFb8tG6y+2Zj6N2XYiNtemkcN3h
-         2QKT9cU9Uwy6JQxNDTS48h6CtFMsz354f5T+VUD+eyontv9YElgdcjYdKj0Ipx9sxQKK
-         qLJnNyv1wqfUSrkarRK8OCbFPak/anujaqySZsVO7ZwL/QDVcI4GJfgIdZTC5DMZnnET
-         SMlA==
-X-Forwarded-Encrypted: i=1; AHgh+RrHmtS8G7dQhd1XbHEokRmS7UYYrnCbfzSAK7VbEPtvhzG+OFanWFlcgG9himwqumx+WcXRHiOTb1aOxQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyuq1T8y+rYPhIN8BSiKb4l/7hfMzwx0KnCPlQNbu8k0CRivC4n
-	USAxG7NVSI/oCE0hx7r2AcXqwJp6ecdSWk8zL3UgMmvSMQBU1FX83MfJNjc35n5pdyyWRBrnXff
-	NCsui2oIqFpiur6wCBVKL8MZuSYpA+wK3Zh7U
-X-Gm-Gg: AfdE7ckMcWS/6Ybzo6xabL36v3ejVecb2Le3jeoNSCwBrFGJ1BjhOALUGb7/R4IxVPF
-	4lgnvu2PVzNumJXoPBqqE/LEJai9mTXmBNM8gURXBAV91soc8lEsLioidLuJVxldCpYcM+10++z
-	5wQ/hj4Fhkf6bazjIQsJl6uJkTbp1BmrpOml3VtFQgIVRCn3dCXXiQrc+vB7YXsa+usICZ1KY86
-	VQ32jSafT4PCUQfrrQfdmR6+kq3nx2lV+68FekPG8KsPJB5NJlkcDVr06d60bYSm2QqB2FsMaaA
-	F6MpOhiRWE5Y3kQ/Lg==
-X-Received: by 2002:a17:907:1b09:b0:c16:8aed:cec3 with SMTP id
- a640c23a62f3a-c16b48643b7mr18580866b.58.1784256509566; Thu, 16 Jul 2026
- 19:48:29 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1784270264; x=1784875064;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=3qM+aWftc8PoPosfqPaRZSyph/d44ipOqM5LtqJstHI=;
+        b=L8OaV2o4iRYGmX9IwKEfPeOLlLrRdrut1RamPZPNMyESc8fpUdw4vTxW1RQ234h9Wm
+         5qG79LFVHxCP1ynuzwvpU1nnwj83rz14yWgTxxcSr56ywjk0vKhEBSARnQdJRjVcW9qu
+         UxOnN8oWczvth+845tdaUoaxafq/r+o+U8TABQsEg/c8k22gxsLNjkiRAQydLHIJHAby
+         v78LD9fy3m3zJxUfZmGy+WPEbazAQw3w4PK3Q14yTNoHNUwwouJHaqp6iZ+qyjh9JaJw
+         Xse6ZX71Buj9C2Nkla4O2EFAwEFFxnHHwm/Nd3/F4yHskTd9Y2+tKebbkn1lvb08JTr0
+         xhEQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrpF004pf/fs4oV8X69iYYvyU+MNtdh9mmq+tWxaP3M8L7APLa4oSoLRCmggljERjJ9jd6J1HOm4wbK2w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNGvlCYECmQsHURZTTfpZs/ruGj3OsTuNLF8+adv6NwniTWOK/
+	P6Ero1IogzmkSFRgBkQWpq1WVSr6d2KHBarQQArTgJfrzWNFuvOdGBib
+X-Gm-Gg: AfdE7ckqb668OHfjJ2u35RIBw7z3CYRU7pxyaVV2IX/Nsmk7TZ3Z/IJLUGUv1R+yCVf
+	U++G9KX/UsNrkOYa0roKK4ju9nu61DT04Ztc8LNfEPhAWcjBtG+EnB/NsbKXuWRXL1XTSOqMrfU
+	n19TZtrZ3jF2x4oGH6mdDaR5GES62l7gvZrxyv9MHZOj9fMFcV3eok680wHRO4qziQohknVklIl
+	85aU4jtZXUgCU3aZMhwL53HXPkMvm72mm06HpzBQ9sNhIq+xaVQmP4LGXxytPfpBLdANuAjK4Fa
+	PoVklx0QACgaXHAJOkNrKAZnoE8Lac2NZYNx1Ub6vSkcy0fCrU++fHvKl9vveMiqWyPCpag3GC2
+	SDk9hl/y0bkGepHwy2Vo1pxCs3tdBfJEWTYR2bw7SaLzyLS5rynS8l3rsC4hpQjA7Y68dfDoSAb
+	URF+lD7HyKs7ffjm791r4ZaaM0nOAhmesHZnUhfxhXwm/hhRtojTNYSeI=
+X-Received: by 2002:a05:600c:4691:b0:493:c47f:3c55 with SMTP id 5b1f17b1804b1-4954a3e20a6mr12918325e9.5.1784270263423;
+        Thu, 16 Jul 2026 23:37:43 -0700 (PDT)
+Received: from flaviu-Aspire-E5-572G.. ([93.122.248.125])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4954966a033sm22207295e9.0.2026.07.16.23.37.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jul 2026 23:37:42 -0700 (PDT)
+From: Flaviu Nistor <flaviu.nistor@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>
+Cc: Flaviu Nistor <flaviu.nistor@gmail.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] hwmon: (lm90) Switch channel parsing to fwnode APIs
+Date: Fri, 17 Jul 2026 09:37:30 +0300
+Message-ID: <20260717063730.5617-1-flaviu.nistor@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260716-adt7470_thermalzone-v1-0-cc55ef35edde@gmail.com>
- <20260716-adt7470_thermalzone-v1-4-cc55ef35edde@gmail.com> <091279bb-391e-4c0a-8ecc-a51f95be3f27@roeck-us.net>
-In-Reply-To: <091279bb-391e-4c0a-8ecc-a51f95be3f27@roeck-us.net>
-From: Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Date: Thu, 16 Jul 2026 23:48:16 -0300
-X-Gm-Features: AUfX_mz9AVIsM_AQi3achJz8IUPx3rvSBxfgPtBXoYk3dxmYM3rsybnFUAJ9i5s
-Message-ID: <CAJq09z72Na3yzdei_BVd69sLKFttWZP8vmF3gf66A_qYZ2Yirw@mail.gmail.com>
-Subject: Re: [PATCH 4/4] hwmon: (adt7470) Add thermal zone sensor support
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-> Detailed explanation why HWMON_C_REGISTER_TZ does not work or is
-> insufficient goes here and into the driver code as comment.
+Replace OF property handling with fwnode in the probe function to read
+the channels properties, improving the driver compatibility since this
+method is not limited to Device Tree only.
+Add also the needed headers for explicit include and clean up related
+function naming.
 
-No need to explain anything. I was just unaware of the existence of
-HWMON_C_REGISTER_TZ.
+Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
+---
+Changes in v2:
+- Remove <linux/mod_devicetable.h> as suggested by Uwe Kleine-Konig. 
+- Link to v1: https://lore.kernel.org/all/20260713190659.4511-1-flaviu.nistor@gmail.com/
 
-You are absolutely right. I'll refactor the driver to use it and make
-the code much cleaner. Thanks!
+ drivers/hwmon/lm90.c | 47 +++++++++++++++++++++-----------------------
+ 1 file changed, 22 insertions(+), 25 deletions(-)
 
-Regards,
+diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+index 4b9c0ccdf260..7d4b8e61bec5 100644
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -101,6 +101,7 @@
+ #include <linux/bits.h>
+ #include <linux/device.h>
+ #include <linux/err.h>
++#include <linux/fwnode.h>
+ #include <linux/i2c.h>
+ #include <linux/init.h>
+ #include <linux/interrupt.h>
+@@ -108,7 +109,7 @@
+ #include <linux/hwmon.h>
+ #include <linux/kstrtox.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
++#include <linux/property.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/slab.h>
+ #include <linux/workqueue.h>
+@@ -295,7 +296,7 @@ static const struct i2c_device_id lm90_id[] = {
+ };
+ MODULE_DEVICE_TABLE(i2c, lm90_id);
+ 
+-static const struct of_device_id __maybe_unused lm90_of_match[] = {
++static const struct of_device_id lm90_of_match[] = {
+ 	{
+ 		.compatible = "adi,adm1032",
+ 		.data = (void *)adm1032
+@@ -2602,7 +2603,6 @@ static void lm90_stop_work(void *_data)
+ 
+ static int lm90_init_client(struct i2c_client *client, struct lm90_data *data)
+ {
+-	struct device_node *np = client->dev.of_node;
+ 	int config, convrate;
+ 
+ 	if (data->flags & LM90_HAVE_CONVRATE) {
+@@ -2626,7 +2626,7 @@ static int lm90_init_client(struct i2c_client *client, struct lm90_data *data)
+ 
+ 	/* Check Temperature Range Select */
+ 	if (data->flags & LM90_HAVE_EXTENDED_TEMP) {
+-		if (of_property_read_bool(np, "ti,extended-range-enable"))
++		if (device_property_read_bool(&client->dev, "ti,extended-range-enable"))
+ 			config |= 0x04;
+ 		if (!(config & 0x04))
+ 			data->flags &= ~LM90_HAVE_EXTENDED_TEMP;
+@@ -2692,8 +2692,8 @@ static irqreturn_t lm90_irq_thread(int irq, void *dev_id)
+ 		return IRQ_NONE;
+ }
+ 
+-static int lm90_probe_channel_from_dt(struct i2c_client *client,
+-				      struct device_node *child,
++static int lm90_probe_channel(struct i2c_client *client,
++				      struct fwnode_handle *child,
+ 				      struct lm90_data *data)
+ {
+ 	u32 id;
+@@ -2701,27 +2701,27 @@ static int lm90_probe_channel_from_dt(struct i2c_client *client,
+ 	int err;
+ 	struct device *dev = &client->dev;
+ 
+-	err = of_property_read_u32(child, "reg", &id);
++	err = fwnode_property_read_u32(child, "reg", &id);
+ 	if (err) {
+-		dev_err(dev, "missing reg property of %pOFn\n", child);
++		dev_err(dev, "missing reg property of %pfw\n", child);
+ 		return err;
+ 	}
+ 
+ 	if (id >= MAX_CHANNELS) {
+-		dev_err(dev, "invalid reg property value %d in %pOFn\n", id, child);
++		dev_err(dev, "invalid reg property value %d in %pfw\n", id, child);
+ 		return -EINVAL;
+ 	}
+ 
+-	err = of_property_read_string(child, "label", &data->channel_label[id]);
++	err = fwnode_property_read_string(child, "label", &data->channel_label[id]);
+ 	if (err == -ENODATA || err == -EILSEQ) {
+-		dev_err(dev, "invalid label property in %pOFn\n", child);
++		dev_err(dev, "invalid label property in %pfw\n", child);
+ 		return err;
+ 	}
+ 
+ 	if (data->channel_label[id])
+ 		data->channel_config[id] |= HWMON_T_LABEL;
+ 
+-	err = of_property_read_s32(child, "temperature-offset-millicelsius", &val);
++	err = fwnode_property_read_u32(child, "temperature-offset-millicelsius", &val);
+ 	if (!err) {
+ 		if (id == 0) {
+ 			dev_err(dev, "temperature-offset-millicelsius can't be set for internal channel\n");
+@@ -2739,18 +2739,17 @@ static int lm90_probe_channel_from_dt(struct i2c_client *client,
+ 	return 0;
+ }
+ 
+-static int lm90_parse_dt_channel_info(struct i2c_client *client,
+-				      struct lm90_data *data)
++static int lm90_parse_channel_info(struct i2c_client *client,
++				   struct lm90_data *data)
+ {
+ 	int err;
+ 	struct device *dev = &client->dev;
+-	const struct device_node *np = dev->of_node;
+ 
+-	for_each_child_of_node_scoped(np, child) {
+-		if (strcmp(child->name, "channel"))
++	device_for_each_child_node_scoped(dev, child) {
++		if (!fwnode_name_eq(child, "channel"))
+ 			continue;
+ 
+-		err = lm90_probe_channel_from_dt(client, child, data);
++		err = lm90_probe_channel(client, child, data);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -2887,12 +2886,10 @@ static int lm90_probe(struct i2c_client *client)
+ 	/* Set maximum conversion rate */
+ 	data->max_convrate = lm90_params[data->kind].max_convrate;
+ 
+-	/* Parse device-tree channel information */
+-	if (client->dev.of_node) {
+-		err = lm90_parse_dt_channel_info(client, data);
+-		if (err)
+-			return err;
+-	}
++	/* Parse channel information */
++	err = lm90_parse_channel_info(client, data);
++	if (err)
++		return err;
+ 
+ 	/* Initialize the LM90 chip */
+ 	err = lm90_init_client(client, data);
+@@ -2985,7 +2982,7 @@ static struct i2c_driver lm90_driver = {
+ 	.class		= I2C_CLASS_HWMON,
+ 	.driver = {
+ 		.name	= "lm90",
+-		.of_match_table = of_match_ptr(lm90_of_match),
++		.of_match_table = lm90_of_match,
+ 		.pm	= pm_sleep_ptr(&lm90_pm_ops),
+ 	},
+ 	.probe		= lm90_probe,
+-- 
+2.34.1
 
-Luiz
