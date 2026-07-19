@@ -1,76 +1,73 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAEAA31195C
-	for <linux-hwmon@vger.kernel.org>; Sun, 19 Jul 2026 14:10:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7203938E8BD
+	for <linux-hwmon@vger.kernel.org>; Sun, 19 Jul 2026 14:11:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784470250; cv=none; b=UnFBDOr7kHqspD8o41oy+oJlczEDZMDi2jct6ri8yTkoCCwbzMG1ZLECkca3ffkXNkkwMUeg5Vrm96H9lve3wDv2v3m1q0xN1Z1/q7s5oJfXZuzPqzyWHaHfBORUIlw+lEo2uzOVY6lGKdbEZ61+SBhbqY0PEhqRpY7yVzpYTe4=
+	t=1784470290; cv=none; b=lIkXdM8jom0YrxgFGnhOWhHG+EL2GRNTbGRc+v2VKYQ+EXpexI3HYk/4pQQ+sBgPuZe14jT/XRjMDJFAWVgLhLk0hCItWeVbJa/mg7Im7zdNtFk9Lk2lYp1j8dI4Rfz/bAyuQ2YQBc5P/POmiwpbiEK+Q/GH/2or/IK2gQclDq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784470250; c=relaxed/simple;
-	bh=AwjrCMQvYaRPfReSbT0Zk0Mdomjz3pkjLoad6E3xe3c=;
+	s=arc-20240116; t=1784470290; c=relaxed/simple;
+	bh=YqBMvUvYZhQ3NPOJguFmztV4GF1KKUJx+moNpJ5Deoo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gTOujyqxF/IVV7wazIO2gYQDSSlwVlwVI+DJ/JGORNqcqlGjWgaVucmYkwFarrEFj1Y94AqSjQm2JU5cAju21ngYktSNYz4nAG57oFsa68Lqa+HDWpELtfdkR3YtRqxjHEPJCwOzEiOTGNyQXzKQ9ni4sHka+R830MWVRtM+0iU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KNV/hgk2; arc=none smtp.client-ip=209.85.210.179
+	 Content-Type:Content-Disposition:In-Reply-To; b=neZmZQK0nLUq+7eVnj3hijM3oz8fwrwuVpG4FRlDn5bfmLXXRTgUHQ0dvSicE950OwqSqFB88/ESToe3c7UPYORbgt4dmnGBeoyQGay3uZGXGN7dNOOgPBv17vmUfOb8Eb6HaSLmwt9fXStSANB0o4QTxC5EzaS1thRB3OP+uyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KZ7rfbl1; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KNV/hgk2"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-845c92bc464so5316117b3a.2
-        for <linux-hwmon@vger.kernel.org>; Sun, 19 Jul 2026 07:10:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KZ7rfbl1"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2ccdb73f0e1so52481975ad.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 19 Jul 2026 07:11:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784470248; x=1785075048; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784470289; x=1785075089; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=iTQJmk4kawkMOWfiMMG71fcFWpUDKgihPyJUTSXNHlU=;
-        b=KNV/hgk29/mpccjSworPLrtGJXDXNl19OFdNG0gR6LjGMpx2FXx5Yb4tK0vYIxqxI4
-         4IMaoloKyymb2Y+k04cFwb2Ly1QQxaymJooQSudvryMibJZ15XEVrsq3NWmCzZTPSYck
-         1wZ4W5AKI4jfM5cHZV8m3iYWk0urIKWpVfumg7mqyQG7zomII7naApprEkHM8mnY4D+d
-         yy6HEvuWd5vfS0a3Xh91yCXG1+Ki0AB6qq/CmS+dokgMQG6oWmpPJS6Q/XRrQEFxIilq
-         X7KUYldHrb5Lep2DxxGmObyDYKLktrJvE1k5HV6ozoYCZunvea5j1pcmtzCJXaJQACZc
-         suaw==
+        bh=ER7MU1Xm3uk4NJiQYLOny67TNxmcxCnLBrGW/DksReo=;
+        b=KZ7rfbl1seCthBxFfbWpGesQHtR4wHLmUdbhnB+Nlfc7T9OVejEUho3Qh+quWzQw6x
+         byVzdITlGkKrPPU2LQTKBlpA+05aI3+N2l2ntxCJkJbgUeLKzDy/ZjgS37M3GzvqsBNC
+         ESAbIXfn9KpB8N+GiyOoGriO4xaEEUkY3+FVJ2BfTeFXcq3uJHGWKeMhhn/07HIirj8/
+         xFF8Kevz+Wu8tyESn7n1O/p352fOg4QLr33mnHMi6kwjiKr4P44GVzTMiJPKx9gWOghf
+         VbB9SvxgUk+pJkxWxgCBMgCbshd3nUOKQOwgd4kvG9Fj4Pp0At9TBzCCTcZhe2315neI
+         DsqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784470248; x=1785075048;
+        d=1e100.net; s=20251104; t=1784470289; x=1785075089;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=iTQJmk4kawkMOWfiMMG71fcFWpUDKgihPyJUTSXNHlU=;
-        b=PrLoYyWwvxyIVgSljHKLUV+dFO8lOgHQk9A0w7/AgcoB4/t7B+1zq0zDf1uNXjvPW+
-         JHh7c3cp5eBqHtQSmcWgNxLl2WIv66bm5Wd0KP/xGVleJG4GtcCtvlrhb4ehy8rVnuFI
-         P+r4oyk1kxZMsc3TLRKlWIju+BaBLDtRZBsUarhxPTZav5x70duWNHsaljokhkp9LNRc
-         9l4KaoZT5Jycxt5ubcViBL7GwJU9faLsVTNkwMwB+/IRiWMFcaDzrCEmR7Ne9mbYJPgr
-         Lh/QVS59EXzk7vU2t/RrY9KDU913tLSbUCyTVwVeUaABfM0E9EC9KZwPOcomizGkiA/j
-         /JbA==
-X-Forwarded-Encrypted: i=1; AHgh+RpJd0SvqaQn062oOV/FPETEdPI54MJ67spFeQ1vAK1RCeCKQQQd702f0advvXoFsvU9RHdke13FkJSWNA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywzo0T5si768ONDtE0pQs/t5DnWtHty9dzjCKrOEz1iBB4ObkEt
-	XSTXclrCtfpbB4rFy6Wn7HmNQJpwl5CovAMNY+6TVVWH/q4YyUpuLIlD
-X-Gm-Gg: AfdE7ckBxDjiloocqhiYLOgJgdDfdzl/E8ByBneVp/AqqISHvJFpKx7siVAh7ej7Y/L
-	7qvCijn2sf0dmJvCw32Ht5pRETG3RgMlCw5Aum16BzXoQQAPdlmGjlFfoe9HOYPkTj4rfB9PMHW
-	hTcM1Xb+L5zK3IPiRuPw57DhufI/k8XWR6cpxFbFsdUjsEuBchaANfMqZ4L4rFkMYhwkrCoXtDC
-	YTozFBCxcDZ+g05jobzAeEKl+fZ/Wa2zBHHTrK+tSJ/SpRq5n5pfUetpJPQ2/GA1qqdBA4cIbg0
-	jHo8QL79tIgHCy/OW2nEco1vjlzbtxP6C4++Penhcfgc65Qpo6EgCZwqaSGtMBf9D1pM8S0b++O
-	E0CRnb/7/MbrtAtEbYqQ9AV43MUwgJzVvrBLdb7HpmDfyp7h4leJjnP/mDqq2tXRTQ6cZGMlHqy
-	fYmqLgH5DGU84feZw=
-X-Received: by 2002:a05:6a00:94ee:b0:848:6c37:cd7c with SMTP id d2e1a72fcca58-84c292b434fmr9984258b3a.28.1784470247818;
-        Sun, 19 Jul 2026 07:10:47 -0700 (PDT)
+        bh=ER7MU1Xm3uk4NJiQYLOny67TNxmcxCnLBrGW/DksReo=;
+        b=NxAxKRZfSnP2GT0+u/XsKHjrRRG6bXAaAbcLt1wNOC6ZGOcwjifrDEEvz7mqeLyhZf
+         OQ4x4Vu+vcxJwrJzQuTw/ghUKD8cOv0LIHcIOehSeNhye7E6HuydI20jlF6ewGxFT6yJ
+         vHGXZMsBe1u9kReS+lPzOPBL4MkLEkXnNW3t75cCE3SD9qYjxctn4zurkSWBRaUV+4Tj
+         mAyNpDDxwOBkvwourAuUkqzc4yQiFN1d9nVF58cMfevje/7H+6/Qpr7OYvZ2+7AlICY4
+         x956qzc/+OdTp8J+NWJ+csGK0w7hV5RDvlz9FIsD+5Te1UXVN5ZQJJ6vMQlvUmUf+UOE
+         AyDQ==
+X-Gm-Message-State: AOJu0Yx3fH1JqysStHic0qsRbmbPvUoAs9Aq79Eq8zKIYhBc2MPK1Ncn
+	VakLJOTw8CAV6iwsv5X1JbeC9RGs8M1xVcLiNVWfThGiVqnTzaacIexCNdXB1w==
+X-Gm-Gg: AfdE7cm0gtov2eCI8hhpEkHRBFCj9rKMH/P6h0PbpgCmWtfmfCi5W6AcraVx0Hjpu5y
+	mi2q/ZQ5EwGbF+jFFu5NRyT+m5wpoNYGg0gYsNgMWyW7nUcKc8HDVD7AK2dnveQYCguPyV5dQ7Y
+	Jtp7q3HmG+QprL+0+4+GR9CPEFfqiJLKbyHO/+8AHfQ7/IOOVvEZg6KpwH2glKir53TVrX+0KnF
+	hZFPSrB1MxU96lkKvhgtXnqMRlPtjdJbNlRBhVtxVLG+pBejULdhV9BKAQdOgbXl+tm9OVhRvBJ
+	PeCADYqIwsSOtVmjweHxeN8CwGqy2f8vw5gUtcLkl/R0zxOV1lH7LI9QTpGXHUoTmJ6Ll/wBPej
+	/urPHxYpAtDVT9vjQRbGqYOaWiw3DLEXEiS78WXfsgGn06MvoKj1EuElmmaoD1Z4n5PANOmtulp
+	FikOfoZU32FKJyi/o=
+X-Received: by 2002:a05:6300:228a:b0:3bf:6c07:b2f0 with SMTP id adf61e73a8af0-3c3ad9de8c2mr11439508637.51.1784470288798;
+        Sun, 19 Jul 2026 07:11:28 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cb5159b11a5sm3261800a12.0.2026.07.19.07.10.47
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cb519de26a5sm3229342a12.22.2026.07.19.07.11.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jul 2026 07:10:47 -0700 (PDT)
+        Sun, 19 Jul 2026 07:11:28 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 19 Jul 2026 07:10:46 -0700
+Date: Sun, 19 Jul 2026 07:11:27 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc: Vishaal Saraiya <vishaal.saraiya@gmail.com>,
-	"open list:ASUS EC HARDWARE MONITOR DRIVER" <linux-hwmon@vger.kernel.org>,
+Cc: "open list:ASUS EC HARDWARE MONITOR DRIVER" <linux-hwmon@vger.kernel.org>,
 	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/1] hwmon: (asus-ec-sensors) add T_Sensor for ROG
- STRIX X870E-E GAMING WIFI
-Message-ID: <c580bb14-9531-4f31-b36c-60195b272569@roeck-us.net>
-References: <20260711073319.553163-1-eugene.shalygin@gmail.com>
- <20260711073319.553163-2-eugene.shalygin@gmail.com>
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) fix looping over banks while
+ reading from EC
+Message-ID: <d314c9b5-ca47-4c17-af15-6ffae1f8a44a@roeck-us.net>
+References: <20260711074217.554656-1-eugene.shalygin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -79,21 +76,13 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260711073319.553163-2-eugene.shalygin@gmail.com>
+In-Reply-To: <20260711074217.554656-1-eugene.shalygin@gmail.com>
 
-On Sat, Jul 11, 2026 at 09:31:52AM +0200, Eugene Shalygin wrote:
-> From: Vishaal Saraiya <vishaal.saraiya@gmail.com>
+On Sat, Jul 11, 2026 at 09:42:07AM +0200, Eugene Shalygin wrote:
+> Do not assume there are only bank 0 and bank 1 available, just use '!='
+> for bank comparison.
 > 
-> Enable T_Sensor for ROG STRIX X870E-E GAMING WIFI.
-> 
-> Board specs list the sensor, reading at the standard for this family
-> address without the thermistor connected to the motherboard, returns
-> -62, which is one of the known blank values (the other one in -40)
-> readings for temperature sensors in the ASUS EC when there is no
-> thermistor connected to the motherboard socket. With that evidence we
-> conclude that the T_Sensor can be enabled in the driver for this board.
-> 
-> Signed-off-by: Vishaal Saraiya <vishaal.saraiya@gmail.com>
+> Fixes: d0ddfd241e57 ("hwmon: (asus-ec-sensors) add driver for ASUS EC")
 > Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 
 Applied.
