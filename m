@@ -1,59 +1,67 @@
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1E22363C4C;
-	Mon, 20 Jul 2026 11:58:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED5E40EBA0
+	for <linux-hwmon@vger.kernel.org>; Mon, 20 Jul 2026 12:11:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784548718; cv=none; b=aqitApda8U8JPvZJ8P1dObtXFuf6UVAGYBEJrFISRhEhdXeWmoWvfKkZMCxg1OUap7DKmhy/4VVr093ZQEQ04d50qHhrUR9wQqnGrPFOsSA9aMXhoZuGL+2BGQvBtkxAsvx9Uh8lKmcXTWVtoYjg/OvG8zFxkbw5vMTiYXMrTzM=
+	t=1784549517; cv=none; b=Anc97zJgpRYRRwUy/HIPfhC3lioVz+MhCtq2uT7ZGFpimHgonOgxis5FQ62obMv4/x8T9rTNDRH0bhrbND0EP8LFJllzNZhQbNubxrA2YbEBio5W+Fnl9avSRYLgza81RIwQAqmRzPofidcVtvi+vDvF48+SEWuc0gDmuKi600k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784548718; c=relaxed/simple;
-	bh=Fz6gJA/fJLP1BolalfBoo5XxqV4PmDL+6TU/W1C5fTo=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=jFNDJS2mAWScHCk5nRutRQSIkZ7eeWgTG+M2EyWIbMahmCOY6hqmxxPLdvGpCSbdv5qyy+l+aAPfAoendRiyOtRQLJCbTo41vo2aqGYbgoLhj1fFBLwNAV+KKaxZhPgW9q9OldshDAw85dQm/Lzr9uSOtL8uyeiuQ/R6geUXo2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from localhost.localdomain (unknown [111.196.245.140])
-	by APP-05 (Coremail) with SMTP id zQCowACXBUBiDV5qJ+OIAA--.63499S2;
-	Mon, 20 Jul 2026 19:58:26 +0800 (CST)
-From: Pengpeng Hou <pengpeng@iscas.ac.cn>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Sanman Pradhan <psanman@juniper.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Runyu Xiao <runyu.xiao@seu.edu.cn>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Pengpeng Hou <pengpeng@iscas.ac.cn>
-Subject: [PATCH v2] hwmon: occ: validate poll response sensor blocks
-Date: Mon, 20 Jul 2026 19:58:26 +0800
-Message-ID: <20260720115826.14813-1-pengpeng@iscas.ac.cn>
-X-Mailer: git-send-email 2.50.1
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1784549517; c=relaxed/simple;
+	bh=CyPgQFmNpKT5hmwTnifsufdjeFoxnY+gN5yPAPeqRvc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=eh4tAFbim0V/iEz/s3iXhg3VMc0ifmUbs//IBgORvE+SYUvnGT3m5hAcLpxw4ij1YQJRIQUkZVKsYffgcX0bxL7iibyFx2NA5KXDSlioA3CRdD4/UMqBnm1iUclHfwgO6IOt4063pIt91KnvMZD9Z5zlzT7HSY8KABXqw4gDIWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BRV16mTg; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BRV16mTg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B55671F00A3A;
+	Mon, 20 Jul 2026 12:11:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784549515;
+	bh=eW8Pf4MwS5nLar+1NofUU70v6UL2r2FmraXJ+yJC3Qg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=BRV16mTg18zyrop/nA6EfrYEOpbB5UDk0XDn80YpvvIZxY/2/2oeIEYUKbKiOqGFQ
+	 K9jUY+nYHaDJK9ux8UOlRxNVDojRhrSdwi7VBOS5nCiN3bWhM5hJCXHEvS7oOF1+En
+	 rjhOPoCuMtZXE56qdElryrZnpqNfCk5Ryowqoc9bzZeY9qjRyg4VL2vDdpNiIPCBfk
+	 qD527I1d6/JMv0fy+n/5ASe/D3JAS/ZzeVoK/+2Aaj07MUPWryGqXM+ImpIQ/ZXEIe
+	 XCfoqSS9jvWqi03VIRrDxQ+uYmtsctNkpXP7RhuxyNwv3WPNrOAIbQCEVtbFD9FePt
+	 HeNVzbu2N8gTg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2] hwmon: occ: validate poll response sensor blocks
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Pengpeng Hou" <pengpeng@iscas.ac.cn>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260720115826.14813-1-pengpeng@iscas.ac.cn>
+References: <20260720115826.14813-1-pengpeng@iscas.ac.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 20 Jul 2026 12:11:55 +0000
+Message-Id: <20260720121155.B55671F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowACXBUBiDV5qJ+OIAA--.63499S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWry8CFykZFyDuw15GryrCrg_yoWrWw4Up3
-	WUGayrGr47Gr13Xrs3Ar4DZr15Kan5Ga47GFZxWwnYyF95WrykW3W0kry09w1UtFZxJrn7
-	Xw1vqayDC3WDJw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7CjxVAaw2AFwI0_
-	JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67
-	AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIY
-	rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14
-	v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_
-	Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjd-PU
-	UUUUU==
-X-CM-SenderInfo: pshqw1xhqjqxpvfd2hldfou0/
+
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+
+Pre-existing issues:
+- [High] Repeatedly toggling the `occ_active` sysfs attribute leaks memory =
+due to `devm_kcalloc` allocations.
+- [High] Validation of sensor block size is insufficient to prevent OOB rea=
+ds because it does not verify `sensor_length` against the expected C struct=
+ure sizes used by sysfs readers.
+- [High] Lockless reads of the response buffer create a data race leading t=
+o torn reads for multi-byte sensor values.
+--
+
+--- Patch [1]: [PATCH v2] hwmon: occ: validate poll response sensor blocks =
+---
+commit 04905329085b910b887e74baa72bc72f52624e45
+Author: Pengpeng Hou <pengpeng@iscas.ac.cn>
+
+hwmon: occ: validate poll response sensor blocks
 
 The OCC poll response parser walks a counted list of sensor data blocks.
 It used the static backing-array capacity as the parse boundary, but a
@@ -61,107 +69,129 @@ transport response makes only data_length bytes current and valid. A
 truncated response can therefore make the parser consume a block header or
 block extent outside the current response.
 
-Use data_length as the parent boundary, prove the fixed poll header and
-each current block header before reading them, and prove the complete block
-before advancing. Keep parsed sensor metadata local until the complete
-response has passed validation, then publish it. Propagate
-malformed-response errors before publishing the OCC as active.
+Link: https://lore.kernel.org/all/20260706093317.80867-1-pengpeng@iscas.ac.=
+cn/
 
-Fixes: aa195fe49b03 ("hwmon (occ): Parse OCC poll response")
-Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
----
-Changes since v1: https://lore.kernel.org/all/20260706093317.80867-1-pengpeng@iscas.ac.cn/
-- use dev_err() for every malformed response that aborts registration
-- publish parsed sensor metadata only after every block passes validation
-- limit this revision to the current-response and block-extent contract
-- rebase onto v7.2-rc4
+> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+> index e18e80e832fd3..175208d712b06 100644
+> --- a/drivers/hwmon/occ/common.c
+> +++ b/drivers/hwmon/occ/common.c
+> @@ -1052,32 +1052,49 @@ static int occ_setup_sensor_attrs(struct occ *occ)
 
- drivers/hwmon/occ/common.c | 38 ++++++++++++++++++++++++++++++--------
- 1 file changed, 30 insertions(+), 8 deletions(-)
+[ ... ]
 
-diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-index e18e80e832fd..175208d712b0 100644
---- a/drivers/hwmon/occ/common.c
-+++ b/drivers/hwmon/occ/common.c
-@@ -1052,32 +1052,49 @@ static int occ_setup_sensor_attrs(struct occ *occ)
- }
- 
- /* only need to do this once at startup, as OCC won't change sensors on us */
--static void occ_parse_poll_response(struct occ *occ)
-+static int occ_parse_poll_response(struct occ *occ)
- {
- 	unsigned int i, old_offset, offset = 0, size = 0;
-+	u16 data_length;
- 	struct occ_sensor *sensor;
--	struct occ_sensors *sensors = &occ->sensors;
-+	struct occ_sensors parsed = {};
-+	struct occ_sensors *sensors = &parsed;
- 	struct occ_response *resp = &occ->resp;
- 	struct occ_poll_response *poll =
- 		(struct occ_poll_response *)&resp->data[0];
- 	struct occ_poll_response_header *header = &poll->header;
- 	struct occ_sensor_data_block *block = &poll->block;
- 
-+	data_length = get_unaligned_be16(&resp->data_length);
-+	if (data_length < sizeof(*header) || data_length > OCC_RESP_DATA_BYTES) {
-+		dev_err(occ->bus_dev, "invalid OCC poll response length %u\n",
-+			data_length);
-+		return -EMSGSIZE;
-+	}
-+
- 	dev_info(occ->bus_dev, "OCC found, code level: %.16s\n",
- 		 header->occ_code_level);
- 
- 	for (i = 0; i < header->num_sensor_data_blocks; ++i) {
- 		block = (struct occ_sensor_data_block *)((u8 *)block + offset);
-+		if (size + sizeof(*header) + sizeof(block->header) >
-+		    data_length) {
-+			dev_err(occ->bus_dev,
-+				"truncated OCC sensor block header\n");
-+			return -EMSGSIZE;
-+		}
-+
- 		old_offset = offset;
- 		offset = (block->header.num_sensors *
- 			  block->header.sensor_length) + sizeof(block->header);
--		size += offset;
- 
- 		/* validate all the length/size fields */
--		if ((size + sizeof(*header)) >= OCC_RESP_DATA_BYTES) {
--			dev_warn(occ->bus_dev, "exceeded response buffer\n");
--			return;
-+		if (size + sizeof(*header) + offset > data_length) {
-+			dev_err(occ->bus_dev,
-+				"exceeded OCC poll response length\n");
-+			return -EMSGSIZE;
- 		}
-+		size += offset;
- 
- 		dev_dbg(occ->bus_dev, " %04x..%04x: %.4s (%d sensors)\n",
- 			old_offset, offset - 1, block->header.eye_catcher,
-@@ -1107,6 +1124,9 @@ static void occ_parse_poll_response(struct occ *occ)
- 
- 	dev_dbg(occ->bus_dev, "Max resp size: %u+%zd=%zd\n", size,
- 		sizeof(*header), size + sizeof(*header));
-+	occ->sensors = parsed;
-+
-+	return 0;
- }
- 
- int occ_active(struct occ *occ, bool active)
-@@ -1138,10 +1158,12 @@ int occ_active(struct occ *occ, bool active)
- 			goto unlock;
- 		}
- 
--		occ->active = true;
- 		occ->next_update = jiffies + OCC_UPDATE_FREQUENCY;
--		occ_parse_poll_response(occ);
-+		rc = occ_parse_poll_response(occ);
-+		if (rc)
-+			goto unlock;
- 
-+		occ->active = true;
- 		rc = occ_setup_sensor_attrs(occ);
- 		if (rc) {
- 			dev_err(occ->bus_dev,
+>  		old_offset =3D offset;
+>  		offset =3D (block->header.num_sensors *
+>  			  block->header.sensor_length) + sizeof(block->header);
+> -		size +=3D offset;
+> =20
+>  		/* validate all the length/size fields */
+> -		if ((size + sizeof(*header)) >=3D OCC_RESP_DATA_BYTES) {
+> -			dev_warn(occ->bus_dev, "exceeded response buffer\n");
+> -			return;
+> +		if (size + sizeof(*header) + offset > data_length) {
+> +			dev_err(occ->bus_dev,
+> +				"exceeded OCC poll response length\n");
+> +			return -EMSGSIZE;
+>  		}
+> +		size +=3D offset;
 
+[Severity: High]
+This isn't a bug introduced by this patch, but is the validation of the
+sensor block size sufficient to prevent out-of-bounds reads?
+
+The validation uses the device-provided sensor_length without verifying it
+matches the expected C structure sizes used by sysfs readers.
+
+For example, sysfs readers like occ_show_power_a0() use native pointer
+arithmetic based on static C structures:
+
+drivers/hwmon/occ/common.c:occ_show_power_a0() {
+    ...
+    power =3D ((struct power_sensor_a0 *)sensors->power.data) + sattr->inde=
+x;
+    ...
+}
+
+If a compromised or malfunctioning OCC device returns a poll response with
+a maliciously small sensor_length (e.g., 1) but a large num_sensors, could
+sysfs readers read beyond the validated bounds of occ->resp.data, leaking
+adjacent kernel heap memory to userspace?
+
+[ ... ]
+
+> @@ -1107,6 +1124,9 @@ static void occ_parse_poll_response(struct occ *occ)
+> =20
+>  	dev_dbg(occ->bus_dev, "Max resp size: %u+%zd=3D%zd\n", size,
+>  		sizeof(*header), size + sizeof(*header));
+> +	occ->sensors =3D parsed;
+> +
+> +	return 0;
+>  }
+
+[Severity: High]
+This is a pre-existing issue, but can lockless reads of the response
+buffer create a data race leading to torn reads for multi-byte sensor
+values?
+
+The hwmon subsystem core locking rules mandate that drivers registering
+attributes via groups must implement their own locking for those
+attributes.
+
+In occ_update_response(), the response buffer is updated under occ->lock,
+but callers drop the lock before consuming the data. For example, sysfs
+readers directly access parsed multi-byte sensor data without locks:
+
+drivers/hwmon/occ/common.c:occ_show_power_a0() {
+    ...
+    val =3D occ_get_powr_avg(get_unaligned_be64(&power->system.accumulator),
+                           get_unaligned_be32(&power->system.update_tag));
+    ...
+}
+
+If concurrent sysfs reads trigger occ_update_response(), which overwrites
+the shared occ->resp buffer via an underlying bus transfer while another
+thread is reading from it, could this cause torn reads and wild spikes in
+reported statistics?
+
+[ ... ]
+
+> @@ -1138,10 +1158,12 @@ int occ_active(struct occ *occ, bool active)
+>  			goto unlock;
+>  		}
+> =20
+> -		occ->active =3D true;
+>  		occ->next_update =3D jiffies + OCC_UPDATE_FREQUENCY;
+> -		occ_parse_poll_response(occ);
+> +		rc =3D occ_parse_poll_response(occ);
+> +		if (rc)
+> +			goto unlock;
+> =20
+> +		occ->active =3D true;
+>  		rc =3D occ_setup_sensor_attrs(occ);
+
+[Severity: High]
+This is a pre-existing issue, but does repeatedly toggling the occ_active
+sysfs attribute leak memory?
+
+Each activation calls occ_setup_sensor_attrs(), which uses devm_kcalloc()
+to allocate memory on the parent device:
+
+drivers/hwmon/occ/common.c:occ_setup_sensor_attrs() {
+    ...
+    occ->attrs =3D devm_kcalloc(dev, num_attrs, sizeof(*occ->attrs),
+                              GFP_KERNEL);
+    ...
+}
+
+On deactivation, the hwmon device is unregistered, but the devm_ managed
+memory is tied to the parent device and is never freed until the module is
+removed.
+
+Can a user with write access to the hwmon sysfs attributes repeatedly write
+'0' then '1' to the occ_active attribute and cause an unbounded memory leak
+leading to system OOM?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260720115826.1481=
+3-1-pengpeng@iscas.ac.cn?part=3D1
