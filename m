@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D128233943
-	for <linux-hwmon@vger.kernel.org>; Mon, 20 Jul 2026 03:36:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 051C8397B17
+	for <linux-hwmon@vger.kernel.org>; Mon, 20 Jul 2026 03:37:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784518598; cv=none; b=GWXYN5CpaQdFwOPpkF9RAXTcPHAXIpHDXShIc0+h1w2SsvlJDF9jzGWd89Zm3GsCu1BzEEV23hkxmEq/ilP25gVHJxM48OiYMHaLBqVRttcikPEcghrbuT4TOh+3iCNyuB9l7SwOOcDFxFIrS3UZfJ5dsu55RHFsqvAHmbvBldA=
+	t=1784518640; cv=none; b=VHvhbM/Tl2+7DYsYZ1kvlp09btby8+8HyAs1rp0EOx9xw2KT+YES2Q9tmavFzs1bUiU/0NqfIw4IuI8ZOF5bdjnkNPDaJqxAnfh1pE+36EHZhFWpW1Wde+vyawc3+8Cq+owMP8fsUVyq7JWuiVQtLsNM5ffYgnytWvuuJEoS/MY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784518598; c=relaxed/simple;
-	bh=5uUnb4bE6lPF77zfOhBByE6lviiA+bke4gO2J7nr9sE=;
+	s=arc-20240116; t=1784518640; c=relaxed/simple;
+	bh=ycqKrlmlYFas/HWzoxOpQ0dzSyziciMPHqCMbxP6YG0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Q1RZDeaCi5lvw5e1G+/R/bPOTpLhIq7OoTx+mBU+O1tMa0kTLoRPBNRX4VWVK+zHlrZvazgQNZOEWdEZM7LUCQzNKv/T3AedmWfz3nV3M+yQagy4vWkMfUKUrKCaWJRSH3o6mDJYZ5htqiFYFd9nwiXgn3oL+3Sj0j3QSGAja4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CeWsHI8x; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=k+QcA3MQarU+z2He5gSmFxiD4vdDvcQJGzOOgBnPiPqYYrBhZLhLa7gapTzXniuJpbPgsMP7Ux6G8rVLg439hjntPlmegBMiYsp4pFMWk8RcKV2ROhSSUEqniYiaexY+L8/aw0G1W8OqBnu7bly+ozeqn+x9UzIbSo7VCEk5X+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kn1oSpbp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CeWsHI8x"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A08491F000E9;
-	Mon, 20 Jul 2026 03:36:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kn1oSpbp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 783F01F000E9;
+	Mon, 20 Jul 2026 03:37:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784518596;
-	bh=Or2g76TUWiid7Cqy8Ubi747lebIkiNYW2pX4ITs3RqM=;
+	s=k20260515; t=1784518638;
+	bh=6ETWewR1vtQRVMs7UBmCaThiZGUOJ1oROOdWS1JzUKQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=CeWsHI8xbaXdQiH5EmOJp5nnAS8mzlFaUDZk5olvC2W3enz+2IaaxNQ8TOiKN+zeO
-	 1qNxEslxFcxNnX4H17O9779KyZeqFWHOdwR5dONfDTAR6NNsOSciwvrlQ//h9d0PgL
-	 nymNW4Xjr3K4oTJvaojiF4X7SDmII+dtBjaO4usY9x0L//r5o9jUh2TJ/aIiKY8Kgv
-	 Ihblo6ePVkUBy94e87jau9XivZ6qcQ4IkZ3LEyOHX/QIcZIQcp0fBnT4NhncWJ5ptx
-	 pu5FqDZc7EnasPEQnmgdj5Fq8tr8rlyvkn/9KCBHldsbjIp6nXQLR3sq/86+ds5FmT
-	 7s9sCtP1bDQGQ==
+	b=Kn1oSpbpHOp2Xpvmm9piku45V++5tFls0RcbKcnLVKsD14rdj1R7sQAI6am6vOk3F
+	 xqwJjBIPrAt8AhJjjKHsm9UUhzWjec5EkjXbaFtsoUOjY9HRXTXpsTeKcZ8PPZy+HU
+	 eJjOoCxEXMqm1wNG6SGaYd1C0CF5UlXu6vtkYrCgbOlmF4J43QYkR9onNBLU7kIRA7
+	 fSishRdypb0VkRImvULcMg/YammfhItsElT9Xh2Xt3TgcknGFIP9+eX1sRju5yHT5+
+	 gO9wg3IalRQ/LxYA1TvjHoUpjyGRG2cM0VK9C194K3PwXjwde435CKjyUEKrhFihxU
+	 7hoIW35ovWrQA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v6 2/2] hwmon: add Altera SoC FPGA hardware monitoring
- driver
+Subject: Re: [PATCH v6 1/2] firmware: stratix10-svc: add async HWMON read
+ commands and register socfpga-hwmon device
 Reply-To: sashiko-reviews@lists.linux.dev
 To: tze.yee.ng@altera.com
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <a686d2c3ef56a3ce28b059621a237259af314032.1784516953.git.tze.yee.ng@altera.com>
+In-Reply-To: <a79aee37be7067691fd02a3a9cfd134c995e5a95.1784516953.git.tze.yee.ng@altera.com>
 References: <cover.1784516953.git.tze.yee.ng@altera.com>
- <a686d2c3ef56a3ce28b059621a237259af314032.1784516953.git.tze.yee.ng@altera.com>
+ <a79aee37be7067691fd02a3a9cfd134c995e5a95.1784516953.git.tze.yee.ng@altera.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 20 Jul 2026 03:36:36 +0000
-Message-Id: <20260720033636.A08491F000E9@smtp.kernel.org>
+Date: Mon, 20 Jul 2026 03:37:18 +0000
+Message-Id: <20260720033718.783F01F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -47,93 +47,108 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] Missing break in async poll loop causes severe kernel log spam and=
- unnecessary blocking on hard errors.
-- [High] Synchronous read timeouts leave stale requests in the channel FIFO=
-, causing all subsequent reads to process stale data and return mismatched =
-sensor values.
+
+New issues:
+- [Medium] Hardware monitoring functionality is registered as a platform de=
+vice rather than an auxiliary device, violating hwmon subsystem layering ru=
+les.
+
+Pre-existing issues:
+- [High] Asynchronous service layer APIs and resources are destroyed before=
+ client devices are unregistered, leading to a Use-After-Free and NULL poin=
+ter dereference race condition.
 --
 
---- Patch [2]: [PATCH v6 2/2] hwmon: add Altera SoC FPGA hardware monitorin=
-g driver ---
-commit ab6c0c0f95d3890d759e04d9d9aecd151d6406fd
+--- Patch [1]: [PATCH v6 1/2] firmware: stratix10-svc: add async HWMON read=
+ commands and register socfpga-hwmon device ---
+commit 552947f984c2b5770daa9717c679362b5561cfa3
 Author: Tze Yee Ng <tze.yee.ng@altera.com>
-Subject: hwmon: add Altera SoC FPGA hardware monitoring driver
 
-This commit adds a hardware monitoring driver for Altera SoC FPGA devices u=
-sing
-the Stratix 10 service layer.
+firmware: stratix10-svc: add async HWMON read commands and register socfpga=
+-hwmon device
 
-> diff --git a/drivers/hwmon/socfpga-hwmon.c b/drivers/hwmon/socfpga-hwmon.c
-> new file mode 100644
-> index 0000000000000..72418201b65d6
-> --- /dev/null
-> +++ b/drivers/hwmon/socfpga-hwmon.c
+Add asynchronous Stratix 10 service layer support for hardware monitor
+temperature and voltage read commands in stratix10_svc_async_send() and
+stratix10_svc_async_prepare_response().
+
+Register a socfpga-hwmon platform device from the service layer driver
+when hardware monitor support is enabled, similar to the RSU device.
+
+> diff --git a/drivers/firmware/stratix10-svc.c b/drivers/firmware/stratix1=
+0-svc.c
+> index c24ca5823078f..fc38afed5b7fe 100644
+> --- a/drivers/firmware/stratix10-svc.c
+> +++ b/drivers/firmware/stratix10-svc.c
 [ ... ]
-> +static int socfpga_hwmon_async_read(struct device *dev,
-> +				    enum hwmon_sensor_types type,
-> +				    struct stratix10_svc_client_msg *msg)
-> +{
+> @@ -2013,16 +2028,38 @@ static int stratix10_svc_drv_probe(struct platfor=
+m_device *pdev)
+>  	if (ret)
+>  		goto err_put_device;
+> =20
+> +	if (IS_ENABLED(CONFIG_SENSORS_ALTERA_SOCFPGA_HWMON)) {
+> +		svc->stratix10_svc_hwmon =3D
+> +			platform_device_alloc(SOCFPGA_HWMON, 0);
+> +		if (!svc->stratix10_svc_hwmon) {
+> +			dev_err(dev, "failed to allocate %s device\n",
+> +				SOCFPGA_HWMON);
+> +		} else {
+> +			svc->stratix10_svc_hwmon->dev.parent =3D dev;
+> +
+> +			ret =3D platform_device_add(svc->stratix10_svc_hwmon);
+
+[Severity: Medium]
+Should the hardware monitoring functionality be implemented as an auxiliary
+device driver instead of a platform device?
+
+The hardware monitoring subsystem guidelines state that when hardware
+monitoring is a secondary function of a chip, it should be implemented as an
+auxiliary device and reside in drivers/hwmon/.
+
+Does registering socfpga-hwmon directly as a platform device from this
+firmware service driver bypass the architectural layering rules for hwmon?
+
 [ ... ]
-> +	ret =3D -ETIMEDOUT;
-> +	while (!time_after(jiffies, deadline)) {
-> +		status =3D stratix10_svc_async_poll(priv->chan, handle, &data);
-> +		if (status =3D=3D -EAGAIN) {
-> +			dev_dbg(dev, "Async message is still in progress\n");
-> +		} else if (status < 0) {
-> +			dev_alert(dev, "Failed to poll async message: %d\n", status);
-> +			ret =3D -ETIMEDOUT;
+> @@ -2046,6 +2083,9 @@ static void stratix10_svc_drv_remove(struct platfor=
+m_device *pdev)
+>  	struct stratix10_svc_controller *ctrl =3D platform_get_drvdata(pdev);
+>  	struct stratix10_svc *svc =3D ctrl->svc;
+> =20
+> +	if (svc->stratix10_svc_hwmon)
+> +		platform_device_unregister(svc->stratix10_svc_hwmon);
+> +
+>  	stratix10_svc_async_exit(ctrl);
+> =20
+>  	of_platform_depopulate(ctrl->dev);
 
 [Severity: High]
-Does this loop need a break statement here when status < 0?=20
+This is a pre-existing issue, but can the destruction order in
+stratix10_svc_drv_remove() lead to a NULL pointer dereference or a
+use-after-free race condition?
 
-If stratix10_svc_async_poll() returns a hard error, the code sets=20
-ret =3D -ETIMEDOUT but continues to loop for up to 2 seconds. This could
-flood the kernel log with dev_alert() messages on every 1ms retry.
+When stratix10_svc_async_exit() is called, it destroys the async ID pool
+and sets actrl->invoke_fn to NULL:
 
-> +		} else if (status =3D=3D 0) {
-> +			ret =3D 0;
-> +			break;
-> +		}
-> +		msleep(HWMON_RETRY_SLEEP_MS);
-> +	}
-[ ... ]
-> +static int socfpga_hwmon_sync_read(struct device *dev,
-> +				   enum hwmon_sensor_types type,
-> +				   struct stratix10_svc_client_msg *msg)
-> +{
-[ ... ]
-> +	ret =3D stratix10_svc_send(priv->chan, msg);
-> +	if (ret < 0)
-> +		goto status_done;
-> +
-> +	ret =3D wait_for_completion_timeout(&priv->completion, HWMON_TIMEOUT);
-> +	if (!ret) {
-> +		dev_err(priv->client.dev, "timeout waiting for SMC call\n");
-> +		ret =3D -ETIMEDOUT;
-> +		goto status_done;
+drivers/firmware/stratix10-svc.c:stratix10_svc_async_exit() {
+    ...
+    ida_destroy(&actrl->async_id_pool);
+    actrl->invoke_fn =3D NULL;
+    ...
+}
 
-[Severity: High]
-If a timeout occurs here, could the unfulfilled request remain in the
-SVC channel's FIFO?
+However, the RSU client device is unregistered after this destruction step
+via platform_device_unregister(svc->stratix10_svc_rsu).
 
-When the timeout hits, this path calls stratix10_svc_done() which stops the
-worker thread, but it doesn't appear to remove the request from chan->svc_f=
-ifo.
+If a user interacts with a client device's sysfs attribute while the module
+is being unloaded, could the still-active client device invoke
+stratix10_svc_async_send()?
 
-Would the next sensor read enqueue a new request and receive the stale data
-from this timed-out request, permanently desynchronizing all subsequent
-sensor readings?
+If so, it would concurrently access freed asynchronous channels or attempt
+to execute actrl->invoke_fn(actrl, &args, &res) after it has been locklessly
+cleared, resulting in a kernel crash.
 
-> +	}
-> +
-> +	ret =3D priv->last_err;
-> +
-> +status_done:
-> +	stratix10_svc_done(priv->chan);
-> +	return ret;
-> +}
+Would it be safer to unregister all child and client devices before the
+resources they depend on are torn down?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1784516953.gi=
-t.tze.yee.ng@altera.com?part=3D2
+t.tze.yee.ng@altera.com?part=3D1
