@@ -1,68 +1,68 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8F24433BA2
-	for <linux-hwmon@vger.kernel.org>; Mon, 20 Jul 2026 14:41:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B525542F6FA
+	for <linux-hwmon@vger.kernel.org>; Mon, 20 Jul 2026 14:43:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784558511; cv=none; b=OkkBz6ECEYT7x4+ZJYtgytcPdV8qn/abmbUkGXhZFtOYqxYqBfxGg4u7OtYt9PnNKTpnssFSsFX3hnOQDhFx3P9tl/cjD/lDm6ynPv45iuGu8yRkH6kQzfvafAUFqGSTqCZnBHBJjzECTWKwRUleWMxU2QBzyebyJStGe8FMTgQ=
+	t=1784558612; cv=none; b=pwWK00LCOSksrY6AIPJ7djHir5kAG+wx2TCaS+ghkkfaimD5/g80k7uqehklVQdWW53lfhLhXK+X0bsRJF3ttlBoUi18kJ+Y/HNLNWmP+TYcdOSmU6a7jHoIaFq21WgkWSIvHIRzEkuEpXGlFldnOLE9DmjZxL1N+pvgkp8bJGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784558511; c=relaxed/simple;
-	bh=7PZbMe7/8P6mBjbl8fZa2hfgo0oWBnuR20DcxmfYwR8=;
+	s=arc-20240116; t=1784558612; c=relaxed/simple;
+	bh=z4xNGYkf4fETdRDY/WXmkgQmHnFeScnUkN9aeJpb0+8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P0mCjsujKiQGw3YmyjQtYB6ECxR1cwc+NcLWvG/209jkRru7mz5SU3YBQcMDoSuhTlZxpYwZkPPQPawR9BRGAh2QaQ8H/DGZ+4PdAc3bl+kxE1VCnkApapvhOasoEp7NSP7J9CXI3dG2WYZbmyxByWeKBl/cfpPELrBFivxqIk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MKVdIqI7; arc=none smtp.client-ip=209.85.214.176
+	 In-Reply-To:Content-Type; b=JkzZZ7XK4tJOm+qJQgnY0YSnBobY1VYvXpgoVeaZv3tG6ho3bVEfW4qgxKqeTPSWZOB8Uap3j9+Tb4YNQdiQYxD1fxjDONf4l3wnroA73sb6s3JcxbfyycomWEgZgWMs1qjCfElO8DxhPb6uF/PzvKh4sp7A7P92cV2TUXrRh4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ylz9mDKR; arc=none smtp.client-ip=209.85.215.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MKVdIqI7"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2ce87c7e3bbso114629755ad.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 20 Jul 2026 07:41:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ylz9mDKR"
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-c96bfabc8d4so4053409a12.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 20 Jul 2026 07:43:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784558506; x=1785163306; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784558609; x=1785163409; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=tY6ci5Qy7tTGy2zsHzGFV9dNONphBOELiUVTTsGRCT8=;
-        b=MKVdIqI7ikL0X6qKgI5bh0HIR7OGCSoEPHOlp0uK9lGNbfBFVFW0kmi2D7CoQnJPbH
-         fPjOYZ81OGCs/ss6sSdFPLPGrf/csY3qAU2cSDQoN2l1W8R20dEEsxaxpjdBPgzChjRW
-         qDExY8e4ycJeJT/lD0e/NbSZiSYWV/ey8d+tTpNUDk6QESK1iehpIf6gCINpujDxGRo2
-         ipqm2VGidnPowk4yBCMaCuA0K9Fgvy+YJOr1sMZ60NNjxUsg6xKmmnOE5DNmmYk6NJq/
-         0BaNzI0qKn/TdJr2U66HNqBcEtcI2wLVWZUlSAqEucnvIdm5W1k90qP8JLxSwI42I4Tt
-         Tw7A==
+        bh=YRPQsRwj+n1ng0H+WDG2QV9LkRG40/jMmpAbf3NOmNY=;
+        b=Ylz9mDKRMe6O4vjS+eQwOXJiakIAaEobGKbnFVNCh0Wek9nIDGMhVCXE0joTv1/Sgh
+         txhsTjkpV2mveGVg5L57b7HM6BUD6LsYgvckzclc1Hlmh3hY8/fv+rR5YqUNnS6F2juW
+         Nu0U4rggrOgtrxaiX8c31rkeT2cCIozh764BKKipQaNlFOdgPl/p+7mEOfbGAjSW+W2V
+         6cMoXsz4vh+ZaAbN+ZFyra1VqkImhvfjbyvJZAfm32cLpiauPZEjvWp2JCCz+cFalAVR
+         7vFBqZ7jKAlbUiFbf3LTLgdSHfGLvQuoPyFKnRdl190kQBr8DIDWb9ktMwguCnCGOvPB
+         tTNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784558506; x=1785163306;
+        d=1e100.net; s=20251104; t=1784558609; x=1785163409;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=tY6ci5Qy7tTGy2zsHzGFV9dNONphBOELiUVTTsGRCT8=;
-        b=YeUnnVt8STOepcNl6FjspSohYe0x77KOAw6QEAOCN63sV+N8AFpBsqJ+Qv4Mxr1vSs
-         JFYdx+9UmIAEvMwixrLLbgp5wDap4UAOTR3E6ZTdvAiWSzrJ8v0Wh6MqLp6ZArINOv6g
-         j24mooQv92At+PJTKglHlJKunksZf/OAtXeSbC5rNjwGPr55I9RzGyCbABl99eJ6XVpY
-         kkM1AHs8ofuxWxErVvxdvjJB1AQmgC0bTPMVGtJ9I2une2fWP/qQj/85jrobeNojQfNT
-         IvJOywLFbeXzE6sxSgtH4cEbTTWWN8FZy/v2+ck6kLg8iYk7Km/F/fqMFSTupGSAq8z9
-         mSGw==
-X-Forwarded-Encrypted: i=1; AHgh+RpivShE4s91rTX4kiag5A81w5LD7MA5CNDsX2YsW+4UfQy6/djmeJXBnT/kfylJnNAr9zbUeO98PY/OtA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9YtEitjQP1U1QPW6a7cnF1+gwBawSYIBlsLtd2MadSxUeawG7
-	I5wlw8xFZa6gKph6EwKcdOeGunkM97WGYl02v/br1gz+5zUHbt4v8Wdq
-X-Gm-Gg: AR+sD11WNjW4OkqEXFtspwWdbBlWGuwMw6sn6l7ju9E6P1lIAFnQaN9GSNQ9sl1yMiG
-	sOZsYx4QIaJgR6oW5o1H8n9kyaH4ZkTysrLnwNxsuTuAzBRn8R8aIBqjwdCqV4HSqlFk543lDfg
-	Nmj/gOXfO3xtKxVPzOdjtbL5w0/hJ0TF1dSeYlHMkC54QPkV//X8qGkYJ7fGgRlkNoLUltNXeqr
-	mDAKGUpVe20fTxv5SaPz2q02njw7T33kzwEQ0GD1yLBXNI10bEXzY9rOCeZnhbMnIwlwkBK54aj
-	47CddhgSgdwkZT+QLFJpMuMjL499po/2jg+l2zVGT6TRB/6QxdzTQwuK8zXp2RiA72ujm25NPj5
-	tKxr6CDA51bfQi4kAOdPQmBgOhPRO7zMxL+QvEMtForLtv6MMaJfD9Wvo7BFK2K1NJXo2rhVmyY
-	xgmZgssKbsuFqj6mVhm4UiLHCzgQkBCXimjLFvCUJs4tnmU7E9jnI=
-X-Received: by 2002:a17:903:360c:b0:2ce:b096:e50b with SMTP id d9443c01a7336-2cf349fe60dmr142784935ad.47.1784558506277;
-        Mon, 20 Jul 2026 07:41:46 -0700 (PDT)
+        bh=YRPQsRwj+n1ng0H+WDG2QV9LkRG40/jMmpAbf3NOmNY=;
+        b=RLQ25sxoYMCoCYeGWG5mN9qKKKtV9lIhfx/IGXN9pDwOai/kUzTPjqTJU3rnaag03T
+         k23uTkBBhqmQBO7I7bmkuAMOkpMgqfJK8dv7RWJOwlFEPPb8RtSXM7Bs8Q0QlrIYER0I
+         FdWplZf2YDkeloFDzlDvMQAcdIuj4ruTWVpnXY+2aAnbpi2fbitn2W+CIhgxCUb2lpFK
+         SvPPbkA2X4FQrPNYnUtFUCMmdkbguoQarQWLkpSB7bIj1/nBOcIJkghQ1OsLeseX6hqR
+         Dfht26wpyYG9oNIQp2SLCbneYXAkWWwp70kUAjfFoUl14kKjC1rTYzP455G8mRsWavJr
+         OGww==
+X-Forwarded-Encrypted: i=1; AHgh+Rr71T/tLnSYeXb1OReMvyN/KoqMBjcZMAqfHXAfajK+MOiSakjqjY/MLZsLgQPbcJwzpy+GJIfk98VyTg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbvqT9UWKufOntcaLyHMbDvUNb148dCu2Ws38OZR4O4Ryl+PkL
+	8aFXowyhNG2w48S+7DiUSuVxfjtMP7mctDFnf6dBkrw9yDZ1cg7iZNMq
+X-Gm-Gg: AfdE7cmCOyJSZqofQEhJPJXokl6vuzUn4S5NKjJYnWzVfnaQTnrq1L24D+Cbv9T3C3x
+	rx8jUvJDGVkF7Ds+S+KWUb/Nvgjw8o876oR04hXd6xBGckSYFUDQsKSgCigfnH9D5FS9IlmiVFv
+	aYDh639lhPyr8M8VSi6sOlNJFMFYLOdFJZJtNg2HzoC16OCwvT//m6y8zuWQ7R6S4fGkQXLvkdV
+	eGQLix/4FF/LKKJZPug+lIEqQeFtZWldqQVh1AxWfCOQMVfwtTv7gbtF3QCc72b6Ec5ojSCxXb1
+	ASZDKhDmZHonOpLgxtVfwyjlCJsROE1SpEBl9J7dQb87O9Ui9z0RvB/srMj3gOrLgrx/+pnWfI3
+	WEJHeh8M+m2kqRwpdbYVS0xEA2Zp7Lllw5fpdQiccuOSmfW6G9sfJSfH9YIeUQnGjXgwSKyfRWf
+	wtLCPBlnzf3QxxQeQC7w1voQGmMpkRekxoBGWELYlfV5g8dEx3G3s=
+X-Received: by 2002:a05:6a21:3981:b0:3c0:adec:b3bd with SMTP id adf61e73a8af0-3c3ad9646afmr16051848637.49.1784558608970;
+        Mon, 20 Jul 2026 07:43:28 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3142a1ddeb6sm42351107eec.20.2026.07.20.07.41.45
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31429f9bb62sm35894013eec.2.2026.07.20.07.43.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jul 2026 07:41:45 -0700 (PDT)
+        Mon, 20 Jul 2026 07:43:28 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <531e3c48-bb61-4741-8fe7-a2dbc213eb1e@roeck-us.net>
-Date: Mon, 20 Jul 2026 07:41:44 -0700
+Message-ID: <612e3496-2917-4d4c-8794-69c3b5b27c5c@roeck-us.net>
+Date: Mon, 20 Jul 2026 07:43:25 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,16 +70,40 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v7] platform/x86: panasonic-laptop: add fan speed mode
- for newer models
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Alex Yeo <alexyeo362@gmail.com>
-Cc: platform-driver-x86@vger.kernel.org,
- Kenneth Chan <kenneth.t.chan@gmail.com>, Hans de Goede <hansg@kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org
-References: <b557e1f6-2072-496f-8eaa-d2899d1bded4@linux.intel.com>
- <20260718185704.3466-1-alexyeo362@gmail.com>
- <fcf57a96-b2ad-c7d5-0d6d-6d760b915195@linux.intel.com>
+Subject: Re: [RFC PATCH] firmware: scmi: Make SCMI arch independent
+To: Ulf Hansson <ulf.hansson@oss.qualcomm.com>,
+ Cristian Marussi <cristian.marussi@arm.com>
+Cc: Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
+ monstr@monstr.eu, git@amd.com, vincent.guittot@linaro.org,
+ Souvik.Chakravarty@arm.com, Alex Shi <alexs@kernel.org>,
+ Andy Shevchenko <andy@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>,
+ Brian Masney <bmasney@redhat.com>, David Lechner <dlechner@baylibre.com>,
+ Dongliang Mu <dzm91@hust.edu.cn>, Fabio Estevam <festevam@gmail.com>,
+ Frank Li <Frank.Li@nxp.com>, Jonathan Cameron <jic23@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Len Brown <lenb@kernel.org>,
+ Liam Girdwood <lgirdwood@gmail.com>, Linus Walleij <linusw@kernel.org>,
+ Lukasz Luba <lukasz.luba@arm.com>, Mark Brown <broonie@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, =?UTF-8?Q?Nuno_S=C3=A1?=
+ <nuno.sa@analog.com>, Pavel Machek <pavel@kernel.org>,
+ Peng Fan <peng.fan@nxp.com>, Pengutronix Kernel Team
+ <kernel@pengutronix.de>, Philipp Zabel <p.zabel@pengutronix.de>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Shuah Khan
+ <skhan@linuxfoundation.org>, Stephen Boyd <sboyd@kernel.org>,
+ Sudeep Holla <sudeep.holla@kernel.org>, Ulf Hansson <ulfh@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Yanteng Si <si.yanteng@linux.dev>,
+ arm-scmi@vger.kernel.org,
+ "open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <imx@lists.linux.dev>,
+ linux-arm-kernel@lists.infradead.org,
+ "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+ "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
+ "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
+ "open list:ENERGY MODEL" <linux-pm@vger.kernel.org>
+References: <d7f7e8c9589d937b60e43168845ab4fda15037a3.1783603600.git.michal.simek@amd.com>
+ <ak_Eu_eQKalPMwo-@pluto>
+ <CAPx+jO9KMcxnmt-wT5jaApj9p7s11B6eSG6K08Jt9J=-vXxjhA@mail.gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -125,54 +149,35 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <fcf57a96-b2ad-c7d5-0d6d-6d760b915195@linux.intel.com>
+In-Reply-To: <CAPx+jO9KMcxnmt-wT5jaApj9p7s11B6eSG6K08Jt9J=-vXxjhA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 7/20/26 06:46, Ilpo Järvinen wrote:
-> On Sun, 19 Jul 2026, Alex Yeo wrote:
+On 7/14/26 06:16, Ulf Hansson wrote:
+> On Thu, Jul 9, 2026 at 5:56 PM Cristian Marussi
+> <cristian.marussi@arm.com> wrote:
+>>
+>> On Thu, Jul 09, 2026 at 03:27:00PM +0200, Michal Simek wrote:
+>>> On heterogenious systems like AMD/Xilinx FPGA there is a need to talk to
+>>> SCMI server from different architectures than ARM that's why remove
+>>> ARM/ARM64 Kconfig dependency with also remove ARM from description and
+>>> rename folder to reflect it.
+>>
+>> While I understand dropping the dependency on ARM (I always wanted to do
+>> that and test if it worked at all on some otehr archs with QEMU), I am
+>> not sure about the whole renaming party ? why is needed just for
+>> cosmetic reasons ? it is at the end an arm originated protocol so I dont
+>> see it as a being wrong to be named as such even though used by other
+>> archs...I have not really strong opinion on this...
+> 
+> This is certainly not my call to make, but I have to admit that I
+> fully agree with the above.
+> 
+> Usually we don't rename files that indicate a legacy platform name,
+> just because a new company/platform wants to make use of it.
+> 
 
-...
-
->> diff --git a/drivers/platform/x86/panasonic-laptop.c b/drivers/platform/x86/panasonic-laptop.c
->> index b83113c26f88..2d67188de2a9 100644
->> --- a/drivers/platform/x86/panasonic-laptop.c
->> +++ b/drivers/platform/x86/panasonic-laptop.c
->> @@ -119,6 +119,9 @@
->>    *		- v0.1  start from toshiba_acpi driver written by John Belmonte
->>    */
->>   
->> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->> +
->> +#include <linux/printk.h>
->>   #include <linux/acpi.h>
->>   #include <linux/backlight.h>
->>   #include <linux/bits.h>
->> @@ -136,6 +139,14 @@
->>   #include <linux/types.h>
->>   #include <linux/uaccess.h>
->>   #include <acpi/video.h>
->> +#include <linux/sysfs.h>
->> +#include <linux/hwmon.h>
->> +#include <linux/hwmon-sysfs.h>
-
-FWIW, I don't see why this is needed.
-
-...
-
->>   
->>   struct pcc_acpi {
-...
->> +	/*
->> +	 * This mutex ensures that the hwmon and thermal functions
->> +	 * for fan operations do not conflict as the PWM fan is
->> +	 * exposed to both.
->> +	 */
->> +	struct mutex			pwm_fan_lock;
-
-Maybe ask why this additional lock is used instead of relying on
-(for hwmon attributes) and using (for thermal) the hwmon subsystem
-lock.
+I agree.
 
 Guenter
 
