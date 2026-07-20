@@ -1,183 +1,213 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011065.outbound.protection.outlook.com [40.93.194.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00B1139447C
-	for <linux-hwmon@vger.kernel.org>; Mon, 20 Jul 2026 03:24:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99CE392C4B;
+	Mon, 20 Jul 2026 03:25:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.65
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784517846; cv=pass; b=leVWhQ9uFhDurNwmoDi9YXqc6C7riklBRQ7KnCHPwKLMXx9DkRGopDpTo/85xB0C+6K/+8yHKzPk7i22gSzgepSKFAiUjVx8tYNU6K6qznQqET3w2HAoynxHsaXJYZRQOr7Ay1LEtGfWqfLYxYOiw/mmi5WZxm7DMsy+AzE5C6c=
+	t=1784517943; cv=fail; b=MZnhUQdVyx39kpmb9UbHq4xq/pvylZleoKQx5HTeXUxoCA7YPRKSzO4wf02sdM93Yiv2SuRKGEGfAHZWzlTuvdWsNVpg7JjJ4F9CloY/7cOFd23NliYu9wFrf42jlR4YVBraxVPfuQbxEcH8gPvv8mmyCg6lN4W34TfPLPBcGmg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784517846; c=relaxed/simple;
-	bh=oRIe/84zUcYPF7WKctWcQse43kn0k7OaGkq/Am/HD3U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pFgYtdvG/CTRxUJ6in8MkjZgFh1QjDNF3iPoUKh4QX2zYNg7rj+H7uRYJlZ7txV4UtOxLys127ff8aw3O6avLfmIqgz2jfT7yBvasVhSqhDx08PXKS+5SpMLeP9qME0sm5q8Aew8Xez0JMmFYOBXiuuigTxBEygWUS15c12FBnI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OjWcHmEJ; arc=pass smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784517943; c=relaxed/simple;
+	bh=5qD5/bJ1dt+lpcIwPLXjC3UNHQwpyB9+NLxlbsy6Wso=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=EVhpD5X5GhuSlVieZMwGtA97kI4jtlrffS+hzRwKthWFTvhOoZzeatlDIiv/Rm0yjeOBfL/fjDT0K6ij23X3bcQZvl+1iu6tkK9ZQVlgCFL8sutOkayOpD2aMvWYPjEOzRcc0wSKe8vGbRTbl7hDxXG9D8r8v4B6OLMjeeWqMb0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com; spf=pass smtp.mailfrom=altera.com; dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b=HXJSeaOq; arc=fail smtp.client-ip=40.93.194.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altera.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OjWcHmEJ"
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-69a50b818c8so15662231a12.2
-        for <linux-hwmon@vger.kernel.org>; Sun, 19 Jul 2026 20:24:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784517843; cv=none;
-        d=google.com; s=arc-20260327;
-        b=kg61GjkV00OTcMSFmCaG4i7ehMwDGGqeq9pSuiutt0oxR5LGf47KRkPYAzSUcYX81T
-         h3uHEV8z4pV9TFx4ExDBCahdGJLBFLfcr2xhDemmqoY9Y+54EG1LCRMOHvMuUIsevLSK
-         FsAbPtGUVA36F9q3XJaJxbx/KkeSxwDM2VxtVSstkohrqhKxvBg47h3VYlbV8cWELcHK
-         u4zioQgkFzkKWqPNqYH7hAQl5Sf7T7tQsLNb8fRPRAwKD6jMjzK3BopoZD4r0TwWg29E
-         AjYg1sQWPDR6KoT2qgHQadYWV3+bjPF0Ts60gVP99pIy6qi/AB6DJBWGPn9USyfWc2x8
-         JeGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=8V+cmq0ObXqhIAMf/P6Sid/1xN3TypvFqnYYrUPHLBo=;
-        fh=N9Z87eG/HzL8ti0cgBStMTEqiW810YfndzyMugtMrHs=;
-        b=LYPjC+ZpWQATbi2gN9mn9AHO/+NSmcAC09ezlW1qamuHmkXBEZ7xhLr1IW9tC5Gl5o
-         By5YC2teErKp2SGU/DiC6m4Sq8YulFaYZTsgz0OTUzE79jzG8asUpBEu0p2XsiCFtrnT
-         T9hIihk1b3uDFXXPOfeCBErgcucjLejUBOg85j/HLFth9G2Z8bo32tE7qQBU/gl3ghw/
-         Yi05Ag9QoaM6RxuQEkQMk4+W+ZvBYT9G1PENIMkIUpz+feBZ/YlpfkuJBMCU9c3VOvTM
-         vYvkGpxszPKvQYvZ5eY+Bz0rs1PTmotfSUGP1RJ+we9QMJByCjd61JI57VyMX8rkitOV
-         YJnw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784517843; x=1785122643; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=8V+cmq0ObXqhIAMf/P6Sid/1xN3TypvFqnYYrUPHLBo=;
-        b=OjWcHmEJ/Q20yrwJ5tFk8ckX0yTSNASrye0ByaxGOf6sOtFK7cQJrx+uxYgQAndoyw
-         aSQqXgzgdZcaelmyk0MSsdfHB68R+eitTqG4H+kNukzJ14iFu63z1S/UX//KruSdCmGu
-         xHUQ38Q+Ymx1txoGlm6b4+rErDC861aPCJrhlgvA4ON56W+nhCu+yZPe2zEbnnd88LxZ
-         9AFmxrgXjvTZqjGCdvDkm2bZnsFy+SM0TiXwhpZPNMkeeY9TByPo3+I80QnP4kjWa6oY
-         ZiDYQpziDoSrk7iTPw1lmqZyRXiliqCY7ML6OFg8Xr66e/WQXpE//J7P25qtA3HA6AYL
-         wUVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784517843; x=1785122643;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=8V+cmq0ObXqhIAMf/P6Sid/1xN3TypvFqnYYrUPHLBo=;
-        b=Jm2XMA4FPpRLAiRetrdyOq+SrPxnP9KO/jnam5H0G/BIXwJxT/mNEZ4eO92hXnqi7B
-         q8aL+bK2u30P6xd1MFtAN5akmrfUNrftYNP9ryaGP7vNPQFVwgUda9ELs4R4CGwN8IBv
-         Rnsl0q4o2k3o71VnPX0di9i6gIUcCo9Po2AGmfMf9DUoigjZOroWKR6MMTTw9VkC2+ef
-         HOMYuXnL+e5TwN/0/cBTyIBhpMo5q945pi7piFWn7C/8QADi0RTzmi18C2IBuF5guaMp
-         e1LeNWuRFFxLNF6l2TyM1LOXRTH1sJepdy0TrRXHAPGpgEPTKzamwZN9CGfOCkIT9SdO
-         Oyow==
-X-Gm-Message-State: AOJu0YzYLReATySQJiDO9eMWIJgJKWwI/U+/F4Fdq5CJaVsTJXKO/MUF
-	/cqS/Z8yKm9PID0bBuFA3ilqwRdwUOW5h3ConfuRx9YfugdpbOXjvOp2o56+5fsgljxMEuCWw4V
-	FHyZZ/eL6X40nGYZkAtxqeiqbUmHsWvk=
-X-Gm-Gg: AfdE7clEiX4dsQCS8hbPCMEkXRqLKY/gwZ2uwiX00/Z/dRB1+JyxbIlmba+5hNYQhNN
-	Z89oo+9KSDPUSehjm/yVW9SOSrvUiQ1bXno0dsTEwvgvJCk6zN9gIwyW6q1wwoljMzryiX3JPkh
-	iaRygEYYPK3bXJrnJLbC85WGa01zi6welUOIpuW474aIlgOj3fY08rXke4F1GvwVWTINGiQUWdO
-	g8l6ZXypnoIoIb1U6lP7tzdLFit2zWRxqPEtbZmpp5t4j98nONqQRjTMSMz9pEnuAG/JeOAvKbm
-	Oo5mSt25ciQFjQlpqpBI
-X-Received: by 2002:a17:906:7947:b0:c12:9b93:61fd with SMTP id
- a640c23a62f3a-c16b46aa27amr427440366b.6.1784517842957; Sun, 19 Jul 2026
- 20:24:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b="HXJSeaOq"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=GZvEoaWG7CwFLom5gkqUktdJ4iBHhVogmh8ytgXXhbcINFjPFxabOCv8YDHpU8/HzyD5WJc0PiKUQiIhtHa7kLAGdOuUqOb4WStOW/wJ+cx/aCB64G20iuv4LyXh5cCLAzG1iErGrX4NWGnszAMP7xfcUyOyoY/Md6EvpqX7ZqOEvckuxFNACMD6Y5H50ZQQLFrbTwWZ9S8W8K0TqM+N7N3K90+CUiCAaClWswJCPxmA/vaJQsCEOWLohFxtU+bPtdTb1L+tI4Pgir8zbbB6Lxr6hHAdBgZzlZNyfi+ddozDEHDOMazFA7nmWdPTncIsjCw0fmLqHXiE2bChkMiT3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=V81kBwBmOq+nMhPUKYJFIkteEWa/ifLwaQEgxMfv3RU=;
+ b=KC9grL3wAw0vZ7TBbYDm7sp/em4Iot5Y7cobdaITyl3xN5XpYBwlBmJFvZLnro13VkugogIwJdd885LAiLqX42WlLFFPyYumsMx5E9L+SLd1Or/7CVFOAhQUPkQJslz/HhbnQmjcUgqMehxr7TdlUT9qyZsHuEG8Te15qT4TVu1406/Jk96J4XEyHqWCN+LJwINrpkw/U78Txl5X6DgbDAI2pqpsxTo/ztmRZ/ZPByCTOEQ5ixejJ8IH35N+wp3R0S+9nQC/Qp9+oUfVvS7t5IDiAa0R75yHAG97C/JdoqzHlyh7bkwZpQoJk4F4Uk/2DFgSOR/rbKqcpgvdPyg4Qg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=altera.com; dmarc=pass action=none header.from=altera.com;
+ dkim=pass header.d=altera.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=altera.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=V81kBwBmOq+nMhPUKYJFIkteEWa/ifLwaQEgxMfv3RU=;
+ b=HXJSeaOqX+g88qqnJpL7azp+cJKKSb5DMthvs+N0B7o6P+H4pN1AUB6BuMkO+m99GzVO+Ufza6GmEfPa5gC9fRILBQ0iBSz1a3Yl+BTjaMXDv9nmwsOknQyWMf66yGZVFVR/C97pUD43V9VGiURuWHS/OeH//t1t0XuWotoH1BvLtrLG26FRETpp4KiGCXJRLvVvJlMcu6s5zBfaRtJpoWBuleFXjOIK7QQiLSi7YQbD5yCxDkd6ty5UDgCe2/EgMdDv3v0YWFwdgnEluUaWnaNjv20P3RX6OHnA9oaWUsVFERT3fmOOlDlod0IdbvYJZNbyWWdpHxzFYhI6yKmJHA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=altera.com;
+Received: from SJ0PR03MB5950.namprd03.prod.outlook.com (2603:10b6:a03:2d3::20)
+ by SA3PR03MB7256.namprd03.prod.outlook.com (2603:10b6:806:300::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.223.15; Mon, 20 Jul
+ 2026 03:25:38 +0000
+Received: from SJ0PR03MB5950.namprd03.prod.outlook.com
+ ([fe80::53a0:bf93:6b6b:de01]) by SJ0PR03MB5950.namprd03.prod.outlook.com
+ ([fe80::53a0:bf93:6b6b:de01%5]) with mapi id 15.21.0223.015; Mon, 20 Jul 2026
+ 03:25:38 +0000
+From: tze.yee.ng@altera.com
+To: Dinh Nguyen <dinguyen@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: [PATCH v6 0/2] hwmon: add Altera SoC FPGA hardware monitoring support
+Date: Sun, 19 Jul 2026 20:25:32 -0700
+Message-ID: <cover.1784516953.git.tze.yee.ng@altera.com>
+X-Mailer: git-send-email 2.43.7
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SJ0PR05CA0040.namprd05.prod.outlook.com
+ (2603:10b6:a03:33f::15) To SJ0PR03MB5950.namprd03.prod.outlook.com
+ (2603:10b6:a03:2d3::20)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260717-adt7470_thermalzone-v2-0-a55147958fad@gmail.com>
- <20260717-adt7470_thermalzone-v2-1-a55147958fad@gmail.com> <20260717210439.356FF1F000E9@smtp.kernel.org>
-In-Reply-To: <20260717210439.356FF1F000E9@smtp.kernel.org>
-From: Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Date: Mon, 20 Jul 2026 00:23:50 -0300
-X-Gm-Features: AUfX_mzsv1aeyFo6ikWaI5--bnju7xbF9TV1ObqLQI1Nx-0zHSbgM8sQSA2VqxQ
-Message-ID: <CAJq09z73W9rtS75K2802jmZpHcAag-Sz6roKQW31cYANH4gjFA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] dt-bindings: hwmon: add binding for adi,adt7470
-To: sashiko-reviews@lists.linux.dev
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, robh@kernel.org, 
-	conor+dt@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ0PR03MB5950:EE_|SA3PR03MB7256:EE_
+X-MS-Office365-Filtering-Correlation-Id: 50219241-2a26-4058-2072-08dee60e9176
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|23010399003|366016|1800799024|6133799003|10067099003|11063799006|56012099006|18002099003|55112099003|3023799007;
+X-Microsoft-Antispam-Message-Info:
+	vNDLBh4aejlt5Sqe21Rzs3Ppi/dGMBK1CttVFZb7ydWN6ufpqFaPw7c4wMxTQ/VheD45W54ON0CWd1hpLR2EjUvLwGYmct3AyEMLgM7u+/yUKUbouowRziHwVQISEUsA6SaHdFnjf2/jyMJ9IQu6GTWxd4znQcrnn2iqBqe+Lt/AiM087ETQVvT+uPXl8sFOTs1BnFcflV08wMQ6lBhOjENphkqyY+oKtwF38gZnSA3gOD6RMeFNS3fMgiFmk6ONtcC66zVVnyfCppfRZatKgBDddXmzDWl6qmUBloj16zHTddjEvSd1/6jWdN9Elf9bRCo51V4R80OZa6qmJTXS0XU38MeOWJ1yVUkK7fgQJ5FjQLiLBi5QwJ2zovRsJNk+57O3w9s7GZCRPx6l4DztScqjliCm04T8/CwUPtfL0EAUTrlicLsnosBtDacSp1WOrgMiYU78yNr9SV+JMPTfyYL0QTWnGujXx/eDF58ebyExcM72HHNgCT2992d4s1s6y7uxVcNFu3yUEjs/uD/9aC9UF9AWIwVAw79qpcnKoDUozc8BjPdO+4efj0iFtYp/om5k3/e7qaAnPUECui9vlUcWCnpdsrBVJhd0AVXWU6USfM5jw+BZkHQeSoBEuHZiH9RNlVbcfBnLZWnzdQ/9aENlTupimXtpVauRI3Buvus=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR03MB5950.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(23010399003)(366016)(1800799024)(6133799003)(10067099003)(11063799006)(56012099006)(18002099003)(55112099003)(3023799007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?LzVYUmx1cmJRVFpTbTlWYUVOVCtOalhGMngwb2M5U0wvZEszRTU0T3ZNd1Ux?=
+ =?utf-8?B?eFBVTVJqd1F6MkN6S3hRZ3luQnEvY3daM1FHK1FaL0JjcXh6Ni9qSWJxNnly?=
+ =?utf-8?B?a0hXQXU1VjladnVuSGp4NmFTQWRyMXpXVFd6OUlyemhJNk43bFh3NVhIYmY3?=
+ =?utf-8?B?TC9Yc3ZhNG4yTnBPU25wY1laMjhjbmdJblU3c2VGdU9OZThkQkVnSnZPTmVH?=
+ =?utf-8?B?elB6cDZqNUpkT3ZNbGZZcGFBRVp0Z1FuZUFvTjJNNGJjT1RzdnMyakJIc0xp?=
+ =?utf-8?B?dU0yektNL2VqcDB4aFhLcURaQkM4YkQ3Qk9CR3BHQ0tnS2oxUUVnbVpuSGtJ?=
+ =?utf-8?B?UHBob2hTZ1BxcUsrT21lTmRaZ05tTzUrcGdRb0hBRjBWVmVvRjdtcHJYbDdx?=
+ =?utf-8?B?TlRXZmM1c2diWU1vY0dWcTJ2MklHYWFJVUlGdnB1cUp1Yytpd1pDaWdUOGhT?=
+ =?utf-8?B?anYvMlg2K3JCMDFQUHI0dUhIZ21veWZHWkZiY012R0xmRjBjYW9jUldjOFNW?=
+ =?utf-8?B?anUvSms3K2N2Z1lQZllnK0t1SmU3b3E2N0ZYejdNTHpQVHI5WGpjanpYQ3lJ?=
+ =?utf-8?B?Vm5zc0JtWmd5eW5rNVI3NVArWWhjYUdiem9RdGZqQzZiK0FFSlMza25YdzFE?=
+ =?utf-8?B?WHpod0RoOTIzZlNLYW5mbVJ5Ky8xbTYzdVhFQkdrVDBXK3Uvc1lZMVZwQ3FJ?=
+ =?utf-8?B?dXFlY1p5ekpXSGJxN2lVZThkbUx1SjlKNUJXK3NlWE9YZTNaRWFkcDk1end0?=
+ =?utf-8?B?ZGV0b2tBSnNjbVFJcXgrbThXRjJDQlNBWHM3eXdVTjBVbXBjMDcwMWsySTRG?=
+ =?utf-8?B?SkM2eWN6UVA0MlBUend0WG1Jd0VtNi9MQ2taZ3ZwV21BUVExYzJ1c25RZmor?=
+ =?utf-8?B?V0FLNXljTWNTRExjK3laUDdNU1lJT1NENmVJci9SMkJLZ2JBYWJ2TjVNaFBC?=
+ =?utf-8?B?UHhManM2SHhNNmdQYXpWOXMwZm1pNXNMTy9OdEt6WTM5VUdsMzRrUXlQRFlO?=
+ =?utf-8?B?bkJEWjM3MndWYU9CdVpwQUNxYmJldGc0Q2M0UXhzV3ZQZlBwWC96dndZTC9L?=
+ =?utf-8?B?VEJDbVM3NlVJMGdBQ0NHRGx4S09wbHFNd0gvYS9ZQnpOd2U4OE1pektkMTJU?=
+ =?utf-8?B?aVdhU0JKeWRTTzBXWG5yWmEyMEdUT0h2MU4xQThhYXVwcEhMYnhGOHZWWVk5?=
+ =?utf-8?B?cU1PMDNyQ1NZTmlpeGYwVUhUQklXVFJSamhvc3dxRzFkUlRxd3Qyam1rclVB?=
+ =?utf-8?B?VUJmcVRHRHkzaHFHcGZjcXZVcTNpWjU1eXY2dFk1UXhCZys1NGIvMnNJT2Iy?=
+ =?utf-8?B?dThBOXZhWVNMYU1FQ25tTSt0QnZlbWJRVlMvRlFDbVE2RitkNTl6TUdUODE3?=
+ =?utf-8?B?cVIrODQzdVVsVlRrTndaMmpNbUt4Rmk3REt0aXlOZjREYUErcmpTazJ5elJ5?=
+ =?utf-8?B?cjcxemdTeEdiYmRlQ2g0Z1RPTmk5YzJJU2ZJaURaTzVSVnlVV0hpdGVYaE0w?=
+ =?utf-8?B?YzQ4NlhDbFVwWk04bDdvY1p4cUJDajhHd0VUNVBzT2QySFVRcW9IdjE3bUpF?=
+ =?utf-8?B?VmJWM0UreWZMRU1tdXZ0cXUzTjFQK2N2K3diWDFwMmFYK0dFdnQvVE1VK0kw?=
+ =?utf-8?B?em9xKzcxMjRGUU9lNDVmKzNxV1grRys4MTVQa01XWXlSeitES1NFUEZzTFRa?=
+ =?utf-8?B?TWF0b1hHN3ZzWU5MUXRndUtnWWd6NGxsQ2NvK3htVUxPdExVTjZMc1RBUEli?=
+ =?utf-8?B?YlRPQldtNlVETGhHQjRJcUx4MEhFcmt2aFRGM0ErTTl5d3hmdHRMZmlEbWJr?=
+ =?utf-8?B?T1FncitqRjNET1gyYXVETEtWU2FOVGpmUWpEcytUTWU0MUlkUTNrRHNhM3c2?=
+ =?utf-8?B?a1RCWERrUVptbzd1MWx2b0hPS1ZNSmlQUDN0NTJ0R043OEZpNVphaThpUzJG?=
+ =?utf-8?B?NmdoWkJhUmFCYW8xd0t4ZVlVSXJCdU96TTJrZmxQakd6NUR6MGxwRExhMXRR?=
+ =?utf-8?B?VjNWR0NvaHZKcXlFK2poRU1NNjFtaVJKRHMwZzRRZnpZY1huUnJoWGZMZUtO?=
+ =?utf-8?B?enRmdmEzNHlzYmN1SWZyampjemxncnNnWFg1Q2hFNmVvaXpuRVZxRzJEb2No?=
+ =?utf-8?B?S0ZEZ0JSeUJVRm9kOWJrK3QrOFZMeU9yeXhXdmovQTNOZC9Dc0FTM1RpR3JH?=
+ =?utf-8?B?bms5L1VvOHJQbG50dVlGZWkxbmJLSVFTenpoRU5BVGgxSjlSTnl5WmprUUFE?=
+ =?utf-8?B?UFo5Zkg1a213NE1LQW5GZDdodERtVXplaEV1a2puaU1NeWphV21XN0M4ODZP?=
+ =?utf-8?B?VERXNEZoZEZyeVhVOEgzay9FS0ZwTm83dE1xd3dGUEZwRVFpMFQrZz09?=
+X-OriginatorOrg: altera.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 50219241-2a26-4058-2072-08dee60e9176
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR03MB5950.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2026 03:25:38.0102
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fbd72e03-d4a5-4110-adce-614d51f2077a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gMvnoTukSkaWooBFUq1Pw5fJxdWPvOXejeBTONvIdRVGAO8kLhjZ3B4+gKje2j96M+d3RXkdI27YjiurwcdjjQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR03MB7256
 
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [Medium] The binding defines PWM output and thermal sensor provider cap=
-abilities but fails to include `#pwm-cells` and `#thermal-sensor-cells` in =
-the `required` list.
-> --
->
-> --- Patch [1]: [PATCH v2 1/6] dt-bindings: hwmon: add binding for adi,adt=
-7470 ---
-> commit 6372aff696282f1ac0ec9a8f1372c186734704a2
-> Author: Luiz Angelo Daros de Luca <luizluca@gmail.com>
->
-> dt-bindings: hwmon: add binding for adi,adt7470
->
-> The ADT7470 hardware monitoring chip supports PWM fan control and tempera=
-ture
-> monitoring. This commit introduces the YAML device tree binding schema fo=
-r it,
-> defining PWM and thermal sensor provider capabilities.
->
-> > diff --git a/Documentation/devicetree/bindings/hwmon/adi,adt7470.yaml b=
-/Documentation/devicetree/bindings/hwmon/adi,adt7470.yaml
-> > new file mode 100644
-> > index 0000000000000..14bb6359c91f2
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/adi,adt7470.yaml
-> [ ... ]
-> > +properties:
-> > +  compatible:
-> > +    const: adi,adt7470
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  "#pwm-cells":
-> > +    const: 2
-> > +    description: |
-> > +      Number of cells in a PWM specifier.
-> > +      - The first cell is the PWM channel (0 to 3).
-> > +      - The second cell is the PWM period in nanoseconds.
-> > +
-> > +  "#thermal-sensor-cells":
-> > +    const: 1
-> > +    description: |
-> > +      Number of cells required to uniquely identify the temperature se=
-nsors.
-> > +      Valid index values are 0 to 9, corresponding to temp1 through te=
-mp10.
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
->
-> [Severity: Medium]
-> Should #pwm-cells and #thermal-sensor-cells be included in this required =
-list?
->
-> Because this binding defines the device as a PWM output and thermal senso=
-r
-> provider, omitting these cell properties from the required list allows
-> incomplete device tree nodes to silently pass schema validation.
->
-> If an adt7470 node is created without them, dependent drivers attempting =
-to
-> reference it as a provider may fail at runtime when parsing the provider
-> specifier.
->
-> Could both #pwm-cells and #thermal-sensor-cells be added to the required
-> array to enforce complete node validation?
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260717-adt7470_=
-thermalzone-v2-0-a55147958fad@gmail.com?part=3D1
+From: Tze Yee Ng <tze.yee.ng@altera.com>
 
-It would be nice if Sashiko-bot could have previous submission threads
-as input context. It would be a great way to avoid false-positives
-like this.
+This series adds hardware monitor support for Altera SoC FPGA devices.
+Temperature and voltage sensors are accessed through the Stratix 10
+service layer and Secure Device Manager (SDM).
 
-The ADT7470 can be (and is, in real-world devices ) used as a PWM-only
-device. Likewise, nothing prevents its use solely as an ADC for
-temperature sensors. Because its use cases are modular, neither of
-these provider properties should be strictly required in the binding.
+Patch 1 adds async HWMON SMC support to stratix10-svc and registers the
+socfpga-hwmon platform device.
 
-Regards,
+Patch 2 adds the socfpga-hwmon driver, documentation, Kconfig, and
+MAINTAINERS entry.
 
-Luiz
+Changes in v6:
+- Rebase on torvalds/master (given “Linux 7.2-rc4”)
+- No functional changes in Patch 1 and Patch 2
+
+Changes in v5:
+- Rebase on dinguyen/socfpga_svc_fixes_for_v7.2
+- Address Sashiko review feedback on socfpga-hwmon (Patch 2):
+  - Poll async responses until HWMON_TIMEOUT instead of a fixed
+    3-iteration retry loop (~3 ms), fixing premature timeouts on
+    silicon
+  - Add MODULE_ALIAS("platform:socfpga-hwmon")
+- No functional changes in Patch 1
+
+Changes in v4:
+- Address maintainer and review feedback on socfpga-hwmon (Patch 2):
+  - Register devm_add_action_or_reset() before
+    devm_hwmon_device_register_with_info() to fix devres teardown order
+  - Remove unreferenced completion and pre-poll
+    wait_for_completion_io_timeout() from async reads; poll directly
+    with a retry loop after async_send()
+- No functional changes in Patch 1
+
+Changes in v3:
+- Address review feedback on socfpga-hwmon (Patch 2):
+  - Fix 16-bit Q8.8 temperature sign extension
+  - Drop unused async callback; pass NULL to stratix10_svc_async_send()
+  - Document and retain pre-poll wait (RSU pattern; firmware needs time
+    before async_poll())
+  - Align async poll retry behaviour with RSU
+  - Use uninterruptible wait_for_completion_timeout() for sync reads
+  - Handle -EINVAL and -EOPNOTSUPP when falling back to sync mode
+  - Defer SVC channel cleanup via devm_add_action_or_reset()
+- No functional changes in Patch 1
+
+Changes in v2:
+- Drop altr,stratix10-hwmon DT binding and intel,stratix10-svc hwmon
+  child property
+- Drop Stratix 10 SoCDK DTS hwmon node
+- Register socfpga-hwmon from stratix10-svc (RSU-style)
+- Replace DT channel parsing with hardcoded Stratix 10 and Agilex tables
+- Rename driver/module to socfpga-hwmon 
+  (CONFIG_SENSORS_ALTERA_SOCFPGA_HWMON)
+- Add Agilex channel support
+- Fix SDM value conversion (Q8.8 degrees Celsius and Q16 volts to hwmon
+  millidegrees/millivolts)
+- Improve sync-mode error handling via last_err
+
+Previous version:
+  https://lore.kernel.org/all/cover.1784096224.git.tze.yee.ng@altera.com/
+
+Tze Yee Ng (2):
+  firmware: stratix10-svc: add async HWMON read commands and register
+    socfpga-hwmon device
+  hwmon: add Altera SoC FPGA hardware monitoring driver
+
+ Documentation/hwmon/index.rst                |   1 +
+ Documentation/hwmon/socfpga-hwmon.rst        |  34 ++
+ MAINTAINERS                                  |   8 +
+ drivers/firmware/stratix10-svc.c             |  46 +-
+ drivers/hwmon/Kconfig                        |  10 +
+ drivers/hwmon/Makefile                       |   1 +
+ drivers/hwmon/socfpga-hwmon.c                | 579 +++++++++++++++++++
+ include/linux/firmware/intel/stratix10-smc.h |  38 ++
+ 8 files changed, 714 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/hwmon/socfpga-hwmon.rst
+ create mode 100644 drivers/hwmon/socfpga-hwmon.c
+
+-- 
+2.43.7
+
