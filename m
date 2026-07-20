@@ -1,134 +1,139 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2583B39446B;
-	Mon, 20 Jul 2026 03:29:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D128233943
+	for <linux-hwmon@vger.kernel.org>; Mon, 20 Jul 2026 03:36:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784518198; cv=none; b=mcF+7vk1IT40kVr3EOFb5rI64/6fHpl4tsMCy4Ka/K5sMM3wrIi/XvPE9PJIJ/XlfNtHz9dyOX2iG6No7EOmzFFnfbr+/1u0NB6UO0TgNVDPHkPxMzwDETum63ZSww7RtJHOsPqqhCyx2XbcEWvQO5wBGSx0FltTyEQ2wm3DPFI=
+	t=1784518598; cv=none; b=GWXYN5CpaQdFwOPpkF9RAXTcPHAXIpHDXShIc0+h1w2SsvlJDF9jzGWd89Zm3GsCu1BzEEV23hkxmEq/ilP25gVHJxM48OiYMHaLBqVRttcikPEcghrbuT4TOh+3iCNyuB9l7SwOOcDFxFIrS3UZfJ5dsu55RHFsqvAHmbvBldA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784518198; c=relaxed/simple;
-	bh=oFidktxrpl15Ellqs8AORyBqV7Ox4jhO2SjVEMBk9cM=;
+	s=arc-20240116; t=1784518598; c=relaxed/simple;
+	bh=5uUnb4bE6lPF77zfOhBByE6lviiA+bke4gO2J7nr9sE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=h0PnsJrGciysf9zI0T1bx1SjK5Cn4RuUUr1jeESLdv3ZPwDL4hj4zDiCxJFQPvO12azUx1AuxAYVZwPRvcgRFk/nt+usSWj76bquQ0BqT/RLrbkAw3ig5LQFcBJPep++knxtaHrT5vmZA4lndxdTHA0k4is4xxBIHKmqKRl2mKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ck1SUy40; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Q1RZDeaCi5lvw5e1G+/R/bPOTpLhIq7OoTx+mBU+O1tMa0kTLoRPBNRX4VWVK+zHlrZvazgQNZOEWdEZM7LUCQzNKv/T3AedmWfz3nV3M+yQagy4vWkMfUKUrKCaWJRSH3o6mDJYZ5htqiFYFd9nwiXgn3oL+3Sj0j3QSGAja4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CeWsHI8x; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ck1SUy40"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FB041F000E9;
-	Mon, 20 Jul 2026 03:29:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CeWsHI8x"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A08491F000E9;
+	Mon, 20 Jul 2026 03:36:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784518196;
-	bh=l69ItRx1+IV/PqCXjWSMetsdxIalnIdGCSwNO9fuY8o=;
+	s=k20260515; t=1784518596;
+	bh=Or2g76TUWiid7Cqy8Ubi747lebIkiNYW2pX4ITs3RqM=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ck1SUy40+75Fg7MaTfE2PnFcY3saLacvX6ZH0FyskGWrSZS1g9wyyc/AWWa7+c5kx
-	 90d45n8aVpisNSd/MYKx1xaso3SXRgbryviZ5udp9ffwEjpJFdVjYA5kYrVdkeVgLB
-	 1Tmkr05/L/mZoqVRSoVFY7U8/g4B4jst3VuVBMilaH6cLewoaqIcmgsUzQXHGpeoFR
-	 NXCP9h4X6nEO2e1ue9Opm+RSzqlu75PGb6EzSb8xzAhQO+glXy1Fq985sDxxH6m23L
-	 SVRC9Er/oUxv/nX0ROEWglvCAphWyJR1azJY9rzGG1exACuU9ef0NsrFeuzkfZfJTz
-	 JJJunM/AUAbgA==
+	b=CeWsHI8xbaXdQiH5EmOJp5nnAS8mzlFaUDZk5olvC2W3enz+2IaaxNQ8TOiKN+zeO
+	 1qNxEslxFcxNnX4H17O9779KyZeqFWHOdwR5dONfDTAR6NNsOSciwvrlQ//h9d0PgL
+	 nymNW4Xjr3K4oTJvaojiF4X7SDmII+dtBjaO4usY9x0L//r5o9jUh2TJ/aIiKY8Kgv
+	 Ihblo6ePVkUBy94e87jau9XivZ6qcQ4IkZ3LEyOHX/QIcZIQcp0fBnT4NhncWJ5ptx
+	 pu5FqDZc7EnasPEQnmgdj5Fq8tr8rlyvkn/9KCBHldsbjIp6nXQLR3sq/86+ds5FmT
+	 7s9sCtP1bDQGQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 4/4] hwmon: (pmbus/max20830): add support for
- max20830c and max20840c
+Subject: Re: [PATCH v6 2/2] hwmon: add Altera SoC FPGA hardware monitoring
+ driver
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexis Czezar Torreno" <alexisczezar.torreno@analog.com>
-Cc: robh@kernel.org, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, conor+dt@kernel.org
-In-Reply-To: <20260720-dev-max20830c-v3-4-9d06d27d6da3@analog.com>
-References: <20260720-dev-max20830c-v3-0-9d06d27d6da3@analog.com>
- <20260720-dev-max20830c-v3-4-9d06d27d6da3@analog.com>
+To: tze.yee.ng@altera.com
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <a686d2c3ef56a3ce28b059621a237259af314032.1784516953.git.tze.yee.ng@altera.com>
+References: <cover.1784516953.git.tze.yee.ng@altera.com>
+ <a686d2c3ef56a3ce28b059621a237259af314032.1784516953.git.tze.yee.ng@altera.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 20 Jul 2026 03:29:55 +0000
-Message-Id: <20260720032956.5FB041F000E9@smtp.kernel.org>
+Date: Mon, 20 Jul 2026 03:36:36 +0000
+Message-Id: <20260720033636.A08491F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] Missing compatible strings for MAX20830C and MAX20840C in the of_m=
-atch_table.
-- [Medium] I2C block read path truncates the device ID for 9-character name=
-s, leading to potential false positive matches.
-- [Low] struct i2c_device_id array uses positional instead of named initial=
-izers.
+- [High] Missing break in async poll loop causes severe kernel log spam and=
+ unnecessary blocking on hard errors.
+- [High] Synchronous read timeouts leave stale requests in the channel FIFO=
+, causing all subsequent reads to process stale data and return mismatched =
+sensor values.
 --
 
---- Patch [4]: [PATCH v3 4/4] hwmon: (pmbus/max20830): add support for max2=
-0830c and max20840c ---
-commit dca1bbdb54e3f769bf22d26e97ead67754787a95
-Author: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+--- Patch [2]: [PATCH v6 2/2] hwmon: add Altera SoC FPGA hardware monitorin=
+g driver ---
+commit ab6c0c0f95d3890d759e04d9d9aecd151d6406fd
+Author: Tze Yee Ng <tze.yee.ng@altera.com>
+Subject: hwmon: add Altera SoC FPGA hardware monitoring driver
 
-hwmon: (pmbus/max20830): add support for max20830c and max20840c
-   =20
-Add support for MAX20830C and MAX20840 step-down DC-DC switching
-regulator with PMBus interface. MAX20830C is a different packaging
-for MAX20830, and MAX20840C supports 40A regulation compared to
-MAX20830 that is only 30A.
+This commit adds a hardware monitoring driver for Altera SoC FPGA devices u=
+sing
+the Stratix 10 service layer.
 
-> diff --git a/drivers/hwmon/pmbus/max20830.c b/drivers/hwmon/pmbus/max2083=
-0.c
-> index 7a5e67bd33c0a..73fe59685cf15 100644
-> --- a/drivers/hwmon/pmbus/max20830.c
-> +++ b/drivers/hwmon/pmbus/max20830.c
-> @@ -98,13 +98,12 @@ static int max20830_probe(struct i2c_client *client)
-
+> diff --git a/drivers/hwmon/socfpga-hwmon.c b/drivers/hwmon/socfpga-hwmon.c
+> new file mode 100644
+> index 0000000000000..72418201b65d6
+> --- /dev/null
+> +++ b/drivers/hwmon/socfpga-hwmon.c
 [ ... ]
-
->  	} else {
-> -		/* Reads 1 length byte + 9 Data bytes from MAX20830 */
-> +		/* Reads 1 length byte + data bytes */
->  		ret =3D i2c_smbus_read_i2c_block_data(client, PMBUS_IC_DEVICE_ID,
->  						    MAX20830_IC_DEVICE_ID_LENGTH + 1,
->  						    buf);
-
-[Severity: Medium]
-Since MAX20830C and MAX20840C have 9-character names, does this hardcoded
-MAX20830_IC_DEVICE_ID_LENGTH + 1 truncate the newly added device IDs?
-
-In max20830_probe(), if the I2C controller lacks SMBUS_READ_BLOCK_DATA supp=
-ort,
-the fallback i2c_smbus_read_i2c_block_data() call uses
-MAX20830_IC_DEVICE_ID_LENGTH. Because this length was initially sized for t=
-he
-8-character "MAX20830" identifier, could it under-read the new longer device
-IDs and cause false positive matches in the I2C fallback path?
-
+> +static int socfpga_hwmon_async_read(struct device *dev,
+> +				    enum hwmon_sensor_types type,
+> +				    struct stratix10_svc_client_msg *msg)
+> +{
 [ ... ]
-
-> @@ -120,26 +119,28 @@ static int max20830_probe(struct i2c_client *client)
-
-[ ... ]
-
->  static const struct i2c_device_id max20830_id[] =3D {
-> -	{"max20830"},
-> +	{ "max20830" },
-> +	{ "max20830c" },
-> +	{ "max20840c" },
+> +	ret =3D -ETIMEDOUT;
+> +	while (!time_after(jiffies, deadline)) {
+> +		status =3D stratix10_svc_async_poll(priv->chan, handle, &data);
+> +		if (status =3D=3D -EAGAIN) {
+> +			dev_dbg(dev, "Async message is still in progress\n");
+> +		} else if (status < 0) {
+> +			dev_alert(dev, "Failed to poll async message: %d\n", status);
+> +			ret =3D -ETIMEDOUT;
 
 [Severity: High]
-Are the compatible strings for max20830c and max20840c missing from the
-max20830_of_match[] table?
+Does this loop need a break statement here when status < 0?=20
 
-Without adding them alongside the newly added i2c_device_id entries, could
-this break module autoloading on systems using Device Tree when the OS atte=
-mpts
-to autoload the driver via the udev modalias?
+If stratix10_svc_async_poll() returns a hard error, the code sets=20
+ret =3D -ETIMEDOUT but continues to loop for up to 2 seconds. This could
+flood the kernel log with dev_alert() messages on every 1ms retry.
 
-[Severity: Low]
-This isn't a bug, but do these entries violate the I2C subsystem coding sty=
-le
-by using positional initializers?
+> +		} else if (status =3D=3D 0) {
+> +			ret =3D 0;
+> +			break;
+> +		}
+> +		msleep(HWMON_RETRY_SLEEP_MS);
+> +	}
+[ ... ]
+> +static int socfpga_hwmon_sync_read(struct device *dev,
+> +				   enum hwmon_sensor_types type,
+> +				   struct stratix10_svc_client_msg *msg)
+> +{
+[ ... ]
+> +	ret =3D stratix10_svc_send(priv->chan, msg);
+> +	if (ret < 0)
+> +		goto status_done;
+> +
+> +	ret =3D wait_for_completion_timeout(&priv->completion, HWMON_TIMEOUT);
+> +	if (!ret) {
+> +		dev_err(priv->client.dev, "timeout waiting for SMC call\n");
+> +		ret =3D -ETIMEDOUT;
+> +		goto status_done;
 
-The I2C client guidelines require initialized arrays of type
-struct i2c_device_id to use named initializers (e.g., { .name =3D "max20830=
-c" }).
+[Severity: High]
+If a timeout occurs here, could the unfulfilled request remain in the
+SVC channel's FIFO?
 
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(i2c, max20830_id);
+When the timeout hits, this path calls stratix10_svc_done() which stops the
+worker thread, but it doesn't appear to remove the request from chan->svc_f=
+ifo.
+
+Would the next sensor read enqueue a new request and receive the stale data
+from this timed-out request, permanently desynchronizing all subsequent
+sensor readings?
+
+> +	}
+> +
+> +	ret =3D priv->last_err;
+> +
+> +status_done:
+> +	stratix10_svc_done(priv->chan);
+> +	return ret;
+> +}
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260720-dev-max208=
-30c-v3-0-9d06d27d6da3@analog.com?part=3D4
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1784516953.gi=
+t.tze.yee.ng@altera.com?part=3D2
