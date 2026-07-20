@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6889727B4F7
-	for <linux-hwmon@vger.kernel.org>; Mon, 20 Jul 2026 06:40:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70801390CA9
+	for <linux-hwmon@vger.kernel.org>; Mon, 20 Jul 2026 06:42:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784529645; cv=none; b=IqlmXTFKoLg1c/nZoUpLoWlHU3jwBIgIXZBbJ+74we4orDnc+Bzx1UH5wuG/ubNCV7IdruEDdv2quJfdaGIFBXFoqWDKfQTgghbidUEMVp648DNdHSzMF7MIduY6LaCyMfluvfSPRHCulqkuiCPRXYF/uRqvoytLyrS347kR5PQ=
+	t=1784529776; cv=none; b=gsYhGf5280TH7GTC+FH61npzxIUqT9maGHH1UoCJw9ztZm+M9jVvY02KLpK2IXgNPZTIn9FlrVnSqcFAHbGTmuaduYvkBVT4E2wnis4V3BijxmmD902DDBvePVt8hBiIHF4EFhOfmlZVrLr2e6MzgsWqWqYhpk70gjehGTHZ2M4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784529645; c=relaxed/simple;
-	bh=EsSZzDLlFN18gK0RDaqKsPEEM5JQ0GnlGCiE1IY82u4=;
+	s=arc-20240116; t=1784529776; c=relaxed/simple;
+	bh=TjH07eqFZLrUN+Ih6+c3WSieuP1aIHGZ9hRk8fzmspA=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=a0mLbocAA3OtvjupcmNFgJMaB0gN8ZzkQl1hNdAFuyNXuLe2CXqTB2U0BwgI610Nq/j8almQ/Mi+pIScn4WffQf/ZEUTOf5ejrkb1zNMPgwkjZS6wjuTp2OVBoW9LkTeQ9yiouOwyeba7jMUywvX9vl/EGkSdXxKT3rLY5+qNp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GDvrt2IP; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=kOucXYjRqVpxDH5HJOjzXwLHeUKXDfB5sgqICRlXtOJ4gQvUheZYfvYnf0D6g3RSgVRg9WsbLqmm3rdO5vKrfUM+D0luZmlLLCcwIrCY3kfq0obBD+WyOTAB5E+Uz2olMFjfCxd2/y0WDxjsqFZ65jIgpGKyxj4eaWwYq4zFR+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KCIKhgjm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GDvrt2IP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C92041F000E9;
-	Mon, 20 Jul 2026 06:40:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KCIKhgjm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDA891F000E9;
+	Mon, 20 Jul 2026 06:42:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784529644;
-	bh=EsSZzDLlFN18gK0RDaqKsPEEM5JQ0GnlGCiE1IY82u4=;
+	s=k20260515; t=1784529774;
+	bh=TjH07eqFZLrUN+Ih6+c3WSieuP1aIHGZ9hRk8fzmspA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=GDvrt2IPLKaBWFpiK65huMt9ouRzVNhOgKrtRpcbWThZMH1G/8xbC6lUyqeCsWSPT
-	 xGEeRzQA4h7bFtBK9R4gRpGXiBsnxwcKBP2CHLTYmENR2XG+hdb8LM1AI4NrdpRkhQ
-	 3vlSekQktQgupL7rkfPzizVoY8QfXIWa+Ad8DXXuWGHFyfTdxcztCZUXy8snc0GnUg
-	 IEniEkA7JgnYwpH3RnQTg29HrNjPFcS0ZYMvESKJOzNyi+H3UFKpwW8yjWjqoYXd0N
-	 xJ22CO0OChvZJdPrHj/xtKC009IE9W3W4fHBtccOhhWQ0NaRTTxVeRZxC3YoQFf9Uq
-	 mxHvpnMgSp8Mg==
+	b=KCIKhgjmE+s3rh82UGrgwGdu3w08fWYKScFe4uEnU/lHmc6uwDehJJVUyvVCtW4gK
+	 PqwNg7LDthiZf6LF7fdFr4TueDdcR0kprkqzYEE/or1qHXKd4G245rw+G+mGfZJPjr
+	 eMPru+F5Kq46H8ofjrrzRX/lWBv/IKkX6nOYhRagFU9hCQTIY7jcBHNR3cx4Irx870
+	 1B6ZXIyKXJEIQSnn016ZaKJ7KpKpF5LqDtgHX3s6s0iivCGHJ2gB9SdUCsFzP9ywPK
+	 v9nDcQIC7LpCEU9zoOHSs2gv+94n/NAzDpmUOllMEygMps67RTWMrm+4pUkzlYG4Ds
+	 CnB+l7ZG636Wg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 2/7] hwmon: (da9055) Remove redundant dev_err()
+Subject: Re: [PATCH v2 3/7] hwmon: (lm90) Remove redundant dev_err()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Pan Chuang" <panchuang@vivo.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260720063745.309331-3-panchuang@vivo.com>
+In-Reply-To: <20260720063745.309331-4-panchuang@vivo.com>
 References: <20260720063745.309331-1-panchuang@vivo.com>
- <20260720063745.309331-3-panchuang@vivo.com>
+ <20260720063745.309331-4-panchuang@vivo.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 20 Jul 2026 06:40:43 +0000
-Message-Id: <20260720064043.C92041F000E9@smtp.kernel.org>
+Date: Mon, 20 Jul 2026 06:42:53 +0000
+Message-Id: <20260720064253.CDA891F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -55,5 +55,5 @@ Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260720063745.3093=
-31-1-panchuang@vivo.com?part=3D2
+31-1-panchuang@vivo.com?part=3D3
 
