@@ -1,229 +1,780 @@
-Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012036.outbound.protection.outlook.com [52.101.53.36])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79E6E39B95D
-	for <linux-hwmon@vger.kernel.org>; Mon, 20 Jul 2026 12:44:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.36
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784551474; cv=fail; b=b01befS1WAC2UCN7iuqiRsC2TsHL1dwkej2Edlll6GcVScy+AowkN4V5OhWZINM6eJoxyZLpRe4aejTHauaVaWor4ToPeT/p9+7GegmhHA7rPcyRApZaotY55/pl4m0zDC7VG3s3a6v0Y2agrwormrnm/retmltsRUuwXpCCGN4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784551474; c=relaxed/simple;
-	bh=+alMm4bf3UCMkUIOjNwvOrNpD/YIt1BwybJ/8+1icLY=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Fr7d8eqlCOgEegBvmYYH0s4nN6BgnDzMvUy6+zKyByWSc1L1bZYzyrpCgkxUDTUj/0hhjfYXknXgFKCzzagKs7r5zQTCGwUEUziSo0KrNvdm/IneWS+lejmbSb358X+fNZ+j35R3DXRW283BSX9nY3j40MKs0JZY5mxc8SN+YE8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com; spf=pass smtp.mailfrom=altera.com; dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b=w7ilKTGn; arc=fail smtp.client-ip=52.101.53.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altera.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BC5E3AEF3E;
+	Mon, 20 Jul 2026 13:46:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784555182; cv=none; b=W5lI1oQIXKKVS1PTExRbakh07AqY/87ULPIyHy4kn2F72SNG2hJ5HyrEwGS7ScTTVQUF0KIZB0sSJirzPV8np+ZHGTv/KMSM9CUN4oB/hJcZZQLZD/BFmgdYtZ7+Rpr8+bRkTRXDFdM+pY7SAil7vadMxprEMTFuOgHOFWCGAP0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784555182; c=relaxed/simple;
+	bh=udFasIY9Rb0UfcbSDubYr+XDtVjyOQA3Foc5ndt7KgM=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=YRYq/OUM4GmAv67yac2Ne2wuapiGXD9BMyM5HLh6vblvZiPtaZQozQpFdtCVi9dk7U3zUwhc6H6cOhbnlHOTa7RhW6UVV0FclW0KkFo+Q8FU8+uN/2lX8WBE2wdDp2wb3CHhR60XZzCcRfxTlGPaLvl9xVL5kjLm6+mEuCv2Wrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dqKlM2Eh; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b="w7ilKTGn"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tN7+Y+Js5H1Vu7hNiVGjPlO52fBl1SX0KmeQVpMmjkWJ74LtPHy4qFSa4YQHdyhc+4fnTk4wh7KIHxKjxRJlircPJz1mDFfOepQyPC498ynHAT6ERW6GIFDQ5B55O/Logtb7mJ19M7tRLkyRPLYwpPefwA/h3vxhbqq2TMOO++pNzWk/9wyONjGU9a+VR2jYJFBlQVGzGg8ojTKY/xQrM3JGdvukLNxWeGrbZRFBqSBUh+lCwitwbFtsPkiyNRuJRkHGcEExe9riw1ZtIxkiJRlKIzbF9IK0Ox5wLHaMTuUtwpHRfiaEOZXdfGZ/LCGoEqgTm5nL49OkrISoD88acg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+alMm4bf3UCMkUIOjNwvOrNpD/YIt1BwybJ/8+1icLY=;
- b=wMSMcQNjliFVlCP5qgU5yiWy1c57pT8vu7bDEjDL7OsrlG6lqY2souW0a1kFZKxh1mojCThCHv57bPWCcRZJ75y6y6ThYEZiEJlDbUrIJJlQhgwhrml4WqcgapaibEzA4TxXUysOu8kj7T76+fbRCJtrez8EQQB8Jdt4se1eErDfPSwcMMg8+sMwcnjiRibVO/01nRWDLsVruTxgpff/9WqgKToX6S60CuvHoE1oUZz2zFSehVPTgs09Xj3VLFp36o1MobBruADNQxI4QlgFMDhVIKjZjV+XL+hR7PfS20Ni4tciBU74WbftvjJ3XWefamwRuUrLQw+rEExbeVYTGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=altera.com; dmarc=pass action=none header.from=altera.com;
- dkim=pass header.d=altera.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=altera.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+alMm4bf3UCMkUIOjNwvOrNpD/YIt1BwybJ/8+1icLY=;
- b=w7ilKTGnOXXgFt5boHVxVY8QDav3sGgI+7oN5FKM3fRZ4Dbd17voAZzwcFV7IS+Q6qeclU/vyiXqUuLxf4TzX5iUP015rxnfBuMzGe0/YQCuM+8gYpFcLs9M9FqoA9+TjP92mYYJ5GSn8B1eknxGBFsRVuJpEWhv7BPOjvcDOBMntRkWgQ+iU8m3VerbUIdYGTayfT9Qx8agSAZiLkNxcissRe0ZjeztHx2zNRSw3YBWXu0GllozrNJvfpG7ZLz29GtLE3uXXg88oiG+l0zIuqRDUFBXwmZ/LuxwPJLEC05EKTJGyaqLAHEYMeL6cYSHTaSd8J4niCS8zCyeS6q/Pw==
-Received: from SJ0PR03MB5950.namprd03.prod.outlook.com (2603:10b6:a03:2d3::20)
- by DS0PR03MB7727.namprd03.prod.outlook.com (2603:10b6:8:1f1::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.223.16; Mon, 20 Jul
- 2026 12:44:28 +0000
-Received: from SJ0PR03MB5950.namprd03.prod.outlook.com
- ([fe80::53a0:bf93:6b6b:de01]) by SJ0PR03MB5950.namprd03.prod.outlook.com
- ([fe80::53a0:bf93:6b6b:de01%5]) with mapi id 15.21.0223.017; Mon, 20 Jul 2026
- 12:44:28 +0000
-From: "NG, TZE YEE" <tze.yee.ng@altera.com>
-To: Guenter Roeck <linux@roeck-us.net>, "sashiko-reviews@lists.linux.dev"
-	<sashiko-reviews@lists.linux.dev>
-CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH v6 2/2] hwmon: add Altera SoC FPGA hardware monitoring
- driver
-Thread-Topic: [PATCH v6 2/2] hwmon: add Altera SoC FPGA hardware monitoring
- driver
-Thread-Index: AQHdF/d07FvM+mtVEEKBY1VPko3f1rZ1wf8AgAAMggCAAIyQgA==
-Date: Mon, 20 Jul 2026 12:44:28 +0000
-Message-ID: <b8c78ad2-bcb2-43a7-8d53-0eaa80ff9b42@altera.com>
-References: <cover.1784516953.git.tze.yee.ng@altera.com>
- <a686d2c3ef56a3ce28b059621a237259af314032.1784516953.git.tze.yee.ng@altera.com>
- <20260720033636.A08491F000E9@smtp.kernel.org>
- <f5189cb4-570e-4eb0-9152-759512d351d5@roeck-us.net>
-In-Reply-To: <f5189cb4-570e-4eb0-9152-759512d351d5@roeck-us.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=altera.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ0PR03MB5950:EE_|DS0PR03MB7727:EE_
-x-ms-office365-filtering-correlation-id: c0e00065-e4f7-4f1c-9ebc-08dee65ca320
-x-ms-exchange-atpmessageproperties: SA
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|23010399003|366016|376014|1800799024|38070700021|10067099003|56012099006|4143699003|11063799006|22082099003|18002099003|55112099003|3023799007;
-x-microsoft-antispam-message-info:
- rN/UrhfBgO4blC1eyazTlUWpuAlCNnV/DBORgf2JGZnKadBrTcwnJYllhx4yKmL5tZA+H1cq/Sw7xChaC9ltr7teGm/krFcC5VxRniYgR+AXhBiPBu6gyNm7eRR7nO++Cop9XeAhASzWWOmBEU6jrGbeJuSmXZa46NZTDVHwvtvOgvbwZrAA7FDy1YtW1/7ax87q+ZV6AyjAB+ZXdI8NIImMtm0Mu6/Wk0WC0IWiRXWBGBS1cqU3V5uzWZd+XR8zMfYnTseZ0rm1lhNbFsfcyGjfc8bqBZoQc9xAj9fo+hQMlaU8BKK/hKannP1oFMXHog8HlxEHhZ/CFOoqX8Z4lQ7CB9kbWojSOjoSMtmBlwUkEYS9DFtyh66ooRI62Covoks9POk3gZdW77icdoWLe6yKStTfc6nVssdG1UAKhxIXoH3AsSh5P4dDQnF9YPGQNTfq9+DuXEOUclRs61kOSwmza9eao5gh7UqJkPSQ1HP2aeeX2N+e/u2fFhNLB6Lo1xH7ZCqqfGu2D2OTGGZvSkE0J6b++P7LLp5ry9UoU8431H1oZY5XUBFGcmFEINDZvfpYZTpoo9929D3QCV2V6im+m+q5WJgp4uOySVkZnCUVoC/NYwOVI91NbC/HuPvxUuCcED5VRifglpStkRJGkrWSnuxjXJXz3ny+7Og+DO+jgz+ohFchDm8xJS6LsTQNW1SZtHkHQkVZS6NHSbhntVNuQJHRnnAwzOLKSepqouU=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR03MB5950.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(376014)(1800799024)(38070700021)(10067099003)(56012099006)(4143699003)(11063799006)(22082099003)(18002099003)(55112099003)(3023799007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?RFU4cnFBTnI5USs5Tlk4SzJkdjZiT3NBN1hGQUpka0F6dlFwZUg0YThhN3Bs?=
- =?utf-8?B?Q1ZVd0VHZ3hGb2xNdTNZbHBFYWJtNldiSEszd0FseTNIeUdaaEZVMzE3NGx6?=
- =?utf-8?B?enBPVmN0dVdXeC9UNkhYcjhpQmtTUUJvY2VrcWsrVEFSRzFRaFEzZ3JwVEhO?=
- =?utf-8?B?eDJOU1J2b1pIdk1halVyRUhvRTBjMWJPUURFeTVWYTVVM2c2RDNYR0FJT3M2?=
- =?utf-8?B?VUg0THFNVjJ5K29xbFk3dnV1cU1ZVXFMUi9YT2pzTGpJSlNNTlpQYmx2Sk5P?=
- =?utf-8?B?Z2NGdEtOdU4xSmNXRUZpZ1g3bVVBcldYcWFOL1J2ZG9LR2FBeUs1dlU0QXZF?=
- =?utf-8?B?R3hTSDlRZU8vSVhXVkZLS2tYSFZZK25EcVU2WFA4UVloTml3VVFxZlpsYXZL?=
- =?utf-8?B?ZnJpcFpNNUg3RnQyblBxamI3Qi92WUQzZ2tWbGRZYzRHOGdMYmRCdSt6cUd3?=
- =?utf-8?B?RW1OaXY3eGl1Vi9YbGFFUEh1a2tGSlJBc3MvdGErOEgxeDV2cmZaSW11SVZR?=
- =?utf-8?B?K2dGOXVWZnFTcW92ci9CbXp6UHNYTDR3dEdiMHppR3B3SVNwQk5ONnZNak9W?=
- =?utf-8?B?Zjd2aG0xdUFBSWhrVldMN0paWnVEV0F3NHhHQUV5MjJRZXhwTzcwcjdWeW1T?=
- =?utf-8?B?NUJ4S0lKaTlpL25aMUJnNWVlMHlOVWVZWkRSY05tVXRiMFRHZUJJM2VoZGJ0?=
- =?utf-8?B?MzV1QXBCMEo3Ti81bzE2dm5SM2NkV3NXYXJuR2JaZW9MMVRUcExONFlCWkVG?=
- =?utf-8?B?S2JkTTdFTlZpUTIyYiswN3NxSWJJMU52SUM3M0E2YTk2c2RoUFp4cGFjL2V1?=
- =?utf-8?B?SXk1SkZWaFZHZnptdTBnK1VMdFVqYTBSdzBTaEJJQlNaY3VMVEdKbk9XYmdr?=
- =?utf-8?B?QVJialNGdjRyMWtuMEE0cjg5eHVWd0YxWWM0WWtXZCtvRUU4bHhYdzVtYmVF?=
- =?utf-8?B?VVllenR6KzNRamFTNDkvMXpMRjAxQ2d5aFlOLy9uc3NrdW5OSW9SK0l2V3V0?=
- =?utf-8?B?Y3BNWVR4QzZEWGdwRldXeFF6S283Vys1SlNiSEhWb1ZIRjR2QjZOSkxTQnZu?=
- =?utf-8?B?ZFFvUW94c2phc0UxRTE1bFFhN3ZJUlE3Z2Z1cVl1bGdzME45RzVVelhFaGF1?=
- =?utf-8?B?K1cvUm5SUDF2NDE0bklJU1RuSndqRmVXbE85eHd6RUtXNXluN09qM0hpdTFP?=
- =?utf-8?B?MFBKUmhFMnZUS25rZ1V2LzV5ZHVKcXc1a05ndUdBMmlFaFdQYUFSekplUEQ5?=
- =?utf-8?B?QzdoTFhaOW84TDUxdkQvRWNmQ2MrRzFNR2NMTm5TdmNabXViQWlPNkRYUStv?=
- =?utf-8?B?ZGJCZFd3a015ejY0ekYvKzlaVEQzZTBvRDVqZDRTWHByOXRTUjF3Q1JDMHpu?=
- =?utf-8?B?QzhUbDEyaXhJbk1GRmpEWjZpN2NPUjI1QWJnNmh3YWdkNDFMdlo0dDdIN1dW?=
- =?utf-8?B?T2M4MlRPcGlzWlNsUEZsQ3ozdmZiZnhqd3NGUllOTE8ydW9uNkF4NWZtblIw?=
- =?utf-8?B?SGNaNTJkRnE5RVkrVWYwT0kxTmJic0ZsTlNUby8wZEdnTVl0cW80dWtxa2I3?=
- =?utf-8?B?cVFtUXJ5SEdWWERoVEQxNFY5WGJhWjNDbjhlRTQxVTlVenBKd2VIY2FSN0Uv?=
- =?utf-8?B?bFdRRUpMdWpXbGJyWjlMVzNQTDNSZzU0RkZsdm1zWlhFSE5OV2NFOTBiaE5K?=
- =?utf-8?B?S0F1dzczSldIRkdWZWVWNUpBNkIxckFCbFJ5RjIydlRXV3pHMnNEYWtGaWts?=
- =?utf-8?B?RVZBajNYVGJ1aFJSRVF6aFJOZE1jLytnek1TWXJvSWRQWG5OZFE4Rm9IL1NN?=
- =?utf-8?B?bXFnZDlhMEZQWEU0cG5vNm50QzZBSG9kOWNJR0hUcjZwbzRBaktvTUxJb3Uz?=
- =?utf-8?B?Unp3MzhGOW00NmUxNlBxYmNlcWxGQlBRM2dvZ1UveUtaK3lTeTlLSmZaLzhz?=
- =?utf-8?B?Qm5DZlBQODd5akNKMlgwRVhUb2xjcWZSZDZOdS94T0ZCdHRjUzVLUndrOTU1?=
- =?utf-8?B?UllzZ3FWY1FFclg2bXkrODNlSnhLR1FuVmpoNzhSc2hjN3NNekJ5bG1TTThX?=
- =?utf-8?B?M3NFaDlvM2p3NU9BcENwa01zQ1ovZjNKSDJVYkFlWUJtNW5hVzdlZU9vRnVY?=
- =?utf-8?B?MDhmSlhMTFZEZGdyT0J2b0dhWDlTS0pjd2szaEltelRLUmVUWHkyV0Q4UzU3?=
- =?utf-8?B?dHNpM05xNk16Vkx3VXcwYWlGNHc4WWRWMVlFZ1B2UWFnOTZLMk5UZTFGN0J2?=
- =?utf-8?B?dCtPZHU5bzRIL2xuOUlyOVl5THJXZTBpaC90L0ZjcE1uQStlUW1VNWI3MnFM?=
- =?utf-8?B?THFrRXJTdmJpaEZXdDM1NzdoRW5UbXpqYUFpQWU2THNsU3BOcjJJUT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <256DBAF2FDE1ED40AF6D0F4C9C9D3A06@namprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dqKlM2Eh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1784555179; x=1816091179;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=udFasIY9Rb0UfcbSDubYr+XDtVjyOQA3Foc5ndt7KgM=;
+  b=dqKlM2EhwutM2301Nn94RFi7gqFQvo3Nc9aMUFFdhzcQLRdMZkj69kZy
+   iEgiyy9WBvAEVvDz/1tB/KOmycfmC9MJezCnKQ+TZsAwjaL2DWXuorUEk
+   Zz0IJ/xHi4CHKBAJFHfXo10yDOIl1CSTD71Y3KwEGpmZ6z+1KueTqgxwt
+   h8zVSB9N3vQTLYT8kx7T+NZ/4wlyS+H0dTp92/+CamwOHDJLPyKoU1Tpa
+   KoSy4G+8NioyDO2a2c4HD5l6foweUXrgKmAQLR5+Dk1HLEZiTKh7NYpZU
+   pYxyBf3rn/QttYXSMgoTcl3Yrnv/0n1RHeOnF4kbODMZrYW14UDprdSP2
+   A==;
+X-CSE-ConnectionGUID: glLi2ncIS4GCMnmsBWst/g==
+X-CSE-MsgGUID: gIvZlAHWRmKuZKsGySzMAA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11852"; a="95787529"
+X-IronPort-AV: E=Sophos;i="6.25,174,1779174000"; 
+   d="scan'208";a="95787529"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2026 06:46:18 -0700
+X-CSE-ConnectionGUID: CmP89ar/TwymSD4TAIrcQA==
+X-CSE-MsgGUID: hpGvypPJR2qrqHu7h6OUHw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,174,1779174000"; 
+   d="scan'208";a="261024072"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.144])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2026 06:46:15 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 20 Jul 2026 16:46:11 +0300 (EEST)
+To: Alex Yeo <alexyeo362@gmail.com>
+cc: platform-driver-x86@vger.kernel.org, 
+    Kenneth Chan <kenneth.t.chan@gmail.com>, Hans de Goede <hansg@kernel.org>, 
+    Guenter Roeck <linux@roeck-us.net>, LKML <linux-kernel@vger.kernel.org>, 
+    linux-hwmon@vger.kernel.org
+Subject: Re: [RFC PATCH v7] platform/x86: panasonic-laptop: add fan speed
+ mode for newer models
+In-Reply-To: <20260718185704.3466-1-alexyeo362@gmail.com>
+Message-ID: <fcf57a96-b2ad-c7d5-0d6d-6d760b915195@linux.intel.com>
+References: <b557e1f6-2072-496f-8eaa-d2899d1bded4@linux.intel.com> <20260718185704.3466-1-alexyeo362@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: altera.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR03MB5950.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c0e00065-e4f7-4f1c-9ebc-08dee65ca320
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2026 12:44:28.0986
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: fbd72e03-d4a5-4110-adce-614d51f2077a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Y99TqSZQR5gVrhtgryar8Vy5DvlmN+au1e71iFqgqRNB7ERYi5d25qXphIFXacG+TI4Yfz68x+T33022Uph5DA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR03MB7727
+Content-Type: text/plain; charset=US-ASCII
 
-T24gMjAvNy8yMDI2IDEyOjIxIHBtLCBHdWVudGVyIFJvZWNrIHdyb3RlOg0KPiBPbiA3LzE5LzI2
-IDIwOjM2LCBzYXNoaWtvLWJvdEBrZXJuZWwub3JnIHdyb3RlOg0KPj4gVGhhbmsgeW91IGZvciB5
-b3VyIGNvbnRyaWJ1dGlvbiEgU2FzaGlrbyBBSSByZXZpZXcgZm91bmQgMiBwb3RlbnRpYWwgDQo+
-PiBpc3N1ZShzKSB0byBjb25zaWRlcjoNCj4+IC0gW0hpZ2hdIE1pc3NpbmcgYnJlYWsgaW4gYXN5
-bmMgcG9sbCBsb29wIGNhdXNlcyBzZXZlcmUga2VybmVsIGxvZyANCj4+IHNwYW0gYW5kIHVubmVj
-ZXNzYXJ5IGJsb2NraW5nIG9uIGhhcmQgZXJyb3JzLg0KPj4gLSBbSGlnaF0gU3luY2hyb25vdXMg
-cmVhZCB0aW1lb3V0cyBsZWF2ZSBzdGFsZSByZXF1ZXN0cyBpbiB0aGUgY2hhbm5lbCANCj4+IEZJ
-Rk8sIGNhdXNpbmcgYWxsIHN1YnNlcXVlbnQgcmVhZHMgdG8gcHJvY2VzcyBzdGFsZSBkYXRhIGFu
-ZCByZXR1cm4gDQo+PiBtaXNtYXRjaGVkIHNlbnNvciB2YWx1ZXMuDQo+PiAtLSANCj4+DQo+PiAt
-LS0gUGF0Y2ggWzJdOiBbUEFUQ0ggdjYgMi8yXSBod21vbjogYWRkIEFsdGVyYSBTb0MgRlBHQSBo
-YXJkd2FyZSANCj4+IG1vbml0b3JpbmcgZHJpdmVyIC0tLQ0KPj4gY29tbWl0IGFiNmMwYzBmOTVk
-Mzg5MGQ3NTllMDRkOWQ5YWVjZDE1MWQ2NDA2ZmQNCj4+IEF1dGhvcjogVHplIFllZSBOZyA8dHpl
-LnllZS5uZ0BhbHRlcmEuY29tPg0KPj4gU3ViamVjdDogaHdtb246IGFkZCBBbHRlcmEgU29DIEZQ
-R0EgaGFyZHdhcmUgbW9uaXRvcmluZyBkcml2ZXINCj4+DQo+PiBUaGlzIGNvbW1pdCBhZGRzIGEg
-aGFyZHdhcmUgbW9uaXRvcmluZyBkcml2ZXIgZm9yIEFsdGVyYSBTb0MgRlBHQSANCj4+IGRldmlj
-ZXMgdXNpbmcNCj4+IHRoZSBTdHJhdGl4IDEwIHNlcnZpY2UgbGF5ZXIuDQo+Pg0KPj4+IGRpZmYg
-LS1naXQgYS9kcml2ZXJzL2h3bW9uL3NvY2ZwZ2EtaHdtb24uYyBiL2RyaXZlcnMvaHdtb24vc29j
-ZnBnYS0gDQo+Pj4gaHdtb24uYw0KPj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+Pj4gaW5kZXgg
-MDAwMDAwMDAwMDAwMC4uNzI0MTgyMDFiNjVkNg0KPj4+IC0tLSAvZGV2L251bGwNCj4+PiArKysg
-Yi9kcml2ZXJzL2h3bW9uL3NvY2ZwZ2EtaHdtb24uYw0KPj4gWyAuLi4gXQ0KPj4+ICtzdGF0aWMg
-aW50IHNvY2ZwZ2FfaHdtb25fYXN5bmNfcmVhZChzdHJ1Y3QgZGV2aWNlICpkZXYsDQo+Pj4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGVudW0gaHdtb25fc2Vuc29yX3R5
-cGVzIHR5cGUsDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN0
-cnVjdCBzdHJhdGl4MTBfc3ZjX2NsaWVudF9tc2cgKm1zZykNCj4+PiArew0KPj4gWyAuLi4gXQ0K
-Pj4+ICvCoMKgwqAgcmV0ID0gLUVUSU1FRE9VVDsNCj4+PiArwqDCoMKgIHdoaWxlICghdGltZV9h
-ZnRlcihqaWZmaWVzLCBkZWFkbGluZSkpIHsNCj4+PiArwqDCoMKgwqDCoMKgwqAgc3RhdHVzID0g
-c3RyYXRpeDEwX3N2Y19hc3luY19wb2xsKHByaXYtPmNoYW4sIGhhbmRsZSwgJmRhdGEpOw0KPj4+
-ICvCoMKgwqDCoMKgwqDCoCBpZiAoc3RhdHVzID09IC1FQUdBSU4pIHsNCj4+PiArwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCBkZXZfZGJnKGRldiwgIkFzeW5jIG1lc3NhZ2UgaXMgc3RpbGwgaW4gcHJv
-Z3Jlc3NcbiIpOw0KPiANCj4gVGhpcyBhbHNvIGNyZWF0ZXMgYSBsb3Qgb2Ygbm9pc2UgaWYgZGVi
-dWdnaW5nIGlzIGFjdGl2ZS4gSSBkb24ndCBrbm93DQo+IGhvdyBsb25nIHRoZSBjb21tYW5kIHVz
-dWFsbHkgdGFrZXMsIGJ1dCBpdCBkb2VzIHNlZW0gdG8gbWUgdGhhdCB0aGlzIGRlYnVnDQo+IG1l
-c3NhZ2UgaXNuJ3QgcmVhbGx5IGhlbHBmdWwuDQo+IA0KPj4+ICvCoMKgwqDCoMKgwqDCoCB9IGVs
-c2UgaWYgKHN0YXR1cyA8IDApIHsNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBkZXZfYWxl
-cnQoZGV2LCAiRmFpbGVkIHRvIHBvbGwgYXN5bmMgbWVzc2FnZTogJWRcbiIsIA0KPj4+IHN0YXR1
-cyk7DQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0ID0gLUVUSU1FRE9VVDsNCj4+DQo+
-PiBbU2V2ZXJpdHk6IEhpZ2hdDQo+PiBEb2VzIHRoaXMgbG9vcCBuZWVkIGEgYnJlYWsgc3RhdGVt
-ZW50IGhlcmUgd2hlbiBzdGF0dXMgPCAwPw0KPj4NCj4+IElmIHN0cmF0aXgxMF9zdmNfYXN5bmNf
-cG9sbCgpIHJldHVybnMgYSBoYXJkIGVycm9yLCB0aGUgY29kZSBzZXRzDQo+PiByZXQgPSAtRVRJ
-TUVET1VUIGJ1dCBjb250aW51ZXMgdG8gbG9vcCBmb3IgdXAgdG8gMiBzZWNvbmRzLiBUaGlzIGNv
-dWxkDQo+PiBmbG9vZCB0aGUga2VybmVsIGxvZyB3aXRoIGRldl9hbGVydCgpIG1lc3NhZ2VzIG9u
-IGV2ZXJ5IDFtcyByZXRyeS4NCj4+DQo+IA0KPiBTYXNoaWtvIGhhcyBhIGdvb2QgcG9pbnQsIGVz
-cGVjaWFsbHkgc2luY2UgdGhlIGZ1bmN0aW9uIHJldHVybnMNCj4gLUVJTlZBTCB3aGljaCwgaWYg
-c2Vlbiwgc2VlbXMgdG8gYmXCoCBfcmVhbF8gaGFyZCBlcnJvciBhbmQgcmV0cnlpbmcNCj4gc2Vl
-bXMgcG9pbnRsZXNzLiBBbHNvLCB3aHkgcmVwbGFjZSAtRUlOVkFMIHdpdGggLUVUSU1FRE9VVCA/
-DQo+IFRoYXQgd291bGQgbmVlZCBhbiBleHBsYW5hdGlvbi4NCj4gDQo+IE9uIHRvcCBvZiB0aGF0
-LCAicmV0ID0gLUVUSU1FRE9VVDsiIGlzIHBvaW50bGVzcyBoZXJlIHNpbmNlIHJldCBpcw0KPiBh
-bHJlYWR5IHNldCB0byAtRVRJTUVET1VULg0KPiANCj4gT2gsIGFuZCB0aGUgY2FsbGVkIGNvZGUg
-YWxyZWFkeSBkaXNwbGF5cyBhbiBlcnJvciBtZXNzYWdlIHVubGVzcw0KPiB0aGUgcGFyYW1ldGVy
-cyBhcmUgYmFkLg0KPiANCg0KQWdyZWVkLiBJbiB2NyBJJ2xsIGJyZWFrIG91dCBvZiB0aGUgcG9s
-bCBsb29wIG9uIGhhcmQgZXJyb3JzLCByZXR1cm4gdGhlIA0KcmVhbCBwb2xsIGVycm9yIGluc3Rl
-YWQgb2YgLUVUSU1FRE9VVCwgZHJvcCB0aGUgcmVkdW5kYW50IGFsZXJ0IChTVkMgDQphbHJlYWR5
-IGxvZ3MpIGFuZCByZW1vdmUgdGhlIC1FQUdBSU4gZGVidWcgcHJpbnQuDQoNCj4+PiArwqDCoMKg
-wqDCoMKgwqAgfSBlbHNlIGlmIChzdGF0dXMgPT0gMCkgew0KPj4+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIHJldCA9IDA7DQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgYnJlYWs7DQo+Pj4g
-K8KgwqDCoMKgwqDCoMKgIH0NCj4+PiArwqDCoMKgwqDCoMKgwqAgbXNsZWVwKEhXTU9OX1JFVFJZ
-X1NMRUVQX01TKTsNCj4gDQo+IEkgd291bGQgc3VnZ2VzdCB0byB1c2UgdXNsZWVwX3JhbmdlKCku
-DQo+IA0KDQpBZ3JlZWQuIEluIHY3IEknbGwgc3dpdGNoIHRoZSBzaG9ydCB3YWl0cyB0byB1c2xl
-ZXBfcmFuZ2UoKS4NCg0KPj4+ICvCoMKgwqAgfQ0KPj4gWyAuLi4gXQ0KPj4+ICtzdGF0aWMgaW50
-IHNvY2ZwZ2FfaHdtb25fc3luY19yZWFkKHN0cnVjdCBkZXZpY2UgKmRldiwNCj4+PiArwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGVudW0gaHdtb25fc2Vuc29yX3R5cGVzIHR5
-cGUsDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3Qgc3Ry
-YXRpeDEwX3N2Y19jbGllbnRfbXNnICptc2cpDQo+Pj4gK3sNCj4+IFsgLi4uIF0NCj4+PiArwqDC
-oMKgIHJldCA9IHN0cmF0aXgxMF9zdmNfc2VuZChwcml2LT5jaGFuLCBtc2cpOw0KPj4+ICvCoMKg
-wqAgaWYgKHJldCA8IDApDQo+Pj4gK8KgwqDCoMKgwqDCoMKgIGdvdG8gc3RhdHVzX2RvbmU7DQo+
-Pj4gKw0KPj4+ICvCoMKgwqAgcmV0ID0gd2FpdF9mb3JfY29tcGxldGlvbl90aW1lb3V0KCZwcml2
-LT5jb21wbGV0aW9uLCANCj4+PiBIV01PTl9USU1FT1VUKTsNCj4+PiArwqDCoMKgIGlmICghcmV0
-KSB7DQo+Pj4gK8KgwqDCoMKgwqDCoMKgIGRldl9lcnIocHJpdi0+Y2xpZW50LmRldiwgInRpbWVv
-dXQgd2FpdGluZyBmb3IgU01DIGNhbGxcbiIpOw0KPj4+ICvCoMKgwqDCoMKgwqDCoCByZXQgPSAt
-RVRJTUVET1VUOw0KPj4+ICvCoMKgwqDCoMKgwqDCoCBnb3RvIHN0YXR1c19kb25lOw0KPj4NCj4+
-IFtTZXZlcml0eTogSGlnaF0NCj4+IElmIGEgdGltZW91dCBvY2N1cnMgaGVyZSwgY291bGQgdGhl
-IHVuZnVsZmlsbGVkIHJlcXVlc3QgcmVtYWluIGluIHRoZQ0KPj4gU1ZDIGNoYW5uZWwncyBGSUZP
-Pw0KPj4NCj4+IFdoZW4gdGhlIHRpbWVvdXQgaGl0cywgdGhpcyBwYXRoIGNhbGxzIHN0cmF0aXgx
-MF9zdmNfZG9uZSgpIHdoaWNoIA0KPj4gc3RvcHMgdGhlDQo+PiB3b3JrZXIgdGhyZWFkLCBidXQg
-aXQgZG9lc24ndCBhcHBlYXIgdG8gcmVtb3ZlIHRoZSByZXF1ZXN0IGZyb20gY2hhbi0gDQo+PiA+
-c3ZjX2ZpZm8uDQo+Pg0KPj4gV291bGQgdGhlIG5leHQgc2Vuc29yIHJlYWQgZW5xdWV1ZSBhIG5l
-dyByZXF1ZXN0IGFuZCByZWNlaXZlIHRoZSBzdGFsZSANCj4+IGRhdGENCj4+IGZyb20gdGhpcyB0
-aW1lZC1vdXQgcmVxdWVzdCwgcGVybWFuZW50bHkgZGVzeW5jaHJvbml6aW5nIGFsbCBzdWJzZXF1
-ZW50DQo+PiBzZW5zb3IgcmVhZGluZ3M/DQo+Pg0KPiANCj4gUGxlYXNlIGVpdGhlciBhZGRyZXNz
-IG9yIGV4cGxhaW4gd2h5IGl0IGlzIG5vdCBhIHByb2JsZW0uDQo+IA0KPiBUaGFua3MsDQo+IEd1
-ZW50ZXINCj4gDQoNClllcywgdGhhdCByYWNlIGlzIHJlYWwgaWYgdGhlIHdvcmtlciBleGl0cyB2
-aWEga3RocmVhZF9zaG91bGRfc3RvcCgpIA0KYmVmb3JlIGRlcXVldWluZy4gc3RyYXRpeDEwX3N2
-Y19kb25lKCkgc3RvcHMgdGhlIHRocmVhZCBidXQgZG9lcyBub3QgDQpmbHVzaCBzdmNfZmlmby4N
-Cg0KRm9yIHRoaXMgZHJpdmVyIEkgd2lsbCBpbnZhbGlkYXRlIGFuIGluLWZsaWdodCB0cmFuc2Zl
-ciBnZW5lcmF0aW9uIGFmdGVyIA0KYSB0aW1lb3V0IHNvIGEgbGF0ZS9zdGFsZSBjYWxsYmFjayBj
-YW5ub3QgY29tcGxldGUgdGhlIG5leHQgcmVhZC4gQSANCnByb3BlciBGSUZPIGRyYWluIGluIHN0
-cmF0aXgxMF9zdmNfZG9uZSgpIHdvdWxkIHN0aWxsIGJlIHVzZWZ1bCBhcyBhIA0KZm9sbG93LXVw
-IGluIHRoZSBzZXJ2aWNlIGxheWVyLg0KDQo+Pj4gK8KgwqDCoCB9DQo+Pj4gKw0KPj4+ICvCoMKg
-wqAgcmV0ID0gcHJpdi0+bGFzdF9lcnI7DQo+Pj4gKw0KPj4+ICtzdGF0dXNfZG9uZToNCj4+PiAr
-wqDCoMKgIHN0cmF0aXgxMF9zdmNfZG9uZShwcml2LT5jaGFuKTsNCj4+PiArwqDCoMKgIHJldHVy
-biByZXQ7DQo+Pj4gK30NCj4+DQo+IA0KDQo=
+On Sun, 19 Jul 2026, Alex Yeo wrote:
+
+> I have a CF-SR4 and Linux works out of the box. Compared to
+> previous models, this one seems to have the fans running at high speed
+> by default when the computer starts.
+> 
+> When Windows 11 is booted up, the high fan speeds persist just until the
+> login screen. Once the login screen shows up, the fan spins down.
+> 
+> I had suspected that this might be the laptop ramping down the fans when
+> the OS declares that it is Windows but this does not seem to be the
+> case.
+> 
+> After analyzing the DSDT and SSDT of the computer, I have found the
+> following:
+> 
+> File ssdt10.dsl under \_SB.PC00.LPCB.EC0:
+> 
+> Name (CEFM, Zero)
+> Method (SEFM, 1, Serialized)
+> {
+>     CEFM = Arg0
+>     REFM ()
+> }
+> 
+> Method (REFM, 0, Serialized)
+> {
+>     If ((\S0IX == 0x03))
+>     {
+>         Local0 = 0x05
+>     }
+>     ElseIf ((CEFM == Zero))
+>     {
+>         Local0 = Zero
+>     }
+>     Else
+>     {
+>         Local0 = 0x02
+>     }
+> 
+>     \_SB.PC00.LPCB.EC0.EC88 (0xB5, 0x79, Local0, Zero)
+> }
+> 
+> \_SB.PC00.LPCB.EC0.CEFM would seem be the current value
+> for the fan profile. On startup, this is set to 0.
+> 
+> Based on the code SEFM seems the be the method to set the fan
+> profile and REFM is executed right after.
+> 
+> I don't have access to information as to what the argument officially
+> means but based on testing, any number above zero makes the fans spin
+> down and behave like the older models where it stops or runs at low
+> speed when its cool and ramps up when the processor gets hot.
+> 
+> The only relevant values for CEFM seem to be just 0 and any number above
+> that just gets treated the same. I personally use just 0 and 1.
+> 0 seems to be the high fan speed mode and 1 makes it behave like
+> Windows.
+> 
+> Giving 0 as an argument reverts the fan back to the way it was during
+> startup where the lowest fan speed is quite high and when load is
+> applied, it seems to ramp up to an even higher speed which I think would
+> be its 100%.
+> 
+> A value of 1 seems to have its max speed capped lower than 0.
+> 
+> For both modes, fan management is still automatic.
+> 
+> fan_mode only shows up in sysfs only if \_SB.PC00.LPCB.EC0.CEFM and
+> \_SB.PC00.LPCB.EC0.SEFM are both present which should mean it should not
+> show up on unsupported models. I have tried not hiding it and it just
+> outputs a generic error when the value is read.
+> 
+> I also saw that variables such as eco_mode are kept in memory, however
+> for fan_mode I rely on getting and setting the value via ACPI.
+> 
+> Signed-off-by: Alex Yeo <alexyeo362@gmail.com>
+> ---
+>  drivers/platform/x86/panasonic-laptop.c | 500 +++++++++++++++++++++++-
+>  1 file changed, 486 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/panasonic-laptop.c b/drivers/platform/x86/panasonic-laptop.c
+> index b83113c26f88..2d67188de2a9 100644
+> --- a/drivers/platform/x86/panasonic-laptop.c
+> +++ b/drivers/platform/x86/panasonic-laptop.c
+> @@ -119,6 +119,9 @@
+>   *		- v0.1  start from toshiba_acpi driver written by John Belmonte
+>   */
+>  
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <linux/printk.h>
+>  #include <linux/acpi.h>
+>  #include <linux/backlight.h>
+>  #include <linux/bits.h>
+> @@ -136,6 +139,14 @@
+>  #include <linux/types.h>
+>  #include <linux/uaccess.h>
+>  #include <acpi/video.h>
+> +#include <linux/sysfs.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/hwmon-sysfs.h>
+> +#include <linux/thermal.h>
+> +#include <linux/dmi.h>
+> +#include <linux/errno.h>
+> +#include <linux/cleanup.h>
+> +#include <linux/minmax.h>
+
+Includes should be added in alphabetical order (per each subdirectory 
+block).
+
+>  
+>  MODULE_AUTHOR("Hiroshi Miura <miura@da-cha.org>");
+>  MODULE_AUTHOR("David Bronaugh <dbronaugh@linuxboxen.org>");
+> @@ -164,6 +175,17 @@ MODULE_LICENSE("GPL");
+>  
+>  #define ACPI_PCC_INPUT_PHYS	"panasonic/hkey0"
+>  
+> +/* Define fan PWM modes */
+> +#define ACPI_PCC_FAN_PWM_AUTO		0x00
+> +#define ACPI_PCC_FAN_PWM_MANUAL		0x01
+> +#define HWMON_PCC_FAN_PWM_AUTO		0x02
+> +#define HWMON_PCC_FAN_PWM_MANUAL	0x01
+> +
+> +/* Define quirks for this driver */
+> +struct quirk_entry {
+> +	bool has_ospm_pwm_fan;
+> +};
+> +
+>  /* LCD_TYPEs: 0 = Normal, 1 = Semi-transparent
+>     ECO_MODEs: 0x03 = off, 0x83 = on
+>  */
+> @@ -238,19 +260,50 @@ static const struct key_entry panasonic_keymap[] = {
+>  };
+>  
+>  struct pcc_acpi {
+> -	acpi_handle		handle;
+> -	unsigned long		num_sifr;
+> -	int			sticky_key;
+> -	int			eco_mode;
+> -	int			mute;
+> -	int			ac_brightness;
+> -	int			dc_brightness;
+> -	int			current_brightness;
+> -	u32			*sinf;
+> -	struct acpi_device	*device;
+> -	struct input_dev	*input_dev;
+> -	struct backlight_device	*backlight;
+> -	struct platform_device	*platform;
+> +	acpi_handle			handle;
+> +	unsigned long			num_sifr;
+> +	int				sticky_key;
+> +	int				eco_mode;
+> +	int				mute;
+> +	int				ac_brightness;
+> +	int				dc_brightness;
+> +	int				current_brightness;
+> +	u32				*sinf;
+> +	struct quirk_entry		*quirks;
+> +	struct acpi_device		*device;
+> +	struct input_dev		*input_dev;
+> +	struct backlight_device		*backlight;
+> +	struct platform_device		*platform;
+> +	struct thermal_cooling_device	*pwm_fan_cdev;
+> +	struct device			*pwm_fan_hwmon;
+> +
+> +	/*
+> +	 * This mutex ensures that the hwmon and thermal functions
+> +	 * for fan operations do not conflict as the PWM fan is
+> +	 * exposed to both.
+> +	 */
+> +	struct mutex			pwm_fan_lock;
+> +};
+> +
+> +/*
+> + * Declare quirks
+> + */
+> +
+> +static struct quirk_entry quirk_cf_sr4 = {
+> +	.has_ospm_pwm_fan = true,
+> +};
+> +
+> +/* DMI matching for quirks copied from asus-nb-wmi.c */
+> +static const struct dmi_system_id pcc_quirks[] = {
+> +	{
+> +		.ident = "Panasonic Connect Co., Ltd. CFSR4-1",
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "Panasonic Connect Co., Ltd."),
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "CFSR4-1"),
+> +		},
+> +		.driver_data = &quirk_cf_sr4,
+> +	},
+> +	{},
+>  };
+>  
+>  /*
+> @@ -415,7 +468,6 @@ static const struct backlight_ops pcc_backlight_ops = {
+>  	.update_status	= bl_set_status,
+>  };
+>  
+> -
+>  /* returns ACPI_SUCCESS if methods to control optical drive are present */
+
+Unrelated change.
+
+>  
+>  static acpi_status check_optd_present(void)
+> @@ -507,6 +559,155 @@ static int set_optd_power_state(int new_state)
+>  	return result;
+>  }
+>  
+> +/* get OSPM fan mode */
+> +
+> +static int pcc_pwm_fan_mode_read(int *pwm_mode)
+> +{
+> +	unsigned long long state;
+> +	acpi_status status;
+> +
+> +	/* BIOS default is zero which seems to be some sort of failsafe mode */
+> +	status = acpi_evaluate_integer(NULL, "\\_SB.PC00.LPCB.EC0.CEFM", NULL,
+> +				       &state);
+> +	if (ACPI_FAILURE(status)) {
+> +		pr_err("cannot get fan mode via CEFM\n");
+> +		return -EIO;
+> +	}
+> +
+> +	/* use hwmon convention for pwm_mode */
+> +	if (state == ACPI_PCC_FAN_PWM_AUTO) {
+> +		*pwm_mode = HWMON_PCC_FAN_PWM_AUTO;
+> +	} else if (state != 0 && state > 0) {
+> +		*pwm_mode = HWMON_PCC_FAN_PWM_MANUAL;
+> +	} else {
+> +		/* unknown */
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/* set OSPM fan mode */
+> +
+> +static int pcc_pwm_fan_mode_set(int pwm_mode)
+> +{
+> +	acpi_status status;
+> +
+> +	union acpi_object param[1];
+> +	struct acpi_object_list input;
+
+Don't leave empty lines in between variable declarations. Please use 
+reverse-xmas tree order when you can (when no internal dependencies 
+between local var don't force your hand).
+
+> +
+> +	param[0].type = ACPI_TYPE_INTEGER;
+> +	param[0].integer.value = pwm_mode;
+> +	input.count = 1; /* takes one arg */
+
+Remove comment.
+
+> +	input.pointer = param;
+> +
+> +	status = acpi_evaluate_object(NULL, "\\_SB.PC00.LPCB.EC0.SEFM", &input,
+> +				      NULL);
+> +	if (ACPI_FAILURE(status)) {
+> +		pr_err("cannot set fan mode via SEFM\n");
+> +		return -EIO;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/* read PWM fan speed */
+
+This comments adds zero value over what the function name already tells 
+us. Please don't add comments that state obvious things.
+
+> +
+> +static int pcc_pwm_fan_speed_read(int *pwm_speed)
+> +{
+> +	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+> +	acpi_status status;
+> +	int pwm_mode;
+> +
+> +
+> +	/* Get fan status first */
+> +	/* If fan is not in manual mode, it will return a bogus value */
+> +	status = pcc_pwm_fan_mode_read(&pwm_mode);
+> +	if (status < 0) {
+> +		pr_err("failed to get fan status\n");
+> +		return status;
+> +	}
+> +
+> +	if (pwm_mode == HWMON_PCC_FAN_PWM_AUTO)
+> +		return -ENODATA; /* Indeterminate value */
+> +
+> +	/* get pwm speed */
+> +	status = acpi_evaluate_object(NULL, "\\_SB.PC00.LPCB.EC0.TFN1._FST",
+> +				      NULL, &buffer);
+> +	if (ACPI_FAILURE(status)) {
+> +		pr_err("failed to get pwm speed\n");
+> +		return -EIO;
+> +	}
+> +
+> +	union acpi_object *obj __free(kfree) = buffer.pointer;
+> +
+> +	/* the structure should have 3 values */
+
+That's what can be easily read from the code. There's no need to comment 
+trivialities like this.
+
+> +	if (!obj || obj->type != ACPI_TYPE_PACKAGE || obj->package.count < 2) {
+> +		pr_err("Invalid _FST package structure (expected 3)\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* the second element should be the pwm speed as an int */
+> +	if (obj->package.elements[1].type != ACPI_TYPE_INTEGER) {
+> +		pr_err("_FST element at index 1 is not an integer\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* prevent out-of-bounds */
+> +	if (obj->package.elements[1].integer.value > 100) {
+> +		pr_err("_FST element at index 1 is an integer out of bounds\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	*pwm_speed = obj->package.elements[1].integer.value;
+> +	return 0;
+> +}
+> +
+> +/* set PWM fan speed */
+> +
+> +static int pcc_pwm_fan_speed_set(int set_pwm_speed)
+> +{
+> +	struct acpi_object_list input;
+> +	union acpi_object param[1];
+> +	acpi_status fsl_status;
+> +	int pwm_mode;
+> +	int status;
+> +
+> +	/* Get fan status. set to manual if not set */
+> +	status = pcc_pwm_fan_mode_read(&pwm_mode);
+> +	if (status < 0) {
+> +		pr_err("failed to get fan status\n");
+> +		return status;
+> +	}
+> +
+> +	if (pwm_mode == HWMON_PCC_FAN_PWM_AUTO) {
+> +		status = pcc_pwm_fan_mode_set(ACPI_PCC_FAN_PWM_MANUAL);
+> +		if (status < 0) {
+> +			pr_err("set fan PWM to manual failed\n");
+> +			return status;
+> +		}
+> +	}
+> +
+> +	/* check if within bounds */
+> +	if (set_pwm_speed < 0 || set_pwm_speed > 100) {
+> +		pr_err("fan speed level out of bounds\n");
+> +		return -EIO;
+> +	}
+> +
+> +	param[0].type = ACPI_TYPE_INTEGER;
+> +	param[0].integer.value = set_pwm_speed;
+> +	input.count = 1; /* takes one arg */
+> +	input.pointer = param;
+> +
+> +	fsl_status = acpi_evaluate_object(NULL, "\\_SB.PC00.LPCB.EC0.TFN1._FSL",
+> +				      &input, NULL);
+> +	if (ACPI_FAILURE(fsl_status)) {
+> +		pr_err("Setting of fan speed via ._FSL failed.\n");
+> +		return -EIO;
+> +	}
+> +
+> +	return 0;
+> +}
+>  
+>  /* sysfs user interface functions */
+>  
+> @@ -825,6 +1026,228 @@ static const struct attribute_group pcc_attr_group = {
+>  	.is_visible	= pcc_sysfs_is_visible,
+>  };
+>  
+> +/* hwmon */
+> +
+> +static const struct hwmon_channel_info *const pcc_pwm_fan_hwmon_info[] = {
+> +	HWMON_CHANNEL_INFO(pwm, HWMON_PWM_INPUT | HWMON_PWM_ENABLE),
+> +	NULL
+> +};
+> +
+> +static int pcc_pwm_fan_hwmon_speed_read(struct pcc_acpi *pcc, long *val)
+> +{
+> +	int pwm_speed;
+> +	int status;
+> +
+> +	guard(mutex)(&pcc->pwm_fan_lock);
+> +
+> +	status = pcc_pwm_fan_speed_read(&pwm_speed);
+> +	if (status < 0)
+> +		return status;
+> +
+> +	/* protect against out-of-bounds */
+> +	if (pwm_speed < 0 || pwm_speed > 100)
+> +		return -EINVAL;
+> +
+> +	*val = (pwm_speed * 255) / 100;
+> +	return 0;
+> +}
+> +
+> +static int pcc_pwm_fan_hwmon_mode_read(struct pcc_acpi *pcc, long *val)
+> +{
+> +	int pwm_mode;
+> +	int status;
+> +
+> +	guard(mutex)(&pcc->pwm_fan_lock);
+> +
+> +	status = pcc_pwm_fan_mode_read(&pwm_mode);
+> +	if (status < 0) {
+> +		pr_err("failed to get fan pwm mode\n");
+> +		return status;
+> +	}
+> +
+> +	switch (pwm_mode) {
+> +	case HWMON_PCC_FAN_PWM_AUTO:
+> +		*val = HWMON_PCC_FAN_PWM_AUTO;
+> +		return 0;
+> +	case HWMON_PCC_FAN_PWM_MANUAL:
+> +		*val = HWMON_PCC_FAN_PWM_MANUAL;
+> +		return 0;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static int pcc_pwm_fan_hwmon_read(struct device *dev,
+> +				  enum hwmon_sensor_types type, u32 attr,
+> +				  int channel, long *val)
+> +{
+> +	struct pcc_acpi *pcc = dev_get_drvdata(dev);
+> +
+> +	if (type != hwmon_pwm)
+> +		return -EOPNOTSUPP;
+> +
+> +	switch (attr) {
+> +	case hwmon_pwm_input:
+> +		return pcc_pwm_fan_hwmon_speed_read(pcc, val);
+> +	case hwmon_pwm_enable:
+> +		return pcc_pwm_fan_hwmon_mode_read(pcc, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int pcc_pwm_fan_hwmon_mode_set(struct pcc_acpi *pcc, long val)
+> +{
+> +	switch (val) {
+> +	case HWMON_PCC_FAN_PWM_AUTO:
+> +		guard(mutex)(&pcc->pwm_fan_lock);
+
+I'm not sure if clang is happy with how scoping is here so these should 
+have {} around each case.
+
+> +		return pcc_pwm_fan_mode_set(ACPI_PCC_FAN_PWM_AUTO);
+> +	case HWMON_PCC_FAN_PWM_MANUAL:
+> +		guard(mutex)(&pcc->pwm_fan_lock);
+> +		return pcc_pwm_fan_mode_set(ACPI_PCC_FAN_PWM_MANUAL);
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static int pcc_pwm_fan_hwmon_speed_set(struct pcc_acpi *pcc, long val)
+> +{
+> +	int pwm_speed_vendor_val;
+> +	int pwm_mode;
+> +	int status;
+> +
+> +	val = clamp_val(val, 0, 255);
+> +	pwm_speed_vendor_val = (val * 100) / 255;
+> +
+> +	guard(mutex)(&pcc->pwm_fan_lock);
+> +
+> +	/* check first if manual control is enabled */
+> +	status = pcc_pwm_fan_mode_read(&pwm_mode);
+> +	if (status < 0) {
+> +		pr_err("failed to get fan pwm mode\n");
+> +		return status;
+> +	}
+> +
+> +	/* do not allow settings speeds if not manual mode */
+> +	if (pwm_mode != HWMON_PCC_FAN_PWM_MANUAL)
+> +		return -EOPNOTSUPP;
+> +
+> +	status = pcc_pwm_fan_speed_set(pwm_speed_vendor_val);
+> +	if (status < 0) {
+> +		pr_err("failed to set fan pwm\n");
+> +		return status;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int pcc_pwm_fan_hwmon_write(struct device *dev,
+> +				   enum hwmon_sensor_types type, u32 attr,
+> +				   int channel, long val)
+> +{
+> +	struct pcc_acpi *pcc;
+> +
+> +	pcc = dev_get_drvdata(dev);
+
+And this is where I started to check whether you've ignored my earlier 
+feedback. Turns out you sent a new version without addressing the 
+feedback I've given you (and IIRC, it's not the first time this has 
+happened).
+
+The next time this happens, I'll move this submission and its subsequent 
+versions into a very low-priority bin to avoid wasting my time on it. So 
+please triple check twice you've addressed every single comment I (or 
+other potential reviewer) has given you on _any earlier version_ of the 
+patch before even considering sending the next version. There's no hurry 
+here, I won't be accepting half-baked patches so you'd just be wasting 
+everyone's time by sending it over and over again with things unaddressed.
+
+
+--
+ i.
+
+> +
+> +	if (type != hwmon_pwm)
+> +		return -EOPNOTSUPP;
+> +
+> +	switch (attr) {
+> +	case hwmon_pwm_enable:
+> +		return pcc_pwm_fan_hwmon_mode_set(pcc, val);
+> +	case hwmon_pwm_input:
+> +		return pcc_pwm_fan_hwmon_speed_set(pcc, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static umode_t pcc_pwm_fan_hwmon_is_visible(const void *data,
+> +					    enum hwmon_sensor_types type,
+> +					    u32 attr, int channel)
+> +{
+> +	if (type != hwmon_pwm)
+> +		return 0;
+> +
+> +	return 0644;
+> +}
+> +
+> +static const struct hwmon_ops pcc_pwm_fan_hwmon_ops = {
+> +	.is_visible = pcc_pwm_fan_hwmon_is_visible,
+> +	.read = pcc_pwm_fan_hwmon_read,
+> +	.write = pcc_pwm_fan_hwmon_write,
+> +};
+> +
+> +static const struct hwmon_chip_info pcc_pwm_fan_hwmon_chip_info = {
+> +	.ops = &pcc_pwm_fan_hwmon_ops,
+> +	.info = pcc_pwm_fan_hwmon_info,
+> +};
+> +
+> +/* thermal interface */
+> +static int pcc_pwm_fan_thermal_max_state(struct thermal_cooling_device *cdev,
+> +					 unsigned long *state)
+> +{
+> +	*state = 100; /* range of 0-100 as per UEFI spec */
+> +	return 0;
+> +}
+> +static int
+> +pcc_pwm_fan_thermal_get_current_pwm(struct thermal_cooling_device *cdev,
+> +				    unsigned long *state)
+> +{
+> +	struct pcc_acpi *pcc = cdev->devdata;
+> +	int current_pwm;
+> +	int pwm_mode;
+> +	int status;
+> +
+> +	guard(mutex)(&pcc->pwm_fan_lock);
+> +
+> +	status = pcc_pwm_fan_mode_read(&pwm_mode);
+> +	if (status < 0) {
+> +		pr_err("%s: failed to get fan pwm mode\n", __func__);
+> +		return status;
+> +	}
+> +	if (pwm_mode == HWMON_PCC_FAN_PWM_AUTO) {
+> +		*state = 100; /* Return failsafe value on EC mode */
+> +		return 0;
+> +	}
+> +
+> +	status = pcc_pwm_fan_speed_read(&current_pwm);
+> +	if (status < 0)
+> +		return status; /* pass error code */
+> +
+> +	if (current_pwm > 100)
+> +		current_pwm = 100;
+> +	if (current_pwm < 0)
+> +		return -EINVAL;
+> +
+> +	*state = current_pwm;
+> +	return 0;
+> +}
+> +static int pcc_pwm_fan_thermal_set_fan_pwm(struct thermal_cooling_device *cdev,
+> +					   unsigned long state)
+> +{
+> +	struct pcc_acpi *pcc = cdev->devdata;
+> +	int status;
+> +	int set_pwm;
+> +
+> +	guard(mutex)(&pcc->pwm_fan_lock);
+> +
+> +	if (state > 100)
+> +		return -EINVAL;
+> +
+> +	set_pwm = state;
+> +	status = pcc_pwm_fan_speed_set(set_pwm);
+> +	if (status < 0) {
+> +		pr_err("%s: failed to set fan speed pwm\n", __func__);
+> +		return status;
+> +	}
+> +
+> +	return 0;
+> +}
+> +static const struct thermal_cooling_device_ops pcc_pwm_fan_cdev_ops = {
+> +	.get_max_state = pcc_pwm_fan_thermal_max_state,
+> +	.get_cur_state = pcc_pwm_fan_thermal_get_current_pwm,
+> +	.set_cur_state = pcc_pwm_fan_thermal_set_fan_pwm,
+> +};
+>  
+>  /* hotkey input device driver */
+>  
+> @@ -981,6 +1404,7 @@ static int acpi_pcc_hotkey_resume(struct device *dev)
+>  
+>  static int acpi_pcc_hotkey_probe(struct platform_device *pdev)
+>  {
+> +	const struct dmi_system_id *dmi_id;
+>  	struct backlight_properties props;
+>  	struct acpi_device *device;
+>  	struct pcc_acpi *pcc;
+> @@ -1013,6 +1437,9 @@ static int acpi_pcc_hotkey_probe(struct platform_device *pdev)
+>  		return -ENOMEM;
+>  	}
+>  
+> +	/* Initialize mutex */
+> +	mutex_init(&pcc->pwm_fan_lock);
+> +
+>  	pcc->sinf = kcalloc(num_sifr + 1, sizeof(u32), GFP_KERNEL);
+>  	if (!pcc->sinf) {
+>  		result = -ENOMEM;
+> @@ -1026,6 +1453,15 @@ static int acpi_pcc_hotkey_probe(struct platform_device *pdev)
+>  	strscpy(acpi_device_name(device), ACPI_PCC_DEVICE_NAME);
+>  	strscpy(acpi_device_class(device), ACPI_PCC_CLASS);
+>  
+> +	/*
+> +	 * Perform quirk detection
+> +	 */
+> +	dmi_id = dmi_first_match(pcc_quirks);
+> +	if (dmi_id) {
+> +		pcc->quirks = dmi_id->driver_data;
+> +		pr_debug("Quirk detect: Enabled quirks for %s\n", dmi_id->ident);
+> +	}
+> +
+>  	result = acpi_pcc_init_input(pcc);
+>  	if (result) {
+>  		pr_err("Error installing keyinput handler\n");
+> @@ -1097,6 +1533,35 @@ static int acpi_pcc_hotkey_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	i8042_install_filter(panasonic_i8042_filter, NULL);
+> +
+> +	/* skip if no quirks */
+> +	if (!pcc->quirks)
+> +		goto out_no_quirks;
+> +
+> +	/* has_ospm_pwm_fan - add hwmon and thermal if present */
+> +	if (pcc->quirks->has_ospm_pwm_fan) {
+> +		pr_debug("has_ospm_pwm_fan quirk: adding hwmon for %s\n", dmi_id->ident);
+> +
+> +		pcc->pwm_fan_hwmon = hwmon_device_register_with_info(
+> +			&pdev->dev, "panasonic_pwm_fan", pcc,
+> +			&pcc_pwm_fan_hwmon_chip_info, NULL);
+> +		if (IS_ERR(pcc->pwm_fan_hwmon)) {
+> +			pr_err("has_ospm_pwm_fan: Failed to register hwmon device\n");
+> +			/* not a critical error. just skip if error */
+> +			pcc->pwm_fan_hwmon = NULL;
+> +		}
+> +
+> +		/* proceed with thermal */
+> +		pr_debug("has_ospm_pwm_fan quirk: adding thermal for %s\n", dmi_id->ident);
+> +		pcc->pwm_fan_cdev = thermal_cooling_device_register(
+> +			"Panasonic_PWM_Fan", pcc, &pcc_pwm_fan_cdev_ops);
+> +		if (IS_ERR(pcc->pwm_fan_cdev)) {
+> +			pr_warn("has_ospm_pwm_fan: Failed to register thermal cdev\n");
+> +			pcc->pwm_fan_cdev = NULL;
+> +		}
+> +	}
+> +
+> +out_no_quirks:
+>  	return 0;
+>  
+>  out_platform:
+> @@ -1124,6 +1589,13 @@ static void acpi_pcc_hotkey_remove(struct platform_device *pdev)
+>  	struct acpi_device *device = ACPI_COMPANION(&pdev->dev);
+>  	struct pcc_acpi *pcc = acpi_driver_data(device);
+>  
+> +	if (pcc->pwm_fan_hwmon)
+> +		hwmon_device_unregister(pcc->pwm_fan_hwmon);
+> +	if (pcc->pwm_fan_cdev)
+> +		thermal_cooling_device_unregister(pcc->pwm_fan_cdev);
+> +
+> +	mutex_destroy(&pcc->pwm_fan_lock);
+> +
+>  	i8042_remove_filter(panasonic_i8042_filter);
+>  
+>  	if (pcc->platform) {
+> 
