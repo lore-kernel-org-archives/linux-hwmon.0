@@ -1,111 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAFBA39022A
-	for <linux-hwmon@vger.kernel.org>; Mon, 20 Jul 2026 06:46:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3E7A21D3F5
+	for <linux-hwmon@vger.kernel.org>; Mon, 20 Jul 2026 06:47:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784529962; cv=none; b=Pc38aWb/pESQEeY53QAS1c5A3koBpw+eTMnukhLq2GPdipqyywD4toleScZBTFoxOM3NHYUYtAsvJBlMUetcreazbpNPB+6ug5k/ZjWTy8IN79NiuRcwhMUB1hoTje4XdSSTEGRbtJKtu0gCv+IiNsinYyJf9TZuSwplY1kgv/E=
+	t=1784530054; cv=none; b=S2oVAjonjpBG76titPUimEJfyYSjbBczw6vWaPac60X500Gy48bZf+mBPtcPbeu2OGRkSPGahkIrpyvD1VmREG5roTabIwSTSl+LNBdH6mvmlBTX/BzdKqD9fPWZQzIdHJPPKJR5AAg5T8OidJWl5h86KwdEqdA9nZtnRsoeiYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784529962; c=relaxed/simple;
-	bh=ITrxoZpkcX9TuO8eobZY5DOydT7rlOva9iR5OXMipM8=;
+	s=arc-20240116; t=1784530054; c=relaxed/simple;
+	bh=30vPzUUIacmMMXNiTWNlA16ESX3WL/m4WEH9/Uzc9tM=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Zz+gzHtENSC7kGxBPb0KEoWhHE6XADzd+m6BVabRlpiP07yXTOQJctE4HzyzbyVa9Gvr3ZlzBOqMHUeCN6vCFfBw3k1Vwz+Ayeo6TzTfqfdhPRVKHxdMA3gvEfu5OOFNliIWomJDjxHHQr0cBigNsx6yIh3PrvWbSnK4/mAP+wI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HhqE+ezR; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=UbK1LbDLq/s73bBYAQbWrnlrf53Zum5ffR9YYK0XVDTbJY9oxcfXGCSXDUgxA0l1mop9tmjq/VB/Y4eU+SrGws11TQwEmcLKFiSbLTpyBTA9Hpen6xwS4EfYWcnFRxUcX8tKFo48zOdvlIU7kM6PkOfqQwWpswjlKJVjXeGBCv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mceZZ+os; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HhqE+ezR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88ACD1F000E9;
-	Mon, 20 Jul 2026 06:45:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mceZZ+os"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A7E81F000E9;
+	Mon, 20 Jul 2026 06:47:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784529959;
-	bh=TE/aADV73m3Hou9DXUWRESgRfAkKDs2DmJT/1ShLBCs=;
+	s=k20260515; t=1784530052;
+	bh=e3qxhXnvqwvKRFbUP8+ewU/+OIhNb4D1+8/4O2uvbxU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=HhqE+ezRtfqIOupba+tYynfmNxruyvUQnPewIiuQEVYBRToLOJnN33R1IbvWOpfDl
-	 Xf3UDyLrZxOCdr4IgkfUvszREPwXOvdkGkL5mvMyb1De5prAmPqSWRdFlB4FrNxtNu
-	 /QhqMNAoh9eRHYOOUXTKe3jW5d5sNM5NUznOP2isRDivECAYEKNQRJ90umvKO5In+1
-	 V9Ig4jhz2z79NV+RQUwFJGPRouj+ynnsC7IMtHGqK3+XfY9FU6H68nD9Yl0yU5JXJW
-	 wDLkPpJY/Ed+SMQRoMOLjyKZHYxr5LBrX0YGscoDD0NW9it6FcMyVAC8pRQmN4ix9Q
-	 3sYbU0JFOYrqw==
+	b=mceZZ+osoLkGrGiop99kXRf9Fdu4CtuAqrzsUkvBFUO8QdJeXE0UmLHd6bWwe73GA
+	 WrtcFs01pOUbsrL5gJirCnXpWN2jNS34K/pGs4BdqHxWIHSKP5y/iam1thyok4X02N
+	 1sT+M2x8yjqFzRqtuAwgLwmJatE8s5qdDPKhvExcHZAq2ODnZGJF4aRLYYzH5Fp95O
+	 ufO0BAMWtXxck7UXnyuewye4TiduHzx2WB2y5AvoI9mq+QYlD4rrf7fjFBY8JV8Mwv
+	 GvMtIqBCvtsVubirJ02a6gwS0vDnAKuDXqiUgkbq8F4fRyfDgg6jiBnhdzYCd/ZkiH
+	 0ezwHhgIdBjhw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 5/7] hwmon: (pwm-fan) Remove redundant dev_err()
+Subject: Re: [PATCH v2 6/7] hwmon: (sht15) Remove redundant dev_err()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Pan Chuang" <panchuang@vivo.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260720063745.309331-6-panchuang@vivo.com>
+In-Reply-To: <20260720063745.309331-7-panchuang@vivo.com>
 References: <20260720063745.309331-1-panchuang@vivo.com>
- <20260720063745.309331-6-panchuang@vivo.com>
+ <20260720063745.309331-7-panchuang@vivo.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 20 Jul 2026 06:45:59 +0000
-Message-Id: <20260720064559.88ACD1F000E9@smtp.kernel.org>
+Date: Mon, 20 Jul 2026 06:47:32 +0000
+Message-Id: <20260720064732.7A7E81F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Unbalanced regulator enable count during devres cleanup if fan-shu=
-tdown-percent is set.
+- [High] Race window during probe leads to permanently disabled IRQ and bro=
+ken device measurements.
+- [High] Missing cancellation of pending workqueues on probe failure and de=
+vice removal leads to Use-After-Free.
 --
 
---- Patch [5]: [PATCH v2 5/7] hwmon: (pwm-fan) Remove redundant dev_err() -=
---
-commit 1f579d7c79ca89d1d4a39ad9aa36221339e0a01b
+--- Patch [6]: [PATCH v2 6/7] hwmon: (sht15) Remove redundant dev_err() ---
+commit 47aa96341071db3373308927505b18391833a75b
 Author: Pan Chuang <panchuang@vivo.com>
 
-hwmon: (pwm-fan) Remove redundant dev_err()
+hwmon: (sht15) Remove redundant dev_err()
 
-Since devm_request_irq() automatically logs error messages on failure,
-this commit removes the redundant driver-specific dev_err() call in the
-probe function.
+Since commit 55b48e23f5c4 ("genirq/devres: Add error handling in
+devm_request_*_irq()"), devm_request_irq() automatically logs detailed
+error messages on failure. Remove the now-redundant driver-specific
+dev_err() call.
 
-> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-> index 37f37813ea511..3b87f65bae058 100644
-> --- a/drivers/hwmon/pwm-fan.c
-> +++ b/drivers/hwmon/pwm-fan.c
-> @@ -628,12 +628,8 @@ static int pwm_fan_probe(struct platform_device *pde=
-v)
->  		if (tach->irq > 0) {
->  			ret =3D devm_request_irq(dev, tach->irq, pulse_handler,
->  					       IRQF_NO_THREAD, pdev->name, tach);
-> -			if (ret) {
-> -				dev_err(dev,
-> -					"Failed to request interrupt: %d\n",
-> -					ret);
-> +			if (ret)
->  				return ret;
+> diff --git a/drivers/hwmon/sht15.c b/drivers/hwmon/sht15.c
+> index 101cebbe68e4d..7bb2105d1ae22 100644
+> --- a/drivers/hwmon/sht15.c
+> +++ b/drivers/hwmon/sht15.c
+> @@ -981,10 +981,8 @@ static int sht15_probe(struct platform_device *pdev)
+>  			       IRQF_TRIGGER_FALLING,
+>  			       "sht15 data",
+>  			       data);
+> -	if (ret) {
+> -		dev_err(&pdev->dev, "failed to get irq for data line\n");
+> +	if (ret)
+>  		goto err_release_reg;
 
 [Severity: High]
-This isn't a bug introduced by this patch, but does this error path trigger
-an unbalanced regulator enable count if fan-shutdown-percent is set?
+This is a pre-existing issue, but does the err_release_reg error path fail
+to cancel pending workqueues, potentially leading to a use-after-free?
 
-If devm_request_irq() fails here, devres teardown executes in reverse order.
-First, pwm_fan_cleanup() runs and explicitly enables the regulator to shut
-down the fan:
+If initialization fails here and the code jumps to err_release_reg:
 
-drivers/hwmon/pwm-fan.c:pwm_fan_cleanup() {
+sht15_probe() {
     ...
-    if (ctx->pwm_shutdown) {
-        ctx->enable_mode =3D pwm_enable_reg_enable;
-        __set_pwm(ctx, ctx->pwm_shutdown);
-    } else {
-    ...
+err_release_reg:
+    if (!IS_ERR(data->reg)) {
+        regulator_unregister_notifier(data->reg, &data->nb);
+        regulator_disable(data->reg);
+    }
+    return ret;
 }
 
-Later in the devres unwind, devm_regulator_release() calls regulator_put().
-Because pwm_fan_cleanup() left the regulator enabled, does regulator_put()
-detect a non-zero enable count and trigger a kernel warning stack trace whi=
-le
-leaking the reference?
+The update_supply_work workqueue is not cancelled via cancel_work_sync().
+Because the data struct is allocated with devm_kzalloc(), devres will free
+it immediately when the probe fails. If the regulator notifier scheduled
+update_supply_work just before the probe failed, will the pending work
+execute and dereference the freed data pointer?
 
->  		}
-> =20
->  		if (!ctx->pulses_per_revolution[i]) {
+A similar issue appears to exist in sht15_remove(), where both read_work
+and update_supply_work are left uncancelled before returning.
+
+> -	}
+>  	disable_irq_nosync(gpiod_to_irq(data->data));
+
+[Severity: High]
+This isn't a bug introduced by this patch, but is there a race window here
+that could leave the IRQ permanently disabled?
+
+Since devm_request_irq() is called without IRQF_NO_AUTOEN, the interrupt is
+enabled immediately. If a falling edge occurs on the data line before the
+disable_irq_nosync() call, sht15_interrupt_fired() will execute and call
+disable_irq_nosync(), setting the IRQ disable depth to 1.
+
+When sht15_probe() resumes, it will call disable_irq_nosync() again,
+incrementing the disable depth to 2. Later, when a measurement starts,
+enable_irq() only decrements the depth to 1. Could this cause the interrupt
+to remain masked in hardware forever, breaking the driver?
+
+>  	ret =3D sht15_connection_reset(data);
+>  	if (ret)
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260720063745.3093=
-31-1-panchuang@vivo.com?part=3D5
+31-1-panchuang@vivo.com?part=3D6
