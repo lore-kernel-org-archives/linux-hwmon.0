@@ -1,56 +1,59 @@
 Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3D26299923;
-	Mon, 20 Jul 2026 03:15:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19D0E2877DE;
+	Mon, 20 Jul 2026 03:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784517330; cv=none; b=GQkhsu2d3BWeazte35+AWEurWBpeTolcerywJAo+IwtCWnhmVzk7j3wztFOAn9td0MUe25vPTn9NgmFFRBAOOjqUuPaueJAx4z+cBw8RXJhduGutEJEhINFSVvKEK/1SXtsAmGRyfqfmkNcxR0weVMCuf6nGea0Q6opXnClPDoo=
+	t=1784517331; cv=none; b=reT7Ukob6eayOMZ2AosAy9vh6KLjJ6cxPNRQRiligA1CORdDkg8pCR6XPJUB2opLzJVxzw7Lv6HVHEDNr3dQ2vz88kVjRp8uuWoE/nWnxTxLlat4E6yolJ7EGFE9O5K5n4Kt9wglae4Ae+DY6NbKzob23lKim0wetIiVJg9kM+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784517330; c=relaxed/simple;
-	bh=9lmRbWMhwDV39UeYBnp3CF5EU4MF+aBpFA9+KLtpUkU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=McJcfNa93UXzXWlOKv5lN4GXaRZh6qd4GcWQB3+riwRwMrS3ks24EOAY6uZnYFim1CJOwR0PvJbVTq+NEjjuqyKLDL6oGhW5xxquTw0jXWm9nt+AOBuXvd5q9nRWiKe66ru/5e/xq6QLYMTSdcARWNu+qMLslABbFc3/rMQKG+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=UmH/BY2k; arc=none smtp.client-ip=148.163.135.77
+	s=arc-20240116; t=1784517331; c=relaxed/simple;
+	bh=EzdOsYLxgXlRcMBiDurBSRzAI9dCcmltFOo57zAtVqo=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=K36sQGgjuQIBdBFytZbf1ysXc8wcEWX5zL2j5aD3KaewK6gq4ShfjZ8iYm5CYLV1sRmBJLD+VONm4yVO3n2YiXSFrdJcjIZMM0pHISe00X82fgy4HbX3DVW57qQzHm3BvzuRi+3WPwHBQxGVNB9zN9mFHtloKokCtKm8Q1GMbfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=Cjx1zq9b; arc=none smtp.client-ip=148.163.135.77
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="UmH/BY2k"
-Received: from pps.filterd (m0516787.ppops.net [127.0.0.1])
-	by mx0a-00128a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66JNt2GE452843;
-	Sun, 19 Jul 2026 23:15:13 -0400
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="Cjx1zq9b"
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66JNvuMM346527;
+	Sun, 19 Jul 2026 23:15:07 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=DKIM; bh=RALi2
-	yKmlNj/tKZec+lFPKu0Vba894q0zZCPSQPKgdk=; b=UmH/BY2khMcXG90vvG1+3
-	vELLd9Do0f1eq5wKoLLa5e+CmJ9bMkyEEKPOYFRDdVxGdLp+Nm0PipSctFbWSssW
-	94x6I2hHsuWGHz3t9nFwK1dRgtQxxD7P+jEMIyNPv8t47NB0kmVX6Ncj7x94yJBp
-	JTCW9jFge7Cdl4JhOfmzwYyF0qndG5U2S/GlOQLi1mg8tfi7z/3sZRXCyRaSq6Zi
-	5h05S3WjRalLyAsxEB8G+NkO9nmqkkYRQfrye74UX3MJkOa+HihWlhRco/Da6x1/
-	TtRbpFWlreBp1Egpm9sGwIeNUkSHOYey7kUjeoq+IB71LRCUFGORstrjrGqTodpK
-	A==
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=DKIM; bh=7KIEsZz0n+O9qoac+edjcxDqJ7/
+	RFx5I0+BjNasbPjU=; b=Cjx1zq9bFm/ft5I88bXtOyzwHmmCWWpi0wMUayEfu5o
+	geQlvQNHicOzaLWAvvMqzbE5iZO/NKWMyZfXIEZwScS7QccXz0ttmWCiQ9piv03c
+	OrbE2ShIh2F/PYxQNX0+e4a1mPgKov3J+mgzvMfLCiXvxCUnRj5lvrdWIvz97w55
+	MFqaqgRoreoOgY+wC6FkffnWjwtsx3y4a25TRgwVgA5oVWnumJQUBqAmoBKZofoh
+	MhMUzDFcO1Mo7Lb6HDq64NIYiCny6XLYWmv4bdXNpU5ZfUDHEWpbEW4LNG721pWQ
+	ZQ+zvmlhx++xP5GQsNNVcnCXREStcHWvNF2OI2C8l4A==
 Received: from nwd2mta4.analog.com ([137.71.173.58])
-	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 4fgttga5aj-1
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 4fg6d1cp09-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 19 Jul 2026 23:15:13 -0400 (EDT)
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 66K3FCJP054360
+	Sun, 19 Jul 2026 23:15:06 -0400 (EDT)
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 66K3F5Bk054345
 	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Sun, 19 Jul 2026 23:15:12 -0400
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.37; Sun, 19 Jul
- 2026 23:15:11 -0400
+	Sun, 19 Jul 2026 23:15:05 -0400
+Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.37; Sun, 19 Jul 2026 23:15:05 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.37; Sun, 19 Jul 2026 23:15:05 -0400
 Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
  (10.64.17.10) with Microsoft SMTP Server id 15.2.1748.37 via Frontend
- Transport; Sun, 19 Jul 2026 23:15:11 -0400
+ Transport; Sun, 19 Jul 2026 23:15:05 -0400
 Received: from ATORRENO-L02.ad.analog.com ([10.66.6.192])
-	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 66K3EoFT021622;
-	Sun, 19 Jul 2026 23:15:03 -0400
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 66K3EoFS021622;
+	Sun, 19 Jul 2026 23:14:53 -0400
 From: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-Date: Mon, 20 Jul 2026 11:14:42 +0800
-Subject: [PATCH v3 1/4] dt-bindings: hwmon: (pmbus/max20830): add VOUT
- feedback resistor properties and complete examples
+Subject: [PATCH v3 0/4] Add support for MAX20830C and MAX20840C step-down
+ DC-DC switching regulator
+Date: Mon, 20 Jul 2026 11:14:41 +0800
+Message-ID: <20260720-dev-max20830c-v3-0-9d06d27d6da3@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -58,118 +61,108 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-ID: <20260720-dev-max20830c-v3-1-9d06d27d6da3@analog.com>
-References: <20260720-dev-max20830c-v3-0-9d06d27d6da3@analog.com>
-In-Reply-To: <20260720-dev-max20830c-v3-0-9d06d27d6da3@analog.com>
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKGSXWoC/3XMSwrCMBSF4a2UjI3cJjZJHbkPcZDHbRuwjSQSK
+ qV7N+1EFByeA9+/kITRYyLnaiERs08+TGXwQ0XsoKceqXdlEwZMgOBAHWY66pmB4mBp67hyyoC
+ WoiHFPCJ2ft5711vZg0/PEF97Ptfb+6+UawpUA5NKGIcnCRc96XvojzaMZEtl9uESxC9nhXMpR
+ Y2qNabpvvi6rm/9jtrZ6gAAAA==
+X-Change-ID: 20260630-dev-max20830c-9d38d8b0a765
 To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
         Shuah Khan <skhan@linuxfoundation.org>
 CC: <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        Alexis Czezar
- Torreno <alexisczezar.torreno@analog.com>,
+        "Alexis Czezar
+ Torreno" <alexisczezar.torreno@analog.com>,
         Krzysztof Kozlowski
 	<krzysztof.kozlowski@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1784517290; l=2332;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1784517290; l=2264;
  i=alexisczezar.torreno@analog.com; s=20250213; h=from:subject:message-id;
- bh=9lmRbWMhwDV39UeYBnp3CF5EU4MF+aBpFA9+KLtpUkU=;
- b=5UAqgIQmo95KbEw+r2kJtAPk7ZiwUSOzdGXkXbiIPfwtv8AIYhutCRIs53nkEZDIJsJz4MoWs
- MoC/66VuN/iB5GkKVy51D6MEX+3Ej0U6pXIY+LJYwYIG6b3yEsXjGZ6
+ bh=EzdOsYLxgXlRcMBiDurBSRzAI9dCcmltFOo57zAtVqo=;
+ b=0NKzD0NV+KW+onlvilbCw/wizRwwie7lS0tisUtRKFzd3ueKoyf3SYnFYCYSPfAgtzKqdK8Gt
+ CCKK9DGO+ABDXsPCq39T5hzwOIJnKQGwsGMV7+Znwv8OGNUneLvJfLF
 X-Developer-Key: i=alexisczezar.torreno@analog.com; a=ed25519;
  pk=XpXmJnRjnsKdDil6YpOlj9+44S+XYXVFnxvkbmaZ+10=
 X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: 0A8hFulF3mUWBr8k_AOOFpa9NT4XK1uC
-X-Authority-Analysis: v=2.4 cv=DagnbPtW c=1 sm=1 tr=0 ts=6a5d92c1 cx=c_pps
+X-Authority-Analysis: v=2.4 cv=ds/rzVg4 c=1 sm=1 tr=0 ts=6a5d92ba cx=c_pps
  a=3WNzaoukacrqR9RwcOSAdA==:117 a=3WNzaoukacrqR9RwcOSAdA==:17
  a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=0sLvza09kfJOxVLZPwjg:22 a=OmVn7CZJonkx5R5zMQLL:22 a=EUspDBNiAAAA:8
- a=gAnH3GRIAAAA:8 a=rWBwxEM6VC-iK73SjNoA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzIwMDAzMyBTYWx0ZWRfX+TxUnZZaKAys
- /W/K27kc7F8XeZzv3qxqIEnJH4HXZOE9YZvs4lAx7TTHkfASZaWAx7fki77KrUyt4OOEggzixD9
- xSKQCZ3V4nGUW60iSG/Cqp82XZijkQYTDUYA0oaqYmUclQ14rbeZ
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzIwMDAzMyBTYWx0ZWRfX3iIfDSPhhqam
- 65W470yWCmwWyPp4A7wFpi8d4EoNg/EAMJnqMWTQ9RL2AcuR0Q7i0J3r8onFdRDIYko4qMlXH0q
- 4DJXKw5W1eRDO0054KtarjJo0uQZXgeCQMkmlabl/7qYEXvKS4CFTf7xxH5xsXXG5ykbFhmdbax
- mjshDYJOSkKpaUISxJnyL4uIcnbfCz8YpPv5jKoUVoPCO+OCh0LicZS8pQK+ETlNHFJ7zKaSzbH
- XFsr31DLBMc45Z5FRHFdpXl6gtYACfg+1RfQUAtyvkaLfYu3LGqeJd8TmAMNyaLG/YBgeT0uk9p
- K5eUwovoCD+aXGFSNOQrrAFRsSY75rY1/f63lgivAeKSP0uwsGGWpZJ7KauEVXZWwgjML7xu+6m
- uuWruObMuaiTJWgOsJMxnOzSsjxB2sxm40alWXIFBMa0E9FVBxRDGCLoHldGnA5Oix5/rS09uP/
- n/fLVTYcXujfiWWe7dA==
-X-Proofpoint-GUID: 0A8hFulF3mUWBr8k_AOOFpa9NT4XK1uC
+ a=0sLvza09kfJOxVLZPwjg:22 a=Z0pTeXoby7EwIRygza74:22 a=VwQbUJbxAAAA:8
+ a=gAnH3GRIAAAA:8 a=aBXZGasqtuxsuxeSzLgA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzIwMDAzMyBTYWx0ZWRfX6PSF6gZA4A03
+ PMXr+MFM9bXkJlzFiPJiLHbaZPTh2dco/PI04ki+P1n+3W7H5ijRkWxDSLs5ENCElJzBKxY53Na
+ WlbtRed9yYPcJxOdhTZQHTLqZ8ZQ6Zk3SpOoBd4FZ1rPiAT06HWf
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzIwMDAzMyBTYWx0ZWRfXwec3vckAhdNT
+ jljAviueUJM2EWZs7WTO1YvYszFiCe/sq0Wr9ZoSMU1jrsrMnd1L8fDQKpQ5Fg12f3EMnK7szbP
+ QhZNPz27etx6JNsTYZPGHInVe786lBOxaqYh9gGcGYXWT9Ph/Ecn1++UeOfzzFEacj7t5BWFV6O
+ FVnZYXlQo5SydMTrNTCt0DaJqSfIIzOIXaqbLi0OnSg7Emp8IXHbV2x+Q/g1zvKmjOsfrRxKhYA
+ 6Vurumn3vGj9FQfCk9oMusXFLUFMO7uAKidfayKF/A5ryp+WkEH27aQ5umvMa1jIwHTl5LdArXr
+ mbpWfB9KO4WU+xZpYy6HKk7rMhTjfk+3pvAeJJJWzADfAEzdRvJdPGqTi/ScKJsr3q/RDNUFN8X
+ lSWGe/TBg/eLeDIMcpyUOHDG4yv70OKxroGYV3z/gCSgwJoCWb75zlz9qq/s56kouxW3+/uTwSc
+ u6G0JRLsFk9c8THSD5g==
+X-Proofpoint-GUID: YbTQAz_nFEqDOc4YkjHrNlgGuVqkvZpb
+X-Proofpoint-ORIG-GUID: YbTQAz_nFEqDOc4YkjHrNlgGuVqkvZpb
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-07-19_08,2026-07-17_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 spamscore=0 clxscore=1015 suspectscore=0 bulkscore=0
- phishscore=0 lowpriorityscore=0 priorityscore=1501 adultscore=0
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
- definitions=main-2607200033
+ phishscore=0 lowpriorityscore=0 suspectscore=0 bulkscore=0 priorityscore=1501
+ adultscore=0 malwarescore=0 clxscore=1015 spamscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607200033
 
-Add adi,vout-rfb1-ohms and adi,vout-rfb2-ohms properties to support
-external voltage divider configuration for VOUT sensing. When the
-desired output voltage is higher than VREF, a resistor divider (RFB1
-and RFB2) is required to reach the intended value.
+This series adds a few features before adding support to MAX20830C and
+MAX20840C.
 
-The properties use a dependency constraint to ensure both resistors
-are specified together, or neither. This prevents misconfiguration
-where only one resistor value is provided.
+Patches 1 and 2 adds new resistor feedback properties that is needed to
+properly scale VOUT
 
-This patch also added missing entries in the examples.
+Patches 3 and 4 adds support for devices MAX20830C and MAX20840C.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+MAX20830C and MAX20840 are step-down DC-DC switching regulator with PMBus
+interface. MAX20830C is a different packaging for MAX20830, and MAX20840C
+supports 40A regulation compared to MAX20830 that is only 30A.
+
 Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
 ---
- .../bindings/hwmon/pmbus/adi,max20830.yaml           | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+Changes in v3:
+- Dropped patch that add EN-GPIO property in DTS
+    - discussed to be skippable until an actual use-case arise
+- Patch 1/4: 
+    - Carried over the completed examples from previously dropped patch
+    - Kept the review tag as the carried info from the dropped patched
+      was also reviewed.
+- Patch 2/4: 
+    - added clamping to read_vout during scaling
+    - improved comments regarding future regulator support 
+- Link to v2: https://lore.kernel.org/r/20260706-dev-max20830c-v2-0-37761e89bb5f@analog.com
 
-diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20830.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20830.yaml
-index 1625dd59417f1b3ca689a9c86ca266da913d1217..214adf1a3b9e9efdeca7db3bd7679c70656e9a7e 100644
---- a/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20830.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20830.yaml
-@@ -44,11 +44,26 @@ properties:
-       GPIO connected to the power-good status output pin.
-     maxItems: 1
- 
-+  adi,vout-rfb1-ohms:
-+    description:
-+      Top feedback resistor (RFB1) value in ohms for VOUT sensing divider.
-+      When the desired output voltage is higher than VREF, a resistor divider
-+      is required. VOUT = VREF × (1 + RFB1/RFB2)
-+
-+  adi,vout-rfb2-ohms:
-+    description:
-+      Bottom feedback resistor (RFB2) value in ohms for VOUT sensing divider.
-+      Datasheet recommends that RFB2 does not exceed 2.5kΩ.
-+
- required:
-   - compatible
-   - reg
-   - vddh-supply
- 
-+dependencies:
-+  adi,vout-rfb1-ohms: ['adi,vout-rfb2-ohms']
-+  adi,vout-rfb2-ohms: ['adi,vout-rfb1-ohms']
-+
- unevaluatedProperties: false
- 
- examples:
-@@ -61,6 +76,11 @@ examples:
-             compatible = "adi,max20830";
-             reg = <0x30>;
-             vddh-supply = <&vddh>;
-+            avdd-supply = <&avdd>;
-+            ldoin-supply = <&ldoin>;
-+            pwr-good-gpios = <&gpio 2 GPIO_ACTIVE_HIGH>;
-+            adi,vout-rfb1-ohms = <10000>;
-+            adi,vout-rfb2-ohms = <2000>;
-         };
-     };
- ...
+Changes in v2:
+- Patch 1/5: completing example
+- Dropped patch adding GPIO enable in driver (no use case)
+- Patch 3/5: added notes on READ_VOUT and related VOUT commands
+- Patch 4/5: removed comment on fallback
+- Patch 5/5: simplified device ID check handling
+- Link to v1: https://lore.kernel.org/r/20260630-dev-max20830c-v1-0-a02786bde470@analog.com
 
+---
+Alexis Czezar Torreno (4):
+      dt-bindings: hwmon: (pmbus/max20830): add VOUT feedback resistor properties and complete examples
+      hwmon: (pmbus/max20830): add VOUT feedback resistor scaling support
+      dt-bindings: hwmon: (pmbus/max20830): add max20830c and max20840c support
+      hwmon: (pmbus/max20830): add support for max20830c and max20840c
+
+ .../bindings/hwmon/pmbus/adi,max20830.yaml         | 28 ++++++-
+ Documentation/hwmon/max20830.rst                   | 27 +++++--
+ drivers/hwmon/pmbus/max20830.c                     | 86 ++++++++++++++++++----
+ 3 files changed, 121 insertions(+), 20 deletions(-)
+---
+base-commit: 1a42625604046790ea8ec61c2a749bbf76b28943
+change-id: 20260630-dev-max20830c-9d38d8b0a765
+
+Best regards,
 -- 
-2.34.1
+Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
 
