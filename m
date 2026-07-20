@@ -1,128 +1,164 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3E7A21D3F5
-	for <linux-hwmon@vger.kernel.org>; Mon, 20 Jul 2026 06:47:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF82A21D3F5;
+	Mon, 20 Jul 2026 06:47:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784530054; cv=none; b=S2oVAjonjpBG76titPUimEJfyYSjbBczw6vWaPac60X500Gy48bZf+mBPtcPbeu2OGRkSPGahkIrpyvD1VmREG5roTabIwSTSl+LNBdH6mvmlBTX/BzdKqD9fPWZQzIdHJPPKJR5AAg5T8OidJWl5h86KwdEqdA9nZtnRsoeiYs=
+	t=1784530062; cv=none; b=KKXJGUTuF1fifpuHi4UCBkC3OnaMnZ+pCNGHm/9fiNjwwkArGbjuE/6F9cW6kA3TZvLTcoeYStePsRVHWCR/iA5qdydQ9CKMEXVJ3EZCNj8hbcwy9imiFVzhaZ4Jar+7nFj7/+LbZBxku5+5YqSgmXZsIZW8keSqaN/04jso6y4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784530054; c=relaxed/simple;
-	bh=30vPzUUIacmMMXNiTWNlA16ESX3WL/m4WEH9/Uzc9tM=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=UbK1LbDLq/s73bBYAQbWrnlrf53Zum5ffR9YYK0XVDTbJY9oxcfXGCSXDUgxA0l1mop9tmjq/VB/Y4eU+SrGws11TQwEmcLKFiSbLTpyBTA9Hpen6xwS4EfYWcnFRxUcX8tKFo48zOdvlIU7kM6PkOfqQwWpswjlKJVjXeGBCv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mceZZ+os; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784530062; c=relaxed/simple;
+	bh=xo2IZXzCWZ7HRjoTS9bFuF+m9ESOAMVvc91hPBQp8Ts=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QaCbbuCLI3jN1qA1oOspBMoYymjQJI1m/I0E/KvqCDfg1FM9ZwS7rYo0QwdCYt+YQ1X4QLcKGktd2qVWcbiv1uaCWas7lB9kC7BIW9PZaXT0OlTqK4WhKeJeevGTH6NXRXBF/je4MKSc48P6JxvAZG0m97S47grF6UrwZzy5Bz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EotMaIxk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mceZZ+os"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A7E81F000E9;
-	Mon, 20 Jul 2026 06:47:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EotMaIxk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 283BB1F000E9;
+	Mon, 20 Jul 2026 06:47:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784530052;
-	bh=e3qxhXnvqwvKRFbUP8+ewU/+OIhNb4D1+8/4O2uvbxU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=mceZZ+osoLkGrGiop99kXRf9Fdu4CtuAqrzsUkvBFUO8QdJeXE0UmLHd6bWwe73GA
-	 WrtcFs01pOUbsrL5gJirCnXpWN2jNS34K/pGs4BdqHxWIHSKP5y/iam1thyok4X02N
-	 1sT+M2x8yjqFzRqtuAwgLwmJatE8s5qdDPKhvExcHZAq2ODnZGJF4aRLYYzH5Fp95O
-	 ufO0BAMWtXxck7UXnyuewye4TiduHzx2WB2y5AvoI9mq+QYlD4rrf7fjFBY8JV8Mwv
-	 GvMtIqBCvtsVubirJ02a6gwS0vDnAKuDXqiUgkbq8F4fRyfDgg6jiBnhdzYCd/ZkiH
-	 0ezwHhgIdBjhw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 6/7] hwmon: (sht15) Remove redundant dev_err()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Pan Chuang" <panchuang@vivo.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260720063745.309331-7-panchuang@vivo.com>
-References: <20260720063745.309331-1-panchuang@vivo.com>
- <20260720063745.309331-7-panchuang@vivo.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 20 Jul 2026 06:47:32 +0000
-Message-Id: <20260720064732.7A7E81F000E9@smtp.kernel.org>
+	s=k20260515; t=1784530061;
+	bh=AUtF5naa3NiHGPmGPNbT0g6G1VJ+GTYQZSr4Fh0o0Ec=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=EotMaIxk6fRiLCHgn83evAm89GRZ2Uhkrpm8DMkkX4DfbzoHpD40IeN6ny9Ponfhm
+	 PjYfCQM5SrUZgDdauPqP+pBnpFPhPLC5+WB/2dJkpUndaBDOyC1uxTntmYrr1sfjiu
+	 jzsHTYgfF21wSMfFj6XXfZSk5melyyKfVH/IlBJCyRdUmnfPM5qX5ia7l4uoPUeyPA
+	 Y0b94/yguieDO9olGWGlXgKSoMGrMg02ljCvpDcCq5MRSCRluxOKywacKA7rW+wZji
+	 e/W9zdXaanJch5r8DxsGmr2u4WviD57+pyXGsPzqrCHuqILgccvkclTiLTKr48uwtr
+	 wRT5yJDGMyh8A==
+Date: Mon, 20 Jul 2026 08:47:37 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Chris Packham <chris.packham@alliedtelesis.co.nz>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Darrick J. Wong" <djwong@us.ibm.com>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pwm@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] dt-bindings: hwmon: add binding for adi,adt7470
+Message-ID: <20260720-placid-fanatic-shrimp-d2bcd2@quoll>
+References: <20260717-adt7470_thermalzone-v2-0-a55147958fad@gmail.com>
+ <20260717-adt7470_thermalzone-v2-1-a55147958fad@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260717-adt7470_thermalzone-v2-1-a55147958fad@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+On Fri, Jul 17, 2026 at 05:59:14PM -0300, Luiz Angelo Daros de Luca wrote:
+> The Analog Devices ADT7470 is a temperature monitor and PWM fan
+> controller. It supports up to 10 external temperature sensors and
+> up to 4 PWM fan outputs.
 
-Pre-existing issues:
-- [High] Race window during probe leads to permanently disabled IRQ and bro=
-ken device measurements.
-- [High] Missing cancellation of pending workqueues on probe failure and de=
-vice removal leads to Use-After-Free.
---
+A nit, subject: drop second/last, redundant "binding for". The
+"dt-bindings" prefix is already stating that these are bindings.
+See also:
+https://elixir.bootlin.com/linux/v7.1-rc7/source/Documentation/devicetree/bindings/submitting-patches.rst#L23
 
---- Patch [6]: [PATCH v2 6/7] hwmon: (sht15) Remove redundant dev_err() ---
-commit 47aa96341071db3373308927505b18391833a75b
-Author: Pan Chuang <panchuang@vivo.com>
+> 
+> Add the YAML device tree binding documentation for it. This includes
 
-hwmon: (sht15) Remove redundant dev_err()
+s/YAML//
+There is no YAML in Devicetree.
 
-Since commit 55b48e23f5c4 ("genirq/devres: Add error handling in
-devm_request_*_irq()"), devm_request_irq() automatically logs detailed
-error messages on failure. Remove the now-redundant driver-specific
-dev_err() call.
+> support for the thermal framework by defining the "#thermal-sensor-cells"
+> property, and support for the PWM subsystem by defining the "#pwm-cells"
+> property.
+> 
+> Signed-off-by: Luiz Angelo Daros de Luca <luizluca@gmail.com>
+> ---
+>  .../devicetree/bindings/hwmon/adi,adt7470.yaml     | 62 ++++++++++++++++++++++
+>  1 file changed, 62 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/adi,adt7470.yaml b/Documentation/devicetree/bindings/hwmon/adi,adt7470.yaml
+> new file mode 100644
+> index 000000000000..14bb6359c91f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/adi,adt7470.yaml
+> @@ -0,0 +1,62 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/adi,adt7470.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Analog Devices ADT7470 hwmon sensor
+> +
+> +maintainers:
+> +  - Luiz Angelo Daros de Luca <luizluca@gmail.com>
+> +
+> +description: |
 
-> diff --git a/drivers/hwmon/sht15.c b/drivers/hwmon/sht15.c
-> index 101cebbe68e4d..7bb2105d1ae22 100644
-> --- a/drivers/hwmon/sht15.c
-> +++ b/drivers/hwmon/sht15.c
-> @@ -981,10 +981,8 @@ static int sht15_probe(struct platform_device *pdev)
->  			       IRQF_TRIGGER_FALLING,
->  			       "sht15 data",
->  			       data);
-> -	if (ret) {
-> -		dev_err(&pdev->dev, "failed to get irq for data line\n");
-> +	if (ret)
->  		goto err_release_reg;
+Do not need '|' unless you need to preserve formatting.
 
-[Severity: High]
-This is a pre-existing issue, but does the err_release_reg error path fail
-to cancel pending workqueues, potentially leading to a use-after-free?
+> +  The ADT7470 is a temperature monitor and multiple PWM outputs.
+> +  It supports monitoring up to 10 external temperature sensors and controlling
+> +  up to four fans.
 
-If initialization fails here and the code jumps to err_release_reg:
+"controling fans" is confusing and suggests this is a fan controller, so
+you would need to reference proper schema for that. It is just PWM
+output, no? PWM output could also go to LEDs or motors (well, fan is a
+motor).
 
-sht15_probe() {
-    ...
-err_release_reg:
-    if (!IS_ERR(data->reg)) {
-        regulator_unregister_notifier(data->reg, &data->nb);
-        regulator_disable(data->reg);
-    }
-    return ret;
-}
+> +
+> +properties:
+> +  compatible:
+> +    const: adi,adt7470
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#pwm-cells":
+> +    const: 2
+> +    description: |
+> +      Number of cells in a PWM specifier.
+> +      - The first cell is the PWM channel (0 to 3).
+> +      - The second cell is the PWM period in nanoseconds.
+> +
+> +  "#thermal-sensor-cells":
+> +    const: 1
+> +    description: |
 
-The update_supply_work workqueue is not cancelled via cancel_work_sync().
-Because the data struct is allocated with devm_kzalloc(), devres will free
-it immediately when the probe fails. If the regulator notifier scheduled
-update_supply_work just before the probe failed, will the pending work
-execute and dereference the freed data pointer?
+Do not need '|' unless you need to preserve formatting.
 
-A similar issue appears to exist in sht15_remove(), where both read_work
-and update_supply_work are left uncancelled before returning.
+> +      Number of cells required to uniquely identify the temperature sensors.
+> +      Valid index values are 0 to 9, corresponding to temp1 through temp10.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        adt7470: hwmon@2f {
+> +            compatible = "adi,adt7470";
+> +            reg = <0x2f>;
+> +            #pwm-cells = <2>;
+> +            #thermal-sensor-cells = <1>;
+> +        };
+> +    };
+> +
+> +    fan0 {
 
-> -	}
->  	disable_irq_nosync(gpiod_to_irq(data->data));
+Drio the node, not relevant. And then drop adt7470 label from hwmon
+node.
 
-[Severity: High]
-This isn't a bug introduced by this patch, but is there a race window here
-that could leave the IRQ permanently disabled?
-
-Since devm_request_irq() is called without IRQF_NO_AUTOEN, the interrupt is
-enabled immediately. If a falling edge occurs on the data line before the
-disable_irq_nosync() call, sht15_interrupt_fired() will execute and call
-disable_irq_nosync(), setting the IRQ disable depth to 1.
-
-When sht15_probe() resumes, it will call disable_irq_nosync() again,
-incrementing the disable depth to 2. Later, when a measurement starts,
-enable_irq() only decrements the depth to 1. Could this cause the interrupt
-to remain masked in hardware forever, breaking the driver?
-
->  	ret =3D sht15_connection_reset(data);
->  	if (ret)
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260720063745.3093=
-31-1-panchuang@vivo.com?part=3D6
+> +        compatible = "pwm-fan";
+> +        /* Connects to PWM channel 0 with a 50000 ns (20 kHz) period */
+> +        pwms = <&adt7470 0 50000>;
+> +        cooling-levels = <0 100 150 255>;
+> +    };
+> 
+> -- 
+> 2.55.0
+> 
