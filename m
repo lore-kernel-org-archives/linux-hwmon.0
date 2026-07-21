@@ -1,170 +1,203 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12BBF3EDAA2;
-	Tue, 21 Jul 2026 04:26:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65103769F5;
+	Tue, 21 Jul 2026 04:26:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784607966; cv=none; b=hY3YCzjil4UIFgwDkBvA3FmV9n87hWBJttkVCDBvb3cHICRFziHC6ITo9MfgSUVXqUD+1reS/gYrVuLXQwT5v6Fc7WL4+SHrCBPi9xIh8xKtLeWxLhog39X3n7plciSMsa8vL0M2wIXlZMpNrlcrnnQhk9gv1EUOoaRwUmLifmg=
+	t=1784607978; cv=none; b=bt0qNBnki/rZamnPkIKSrQzMfI+gx6Fzhv7stckOTQvildDWsR7MBBlQdxBpM56UsPS8/Zzm5nvR+U8Z/xja139Az2rySJi1CgpU8iCYo/8aKnKday54ws0aJ3yac8v8xj09VK8KSzjzgqJT+U9084qDvDBJ4VhSsiKIEZoBx0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784607966; c=relaxed/simple;
-	bh=WaciNlMmRDh7Si+nV3k6wSn77k9JJZ932HQtSDAj8Sg=;
+	s=arc-20240116; t=1784607978; c=relaxed/simple;
+	bh=cxA3kEUiS/5jSh9nAx4c8qr11h91GRP7agfaAanWK94=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=TuBpwHOw2yt2J2aHjrLaLlJCimQSabxSTLmPjG92blq40JJ89b36aYa/YfgQxR3HI1kGR+rVSzNBvkju2ya6OjewXDZt0uCTDC4LyoVYd39mIpYpo6ly7k/2FpqdjQqjCBkQDhy6605PxQ1vkECF8lT/w6PnxgjLYlr788GDtrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SxxexnG6; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=qIT39r8ETs1WuHq36gaNECAPOP+/GPMWYcNgP9CyPlLvGeMvQodd7prNTZipUDOuyNc3M9YNNbSGhAbyVt6m4KQx4CLKRmafNMB3wQDvhKZpAHlV+LVuBtjsVDiYlbfRzrWfzVHOnm0p1mTo6I8lkVt/KIReO0+yaVe6IZdOS0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=esiL2wKl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SxxexnG6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87E791F00A3A;
-	Tue, 21 Jul 2026 04:26:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="esiL2wKl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E38721F000E9;
+	Tue, 21 Jul 2026 04:26:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784607965;
-	bh=LAE26sMh6ZrJ8Lvg6zGD83jtaqtfFfO3Z4H0CXF5NvA=;
+	s=k20260515; t=1784607976;
+	bh=KQjNZHU8lU+rvCrozyYa4foPCVFUSMsLDpVgo8HjRvs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=SxxexnG6ImrXdafB/AEmKq2CeRelaaJvkwIj10W/hMUl7rGNWem3TPgN+p1miIc9g
-	 x7jFwnJXJXOEX2wGy4MXTKR+pd6ywz4ILsVsKn9uMetGt+EyS6xWkyDAtzQuR92Hsl
-	 nzqIlOBuZkWPd39ypaTz8dj+h2WkY8EaEO9z3U0w+53KyLNuihCZS56Qy3kHJT6k3Q
-	 jZKQhIF/6pu5/QS0G0z1XrjKUoNhqlMkBoyzhNsxk8PD6SJPICHNoXoQWiCuzJRT2F
-	 nP2XDg7qyRrHUgzGdLdNOVW/+7o5a/+jMP4+kxND1enZs3Obh0dT34EG+HV4V7R+fT
-	 v20cChD2O94EQ==
+	b=esiL2wKlrqtlV7MurL0ZjRNXrH4aMD5RMcV/RvpSCes6Z8Ez/vwsV+TDzrgaxcG63
+	 Ols/HHQ7YYfPpDSL7HZd6qehwKyzRpzLyhvIuu0TwefG9paBKst5/sgl1n6Kn2QHxO
+	 QGFwLzt+ykgqIALnXuBQ35XZB66nUlKluOnPuVuJPDSKOXAM+iHijkRN4K+OWW19QR
+	 +U8qsl2TadFPiAQYKVP5pECyfeoR7mkifRra7HFtWeDrhE5bGZjHlUTjQuYSEQ8V4i
+	 varqFY5C6hLC4YAnkAPImIftv+SAgFzN1G0plAFmCHJax5HIRGWXVbwMyZHL/Keqtx
+	 It2QIhmx3I6SA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v6 05/12] i3c: master: Add support for devices without
- PID
+Subject: Re: [PATCH v6 08/12] i3c: dw-i3c-master: Add ACPI core clock
+ frequency quirk
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Akhil R" <akhilrajeev@nvidia.com>
-Cc: Frank.Li@kernel.org, "Alexandre Belloni" <alexandre.belloni@bootlin.com>, robh@kernel.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, conor+dt@kernel.org, linux-i3c@lists.infradead.org
-In-Reply-To: <20260721040805.1696503-6-akhilrajeev@nvidia.com>
+Cc: linux-i3c@lists.infradead.org, Frank.Li@kernel.org, devicetree@vger.kernel.org, robh@kernel.org, linux-hwmon@vger.kernel.org, "Alexandre
+ Belloni" <alexandre.belloni@bootlin.com>, conor+dt@kernel.org
+In-Reply-To: <20260721040805.1696503-9-akhilrajeev@nvidia.com>
 References: <20260721040805.1696503-1-akhilrajeev@nvidia.com>
- <20260721040805.1696503-6-akhilrajeev@nvidia.com>
+ <20260721040805.1696503-9-akhilrajeev@nvidia.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 21 Jul 2026 04:26:04 +0000
-Message-Id: <20260721042604.87E791F00A3A@smtp.kernel.org>
+Date: Tue, 21 Jul 2026 04:26:15 +0000
+Message-Id: <20260721042615.E38721F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Medium] The static address matching logic for devices without a PID in `=
-i3c_master_attach_boardinfo` is unreachable and contains a structurally imp=
-ossible condition.
-- [Medium] Devices requiring a PID can now be registered with an invalid Ma=
-nufacturer ID of 0.
+
+New issues:
+- [Low] Structurally unreachable error condition in `dw_i3c_master_get_core=
+_rate()`.
+
+Pre-existing issues:
+- [High] Missing pm_runtime_get_sync() in device removal path causes uncloc=
+ked MMIO access bus faults and devres clock refcount underflows.
+- [High] Incorrect casting of device_get_match_data() result for ACPI PRP00=
+01 devices causes random kernel pointers to be used as quirk bitmasks.
 --
 
---- Patch [5]: [PATCH v6 05/12] i3c: master: Add support for devices withou=
-t PID ---
-commit 671c3fae66002e874a13051a9c956e9987d76674
+--- Patch [8]: [PATCH v6 08/12] i3c: dw-i3c-master: Add ACPI core clock fre=
+quency quirk ---
+commit f3333de342eb1c266eb94909516ea27afe8378d5
 Author: Akhil R <akhilrajeev@nvidia.com>
 
-i3c: master: Add support for devices without PID
+i3c: dw-i3c-master: Add ACPI core clock frequency quirk
    =20
-Devices using SETAASA for address assignment are not required to have
-a 48-bit PID according to the I3C specification. Allow such devices to
-register and use the static address where PID was required.
+Some ACPI-enumerated devices like Tegra410 do not expose the controller
+core clock through the clk framework. Unlike device tree, ACPI on Arm does
+not model clock providers. The hardware is expected to have its clocks
+enabled by firmware before the OS takes over.
 
-> diff --git a/drivers/i3c/master.c b/drivers/i3c/master.c
-> index b18dda89c4737..7b2f819bf4437 100644
-> --- a/drivers/i3c/master.c
-> +++ b/drivers/i3c/master.c
-
-[ ... ]
-
-> @@ -2389,8 +2398,18 @@ static void i3c_master_attach_boardinfo(struct i3c=
-_dev_desc *i3cdev)
->  	struct i3c_dev_boardinfo *i3cboardinfo;
-> =20
->  	list_for_each_entry(i3cboardinfo, &master->boardinfo.i3c, node) {
-> -		if (i3cdev->info.pid !=3D i3cboardinfo->pid)
-> -			continue;
-> +		/*
-> +		 * For devices without PID (e.g., SETAASA devices), match by
-> +		 * static address. For devices with PID, match by PID.
-> +		 */
-> +		if (i3cboardinfo->pid) {
-> +			if (i3cdev->info.pid !=3D i3cboardinfo->pid)
-> +				continue;
-> +		} else {
-> +			if (!i3cboardinfo->static_addr ||
-> +			    i3cdev->info.static_addr !=3D i3cboardinfo->static_addr)
-> +				continue;
-> +		}
-
-[Severity: Medium]
-Will this static address matching logic ever evaluate to false?
-
-Since i3c_master_attach_boardinfo() is only called during the dynamic
-address assignment (ENTDAA) phase, i3cdev->info.static_addr is inherently 0
-in this context.
-
-Because i3cboardinfo->static_addr is validated to be non-zero at creation,
-the condition i3cdev->info.static_addr !=3D i3cboardinfo->static_addr will
-evaluate to 0 !=3D non-zero, which is always true.
-
-This means the loop will always continue, making this branch effectively
-dead code that fails to perform the intended matching.
-
-> =20
->  		i3cdev->boardinfo =3D i3cboardinfo;
->  		i3cdev->info.static_addr =3D i3cboardinfo->static_addr;
+> diff --git a/drivers/i3c/master/dw-i3c-master.c b/drivers/i3c/master/dw-i=
+3c-master.c
+> index 29030fd9594aa..3ec3ab1c13b4c 100644
+> --- a/drivers/i3c/master/dw-i3c-master.c
+> +++ b/drivers/i3c/master/dw-i3c-master.c
 
 [ ... ]
 
-> @@ -2848,9 +2871,16 @@ i3c_master_add_i3c_boardinfo(struct i3c_master_con=
-troller *master,
+> @@ -556,13 +557,33 @@ static void dw_i3c_master_set_intr_regs(struct dw_i=
+3c_master *master)
+>  	writel(IBI_REQ_REJECT_ALL, master->regs + IBI_MR_REQ_REJECT);
+>  }
 > =20
->  	boardinfo->pid =3D ((u64)reg[1] << 32) | reg[2];
-> =20
-> -	if ((boardinfo->pid & GENMASK_ULL(63, 48)) ||
-> -	    I3C_PID_RND_LOWER_32BITS(boardinfo->pid))
-> -		return -EINVAL;
-> +	/* For SETAASA devices, validate the static address instead of PID */
-> +	if (boardinfo->static_addr_method & I3C_ADDR_METHOD_SETAASA) {
-> +		if (!boardinfo->static_addr)
-> +			return -EINVAL;
-> +	} else {
-> +		if (!boardinfo->pid ||
-> +		    (boardinfo->pid & GENMASK_ULL(63, 48)) ||
-> +		    I3C_PID_RND_LOWER_32BITS(boardinfo->pid))
-> +			return -EINVAL;
+> +static unsigned long dw_i3c_master_get_core_rate(struct dw_i3c_master *m=
+aster)
+> +{
+> +	unsigned int core_rate_prop;
+> +
+> +	if (master->core_clk)
+> +		return clk_get_rate(master->core_clk);
+> +
+> +	if (!(master->quirks & DW_I3C_ACPI_SKIP_CLK_RST)) {
+> +		dev_err(master->dev, "missing core clock\n");
+> +		return 0;
 > +	}
+
+[Severity: Low]
+Is this check reachable?
+
+During initialization in dw_i3c_common_probe(), if the core clock is missing
+and DW_I3C_ACPI_SKIP_CLK_RST is not set, probe immediately aborts with -EIN=
+VAL.
+
+By the time dw_i3c_master_get_core_rate() is executed, it seems guaranteed
+that if core_clk is missing, the DW_I3C_ACPI_SKIP_CLK_RST quirk is already
+set, making this fallback check dead code.
+
+> +
+> +	if (device_property_read_u32(master->dev, "clock-frequency", &core_rate=
+_prop)) {
+> +		dev_err(master->dev, "missing clock-frequency property\n");
+> +		return 0;
+> +	}
+> +
+> +	return core_rate_prop;
+> +}
+
+[ ... ]
+
+> @@ -1573,14 +1594,28 @@ int dw_i3c_common_probe(struct dw_i3c_master *mas=
+ter,
 > =20
->  	boardinfo->init_dyn_addr =3D init_dyn_addr;
->  	boardinfo->fwnode =3D fwnode_handle_get(fwnode);
-> @@ -2873,10 +2903,10 @@ static int i3c_master_add_of_dev(struct i3c_maste=
-r_controller *master,
->  		return ret;
+>  	master->dev =3D &pdev->dev;
 > =20
->  	/*
-> -	 * The manufacturer ID can't be 0. If reg[1] =3D=3D 0 that means we're
-> -	 * dealing with an I2C device.
-> +	 * I3C device should have either the manufacturer ID specified or the
-> +	 * address discovery method specified. Else treat it as an I2C device.
->  	 */
-> -	if (!reg[1])
-> +	if (!reg[1] && !fwnode_property_present(fwnode, "mipi-i3c-static-method=
-"))
->  		ret =3D i3c_master_add_i2c_boardinfo(master, fwnode, reg);
->  	else
->  		ret =3D i3c_master_add_i3c_boardinfo(master, fwnode, reg);
+> +	if (has_acpi_companion(&pdev->dev)) {
+> +		quirks =3D (unsigned long)device_get_match_data(&pdev->dev);
+> +	} else if (pdev->dev.of_node) {
 
-[Severity: Medium]
-Could this change allow devices requiring a PID to be registered with an
-invalid Manufacturer ID of 0?
+[Severity: High]
+This isn't a bug introduced by this patch, but since this block was
+relocated, I noticed a potential issue for devices using ACPI PRP0001.
 
-By permitting reg[1] =3D=3D 0 when mipi-i3c-static-method is present in
-i3c_master_add_of_dev(), it appears we can bypass the strict Manufacturer ID
-validation in i3c_master_add_i3c_boardinfo().
+If the device is instantiated via ACPI using the PRP0001 HID,
+device_get_match_data() correctly falls back to the OF match table and
+returns a pointer to struct dw_i3c_drvdata.
 
-If the method is SETDASA, which still requires a PID, boardinfo->pid is set
-to ((u64)0 << 32) | reg[2].  If reg[2] is non-zero, !boardinfo->pid is fals=
-e.
+Does casting this pointer to an unsigned long and assigning it to
+master->quirks cause random kernel pointers to be used as a quirk bitmask?
+Depending on the kernel layout, this might cause erratic driver behavior su=
+ch
+as missing PM operations.
 
-Would this result in successfully registering the device despite the zero
-Manufacturer ID, violating the MIPI I3C specification?
+> +		drvdata =3D device_get_match_data(&pdev->dev);
+> +		if (drvdata)
+> +			quirks =3D drvdata->flags;
+> +	}
+> +	master->quirks =3D quirks;
+> +
+>  	master->regs =3D devm_platform_ioremap_resource(pdev, 0);
+
+[ ... ]
+
+> @@ -1636,15 +1671,6 @@ int dw_i3c_common_probe(struct dw_i3c_master *mast=
+er,
+>  		master->has_ibi_data =3D true;
+>  	writel(thld_ctrl, master->regs + QUEUE_THLD_CTRL);
+> =20
+> -	if (has_acpi_companion(&pdev->dev)) {
+> -		quirks =3D (unsigned long)device_get_match_data(&pdev->dev);
+> -	} else if (pdev->dev.of_node) {
+> -		drvdata =3D device_get_match_data(&pdev->dev);
+> -		if (drvdata)
+> -			quirks =3D drvdata->flags;
+> -	}
+> -	master->quirks =3D quirks;
+> -
+>  	/* Keep controller enabled by preventing runtime suspend */
+>  	if (master->quirks & DW_I3C_DISABLE_RUNTIME_PM_QUIRK)
+>  		pm_runtime_get_noresume(&pdev->dev);
+
+[Severity: High]
+This is a pre-existing issue, but I noticed a potential problem in the devi=
+ce
+removal path regarding runtime PM state.
+
+When the driver is unbound, dw_i3c_common_remove() calls
+i3c_master_unregister(), which internally calls dw_i3c_master_bus_cleanup():
+
+dw_i3c_common_remove()
+    i3c_master_unregister()
+        dw_i3c_master_bus_cleanup()
+
+The dw_i3c_master_bus_cleanup() function accesses the DEVICE_CTRL MMIO
+register. Because the driver does not wake the device via
+pm_runtime_get_sync() before unregistration, the device may be in a
+runtime-suspended state with its core clocks disabled.
+
+Could this cause a fatal bus fault on platforms like ARM due to unclocked M=
+MIO
+accesses?
+
+Additionally, if the device remains suspended, will the subsequent devres
+cleanup attempt to disable the already-disabled clocks, causing a clock ena=
+ble
+counter underflow warning?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260721040805.1696=
-503-1-akhilrajeev@nvidia.com?part=3D5
+503-1-akhilrajeev@nvidia.com?part=3D8
