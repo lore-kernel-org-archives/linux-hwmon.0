@@ -1,63 +1,62 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4D4542FCA8
-	for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 09:59:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35FBD446820
+	for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 09:59:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784627995; cv=none; b=I9NOB8xs13srAcH2Bg2lWrcu0to6kKCKJnt5CXL288slBvw7h3Ox7ZDi2W7SdjP1JavNOr6fT3dpcoGpUfNiKWOCGGzXO4sK+WmaH/wxHyyIIunhRRtj8DeeOQnn4Tm8plqoNiGjqOM0t3NS0BqaVKI84sOwhXwSxJESOpF5lE8=
+	t=1784627996; cv=none; b=u1z34uZuNZDzPVB5MgN5JDhWHQLcKA3g2GHHkLFD+/nhB05Ve539aGnTJpaPgUbu7kaq79iLCLHvFKGCmW9RHUM07PKJ2teLA8sR9B7oEONMn1+hThHVdwefjX8s121uCTZPYYcCOrNxsuACnMGfhVvOjNlC8CWEtzpyaWwY1xA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784627995; c=relaxed/simple;
-	bh=uMbFgZLCRFrESlapa+JInn2glqohSQZ25RTJ1QwtfR8=;
+	s=arc-20240116; t=1784627996; c=relaxed/simple;
+	bh=mKTuHoudPXtUD4fSIGLO2rO3jfWebdMkF2r5JFmyoqc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QdedEvHe0j15M2vIpS8VcxTa9/1LHS6I487AwvwY6zuu9EfaGlFJwSrJP1FaCyyneryzZjK58HoedwmxPsEnkHQXiU4cj4D1UPtpiDtq7LM4SHUl0xTjomHTdsPfAYDSn36iYisBqZTzgHsEyPv60rnYG49fmMY9KI6cshTOYNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MN5WZiLe; arc=none smtp.client-ip=209.85.128.50
+	 MIME-Version; b=T99e5cZaYIkDM0Utwwwhv/kJew4i939KRpMF2ZVvtga+T/CwYosA0TsPqlaXe0gHJz9KmqJO6iMyO1q/OhcPyEGek/0vzy/rYsnrC/JAX1HokVrXHZkiw4tq25f0kL1uVgpNBhueuEfm+KMTW9UtklbpNzUzuNcF71MxGEgEL9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BEO8jKBX; arc=none smtp.client-ip=209.85.221.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MN5WZiLe"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4955de8797cso11708485e9.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 02:59:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BEO8jKBX"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-47c6e9a694bso6217916f8f.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 02:59:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784627991; x=1785232791; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=HaCVTtIsxHrLK92jf9IpnJwSHawfy+ZzA+YycHEjzEQ=;
-        b=MN5WZiLe9nwOuoa2BgL+HXM8/Vl8zON3ascy2+c+F1yOrUqWXoGtJe5O12bVGSEu7Q
-         MowvGB9jtaWNcg4UKqkNJX+Sc9cK1asx/TWHGJSt1aXyE2ObjqudxVALjXy42ndxzybM
-         EMZ8G7C4pBkZb6PpFPkyR4PecnW+dLHOG/AgiyNxG8NEVwkm1AePhzfnFnLsI/FIwzRO
-         YRNQZsevufREfs98Dsb+qws/piBKw+LquFE0UkZCN31xSOlzFq+5PRLdxAMIIUe6ny7g
-         eOlUSLhmWnOJgJjPGqrZH/9vCU63Zxll+0rJkVYmfgtY7UFGw/V2umbx3xVtj0c04y4B
-         cJ+A==
+        d=gmail.com; s=20251104; t=1784627992; x=1785232792; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=xoUmS0jdu/jOcdI96dGt2PLvXC9ansFuvfUj3r5TqFk=;
+        b=BEO8jKBXIYIuFwQQJJPrXiyuqvyUYvuOxVe+EJLxf0q20J3uMLGTX0Fpv7tWtMhUsL
+         GM4LuXqcN25uSNyMutUpEhm8Z7MI+r0DNhZsQkAYYmb8N0TAqXTtjWvnyPD2gz5xRq84
+         yaE9q+84EwJXCM112TUISW0Rgxnijz80EParmF3tfI+5bGQ19xbiR3lMWPZQVfFQ/rsu
+         YtTBgz+hx8K54fymkfX15Riu1llkCcjidNtbylgUajRqnw1eDA43rZfbVUvBbmKTUrki
+         TtYFMSy2N85l7AsDA9+aTFE/kOQzq+V8qKGlM8SFmjpEYFbH9za+TDyYR2HJjgMxITKf
+         dCdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784627991; x=1785232791;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=HaCVTtIsxHrLK92jf9IpnJwSHawfy+ZzA+YycHEjzEQ=;
-        b=FpTfZZVBUC37d6C30sRyPOrOgISl9Ehu+V8j0cU82MyDGP8WlaftfDo4u84Zc31Vwt
-         G93lNr1IXuYbsZzZs1YuawIC14XniZx6r7FxlmSxQCLI7wUchRltL4yR0oQ1sdbpvF78
-         ezeJxA4CV86jD/XZl7zWDkQoHS0H12raD4JYTEvi0FPen2hb45seW1UwgLixzYzJPWFV
-         uKppeJkHqz0hkZNVkxiLvRcTUW47qtXqjzVqelWltDF4ib3FN5eeD6/vdk7Dy34DuyCU
-         JMi5HaKkvefxGEz/hnTFjVjcVLM/Hq3XjnIAADfhmwVEHNLZE5NwbFkrIrCP/s1dlmvK
-         Zbnw==
-X-Gm-Message-State: AOJu0Yx8Xyn286Vmn4Gg3G7PXVHqghUbfrQZzxOlsbkJSp+spbLNIYep
-	ku1Cfyb+ehvfmiw/SG5jbIi/JtdHhbIRG7ePTwOHMMr0b4+Y/QJDeuWG
-X-Gm-Gg: AfdE7cnzOUle0h+yDcZ9stZQ7TAKoGQYLUxcoG4QHWQc39XqkaPCGakvj4QyzjnNfHT
-	eAML55EGbePLe9+979J5quaX+Y1pIqfYuHQBeaUFlhoxv8S9tx0I4XrjHmsNQjbbk3esy8tBo+6
-	c0Rl7Gb/h9UlpDQQw1WNU5/MId95m9xHFz20LVuyApQV5X7O+gWFHuPTTa+zw6mxT0CHV1YlLJ2
-	FItx0iZ/FXhsPplKGWUL6BFZKclPAcUq4xzqj1qkf9/YO0KMCugmiuDy/gOuh9KRH38USoGdQOT
-	/5dObgEaPDoXbR80OJovVFdcgVPgQBLycjIkAmfJJpqWDzIdHewiIN0g8H820p7m4Epjfwveb/b
-	WBbSoM3ZIgxONFO3wazawtrOrufV8YYa3fiyYfV7oxGiry+32jzDs7KGMdSqOwf440ISmIT7xgQ
-	ILzKKS5tAQSlozABFMgGVQjIuOW8aq3f+4ew==
-X-Received: by 2002:a05:600c:5882:b0:495:441a:39d2 with SMTP id 5b1f17b1804b1-4954a402f2amr149790865e9.21.1784627990818;
-        Tue, 21 Jul 2026 02:59:50 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1784627992; x=1785232792;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=xoUmS0jdu/jOcdI96dGt2PLvXC9ansFuvfUj3r5TqFk=;
+        b=Wt2QP7Vn+KUWlwBDcYVXsASOMfTEbzw+V6rwSdmarICtqygW44Yf0sQnZTx477zNnO
+         1gMjECL/E1NYc4VwND3jmYg88SeSWAm6l7jJHx5QYjp4doJO39WjvsnoPTY+XjZu21PB
+         D4ZYxHsLVGa52Dh4Axl7Ny145Hc9mrDmsTAogAwsRmcqdOELB6AHh+uY53oryIPPR33g
+         YuZQBNTUrIzXfTsVAClE4V0VA/Cvrsx9gHQMPHEGDla9yoAIDznXNEwB/fbgYlrZ91pA
+         8AGDHNJFQnQdYlGOPRH1/fnn4eHBH6z3TYqXW3U46QBXmIMCEDGvY4FiAGw2oIY271c+
+         wIbw==
+X-Gm-Message-State: AOJu0YwXbCWX2Ty+NgDi5IydNdUsNbtW9pLHGtdUsdgo41BhnML1Estx
+	Pr/UWltO5h4kHNpwVI7Ru1xcycgPdAShWv9HhU90LWzs66dPdW7isIYJ
+X-Gm-Gg: AR+sD12Z0UvuTxkrga7qsPRXTa1X+JJKYgm+gswiim9SYjvOlERiY5wUZ3yLMY/CK83
+	b/r4vlLeK+dPEc4rHgIJXqPG0PZD5vtjWGGoqlLEL0BMtwnNXjRbcSxs7EllVEX/giUPaJawxlb
+	ZRHwHxaf4BQcfmfB4/3VdCeZPcUS9Fl1YAAsmiBkqo+cYharcvpaTt8dxoQ/Ct18n14P3szs6Ak
+	2oy0HxfQdeu4rxjum8hLhdale7GLclqzcHPeIY9ZEb+6SskT5WkfZzZfB8FQge/ejje+JbgJs37
+	7GCiN6EC9JNoMRiiZhoSBdoWKC7G7y/V7wfot5Lj5PZrqhoraKK/5O59ttn/nkpIIC73Rsbb94U
+	OwH9dgJ6IsTGi/5qLMnAekK21N3zecvKyylCTy7FAV2qFWJGABMd53yTel6JVTcOxDf4azJy+5f
+	dDSQZJJExKbYReHmq+PZIA5Vc=
+X-Received: by 2002:a05:6000:4a0a:b0:47d:f441:5f93 with SMTP id ffacd0b85a97d-47f6230deacmr20810502f8f.25.1784627992105;
+        Tue, 21 Jul 2026 02:59:52 -0700 (PDT)
 Received: from xeon ([188.163.112.51])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63e499c2sm35228691f8f.4.2026.07.21.02.59.49
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63e499c2sm35228691f8f.4.2026.07.21.02.59.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2026 02:59:50 -0700 (PDT)
+        Tue, 21 Jul 2026 02:59:51 -0700 (PDT)
 From: Svyatoslav Ryhel <clamor95@gmail.com>
 To: Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>,
@@ -68,9 +67,9 @@ To: Jean Delvare <jdelvare@suse.com>,
 Cc: linux-hwmon@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/3] hwmon: (emc1403) Convert to use OF bindings
-Date: Tue, 21 Jul 2026 12:59:34 +0300
-Message-ID: <20260721095935.439174-3-clamor95@gmail.com>
+Subject: [PATCH v3 3/3] hwmon: (emc1403) Add regulator support
+Date: Tue, 21 Jul 2026 12:59:35 +0300
+Message-ID: <20260721095935.439174-4-clamor95@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260721095935.439174-1-clamor95@gmail.com>
 References: <20260721095935.439174-1-clamor95@gmail.com>
@@ -80,72 +79,42 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Jonas Schwöbel <jonasschwoebel@yahoo.de>
+Add support for VDD power supply for this sensor. It is required on some
+devices for the sensor to start up and work properly.
 
-Add OF match compatible table to be able to use this driver with Device
-Trees.
-
-Signed-off-by: Jonas Schwöbel <jonasschwoebel@yahoo.de>
 Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/emc1403.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ drivers/hwmon/emc1403.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/drivers/hwmon/emc1403.c b/drivers/hwmon/emc1403.c
-index cd753b38709f2..b7ab6069ec7b1 100644
+index b7ab6069ec7b1..5a472760f8d80 100644
 --- a/drivers/hwmon/emc1403.c
 +++ b/drivers/hwmon/emc1403.c
-@@ -16,6 +16,7 @@
- #include <linux/hwmon.h>
- #include <linux/hwmon-sysfs.h>
- #include <linux/err.h>
-+#include <linux/mod_devicetable.h>
+@@ -19,6 +19,7 @@
+ #include <linux/mod_devicetable.h>
  #include <linux/sysfs.h>
  #include <linux/regmap.h>
++#include <linux/regulator/consumer.h>
  #include <linux/util_macros.h>
-@@ -659,14 +660,14 @@ static int emc1403_probe(struct i2c_client *client)
+ 
+ #define THERMAL_PID_REG		0xfd
+@@ -660,6 +661,12 @@ static int emc1403_probe(struct i2c_client *client)
  {
  	struct thermal_data *data;
  	struct device *hwmon_dev;
--	const struct i2c_device_id *id = i2c_match_id(emc1403_idtable, client);
++	int ret;
++
++	ret = devm_regulator_get_enable(&client->dev, "vdd");
++	if (ret)
++		return dev_err_probe(&client->dev, ret,
++				     "Failed to enable regulator\n");
  
  	data = devm_kzalloc(&client->dev, sizeof(struct thermal_data),
  			    GFP_KERNEL);
- 	if (!data)
- 		return -ENOMEM;
- 
--	data->chip = id->driver_data;
-+	data->chip = (uintptr_t)i2c_get_match_data(client);
-+
- 	data->regmap = devm_regmap_init_i2c(client, &emc1403_regmap_config);
- 	if (IS_ERR(data->regmap))
- 		return PTR_ERR(data->regmap);
-@@ -682,10 +683,21 @@ static const unsigned short emc1403_address_list[] = {
- 	0x18, 0x1c, 0x29, 0x3c, 0x4c, 0x4d, 0x5c, I2C_CLIENT_END
- };
- 
-+static const struct of_device_id emc1403_of_match[] = {
-+	{ .compatible = "smsc,emc1402", .data = (void *)emc1402 },
-+	{ .compatible = "smsc,emc1403", .data = (void *)emc1403 },
-+	{ .compatible = "smsc,emc1404", .data = (void *)emc1404 },
-+	{ .compatible = "smsc,emc1428", .data = (void *)emc1428 },
-+	{ }
-+
-+};
-+MODULE_DEVICE_TABLE(of, emc1403_of_match);
-+
- static struct i2c_driver sensor_emc1403 = {
- 	.class = I2C_CLASS_HWMON,
- 	.driver = {
- 		.name = "emc1403",
-+		.of_match_table = emc1403_of_match,
- 	},
- 	.detect = emc1403_detect,
- 	.probe = emc1403_probe,
 -- 
 2.53.0
 
