@@ -1,120 +1,101 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35FBD446820
-	for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 09:59:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 862DE4499A3;
+	Tue, 21 Jul 2026 10:00:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784627996; cv=none; b=u1z34uZuNZDzPVB5MgN5JDhWHQLcKA3g2GHHkLFD+/nhB05Ve539aGnTJpaPgUbu7kaq79iLCLHvFKGCmW9RHUM07PKJ2teLA8sR9B7oEONMn1+hThHVdwefjX8s121uCTZPYYcCOrNxsuACnMGfhVvOjNlC8CWEtzpyaWwY1xA=
+	t=1784628007; cv=none; b=GOCUei/3NctFGN+SvWcf3scvB7oYEs/6JPkoFq+cN+nfPsCRXFROenfwoqr4FX1G2/ECPZp5Yg7jOcqPQ32JOGHYgYYt3uCq5CfDixs35oOVrcHO+MUB2W2CA9efaiY/QIe116V+3xQVCgZWMxnCjt3+zAZSB3O482XvpRpZDLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784627996; c=relaxed/simple;
-	bh=mKTuHoudPXtUD4fSIGLO2rO3jfWebdMkF2r5JFmyoqc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=T99e5cZaYIkDM0Utwwwhv/kJew4i939KRpMF2ZVvtga+T/CwYosA0TsPqlaXe0gHJz9KmqJO6iMyO1q/OhcPyEGek/0vzy/rYsnrC/JAX1HokVrXHZkiw4tq25f0kL1uVgpNBhueuEfm+KMTW9UtklbpNzUzuNcF71MxGEgEL9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BEO8jKBX; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784628007; c=relaxed/simple;
+	bh=RxNiZg6VNKiujo14I9B5v7gaww/65c0qeFhe4P9gYTo=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=C674n9T0Qd4SnB8g2auTlzt9iasKrNY8Pf0M8ILSJCuGFpcqANf/ozetjVAizrZikrT3MEJbVNk+TU2+ZJw/Tm7QJ0BMaKMGew8EydsQesKDudTZGKFG+84Q9x1McPbPKu0ZVqAyDNUzEGvWLBePfPOZtmp+Zp6smBRNOUwJdNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kfLdOq+t; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BEO8jKBX"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-47c6e9a694bso6217916f8f.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 02:59:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784627992; x=1785232792; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=xoUmS0jdu/jOcdI96dGt2PLvXC9ansFuvfUj3r5TqFk=;
-        b=BEO8jKBXIYIuFwQQJJPrXiyuqvyUYvuOxVe+EJLxf0q20J3uMLGTX0Fpv7tWtMhUsL
-         GM4LuXqcN25uSNyMutUpEhm8Z7MI+r0DNhZsQkAYYmb8N0TAqXTtjWvnyPD2gz5xRq84
-         yaE9q+84EwJXCM112TUISW0Rgxnijz80EParmF3tfI+5bGQ19xbiR3lMWPZQVfFQ/rsu
-         YtTBgz+hx8K54fymkfX15Riu1llkCcjidNtbylgUajRqnw1eDA43rZfbVUvBbmKTUrki
-         TtYFMSy2N85l7AsDA9+aTFE/kOQzq+V8qKGlM8SFmjpEYFbH9za+TDyYR2HJjgMxITKf
-         dCdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784627992; x=1785232792;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=xoUmS0jdu/jOcdI96dGt2PLvXC9ansFuvfUj3r5TqFk=;
-        b=Wt2QP7Vn+KUWlwBDcYVXsASOMfTEbzw+V6rwSdmarICtqygW44Yf0sQnZTx477zNnO
-         1gMjECL/E1NYc4VwND3jmYg88SeSWAm6l7jJHx5QYjp4doJO39WjvsnoPTY+XjZu21PB
-         D4ZYxHsLVGa52Dh4Axl7Ny145Hc9mrDmsTAogAwsRmcqdOELB6AHh+uY53oryIPPR33g
-         YuZQBNTUrIzXfTsVAClE4V0VA/Cvrsx9gHQMPHEGDla9yoAIDznXNEwB/fbgYlrZ91pA
-         8AGDHNJFQnQdYlGOPRH1/fnn4eHBH6z3TYqXW3U46QBXmIMCEDGvY4FiAGw2oIY271c+
-         wIbw==
-X-Gm-Message-State: AOJu0YwXbCWX2Ty+NgDi5IydNdUsNbtW9pLHGtdUsdgo41BhnML1Estx
-	Pr/UWltO5h4kHNpwVI7Ru1xcycgPdAShWv9HhU90LWzs66dPdW7isIYJ
-X-Gm-Gg: AR+sD12Z0UvuTxkrga7qsPRXTa1X+JJKYgm+gswiim9SYjvOlERiY5wUZ3yLMY/CK83
-	b/r4vlLeK+dPEc4rHgIJXqPG0PZD5vtjWGGoqlLEL0BMtwnNXjRbcSxs7EllVEX/giUPaJawxlb
-	ZRHwHxaf4BQcfmfB4/3VdCeZPcUS9Fl1YAAsmiBkqo+cYharcvpaTt8dxoQ/Ct18n14P3szs6Ak
-	2oy0HxfQdeu4rxjum8hLhdale7GLclqzcHPeIY9ZEb+6SskT5WkfZzZfB8FQge/ejje+JbgJs37
-	7GCiN6EC9JNoMRiiZhoSBdoWKC7G7y/V7wfot5Lj5PZrqhoraKK/5O59ttn/nkpIIC73Rsbb94U
-	OwH9dgJ6IsTGi/5qLMnAekK21N3zecvKyylCTy7FAV2qFWJGABMd53yTel6JVTcOxDf4azJy+5f
-	dDSQZJJExKbYReHmq+PZIA5Vc=
-X-Received: by 2002:a05:6000:4a0a:b0:47d:f441:5f93 with SMTP id ffacd0b85a97d-47f6230deacmr20810502f8f.25.1784627992105;
-        Tue, 21 Jul 2026 02:59:52 -0700 (PDT)
-Received: from xeon ([188.163.112.51])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63e499c2sm35228691f8f.4.2026.07.21.02.59.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2026 02:59:51 -0700 (PDT)
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] hwmon: (emc1403) Add regulator support
-Date: Tue, 21 Jul 2026 12:59:35 +0300
-Message-ID: <20260721095935.439174-4-clamor95@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260721095935.439174-1-clamor95@gmail.com>
-References: <20260721095935.439174-1-clamor95@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kfLdOq+t"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D93AC1F000E9;
+	Tue, 21 Jul 2026 10:00:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784628005;
+	bh=63GK3+lU6Xik7r/DuPgi1C8D+PIBWHw++pfSdIyYQQU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=kfLdOq+tb79+KbSy70kYyapDXa7M7rP+W8Pwocvw8Y9ZYW5varYPI7523bS8Jq7Wp
+	 Gq0mkqgjxi9vj2IwLwXZ9iWEKxBAuRA9va8yml/LVSZVWJxxtT4FIk/dhfD12Knk3C
+	 TqZ9IXLMPhL8J3Hg7dvoC+1cDF3sAYjNZP2KEJsA5h/LI5L8RlfCoslD8wR3g0YAvm
+	 d3m/bFxJJbmw7dxdouVEG/cYQQoMgZ8FFPY5Q51iGf4x/fqDDI9HnXr1LhTWknA4Q1
+	 4NHwVjflAMTFe8zny4uyRFyJz4ILvJhCvkUMtBIyRLiap9LEnYr4OFT3QaUIRdVqOt
+	 AwgPNXFICB3BQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 4/6] hwmon: (lm63) Add Sensylink CTF2301 support
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Troy Mitchell" <troy.mitchell@linux.dev>
+Cc: robh@kernel.org, devicetree@vger.kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org
+In-Reply-To: <20260721-ctl2301-v2-4-ef5fb342872a@linux.dev>
+References: <20260721-ctl2301-v2-0-ef5fb342872a@linux.dev>
+ <20260721-ctl2301-v2-4-ef5fb342872a@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 21 Jul 2026 10:00:04 +0000
+Message-Id: <20260721100004.D93AC1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add support for VDD power supply for this sensor. It is required on some
-devices for the sensor to start up and work properly.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] Unchecked I2C reads for LSB are bitwise-ORed into 16-bit registe=
+r values, corrupting data on read errors.
+--
 
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/emc1403.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+--- Patch [4]: [PATCH v2 4/6] hwmon: (lm63) Add Sensylink CTF2301 support -=
+--
+commit bbf54143e45eb1b3b9599d60a55904a5184333c9
+Author: Troy Mitchell <troy.mitchell@linux.dev>
 
-diff --git a/drivers/hwmon/emc1403.c b/drivers/hwmon/emc1403.c
-index b7ab6069ec7b1..5a472760f8d80 100644
---- a/drivers/hwmon/emc1403.c
-+++ b/drivers/hwmon/emc1403.c
-@@ -19,6 +19,7 @@
- #include <linux/mod_devicetable.h>
- #include <linux/sysfs.h>
- #include <linux/regmap.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/util_macros.h>
- 
- #define THERMAL_PID_REG		0xfd
-@@ -660,6 +661,12 @@ static int emc1403_probe(struct i2c_client *client)
- {
- 	struct thermal_data *data;
- 	struct device *hwmon_dev;
-+	int ret;
-+
-+	ret = devm_regulator_get_enable(&client->dev, "vdd");
-+	if (ret)
-+		return dev_err_probe(&client->dev, ret,
-+				     "Failed to enable regulator\n");
- 
- 	data = devm_kzalloc(&client->dev, sizeof(struct thermal_data),
- 			    GFP_KERNEL);
--- 
-2.53.0
+hwmon: (lm63) Add Sensylink CTF2301 support
 
+This commit adds support for the Sensylink CTF2301 chip to the lm63 driver.
+It introduces extended local temperature resolution and optional thermal
+cooling device registration.
+
+> diff --git a/drivers/hwmon/lm63.c b/drivers/hwmon/lm63.c
+> index e2a429e579ac1..764a7467afa60 100644
+> --- a/drivers/hwmon/lm63.c
+> +++ b/drivers/hwmon/lm63.c
+
+[ ... ]
+
+> @@ -256,8 +270,16 @@ static struct lm63_data *lm63_update_device(struct d=
+evice *dev)
+> =20
+>  		data->temp8[0] =3D i2c_smbus_read_byte_data(client,
+>  				 LM63_REG_LOCAL_TEMP);
+> +		if (data->kind =3D=3D ctf2301)
+> +			data->temp1_input =3D ((u16)(u8)data->temp8[0] << 8)
+> +					  | i2c_smbus_read_byte_data(client,
+> +						CTF2301_REG_LOCAL_TEMP_LSB);
+>  		data->temp8[1] =3D i2c_smbus_read_byte_data(client,
+>  				 LM63_REG_LOCAL_HIGH);
+> +		if (data->kind =3D=3D ctf2301)
+> +			data->temp1_max =3D ((u16)(u8)data->temp8[1] << 8)
+> +					  | i2c_smbus_read_byte_data(client,
+> +						CTF2301_REG_LOCAL_HIGH_LSB);
+
+[Severity: Medium]
+Will this corrupt the temperature reading if the I2C read fails?
+
+In lm63_update_device(), if i2c_smbus_read_byte_data() for the LSB returns
+a negative error code (such as -EIO), it gets bitwise-ORed with the shifted
+MSB. The negative s32 error code would sign-extend, overwriting the MSB
+bits entirely and resulting in a large negative temperature spike instead
+of propagating the error or maintaining the previous valid reading.
+
+Could we check the return value of i2c_smbus_read_byte_data() before
+merging it into temp1_input and temp1_max?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260721-ctl2301-v2=
+-0-ef5fb342872a@linux.dev?part=3D4
