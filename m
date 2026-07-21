@@ -1,123 +1,124 @@
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+Received: from mx0b-00128a01.pphosted.com (mx0b-00128a01.pphosted.com [148.163.139.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A91F1390CBF;
-	Tue, 21 Jul 2026 00:44:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.135.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A26A390CBF;
+	Tue, 21 Jul 2026 00:44:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.139.77
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784594687; cv=fail; b=EimMHeO651fFWZNeFJzWNOjr91GjdqXO0p88mvTV8c3BVc6HvG1bxw9Dj/HIO28mYO1np2htIYaOVzTuLws2sK7Lzijd0Rj9Y0b9F0vwLqRBFKMvzpgQ2hztRy2lQdqKbGYW6yUdA0vO/MSQjnFgILlgma2Bg95ZhuNrBF5cZ04=
+	t=1784594691; cv=fail; b=avWGvcBrOvPAQTBdDmnHfr2u7mVjLAiEjaXdN61aQkyG0OLwlx3nfeja6W5Lcbj0m4fmVcSw768/XHge7oIbvHxecNF9D25WOUNShwjvDj38sYNWkB7ZoU5lW3svLcAG3E5Xhg35ndLpEGaoTd9ukQBchpicd+UjC5BAgGLezm0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784594687; c=relaxed/simple;
-	bh=tOJXn4ESubTgG5IGhcVRFjL4CpOKJ3Ru8PHMxotFhNE=;
+	s=arc-20240116; t=1784594691; c=relaxed/simple;
+	bh=DOR8RqhqjwJ5HaiQVtQ+w5mviB1yFJvPEddWQqJ+u74=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=EJ8Bnx9DhrCTJk5xzTGeN8XE+WNVHPYDugKWU6rbiZ532pb/2U+SM7C0bPiSRXCT9Z8BIWmHRM+ymTYVwbVfgsTIsfb+dkNbQ0Pl1B6akgRZ8qJ88brAmtoJQc0Iflb947+U8sGthpZxCgEUdowB7NAyDqjQMgbTMeS5DMr+rHU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=Sg9E3orW; arc=fail smtp.client-ip=148.163.135.77
+	 Content-Type:MIME-Version; b=ozDqv81oC2NklwHBz3CuO+JP1yiro/V4WVg40mF14guJdpv3ZI5cOkVvyS0c+jH0M+eJh+4ENQ85oTbh/bVOUDk0SgI387qlGxmVBxBhRGP1FOHh8UnqGAxGRVC274UxkEYrbI8MjccgHOJSI56etGNzdd01GpaVuasiX45N/yo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=zg0XzLC+; arc=fail smtp.client-ip=148.163.139.77
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="Sg9E3orW"
-Received: from pps.filterd (m0516787.ppops.net [127.0.0.1])
-	by mx0a-00128a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66KNCdJD3189968;
-	Mon, 20 Jul 2026 20:44:38 -0400
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="zg0XzLC+"
+Received: from pps.filterd (m0375854.ppops.net [127.0.0.1])
+	by mx0b-00128a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66KNBpM91523824;
+	Mon, 20 Jul 2026 20:44:41 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=DKIM; bh=qLl/i
-	01H6N3vSjzYJYwc1gvDghaFRQDM/OMYMejH4wk=; b=Sg9E3orWHEQrKLOsre3PJ
-	z6FJg83GQjQYfSxWgqszSoRnosVU0hOZawHK3KKeVW5NJYLnn0yScV+8+WSH3bCl
-	vXNDkbiN6fQYmKNQrv+5psKgdTmo9eVPHCKXuVv9AylYGv70AFEmMJqR3MCydFuy
-	YmBHHX+yhmjsn4C5KcoKDSKJiKDed16YgGcJt5R+A3Ey3VXnhAfctV+bAs5mjc6N
-	/r8T5/sYa/0dCnm0SwDtsrPiPMEBthglv+8/TUPrTTsnQ0aFh3odUq6lKqdLowcD
-	oAmzM61TkKR3q3ooSakvdsQCg996BLe7DXFcmQZCV1yg0VMF2OeEowpt4LExDO+9
-	A==
-Received: from byapr05cu005.outbound.protection.outlook.com (mail-westusazon11010064.outbound.protection.outlook.com [52.101.85.64])
-	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 4fgttgef12-1
+	:message-id:mime-version:references:subject:to; s=DKIM; bh=q7NGt
+	yXA/YyVLwSXDyieALsSAh3YEUChlNLiYep54uI=; b=zg0XzLC+HzRujhmrZtpl2
+	MJlw4gX04Uwfqbhz/U4L5zWVQBazNTjXvc9EZREW0Z6+oCDRChcYItKBLJGebpTy
+	165GMGHA4+zkCbXlRf01cGXonxVSYrvdn7tdFVLi/2sbOjcDM881k7EJTZsZ/k4W
+	QjFZzQs9xncOwgBR9OyGGHhozzKnyQvSY1o2xBvD9HgBHXlBwu+bJU4EWd56BXBU
+	8bH6CP58P7aYRrpuJHJP4w0q0etpHUia4wNx5D0UGWe3RPjRxDnY68ZtYMyW964Y
+	5UKHkWXntpQSIGWqBBYRedwEJtCXKw1zUkHd6zXSZM7e/+J3mBTYgojNurSrA2Kr
+	g==
+Received: from cy7pr03cu001.outbound.protection.outlook.com (mail-westcentralusazon11010019.outbound.protection.outlook.com [40.93.198.19])
+	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 4fguhfwkdc-1
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Mon, 20 Jul 2026 20:44:37 -0400 (EDT)
+	Mon, 20 Jul 2026 20:44:40 -0400 (EDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=YKm+h2cUJ41H+RmX3R4dIuRv9b0f7VypH8zLkYknoWP3H+uW3I3DQci0PwICuFzJZ9rAzaGOrPLXrW9+fr/x8tVky4GLV4H4DjpCkFvVE8t8c4bOA7tTY3tkLXRUgrO6x8u2ny6ISZZvQ11tDDoROBbDdvoKHOadtL7CnKJjzX0+rAtmkmvC80VFvG+vHtzAOIqGimuPvPRKywPsUIf0/J1h4N4IXt3oNiLtP6T6mc4qM18o9MSETBKgLq72oZgXdZ0F3A6hAqd6DOXc6GNuWyZMh+5fC8GM/a6mMEepsnLm9OQqaBqrYaclscIr3lVmwZlnh6hg3b4BXhD+xvDGdw==
+ b=cYXrAWHDUibauXJ0Aeda8OCjzwZ9IFMnyhEONfyhSX8PLug6UQ3cwCl/KVv7W9TpBnmme6ui9KG69Zc4SNixOcXK0lTVqUNfkF0GageV2oLYxmZjXh1bFKoPDFY8knvK3FWC0C9jJN3qGVdHykuyG7etq8UOAgVFr84R8ptewbTnYaMik4jj9Ch4++EuBiNmeDxEJiYfmXWmpSTXRWblfr0NYD687cyRpIn0AWQFvwha1z+6F+IH0rDU0/1endCvZA9isXLB31sQ5R1gcI82HPs8URL6bzJFO9MSqrDbj94n9e1cxY0ubhmN8Rk2jOd0JDjOtVO5zQb+F8nD3nXXFg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qLl/i01H6N3vSjzYJYwc1gvDghaFRQDM/OMYMejH4wk=;
- b=OcUh10n/NNO5LnC3A2yG66arDGgyK+IUmjXimXY0Bz+EBjbJNvb++WSs0r5pspXsgnTW2GjvaCUsrIK5N6Vp/7X0i8rsRKR7KsXp2b5+sQSF8h/epFRo5wCJW3I23syRMjsFbHPoFgy8ZgPwSu4bWqC50kH8GCQhq3gWQLPhFIAmIkGUV8A8u4cfFGjOu88NiDdwMX28qEC1v0xFDLcf7Q29DIiYk+d3L5RZK0jlaNIG5NTWff+FqHgFPYufoctuazOUOz3EZ/qyNNsLQ+Cv4PGmtRscIzvLgc+IHUgsY0ORYRvUA49yy4cfI9ZnkDR09Fbtrgsk1AZFq/iaAB4lgg==
+ bh=q7NGtyXA/YyVLwSXDyieALsSAh3YEUChlNLiYep54uI=;
+ b=geLJdz0tzlVmrzwU8yONQpan2U7X98Y7Waxcg4KHKvTaahCFJ+5CQaUwjnpyeLhaMvE/sjykyValmIzdA0/gMPVmu9b9WPhTXmGtr+FAEFWTVIW2iAJKar6oi8md+z9ZdkqloRI4xxywnEjEj6KWYKPbYhrkkfERVii179T5Oijugdy3oWJDe2E/ZGzxdcuXyrZo0iz3dyXCzSYCYkNL6sTqPQDr8+JIyXHzXOLefIOFduCK6LYyS4CkYR0bQUL17efNnuY8zJXm9z8tFjsT/nC3zkBnCX1IO0RA38P1LwcPlQRq0bv1XsPr7yBuNmS/J5OtRie6n0IFaafb9Uv1lw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
  dkim=pass header.d=analog.com; arc=none
 Received: from PH0PR03MB6351.namprd03.prod.outlook.com (2603:10b6:510:ab::18)
- by SJ0PR03MB6951.namprd03.prod.outlook.com (2603:10b6:a03:419::17) with
+ by BN5PR03MB8056.namprd03.prod.outlook.com (2603:10b6:408:2a9::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.223.18; Tue, 21 Jul
- 2026 00:44:35 +0000
+ 2026 00:44:38 +0000
 Received: from PH0PR03MB6351.namprd03.prod.outlook.com
  ([fe80::1578:4572:29b5:2442]) by PH0PR03MB6351.namprd03.prod.outlook.com
  ([fe80::1578:4572:29b5:2442%4]) with mapi id 15.21.0223.017; Tue, 21 Jul 2026
- 00:44:35 +0000
+ 00:44:37 +0000
 From: "Torreno, Alexis Czezar" <AlexisCzezar.Torreno@analog.com>
 To: "sashiko-reviews@lists.linux.dev" <sashiko-reviews@lists.linux.dev>
-CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+CC: "robh@kernel.org" <robh@kernel.org>,
+        "linux-hwmon@vger.kernel.org"
+	<linux-hwmon@vger.kernel.org>,
         "devicetree@vger.kernel.org"
 	<devicetree@vger.kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>
-Subject: RE: [PATCH v3 2/4] hwmon: (pmbus/max20830): add VOUT feedback
- resistor scaling support
-Thread-Topic: [PATCH v3 2/4] hwmon: (pmbus/max20830): add VOUT feedback
- resistor scaling support
-Thread-Index: AQHdF/YCzJ3w82nZi0u4PK0Z06eq07Z1vwAAgAFW6nA=
-Date: Tue, 21 Jul 2026 00:44:35 +0000
+        "conor+dt@kernel.org" <conor+dt@kernel.org>
+Subject: RE: [PATCH v3 4/4] hwmon: (pmbus/max20830): add support for max20830c
+ and max20840c
+Thread-Topic: [PATCH v3 4/4] hwmon: (pmbus/max20830): add support for
+ max20830c and max20840c
+Thread-Index: AQHdF/YJPqkE3QBbFkeFnRBEs/hOLrZ1wCSAgAFfRqA=
+Date: Tue, 21 Jul 2026 00:44:37 +0000
 Message-ID:
- <PH0PR03MB635109584F166EBD4A5510B4F1C22@PH0PR03MB6351.namprd03.prod.outlook.com>
+ <PH0PR03MB6351840C485DB5012440472FF1C22@PH0PR03MB6351.namprd03.prod.outlook.com>
 References: <20260720-dev-max20830c-v3-0-9d06d27d6da3@analog.com>
- <20260720-dev-max20830c-v3-2-9d06d27d6da3@analog.com>
- <20260720032550.A4F891F000E9@smtp.kernel.org>
-In-Reply-To: <20260720032550.A4F891F000E9@smtp.kernel.org>
+ <20260720-dev-max20830c-v3-4-9d06d27d6da3@analog.com>
+ <20260720032956.5FB041F000E9@smtp.kernel.org>
+In-Reply-To: <20260720032956.5FB041F000E9@smtp.kernel.org>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR03MB6351:EE_|SJ0PR03MB6951:EE_
-x-ms-office365-filtering-correlation-id: 903f1ced-f882-4ef1-a0f8-08dee6c13cd1
+x-ms-traffictypediagnostic: PH0PR03MB6351:EE_|BN5PR03MB8056:EE_
+x-ms-office365-filtering-correlation-id: 672ff2b8-a197-47e5-07d5-08dee6c13df5
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam:
- BCL:0;ARA:13230040|23010399003|376014|366016|1800799024|4133799003|11063799006|10067099003|4143699003|56012099006|18002099003|22082099003|38070700021;
+ BCL:0;ARA:13230040|23010399003|376014|366016|1800799024|38070700021|6133799003|56012099006|11063799006|5023799004|10067099003|4143699003|22082099003|18002099003;
 x-microsoft-antispam-message-info:
- vKFupTy429spdyuQPzr8jcYiN/o/TE3d/WJ8n7SiVjmtN/BIH6BO8DxT2VZfepsI8GDSOce7RbbmKSPh29FcfGJL2QMgBSDxIKbhlWCth7eY/KCzqR9ogZ1X7VlJ/A9HNyJ6kx3K/tZr74IpsAu1JUJbmrsMjv12BSMMrYcyfBfVGwPHrqnZ6X0yiuOpvlpOklj2uPHL+SkGhDxZbkZfc4RJ/BstUwYxyYAT6BQMIsAvxAxnqt5Rdd+Kq98ifJrMKRy2yf/5I5Ggpk+4TT+HBGqUlFTpFBI8niE/OvBxZ87X1iBD4L5wZVo4Uti/oUVk/FNF0kga/M6jZjTV3aEz3FNOEiz7qCza+Uiy7QFQs8F9Ae5jk7dr1LISZGLe65Oku2RjIaQFg+PlaHla/yQh+qaZmUanUcYEuMA05i2i9K4BAX7RYd866nMXkDPBPnlpGth81SoCSQSIbAWwyi4IBwhuYvC0W5EKHpqY1OdBTRqL96hki5x5VS3hE26y70Gjhh6OZqV1eCI9RFFvGJt948ec7zO501xrdgPTXSaSSqAzK/AffUpNgWxm3i65WIdsUgLvDnD5Le4qgd5H8Jk3Y8a/G4zJrz10GWqc2aXz3AWQepsObX2z1nhoYU+pF1zpm3R/g7GXAwyYuEiIP/wBo61NIywnNJe6sDnF8ObiAQs=
+ +1yPbIzS6dYi7ZhvroV7ACwem4MuRa6jaDJsgvYe3Fc6UoaMgsoGg5csNAIb9Ac/lMJm21cHqEVKuxETfC1FwPeqI+aOEtx/Is0/zXg51j45ek2Q1I0jIu4BjcvurCqxHch2BDLbXItkTNtjMr7ybQosAG0kJ0630lFhg+WsTD0Wwle8l1WxVHC33HFm0Ymxp3qG8xI65bWXAaSQrvkL8wVUux+SnwCusip39KjinmMm/gD3el5sQBL1R1SvrFbgwtuT1nt4BIG46jSalX3ckra+jYedoKXk6m6pOQtZrmksIE0KIfLJzA/homIbRa24IyoiMljVp3P3+bO+A23jGXbirOHggvTQyYd9oYOhKmnQemlYJGrh+UeZqTiG7l9//l+H0aVveQNrdYdGYAperV2Q+NtG241WkU+at94eI1XJJ48EIYlEqb02DtLkqUMVRPG741AzS9S1SGQqjblD31szl0QnlqV7ziW+Uzv75arfBxE7wUsoLCjFl9RhLCikWhPiUgqQWfLNGKQnEgmExEcN4EeZR2+3jihp039tTqaauDstG0zt9A4pYLcEsXcM3I8i58MaMIzjCr8EcWN1Dl3CKP+LuFHMrdU5N6cIgwmLM+ONn4ne/zFjsYfRL3exfdvAhDxvZ8XVsusaDpYWgaB6svcoaO7k7LfsVsL9lHw=
 x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR03MB6351.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(366016)(1800799024)(4133799003)(11063799006)(10067099003)(4143699003)(56012099006)(18002099003)(22082099003)(38070700021);DIR:OUT;SFP:1101;
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR03MB6351.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(366016)(1800799024)(38070700021)(6133799003)(56012099006)(11063799006)(5023799004)(10067099003)(4143699003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?8IDrI0vA5zvmUtvBxupPRZdz/FpM1Q4wjK2ZjW/zJ0VDdEtALTLSKz0qdfTh?=
- =?us-ascii?Q?9o75bXR9kaXKfA1imvPhRpx2o8Xkli92ZLipg+LNaf0RIjfWzxdWsy7CANYn?=
- =?us-ascii?Q?2viNghCdI7E4c5HO+KWPnqC6hxiNqubgEJEkrnTTlG53sFW1wbnESXob6ZUu?=
- =?us-ascii?Q?y7ajp4c0Yy2OoLiCVyNd0h2mbFBnD1hONweez6mhzKZYm5RAnTlGPKgBc3DD?=
- =?us-ascii?Q?Pb1oXJVkebqSjLksuKwRCzGZ3Cqw2CrFeb2bUCZPRZ/ykreBAX98nrJjwnP4?=
- =?us-ascii?Q?SqW+yJpDQ9/yPNJp4PMVCuKPcnrGS+jjGvhz7KsXkACo67Lm5rbpU11Wst0e?=
- =?us-ascii?Q?/O3AuLe6Tzv8ChZlUADm/97/YcY+uL7u4UXNwvPN3mcq9Dusf27XKvxgO97T?=
- =?us-ascii?Q?TtDVWbg1jad3ieYGwDZa50uAIJX2bOhDkSvTsdAnbL2RTFqURn01LNAK3ud2?=
- =?us-ascii?Q?HcL9axJ5gb+5txFJD8B3drlj3TWXpa0c6TTXUfuw/b4WYk9nqRhkV3sHm1Ne?=
- =?us-ascii?Q?qOstTBR+FCDJvqdj+ELQB/hWD9cYte04hgJ3kRtJIZlz20ochriOjtwfGngy?=
- =?us-ascii?Q?dn7hOJ4OqafoeAvWSrQ4v81qCv5fesZ/Q5L2dsTUpUPiqXek66wMEqFB2CSq?=
- =?us-ascii?Q?RvG3NLSZfKEMLFdOCC0BKSRgTyjrCWwqulyQN4DakH2tNQ/M/vhLgcPCF4Fk?=
- =?us-ascii?Q?1MH1vhng+9P4ada+cqBx5awcZTez7zfKSbbnfh2gtItRsxYdu1AbAQbujSE9?=
- =?us-ascii?Q?eLiP6a/BoBoJrLE2WuP9Szff5Xbf/C3ssHaR0L6Eb2hRmhNt3CSDG+Bml1d2?=
- =?us-ascii?Q?hsupz+vlrMaIJm5HeWJfwQdzSe3wtCu5Df3T4Y9U6WNxw8rGZeKNYhh6YWmZ?=
- =?us-ascii?Q?EWot6LmTGWIHptFe5RYi7SMGY+o9CULlOwS5OjU8RYxfsHK5L6yd/YhBoLOS?=
- =?us-ascii?Q?X5BxtWZzElqU/GVrOwXgcmMFVDXBkOkRD0N16awfc4HZxqVX0hilfFJqYEpz?=
- =?us-ascii?Q?EyI//K/60pXD1crRev+sHtviYxYyBRpdlFgQYSId7M0gJQsN8Q2NOyzNg+9L?=
- =?us-ascii?Q?v20XXyXDc2zzyDDyCn2YjlpR/ZpU+w0XDuSfLPYlQaeMx4OQequU04X6q7Uv?=
- =?us-ascii?Q?vvsc6yMasrcY7Ppc5ldM0tA7oB+xACzYIJYbYJPKeXI6lKasBzdBjLCGfmbF?=
- =?us-ascii?Q?UECW0xqLKLn8lBR5M2IIoT6M9MBXmKPqC2RWvWMSu7dcHSf3y0yIzfixmCRk?=
- =?us-ascii?Q?do/YFshRT1jiVebCZ8mXxeceVIHOF/975KInWAmol90xiMGnuPXkmvgVp1cK?=
- =?us-ascii?Q?PKsN+ZiERXDARzXtcbjhTTuTXOaJK7hcD56CR96SONbCfVTI1ap2o+u/K3wA?=
- =?us-ascii?Q?qA/NtylpAF7s2TwlVu++UjEmFUOW46o5UnqvJdUAwDo5TcTmA/I3h30q4OYT?=
- =?us-ascii?Q?bBE0cLizdAcY0p8b85sQu6RFH6Qzim0yDDyGDkI/EjDYZb2O1E5Jzo+57k1L?=
- =?us-ascii?Q?Lo9LGUixHWY3VSkCMDicDWzOJGZP0hmAQ3MVkdMYU4QIxDVyJLdA6oNeDtnq?=
- =?us-ascii?Q?QAbz6IRYTtKceo0HGNxKRUsy7bP3uA28ZGnj+gOW7BEfc17wfrZiLxtG4r0b?=
- =?us-ascii?Q?/0ThWqqyFErilYiz2aK1SgBEC2LUsr71PFaOKwSVB+sdWNAcYyPSDuXPpfNX?=
- =?us-ascii?Q?KoSeH2aCxPpiEkPqQiuX106MXZgqkjdxq2UfS86X5SlgFZ63KmxNfyC41npz?=
- =?us-ascii?Q?7cwZP0lSy8geQ5tRevpxRtsMqlhxMXA=3D?=
+ =?us-ascii?Q?U9B3B88xmFBiYGXk6Xj/Q75tuMD46ASRz2yn8OFhYy1eivkc8z4eP6SxAau/?=
+ =?us-ascii?Q?BiXdpySo5tFl1/e/41IUvwdTXsQEXmG9lyys8fsFNruBPz0EnAiRVdGyPg5t?=
+ =?us-ascii?Q?GL/YPrT7QwpBeQiht3vdYBHeoNWQrc6yipEvfKhZbunX6t3nyjQSkcVuN6rf?=
+ =?us-ascii?Q?lgp/30nNEs87wBgpYr1kW8viytjgpgcp4FnZZwbdHJuSA1VWqLOq9st+lBNY?=
+ =?us-ascii?Q?KAaAAatUi2nubpFRGHV1sIulb/N0xSIycke3Zo2BJP+LXhTA2VU72zluNhfK?=
+ =?us-ascii?Q?EvdPfqN3z6xTEzQzTfPuilgNB1NQo+vewcBjopYLq5QNvccKIY/iRQr3cM1H?=
+ =?us-ascii?Q?cmdBheP6ivFHxg9Mu3GWfoObQrp5zmZG8Fo+m66Rlcc43YazghKqHUSXsY4c?=
+ =?us-ascii?Q?+LTtgQxIUP/PsqCZPHqO7qUJUMgVOw6k/2M2EPf/wFO7woot8C+l6xE5WzKa?=
+ =?us-ascii?Q?qkPQDoDS1cMUGhWnrT3tNE+yCIxuaCzwbl9fNfbaM7NCvVg/Y/1AwkvE92SP?=
+ =?us-ascii?Q?/2oh+LX5ojplXe4cuX5COfUx5SBsheXX2bSpS3Ajjszq/Q0at2/7spATb3h2?=
+ =?us-ascii?Q?DcHDinwV2hyitm20R5n3ShVEqyj2wiXa5I3kzO8A5MVjLIEFr+KmqWGW6YJU?=
+ =?us-ascii?Q?1/LkxAUE2uaCMytWN7n850zD3A9c9d2LpugGGcFX3d7gJD0uxTt/VSX3xm5o?=
+ =?us-ascii?Q?qxHKSInN6rzkuaARxFNOfjv0ES6JzvaERmTZK6raNQ0ldhBffJjxgc1XAd5I?=
+ =?us-ascii?Q?3qnFP3sGcNk52VPQ2B4+k2Xwx2eYEUBYQgcIiIKf525MR28u7+v4QjdKSFPI?=
+ =?us-ascii?Q?KLK+fkCbOUmn86BgQCq4QZY10/MNXt9WPeXT2pWDTEkiuniXJnQDK0TDyxJ8?=
+ =?us-ascii?Q?WVLlpQQ7192Dh6cMXg9lJp/QP83EPRWnuP1YXFS46Y0MGNa42KckBSzuul7n?=
+ =?us-ascii?Q?oP1G4MQ19I9x8SI2nTBKZ1qwV6dZ9MJdWZiUl/Gy30i6e1kFVsvQ2eRqFavx?=
+ =?us-ascii?Q?zyRm8poRWLvdYA5t0Fip7s8OlahQccPYbNUiWyuIk7DlsnJBhY5LeKY4S853?=
+ =?us-ascii?Q?sZq3AyJ/h6pfWd55zZezneOkylaMWAEhzR1wpU73WMgFFSXmHg7ZEAYuWBPo?=
+ =?us-ascii?Q?IV4qjQDKMp7pSrTk+zzwPhsoLsoHkBOa9AfmMrH3ncaoHHEEtbzhoRww61mr?=
+ =?us-ascii?Q?DTUIqZvELfIB0rJi3AviztLOfHfurFEp99P/Qz9W+1Pfow8XK/rHno8C0aWk?=
+ =?us-ascii?Q?AUljKUw+pY6/CAn/tL47lkQQ/OiPc7jHKZG3t4NJ3EMxVZYkYavVwYw0YTHu?=
+ =?us-ascii?Q?J/Jp/D61tQOyeW/W7a4DV/PoMlCTewYjhCsqhI55dmY9yamraO2X1lr/Fjn1?=
+ =?us-ascii?Q?qLdmgxu8gEWKS8OGlPfci58eW6cuK1VW7uRdEMIvxag7ka01k+kXFCtaIkAS?=
+ =?us-ascii?Q?FrItpurACCVwCYIoBDdKNbAexB10Fm7Ctl5gU13BYyC4bZl40ZoyNOE4a/xf?=
+ =?us-ascii?Q?DoA2eNG4H9jnj4+p5yfUnayUlX9ub42TY49mTxbwiB+ueGhp70fm4jdszbgS?=
+ =?us-ascii?Q?4yGuPEOxI0TQCmXHBgUjUITCOOnr2F87SJ+a9OiscLzQXkdUuzQVrFSya7Ol?=
+ =?us-ascii?Q?2ioMlfkKwe5sk16XHfwsSd80gFC/jHeschFS6eKyO4j7TvBCYa1q3N7eufy1?=
+ =?us-ascii?Q?ssgXZoURgb83hbLBpdjJTJvbWmuZOUPlMu4LCIHIw2LyMlP326sNWqwl+wMn?=
+ =?us-ascii?Q?k4QMk92DJ6Dc86o72GLQ7l5HogWwjWU=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
@@ -127,45 +128,45 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-Exchange-RoutingPolicyChecked:
-	rt9hFPvnOF8QI3oX5XQz3N0ZWWllZd6bwOgMGhGDAVhu5Qsl0hGUMlt0cfwoCCBOc4/64qocMLcQw6H5JcuckhKe0thLJx/kSgKStnB/751qRpUFZx+NsR2Y/uG7MBpasnoOarudHBrir9eAnXHAAr8sIqcRdKNJVSEBW23kCnmcoJP3LaUFTOFikIWc0n75Sp24rh6QLw7JZPP0zDK1mGVXkssLfMRHhVsYfNIIYw9fScj8W09qmza3FiNCV/uiw/oOuOm+CA9D4EjMY2IjDOAGbG3ZuI54S2xguQC/Y9V3Zk9IatAp7c4J8hBEFQEy2w/MqI7VWjNGGFrcUtJc1Q==
+	kpXZw/lTetdrfDNBxRyB2TdYZc+8qdmh2KBtQOUii9UnAK1ra3xvSNUiz2IjuGZ81h9vSqcgDAQMdsp+JeVtDy5hjA6Se1Z694tM1INJc1qDu2P/uUk5FbuSdmxv1VkjrDXhfFAag76i8AOVnoSIoeYuQEsIwkQuDYtxeElKhRtixVLqzfa79DtuZHCJNQW8ggl7LLh5SEtWZc71hQDkHyFAVFJ7hDMidev9zJ4OAEBK46ZjRjtWeeIPQuwPrsMl6ZKQWEPOACY+cYGoXdTU2Qfh30wnwx0t4XMN9uNKl4njmqDjEZKi6la2b3UeVrpsEJ67R1OK1bVH021+FMBgbQ==
 X-OriginatorOrg: analog.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: PH0PR03MB6351.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 903f1ced-f882-4ef1-a0f8-08dee6c13cd1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jul 2026 00:44:35.6223
+X-MS-Exchange-CrossTenant-Network-Message-Id: 672ff2b8-a197-47e5-07d5-08dee6c13df5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jul 2026 00:44:37.5187
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OQD18JbliE0YiFqwOfX2+SoHDGEIcFMaCAsaLY8hrquKi0PLGZBsuSyC2koayRHPTmyoVScfjZDjTD62e8DmioLBOz6iPOfa/Rbz5WzGc50=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR03MB6951
-X-Proofpoint-ORIG-GUID: hz86YpPWxSTpzIzB-LXZpEq60wHrAuav
-X-Authority-Analysis: v=2.4 cv=DagnbPtW c=1 sm=1 tr=0 ts=6a5ec0f5 cx=c_pps
- a=Et1EcG/LeKhR1br1BBFfMA==:117 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+X-MS-Exchange-CrossTenant-userprincipalname: TSH6dC+L7iXtIIU0O3oqXCdY8cJ+T6tOKresRmOmPqTICeJYBYKPwj4Cc/2Uy5jdn248c+un92Z0x4W76pyLhB4/oq2LcvbpFtc4l4dRFtI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN5PR03MB8056
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzIxMDAwNCBTYWx0ZWRfX4AXsAT+sh+r1
+ iIITCXufjdUY567IDY+frLXfZMdfo8bRX/PVwAuXjMCFyEpPfSqcqtrwY0BEf8EP3ANTf7HFwjv
+ m9e8IBQv98gL8wSViwecISiqPq1aZ2Pjf6grNGGCnZHpH471+86bcnyk2xEmt2YAnRKFu/TnPgP
+ 2W5URpF56UzsKEWXVkrYcdY5E9H069ti/bntYbdINjf9GWuGzkQEmGWm4Hf9nDcwsj/OOrXlpKI
+ yuNyQen5Avr8rS5gu0bZ8oVyJm6G59NhqNb873uvqucvrd0mXfW3gVlxDNFZQ7hIvv5vkMxc5TJ
+ Gh6hbT25PV4Mj52DCM0t3dwX1Mli3NscW1i8Ca9+nZhEk3uSg22YP5/F/IWfP1MSw/5W6QEiwtT
+ rOCKJGg2z0AHy9C8X7+vV/CxaHUqqxuAGmPWcGcw9VsvDojZcX2/v+uN4olVav//2eBsgL6gkTD
+ mNnlLH30/nkLskXE45A==
+X-Proofpoint-ORIG-GUID: 0AKDfCkKHQv78sg8wsd6JKIKa0NmpMR9
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzIxMDAwNCBTYWx0ZWRfXy2xDMbYQ6hO7
+ 5QsmvEz83m1sSBMRFY+Rd2gyCFB/3MDwLJbrpzfL8gDbnCmveKmgdQvV452JRQuP6OwC7/F571D
+ M1EScFIi2S0SDLMbgCVa3KC9v16x38ozjKXFE2Vczr+nvvRz0iVO
+X-Proofpoint-GUID: 0AKDfCkKHQv78sg8wsd6JKIKa0NmpMR9
+X-Authority-Analysis: v=2.4 cv=VIztWdPX c=1 sm=1 tr=0 ts=6a5ec0f8 cx=c_pps
+ a=xx7W88v/Jz1hHwbI4fXbew==:117 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
  a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
  a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=0sLvza09kfJOxVLZPwjg:22
- a=OmVn7CZJonkx5R5zMQLL:22 a=uherdBYGAAAA:8 a=c92rfblmAAAA:8 a=VwQbUJbxAAAA:8
- a=gAnH3GRIAAAA:8 a=6qIfmrQ-uDjTnqxQwCAA:9 a=CjuIK1q_8ugA:10
+ a=iZSIUCweCk2Oy3QsdGPA:22 a=uherdBYGAAAA:8 a=c92rfblmAAAA:8 a=VwQbUJbxAAAA:8
+ a=gAnH3GRIAAAA:8 a=lKZ3dfJkCFrrC9Jp1yQA:9 a=CjuIK1q_8ugA:10
  a=GvGzcOZaWPEFPQC_NcjD:22
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzIxMDAwNCBTYWx0ZWRfX8fc4g0zae2yD
- LitHCkVQSfDqxgdUESiXXot79xS87Jxao4nf+BaYug0M2+yIYkjEW1t+at5rIJ+Oy0A+4dwrvtF
- N8uDCdklbZO4wZY4n8+e/Uzw8WqWJxtHnlw7cSEBt7j1IBM0rWUw
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzIxMDAwNCBTYWx0ZWRfXwV1c2NzwGwaF
- y8DsuP3i5+UIkG1e22Ok7KtSxbDWaB5atttl6XJnupjs1pS037SRy1JNrR5W3F36eFlehimFLFt
- Eg2SUMf/6eqIvXA2Dk2DLX08hxWmq8BzI85l3NbkfzObdN0GoTN2mdsRw0nvE4AZlt95a5kyRoG
- LMtaZQa/4baS1CdChJ1AUQlyLU2LX0/lmA+xC55aysl+lOSDhaaweFD4CyxDijyXGcXyE35iTuQ
- e/FCrrZzpbspRiSrdIYc9NJ5CPJHwuiTJGXVEJG4OvX0FAZyo2yxAyjgVYvV5LmhCrVSs67mfom
- +xeThs0dAu5Q7u57MbyAGHQd1WzZt3RxdwpAkAV/BOreJ2P5EBmFMWMY1Dtk3v10apkqQw4HKa5
- 4ufBELMeDynC1Cx0x5ld4xGymf7MUgihNWoLLY28DdDdAV6gc6I200Vukrs3ZZqTGogBf1U2iCa
- 8QPtihL8vRSGZSU0eow==
-X-Proofpoint-GUID: hz86YpPWxSTpzIzB-LXZpEq60wHrAuav
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-07-20_06,2026-07-20_03,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 spamscore=0 clxscore=1015 suspectscore=0 bulkscore=0
- phishscore=0 lowpriorityscore=0 priorityscore=1501 adultscore=0
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ impostorscore=0 priorityscore=1501 malwarescore=0 lowpriorityscore=0
+ clxscore=1015 bulkscore=0 adultscore=0 phishscore=0 spamscore=0
+ suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
  route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
  definitions=main-2607210004
 
@@ -173,96 +174,130 @@ X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
 
 > -----Original Message-----
 > From: sashiko-bot@kernel.org <sashiko-bot@kernel.org>
-> Sent: Monday, July 20, 2026 11:26 AM
+> Sent: Monday, July 20, 2026 11:30 AM
 > To: Torreno, Alexis Czezar <AlexisCzezar.Torreno@analog.com>
-> Cc: linux-hwmon@vger.kernel.org; conor+dt@kernel.org;
-> devicetree@vger.kernel.org; robh@kernel.org
-> Subject: Re: [PATCH v3 2/4] hwmon: (pmbus/max20830): add VOUT feedback
-> resistor scaling support
+> Cc: robh@kernel.org; linux-hwmon@vger.kernel.org;
+> devicetree@vger.kernel.org; conor+dt@kernel.org
+> Subject: Re: [PATCH v3 4/4] hwmon: (pmbus/max20830): add support for
+> max20830c and max20840c
 >=20
 > [External]
 >=20
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+> Thank you for your contribution! Sashiko AI review found 3 potential issu=
 e(s) to
 > consider:
-> - [Medium] The voltage divider scaling calculation suffers from a 32-bit =
-addition
-> overflow and an unsafe 64-bit to 32-bit signed integer truncation before
-> clamping.
+> - [High] Missing compatible strings for MAX20830C and MAX20840C in the
+> of_match_table.
+> - [Medium] I2C block read path truncates the device ID for 9-character na=
+mes,
+> leading to potential false positive matches.
+> - [Low] struct i2c_device_id array uses positional instead of named initi=
+alizers.
 > --
 >=20
-> --- Patch [2]: [PATCH v3 2/4] hwmon: (pmbus/max20830): add VOUT feedback
-> resistor scaling support --- commit
-> ac88893286286c633f117369db91c2cffd163afd
+> --- Patch [4]: [PATCH v3 4/4] hwmon: (pmbus/max20830): add support for
+> max20830c and max20840c --- commit
+> dca1bbdb54e3f769bf22d26e97ead67754787a95
 > Author: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
 >=20
-> hwmon: (pmbus/max20830): add VOUT feedback resistor scaling support
+> hwmon: (pmbus/max20830): add support for max20830c and max20840c
 >=20
-> This commit implements support for external voltage divider scaling using=
- the
-> adi,vout-rfb1-ohms and adi,vout-rfb2-ohms device tree properties. The dri=
-ver
-> reads these values and applies the scaling formula to the raw VOUT readin=
-g.
+> Add support for MAX20830C and MAX20840 step-down DC-DC switching
+> regulator with PMBus interface. MAX20830C is a different packaging for
+> MAX20830, and MAX20840C supports 40A regulation compared to
+> MAX20830 that is only 30A.
 >=20
 > > diff --git a/drivers/hwmon/pmbus/max20830.c
-> > b/drivers/hwmon/pmbus/max20830.c index cb2c23672166d..7a5e67bd33c0a
+> > b/drivers/hwmon/pmbus/max20830.c index 7a5e67bd33c0a..73fe59685cf15
 > > 100644
 > > --- a/drivers/hwmon/pmbus/max20830.c
 > > +++ b/drivers/hwmon/pmbus/max20830.c
+> > @@ -98,13 +98,12 @@ static int max20830_probe(struct i2c_client
+> > *client)
 >=20
 > [ ... ]
 >=20
-> > +static int max20830_read_word_data(struct i2c_client *client, int page=
-,
-> > +				   int phase, int reg)
-> > +{
-> > +	const struct pmbus_driver_info *info =3D pmbus_get_driver_info(client=
-);
-> > +	const struct max20830_data *data =3D container_of(info, struct
-> max20830_data, info);
-> > +	int ret;
-> > +
-> > +	switch (reg) {
-> > +	case PMBUS_READ_VOUT:
-> > +		ret =3D pmbus_read_word_data(client, page, phase, reg);
-> > +		if (ret < 0)
-> > +			return ret;
-> > +
-> > +		/* Apply voltage divider scaling if resistors are non-zero */
-> > +		if (data->vout_rfb1 && data->vout_rfb2) {
-> > +			ret =3D DIV_ROUND_CLOSEST_ULL((u64)ret * (data-
-> >vout_rfb1 +
-> > +						    data->vout_rfb2), data-
-> >vout_rfb2);
-> > +			ret =3D clamp_val(ret, 0, 0xFFFF);
+> >  	} else {
+> > -		/* Reads 1 length byte + 9 Data bytes from MAX20830 */
+> > +		/* Reads 1 length byte + data bytes */
+> >  		ret =3D i2c_smbus_read_i2c_block_data(client,
+> PMBUS_IC_DEVICE_ID,
+> >
+> MAX20830_IC_DEVICE_ID_LENGTH + 1,
+> >  						    buf);
 >=20
 > [Severity: Medium]
-> Can this calculation suffer from a 32-bit addition overflow and an unsafe=
- 64-bit
-> to 32-bit signed integer truncation?
+> Since MAX20830C and MAX20840C have 9-character names, does this
+> hardcoded MAX20830_IC_DEVICE_ID_LENGTH + 1 truncate the newly added
+> device IDs?
 >=20
-> If data->vout_rfb1 and data->vout_rfb2 sum to more than 2^32 - 1, the 32-=
-bit
-> addition will wrap around before the 64-bit multiplication.
->=20
-> Additionally, since ret is a signed 32-bit integer, if the 64-bit result =
-returned
-> from DIV_ROUND_CLOSEST_ULL exceeds 2^31 - 1, the assignment to ret will
-> overflow into a negative integer. The clamp_val() macro will then evaluat=
-e this
-> negative number and incorrectly clamp it to 0 instead of 0xFFFF.
+> In max20830_probe(), if the I2C controller lacks SMBUS_READ_BLOCK_DATA
+> support, the fallback i2c_smbus_read_i2c_block_data() call uses
+> MAX20830_IC_DEVICE_ID_LENGTH. Because this length was initially sized for
+> the 8-character "MAX20830" identifier, could it under-read the new longer
+> device IDs and cause false positive matches in the I2C fallback path?
 >=20
 
-Although technically correct, is sashiko a bit paranoid?
-Feedback resistors won't typically reach those values.
+Non issue. MAX20830_IC_DEVICE_ID_LENGTH is already declared as 9.
+The quirk is MAX20830 replies a 9th character of Null. Declaring them all a=
+s
+9 length poses no issue to the string checks.
 
-> > +		}
-> > +		return ret;
+> [ ... ]
+>=20
+> > @@ -120,26 +119,28 @@ static int max20830_probe(struct i2c_client
+> > *client)
+>=20
+> [ ... ]
+>=20
+> >  static const struct i2c_device_id max20830_id[] =3D {
+> > -	{"max20830"},
+> > +	{ "max20830" },
+> > +	{ "max20830c" },
+> > +	{ "max20840c" },
+>=20
+> [Severity: High]
+> Are the compatible strings for max20830c and max20840c missing from the
+> max20830_of_match[] table?
+>=20
+> Without adding them alongside the newly added i2c_device_id entries, coul=
+d
+> this break module autoloading on systems using Device Tree when the OS
+> attempts to autoload the driver via the udev modalias?
+>=20
+
+max20830c and max20840c are functionally identical to max20830 and uses
+the same configuration. DTS has adi,max20830 as a fallback compatible for t=
+he
+new variants. Driver only needs to match the fallback compatible string.
+
+> [Severity: Low]
+> This isn't a bug, but do these entries violate the I2C subsystem coding s=
+tyle by
+> using positional initializers?
+>=20
+> The I2C client guidelines require initialized arrays of type struct i2c_d=
+evice_id to
+> use named initializers (e.g., { .name =3D "max20830c" }).
+>=20
+
+max20830.c was using positional initializers, so for consistency the others=
+ were added
+as positional initializers as well.
+
+If requested, it is possible to change them all, including the original max=
+20830, to named
+initializers
+
+
+> >  	{ }
+> >  };
+> >  MODULE_DEVICE_TABLE(i2c, max20830_id);
 >=20
 > --
 > Sashiko AI review *
 > https://urldefense.com/v3/__https://sashiko.dev/*/patchset/20260720-dev-
-> max20830c-v3-0-9d06d27d6da3@analog.com?part=3D2__;Iw!!A3Ni8CS0y2Y!-
-> Nb04qCcfItlq4xUQf1LOznoGLxKoSEsno7xJWN0eYkdUVeuxpbLDHOwPO7BxUuG
-> Ay8TA8LSvrg2p2pTJxd3gvxozfIGEIg$
+> max20830c-v3-0-
+> 9d06d27d6da3@analog.com?part=3D4__;Iw!!A3Ni8CS0y2Y!5gKYVqJULNay7eEZv_
+> L_8_gucJb1N86NTpoIzkSsewioUyVMMHaaxOqZzCyePUogn-
+> 8pmaMWp4WmbDN1rInYx6qi_lW_gTM$
