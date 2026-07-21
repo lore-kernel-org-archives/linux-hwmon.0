@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 862DE4499A3;
-	Tue, 21 Jul 2026 10:00:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FFE34499BB;
+	Tue, 21 Jul 2026 10:00:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784628007; cv=none; b=GOCUei/3NctFGN+SvWcf3scvB7oYEs/6JPkoFq+cN+nfPsCRXFROenfwoqr4FX1G2/ECPZp5Yg7jOcqPQ32JOGHYgYYt3uCq5CfDixs35oOVrcHO+MUB2W2CA9efaiY/QIe116V+3xQVCgZWMxnCjt3+zAZSB3O482XvpRpZDLc=
+	t=1784628007; cv=none; b=ecaoL1saUwMMsmqluPrQzroTDuygMw4rV9xt2TPFpWU0nUUTTll1aar/8NZwmdI8ks2/JDvFeRN73R5MmkGWb+WO4ACYLseVP+SeREqfE+XuNn3fkbvqg0SFoSaTQMUNPJUh3dgY8WZMwo5dpp7XAJMDJg7dxN5mmr16nPYxB4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1784628007; c=relaxed/simple;
-	bh=RxNiZg6VNKiujo14I9B5v7gaww/65c0qeFhe4P9gYTo=;
+	bh=Ts9JsIYINTQC5zCdseT2aWBRudiucjibRUnYvsBJXTw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=C674n9T0Qd4SnB8g2auTlzt9iasKrNY8Pf0M8ILSJCuGFpcqANf/ozetjVAizrZikrT3MEJbVNk+TU2+ZJw/Tm7QJ0BMaKMGew8EydsQesKDudTZGKFG+84Q9x1McPbPKu0ZVqAyDNUzEGvWLBePfPOZtmp+Zp6smBRNOUwJdNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kfLdOq+t; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=eXB8PggRGSEg0i0/rklmHIQGUhcW1T/c564k2FisjFZZs1Ryvewke7xYXu7YJ0EVLwIMtD31/A2RcG+UQnIvnNIHeyj5ibgCy+6nat7j/dY63Tj5pDNlJCPgYrWt4F57ZUeNzQEolGcdPxhuzaMLDzAwm6KQpaNRI/IqYVp42y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jw6A77VQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kfLdOq+t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D93AC1F000E9;
-	Tue, 21 Jul 2026 10:00:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jw6A77VQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B94D91F00A3A;
+	Tue, 21 Jul 2026 10:00:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784628005;
-	bh=63GK3+lU6Xik7r/DuPgi1C8D+PIBWHw++pfSdIyYQQU=;
+	s=k20260515; t=1784628006;
+	bh=SoA1a9Eu7sBeHdkMzDDnLppAClMd5Y6AAqY5c0MFLhI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kfLdOq+tb79+KbSy70kYyapDXa7M7rP+W8Pwocvw8Y9ZYW5varYPI7523bS8Jq7Wp
-	 Gq0mkqgjxi9vj2IwLwXZ9iWEKxBAuRA9va8yml/LVSZVWJxxtT4FIk/dhfD12Knk3C
-	 TqZ9IXLMPhL8J3Hg7dvoC+1cDF3sAYjNZP2KEJsA5h/LI5L8RlfCoslD8wR3g0YAvm
-	 d3m/bFxJJbmw7dxdouVEG/cYQQoMgZ8FFPY5Q51iGf4x/fqDDI9HnXr1LhTWknA4Q1
-	 4NHwVjflAMTFe8zny4uyRFyJz4ILvJhCvkUMtBIyRLiap9LEnYr4OFT3QaUIRdVqOt
-	 AwgPNXFICB3BQ==
+	b=jw6A77VQhtyD4CPzFOhxi3l++bu6x+vVzcKWmFG+NTpkt7kfdLdiDD73hNb+SUgyA
+	 RIF+uiZWH3yrKrS20watxAIA3DtQr7oB/PEBvOkg2jyYWWQZxlCya1Xd2YYrO78YLv
+	 hzTxLir2akkMnSIG/b3+hCTKgPbSLfmHEYtUrWxNKq9hmj0zQbljh3OtXEBzqypYzF
+	 2DFvILH+7ZcuUw/7/dF9+f8KMYJbsRJ9RAD+eC5AfBAF48Ead6fAB6Q4/o6sR+zYsr
+	 epaVL9KKXrT7U8i8nrk+TfUf87KuPa593P7RRHBTBP25La6kB8fbCUlLgeZEhqLpHm
+	 WqNq1/FuUhp6A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 4/6] hwmon: (lm63) Add Sensylink CTF2301 support
+Subject: Re: [PATCH v2 6/6] riscv: dts: spacemit: Add CTF2301 on K3 CoM260
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Troy Mitchell" <troy.mitchell@linux.dev>
-Cc: robh@kernel.org, devicetree@vger.kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <20260721-ctl2301-v2-4-ef5fb342872a@linux.dev>
+Cc: linux-hwmon@vger.kernel.org, robh@kernel.org, devicetree@vger.kernel.org, conor+dt@kernel.org
+In-Reply-To: <20260721-ctl2301-v2-6-ef5fb342872a@linux.dev>
 References: <20260721-ctl2301-v2-0-ef5fb342872a@linux.dev>
- <20260721-ctl2301-v2-4-ef5fb342872a@linux.dev>
+ <20260721-ctl2301-v2-6-ef5fb342872a@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 21 Jul 2026 10:00:04 +0000
-Message-Id: <20260721100004.D93AC1F000E9@smtp.kernel.org>
+Date: Tue, 21 Jul 2026 10:00:05 +0000
+Message-Id: <20260721100005.B94D91F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -46,56 +46,74 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] Unchecked I2C reads for LSB are bitwise-ORed into 16-bit registe=
-r values, corrupting data on read errors.
+
+Pre-existing issues:
+- [High] PWM duty cycle calculation can overflow and wrap around to 0, comp=
+letely turning off the fan when maximum speed is requested.
 --
 
---- Patch [4]: [PATCH v2 4/6] hwmon: (lm63) Add Sensylink CTF2301 support -=
---
-commit bbf54143e45eb1b3b9599d60a55904a5184333c9
+--- Patch [6]: [PATCH v2 6/6] riscv: dts: spacemit: Add CTF2301 on K3 CoM26=
+0 ---
+commit 2adeea2e46046fc26168a60ad26929de961f2f43
 Author: Troy Mitchell <troy.mitchell@linux.dev>
 
-hwmon: (lm63) Add Sensylink CTF2301 support
+riscv: dts: spacemit: Add CTF2301 on K3 CoM260
 
-This commit adds support for the Sensylink CTF2301 chip to the lm63 driver.
-It introduces extended local temperature resolution and optional thermal
-cooling device registration.
+This commit enables I2C6 on the K3 CoM260 module. It sets the I2C6 pin power
+source and describes the Sensylink CTF2301 temperature sensor and fan
+controller.
 
-> diff --git a/drivers/hwmon/lm63.c b/drivers/hwmon/lm63.c
-> index e2a429e579ac1..764a7467afa60 100644
-> --- a/drivers/hwmon/lm63.c
-> +++ b/drivers/hwmon/lm63.c
-
-[ ... ]
-
-> @@ -256,8 +270,16 @@ static struct lm63_data *lm63_update_device(struct d=
-evice *dev)
+> diff --git a/arch/riscv/boot/dts/spacemit/k3-com260.dtsi b/arch/riscv/boo=
+t/dts/spacemit/k3-com260.dtsi
+> index a38d7b738258d..95a60fbb411f8 100644
+> --- a/arch/riscv/boot/dts/spacemit/k3-com260.dtsi
+> +++ b/arch/riscv/boot/dts/spacemit/k3-com260.dtsi
+> @@ -26,6 +26,25 @@ reg_5v_sys: regulator-5v-sys {
+>  	};
+>  };
 > =20
->  		data->temp8[0] =3D i2c_smbus_read_byte_data(client,
->  				 LM63_REG_LOCAL_TEMP);
-> +		if (data->kind =3D=3D ctf2301)
-> +			data->temp1_input =3D ((u16)(u8)data->temp8[0] << 8)
-> +					  | i2c_smbus_read_byte_data(client,
-> +						CTF2301_REG_LOCAL_TEMP_LSB);
->  		data->temp8[1] =3D i2c_smbus_read_byte_data(client,
->  				 LM63_REG_LOCAL_HIGH);
-> +		if (data->kind =3D=3D ctf2301)
-> +			data->temp1_max =3D ((u16)(u8)data->temp8[1] << 8)
-> +					  | i2c_smbus_read_byte_data(client,
-> +						CTF2301_REG_LOCAL_HIGH_LSB);
+> +&pinctrl {
+> +	i2c6-1-cfg {
+> +		i2c6-1-pins {
+> +			power-source =3D <3300>;
+> +		};
+> +	};
+> +};
+> +
+> +&i2c6 {
+> +	pinctrl-names =3D "default";
+> +	pinctrl-0 =3D <&i2c6_1_cfg>;
+> +	status =3D "okay";
+> +
+> +	temperature-sensor@4c {
+> +		compatible =3D "sensylink,ctf2301";
 
-[Severity: Medium]
-Will this corrupt the temperature reading if the I2C read fails?
+[Severity: High]
+This isn't a bug introduced by this patch, but adding this sensor node
+exposes a pre-existing PWM duty cycle calculation overflow in the lm63
+driver.
 
-In lm63_update_device(), if i2c_smbus_read_byte_data() for the LSB returns
-a negative error code (such as -EIO), it gets bitwise-ORed with the shifted
-MSB. The negative s32 error code would sign-extend, overwriting the MSB
-bits entirely and resulting in a large negative temperature spike instead
-of propagating the error or maintaining the previous valid reading.
+When the fan controller computes the duty cycle in drivers/hwmon/lm63.c:
 
-Could we check the return value of i2c_smbus_read_byte_data() before
-merging it into temp1_input and temp1_max?
+drivers/hwmon/lm63.c:lm63_pwm_to_reg() {
+    ...
+    return (val * data->pwm1_freq * 2 + LM63_MAX_PWM / 2) / LM63_MAX_PWM;
+}
+
+If the bootloader configures a low PWM frequency (setting the register > 12=
+7),
+data->pwm1_freq will exceed 127 without bounds checking.
+
+When maximum cooling is requested (val =3D 255), the arithmetic evaluates to
+256 or more. Because the function returns a u8, the value implicitly
+truncates and wraps around to 0.
+
+Can this completely turn off the fan when maximum cooling is requested?
+
+> +		reg =3D <0x4c>;
+> +	};
+> +};
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260721-ctl2301-v2=
--0-ef5fb342872a@linux.dev?part=3D4
+-0-ef5fb342872a@linux.dev?part=3D6
