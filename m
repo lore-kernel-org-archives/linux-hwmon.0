@@ -1,205 +1,227 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B74472520
-	for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 17:56:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749FB40860A
+	for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 18:30:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784656601; cv=none; b=gsqemjs82hNRpIU8l3SN+IDbvhlVsmVFhjm4qSMFHayoc0a/LmpmjnUbOl+5gzKn/h2OXj9KcwyxKsPeX2/iJFCcEbZNPA2yxQamFv+dyXfqQCR1w8SQaMD76YDYe6hwylrlVsaTXXzsntortxdLRK/7WtFcheC6+Cz65ALW8G4=
+	t=1784658623; cv=none; b=tBiOcSFeOXE1CHfxkDE1MJYUXfH07B4vBrqVI/mE+BqKh+gM+l2z8eBfQfJv2atUxHVCuZ3XyX/gaajt6rQvhWS5Y68knYuDFHr3nKaJ52poWtVTfzkNQttXHqpu40jlCoYykh7vZ7/Uf0WqXduBaifXReNPvWOADJRgReHi9qY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784656601; c=relaxed/simple;
-	bh=swtbcGBx+Z+G69KWlolz+miL/y+ERWs5cFjryaMB2Uk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uL1r0qBaDgJS7RNPK/soRPj9EcScPk8kinac+Yagtu+/2zvSvAwvirbptVID+/DCxNXmPuUHK/IdBfZw9UBWLCjNQbN6AkuGoXmViX9bU7S7kGDIi0h7MfTW4FBdEqyc0LRA8kFrj/Zq7L4YQXqmq7KQQ8TKl8sU18JQRMvn+qM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FXNrTPi7; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784658623; c=relaxed/simple;
+	bh=1b61qAvsm0miOUwJn8KRMPbavCrI7mO+2vWxjpqZ7do=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=a1OI9XHDLFmD7m7EGfOYfL0vtpqdGjP32uUA8b1onpkiU22Jxqrtw/Ko3ZbaL4kO8+LAn2hVwlgM9R+IbseYwT+2kXnr491e1wzGQ36YMm+WYXcJhWQnCKf1LZ2c1SdrBEuWVmRpY1ZQyl3iyZTXlgRxKJnPdePbFlxUc93kVr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=aMi6d7Kl; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=bU/6som+; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FXNrTPi7"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2ceae1ed204so96912255ad.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 10:56:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="aMi6d7Kl";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="bU/6som+"
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66LH2UWo2548681
+	for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 18:30:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=iCyYsJpFLRWTeCtgdOOx5D
+	rdFbsbn7oJEfvZv6H9lPc=; b=aMi6d7KlHsmyl/2tgg4byoJiBTLIAQqGKy9PjU
+	Hicjg5WteTXTY2ib4bxSOhkUHKpKD/znQINjJkVCV+4uDCasSGsVOCUqUlO5BH0d
+	dhLMyge9QCVNGDmqXisAXwSyi+xYXy8Q4L4sc675z+HYDOZxrHIaI1tDICTgOXyN
+	ENpUyVJXhrDaLC8yPH0gt8xU8ubieVyOUIFr+SGflscfywukDLeixFQdB6lqpjAl
+	BB+giDzNhWM6Uo8yPuvSwapocF0bzfPp2LJ/t8fH1/wqoNn5ZrrYeeXExo5gfD3u
+	5CancAbufn8Ia06Etfe3XlQtmJEnIHXXLDCdWjIHFvZThwBQ==
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4fj6r3jd8n-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 18:30:20 +0000 (GMT)
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2cee894b3d8so158447205ad.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 11:30:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784656599; x=1785261399; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=EibvRmzRwEGHkazysuYtnr7BudsAqWjL7jIqkEVJ+pw=;
-        b=FXNrTPi7YkEFm6cw4CWrdRH1G1qNIxVVsYiDX4FATg6cXrAXNMTt10HfrTk3CRH3xI
-         pZINymbtBnkB7+otQ9sIJHJ8Jjn1JsJH3vbJzgrESuhaeEjEFvYz8uA5H8QJWdns/WOf
-         P+mI3gQPPPNc6H291kk94zQbt7Cwo+plJcjAteY/55PNbHm1xvI3ksGjwbJGZwd5UgT/
-         AmSORVtPa9saP4RmHeDyW8FF+qDteM43zrABpHzhsNcFFd1wHaYm4mMcZZlN2zSNDBnt
-         xDuSJ+AIJI833RPRysiVSG8kr2OxaE07FE2+48in46wBBW2pO3Fn9lVJ28rY7byL9xE2
-         /g6A==
+        d=oss.qualcomm.com; s=google; t=1784658620; x=1785263420; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=iCyYsJpFLRWTeCtgdOOx5DrdFbsbn7oJEfvZv6H9lPc=;
+        b=bU/6som+ICPrpYj+3O2ni4bDm5qJmVweqNDXLDD6mKCy+uUwEMYaC5eQn0jbOooO4s
+         98sWT4ph0AYoEXq6RYF4lxASwxv+zX9ouvyw0A+91Lr4UfidMnrO/Ah+wETzZBafoqbS
+         9QOjl0v5pvxoMyTP7Zi41iV7/H4BqeIt375AEEOi80KLCjvLG+sVD85ovnM2GiycUGTj
+         h8hrq7v+2qdQHGrU56YSNCiL97ZpLMRrYpi5WyLpNL6cMMAvdv+12+K9im3gTPSF9cVP
+         yLUZx4rCPdz0czrpB6Foc9z8vDcLsYK1IUw9Qnj5DunXEhNIqlvBoIv9L6491sDEMULr
+         968g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784656599; x=1785261399;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20251104; t=1784658620; x=1785263420;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=EibvRmzRwEGHkazysuYtnr7BudsAqWjL7jIqkEVJ+pw=;
-        b=OCFoOm9AVCdW5zx1eWUGgqSsieLVanoS4rVfswMMFLbdYdzwRQxGKNLdtPHgdlVbOt
-         KMnjrdW679HrOqJoG1UIKsZbyGR4cn+tK80RIIx3wTKiDNU60vXJjhDRuAmQSqIQ5uq8
-         2I/G/3U2VMLECcFVjg4Na6TzpyOgGEyR5lheg99hjNZYdoIJL/cFs2MCUGuNPwEO+HLK
-         5ZlpXWsw0jIt822u7vgAIq+EmWYGtN7/6y974klOi3uFXHANzvfzlt4OAjY/fot0YIIV
-         4mH6Qip5kIpJx43VctXSi9enHpINoE0v1xrzid4fS0nCK+TCuK3XTJF/EK4zODAZ6cOn
-         DZCw==
-X-Forwarded-Encrypted: i=1; AHgh+RrsnYc1lrck08Y9D6UcQ3gJIRJt1jI7oUPVn8aJ952zHkydXw4syNApH9p5D/60ePlgagMrXMHBY5xvJA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7DYMX7zval7hNwaVVMMdVrSfla4sHXVCf7BWLP7txdRTR+lnw
-	o824XMP/e4zivZPwOPwcHhoUPfbu0iJf46RNgXwhP4DYno6VcKfavA3U
-X-Gm-Gg: AR+sD12TE7ytUaTOqqUsVbcXaQfFgEpyXn+OIO8AOoPlEbA9QPhZDZQ+N0y23rxAHUK
-	NbL0dabz6K25yJyO0GpiGQY2XgHoqhyDjamszk22SWLzKKZvtmhiNq9Uwk3P9Xfxo4Hxnj442XC
-	Bw4KhddbdSwoaRVE6ofLGWuwq5wFe632v9LOgHnWigdeXmADcJ2fcxfw1mhmjGRMzv1qCK7CqGZ
-	6NPxqnmrl5N4WBhc21dv1bMcTYG+FEAXmt9NzS44BYaO59R82YTAXl1+0tCLl/35fCb1feZpRtW
-	xXQ4kuIZMLHrHiI4+FhF78nm6kAktx+c8Og20Uw2iU/n3zX7/GRWyei+ThSx2/mcaDG7SE9WJ8h
-	eDUhJhFTX2AZij1QTg5AFWMYzc/2NYWPKw/24JN875VV3g9SII0euib6ZNiSCXSJ0BLbEAVFktb
-	2CWDBPn7yTeHd/0SbyhwXxcu5viRnvcdUK3ENcLplJqPLpAlbJLlHTTuzsZFwC4A==
-X-Received: by 2002:a17:902:d486:b0:2c8:2808:3ec9 with SMTP id d9443c01a7336-2cf3487e320mr208898165ad.12.1784656598500;
-        Tue, 21 Jul 2026 10:56:38 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf8f362e00sm828255ad.71.2026.07.21.10.56.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jul 2026 10:56:37 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <673be23a-2a84-43b7-9be7-a661cf0e7935@roeck-us.net>
-Date: Tue, 21 Jul 2026 10:56:36 -0700
+        bh=iCyYsJpFLRWTeCtgdOOx5DrdFbsbn7oJEfvZv6H9lPc=;
+        b=mM5VVUsF5PU3KA+aajpoAbwSEVuIZx7+UdIbWq0uB1EfmOT0b1QbuBubwTixieG625
+         lNfFrEI+OWOJaOjaONIuUHUJIIvS20OpsI0KdQfsFNtgThj9k+AOZwKq7Xhw86kCvn+c
+         NUkEsA308Vz//5EAxjCCruKwveVGm6P0dT6DOh4X9Dk7qH05iQ59pxQzWMAVHmICFKXP
+         RSmECdCzAMD/7xTMLghTjxnBaOscZNY0wnN245CFNzW7Uqy220tJcBgZVP7UYS0cQ2uE
+         DA+V55mLjDNsQJzluV057JvNub3sDfl8AH9b6qthw5gWI2Qji4/SC3x+5gtvHaAlTkhu
+         N2Bw==
+X-Gm-Message-State: AOJu0YzNNEU8et10kd3zJQOYPJJfgSRsQy80Pph+eYMjMYuFUKk+7K+6
+	HlJwk2Ejc/sQDRLydq1c/DfnRtaoPlEJACZM+v9UiSKs6LJdaT8Nmxd0yJTANO+Or0UbNl5hwqP
+	g/BdhWdyTnSaSPSsKbHZ3fyNxRwDNu6ziH+0pH5iWuR0/7s2ZCv2RRIPOa+h1V82XsQ==
+X-Gm-Gg: AR+sD13m3FRiOhXpXVoKui7v3fvnfDVRrN9MzawyhmrVWF/axcRJ+tqdp1d6JNrdF6j
+	mO3E+IPWJWM7vgcuFYZlYzDJmUHvIjyU4eSEa1gBRnTgQzZmCatvzcT/sgTdZc2SgaNgdDKtph6
+	OrsE3F4qamnOBqGcpT8VyTISuEVs9nMLZMDZ1K232LBeL4tseNt9Eu0V76QGhZrrl9Kl1BDBZuh
+	Z9zHSPH/iWIZFTcoxD5qeHx8hhxOjkBPJarTACJLHSXjsya925Mw+XngYf1IkNiFoCON5Kh+qfg
+	buHGl5j1vUCZpRZrphUR56VRFa6y0zp9RRCmfhdUYbmGuCt35PAhpg0HLTkR1Ov4pSoIqR31pLe
+	e1QeQQEIupTtHrW/hWx6HYQbkpjiltgwoFSk=
+X-Received: by 2002:a17:902:e889:b0:2ca:e565:7b15 with SMTP id d9443c01a7336-2cf348317cbmr211901585ad.10.1784658619630;
+        Tue, 21 Jul 2026 11:30:19 -0700 (PDT)
+X-Received: by 2002:a17:902:e889:b0:2ca:e565:7b15 with SMTP id d9443c01a7336-2cf348317cbmr211901015ad.10.1784658618925;
+        Tue, 21 Jul 2026 11:30:18 -0700 (PDT)
+Received: from hu-manafm-hyd.qualcomm.com ([202.46.23.25])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3147e1ca3efsm1185298eec.30.2026.07.21.11.30.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jul 2026 11:30:18 -0700 (PDT)
+From: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
+Subject: [PATCH v2 00/10] hwmon: Add Qualcomm SPMI BCL driver
+Date: Wed, 22 Jul 2026 00:00:05 +0530
+Message-Id: <20260722-qcom-bcl-hwmon-v2-0-febe2805e17b@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/6] dt-bindings: vendor-prefixes: Add Sensylink
-To: Conor Dooley <conor@kernel.org>, Troy Mitchell <troy.mitchell@linux.dev>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Paul Walmsley <pjw@kernel.org>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>, Yixun Lan <dlan@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-riscv@lists.infradead.org,
- spacemit@lists.linux.dev, linux-doc@vger.kernel.org
-References: <20260721-ctl2301-v2-0-ef5fb342872a@linux.dev>
- <20260721-ctl2301-v2-1-ef5fb342872a@linux.dev>
- <20260721-dill-dab-df15585090d2@spud>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260721-dill-dab-df15585090d2@spud>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAK66X2oC/12MwQ7CIBBEf6XZs9ssG4Xoyf8wPQCllqQtFhQ1T
+ f9drDcvk7zJzFsguehdglO1QHTZJx+mAryrwPZ6ujr0bWFgYkmKCWcbRjR2wP45hgllK4mtOB6
+ cNlBOt+g6/9qEl6Zw79M9xPfmz+Lb/lRM8l+VBRIqs2fZkVFKi3NIqZ4feii7sS4BzbquH7p0i
+ JezAAAA
+X-Change-ID: 20260720-qcom-bcl-hwmon-6d602c195eab
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+Cc: linux-hwmon@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mfd@lists.linux.dev, Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>,
+        Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1784658613; l=4491;
+ i=manaf.pallikunhi@oss.qualcomm.com; s=20260206; h=from:subject:message-id;
+ bh=1b61qAvsm0miOUwJn8KRMPbavCrI7mO+2vWxjpqZ7do=;
+ b=qxbyeCA/FiwpuCQAvOMPkNVnE03+Ii801GfNJw9S0YLZnYvs0+KZ1xJMKJSp0WME6AY44MkJe
+ 8uNnWa3++/UBsolM9qGHbVEEe3SdnvbYOvu1CPC9hvZVjMEWw2hramd
+X-Developer-Key: i=manaf.pallikunhi@oss.qualcomm.com; a=ed25519;
+ pk=oZ3x9jh+FDyPwxHmCbyzEMQHMzKqrH6hUbbL7dEBe2g=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzIxMDE5NCBTYWx0ZWRfX9bpJjimwwV4e
+ cSh5OiBpZ787dFIgrghVdUlZB3331C44/UiScu8M7GNhEJ51DqjMeF5Sn1X4exrj/FR61G9XXjV
+ g6Pj1+Zlztb3F5d2zTm09yn+BUaXQn9EyLcileZJm8IU723yIt3sDwii9xnYywuyEoUQXfDCu++
+ g+3HgQ4ibdmzDQDVxjmdKHpmHAhDo6cKzre+7LisLqnxwb5DKvdLo7wmLJyKctAJ0+UqYUpuOFT
+ /2c6PnRCuwpcwyLnw38lqldTxHDtJ8asdfTTOwOaXJEAThqGdoxV62MaRXvG11awTv42c29a1+q
+ wSwwq5SHhA6oRt4L4zJj3To6M4FKbGG7wEh7a/S5PNHYb+H44+PeAAajFcuUnAJDOsaTLVIlNw5
+ NsVDpkRfR1oKT1YQWCx2cWPFlIdLzePcIEV01a9K3ORB8wsxB8rPp6+hAA/1teOXm9gfJOu9+iW
+ D93dowOd9pcqR71y8YA==
+X-Proofpoint-ORIG-GUID: p-K3GT9bl05Z__gh-Ba0jhkJbJMp1KGf
+X-Proofpoint-GUID: p-K3GT9bl05Z__gh-Ba0jhkJbJMp1KGf
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzIxMDE5NCBTYWx0ZWRfXxUCCRg2UpHXc
+ O3F5NEqlHPl0lPlKe0dAN5PVl0CMvCaQ1pNop7YWVB7JzAm+dBunQgzb/G4wmX6c63A/mczcOwS
+ lqi4ft5/7irysZDQ7t1/R17jFGfGPJ0=
+X-Authority-Analysis: v=2.4 cv=SIRykuvH c=1 sm=1 tr=0 ts=6a5fbabc cx=c_pps
+ a=cmESyDAEBpBGqyK7t0alAg==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
+ a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=Um2Pa8k9VHT-vaBCBUpS:22
+ a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=rZfr960RYrngOTP2lHgA:9 a=QEXdDO2ut3YA:10
+ a=1OuFwYUASf3TG4hYMiVC:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-21_03,2026-07-21_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 malwarescore=0 spamscore=0 phishscore=0 clxscore=1011
+ suspectscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607210194
 
-On 7/21/26 08:49, Conor Dooley wrote:
-> On Tue, Jul 21, 2026 at 02:48:27AM -0700, Troy Mitchell wrote:
->> Add the vendor prefix for Sensylink Microelectronics.
->>
->> Signed-off-by: Troy Mitchell <troy.mitchell@linux.dev>
->> ---
->>   Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
->> index 396044f368e7..22d0d26f1bbd 100644
->> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
->> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
->> @@ -1467,6 +1467,8 @@ patternProperties:
->>       description: Sensirion AG
->>     "^sensortek,.*":
->>       description: Sensortek Technology Corporation
->> +  "^sensylink,.*":
->> +    description: Sensylink Microelectronics Technology Co., Ltd.
-> 
-> Googling the company to see what their website is, I seem to see a
-> different name for the company: Shanghai Sensylink Microelectronics Inc.
-> Their website has that with the Shanghai dropped.
-> 
-> Also, probably the commit message should contain
-> Link: https://en.sensylink.com/
-> 
+This series introduces support for the Qualcomm SPMI PMIC Battery Current
+Limiting (BCL) hardware monitor present in various Qualcomm PMICs.
 
-Asking Google search: "Why the two names ? Did they rename themselves at some point ?"
+The BCL hardware ensures robust battery protection by monitoring battery
+conditions in real time and triggering interrupts when predefined
+thresholds are crossed. These alerts allow the system to respond
+proactively, preventing battery degradation and preserving system
+reliability under adverse power conditions.
 
-Response:
+The driver integrates with the standard hwmon subsystem, exposing battery
+measurements and configurable alarm thresholds. This design enables
+seamless integration with existing system monitoring tools and thermal
+management frameworks.
 
-Understanding the Name Structure
+Key features:
+- Battery/system under voltage and over current monitoring support
+- Real-time voltage and current readings support
+- Configurable threshold-based alarms (warning and critical levels)
+- Interrupt-driven notifications for threshold violations
+- Automatic threshold management with polling-based recovery
+- Hardware-specific scaling factors and threshold representations
 
-1. English Legal Name vs. Marketing Abbreviation
+Voltage and current monitoring can be independently enabled/disabled
+by firmware, and the driver automatically detects the enabled features
+at probe time.
 
-Sensylink Microelectronics Technology Co., Ltd.:
-This is the literal translation of their full, formal registered corporate name
-used for international trade, customs, and legal documentation.
+Signed-off-by: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
+---
+Changes in v2:
+- Reworked the binding from the generic qcom,bcl-hwmon.yaml schema to a
+  PMIC-specific qcom,pm7250b-bcl.yaml schema using exact compatible strings.(Krzysztof)
+- Dropped the DT-configured overcurrent-thresholds-milliamp property.(Konrad)
+- Renamed interrupt names from "bcl-max-min"/"bcl-critical" to
+  "max-min"/"critical".(Krzysztof)
+- Limited the binding and driver match table to the supported PMICs:
+  PM7250B, PM8350C, PM8550, PMH0101, PMIH0108, SMB2360 and SMB2370.(Daniel)
+- Folded qcom-bcl-hwmon.h into qcom-bcl-hwmon.c and removed the
+  macro-generated alarm mapping helpers.(Krzysztof/Bjorn/Daniel)
+- Reworked the driver around per-PMIC register descriptors instead of
+  generic BCL generation/mode descriptors.(Krzysztof/Bjorn)
+- Added support for 16-bit voltage/current input registers and
+  SMB2360/SMB2370 2S/3S battery configuration based scaling.
+- Build hwmon channel information dynamically from hardware enable state
+  instead of registering static voltage/current channel sets.(Daniel)
+- Improved alarm IRQ handling with per-alarm locking, wake state tracking,
+  shutdown guards, and explicit delayed-work cleanup.
+- Switched probe/error paths to dev_err_probe() and tightened BCL enable,
+  regmap-field, and hwmon registration handling.
+- Link to v1: https://lore.kernel.org/r/20260206-qcom-bcl-hwmon-v1-0-7b426f0b77a1@oss.qualcomm.com
 
-Sensylink Microelectronics Inc.:
-This is a simplified, Westernized abbreviation used on their official
-English website and marketing materials for cleaner global branding.
+---
+Manaf Meethalavalappu Pallikunhi (10):
+      dt-bindings: hwmon: Describe Qualcomm BCL hardware
+      hwmon: Add Qualcomm PMIC BCL driver
+      arm64: dts: qcom: pm7250b: Enable BCL sensor node
+      arm64: dts: qcom: hamoa-pmic: Enable BCL sensor node
+      arm64: dts: qcom: pm8350c: Enable BCL sensor node
+      arm64: dts: qcom: pmh0101: Enable BCL sensor node
+      arm64: dts: qcom: pm8550: Enable BCL sensor node
+      arm64: dts: qcom: pmih0108-kaanapali: Enable BCL sensor node
+      arm64: dts: qcom: pmih0108: Enable BCL sensor node
+      arm64: dts: qcom: smb2370: Enable BCL sensor node
 
-2. The Native Chinese Name
+ .../bindings/hwmon/qcom,pm7250b-bcl.yaml           |   64 +
+ .../devicetree/bindings/mfd/qcom,spmi-pmic.yaml    |    4 +
+ MAINTAINERS                                        |    8 +
+ arch/arm64/boot/dts/qcom/hamoa-pmics.dtsi          |    9 +
+ arch/arm64/boot/dts/qcom/pm7250b.dtsi              |    9 +
+ arch/arm64/boot/dts/qcom/pm8350c.dtsi              |   10 +
+ arch/arm64/boot/dts/qcom/pm8550.dtsi               |    9 +
+ arch/arm64/boot/dts/qcom/pmh0101.dtsi              |    9 +
+ arch/arm64/boot/dts/qcom/pmih0108-kaanapali.dtsi   |    9 +
+ arch/arm64/boot/dts/qcom/pmih0108.dtsi             |    9 +
+ arch/arm64/boot/dts/qcom/smb2370.dtsi              |    9 +
+ drivers/hwmon/Kconfig                              |   11 +
+ drivers/hwmon/Makefile                             |    1 +
+ drivers/hwmon/qcom-bcl-hwmon.c                     | 1443 ++++++++++++++++++++
+ 14 files changed, 1604 insertions(+)
+---
+base-commit: 3fe08b9796f36ef437ab9328e7dd1e5ff2d66603
+change-id: 20260720-qcom-bcl-hwmon-6d602c195eab
 
-上海申矽凌微电子科技股份有限公司 (Shanghai Shenxiling Microelectronics Technology
-Co., Ltd.): This is the company's sole, official legal name registered with
-the Chinese government.
-
-"Sensylink" is a portmanteau created specifically for international markets,
-blending "Sensing" (their core technology) and "Link" (their interface and
-connectivity products).
-
-Prodding further, asking if the previous response was complete, it tells
-me that there was a name change:
-
-According to Chinese corporate registry data (via Tianyancha and Qcc),
-they did change their official Chinese legal name:
-
-Old Name: 上海申矽凌微电子科技有限公司 (Shanghai Sensylink Microelectronics Technology
-Co., Ltd.)
-
-New Name: 上海申矽凌微电子科技股份有限公司 (Shanghai Sensylink Microelectronics Technology
-Co., Ltd. by Shares / Joint-Stock Company)
-
-I don't know if Linux has a policy about Legal vs. Marketing names. Personally
-I don't have an opinion. Your call, really.
-
-Guenter
+Best regards,
+-- 
+Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
 
