@@ -1,62 +1,63 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D9E445AE2
-	for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 09:59:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4D4542FCA8
+	for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 09:59:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784627994; cv=none; b=s/hJ62tWHQQHr/t3WI2DTLgwpbH5iJnQBUhum5+txSkp622tgVUMbOdacCPYfajQQBRKWxOFYfJ/G8EA11onisgOxH4AMA5S78sT5FUm1YFGxtvklzUKMKHbfd+Fnj3TXTqX4M/NixRWfkGcXmUIOFjlUrI/5zolduVF99hr9JQ=
+	t=1784627995; cv=none; b=I9NOB8xs13srAcH2Bg2lWrcu0to6kKCKJnt5CXL288slBvw7h3Ox7ZDi2W7SdjP1JavNOr6fT3dpcoGpUfNiKWOCGGzXO4sK+WmaH/wxHyyIIunhRRtj8DeeOQnn4Tm8plqoNiGjqOM0t3NS0BqaVKI84sOwhXwSxJESOpF5lE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784627994; c=relaxed/simple;
-	bh=4hhsAxAJjA9CnHKxIGE5+DUar4FrPizlIRDXYPMfD4I=;
+	s=arc-20240116; t=1784627995; c=relaxed/simple;
+	bh=uMbFgZLCRFrESlapa+JInn2glqohSQZ25RTJ1QwtfR8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Hy/zdnJz45pLHRDRGRpkcg2P/FbXtLOjEco4BKbrDfei0nO7W7FAOyNlUS6pv3Yh1gG/+8xx5CfjikFRsAN3dlm6twpu58lPx/ij2zKfhpyUdPgNDmspWYWx7c9eN0nIpAK2eN0rjkBmoMVAvX1dFC+cmI3Jr2jxNa6cDvtcM78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LQNraOng; arc=none smtp.client-ip=209.85.221.41
+	 MIME-Version:Content-Type; b=QdedEvHe0j15M2vIpS8VcxTa9/1LHS6I487AwvwY6zuu9EfaGlFJwSrJP1FaCyyneryzZjK58HoedwmxPsEnkHQXiU4cj4D1UPtpiDtq7LM4SHUl0xTjomHTdsPfAYDSn36iYisBqZTzgHsEyPv60rnYG49fmMY9KI6cshTOYNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MN5WZiLe; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LQNraOng"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-47ddf7b09aaso7241424f8f.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 02:59:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MN5WZiLe"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4955de8797cso11708485e9.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 02:59:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784627989; x=1785232789; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ge4jOwru2gdBik+03SVRNyiDvso3mpjCVgnlsYEIFrM=;
-        b=LQNraOngZes09ELhRxvcapcyEb8OUPktJff2L42ZeY22O5/NHADDF2l66NnV4sGZ1p
-         qJifLkCKqbFLOXO3iymCqAb7XpPO+YVxvx6OycMIw3k6BwR8cOkfCqDAcjKg3NpjhqwZ
-         ZQnxqjcgZPHJTV2rzezkVJOz27LUHnKIKoUZsPTXVpQxyye3ZeDgkkn6+bNp7EJ4Gjvi
-         xTg3kTnO++esAC+JRYMukC7ISjTdWoNmmmxfU+T2p0mhYxBr76eghxIdr66P8voFrmGP
-         ZAW3qHI5g9KTACr5g1MN6KpjJYM9Bw0km4ZmytgAMuuCauua4zVrlIOGHdgZw/xE189X
-         pGUQ==
+        d=gmail.com; s=20251104; t=1784627991; x=1785232791; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=HaCVTtIsxHrLK92jf9IpnJwSHawfy+ZzA+YycHEjzEQ=;
+        b=MN5WZiLe9nwOuoa2BgL+HXM8/Vl8zON3ascy2+c+F1yOrUqWXoGtJe5O12bVGSEu7Q
+         MowvGB9jtaWNcg4UKqkNJX+Sc9cK1asx/TWHGJSt1aXyE2ObjqudxVALjXy42ndxzybM
+         EMZ8G7C4pBkZb6PpFPkyR4PecnW+dLHOG/AgiyNxG8NEVwkm1AePhzfnFnLsI/FIwzRO
+         YRNQZsevufREfs98Dsb+qws/piBKw+LquFE0UkZCN31xSOlzFq+5PRLdxAMIIUe6ny7g
+         eOlUSLhmWnOJgJjPGqrZH/9vCU63Zxll+0rJkVYmfgtY7UFGw/V2umbx3xVtj0c04y4B
+         cJ+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784627989; x=1785232789;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ge4jOwru2gdBik+03SVRNyiDvso3mpjCVgnlsYEIFrM=;
-        b=qPRmv6dFOfdG4CB2AwlV3i1TJFErJzi4xDhRGZg9kx2gyGGWP2tHMyc0S3auHl4FCO
-         jK34Xi2h3+mmJwyzlv0SsolFuwY1Bp/QU3cgCfKlm/hH9dhEgRgpdwoCfWB270pls6Tk
-         Y1B9La/9jgo4rHyGig250GkUTBCJeUBU8gUa8TCzVpaRLev6wikPIs7ceDsdLBRrnPFF
-         Ir37cy6oO6HXP1Vpi8qmIt8RwGNGlhxCrJPwtuq6VrVqHIMH06ScvCY5CVoKihhqBEin
-         HBQ2IXotL9aw3ricCHKGnTIfgu051aea63vPndujGbk1x6rIbYfE7FUxOqz/bhr5KBtL
-         cndQ==
-X-Gm-Message-State: AOJu0YyVI2mmifsr4biHlPDWAKD9BZ2fjL4/3Pq6zvHckqcWi11IMWN0
-	RdRj5zD9E0/vtQ2+aRJYk4DIWdkup3oFrS5kgl0hfWyZOmwoYKbfrc7r
-X-Gm-Gg: AR+sD10A1liL+K0QW7D5eKlRfREuAAzoGGCT9CbilJYTRhUo+BebI0vanucYmmVsn1c
-	27B7HH2NsfRcjAwvemS+sUMmt6IotUC/7E3S1ksFHfNRMQg8eTdefKAmGgsMYl08l9cSQs8SJda
-	I7zAas6jJvoUCuLuMsW/Pz22ewGlQzsdyXNnxoWsR+yMULXigg5Z2Hf/KLBD7ehWX0gyOHrpOoM
-	YuP7aoMQ4p97I8vuqs0KD3TSEykeeEJE9q0n0YZMv7ot+oaD27wzMo+sMpdh9LtJVxVsBxDR3Hr
-	dp7p/h3VmgeRBxYEd6uh///1hNO7WtpoU0iVuII6fQrdFDWNKOs7Hri5lDNsyJWRrvwdZ2Ayz3A
-	P+agpows6MCL3w2W1Bp3rrAohw2G23IrRLEuJEp3aRooxOWYp8+oDn77GMz2XsSMzouLMiwgup+
-	iMLdLRnzpTauXePRZz75g/jXE=
-X-Received: by 2002:a5d:64e3:0:b0:47f:70f3:451d with SMTP id ffacd0b85a97d-47f70f3455cmr12905125f8f.8.1784627989466;
-        Tue, 21 Jul 2026 02:59:49 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1784627991; x=1785232791;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=HaCVTtIsxHrLK92jf9IpnJwSHawfy+ZzA+YycHEjzEQ=;
+        b=FpTfZZVBUC37d6C30sRyPOrOgISl9Ehu+V8j0cU82MyDGP8WlaftfDo4u84Zc31Vwt
+         G93lNr1IXuYbsZzZs1YuawIC14XniZx6r7FxlmSxQCLI7wUchRltL4yR0oQ1sdbpvF78
+         ezeJxA4CV86jD/XZl7zWDkQoHS0H12raD4JYTEvi0FPen2hb45seW1UwgLixzYzJPWFV
+         uKppeJkHqz0hkZNVkxiLvRcTUW47qtXqjzVqelWltDF4ib3FN5eeD6/vdk7Dy34DuyCU
+         JMi5HaKkvefxGEz/hnTFjVjcVLM/Hq3XjnIAADfhmwVEHNLZE5NwbFkrIrCP/s1dlmvK
+         Zbnw==
+X-Gm-Message-State: AOJu0Yx8Xyn286Vmn4Gg3G7PXVHqghUbfrQZzxOlsbkJSp+spbLNIYep
+	ku1Cfyb+ehvfmiw/SG5jbIi/JtdHhbIRG7ePTwOHMMr0b4+Y/QJDeuWG
+X-Gm-Gg: AfdE7cnzOUle0h+yDcZ9stZQ7TAKoGQYLUxcoG4QHWQc39XqkaPCGakvj4QyzjnNfHT
+	eAML55EGbePLe9+979J5quaX+Y1pIqfYuHQBeaUFlhoxv8S9tx0I4XrjHmsNQjbbk3esy8tBo+6
+	c0Rl7Gb/h9UlpDQQw1WNU5/MId95m9xHFz20LVuyApQV5X7O+gWFHuPTTa+zw6mxT0CHV1YlLJ2
+	FItx0iZ/FXhsPplKGWUL6BFZKclPAcUq4xzqj1qkf9/YO0KMCugmiuDy/gOuh9KRH38USoGdQOT
+	/5dObgEaPDoXbR80OJovVFdcgVPgQBLycjIkAmfJJpqWDzIdHewiIN0g8H820p7m4Epjfwveb/b
+	WBbSoM3ZIgxONFO3wazawtrOrufV8YYa3fiyYfV7oxGiry+32jzDs7KGMdSqOwf440ISmIT7xgQ
+	ILzKKS5tAQSlozABFMgGVQjIuOW8aq3f+4ew==
+X-Received: by 2002:a05:600c:5882:b0:495:441a:39d2 with SMTP id 5b1f17b1804b1-4954a402f2amr149790865e9.21.1784627990818;
+        Tue, 21 Jul 2026 02:59:50 -0700 (PDT)
 Received: from xeon ([188.163.112.51])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63e499c2sm35228691f8f.4.2026.07.21.02.59.48
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63e499c2sm35228691f8f.4.2026.07.21.02.59.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2026 02:59:48 -0700 (PDT)
+        Tue, 21 Jul 2026 02:59:50 -0700 (PDT)
 From: Svyatoslav Ryhel <clamor95@gmail.com>
 To: Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>,
@@ -67,9 +68,9 @@ To: Jean Delvare <jdelvare@suse.com>,
 Cc: linux-hwmon@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/3] dt-bindings: hwmon: Document SMSC EMC1402/1403/1404/1428
-Date: Tue, 21 Jul 2026 12:59:33 +0300
-Message-ID: <20260721095935.439174-2-clamor95@gmail.com>
+Subject: [PATCH v3 2/3] hwmon: (emc1403) Convert to use OF bindings
+Date: Tue, 21 Jul 2026 12:59:34 +0300
+Message-ID: <20260721095935.439174-3-clamor95@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260721095935.439174-1-clamor95@gmail.com>
 References: <20260721095935.439174-1-clamor95@gmail.com>
@@ -79,226 +80,72 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Document the basic hardware layout of SMSC (now Microchip)
-EMC1402/1403/1404/1428 thermal sensors.
+From: Jonas Schwöbel <jonasschwoebel@yahoo.de>
 
+Add OF match compatible table to be able to use this driver with Device
+Trees.
+
+Signed-off-by: Jonas Schwöbel <jonasschwoebel@yahoo.de>
 Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 ---
- .../bindings/hwmon/smsc,emc1403.yaml          | 203 ++++++++++++++++++
- 1 file changed, 203 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/smsc,emc1403.yaml
+ drivers/hwmon/emc1403.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/smsc,emc1403.yaml b/Documentation/devicetree/bindings/hwmon/smsc,emc1403.yaml
-new file mode 100644
-index 0000000000000..d7873a37c3295
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/smsc,emc1403.yaml
-@@ -0,0 +1,203 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/smsc,emc1403.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/hwmon/emc1403.c b/drivers/hwmon/emc1403.c
+index cd753b38709f2..b7ab6069ec7b1 100644
+--- a/drivers/hwmon/emc1403.c
++++ b/drivers/hwmon/emc1403.c
+@@ -16,6 +16,7 @@
+ #include <linux/hwmon.h>
+ #include <linux/hwmon-sysfs.h>
+ #include <linux/err.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/sysfs.h>
+ #include <linux/regmap.h>
+ #include <linux/util_macros.h>
+@@ -659,14 +660,14 @@ static int emc1403_probe(struct i2c_client *client)
+ {
+ 	struct thermal_data *data;
+ 	struct device *hwmon_dev;
+-	const struct i2c_device_id *id = i2c_match_id(emc1403_idtable, client);
+ 
+ 	data = devm_kzalloc(&client->dev, sizeof(struct thermal_data),
+ 			    GFP_KERNEL);
+ 	if (!data)
+ 		return -ENOMEM;
+ 
+-	data->chip = id->driver_data;
++	data->chip = (uintptr_t)i2c_get_match_data(client);
 +
-+title: SMSC EMC1402/1403/1404/1428 thermal sensors
+ 	data->regmap = devm_regmap_init_i2c(client, &emc1403_regmap_config);
+ 	if (IS_ERR(data->regmap))
+ 		return PTR_ERR(data->regmap);
+@@ -682,10 +683,21 @@ static const unsigned short emc1403_address_list[] = {
+ 	0x18, 0x1c, 0x29, 0x3c, 0x4c, 0x4d, 0x5c, I2C_CLIENT_END
+ };
+ 
++static const struct of_device_id emc1403_of_match[] = {
++	{ .compatible = "smsc,emc1402", .data = (void *)emc1402 },
++	{ .compatible = "smsc,emc1403", .data = (void *)emc1403 },
++	{ .compatible = "smsc,emc1404", .data = (void *)emc1404 },
++	{ .compatible = "smsc,emc1428", .data = (void *)emc1428 },
++	{ }
 +
-+maintainers:
-+  - Svyatoslav Ryhel <clamor95@gmail.com>
++};
++MODULE_DEVICE_TABLE(of, emc1403_of_match);
 +
-+properties:
-+  compatible:
-+    oneOf:
-+      - enum:
-+          - smsc,emc1402
-+          - smsc,emc1403
-+          - smsc,emc1404
-+          - smsc,emc1428
-+
-+      - items:
-+          - enum:
-+              - smsc,emc1412
-+              - smsc,emc1422
-+              - smsc,emc1442
-+          - const: smsc,emc1402
-+
-+      - items:
-+          - enum:
-+              - smsc,emc1413
-+              - smsc,emc1423
-+          - const: smsc,emc1403
-+
-+      - items:
-+          - enum:
-+              - smsc,emc1414
-+              - smsc,emc1424
-+          - const: smsc,emc1404
-+
-+      - items:
-+          - enum:
-+              - smsc,emc1438
-+          - const: smsc,emc1428
-+
-+  interrupts:
-+    items:
-+      - description: Sensors "ALERT" pin output.
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#thermal-sensor-cells":
-+    const: 1
-+
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 0
-+
-+  vdd-supply: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+patternProperties:
-+  "^channel@([0-7])$":
-+    type: object
-+    description: Represents channels of the device and their specific configuration.
-+
-+    properties:
-+      reg:
-+        description: The channel number. 0 is local channel, 1-7 are remote channels.
-+        items:
-+          minimum: 0
-+          maximum: 7
-+
-+      label:
-+        description: A descriptive name for this channel, like "ambient" or "psu".
-+
-+    required:
-+      - reg
-+
-+    additionalProperties: false
-+
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - smsc,emc1402
-+    then:
-+      patternProperties:
-+        "^channel@([0-7])$":
-+          properties:
-+            reg:
-+              items:
-+                maximum: 1
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - smsc,emc1403
-+    then:
-+      patternProperties:
-+        "^channel@([0-7])$":
-+          properties:
-+            reg:
-+              items:
-+                maximum: 2
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - smsc,emc1404
-+    then:
-+      patternProperties:
-+        "^channel@([0-7])$":
-+          properties:
-+            reg:
-+              items:
-+                maximum: 3
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        sensor@4c {
-+            compatible = "smsc,emc1412", "smsc,emc1402";
-+            reg = <0x4c>;
-+
-+            interrupt-parent = <&gpio>;
-+            interrupts = <4 IRQ_TYPE_LEVEL_LOW>;
-+
-+            vdd-supply = <&vdd_3v3_sys>;
-+            #thermal-sensor-cells = <1>;
-+        };
-+    };
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        sensor@29 {
-+            compatible = "smsc,emc1428";
-+            reg = <0x29>;
-+
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            channel@0 {
-+                reg = <0x0>;
-+                label = "local";
-+            };
-+
-+            channel@1 {
-+                reg = <0x1>;
-+                label = "chan1";
-+            };
-+
-+            channel@2 {
-+                reg = <0x2>;
-+                label = "chan2";
-+            };
-+
-+            channel@3 {
-+                reg = <0x3>;
-+                label = "chan3";
-+            };
-+
-+            channel@4 {
-+                reg = <0x4>;
-+                label = "chan4";
-+            };
-+
-+            channel@5 {
-+                reg = <0x5>;
-+                label = "chan5";
-+            };
-+
-+            channel@6 {
-+                reg = <0x6>;
-+                label = "chan6";
-+            };
-+
-+            channel@7 {
-+                reg = <0x7>;
-+                label = "chan7";
-+            };
-+        };
-+    };
+ static struct i2c_driver sensor_emc1403 = {
+ 	.class = I2C_CLASS_HWMON,
+ 	.driver = {
+ 		.name = "emc1403",
++		.of_match_table = emc1403_of_match,
+ 	},
+ 	.detect = emc1403_detect,
+ 	.probe = emc1403_probe,
 -- 
 2.53.0
 
