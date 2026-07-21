@@ -1,99 +1,56 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 150F2446C06
-	for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 09:50:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CE1E448385;
+	Tue, 21 Jul 2026 09:51:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784627402; cv=none; b=Gn8vZ8+1J7FT+xSbr+dAMDWlbkxRumRnk5kw+5zCWf19/QnU/oVmdlRS0hIerMdCYjGHf83XHwBkVfVkLwd0trIhcBvYkrBbCf2qxwiXNscyFSz/UWfdC+haG7TbiT3X35aoxjEoQH/wRJmVDPZah4gKywPh6izaUVtOEMCBqyg=
+	t=1784627477; cv=none; b=cdjiMp7uxWpj+vH5CeOaDclzQ1vyaYI2BWfNevaAu8CbXsgBicEyTCNArTCEl1V5VwK/ehlA+dHrnLB7x0ZyEyNl0pKBfhFAtbYtYUQgwWOJM0pugK/IwcdcBiEuCTmBMqe0ZwVG5H/SvM5zEHpBCdaniEBjTPdImpFPp7CrMZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784627402; c=relaxed/simple;
-	bh=7uMF/zan9gnF7cZMHx9exe4LLPPvRgc33P/RP9t39e0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jHcodWQcTPWiKfpImohOkDkITcl1ZNHTt+aExVKVa0TTMIInWatnRljaD3ftZ3AsiNC9ozXnzpHEltPU4foGdxpGBTLYHKHpi0ssSvp3VPc310uaoB0kxteAIWTrLy52lmV8Lzlf52yw2ipn8pSeB9a0l7AYjnw8l2xicq7mvfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OeuoYatB; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1784627477; c=relaxed/simple;
+	bh=e/8eEwQxKSM0rJjhEeoprTTOPdc/dHOYfAITKHSolvo=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Fx8WjmsBYPAlClotJWjqq0LPN+2JLxz1zJZc6S8lqVCEL+OLhk/4P1waYGclds832Or/0ONXty1Ww+eqTWxCdTLTzZs/8i1e3vpFcQOLJSAc3lD9b7lNcflEPm/Kq6p2+NQNa/OgeaSdVS384DmktqkHpKnM7tMDM9+VPhBMBWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kS4e44Sa; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OeuoYatB"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784627388;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uYgDvv/8zUBPOt0Bkan5pLK6f5pZoY2kPjTQUy/vRm4=;
-	b=OeuoYatBX+ioCnxSVS4R6sBmsKaLpqM7WjDK8FzR8/j5Kt+29+c5kshBOf1j8+F4ifvCqZ
-	lY0HCaIytaGZjHhluZYjzhLbIvNoZpmkBlPGIHFUx/JPOLDPBdWRVwKiGYNNv4mpqUE4Jh
-	NvsUldndmot4LxPvgpBsaKcCZTAgtaE=
-From: Troy Mitchell <troy.mitchell@linux.dev>
-Date: Tue, 21 Jul 2026 02:48:31 -0700
-Subject: [PATCH v2 5/6] riscv: dts: spacemit: Add K3 I2C6 pinctrl state
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kS4e44Sa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DD931F00A3A;
+	Tue, 21 Jul 2026 09:51:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784627476;
+	bh=e/8eEwQxKSM0rJjhEeoprTTOPdc/dHOYfAITKHSolvo=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=kS4e44SaDEKfKcF6G8EF2xsJFBysnsmuYzBnevWxd6ThwXfcMubRclTinbYRTi5Bv
+	 ZEUcOqW8u5D5E9OhQ056xioHNifGQLQ7qYMgWC8g1K2Hc1WWZbe4jGVEL4C5/OGZxn
+	 AFpJsWmTNRUlyGg/t29XY9nl+HboLvgfCWkfKUk+DNTqBFZD2YXVotmshEpxhHo+9N
+	 FII91kYpcgE7c8r3D/npCmZHyWdhly2f5kT+ycPc4HZe6BkXvSAZ+VmjzZ+unpTT9B
+	 WKsXXkhaknWO187rv1CpgSHd0L8hPKx0hXNuj50b6txjyX64knCQAjdLNWZGdhZAFh
+	 0ZD2V/qcbyXXg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 1/6] dt-bindings: vendor-prefixes: Add Sensylink
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Troy Mitchell" <troy.mitchell@linux.dev>
+Cc: conor+dt@kernel.org, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, robh@kernel.org
+In-Reply-To: <20260721-ctl2301-v2-1-ef5fb342872a@linux.dev>
+References: <20260721-ctl2301-v2-0-ef5fb342872a@linux.dev>
+ <20260721-ctl2301-v2-1-ef5fb342872a@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 21 Jul 2026 09:51:15 +0000
+Message-Id: <20260721095116.0DD931F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260721-ctl2301-v2-5-ef5fb342872a@linux.dev>
-References: <20260721-ctl2301-v2-0-ef5fb342872a@linux.dev>
-In-Reply-To: <20260721-ctl2301-v2-0-ef5fb342872a@linux.dev>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
- Yixun Lan <dlan@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>
-Cc: Troy Mitchell <troy.mitchell@linux.dev>, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
- linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
- linux-doc@vger.kernel.org
-X-Developer-Signature: v=1; a=openpgp-sha256; l=913;
- i=troy.mitchell@linux.dev; h=from:subject:message-id;
- bh=7uMF/zan9gnF7cZMHx9exe4LLPPvRgc33P/RP9t39e0=;
- b=owGbwMvMwCU2g/N9w09jE33G02pJDFnxDqWiHyoN9T7VLE+U33ts00PlQBO+N2Wxyz332nGrc
- a9d8elVRykLgxgXg6yYIkv3A55tBT5RtgUChb4wc1iZQIYwcHEKwESmb2dkmLeBsSz8+4kE41yL
- rmPZ246sLnl08YeyX+HU2z6LtWf9n8rI8MEntiN/txV/SdWR/G8CjS6HUm6+5DlmKV7qOduqz6i
- DCQA=
-X-Developer-Key: i=troy.mitchell@linux.dev; a=openpgp;
- fpr=3FE5535CF1B0E658E57DB59BAE1C2FBEA7DB42E1
-X-Migadu-Flow: FLOW_OUT
 
-Add the K3 I2C6 pinctrl state used by boards that route I2C6 to
-pads 7 and 8. Leave board-specific IO voltage selection to board
-files.
+> Add the vendor prefix for Sensylink Microelectronics.
+>=20
+> Signed-off-by: Troy Mitchell <troy.mitchell@linux.dev>
 
-Signed-off-by: Troy Mitchell <troy.mitchell@linux.dev>
----
- arch/riscv/boot/dts/spacemit/k3-pinctrl.dtsi | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Sashiko has reviewed this patch and found no issues. It looks great!
 
-diff --git a/arch/riscv/boot/dts/spacemit/k3-pinctrl.dtsi b/arch/riscv/boot/dts/spacemit/k3-pinctrl.dtsi
-index 3ee1471f3798..91cd08099e27 100644
---- a/arch/riscv/boot/dts/spacemit/k3-pinctrl.dtsi
-+++ b/arch/riscv/boot/dts/spacemit/k3-pinctrl.dtsi
-@@ -78,6 +78,17 @@ gmac1-phy-0-pins {
- 		};
- 	};
- 
-+	/omit-if-no-ref/
-+	i2c6_1_cfg: i2c6-1-cfg {
-+		i2c6-1-pins {
-+			pinmux = <K3_PADCONF(7, 6)>,	/* i2c6 scl */
-+				 <K3_PADCONF(8, 6)>;	/* i2c6 sda */
-+
-+			bias-pull-up = <0>;
-+			drive-strength = <18>;
-+		};
-+	};
-+
- 	/omit-if-no-ref/
- 	i2c8_cfg: i2c8-cfg {
- 		i2c8-pins {
-
--- 
-2.55.0
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260721-ctl2301-v2=
+-0-ef5fb342872a@linux.dev?part=3D1
 
