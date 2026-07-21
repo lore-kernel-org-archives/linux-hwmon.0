@@ -1,244 +1,126 @@
-Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com [209.85.217.46])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8660A418A58
-	for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 22:10:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00AB143F4B3
+	for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 22:15:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784671822; cv=none; b=NxP++calFBRbaQQMTvTV/28xkoySXUyF80v0fz+sIIy5Y99ORWWSJD0n8WOM4Y+InfyolqWygrZk2sRFvL24Mc9qA+BgY7W3dBwEHIVOoVIXs8BaG1HfK8nvDGmrZzRj8xm93EuAti7RM3DCO4e+/wYeWQakAewv70hTKGfm0nM=
+	t=1784672147; cv=none; b=mttRaFfBSZdyga53DjOhbYe8duZAYmNkqj//t6cx7rDtYdV5h3OnQh/AG6DLY9NHSzHMRcPf68dLFY3OnMN8MEAiZnQIP0kIAjQLaWdtKV1SZsWffX0OjGOMjMf/eJt8uQYXLsZ5CTS8XDWyio391mqMW9ho2bnbHxyyUTauVXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784671822; c=relaxed/simple;
-	bh=zUPO0xW8EbcG6n05XKUjBFvNtTU1+ce31pPO4tifURQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FVNvJ7QYzvtqKxhJVGVew2EaseOI3FrR0//RtsF6aId8MBdn2jwPGMhitTPw2XA9TzX+WQXwcmKG2Gu9zGEW19xB/Kc1hQnDnbUkGafrI4L+ZOAZeMp9XBwAcTftfit4lDmOaPLQ1wSdNizygsyUZ4L+tlnVCH9t2bHHYC1YYXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i3TrD2Ix; arc=none smtp.client-ip=209.85.217.46
+	s=arc-20240116; t=1784672147; c=relaxed/simple;
+	bh=VAWojVejDeGwOkjnDGXuV/vrvqiFfZQoLUqScAaNmRI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UheSQnd5ZxOiFIcJzXtNbgKkLKpexWrg+AQUlGv9l0k8fPMsGWOkcMQD+R98oquKP7A1C8XqTFtgH7j6keDZQR6NTm2XxaOqGeGekqaszx5fUmrRFr4szqXnhc8b45LfG3VniaZMlmbqtgFz47cmgnTXpKJvj1h/OQBGWQU4VV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iiOpAGmT; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i3TrD2Ix"
-Received: by mail-vs1-f46.google.com with SMTP id ada2fe7eead31-7396940aebcso5695185137.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 15:10:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iiOpAGmT"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2ce98cb8165so57867275ad.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 15:15:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784671819; x=1785276619; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=kdIwiKXskzBc9nnshg1SjXod+Z/w7Wh/7DOz3DcaCJ8=;
-        b=i3TrD2IxwzY8KyQFBRM/2Ei5ZcnffFtwCyF/B/nT46LpMVyEV3A59iF5wwa+bn05Q+
-         j1iQRhdIwNJCYLrDfNnv1kLa36MD2IiRGFJKY6a/ivwlyQ1vgKVO4bPT/OINtEqZzb56
-         7Ip7YjDHYGmJtLjy7uZIMYVwq8A9/pCkoLw7MYvUIzDmaf0zulOfMDml5jbBc04ASoaH
-         50UJd6t2BulAoZ4jeV9ND6BLVCBkIK5AOv4CthC9ttCSPc7v7DlGHg9MlUBzv0NfdJo4
-         C3ppvjd1fxXqGdDjTnNSHSj4wyzixnFagGvBcjrjpBeHPpEynZO1seQqtH4nim10hP+0
-         urbA==
+        d=gmail.com; s=20251104; t=1784672145; x=1785276945; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=3G1xZyDLJd9iu8xkf6hvq4eD1i/K79dhkC7e31jMsW4=;
+        b=iiOpAGmTDrBN9DhNpClATKCQTtxhwoulGsJQyCUccqhFlFCsGZuwt5lgaJmxaXe4I9
+         ixNA7s83kig34k0BM+zbEElc+kPoLSEhL3vtfaGUDcrFnqUr99PIYSkGyp7S8Rg56P0Y
+         0V9g7fWMzHaRX7rQgIysk3Bh2bKsajVkuXQMHnOls+iWydI1tkwkAv80ya+dT2U79OUF
+         2sXrEylDbSEV5cNNyrj01/3kpdFBZ5FW2UJEKGhWnn8x5Cb9HV3MHKl81ad/11GbYPbc
+         ku405UYHI7Hy6W2dZtlst95fbc7Gpj1SonvRyLxEAhn14viUuLNExoKVnm0AopGgtEvW
+         aMVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784671819; x=1785276619;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1784672145; x=1785276945;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=kdIwiKXskzBc9nnshg1SjXod+Z/w7Wh/7DOz3DcaCJ8=;
-        b=m9AW1zDU0IwVK5fmMpsgjE0zLL31XIH0Q+t8eSOpBm88V+/mgfg0DLoznyXVg+Z04W
-         HO7cjEo4vyLV0bGFd3YzyOsFGoVOAD0XUJAKpe/i9qRFljwX/BhsAqEhSNYS/BNbr/lc
-         VYLHvpuy3pz32ml4S8HnIKMRnKHQhOK5sh+20Hie7hrGYmqHYdzzDPqae17zVw9eLn2p
-         LoEyNWvw5b3lBRQtNtRtQIW3NAGSziI1ptvDwM8ZIRvwqtZkZQzm2sm1PPkhk3hZKNu+
-         sxDBqJsn/NbAmuoRpvIE9EoqJ/H05KYIY5QidRK1wb0Iox3XHizXf1/BxquHzjvaCHHh
-         UfFw==
-X-Forwarded-Encrypted: i=1; AHgh+RrIIYG0eB3ZrwYI1NWGkIaA1IKjiBPJ1k1Hl4+1JdROspLHmd6YPipYB+Ple80KB/1gOC4q3pIxae1q3A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYeSH7rSh61Sa+JUMknd2gKr4e1D1im5miLH4vhdkTlr5gg2iF
-	dYMPr5GLjdVZsT038nbHFyUUaDkMeWK5SiJ7i+46L/wuihIkkUhPnNN7gyz9JdSShrc=
-X-Gm-Gg: AR+sD114urk83RjMmO3N1uef1zLUD0I/cUcjkxOA8+icHN9OIxwb/poQXt+TD7yCCMs
-	gXutNNOosGEnsE3DAzLFdnBf6ojunVRSFYbUaIYTCeg4YJlsDAJQ4HjmuLa+5TAhlWbyJz7zKw3
-	LM5DCq+cACO7dNlmaIcDdCVe88EU035e7WXct9Smv0N1iYN+Ayw4r3JUHPJgu6FEJea+0767paq
-	MZwm0Id6c9nV34suylH414WhXnSbKzsNbvMYh44BRYDnB58IDs/OZ+RvjPJY2vtyZh36X/UPoO+
-	TqtaCruAoePBs6QHceID5eeD1MBW1YAi2P/cexxpBZXeXNbbzb3NujkRoRudPJdaeG2m+nRsSl9
-	LieIw4Hxk9RBGipbgNSIPT4HnMeudxaFVxwLz6LQdVyMAr/L4VnmSLJzLSHkPsc85ILnOIO0Hc5
-	piYZCEm19XFDu7gA9dlQRFedwZDVV2+nwnG626+SZd9aOThcI21g==
-X-Received: by 2002:a05:6102:549e:b0:631:37cb:1e64 with SMTP id ada2fe7eead31-74753467d9dmr7663554137.4.1784671819309;
-        Tue, 21 Jul 2026 15:10:19 -0700 (PDT)
-Received: from [192.168.60.4] ([207.115.103.98])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-977441dc0basm644188241.10.2026.07.21.15.10.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jul 2026 15:10:18 -0700 (PDT)
-Message-ID: <bba0e7c6-e652-4dd8-a777-5e30dca810bf@gmail.com>
-Date: Wed, 22 Jul 2026 06:10:10 +0800
+        bh=3G1xZyDLJd9iu8xkf6hvq4eD1i/K79dhkC7e31jMsW4=;
+        b=FpGK5k3CnzfuB+/aXg9AMsoEOP3gXMYk4ZtgExH6vPNwBiUY48+qD3sMrJCR1mArZ8
+         8tXaDHIJjtAcmyldudlWA/AzAU6QQJBhUqNdzipGTXj4SUPxz4fcEshWLm2g4yovObLv
+         d8qDLbuBh8B2RThmKQ0dvwXDFhV+aQq98HBpdgfz7VJLO+qUW5kIqWZgl0VUhVhIy5RW
+         0iSnT8GRLc9dG0wqkkEayjlijntTDeDJCKaM5DSi5HC/TosZ7kPNMNQ9rwetW0Rn1kDt
+         aCkIeuC2DomAf18jSW40U5nGHVbaJEaEJ9+D67mlOCV0pPmlSPVbh8NJ8518i2mstYCs
+         /XNw==
+X-Forwarded-Encrypted: i=1; AHgh+RrTM47dUSPHil2Mr/sXKa234X+BCbzkR9zvABip2J9U63G7zwbhc91UJmdQoZTI/w16uOyi2vZcUEx/EQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVPbsManRvl57/vLSBG8eeqopCSu9dWdXITTGxtwiAUQbaIHB9
+	V9m8SS1uhwAu+9gvnzQ5+iwyiSamph/i1fd21kifIeMOJQjrLf5JqsUT
+X-Gm-Gg: AR+sD13x3W5Ps6A4J5CfZuWv0t5599qF9b6/hnepvtb2RdcCuNkiv9LIBElJDwc00qM
+	dGAMqZ/kPaItqDS29hZ5oOhekXXBCWcTl6lDLLe6uGJhNGXv9JPzHPFja+k5VE8yfrqPYt6c8hh
+	2mryUVfpPgB4o1wZTsn4YFpPxn1WwYB7sp3HP/59RgnWCC/tvWjc+Nse5+/gwrOGZiiuzQu6WAN
+	ZowGyRmygZ5U80GpU29FufNV4SVxfCtmFdZYP9CUClkimq+EJmEWsJ0K7BPQTEFccmLsCA1GeId
+	/GlVkF1NSuucRl88K9LNWYwBeNubHZouH3Tw32ICQ0F+sSThzevxyNG+hwQZ2kF+2aqmplJxvFR
+	IrYN6rBGHQzx4pEKifufzcFDE92XKdwSajMPFlw7I91ULN2Tw7d7ZfENJkbpXtdO5aKIR2wqgct
+	KBLSuSS2q9PzNYnzJj
+X-Received: by 2002:a17:902:e5c3:b0:2cc:db7a:251 with SMTP id d9443c01a7336-2cf8dc6d1c3mr14543185ad.2.1784672145071;
+        Tue, 21 Jul 2026 15:15:45 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:500::9edb])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3147e1bc886sm2079950eec.26.2026.07.21.15.15.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jul 2026 15:15:44 -0700 (PDT)
+From: Zinc Lim <limzhineng2@gmail.com>
+To: Alexander Duyck <alexanderduyck@fb.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Simon Horman <horms@kernel.org>,
+	Mohsin Bashir <mohsin.bashr@gmail.com>
+Cc: kernel-team@meta.com,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	zinclim@meta.com,
+	Zinc Lim <limzhineng2@gmail.com>
+Subject: [PATCH net-next 0/6] eth: fbnic: expand hwmon sensor support
+Date: Tue, 21 Jul 2026 15:15:34 -0700
+Message-ID: <20260721221540.648272-1-limzhineng2@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v7] platform/x86: panasonic-laptop: add fan speed mode
- for newer models
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: platform-driver-x86@vger.kernel.org,
- Kenneth Chan <kenneth.t.chan@gmail.com>, Hans de Goede <hansg@kernel.org>,
- Guenter Roeck <linux@roeck-us.net>, LKML <linux-kernel@vger.kernel.org>,
- linux-hwmon@vger.kernel.org
-References: <b557e1f6-2072-496f-8eaa-d2899d1bded4@linux.intel.com>
- <20260718185704.3466-1-alexyeo362@gmail.com>
- <fcf57a96-b2ad-c7d5-0d6d-6d760b915195@linux.intel.com>
-Content-Language: en-US
-From: Alex Yeo <alexyeo362@gmail.com>
-In-Reply-To: <fcf57a96-b2ad-c7d5-0d6d-6d760b915195@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+fbnic currently exposes only the raw temperature and voltage readings
+(temp1_input, in0_input) via hwmon. This series builds that out into a
+complete sensor interface and hardens the read path.
 
-On 2026/07/20 9:46 PM, Ilpo Järvinen wrote:
->>    *		- v0.1  start from toshiba_acpi driver written by John Belmonte
->>    */
->>   
->> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->> +
->> +#include <linux/printk.h>
->>   #include <linux/acpi.h>
->>   #include <linux/backlight.h>
->>   #include <linux/bits.h>
->> @@ -136,6 +139,14 @@
->>   #include <linux/types.h>
->>   #include <linux/uaccess.h>
->>   #include <acpi/video.h>
->> +#include <linux/sysfs.h>
->> +#include <linux/hwmon.h>
->> +#include <linux/hwmon-sysfs.h>
->> +#include <linux/thermal.h>
->> +#include <linux/dmi.h>
->> +#include <linux/errno.h>
->> +#include <linux/cleanup.h>
->> +#include <linux/minmax.h>
-> 
-> Includes should be added in alphabetical order (per each subdirectory
-> block).
-> 
+The firmware capability response already carries per-board sensor
+thresholds, and the firmware can asynchronously report when a sensor
+crosses one of them. This series surfaces both to userspace and cleans
+up the supporting plumbing:
 
-Will sort the headers alphabetically within their respective blocks.
+ - Move the sensor read logic out of fbnic_mac, closer to its only
+   caller in the hwmon code, and drop the now-unused get_sensor op.
+ - Expose all hwmon attributes unconditionally as read-only (0444).
+ - Cache the temperature and voltage readings for the current jiffy so
+   a burst of attribute reads issues a single firmware round-trip.
+ - Parse and expose the temperature (min/max/crit) and voltage
+   (min/max) thresholds. Thresholds the firmware did not populate read
+   back as -ENODATA.
+ - Add the corresponding alarm attributes, computed by comparing a live
+   reading against the stored thresholds.
+ - Translate the firmware's sensor-threshold-exceeded message into an
+   hwmon event so userspace is notified on the relevant attribute.
 
->> +	{},
->>   };
->>   
->>   /*
->> @@ -415,7 +468,6 @@ static const struct backlight_ops pcc_backlight_ops = {
->>   	.update_status	= bl_set_status,
->>   };
->>   
->> -
->>   /* returns ACPI_SUCCESS if methods to control optical drive are present */
-> 
-> Unrelated change.
-> 
+Zinc Lim (6):
+  eth: fbnic: move sensor read logic out of fbnic_mac
+  eth: fbnic: expose all hwmon attributes unconditionally as read-only
+  eth: fbnic: cache hwmon sensor readings
+  eth: fbnic: report temperature and voltage thresholds via hwmon
+  eth: fbnic: report temperature and voltage alarms via hwmon
+  eth: fbnic: firmware notifies hwmon on sensor threshold events
 
-Sorry about that. I have identified the issue to be my text editor 
-config. I have fixed the issue on my end and I'll make sure to read the 
-git diff line by line for the next submission.
+ drivers/net/ethernet/meta/fbnic/fbnic.h       |   8 +
+ drivers/net/ethernet/meta/fbnic/fbnic_fw.c    |  75 +++++
+ drivers/net/ethernet/meta/fbnic/fbnic_fw.h    |  30 ++
+ drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c | 260 ++++++++++++++++--
+ drivers/net/ethernet/meta/fbnic/fbnic_mac.c   |  55 ----
+ drivers/net/ethernet/meta/fbnic/fbnic_mac.h   |   2 -
+ 6 files changed, 346 insertions(+), 84 deletions(-)
 
->> +/* set OSPM fan mode */
->> +
->> +static int pcc_pwm_fan_mode_set(int pwm_mode)
->> +{
->> +	acpi_status status;
->> +
->> +	union acpi_object param[1];
->> +	struct acpi_object_list input;
-> 
-> Don't leave empty lines in between variable declarations. Please use
-> reverse-xmas tree order when you can (when no internal dependencies
-> between local var don't force your hand).
-> 
-
-I will go through and apply this to the entire patch.
-
->> +
->> +	param[0].type = ACPI_TYPE_INTEGER;
->> +	param[0].integer.value = pwm_mode;
->> +	input.count = 1; /* takes one arg */
-> 
-> Remove comment.
-> 
-
-Will do
-
->> +	input.pointer = param;
->> +
->> +	status = acpi_evaluate_object(NULL, "\\_SB.PC00.LPCB.EC0.SEFM", &input,
->> +				      NULL);
->> +	if (ACPI_FAILURE(status)) {
->> +		pr_err("cannot set fan mode via SEFM\n");
->> +		return -EIO;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +/* read PWM fan speed */
-> 
-> This comments adds zero value over what the function name already tells
-> us. Please don't add comments that state obvious things.
-> 
-
-Will do
-
->> +	/* get pwm speed */
->> +	status = acpi_evaluate_object(NULL, "\\_SB.PC00.LPCB.EC0.TFN1._FST",
->> +				      NULL, &buffer);
->> +	if (ACPI_FAILURE(status)) {
->> +		pr_err("failed to get pwm speed\n");
->> +		return -EIO;
->> +	}
->> +
->> +	union acpi_object *obj __free(kfree) = buffer.pointer;
->> +
->> +	/* the structure should have 3 values */
-> 
-> That's what can be easily read from the code. There's no need to comment
-> trivialities like this.
-> 
-
-Will do
-
->> +
->> +static int pcc_pwm_fan_hwmon_mode_set(struct pcc_acpi *pcc, long val)
->> +{
->> +	switch (val) {
->> +	case HWMON_PCC_FAN_PWM_AUTO:
->> +		guard(mutex)(&pcc->pwm_fan_lock);
-> 
-> I'm not sure if clang is happy with how scoping is here so these should
-> have {} around each case.
-> 
-
-Will add {} to each case
-
->> +
->> +static int pcc_pwm_fan_hwmon_write(struct device *dev,
->> +				   enum hwmon_sensor_types type, u32 attr,
->> +				   int channel, long val)
->> +{
->> +	struct pcc_acpi *pcc;
->> +
->> +	pcc = dev_get_drvdata(dev);
-> 
-> And this is where I started to check whether you've ignored my earlier
-> feedback. Turns out you sent a new version without addressing the
-> feedback I've given you (and IIRC, it's not the first time this has
-> happened).
-> 
-> The next time this happens, I'll move this submission and its subsequent
-> versions into a very low-priority bin to avoid wasting my time on it. So
-> please triple check twice you've addressed every single comment I (or
-> other potential reviewer) has given you on _any earlier version_ of the
-> patch before even considering sending the next version. There's no hurry
-> here, I won't be accepting half-baked patches so you'd just be wasting
-> everyone's time by sending it over and over again with things unaddressed.
-> 
-
-I sincerely apologize about this. I have made the mistake of applying 
-comments where it was pointed out instead of recognizing it as a pattern 
-to be applied to the entire patch in addition to repeating mistakes 
-pointed out in the previous replies.
-
-I will go back to the very first version, cross-check every comment and 
-check it against the entire patch before sending a v8.
-
-Thank you
+--
+2.53.0-Meta
