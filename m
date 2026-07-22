@@ -1,218 +1,175 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE2B4381EB6
-	for <linux-hwmon@vger.kernel.org>; Wed, 22 Jul 2026 18:58:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA4338D400
+	for <linux-hwmon@vger.kernel.org>; Wed, 22 Jul 2026 18:59:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784746686; cv=none; b=FQlq2Ss1TDbDXJKdjl+Jgi12imCUeIMpk9GGen0kJyjNqdikFktVGWArTRigSAYnw3Bj47iz+aO6/THMSpHUyHiiexPCuOPEqVpgjsvofLG5+CBBZO/6clHNqGFLmZ4YgtU31mWaO/qxd4B4XG6His3LWYls/Alf1KjXeN6gWAc=
+	t=1784746792; cv=none; b=kt4Mbi2tOsNHC2ldMInMCMVaTkuDmGhxclKu8iSj8VSaWzDj8gtLuiSRcQV+rt9Kc8v0RrtOrlrjpkV1pkoy9U1AWUE+SWzAuHDx9go1OJcX8gmBQbeNwnU54DFOjUrppmnxAlrKlrEHW4eBZfvxPYHuYMtovZbGFA0x+otr2P8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784746686; c=relaxed/simple;
-	bh=hTxnvCCR3zR+4xEII5otMAMtiwZ/u8ZxjcxhCkNWxJU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MXaVeSMhHLltwPnzu0g/IGkOiISbm3YquaHOJuI+tFz40c1AO+5kQj6G7rm/jgAr9c8cy9ht14I+CLKXyCc69CXCFs0lYHlt0BYJJy+JF59mRv0rM4ETLqg3m9Fd4emZUzY/Riu7XhLWksgkrCsac/fW2kcX4AvOMcbx5rLu86o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F6le+HOX; arc=none smtp.client-ip=209.85.210.173
+	s=arc-20240116; t=1784746792; c=relaxed/simple;
+	bh=SWE5xEokraCLrBzxKLFN3ueo1NNiNLPdJXP9d9dXNx8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ux9D9TL0Bi3Hr6Iwb+/KbNmDHNUPDcxS1MsiBNHF/MqGVAHLW1NeFxg+3J/KK22zEIKyq/gCPcY2xpRZWs/RfDDKNDxGGdWxq4OAj7CVcibfdKpWxRzc1WW0dmKEMJYKk2rZ4BicuslR49/U/Lg+TxrD54R+YdVhNyrNqbTXI6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xh4439CC; arc=none smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F6le+HOX"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8485bd28dd0so14816533b3a.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 22 Jul 2026 11:58:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xh4439CC"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-84e0a4334b6so1862929b3a.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 22 Jul 2026 11:59:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784746677; x=1785351477; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1784746789; x=1785351589; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=wj+1LGqAFiJSD/N1c7ShfQVKFXacB+69/Yy7TCDPawc=;
-        b=F6le+HOXvP/ZOuVPNPFYtKS5tNYZPCBuhXrXPgC+qvmwhOiU5p2PlJszAvuHUSFQsg
-         IK1NrpoasQbk5UzPwgHEj0M0SF4uoP51aYUe/684EEEy1hPUEVKFl+qRPL4WKUZtfc/t
-         Jc8KXONcVGQesFnCFPRUovrD2KR8oZczetsekeQahnZW9WggSAE8b69iVg53GHczoISM
-         67WhKTLp1uDqEqJ2EPp4xXvWdQCAh/MWgtw2kfmVmCPDuRJQiLJ7z7VHnPhnStofxsqw
-         U4lFoM2Ec4cy5taEgWUfj6SC93XPCl/gnLo8gTgY25UGZME9hZeWaa7GwoDDi6BYn9/K
-         Nsdg==
+        bh=p6ZLC0o0pPH5ppMj1NKH//VtPE1br/BJv/qJB9TBuCI=;
+        b=Xh4439CCV1UV04M1W9evEzbvAW8U8YuGVnsak4mnx388wnguPsARLgk6hU64meJYi6
+         xCog9zHDIi7v7daTJnVWbpCWTNLhv6pHxoTRLXbbjU/oEnXcSAb7Z/CGsFkZBJ3nwy+T
+         2HJAL0aR4MhzKcWOShD8FQt5Vj12774E2idoAI/BsWY5e0soqeyVEtOW1xpUqxE7oLIE
+         MVS25FENEBlXz4hgT2DEppExAO01cJeHbyrZn25jEgKUIBZW/2Ta/aJZwSvzlZfh2i5c
+         eEdxcOfcb1OWGTU8hKVltq0uhugXzejFmCuRQmCEUaKE/bye9974uMDWxCMqkbI9O4Ea
+         oxIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784746677; x=1785351477;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=wj+1LGqAFiJSD/N1c7ShfQVKFXacB+69/Yy7TCDPawc=;
-        b=WeJA0ps1vW/MBYN0lEQH5v9HFqTKEQQKZ39Z3I72QQJ+2oXIB6XNpvuS/it83QWqIp
-         l1TQlBURbKaTaOGexODpK1f9Yj0T4bQOOp7rqmZQZTQScWJaN65wk3BJkvNh9JYd3UvU
-         HhaHISmHa2QweDnvOogoxKI19YJDZ+tkQY5pXrVRYiUGTvHeZaBA6iQJ867RUkO0yLCm
-         duf1iAYx41AIWWraKQ8Itn31moke7NZUWHlNy/hh6MUdTdlDIALK2910Rwv6PpBwUf6g
-         MItqqanuTxOsNmL3EkkyXNIcgWTlvIRLW5jlPv3JABK4ceKrpAGgQl76YYxa+yew7TNa
-         /IzA==
-X-Gm-Message-State: AOJu0YxBirhjyyfJYOgTI8+Ww+AcAM3/D9kRjubmZctIghp+s0Q9TBED
-	TC4zERfBG58URwddjmNSiM3Y5skSTfZLrfLebHsxLv7rBzVCbh86qIkOPx2JlA==
-X-Gm-Gg: AR+sD13yRbirwl8vn3fdXx6ClQB8L4CW1UnoO6SypzC6UnD7c80j3dFzwxoFN98AJFa
-	xqYVyXuUuSp/GILwPjZ5y2SM12doZCNwTRdkI6jeRHwVEdH9XJkF2czyky+BdMTwleluNfJwQrf
-	h7RJvslIx5t6LKl4htGX9VaeL+Xrz0bGS/UCz9ihRBK43zjtssXGEdfoaMGoXb5q2cx5pgxFjIb
-	Pe/r5SCSrSqzzK905jat1FhaJ+uCrNjxfDyo6cPWSzT90jYVe4Qos703TdrDIz26jQfhZ0Xv/rI
-	NxDB/Cm1oXhhlScArtOWRPUOzChEL0oNXokuZiHox12GcHp+qqBQ36vMbF++SDs/hXDnpFnHmTj
-	birQ5mR/dUD3JYWx3lnUQUPq5TwjfLS3fkCrJRPhXADAT+MHibiTiWE+U9QIDXaBIzFohkThlZJ
-	qk54E+yf+alEfGme4iLF953Axhaw==
-X-Received: by 2002:a05:6a00:b48:b0:848:7443:f2de with SMTP id d2e1a72fcca58-84e2bbe8f2amr109545b3a.13.1784746677083;
-        Wed, 22 Jul 2026 11:57:57 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e17236c6fsm1827827b3a.5.2026.07.22.11.57.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 11:57:56 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1784746789; x=1785351589;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=p6ZLC0o0pPH5ppMj1NKH//VtPE1br/BJv/qJB9TBuCI=;
+        b=tJdYZxJ8TBSkksNjIc9dP0GzdOfpAP1uruacmVgFBNjTp/DaT3vjEVd918xPjcjsGh
+         nDc45SWKkBTk6MZxFgJS9LiSLWBrizOeWU9QUHo30umt6hZSs+hgq0ok73Hk6vM/YWx3
+         tIdKHNREA7EvaBWNKdepxA5MtdYJOYZthK8CI7feEY8XYsxiYEqq4LIssVCnF3prszqt
+         Rhy4FKFy3JitaBC7l58RmV1UVY/08nTQIJ1z/NU3LRb4spdTslCYFndUS1UCamBH7VTA
+         YEX97JwnMkODwHaEKAAEDHEthCWqoeNN0/Y5KJ3mo2lobD7Qa4woijtThYE6VSRdDtZa
+         oQKQ==
+X-Gm-Message-State: AOJu0YwNnZkbrUbfTI9vSAy86nU6l2FMUaN7M8lbkLaGI4zT/egxugcd
+	rsRH1fB398JPNxfvzenZkLO1RP6zT5U4SexaYMckK1YvIL+Kod1v5VKm
+X-Gm-Gg: AR+sD10IYO49mY4N2/DxdrJuD6zbrilZZPHXUhkCFVLjT0lBrzwwGAjdHCsC6Odi/9z
+	xC3XIknjrpLl1AcIvh077aV3QMQ9C6iK93ed5ckBk3ZSFMjFJrE8PkI257+mC1bqN4nzUw50p8+
+	tHJu/YCWEjjhaB1xfGJJja1VJXcQQ4NjCAb19wtY+DAkSrpmMkaLd+m7ISjZXAcMpBfDcf0Vqad
+	iM/XeBGlxUAb+LUpxP/16J8oleIBCmgJ9sveVnVS9uzLIHzYIQ5ivA/S4GDjiBQaGbaG8F6M6sW
+	lRTB8nbIkMBW7C5cjUXeQTq51R16TAThT+lLBOFtngXegxFPbU/Upxz1sIB4YWD4Dq3DULXlcox
+	d0EtuReZtGKglbsE88hrp0MpbaXperOinSX7NFtJ4dmilsUuIBu1PtJp3+M6BaSH9O6e+KnHxLK
+	xEI2wMYgkIn0FrTNVN1FaYO+NgOchDz/UJEUi1RqCqwFA40vWnBoc=
+X-Received: by 2002:a05:6a00:a88e:b0:848:2f84:f42c with SMTP id d2e1a72fcca58-84e2bc1a3f9mr113390b3a.69.1784746788971;
+        Wed, 22 Jul 2026 11:59:48 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbb8f0ebeeesm1509889a12.10.2026.07.22.11.59.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jul 2026 11:59:48 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: linux-doc@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>,
-	Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
-Subject: [RFT PATCH] hwmon: Add support for currX_emergency and inX_emergency attributes
-Date: Wed, 22 Jul 2026 11:57:49 -0700
-Message-ID: <20260722185749.2313572-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+Message-ID: <3635cd34-4c11-40fe-a9ff-48b752fb5150@roeck-us.net>
+Date: Wed, 22 Jul 2026 11:59:47 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 02/10] hwmon: Add Qualcomm PMIC BCL driver
+To: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+ Stephen Boyd <sboyd@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+Cc: linux-hwmon@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ mfd@lists.linux.dev, Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
+References: <20260722-qcom-bcl-hwmon-v2-0-febe2805e17b@oss.qualcomm.com>
+ <20260722-qcom-bcl-hwmon-v2-2-febe2805e17b@oss.qualcomm.com>
+ <373bd00e-bfcd-4f6c-b64e-a707af01417c@roeck-us.net>
+ <cdc0fb5c-d277-40b4-8b00-c73eb881c062@oss.qualcomm.com>
+ <4f2d9c51-1059-489c-a469-562ec52015da@roeck-us.net>
+ <24a0ac2f-792e-4296-949c-047d9ce1c1f3@oss.qualcomm.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAmgrMyQFCSbODQkACgkQyx8mb86fmYGcWRAA
+ oRwrk7V8fULqnGGpBIjp7pvR187Yzx+lhMGUHuM5H56TFEqeVwCMLWB2x1YRolYbY4MEFlQg
+ VUFcfeW0OknSr1s6wtrtQm0gdkolM8OcCL9ptTHOg1mmXa4YpW8QJiL0AVtbpE9BroeWGl9v
+ 2TGILPm9mVp+GmMQgkNeCS7Jonq5f5pDUGumAMguWzMFEg+Imt9wr2YA7aGen7KPSqJeQPpj
+ onPKhu7O/KJKkuC50ylxizHzmGx+IUSmOZxN950pZUFvVZH9CwhAAl+NYUtcF5ry/uSYG2U7
+ DCvpzqOryJRemKN63qt1bjF6cltsXwxjKOw6CvdjJYA3n6xCWLuJ6yk6CAy1Ukh545NhgBAs
+ rGGVkl6TUBi0ixL3EF3RWLa9IMDcHN32r7OBhw6vbul8HqyTFZWY2ksTvlTl+qG3zV6AJuzT
+ WdXmbcKN+TdhO5XlxVlbZoCm7ViBj1+PvIFQZCnLAhqSd/DJlhaq8fFXx1dCUPgQDcD+wo65
+ qulV/NijfU8bzFfEPgYP/3LP+BSAyFs33y/mdP8kbMxSCjnLEhimQMrSSo/To1Gxp5C97fw5
+ 3m1CaMILGKCmfI1B8iA8zd8ib7t1Rg0qCwcAnvsM36SkrID32GfFbv873bNskJCHAISK3Xkz
+ qo7IYZmjk/IJGbsiGzxUhvicwkgKE9r7a1rOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAmgrMyQFCSbODQkACgkQyx8mb86fmYHlgg/9
+ H5JeDmB4jsreE9Bn621wZk7NMzxy9STxiVKSh8Mq4pb+IDu1RU2iLyetCY1TiJlcxnE362kj
+ njrfAdqyPteHM+LU59NtEbGwrfcXdQoh4XdMuPA5ADetPLma3YiRa3VsVkLwpnR7ilgwQw6u
+ dycEaOxQ7LUXCs0JaGVVP25Z2hMkHBwx6BlW6EZLNgzGI2rswSZ7SKcsBd1IRHVf0miwIFYy
+ j/UEfAFNW+tbtKPNn3xZTLs3quQN7GdYLh+J0XxITpBZaFOpwEKV+VS36pSLnNl0T5wm0E/y
+ scPJ0OVY7ly5Vm1nnoH4licaU5Y1nSkFR/j2douI5P7Cj687WuNMC6CcFd6j72kRfxklOqXw
+ zvy+2NEcXyziiLXp84130yxAKXfluax9sZhhrhKT6VrD45S6N3HxJpXQ/RY/EX35neH2/F7B
+ RgSloce2+zWfpELyS1qRkCUTt1tlGV2p+y2BPfXzrHn2vxvbhEn1QpQ6t+85FKN8YEhJEygJ
+ F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
+ FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <24a0ac2f-792e-4296-949c-047d9ce1c1f3@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Some hardware monitoring chips support three alarm levels for current and
-voltage measurements. Add support for currX_emergency and inX_emergency
-attributes to support such chips.
+On 7/22/26 11:19, Manaf Meethalavalappu Pallikunhi wrote:
+> Hi Guenter,
+> 
+> On 7/22/2026 11:16 PM, Guenter Roeck wrote:
+>> On 7/22/26 10:38, Manaf Meethalavalappu Pallikunhi wrote:
+>> ...
+>>>>
+>>>> I am curious: Why not use static initialization and use the is_visible
+>>>> function to determine if an attribute is visible or not ?
+>>>
+>>> ACK. There is already a comment in v1 suggesting the use of dynamic allocation based on the available attributes rather than static initialization. The intent is to avoid having to perform enable flag checks in multiple places.
+>>> . >
+>>
+>> You lost me, sorry. There is only a single is_visible function,
+>> and its intent is exactly to handle situations where some sensors
+>> are not always available.
+>>
+>> What would be those "multiple places" ?
+> 
+> Understood, thanks for the clarification. I'll revert to static attribute initialization in the next revision and use is_visible() to control attribute visibility where needed.
+> 
+>>
+>>>>  From the earlier exchange I had the impression that there is a large
+>>>> number of current and voltage channels, but it looks like there is only
+>>>> one each. That doesn't really warrant or need all this dynamic code
+>>>
+>>> Yes, this hardware only supports one or two channels (voltage and current). What we discussed earlier was that each channel can have up to three threshold alarms (warning, critical, and emergency). However, the hwmon framework currently supports only two limit alarms for these sensor types. I have not added support for the third alarm threshold in this series to keep the initial driver support aligned with the existing hwmon capabilities. Once the basic driver support is accepted, I can queue a follow-up series to add support for the third limit alarm.
+>>>
+>>
+>> What does that have to do with attribute visibility ?
+> 
+> I was only clarifying that the channel count has always been small (maximum of two channels) and has not changed since v1. The earlier discussion was primarily around the limit alarm attributes. That said, you're right that this is unrelated to attribute visibility.
+> 
 
-Cc: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-RFT: Waiting for an actual chip driver using the new attributes.
+Feel free to use (and test)
+https://lore.kernel.org/linux-hwmon/20260722185749.2313572-1-linux@roeck-us.net/T/#u
 
- Documentation/ABI/testing/sysfs-class-hwmon | 26 +++++++++++++++++++++
- Documentation/hwmon/sysfs-interface.rst     |  6 +++++
- drivers/hwmon/hwmon.c                       |  2 ++
- include/linux/hwmon.h                       |  4 ++++
- 4 files changed, 38 insertions(+)
-
-diff --git a/Documentation/ABI/testing/sysfs-class-hwmon b/Documentation/ABI/testing/sysfs-class-hwmon
-index b185bdfc7186..42fd89305101 100644
---- a/Documentation/ABI/testing/sysfs-class-hwmon
-+++ b/Documentation/ABI/testing/sysfs-class-hwmon
-@@ -81,6 +81,18 @@ Description:
- 		take drastic action such as power down or reset. At the very
- 		least, it should report a fault.
- 
-+What:		/sys/class/hwmon/hwmonX/inY_emergency
-+Description:
-+		Voltage emergency max value.
-+
-+		Unit: millivolt
-+
-+		RW
-+
-+		If voltage reaches or exceeds this limit, the system is expected
-+		to take drastic action such as immediate power down or reset.
-+		At the very least, it should report a fault.
-+
- What:		/sys/class/hwmon/hwmonX/inY_input
- Description:
- 		Voltage input value.
-@@ -647,6 +659,20 @@ Description:
- 
- 		RW
- 
-+What:		/sys/class/hwmon/hwmonX/currY_emergency
-+Description:
-+		Current emergency high value.
-+
-+		Unit: milliampere
-+
-+		RW
-+
-+		If a current reaches or exceeds this limit, the system is
-+		expected to take drastic action such as immediate power down
-+		or reset. At the very least, it should report a fault.
-+
-+What:		/sys/class/hwmon/hwmonX/inY_input
-+
- What:		/sys/class/hwmon/hwmonX/currY_input
- Description:
- 		Current input value
-diff --git a/Documentation/hwmon/sysfs-interface.rst b/Documentation/hwmon/sysfs-interface.rst
-index 94e1bbce172a..e8f2a12793af 100644
---- a/Documentation/hwmon/sysfs-interface.rst
-+++ b/Documentation/hwmon/sysfs-interface.rst
-@@ -127,6 +127,9 @@ Voltages
- `in[0-*]_crit`
- 		Voltage critical max value.
- 
-+`in[0-*]_emergency`
-+		Voltage emergency max value.
-+
- `in[0-*]_input`
- 		Voltage input value.
- 
-@@ -332,6 +335,9 @@ Currents
- `curr[1-*]_crit`
- 		Current critical high value.
- 
-+`curr[1-*]_emergency`
-+		Current emergency high value.
-+
- `curr[1-*]_input`
- 		Current input value.
- 
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 55a9a3ddd4aa..a07bfe7ac7db 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -621,6 +621,7 @@ static const char * const hwmon_in_attr_templates[] = {
- 	[hwmon_in_max] = "in%d_max",
- 	[hwmon_in_lcrit] = "in%d_lcrit",
- 	[hwmon_in_crit] = "in%d_crit",
-+	[hwmon_in_emergency] = "in%d_emergency",
- 	[hwmon_in_average] = "in%d_average",
- 	[hwmon_in_lowest] = "in%d_lowest",
- 	[hwmon_in_highest] = "in%d_highest",
-@@ -644,6 +645,7 @@ static const char * const hwmon_curr_attr_templates[] = {
- 	[hwmon_curr_max] = "curr%d_max",
- 	[hwmon_curr_lcrit] = "curr%d_lcrit",
- 	[hwmon_curr_crit] = "curr%d_crit",
-+	[hwmon_curr_emergency] = "curr%d_emergency",
- 	[hwmon_curr_average] = "curr%d_average",
- 	[hwmon_curr_lowest] = "curr%d_lowest",
- 	[hwmon_curr_highest] = "curr%d_highest",
-diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-index 77a6f2bffcba..2cd433966723 100644
---- a/include/linux/hwmon.h
-+++ b/include/linux/hwmon.h
-@@ -134,6 +134,7 @@ enum hwmon_in_attributes {
- 	hwmon_in_max,
- 	hwmon_in_lcrit,
- 	hwmon_in_crit,
-+	hwmon_in_emergency,
- 	hwmon_in_average,
- 	hwmon_in_lowest,
- 	hwmon_in_highest,
-@@ -156,6 +157,7 @@ enum hwmon_in_attributes {
- #define HWMON_I_MAX		BIT(hwmon_in_max)
- #define HWMON_I_LCRIT		BIT(hwmon_in_lcrit)
- #define HWMON_I_CRIT		BIT(hwmon_in_crit)
-+#define HWMON_I_EMERGENCY	BIT(hwmon_in_emergency)
- #define HWMON_I_AVERAGE		BIT(hwmon_in_average)
- #define HWMON_I_LOWEST		BIT(hwmon_in_lowest)
- #define HWMON_I_HIGHEST		BIT(hwmon_in_highest)
-@@ -178,6 +180,7 @@ enum hwmon_curr_attributes {
- 	hwmon_curr_max,
- 	hwmon_curr_lcrit,
- 	hwmon_curr_crit,
-+	hwmon_curr_emergency,
- 	hwmon_curr_average,
- 	hwmon_curr_lowest,
- 	hwmon_curr_highest,
-@@ -199,6 +202,7 @@ enum hwmon_curr_attributes {
- #define HWMON_C_MAX		BIT(hwmon_curr_max)
- #define HWMON_C_LCRIT		BIT(hwmon_curr_lcrit)
- #define HWMON_C_CRIT		BIT(hwmon_curr_crit)
-+#define HWMON_C_EMERGENCY	BIT(hwmon_curr_emergency)
- #define HWMON_C_AVERAGE		BIT(hwmon_curr_average)
- #define HWMON_C_LOWEST		BIT(hwmon_curr_lowest)
- #define HWMON_C_HIGHEST		BIT(hwmon_curr_highest)
--- 
-2.45.2
+Guenter
 
