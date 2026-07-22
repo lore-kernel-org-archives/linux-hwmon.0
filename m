@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D253831326A
-	for <linux-hwmon@vger.kernel.org>; Wed, 22 Jul 2026 22:17:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AD99403AE2
+	for <linux-hwmon@vger.kernel.org>; Wed, 22 Jul 2026 22:18:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784758680; cv=none; b=AgOgLALODal1hpR5J6L9/eU2IoTRf5GJeCHRXNt+sG5ngGJEzP8yCSiN8EjmQQ3lsvOo9wK3gv7fvPprbSHBEa6FMP7AhNGzi+yXV63cNjrSgy+xJVbJxiojIY1HtBFRkdaJSyxe7yR6J9unmRq9/IvWHS8uHIkifYyb5Xr2PZg=
+	t=1784758682; cv=none; b=DyErlpc5tgt8pXE5YiupvIknN083PCn2ptw9R6pBoOu9rK1WSQCRbmwm1u2zM7YAjNT9kFA2qOF8Vn8KVn1cVeDjeqJILqydspsxtVQ0VGo8wCPvjk7ojEK75Li3ljGRkZ6nqWExcHRJOgWBKIvq2F3GSVK0XIBWPrWFg5qKumU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784758680; c=relaxed/simple;
-	bh=KiRo7lJxsnrErgcjT1uYB3Qp9s2y8WQ5KNnnTTY1ilQ=;
+	s=arc-20240116; t=1784758682; c=relaxed/simple;
+	bh=jMken4843MkyGahFq+DDL3UTq46nsDDnuOC9CrXVWLc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=D9QSdxGyLEeRxGOs9eGTkZKCTNpgGMbX0YKxmT1NFSFwV5QQdS9QceX2rJR0eWe0Rygzhybo83+Xv3gAliLpl5Q8vLKfPGfWhi7vA2qu0CXmET/oql8yzALo1d8LkPeUFUxk0rwtkFXSYsx4eywdsUHAmlr+UZANJ6xaDWVeHCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hRMMZMG5; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=WyY+i1MKo3KRZv+V+yjJOX4Y5qyIwnnFGen58WoHHu9IEK70V2OVHLIOPlwoYXX3Zx4xygTOAGsU1wr4e4NdRx0igyLJfd46M/DNLPjZK5ddsQQ5vJn6A1PYr87NViTQtyRL8Dq/T4tWO0LZ7YyVnEyjnp1G1zhS3XNlgfLottg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WxNrWSKq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hRMMZMG5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EAAE1F00A3A;
-	Wed, 22 Jul 2026 22:17:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WxNrWSKq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 770DE1F00A3D;
+	Wed, 22 Jul 2026 22:18:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784758679;
-	bh=zzkaKAq9wCTszHARwKUNZkT8lExOBdeuntFLVFH2LNU=;
+	s=k20260515; t=1784758680;
+	bh=wZ2DsqZn1wtURjO5sLNs4nU5pwK5etfJfMZUKTikfFE=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hRMMZMG5gtyl9vOs8fdFxaQSl73C2Mhr2cfeQxZiXoUjR4QzQXRZn2id5P/gd1ogd
-	 ibSK6WyeTh3FVj++nJB+Dt5yr+2eCoN7aQ8w3eAFAktyKlIscJMF1UWFkL8M0ZTh1u
-	 W2cSo3yIPOcJnQSKbinkRwS4PCNreGBnTLKSQCyTQXcvWDP84Ioh/qi4qcJbxTB/Tn
-	 gqS9AJVkisMXQ8a35FkHxDpMwQAj0STauvyrfbV5v9Y1U4+EH4zG6dFdrQdQt8D2mU
-	 rspv5sE1nQ5mX7Z07OXhKGb5tdJAmoo9i6qlQ65LuBYg3ukfQSbw+DduNvkfNhn6+o
-	 0JH9oTTMvcOPQ==
+	b=WxNrWSKq9oSzsMfTz0COu8IgtTRdnnixHSlfawa0nrp+IwfduqqxdgbNIa+z9t/u8
+	 lyVInkQ6Dnai/25e3rqOc0ILgx9YedkINzd7jAk0WRlkBwt4GPJGC5UpnQamUYeyKZ
+	 UDEnlBuNx4lTTA9EifpZ8+IspKfJiTaMYYAorJn3sry9zOEbb+jLTKA0ZIcr//fG0R
+	 k9GgTfLp5WLxu02PFG6pWzFiUIyhr+7kooi7jYUzlZea7Gzxn0aL1CwskalKO3Wr+b
+	 GJHnKY1QYD8+TrwG/FicZ8c/EPHDANpsoSzD+WLplRpUsyEzsE8+AU8OW6zXr4F1M2
+	 wmylJZTLwETkQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 1/6] eth: fbnic: move sensor read logic out of
- fbnic_mac
+Subject: Re: [PATCH net-next 5/6] eth: fbnic: report temperature and voltage
+ alarms via hwmon
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Zinc Lim" <limzhineng2@gmail.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260721221540.648272-2-limzhineng2@gmail.com>
+In-Reply-To: <20260721221540.648272-6-limzhineng2@gmail.com>
 References: <20260721221540.648272-1-limzhineng2@gmail.com>
- <20260721221540.648272-2-limzhineng2@gmail.com>
+ <20260721221540.648272-6-limzhineng2@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Wed, 22 Jul 2026 22:17:59 +0000
-Message-Id: <20260722221759.8EAAE1F00A3A@smtp.kernel.org>
+Message-Id: <20260722221800.770DE1F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -47,85 +47,97 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] A positive firmware error code causes `fbnic_hwmon_sensor_read` to=
- return a positive value to the hwmon core, which treats it as success and =
-leaks an uninitialized stack variable.
-- [High] Mailbox completions lack transaction IDs, allowing late firmware r=
-esponses from timed-out requests to erroneously complete subsequent request=
-s.
+- [Medium] Unpopulated alarm attributes trigger unnecessary firmware reads =
+instead of being rejected up front.
+- [Medium] Hardware monitoring alarms are improperly computed in software b=
+y the driver.
 --
 
---- Patch [1]: [PATCH net-next 1/6] eth: fbnic: move sensor read logic out =
-of fbnic_mac ---
-commit 3d23a98846b8fe29f6da2d75356fdb3ad9559179
+--- Patch [5]: [PATCH net-next 5/6] eth: fbnic: report temperature and volt=
+age alarms via hwmon ---
+commit 6d735c75df1c02d16911aecd205cd4bf98b0bb3b
 Author: Zinc Lim <limzhineng2@gmail.com>
 
-eth: fbnic: move sensor read logic out of fbnic_mac
+eth: fbnic: report temperature and voltage alarms via hwmon
 
-The sensor read lived behind the fbnic_mac get_sensor op, but it is only
-ever used by the hwmon subsystem. Move the read into fbnic_hwmon.c and
-call it directly there, closer to where it is used, and drop the
-now-unused get_sensor op from struct fbnic_mac. No functional change.
+Building on the temperature and voltage thresholds stored in
+fbnic_fw_cap, expose alarm attributes through the hwmon interface:
+temp1_{min,max,crit}_alarm and in0_{min,max}_alarm.
 
 > diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c b/drivers/net/=
 ethernet/meta/fbnic/fbnic_hwmon.c
-> index def8598aceecf..6c8c66ab86c13 100644
+> index 4938f7b391402..c5cddd9cef124 100644
 > --- a/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
 > +++ b/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
-> @@ -28,15 +28,67 @@ static umode_t fbnic_hwmon_is_visible(const void *drv=
-data,
 
 [ ... ]
 
-> +	err =3D fbnic_fw_xmit_tsene_read_msg(fbd, fw_cmpl);
-> +	if (err) {
-> +		dev_err(fbd->dev,
-> +			"Failed to transmit TSENE read msg, err %d\n",
-> +			err);
-> +		goto exit_free;
-> +	}
+> @@ -87,34 +87,84 @@ static int fbnic_hwmon_read_threshold(long thr, long =
+*val)
+>  	return 0;
+>  }
+> =20
+> +static int fbnic_hwmon_read_alarm(long a, long b, long *val)
+> +{
+> +	if (a =3D=3D FBNIC_SENSOR_NO_DATA || b =3D=3D FBNIC_SENSOR_NO_DATA)
+> +		return -ENODATA;
 > +
-> +	if (!wait_for_completion_timeout(&fw_cmpl->done, 10 * HZ)) {
-> +		dev_err(fbd->dev, "Timed out waiting for TSENE read\n");
-> +		err =3D -ETIMEDOUT;
-> +		goto exit_cleanup;
-> +	}
+> +	*val =3D a >=3D b;
 
-[Severity: High]
-This is a pre-existing issue, but does timing out and clearing the completi=
-on
-slot expose the driver to late responses matching the next request?
+[Severity: Medium]
+Is it intentional to compute alarms in software by comparing the live
+sensor reading against the threshold here?
 
-If wait_for_completion_timeout() times out, the mailbox slot is cleared. Si=
-nce
-the matching logic in fbnic_fw_get_cmpl_by_type() uses only the message typ=
-e:
+According to the hwmon sysfs ABI documentation, drivers should not make
+comparisons of readings to thresholds themselves. Alarms are expected to be
+hardware-latched indications that can catch transient spikes between polls.
 
-	if (fbd->cmpl_data[i] &&
-	    fbd->cmpl_data[i]->msg_type =3D=3D msg_type) {
+If the hardware does not support latched alarms, should these alarm
+attributes be omitted entirely so user-space tools can handle their own
+software threshold comparisons?
 
-Will a delayed response to this request erroneously complete a subsequent
-request of the same type?
-
+> +	return 0;
+> +}
 > +
-> +	/* Handle error returned by firmware */
-> +	if (fw_cmpl->result) {
-> +		err =3D fw_cmpl->result;
-> +		dev_err(fbd->dev, "%s: Firmware returned error %d\n",
-> +			__func__, err);
-> +		goto exit_cleanup;
-> +	}
+>  static int fbnic_hwmon_temp_read(struct fbnic_dev *fbd, u32 attr, long *=
+val)
+>  {
+> +	int err;
+> +
+>  	switch (attr) {
+> -	case hwmon_temp_input:
+> -		return fbnic_hwmon_sensor_read(fbd, FBNIC_SENSOR_TEMP, val);
+>  	case hwmon_temp_min:
+>  		return fbnic_hwmon_read_threshold(fbd->fw_cap.temp.min, val);
+>  	case hwmon_temp_max:
+>  		return fbnic_hwmon_read_threshold(fbd->fw_cap.temp.max, val);
+>  	case hwmon_temp_crit:
+>  		return fbnic_hwmon_read_threshold(fbd->fw_cap.temp.crit, val);
+> +	case hwmon_temp_input:
+> +	case hwmon_temp_min_alarm:
+> +	case hwmon_temp_max_alarm:
+> +	case hwmon_temp_crit_alarm:
+> +		break;
+>  	default:
+>  		return -EOPNOTSUPP;
+>  	}
+> +
+> +	err =3D fbnic_hwmon_sensor_read(fbd, FBNIC_SENSOR_TEMP, val);
 
-[Severity: High]
-This isn't a bug introduced by this patch, but what happens if the firmware
-returns a positive error code in fw_cmpl->result?
+[Severity: Medium]
+The commit message notes that unsupported attributes are rejected up front,
+but does this code fall through for unpopulated alarm thresholds and trigger
+a blocking firmware read before eventually returning -ENODATA?
 
-Since this error code is propagated back to the hwmon core, and the hwmon
-core only checks for negative error codes, will it treat a positive value
-as success and leak an uninitialized stack variable (val) to userspace?
+If fbd->fw_cap.temp.min is FBNIC_SENSOR_NO_DATA, reading
+hwmon_temp_min_alarm will hit the break statement above, execute this
+sensor read, and then fail later inside fbnic_hwmon_read_alarm().
+
+Could we check the threshold value up front before issuing the mailbox
+request?
+
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260721221540.6482=
-72-1-limzhineng2@gmail.com?part=3D1
+72-1-limzhineng2@gmail.com?part=3D5
