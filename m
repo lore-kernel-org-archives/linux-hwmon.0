@@ -1,213 +1,167 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6BC37996C
-	for <linux-hwmon@vger.kernel.org>; Wed, 22 Jul 2026 00:00:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 736DD3793CC;
+	Wed, 22 Jul 2026 01:30:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784678429; cv=none; b=ojX6USIcboIBW4XGJpoebi/U9nzCppJllFiAKOgDxSH85ILqCqzy96Tk/iOxGKD8l1PzejbOX3QeuMEKaq0QLDpk3xLk3eAGJOmpmbVIWHgwYag/lBi5tw15hKHt5KDD6wSAAq9GD9GKJzvJU/PVvlwf3Hw0uSqwb9nwBCm8D28=
+	t=1784683815; cv=none; b=A2+enAB5137qqO83nh/0GpVwRv7BW6kFlKuphkknJmdzX8bw52yjZ+JI9F44emyKNxD/inHH1EYP4ZxlhSdY62YMRT88AAWukN+9n5GEVJ7q0W997oh3CQPPXMgyz5MuFxPvYRtnnXS01Yn59Ob7UqgOYDWGLGQpBe8WLvPN9jo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784678429; c=relaxed/simple;
-	bh=57SqYvInkYDKYWO5zuktJ3i7LRpvI+nkX9lqI7GzSTc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s99Y50CNyT0rFzqwzC+3rYiqrtF1/MNOESY8PFDzgjUFHj+OpT6bdx+SYIpXuOQKD4W5xUhdeS6rELi1UUTOfhgarNkHNdzq8I1/7fuXsjpjB5Jql0O5ICHpu7uKVLRdIX+Z3wkBZSonykeGB8MIeQluTKDQzOlTOH6Ui2UAjeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cLfvqPDZ; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784683815; c=relaxed/simple;
+	bh=3841kedHGeo0OWw7xy7rFboLyST/n3PvEfzZB2YAtHI=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=HUf9xgQESC7VCcppy8CQfa6iznjXwxPggaDQkNwWdgP65UgwiyCY7laUrKKB7WmZw7u3hCbvdpYAVzSldfVCennvf2drwVd1tGSYnXW6yHeYdAE5+BsDh2we1aRxg57aOeGQbhoPwkjsDzlFTnA6kqECz0uEBfggZdGVYMAEhHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=e6i4sOip; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cLfvqPDZ"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8485ef63b68so11630830b3a.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2026 17:00:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784678426; x=1785283226; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=TfD1WJrnD93D/tERtpxD/SCKB4+Ih78t8LlR0dT8WBQ=;
-        b=cLfvqPDZXeXFxGxjYsOrukcIRDV63KuhZeR1yfrWmQ34sRgIsQRUwlkYCUpBPi3OCC
-         fIiMSK6AUkowxJ8Gg0eYUu8GjxXOACaaf0y6/DjSRqII+PACieLFAm3jPp7F1kTzFqBC
-         dBiM9QqLD2Y3u6zDNkvt4ysjszczxSlbaVtiIj76GwWilnMnp2k2VTp+19YkrSoFv9ms
-         pY+NkUzeHeRZGchxrvDL49Uc887PadiWPRB7gV0lAy7XcqbTSeDhVKuTsg/WEXsou8fH
-         Uf6SlLFnJKK1KBd03j/dZNWxHy9FKmniA8z9P19rBPHRRrLn/KNoFphxqyy6akj+ZMVn
-         fz7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784678426; x=1785283226;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=TfD1WJrnD93D/tERtpxD/SCKB4+Ih78t8LlR0dT8WBQ=;
-        b=fjhf0f09F0I9hXzSKa0hulgJSnKfUEvBKmKI/PO+6jq9ihYZaZC40HH8Js7J4ka1+Z
-         2SzhrrWqujqehETwP8lL2ex/hh9LsT5L+kxbwqf47DLAjdt2/slUNaloh45Eg6JIXhtk
-         Lyj1Q5FfUA7wCjLXM+mRJQaibsDtFkNjklbZm7cRuI43WxnsaOeU35zrQCu0N9Hf0NY6
-         E7NMZkjPRYh/7e0YoB3x8RRlzlnAFxwzSd5k0tgVrKKU8Kn3s8+suLon6S8Jj3/ixh/1
-         5QOC1SzRMsAGH6BbeOCqsCl/T4chr3LBZV3Y9Ke5TdOEX1zci/KB8NwxHjrcR0RZZasX
-         YMAQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rr6Zb2+qZcoVVCdA/Cc/0j5vRpk/oKQyJ5wgAx8wD75L20/LMewrTF77DIxpKaPa7GIkLa7Vvs+bwsYow==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxu/nbb6mNIZNyt7x+obLufBehUjSPrMI81piUV1/EWv9iimhkX
-	rMqcJSc/eK2h0lTGWidvuoyYlErcZEHyb3w4+QqsU65Wuy0qPYIavr0+
-X-Gm-Gg: AR+sD131l0Mtb08YJl88slI8hUoGaxJDKhqBT5B0V9i76wHDhZOsr/9L0XEGwD4BAFo
-	IuCXWS5c8+niXhNPrfcKqozXT6KlD2WCzZzN6mW6HGBvi4Bd05vGjlHi6M2/Isc91209PKXVLoj
-	3kGzgZY+fOe9pUhkAS4pvEpczvmeh0X1fm+DrJH9lsJKNecF5Ww3nuoFZAtQulJqee4Yy/eMHEd
-	mWyeceiD31Vrz0ZwkGMGqMi32zDulV6qmdM5CKhiWQu1hv9S/ZXXQb783pp/FGKvluPLsvk1YE4
-	LZgQ/iKi+OVLNHITmyVDYQ7VZiGLFlPescdZHuW/btV87lRrusZdPURNL1eyKGuYvK9c3hqW/KG
-	0UKPHJiy6MpgaBrAecYebavgOWWCSSRGtjiLEUxoeekf7heL+Y3Nzw64obHRoPzu/Jb1WGJAtvB
-	Npx+kiA9xDy6zacpjUEJ7vNpfh3EZq6OvTMm7SuBzuVMWB9CCUS1w=
-X-Received: by 2002:a05:6a00:32c4:b0:847:80f5:c616 with SMTP id d2e1a72fcca58-84c292a0f00mr20522474b3a.10.1784678425951;
-        Tue, 21 Jul 2026 17:00:25 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e175a29aesm390443b3a.41.2026.07.21.17.00.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jul 2026 17:00:25 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <635a0d22-8565-4c62-94d5-2cbaff308558@roeck-us.net>
-Date: Tue, 21 Jul 2026 17:00:23 -0700
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="e6i4sOip"
+Received: from pps.filterd (m0375855.ppops.net [127.0.0.1])
+	by mx0b-00128a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66M1DDHK1779102;
+	Tue, 21 Jul 2026 21:29:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=DKIM; bh=HgzenWrm4M86tE2MG++SyPEcfWE
+	iozyxMoFd0ihDP4U=; b=e6i4sOipfEhVFE/rM5IO9GyViyUAGmq/S/mhVGA6OOp
+	WqE28gnuaBeF4FrwDZ7t4PV7o463/+S0FSKTifkiFs5ZYmdPbQrHK/xnswmxrNb2
+	O/dfFtBGMUv/F0iZ4jfuUDapiaQBfPYQ3qL9p6nGevPACutipc88Oe0IZrH2oOeR
+	wLe7zcrQNwD/VY+CMAropV3yFNH6jxsZeU1nUN4mkvgCAASTW5N0jz+SfkM7bczN
+	eAMyONGZCejFlqgDIHthR/R3bXNlt+7NS7nGmoohdnxhQcOkxHQ9QJ2AdmMiXIen
+	lKCZyk01frlSmMj+Ll2ydB3HSK38p+4+NkBtrOFwhCQ==
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 4fj6vquarj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 Jul 2026 21:29:55 -0400 (EDT)
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 66M1TsLt003270
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Tue, 21 Jul 2026 21:29:54 -0400
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.37; Tue, 21 Jul 2026 21:29:53 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.37; Tue, 21 Jul 2026 21:29:53 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.1748.37 via Frontend
+ Transport; Tue, 21 Jul 2026 21:29:53 -0400
+Received: from ATORRENO-L02.ad.analog.com ([10.66.6.191])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 66M1Tc8B017211;
+	Tue, 21 Jul 2026 21:29:42 -0400
+From: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+Subject: [PATCH v2 0/3] hwmon: (pmbus/max34440): Bug fixes and supporting
+ new device
+Date: Wed, 22 Jul 2026 09:29:28 +0800
+Message-ID: <20260722-max34451_fixes-v2-0-bbddb18ec1d6@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v7] platform/x86: panasonic-laptop: add fan speed mode
- for newer models
-To: Alex Yeo <alexyeo362@gmail.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: platform-driver-x86@vger.kernel.org,
- Kenneth Chan <kenneth.t.chan@gmail.com>, Hans de Goede <hansg@kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org
-References: <b557e1f6-2072-496f-8eaa-d2899d1bded4@linux.intel.com>
- <20260718185704.3466-1-alexyeo362@gmail.com>
- <fcf57a96-b2ad-c7d5-0d6d-6d760b915195@linux.intel.com>
- <531e3c48-bb61-4741-8fe7-a2dbc213eb1e@roeck-us.net>
- <84b521b8-112b-4fed-ab82-e1e16d770e66@gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAmgrMyQFCSbODQkACgkQyx8mb86fmYGcWRAA
- oRwrk7V8fULqnGGpBIjp7pvR187Yzx+lhMGUHuM5H56TFEqeVwCMLWB2x1YRolYbY4MEFlQg
- VUFcfeW0OknSr1s6wtrtQm0gdkolM8OcCL9ptTHOg1mmXa4YpW8QJiL0AVtbpE9BroeWGl9v
- 2TGILPm9mVp+GmMQgkNeCS7Jonq5f5pDUGumAMguWzMFEg+Imt9wr2YA7aGen7KPSqJeQPpj
- onPKhu7O/KJKkuC50ylxizHzmGx+IUSmOZxN950pZUFvVZH9CwhAAl+NYUtcF5ry/uSYG2U7
- DCvpzqOryJRemKN63qt1bjF6cltsXwxjKOw6CvdjJYA3n6xCWLuJ6yk6CAy1Ukh545NhgBAs
- rGGVkl6TUBi0ixL3EF3RWLa9IMDcHN32r7OBhw6vbul8HqyTFZWY2ksTvlTl+qG3zV6AJuzT
- WdXmbcKN+TdhO5XlxVlbZoCm7ViBj1+PvIFQZCnLAhqSd/DJlhaq8fFXx1dCUPgQDcD+wo65
- qulV/NijfU8bzFfEPgYP/3LP+BSAyFs33y/mdP8kbMxSCjnLEhimQMrSSo/To1Gxp5C97fw5
- 3m1CaMILGKCmfI1B8iA8zd8ib7t1Rg0qCwcAnvsM36SkrID32GfFbv873bNskJCHAISK3Xkz
- qo7IYZmjk/IJGbsiGzxUhvicwkgKE9r7a1rOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAmgrMyQFCSbODQkACgkQyx8mb86fmYHlgg/9
- H5JeDmB4jsreE9Bn621wZk7NMzxy9STxiVKSh8Mq4pb+IDu1RU2iLyetCY1TiJlcxnE362kj
- njrfAdqyPteHM+LU59NtEbGwrfcXdQoh4XdMuPA5ADetPLma3YiRa3VsVkLwpnR7ilgwQw6u
- dycEaOxQ7LUXCs0JaGVVP25Z2hMkHBwx6BlW6EZLNgzGI2rswSZ7SKcsBd1IRHVf0miwIFYy
- j/UEfAFNW+tbtKPNn3xZTLs3quQN7GdYLh+J0XxITpBZaFOpwEKV+VS36pSLnNl0T5wm0E/y
- scPJ0OVY7ly5Vm1nnoH4licaU5Y1nSkFR/j2douI5P7Cj687WuNMC6CcFd6j72kRfxklOqXw
- zvy+2NEcXyziiLXp84130yxAKXfluax9sZhhrhKT6VrD45S6N3HxJpXQ/RY/EX35neH2/F7B
- RgSloce2+zWfpELyS1qRkCUTt1tlGV2p+y2BPfXzrHn2vxvbhEn1QpQ6t+85FKN8YEhJEygJ
- F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
- FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <84b521b8-112b-4fed-ab82-e1e16d770e66@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPgcYGoC/3WMwQ7CIBAFf6XZsxiWIlRP/odpDLRrS2LBgCE1D
+ f8u9u5x3svMBomiowSXZoNI2SUXfAVxaGCYjZ+IubEyCC4U16jYYtZWyhPeH26lxHTX0WiVaBE
+ VVOkVaT+qc+srzy69Q/zs/Yy/9W8qI+PMnCVaocnQYK/Gm2eYjkNYoC+lfAERUKzHrQAAAA==
+X-Change-ID: 20260716-max34451_fixes-788edb623116
+To: Guenter Roeck <linux@roeck-us.net>, Kun Yi <kunyi@google.com>,
+        =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+        Jonathan Corbet
+	<corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>
+CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>,
+        Alexis Czezar Torreno
+	<alexisczezar.torreno@analog.com>,
+        Carlos Jones Jr
+	<carlosjr.jones@analog.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1784683778; l=2109;
+ i=alexisczezar.torreno@analog.com; s=20250213; h=from:subject:message-id;
+ bh=3841kedHGeo0OWw7xy7rFboLyST/n3PvEfzZB2YAtHI=;
+ b=ZZwz4aRT5iegIbm5cDpfTeWGktTGMLTWmOCFzP4Y+gVFGQhw6QpZlHWCEJyi2xY5uhTtbNkJZ
+ jE+PZqQClagCLLd+IRQ2BZi6phi+zGn0T8AWSHBjp4mW6RNFvktmuBD
+X-Developer-Key: i=alexisczezar.torreno@analog.com; a=ed25519;
+ pk=XpXmJnRjnsKdDil6YpOlj9+44S+XYXVFnxvkbmaZ+10=
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: oVI5WKIs5N1kxkpHjZIHTF1a6byP3i28
+X-Proofpoint-ORIG-GUID: oVI5WKIs5N1kxkpHjZIHTF1a6byP3i28
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzIyMDAxMSBTYWx0ZWRfX7KPF086/Zgdj
+ Jsi4e/NvW1eHVswihNvMs1c7NbxRt1YQ+wHkaU4cNa5rrXOp4QXKuItDeyORmx1VCje+ae2S9Jj
+ oGaB4n7Btw2vbobzfXAVPXRR04U8pnU8ZA0Iu9Zrxr1Du1ibgyyo
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzIyMDAxMSBTYWx0ZWRfXxW7faXBKsB3y
+ IpAa1faOZSYtacffnix9DL3bLwTfV+2fFa+sUC53WgTYomi7U/VybvXfLi5p2Psx60WEiyrWZtF
+ 2v7cT/simvkojfqR9XOgIj4wWPNCXlKIMkMQdfaiuI6C4OWxERF/LCp2Y47BoBXuEsrSATWdocq
+ JQXgnUPGnMTQVFhzFKwIYczC8pUpDhbNWlLREsYUHr05Ygx9AluL5RzlxHXA+VlvUPW5N2QBo/r
+ 1Rud1lmcVR0WIInZYNwFPVVECf0U881d8wxV6KCa9a8PNo1EBcUk8fnr0hAK4VaAsW7t/AXD38o
+ 8kFxeQNKrLBXdpcXIfZs+sV0pnpP1+/n3hHKQd6h+mloqSJpcMxLy3OOt1lIWib5ktLHEFPcRXd
+ G8NkZA9F1az99k0WXw5/RQ6tEenX+LLt6FhfV51S4RMjQ7D2yQ81lbyKPXCBXZQt2KvNqlSPyKe
+ aWVa+lgS46d+qM/UfSQ==
+X-Authority-Analysis: v=2.4 cv=WIpPmHsR c=1 sm=1 tr=0 ts=6a601d13 cx=c_pps
+ a=3WNzaoukacrqR9RwcOSAdA==:117 a=3WNzaoukacrqR9RwcOSAdA==:17
+ a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=0sLvza09kfJOxVLZPwjg:22 a=N--XFCr6TIEc_64PeIT2:22 a=VwQbUJbxAAAA:8
+ a=gAnH3GRIAAAA:8 a=lAPpY2re-nV465j7mocA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-22_01,2026-07-21_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0
+ phishscore=0 spamscore=0 impostorscore=0 suspectscore=0 clxscore=1015
+ bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
+ definitions=main-2607220011
 
-On 7/21/26 16:22, Alex Yeo wrote:
-> 
-> 
-> On 2026/07/20 10:41 PM, Guenter Roeck wrote:
->> On 7/20/26 06:46, Ilpo Järvinen wrote:
->>> On Sun, 19 Jul 2026, Alex Yeo wrote:
->>
->> ...
->>
->>>> diff --git a/drivers/platform/x86/panasonic-laptop.c b/drivers/ platform/x86/panasonic-laptop.c
->>>> index b83113c26f88..2d67188de2a9 100644
->>>> --- a/drivers/platform/x86/panasonic-laptop.c
->>>> +++ b/drivers/platform/x86/panasonic-laptop.c
->>>> @@ -119,6 +119,9 @@
->>>>    *        - v0.1  start from toshiba_acpi driver written by John Belmonte
->>>>    */
->>>> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->>>> +
->>>> +#include <linux/printk.h>
->>>>   #include <linux/acpi.h>
->>>>   #include <linux/backlight.h>
->>>>   #include <linux/bits.h>
->>>> @@ -136,6 +139,14 @@
->>>>   #include <linux/types.h>
->>>>   #include <linux/uaccess.h>
->>>>   #include <acpi/video.h>
->>>> +#include <linux/sysfs.h>
->>>> +#include <linux/hwmon.h>
->>>> +#include <linux/hwmon-sysfs.h>
->>
->> FWIW, I don't see why this is needed.
-> 
-> If you mean linux/hwmon-sysfs.h, I agree.
-> I will remove that in v8.
-> 
-> For the other includes:
-> 
->  >>> +#include <linux/sysfs.h>
-> this was previously missing
-> 
->  >>> +#include <linux/hwmon.h>
-> used this for registering the fan as a PWM fan on hwmon.
-> 
->>
->>>>   struct pcc_acpi {
->> ...
->>>> +    /*
->>>> +     * This mutex ensures that the hwmon and thermal functions
->>>> +     * for fan operations do not conflict as the PWM fan is
->>>> +     * exposed to both.
->>>> +     */
->>>> +    struct mutex            pwm_fan_lock;
->>
->> Maybe ask why this additional lock is used instead of relying on
->> (for hwmon attributes) and using (for thermal) the hwmon subsystem
->> lock.
->>
-> 
-> Both the hwmon and thermal devices share the same control path
-> (pcc_pwm_fan_speed_read and pcc_pwm_fan_speed_set). To prevent them from
-> executing concurrently and interleaving, I added pwm_fan_lock to serialize access.
-> 
-> Reading and writing fan speed requires a multi-step ACPI transaction (e.g., checking/setting manual mode first before accessing or setting fan speed). This is because I rely on querying ACPI for the current state instead of keeping state cached in the driver. Because of this, the mutex is placed in the outer hwmon and thermal callbacks rather than inside the low-level ACPI helper functions.
-> 
-> If there's a more appropriate way to synchronize this across both interfaces (e.g. use hwmon_lock in place of a driver level mutex), I'd be interested to hear it.
-> 
+This series fixes register access issues in MAX34451/ADPM devices and adds
+support for newer MAX34451 variants and the MAX34452 device.
 
-I for my part would like to understand why hwmon_lock() / hwmon_unlock()
-(or the hwmon_lock guard) are not sufficient. You suggest above that they
-are not sufficient and that you need the additional pwm_fan_lock, but you
-don't really explain the reason. You do explain that you need to lock the
-thermal access functions, and I agree, but you do not explain why the hwmon
-subsystem lock functions can not be used. It would be important to
-understand why that is the case because those functions exist for exactly
-that purpose. If they are insufficient, it is important to understand why
-that is the case.
+The first patch addresses an issue where the driver attempts to access
+unsupported registers on MAX34451 and ADPM devices, causing CML errors and
+triggering ALERT. 
+NOTE: Patch already applied to hwmon branch as a fix. It was suggested I
+could simply carry this for the meantime to easily submit new versions
+of patch 2 and 3 which are dependent of patch 1.
 
-Thanks,
-Guenter
+The second patch adds support for the newer MAX34451ETNA8+ silicon revision
+which uses different direct format coefficients for voltage and current
+measurements.
+
+The third patch introduces support for the MAX34452, a 16-channel voltage/
+current monitor that shares a similar architecture with MAX34451.
+
+Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+---
+Changes in v2:
+- Patch 1/3:
+    - Accepted and applied in hwmon. As per suggestion, carried this
+      over to simplify submission of patch 2 and 3 as dependency exist.
+- Patch 2/3:
+    - Replaced ETNA8+ revision check from == to >= for future proofing
+- Patch 3/3: 
+    - Added MAX34452 to unsupported register check
+    - Added explicit MAX34451 id check in ETNA6+ feature detection to
+      prevent applying to MAX34452.
+- Link to v1: https://lore.kernel.org/r/20260716-max34451_fixes-v1-0-a941b27eaecb@analog.com
+
+---
+Alexis Czezar Torreno (2):
+      hwmon: (pmbus/max34440): block unsupported VIN and IIN limit registers
+      hwmon: (pmbus/max34440): add support for newer version of max34451
+
+Carlos Jones Jr (1):
+      hwmon: (pmbus/max34440): Add support for MAX34452
+
+ Documentation/hwmon/max34440.rst |  26 ++++---
+ drivers/hwmon/pmbus/Kconfig      |   5 +-
+ drivers/hwmon/pmbus/max34440.c   | 152 ++++++++++++++++++++++++++++++++++++---
+ 3 files changed, 163 insertions(+), 20 deletions(-)
+---
+base-commit: ec5dac32f359168b90f5361a4de16dbf7f258031
+change-id: 20260716-max34451_fixes-788edb623116
+
+Best regards,
+-- 
+Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
 
