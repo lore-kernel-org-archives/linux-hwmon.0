@@ -1,148 +1,118 @@
-Received: from mta-64-226.siemens.flowmailer.net (mta-64-226.siemens.flowmailer.net [185.136.64.226])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 072E6340400
-	for <linux-hwmon@vger.kernel.org>; Wed, 22 Jul 2026 21:06:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.64.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 752FB3BADB2
+	for <linux-hwmon@vger.kernel.org>; Wed, 22 Jul 2026 22:17:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784754400; cv=none; b=IwSTVqcgKT0Jszl33tZNnX9TSsctRHvEHYsCvbnCtmtp4hZo/09HldLQ7Qz5LguaZXHaF8aS7YIDadJ2V6PjWfiXsFR+buLZ+hoKbQY/7dhr7LuAVHeIPBle/4Io51IYm4RdMPiC7pqJWqv0XAtC84gZ6lBe69Gba3hDKEtflWo=
+	t=1784758680; cv=none; b=J6ZqbvN6oa0fpF6wKAw2kZOw9y1WqfssLGO4iPHWX/EucnF4n95YNaFVYJR6Wb3DTBXFAVrPxxnFShC/Yh3TrMgawOYm+DgG2DANrjVW8mLNXoA0FgoGacQUFFW2E7on+e09avmTUBqny6si73GedjCh5x88MKYy72QsYzvv2rI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784754400; c=relaxed/simple;
-	bh=uH9tOgxdDnzLT1oQ3U/U7emXSV8JbUuE+9VQZi21kio=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=f+ydWhdO+KdyS41JFYBpCJ8eU4UxMv05Pyu24e3+rVoO4hXtd3Go/uigtpm0NDmsYjXE3MnzgeJiHP+5u9zIUtWV5FyLc/YHlzUwH+d8uFlp/p5ND5PFqEyOAqMKBYCJLZyN2T/1RgcKsh5WZWOPalQMN/eHlcEWf2rxGIJl1kA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=florian.bezdeka@siemens.com header.b=aI3S6Qv4; arc=none smtp.client-ip=185.136.64.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
+	s=arc-20240116; t=1784758680; c=relaxed/simple;
+	bh=rJeKsUQY+boFezBYJA/U6Gqcdv5PEzg+2ODkEOiu7y0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=XkAbXfRVUcxssa+b5qOReD29BLFg4hTDC4bBThue0bxWtaLjO9Gv+apGBKfHWUVuEcEN15nvsuEXN6kxIwCpu9KI016eptkZU1jU0K62wu5oC1XtGtL5vd08yL0vWFcbkUSjTPcpGRZ5xK2CMYYlalrAooaab4Pg1Ekpzt5xpXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dLXXUHRj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=siemens.com header.i=florian.bezdeka@siemens.com header.b="aI3S6Qv4"
-Received: by mta-64-226.siemens.flowmailer.net with ESMTPSA id 202607222106253abad1d43f000207ee
-        for <linux-hwmon@vger.kernel.org>;
-        Wed, 22 Jul 2026 23:06:25 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=florian.bezdeka@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=/Tx4FUfIsblq/Zswf5P0eREfvzod3xoZ0U/Z5VWoe+g=;
- b=aI3S6Qv4K9gsYewIQGtAfLzXAtLdU0ldec4gSMzYMeKf+9p5Mnd4r0GMZYf9ptOaptnEe7
- O+4iDiNQJ/WcCIPgM7KFpe5EZsyCGBOcakUiOKhTRF9UgK8gQsbiZMWRx3MUtZ6YHBpvMv4H
- yg2D3kZd6smlaXq62N6SfYfS3ZtvLKgsUutR2P3suovRxQiFikGCUGMVu36O85CjtyyyjfZw
- Sn3s1RN4GzECvevn87fWQVbf9PFoALPtlGCOv6VtWDfAnpa5kQNsDHeJBVpnwrfMGxfflcbw
- mpcTiBd/yRs7Do/dJqkR9ASxu02HBMVG0jdD0B/sXIZ5kAvKlgv2FcWg==;
-Message-ID: <b89e04deaef5e6612649c77700c089005f1410f9.camel@siemens.com>
-Subject: Re: [PATCH] hwmon: (nct6775-core) Fix number of temperature
- registers for NCT6116
-From: Florian Bezdeka <florian.bezdeka@siemens.com>
-To: Guenter Roeck <linux@roeck-us.net>, Hardware Monitoring
-	 <linux-hwmon@vger.kernel.org>
-Cc: =?ISO-8859-1?Q?Bj=F6rn?= Gerhart <gerhart@posteo.de>
-Date: Wed, 22 Jul 2026 23:06:25 +0200
-In-Reply-To: <20260722142846.2302075-1-linux@roeck-us.net>
-References: <20260722142846.2302075-1-linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dLXXUHRj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D76421F000E9;
+	Wed, 22 Jul 2026 22:17:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784758679;
+	bh=kGB8syCmw3LIpsV7eA38OPuChf2u2JqHWIyDY3F4UjY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=dLXXUHRjBmOAXX1ng220UC9HBzPIoMuCIiK+x3fKaZ8uqPU34+I64rjQzO+/0YTXa
+	 sRX4mqexCNLaznJXNFlsgVU/HcCgeZ+aMtVp/8rtHB94QAZr4PwiBrZaZ/7YGLc1fC
+	 6P1YvuCxnhFrAAp8M78gUhAeUGqNCuhEzhmCY1G6geIwXt9hwYZOygkdpavZAM0B39
+	 skoVJ2CuxwCmkqa5ft27Uod9hUvQ2ExUtIys8fQD+Uvdypyhk9g/7m5XYAAT4GbWWE
+	 U5yYeN+Am1LIBNO9Odlsltqav9aOs+yG2lQWg3DlFQjMziDuej1vgflTGxKM9dfxwU
+	 cNF+LUR5P3CdA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next 3/6] eth: fbnic: cache hwmon sensor readings
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Zinc Lim" <limzhineng2@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260721221540.648272-4-limzhineng2@gmail.com>
+References: <20260721221540.648272-1-limzhineng2@gmail.com>
+ <20260721221540.648272-4-limzhineng2@gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
+Date: Wed, 22 Jul 2026 22:17:58 +0000
+Message-Id: <20260722221758.D76421F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-68982:519-21489:flowmailer
 
-On Wed, 2026-07-22 at 07:28 -0700, Guenter Roeck wrote:
-> Unlike NCT6106, NCT6116 only has three temperature registers, and with
-> it only three temperature source and temperature source configuration
-> registers. The register addresses match those of NCT6106 and can be
-> re-used.
->=20
-> The code used a separate array to list the temperature source registers
-> for NCT6116, but used the size of the NCT6106 register array to set
-> the number of registers. The NCT6106 register array provides six addresse=
-s,
-> while the temperature source register array for NCT6116 only provides thr=
-ee
-> addresses. This causes a KASAN report.
->=20
-> BUG: KASAN: global-out-of-bounds in nct6775_probe+0x936/0x46f0 [nct6775]
-> Read of size 2 at addr ffffffffc19561a6 by task modprobe/954
-> ...
-> Call Trace:
->  dump_stack+0x7d/0xa7
->  print_address_description.constprop.0+0x1c/0x220
->  ? __kasan_kmalloc.constprop.0+0xc9/0xd0
->  ? __kmalloc_node_track_caller+0x194/0x5b0
->  ? nct6775_probe+0x936/0x46f0 [nct6775]
->  ? nct6775_probe+0x936/0x46f0 [nct6775]
-> ...
->=20
-> Fix the problem by hard-coding the number of temperature and temperature
-> configuration registers to three for NCT6116. Drop the unnecessary
-> NCT6116_REG_TEMP_SOURCE array and re-use NCT6106_REG_TEMP_SOURCE.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The hardware monitoring cache expiration check is vulnerable to =
+a 24-day jiffies wraparound bug on 32-bit systems, which can cause the driv=
+er to indefinitely serve stale sensor readings.
+--
 
-Thanks a lot for taking over and the super fast response/fix. Highly
-appreciated!
+--- Patch [3]: [PATCH net-next 3/6] eth: fbnic: cache hwmon sensor readings=
+ ---
+commit 4d77f6b947d1d111d9ffbbeb2ef3742b0f54686f
+Author: Zinc Lim <limzhineng2@gmail.com>
+Subject: eth: fbnic: cache hwmon sensor readings
 
-Have you checked how far we get with the auto-stable apply process? I'm
-expecting that 5.10 (and maybe 5.15 in addition) will need some manual
-backporting. Happy to help there, just let me know.
+This commit introduces caching for hardware monitoring sensor readings to
+reduce firmware mailbox IPC traffic. It caches the temperature and voltage
+values and serves them for the remainder of the current jiffy, using a
+sentinel value to ensure the first read always triggers a refresh.
 
->=20
-> Reported-by: Florian Bezdeka <florian.bezdeka@siemens.com>
-> Closes: https://lore.kernel.org/linux-hwmon/57cfc3fa-d4e9-4c10-8aa7-4ad0a=
-f7ebebe@roeck-us.net/T/#t
-> Fixes: 29c7cb485b32 ("hwmon: (nct6775) Integrate new model nct6116")
-> Cc: Bj=C3=B6rn Gerhart <gerhart@posteo.de>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-
-Reviewed-by: Florian Bezdeka <florian.bezdeka@siemens.com>
-
-> ---
->  drivers/hwmon/nct6775-core.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
-> index d668dc390def..51253acff4b0 100644
-> --- a/drivers/hwmon/nct6775-core.c
-> +++ b/drivers/hwmon/nct6775-core.c
-> @@ -846,8 +846,6 @@ static const u16 NCT6116_FAN_PULSE_SHIFT[] =3D { 0, 2=
-, 4, 6, 6 };
->  static const u16 NCT6116_REG_PWM[] =3D { 0x119, 0x129, 0x139, 0x199, 0x1=
-a9 };
->  static const u16 NCT6116_REG_FAN_MODE[] =3D { 0x113, 0x123, 0x133, 0x193=
-, 0x1a3 };
->  static const u16 NCT6116_REG_TEMP_SEL[] =3D { 0x110, 0x120, 0x130, 0x190=
-, 0x1a0 };
-> -static const u16 NCT6116_REG_TEMP_SOURCE[] =3D {
-> -	0xb0, 0xb1, 0xb2 };
+> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c b/drivers/net/=
+ethernet/meta/fbnic/fbnic_hwmon.c
+> --- a/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
+> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
+[ ... ]
+> @@ -25,26 +26,32 @@ static int fbnic_hwmon_sensor_read(struct fbnic_dev *=
+fbd, int id, long *val)
+>  {
+> +	struct fbnic_hwmon_cache *cache =3D &fbd->hwmon_cache;
+>  	struct fbnic_fw_completion *fw_cmpl;
+>  	int err =3D 0;
+> +	s32 *cached;
 > =20
->  static const u16 NCT6116_REG_CRITICAL_TEMP[] =3D {
->  	0x11a, 0x12a, 0x13a, 0x19a, 0x1aa };
-> @@ -3652,7 +3650,7 @@ int nct6775_probe(struct device *dev, struct nct677=
-5_data *data,
->  		  =3D NCT6106_CRITICAL_PWM_ENABLE_MASK;
->  		data->REG_CRITICAL_PWM =3D NCT6116_REG_CRITICAL_PWM;
->  		data->REG_TEMP_OFFSET =3D NCT6106_REG_TEMP_OFFSET;
-> -		data->REG_TEMP_SOURCE =3D NCT6116_REG_TEMP_SOURCE;
-> +		data->REG_TEMP_SOURCE =3D NCT6106_REG_TEMP_SOURCE;
->  		data->REG_TEMP_SEL =3D NCT6116_REG_TEMP_SEL;
->  		data->REG_WEIGHT_TEMP_SEL =3D NCT6106_REG_WEIGHT_TEMP_SEL;
->  		data->REG_WEIGHT_TEMP[0] =3D NCT6106_REG_WEIGHT_TEMP_STEP;
-> @@ -3666,13 +3664,13 @@ int nct6775_probe(struct device *dev, struct nct6=
-775_data *data,
-> =20
->  		reg_temp =3D NCT6106_REG_TEMP;
->  		reg_temp_mon =3D NCT6106_REG_TEMP_MON;
-> -		num_reg_temp =3D ARRAY_SIZE(NCT6106_REG_TEMP);
-> +		num_reg_temp =3D 3;
->  		num_reg_temp_mon =3D ARRAY_SIZE(NCT6106_REG_TEMP_MON);
->  		num_reg_tsi_temp =3D ARRAY_SIZE(NCT6116_REG_TSI_TEMP);
->  		reg_temp_over =3D NCT6106_REG_TEMP_OVER;
->  		reg_temp_hyst =3D NCT6106_REG_TEMP_HYST;
->  		reg_temp_config =3D NCT6106_REG_TEMP_CONFIG;
-> -		num_reg_temp_config =3D ARRAY_SIZE(NCT6106_REG_TEMP_CONFIG);
-> +		num_reg_temp_config =3D 3;
->  		reg_temp_alternate =3D NCT6106_REG_TEMP_ALTERNATE;
->  		reg_temp_crit =3D NCT6106_REG_TEMP_CRIT;
->  		reg_temp_crit_l =3D NCT6106_REG_TEMP_CRIT_L;
-> --=20
-> 2.45.2
+>  	switch (id) {
+>  	case FBNIC_SENSOR_TEMP:
+> +		cached =3D &cache->temp_mdeg;
+>  		break;
+>  	case FBNIC_SENSOR_VOLTAGE:
+> +		cached =3D &cache->volt_mv;
+>  		break;
+>  	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (*cached !=3D FBNIC_SENSOR_NO_DATA &&
+> +	    time_is_after_eq_jiffies(cache->last_read)) {
+
+[Severity: Medium]
+Can this cache expiration check cause stale readings on 32-bit systems due =
+to
+jiffies wraparound?
+
+If the hwmon sysfs files are not read for ~24.8 days, the jiffies counter w=
+ill
+advance such that the signed subtraction in time_is_after_eq_jiffies()
+underflows. This would cause the macro to evaluate to true, resulting in a
+cache hit.
+
+Since a cache hit bypasses the firmware read and does not update last_read,
+would the driver continually return the same stale cached value for the next
+24.8 days until the difference wraps back to negative?
+
+Given the commit message mentions serving reads "for the remainder of the
+current jiffy", should this explicitly check for jiffies =3D=3D cache->last=
+_read
+instead?
+
+> +		*val =3D *cached;
+> +		return 0;
+>  	}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260721221540.6482=
+72-1-limzhineng2@gmail.com?part=3D3
