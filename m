@@ -1,251 +1,175 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mta-65-225.siemens.flowmailer.net (mta-65-225.siemens.flowmailer.net [185.136.65.225])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE8840F74E;
-	Wed, 22 Jul 2026 10:38:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784716736; cv=fail; b=DaK17E1WI0hNVPAoGoBXyLocD/Ro3t/9CO18XC/a5zvCmDG4Zf1s1hiygw1NVta8Arob1w62926KdnDcmV76PpKmdpsXsuZxPbTAigLt8f2Wxqtzj18l3+8OpiVYkAJXU1AjlorDkXwZ4cleqyeI0sWMOD1o8cYT53uclU9qH+U=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784716736; c=relaxed/simple;
-	bh=/7njgwk3LXPNtnv/mEhMKP2pKBStl8f4oxLTCfzO+v4=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=i4T5yD/UOKnKDGV/48PnrUMH8S4EBgjpfI1UzSoNo/9UcBUG4Ozymgk7w/fvAeFztLmMbuAk48GkeAH0FgR8K6Ys/2prfXRXLmwcEgp5WLtVIz9YncUQ076njpR8ZAoVNZ6G9eRtcHMu7o5ftpW+iR3DZA88tgAZdQL9RoCV0RM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TJYN7vDa; arc=fail smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FA1B4D2EC4
+	for <linux-hwmon@vger.kernel.org>; Wed, 22 Jul 2026 11:38:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.65.225
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784720305; cv=none; b=nfFKbwQnSP/KABAJVIRykQ9qufmvN58jT1CULwhX1dWPX1F6iEBIS/Nw99JqM14csG7A6ORmi94IcfpcDKvOhQEEqNXdRaH/EWevDvFGVS+fwwsN7mMceCB29+wotI1bXyskrdBxlNArXXZHoGljW6/o9F+irLkQ89B6N/K5G4I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784720305; c=relaxed/simple;
+	bh=60w0YRlc52KcE33hL+n8Z/Mug0h6V47nV/oFoERXxHg=;
+	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=LJJoJXcaqnQnUvyc9zGF3zoGb592ENholmn21xTHh6moS/lXo7uyINaZEDxal/5Uw/lTy1AFb/98+FzJ6QXKm8NJzecGZjQBOTR+oJSupxvYEinat5ByeDk6+MQgvSw8/6+9w/mfdKTjehym7GmgfR8NvgutNVVP4njMPG2eVJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=florian.bezdeka@siemens.com header.b=MSTTyez9; arc=none smtp.client-ip=185.136.65.225
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TJYN7vDa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1784716734; x=1816252734;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=/7njgwk3LXPNtnv/mEhMKP2pKBStl8f4oxLTCfzO+v4=;
-  b=TJYN7vDaZwEPYqF6inLdvLGibmyPryRndzX38kKqIFwDgUEi1FoXRktb
-   i6IPl0vVomQoFmBwHasDpS4lSiusmFuXdamAaYzZGVhKTqGX0DptmldmP
-   E8xCis+mYAkNnoNtzMYDVWitd8l7dxXYD42p9hu2qyuu4UJqCe3b85y3W
-   DaMqTo9RYmBczrHX8ABnlQQV/v/G0f8TCZttdNu2JvS5OTaULD2+YmymK
-   Yh84CQrgxwd5AtSm73I/Zfgvsudp+e55f3swGe7fr6G6zh1HWbapPnWSd
-   6PMIYrOlktaOekj1x0RNlhmUZ6XKYnXBkcwcl1TGRPMLB1lW/y5twH/YW
-   Q==;
-X-CSE-ConnectionGUID: K3G13fAqS2iZOFsszTAPVA==
-X-CSE-MsgGUID: 1vhNHoL7SQGnKPCdg7KRIw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11853"; a="84474685"
-X-IronPort-AV: E=Sophos;i="6.25,178,1779174000"; 
-   d="scan'208";a="84474685"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2026 03:38:53 -0700
-X-CSE-ConnectionGUID: F1Wn3v0jSomIgD/e1Dm66Q==
-X-CSE-MsgGUID: +7nW0uiyR4mO5jvYTRYvYg==
-X-ExtLoop1: 1
-Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
-  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2026 03:38:53 -0700
-Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.43; Wed, 22 Jul 2026 03:38:52 -0700
-Received: from ORSEDG902.ED.cps.intel.com (10.7.248.12) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.43 via Frontend Transport; Wed, 22 Jul 2026 03:38:52 -0700
-Received: from SN4PR0501CU005.outbound.protection.outlook.com (40.93.194.2) by
- edgegateway.intel.com (134.134.137.112) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.43; Wed, 22 Jul 2026 03:38:52 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=sc7lNP/l4kuCBRL1viKiulRP0oIUyOyrf+o00zWbty0E0swBAUoLRmVzIg5FDZ7O0GyO/B0iDdG5675R0teSjBUgotg8K4FpLkFyMnCLUdS9Gt6n1EbuJSVRVDioVs5EzYNpgEbqBXfI26mZLekjjdRg1b1+YqELXeOqitFewhm1yLZYKyfqVagkMu6Y/yP6d3k5/Kr+pCFGm+H+QdaAFLdVw9QCITAppNmsrF/4JpLtLL++axjAPsx2V8wPxUS+4ovbCbIZnExjgo/uNg4UYIK5UbIyZPkuxVcQ7EmpQuUNQep5sY4xtJq79Tlg0BYBfS+dZus1MQ5BGA5+/Y/wOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=e+gugPIe0TJOlKIHqF7TXLzrUxxJuPuM3fYt8iy2lIM=;
- b=KsjAbaSR4SxOnD0t0eq6Juu16+q7mLZRTrDQLyP83Lom30qLYQupooqvcdzHmI12Ks4XzcnMlKs6AoJLZI8Pu2kN8mC/HhLrAV73RClYAKQ4NAuQSkz1t1Ox39UStPeTi5yp3ARpu04iiu7/LTTkgs0Zk4TTKAWxmhYy3S3q/Jq+tQVVR8uBqESu9oQPlsKAtARPCR+3fUymcl9t3lxLPnd19ZBkdKvfaAOwQx9FLd77pwBbY4vg5xVh4PR6Abf9W0jUX1Ry5LR6bQ+qnh0YmPLV6/hBsOg5mgCJtcbwK718hql+jsfaiv1mRB24um3spYv22GF4mTIHwZlWB6YVxQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from IA1PR11MB7198.namprd11.prod.outlook.com (2603:10b6:208:419::15)
- by MN2PR11MB4629.namprd11.prod.outlook.com (2603:10b6:208:264::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.223.18; Wed, 22 Jul
- 2026 10:38:49 +0000
-Received: from IA1PR11MB7198.namprd11.prod.outlook.com
- ([fe80::2c4e:e92a:4fa:a456]) by IA1PR11MB7198.namprd11.prod.outlook.com
- ([fe80::2c4e:e92a:4fa:a456%3]) with mapi id 15.21.0245.009; Wed, 22 Jul 2026
- 10:38:49 +0000
-Message-ID: <97465893-3650-4f37-98b7-1db76fc6fd03@intel.com>
-Date: Wed, 22 Jul 2026 13:38:43 +0300
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 02/12] i3c: master: Use unified device property
- interface
-To: Akhil R <akhilrajeev@nvidia.com>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>
-CC: Frank Li <Frank.Li@nxp.com>, Miquel Raynal <miquel.raynal@bootlin.com>,
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
-	Philipp Zabel <p.zabel@pengutronix.de>, Jon Hunter <jonathanh@nvidia.com>,
-	Thierry Reding <thierry.reding@kernel.org>, <linux-i3c@lists.infradead.org>,
-	<devicetree@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
-	<linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20260721040805.1696503-1-akhilrajeev@nvidia.com>
- <20260721040805.1696503-3-akhilrajeev@nvidia.com>
-Content-Language: en-US
-From: Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: c/o Alberga Business Park,
- 6 krs, Bertel Jungin Aukio 5, 02600 Espoo, Business Identity Code: 0357606 -
- 4, Domiciled in Helsinki
-In-Reply-To: <20260721040805.1696503-3-akhilrajeev@nvidia.com>
+	dkim=pass (2048-bit key) header.d=siemens.com header.i=florian.bezdeka@siemens.com header.b="MSTTyez9"
+Received: by mta-65-225.siemens.flowmailer.net with ESMTPSA id 2026072211380749c849518e00020782
+        for <linux-hwmon@vger.kernel.org>;
+        Wed, 22 Jul 2026 13:38:07 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=florian.bezdeka@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=wmlJYxhu2EzyKfqOg0JEWYekO/zMAuV71yd4pxBepbo=;
+ b=MSTTyez9nr90//Pw3D7JqeWxtaNCN6qcLPBdMbJSjLaqjHgtewATRHSykFI+irhQdT9xof
+ JS3KED/R5ksXwGuA6EfD+9Xfp3VyLtilORFIOlC2cszfGqknGHaQlVVA4dOnCsT+Jb9yeB8v
+ I5f1rLAAKSfstgcZ7+0RX5/Z5cq1q3edQcHBD3CaFMNG30Nl+3te+bbDxLQR6XvzL0i1jlRn
+ ztdCeTvyqVkzKQy2tvIjdt6PnjAoM+EXvcPdadlm9YHcSaXWp4AwgEG1TTDlUqVpine1Qpv2
+ yWDH0UgmMR4c9u6FwtOt/ncvX/S0iSnZIcwT4kqiEh8P8hwEcepcdznQ==;
+Message-ID: <c1ff485a688b4ee00b1dc3b1d94644b54d12a69f.camel@siemens.com>
+Subject: hwmon: (nct6775) Out of bounds access to NCT6116_REG_TEMP_SOURCE
+From: Florian Bezdeka <florian.bezdeka@siemens.com>
+To: linux-hwmon@vger.kernel.org
+Cc: Guenter Roeck <linux@roeck-us.net>, "; Bjoern Gerhart"
+ <gerhart@posteo.de>,  "; Jan Kiszka" <jan.kiszka@siemens.com>, "; Andreas
+ Ziegler" <ziegler.andreas@siemens.com>
+Date: Wed, 22 Jul 2026 13:38:06 +0200
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: DUZPR01CA0103.eurprd01.prod.exchangelabs.com
- (2603:10a6:10:4bb::15) To IA1PR11MB7198.namprd11.prod.outlook.com
- (2603:10b6:208:419::15)
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR11MB7198:EE_|MN2PR11MB4629:EE_
-X-MS-Office365-Filtering-Correlation-Id: c0129dac-2a10-49b5-23e1-08dee7dd6a80
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|23010399003|366016|6133799003|18002099003|22082099003|4143699003|11063799006|56012099006|10067099003;
-X-Microsoft-Antispam-Message-Info: SmLTPjqWX7i6SJoPEhPj8DFqGnPp5pFHnNUf4B3LYKIwuohSZOAVoqmHFQib8R4zA6m/lznHqyWsBRya8GBdtIp9cPar1y86isUXPM3lP2lvNZrWQhqseZ8UFAlWFG74BtwWvWL/lHLoaypcvmafZ1+suRxkw0SARVmN1anFve8Lf4Uun/fKw5j2mDkk0NQlnvY5rWDnsIfxT99RYojwx3ZNbYl7Xf51Mz2ReyZZiEBh73z3vwhntz5QJPSCjhI83pxNdnZRHpST/4dGOYAOvNzdQPdSskvqcYvY5YW/i105I8pi42y0gBPa7tl1RqBDqOjx/Ur3xWDphwblcoSFOvJD8DahPioSbQd1xVHBomb9tn5AuFvDFEhSI5tLKxtPPaHX2fNkKqGDMkZ/WFSOR7HtUMErViM8xMBw9iNKDgBezZVUdwRYtksMn9QfikiuQ67bCy10vazOW1vgv9ASSfZj8bBhtJ9th8opyTD3O7DDXO28pF7cWT7+CDQ0VN2yfKPIvTMXBxfAYdWt6E1HBkVKpM/bW4EAGWSxZU7NRPy8OrHa51iSBryfJTyMeS4C8GTcVhMRuFXKOE4xZvh2J8XL5H9bduOfJXfP4+UL4sEarFCVF3WrvtE3TMP1ENfvMi2IbX/vdwGFL0U4zKCX4K3vBFp947BqweX+EVPoEfM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR11MB7198.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(23010399003)(366016)(6133799003)(18002099003)(22082099003)(4143699003)(11063799006)(56012099006)(10067099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b2dBOUxqbWhQOTRyNWVmS0d1T1N5ZGVraFozdEVKWkp4bXQ4UGs4clg5blA4?=
- =?utf-8?B?M2N5a0YzSFFKQzNGOVNIMmcxckdUQjFHVWRwajR5L1EyUW92NVdIL2Nmamdi?=
- =?utf-8?B?WUtXMTZCMENmR1NVdHl4SGlnK1ZTMElLU1ZiV0xNZnBqL0g3NUQ4K0UzM2dE?=
- =?utf-8?B?WVpaR2FhU3NidVFwdHJ1ZzVyVVg1MmpPRU1QZFlsVWxoWVJ3bm8weEhEelIw?=
- =?utf-8?B?dDVURVNMMEc0WmNWa0R6cm9DRWdzMEFMbkR4ZXU5MWI1NXN3ek1KQlQyRDYw?=
- =?utf-8?B?Y3VkQWFQNHIzcUpUaGNOallDUjFpV2QzdkJhZlVUbldMR2Q4WnNkaUtIeUs4?=
- =?utf-8?B?d3pVZ0hxUUpYeXhUWWluRE1iekR0NEZUVUo3SUZEaGpXZEU2Z29FeE1hTHNP?=
- =?utf-8?B?cmFxbVpWV1U5eEtwVjR5NnNTVjhUTGdkVENmUDBGK3FQdlBIam1WUE16YmF2?=
- =?utf-8?B?TlJKcEw4REVMVGhjN1RqU3ZYK0JwYXV4SVRzRkZuM1pEK3orZ0FTemh1YjFX?=
- =?utf-8?B?SkFuVHBkK2JVZFJCWEdtTll1RHZERW53TU5wNDFJZmlyaEdXK1ZDWGl6NnNE?=
- =?utf-8?B?R1NUK1RWcmRzc1BHV1kwYjFXVkdhR2d3ejRZaWNWKzYxVVZDRkYrWGtLS3c4?=
- =?utf-8?B?R2ZZcEY5QzJxVEdreVpqMlFSWDMrSHF0VHl5TFBJTnQ0VWRIb3pwaFJFSHVk?=
- =?utf-8?B?V0FwK3lGY3lVTmhwSXNITVZ0V3Z3MXljZ3IvU0pqSzR6R3RFRGdIb1J5ME9D?=
- =?utf-8?B?Y2syaU1RM2sweDhCOGl6Mmd2VnltWkRaR0ExNkxocG5Ed003TTJWeUFMTEUz?=
- =?utf-8?B?ZFduRUF6Q0xzang0UlZlL0RtMDIvSmdnK0RqaTBTQTV6QXJFZ1Z1Z1RYQi9j?=
- =?utf-8?B?SlE1VnhnMVR3WWRVeWl4ZE03Q2V0U21zOGJXaXdzYWh4N09jTXlnU0lsK1E2?=
- =?utf-8?B?ZjhhWkZtUC9mUWNIZ2dsZE5XdHoydHlINWtHQlRWcTFScXRmcTVTVzhmUndY?=
- =?utf-8?B?MjJnVHpDbTVOKzM1NkxxSitrNTZkN3lSdnVhdGxNV3FGMjAxVDBqZ01adHZB?=
- =?utf-8?B?YjdKM3NUdEt2VXlVSGoyK2V3bW9FLy91YXhHSlRKMzU0aU41UVV6YjlnUVRU?=
- =?utf-8?B?aHhrelRYOXJIWTh4b2doalozWEo4WTUvdDFtUkJpSHhNWTlJZm9rZldHWktk?=
- =?utf-8?B?SFZORlJXMFM3MnFJS3BmekhjMEc4ZXlWSHh2NVFmSHB1S1NSZ2dWb2lIdUVv?=
- =?utf-8?B?Q1dJMmNoMTdFQThJSnlPVTVkOUFmSFl0Y3ZlcXEyUUFwOUZoeEg2OE5XYmda?=
- =?utf-8?B?RTJjZG51V3p2bnAvQXhtWVBQSXkxRnVJNzNsckovRVFJakVSaGhlbkJoN0NI?=
- =?utf-8?B?N1V2ak5FMG5jMk5RSHpxNFZUVkxudW9KbkpHTTY3Y1k0NWJGd3VkQ0dLVlZG?=
- =?utf-8?B?K0JBb3NrTWJ6alIvNUVveEgvNndwQTZMdEZ3WGY3WU9qVEN1SlRNaVFLTnFD?=
- =?utf-8?B?ZURYWXIvWXRZUGNKbXRvQzRpckNxZDY3aUQ2Y2xncDh0S0JyaXBZK0k0a1RN?=
- =?utf-8?B?Lyt0NlFtUG8wdkFqTDNvc0xGZllDVDBiMDJiME9ObkwxS3B1c2VpUTRaTUR5?=
- =?utf-8?B?VXVNbmcrQmlnamdXQXZkeWZ2aWg4a2pkK3hORjNvRk16R2FlS1VwOXhYRTdn?=
- =?utf-8?B?MExidHBxZ1N3NjVlSkUzNXZIVlNFQXZSbGRnb1dLS0JPbXlTaHFMV1pGMjBS?=
- =?utf-8?B?RDJMRkdMSjBjS21RVGN6bUZyczlWZ09qWWU3NkhhdlpSTTUwUjMzL0xVcUNK?=
- =?utf-8?B?alROaWo2M2tVMlJ1bVQ3ci9zbFdLZHhhME1hc2lTSHdaWE9SVHJUUCtCSjln?=
- =?utf-8?B?UXpGa3loUkdhK1FsWExXUHduOEVWc2ZvV2h3UnBtWTVjVXlTdWhLOWlFYVZy?=
- =?utf-8?B?K21aNWRmNTFFdUgvY2Z6ZDlpU290K0NrYTFPQ2VFcm45WXNHWFZNSGdha1lD?=
- =?utf-8?B?Rk9iK3ZWT01JREJEcjdNQnBXRHZTT3FHd2o3ZlRRVzNONXJhU2x5NEU0S0Rz?=
- =?utf-8?B?a1dycTNpUm1aRU1GbVhYQUUwcjdGUFRpTjkxSldaTUxRTEdoT1F2Y0JiSXFL?=
- =?utf-8?B?b1JlRGdYNVhqaDJaK21YYVQxRjFycUoxQ1RxdUNUUGZmYUQyYkIwbWtEWVZt?=
- =?utf-8?B?UFN5QnBldWY4NWtLbFhXYmRFVy9SOFduQXRpTlRvSTlnYkFXTXlpSmQxUGcz?=
- =?utf-8?B?U0hvUmh6MjhTQUtBbmFhVXhteFc5MzZpNFIycmlCaHcrRzB4NU11QkdLQnFr?=
- =?utf-8?B?NjlKd0dtSWpNYTd6VDVrcHFRUzlhMHRQeGNHK3h3OHRxM3JZNUpQT00xd205?=
- =?utf-8?Q?AGBWUyNugkuO6kzg=3D?=
-X-Exchange-RoutingPolicyChecked: hkSTgHlck2cefqDMqr9DYFtbvQMzoLf06o0tlQyQIcTryIj99Ix1V0bibDtgrVUkE+XMvSEN4GGSYIKQk8Q/w836ByvZhZgoNVyX5IJxWkq5SIa6VHqu10M+8Cp7gRdb+eqwe8j1Vp2fGkwTlSrcYrFty4OMxICyaxPmsJ6jZD1JRsZ0yJLEXdBjkTxkXoX+sgNVaAO22ABA/5GeurdxUJ6LJ1CXeAUV5U3v/OecJaIG13jBXTQr0anP3SoTK4rwnw+N/bXLHn2nDv9vuQDWbWmWbZnLZ9X7zPi47AsHI21aYOg4pdYgoGsLKexMpsvg70Eb9QrDJNJU78cTy3eCJA==
-X-MS-Exchange-CrossTenant-Network-Message-Id: c0129dac-2a10-49b5-23e1-08dee7dd6a80
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR11MB7198.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2026 10:38:49.6004
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ByUoKNol5q/porRWWqkuRXMhJYiTDycpUW8kPJ8D1+2+uN88RgAdQaGdDmsN9+b5Cb2ozl2rzEcOPEnFnB4Z+g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4629
-X-OriginatorOrg: intel.com
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-68982:519-21489:flowmailer
 
-On 21/07/2026 07:07, Akhil R wrote:
-> Replace all OF-specific functions with unified device property functions
-> as a prerequisite to support both ACPI and device tree.
-> 
-> Reviewed-by: Frank Li <Frank.Li@nxp.com>
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> ---
->  drivers/i3c/master.c       | 77 +++++++++++++++++++++-----------------
->  include/linux/i3c/master.h |  5 ++-
->  2 files changed, 46 insertions(+), 36 deletions(-)
-> 
-> diff --git a/drivers/i3c/master.c b/drivers/i3c/master.c
-> index f1be38a640ca..4b3d9628bc39 100644
-> --- a/drivers/i3c/master.c
-> +++ b/drivers/i3c/master.c
-> @@ -13,10 +13,12 @@
->  #include <linux/dma-mapping.h>
->  #include <linux/err.h>
->  #include <linux/export.h>
-> +#include <linux/i2c.h>
->  #include <linux/kernel.h>
->  #include <linux/list.h>
->  #include <linux/of.h>
->  #include <linux/pm_runtime.h>
-> +#include <linux/property.h>
->  #include <linux/slab.h>
->  #include <linux/spinlock.h>
->  #include <linux/workqueue.h>
-> @@ -491,7 +493,7 @@ static void i3c_bus_cleanup(struct i3c_bus *i3cbus)
->  	mutex_unlock(&i3c_core_lock);
->  }
->  
-> -static int i3c_bus_init(struct i3c_bus *i3cbus, struct device_node *np)
-> +static int i3c_bus_init(struct i3c_bus *i3cbus, struct fwnode_handle *fwnode)
->  {
->  	int ret, start, end, id = -1;
->  
-> @@ -501,8 +503,8 @@ static int i3c_bus_init(struct i3c_bus *i3cbus, struct device_node *np)
->  	i3c_bus_init_addrslots(i3cbus);
->  	i3cbus->mode = I3C_BUS_MODE_PURE;
->  
-> -	if (np)
-> -		id = of_alias_get_id(np, "i3c");
-> +	if (fwnode && is_of_node(fwnode))
-> +		id = of_alias_get_id(to_of_node(fwnode), "i3c");
->  
->  	mutex_lock(&i3c_core_lock);
->  	if (id >= 0) {
-> @@ -837,7 +839,7 @@ static void i3c_masterdev_release(struct device *dev)
->  	WARN_ON(!list_empty(&bus->devs.i2c) || !list_empty(&bus->devs.i3c));
->  	i3c_bus_cleanup(bus);
->  
-> -	of_node_put(dev->of_node);
-> +	fwnode_handle_put(dev->fwnode);
->  }
->  
->  static const struct device_type i3c_masterdev_type = {
-> @@ -1044,7 +1046,7 @@ static void i3c_device_release(struct device *dev)
->  
->  	WARN_ON(i3cdev->desc);
->  
-> -	of_node_put(i3cdev->dev.of_node);
-> +	fwnode_handle_put(dev->fwnode);
->  	kfree(i3cdev);
->  }
->  
-> @@ -1928,7 +1930,7 @@ i3c_master_register_new_i3c_devs(struct i3c_master_controller *master)
->  			     desc->info.pid);
->  
->  		if (desc->boardinfo)
-> -			desc->dev->dev.of_node = desc->boardinfo->of_node;
-> +			device_set_node(&desc->dev->dev, desc->boardinfo->fwnode);
+Hi all,
 
-i3c_device_release() "puts" the node so there should be a "get" here.
-Should probably fix that before switching to device properties.
+while debugging a completely different issue on 5.10 the following KASAN
+report came up. To my understanding the same problem still exists in
+current versions.
 
-Also seems like the of_node_get() for boardinfo for both i3c and i2c
-has no balancing put.  Again, it would be good to get that sorted out
-before switching to device properties.
+There seems to be a size mismatch between=20
 
+data->REG_TEMP_SOURCE =3D NCT6116_REG_TEMP_SOURCE;  // 3 elements
+
+and
+
+num_reg_temp =3D ARRAY_SIZE(NCT6106_REG_TEMP);      // 6 elements
+
+The NCT6116 tries to re-use some NCT6106 infrastructure, which seems
+wrong in that case. NCT6116_REG_TEMP_SOURCE is NCT6116 specific.
+
+To my understanding the issue was introduced with=20
+commit 29c7cb485b32 ("hwmon: (nct6775) Integrate new model nct6116")
+
+Some guidance on how to properly fix that issue is needed. I don't have
+any data sheet of this piece of hardware available, so I can't tell
+which registers are the correct ones.
+
+Best regards,
+Florian
+
+[   20.345420] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+[   20.345427] BUG: KASAN: global-out-of-bounds in nct6775_probe+0x936/0x46=
+f0 [nct6775]
+[   20.345455] Read of size 2 at addr ffffffffc19561a6 by task modprobe/954
+
+[   20.345465] CPU: 4 PID: 954 Comm: modprobe Tainted: G           OE     5=
+.10.223-cip51-rt21+ind4 #1
+[   20.345475] Hardware name: SIEMENS AG SIMATIC IPC PX-39A PRO/A5E51244450=
+, BIOS V29.01.03 02/07/2023
+[   20.345479] Call Trace:
+[   20.345484]  dump_stack+0x7d/0xa7
+[   20.345500]  print_address_description.constprop.0+0x1c/0x220
+[   20.345513]  ? __kasan_kmalloc.constprop.0+0xc9/0xd0
+[   20.345523]  ? __kmalloc_node_track_caller+0x194/0x5b0
+[   20.345537]  ? nct6775_probe+0x936/0x46f0 [nct6775]
+[   20.345574]  ? nct6775_probe+0x936/0x46f0 [nct6775]
+[   20.345610]  kasan_report.cold+0x1c/0x34
+[   20.345623]  ? nct6775_probe+0x936/0x46f0 [nct6775]
+[   20.345662]  nct6775_probe+0x936/0x46f0 [nct6775]
+[   20.345705]  ? store_temp_beep+0x270/0x270 [nct6775]
+[   20.345737]  ? kernfs_create_link+0xbb/0x120
+[   20.345749]  ? acpi_dev_pm_attach+0x30/0x170
+[   20.345760]  platform_drv_probe+0x47/0xa0
+[   20.345768]  really_probe+0x184/0x6b0
+[   20.345774]  ? driver_allows_async_probing+0x80/0x80
+[   20.345779]  driver_probe_device+0x119/0x180
+[   20.345785]  ? driver_allows_async_probing+0x80/0x80
+[   20.345790]  bus_for_each_drv+0xed/0x150
+[   20.345794]  ? bus_for_each_dev+0x150/0x150
+[   20.345799]  ? migrate_enable+0x1fe/0x250
+[   20.345807]  __device_attach+0x13a/0x2e0
+[   20.345812]  ? really_probe+0x6b0/0x6b0
+[   20.345817]  ? kobject_uevent_env+0x186/0x910
+[   20.345826]  bus_probe_device+0xfc/0x120
+[   20.345836]  device_add+0x64c/0xd50
+[   20.345845]  ? devlink_add_symlinks+0x3e0/0x3e0
+[   20.345852]  ? __rcu_read_lock+0x1b/0x30
+[   20.345864]  platform_device_add+0x1c0/0x370
+[   20.345877]  sensors_nct6775_init+0x465/0x1000 [nct6775]
+[   20.345899]  ? 0xffffffffc1970000
+[   20.345905]  ? kobject_create_and_add+0x2d/0x70
+[   20.345910]  ? __list_add_valid+0x41/0x70
+[   20.345917]  ? idle_cpu+0x45/0x90
+[   20.345921]  ? irq_exit_rcu+0x5d/0x100
+[   20.345927]  ? 0xffffffffc1970000
+[   20.345931]  do_one_initcall+0x87/0x340
+[   20.345937]  ? perf_trace_initcall_level+0x250/0x250
+[   20.345943]  ? memset_erms+0xb/0x20
+[   20.345948]  ? kasan_unpoison_shadow+0x33/0x50
+[   20.345954]  do_init_module+0xe4/0x390
+[   20.345961]  load_module+0x3f30/0x41d0
+[   20.345974]  ? module_frob_arch_sections+0x20/0x20
+[   20.345981]  ? kernel_read_file+0x1d2/0x3e0
+[   20.345987]  ? __x64_sys_fsopen+0x200/0x200
+[   20.345993]  ? kernel_read_file_from_fd+0x5b/0xa0
+[   20.345998]  __do_sys_finit_module+0x110/0x1b0
+[   20.346003]  ? __ia32_sys_init_module+0x40/0x40
+[   20.346008]  ? randomize_page+0x60/0x60
+[   20.346018]  ? __ia32_sys_fstat+0x30/0x30
+[   20.346030]  ? __audit_syscall_entry+0x193/0x200
+[   20.346042]  ? ktime_get_coarse_real_ts64+0x4a/0x70
+[   20.346055]  do_syscall_64+0x30/0x80
+[   20.346063]  entry_SYSCALL_64_after_hwframe+0x67/0xd1
+[   20.346069] RIP: 0033:0x7fc77b7a4fd9
+[   20.346086] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 =
+89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48=
+> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 87 8e 0d 00 f7 d8 64 89 01 48
+[   20.346093] RSP: 002b:00007fff67806118 EFLAGS: 00000246 ORIG_RAX: 000000=
+0000000139
+[   20.346108] RAX: ffffffffffffffda RBX: 000055b2be38bff0 RCX: 00007fc77b7=
+a4fd9
+[   20.346113] RDX: 0000000000000000 RSI: 000055b2bde4d260 RDI: 00000000000=
+00001
+[   20.346118] RBP: 0000000000040000 R08: 0000000000000000 R09: 00000000000=
+00000
+[   20.346122] R10: 0000000000000001 R11: 0000000000000246 R12: 000055b2bde=
+4d260
+[   20.346127] R13: 0000000000000000 R14: 000055b2be38bf50 R15: 000055b2be3=
+8bff0
+
+[   20.346222] The buggy address belongs to the variable:
+[   20.346225]  NCT6116_REG_TEMP_SOURCE+0x6/0xffffffffffffde60 [nct6775]
+
+[   20.346254] Memory state around the buggy address:
+[   20.346259]  ffffffffc1956080: f9 f9 f9 f9 00 02 f9 f9 f9 f9 f9 f9 00 02=
+ f9 f9
+[   20.346265]  ffffffffc1956100: f9 f9 f9 f9 00 02 f9 f9 f9 f9 f9 f9 00 02=
+ f9 f9
+[   20.346269] >ffffffffc1956180: f9 f9 f9 f9 06 f9 f9 f9 f9 f9 f9 f9 00 02=
+ f9 f9
+[   20.346272]                                ^
+[   20.346276]  ffffffffc1956200: f9 f9 f9 f9 00 02 f9 f9 f9 f9 f9 f9 00 02=
+ f9 f9
+[   20.346280]  ffffffffc1956280: f9 f9 f9 f9 00 02 f9 f9 f9 f9 f9 f9 00 02=
+ f9 f9
+[   20.346282] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
