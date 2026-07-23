@@ -1,75 +1,78 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50BA73B42F6
-	for <linux-hwmon@vger.kernel.org>; Thu, 23 Jul 2026 06:28:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5521E3B52E6
+	for <linux-hwmon@vger.kernel.org>; Thu, 23 Jul 2026 06:29:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784788089; cv=none; b=AYCtLBd4dwfT02r8XlI0s6R18zEUSuhFxQjS53bN/f8p7dsBobg7vLhZ3GlJmynjJMjZsMX5Zg9ZBk6mBf6XM0KylDYCXRr6TKwWzX4w2icqCRmErYEPtsA367hcJrTGFLfW7Wejub700U+gx8ST61Vd/wmqSctf39diBS6bSoI=
+	t=1784788200; cv=none; b=ReKUOwYKBdjSgDeKOF70mmnIYCrHYbehgtbKLmzsKd+7YaxiiqHQ/o5zUABfUfkgr0y5bQuDJFNiJ2X5qgMuYeqgNWpAKjT7GZMUEQ+vcuUXGmjUci48J5eARVxD5n3AvyU3dpHdmTouUawbn2n22CqlM4BYp/dbdvUAWQT1OIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784788089; c=relaxed/simple;
-	bh=TQAEV7UNUSBt5hCHAIhIYZaRcGmEyjeZFj3OyVcrCeo=;
+	s=arc-20240116; t=1784788200; c=relaxed/simple;
+	bh=uozDH4XEIfou8SOxvvK+z4mvTO/pfJIURoO4Y8ZM6LA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ULrilIs8QHnYv8VkY900Ooejkvi5QU9/Ch9mv7Cn4w9uuDjWl5jRK8viSqNObLx0f5xBDrEGn/fXYB7hw913jqSntijkewtreWRt7YaSYUqihSuXRVX3U8xnIjVVfFAU1JeL/5b/7+5q70yt7Mq9iyPShJp57F+Zp7Ann0ZM8dU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=e8n4LgNd; arc=none smtp.client-ip=209.85.221.43
+	 Content-Type:Content-Disposition:In-Reply-To; b=O3aOguKD06iV0d/qFqOhQNI7oj31zeXBXe6vd8Cny/65RKyul2S/EYlbCfFtVb2vXFYZ/A7C1cdWOJEzxdahZAHXnnxHULBedVMYG46h4H0rdVmUQKIKhvLHJpLNsS400qNTCNwO2WBgTj7y2+yaMTog/z7Nna3s/7Z+aLE4vp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=NHG+g/P/; arc=none smtp.client-ip=209.85.221.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="e8n4LgNd"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-47f752b3423so132262f8f.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 22 Jul 2026 23:28:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="NHG+g/P/"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-47f64ca1c2dso30935f8f.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 22 Jul 2026 23:29:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1784788085; x=1785392885; darn=vger.kernel.org;
+        d=baylibre.com; s=google; t=1784788197; x=1785392997; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=2TD6c2aawyPviSqpm5Nt3rY9T6uJCx1d6aW8Jwv1HfI=;
-        b=e8n4LgNdC8mDUP3yGwpA3WlCKZ3sVXKKgl7G9mOyX0iWUQKXry8iF+ynsURmyyOq4S
-         Y/e05FSvJsWQE0TRHQtzo4s84+9fvoKFiFDc19mHET/KbgGDnMVth4b2XLYBuMFs6KDy
-         Emt7xCYDPjrVHbUhSP7UlvYeuMXLzJs2CnZKkNg7+2zI9RdNCteuLxPSSjZ2PRh1dgV2
-         2ziHW6Rm+MgeDnHuwE4Nyxwrk8a/TFe6URh6NL/TN/gPBNixDHA0DzrMj1gMIMDSErzF
-         jOu53lVJs+aeG7w90UvOFiNSotx7IgIXckaIAMIuCXQVsRdkbcB668unOmHgWP1XT7cZ
-         p/ww==
+        bh=uozDH4XEIfou8SOxvvK+z4mvTO/pfJIURoO4Y8ZM6LA=;
+        b=NHG+g/P/bUGjqS1muu1hi2MTDTYqc3WJmQ4kmoSpKP8plbhkwHH6BXtZKrQsgH6SJ8
+         7X6MUzEZUt/mi62jRRc5O3QK9d5GgRLbWvknmKUayVkLgkydV2xXpnIlVBcu739nJoHJ
+         4mSNHR6eoHBrAf1tRwu01lq3sK5m/6rClQ2HlfLz4vGI0kyFjdasCO0k5Dni4Z14AN0Z
+         proSqh3I4NvD40Q8RonpF/gp3LYayRcHIQ1Rk4VwzOMQD6OlzRdgjbN5QhCrmXz7CaNZ
+         rKA9TILcKa4aMPZErqtgWF8RrCvxRasypLvnUvM2+pD8c5nrQMUpzpIu8BT9tbsLuMay
+         uBuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784788085; x=1785392885;
+        d=1e100.net; s=20251104; t=1784788197; x=1785392997;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=2TD6c2aawyPviSqpm5Nt3rY9T6uJCx1d6aW8Jwv1HfI=;
-        b=juXuRe0kNgIwi8mMbj1oNVR1PrtGENFaZXMi5cFXcxwGrdKxJmmE9lXXglSwJwOR1b
-         9fn9L4164WsK0NBg09++fI84d0DtopvrGH2zlJ0GR64buTmGhwFSPp8HuKAuQvrbMDIG
-         ewYUCObHlQ1I+66bhOHWB7PvFddeCf/bkSuaMvleQIoaHPbnjM/Sg9dd3w9GDab4w1WG
-         EWWjfmAo/L1MzjKeo8V2hZ1/Jbn41eBpM0bmjrKXflbppoNNbdt79ZA8EpJJSldvU3r6
-         22yNhmpeiSaiUhUViDsSOh2qUtevQ8rz2iZIIjR795EKuKX5uAWDSM81uyW+rntyyn9O
-         2+bA==
-X-Forwarded-Encrypted: i=1; AHgh+RpR+UGCn9+t06BNZiHc2GIJog066bLm30nfCrBki/j9PHxmvGlk8dih8Uy0dMAsy2qZ4I1SG/M+sbIbrQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0vZ47UeBft0Wxp3tvD7Q63+AOOiBSn4nupzA6B90IGGVk+72J
-	PGSa+yQly9yMM0kERtmo8FrnGVHb+t4VCFsg+Dy4z9uIOm5TzGygviAYkwLF9Bx92MY=
-X-Gm-Gg: AR+sD13kqQWCN54DO4i+6olzvulAxwUVwhJ8QEQ96Fn4ObH0lRL5txuG90U0VoGtJGK
-	Sdyyya2IjYWLOHpVRfQPazHV13H6VF//yy+71hXcbTOR6HGHxVMkclPOvGtxSX27isTdtUvwb9C
-	UUxB9DNSL4v0c0d5uDKFr777JfiPgp+Be0k3ZBTzYEIowEVOWxQb8u5HYz9AZ0kYVQZV4FhMs7M
-	ZiJqLeMbYrSMSisXj3tfEEfJspUBJGTNUr3cKc39UHvlCScpHJPBcNwYfeLctuPKBpp01shhNy7
-	jB+q/aX93eaiyNENHqnjyhLBVU8ExKUiob8T9fRyUq58LzdFu5j+HzfQyEdxs0JGssfBq4T+9jN
-	jyTVUeXqlaIMYMPb9mVVgl07g+20eyDy67Z+yzUUaueC1wKfEJtULLQCmaqBF314eSAUXHw2mpr
-	drw1UGz44=
-X-Received: by 2002:a05:6000:22c7:b0:47f:6fd2:12ff with SMTP id ffacd0b85a97d-47f8da5c9efmr1980906f8f.9.1784788085516;
-        Wed, 22 Jul 2026 23:28:05 -0700 (PDT)
+        bh=uozDH4XEIfou8SOxvvK+z4mvTO/pfJIURoO4Y8ZM6LA=;
+        b=ZdgY+mlW7PGm+l1BntPBHll1kNcqOWCtAy/GGYJGI8w42dUJjviaMolY8lBsn9lZTZ
+         kTXQgGQ9KGSBc0RE/2t7Jt9x/s8uKv+xrXpHy/EsA8qF3H7D9Eu6lZ1NGLiVDfegVPhh
+         hs3Vp6XQECWMggP4LsuVIyhj0adIhIIsPauaxclDKYaS/n0HVZXP+BVZz7zKoEx5uGHX
+         pzNx9UFC5viZld3yEaBX4IQf8A45gfL8+p2xWvE+HDtzLYBzRyFzTg97uNkpO2PQQviX
+         oBIv7WXpDX1j9R0/gckWGTVlfdKSmt4wwp9mqoVL1PE9etlwCGjJJHK3ZaX0wwKcjFdn
+         Gf0A==
+X-Forwarded-Encrypted: i=1; AHgh+RodwQZZ/0y5t9jYggZ+YE3ClJRz3EAvpDmaHu6Na18N2FWxVFtfSqvbkDH8aWVGZ5kyopz8jMftj5+vRQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOHaf7A+rpiQN1pulZqg+RmpNCN2v5c8D0KbZCv+qZJaeCHZcX
+	7XZAl5Pken3Nlg9S08/AJDLS+g4PrLsqJosHvAVUew0NnedZ83sok6I0XUJwx4FXlKg=
+X-Gm-Gg: AR+sD12njnlvYze5mzl1Q7+kQ6cXUqTAD0nvtEg8qz6dVMcIEUqFOlXvx79pj+a25d6
+	ScH5z7m94R1ecy5R61p6qdwO5btaBE7ETKLmRZgYClezTAC4wrneijD06uj0Z5xxe2g0RuexAXf
+	lTA7Kq+04dR/VNj2yF+fE42P1Mcn58Kb2vnE5wIX9Z6sztILVZoGsM2XXsk2bUD5ymkVjMe+eWR
+	PXsudEMrlEg6Dw4y4lfRmh1pQyV0tR+3fKFsTG8KRFCxXOPO9xK+QriW0LvSjJYuiCYS3gIX1LL
+	pM3Q5VAowaz+jBrW/+rjKzZd55726aBfbMkdhldt+QONxEH8l/t49e/pa81dO3Mj+HlRy8mCwHc
+	kAlEyA6HwBisNf3xvSuL6qIbsmHH8glUHyO7ZjhdAYlgAUIjk5t3SvkIpEL3wpO2wWTsiOSjpDA
+	dkWEtyKu4=
+X-Received: by 2002:a05:6000:4610:b0:47f:45d1:7b74 with SMTP id ffacd0b85a97d-47f8dca6c5fmr1936289f8f.58.1784788197625;
+        Wed, 22 Jul 2026 23:29:57 -0700 (PDT)
 Received: from localhost ([2a02:8071:56d1:2de0:1d24:d58d:2b65:c291])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-47f85b9a5c4sm12114701f8f.8.2026.07.22.23.28.04
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-47f85c631fdsm12158433f8f.28.2026.07.22.23.29.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 23:28:04 -0700 (PDT)
-Date: Thu, 23 Jul 2026 08:28:03 +0200
+        Wed, 22 Jul 2026 23:29:56 -0700 (PDT)
+Date: Thu, 23 Jul 2026 08:29:56 +0200
 From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] hwmon: (emc1403) Convert to use OF bindings
-Message-ID: <amGz2YZogakb5XAv@monoceros>
-References: <20260721095935.439174-1-clamor95@gmail.com>
- <20260721095935.439174-3-clamor95@gmail.com>
+To: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
+	Stephen Boyd <sboyd@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>, 
+	linux-hwmon@vger.kernel.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, mfd@lists.linux.dev, 
+	Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
+Subject: Re: [PATCH v2 02/10] hwmon: Add Qualcomm PMIC BCL driver
+Message-ID: <amG0f57O5-e_Qg5z@monoceros>
+References: <20260722-qcom-bcl-hwmon-v2-0-febe2805e17b@oss.qualcomm.com>
+ <20260722-qcom-bcl-hwmon-v2-2-febe2805e17b@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -77,89 +80,44 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="l6sn4pufjezkt2ci"
+	protocol="application/pgp-signature"; boundary="bd4y6yvvhvmkobl7"
 Content-Disposition: inline
-In-Reply-To: <20260721095935.439174-3-clamor95@gmail.com>
+In-Reply-To: <20260722-qcom-bcl-hwmon-v2-2-febe2805e17b@oss.qualcomm.com>
 
 
---l6sn4pufjezkt2ci
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+--bd4y6yvvhvmkobl7
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v3 2/3] hwmon: (emc1403) Convert to use OF bindings
+Subject: Re: [PATCH v2 02/10] hwmon: Add Qualcomm PMIC BCL driver
 MIME-Version: 1.0
 
 Hello,
 
-On Tue, Jul 21, 2026 at 12:59:34PM +0300, Svyatoslav Ryhel wrote:
-> From: Jonas Schw=F6bel <jonasschwoebel@yahoo.de>
->=20
-> Add OF match compatible table to be able to use this driver with Device
-> Trees.
->=20
-> Signed-off-by: Jonas Schw=F6bel <jonasschwoebel@yahoo.de>
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-Please put your S-o-b line last.
-
-> ---
->  drivers/hwmon/emc1403.c | 16 ++++++++++++++--
->  1 file changed, 14 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/hwmon/emc1403.c b/drivers/hwmon/emc1403.c
-> index cd753b38709f2..b7ab6069ec7b1 100644
-> --- a/drivers/hwmon/emc1403.c
-> +++ b/drivers/hwmon/emc1403.c
-> @@ -16,6 +16,7 @@
->  #include <linux/hwmon.h>
->  #include <linux/hwmon-sysfs.h>
->  #include <linux/err.h>
+On Wed, Jul 22, 2026 at 12:00:07AM +0530, Manaf Meethalavalappu Pallikunhi wrote:
 > +#include <linux/mod_devicetable.h>
-
-Don't add <linux/mod_devicetable.h> please. struct of_device_id is also
-provided by <linux/i2c.h> so adding <linux/mod_devicetable.h> isn't
-needed.
-
->  #include <linux/sysfs.h>
->  #include <linux/regmap.h>
->  #include <linux/util_macros.h>
 > [...]
-> @@ -682,10 +683,21 @@ static const unsigned short emc1403_address_list[] =
-=3D {
->  	0x18, 0x1c, 0x29, 0x3c, 0x4c, 0x4d, 0x5c, I2C_CLIENT_END
->  };
-> =20
-> +static const struct of_device_id emc1403_of_match[] =3D {
-> +	{ .compatible =3D "smsc,emc1402", .data =3D (void *)emc1402 },
-> +	{ .compatible =3D "smsc,emc1403", .data =3D (void *)emc1403 },
-> +	{ .compatible =3D "smsc,emc1404", .data =3D (void *)emc1404 },
-> +	{ .compatible =3D "smsc,emc1428", .data =3D (void *)emc1428 },
-> +	{ }
-> +
+> +#include <linux/platform_device.h>
 
-Unusual empty line here.
-
-> +};
-> +MODULE_DEVICE_TABLE(of, emc1403_of_match);
-> +
+<linux/platform_device.h> already provides struct of_device_id and
+<linux/mod_devicetable.h> will go away soon. So please drop the #include
+for <linux/mod_devicetable.h>.
 
 Best regards
 Uwe
 
---l6sn4pufjezkt2ci
+--bd4y6yvvhvmkobl7
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmphtHEACgkQj4D7WH0S
-/k4H9Qf/eIS4Qz8jNjTZB5EcrdJYqD0cdgZY44kCeDGMBB625M8vmpG7qAv2xnqF
-0lGgOTpDoCEs+IgmNz8ISciUqEeY7PWmCge3u6jKZteesuUBX1tMrtnR5DPjVNUv
-jV6gAM1O287rIzQjp59TZ6tcQe670H3YK+tZAZOIOgpCg5C8FNUOanj9B/sGgnn8
-lF3XTCng+Kh6FacdHSPIEwi/FURNxIwy0aKXjPsxEse7EcC4fsTnmjHubUsWdtOm
-r8cBcczstoZwosFPOMzSGgft070Ay2Xq2J18y7uYgjpK22gqxuxI6tXe4fucREy9
-YSZUBJ9ebV0SVa8smQjX8NPHHGxKJA==
-=n8hC
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmphtOEACgkQj4D7WH0S
+/k49VQgAmlAG8muz6EMH5FjdlhV/oZNvJu7GJoTRj34gMkDOuJxv5eCjOKSjMT9q
+kpJaIlEzPWBL87vMjKLjzIjbrmzbQCecyRprvXwQD5kRTcHIp6VehlZoXVoEkmVE
+IHwyi4SD0DiEa8zfppjbcvaSy86X42bsR+zf9bWW2I4myMzanvPMEROEE7LvPJFG
+/ZN2+kVdAdHJCs7RVEPmaOmb75+Dr+jnkVFQC0VV1f+KSVkZEpvd+fcQXcv3GaHu
+n2iHyLpWtJeYA1uhY688Q+tPOwMAEwcHbgmIDoyYtC+DYHrlH9/4gqEsHVWD7vQO
+fmjQGvUa3+No+e0dojq+d8Go1+fZWg==
+=P/xV
 -----END PGP SIGNATURE-----
 
---l6sn4pufjezkt2ci--
+--bd4y6yvvhvmkobl7--
