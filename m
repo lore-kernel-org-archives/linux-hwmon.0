@@ -1,440 +1,219 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D2442E8D0
-	for <linux-hwmon@vger.kernel.org>; Thu, 23 Jul 2026 17:22:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26BAC44C505
+	for <linux-hwmon@vger.kernel.org>; Thu, 23 Jul 2026 19:16:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784827338; cv=none; b=V6JONiUmX3uIk9olI2lhXP7rAF7GcZfyGm4V3KAXKcFWZNrrFDUkNVHrxQw5BjqUrFUVEfeeEUfWO+Kw8gYbI/weot7PGe888ovVkrpqJ8kn67K8GiQOtwYGIEOAeYtcKBTfpul5+X6HusoW4EAxPW3fknhfPuWfOmhTKO6A+ok=
+	t=1784834190; cv=none; b=uGbsz0SxO1BySLFTu3GD1a22JEiugYcfynw6v9xPS9PtWtrJQ+3xFx9x0MS9qBgDcu/iwlDWr+7JAognwbWZJak38A/PL8f9P2tOa5aoqK+bGtChzZEeMw1AHOLaPS+XX47xh6OqEk+dYczmtzIOrWIWKaN1iJ0vx4OHDDS6w/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784827338; c=relaxed/simple;
-	bh=t4AHcoN12B1QjSi/ljYwVA9bQFM5mM/AVbU8fVBPFfE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=mKAo+HZ5I1C+yukpt9KqcIwUUcKRr3KvpERpDviVlf1ZVfID/5De6WpsJLpm1iblrrqq1VAZUn36kcMl09mGkknwKyPyJtnbCGcTXZSn+kZ8ObGr2gu0yk/CeHUpgB3ng5ahf1akwW5vxEQTttJOxWbSoIv8IFp2SbSVYjZlhDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tvP3YDKG; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1784834190; c=relaxed/simple;
+	bh=asxDQ6fQtq0+zoBrpTtg4hSVuljD7ouxIXdiKSHzxcQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a0KJsal1IgcoY14rdMka0suhE4cBGkLo7kCl7nZ8Rb5hM0kyJ3PXACAfKJP3M2umrA0nsvg0kbzFIheiD6G2+1FH2db4l2NN4bfRSPnCPGF64WIBAulpyBp8ltYDoccJJaWAn0OfvR8xJnrExnPR9f5fcMomZk/HTUqwJ9QMR88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=j8YM4+5/; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=VMt+lrpx; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tvP3YDKG"
-Message-ID: <7b986215fe644da12c4bdab1abefbf43dbb3c3eb.camel@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784827322;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3QtL7gszN3sM117kkbXH/EmXUyyGD0Xu3aTOGAdJZAY=;
-	b=tvP3YDKG7fjwNsw8YnsOBxAAS05zxqKdzbstCyBkMcNTUQUPSgOOwsz6PpETGpP5S29B+t
-	LZ6qwFvrHJmF336sAGoucVA3y8ITR5Y/B3w/LycDtoaF4hflDcde7EnprAfV7EPtBPsolk
-	Oup920+5Njk3eUy/AAF7VA8IpojQ8ac=
-Subject: Re: [PATCH v5 2/2] iio: adc: add MAX40080 current-sense amplifier
- driver
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Siratul Islam <siratul.islam@linux.dev>
-To: Stefan Popa <stefan.popa@analog.com>, linux-iio@vger.kernel.org
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, jic23@kernel.org, andy@kernel.org, 
-	nuno.sa@analog.com, linux@roeck-us.net, robh@kernel.org,
- krzk+dt@kernel.org, 	conor+dt@kernel.org, dlechner@baylibre.com,
- ciprian.hegbeli@analog.com, 	u.kleine-koenig@baylibre.com
-Date: Thu, 23 Jul 2026 23:21:16 +0600
-In-Reply-To: <20260723065036.2683075-3-stefan.popa@analog.com>
-References: <20260723065036.2683075-1-stefan.popa@analog.com>
-	 <20260723065036.2683075-3-stefan.popa@analog.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="j8YM4+5/";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="VMt+lrpx"
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66NImGLw579769
+	for <linux-hwmon@vger.kernel.org>; Thu, 23 Jul 2026 19:16:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	+YmIG/iZNAmovLkMBYqbYn5P4DPYWwSvMf5WH1pV7/Y=; b=j8YM4+5/mxhtJZA/
+	Fw7grVa5EXsQG9wnVw9HnY/SkxNvYuRc+KqREeqWrcAbdrgMwtgUlreKPlhKffSe
+	QOdGt9Po7AW6PQhp2dL96ei7Wfqo4PvYz1j6CncO9SHhGeGCIM3m7tf8/KxI3BpU
+	GvVrcq/FHHJPplYmVe9EvbkhfttV4pURzXDt0sSGGq4hbhEPKL0Pd+b3SSektTCI
+	m+6T4DRiG7MV5i16v5NqXKGtPLT3+llMwFHZyCSHctzuPITLA6aCnzrDhKOc8W11
+	JLn/W0OJcSzxD3Ex7XSd3M51TGMEGaXcJG55m404MdQ5QiDFkhTQEanX+ZorN+/p
+	eubtxw==
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4fkjnua0eg-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-hwmon@vger.kernel.org>; Thu, 23 Jul 2026 19:16:20 +0000 (GMT)
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-c96b4f58ddcso944705a12.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 23 Jul 2026 12:16:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1784834179; x=1785438979; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+YmIG/iZNAmovLkMBYqbYn5P4DPYWwSvMf5WH1pV7/Y=;
+        b=VMt+lrpxv1soFVh/cvDopZzSBOIw9Nrn4NfQVPNlT1wuQlyM9rgsvd/DZQfi/y1tEa
+         6YqxHEqN7qGV8KlAqgWGOBc2moinph0krJnxtfA1TH1KlpxyU/+m+RXia2gKLd2JYGAN
+         du5MmuqsF8PDei0ZIOz8Uz0eu7BMnuoRN6zHc/Ue0qvBsDxfBXfNMQov7VeuZQGq1sUs
+         fp8MO1xAoecVXOgFjeX9diBWr5GJHDdJGOnQMRpPYgvv/VGua4CqqoHS1Hxhmj2c02Gu
+         zoZBXfoq7Word9GaojBoHiVPxAMsHRSNA8mSQUnyOc4Gvs45edz76UI3L+icXcdBIunI
+         YH0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784834179; x=1785438979;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=+YmIG/iZNAmovLkMBYqbYn5P4DPYWwSvMf5WH1pV7/Y=;
+        b=co/OlatfYhXrR3yeF8fxDlxBCyQ+WvlB11AYY1D34A7OefjgtWoETjbuOaQR42hmM8
+         VsfLb0qXlHW5vaJRTv8hbW1kG20pDBWP6y6DXt95GvBhznaK166mC/449DVjb2DyTQ5s
+         GBuKLbZk0VovkgF+q8x88Lf6Uo15cUMlWdNOsxVrVUMR9vCYZ5RLA/jDOEAXbL5g2jid
+         3V27Xs0psEPFcYr3zNST/nm+x7T3EysOBDvljs0yCYY+eBSrSsRZcIl6V5yR9gIlCi1d
+         BVcYxX2LXiVC1psf6C93ehIjPmZTWsiF4eG41TZfAbrM25T/jLjMDMtn2TesdZGqHtvt
+         5+FA==
+X-Gm-Message-State: AOJu0Yw3LG/VtPP4Pr0/Ijjv4noE2w7buu6WwIivwrYs+8IUCRTlMxO+
+	rUPEJgccXp98NPHBMei8OOw9OUT3Rp6ZqhsxjbGeGFgyTGfJ9EAz86AfG1TrDJZzDs3qdKW2Ldb
+	JLctFQ5L0YT6xZ2ANsR+JL5Cha8zTMuxSPQQU4bqe+S3y7iHjpSnXZKpH9QmhfZkR/g==
+X-Gm-Gg: AR+sD107ZebO45d31iLREgFq/MrKV6d4xPVbdaegUEgiQGVsH2hGrwGpx//L9S5Zh/w
+	wDV303FXrXLV7JtKFAIH7aOxTHnDEBJ779TAIBZhjtvN4TBOhRaIV2r1MCG0NPHmVIwMwfMIhrr
+	0wHHow2x6XdHfNTb4wTdsK70OGvDYoF1BnzJOAILeMNnCeWspENVYQxKgi4U6Eln6iF0RTcy3a6
+	U7fTgdDbx5A7vyte/GEaCqT4CAYhOMx72/0nrL5Z/V6iFs3vdL1qnv33mGLZykjeFHD6wURSswA
+	pQ8WkwCX3VSD0J4DkdHkK7x2HStDeH31gKXlgVaKIXyiw3SnglRDWqkB/DbNYblW1I15Qn91K6i
+	M/ynTeMf9+1TaCARTJJOHooH7gPSnDPTb
+X-Received: by 2002:a05:6a21:103:b0:3c1:d78:6457 with SMTP id adf61e73a8af0-3c44b02ea57mr4433547637.32.1784834178838;
+        Thu, 23 Jul 2026 12:16:18 -0700 (PDT)
+X-Received: by 2002:a05:6a21:103:b0:3c1:d78:6457 with SMTP id adf61e73a8af0-3c44b02ea57mr4433501637.32.1784834178262;
+        Thu, 23 Jul 2026 12:16:18 -0700 (PDT)
+Received: from [192.168.2.3] ([49.204.16.42])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3147e070538sm22149978eec.20.2026.07.23.12.16.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jul 2026 12:16:17 -0700 (PDT)
+Message-ID: <c1db2ca4-ad1c-440f-bff8-eb7660af8021@oss.qualcomm.com>
+Date: Fri, 24 Jul 2026 00:46:11 +0530
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 02/10] hwmon: Add Qualcomm PMIC BCL driver
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+Cc: linux-hwmon@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mfd@lists.linux.dev, Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
+References: <20260722-qcom-bcl-hwmon-v2-0-febe2805e17b@oss.qualcomm.com>
+ <20260722-qcom-bcl-hwmon-v2-2-febe2805e17b@oss.qualcomm.com>
+ <373bd00e-bfcd-4f6c-b64e-a707af01417c@roeck-us.net>
+ <cdc0fb5c-d277-40b4-8b00-c73eb881c062@oss.qualcomm.com>
+ <4f2d9c51-1059-489c-a469-562ec52015da@roeck-us.net>
+ <24a0ac2f-792e-4296-949c-047d9ce1c1f3@oss.qualcomm.com>
+ <3635cd34-4c11-40fe-a9ff-48b752fb5150@roeck-us.net>
+Content-Language: en-US
+From: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
+In-Reply-To: <3635cd34-4c11-40fe-a9ff-48b752fb5150@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: aypEvB7ng7fKRfbwtN_WtLcGYpab6Hjn
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzIzMDE4NyBTYWx0ZWRfX+55GnymXgyO9
+ NboZjf8IEw9mwH8T4GyO1v4O7XGot205RlhZYVbQCyJ7aga2njZLrpuhN3bRbGqmADKlsRukg/I
+ fISqNw74kFEysPCJwSHOajwptG+2W3XUpLsoFImf5Ie+fI02SWRAzHcCCs+OGUCBO6ZMy/0Hv2Y
+ 1Wt1Zfl1AbJXv1pBtIF4Q6YmnMoXTCVn+ojOQYi6Vjdd0eKI4KDQN5jhZR/XElGx9gLkjCRCayY
+ fi5mTVyZs8UIvarZkOKGJTM/5x0Mxk7mG116aPBJpz8+52muxVY/15huqrM+Ymp5iIO1M7Lk5zJ
+ Q6cJWnvgq4LInVvaiJsqh8/rgW52QmPYIt8O0cEy00lF+Ga3Dkyjh2AX3vDldiy9MrnFbhCNqgs
+ QkhJPOvpKVhoVZGbTTAA59Z3ZLpnUXxTQhBEDC4ec/2NeACzdRnnoUBAdy/GsQZ6hV7/ODXM1j3
+ RXuXyrBa9+Ua+edsWlA==
+X-Authority-Analysis: v=2.4 cv=Een4hvmC c=1 sm=1 tr=0 ts=6a626884 cx=c_pps
+ a=Qgeoaf8Lrialg5Z894R3/Q==:117 a=BvtW7Q8lqb1UdYndl6lHrw==:17
+ a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=_K5XuSEh1TEqbUxoQ0s3:22
+ a=VwQbUJbxAAAA:8 a=_jlGtV7tAAAA:8 a=l_Mds-CbMwRO_PrwST4A:9 a=3ZKOabzyN94A:10
+ a=QEXdDO2ut3YA:10 a=x9snwWr2DeNwDh03kgHS:22 a=nlm17XC03S6CtCLSeiRr:22
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzIzMDE4NyBTYWx0ZWRfXyk64fUJxuI9V
+ tMDwPvpOk1ERIvfM9zd5+qzdKQKQYCmPEkdmxjEu8mg8qtUQZ6SRRg9d5FouQw0+saeMD0Z0i46
+ 5+40GATx1pS6cLwGB1Ie2TQ7IPaarI8=
+X-Proofpoint-GUID: aypEvB7ng7fKRfbwtN_WtLcGYpab6Hjn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-23_06,2026-07-22_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 bulkscore=0 spamscore=0 priorityscore=1501 suspectscore=0
+ malwarescore=0 impostorscore=0 clxscore=1015 adultscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607230187
 
-On Thu, 2026-07-23 at 09:50 +0300, Stefan Popa wrote:
-> The MAX40080 is a bidirectional current-sense amplifier with an
-> integrated 12-bit ADC and an I2C/SMBus interface. It measures the
-> voltage across an external shunt resistor and the input bus voltage,
-> storing the results in an internal FIFO.
->=20
-...
-> =C2=A0
-> +MAXIM MAX40080 CURRENT SENSE AMPLIFIER DRIVER
-> +M:	Ciprian Hegbeli <ciprian.hegbeli@analog.com>
-> +M:	Stefan Popa <stefan.popa@analog.com>
-> +L:	linux-iio@vger.kernel.org
-> +S:	Supported
-> +W:	https://ez.analog.com/linux-software-drivers
-> +F:	Documentation/devicetree/bindings/iio/adc/maxim,max40080.yaml
-MAINTAINERS file entry for the binding should be added with the binding pat=
-ch.
-> +F:	drivers/iio/adc/max40080.c
-> +
->=20
-...
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * MAX40080 Digital Current-Sense Amplifier driver
-> + *
-> + * Copyright 2026 Analog Devices, Inc.
-I'd also add the datasheet link here.
-/* Datasheet: <https://www.analog.com/media/en/technical-documentation/data=
--sheets/MAX40080.pdf> */
-> + */
-> +
-...
-> +
-> +/* CFG.mode field */
-> +#define MAX40080_STDBY_MODE		0x00
-> +#define MAX40080_SINGLE_MODE		0x02	/* one conversion per Quick Command *=
-/
-Make "o" in "One" uppercase to maintain consistency with your other comment=
-s.
-> +
-> +/* FIFO_CFG.store_iv field */
-> +#define MAX40080_STORE_I_V		0x02
-Why I_V and not IV?
-> +
-> +#define MAX40080_ADC_RES		4096
-> +#define MAX40080_INTER_VREF_MV		1250
-Andy would usually suggest "mV"
-> +#define MAX40080_V_BUFF_GAIN		30
-> +#define MAX40080_CSA_50MV_GAIN		25
-> +#define MAX40080_CSA_10MV_GAIN		125
-Ditto.
-> +
-> +/*
-...
-> +
-> +static int max40080_update_bits(struct max40080_state *st, u8 reg,
-> +				u16 mask, u16 val)
-> +{
-> +	int ret;
-> +	int tmp;
-> +
-> +	guard(mutex)(&st->lock);
-> +
-> +	tmp =3D i2c_smbus_read_word_data(st->client, reg);
-> +	if (tmp < 0)
-> +		return tmp;
-> +
-> +	tmp &=3D ~mask;
-> +	tmp |=3D val & mask;
-Could be done in one step? "tmp =3D (tmp & ~mask) | (val & mask)"
-> +
-> +	ret =3D i2c_smbus_write_word_data(st->client, reg, tmp);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
-> +static int max40080_read_iv(struct max40080_state *st, u32 *iv)
-> +{
-> +	u32 tmp =3D 0;
-> +	int ret, io_ret;
-> +
-> +	guard(mutex)(&st->lock);
-> +
-> +	ret =3D max40080_trigger_measurement(st);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/*
-> +	 * Wait for the conversion to complete by polling the FIFO valid bit
-> +	 * (or bail out on an I2C error). Polling the device's own status makes
-> +	 * this independent of the actual conversion time, which varies with th=
-e
-> +	 * oversampling ratio and the bus speed. The timeout is only a safety
-> +	 * ceiling: the worst case is the maximum 128x averaging on both the
-> +	 * current and voltage channels at the slowest 15 ksps base rate plus t=
-he
-> +	 * inter-channel switching time, i.e. roughly 20 ms; 50 ms leaves ample
-> +	 * margin.
-> +	 */
-> +	ret =3D read_poll_timeout(max40080_read_iv_once, io_ret,
-> +				io_ret || (tmp & MAX40080_IV_VALID_MSK),
-> +				500, 50000, false, st, &tmp);
-> +	*iv =3D tmp;
-Is "iv" intentionally being written even in error path? Ideally it would be=
-=C2=A0
-assigned after the check.
-> +	if (ret)
-> +		return ret;
-> +
-> +	return io_ret;
-> +}
-> +
-> +/*
-> + * max40080_oversampling_avail[] is ordered so that its index is the FIL=
-TER
-> + * field value (index 0 =3D no averaging, index 1 =3D 8x, ...). Return t=
-hat index
-> + * for an exact match, or -EINVAL for a value that is not on the list.
-> + */
-> +static int max40080_oversampling_to_filter(int val)
-> +{
-> +	int i;
-> +
-Just use for(unsigned int i =3D 0; i < ARRAY_SIZE(max40080_oversampling_ava=
-il); i++);
-No need to have a separate declaration of 'i' for "for"
-> +	for (i =3D 0; i < ARRAY_SIZE(max40080_oversampling_avail); i++)
-> +		if (max40080_oversampling_avail[i] =3D=3D val)
-> +			return i;
-I'd use scope here as it's technically multiline. "for(...) { }"
-> +
-> +	return -EINVAL;
-> +}
-> +
-> +static int max40080_set_oversampling_ratio(struct max40080_state *st, in=
-t val)
-> +{
-> +	int ret, filter =3D max40080_oversampling_to_filter(val);
-Separate initialization from declaration.
+Hi Guenter,
 
-int ret, filter;
+On 7/23/2026 12:29 AM, Guenter Roeck wrote:
+> On 7/22/26 11:19, Manaf Meethalavalappu Pallikunhi wrote:
+>> Hi Guenter,
+>>
+>> On 7/22/2026 11:16 PM, Guenter Roeck wrote:
+>>> On 7/22/26 10:38, Manaf Meethalavalappu Pallikunhi wrote:
+>>> ...
+>>>>>
+>>>>> I am curious: Why not use static initialization and use the is_visible
+>>>>> function to determine if an attribute is visible or not ?
+>>>>
+>>>> ACK. There is already a comment in v1 suggesting the use of dynamic 
+>>>> allocation based on the available attributes rather than static 
+>>>> initialization. The intent is to avoid having to perform enable flag 
+>>>> checks in multiple places.
+>>>> . >
+>>>
+>>> You lost me, sorry. There is only a single is_visible function,
+>>> and its intent is exactly to handle situations where some sensors
+>>> are not always available.
+>>>
+>>> What would be those "multiple places" ?
+>>
+>> Understood, thanks for the clarification. I'll revert to static 
+>> attribute initialization in the next revision and use is_visible() to 
+>> control attribute visibility where needed.
+>>
+>>>
+>>>>>  From the earlier exchange I had the impression that there is a large
+>>>>> number of current and voltage channels, but it looks like there is 
+>>>>> only
+>>>>> one each. That doesn't really warrant or need all this dynamic code
+>>>>
+>>>> Yes, this hardware only supports one or two channels (voltage and 
+>>>> current). What we discussed earlier was that each channel can have 
+>>>> up to three threshold alarms (warning, critical, and emergency). 
+>>>> However, the hwmon framework currently supports only two limit 
+>>>> alarms for these sensor types. I have not added support for the 
+>>>> third alarm threshold in this series to keep the initial driver 
+>>>> support aligned with the existing hwmon capabilities. Once the basic 
+>>>> driver support is accepted, I can queue a follow-up series to add 
+>>>> support for the third limit alarm.
+>>>>
+>>>
+>>> What does that have to do with attribute visibility ?
+>>
+>> I was only clarifying that the channel count has always been small 
+>> (maximum of two channels) and has not changed since v1. The earlier 
+>> discussion was primarily around the limit alarm attributes. That said, 
+>> you're right that this is unrelated to attribute visibility.
+>>
+> 
+> Feel free to use (and test)
+> https://lore.kernel.org/linux-hwmon/20260722185749.2313572-1- 
+> linux@roeck-us.net/T/#u
 
-filter =3D max40080_oversampling_to_filter(val);
-> +
-> +	if (filter < 0)
-> +		return filter;
-> +
-> +	ret =3D max40080_update_bits(st, MAX40080_REG_CFG, MAX40080_FILTER_MSK,
-> +				=C2=A0=C2=A0 FIELD_PREP(MAX40080_FILTER_MSK, filter));
-> +	if (ret)
-> +		return ret;
-> +
-> +	st->oversampling_ratio =3D val;
-> +
-> +	return 0;
-> +}
-> +
-> +static int max40080_read_raw(struct iio_dev *indio_dev,
-> +			=C2=A0=C2=A0=C2=A0=C2=A0 struct iio_chan_spec const *chan,
-> +			=C2=A0=C2=A0=C2=A0=C2=A0 int *val,
-> +			=C2=A0=C2=A0=C2=A0=C2=A0 int *val2,
-> +			=C2=A0=C2=A0=C2=A0=C2=A0 long mask)
-Put "int *val, int *val2, long mask" on the same line. i.e,
-static int max40080_read_raw(struct iio_dev *indio_dev,
-			     struct iio_chan_spec const *chan,
-			     int *val, int *val2, long mask)
+Thanks for working on this. I'll use that change as the base, rebase my 
+series on top of it, and add support for the third alarm level.
+By the way, for the voltage channel, the hardware monitors undervoltage 
+conditions and provides three threshold levels. At the moment, I am mapping:
 
-> +{
-> +	struct max40080_state *st =3D iio_priv(indio_dev);
-> +	int ret;
-> +
-> +	switch (mask) {
-> +	case IIO_CHAN_INFO_RAW:
-> +		if (chan->type =3D=3D IIO_CURRENT) {
-> +			ret =3D max40080_get_current(st, val);
-> +			if (ret)
-> +				return ret;
-> +		} else if (chan->type =3D=3D IIO_VOLTAGE) {
-> +			ret =3D max40080_get_voltage(st, val);
-> +			if (ret)
-> +				return ret;
-> +		}
-> +
-Either have this space before return on all of the paths in this "switch"=
-=C2=A0
-or none of them for consistency.
-> +		return IIO_VAL_INT;
-> +	case IIO_CHAN_INFO_SCALE:
-> +		if (chan->type =3D=3D IIO_CURRENT) {
-> +			/*
-> +			 * The selectable current-sense range is exposed through
-> +			 * scale: each RANGE setting has its own precomputed
-> +			 * mA-per-code value. Userspace picks the range by writing
-> +			 * the matching scale.
-> +			 */
-> +			*val =3D st->current_scale[st->range][0];
-> +			*val2 =3D st->current_scale[st->range][1];
-> +			return IIO_VAL_INT_PLUS_NANO;
-> +		}
-> +		/* voltage[mV] =3D raw * Vref[mV] * buffer_gain / ADC_RES */
-> +		*val =3D MAX40080_INTER_VREF_MV * MAX40080_V_BUFF_GAIN;
-> +		*val2 =3D MAX40080_ADC_RES;
-> +		return IIO_VAL_FRACTIONAL;
-> +	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
-> +		ret =3D max40080_get_oversampling_ratio(st, val);
-> +		if (ret)
-> +			return ret;
-> +		return IIO_VAL_INT;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-> +
-> +static int max40080_write_raw(struct iio_dev *indio_dev,
-> +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct iio_chan_spec const *chan,
-> +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int val, int val2, long mask)
-> +{
-> +	struct max40080_state *st =3D iio_priv(indio_dev);
-> +	unsigned int i;
-> +	int ret;
-> +
-> +	switch (mask) {
-> +	case IIO_CHAN_INFO_SCALE:
-> +		/* Only the current channel has a selectable range/scale. */
-> +		if (chan->type !=3D IIO_CURRENT)
-> +			return -EINVAL;
-> +
-> +		for (i =3D 0; i < MAX40080_NUM_RANGES; i++)
-> +			if (val =3D=3D st->current_scale[i][0] &&
-> +			=C2=A0=C2=A0=C2=A0 val2 =3D=3D st->current_scale[i][1])
-> +				return max40080_set_range(st, i);
-I'd add brackets to this "for" too like above.
-> +
-> +		return -EINVAL;
-> +	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
-> +		ret =3D max40080_set_oversampling_ratio(st, val);
-> +		if (ret)
-> +			return ret;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int max40080_reg_access(struct iio_dev *indio_dev,
-> +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned int reg,
-> +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned int write_val,
-> +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned int *read_val)
-> +{
-> +	struct max40080_state *st =3D iio_priv(indio_dev);
-> +
-> +	if (read_val) {
-> +		int val =3D i2c_smbus_read_word_data(st->client, reg);
-Declare this "val" at the top.
-> +
-> +		if (val < 0)
-> +			return val;
-> +		*read_val =3D val;
-Add blank lines above and below
-"*read_val =3D val;"
-> +		return 0;
-> +	}
-> +
-> +	return i2c_smbus_write_word_data(st->client, reg, write_val);
-> +}
-> +
-> +/*
-> + * Configure the device from the cached state. The device powers up in s=
-tandby
-> + * with PEC enabled (CFG POR =3D 0x0060), so PEC is kept enabled through=
-out.
-> + */
-> +static int max40080_init(struct max40080_state *st)
-> +{
-> +	u16 fifo_cfg, cfg;
-> +	int ret, filter;
-> +
-> +	filter =3D max40080_oversampling_to_filter(st->oversampling_ratio);
-> +	if (filter < 0)
-> +		return filter;
-> +
-> +	/*
-> +	 * Put the device in standby before (re)configuring the FIFO: the FIFO
-> +	 * configuration register can only be written while the device is not
-> +	 * converting.
-> +	 */
-> +	cfg =3D FIELD_PREP(MAX40080_MODE_MSK, MAX40080_STDBY_MODE) |
-> +	=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 FIELD_PREP(MAX40080_PEC_EN_MSK, 1);
-I'd have a blank line before the "ret" assignments.
-> +	ret =3D i2c_smbus_write_word_data(st->client, MAX40080_REG_CFG, cfg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Store a matched current+voltage pair per conversion. */
-> +	fifo_cfg =3D FIELD_PREP(MAX40080_STORE_IV_MSK, MAX40080_STORE_I_V);
-Here too.
-> +	ret =3D i2c_smbus_write_word_data(st->client, MAX40080_REG_FIFO_CFG,
-> +					fifo_cfg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/*
-> +	 * Use single-measurement mode: the device stays idle and converts once
-> +	 * per SMBus Quick Command (see max40080_trigger_measurement()), so eac=
-h
-> +	 * read returns a fresh sample rather than a queued FIFO entry.
-> +	 */
-> +	cfg =3D FIELD_PREP(MAX40080_MODE_MSK, MAX40080_SINGLE_MODE) |
-> +	=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 FIELD_PREP(MAX40080_PEC_EN_MSK, 1) |
-> +	=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 FIELD_PREP(MAX40080_RANGE_MSK, st->range=
-) |
-> +	=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 FIELD_PREP(MAX40080_FILTER_MSK, filter);
-> +
-Like you have here.
-> +	ret =3D i2c_smbus_write_word_data(st->client, MAX40080_REG_CFG, cfg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
-> +static int max40080_probe(struct i2c_client *client)
-> +{
-> +
-...
-> +
-> +	indio_dev =3D devm_iio_device_alloc(dev, sizeof(*st));
-> +	if (!indio_dev)
-> +		return -ENOMEM;
-> +
-> +	i2c_set_clientdata(client, indio_dev);
-> +
-Is it used?
-> +	st =3D iio_priv(indio_dev);
-> +	st->client =3D client;
-> +
-> +	ret =3D devm_mutex_init(dev, &st->lock);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret =3D device_property_read_u32(dev, propname, &st->shunt_resistor_uoh=
-m);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "can't read %s\n", propname);
-Add a space here.
-> +	if (!st->shunt_resistor_uohm)
-> +		return dev_err_probe(dev, -EINVAL, "%s must be non-zero\n",
-> +				=C2=A0=C2=A0=C2=A0=C2=A0 propname);
-> +
-> +	max40080_calc_current_scale(st);
-> +
-> +	/* Defaults: 50 mV range (index 0), no averaging. */
-> +	st->range =3D 0;
-> +	st->oversampling_ratio =3D 1;
-> +
-> +	indio_dev->name =3D "max40080";
-> +	indio_dev->info =3D &max40080_info;
-> +	indio_dev->modes =3D INDIO_DIRECT_MODE;
-> +	indio_dev->channels =3D max40080_channels;
-> +	indio_dev->num_channels =3D ARRAY_SIZE(max40080_channels);
-> +
-> +	ret =3D max40080_init(st);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return devm_iio_device_register(dev, indio_dev);
-> +}
-> +
-> +static const struct i2c_device_id max40080_i2c_ids[] =3D {
-> +	{ "max40080" },
-use named initializer. i.e,=20
-{ .name =3D "max40080" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, max40080_i2c_ids);
-> +
->=20
-...
-> +MODULE_AUTHOR("Ciprian Hegbeli <ciprian.hegbeli@analog.com>");
-> +MODULE_AUTHOR("Stefan Popa <stefan.popa@analog.com>");
-> +MODULE_DESCRIPTION("Analog Devices MAX40080 current-sense amplifier driv=
-er");
-> +MODULE_LICENSE("GPL");
+LVL0 → min
+LVL1 → lcrit
+
+For LVL2, would it be possible to introduce a corresponding low-voltage 
+emergency threshold, such as lemergency (or another more appropriate 
+name), to represent the third alarm level for voltage sensors ?
+
+Thanks,
+Manaf
+
+> 
+> Guenter
+> 
+
