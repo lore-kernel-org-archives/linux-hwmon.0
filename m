@@ -1,140 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2A73FF89F;
-	Thu, 23 Jul 2026 21:38:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F70037AA95
+	for <linux-hwmon@vger.kernel.org>; Thu, 23 Jul 2026 21:42:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784842727; cv=none; b=XKW9OA62F6W6db7lxAl3sFYKFzFIzKZ1cBMztU452JeVOyZe/lDizSHdTOPZsTSUUzwmL5lLNYC4nCXLOmBLfWG1WMyb0CadkFgDyTN7fdgeKbVz7ZaeW/FhmvBfcAZ1OICzXZd0VSrfOVovUGJ6Kupaar6/+oWPYv1nwM2BViI=
+	t=1784842966; cv=none; b=rRjsrxh0YgrWadQNmkAWW8ZFZB29/l/J3+jE05dRv6FYQ73zZ+VcHUVIgh0ifCODYEeHiY4BGI1dYGVjDkanvIejNosF/CwLG+x2Exlnm2+RwbbarpaWc/7VlJUd03o03Kf+CZmdpI0l5s9/HMUVofXuafGo8vow/jJKLnngJ2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784842727; c=relaxed/simple;
-	bh=DLVhQmaKjnuyBa919iY7i8pN7lOModUYk9klGPgiHIw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cBCQbZjr9lGkCJqMbvtUQ9QobFyeTortKvKeFlnz1W7jlQWmPnASdGwu8opMOubqqh4gPbnetsNL7mRV2+atbmwwNCv5cPRKg0r4ixJ45u6GvL3Wd+OZm7sg6itv90DTI3CCWtof5KEyVESs/wf66dOwDMmiXluveTlnlYzfboo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aLHdEtbb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1784842966; c=relaxed/simple;
+	bh=cMVH30seVxDqGNU+JXO7CI9A1iWOcqfw3kUyY5cSpXw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G59E+1RZwUEOuQVyrEEaHcPbkBi4Os8cGZ7B5ZsHVufGPZVkhytypnfNb8CavyKrpUFV7rcuMKAZYt/CkVZ9BcY8rVUBRMTCScdQC4BF71Q/c8RRDCBSxIXA65jzK9BH9pmgCiD95xWR6cGXG81koPKTZOhLRIahzTIk8xbPpTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GX/8PCT4; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aLHdEtbb"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 024B5C2BCF7;
-	Thu, 23 Jul 2026 21:38:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1784842727;
-	bh=DLVhQmaKjnuyBa919iY7i8pN7lOModUYk9klGPgiHIw=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=aLHdEtbbJDzC+4dbwCXqjKxyKmGfhElnckkqHbori+CNGOSdLNLJqRrt52/SWXpZ+
-	 oORwfFSKtmpbRzA9Uv5ydti8L6V9PA5Uu3awjwN59Nb4UoNHvz+0UGhr5ZELZDChrq
-	 VdOmNjJBZkuXo42n5Y8GK0ZDEDMFN9mR5c7OA8LAo+xyd61DZlYVtxSVFOiI3TyrYa
-	 BN+V9Pe0QhTGj7t9P+lRkQhEc+L2qU/smq+SgvSgvel0jn1dF8zEbJnK14MPxmEMMM
-	 VWbeRIH1tJ6+6AiQwYQDjDgwPBmfztnAzWTah/mOlYETTwii5mXDQRimCIRLqcJjJa
-	 KDR0nWg/87iEw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4F06C531D0;
-	Thu, 23 Jul 2026 21:38:46 +0000 (UTC)
-From: Vincent Jardin via B4 Relay <devnull+vjardin.free.fr@kernel.org>
-Date: Thu, 23 Jul 2026 23:38:45 +0200
-Subject: [PATCH v4 2/3] dt-bindings: hwmon: pmbus: add MPS MPQ8646 binding
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GX/8PCT4"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-84867f07d63so1337165b3a.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 23 Jul 2026 14:42:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784842964; x=1785447764; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=IPzjE3FNOTGqvDB3QZeC9AMUwCIrsHLR+NHAqkuuNKg=;
+        b=GX/8PCT4gj44Hoz7vIJxUbVp28tJd0yDDNPY4GD83psjqXwEta24C5bviRZYCwFaei
+         E91nBXJWb7sv3khiPzJ1cmjZeBcHDPbGc1nhFbw3m/sKbhITGco+dSEJAsE8uQ+JGo1R
+         b1ZS9n6o0ANZA8HGrIRK8e57evntrGmHWRiINx1kNlPVGIKte8jzJZQW1RWi3hBaK6Zb
+         0XqW8xqEF88ikau0EV3oyl7FvLgGgio2s4/aEzzvga/TDoOFQ+/9WU6JZgWv7bEc1Und
+         8t/hBcl7zH2UdzG2MC1axazphFnVQK8yxWhIpmwGf2Rsq9q8RhObZFsuHcyXX1lBtq+H
+         MBHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784842964; x=1785447764;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=IPzjE3FNOTGqvDB3QZeC9AMUwCIrsHLR+NHAqkuuNKg=;
+        b=kaBQOQmmXR69L9st9jotllzhCQat1JBWTzrHpywGBbcJO8Np6pLTi8y+s1jeqBNPgH
+         oi1iKS7y9FXB8n8NLslaR3wT8hWOJqb6vQYtdFBQY52PyyZs1ViRmCj3356bpNHOe209
+         F35wSDWFPHQA76LARq7QqtQRm7LWywqW5gwLnK4T+m+gVPIGL1JMia+fafOCb34ow4Nn
+         4lt8rtsPJhiNoB/KBbeg0YVvXVxor0FhoerwG7EBf73A6Yev7MKofxZ2//50o8E137iL
+         BqJSvuAGwq3HFD5YwaQx7TSrt6PAcQgMXbPsBm2sSybIE7/56odnEfGm5Yq4sLjSKY61
+         Tcow==
+X-Forwarded-Encrypted: i=1; AHgh+RrYd1M6xZ+fwwcFL29d6/7/8ZSn5PcLLZkEnzirmKmesSoGv6ZJeSn6yraQy53QHywdN8H+k/WNorJK8Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxYuFXSxYi9iW7jVPqoOO+Y6wqHT8y82F68G2m0mEnTTEQtBXvg
+	nvhTqfb7oi9SZEBJTGGEodfTK6dXk9KGIngXZD0DgZOHrvPFKLwZFA0Hq5bawg==
+X-Gm-Gg: AR+sD10yH32v/bEApkQgx6+GYTQFLsj8M+frGSj06Q5lPo4Pex095OWHz3ajZcALhPb
+	Yph+dXe2Uv1uLebQ8IE50wk/dGjYvCHf6OQXsfkUuFUz/vSqyp/VAAKW7iphZyvcoiI+yS9uYj1
+	y2/sfAxkfjUePEMOKVMlWh1VQ0AUmMyxjdSk3h4IcvJ2sEZV3qfXDimtpOkD/us4DMo4TVk+2RB
+	q8J1Z3vFG8il9R+1kxMVY+IRCwre489LO5gIcLjfDz8hTLKv6AKv7oElGS6eLhbAxPuymiHRMjs
+	8UGkKaGOkvMoFEydWSj8QKOEHWXAZC/UGLakm1fl6mRq0HmBuHYyCXt+bChwRxNhgWoLxJMJ3k5
+	JI4CpQ3qY2GWlhp2wUE1UXRgDSRDBPAK7h4UovXdDHF54lcaUDLP8JRG32SiPIrzXhpv7G542rX
+	iCe3OxwwxQWqwDfkw=
+X-Received: by 2002:a05:6a00:3c94:b0:848:4859:a45 with SMTP id d2e1a72fcca58-84e2b7ca651mr5747181b3a.2.1784842963810;
+        Thu, 23 Jul 2026 14:42:43 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e17237c32sm3663216b3a.6.2026.07.23.14.42.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jul 2026 14:42:42 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 23 Jul 2026 14:42:42 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: kr494167@gmail.com
+Cc: nuno.sa@analog.com, linux-hwmon@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: ltc4283: add missing MODULE_DEVICE_TABLE for OF
+ match table
+Message-ID: <7e86e321-aab2-460c-a864-e6aa7c108bab@roeck-us.net>
+References: <20260721055022.34629-1-kr494167@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260723-mpq8646_v0-v4-2-b6323d5fc524@free.fr>
-References: <20260723-mpq8646_v0-v4-0-b6323d5fc524@free.fr>
-In-Reply-To: <20260723-mpq8646_v0-v4-0-b6323d5fc524@free.fr>
-To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-doc@vger.kernel.org, 
- Vincent Jardin <vjardin@free.fr>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1784842725; l=1966;
- i=vjardin@free.fr; s=20260525; h=from:subject:message-id;
- bh=jpM2J4BObT1ueMT0EACWE+VQr1KSy7O4X/bw3YdCS0Q=;
- b=fhoao3hf9ITESHzo6hYX4viwfDEuxSnhI/6eN0Dh0heR0UJVN5neFRNkVhQDkh9g1pU/7A+O3
- RFE1nkbZSEnAmy1vECvDlKgWkgIPITW59K8Vh3q78GQZ1+QoqTbnouZ
-X-Developer-Key: i=vjardin@free.fr; a=ed25519;
- pk=hppgLeFpGpKOi7LNwGEZ4jOYofJCoGd4Jf1ltAabiLw=
-X-Endpoint-Received: by B4 Relay for vjardin@free.fr/20260525 with
- auth_id=871
-X-Original-From: Vincent Jardin <vjardin@free.fr>
-Reply-To: vjardin@free.fr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260721055022.34629-1-kr494167@gmail.com>
 
-From: Vincent Jardin <vjardin@free.fr>
+On Tue, Jul 21, 2026 at 11:20:22AM +0530, kr494167@gmail.com wrote:
+> From: surendra <kr494167@gmail.com>
+> 
+> The driver registers ltc4283_of_match as the platform driver's
+> .of_match_table so the kernel probes the device when a DT node with
+> compatible "adi,ltc4283" is present, but the corresponding
+> MODULE_DEVICE_TABLE(of, ...) call is absent.
+> 
+> Without it the module alias table (modules.alias) does not contain an
+> "of:N*T*Cadi,ltc4283" entry, so udev / kmod cannot auto-load the
+> module when the DT node appears, breaking modules-based deployments
+> while built-in configurations happen to work by accident.
+> 
+> Add the missing MODULE_DEVICE_TABLE() to fix module auto-loading.
+> 
+> Fixes: dd63353a0b5e ("hwmon: ltc4283: Add support for the LTC4283 Swap Controller")
+> Signed-off-by: surendra <kr494167@gmail.com>
 
-Add a device-tree binding for the Monolithic Power Systems
-MPQ8646 step-down converter as a PMBus device.
+Applied.
 
-The schema is inspired from the mpq8785e:
-same mps,vout-fb-divider-ratio-permille property (maximum: 2047),
-and const: mps,mpq8646.
+Thanks,
+Guenter
 
-Signed-off-by: Vincent Jardin <vjardin@free.fr>
----
- .../bindings/hwmon/pmbus/mps,mpq8646.yaml          | 50 ++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8646.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8646.yaml
-new file mode 100644
-index 000000000000..7acf4f235b12
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8646.yaml
-@@ -0,0 +1,50 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright (c) 2026 Free Mobile - Vincent Jardin <vjardin@free.fr>
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/pmbus/mps,mpq8646.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Monolithic Power Systems MPQ8646 PMBus Step-Down Converter (extended)
-+
-+maintainers:
-+  - Vincent Jardin <vjardin@free.fr>
-+
-+description: |
-+  MPS MPQ8646 PMBus step-down converter.
-+
-+properties:
-+  compatible:
-+    const: mps,mpq8646
-+
-+  reg:
-+    maxItems: 1
-+
-+  mps,vout-fb-divider-ratio-permille:
-+    description:
-+      The feedback resistor divider ratio, expressed in permille
-+      (Vfb / Vout * 1000). This value is written to the
-+      PMBUS_VOUT_SCALE_LOOP register and is required for correct output
-+      voltage presentation.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    minimum: 1
-+    maximum: 2047
-+    default: 706
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      regulator@10 {
-+        compatible = "mps,mpq8646";
-+        reg = <0x10>;
-+      };
-+    };
-
--- 
-2.43.0
-
-
+> ---
+>  drivers/hwmon/ltc4283.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/hwmon/ltc4283.c b/drivers/hwmon/ltc4283.c
+> index 9b85293ea664..9ec409bc2648 100644
+> --- a/drivers/hwmon/ltc4283.c
+> +++ b/drivers/hwmon/ltc4283.c
+> @@ -1772,6 +1772,7 @@ static const struct of_device_id ltc4283_of_match[] = {
+>  	{ .compatible = "adi,ltc4283" },
+>  	{ }
+>  };
+> +MODULE_DEVICE_TABLE(of, ltc4283_of_match);
+>  
+>  static const struct i2c_device_id ltc4283_i2c_id[] = {
+>  	{ "ltc4283" },
