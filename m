@@ -1,123 +1,157 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5521E3B52E6
-	for <linux-hwmon@vger.kernel.org>; Thu, 23 Jul 2026 06:29:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6561A346E74;
+	Thu, 23 Jul 2026 06:51:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784788200; cv=none; b=ReKUOwYKBdjSgDeKOF70mmnIYCrHYbehgtbKLmzsKd+7YaxiiqHQ/o5zUABfUfkgr0y5bQuDJFNiJ2X5qgMuYeqgNWpAKjT7GZMUEQ+vcuUXGmjUci48J5eARVxD5n3AvyU3dpHdmTouUawbn2n22CqlM4BYp/dbdvUAWQT1OIg=
+	t=1784789486; cv=none; b=cXA6fjEu8FRAsEpbCZ29m9HoCnSLcBe3IUqu4zUzWH8znFoT5rkU53RON4PD5+Zh0N7SO++MAgtH1jkuZUDD232/2aQWt7wMO+1AxFWz4SbN4+uZBBsLd7fgZSjlxqd3aYEAbLunm6SMsQjs+dzmV0+UYMUe9USVusn/Nuty/3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784788200; c=relaxed/simple;
-	bh=uozDH4XEIfou8SOxvvK+z4mvTO/pfJIURoO4Y8ZM6LA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O3aOguKD06iV0d/qFqOhQNI7oj31zeXBXe6vd8Cny/65RKyul2S/EYlbCfFtVb2vXFYZ/A7C1cdWOJEzxdahZAHXnnxHULBedVMYG46h4H0rdVmUQKIKhvLHJpLNsS400qNTCNwO2WBgTj7y2+yaMTog/z7Nna3s/7Z+aLE4vp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=NHG+g/P/; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1784789486; c=relaxed/simple;
+	bh=IldCBTIVQ/20IH2of9ojT4K6QWDUBkC9r8K95rwpswo=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nZFBGPxLEBKkZ/wSYOPc4VFRmrgFcMkOciFihR7rkoQRGOgdOGWvnV72e7k7wkITcBrchnb6MPU/+ftxyIMt7H9079wVccHNrn8jPX+KN4sIMB/8r7v53YNpvXWGhyyhiDCJFTOPZ2gqfQQApGibyPoc/FNpgO2Xv31OJQDEQ1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=dIm4Phku; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="NHG+g/P/"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-47f64ca1c2dso30935f8f.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 22 Jul 2026 23:29:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1784788197; x=1785392997; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=uozDH4XEIfou8SOxvvK+z4mvTO/pfJIURoO4Y8ZM6LA=;
-        b=NHG+g/P/bUGjqS1muu1hi2MTDTYqc3WJmQ4kmoSpKP8plbhkwHH6BXtZKrQsgH6SJ8
-         7X6MUzEZUt/mi62jRRc5O3QK9d5GgRLbWvknmKUayVkLgkydV2xXpnIlVBcu739nJoHJ
-         4mSNHR6eoHBrAf1tRwu01lq3sK5m/6rClQ2HlfLz4vGI0kyFjdasCO0k5Dni4Z14AN0Z
-         proSqh3I4NvD40Q8RonpF/gp3LYayRcHIQ1Rk4VwzOMQD6OlzRdgjbN5QhCrmXz7CaNZ
-         rKA9TILcKa4aMPZErqtgWF8RrCvxRasypLvnUvM2+pD8c5nrQMUpzpIu8BT9tbsLuMay
-         uBuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784788197; x=1785392997;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=uozDH4XEIfou8SOxvvK+z4mvTO/pfJIURoO4Y8ZM6LA=;
-        b=ZdgY+mlW7PGm+l1BntPBHll1kNcqOWCtAy/GGYJGI8w42dUJjviaMolY8lBsn9lZTZ
-         kTXQgGQ9KGSBc0RE/2t7Jt9x/s8uKv+xrXpHy/EsA8qF3H7D9Eu6lZ1NGLiVDfegVPhh
-         hs3Vp6XQECWMggP4LsuVIyhj0adIhIIsPauaxclDKYaS/n0HVZXP+BVZz7zKoEx5uGHX
-         pzNx9UFC5viZld3yEaBX4IQf8A45gfL8+p2xWvE+HDtzLYBzRyFzTg97uNkpO2PQQviX
-         oBIv7WXpDX1j9R0/gckWGTVlfdKSmt4wwp9mqoVL1PE9etlwCGjJJHK3ZaX0wwKcjFdn
-         Gf0A==
-X-Forwarded-Encrypted: i=1; AHgh+RodwQZZ/0y5t9jYggZ+YE3ClJRz3EAvpDmaHu6Na18N2FWxVFtfSqvbkDH8aWVGZ5kyopz8jMftj5+vRQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOHaf7A+rpiQN1pulZqg+RmpNCN2v5c8D0KbZCv+qZJaeCHZcX
-	7XZAl5Pken3Nlg9S08/AJDLS+g4PrLsqJosHvAVUew0NnedZ83sok6I0XUJwx4FXlKg=
-X-Gm-Gg: AR+sD12njnlvYze5mzl1Q7+kQ6cXUqTAD0nvtEg8qz6dVMcIEUqFOlXvx79pj+a25d6
-	ScH5z7m94R1ecy5R61p6qdwO5btaBE7ETKLmRZgYClezTAC4wrneijD06uj0Z5xxe2g0RuexAXf
-	lTA7Kq+04dR/VNj2yF+fE42P1Mcn58Kb2vnE5wIX9Z6sztILVZoGsM2XXsk2bUD5ymkVjMe+eWR
-	PXsudEMrlEg6Dw4y4lfRmh1pQyV0tR+3fKFsTG8KRFCxXOPO9xK+QriW0LvSjJYuiCYS3gIX1LL
-	pM3Q5VAowaz+jBrW/+rjKzZd55726aBfbMkdhldt+QONxEH8l/t49e/pa81dO3Mj+HlRy8mCwHc
-	kAlEyA6HwBisNf3xvSuL6qIbsmHH8glUHyO7ZjhdAYlgAUIjk5t3SvkIpEL3wpO2wWTsiOSjpDA
-	dkWEtyKu4=
-X-Received: by 2002:a05:6000:4610:b0:47f:45d1:7b74 with SMTP id ffacd0b85a97d-47f8dca6c5fmr1936289f8f.58.1784788197625;
-        Wed, 22 Jul 2026 23:29:57 -0700 (PDT)
-Received: from localhost ([2a02:8071:56d1:2de0:1d24:d58d:2b65:c291])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-47f85c631fdsm12158433f8f.28.2026.07.22.23.29.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 23:29:56 -0700 (PDT)
-Date: Thu, 23 Jul 2026 08:29:56 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
-	Stephen Boyd <sboyd@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>, 
-	linux-hwmon@vger.kernel.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, mfd@lists.linux.dev, 
-	Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
-Subject: Re: [PATCH v2 02/10] hwmon: Add Qualcomm PMIC BCL driver
-Message-ID: <amG0f57O5-e_Qg5z@monoceros>
-References: <20260722-qcom-bcl-hwmon-v2-0-febe2805e17b@oss.qualcomm.com>
- <20260722-qcom-bcl-hwmon-v2-2-febe2805e17b@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="dIm4Phku"
+Received: from pps.filterd (m0516787.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66N4xbQP1191979;
+	Thu, 23 Jul 2026 02:51:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=DKIM; bh=C+06+t5Vnmb0imB+GgslTdHyKCz
+	tk1vLc1A4qLZgHBg=; b=dIm4PhkuXNIimHfAqh0H5aYOOl906KZBZcHxrU2vkiF
+	MczEFjW0mcVBp53+3APM1rFsulzN5ClWh4w5P/0em1d152Q10vTtccqX7LoJJTJR
+	C8jzqFDwyvmZ7s3TDY6+A1TNYtB6GM8/nrywu5jNDk993e7/2geEKsgg0pyU2xEQ
+	tJiVx0GpcqRkTF+aomddf9/XpDZ14gO7SCC2vHfDdicWGY3qmx1D7Fk/6F5QgVuI
+	vBAif7VZKPVE4UPkaAYCVQBOm54D7BrNRP7hXNuw5ku8q6GFpteP+l+I89e/Topq
+	L1fZvoik9Dc/AS5vNcNWwJmJUIyTfFo5F6MGR7aOz/g==
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 4fjnd9p0ae-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 23 Jul 2026 02:51:02 -0400 (EDT)
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 66N6p1rP039195
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 23 Jul 2026 02:51:01 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.37; Thu, 23 Jul
+ 2026 02:51:01 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.1748.37 via Frontend
+ Transport; Thu, 23 Jul 2026 02:51:01 -0400
+Received: from HYB-JRXo5UEs61B.ad.analog.com ([10.66.6.191])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 66N6olKw030342;
+	Thu, 23 Jul 2026 02:50:50 -0400
+From: Stefan Popa <stefan.popa@analog.com>
+To: <linux-iio@vger.kernel.org>
+CC: <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <jic23@kernel.org>, <andy@kernel.org>,
+        <nuno.sa@analog.com>, <linux@roeck-us.net>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <dlechner@baylibre.com>,
+        <ciprian.hegbeli@analog.com>, <siratul.islam@linux.dev>,
+        <u.kleine-koenig@baylibre.com>, Stefan Popa <stefan.popa@analog.com>
+Subject: [PATCH v5 0/2] iio: adc: add MAX40080 current-sense amplifier driver
+Date: Thu, 23 Jul 2026 09:50:34 +0300
+Message-ID: <20260723065036.2683075-1-stefan.popa@analog.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="bd4y6yvvhvmkobl7"
-Content-Disposition: inline
-In-Reply-To: <20260722-qcom-bcl-hwmon-v2-2-febe2805e17b@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: VLC4CTfIRrv15bGBb3kwcOfAr2C104el
+X-Proofpoint-GUID: VLC4CTfIRrv15bGBb3kwcOfAr2C104el
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzIzMDA2NyBTYWx0ZWRfX6pnssPUupqFs
+ qKZIRLMPTbjeRSw6Qe5JjQ8ONy6JvhB5M0ZLVpcGarqtinjbtZ6TMyVkHmSx660f6X9UieDwokV
+ LIEnvx/y5PSU+OsqsFHTZMgQHKoOL087clvta1kVzndxmo7Mn12ywLXSIQc5CQbPw/oBCZJaDeE
+ j+S6frawxaADARr11WWK3Cw05JBZZcjpp8P1tfIRLcf/aLYJn2I1ilZ8zpNp+6j20eDeuEg1OVF
+ oT0CN7AZLTBwPuCTwEPQs97Vt7yfqEbFxqoHRtbz0s/ch7h4MpouZRC2I3oDvs8ltcLEck91B8U
+ 4/M0bHhDKs33g8PfgFvvDHvhp/PgDJFE24ymN/ni+Z/lx0nzdXCrNg45WDq/EF2jEbTglFUUeS7
+ iSPXDfn0HNLYvh/EovLf0tajpxnoEBO4sMbx3AzcQn/2YENq4ZnN+/QhvN9VhnSDyJloPvwCA4S
+ RtIUt2A6JV4ZqViFZqQ==
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzIzMDA2NyBTYWx0ZWRfXwNaj2o7WPlnx
+ ykL11wKLom+dsE+DReaZrNQ3gnlfvGZ3W9v4FHKjZXBe+uxNjgcZ0Fk2nwKLHDCvdZPrteSv41z
+ /x1N1LmT0je/a/uPdn/pRZ8tzRXhxO/FeJ6Pk8ajob70aPbqYZVY
+X-Authority-Analysis: v=2.4 cv=BYHoFLt2 c=1 sm=1 tr=0 ts=6a61b9d7 cx=c_pps
+ a=3WNzaoukacrqR9RwcOSAdA==:117 a=3WNzaoukacrqR9RwcOSAdA==:17
+ a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=0sLvza09kfJOxVLZPwjg:22
+ a=OmVn7CZJonkx5R5zMQLL:22 a=VwQbUJbxAAAA:8 a=gAnH3GRIAAAA:8
+ a=UunNvpd7KEJHXI4jChAA:9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-23_02,2026-07-22_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 clxscore=1011 impostorscore=0 phishscore=0 malwarescore=0
+ suspectscore=0 bulkscore=0 spamscore=0 adultscore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607230067
 
+This series adds support for the MAX40080, a bidirectional current-sense
+amplifier with an integrated 12-bit ADC.
 
---bd4y6yvvhvmkobl7
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Subject: Re: [PATCH v2 02/10] hwmon: Add Qualcomm PMIC BCL driver
-MIME-Version: 1.0
+The driver is placed in IIO rather than hwmon because:
+  - IIO's scale/raw model naturally exposes the selectable gain ranges and
+    lets userspace apply the correct scale per range.
+  - Buffered capture support is planned for a follow-up series -- each
+    conversion returns a matched current+voltage pair, which maps cleanly
+    to IIO's buffered/triggered model.
 
-Hello,
+Changes since v4:
+  - Initialize tmp = 0 in max40080_read_iv() before read_poll_timeout to
+    avoid using potentially uninitialized value in the condition check
+    (Sashiko, Jonathan).
+  - Simplify max40080_get_oversampling_ratio() to use cached value instead
+    of reading from the device (Jonathan).
+  - Remove DMA-safe buffer from struct -- I2C layer already bounces data
+    internally for i2c_smbus_* calls (Jonathan).
+  - Make shunt-resistor-micro-ohms required in DT binding. The default
+    1 Ohm was arbitrary and rarely correct for real hardware (Jonathan).
+  - Remove PM ops entirely. Having only resume without suspend was flagged
+    as "papering over" possible power loss issues (Jonathan).
+  - Remove the {} scope around propname, declare it at function top (Andy).
+  - Remove mod_devicetable.h include -- i2c.h provides necessary types
+    (Jonathan).
 
-On Wed, Jul 22, 2026 at 12:00:07AM +0530, Manaf Meethalavalappu Pallikunhi wrote:
-> +#include <linux/mod_devicetable.h>
-> [...]
-> +#include <linux/platform_device.h>
+Changes since v3:
+  - Removed all regmap usage -- regmap doesn't support SMBus PEC or Quick
+    Command, both required by this device (Nuno).
+  - Fixed locking: max40080_update_bits() now takes the lock internally,
+    and callers update cached state after the call returns (Nuno).
+  - Consistent comment style: capital first letter + period (Andy).
+  - Use propname variable to deduplicate "shunt-resistor-micro-ohms" (Andy).
+  - Return IIO_VAL_* inline instead of break + return pattern (Nuno).
 
-<linux/platform_device.h> already provides struct of_device_id and
-<linux/mod_devicetable.h> will go away soon. So please drop the #include
-for <linux/mod_devicetable.h>.
+Changes since v2:
+  - Added shunt-resistor-micro-ohms DT property with default value.
+  - Use single-shot mode with SMBus Quick Command trigger for correlated
+    current/voltage reads.
+  - Precompute current scale per range at probe time.
 
-Best regards
-Uwe
+Link: https://lore.kernel.org/linux-iio/20260717123852.1140893-1-stefan.popa@analog.com/ [v4]
+Link: https://lore.kernel.org/linux-iio/20260715063652.368501-1-stefan.popa@analog.com/ [v3]
+Link: https://lore.kernel.org/linux-iio/20260713120226.90303-1-stefan.popa@analog.com/ [v2]
+Link: https://lore.kernel.org/linux-iio/20260703102941.1141341-1-stefan.popa@analog.com/ [v1]
 
---bd4y6yvvhvmkobl7
-Content-Type: application/pgp-signature; name="signature.asc"
+Stefan Popa (2):
+  dt-bindings: iio: adc: add maxim,max40080
+  iio: adc: add MAX40080 current-sense amplifier driver
 
------BEGIN PGP SIGNATURE-----
+ .../bindings/iio/adc/maxim,max40080.yaml      |  56 ++
+ MAINTAINERS                                   |   9 +
+ drivers/iio/adc/Kconfig                       |  11 +
+ drivers/iio/adc/Makefile                      |   1 +
+ drivers/iio/adc/max40080.c                    | 586 ++++++++++++++++++
+ 5 files changed, 663 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/maxim,max40080.yaml
+ create mode 100644 drivers/iio/adc/max40080.c
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmphtOEACgkQj4D7WH0S
-/k49VQgAmlAG8muz6EMH5FjdlhV/oZNvJu7GJoTRj34gMkDOuJxv5eCjOKSjMT9q
-kpJaIlEzPWBL87vMjKLjzIjbrmzbQCecyRprvXwQD5kRTcHIp6VehlZoXVoEkmVE
-IHwyi4SD0DiEa8zfppjbcvaSy86X42bsR+zf9bWW2I4myMzanvPMEROEE7LvPJFG
-/ZN2+kVdAdHJCs7RVEPmaOmb75+Dr+jnkVFQC0VV1f+KSVkZEpvd+fcQXcv3GaHu
-n2iHyLpWtJeYA1uhY688Q+tPOwMAEwcHbgmIDoyYtC+DYHrlH9/4gqEsHVWD7vQO
-fmjQGvUa3+No+e0dojq+d8Go1+fZWg==
-=P/xV
------END PGP SIGNATURE-----
+--
+2.53.0
 
---bd4y6yvvhvmkobl7--
