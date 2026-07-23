@@ -1,149 +1,165 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5083F367F48
-	for <linux-hwmon@vger.kernel.org>; Thu, 23 Jul 2026 06:15:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50BA73B42F6
+	for <linux-hwmon@vger.kernel.org>; Thu, 23 Jul 2026 06:28:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784787317; cv=none; b=cEyyt36q1JEQBW0RRBDPIl6A8MbyBWOXY8KIeYZeISZnTDP4zQiJw+5hhKyRiQmVNfRvHdHcUajHmwsB4z1fqbv+cZC1HngcgLVqTwQKVRrzUHY2wFJ1m+a66IBIWeQpnKwTEhIeU2CkVLJgVvSRXhw6QFVIgOUDCMRdyL0rWAI=
+	t=1784788089; cv=none; b=AYCtLBd4dwfT02r8XlI0s6R18zEUSuhFxQjS53bN/f8p7dsBobg7vLhZ3GlJmynjJMjZsMX5Zg9ZBk6mBf6XM0KylDYCXRr6TKwWzX4w2icqCRmErYEPtsA367hcJrTGFLfW7Wejub700U+gx8ST61Vd/wmqSctf39diBS6bSoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784787317; c=relaxed/simple;
-	bh=DJWg6i9DE0m8GO5eekxnXvdRpFxQZRk6q4zTYswIC4s=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=HSGgs3Jplku6Du1smPbFcw3j5BByOMuMOJzwiA8MzRbFmnmFHCJ8pkSCrZ0MO+wf8brzaxjvsHNjpfPsANSUTUpqTXj9mPrfRlC4ppzs6H5LbRBZF74TtMn3zbSRy3BPlZ+/w5HGlD8T6YkBtphfll40MIwUCGc4k/VZ0RukQM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gk143dB0; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784788089; c=relaxed/simple;
+	bh=TQAEV7UNUSBt5hCHAIhIYZaRcGmEyjeZFj3OyVcrCeo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ULrilIs8QHnYv8VkY900Ooejkvi5QU9/Ch9mv7Cn4w9uuDjWl5jRK8viSqNObLx0f5xBDrEGn/fXYB7hw913jqSntijkewtreWRt7YaSYUqihSuXRVX3U8xnIjVVfFAU1JeL/5b/7+5q70yt7Mq9iyPShJp57F+Zp7Ann0ZM8dU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=e8n4LgNd; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gk143dB0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAA0E1F000E9;
-	Thu, 23 Jul 2026 06:15:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784787316;
-	bh=mWViNt0xKU9C9hlnuIN3YFV2NVQVl4CfrNYuft/Icq0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=gk143dB0lORxpuN9T2mjKhFbA+hDf7fW166JZOEWGL8+EJn++BFxKt1GwgyblGEqo
-	 Q3dj2ETPCGLNmbTYu16t6SZT2yYWoS+C+05wwHMDtfV+4lelV85k2v1LJpglqjiXEX
-	 nEUGJXH6H9KUoRNo6MOUML4tCw5sTEBOM0VKTsTS279cA2Or6Krn+WWvy+mB15pyd0
-	 WiRqT9dMdmkOE/mfNPeJLVkevv7as1L9GrfNy34oXdZ8YFAsV7E31F+3XiiY5gIU6t
-	 rwzcbXYmwVIecdkzFls3YskWj+0lf7JBAULSikelMuH+dEVSHkqd+ZWf1T76Ut7x5D
-	 g1Xl87DELsTNw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v8 2/2] hwmon: add Altera SoC FPGA hardware monitoring
- driver
-Reply-To: sashiko-reviews@lists.linux.dev
-To: tze.yee.ng@altera.com
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <d29d05f8bc25a89a0dbf59c8a0bb705f676a58a0.1784785709.git.tze.yee.ng@altera.com>
-References: <cover.1784785709.git.tze.yee.ng@altera.com>
- <d29d05f8bc25a89a0dbf59c8a0bb705f676a58a0.1784785709.git.tze.yee.ng@altera.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 23 Jul 2026 06:15:03 +0000
-Message-Id: <20260723061515.BAA0E1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="e8n4LgNd"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-47f752b3423so132262f8f.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 22 Jul 2026 23:28:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1784788085; x=1785392885; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=2TD6c2aawyPviSqpm5Nt3rY9T6uJCx1d6aW8Jwv1HfI=;
+        b=e8n4LgNdC8mDUP3yGwpA3WlCKZ3sVXKKgl7G9mOyX0iWUQKXry8iF+ynsURmyyOq4S
+         Y/e05FSvJsWQE0TRHQtzo4s84+9fvoKFiFDc19mHET/KbgGDnMVth4b2XLYBuMFs6KDy
+         Emt7xCYDPjrVHbUhSP7UlvYeuMXLzJs2CnZKkNg7+2zI9RdNCteuLxPSSjZ2PRh1dgV2
+         2ziHW6Rm+MgeDnHuwE4Nyxwrk8a/TFe6URh6NL/TN/gPBNixDHA0DzrMj1gMIMDSErzF
+         jOu53lVJs+aeG7w90UvOFiNSotx7IgIXckaIAMIuCXQVsRdkbcB668unOmHgWP1XT7cZ
+         p/ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784788085; x=1785392885;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=2TD6c2aawyPviSqpm5Nt3rY9T6uJCx1d6aW8Jwv1HfI=;
+        b=juXuRe0kNgIwi8mMbj1oNVR1PrtGENFaZXMi5cFXcxwGrdKxJmmE9lXXglSwJwOR1b
+         9fn9L4164WsK0NBg09++fI84d0DtopvrGH2zlJ0GR64buTmGhwFSPp8HuKAuQvrbMDIG
+         ewYUCObHlQ1I+66bhOHWB7PvFddeCf/bkSuaMvleQIoaHPbnjM/Sg9dd3w9GDab4w1WG
+         EWWjfmAo/L1MzjKeo8V2hZ1/Jbn41eBpM0bmjrKXflbppoNNbdt79ZA8EpJJSldvU3r6
+         22yNhmpeiSaiUhUViDsSOh2qUtevQ8rz2iZIIjR795EKuKX5uAWDSM81uyW+rntyyn9O
+         2+bA==
+X-Forwarded-Encrypted: i=1; AHgh+RpR+UGCn9+t06BNZiHc2GIJog066bLm30nfCrBki/j9PHxmvGlk8dih8Uy0dMAsy2qZ4I1SG/M+sbIbrQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0vZ47UeBft0Wxp3tvD7Q63+AOOiBSn4nupzA6B90IGGVk+72J
+	PGSa+yQly9yMM0kERtmo8FrnGVHb+t4VCFsg+Dy4z9uIOm5TzGygviAYkwLF9Bx92MY=
+X-Gm-Gg: AR+sD13kqQWCN54DO4i+6olzvulAxwUVwhJ8QEQ96Fn4ObH0lRL5txuG90U0VoGtJGK
+	Sdyyya2IjYWLOHpVRfQPazHV13H6VF//yy+71hXcbTOR6HGHxVMkclPOvGtxSX27isTdtUvwb9C
+	UUxB9DNSL4v0c0d5uDKFr777JfiPgp+Be0k3ZBTzYEIowEVOWxQb8u5HYz9AZ0kYVQZV4FhMs7M
+	ZiJqLeMbYrSMSisXj3tfEEfJspUBJGTNUr3cKc39UHvlCScpHJPBcNwYfeLctuPKBpp01shhNy7
+	jB+q/aX93eaiyNENHqnjyhLBVU8ExKUiob8T9fRyUq58LzdFu5j+HzfQyEdxs0JGssfBq4T+9jN
+	jyTVUeXqlaIMYMPb9mVVgl07g+20eyDy67Z+yzUUaueC1wKfEJtULLQCmaqBF314eSAUXHw2mpr
+	drw1UGz44=
+X-Received: by 2002:a05:6000:22c7:b0:47f:6fd2:12ff with SMTP id ffacd0b85a97d-47f8da5c9efmr1980906f8f.9.1784788085516;
+        Wed, 22 Jul 2026 23:28:05 -0700 (PDT)
+Received: from localhost ([2a02:8071:56d1:2de0:1d24:d58d:2b65:c291])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-47f85b9a5c4sm12114701f8f.8.2026.07.22.23.28.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2026 23:28:04 -0700 (PDT)
+Date: Thu, 23 Jul 2026 08:28:03 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] hwmon: (emc1403) Convert to use OF bindings
+Message-ID: <amGz2YZogakb5XAv@monoceros>
+References: <20260721095935.439174-1-clamor95@gmail.com>
+ <20260721095935.439174-3-clamor95@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="l6sn4pufjezkt2ci"
+Content-Disposition: inline
+In-Reply-To: <20260721095935.439174-3-clamor95@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Timeouts in both synchronous and asynchronous read paths abandon p=
-ending requests without flushing queues or canceling them, causing permanen=
-t data desynchronization or hangs for subsequent reads.
---
 
---- Patch [2]: [PATCH v8 2/2] hwmon: add Altera SoC FPGA hardware monitorin=
-g driver ---
-commit 467543c9f9e3893d8c84995c5e7bc8bab31dfb20
-Author: Tze Yee Ng <tze.yee.ng@altera.com>
+--l6sn4pufjezkt2ci
+Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v3 2/3] hwmon: (emc1403) Convert to use OF bindings
+MIME-Version: 1.0
 
-hwmon: add Altera SoC FPGA hardware monitoring driver
+Hello,
 
-This commit adds a hardware monitoring driver for Altera SoC FPGA devices
-using the Stratix 10 service layer. It supports temperature and voltage
-sensors based on the service layer compatible string.
+On Tue, Jul 21, 2026 at 12:59:34PM +0300, Svyatoslav Ryhel wrote:
+> From: Jonas Schw=F6bel <jonasschwoebel@yahoo.de>
+>=20
+> Add OF match compatible table to be able to use this driver with Device
+> Trees.
+>=20
+> Signed-off-by: Jonas Schw=F6bel <jonasschwoebel@yahoo.de>
+> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-> diff --git a/drivers/hwmon/socfpga-hwmon.c b/drivers/hwmon/socfpga-hwmon.c
-> new file mode 100644
-> --- /dev/null
-> +++ b/drivers/hwmon/socfpga-hwmon.c
-[ ... ]
-> +static int socfpga_hwmon_async_read(struct device *dev,
-> +				    enum hwmon_sensor_types type,
-> +				    struct stratix10_svc_client_msg *msg)
-> +{
-[ ... ]
-> +	ret =3D -ETIMEDOUT;
-> +	while (!time_after(jiffies, deadline)) {
-> +		status =3D stratix10_svc_async_poll(priv->chan, handle, &data);
-> +		if (status =3D=3D -EAGAIN) {
-> +			/* still in progress */
-> +		} else if (status < 0) {
-> +			ret =3D status;
-> +			break;
-> +		} else if (status =3D=3D 0) {
-> +			ret =3D 0;
-> +			break;
-> +		}
-> +		usleep_range(HWMON_RETRY_SLEEP_US, HWMON_RETRY_SLEEP_US * 2);
-> +	}
+Please put your S-o-b line last.
+
+> ---
+>  drivers/hwmon/emc1403.c | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/hwmon/emc1403.c b/drivers/hwmon/emc1403.c
+> index cd753b38709f2..b7ab6069ec7b1 100644
+> --- a/drivers/hwmon/emc1403.c
+> +++ b/drivers/hwmon/emc1403.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/hwmon.h>
+>  #include <linux/hwmon-sysfs.h>
+>  #include <linux/err.h>
+> +#include <linux/mod_devicetable.h>
+
+Don't add <linux/mod_devicetable.h> please. struct of_device_id is also
+provided by <linux/i2c.h> so adding <linux/mod_devicetable.h> isn't
+needed.
+
+>  #include <linux/sysfs.h>
+>  #include <linux/regmap.h>
+>  #include <linux/util_macros.h>
+> [...]
+> @@ -682,10 +683,21 @@ static const unsigned short emc1403_address_list[] =
+=3D {
+>  	0x18, 0x1c, 0x29, 0x3c, 0x4c, 0x4d, 0x5c, I2C_CLIENT_END
+>  };
+> =20
+> +static const struct of_device_id emc1403_of_match[] =3D {
+> +	{ .compatible =3D "smsc,emc1402", .data =3D (void *)emc1402 },
+> +	{ .compatible =3D "smsc,emc1403", .data =3D (void *)emc1403 },
+> +	{ .compatible =3D "smsc,emc1404", .data =3D (void *)emc1404 },
+> +	{ .compatible =3D "smsc,emc1428", .data =3D (void *)emc1428 },
+> +	{ }
 > +
-> +	if (ret) {
-> +		dev_err(dev, "Failed to get async response\n");
-> +		goto done;
-> +	}
-[ ... ]
-> +done:
-> +	stratix10_svc_async_done(priv->chan, handle);
-> +	return ret;
-> +}
 
-[Severity: High]
-If the polling loop times out, this calls stratix10_svc_async_done() which
-immediately frees the job ID via ida_free().
+Unusual empty line here.
 
-Since the firmware might still be processing this request, could the next
-async read reuse this job ID and intercept the delayed completion of this
-timed-out request?
-
-[ ... ]
-> +static int socfpga_hwmon_sync_read(struct device *dev,
-> +				   enum hwmon_sensor_types type,
-> +				   struct stratix10_svc_client_msg *msg)
-> +{
-[ ... ]
-> +	ret =3D wait_for_completion_timeout(&priv->completion, HWMON_TIMEOUT);
-> +	if (!ret) {
-> +		dev_err(priv->client.dev, "timeout waiting for SMC call\n");
-> +		ret =3D -ETIMEDOUT;
-> +		goto status_done;
-> +	}
+> +};
+> +MODULE_DEVICE_TABLE(of, emc1403_of_match);
 > +
-> +	ret =3D priv->last_err;
-> +
-> +status_done:
-> +	stratix10_svc_done(priv->chan);
-> +	return ret;
-> +}
 
-[Severity: High]
-If wait_for_completion_timeout() times out, this calls stratix10_svc_done(),
-which stops the worker thread via kthread_stop() without flushing the pendi=
-ng
-message from the channel's svc_fifo.
+Best regards
+Uwe
 
-If the worker thread evaluates kthread_should_stop() before dequeuing the
-message, will the stale message stay in the queue?
+--l6sn4pufjezkt2ci
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If so, could the next read spawn a new thread that dequeues the stale messa=
-ge
-and returns wrong data (like returning a voltage reading for a temperature
-request)?
+-----BEGIN PGP SIGNATURE-----
 
-Also, if the worker thread is stuck inside the SMC call, won't kthread_stop=
-()
-block indefinitely, hanging the reader process?
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmphtHEACgkQj4D7WH0S
+/k4H9Qf/eIS4Qz8jNjTZB5EcrdJYqD0cdgZY44kCeDGMBB625M8vmpG7qAv2xnqF
+0lGgOTpDoCEs+IgmNz8ISciUqEeY7PWmCge3u6jKZteesuUBX1tMrtnR5DPjVNUv
+jV6gAM1O287rIzQjp59TZ6tcQe670H3YK+tZAZOIOgpCg5C8FNUOanj9B/sGgnn8
+lF3XTCng+Kh6FacdHSPIEwi/FURNxIwy0aKXjPsxEse7EcC4fsTnmjHubUsWdtOm
+r8cBcczstoZwosFPOMzSGgft070Ay2Xq2J18y7uYgjpK22gqxuxI6tXe4fucREy9
+YSZUBJ9ebV0SVa8smQjX8NPHHGxKJA==
+=n8hC
+-----END PGP SIGNATURE-----
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1784785709.gi=
-t.tze.yee.ng@altera.com?part=3D2
+--l6sn4pufjezkt2ci--
