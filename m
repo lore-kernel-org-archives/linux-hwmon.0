@@ -1,107 +1,140 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6147D3D810D;
-	Thu, 23 Jul 2026 07:04:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A563CE4A3;
+	Thu, 23 Jul 2026 07:06:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784790277; cv=none; b=GuzXw3U09hf6elPSc2g+6VD0QZ2Vc7j6YRafhQ0AsGJoDc+fsFgOUuQ5IQjymeUO86H2qTlHIKoywZL+deHDq/CUDJQjsTqtkkFN9Zolexce1Vs/OWGruN+AH7E9wu3qqjaC9EXcEkxh5Lx4Sf4ImlIbCm8GY6Zed8/wiP9Nue4=
+	t=1784790395; cv=none; b=c2Tfi/qWoh0PBeIsA0hE2xxepT+ml9wWoy+7yC02I7lKUyCZHx3LcrhSIw4i1hcHEHQbymoP/qQ7FXBGEkgy0R6D5GA4s90Q/ZuCQpBzNsSo4ZMOkmjaXlfsZC8pvBIVF7zS4OOLgsjCNVqhz0mSH5Hg28zUw1qt9ceWHJuOXyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784790277; c=relaxed/simple;
-	bh=e6O/jwXV0cFZ+A+Rpu7Y1iGC6zXCLWLDgSdxCYR43bo=;
+	s=arc-20240116; t=1784790395; c=relaxed/simple;
+	bh=yXWCbKdW4y8jr59aCQtbKgTC6KkN/5zAPMLC9a8mQew=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=UZTDrxM55M3H/C2Wx1Ti3PeFf/5ThZspeDgCD8iLtbjj8QdIh7s1NzFNKj3V4JwOnOOGQ/WEmZxYDFSDmO9WbAXQb60yoGxgG/Qa1CbIfxB8D1+yaDspMdzFIueeAjbmjazeD7RpuVkTtQSctO2UQ+ndFppTaX9m862E9Zj9I3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YbzrDk9n; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=snRU9ZkCub1xt5rSC7IDR2vYemUtuhLzKZPGbQ4sr8RexJxIY8yU0Wajt6yQrnFTolNadsJyNAS66HuWom8kLgdhSsv1mPd//WcaRhVSs+J4YOx4jGKEWS4wABj7mwsnbTImzlteRVyxEBCZoF3HL1d6fp+nkXlZPhme0v+ky1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JXzbuwyi; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YbzrDk9n"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 142E91F000E9;
-	Thu, 23 Jul 2026 07:04:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JXzbuwyi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C6FD1F000E9;
+	Thu, 23 Jul 2026 07:06:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784790272;
-	bh=ZcJPKOMWzIIGG24Xn3PdMWHsuyqMzhaGI7gN3Dt/UAs=;
+	s=k20260515; t=1784790393;
+	bh=Bitx58NIBLwepXqTVFkGw2TJT/qjF1gDCN1N8/6iIXA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=YbzrDk9n7koIcqEzyfh3MbghVfPBW4cuidUd/LMzOiP93mJZYGXY4Va8NmKNfop7e
-	 /hUm/Aae1Du//od8LN5Y321i7PTLdHNOHSBNQiHiMPQHkzXNC9kjOT/EczmUgbDZL1
-	 KeXanQWCKIsmhWWlX5WrEKKYRiGgExDvQUiFAdc/v8GNvFO2FXY/uQgpZ0I2KZ/cKz
-	 NoqKPIsaUmRGAY8emeLEn3cO0PnNfFx6j5TuGYMuWDlA5Ig+JbCdr1UzAnrMT0I2UF
-	 7N/XgG4ZcX1QQOnrd9z7rtm6uIPMCC3y9woxOFw6CidaAzDIZhLR7ubZTAWmdPWNjA
-	 xsYnage0Zbuaw==
+	b=JXzbuwyiAVhnFn+f2T4nbWcgGia11UeM0Dk/ipTd6NrwwnMcuLIb2fXRl5daKdKXf
+	 UCosDfA64rt8u31d+UxFYEyADd5KrePBK6um7BIQb4+G4QtIHxit2GCeQ3NpS88RX+
+	 iZ7qJHP2sKB5dldD7W/mcpPepHORZxADdCoH3I3COYjpK0A8pHYsAwZM9uGbPdw0E3
+	 ad+iwkc7JS+n+IdGf64KsjHZ6J6Th94Xb5RlTJ9q1/vWmgkIhXQBPF9kreFt5ibCWO
+	 m7qe43i3dzUDkJORnvkPbdtVkf//7ZoaUYNi+nNd0wm5DcKKe4Uj3Unz/dYUKax81Y
+	 II0BhStlAfPfg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 1/2] dt-bindings: iio: adc: add maxim,max40080
+Subject: Re: [PATCH v5 2/2] iio: adc: add MAX40080 current-sense amplifier
+ driver
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Stefan Popa" <stefan.popa@analog.com>
-Cc: robh@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <20260723065036.2683075-2-stefan.popa@analog.com>
+Cc: linux-hwmon@vger.kernel.org, robh@kernel.org, devicetree@vger.kernel.org, conor+dt@kernel.org
+In-Reply-To: <20260723065036.2683075-3-stefan.popa@analog.com>
 References: <20260723065036.2683075-1-stefan.popa@analog.com>
- <20260723065036.2683075-2-stefan.popa@analog.com>
+ <20260723065036.2683075-3-stefan.popa@analog.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 23 Jul 2026 07:04:29 +0000
-Message-Id: <20260723070432.142E91F000E9@smtp.kernel.org>
+Date: Thu, 23 Jul 2026 07:06:32 +0000
+Message-Id: <20260723070633.2C6FD1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Low] Incomplete DT binding schema due to missing standard hardware prope=
-rties
+- [Medium] Software state can desynchronize from hardware configuration due=
+ to TOCTOU race during concurrent sysfs writes.
+- [Low] The i2c_device_id array is missing required named initializers.
 --
 
---- Patch [1]: [PATCH v5 1/2] dt-bindings: iio: adc: add maxim,max40080 ---
-commit 613bf10ba7af5c378c448dbcf5f6af9c11712984
+--- Patch [2]: [PATCH v5 2/2] iio: adc: add MAX40080 current-sense amplifie=
+r driver ---
+commit 0c56883df0b122ded44daf6d01973fa32a6c55e4
 Author: Stefan Popa <stefan.popa@analog.com>
 
-dt-bindings: iio: adc: add maxim,max40080
+iio: adc: add MAX40080 current-sense amplifier driver
+   =20
+This commit adds a direct-mode IIO driver for the MAX40080 bidirectional
+current-sense amplifier. It exposes current and voltage channels over an
+I2C/SMBus interface.
 
-This commit adds device tree bindings for the Maxim MAX40080 bidirectional
-current-sense amplifier. It defines standard properties and parameters like
-the shunt resistor value used for scaling the reported current.
-
-> diff --git a/Documentation/devicetree/bindings/iio/adc/maxim,max40080.yam=
-l b/Documentation/devicetree/bindings/iio/adc/maxim,max40080.yaml
+> diff --git a/drivers/iio/adc/max40080.c b/drivers/iio/adc/max40080.c
 > new file mode 100644
-> index 0000000000000..170bf4eff8706
+> index 0000000000000..cdf626dccb24f
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/iio/adc/maxim,max40080.yaml
+> +++ b/drivers/iio/adc/max40080.c
+
 [ ... ]
-> +properties:
-> +  compatible:
-> +    const: maxim,max40080
+
+> +static int max40080_set_range(struct max40080_state *st, unsigned int ra=
+nge)
+> +{
+> +	int ret;
 > +
-> +  reg:
-> +    maxItems: 1
+> +	ret =3D max40080_update_bits(st, MAX40080_REG_CFG, MAX40080_RANGE_MSK,
+> +				   FIELD_PREP(MAX40080_RANGE_MSK, range));
+> +	if (ret)
+> +		return ret;
 > +
-> +  "#io-channel-cells":
-> +    const: 1
+> +	st->range =3D range;
 > +
-> +  shunt-resistor-micro-ohms:
-> +    description:
-> +      Value of the current-sense shunt resistor connected between the IN=
-+ and
-> +      IN- inputs. Used to scale the reported current.
+> +	return 0;
+> +}
+
+[Severity: Medium]
+Since max40080_update_bits() acquires and releases the mutex internally,=20
+does this leave the assignment of st->range unprotected against concurrent
+sysfs writes?=20
+
+If two threads write to the sysfs attribute at the same time, could the=20
+cached software state become permanently desynchronized from the actual=20
+hardware configuration, causing future readings to be scaled incorrectly?
+
+[ ... ]
+
+> +static int max40080_set_oversampling_ratio(struct max40080_state *st, in=
+t val)
+> +{
+> +	int ret, filter =3D max40080_oversampling_to_filter(val);
 > +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - shunt-resistor-micro-ohms
+> +	if (filter < 0)
+> +		return filter;
 > +
-> +additionalProperties: false
+> +	ret =3D max40080_update_bits(st, MAX40080_REG_CFG, MAX40080_FILTER_MSK,
+> +				   FIELD_PREP(MAX40080_FILTER_MSK, filter));
+> +	if (ret)
+> +		return ret;
+> +
+> +	st->oversampling_ratio =3D val;
+> +
+> +	return 0;
+> +}
+
+[Severity: Medium]
+Similarly to max40080_set_range(), is the update of st->oversampling_ratio
+vulnerable to a race condition since it happens after max40080_update_bits()
+has released the lock?
+
+[ ... ]
+
+> +static const struct i2c_device_id max40080_i2c_ids[] =3D {
+> +	{ "max40080" },
+> +	{ }
+> +};
 
 [Severity: Low]
-The commit message mentions an internal FIFO, which usually implies an
-interrupt pin is available to signal data ready or alerts. Physical devices
-also typically have power supply requirements, such as a vdd-supply.
+Does this violate the I2C subsystem coding style guidelines which mandate
+named initializers for initialized arrays of type struct i2c_device_id?=20
 
-Since additionalProperties is set to false, will device trees that accurate=
-ly
-describe these physical hardware connections fail schema validation? Should
-definitions for interrupts or power supplies be added to the properties blo=
-ck
-to bypass the additionalProperties restriction?
+Should this be .name =3D "max40080" to prevent issues if the struct definit=
+ion=20
+changes in the future?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260723065036.2683=
-075-1-stefan.popa@analog.com?part=3D1
+075-1-stefan.popa@analog.com?part=3D2
