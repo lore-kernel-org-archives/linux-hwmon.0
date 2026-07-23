@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1B684968FE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C164A13AE;
 	Thu, 23 Jul 2026 13:03:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784811783; cv=none; b=utCNwvS0y/8HF+c0OAvvAvzgq4DMh1SwZDil24a2fVwdeKga4959BJuqA/IdorMeCl1FcqMCDxSAru+kvzA46X6eL84wgSK4BsVALwJIRqNAO9LDGc7sNJ1naq/uG8OHGpzibh59DY7hFbpYSDqI6IjJTVpEqu1blvNKUTTqE+E=
+	t=1784811783; cv=none; b=CI4Znda73xeSCspUbS8OpQcx0pAg11C7Y/CjYW0fRLDe1H1G+4ZlttdQ7xwsWJmVlhwO5LKTQLuyMgxVmJ2RvgXk41nTpfYqHkX2D+OHEFf9nk8FjNiCeKDLxLAHHPgVSfNAp8RB5BWloySoilVKiu+/DVpfe4c01fPVCCKkG7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1784811783; c=relaxed/simple;
-	bh=kXa6plVQtcFVC3+j2pCHXzYBLB3t/8xHvSXO96PxSfA=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CnM7pR6hfp1UX+MfNqk1YAU+NcXeHNr9IIV6XCnv4M9RUNurMYZvqqQB64cMQuSknth3tlR/GnL30C122Euq+XBwpCnJrEwMeMGJhQ4mzHYSygszzcQweou+dHpOD4jI1XqDIqOtaJDtHYF83f80JONpU3i0rdnhz283y/Kntp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cWnjWonw; arc=none smtp.client-ip=10.30.226.201
+	bh=1mon8LaeMuCph73tN+4tR92dPqjWfoCayEXKWENCMLc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=q4UdDOSw37X0hBkRPXI+C0ZjvoiU8oUL4pPSxYcmyvTnmupFgxIRWIxX8xw5YSF7Im16P9a8ewVIs5LcI2vsFU78SojzYmrnAeTupGFy0+zu/jWplUFK9/1x4n4Z24ZQl1jwgTtwAmk/wxwuOoXQQAC/Ln9P+gkU3GuO+HtqSjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EsYs4m7i; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cWnjWonw"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 672C1C2BCB8;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EsYs4m7i"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8952FC2BCF7;
 	Thu, 23 Jul 2026 13:03:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1784811783;
-	bh=kXa6plVQtcFVC3+j2pCHXzYBLB3t/8xHvSXO96PxSfA=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=cWnjWonwy2elIagSZmGCSWV/Q1Ou7rlWyMuFq0InwpZV4JnIpTvJh+dP8fbQQMCNf
-	 2EzpdambIKwlfEQikbfVAM+wRYu98AxblxQSjKIXk63juu6qhCRUHApmc8sfmNf34L
-	 uJDnNJwVIMtsbBQGLTYMMeHUn8a7NHvg9d+iFRgx3+7JC7PtBkt+AsHkDxXoBEItZC
-	 SsC2a+lKjLPipnyDY8HNgi0iATFntRodZjKIp+X3jqofgJwnDZpMa6e9Z+SjUsOpKD
-	 AebQ4MvLQ2Z+cf1pLIJ1t16S6PfQ+sHhuF9Kqwlgwr4VmIJM7xjX6dRFH1GNyX5xWB
-	 4Ij30qdEP3zrg==
+	bh=1mon8LaeMuCph73tN+4tR92dPqjWfoCayEXKWENCMLc=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=EsYs4m7ieh0GzPwxHld8jQ+oIXxS8KXpRj4A89O/2JlZW9uCjPEgLvmsoQFCFvdEm
+	 Buo1MreKozUgt0HTx8VbMJQi4GvbIEjuYU1BPbCx9fTtN1Fvz5OCTrAedX0mT/wuLc
+	 mCfYsZj9sfX1BEoemScZf+ucaQQmRW5Z4MuYErInRMWH78B+quRpQTDVkiUau7Jlvk
+	 aPTk2Z1GR+mCHKqRBE+fj+OyELcuKG0gRX21/BnG6D9erSXBLdCV9nn9So4dGFdDOJ
+	 qzZ5ReJCEtMARcK0147GIL52ev1SPMsQxXXcgf4s0URWCCPKi9R5a5UG3IO/wZjQrU
+	 zmyuPqIczKKsQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CB20C531CF;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70076C531CA;
 	Thu, 23 Jul 2026 13:03:03 +0000 (UTC)
 From: Vincent Jardin via B4 Relay <devnull+vjardin.free.fr@kernel.org>
-Subject: [PATCH 0/3] hwmon: pmbus: add MPS MPQ8646 support
-Date: Thu, 23 Jul 2026 15:02:41 +0200
-Message-Id: <20260723-mpq8646_v0-v1-0-14363c75916f@free.fr>
+Date: Thu, 23 Jul 2026 15:02:43 +0200
+Subject: [PATCH 2/3] dt-bindings: hwmon: pmbus: add MPS MPQ8646 binding
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -40,9 +40,9 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAPEQYmoC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDcyNj3dyCQgszE7P4MgNdY2ML4+QkU3OTFPNEJaCGgqLUtMwKsGHRsbW
- 1ANIITmhcAAAA
+Message-Id: <20260723-mpq8646_v0-v1-2-14363c75916f@free.fr>
+References: <20260723-mpq8646_v0-v1-0-14363c75916f@free.fr>
+In-Reply-To: <20260723-mpq8646_v0-v1-0-14363c75916f@free.fr>
 To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
@@ -51,11 +51,11 @@ Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org, linux-doc@vger.kernel.org, 
  Vincent Jardin <vjardin@free.fr>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1784811776; l=1766;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1784811776; l=1982;
  i=vjardin@free.fr; s=20260525; h=from:subject:message-id;
- bh=kXa6plVQtcFVC3+j2pCHXzYBLB3t/8xHvSXO96PxSfA=;
- b=kKQmK18ETlm33Tn76966YnxqlQbKQVxjIBKc4kHMNmNA800tJUTsQZbJ5K0u+r6W1zJzOhmcT
- +s1gUrOyW1CCPdPRMPL6cna+N12FA/lrBlnOHk5+8XGTqbr6wpBW9oM
+ bh=Tvf4fzvHxa9KKqFmGBANHE66PMlQlAr4hrKgSTUyCc4=;
+ b=U08MA3fO8zvi76wSTIPiAJ8aUZLwkoPKs9FvZXg6VsyfAmQ77Q6McjT2qLrFeIenIAchmp4T/
+ Hw9h0NFEd9nCvIaKwluwz/DGo8pbMAbc6vggpSbAHthUMAmRszdwGZL
 X-Developer-Key: i=vjardin@free.fr; a=ed25519;
  pk=hppgLeFpGpKOi7LNwGEZ4jOYofJCoGd4Jf1ltAabiLw=
 X-Endpoint-Received: by B4 Relay for vjardin@free.fr/20260525 with
@@ -63,44 +63,78 @@ X-Endpoint-Received: by B4 Relay for vjardin@free.fr/20260525 with
 X-Original-From: Vincent Jardin <vjardin@free.fr>
 Reply-To: vjardin@free.fr
 
-Add support for the Monolithic Power Systems MPQ8646 step-down
-converter as a PMBus device.
+From: Vincent Jardin <vjardin@free.fr>
 
-  1/3 pmbus core: add and export pmbus_get_hwmon_device() so a chip
-      driver can call hwmon_notify_event() from an in-driver
-      alarm-poll fallback (lm90-style) on boards where the chip's
-      SMBALERT# pin is not available for the CPU.
-  2/3 dt-bindings: the MPQ8646 binding; schema inspired from the
-      mpq8785 (same mps,vout-fb-divider-ratio-permille property).
-  3/3 the MPQ8646 driver: PMBus telemetry plus MFR_CFG_EXT
-      gate-close retry after CLEAR_LAST_FAULT, alarm acknowledge via
-      inX_reset_history, MPS-extended STATUS_WORD decode and
-      post-mortem clear, the alarm-poll fallback for boards without
-      SMBALERT, and on_off_config / vout_margin / mfr_pmbus_lock
-      sysfs.
+Add a device-tree binding for the Monolithic Power Systems
+MPQ8646 step-down converter as a PMBus devince.
+
+The schema is inspired from the mpq8785e:
+same mps,vout-fb-divider-ratio-permille property (maximum: 2047),
+and const: mps,mpq8646.
 
 Signed-off-by: Vincent Jardin <vjardin@free.fr>
 ---
-Vincent Jardin (3):
-      hwmon: pmbus: event notification with alarms
-      dt-bindings: hwmon: pmbus: add MPS MPQ8646 binding
-      hwmon: pmbus: add MPQ8646 driver
+ .../bindings/hwmon/pmbus/mps,mpq8646.yaml          | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
- .../bindings/hwmon/pmbus/mps,mpq8646.yaml          |   50 +
- Documentation/hwmon/mpq8646.rst                    |  314 +++++
- MAINTAINERS                                        |    8 +
- drivers/hwmon/pmbus/Kconfig                        |   11 +
- drivers/hwmon/pmbus/Makefile                       |    1 +
- drivers/hwmon/pmbus/mpq8646.c                      | 1214 ++++++++++++++++++++
- drivers/hwmon/pmbus/pmbus.h                        |    1 +
- drivers/hwmon/pmbus/pmbus_core.c                   |    8 +
- 8 files changed, 1607 insertions(+)
----
-base-commit: 248951ddc14de84de3910f9b13f51491a8cd91df
-change-id: 20260723-mpq8646_v0-3383cb574d7a
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8646.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8646.yaml
+new file mode 100644
+index 000000000000..401a80325b4b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8646.yaml
+@@ -0,0 +1,50 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright (c) 2026 Free Mobile - Vincent Jardin <vjardin@free.fr>
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/pmbus/mps,mpq8646.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Monolithic Power Systems MPQ8646 PMBus Step-Down Converter (extended)
++
++maintainers:
++  - Vincent Jardin <vjardin@free.fr>
++
++description: |
++  PMBus driver for the MPS MPQ8646 step-down converter.
++
++properties:
++  compatible:
++    const: mps,mpq8646
++
++  reg:
++    maxItems: 1
++
++  mps,vout-fb-divider-ratio-permille:
++    description:
++      The feedback resistor divider ratio, expressed in permille
++      (Vfb / Vout * 1000). This value is written to the
++      PMBUS_VOUT_SCALE_LOOP register and is required for correct output
++      voltage presentation.
++    $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 1
++    maximum: 2047
++    default: 706
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      regulator@10 {
++        compatible = "mps,mpq8646";
++        reg = <0x10>;
++      };
++    };
 
-Best regards,
 -- 
-Vincent Jardin <vjardin@free.fr>
+2.43.0
 
 
