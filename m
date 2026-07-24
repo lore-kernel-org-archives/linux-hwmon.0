@@ -1,138 +1,189 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2637518C2C;
-	Fri, 24 Jul 2026 00:10:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D4DD1A681C
+	for <linux-hwmon@vger.kernel.org>; Fri, 24 Jul 2026 02:07:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784851844; cv=none; b=iP5QHNtNzlF/un6+UkY68cTgFFDNFDtvfAwf5HtkXraWvt0uQoKGOHvDDaldui3CJKWo8IP1QZDhZ1q5UXlmDrF8f0Uv6aKNA97k1hSdlpQ4CnzpmV6k+p7nsXa7oBm44d5ayZQE1C245A8D57hPl2MeXutb2rdxz9S64ktF91g=
+	t=1784858844; cv=none; b=DpfE2PeKl7no9FLsoQs8KTCR4RZGJzqlpi9Xhro0GjNxOQvZ/v83gA0w6mxhmb4L3i+goOegTdS1p2C+kl82bWa7po0UDUTvnEpuqL+2y3Uh7GeXJobRNlPEbpW6FMZ4ep/pIwxWTfnPRwmzsohrA5bL8dQ0BaFTvfoPVnxK2AI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784851844; c=relaxed/simple;
-	bh=/XCGfZZryYqf2RL/9Bk7o8Rj8P8DEX1WJbP6Beezntg=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=C+xDd5iK72Lmx2CJUoKAxVDiyT3JkhsA0A29wDDdiJ56PxNmODiqf5Oa0c0VIOyLp85jlRdtcwgi4Mt3Cc1cgvZBimnwPfEHl9A532gnaCBpXIhA9L0IoS9+yAVy1pqO8HYAyYTFpvXw8s1Kxym24Enhg/2jOjxnyjnhh6pagL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DhGBvzLG; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784858844; c=relaxed/simple;
+	bh=zcIh3xhJPfZul3vgF+1M9u53SutSZDLGPVP9Rpe9+8M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EN7pZlbetcpgJ2smzuf8pbcdhWNEq/N87cgkZhHyun3OL+xBgfRgfNPZ+nn2Pgzlbw4nsCvs/1rV7OYipUO1+vMY9TS1uPKx9KHGAbRXEHsh+uFvFr2MeteIZMhGSa9J29LjE9GnzFmcC2FGE1OM2ryBPXW1YGfnKOYHlgzEaoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GZa0BVG+; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DhGBvzLG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C7F61F000E9;
-	Fri, 24 Jul 2026 00:10:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784851842;
-	bh=phfgCvD7Zr20r32BqBpd4JvtMbpPd+s7B27tAOBtStc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=DhGBvzLG29tjsKUSBvv3GRfVO7S8CNfMClQkWZaPD8ciFZSNpZuTW+ArpLNex+vWM
-	 00namJiqwl1bypjpLolPeIFm+HdtFNBvIQo6sax0qquRPfJg5GZ64BtAPB4ARXzdtJ
-	 YvSRJRIwvCgqqjq6nCUetOKe83tkiLK9bIh9o0l1uaNjwYcrXjE8o+Bz4twS/Zy8WE
-	 jBV6645PbbjvEeiz9h+QTuFQaL22SjPgwo3CKJKzojXqMcMtHNQGr2F1amxx/Ax42z
-	 FaHbc+9KlDp/cW2vARyAv6fkoPyAnTPesDfjPnzAIrvvA7rP2cVu4e4mLxB8eokpKp
-	 53AaA03jdTFRw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 1/3] hwmon: pmbus: event notification with alarms
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Vincent Jardin" <vjardin@free.fr>
-Cc: conor+dt@kernel.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org
-In-Reply-To: <20260724-mpq8646_v0-v5-1-5915b5ae9aa2@free.fr>
-References: <20260724-mpq8646_v0-v5-0-5915b5ae9aa2@free.fr>
- <20260724-mpq8646_v0-v5-1-5915b5ae9aa2@free.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 24 Jul 2026 00:10:41 +0000
-Message-Id: <20260724001042.5C7F61F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GZa0BVG+"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-38a0c7e841fso1574323a91.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 23 Jul 2026 19:07:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784858842; x=1785463642; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Dl8tyxT4KPIKqu864RkA+VQDYik03yogsDeWzT/nylM=;
+        b=GZa0BVG+Miox4cMg37ImbDW2SBtb9a7B4WN3Ue6RJXVlbyASOgLnwNSEyVsQxFkg/f
+         +DPP1grOR//q8HCj7JQasE5RJdOgwYxgVl6fpuTrc/4Um99JQLBhWgB0MSZNLUgk8+w6
+         2f7fAReWVozVX+D7/JHoQQfXj0rKaz5iYQDwiwCsJJoJmZK8p54E2xn3MXJjvGSR/lr1
+         MkCHI0W95Hgw7px92UF+FyZ/Yc0B7lXngcd8UUbIWTjeKRtxbb64wiwtUQa6GMvyEDQv
+         eUPU0P6DIaNslBdABCiyhOls/vROnznASxdxaOdOtNbkryRQ4IJSIxohAoZOIRDh+630
+         p/LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784858842; x=1785463642;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Dl8tyxT4KPIKqu864RkA+VQDYik03yogsDeWzT/nylM=;
+        b=eVPNOJfnm4PEdU9mMU2Z3pIVqjocAD0735eAiCsoJWdv7CSZizcS0XcPnYs4TXbiwN
+         02cUs+1F2aXe6V4oVctRY7NMua7vgwBUZxr5Em1OsD9IVI/HRudpWTnz7jHsQ9otGWsi
+         tPp4TR0R72axqFOMOhKs9qphioFCSlJ5XuoPaqy6uV8o8JnAeuZ6L0jfM22nzVX1Kdxp
+         hzCjG0Fgd7PiVV9eVcyRdmliAasVlIUMPkrbpKmNbO8dSHpSd/EZCjmd6SmxP9u9BJWm
+         4SKI9oKXwnkbkZEZeqPe7xPVXcsIAIYmGdRogvSjYfqasb5cC4/BcMpTSGAnXpjRVhhw
+         spOA==
+X-Gm-Message-State: AOJu0YxgsO0qDJPfO2Jh+sM3gcTm4U1mvweqEUhUVll3vyBF9tdDZJIv
+	0g6Sar46Mt6cua+mL3bqMhYsEtOwPmemsAsxuNruT9x+oMhL14X2gtJn
+X-Gm-Gg: AR+sD10bzke6nNOTDjYW9TtLFqhDxKTY4Ik4BKzNkpJ6VJ/GkHZipOhZD0EbkFXwH/9
+	0MT6LzDSBE4uHCGJuCZ1VhEUSEWBx8+XGGT0OSIYqFa2yqQDn8daRIcn2VhNZVZ9qWDkWxva5d9
+	7yp1BmBOiPKnOMtFEJMSY0CrIcOoODa2ggd63UXb7jzD7leVBfBZY5lDzrjcOhdX/UAtDH0q72s
+	G4FyANQMDcATDp/h1eVPsMlcmRYy/P9Wy0pLh3Nmb/tTSRy2W1exvFkM24/xWCCbP2MMucJt0+D
+	0giE06l80PDkRN6NMIBvvzF9cBGzfsdPERKZpiuXAB4yMH0InYLGgYGALLY3334OqrNsgTaX+BS
+	6ExbO5FPYl0Jc5B0G6wfX8yf7/YDen7qbRBKZ7ajsz2y9/4fwHrAUFPI8Q5+T+eZ+vG3gndH/Az
+	Yp6/DlAJdQMyewPb7CDmyWSfiiwe7TfCmn1KQqyOoCCstYHJe9XlM=
+X-Received: by 2002:a17:90b:4c12:b0:37f:c2a8:ce45 with SMTP id 98e67ed59e1d1-38ec6539535mr5383662a91.4.1784858841861;
+        Thu, 23 Jul 2026 19:07:21 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf9bfbf725sm33637515ad.36.2026.07.23.19.07.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jul 2026 19:07:21 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b5c0741a-b9da-4a3a-81ae-33368e6dd756@roeck-us.net>
+Date: Thu, 23 Jul 2026 19:07:20 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 3/3] hwmon: pmbus: add MPQ8646 driver
+To: sashiko-reviews@lists.linux.dev, Vincent Jardin <vjardin@free.fr>
+Cc: linux-hwmon@vger.kernel.org, conor+dt@kernel.org, robh@kernel.org,
+ devicetree@vger.kernel.org
+References: <20260724-mpq8646_v0-v5-0-5915b5ae9aa2@free.fr>
+ <20260724-mpq8646_v0-v5-3-5915b5ae9aa2@free.fr>
+ <20260724000643.E60C81F000E9@smtp.kernel.org>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260724000643.E60C81F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+On 7/23/26 17:06, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [High] Stack variables passed to i2c_transfer() can cause memory corruption or panics with CONFIG_VMAP_STACK.
+> --
+> 
+> --- Patch [3]: [PATCH v5 3/3] hwmon: pmbus: add MPQ8646 driver ---
+> commit 1098fecfca1c29b33a174b200465134bc5be4be8
+> Author: Vincent Jardin <vjardin@free.fr>
+> 
+> hwmon: pmbus: add MPQ8646 driver
+> 
+> Add a new single-chip driver for the MPS MPQ8646 that is a PMBus device.
+> The driver adds extended bits decode, alarm acknowledge, gate-close retry,
+> and an in-driver alarm-poll fallback.
+> 
+>> diff --git a/drivers/hwmon/pmbus/mpq8646.c b/drivers/hwmon/pmbus/mpq8646.c
+>> index 0000000000000..f8dfabef09df3 100644
+>> --- /dev/null
+>> +++ b/drivers/hwmon/pmbus/mpq8646.c
+> [ ... ]
+>> @@ -187,24 +187,24 @@ static inline struct mpq8646_priv *mpq8646_priv_from_client(struct i2c_client *c
+>>   static int mpq8646_raw_xfer_rword(struct i2c_client *client, u8 reg)
+>>   {
+>>   	u8 cmd = reg;
+>>   	__le16 data = 0;
+>>   	struct i2c_msg msg[] = {
+>>   		{
+>>   			.addr = client->addr,
+>>   			.flags = 0,
+>>   			.len = sizeof(cmd),
+>>   			.buf = &cmd,
+>>   		},
+>>   		{
+>>   			.addr = client->addr,
+>>   			.flags = I2C_M_RD,
+>>   			.len = sizeof(data),
+>>   			.buf = (u8 *)&data,
+>>   		},
+>>   	};
+>>   	int rc;
+>>   
+>>   	rc = i2c_transfer(client->adapter, msg, ARRAY_SIZE(msg));
+> 
+> [Severity: High]
+> Can this cause memory corruption or a kernel panic?
+> 
+> I2C adapter drivers often use DMA for transfers. When CONFIG_VMAP_STACK is
+> enabled, the kernel stack is not guaranteed to be physically contiguous.
+> Passing stack-allocated buffers like cmd and data to DMA-capable APIs
+> like i2c_transfer() will cause dma_map_single() to map incorrect physical
+> memory.
+> 
+> Although this is triggered via debugfs, executing it on a DMA-capable I2C bus
+> could reliably crash or corrupt the system. Should these buffers be dynamically
+> allocated instead?
+> 
 
-New issues:
-- [High] Using hwmon_notify_event() for PMBus temperature alarms silently f=
-ails to notify the thermal subsystem due to an architectural mismatch.
+Do not address. This is a false positive. Sashiko's I2C subsystem prompts
+need to be updated.
 
-Pre-existing issues:
-- [High] pmbus_notify() calls sysfs_notify() on the parent I2C device's kob=
-ject instead of the hwmon device, breaking userspace poll() on alarm attrib=
-utes.
---
+Guenter
 
---- Patch [1]: [PATCH v5 1/3] hwmon: pmbus: event notification with alarms =
----
-commit 3c1ad67c1176e741304b7aff4d177996b81ebe1a
-Author: Vincent Jardin <vjardin@free.fr>
-
-hwmon: pmbus: event notification with alarms
-
-This patch adds an accessor for the hwmon class device registered by the
-pmbus core. It is exported so chip drivers can use it to call
-hwmon_notify_event() for alarm attributes in polling fallback routines.
-
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus=
-_core.c
-> index 3143b9e0316c4..6ba00ad732973 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -695,6 +695,14 @@ const struct pmbus_driver_info *pmbus_get_driver_inf=
-o(struct i2c_client *client)
->  }
->  EXPORT_SYMBOL_NS_GPL(pmbus_get_driver_info, "PMBUS");
-> =20
-> +struct device *pmbus_get_hwmon_device(struct i2c_client *client)
-> +{
-> +	struct pmbus_data *data =3D i2c_get_clientdata(client);
-> +
-> +	return data->hwmon_dev;
-> +}
-> +EXPORT_SYMBOL_NS_GPL(pmbus_get_hwmon_device, "PMBUS");
-
-[Severity: High]
-Does using hwmon_notify_event() with this device successfully notify the
-thermal subsystem?
-
-Looking at how hwmon_notify_event() works, it relies on iterating over the
-hwdev->tzdata list:
-
-drivers/hwmon/hwmon.c:hwmon_thermal_notify() {
-    ...
-    list_for_each_entry(tzdata, &hwdev->tzdata, node) {
-        if (tzdata->index =3D=3D index) {
-            thermal_zone_device_update(tzdata->tzd, THERMAL_EVENT_UNSPECIFI=
-ED);
-        }
-    }
-    ...
-}
-
-Because pmbus_core.c registers the hwmon device using
-devm_hwmon_device_register_with_groups() rather than
-devm_hwmon_device_register_with_info(), and manually registers thermal zones
-via devm_thermal_of_zone_register(), will hwdev->tzdata be empty?
-
-If hwdev->tzdata is unpopulated, will thermal alarms signaled via this new
-polling fallback silently fail to trigger the thermal subsystem?
-
-
-[Severity: High]
-This is a pre-existing issue, but does pmbus_notify() currently notify the =
-wrong
-kobject when SMBALERT# interrupts do fire?
-
-Looking at pmbus_notify() in drivers/hwmon/pmbus/pmbus_core.c:
-
-drivers/hwmon/pmbus/pmbus_core.c:pmbus_notify() {
-    ...
-    sysfs_notify(&data->dev->kobj, NULL, da->attr.name);
-    kobject_uevent(&data->dev->kobj, KOBJ_CHANGE);
-    ...
-}
-
-Since devm_hwmon_device_register_with_groups() registers the attribute
-groups on the newly created hwmon child device (data->hwmon_dev) and not the
-parent I2C device (data->dev), and sysfs_notify() does not recurse into
-child directories, will userspace applications relying on poll(POLLPRI) for
-these alarm attributes fail to wake up?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260724-mpq8646_v0=
--v5-0-5915b5ae9aa2@free.fr?part=3D1
