@@ -1,67 +1,67 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4913C1406
-	for <linux-hwmon@vger.kernel.org>; Fri, 24 Jul 2026 21:25:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11B683B47DC
+	for <linux-hwmon@vger.kernel.org>; Fri, 24 Jul 2026 21:26:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784928335; cv=none; b=mx0txVtJODYrWghrVC/iwKe/eiOpn/iqMjGcd2mRQymCgu6vgLQffBBlS56ofSWTYJWu8qUA78eU1pemRiV65IekwKCMdQrf7h2tgDEdR852b1M3bbHUzFdel74SnfFdAL2Ui3bVmj7QBlFVSGQZdUISuU7dPruclY/zARFdo6E=
+	t=1784928383; cv=none; b=PQpb+rSdE190pXlSPsiQ/uwHqzaow6H4y+vKXNVOzHJWSGAr/6nEDyfly4wp+pcfL714WRzSvecD2mp0kk9uK2L9iUDUzNNv7wvihMkDRY3DRwFfNq0r2lYZ0ROcoIwfh0TUjh66MSzVGIMOx1yZifngUGZg5wfmjnmHtyxE45Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784928335; c=relaxed/simple;
-	bh=Iaoxk46tvSh8+Ny6bGv5Jc0llkY7SsZnVR3a5Mw2F+o=;
+	s=arc-20240116; t=1784928383; c=relaxed/simple;
+	bh=Pn6EvwAnKyjOYLOgT2cdfgXdiVfsnsS+1/LG8t9hp5w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s1h1G2D2BHI+x2WDtzspC1lJwxRXZM6ryX05GfyXH8QppT5M6CeFjA8jrtbB5GZwTCNYKH1tJ06n5VGS5G5JyRPED+MgOqXzcacJhBK3YBJGX4ELj6Imfaws/dIieZayBus8nYTwCbyYZBNXEax6pAf1XSb4Kll6dWBkKON4tRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J9g69ZIB; arc=none smtp.client-ip=209.85.210.176
+	 In-Reply-To:Content-Type; b=e5mD5JWrI8Z1NTI6Gv3SLbZLPlxoW2Dfe6+zhiYJ+mtAYuJt/22TDdPEw8aNu4nULmRGWVb5E5y+ZbhcS9iBktIRQ/vBDLnKIyOiZvUB/0BjgXSqYNApyMx/1J9oRJH4itJagCaQwIluk9ptoKxAYOmK8Y1d1w4nxUwvtKAApDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=btuP0Sl8; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J9g69ZIB"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-845c92bc464so756958b3a.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 24 Jul 2026 14:25:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="btuP0Sl8"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8453427d3f4so998789b3a.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 24 Jul 2026 14:26:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784928333; x=1785533133; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784928381; x=1785533181; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=bHn4RRq87Wsfa+wmQLY9ofTV9/may/6+/3F978R2CLM=;
-        b=J9g69ZIB1J5URvJlBwwOrbB/XZitLpfxJCE0LQMdg/PxCcAoCc+kwLxh54qg5Uo6ui
-         VgQZv+cHB74Ug7xgJp7boBQDlqG9A3pyEgvQejFxcfzrOVE+PEjp2xQ4+I+fmF5kess4
-         2LXEn71HHZVI2Xi7RJAQrRojFRKATSOAi28hmhd5QVgUhflcKQ5wDRVTjEw1r+1+uz0W
-         rwTocwlxlZ3gm889h9f4ZB/DFiFjlFuZ8jB1gHmeS+6sg3ym0Paqc7BSptDsLIWDHrdN
-         qh0fI2NErfQ99Npv6WcJLLXKcW+CgijReUJ6zhT/FNe4ai5Rj7I6ZtjjlEQksU7AtTwn
-         z7iA==
+        bh=kmyLUNu300WyBDZkVHiaWG5FLKRt0pyiRWuoSzAW/Ks=;
+        b=btuP0Sl8CmwX8C5YPSe7Rjv61jyFZgj7mEbXtT18vv9dDLjcv5/27vLM1TDUeA6tAm
+         C1KTtZonlHv9zZs85lfPVgQgxGOWfDQgPYjjEI+arcYm9BKMm38jVUpc3piodH5ncICi
+         EsXPIB0eGMQHEhm8ONCxaTQoeEGTUR/r8qohxEE2PqAgRpOS/hgitmCyiaxW3BBJAGdj
+         ryNMYerw7DdWezzx9lA+b5TNN/7a8zk91VbeR0f5k4imtKAFLBOJoGhQjT3YG+biJYTx
+         loBtrTu3zHqvHzbFsc0etYSTjcWWe91zamk1YI0Qa1rTjUslWJ3F0sgwaIex2FwOKMgS
+         QAMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784928333; x=1785533133;
+        d=1e100.net; s=20251104; t=1784928381; x=1785533181;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=bHn4RRq87Wsfa+wmQLY9ofTV9/may/6+/3F978R2CLM=;
-        b=BhsXQPQxFxJAmlP9hUU2YmC0Czb9AOnP4+FNk84/DTfn8zu626pMWb8N+9tT+9Jz4I
-         Y085+QyOkStPAcnfpr/L2JJnHqzHqmqZsMR6QThGneKtP3xnQ/mX72/HX/955g+59XxD
-         95J17cl8sH2TnH8EgpEin1VOwuBf3I/PJb0JjuEFnUynkQcN5ke+3fqlqRo6xN5AQI3c
-         +DH5HAmjkyr6OVs1nyW+8NWjWCYb3EIKsm8fWCieyu1MDx6Ws8jDXYXQ+SnrLdK8EWvj
-         crKjcoDy+bOl/ITZnsE7PqN1e9kYUi6kmo8F8NAHrwWRwRhx5u5fivwW/VA6uuBTDo3t
-         VIUg==
-X-Gm-Message-State: AOJu0Yzd2nveUOfa+YqJ9x4LxbDbkBDq/6cpht4t8eLaDrD2FS2r48Jv
-	SUs+dX6jqz+lb/b5pPRjcZxv8z2Z2bg3Ud6H5s/72ClrpKZyKttlycEI
-X-Gm-Gg: AR+sD11QYKrWBcr+7RSz2fRvVTBOzsTFV9vJFAI8ROw1Nw6JaepfMrVzGyocHnPsFRz
-	tGKAapjJXxKaRSDzY9lfi35upwIixzjGtdOjaovynZbqha61WkPrU7rSfbvhz/W8rlLO28v9yQW
-	VggECGKoNSu9jQL0PPlLHLK4KQ/zGYM3BggEE2Wynlb3CtoRtMnJ/bF03KSoe5lGmA3zgvx3+4x
-	aUDna80eYq9QUrEV6lpWljz1hUkksCuUWlYFSurX9YwuLRewEZpctRUwB080mVn57BetT0G7zl9
-	hoexo9KvuKs0292JjsHkQ+Xw10MJqnUsRYTfvX7t0cAfRZOc2x3skydfueA9/OxgKm/ATv+gbMl
-	6m9rsSap8s+mdCd9MH1YQWBTlj4d5dr5RALbsaJvyjn1WLnzgczOlpsFxvYvsbctWqTGNpURXz4
-	ETxRP548NZkQTpCr22kF9yKCHXZVm6r96dAw2eCsRPr+lOIBZ9pTA=
-X-Received: by 2002:a05:6a21:389:b0:3c3:7cd0:fc27 with SMTP id adf61e73a8af0-3c67d9b3dddmr67804637.3.1784928333394;
-        Fri, 24 Jul 2026 14:25:33 -0700 (PDT)
+        bh=kmyLUNu300WyBDZkVHiaWG5FLKRt0pyiRWuoSzAW/Ks=;
+        b=TUZ7oXnx3faJlm3zkjniGHsAuibK5JdU6tJynz2L6ygrKUDkOF1KbWohUFPFzXZJqH
+         y+etz8HT0w8wPqu3uLdyVxbacPZcpDGbIIH5S6l6WObMvk1jONlsB7RYQXicFEhVn0oQ
+         udy0tT/EJKZtwEldIWwVus6z14p3c6gARKBQSHYiBBOokQOAtUSaPeEeU6barukbP6bo
+         IA0bAqLY0PsQHefoKjSQj8Bx3rVlYwHxalZyhjjg3ABcOicS3SnJxW1qCWRbqHHnyWQq
+         kTQ55JdEtjXs+vEHs6x+0NdFKhDQM4CEVGL+/oZqcVXBHsMkBdPZfFPfUFaIpy1WN3hS
+         Ia3w==
+X-Gm-Message-State: AOJu0Ywtarrw4aWOYtydQVMAQmUxYUAiZyJpRWe8waVU3DFB5hs0g4OK
+	AfrNQpa4555d9N/Szu9+O4cPvpYL9OUa4FYyUdduBi+4JLPjwlbLEUlZHfjCSg==
+X-Gm-Gg: AR+sD11JK3Ky4qF2VfqX8q4WlzAH8RD7AQ2wO8PZ281nHvA9mA59LSPsi41mr38iUeL
+	wtNorKtRyZxN4MyvVSHrWjbxLUJCPuNy3Qwiv3I5uKxcfBGyhELdidSNu67CBx9Zs3W/ObaByPJ
+	c5JJvideAQELFfEr+pQcQK5ze4poslT9+2nzNKgxIf6N+GrSz6mfmVrU/Mnf9dxnFnaNsFzepsQ
+	dQddWG9T76NSXk62j8xs8OHg0Ebc72h0Pt80/Qzi4Ox2CZfEVaa1eL9Me9CwYidyHH2PxrYBfFW
+	aHjP+adLiY7D8lLVJURVoQnQuYCbaH5n4ZwyVxSrNcT4JUARyWilk9WeSAD5E4xw1+8iPRh+D2V
+	MBUpii4FSRUJ+UfiTsXdyZCyk2zKucZrTJd/adCuRkltNUd5kkjdhyeAnJkC9jfW+93c3tkoIU7
+	OjVypOxLx4QkwKdT85Cy3UIn2bK5PAgkKYSQyJ0060kl08eCFJPnk=
+X-Received: by 2002:a05:6a21:496:b0:3bf:e24e:3afe with SMTP id adf61e73a8af0-3c67e060010mr34505637.43.1784928381390;
+        Fri, 24 Jul 2026 14:26:21 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-314bc3e1255sm3933937eec.4.2026.07.24.14.25.31
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-314bc3e878esm2608777eec.3.2026.07.24.14.26.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jul 2026 14:25:32 -0700 (PDT)
+        Fri, 24 Jul 2026 14:26:20 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f826634e-5613-4368-b23b-fabcdf2830f9@roeck-us.net>
-Date: Fri, 24 Jul 2026 14:25:31 -0700
+Message-ID: <bff175c3-f29a-42eb-a857-c06f66483897@roeck-us.net>
+Date: Fri, 24 Jul 2026 14:26:19 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -86,7 +86,7 @@ Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
 References: <20260724164919.247162-1-sanman.pradhan@hpe.com>
  <20260724164919.247162-3-sanman.pradhan@hpe.com>
  <acd92cd2-ec1d-447e-9e80-35ec5289fd0f@roeck-us.net>
- <20260724194229.261194-1-sanman.pradhan@hpe.com>
+ <20260724195912.262226-1-sanman.pradhan@hpe.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -132,61 +132,29 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260724194229.261194-1-sanman.pradhan@hpe.com>
+In-Reply-To: <20260724195912.262226-1-sanman.pradhan@hpe.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 7/24/26 12:42, Pradhan, Sanman wrote:
+On 7/24/26 12:59, Pradhan, Sanman wrote:
 > From: Sanman Pradhan <psanman@juniper.net>
 > 
-> On Fri, Jul 24, 2026 at 10:53:36 -0700, Guenter Roeck wrote:
->> I get delivery errors for the following addresses.
->>       ddevineni@juniper.net
->>       gvlaev@juniper.net
->>       avadhutn@juniper.net
->>
->> meaning they are quite obviously _not_ involved in the patch approval
->> path. Please drop those addresses. Also, per
->> Documentation/process/submitting-patches.rst:
->>
->>    Any further SoBs (Signed-off-by:'s) following the author's SoB are
->>    from people handling and transporting the patch, but were not
->>    involved in its development. SoB chains should reflect the **real**
->>    route a patch took as it was propagated to the maintainers and
->>    ultimately to Linus, with the first SoB entry signalling primary
->>    authorship of a single author.
->>
->> Does the above SoB sequence really reflect the approval patch for this
->> patch ?
+> I think my ordering on the trailer in v4 should be changed,
+> I'll restructure the sign-off chain so that co-developers are
+> attributed before the primary author, rather than after, which
+> should better reflect the development history rather than the
+> transport path:
 > 
-> Thank you for the review.
+>      Co-developed-by: <co-developer>
+>      Signed-off-by: <co-developer>
+>      ...            (one pair per co-developer)
+>      Signed-off-by: Georgi Vlaev        (primary author)
+>      Signed-off-by: Sanman Pradhan      (submitter)
 > 
-> Just to clarify the sign-off history, this driver consolidates work
-> from several internal commits developed by multiple contributors over a
-> number of years. Each Signed-off-by line was carried over from the
-> contributor's original commit, where they signed off on their own work
-> I did not add any sign-offs on their behalf.
-> 
-> The contributions were roughly as follows:
-> 
->    * Georgi Vlaev: original driver
->    * Dhruva Devineni: MAX16550 support
->    * Debjit Ghosh: MAX16545 support and device-specific data
->    * Santhanakrishnan Balraj: severe-OCP filter
->    * Avadhut Naik and JawaharBalaji Thirumalaisamy: device-tree probing
->    * Brian Mak: fixes
-> 
-> Some of these contributors have since left the company, so their
-> juniper.net addresses now bounce. I've removed those addresses from
-> the recipient list to avoid further delivery errors.
-> 
-> My intention in retaining the Co-developed-by and Signed-off-by lines
-> was to preserve the original authorship and sign-off history. However,
-> I'm happy to adjust the attribution chain if there is a preferred way
-> to handle contributors whose email addresses are no longer active.
+> Please let me know if you'd prefer a different arrangement.
 > 
 
-Please only keep the Co-developed-by: lines, as per the guidance above.
+Signed-off-by: is inappropriate for co-developers.
 
 Thanks,
 Guenter
