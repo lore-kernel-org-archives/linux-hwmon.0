@@ -1,141 +1,104 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05BBE374E67
-	for <linux-hwmon@vger.kernel.org>; Sat, 25 Jul 2026 22:02:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5654C37B010
+	for <linux-hwmon@vger.kernel.org>; Sat, 25 Jul 2026 22:05:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785016930; cv=none; b=FZVodzvuyBmjtCn7ggPWX20+mXFQCs2xHEK4aPHfV4K0wmilyCNL24TyrhNxlsyC9IjK6Tuvq8A7UZV+8EQtqmR2dPPvAVbBLPfHRDVxYXBnbz8J7vxkOUcWzTekDE+XmHK3BfX3ftT8SyPBVkuRSLrqCdIsy4WfzkBdm5C2D4U=
+	t=1785017145; cv=none; b=g0G8MNRaMD9th5Ocr1qwfn84MVqJOSjNIJyjzyRNjTqv9bql8g7MG4W/vwQj35Bqq8K5ftGUnnThwS0tHei7RBPnzrHCoKab23yxkgx2jWfYLXkQalScNtadFzOrfW+9JQpdzj5y2FF4WsbLweL70lGAS45kM2OCq9MWTNXKNKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785016930; c=relaxed/simple;
-	bh=9ZVA5F1apm9Y8OSBwNUy1O3cywXwO9qSbRbgAFCMq0w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tPXaWXKemJc7vo1TwFLshMeTZiGAm6vd7AVasAL9wvg9Ypz/os5pkpXomeoy9DhVYRmjInOcTCS4q68cYiHAcbJAlpYkodYcf7QxSFT9XekP9gsd56SBI8YoA9FhBEh/lzblLzoX3utVIoNKYoTRt3PGJ8QCB1g/XMelUDtKFTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FjF0bnVU; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785017145; c=relaxed/simple;
+	bh=nSAEN1h/E6ABqupW+ja/sqEqGj7XQn6XtCE6+tolnt4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ooYDP9/lwKRWQCz/m3xyEqdHJp1un7MyKQwmZnLBn1zeA19+jjj0FYL4qqWc3P1ISvKKpYti4dA3Zi0MpzLmZIiFE56ANRNLQSxB763xo8DFYbo1oBNprV9MPdYOJLHG5eo8fvmboCf+VmHBBiiAKyLIy/k3O1ytEFX6t6Osg28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C6vEhQ6i; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FjF0bnVU"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-84847482584so1101746b3a.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 25 Jul 2026 15:02:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785016928; x=1785621728; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=XPmk2LaJF2j7Cy/ci3JJ9rxR/hY7vB88kyDQKQGkbM8=;
-        b=FjF0bnVU9CaquCgEUdtwkx7mnEUU1KAlI2F5KzMj9R6Z540s8QA+bVwa+vbn6W99DO
-         qldmM/JgZ/u+Op4VO15wSsuKyW3dm+ts6QiGRY8Ah6Sxr9bP1L1FfQL9GwjdqbtvQf14
-         oK5Ipbr3N/KRO+oV/qQw+WSFgrEGetXISxiYNi0mzh8WJ//RqtzJgPa5ahCoxq4pOd2e
-         U5bf+gtB2OquTdn925Mc5rc6QfnxEBEMZOCLj+Ua/FbFEYh1yo+M7I3mWeMneTuaxQI1
-         maCdRwfZwFBYq1pWGl9dPR1mpkRklks6NQ+LzR1wFCmr8rKT3llUUvEJ3F3YmNzKJB85
-         81yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785016928; x=1785621728;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=XPmk2LaJF2j7Cy/ci3JJ9rxR/hY7vB88kyDQKQGkbM8=;
-        b=i/83WKeVurj8jcQ8MwcJQtaupLlnAdMllrLP8X30qWhzxvK9Jg1k+OPcH4XOFPvgg7
-         f+Aym/j2aTuBgDxrsIwKWa/APs3JscEXuE2VNaAhbfWTCaKvpTuX2G2qyGMKsIRYXZHy
-         PlVX86QTFD+4msLLi9hYzJ0GQEmErqHOj2l7uF352XnhgP5Ph6KrNAFuwnTlJ++bPAoC
-         0Fm6VvgknXjRmcY6wvDiArESgPG/GRKZEAUnPcziG3hdKWwFD5wiDZ+Y72Hg1mnV46by
-         PN9MBSiCwYA7Z27nIO+1gfK+ZS+AujmAlZaUcvsNl7jLG4Pi4KBAT8xPttIY2lGR5p9p
-         /gKw==
-X-Gm-Message-State: AOJu0YyFQCZWR9Jai3gAWR21UlLRNdASb++UFiHc2oFcPWRLv7yPoEYu
-	R3+W3CwWOjX3JbnXWgoaZzaO/r/mrA2eLhH3hNz+llCpsTrumql3Kg0Ui3+FUw==
-X-Gm-Gg: AR+sD12fu5zUGE+t6PHlbfVl11D3Bt5Lue/20yOs3XSZZ2/qL7MUSDvsupfARcT0OU6
-	zcuDKH6w3Hm6W1WsBBbKJJixjzpvDuxo7Ulvn9csCBq4iUepwCrFuNxvJef5qhIEN0AL10Y+ix1
-	LUhhIj0w4nexc6/Xo41rq+YYRkysIALTxHw7oOnsVAbw2z3S7ZO3qUDdh45x+zdmEq30SZwfmTg
-	CgcUfXrvdSyswrdN8My098LVx09gNc5Xv+lzuyuyHYkQXWCy8Ktb/1c3Smufch+XhSRGW2KmKY1
-	R7YpLlEGW8yaW+/7O0/e4HB1FWw8Y5oXG5/Lm/UArxs1Zu+is0i7EwdA5ygLpwtOn9EIIIFlwDy
-	CV3EV75B1/S+Cv5eujby1W1LCcgc2INzkHjT0DtrrgjVUmLlPkTN2/t5tu/Rpg+fL9Co313OTBz
-	6H0VJkVqY6Fe8cGMM6SAuVYfZ/7g==
-X-Received: by 2002:a05:6a00:3909:b0:84b:9a69:156d with SMTP id d2e1a72fcca58-84e59266bc9mr2275361b3a.0.1785016928120;
-        Sat, 25 Jul 2026 15:02:08 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e533d13f0sm1336021b3a.35.2026.07.25.15.02.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jul 2026 15:02:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Sashiko <sashiko-bot@kernel.org>
-Subject: [PATCH] hwmon: sht3x: Fix unaligned accesses
-Date: Sat, 25 Jul 2026 15:02:05 -0700
-Message-ID: <20260725220205.1931189-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C6vEhQ6i"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 856D01F000E9;
+	Sat, 25 Jul 2026 22:05:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785017142;
+	bh=GtsCOknVg7vn9iB+b4iHt+xVwx2XEraajU36WqEXjsc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=C6vEhQ6iqOktkYcpn6NtU+BRmddQ82AaNIA5JmMv/mNS8dW6E0Md8t2gqxXK1O9vp
+	 sgk01XyZ6v1dk3C37CbhD7P/divpa03wQIbM7UDY8Y/eCASySfIqy1TJhyPpv3qx5z
+	 yFTeuCv69r80Y9JeuYUEh5h4q+j78sHpazvqfYxi6ZMD9nZpx+EYuNSwrElwVf516d
+	 fFgRgs38lbbXXkJ5aLKoSgjeHJawqCCo0ZY7yBBx/QITbQGzVGBs6ergVq8MQNmB5m
+	 aHld82f4QiV4ZTpgH6OvT8LEbm2RAA0xzyyAbetM0Uv2HYeG1SmDFqMU2fsTKh35XZ
+	 H4GRJUsLWgJbQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] hwmon: (ltc4282) Fix reading the minimum alarm voltage
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Guenter Roeck" <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260725215755.1926830-1-linux@roeck-us.net>
+References: <20260725215755.1926830-1-linux@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 25 Jul 2026 22:05:42 +0000
+Message-Id: <20260725220542.856D01F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Sashiko reports:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-In sht3x_update_client(), the 16-bit temperature and humidity values are
-extracted from a stack-allocated byte array using be16_to_cpup(). The
-pointers passed to this function are calculated as buf and buf + 3. Since
-the difference between the two pointers is an odd number of bytes, at
-least one of them is guaranteed to be at an unaligned offset.
+Pre-existing issues:
+- [High] Calculation of `st->power_max` causes a 32-bit integer overflow, r=
+esulting in a severely truncated max power limit being written to the devic=
+e.
+--
 
-This will trigger an alignment fault on strict-alignment architectures
-such as ARMv5 or SPARC, resulting in a kernel panic.
+--- Patch [1]: [PATCH] hwmon: (ltc4282) Fix reading the minimum alarm volta=
+ge ---
+commit 42cce0899ae28102bd89120aefb684af52579bfe
+Author: Guenter Roeck <linux@roeck-us.net>
 
-Fix the problem by using get_unaligned_be16() instead of be16_to_cpup(),
-and put_unaligned_be16() instead of cpu_to_be16().
+hwmon: (ltc4282) Fix reading the minimum alarm voltage
 
-Fixes: 7c84f7f80d6f ("hwmon: add support for Sensirion SHT3x sensors")
-Reported-by: Sashiko <sashiko-bot@kernel.org>
+Coverity reports an out-of-bounds access when reading the minimum alarm
+voltage for the VGPIO channel. Add the missing return statement to fix
+the problem.
+
+Fixes: cbc29538dbf7 ("hwmon: Add driver for LTC4282")
+Cc: Nuno Sa <nuno.sa@analog.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/sht3x.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
-index c2f6b73aa7f3..4d90f89a9929 100644
---- a/drivers/hwmon/sht3x.c
-+++ b/drivers/hwmon/sht3x.c
-@@ -21,6 +21,7 @@
- #include <linux/module.h>
- #include <linux/slab.h>
- #include <linux/jiffies.h>
-+#include <linux/unaligned.h>
- 
- /* commands (high repeatability mode) */
- static const unsigned char sht3x_cmd_measure_single_hpm[] = { 0x24, 0x00 };
-@@ -276,9 +277,9 @@ static struct sht3x_data *sht3x_update_client(struct device *dev)
- 		if (ret)
- 			goto out;
- 
--		val = be16_to_cpup((__be16 *)buf);
-+		val = get_unaligned_be16(buf);
- 		data->temperature = sht3x_extract_temperature(val);
--		val = be16_to_cpup((__be16 *)(buf + 3));
-+		val = get_unaligned_be16(buf + 3);
- 		data->humidity = sht3x_extract_humidity(val);
- 		data->last_update = jiffies;
- 	}
-@@ -336,7 +337,7 @@ static int limits_update(struct sht3x_data *data)
- 		if (ret)
- 			return ret;
- 
--		raw = be16_to_cpup((__be16 *)buffer);
-+		raw = get_unaligned_be16(buffer);
- 		temperature = sht3x_extract_temperature((raw & 0x01ff) << 7);
- 		humidity = sht3x_extract_humidity(raw & 0xfe00);
- 		data->temperature_limits[index] = temperature;
-@@ -389,7 +390,7 @@ static size_t limit_write(struct device *dev,
- 	raw = ((u32)(temperature + 45000) * 24543) >> (16 + 7);
- 	raw |= ((humidity * 42950) >> 16) & 0xfe00;
- 
--	*((__be16 *)position) = cpu_to_be16(raw);
-+	put_unaligned_be16(raw, position);
- 	position += SHT3X_WORD_LEN;
- 	*position = crc8(sht3x_crc8_table,
- 			 position - SHT3X_WORD_LEN,
--- 
-2.45.2
+> diff --git a/drivers/hwmon/ltc4282.c b/drivers/hwmon/ltc4282.c
+> index 39b9d3abca990..cc698803f8bf8 100644
+> --- a/drivers/hwmon/ltc4282.c
+> +++ b/drivers/hwmon/ltc4282.c
+[ ... ]
 
+[Severity: High]
+This isn't a bug introduced by this patch, but I noticed a potential 32-bit
+integer overflow in ltc4282_set_max_limits() during device probe:
+
+drivers/hwmon/ltc4282.c:ltc4282_set_max_limits() {
+    ...
+	/* Power is given by ISENSE * Vout. */
+	st->power_max =3D DIV_ROUND_CLOSEST(st->vsense_max * DECA * MILLI, st->rse=
+nse) * st->vfs_out;
+	ret =3D ltc4282_write_power_byte(st, LTC4282_POWER_MAX, st->power_max);
+    ...
+}
+
+Because the result of DIV_ROUND_CLOSEST() and st->vfs_out are both 32-bit
+or smaller types, does this multiplication overflow 32-bit precision before
+being assigned to st->power_max?=20
+
+If the device tree configures a small sense resistor (e.g., 100 nOhm,
+making st->rsense =3D 1) and the voltage is high, the division result can be
+around 343,750,000 and st->vfs_out can be 33,280. The resulting product is
+over 11.44 trillion, which would overflow a 32-bit integer.=20
+
+Could this cause a severely truncated max power limit to be written to the
+hardware, potentially triggering spurious power-bad faults or shutting down
+the monitored power rail?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260725215755.1926=
+830-1-linux@roeck-us.net?part=3D1
