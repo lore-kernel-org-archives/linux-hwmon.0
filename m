@@ -1,68 +1,66 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF926255F2D
-	for <linux-hwmon@vger.kernel.org>; Sun, 26 Jul 2026 13:46:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B84B13BCD2C
+	for <linux-hwmon@vger.kernel.org>; Sun, 26 Jul 2026 15:37:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785073588; cv=none; b=NBYKH4Q2tLAnuhwwXXKph+D/ywIsshwiyiYwReqvB/3E/nJqsR8eun/2CPN7iCiPmCw3xrLbM72x90MGQ9ecvy0O1zyZq5xAfPr/m1ZCwILjQwuUcVBbTtGMf4eprMG3zr3DzzjJslSUBZo85sjGF207pPvSVCcbhKW64a80TAs=
+	t=1785080279; cv=none; b=FYHZ9fSgDuoqyZlJ7fsStv7j3vId1IZHcM+3KGe8v8afs67EnkC0y2H7Up6LC+GPDIfGqXsof9wgn30dFyzZVc+3RVaPPYARFNFl4zBy1+jGg3ErktrmC5gyEMTScs0CqULaZusSQU57184sYafjLdj91/uwCqID9Wo/GpSh2GQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785073588; c=relaxed/simple;
-	bh=R7N7U3YdIPPLN/FJDOS/LQg+HJMKie0W3IPr39edPc0=;
+	s=arc-20240116; t=1785080279; c=relaxed/simple;
+	bh=2WZER4o6v0Hx8PfdeNj46jlYkr2QO/bQWZIQs/AAsUM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VizOF5dcMHGTp/lnLYpPjjSY9ByQ1SnN6YY3UOguCV6+qjnQhl5YKoxozzH+SsHJbZezpp02/87QdfxhTb3ElzAWhkRvAYm7sCvy5B5DKm+n2S19c7e4Z5STZh6nkls86UmYp/n6su7hlzjOLRh+PZkTqSzrgxg3QmyJdNyLkZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bDA9si1I; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=f2T/0ZxAdc3mkkea4lZoefuX4qD92nC3oP6rr0RA8WQ15y/1GTnO+qQqsIGDEOHk4rgVAyoTsfml0cPKcJhQFwZiC2dymKj+7hjwmgWxaIWWThiK71Tj+Fq0RzjQtpzl1GheZosvWP/du+DQslCr49gV5Wkh5is9xEDQSbRAcWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=cJI9l0pA; arc=none smtp.client-ip=209.85.167.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bDA9si1I"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-38e07ebd263so1248968a91.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 26 Jul 2026 06:46:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="cJI9l0pA"
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-4a45b3f0becso934738b6e.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 26 Jul 2026 08:37:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785073586; x=1785678386; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+        d=baylibre.com; s=google; t=1785080273; x=1785685073; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=3GlYt82Udc/E8ne84+NQ36Q+2wgUeOfgJEOTwOxxqCw=;
-        b=bDA9si1II6nhwnGMyXz1Pm/4i/2rP1lCA9zju+m7fejKenyVZWhRhUQ88vQo61ArFY
-         HLlsLCfUikqCtQmAOq9cn/SYqoqF/BpmsWinT/yXWgXjb6nriUuB267wk+wS8Yofp+DV
-         j3tDotRtGvb+WvYHFSKkPIvagDJBkaezaWGLd6hoWVbIgdE1Ukwz4VLu72B26iXLiNo+
-         H11t9pmUcCdWMPwf2SeG43HMyXJ54wHGd9jc3kw3OCOuq90UPu9kFmlY84vZs/Hl7jDQ
-         fK1StFXX/+CTTh7tmAfXvWpSw000xD7VFBFGaRH4q76tK8oMKkYa0Bw/1x+0omXQWdG3
-         AvuA==
+        bh=+iZf44bRNZi4EavQ0T3yVwCCro6xvtHUrPxwZYFjPgs=;
+        b=cJI9l0pATcynKd0FnHdTvt58QaGanpa7zhfpT9JbR/3PyFqq/n+dgpoC44CP3RRfuv
+         4dm/u81lTsBSi9d/S/sg3BmYgO1siDok2r5u3U8cVPwiWFu12AyGugqmfT8cEiLQRDvy
+         Kx6jv8x4joKoyEQi9WViAxMuBRiIrQ9hWiNQq0ZU5Cm5M5+x7OH5RkZJ6746DjzlbX9B
+         KFItqqjGO992904srSXcZYISB1Dwsk8Vq0Z8cPngACVR+/qy5L0ZQsYtjskxMr4tYiyK
+         ANe8e597li4UGuQNlwjFkLybFT92XLWbAVvMu5++SNjtyEbmk1meZBP/qi3bomLgQS2L
+         PvDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785073586; x=1785678386;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+        d=1e100.net; s=20251104; t=1785080273; x=1785685073;
+        h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=3GlYt82Udc/E8ne84+NQ36Q+2wgUeOfgJEOTwOxxqCw=;
-        b=DhN6+FsJ02MH9BWmLldEsC+zvhWuUX0xazHNpyJqByPKptqcYWtRxPY3RAmnHa6we7
-         WGhNgywZBCprtzBsyBOGcqJXjCCPoH3UfSJSHfuvCjo5wf6FqvW3gyrUxxlHmdEr96fj
-         6UvtdAY9th2lEoZiAbaqaiISfgA9QBFGf8DxxKwZRndrtXVm8gqlNmLo23mXhF/6GcDc
-         rghp5hWZ6xQX8QGbfdMuaFpvA6MG8Wpj/u2ZqF0iVtL2ocWtapylEET/whIJXpjprPvr
-         gppZA3YZ1wdZeqTTC8IHHoPwPP0RjyZ3JAiQ0/RGoZYp0+OyFWXoZKyz+v+OoXXr42LW
-         zQDQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoYOQiCMTYsxZVH7ePKEOR8j5x66f7P3eTaqrgoTCLMXTmBmSAnEA/RedxefW5fB0VRn7+zppDxb75pqg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLaAd1da3PMV6RQ6SeA2Y/XXFU4DPtaESj4B+HLLxJlYOkfKJQ
-	KJAwbdukbdPgOvZOpcp4z6uGkIkOiRJqx3g3dg2ctATNFm8vwOCPU19m
-X-Gm-Gg: AR+sD11hMJPqtlXxMisQE/ZZ7TC0iqC9tmE7R9vnKd1BPaIza+P+mERHzRSXxkKC5OL
-	BGOFzA2d+E0YpchAMzBDQ2I9vH1D0m9/4+yiPyWt9lxwLhSFsR7rJkwh2uNZjDdO49DCE1CmuoB
-	ge9VAtZeDBaXGb861iu4SYvIA/5D46n/5buUtUEqO7Ag5+NZp7OrtxO1jXDDZyRjte98c0ZbSFk
-	Rn3B4iWYBXs/xIpYOFXWVswkmQIEOhk1fuDYNuSRnYktt+gMYRNYM5LJZAaFL+4A8RN/Evk46d1
-	12kBEWzexclW9qU8MgwOJDTMf80Y6RaU4xz1jwiecmd3bk9ceFjY41oQOd/PVuK/fMB0ivgdDZM
-	9EIWTUUjzNuQsdOwrrIMngb/gHnjcRe2bBIM1iws/RxQzW0uq7k7xdnmopHvULLx/Ap4AnGMIiX
-	7pEagYEU/DKnErrgwOXjKMJd2FVxrxsT/ofAHxFmYNxL4LZbB78PU=
-X-Received: by 2002:a17:90b:57e5:b0:380:f389:447b with SMTP id 98e67ed59e1d1-38f294e9635mr5106177a91.11.1785073585944;
-        Sun, 26 Jul 2026 06:46:25 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13d2eb01aa0sm30683807c88.3.2026.07.26.06.46.24
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=+iZf44bRNZi4EavQ0T3yVwCCro6xvtHUrPxwZYFjPgs=;
+        b=rK0mTRSW17Vc8zLL9LyJ2RwdZStbAkDeFitDRXcMm+zQSrZJj4pMS7lM7SiVBBDz/o
+         eugyHc/z5Uovu5TBgUxifn06PqusDhcdJ63N803W/jVOqoemsoL5qoBg4BFN3VL3gaZo
+         jBk5+WFi3Amc5Q96Sk3FmQff6fffdjuVLbMXWtwKyy2PKQr5Ssuw2EYucUongYGTolmL
+         IJGNHXBrPXojvobhisCBWcuRClOjdz/9eLgoX1fZbkCA+6HCC2MLhMydv50Gj/K9rDtA
+         gW+VCEcBRIYdPywQlqR20KqD3F/MeDlbTfYBzpl4BylXE3evLs5yGH7eldpCgQSqoQ6R
+         TnHQ==
+X-Gm-Message-State: AOJu0YyTMNP6kv6N80EAyD6btKc5JGoV5IxX/mLzA4zF8xCIrrlCPHXh
+	ZgxPj6ZsMKfKgnBJBbz7Y1kAP44PLkp/zNzUSx3Whryf15bHtP5ESwVvWaDV63pFNeo=
+X-Gm-Gg: AR+sD10h5mOXMqn/iSVdaOrdmMt0w/FEiRqcEoI1BqnF3cvtqxFi1hJY40ue9X/NbTE
+	GpRdwbnyBw3FmtGZOTOljU6KBF8J/65I03KRLdoLgF4H2/PNFZcqVX8z+JxTJeX+8Svz4gKMND3
+	IPyyEqAHzzyhY5pHKL0pMP+ed52r8jid3QuZgFbWLe0g9L5f0JFp907u1pOGD8XNESli6zT2xyd
+	G0CV3/daGtV/PJNtAeT6jBOLZog7KhcOCkvF6ARtj4495pbyUTgCBmA2Wwwqpnf/Ezoz2/0kUsq
+	sY7aoRoR1WaGkGsoI7xknxHdwDKzX0xuSf8kvQWSciuz2E6FTgi5SyGnVTn4XZLZp699ciAwoyB
+	MlXMZ14L24Xslss68/f9pKZLxxYp+g1NL0uQ+FSPm3KzZdgF0pcF8m/3HEUDMnvxnP16PVH1Dfm
+	76+BI+HaE1nKNuaO7rMZ2MggSBSTqx7eT8iCyPaDI9om195eAfAWmUDJKg0Q==
+X-Received: by 2002:a05:6808:3190:b0:4a2:ca6b:4214 with SMTP id 5614622812f47-4ab6a298532mr4860974b6e.29.1785080272888;
+        Sun, 26 Jul 2026 08:37:52 -0700 (PDT)
+Received: from ?IPV6:2600:8803:e7e4:500:105e:29ca:45cc:c7? ([2600:8803:e7e4:500:105e:29ca:45cc:c7])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4ab3505ac2bsm7308907b6e.10.2026.07.26.08.37.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Jul 2026 06:46:25 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2388e6b3-4ae2-485b-b276-5d787bc5c7e9@roeck-us.net>
-Date: Sun, 26 Jul 2026 06:46:23 -0700
+        Sun, 26 Jul 2026 08:37:51 -0700 (PDT)
+Message-ID: <39bac146-227f-4155-a80a-78b84a89ef20@baylibre.com>
+Date: Sun, 26 Jul 2026 10:37:49 -0500
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,120 +69,96 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v5 1/2] dt-bindings: iio: adc: add maxim,max40080
-To: Siratul Islam <siratul.islam@linux.dev>,
- Jonathan Cameron <jic23@kernel.org>
-Cc: Stefan Popa <stefan.popa@analog.com>, linux-iio@vger.kernel.org,
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, andy@kernel.org, nuno.sa@analog.com,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- dlechner@baylibre.com, ciprian.hegbeli@analog.com,
+To: Stefan Popa <stefan.popa@analog.com>, linux-iio@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, jic23@kernel.org, andy@kernel.org,
+ nuno.sa@analog.com, linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, ciprian.hegbeli@analog.com, siratul.islam@linux.dev,
  u.kleine-koenig@baylibre.com
 References: <20260723065036.2683075-1-stefan.popa@analog.com>
  <20260723065036.2683075-2-stefan.popa@analog.com>
- <a79b2fd8d08d4594bbb472b005534d7c91d86e49.camel@linux.dev>
- <20260726003152.1d9f36d5@jic23-huawei>
- <196a781d5ff487fb890abc8c3ed2ae07f8614b38.camel@linux.dev>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <196a781d5ff487fb890abc8c3ed2ae07f8614b38.camel@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: David Lechner <dlechner@baylibre.com>
+In-Reply-To: <20260723065036.2683075-2-stefan.popa@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 7/26/26 02:59, Siratul Islam wrote:
-> On Sun, 2026-07-26 at 00:31 +0100, Jonathan Cameron wrote:
->> On Thu, 23 Jul 2026 22:23:39 +0600
->> Siratul Islam <siratul.islam@linux.dev> wrote:
->>
->>> On Thu, 2026-07-23 at 09:50 +0300, Stefan Popa wrote:
->>>> Add device tree bindings for the Maxim MAX40080 bidirectional
->>>> current-sense amplifier with a 12-bit ADC and an I2C/SMBus interface.
->>>>
->>>> Signed-off-by: Stefan Popa <stefan.popa@analog.com>
->>>> ---
->>>>    
->>> ...
->>>> +
->>>> +title: Maxim MAX40080 bidirectional current-sense amplifier
->>>> +
->>>> +maintainers:
->>>> +  - Ciprian Hegbeli <ciprian.hegbeli@analog.com>
->>>> +  - Stefan Popa <stefan.popa@analog.com>
->>>> +
->>>> +description: |
->>>> +  The MAX40080 is a high-precision, bidirectional current-sense amplifier with
->>>> +  an integrated 12-bit ADC and an I2C/SMBus interface. It measures the voltage
->>>> +  across an external shunt resistor and the input bus voltage, and stores the
->>>> +  results in an internal FIFO.
->>>> +
->>>> +  Datasheet:
->>>> +    https://www.analog.com/en/products/max40080.html
->>> This URL links to a product page rather than a datasheet as the tag suggests.
->>> Would be difficult to fetch using CLI tools.
->>> Were you supposed to use something like
->>> "https://www.analog.com/media/en/technical-documentation/data-sheets/MAX40080.pdf"?
->>
->> I think the argument for using product pages is that they are stable and datasheet
->> paths sometimes change.
->>
->> For ADI there is a neater form as well that is supposed to be stable (and
->> has been for last few years at least)
->> https://www.analog.com/max40080
->> Works for any product and takes you to the equilvalent product page to the
->> link above.
->>
->> So whilst you make a good point I think we will have to let Analog decide
->> on a standard way to link to their product info / datasheets.  That is
->> on the perhaps optimistic basis they have more insight into stable choices
->> than we do!
->>
-> I was just nitpicking because it said "Datasheet" to point to a link which was not a
-> datasheet.
+On 7/23/26 1:50 AM, Stefan Popa wrote:
+> Add device tree bindings for the Maxim MAX40080 bidirectional
+> current-sense amplifier with a 12-bit ADC and an I2C/SMBus interface.
 > 
+> Signed-off-by: Stefan Popa <stefan.popa@analog.com>
+> ---
+>  .../bindings/iio/adc/maxim,max40080.yaml      | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/adc/maxim,max40080.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/adc/maxim,max40080.yaml b/Documentation/devicetree/bindings/iio/adc/maxim,max40080.yaml
+> new file mode 100644
+> index 0000000000000..170bf4eff8706
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/adc/maxim,max40080.yaml
+> @@ -0,0 +1,56 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/adc/maxim,max40080.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Maxim MAX40080 bidirectional current-sense amplifier
+> +
+> +maintainers:
+> +  - Ciprian Hegbeli <ciprian.hegbeli@analog.com>
+> +  - Stefan Popa <stefan.popa@analog.com>
+> +
+> +description: |
+> +  The MAX40080 is a high-precision, bidirectional current-sense amplifier with
+> +  an integrated 12-bit ADC and an I2C/SMBus interface. It measures the voltage
+> +  across an external shunt resistor and the input bus voltage, and stores the
+> +  results in an internal FIFO.
+> +
+> +  Datasheet:
+> +    https://www.analog.com/en/products/max40080.html
+> +
+> +properties:
+> +  compatible:
+> +    const: maxim,max40080
 
-FWIW, it points to a link which points to the datasheet.
+adi, (the part is owned by ADI now)
 
-Guenter
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#io-channel-cells":
+> +    const: 1
+> +
+> +  shunt-resistor-micro-ohms:
+> +    description:
+> +      Value of the current-sense shunt resistor connected between the IN+ and
+> +      IN- inputs. Used to scale the reported current.
+> +
+
+Missing vdd-supply for power and interrupts for ALERT_ output.
+
+> +required:
+> +  - compatible
+> +  - reg
+> +  - shunt-resistor-micro-ohms
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        adc@20 {
+> +            compatible = "maxim,max40080";
+> +            reg = <0x20>;
+> +            #io-channel-cells = <1>;
+> +            shunt-resistor-micro-ohms = <100000>;
+> +        };
+> +    };
 
