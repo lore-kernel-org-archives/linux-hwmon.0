@@ -1,112 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E6C24A33
-	for <linux-hwmon@vger.kernel.org>; Sun, 26 Jul 2026 00:06:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799F629AAEA
+	for <linux-hwmon@vger.kernel.org>; Sun, 26 Jul 2026 06:58:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785024401; cv=none; b=bxK3KqC4/iigj3WRVzxSCSysdJD3S4AsvFVeU4FA1SAoHLEPp4uzMy1Ar37VelwnPni9kuaKBnHtroO2SiDVRNwt/ZEVxoyFk6Qf+g9ZY18KmmgWLDxHHT61CxPbwPs+O8OlZj+vuaY/WWMBBqusejFnsN64V4fjnxCkhlHRVdQ=
+	t=1785049127; cv=none; b=TP4DHzh96ItIKJ6TYwYuHlk+KkIN0SPOz9IhrytJZvPuT5edFAV2KANbklu+yftzzwNN7d9RGciYQJFYodbMp0qXVS/kSNaoCXk2bwX92fuNp8x/hzwZm7rq+4U/qcx98YUlIV+EBI6KmFL94R098kShUzp+GLaDCXDEvUV2cdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785024401; c=relaxed/simple;
-	bh=4uum5U030OVwI4hSbEUirufkKHba7ZlEqbcQ166AaFg=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=FmO/S2b54sxBsUMepxVzllNn3vYaeMsZQLSvaPnXBAmRE3k1i0lWbG/ZkapiWP/ic81OU2+NoqQzjPdWtnPuIsRu2P6L4TW/uyaugZQNNesOA6hNiMufGZy9HBQIOf0TXHGOyGfj4PHovFiCHf1yFcrZ02awdCnZO0yzVb7gSZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UPPCjLVy; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785049127; c=relaxed/simple;
+	bh=iWUJEIQp15Vv+mHQ2FLlbzu13SJ3z5D3SLnInr8haoM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TJozp9QqM/3aMl3DP+ByKX/cPb8QaGWQqCALYtibaKBJeD3VTUYBvKJ6V9b6943DAt97gGQ+uOgCfgg0mgfCvPaLnY9lBwtpbbM8CnUmWQxKhUPYNl8svA7oFaPYvPrLsFe2mf61ohikjtE0IvbWj07A6M9ON0D37rj97UoNNAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PeggcgyW; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UPPCjLVy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB56F1F000E9;
-	Sun, 26 Jul 2026 00:06:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785024400;
-	bh=oUOFG7m11wzUff2O5F8grjxicKtfX/c00/McfM7lNJw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=UPPCjLVy1UnE7IJmgHg5SfqZwbtaIup2hUqB3rS1UnRiDbXm+yARtnkuwOTZ8PCph
-	 SFQgv8hJAe192XRBdg8ZXUlZG2MSV0Ego2rDKH66Sp1kISXkkfReZr46Z29ho0bGfR
-	 RgzvqZkVFWpDRgfRX3Gzx6pIEyQOZ5mQRvwEkdBHZwspxOW/oW5wrfAuzQ2CTGS+WR
-	 xE2VcM9d4wuUpg9g/84yUdI0Jgl4YpdQwrvBYkswVv8RSNx2p0VvxBpjAoJtSMhb1O
-	 be5Vllh/+vd6d0yPbN7Rp+vuZ9V/yk3KUNDj4QLm8Dw0rBhzxowwAFBtmLmixq7jSV
-	 357NUTggRjz2A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (lm90) Only report alarms if driver is ready
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Guenter Roeck" <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260725234831.1949014-1-linux@roeck-us.net>
-References: <20260725234831.1949014-1-linux@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 26 Jul 2026 00:06:39 +0000
-Message-Id: <20260726000639.EB56F1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PeggcgyW"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2cacb8416a1so16346595ad.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 25 Jul 2026 23:58:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785049126; x=1785653926; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=kb8i2R2pDMPs/7f5uag+f02VBSsq6VTvV2JKsBdYskg=;
+        b=PeggcgyWC7pITh0S3fZZ1eYrvAF0tRp53I0/XuppDW4O7nD+Jb0PeLBd8lTIZGW4rO
+         SbZocmuHGBEi+wDmMFC3jvjz6lXqsBfuJtdBJZeg8LGXTv1+fvih1Nv6890hf3jwH/ZZ
+         likhZkG055ExICO3bSlIvhvVHGF7eLznxNZGmVx6XUsHk36XpyyaBIPC3wXnjcFzGwIl
+         sOeOzvY1hwgy1SzYQtXQ03Wu1BjzzJFu6YnM+C+8ZX7BLSprfmp49R0DDz3ZpH8azloY
+         H0i3GLmME2dMaILgyaXPyauhUqWPw4qOASBKnElM17LYVJk3xakPa5Cns60KHB+K9QUr
+         eqJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785049126; x=1785653926;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=kb8i2R2pDMPs/7f5uag+f02VBSsq6VTvV2JKsBdYskg=;
+        b=mpy0DgZpmFrl05QNrS4kpqwfonq8xOu7G/EOZUt7W9OzzqO6UYou++AJ467Gvfdi1n
+         O6+slHDTzDPkZlMNwQyO1kkDt0+kd1WEUmBE8zFGo8aWuc6fnqiiIAVV0FIg/zmm97Oo
+         5ocQVdF8yGolam3+xEDc6gq+qhbcePYGwenI5zrbi/VqCWKFeTrnZQoUOmbjK5DXp5p5
+         Qa431aJfq57hHg+RaPW/m22s094/iaF56Uk0ZHdUbJg+mpcNCF4dWWjcHEBBo5oy2/Lh
+         lcmiA+MnfHu8Igg3jDjBvk/0XZiyuNv96sAO/i3WRNlbFeTKVz2Rqfsb3ikMXwRmQMdK
+         lMfw==
+X-Gm-Message-State: AOJu0YxoXgF/f1uJBqdcbJMHqRKpgYbbfKTwvCts+kPXKtusZOkybpJh
+	YZPdC0FDKQp3bDD1ru2w7sJVe57QeKuPhhWSp8vM1qCOJc2Vg6iQUujx
+X-Gm-Gg: AR+sD11CiUpJI2W8vBzJ4c8pvWUj1IkYXIiLOqFgJOkEJBIW0pAAstvskSjLllwaK5F
+	hhpA8TvUdE0STdoIgDvBdyEgoyScuuPUJs6Z2KRy5jiqX+NrNxYkPFPGeS5ZiPthHk4p4TPoEDk
+	L8TZpRtPnL+MIPIieJmEtsPsPMiY3eF91pv4VS+wDqwKmNjFYp5NDlZi2YU7fmOgzdSRnu1PUNu
+	rebdF+/a1jq+uyXTW9GN+/mcw0+OeexookSLQivBEkp5pHIPn81ZZjmuw01YgWgohmlF9/TUmNk
+	kUmM+I/Rqoh84CzH2DC++owkmhDWvjejKd3+KqXqoxIciuTk3SNbSr0vLHQ4iNPNnSNAZ1onGQC
+	maCG+NmZX2tTgq7ehEPf6E4k9PQwUQAbsjYexbBqacE7vlJfJmgH7Bq/ZdsggaC9oseSBAsrpFd
+	dJsGGXz3Zj7uFdcXSwUnPZJDB2vwoRryo=
+X-Received: by 2002:a17:903:18b:b0:2ca:ed57:8586 with SMTP id d9443c01a7336-2cfde83034fmr41352235ad.23.1785049125808;
+        Sat, 25 Jul 2026 23:58:45 -0700 (PDT)
+Received: from acer-nitro-anv15-41.entro.com ([118.34.230.2])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cfde5e28easm17153545ad.24.2026.07.25.23.58.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Jul 2026 23:58:45 -0700 (PDT)
+From: "shaikh.kamal" <shaikhkamal2012@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] docs: hwmon: fix spelling error
+Date: Sun, 26 Jul 2026 12:28:35 +0530
+Message-ID: <20260726065835.21012-1-shaikhkamal2012@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+Fix spelling error reported by codespell:
 
-Pre-existing issues:
-- [High] Incomplete Fix / Use-After-Free and NULL Pointer Dereference via a=
-lert_work
---
+  supprts -> supports (sg2042-mcu.rst)
 
---- Patch [1]: [PATCH] hwmon: (lm90) Only report alarms if driver is ready =
+No functional change.
+
+Signed-off-by: shaikh.kamal <shaikhkamal2012@gmail.com>
 ---
-commit 79dff8acd6e841981f1482b13b5476e90ffaad24
-Author: Guenter Roeck <linux@roeck-us.net>
+ Documentation/hwmon/sg2042-mcu.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-hwmon: (lm90) Only report alarms if driver is ready
+diff --git a/Documentation/hwmon/sg2042-mcu.rst b/Documentation/hwmon/sg2042-mcu.rst
+index 077e79841d2e..431ed832d083 100644
+--- a/Documentation/hwmon/sg2042-mcu.rst
++++ b/Documentation/hwmon/sg2042-mcu.rst
+@@ -18,7 +18,7 @@ Authors:
+ Description
+ -----------
+ 
+-This driver supprts hardware monitoring for onboard MCU with
++This driver supports hardware monitoring for onboard MCU with
+ i2c interface.
+ 
+ Usage Notes
+-- 
+2.43.0
 
-This commit fixes a NULL pointer dereference by ensuring report_work is
-only scheduled if data->hwmon_dev is set. This prevents a crash when
-userspace reads sysfs attributes before driver registration completes.
-
-> diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-> index 4b9c0ccdf2609..b03f75f4ddec2 100644
-> --- a/drivers/hwmon/lm90.c
-> +++ b/drivers/hwmon/lm90.c
-> @@ -1194,7 +1194,7 @@ static int lm90_update_alarms_locked(struct lm90_da=
-ta *data, bool force)
->  		check_enable =3D (client->irq || !(data->config_orig & 0x80)) &&
->  			(data->config & 0x80);
-> =20
-> -		if (force || check_enable)
-> +		if (data->hwmon_dev && (force || check_enable))
->  			schedule_work(&data->report_work);
-> =20
->  		/*
-
-[Severity: High]
-This is a pre-existing issue, but does this fix also need to be applied
-to alert_work scheduled further down in this function?
-
-If userspace reads an attribute during the registration window and alarms
-are active, it looks like alert_work can still be scheduled while
-data->hwmon_dev is NULL:
-
-drivers/hwmon/lm90.c:lm90_update_alarms_locked() {
-    ...
-		if (check_enable) {
-			if (!(data->current_alarms & data->alert_alarms)) {
-				...
-			} else {
-				schedule_delayed_work(&data->alert_work,
-					max_t(int, HZ, msecs_to_jiffies(data->update_interval)));
-			}
-		}
-    ...
-}
-
-If devm_hwmon_device_register_with_info() subsequently fails in lm90_probe(=
-),
-devres frees the data structure. Since lm90_stop_work hasn't been registered
-yet on this error path, alert_work wouldn't be cancelled.
-
-Could this result in a use-after-free when the delayed timer fires, or a
-NULL pointer dereference if the work executes and calls lm90_update_alarms()
-before data->hwmon_dev is assigned?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260725234831.1949=
-014-1-linux@roeck-us.net?part=3D1
