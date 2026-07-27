@@ -1,215 +1,165 @@
-Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011038.outbound.protection.outlook.com [52.101.52.38])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA3D30568D;
-	Mon, 27 Jul 2026 14:12:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.38
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785161558; cv=fail; b=pMpEkEJy6gV/JSQQP667QihQ/CUUYuuY793TbnrL3JeVhIy0/zrf1ABPC1AUeRlUFVqe7i2+Z2XuIB64xNDzdRJE57/vszy82dJQXx6IHbofvxoCSHk9fmjWLa8gimJB3/48nJNxqCsYkpt+XFyLmfptlL5kcFRhBnWUQrQv0i0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785161558; c=relaxed/simple;
-	bh=aLfAokYwZ5Sy7K+kesaw9/G/Ns5Q/5fpRWhRsD+3XUA=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SdMQ1+b98aSSrpY47of0YNbps288W/sdj6VpWpEZkfhqVUDUY5Doc3Tv6o7SB8hh/5uFVhpY6DSnZlAMDVMAl8D87Slh2rUjX2XzmAIabGaIEEnt/74wGLE7LUvLWqt8Xch0vwzNoergy1YBDU6EV6qZEGetdjh2vEkOQHvgwck=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=EtPmqqyy; arc=fail smtp.client-ip=52.101.52.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21F9730216D
+	for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 14:27:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785162474; cv=none; b=iYSd3sW6Veeo0w1b54M1IOCC0i0HUG5f1FMPkx4nYnUnqnysBsuYB9u0AtS5R4t2U2XbAswC/6/hs0d2UWe4jHOt/h74/Gja+3Ly/7B3+1utNaDbyBOxsbVdhwmL68E0I2khqnTOCr2BpgydAaWOkWzUWtgb17bH0VcFM3Xtwu0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785162474; c=relaxed/simple;
+	bh=apuFk0nZwSfRqXS5CBFDSIhd+9oJlZeaDj7XBHusRJc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DVhIYHGtFBltDV3O+luzrCRy2ERSUfxG2E/y+H+CT4zb7BwpGNT/SzKAqFT/XCxhe3WU5zzzTyMl+725eiA8smAHT/42AXtyPbQfcG+b/fVHXF0ksQm5vGYneOIyEx8c4KXm76zkRH5FfJT6Si51vJDZ7M9lP5PjntI6a2NfK9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UY9Vm3yV; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="EtPmqqyy"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=BeEybnZpXu3gTNFuWC5NBSw6Oz/PnO4eu41+/eM+ab0TnhYpPMpY7feqjl6yUTZAKazcdiDovTGSVa7oM14R4bOrh1QD6CZh8P2+bPkDDrYocI4isOHyHRte1jp+cyu3aFeFuo6vvjS8NSuzrFZ6IiyYC3CjupG9bhdyjZWhuGv8iAPTVxW5NVrFuhdTfVEhYffrG+y0iqGa0q7DWdmGZulQF062pKJUGJpGqiCTSzTk8ZGwC3URmBlqr5bBGpsTMLYKKLWZx2Z4S4spfGg2PLg2I5dp/PWAjRqtbwl4PjS9ostUbQa4nzspqA2JTImPuDFFSY3n6QKhk4LjVQrKqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S60XBqFr76tzZWXzTso9h5tbDGUZngHBG4f/C1S/l2w=;
- b=AoOG/RBibzkt6zDBWA9SitJp1O5/qg5EBD11LcVAUL50R7OA7ZIEwwglLEmwuXq/pnrO0KRhxEajhUjd2P27iHRhBeqbI4Y9lPT8zXyvay29md3ZaFkkLm8Cq+mAzhXY3FFGVGBcyYI/a5J99jc7NYi2TbcvSVvwjycUQBD8DZOp0kcMoO+EZ5Ik8QFrH4QWophRKvxgP4/uC9zwI3K1EBo1XcRlOFVShKpHABdplldu5ZNHwq2BBx1an84eOAIhU2z1N/cJJZU/bVxK/K3hjiD9D48bNuA/qd/pxLyodPecavEfSqec9Aw275a/SwXF0g732K1apgbN0Vo+ZRXrFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S60XBqFr76tzZWXzTso9h5tbDGUZngHBG4f/C1S/l2w=;
- b=EtPmqqyy/4x6lyU9kpuWa2ooUp2RrHjC+zBNET7Rci6w9RexrQgETGNidYTXNrLihsniXHtARc6QIalvWv2xHpGi8EA4gSCHQ6fmBJw0hjze2tsbpJLH8mDome6ES2CaYAlQV4gR152m4z6oEyse0l6LWo+G9RJ8n23+qDZcGFoA41S3h96gRAUgGLozQHVmBPfsv8OCuJa0HdbcBssFkj/TZip3zJP0agKyH5e1lTW5ybuJ/KaC1i3hcu5SBWMPOhblAFz5lFCG53kZ/+O34nKwwTLb6bH3ny2+CXqb4GjBYpkvGk7PpYp9gk+3NRLRJza4Vc1S5xGP7ueoIoZe0w==
-Received: from BN9P223CA0007.NAMP223.PROD.OUTLOOK.COM (2603:10b6:408:10b::12)
- by SJ2PR12MB9164.namprd12.prod.outlook.com (2603:10b6:a03:556::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.245.13; Mon, 27 Jul
- 2026 14:12:30 +0000
-Received: from BN1PEPF00005FFF.namprd05.prod.outlook.com
- (2603:10b6:408:10b:cafe::71) by BN9P223CA0007.outlook.office365.com
- (2603:10b6:408:10b::12) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.245.13 via Frontend Transport; Mon,
- 27 Jul 2026 14:12:29 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN1PEPF00005FFF.mail.protection.outlook.com (10.167.243.231) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.270.5 via Frontend Transport; Mon, 27 Jul 2026 14:12:29 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Mon, 27 Jul
- 2026 07:12:04 -0700
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 27 Jul
- 2026 07:12:04 -0700
-Received: from build-akhilrajeev-noble-20260602.internal (10.127.8.11) by
- mail.nvidia.com (10.129.68.10) with Microsoft SMTP Server id 15.2.2562.20 via
- Frontend Transport; Mon, 27 Jul 2026 07:12:01 -0700
-From: Akhil R <akhilrajeev@nvidia.com>
-To: <sashiko-bot@kernel.org>
-CC: <Frank.Li@kernel.org>, <akhilrajeev@nvidia.com>,
-	<alexandre.belloni@bootlin.com>, <conor+dt@kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
-	<linux-i3c@lists.infradead.org>, <robh@kernel.org>,
-	<sashiko-reviews@lists.linux.dev>
-Subject: Re: [PATCH v6 05/12] i3c: master: Add support for devices without PID
-Date: Mon, 27 Jul 2026 14:12:00 +0000
-Message-ID: <20260727141200.171715-1-akhilrajeev@nvidia.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260721042604.87E791F00A3A@smtp.kernel.org>
-References: <20260721042604.87E791F00A3A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UY9Vm3yV"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cb5a6aa8760so1594532a12.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 07:27:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785162471; x=1785767271; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Li5tZuE717tlYEzUliD4boes1/6PgXx531SlUxh8t2g=;
+        b=UY9Vm3yVx3kue2X4pMqs+Q/3ACKdcVTdVyNJUNDhdkNaySkmrSyzzEtWJ/55TyzkH/
+         J8Zhk/4OqWU6iLr8vJsCaD/4JYEE8dBMMMM4W3YZm7w2ZAmvOYjExm8POe8FCS8sEKYP
+         pS2X/ZL6DEnSB6Ky64fb7Gq/DZALwdba8SJsoPnjtFzsWdDc+sIqXh0m4tuKjnVex6NO
+         g0xLGFrDJa2MoAEKNDGNjGIB7wDt9yzuT/iLPGT4X0c0pXfVkDsVFYr3lIo37Kw5NMhQ
+         VvP5XS/5iqYK98bs47wum6m118nLTNpsP6zEEXNosNP2gsmyW4Odj6gVrMqPOw3OKZI/
+         VgtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785162471; x=1785767271;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Li5tZuE717tlYEzUliD4boes1/6PgXx531SlUxh8t2g=;
+        b=CCvLNVDN1J1SThDjTxB9rXTAdUU0aFsmYRfnVYAaD5QPw1I8uquNMijc+Fag39TgnX
+         w+3p5Bn1xpvB2rxY8mWc/4lvT5HhMZLL7yqQl1xP/mge3vB1xzFjDofUXMrb5bm4QKN+
+         6p9R5KXZooVjbxZv3EZUcwBqDAeMbyJKqDLevdQBDFZP1ZxPU2iDK1FsSv3/YaUarQfy
+         ZTLcLEf0Vu66sAiEqzVX2XzizqT9Tj/fnXRoSfMHQoGLfJoRm15Ub/ES9uEhnCGjKqGX
+         bBGVd6na+Pto/R1oYlNt9FuspMvhq55cNSxblGQgKeVOXSF5xSWDydNjKwcIo9VJY+UF
+         qluA==
+X-Gm-Message-State: AOJu0YzSl1Y9dMI5xKu67W0kKdbbTBnWvedbNdOeq8XSodGdzThsoSgA
+	VuiGYj6OICwb+pLrvZhzPTixUNlYkMi5Mf43Rns2xNHe9EyTVXl5ROCv
+X-Gm-Gg: AR+sD10Hwz5EePTzl5E9nx/6N3T6l/CI2ddATBi+2tI7xJnKZFkcQAQ9zqVprGd7oel
+	+m2i3xHjaypTpBzSezxq4YSjrqWizbZpD08etjaXPDNhfsXCjfKhUkWttzlY/j9heRGOnpkDfSj
+	+VHrLMTvVZnVsJqaGb375y8WD0zqgRviZAyjhDE3dcjav32U2DsANkLLi06LoOFwaGUhLE/EA3w
+	B/+8h+JUTWc/GaNGfmPjI3qLlErg+yzqZRxi74JimKApKmCS80Emx4wk9p6jXgCwfIMPLOYA6vj
+	7QMCk69miuoBNsgSccjm5MTOXw573X074CRZMyB1UKfgaN6w/wQRmLDbkvuTNogSArpA1v1/RKS
+	Ghz/NFwyRb9gzf7XJ5ZJJwmnjlXnRIrtIxftRJa+F+/7/GJgUkZlgpPNiuAUUDgx6Xo+SpGCq3c
+	u6GRnoqxOhZebjrulp2uKicMnLb1OA9DC+L5zLft3NJvSKssxaefA=
+X-Received: by 2002:a05:6a21:6494:b0:3c3:9aff:7a5b with SMTP id adf61e73a8af0-3c67df803fbmr7678921637.50.1785162471051;
+        Mon, 27 Jul 2026 07:27:51 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-314bc59cfb4sm32311682eec.26.2026.07.27.07.27.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jul 2026 07:27:50 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <74eadbaa-0020-4628-bf82-29fca725fcb2@roeck-us.net>
+Date: Mon, 27 Jul 2026 07:27:49 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN1PEPF00005FFF:EE_|SJ2PR12MB9164:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1bdfaca1-b6ae-400a-ccf7-08deebe917e3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|376014|1800799024|36860700016|82310400026|10067099003|22082099003|18002099003|11063799006|56012099006;
-X-Microsoft-Antispam-Message-Info:
-	w8z2Z0lwWhiyu4OrR8vPZhJ/SJ3zMVh79HUCBbp728STvGBXMQGsOtnQdPyTtSG27AQPMLp1VfNCP6CIqN2/v3HaG8kW2bjWFdEQ4+lYwKivKQS2fdLoLEHo6Enteg4IRufI5viSRYnCV9EEiYxiohNetysk379RINVrxL6/tNRhOhOF18H2iDPhAjgFTmsvpXLtQVvWk5Pt4paqfO5EFK84f7ImzAtl9R5NLZcc9HwcuPOz+XWsHM3+PL7JBnt9p2PmEjVVVSlC6RNu6VVpDa+ldh5P0qXet/aY6hmFKzYdXuekSZcG90QfjyrEeKCaCDgVybpZT/8K5im5shthlQLMqeoM1evGRTnId5rZaBIxXFbRyiEbILIrf00n0b2/4bfOv88lYNddJg1U2HqCE+rahv/GbO8yiVXVqyw/tyoker2m0RZXDCgn8NxVbt693tBDnFuj0TWwmWTL2oOlGE1bU6kVE4K8juZkUo7KSHurjt6sSoe336DkjI5cPv/e9Yvb1+PaHBNqKWVhSA7VscrERRlrQSBNbHHQe9/k/xPfDNu5AX6U00dtnC3MmFIOAfzH8nxS12zOI4ohTcX/Bp/Ax41JmjvPOc1RCMJesuD2lOWLl78xplCaG3/RNCsy9BPMwLrJ/+d9/aaryXH62C5t4UdDKCFx4iaNLIMjXNGbA/r/+xOK+EZQaYUnIZssLoVAyumydFdgVi7r4+6Klg==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(23010399003)(376014)(1800799024)(36860700016)(82310400026)(10067099003)(22082099003)(18002099003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	NZiFZDfeMUn4dmQuDAy4Vm7I5Q2gk0VC8Jx3Cex8Ok6f5ttNTkoqXMex29P5U9ealCWa0lPqaIdsHA0SBWFqdZh2p2hcskBiOGli60N0A9ROcmUzeg1hk+EN6p0OpceMHSNNuSVqjIdL3mOrNww3DjePBjTNAPtn8LqiV4G1P9zz9e3Y/5CeM/OlDZcDqBdF0ODm8/nQic4EMdjRmzt2uqxBoipZ/GPLX1nFN56/wmdItq6y6TlyfGbF6hbsVpIO/ClsLopxJJxW3hjJBvQS3u1T4Vb7e1UmqK+lkIJeoc3ISJHOlDHmclgrd7K+HpvuMMkjmbtGZfTwM330ab8ihDOwjVTvE4R+JB+henskyWLxFO/P3uCmolkiVGuj7gbaqUtwDiYTGs20LonbIJHkk3lKPUoyioIkP86NBDXoP+YVieD0GxP8B3L4sAu9lK+N
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jul 2026 14:12:29.2015
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1bdfaca1-b6ae-400a-ccf7-08deebe917e3
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN1PEPF00005FFF.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9164
+User-Agent: Mozilla Thunderbird
+Subject: Re: [hwmon PATCH v3 4/6] hwmon: (adt7470) Fix swapped PWM3 and PWM4
+ auto mode masks
+To: Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+ Chris Packham <chris.packham@alliedtelesis.co.nz>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Darrick J. Wong" <djwong@us.ibm.com>,
+ "Mark M. Hoffman" <mhoffman@lightlink.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260727-adt7470_thermalzone-v3-0-21424d550c3d@gmail.com>
+ <20260727-adt7470_thermalzone-v3-4-21424d550c3d@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260727-adt7470_thermalzone-v3-4-21424d550c3d@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, 21 Jul 2026 04:26:04 +0000, Sashiko AI review <sashiko-bot@kernel.org> wrote:
-> commit 671c3fae66002e874a13051a9c956e9987d76674
-> Author: Akhil R <akhilrajeev@nvidia.com>
->
-> i3c: master: Add support for devices without PID
->
-> Devices using SETAASA for address assignment are not required to have
-> a 48-bit PID according to the I3C specification. Allow such devices to
-> register and use the static address where PID was required.
->
-> > diff --git a/drivers/i3c/master.c b/drivers/i3c/master.c
-> > index b18dda89c4737..7b2f819bf4437 100644
-> > --- a/drivers/i3c/master.c
-> > +++ b/drivers/i3c/master.c
->
-> [ ... ]
->
-> > @@ -2389,8 +2398,18 @@ static void i3c_master_attach_boardinfo(struct i3c_dev_desc *i3cdev)
-> >  	struct i3c_dev_boardinfo *i3cboardinfo;
-> >  
-> >  	list_for_each_entry(i3cboardinfo, &master->boardinfo.i3c, node) {
-> > -		if (i3cdev->info.pid != i3cboardinfo->pid)
-> > -			continue;
-> > +		if (i3cboardinfo->pid) {
-> > +			if (i3cdev->info.pid != i3cboardinfo->pid)
-> > +				continue;
-> > +		} else {
-> > +			if (!i3cboardinfo->static_addr ||
-> > +			    i3cdev->info.static_addr != i3cboardinfo->static_addr)
-> > +				continue;
-> > +		}
->
-> [Severity: Medium]
-> Will this static address matching logic ever evaluate to false?
->
-> Since i3c_master_attach_boardinfo() is only called during the dynamic
-> address assignment (ENTDAA) phase, i3cdev->info.static_addr is inherently 0
-> in this context.
->
-> Because i3cboardinfo->static_addr is validated to be non-zero at creation,
-> the condition i3cdev->info.static_addr != i3cboardinfo->static_addr will
-> evaluate to 0 != non-zero, which is always true.
->
-> This means the loop will always continue, making this branch effectively
-> dead code that fails to perform the intended matching.
+On 7/26/26 20:34, Luiz Angelo Daros de Luca wrote:
+> The ADT7470_PWM3_AUTO_MASK and ADT7470_PWM4_AUTO_MASK macros are
+> currently defined with swapped bit values.
+> 
+> According to Table 22 of the ADT7470 datasheet, the Fan Control Mode
+> Configuration for register 0x69 follows the exact same bit position
+> layout as register 0x68:
+> - 0x68 Bit[7] corresponds to BHVR1 (PWM1) -> 0x80
+> - 0x68 Bit[6] corresponds to BHVR2 (PWM2) -> 0x40
+> - 0x69 Bit[7] corresponds to BHVR3 (PWM3) -> 0x80
+> - 0x69 Bit[6] corresponds to BHVR4 (PWM4) -> 0x40
+> 
+> Consequently, PWM3 should use mask 0x80 and PWM4 should use 0x40.
+> 
+> This typo did not cause any functional bugs because these specific
+> macros are never referenced in the driver code. Instead, the driver
+> correctly applies the configuration by relying on the modulo parity of
+> the channel index (e.g., `channel % 2`) to selectively apply either
+> ADT7470_PWM1_AUTO_MASK (0x80) or ADT7470_PWM2_AUTO_MASK (0x40).
+> Since the bit layout is identical between the two configuration
+> registers, the hardware is currently configured correctly.
+> 
+> Fix the macro definitions to reflect the datasheet accurately and
+> prevent future bugs or confusion during code review and refactoring.
+> As this is a purely cosmetic fix with no functional impact, a backport
+> to stable kernels is not necessary.
+> 
 
-This branch is harmless and does not affect functionality. It is kept for
-symmetry/clarity and can be cleaned up if preferred.
+If the masks are unused, how about just dropping the definitions instead
+(including the unused ADT7470_REG_PWM12_CFG and ADT7470_REG_PWM34_CFG) ?
+That could be done as first patch of the series.
 
-> > 
-> >  		i3cdev->boardinfo = i3cboardinfo;
-> >  		i3cdev->info.static_addr = i3cboardinfo->static_addr;
->
-> [ ... ]
->
-> > @@ -2848,9 +2871,16 @@ i3c_master_add_i3c_boardinfo(struct i3c_master_controller *master,
-> >  
-> >  	boardinfo->pid = ((u64)reg[1] << 32) | reg[2];
-> >  
-> > -	if ((boardinfo->pid & GENMASK_ULL(63, 48)) ||
-> > -	    I3C_PID_RND_LOWER_32BITS(boardinfo->pid))
-> > -		return -EINVAL;
-> > +	/* For SETAASA devices, validate the static address instead of PID */
-> > +	if (boardinfo->static_addr_method & I3C_ADDR_METHOD_SETAASA) {
-> > +		if (!boardinfo->static_addr)
-> > +			return -EINVAL;
-> > +	} else {
-> > +		if (!boardinfo->pid ||
-> > +		    (boardinfo->pid & GENMASK_ULL(63, 48)) ||
-> > +		    I3C_PID_RND_LOWER_32BITS(boardinfo->pid))
-> > +			return -EINVAL;
-> > +	}
->
-> [ ... ]
->
-> > @@ -2873,10 +2903,10 @@ static int i3c_master_add_of_dev(struct i3c_master_controller *master,
-> > -	if (!reg[1])
-> > +	if (!reg[1] && !fwnode_property_present(fwnode, "mipi-i3c-static-method"))
-> >  		ret = i3c_master_add_i2c_boardinfo(master, fwnode, reg);
-> >  	else
-> >  		ret = i3c_master_add_i3c_boardinfo(master, fwnode, reg);
->
-> [Severity: Medium]
-> Could this change allow devices requiring a PID to be registered with an
-> invalid Manufacturer ID of 0?
->
-> By permitting reg[1] == 0 when mipi-i3c-static-method is present in
-> i3c_master_add_of_dev(), it appears we can bypass the strict Manufacturer ID
-> validation in i3c_master_add_i3c_boardinfo().
->
-> If the method is SETDASA, which still requires a PID, boardinfo->pid is set
-> to ((u64)0 << 32) | reg[2].  If reg[2] is non-zero, !boardinfo->pid is false.
->
-> Would this result in successfully registering the device despite the zero
-> Manufacturer ID, violating the MIPI I3C specification?
+Thanks,
+Guenter
 
-This is only if the reg property is intentionally malformed. If needed,
-'!boardinfo->pid' can be replaced with !I3C_PID_MANUF_ID(pid) to fix this.
-
-Best Regards,
-Akhil
