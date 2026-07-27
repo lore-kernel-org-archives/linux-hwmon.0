@@ -1,139 +1,186 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFC7837BE95
-	for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 18:47:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A0541624DF
+	for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 18:55:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785178025; cv=none; b=puZiPyaMthap1pkbHR0pKhlaSj/h+FRkNBAo7EXGxp+8FHNA/EmyqqPK7GgY8G7rrW70AYqSaYzaXm9i5HHp/mJZeAEaEF6jlE6CeS95RQSRU4wpnbBDh3ZwUHdFVRzTUnp02AA/uxMfSrWNGvFjzvPBLxsilBeASRjOrMFC2BA=
+	t=1785178532; cv=none; b=Zd+BHTQ7A6opnqoTH/j/iM64kQiWjYqKbJyKwlQiT/7goMgoNejYEIEPHWLTbevk1uBEtx3nP9PczaoKYMXWKNthSZEIyPHPyHb7wlZXvy4WsnwC4efe8CK5RD+S8ajgJtTIGS3eJW7T6IQmA2/nknTm8dG+HKUpWsad80GwrDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785178025; c=relaxed/simple;
-	bh=BgialWtUiPk2ndzeB1RtRVVlvyLma9/0W7I6go27Wds=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Fx9m+/Ixhxha3Qmjw0osjDWv+x2XwoYDYCmvVZyHnvvinmF7+tdLMu2C+usnGUsTox5xHFwXr5C7Gt7Er4qbusUi3AIvlxMcuMVj6pXI0REXQnAHoN7dOt8wW7cDvjG4ltWmIN27ftdJYRnEe7c6Hm1UMRk+jT2HHMcU93o3baE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i+I/sCIB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785178532; c=relaxed/simple;
+	bh=/1hZJEmmjYrWmizJ2XQNxy5Z9jsipLYNR/8k4bfXDUA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SMfWXLX68jP9UxdhIBlXTzBnNeDikay2Ba218H9A79BoQuanDIYHAHi3aluioVkvaprJ9nwaMDFMX/SJgmPvsVry4SCF55HBBBoK4bjdI1WAKh7vrGUlCFFS553mSmI8FIhSHYfpRsQwQ+BMRDXcJmgTkSmnCCtoBl1r01QEezs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XZpRH2XF; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i+I/sCIB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36A021F000E9;
-	Mon, 27 Jul 2026 18:47:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785178023;
-	bh=6tHGEgR3SGVVpqPzVLYGiHprILXbo9NC8TA1emd6Jmo=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=i+I/sCIBQWuEM3GXwGfWv3GRIudtcUg5xqmMj4NnjXOJkLCjqPEBWrId8PMBNzZgN
-	 fZHMgFCeYg1iHHOfxcHDaFA7COIcGB0wdUu7P8kpltEcRxqRaw8SBq1Dfzp8x3Trqj
-	 iSwZgw7rARSeoIPDC+myGiZd2EQP14MtMRF4e/owso5ycboKfxpQLGrD2I6XZb9EHt
-	 DbIRm8aSTF8EEFzIyJcc16btSAMcA0ulEhxZX+NhnZX/Z88I7wKgHQr12m6SiPZG0U
-	 g23DZ4Eda+S37pGk+URngsJftH9jns8fEUruaP6a5lS4UjTuMaFXsBJKyBDeMtIuGi
-	 2VPwprmgIDqTQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (nzxt-smart2) DMA-align output buffer
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Guenter Roeck" <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260727183309.3681243-1-linux@roeck-us.net>
-References: <20260727183309.3681243-1-linux@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 27 Jul 2026 18:47:02 +0000
-Message-Id: <20260727184703.36A021F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XZpRH2XF"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2cc7ef7ec27so39009325ad.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 11:55:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785178531; x=1785783331; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=7s3NY8HvmOabzcWDfdBtfJrwVxvIJEKBPYhXRbvoayw=;
+        b=XZpRH2XFmuQP9GNhyI3vHvA0SLkTqZwbSMjv08+moYvcImmCEWFSoOD47rQ3aX9/dk
+         9ziBLmqiEaxcezloUnSZCnbNgTmcdXhZb8xGK7s/r99sWnZTbZvbgAVOfKOOHe9z40ux
+         3lNplt9rffQCodoF+WE5P+eLcbB3l4r3rLGIieqwyrJTSvRdTHbTbGyoRcVnQlgmSthD
+         S4E1fj8Yt1NiSl2NYpNNKumvjnuLLXaaAmox4fnXYogI622NYTw5CQvYZGOubloGxbBU
+         D9wsib08AARw4WSPyVSEB+ulIi2KSlHfYdwO5TH+Lwtuaum0seg7hC4CPsrRpowV6JSV
+         1Xkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785178531; x=1785783331;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=7s3NY8HvmOabzcWDfdBtfJrwVxvIJEKBPYhXRbvoayw=;
+        b=VINQsGa1iO3vU8op36pyqdYy9ydYpTb5Ul4LYBO0ufY9xuHs2O4REzJnxASyYkt2kO
+         y0iQYAzyP2xs4UbmJ+lzA2TzZCyl54dJQ8Rv31c3tRlnPnD5CVj3abvrWXq26Po7dxmD
+         ibpcu4pQhKAAP3EYQyCskVq1SluuybcsHYlzg/1+BtLCS0HxrA4a07PQ/YDxHYkhkQFM
+         prIcIMiaPVWN1IM993K5vO5ydKhXxeCmxNuNfkGxxlLBcIub5fZyRhh/8MtOY+T8Bfk2
+         1zctM92wkU2HjHPBf8TyAmPxzEdf8CftJ3gx7VkoIe49AUUtEroSr5mE+xmnZUVqJuZr
+         UMTQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqrlvLrs/p5Tl7e7lz9ydtFF43RsYSugn5EuhdQxeSRgvyZytO25iicDoxJHdAoRiNFnyymVYn1IpWteg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHxknobhDTdKGuMdfl+hdXG1mud8CdvQLeswvxVTWpLRCHn6sE
+	8Wc5BbA7HutvDbHwTH9Zload98idiWFpt4PGDeoQrXmHOeZ0mr7QN/Gzt2IeoQ==
+X-Gm-Gg: AR+sD10l2ODu5kSccE4vQO0/GUg5jMlonph72IkPP8XhftpnyAg1ZrTK5hXu3CVtvui
+	iC1MbIsQOAxzCqLsyesjysKQzoKxydqHP4macbPuQ9CgQJzzr6xvewzifTEGOaYvrxdn2Q+qbM8
+	nhIyPKuk761hAkgKm7SiyW0BAXk4AoBbbOs7qzOGhDcjOuViotyzFqIAIlXCA2sFrksUXQJg1tv
+	3vixa8SLS4oedDynTsrUDsy85GtajhWz21rKOak/KYfJmhI1ikYgpGxbyQhY5zfg6OlwlVRFi0b
+	80vVa97PRX8doDLhs7bMYZwATLqNxUHTOKc12scR1/1mmxzxO93Y3b4o/869bXyPOmA665isMx0
+	cn/ceRL0BbwjaQ/NyAo45IsqmGsomLzvXAw7KNxdMN1KgaGpjga+v+EPVfy/g9aANSusTjKSClb
+	JqokTrI48GwKnj/HnjwJPbZAVUs4wLSO1lWMWordNjvRgzEMf7h8I=
+X-Received: by 2002:a05:6300:8d:b0:3c4:48da:8102 with SMTP id adf61e73a8af0-3c67daa5c35mr9606155637.29.1785178530607;
+        Mon, 27 Jul 2026 11:55:30 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-314bc419c52sm34318893eec.10.2026.07.27.11.55.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jul 2026 11:55:29 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <a4a9b5c8-cb83-4865-a226-66c55987ec38@roeck-us.net>
+Date: Mon, 27 Jul 2026 11:55:28 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [hwmon PATCH v3 6/6] hwmon: (adt7470) Use cached PWM frequency
+ value
+To: Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Darrick J. Wong" <djwong@us.ibm.com>,
+ "Mark M. Hoffman" <mhoffman@lightlink.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260727-adt7470_thermalzone-v3-0-21424d550c3d@gmail.com>
+ <20260727-adt7470_thermalzone-v3-6-21424d550c3d@gmail.com>
+ <f15dd16d-0e3c-4d7a-a8db-59ca3d34d4dd@roeck-us.net>
+ <CAJq09z57AMTFyEnvbHw=-6KDC83sA+E944=WcNc=FjzFySAmzw@mail.gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <CAJq09z57AMTFyEnvbHw=-6KDC83sA+E944=WcNc=FjzFySAmzw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+On 7/27/26 11:44, Luiz Angelo Daros de Luca wrote:
+> Em seg., 27 de jul. de 2026 às 11:33, Guenter Roeck
+> <linux@roeck-us.net> escreveu:
+>>
+>> On 7/26/26 20:34, Luiz Angelo Daros de Luca wrote:
+>>> adt7470_pwm_read() currently ignores failures returned by
+>>> pwm1_freq_get(). If the register read fails, the negative error code is
+>>> returned through *val while the function itself reports success,
+>>> potentially exposing a negative PWM frequency through sysfs.
+>>>
+>>> Fix this by using the cached PWM frequency maintained by the driver,
+>>> eliminating the register access from the read path.
+>>>
+>>> Apart from the corrected error propagation and using the cached value,
+>>> no functional change is intended.
+>>>
+>>
+>> An alternative might be to use regmap for caching and drop all driver-internal
+>> caching. I have done that for other drivers; typically it simplifies the code,
+>> sometimes significantly, since the update_device() function is no longer needed.
+>> Something to consider for later, maybe.
+> 
+> That definitely sounds like a nice upgrade to consider!
+> 
+> I haven't used regmap's caching feature before, so I'm not entirely
+> sure how cache expiration is typically handled. In adt7470, caching is
+> mainly used for volatile readings because hardware access over
+> SMBus/I2C is quite slow. On my device (which might be an extreme
+> case), reading all registers can take over a second.
+> 
 
-Pre-existing issues:
-- [High] Sysfs read paths wait indefinitely for device reports, causing a d=
-eadlock during device removal when kernfs_drain waits for sysfs operations =
-to complete.
-- [High] Unprotected access to output_buffer and update_interval in the res=
-et_resume path leads to corrupted USB reports.
---
+regmap caching does not time out. Registers are either cached or not.
+Usually that works just fine because there are not that many volatile
+registers in a chip. Most are limits which can be cached forever.
 
---- Patch [1]: [PATCH] hwmon: (nzxt-smart2) DMA-align output buffer ---
-commit 4207ab1b1718833d04744a9d89312688c2cf5221
-Author: Guenter Roeck <linux@roeck-us.net>
+> What would be the recommended strategy here? Would it be caching all
+> registers and periodically calling regcache_drop_region() (or mark
+> them volatile) to force a refresh?
+> 
 
-hwmon: (nzxt-smart2) DMA-align output buffer
+What I usually do is to just mark the volatile registers in regmap,
+and drop all driver-internal caching. I would not see the point of
+re-reading limit registers.
 
-When send_output_report() calls hid_hw_output_report(), the underlying USB
-HID core calls usb_interrupt_msg() which maps this buffer directly for DMA.
-Align the output buffer to ARCH_DMA_MINALIGN to fix the problem on
-non-coherent architectures.
+There is still a case-by-case decision to be made for cacheable
+values which would need excessive calculations (more than just mapping)
+if read from a cached register value.
 
-> diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
-> index e2316c46629d6..ff0c0bee0e839 100644
-> --- a/drivers/hwmon/nzxt-smart2.c
-> +++ b/drivers/hwmon/nzxt-smart2.c
-> @@ -203,7 +203,7 @@ struct drvdata {
->  	 */
->  	struct mutex mutex;
->  	long update_interval;
-> -	u8 output_buffer[OUTPUT_REPORT_SIZE];
-> +	u8 output_buffer[OUTPUT_REPORT_SIZE] __aligned(ARCH_DMA_MINALIGN);
+I'd say never mind though - you are right, the driver has a number
+of issues, and Sashiko is likely to keep finding more.
 
-[Severity: High]
-This is a pre-existing issue, but could this output buffer be corrupted
-during a USB device reset?
+Guenter
 
-If a userspace process triggers a USBDEVFS_RESET ioctl, the USB core logic
-calls nzxt_smart2_hid_reset_resume(), which calls init_device() without
-holding drvdata->mutex:
-
-nzxt_smart2_hid_reset_resume()
-    return init_device(drvdata, drvdata->update_interval);
-   =20
-init_device()
-    ret =3D send_output_report(drvdata, detect_fans_report, ...);
-   =20
-send_output_report()
-    memcpy(drvdata->output_buffer, data, data_size);
-
-Because userspace sysfs access is not frozen during USBDEVFS_RESET, another
-thread could concurrently write to a hwmon sysfs attribute, acquire the
-mutex, and call send_output_report().=20
-
-Both threads would then concurrently modify the shared output_buffer via
-memcpy() and attempt to submit it, potentially corrupting the USB report and
-causing concurrent DMA mapping of the same buffer.
-
-Does init_device() need to acquire the mutex when called from the
-reset_resume path?
-
-
-[Severity: High]
-This is another pre-existing issue, but is there a risk of deadlocking
-during device removal if a sysfs read is blocked?
-
-In nzxt_smart2_hwmon_read(), the read path blocks waiting for a report:
-
-nzxt_smart2_hwmon_read()
-    res =3D wait_event_interruptible_locked_irq(drvdata->wq,
-                                              drvdata->fan_config_received);
-
-If the device is disconnected before the report arrives, the read might
-block indefinitely.
-
-When the USB disconnect triggers nzxt_smart2_hid_remove(), it calls
-hwmon_device_unregister():
-
-nzxt_smart2_hid_remove()
-    hwmon_device_unregister(drvdata->hwmon);
-   =20
-This in turn invokes kernfs_drain to wait for all sysfs operations to
-complete.
-
-Since the sysfs read is waiting indefinitely and the remove function does
-not wake it up, could kernfs_drain block forever and deadlock the removal?
-
->  };
-> =20
->  static long scale_pwm_value(long val, long orig_max, long new_max)
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260727183309.3681=
-243-1-linux@roeck-us.net?part=3D1
