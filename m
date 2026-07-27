@@ -1,21 +1,21 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A9C3DDAE4
-	for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 07:26:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 687C23DAAAD;
+	Mon, 27 Jul 2026 07:26:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785137185; cv=none; b=JNKI3xnWR5vtXV4ZtoNYGXzyLOG8pLqP/rmrzIohomH++BpDcu2Tj7Y3Ef0sqi1YcmPcRGqS3s2mPD0nVbR58AsJ/eGitOadXXSvf6iJY9Wj5Xf/X5vTrGWWShj6LzIgmIwnjPrIrfF7VVjhgiPVnQbkQB8FlrklSdGFF+RzM84=
+	t=1785137200; cv=none; b=UBv8KdmO4L2u97kteGPTw3KbF7zkjqrOXfAfp6VkZhub5kjekRbhsPMxNbUV0X5mHD4eADTsGj22I2EZ7cHxSiHWvYC8L8U560ZJDOe6HyRYbv0SX2p6iSakXPd2kRJ1sBI2GtFBQtQU2k9p1YnFe2qSS7NKN5ybLK6i+9hUVDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785137185; c=relaxed/simple;
+	s=arc-20240116; t=1785137200; c=relaxed/simple;
 	bh=OSMOMMdhr3sgJudgtPi3Zf5hGhHVJV2Gi7WpSc6PQUc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 In-Reply-To:References; b=d5xeuPq57jYToBtuZIcNsrGJx46ILgOrIF2fQDflrctggNpcnht6t+Asy9WEPJG/0+iJoTCMpLpK0jE9wNUa5ykjfNKTIpGUntawhBG2Ba7FdzN6ELA5nPM6yR8W4rgC9Aook0FTdDVt5JvcQYwqhcbOvXg46ytHYSy5ZD/MSoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vK2cbbSs; arc=none smtp.client-ip=95.215.58.174
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 In-Reply-To:References; b=kcGePcx8yk3AiJdO6asGhlDhuQlOeQaHo0nT0fJ1JMTKbRhSNwZhmd3x4ZvK0uPdFXIvobsDihKRPFJG279LYdg3it81ABRpLzj/FPgePZfoerjpS5Rh2U92JP49dQLzsQbwtYV4DV1iYuWFDI/WhB0pCX7bKFlK+htCMieOHXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=To1h0LPG; arc=none smtp.client-ip=95.215.58.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vK2cbbSs"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="To1h0LPG"
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -23,19 +23,22 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785137171;
+	t=1785137197;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
 	bh=UmJ8uGmDc0hqwz3dbUX6RW8a5ofURnJwzsVN39eibdM=;
-	b=vK2cbbSs1DT5vRr9+SQd/GLIMXVCOOZW/EgtwXudjf1h519XwUU78l8B2/r/V10rbEFFjr
-	0gBHz8Ht0x0AKJmO+lozdEzYmuV6iKDuVEUBLMAax/SUMTnpqCai2zt34S2/2J28HLDH01
-	HhTpZW/I1hP3acxWKuHAZ+vOxi0d8l4=
+	b=To1h0LPGWVHT/8VQA8oTLB+BbCw2hm9pD82X8CxV1puWY/GYeNwhPv9NBXOvSyjgPNlvcr
+	ou9uK0WGT+tiVM9nOTEfuw69UitfFjB50ncPBaNf2MIwXe/bYRuQ31dRkXP9CKQQPd97HU
+	qJHuPjMtDX74mnUjSu4Q4n1ROcbQ0Gk=
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 27 Jul 2026 00:26:00 -0700
-Message-Id: <DK96B6DQ9JJS.K5GR6MBAX8KP@linux.dev>
+Date: Mon, 27 Jul 2026 00:26:29 -0700
+Message-Id: <DK96BJJI4EKH.3FO6NPOTYTY0V@linux.dev>
+Cc: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-hwmon@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+ <spacemit@lists.linux.dev>, <linux-doc@vger.kernel.org>
 Subject: Re: [PATCH v2 3/6] dt-bindings: hwmon: Add Sensylink CTF2301
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: "Troy Mitchell" <troy.mitchell@linux.dev>
@@ -46,9 +49,6 @@ To: "Troy Mitchell" <troy.mitchell@linux.dev>, "Rob Herring"
  Ou" <aou@eecs.berkeley.edu>, "Alexandre Ghiti" <alex@ghiti.fr>, "Yixun Lan"
  <dlan@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan"
  <skhan@linuxfoundation.org>
-Cc: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-hwmon@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
- <spacemit@lists.linux.dev>, <linux-doc@vger.kernel.org>
 In-Reply-To: <20260721-handbook-dancing-0c6805fbc94e@spud>
 References: <20260721-ctl2301-v2-0-ef5fb342872a@linux.dev>
 	<20260721-ctl2301-v2-3-ef5fb342872a@linux.dev>
