@@ -1,65 +1,65 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DCEE41DEE0
-	for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 14:43:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4000341DEE7
+	for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 14:45:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785163440; cv=none; b=J5gqO8PtoQhL9+Qy2ZlJK2cBUN9ynH8GOXffF6WwhUxBYyC4AVkjmGQGIbqQ7Ws01ixUeaaJJibtdruLyEvggF0E6RlQx3ZgaQ64gQ0Tg/rT1QIxO53tODJnOPKdIv0JJomXPUwd30xoNX692sTg44CAR1itpa7vlig/YvyFaGw=
+	t=1785163545; cv=none; b=bp9xoHckBvRsSLs28DQWfQgoEHr/y3IKaCJbZAxzYyQk675B8Jf5OCDkQB+w958FhPu/faPkXnJozKObLzdoUHq1wPr9lHCBB94KhHdFfqL0c+uEPemapVd1gUMs/j3Yb0iCZjwjYpOs/k12o4M2bZeHjeGCNAEVP5qLi0f3vw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785163440; c=relaxed/simple;
-	bh=FV+/YCwfRcSeJLpQbyCqO2LsqLecdOQ2BHs0QhtxJL8=;
+	s=arc-20240116; t=1785163545; c=relaxed/simple;
+	bh=TRQNemJU0zS79g/J4enfOrZKplEZddMF1OAmtUzc9ho=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UshF6a2L4agZsaKnE4qGn7T8QdAUHVtDuFoqL6rjfmsUdE24hDoBfjEbxUhiJBzgeIw0+G02tb1ahlmC4MFng4jsZM75SM0lmDbX8PShSl2Hs83d4f/tDFYO/5sHxOQTajpSwqBGKpz/MMLMb54mHLjhsUgN4mPpeSvryDbeTiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DDdJf4Wk; arc=none smtp.client-ip=209.85.216.53
+	 Content-Type:Content-Disposition:In-Reply-To; b=juTs9uPxV325xKqG5gRGV+lJyNu4+hLmOJK3+e3Yw5UkZsBfHs+L+VoexFnRTC4XM9n01V7iT91Bl5gQ6UaOi1pwBXHitrtoK56UXHmCCHDHPNLNo/++GryhXCgqVG6qRAcEpZG4rtYPszbBjscUPfg8UPdE1W8z7pkJOu3gqN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=byWA0BWv; arc=none smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DDdJf4Wk"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-38125cebfdaso3949840a91.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 07:43:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="byWA0BWv"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c966b9ee9cbso1403540a12.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 07:45:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785163432; x=1785768232; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785163543; x=1785768343; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=r/gU8ov/fQyOvJUuHODvlkU8XPQBpDuOkD6xU2q1pEg=;
-        b=DDdJf4Wk1YcEtz20RXvXgPQhxaXWLz5dVCSgiaj0k0w+lJgYLn0HVLDawX3OsOaxeb
-         z5earDSw/QsIFGNl20UBtopa/8NGJXU30bxTCHxfR8+FxB0FMrao7pZ3T/VRM9VDU1b8
-         UowadDkKwI5B4On7XjKMHuseGsZXJ2jcuIZ2d6nolJsFmjAIhhEEghNkjzQhPxmux+a+
-         S+gHMMl4ZWhFZ2CYX6ASgOhy6tEgfwhAsT2ixcMuiPrfWRODFzwl6hrUytPCXluTaWdg
-         /19+N/eOEKqNIRi6GWCGvqZSjBgkBh0As9OMnwveOgKN9JAW/+Dd6XIvW50TdTFY4UZW
-         mYjw==
+        bh=KAGgkFqzP96xx/+bNop2DzU5y4t0TVlGWAhIbONjPIo=;
+        b=byWA0BWvGW8fGgI091FdsEcrFvt4I25/Tpv9v6UrJNzLSxcVEnBJ8XSpHwdt+rZj3t
+         75EweMkNDF1Jr1+sdGRahEmpveHG485EGMs7VoK1Kh5byEhwH8RkLpBQWdOXhsgc2oCe
+         1ee4e0ou8x7gVRwluWW2I4RAxKCgKOqv7qVkW+S1f+5bLldeUqZEHUZ7P/lmq5B3Pk0a
+         AuyQgevhQucNkqeXjaK7j/m1ZbfSu8zUpBgT1zOvFjRz0VVnmj6cFuXGXqhAHVoxO0BN
+         K/1U53PK7xeN5m5y5jCudZ0jITVpvO7gjWJ76iSNAlemYGEkYWce0whtWLyfFS9cXut5
+         Bj/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785163432; x=1785768232;
+        d=1e100.net; s=20251104; t=1785163543; x=1785768343;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=r/gU8ov/fQyOvJUuHODvlkU8XPQBpDuOkD6xU2q1pEg=;
-        b=ohDpJJoaM6xE6S0X+9pwM0ketkKQjH+e9++GMXah9hDNioFyIVxjrgUG5RFL1nl3TY
-         ZGoFYEEQu9ijcgqn3dciZAkrwS4eGH4BsEHUQfLenpuY9WxT1X4H6eHUECs/K3gyp21K
-         O9zDgi+4FVswMUYiJn/gLZr7Xbi3Zt9GOjbyNVKleMmn2bzT2Yyh6WJ4tYsJFbbGGQ/X
-         EES5BrzT8T40JbILddhai4J0Kws9dY3iySfmOXEDvo+mIR5TWiU8oBF7UWKr6+B/q+NC
-         1CsfQJqPBCFUBD+V28fKYI8z5i3knshe652EqSmawqA6ZXCtmVQ47HswsJJ4LydcCNNS
-         2oMQ==
-X-Gm-Message-State: AOJu0Yxmpzkv/KXTqUAXqkO9/AHLG+2FQzd38aPlDZ0HwYvBZ9RjJrbK
-	g3bSrno3NbBqxBDuHQngrkrvvMRmVjMIoGx7n41wjoj9scee2PXr8DYg
-X-Gm-Gg: AR+sD13LkDy9idwLkuMUnscb8P/GhP4YTUdnNV7ux7vuOicRaSbwWF4uyvDj/7h+Bb+
-	R4vJ8pZWwOXd9IHjYkd1GyfZvHrHdfJQQjhU+EUZCnMj67ykQNw+8MXUZ7gEakvuyUdMqn4cb88
-	dhT/5M5KCiC5x8J78G73yi30rMn17xmr4LmuQx9xTcmZgF2c+heJOVZCwko8cIDmxqiAk2Wb79m
-	99OqZ+I80jICj7YeeqPLkzLtokombVnRliKntCIj4jn9TQy8DdN4VJSLsTZ4Jg+9juudDokOrjl
-	qOsoug1f+tsVOtjFIhvfyBlSZi8S2JRlcnojjCiHGkTKUIz++fljCEDUu9c1Gi6AGJF7EDGpMXR
-	UUUHr4FN0GXasl1dsy8FsM5LuuRG55cx0zdNz6s7P+hCwOKVgRFShXHqeOh16ik0+Cm5a8rB0DF
-	XCDvP2PB+1DjEJCSs=
-X-Received: by 2002:a17:90b:3904:b0:38e:6f90:eabd with SMTP id 98e67ed59e1d1-38f293cf251mr8242794a91.5.1785163431273;
-        Mon, 27 Jul 2026 07:43:51 -0700 (PDT)
+        bh=KAGgkFqzP96xx/+bNop2DzU5y4t0TVlGWAhIbONjPIo=;
+        b=MmKxLOc9hefFhoB85ft1P9rnxFXf1H98jhg6X+9XxvWkFYmwReausNsxG2m31VvuVF
+         z/xX50YRRNuatXRwT/0T7mbqfXyz+vxVOj9ONsykzsM6UUNbzJwgwyc9/QJ7sTTjZM8l
+         TtQ2XcLvZEiaBKfJ8S0YwB0pnKSxuT/xGbGTkoerD+NuALtkaUgevdBaG2jpRpyIloOv
+         Vxm6G3ntrZqutJu2NHYo/FPUt9SrsiruEsDFSh/ALVwaXsCHRFDyVc7XB8tGeNoSobKi
+         ptT+ZA2+ZBJcHWDcZIZCc6qJRuEZeloQW6sWnIAxIS5U1vKW8+DOL1VoLF0Kp+fCZ0qe
+         lZqw==
+X-Gm-Message-State: AOJu0YxzDLHbAis5/zFUDhqRXvXkgr0Ir5z/yuUEX21cNqm+bbp0x709
+	XFd2BiFvqo1/g3b0BBh/JonFfeN8JCJ2PC2YgRzGTu3xJOwFUFw8AJ+B
+X-Gm-Gg: AR+sD10PXFgnxvNE2f45Y7nJmcnOMiPFlqmqJSTL1m5SMpwaDrP0RObH0OzaMsVeiiU
+	wWCPJw6hyCyXl86h3PXF/Fj9hwBKKC6/mGZxmM4pBEL9+tqV9B2+4k2LdLeUPKTDXOdjgaPdfQW
+	tac43GB34/CGxToXgm/ONwAkfY5aeTPWXl2K8zD8+hYC2aDNHCKJCS3+DLugQ7dI3NI4ZZNpSIP
+	w/U9t3p6TM8u/cv1yIW60A71yvZAOGyKzC2U3GnF2mUaSD27DVSTFIa/qKLvjkgcIEd6BLQaPw8
+	y7i3tcaUdZsMbnmM+gUGRRdip6NpPQ+4cnHXJ78CxIidGvTHf1pgPTEh0YHUVG8Kb6hf47JJdvy
+	2wG2lGIdpACctY1Yq6sgbvECkB7c9ExyEwTgau7cVgZA2FpXo1o6rbUoSYU1iuk6WR4DAFEID3P
+	9W6uk7OzNnqoSyyUj/n5yEtZkmlA==
+X-Received: by 2002:a05:6a20:94ce:b0:3c0:9c19:659e with SMTP id adf61e73a8af0-3c67e00cac0mr8474498637.70.1785163543389;
+        Mon, 27 Jul 2026 07:45:43 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-314bc3e127asm54034061eec.2.2026.07.27.07.43.50
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-314bc288a79sm32967946eec.0.2026.07.27.07.45.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jul 2026 07:43:50 -0700 (PDT)
+        Mon, 27 Jul 2026 07:45:42 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 27 Jul 2026 07:43:50 -0700
+Date: Mon, 27 Jul 2026 07:45:42 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: "Pradhan, Sanman" <sanman.pradhan@hpe.com>
 Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
@@ -76,12 +76,14 @@ Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
 	Debjit Ghosh <dghosh@juniper.net>,
 	Jawahar Balaji Thirumalaisamy <jawaharb@juniper.net>,
 	Santhanakrishnan Balraj <sbalraj@juniper.net>,
-	Brian Mak <makb@juniper.net>
-Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: pmbus: Add Analog Devices
- MAX16545/MAX16550 and Volterra VT7505
-Message-ID: <e11f1d3a-c283-424d-a40c-2284caf904fa@roeck-us.net>
+	Brian Mak <makb@juniper.net>, Georgi Vlaev <gvlaev@juniper.net>,
+	Dhruva Devineni <ddevineni@juniper.net>,
+	Avadhut Naik <avadhutn@juniper.net>
+Subject: Re: [PATCH v4 2/2] hwmon: (pmbus/vt7505) Add driver for Analog
+ Devices MAX16545/MAX16550 and Volterra VT7505
+Message-ID: <eb7f53ad-f996-4e13-aa67-0b70b6e399bd@roeck-us.net>
 References: <20260725211945.288415-1-sanman.pradhan@hpe.com>
- <20260725211945.288415-2-sanman.pradhan@hpe.com>
+ <20260725211945.288415-3-sanman.pradhan@hpe.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -90,16 +92,34 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260725211945.288415-2-sanman.pradhan@hpe.com>
+In-Reply-To: <20260725211945.288415-3-sanman.pradhan@hpe.com>
 
-On Sat, Jul 25, 2026 at 09:20:06PM +0000, Pradhan, Sanman wrote:
-> From: Sanman Pradhan <psanman@juniper.net>
+On Sat, Jul 25, 2026 at 09:20:14PM +0000, Pradhan, Sanman wrote:
+> From: Georgi Vlaev <gvlaev@juniper.net>
 > 
-> Add device tree binding documentation for the Analog Devices MAX16545 and
-> MAX16550, and the Volterra VT7505 PMBus controllers.
+> Add a PMBus driver for the Analog Devices MAX16545 and MAX16550, and the
+> Volterra VT7505 controllers. The driver reports input/output voltage,
+> input/output current, input power and temperature over PMBus. All values
+> use the direct data format. Peak input voltage, output voltage, output
+> current, input power and temperature readings are exposed and can be
+> reset.
 > 
+> The reported current and power depend on the external current-report
+> resistor connected to the ILOAD pin, which can be provided through the
+> "adi,rload-ohms" device tree property.
+> 
+> On the MAX16550 and VT7505, the severe-OCP deglitch time can optionally
+> be configured with the "adi,ocp-severe-filter-us" device tree property.
+> When omitted, the existing hardware setting is left unchanged.
+> 
+> Co-developed-by: Dhruva Devineni <ddevineni@juniper.net>
+> Co-developed-by: Debjit Ghosh <dghosh@juniper.net>
+> Co-developed-by: JawaharBalaji Thirumalaisamy <jawaharb@juniper.net>
+> Co-developed-by: Avadhut Naik <avadhutn@juniper.net>
+> Co-developed-by: Santhanakrishnan Balraj <sbalraj@juniper.net>
+> Co-developed-by: Brian Mak <makb@juniper.net>
+> Signed-off-by: Georgi Vlaev <gvlaev@juniper.net>
 > Signed-off-by: Sanman Pradhan <psanman@juniper.net>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
 Applied.
 
