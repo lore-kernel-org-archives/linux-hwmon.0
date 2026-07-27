@@ -1,68 +1,69 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A0541624DF
-	for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 18:55:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24F7B3C3443
+	for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 19:00:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785178532; cv=none; b=Zd+BHTQ7A6opnqoTH/j/iM64kQiWjYqKbJyKwlQiT/7goMgoNejYEIEPHWLTbevk1uBEtx3nP9PczaoKYMXWKNthSZEIyPHPyHb7wlZXvy4WsnwC4efe8CK5RD+S8ajgJtTIGS3eJW7T6IQmA2/nknTm8dG+HKUpWsad80GwrDc=
+	t=1785178853; cv=none; b=A404RKgZL8I7hW+MhYNu9c4zfhF1nlKcgMyJdZBVVXT1+J9dq+HS81A/lf9ukb+MYta6adzvKrYRFmOJOJXqFDrEtPMctN3i3ig/7PC+byDTOrnxyhmQ+sOtr26jy3EyKx7GjhcojvT2LX9mxnkFKVRGCdX9xeTc/h5lKsU98bo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785178532; c=relaxed/simple;
-	bh=/1hZJEmmjYrWmizJ2XQNxy5Z9jsipLYNR/8k4bfXDUA=;
+	s=arc-20240116; t=1785178853; c=relaxed/simple;
+	bh=pHqlPF2IXxFEfLsXucEr4nceLo+Hyd6ewjdSFK3jx30=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SMfWXLX68jP9UxdhIBlXTzBnNeDikay2Ba218H9A79BoQuanDIYHAHi3aluioVkvaprJ9nwaMDFMX/SJgmPvsVry4SCF55HBBBoK4bjdI1WAKh7vrGUlCFFS553mSmI8FIhSHYfpRsQwQ+BMRDXcJmgTkSmnCCtoBl1r01QEezs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XZpRH2XF; arc=none smtp.client-ip=209.85.214.178
+	 In-Reply-To:Content-Type; b=IwLDppn5i0zHd+dqF2M6F8juvMb2K2hjjLnWH4W0o4qGieKk3btUG1z6nfNx5sHivZLjxyJO6J+lrVfM+fM5v6bwsDbw8yAm/Qo08cR39FMnvdze5TJOaUhCUmHwXbS7MqBnBR8aik7eOKRYGJ68e/Ja5uuMb5R2M5GfUk+loPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ijgSIB+U; arc=none smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XZpRH2XF"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2cc7ef7ec27so39009325ad.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 11:55:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ijgSIB+U"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-38ea87caafeso2321919a91.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 12:00:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785178531; x=1785783331; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785178833; x=1785783633; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=7s3NY8HvmOabzcWDfdBtfJrwVxvIJEKBPYhXRbvoayw=;
-        b=XZpRH2XFmuQP9GNhyI3vHvA0SLkTqZwbSMjv08+moYvcImmCEWFSoOD47rQ3aX9/dk
-         9ziBLmqiEaxcezloUnSZCnbNgTmcdXhZb8xGK7s/r99sWnZTbZvbgAVOfKOOHe9z40ux
-         3lNplt9rffQCodoF+WE5P+eLcbB3l4r3rLGIieqwyrJTSvRdTHbTbGyoRcVnQlgmSthD
-         S4E1fj8Yt1NiSl2NYpNNKumvjnuLLXaaAmox4fnXYogI622NYTw5CQvYZGOubloGxbBU
-         D9wsib08AARw4WSPyVSEB+ulIi2KSlHfYdwO5TH+Lwtuaum0seg7hC4CPsrRpowV6JSV
-         1Xkw==
+        bh=d2RlGb9j3Wk/77P8KLAmYhgjh5HfM5b0+29LJClkrbI=;
+        b=ijgSIB+UATCkey7/a1L/0CQ1rOUVAZGSSqIzRh2c43uGy+cDn8PlN/s3y5b88U3pPV
+         66FuVQOcIgkLXAdawaFMs2KBkXxtROt0r2tyysMyJHnkJhr58a5EQJDHxOOLWM+zo3ez
+         hMelQMqHO+p3j5Lb9cG1KLYcV5iArM7Poa4e4a/mfIpe8sCJO0/s9xJkIFBI1fVwfagv
+         f/FxiMqBrPzFcaQ7OdVHic8CfQHF5AHK0BLLS82iKZ2paFf459Fqzuq80QwcaGRtlmCt
+         tXpWdnyum2ruMBeEE5yDgpuB9AntDBVdSH9/I3RlVPu5P7oS1ydCTav6Kn5Py9zeJDtM
+         l0Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785178531; x=1785783331;
+        d=1e100.net; s=20251104; t=1785178833; x=1785783633;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=7s3NY8HvmOabzcWDfdBtfJrwVxvIJEKBPYhXRbvoayw=;
-        b=VINQsGa1iO3vU8op36pyqdYy9ydYpTb5Ul4LYBO0ufY9xuHs2O4REzJnxASyYkt2kO
-         y0iQYAzyP2xs4UbmJ+lzA2TzZCyl54dJQ8Rv31c3tRlnPnD5CVj3abvrWXq26Po7dxmD
-         ibpcu4pQhKAAP3EYQyCskVq1SluuybcsHYlzg/1+BtLCS0HxrA4a07PQ/YDxHYkhkQFM
-         prIcIMiaPVWN1IM993K5vO5ydKhXxeCmxNuNfkGxxlLBcIub5fZyRhh/8MtOY+T8Bfk2
-         1zctM92wkU2HjHPBf8TyAmPxzEdf8CftJ3gx7VkoIe49AUUtEroSr5mE+xmnZUVqJuZr
-         UMTQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqrlvLrs/p5Tl7e7lz9ydtFF43RsYSugn5EuhdQxeSRgvyZytO25iicDoxJHdAoRiNFnyymVYn1IpWteg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHxknobhDTdKGuMdfl+hdXG1mud8CdvQLeswvxVTWpLRCHn6sE
-	8Wc5BbA7HutvDbHwTH9Zload98idiWFpt4PGDeoQrXmHOeZ0mr7QN/Gzt2IeoQ==
-X-Gm-Gg: AR+sD10l2ODu5kSccE4vQO0/GUg5jMlonph72IkPP8XhftpnyAg1ZrTK5hXu3CVtvui
-	iC1MbIsQOAxzCqLsyesjysKQzoKxydqHP4macbPuQ9CgQJzzr6xvewzifTEGOaYvrxdn2Q+qbM8
-	nhIyPKuk761hAkgKm7SiyW0BAXk4AoBbbOs7qzOGhDcjOuViotyzFqIAIlXCA2sFrksUXQJg1tv
-	3vixa8SLS4oedDynTsrUDsy85GtajhWz21rKOak/KYfJmhI1ikYgpGxbyQhY5zfg6OlwlVRFi0b
-	80vVa97PRX8doDLhs7bMYZwATLqNxUHTOKc12scR1/1mmxzxO93Y3b4o/869bXyPOmA665isMx0
-	cn/ceRL0BbwjaQ/NyAo45IsqmGsomLzvXAw7KNxdMN1KgaGpjga+v+EPVfy/g9aANSusTjKSClb
-	JqokTrI48GwKnj/HnjwJPbZAVUs4wLSO1lWMWordNjvRgzEMf7h8I=
-X-Received: by 2002:a05:6300:8d:b0:3c4:48da:8102 with SMTP id adf61e73a8af0-3c67daa5c35mr9606155637.29.1785178530607;
-        Mon, 27 Jul 2026 11:55:30 -0700 (PDT)
+        bh=d2RlGb9j3Wk/77P8KLAmYhgjh5HfM5b0+29LJClkrbI=;
+        b=YZwQUGFvL17+hA/s9/JSrqQ+X1ca76RdCWKfgRbO54Q95MW2PC9TkbpxK2Yu+uaqXZ
+         T+FHCl5KvNm7RMh6fEC+yfzhOYKL+SmvbWfX22Cgs6XVCCJ/2nvC6JgwafjN8wGjVQfP
+         0XwhmHXHwrdvWYDcFG2bYtlIFKdA/IwabuiRSBXMYbAyszHw8HgKAwbMAn7L0z9/j835
+         M56rKMvthYg4NpQTAy21knGvq42Rn2K+4ladXSA+896nR2rCbq4Uma/6Dr7XHjS1slVV
+         zZJGX6BGQ7jimVl21npyo550tmWSm8ELE3Ozoc3YVMw3bLLrYvTXlytGbbMa6tdYg0nQ
+         4xxg==
+X-Forwarded-Encrypted: i=1; AHgh+RpTD4TWQwwJ78Gg37e4Yq0tSnZ4eC4AvJNIbJ1alFWl3Ff3xtlhLxDexjOCG0ue4g4WR2o6lhJLIWiXOg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsuOwvzrAbuD9RfxI0zu1biKc6tJosypU53cQ/9t2Sdk/Eyl6x
+	Qrltl8xUxWG/7hTUNAXUgDb/ZH9FfcFUmUaiGPdv/BpA6NQ3qgsozFEZ
+X-Gm-Gg: AR+sD119WX5Kefx+kaDfAgIdexlS7ezoj9ztHjH2Pv7kvcEr+t2/Ag89eQvjhfQ+WxT
+	IpNR7V+bB9VGT/FbYIFhZjVuMT/QaqfBeKyLEKE5u4MNF3K+YUOH+LRDTlPdfaley39TXGAfNbP
+	4Ufp3vqmPduTNpFyHUUjKN2YqFN0qPou0ETdqqs3hsCmhulX3YtNP9JsZXDcRD/wspqBWFqm+XP
+	+nPIDGiiM5C+ORaafaltTnXcLzLh/vDvD8PAtAnpA99MZ/BwtE6E3fYqehfjy0mSd5juqLK6/XD
+	mzElN0dLsUrFdiPtIGz0Fs1aXt4dThb2YlcPi1HxIugbWjPdKLZiEQQjch0mqQuNjLGEb5WnM/b
+	EgnIFzuB0IWFSYJUhBS3WlqYZfH3nabw+QJwXt7GfzgSRgaiIMZBxFRd3cMMUP1jIIgBpueBwHX
+	CqbjFUbGRgTvDoGRuUy+jmfX5957kPMCH0WxCAnq/iL5tuzKkU03+IyREEI6CEPE3j9nn1mWy1B
+	IbMsURneXhZjRljOf+mbQNhP/Blb0pwhi5juR6XZmAxSigPWA==
+X-Received: by 2002:a17:90b:58f0:b0:37f:9ce1:735a with SMTP id 98e67ed59e1d1-38f29612520mr8994134a91.27.1785178833365;
+        Mon, 27 Jul 2026 12:00:33 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-314bc419c52sm34318893eec.10.2026.07.27.11.55.29
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-314bc3e127asm57166786eec.2.2026.07.27.12.00.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jul 2026 11:55:29 -0700 (PDT)
+        Mon, 27 Jul 2026 12:00:32 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a4a9b5c8-cb83-4865-a226-66c55987ec38@roeck-us.net>
-Date: Mon, 27 Jul 2026 11:55:28 -0700
+Message-ID: <f46d7852-41e8-4fba-ab06-b5fab49d2c9d@roeck-us.net>
+Date: Mon, 27 Jul 2026 12:00:31 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,8 +71,8 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [hwmon PATCH v3 6/6] hwmon: (adt7470) Use cached PWM frequency
- value
+Subject: Re: [hwmon PATCH v3 4/6] hwmon: (adt7470) Fix swapped PWM3 and PWM4
+ auto mode masks
 To: Luiz Angelo Daros de Luca <luizluca@gmail.com>
 Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
  Andrew Morton <akpm@linux-foundation.org>,
@@ -79,9 +80,9 @@ Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
  "Mark M. Hoffman" <mhoffman@lightlink.com>, linux-hwmon@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20260727-adt7470_thermalzone-v3-0-21424d550c3d@gmail.com>
- <20260727-adt7470_thermalzone-v3-6-21424d550c3d@gmail.com>
- <f15dd16d-0e3c-4d7a-a8db-59ca3d34d4dd@roeck-us.net>
- <CAJq09z57AMTFyEnvbHw=-6KDC83sA+E944=WcNc=FjzFySAmzw@mail.gmail.com>
+ <20260727-adt7470_thermalzone-v3-4-21424d550c3d@gmail.com>
+ <74eadbaa-0020-4628-bf82-29fca725fcb2@roeck-us.net>
+ <CAJq09z5Etg_1LvEyN10ZmZMPJ602SDG3apdK+j8mDm1A8CoR=g@mail.gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -127,60 +128,76 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <CAJq09z57AMTFyEnvbHw=-6KDC83sA+E944=WcNc=FjzFySAmzw@mail.gmail.com>
+In-Reply-To: <CAJq09z5Etg_1LvEyN10ZmZMPJ602SDG3apdK+j8mDm1A8CoR=g@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 7/27/26 11:44, Luiz Angelo Daros de Luca wrote:
-> Em seg., 27 de jul. de 2026 às 11:33, Guenter Roeck
-> <linux@roeck-us.net> escreveu:
->>
+On 7/27/26 11:09, Luiz Angelo Daros de Luca wrote:
 >> On 7/26/26 20:34, Luiz Angelo Daros de Luca wrote:
->>> adt7470_pwm_read() currently ignores failures returned by
->>> pwm1_freq_get(). If the register read fails, the negative error code is
->>> returned through *val while the function itself reports success,
->>> potentially exposing a negative PWM frequency through sysfs.
+>>> The ADT7470_PWM3_AUTO_MASK and ADT7470_PWM4_AUTO_MASK macros are
+>>> currently defined with swapped bit values.
 >>>
->>> Fix this by using the cached PWM frequency maintained by the driver,
->>> eliminating the register access from the read path.
+>>> According to Table 22 of the ADT7470 datasheet, the Fan Control Mode
+>>> Configuration for register 0x69 follows the exact same bit position
+>>> layout as register 0x68:
+>>> - 0x68 Bit[7] corresponds to BHVR1 (PWM1) -> 0x80
+>>> - 0x68 Bit[6] corresponds to BHVR2 (PWM2) -> 0x40
+>>> - 0x69 Bit[7] corresponds to BHVR3 (PWM3) -> 0x80
+>>> - 0x69 Bit[6] corresponds to BHVR4 (PWM4) -> 0x40
 >>>
->>> Apart from the corrected error propagation and using the cached value,
->>> no functional change is intended.
+>>> Consequently, PWM3 should use mask 0x80 and PWM4 should use 0x40.
 >>>
->>
->> An alternative might be to use regmap for caching and drop all driver-internal
->> caching. I have done that for other drivers; typically it simplifies the code,
->> sometimes significantly, since the update_device() function is no longer needed.
->> Something to consider for later, maybe.
+>>> This typo did not cause any functional bugs because these specific
+>>> macros are never referenced in the driver code. Instead, the driver
+>>> correctly applies the configuration by relying on the modulo parity of
+>>> the channel index (e.g., `channel % 2`) to selectively apply either
+>>> ADT7470_PWM1_AUTO_MASK (0x80) or ADT7470_PWM2_AUTO_MASK (0x40).
+>>> Since the bit layout is identical between the two configuration
+>>> registers, the hardware is currently configured correctly.
+>>>
+>>> Fix the macro definitions to reflect the datasheet accurately and
+>>> prevent future bugs or confusion during code review and refactoring.
+>>> As this is a purely cosmetic fix with no functional impact, a backport
+>>> to stable kernels is not necessary.
 > 
-> That definitely sounds like a nice upgrade to consider!
+> If you build with W=2, you indeed get tons of unused macros...
 > 
-> I haven't used regmap's caching feature before, so I'm not entirely
-> sure how cache expiration is typically handled. In adt7470, caching is
-> mainly used for volatile readings because hardware access over
-> SMBus/I2C is quite slow. On my device (which might be an extreme
-> case), reading all registers can take over a second.
+> Initially, I intended to just drop them. However, just like the
+> incorrect macro led Sashiko (and other bots) to assume the masks were
+> swapped, keeping them correctly defined serves as useful context
+> directly in the code. If we drop them entirely, anyone (or any AI
+> agent/tool analyzing the driver) would need to fetch and parse the
+> datasheet to verify the register layout. While the datasheet is the
+> ultimate source of truth, reading PDF tables costs more than reading
+> well-defined driver constants, to the point that agents might simply
+> skip it.
 > 
-
-regmap caching does not time out. Registers are either cached or not.
-Usually that works just fine because there are not that many volatile
-registers in a chip. Most are limits which can be cached forever.
-
-> What would be the recommended strategy here? Would it be caching all
-> registers and periodically calling regcache_drop_region() (or mark
-> them volatile) to force a refresh?
+> We could certainly drop the unused macros and add a comment explaining
+> the layout, or even rename them to better reflect their shared usage
+> across channels (e.g., ADT7470_PWM_ODD_AUTO_MASK and
+> ADT7470_PWM_EVEN_AUTO_MASK). That said, simply fixing the unused
+> definition feels like the cleanest and least verbose option. What do
+> you think?
 > 
+>> If the masks are unused, how about just dropping the definitions instead
+>> (including the unused ADT7470_REG_PWM12_CFG and ADT7470_REG_PWM34_CFG) ?
+>> That could be done as first patch of the series.
+> 
+> I'm almost afraid of touching anything else here! Fixing bugs in this
+> driver feels like fighting a hydra: every time you address one, the
+> Sashiko bot sprouts two more. :-) I already have seven.
+> 
+Good point. Normally a driver should only provide definitions which are
+actually used, but for an old driver like this one ends up with a lot of
+churn.
 
-What I usually do is to just mark the volatile registers in regmap,
-and drop all driver-internal caching. I would not see the point of
-re-reading limit registers.
+Note that you don't_ have_ to fix all the reported pre-existing issues.
+It is very much appreciated if you do, and I tried to do it myself, but
+nowadays I only fix (or try to fix) the issues marked as critical and/or
+as security issues. All I really ask for is that patch authors fix all new
+issues (and that they don't tell me that I should accept new issues because
+the driver or some other driver is already buggy).
 
-There is still a case-by-case decision to be made for cacheable
-values which would need excessive calculations (more than just mapping)
-if read from a cached register value.
-
-I'd say never mind though - you are right, the driver has a number
-of issues, and Sashiko is likely to keep finding more.
-
+Thanks,
 Guenter
 
