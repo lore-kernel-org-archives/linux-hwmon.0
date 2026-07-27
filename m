@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C96EE13E41A
-	for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 03:44:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC903CA486
+	for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 03:45:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785123881; cv=none; b=Af1jrLMQfVR9J1/EiuPbYldGND21V2IPu7fgONFyYYbKiEZVjYGMjeG6FKGAZWCW7spCqu5dAfonu8M8FEcwQSLVmQcu3b7wLOZMrcplV4WZRAjiH59YF1s14eSEVKEBmAuRdtNVoobuzdSGZXpk2Zsd1yVHPR4Vg+aZ+NlbJdI=
+	t=1785123904; cv=none; b=jCgdrK4vN71yngN+6J5F0OVuA7n1sFTr/1nm34A6ptBP8eFdNQ63pFVuj6NT4OcJ1pWwWMsPAeaS58hivQSsLse1KeCPRQcQ9lzGnigm4uqQlaZQ5Je0R7LTf0GPbK0J8qpMgJfdtv2ekupujG1PiM+9cIO/bWi6sAmrtQgs6Os=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785123881; c=relaxed/simple;
-	bh=H8yvT8qf2FYX3OxwxjYv7unYxOkjAViRfn9QxS7/14Y=;
+	s=arc-20240116; t=1785123904; c=relaxed/simple;
+	bh=glRRoMiF8YyGxSUitfZZQZP8MOXata9uSA/Ce6QgF3k=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=liWC00LHqzVWzfeFUbHiHIdO47QTbh1XKQPAxleM8GBLBZNCCVIElfpZt47EI/zd+EcmCGhsuC9oAkUuoGjK3giKQMObgga2HVZaMG3YAdjOV6c3AM7MOkYH2ufqf3vh2+PN/fbmGqEMvbilkP4JCy8j6+hQoU3bmJjm6jCHZh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fP62ZLV9; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=uTX8piEQL7K5pZsl3HZKz0Wx5f+g1EkBYIGXz7H9SaoPdTB+RZ+TjX8X3tKyiCQ9qjZZV4ZPKUdIYmb1RCFph8AJXNsRylZIBoMoGRxdc09SeQfK4LnlO+dDrPJNsfrBIS4rK2JjfiPD/+xeLUJUObhAhn3L8mjWMZL+n17JgXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GAqhM1hc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fP62ZLV9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CA821F000E9;
-	Mon, 27 Jul 2026 03:44:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GAqhM1hc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94A5D1F000E9;
+	Mon, 27 Jul 2026 03:45:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785123880;
-	bh=r6q0ROj8DJW2mWdBu23cKB7FrApVJ0bz8yFrcgtXPJM=;
+	s=k20260515; t=1785123902;
+	bh=ip2fV9jIR2b3cJeg5ClzYn8GUYk/C88ohYLD9JJ/lHs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=fP62ZLV9TaI5kck4J5HTbVbjBIvXDgWFQcSv1VBi0WiubBVqIzqW2InEv9ZoKeF3M
-	 L7UB70oajt6Pfjsb08veJpnEIYQOiDAj+k8I7q0yBG9NbFcnO2nMBN5+4YyDVp3tn4
-	 lzQ/xdDC/QORWce2zG6JoE3PAyvR6NkTM4RhBbN+qX7DjCJUlEwT6dPKF/e4tVdFcD
-	 zeELv9LUYyRWht78YaIhoR7J57CtMu/RIz0KCoTY/QpRZGc0f6eKe4gWoqQ08owZSx
-	 1EK/CXhaQgWNaK8sat/ZVCbkyVBf2XIn/KG2ME9rD+LUiXDkb2EcdiQGEpByX+jOVf
-	 V6oMIROeSbHgg==
+	b=GAqhM1hcTHUydpMgWQV117v4RlLaR78uHjL/Dxpz+yr0BXm2jpC5b0da7pt3Qz3u4
+	 7MmEJCNQgUiTxKSzQwH2kXOVhuK61GL/WnijkvaZ0LhaL5NYf292pDNprEa7WJpYom
+	 X8Pqd7xTkVt2XMqzmmDDVuAAngaDQHFTZdctr89sOx9UPC6HXIuO1it66Pi5xNXTAF
+	 +NykN8IHpuFgiqTimrcNFg0LHOhR849NF242z7GCSywLN8DQDJN052IxNe/byRlZsx
+	 F6xgrNbsjOmNc+IQsaQKu7jffZ7713YE/R5t8qtdNWlDyV57KgPQ7XqgU1XwJQ2Cmd
+	 Imqj07Gv8T3tA==
 From: sashiko-bot@kernel.org
-Subject: Re: [hwmon PATCH v3 5/6] hwmon: (adt7470) Fix temperature alarm
- logic in hwmon_temp_read()
+Subject: Re: [hwmon PATCH v3 6/6] hwmon: (adt7470) Use cached PWM frequency
+ value
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Luiz Angelo Daros de Luca" <luizluca@gmail.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260727-adt7470_thermalzone-v3-5-21424d550c3d@gmail.com>
+In-Reply-To: <20260727-adt7470_thermalzone-v3-6-21424d550c3d@gmail.com>
 References: <20260727-adt7470_thermalzone-v3-0-21424d550c3d@gmail.com>
- <20260727-adt7470_thermalzone-v3-5-21424d550c3d@gmail.com>
+ <20260727-adt7470_thermalzone-v3-6-21424d550c3d@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 27 Jul 2026 03:44:38 +0000
-Message-Id: <20260727034440.2CA821F000E9@smtp.kernel.org>
+Date: Mon, 27 Jul 2026 03:45:01 +0000
+Message-Id: <20260727034502.94A5D1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -47,50 +47,53 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] The bitmask calculation `BIT(channel)` for temperature alarms inco=
-rrectly maps channels 7, 8, and 9 due to a discontinuity at bit 7.
+- [Medium] Incorrect PWM frequency is cached in `pwm1_freq_set()` for high =
+frequencies.
 --
 
---- Patch [5]: [hwmon PATCH v3 5/6] hwmon: (adt7470) Fix temperature alarm =
-logic in hwmon_temp_read() ---
-commit ab0ed15b014e653c238da0d91110d0699630d8f7
+--- Patch [6]: [hwmon PATCH v3 6/6] hwmon: (adt7470) Use cached PWM frequen=
+cy value ---
+commit 1d5eabde22a3c2244581f951eb2060da34244bbe
 Author: Luiz Angelo Daros de Luca <luizluca@gmail.com>
 
-hwmon: (adt7470) Fix temperature alarm logic in hwmon_temp_read()
+hwmon: (adt7470) Use cached PWM frequency value
 
-This commit changes the temperature alarm read logic to use a bitmask based
-on the channel index, attempting to fix an issue where the channel index
-was previously interpreted directly as an alarm bitmask.
-
-Link: https://lore.kernel.org/r/20260717211224.B9E291F000E9@smtp.kernel.org
+This commit updates the driver to use a cached PWM frequency in the read
+path instead of querying the hardware. It aims to prevent exposing negative
+error codes through sysfs if the register read fails.
 
 > diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
-> index a34635526aaa2..f1150f0fe2172 100644
+> index f1150f0fe2172..405eda900650f 100644
 > --- a/drivers/hwmon/adt7470.c
 > +++ b/drivers/hwmon/adt7470.c
-> @@ -569,7 +569,7 @@ static int adt7470_temp_read(struct device *dev, u32 =
-attr, int channel, long *va
->  		*val =3D 1000 * data->temp_max[channel];
->  		break;
->  	case hwmon_temp_alarm:
-> -		*val =3D !!(data->alarm & channel);
-> +		*val =3D !!(data->alarm & BIT(channel));
 
-[Severity: High]
-Does this bitwise calculation map correctly for higher channel indexes?
+[ ... ]
 
-If bit 7 of the alarm state is the Out-of-Limit (OOL) global flag, it
-appears channel 7 will erroneously report the OOL flag instead of its actual
-alarm state.
+> @@ -817,6 +818,10 @@ static int pwm1_freq_set(struct device *dev, long fr=
+eq)
+>  	err =3D regmap_update_bits(data->regmap, ADT7470_REG_CFG_2,
+>  				 ADT7470_FREQ_MASK,
+>  				 index << ADT7470_FREQ_SHIFT);
+> +	if (err < 0)
+> +		goto out;
+> +
+> +	data->pwm_freq =3D adt7470_freq_map[index];
 
-Could this also cause an off-by-one mapping for the remaining channels,
-where channel 8 reports channel 7's alarm and channel 9 reports channel 8's
-alarm?
+[Severity: Medium]
+Is the correct index used for caching the frequency here?
 
->  		break;
->  	default:
->  		return -EOPNOTSUPP;
+Looking at pwm1_freq_set(), when setting a high frequency like 1400Hz or=20
+22500Hz, the initial index is resolved to 8 or 9. The code then modifies=20
+this by subtracting 8 (index -=3D 8) before updating the hardware registers.
+
+By using this modified index to update data->pwm_freq, does the driver end
+up caching 11Hz or 15Hz (indexes 0 and 1) instead of the requested high
+frequency?
+
+>  out:
+>  	mutex_unlock(&data->lock);
+>
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260727-adt7470_th=
-ermalzone-v3-0-21424d550c3d@gmail.com?part=3D5
+ermalzone-v3-0-21424d550c3d@gmail.com?part=3D6
