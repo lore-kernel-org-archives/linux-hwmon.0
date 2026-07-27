@@ -1,65 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80303DB333;
-	Mon, 27 Jul 2026 07:14:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4099F3DD51E;
+	Mon, 27 Jul 2026 07:25:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785136475; cv=none; b=n7kcVdsYu9c3RHEEthbS4EqOPHxJJqnCqef3z1g+Mq+Ens+xszOv2248Li2wwpjNN7tfq5gxOiRPUNAWBkMd2SGpyUrI2ozPxbz6WDurU0h61ne7kumhIXm2u7GxsIhU5m9Lhu1ICStXwdAAKRcLI7xJiv+f0MeJeRfFIe6dY5E=
+	t=1785137149; cv=none; b=cVwgspZQrnS9WFV6Wa21vI9vKH5K3w4PFS0WQ0yVilmriGnZvl8TBkyZqyLpFFATPzPhzB4E5kW5SpI6x4FKoLbVsXWj9PDiyc5+fy26P9GDGMg+9TPrYiAp4ZV9N8zafGzmZt1mp9PmZHllR2K4cT2hMCAjosWIqXuLEW3TLao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785136475; c=relaxed/simple;
-	bh=Gx/6v/wwTiL9ipHOQL8NVq8oK0c4Ye7Krnzn3sWPVlY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B2pxxbXu3fQiK0JBuOeCzrOha9P57f0aBN4Ecclr8InFWFgSGUj1Ic+174Zcdo0WMvtQdnpBYJsZXkPWPYLJLpEd9iadLEDkvAaTkZBiDoYlGKIlfTp9XXRbsd+IwCg5bGuiKG0GZJI9QpIJiycUvZG9nEQCcTZkFtIYKtQ11Pk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oizi4npP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785137149; c=relaxed/simple;
+	bh=J47sKYVXFsDPGrwWVANqosoLCQ0UZXXSniADY9yNIUE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 In-Reply-To:References; b=nMzf3BpAZwiE7HpexcnNu+rEsowX9s7v5idturF5dM/i1vrqog+VW4sj5BcmOJp/lA3T/F10vskCjmexKmoY6rusddY0KNf6QW2g5AnnUQEIzhZNp/o7Rolb1gjMXyAJ2tb0nCiGZinuX1maAV7yMph5oGsLezSBTUJep6XaRjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fi90h6ms; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oizi4npP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28C0B1F00ACA;
-	Mon, 27 Jul 2026 07:14:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785136474;
-	bh=MC4sDKdeGivtH6bnm+aKKRpOIXAyTa+BQpMBWFaJ5tw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=oizi4npPZPn2BxHKK+YuJpGslepdPl4cFTQ1woVg4rdOgxSdh080l2XjJa9Rc04s5
-	 ingWBIQPbi+HZqqJoNNiSeYuYyav0k4NSc8O7NQZTmtfOY0XMqOG8O4fMhnGPu/Z3a
-	 svFKM4oUjzypU/WQhuUHAtNy8lAxHecMsmOC03JibsxHNWAmwyWuoqewL1Xfj4d2ac
-	 EAfrjeMu0DlzRZdxamSeeTdDnygfX4t7rwizXuCEzMcWDNSVQjhv8ceiYxLgYxpwf7
-	 TS7KZon9P8GDcRiZoXzj1LLwlxAuMhM+Lcg5e80mI/RiQeQfOEDFUyEW9GyphE39PN
-	 0Dq5o8EkIpArQ==
-Date: Mon, 27 Jul 2026 09:14:30 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Andy Chung <Andy.Chung@amd.com>
-Cc: Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v5 2/4] dt-bindings: trivial-devices: Add Kandou KB9002
-Message-ID: <20260727-benign-wapiti-from-hell-28d3fe@quoll>
-References: <20260724-kb9002-upstream-v5-0-9523c3ffe83a@amd.com>
- <20260724-kb9002-upstream-v5-2-9523c3ffe83a@amd.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fi90h6ms"
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260724-kb9002-upstream-v5-2-9523c3ffe83a@amd.com>
+Mime-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785137135;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Hrajy83uZbAEZ4QXrdneOBkHt4WwSHMSLCICN+iSQXA=;
+	b=fi90h6msLZL7tSozgaiuR1Ijvk7duvQC8bR42WDPPplaECbDFvk4gHk1r29dC5ZTqXL+46
+	+cyULThIQsp41/GbfUkRxxbXkLgchGfexbfb5EVb+KewWpocx4ruS606a5g+UoEWgikZC6
+	F+JEFZ+c3Nw7+20SyXYqKVAqwzObms0=
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 27 Jul 2026 00:25:28 -0700
+Message-Id: <DK96ARC1DRG7.185G42UPDTMCY@linux.dev>
+Cc: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-hwmon@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+ <spacemit@lists.linux.dev>, <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v2 1/6] dt-bindings: vendor-prefixes: Add Sensylink
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Troy Mitchell" <troy.mitchell@linux.dev>
+To: "Troy Mitchell" <troy.mitchell@linux.dev>, "Rob Herring"
+ <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Conor
+ Dooley" <conor+dt@kernel.org>, "Guenter Roeck" <linux@roeck-us.net>, "Paul
+ Walmsley" <pjw@kernel.org>, "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert
+ Ou" <aou@eecs.berkeley.edu>, "Alexandre Ghiti" <alex@ghiti.fr>, "Yixun Lan"
+ <dlan@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan"
+ <skhan@linuxfoundation.org>
+In-Reply-To: <20260722-devious-seventh-9859bb3741b3@spud>
+References: <20260721-ctl2301-v2-0-ef5fb342872a@linux.dev>
+	<20260721-ctl2301-v2-1-ef5fb342872a@linux.dev>
+	<20260721-dill-dab-df15585090d2@spud>
+	<673be23a-2a84-43b7-9be7-a661cf0e7935@roeck-us.net>
+	<20260722-devious-seventh-9859bb3741b3@spud>
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Jul 24, 2026 at 12:47:38PM +0800, Andy Chung wrote:
-> The Kandou KB9002 is an 8-lane PCIe 5.0 retimer exposing an SMBus target
-> that reports an aggregated die temperature. It needs no device-specific
-> device tree properties beyond its address, so add it to trivial-devices.
-> 
-> Signed-off-by: Andy Chung <Andy.Chung@amd.com>
-> ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+> On Tue, Jul 21, 2026 at 10:56:36AM -0700, Guenter Roeck wrote:
+>> On 7/21/26 08:49, Conor Dooley wrote:
+>>> On Tue, Jul 21, 2026 at 02:48:27AM -0700, Troy Mitchell wrote:
+>>>> Add the vendor prefix for Sensylink Microelectronics.
+>>>>
+>>>> [...]
+>>>>
+>>>> +  "^sensylink,.*":
+>>>> +    description: Sensylink Microelectronics Technology Co., Ltd.
+>>>
+>>> Googling the company to see what their website is, I seem to see a
+>>> different name for the company: Shanghai Sensylink Microelectronics Inc=
+.
+>>> Their website has that with the Shanghai dropped.
+>>>
+>>> Also, probably the commit message should contain
+>>> Link: https://en.sensylink.com/
+>>
+>> Asking Google search: "Why the two names ? Did they rename themselves at
+>> some point ?"
+>
+> The google search "AI" response was what showed me the different name,
+> sounds like I should have questioned it some more!
+>
+>> [...]
+>>
+>> I don't know if Linux has a policy about Legal vs. Marketing names.
+>> Personally I don't have an opinion. Your call, really.
+>
+> I don't know what the policy is, or if there is one, but personally I
+> wouldn't use the westernised abbreviation since they may decide to rebran=
+d
+> that etc and the vendor prefix information should remain static.
+>
+> So this is probably fine as-is, just I'd like to see that link added to
+> their website.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Understood. I will keep the current vendor name and add the following link
+to the commit message in the next version:
 
-Best regards,
-Krzysztof
+  Link: https://en.sensylink.com/
 
+                                            - Troy
