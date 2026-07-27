@@ -1,126 +1,114 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6489C42640B
-	for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 20:21:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7920825332E
+	for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 20:30:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785183688; cv=none; b=C50HOoCbHuBY5d8G0QhWx0Zo4EMzHfDdt9UCtLDGYPgooIG+87VxwRbUE8VPyUFhOuu9wGxBEvJ16wvfoOvYx+NcW1NSQhuKBVBrp7U/DxkdRUEUD3oN6tA/gDZ4ojWoyd8bibf7zrrR3k1QGYKaleQEPqu4j02rWhJ9IjAtm0k=
+	t=1785184249; cv=none; b=pIIv5h89QjwGX+Sp34QaQkFXGHgwYPvkYFpnOhXkjzBZK8CszgJiFtito6P5JSjWWp5Xp/Me4HFOrMuz+Ijzth2YEcOS5a0moC1dlc5yatrvhUkLy6ORQab2JcdCbfNi7EzeR2lblDz/jx5MLv8ol5nH8Kgsfhq4wwu9qo88sBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785183688; c=relaxed/simple;
-	bh=0Tyl0ZUv3LpVYDupST6Ozg9AcdkVLIK8TkSKICgjm/k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HmzmWocsNaWD9EGE8jBWHG1DMK0O1D6+YeNVkBPi3Hs9rmzG2PWTyZ1zAcLnRTN5vM/EvyTkSgOLAWm6Dsf65Ubzot1+/zjV+CrQRvA0md5s15elmnEHOaUNGXc+Ec+E1Y4Gy7H/1sGFSiEeDHFAK/NQRNE8+zWyA+0FC1c1fW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FU542rMn; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785184249; c=relaxed/simple;
+	bh=oPcyaX6HAhB6YqOap8y+n2yWr6X/5yAQjM1ohMFisC4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=CGtua1lmE+v5KQMc/YPmBBwA88+GnCBb6W6kiBi4jsV1tq4uyAieXaLwH8xvQctycP37GYs8J988ue7aaTRdE9RWpUXeJgNJx+b5aqt0rvF6NtAd+RdZ0bQ68KUZB2Cg3tLRFWl92IDbo3zDUF8DF1te2V3sXZWXqS9cbQJD+xQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W1EsSkVS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FU542rMn"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8485bd28dd0so3184716b3a.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 13:21:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785183684; x=1785788484; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=PpNIKkt0URdaKrBEn1GhLKIqGqWBHB+iRFqA8HQeoVE=;
-        b=FU542rMnAeQEESdLJwG4gwPgBXCH0Q6y5DBVCueB5L78Kg9czg44pZ+jrWkXJSAsIv
-         GiQPH68SyqRHTVMfppFKzYOHCp9ECOrNql3WkkHm8wPijgKi2UrtXFh50aPpj9lacUbC
-         8FGu44etDobpgjxG53rjaj2IWYjhXu1VsfKFIsTMmZzKNHhunxF0eGC+sFiNfWnr6foj
-         fP6JdGa9/4WGZWNLp7CvXAdSwK/TYcuzerRKX/+DiRXyY0EoXwP3F3XLuvGkbR6hAAV2
-         ph1HHh0+T4EgnW04FEeFpli4OLFap5LKUR6rkQVuy6p+mQVY/H83qOquCnF7baE3/4ZA
-         YRtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785183684; x=1785788484;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=PpNIKkt0URdaKrBEn1GhLKIqGqWBHB+iRFqA8HQeoVE=;
-        b=X1DsHa8qxcsojhHdi5z6uPJ5iep0LwC8lI8Jw8UiqatYLmyhjiuaZr7y7MAws38NsJ
-         wMEoQ71e6Yrk+bag4S4xvyBT4uQsTKc2T5z9qKmlHS9saWuMRMmhx8jKocVD8DEdcD7L
-         iWJ2q8E9D7EIr3mMRoOKrr4pOjV5Esqaxp1uJ+7jOze6jNd7N2l+ChN309UjDhOaK3KV
-         VjDEKdEP4NfF9rU/BGUyFz/9dNXsQIcCy9z91+Y+R5C0jEXFmLBwdXWUBOKxApffo8Il
-         Id43uN5mjND5Djb8Ubgnr8Zt14qkKMK06vv1bYmH7LiengqbvtKk/1z04bDAZZDCp7RZ
-         V5zw==
-X-Gm-Message-State: AOJu0Yyh/q5UtUlj7wAzlqq6k9qKy1ZGBw8laTvl4wRxRRuv73s8dxp7
-	ZTjXf6KcXcgjzwZlukeOaPfuPlCMrmbRdogSKmQa/Z5lICbliP+8u3Ac9NWy1Q==
-X-Gm-Gg: AR+sD11wLyB13S4hj+/hyZqKfkxBzlsSSNyMn1oJ/FmqWWRM4yDOVJFUCMM1qISLEsQ
-	kagJP0trxYZfbqI3WcGJNhcyagON7YRkZLgloa7AXOMfEC98bD11FKxWCO6S0BhCANuiYiMhNWt
-	tAcOZMPtz91K1wnv30KLdqXwOgXumlf4kXMgZFrnmIpburKye62uftSUlJgyaDON7ESf6NGEOn0
-	g97qacY0XDdOLHd/VSK7MkYPUGVCR85bgR0AnijhtmtbKtjiXENhC55H2AqDZd9Mh7sJyuuZHyn
-	Q7TZSH5wVmpRF8FOib+vshIfwQ4wMAAZ4HeLsi9eZlvlP6qgWa/uvkFLpBg5+fcRK+CMzZPIXH0
-	H4R08WvZcKiThqQeeYso5G9MRz2I7DzUgRE7+EAeGB4BQv8Cm5AYxMlmDnWSyvLiqWp+43AzCAy
-	3XtQ6yQtIY05xhnHNYXCqAZLhoqQ==
-X-Received: by 2002:a05:6a00:1805:b0:848:7071:9856 with SMTP id d2e1a72fcca58-84e8d4ae28cmr688635b3a.61.1785183683968;
-        Mon, 27 Jul 2026 13:21:23 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e533ce57asm3558086b3a.28.2026.07.27.13.21.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jul 2026 13:21:23 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Sashiko <sashiko-bot@kernel.org>
-Subject: [PATCH] hwmon: (lm63) Clamp PWM frequency multiplier to [1, 31]
-Date: Mon, 27 Jul 2026 13:21:20 -0700
-Message-ID: <20260727202120.3710948-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W1EsSkVS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E8E91F000E9;
+	Mon, 27 Jul 2026 20:30:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785184248;
+	bh=Bd/BfB1Z4bJO0IhY2jqOk8FhK4v2PVmVH7geKDR56Eo=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=W1EsSkVSonJBktqJtrNG7bj4zubHZPsMxw97ObSE4fmeemrbxC29omben//x2wxAs
+	 GmZ8AFrqxx+EpOENvYIavxLSQbWurGwKyYZG/sUm4CryHADteDVr3chXbdwokZwyak
+	 Wn83qEl+5OYncjmWtRZfry8QxJQa1jInP8coOXJp2a1vgC3PJA701d3dzqidCGW+jS
+	 VZZWI8XehP5Mt+3r2BwhQBb7ha6RfLst+u8aicqSrJC6znjvCXydSIkHUNPFdWpPWy
+	 clzAqotXCuEk/wZrQCWJev3ww42M7OIg0kB0ueH2YshdWs/RwPdxa74UuqO2QdbqXz
+	 wxgovSRO8P7uQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] hwmon: (lm63) Clamp PWM frequency multiplier to [1, 31]
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Guenter Roeck" <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260727202120.3710948-1-linux@roeck-us.net>
+References: <20260727202120.3710948-1-linux@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 27 Jul 2026 20:30:46 +0000
+Message-Id: <20260727203047.5E8E91F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Sashiko is concerned that reading a PWM frequency multiplier outside
-the supported range of [1, 31] might result in bad PWM values written
-to the chip. Technically, the chip should never return a value with
-the upper 3 bits set, so this should never happen. However, it is
-unknown if there are LM63 variants where the upper bits of the register
-can be written.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Using clamp() instead of masking incorrectly handles reserved bits=
+, potentially corrupting the PWM frequency multiplier.
+--
 
-Clamp the PWM frequency multiplier value to [1, 31] when reading it
-from the chip to avoid the problem.
+--- Patch [1]: [PATCH] hwmon: (lm63) Clamp PWM frequency multiplier to [1, =
+31] ---
+commit 7a1685b6b2f22a4e89624bbad02ad4ecbb43a849
+Author: Guenter Roeck <linux@roeck-us.net>
 
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/lm63.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+hwmon: (lm63) Clamp PWM frequency multiplier to [1, 31]
 
-diff --git a/drivers/hwmon/lm63.c b/drivers/hwmon/lm63.c
-index e2a429e579ac..45a0efa8a39d 100644
---- a/drivers/hwmon/lm63.c
-+++ b/drivers/hwmon/lm63.c
-@@ -32,6 +32,7 @@
- #include <linux/hwmon-sysfs.h>
- #include <linux/hwmon.h>
- #include <linux/err.h>
-+#include <linux/minmax.h>
- #include <linux/mutex.h>
- #include <linux/of.h>
- #include <linux/sysfs.h>
-@@ -249,8 +250,7 @@ static struct lm63_data *lm63_update_device(struct device *dev)
- 
- 		data->pwm1_freq = i2c_smbus_read_byte_data(client,
- 				  LM63_REG_PWM_FREQ);
--		if (data->pwm1_freq == 0)
--			data->pwm1_freq = 1;
-+		data->pwm1_freq = clamp(data->pwm1_freq, 1, 31);
- 		data->pwm1[0] = i2c_smbus_read_byte_data(client,
- 				LM63_REG_PWM_VALUE);
- 
-@@ -1188,8 +1188,7 @@ static void lm63_init_client(struct lm63_data *data)
- 
- 	/* We may need pwm1_freq before ever updating the client data */
- 	data->pwm1_freq = i2c_smbus_read_byte_data(client, LM63_REG_PWM_FREQ);
--	if (data->pwm1_freq == 0)
--		data->pwm1_freq = 1;
-+	data->pwm1_freq = clamp(data->pwm1_freq, 1, 31);
- 
- 	switch (data->kind) {
- 	case lm63:
--- 
-2.45.2
+This commit updates the lm63 driver to clamp the PWM frequency multiplier
+read from the chip to the range [1, 31]. This is intended to prevent writing
+bad PWM values if the upper bits of the register are unexpectedly set on
+some variants.
 
+> diff --git a/drivers/hwmon/lm63.c b/drivers/hwmon/lm63.c
+> --- a/drivers/hwmon/lm63.c
+> +++ b/drivers/hwmon/lm63.c
+
+[ ... ]
+
+> @@ -249,8 +250,7 @@ static struct lm63_data *lm63_update_device(struct de=
+vice *dev)
+> =20
+>  		data->pwm1_freq =3D i2c_smbus_read_byte_data(client,
+>  				  LM63_REG_PWM_FREQ);
+> -		if (data->pwm1_freq =3D=3D 0)
+> -			data->pwm1_freq =3D 1;
+> +		data->pwm1_freq =3D clamp(data->pwm1_freq, 1, 31);
+
+[Severity: High]
+If the upper bits of the LM63_REG_PWM_FREQ register happen to be set on some
+LM63 variants, won't clamp() treat the entire byte as a magnitude?
+
+For example, if the register reads 0x81, clamp(129, 1, 31) will evaluate
+to 31, rather than isolating the lower 5-bit multiplier of 1.
+
+Would it be more correct to mask out the reserved bits with & 0x1F before
+checking for zero or clamping?
+
+>  		data->pwm1[0] =3D i2c_smbus_read_byte_data(client,
+>  				LM63_REG_PWM_VALUE);
+> =20
+
+[ ... ]
+
+> @@ -1188,8 +1188,7 @@ static void lm63_init_client(struct lm63_data *data)
+> =20
+>  	/* We may need pwm1_freq before ever updating the client data */
+>  	data->pwm1_freq =3D i2c_smbus_read_byte_data(client, LM63_REG_PWM_FREQ);
+> -	if (data->pwm1_freq =3D=3D 0)
+> -		data->pwm1_freq =3D 1;
+> +	data->pwm1_freq =3D clamp(data->pwm1_freq, 1, 31);
+
+[Severity: High]
+Does this have the same risk as lm63_update_device() above, where reserved
+upper bits being set will cause the multiplier to be incorrectly calculated
+and clamped to 31?
+
+> =20
+>  	switch (data->kind) {
+>  	case lm63:
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260727202120.3710=
+948-1-linux@roeck-us.net?part=3D1
