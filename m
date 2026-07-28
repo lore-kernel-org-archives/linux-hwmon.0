@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DB5519D8BC
-	for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2026 00:37:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 103A02192F9
+	for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2026 00:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785199069; cv=none; b=IiNTLl+oqWfyF47lkUKCjCUWAN0Z8nPOUknKUvXXzgd8GsIzhU7zuW7LChy7AQou+EoIJkc/pugs9QzvAkytiEPsgiCz/DSU/4dCjFtUnbTrbyKcnTLAlcMUG3WtlDIAG0ur8KiZXD0VfknCnRCte3ApOJA+GJHASBiOsCzmwnU=
+	t=1785199216; cv=none; b=Snk6ilGgNkdZPGu2GREOaQ+isLr1sKPxohk7Qzw897+etr0gpr0/O0MVTV0H6ZHLH0MOZzVf/V20N7ObI12yA3vm+f4YiMg03ugxLXb+E7jf8jNBAOkup5EV/MHQFkudvvazxwUz3UwnNLjSoptnr1me9IjeKXLK6+GmENVFgQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785199069; c=relaxed/simple;
-	bh=/3epqcyqoDb3s8tDnOkVxGRfjhWvHt/GRHU1JYn7YBI=;
+	s=arc-20240116; t=1785199216; c=relaxed/simple;
+	bh=cHTZGKr8eOrMQZKuZ3XYj+ivstDvLjXVVN67HiT8yxc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=a8CEMibR9PJ46HG1MlJoiCdi0LHBx8WcjmVFk4DPfDlCV72xOy2+07mRvwfkrcE39k0hcH0l88xjEgC7byHT6G8/CrL15XM71UPvTNL5M0ajGxsHQ79Ep9Eu66iIFiONCvxV6VIMyv3ILub5CF0fJLbnSyf6Ai4eACljVYSm7RM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W7A1fnoR; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=AzZ7kSX6yl7mz6Vy+pH2L1RguIkWMV/IBfaPPFY42GqsAwL9bPdpRyUc9O3zLJnHDEcqOfClpq6ih53L/V2DhOfKJ0UJbXDsyBuRozOUiFHMdc0pxvJNg4SM6g3jCkaa1Y1ue4X4danYZZAuJsCtMN2KKPMdIBax4h2vaLsM5AE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IyJ7Tr3a; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W7A1fnoR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B67731F000E9;
-	Tue, 28 Jul 2026 00:37:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IyJ7Tr3a"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94FCC1F000E9;
+	Tue, 28 Jul 2026 00:40:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785199067;
-	bh=pjqLe5v7P4/7FC6A/WkmokNFpk84UjpXNBJiqErIDeY=;
+	s=k20260515; t=1785199214;
+	bh=BPFU+sLTv6pS6yYexP/fJDu3QFrMuLMukDAdv/VbOcM=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=W7A1fnoRLHlQVEUq22O8LILeL9o4Y8KIpujN/mWKRWt7ca8hJ9it0tozh/W1l42kr
-	 Vb4d9hlgVXl3mhQ38usfMBV2NFp8dyVXU7yJIh9UrkynQOt8WZaoodsiEi+0To24Pt
-	 WVfhAkgGlWPqdky4d7g6CM9rJp6W9xg9GKJXTEZGmwCGbFs/zQKJ88eHjTCMFqNiSs
-	 tkHM4IUJ54z+UZh89GkniXxcztwLurtgJm9IfQ89ojYFpdv9AfQB2WXnmhAwXG9oBE
-	 OCMevC9lnSVjtx/U2ThZ763Z/yZ+GCbbmMC0nPCfsYU7uYOY7KYMqiPZo6FWYDsGMe
-	 3Zw650/zjHFDQ==
+	b=IyJ7Tr3ayD5byX7WHJP+joJu7QGPiCRbwEtrqdhaQJ1K14P512hi0MrTSINoBB0Uq
+	 qiSqduum5coH9qoHu8J8OAXVjU8t5hmfyIugWV5W4LGLdZ9Bvr5t70dXtI5wRag5aj
+	 lhK8NLkQgKrSR/Y/QdTPd8YZK+g8gWrKCb1KCckod5YoFw9QCHOb1Sot7IIPcg/hKt
+	 3X5yQBreEeRdzLrmIesNbGHKzr3NXwUMGcHhoTuNUTmpiAJAp4vtEflJin/6Hfc0s/
+	 fccqg1/3N9vuUfghB/CquMvZrjSx/4tMrpXniLpmV4PDO+HVBbnKlGp/BKbnwPwTfY
+	 60f47osUJ/F/A==
 From: sashiko-bot@kernel.org
-Subject: Re: [hwmon PATCH v2 3/8] hwmon: (adt7470) Fix busy-loop and I2C
- flooding in update thread
+Subject: Re: [hwmon PATCH v2 8/8] hwmon: (adt7470) Fix PWM auto temp state
+ array and bounds check
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Luiz Angelo Daros de Luca" <luizluca@gmail.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260727-adt7470_fixes-v2-3-598e38a46ba6@gmail.com>
+In-Reply-To: <20260727-adt7470_fixes-v2-8-598e38a46ba6@gmail.com>
 References: <20260727-adt7470_fixes-v2-0-598e38a46ba6@gmail.com>
- <20260727-adt7470_fixes-v2-3-598e38a46ba6@gmail.com>
+ <20260727-adt7470_fixes-v2-8-598e38a46ba6@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 28 Jul 2026 00:37:47 +0000
-Message-Id: <20260728003747.B67731F000E9@smtp.kernel.org>
+Date: Tue, 28 Jul 2026 00:40:14 +0000
+Message-Id: <20260728004014.94FCC1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -49,86 +49,63 @@ Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Setting `num_temp_sensors` to a non-negative value before temperat=
-ures have been probed permanently breaks temperature reporting and stalls s=
-ysfs reads.
+- [High] The driver violates HWMON subsystem guidelines by using a private =
+mutex (`data->lock`) instead of the required `hwmon_lock()` API to serializ=
+e sysfs attributes registered outside the `info` structure.
 --
 
---- Patch [3]: [hwmon PATCH v2 3/8] hwmon: (adt7470) Fix busy-loop and I2C =
-flooding in update thread ---
-commit 34430e742760a7d00b9b258ac39d10dadd63f0d0
+--- Patch [8]: [hwmon PATCH v2 8/8] hwmon: (adt7470) Fix PWM auto temp stat=
+e array and bounds check ---
+commit 3702a967e9e4da59d546cf6a3b0fc208ec5ff2bf
 Author: Luiz Angelo Daros de Luca <luizluca@gmail.com>
 
-hwmon: (adt7470) Fix busy-loop and I2C flooding in update thread
+hwmon: (adt7470) Fix PWM auto temp state array and bounds check
 
-This commit fixes a busy-loop vulnerability in the background thread.
-It clamps the minimum auto_update_interval to 500ms to guarantee a
-reasonable minimum sleep window between sensor updates.
+This commit fixes a bounds checking issue in pwm_auto_temp_store() where
+values > 0xF could overflow into adjacent channel bits. It also corrects
+the array assignment so values are written to pwm_auto_temp instead of
+pwm_automatic after a successful I2C write.
 
-Reported-by: sashiko-bot@kernel.org
-Closes: https://lore.kernel.org/r/20260716213252.EACA71F000E9@smtp.kernel.o=
-rg
-Fixes: 89fac11cb3e7 ("adt7470: make automatic fan control really work")
+Closes: https://lore.kernel.org/all/20260727034932.0B7C41F000E9@smtp.kernel=
+.org/#t
 
 > diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
-> index 62ec68ea0a406..0b19b0925d1c7 100644
+> index 772d2a409bb5c..c45b984c02e6b 100644
 > --- a/drivers/hwmon/adt7470.c
 > +++ b/drivers/hwmon/adt7470.c
-> @@ -509,7 +509,7 @@ static ssize_t auto_update_interval_store(struct devi=
-ce *dev,
->  	if (kstrtol(buf, 10, &temp))
->  		return -EINVAL;
+> @@ -1049,8 +1049,10 @@ static ssize_t pwm_auto_temp_store(struct device *=
+dev,
+>  	if (temp < 0)
+>  		return temp;
 > =20
-> -	temp =3D clamp_val(temp, 0, 60000);
-> +	temp =3D clamp_val(temp, 500, 60000);
-> =20
+> +	if (temp > 0xF)
+> +		return -EINVAL;
+> +
 >  	mutex_lock(&data->lock);
->  	data->auto_update_interval =3D temp;
 
 [Severity: High]
-This is a pre-existing issue, but does setting num_temp_sensors before
-temperatures are probed prevent temperature reporting and stall sysfs reads?
+This is a pre-existing issue, but does this driver violate the hwmon
+subsystem locking guidelines by using a private mutex here?
 
-If userspace writes a non-negative value to the num_temp_sensors sysfs node
-before data->temperatures_probed is set to 1, data->temperatures_probed
-remains 0:
+According to the hardware monitoring API documentation, drivers must
+implement locking required for interrupt handling and for attributes
+registered outside the standard info structure using hwmon_lock() and
+hwmon_unlock(). The core relies on this to serialize thermal subsystem
+and sysfs operations.
 
-drivers/hwmon/adt7470.c:num_temp_sensors_store() {
-	...
-	data->num_temp_sensors =3D temp;
-	if (temp < 0)
-		data->temperatures_probed =3D 0;
-	...
-}
+By using the private data->lock in pwm_auto_temp_store(), could this
+bypass the central hwmon locking mechanism and cause concurrency issues
+with the thermal subsystem?
 
-Because temperatures_probed is 0, adt7470_update_sensors() will always call
-adt7470_read_temperatures() rather than a bulk read. Inside
-adt7470_read_temperatures(), it checks the sensor count:
+Would it make sense to update this to use hwmon_lock(dev)?
 
-drivers/hwmon/adt7470.c:adt7470_read_temperatures() {
-	...
-	/* Only count fans if we have to */
-	if (data->num_temp_sensors >=3D 0)
-		return 0;
+> -	data->pwm_automatic[attr->index] =3D temp;
+> =20
+>  	if (!(attr->index % 2)) {
+>  		mask =3D 0xF0;
 
-	err =3D regmap_bulk_read(data->regmap, ADT7470_TEMP_REG(0),
-			       &data->temp[0], ADT7470_TEMP_COUNT);
-	...
-	data->temperatures_probed =3D 1;
-	return 0;
-}
-
-Since num_temp_sensors >=3D 0, it returns early and never actually reads the
-temperature registers or sets data->temperatures_probed =3D 1. This appears=
- to
-cause every subsequent sensor update to stall the driver with the probe sle=
-ep
-time while never actually updating data->temp.
-
-Could num_temp_sensors_store() also set data->temperatures_probed =3D 1 when
-temp >=3D 0, or should adt7470_read_temperatures() read the registers
-regardless of the num_temp_sensors value?
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260727-adt7470_fi=
-xes-v2-0-598e38a46ba6@gmail.com?part=3D3
+xes-v2-0-598e38a46ba6@gmail.com?part=3D8
