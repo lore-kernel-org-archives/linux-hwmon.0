@@ -1,66 +1,66 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 279ED23D7DC
-	for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2026 00:57:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8001372618
+	for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2026 00:57:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785200226; cv=none; b=dPdSuwWnROkUBWWGPB8zunlCKsYXjGVzwzzrGUbn9BW3p7Rpv+p4EaYfb9sd24uECdQGAiwvL6g71aihj5vjwPkq3DDnJNvvGg1+3LVMD9nykVokWw49R8CmT2WtxZr9SVrI+ULH59ndbfaVcm/TgJJBaR/vrUZkH2EDTaEj5Ss=
+	t=1785200257; cv=none; b=Eppoy1Y2ijq0u787FXpzu8N/GxDAGSjjEDLKR6Kc9cgAPb/YN0mG11MAULMMlOg5gJUd554UEks/XBfke9vy1HvI2dR8DqMtd/XMF8Evj7u7PFoKkhbdYBESqX+xqXvng3PnRsg66dlblzYVghxw8WOnUm9uEGnGJcvDCPWQTXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785200226; c=relaxed/simple;
-	bh=vPXOPAXVhTG/bqsetoHbCSl/RsBxdyGibSkTdfFIyzU=;
+	s=arc-20240116; t=1785200257; c=relaxed/simple;
+	bh=r7Xt4sAN1oMMGOrDoEkCQxEemememLGVjRCSa6gxa1Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Km0AwKLtUnEasIktPtCHlommY0PKefIHEY9bqjcwsxpaSRMUpJsL4J3mYkpQ5dAB/X26+z5koa7Kn9oj8HohxxvGq5mQYukFmX3DGsoRBSPSEq6BGAlDZ/bDDhKgVraPNeqgGzy79+Jc51Sb3Iz+mz6yU1LQ231odcg7Nhjpk4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=raOLoJNK; arc=none smtp.client-ip=209.85.216.51
+	 Content-Type:Content-Disposition:In-Reply-To; b=gJj//ZgDou4BSBqdgGU4u1GFUFQ5KUMhtDuvOQnCGv3SwYHtAME1vEEdBRGHfLqCc3p2kByW4hWrdCuX26OzkHZ1l60zU2UwazVxXBbe6TJ9pUVIji+v8QoFf0hyzxr2zi9sJouci2K+nE0v7Dx2NsrsB3nV9OaLfBqNzZ2BgTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lk8BA1YD; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="raOLoJNK"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-383cb94f742so2872681a91.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 17:57:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lk8BA1YD"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2cacf197759so47225915ad.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 17:57:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785200224; x=1785805024; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785200256; x=1785805056; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=YNJ5chWsUz3M08Gy0JNoXm0UmHRakM1L4cKjiaWyoik=;
-        b=raOLoJNKtMr+BkN2f2QBFOmiJD4bulxBXWOEs0LUMvcNE/vAVAV3jPZwcbr6OydLpd
-         joxlpoltsiB+gMof4WahCbktlOb9V0IHMYSeqLG3naJjsmDpT+Dfg8bPimbWXV5jZHUS
-         ptdT7L0hexpDfdL9fNCLU71fJxTH7O1fjDLl9MYyMNK+L04OWM0Sg/gUodjFAV1z5RFu
-         Wm1AHURwylWrvelbyHtuz6Cy7DACZhiBYxUPAf4RjOkfruDI2ZKZgpmY4YefOOwt1H7u
-         VqEXL7x5AJyuDHYDW25Cr15FI9v9qwXngwFj0zQ54P/XzZJaQugHqyhqLgVLr6G0HeUh
-         6wLg==
+        bh=Qto3bVGMAs/3+VEzt+gxU2EaDabuY+anOP1PDkQG9cg=;
+        b=lk8BA1YDwDBlfXA4C43KrCkzrBUe5RzgxKjfXDkZ3uWNugp+ZXm/uV3nLevLlMBczf
+         twGXNddeM+xJY/ybqefreMc/syGA9kfDHOGlm4uMiijLuwBKPWOmGdA7mo7BN35OqapO
+         08u+wG7MhX7K/nqw94R5f3JlnUqOQeozn2JHTpfXWUeIixEWcLBqbHl6mFEB/xy2tpnW
+         fGNpkrfbNfHW1XD97r1YL15h4sAG0vGyxjQCv1GA0+68I5pd9WjS5h9k57X27RcZbFEi
+         V5V6mZ19WUArvX8/O8su06lqLQ3jxMQMuSbAnviVbXeny3160066yUO2rOmGMirLdJnC
+         d46g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785200224; x=1785805024;
+        d=1e100.net; s=20251104; t=1785200256; x=1785805056;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=YNJ5chWsUz3M08Gy0JNoXm0UmHRakM1L4cKjiaWyoik=;
-        b=XwB81bU8jx3dshASguXaN3LTLeYMlKvQso60c/mCrU1lyJhUuTWqR3X4SdNibtI3fT
-         5LYHXCx2z55rciShzkmBkDdd7lTwENS4UvvHR9ijDBxteV5Try56uoJV2mn9aqRu2967
-         Id36/SqsqaaAfdHn07Z/KRfmxlpX4C9s+5wE9i7gposf89VKhjEObCILW8ZYLOkdBwXR
-         lYcvGct5/HrPz6N+K9pluIfCfaxAiJRmx0ynLxGavDXQRgqAjgbcdK8Lt3K4Mqr033Wj
-         yW3BPIaEZhJnZ/w0089ssf1O7bV5Eo+GXRzB/IJH0DCJOj6dz7Jal7khLD6MBGnv9F7J
-         IiXw==
-X-Forwarded-Encrypted: i=1; AHgh+Rpld5nKF/KBrW6zjO/h80mYetFH3265TzJ/3qaUdB4fXvpc4mvVGnN2rNxTr8+Qt7NnuppgFm0QWuz32g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyz0iusQQmT9/kbF12ON/shw/59EmaSZ+NwA17kqnce+bYx8dXn
-	XcDq7pfjdwQ49+99J1eXmgbubCfNum55NVffLd4PQ9BGBgtih5BLuYXH
-X-Gm-Gg: AR+sD11ZBEk9vsA2Ou3L+f2/nn09ZSdCjLlN67f4q1TWcOkdDbo9zDl+UWDlram1OiM
-	Hi3M1E4lAIWe052DhDi6A1clJoeD8wb1wR6BFx7VzDAhkBIQbHSNjx+056mEVLX9l8pprqHcS1v
-	Vw/b+iHaOa9VkbXPxitQgJc/VamJ6n5V2k40QryJWE0gCtyQt9LEf2H4CjO/Dv5cWtsQXAEM30s
-	WhQ8Dg5pmW0QEsoI5uKm4w5y+PqMOQkyB3wnSu6zZkkaZPbcYjl3cNp11lcm65t2ZdxZIOwtw9E
-	NUMBSfKu2sz5R5/AQKJqmQmQWveQDVhCiSC4Lxwqfy7tAUau0SyTEvnwHohGTbOExkNrTS3jlH6
-	dZjxADbNZgwuOinE/696Y0zgAHWdZkgyYxsdrUGeF6659h7JsUMPsOM6k2VFJd/oebK50e6m5wd
-	N3i1ffl/olrflgC7Q=
-X-Received: by 2002:a17:903:2343:b0:2c9:cf62:6f61 with SMTP id d9443c01a7336-2d015c3d456mr1934905ad.17.1785200224562;
-        Mon, 27 Jul 2026 17:57:04 -0700 (PDT)
+        bh=Qto3bVGMAs/3+VEzt+gxU2EaDabuY+anOP1PDkQG9cg=;
+        b=glN2efbFV44dMSgpZga+H1iHGWXkFWNGqlFSUUwjY+715C31/Z0/IrLZQWzD36dGpA
+         dJbOBtLuG2iCtyfEaeNT0sXS+mpycFPpcguiI2PRauorDNwpHsiR/UX/GiUFNPdNbWyJ
+         D4aSysJTxSRAS/2/wRoncNy6Y86ZKYhVWBHtyS5vdciSHjPs+dhZUVDWTnAH5X1vYLV8
+         XZAn3zkjgopZndLDPVZb4CDsnb2GGXFtXglgIMFNbafxbq/5Sd6mWinrhF9EqjlrsSYz
+         ToIWOe6kIDJ4qDN79dVbMX5kAqlRdw/NX+XxF/OHlKniSKHDv169xa7l5zehBWZzwBGe
+         k3Vw==
+X-Forwarded-Encrypted: i=1; AHgh+RqMaa1g3J39Cq3Kc9iFHEEmro2ehDI9D/RzxnckJSeiPHdVkYiG3yBdzA72lA6GuBElUSz9UDTmNI2zQw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxEniICgdsI81z2KbE+TlSNFFEqorv+To4hEvgHpr6uJXkSHaDn
+	YAE7QUrlb+RmczqbXjIFuoUgH3KYTTwmg671OiVa5lHdUcFerJ15nijk36mllA==
+X-Gm-Gg: AR+sD11Jy0VRyP5OH3RPRQKqPwH07FtI6Pi6ZNitXm0Fzzgzn2Hh80KhLcGSJs3e9kY
+	hyhdnVQPPiblbYDywJ27AWLB+yTOyKNQqvR9NMA+DOObOTr3Y8HZaiAMKEhJ0yuD9xqGCyHm1vj
+	WXnIli35cwUldm+7/lM8D/wS0YfItGn3ogJFvQFj3LhNw6s17EPylqb4gtVnLSaj9J3Et5LQmjr
+	zIHxVcvVBbp4hI1v+5i9FbRAaRjB4ysaJfHVLAWGJjiPVSGCFnsDxoiZCOMSdGRhPwMx5QfiFLA
+	lKHk5tWw/m8XnmEDrsHqAyzipc4fVXPaop3aJRHfYAiLjPXxPQBJiRzWAFAJnfLyznrWvFkxRlv
+	mLDKO0oEkVC5H8aLLob7CHWt7PqDhqE9ZI7Lm+ViPApik/WXxHcZZ/dqnpsW4uooDIrrpkabjjA
+	lXA/Am9HuYB3QFtAbuEkPYRkJ+pA==
+X-Received: by 2002:a17:903:1844:b0:2ca:d91d:d3a7 with SMTP id d9443c01a7336-2d015c9cd4cmr2532745ad.10.1785200255750;
+        Mon, 27 Jul 2026 17:57:35 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cfde59b768sm43659295ad.4.2026.07.27.17.57.03
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cfde5e8a44sm43786245ad.35.2026.07.27.17.57.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jul 2026 17:57:04 -0700 (PDT)
+        Mon, 27 Jul 2026 17:57:35 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 27 Jul 2026 17:57:03 -0700
+Date: Mon, 27 Jul 2026 17:57:34 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Luiz Angelo Daros de Luca <luizluca@gmail.com>
 Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
@@ -68,11 +68,11 @@ Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
 	"Darrick J. Wong" <djwong@us.ibm.com>,
 	"Mark M. Hoffman" <mhoffman@lightlink.com>,
 	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [hwmon PATCH v2 4/8] hwmon: (adt7470) Fix swapped PWM3 and PWM4
- auto mode masks
-Message-ID: <5ce1a42b-91ac-4fba-9153-34dc8de76a04@roeck-us.net>
+Subject: Re: [hwmon PATCH v2 6/8] hwmon: (adt7470) Use cached PWM frequency
+ value
+Message-ID: <06aabaed-98c3-4b06-b2d3-acbbd35e2309@roeck-us.net>
 References: <20260727-adt7470_fixes-v2-0-598e38a46ba6@gmail.com>
- <20260727-adt7470_fixes-v2-4-598e38a46ba6@gmail.com>
+ <20260727-adt7470_fixes-v2-6-598e38a46ba6@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -81,36 +81,21 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260727-adt7470_fixes-v2-4-598e38a46ba6@gmail.com>
+In-Reply-To: <20260727-adt7470_fixes-v2-6-598e38a46ba6@gmail.com>
 
-On Mon, Jul 27, 2026 at 09:22:20PM -0300, Luiz Angelo Daros de Luca wrote:
-> The ADT7470_PWM3_AUTO_MASK and ADT7470_PWM4_AUTO_MASK macros are
-> currently defined with swapped bit values.
+On Mon, Jul 27, 2026 at 09:22:22PM -0300, Luiz Angelo Daros de Luca wrote:
+> adt7470_pwm_read() currently ignores failures returned by
+> pwm1_freq_get(). If the register read fails, the negative error code is
+> returned through *val while the function itself reports success,
+> potentially exposing a negative PWM frequency through sysfs.
 > 
-> According to Table 22 of the ADT7470 datasheet, the Fan Control Mode
-> Configuration for register 0x69 follows the exact same bit position
-> layout as register 0x68:
-> - 0x68 Bit[7] corresponds to BHVR1 (PWM1) -> 0x80
-> - 0x68 Bit[6] corresponds to BHVR2 (PWM2) -> 0x40
-> - 0x69 Bit[7] corresponds to BHVR3 (PWM3) -> 0x80
-> - 0x69 Bit[6] corresponds to BHVR4 (PWM4) -> 0x40
+> Fix this by using the cached PWM frequency maintained by the driver,
+> eliminating the register access from the read path.
 > 
-> Consequently, PWM3 should use mask 0x80 and PWM4 should use 0x40.
+> Apart from the corrected error propagation and using the cached value,
+> no functional change is intended.
 > 
-> This typo did not cause any functional bugs because these specific
-> macros are never referenced in the driver code. Instead, the driver
-> correctly applies the configuration by relying on the modulo parity of
-> the channel index (e.g., `channel % 2`) to selectively apply either
-> ADT7470_PWM1_AUTO_MASK (0x80) or ADT7470_PWM2_AUTO_MASK (0x40).
-> Since the bit layout is identical between the two configuration
-> registers, the hardware is currently configured correctly.
-> 
-> Fix the macro definitions to reflect the datasheet accurately and
-> prevent future bugs or confusion during code review and refactoring.
-> As this is a purely cosmetic fix with no functional impact, a backport
-> to stable kernels is not necessary.
-> 
-> Fixes: 6f9703d0be16 ("hwmon: add support for adt7470")
+> Fixes: ef67959c4253 ("hwmon: (adt7470) Convert to use regmap")
 > Signed-off-by: Luiz Angelo Daros de Luca <luizluca@gmail.com>
 
 Applied.
