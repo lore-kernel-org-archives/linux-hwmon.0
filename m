@@ -1,68 +1,68 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96C023A75A7
-	for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2026 04:31:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6103F38F254
+	for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2026 04:34:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785213111; cv=none; b=JeUMLIGiRDZ24ANavwusuQwxAypxsAbE2KFruT9lbr7h7p1D7dU4mFEEP46eJEl6MGOernvNBN6FGbecVP7Ps5cfH3XEihwmBOm2kqqW+1rvBAi6yxJmFpAwpKgrsytLc24181p9PEbOCE978sdRW/L8pPrzaKFOVsJ8ktKlve4=
+	t=1785213267; cv=none; b=EL1/EKs8gPVQiljy0oDVdkFNYP8gkJwtDgxqoQ5UnjIguZI+62yX4GTgH56nUG/qMONIareQPMpS+/qL+pA6t8T+pyVN3RYyNXUlqEzKaD7RsbzHR9qdUTc3qzujZ4Xj9cODJpEKQPEQrmGZnDk98SA4jG5waPzJ95K+QfSu4tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785213111; c=relaxed/simple;
-	bh=xW+jeVJ7gBoIcbZHJ2Y9ZJZhRwhdct15ixQFUsZWyJw=;
+	s=arc-20240116; t=1785213267; c=relaxed/simple;
+	bh=uyawnA8JzmPstrkoM+DBDNOWOHPLgRXU9HmSBbtzOPU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=vGYPn88aEYTnDIG/NnurqIr8QbocZ4Xvxg+mBfzqqvQJMo0m/oqDdmhVdfGU0XfgQtncRXQBf50hCnPupJLCKBSmHFF8FKUz2NlC1PDXjHbSFbVvKiTmY2HJ1Ach2wQZOOHLRkAZEsVK0HFSXZzqTjbd8cV3yUXjBI30kUP1Hmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZojooIiP; arc=none smtp.client-ip=209.85.214.173
+	 In-Reply-To:Content-Type; b=IxpeFmbKSFGA9Cf9qpbXt3ojzx3alt+e7RNf3o5UGUd9wczSzqW2EdLcM2AOsdp9Cy6XhmbrtSv+jwA5n5UiLgwkb0LECnnGdCKYPJYr4Sv9xtOkujSeiuZe7/KcIuRXqDaESB6JkZ7nw0G4cuCgqwQQe1xNTGoD+3sqIz8WELA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fJemoSMD; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZojooIiP"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2d01663d816so1523565ad.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 21:31:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fJemoSMD"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2cfbbdfa60bso31408685ad.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 21:34:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785213107; x=1785817907; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785213266; x=1785818066; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=1vBFBzSt7pNhRD/NLr/9cCWACL2lf1sDzhfdvaRdsOs=;
-        b=ZojooIiPN2HOcNkyAW0+/H3S+5JrawWrG0B6oT+Bap3hmYkv/iyMkujKSbXV2tsa0H
-         ntfpaRO+EHWbBNUgFOYMFyagMA9LEJXOgrH2zLvVPiFCZmd+DPXTGRoi3qAdBDWnTmmf
-         1D1godSSCeuh/fFa4JIsILAUnbDywGapUQbUzAEfNGCaBb7fIQLaiUlt9mUkm7gvTFqq
-         VFQ11OH92WX3dcxv/0/hvB4zHf4vaNkslDKlG5Gj/dZgRhsVlIvQD8mgz1MuhwZuU/yE
-         Yu+yn4VsCo0hfolZ+2NypGKVX0STHGAoSWblblyfgjOlGfmtdkFspgV5Kr/S0ylW0Gd5
-         yExA==
+        bh=HbpEiYESyYcbPpVXAmf0MuFPaZ33OeP2HIx7dfPBaM4=;
+        b=fJemoSMD1+90FUrXWkPlKVciTX9Co17rdfKWArlkoZj87g9oqZoVw46icPLSWQ/1E0
+         Le0YIY1965JNS6BEe+STZZUp2rc6hwuHBahwvU/Lly1ag7QBlCNhbM5rNA0uEIuP7a6g
+         6GQzEv+Y6dfxQpMCTM3JIvCac2nwPYlZr8+ZGv9h3bT21oV2Xd4um8rdIcmJ5mrU7+9z
+         y3gOcjXoTy9qmiUbGWmN+gE9MkSMBq64mMzsPAYSDfXgXdkYcsiD2nt6Nbzn0lDFE9nu
+         f7Wey/kxpwe+TAkr1/tqhFtWXNpJVZls9rciO1yhU9aZqy3ND7Ij+L4ipURiBokTkneM
+         2ZQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785213107; x=1785817907;
+        d=1e100.net; s=20251104; t=1785213266; x=1785818066;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=1vBFBzSt7pNhRD/NLr/9cCWACL2lf1sDzhfdvaRdsOs=;
-        b=qVsuV/BV5K0czDHPtNYJ5xJ7B9458PnCu9iKHQDt/6hMFg4aGmidT22p9tyX+7XeWR
-         59X1VlCkiWXLJkdSJN+cYGikCA9+lXw3tL70Hm3i9GopLe6NR7eTtvwe38nfEqIE2NXr
-         U6CnEWD7mAL5r3ZtU3Bk/q18CUU8g7/jMYqwosejjaAXv8FhGrvkRJ0ovf9r5wacXODv
-         OplwEMgMj9oyIdn5zLuxAxTCaOVH50itJtjmVKqIfOnBhBlS38JL9v2/YErjIZ4xG/uE
-         DmYoLSp+h0jOij3iCrf0W+VziMocQRnLOHfscyk4RjWnNGqjtjQJ82PY+1P5zr7g0qkb
-         6ucw==
-X-Gm-Message-State: AOJu0YzAfXUiWCPzoi2LjGGObZ90XNI1YAf8AHcA9ji/3QfklhGHMOTA
-	A7JHv4EUeHN0sUbtmkLpwl/76Om/c6g9ulRnzLBwGDQl0ztYdZT1iGkn
-X-Gm-Gg: AR+sD11Kb3tapf4+zpds4PekM4WgN7SFIPKtJTdgezVhzdne508kpWfQ/BOyoWVX3vu
-	B1ZFpsWSX845G6bWerSWoscM8ZYmWxXQl/UVLSUw789VrQ8Ut5cvFIPAkxAiBCtMtM8PkpvQb/r
-	nHF30iCzU8lHTm2jdFke+ElNgEjV92qzqZ20ivbV1ySQeMEUKclWehKlL8v2zfrf/thlIY5LjaK
-	kVH/ipWSO5ZA1YRs0tAaE/rMhlfgdFzfr+XN268RuHTRnkH/CXHiQxoistsT0WzzHowJyhAw7ro
-	4SH2ZKUSiCvNydvlzqkTVAHHcGWmgHMlwfmwnlL3ioOJNsVuewjP/0r27TLezhLz2iRtYFakYO1
-	boG6tJgCos446NSWkpYKQuo41hzSyM0n/X8ItLOL8Lh+CfbFONqZt6VmXNHnBryNcXy+CPBzMUG
-	WXzbQO6B/QeogGOg62ULiNc8TksWc9wERlWgkNYXNy3tgUzVScnIoEJ1v6MZ3QjBG9ZWdi4L8iQ
-	CXkz4OL7ljTY6xNW/LzDpdxL2xGtA4wGa/FRg==
-X-Received: by 2002:a05:6a21:3a42:b0:3bf:7994:ddca with SMTP id adf61e73a8af0-3c8ba462562mr1069953637.29.1785213107414;
-        Mon, 27 Jul 2026 21:31:47 -0700 (PDT)
+        bh=HbpEiYESyYcbPpVXAmf0MuFPaZ33OeP2HIx7dfPBaM4=;
+        b=qTkHaeaU5/1XXnE1ovG2/C9jvAJhBTu0Lt6AI+tbMk8cNVnug93lnrVFTSNSoBUdJQ
+         ghmMIBrOZcqFhhhekpRjRsawKtZmvmUdJxWOxO7m5STPjsnuwsBG1oQE22AV5N0Kqi5G
+         lCt+nSGgbIq3kTqs33yDSl1FiCp7gydVejsP0Budbx7S9QG3vWTP8ivPoYhU5LnmHdYS
+         /Ud4bxBUNfMuP7RF+mGpHVVQ2IMCD3R5vrvTkd0pRahr20RSNqh0AzfNdx4RT3JMa7jR
+         G6zWLhUpd/iVmQumuiBb3sWn6Z/WOKl8FPmEPUslE6ldpeKxaEh5J36aRAPyGCChDbsb
+         3gqg==
+X-Forwarded-Encrypted: i=1; AHgh+RoLCb/QDiNJRt5rfLM9bXRr07lNPM66FS5+zIymnXf+V7SBtpjBaxVbaIg4zukgGRTV2YEpc35eh6ZdGQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzd70TtxYDSTek68P1QzDhRPwFk6doGj93tM8xudF/Q+p0czh4c
+	OOAAr246JQvPTtwp4c3FcTLveOTwUeDJyTEpjA9Hpt8HYRrgYl13cTB3
+X-Gm-Gg: AR+sD11unVYBDmnYyW45xbeaWTqFcD+sZCBK1NeChEe0hrWpeC1pAOqdorpV1r225r/
+	niEzAWhtPz7n2ksA8YyiDzQa/J+m6dLRx0ojT7I0OXos7S+EuAbelsOOYeq0hg9Y/PT4ow3mfPe
+	mnW77LwFBvBMfNTC+YDk66xomfLHg1ECPbirIez4hHVFhbJwW5e0g1vZ752gkhJG0BX+1oynpD9
+	GGeZXRHuk+i/wS2/F9jSU1NdUDhHhKTL+IpVOV4rpxfOBktlqjSdwXN7OzEES9juf9smoNPXDfB
+	47e//rZLkOz28chHkuyigfKz9Mg7pAaFtKUB3DWanhlPEAu4JYVNaHQ70WcmMq9fPNQx1vlcbul
+	RRb1P16NX2rrTaHVfeBywZSSIdbaHGQzQ/HbLW2wT18KnkaQaKCblhEe8zR+irrP051cTS80Yci
+	IvQ+0G6s178BaHCkjfnFP8HpHhljcVt2zFZFWxehifHoRrfndZ1pK0hZwimoM7SQ==
+X-Received: by 2002:a17:903:1904:b0:2cf:b23a:3e39 with SMTP id d9443c01a7336-2d015d8f422mr8372255ad.43.1785213265610;
+        Mon, 27 Jul 2026 21:34:25 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbbb66dc15asm3912996a12.30.2026.07.27.21.31.46
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cfde7bc4f4sm44562095ad.39.2026.07.27.21.34.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jul 2026 21:31:46 -0700 (PDT)
+        Mon, 27 Jul 2026 21:34:25 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <336bd264-52ec-473a-b74f-5661f06286ed@roeck-us.net>
-Date: Mon, 27 Jul 2026 21:31:45 -0700
+Message-ID: <69a7e430-e7a7-4b84-aa1e-f0f07393b9e0@roeck-us.net>
+Date: Mon, 27 Jul 2026 21:34:23 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,16 +70,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 4/4] hwmon: (pmbus/max20830): add support for max20830c
- and max20840c
-To: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v4 2/4] hwmon: (pmbus/max20830): add VOUT feedback
+ resistor scaling support
+To: sashiko-reviews@lists.linux.dev,
+ Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org,
+ conor+dt@kernel.org
 References: <20260728-dev-max20830c-v4-0-cec034298535@analog.com>
- <20260728-dev-max20830c-v4-4-cec034298535@analog.com>
+ <20260728-dev-max20830c-v4-2-cec034298535@analog.com>
+ <20260728034543.3F7BB1F000E9@smtp.kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -125,139 +124,95 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260728-dev-max20830c-v4-4-cec034298535@analog.com>
+In-Reply-To: <20260728034543.3F7BB1F000E9@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 7/27/26 20:32, Alexis Czezar Torreno wrote:
-> Add support for MAX20830C and MAX20840 step-down DC-DC switching
-> regulator with PMBus interface. MAX20830C is a different packaging
-> for MAX20830, and MAX20840C supports 40A regulation compared to
-> MAX20830 that is only 30A.
+On 7/27/26 20:45, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [High] Incomplete VOUT scaling introduces UAPI inconsistency and dangerous hardware limit writes.
+> --
+> 
+> --- Patch [2]: [PATCH v4 2/4] hwmon: (pmbus/max20830): add VOUT feedback resistor scaling support ---
+> commit 4d1fa3c4cb8d1f4bfe3ca16a79ad028a0dd9bfee
+> Author: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+> 
+> hwmon: (pmbus/max20830): add VOUT feedback resistor scaling support
+> 
+> This commit adds support for external voltage divider scaling using the
+> adi,vout-rfb1-ohms and adi,vout-rfb2-ohms device tree properties. It reads
+> these properties and scales the feedback voltage for PMBUS_READ_VOUT.
+> 
+>> diff --git a/drivers/hwmon/pmbus/max20830.c b/drivers/hwmon/pmbus/max20830.c
+>> index cb2c23672166d..7c1e94c43ac4e 100644
+>> --- a/drivers/hwmon/pmbus/max20830.c
+>> +++ b/drivers/hwmon/pmbus/max20830.c
+> [ ... ]
+>> @@ -14,6 +15,51 @@
+> [ ... ]
+>> +static int max20830_read_word_data(struct i2c_client *client, int page,
+>> +				   int phase, int reg)
+>> +{
+>> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
+>> +	const struct max20830_data *data = container_of(info, struct max20830_data, info);
+>> +	int ret;
+>> +	u64 temp;
+>> +
+>> +	switch (reg) {
+>> +	case PMBUS_READ_VOUT:
+>> +		ret = pmbus_read_word_data(client, page, phase, reg);
+>> +		if (ret < 0)
+>> +			return ret;
+>> +
+>> +		/* Apply voltage divider scaling if resistors are non-zero */
+>> +		if (data->vout_rfb1 && data->vout_rfb2) {
+>> +			temp = (u64)data->vout_rfb1 + (u64)data->vout_rfb2;
+>> +			temp = DIV_ROUND_CLOSEST_ULL((u64)ret * temp, data->vout_rfb2);
+>> +			ret = clamp_val(temp, 0, 0xFFFF);
+>> +		}
+>> +		return ret;
+>> +	default:
+>> +		return -ENODATA;
+>> +	}
+>> +}
+> 
+> [Severity: High]
+> Does this code introduce a UAPI inconsistency by only scaling PMBUS_READ_VOUT?
+> 
+> When in1_input is read, it returns the scaled output voltage.
+> 
+> However, because this switch returns -ENODATA for limits (like
+> PMBUS_VOUT_OV_WARN_LIMIT or PMBUS_VOUT_OV_FAULT_LIMIT), reading limits like
+> in1_max will return the unscaled feedback voltage directly from the chip.
 > 
 
-Are those chips still not published ? I find MAX20840T, but no "C" variants.
-And MAX20840T presumably has an I2C device ID of "MAX20840", not "MAX20840C".
-
-I also noticed that MAX20810 and MAX20815 seem to be register compatible.
-
-> Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-> ---
->   Documentation/hwmon/max20830.rst | 27 ++++++++++++++++++++++-----
->   drivers/hwmon/pmbus/max20830.c   | 27 ++++++++++++++-------------
->   2 files changed, 36 insertions(+), 18 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/max20830.rst b/Documentation/hwmon/max20830.rst
-> index 936e409dcc5c0898dde27d782308d4a7e1357e73..b850f3b6e40d1f1d0cec944be40af02265aced59 100644
-> --- a/Documentation/hwmon/max20830.rst
-> +++ b/Documentation/hwmon/max20830.rst
-> @@ -13,6 +13,22 @@ Supported chips:
->   
->       Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/max20830.pdf
->   
-> +  * Analog Devices MAX20830C
-> +
-> +    Prefix: 'max20830c'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet:
-> +
-> +  * Analog Devices MAX20840C
-> +
-> +    Prefix: 'max20840c'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet:
-> +
->   Author:
->   
->     - Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-> @@ -21,12 +37,13 @@ Author:
->   Description
->   -----------
->   
-> -This driver supports hardware monitoring for Analog Devices MAX20830
-> -Step-Down Switching Regulator with PMBus Interface.
-> +This driver supports hardware monitoring for Analog Devices MAX20830, MAX20830C
-> +and MAX20840C. These are Step-Down Switching Regulator with PMBus Interface.
->   
-> -The MAX20830 is a 2.7V to 16V, 30A fully integrated step-down DC-DC switching
-> -regulator. Through the PMBus interface, the device can monitor input/output
-> -voltages, output current and temperature.
-> +MAX20830, and MAX20830C are 2.7V to 16V, 30A fully integrated step-down DC-DC
-> +switching regulators. MAX20840C is similar but can reach 40A. Through the PMBus
-> +interface, these devices can monitor input/output voltages, output current and
-> +temperature.
->   
->   The driver is a client driver to the core PMBus driver. Please see
->   Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
-> diff --git a/drivers/hwmon/pmbus/max20830.c b/drivers/hwmon/pmbus/max20830.c
-> index 7c1e94c43ac4e5d1b4f69dc77b02e424a674e908..029733a377123ae6a861841db4a40dd540f1149e 100644
-> --- a/drivers/hwmon/pmbus/max20830.c
-> +++ b/drivers/hwmon/pmbus/max20830.c
-> @@ -99,13 +99,12 @@ static int max20830_probe(struct i2c_client *client)
->   	 * which do not support SMBus block reads.
->   	 */
->   	if (i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_READ_BLOCK_DATA)) {
-> -		/* Reads 9 Data bytes from MAX20830 */
->   		ret = i2c_smbus_read_block_data(client, PMBUS_IC_DEVICE_ID, buf);
->   		if (ret < 0)
->   			return dev_err_probe(&client->dev, ret,
->   					     "Failed to read IC_DEVICE_ID\n");
->   	} else {
-> -		/* Reads 1 length byte + 9 Data bytes from MAX20830 */
-> +		/* Reads 1 length byte + data bytes */
->   		ret = i2c_smbus_read_i2c_block_data(client, PMBUS_IC_DEVICE_ID,
->   						    MAX20830_IC_DEVICE_ID_LENGTH + 1,
->   						    buf);
-> @@ -121,26 +120,28 @@ static int max20830_probe(struct i2c_client *client)
->   		ret = ret - 1;
->   	}
->   
-> -	/*
-> -	 * MAX20830 IC_DEVICE_ID sends string data "MAX20830\0".
-> -	 * Return value should at least be 9 bytes of data.
-> -	 */
-> +	/* Verify we read the expected number of bytes */
->   	if (ret < MAX20830_IC_DEVICE_ID_LENGTH)
->   		return dev_err_probe(&client->dev, -ENODEV,
-> -				     "IC_DEVICE_ID too short: expected at least 9 bytes, got %d\n",
-> -				     ret);
-> +				     "IC_DEVICE_ID too short: expected %d bytes, got %d\n",
-> +				     MAX20830_IC_DEVICE_ID_LENGTH, ret);
-> +
-> +	/* Null-terminate the string */
-> +	buf[ret] = '\0';
->   
-> -	/* 9 bytes of data, buf[0]-buf[7] = "MAX20830", buf[8] = '\0' */
-> -	buf[MAX20830_IC_DEVICE_ID_LENGTH - 1] = '\0';
-> -	if (strncmp(buf, "MAX20830", MAX20830_IC_DEVICE_ID_LENGTH - 1))
-> +	/* Verify the device ID matches what we expect */
-> +	if ((strcmp(buf, "MAX20830") && strcmp(buf, "MAX20830C") &&
-> +	    strcmp(buf, "MAX20840C")))
->   		return dev_err_probe(&client->dev, -ENODEV,
-> -				     "Unsupported device: '%s'\n", buf);
-> +				     "Unsupported device: '%*pE'\n", ret, buf);
->   
->   	return pmbus_do_probe(client, &data->info);
->   }
->   
->   static const struct i2c_device_id max20830_id[] = {
-> -	{"max20830"},
-> +	{ "max20830" },
-> +	{ "max20830c" },
-> +	{ "max20840c" },
-
-I don't think that is needed or warranted, given that there is no matching
-devicetree node.
+I would suggest to add a comment explaining that this series does not support
+any limit registers. That should "address" the issues raised by Sashiko, and also
+help future readers understand why the limit registers are not scaled.
 
 Thanks,
 Guenter
 
->   	{ }
->   };
->   MODULE_DEVICE_TABLE(i2c, max20830_id);
+>> +
+>>   static struct pmbus_driver_info max20830_info = {
+>>   	.pages = 1,
+>>   	.format[PSC_VOLTAGE_IN] = linear,
+>> @@ -24,13 +70,25 @@ static struct pmbus_driver_info max20830_info = {
+>>   		PMBUS_HAVE_TEMP |
+>>   		PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_STATUS_IOUT |
+>>   		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP,
+>> +	.read_word_data = max20830_read_word_data,
+>>   };
+> 
+> [Severity: High]
+> Should there be a matching write_word_data callback here to reverse the
+> scaling for limit registers?
+> 
+> Since there is no write_word_data callback, if a user writes a new limit using
+> the scaled unit, the core will write it directly to the hardware without
+> reverse-scaling.
+> 
+> The chip treats this as a feedback limit, which could drastically raise the
+> physical overvoltage trip point and bypass hardware protection.
 > 
 
