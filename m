@@ -1,67 +1,68 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A73BE364926
-	for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2026 04:11:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96C023A75A7
+	for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2026 04:31:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785211879; cv=none; b=RVDaPLZl2St7fZ/qa2Nr6ynPpvMt3B0uJWaHZoJHgtD3dZ36WXu4D2uYaPz8uYJeKffqjP4rDmIw5cnrEvtPo5fgXWHOF0k38QMOS9dWFgayUVetXg8RgyjOB9SytvXxAwNQoH3x2/oWLXRsN+ThgTRM07uhBt1E/WZPXxonZL8=
+	t=1785213111; cv=none; b=JeUMLIGiRDZ24ANavwusuQwxAypxsAbE2KFruT9lbr7h7p1D7dU4mFEEP46eJEl6MGOernvNBN6FGbecVP7Ps5cfH3XEihwmBOm2kqqW+1rvBAi6yxJmFpAwpKgrsytLc24181p9PEbOCE978sdRW/L8pPrzaKFOVsJ8ktKlve4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785211879; c=relaxed/simple;
-	bh=rzHSSUxKw4BlJul30nuAk87yQXFGdgckT1MJA42S4SI=;
+	s=arc-20240116; t=1785213111; c=relaxed/simple;
+	bh=xW+jeVJ7gBoIcbZHJ2Y9ZJZhRwhdct15ixQFUsZWyJw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HWaa9tx79lC0rSs5w3ogHj1oJlUqGgtfyYMfbuZjZwluoyD2UWtNOhWr9g3YLz4cHV6oMdLfV/RQ8vRQbtiHXnX9zGv8dHqTo+RZld7OWghQng1d9iDvoEiS+wmL19YH18wgIxIKElntQzRynL15qSzcGIervgzKiMM1vRXtNaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KGqTHsj9; arc=none smtp.client-ip=209.85.210.177
+	 In-Reply-To:Content-Type; b=vGYPn88aEYTnDIG/NnurqIr8QbocZ4Xvxg+mBfzqqvQJMo0m/oqDdmhVdfGU0XfgQtncRXQBf50hCnPupJLCKBSmHFF8FKUz2NlC1PDXjHbSFbVvKiTmY2HJ1Ach2wQZOOHLRkAZEsVK0HFSXZzqTjbd8cV3yUXjBI30kUP1Hmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZojooIiP; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KGqTHsj9"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8423f236418so2596321b3a.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 21:11:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZojooIiP"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2d01663d816so1523565ad.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 21:31:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785211876; x=1785816676; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785213107; x=1785817907; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=iTBGyr7mBmgTBTF3mSoHRHnNBWWZbdw9RY2sNeblvzE=;
-        b=KGqTHsj9zEkEn4mhIBgoO8vah2XojKYxmH3XY8QvvztLFEc3VRMB1yph1535aoAEMs
-         OrVDvjl/7DiIRAzJPH08joqyu47c2pwmEcgbLwD0Oa5zxO5tBsU47jOWVbcmPCsa+HzU
-         tHG4WJUeM31XtN9meT1fHL+0GX+LPd0NCR/TENXKvpMQqkU+9/sWYNyllKtb4vH7eV0I
-         7L7aE46ZZuu2xhw4Z9Kc2/6y5jhhcSc99A5kO2ElwEAa77CH9PXYK2EtH5t6aPtWA1/w
-         exV/v610anRl4AAo8fjnXh5tt50cuXkRRXYFizd0KufhoL7ZGDoXuiY+UL34hB0xlP8E
-         yxjw==
+        bh=1vBFBzSt7pNhRD/NLr/9cCWACL2lf1sDzhfdvaRdsOs=;
+        b=ZojooIiPN2HOcNkyAW0+/H3S+5JrawWrG0B6oT+Bap3hmYkv/iyMkujKSbXV2tsa0H
+         ntfpaRO+EHWbBNUgFOYMFyagMA9LEJXOgrH2zLvVPiFCZmd+DPXTGRoi3qAdBDWnTmmf
+         1D1godSSCeuh/fFa4JIsILAUnbDywGapUQbUzAEfNGCaBb7fIQLaiUlt9mUkm7gvTFqq
+         VFQ11OH92WX3dcxv/0/hvB4zHf4vaNkslDKlG5Gj/dZgRhsVlIvQD8mgz1MuhwZuU/yE
+         Yu+yn4VsCo0hfolZ+2NypGKVX0STHGAoSWblblyfgjOlGfmtdkFspgV5Kr/S0ylW0Gd5
+         yExA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785211876; x=1785816676;
+        d=1e100.net; s=20251104; t=1785213107; x=1785817907;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=iTBGyr7mBmgTBTF3mSoHRHnNBWWZbdw9RY2sNeblvzE=;
-        b=NO1FDPLyIkxgf1v49DZ186DWof3xRbNwuBPKZJ3N/NQGwO/A1nheycFgt5xx1R2gpm
-         YrLWluSD1KaImAVYtuQz5aQDJ5zzZEUCH+vqas3HemnEXT4i4h8XNMuXnIaN/z41TKvq
-         UU8/oHrtuchKec760vi+twww8fDHuRfMYPPUMWCp4lbTbElUC4KiyR92arRAAz4LflAs
-         m8kIlWQvukfyCAaR1TSa+Qfpp2Ei2gyGo0XvJkY+rf+t88gCC12N91S3uiteErOpLK28
-         QipT0Z4pxdSbWJGoMyUSB2Yy/R7fYIN5uJytTIyTAKgw7+iqGHexpYDed5mJUu926rVq
-         y/2Q==
-X-Gm-Message-State: AOJu0Yy2v1MMlb6QY2g0njBd2vHFdgz43+2sTGz2CRwE3y/hmxQoaApf
-	nUdA/q6BeLdSl4PxQPvbPhl/57RMWNkt/dvtVecwSuZ+G3wCjv3WDb7s
-X-Gm-Gg: AR+sD12QNDCF7lY4Z4rjVsa74Q1R9F69cUs0axITKkexxnDNbI5MC+IY4Kqa7/0znFc
-	ev1THkHHB8EV+AX/2fO/F6ViEvRJpB9eXMWuVxaxQUebKqo9GV7aKCYx36XXOWX0+5aI0q20Gzf
-	NmVPWrIy9fQK3IyPXuc9zmUj79IHJT38eom7SK72m4c+1Y8MY3DolFIMKK+R+uWBMXjo72oL6n8
-	PUJs1bTHUrmcOSf+bqTCzC3cQvB+pQ5Lyc+1bXnBTIJp7/lN38IAN+aw0WKBGxX4l+oRmoZqKJm
-	xs0i01qJZYgk4PkLTqrqab7RU+Mugy1Qznj/7oVi2iHUGnS+FUZUlbOb6CKoakjiUeZTtB7cg/I
-	ATl7Z1RJl/HO+miJHWQoO8QJ8uDmberO2zh6vr4LPADs7xTcZVdR181FmYLsy51BFPZG3rgm82p
-	i1cKvXVuuhuoVCkbN71lH0Kbq76ttVzkHSdDU/3NzEB1kbrlXDorM=
-X-Received: by 2002:a05:6a00:f0c:b0:848:727f:2c8d with SMTP id d2e1a72fcca58-84e93313298mr692501b3a.77.1785211875939;
-        Mon, 27 Jul 2026 21:11:15 -0700 (PDT)
+        bh=1vBFBzSt7pNhRD/NLr/9cCWACL2lf1sDzhfdvaRdsOs=;
+        b=qVsuV/BV5K0czDHPtNYJ5xJ7B9458PnCu9iKHQDt/6hMFg4aGmidT22p9tyX+7XeWR
+         59X1VlCkiWXLJkdSJN+cYGikCA9+lXw3tL70Hm3i9GopLe6NR7eTtvwe38nfEqIE2NXr
+         U6CnEWD7mAL5r3ZtU3Bk/q18CUU8g7/jMYqwosejjaAXv8FhGrvkRJ0ovf9r5wacXODv
+         OplwEMgMj9oyIdn5zLuxAxTCaOVH50itJtjmVKqIfOnBhBlS38JL9v2/YErjIZ4xG/uE
+         DmYoLSp+h0jOij3iCrf0W+VziMocQRnLOHfscyk4RjWnNGqjtjQJ82PY+1P5zr7g0qkb
+         6ucw==
+X-Gm-Message-State: AOJu0YzAfXUiWCPzoi2LjGGObZ90XNI1YAf8AHcA9ji/3QfklhGHMOTA
+	A7JHv4EUeHN0sUbtmkLpwl/76Om/c6g9ulRnzLBwGDQl0ztYdZT1iGkn
+X-Gm-Gg: AR+sD11Kb3tapf4+zpds4PekM4WgN7SFIPKtJTdgezVhzdne508kpWfQ/BOyoWVX3vu
+	B1ZFpsWSX845G6bWerSWoscM8ZYmWxXQl/UVLSUw789VrQ8Ut5cvFIPAkxAiBCtMtM8PkpvQb/r
+	nHF30iCzU8lHTm2jdFke+ElNgEjV92qzqZ20ivbV1ySQeMEUKclWehKlL8v2zfrf/thlIY5LjaK
+	kVH/ipWSO5ZA1YRs0tAaE/rMhlfgdFzfr+XN268RuHTRnkH/CXHiQxoistsT0WzzHowJyhAw7ro
+	4SH2ZKUSiCvNydvlzqkTVAHHcGWmgHMlwfmwnlL3ioOJNsVuewjP/0r27TLezhLz2iRtYFakYO1
+	boG6tJgCos446NSWkpYKQuo41hzSyM0n/X8ItLOL8Lh+CfbFONqZt6VmXNHnBryNcXy+CPBzMUG
+	WXzbQO6B/QeogGOg62ULiNc8TksWc9wERlWgkNYXNy3tgUzVScnIoEJ1v6MZ3QjBG9ZWdi4L8iQ
+	CXkz4OL7ljTY6xNW/LzDpdxL2xGtA4wGa/FRg==
+X-Received: by 2002:a05:6a21:3a42:b0:3bf:7994:ddca with SMTP id adf61e73a8af0-3c8ba462562mr1069953637.29.1785213107414;
+        Mon, 27 Jul 2026 21:31:47 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e532acee2sm3757774b3a.27.2026.07.27.21.11.14
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbbb66dc15asm3912996a12.30.2026.07.27.21.31.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jul 2026 21:11:14 -0700 (PDT)
+        Mon, 27 Jul 2026 21:31:46 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ca4f288b-7bdf-483f-babb-b5f948a27198@roeck-us.net>
-Date: Mon, 27 Jul 2026 21:11:13 -0700
+Message-ID: <336bd264-52ec-473a-b74f-5661f06286ed@roeck-us.net>
+Date: Mon, 27 Jul 2026 21:31:45 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,14 +70,16 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 3/3] hwmon: (pmbus/tps25990): Add TPS1689 support
-To: Stoyan Bogdanov <sbogdanov@baylibre.com>, jbrunet@baylibre.com,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, corbet@lwn.net,
- skhan@linuxfoundation.org
+Subject: Re: [PATCH v4 4/4] hwmon: (pmbus/max20830): add support for max20830c
+ and max20840c
+To: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>
 Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260728015857.193890-1-sbogdanov@baylibre.com>
- <20260728015857.193890-4-sbogdanov@baylibre.com>
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20260728-dev-max20830c-v4-0-cec034298535@analog.com>
+ <20260728-dev-max20830c-v4-4-cec034298535@analog.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -122,253 +125,139 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260728015857.193890-4-sbogdanov@baylibre.com>
+In-Reply-To: <20260728-dev-max20830c-v4-4-cec034298535@analog.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 7/27/26 18:58, Stoyan Bogdanov wrote:
-> Extend the existing TPS25990 driver to support the TPS1689 eFuse,
-> as both devices share the same command interface and functionality.
+On 7/27/26 20:32, Alexis Czezar Torreno wrote:
+> Add support for MAX20830C and MAX20840 step-down DC-DC switching
+> regulator with PMBus interface. MAX20830C is a different packaging
+> for MAX20830, and MAX20840C supports 40A regulation compared to
+> MAX20830 that is only 30A.
 > 
-> Update the documentation to include TPS1689 support.
-> 
-> Signed-off-by: Stoyan Bogdanov <sbogdanov@baylibre.com>
+
+Are those chips still not published ? I find MAX20840T, but no "C" variants.
+And MAX20840T presumably has an I2C device ID of "MAX20840", not "MAX20840C".
+
+I also noticed that MAX20810 and MAX20815 seem to be register compatible.
+
+> Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
 > ---
->   Documentation/hwmon/tps25990.rst | 15 +++--
->   drivers/hwmon/pmbus/tps25990.c   | 98 ++++++++++++++++++++++++++------
->   2 files changed, 92 insertions(+), 21 deletions(-)
+>   Documentation/hwmon/max20830.rst | 27 ++++++++++++++++++++++-----
+>   drivers/hwmon/pmbus/max20830.c   | 27 ++++++++++++++-------------
+>   2 files changed, 36 insertions(+), 18 deletions(-)
 > 
-> diff --git a/Documentation/hwmon/tps25990.rst b/Documentation/hwmon/tps25990.rst
-> index 04faec780d26..e8bc9a550bda 100644
-> --- a/Documentation/hwmon/tps25990.rst
-> +++ b/Documentation/hwmon/tps25990.rst
-> @@ -9,26 +9,31 @@ Supported chips:
+> diff --git a/Documentation/hwmon/max20830.rst b/Documentation/hwmon/max20830.rst
+> index 936e409dcc5c0898dde27d782308d4a7e1357e73..b850f3b6e40d1f1d0cec944be40af02265aced59 100644
+> --- a/Documentation/hwmon/max20830.rst
+> +++ b/Documentation/hwmon/max20830.rst
+> @@ -13,6 +13,22 @@ Supported chips:
 >   
->       Prefix: 'tps25990'
+>       Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/max20830.pdf
 >   
-> -  * Datasheet
-> +    Datasheet: Publicly available at Texas Instruments website: https://www.ti.com/lit/gpn/tps25990
->   
-> -    Publicly available at Texas Instruments website: https://www.ti.com/lit/gpn/tps25990
-> +  * TI TPS1689
+> +  * Analog Devices MAX20830C
 > +
-> +    Prefix: 'tps1689'
+> +    Prefix: 'max20830c'
 > +
-> +    Datasheet: Publicly available at Texas Instruments website: https://www.ti.com/lit/gpn/tps1689
->   
+> +    Addresses scanned: -
+> +
+> +    Datasheet:
+> +
+> +  * Analog Devices MAX20840C
+> +
+> +    Prefix: 'max20840c'
+> +
+> +    Addresses scanned: -
+> +
+> +    Datasheet:
+> +
 >   Author:
 >   
->   	Jerome Brunet <jbrunet@baylibre.com>
-> +	Stoyan Bogdanov <sbogdanov@baylibre.com>
->   
+>     - Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+> @@ -21,12 +37,13 @@ Author:
 >   Description
 >   -----------
 >   
-> -This driver implements support for TI TPS25990 eFuse.
-> +This driver implements support for TI TPS25990 and TI TPS1689 eFuse chips.
->   This is an integrated, high-current circuit protection and power
->   management device with PMBUS interface
+> -This driver supports hardware monitoring for Analog Devices MAX20830
+> -Step-Down Switching Regulator with PMBus Interface.
+> +This driver supports hardware monitoring for Analog Devices MAX20830, MAX20830C
+> +and MAX20840C. These are Step-Down Switching Regulator with PMBus Interface.
 >   
-> -Device compliant with:
-> +Devices are compliant with:
+> -The MAX20830 is a 2.7V to 16V, 30A fully integrated step-down DC-DC switching
+> -regulator. Through the PMBus interface, the device can monitor input/output
+> -voltages, output current and temperature.
+> +MAX20830, and MAX20830C are 2.7V to 16V, 30A fully integrated step-down DC-DC
+> +switching regulators. MAX20840C is similar but can reach 40A. Through the PMBus
+> +interface, these devices can monitor input/output voltages, output current and
+> +temperature.
 >   
->   - PMBus rev 1.3 interface.
->   
-> -Device supports direct format for reading input voltages,
-> +Devices supports direct format for reading input voltages,
->   output voltage, input current, input power and temperature.
->   
->   Due to the specificities of the chip, all history reset attributes
-> diff --git a/drivers/hwmon/pmbus/tps25990.c b/drivers/hwmon/pmbus/tps25990.c
-> index 490dcd2a5fa5..7e2991a85da1 100644
-> --- a/drivers/hwmon/pmbus/tps25990.c
-> +++ b/drivers/hwmon/pmbus/tps25990.c
-> @@ -48,6 +48,7 @@
->   					 PK_MIN_AVG_RST_MIN)
->   
->   enum chips {
-> +	tps1689,
->   	tps25990,
->   };
->   
-> @@ -105,6 +106,8 @@ static int tps25990_mfr_write_protect_get(struct i2c_client *client)
->   static int tps25990_read_word_data(struct i2c_client *client,
->   				   int page, int phase, int reg)
->   {
-> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-> +	struct tps25990_data *data = container_of(info, struct tps25990_data, info);
->   	int ret;
->   
->   	switch (reg) {
-> @@ -193,9 +196,11 @@ static int tps25990_read_word_data(struct i2c_client *client,
->   		ret = pmbus_read_word_data(client, page, phase, reg);
+>   The driver is a client driver to the core PMBus driver. Please see
+>   Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
+> diff --git a/drivers/hwmon/pmbus/max20830.c b/drivers/hwmon/pmbus/max20830.c
+> index 7c1e94c43ac4e5d1b4f69dc77b02e424a674e908..029733a377123ae6a861841db4a40dd540f1149e 100644
+> --- a/drivers/hwmon/pmbus/max20830.c
+> +++ b/drivers/hwmon/pmbus/max20830.c
+> @@ -99,13 +99,12 @@ static int max20830_probe(struct i2c_client *client)
+>   	 * which do not support SMBus block reads.
+>   	 */
+>   	if (i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_READ_BLOCK_DATA)) {
+> -		/* Reads 9 Data bytes from MAX20830 */
+>   		ret = i2c_smbus_read_block_data(client, PMBUS_IC_DEVICE_ID, buf);
 >   		if (ret < 0)
->   			break;
-> -		ret = DIV_ROUND_CLOSEST(ret * TPS25990_VIN_OVF_NUM,
-> -					TPS25990_VIN_OVF_DIV);
-> -		ret += TPS25990_VIN_OVF_OFF;
-> +		if (data->chip_id == tps25990) {
-> +			ret = DIV_ROUND_CLOSEST(ret * TPS25990_VIN_OVF_NUM,
-> +						TPS25990_VIN_OVF_DIV);
-> +			ret += TPS25990_VIN_OVF_OFF;
-> +		}
-
-Unless I am missing something, TPS1689 also has a voltage offset for this register.
-
->   		break;
+>   			return dev_err_probe(&client->dev, ret,
+>   					     "Failed to read IC_DEVICE_ID\n");
+>   	} else {
+> -		/* Reads 1 length byte + 9 Data bytes from MAX20830 */
+> +		/* Reads 1 length byte + data bytes */
+>   		ret = i2c_smbus_read_i2c_block_data(client, PMBUS_IC_DEVICE_ID,
+>   						    MAX20830_IC_DEVICE_ID_LENGTH + 1,
+>   						    buf);
+> @@ -121,26 +120,28 @@ static int max20830_probe(struct i2c_client *client)
+>   		ret = ret - 1;
+>   	}
 >   
->   	case PMBUS_IIN_OC_FAULT_LIMIT:
-> @@ -207,9 +212,11 @@ static int tps25990_read_word_data(struct i2c_client *client,
->   		ret = pmbus_read_byte_data(client, page, TPS25990_VIREF);
->   		if (ret < 0)
->   			break;
-> -		ret = DIV_ROUND_CLOSEST(ret * TPS25990_IIN_OCF_NUM,
-> -					TPS25990_IIN_OCF_DIV);
-> -		ret += TPS25990_IIN_OCF_OFF;
-> +		if (data->chip_id == tps25990) {
-> +			ret = DIV_ROUND_CLOSEST(ret * TPS25990_IIN_OCF_NUM,
-> +						TPS25990_IIN_OCF_DIV);
-> +			ret += TPS25990_IIN_OCF_OFF;
-> +		}
-
-Looking at the datasheet, I see no difference regarding TPS25990_VIREF
-and its use across the two chips. Also, it does not make sense to me to pass
-the value of TPS25990_VIREF directoy as OC fault limit. Unless I am missing
-something, I don't think this works as intended.
-
->   		break;
->   
->   	case PMBUS_VIRT_SAMPLES:
-> @@ -238,6 +245,8 @@ static int tps25990_read_word_data(struct i2c_client *client,
->   static int tps25990_write_word_data(struct i2c_client *client,
->   				    int page, int reg, u16 value)
->   {
-> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-> +	struct tps25990_data *data = container_of(info, struct tps25990_data, info);
->   	int ret;
->   
->   	switch (reg) {
-> @@ -253,20 +262,23 @@ static int tps25990_write_word_data(struct i2c_client *client,
->   		value = clamp_val(value, 0, 0xff);
->   		ret = pmbus_write_word_data(client, page, reg, value);
->   		break;
-> -
->   	case PMBUS_VIN_OV_FAULT_LIMIT:
-> -		value -= TPS25990_VIN_OVF_OFF;
-> -		value = DIV_ROUND_CLOSEST(((unsigned int)value) * TPS25990_VIN_OVF_DIV,
-> -					  TPS25990_VIN_OVF_NUM);
-> -		value = clamp_val(value, 0, 0xf);
-> +		if (data->chip_id == tps25990) {
-> +			value -= TPS25990_VIN_OVF_OFF;
-> +			value = DIV_ROUND_CLOSEST(((unsigned int)value) * TPS25990_VIN_OVF_DIV,
-> +						  TPS25990_VIN_OVF_NUM);
-> +			value = clamp_val(value, 0, 0xf);
-> +		}
-
-As pointed out by Sashiko, a clamp is still needed here. Also, again,
-according to the datasheet there is still a voltage offset.
-
->   		ret = pmbus_write_word_data(client, page, reg, value);
->   		break;
->   
->   	case PMBUS_IIN_OC_FAULT_LIMIT:
-> -		value -= TPS25990_IIN_OCF_OFF;
-> -		value = DIV_ROUND_CLOSEST(((unsigned int)value) * TPS25990_IIN_OCF_DIV,
-> -					  TPS25990_IIN_OCF_NUM);
-> -		value = clamp_val(value, 0, 0x3f);
-> +		if (data->chip_id == tps25990) {
-> +			value -= TPS25990_IIN_OCF_OFF;
-> +			value = DIV_ROUND_CLOSEST(((unsigned int)value) * TPS25990_IIN_OCF_DIV,
-> +						  TPS25990_IIN_OCF_NUM);
-> +			value = clamp_val(value, 0, 0x3f);
-> +		}
-
-Again, per datasheets, there does not appear to be a difference between
-the two chips regarding TPS25990_VIREF.
->   		ret = pmbus_write_byte_data(client, page, TPS25990_VIREF, value);
->   		break;
->   
-> @@ -347,6 +359,59 @@ static const struct regulator_desc tps25990_reg_desc[] = {
->   #endif
->   
->   static struct pmbus_driver_info tps25990_base_info[] = {
-> +	[tps1689] = {
-> +		.pages = 1,
-> +		.format[PSC_VOLTAGE_IN] = direct,
-> +		.m[PSC_VOLTAGE_IN] = 1166,
-> +		.b[PSC_VOLTAGE_IN] = 0,
-> +		.R[PSC_VOLTAGE_IN] = -2,
-> +		.format[PSC_VOLTAGE_OUT] = direct,
-> +		.m[PSC_VOLTAGE_OUT] = 1166,
-> +		.b[PSC_VOLTAGE_OUT] = 0,
-> +		.R[PSC_VOLTAGE_OUT] = -2,
-> +		.format[PSC_TEMPERATURE] = direct,
-> +		.m[PSC_TEMPERATURE] = 140,
-> +		.b[PSC_TEMPERATURE] = 32103,
-> +		.R[PSC_TEMPERATURE] = -2,
-> +		/*
-> +		 * Current and Power measurement depends on the ohm value
-> +		 * of Rimon. m is multiplied by 1000 below to have an integer
-> +		 * and -3 is added to R to compensate.
-> +		 */
-> +		.format[PSC_CURRENT_IN] = direct,
-> +		.m[PSC_CURRENT_IN] = 9548,
-> +		.b[PSC_CURRENT_IN] = 0,
-> +		.R[PSC_CURRENT_IN] = -6,
-> +		.format[PSC_CURRENT_OUT] = direct,
-> +		.m[PSC_CURRENT_OUT] = 24347,
-> +		.b[PSC_CURRENT_OUT] = 0,
-> +		.R[PSC_CURRENT_OUT] = -3,
-> +		.format[PSC_POWER] = direct,
-> +		.m[PSC_POWER] = 2775,
-> +		.b[PSC_POWER] = 0,
-> +		.R[PSC_POWER] = -4,
-> +		.func[0] = (PMBUS_HAVE_VIN |
-> +			    PMBUS_HAVE_VOUT |
-> +			    PMBUS_HAVE_VMON |
-> +			    PMBUS_HAVE_IIN |
-> +			    PMBUS_HAVE_PIN |
-> +			    PMBUS_HAVE_TEMP |
-> +			    PMBUS_HAVE_STATUS_VOUT |
-> +			    PMBUS_HAVE_STATUS_IOUT |
-> +			    PMBUS_HAVE_STATUS_INPUT |
-> +			    PMBUS_HAVE_STATUS_TEMP |
-> +			    PMBUS_HAVE_SAMPLES),
+> -	/*
+> -	 * MAX20830 IC_DEVICE_ID sends string data "MAX20830\0".
+> -	 * Return value should at least be 9 bytes of data.
+> -	 */
+> +	/* Verify we read the expected number of bytes */
+>   	if (ret < MAX20830_IC_DEVICE_ID_LENGTH)
+>   		return dev_err_probe(&client->dev, -ENODEV,
+> -				     "IC_DEVICE_ID too short: expected at least 9 bytes, got %d\n",
+> -				     ret);
+> +				     "IC_DEVICE_ID too short: expected %d bytes, got %d\n",
+> +				     MAX20830_IC_DEVICE_ID_LENGTH, ret);
 > +
-> +		.read_word_data = tps25990_read_word_data,
-> +		.write_word_data = tps25990_write_word_data,
-> +		.read_byte_data = tps25990_read_byte_data,
-> +		.write_byte_data = tps25990_write_byte_data,
-> +
-> +#if IS_ENABLED(CONFIG_SENSORS_TPS25990_REGULATOR)
-> +		.reg_desc = tps25990_reg_desc,
-> +		.num_regulators = ARRAY_SIZE(tps25990_reg_desc),
-> +#endif
-> +		},
->   	[tps25990] = {
->   		.pages = 1,
->   		.format[PSC_VOLTAGE_IN] = direct,
-> @@ -389,7 +454,6 @@ static struct pmbus_driver_info tps25990_base_info[] = {
->   		.write_word_data = tps25990_write_word_data,
->   		.read_byte_data = tps25990_read_byte_data,
->   		.write_byte_data = tps25990_write_byte_data,
-> -
->   #if IS_ENABLED(CONFIG_SENSORS_TPS25990_REGULATOR)
->   		.reg_desc = tps25990_reg_desc,
->   		.num_regulators = ARRAY_SIZE(tps25990_reg_desc),
-> @@ -398,12 +462,14 @@ static struct pmbus_driver_info tps25990_base_info[] = {
->   };
+> +	/* Null-terminate the string */
+> +	buf[ret] = '\0';
 >   
->   static const struct i2c_device_id tps25990_i2c_id[] = {
-> +	{ "tps1689", tps1689 },
->   	{ "tps25990", tps25990 },
->   	{}
->   };
->   MODULE_DEVICE_TABLE(i2c, tps25990_i2c_id);
+> -	/* 9 bytes of data, buf[0]-buf[7] = "MAX20830", buf[8] = '\0' */
+> -	buf[MAX20830_IC_DEVICE_ID_LENGTH - 1] = '\0';
+> -	if (strncmp(buf, "MAX20830", MAX20830_IC_DEVICE_ID_LENGTH - 1))
+> +	/* Verify the device ID matches what we expect */
+> +	if ((strcmp(buf, "MAX20830") && strcmp(buf, "MAX20830C") &&
+> +	    strcmp(buf, "MAX20840C")))
+>   		return dev_err_probe(&client->dev, -ENODEV,
+> -				     "Unsupported device: '%s'\n", buf);
+> +				     "Unsupported device: '%*pE'\n", ret, buf);
 >   
->   static const struct of_device_id tps25990_of_match[] = {
-> +	{ .compatible = "ti,tps1689", .data = (void *)tps1689 },
->   	{ .compatible = "ti,tps25990", .data = (void *)tps25990 },
->   	{}
+>   	return pmbus_do_probe(client, &data->info);
+>   }
+>   
+>   static const struct i2c_device_id max20830_id[] = {
+> -	{"max20830"},
+> +	{ "max20830" },
+> +	{ "max20830c" },
+> +	{ "max20840c" },
+
+I don't think that is needed or warranted, given that there is no matching
+devicetree node.
+
+Thanks,
+Guenter
+
+>   	{ }
 >   };
+>   MODULE_DEVICE_TABLE(i2c, max20830_id);
+> 
 
