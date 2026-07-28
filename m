@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D3F3314DE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B12E23321B1;
 	Tue, 28 Jul 2026 16:02:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785254560; cv=none; b=XCjoayp09Bg2Daq6x9GFG4xychRUb8nrc2Ai1pkvCodQlDx4hAiYJjosGF+473xlw3g2bF9d9+4QkT78HkKanls61EGTplu+lUm2mQ/VRjFpdJdMcGsUipIVVWh/4FDPk9mFtNtNkz7lmg4VVQbifdE86rcHhJ7FS1HGH6atg+E=
+	t=1785254560; cv=none; b=qND2yyEi/Px9PpqFLwqx7yh1HxkKtUBZdNRXx5jR+tkvqBnagW2HgItG1wJkupv4Ot2NHFRi/mhKXJ3UPndXs6GWqy6vamNdFWrZTyoUwSq0gP/y5NCsZTU+F0tBI2YZt+CrDN/h/RRt0Rrzs9YYNlSg51mWtKKOKP//TwBp9t8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1785254560; c=relaxed/simple;
-	bh=raRKgqD7Z8P41pVdBuPvuXQ3F0/oGEYUZF+9nK+i8f8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UGqfWq5nPn6mGkSL8dMdJiWTYZtPGhn/d/tn82CO+dyRlJn6l9UO3uSIUu/OJLQoVIdrBTwPX2feq//KhC9HZEiENx3Y++rYiTnA5YQ49dhq7qe5CJJk8ItF9FqbeCL0luQiUZPkh+MKr0MB21DnA93xWWYIp9xStFz53jSHnCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dF/3FkKU; arc=none smtp.client-ip=10.30.226.201
+	bh=R1iqUtqOuhShL/Z71oQFUiw3Kxe9IhmPJ4+ezwSgN4I=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=sIjsrWJgAXfaEpWphS/tTPOMI8/xGF9/oAxSFoil0CbgW7mIVO0hnNePEfYAzCiQjyeDv/qPRAKnBzkudrdtdKHznykXnDkRsHf5pxo62P3VTlDkCdXllpGBopsAZDawj0oDdrU0sZHRtX/6TgjGRPk6MzoxOZ+NOQoz6UUKPaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ltFrYj8s; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dF/3FkKU"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7E10EC2BD00;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ltFrYj8s"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4F239C2BCC6;
 	Tue, 28 Jul 2026 16:02:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1785254560;
-	bh=raRKgqD7Z8P41pVdBuPvuXQ3F0/oGEYUZF+9nK+i8f8=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=dF/3FkKUCJyRCnPTMk/qgCeNPlPqDdXEDngG/7pmKSwKyHqXqyPqmljh8wR2JNqu7
-	 XGny/NM4RwJGdOH4PrNZQNQIvbOeO86XXIqfwMBcR/gqmW3cmC7Qq3k61CIAUDpLl9
-	 /9Taeh/39RoDQwOOmnIbcdflFgmbeHzhk1pWGFTiyhsoOnDgT5jCZmjoe7qJbAMS5k
-	 aOVVd0xRQF9J3hGLxGkN5bIcQWCAlDsjmQtdAxeDk6ZRniBcJNqL3gzIc4Yyi7aEmK
-	 hNN8Rd+nZDRp8Xcb5Y1iIIujGVCg9xi4n4+vJdvmSyWKP7mvzv3i49DX49giPx/ttB
-	 Vn4B7f7t8IQpg==
+	bh=R1iqUtqOuhShL/Z71oQFUiw3Kxe9IhmPJ4+ezwSgN4I=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=ltFrYj8smK0kMTO2qSLgsmGB6ndDa0hbMICyuDNmAItJ6URwL+qKBErkkobJraxh5
+	 7XW7rs446EkOE3oWpt/nCvSwg9pqj99h13ZJHo/Bp/HH/5LscdHQlrrNvawOpNsmR0
+	 acAF0Q6M2ZzterndLJkbWXuXSSAunzlL9ZuEqMW9myZPdyJkTGRJbQLnlZZeaM38Vb
+	 EMFsg7TsgtgQe3JJcjQfOvoSpHUHtq2fBkz/Ej0A3ljPL9Omc/hAkhMSwA9p2MzvZh
+	 ezcWnz0jGeuVpj2k+2Hj9CZb8FW2y8ybO+x75jIHmBWjl9p7roe1vsgkTQMhM2Ncz7
+	 Nulk2OoKfFReA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C733C54F55;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A6A3C531F9;
 	Tue, 28 Jul 2026 16:02:40 +0000 (UTC)
 From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
-Date: Tue, 28 Jul 2026 17:03:50 +0100
-Subject: [PATCH 3/5] hwmon: (pmbus/core) Add mapping function to
- pmbus_read_block_data()
+Subject: [PATCH 0/5] hwmon: (pmbus) Add support for MAX20826 and similar
+ devices
+Date: Tue, 28 Jul 2026 17:03:47 +0100
+Message-Id: <20260728-hwmon-max20826-support-v1-0-224766e0acd1@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -41,22 +41,24 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260728-hwmon-max20826-support-v1-3-224766e0acd1@analog.com>
-References: <20260728-hwmon-max20826-support-v1-0-224766e0acd1@analog.com>
-In-Reply-To: <20260728-hwmon-max20826-support-v1-0-224766e0acd1@analog.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMQQqDMBBA0avIrDuQDDQNXqV0YdOxTsEkZNQK4
+ t2N7fIt/t9AuQgrtM0GhRdRSbHCXhoIQxffjPKqBjLkzI08Dt8xRRy7lYwnhzrnnMqEwROzu1r
+ rOUCNc+Fe1t/4/vhb5+eHw3TeYN8PERV35noAAAA=
+X-Change-ID: 20260728-hwmon-max20826-support-c82ee65118ec
 To: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
  linux-doc@vger.kernel.org
 Cc: Mark Brown <broonie@kernel.org>, 
  Alan Tull <atull@opensource.altera.com>, Guenter Roeck <linux@roeck-us.net>, 
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>
+ Shuah Khan <skhan@linuxfoundation.org>, 
+ Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1785254629; l=2984;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1785254629; l=2138;
  i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
- bh=MpoqGzL/f8xXIX/4rv/9LHforDgeFadYOUlsVFzvy08=;
- b=CoNE+nExAud6IUgiFgWP5usMfZRc9+WxlzckO/g26elMTrj7nQL5FZQsoWaD8txnnxMHQpNLJ
- nPjumM52J6ICFKBtHdcMtbaCey4M9rGtL7Z+22KWb38SR62hh/2Ig7f
+ bh=R1iqUtqOuhShL/Z71oQFUiw3Kxe9IhmPJ4+ezwSgN4I=;
+ b=b9HV+Hqjh563A6qYvO9D3ge9OpibJJYjVWyF3ncH08ZgXg0IFycHU/q/kwsK5fdYC5wDhvxyW
+ TIozHxBZjW9D3hp2p2LafB0I3e/Y6/SF1/qVShwpKZFmgv1WThs5AsS
 X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
  pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
 X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
@@ -64,82 +66,52 @@ X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
 X-Original-From: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
 Reply-To: nuno.sa@analog.com
 
-From: Nuno Sá <nuno.sa@analog.com>
+Add support for Analog Devices MAX20826, MAX20855B, MAX20908,
+MAX20912 and MAX20916 dual-output multiphase PMBus voltage regulator
+controllers.
 
-This is in preparation for adding support to a device which needs to
-use it's own read_block implementation.
+This follows up on the earlier MAX20912/MAX20916 submission and the
+review discussion around it [1]. Compared to that minimal driver, this
+series covers the full MAX20826 family and implements the device-specific
+pieces discussed there: optional EN GPIO handling, non-standard phase
+reporting, direct address mode, and regulator support.
 
-Signed-off-by: Nuno Sá <nuno.sa@analog.com>
+The first patches prepare/fix PMBus core support needed by the driver:
+fix regulator enable/disable return handling, allow up to 16 phases, and
+add a device-specific block-read hook. The remaining patches add the DT
+binding and the MAX20826-family driver/documentation.
+
+Guenter,
+
+We are still checking the possibility of getting you docs for at least
+one of the parts supported byu this series.
+
+[1]: https://lore.kernel.org/linux-hwmon/20260707122701.751878-3-fredchen.openbmc@gmail.com/
+
 ---
- drivers/hwmon/pmbus/pmbus.h      |  3 +++
- drivers/hwmon/pmbus/pmbus_core.c | 24 ++++++++++++++++++++++--
- 2 files changed, 25 insertions(+), 2 deletions(-)
+Nuno Sá (5):
+      hwmon: (pmbus/core) fix regulator enable/disable
+      hwmon: (pmbus/core) increase number of phases and add new mask
+      hwmon: (pmbus/core) Add mapping function to pmbus_read_block_data()
+      dt-bindings: hwmon/pmbus: Document MAX20826 and similar devices
+      hwmon: (pmbus) add support for MAX20826 and similar devices
 
-diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-index 3d5586c67f84..d697939ec892 100644
---- a/drivers/hwmon/pmbus/pmbus.h
-+++ b/drivers/hwmon/pmbus/pmbus.h
-@@ -459,6 +459,9 @@ struct pmbus_driver_info {
- 	int (*read_byte_data)(struct i2c_client *client, int page, int reg);
- 	int (*read_word_data)(struct i2c_client *client, int page, int phase,
- 			      int reg);
-+	/* size of data_buf is I2C_SMBUS_BLOCK_MAX + 2 */
-+	int (*read_block_data)(struct i2c_client *client, int page, u8 reg,
-+			       char *data_buf);
- 	int (*write_byte_data)(struct i2c_client *client, int page, int reg,
- 			      u8 byte);
- 	int (*write_word_data)(struct i2c_client *client, int page, int reg,
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 7b58f7198574..ff4572c473b7 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -533,6 +533,26 @@ static int pmbus_read_block_data(struct i2c_client *client, int page, u8 reg,
- 	return rv;
- }
- 
-+/*
-+ * _pmbus_read_block_data() is similar to pmbus_read_block_data(), but checks if
-+ * a device specific mapping function exists and calls it if necessary.
-+ */
-+static int _pmbus_read_block_data(struct i2c_client *client, int page, u8 reg,
-+				  char *data_buf)
-+{
-+	struct pmbus_data *data = i2c_get_clientdata(client);
-+	const struct pmbus_driver_info *info = data->info;
-+	int status;
-+
-+	if (info->read_block_data) {
-+		status = info->read_block_data(client, page, reg, data_buf);
-+		if (status != -ENODATA)
-+			return status;
-+	}
-+
-+	return pmbus_read_block_data(client, page, reg, data_buf);
-+}
-+
- static struct pmbus_sensor *pmbus_find_sensor(struct pmbus_data *data, int page,
- 					      int reg)
- {
-@@ -678,7 +698,7 @@ static bool __maybe_unused pmbus_check_block_register(struct i2c_client *client,
- 	struct pmbus_data *data = i2c_get_clientdata(client);
- 	char data_buf[I2C_SMBUS_BLOCK_MAX + 2];
- 
--	rv = pmbus_read_block_data(client, page, reg, data_buf);
-+	rv = _pmbus_read_block_data(client, page, reg, data_buf);
- 	if (rv >= 0 && !(data->flags & PMBUS_SKIP_STATUS_CHECK))
- 		rv = pmbus_check_status_cml(client);
- 	if (rv < 0 && (data->flags & PMBUS_READ_STATUS_AFTER_FAILED_CHECK))
-@@ -3564,7 +3584,7 @@ static ssize_t pmbus_debugfs_block_read(struct file *file, char __user *buf,
- 	char data[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
- 
- 	scoped_guard(pmbus_lock, client) {
--		rc = pmbus_read_block_data(client, entry->page, entry->reg, data);
-+		rc = _pmbus_read_block_data(client, entry->page, entry->reg, data);
- 		if (rc < 0)
- 			return rc;
- 	}
+ .../bindings/hwmon/pmbus/adi,max20826.yaml         |   56 ++
+ Documentation/hwmon/index.rst                      |    1 +
+ Documentation/hwmon/max20826.rst                   |  124 +++
+ MAINTAINERS                                        |    9 +
+ drivers/hwmon/pmbus/Kconfig                        |   19 +
+ drivers/hwmon/pmbus/Makefile                       |    1 +
+ drivers/hwmon/pmbus/max20826.c                     | 1037 ++++++++++++++++++++
+ drivers/hwmon/pmbus/pmbus.h                        |    6 +-
+ drivers/hwmon/pmbus/pmbus_core.c                   |   39 +-
+ 9 files changed, 1286 insertions(+), 6 deletions(-)
+---
+base-commit: 92413f439d1ec5e55b73ede8d66a7b971cbd1ced
+change-id: 20260728-hwmon-max20826-support-c82ee65118ec
+--
 
--- 
-2.55.0
+Thanks!
+- Nuno Sá
 
 
