@@ -1,205 +1,167 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F9273D9058;
-	Tue, 28 Jul 2026 07:20:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1434B3C4542;
+	Tue, 28 Jul 2026 07:20:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785223243; cv=none; b=LPPi8AFTHd6hT5VCO659ll5qhQqYpA5i14JYf93kBRRD4lwa2T9rmczqhvEOsFCfpijWLOeCaYNJr02MWBU11jhF1KV5O6KFNFBmMLMADIDByf2vGV5gWStqoOb94htsgvdmPoKqRz45tAlTAXU3Ltob/eOtsVp0l2wOUteodBM=
+	t=1785223254; cv=none; b=XmO08Yj2DQzcYgL4o1Zlkv+72Xn8kYoihzkHHpXBX6fMhuT4BYv/KZ348pXRkzTBzDtqhqV62fSoaO1S0DTJAvrQN/wZWAvWqeC+YONTg9GKqNkbMhLnyMCyDZoKkiY75/v27bZYrv7dnG6nZZbgmKGNmtQAbAPwFkaGFSlOvbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785223243; c=relaxed/simple;
-	bh=RQcRYIaoMMyHwhELQmRpMx08wRli9QzO9cuelCLqv1c=;
+	s=arc-20240116; t=1785223254; c=relaxed/simple;
+	bh=HddlPoGC7QhBxWvp2LxfEsh71nYJZr96rtYJ54VTDoI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=V9FvS/1iQahfNgaDa49YsOwi8e3si+/yoJaS0tkkr9dU0PpMUeVzHio50XR1or2iYEBE+I7zYEvfHpPFar7P4IvS5EVXGTjEtHj/uJijg3u6cpAj3jh/JQF7yd4VgXfLEso892YcY28OCdPMv3J8p4E0sBLnDOqo5AHBkOd1Pac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O/vNw53L; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=XYdMh1Z9EI8YOvYTgJn9T7Z2oVsE7Qd3PF9EuTLi1l0R7ceYKE0T+MgF6N3y51wm6unL4EJHMBCynGyD6VqYuI4kDqlfYNiQdTHTRGaucUcaexbfLQnV1JsOths6t+rhcpl/5A0FxP6t7m+NDdNFb5uYwkn6tH+TvAp2o7q8MHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N/4WCBK4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O/vNw53L"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B1591F000E9;
-	Tue, 28 Jul 2026 07:20:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N/4WCBK4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 528E41F000E9;
+	Tue, 28 Jul 2026 07:20:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785223241;
-	bh=8WfwwvGg2qLTfrP4eVDki/1M/8rAfrjDZMctghwmJaI=;
+	s=k20260515; t=1785223252;
+	bh=R/9h3j4EtZ4mjjNRNqiECDyhfTkG1qrXnhp5Vg6PVHw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=O/vNw53LvxSL676ugotdtxAGSeXDMgseMhyJFSv5tw0R4FcroYl29Wt9c1/OqrJQh
-	 y8+gNEarv6pe1O4yOyXo0a2M/TXh8kJ7RSKHQhxsLVvpHsvBrA2iQpD5uqiLdhgoa8
-	 tzJqJZobNVCNWaa8+TogduXmZJb/4ZmdTN9lEOd4Ta8FOHm36Mk1GbDa07s0m9TIvI
-	 GW76KXZgh2/8YiVDdYIVjDOxCnm0+WDESZSFFh4T4I9Rqrq6UogfxFDGyGE5S7f+qT
-	 y1OHtorph6gkY3DTnDBMK/jPnlDcvAdu3T2ysRXl/ws50t5iRnJXor9mhDb77yyDEO
-	 dJ9ZEEHNdYRgg==
+	b=N/4WCBK4v2qVgapt4eQTmpibGKUTLGkzKNT9aSOka/ezw1MB/286J4Xyrj9Lmf4/W
+	 /BuVDG4BoOqALHbjw9FvqAGDPv0dLrKNtwaFujjTvha8Sp5CcOaEBmeRW5IKx1IdY6
+	 B0fd/wRGKNzXCh3Ll+LHU/sXigtdw74mqzQSpvBNwibYV2OJRoe4abVgh95OOepFwY
+	 g5ZYEebwX3+Faf3BmoWVv/0JzQJbTWamJJs4K+seNfG9JnQpQYsprzQoQb0b+da0KT
+	 5ySiWzv4eU8qpxOLC/D0XAUWKurURCXTD8EPBWGbWLHPzbqIGqgUI6JBajWCC0DqFW
+	 jLSOVtPGEuEvw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v7 05/12] i3c: master: Add support for devices without
- PID
+Subject: Re: [PATCH v7 06/12] i3c: master: match I3C device through DT and
+ ACPI
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Akhil R" <akhilrajeev@nvidia.com>
-Cc: robh@kernel.org, linux-i3c@lists.infradead.org, Frank.Li@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, "Alexandre
- Belloni" <alexandre.belloni@bootlin.com>
-In-Reply-To: <20260728065955.809445-6-akhilrajeev@nvidia.com>
+Cc: linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org, robh@kernel.org, conor+dt@kernel.org, Frank.Li@kernel.org, "Alexandre
+ Belloni" <alexandre.belloni@bootlin.com>, devicetree@vger.kernel.org
+In-Reply-To: <20260728065955.809445-7-akhilrajeev@nvidia.com>
 References: <20260728065955.809445-1-akhilrajeev@nvidia.com>
- <20260728065955.809445-6-akhilrajeev@nvidia.com>
+ <20260728065955.809445-7-akhilrajeev@nvidia.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 28 Jul 2026 07:20:40 +0000
-Message-Id: <20260728072040.9B1591F000E9@smtp.kernel.org>
+Date: Tue, 28 Jul 2026 07:20:51 +0000
+Message-Id: <20260728072052.528E41F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
 
-New issues:
-- [High] Dead code in `i3c_master_attach_boardinfo` fallback match logic pr=
-events Device Tree node attachment for SETAASA devices discovered via DAA.
-- [High] Duplicate I3C device creation for SETAASA devices participating in=
- Dynamic Address Assignment.
-
 Pre-existing issues:
-- [High] Use-After-Free and Double-Free on driver teardown due to a danglin=
-g pointer left by `device_register()` failure.
+- [High] Uninitialized stack memory read and kernel stack information leak =
+during device unregistration when `i3cdev->desc` is NULL.
+- [High] NULL pointer dereference in sysfs attribute show functions when ac=
+cessed concurrently with device removal.
 --
 
---- Patch [5]: [PATCH v7 05/12] i3c: master: Add support for devices withou=
-t PID ---
-commit 978db33da88aedc2a14abd69fdc128b5e3961e92
+--- Patch [6]: [PATCH v7 06/12] i3c: master: match I3C device through DT an=
+d ACPI ---
+commit d545f133fafb1ddd78e75d979b76dc143ac8e0b0
 Author: Akhil R <akhilrajeev@nvidia.com>
 
-i3c: master: Add support for devices without PID
+i3c: master: match I3C device through DT and ACPI
 
-Devices using SETAASA for address assignment are not required to have
-a 48-bit PID according to the I3C specification. Allow such devices to
-register and use the static address where PID was required.
+This commit updates i3c_device_match() to allow SETAASA-based I3C devices
+to be matched through Device Tree or ACPI. It checks if the device has a
+SETAASA static address method and uses of_driver_match_device() or
+acpi_driver_match_device() as fallbacks when standard ID matching is not
+applicable.
 
 > diff --git a/drivers/i3c/master.c b/drivers/i3c/master.c
-> index 87749a739e62d..488177d95e484 100644
+> index 488177d95e484..f94e2410d37ba 100644
 > --- a/drivers/i3c/master.c
 > +++ b/drivers/i3c/master.c
-> @@ -2001,8 +2001,17 @@ i3c_master_register_new_i3c_devs(struct i3c_master=
-_controller *master)
->  		desc->dev->dev.type =3D &i3c_device_type;
->  		desc->dev->dev.bus =3D &i3c_bus_type;
->  		desc->dev->dev.release =3D i3c_device_release;
-> -		dev_set_name(&desc->dev->dev, "%d-%llx", master->bus.id,
-> -			     desc->info.pid);
-> +
-> +		/*
-> +		 * For devices without PID (e.g., SETAASA devices), use
-> +		 * static address for naming instead.
-> +		 */
-> +		if (desc->info.pid)
-> +			dev_set_name(&desc->dev->dev, "%d-%llx", master->bus.id,
-> +				     desc->info.pid);
-> +		else
-> +			dev_set_name(&desc->dev->dev, "%d-%02x", master->bus.id,
-> +				     desc->info.static_addr);
-> =20
->  		if (desc->boardinfo)
->  			device_set_node(&desc->dev->dev, desc->boardinfo->fwnode);
-
-[Severity: High]
-This is a pre-existing issue, but does device_register() failure in this
-function leave a dangling pointer that causes a use-after-free later?
-
-Just below this hunk in i3c_master_register_new_i3c_devs():
-
-    ret =3D device_register(&desc->dev->dev);
-    if (ret) {
-        dev_err(&master->dev,
-            "Failed to add I3C device (err =3D %d)\n", ret);
-        put_device(&desc->dev->dev);
-    }
-
-When put_device() frees desc->dev->dev, desc->dev is not set to NULL.
-Later, if the master is unregistered, i3c_master_unregister_i3c_devs()
-iterates through the list and dereferences this dangling pointer:
-
-    if (!i3cdev->dev)
-        continue;
-    i3cdev->dev->desc =3D NULL;
-    // ...
-    else
-        put_device(&i3cdev->dev->dev);
-
-Could desc->dev be set to NULL after put_device() to prevent this?
 
 [ ... ]
 
-> @@ -2401,8 +2410,18 @@ static void i3c_master_attach_boardinfo(struct i3c=
-_dev_desc *i3cdev)
->  	struct i3c_dev_boardinfo *i3cboardinfo;
+> @@ -345,15 +346,32 @@ static int i3c_device_match(struct device *dev, con=
+st struct device_driver *drv)
+>  {
+>  	struct i3c_device *i3cdev;
+>  	const struct i3c_driver *i3cdrv;
+> +	u8 static_addr_method =3D 0;
 > =20
->  	list_for_each_entry(i3cboardinfo, &master->boardinfo.i3c, node) {
-> -		if (i3cdev->info.pid !=3D i3cboardinfo->pid)
-> -			continue;
-> +		/*
-> +		 * For devices without PID (e.g., SETAASA devices), match by
-> +		 * static address. For devices with PID, match by PID.
-> +		 */
-> +		if (i3cboardinfo->pid) {
-> +			if (i3cdev->info.pid !=3D i3cboardinfo->pid)
-> +				continue;
-> +		} else {
-> +			if (!i3cboardinfo->static_addr ||
-> +			    i3cdev->info.static_addr !=3D i3cboardinfo->static_addr)
-> +				continue;
-> +		}
-
-[Severity: High]
-Will this fallback matching logic fail for SETAASA devices discovered
-dynamically?
-
-If a SETAASA device without a PID in the Device Tree loses its dynamic
-address and asserts a Hot-Join, the master will execute Dynamic Address
-Assignment (DAA).
-
-During DAA, __i3c_master_add_i3c_dev_locked() allocates a new device
-descriptor and initializes newdev's static_addr to 0, because the static
-address cannot be retrieved via CCCs.
-
-When i3c_master_attach_boardinfo(newdev) is then called,
-i3cdev->info.static_addr will be 0. Would this cause the condition
-i3cdev->info.static_addr !=3D i3cboardinfo->static_addr to always evaluate
-to true, skipping the boardinfo assignment and preventing the driver from
-binding?
-
+>  	if (dev->type !=3D &i3c_device_type)
+>  		return 0;
 > =20
->  		i3cdev->boardinfo =3D i3cboardinfo;
->  		i3cdev->info.static_addr =3D i3cboardinfo->static_addr;
-> @@ -2416,8 +2435,12 @@ i3c_master_search_i3c_dev_duplicate(struct i3c_dev=
-_desc *refdev)
->  	struct i3c_master_controller *master =3D i3c_dev_get_master(refdev);
->  	struct i3c_dev_desc *i3cdev;
-> =20
-> +	if (!refdev->info.pid)
-> +		return NULL;
+>  	i3cdev =3D dev_to_i3cdev(dev);
+>  	i3cdrv =3D drv_to_i3cdrv(drv);
+> -	if (i3c_device_match_id(i3cdev, i3cdrv->id_table))
 > +
->  	i3c_bus_for_each_i3cdev(&master->bus, i3cdev) {
-> -		if (i3cdev !=3D refdev && i3cdev->info.pid =3D=3D refdev->info.pid)
-> +		if (i3cdev !=3D refdev && i3cdev->info.pid &&
-> +		    i3cdev->info.pid =3D=3D refdev->info.pid)
->  			return i3cdev;
->  	}
-> =20
+> +	if (i3cdev->desc && i3cdev->desc->boardinfo)
+> +		static_addr_method =3D i3cdev->desc->boardinfo->static_addr_method;
+> +
+> +	/*
+> +	 * SETAASA-based devices need not always have a matching ID since
+> +	 * it is not mandatory for such devices to implement deviceinfo
+> +	 * CCC commands. Allow them to register through DT or ACPI.
+> +	 */
+> +	if (i3cdrv->id_table && i3c_device_match_id(i3cdev, i3cdrv->id_table))
 
 [Severity: High]
-Does this logic lead to duplicate device creation for SETAASA devices that
-participate in Dynamic Address Assignment?
+This is a pre-existing issue, but can i3c_device_match_id() read
+uninitialized stack memory here?
 
-If a SETAASA device is defined in the DT without a PID, it is initially
-added to the master's bus list with pid =3D 0. If the device later asserts a
-Hot-Join, the master executes DAA, discovers the device, and retrieves its
-true physical PID.
+During device unregistration, i3c_master_unregister_i3c_devs() explicitly
+sets i3cdev->dev->desc =3D NULL before calling device_unregister().
 
-In __i3c_master_add_i3c_dev_locked(), the old device is searched using:
-olddev =3D i3c_master_search_i3c_dev_duplicate(newdev);
+If driver matching occurs concurrently, i3c_device_match_id() might be call=
+ed
+while desc is NULL:
 
-Since the existing device has pid =3D 0, the check here for i3cdev->info.pid
-and i3cdev->info.pid =3D=3D refdev->info.pid will fail to match the newly
-discovered PID to the existing device. Will this cause the master to add
-the newly discovered device instead of detaching and updating the existing
-one, resulting in duplicate devices on the bus?
+drivers/i3c/device.c:i3c_device_match_id() {
+    struct i3c_device_info devinfo;
+    ...
+    i3c_device_get_info(i3cdev, &devinfo);
+    manuf =3D I3C_PID_MANUF_ID(devinfo.pid);
+    ...
+}
+
+Because i3c_device_get_info() does not initialize devinfo when desc is NULL,
+this leaves stack memory to be read unconditionally and used in the matching
+logic. This same uninitialized memory can also leak to userspace through the
+uevent MODALIAS string in i3c_device_uevent() when desc is NULL.
+
+Should i3c_device_match_id() be guarded by checking i3cdev->desc, similar
+to how static_addr_method is guarded above?
+
+>  		return 1;
+> =20
+> +	if (static_addr_method & I3C_ADDR_METHOD_SETAASA) {
+> +		if (of_driver_match_device(dev, drv))
+> +			return 1;
+> +		if (acpi_driver_match_device(dev, drv))
+> +			return 1;
+> +	}
+> +
+>  	return 0;
+>  }
+
+Also, while reviewing this, I noticed another pre-existing issue during dev=
+ice
+unregistration:
+
+[Severity: High]
+This isn't a bug introduced by this patch, but can bcr_show() and dcr_show()
+dereference a NULL pointer?
+
+When i3c_master_unregister_i3c_devs() clears i3cdev->dev->desc =3D NULL, th=
+ere
+is a race window before the sysfs files are removed in device_del(). If a
+user reads the bcr or dcr sysfs attributes during this window,
+dev_to_i3cdesc() will return NULL:
+
+drivers/i3c/master.c:bcr_show() {
+    ...
+    desc =3D dev_to_i3cdesc(dev);
+    ret =3D sysfs_emit(buf, "0x%02x\n", desc->info.bcr);
+    ...
+}
+
+Could this lead to a NULL pointer dereference?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260728065955.8094=
-45-1-akhilrajeev@nvidia.com?part=3D5
+45-1-akhilrajeev@nvidia.com?part=3D6
