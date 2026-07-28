@@ -1,65 +1,68 @@
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97A0B1AA1D5
-	for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2026 00:22:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97491A9FA8
+	for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2026 00:22:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785198153; cv=none; b=BMsVvC1saGS31SvQWNTiTuI1viCa1i/BbjUkLjmF2roPYx/zR+TZO5JP6t4du5x9eLQb6fXe0E+8LmzNBZ9VtUml+doELL8WqJWRfo66poXno6Q6bF0ZU0emRJQSwp9ju3rl5JG4oGpBT5BvLFY56oNBuUFI6+hy8BRJItqW5gE=
+	t=1785198158; cv=none; b=uSBuF3v3q+refSmiBpQz3GKSklaoNeUXRk//OWqRZC9aWvXZTN8QUBUJmDWepRmy5QAm+a8AKJXD6FSv14u5t8+reXnWYfFyqKU9ca4k3BTIUFVQ+ZKWSeysvu2/x1F1FBaEisQnOc1ZMlod5b76hwZ6tngtGBRYsFbEFWXz/mw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785198153; c=relaxed/simple;
-	bh=jEZfQ7pBjQS9Q05BRDHcrBjHv3qqJ+ZMsKD81JGtnMM=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Ee5ATZyE8eBwBQ62eDoso2LLCWpwrPx9fQJidqfzXALBO/8zpwmqtkyv5EN4q8IpRjF4ZQRTjKX5LdXCGXbl8buoPKiMX0C8304Y7NH4TbgsK7EBcD6e6B9BMjaS6cq+cnP/5iVtze9xkwPWi+VBsbjK3LmuuljHr6mhrH4N1kE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ockjr02q; arc=none smtp.client-ip=209.85.128.171
+	s=arc-20240116; t=1785198158; c=relaxed/simple;
+	bh=w1Hv0r2r6jSycHFUZO7pD+HmNcQNoWtICO6sg/Lwaxs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=sWZVAs3RxSRBTcr2NgqBGQ2xe0D58DX4wsfHN6KEhzyRsgI/ZedyGh6EpZXof59m8BohhajT0lpPacOf1X+bEsLzRt/TKykvbo4U7t2DIVqYQZnkKXGTg21ljbktvA7fNh2C9L28HThfANlFmgPPYgxAWLodB1DQ6I4oosy5W5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sP+wOSmI; arc=none smtp.client-ip=209.85.128.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ockjr02q"
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-81f64e8dfbcso37462337b3.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 17:22:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sP+wOSmI"
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-81f52945098so8204487b3.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 17:22:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785198150; x=1785802950; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=hKqAp+lXFK1ad3gSFCI8Ii70s2A3O4pmj5AJJWSJRc0=;
-        b=Ockjr02qT24ZQurpttdNa6fbagsWnMa5ALiIZuZZtvhL2X7mj55WGf1RWNKZoXdm/A
-         EAVVF5u926+blIV6qIrTZhtspWl/h612XSb0rpfU7iYc/RSx8w8WHytgtmTuk/aKJftw
-         /bJKDR6pLvIcN4GV/NYsSBvDdhCJnnao8/jtsU3iZAT4nehbz4LkB0xmnL4MnPtu1iV8
-         nEmg31Q+DEKP5uFr3sXl2QY7xc1xzuj6YezudtkJAQdHgZfY1J7w/DgDjlhodsr4Br2K
-         eXgmuuFjWbVGCbwlZkLfdg6gcfOcKYCShyLCTd2KtipO81u3XsW4M3yeJO57xnzNoMrg
-         y7ag==
+        d=gmail.com; s=20251104; t=1785198156; x=1785802956; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=sc68CqtTOQLhSPfGgDFsVsO0c0+MZYn4nDNljvauFns=;
+        b=sP+wOSmIZC9CowfynQ86ETdir2JMrdMhfxUz95iXPyEW++JmemcQnSe/sqlAcCoLr7
+         Z0hUJwR87vBKA6Faicw2c+HrzajDH5D4DpALaXU3OyUoX5sL+1TXjFVwcWsBIl9jZ5dv
+         3TreQYzHHphTIzgp/Q3IG5gvUgRUOhXFteMo9CWtN92/JZ7c90ivIZSegWXpKwR+zaR8
+         Fdw8m8lbxIq0bf5VU12olSaS4G08Ms5V4aknvyA0rBBztD0gjAmEvJ2abt5XOTnBCBdE
+         E7a+axk+5y6Cgyd+/fE+FPH70UmALxDSkyZ8Jxji0bX/fDJV14Gc+vHErs4ikZVrPtyC
+         blBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785198150; x=1785802950;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=hKqAp+lXFK1ad3gSFCI8Ii70s2A3O4pmj5AJJWSJRc0=;
-        b=FtPq6+doZPdp0fKwb8uBctXpxVficmFoIHiogMhqP2nmK9eumRVh4Bf0qg6fMYpsTX
-         EkW4HqfvKmT9S21XPy+fzVioa5/2Hii+vZnF87MnJRxYOgRKHzCeDr/zm2xCM8u4hXd+
-         YY8znLv7mjodu5cyHSbbuOtCB5MVk9oyygY/EKx91lUHnPKzxPMar0GpCchOoODHoKJt
-         kQrOaETYLfiQ2ceI0qN2E6WvMCwuVkYED5WwRlyuQ5rajs4nm7sS7q7yP8VLDHi2UThm
-         ho5ow+AqaRmrN8T5dxlXzwC+rQgjIVBMrZTS+m4kHPY/oISXgPmt6HUIggQVdkYVmCAc
-         5jVQ==
-X-Gm-Message-State: AOJu0YyQ7U6Ohq8E+vh5NSNyrZOlfbfAy3jqSTjFBYHn6zPMGT9q/AHw
-	rvUSgPsSClnL61YC2Hlh1S2CyVS+TjttnHodT4f4hJPO24hSde9Q+E/+GS3/WvRA
-X-Gm-Gg: AR+sD127EGNYbupra5U6jFFv6VP6w6rUIXRdByKDJyMXbfdTET2FmWit71GySifZY3T
-	ZrKk+9XbCdjCN36+t+nM+HI5x58M/pSWyxO2qrzmHQP+1PvRPSA1+N3132ij6rJy3Wxa1THCio5
-	FaCgaol3C0zQ2dRGZSpqbzL60r8z9eZfUHYwKiATwBZH5+RY4zm5URwjbgIKJudeN9gMwgyNJJX
-	UoLTVEe2Gn7HH9nNQrnU/rMKaWBimLlkdsVIUdmwEa/3dcoGX0F78Ld+HKNdBwPe/6EUYVlck69
-	orgE/Nkqp/UMfWEWmv7uXGglWePvxQIDLi3GKufeIXoYQ+iEcTbDSQ6wf9P3hd18HmiSS7KFyrD
-	IlfTmQ3wQCLIwAvZsVPkhXwxWqI+hPfdF1zl98rbvXS1ZdpR7MCmBF0VKv0vMp7lVzcBWs0y+Le
-	RFmjAqSet9cgWRuqoChg==
-X-Received: by 2002:a05:690c:4b01:b0:80d:c24f:b790 with SMTP id 00721157ae682-81f991fab62mr562557b3.5.1785198150431;
-        Mon, 27 Jul 2026 17:22:30 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1785198156; x=1785802956;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=sc68CqtTOQLhSPfGgDFsVsO0c0+MZYn4nDNljvauFns=;
+        b=gza1IC0AsW5tJXGP5Go00s8apHVasLLympUcFjLyNZx60FJv8KcZ/qRfuQZGJ9fAbJ
+         rWnm/KsQczRK5MyRt0xoa0ZzRijbkoSmFSHvT5EBpWDODJKCHZ44UTfNszRO+CdO1oyA
+         kgTdFRuEliO/VJZbCL5Gd12QaDMSsYecWXi/KphPa+npEVkUQ01AXJvhaZDjbEP31CA4
+         jk9eHhsnYVcRFzgb1L9lHHIXVADuO1sJIoTJ5R2AIlkhRBiXTEZ6qYamTqwi9rgob3Gd
+         inkl/CsnaNvibIUHgSNsemLe2P4I/RdYQZAubOJO0GdD6jmBPEaWIu8f4aV5sZ3pXXfZ
+         CCEQ==
+X-Gm-Message-State: AOJu0YxtBwlLFt6pfqx0NAUCkAvQR5m09/Moydx4WFRjTnBiSmf+qPeg
+	J6PqDw5VoKtidlTqn67Ys3v2J70KxZ/zjxmzMGxHI4vHpsUSLhDXK01TxshmCU19
+X-Gm-Gg: AR+sD12kMOMHCQIVssW4KM/mxKYBoP1H/bO9JrW2V5LsL0hW2iJkOtMheOdv6v2JQQ7
+	gnu3nsX8ANzI1AohchG1D5cabe/2u3g+L6KokdR+bWPtXFzg3MWTdLUtt3dQvWOHUOKc9EXjKlA
+	RgT8y4PP11q4pY3k7BJAyKpAy4Nt59CTqq1/W03OQSiBTlZPIR5CWOsElGwn4sO93lKewILmtXa
+	vaVsozBtZd1ubAFw6M2RdQ3iaYPAKU4HSZd3WmJBiCKxR92Zu77nsxbSQz+DTT0EH34S6IBOWXC
+	b39YUlneuY7vYNqrA4bs/YnayHfNo7voNzYTrVaYirfJWCmeQsZZrY+BEAE9kZyLzn/gaSxDK5y
+	xs9D08YfO8fDMutpUPG30m+PGuBCRqxRc9O7x0nRzD8OKLoHa1yHnhEVqVmQtPam5YHErfpXePm
+	mSUrNg7onsanQbfzX93B0xkjs4yf7d3ADTOlDpRO715FlymrRFhghRp5Bh6MLm0EWThs4MODQRa
+	AX/Jtkj9rXGyJI=
+X-Received: by 2002:a05:690c:e255:10b0:81e:94bd:6473 with SMTP id 00721157ae682-81f993e072dmr236667b3.30.1785198155733;
+        Mon, 27 Jul 2026 17:22:35 -0700 (PDT)
 Received: from tresc054937.tre-sc.gov.br ([187.65.210.13])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-81f655acc7csm39583707b3.0.2026.07.27.17.22.22
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-81f655acc7csm39583707b3.0.2026.07.27.17.22.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jul 2026 17:22:25 -0700 (PDT)
+        Mon, 27 Jul 2026 17:22:33 -0700 (PDT)
 From: Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Subject: [hwmon PATCH v2 0/8] hwmon: (adt7470): Multiple fixes
-Date: Mon, 27 Jul 2026 21:22:16 -0300
-Message-Id: <20260727-adt7470_fixes-v2-0-598e38a46ba6@gmail.com>
+Date: Mon, 27 Jul 2026 21:22:17 -0300
+Subject: [hwmon PATCH v2 1/8] hwmon: (adt7470) Fix fans stuck in manual
+ mode on I2C errors
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,11 +71,9 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIADj2Z2oC/12NSw6CMBCGr0JmbU07AlVX3sMQU9sRxlgwLaKGc
- HcL7Fz+z2+ESIEpwjEbIdDAkbs2CdxkYBvT1iTYJQ0osZRalcK4XudaXm78oSiKg1ESUe+dRki
- bZ6AlSJMzNG+fzqrVjq/rnWw/f83FhmPfhe/CHdRSXxGo/xCDElKgyjF3RSHtzp1qb/ixtZ2Ha
- pqmH14LolrDAAAA
-X-Change-ID: 20260716-adt7470_fixes-59a102278d72
+Message-Id: <20260727-adt7470_fixes-v2-1-598e38a46ba6@gmail.com>
+References: <20260727-adt7470_fixes-v2-0-598e38a46ba6@gmail.com>
+In-Reply-To: <20260727-adt7470_fixes-v2-0-598e38a46ba6@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>, 
  Chris Packham <chris.packham@alliedtelesis.co.nz>, 
  Andrew Morton <akpm@linux-foundation.org>, 
@@ -82,55 +83,107 @@ Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
  Luiz Angelo Daros de Luca <luizluca@gmail.com>, sashiko-bot@kernel.org
 X-Mailer: b4 0.15.2
 
-This series fixes several issues in the adt7470 driver:
+During adt7470_read_temperatures(), the driver temporarily switches
+the PWM channels to manual mode, performs the temperature collection,
+and then restores the original configuration registers.
 
-- Restore PWM configuration after I2C failures.
-- Avoid cache corruption after failed writes.
-- Prevent busy looping when auto_update_interval is zero.
-- Fix incorrect temperature alarm reporting.
-- Cache the PWM frequency and fix error propagation.
-- Correct unused PWM auto-mode mask definitions.
-- Fix TOCTOU issue when reading fan data.
-- Fix PWM auto temp state array corruption and missing bounds check in
-  sysfs read.
+However, if an I2C transaction fails at any point after entering manual
+mode, the function aborts and returns immediately. This leaves the
+configuration registers un-restored, permanently trapping the fans in
+manual mode.
 
+Introduce a recovery path to ensure that the original PWM configuration
+registers are always restored, even when intermediate I2C operations
+fail.
+
+Reported-by: sashiko-bot@kernel.org
+Closes: https://lore.kernel.org/r/20260716213252.EACA71F000E9@smtp.kernel.org
+Fixes: ef67959c4253 ("hwmon: (adt7470) Convert to use regmap")
 Signed-off-by: Luiz Angelo Daros de Luca <luizluca@gmail.com>
 ---
-Changes in v2:
-- Added new patch to fix TOCTOU divide-by-zero crash in fan speed read.
-- "Fix temperature alarm logic...": Added TEMP_ALARM_BIT and
-  FAN_ALARM_BIT macros for clarity.
-- "Use cached PWM frequency value": Fixed incorrect array indexing by
-  caching the closest frequency early.
-- Added patch to fix PWM auto temp state array corruption and missing bounds check.
-- Link to v1: https://patch.msgid.link/20260727-adt7470_thermalzone-v3-0-21424d550c3d@gmail.com
+ drivers/hwmon/adt7470.c | 40 +++++++++++++++++++++++++++++-----------
+ 1 file changed, 29 insertions(+), 11 deletions(-)
 
-To: Guenter Roeck <linux@roeck-us.net>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-To: Andrew Morton <akpm@linux-foundation.org>
-To: "Darrick J. Wong" <djwong@us.ibm.com>
-To: "Mark M. Hoffman" <mhoffman@lightlink.com>
-Cc: linux-hwmon@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
+index 664349756dc2..481d51617f4b 100644
+--- a/drivers/hwmon/adt7470.c
++++ b/drivers/hwmon/adt7470.c
+@@ -205,11 +205,12 @@ static inline int adt7470_write_word_data(struct adt7470_data *data, unsigned in
+ /* Probe for temperature sensors.  Assumes lock is held */
+ static int adt7470_read_temperatures(struct adt7470_data *data)
+ {
+-	unsigned long res;
++	struct device *dev = regmap_get_device(data->regmap);
++	u8 pwm[ADT7470_FAN_COUNT];
+ 	unsigned int pwm_cfg[2];
+-	int err;
++	unsigned long res;
++	int err, err2;
+ 	int i;
+-	u8 pwm[ADT7470_FAN_COUNT];
+ 
+ 	/* save pwm[1-4] config register */
+ 	err = regmap_read(data->regmap, ADT7470_REG_PWM_CFG(0), &pwm_cfg[0]);
+@@ -233,19 +234,19 @@ static int adt7470_read_temperatures(struct adt7470_data *data)
+ 	err = regmap_update_bits(data->regmap, ADT7470_REG_PWM_CFG(2),
+ 				 ADT7470_PWM_AUTO_MASK, 0);
+ 	if (err < 0)
+-		return err;
++		goto out_restore;
+ 
+ 	/* write pwm control to whatever it was */
+ 	err = regmap_bulk_write(data->regmap, ADT7470_REG_PWM(0), &pwm[0],
+ 				ADT7470_PWM_COUNT);
+ 	if (err < 0)
+-		return err;
++		goto out_restore;
+ 
+ 	/* start reading temperature sensors */
+ 	err = regmap_update_bits(data->regmap, ADT7470_REG_CFG,
+ 				 ADT7470_T05_STB_MASK, ADT7470_T05_STB_MASK);
+ 	if (err < 0)
+-		return err;
++		goto out_restore;
+ 
+ 	/* Delay is 200ms * number of temp sensors. */
+ 	res = msleep_interruptible((data->num_temp_sensors >= 0 ?
+@@ -256,13 +257,30 @@ static int adt7470_read_temperatures(struct adt7470_data *data)
+ 	err = regmap_update_bits(data->regmap, ADT7470_REG_CFG,
+ 				 ADT7470_T05_STB_MASK, 0);
+ 	if (err < 0)
+-		return err;
++		goto out_restore;
+ 
++out_restore:
+ 	/* restore pwm[1-4] config registers */
+-	err = regmap_write(data->regmap, ADT7470_REG_PWM_CFG(0), pwm_cfg[0]);
+-	if (err < 0)
+-		return err;
+-	err = regmap_write(data->regmap, ADT7470_REG_PWM_CFG(2), pwm_cfg[1]);
++	err2 = regmap_write(data->regmap, ADT7470_REG_PWM_CFG(0), pwm_cfg[0]);
++	if (err2 < 0) {
++		dev_warn_ratelimited(dev,
++				     "failed to restore PWM{1,2} config (%d)\n",
++				     err2);
++
++		if (!err)
++			err = err2;
++	}
++
++	err2 = regmap_write(data->regmap, ADT7470_REG_PWM_CFG(2), pwm_cfg[1]);
++	if (err2 < 0) {
++		dev_warn_ratelimited(dev,
++				     "failed to restore PWM{3,4} config (%d)\n",
++				     err2);
++
++		if (!err)
++			err = err2;
++	}
++
+ 	if (err < 0)
+ 		return err;
+ 
 
----
-Luiz Angelo Daros de Luca (8):
-      hwmon: (adt7470) Fix fans stuck in manual mode on I2C errors
-      hwmon: (adt7470) Fix cache updated before hardware write on I2C error
-      hwmon: (adt7470) Fix busy-loop and I2C flooding in update thread
-      hwmon: (adt7470) Fix swapped PWM3 and PWM4 auto mode masks
-      hwmon: (adt7470) Fix temperature alarm logic in hwmon_temp_read()
-      hwmon: (adt7470) Use cached PWM frequency value
-      hwmon: (adt7470) Fix divide-by-zero TOCTOU crash in fan speed read
-      hwmon: (adt7470) Fix PWM auto temp state array and bounds check
-
- drivers/hwmon/adt7470.c | 129 ++++++++++++++++++++++++++++++++++--------------
- 1 file changed, 92 insertions(+), 37 deletions(-)
----
-base-commit: 7e12ea5aae19ee07d466e9613ccba753349c9c1d
-change-id: 20260716-adt7470_fixes-59a102278d72
-
-Best regards,
---  
-Luiz Angelo Daros de Luca <luizluca@gmail.com>
+-- 
+2.55.0
 
