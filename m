@@ -1,69 +1,68 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21F72311C1B
-	for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2026 16:58:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6526C3C9EC2
+	for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2026 18:13:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785257896; cv=none; b=koC9Kr8xKGf0MeEyqYBaQYqmu/WatbfiKNoeYKFoioi60eC9OHbP3AQaTvSoYEn/cMFXAtZDsrBl0jLUWmD+G6T+DXZxx9aAGqyM+JVxH9iZf0CFJ8Srwf3a6MOJ8TbH2HXF7Tv80yMYTApYmyuW0Z7XIYLx88TBPO2sAk6pe0I=
+	t=1785262411; cv=none; b=jp9ZZwLIexph0l5l1sOIoe3Q0nxGohgpFzIVwYP/ziTBxKxLRN9S1ejvSAtJY62k1g1KlLCtFdy6e6DpLXnRORVqze0irZhviotWrMA16nuiraMC4tGjQxBO/r9BSlvPQDYQ54nOpVbYZIiH8kbU7eLN/tR6Pb/FmMkfQGqyvwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785257896; c=relaxed/simple;
-	bh=vJCIAgCUnA8gtIAB3h4MukXcUJaZitbAJxAQaP0cFtU=;
+	s=arc-20240116; t=1785262411; c=relaxed/simple;
+	bh=jY6dnqvHqg10KwmO68TrPmov0yHK8C6hEToNCKrRsr4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lZlAb/dI9ydix8lu/Mz0/8oCrGR7htedfdD5bE5caATAqfGj9jfLiske6KEpjK7kXsIQxZEa7nkNETWuqZwvdvL0tQYl7tr0FOtL0kYfSwshTTcc4UPMSYYXWYvuxJ61ixJXZAwfSptpKuovQTrp074XQdfk3xywmDWnserq/t8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k6zraJe6; arc=none smtp.client-ip=209.85.216.47
+	 In-Reply-To:Content-Type; b=V6oFpnP01hRewCt9DH83qLDXWBVHi1W38++z31oEXGf3MiuVQkwziQT1OZuWqQJDDjq0jKKSSD877dEN7IlZ6uOg8UCnqlKae44Pj55BCgFKPyyQ4kzk0vHNm4DJ2zGkEHsndZPsVTb6yB+kiDtrXJuc3xBdQcQ2uMZIg4qhp+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UuME5CsZ; arc=none smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k6zraJe6"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3856d6fbcb3so39451a91.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2026 09:58:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UuME5CsZ"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-38511175ad3so82886a91.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2026 11:13:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785257894; x=1785862694; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785262409; x=1785867209; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Fa/LYPA7/Xkoo++dRTwytqE1SJTv+ovanIbkQn9jNIg=;
-        b=k6zraJe605F29C657cScOWXqO5D2tU5DWIwbGGIFy7SHE5RVtzMyDFBWkHqH+P0r9K
-         0/DKkgalICToLuc3JbN/kFnq1fOmEwS4STISebqH6kNJFs/adv7L+lhgmZAAy3VbkxCj
-         zXRNALT+r6JmcfS5flU2aajHNiqobNRYnN+vT9qm5YpKGHJjJpbxBUGtz9GzaXO1CyfT
-         19fZqd+hZriIgVZpBp2jk9zlvu6rOHHESu1Rh+9+0zRhd+SO88/TPPcSLec5Kk29Ypvm
-         mESat1+Z1FusUxQgnNMtscprTMS7qo3715AqpXgY8EHDdc7EgS4nY/wiz34tUvYzRHAQ
-         ZTYw==
+        bh=YMSPpx6yGKTGt83Sgz1eRa+q8wGQ4JN++szdtt2dYyA=;
+        b=UuME5CsZQjqyb2mrQUATIO4vZ6+C0hSQdhuMNCT3jWqVdCo+gGA6L1gidOn7INn8e8
+         JD5Z5HFpaRRZKWBNf8D7JN6xTgSWqu8kag02bZ93t4Zv2DCSRl+DgH4v6bSmX9DgC8gr
+         h5xdOhnjVUrk/RDHquYuwH/qLwnqACfMVvyyqLsVUPagF+SoDevAXpvt2cysVGJv01/e
+         svfmMcJ5yD+eD+urMqaBc6vECa0+FKWsNkCZS7Q6WxwNUgtuVek/Yr46iJuhjxIWlQy0
+         Ix1mPrtWCI9yszseN2PsfBt6HNPn+P85b5m96pAj5wrMqe6CjkBe9GntTILe8ms4p298
+         uR4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785257894; x=1785862694;
+        d=1e100.net; s=20251104; t=1785262409; x=1785867209;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=Fa/LYPA7/Xkoo++dRTwytqE1SJTv+ovanIbkQn9jNIg=;
-        b=PK/Ne2I15MRK8IrlBnGSaGUattdDQuepZepkL1F6+mgLk86E3nEV+7vVmZ3zgD7sSK
-         6+VX7CUdBr6woAeSqQ0o8J70wpl9aLdU137PcYTOTyyD+8K1cDSt8PwASRY88J5L4lWC
-         WtZdsf6dvztAGG00B5eqnNASBhSYPPjOwlrTQr7Cb0EVrmjtvXggPtF2Fd8bKlL6A9G7
-         ZvsyGjFRH2jvzkdJtPmcJBmbeQZsBQBKZeatBRmyw1QcZ7xSWhsIU5lnryb88jCQELKt
-         5N1RwLTyYFNUBDfLahNWnaEWWRgSpnqSTxizkPSO1KwtmSJokP3L9ZWdg3REtjd7N5yx
-         vteg==
-X-Forwarded-Encrypted: i=1; AHgh+Ro6IOHbaslbBOzOy0KrseFZ5MtvMoqgK0ARyIMcaO4VA87J8aEJlDeE4tdNkYwvp1darQwnMbbcDAzkZw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJw0KwQiAhs5IOThN7hdkweaPZeZqyH5EkRas8MFJNPMPsYvLn
-	MiycrIkDc+FEZ67sT6Qjr0kCF+9bKXgVtv732o6JI1oPpM/rnOSjpt7R
-X-Gm-Gg: AR+sD1007T6PMqipkYisrj1aeXV/8zHKHOg/ucFpJTYz7YB/yJkPD1d7SqL5dixSrH/
-	2Mv+SWjiJvPC9Tk0exsff8zCMlQh56tEtXhMGVbkMDSTt5KF4f3dLf0C4cWvC7S9mDr8KrjRnDJ
-	4+xuXHo1/r5JbjoKH/eA6X2J5zVOk045iJO3GWbc8Zhfa81uhGTU2N8Xesvfmkz2k1s11eSNcBW
-	B630A15iYi+gJm+NQYl5TcjGgudYptDga7oCyuW1oQbCWB/CY55gnto+rPSO+lmdmMb2OTgScGx
-	8tDOVlkFWF/Gu7q0mueqbw2q1i797dxyP9lvQoAUzTrLldDgyAWpk+sGjPm9dPWtDhN3bKZ4UFe
-	k7pTmS4vxwTyHl/nYocWWRTNTJQKpMEw4BmROTJoQtDzzbBiyaHt8itvfylkAaNZP6aYnKWGpnU
-	37us+DM0/wpG1SkZndbwVu+NzBlN200jNkyJFFJjMbJkuMaxrIktHjWaNNbKiCQSozmyaTk/Fla
-	BifzJionEnsK79/6OhdLd/p4BYH31GtFdXTiw==
-X-Received: by 2002:a17:90b:258e:b0:387:e0db:bc2c with SMTP id 98e67ed59e1d1-38f6a422e25mr3827094a91.34.1785257894487;
-        Tue, 28 Jul 2026 09:58:14 -0700 (PDT)
+        bh=YMSPpx6yGKTGt83Sgz1eRa+q8wGQ4JN++szdtt2dYyA=;
+        b=mdMJVABPpbhozkWpd2XOtpka+zAvw4pTUAZUuIH4ele1ykOZ0r8+Tfcrfm4o86GYr3
+         HxRXpZLpng0udm1HclkXm99ZiByl/jLgQjcBnu18uojJzF/qcAN4rGNt4fnlszqjfmuj
+         2gQqCz/chXF3U312G/nZ/p4nlDy0rPtfa9jx4qcAi8aGEMTcsD013B5jreD6kfLZJloB
+         XK+N2+agAP8xQwKNfFOqdILnEC/PY02FAyjuQkvldDpBfkud5EU+6J3Y0YxpU5bD7XG0
+         zMNCA1Ou+6CxdX44cSwk12vpcnlIJjcNORmsE6sN4bTUM+yDNLAIiv2y8rkJRsTd6XZP
+         /JAQ==
+X-Forwarded-Encrypted: i=1; AHgh+RoEwPQKFIixa/jkeOxBw0a1iY+2c8026qkkMQmEX3NFx0idh2d5KGZ/lFav1HTFoFEoWLKl0Cj7z8kGpg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAPXV2FacMFgK31oSqcilqXUkbyJ2ULd1dfx32pod7tPKWuHDq
+	Nkt5ZXTHGsvqq1Khs/ztc6u10YpRwuPKy4RlrMMrafhK3ZR+nQQQq84p
+X-Gm-Gg: AR+sD13rCEjCXYBbgdzo8r1Kh6TMBHKlufo60M/Z6aPBdhn78TFeGqVfPwwIFqYJKXJ
+	9t92215fNd+AY3GPF5khx+mL6UTQHxFmgg+hNuavCZpWYe6+WLpkC7dMRpjsVAacCOCWdSFnNXV
+	EZWW4sfqeRcesVJE6ZUnHgmN3gcY1sjiXLDGBHqzJKWGi/D4hvqXue8uPPYFOsvqu0DIWD+gl4V
+	NFuwo6xGatQQIpHd+hD1MpiUBN4fxwNTdM/YqYXMpkAsBGoq9653vQqKNhK6aqkGFdeBFxDr4SP
+	cz4FEv9nUzY20pfA7N1B8MQzrH5JmQm0/5kZ296MQdAJRgZwXnuOcnIw84v71RjugNBECObtvOn
+	8khP28ut8zmhoi1rdXcUMZPEMnNlofoemQXYbtUIU3tSafi2gXcxg/TuEwL91+jlm7qt4k24Jpp
+	hzBGS+mxaSe3nKs6MemYQLAKO/LiE7lYHU/elv43ulKXDPEhdUsj0=
+X-Received: by 2002:a17:90a:d888:b0:38d:e658:595a with SMTP id 98e67ed59e1d1-38f6a30d87emr3634504a91.2.1785262408610;
+        Tue, 28 Jul 2026 11:13:28 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38f642fbf74sm1640475a91.17.2026.07.28.09.58.13
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31504d373c3sm915235eec.23.2026.07.28.11.13.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jul 2026 09:58:14 -0700 (PDT)
+        Tue, 28 Jul 2026 11:13:28 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a39191ba-2ebc-425c-9435-f0465d1cfbeb@roeck-us.net>
-Date: Tue, 28 Jul 2026 09:58:12 -0700
+Message-ID: <e8ba1c8a-cf68-421e-9974-f31f31e90e59@roeck-us.net>
+Date: Tue, 28 Jul 2026 11:13:26 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,15 +70,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] hwmon: (pmbus/core) fix regulator enable/disable
-To: nuno.sa@analog.com, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-doc@vger.kernel.org
-Cc: Mark Brown <broonie@kernel.org>, Alan Tull <atull@opensource.altera.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH 3/5] hwmon: (pmbus/core) Add mapping function to
+ pmbus_read_block_data()
+To: sashiko-reviews@lists.linux.dev, =?UTF-8?Q?Nuno_S=C3=A1?=
+ <nuno.sa@analog.com>
+Cc: conor+dt@kernel.org, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, robh@kernel.org
 References: <20260728-hwmon-max20826-support-v1-0-224766e0acd1@analog.com>
- <20260728-hwmon-max20826-support-v1-1-224766e0acd1@analog.com>
+ <20260728-hwmon-max20826-support-v1-3-224766e0acd1@analog.com>
+ <20260728162749.A42051F000E9@smtp.kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -125,24 +124,114 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260728-hwmon-max20826-support-v1-1-224766e0acd1@analog.com>
+In-Reply-To: <20260728162749.A42051F000E9@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 7/28/26 09:03, Nuno Sá via B4 Relay wrote:
-> From: Nuno Sá <nuno.sa@analog.com>
+On 7/28/26 09:27, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
 > 
-> pmbus_update_byte_data() can return the value of PMBUS_OPERATION which
-> can be different than 0 and that can mess with the regulator core
-> given _regulator_disable() explicitly checks for ret == 0 in order to
-> call _regulator_handle_consumer_disable().
+> New issues:
+> - [High] Stack buffer overflow in `pmbus_debugfs_block_read` due to unbounded return value from custom `read_block_data` callback.
 > 
-> Fixes: ddbb4db4ced1 ("hwmon: (pmbus) Add regulator support")
-> Signed-off-by: Nuno Sá <nuno.sa@analog.com>
+> Pre-existing issues:
+> - [High] TOCTOU data race on PMBus hardware page selection during probe.
+> --
+> 
+> --- Patch [3]: [PATCH 3/5] hwmon: (pmbus/core) Add mapping function to pmbus_read_block_data() ---
+> commit c4bd4d03203a9fd14a7a2bcff69ec842b441fa68
+> Author: Nuno Sá <nuno.sa@analog.com>
+> 
+> hwmon: (pmbus/core) Add mapping function to pmbus_read_block_data()
+> 
+> This commit introduces a mapping function to pmbus_read_block_data() in
+> preparation for adding support to a device which needs to use its own
+> read_block implementation.
+> 
+>> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+>> index 3d5586c67f840..d697939ec8921 100644
+>> --- a/drivers/hwmon/pmbus/pmbus.h
+>> +++ b/drivers/hwmon/pmbus/pmbus.h
+>> @@ -459,6 +459,9 @@ struct pmbus_driver_info {
+>>   	int (*read_byte_data)(struct i2c_client *client, int page, int reg);
+>>   	int (*read_word_data)(struct i2c_client *client, int page, int phase,
+>>   			      int reg);
+>> +	/* size of data_buf is I2C_SMBUS_BLOCK_MAX + 2 */
+>> +	int (*read_block_data)(struct i2c_client *client, int page, u8 reg,
+>> +			       char *data_buf);
+> 
+> [Severity: High]
+> Does this API need a size limit parameter? The comment specifies the buffer
+> size is 34, without providing a limit parameter to the callback, which might
+> encourage callbacks to return values up to 34.
+> 
 
-The real problem is that pmbus_update_byte_data() should only return 0
-or an error code. The fix is in the "hwmon" branch and should be upstream
-by the end of the week.
+The maximum amount of data returned must be 32 bytes, not 34. Callers define
+a larger buffer size to be able to append, for example, '\n\0'. The function
+itself, however, must not return more than 32 bytes of data, plus the data
+length in the first byte.
 
 Guenter
+> [ ... ]
+> 
+>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+>> index 7b58f71985741..ff4572c473b70 100644
+>> --- a/drivers/hwmon/pmbus/pmbus_core.c
+>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> [ ... ]
+>> @@ -678,7 +698,7 @@ static bool __maybe_unused pmbus_check_block_register(struct i2c_client *client,
+>>   	struct pmbus_data *data = i2c_get_clientdata(client);
+>>   	char data_buf[I2C_SMBUS_BLOCK_MAX + 2];
+>>   
+>> -	rv = pmbus_read_block_data(client, page, reg, data_buf);
+>> +	rv = _pmbus_read_block_data(client, page, reg, data_buf);
+> 
+> [Severity: High]
+> This is a pre-existing issue, but can this lead to a race condition with
+> sysfs accesses during probe?
+> 
+> Looking at pmbus_init_debugfs(), it traverses pages and reads registers
+> without taking the pmbus_lock. This indirectly invokes pmbus_set_page()
+> through pmbus_check_block_register():
+> 
+> pmbus_init_debugfs()
+>    pmbus_check_block_register()
+>      _pmbus_read_block_data()
+>        pmbus_read_block_data()
+>          pmbus_set_page()
+> 
+> If userspace reads or writes to a sysfs attribute concurrently, it acquires
+> the lock and sets the hardware page. Could the lockless call from
+> pmbus_init_debugfs() interleave between the sysfs thread's pmbus_set_page()
+> and its subsequent I2C operation, causing the sysfs thread to hit the wrong
+> PMBus page?
+> 
+>>   	if (rv >= 0 && !(data->flags & PMBUS_SKIP_STATUS_CHECK))
+>>   		rv = pmbus_check_status_cml(client);
+> [ ... ]
+>> @@ -3564,7 +3584,7 @@ static ssize_t pmbus_debugfs_block_read(struct file *file, char __user *buf,
+>>   	char data[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
+>>   
+>>   	scoped_guard(pmbus_lock, client) {
+>> -		rc = pmbus_read_block_data(client, entry->page, entry->reg, data);
+>> +		rc = _pmbus_read_block_data(client, entry->page, entry->reg, data);
+>>   		if (rc < 0)
+>>   			return rc;
+>>   	}
+> 
+> [Severity: High]
+> Can the new callback return a value large enough to cause an out-of-bounds
+> write here?
+> 
+> If _pmbus_read_block_data() delegates to the new read_block_data callback,
+> and that callback returns a size of 34 (I2C_SMBUS_BLOCK_MAX + 2) or greater,
+> would it cause a buffer overflow?
+> 
+> Just below this hunk in pmbus_debugfs_block_read(), the code does:
+> 
+>      data[rc] = '\n';
+> 
+> Since the size of the data array is 34, an rc of 34 would write past the end
+> of the array. Is a bounds check needed on rc before using it as an index?
+> 
 
