@@ -1,66 +1,65 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 477DE3E025C;
-	Tue, 28 Jul 2026 07:24:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0AA3F5BEF;
+	Tue, 28 Jul 2026 07:32:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785223480; cv=none; b=LBltX7a5UR3g61XjMWimJU320H4c6vRp/NZ/gExe1Klrtm/MlnanRTyml2K4B38DothglaaOQNACcvxG9lxfvSkb845OiOpbS3K1kRXAbiBUizH+QO7IUHf2WS/frDz8Flj2L4SOAHnp9iuvS2BuHgOr0/Kha4KDeiKtDRvqkVU=
+	t=1785223975; cv=none; b=IoUWDOp8GE9KlTC6lwpqzSa7AYPoxmLIULz91iCi23ANWiF4y50YndU7aLwwavODyNoWcEVkN+0/eqgeabUa0XKWriqCbXSXkWi4mXr1mIpHJVfI8rm3mu0fgIe/MUJMVDIrLWl8TKxWzdP7PGY51Q/AGe53gGXnDenJt6NjeK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785223480; c=relaxed/simple;
-	bh=3JrtV3KN/UgQ91pgkMuzvCTjKjiM2JKJnuhw3hCQRFA=;
+	s=arc-20240116; t=1785223975; c=relaxed/simple;
+	bh=Tr1yk5M/1ibVUSlaQQlbBDhATqYoOLL3gJFQ801csDc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=efOKtn4W0u8b0EBM7d9deGMClnuQB4//xYZTbMhR/OBTwR6vEsnkyZvVgmmq24K/FD4aZpdiQk7yq/gL+diResoZPss4G/JDA+xm9NEwKdNXpa0EX3+WHz3YE7UZUoBN3Vmvm+F8yRJPVXMGQjjdia8Yc2e5Wh1ztJKQuiz7U7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jtlyvNMQ; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=oPsrV+WHsqvW6zU8Rd7K3FVBCbgYvEG9J0nCc2tMu3UpznLe1XIgUBJCepKrT85mELfNgXZgiXAcUx8p/QFYyQ3oVBCwkJiiqz9FFbu+4gQx2CS5X+ASRyZYdbuHGgpLwb2h2GJginfB/zcTDdglsTC9A0iFErcNwgJzFzwdCtw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hM/7tnj/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jtlyvNMQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B48091F000E9;
-	Tue, 28 Jul 2026 07:24:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hM/7tnj/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20D781F000E9;
+	Tue, 28 Jul 2026 07:32:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785223477;
-	bh=3JrtV3KN/UgQ91pgkMuzvCTjKjiM2JKJnuhw3hCQRFA=;
+	s=k20260515; t=1785223974;
+	bh=Tr1yk5M/1ibVUSlaQQlbBDhATqYoOLL3gJFQ801csDc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jtlyvNMQ54dTMyJUSaIR9ykMsMCGc2xdgRGKBYeU1SlHLSZlgNCh9iXcf9XThnv8g
-	 JHGu+2m5Wq9IL9J2ScsDypF33flGbHIF+0+HBth0YXtjgEVjLwWXX7eWL2jM/DVPhn
-	 rKk+cJvW/KyBaTeJNxByc8YNOuikAg5K8MGI7zrxdesw9lt30RZyAftmH6ivlCn2As
-	 0emVIExmTHlTZnqrS7YidbHJQS3tofGYsDQtwGhzv7+8g8YDQ2Qh7GUIRkOoMdcSjb
-	 veJNCgHgMpSQisffnOn/gL8JPNYnoAz2r30RywpJM8/QGI/SWxsGhMROL42AP0uHJN
-	 ZUeITt1/1j0uA==
+	b=hM/7tnj/2FNoT+jLg+RIGOejkPQH5m44Qws6XLmtMLE5pgNoyrO7x5Jmmma8aQDHe
+	 osk1NNL0xsGJ+5gb8TnAWn4D3AxtvaUQt+3GPqFD2JnMMwH7DF1DVVIIpYJnZi2nRH
+	 hGOk5uRhh5zwhRS3AcA2rzrWsGbdPcK4BcPaWlyxUWiDN+uMKKNJFewzje7JKBYjlT
+	 8ET36qExiOGoTfY0ANJCYCrF2bT7qPaJy8D/oj2ZU92hry/b7HbiYv+xTjR6u7gQO+
+	 FgK72yKh1tGWucTKvvOrVMWyZHMhAHzMFFkr9J6M52Axux3Z95Xq8f+3ZdWjIzHLR4
+	 CmyMDjZQQjZgw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v7 12/12] arm64: defconfig: Enable I3C and SPD5118 hwmon
+Subject: Re: [PATCH v7 11/12] hwmon: spd5118: Add I3C support
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Akhil R" <akhilrajeev@nvidia.com>
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org, "Alexandre
- Belloni" <alexandre.belloni@bootlin.com>, Frank.Li@kernel.org, conor+dt@kernel.org, linux-i3c@lists.infradead.org
-In-Reply-To: <20260728065955.809445-13-akhilrajeev@nvidia.com>
+Cc: robh@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, Frank.Li@kernel.org, "Alexandre
+ Belloni" <alexandre.belloni@bootlin.com>, linux-i3c@lists.infradead.org
+In-Reply-To: <20260728065955.809445-12-akhilrajeev@nvidia.com>
 References: <20260728065955.809445-1-akhilrajeev@nvidia.com>
- <20260728065955.809445-13-akhilrajeev@nvidia.com>
+ <20260728065955.809445-12-akhilrajeev@nvidia.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 28 Jul 2026 07:24:36 +0000
-Message-Id: <20260728072436.B48091F000E9@smtp.kernel.org>
+Date: Tue, 28 Jul 2026 07:32:53 +0000
+Message-Id: <20260728073254.20D781F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-> Enable I3C subsystem (I3C), Synopsys DesignWare I3C master controller
-> (DW_I3C_MASTER), and SPD5118 hwmon temperature sensor (SENSORS_SPD5118)
-> as modules.
+> Add a regmap config and a probe function to support I3C-based
+> communication with SPD5118 devices.
 >=20
-> The NVIDIA Vera CPU uses SOCAMM LPDDR5X memory module, which contains
-> SPD5118 (JEDEC JESD300) compliant temperature sensor. This sensor is
-> accessible over the I3C bus through the DesignWare I3C controller present
-> on the SoC. Enabling these configs allows monitoring memory module
-> temperatures on platforms such as Vera Rubin. Vera is an ACPI-based
-> platform and does not use device tree.
+> On an I3C bus, SPD5118 devices are enumerated via SETAASA and always
+> require an ACPI or device tree entry. Device matching is hence through
+> the OF match tables only and does not need an I3C class match table. The
+> device identity is verified in the type registers before proceeding to
+> the common probe function.
 >=20
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
 > Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
 
 Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260728065955.8094=
-45-1-akhilrajeev@nvidia.com?part=3D12
+45-1-akhilrajeev@nvidia.com?part=3D11
 
