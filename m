@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B142A334C3D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14973385B9;
 	Tue, 28 Jul 2026 16:02:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785254560; cv=none; b=O0VphsVPa27bGOA+LmJYBmrAgp+k+fIuXUSD94FcFLOMyCeiXXh5Qvt0inKoPsNTHm3TPnSq2+YrIT/AOaaRa8uhwWOCZZtPfk+RsQtUEwC34oNQT7iRRAMMn+dVg5UluBjnyeFnAD6bXW5SRXiWbGkvEnk7+3NYbEAgZjgFGYo=
+	t=1785254560; cv=none; b=oXNgRWstMZFBcuRSuXLYQ2n3P8VIPXZEKF/oer96VlpLMFqshi1U0jYXUme31vMLZ7nILs44sXAdmxnrZvtJxO4Qc3Tu3O6xO9SFGqF+3no16OswG2i6FXbiN9pBQDg2n6DxPbUPivRRuCnmt60F925bi9yisZ7b9tGHoWoKF9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1785254560; c=relaxed/simple;
-	bh=6m2EEwWqSxVfaNSRqvdd8tOLTH5Eq6hgszuHPYRehR4=;
+	bh=BWAiDBOztkmaITErk8pXUGKWjoVze0TrP3li8wPhyMo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ck9VRD3EYXPe4naonY9SaVtVzIkBNnUjEKxmk/LjJtShRIV7mVwokkE8q/+sluWP3NnziPhDv/cgaAaWzfAcyxomMX0NsFY+3KIFS0Dnr6GXN+cUnWwkw3cR8rcq3NbAEy24wkPewCf6xBxrAgs4EjAnCch1E1DCLmPIQ8YRRJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BKX3+u0M; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=XwQZrPkJu7zMv1bEt/wle0eY5X7jsQ8fdSYSJegshTVnIoURS3t+s7YroSJBfIQAmFG8n9j0LbbG+1X+p8QjFpep9QHPd9Q1GCX5sy04ehwlQcBb24a81+/KQAPdbubBKiBMFt886aYOR6qbZ2upxYAiu4lms7EyNrPVQv7t+4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fzOX3O0/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BKX3+u0M"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6F345C2BCC9;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fzOX3O0/"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 81322C2BCFD;
 	Tue, 28 Jul 2026 16:02:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1785254560;
-	bh=6m2EEwWqSxVfaNSRqvdd8tOLTH5Eq6hgszuHPYRehR4=;
+	bh=BWAiDBOztkmaITErk8pXUGKWjoVze0TrP3li8wPhyMo=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=BKX3+u0M2N7vBlSsinr45iAAQCn5MidTnRNzMNTMgjRdPAszqkuwa6BO7Zn/b3fv/
-	 RTqUjO4W6Yk9KAxAOdQHRCf4dLsb4Cb6/484RA4BBnQOhCWJ/lqb9Ouva2zzfxAac+
-	 /rI7BZ78jN2LMKP7bUHCNmItS7Xcp3gRE0oJJalKhXg9VOq/Lv/7Sr5pxmKf82eyAk
-	 mXbY1Vj4I8USGTONEjMQrkhhlVSWKmdimaWUNVW7ohu5muokYU1UH2wuxwCjnldE7l
-	 zun7fWSEKpb30F3IrfnapOfvJcoTbL4hLvSFqqWIvl73jfMQM8n8Z/5cVjBiS962IP
-	 W4QhDVy3wdonA==
+	b=fzOX3O0/+bcVyN2ryQkgJ1FySFlAM5noAkmSrkLqXSgrRlJZgs9yDXtRvnH7mw6Dr
+	 tEkSQNHuOcGR4G/sJG7L5Ol+HLtGr8Lyzgew6x8IvbEswZGfP60HXcORfO4pn1zoYH
+	 5RaKP35x+Ouqx0EOFJvcEMDE5zbkDsvvx//9dcNyHr8YljuwcRoUgWwPD2SorOOmEM
+	 lzqs/8rTzA4etX/Ny/bx3BX01T5nwQ4+rxyTJ4qAQdNkYH/MHhu4PG078KY3BH2pUa
+	 EU62g7DIBWhH0AABx6dx56R39aB7uM3lTN+6gt/AST4TaVwqALiSNSO9X0LWxFckKu
+	 mZ3UYAw7Myhuw==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A549C54F4D;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EA93C54F54;
 	Tue, 28 Jul 2026 16:02:40 +0000 (UTC)
 From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
-Date: Tue, 28 Jul 2026 17:03:49 +0100
-Subject: [PATCH 2/5] hwmon: (pmbus/core) increase number of phases and add
- new mask
+Date: Tue, 28 Jul 2026 17:03:51 +0100
+Subject: [PATCH 4/5] dt-bindings: hwmon/pmbus: Document MAX20826 and
+ similar devices
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260728-hwmon-max20826-support-v1-2-224766e0acd1@analog.com>
+Message-Id: <20260728-hwmon-max20826-support-v1-4-224766e0acd1@analog.com>
 References: <20260728-hwmon-max20826-support-v1-0-224766e0acd1@analog.com>
 In-Reply-To: <20260728-hwmon-max20826-support-v1-0-224766e0acd1@analog.com>
 To: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
@@ -50,13 +50,14 @@ Cc: Mark Brown <broonie@kernel.org>,
  Alan Tull <atull@opensource.altera.com>, Guenter Roeck <linux@roeck-us.net>, 
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>
+ Shuah Khan <skhan@linuxfoundation.org>, 
+ Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1785254629; l=986;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1785254629; l=3112;
  i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
- bh=oKIIng3y59ZHT0PaUVcYuwBTM83FBKhU2wmTmXOIUCo=;
- b=cskd5rh96mpDBzhtMAanbyj8XjWQpihj8hxk9jsT/bKf5Mz0XjZaYSztKZJuzDMcPM0hQ9Wep
- dvX0Rv5JeZYA40mIjK7D+/vhkuZyJQhO3XxmrGIm+IbYV7qUF+ymvSg
+ bh=kkxkPuAr8r9C2BFfsr9GKXUusi7kxUwS7LZSffvIXhU=;
+ b=zqGK7puAKOZaV6S/5MGhCAOD5knjNz+BCV2WduhmPN8fHxpqS0es+dzQu9lBnHElPpS7rScdo
+ leIc9eCnwznB84Yw/oHFhyxrlUXqj+y6g0K0bknQmd+WSJPZ2/YBdwt
 X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
  pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
 X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
@@ -66,38 +67,101 @@ Reply-To: nuno.sa@analog.com
 
 From: Nuno Sá <nuno.sa@analog.com>
 
-Increase the number of phases to 16 as a new upcoming device supports
-such a number.
+The MAX20826 IC and similar provide a high-density, flexible and scalable
+dual-loop solution for high current cores for AI applications. These are
+dual loop solutions multiphase voltage regulators. Between Rails A and B,
+MAX20855B and MAX20908 supports up to 8 phases total configurable from
+8+0 to 4+4 phases, MAX20912 supports up to 12 phases from 12+0 to 6+6,
+and MAX20826 and MAX20916 supports up to 16 phases from 16+0 to 8+8.
 
-While at it, add a new mask for controlling the source of the output
-voltage.
-
+Co-developed-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
 Signed-off-by: Nuno Sá <nuno.sa@analog.com>
 ---
- drivers/hwmon/pmbus/pmbus.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../bindings/hwmon/pmbus/adi,max20826.yaml         | 56 ++++++++++++++++++++++
+ MAINTAINERS                                        |  7 +++
+ 2 files changed, 63 insertions(+)
 
-diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-index 23e3eda58870..3d5586c67f84 100644
---- a/drivers/hwmon/pmbus/pmbus.h
-+++ b/drivers/hwmon/pmbus/pmbus.h
-@@ -242,6 +242,7 @@ enum pmbus_regs {
- /*
-  * OPERATION
-  */
-+#define PB_OPERATION_CONTROL_V_SRC	GENMASK(5, 4)
- #define PB_OPERATION_CONTROL_ON		BIT(7)
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20826.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20826.yaml
+new file mode 100644
+index 000000000000..6d280f8bf56b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20826.yaml
+@@ -0,0 +1,56 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/pmbus/adi,max20826.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Analog Devices MAX20826 PMBus Voltage Regulator
++
++maintainers:
++  - Nuno Sá <nuno.sa@analog.com>
++
++description:
++  Analog Devices MAX20826 and similar devices are Dual-Output Multiphase
++  High-Current Controller.
++
++properties:
++  compatible:
++    enum:
++      - adi,max20826
++      - adi,max20855b
++      - adi,max20908
++      - adi,max20912
++      - adi,max20916
++
++  reg:
++    maxItems: 1
++
++  avren-gpios:
++    description: GPIO pin to enable/disable the output voltage on Rail A.
++    maxItems: 1
++
++  bvren-gpios:
++    description: GPIO pin to enable/disable the output voltage on Rail B.
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        regulator@64 {
++            compatible = "adi,max20826";
++            reg = <0x64>;
++
++            avren-gpios = <&gpio 0 GPIO_ACTIVE_HIGH>;
++            bvren-gpios = <&gpio 1 GPIO_ACTIVE_HIGH>;
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 716acfc3d7c1..fe8808f3ee4c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15837,6 +15837,13 @@ F:	Documentation/devicetree/bindings/hwmon/pmbus/adi,max17616.yaml
+ F:	Documentation/hwmon/max17616.rst
+ F:	drivers/hwmon/pmbus/max17616.c
  
- /*
-@@ -386,7 +387,7 @@ enum pmbus_sensor_classes {
- };
- 
- #define PMBUS_PAGES	32	/* Per PMBus specification */
--#define PMBUS_PHASES	10	/* Maximum number of phases per page */
-+#define PMBUS_PHASES	16	/* Maximum number of phases per page */
- 
- /* Functionality bit mask */
- #define PMBUS_HAVE_VIN		BIT(0)
++MAX20826 HARDWARE MONITOR CONTROLLER DRIVER
++M:	Nuno Sá <nuno.sa@analog.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Supported
++W:	https://ez.analog.com/linux-software-drivers
++F:	Documentation/devicetree/bindings/hwmon/pmbus/adi,max20826.yaml
++
+ MAX20830 HARDWARE MONITOR DRIVER
+ M:	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+ L:	linux-hwmon@vger.kernel.org
 
 -- 
 2.55.0
