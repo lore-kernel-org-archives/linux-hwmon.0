@@ -1,67 +1,68 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6F5E448CE3
-	for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2026 14:25:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DB6843CE5C
+	for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2026 15:02:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785248727; cv=none; b=m94eDDFWtbCnaBOCNjLkTMws/4JiGmx040IBKlx1jGlG3LW2AuDVPehQQHZIf7NYPUfnRNMqwH/xdmkRwOc8jZJcOOyktjZQ86+zpXzy38DcB6WAlWb6E5mzpkPh8CV5EyOD91XIuX7nIboVPM2SwJLefoaxgh0HromDWbd7FRw=
+	t=1785250953; cv=none; b=Q+9Jn4wCWAS8WpVfXLUSICX6EpmxgAp/rm6Ivz5Jvduiy0yYqIQrw73u/8NJctM4d4j/ip9aVMdNBtFORUqbpoX+FzaNzK3Y280V+IB9Okey7XD7NRhV/r17ss24emUj6WX8W7TDt2SMMnq7qAF45mfZVM78va7KOouAZ9RF6EY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785248727; c=relaxed/simple;
-	bh=5pXi4dgAo1m0sp77oTw62O1Q9wJLmYmFtoegNg07rZA=;
+	s=arc-20240116; t=1785250953; c=relaxed/simple;
+	bh=/pjWjnvW18ltOYqApap5ErjiNT7bG1O5sPTIqfcoPlY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Nkp1SyTPILb3M8t24Kk71rUcZrEfK0dUJF4c/CgHvQWRLGajU2G35G6CP6+QH0XzzyIQ8/qwJrsSzvlRdQUIdz6qIxRWUjdT7SaB4Uof2WQn3p6EJGtBccCOfLEOf5XZ2K53saeDP2dcPDEuj0L3LHGTN27aofCFeDy0G8x2lYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I+Hd9qTV; arc=none smtp.client-ip=209.85.214.170
+	 In-Reply-To:Content-Type; b=kg5PUm34UncXtQX3edmOyLnqWo9tw5kwzrcrnUz8mtCe8jdROPIcWDo1OuTLVZh2URjw7vik43JdNxhyZfBs04A209wDX0gVYC3cj0rhjwNpb6Q1Y39bKMw1PhstycNJGv8Zi3BZlNlXo4MszLzdOzSraROUn4bpH5nvTNHrju0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hjLJ5Jbc; arc=none smtp.client-ip=209.85.216.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I+Hd9qTV"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2caed617615so40637225ad.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2026 07:25:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hjLJ5Jbc"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-38dc4553f62so3912828a91.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2026 08:02:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785248725; x=1785853525; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785250952; x=1785855752; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=mAjDSAgZ2SM25Sq8ILGGacbnA1ulD3BXrj3aZojkvoQ=;
-        b=I+Hd9qTVKczeqvIxEuLGaXEtA/u2MWaOJ0GrySOwjQXamqKda2QynOikZCPmqlVltM
-         wzmdZYDxvMOEIzZq1HrxlfUFcrVOt5WSTk7sSlN5mf4c1MHUJq/ryXuOvSH63+DkvmNj
-         3fAFLki31ORrBpefJgGlYytOZCvIcmfuu5NO370sZq0P2s4MABleGsXFT/l+GS8Y1I/S
-         omY/zkxLq2DTBAX9uTef2/wA/jJ6grsymCoDCgurEA1/Y9GFPSVHHRr1xGxpT/WV8Q7P
-         7IdOj5gu7+lXpgmKXgwLlB6VdhD8ZoAjBgP/6LKzukP27i5JZnTs4SOx+7r6eM+ZBJ5l
-         0FCA==
+        bh=dUzc+JehiKPLDwYoiSthREnBwc+c90eS4DhkRApL8iE=;
+        b=hjLJ5Jbc0Z+aF3w9Ziz9FMFyymZ+4vp3kzFE5psfP5de2aaD9xSMb8GavLHrWQJQYH
+         1IzJ3jcyeOAv/dqxrGvwPowsHFqUPZUHPZvOHrvn6TmQawpJxTGrld3OHJlBwpTZ+Aeh
+         qZcrCKBiIrwD5ywqhISsczWR+YUsrlkmk5MMgkHT18AEJD4/vqvngdxM81HBte9B8hLx
+         VzqfrJsTUnnGF3MnfO+vcbWF3ff+vXrobR0FLwIXuFqz0LW0CKgBDQgeoRdfK2XaOI90
+         b92OoDSyl9jF3OgbaUvgbo2t1lFYbZ5+4bGSLR684NQa+VXEKSyIDHBJfSufYoaRZn25
+         Oa7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785248725; x=1785853525;
+        d=1e100.net; s=20251104; t=1785250952; x=1785855752;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=mAjDSAgZ2SM25Sq8ILGGacbnA1ulD3BXrj3aZojkvoQ=;
-        b=mqw3/wYA91kbnM0OSTQhT8DfL1wval0/bXEkEf/NUyb0ZyCjNojxVnbiWYBYJe7l54
-         k+42caQqvNWiuTCcNrEPDFQPufLSm3UWt3/DKsd8NO2QcFUEkvPLUGV6K6orGzmuI8NW
-         AYxyxLpnldrfAU3r1aVl7w5r+SpdA1W1ELSuNT+DsKW3NfSXSBz9Cc7RHHdrD7oN7x3H
-         Uom+CEZ+s9bkjxHeTqzeJmpMQzYbxqg/D1hkgxn7qkpzj8GDM48pSZpC+xG/l8m8hx7R
-         sJy3PM0oNGZHfY64vos/Ihckpsw5DUcEG3tKcdfQJ+sQ4qcl8VwdYtnxfzIk6Q15+YvZ
-         Q5HA==
-X-Gm-Message-State: AOJu0YzwL4BQindH1zvbNODZNUE13scZX5mipIrkaboEDi4icvZEymY1
-	M6LckHA9tGaACnRgZ5FncgTdtNaNNBjL/vM9PmbCiU04HQuTJtyaaKVIhr/Fgg==
-X-Gm-Gg: AR+sD13E18sJSwXtCeiIM8IvJTX+rMxurX4F9FmnW18uSG50IdgPxU4MJSQxfbR8XNN
-	rWTQeoedi1/NfXeH6ka8/s8SkBm6uTf7k8cXDT6a2BoeI9Bb9oO3e9lo45Yx1kqfzOg1jxiAwmD
-	BLj/8IMP0vsC1HwfAnIF4VyKRaww2N+5PGsV6P8v6PxUJkb/ZKdFCQi9v4polZxX3UPee7JXPjO
-	ybcoCmqfWTn4gRlehX8OdgM/yVGTGvLUFAhrmbi1XJksWUfE9FQe2fp6605NrbWlcCmGYEj3GVi
-	q9gVL0OqHfzmIh7dYJ0EjecccKisC0PLD42+obUd5/iLCCMDVr8/jb9/MNKdRiZfCRcK/fV0G4i
-	bCtEGebh5wcrZoI2HEaU3xJpvUmiwY6tXlWsotnwbdx76wNAI5hnOHTRde9tXJ3fnHLj6+/XInD
-	o3NJZQ3FQujF4LCc0CagTnSuk2MXLkQggNS19UnNSffCqHHDqV1Ow=
-X-Received: by 2002:a17:903:46cd:b0:2cc:f7c6:8353 with SMTP id d9443c01a7336-2d015da2cdcmr30952985ad.41.1785248724721;
-        Tue, 28 Jul 2026 07:25:24 -0700 (PDT)
+        bh=dUzc+JehiKPLDwYoiSthREnBwc+c90eS4DhkRApL8iE=;
+        b=qHtFS2l2oS5/te1uIk9b3hP4PYBpupoCJlXgF4hIkoS0+YF7MDGy3C1SRgpE82G5uo
+         QUKOkHl4PqIBgGV05SQlrqJDPNi1mNoRpwBTLQCUG5iMqzaurOu0+O25UvvPHUu6xQV8
+         XPEtyVxap9wQSBFgoYKv8v8O01nm1RH2kEjAxb7Hb0Ag47XYznolYh9aIRvrtVZSd9xc
+         Kqnoh/kyVCDppPASEcslkpbN9CKVhzM9EwoUqIbjdOZrwacHcIoGSEpyFOIrutfc54Ag
+         msP0M2xCoVszmA8F5U0G4INpM3rHvRvI2yIwbmGdbymqnvtVmlCS7m99pwzCaySMVdST
+         2Cuw==
+X-Forwarded-Encrypted: i=1; AHgh+Rr+6EhjE7ZhAmlXUPqb6cnrrWoUauOF86vVOadMIRVtIAugwrXwy4XwEaalimqYhRPq51brN4FtO/8zig==@vger.kernel.org
+X-Gm-Message-State: AOJu0YylwJICy1hPdT0GoQ7WdZZLsKbGp6xFalVqWaFMAp5iiQ9s6ygQ
+	vODxer0ADsJHednXIfHwSSvxJMQMmNTyVwN3LhLMBIcsalV9Ql1zcEP9
+X-Gm-Gg: AR+sD11BXVaVkj1v90r5jbw0bNF2NHJ8XODI9eJnP1czRd4UqM7vfzEDOk4qJSGQ2st
+	SYXel3A7zCA53WwzclQWAHubXnrVbbMks+8GfoHWXwdKY3QpcS1fhUJLKOMEF2h9f4nuZyktb1M
+	+qZB+y/HZTbPfK55rtMcVarsG3qDEBRofq/Sw1vGf0CR7LYa/cCyJEp//yU5VeVXei8sUC2Fsjp
+	ijpnKgk/yPhkjfCaHv2kqLpKOyHpCybzpIt+MsiwHVLOOOcSg3jaTncrz7XH++vUX7d2mBWLKCW
+	bEjyt1QKoTn1jRl9bjPAwUim9b+WqLWSpv2r/6MRbreD8xRtGnWthQgXfwd+VmA6LFLAnmf9ita
+	0t+WeIqkMcFJJzl4MzRvoCBAYqK4zMY7DtC6kxSB3rLUVWQiKJvpeoMMiWxCa12RI8A3CUTyzTp
+	pupHwbAwvmVwL3PhI5fttR5oqeJvaLsMuXiobH0W2Lx9ArwU9eSBUe6siOfzYLLWNX0DvfPunc
+X-Received: by 2002:a17:90b:2782:b0:38e:5717:9cc8 with SMTP id 98e67ed59e1d1-38f6a45d31emr3370435a91.31.1785250950740;
+        Tue, 28 Jul 2026 08:02:30 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-314bc548efesm45553281eec.14.2026.07.28.07.25.23
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-314bc3e1255sm66792348eec.4.2026.07.28.08.02.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jul 2026 07:25:24 -0700 (PDT)
+        Tue, 28 Jul 2026 08:02:30 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9812bc9e-75c7-49b8-82c3-1e9162d53ccd@roeck-us.net>
-Date: Tue, 28 Jul 2026 07:25:22 -0700
+Message-ID: <0fbf7f69-bb90-4209-b9d5-258759711496@roeck-us.net>
+Date: Tue, 28 Jul 2026 08:02:28 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,22 +70,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 4/4] hwmon: (pmbus/max20830): add support for max20830c
- and max20840c
-To: "Torreno, Alexis Czezar" <AlexisCzezar.Torreno@analog.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>
-Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-References: <20260728-dev-max20830c-v4-0-cec034298535@analog.com>
- <20260728-dev-max20830c-v4-4-cec034298535@analog.com>
- <336bd264-52ec-473a-b74f-5661f06286ed@roeck-us.net>
- <PH0PR03MB6351D7369AB790714DF416BDF1CB2@PH0PR03MB6351.namprd03.prod.outlook.com>
- <9559d319-4b44-45c2-ae13-f92099de4c89@roeck-us.net>
- <PH0PR03MB63510057D496CBE8EBFAE246F1CB2@PH0PR03MB6351.namprd03.prod.outlook.com>
+Subject: Re: [PATCH v2] hwmon: (cros_ec) Handle temperature conversion
+ overflows
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Benson Leung <bleung@chromium.org>
+Cc: Guenter Roeck <groeck@chromium.org>, chrome-platform@lists.linux.dev,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260728-cros_ec-hwmon-overflow-v2-1-d24e24d0792b@weissschuh.net>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -130,68 +122,122 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <PH0PR03MB63510057D496CBE8EBFAE246F1CB2@PH0PR03MB6351.namprd03.prod.outlook.com>
+In-Reply-To: <20260728-cros_ec-hwmon-overflow-v2-1-d24e24d0792b@weissschuh.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 7/27/26 23:58, Torreno, Alexis Czezar wrote:
->>
->>>>
->>>> Are those chips still not published ? I find MAX20840T, but no "C" variants.
->>>> And MAX20840T presumably has an I2C device ID of "MAX20840", not
->>>> "MAX20840C".
->>>>
->>>> I also noticed that MAX20810 and MAX20815 seem to be register
->> compatible.
->>>>
->>>
->>> I believe so yes, they aren't yet.
->>>
->>
->> I just hope they are really compatible, and that the device ID strings really
->> include the "C". The "T" variants seem to have no T in the device ID string,
->> making it a bit odd that it was (or will be) added for the C variants.
->>
+On 7/28/26 03:17, Thomas Weißschuh wrote:
+> The calculations converting between the different temperature units can
+> overflow on 32-bit systems, resulting in incorrect data.
 > 
-> Yeah the T is weird, but I did test the C variants and they do reply the 'c' char.
+> Detect these overflows and handle them.
 > 
->>> Actually MAX20810/815 and a few more are next in line after this. A
->>> different person is handling it, but they're waiting on how this patches go.
->>>
->>
->> You are making yourself more work than necessary. Knowing that there are
->> more chips coming, the sequence of strcmp() is not really that desirable
->> anymore.
->> It might make sense to create an array with all chips supported by the driver
->> instead of adding up strcmp sequences. That would make it much easier to add
->> support for new variants.
->>
->> There also seems to be a MAX20830T. Does it actually make sense to list the
->> variants (C/T) in the first place ?
->>
+> The code is written in a way that there is a single conversion function
+> and the compiler can recognize when overflows are impossible (on 64-bit
+> and in cros_ec_hwmon_temp_to_millicelsius()). If the compiler detects
+> this, it will optimize away the overflow checks.
 > 
-> Will think about how to make to scale the code when adding newer variants.
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> ---
+> Changes in v2:
+> - Drop already applied patch 1.
+> - Also handle overflow of u32 -> long.
+> - Clarify commit message wrt compiler optimizations.
+> - Use __always_inline over __flatten to allow the compiler to optimize
+>    away more unnecessary overflow checks.
+> - Link to v1: https://patch.msgid.link/20260630-cros_ec-hwmon-overflow-v1-0-3d2ecd3eb0f2@weissschuh.net
+> ---
+>   drivers/hwmon/cros_ec_hwmon.c | 31 ++++++++++++++++++++++++++-----
+>   1 file changed, 26 insertions(+), 5 deletions(-)
 > 
+> diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
+> index 1337b646e022..004a8180b665 100644
+> --- a/drivers/hwmon/cros_ec_hwmon.c
+> +++ b/drivers/hwmon/cros_ec_hwmon.c
+> @@ -5,11 +5,13 @@
+>    *  Copyright (C) 2024 Thomas Weißschuh <linux@weissschuh.net>
+>    */
+>   
+> +#include <linux/build_bug.h>
+>   #include <linux/cleanup.h>
+>   #include <linux/device.h>
+>   #include <linux/hwmon.h>
+>   #include <linux/math.h>
+>   #include <linux/module.h>
+> +#include <linux/overflow.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/platform_data/cros_ec_commands.h>
+>   #include <linux/platform_data/cros_ec_proto.h>
+> @@ -151,14 +153,28 @@ static bool cros_ec_hwmon_is_error_temp(u8 temp)
+>   /* This differs slightly from the variant in units.h to avoid rounding inconsistencies. */
+>   #define CROS_EC_HWMON_ABSOLUTE_ZERO_MILLICELSIUS (-273000)
+>   
+> -static long cros_ec_hwmon_kelvin_to_millicelsius(long t)
+> +static __always_inline bool cros_ec_hwmon_kelvin_to_millicelsius_overflow(long t, long *ret)
+>   {
+> -	return t * MILLIDEGREE_PER_DEGREE + CROS_EC_HWMON_ABSOLUTE_ZERO_MILLICELSIUS;
+> +	if (check_mul_overflow(t, MILLIDEGREE_PER_DEGREE, ret))
+> +		return true;
+> +
+> +	if (check_add_overflow(*ret, CROS_EC_HWMON_ABSOLUTE_ZERO_MILLICELSIUS, ret))
+> +		return true;
+> +
+> +	return false;
 
-Something like the following should do.
+	return check_add_overflow(*ret, CROS_EC_HWMON_ABSOLUTE_ZERO_MILLICELSIUS, ret);
+>   }
+>   
+>   static long cros_ec_hwmon_temp_to_millicelsius(u8 temp)
 
-const char *supported_chips[] = {
-	"MAX20830",
-	"MAX20830C",
-	"MAX20840",
-	"MAX20840C"
-};
+The maximum value of "temp" is 255.
 
-...
-	for (i = 0, supported = false; i < ARRAY_SIZE(supported_chips) && !supported; i++)
-		supported = !strcmp(buf, supported_chips[i]);
+>   {
+> -	return cros_ec_hwmon_kelvin_to_millicelsius((((long)temp) + EC_TEMP_SENSOR_OFFSET));
 
-	if (!supported)
-		return dev_err_probe(&client->dev, -ENODEV,
-				     "Unsupported device: '%*pE'\n", ret, buf);
+255 + 200 = 455.
+455 * 1000 = 455000 (not even counting the conversion from kelvin to C).
 
-Then all you'd need to do to add more chips would be to add the strings to
-the supported_chips[] array.
+How could this ever overflow ?
+
+> +	long ret;
+> +
+> +	if (check_add_overflow(temp, EC_TEMP_SENSOR_OFFSET, &ret))
+> +		BUILD_BUG();
+> +
+> +	if (cros_ec_hwmon_kelvin_to_millicelsius_overflow(ret, &ret))
+> +		BUILD_BUG();
+> +
+> +	return ret;
+>   }
+>   
+>   static bool cros_ec_hwmon_attr_is_temp_threshold(u32 attr)
+> @@ -236,8 +252,13 @@ static int cros_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+>   			ret = cros_ec_hwmon_read_temp_threshold(priv->cros_ec, channel,
+>   								cros_ec_hwmon_attr_to_thres(attr),
+>   								&threshold);
+> -			if (ret == 0)
+> -				*val = cros_ec_hwmon_kelvin_to_millicelsius(threshold);
+> +			if (ret == 0) {
+> +				if (overflows_type(threshold, long))
+> +					*val = LONG_MAX;
+> +
+> +				if (cros_ec_hwmon_kelvin_to_millicelsius_overflow(threshold, val))
+> +					*val = LONG_MAX;
+> +			}
+
+I agree with Sashiko - it does not make sense to call cros_ec_hwmon_kelvin_to_millicelsius_overflow()
+if it is already known that threshold overflowed.
+
+Personally I think this is way too complicated. An overflowing temperature above 255 degrees C
+does not make any sense, and returning LONG_MAX as temperature seems a bit odd.
+I would just have checked for some reasonable limit, such as
+			if (threshold > 255 + 273)
+				*val = 255000;
+			else
+				*val = cros_ec_hwmon_kelvin_to_millicelsius(threshold);
+
+If it does make sense to return LONG_MAX as temperature for some reason, that should
+be explained.
 
 Thanks,
 Guenter
