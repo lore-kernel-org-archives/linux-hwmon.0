@@ -1,135 +1,147 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9ABF3264DA;
-	Tue, 28 Jul 2026 03:45:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 381B7376463
+	for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2026 03:52:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785210345; cv=none; b=JrDY/hdItDY2iu3ecZ6Jxe2YqnCczgwTF9DK2fJ9NCil+hZzE8h+B4UfKS3wM6DliPiyi6UtIZlHl5KfUnJvIXv0u0a73AloZ5PliTFocbgXrPyBMfToCitL+lLDrUq3Xj9bxhxV9WNA+UhXtuOll5QIwgQ1i2MZ+g/m2UX96EU=
+	t=1785210774; cv=none; b=OsiBrGotRsaeR55rHMxV6DoCV8GEgPi2EQu0+y10Ma/VYTQL3fBXm7lLzu5eOEV5YPJLabl7L69fwd7M/QnGaXZkHvGdwXBSpp7zMRwztylmsU/FAErZrSee2Dpzb/LTGO2WbF94o9d29IbScoLiqAjMhNtsDP4TWFfonHLpO14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785210345; c=relaxed/simple;
-	bh=PVqAlAiAgci4heBwWVnlcyysnwsq0iSyhCWOBUX0eEU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pwENfwZZWMw4q7AmBdlZN8hLRt5+YbTr0j/u405KnlbAdxrO0e/NpD8RFRAf0Gp7mkSdyg16Da6KcVc9qP6LLjRc5sRBPswQgui1miYavM4D9H9qMPS8gqnMQdNcjNUB9su7BrUrmU6VYfTHiR21sqzgK52IXpan1KjcyOcRwZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dt/RVHeN; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785210774; c=relaxed/simple;
+	bh=M5T+KaAM80t9AovNsGUv3DFWLw7uVTelJY8eceUcDiU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LD64N+VN7uCyxJv7qzmCT7OJDZY5bRrG12odlZxx8nuXz1IY8YmqnojEMlrpMYZNjyng3JbaJO7JxCN7DglcHJXhRIjHX2yI47gn+Q6laAgg66Khhnco7+Y8WOFNGgK4vQ26G8xzju0rfHrtwVKP9EBFtYxgcRQZ1eAVY9zrVjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HtzdPc6A; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dt/RVHeN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F7BB1F000E9;
-	Tue, 28 Jul 2026 03:45:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785210343;
-	bh=DFHckNq+WO4j8iRsxe8dooqfVklGc/Dzzht3P4JTKjI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=dt/RVHeNuYq9zeuXhONMMcjzWg/ZStwc8PbhIUuIUaKmAiIhNF5Im9mncPW+DNkfa
-	 LZaPP4MGrblLCGSZeN2mB1xa5LSYXOsvAkIwjnBgWgS5f07+PBqSmoq0l0oNka4y0a
-	 boQZ/MBKjgqRgtdCMlCq+XQb1Q5pNSGfd/dZiqiv6Co1AzM1j53levBFD60yh//ztk
-	 TD2sWPZMip0DME4QbcDMeQuGSw1b9tGaDwtOZ+P0DetQp3JUt90LD3fUTbcnSXdIg4
-	 2gbMUCI9wMDUX6cpshZupzAjz0oWNju4bE1hzuXDErrOv7BxCfYQQpRddUoCMXCNwX
-	 wO81z1D89aO3w==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 2/4] hwmon: (pmbus/max20830): add VOUT feedback
- resistor scaling support
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexis Czezar Torreno" <alexisczezar.torreno@analog.com>
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org, conor+dt@kernel.org
-In-Reply-To: <20260728-dev-max20830c-v4-2-cec034298535@analog.com>
-References: <20260728-dev-max20830c-v4-0-cec034298535@analog.com>
- <20260728-dev-max20830c-v4-2-cec034298535@analog.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 28 Jul 2026 03:45:42 +0000
-Message-Id: <20260728034543.3F7BB1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HtzdPc6A"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-38e42560ebcso2460905a91.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 20:52:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785210773; x=1785815573; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=NC0j+I/moo0hAr2UFiiUrPSesKOHYlZZ/duqtEzgHMI=;
+        b=HtzdPc6Ak9tS7+a8q7fCwnE8dEg2CqiYg/lv+vjrqyf3WLNAJN9gJgX4LhTb0mKXax
+         zw2Gp1hTnxi0mdqO5vfj7H2X4yEzLPm4OGp0T1QFBL5i0nxUjin6CpYD96wSNXaI4up2
+         nsn4yOBSpTt9fT1TFA0Uev00EPX9dR/BzCd+fvBpdYI75BQ7RRFWAUSRm6NFFzhR1ePf
+         /g80gVI+1NqDl0KEmZf2SvpxQsn8iT3BUA+Si0zLL7uODa0xF94UMxpONqdb8OUBJT4N
+         YO36IJNMFsppltxL8wmbE4T2ExrQhxpweGOF/dgYPhhZhJdFH5oj7TxrTYvTw+d/wRjJ
+         g/PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785210773; x=1785815573;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=NC0j+I/moo0hAr2UFiiUrPSesKOHYlZZ/duqtEzgHMI=;
+        b=B+MjhIyirpjb+U28LpNGPd2VFSk0E+5wPBzAqJ5+uIQb71W7zSbdndF7yXLx3JhUy1
+         4LExJHkz83bdW4iCSSV6FRyby1o9/niMiN7KgLkjSkEBG4gTgYHnC08PThnB+MmF1aGm
+         V5yIMlgsD3F2dUnCmRr94TgMgbPZcldvI763ZcCbjlu1xIZCTxQ4Gtv8hxuTW9CDGNaI
+         q7gCjz+J6EU6GjINZ73uv1vll2yyYPs23XCclTiQc86iKsCaGlmpEBo/HypFT8dt8Ilj
+         UJMtt9qL5LTpkAA8vPM4YrYIFMW2dcIYzkYl5NbckXTWNQoKSWJzUXns5XZLwJlkl0IO
+         wMTQ==
+X-Gm-Message-State: AOJu0Yyz6vyE5BPK7f/10U2qykWX7tYQT22khGx0P2KNgBINgfHVRVYi
+	RF6n+XPyDuWK+YzNbOxyyYq9FY5NtpJUjGTyoSmUV8Bm7/PZLxzhfeY6
+X-Gm-Gg: AR+sD10TBBo8Cs+fSHf+g8YJdw77gkhUkTz3tssjSEhZSlE3D7anKYY2bfxzThCEJVh
+	zmJV3N7stQFy2jkoTaJwrCKK8FFq7Nw+1g6FmC3drAP33E4Da+jnvV4Whc1dEhxe3fyMnQr6W5D
+	DGtMKU5+yFTkCr1D3p6T5a6T8Ay62UEo3ulGt5snjGm/SPVC7hhaaq1Zc8rtyox4gThP485dOSd
+	uN27y77mFv0glmIpUq52JULo7198fEzl+vNp6Ev+Fqz53P+wgDmbA9Jcly0vB7zQBPKm6yDdTGF
+	KLGsmCHQTsTeHocfSAsSazWyvCx0VawPVAP0Q8ZsKvnt7WT/VPfqlEtXr6nklqtWiimhtMIyWvr
+	AzqItnrsajx9K5mlHMoFjb3+oe2k/on5UygYMZ3B1zZqHwJMWt3eT4V6rZ+KcEEO2tbnDezVMP5
+	ZTjyzAee5GfSQ0UGwd08TuO/Stp9bHvPuHfT/wiF/I9p8hKV2hsKk=
+X-Received: by 2002:a17:90b:55c8:b0:38e:7d77:2fbb with SMTP id 98e67ed59e1d1-38f6a425a50mr730604a91.32.1785210772563;
+        Mon, 27 Jul 2026 20:52:52 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38f641053cfsm601716a91.3.2026.07.27.20.52.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jul 2026 20:52:52 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <f8d70912-3b01-47aa-9be2-f77ea5dfbf0e@roeck-us.net>
+Date: Mon, 27 Jul 2026 20:52:50 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [hwmon-next PATCH v3 0/4] hwmon: (adt7470) Add PWM provider and
+ thermal sensor support
+To: Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Chris Packham <chris.packham@alliedtelesis.co.nz>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Darrick J. Wong" <djwong@us.ibm.com>, =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?=
+ <ukleinek@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
+References: <20260728-adt7470_thermalzone-v3-0-d4586478cdba@gmail.com>
+ <CAJq09z7QtzTxucEvcKa6zXjhGyuqDjpLHiD8A=EJXshpoV_vvA@mail.gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <CAJq09z7QtzTxucEvcKa6zXjhGyuqDjpLHiD8A=EJXshpoV_vvA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Incomplete VOUT scaling introduces UAPI inconsistency and dangerou=
-s hardware limit writes.
---
+On 7/27/26 20:21, Luiz Angelo Daros de Luca wrote:
+> It looks like Sashiko had trouble applying the patchset on top of
+> hwmon-next. I likely should have used a base commit that's available
+> across other trees, such as linux-next. I'll double-check whether I
+> misconfigured the prerequisites (it was my first time using them),
+> though b4 validated everything fine locally.
+> 
+I pushed the patch series only into the hwmon branch. I guess Sashiko
+doesn't know about that branch. I now rebased hwmon-next on top of hwmon
+and pushed it out, so Sashiko should now be able to see the previous
+patches.
 
---- Patch [2]: [PATCH v4 2/4] hwmon: (pmbus/max20830): add VOUT feedback re=
-sistor scaling support ---
-commit 4d1fa3c4cb8d1f4bfe3ca16a79ad028a0dd9bfee
-Author: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+Guenter
 
-hwmon: (pmbus/max20830): add VOUT feedback resistor scaling support
-
-This commit adds support for external voltage divider scaling using the
-adi,vout-rfb1-ohms and adi,vout-rfb2-ohms device tree properties. It reads
-these properties and scales the feedback voltage for PMBUS_READ_VOUT.
-
-> diff --git a/drivers/hwmon/pmbus/max20830.c b/drivers/hwmon/pmbus/max2083=
-0.c
-> index cb2c23672166d..7c1e94c43ac4e 100644
-> --- a/drivers/hwmon/pmbus/max20830.c
-> +++ b/drivers/hwmon/pmbus/max20830.c
-[ ... ]
-> @@ -14,6 +15,51 @@
-[ ... ]
-> +static int max20830_read_word_data(struct i2c_client *client, int page,
-> +				   int phase, int reg)
-> +{
-> +	const struct pmbus_driver_info *info =3D pmbus_get_driver_info(client);
-> +	const struct max20830_data *data =3D container_of(info, struct max20830=
-_data, info);
-> +	int ret;
-> +	u64 temp;
-> +
-> +	switch (reg) {
-> +	case PMBUS_READ_VOUT:
-> +		ret =3D pmbus_read_word_data(client, page, phase, reg);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		/* Apply voltage divider scaling if resistors are non-zero */
-> +		if (data->vout_rfb1 && data->vout_rfb2) {
-> +			temp =3D (u64)data->vout_rfb1 + (u64)data->vout_rfb2;
-> +			temp =3D DIV_ROUND_CLOSEST_ULL((u64)ret * temp, data->vout_rfb2);
-> +			ret =3D clamp_val(temp, 0, 0xFFFF);
-> +		}
-> +		return ret;
-> +	default:
-> +		return -ENODATA;
-> +	}
-> +}
-
-[Severity: High]
-Does this code introduce a UAPI inconsistency by only scaling PMBUS_READ_VO=
-UT?
-
-When in1_input is read, it returns the scaled output voltage.
-
-However, because this switch returns -ENODATA for limits (like
-PMBUS_VOUT_OV_WARN_LIMIT or PMBUS_VOUT_OV_FAULT_LIMIT), reading limits like
-in1_max will return the unscaled feedback voltage directly from the chip.
-
-> +
->  static struct pmbus_driver_info max20830_info =3D {
->  	.pages =3D 1,
->  	.format[PSC_VOLTAGE_IN] =3D linear,
-> @@ -24,13 +70,25 @@ static struct pmbus_driver_info max20830_info =3D {
->  		PMBUS_HAVE_TEMP |
->  		PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_STATUS_IOUT |
->  		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP,
-> +	.read_word_data =3D max20830_read_word_data,
->  };
-
-[Severity: High]
-Should there be a matching write_word_data callback here to reverse the
-scaling for limit registers?
-
-Since there is no write_word_data callback, if a user writes a new limit us=
-ing
-the scaled unit, the core will write it directly to the hardware without
-reverse-scaling.
-
-The chip treats this as a feedback limit, which could drastically raise the
-physical overvoltage trip point and bypass hardware protection.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260728-dev-max208=
-30c-v4-0-cec034298535@analog.com?part=3D2
