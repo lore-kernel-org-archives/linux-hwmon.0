@@ -1,211 +1,167 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66AAB27A462;
-	Tue, 28 Jul 2026 02:09:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6706730C14C
+	for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2026 03:07:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785204557; cv=none; b=RrxzyTzlIfScA2mT4HbzTv9ZQrUlQv3ICP9eB/EseiAtCRUeKGfm+J44Uxx9orgj99uZn9fomCidDBVm5XpceiDiQJaL4lAklpuLWe35e1feQ8Dc0yXg2tML0odlOlSF9wd69rVMr3Q1gWxJzZGVctby51MNhOnBMuich9klz0I=
+	t=1785208042; cv=none; b=Ehgh88NXySPqC9ON2I1hWWrwpoj/As0YSVz9Fio6AUMI/25trfJpsioZh2cf1hCJpFCP6DNs40fakiUkdAxZYnnaIva5l9rPqmjG1fp/+ZKgduT1LFg/xC9f7s1cG04I5pW7ihvBQXe+UNa4muywu51YxUOrj3zt0lSfhqbNJns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785204557; c=relaxed/simple;
-	bh=Po3u26tiy9fzKS4s3ibDoD5Sv3IGtwqNG1ehd74heSg=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=nyIElxSn7/BxFoYWMm1V0expTYlv1azTm0rAzSl3QFylB6rZRbPaCt7TDVFEiHBdJOdkLS4XJDECKXp9RxfR/jZeP24YyvhlvHrb+64t0wPgQl5M0D4xRBIFVi7UFmSpIoOcBbHm1TaY9Nfqx86wylX8pqu2s1rToocQ4y2glrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lB5Hmw2C; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785208042; c=relaxed/simple;
+	bh=vKdAA6cFT54tLCIgFXya6DLI52t7A+r1YFU+iUb76PI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=uxQBqvAj01kcYr7yo3HNcCFtwujY9gyoH5eNUQ9qDkmNRcyWpYcoapbHhjjepRHThI31+QU6yRbsh5q53gN0dLEbTGiZ513+nxpTWD2zx35dNmMS6iTj3INjTwti2CoEzN0CC6wAp1Sz6M2K19kzG+jHoUE8gAPZyhTS3MKnKzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q9VwL+KX; arc=none smtp.client-ip=209.85.221.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lB5Hmw2C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C37C11F00A3D;
-	Tue, 28 Jul 2026 02:09:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785204556;
-	bh=YE9d1hPc3QvOYyY3eTPQmeCNlJ71ZgWMCr0cx8b21fw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lB5Hmw2CnXjZw+tKFeunEbNmM9+iwJMdzi2PbDb+QazqPt8hjkvC6A2r2QKSAywRp
-	 SvVekranoXhrxH8Kc6tVjyCwop1bvDW/LmqGO//rnd4hbgtwM9vWp7hdVvDMBizpJj
-	 bDz8X0Ac7W+rSLayXUymTVwPNHHa+B4sphV7BesnGJGvEcU5UAmKPjsf9HxBYjTvMM
-	 onAtPbMm7ikLm45sfV5G3/4XJPdnKbi3YEGeKSkn0YVlS9UN4nX7bUrhMNCX5/bBz4
-	 +3xbS5Syh/AwJgX9Zh7x4wjmAz1G1KaZeqGJ9McATXt6rHHCEg6XMI2DEIi0DaennU
-	 pODA0UwFc9y+g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 3/3] hwmon: (pmbus/tps25990): Add TPS1689 support
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Stoyan Bogdanov" <sbogdanov@baylibre.com>
-Cc: robh@kernel.org, linux-hwmon@vger.kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org
-In-Reply-To: <20260728015857.193890-4-sbogdanov@baylibre.com>
-References: <20260728015857.193890-1-sbogdanov@baylibre.com>
- <20260728015857.193890-4-sbogdanov@baylibre.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 28 Jul 2026 02:09:15 +0000
-Message-Id: <20260728020915.C37C11F00A3D@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q9VwL+KX"
+Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-5bf95ade656so1168123e0c.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 27 Jul 2026 20:07:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785208039; x=1785812839; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=2daEu8V03oHloZq7HOxZbsCrfFEu1YUSaEp/KisdjxA=;
+        b=q9VwL+KXqhK+BY0WMQkjPqa9L+mIsUg3Y11wLsMgTqNZSlqyVAQLdHDkFcgE84WDaQ
+         Aq7OUEoorbmSg4ATvGoD30CvE1ZX3UB2m+0SRel8M/6ZW+UVu3CULETfry4lRABGwyJq
+         McPTVIDqh57xysyR93CSnwhnMYL1QWjirCmg53AnEE/ckrf9G1INSKmHegpLdBkOoGfX
+         1YvwyRE69kQQDz1Z1VuE7hf/F8OK+T6XaNLKKgwGvCWNDrTvRSVGrAG/y9gw4jQfBWBA
+         qsBUmT+R6jDr8KSMK/DxcG2wuAnjecztyS45rnoglYp1SHN5HtWXZ+xOpjGVco/QcYfM
+         Z/Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785208039; x=1785812839;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=2daEu8V03oHloZq7HOxZbsCrfFEu1YUSaEp/KisdjxA=;
+        b=PDvCRGrv+qL+5/SsoaoIlOjmC+p75IrXn3x2YKc+HVWUZEgdXfSz2K6Ly7h89dqeYC
+         tf8+LietX2g43VwNcjbSHzt+i+kjtvOZKND8ig11GQ0g93o6ru+Y3k+Ehkjkh/0T7aJE
+         gH+Atr+A9IHHwjJ67TxU8TfCvh2LbFW7x542Pol3zt/7XWwlyjAs79Mi5oH/C2sJEfHT
+         tk4eL0hX0ctltcRyE+8iCWpLJ9KBtgMZOV8lITvO1tNGnM+P5S0vfuNbXBtgkjZ+woAa
+         PEfvjGHxM1rjs8eAzENGR8urcKi5huE1M2Trq6sjxyu+gokLtzlKEUgL/4/7vP7vH3/y
+         47Lw==
+X-Gm-Message-State: AOJu0Yz2FGzvG6JNCnEOZcaaZR9K6AvIvNJBVNt5xYxO8OUx6EBm9UrL
+	Os1Ds+CYddV4rrSfjY2eqA4nlR0pN78XmNRSBljcwbyatYrnkC79uZWq
+X-Gm-Gg: AR+sD13QTebx4Yz0yys9pmE5fcOEmg7NPTqkAFMiNz8Gd/LFB7a/nf2HblnBEDU6YFj
+	lo/KRSMtXNR7yrtiF6a3RIPtgxFPUYDf2tMl3mDc/wbUMdJBU2Ev+RbBGvf7mzfJwBGoRTDcPVt
+	6Im8LabIieodk4y47TJsDKLI4ytrIwxgRdxateWMJ1/kwLvPZWqVqBiWIvuLHiouaAGRygrvxvg
+	QzljM71dZp7XrLFEQwIt8+Te3rHJdrvFIllzgwD8Afh1Eo1CHtUi5imEgV4JnmMbLYRYkUq4lZE
+	76cY1MEztOqCuWCcOVjmYLSA8k4a/8ftSkgKqiHNKgXMhbvihcfxVpCYyO6obcdg4MVSYUAkUEQ
+	307WM4+NML0GC7G03UFOIjna2Iso4tcsMezDkVZZ7HOEfXQidpIegoEoLVUpJjFtOkrcqNcZ4i5
+	kLKf6SiTLa82LWezwQgg==
+X-Received: by 2002:a05:6122:3124:b0:5bf:7f98:9657 with SMTP id 71dfb90a1353d-5c33f928744mr246810e0c.6.1785208039161;
+        Mon, 27 Jul 2026 20:07:19 -0700 (PDT)
+Received: from tresc054937.tre-sc.gov.br ([187.65.210.13])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5c305759d35sm8148812e0c.18.2026.07.27.20.07.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jul 2026 20:07:18 -0700 (PDT)
+From: Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Subject: [hwmon-next PATCH v3 0/4] hwmon: (adt7470) Add PWM provider and
+ thermal sensor support
+Date: Tue, 28 Jul 2026 00:07:08 -0300
+Message-Id: <20260728-adt7470_thermalzone-v3-0-d4586478cdba@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIANwcaGoC/32Q0U7DMAxFf6XKM0FJWidphRD/gRByG3cNWlpos
+ jKY9u9kLdL2gHjzle3je31ikWZPkTXFic20+OinMYvyrmDdgOOOuHdZMyWUFkZqji6ZyojXNNA
+ ccP89jcShRimUMtYZxfLm+0y9P67UZzZ8hmnkIx0Te9l68dC+UZcu2Mv04GOa5q/VwiLXnX+vL
+ ZIL3nUA1JdAztHTLqDf33dTWC8s6pZh/maozEAAWZkabI/ulnHebM70ccj/SL85AsWI6z+a4mG
+ Dqyt8zbthobZUWqx0i/qKfbxEbTESzyL41BQWbPaHskPoayzLUrQVQO2wrSRoEFbnymqVDZ1/A
+ L6OxcWoAQAA
+X-Change-ID: 20260716-adt7470_thermalzone-59a102278d72
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Chris Packham <chris.packham@alliedtelesis.co.nz>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ "Darrick J. Wong" <djwong@us.ibm.com>, 
+ =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Luiz Angelo Daros de Luca <luizluca@gmail.com>, linux-pwm@vger.kernel.org
+X-Mailer: b4 0.15.2
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
+The ADT7470 is a temperature monitor and PWM fan controller capable of
+monitoring up to ten external temperature sensors and controlling up to
+four PWM outputs.
 
-New issues:
-- [High] When writing the `PMBUS_IIN_OC_FAULT_LIMIT` for `tps1689`, the 16-=
-bit `value` is passed directly to `pmbus_write_byte_data()` without clampin=
-g, causing silent integer truncation and incorrect hardware limits.
-- [Medium] The `tps1689` configuration defines format and coefficients for =
-`PSC_CURRENT_OUT`, but misses the required capability flag and scaling logi=
-c, leaving it completely unused and broken.
+Currently, the driver exposes these sensors and PWM controls only
+through the hwmon sysfs interface. This patch series integrates the
+ADT7470 driver with the kernel's thermal and PWM subsystems. This allows
+temperature sensors to participate in Device Tree thermal zones while
+exposing the PWM outputs as generic PWM providers for consumers such as
+pwm-fan.
 
-Pre-existing issues:
-- [High] When a user requests a voltage or current limit lower than the bas=
-e hardware offset, the unsigned 16-bit limit underflows, silently configuri=
-ng the hardware to its absolute maximum limit.
---
+Patch 1 adds the YAML device tree binding documentation.
+Patch 2 introduces the ADT7470_PWM_MAX macro.
+Patch 3 registers the four PWM channels as a generic PWM provider.
+Patch 4 registers the external temperature sensors with the thermal
+framework.
 
---- Patch [3]: [PATCH v5 3/3] hwmon: (pmbus/tps25990): Add TPS1689 support =
+Signed-off-by: Luiz Angelo Daros de Luca <luizluca@gmail.com>
+
 ---
-commit 3362ebf6e63c82cf07dc00cc00e78fd1761514ef
-Author: Stoyan Bogdanov <sbogdanov@baylibre.com>
+Changes in v3:
+- Migrated from the `.apply` callback to the PWM Waveform API.
+- Moved fixes to another patch series:
+  20260727-adt7470_thermalzone-v3-0-21424d550c3d@gmail.com
+- Use guard(mutex) for simpler locking.
+- Link to v2: https://patch.msgid.link/20260717-adt7470_thermalzone-v2-0-a55147958fad@gmail.com
 
-hwmon: (pmbus/tps25990): Add TPS1689 support
-   =20
-Extend the existing TPS25990 driver to support the TPS1689 eFuse,
-as both devices share the same command interface and functionality.
-Update the documentation to include TPS1689 support.
+Changes in v2:
+- Fixed 2 previous bugs uncovered by Sashiko-bot during review.
+- Dropped the thermal cooling device registration for the PWM channels.
+- Implemented generic PWM provider support using the PWM subsystem.
+- Updated Kconfig to safely handle the PWM subsystem dependency (depends on PWM || PWM=n).
+- Updated Device Tree bindings to require #pwm-cells instead of #cooling-cells.
+- Link to v1: https://patch.msgid.link/20260716-adt7470_thermalzone-v1-0-cc55ef35edde@gmail.com
 
-> diff --git a/drivers/hwmon/pmbus/tps25990.c b/drivers/hwmon/pmbus/tps2599=
-0.c
-> index 490dcd2a5fa51..7e2991a85da13 100644
-> --- a/drivers/hwmon/pmbus/tps25990.c
-> +++ b/drivers/hwmon/pmbus/tps25990.c
+To: Guenter Roeck <linux@roeck-us.net>
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Luiz Angelo Daros de Luca <luizluca@gmail.com>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>
+To: Andrew Morton <akpm@linux-foundation.org>
+To: "Darrick J. Wong" <djwong@us.ibm.com>
+To: Uwe Kleine-König <ukleinek@kernel.org>
+Cc: linux-hwmon@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-pwm@vger.kernel.org
 
-[ ... ]
+---
+Luiz Angelo Daros de Luca (4):
+      dt-bindings: hwmon: adi,adt7470
+      hwmon: (adt7470) Add ADT7470_PWM_MAX macro
+      hwmon: (adt7470) Expose fan control via PWM framework
+      hwmon: (adt7470) Add thermal zone sensor support
 
-> @@ -253,20 +262,23 @@ static int tps25990_write_word_data(struct i2c_clie=
-nt *client,
->  		value =3D clamp_val(value, 0, 0xff);
->  		ret =3D pmbus_write_word_data(client, page, reg, value);
->  		break;
->  	case PMBUS_VIN_OV_FAULT_LIMIT:
-> -		value -=3D TPS25990_VIN_OVF_OFF;
-> -		value =3D DIV_ROUND_CLOSEST(((unsigned int)value) * TPS25990_VIN_OVF_D=
-IV,
-> -					  TPS25990_VIN_OVF_NUM);
-> -		value =3D clamp_val(value, 0, 0xf);
-> +		if (data->chip_id =3D=3D tps25990) {
-> +			value -=3D TPS25990_VIN_OVF_OFF;
-> +			value =3D DIV_ROUND_CLOSEST(((unsigned int)value) * TPS25990_VIN_OVF_=
-DIV,
-> +						  TPS25990_VIN_OVF_NUM);
-> +			value =3D clamp_val(value, 0, 0xf);
-> +		}
+ .../devicetree/bindings/hwmon/adi,adt7470.yaml     |  55 ++++++++
+ drivers/hwmon/Kconfig                              |   1 +
+ drivers/hwmon/adt7470.c                            | 146 ++++++++++++++++++++-
+ 3 files changed, 199 insertions(+), 3 deletions(-)
+---
+base-commit: 858071a1ca5f9a3330b4559dab41565086ab4862
+change-id: 20260716-adt7470_thermalzone-59a102278d72
+prerequisite-message-id: <20260727-adt7470_fixes-v2-0-598e38a46ba6@gmail.com>
+prerequisite-patch-id: c9bcf1ff38418e47f71472b71dfde900d8d930ec
+prerequisite-patch-id: 13a1e87608fe9df25880aa4d1a415aa2dc0b6ffd
+prerequisite-patch-id: 01857ee7a1f867a6d415a72f471db5cfef294235
+prerequisite-patch-id: 4472685c2096d7d07e580b5d07c37328e0a13ad5
+prerequisite-patch-id: 7a40cf8dfb0282f8b7341a1277d4169d8573cb13
+prerequisite-patch-id: c8f47ab359354fcc2a7c742adb4b26e3a761bd07
+prerequisite-patch-id: 1b37470872d5d5d7795370ceec16e2695894bb44
+prerequisite-patch-id: 5ba552f8997854e2f24c3ef005490b5eedcf083f
 
-[Severity: High]
-This is a pre-existing issue, but could this calculation underflow if the u=
-ser
-requests a limit lower than the base hardware offset?
+Best regards,
+--  
+Luiz Angelo Daros de Luca <luizluca@gmail.com>
 
-If a limit is requested where the value is less than TPS25990_VIN_OVF_OFF (=
-155),
-wouldn't the u16 value silently underflow to a very large positive number w=
-hen
-subtracted?
-
-Since this huge value is then scaled and passed to clamp_val() against 0xf,
-would this result in setting the absolute maximum possible limit in the har=
-dware
-instead of the requested low limit, inadvertently bypassing the protections?
-
->  		ret =3D pmbus_write_word_data(client, page, reg, value);
->  		break;
-> =20
->  	case PMBUS_IIN_OC_FAULT_LIMIT:
-> -		value -=3D TPS25990_IIN_OCF_OFF;
-> -		value =3D DIV_ROUND_CLOSEST(((unsigned int)value) * TPS25990_IIN_OCF_D=
-IV,
-> -					  TPS25990_IIN_OCF_NUM);
-> -		value =3D clamp_val(value, 0, 0x3f);
-> +		if (data->chip_id =3D=3D tps25990) {
-> +			value -=3D TPS25990_IIN_OCF_OFF;
-> +			value =3D DIV_ROUND_CLOSEST(((unsigned int)value) * TPS25990_IIN_OCF_=
-DIV,
-> +						  TPS25990_IIN_OCF_NUM);
-> +			value =3D clamp_val(value, 0, 0x3f);
-> +		}
-
-[Severity: High]
-This is also a pre-existing issue, but does this face the same underflow ri=
-sk
-if the requested limit is less than TPS25990_IIN_OCF_OFF?
-
->  		ret =3D pmbus_write_byte_data(client, page, TPS25990_VIREF, value);
-
-[Severity: High]
-When data->chip_id =3D=3D tps1689, this code skips the scaling block and pa=
-sses
-the u16 value directly into pmbus_write_byte_data().
-
-Does this silently truncate the 16-bit value into an 8-bit register write?
-
-If a large limit is requested, could this truncation cause it to wrap around
-to a very small limit, potentially causing the eFuse to prematurely cut pow=
-er?
-
->  		break;
-
-[ ... ]
-
-> @@ -347,6 +359,59 @@ static const struct regulator_desc tps25990_reg_desc=
-[] =3D {
->  #endif
-> =20
->  static struct pmbus_driver_info tps25990_base_info[] =3D {
-> +	[tps1689] =3D {
-> +		.pages =3D 1,
-
-[ ... ]
-
-> +		.format[PSC_CURRENT_OUT] =3D direct,
-> +		.m[PSC_CURRENT_OUT] =3D 24347,
-> +		.b[PSC_CURRENT_OUT] =3D 0,
-> +		.R[PSC_CURRENT_OUT] =3D -3,
-
-[ ... ]
-
-> +		.func[0] =3D (PMBUS_HAVE_VIN |
-> +			    PMBUS_HAVE_VOUT |
-> +			    PMBUS_HAVE_VMON |
-> +			    PMBUS_HAVE_IIN |
-> +			    PMBUS_HAVE_PIN |
-> +			    PMBUS_HAVE_TEMP |
-> +			    PMBUS_HAVE_STATUS_VOUT |
-> +			    PMBUS_HAVE_STATUS_IOUT |
-> +			    PMBUS_HAVE_STATUS_INPUT |
-> +			    PMBUS_HAVE_STATUS_TEMP |
-> +			    PMBUS_HAVE_SAMPLES),
-
-[Severity: Medium]
-The configuration defines format and coefficients for PSC_CURRENT_OUT, howe=
-ver
-the func[0] capability flags do not include PMBUS_HAVE_IOUT.
-
-Does this mean the PMBus core will completely ignore the output current sen=
-sor?
-
-Additionally, looking at tps25990_probe(), it appears dynamic scaling for t=
-he
-rimon resistor is applied for PSC_CURRENT_IN and PSC_POWER, but not
-PSC_CURRENT_OUT:
-
-drivers/hwmon/pmbus/tps25990.c:tps25990_probe() {
-    ...
-	/* Adapt the current and power scale for each instance */
-	tps25990_set_m(&data->info.m[PSC_CURRENT_IN], rimon);
-	tps25990_set_m(&data->info.m[PSC_POWER], rimon);
-    ...
-}
-
-Would this reading be incorrect even if the sensor capability were enabled?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260728015857.1938=
-90-1-sbogdanov@baylibre.com?part=3D3
