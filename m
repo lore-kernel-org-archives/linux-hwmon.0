@@ -1,192 +1,103 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E3334F46F
-	for <linux-hwmon@vger.kernel.org>; Wed, 29 Jul 2026 16:28:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA423388E66
+	for <linux-hwmon@vger.kernel.org>; Wed, 29 Jul 2026 18:54:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785342518; cv=none; b=UFekGVurObkjPfGkyTYT++qTerRpCDrhqvj1lsDpxoP5RKkUOF3Y6xCuv6TgRArmwRzhGdpJGD32UGmT7BaFmcB9raHN+cKIkHisc57oFENxHXZFT+LltYytga8eigD0gN/ovrL+/XZC+kUDWT0T2Y1OzPoSBONaJXA//sh45vE=
+	t=1785351248; cv=none; b=qtpvoy0gE1gJ05ibGfID+8tdQA3IHy/2SVPO1/sFXJz93DV5WGqj+uh0AjoN1T8hdPhUsVQNIbRVMtP3SN6K/Rp1crc8+x+SlYVcKVST3xzIJ+bTCjqvGd9RQUam1fpSufpxdaTguMZhwHluQ2l2W69xT1AGBT8LeiZQKkzaYak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785342518; c=relaxed/simple;
-	bh=23XMI5K5LIq57ctGCZI16Bz6vT7E5rMZqNMr1bjfpGk=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=qWoUnnNOOrX0CyMDe4daz2z56SHOov0jLrAswihHTwUKy72BTXJKe7NDz+dsVnF5J4DfMc27mxt0yNUaJZ9eL71Wf9rBhL8H5kphIc8tW0hTXt5FyYmwgdF7c8orVdQRsr6jvssq3lCnSyklkCc0HmMpWgQHA3f7aVBMzMRUg1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kf/tmPLB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785351248; c=relaxed/simple;
+	bh=6zoZdSWUFC1Yh/KwmZfkp6cyAs6Uo+5LNkUL0WNS86U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LDXbyPTgIVfL1RgNGVfzVuoFMPqRUoeqSwJ02DqYvKlmWbIPctdu72J5NmqLVctP3Ri3cvbA5yl6K/2YXW7s5c9lhH+z1qKfXxEvTWb3XxE4BpOeg97Vy//CfCDYyDmHy6jvhVfT1tmAyByYfLjhJbqaYudP3xgHE2DXNC800+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nu2b1DVo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kf/tmPLB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89BDF1F00A3A;
-	Wed, 29 Jul 2026 16:28:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nu2b1DVo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80C421F000E9
+	for <linux-hwmon@vger.kernel.org>; Wed, 29 Jul 2026 18:54:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785342516;
-	bh=jyEauN0zzGOhh87VPJ20mxLLxTYf6a9j4asrUoLfj54=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kf/tmPLBKctvryD2HtBedJR2viuG7xVeGidjXFP3FMmv+j8Sq9zZTmfxuUSkcNU3w
-	 fHhkBQEQ5OD7XNjzNAq24Q6O7egvOKxZQ8JN4ndbKis6SBJCoQjN98FVfch3+zLp9Z
-	 UJbwJ2wESytoctSzi4ZiE8xKBdm7Ee1DtIwlsNPSThZ+Qt/MqxH3WrblN5DeXXFBD+
-	 QemJXxkFBHejnDrfD0dY+T1w3ETwwzldMJEMvVw/nq8GrDnJ9zgrHTZTpq/hsW2X/x
-	 wB+lfyQinp7r0cqMhsweMQidbuuOhPtwNmSMNQMgp4aI278wACKVx39LSf3JaQhhLs
-	 /KENfWEKnYHCQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 4/4] hwmon: (ina2xx) Return 0 on inactive alarm/limit
- reads
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jared Kangas" <jkangas@redhat.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260729-upstream-ina2xx-in0-curr1-alarms-v1-4-349f7b2f1df8@redhat.com>
-References: <20260729-upstream-ina2xx-in0-curr1-alarms-v1-0-349f7b2f1df8@redhat.com>
- <20260729-upstream-ina2xx-in0-curr1-alarms-v1-4-349f7b2f1df8@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Jul 2026 16:28:36 +0000
-Message-Id: <20260729162836.89BDF1F00A3A@smtp.kernel.org>
+	s=k20260515; t=1785351246;
+	bh=jXQpDWqAb74OqEJpx4DwK5i29N3oHNBajY8MDldAJI0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=nu2b1DVon6yP9gCT0EmEj/VW7jjj9PYZH4YPz2Pmv2w06qJOSMECnrakW2mFX5XXO
+	 qIoTef2Ra+R5xrWk1jHN3PScRK7VgqGGrWesSgSYZ/ruZXUWt5FOr2GllbjOfM4p5E
+	 mAly2BjbjHfO2hIXjZp+MgvZ0KTk1L+pmG6DkdRsoV9o7Ut/EHQXSujlXaFUudKPsI
+	 en+5u25ZqTIibZOkUnCEZvVrDoF32vGKM8Ep63oLeVyiN1hWEh3QLiyz4AvouHryvK
+	 ZnHC7C9xgwwxNrYTP+7wK6b3L+mj2Y/cVprZlfxhuiAUyiKBo5TTRW15h0i5enJKwe
+	 20gBR/xhYewKQ==
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-39c62764c7cso408001fa.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 29 Jul 2026 11:54:06 -0700 (PDT)
+X-Gm-Message-State: AOJu0YzFV1t7sSElVJRKDX91ojFJm+O4bXwYCGk7fmaRBYdovv2lJeRi
+	pPEBO05AQ1rRv26lRlcIK1/42F17vbV+jQqBxU1CpnzpPxeNzXwNDo3/z8BxzDzozT2eSlhoRb3
+	5XIlLPVAacVzpAWJlshBV1Ud7udjQYx4=
+X-Received: by 2002:a2e:a547:0:b0:396:ade7:4153 with SMTP id
+ 38308e7fff4ca-39f604633f8mr7411561fa.0.1785351244980; Wed, 29 Jul 2026
+ 11:54:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <CAJZ5v0gcatfUYocWViAZjs=BkqSz-JK+bECm2cpanv9NrWgfnw@mail.gmail.com>
+ <ab8b093b-46e6-4738-afcf-4b97c9ad5af9@googlemail.com>
+In-Reply-To: <ab8b093b-46e6-4738-afcf-4b97c9ad5af9@googlemail.com>
+From: "Rafael J. Wysocki (Intel)" <rafael@kernel.org>
+Date: Wed, 29 Jul 2026 20:53:53 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hw0Zhr190_V=OenLZGtOsTvb7T6UA7BPU_qoLbHa2tDA@mail.gmail.com>
+X-Gm-Features: AUfX_mxP7-FuMFrOAKn4CTf3Evrj9-SzgxgmNPJSqCXGuO3DOKWs4bnn3-Ps8sg
+Message-ID: <CAJZ5v0hw0Zhr190_V=OenLZGtOsTvb7T6UA7BPU_qoLbHa2tDA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] thermal: hwmon: Register a hwmon device for each
+ thermal zone
+To: Oliver Freyermuth <o.freyermuth@googlemail.com>
+Cc: linux-hwmon@vger.kernel.org, linux@roeck-us.net, 
+	Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
-s) to consider:
+Hi,
 
-Pre-existing issues:
-- [High] Writing `0` to an inactive alert limit attribute unintentionally d=
-isables the currently active alert limit of a completely different type.
-- [High] In `ina2xx_get_value`, calculating `INA2XX_POWER` can overflow a 3=
-2-bit signed `int` for small shunt resistor values, resulting in negative p=
-ower readings.
-- [High] In `ina226_alert_to_reg`, `INA2XX_SHUNT_VOLTAGE` limits can overfl=
-ow a 32-bit signed `long`, causing large limits to be incorrectly clamped t=
-o 0 on 32-bit systems.
-- [High] In `ina226_alert_to_reg`, `INA2XX_POWER` limits always evaluate to=
- 0 on 32-bit systems because `UINT_MAX` is cast to a negative `long` in the=
- clamping macro.
-- [Medium] The `shunt_resistor_show` function accesses shared driver state =
-locklessly, violating HWMON subsystem locking guidelines.
---
+On Tue, Jul 28, 2026 at 11:26=E2=80=AFPM Oliver Freyermuth
+<o.freyermuth@googlemail.com> wrote:
+>
+> Dear hwmon devs,
+> (please keep me in CC, I am not subscribed to the list),
+>
+> after upgrading my systems to kernel 7.1.5 which incorporates this change=
+ (Arch and Gentoo), I have for now become aware of two places with userspac=
+e fallout from this change:
+>
+> * KDE / Plasma System Monitor
+>    Report: https://bugs.kde.org/show_bug.cgi?id=3D523588
+>    Corresponding userspace code: https://invent.kde.org/plasma/ksystemsta=
+ts/-/blob/46f7e842767774b96bcd22edec0636a267151475/plugins/lmsensors/lmsens=
+ors.cpp
+>
+>    As Plasma System Monitor remembers the (full) hwmon sensor name in all=
+ widgets and thermal zone IDs may change depending on module load order, se=
+nsors are lost both after upgrade to 7.1.5 and at "random" boots after (whe=
+never init order changes for some reason).
+>
+> * (good old) gkrellm
+>    Report: https://git.srcbox.net/gkrellm/gkrellm/issues/98
+>    As shown in the report, gkrellm remembers the full hwmon sensor name a=
+nd hence is affected both when upgrading to 7.1.5 and also at "random" boot=
+s after (whenever init order changes for some reason).
+>
+> My custom Conky script followed the established practice of these tools a=
+nd also broke, but in my case, I fixed it myself by just ignoring the therm=
+al zone ID if present
+> ( https://github.com/olifre/conky-themes/commit/6d015b9d9eae21ffab8c5571c=
+387534bb93cbc50 ).
+>
+> As I do not use Gnome or other system monitoring tools, I do not know if =
+the fallout is larger than this,
+> but given that lmsensors returns the new names with thermal zone ID inclu=
+ded, it seems likely other tools suffer from similar problems.
 
---- Patch [4]: [PATCH 4/4] hwmon: (ina2xx) Return 0 on inactive alarm/limit=
- reads ---
-commit 4e821bd1003ecc2b04b0b58f9702178e2bd3a2eb
-Author: Jared Kangas <jkangas@redhat.com>
+Thanks for the report, we'll clearly need to do something about this.
 
-hwmon: (ina2xx) Return 0 on inactive alarm/limit reads
+I'll see what can be done and figure out something.
 
-Guard alarm/limit reads with a check that returns zero if the active
-alarm is for a different type to avoid unintentionally clearing alarms.
-
-> diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
-> index 8ba0dce1f9e31..5521490deba98 100644
-> --- a/drivers/hwmon/ina2xx.c
-> +++ b/drivers/hwmon/ina2xx.c
-> @@ -479,6 +479,12 @@ static int ina226_alert_limit_read(struct ina2xx_dat=
-a *data, enum ina2xx_alert_t
->  	u32 mask;
->  	int ret;
-> =20
-> +	/* Avoid nonzero reads from inactive alerts caused by shared limit regi=
-ster */
-> +	if (data->active_alert !=3D alert) {
-> +		*val =3D 0;
-> +		return 0;
-> +	}
-> +
-
-[Severity: High]
-This isn't a bug introduced by this patch, but since we are fixing the
-read path for inactive alerts here, what happens on the write path?
-
-If a user or monitoring daemon reads an inactive alert attribute (which
-now correctly returns 0) and subsequently writes 0 back to it, will
-ina226_alert_limit_write() unconditionally wipe the active alert?
-
-Looking at ina226_alert_limit_write():
-
-	ret =3D regmap_update_bits(regmap, INA226_MASK_ENABLE,
-				 INA226_ALERT_CONFIG_MASK, 0);
-	...
-	data->active_alert =3D val ? alert : INA2XX_ALERT_NONE;
-
-Does this inadvertently destroy the configuration of the currently active
-alert of a different type without checking if the disable operation applies
-to it?
-
-[ ... ]
-
-[Severity: High]
-This is a pre-existing issue, but I noticed a potential overflow when
-calculating power values.
-
-In ina2xx_get_value() for INA2XX_POWER:
-
-	case INA2XX_POWER:
-		val =3D regval * data->power_lsb_uW;
-		break;
-
-If a user configures a small shunt resistor (e.g., 1 mOhm), power_lsb_uW
-becomes large. When the hardware measures high power, regval can also be
-quite large.=20
-
-Since val is a 32-bit signed integer, could this multiplication overflow
-on 32-bit architectures and result in incorrect negative power readings
-being reported to userspace?
-
-[Severity: High]
-This is a pre-existing issue, but could we run into an overflow on 32-bit
-architectures when setting shunt voltage limits?
-
-In ina226_alert_to_reg():
-
-	case INA2XX_SHUNT_VOLTAGE:
-		val =3D clamp_val(val, 0, SHRT_MAX * data->config->shunt_div);
-		val *=3D data->config->shunt_div;
-
-On a 32-bit system, long is 32 bits. If a user inputs a large limit, and
-it passes the first clamp, the multiplication by shunt_div could exceed
-the maximum value of a signed 32-bit integer.
-
-Does this overflow the signed long, wrapping to a negative value that
-then gets incorrectly clamped to 0 by the final clamp_val()?
-
-[Severity: High]
-This is a pre-existing issue, but setting power limits on 32-bit systems
-seems to always evaluate to 0.
-
-In ina226_alert_to_reg():
-
-	case INA2XX_POWER:
-		val =3D clamp_val(val, 0, UINT_MAX - data->power_lsb_uW);
-
-The clamp_val macro casts bounds to typeof(val) which is a signed long.=20
-
-On 32-bit systems, does UINT_MAX - data->power_lsb_uW evaluate to a
-large positive unsigned value that becomes negative when cast to a
-signed long?
-
-If the upper bound is negative, does this force clamp_val to rewrite all
-positive user inputs to negative values, guaranteeing the function always
-returns 0?
-
-[Severity: Medium]
-This is a pre-existing issue, but there appears to be a locking violation
-when reading the shunt resistor.
-
-The hwmon subsystem guidelines require drivers to use hwmon_lock() for
-attributes registered outside the core info parameter.=20
-
-Looking at shunt_resistor_show():
-
-static ssize_t shunt_resistor_show(struct device *dev,
-				   struct device_attribute *da, char *buf)
-{
-	struct ina2xx_data *data =3D dev_get_drvdata(dev);
-
-	return sysfs_emit(buf, "%li\n", data->rshunt);
-}
-
-Since shunt_resistor_store() modifies data->rshunt, does this show
-function need to acquire the hwmon_lock to prevent unprotected concurrent
-accesses?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260729-upstream-i=
-na2xx-in0-curr1-alarms-v1-0-349f7b2f1df8@redhat.com?part=3D4
+Thanks!
