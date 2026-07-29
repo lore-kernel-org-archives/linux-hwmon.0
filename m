@@ -1,138 +1,74 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E0DA396D09;
-	Wed, 29 Jul 2026 21:54:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22ABF3BED78
+	for <linux-hwmon@vger.kernel.org>; Wed, 29 Jul 2026 21:59:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785362094; cv=none; b=GtT02PyIJu5M7lSub6jGpaFASjp6XvI1FRyHxzLhz55lvmPMQokfXtLHubFmMJX5/fwr/aZ8hrzVqh1pl3FyRRvI8xIfYCMMbxzoCBqE06mjtJf/cT0PIyNaTbvKXBIeAgiu/7aYSCFDYBqZMWlDbxCZlAZFyd11AIhNdCTjVQs=
+	t=1785362387; cv=none; b=aP4qqyYTtPvMMXRh9AgG/gWydt7gy4+bKQ6FnU3ck28kb4dDuP1tT9MTIyhWrykwevIkS2gn3D/WzoxfN9te5FTSJjdYCDebhD8KA2kBEMlqB0i1SPy7qt7RW6/RWbRK6hrE1/U0kt7c6wGVfpyto43hcdcFbbaNHJiSm51neZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785362094; c=relaxed/simple;
-	bh=XHNnNP0x2wCRJyrSJgej4CyXt6QqDHcD5MVMn0YR8+4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Sj0XkGNpAVmJXRgE7OlBe7XwtL0D0NSxSskUrQ4Ns7A34FP3qln6VbnsicnRcLte3g0v1Lt8dTsCdEYwbLvcuNfiZ9pKd2DKz3f+jDy/chQYCi5wTk3ahya37qtA925dAMh7SaWWYOGGU21C8hPCaEOBwHTj5ltCB+0QW8hJOlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=b6DbNnm4; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1785362387; c=relaxed/simple;
+	bh=zjqmgPQT5aMjVpYidoG4UAwfNZw2UqvKj2gNfa2ImvA=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=BlYy6LWrB+2axOgE/FyrfPOnJFTGF3OFt5Qsvdya2ZcbDP2PKqHfa31NaIwOuC2iG3kURCFi4BOPq0VDDOzM3wTEnpGHn3sC1cZze8yyhTY9j5iLVSTuX7aj8BKRwJ9J/PjW310+VCnrJf4S+qVME0hcbCaC3C9zmwXvTam1Urg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D4SHcnPM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="b6DbNnm4"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 418BA1684;
-	Wed, 29 Jul 2026 14:54:40 -0700 (PDT)
-Received: from e131404.arm.com (unknown [10.57.43.134])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1F2863F763;
-	Wed, 29 Jul 2026 14:54:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1785362084; bh=XHNnNP0x2wCRJyrSJgej4CyXt6QqDHcD5MVMn0YR8+4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=b6DbNnm46lfNZ8vZS9R63cbt98b/2emk8OCLXhdWtRnRmgjlwE0rS0EFE9j/4DmZL
-	 5J4z5tK+XQ5hVGSkXZlON0Rq+YZLHpUdxq9H5WUtCzZZ/0oO1jUgW4LD7rCKHVuVXU
-	 eCQa41StmChzeHX+mVYck4V4FhZDZmgBWPW+WJ6o=
-From: Laszlo Ersek <laszlo.ersek@arm.com>
-To: laszlo.ersek@arm.com
-Cc: Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Joel Stanley <joel@jms.id.au>,
-	Sudeep Holla <sudeep.holla@kernel.org>,
-	arm-scmi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] hwmon: remove tautological dependency expressions from Kconfig
-Date: Wed, 29 Jul 2026 23:54:27 +0200
-Message-ID: <20260729215436.2103380-1-laszlo.ersek@arm.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D4SHcnPM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 969B11F000E9;
+	Wed, 29 Jul 2026 21:59:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785362385;
+	bh=dDNs6gIdO1/Qaf6BEe/0k+fFEQTysXAesqRzCskc1Ns=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=D4SHcnPMSoP3adx5MWGNMHphfe4Oxj7aYvl/zqLK3RTLKCphQep3fyEsColycrICb
+	 9jvjNPcosAPjIGnyNEhbs4TPU7eSFYkUKTrG9ORq3E/NrNUH3in3bM9a+tSlS60bsM
+	 ujqZWMbZC7UZilJVNka9L3Xj+J+3ulNHqZe+aYiq1yoCplKIQovFJ+C7HYaCbNyq/Z
+	 ZOZ9EDKH+aVHlMif5kWJHbxfW7Sd8aUHPZVxKWk4/UvTnN+GAtl/20ZKWFMLoWJ7O2
+	 XhxUVBHSHRKJDyILAeOQ7zqhM56rkceTUVlpiOiwJ37E2KGDTWxWFJE5sKcy9Szq1L
+	 OmHz48sHxT7fQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH] hwmon: remove tautological dependency expressions
+ from Kconfig
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Laszlo Ersek" <laszlo.ersek@arm.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260729215436.2103380-1-laszlo.ersek@arm.com>
+References: <20260729215436.2103380-1-laszlo.ersek@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 29 Jul 2026 21:59:45 +0000
+Message-Id: <20260729215945.969B11F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
 
-Q29tbWl0IDU1NGIzNTI5ZmUwMSAoInRoZXJtYWwvZHJpdmVycy9jb3JlOiBSZW1vdmUgdGhlIG1v
-ZHVsZSBLY29uZmlnJ3MKb3B0aW9uIikgWzFdIG9idmlhdGVkIHNvbWUgb2YgdGhlICJPcHRpb25h
-bCBkZXBlbmRlbmNpZXMiIChhcyBkZXNjcmliZWQgaW4KIkRvY3VtZW50YXRpb24va2J1aWxkL2tj
-b25maWctbGFuZ3VhZ2UucnN0IikgaW4gImRyaXZlcnMvaHdtb24vS2NvbmZpZyIuCgpOYW1lbHks
-IHNhaWQgY29tbWl0IHJlc3RyaWN0ZWQgdGhlIHZhbGlkL3Bvc3NpYmxlIHN1YnNldCBvZiB0aGUg
-ZnVsbApDYXJ0ZXNpYW4gcHJvZHVjdCAiQ09ORklHX1RIRVJNQUwgeCBDT05GSUdfVEhFUk1BTF9P
-RiIgdG8KCiAgeyAobiwgbiksICh5LCBuKSwgKHksIHkpIH0KCnRocm91Z2ggImRyaXZlcnMvdGhl
-cm1hbC9LY29uZmlnIi4gTnVtZXJpY2FsbHkgKHVzaW5nIHRyaXN0YXRlIHZhbHVlcyksCnRoaXMg
-c2V0IGNhbiBiZSBleHByZXNzZWQgYXM6CgogIHsgKDAsIDApLCAoMiwgMCksICgyLCAyKSB9CgpP
-dmVyIHRoaXMgc2V0LCB0aGUgImRyaXZlcnMvaHdtb24vS2NvbmZpZyIgdHJpc3RhdGUgZXhwcmVz
-c2lvbgoKICBUSEVSTUFMIHx8ICFUSEVSTUFMX09GCgpvciBlcXVpdmFsZW50bHksCgogIG1heChU
-SEVSTUFMLCAyLVRIRVJNQUxfT0YpCgppbnZhcmlhYmx5IGV2YWx1YXRlcyB0byAieSIgKDIpLgoK
-U2ltaWxhcmx5LCB3aXRoIFRIRVJNQUwgaGF2aW5nIGJlZW4gcmVzdHJpY3RlZCB0bwoKICB7IG4s
-IHkgfQoKb3IgbnVtZXJpY2FsbHksCgogIHsgMCwgMiB9Cgp0aGUgImRyaXZlcnMvaHdtb24vS2Nv
-bmZpZyIgdHJpc3RhdGUgZXhwcmVzc2lvbgoKICBUSEVSTUFMIHx8IFRIRVJNQUw9bgoKb3IgZXF1
-aXZhbGVudGx5LAoKICBtYXgoVEhFUk1BTCwgVEhFUk1BTD0wKQoKaW52YXJpYWJseSBldmFsdWF0
-ZXMgdG8gInkiICgyKS4gKE5vdGUgdGhhdCAiVEhFUk1BTD0wIiByZXR1cm5zIGVpdGhlciAieSIK
-KDIpIG9yICJuIiAoMCkuKQoKQ29tbWl0IGYzNzM1MzMyMGVlOSAoImh3bW9uL2RyaXZlcnMvY29y
-ZTogU2ltcGxpZnkgY29tcGxleCBkZXBlbmRlbmN5IikKWzJdLCB3aGljaCBpcyB0aGUgZmluYWwg
-Y29tbWl0IG9mIHRoZSBzZXJpZXMgdGhhdCBbMV0gaXMgdGhlIGJlZ2lubmluZyBvZiwKY2xlYW5l
-ZCB1cCB0aGUgaHdtb24gQyBzb3VyY2UgY29kZSBpbiBmYWN0OyBob3dldmVyLCBpdCBtaXNzZWQg
-dGhlCm5vdy1jb2xsYXBzZWQgZGVwZW5kZW5jaWVzIGluIEtjb25maWcuIEF0IHRoZSB0aW1lIG9m
-IFsyXSwgc2l4IG9mIHRvZGF5J3MKc3VjaCBkZXBlbmRlbmNpZXMgd2VyZSBwcmVzZW50IGluIEtj
-b25maWcuIFNpbmNlIHRoZW4sIHR3byBtb3JlIGhhdmUgYmVlbgphZGRlZCAoc3VjaCB0aGF0IHRo
-ZXkgcGVyc2lzdCwgYW55d2F5KTogb25lIGJ5IGNvbW1pdCA0ZjhkMzc0Yjc3MGEKKCJod21vbjog
-KG1heDY2NTApIGFkZCB0aGVybWFsIGNvb2xpbmcgZGV2aWNlIGNhcGFiaWxpdHkiKSwgd2hpY2gg
-d2FzCmluZGVwZW5kZW50IG9mIHRoZSBhYm92ZS1ub3RlZCBzZXJpZXMsIGFuZCBhbm90aGVyIGJ5
-IGNvbW1pdCA5ODU1Y2FmNWQ0ZWIKKCJod21vbjogYWRkIGRyaXZlciBmb3IgdGhlIGh3bW9uIHBh
-cnRzIG9mIHFuYXAtbWN1IGRldmljZXMiKSwgd2hpY2ggd2FzIGEKZGVzY2VuZGFudCBvZiB0aGUg
-c2VyaWVzLgoKUmVtb3ZlIHRoZXNlIGFsd2F5cy0ieSIgZGVwZW5kZW5jaWVzLgoKQ2M6IEFuZHJl
-dyBKZWZmZXJ5IDxhbmRyZXdAY29kZWNvbnN0cnVjdC5jb20uYXU+CkNjOiBDcmlzdGlhbiBNYXJ1
-c3NpIDxjcmlzdGlhbi5tYXJ1c3NpQGFybS5jb20+CkNjOiBHdWVudGVyIFJvZWNrIDxsaW51eEBy
-b2Vjay11cy5uZXQ+CkNjOiBIZWlrbyBTdHVlYm5lciA8aGVpa29Ac250ZWNoLmRlPgpDYzogSm9l
-bCBTdGFubGV5IDxqb2VsQGptcy5pZC5hdT4KQ2M6IFN1ZGVlcCBIb2xsYSA8c3VkZWVwLmhvbGxh
-QGtlcm5lbC5vcmc+CkNjOiBhcm0tc2NtaUB2Z2VyLmtlcm5lbC5vcmcKQ2M6IGxpbnV4LWFybS1r
-ZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZwpDYzogbGludXgtYXNwZWVkQGxpc3RzLm96bGFicy5v
-cmcKQ2M6IGxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZwpDYzogbGludXgta2VybmVsQHZnZXIu
-a2VybmVsLm9yZwpTaWduZWQtb2ZmLWJ5OiBMYXN6bG8gRXJzZWsgPGxhc3psby5lcnNla0Bhcm0u
-Y29tPgotLS0KCk5vdGVzOgogICAgVW50ZXN0ZWQgKGhlbmNlIFJGQykgLS0gSSBkb24ndCBrbm93
-IGhvdyB0byByZWdyZXNzaW9uLXRlc3QgdGhpcyBwYXRjaAogICAgY29tcHJlaGVuc2l2ZWx5IHll
-dCBtaW5pbWFsbHkuCgogZHJpdmVycy9od21vbi9LY29uZmlnIHwgOCAtLS0tLS0tLQogMSBmaWxl
-IGNoYW5nZWQsIDggZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9od21vbi9LY29u
-ZmlnIGIvZHJpdmVycy9od21vbi9LY29uZmlnCmluZGV4IDJiZmJjYzAzM2Q1OS4uZDNhOWM4YTNh
-NzljIDEwMDY0NAotLS0gYS9kcml2ZXJzL2h3bW9uL0tjb25maWcKKysrIGIvZHJpdmVycy9od21v
-bi9LY29uZmlnCkBAIC00MDMsNyArNDAzLDYgQEAgY29uZmlnIFNFTlNPUlNfQVJDVElDX0ZBTl9D
-T05UUk9MTEVSCiBjb25maWcgU0VOU09SU19BUk1fU0NNSQogCXRyaXN0YXRlICJBUk0gU0NNSSBT
-ZW5zb3JzIgogCWRlcGVuZHMgb24gQVJNX1NDTUlfUFJPVE9DT0wKLQlkZXBlbmRzIG9uIFRIRVJN
-QUwgfHwgIVRIRVJNQUxfT0YKIAloZWxwCiAJICBUaGlzIGRyaXZlciBwcm92aWRlcyBzdXBwb3J0
-IGZvciB0ZW1wZXJhdHVyZSwgdm9sdGFnZSwgY3VycmVudAogCSAgYW5kIHBvd2VyIHNlbnNvcnMg
-YXZhaWxhYmxlIG9uIFNDTUkgYmFzZWQgcGxhdGZvcm1zLiBUaGUgYWN0dWFsCkBAIC00MTUsNyAr
-NDE0LDYgQEAgY29uZmlnIFNFTlNPUlNfQVJNX1NDTUkKIGNvbmZpZyBTRU5TT1JTX0FSTV9TQ1BJ
-CiAJdHJpc3RhdGUgIkFSTSBTQ1BJIFNlbnNvcnMiCiAJZGVwZW5kcyBvbiBBUk1fU0NQSV9QUk9U
-T0NPTAotCWRlcGVuZHMgb24gVEhFUk1BTCB8fCAhVEhFUk1BTF9PRgogCWhlbHAKIAkgIFRoaXMg
-ZHJpdmVyIHByb3ZpZGVzIHN1cHBvcnQgZm9yIHRlbXBlcmF0dXJlLCB2b2x0YWdlLCBjdXJyZW50
-CiAJICBhbmQgcG93ZXIgc2Vuc29ycyBhdmFpbGFibGUgb24gQVJNIEx0ZCdzIFNDUCBiYXNlZCBw
-bGF0Zm9ybXMuIFRoZQpAQCAtNDM1LDcgKzQzMyw2IEBAIGNvbmZpZyBTRU5TT1JTX0FTQjEwMAog
-Y29uZmlnIFNFTlNPUlNfQVNQRUVECiAJdHJpc3RhdGUgIkFTUEVFRCBBU1QyNDAwL0FTVDI1MDAg
-UFdNIGFuZCBGYW4gdGFjaCBkcml2ZXIiCiAJZGVwZW5kcyBvbiBBUkNIX0FTUEVFRCB8fCBDT01Q
-SUxFX1RFU1QKLQlkZXBlbmRzIG9uIFRIRVJNQUwgfHwgVEhFUk1BTD1uCiAJc2VsZWN0IFJFR01B
-UAogCWhlbHAKIAkgIFRoaXMgZHJpdmVyIHByb3ZpZGVzIHN1cHBvcnQgZm9yIEFTUEVFRCBBU1Qy
-NDAwL0FTVDI1MDAgUFdNCkBAIC03ODgsNyArNzg1LDYgQEAgY29uZmlnIFNFTlNPUlNfRzc2Mgog
-Y29uZmlnIFNFTlNPUlNfR1BJT19GQU4KIAl0cmlzdGF0ZSAiR1BJTyBmYW4iCiAJZGVwZW5kcyBv
-biBHUElPTElCIHx8IENPTVBJTEVfVEVTVAotCWRlcGVuZHMgb24gVEhFUk1BTCB8fCBUSEVSTUFM
-PW4KIAloZWxwCiAJICBJZiB5b3Ugc2F5IHllcyBoZXJlIHlvdSBnZXQgc3VwcG9ydCBmb3IgZmFu
-cyBjb25uZWN0ZWQgdG8gR1BJTyBsaW5lcy4KIApAQCAtMTM1Nyw3ICsxMzUzLDYgQEAgY29uZmln
-IFNFTlNPUlNfTUFYNjYzOQogY29uZmlnIFNFTlNPUlNfTUFYNjY1MAogCXRyaXN0YXRlICJNYXhp
-bSBNQVg2NjUwIHNlbnNvciBjaGlwIgogCWRlcGVuZHMgb24gSTJDCi0JZGVwZW5kcyBvbiBUSEVS
-TUFMIHx8IFRIRVJNQUw9bgogCWhlbHAKIAkgIElmIHlvdSBzYXkgeWVzIGhlcmUgeW91IGdldCBz
-dXBwb3J0IGZvciB0aGUgTUFYNjY1MCAvIE1BWDY2NTEKIAkgIHNlbnNvciBjaGlwcy4KQEAgLTE3
-MzIsNyArMTcyNyw2IEBAIGNvbmZpZyBTRU5TT1JTX1BDODc0MjcKIGNvbmZpZyBTRU5TT1JTX05U
-Q19USEVSTUlTVE9SCiAJdHJpc3RhdGUgIk5UQyB0aGVybWlzdG9yIHN1cHBvcnQiCiAJZGVwZW5k
-cyBvbiBJSU8KLQlkZXBlbmRzIG9uIFRIRVJNQUwgfHwgIVRIRVJNQUxfT0YKIAloZWxwCiAJICBU
-aGlzIGRyaXZlciBzdXBwb3J0cyBOVEMgdGhlcm1pc3RvcnMgc2Vuc29yIHJlYWRpbmcgYW5kIGl0
-cwogCSAgaW50ZXJwcmV0YXRpb24uIFRoZSBkcml2ZXIgY2FuIGFsc28gbW9uaXRvciB0aGUgdGVt
-cGVyYXR1cmUgYW5kCkBAIC0xOTMzLDcgKzE5MjcsNiBAQCBjb25maWcgU0VOU09SU19QVDUxNjFM
-CiBjb25maWcgU0VOU09SU19QV01fRkFOCiAJdHJpc3RhdGUgIlBXTSBmYW4iCiAJZGVwZW5kcyBv
-biBQV00gfHwgQ09NUElMRV9URVNUCi0JZGVwZW5kcyBvbiBUSEVSTUFMIHx8IFRIRVJNQUw9bgog
-CWhlbHAKIAkgIElmIHlvdSBzYXkgeWVzIGhlcmUgeW91IGdldCBzdXBwb3J0IGZvciBmYW5zIGNv
-bm5lY3RlZCB0byBQV00gbGluZXMuCiAJICBUaGUgZHJpdmVyIHVzZXMgdGhlIGdlbmVyaWMgUFdN
-IGludGVyZmFjZSwgdGh1cyBpdCB3aWxsIHdvcmsgb24gYQpAQCAtMTk0NSw3ICsxOTM4LDYgQEAg
-Y29uZmlnIFNFTlNPUlNfUFdNX0ZBTgogY29uZmlnIFNFTlNPUlNfUU5BUF9NQ1VfSFdNT04KIAl0
-cmlzdGF0ZSAiUU5BUCBNQ1UgaGFyZHdhcmUgbW9uaXRvcmluZyIKIAlkZXBlbmRzIG9uIE1GRF9R
-TkFQX01DVQotCWRlcGVuZHMgb24gVEhFUk1BTCB8fCBUSEVSTUFMPW4KIAloZWxwCiAJICBTYXkg
-eWVzIGhlcmUgdG8gZW5hYmxlIHN1cHBvcnQgZm9yIGZhbiBhbmQgdGVtcGVyYXR1cmUgc2Vuc29y
-CiAJICBjb25uZWN0ZWQgdG8gYSBRTkFQIE1DVSwgYXMgZm91bmQgaW4gYSBudW1iZXIgb2YgUU5B
-UCBuZXR3b3JrCg==
+> Commit 554b3529fe01 ("thermal/drivers/core: Remove the module Kconfig's
+> option") [1] obviated some of the "Optional dependencies" (as described in
+> "Documentation/kbuild/kconfig-language.rst") in "drivers/hwmon/Kconfig".
+>=20
+> Namely, said commit restricted the valid/possible subset of the full
+> Cartesian product "CONFIG_THERMAL x CONFIG_THERMAL_OF" to
+>=20
+>   { (n, n), (y, n), (y, y) }
+>=20
+> through "drivers/thermal/Kconfig". Numerically (using tristate values),
+> this set can be expressed as:
+>=20
+>   { (0, 0), (2, 0), (2, 2) }
+>=20
+> Over this set, the "drivers/hwmon/Kconfig" tristate expression
+> [ ... ]
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-aspeed@lists.ozlabs.org
+> Cc: linux-hwmon@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Laszlo Ersek <laszlo.ersek@arm.com>
+
+Sashiko has reviewed this patch and found no issues. It looks great!
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260729215436.2103=
+380-1-laszlo.ersek@arm.com?part=3D1
+
