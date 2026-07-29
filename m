@@ -1,178 +1,148 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB65F38DC5F;
-	Wed, 29 Jul 2026 15:40:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD78D32E141
+	for <linux-hwmon@vger.kernel.org>; Wed, 29 Jul 2026 15:43:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785339638; cv=none; b=mS3H1YBKqF39x4b8NBFzULWBrOJCnPNZAYDTSujLkjAgvMo03eQX36luxxYk0dDPYMjcTZhewIGvGCvdMLPdOKilpQn2VLAZ0FnSIQZ6FNlX62XkzZjjUU7FIkEaym7aDBMKHyANHpc1hS8RcVJE+LHuDMc6lwErHdFG1DW9Ta4=
+	t=1785339783; cv=none; b=TosWjmGQ+lZr2S5n/t1+DfocQPxK3xwfugzZG8PI4RbJYNV/8+IOEzsAWiBNKupTRKuLA6lyLwCu4dmXWAnnFOu51s1NtpmQ9YRgnV5JgI9uJuS9UGRIHFmZ4AOaLGd+917IcowIdlx34L6028NjoOe/ynSnz6k2e48YHQkXLD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785339638; c=relaxed/simple;
-	bh=y4Z9bRI9kl+5SfyqXip40FNbkMh0cLcY/RV/p5Va0g8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JFF28BpbuSf9JaVDbxYzBLUPutbFmZIewdbxKKPGG4iwCbzuuFULZAyj3TzU6UNNY33PdBllyLf6O6NrNz1UbWYCgJgLprJvHFD5bTAZTd/YaxQr7Ytqe+xcp6lVkmCj54LIKYfZwLXpUEVDnxzV4qqREFRqghMrBMmzw9q0FDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=qAN4v858; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1785339783; c=relaxed/simple;
+	bh=w9mDpTYu4ssoJnJ+HkcMVBmgvJ1qdCqNaAaVaYH1h7I=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Nw6iMulqgyun2PiH5nVP1YyqHlP++g6O0beTLkRw25/XYUIzUrWUGLktofiGjDixIm80YGSxNDDksb7f6Tsxy3zdHLASd8Ek3edDzVjPotJxcp+u73tdEVvkYgqujLZlGzH9creCo4ptWJUlFZ9M/nxNIopPholhYj4Ukdo1Kow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Mt9FD3p3; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=k7jTYbFS; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="qAN4v858"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1785339634;
-	bh=y4Z9bRI9kl+5SfyqXip40FNbkMh0cLcY/RV/p5Va0g8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qAN4v8583/1yw+8mYzSADdu1jNKw5bQGOcHbMZEVkvSSHXzy89SpgT95weARf+ZBf
-	 eDfKYoen659YHSGzhprXzrGQlNtrScAIkWIpVDxK5uZCl65AHH8ryQwuZBd1YG6YXc
-	 PPgUQPpTKR1RsmiJUfjl8bdkDFbA8y60k9lmCEiA=
-Date: Wed, 29 Jul 2026 17:40:33 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Benson Leung <bleung@chromium.org>, 
-	Guenter Roeck <groeck@chromium.org>, chrome-platform@lists.linux.dev, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (cros_ec) Handle temperature conversion
- overflows
-Message-ID: <63f9c782-3e4e-468e-a31f-901d1e2ff40b@t-8ch.de>
-References: <20260728-cros_ec-hwmon-overflow-v2-1-d24e24d0792b@weissschuh.net>
- <0fbf7f69-bb90-4209-b9d5-258759711496@roeck-us.net>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Mt9FD3p3";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="k7jTYbFS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1785339781;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=0qSY6BWrUE0NLE71VBbO7Z4Al1DApQtmOZjsA5GEmE8=;
+	b=Mt9FD3p3pHJAmc7YFwcagqhl5uEqMpRzx0leqdKjbK96C3J1TmDAoGibXcbS/1AFEdI4Kh
+	dwhcXhUg6+He7kGjQy8SolvOsNWe94XgWaA7I8taOmKKTrkLQ5LXhqo8ldO3IPvjoRkHrK
+	1KcxenQd9Gc8SLVR51/av3G1UZCCkww=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-81-chRCTsuiOjydl_F5b9XiUA-1; Wed, 29 Jul 2026 11:43:00 -0400
+X-MC-Unique: chRCTsuiOjydl_F5b9XiUA-1
+X-Mimecast-MFC-AGG-ID: chRCTsuiOjydl_F5b9XiUA_1785339780
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-51c0408254aso94291cf.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 29 Jul 2026 08:43:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1785339780; x=1785944580; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=0qSY6BWrUE0NLE71VBbO7Z4Al1DApQtmOZjsA5GEmE8=;
+        b=k7jTYbFS8ROqerynujB1YOPmX9+yx/aZ8nwL/5HBnwqMFiLfQNW4z/jZOTxrdroXuJ
+         4jADtnuNtuwmkdT8EPRZRonvjt618QnYG0nBa5N29uMmLTZfvOaT4Mzfyf05rKycARGn
+         w6hIhzx6WKbLICrEuo39uydNHb3avgT+uLaaiuEE5n2CA8WfD/41SvtJ+PlD6Mek4uOM
+         cf4Cj6cj1AO92cMsUP8ZhWrtl1Nb46MCfyrXBeWdvDAnh6x3o3l6SM81WJ94mzKC0Noy
+         6IgyIHX4iz99sWRbnN6FuZOiFD39dLlAo1bQJj5t8wp2hW87G9HANLh6pbvRi7au8tr6
+         551w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785339780; x=1785944580;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=0qSY6BWrUE0NLE71VBbO7Z4Al1DApQtmOZjsA5GEmE8=;
+        b=IGbZpH9h+jmnJarCSAiUWT8DLOLaeYZ/4fD+XnbTfBnANxMdxoUwfMoV6biiDQVRAZ
+         5lgLCsI+NizgUHENby0CpTs3i0qKGnWqedvlI//QiTCB3QRiQ8SWeywEYtIbC3zBg/sq
+         eEM/7EAnvFiVWWwbVMODQuWW6F39neftMfw6UOQ1G3axvCtuR/HgmwJZE+QeAM12pQ7h
+         mK+PE09YyCn12wzILH1vVW07J9ipYZeRkhF08VeVgFYjPvathwsIC9OZCv65puoRXna9
+         gaKyJUS1M1sENByUrAZzNxERvDc6sJntpBR5nJ2ckv9EOlrn8FYnlq2F+BmdIJrPuu7U
+         nG9g==
+X-Gm-Message-State: AOJu0YzxPrQ8jtwW/t2Bidn1m0UWEUDaGZUVVq58H/yMSCg/IahKQweV
+	Fl0SoGh4keCvxTAf0PC+M8svyLDfUZ53s5ltqFIJXj/eIUzU7+Ov03twSJnClmqrscFhO2ZU77M
+	3JBMwyy7FD2EZ4mYuZaZyOZ9d2eLgUETsJoc/be+g2XPmCI8DyO+VsyK3LiKJyfuLZ+WMxIYWZr
+	UFvYmepvoOBrh2AqN3W+u2sRGyWdqtQWv90HXBVnv6bOic++I=
+X-Gm-Gg: AR+sD12xjEk4gPkPW5D+22OF0W0Fs5YxH4Yda8xNl/mMRQvqvbBGp7wDSJlHw7t/vV5
+	3ZocokYx8pjZjPv5c8u4vYjLv/XQlofHBWO2iLRmiJs4SoDKMRFv3eCku5SzTxrBK4hgXzzdeAH
+	A1MRBNT//Np4ZAAOM0qH17vdqyzW9DPzPG2VYxdICkcamKjvY8zi9wDqO/xCzC32WrqbsQE1D3H
+	tjE79SU7HUJk9DawIRZfNVIrQiG3wfG+XSfQcjFRFzotw76V3GE8aTckKZd+Ec+CYRQ+S8pyl4o
+	GqsMtBky7yJ/GGivU1DjvMvR+mkkLzc5+axxn3ndm3rHc1Jds/h+9wat0D1X4T287U3qCaYzCna
+	OdUs4I4leanb3gzorwUmukXKGbMDSKd7T
+X-Received: by 2002:a05:622a:c83:b0:51c:a9a:b0f8 with SMTP id d75a77b69052e-52b2add4528mr25908371cf.29.1785339779822;
+        Wed, 29 Jul 2026 08:42:59 -0700 (PDT)
+X-Received: by 2002:a05:622a:c83:b0:51c:a9a:b0f8 with SMTP id d75a77b69052e-52b2add4528mr25907451cf.29.1785339778578;
+        Wed, 29 Jul 2026 08:42:58 -0700 (PDT)
+Received: from jkangas-thinkpadp1gen3.rmtuswa.csb ([2601:1c2:4480:2110:932e:45ef:6b6c:ddd0])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-529e2efcb4esm20749871cf.26.2026.07.29.08.42.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jul 2026 08:42:57 -0700 (PDT)
+From: Jared Kangas <jkangas@redhat.com>
+Subject: [PATCH 0/4] hwmon: (ina2xx) Decouple in0 and curr1 alarms
+Date: Wed, 29 Jul 2026 08:42:34 -0700
+Message-Id: <20260729-upstream-ina2xx-in0-curr1-alarms-v1-0-349f7b2f1df8@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0fbf7f69-bb90-4209-b9d5-258759711496@roeck-us.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2NQQqDQAwAvyI5G1hDq61fkR6Cm20DdZWklgXx7
+ 116GuYyc4CLqTiMzQEmX3Vdc5WubWB+cX4KaqwOFKgPA11w3/xjwgtqZiqlIuC8m3XIb7bFMd2
+ uMsT+TikmqJnNJGn5L6bHef4AEfea+XIAAAA=
+X-Change-ID: 20260724-upstream-ina2xx-in0-curr1-alarms-f85e7d692fdf
+To: Guenter Roeck <linux@roeck-us.net>, Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Jared Kangas <jkangas@redhat.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1785339776; l=1530;
+ i=jkangas@redhat.com; s=20251111; h=from:subject:message-id;
+ bh=w9mDpTYu4ssoJnJ+HkcMVBmgvJ1qdCqNaAaVaYH1h7I=;
+ b=+suQkW2QuF11tg680dJ6Aq1dbuQUfWiawaFdTsdI2/DSoVjhD0zdtNfjwnpJXT3QzexfhxyiJ
+ UfW/cQE+OtODGYZ4yM7mJSKY6AZMdpFh+QCqNJeRNP3Yl//yYHx/wVk
+X-Developer-Key: i=jkangas@redhat.com; a=ed25519;
+ pk=eFM2Mqcfarb4qox390655bUATO0fG9gwgaw7kGmOEZQ=
 
-On 2026-07-28 08:02:28-0700, Guenter Roeck wrote:
-> On 7/28/26 03:17, Thomas Weißschuh wrote:
-> > The calculations converting between the different temperature units can
-> > overflow on 32-bit systems, resulting in incorrect data.
-> > 
-> > Detect these overflows and handle them.
-> > 
-> > The code is written in a way that there is a single conversion function
-> > and the compiler can recognize when overflows are impossible (on 64-bit
-> > and in cros_ec_hwmon_temp_to_millicelsius()). If the compiler detects
-> > this, it will optimize away the overflow checks.
-> > 
-> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> > ---
-> > Changes in v2:
-> > - Drop already applied patch 1.
-> > - Also handle overflow of u32 -> long.
-> > - Clarify commit message wrt compiler optimizations.
-> > - Use __always_inline over __flatten to allow the compiler to optimize
-> >    away more unnecessary overflow checks.
-> > - Link to v1: https://patch.msgid.link/20260630-cros_ec-hwmon-overflow-v1-0-3d2ecd3eb0f2@weissschuh.net
-> > ---
-> >   drivers/hwmon/cros_ec_hwmon.c | 31 ++++++++++++++++++++++++++-----
-> >   1 file changed, 26 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
-> > index 1337b646e022..004a8180b665 100644
-> > --- a/drivers/hwmon/cros_ec_hwmon.c
-> > +++ b/drivers/hwmon/cros_ec_hwmon.c
-> > @@ -5,11 +5,13 @@
-> >    *  Copyright (C) 2024 Thomas Weißschuh <linux@weissschuh.net>
-> >    */
-> > +#include <linux/build_bug.h>
-> >   #include <linux/cleanup.h>
-> >   #include <linux/device.h>
-> >   #include <linux/hwmon.h>
-> >   #include <linux/math.h>
-> >   #include <linux/module.h>
-> > +#include <linux/overflow.h>
-> >   #include <linux/platform_device.h>
-> >   #include <linux/platform_data/cros_ec_commands.h>
-> >   #include <linux/platform_data/cros_ec_proto.h>
-> > @@ -151,14 +153,28 @@ static bool cros_ec_hwmon_is_error_temp(u8 temp)
-> >   /* This differs slightly from the variant in units.h to avoid rounding inconsistencies. */
-> >   #define CROS_EC_HWMON_ABSOLUTE_ZERO_MILLICELSIUS (-273000)
-> > -static long cros_ec_hwmon_kelvin_to_millicelsius(long t)
-> > +static __always_inline bool cros_ec_hwmon_kelvin_to_millicelsius_overflow(long t, long *ret)
-> >   {
-> > -	return t * MILLIDEGREE_PER_DEGREE + CROS_EC_HWMON_ABSOLUTE_ZERO_MILLICELSIUS;
-> > +	if (check_mul_overflow(t, MILLIDEGREE_PER_DEGREE, ret))
-> > +		return true;
-> > +
-> > +	if (check_add_overflow(*ret, CROS_EC_HWMON_ABSOLUTE_ZERO_MILLICELSIUS, ret))
-> > +		return true;
-> > +
-> > +	return false;
-> 
-> 	return check_add_overflow(*ret, CROS_EC_HWMON_ABSOLUTE_ZERO_MILLICELSIUS, ret);
-> >   }
-> >   static long cros_ec_hwmon_temp_to_millicelsius(u8 temp)
-> 
-> The maximum value of "temp" is 255.
-> 
-> >   {
-> > -	return cros_ec_hwmon_kelvin_to_millicelsius((((long)temp) + EC_TEMP_SENSOR_OFFSET));
-> 
-> 255 + 200 = 455.
-> 455 * 1000 = 455000 (not even counting the conversion from kelvin to C).
-> 
-> How could this ever overflow ?
+The in0 and curr1 alarms in the ina2xx driver are both based on shunt
+voltage in the hardware, which causes unexpected behavior when reading
+the two inputs' alarms:
 
-It will never overflow. And the compiler knows this and optimizes away
-all the overflow checks. Otherwise the build would straight up fail to
-the BUILD_BUG()s below.
+1. Both alarms may read back 1, even though only one is set.
 
-The idea was that not everyone reading this code needs to do the
-calculations and double-check.
+2. The "active" alarm may read back 0 even if the limit was reached due
+   to the use of alert latching. If the inactive alarm is read, it
+   clears the active alarm, and the alarm may not be set before the next
+   read:
 
-> > +	long ret;
-> > +
-> > +	if (check_add_overflow(temp, EC_TEMP_SENSOR_OFFSET, &ret))
-> > +		BUILD_BUG();
-> > +
-> > +	if (cros_ec_hwmon_kelvin_to_millicelsius_overflow(ret, &ret))
-> > +		BUILD_BUG();
-> > +
-> > +	return ret;
-> >   }
-> >   static bool cros_ec_hwmon_attr_is_temp_threshold(u32 attr)
-> > @@ -236,8 +252,13 @@ static int cros_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-> >   			ret = cros_ec_hwmon_read_temp_threshold(priv->cros_ec, channel,
-> >   								cros_ec_hwmon_attr_to_thres(attr),
-> >   								&threshold);
-> > -			if (ret == 0)
-> > -				*val = cros_ec_hwmon_kelvin_to_millicelsius(threshold);
-> > +			if (ret == 0) {
-> > +				if (overflows_type(threshold, long))
-> > +					*val = LONG_MAX;
-> > +
-> > +				if (cros_ec_hwmon_kelvin_to_millicelsius_overflow(threshold, val))
-> > +					*val = LONG_MAX;
-> > +			}
-> 
-> I agree with Sashiko - it does not make sense to call cros_ec_hwmon_kelvin_to_millicelsius_overflow()
-> if it is already known that threshold overflowed.
+        # echo 1800 >curr1_lcrit
+        # head {in0,curr1}_lcrit_alarm
+        ==> in0_lcrit_alarm <==
+        1
 
-Yep, this is a bug. This would be correct:
+        ==> curr1_lcrit_alarm <==
+        0
 
-if (ret == 0) {
-       if (overflows_type(threshold, long) ||
-	   cros_ec_hwmon_kelvin_to_millicelsius_overflow(threshold, val))
-	       *val = LONG_MAX;
-}
+To address this, track the active alarm's type in the driver, and when
+reading alarms, return early without polling the hardware if the alarm
+being read is inactive.
 
-> Personally I think this is way too complicated. An overflowing temperature above 255 degrees C
-> does not make any sense, and returning LONG_MAX as temperature seems a bit odd.
-> I would just have checked for some reasonable limit, such as
-> 			if (threshold > 255 + 273)
-> 				*val = 255000;
-> 			else
-> 				*val = cros_ec_hwmon_kelvin_to_millicelsius(threshold);
+Some prep work is done in patches 1-3 to simplify the fix in patch 4.
 
-That works for me, too. Thanks.
+Signed-off-by: Jared Kangas <jkangas@redhat.com>
+---
+Jared Kangas (4):
+      hwmon: (ina2xx) Replace regmap in ina226_alert_read() with ina2xx_data
+      hwmon: (ina2xx) Replace masks with enum in alert functions
+      hwmon: (ina2xx) Track active alarm in ina2xx_data
+      hwmon: (ina2xx) Return 0 on inactive alarm/limit reads
 
-> If it does make sense to return LONG_MAX as temperature for some reason, that should
-> be explained.
+ drivers/hwmon/ina2xx.c | 148 ++++++++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 122 insertions(+), 26 deletions(-)
+---
+base-commit: 1590cf0329716306e948a8fc29f1d3ee87d3989f
+change-id: 20260724-upstream-ina2xx-in0-curr1-alarms-f85e7d692fdf
 
-No specific reason.
+Best regards,
+-- 
+Jared Kangas <jkangas@redhat.com>
 
-
-Thomas
