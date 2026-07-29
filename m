@@ -1,192 +1,138 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C904C42F709;
-	Wed, 29 Jul 2026 21:51:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E0DA396D09;
+	Wed, 29 Jul 2026 21:54:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785361918; cv=none; b=X2OT9ZlwxDv9vUI9zReQsz+txGGA3RGpP6PDVXGOTySrwmvMHQvscDP+YACjjOJPtIzhft+SOGYcHLf37bSrHbfv8Xy3k1juS5TAfYovW6I3Gnf85YmmAz0G1usA4OzWSwwfUY7ZXx22HhxSay2svSjHtxtBMBp8mTeHIr8b4Tw=
+	t=1785362094; cv=none; b=GtT02PyIJu5M7lSub6jGpaFASjp6XvI1FRyHxzLhz55lvmPMQokfXtLHubFmMJX5/fwr/aZ8hrzVqh1pl3FyRRvI8xIfYCMMbxzoCBqE06mjtJf/cT0PIyNaTbvKXBIeAgiu/7aYSCFDYBqZMWlDbxCZlAZFyd11AIhNdCTjVQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785361918; c=relaxed/simple;
-	bh=4HjGqwAZEnifMCrcj0XY/f15Eo3gD72NccHcHAbnrjU=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=FlqInA0viWGKakaBUR2l8ab81sGCsIjoSB2PUG17QZrYjRdRuLhGDQyjJ47RFjEb/QT/4Njq1fGqWRO8+ZHv1bfNtpl+m4ggVGj5Y68upYX88SlIxyzHHYyAjCXM6j9WiNVfAydLm8P2CSk3/MkQJlDgQVvBBZzBMjZtII8n/ks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u6f4hk/6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1785362094; c=relaxed/simple;
+	bh=XHNnNP0x2wCRJyrSJgej4CyXt6QqDHcD5MVMn0YR8+4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Sj0XkGNpAVmJXRgE7OlBe7XwtL0D0NSxSskUrQ4Ns7A34FP3qln6VbnsicnRcLte3g0v1Lt8dTsCdEYwbLvcuNfiZ9pKd2DKz3f+jDy/chQYCi5wTk3ahya37qtA925dAMh7SaWWYOGGU21C8hPCaEOBwHTj5ltCB+0QW8hJOlg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=b6DbNnm4; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u6f4hk/6"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 86FBDC2BCB9;
-	Wed, 29 Jul 2026 21:51:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1785361915;
-	bh=4HjGqwAZEnifMCrcj0XY/f15Eo3gD72NccHcHAbnrjU=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=u6f4hk/6+JrTTqwh4GzOgdQgs4v8DfxyXYP+HyPAiR+1/TpOnKMKP6ye0yGne9pmy
-	 Usf/QEvfEfMbGlE6B8F06fKxKRvPluebHM3uaMsnE127du/hYpv1Lqru0kYDZN+Lcr
-	 MliB4L7MIjX5NONFq8c9c+1lpEKQ0B4mp1IFgy/upUBg3bQN00IUc0Jmpcw6BfoAVp
-	 LNzEq5GUCgLv53/TkpR9NOQJ1mSaHD1e6KeQXVZcMBdFKgXYofVxOotf0OrQ27FmWK
-	 vGuCGg8cRD6xvVVup1LLcJgKJaw7JdexZio20ec+91/SCXDgrDULMCngo0soXXYxUD
-	 BMuhdKL0+rBcA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71B39C53200;
-	Wed, 29 Jul 2026 21:51:55 +0000 (UTC)
-From: Vincent Jardin via B4 Relay <devnull+vjardin.free.fr@kernel.org>
-Subject: [PATCH v6 0/4] hwmon: pmbus: add MPS MPQ8646 support
-Date: Wed, 29 Jul 2026 23:51:42 +0200
-Message-Id: <20260729-mpq8646_v0-v6-0-98848151cdb4@free.fr>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="b6DbNnm4"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 418BA1684;
+	Wed, 29 Jul 2026 14:54:40 -0700 (PDT)
+Received: from e131404.arm.com (unknown [10.57.43.134])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1F2863F763;
+	Wed, 29 Jul 2026 14:54:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1785362084; bh=XHNnNP0x2wCRJyrSJgej4CyXt6QqDHcD5MVMn0YR8+4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=b6DbNnm46lfNZ8vZS9R63cbt98b/2emk8OCLXhdWtRnRmgjlwE0rS0EFE9j/4DmZL
+	 5J4z5tK+XQ5hVGSkXZlON0Rq+YZLHpUdxq9H5WUtCzZZ/0oO1jUgW4LD7rCKHVuVXU
+	 eCQa41StmChzeHX+mVYck4V4FhZDZmgBWPW+WJ6o=
+From: Laszlo Ersek <laszlo.ersek@arm.com>
+To: laszlo.ersek@arm.com
+Cc: Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Joel Stanley <joel@jms.id.au>,
+	Sudeep Holla <sudeep.holla@kernel.org>,
+	arm-scmi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] hwmon: remove tautological dependency expressions from Kconfig
+Date: Wed, 29 Jul 2026 23:54:27 +0200
+Message-ID: <20260729215436.2103380-1-laszlo.ersek@arm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAO51amoC/3XPTQ7CIBCG4asY1mJgZvjRlfcwxlAKykKr1BCN6
- d2lbrSJXX4kzzvhxfqQU+jZZvFiOZTUp+5Sh14umD+5yzHw1NbNQIAWBpCfrzerSR+K4IgWfaM
- MtcaxCq45xPT4xHb7uk+pv3f5+WkXOb7+zRTJBZeEGr1Ra6njNuYQVjGzMVJgHkKF6Mk3RkZAL
- 6YQ5yGOF12UEVu0luwU0jykChuNgK2KXgFNofqFNIGqwvo51SgX1s7BFw7D8AZkz2G4hgEAAA=
- =
-To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, Charles Hsu <ythsu0511@gmail.com>
-Cc: Markus Elfring <Markus.Elfring@web.de>, linux-hwmon@vger.kernel.org, 
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-doc@vger.kernel.org, Vincent Jardin <vjardin@free.fr>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1785361913; l=6143;
- i=vjardin@free.fr; s=20260525; h=from:subject:message-id;
- bh=4HjGqwAZEnifMCrcj0XY/f15Eo3gD72NccHcHAbnrjU=;
- b=n/orkxQZu4okf7aOSoHwGZnlT3tUrP673perPXtXDk8kE0NJDo1GjAPPB5KPFBI5UCSqrXH7I
- /ovnViMiD4BAamTRjUwcAYHRQ7ad+YdY+G0p/W8MNL/SHiNNnABcn/v
-X-Developer-Key: i=vjardin@free.fr; a=ed25519;
- pk=hppgLeFpGpKOi7LNwGEZ4jOYofJCoGd4Jf1ltAabiLw=
-X-Endpoint-Received: by B4 Relay for vjardin@free.fr/20260525 with
- auth_id=871
-X-Original-From: Vincent Jardin <vjardin@free.fr>
-Reply-To: vjardin@free.fr
+Content-Transfer-Encoding: base64
 
-Add support for the Monolithic Power Systems MPQ8646 step-down
-converter as a PMBus device.
-
-  1/4 pmbus core: export pmbus_check_and_notify_faults() so a chip
-      driver can run the SMBALERT# path check and notify sequence
-      from a polling work item when the chip's SMBALERT# pin is
-      unavailable to the CPU.
-  2/4 dt-bindings: add the MPQ8646 compatible to the existing
-      mps,mpq8785 schema (same mps,vout-fb-divider-ratio-permille
-      property, same constraints).
-  3/4 the MPQ8646 driver: PMBus telemetry
-  4/4 the provisioning/NVM write entries, compiled out by default
-      thanks to SENSORS_MPQ8646_DEBUG_UNSAFE.
-
-To: Guenter Roeck <linux@roeck-us.net>
-To: Rob Herring <robh@kernel.org>
-To: Krzysztof Kozlowski <krzk+dt@kernel.org>
-To: Conor Dooley <conor+dt@kernel.org>
-To: Jonathan Corbet <corbet@lwn.net>
-To: Shuah Khan <skhan@linuxfoundation.org>
-To: Charles Hsu <ythsu0511@gmail.com>
-Cc: Markus Elfring <Markus.Elfring@web.de>
-Cc: linux-hwmon@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Cc: linux-doc@vger.kernel.org
-Signed-off-by: Vincent Jardin <vjardin@free.fr>
-
-Changes in v6:
-- core: replace the pmbus_get_hwmon_device() accessor with an exported
-  pmbus_check_and_notify_faults() (suggested by Guenter Roeck on v5)
-- driver: drop the bring-up probe/instrumentation debugfs entries
-  (challenged by Guenter Roeck on v4)
-- new patch 4/4: move the write/provisioning debugfs entries
-  behind a new default-n SENSORS_MPQ8646_DEBUG_UNSAFE
-- move the debugfs files into the client's pmbus debugfs directory
-  (pmbus_get_debugfs_dir()), mask using VOUT_MODE checks, MPQ8646_DEBUG()
-  using dev_dbg(), drop the 0xFF VOUT_MODE probe check and the
-  source-attribution comments (many inline reviews reported
-  by Guenter Roeck on v5)
-- driver: drop the WRITE_PROTECT read shim: the HW implements the
-  register (reads back 0x00, unprotected), so the core handles write
-  protection as designed (reported by Guenter Roeck on v5)
-- dt-bindings: fold the MPQ8646 into the existing mps,mpq8785.yaml
-  (suggested by Krzysztof Kozlowski on v5)
-- scope locking, guard() and scoped_guard() (suggested by Markus
-  Elfring on v5)
-- XXX TBD: should pmbus_check_and_notify_faults() also update
-  the pmbus registered thermal zones, or is that follow-up material ?
-  Currently, neither the SMBALERT# path nor this helper does it.
-- Link to v5: https://lore.kernel.org/r/20260724-mpq8646_v0-v5-0-5915b5ae9aa2@free.fr
-
-Changes in v5:
-- driver: fix the hwmon channel indices used by the in*_alarm poll
-  notifications (thanks Sashiko AI, v4)
-- driver: remove the shared debugfs root on module unload, by creating
-  it in module_init() and removing it in module_exit(). It also drops
-  the v4 per-probe root mutex and debugfs_lookup()
-  (Sashiko AI review of v4)
-- doc: add Documentation/hwmon/mpq8646.rst to the toctree (kernel test robot)
-- doc: fix a malformed table and drop the stale probe_page_write row
-  (removed since v3) and fix typo
-- Link to v4: https://lore.kernel.org/r/20260723-mpq8646_v0-v4-0-b6323d5fc524@free.fr
-
-Changes in v4 (all reported by the Sashiko AI review on v3):
-- driver: register debugfs only after a successful pmbus_do_probe() --
-  the debugfs handlers take pmbus_lock() and rely on the pmbus clientdata
-  that pmbus_do_probe() installs (NULL-deref window in v3)
-- driver: in remove(), unregister debugfs before cancel_delayed_work_sync()
-  so a debugfs write cannot re-arm the poll worker after it is cancelled
-- driver: serialise the shared debugfs root create against concurrent
-  probes with a static mutex
-- driver: move the remaining last_probe_* updates (clear_protection_last,
-  store_all, restore_all) inside mps_lock
-- dt-bindings: describe the hardware, not the driver, in the description
-- Link to v3: https://lore.kernel.org/r/20260723-mpq8646_v0-v3-0-1af1f3d38848@free.fr
-
-Changes in v3 (all reported by the Sashiko AI review on v2):
-- driver: alarm_poll_interval_ms is now a debugfs fops
-- driver: pmbus_lock() around the async raw i2c accesses: the poll
-  worker and the CLEAR_LAST_FAULT force sequence, the nvmem snapshot read
-  keeps mps_lock (read-only, no chip-state change)
-- driver: update last_probe_rc/last_probe_data under mps_lock to avoid
-  torn diagnostics
-- driver: remove the dead PMBUS_PAGE swallow in write_byte
-- driver: remove the probe_page_write debugfs hook
-- Link to v2: https://lore.kernel.org/r/20260723-mpq8646_v0-v2-0-3c4cb71f23c0@free.fr
-
-Changes in v2:
-- driver: register debugfs only after the DT-property validation, to
-  avoid an early probe error to avoid dangling debugfs entries
-- driver: do not schedule the alarm-poll worker when SMBALERT# (irq)
-  is wired, and do not re-arm it from the worker in that case
-- driver: dput() the dentry returned by debugfs_lookup()
-- driver: hold mps_lock around the nvmem snapshot reads
-- driver: fix VID coefficients comment
-- dt-bindings: fix typo of the commit message
-- Link to v1: https://lore.kernel.org/r/20260723-mpq8646_v0-v1-0-14363c75916f@free.fr
-
----
-Vincent Jardin (4):
-      hwmon: (pmbus/core) export pmbus_check_and_notify_faults()
-      dt-bindings: hwmon: pmbus: add MPS MPQ8646
-      hwmon: pmbus: add MPQ8646 driver
-      hwmon: pmbus: mpq8646: gate the writes
-
- .../bindings/hwmon/pmbus/mps,mpq8785.yaml          |   5 +-
- Documentation/hwmon/index.rst                      |   1 +
- Documentation/hwmon/mpq8646.rst                    | 298 +++++++
- MAINTAINERS                                        |   7 +
- drivers/hwmon/pmbus/Kconfig                        |  28 +
- drivers/hwmon/pmbus/Makefile                       |   1 +
- drivers/hwmon/pmbus/mpq8646.c                      | 954 +++++++++++++++++++++
- drivers/hwmon/pmbus/pmbus.h                        |   1 +
- drivers/hwmon/pmbus/pmbus_core.c                   |  14 +-
- 9 files changed, 1305 insertions(+), 4 deletions(-)
----
-base-commit: 248951ddc14de84de3910f9b13f51491a8cd91df
-change-id: 20260723-mpq8646_v0-3383cb574d7a
-
-Best regards,
--- 
-Vincent Jardin <vjardin@free.fr>
-
-
+Q29tbWl0IDU1NGIzNTI5ZmUwMSAoInRoZXJtYWwvZHJpdmVycy9jb3JlOiBSZW1vdmUgdGhlIG1v
+ZHVsZSBLY29uZmlnJ3MKb3B0aW9uIikgWzFdIG9idmlhdGVkIHNvbWUgb2YgdGhlICJPcHRpb25h
+bCBkZXBlbmRlbmNpZXMiIChhcyBkZXNjcmliZWQgaW4KIkRvY3VtZW50YXRpb24va2J1aWxkL2tj
+b25maWctbGFuZ3VhZ2UucnN0IikgaW4gImRyaXZlcnMvaHdtb24vS2NvbmZpZyIuCgpOYW1lbHks
+IHNhaWQgY29tbWl0IHJlc3RyaWN0ZWQgdGhlIHZhbGlkL3Bvc3NpYmxlIHN1YnNldCBvZiB0aGUg
+ZnVsbApDYXJ0ZXNpYW4gcHJvZHVjdCAiQ09ORklHX1RIRVJNQUwgeCBDT05GSUdfVEhFUk1BTF9P
+RiIgdG8KCiAgeyAobiwgbiksICh5LCBuKSwgKHksIHkpIH0KCnRocm91Z2ggImRyaXZlcnMvdGhl
+cm1hbC9LY29uZmlnIi4gTnVtZXJpY2FsbHkgKHVzaW5nIHRyaXN0YXRlIHZhbHVlcyksCnRoaXMg
+c2V0IGNhbiBiZSBleHByZXNzZWQgYXM6CgogIHsgKDAsIDApLCAoMiwgMCksICgyLCAyKSB9CgpP
+dmVyIHRoaXMgc2V0LCB0aGUgImRyaXZlcnMvaHdtb24vS2NvbmZpZyIgdHJpc3RhdGUgZXhwcmVz
+c2lvbgoKICBUSEVSTUFMIHx8ICFUSEVSTUFMX09GCgpvciBlcXVpdmFsZW50bHksCgogIG1heChU
+SEVSTUFMLCAyLVRIRVJNQUxfT0YpCgppbnZhcmlhYmx5IGV2YWx1YXRlcyB0byAieSIgKDIpLgoK
+U2ltaWxhcmx5LCB3aXRoIFRIRVJNQUwgaGF2aW5nIGJlZW4gcmVzdHJpY3RlZCB0bwoKICB7IG4s
+IHkgfQoKb3IgbnVtZXJpY2FsbHksCgogIHsgMCwgMiB9Cgp0aGUgImRyaXZlcnMvaHdtb24vS2Nv
+bmZpZyIgdHJpc3RhdGUgZXhwcmVzc2lvbgoKICBUSEVSTUFMIHx8IFRIRVJNQUw9bgoKb3IgZXF1
+aXZhbGVudGx5LAoKICBtYXgoVEhFUk1BTCwgVEhFUk1BTD0wKQoKaW52YXJpYWJseSBldmFsdWF0
+ZXMgdG8gInkiICgyKS4gKE5vdGUgdGhhdCAiVEhFUk1BTD0wIiByZXR1cm5zIGVpdGhlciAieSIK
+KDIpIG9yICJuIiAoMCkuKQoKQ29tbWl0IGYzNzM1MzMyMGVlOSAoImh3bW9uL2RyaXZlcnMvY29y
+ZTogU2ltcGxpZnkgY29tcGxleCBkZXBlbmRlbmN5IikKWzJdLCB3aGljaCBpcyB0aGUgZmluYWwg
+Y29tbWl0IG9mIHRoZSBzZXJpZXMgdGhhdCBbMV0gaXMgdGhlIGJlZ2lubmluZyBvZiwKY2xlYW5l
+ZCB1cCB0aGUgaHdtb24gQyBzb3VyY2UgY29kZSBpbiBmYWN0OyBob3dldmVyLCBpdCBtaXNzZWQg
+dGhlCm5vdy1jb2xsYXBzZWQgZGVwZW5kZW5jaWVzIGluIEtjb25maWcuIEF0IHRoZSB0aW1lIG9m
+IFsyXSwgc2l4IG9mIHRvZGF5J3MKc3VjaCBkZXBlbmRlbmNpZXMgd2VyZSBwcmVzZW50IGluIEtj
+b25maWcuIFNpbmNlIHRoZW4sIHR3byBtb3JlIGhhdmUgYmVlbgphZGRlZCAoc3VjaCB0aGF0IHRo
+ZXkgcGVyc2lzdCwgYW55d2F5KTogb25lIGJ5IGNvbW1pdCA0ZjhkMzc0Yjc3MGEKKCJod21vbjog
+KG1heDY2NTApIGFkZCB0aGVybWFsIGNvb2xpbmcgZGV2aWNlIGNhcGFiaWxpdHkiKSwgd2hpY2gg
+d2FzCmluZGVwZW5kZW50IG9mIHRoZSBhYm92ZS1ub3RlZCBzZXJpZXMsIGFuZCBhbm90aGVyIGJ5
+IGNvbW1pdCA5ODU1Y2FmNWQ0ZWIKKCJod21vbjogYWRkIGRyaXZlciBmb3IgdGhlIGh3bW9uIHBh
+cnRzIG9mIHFuYXAtbWN1IGRldmljZXMiKSwgd2hpY2ggd2FzIGEKZGVzY2VuZGFudCBvZiB0aGUg
+c2VyaWVzLgoKUmVtb3ZlIHRoZXNlIGFsd2F5cy0ieSIgZGVwZW5kZW5jaWVzLgoKQ2M6IEFuZHJl
+dyBKZWZmZXJ5IDxhbmRyZXdAY29kZWNvbnN0cnVjdC5jb20uYXU+CkNjOiBDcmlzdGlhbiBNYXJ1
+c3NpIDxjcmlzdGlhbi5tYXJ1c3NpQGFybS5jb20+CkNjOiBHdWVudGVyIFJvZWNrIDxsaW51eEBy
+b2Vjay11cy5uZXQ+CkNjOiBIZWlrbyBTdHVlYm5lciA8aGVpa29Ac250ZWNoLmRlPgpDYzogSm9l
+bCBTdGFubGV5IDxqb2VsQGptcy5pZC5hdT4KQ2M6IFN1ZGVlcCBIb2xsYSA8c3VkZWVwLmhvbGxh
+QGtlcm5lbC5vcmc+CkNjOiBhcm0tc2NtaUB2Z2VyLmtlcm5lbC5vcmcKQ2M6IGxpbnV4LWFybS1r
+ZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZwpDYzogbGludXgtYXNwZWVkQGxpc3RzLm96bGFicy5v
+cmcKQ2M6IGxpbnV4LWh3bW9uQHZnZXIua2VybmVsLm9yZwpDYzogbGludXgta2VybmVsQHZnZXIu
+a2VybmVsLm9yZwpTaWduZWQtb2ZmLWJ5OiBMYXN6bG8gRXJzZWsgPGxhc3psby5lcnNla0Bhcm0u
+Y29tPgotLS0KCk5vdGVzOgogICAgVW50ZXN0ZWQgKGhlbmNlIFJGQykgLS0gSSBkb24ndCBrbm93
+IGhvdyB0byByZWdyZXNzaW9uLXRlc3QgdGhpcyBwYXRjaAogICAgY29tcHJlaGVuc2l2ZWx5IHll
+dCBtaW5pbWFsbHkuCgogZHJpdmVycy9od21vbi9LY29uZmlnIHwgOCAtLS0tLS0tLQogMSBmaWxl
+IGNoYW5nZWQsIDggZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9od21vbi9LY29u
+ZmlnIGIvZHJpdmVycy9od21vbi9LY29uZmlnCmluZGV4IDJiZmJjYzAzM2Q1OS4uZDNhOWM4YTNh
+NzljIDEwMDY0NAotLS0gYS9kcml2ZXJzL2h3bW9uL0tjb25maWcKKysrIGIvZHJpdmVycy9od21v
+bi9LY29uZmlnCkBAIC00MDMsNyArNDAzLDYgQEAgY29uZmlnIFNFTlNPUlNfQVJDVElDX0ZBTl9D
+T05UUk9MTEVSCiBjb25maWcgU0VOU09SU19BUk1fU0NNSQogCXRyaXN0YXRlICJBUk0gU0NNSSBT
+ZW5zb3JzIgogCWRlcGVuZHMgb24gQVJNX1NDTUlfUFJPVE9DT0wKLQlkZXBlbmRzIG9uIFRIRVJN
+QUwgfHwgIVRIRVJNQUxfT0YKIAloZWxwCiAJICBUaGlzIGRyaXZlciBwcm92aWRlcyBzdXBwb3J0
+IGZvciB0ZW1wZXJhdHVyZSwgdm9sdGFnZSwgY3VycmVudAogCSAgYW5kIHBvd2VyIHNlbnNvcnMg
+YXZhaWxhYmxlIG9uIFNDTUkgYmFzZWQgcGxhdGZvcm1zLiBUaGUgYWN0dWFsCkBAIC00MTUsNyAr
+NDE0LDYgQEAgY29uZmlnIFNFTlNPUlNfQVJNX1NDTUkKIGNvbmZpZyBTRU5TT1JTX0FSTV9TQ1BJ
+CiAJdHJpc3RhdGUgIkFSTSBTQ1BJIFNlbnNvcnMiCiAJZGVwZW5kcyBvbiBBUk1fU0NQSV9QUk9U
+T0NPTAotCWRlcGVuZHMgb24gVEhFUk1BTCB8fCAhVEhFUk1BTF9PRgogCWhlbHAKIAkgIFRoaXMg
+ZHJpdmVyIHByb3ZpZGVzIHN1cHBvcnQgZm9yIHRlbXBlcmF0dXJlLCB2b2x0YWdlLCBjdXJyZW50
+CiAJICBhbmQgcG93ZXIgc2Vuc29ycyBhdmFpbGFibGUgb24gQVJNIEx0ZCdzIFNDUCBiYXNlZCBw
+bGF0Zm9ybXMuIFRoZQpAQCAtNDM1LDcgKzQzMyw2IEBAIGNvbmZpZyBTRU5TT1JTX0FTQjEwMAog
+Y29uZmlnIFNFTlNPUlNfQVNQRUVECiAJdHJpc3RhdGUgIkFTUEVFRCBBU1QyNDAwL0FTVDI1MDAg
+UFdNIGFuZCBGYW4gdGFjaCBkcml2ZXIiCiAJZGVwZW5kcyBvbiBBUkNIX0FTUEVFRCB8fCBDT01Q
+SUxFX1RFU1QKLQlkZXBlbmRzIG9uIFRIRVJNQUwgfHwgVEhFUk1BTD1uCiAJc2VsZWN0IFJFR01B
+UAogCWhlbHAKIAkgIFRoaXMgZHJpdmVyIHByb3ZpZGVzIHN1cHBvcnQgZm9yIEFTUEVFRCBBU1Qy
+NDAwL0FTVDI1MDAgUFdNCkBAIC03ODgsNyArNzg1LDYgQEAgY29uZmlnIFNFTlNPUlNfRzc2Mgog
+Y29uZmlnIFNFTlNPUlNfR1BJT19GQU4KIAl0cmlzdGF0ZSAiR1BJTyBmYW4iCiAJZGVwZW5kcyBv
+biBHUElPTElCIHx8IENPTVBJTEVfVEVTVAotCWRlcGVuZHMgb24gVEhFUk1BTCB8fCBUSEVSTUFM
+PW4KIAloZWxwCiAJICBJZiB5b3Ugc2F5IHllcyBoZXJlIHlvdSBnZXQgc3VwcG9ydCBmb3IgZmFu
+cyBjb25uZWN0ZWQgdG8gR1BJTyBsaW5lcy4KIApAQCAtMTM1Nyw3ICsxMzUzLDYgQEAgY29uZmln
+IFNFTlNPUlNfTUFYNjYzOQogY29uZmlnIFNFTlNPUlNfTUFYNjY1MAogCXRyaXN0YXRlICJNYXhp
+bSBNQVg2NjUwIHNlbnNvciBjaGlwIgogCWRlcGVuZHMgb24gSTJDCi0JZGVwZW5kcyBvbiBUSEVS
+TUFMIHx8IFRIRVJNQUw9bgogCWhlbHAKIAkgIElmIHlvdSBzYXkgeWVzIGhlcmUgeW91IGdldCBz
+dXBwb3J0IGZvciB0aGUgTUFYNjY1MCAvIE1BWDY2NTEKIAkgIHNlbnNvciBjaGlwcy4KQEAgLTE3
+MzIsNyArMTcyNyw2IEBAIGNvbmZpZyBTRU5TT1JTX1BDODc0MjcKIGNvbmZpZyBTRU5TT1JTX05U
+Q19USEVSTUlTVE9SCiAJdHJpc3RhdGUgIk5UQyB0aGVybWlzdG9yIHN1cHBvcnQiCiAJZGVwZW5k
+cyBvbiBJSU8KLQlkZXBlbmRzIG9uIFRIRVJNQUwgfHwgIVRIRVJNQUxfT0YKIAloZWxwCiAJICBU
+aGlzIGRyaXZlciBzdXBwb3J0cyBOVEMgdGhlcm1pc3RvcnMgc2Vuc29yIHJlYWRpbmcgYW5kIGl0
+cwogCSAgaW50ZXJwcmV0YXRpb24uIFRoZSBkcml2ZXIgY2FuIGFsc28gbW9uaXRvciB0aGUgdGVt
+cGVyYXR1cmUgYW5kCkBAIC0xOTMzLDcgKzE5MjcsNiBAQCBjb25maWcgU0VOU09SU19QVDUxNjFM
+CiBjb25maWcgU0VOU09SU19QV01fRkFOCiAJdHJpc3RhdGUgIlBXTSBmYW4iCiAJZGVwZW5kcyBv
+biBQV00gfHwgQ09NUElMRV9URVNUCi0JZGVwZW5kcyBvbiBUSEVSTUFMIHx8IFRIRVJNQUw9bgog
+CWhlbHAKIAkgIElmIHlvdSBzYXkgeWVzIGhlcmUgeW91IGdldCBzdXBwb3J0IGZvciBmYW5zIGNv
+bm5lY3RlZCB0byBQV00gbGluZXMuCiAJICBUaGUgZHJpdmVyIHVzZXMgdGhlIGdlbmVyaWMgUFdN
+IGludGVyZmFjZSwgdGh1cyBpdCB3aWxsIHdvcmsgb24gYQpAQCAtMTk0NSw3ICsxOTM4LDYgQEAg
+Y29uZmlnIFNFTlNPUlNfUFdNX0ZBTgogY29uZmlnIFNFTlNPUlNfUU5BUF9NQ1VfSFdNT04KIAl0
+cmlzdGF0ZSAiUU5BUCBNQ1UgaGFyZHdhcmUgbW9uaXRvcmluZyIKIAlkZXBlbmRzIG9uIE1GRF9R
+TkFQX01DVQotCWRlcGVuZHMgb24gVEhFUk1BTCB8fCBUSEVSTUFMPW4KIAloZWxwCiAJICBTYXkg
+eWVzIGhlcmUgdG8gZW5hYmxlIHN1cHBvcnQgZm9yIGZhbiBhbmQgdGVtcGVyYXR1cmUgc2Vuc29y
+CiAJICBjb25uZWN0ZWQgdG8gYSBRTkFQIE1DVSwgYXMgZm91bmQgaW4gYSBudW1iZXIgb2YgUU5B
+UCBuZXR3b3JrCg==
