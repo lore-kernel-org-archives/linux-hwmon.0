@@ -1,123 +1,175 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38FED42A16D
-	for <linux-hwmon@vger.kernel.org>; Wed, 29 Jul 2026 12:19:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D45C4A33FA
+	for <linux-hwmon@vger.kernel.org>; Wed, 29 Jul 2026 14:22:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785327542; cv=none; b=Q/PyLlTU2M5My0Rx8h4+fQS3ECNtjVInwA8j8tLNpLgvOwt6STgFOt9w3dNaW7++goXEEgHcTp+QnOV8swyT9QMPp/0kjQyKEjG3EojqfKubM4tHMkp0kZ72381Q2Nz4MJphKNGuaBP7xPyRwxexRNng6oD3hm2E7bifpVw0mmQ=
+	t=1785334936; cv=none; b=LgJp5LsdOazYhygWL5oILJ/QLSUn687mtwpwxE1u7qc3+24ySx1xLgwiDdiEYw94qPkNMuiJRxdWpL4GdZeGKokqJqek6AlUAaymCwnT5pC+GcJnK/NNclV9tUd9xIRO6gbomjz+yRmRcB1buUbW2xTnAGNG6vzRtrLhfh5y6LE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785327542; c=relaxed/simple;
-	bh=RKttXu7FexOizbpwsY5nm2JyW7CYOkbl5iTB0i4sC7k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TS4Lm5H6pa1XV4e5O3txmmR42ayf3mOrUvIjkvyDgv/8ZFXJaF0sDCFrse0ok7dxupEv10Pa7ZQ6n3/6/L8LWfQzmYxXpOIAnyfbPfLfspcCuaa40+UDMU7ZMEEFz16pKoe+CtMeVBahX6ABsm/vagvutNaGB2VtIVXrNqKXF+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=RJf/pO6V; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1785334936; c=relaxed/simple;
+	bh=wfthrTkDQg+zXZkKyFIKQ1Q32bcyZi6WCgNCplThDEo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cDGeS/FaWY5bdNU/UTUtgviZY7cdGABX+8Zjgk8Xata8tv2TgGZMvw9gddm0vza0wQ7oh2KM3Wt71GEzD2To9DQWjgifsafDNfrkn36UaVYsSMxmtEtcmpZAiYPt5T6daKIun6IxXbGFeyRaL7qZ83GmkRtk+DQ3w9FIfWgS2eg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zu7vlek6; arc=none smtp.client-ip=209.85.161.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="RJf/pO6V"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-47f84023916so870217f8f.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 29 Jul 2026 05:18:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zu7vlek6"
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-6aae367af50so387807eaf.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 29 Jul 2026 07:22:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1785327538; x=1785932338; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=RKttXu7FexOizbpwsY5nm2JyW7CYOkbl5iTB0i4sC7k=;
-        b=RJf/pO6Vc3JuAlNkGi1cpUY32xGjv9IjLCMIsbCFeytkCBFL+ot5NaP9GuPHpTG1dh
-         LK2le7kj58ESa43Dx1J1m2v6DtBwOF2vrtgk32z++9S7h+OYiucKoX5vrjnau/3ttJEd
-         9XqnzIdTJXV/p1jTLoc1WppJOLIo1XZ4AGhHDHJULy+b17nd/6SWsD2DM6VtSnYBGo42
-         CBhZNnqWok9MwDKNDWEEQUHyNS2lIwXVO2vgMB5Vy31fGyA2+2GhzJGW+a/QlLxBYquh
-         H+p991AClM69xCeNA+531GUQLI8idbQAbgGZBrWUMuF0cMyJkmkjMXNkegpn9hQ5/nW6
-         LzKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785327538; x=1785932338;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1785334933; x=1785939733; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=RKttXu7FexOizbpwsY5nm2JyW7CYOkbl5iTB0i4sC7k=;
-        b=GLkpr13ybUQzdNBp97eQFCJo1FlredDDQ+oXdipjFznNLScjQM34xOjTARE7JKxerM
-         1HBncwBeWLQpzEjShaXT7ooaEnnhDaV15UQDNSBO9Fwx6ZDduXRXQndmZ1oGUKqnEoZk
-         BTewOznv3OXHPaq24oJpbw/4yiT2oWNt2iVeXQVeGW6qFcQazTY9qzoE5OxCEQIOP4Q8
-         ivf5Kmt/Dy0FElB3wY2NHv52ac4SnRw86MF9yrVZp0exOj6jgXgZ34AYn54BaQ0G6GZN
-         BFcPz1+005F42zoUPInKZqqJIYfbKqq+pnQ8h1iU68GrTSG9BkHQ7uRttbxQrrPNKfV2
-         QJ+g==
-X-Gm-Message-State: AOJu0Ywi8jhzqqRMNL9qO09BGBBeZgSazRW9izoLcJvxfJw1P+FaN7my
-	qVBCTgFG7UJJIsDtWmAFWSnVyr249+0lwyoBQpG/2YqsTUruACrLxjLZajaR8zJzK/I=
-X-Gm-Gg: AR+sD12XJ4Daru2Rqmx0Ggo1YDL1hLa78yFB/h3kU9bLKdGgXM46cY2+fJPKIOopV1H
-	R5d4XfZC/WpFMGOo7QQgY5qduGzrRezmmhon5afhUp1/QGjPUL9Cj9UhXa/jj6614fzl2TRKx47
-	8nEK5YpoHyuIfymmPUsBbZifX4I3yJldCbZQOzQ1TZ4UNoCfW5WvBUac46oIKpF+VOMMuM90nGQ
-	wypNZs/ndn4+V7Wjwc9egWxae3K54cr0s8/8P1qazGyWC7pC3vbmwrL0YgcWH6AU/9SWMMp6cFI
-	qVZ02wtSyn0jP10Ww2kHGl1PYFfgkm4qn+SylatYBNvcK+iuOBBv8Uls8WBD59TA7l63azHPNsY
-	IewRwc56KDgXpbuEK5gi79eroH9IvEZePzz9YUDc4ijamePOD2ZVF69eNWiXhHSQUAtmujvRCMq
-	v0vNi6qmmRJ2I8udgrgfZVOzYIfRS1pabQ7Tfzf8pDtRXwgs4hzzQagHXgd8Ycs8sbOaHccR+mX
-	LM/l5qArVu+BuRfLSHJRLh86361x20tGBtJKpJfzJD1rJN/EIw=
-X-Received: by 2002:a05:6000:4911:b0:47f:97a6:1334 with SMTP id ffacd0b85a97d-47fb1f18049mr7073654f8f.46.1785327538205;
-        Wed, 29 Jul 2026 05:18:58 -0700 (PDT)
-Received: from localhost (p200300f65f47db0401da7fd03a16a046.dip0.t-ipconnect.de. [2003:f6:5f47:db04:1da:7fd0:3a16:a046])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-47fb6b2768fsm7550029f8f.37.2026.07.29.05.18.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jul 2026 05:18:57 -0700 (PDT)
-Date: Wed, 29 Jul 2026 14:18:55 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: nuno.sa@analog.com
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-doc@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
-	Alan Tull <atull@opensource.altera.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-Subject: Re: [PATCH 5/5] hwmon: (pmbus) add support for MAX20826 and similar
- devices
-Message-ID: <amnvYB2Occ911k3B@monoceros>
-References: <20260728-hwmon-max20826-support-v1-0-224766e0acd1@analog.com>
- <20260728-hwmon-max20826-support-v1-5-224766e0acd1@analog.com>
+        bh=aBs0uk/Nz7BeNh47t+Q3dnJOuZWHDf1CUHbRfB2n60M=;
+        b=Zu7vlek6cx4S3C9lKbOA13aJ+03kEKHYnKklrVbhOtplebZcoCcgWd1jYoS4Oi2npo
+         5EoL0Oyv0TE3A/z/ioNAAqsdlFZFDfzW+FssehwYHyxiVHesVQQK7IojsIVfp2fcg7OZ
+         UvoteJDnPf9Pq2F2VCfXU8X2l+AR5rda+Ctm7HAG5hjVVW/xYvFOPYB2IsVScdDGEVgY
+         WQHK+s6iSZmVbLPrOjmU65uh76nu5kBZz67ajBo067+DapsQJG3EygP+waMhsLyGCteW
+         V3doNiC+kNmLjwkDXe71Fvhl3Zn1kflKcFtFBJZNb9iIj69LJ/2Vebv5U9tm76y1DnyD
+         G6zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785334933; x=1785939733;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=aBs0uk/Nz7BeNh47t+Q3dnJOuZWHDf1CUHbRfB2n60M=;
+        b=OF0tioFQPWsssecVONEkR8d4pV1z6TgrUuzb6vb96bXcpg/2SNGats/Ih8PLHyf/uE
+         BGdHRg/HTNDZKIIR0GXILOB/fhXgo6VmPYRDVwBF/s5WWKzHXOXDsby8tMje4f2YFh+/
+         GFsSmax20mQFKKOE46HgR8Dp/irZdAEEX6Nwi5HpG5CvDLz2tEtUp4KvnOwgg0sCGpQx
+         0XLIkpoaCck9+cEQjx1p4J/vrbtc1jTofZnhwmH5sSJVzvrtJ2YIMCNGDTqDjBmHGQLP
+         mXCpSG+T3MC/PCrUANCcbXVHdg6K1VNmp/48P5k2R5uRg1Hd9mfwFXVPQ0QVwBb3Gk22
+         mm0w==
+X-Forwarded-Encrypted: i=1; AHgh+RrFSzFhjVclzTqwcCZw0mFEPQTzgmg9XVvJqfGQhBu25zkCxroE0hsiR/lHLY1LJTHZ41x6cr0M3FhIJQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyY2Y8NbDShFT5+7rKDFxUTS2CWlsesbGxhJIGIpSOoXuUuqbLR
+	6YxqZHqX7YFTSfR1JVLzbHydckxNYXIUXWzonLjzxf8Rjtv3Jn4+2wQa
+X-Gm-Gg: AR+sD11idCemRs020lGEZFqMZKwQ6+9/8iyUBaWlLy7KOrQaIu4rSJYaVrZMNMhg/7c
+	8pSadYSFlgHW0VuI3as4dgp5YL8coR6/8KIMFVFyEaigg9wsEjvVffsFMiDXtWrgVkCcW1pbkXU
+	UPnTVQh45wi/+KdjINDNt4j9AfwVQwTMkRhAE8aSuxkUeHryXEbRH/IAHQ9dbot414ch74fFPi2
+	GpAGmZYQTiWNTsNNe1WQ2d8JUSAVdRhXTB0zDgATPLOV4kgL5zQaAjA3VfuCqwX0Sn4HQAeanaD
+	Z4afVyWPW9MdSXM/YJmEgDMw33RENlpTERu0NEkOyU81dnGxMTN4qcSB4v5HMqyz6sM4ntYP6qq
+	ygnG6+2is9nuY3EAeu/EN+V2YnsVEW8i3B4SdTMzFmkthVe55dC2FV5p8HkkN1KyKR7u/17RYhU
+	nLl5jBY3g6R/ZM659z9fvTmPPQlQXYM8ik5vGDP+aLjR77Pnx5CBMVEvWEqm+CIhnFr7nXERNUy
+	sBMdLwOsqhxAyPxSN2WODdvGZ4k5OSRFkwegA==
+X-Received: by 2002:a05:6820:2908:b0:6aa:f61e:2463 with SMTP id 006d021491bc7-6acb603b4f1mr8979eaf.24.1785334933143;
+        Wed, 29 Jul 2026 07:22:13 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4588646ade0sm2426214fac.5.2026.07.29.07.22.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jul 2026 07:22:12 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e535a9c5-28a5-470c-be21-95e1812e5e01@roeck-us.net>
+Date: Wed, 29 Jul 2026 07:22:10 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="n3ggbw5bacfwekjx"
-Content-Disposition: inline
-In-Reply-To: <20260728-hwmon-max20826-support-v1-5-224766e0acd1@analog.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [hwmon-next PATCH v4 3/4] hwmon: (adt7470) Expose fan control via
+ PWM framework
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+Cc: Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Chris Packham <chris.packham@alliedtelesis.co.nz>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Darrick J. Wong" <djwong@us.ibm.com>, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pwm@vger.kernel.org
+References: <20260729-adt7470_thermalzone-v4-0-c14039dfa0e6@gmail.com>
+ <20260729-adt7470_thermalzone-v4-3-c14039dfa0e6@gmail.com>
+ <12dfeaae-f806-4adc-95f1-97fe10ef748e@roeck-us.net>
+ <amnoV4Vlxmc5QgVC@monoceros>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <amnoV4Vlxmc5QgVC@monoceros>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
+On 7/29/26 04:49, Uwe Kleine-König wrote:
+> On Tue, Jul 28, 2026 at 10:56:04PM -0700, Guenter Roeck wrote:
+>> On 7/28/26 21:46, Luiz Angelo Daros de Luca wrote:
+>>> The ADT7470 features four PWM outputs designed to control fans.
+>>> Previously, these were only accessible through the legacy hwmon
+>>> sysfs interface.
+>>>
+>>> Expose the ADT7470 fan control lines through the generic PWM framework.
+>>> This allows generic PWM consumers described in Device Tree, such as
+>>> "pwm-fan", to use the device through the "#pwm-cells" property.  This is
+>>> particularly necessary for boards where the ADT7470 external temperature
+>>> sensors are not populated and the chip is used strictly as a fan
+>>> controller (e.g., Edgecore ECS-2100-52T switches). In such setups,
+>>> delegating control to the generic PWM subsystem allows the kernel's
+>>> thermal framework to manage the fans based on unrelated temperature
+>>> zones, such as internal SoC sensors.
+>>>
+>>> When a PWM consumer applies a new PWM state, the driver automatically
+>>> switches the corresponding PWM channel to manual mode so that the
+>>> requested duty cycle takes effect. The duty cycle specified by the PWM
+>>> framework is internally converted to the 0-255 scale expected by the
+>>> hardware registers.
+>>>
+>>> The legacy sysfs interface remains unaffected and operates in parallel.
+>>
+>> No, I won't accept this. It has to be either or. A pwm channel modeled as pwm
+>> subsystem channel must not be visible via hwmon attributes.
+> 
+> I didn't look in detail, but maybe my red line is a bit more lax. IMHO
+> it's not OK to be able to modify a setting that results from pushing
+> hwmon knobs using PWM operations or vice-versa. Switching between
+> exclusive use at runtime is IMHO ok.
+> 
+It is my call to make, and my call is either-or to avoid confusion.
 
---n3ggbw5bacfwekjx
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 5/5] hwmon: (pmbus) add support for MAX20826 and similar
- devices
-MIME-Version: 1.0
+Thanks,
+Guenter
 
-On Tue, Jul 28, 2026 at 05:03:52PM +0100, Nuno S=E1 via B4 Relay wrote:
-> +#include <linux/i2c.h>
-> [...]
-> +#include <linux/mod_devicetable.h>
-
-<linux/i2c.h> already makes sure that of_device_id and i2c_device_id are
-available and <linux/mod_devicetable.h> is going away soon. So please
-drop the latter.
-
-Best regards
-Uwe
-
---n3ggbw5bacfwekjx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmpp76sACgkQj4D7WH0S
-/k6yCggAq8efA13zwRO+Od3kMS57XL7KmMYi+2Eh+9uZ7z7a0LHgWsU0VnvflFFJ
-KAIXrYrr/94JXpdd7ba5V7gM/q9gO1TVpdAU6jKSE/P6ytUI3h5iVobiYzRDLvwM
-FWz5otvARA+J1CXKX7BiqFqCVZdhm3jj/8GmDeUZXdudUC2++V40vzsgdD5HthOE
-ZPqyWUne8JrzFmMPZRfMoWKvNHO6TPcYMwAylQRQYg0emRPmi0FQ/7cn8A773L2w
-1BrcYY/dxpTVNn1ziLtmoKJ4sQyT60Wk6TpJ3MoYRqHEoVC9Zogow1beYtzKgoEC
-nvPzV0EF/3Xx7tnKcG737INpSl0eMg==
-=hHoq
------END PGP SIGNATURE-----
-
---n3ggbw5bacfwekjx--
