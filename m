@@ -1,38 +1,39 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B65E64119EB;
-	Wed, 29 Jul 2026 15:35:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB65F38DC5F;
+	Wed, 29 Jul 2026 15:40:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785339327; cv=none; b=FmXNj1tyN1JVR41Qw8+h5MYN2aAfKzDwwJP18lkJSA+WX7GxvrSh1hxby5T/RVAikYVEyARQJk4MkFs6RUmiVzeeesmOp2FH3PiiKDgadZTqw5vu6PoBekGY2smNgrSLc8M9Y0tDZ1LEFD/8XEWzO/ChWh6x0LenkdBiZCq7BOI=
+	t=1785339638; cv=none; b=mS3H1YBKqF39x4b8NBFzULWBrOJCnPNZAYDTSujLkjAgvMo03eQX36luxxYk0dDPYMjcTZhewIGvGCvdMLPdOKilpQn2VLAZ0FnSIQZ6FNlX62XkzZjjUU7FIkEaym7aDBMKHyANHpc1hS8RcVJE+LHuDMc6lwErHdFG1DW9Ta4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785339327; c=relaxed/simple;
-	bh=l0NCnI6JOuhb++b95efRhL0Y/0C3ZAtA3MWlgH3zA2c=;
+	s=arc-20240116; t=1785339638; c=relaxed/simple;
+	bh=y4Z9bRI9kl+5SfyqXip40FNbkMh0cLcY/RV/p5Va0g8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TABAEq2mu2pnUZKixoIeZhotmdAYJZ4bMjDR55DqDtXEEWdYamfu2ZouuPXHxon/LQ7BKgKeK/++5cgXS89+jjwXRWtMc8DIWZe+9yEzmjdtHoVZm193wE/RajL3YyrXpRV8GdIoFVgvRIFbsGRtLx7uZGymrMbSCQ63Fk1yzPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=BWyXI9hH; arc=none smtp.client-ip=159.69.126.157
+	 Content-Type:Content-Disposition:In-Reply-To; b=JFF28BpbuSf9JaVDbxYzBLUPutbFmZIewdbxKKPGG4iwCbzuuFULZAyj3TzU6UNNY33PdBllyLf6O6NrNz1UbWYCgJgLprJvHFD5bTAZTd/YaxQr7Ytqe+xcp6lVkmCj54LIKYfZwLXpUEVDnxzV4qqREFRqghMrBMmzw9q0FDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=qAN4v858; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="BWyXI9hH"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="qAN4v858"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1785339316;
-	bh=l0NCnI6JOuhb++b95efRhL0Y/0C3ZAtA3MWlgH3zA2c=;
+	s=mail; t=1785339634;
+	bh=y4Z9bRI9kl+5SfyqXip40FNbkMh0cLcY/RV/p5Va0g8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BWyXI9hHDmmA7SrILfJCTnQulplcF3cLGT05iTMDA9lh7nbJxNDR/eJaU8gDDXZIm
-	 5AabpRJ1ajdHM/TK6WHmoNbLDBTPUlX29m8KcPDT8YIyfnuwishB6ywBOyCOggChoz
-	 h+kzJfvj6U0OnDcfQX4QpaWVHfHTLtRLaA2P2nBs=
-Date: Wed, 29 Jul 2026 17:35:15 +0200
+	b=qAN4v8583/1yw+8mYzSADdu1jNKw5bQGOcHbMZEVkvSSHXzy89SpgT95weARf+ZBf
+	 eDfKYoen659YHSGzhprXzrGQlNtrScAIkWIpVDxK5uZCl65AHH8ryQwuZBd1YG6YXc
+	 PPgUQPpTKR1RsmiJUfjl8bdkDFbA8y60k9lmCEiA=
+Date: Wed, 29 Jul 2026 17:40:33 +0200
 From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: dhs@frame.work
-Cc: Guenter Roeck <linux@roeck-us.net>, Benson Leung <bleung@chromium.org>, 
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Benson Leung <bleung@chromium.org>, 
 	Guenter Roeck <groeck@chromium.org>, chrome-platform@lists.linux.dev, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Tzung-Bi Shih <tzungbi@kernel.org>, linux@frame.work
-Subject: Re: [PATCH] hwmon: (cros_ec): Hide unconfigured temperature
- thresholds
-Message-ID: <1020ffb2-5c50-4440-ba88-8f40f02a754f@t-8ch.de>
-References: <20260729-crosec-hwmon-warn-default-v1-1-d1eb39656a60@frame.work>
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (cros_ec) Handle temperature conversion
+ overflows
+Message-ID: <63f9c782-3e4e-468e-a31f-901d1e2ff40b@t-8ch.de>
+References: <20260728-cros_ec-hwmon-overflow-v2-1-d24e24d0792b@weissschuh.net>
+ <0fbf7f69-bb90-4209-b9d5-258759711496@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -42,89 +43,136 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260729-crosec-hwmon-warn-default-v1-1-d1eb39656a60@frame.work>
+In-Reply-To: <0fbf7f69-bb90-4209-b9d5-258759711496@roeck-us.net>
 
-On 2026-07-29 00:38:16+0800, Daniel Schaefer via B4 Relay wrote:
-> From: Daniel Schaefer <dhs@frame.work>
-
-Welcome to upstream!
-
-> The EC reports a threshold of 0 K for host thresholds that are not
-> configured. Most Framework Computer systems don't use all thresholds.
-> E.g. temp_host_warn is left unset and stays at its -273 C / 0 K
-> default), see the EC code in zephyr/shim/src/thermal.c:
+On 2026-07-28 08:02:28-0700, Guenter Roeck wrote:
+> On 7/28/26 03:17, Thomas Weißschuh wrote:
+> > The calculations converting between the different temperature units can
+> > overflow on 32-bit systems, resulting in incorrect data.
+> > 
+> > Detect these overflows and handle them.
+> > 
+> > The code is written in a way that there is a single conversion function
+> > and the compiler can recognize when overflows are impossible (on 64-bit
+> > and in cros_ec_hwmon_temp_to_millicelsius()). If the compiler detects
+> > this, it will optimize away the overflow checks.
+> > 
+> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> > ---
+> > Changes in v2:
+> > - Drop already applied patch 1.
+> > - Also handle overflow of u32 -> long.
+> > - Clarify commit message wrt compiler optimizations.
+> > - Use __always_inline over __flatten to allow the compiler to optimize
+> >    away more unnecessary overflow checks.
+> > - Link to v1: https://patch.msgid.link/20260630-cros_ec-hwmon-overflow-v1-0-3d2ecd3eb0f2@weissschuh.net
+> > ---
+> >   drivers/hwmon/cros_ec_hwmon.c | 31 ++++++++++++++++++++++++++-----
+> >   1 file changed, 26 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
+> > index 1337b646e022..004a8180b665 100644
+> > --- a/drivers/hwmon/cros_ec_hwmon.c
+> > +++ b/drivers/hwmon/cros_ec_hwmon.c
+> > @@ -5,11 +5,13 @@
+> >    *  Copyright (C) 2024 Thomas Weißschuh <linux@weissschuh.net>
+> >    */
+> > +#include <linux/build_bug.h>
+> >   #include <linux/cleanup.h>
+> >   #include <linux/device.h>
+> >   #include <linux/hwmon.h>
+> >   #include <linux/math.h>
+> >   #include <linux/module.h>
+> > +#include <linux/overflow.h>
+> >   #include <linux/platform_device.h>
+> >   #include <linux/platform_data/cros_ec_commands.h>
+> >   #include <linux/platform_data/cros_ec_proto.h>
+> > @@ -151,14 +153,28 @@ static bool cros_ec_hwmon_is_error_temp(u8 temp)
+> >   /* This differs slightly from the variant in units.h to avoid rounding inconsistencies. */
+> >   #define CROS_EC_HWMON_ABSOLUTE_ZERO_MILLICELSIUS (-273000)
+> > -static long cros_ec_hwmon_kelvin_to_millicelsius(long t)
+> > +static __always_inline bool cros_ec_hwmon_kelvin_to_millicelsius_overflow(long t, long *ret)
+> >   {
+> > -	return t * MILLIDEGREE_PER_DEGREE + CROS_EC_HWMON_ABSOLUTE_ZERO_MILLICELSIUS;
+> > +	if (check_mul_overflow(t, MILLIDEGREE_PER_DEGREE, ret))
+> > +		return true;
+> > +
+> > +	if (check_add_overflow(*ret, CROS_EC_HWMON_ABSOLUTE_ZERO_MILLICELSIUS, ret))
+> > +		return true;
+> > +
+> > +	return false;
 > 
->   DT_PROP_OR(node_id, temp_host_warn,  -273)
+> 	return check_add_overflow(*ret, CROS_EC_HWMON_ABSOLUTE_ZERO_MILLICELSIUS, ret);
+> >   }
+> >   static long cros_ec_hwmon_temp_to_millicelsius(u8 temp)
 > 
-> Previously these unconfigured thresholds were exposed as sysfs limits
-> that read back as -273.15 C, which userspace (e.g. s-tui) interpreted as
-> a real, permanently-exceeded limit.
-
-In current hwmon-next this should read back as -273C. See commit
-9f14280c5ef3 ("hwmon: (cros_ec) Implement custom kelvin to celsius conversions")
-
-> To avoid this we can hide the sysfs attribute for that threshold.
-
-"Avoid this by hiding ..."
-
-> See truncated example below.
+> The maximum value of "temp" is 255.
 > 
-> Before:
+> >   {
+> > -	return cros_ec_hwmon_kelvin_to_millicelsius((((long)temp) + EC_TEMP_SENSOR_OFFSET));
 > 
-> > sensors cros_ec-isa-000c
-> cpu_f75303@4d:       +36.9°C  (crit = +74.8°C, emerg = +84.8°C)
+> 255 + 200 = 455.
+> 455 * 1000 = 455000 (not even counting the conversion from kelvin to C).
 > 
-> After:
+> How could this ever overflow ?
+
+It will never overflow. And the compiler knows this and optimizes away
+all the overflow checks. Otherwise the build would straight up fail to
+the BUILD_BUG()s below.
+
+The idea was that not everyone reading this code needs to do the
+calculations and double-check.
+
+> > +	long ret;
+> > +
+> > +	if (check_add_overflow(temp, EC_TEMP_SENSOR_OFFSET, &ret))
+> > +		BUILD_BUG();
+> > +
+> > +	if (cros_ec_hwmon_kelvin_to_millicelsius_overflow(ret, &ret))
+> > +		BUILD_BUG();
+> > +
+> > +	return ret;
+> >   }
+> >   static bool cros_ec_hwmon_attr_is_temp_threshold(u32 attr)
+> > @@ -236,8 +252,13 @@ static int cros_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+> >   			ret = cros_ec_hwmon_read_temp_threshold(priv->cros_ec, channel,
+> >   								cros_ec_hwmon_attr_to_thres(attr),
+> >   								&threshold);
+> > -			if (ret == 0)
+> > -				*val = cros_ec_hwmon_kelvin_to_millicelsius(threshold);
+> > +			if (ret == 0) {
+> > +				if (overflows_type(threshold, long))
+> > +					*val = LONG_MAX;
+> > +
+> > +				if (cros_ec_hwmon_kelvin_to_millicelsius_overflow(threshold, val))
+> > +					*val = LONG_MAX;
+> > +			}
 > 
-> > sensors cros_ec-isa-000c
-> cpu_f75303@4d:       +36.9°C  (high = -273.1°C, crit = +74.8°C)
->                               (emerg = +84.8°C)
+> I agree with Sashiko - it does not make sense to call cros_ec_hwmon_kelvin_to_millicelsius_overflow()
+> if it is already known that threshold overflowed.
 
-"Before:" and "After:" are swapped?
+Yep, this is a bug. This would be correct:
 
-> Cc: Tzung-Bi Shih <tzungbi@kernel.org>
-> Cc: Thomas Weißschuh <linux@weissschuh.net>
-> Cc: linux@frame.work
-> Signed-off-by: Daniel Schaefer <dhs@frame.work>
-> ---
->  drivers/hwmon/cros_ec_hwmon.c | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
-> index 03bfcc40bb7c..57158443dafe 100644
-> --- a/drivers/hwmon/cros_ec_hwmon.c
-> +++ b/drivers/hwmon/cros_ec_hwmon.c
-> @@ -319,6 +319,7 @@ static umode_t cros_ec_hwmon_is_visible(const void *data, enum hwmon_sensor_type
->  					u32 attr, int channel)
->  {
->  	const struct cros_ec_hwmon_priv *priv = data;
-> +	u32 threshold;
->  	u16 speed;
->  
->  	if (type == hwmon_fan) {
-> @@ -334,8 +335,17 @@ static umode_t cros_ec_hwmon_is_visible(const void *data, enum hwmon_sensor_type
->  	} else if (type == hwmon_temp) {
->  		if (priv->temp_sensor_names[channel]) {
->  			if (cros_ec_hwmon_attr_is_temp_threshold(attr)) {
-> -				if (priv->temp_threshold_supported)
-> -					return 0444;
-> +				if (!priv->temp_threshold_supported)
-> +					return 0;
-> +
-> +				if (cros_ec_hwmon_read_temp_threshold(priv->cros_ec, channel,
-> +								      cros_ec_hwmon_attr_to_thres(attr),
-> +								      &threshold) != 0)
+if (ret == 0) {
+       if (overflows_type(threshold, long) ||
+	   cros_ec_hwmon_kelvin_to_millicelsius_overflow(threshold, val))
+	       *val = LONG_MAX;
+}
 
-Probing would be a bit faster by not calling this for each threshold,
-but only doing it once. cros_ec_hwmon_priv::temp_threshold_supported
-could become a bitmask for supported thresholds to be read in is_visible().
-This can also replace is_cros_ec_cmd_available(EC_CMD_THERMAL_GET_THRESHOLD).
+> Personally I think this is way too complicated. An overflowing temperature above 255 degrees C
+> does not make any sense, and returning LONG_MAX as temperature seems a bit odd.
+> I would just have checked for some reasonable limit, such as
+> 			if (threshold > 255 + 273)
+> 				*val = 255000;
+> 			else
+> 				*val = cros_ec_hwmon_kelvin_to_millicelsius(threshold);
 
-> +					return 0;
-> +				if (threshold == 0)
-> +					return 0;
-> +
-> +				return 0444;
->  			} else {
->  				return 0444;
->  			}
+That works for me, too. Thanks.
+
+> If it does make sense to return LONG_MAX as temperature for some reason, that should
+> be explained.
+
+No specific reason.
+
+
+Thomas
