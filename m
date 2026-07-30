@@ -1,69 +1,69 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C8936A340
-	for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 04:12:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 309BD396D38
+	for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 04:12:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785384729; cv=none; b=UyKyVWPPuKglRnh6eRAAEb1OoJtGLA29GhXBT9FmBgLuEGw0TjaiLcjfM5ejMTp9k9P89A1oestFy3MoVbo+rfBWhfpOsqLkmWrbfNHSGpTWYxrtH5QLbEpCjhNOjLagtHNG+8mjwyEikWY9BJbbHVQk0+1rAN1zuSuSZEuCvCk=
+	t=1785384770; cv=none; b=qJA9YG+efFxSkJLTHNME6YyZ38woZnXB2nxrqEcbWeLu6EaTMrbdP7o9TjGzcYoAeezWVtW90MT/wUtCQZgAM2pWaTUFh/yI94Wx3HGPVQl2bc/6LlJ8jwAOCT6a4A2eZGrY4+TRi3xcZRatdZ3er4ysNUV27Kg9gIdEfqXLGS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785384729; c=relaxed/simple;
-	bh=LAu2sW5l3IiFBj/Rjq06BIicVSjU9eqoVk3guL9bz/E=;
+	s=arc-20240116; t=1785384770; c=relaxed/simple;
+	bh=S05elIAgEDFPxffm6US5XwDiLG3j89Gks0C3PBMYf1s=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k3Z+3UJy/OxTgf93nYeZx5Uw2XY7WK+M+cHigm59EQ5dt9d0WsrldShEjqyQf3WqvalCQkkhA85ls14duumhw+s+5fYIPyk2b3S31zlFQLJs+jYReJQKJ18eDlNvUdA5Zl2TVD1DfC8/hVDas71MCrcWPElDld/VvB/XgOmR4g8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MaUPqcGN; arc=none smtp.client-ip=209.85.214.170
+	 In-Reply-To:Content-Type; b=W2n2qS11XdDGKgTBGDApGiQNJEjFYRzXpZDRVlb6YmYfKhbGTGx9WzIEe5gTX28amTUT+SF+achmefvhfDSUjYuOJOG0GYz4Yzw6asnQm9YcJWBi5ZA6iyF1llIpFVVblWSA6BVy+z4ReiTVSG/Jujk49OjUEDcXqjGrctqB4ag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o0qntW6B; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MaUPqcGN"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2cc61541f8cso3996965ad.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 29 Jul 2026 21:12:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o0qntW6B"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-8487b7b3fc8so1871122b3a.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 29 Jul 2026 21:12:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785384727; x=1785989527; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785384768; x=1785989568; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=GJL6cS6g6CqvOf4rn75EuWDitpA19wttRxq8V4yVCks=;
-        b=MaUPqcGNf8lEXdgwOQ7KlEA4zqATZiCHF+G8J7Kt/RWJZBq+N2wB5W6scg1EdlwdEp
-         As9Uc2tOFJqqbeBfSw/YAAth1PPklTP+4M2oiZaurOi7tSNKt0IpAQChQH1eZsPjjJmT
-         rF8Jqv5Y0+E2+pIr+ro//kwht394Zk3yzWLJukwobkmM+m3t6ErmdQcpAFchSIo1wMFg
-         f3Y4VL0PmP/xuHx8dceIZ67abg3osZAS/wYh8cmTAEvaJpL9YlfhsnXpJiEw7bVvcvJ6
-         PrFAGPjPHnoGQSSrxlC9fsFcUG+LbHe7y75hIda92q9+wUL3H11GgAfFwNHaaQTjTKUc
-         yvsA==
+        bh=yrUKv4UtSvyZWLjf9iBBjhJjTZlyrezq04V3SN/NPFU=;
+        b=o0qntW6BNYiSyjwZNjsKF+aysHYaa2EAPe6zaIbcHUBiJjeSyVRfVMDHY+eB8nHa2/
+         n4DZ9bin74xD9ky1y0i60kqOtvaEZz/d90j7KmzWtIQx41y9STKRv43BuFg08mdtq7Nu
+         ZxnUAbT0BAKd46/zH8cLxbotDi3aWPQUUD2l7UQiZp4fjntC8/7I4frpMmB8A4Lde6WE
+         +/nBV3xiWYPKhPIC20DnjaCzWREg1e6TVDZtJjJsPx/jBNwh8DuVsZmRcwDNcxiN75TI
+         K45Fp5+L+uzXrDNKxWMxToYy+D0NMuTtisuRDggRs6qBmAljM/NPpnZmOM6JQzmRNasf
+         Bk4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785384727; x=1785989527;
+        d=1e100.net; s=20251104; t=1785384768; x=1785989568;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=GJL6cS6g6CqvOf4rn75EuWDitpA19wttRxq8V4yVCks=;
-        b=bSJ/x/FdzrmPqg6VSpJNWRqsoC0CLNw4ILuIoUO6QyouasYt3tciTzqrXelGxXTxU7
-         CRCTJWBpB4idezbQeo1ki4S/UFS6thMs8qSUGM2RiSthKBpWs44eMmO/t3McYZ61lAUD
-         jcn7B3Qq6GuN1GbT5YVzwtJ9HV0IfSZfkXspbyzth9+Ojr92Mcnx7pAXndLNcNyaMr5B
-         mSw8TJ9VIkWGxxUyNRX4ho1ztLSOuYLcc8XoN0hfw+mo1EdSLsctLrd8oKOTULCH0MoR
-         NVoIrYpkVAQ5XbLhnGi4Ub7HpCexeVvGf5wWhHKxnO041aXCEPjcz/BUw+5BZVNO6p/I
-         uP/w==
-X-Forwarded-Encrypted: i=1; AHgh+RoA9NgEnZ+C6s6PV8jDW6Vh2CGIvgl3WmCCWLu8jcUtveeETaV2joVN04k9OxP8/Zarek0DPIHFd4kXWw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7Jtc7mc+xu+D2oSsS9MZVuoWUuI5eOjznHmWDLElwB+UjHXso
-	/hO/iWJa6smCAcMT/qVe//m6+nECQy371C73d3CkDq8aPYy4BsIXxmP4
-X-Gm-Gg: AR+sD13tGYFBE4XMybuwKzlj+8NL06gCJ316UdblZKJ/qTsqTUqRqIzlFzfSNsyOMjO
-	9witbwF5RFyT9L8c0LC+6dsAO2SifPXFeC44YhTX7/ZZCkZWOjs0CPUytdyV+NgOTgrWNwO1kR4
-	m3OfI2STLUQBKMxuiQVL3E47bQbsl0B9wvWuGzs0+ba/gNVHncGLiUQjsw+rGQjfypCXc1TTuyg
-	GiATp8LlKHLVCrDOC3TfspamfBAmVYUHlRJMooIMRSTpWOOsMYvnRKZw4V0wUTsINR6P0A50l5o
-	ndA65R4XsOtAAGgXdMMt2p/1GkxgCJn39KzLExQEZYBunZS5z3EcueHugsV/x+52MscXlYIM38i
-	Wb+rYW+IQS54KKJL/T2H0ZNDBCTX33/Sdn9DAYtksSp/OU/1knQuLuRuGdlKCsmGBQybDJ4RO1n
-	ReHyqBaINNNuntxn+6ahs9JMqXVTMCKNzZjuWQ3T+P7csDstWw8j0BsG5TFiQn/BxMhhgazOUUc
-	hSzDGbD3Qrn1S4NdrGG8yhsrC5aclgkyRtiRg==
-X-Received: by 2002:a17:903:1ac3:b0:2cc:80d6:b72 with SMTP id d9443c01a7336-2d036fb0f54mr6657595ad.20.1785384727063;
-        Wed, 29 Jul 2026 21:12:07 -0700 (PDT)
+        bh=yrUKv4UtSvyZWLjf9iBBjhJjTZlyrezq04V3SN/NPFU=;
+        b=JlshSwChXutJTAWI5Rd9iz2sTrMWLf2qGvBGyMiI7cjuaeUh9NDmPdJ9VmYY/b0oiU
+         OT1jXKe7lyrZv1FeXNr7n4kNdKQIZT8bxM4Is1yLz3l/FtOeaWBQTf/p5Zjtzp1aT34a
+         dlE8gA/dwSkrYjVjzDZLyb6H1/Nn9unTmHhF3qqjNZyJ14RztlrdIzyWnTWJBBISIIdS
+         /SwIgcjKJz7MP6XhIIVXbUTNNZ5FuR+7LpCLvW03/4GMMQ8lIYgXnCh8KMBtBLWKo5/g
+         yL8foxmmibS3IF7Z2MwIzYCMoACZtwpQbGe6XUX9Fzll1T1lyMnKrwKf+lGFcOrW50OP
+         PhgQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrR5HAmTWjsfa5ZGpM1Vm6BE/Oww+1P/3RfwYqIQR7nnbyDxIXYkkT11PSIVceJjL0nwtBlqKn6O9jf4Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxywkrq1KokMWV5URT2XQJxrirXCX2vFxyqH4RPw9M2CplO73GV
+	vVB5UFqv0fQ9hAct3w56P+RJfEORQhQn+XrZg8lpWU4law61BUn8OiYS
+X-Gm-Gg: AR+sD10s/oc9cUEC4jD604GVe6TwEVKGeBI6svfChah6pt7Z6mn6rrJJ1Ik3OF+vaX4
+	jykPluBXka2WKQCr4/l5oYqO42rhjNLONv0HuLev43jAR8W+J4si9TVG1jZioY9/EJeUpcMFB1K
+	N67qUi5pCD4AQZxtMO57R6vSSgLY26Ns8r0R+EYwZC+29pBZXvBTd1Rl3dXnhX1UYVbkrlueB4F
+	ool1UT0xNbgFASd3mONbHDwmv1uWa6y1ahLb1ur8Etx9+VZU3MfVLgwsliykkk1wPKm7Tp9jeds
+	MBuNw48jNoxSgBI36X2w+GMlcQERFV1DpWCNnhxLq4Kt2PjpB+m4iiYfUh/AnGoAZyYq9SL+Xpj
+	AU6AKQ3MGUCjSbrKDiBh0QGY6zZXG6DWUZ6L6AlMbP5W1gJUVsAiGPJGbO1JC170z15Lc6O2Meo
+	ZbGPB1/YN5W9VGQGU+V3nvWisKHSU8r+AnLrnztbB4E1N3bHWKRdcfCOXW7bxc5/Sy/FiOb8Ssi
+	T+QKh4RLufB4QHhd67KmZ1Fi8G2yXHK0H1Zw439KBZbAc47
+X-Received: by 2002:a05:6a00:909a:b0:848:6c1c:17c0 with SMTP id d2e1a72fcca58-84ebc213480mr1074576b3a.19.1785384768343;
+        Wed, 29 Jul 2026 21:12:48 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d022c3721esm19709085ad.77.2026.07.29.21.12.05
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84ea0378b18sm2219894b3a.48.2026.07.29.21.12.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jul 2026 21:12:06 -0700 (PDT)
+        Wed, 29 Jul 2026 21:12:47 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e8107a53-6d77-48a8-bb4f-24e9aff9c27c@roeck-us.net>
-Date: Wed, 29 Jul 2026 21:12:05 -0700
+Message-ID: <53527fab-620d-49c1-a65a-5253a9b65011@roeck-us.net>
+Date: Wed, 29 Jul 2026 21:12:46 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,13 +71,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 2/4] dt-bindings: hwmon: pmbus: add MPS MPQ8646
+Subject: Re: [PATCH v6 3/4] hwmon: pmbus: add MPQ8646 driver
 To: sashiko-reviews@lists.linux.dev, Vincent Jardin <vjardin@free.fr>
-Cc: robh@kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org,
+Cc: conor+dt@kernel.org, robh@kernel.org, linux-hwmon@vger.kernel.org,
  devicetree@vger.kernel.org
 References: <20260729-mpq8646_v0-v6-0-98848151cdb4@free.fr>
- <20260729-mpq8646_v0-v6-2-98848151cdb4@free.fr>
- <20260729220154.3B6021F000E9@smtp.kernel.org>
+ <20260729-mpq8646_v0-v6-3-98848151cdb4@free.fr>
+ <20260729220547.C24321F000E9@smtp.kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -123,62 +123,45 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260729220154.3B6021F000E9@smtp.kernel.org>
+In-Reply-To: <20260729220547.C24321F000E9@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 7/29/26 15:01, sashiko-bot@kernel.org wrote:
+On 7/29/26 15:05, sashiko-bot@kernel.org wrote:
 > Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] The newly added compatible string 'mps,mpq8646' lacks driver support in the mpq8785 PMBus driver.
+> - [Low] Missing named initializers in `struct i2c_device_id` array.
 > --
 > 
-> --- Patch [2]: [PATCH v6 2/4] dt-bindings: hwmon: pmbus: add MPS MPQ8646 ---
-> commit 341628a3dba9f658492690f20d45d96084eb12d5
+> --- Patch [3]: [PATCH v6 3/4] hwmon: pmbus: add MPQ8646 driver ---
+> commit 63fabec4213f8ada1bf01d09967620e66fc9f459
 > Author: Vincent Jardin <vjardin@free.fr>
 > 
-> dt-bindings: hwmon: pmbus: add MPS MPQ8646
+> hwmon: pmbus: add MPQ8646 driver
 > 
-> This commit adds the mps,mpq8646 compatible string to the existing MPQ8785
-> device tree schema. The MPQ8646 step-down converter shares the same
-> constraints for the mps,vout-fb-divider-ratio-permille property as the
-> mpq8785.
+> This commit adds a new driver for the MPS MPQ8646 PMBus device. It provides
+> basic PMBus telemetry, alarm acknowledgement, STATUS_WORD extended bit
+> decoding, NVM-backed post-mortem data, and an in-driver alarm-poll fallback.
 > 
->> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
->> index 90970a0433e95..d7a32fb3b7af6 100644
->> --- a/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
->> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
->> @@ -18,6 +18,7 @@ properties:
->>         - mps,mpm3695
->>         - mps,mpm3695-25
->>         - mps,mpm82504
->> +      - mps,mpq8646
+>> diff --git a/drivers/hwmon/pmbus/mpq8646.c b/drivers/hwmon/pmbus/mpq8646.c
+>> new file mode 100644
+>> index 0000000000000..1fd41d89e5bef
+>> --- /dev/null
+>> +++ b/drivers/hwmon/pmbus/mpq8646.c
+> [ ... ]
+>> +static const struct i2c_device_id mpq8646_id[] = {
+>> +	{ "mpq8646", 0 },
+>> +	{ },
+>> +};
 > 
-> [Severity: Medium]
-> Should the corresponding driver (drivers/hwmon/pmbus/mpq8785.c) also be
-> updated to match this new compatible string?
-> 
-> Because the DT schema specifies the compatible string as an enum rather than
-> allowing a fallback (e.g. to "mps,mpq8785"), it appears the MPQ8646 device
-> will fail to probe. The OF match table in mpq8785_of_match currently lacks
-> an entry for this new hardware:
-> 
-> static const struct of_device_id __maybe_unused mpq8785_of_match[] = {
-> 	{ .compatible = "mps,mpm3695", .data = (void *)mpm3695 },
-> 	{ .compatible = "mps,mpm3695-25", .data = (void *)mpm3695_25 },
-> 	{ .compatible = "mps,mpm82504", .data = (void *)mpm82504 },
-> 	{ .compatible = "mps,mpq8785", .data = (void *)mpq8785 },
-> 	{ }
-> };
-> 
-> The I2C ID table in mpq8785_id is similarly missing an "mpq8646" entry.
-> Without these additions, will a device instantiated via this new standalone
-> compatible string be completely ignored by the driver?
-> 
->>         - mps,mpq8785
+> [Severity: Low]
+> This isn't a bug, but should this array use named initializers? The I2C
+> subsystem guidelines specify that initialized arrays of type struct
+> i2c_device_id must use named initializers, such as:
+> 	{ .name = "mpq8646", .driver_data = 0 },
 > 
 
-Sashiko for sure doesn't understand that the same bindings file is used for multiple
-drivers. For DT maintainers - is there some common guidance for situations like this ?
+Yes, this needs to be a named initializer.
 
+Thanks,
 Guenter
 
