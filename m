@@ -1,69 +1,69 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA8A5368D40
-	for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 04:14:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87086382368
+	for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 04:26:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785384880; cv=none; b=qbNyAHwR6osKiXLZG4w3BihqZIvCbgFGLcsrE0Xg0BVuq+E6mhe9MrGO87l81Vvg2PWOttBIxEmYMbsZuOK8SHY20qvKnm5wg7yTbuSEJG8ngOd2TAIh4SCe9BuryQa62mEqihUiJwXj4LX0Svqxlu8lQsGAVGNeRAe9CWsslsk=
+	t=1785385606; cv=none; b=l2JVcYdxbrB6BqZkFjHRnpaEzyZJl6v3/LG9xZTOeYteNaoH0trzugMupxFysTXoW674IK+HAA1RjS208f7WamMW9WSURVlU0I8PnNH/LQeOqzhv0SsVDoD2UoJgsHQYI7G4bfH071C5vlO2LSgFF+5Ea1V+zbOlfbHuzIPrtTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785384880; c=relaxed/simple;
-	bh=0Q8fQ7ih08tbw4lzBOTN5MiSutzmizbN15Ync8bM+X0=;
+	s=arc-20240116; t=1785385606; c=relaxed/simple;
+	bh=TqdyjM/5GLN2EIbS4ZTkI2p/xSup96wYJXGxoia6qi8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HFsHZDdv0IfsUMFaz6H5qi/S44akoA9HTyyv03POEk1K0OittX2+DBCMn8B9RYPOp4lR9b2YGyhyHe7eV8aFwRL686ZfO6m9qhY6JGJpxvBhWb2mhUbUbN8Sd2dr2Gx2GOf2mzagOqUWSricfyEYXjMQKCvcMxYf4KKi/3ePUAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YGC7gc1T; arc=none smtp.client-ip=209.85.210.173
+	 In-Reply-To:Content-Type; b=qRMVxoEbW1cGZkCUUcUFv3pPXvtzVW1sP+cpB1RDbX4kyxusBUD4i5Ylropn7RLO9MCYp5EuhZpAb4AJTEGsLPAmoZBo+fQ97IjdgIyXsNHdtZIW+6E8HU1Eo2ti56zj6cjanfVnO01ioqeefvPjqynLA9WCvtkH44S41t0FMVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tNi6Yi3W; arc=none smtp.client-ip=209.85.210.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YGC7gc1T"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-84862b0d5f8so1464853b3a.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 29 Jul 2026 21:14:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tNi6Yi3W"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-8485b358552so1931016b3a.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 29 Jul 2026 21:26:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785384878; x=1785989678; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785385604; x=1785990404; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=vtrD6B8jP+hl6az+0jgCn+3wLAQryXG9np2Gsxpe3Z0=;
-        b=YGC7gc1Tru2Qz3RcApXnn3kTyi9kg2GeZNRD3n1PaSwUyTZm4o6/ERFo39cv2jKp64
-         0YDj3pd2lMx9Ws1H1fZMRdiISfMzdWyMlK2ranaRqqZf4S7gnve5stdBLQT3x6i3bwIk
-         MXVV0qPCHN7rn4PlT4ffKqxgGRk5Drk3cWsmdLMZp8+Bc6mQOwD3kHhBZaEY5HWSVrOP
-         xlNNBZAUOVFkaOVGYORBvmj5kzTNBqV0xWCZgnsj7AOoPC9X770Eja5eH7KVSFuirpx5
-         tY5/rnzxxqtpgW7+F29Z3V09AWQESEC9tqqepB/wkhGBR3iU6pvCMNRwpydiBHTSWMuA
-         qVuQ==
+        bh=SiQ1daJGHngzKWEQKXllXfEw1lyX6ubdIL7ID1shbk4=;
+        b=tNi6Yi3W1ghYQExSF+l78mW5gG69KD8QYLizk2z/xz26EUU2PRQpBixH+XeIDUPN2X
+         6lZE5dBx6nEu7DXdy/xdLpKrf96Vwqn41yBRULYZ0IrYXqnCRWIHVSW1V62IqAkA6cbo
+         qZAs/03j+gVCcZevKajtc8K6JwzFlKJacVS5Qjka57q5mGPoyYv2Sk4rR2CjpHBIZJMB
+         4AGimVvHvHDZ+61cGCTM7TIA/DNmAyiom7+Etzut8yY5jxioPzso0shX0GO1DVNnrYLj
+         Iwbx0rBuiQcvA8Eg6G2scPe3itNL6y0tR/WXTlvzf/V/xT6U65kHMrdg3fZ9tRZ1lP2I
+         A+/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785384878; x=1785989678;
+        d=1e100.net; s=20251104; t=1785385604; x=1785990404;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=vtrD6B8jP+hl6az+0jgCn+3wLAQryXG9np2Gsxpe3Z0=;
-        b=NeHnQyaADOlh2cS78T4qlfGGKtoYA812c5yKtdSuQISR1WpP+ubZVvQ6yCUJ2k0Cs4
-         X5PRu/TGOCVuwNXyfr6mIG3EUF12ueOwD9JFMdfn5MzwHD5U+C9lByppnikBfpqESw2E
-         2K9BariDuWRZq91ZDTlhLOAEgppC7lyVIes3N+41DdaSjywEG72nQ+yhyIVtauZ/cfH1
-         hIu7dN4kxD8AEcivg96KdG7HrnvYgGndJDUTbOsbfC/Alz6ozdGv9Fu31wmMFo1fdcPK
-         iuxaQe8rWepK4RanZ8X6SgwpDm+lwcYLHKXg7szKBGrRNMDlbapgqvIJf1+dx0tiCj0U
-         KKwg==
-X-Forwarded-Encrypted: i=1; AHgh+RoG4nFkzhET/5dSBVH4/I7av0lxc7+eDSprDjYVtDWBszohiKLR4FOezj/c4boIqZDtdDi0nVUGY8pIIA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzdb17GFT0211QULa+kd0JnCB9+diB2dRejZlhm/eJmHvRRyX3L
-	4agzWEcfdm666Kd4FbT+umm8XQ01qgBHv8kDOEd3Sw8YH/D8keh4W2Os
-X-Gm-Gg: AR+sD10FbDqpXYEhQfBc+D6yFobi4bsUm2iveY8I1FCYvM0RqMWZujLSOKj98SAGz11
-	kzyGeyPjWJbmF4n9Ui7SOjPfIZVZZHG7RA1+sIY2z+Tkedj6JUH5eiKISzcid6ETZr2tfdUMBpe
-	G7gZGv4nunC2/ewrY9gUXAkFhb78LC9lzkYMfaQXDJCPcQnYAPN3Pvnp1OlQa4A6zzlpHuVkBAh
-	ttkPcQMpcW7gw6O3HUiSHKRQoG2vmi/HE1pnv4IcDW439Uim4DsmWVbSNCLLUyTEI30XfcKFVAC
-	DfBW9nAH8BY3lzvQoSeqFE131f7MUAIdZPHTBjKCYALtuf7OrNibVSyFh4kkPmS1j2by6fN9WDl
-	134xEuuuA+u0qn7t22m/GEEjWmEPPaMN+L903TJ+/X3azClrmFHHzG97nqvI8tSTM1otT+BduQn
-	dPAtY4ozaiyH/NEcztvX2R7Gyw13jk3fxqAoYSwDMIcXEOQtqX4j/tXoO3bJTJRqs81P939M3UM
-	EFsiz8pJ+NhNIMrj73GEVtBii4Yj9gOnjqjKtM5lQ6vTebU
-X-Received: by 2002:a05:6a00:4c98:b0:848:6447:e0a6 with SMTP id d2e1a72fcca58-84ebc1fd269mr1163841b3a.9.1785384878141;
-        Wed, 29 Jul 2026 21:14:38 -0700 (PDT)
+        bh=SiQ1daJGHngzKWEQKXllXfEw1lyX6ubdIL7ID1shbk4=;
+        b=cmF4bWO7Eb1t3h+QABGxQne9LFWPVaBEkZ0Guo74P4GsI6Ui6pPfYI8MUBFhHgfvXX
+         rpMI84DNIOGszi8FHRJWHliuB2XkJDQscWUv4D1qBL/dQVvAawEPiU3tKvpbCVURbOUB
+         63pgXiVWg809+3M0O54l9mhgepdjcdBtViMDMW97inEI23bqGZD41ztIlFt/ax7ffdSm
+         oXuwnqTp9INy/FtPQYhgxSs36JshUP2V3j7iAgq6deCEQZ25ydvfUYYqXqgXrKQ6twyU
+         mWdLqNALv6FYEzw6F5PtudQQVeoeqix7WYE/6ao883kKPiQMUo20Q2VmllPDExab2hpZ
+         JbiA==
+X-Forwarded-Encrypted: i=1; AHgh+RqDkUTiOD25IQ6k61XQdg2+qDk1TFRDiZqZQYqhKp4tAYLISYrLJ7r2SHsv09m4nFFWlNmahXkr5YbvvQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOUsYm+XNiA1DjQzyaFy1ZI2hPvj9GaTauqZgPZZQOL0y8U+6U
+	8nnSg0kpQ92yfHYUQ0QMHfhNF7glTdSSRoIWDmEm2fUz2wckPWmtwQa3fP87fg==
+X-Gm-Gg: AR+sD12EX9v3LOOfXjflM+srsKpZq6nnSb9GDo92zbJYG+OgODsZPHSxCUlWyhWNwSf
+	haGhjfGKAxFtVfhzbc9MxLYqNXSqM7MfuOg4TWXB7zG/9YiA7wYU0r4O/pXgmzYqLsfH7vR/YFg
+	VSwtLFzajTrQAFrlPV0E0Pvl6IrxsRG2815VFJUwPvffNr8LC9UrQ6avCVoZYaI0M1UWujsogk+
+	M8WK8EXO4ZRtDjGI0chMc61nIAeLx3qSjg3/VVUcUo7voWSuM0O7rEiW4BvXwgQzYCe2Yh1N1Fe
+	Sh6F3l5PVzlgin+eMI0UN2k9ZKZbFE6i5sYO9IcFri6iL9X0CEqHA3thJ9eQU6sIocniMvWXF8v
+	pqzKlj35jJhttitub63bQzIvyhaC+1yScUXH18UXkzad5sEKfcV2m80ioNnGPd8FdFBs7xlBVsj
+	d36q/k+Se1dUIBuZ+3Seovexa58lpTvkcgH6iSxD/b6em1vNb55j3xclm85sKLqSFmSrizWxl7M
+	w6ajqTw+uOksVsRAooDnmtXX+Ujk79PtAJcUA==
+X-Received: by 2002:a05:6a00:21c8:b0:848:2c6c:dfe3 with SMTP id d2e1a72fcca58-84ebc22ff1amr1152781b3a.17.1785385603717;
+        Wed, 29 Jul 2026 21:26:43 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84ea02fc6afsm2241052b3a.36.2026.07.29.21.14.36
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84ea02fa4d4sm2244187b3a.38.2026.07.29.21.26.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jul 2026 21:14:37 -0700 (PDT)
+        Wed, 29 Jul 2026 21:26:43 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <148bb518-a4a2-44a4-b796-aeb5aa6f459d@roeck-us.net>
-Date: Wed, 29 Jul 2026 21:14:36 -0700
+Message-ID: <6c663220-c4f2-47bc-8dd7-83cfaaf079da@roeck-us.net>
+Date: Wed, 29 Jul 2026 21:26:41 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -72,12 +72,15 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v6 4/4] hwmon: pmbus: mpq8646: gate the writes
-To: sashiko-reviews@lists.linux.dev, Vincent Jardin <vjardin@free.fr>
-Cc: conor+dt@kernel.org, robh@kernel.org, devicetree@vger.kernel.org,
- linux-hwmon@vger.kernel.org
+To: vjardin@free.fr, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Charles Hsu <ythsu0511@gmail.com>
+Cc: Markus Elfring <Markus.Elfring@web.de>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-doc@vger.kernel.org
 References: <20260729-mpq8646_v0-v6-0-98848151cdb4@free.fr>
  <20260729-mpq8646_v0-v6-4-98848151cdb4@free.fr>
- <20260729220705.978B61F000E9@smtp.kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -123,158 +126,215 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260729220705.978B61F000E9@smtp.kernel.org>
+In-Reply-To: <20260729-mpq8646_v0-v6-4-98848151cdb4@free.fr>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 7/29/26 15:07, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
-> - [High] Debugfs attributes perform I2C accesses without acquiring necessary locks, risking race conditions and bypassing hardware write protection.
-> - [Medium] Mixing goto-based error handling with guard() declarations in the same function.
-> - [Medium] Debugfs write functions mask negative error codes by returning 0 (success) on hardware failure.
-> --
+On 7/29/26 14:51, Vincent Jardin via B4 Relay wrote:
+> From: Vincent Jardin <vjardin@free.fr>
 > 
+> The write cases of debugfs entries are provisioning and bench
+> helpers. By designs the MPQ8646 powers the CPU cores rail,
+> so a wrong write can brown out the board or persist a bad
+> setpoint into finite-cycle NVM.
+> 
+> Signed-off-by: Vincent Jardin <vjardin@free.fr>
+> ---
+>   Documentation/hwmon/mpq8646.rst |  37 ++++++
+>   drivers/hwmon/pmbus/Kconfig     |  17 +++
+>   drivers/hwmon/pmbus/mpq8646.c   | 269 ++++++++++++++++++++++++++++++++++++++++
+>   3 files changed, 323 insertions(+)
+> 
+> diff --git a/Documentation/hwmon/mpq8646.rst b/Documentation/hwmon/mpq8646.rst
+> index d3ede656ea15..6207cfd89f7f 100644
+> --- a/Documentation/hwmon/mpq8646.rst
+> +++ b/Documentation/hwmon/mpq8646.rst
+> @@ -246,6 +246,43 @@ The only writable entry is ``alarm_poll_interval_ms`` (the alarm-poll
+>   worker cadence, see above), it is driver-local and never touches the
+>   chip.
+>   
+> +Unsafe provisioning
+> +-------------------
+> +
+> +Available only when ``CONFIG_SENSORS_MPQ8646_DEBUG_UNSAFE=y``
+> +(``default n``, it is for boards bring up only). They WRITE to the regulator.
+> +On many designs the MPQ8646 powers the main CPU core rail, so a wrong write can
+> +brown out the board or persist a bad setpoint into finite-cycle NVM. The first
+> +gated write logs a one-shot warning.
+> +
 
-Feedback seems valid. Please address.
+This and the explanation in Kconfig need to be much stronger,
+along the line of
+
+"WARNING: Wrong register writes can and likely will physically damage
+or destroy the chip and/or the board".
+
+> +===============================  ===============  =========================================================
+> +File                             PMBus / MFR cmd  Description
+> +===============================  ===============  =========================================================
+> +``store_all``                    0x15             STORE_USER_ALL Send-Byte (commit RAM config to NVM)
+> +``restore_all``                  0x16             RESTORE_USER_ALL Send-Byte (revert RAM to last-NVM image)
+> +``clear_protection_last``        0x08             CLEAR_LAST_FAULT Send-Byte
+> +``clear_protection_last_force``  --               gated CLEAR_LAST_FAULT, see below
+> +``on_off_config``                0x02 (byte)      PMBus vs CTRL-pin on/off source + active polarity
+> +``vout_margin_high``             0x25 (word)      margin-high VOUT setpoint
+> +``vout_margin_low``              0x26 (word)      margin-low VOUT setpoint
+> +``mfr_pmbus_lock``               0xEE (word)      programmable PMBus write-lock
+> +``mfr_product_rev_user``         0xC2 (word)      user-programmable product revision
+> +===============================  ===============  =========================================================
+> +
+> +``clear_protection_last`` writes ``CLEAR_LAST_FAULT`` (0x08) Send-Byte.
+> +The chip silently no-ops unless ``MFR_CFG_EXT`` (0xF5) bit[6] is set.
+> +
+> +``clear_protection_last_force`` performs the unlock with the following
+> +six-step dancing:
+> +
+> +1. read ``WRITE_PROTECT`` (0x10) and ``MFR_CFG_EXT`` (0xF5) for restore
+> +2. clear ``WRITE_PROTECT`` if set
+> +3. set ``MFR_CFG_EXT`` bit[6] = 1, preserving other bits
+> +4. send ``CLEAR_LAST_FAULT`` (0x08)
+> +5. restore ``MFR_CFG_EXT`` (with retry to handle the chip's
+> +   undocumented post-NVM-write busy window)
+> +6. restore ``WRITE_PROTECT``
+> +
+>   Devicetree
+>   ----------
+>   
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index 9f44e76b0b64..9c6d3de61a75 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -627,6 +627,23 @@ config SENSORS_MPQ8646
+>   	  This driver can also be built as a module. If so, the module
+>   	  will be called mpq8646.
+>   
+> +config SENSORS_MPQ8646_DEBUG_UNSAFE
+> +	bool "MPQ8646 unsafe write/provisioning debugfs (DANGEROUS)"
+> +	depends on SENSORS_MPQ8646 && DEBUG_FS
+> +	default n
+> +	help
+> +	  Expose additional WRITE-able debugfs files in the client's
+> +	  pmbus debugfs directory,
+> +	  /sys/kernel/debug/i2c/i2c-<bus>/<bus>-<addr>/
+> +
+> +	  These are provisioning and bring-up aids. On many designs the
+> +	  MPQ8646 powers the SoC core rail, so a wrong write can brown out
+> +	  or permanently mis-provision the board.
+> +
+> +	  It shall never be set in a production, shipping, or default configuration.
+> +
+> +	  If unsure, say N.
+> +
+>   config SENSORS_PIM4328
+>   	tristate "Flex PIM4328 and compatibles"
+>   	help
+> diff --git a/drivers/hwmon/pmbus/mpq8646.c b/drivers/hwmon/pmbus/mpq8646.c
+> index 1fd41d89e5be..0034cf591934 100644
+> --- a/drivers/hwmon/pmbus/mpq8646.c
+> +++ b/drivers/hwmon/pmbus/mpq8646.c
+> @@ -7,6 +7,7 @@
+>   
+>   #include <linux/bitops.h>
+>   #include <linux/debugfs.h>
+> +#include <linux/delay.h>
+>   #include <linux/i2c.h>
+>   #include <linux/module.h>
+>   #include <linux/mutex.h>
+> @@ -23,8 +24,18 @@
+>   #define MPQ8646_ALARM_POLL_MS_DEFAULT	1000
+>   
+>   /* MPS vendor-extended command codes (NOT in PMBus 1.3 Part II) */
+> +#define MPS_CLEAR_LAST_FAULT		0x08
+> +#define MPS_MFR_CFG_EXT			0xF5
+> +#define MPS_MFR_CFG_EXT_CLR_LAST_EN	BIT(6)
+>   #define MPS_PROTECTION_LAST		0xFB
+>   
+> +/*
+> + * PMBus 1.3 NVM commit / revert commands. MPS equivalent of
+> + * STORE_ALL (15h) and RESTORE_ALL (16h).
+> + */
+> +#define PMBUS_STORE_USER_ALL		0x15
+> +#define PMBUS_RESTORE_USER_ALL		0x16
+> +
+>   /* PMBus 1.3 timing / UVLO command codes */
+>   #define PMBUS_VIN_ON			0x35
+>   #define PMBUS_VIN_OFF			0x36
+> @@ -36,10 +47,32 @@
+>   /* MPS vendor-extended observability / identity registers */
+>   #define MPS_MFR_CONFIG_ID		0xC0
+>   #define MPS_MFR_CONFIG_CODE_REV		0xC1
+> +#define MPS_MFR_PRODUCT_REV_USER	0xC2
+>   #define MPS_MFR_SILICON_REV		0xC3
+>   #define MPS_MFR_RETRY_TIMES		0xF4
+>   #define MPS_MFR_VBOOT_CFG		0xFC
+>   
+> +/*
+> + * MPS_MFR_PMBUS_LOCK (EEh): 16-bit WORD whose low two bits gate
+> + * subsequent PMBus writes
+> + *   bits[1:0] = 00  -- unlocked (POR default)
+> + *               01  -- lock all writes EXCEPT VOUT_COMMAND (0x21)
+> + *                      so the operator can still DVFS the rail
+> + *               11  -- lock all writes
+> + * A negative-going PG edge resets these bits to 00, the lock
+> + * is operationally reversible without a full chip POR.
+> + */
+> +#define MPS_MFR_PMBUS_LOCK		0xEE
+> +
+> +/*
+> + * Retry parameters for the MFR_CFG_EXT gate-close write after
+> + * CLEAR_LAST_FAULT. Bench-observed NVM-busy NACK window on this
+> + * silicon is about 1 ms; the datasheet does not have information.
+> + */
+> +#define MPQ8646_NVM_RETRY_MAX		5
+> +#define MPQ8646_NVM_RETRY_DELAY_US_MIN	2000
+> +#define MPQ8646_NVM_RETRY_DELAY_US_MAX	4000
+> +
+>   #define MPQ8646_DEBUG(client, fmt, ...) \
+>   	dev_dbg(&(client)->dev, fmt, ##__VA_ARGS__)
+>   
+> @@ -498,6 +531,240 @@ static int mpq8646_dbg_reg_show(struct seq_file *s, void *unused)
+>   }
+>   DEFINE_SHOW_ATTRIBUTE(mpq8646_dbg_reg);
+>   
+> +#ifdef CONFIG_SENSORS_MPQ8646_DEBUG_UNSAFE
+> +/*
+> + * Write/provisioning data, disabled by default: NVM commit and
+> + * revert, the CLEAR_LAST_FAULT sequences and a small set of named
+> + * writable registers.
+> + */
+> +
+> +static void mpq8646_unsafe_warn_once(struct mpq8646_priv *priv)
+> +{
+> +	dev_warn_once(&priv->client->dev,
+> +		      "UNSAFE debugfs write to core-rail regulator; board integrity not guaranteed (CONFIG_SENSORS_MPQ8646_DEBUG_UNSAFE)\n");
+
+This is also not strong enough. You insist adding this functionality to the driver.
+Please inform the user that they are about to shoot themselves into the foot.
+This is much worse than "board integrity not guaranteed".
+
+CONFIG_SENSORS_MPQ8646_DEBUG_UNSAFE in the message is pretty pointless.
+
+Also, the message should be shown when the driver is loaded, as multi-line
+message, similar to the unhashed kernel memory address warning.
+
+**********************************************************
+**   NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE   **
+**                                                      **
+** This system shows unhashed kernel memory addresses   **
+** via the console, logs, and other interfaces. This    **
+** might reduce the security of your system.            **
+**                                                      **
+** If you see this message and you are not debugging    **
+** the kernel, report this immediately to your system   **
+** administrator!                                       **
+**                                                      **
+**   NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE   **
+**********************************************************
+
+only as WARNING not as NOTICE.
+
+I'll leave it up to you to find an appropriate and strong enough message.
 
 Thanks,
 Guenter
-
-> --- Patch [4]: [PATCH v6 4/4] hwmon: pmbus: mpq8646: gate the writes ---
-> commit ec4599677b214a57f0796000d18d9f3b6e5d4fb5
-> Author: Vincent Jardin <vjardin@free.fr>
-> 
-> hwmon: pmbus: mpq8646: gate the writes
-> 
-> This commit adds unsafe debugfs provisioning and benchmarking helpers
-> to write specific registers. These operations are restricted due to the
-> risk of browning out the board or persisting bad setpoints.
-> 
->> diff --git a/drivers/hwmon/pmbus/mpq8646.c b/drivers/hwmon/pmbus/mpq8646.c
->> index 1fd41d89e5bef..0034cf5919345 100644
->> --- a/drivers/hwmon/pmbus/mpq8646.c
->> +++ b/drivers/hwmon/pmbus/mpq8646.c
-> [ ... ]
->> +static int mpq8646_dbg_clear_protection_last(void *data, u64 val)
->> +{
-> [ ... ]
->> +	scoped_guard(mutex, &priv->mps_lock)
->> +		rc = i2c_smbus_write_byte(priv->client, MPS_CLEAR_LAST_FAULT);
->> +	if (rc < 0)
->> +		dev_warn(&priv->client->dev,
->> +			 "clear_protection_last: CLEAR_LAST_FAULT write failed (%d)\n",
->> +			 rc);
->> +	return 0;
->> +}
-> 
-> [Severity: Medium]
-> Should this propagate the negative error code from rc instead of returning 0?
-> Returning 0 masks hardware faults and might lead userspace provisioning
-> scripts to assume the write succeeded.
-> 
-> [ ... ]
->> +static int mpq8646_dbg_clear_protection_last_force(void *data, u64 val)
->> +{
-> [ ... ]
->> +	guard(pmbus_lock)(priv->client);
->> +	guard(mutex)(&priv->mps_lock);
->> +
->> +	wp_orig = i2c_smbus_read_byte_data(priv->client, PMBUS_WRITE_PROTECT);
->> +	if (wp_orig < 0) {
->> +		dev_warn(&priv->client->dev,
->> +			 "clear_protection_last_force: WRITE_PROTECT read failed (%d), aborting\n",
->> +			 wp_orig);
->> +		return 0;
->> +	}
-> 
-> [Severity: Medium]
-> Like above, should this return the negative error code in wp_orig so the I2C
-> read failure is reported to the caller?
-> 
-> [ ... ]
->> +	rc = i2c_smbus_write_word_data(priv->client, MPS_MFR_CFG_EXT,
->> +				       (u16)cfg_orig | MPS_MFR_CFG_EXT_CLR_LAST_EN);
->> +	if (rc < 0) {
->> +		dev_warn(&priv->client->dev,
->> +			 "clear_protection_last_force: gate open failed (%d)\n",
->> +			 rc);
->> +		goto restore_wp;
->> +	}
-> 
-> [Severity: Medium]
-> Does this mix goto-based error handling with guard() declarations in the
-> same function?
-> 
-> The cleanup guidelines specify that functions should either use scope-based
-> cleanup exclusively or not at all, to avoid confusing ownership semantics.
-> 
-> [ ... ]
->> +static int mpq8646_dbg_store_all(void *data, u64 val)
->> +{
-> [ ... ]
->> +	mpq8646_unsafe_warn_once(priv);
->> +	scoped_guard(mutex, &priv->mps_lock)
->> +		rc = i2c_smbus_write_byte(priv->client, PMBUS_STORE_USER_ALL);
-> 
-> [Severity: High]
-> Should this also acquire the global pmbus_lock?
-> 
-> Issuing STORE_USER_ALL without the pmbus_lock might expose an unprotected
-> NVM-busy window to PMBus core background polling.
-> 
->> +	if (rc < 0)
->> +		dev_warn(&priv->client->dev,
->> +			 "store_all: STORE_USER_ALL (0x15) write failed (%d)\n",
->> +			 rc);
->> +	return 0;
->> +}
-> 
-> [Severity: Medium]
-> Does this need to return the negative error code in rc instead of 0 on
-> failure?
-> 
-> [ ... ]
->> +static int mpq8646_dbg_restore_all(void *data, u64 val)
->> +{
-> [ ... ]
->> +	mpq8646_unsafe_warn_once(priv);
->> +	scoped_guard(mutex, &priv->mps_lock)
->> +		rc = i2c_smbus_write_byte(priv->client, PMBUS_RESTORE_USER_ALL);
-> 
-> [Severity: High]
-> As with mpq8646_dbg_store_all(), should this also hold pmbus_lock to
-> prevent NVM-busy window races?
-> 
->> +	if (rc < 0)
->> +		dev_warn(&priv->client->dev,
->> +			 "restore_all: RESTORE_USER_ALL (0x16) write failed (%d)\n",
->> +			 rc);
->> +	return 0;
->> +}
-> 
-> [Severity: Medium]
-> Should this return the negative error code in rc?
-> 
-> [ ... ]
->> +static int mpq8646_dbg_reg_set(void *data, u64 val)
->> +{
->> +	struct mpq8646_dbg_reg_ctx *ctx = data;
->> +	int rc;
->> +
->> +	mpq8646_unsafe_warn_once(ctx->priv);
->> +	if (ctx->desc->is_word)
->> +		rc = i2c_smbus_write_word_data(ctx->priv->client,
->> +					       ctx->desc->reg, (u16)val);
->> +	else
->> +		rc = i2c_smbus_write_byte_data(ctx->priv->client,
->> +					       ctx->desc->reg, (u8)val);
-> 
-> [Severity: High]
-> Does this need to acquire pmbus_lock or mps_lock before performing the I2C
-> write?
-> 
-> If another thread concurrently calls mpq8646_dbg_clear_protection_last_force()
-> which temporarily lowers the PMBUS_WRITE_PROTECT register, could a direct
-> write here slip through and bypass the hardware write protection?
-> 
 
