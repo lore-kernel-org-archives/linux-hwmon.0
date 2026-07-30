@@ -1,146 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 093BF282F1C
-	for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 09:43:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9C68411A01
+	for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 11:07:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785404632; cv=none; b=L9i9nuRgqTFLqcE96/fOPtiR4CeE30HoEc60kQW1Vu8uF5CgNjxpxPF8ud8qwycYkV43UbX+1vf56WEoVLvQv7Y7dtGdtmAig2NHxgsBNjtHe255u1kvR9GZDA2Y3xHB7fSR7+JpAKrcDkvNlrQQkCuSOHQBFwuBCoZjcgMM2y8=
+	t=1785409641; cv=none; b=f2KzU5gImgBQe+Gs4rnEJwWf2KQYNTtfxlfhqx7V4ACQ986v+aD4PtMJQYnCdVuw0lYPbraZxpQa5dSlSGpxRrzVNJOhYRB5Fgd9DbvdKrJ9GpBjb4Q96LDpd3Ny7pqU920BoDKpjPYwQx0ym07tBfWts5EIT1g9YTMSmWT7/jY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785404632; c=relaxed/simple;
-	bh=Wh0HiAh4aMYYOpUpUihXsjGI0Y1sYVyMUHnBrZb0/M0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=esirOv/uf8UVg+WlefkgSiJoGQNjp3Yx37SwyDffex2eDUCEV8vlcxI825WHEZ6VRt2TcwOi6jqvwipHjEGoNuDAZBvu0aXsio5qC6QvIYzdkcDAcNYTRqG/ZoapeNcXuaagxxFvyHt5V8VQV+An4A3mx2ruQ0EgzPdhlKQCCJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VPpamArP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785409641; c=relaxed/simple;
+	bh=eJjTVRMZVoKwofLWi3LVva7SIn7zgP+PhhVCCay9rrI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XoMIgh0INhSoBQqK6DXS4LV0U2QrxmejfbjQ/fe/sOn8jYkyI+gkdGkGOVNJP0ylUN6WhfXSJCrccUS7VHq+6RdaoKaXZRNgtkmEKe5aEdNEisWgywHA0oVLIGgGyIPeKFDNcknK0KBAIPnApJoHXvjRnuAyl82yLdwAe5Gk6lk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eho55y+C; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VPpamArP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95BDF1F000E9;
-	Thu, 30 Jul 2026 09:43:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785404630;
-	bh=P9+kFLNmkQaPSS4YFp348B0T8OJXhQQXxTGSYi+c814=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=VPpamArPd7lxj2oQgiIsL89kQvLoM2w3Gu/CK5F9lej8rqdg9FZ9oGTig529SJiJQ
-	 kTvKSiOSqHJtixLK06IjMEKrhcD7kuoZ2oTf5vBVnS6L2TLSFrqEpoxhag35QzdVDQ
-	 XDAD6rNqtol5XRX/VvyW1mvWhYkQo3YMhHT3YrJhX0UqmTTGcp0Pk0ZJl4GaS0VooR
-	 hLvPRhTQ+v1RZtP2rFrI3x3le9WWmQOeD/AiIYnZviTi3z4g3eH+QFOw37Y+cenYOl
-	 ossSQlJLV+x2zYrCA2VTIkmsB/4K2lc9iCrjMaQymoSCgf14IuXquWK/+l07DxLLLY
-	 DnlIZ9WBmjzNw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3] hwmon: (lm90) Switch channel parsing to fwnode APIs
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Flaviu Nistor" <flaviu.nistor@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260730091409.10544-1-flaviu.nistor@gmail.com>
-References: <20260730091409.10544-1-flaviu.nistor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 30 Jul 2026 09:43:50 +0000
-Message-Id: <20260730094350.95BDF1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eho55y+C"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4954a32cf1eso9858655e9.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 04:07:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785409638; x=1786014438; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=rzwQZ2FZuL5P8Gv1fpsnj5lYgdyhcN4VWRCQhBah8Ng=;
+        b=eho55y+CVoDy2oye0k6Ku9EAGvlotUAm5pXldS0dS0TpZm6wwjbH21pE/g+pTmTCpX
+         9nXo9TgZ54wKxUUesOrQ2ve2pkPq5S1B5oVqFlxwZT4duT4Dvi803MF75pXGZP1rKhLS
+         VO13oq+RHsRRupSOpLBoLcuwSk/5ROCIsBc+eCusLIw+a5yJZ/zQ1nwdbOIDt3BLzNgT
+         tAxzmd9qlhYMRI28MwKFq0X3plpYVL+7TKoLj32PnHbxYPTLBdEJowG4oaVxGCp1iMtu
+         wloq3Nklh8ipNvBKEg1SwAnHUlG9kPre/3PFRDUO02hBzSlJfacuCB7FbLapn8hTeLTC
+         OAnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785409638; x=1786014438;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=rzwQZ2FZuL5P8Gv1fpsnj5lYgdyhcN4VWRCQhBah8Ng=;
+        b=UYlyF+bdIZUJyz5FBgnHhWuo11EK6wXMuXx/fLNgvpepwB0TbLTh7tEKwxfhIU9HpH
+         seq/jCSuV7FIC239LBVEp0oWuv1ZKiZMKcMe0GgcuUPsQNA3ynggY/Maaxm6Jx9BboMP
+         f8e4BkIfRbgeJuRWJpHBwV0xdIwTI2zAgFEKlRfZPNXPjPT4EjupQFF5P+rHXYSPCpJS
+         28Z5RTeqT/8ODGYxTQpsrQCj8UU5uak0WSpzPjgcXwFSkxZLcLS7aFXxi9JQ+lwIV+6w
+         /q48QHa4+3wuXyh9QLOtA9akdnkBkQVb0nfcaR3gN3nZq5C/k8Di1FhO8xEre9z5gfKS
+         3i2A==
+X-Forwarded-Encrypted: i=1; AHgh+RrxJSTVJggroYII28QeF8kl9pfwwoOvTr5SDBrx2ju/uvhUt3rb3uRMMds3ermJDz5HaRaV6RZ0azCtYw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxreeH8MlGKtREndiVjxv4waZpLSH6SDBTGWtTdJC0MS36nkAqz
+	tswybadvnvS88bXoOl/8dzGpLZvlC3qwPBvDFiEH78zUwlFc5gIAfEFaiQBlAQ==
+X-Gm-Gg: AR+sD125cRBhCfn62c9W9aFQg+yJO+TeuOVj7L+E4KTeMqupHbZL51SiPWn4fAteGWY
+	UzpWIk8VtgtY4/qpQBCHcAVwgvQJVUwqVFORou+/U5FzP2FffsfrR8SEZqNkmGDjXCSGbxoqfDc
+	qYKb+ty/1BFMMMkmatysrKc7RKnsznQgmBGAusdgPm4qW1pK9gSzM2yu+xBnNhlzHw3gV6n9y43
+	9n5/oF93vwOqCpPpFi5aQZjeLWMrcVdvIFIelneS+fdGvfZ3yCjAjmCyj9GDnzbQtUNRho157f1
+	FFcnpvglHwRRfuxyShuHFrEG7sJpvNpyYNbFFuofysXKAe5sD9Kw7vmfy0Bn5WhAvblaM/LP5AN
+	UgLpxDmYulowtYZttZjmZxJnnWh4T0hGLWlaLUqNbAIv22JVvTUncab12IswCT2dwMvAnJQgLwM
+	6dmH1snFsneso6oFBdT2kelO62dMzxitRiBeOF/Jf458/IIOmxz3vH
+X-Received: by 2002:a05:600c:19d3:b0:495:6b78:6f4 with SMTP id 5b1f17b1804b1-49800e70069mr27708485e9.8.1785409638030;
+        Thu, 30 Jul 2026 04:07:18 -0700 (PDT)
+Received: from nsa ([148.63.225.166])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-498010a0ae3sm54406785e9.9.2026.07.30.04.07.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jul 2026 04:07:17 -0700 (PDT)
+Date: Thu, 30 Jul 2026 12:08:27 +0100
+From: Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>
+To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Cc: nuno.sa@analog.com, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
+	Alan Tull <atull@opensource.altera.com>, Guenter Roeck <linux@roeck-us.net>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+Subject: Re: [PATCH 5/5] hwmon: (pmbus) add support for MAX20826 and similar
+ devices
+Message-ID: <amswd7M_ROGC8VGg@nsa>
+References: <20260728-hwmon-max20826-support-v1-0-224766e0acd1@analog.com>
+ <20260728-hwmon-max20826-support-v1-5-224766e0acd1@analog.com>
+ <amnvYB2Occ911k3B@monoceros>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <amnvYB2Occ911k3B@monoceros>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On Wed, Jul 29, 2026 at 02:18:55PM +0200, Uwe Kleine-König wrote:
+> On Tue, Jul 28, 2026 at 05:03:52PM +0100, Nuno Sá via B4 Relay wrote:
+> > +#include <linux/i2c.h>
+> > [...]
+> > +#include <linux/mod_devicetable.h>
+> 
+> <linux/i2c.h> already makes sure that of_device_id and i2c_device_id are
+> available and <linux/mod_devicetable.h> is going away soon. So please
+> drop the latter.
+> 
 
-Pre-existing issues:
-- [Critical] Switching to `device_for_each_child_node_scoped()` exposes a c=
-ritical pre-existing bug in the core `fwnode_get_next_child_node()` which c=
-auses an infinite loop and double-frees if a device has both OF and seconda=
-ry firmware nodes.
---
+Argh! Totally forgot about it (I have seen your comments about the above
+in other patches). Will do
 
---- Patch [1]: [PATCH v3] hwmon: (lm90) Switch channel parsing to fwnode AP=
-Is ---
-commit 39e5cdd2d72333fe0fa7b34c25ad27651948158c
-Author: Flaviu Nistor <flaviu.nistor@gmail.com>
+- Nuno Sá
 
-hwmon: (lm90) Switch channel parsing to fwnode APIs
 
-Replace OF property handling with fwnode in the probe function to read
-the channels properties, improving the driver compatibility since this
-method is not limited to Device Tree only.
-Add also the needed headers for explicit include and clean up related
-function naming.
-
-> diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-> index 4b9c0ccdf2609..03779c1a251a2 100644
-> --- a/drivers/hwmon/lm90.c
-> +++ b/drivers/hwmon/lm90.c
-
-[ ... ]
-
-> @@ -2739,18 +2744,17 @@ static int lm90_probe_channel_from_dt(struct i2c_=
-client *client,
->  	return 0;
->  }
-> =20
-> -static int lm90_parse_dt_channel_info(struct i2c_client *client,
-> -				      struct lm90_data *data)
-> +static int lm90_parse_channel_info(struct i2c_client *client,
-> +				   struct lm90_data *data)
->  {
->  	int err;
->  	struct device *dev =3D &client->dev;
-> -	const struct device_node *np =3D dev->of_node;
-> =20
-> -	for_each_child_of_node_scoped(np, child) {
-> -		if (strcmp(child->name, "channel"))
-> +	device_for_each_child_node_scoped(dev, child) {
-> +		if (!fwnode_name_eq(child, "channel"))
-
-[Severity: Critical]
-This is a pre-existing issue, but switching to
-device_for_each_child_node_scoped() exposes this driver to a regression
-in the core fwnode_get_next_child_node() framework.
-
-If a device has both Open Firmware and secondary firmware nodes (swnodes),
-can this iterator trigger an infinite loop and a double-free?
-
-When transitioning from the primary Open Firmware fwnode to the secondary
-swnode, the core fwnode_get_next_child_node() passes the already-put
-primary child to the secondary fwnode backend:
-
-drivers/base/property.c:fwnode_get_next_child_node() {
-	...
-	/* When no more children in primary, continue with secondary */
-	return fwnode_call_ptr_op(fwnode->secondary, get_next_child_node, child);
-}
-
-Since the passed child is an Open Firmware node rather than a software node,
-to_swnode() inside software_node_get_next_child() returns a null pointer.
-This causes it to drop the reference on the node a second time (the first
-drop was in of_get_next_available_child()), leading to a double-free:
-
-drivers/base/swnode.c:software_node_get_next_child() {
-	...
-	if (!p || list_empty(&p->children) ||
-	    (c && list_is_last(&c->entry, &p->children))) {
-		fwnode_handle_put(child);
-		return NULL;
-	}
-}
-
-Furthermore, on the next iteration, the returned secondary child is passed
-back to the primary backend. Since it is not an Open Firmware node,
-to_of_node() returns a null pointer, causing of_get_next_available_child()
-to restart the search and return the first node again, creating an
-infinite loop between node types.
-
-Could this driver probe freeze the kernel on systems where a software node
-is attached alongside Open Firmware child nodes?
-
->  			continue;
-> =20
-> -		err =3D lm90_probe_channel_from_dt(client, child, data);
-> +		err =3D lm90_probe_channel(client, child, data);
->  		if (err)
->  			return err;
->  	}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260730091409.1054=
-4-1-flaviu.nistor@gmail.com?part=3D1
