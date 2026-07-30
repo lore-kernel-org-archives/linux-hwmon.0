@@ -1,63 +1,232 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F1733A641D
-	for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 15:28:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B60737F724
+	for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 15:38:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785425287; cv=none; b=aZKMYqLMXTjpJBcr+Tq3Ky5puExvy3SgMyvb8gINbWGKhTjClwNY5ObHxt5ImIz60nxiXkNtwxuCzagnZ/Mn5aeRSbYnKzvsmXV4y52768vLI94eqyQPSeqeymPnZKEh0M1mAwAs+zHMZrKtxS5mZ7S9/rgQrFHDcDN6watL3WQ=
+	t=1785425940; cv=none; b=srtESps7Syw8B0R9HOTCDxxHn+aWx3+/+lXI1l3jPjBdgYYfAkMDjeN+XbOkWqbKBvShbobMZsx//52O7m6cpv8EWMZ5b+M4CASj2GgATqI+BMKjXX16FshGfKS5Bi/1z/0UF/z2kOqBS2rEewD/8fZSmQrVpAK39Zh0MEj3UmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785425287; c=relaxed/simple;
-	bh=Ycs4dW6Yf/2QB6G2RilbQL9VgVwZlpwr7k3jwmApzBg=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=k1LPzJzOY32yZAZONEyHgGsWhpYlgWUQ45C3B3+6P8N021ww3WV99M2PEBlwuXMAOURHggvwkqLaWxRSweagGZFdXP/Af3rij34IQMta5WpadtwFHKFl5K93/hECa7esHl7SkZgyUU+M9Jv66ZqLaX8W95gyhPsGZmVALwtEDd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MlTC35PU; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785425940; c=relaxed/simple;
+	bh=qQ7RtlTQHMHHpvj83e3+ghCiBppCt64olewSD63Aaq0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Sx0k4amswxWrC70VQdxsIqFRdI90ux7HxgoZWt6zJtc/lk5NCDn2OsDsivKGUT7OusdOBYPLY5VtEPUrB4/q7c2nFtv/rYbPc3twq/pPOVXdiy5DOEqZoEaAgE/z9IHKKX78s2O6svwY0i4fG5Lj4ct58UyTBkOYQLb95qKKm24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=afJ73mqq; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MlTC35PU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 293191F00A3A;
-	Thu, 30 Jul 2026 15:28:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785425286;
-	bh=Ycs4dW6Yf/2QB6G2RilbQL9VgVwZlpwr7k3jwmApzBg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=MlTC35PUcpHLYqwQXfxRAMRwVTlt4e2ve8LoKaiYiG2XRzmup3gd6O0170HSD+uZ0
-	 F0lzqGsOaVJMjnOgGVvwz8r0X6/6N9sQAKDFCGQ5f6bSXDMWozV9MGt+2w1N5ZxJDQ
-	 ctCFIQyTV1+OMKHinyVmgZ3vTo/nY3BOQlatGpU2bi+LmpFXXo5e9MnN5Z2FwcfZfe
-	 AqYHAExCppnULRxPnmY0IyZjBhfN6kBzGzAXib0LhuOhcSlx/aW0JSyIHdnGXS6O41
-	 azVvuvLDnfw/hCEOVW7B4pxqa83Z3E/V/PudUSpJJV9LaSFYOtYjloYBpniCzG74Xc
-	 u1TjotUnD+dqA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3] hwmon: (cros_ec) Avoid threshold temperature
- conversion overflows
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?VGhvbWFzIFdlacOfc2NodWg=?= <linux@weissschuh.net>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260730-cros_ec-hwmon-overflow-v3-1-c7198ba034ad@weissschuh.net>
-References: <20260730-cros_ec-hwmon-overflow-v3-1-c7198ba034ad@weissschuh.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 30 Jul 2026 15:28:05 +0000
-Message-Id: <20260730152806.293191F00A3A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="afJ73mqq"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2cee9b74ee1so18476745ad.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 08:38:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785425938; x=1786030738; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=le2uxJXCjEqMP45D/ueXFV/jxmIOCD7UYIlA5TE2iaQ=;
+        b=afJ73mqqsrwan9DNuEDN4gqm0bcM8K1fvdiLp8fu2VPPgC1/i8zEt8hq3P9fYxMFl+
+         lWgZAk8yDYu1G0G5H4mFZNnRXnLpe+rgLXXfP7QOmdS8nnsZWUsCeWxUTJFzS+FAQTGS
+         Iehs/oPUJTiERKoAj0Kwz5/0aPmHi7wpzzSWfDYSh0Z5Og9loAlnto0JJrFzeA4BxB/T
+         PLcXJtTrFYAJj0PvVL6hNbEo1CHbFtD7vXZuVM4my4nLq1luyhZLsRBZ1GKD5A6JFIDW
+         uZkXhiCX10xGZEIE1jbhE8OjzfXMY61K+unP6ZfsjjRkjFMbOOLH7DGHjfu9yeqbtBPy
+         nTjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785425938; x=1786030738;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=le2uxJXCjEqMP45D/ueXFV/jxmIOCD7UYIlA5TE2iaQ=;
+        b=CEIQmgfzfOqmAls3NJI4fuwWD0o+OCE95f3/JJWOzyDYLFeyXWIa0SAWP5YKaqIHO1
+         Ax9syNM+6QOzVzK5Lqn71PiLTu4y2egmLQhCXVWsA/NAFCTY1v8weOCeN1RJkL7OfjZg
+         l79NRXYs+18X8lOam3PyGNa3IqzB+y/WeT5JPplmHRn+OsEniXLZtQS71OWcNl9QnGEX
+         oDX2sn4VthyjXF9o3HoZNRzb0Vil5AubDJS7Ogc7EJDm3qaUSXlm93elP8tRhL+4v4zL
+         Yo+w4xG0DL2lTyKu0ZyyPASGItirVrcGulwZnR7dm/AEihRMZt0gzHdE78nOXF6nuEh5
+         OWCw==
+X-Forwarded-Encrypted: i=1; AHgh+RpzPyzMOWISUy646KoyVFg43Fub61IgAzn9s5Ki2wST+POQg8Xl968gTQggAvoQoqtinmdd+3lSB/ptqw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSFDOjfE7l82z3D7YEx4ria801aLAPzHt/PRnGb82Ol0lXx96P
+	ID6Fz01peI6i/MC0o7966CMPRXjbMgW9XnzPi0xUgic3uoks5qf8tgkk
+X-Gm-Gg: AR+sD12qrS3aUDuF4JnFtDkX6Zn7eJOnTpAqzVDvTJ2GNAYSdmjQbwYmDRBy9zwLDUY
+	3lj6d4xLwl6VLqxDGObSxLjN9dPbJrnQHhELS5ASOblv3KgnAtcckejn6OWkTMPpOrO/9lUTyUA
+	oN6FOa4tvovnq9ymn6Rc/fxjve6juncB/0NtPPnvJ6p61WjWEDVPgtunwEWlabkps8veu1W6WSl
+	PlAN1rVzWxTG+ed0SFxIflsdahj61/+HdJgZcSGuqMXYGCfo4tgiG/ZhcBMZu2lT6mOc5Sp+hZF
+	jUDynTnMqn1XPrT8+JeP3hBs+DytzxjDP7ZoL7pqVpQkRnJJ5lVdpRJCBM0HS/bFnBUS6uwNLAm
+	FBw4HNbxbzi74WjAJjITp3DVwphqOSoXT1x34MnoEnmR0eWWA6pY3Oz68ZrtE2ky0Lfkh/dw9le
+	dgHsEs0s5+zNcE3CkzrWnCqi1U8yD/TQTdakve/nLIEn66BzQGCd+Of2VWQllsCGvoGmJ4CmU/X
+	cvGWGO6hiLy9rVpJPY72bV2lmKDKX9OvIDwgw==
+X-Received: by 2002:a17:902:d2d2:b0:2c9:e69f:edce with SMTP id d9443c01a7336-2d035d3be92mr34300745ad.44.1785425937429;
+        Thu, 30 Jul 2026 08:38:57 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d022bf4747sm28410415ad.56.2026.07.30.08.38.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jul 2026 08:38:56 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <05b7f116-25a9-49b3-a31c-15eb4e6ec838@roeck-us.net>
+Date: Thu, 30 Jul 2026 08:38:55 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [hwmon-next PATCH v3 1/4] dt-bindings: hwmon: adi,adt7470
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+ Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Chris Packham <chris.packham@alliedtelesis.co.nz>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Darrick J. Wong" <djwong@us.ibm.com>, =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?=
+ <ukleinek@kernel.org>, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pwm@vger.kernel.org
+References: <20260728-adt7470_thermalzone-v3-0-d4586478cdba@gmail.com>
+ <20260728-adt7470_thermalzone-v3-1-d4586478cdba@gmail.com>
+ <20260728-meteoric-quixotic-sunfish-0de2cb@quoll>
+ <CAJq09z5CQgzzFahoiteh9ykjdbsYpP=QZ2AugzY4tQ79RpA-cg@mail.gmail.com>
+ <6cc03c4c-2d88-46f2-aee4-adb769d10cbd@kernel.org>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <6cc03c4c-2d88-46f2-aee4-adb769d10cbd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-> If the EC returns non-sensical values the temperature conversions might
-> overflow on 32-bit systems.
->=20
-> As these values wouldn't make sense, clamp them to 255 degrees celsius.
-> The machine would die before reaching that limit anyways.
->=20
-> Suggested-by: Guenter Roeck <linux@roeck-us.net>
-> Link: https://lore.kernel.org/lkml/0fbf7f69-bb90-4209-b9d5-258759711496@r=
-oeck-us.net/
-> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+On 7/29/26 23:17, Krzysztof Kozlowski wrote:
+> On 29/07/2026 06:45, Luiz Angelo Daros de Luca wrote:
+>> Hi Krzysztof,
+>>
+>> Thanks for the review.
+>>
+>>> On Tue, Jul 28, 2026 at 12:07:09AM -0300, Luiz Angelo Daros de Luca wrote:
+>>>> The Analog Devices ADT7470 is a multichannel temperature sensor and
+>>>> PWM fan controller. It supports monitoring up to 10 external
+>>>> temperature sensors and controlling up to 4 fans.
+>>>>
+>>>> Add the device tree binding documentation for it. This includes
+>>>> support for the thermal framework by defining the "#thermal-sensor-cells"
+>>>> property, and models the fan control lines as PWM channels by
+>>>> defining the "#pwm-cells" property.
+>>>>
+>>>> Signed-off-by: Luiz Angelo Daros de Luca <luizluca@gmail.com>
+>>>> ---
+>>>>   .../devicetree/bindings/hwmon/adi,adt7470.yaml     | 55 ++++++++++++++++++++++
+>>>>   1 file changed, 55 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/hwmon/adi,adt7470.yaml b/Documentation/devicetree/bindings/hwmon/adi,adt7470.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..bb2375a4a490
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/hwmon/adi,adt7470.yaml
+>>>> @@ -0,0 +1,55 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: http://devicetree.org/schemas/hwmon/adi,adt7470.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: Analog Devices ADT7470 hwmon sensor
+>>>> +
+>>>> +maintainers:
+>>>> +  - Luiz Angelo Daros de Luca <luizluca@gmail.com>
+>>>> +
+>>>> +description:
+>>>> +  Multi-channel temperature monitor and PWM fan controller.
+>>>> +  It supports monitoring up to 10 external temperature sensors and
+>>>> +  controlling up to four fans. The fan control lines are modeled
+>>>> +  as standard PWM channels.
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    const: adi,adt7470
+>>>> +
+>>>> +  reg:
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  "#pwm-cells":
+>>>> +    const: 3
+>>>> +    description:
+>>>> +      See Documentation/devicetree/bindings/pwm/pwm.yaml for the
+>>>> +      generic PWM binding description.
+>>>
+>>> Drop description.
+>>>
+>>> You OTOH, miss ref to pwm schema. Referencing here in description should
+>>> raise you questions... And then use unevaluatedProperties.
+>>
+>> I will drop the description and change to `unevaluatedProperties: false`.
+>>
+>> Regarding the reference to the PWM schema, adding `$ref:
+>> /schemas/pwm/pwm.yaml#` enforces the `$nodename` to match
+>> `^pwm(@.*|-([0-9a-f]+))?$`. Since the ADT7470 is primarily a hardware
+>> monitor, its node is typically named `sensor@...`,
+>> `fan-controller@...` or `hwmon@...`. Importing `pwm.yaml` causes
+>> `dtbs_check` to fail on existing node names because of this mismatch.
+> 
+> If it is a fan-controller then it should use common fan schema, because
+> you might be missing several properties.
+> 
+> Device having PWM outputs alone does not make it a fan controller, though.
+> 
 
-Sashiko has reviewed this patch and found no issues. It looks great!
+It is a fan controller. The logic used here is the opposite:
+It has pwm outputs to control the fans, therefore it should be modeled as
+pwm controller and use pwm controller bindings (to clarify, this is not
+my logic, but both DT and PWM maintainers insist on it).
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260730-cros_ec-hw=
-mon-overflow-v3-1-c7198ba034ad@weissschuh.net?part=3D1
+Also, to clarify: I do not like the idea of registering pwm outputs with
+the pwm subsystem and require the pwm-fan driver to actually control the
+fan. I prefer the mechanism used by, for example, then emc2305 driver,
+which registers cooling devices with the thermal subsystem directly
+and uses of_parse_phandle_with_args() to extract the pwm configuration.
+
+However, the patch author claims that the pwm outputs are used for
+non-fan-control purposes (such as controlling LEDs), making the two-driver
+approach necessary.
+
+Guenter
 
