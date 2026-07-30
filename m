@@ -1,28 +1,28 @@
-Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012025.outbound.protection.outlook.com [52.101.48.25])
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011061.outbound.protection.outlook.com [52.101.62.61])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FFC033C18E;
-	Thu, 30 Jul 2026 08:57:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 051953B4EA5;
+	Thu, 30 Jul 2026 08:58:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.61
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785401860; cv=fail; b=bujZlzNnYItBaw3HuEwq8W9JoPOzKMQ3qUb+VjVBuZ5q5XZeqCa+CIjeFqARvQCL0K1GYFLvfIt4zpz5NKt5lWt5SHGhDrFdrCn2x/WVioTYqV+JCSCb82A5BTB1+JidI+zbRGYjGyZccTy1DGg+53KkuAR+riATxJwcTGBq0oc=
+	t=1785401897; cv=fail; b=sfafflcX1UqVrTO8ygMY7xHEQOZr0Qa9QyKE0pbnPEodhURCO2N7xWkTwyAmhXk3YXfAhk1h2dK/UAInHeG7900RfDjGHrD2xcqmscfbzhALuihWvYYwiWntF/JkjFb/mK82ff8QpiJJIHxlevP50vC7zQOUMlATCt7pIOsWYQE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785401860; c=relaxed/simple;
-	bh=DuXyyY1L1BYNN8M7lTgxA82KTnEgWXdfzd7Jh6lpac8=;
+	s=arc-20240116; t=1785401897; c=relaxed/simple;
+	bh=kqJjC5gisi4l0j2fha57Yq1c5uC71hQfLa09C5A5/H0=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hqKZprQUgHY/LjGNpEh219Ya6+Un+LXXwC/uT9F/PHqdyNSzHIMjwQTkJfkAUtvr2v3sZZ6aN5yZ4YTEatYE1QN7/KMMqgqX6D0NbO/Lg3EvJSH9B++lhpYzAyLLAcE3cQXmkZQmYST7ZhNAsFYJInu6WH8LDjtYlwu7QilBpEo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=hImeHIsG; arc=fail smtp.client-ip=52.101.48.25
+	 MIME-Version:Content-Type; b=Rtl6Rat2V46dbx6dWFNfqlX4upITX3M0maQuCfDMjuxe8XGMp/+afZ7d5LbDdgWiv/qUcasLXsvhXTs75OE7P5tDmxH9DqWdwWJk2Ht6Mg75MbO2IAm1SEnFzYN8+5afXuxqlUNdk+KLduO1tZyyaSlOxt81zwk8ettwvsHaXbA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=D8Inl8+4; arc=fail smtp.client-ip=52.101.62.61
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="hImeHIsG"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="D8Inl8+4"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XYqiEgY6eMhgXPWS6XNuGaqbYpRM6G7MQIbKRaxXjG/6DN9XbW9EXSVIaJVpBLnUAqHnkoALPhYs1cNh2yFyH3R1LcOOYRYuv+RKdKvyRiiBr5e+6goSzEIA0inxWEIAou+mhGfr153M1fPl9BpFTAGfopfAzK1nbI/281/icT5lJvRTp6PqrtBZQcUFX4fY3SpBfp14uf90wfQ04ueoPuZelLiv2HrRiw/S8Fuh6xy67mEitOZHSXs8QKwNBwToRxcC0TluLc/xV94N7WDsTkhfPg9/bD+GjGawJHX1miMszFfdL5PKFuyjd4j/rID0mk/yFjBIjmDUdni5Gv935w==
+ b=KTIr5CgT3KDSbz7P2qosdWui8lahRZJM+xMjJ9h0B+X7yHjonHiXnNKPGtvI4vnEM5FETdTvfZkW5NxHuqs3+GI7Si7qucow/iE2VyYsCEzmo2Cpdarq35sODMCjGNNoGFORncRpPnA1xBNlBoUkVs349dOT7W9bLgwROw4Z04cB7uw6HNqnSfsOX1Cc+wUN+WQx3I7VoCosK1MQgOLUyFuwXB1QI4Swo7+v5gCfE94iYitlDyV/mnjs+sJeWtRkMxBfYpJZs2BymnXp5PPhlSXYdZ9RIyEcDBNWwqukK2D9826FB/IoKCpz1nxfFG7gmNjtxyPqYFurHyMuAbmS4Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PX5YtWwhoe9/u48fqRtRismSVpFKtRDiSICqHlebWhg=;
- b=fFEqLIKw6Sy+NoijQMep6mvD7Xgsq4IR2flEK7Tf4yxzqaAKqejuBBlqMQeBuHp/bac7Farzi237d9tA6cOnuQr8Ys4QdnVf9wyoe7yij3dF+CJNUyJW0rbrBGhdQCCVSn5TWVcw++LPsOsv/vCvj9EePZZ57bIKs+BJhRoPlYyMrSKLJs+N0K99cp6l0hvsd32PPHIs+LPi7YklH677+mD156FWzJZleyP3MWmZOeMFCGK42E0GbZnAuKiWgRTLdTjBT9STccm7rUG6qyxmeY9VAeMek6RJVNDTPg1BDKqBs4UEbbjenlljmOOo4CkI80241riBSLjxrdpZY+keIw==
+ bh=UwXt1HBuG6tpgi6DB23CqREVkrDh6M3O1oJ4FCTC7ug=;
+ b=pAdmflVAq1uLUjOO47GExFoTodRpxmjk8M8rNnDur79NKB9dZNF8K6oP5Gasyck36ea8QhEhfGwKHq1piTT0jofwMAg5510i02TMbiIuajppzAyKWR7MkcVRWgEMbVqABa+hJW8kupTks6mX0bpeGczW1VF+CYzk0npMTP8aCZPg6rbRNBYnOHLx0ydtBIzgni5L5+ykrlC/qr5sjKIc4buZ938fLPpynX5iLenZW8+WLZ3IhPR5n0eiO1L9FGf6OewvlG7MTC2y58aqc1xKhCsw1YGbtN21evB0SH6gK+u1ZPVbNQ8zg4acWNSoHsfWW2erd+tJ33T66gaxqLl5Jw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.118.233) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -30,18 +30,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PX5YtWwhoe9/u48fqRtRismSVpFKtRDiSICqHlebWhg=;
- b=hImeHIsG9m5eskmTBrI61MUXmE66cs/TVLfMEesVqWX+MS405wb1EwDkA3TbdcODy5MN94akbknHshRDIarAaHS8/qeF8DMEaEJ+ul31uEoT7gBQEt5jEBudO+d79xP9G+Xflc5LDXv8yr8NoqjZEnej7BbfHyReQ8UDPOZFumqOvyi5hz8X5euBq2EnWdadHnKttCJTg8QVvP9zlJvLmyUUMpPeL+yFmeMgc9Nb8VjsXeieJnWHl3TZbnO/qP9xxX8NhWJoYaTBHsEahvc6ANEBVWWKRGzcxnvZY+q9RfNBmSnvFARFyINHfDdHNKHEi5AxyVfAqedLWwnJ8YKohg==
-Received: from IA4P221CA0009.NAMP221.PROD.OUTLOOK.COM (2603:10b6:208:559::11)
- by SAVPR12MB999119.namprd12.prod.outlook.com (2603:10b6:806:4e9::19) with
+ bh=UwXt1HBuG6tpgi6DB23CqREVkrDh6M3O1oJ4FCTC7ug=;
+ b=D8Inl8+47CcFqujvEQQvAchfkyWqXUr1SRvEnGTiNrKovtIlHCT4J0ohGo1ha+TFojVP2gvJo1loGF+Lc2UEeLD5Lm7iSRhtdUOW7uCMjVgB4/xX2lUfDlihzHDMxoQb6N1WhHbD1qH8lwTfaB9wiwou2k0jw64jGNyw+8JYqI5m3O86wK5f6uoI7IYs8EzAzXF3Yoc2588XI8khn5hMCn93pm+6lX3fBh2kBubNL5KIlsfzaWDmf+cCH2ZvR3kk/oVX21So4Aom5oQYpplhOa1JthzcAAQ8SD0jQc7EWarJ77hZG2hGHPpbKQYRyJqjroBdSRjS3OaOV1ti595YTg==
+Received: from MN2PR15CA0044.namprd15.prod.outlook.com (2603:10b6:208:237::13)
+ by DM4PR12MB7672.namprd12.prod.outlook.com (2603:10b6:8:103::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.12; Thu, 30 Jul
- 2026 08:57:32 +0000
-Received: from BL02EPF0002992C.namprd02.prod.outlook.com
- (2603:10b6:208:559:cafe::96) by IA4P221CA0009.outlook.office365.com
- (2603:10b6:208:559::11) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.270.15 via Frontend Transport; Thu,
- 30 Jul 2026 08:57:32 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.14; Thu, 30 Jul
+ 2026 08:58:09 +0000
+Received: from BL02EPF00029927.namprd02.prod.outlook.com
+ (2603:10b6:208:237:cafe::91) by MN2PR15CA0044.outlook.office365.com
+ (2603:10b6:208:237::13) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.270.14 via Frontend Transport; Thu,
+ 30 Jul 2026 08:58:09 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -49,20 +49,20 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.118.233 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
 Received: from mail.nvidia.com (216.228.118.233) by
- BL02EPF0002992C.mail.protection.outlook.com (10.167.249.57) with Microsoft
+ BL02EPF00029927.mail.protection.outlook.com (10.167.249.52) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.292.8 via Frontend Transport; Thu, 30 Jul 2026 08:57:32 +0000
+ 15.21.292.8 via Frontend Transport; Thu, 30 Jul 2026 08:58:09 +0000
 Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
  (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 30 Jul
- 2026 01:57:21 -0700
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ 2026 01:57:59 -0700
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
  drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.20; Thu, 30 Jul 2026 01:57:20 -0700
+ 15.2.2562.20; Thu, 30 Jul 2026 01:57:59 -0700
 Received: from build-akhilrajeev-noble-20260602.internal (10.127.8.11) by
- mail.nvidia.com (10.126.190.181) with Microsoft SMTP Server id 15.2.2562.20
- via Frontend Transport; Thu, 30 Jul 2026 01:57:18 -0700
+ mail.nvidia.com (10.126.190.182) with Microsoft SMTP Server id 15.2.2562.20
+ via Frontend Transport; Thu, 30 Jul 2026 01:57:56 -0700
 From: Akhil R <akhilrajeev@nvidia.com>
 To: <sashiko-bot@kernel.org>
 CC: <Frank.Li@kernel.org>, <akhilrajeev@nvidia.com>,
@@ -70,12 +70,12 @@ CC: <Frank.Li@kernel.org>, <akhilrajeev@nvidia.com>,
 	<devicetree@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
 	<linux-i3c@lists.infradead.org>, <robh@kernel.org>,
 	<sashiko-reviews@lists.linux.dev>
-Subject: Re: [PATCH v7 04/12] i3c: master: Add support for devices using SETAASA
-Date: Thu, 30 Jul 2026 08:57:16 +0000
-Message-ID: <20260730085717.2456089-1-akhilrajeev@nvidia.com>
+Subject: Re: [PATCH v7 05/12] i3c: master: Add support for devices without PID
+Date: Thu, 30 Jul 2026 08:57:55 +0000
+Message-ID: <20260730085755.2456630-1-akhilrajeev@nvidia.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260728072201.AD0D31F000E9@smtp.kernel.org>
-References: <20260728072201.AD0D31F000E9@smtp.kernel.org>
+In-Reply-To: <20260728072040.9B1591F000E9@smtp.kernel.org>
+References: <20260728072040.9B1591F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -87,114 +87,134 @@ Content-Type: text/plain
 X-NV-OnPremToCloud: ExternallySecured
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0002992C:EE_|SAVPR12MB999119:EE_
-X-MS-Office365-Filtering-Correlation-Id: f17ea34c-955f-4791-2eb0-08deee1897b3
+X-MS-TrafficTypeDiagnostic: BL02EPF00029927:EE_|DM4PR12MB7672:EE_
+X-MS-Office365-Filtering-Correlation-Id: e4ff30c2-2341-48a6-385c-08deee18ade4
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|376014|36860700016|82310400026|1800799024|6133799003|10067099003|56012099006|11063799006|18002099003|22082099003|3023799007;
+	BCL:0;ARA:13230040|1800799024|23010399003|82310400026|36860700016|376014|18002099003|22082099003|6133799003|10067099003|11063799006|56012099006;
 X-Microsoft-Antispam-Message-Info:
-	SgWbX0gAuf1xEfw1LILJ9TyqLg2yP4G4k/NmYlrSwaqOTiV3PGsOa6e0G5Esso/4s7xuXIPVfh/o/vHx7JAcyJAuSYncR5xqQ76zHqCVJNupZN12Vo8truPP4P8CckracymHHuZYUY3H2RsojvI7OM30iOBTpvT8Lrqw8MtXScjz6/ROkp2LbdsPzpVv0W06Y1cscsbA0RrIFGEf3Dt3DNmn+US0ZRwQkJmCF12xU46WZMw7TO7LSTVxKBIwbed/i20h0Hm1ys1/EoBTxLvQptUhht4lmZ5rzVrFV1KL0fpXIPeDhNByhXAXgz1PSjgd6KHzaqKcJTkTvVQqKK0G3Nq64fvrWXrTWw5PplLAQjwFz0TjK7qVOsW/gklKrILSSU8fthMUTCc5/+WkfuuIVUPPdIo4BQHu8wu+Vv6aT32GhJy6x815P2K+OaPq9V6SUFw4gDI8ygEx/iwn/siGEY+fVPiY6AbaB177TjdrncF2IpkeHQjyQeqqKNK8olJF7HtYV1gJIG3LZa+uEfDA/kip1zciD7ZnjzvkjozT4GNcjv//Xy5i2JoXawpjQyEADvaoofwADBePXuc5FDvXTQNT72Lq7C38HhP4mxS3/hBY38De3pljcwudTE8q6RAGOsI6rICeC4jDkRhHlXy7PEqVlXJ4si09a7DjV6uMoCQBBO6hHla0e9WY+KGC0dZce5THyD3rYWKv+f8T/SWf6A==
+	Ww7ih4NSmA23s8gq7p7AkAK91bKUDGia+LblEEvL+kGv8gtuimO8XTYarWtR8OZqP+maXFSDvkCu+f6uMOcHCTpItkSM6cfSPxlzKV1OIuqHMWvvcHUAmlZlfEK/zZUR2mVGRZGnmUEcJt421AL3LD7dmtpoxxFRFaNDB+DtMEkM1DVqb75HYw1wIemIDOx1vgHtPPqUtmUs7is73PKjhksU0we2yEF/GEMPl+G0WOOEtuieSHTB4k5WFTVln8o3hGXULWI/qseadjMUDECLxS3uFEh0QIjCd8Fx5RPaJZe23g3D9KP/W8XSrTyp5+jeGUzBDwZrv5Rh+0cbR1vOo+/EXTlpzgpxRpqKK+qQmCCIEa5D3uSpEdQAM5lwvZKT9eowZf0K5Xc5rA9h4n1lQWDbm1EgpeEZRxPimn0OYysKVhqq74P+r5tOCOQT4YWbnWSjKaf5pkZjY1hdx+3lC/TdMd75GTqISvBtGhr18lSOZmVTEBF1+VvN0dFUfY4hA6P/5GF8clKhTnjkOR7Bw6s1rnowbenTr4dlnmvxB1cGm3FAAJYumIp7/KI74S2UY5xzAe880QRG/YH88yN9p4X2WP9FFol/uPCaeGclo34Y7MRgWfsSMFJj0g4PPL6Z22B4lQhCnO3IVENkqxcW2ORtg7D9jE4WD6FsUM/1xoLPVHz2OBcceQTK7skaTL9wYigVUvRy2S8amrLIVpznZw==
 X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(23010399003)(376014)(36860700016)(82310400026)(1800799024)(6133799003)(10067099003)(56012099006)(11063799006)(18002099003)(22082099003)(3023799007);DIR:OUT;SFP:1101;
+	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(23010399003)(82310400026)(36860700016)(376014)(18002099003)(22082099003)(6133799003)(10067099003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	k8NNX940pp4w3EYggpQhv6XJCRnyRVxsnZOBLSHJwF3QC5uUFteL3cXszO8dkoQpy3hM/dm51D5MDI42JVIpwknOrssMMSJCj1EYgBt5Z2KFFhjYUJoDLwlp5B+2f4VSiZYnGKjwDeOi0exEx/EyoX+wR3amCr4DofZtAONpIg5zTDqbxhuadEUeOzykzV8Ygrp2PsX01TCXJEU1b3xoUZZdCPtLJ7lKv44DzGGTDGUL2iLSx51xfRdCLAr49nr1sQym5S/Q71guZVQJbGY9cC+wLBVO2oi9OOajGERSnz8wcstZ+IEtnYWmppc6eJKtxYeaVCnLhlCWKuFAG5zLTBhLUlivCIe+hsrEHwOSNaxAotEjShBniGXwtGf7EpmLnSW8NLwsHlEDTSLZ/qCmd3CNDf6s2ppIbpGN9tz5oCblcQCxIieVC9zgQ2kXHQjo
+	va6lLMEjNS2vI3GiW5qY71jqdFUo159KEfRIpP0YoVETLug4dgof1KEIfSKpJyoclbPMn2YsH/ll5aY4GQkICrra4lRcEZ1s4cZpBs+VBG3c3WWjUNUL6bPckfPQY532ZQUKm1mVYEQ+fFgVI2XUrRhj/7FionT71smAHcbZrwJOt2TWPmY/b45gPeDs6YGL0cg3U6hVo/9SlphJY/Hhw/S0hlu0eukUesICcGvWQY1ijA50NrXYFIXf2Gkz/u6ciKAZnexffPmetK9TMIKNjqMNzFM6rTQhM53n37Xzz/AP3LON3wu0H3CA/E3R3G/bc1MYU03EcLzHE1ou2SOgK9LAB51ylRGuDF2caVoHugYm8xrl7NNmoRK8FaZW/yYa8kGgnzusa1QrlvuziYJMcv1uWU8xghxRLH2g52nCJN4jYfxGK8dmk1qun7ylDuSK
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2026 08:57:32.3202
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2026 08:58:09.5333
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f17ea34c-955f-4791-2eb0-08deee1897b3
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4ff30c2-2341-48a6-385c-08deee18ade4
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF0002992C.namprd02.prod.outlook.com
+	BL02EPF00029927.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SAVPR12MB999119
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7672
 
-On Tue, 28 Jul 2026 07:22:01 +0000, Sashiko AI review <sashiko-bot@kernel.org> wrote:
-> commit 61911732853b10649effe5164454ca8a4a87e970
+On Tue, 28 Jul 2026 07:20:40 +0000, Sashiko AI review <sashiko-bot@kernel.org> wrote:
+> commit 978db33da88aedc2a14abd69fdc128b5e3961e92
 > Author: Akhil R <akhilrajeev@nvidia.com>
 >
-> i3c: master: Add support for devices using SETAASA
+> i3c: master: Add support for devices without PID
 >
-> This patch adds support for discovering and configuring devices using the
-> SETAASA method, which statically assigns addresses without using ENTDAA.
-> It adheres to the MIPI Discovery and Configuration Specification.
+> Devices using SETAASA for address assignment are not required to have
+> a 48-bit PID according to the I3C specification. Allow such devices to
+> register and use the static address where PID was required.
+>
+> > diff --git a/drivers/i3c/master.c b/drivers/i3c/master.c
+> > index 87749a739e62d..488177d95e484 100644
+> > --- a/drivers/i3c/master.c
+> > +++ b/drivers/i3c/master.c
 >
 > [ ... ]
 >
-> > @@ -1878,6 +1926,22 @@ static int i3c_master_early_i3c_dev_add(struct i3c_master_controller *master,
-> > +	if (i3cdev->boardinfo->static_addr_method & I3C_ADDR_METHOD_SETAASA) {
-> > +		i3cdev->info.dyn_addr = i3cdev->boardinfo->static_addr;
-> > +		ret = i3c_master_reattach_i3c_dev_locked(i3cdev, 0);
-> > +		if (ret)
-> > +			goto err_detach_dev;
+> [Severity: High]
+> This is a pre-existing issue, but does device_register() failure in this
+> function leave a dangling pointer that causes a use-after-free later?
+>
+> When put_device() frees desc->dev->dev, desc->dev is not set to NULL.
+> Later, if the master is unregistered, i3c_master_unregister_i3c_devs()
+> iterates through the list and dereferences this dangling pointer.
+>
+> Could desc->dev be set to NULL after put_device() to prevent this?
+> [ ... ]
+>
+> > @@ -2401,8 +2410,18 @@ static void i3c_master_attach_boardinfo(struct i3c_dev_desc *i3cdev)
+> >  	list_for_each_entry(i3cboardinfo, &master->boardinfo.i3c, node) {
+> > -		if (i3cdev->info.pid != i3cboardinfo->pid)
+> > -			continue;
+> > +		if (i3cboardinfo->pid) {
+> > +			if (i3cdev->info.pid != i3cboardinfo->pid)
+> > +				continue;
+> > +		} else {
+> > +			if (!i3cboardinfo->static_addr ||
+> > +			    i3cdev->info.static_addr != i3cboardinfo->static_addr)
+> > +				continue;
+> > +		}
+>
+> [Severity: High]
+> Will this fallback matching logic fail for SETAASA devices discovered
+> dynamically?
+>
+> If a SETAASA device without a PID in the Device Tree loses its dynamic
+> address and asserts a Hot-Join, the master will execute Dynamic Address
+> Assignment (DAA).
+>
+> During DAA, __i3c_master_add_i3c_dev_locked() allocates a new device
+> descriptor and initializes newdev's static_addr to 0, because the static
+> address cannot be retrieved via CCCs.
+>
+> When i3c_master_attach_boardinfo(newdev) is then called,
+> i3cdev->info.static_addr will be 0. Would this cause the condition
+> i3cdev->info.static_addr != i3cboardinfo->static_addr to always evaluate
+> to true, skipping the boardinfo assignment and preventing the driver from
+> binding?
+
+A device without a PID cannot be discovered through DAA, so this should not
+happen. Per the MIPI I3C specification, a Target that supports ENTDAA shall
+have a 48-bit Provisioned ID (Section 5.1.4.1.1), which it transmits during
+the procedure, and Hot-Join is only compatible with ENTDAA - "Targets that
+do not support ENTDAA shall not use Hot-Join" (Section 5.1.5). A device
+that supports both SETAASA and ENTDAA does have a PID and is expected
+to describe it in DT/ACPI, in which case the PID match applies.
+
+> >  		i3cdev->boardinfo = i3cboardinfo;
+> >  		i3cdev->info.static_addr = i3cboardinfo->static_addr;
+> > @@ -2416,8 +2435,12 @@ i3c_master_search_i3c_dev_duplicate(struct i3c_dev_desc *refdev)
+> > +	if (!refdev->info.pid)
+> > +		return NULL;
 > > +
-> > +		return 0;
-> > +	}
+> >  	i3c_bus_for_each_i3cdev(&master->bus, i3cdev) {
+> > -		if (i3cdev != refdev && i3cdev->info.pid == refdev->info.pid)
+> > +		if (i3cdev != refdev && i3cdev->info.pid &&
+> > +		    i3cdev->info.pid == refdev->info.pid)
+> >  			return i3cdev;
+> >  	}
 >
 > [Severity: High]
-> Does this early return prevent the device from acquiring a unique PID?
+> Does this logic lead to duplicate device creation for SETAASA devices that
+> participate in Dynamic Address Assignment?
 >
-> Since PID validation is bypassed for SETAASA devices in
-> i3c_master_add_i3c_boardinfo(), multiple devices can share the same default
-> PID (like 0). Because this skips i3c_master_retrieve_dev_info(), the dummy
-> PID is never replaced by a real one.
+> If a SETAASA device is defined in the DT without a PID, it is initially
+> added to the master's bus list with pid = 0. If the device later asserts a
+> Hot-Join, the master executes DAA, discovers the device, and retrieves its
+> true physical PID.
 >
-> When i3c_master_register_new_i3c_devs() attempts to register these devices,
-> the sysfs registration fails due to duplicate names. The error handling calls
-> put_device() but leaves a dangling pointer in desc->dev.
->
-> Could this dangling pointer lead to a use-after-free when
-> i3c_master_unregister_i3c_devs() later accesses and frees it again?
+> Since the existing device has pid = 0, the check here for i3cdev->info.pid
+> and i3cdev->info.pid == refdev->info.pid will fail to match the newly
+> discovered PID to the existing device. Will this cause the master to add
+> the newly discovered device instead of detaching and updating the existing
+> one, resulting in duplicate devices on the bus?
 
-As clarified in v6, devices without a PID are named using their static address
-in the next patch of this series, and two devices cannot share the same static
-address. The dangling desc->dev on device_register() failure is pre-existing
-and will have to be fixed separately.
+This also needs a device without a PID to take part in ENTDAA, which the
+specification does not allow, as above. A device that already has a Dynamic
+Address assigned through SETAASA does not participate in ENTDAA either
+(Section 5.1.4.2).
 
-> [ ... ]
->
-> > @@ -2272,6 +2346,19 @@ static int i3c_master_bus_init(struct i3c_master_controller *master)
-> > +	if (master->addr_method & I3C_ADDR_METHOD_SETAASA) {
-> > +		ret = i3c_master_setaasa_locked(master);
-> > +		if (ret)
-> > +			goto err_rstdaa;
-> > +	}
->
-> [Severity: High]
-> What happens here if the underlying master controller driver rejects the
-> SETAASA and SETHID CCC commands?
->
-> Most mainline I3C master drivers, like Cadence and DesignWare, implement a
-> strict allowlist in their supports_ccc_cmd callback. If they reject these
-> new commands, i3c_master_send_ccc_cmd_locked() returns -EOPNOTSUPP.
->
-> Will this cause the entire I3C bus initialization to abort and detach all
-> devices, effectively breaking all I3C communications for that controller?
-
-This is clarified in v6. It's an opt-in property and existing drivers are
-unaffected.
-
-> [Severity: High]
-> How are SETAASA devices handled during system resume?
->
-> During resume, i3c_master_do_daa_ext() issues an RSTDAA broadcast to reset
-> dynamic addresses and then calls ENTDAA. Since SETAASA devices do not
-> participate in ENTDAA, and SETAASA is not re-broadcasted there, will these
-> devices lose their dynamic address on the physical bus?
->
-> If the kernel still retains the i3c_dev_desc with the dynamic address
-> uncleared, won't all subsequent I/O to these targets fail?
-
-i3c_master_do_daa_ext() is only reached through the mipi-i3c-hci driver when
-HCI_QUIRK_RPM_ALLOWED is set and not through dw-i3c-master. So this issue does
-not have any impact today since HCI_QUIRK_RPM_ALLOWED is set only by
-intel-lpss-i3c platform.
-
-The same issue also applies to other statically configured devices like SETDASA
-devices that do not implement ENTDAA. It will be better to fix this separately.
+The !pid checks are intentional in this patch. Devices without a PID have
+pid == 0 and would otherwise match each other, and one of them would be
+freed as a duplicate. Devices that do have a PID are matched as before.
 
 Best Regards,
 Akhil
