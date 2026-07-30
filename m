@@ -1,171 +1,180 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4317143553C;
-	Thu, 30 Jul 2026 13:29:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60993431A3D
+	for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 13:31:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785418165; cv=none; b=Tq3iseAe1Ofx1eLCzaWBL/rAVjIxSXPsN9hoO/L367EtawgCgy8jokovC0K9VFDnNgWGGltOJRKM2OOfzys5xT8vpaIZMTuSdr1jjfGZ9qoutMfPAWzeffBfpwMIhQ9WE9hAzCz1iI2Su/lLI/0mQjVTgkAY/lbrXgZJ/J+X7dU=
+	t=1785418283; cv=none; b=LmOFtyRqMBQRxoHjL+bGD/m0o6nC6gq3HyMjLUhELIDD1kXiYrh3yJTJ3mrSWYdF3FyHOgSAZqnbDhHnO6VRxrtwV454absRtvHcysNdrSK7e5UM9/onsiaghWexX7UXK9Zloto8QrMtMDsHv9161cTuCYYsTUzHvNO2j+bPA/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785418165; c=relaxed/simple;
-	bh=MASmoo3pKF3zzv1JCPcmtqHIX55Uv9lO5FuGniOCAGU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ADv/Kmwr93OcSz9XSfQn068dOMbwuc9Eq1ytYH/xqMcrP50cABmhZ04UHd5Yi8HZ2cVLRoJghTXytakzmQgcwL5Z7PhX/OwYlGKnDXzTbZ66LqKipcHS1viJdrH6pdFDNjfOBCrD7IhVCysjqFBwluK0nmD9bv0bnuQVc8s2N48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dC148Uy0; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785418283; c=relaxed/simple;
+	bh=icF+OEw7L9PrAa01YQ7jfE3TPmwZ0NhswpUSw9RzKts=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XulkoBLZqlQs6z4b/KEkr2WiQeLrqnNYgd4e1k/3lJGcb6waxSzurPEC3nyXxCyUTnWyrXZL6ZbJeUGDJoVCuRcwVBWeWRFiHLf64LFY/2bqeYVVWC40a40MBNJh0PU1RhezqMyATgeA6TVVwBK9rTZ9KAEpGMyagfr3hhrizcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PX4LOeWv; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dC148Uy0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6B781F000E9;
-	Thu, 30 Jul 2026 13:29:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785418164;
-	bh=Wpr0fLi6Jv5h/57QpMvy/3UfAa7FBg/jbKaTtXFF5tg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=dC148Uy0xza2EwRmXIH7ZdcgI3aqmQ4MX+h2n672ZarWk8EBMERgkQw82tk+n8Zyo
-	 yX9eYiVaQGK+sm+RZne0GI+DWG7GXybPpsmDHNDVjkx6gp66wTOBE5JT9NhYJrrM8v
-	 A0FA3B+98D+tnMGGGVnBecOKybE8HxrN/m9gG0DXq9iO9YCF3IPN2OtWU0isHDclxt
-	 x5yQUZceQ98mDiC2HwFZqbWBhCsH6lW9O5TLCEeSfLmtC7sHB1CL0OP1Z8a/Btb66B
-	 di0hOnPwkuN5eA5kkfzziEzw0ssTAXq6bJo6yWkJ9jp3iBK//dQiTNx1pGiH+Km9fZ
-	 MS4Cn9sRo0bTA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v6 2/2] iio: adc: add MAX40080 current-sense amplifier
- driver
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Stefan Popa" <stefan.popa@analog.com>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, robh@kernel.org, conor+dt@kernel.org
-In-Reply-To: <20260730131738.822405-3-stefan.popa@analog.com>
-References: <20260730131738.822405-1-stefan.popa@analog.com>
- <20260730131738.822405-3-stefan.popa@analog.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 30 Jul 2026 13:29:23 +0000
-Message-Id: <20260730132923.A6B781F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PX4LOeWv"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6a02aedabadso3035867a12.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 06:31:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785418281; x=1786023081; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=LwXhSYKJcGy1lCzsCfGX27GjbZs8eEFVFEYjgqpuu5A=;
+        b=PX4LOeWvN2YXvSlOMdNErEunmWYvMvlfdroI4F2TQioF39sW0xgQX3ngZOEvcJe8D8
+         UVu3nwht/T2DOh/g2cqnQo1yh7syp3X1wqa4CfS0UkvBYoCDDp2AZFWYZCpdoRWKZLO2
+         3x8eTPLQEcy/FR9Rr6eFqsVt4tvDx8d2bdDfcIi9X0E54viz0fij61pnykESoH2+W5zC
+         c9ott9A1qW/mVMv5waRpnWRKb3BO2CFh7FgXGp9FFG4KLTHvodDvFnIV9S8W1QB6GrDn
+         iLU5b5hsbcwMOSs5gZwsxMz/Qc/XRq8xR3MhGRG2QlxaGQLDODdk4q3fk89DHio2NNL4
+         pFYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785418281; x=1786023081;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=LwXhSYKJcGy1lCzsCfGX27GjbZs8eEFVFEYjgqpuu5A=;
+        b=EWSi+lHtOmgHm5yaTM5gkzkEiu2U4i9UhZvKJzduiIIbqh9/l3Sk8Xv3DHkxbfCDWn
+         vkfYqG8osalnkl0JhIUPxyyuHpbk4I1Di10BqvwACTRl7njAh/M8/d5YXT56B4AGch64
+         POX059hKLTxecO4aIrk2saFOn9pD4VU9nnhT3q5VzvxDOOzpx1b39aFXVbZuK3EeQA9+
+         HVU3+MEmp6kPgELbN3X9Lx6uq493ziQhIdw8GB43lAphffiuTx5dA3JhxqeK6+7r4cNF
+         lTPuPtZfxNxhuSdTyKoKethY0Cw8+1RwuQEiZhymR/lpjwG1HXoK0ObzhhlB+qWeGXvc
+         Lzhw==
+X-Forwarded-Encrypted: i=1; AHgh+RpXlM9r/jcf8mB8sokkxy1G6VbkNX6rkqh1A0d0wbYUYsNW4OQWGgM4r+rTpxq4A6IGSmabD3nUBnxVwQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywwx80UwHgkplWH9KAemV3C+YJtjE9osZ9ptWYl2djxz+y9S4na
+	WIPMMOnpPH2SRNVLBygdInHLQ+YX2WlQJhEWAzGwuDtxtgHHpcjUsP7H
+X-Gm-Gg: AR+sD13Ea8HFF+Jhrph+NmQHHTp21MrMy9m+/o0EH4v1ANK75or8o43II2IsJhdNrDc
+	NrgL37KV40DUt6y+w+6TN5AYXidxYaA5G5qsDHX0UUBSyL2+8ernrUurVU7FxNNuLrv4LUDy3jQ
+	tp+dUxH6LAQF1FboA/K+DumTgRBdjW4GwKcgzcD7ycu5ty/KAcG9kKSwYQsQOukGHVXpuWtZimK
+	zDN/tzl/l3ev4+bR3Bj0sLQn8YIxO0gmIuNDbVBhh/dQW9Q/TMUVYhepZ5W073TU/fnzaE+f2WO
+	duVKlTQj06cVrAYRdoj4NTV6AXnEBMb4BfRucQkmW4EBW6iUYdBtyX8K3BLORgOo40Hw8y5sCUg
+	CbdBHHv9zB98G1hxuaaRH8Q77Le94FBpdD0g9aiVAQqjQwM2iS2Tubc+CHKOvx7IoMYrtXDTsPA
+	hutuvxIerD2LlTNWx6R4kt60/lPLJ7fwRz45bzt72yLpNnkDIFc8kRRPW1wWLdv6Mevfgc47RsZ
+	3re8UgDtmc9xSgr1zF9pTPc9ZVu8hNdCyWIRmr6VKsD6w==
+X-Received: by 2002:a05:6402:34cf:b0:698:8830:70c5 with SMTP id 4fb4d7f45d1cf-6a07b7c3cacmr1264732a12.14.1785418280330;
+        Thu, 30 Jul 2026 06:31:20 -0700 (PDT)
+Received: from fedora.tux.internal (85.191.71.118.dynamic.dhcp.aura-net.dk. [85.191.71.118])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a07d393c48sm565891a12.24.2026.07.30.06.31.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jul 2026 06:31:19 -0700 (PDT)
+From: Bruno Thomsen <bruno.thomsen@gmail.com>
+To: devicetree@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	Bruno Thomsen <bruno.thomsen@gmail.com>
+Subject: [PATCH 1/2] dt-bindings: hwmon: ti,tmp401: Add label property
+Date: Thu, 30 Jul 2026 15:30:57 +0200
+Message-ID: <20260730133058.14731-1-bruno.thomsen@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] Stale measurements: each raw sysfs read returns the previous conve=
-rsion's data due to an un-flushed FIFO.
-- [Medium] Missing READ_ONCE() for `st->range` in `max40080_read_raw()` can=
- lead to data races and torn scale values.
---
+Add support for an optional channel label property similar to other
+hwmon devices.
 
---- Patch [2]: [PATCH v6 2/2] iio: adc: add MAX40080 current-sense amplifie=
-r driver ---
-commit 557f2827eeb4edfa93bf2f63edf6a0664453dad6
-Author: Stefan Popa <stefan.popa@analog.com>
+Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
+---
+ .../devicetree/bindings/hwmon/ti,tmp401.yaml  | 58 +++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
-iio: adc: add MAX40080 current-sense amplifier driver
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
+index 0e8ddf0ad789..345ab6203a54 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
+@@ -30,6 +30,12 @@ properties:
+   reg:
+     maxItems: 1
+ 
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 0
++
+   ti,extended-range-enable:
+     description:
+       When set, this sensor measures over extended temperature range.
+@@ -50,6 +56,26 @@ properties:
+     minimum: 0
+     maximum: 15
+ 
++patternProperties:
++  "^channel@([0-2])$":
++    type: object
++    description: Represents channels of the device and their specific configuration.
++
++    properties:
++      reg:
++        description: The channel number. 0 is local channel, 1-2 are remote channels.
++        items:
++          minimum: 0
++          maximum: 2
++
++      label:
++        description: A descriptive name for this channel, like "ambient" or "psu".
++
++    required:
++      - reg
++
++    additionalProperties: false
++
+ allOf:
+   - if:
+       properties:
+@@ -72,6 +98,16 @@ allOf:
+       properties:
+         ti,beta-compensation: false
+ 
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              const: ti,tmp432
++    then:
++      properties:
++        channel@2: false
++
+ required:
+   - compatible
+   - reg
+@@ -102,3 +138,25 @@ examples:
+         ti,beta-compensation = <0x7>;
+       };
+     };
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      sensor@4c {
++        compatible = "ti,tmp431";
++        reg = <0x4c>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        channel@0 {
++          reg = <0x0>;
++          label = "front";
++        };
++
++        channel@1 {
++          reg = <0x1>;
++          label = "back";
++        };
++      };
++    };
 
-The patch adds a direct-mode IIO driver for the MAX40080 current-sense
-amplifier, exposing current and voltage channels with configurable
-oversampling.
+base-commit: 11028ab62899e4191e074ee364c712b77823a9c4
+-- 
+2.55.0
 
-> diff --git a/drivers/iio/adc/max40080.c b/drivers/iio/adc/max40080.c
-> new file mode 100644
-> index 0000000000000..82572536b704d
-> --- /dev/null
-> +++ b/drivers/iio/adc/max40080.c
-
-[ ... ]
-
-> +static int max40080_read_iv(struct max40080_state *st, u32 *iv)
-> +{
-> +	u32 tmp =3D 0;
-> +	int ret, io_ret;
-> +
-> +	guard(mutex)(&st->lock);
-> +
-> +	ret =3D max40080_trigger_measurement(st);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/*
-> +	 * Wait for the conversion to complete by polling the FIFO valid bit
-> +	 * (or bail out on an I2C error). Polling the device's own status makes
-> +	 * this independent of the actual conversion time, which varies with the
-> +	 * oversampling ratio and the bus speed. The timeout is only a safety
-> +	 * ceiling: the worst case is the maximum 128x averaging on both the
-> +	 * current and voltage channels at the slowest 15 ksps base rate plus t=
-he
-> +	 * inter-channel switching time, i.e. roughly 20 ms; 50 ms leaves ample
-> +	 * margin.
-> +	 */
-> +	ret =3D read_poll_timeout(max40080_read_iv_once, io_ret,
-> +				io_ret || (tmp & MAX40080_IV_VALID_MSK),
-> +				500, 50000, false, st, &tmp);
-
-[Severity: High]
-Does this polling loop read a stale sample?
-
-Writing the SINGLE mode configuration in max40080_init() triggers an initial
-conversion, leaving a sample in the FIFO. Because the FIFO already contains
-this unread sample, the read_poll_timeout() loop here might instantly succe=
-ed
-and pop the stale sample before the newly triggered measurement has a chance
-to complete.
-
-This would cause each sysfs read to return the previous conversion's data.
-
-> +	/*
-> +	 * Propagate the last-read value even on timeout so the caller can
-> +	 * inspect it for debugging.
-> +	 */
-> +	*iv =3D tmp;
-> +	if (ret)
-> +		return ret;
-> +
-> +	return io_ret;
-> +}
-
-[ ... ]
-
-> +static int max40080_read_raw(struct iio_dev *indio_dev,
-> +			     struct iio_chan_spec const *chan,
-> +			     int *val, int *val2, long mask)
-> +{
-> +	struct max40080_state *st =3D iio_priv(indio_dev);
-> +	unsigned int range;
-> +	int ret;
-> +
-> +	switch (mask) {
-
-[ ... ]
-
-> +	case IIO_CHAN_INFO_SCALE:
-> +		if (chan->type =3D=3D IIO_CURRENT) {
-> +			/*
-> +			 * The selectable current-sense range is exposed through
-> +			 * scale: each RANGE setting has its own precomputed
-> +			 * mA-per-code value. Userspace picks the range by writing
-> +			 * the matching scale.
-> +			 *
-> +			 * Take a local copy of range to ensure val and val2 come
-> +			 * from the same setting even if a concurrent write changes
-> +			 * st->range between the two accesses.
-> +			 */
-> +			range =3D st->range;
-> +			*val =3D st->current_scale[range][0];
-> +			*val2 =3D st->current_scale[range][1];
-
-[Severity: Medium]
-Could this result in a torn read if st->range is modified concurrently?
-
-Without a READ_ONCE() for st->range, the compiler might optimize away the l=
-ocal
-variable and reload st->range directly from memory between reading
-st->current_scale[range][0] and st->current_scale[range][1].
-
-If max40080_write_raw() modifies st->range concurrently, this could return =
-an
-invalid combination of integer and fractional components.
-
-> +			return IIO_VAL_INT_PLUS_NANO;
-> +		}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260730131738.8224=
-05-1-stefan.popa@analog.com?part=3D2
