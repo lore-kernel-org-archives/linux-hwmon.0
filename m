@@ -1,81 +1,72 @@
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011061.outbound.protection.outlook.com [52.101.62.61])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 051953B4EA5;
-	Thu, 30 Jul 2026 08:58:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.61
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785401897; cv=fail; b=sfafflcX1UqVrTO8ygMY7xHEQOZr0Qa9QyKE0pbnPEodhURCO2N7xWkTwyAmhXk3YXfAhk1h2dK/UAInHeG7900RfDjGHrD2xcqmscfbzhALuihWvYYwiWntF/JkjFb/mK82ff8QpiJJIHxlevP50vC7zQOUMlATCt7pIOsWYQE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785401897; c=relaxed/simple;
-	bh=kqJjC5gisi4l0j2fha57Yq1c5uC71hQfLa09C5A5/H0=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Rtl6Rat2V46dbx6dWFNfqlX4upITX3M0maQuCfDMjuxe8XGMp/+afZ7d5LbDdgWiv/qUcasLXsvhXTs75OE7P5tDmxH9DqWdwWJk2Ht6Mg75MbO2IAm1SEnFzYN8+5afXuxqlUNdk+KLduO1tZyyaSlOxt81zwk8ettwvsHaXbA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=D8Inl8+4; arc=fail smtp.client-ip=52.101.62.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FE913EFD24
+	for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 09:14:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785402856; cv=none; b=AHP9YNJnJ5q3UDvIjRwGMw/A65/zCkVkwK03fm3atLWzJkh5uzorzq4F6MpGnIEQly7WD1p2rROkQ3cmgvJeKwvWrMdyNXHZIhTVFqHcLhmnbewEW187VE+HjWDdVqdk0fIF74PE0wLBmDABuWLETKSQRSSUfagPx2GXn4yaTDs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785402856; c=relaxed/simple;
+	bh=NuOX9I/WU6e84gPfmuE30SCaKWAIeOtSOKJZFIbZtFw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cgeLUaKG0EhQxjRHM7c6SzPwQXuEp1d47RioM2jIlb4hIlxchTE5ezNGEp1AqLGIQvTZK7WBX+uMDI4AqGNh3nvlKcu6tVgZcepbt+k2lDkJu2L39DEIVu30u8T+GNLpFlCfdC2qkpViwi4q80PKUWhECRpzmzlvs/2xRtK2abE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CUyd+IcB; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="D8Inl8+4"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=KTIr5CgT3KDSbz7P2qosdWui8lahRZJM+xMjJ9h0B+X7yHjonHiXnNKPGtvI4vnEM5FETdTvfZkW5NxHuqs3+GI7Si7qucow/iE2VyYsCEzmo2Cpdarq35sODMCjGNNoGFORncRpPnA1xBNlBoUkVs349dOT7W9bLgwROw4Z04cB7uw6HNqnSfsOX1Cc+wUN+WQx3I7VoCosK1MQgOLUyFuwXB1QI4Swo7+v5gCfE94iYitlDyV/mnjs+sJeWtRkMxBfYpJZs2BymnXp5PPhlSXYdZ9RIyEcDBNWwqukK2D9826FB/IoKCpz1nxfFG7gmNjtxyPqYFurHyMuAbmS4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UwXt1HBuG6tpgi6DB23CqREVkrDh6M3O1oJ4FCTC7ug=;
- b=pAdmflVAq1uLUjOO47GExFoTodRpxmjk8M8rNnDur79NKB9dZNF8K6oP5Gasyck36ea8QhEhfGwKHq1piTT0jofwMAg5510i02TMbiIuajppzAyKWR7MkcVRWgEMbVqABa+hJW8kupTks6mX0bpeGczW1VF+CYzk0npMTP8aCZPg6rbRNBYnOHLx0ydtBIzgni5L5+ykrlC/qr5sjKIc4buZ938fLPpynX5iLenZW8+WLZ3IhPR5n0eiO1L9FGf6OewvlG7MTC2y58aqc1xKhCsw1YGbtN21evB0SH6gK+u1ZPVbNQ8zg4acWNSoHsfWW2erd+tJ33T66gaxqLl5Jw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UwXt1HBuG6tpgi6DB23CqREVkrDh6M3O1oJ4FCTC7ug=;
- b=D8Inl8+47CcFqujvEQQvAchfkyWqXUr1SRvEnGTiNrKovtIlHCT4J0ohGo1ha+TFojVP2gvJo1loGF+Lc2UEeLD5Lm7iSRhtdUOW7uCMjVgB4/xX2lUfDlihzHDMxoQb6N1WhHbD1qH8lwTfaB9wiwou2k0jw64jGNyw+8JYqI5m3O86wK5f6uoI7IYs8EzAzXF3Yoc2588XI8khn5hMCn93pm+6lX3fBh2kBubNL5KIlsfzaWDmf+cCH2ZvR3kk/oVX21So4Aom5oQYpplhOa1JthzcAAQ8SD0jQc7EWarJ77hZG2hGHPpbKQYRyJqjroBdSRjS3OaOV1ti595YTg==
-Received: from MN2PR15CA0044.namprd15.prod.outlook.com (2603:10b6:208:237::13)
- by DM4PR12MB7672.namprd12.prod.outlook.com (2603:10b6:8:103::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.14; Thu, 30 Jul
- 2026 08:58:09 +0000
-Received: from BL02EPF00029927.namprd02.prod.outlook.com
- (2603:10b6:208:237:cafe::91) by MN2PR15CA0044.outlook.office365.com
- (2603:10b6:208:237::13) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.270.14 via Frontend Transport; Thu,
- 30 Jul 2026 08:58:09 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- BL02EPF00029927.mail.protection.outlook.com (10.167.249.52) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.292.8 via Frontend Transport; Thu, 30 Jul 2026 08:58:09 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 30 Jul
- 2026 01:57:59 -0700
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.20; Thu, 30 Jul 2026 01:57:59 -0700
-Received: from build-akhilrajeev-noble-20260602.internal (10.127.8.11) by
- mail.nvidia.com (10.126.190.182) with Microsoft SMTP Server id 15.2.2562.20
- via Frontend Transport; Thu, 30 Jul 2026 01:57:56 -0700
-From: Akhil R <akhilrajeev@nvidia.com>
-To: <sashiko-bot@kernel.org>
-CC: <Frank.Li@kernel.org>, <akhilrajeev@nvidia.com>,
-	<alexandre.belloni@bootlin.com>, <conor+dt@kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
-	<linux-i3c@lists.infradead.org>, <robh@kernel.org>,
-	<sashiko-reviews@lists.linux.dev>
-Subject: Re: [PATCH v7 05/12] i3c: master: Add support for devices without PID
-Date: Thu, 30 Jul 2026 08:57:55 +0000
-Message-ID: <20260730085755.2456630-1-akhilrajeev@nvidia.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CUyd+IcB"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4954df200ddso11212595e9.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 02:14:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785402852; x=1786007652; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=gDn9qQ7ntj6+K85ggMl00jcud8yuR9BTC6rTJN7emAc=;
+        b=CUyd+IcBHYM8HJwjfpwCvDBfmvio4DndXT3dfqkQ7vfoVWjgUoQItzeF0jDPm3hXff
+         pjHyZKRGw8PH+U9jzUb5qSmNVp9/viZ819XXS7QKimmpNO2sTGXfQpF8KXZF4JtrNF+x
+         rkT7so9RYcKBYHFMmD0sr7lR5K7j4GxBzjXRji+Xcp2Xv003I0lZUXWGhoU3zn7Xt9xl
+         1y30QN70dzqggTLhJC1UzMhr+DW+aF0GVPPEqIvNdE6f0tZjJhPE0TnmnKYx+QxklVa4
+         kpM5/y+UEx/llqWrZnKWIrGufZdHzC6ofCMvRHIYh/0xI/AVGSlxV/r+Pb0un5EfURq7
+         peuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785402852; x=1786007652;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=gDn9qQ7ntj6+K85ggMl00jcud8yuR9BTC6rTJN7emAc=;
+        b=bnbnF6NHMfVlUGte+UsVZj5rWOSjutwgdv1CH1OBGnEedfenXKHj5R8XbrQ/t5dZvN
+         jzN7C7hWH5tThnkIzyud5ZoJOzT6EXLHLl/Kf9G8CzE4ob/nJCKl6PGDtpEVoNZwaAoV
+         ulf/h/wibkHy0BCoAbSqpTiSNxeoj/WtcLFhQib0V889KdeEB1UkQant1MZnwK8Nks7F
+         j6Rz9A/6rYjhgA7shPn3PddVcqjEfmSFBC23Y/UKmPvjpFpJSTHHOCf7a12QCROnK7Ao
+         gKpXCv1//b8DvHG0HNCgF0yggzigfzqJV21m2elFtgoRtqV/CkWOancIkkftzfEu7OmG
+         WPig==
+X-Forwarded-Encrypted: i=1; AHgh+RqNvSkCqeX0i7qAtBlCc6JCX4m3filVfZr0x+r1JkCdC73347d9z2uu6y/ThCXSuT9Zl+6LUxWzQ4kplQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaBh7pP4Ai+Mc33OqXqhjdVRzm5aMIDMKSXn9mAckvjqAuap5R
+	mQXNNwKngV4s3PhjBiu1XL1cmsEmRxJPN44/HMO7EnqNJOWHm80y7RIX
+X-Gm-Gg: AR+sD13H41V6RRyO73EWRXgn9qceU3EUPoSclufL36L2+4PvT/HbdvIKal9t/oXmgkz
+	Hrq/DFcF7vqublZouNAJeqL8rUfJ31wB6JIviOyNB5EBlyh8BrpFjfvv1U+rJ3r+E7mFXlm4Ghs
+	fmNgUfFIcnm6/Spcg6zwv2F8PqpQZIle10xHMr2/OKorU1wdk4oNC1MO6A6xRJsAbs9M4zGxBTr
+	2YKKBPWGZlf1qOd4sACM0pta5VgU+a4zwW10w+Y3AOlzXPB9/e640mCYeyVUjDVnq7RDCIx0Jn9
+	a1ZJL1htC30pmWseHwgH9om6OKMqZqXMxHj8bWR2jQOOmtlHdJwTisXQiby4s4lRtYm3+8MftP2
+	IH0SsuohP/Ncwfoz+TMcNS4rYAqMmJfPcvyzTCDJ4fW+crc7tKX4lf7Aezj9wVw9CWQmjqHJ117
+	I2c0qBul8F2PCsFzrY6szWk5AQIDMAP5DwkMxFzc+ZDpedJhgvRcMLFkfbC2RXr7B1H0iSvUHZq
+	tAkvHHmT/6Bv0DpjCJdDN1mMnVdbnRpHYQl
+X-Received: by 2002:a05:600c:46c8:b0:495:409e:bc80 with SMTP id 5b1f17b1804b1-49800ebe7b8mr22426425e9.37.1785402852337;
+        Thu, 30 Jul 2026 02:14:12 -0700 (PDT)
+Received: from flaviu-Aspire-E5-572G.. ([5.15.69.50])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-496e8e06f7csm127936065e9.0.2026.07.30.02.14.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jul 2026 02:14:11 -0700 (PDT)
+From: Flaviu Nistor <flaviu.nistor@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>
+Cc: Flaviu Nistor <flaviu.nistor@gmail.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3] hwmon: (lm90) Switch channel parsing to fwnode APIs
+Date: Thu, 30 Jul 2026 12:14:09 +0300
+Message-ID: <20260730091409.10544-1-flaviu.nistor@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260728072040.9B1591F000E9@smtp.kernel.org>
-References: <20260728072040.9B1591F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -83,138 +74,175 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF00029927:EE_|DM4PR12MB7672:EE_
-X-MS-Office365-Filtering-Correlation-Id: e4ff30c2-2341-48a6-385c-08deee18ade4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|23010399003|82310400026|36860700016|376014|18002099003|22082099003|6133799003|10067099003|11063799006|56012099006;
-X-Microsoft-Antispam-Message-Info:
-	Ww7ih4NSmA23s8gq7p7AkAK91bKUDGia+LblEEvL+kGv8gtuimO8XTYarWtR8OZqP+maXFSDvkCu+f6uMOcHCTpItkSM6cfSPxlzKV1OIuqHMWvvcHUAmlZlfEK/zZUR2mVGRZGnmUEcJt421AL3LD7dmtpoxxFRFaNDB+DtMEkM1DVqb75HYw1wIemIDOx1vgHtPPqUtmUs7is73PKjhksU0we2yEF/GEMPl+G0WOOEtuieSHTB4k5WFTVln8o3hGXULWI/qseadjMUDECLxS3uFEh0QIjCd8Fx5RPaJZe23g3D9KP/W8XSrTyp5+jeGUzBDwZrv5Rh+0cbR1vOo+/EXTlpzgpxRpqKK+qQmCCIEa5D3uSpEdQAM5lwvZKT9eowZf0K5Xc5rA9h4n1lQWDbm1EgpeEZRxPimn0OYysKVhqq74P+r5tOCOQT4YWbnWSjKaf5pkZjY1hdx+3lC/TdMd75GTqISvBtGhr18lSOZmVTEBF1+VvN0dFUfY4hA6P/5GF8clKhTnjkOR7Bw6s1rnowbenTr4dlnmvxB1cGm3FAAJYumIp7/KI74S2UY5xzAe880QRG/YH88yN9p4X2WP9FFol/uPCaeGclo34Y7MRgWfsSMFJj0g4PPL6Z22B4lQhCnO3IVENkqxcW2ORtg7D9jE4WD6FsUM/1xoLPVHz2OBcceQTK7skaTL9wYigVUvRy2S8amrLIVpznZw==
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(23010399003)(82310400026)(36860700016)(376014)(18002099003)(22082099003)(6133799003)(10067099003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	va6lLMEjNS2vI3GiW5qY71jqdFUo159KEfRIpP0YoVETLug4dgof1KEIfSKpJyoclbPMn2YsH/ll5aY4GQkICrra4lRcEZ1s4cZpBs+VBG3c3WWjUNUL6bPckfPQY532ZQUKm1mVYEQ+fFgVI2XUrRhj/7FionT71smAHcbZrwJOt2TWPmY/b45gPeDs6YGL0cg3U6hVo/9SlphJY/Hhw/S0hlu0eukUesICcGvWQY1ijA50NrXYFIXf2Gkz/u6ciKAZnexffPmetK9TMIKNjqMNzFM6rTQhM53n37Xzz/AP3LON3wu0H3CA/E3R3G/bc1MYU03EcLzHE1ou2SOgK9LAB51ylRGuDF2caVoHugYm8xrl7NNmoRK8FaZW/yYa8kGgnzusa1QrlvuziYJMcv1uWU8xghxRLH2g52nCJN4jYfxGK8dmk1qun7ylDuSK
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2026 08:58:09.5333
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e4ff30c2-2341-48a6-385c-08deee18ade4
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF00029927.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7672
 
-On Tue, 28 Jul 2026 07:20:40 +0000, Sashiko AI review <sashiko-bot@kernel.org> wrote:
-> commit 978db33da88aedc2a14abd69fdc128b5e3961e92
-> Author: Akhil R <akhilrajeev@nvidia.com>
->
-> i3c: master: Add support for devices without PID
->
-> Devices using SETAASA for address assignment are not required to have
-> a 48-bit PID according to the I3C specification. Allow such devices to
-> register and use the static address where PID was required.
->
-> > diff --git a/drivers/i3c/master.c b/drivers/i3c/master.c
-> > index 87749a739e62d..488177d95e484 100644
-> > --- a/drivers/i3c/master.c
-> > +++ b/drivers/i3c/master.c
->
-> [ ... ]
->
-> [Severity: High]
-> This is a pre-existing issue, but does device_register() failure in this
-> function leave a dangling pointer that causes a use-after-free later?
->
-> When put_device() frees desc->dev->dev, desc->dev is not set to NULL.
-> Later, if the master is unregistered, i3c_master_unregister_i3c_devs()
-> iterates through the list and dereferences this dangling pointer.
->
-> Could desc->dev be set to NULL after put_device() to prevent this?
-> [ ... ]
->
-> > @@ -2401,8 +2410,18 @@ static void i3c_master_attach_boardinfo(struct i3c_dev_desc *i3cdev)
-> >  	list_for_each_entry(i3cboardinfo, &master->boardinfo.i3c, node) {
-> > -		if (i3cdev->info.pid != i3cboardinfo->pid)
-> > -			continue;
-> > +		if (i3cboardinfo->pid) {
-> > +			if (i3cdev->info.pid != i3cboardinfo->pid)
-> > +				continue;
-> > +		} else {
-> > +			if (!i3cboardinfo->static_addr ||
-> > +			    i3cdev->info.static_addr != i3cboardinfo->static_addr)
-> > +				continue;
-> > +		}
->
-> [Severity: High]
-> Will this fallback matching logic fail for SETAASA devices discovered
-> dynamically?
->
-> If a SETAASA device without a PID in the Device Tree loses its dynamic
-> address and asserts a Hot-Join, the master will execute Dynamic Address
-> Assignment (DAA).
->
-> During DAA, __i3c_master_add_i3c_dev_locked() allocates a new device
-> descriptor and initializes newdev's static_addr to 0, because the static
-> address cannot be retrieved via CCCs.
->
-> When i3c_master_attach_boardinfo(newdev) is then called,
-> i3cdev->info.static_addr will be 0. Would this cause the condition
-> i3cdev->info.static_addr != i3cboardinfo->static_addr to always evaluate
-> to true, skipping the boardinfo assignment and preventing the driver from
-> binding?
+Replace OF property handling with fwnode in the probe function to read
+the channels properties, improving the driver compatibility since this
+method is not limited to Device Tree only.
+Add also the needed headers for explicit include and clean up related
+function naming.
 
-A device without a PID cannot be discovered through DAA, so this should not
-happen. Per the MIPI I3C specification, a Target that supports ENTDAA shall
-have a 48-bit Provisioned ID (Section 5.1.4.1.1), which it transmits during
-the procedure, and Hot-Join is only compatible with ENTDAA - "Targets that
-do not support ENTDAA shall not use Hot-Join" (Section 5.1.5). A device
-that supports both SETAASA and ENTDAA does have a PID and is expected
-to describe it in DT/ACPI, in which case the PID match applies.
+Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
+---
+Changes in v3:
+- Use casting (with explanation comment) to handle the signed values as suggested
+  by Guenter Roeck. This is tested and works similar to the old implementation that
+  used of_property_read_s32().
+- Link to v2: https://lore.kernel.org/all/20260717063730.5617-1-flaviu.nistor@gmail.com/
+Changes in v2:
+- Remove <linux/mod_devicetable.h> as suggested by Uwe Kleine-Konig. 
+- Link to v1: https://lore.kernel.org/all/20260713190659.4511-1-flaviu.nistor@gmail.com/
 
-> >  		i3cdev->boardinfo = i3cboardinfo;
-> >  		i3cdev->info.static_addr = i3cboardinfo->static_addr;
-> > @@ -2416,8 +2435,12 @@ i3c_master_search_i3c_dev_duplicate(struct i3c_dev_desc *refdev)
-> > +	if (!refdev->info.pid)
-> > +		return NULL;
-> > +
-> >  	i3c_bus_for_each_i3cdev(&master->bus, i3cdev) {
-> > -		if (i3cdev != refdev && i3cdev->info.pid == refdev->info.pid)
-> > +		if (i3cdev != refdev && i3cdev->info.pid &&
-> > +		    i3cdev->info.pid == refdev->info.pid)
-> >  			return i3cdev;
-> >  	}
->
-> [Severity: High]
-> Does this logic lead to duplicate device creation for SETAASA devices that
-> participate in Dynamic Address Assignment?
->
-> If a SETAASA device is defined in the DT without a PID, it is initially
-> added to the master's bus list with pid = 0. If the device later asserts a
-> Hot-Join, the master executes DAA, discovers the device, and retrieves its
-> true physical PID.
->
-> Since the existing device has pid = 0, the check here for i3cdev->info.pid
-> and i3cdev->info.pid == refdev->info.pid will fail to match the newly
-> discovered PID to the existing device. Will this cause the master to add
-> the newly discovered device instead of detaching and updating the existing
-> one, resulting in duplicate devices on the bus?
+ drivers/hwmon/lm90.c | 54 +++++++++++++++++++++++---------------------
+ 1 file changed, 28 insertions(+), 26 deletions(-)
 
-This also needs a device without a PID to take part in ENTDAA, which the
-specification does not allow, as above. A device that already has a Dynamic
-Address assigned through SETAASA does not participate in ENTDAA either
-(Section 5.1.4.2).
+diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+index ae3b0a33d676..1c603272538a 100644
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -101,6 +101,7 @@
+ #include <linux/bits.h>
+ #include <linux/device.h>
+ #include <linux/err.h>
++#include <linux/fwnode.h>
+ #include <linux/i2c.h>
+ #include <linux/init.h>
+ #include <linux/interrupt.h>
+@@ -108,7 +109,7 @@
+ #include <linux/hwmon.h>
+ #include <linux/kstrtox.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
++#include <linux/property.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/slab.h>
+ #include <linux/workqueue.h>
+@@ -295,7 +296,7 @@ static const struct i2c_device_id lm90_id[] = {
+ };
+ MODULE_DEVICE_TABLE(i2c, lm90_id);
+ 
+-static const struct of_device_id __maybe_unused lm90_of_match[] = {
++static const struct of_device_id lm90_of_match[] = {
+ 	{
+ 		.compatible = "adi,adm1032",
+ 		.data = (void *)adm1032
+@@ -2602,7 +2603,6 @@ static void lm90_stop_work(void *_data)
+ 
+ static int lm90_init_client(struct i2c_client *client, struct lm90_data *data)
+ {
+-	struct device_node *np = client->dev.of_node;
+ 	int config, convrate;
+ 
+ 	if (data->flags & LM90_HAVE_CONVRATE) {
+@@ -2626,7 +2626,7 @@ static int lm90_init_client(struct i2c_client *client, struct lm90_data *data)
+ 
+ 	/* Check Temperature Range Select */
+ 	if (data->flags & LM90_HAVE_EXTENDED_TEMP) {
+-		if (of_property_read_bool(np, "ti,extended-range-enable"))
++		if (device_property_read_bool(&client->dev, "ti,extended-range-enable"))
+ 			config |= 0x04;
+ 		if (!(config & 0x04))
+ 			data->flags &= ~LM90_HAVE_EXTENDED_TEMP;
+@@ -2692,36 +2692,41 @@ static irqreturn_t lm90_irq_thread(int irq, void *dev_id)
+ 		return IRQ_NONE;
+ }
+ 
+-static int lm90_probe_channel_from_dt(struct i2c_client *client,
+-				      struct device_node *child,
+-				      struct lm90_data *data)
++static int lm90_probe_channel(struct i2c_client *client,
++			      struct fwnode_handle *child,
++			      struct lm90_data *data)
+ {
+ 	u32 id;
+ 	s32 val;
+ 	int err;
+ 	struct device *dev = &client->dev;
+ 
+-	err = of_property_read_u32(child, "reg", &id);
++	err = fwnode_property_read_u32(child, "reg", &id);
+ 	if (err) {
+-		dev_err(dev, "missing reg property of %pOFn\n", child);
++		dev_err(dev, "missing reg property of %pfw\n", child);
+ 		return err;
+ 	}
+ 
+ 	if (id >= MAX_CHANNELS) {
+-		dev_err(dev, "invalid reg property value %d in %pOFn\n", id, child);
++		dev_err(dev, "invalid reg property value %d in %pfw\n", id, child);
+ 		return -EINVAL;
+ 	}
+ 
+-	err = of_property_read_string(child, "label", &data->channel_label[id]);
++	err = fwnode_property_read_string(child, "label", &data->channel_label[id]);
+ 	if (err == -ENODATA || err == -EILSEQ) {
+-		dev_err(dev, "invalid label property in %pOFn\n", child);
++		dev_err(dev, "invalid label property in %pfw\n", child);
+ 		return err;
+ 	}
+ 
+ 	if (data->channel_label[id])
+ 		data->channel_config[id] |= HWMON_T_LABEL;
+ 
+-	err = of_property_read_s32(child, "temperature-offset-millicelsius", &val);
++	/*
++	 * fwnode_property_read_u32() has no signed equivalent.
++	 * temperature-offset-millicelsius is signed, so read and reinterpret it as s32 to
++	 * preserve negative offsets values (same behavior as the old of_property_read_s32()).
++	 */
++	err = fwnode_property_read_u32(child, "temperature-offset-millicelsius", (u32 *)&val);
+ 	if (!err) {
+ 		if (id == 0) {
+ 			dev_err(dev, "temperature-offset-millicelsius can't be set for internal channel\n");
+@@ -2739,18 +2744,17 @@ static int lm90_probe_channel_from_dt(struct i2c_client *client,
+ 	return 0;
+ }
+ 
+-static int lm90_parse_dt_channel_info(struct i2c_client *client,
+-				      struct lm90_data *data)
++static int lm90_parse_channel_info(struct i2c_client *client,
++				   struct lm90_data *data)
+ {
+ 	int err;
+ 	struct device *dev = &client->dev;
+-	const struct device_node *np = dev->of_node;
+ 
+-	for_each_child_of_node_scoped(np, child) {
+-		if (strcmp(child->name, "channel"))
++	device_for_each_child_node_scoped(dev, child) {
++		if (!fwnode_name_eq(child, "channel"))
+ 			continue;
+ 
+-		err = lm90_probe_channel_from_dt(client, child, data);
++		err = lm90_probe_channel(client, child, data);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -2887,12 +2891,10 @@ static int lm90_probe(struct i2c_client *client)
+ 	/* Set maximum conversion rate */
+ 	data->max_convrate = lm90_params[data->kind].max_convrate;
+ 
+-	/* Parse device-tree channel information */
+-	if (client->dev.of_node) {
+-		err = lm90_parse_dt_channel_info(client, data);
+-		if (err)
+-			return err;
+-	}
++	/* Parse channel information */
++	err = lm90_parse_channel_info(client, data);
++	if (err)
++		return err;
+ 
+ 	/* Initialize the LM90 chip */
+ 	err = lm90_init_client(client, data);
+@@ -2983,7 +2985,7 @@ static struct i2c_driver lm90_driver = {
+ 	.class		= I2C_CLASS_HWMON,
+ 	.driver = {
+ 		.name	= "lm90",
+-		.of_match_table = of_match_ptr(lm90_of_match),
++		.of_match_table = lm90_of_match,
+ 		.pm	= pm_sleep_ptr(&lm90_pm_ops),
+ 	},
+ 	.probe		= lm90_probe,
+-- 
+2.34.1
 
-The !pid checks are intentional in this patch. Devices without a PID have
-pid == 0 and would otherwise match each other, and one of them would be
-freed as a duplicate. Devices that do have a PID are matched as before.
-
-Best Regards,
-Akhil
