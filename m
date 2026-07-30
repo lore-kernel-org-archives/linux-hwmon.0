@@ -1,55 +1,56 @@
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+Received: from mx0b-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBF922EBBB7;
-	Thu, 30 Jul 2026 01:04:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE5A34CFC2;
+	Thu, 30 Jul 2026 01:04:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785373471; cv=none; b=JhHbNyNAxwWjeN7eLOiZhpEwya8idWs4SO/mDYOP+mOKiAF6s1H/lIYQoVpPD/F88332mIykDqtcwnVGUc+CjYbHsDE9Hj0cKX4kxtVblGAMAIMWHuuSRIs8Xk5JHRKiCLmJuME4ERZNWdyXtjC3GjV0CRz5srvAkt254h8Xo2Y=
+	t=1785373472; cv=none; b=ScJSnN239SVuf9AsYJY+96lkmsSO5O1shZZgXOPfaCz9FbIR4Gqsm5yO/7IZvPS2sjBNV9zrcMBsWkv+rhZygdsle7j1Ez//89HbgUGLhaId0vBZKpieQWyJth8Bl2AkGJLqWdvEMPUbomNrAAnG4/O4F8O/yznBHcyjARkHUcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785373471; c=relaxed/simple;
-	bh=J9uX2KQEzpcg99BlCxe4l4aEk/BvC1QNAZMjrXqTMdo=;
-	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=U4fDOoVheuilmEzsX6BXz8T0iZv2XVfMTprwXBYsTR5/M1G70WTA/b/wS27lYHWorASKNcxIl45ejMad9zPIYina7UAFk3QLWUlBEStFuy6tfqySgEHndhQ6vBAMY/wjjdLJ87H8R3eNucSdhhZ22XNJ5AfdZXX2JmhFrLnxoVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=fe8sb5sH; arc=none smtp.client-ip=148.163.135.77
+	s=arc-20240116; t=1785373472; c=relaxed/simple;
+	bh=ta+gqkJOzk2z5y8MPlrhsU2CswcciVfxQMzcsris8Y4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=qOj5bzpxc6RA61yeIh7jb6Hm0PG4vB2OhjWaYqG0r8unIil6g9I20b1Bkvf6MEa73Ddu//feC1vFskr4tglsb3ac85PD5Z7p9zkrB5XlkkOd29WHIsaZZLXqn0Ta8BgORuOE/PNp67YOc6VkJvP3efBgNrgkUf4upaojZvz5EnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=DNA2R8yr; arc=none smtp.client-ip=148.163.135.77
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="fe8sb5sH"
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-	by mx0a-00128a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66U0m0Jw3369156;
-	Wed, 29 Jul 2026 21:04:01 -0400
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="DNA2R8yr"
+Received: from pps.filterd (m0375855.ppops.net [127.0.0.1])
+	by mx0b-00128a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66U0m4KY3116059;
+	Wed, 29 Jul 2026 21:04:10 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=DKIM; bh=iFQd0+CpEK+bAKFteqwj4xweR6q
-	ue/+3OIB9aso6Ib8=; b=fe8sb5sHze8YVkGTBHzVfcEQhbFkYbGbCasPCXEmlJu
-	/wKPgc9EEniomcVdOZ30/3kXO546ikdx9ajnbHh7xbXWKSgHsx327ksegqFYCjpl
-	Fy/yDRZy1SX1kUBKtdy0tRRKUsbXfOKeHDo/drmy48p9JpRVmomyUmjEkrmFe2b9
-	ja9O8r1nV2060ynntEinPPXQi/8JsxOat1IitHsp0M4gjuaV0CBQ+zTU5qln2gIm
-	CfOEQ0eZO4RDrZg0F0QhGRxaFt43Peuc84iwbSi5bU9K/7oEzPV31Ks/EUvWswhb
-	UxrOXAYnOHVGjX0NP2M8rEwy0DdEVkukUgUMRdscbXA==
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=DKIM; bh=LVuDw
+	//yauhiP3d5hW+PHjvxST7j+YC3Wp5A/OIpIQY=; b=DNA2R8yrNHf7pHoKzfUSm
+	l5f+E3FJa5r8BQ0X78C+GkyPZlLqBnH2Gq9/4EguSK1l92OKI5pvl7guIBvdlXWv
+	Ahq6SlK4KzDnewBSISwStzFfDNl1kqTT6B8U1RzvFJobuCkP4Hcau90hd4RO4ppx
+	rk3kB4WROBp5dK7xGImOVMXP9XmOYWqhdE4jHHeMTadz+UzOGWxjiWCUcEL0elPh
+	/HnA/gkz7aBu30PMOooUcWTSYH5Ushl2fMhiYb9KWj2OIy4+sHjV5tqTTlKHg/AK
+	xiTAIaQPo3SYCoaFqBDZsNb8qFl31jLgTeTKoEB79slIICnmzsykZGmLZDgF4uCd
+	w==
 Received: from nwd2mta4.analog.com ([137.71.173.58])
-	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 4fqag4ck25-1
+	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 4fq18dxm0d-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 29 Jul 2026 21:04:01 -0400 (EDT)
+	Wed, 29 Jul 2026 21:04:10 -0400 (EDT)
 Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 66U140RI036783
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 66U148gT036862
 	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 29 Jul 2026 21:04:00 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX9.ad.analog.com
+	Wed, 29 Jul 2026 21:04:08 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
  (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.37; Wed, 29 Jul
- 2026 21:04:00 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.1748.37 via Frontend
- Transport; Wed, 29 Jul 2026 21:04:00 -0400
+ 2026 21:04:08 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.1748.37 via Frontend
+ Transport; Wed, 29 Jul 2026 21:04:08 -0400
 Received: from ATORRENO-L02.ad.analog.com ([10.66.6.193])
-	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 66U13i43020304;
-	Wed, 29 Jul 2026 21:03:47 -0400
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 66U13i45020304;
+	Wed, 29 Jul 2026 21:04:02 -0400
 From: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-Subject: [PATCH v5 0/4] Add support for MAX20830C and MAX20840C step-down
- DC-DC switching regulator
-Date: Thu, 30 Jul 2026 09:03:32 +0800
-Message-ID: <20260730-dev-max20830c-v5-0-a7553f84ee74@analog.com>
+Date: Thu, 30 Jul 2026 09:03:34 +0800
+Subject: [PATCH v5 2/4] hwmon: (pmbus/max20830): add VOUT feedback resistor
+ scaling support
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -57,12 +58,10 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAOSiamoC/3XNTY7CMAyG4augrMnItZufsuIeIxZpbCAStKhFU
- UeodyewGaBi+Vl6Xt/UKEOSUW1WNzVITmPquzLMeqXiMXQH0YnLVghowRJolqzPYULwBFE3TJ5
- 9C8FZo4q5DLJP07P3uyv7mMZrP/w987l6XL+VcqVBB0DnbctSO9iGLpz6w0/sz+qRyvjPHdhPj
- oWTc7YS37St2S84vXBcfKfCGwbL6NhyoAWvX7n/5HXhUSJQjY03ZN74PM93ddt2U2gBAAA=
-X-Change-ID: 20260630-dev-max20830c-9d38d8b0a765
+Content-Transfer-Encoding: 8bit
+Message-ID: <20260730-dev-max20830c-v5-2-a7553f84ee74@analog.com>
+References: <20260730-dev-max20830c-v5-0-a7553f84ee74@analog.com>
+In-Reply-To: <20260730-dev-max20830c-v5-0-a7553f84ee74@analog.com>
 To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
@@ -70,113 +69,164 @@ To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
 CC: <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
         Alexis Czezar
- Torreno <alexisczezar.torreno@analog.com>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski@oss.qualcomm.com>
+ Torreno <alexisczezar.torreno@analog.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1785373424; l=3005;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1785373424; l=4341;
  i=alexisczezar.torreno@analog.com; s=20250213; h=from:subject:message-id;
- bh=J9uX2KQEzpcg99BlCxe4l4aEk/BvC1QNAZMjrXqTMdo=;
- b=J3biWRmdNzy4jTprW8AYsdPDfgotj0y0DGy5vlyQVI00UNGV2q5+/anQfJRnwnGwuHYvkXbWL
- 6EZnJp3BPqRBNgrvkIGxzveHul1TodmHkZX1EVHii2G9NC5dQlCQWVp
+ bh=ta+gqkJOzk2z5y8MPlrhsU2CswcciVfxQMzcsris8Y4=;
+ b=39nuxaxaxS32+AjGr7vX886Iw+lUsRYfh6HbQ+C9kfzXB+FSD+T0q/7dpqhKs1xOPpivuDZGR
+ mYfbNIw6KAFBdWJ5sjHoJjGjyyjc0B2HCYdyd3fkCSB8brdlDoGD9PP
 X-Developer-Key: i=alexisczezar.torreno@analog.com; a=ed25519;
  pk=XpXmJnRjnsKdDil6YpOlj9+44S+XYXVFnxvkbmaZ+10=
 X-ADIRuleOP-NewSCL: Rule Triggered
-X-Authority-Analysis: v=2.4 cv=V/tNF+ni c=1 sm=1 tr=0 ts=6a6aa301 cx=c_pps
+X-Proofpoint-ORIG-GUID: NU8jRuq2O4UjJIqHuuL2diAELjoFe_Bm
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzMwMDAwNCBTYWx0ZWRfXxe0945rpgG3Z
+ vQ4DV+58aFq9M9YXFwDV4tSFBbHDchjXFtDrb9tkB/nSZWYit4BxxjRXZqkf43X3ubwlp2QDyFD
+ olR+Llo9jqXQdcsfG2X3Dezc0N3cloqEOpwp6LsQtHc7C2J1lGlhNQO3zPaFZJRVa9VLdYOsVjS
+ tjen+dhFoePv9qfJvmyTzuxUCgXiBZkKFCcmOo3AuwZ8xriOjbt4/QzKXj0Wl4P2+NV5ZrDICzN
+ kUetsAsJW+UxxXkc1nkIut6IOLWIT3SHUY+oqxjcNwc2GjhH8M0pIwWXCUV7uNVxmId5d4yesgC
+ mgiYhD+cP5G9n+Lw3qK6b9WbtFyIXedD9WiEzEqkWijuWPlMkPm6EKZU61oIVeS4hTnmYrsDi3v
+ Bk6olG1GDoHMHAVhzyZfhT/HQBICp9jJP90PkifVxLMK/94TgE98vyqEDoQece5J/s5rev95uM5
+ Vrah7BuknDVh2HGzeZA==
+X-Proofpoint-GUID: NU8jRuq2O4UjJIqHuuL2diAELjoFe_Bm
+X-Authority-Analysis: v=2.4 cv=OtN/DS/t c=1 sm=1 tr=0 ts=6a6aa30a cx=c_pps
  a=3WNzaoukacrqR9RwcOSAdA==:117 a=3WNzaoukacrqR9RwcOSAdA==:17
  a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=0sLvza09kfJOxVLZPwjg:22 a=Z0pTeXoby7EwIRygza74:22 a=VwQbUJbxAAAA:8
- a=gAnH3GRIAAAA:8 a=H0MElV2ufFurq6DkGqYA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: i85VG6o3qA_JC5gvq3rGhlA2SxC-phSx
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzMwMDAwNCBTYWx0ZWRfX8R/QuZer330+
- PnkuJcJ6BFxkTHly4ShJfwX9YJYP89nzf/QgXsmr+nE78Ycsse21/EsKJrnPU9oy7TxQd+phzD4
- 2rO+lMMd0x+7RCBhWU0HUZT47zDk5e0nJad6h/RpmPDlGHCCVBp+hCl5wBPCc0FXZD4fq6lZu/1
- p7i7nJE4DCJLMjKo3QdKQMgN2Ix1HlDTYihSnFS3KHU1T3vwxr5ej+0tys4oDSVp9K5xXh8dEls
- ModldWT/SbeIXVPm+I9FPMggriwqM4SiKczcvhqBsBx4M5i+dgY95yTjDrnRsAHhA8e2Td8aG5y
- T9czD1WcGu+Djm4ybn2deb70WslEHvE7csTQn4tBKIczWqNZJYyV3v5SgKDcnahqi2Q43GNhDKZ
- i4CPD0MlwRiAzsZzh/OA/cZ4EDxPwmLqJIhtVYpp575/uShCqw93TnvV518dflQNmW1cfKvXHi7
- 8E7iLAGmb5fctHB1n1A==
-X-Proofpoint-ORIG-GUID: i85VG6o3qA_JC5gvq3rGhlA2SxC-phSx
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzMwMDAwNCBTYWx0ZWRfX1LFc/M7wO8rQ
- N2xnmAjHQSx8vmKgX+qiMImEKLcYZwexI3Ou4hLs+0rpZrOGHqQSTxdYVbXyS5jxwty96nM4M7G
- JIicdKCkyDdZt+f/N2rH6o66iPEcgQq9nDIbcs9SKkO+dgGActTl
+ a=0sLvza09kfJOxVLZPwjg:22 a=N--XFCr6TIEc_64PeIT2:22 a=gAnH3GRIAAAA:8
+ a=c585p9qd8l5BjXVnlE8A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzMwMDAwNCBTYWx0ZWRfX1iCBZFYvDsUI
+ 5q8zcGp/ib7UHE5UYwP6WbTs3inZa7FXJcBpL1Tp5LJfL9T2nJKRiJepi8Blqh+G4FNCEETty9R
+ VhZilhlRNLl9DaFEL7IgblngGov2EAiYR/ebqSmI1HpJl5E3MhRm
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-07-29_09,2026-07-29_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 lowpriorityscore=0 impostorscore=0 spamscore=0 suspectscore=0
- clxscore=1015 priorityscore=1501 malwarescore=0 bulkscore=0 adultscore=0
+ malwarescore=0 clxscore=1015 phishscore=0 adultscore=0 priorityscore=1501
+ impostorscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 suspectscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607300004
 
-This series adds a few features before adding support to MAX20830C and
-MAX20840C.
+Implement support for external voltage divider scaling using the
+adi,vout-rfb1-ohms and adi,vout-rfb2-ohms device tree properties.
 
-Patches 1 and 2 adds new resistor feedback properties that is needed to
-properly scale VOUT
+When the desired output voltage exceeds VREF, a resistor divider
+(RFB1 and RFB2) is used to scale down the feedback voltage. The
+driver reads these resistor values from device tree and applies
+the scaling formula: VOUT_actual = VOUT_measured × (1 + RFB1/RFB2)
 
-Patches 3 and 4 adds support for devices MAX20830C and MAX20840C.
-
-MAX20830C and MAX20840 are step-down DC-DC switching regulator with PMBus
-interface. MAX20830C is a different packaging for MAX20830, and MAX20840C
-supports 40A regulation compared to MAX20830 that is only 30A.
+The properties are optional. If not specified, the driver assumes
+no voltage divider is present and reports the raw VOUT reading.
 
 Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
 ---
-Changes in v5:
-- Patch 2/4: added comment about not supporting limit registers
-- Patch 4/4:
-    - removed max20830c/40c entries in i2c_device_id
-    - created an array to help scale adding of new variants
-    - edited Kconfig to note new compatibles
-- Link to v4: https://lore.kernel.org/r/20260728-dev-max20830c-v4-0-cec034298535@analog.com
+ drivers/hwmon/pmbus/max20830.c | 65 +++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 64 insertions(+), 1 deletion(-)
 
-Changes in v4:
-- Patch 1/4:
-    - Added missing #include for gpio
-    - Removed review tag, patch edited to complete examples
-- Patch 2/4:
-    - casted feedback resistors to u64 to avoid possible overflow
-      during scaling
-- Link to v3: https://lore.kernel.org/r/20260720-dev-max20830c-v3-0-9d06d27d6da3@analog.com
+diff --git a/drivers/hwmon/pmbus/max20830.c b/drivers/hwmon/pmbus/max20830.c
+index cb2c23672166d641852199ca07eb716924f4f286..ddead72a8db5d6f8491cbfbf356db0f8de64da03 100644
+--- a/drivers/hwmon/pmbus/max20830.c
++++ b/drivers/hwmon/pmbus/max20830.c
+@@ -7,6 +7,7 @@
+ 
+ #include <linux/errno.h>
+ #include <linux/i2c.h>
++#include <linux/math64.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/string.h>
+@@ -14,6 +15,56 @@
+ 
+ #define MAX20830_IC_DEVICE_ID_LENGTH	9
+ 
++struct max20830_data {
++	struct pmbus_driver_info info;
++	u32 vout_rfb1;
++	u32 vout_rfb2;
++};
++
++/*
++ * MAX20830 only supports READ_VOUT for VOUT monitoring.
++ *
++ * Limit registers (VOUT_OV_WARN_LIMIT, VOUT_OV_FAULT_LIMIT, etc.) are not
++ * supported by this driver and return -ENODATA. This means sysfs attributes
++ * like in1_max, in1_crit, etc. will not be available. Only in1_input (the
++ * scaled output voltage) is supported.
++ *
++ * MAX20830 uses an external resistor divider for voltage sensing:
++ * - VOUT_COMMAND and VOUT_MAX set the reference voltage at the feedback pin
++ * - READ_VOUT reports the feedback voltage, which needs to be scaled for actual
++ *   output voltage
++ *
++ * Scaling formula: vout_actual = vout_fb × (1 + RFB1 / RFB2)
++ *
++ * If regulator support is added in the future, some adjustments are needed to
++ * ensure correct feedback voltages are set.
++ */
++static int max20830_read_word_data(struct i2c_client *client, int page,
++				   int phase, int reg)
++{
++	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
++	const struct max20830_data *data = container_of(info, struct max20830_data, info);
++	int ret;
++	u64 temp;
++
++	switch (reg) {
++	case PMBUS_READ_VOUT:
++		ret = pmbus_read_word_data(client, page, phase, reg);
++		if (ret < 0)
++			return ret;
++
++		/* Apply voltage divider scaling if resistors are non-zero */
++		if (data->vout_rfb1 && data->vout_rfb2) {
++			temp = (u64)data->vout_rfb1 + (u64)data->vout_rfb2;
++			temp = DIV_ROUND_CLOSEST_ULL((u64)ret * temp, data->vout_rfb2);
++			ret = clamp_val(temp, 0, 0xFFFF);
++		}
++		return ret;
++	default:
++		return -ENODATA;
++	}
++}
++
+ static struct pmbus_driver_info max20830_info = {
+ 	.pages = 1,
+ 	.format[PSC_VOLTAGE_IN] = linear,
+@@ -24,13 +75,25 @@ static struct pmbus_driver_info max20830_info = {
+ 		PMBUS_HAVE_TEMP |
+ 		PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_STATUS_IOUT |
+ 		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP,
++	.read_word_data = max20830_read_word_data,
+ };
+ 
+ static int max20830_probe(struct i2c_client *client)
+ {
+ 	u8 buf[I2C_SMBUS_BLOCK_MAX + 1] = {};
++	struct max20830_data *data;
+ 	int ret;
+ 
++	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	data->info = max20830_info;
++
++	/* Read optional voltage divider resistor values */
++	device_property_read_u32(&client->dev, "adi,vout-rfb1-ohms", &data->vout_rfb1);
++	device_property_read_u32(&client->dev, "adi,vout-rfb2-ohms", &data->vout_rfb2);
++
+ 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_READ_BLOCK_DATA) &&
+ 	    !i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_READ_I2C_BLOCK))
+ 		return -ENODEV;
+@@ -78,7 +141,7 @@ static int max20830_probe(struct i2c_client *client)
+ 		return dev_err_probe(&client->dev, -ENODEV,
+ 				     "Unsupported device: '%s'\n", buf);
+ 
+-	return pmbus_do_probe(client, &max20830_info);
++	return pmbus_do_probe(client, &data->info);
+ }
+ 
+ static const struct i2c_device_id max20830_id[] = {
 
-Changes in v3:
-- Dropped patch that add EN-GPIO property in DTS
-    - discussed to be skippable until an actual use-case arise
-- Patch 1/4: 
-    - Carried over the completed examples from previously dropped patch
-    - Kept the review tag as the carried info from the dropped patched
-      was also reviewed.
-- Patch 2/4: 
-    - added clamping to read_vout during scaling
-    - improved comments regarding future regulator support 
-- Link to v2: https://lore.kernel.org/r/20260706-dev-max20830c-v2-0-37761e89bb5f@analog.com
-
-Changes in v2:
-- Patch 1/5: completing example
-- Dropped patch adding GPIO enable in driver (no use case)
-- Patch 3/5: added notes on READ_VOUT and related VOUT commands
-- Patch 4/5: removed comment on fallback
-- Patch 5/5: simplified device ID check handling
-- Link to v1: https://lore.kernel.org/r/20260630-dev-max20830c-v1-0-a02786bde470@analog.com
-
----
-Alexis Czezar Torreno (4):
-      dt-bindings: hwmon: (pmbus/max20830): add VOUT feedback resistor properties and complete examples
-      hwmon: (pmbus/max20830): add VOUT feedback resistor scaling support
-      dt-bindings: hwmon: (pmbus/max20830): add max20830c and max20840c support
-      hwmon: (pmbus/max20830): add support for max20830c and max20840c
-
- .../bindings/hwmon/pmbus/adi,max20830.yaml         |  30 +++++-
- Documentation/hwmon/max20830.rst                   |  27 +++++-
- drivers/hwmon/pmbus/Kconfig                        |   4 +-
- drivers/hwmon/pmbus/max20830.c                     | 101 ++++++++++++++++++---
- 4 files changed, 140 insertions(+), 22 deletions(-)
----
-base-commit: 1a42625604046790ea8ec61c2a749bbf76b28943
-change-id: 20260630-dev-max20830c-9d38d8b0a765
-
-Best regards,
 -- 
-Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+2.34.1
 
