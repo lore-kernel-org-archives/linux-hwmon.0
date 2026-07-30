@@ -1,104 +1,185 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9C68411A01
-	for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 11:07:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C12C3FF1C4
+	for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 11:35:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785409641; cv=none; b=f2KzU5gImgBQe+Gs4rnEJwWf2KQYNTtfxlfhqx7V4ACQ986v+aD4PtMJQYnCdVuw0lYPbraZxpQa5dSlSGpxRrzVNJOhYRB5Fgd9DbvdKrJ9GpBjb4Q96LDpd3Ny7pqU920BoDKpjPYwQx0ym07tBfWts5EIT1g9YTMSmWT7/jY=
+	t=1785411308; cv=none; b=qRCduDed6UYzDOiyDaudDWF0m4RjXdcACXfboWlpYDD8nyhkllXV0DrM3Tnz8wZF3PFoEdRhPaNh1tvu9m+80mGihYFy5p63VsZDD8PcR7W0j6Dj9FRvAebI/RHhdqygndMmacx9ZtuBaiSkBBQQx7b8+DSL6F8GDHCJQMaGNUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785409641; c=relaxed/simple;
-	bh=eJjTVRMZVoKwofLWi3LVva7SIn7zgP+PhhVCCay9rrI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XoMIgh0INhSoBQqK6DXS4LV0U2QrxmejfbjQ/fe/sOn8jYkyI+gkdGkGOVNJP0ylUN6WhfXSJCrccUS7VHq+6RdaoKaXZRNgtkmEKe5aEdNEisWgywHA0oVLIGgGyIPeKFDNcknK0KBAIPnApJoHXvjRnuAyl82yLdwAe5Gk6lk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eho55y+C; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785411308; c=relaxed/simple;
+	bh=5q46ffEKe/AL/tCJ5clvNOasJqMy2l3vKZtTmAh4GQA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=meL9k1eD6Zcx7o5cw2QY5vFJCRLmCB4tlagbKXUAJ2MJRdHTshRLQh1DefqQ7z+92O5FVzwoKTvZk8MwOUaRzvyqRNKa6nPVo4Dird82cPWE7rohVC1LUBfYifZyWsdMxdtP226PVH4cMtqRaounW/hsCko2sXgcMEK2eS9CjHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=F6fclxRi; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=AQUtsX11; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eho55y+C"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4954a32cf1eso9858655e9.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 04:07:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="F6fclxRi";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="AQUtsX11"
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66UB5crx429073
+	for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 11:35:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	07/dZmQGLQpEoux0gZ8DuLcNzeKHmPfKLFyU53AM5uA=; b=F6fclxRi6NecK1lX
+	D5bR/vLg6WzqjEO3ftynbg9l0r7oLrKFTxjVNcZV70JMymLnGcIBKhrwHG90drQz
+	oKlA7jF+g+N3pFNJKQUCBSjUJKyZIwTy2HAd9BRkb5XoK2PBorZtw/qsI3CuKZcW
+	1mbNpj1/0enrYEe5+jrqpC8nCHgzPGV/8s3cJLPFFnk8CLxhqk6TFp6AZLTVCWPc
+	zAH8jlI7Id6mBTdJ3nqwK2a4ddivX+rGFHuqPHtxf8WtJrW+JrMp1F0Oz9/6tjR5
+	yAOUWWojumWOv8j8NUgg8LiAk5dX7g+IlKJBQUJX6HoHmND/jQ8BiFsHvitESRj8
+	pe+OOA==
+Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com [209.85.128.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4fr5efg3tg-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 11:35:06 +0000 (GMT)
+Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-81e92ddc199so49749707b3.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 04:35:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785409638; x=1786014438; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=rzwQZ2FZuL5P8Gv1fpsnj5lYgdyhcN4VWRCQhBah8Ng=;
-        b=eho55y+CVoDy2oye0k6Ku9EAGvlotUAm5pXldS0dS0TpZm6wwjbH21pE/g+pTmTCpX
-         9nXo9TgZ54wKxUUesOrQ2ve2pkPq5S1B5oVqFlxwZT4duT4Dvi803MF75pXGZP1rKhLS
-         VO13oq+RHsRRupSOpLBoLcuwSk/5ROCIsBc+eCusLIw+a5yJZ/zQ1nwdbOIDt3BLzNgT
-         tAxzmd9qlhYMRI28MwKFq0X3plpYVL+7TKoLj32PnHbxYPTLBdEJowG4oaVxGCp1iMtu
-         wloq3Nklh8ipNvBKEg1SwAnHUlG9kPre/3PFRDUO02hBzSlJfacuCB7FbLapn8hTeLTC
-         OAnw==
+        d=oss.qualcomm.com; s=google; t=1785411305; x=1786016105; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=07/dZmQGLQpEoux0gZ8DuLcNzeKHmPfKLFyU53AM5uA=;
+        b=AQUtsX11GIJci9w9zsYdSekoJ8kJzfnFa5kEwvb9WlmH4HJPM4dg6iEbmIDat9G3BY
+         4beE9BrXWy9bOVISl/NlONekO+PvUTqjowsmKp3KFwPMvrltkXMTG+Xr/jJJCXRhzcxX
+         WnnJG3x772WcvwZ8snDHGYOffnaXZVcxMGipqCtKEhic41GJ+VGHeQHPXDpyIa0v+Jqz
+         me9QZngF/ZXi7zM5MRqA/4m3tqlVY+jT0A1LHECGDyem/8KkK1gCOjh3jqK7g3shtejN
+         3tf7s5KB7hSrC/kZBhFNHiyvkzO7pO1jdBXf2EQ8yIZvvSkAG7H1PFnXQ0Dvv07Om5IX
+         4XaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785409638; x=1786014438;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=rzwQZ2FZuL5P8Gv1fpsnj5lYgdyhcN4VWRCQhBah8Ng=;
-        b=UYlyF+bdIZUJyz5FBgnHhWuo11EK6wXMuXx/fLNgvpepwB0TbLTh7tEKwxfhIU9HpH
-         seq/jCSuV7FIC239LBVEp0oWuv1ZKiZMKcMe0GgcuUPsQNA3ynggY/Maaxm6Jx9BboMP
-         f8e4BkIfRbgeJuRWJpHBwV0xdIwTI2zAgFEKlRfZPNXPjPT4EjupQFF5P+rHXYSPCpJS
-         28Z5RTeqT/8ODGYxTQpsrQCj8UU5uak0WSpzPjgcXwFSkxZLcLS7aFXxi9JQ+lwIV+6w
-         /q48QHa4+3wuXyh9QLOtA9akdnkBkQVb0nfcaR3gN3nZq5C/k8Di1FhO8xEre9z5gfKS
-         3i2A==
-X-Forwarded-Encrypted: i=1; AHgh+RrxJSTVJggroYII28QeF8kl9pfwwoOvTr5SDBrx2ju/uvhUt3rb3uRMMds3ermJDz5HaRaV6RZ0azCtYw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxreeH8MlGKtREndiVjxv4waZpLSH6SDBTGWtTdJC0MS36nkAqz
-	tswybadvnvS88bXoOl/8dzGpLZvlC3qwPBvDFiEH78zUwlFc5gIAfEFaiQBlAQ==
-X-Gm-Gg: AR+sD125cRBhCfn62c9W9aFQg+yJO+TeuOVj7L+E4KTeMqupHbZL51SiPWn4fAteGWY
-	UzpWIk8VtgtY4/qpQBCHcAVwgvQJVUwqVFORou+/U5FzP2FffsfrR8SEZqNkmGDjXCSGbxoqfDc
-	qYKb+ty/1BFMMMkmatysrKc7RKnsznQgmBGAusdgPm4qW1pK9gSzM2yu+xBnNhlzHw3gV6n9y43
-	9n5/oF93vwOqCpPpFi5aQZjeLWMrcVdvIFIelneS+fdGvfZ3yCjAjmCyj9GDnzbQtUNRho157f1
-	FFcnpvglHwRRfuxyShuHFrEG7sJpvNpyYNbFFuofysXKAe5sD9Kw7vmfy0Bn5WhAvblaM/LP5AN
-	UgLpxDmYulowtYZttZjmZxJnnWh4T0hGLWlaLUqNbAIv22JVvTUncab12IswCT2dwMvAnJQgLwM
-	6dmH1snFsneso6oFBdT2kelO62dMzxitRiBeOF/Jf458/IIOmxz3vH
-X-Received: by 2002:a05:600c:19d3:b0:495:6b78:6f4 with SMTP id 5b1f17b1804b1-49800e70069mr27708485e9.8.1785409638030;
-        Thu, 30 Jul 2026 04:07:18 -0700 (PDT)
-Received: from nsa ([148.63.225.166])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-498010a0ae3sm54406785e9.9.2026.07.30.04.07.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jul 2026 04:07:17 -0700 (PDT)
-Date: Thu, 30 Jul 2026 12:08:27 +0100
-From: Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>
-To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-Cc: nuno.sa@analog.com, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
-	Alan Tull <atull@opensource.altera.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-Subject: Re: [PATCH 5/5] hwmon: (pmbus) add support for MAX20826 and similar
- devices
-Message-ID: <amswd7M_ROGC8VGg@nsa>
-References: <20260728-hwmon-max20826-support-v1-0-224766e0acd1@analog.com>
- <20260728-hwmon-max20826-support-v1-5-224766e0acd1@analog.com>
- <amnvYB2Occ911k3B@monoceros>
+        d=1e100.net; s=20251104; t=1785411305; x=1786016105;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=07/dZmQGLQpEoux0gZ8DuLcNzeKHmPfKLFyU53AM5uA=;
+        b=DeWNhnYLcRpAK3TIbWtOjAlOtHUGV+AXHtHZ5iv+IiF7bkt6OekIB0GEluOkVNRSEQ
+         PV/UnBKi2Edb2dl+7VG9g6wmm526pWQBAIGyNYiyXG9hvghVWpMJt0LkNktvlOe1tloE
+         VTRsDgT4xwPTSKJeQJ0Qfrak7GbXCJKw2VIBvxUlVSp1bmCI6R2QQmGuw2bfQnRMs5r4
+         8QKxCets4HC7yoh1LD1nDNdhfLC6XgukVjnS5D2k2fW2aFknAF+F+zR5i+FFRb7xDOq0
+         dmIxeRRgAhg7B+kEqlj/R+FrP4/WT29AdyllsOsjKJ1oJmccNsDMK6/pGApyLICnft/s
+         GsoQ==
+X-Forwarded-Encrypted: i=1; AHgh+RomGW8F6i7kGOPxv+gF2BWrRa5a/NE9mPoZXdxB4bTC1/yeB0rdfVGfbjhnohRT6bpN9fP9vkWH5zECDg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9O/w/T9QEDPNmgoc7W4+RQ3ePgVD2UGN+BoW4t7NqtBOltDo2
+	ZJGDcShd+KA+TZTQuBzBJCYb66U+hphwSLsdIx1HCxFOmKecXDN0VDu0FLOuSY0ZRaoj4GRbBo2
+	3GEZzIB7n+EOrEEqobI9K6+NiS0UP54oqRPMj1eD6jGi0/ImSSxTWt5n+V1G6+p1f2A==
+X-Gm-Gg: AR+sD10jlekCsthAVxeM4S35ahH350wp7j1CscOgraxA2Ji76eFt3z6FR7cBwnKM4Ng
+	QpLZFcePEqPZgRRHGKFLFf4TNv53YDM3Vd+TfCCfUCC+H/PCq/pMQfuLSdfGW2LiTIEZLGGxXho
+	hfDXMuWgphE4jRrz062FGamxB3AuJ/bdGCoLXhYDjsAUdpDz1dx7oa3+O20r0QyF+hT6kIVCjCn
+	I//JjAzjSDGXwrjdoOlqtdRzfkWZ69p2y28v6Hf82Ct2pIu8Fw/+c7Kf35RZsqrM2DAWs0vumfI
+	T/wjmq8GB3SoGfX2sFHMP0mdF0Zj08g7qplZWuh6saYlZyoZEdiugHPwpaDlWpQBLPt5eDbF/iu
+	SJtmPqrjuKnlxxiOzJKhDnNJcsqZPoeBigfm+ddsls3Mm9YpeUgm1EwxSNI3pGjdk
+X-Received: by 2002:a05:690c:c02:b0:81e:4e5d:4848 with SMTP id 00721157ae682-81fb89076a2mr13889877b3.17.1785411305356;
+        Thu, 30 Jul 2026 04:35:05 -0700 (PDT)
+X-Received: by 2002:a05:690c:c02:b0:81e:4e5d:4848 with SMTP id 00721157ae682-81fb89076a2mr13889687b3.17.1785411304937;
+        Thu, 30 Jul 2026 04:35:04 -0700 (PDT)
+Received: from ?IPV6:2a01:cde0:108:24ed:2206:62e9:bbc4:c360? ([2a01:cde0:108:24ed:2206:62e9:bbc4:c360])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-81fb8926becsm8201587b3.20.2026.07.30.04.35.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jul 2026 04:35:04 -0700 (PDT)
+Message-ID: <63b4c911-d1a4-42b0-a66f-b0c84308d5dc@oss.qualcomm.com>
+Date: Thu, 30 Jul 2026 13:35:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <amnvYB2Occ911k3B@monoceros>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 01/10] dt-bindings: hwmon: Describe Qualcomm BCL
+ hardware
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+        Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, linux-hwmon@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mfd@lists.linux.dev,
+        Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
+References: <20260722-qcom-bcl-hwmon-v2-0-febe2805e17b@oss.qualcomm.com>
+ <20260722-qcom-bcl-hwmon-v2-1-febe2805e17b@oss.qualcomm.com>
+ <20260723-radiant-scorpion-of-hurricane-cbed57@quoll>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+In-Reply-To: <20260723-radiant-scorpion-of-hurricane-cbed57@quoll>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: rdbfxA-IX9MOpPIvbREkUugmMULny_l4
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzMwMDA4NiBTYWx0ZWRfX79TX2T6OSEHk
+ pCf+JGUi9ccYLaeADaGsK1I8EMO3WIOO/d01BmbXHR+tFCNtcWPYTQoIdTCLPWQt+lonIO2ljBY
+ 2ZyJ6QYMqd3wc+J9qGbZE3zQYJ5j+d0=
+X-Proofpoint-GUID: rdbfxA-IX9MOpPIvbREkUugmMULny_l4
+X-Authority-Analysis: v=2.4 cv=I45Vgtgg c=1 sm=1 tr=0 ts=6a6b36ea cx=c_pps
+ a=72HoHk1woDtn7btP4rdmlg==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=RAioF0-LDSMA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=YMgV9FUhrdKAYTUUvYB2:22 a=NFBEJmUEwPxnxbdnG5UA:9
+ a=QEXdDO2ut3YA:10 a=kA6IBgd4cpdPkAWqgNAz:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzMwMDA4NiBTYWx0ZWRfXwo0IVhIV+CKP
+ a7xpktfa5pA7djIVEDjr6IOlKtIKNqvxZ8pn+3TMUJRxGgNaOQrPmZNoJjeFb5W1Du29rDwRxxK
+ HNCgkx75OVKWbV1B7hsFutAZkTODXZxTpTl9RgaqfOdeaV2+3fv3E/KrPY/YR7em8h7ZP75ticg
+ 8xRzBo8dBpXH76F/gjUCmQCLzEVc5ZmFcn/coWTAWyVBAt95orkDvS5yNGCAtZX0MGiBkr6QM1y
+ bA7y5oTOocsYkJr+bor2ZKXTNwYOofAO0SR0Z5IIeHmoQalkfMjLakUMJhdON3m828Wj9G2JTTZ
+ Bl7AT4VyGwyjBEZ3Qm6WrAtGraSlFmJA3Q1274FhNXsWsUcEesndgD4D81I94Ylv4NoPTqWIakN
+ N8s3dHvRyruEqSsnWEndT+UqSSy7QqKO/CZ/uWtVX1nx9peHiyLMFtggNqENI9pzYVhQTMMTu5b
+ YGWn9TXZ+cJIBjbzuYA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-30_03,2026-07-29_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 priorityscore=1501 lowpriorityscore=0 suspectscore=0
+ adultscore=0 spamscore=0 bulkscore=0 malwarescore=0 impostorscore=0
+ clxscore=1015 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
+ definitions=main-2607300086
 
-On Wed, Jul 29, 2026 at 02:18:55PM +0200, Uwe Kleine-König wrote:
-> On Tue, Jul 28, 2026 at 05:03:52PM +0100, Nuno Sá via B4 Relay wrote:
-> > +#include <linux/i2c.h>
-> > [...]
-> > +#include <linux/mod_devicetable.h>
+
+Hi Krzystof,
+
+
+On 7/23/26 10:11, Krzysztof Kozlowski wrote:
+> On Wed, Jul 22, 2026 at 12:00:06AM +0530, Manaf Meethalavalappu Pallikunhi wrote:
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - qcom,pm7250b-bcl
+>> +      - qcom,pm8350c-bcl
+>> +      - qcom,pm8550-bcl
+>> +      - qcom,pmh0101-bcl
+>> +      - qcom,pmih0108-bcl
+>> +      - qcom,smb2360-bcl
+>> +      - qcom,smb2370-bcl
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    maxItems: 2
+>> +
+>> +  interrupt-names:
+>> +    items:
+>> +      - const: max-min
+>> +      - const: critical
+>> +
 > 
-> <linux/i2c.h> already makes sure that of_device_id and i2c_device_id are
-> available and <linux/mod_devicetable.h> is going away soon. So please
-> drop the latter.
-> 
+> Binding looks in general ok, but feels incomplete. If this is battery
+> limiting hardware, does it actually need any battery data through
+> monitored-battery property?
 
-Argh! Totally forgot about it (I have seen your comments about the above
-in other patches). Will do
+I'm not sure it is relevant here. The BCL is not a power supply neither 
+a charger. It monitors a power supply output which can be a battery or 
+another source of power AFAIU.
 
-- Nuno Sá
+The monitored-battery property is used by chargers or fuel gauges if I 
+refer to the documentation.
 
+The BCL monitors the output of the power supply while the chargers 
+monitors the input for the battery.
 
+Manaf, does it sound correct ?
