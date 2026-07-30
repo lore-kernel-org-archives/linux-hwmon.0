@@ -1,112 +1,146 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1403D8914
-	for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 09:33:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 093BF282F1C
+	for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 09:43:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785404003; cv=none; b=rCxJDrP6szXrEGQY84flmsUb944BKYUwhHk/PEDkeSpaW6N5kLAySvuxYcPVyVXpbRjjG45WSxCQoG3PgEdT/YJi0hNQQ44ZhRjNk1WNOU/awoGkLKDVZan9Mm+zVcSmXpv5xOSD8QkS05/T8uEqUfzcsNrQKjpCxzXNOrhi09Y=
+	t=1785404632; cv=none; b=L9i9nuRgqTFLqcE96/fOPtiR4CeE30HoEc60kQW1Vu8uF5CgNjxpxPF8ud8qwycYkV43UbX+1vf56WEoVLvQv7Y7dtGdtmAig2NHxgsBNjtHe255u1kvR9GZDA2Y3xHB7fSR7+JpAKrcDkvNlrQQkCuSOHQBFwuBCoZjcgMM2y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785404003; c=relaxed/simple;
-	bh=iYMHnvH0OKGCDdTGrzlI3yhg9p5eCKTm9i6oNiNLpdk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZVVcQ//bxidnR/ucx+jT8rSKTXyStus4pbpqA5RkuLSGQ3dkfOTdnokE+KDqwZtpnvfHKcCWwri6iJn2VTDErcutIaRYqu372nncZ4eoVUl+fs8o9yt5Uwr79AosENp1pcnBGUyYIWLSNzZT1C7DskBDNZj48rmBEjiN9PAAGbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YV2SQfnk; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785404632; c=relaxed/simple;
+	bh=Wh0HiAh4aMYYOpUpUihXsjGI0Y1sYVyMUHnBrZb0/M0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=esirOv/uf8UVg+WlefkgSiJoGQNjp3Yx37SwyDffex2eDUCEV8vlcxI825WHEZ6VRt2TcwOi6jqvwipHjEGoNuDAZBvu0aXsio5qC6QvIYzdkcDAcNYTRqG/ZoapeNcXuaagxxFvyHt5V8VQV+An4A3mx2ruQ0EgzPdhlKQCCJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VPpamArP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YV2SQfnk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 172731F00A3D
-	for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 09:33:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VPpamArP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95BDF1F000E9;
+	Thu, 30 Jul 2026 09:43:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785404002;
-	bh=Gwcd753fWtAnlelFtxkponYfNiVbGFQihpYN8RGz7/w=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=YV2SQfnkPi6irvwjs+pOtcroloDKSb143fkoSCOg6z9dPw3qOhgjnY/dGvVQHhGiF
-	 KFoSHm8qMrIisiHc0ce+faONel1+7Kjuxqj9XroP3UQ/GVel/lZteKWZs8Nx1eZ9RJ
-	 UW5XzVj6R8awhVdr2QTvCazgQ2e2NZWw/x03w0qv8clpJoarFBtuUUlBzaclv/XkdO
-	 WZSNiqaWqisoPfPrL6jL/IHz1pWBsgEyA772pN/US4owzZbwSPQ5LQDB8HmVT5Apze
-	 Q01wtJuWOZrfHHcq16kR2AtewkCLdNRb/AIaavT4iSPbYk01L0/3ousdgsSRPJNl56
-	 SQ4ruZ3eXggeA==
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5aec6360133so1504915e87.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 30 Jul 2026 02:33:22 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+Rpz/Bcgi2ka8XLcc85XkfkIby3hy1b6NEA3hkjI4A+u1nl1pnEVweDcgBk7Sy5uGyQ0S/aSOezalerZqQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YynBR+LtmHxfFKEsX/XM43sQxH4fbEn4a11k3m3m4D+WoaAM13A
-	8nEtsTVH1mFLo7Xvbyxv5WPR0gAylKzoKOecU0kNRAJ+cmqd4FDhYG/7epypQveO2FQzZPgAI80
-	+JI+YsrMh/G6VfviMuOjmLNrkJhw1/+I=
-X-Received: by 2002:a05:6512:1384:b0:5ae:b24c:7723 with SMTP id
- 2adb3069b0e04-5b2db34f426mr409984e87.17.1785404000537; Thu, 30 Jul 2026
- 02:33:20 -0700 (PDT)
+	s=k20260515; t=1785404630;
+	bh=P9+kFLNmkQaPSS4YFp348B0T8OJXhQQXxTGSYi+c814=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=VPpamArPd7lxj2oQgiIsL89kQvLoM2w3Gu/CK5F9lej8rqdg9FZ9oGTig529SJiJQ
+	 kTvKSiOSqHJtixLK06IjMEKrhcD7kuoZ2oTf5vBVnS6L2TLSFrqEpoxhag35QzdVDQ
+	 XDAD6rNqtol5XRX/VvyW1mvWhYkQo3YMhHT3YrJhX0UqmTTGcp0Pk0ZJl4GaS0VooR
+	 hLvPRhTQ+v1RZtP2rFrI3x3le9WWmQOeD/AiIYnZviTi3z4g3eH+QFOw37Y+cenYOl
+	 ossSQlJLV+x2zYrCA2VTIkmsB/4K2lc9iCrjMaQymoSCgf14IuXquWK/+l07DxLLLY
+	 DnlIZ9WBmjzNw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v3] hwmon: (lm90) Switch channel parsing to fwnode APIs
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Flaviu Nistor" <flaviu.nistor@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260730091409.10544-1-flaviu.nistor@gmail.com>
+References: <20260730091409.10544-1-flaviu.nistor@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 30 Jul 2026 09:43:50 +0000
+Message-Id: <20260730094350.95BDF1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <cafd8af9-c6e9-4bf2-b496-23e796fbc9a6@linux.dev>
-In-Reply-To: <cafd8af9-c6e9-4bf2-b496-23e796fbc9a6@linux.dev>
-From: "Rafael J. Wysocki (Intel)" <rafael@kernel.org>
-Date: Thu, 30 Jul 2026 11:33:07 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hWDKHXO5d-rgp_TMiS48fHY-cTxf5r5rGg2eBNpNtVig@mail.gmail.com>
-X-Gm-Features: AUfX_mxpk7wOb3Rn1IIPdkmSayC3zS-sp0NaL-oKcv7EWugBomcUesiy2CrmkiA
-Message-ID: <CAJZ5v0hWDKHXO5d-rgp_TMiS48fHY-cTxf5r5rGg2eBNpNtVig@mail.gmail.com>
-Subject: Re: [REGRESSION] thermal: per-zone hwmon names break Steam Deck fan control
-To: Matthew Schwartz <matthew.schwartz@linux.dev>
-Cc: regressions@lists.linux.dev, 
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, Linux PM <linux-pm@vger.kernel.org>, 
-	linux-hwmon@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-On Wed, Jul 29, 2026 at 10:50=E2=80=AFPM Matthew Schwartz
-<matthew.schwartz@linux.dev> wrote:
->
-> Hello,
->
-> After upgrading my Steam Deck OLED to a 7.2-rc kernel, the userspace fan =
-control daemon that I use stopped working. I bisected the regression to d63=
-23469bcfb ("thermal: hwmon: Register a hwmon device for each thermal zone")=
-.
->
-> Before this commit, the ACPI thermal-zone hwmon name was acpitz, while af=
-ter the change it is now acpitz_0.
->
-> The device profiles for fan control rely on the exact `acpitz` hwmon nami=
-ng like the below code snippet:
->
-> devices:
->   - hwmon_name: acpitz
->     nice_name: CPU
->     max_temp: 90
->     temp_hysteresis: 0
->     sensor_name: temp1
->
-> So now, the profile fails to load with:
->
-> fancontrol.py[40528]: Warning: hwmons not fully loaded, retrying...
-> fancontrol.py[40528]: Warning: hwmons not fully loaded, retrying...
-> fancontrol.py[40528]: Warning: hwmons not fully loaded, retrying...
-> fancontrol.py[40528]: Traceback (most recent call last):
-> fancontrol.py[40528]:   File "/usr/share/jupiter-fan-control/fancontrol.p=
-y", line 606, in <module>
-> fancontrol.py[40528]:     raise FileNotFoundError("Failed to load hwmons =
-after 10 attempts.")
-> fancontrol.py[40528]: FileNotFoundError: Failed to load hwmons after 10 a=
-ttempts.
->
-> Because initialization fails, the daemon never enters its fan-control loo=
-p or writes the requested fan target.
->
-> This change was also backported to Linux 7.1.5 as commit 996957016bc1, so=
- the regression is present there as well and has led to a userspace ABI reg=
-ression. I can look at accommodating the change on the userspace side, but =
-it still seemed worth reporting as a kernel regression.
->
-> Thanks,
-> Matt
->
-> #regzbot introduced: d6323469bcfbda91f0aa89b7b39ad45fe822ca5d
+Pre-existing issues:
+- [Critical] Switching to `device_for_each_child_node_scoped()` exposes a c=
+ritical pre-existing bug in the core `fwnode_get_next_child_node()` which c=
+auses an infinite loop and double-frees if a device has both OF and seconda=
+ry firmware nodes.
+--
 
-Thanks for the report!
+--- Patch [1]: [PATCH v3] hwmon: (lm90) Switch channel parsing to fwnode AP=
+Is ---
+commit 39e5cdd2d72333fe0fa7b34c25ad27651948158c
+Author: Flaviu Nistor <flaviu.nistor@gmail.com>
 
-I think that commit d6323469bcfb will need to be reverted.
+hwmon: (lm90) Switch channel parsing to fwnode APIs
+
+Replace OF property handling with fwnode in the probe function to read
+the channels properties, improving the driver compatibility since this
+method is not limited to Device Tree only.
+Add also the needed headers for explicit include and clean up related
+function naming.
+
+> diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+> index 4b9c0ccdf2609..03779c1a251a2 100644
+> --- a/drivers/hwmon/lm90.c
+> +++ b/drivers/hwmon/lm90.c
+
+[ ... ]
+
+> @@ -2739,18 +2744,17 @@ static int lm90_probe_channel_from_dt(struct i2c_=
+client *client,
+>  	return 0;
+>  }
+> =20
+> -static int lm90_parse_dt_channel_info(struct i2c_client *client,
+> -				      struct lm90_data *data)
+> +static int lm90_parse_channel_info(struct i2c_client *client,
+> +				   struct lm90_data *data)
+>  {
+>  	int err;
+>  	struct device *dev =3D &client->dev;
+> -	const struct device_node *np =3D dev->of_node;
+> =20
+> -	for_each_child_of_node_scoped(np, child) {
+> -		if (strcmp(child->name, "channel"))
+> +	device_for_each_child_node_scoped(dev, child) {
+> +		if (!fwnode_name_eq(child, "channel"))
+
+[Severity: Critical]
+This is a pre-existing issue, but switching to
+device_for_each_child_node_scoped() exposes this driver to a regression
+in the core fwnode_get_next_child_node() framework.
+
+If a device has both Open Firmware and secondary firmware nodes (swnodes),
+can this iterator trigger an infinite loop and a double-free?
+
+When transitioning from the primary Open Firmware fwnode to the secondary
+swnode, the core fwnode_get_next_child_node() passes the already-put
+primary child to the secondary fwnode backend:
+
+drivers/base/property.c:fwnode_get_next_child_node() {
+	...
+	/* When no more children in primary, continue with secondary */
+	return fwnode_call_ptr_op(fwnode->secondary, get_next_child_node, child);
+}
+
+Since the passed child is an Open Firmware node rather than a software node,
+to_swnode() inside software_node_get_next_child() returns a null pointer.
+This causes it to drop the reference on the node a second time (the first
+drop was in of_get_next_available_child()), leading to a double-free:
+
+drivers/base/swnode.c:software_node_get_next_child() {
+	...
+	if (!p || list_empty(&p->children) ||
+	    (c && list_is_last(&c->entry, &p->children))) {
+		fwnode_handle_put(child);
+		return NULL;
+	}
+}
+
+Furthermore, on the next iteration, the returned secondary child is passed
+back to the primary backend. Since it is not an Open Firmware node,
+to_of_node() returns a null pointer, causing of_get_next_available_child()
+to restart the search and return the first node again, creating an
+infinite loop between node types.
+
+Could this driver probe freeze the kernel on systems where a software node
+is attached alongside Open Firmware child nodes?
+
+>  			continue;
+> =20
+> -		err =3D lm90_probe_channel_from_dt(client, child, data);
+> +		err =3D lm90_probe_channel(client, child, data);
+>  		if (err)
+>  			return err;
+>  	}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260730091409.1054=
+4-1-flaviu.nistor@gmail.com?part=3D1
