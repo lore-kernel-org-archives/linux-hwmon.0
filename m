@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 109B13451DA;
-	Thu, 30 Jul 2026 01:11:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EFD8266576;
+	Thu, 30 Jul 2026 01:14:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785373865; cv=none; b=LTk4p1MT/8BWNuDCthAJDA4Mzg9Oc7uceVyqC004fOtRkKcj9mjpM/4WRVb6zDB7fNFC2IYTe1JX/eKSrgd//mRWc2gVdUgR4osbREcqm0GU/oc1g+M4Gg9DRy0qA1V4P2Yt2qy/OqGVxdkWCoqYDtW3yRew4K+Aus8vmGh0xH4=
+	t=1785374048; cv=none; b=NmRfXax+b6IMbVpbIGIayvINmD0nO6S5vc7kU28lplDdKRzuHypW0SPjINICrgoiLeEn3SmwsnXK4iZPoKX1AKTW8rH5k7m2yAeQ/ApswTqZIVYG8t/cHbpow429jw/9sNlMglxMplBfCjCGrVLm12q/jNqg9uYAxL6Os2EI62A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785373865; c=relaxed/simple;
-	bh=Pfykq9KYY6nH7DmG2E1dViCHmtOtjU3Y5RNH8HIqDDU=;
+	s=arc-20240116; t=1785374048; c=relaxed/simple;
+	bh=ZN2iQ69zTg2Omwp+b28sjqEAF7zt9/o21ei2NV8+KN4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=NWTh5aUKFnHOEW9VcWqukr+AXlzmd+B/Mvylv9bx5ShsM3uKOew8spN0l2w0O9BO2JiFHp1SVqH7+P6TVG85LNfVA2YmJjYTt/KdRLjZKaMJlwSOZ0uKPY0f6JTdG71y3EdA/qF8WZLyFiwVY0fVqHIKscCGho22YrreUCzBj50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I/+FrQph; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=l8w+jMMHQ61+FtYP+oN3KDBVYJ5/pY4DoO9SpJ8AdzT9oC+GbXIzv0E4exBz1OeivdOqoh9CXoWsOMfJx29xaHssLsg9J20Fq3zJy3jRL/oUamgkxDN3UibHNf2S+0G7NeQWrhWPq371/mZw8QDFd1uY0v8lrO0Oxpski1ZNgCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XOEr3GAM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I/+FrQph"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BC7B1F000E9;
-	Thu, 30 Jul 2026 01:11:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XOEr3GAM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6B871F000E9;
+	Thu, 30 Jul 2026 01:14:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785373863;
-	bh=iq8UgmGJbcuaK3dfW7kwBk7s4BhogddC79UulyjDcgk=;
+	s=k20260515; t=1785374047;
+	bh=1Dd4vBz603VYQr6wd+KQy+PpMObA5u802mrokheimnE=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=I/+FrQph0bF8L3mF4r43g4cg0OBdUA1DkvibsucB2ibAp96FTL+H5RDpQp56jnpOr
-	 O2fcbIQwrTaM1ah94QJ95AsmihbK9J7EcJMRO3LUFJWUmsIEjlmymo7nIPpDrgcrHL
-	 Xer4CrKY5GZ/Tn7vLqmiXrUzklIL5Jq4wvE0ILhPEShs3ftV6ETEXPA19RJkj5s1c/
-	 Bivl3+FMLpmcsIiYmpynthJnGfCyDAkbIMxtNq5DHk336P160xhL5jvcHaek2RmVgU
-	 0EDiGsB/MJDreEPdDPEVhWQRaONvUI1CSr15ioU8y22s3nsGL+bhxgNPNu6JJ0FtMY
-	 7U3jWaQiY7C5Q==
+	b=XOEr3GAMdhqg6b6ezq3H9beFbmZoEacIrmlDKSQ/xj7mmea5dUa2pe0mePSFccBsH
+	 bNqAj4RF+sWtDNuTq8dHVbRwjChLalgW42AvyI4GdOUsIhHPUhcAvKk1BhvlibFwAr
+	 vp6xUORJt6Dg2g4XCsILSudHZuZhFgNxlAK7/G5HBnlvJx5f7K2uiYpFtR1XwhxwW+
+	 b409492j6+IJljuuYMMWkSdxBwR8fm+NbSvC3KlJCwMW1xbnWV2qSpaTR2DzzH7XMy
+	 4eV+zUvEQV1/3GKdmWu+SL3+mAHyBepBvq0AoM26OkD//nJx+8O8DNbh2hIlbfUBEC
+	 DZfBo4Avii21w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 3/4] dt-bindings: hwmon: (pmbus/max20830): add
- max20830c and max20840c support
+Subject: Re: [PATCH v5 4/4] hwmon: (pmbus/max20830): add support for
+ max20830c and max20840c
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexis Czezar Torreno" <alexisczezar.torreno@analog.com>
-Cc: conor+dt@kernel.org, robh@kernel.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <20260730-dev-max20830c-v5-3-a7553f84ee74@analog.com>
+Cc: robh@kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20260730-dev-max20830c-v5-4-a7553f84ee74@analog.com>
 References: <20260730-dev-max20830c-v5-0-a7553f84ee74@analog.com>
- <20260730-dev-max20830c-v5-3-a7553f84ee74@analog.com>
+ <20260730-dev-max20830c-v5-4-a7553f84ee74@analog.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 30 Jul 2026 01:11:03 +0000
-Message-Id: <20260730011103.5BC7B1F000E9@smtp.kernel.org>
+Date: Thu, 30 Jul 2026 01:14:06 +0000
+Message-Id: <20260730011406.A6B871F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -47,78 +47,58 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The dt-bindings introduce `adi,max20840c` with a fallback to `ad=
-i,max20830`, asserting compatibility, but the existing `max20830` driver ex=
-plicitly rejects MAX20840C hardware during probe due to a strict `IC_DEVICE=
-_ID` string check.
+- [High] The patch adds support for MAX20830C and MAX20840C devices but fai=
+ls to add their corresponding compatible strings and I2C IDs to the driver'=
+s match tables.
 --
 
---- Patch [3]: [PATCH v5 3/4] dt-bindings: hwmon: (pmbus/max20830): add max=
-20830c and max20840c support ---
-commit 6c40a5eeb4c4be3695032dfafd53c9b3d0333b47
+--- Patch [4]: [PATCH v5 4/4] hwmon: (pmbus/max20830): add support for max2=
+0830c and max20840c ---
+commit f53870a8f52f5aa8dbc791f9a7e148eeab915f24
 Author: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
 
-dt-bindings: hwmon: (pmbus/max20830): add max20830c and max20840c support
-   =20
-This commit adds compatible strings for MAX20830C and MAX20840C to the MAX2=
-0830
-PMBus hardware monitoring driver bindings. It uses a fallback to adi,max208=
-30
-for the new variants.
+hwmon: (pmbus/max20830): add support for max20830c and max20840c
 
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20830.y=
-aml b/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20830.yaml
-> index 01b7275f5b341..cc50a4ee44a27 100644
-> --- a/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20830.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/adi,max20830.yaml
-> @@ -22,7 +22,13 @@ allOf:
+Add support for MAX20830C and MAX20840 step-down DC-DC switching regulator
+with PMBus interface. MAX20830C is a different packaging for MAX20830, and
+MAX20840C supports 40A regulation compared to MAX20830 that is only 30A.
+
+> diff --git a/drivers/hwmon/pmbus/max20830.c b/drivers/hwmon/pmbus/max2083=
+0.c
+> index ddead72a8db5d..94433deda0113 100644
+> --- a/drivers/hwmon/pmbus/max20830.c
+> +++ b/drivers/hwmon/pmbus/max20830.c
+> @@ -21,6 +21,12 @@ struct max20830_data {
+>  	u32 vout_rfb2;
+>  };
 > =20
->  properties:
->    compatible:
-> -    const: adi,max20830
-> +    oneOf:
-> +      - const: adi,max20830
-> +      - items:
-> +          - enum:
-> +              - adi,max20830c
-> +              - adi,max20840c
-> +          - const: adi,max20830
+> +static const char * const supported_chip_ids[] =3D {
+> +	"MAX20830",
+> +	"MAX20830C",
+> +	"MAX20840C",
+> +};
 
-[Severity: Medium]
-Will the existing driver actually be able to probe the MAX20840C hardware
-using this fallback?
+[Severity: High]
+While the new chips are added to the internal string matching list here, do=
+es
+the driver also need to add these to max20830_id and max20830_of_match?
 
-Looking at max20830_probe() in drivers/hwmon/pmbus/max20830.c, there is a
-strict device ID string check:
+Without the new compatible strings in these tables, won't the devices fail
+to bind to the driver when instantiated via Device Tree?
 
-drivers/hwmon/pmbus/max20830.c:max20830_probe() {
-    ...
-	if (strncmp(buf, "MAX20830", MAX20830_IC_DEVICE_ID_LENGTH - 1))
-		return dev_err_probe(&client->dev, -ENODEV,
-				     "Unsupported device: '%s'\n", buf);
-    ...
-}
+For reference, the existing tables at the bottom of the driver only have
+entries for the original chip:
 
-Will this actively reject a MAX20840C device since its ID presumably starts
-with "MAX20840"?
+static const struct i2c_device_id max20830_id[] =3D {
+	{"max20830"},
+	{ }
+};
 
-Additionally, the commit message mentions a longer IC_DEVICE_ID, but the
-I2C block read in max20830_probe() hardcodes the read length:
-
-drivers/hwmon/pmbus/max20830.c:max20830_probe() {
-    ...
-		ret =3D i2c_smbus_read_i2c_block_data(client, PMBUS_IC_DEVICE_ID,
-						    MAX20830_IC_DEVICE_ID_LENGTH + 1,
-						    buf);
-    ...
-}
-
-Will the longer ID be truncated before validation?
-
-> =20
->    reg:
->      maxItems: 1
+static const struct of_device_id max20830_of_match[] =3D {
+	{ .compatible =3D "adi,max20830" },
+	{ }
+};
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260730-dev-max208=
-30c-v5-0-a7553f84ee74@analog.com?part=3D3
+30c-v5-0-a7553f84ee74@analog.com?part=3D4
