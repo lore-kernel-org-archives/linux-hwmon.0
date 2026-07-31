@@ -1,156 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFD6733AD8B;
-	Fri, 31 Jul 2026 07:06:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C52D7326928
+	for <linux-hwmon@vger.kernel.org>; Fri, 31 Jul 2026 11:30:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785481606; cv=none; b=KTK83D+q/LOApxYcVUaiZ773+2fixptzgN7sZQTbFTmDtbg3/oeeypsylcsZlYJRwYK77GmwRikBISTn4U9N6TOg4r47jSlS5zk6+OUGzIRwjt5lGGxGwHQnmhNdPA/pVMEFRI3tHyx34Ix/3SHISXEiVhU69SwOVhuZNuozGkA=
+	t=1785497439; cv=none; b=ZjKmDVb+KJvtppUw+kG/VU8I44uNVcOLyoUlMcwbnurb/QTwSZjjjh9x5S2zGuhah72D3e45yX9Jsh5nlcyqZfr8SogE1X2AwQE57SS6uYbGBdke02eqZZfU5iR6MV2bRvY2Da6z91kHds0iK0Mnsfn31lpF5Os+838hxb600nw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785481606; c=relaxed/simple;
-	bh=FVqvsKe/n2dYeThJDHcpjCZ9n//kHlaTzT9mHseqK1I=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=l4Y/urSRh4JCHaVTNDC/zTDmEimuc43aH/aUgbt7QB0MlPBSukO2m7znig5wrAsyLcdczLVcV3S9Xp7oAq490FkpXdvrQPSJGrri7WwvNCurYZ5XkssLK/Owqta/DdjB81fwNvSr3Ta3c06nr4ptLw550C07Mx/chY4r/8DiTlE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HJy9rmAG; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785497439; c=relaxed/simple;
+	bh=PeMDpAvSc5FYx4ZkkGcmikFJZ8r3hndPMUQlaqdD8jI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jpGAMBozPzKJUhDOcJKQOXiK5guNCeD2bPTxiriRUFfWYKA0dWuBvV/77Md+PXyP/q6cgMnf+ZFpSy4yB/f4gOPFnyBpSQy870fKJiQxhiFqHNeVPNCs3Obt8yxQgtRv8fKwSB7q7dpi4hpoxA8nNzUn0c+FBiwPJyud2/UJbMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gzFR4OLf; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HJy9rmAG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF17F1F000E9;
-	Fri, 31 Jul 2026 07:06:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785481604;
-	bh=YXpVRawU4eKqO1E5kHdvQATW/LnGM3EvAkC4h7gA85Q=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To;
-	b=HJy9rmAGp+SLNVmA8FzS09mlNWwpiDc/dJLJq31DbdrmN+NgRBxxjsTq+Pl6a5Ji9
-	 SLgVEK6L6+Yb2f/2nfVXONsjzOxFMWVl58Y4WsjNzMzBGXv8Go9QRqrHi5YY/tmy8s
-	 1LOS48JbwTqd3b10uROXFW7Lrxfk7spMcnpbpfew+9urRFJ8syGimlHGTbddOjXZ8j
-	 UowduSq4zN6cODohTakgTdA47Krw18WxuadTEWxu5Oh8A+3sZfi57jcw+f9pGoWwee
-	 jg4P/hgSyBdPY+6d3a/7kTI7fhQzK43J3IcHpvOkC1xuIOO+IisqI2IG1dc8j71i33
-	 TJDSiFj0IJxJw==
-Message-ID: <f0ec8d8e-b7fe-4620-a715-65af36166e05@kernel.org>
-Date: Fri, 31 Jul 2026 09:06:36 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gzFR4OLf"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-4758bd3731bso867292f8f.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 31 Jul 2026 04:30:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785497432; x=1786102232; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=3c4L/MJdU0lTNZCQtFNIqJoMYY64q68vh+MgKlRHtjQ=;
+        b=gzFR4OLfiLykFqtMqrkXcG1BbL/fk5y9BuhSGj+pGercqmm9N6XCIIC9mocgWqDGxt
+         pe6Ht3mz0rRhlq7lNnoLIDH2cTunEOfbg2QfmsdOEDxbcNi2NQhLApzezqKlQwoLVpL4
+         QWc4FThUBXFpUYGpX1Bg9mKpT2GgLaSzUd4FVUlRLemYZTk0xZYKHd9zIbDBbOZOYk2Q
+         eRKdLw5TVDeLVcqWxOKPIPC8l9SXr3t0YnLcYQED3FY5P0RcAK/ds5gbXQrlO+knrbKJ
+         mlUQOV1DZg0MSVTJZIGQl92sV2S8bMbfo0Wn0HJgOWfm9udq/RJ3XP+jwMEwUxmOteeZ
+         nFhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785497432; x=1786102232;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=3c4L/MJdU0lTNZCQtFNIqJoMYY64q68vh+MgKlRHtjQ=;
+        b=RuaArJjqonSmuivF/GKiFGHW1DRKkKgOeAlJioltFn7WWAd1G2tUQl2QIefhTItqP0
+         jc26LwHLQE9+n20fY2XCYCrpw9IwDDVFupCti4dpOtQ3felen3jeIg8oi9H4bLs8HIRe
+         cAIjzLwrZTlQYXeifdoL0/klQktBvMfG/aW7MvWPTVRqPUbsJ0NtaMLeHBWezrzH08R2
+         CyEOUI1+S1vY4DJFNiUhLnGkLQhJOW/ncsvLI1bfyC6kJEXNxM5v9u9cebxUnkB/cnHS
+         pB9b3JOBT1zC9wtVYpuNHcwi0gjlUtXY/rnvM0tGrsQM0nz7NlAmBZByFTa6prgR1lLr
+         A5Jg==
+X-Gm-Message-State: AOJu0YyMLla8l+qyowCLPeEqyNW/kpME4qKsakj6gFPVOsphQNE1aoKm
+	l62EkpmaLgdQ/e5cuK2vSWbwEl55ZjMwr00sIqHUvpJ0TSjKPsXKlHrW
+X-Gm-Gg: AR+sD12e4b8ThANEpZSlOKtKxSsvKFNFfBfmKKEnvDiy9q5T2/AYOoCcG05SIUYuhEk
+	K6ywWLUpS/cB2hxCXgZGkfwhDgM/TOr2bcAkri94Pgq7WzP0IuZM2BsB9WTUTqEuH/zhe6tGEw8
+	cPMVH4Lq5l3NVrmvemuQSw+ePNiAEkXBRlc0MakGKQlOMlnaIU2x21i9WPFe6BKsBfw/awYQbwF
+	3h7X082VX+Gy4SN8SCmnJR1HMn8YysJaYBGg4Nce0UNBDMYa3oqMzSON6qCAPTZ5k/DZs8j/J4r
+	XdMs+1ITBDvK9Muau1HblZFCCUEa58KOAmcBnPfzzajF/xrCvgPZuG9UL/26riGq0awBBGGWY8t
+	kfJnCK4naGon9Ew8B77QqfGugBBM9ofo4FM7PU7ajeNatFHSVpv1HPt1SCYvdeV+R4ez2eRu9gE
+	wao9qYFP6caRZWrAPuvRbQ9GP7q9QVNZETQmPkud5i+IPCHV2P/kPZzW0ExQGAiCqqK6M5K9dT+
+	q/Vn+PxAg==
+X-Received: by 2002:a05:6000:220c:b0:470:8e2b:9c84 with SMTP id ffacd0b85a97d-47fd32b8f8emr3398881f8f.7.1785497432068;
+        Fri, 31 Jul 2026 04:30:32 -0700 (PDT)
+Received: from xeon ([188.163.112.51])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd456a6besm3823656f8f.22.2026.07.31.04.30.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Jul 2026 04:30:30 -0700 (PDT)
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/3] hwmon: emc1403: Convert to use OF bindings and add regulator support
+Date: Fri, 31 Jul 2026 14:30:04 +0300
+Message-ID: <20260731113007.145322-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/2] dt-bindings: iio: adc: add adi,max40080
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Stefan Popa <stefan.popa@analog.com>
-Cc: linux-iio@vger.kernel.org, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, jic23@kernel.org,
- andy@kernel.org, nuno.sa@analog.com, linux@roeck-us.net, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, dlechner@baylibre.com,
- ciprian.hegbeli@analog.com, siratul.islam@linux.dev,
- u.kleine-koenig@baylibre.com, joshua.crofts1@gmail.com
-References: <20260730131738.822405-1-stefan.popa@analog.com>
- <20260730131738.822405-2-stefan.popa@analog.com>
- <20260731-steadfast-peculiar-bee-33fec4@quoll>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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
-In-Reply-To: <20260731-steadfast-peculiar-bee-33fec4@quoll>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 31/07/2026 09:04, Krzysztof Kozlowski wrote:
-> On Thu, Jul 30, 2026 at 04:17:37PM +0300, Stefan Popa wrote:
->> +  vdd-supply:
->> +    description: Power supply for the device.
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +    description: ALERT output for overcurrent/undervoltage threshold events.
->> +
->> +  shunt-resistor-micro-ohms:
->> +    description:
->> +      Value of the current-sense shunt resistor connected between the IN+ and
->> +      IN- inputs. Used to scale the reported current.
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - shunt-resistor-micro-ohms
-> 
-> Supply is required
-> 
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    i2c {
->> +        #address-cells = <1>;
->> +        #size-cells = <0>;
->> +
->> +        adc@20 {
->> +            compatible = "adi,max40080";
->> +            reg = <0x20>;
->> +            #io-channel-cells = <1>;
->> +            shunt-resistor-micro-ohms = <100000>;
->> +        };
->> +    };
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index e087673237636..e1170230c4bb2 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -28893,3 +28893,11 @@ S:	Buried alive in reporters
->>  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>  F:	*
->>  F:	*/
->> +
->> +MAXIM MAX40080 CURRENT SENSE AMPLIFIER DRIVER
-> 
-> Honestly, how did it appear at the end? Do you see any other
-> commit/patchset adding it there? No, so this should raise questions on
-> your side.
+Document, add OF and regulator support to EMC14XX thermal sensor family.
 
-And this is quite different than v5 and nothing explains that change in
-the changelog.
+Schema file was separated from LM90 since according to Guenter Roeck[1]
+these sensors are incompatible with LM90. Proposed schema has basic
+hardware description. All registers Guenter Roeck mentioned may be added
+later on, when/if driver would need to work with them. As for now driver
+successfully works as is.
 
-Use b4 prep to see what you did between revisions.
+[1] https://lore.kernel.org/lkml/a0c5c1e8-9a36-4835-a5d9-7bafda79c36f@roeck-us.net/
 
-Best regards,
-Krzysztof
+---
+Changes in v2:
+- schema separated into a dedicated file
+- dropped chip id check
+- fixed match data casting
+- adjusted regulator name
+
+Changes in v3:
+- fixed number on channels for sensors in schema
+
+Changes in v4:
+- removed redundant line
+---
+
+Jonas Schwöbel (1):
+  hwmon: (emc1403) Convert to use OF bindings
+
+Svyatoslav Ryhel (2):
+  dt-bindings: hwmon: Document SMSC EMC1402/1403/1404/1428
+  hwmon: (emc1403) Add regulator support
+
+ .../bindings/hwmon/smsc,emc1403.yaml          | 203 ++++++++++++++++++
+ drivers/hwmon/emc1403.c                       |  21 +-
+ 2 files changed, 222 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/smsc,emc1403.yaml
+
+-- 
+2.53.0
+
