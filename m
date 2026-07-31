@@ -1,67 +1,67 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C61242B327
-	for <linux-hwmon@vger.kernel.org>; Fri, 31 Jul 2026 14:28:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C47342D750
+	for <linux-hwmon@vger.kernel.org>; Fri, 31 Jul 2026 14:28:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785508091; cv=none; b=AS+qXPybfu3MWooBpNEpOukLzRr1pEnGtp0q46nHilA45qYcdCwIbsnmyViPbL4kiQl9jlD6pfBzUDpRqyMB4YpuXDQJOFmyHJgCwz9tm6z5NEwxVJDxjh67bwy6FjyCk2Fdg0hlwUh6ML17LUL29nCwXKp5qLEQzQJ4YCmWdNk=
+	t=1785508123; cv=none; b=alwliu3h/GIfQkcGqFTUjmx5ylTI1/ekMugpJmyW/xDoKD9ggvsCWG2DB0VakjqiBwvZ5n3tgH2mhgbcaPG8JvUE9rbpH2ddOmOw/6FN9ke/6dKxpu01TJ7Ve9BzeA8G3x8UlFoj177slQWSOkJBA4Q3y1iXIFRjFCrvXvXdSXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785508091; c=relaxed/simple;
-	bh=edFieJ1NngPAWgAyLJoMFk0KLwhFjP40NLOCIGfVUQA=;
+	s=arc-20240116; t=1785508123; c=relaxed/simple;
+	bh=bJIYJvKsMNEruxpzrlHOJljkrhHcajYooGadT96u0HQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=utPngX21yMUWJcq0czU8Ars/glRQTrL+HmC4IZRTR6R/X4HTzCd4KpB0WoZAu8Zl7ISpTL0uligUz5IRM6jHD4O4EDjuh9jYQ2RCZxsngpkeaOa+ENyS3ALh/otWTHxD3OJ5fp0SIl8ADHdWjzR0qATenuxsT1MazGXet5GLRjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M97DQ3yX; arc=none smtp.client-ip=209.85.214.179
+	 Content-Type:Content-Disposition:In-Reply-To; b=qYoYsQGHy6VyNfq3QEHXZF1hTliLqcxTVtkEP/yGuUrjLu9pBPaqoXw25JGFC92d1aHCjY98hLs2bopmm7iHppTl20OLFo75EoN6NnZZf4agWbTEz1ElTNBFL3tKY+09Usq+sEgsgCuydsyEqyuNhAn+pV8qeHLXj5MyogTu5ok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nbCvswdp; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M97DQ3yX"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2cea3004256so11480355ad.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 31 Jul 2026 07:28:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nbCvswdp"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2ceaf8a1265so11493445ad.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 31 Jul 2026 07:28:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785508089; x=1786112889; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785508120; x=1786112920; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=jtRqUp5ioQJk376KJJx1DKpoRdIegI2ssFhD6hm1Q1s=;
-        b=M97DQ3yXJYA/V1D6uTOgi/iFoMHZVbQh7J9tFEBcTV/0TQKDwkT/w+ydMUI3dUqQuI
-         XJJuT2OGT3iT/z+/BKwxJwW3HVD7dZRBFRsI32o33w4SNaKdv9DCeIEdTJverj/Uv69v
-         hfdhYeJ7Q+Uo2wQqE0jX2JPkLoRBnXWEoZwbcCSEuXtw8yVXmEoCFmSnQhmoUE2n3vP7
-         ZTGIxpvOSPU5HOp8p85BPZQeZg84JQsElw33/5ktmz/OuOj3K1cNLk4ZsziAgnVGzXxf
-         AzeyqkhzQQtgYx2pOlHrTcAwIqo5cpKY5fTjwxbbXbOb4Ui5jTS9KWq8KZkT8oL29Z6B
-         Qwuw==
+        bh=TKJ9iDE/Xqq1g7NWZ7YBtTJP0oKWB5LTOhWSNxoPZsk=;
+        b=nbCvswdpTyJKEWkYJFQ5jjfIeBPVCYlw8mSUayTHqnkBhdn7p0jDhydVeNkiOF13jS
+         55ZUJAAAU1AvbhwPohXnxu+kQ5saUb9qS2aKbqJ+2hjEUVAsJ6rI8X3/BmBO9Q5XevSI
+         /eKwW8/cUyn09LixK0BYo88+GbOY0gT4/wW7S+I60S1pdlekwF0mrGoN2kuF2NTtRl1x
+         OFwcr2hC2zZ2I+WJ8Df+mg+/iM2x0GN58/tJ2aaC0QdIKCEJI/k1EFIQhRYnH7JsfbCK
+         m9L9PnoUGpU4vCHUjgkv9xMyAKhEm2KKLpYvajFNNesVMUbyqUayQs+LsHyphvaNcFXN
+         36QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785508089; x=1786112889;
+        d=1e100.net; s=20251104; t=1785508120; x=1786112920;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=jtRqUp5ioQJk376KJJx1DKpoRdIegI2ssFhD6hm1Q1s=;
-        b=QZP7FMKpCubkTHNFd9wnJKc+QivKe/2+/TU6+F8Li4JBMMZihyx1Z8mjDRh/hDHHrq
-         TQE4IG3HrxRYbZ3S7QOpr2pX+spztTp2lig8/yYaHtbFhwHIaIGhteCqhtn+HkwBSN7v
-         SPlSajucI+HNkcuVyNg4Hy6/tihJL55VybKfbDp4vzIbz4Om3MGu5bk+fqMk6SXHL/rI
-         fGoJXOuli7suEfJSxIL8BXzLT+VhVpfgWoRvojRuRBtN6ZPHdrddBb1zzPJmcBftn4cD
-         S5BhEMcgx9vH+IWBfmW8l622VzKQY93KFm/yTewUJ/E5f6na/I2QPF08xm+PcCKI2X0w
-         E6Pg==
-X-Forwarded-Encrypted: i=1; AHgh+RqnXaELWMLvdWd4eQThPnJ7AgVPU/THwyPpOsZuNxVFiMzsG5kUymI8K0Y5mgxhkJB4r7XQFss50Ia3RA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwT9YhL1R0jvFkJ1MJzpy/4pXppkZKIxMCfmNHwX66Sk0DHZhjh
-	F0PFHx3+GmaFNq4a3aSXvcTVG0/nux8cMplCtZ0mNHbQkXqWVjqLhyGf
-X-Gm-Gg: AR+sD12T0hgYiazdajeOFVIxSlZIez+AAdll1X61a7QAQ1nRVgA2YYF61lKU5HDg/Gj
-	ly1rv14mBBxHIDEnSHe2kgPMLvIPsWMvkk7mGYGMaRuhJ7wZepOLIlWA1Q/zLYVQGbRwpCJcVOK
-	Cmm60YWWAlY7LpL6JSj58/Szj7q0xEEIsNYpBDbIUY7+BC75srkQfUA28v8NTIsFrsiuR/PM5Vm
-	MHAa9kahCOpLNxl74VVjEXcmiGO9vZjdRgoqZHCf68KW416DDbHO5S2ivRfwkcP8/Z31+EY5eNe
-	f9Tj5iMK7+7d/itcNHo4KRmffmZ8Tvm5cxvBE7x5txLjFa9pA+q3sI1CUy2mDq74IlpNYQ/dtnC
-	djb9ZLykLPOSthSmQ4oYYtCtNctYNM5hD+ZhwSU9jdx32TRri3tmUVo89PAq7YVMpIPf4DXEdCT
-	UTE7sRZhuJe4uAo0Qtdm3obgytYErxyG58WDv+1qHwu0dTHSTq0C1S6rS05JarYpKeZFTt4qx6z
-	1d9QEb4lN6z
-X-Received: by 2002:a17:903:1110:b0:2ca:c01e:8837 with SMTP id d9443c01a7336-2d052428e6dmr1975785ad.24.1785508089234;
-        Fri, 31 Jul 2026 07:28:09 -0700 (PDT)
+        bh=TKJ9iDE/Xqq1g7NWZ7YBtTJP0oKWB5LTOhWSNxoPZsk=;
+        b=ClDKx2JwVe6nh0ZJ4UJWIRCdq0sKxE+QTk0JLJdYRrfPZp06/uZmxVnIHnbR4jr7su
+         wa1PfaGNYdB/hQXHQgbdhUvpVUyW86auEYp3RlCCeHCwP34J6rk/vau0pU61z/403zu1
+         ER0wPgZQLr6bzXS9YbjJy3n27CYL77hXu2CNg/bFdW192T+GAmrgQJ6UdkA7ydaC4gdW
+         nAIJyA9N6PRLDZDp8UW3jZx7enK3jzJBy3yL/7pV/3C7CwtZTi4a9ylXg80co0G/n/3D
+         AM1EfKqyxJijZn+gzp7b7fgaOM23qf7l60UWx+sFdMKOVWFW8wiAKIJ0XdtPryvSvLr8
+         oLXg==
+X-Forwarded-Encrypted: i=1; AHgh+RrOr+v77+ZfOoplKHJLXyqJ7JdUp2/p+8OYB0dF0uBgfKZPwVXWympHDhYrgw3lFwaGFC+JfPZXsE7nzQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUjyF8rfbzwRQ50Q9Dtr5BvZcbxogcnTmbNgr0yVy8SmEn4xki
+	peP93lW/2iPV0mleAtQqeyreO5QI9NZLzT34je5gHsQF23RHQXEMpqXBStzCrQ==
+X-Gm-Gg: AR+sD12Cb6oMzxJJfdqxqO+HttVp08XrI2GiQdDrDhnHgt59mpENIj7Z7mVJ/3cBoH0
+	Zcq5mNkCy2NWWu8qi/FK/PayPybGkV2yMeaAYjKK/8I3TqOZjQCfcMiF/YV8s7kArxAUKeakVGk
+	JEYY37CSmtbg4UhyX2K8EM9oxa2IS2x0V657NfnxSj0mEUxGxQ2KStmAtsIhXtNRNr6zY4HiWdH
+	3tPnUUPNTmbDKzCzfpR0RFtL8qrW78Hn+a+dgFyTHYdvxtvihFhr/SxXcqjMu08FA9s7HCerddY
+	GI073at0fMqABgmdSLALC0zK9aNjJwtV9XeCVjlBCgl/nL1TAU4TRi1R5Ho/h0QPeaZU/xcqOxP
+	CQfr9kv5Z6209kUSLl6t8DOJDASks7XssFxJM6jFzTP9lvsX0ftH4BSu1oSyY+NgOecGdXy4Vat
+	rdTeVZtZGh//LRQLunJZqY+iYxyivaMMTvtbEpWmd+a3qw23SwIhjbUfdTltcG7O/41qPNaSp+4
+	g==
+X-Received: by 2002:a17:902:e849:b0:2d0:3412:a3f0 with SMTP id d9443c01a7336-2d0522340damr2268765ad.19.1785508119517;
+        Fri, 31 Jul 2026 07:28:39 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d04b11f9a9sm6027035ad.57.2026.07.31.07.28.08
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d04b15db1esm5979555ad.81.2026.07.31.07.28.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Jul 2026 07:28:08 -0700 (PDT)
+        Fri, 31 Jul 2026 07:28:39 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 31 Jul 2026 07:28:07 -0700
+Date: Fri, 31 Jul 2026 07:28:38 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Vincent Jardin <vjardin@free.fr>
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -72,11 +72,10 @@ Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Markus Elfring <Markus.Elfring@web.de>, linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v7 1/4] hwmon: (pmbus/core) export
- pmbus_check_and_notify_faults()
-Message-ID: <5e7ad6e1-7151-422f-a55b-1b116298e653@roeck-us.net>
+Subject: Re: [PATCH v7 2/4] dt-bindings: hwmon: pmbus: add MPS MPQ8646
+Message-ID: <8ffd1289-c895-4ce5-ab0f-dad1c9696ddd@roeck-us.net>
 References: <20260730-mpq8646_v0-v7-0-e7c7ad768d5d@free.fr>
- <20260730-mpq8646_v0-v7-1-e7c7ad768d5d@free.fr>
+ <20260730-mpq8646_v0-v7-2-e7c7ad768d5d@free.fr>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -85,21 +84,18 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260730-mpq8646_v0-v7-1-e7c7ad768d5d@free.fr>
+In-Reply-To: <20260730-mpq8646_v0-v7-2-e7c7ad768d5d@free.fr>
 
-On Thu, Jul 30, 2026 at 05:43:59PM +0200, Vincent Jardin wrote:
+On Thu, Jul 30, 2026 at 05:44:00PM +0200, Vincent Jardin wrote:
 > From: Vincent Jardin <vjardin@free.fr>
 > 
-> Factor of pmbus_fault_handler() into an exported helper so
-> drivers can notify sequence from a polling work item on boards
-> for which the chip's SMBALERT# pin is not wired to the
-> CPU. The interrupt handler becomes a thin wrapper.
-> 
-> Like the SMBALERT# path, the helper notifies and then clears the
-> latched faults unconditionally, so a polling caller inherits exactly
-> the interrupt semantics.
+> The MPS MPQ8646 PMBus step-down converter uses the same
+> mps,vout-fb-divider-ratio-permille property with the same constraints
+> (maximum 2047, default 706) as the mps,mpq8785, so add its compatible
+> to the existing schema.
 > 
 > Signed-off-by: Vincent Jardin <vjardin@free.fr>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
 Applied.
 
