@@ -1,144 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from sender-of-o58.zoho.eu (sender-of-o58.zoho.eu [136.143.169.58])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DBB1FBEA8
-	for <linux-hwmon@vger.kernel.org>; Sun,  2 Aug 2026 12:48:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785674901; cv=none; b=KQLVxjAS6SYYmdmNgvgAEoWrmyzOS6lk+G2UJSFUSdTJtB8nV2NkseLK7sksibVHOcPJnimTrPgrmyA4wccS01vvqL+KI9LtW9jlcE9RCCUyPEaBvSdyl5/cn8s2hPnDy02/B6i4Pt2SXV2xpaRquVEUGU8HKsSEUmNnYivvpYs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785674901; c=relaxed/simple;
-	bh=DMi6AELZF+HAQh9cpiVhmL0nf4k/QOqDzC1L1xcbbzQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fpuYZu0Uwwb9JhydQysJ1iY7hjOjzO4X5NcExlYpAcU45F40QVhLKoCEgQh6DfersnsSMXJ6BSSzHaIId5E7UFUTTQ+LeiUo/BgciKGJccw0/gqKfwazJu9RfHouqJfWC+Xp4TQi2NWvJfPOxGvZlBaFGqHsmTXn3nInPNQxMRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZC2CqvqP; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA32489865;
+	Sun,  2 Aug 2026 12:53:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.169.58
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785675240; cv=pass; b=kDJPMfSItIFMRdU6K/iBg+kojWFFPu4SPra0pWxdhvd6CI9btHv0s33sza7Jffe5fSW8aZ16kQbCSru/ICynwgUhFUVA0/4xqaPpwa9VPdZC/RX9joMy97gAmFh1523KQWs0RPV/8SRGpikow/dXh2r6HPlU/R+kY0C89RKkEnI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785675240; c=relaxed/simple;
+	bh=vsJ7TjyaQctbC/ovy/l9K5gqDxt3xO+3S3+/n0anHvk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JwY4yislb9kmCVyTckiQ5G9R18RaA+T8y8zHkuOZX7geSWj9DRtfAfNTTSnwjnEM3dqCYaeDkOG5S9fLqM2cx6FZwP5nA7HkJFg4A2unEIfleD9+c/Iyf4XqsnbC2LNhXEBFc6yTgtnYkpPCaELyRbj3EllJMUJN5BI55cZ1Xu8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iusegentoo.com; spf=pass smtp.mailfrom=iusegentoo.com; dkim=pass (1024-bit key) header.d=iusegentoo.com header.i=ali@iusegentoo.com header.b=gBeI5cgv; arc=pass smtp.client-ip=136.143.169.58
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iusegentoo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iusegentoo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZC2CqvqP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D796B1F000E9;
-	Sun,  2 Aug 2026 12:48:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785674900;
-	bh=UtzLtO/NIlh0xmrRowplWRWxL+ib81LOzKlalrEOtv8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ZC2CqvqPSRdfLRaIJhhHNa77pTp6vfB8K/N15l2glU2icwr+xHbjkAbp4VV3POeq4
-	 bXLZ5zGCwTpV6acFd9AnaY6gNBSqpxJUqVPR8Y1Oi18Q8vaCTGp1LQT+ERWmud0eEg
-	 z3qj2YbmUoYtOCFGEb1/52rLz9ViiiBrkf7p5uyaaHMagVAX5HozwPuAQN+d3qJiLS
-	 6bvDBZ/nCKLKf8NRLaV7k1Bxo8Bs2hoMJ/1lOOTBBjLMeaOJRV72DWujrIu5XUA1mY
-	 IDMgaNDawLD4PX2sXLPAhpKmBzAH5RcN99rAWNM/Jev18LnUrJUoPE4W+9Fq47i/q2
-	 TfNF28Q1PfOuA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (corsair-psu) serialize debugfs access against
- hwmon
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ali Ahmet Memis" <ali@iusegentoo.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260802123653.19532-1-ali@iusegentoo.com>
-References: <20260802123653.19532-1-ali@iusegentoo.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 02 Aug 2026 12:48:19 +0000
-Message-Id: <20260802124819.D796B1F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=iusegentoo.com header.i=ali@iusegentoo.com header.b="gBeI5cgv"
+ARC-Seal: i=1; a=rsa-sha256; t=1785675218; cv=none; 
+	d=zohomail.eu; s=zohoarc; 
+	b=kgifT6eL5dZaKnFhYlZfUHm7KhTswnJ+lJLXqsCJaLXVwwBr17jLt2nnGCrNw0IX2TW0QNZFI5oOwC3bZ4zxMxGxonV1VisCZFIgvO5L4f9u2B3kfimNgsMojsT96nwemTM1Yr1rN3z5w26oL9beUyZDiltLSmgYshys4NgmoUo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
+	t=1785675218; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=aGfBqBgS8wpCOiIXZnOQRX+FSgYCixnzg6cIc6f/lqU=; 
+	b=RHw3mOS+137pMMKmlfs7I6k+BVUzMZaNLPSSOSBx7n6OKGrQB1cN4P8A6gL91qerStPl8yCjzCK+x0FrdWDvpG85H14gEYnhILkH+quGJIA7NXcO7jg64lfpOHBeBPOQyuMaY58yHUoJmoLqAidv+yEP59cL/KuEuaAgeNEumJ4=
+ARC-Authentication-Results: i=1; mx.zohomail.eu;
+	dkim=pass  header.i=iusegentoo.com;
+	spf=pass  smtp.mailfrom=ali@iusegentoo.com;
+	dmarc=pass header.from=<ali@iusegentoo.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1785675218;
+	s=zmail; d=iusegentoo.com; i=ali@iusegentoo.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=aGfBqBgS8wpCOiIXZnOQRX+FSgYCixnzg6cIc6f/lqU=;
+	b=gBeI5cgv2W73uTDkRDJ74axbuMLRAnr0n5QWPy1GLaR8SFa+Uvq80jSeFWC+3Dao
+	cdk6KtCccdualsuo/Q+v4+xAw1ln81iJ2mDvyom1HpuJ6dKVAoF3tN31tB6pqw6Hn/k
+	Qi6qz3v3OqjNYO1+839gurg0xFtY0ch/TRo0G6SY=
+Received: by mx.zoho.eu with SMTPS id 1785675217109579.811818923895;
+	Sun, 2 Aug 2026 14:53:37 +0200 (CEST)
+From: Ali Ahmet Memis <ali@iusegentoo.com>
+To: Wilken Gottwalt <wilken.gottwalt@posteo.net>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (corsair-psu) null terminate the vendor and product strings
+Date: Sun,  2 Aug 2026 12:53:27 +0000
+Message-ID: <20260802125327.21469-1-ali@iusegentoo.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+corsairpsu_usb_cmd() copies a fixed REPLY_SIZE bytes out of the reply
+into the caller's buffer:
 
-Pre-existing issues:
-- [High] The shared `priv->cmd_buffer` is modified concurrently by process =
-context and interrupt/softirq context without synchronization, leading to d=
-ata races and hardware state machine corruption.
-- [Medium] Missing null termination for USB-provided strings allows an out-=
-of-bounds read in debugfs.
---
-
---- Patch [1]: [PATCH] hwmon: (corsair-psu) serialize debugfs access agains=
-t hwmon ---
-commit 99da3eb40b38c5c1f4427842c0633cb5ade4ac3c
-Author: Ali Ahmet Memis <ali@iusegentoo.com>
-
-hwmon: (corsair-psu) serialize debugfs access against hwmon
-
-This commit adds guard(hwmon_lock)(priv->hwmon_dev) to debugfs read
-operations to serialize them against other hwmon subsystem calls. The hwmon
-core serializes its own callers, but the debugfs files call
-corsairpsu_get_value() directly.
-
-Link: https://lore.kernel.org/all/5f0406fa-9692-49f0-bcfe-c013f5fc7b62@roec=
-k-us.net/
-Link: https://lore.kernel.org/all/agR9YW7hGTJ_l7ms@monster.localdomain/
-
-> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-> index ce958cdaef58a..24100519cd834 100644
-> --- a/drivers/hwmon/corsair-psu.c
-> +++ b/drivers/hwmon/corsair-psu.c
-
-[ ... ]
-
-[Severity: High]
-This is a pre-existing issue, but can this sequence lead to data corruption?
-
-Looking at corsairpsu_usb_cmd(), the completion is reinitialized before
-the command is transmitted:
-
-drivers/hwmon/corsair-psu.c:corsairpsu_usb_cmd() {
-    ...
-	reinit_completion(&priv->wait_completion);
-
-	ret =3D hid_hw_output_report(priv->hdev, priv->cmd_buffer, CMD_BUFFER_SIZE=
-);
-    ...
-}
-
-If a delayed or spurious HID report arrives during this window,
-corsairpsu_raw_event() will see completion_done() as false:
-
-drivers/hwmon/corsair-psu.c:corsairpsu_raw_event() {
-    ...
-	if (completion_done(&priv->wait_completion))
-		return 0;
-
-	memcpy(priv->cmd_buffer, data, min(CMD_BUFFER_SIZE, size));
-	complete(&priv->wait_completion);
-    ...
-}
-
-Will this asynchronous overwrite corrupt the shared cmd_buffer while it is
-being transmitted via hid_hw_output_report(), and cause the driver to proce=
-ss
-a delayed reply as the answer to the new command?
-
-[Severity: Medium]
-This is a pre-existing issue, but does this copy guarantee null termination
-for string fields?
-
-When populating string fields like priv->vendor, 24 bytes (REPLY_SIZE) are
-copied directly from the USB response:
-
-drivers/hwmon/corsair-psu.c:corsairpsu_usb_cmd() {
-    ...
 	if (data)
 		memcpy(data, priv->cmd_buffer + 2, REPLY_SIZE);
 
-	return 0;
-}
+corsairpsu_fwinfo() passes priv->vendor and priv->product, both declared
+as char[REPLY_SIZE]. A device that fills all 24 bytes without a NUL
+leaves them unterminated, and the debugfs files print them with %s:
 
-If a non-compliant or malicious USB device provides exactly 24 non-null
-characters, there won't be a null terminator.
-
-When the debugfs file is read later, could this result in an out-of-bounds
-read that leaks adjacent kernel memory to userspace?
-
-drivers/hwmon/corsair-psu.c:vendor_show() {
-    ...
 	seq_printf(seqf, "%s\n", priv->vendor);
 
-	return 0;
-}
+The read then runs on into whatever follows in the structure, product
+for vendor and temp_crit[] for product, until it happens to find a zero
+byte. priv comes from devm_kzalloc() so it stays inside the allocation
+and terminates eventually, but the strings are still wrong and the
+contents of neighbouring fields end up in debugfs.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260802123653.1953=
-2-1-ali@iusegentoo.com?part=3D1
+Give both arrays one more byte. The structure is zero allocated and
+nothing else writes past REPLY_SIZE, so the terminator is always there.
+
+Fixes: d115b51e0e56 ("hwmon: add Corsair PSU HID controller driver")
+Signed-off-by: Ali Ahmet Memis <ali@iusegentoo.com>
+---
+This came up while looking at the driver for the debugfs locking patch
+posted earlier today, and the automated review on that thread flagged it
+too:
+
+  https://lore.kernel.org/all/20260802123653.19532-1-ali@iusegentoo.com/
+
+The two are independent; this one applies to master on its own and does
+not depend on the locking change.
+
+I have no Corsair PSU, so I have not seen a device actually fill all 24
+bytes. The fix is on the grounds that the driver should not depend on
+the device terminating the string.
+
+ drivers/hwmon/corsair-psu.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+index 24100519cd83..a242373c4656 100644
+--- a/drivers/hwmon/corsair-psu.c
++++ b/drivers/hwmon/corsair-psu.c
+@@ -123,8 +123,8 @@ struct corsairpsu_data {
+ 	struct dentry *debugfs;
+ 	struct completion wait_completion;
+ 	u8 *cmd_buffer;
+-	char vendor[REPLY_SIZE];
+-	char product[REPLY_SIZE];
++	char vendor[REPLY_SIZE + 1];
++	char product[REPLY_SIZE + 1];
+ 	long temp_crit[TEMP_COUNT];
+ 	long in_crit[RAIL_COUNT];
+ 	long in_lcrit[RAIL_COUNT];
+
+base-commit: 2d2338c93da79b3bfe4b6099a931d9468d539952
+prerequisite-patch-id: b3289aa9b605d10f8499c46149f857a9d0a2b2e7
+-- 
+2.55.0
+
