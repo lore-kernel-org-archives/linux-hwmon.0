@@ -1,68 +1,69 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC783AE191
-	for <linux-hwmon@vger.kernel.org>; Sun,  2 Aug 2026 14:33:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14ED3BE161
+	for <linux-hwmon@vger.kernel.org>; Sun,  2 Aug 2026 15:00:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785681186; cv=none; b=jWp2y4YElGa8sLBSxK/cnfOEc3T0YdwWgHJYuR85zjXHzmrDqqtgMQl/2iFm5WXOHPdR2tjhYE8WgCPJnquqsJ0obvXqIIFlolzU6z8ZlnPrNUDGPD6t9S/XATopvVbFYU99Ws4DVJmoeA857wsZC0YpMiDRcm8zZb2AaM58ubc=
+	t=1785682819; cv=none; b=khn5Jok7mkRfIXc1cz16gABKhsKGE3wcANshGxhp+ywBYzUZrZT5nsg3eSTqN+2zJTuMSsYSHNYXDzU2I2o988CZnp2RVCT5URhoncfe7GZuA7SOasWB/faNhItiFqBDcor9IJyXyz1YWyDxYcvGw72//8QE9eytAc0kKzYqoho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785681186; c=relaxed/simple;
-	bh=nN+rWgmPbo9Vf9AnRm/dRiZfUzPdThaavIJLG/s+Y58=;
+	s=arc-20240116; t=1785682819; c=relaxed/simple;
+	bh=1ABiPp4UdOFHDmR/kVqOSaBai6KDqRepZunqk3UqW+o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VRDo9as7zKOne9SWGb6DXqseUbbDzcclrvmbZkXMr1FdiUtJ4QL1t8THXlBY7h55Im+PUsgaSlNx1wX8etKYGxIEtkQk+EhXy9kapLOcLj2NWGdudKYOWcAL1DJ6zazHBlUJ+7192j3tmbl3EQBwPJ+jYkNN5DJTrZgWl9uWMdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b+v1PeXH; arc=none smtp.client-ip=209.85.216.47
+	 In-Reply-To:Content-Type; b=GbfLLegvI88JgJHorZpnoHMI0mKQBBBmHwZNkSjPbYL1e9ywSP1Q2VLarDYeorvTKy4onKLJYyXfEKqUuU6eCjQqm7uXoj1CTM4lrgsewuranhvDTdKZm4Wg5Z9gmEpIDnJc+Dd+qmhML+WiufUvZsPOJiI1dPm7qcrxtrGWD+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o+Vvvsvm; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b+v1PeXH"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-38759bcd877so2208074a91.2
-        for <linux-hwmon@vger.kernel.org>; Sun, 02 Aug 2026 07:33:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o+Vvvsvm"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2cc73e322dbso23245605ad.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 02 Aug 2026 08:00:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785681184; x=1786285984; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785682817; x=1786287617; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=41DGoZbXWYu1hxi3hs8Z8YcsIWCVDtDMnLMoUzZjqZc=;
-        b=b+v1PeXHNe4M7yLk2NJ8arJ8yDlk/I9nOKFDF9BAYIj30O788fVJbh4svUC6VBI+6/
-         Z/XK64qK0eoyXwHKLxyHR9AM7lrArQLNlzfPNwOZUFhy3oVNRa/ekaAyNE9ZBDBiO5pj
-         W5avciBjbiW/8XD4YAR8xbNCT4eRcR5Su7Aq6u7byrr1U9ER/Uy1ukGw3ZLAOguJHZRa
-         V6K7US7CknDCc5h/5vL57KbKZXAxIXoULkDZ5AcSEDNDqdmlAw3E4EShIKVyenWNjdzU
-         hIHpu02v9cL3+9O/81MnKaMGFRVhVH4OsOjPVMaPG5izaPMH3osvqOl6E1e/ICtgX6uB
-         6eZQ==
+        bh=m7GubX2oexnzGSUu+7RCqdftEDvzwkCvHfcYB+mewBQ=;
+        b=o+Vvvsvme7ZtBCuzObFSLBG+o9LYnM8XNUcZlrXcLOR3AXvr8v47xPXjW1YxWI3tva
+         lvOLan8ZbkaZs4ljajN6PyGQMlcT9KOryx/scsui7urwmu6H8d/eC0voohftGRPXrnVs
+         O2PUOw0ixhechlkZ9pvWAxfwQ7aNyEAsyByr+5v7XzUKizKjmztI4V0TsU6DmxMB8c/p
+         3kvye+D8eZS5Az3AkxyXc8FgL/2fyWBH75z0kX1M2CGIrq+8qotqM38F1pAP+nY/Xx05
+         mw4qD8goLvqg1m3wiCpI0mDDcyXPYPZayb0YHD3qGj52nujiSjvYGZ7Y/qewdbdceKSd
+         U0+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785681184; x=1786285984;
+        d=1e100.net; s=20251104; t=1785682817; x=1786287617;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=41DGoZbXWYu1hxi3hs8Z8YcsIWCVDtDMnLMoUzZjqZc=;
-        b=aESezC2svr9UTZI50HdMeynw0rfXh/HgLCQDjSVOVklzwOKLS6CDa3/VUivATr13/L
-         D/Xrl8qeMKyOQMA48oml1ZO+zG9KGXcm5nCQWMFJabQ3JR41zJo1uj2Ol/peooKg4PT2
-         +gTfkD3HN+Kb17azOjrfY0Vx5DgdcLHpZ4sucNekswTW3zPBMWzvipwfuHBnV+HMeXDA
-         T93ubZK9VrOKybVQHE6gphN6rxukW7Cop1TB8ctzIcQRlCv2QdVvMtr/AMMqcvHIsQs/
-         q2VpBx8PFgVtLthMzNWUmrUpW/xnY4jybYR4BaunMfTn6GJF0xGXYDmLRX8Mn1gqlmxg
-         qLvQ==
-X-Gm-Message-State: AOJu0Yzccz37ia+09tAgCLn9Y8dUo3mGhaBLU28dcuwerqrC8Ha2YDJ8
-	JOk7WiE20nin+JY31a0htQLxFJHbHkXr8A7gR8l+8MzH/NutbVx4Y9t2
-X-Gm-Gg: AR+sD13LF2Lfhl5Fqgd8xE89oeH76fn+gOFD6Fhteg+rZZhI2leeQfJd/icQJRCVrpj
-	ekcGna05hIYtJF0eqi1g17VCuSc3cA7gtbiXpaw9heR5OEOK6zn2D25sORTaQapm9kwi9HiB554
-	0lUQ6LsIfNvvl+RGEyiF7sMruarM8PGlqm5dl0mQbzJK3wIouZ7tpWus2OQTC53TniBiMuW/Qni
-	LW3E0MQvZHGufpaLpeQy4EqZwEqQbHgL6rOhdFL70w1EvtGx4y/xd180awyjbVdCV6F8eQsKxcw
-	5lWWOWFWHYbYmEOUcGZvxqJUmEFvUBKZiH77Q5rcqNed/zFUuvDt6ALxc7IiqjpgB8CeUvtJxj/
-	xDLdUtR6KmcbONa+sIvBQ4zO59ttIwHYQ79bkT5VEp/nkdaCTWQsEv5H5tulSEjkGaowHGU8wq2
-	PtegfDSsv9vtF94/G4YyUwyfjrihnsygBl47dPBgFkrk34a/6ldR/bqMYxkPR7tS9sodxQJqqUQ
-	/2a6G1JJTKj5gyYuX9F9x3xxUyLiK9MO+xNSQ==
-X-Received: by 2002:a17:90b:580d:b0:38f:c911:5436 with SMTP id 98e67ed59e1d1-38fc911545fmr3940101a91.41.1785681184250;
-        Sun, 02 Aug 2026 07:33:04 -0700 (PDT)
+        bh=m7GubX2oexnzGSUu+7RCqdftEDvzwkCvHfcYB+mewBQ=;
+        b=AzQG5FhJy7rXZgmdilZ1Bi8SBUiHhQjcUuOT5Yj64BPM+HC+wJG0+shv2zoBNlx/d8
+         hiv0hOTPO0Rej0oCy+TFvGjzTsqlF3+VDbob2CP2OXgjmZg+3z2iSJlq/i03uAv5svJY
+         d6sF6Uu3nWAjQOSepJIIW9frQlcjpUDbxbLEWderqkrBDZtekDKKnw225tHmwujgQPBs
+         /NHW7TlFz8DpYnoUgK0ommCayHqNrop1+4Cfz2idmc+ReWLcZeXKZCP0xA7s872Jmicm
+         dzbTASdbYZus7tqNjOq40d4+dUbZzDH4Wmd3wM1PqFo1KKM914cRqXVGrjFPZ76HFcyH
+         kG6Q==
+X-Forwarded-Encrypted: i=1; AHgh+RoskDbXGufzEuGhjzLY+qQqQ5vO5jPembPRdIMPpPQFcvA4BEJlrYS+f4iDfNhjmnk0o7Ucw4rWtqLQGg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKLHiB59y5tt1tL+z0DamZYL0EQSms6KH7Alg4EgET/vzcx0hH
+	pqEPdGqfimledjFratRnH8wcd3qYQkx4ozukQ+CaxiRZP+K4Keq/NPrxU+uhKQ==
+X-Gm-Gg: AR+sD13elvDmHQPvMbomzcTmiAf3i9lfANh6EC4432sV4VmdCmTAZwU17LiQSg0KVIK
+	2llilxRl/n53OFZ5OhZfMYUTLRN0SqPHMMskGWS4oKVGE7ZnFvY9zZF4CIVt2O4i3ojUsaBRnT1
+	JRh7UM0yv80jFgRNSj5RC2j4dPHQcNujsctH66dFhym+MqZU4BJfDbl4WOIwb85sw9AbEsrq84R
+	sslI6zcfZsOJF1CSaNwPeIwurEECv/DNLc1UGhrkuGn4M1WbVcVoGPnUTSWCC+W/UM2+URL2WJX
+	xd6nUl4rRxBLTUnbpxKxipeNDEMneRCmhcfUGsYwbAM29ksZNZ+ZgWPv/WIw80YLt4GsWv8Ni5V
+	VdHwQFfLf3qL1/bNF8n41cZqvs6/5caGlGKGRmkus1XFC1zOeMxg3xxR8URNhSUw7XIjuqsqCXT
+	fSM6t9UJ99o0yWZGMGTTfOAU95WjYNFDuDlPoy/F3iZOekhA3KaJ1oCWRHSUriZGwpO9bb6fL6T
+	hq/3zdlX6BCd3yGadtf7P5CAL0rfth38w==
+X-Received: by 2002:a17:902:f612:b0:2ca:f44b:63be with SMTP id d9443c01a7336-2d0521bc1b4mr67661545ad.3.1785682816962;
+        Sun, 02 Aug 2026 08:00:16 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38fb2ce5ca2sm1566389a91.4.2026.08.02.07.33.02
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d04ae5ac3dsm26830925ad.23.2026.08.02.08.00.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Aug 2026 07:33:02 -0700 (PDT)
+        Sun, 02 Aug 2026 08:00:16 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0ba65a90-b2b5-4d2e-b35f-5f2a6c914fad@roeck-us.net>
-Date: Sun, 2 Aug 2026 07:33:01 -0700
+Message-ID: <8f25c37b-8408-47f2-8069-87a1ef96ce7e@roeck-us.net>
+Date: Sun, 2 Aug 2026 08:00:15 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,12 +71,11 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFT PATCH] hwmon: (pmbus) Fix type confusion in notification
- logic
-To: Vincent Jardin <vjardin@free.fr>
-Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-References: <20260723211336.3046042-1-linux@roeck-us.net>
- <am9RrapJinQ-eKDF@L30177.local>
+Subject: Re: [PATCH] hwmon: (sg2042-mcu) reject short uptime reads
+To: Ali Ahmet Memis <ali@iusegentoo.com>
+Cc: Inochi Amaoto <inochiama@outlook.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20260802130728.25721-1-ali@iusegentoo.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,56 +121,87 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <am9RrapJinQ-eKDF@L30177.local>
+In-Reply-To: <20260802130728.25721-1-ali@iusegentoo.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 8/2/26 07:18, Vincent Jardin wrote:
-> Hi Guenter,
+On 8/2/26 06:07, Ali Ahmet Memis wrote:
+> uptime_show() asks for two bytes and only rejects a negative return:
 > 
->> However, data->group.attrs can contain other types like struct
->> pmbus_samples_reg or struct pmbus_sensor, which only embed a base
->> struct device_attribute.
->>
->> If da is a struct pmbus_samples_reg, dev_attr is the last member. Casting
->> it to struct sensor_device_attribute and reading the index field appears
->> to access memory past the end of the allocation, which might trigger a
->> slab-out-of-bounds read.
->>
->> Additionally, if da is a struct pmbus_sensor, casting it causes the index
->> field to overlap with the page, phase, and reg fields. Could this produce
->> a garbage mask on little-endian systems that spuriously matches the target
->> reg, page, and flags during an alert?
->>
->> Fix the problem by using struct sensor_device_attr in struct pmbus_sensor
->> and struct pmbus_label. Since those attributes never trigger a
->> notification, set the value of attr->index to -1 for them. Use this value
->> to distinguish from boolean attributes which _can_ trigger a notification
->> and use the index field to encode mask, page, and register values.
->>
->> Fixes: f469bde9afd1 ("hwmon: (pmbus/core) Notify hwmon events")
->> Cc: Vincent Jardin <vjardin@free.fr>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->> RFT: Build-tested only
+> 	u8 time_val[2];
 > 
-> I tested on my board today but I did cherry pick the the 5 commits from:
->    https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/log/?h=hwmon-next
-> 	hwmon: (pmbus) Fix type confusion in notification logic <-- this RFT
-> 	hwmon: (pmbus/mpq8646) Gate the writes
-> 	hwmon: (pmbus) Add MPQ8646 driver
-> 	dt-bindings: hwmon: pmbus: add MPS MPQ8646
-> 	hwmon: (pmbus/core) export pmbus_check_and_notify_faults()
+> 	ret = i2c_smbus_read_i2c_block_data(mcu->client, REG_UPTIME,
+> 					    sizeof(time_val), time_val);
+> 	if (ret < 0)
+> 		return ret;
 > 
-> Beside testing it with the attributes and boolean alarms of the MPQ8646, I did
-> test it with the board's PSU that is another PMBUus device and exposes some attributes
-> and boolean alarms too.
+> 	return sprintf(buf, "%d\n",
+> 		       (time_val[0]) | (time_val[1] << 8));
 > 
-> Both were OK.
+> i2c_smbus_read_i2c_block_data() returns the number of bytes the transfer
+> actually produced, which the device supplies and which can be shorter
+> than the length asked for:
 > 
-> Tested-by: Vincent Jardin <vjardin@free.fr>
+> 	memcpy(values, &data.block[1], data.block[0]);
+> 	return data.block[0];
 > 
-Thanks a lot!
+> time_val is not initialised, so a reply of one byte leaves the high half
+> of the reported uptime as whatever was on the stack, and a reply of zero
+> bytes leaks both halves. Either way the value ends up in sysfs.
+> 
+> Require the full two bytes. The other registers this driver reads go
+> through i2c_smbus_read_byte_data(), which returns the byte itself, so
+> the existing negative-only checks are right there.
+> 
 
+I ended up asking AI:
+
+Does i2c_smbus_read_i2c_block_data() in ./drivers/i2c/i2c-core-smbus.c ever return less than the requested number of bytes unless there is an error ?
+
+Here is what it tells me:
+
+   No, as long as the requested length is <= I2C_SMBUS_BLOCK_MAX (32 bytes), i2c-core-smbus.c will never return fewer
+bytes than requested unless a negative error code is returned.
+
+   The only scenario where it returns a positive byte count less than the caller's requested length is if the caller
+passes length > 32, because the function clamps the request to I2C_SMBUS_BLOCK_MAX.
+
+   ### Why this is the case
+
+   1. No Count Byte in I2C Block Read (I2C_SMBUS_I2C_BLOCK_DATA):
+   Unlike an SMBus Block Read (smbus-protocol.rst), where the slave device sends a length/count byte as the first byte of
+  data transferred, an I2C Block Read does not include a length byte from the target
+   device. The master reads a fixed number of bytes determined by the caller.
+   2. In i2c-core-smbus.c:
+     if (length > I2C_SMBUS_BLOCK_MAX)
+             length = I2C_SMBUS_BLOCK_MAX;
+     data.block[0] = length;
+     status = i2c_smbus_xfer(client->adapter, client->addr, client->flags,
+                             I2C_SMBUS_READ, command,
+                             I2C_SMBUS_I2C_BLOCK_DATA, &data);
+     if (status < 0)
+             return status;
+
+     memcpy(values, &data.block[1], data.block[0]);
+     return data.block[0];
+     Before calling i2c_smbus_xfer(), data.block[0] is initialized to the requested length (clamped to 32). Upon success
+(status >= 0), it returns data.block[0].
+   3. In I2C Emulation (i2c-core-smbus.c):
+       • The read message is set up for exactly data->block[0] bytes (msg[1].len = data->block[0];).
+       • Unlike SMBus Block Data, it does not set I2C_M_RECV_LEN.
+       • When copying the buffer back upon completion (i2c-core-smbus.c), data->block[0] is never modified and remains
+exactly equal to the requested length.
+   4. In Native Adapter Drivers (adapter->algo->smbus_xfer):
+       • None of the bus drivers in drivers/i2c/busses/ implementing I2C_SMBUS_I2C_BLOCK_DATA (i2c-i801, i2c-viapro,
+i2c-amd8111, i2c-ismt, i2c-mlxbf, etc.) modify data->block[0] to a smaller value on success.
+       • If a target device NAKs before the requested length bytes are read, the controller driver fails the transaction
+and returns a negative errno (e.g., -ENXIO, -EIO, or -EPROTO).
+
+   Consequently, any successful call such as i2c_smbus_read_i2c_block_data(client, reg, I2C_SMBUS_BLOCK_MAX, buf) will
+always return exactly 32 (I2C_SMBUS_BLOCK_MAX) on success.
+
+Please refrain from sending fixes for non-issues.
+
+Thanks,
 Guenter
 
