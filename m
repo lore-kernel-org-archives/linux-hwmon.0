@@ -1,134 +1,144 @@
-Received: from sender-of-o57.zoho.eu (sender-of-o57.zoho.eu [136.143.169.57])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBFEA1FBEA8;
-	Sun,  2 Aug 2026 12:48:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.169.57
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785674888; cv=pass; b=t+fLNev6TlBji9/Yh/sZiCKFLh3z/9tVtd9MFxbPm1A/XlzGmjPHiENDAM/O4LgQg04NhjuXTmEi/awygK4eUJpr76EM4Zq70u5Gbw2JnZDvfpxuvNw3+MzgmhGcFf6/0GB8D67YyZu17hqrksuYumMtI4EolO+VbgmddVcIp+8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785674888; c=relaxed/simple;
-	bh=WobAaZ0g6QY3eB45gEG3Essr0H56lGxOJZvz0zP41ak=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Z7IryhPCrTdQQm0RqN998h8VHbksPnLJa8ZW8O8DfLpST2yI0MOJub52ozbNxa17l8SlRTTKxumJwavToAd/2RY+m1BcZsjIoM76kz4bo5J2KVdyjNH1Y5/1lEricrVGD2euQ1zJq9/pnUZL1H6czd0v2fW/EVZlOMz3lhBL4/o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iusegentoo.com; spf=pass smtp.mailfrom=iusegentoo.com; dkim=pass (1024-bit key) header.d=iusegentoo.com header.i=ali@iusegentoo.com header.b=X1fOMmUq; arc=pass smtp.client-ip=136.143.169.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iusegentoo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iusegentoo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DBB1FBEA8
+	for <linux-hwmon@vger.kernel.org>; Sun,  2 Aug 2026 12:48:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785674901; cv=none; b=KQLVxjAS6SYYmdmNgvgAEoWrmyzOS6lk+G2UJSFUSdTJtB8nV2NkseLK7sksibVHOcPJnimTrPgrmyA4wccS01vvqL+KI9LtW9jlcE9RCCUyPEaBvSdyl5/cn8s2hPnDy02/B6i4Pt2SXV2xpaRquVEUGU8HKsSEUmNnYivvpYs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785674901; c=relaxed/simple;
+	bh=DMi6AELZF+HAQh9cpiVhmL0nf4k/QOqDzC1L1xcbbzQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=fpuYZu0Uwwb9JhydQysJ1iY7hjOjzO4X5NcExlYpAcU45F40QVhLKoCEgQh6DfersnsSMXJ6BSSzHaIId5E7UFUTTQ+LeiUo/BgciKGJccw0/gqKfwazJu9RfHouqJfWC+Xp4TQi2NWvJfPOxGvZlBaFGqHsmTXn3nInPNQxMRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZC2CqvqP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iusegentoo.com header.i=ali@iusegentoo.com header.b="X1fOMmUq"
-ARC-Seal: i=1; a=rsa-sha256; t=1785674863; cv=none; 
-	d=zohomail.eu; s=zohoarc; 
-	b=GV8kDG/n5pDkSxva0AxR8tS14a4mjkysFanbXS8talPnHmm9xqe+OuRkcNe2S/3nZK2eWiJsKeIjQBUuljjeWyxnHBmiTAi6kFpEWueBufQZbR73dmPvsPURFSnxpcqsuA9Xd6LEpjkesLgzj2LcMIcc9XKV/rq3Cujf/oEYqIc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
-	t=1785674863; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=AceY0HP18bSMJ8UJ8ZQUYyyRB+EPqmSqMGKy335dCvE=; 
-	b=HiABIKmy5WDa1jfG131FN6q28bb+2BIFskW3YVkllpRknfDs9FRPx4Cwwn3EMwPNNxpdQjz+6+FNitEdOKvdE6w4AbYQZihhZvoIX848Yt1tsdFhbScH1/0jTbamjQVweX8sd3kptAHLn9Udm47QCSpVd9WiRqJdrctUwJgiJjw=
-ARC-Authentication-Results: i=1; mx.zohomail.eu;
-	dkim=pass  header.i=iusegentoo.com;
-	spf=pass  smtp.mailfrom=ali@iusegentoo.com;
-	dmarc=pass header.from=<ali@iusegentoo.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1785674863;
-	s=zmail; d=iusegentoo.com; i=ali@iusegentoo.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=AceY0HP18bSMJ8UJ8ZQUYyyRB+EPqmSqMGKy335dCvE=;
-	b=X1fOMmUqcHBQUu6shhum8viugMSS171CrsHG++fY4l8SSzO12AP0267o7QXfVadm
-	G9rPuoDI72CSkJNj6wp309zTLTGYtGi178lIH02urJuq1bNazn8tK1JrdWrf4euuv1g
-	B9PxMjkhMXDpp9RNFNZUDL2MfdxWguykEKwbExn0=
-Received: by mx.zoho.eu with SMTPS id 1785674860305241.6541559953971;
-	Sun, 2 Aug 2026 14:47:40 +0200 (CEST)
-From: Ali Ahmet Memis <ali@iusegentoo.com>
-To: Ming Yu <tmyu0@nuvoton.com>
-Cc: Ming Yu <a0282524688@gmail.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: nct6694-hwmon: temp17_enable and above write into the fan enable bitmap
-Date: Sun,  2 Aug 2026 12:47:30 +0000
-Message-ID: <20260802124730.20387-1-ali@iusegentoo.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZC2CqvqP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D796B1F000E9;
+	Sun,  2 Aug 2026 12:48:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785674900;
+	bh=UtzLtO/NIlh0xmrRowplWRWxL+ib81LOzKlalrEOtv8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ZC2CqvqPSRdfLRaIJhhHNa77pTp6vfB8K/N15l2glU2icwr+xHbjkAbp4VV3POeq4
+	 bXLZ5zGCwTpV6acFd9AnaY6gNBSqpxJUqVPR8Y1Oi18Q8vaCTGp1LQT+ERWmud0eEg
+	 z3qj2YbmUoYtOCFGEb1/52rLz9ViiiBrkf7p5uyaaHMagVAX5HozwPuAQN+d3qJiLS
+	 6bvDBZ/nCKLKf8NRLaV7k1Bxo8Bs2hoMJ/1lOOTBBjLMeaOJRV72DWujrIu5XUA1mY
+	 IDMgaNDawLD4PX2sXLPAhpKmBzAH5RcN99rAWNM/Jev18LnUrJUoPE4W+9Fq47i/q2
+	 TfNF28Q1PfOuA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] hwmon: (corsair-psu) serialize debugfs access against
+ hwmon
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ali Ahmet Memis" <ali@iusegentoo.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260802123653.19532-1-ali@iusegentoo.com>
+References: <20260802123653.19532-1-ali@iusegentoo.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 02 Aug 2026 12:48:19 +0000
+Message-Id: <20260802124819.D796B1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
 
-Hi,
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-While reading nct6694-hwmon.c I ran into something that looks wrong, but
-which way to fix it depends on the device protocol, so I would rather ask
-than guess.
+Pre-existing issues:
+- [High] The shared `priv->cmd_buffer` is modified concurrently by process =
+context and interrupt/softirq context without synchronization, leading to d=
+ata races and hardware state machine corruption.
+- [Medium] Missing null termination for USB-provided strings allows an out-=
+of-bounds read in debugfs.
+--
 
-The driver registers 26 temperature channels, each with HWMON_T_ENABLE:
+--- Patch [1]: [PATCH] hwmon: (corsair-psu) serialize debugfs access agains=
+t hwmon ---
+commit 99da3eb40b38c5c1f4427842c0633cb5ade4ac3c
+Author: Ali Ahmet Memis <ali@iusegentoo.com>
 
-	HWMON_CHANNEL_INFO(temp,
-			   NCT6694_HWMON_TEMP_CONFIG,	/* THR1 */
-			   ...
-			   NCT6694_HWMON_TEMP_CONFIG),	/* DTIN15 */
+hwmon: (corsair-psu) serialize debugfs access against hwmon
 
-That is 5 THR plus 5 TDP plus 16 DTIN. The enable bitmap it indexes is
-two bytes:
+This commit adds guard(hwmon_lock)(priv->hwmon_dev) to debugfs read
+operations to serialize them against other hwmon subsystem calls. The hwmon
+core serializes its own callers, but the debugfs files call
+corsairpsu_get_value() directly.
 
-	struct __packed nct6694_hwmon_control {
-		u8 vin_en[2];
-		u8 tin_en[2];
-		u8 fin_en[2];
-		u8 pwm_en[2];
-		u8 reserved1[40];
-		u8 pwm_freq[10];
-		u8 reserved2[6];
-	};
+Link: https://lore.kernel.org/all/5f0406fa-9692-49f0-bcfe-c013f5fc7b62@roec=
+k-us.net/
+Link: https://lore.kernel.org/all/agR9YW7hGTJ_l7ms@monster.localdomain/
 
-and both the read and the write path index it with the raw channel:
+> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+> index ce958cdaef58a..24100519cd834 100644
+> --- a/drivers/hwmon/corsair-psu.c
+> +++ b/drivers/hwmon/corsair-psu.c
 
-	temp_en = data->hwmon_en.tin_en[channel / 8];
-	...
-	data->hwmon_en.tin_en[channel / 8] |= BIT(channel % 8);
+[ ... ]
 
-nct6694_is_visible() returns 0644 for hwmon_temp_enable without looking
-at the channel number, so all 26 are writable. Since the structure is
-packed, channel 16 and above land past tin_en[]:
+[Severity: High]
+This is a pre-existing issue, but can this sequence lead to data corruption?
 
-	channel  0-15 -> tin_en[0-1]
-	channel 16-23 -> tin_en[2] == fin_en[0]
-	channel 24-25 -> tin_en[3] == fin_en[1]
+Looking at corsairpsu_usb_cmd(), the completion is reinitialized before
+the command is transmitted:
 
-nct6694_hwmon_init() sends the whole control structure back to the
-device, so writing temp17_enable through temp26_enable ends up toggling
-the fan enable bits, and reading them reports fan state as temperature
-state. It stays inside the structure, so this is not a memory safety
-problem, but on a board using the fan channels it is not harmless.
+drivers/hwmon/corsair-psu.c:corsairpsu_usb_cmd() {
+    ...
+	reinit_completion(&priv->wait_completion);
 
-What I cannot tell from here is which side is wrong, and the answers
-need different patches:
+	ret =3D hid_hw_output_report(priv->hdev, priv->cmd_buffer, CMD_BUFFER_SIZE=
+);
+    ...
+}
 
- 1. If the control block really has two bytes of tin_en, then only 16
-    temperature channels can be enabled and the last ten should not
-    advertise HWMON_T_ENABLE.
+If a delayed or spurious HID report arrives during this window,
+corsairpsu_raw_event() will see completion_done() as false:
 
- 2. If the device has four bytes of tin_en, the structure is wrong, and
-    fin_en and pwm_en are being read and written at the wrong offsets as
-    well.
+drivers/hwmon/corsair-psu.c:corsairpsu_raw_event() {
+    ...
+	if (completion_done(&priv->wait_completion))
+		return 0;
 
- 3. If the bitmap only covers the digital inputs, the indexing is wrong
-    in a third way: there are exactly 16 DTIN channels, which is exactly
-    what tin_en[2] holds, and they sit at channel 10 and above.
+	memcpy(priv->cmd_buffer, data, min(CMD_BUFFER_SIZE, size));
+	complete(&priv->wait_completion);
+    ...
+}
 
-The structure is 64 bytes as declared, and it would still be 64 bytes
-with tin_en[4] and reserved1[38], so the total size does not settle it.
-Two things make me unsure rather than confident: the other three bitmaps
-match their channel counts exactly, 16 in channels against vin_en[2] and
-10 fan channels against fin_en[2], which argues for the first case; but
-the 16 DTIN channels also match tin_en[2] exactly, which is what made me
-think of the third. I could not find a public datasheet to settle it.
+Will this asynchronous overwrite corrupt the shared cmd_buffer while it is
+being transmitted via hid_hw_output_report(), and cause the driver to proce=
+ss
+a delayed reply as the answer to the new command?
 
-Ming, could you say which one it is? I am happy to write the patch once
-I know, I just do not want to guess at the device side.
+[Severity: Medium]
+This is a pre-existing issue, but does this copy guarantee null termination
+for string fields?
 
-I have no NCT6694 hardware, so this is from reading the driver against
-current mainline rather than from an observed misbehaviour.
+When populating string fields like priv->vendor, 24 bytes (REPLY_SIZE) are
+copied directly from the USB response:
 
-Thanks,
-Ali
+drivers/hwmon/corsair-psu.c:corsairpsu_usb_cmd() {
+    ...
+	if (data)
+		memcpy(data, priv->cmd_buffer + 2, REPLY_SIZE);
+
+	return 0;
+}
+
+If a non-compliant or malicious USB device provides exactly 24 non-null
+characters, there won't be a null terminator.
+
+When the debugfs file is read later, could this result in an out-of-bounds
+read that leaks adjacent kernel memory to userspace?
+
+drivers/hwmon/corsair-psu.c:vendor_show() {
+    ...
+	seq_printf(seqf, "%s\n", priv->vendor);
+
+	return 0;
+}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260802123653.1953=
+2-1-ali@iusegentoo.com?part=3D1
