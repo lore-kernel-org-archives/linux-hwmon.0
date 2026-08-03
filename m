@@ -1,73 +1,73 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B7C2BF3D7
-	for <linux-hwmon@vger.kernel.org>; Mon,  3 Aug 2026 19:35:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA6F437107
+	for <linux-hwmon@vger.kernel.org>; Mon,  3 Aug 2026 19:35:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785785743; cv=none; b=FHFxeNe6n+8PSMqiGy/0RMSC3RAHU8bkuLdbyinb0IvciwoKAVWwUfuMoAjMX7FX3s7dLZqZ2T306E/hGxen6hrCtciDEB1mvyy0owbbNf8bWYhRE1eTmJYk449HNQHujrcU5P1Mr/peEQsQXdbu2G97zvKo88jGjLOPP86CArI=
+	t=1785785744; cv=none; b=mhJR9AojQAlDZkOG5C4ILguB7L4a0uGrhZAasRTz3rD4KDzNMk+deque2GkfrdxHyGOeaMmvURGzkCf8r3PoVf14jtW/ZKxzsPUzPA5QT/+SL+199cEMjqb8XJYLs2oMLus1i8SGSeeHasR1BjOZ374FnaDIf5kRdeMDDkYP8Ro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785785743; c=relaxed/simple;
-	bh=oVUK9yviQ3AKiqipPOMGf3HzUJvzdD2TFqNvYtuxVVM=;
+	s=arc-20240116; t=1785785744; c=relaxed/simple;
+	bh=Ejm1EjVj3KgxcvLLkmvtfPx/N9NZ15VwTdXwVvjWiuI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EYtaBN8V5J5A4r7vi3IenuHHhmecl+qOX07efpxwcLvDasoGdZTNcUQtzweD3rnpGsn1wPwaZ4/PZULepTC7LYMvXC/FEw5bxC3YHC3GRgmhTpsZ/ggaPH/3I39JSYpdMXX9+M8Od8TlfIiRDydWX+GYDMBANwhb8VaXl8LJo9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=buYx0K30; arc=none smtp.client-ip=209.85.210.170
+	 MIME-Version; b=mbEX9Rb9fsnaGk4dK0XQl5IEdRv5fPT9uH5jFLn8BbZpPKau587VAujUmXPHiPjDTs/Nw9JSQg/GknsKc5piOpAHsUuD8bLTCmron1+CanHMUEpA/W7TpD4YtNTGjE4ooAzNFB8or3FJ7BTQRT/juNfti3cHjbNed9sf08LwWUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BYS7i84P; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="buYx0K30"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-8487088510aso3906825b3a.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 03 Aug 2026 12:35:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BYS7i84P"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2cea3004256so42052085ad.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 03 Aug 2026 12:35:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785785741; x=1786390541; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=TVNb2H4FUacDIOEpWf7OqzlevaEB4jIauXqreClilB0=;
-        b=buYx0K30NwIHFgJ6yjVAuIjZZ42ML+HfF2E4o46MrnevcsAwM2ocO8sV9wSwoWZbbm
-         KrgyA4F50+NFlFQU69iNhMFlZz/ERdrjx1eTONI3w+qilpBS/ZW1b/LC43M+fUqbd9fm
-         LEPZswBoCbTvMiPzAruflbO/wvM8/otNMKWXQhcwN6xfLaYGzcKxRJdoFwlD1eYl50E7
-         3L6bfKDpjsmn8WYxQFtcdVmNd1QidDEv/xSDhRGAy03MwN2OdxjxgUGRDgWxQvb5qmdX
-         nCwXV7eSledADFztYMano/meLYq/4tU++Hk2o6fsbIj/jC7jcagsdqUDEEpCOxZaVzRM
-         FbZQ==
+        d=gmail.com; s=20251104; t=1785785743; x=1786390543; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=MYsTRe4LgwWNdUnAZkn8EKt4KU318nYWm4jl0uqk/9w=;
+        b=BYS7i84PH4G2yqLs+P5/1tB8D6pVk1F7r4bhmglxAU+I/cAMQspu0qfXB3AyN+3mS+
+         5np31aI+OI4XCUi6wiCXDxgJQ7xB2Khhbd4AQ2UZa3037bfmx6uSirLTyU36tIqi+DyD
+         rTbuVA9JzU76UQhGx38BrdaooO8HtypRopji5Xm6ClXrv1aQ71KcI0JjpURnlBnY8HdK
+         gwWXDGba6psKUqT2u7AoQEA7ZxY6ZR4Prk3WJORCc4W2mV+Q+sNgbsE7bXzw4Zx03Zz7
+         TcUO96SROk1hf6o5mtv6N8n7yn8xIENECdAxWZgGAbvkeSYjZ6rMUsd5w55IUV7OkQ6g
+         dbTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785785741; x=1786390541;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:sender:x-gm-gg
+        d=1e100.net; s=20251104; t=1785785743; x=1786390543;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=TVNb2H4FUacDIOEpWf7OqzlevaEB4jIauXqreClilB0=;
-        b=CBGAdlIsqPtQqKj/vpwgTYT36YC92vKZwW0X93av5wDaGAMfcic4TE/kYQT7k8lAwf
-         vXcyqRBYKeBQabwgDx+XWUpWT0xITl/IVsoj+BxfPDdn6L5o2rP6pbjOkRqB1A5B6c4b
-         OAQig+QjR8sFBFK4Sv6Bp0IJgz02kEXLPjZX23YAxR7doOsy0mFrfRAgujwI1PXBedM7
-         hUCTNEroObl2UB28h5N5K3R8ximv+IufeGgWd2qWsMPVrp1MgcgnQG+qH9q68AeQsAwH
-         hDVo19vVRxgPn20cquU+Q8mGKM8eALLwpyZDueDRCowXtYnyn1g2gIg343p3lTIDhtIx
-         WtMw==
-X-Gm-Message-State: AOJu0YzoiC6elDD6F8koaz8RzBxNVGu+qIMr8wEaV3vudn5BJRfASagN
-	H+PEvaWYyA/pOo824DysncVITCHKjks4wklm3hSig+J5nW8wX8wN3FCe3T572g==
-X-Gm-Gg: AR+sD1285EBV2s6nvpasFT8z2Z8nu4TeczQjTRsLu6S/MLlBMKbJBRZLrlWaD/2yq1/
-	BN4Drd3xJJY+Oigx+bBeQGQHBa88iDdi5hw5ZqqD+1Bo5QsW+i/pB6C2iD3FBl8m5RWYKedVlB8
-	rd38XJDIzhozjr2Ba19hJK0hYP4I94ueZn2dvD6f5CJuIdAfvMn2H+zQggf4F3/oKvDQjvNn/3+
-	UBGhnzXPJZBuu8ZC5uinzfg2OpDqVd9p2qjwnBjSnMSlMUez5/TYnfvuF2lYXqKnGWRdAeLrFsl
-	NXzXSNSaBRPbtJFQiJJigILBmVTb18cBW82mrGSOYyJUIBXLNi0DFc3/EedMDETnmomaupXsRtT
-	fa9LCGS4zBPgbxZZ1bCFTrhGQoPS98HpsrVadpwYAbuQQ8BR7U3v8OusCfrhjfNBpFdPFg+MiFz
-	3iuqOUAJpQjkEOkKU0a2wk5Z0Q8ty4gAPRbqwRmEkQDR35tm8hvr2wqUkBv/M3NT4Vf7Uv54Bg/
-	Lwgh2E9PWof2g==
-X-Received: by 2002:a05:6a00:1d87:b0:848:4256:d6ad with SMTP id d2e1a72fcca58-84ee48f8ab0mr10013720b3a.60.1785785741375;
-        Mon, 03 Aug 2026 12:35:41 -0700 (PDT)
+        bh=MYsTRe4LgwWNdUnAZkn8EKt4KU318nYWm4jl0uqk/9w=;
+        b=lgFzyvxZ55HvIXgXbgGbpjMbe7sdEXRgPnroKv4O/fk3pajBOJsWF5Brm0XZ4Dfmxb
+         KpusKrKbv7Yurczy0y0jhACN1Bxvuzg2mBopi7xrsKFKK/eE/+SFh/ogUHbSXNHKXADz
+         8mAUL5rz8kZjRUpAqeCmlpeqola2rdKA3GvbmPAEodaC5yeG5ivRAu64KzXPgcLgMaAX
+         3i9eOl6SVCDV+McYz2lNrmAGcUtq2dMHJ7KMb9xNUFxNSClh9lZyKs4BwMH87prGq8NN
+         N/bEYj+K8iM315mNcF2ijmmQcQCzS4tRARg5yh0sX5l7FP8DdxrVv75O4zZhRzszArDk
+         YJvw==
+X-Gm-Message-State: AOJu0YyjL2zAiNX6WpyyC0guToqVMqZtT8abXtr3QqTaF4B4VzjZPNTU
+	HepVUfhgXGT7etzc4GUCk1c8sawB6i4LgkIir+i3LPONsSQNuFvJG24Ft7Mgrg==
+X-Gm-Gg: AR+sD11X2w2DFnSDmYEMK4mR5zSkGhSRz4/88o/ZeNuEaPbTLloSQ1hOKr9KCbnTd/F
+	UtS0nKmIvogyWVmhEoKVUo0Lt+QDpwAB0tIEkTg7MDiTIYShfzQdclBT8kolEWucfyGyip1mdBF
+	TupG4qtOtmOLyK8tCFSidXyMvLqP9Hi6IRdgHHTLyWyqANtt3bDOqVLulL2qkMUzPnmYMDjxY3r
+	DqjSsYNZoDDLg5QVLe0cTOa1WKIq6iBlmtMHblKWd/nsWMY0DhJqa2vu7FT6nFsHjx1QKUkXhu4
+	JgrS6XnkYeT5CI4R+x7sTfJt6pSDn+sn0FkDdYZRlEu3QDHSfq7Zrs+fK/pYyQAGCn8MX78xqIm
+	LbAjcOWiw0Lmlh2orFRadk9ltcUFDbInC1OZijzBW0SwCTGDdciRDiu3+LmWUWFNVsxmoZavZcI
+	7N7MfpYGxbTfuTeQ/LiazNHrPI/Z2pbVNzBhQu4rw/uqt5QroFQsemziRIipXkBxAW8kusWl0SH
+	g==
+X-Received: by 2002:a17:903:2c0e:b0:2c9:97a7:71b1 with SMTP id d9443c01a7336-2d0524c91c7mr115923375ad.44.1785785742603;
+        Mon, 03 Aug 2026 12:35:42 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84edbe57a9esm4168891b3a.19.2026.08.03.12.35.40
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d04b0eb5a3sm42941865ad.46.2026.08.03.12.35.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2026 12:35:40 -0700 (PDT)
+        Mon, 03 Aug 2026 12:35:42 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
 Cc: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
 	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 1/5] hwmon: (pmbus/core) Introduce pmbus_read_smbus_i2c_block_data()
-Date: Mon,  3 Aug 2026 12:35:31 -0700
-Message-ID: <20260803193535.2286578-2-linux@roeck-us.net>
+Subject: [PATCH 2/5] hwmon: (pmbus/adm1275) Use pmbus_read_smbus_i2c_block_data for block commands
+Date: Mon,  3 Aug 2026 12:35:32 -0700
+Message-ID: <20260803193535.2286578-3-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20260803193535.2286578-1-linux@roeck-us.net>
 References: <20260803193535.2286578-1-linux@roeck-us.net>
@@ -77,171 +77,47 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-PMBus drivers need support for reading SMBus block data. Unfortunately,
-not all i2C controllers support this command.
+The driver uses i2c_smbus_read_block_data() for PMBus block commands.
+Use pmbus_read_smbus_i2c_block_data() instead to enable the driver to work
+with I2C controllers which do not support i2c_smbus_read_block_data().
 
-Implement pmbus_read_smbus_i2c_block_data() which first tries to use
-i2c_smbus_read_block_data(). If not supported, try to emulate it by calling
-i2c_smbus_read_i2c_block_data(). Export the new function for use in PMBus
-drivers.
+Drop the functionality check to get an explicit error message if the
+required SMBus commands are not supported.
 
-Cc: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-Cc: Nuno Sá <nuno.sa@analog.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/pmbus/pmbus.h      |   1 +
- drivers/hwmon/pmbus/pmbus_core.c | 102 ++++++++++++++++++++++++++++---
- 2 files changed, 95 insertions(+), 8 deletions(-)
+ drivers/hwmon/pmbus/adm1275.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-index 5fe2c415eada..2cd3216b3cd9 100644
---- a/drivers/hwmon/pmbus/pmbus.h
-+++ b/drivers/hwmon/pmbus/pmbus.h
-@@ -561,6 +561,7 @@ void pmbus_set_update(struct i2c_client *client, u8 reg, bool update);
- void pmbus_wait(struct i2c_client *client);
- void pmbus_update_ts(struct i2c_client *client, int op);
- int pmbus_set_page(struct i2c_client *client, int page, int phase);
-+int pmbus_read_smbus_i2c_block_data(struct i2c_client *client, u8 reg, char *data_buf);
- int pmbus_read_word_data(struct i2c_client *client, int page, int phase,
- 			 u8 reg);
- int pmbus_write_word_data(struct i2c_client *client, int page, u8 reg,
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 6991c7f8d125..1e09abbc05d3 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -182,7 +182,12 @@ EXPORT_SYMBOL_NS_GPL(pmbus_set_update, "PMBUS");
- void pmbus_wait(struct i2c_client *client)
- {
- 	struct pmbus_data *data = i2c_get_clientdata(client);
--	s64 delay = ktime_us_delta(data->next_access_backoff, ktime_get());
-+	s64 delay;
-+
-+	if (!data)
-+		return;
-+
-+	delay = ktime_us_delta(data->next_access_backoff, ktime_get());
+diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
+index 174f9bcba7e2..beb32a878d1c 100644
+--- a/drivers/hwmon/pmbus/adm1275.c
++++ b/drivers/hwmon/pmbus/adm1275.c
+@@ -553,12 +553,7 @@ static int adm1275_probe(struct i2c_client *client)
+ 	u32 shunt;
+ 	u32 avg;
  
- 	if (delay > 0)
- 		fsleep(delay);
-@@ -193,8 +198,14 @@ EXPORT_SYMBOL_NS_GPL(pmbus_wait, "PMBUS");
- void pmbus_update_ts(struct i2c_client *client, int op)
- {
- 	struct pmbus_data *data = i2c_get_clientdata(client);
--	const struct pmbus_driver_info *info = data->info;
--	int delay = info->access_delay;
-+	const struct pmbus_driver_info *info;
-+	int delay;
-+
-+	if (!data)
-+		return;
-+
-+	info = data->info;
-+	delay = info->access_delay;
- 
- 	if (op & PMBUS_OP_WRITE)
- 		delay = max(delay, info->write_delay);
-@@ -518,6 +529,85 @@ int pmbus_update_byte_data(struct i2c_client *client, int page, u8 reg,
- }
- EXPORT_SYMBOL_NS_GPL(pmbus_update_byte_data, "PMBUS");
- 
-+/**
-+ * pmbus_read_smbus_i2c_block_data() - Read SMBus/I2C block data
-+ * @client:	Handle to slave device
-+ * @reg:	Byte interpreted by slave
-+ * @data_buf:	Byte array into which data will be read
-+ * Return:	Negative errno or number of bytes read
-+ *
-+ * PMBus internal function to read a SMBus block from a PMBus chip.
-+ *
-+ * PMBus chips report various properties using SMBus block read operations.
-+ * However, not all I2C controllers support this operation.
-+ *
-+ * Execute SMBus block read if supported. If not supported, but SMBus I2C block
-+ * read is supported, use it instead. Note that at most 31 data bytes can be
-+ * read from the device if i2c_smbus_read_i2c_block_data() is used to read the
-+ * data. This is a SMBUs protocol limit which can not be avoided.
-+ *
-+ * Return -EOPNOTSUPP if neither I2C_FUNC_SMBUS_READ_BLOCK_DATA nor
-+ * I2C_FUNC_SMBUS_READ_I2C_BLOCK is supported.
-+ *
-+ * Callers must hold pmbus_lock or execute calls from the probe function.
-+ */
-+int pmbus_read_smbus_i2c_block_data(struct i2c_client *client, u8 reg, char *data_buf)
-+{
-+	u8 buf[I2C_SMBUS_BLOCK_MAX];
-+	int blen, len, ret;
-+
-+	if (i2c_check_functionality(client->adapter,
-+				    I2C_FUNC_SMBUS_READ_BLOCK_DATA)) {
-+		pmbus_wait(client);
-+		ret = i2c_smbus_read_block_data(client, reg, data_buf);
-+		pmbus_update_ts(client, 0);
-+		return ret;
-+	}
-+
-+	if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_READ_I2C_BLOCK)) {
-+		dev_err_once(&client->dev, "I2C adapter does not support I2C_FUNC_SMBUS_READ_I2C_BLOCK\n");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	/*
-+	 * If the returned data is valid SMBus block data, the first byte
-+	 * must be the data length.
-+	 *
-+	 * i2c_smbus_read_i2c_block_data() may return an error if the chip
-+	 * sends NACK before the number of requested bytes is received.
-+	 * Handle this by reading the data length first, then reading the
-+	 * entire message up to I2C_SMBUS_BLOCK_MAX bytes. This ensures
-+	 * that requested number of bytes never exceeds the number of
-+	 * bytes sent by the chip.
-+	 */
-+	pmbus_wait(client);
-+	ret = i2c_smbus_read_i2c_block_data(client, reg, 1, buf);
-+	pmbus_update_ts(client, 0);
-+	if (ret < 0)
-+		return ret;
-+	if (ret != 1)
-+		return -EIO;
-+
-+	len = buf[0];
-+	if (len == 0)
-+		return 0;
-+	blen = len;
-+	if (len >= I2C_SMBUS_BLOCK_MAX)
-+		len = I2C_SMBUS_BLOCK_MAX - 1;
-+	pmbus_wait(client);
-+	ret = i2c_smbus_read_i2c_block_data(client, reg, len + 1, buf);
-+	pmbus_update_ts(client, 0);
-+	if (ret < 0)
-+		return ret;
-+	if (ret != len + 1)
-+		return -EIO;
-+	if (buf[0] != blen)
-+		return -EIO;
-+	memcpy(data_buf, buf + 1, len);
-+	return len;
-+}
-+EXPORT_SYMBOL_NS_GPL(pmbus_read_smbus_i2c_block_data, "PMBUS");
-+
- static int pmbus_read_block_data(struct i2c_client *client, int page, u8 reg,
- 				 char *data_buf)
- {
-@@ -527,11 +617,7 @@ static int pmbus_read_block_data(struct i2c_client *client, int page, u8 reg,
- 	if (rv < 0)
- 		return rv;
- 
--	pmbus_wait(client);
--	rv = i2c_smbus_read_block_data(client, reg, data_buf);
--	pmbus_update_ts(client, 0);
+-	if (!i2c_check_functionality(client->adapter,
+-				     I2C_FUNC_SMBUS_READ_BYTE_DATA
+-				     | I2C_FUNC_SMBUS_BLOCK_DATA))
+-		return -ENODEV;
 -
--	return rv;
-+	return pmbus_read_smbus_i2c_block_data(client, reg, data_buf);
- }
+-	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, block_buffer);
++	ret = pmbus_read_smbus_i2c_block_data(client, PMBUS_MFR_ID, block_buffer);
+ 	if (ret < 0) {
+ 		dev_err(&client->dev, "Failed to read Manufacturer ID\n");
+ 		return ret;
+@@ -570,7 +565,7 @@ static int adm1275_probe(struct i2c_client *client)
+ 		return -ENODEV;
+ 	}
  
- static struct pmbus_sensor *pmbus_find_sensor(struct pmbus_data *data, int page,
+-	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, block_buffer);
++	ret = pmbus_read_smbus_i2c_block_data(client, PMBUS_MFR_MODEL, block_buffer);
+ 	if (ret < 0) {
+ 		dev_err(&client->dev, "Failed to read Manufacturer Model\n");
+ 		return ret;
 -- 
 2.45.2
 
