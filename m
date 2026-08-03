@@ -1,64 +1,64 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68929346FB3
-	for <linux-hwmon@vger.kernel.org>; Mon,  3 Aug 2026 22:16:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF67C34D3A9
+	for <linux-hwmon@vger.kernel.org>; Mon,  3 Aug 2026 22:16:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785795386; cv=none; b=OmvmJ9G/QcGbIV9D2xSNRoy+rXuROCYh9lBOgJ8eTTFTYyCGiwQvSYk+aNl9NEswNZu8bnKWllBi3LORMkrbPaz7Q83kCX9ejaYewSjd7Aqhjr1+4q2vqFdtLVF87ivp8oCCcumc6PjPyOLrm6ppEOjMk1lK+NPt11Jga8GnYRE=
+	t=1785795387; cv=none; b=UAS9E0Gr4ZSARwwkTBoStynEIJKVGSgDN0JcjU71rULyoZd9w8YuBb2A0S5RVanYqO61RGVytCkfGqX/+jrCHdD+UhDcEp2mnZeKqmViw7TWrKnKFpRhA9rsjAJTlDb5dDLAIMWj9T5q5crRWMGxnxeh1Av5t6zAMF91DB3fvbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785795386; c=relaxed/simple;
-	bh=EIMWWlWDcq0uEYhrtukreWiGwiCZqVgmmuCgjtQWFjc=;
+	s=arc-20240116; t=1785795387; c=relaxed/simple;
+	bh=+Fd4D4G24Lf6HeULnGUvJTIyL+0ZgRwVDOjp2wWUOEs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X5JKDCViQM/aGQM+g/aU6DZ3AznLjXqbTpFOGFVJkIQLmSIENLmxrLHlLxe/gKbI6JI3trfNnzI8JjOU10z0RJkq7SJHSalyRsoAXWnvkIDFUUa6AAehnMskXrey/PFxsM0j9mhtU1xM8ShK9Q8vz65t0Gmqfs0W0HtEhfGTpSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fmXc8oU8; arc=none smtp.client-ip=209.85.216.52
+	 MIME-Version; b=cEWwcUJdbP5MXj9FSA2EmLSwnvJedANC1ZKjwKkV6N6AuckJHbswj4gw/n1JWgdXDfGhjMAkS5eUR9W28KGx6/EEGQz5u6iuezkAdyCWX9mjk7R8RO7jUlyv8wkG/CygYCzu2N5KNDRJo3Br0KLDfZEK6673+4Fdb60CczjcT3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kly7RrAf; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fmXc8oU8"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-38e08baf860so3425856a91.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 03 Aug 2026 15:16:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kly7RrAf"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2cf452def93so3113025ad.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 03 Aug 2026 15:16:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785795383; x=1786400183; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785795385; x=1786400185; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=cyQb3HEnxnGJdzSi8B8jk9beGpq3QOPyQ1mK+KBtq5A=;
-        b=fmXc8oU8QMWRSg83kAatQ3GNpWjjSeFXdDFz/EfLaJR8lKtFDy8k0BgzDeSjG2vWVz
-         ki12rrVoKtLy/xhEYzjUwiPnpnQx8EJvEVlnO38s8VFitlvTkKJgwNGwbzLtMkrnWoOo
-         fIqW34odSPmPAuE/k8SK5pPMnz4tKg8p1y788wYxfXejjxlxWjSdRzmNsDiU5Y/u1MSP
-         jAWjAy/LXbw4LMyus0OIqSPZ0VjjNN5H8HUBdbMKs6sgWpB5993X9HaBdcjRudC4qCPN
-         x1NAQAg5lJtFxI7qRIhyGFE0IWdPCENlqmcGjGMbKmUe/3alR/KpxVA/q1nWrNoaVCKJ
-         TNNw==
+        bh=5LM51EciHqg/+cWUGKzq5pQNwGKYXu9VyZMTqMOay7I=;
+        b=kly7RrAf2OvRFF9VWX+StFLnWWvJXla3DMbnHjiuM2BH1wKrki+M9DpTc+m2qvFVeZ
+         +qr5LH8M0+gDdTFbHeBrtsrO2lOeoKgN9IMbC1op/fiP+gzHf1oQrvDtf1KflkNQ35yV
+         DdyOuc3lAYp9wE+eT+++dx1XMK8/rdOA8j70n1h+tzJpoDJ8eTCEHNv8s6lzLXa4sfga
+         OI3fll1t9/m29mkrpd+JIHdmIhRz89oL94BhYgZQHNP95V0G878rjV8CRZ1gQM+OEMIa
+         UQLoFxBNQJEziNlT77hjdHLW9VBLM2zkuv6OQaX6TY7IIcYPiuALm/T0f9PMuW/AoLy1
+         C6qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785795383; x=1786400183;
+        d=1e100.net; s=20251104; t=1785795385; x=1786400185;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=cyQb3HEnxnGJdzSi8B8jk9beGpq3QOPyQ1mK+KBtq5A=;
-        b=Sti9d6Q05uT/GTFfnrYqy8XyIQEhAS2jbv5dJOgkX2ytHfYJ8nE8GvNOOwMOp5B+J/
-         XBL8D367uLzgS7KPB7HUwGndrrBPs02+hK9IN7o+YP1JtH3bARfyo9v3GFY9iQHJqmlY
-         BTsL6n9wh1nd1oW2UWYlQUJ6XTyoLKIsstNpQUEqlBDuKYv95kY8rz7nChR0z34rE63D
-         G5QZecdZZFVABS19NpImKHLP5mkwuLpTUZBbcnQ4C/o12S9RUSyBbDpFQbdHNS1u3+6x
-         YMAl4XQ4X52TMZArUyaii9Z9KtpS4K46zjhJzxrm4LFCTnWnnrjaaunHOsDs1O6PJmit
-         1UdQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoD4StDtAA0lNYeXHUgrIrbWK6AfRfwTOOQ+fhMDSQJMmXyG6E1Ij9vY7y5fipg51KzMq2eCOIy27/N9g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyr3zo2Bv6QFba21tASF/WsIX+7FK/P4zX+94+kDD5mH9Y3SM/N
-	C8ygtbtihMP7Ryn8u3+Noy0h2hofcYE39gfSCLqtxAHC/1EAZIE8ol84
-X-Gm-Gg: AR+sD10ko7x32m2fa2bwHbhIjU6MtXISaFzuTreoSOY2BGHgAGGDnbJFMrqC6fxhtxF
-	uJ8jclNzag31egVgfoti7kW2FJeUUV6Wbhid/IJslDpUzQ74a8lqLgejxx4O73QNWs0ncqOk6ao
-	8s7XBvfYUDnbNqCKZxhmOLCDXQnj9Zf+WpdkpBcx3iALRpon2E+D12CtIOewZVPsIT+gnElhceJ
-	KZq4KW9y9ei7OWr0DF1jZN0FImK3IcoLMc2PnKopT9w5EvFC/1w4YGmtfTMMzzRHSGcF2L3A12S
-	3H9rpBUk/thHFQYp5r2PVPo5fDRDALkCkY+B732DRwn5IZsWw15/NvSj5prcPkzqRJFcBQkobrH
-	vWkjz4lyYlOniC0N0wByrxOoChXnu7Iweh+L4v+wH+JF6+CO9JiaYR0nrAfyOpwZiFQPFJ4VHvI
-	IyazygrAuhSQqKdrTxumWxB9V7ZjLBm+UqooMb6DwbLv9p4tZ30MfLBKCHROVg7pVdLIQe/D7WE
-	C6dMLRkqWI5uoMXJ5oAEIiHFSZvslpVk82R/gJkcQ==
-X-Received: by 2002:a17:90b:5824:b0:381:9028:5945 with SMTP id 98e67ed59e1d1-38fbc43a847mr11586487a91.14.1785795382878;
-        Mon, 03 Aug 2026 15:16:22 -0700 (PDT)
+        bh=5LM51EciHqg/+cWUGKzq5pQNwGKYXu9VyZMTqMOay7I=;
+        b=Poy3Ar/N+am6xdh7nmc8pGiMtn+lSP64kPpVrRR79SCjiFuHjDiJ6nNvbWKncR+1mb
+         ZCToXBzadOA9gr93x1BjZnH8x+yKiBaO2SjtcbvCs8aOO5zfA0xt46WaPAhdc2EMniz0
+         beQ5eyIAljaeyi0IvqlWh0VKDL3ZqVgMQeWVkV6Y+DhFa/2+fcBl40wCGHKwEMZETWmm
+         ZlX3ZpNwYm9HP7rOPYu551+yUtGc2RGgGviKo88XthGylSTYLYb29wfJrBvg5GUZ31p/
+         vUqLz024ZTVnwNB1LdUNWkGoVsmA6uctwBzrlXQ1M2hB17MKKqMoMptKKYJNzT6rZa4Z
+         l3cw==
+X-Forwarded-Encrypted: i=1; AHgh+RogjeXVaUWn+FPoLgA/Hzq8jTTtVyXUBa1SYZkh26m7jvRgmE3xpezVpvk0AbCaVowg7w040RDS5q+eUA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfFA3P8bGaRfvWQFQPK/XFA9PPHCZ86i0Tw4Y3lVFo8fRw93TN
+	XzW3We3s7BlMMcUjMS/uNUBpqivpdP5PdVhUhAKmilw+HW8rNgIlwIbY
+X-Gm-Gg: AR+sD13fenrN/HOr0rV6YeINPIgEoQiuyxYFegpJIliadPOh7PQVeu/McbQVfcsu7Ix
+	mprqnzOAYtzGweRmvThbZ07AaLmtMEp0JHsBJsrMPT/Tu68v+nCy6t1G3l1k0L1Qrxp6BifgASK
+	Ij04WbgrUhBREymSZCjNaP6rPTYgyL3tusThEtsIoEykGrB7OBGUSRMHc9CN+hoOlQov+jca6mH
+	x/DbMeVp9SZSW24p7lW/9fEVdjS0DJY3Z+fo/sFbgeLYHvz6SeTiCZ9ZwhKrmV0VAcKuEjnclXR
+	29n0ytwBrIo4ulCoA9lRriliISaPsJlaxhaSkk6+qSzbHsWzk7CQ9hARJoCBLOdTe8Yc4o/g4/c
+	qffLELU2J0VBI2RvOlxWDzgXknhN+4hLSItJinyZNylsRck6QaayXic+tANRp8AbMkLEnHL2aWB
+	6o80km2D6+/BfYThAPSjdADwrH8fxpUrFyX2JLKiU6k9cjmpyozyOGFPU278Dm6l/qOmzOWjha+
+	Y/mumcfoLyzKeIu8UH+TYxfS5vvfF+8oQjU6ijTbsNX+mAZ+l1G
+X-Received: by 2002:a05:6a20:431f:b0:3c3:750f:3cf9 with SMTP id adf61e73a8af0-3cb6c7b8475mr1065933637.11.1785795385301;
+        Mon, 03 Aug 2026 15:16:25 -0700 (PDT)
 Received: from lappy (108-228-232-20.lightspeed.sndgca.sbcglobal.net. [108.228.232.20])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13fab1334cfsm38685666c88.1.2026.08.03.15.16.22
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13fab1334cfsm38685666c88.1.2026.08.03.15.16.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2026 15:16:22 -0700 (PDT)
+        Mon, 03 Aug 2026 15:16:24 -0700 (PDT)
 From: "Derek J. Clark" <derekjohn.clark@gmail.com>
 To: lkml@antheas.dev
 Cc: W_Armin@gmx.de,
@@ -71,10 +71,10 @@ Cc: W_Armin@gmx.de,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	platform-driver-x86@vger.kernel.org,
-	Matthew Schwartz <matthew.schwartz@linux.dev>
-Subject: [PATCH 3/6] platform/x86: msi-wmi-platform: terminate msi_quirks DMI table
-Date: Mon,  3 Aug 2026 15:16:11 -0700
-Message-ID: <20260803221614.59324-4-derekjohn.clark@gmail.com>
+	"Derek J. Clark" <derekjohn.clark@gmail.com>
+Subject: [PATCH 6/6] platform-x86: msi-wmi-platform: Add Gen 4 device
+Date: Mon,  3 Aug 2026 15:16:14 -0700
+Message-ID: <20260803221614.59324-7-derekjohn.clark@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260803221614.59324-1-derekjohn.clark@gmail.com>
 References: <20250511204427.327558-1-lkml@antheas.dev>
@@ -87,28 +87,113 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Matthew Schwartz <matthew.schwartz@linux.dev>
+Adds support for the MSI Claw 8 EX AI+. This device uses a unique new
+shift mode for custom TDP not previously exposed by this driver. To
+ensure that "MSI_SHIFT_MODE_USER" can still be set in the future to
+CUSTOM platform profile, store the shift mode that applies to custom in
+the quirks and check it outside the switch case in _get() since it is no
+longer a compile time const.
 
-The msi_quirks table lacks a terminating empty entry so it crashes the
-kernel on non-quirked MSI Claw devices.
-
-Signed-off-by: Matthew Schwartz <matthew.schwartz@linux.dev>
+Signed-off-by: Derek J. Clark <derekjohn.clark@gmail.com>
 ---
- drivers/platform/x86/msi-wmi-platform.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/platform/x86/msi-wmi-platform.c | 38 ++++++++++++++++++++++---
+ 1 file changed, 34 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/platform/x86/msi-wmi-platform.c b/drivers/platform/x86/msi-wmi-platform.c
-index 2439b4f0001b..fdc2f6f4ca7e 100644
+index 8d11dad99776..0b1b64182cc3 100644
 --- a/drivers/platform/x86/msi-wmi-platform.c
 +++ b/drivers/platform/x86/msi-wmi-platform.c
-@@ -268,6 +268,7 @@ static const struct dmi_system_id msi_quirks[] = {
+@@ -271,6 +271,17 @@ static struct msi_wmi_platform_quirk quirk_gen3 = {
+ 	.pl3_min = 10,
+ 	.pl3_max = 48,
+ };
++static struct msi_wmi_platform_quirk quirk_gen4 = {
++	.shift_mode = true,
++	.charge_threshold = true,
++	.dual_fans = true,
++	.restore_curves = true,
++	.custom_shift = MSI_PLATFORM_SHIFT_MANUAL,
++	.pl1_min = 8,
++	.pl1_max = 35,
++	.pl2_min = 9,
++	.pl2_max = 45,
++};
+ 
+ static const struct dmi_system_id msi_quirks[] = {
+ 	{
+@@ -305,6 +316,14 @@ static const struct dmi_system_id msi_quirks[] = {
  		},
- 		.driver_data = &quirk_gen2,
+ 		.driver_data = &quirk_gen3,
  	},
-+	{ }
++	{
++		.ident = "MSI Claw 8 EX AI+ CG3EM",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Micro-Star International Co., Ltd."),
++			DMI_MATCH(DMI_BOARD_NAME, "MS-1T91"),
++		},
++		.driver_data = &quirk_gen4,
++	},
+ 	{ }
  };
  
- static int msi_wmi_platform_parse_buffer(union acpi_object *obj, u8 *output, size_t length)
+@@ -805,10 +824,16 @@ static const struct hwmon_chip_info msi_wmi_platform_chip_info_dual = {
+ 
+ static int msi_wmi_platform_profile_probe(void *drvdata, unsigned long *choices)
+ {
++	struct msi_wmi_platform_data *data = drvdata;
++
+ 	set_bit(PLATFORM_PROFILE_LOW_POWER, choices);
+ 	set_bit(PLATFORM_PROFILE_BALANCED, choices);
+ 	set_bit(PLATFORM_PROFILE_BALANCED_PERFORMANCE, choices);
+ 	set_bit(PLATFORM_PROFILE_PERFORMANCE, choices);
++
++	if (data->quirks->custom_shift)
++		set_bit(PLATFORM_PROFILE_CUSTOM, choices);
++
+ 	return 0;
+ }
+ 
+@@ -816,6 +841,7 @@ static int msi_wmi_platform_profile_get(struct device *dev,
+ 					enum platform_profile_option *profile)
+ {
+ 	struct msi_wmi_platform_data *data = dev_get_drvdata(dev);
++	u8 custom = data->quirks->custom_shift;
+ 	int ret;
+ 
+ 	u8 buffer[32] = { };
+@@ -829,6 +855,11 @@ static int msi_wmi_platform_profile_get(struct device *dev,
+ 	if (buffer[0] != 1)
+ 		return -EINVAL;
+ 
++	if (custom && buffer[1] == custom) {
++		*profile = PLATFORM_PROFILE_CUSTOM;
++		return 0;
++	}
++
+ 	switch (buffer[1]) {
+ 	case MSI_PLATFORM_SHIFT_SPORT:
+ 		*profile = PLATFORM_PROFILE_PERFORMANCE;
+@@ -842,9 +873,6 @@ static int msi_wmi_platform_profile_get(struct device *dev,
+ 	case MSI_PLATFORM_SHIFT_ECO:
+ 		*profile = PLATFORM_PROFILE_LOW_POWER;
+ 		return 0;
+-	case MSI_PLATFORM_SHIFT_USER:
+-		*profile = PLATFORM_PROFILE_CUSTOM;
+-		return 0;
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -872,7 +900,9 @@ static int msi_wmi_platform_profile_set(struct device *dev,
+ 		buffer[1] = MSI_PLATFORM_SHIFT_ECO;
+ 		break;
+ 	case PLATFORM_PROFILE_CUSTOM:
+-		buffer[1] = MSI_PLATFORM_SHIFT_USER;
++		if (!data->quirks->custom_shift)
++			return -EINVAL;
++		buffer[1] = data->quirks->custom_shift;
+ 		break;
+ 	default:
+ 		return -EINVAL;
 -- 
 2.55.0
 
