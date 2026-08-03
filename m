@@ -1,72 +1,84 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA7C40F74D
-	for <linux-hwmon@vger.kernel.org>; Mon,  3 Aug 2026 13:26:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A6440B11C
+	for <linux-hwmon@vger.kernel.org>; Mon,  3 Aug 2026 15:01:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785763596; cv=none; b=tIcyA83jNC+c+84KYExPsKyb3LW4vFtrnjcQ+arz9JrXC17UqKfEbHEvArcfcTDxeE/y2lEQFCqz2Xy+27E2DPzDnoAdFV+NQNr3jHLaXdBDOdZxs1x821Mr7YU+ljbRGy7ijwmc0+Exog1SaFweUJikVKq8uckuI29Ic1bzvvE=
+	t=1785769320; cv=none; b=trc2FOyb8r1OB4RkNksDlyImty5f4JnC6puMVXjuIGmVwSJVCow6U1fCs4gwLXL96sKz0fFZgsfLTcO/bKdBRiCdL5FBv9rRT+XG8dUIGp42dhJbNmr7oPpiTt57NDbiRejFM2Z1A5IDh+bh5bpWpGJgAxmrWvp+Mk8rzio86xI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785763596; c=relaxed/simple;
-	bh=VEfV5i7+rjLPz91IjmWTpZNZKQKHmYmJnE5AmzTRjaM=;
+	s=arc-20240116; t=1785769320; c=relaxed/simple;
+	bh=IZhNb9orP3q/qKe1fv5lTgp5V9rCwNYTH1hDIO9R7MQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aUppVm5NDfq4FKp93zHrnpB5wE7XunEgcKUSBYNtt4sJHLsbGwTYsaMMvm4TmUPcn61FArR4FY2D/jLEqIlQVZK9bN+rvXP6/ThzwX4Ct32qkXlCwXYM37Iz4wHHzRjcDN3Rxdknbpv21sTbji5mB5kIlznXonXrnqJ4njezfVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lffa/BIo; arc=none smtp.client-ip=209.85.221.53
+	 Content-Type:Content-Disposition:In-Reply-To; b=E3zcf6wWdlay4dm18oZSPfnpjXzvMtSxj3OhE0PQhPT3cm8gbX0lWVGmpZbpFBSEOt4CnxMGjWhmF51yzubk7CSduudkghp3JqkkIseu7SZgHc4k863StieS/RjJuXGx8BKJt8vs8yPYWaIOFH7YA4nXPpEDzfl3oFz3zAtqPG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QMcHXGjF; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lffa/BIo"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-47f703a9e5dso1702850f8f.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 03 Aug 2026 06:26:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QMcHXGjF"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-49553515a8bso35221705e9.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 03 Aug 2026 08:01:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785763588; x=1786368388; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785769316; x=1786374116; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :content-type:mime-version:references:message-id:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=3uh4QWJ+dMB3SyoQaPH7hwvsQwkONdTGohgRyY0mt0c=;
-        b=Lffa/BIo0K+rgvzxrDvn3BfUZPDK4yX6pCueOdvgxS+ySTZ10eMTlTsSm6boTvIzA2
-         T6VoOFsTDmmmkMThJoKq+PtDnuMk7IpR5i39TlaNkNTdU68hQXy1tky9vCslkV+3VJ3s
-         IhaupFoHWGfk8Jp4KmWswctJB5zTxGlSanRvVa2u2Z6MEwN6c7MaD6ulkcEt0hQ2imPi
-         DDVy8EqgGj5UCrfxPgDlPrQwPC9NtD6nC2fasTsdhKMn4DyvbaKPIgobtC0Zv8anqHN+
-         dAQiY9s+YwaEv9ZZm+YSrnKkn+6SMYsB4rhHxEqcYqF37q8+81S7SyanozctLvY9ni8p
-         vknw==
+        bh=Ep+nLqQCF6bAr0oltLdzKjN/n2j57SUc0s56vDHNl7U=;
+        b=QMcHXGjFysL9Kf0JxEJORaRDjwIncMKaYNK2PcOc1/FEYdQnad1oJmyAskYN9LhfZ+
+         LZuqmyG1r+TO8KpRPWxVhkr5GbSKTKKXLH3wxeXA8LpNFclWm34WDwB8xBr60EymguwZ
+         UYzyYdnxEqAGgFL6nwC8Kyj8xU5TJXh3fgKuLocxKYMkPOs73/r5vH7ADM+vc/X2oPkZ
+         up+aBPBU91JChuJ/O/WN0ky7Z4fMERYYhfvc6sgRYts00qDpCPgiSz4Q/GRgTzq8Y4FW
+         /pJ//JKSRW0VjEmG/E0YlSOrD/+vFVIpxlARFpyrPeEkg4SWIbfE3sdcEyN7AKKh+qgW
+         fgrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785763588; x=1786368388;
+        d=1e100.net; s=20251104; t=1785769316; x=1786374116;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :content-type:mime-version:references:message-id:subject:cc:to:from
          :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=3uh4QWJ+dMB3SyoQaPH7hwvsQwkONdTGohgRyY0mt0c=;
-        b=IkysFgLms9Na7RILHCL0abD2/jq7QVCvu8nb/O2wcOm9XaQkPQ0+ThVKovJSVFmvSu
-         8xAy4Zsq3DPoNUa8a5alsMU69Ve/j4C7hvj6gmOWhehOS9mpq2sw1YFCLZU4A51PS7lJ
-         Dt5DTDGREVKpysNVQeye4RaD98UIk9xJJVsYsaDpKBjiRZEZLAtgsG7DgUMVkKo4hl3l
-         lSA/jxmsudztJemMvSDzGPy97vbRI1UmAUfNY4rO6Gn9JGIyb1iiBG/zxWWmNHQmx/JN
-         YyHMaPnrXNQtubXclFYi3C2p9MBjMpIjuyyjzaTGZ7TsEIYWHQkHeewMo093udOE6DRd
-         x6wg==
-X-Gm-Message-State: AOJu0YyOn181qLmSEUkjJnF9s7bOROtTkTXsvm+cQm2aqa5F7L5TA/Hf
-	FVIj33/a/QPveay1KV1jCpr1Zlu4WC1mj+FDaWdLfxa2w3XZEe9jSbL7
-X-Gm-Gg: AR+sD10RNJb2tOY9BrHLaLhO5UdFUDmhw7Uu/iKOPSvBG6pFbx+4Pv90c8vm1ddjsEL
-	DHWo5vXqytSpH1aNnSdcYspwjsWA61vXowXerfLXmkzsv3EijROw8WHTGrew22WgVLsSxu4bsOL
-	keefFRGmZ2m1EftJopShSo31bSzJMgrySbIRePAyK+poLCLm0fKosVpETBU7u8zK9/1eBu9RTtD
-	rO3mujdy4sp59sSXncudUX9at74u02+0gQX+itIH74tGifgX3SGNRJ+0ejoPBE1kD1M7lkUlMLn
-	JPG2SidKa8s+RXBP4RLb5Qsqp6QIulCasfYdPkATmSXlxhA9NPR1zcbLCUSkwFbhccLQ1mBbA//
-	Kwgat0oBc3cIvOIEgSjLfKGxljBZxD1knOH1EhRMcYTgJWC72BygZ3ED/tHeHm4z6F7NDamuCec
-	SednSRkRFP537Vvjb6jFAfljaO1meygkKwyrbx7XRXE30vvd3JJMpi
-X-Received: by 2002:a05:6000:24c7:b0:47f:8fc9:6eaa with SMTP id ffacd0b85a97d-47fd72ba6fcmr26152582f8f.8.1785763588049;
-        Mon, 03 Aug 2026 06:26:28 -0700 (PDT)
+        bh=Ep+nLqQCF6bAr0oltLdzKjN/n2j57SUc0s56vDHNl7U=;
+        b=iUd5Az3W7xPFAZNe87xdO/MYtfdhJ2AllulGYwecOTWKpKyn5o/AYXKjYvfFRQ3bCB
+         KGLFH4BrJ1ZWMdut1CTVGKkDCGAL+GZIRPKE9CSHqCngXWyKFNUkyQKpv/tOqEfEs179
+         QkqypiWWOxqcCl56gzOsi4qxotxU2m+gNQOFXo2O0a/Li3cUgRv682xxmlSGcLfjH8jZ
+         KMb4z/NrjkkFj4Zf6MqpgPhkhS9BvxrDNv6R80eG9XgPTnIi6xGM2UnR1q8jCmN8AHX5
+         ZV/jUyxtJGWHnjjPcSu2FJTWNOBltU73u8AHmqlZpGTSnJqqrVx1JaUgGwH84GDiFeZt
+         LFZw==
+X-Forwarded-Encrypted: i=1; AHgh+RoPXzC/sw8WnSu3AHA4qR8Xb+06wIori9g6Dv0SioCBP6almeTdMmDrljyhiLjg0JmxHAWklObUZ7Xy2A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywr/PC4YXMsnxXov9oM7AyvFwU9uiG3ugNG96J4R1vpYqxDl3EL
+	V9afacMO4k6yXFOXiJAQu02d8+4SWXHb/m8ThNVuaCpGRxbrz7YFr+WnDzeqmBa6
+X-Gm-Gg: AR+sD12ejKm0yMfsBAFVx7jYClG+JpMeT996o9lE4HV4D1diKKPLLBvnq3jmE9gR5Au
+	D8Mfsrb+HMUebQ+ufECtWef4T6yehf4h7Y981WZHJYo/XyfzrlNJFikjOFEmif8RKX7gtmcrDfY
+	/KefPHgnYyG0l/iRGOGiNe72ma6KjHhS3XAsPtrkW0F43qrkv3giSFy1PNbJmkm0dvhDUmGNdZY
+	QYw/Zz88QEIaLf3vQ6DfwPugJEkCcBbpQ+FkZJ3aAyWucpBdinWPnl1Fyud5aFEuu3rZhY2Ulcr
+	9iEjFoTCXwXmViBrB7QWZRipE0sOjYJZQ0YYhNLz0hBO5rIWBtzUH+K4naw7fsIKoVEdxBsBz2g
+	9HksirDd45/K4jceIhehKT26SGmH1TrJKBQ6YelSltz2Pq1D0qmhFic8g1z6PQbpTg57D79aK3D
+	U8T601yOoH0aRx2Xe2QFZyNnPkHalkHTRED5JBMhCkDJSg0vdZ++MYFiZYHnPbkco=
+X-Received: by 2002:a05:600d:849c:10b0:499:48bb:417e with SMTP id 5b1f17b1804b1-49948bb41d5mr32558375e9.2.1785769315942;
+        Mon, 03 Aug 2026 08:01:55 -0700 (PDT)
 Received: from nsa ([148.63.225.166])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd45895b6sm33784651f8f.26.2026.08.03.06.26.27
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4980878dbaesm404528925e9.12.2026.08.03.08.01.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2026 06:26:27 -0700 (PDT)
-Date: Mon, 3 Aug 2026 14:27:37 +0100
+        Mon, 03 Aug 2026 08:01:55 -0700 (PDT)
+Date: Mon, 3 Aug 2026 16:03:04 +0100
 From: Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>
-Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>, 
-	Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>, Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-Subject: Re: [PATCH] hwmon: (pmbus) Let PMBus drivers report the supported
- PMBus revision
-Message-ID: <anCWlguPT2qPALCg@nsa>
-References: <20260729011914.4018703-1-linux@roeck-us.net>
+Cc: nuno.sa@analog.com, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
+	Alan Tull <atull@opensource.altera.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH 3/5] hwmon: (pmbus/core) Add mapping function to
+ pmbus_read_block_data()
+Message-ID: <anCsIHUkaL7ckyiL@nsa>
+References: <20260728-hwmon-max20826-support-v1-0-224766e0acd1@analog.com>
+ <20260728-hwmon-max20826-support-v1-3-224766e0acd1@analog.com>
+ <c3e143ed-af08-4a0f-a630-96a255df838d@roeck-us.net>
+ <amtewh9lOgWz0-Nh@nsa>
+ <e37df572-1ca9-4c56-a16e-faa44f1ff1cd@roeck-us.net>
+ <amtqPQSM6zsiCh4B@nsa>
+ <6287e749-04f5-4a03-a91c-fcc705df269c@roeck-us.net>
+ <amzB2aw_4y6ji9zs@nsa>
+ <b48636b8-33d1-425f-93a7-d0b9c4dd86ca@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -76,153 +88,113 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260729011914.4018703-1-linux@roeck-us.net>
+In-Reply-To: <b48636b8-33d1-425f-93a7-d0b9c4dd86ca@roeck-us.net>
 
-On Tue, Jul 28, 2026 at 06:19:14PM -0700, Guenter Roeck wrote:
-> Some PMBus chips do not support the PMBUS_REVISION command. Knowing
-> the PMBUs revision supported by a chip is relevant for PMBUs core
-> functionality, so add support for letting chip drivers report the PMBUs
-> revision.
+On Fri, Jul 31, 2026 at 09:46:29AM -0700, Guenter Roeck wrote:
+> On 7/31/26 08:42, Nuno Sá wrote:
+> > On Thu, Jul 30, 2026 at 08:54:25AM -0700, Guenter Roeck wrote:
+> > > On 7/30/26 08:19, Nuno Sá wrote:
+> > > > On Thu, Jul 30, 2026 at 07:47:37AM -0700, Guenter Roeck wrote:
+> > > > > On 7/30/26 07:27, Nuno Sá wrote:
+> > > > > > On Tue, Jul 28, 2026 at 02:05:53PM -0700, Guenter Roeck wrote:
+> > > > > > > On 7/28/26 09:03, Nuno Sá via B4 Relay wrote:
+> > > > > > > > From: Nuno Sá <nuno.sa@analog.com>
+> > > > > > > > 
+> > > > > > > > This is in preparation for adding support to a device which needs to
+> > > > > > > > use it's own read_block implementation.
+> > > > > > > > 
+> > > > > > > 
+> > > > > > > The chip-specific implementation calls i2c_smbus_read_i2c_block_data().
+> > > > > > > I'll need to know if this is a chip limit or a controller limit.
+> > > > > > > If it is a controller limit, a chip specific override would be
+> > > > > > > inappropriate.
+> > > > > > 
+> > > > > > I'll reply from top of my head (did not looked at the driver again).
+> > > > > > IIRC, the biggest reason we need the chip-specific implementation is because of
+> > > > > > the RAIL selection logic (mainly when not in page mode).
+> > > > > > 
+> > > > > 
+> > > > > Yes, I have seen that. Question is why you use i2c_smbus_read_i2c_block_data()
+> > > > > instead of i2c_smbus_read_block_data(). The rail selection logic would not
+> > > > > require that.
+> > > > 
+> > > > IIRC the reason was because the i2c controller on the raspberry pie does not
+> > > > support i2c_smbus_read_block_data(). So I guess this:
+> > > > 
+> > > > https://elixir.bootlin.com/linux/v7.1.4/source/drivers/i2c/i2c-core-smbus.c#L220
+> > > > 
+> > > 
+> > > Hmm, I think we really need a common solution for that problem. Not all
+> > > controllers support i2c_smbus_read_i2c_block_data(), so you are just moving
+> > > the problem from one controller to another.
+> > 
+> > Yikes. I actually though i2c_smbus_read_i2c_block_data(9 was more widely
+> > supported (if not always). Not sure if you have something in mind but
+> > one straight way would be to choose different implementations (for
+> > read_block) depending on i2c_check_functionality()
+> > 
 > 
-> Use the new capability to report the PMBus revision supported by MAX20830.
+> Handling it in pmbus_read_block_data() would be straightforward. Actually, I
+> wonder why it isn't handled as fallback in i2c_smbus_read_block_data(),
+> but I assume there must be a reason.
 > 
-> While at it, add definitions for PMBUs revisons 1.3.1 and 1.4.
+> Either case, I don't understand how the existing calls to i2c_smbus_read_i2c_block_data()
+> work. For example, in drivers/hwmon/pmbus/max20830.c, the assumption is that the
+> first returned data byte would be the length field. However, that is already done
+> in i2c_smbus_read_i2c_block_data():
 > 
-> Cc: Nuno Sá <nuno.sa@analog.com>
-> Cc: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
+> /* Returns the number of read bytes */
+> s32 i2c_smbus_read_i2c_block_data(const struct i2c_client *client, u8 command,
+>                                   u8 length, u8 *values)
+> {
+>         union i2c_smbus_data data;
+>         int status;
+> 
+>         if (length > I2C_SMBUS_BLOCK_MAX)
+>                 length = I2C_SMBUS_BLOCK_MAX;
+>         data.block[0] = length;
+>         status = i2c_smbus_xfer(client->adapter, client->addr, client->flags,
+>                                 I2C_SMBUS_READ, command,
+>                                 I2C_SMBUS_I2C_BLOCK_DATA, &data);
+>         if (status < 0)
+>                 return status;
+> 
+>         memcpy(values, &data.block[1], data.block[0]);
+>         return data.block[0];
+> }
+> 
+> Does the command return the length twice ?
 
-LGTM,
+I think the device is actually the one sending the block size again. I
+went looking at very old emails and found this chain:
 
-Reviewed-by: Nuno Sá <nuno.sa@analog.com>
+Me:
 
->  drivers/hwmon/pmbus/max20830.c   |  2 ++
->  drivers/hwmon/pmbus/pmbus.h      | 20 +++++++++++++----
->  drivers/hwmon/pmbus/pmbus_core.c | 38 ++++++++++++++++++++++----------
->  3 files changed, 44 insertions(+), 16 deletions(-)
+"Thanks for the inputs... As I said, I think know what’s my issue. I’m fairly sure the first
+byte I’m reading is the block size. I’ll take this into account and re-test."
+
+Reply:
+
+"On one hand, that does make sense. The first byte in a block read transaction should indeed
+be the block size. That said, 0xB1 is 6 bytes long when not including this first byte. So we
+are still missing a byte with actual information. Could you perhaps please share the full 
+packet data that you are capturing?"
+
+The above was me struggling with per phase reads.
+
+But maybe the above changed with newer FW versions for the chips. I'll
+ask around.
+
+- Nuno Sá
+
 > 
-> diff --git a/drivers/hwmon/pmbus/max20830.c b/drivers/hwmon/pmbus/max20830.c
-> index e3470118fd36..d43ee6438b26 100644
-> --- a/drivers/hwmon/pmbus/max20830.c
-> +++ b/drivers/hwmon/pmbus/max20830.c
-> @@ -23,6 +23,8 @@ static struct pmbus_driver_info max20830_info = {
->  		PMBUS_HAVE_TEMP |
->  		PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_STATUS_IOUT |
->  		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP,
-> +	.have_pmbus_revision = true,
-> +	.pmbus_revision = PMBUS_REV_13,
->  };
->  
->  static int max20830_probe(struct i2c_client *client)
-> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-> index 23e3eda58870..1af247de9075 100644
-> --- a/drivers/hwmon/pmbus/pmbus.h
-> +++ b/drivers/hwmon/pmbus/pmbus.h
-> @@ -420,10 +420,12 @@ enum pmbus_data_format { linear = 0, ieee754, direct, vid };
->  enum vrm_version { vr11 = 0, vr12, vr13, imvp9, amd625mv, nvidia195mv };
->  
->  /* PMBus revision identifiers */
-> -#define PMBUS_REV_10 0x00	/* PMBus revision 1.0 */
-> -#define PMBUS_REV_11 0x11	/* PMBus revision 1.1 */
-> -#define PMBUS_REV_12 0x22	/* PMBus revision 1.2 */
-> -#define PMBUS_REV_13 0x33	/* PMBus revision 1.3 */
-> +#define PMBUS_REV_10	0x00	/* PMBus revision 1.0 */
-> +#define PMBUS_REV_11	0x11	/* PMBus revision 1.1 */
-> +#define PMBUS_REV_12	0x22	/* PMBus revision 1.2 */
-> +#define PMBUS_REV_13	0x33	/* PMBus revision 1.3 */
-> +#define PMBUS_REV_131	0x44	/* PMBus revision 1.3.1 */
-> +#define PMBUS_REV_14	0x55	/* PMBus revision 1.4 */
->  
->  /* Operation type flags for pmbus_update_ts */
->  #define PMBUS_OP_WRITE		BIT(0)
-> @@ -488,6 +490,16 @@ struct pmbus_driver_info {
->  	int access_delay;		/* in microseconds */
->  	int write_delay;		/* in microseconds */
->  	int page_change_delay;		/* in microseconds */
-> +
-> +	/*
-> +	 * Some chips do not support the PMBUS_REVISION command.
-> +	 * Drivers for such chips can report the supported PMBus revision here.
-> +	 *
-> +	 * Drivers must set have_pmbus_revision to true and provide the
-> +	 * supported PMBus version in pmbus_revision.
-> +	 */
-> +	bool have_pmbus_revision;	/* true if pmbus_revision is valid */
-> +	u8 pmbus_revision;		/* PMBus revision */
->  };
->  
->  /* Regulator ops */
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 53501fa1a28e..3e13d09e2c1c 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -96,7 +96,8 @@ struct pmbus_data {
->  
->  	u32 flags;		/* from platform data */
->  
-> -	u8 revision;	/* The PMBus revision the device is compliant with */
-> +	bool have_pmbus_revision;
-> +	u8 revision;		/* The PMBus revision the device is compliant with */
->  
->  	int exponent[PMBUS_PAGES];
->  				/* linear mode: exponent for output voltages */
-> @@ -2847,9 +2848,16 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
->  	if (!(data->flags & PMBUS_NO_WRITE_PROTECT))
->  		pmbus_init_wp(client, data);
->  
-> -	ret = i2c_smbus_read_byte_data(client, PMBUS_REVISION);
-> -	if (ret >= 0)
-> -		data->revision = ret;
-> +	if (info->have_pmbus_revision) {
-> +		data->have_pmbus_revision = true;
-> +		data->revision = info->pmbus_revision;
-> +	} else {
-> +		ret = i2c_smbus_read_byte_data(client, PMBUS_REVISION);
-> +		if (ret >= 0) {
-> +			data->have_pmbus_revision = true;
-> +			data->revision = ret;
-> +		}
-> +	}
->  
->  	if (data->info->pages)
->  		pmbus_clear_faults(client);
-> @@ -3537,6 +3545,17 @@ static int pmbus_debugfs_get(void *data, u64 *val)
->  DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops, pmbus_debugfs_get, NULL,
->  			 "0x%02llx\n");
->  
-> +static int pmbus_debugfs_get_revision(void *data, u64 *val)
-> +{
-> +	struct pmbus_data *pdata = data;
-> +
-> +	*val = pdata->revision;
-> +
-> +	return 0;
-> +}
-> +DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_revision_ops, pmbus_debugfs_get_revision, NULL,
-> +			 "0x%02llx\n");
-> +
->  static int pmbus_debugfs_get_status(void *data, u64 *val)
->  {
->  	struct pmbus_debugfs_entry *entry = data;
-> @@ -3690,14 +3709,9 @@ static void pmbus_init_debugfs(struct i2c_client *client,
->  				    &entries[idx++],
->  				    &pmbus_debugfs_ops);
->  	}
-> -	if (pmbus_check_byte_register(client, 0, PMBUS_REVISION)) {
-> -		entries[idx].client = client;
-> -		entries[idx].page = 0;
-> -		entries[idx].reg = PMBUS_REVISION;
-> -		debugfs_create_file("pmbus_revision", 0444, debugfs,
-> -				    &entries[idx++],
-> -				    &pmbus_debugfs_ops);
-> -	}
-> +	if (data->have_pmbus_revision)
-> +		debugfs_create_file("pmbus_revision", 0444, debugfs, data,
-> +				    &pmbus_debugfs_revision_ops);
->  
->  	for (i = 0; i < ARRAY_SIZE(pmbus_debugfs_block_data); i++) {
->  		const struct pmbus_debugfs_data *d = &pmbus_debugfs_block_data[i];
-> -- 
-> 2.45.2
+> > > 
+> > > One key example is the PIIX4 driver. Your new driver does not support the
+> > > majority of PC style systems with AMD CPUs.
+> > > 
+> > 
+> > I see!
+> > 
+> > - Nuno Sá
+> > 
 > 
