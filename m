@@ -1,121 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 431823C1F
-	for <linux-hwmon@vger.kernel.org>; Mon,  3 Aug 2026 19:04:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B637431E51
+	for <linux-hwmon@vger.kernel.org>; Mon,  3 Aug 2026 19:30:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785783892; cv=none; b=e68yLBjfV2UyZXjihdrBv4eMhqKW1OLU04WO/T73Inc7ySZ94IFdTr7ARgYHt1lDiGn/L5VO8VRqRX5oN56QZU4cF49/AS9cU7yvu3/C9B0Iv0hfk5QhdTV9EQFBfqm5DBW9Wxsdq00gKhgdWgVM6yHSJyWcXm5KlYn7q99IpOw=
+	t=1785785439; cv=none; b=OekxnYrtaDXQHnhAQmU1MpzVH7xFqPcRiXSrUjsvhV8FDv2pDVy/KKWQ6u3AuPOb7Igg82oQxV4+L/IuSUk9uGwzuwLw+o2MOIHS0Gu+sVd6LCzeR1/w9MfjgYB44Gd80vgmY5ORdjgm5son+9PSTQ4tw1TtIeyWjqrm7Pi8F+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785783892; c=relaxed/simple;
-	bh=+v7FAuHe7CEmQAss3ivU9PZaKHj2zFtoEULtalAsH00=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=MZDLgvcdy0rk0U7HigedSa1KNfmELSyqVoyQz1lw/ZRNCxr1ScfIEwoBfmMNTblxK0N+0fdJ++8s45i62Vhw5YaLHuqefnfENDYavQ0OJBBFsxj/IKEb+HWZEd0mZ59lyz3CQfWJP/lZgShtJcKrmXt25NWA8EgNq6qNWkZFVvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gpXTTvbx; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785785439; c=relaxed/simple;
+	bh=rE4NtSb8RefNwPqZ9ZPlNF51YGx+BAl9SMDLmbTX4n0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f1GaiH5DHxeUncMT7wLwspNBLPlsZFtglLr5+SywS2Qp2giVFNTMMyVTzfxRxcH8g67tcRoypXP7+otkTCN2X8FLjHQ2sUmNA0v6kFrW44qmxYhopSOJFWX5gFD/QzZRyT1gL5c0fFkDFFU8uEvgaxtztdLvEGEgjXHmwiOCp9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NFo08uZF; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gpXTTvbx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B57FD1F000E9;
-	Mon,  3 Aug 2026 19:04:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785783890;
-	bh=O8m38LJRypd7mZXbUpVxHuDtkiERztroF9i4K6eWUCM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=gpXTTvbxsR8ZYSYrM5vpDYv9d9lw68YSM/u0wAvFrMpfFro3JtUUWy3dOxTky7euX
-	 TbEbuzM0JX5AYGaWlPB/hiAV+tt4aURO46PpQTEIN7IVOpo9QTbTniZMc878sy73IK
-	 zHIDB4IytSU5CUkvj119XfqyhE/lVGmv571v/+OV/JcO6qQaTeX/n4rjAIRhqppXPZ
-	 wFb7HAm6RMdqx6yUxk/I/4ioVLP9oGPhkeyjF17pW9/Mgdvtd6ZdKeKwJe1sPuFSFr
-	 ttH95S/aS9OxWM5YlDMvmrmF5SQ8e9ca6Y20IlToqfylBn1jwhNtpQCwJp4sQ3M+Rh
-	 AkcGCTl/kICjA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v12] hwmon: (yogafan) Add support for Lenovo Yoga/Legion
- fan monitoring
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sergio Melas" <sergiomelas@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260803184206.18465-1-sergiomelas@gmail.com>
-References: <20260803184206.18465-1-sergiomelas@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 03 Aug 2026 19:04:50 +0000
-Message-Id: <20260803190450.B57FD1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NFo08uZF"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cbb662575d3so2087527a12.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 03 Aug 2026 12:30:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785785437; x=1786390237; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ZpRT+EhzQzaNzI6fC2iuMmtXR09+7xFpS5XvlJHjRa4=;
+        b=NFo08uZFyWC/GhVrf1WJsh9UYjIsBggUCRJdfsQTdN3RMaGnn+AuO+0LF3+wx6nf37
+         bzHdxW35y0L19e3+H1UMCP6eFEQMm5VcA2ZdZL1nPCJke/HE8Pd+c7Zh8g6JdJThQJan
+         f0W2Jr2Qgt3RhIodhdAqsLOQcWQuE/l1xSfmRixCKfR9EBaDGBZEZzb/fyaMn26zDw24
+         vqVmHuS6tZFucBCBRd+8WfhQELk2v3nxK1de1GIUiJ1iK1/lrboHkzfGhSayUb6QHfVL
+         +FTJ9OcG2Ita+2TFPldBnoRRu6On5iTsuYXTeYjRrMLOt87Crj6Jb0k6U1aZ2w+raFXp
+         VSjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785785437; x=1786390237;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ZpRT+EhzQzaNzI6fC2iuMmtXR09+7xFpS5XvlJHjRa4=;
+        b=aBI5qex3NSPEGweVNT0vWA/KycCeOp7P5HWTT79IhrIOeSP4N7sw++4202yxSGeAWg
+         I19M9LJjfBat1D4ECkgvMloWFI0O7Lp/lbzhN7siPHRwDdBZrhq/gEByt3Jte2LAQk4i
+         aWmrjayIkh57OORLeT4Yc/QT87U5modMHHEM0Dc57XevwUfnggfuLgMxPYAWgC6L1ayQ
+         0rTVLpelx8Nw8v9T96uA1I2wB3fecX2AqLMpdT8Q+rM9+pVZ8YEgQa127NEZEfCg/s24
+         DF3IUPv795rUwuZedt0WIvRq71OJOmeQ6pb3U8cVn0mij8LZkCZNNQep8ItSePncnnCU
+         aiOA==
+X-Gm-Message-State: AOJu0YweChzDd58Nofy/HfYGf9iL2ecEW+WgmVaqa/fWDoyMnvHyZSoM
+	B7Uqugi1DleV/4cKiEJ5qP1ZE2d7gJs+HAe4oTsWJ4F6HhOwdj5GUPNoFfelSg==
+X-Gm-Gg: AR+sD11kkLnOQylVMx7jncmOsmA8vjQ2W/Bh62jHG4VamQTRjVJlNascjQNqLBR6yAm
+	NirMWMPdnS92VcCTBDuMhBG5emoHM9ig75qRTqZVrfg8VAJODL5bWNGz0WdTqpek/VxG1Rs4OGg
+	wHD3MM5QOERPiWlgaXOJMo4jc5gdP+Zs6w5bGl9Q8BWtqCY6f6W+ZgRWwYDU6P1yhlaXIgTYzjh
+	bFRNnYs8+JUK+iZkrVuND2JUPEHZClitB/Lgkv4jlm6Q+zmF1+OOeFGgyrBE//5yXGlACqwB9KH
+	Y/uZ2FzM9lsOAoIw2JTdR0wAeYxufmchLW8Ni9V6o98rOuRdAaSzRoJBiJZqxodv9VRMmAcNUim
+	EKL2NROFnX5wdGvlujnkB3UTT4r4v+cOjmx+Udpng6FQtKVG68+i+1+9974WOZcccK5G89Xc6Ev
+	VLOFuOfbi+7a6WEoaqJtxCBI6v6xZSScZmgs5LwNsU1mL0MZxM4DXvu2S4COHBy950N9JGK86Sn
+	A==
+X-Received: by 2002:a17:90b:2dc4:b0:38e:ad9d:1151 with SMTP id 98e67ed59e1d1-38fbc3f807cmr10882365a91.4.1785785436347;
+        Mon, 03 Aug 2026 12:30:36 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38febffb349sm226750a91.6.2026.08.03.12.30.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Aug 2026 12:30:35 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] hwmon: (pmbus/core) Avoid race condition during probe
+Date: Mon,  3 Aug 2026 12:30:33 -0700
+Message-ID: <20260803193033.2285332-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] The MIN_SAMPLING rate limit fails to prevent excessive ACPI querie=
-s to the EC because the check occurs after the ACPI evaluation.
---
+pmbus_write_smbalert_mask() is not guarded, which can cause race conditions
+with concurrent sysfs attribute accesses.
 
---- Patch [1]: [PATCH v12] hwmon: (yogafan) Add support for Lenovo Yoga/Leg=
-ion fan monitoring ---
-commit c15f7b338b1cdd81a16c2f92f8d5807ac9a0b7da
-Author: Sergio Melas <sergiomelas@gmail.com>
+Similar, PMBus accesses in pmbus_init_debugfs() are not guarded, also
+resulting in potential race conditions.
 
-hwmon: (yogafan) Add support for Lenovo Yoga/Legion fan monitoring
-   =20
-This driver provides fan speed monitoring for modern Lenovo consumer
-laptops by interfacing with the Embedded Controller (EC) via ACPI.
-To address low-resolution sampling in Lenovo EC firmware, a Rate-Limited
-Lag (RLLag) filter is implemented. The filter ensures a consistent physical
-curve regardless of userspace polling frequency.
+Add guards to both functions to prevent the races.
 
-> diff --git a/drivers/hwmon/yogafan.c b/drivers/hwmon/yogafan.c
-> index 0a41b8672b56e..371e35895f584 100644
-> --- a/drivers/hwmon/yogafan.c
-> +++ b/drivers/hwmon/yogafan.c
+Fixes: 221819ca4c36e ("hwmon: (pmbus/core) Add interrupt support")
+Fixes: 1e069dfd96dfe ("hwmon: (pmbus) Add debugfs for status registers")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/pmbus/pmbus_core.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-[ ... ]
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index ba3e9e9fc8bc..6991c7f8d125 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -3448,6 +3448,8 @@ static int pmbus_write_smbalert_mask(struct i2c_client *client, u8 page, u8 reg,
+ {
+ 	int ret;
+ 
++	guard(pmbus_lock)(client);
++
+ 	ret = _pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
+ 
+ 	/*
+@@ -3700,6 +3702,8 @@ static void pmbus_init_debugfs(struct i2c_client *client,
+ 	if (!entries)
+ 		return;
+ 
++	guard(pmbus_lock)(client);
++
+ 	/*
+ 	 * Add device-specific entries.
+ 	 * Please note that the PMBUS standard allows all registers to be
+-- 
+2.45.2
 
-> @@ -77,6 +78,18 @@ static const struct yogafan_config loq_15iax9_8bit_dua=
-l_cfg =3D {
->  	.paths =3D { "\\_SB.PC00.LPCB.EC0.FA1S", "\\_SB.PC00.LPCB.EC0.FA2S" }
->  };
-> =20
-> +static const struct yogafan_config xiaoxin_8bit_dual_cfg =3D {
-> +	.multiplier =3D 100,
-> +	.fan_count =3D 2,
-> +	.paths =3D { "\\_SB.PCI0.LPC0.EC0.FANS", "\\_SB.PCI0.LPC0.EC0.FA2S" }
-> +};
-> +
-> +static const struct yogafan_config yoga_pro_7_14iah10_cfg =3D {
-> +	.multiplier =3D 100,
-> +	.fan_count =3D 1,
-> +	.paths =3D { "\\_SB.PC00.LPCB.EC0.FANS", NULL }
-> +};
-> +
->  static void apply_rllag_filter(struct yoga_fan_data *data, int idx, long=
- raw_rpm)
->  {
-
-[Severity: High]
-Does the MIN_SAMPLING rate limit effectively prevent excessive ACPI queries?
-
-Looking at yoga_fan_read(), it appears the expensive ACPI evaluation happens
-unconditionally before the filter is applied:
-
-drivers/hwmon/yogafan.c:yoga_fan_read() {
-    ...
-	status =3D acpi_evaluate_integer(data->active_handles[channel], NULL, NULL=
-, &raw_acpi);
-	if (ACPI_FAILURE(status))
-		return -EIO;
-
-	apply_rllag_filter(data, channel, (long)raw_acpi * data->multiplier);
-    ...
-}
-
-Even though apply_rllag_filter() skips math updates when dt_ms < MIN_SAMPLI=
-NG,
-the hardware ACPI query has already been executed.
-
-Since the sysfs fanX_input file has 0444 permissions, could an unprivileged
-local user continuously read it in a tight loop and cause an EC saturation,
-leading to system stalls and keyboard/mouse lag?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260803184206.1846=
-5-1-sergiomelas@gmail.com?part=3D1
