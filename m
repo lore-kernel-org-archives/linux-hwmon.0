@@ -1,64 +1,64 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C936349B1C
-	for <linux-hwmon@vger.kernel.org>; Mon,  3 Aug 2026 22:16:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68929346FB3
+	for <linux-hwmon@vger.kernel.org>; Mon,  3 Aug 2026 22:16:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785795386; cv=none; b=CBStwNcwibVCVkDOXLJZQbRSIpoOFPk12YEAqow2iaQOsNYddHn0I2DZqSmB0xFE4c3iM2E+5TCYyRo1kvYwGILfBHBtsIAP+2NX+ZlmIfrIvOEpG9F834QT/Sc552aGhKscqL/Qsa9g0NdyOEGOHxOPBZix5XM6u/2TiDjfCEU=
+	t=1785795386; cv=none; b=OmvmJ9G/QcGbIV9D2xSNRoy+rXuROCYh9lBOgJ8eTTFTYyCGiwQvSYk+aNl9NEswNZu8bnKWllBi3LORMkrbPaz7Q83kCX9ejaYewSjd7Aqhjr1+4q2vqFdtLVF87ivp8oCCcumc6PjPyOLrm6ppEOjMk1lK+NPt11Jga8GnYRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1785795386; c=relaxed/simple;
-	bh=ODSEOHVW4KYU9xP2cIISQVh2g4cADrCkR6ETTeHmPoA=;
+	bh=EIMWWlWDcq0uEYhrtukreWiGwiCZqVgmmuCgjtQWFjc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZtPr3M6ax1fnm8kbT3ZWaOeCjy7JVOXIwYAyJQmF3IGi47E0lvlRgS1DYfSyUDOcI1+c4nl69FmBztDWQj++W5/wWt7k/d+XfwTpLO4NfnjXET4S/6xKji5eZwHkG/mw1jSNozEpqfr1Lpom4FUU41QH+N8PYvFLVGjnKUThHio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d8bXM6do; arc=none smtp.client-ip=209.85.214.174
+	 MIME-Version; b=X5JKDCViQM/aGQM+g/aU6DZ3AznLjXqbTpFOGFVJkIQLmSIENLmxrLHlLxe/gKbI6JI3trfNnzI8JjOU10z0RJkq7SJHSalyRsoAXWnvkIDFUUa6AAehnMskXrey/PFxsM0j9mhtU1xM8ShK9Q8vz65t0Gmqfs0W0HtEhfGTpSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fmXc8oU8; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d8bXM6do"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2cad8076b01so43451335ad.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 03 Aug 2026 15:16:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fmXc8oU8"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-38e08baf860so3425856a91.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 03 Aug 2026 15:16:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785795384; x=1786400184; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785795383; x=1786400183; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=gtKu0FT85uYm4ILu5Mq1OuaF/iNH/TftNn4lcGyvoLs=;
-        b=d8bXM6doaHydHzm6dzFOTn3SCRvyLcTVDpPyP7wmAcp6XXXCw/36DwNmzblGsPzaES
-         Eh+WCh9n4xGq6/afaevwQOqTX64K5FmseuGSgMkprXgJ3CTC0LBAxh2s2m83ksTnUIvw
-         T5FMqPBb/76hIPjmC8/c30ri1kuGX/f8eb8Yy/tFlPfZSiprQNVZN5zLRz66ZBaxVpZQ
-         Z3bmLyGO3hzUypiRpiVHqYGRAp8+YkwFx3RAMxRTvtDEHX5QQbxlcWCA92L1MHYkZLVB
-         S/KEZzhqncWHVKzUa/qRPxQkxGSW2KFwbl+fv41gUsYWFEgp3O+wcYo8n301rE4dQjij
-         aeHw==
+        bh=cyQb3HEnxnGJdzSi8B8jk9beGpq3QOPyQ1mK+KBtq5A=;
+        b=fmXc8oU8QMWRSg83kAatQ3GNpWjjSeFXdDFz/EfLaJR8lKtFDy8k0BgzDeSjG2vWVz
+         ki12rrVoKtLy/xhEYzjUwiPnpnQx8EJvEVlnO38s8VFitlvTkKJgwNGwbzLtMkrnWoOo
+         fIqW34odSPmPAuE/k8SK5pPMnz4tKg8p1y788wYxfXejjxlxWjSdRzmNsDiU5Y/u1MSP
+         jAWjAy/LXbw4LMyus0OIqSPZ0VjjNN5H8HUBdbMKs6sgWpB5993X9HaBdcjRudC4qCPN
+         x1NAQAg5lJtFxI7qRIhyGFE0IWdPCENlqmcGjGMbKmUe/3alR/KpxVA/q1nWrNoaVCKJ
+         TNNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785795384; x=1786400184;
+        d=1e100.net; s=20251104; t=1785795383; x=1786400183;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=gtKu0FT85uYm4ILu5Mq1OuaF/iNH/TftNn4lcGyvoLs=;
-        b=bC/4CRnNPQspOD8FuenqWDzckEqarLwXuET1JsT4phUYLc4xPvI0xI4OigIpeyXzoR
-         A/wxIIctyQBRcsv29+5SmPk/0aCgA6pD6jGjyrWz3gWkyPFme2N1Op1dduZn0oTbpTuz
-         bjXhy5jjvYVsu88GCfxBO6GLvf+GDobR81D4bb65zvdpGOF2KUnu3JriS4WyC/6V9Y5E
-         1SAHXf8KHKIcAdG1WzHkDOXDmfk2poOlRqeDPCp+0OHMZ+apWUtCsS7JNM0aENLFK65E
-         ONFUGkN7qMlSiphKVcCU6WqbqdvDx9zV1ceh5Lk0r12H2ssf1UsSROBcUNhc1qDTdn5R
-         0uQg==
-X-Forwarded-Encrypted: i=1; AHgh+Rr3E5SW7701Lb5unepbyn5mTj5JCaoPTbiaSs2z9l/Pc2DTO/djA7WvcId+RKiI9VnEXcmPa0vwZZ1ASQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZNw+v2eWxIgshy9lH+ySLmGHkiibEZ2rNuyjyfyWugR85+rSm
-	iAEN6lckZyr0NFReC/8TcORX2iwUs1PA84XGW/ofh7xvvWMJqi3LlyZs
-X-Gm-Gg: AR+sD11+ic0VQPz7JCn44z1/4kTEVyYasYu0JR3y4K9SuWsy+asWzYxOboI9hUr7aBV
-	NLY38NhoDsLnew7J5tCTbKvKYjkpy2yILh3z/LBHPBFd2V5bhSrQQ1OiAdc5QUosdxAt1BGawjS
-	zwDzzv/zGH6o7JJYk1eFW2GJqzoM6skdtL4P2G7FWe0YE2xTu178RQwQPVAj0BzxXRukqQpzYH7
-	j5ZCWMpgfFOhuhTZTIevM6ym5AwhIpb1VGsElXBRfEEylprkX8o4khgt70UqlzNPPnV/ZCofTCN
-	S8NLIwOTk2fH+lUqpv14XB/XaxxHTPvgp2wN3DlEVUA19F0ITEUZrv+A9aEFCu1NzO+eKah85HV
-	nX4+kQ6J244G/20O0n4GxZvb5yTCXR22vDD+5FTIz/yIE4G7DMJtl4GLonPG22skUkcqDGQF8ON
-	RnGhD0H4iq+sfvJ6CbVkJ5XNpqJOMGp6kl3FgY2Pc80w7tT8lGHrSM6Z0VDdDIv2IULJ+ujXia2
-	nQRj9kI4P3Bkfd6B/6HWR+DXZcp2Ru+7he4t2dINg==
-X-Received: by 2002:a05:6a21:696:b0:3c3:a7ab:135a with SMTP id adf61e73a8af0-3c92a749b53mr11060704637.20.1785795383620;
-        Mon, 03 Aug 2026 15:16:23 -0700 (PDT)
+        bh=cyQb3HEnxnGJdzSi8B8jk9beGpq3QOPyQ1mK+KBtq5A=;
+        b=Sti9d6Q05uT/GTFfnrYqy8XyIQEhAS2jbv5dJOgkX2ytHfYJ8nE8GvNOOwMOp5B+J/
+         XBL8D367uLzgS7KPB7HUwGndrrBPs02+hK9IN7o+YP1JtH3bARfyo9v3GFY9iQHJqmlY
+         BTsL6n9wh1nd1oW2UWYlQUJ6XTyoLKIsstNpQUEqlBDuKYv95kY8rz7nChR0z34rE63D
+         G5QZecdZZFVABS19NpImKHLP5mkwuLpTUZBbcnQ4C/o12S9RUSyBbDpFQbdHNS1u3+6x
+         YMAl4XQ4X52TMZArUyaii9Z9KtpS4K46zjhJzxrm4LFCTnWnnrjaaunHOsDs1O6PJmit
+         1UdQ==
+X-Forwarded-Encrypted: i=1; AHgh+RoD4StDtAA0lNYeXHUgrIrbWK6AfRfwTOOQ+fhMDSQJMmXyG6E1Ij9vY7y5fipg51KzMq2eCOIy27/N9g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyr3zo2Bv6QFba21tASF/WsIX+7FK/P4zX+94+kDD5mH9Y3SM/N
+	C8ygtbtihMP7Ryn8u3+Noy0h2hofcYE39gfSCLqtxAHC/1EAZIE8ol84
+X-Gm-Gg: AR+sD10ko7x32m2fa2bwHbhIjU6MtXISaFzuTreoSOY2BGHgAGGDnbJFMrqC6fxhtxF
+	uJ8jclNzag31egVgfoti7kW2FJeUUV6Wbhid/IJslDpUzQ74a8lqLgejxx4O73QNWs0ncqOk6ao
+	8s7XBvfYUDnbNqCKZxhmOLCDXQnj9Zf+WpdkpBcx3iALRpon2E+D12CtIOewZVPsIT+gnElhceJ
+	KZq4KW9y9ei7OWr0DF1jZN0FImK3IcoLMc2PnKopT9w5EvFC/1w4YGmtfTMMzzRHSGcF2L3A12S
+	3H9rpBUk/thHFQYp5r2PVPo5fDRDALkCkY+B732DRwn5IZsWw15/NvSj5prcPkzqRJFcBQkobrH
+	vWkjz4lyYlOniC0N0wByrxOoChXnu7Iweh+L4v+wH+JF6+CO9JiaYR0nrAfyOpwZiFQPFJ4VHvI
+	IyazygrAuhSQqKdrTxumWxB9V7ZjLBm+UqooMb6DwbLv9p4tZ30MfLBKCHROVg7pVdLIQe/D7WE
+	C6dMLRkqWI5uoMXJ5oAEIiHFSZvslpVk82R/gJkcQ==
+X-Received: by 2002:a17:90b:5824:b0:381:9028:5945 with SMTP id 98e67ed59e1d1-38fbc43a847mr11586487a91.14.1785795382878;
+        Mon, 03 Aug 2026 15:16:22 -0700 (PDT)
 Received: from lappy (108-228-232-20.lightspeed.sndgca.sbcglobal.net. [108.228.232.20])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13fab1334cfsm38685666c88.1.2026.08.03.15.16.23
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13fab1334cfsm38685666c88.1.2026.08.03.15.16.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2026 15:16:23 -0700 (PDT)
+        Mon, 03 Aug 2026 15:16:22 -0700 (PDT)
 From: "Derek J. Clark" <derekjohn.clark@gmail.com>
 To: lkml@antheas.dev
 Cc: W_Armin@gmx.de,
@@ -71,10 +71,10 @@ Cc: W_Armin@gmx.de,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	platform-driver-x86@vger.kernel.org,
-	"Derek J. Clark" <derekjohn.clark@gmail.com>
-Subject: [PATCH 4/6] platform/x86: msi-wmi-platform: Clean up devices
-Date: Mon,  3 Aug 2026 15:16:12 -0700
-Message-ID: <20260803221614.59324-5-derekjohn.clark@gmail.com>
+	Matthew Schwartz <matthew.schwartz@linux.dev>
+Subject: [PATCH 3/6] platform/x86: msi-wmi-platform: terminate msi_quirks DMI table
+Date: Mon,  3 Aug 2026 15:16:11 -0700
+Message-ID: <20260803221614.59324-4-derekjohn.clark@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260803221614.59324-1-derekjohn.clark@gmail.com>
 References: <20250511204427.327558-1-lkml@antheas.dev>
@@ -87,119 +87,28 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The current driver has multiple minor mistakes. Fix them all in one
-cleanup patch.
+From: Matthew Schwartz <matthew.schwartz@linux.dev>
 
-- Device names are inconsistent/incorrect for the quirk table
-- Per the Windows DLL, PL2 must always be at least 1W higher than
-  PL1. Give PL1 and PL2 different minimum values.
-- Copy buffer before write to ensure payload is sent instead of stale
-  data
+The msi_quirks table lacks a terminating empty entry so it crashes the
+kernel on non-quirked MSI Claw devices.
 
-Signed-off-by: Derek J. Clark <derekjohn.clark@gmail.com>
+Signed-off-by: Matthew Schwartz <matthew.schwartz@linux.dev>
 ---
- drivers/platform/x86/msi-wmi-platform.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ drivers/platform/x86/msi-wmi-platform.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/platform/x86/msi-wmi-platform.c b/drivers/platform/x86/msi-wmi-platform.c
-index fdc2f6f4ca7e..35cd35fc6446 100644
+index 2439b4f0001b..fdc2f6f4ca7e 100644
 --- a/drivers/platform/x86/msi-wmi-platform.c
 +++ b/drivers/platform/x86/msi-wmi-platform.c
-@@ -124,8 +124,9 @@ struct msi_wmi_platform_quirk {
- 	bool charge_threshold;	/* Charge threshold is supported */
- 	bool dual_fans;		/* For devices with two hwmon fans */
- 	bool restore_curves;	/* Restore factory curves on unload */
--	int pl_min;		/* Minimum PLx value */
-+	int pl1_min;		/* Minimum PL1 value */
- 	int pl1_max;		/* Maximum PL1 value */
-+	int pl2_min;		/* Minimum PL2 value */
- 	int pl2_max;		/* Maximum PL2 value */
- };
- 
-@@ -229,8 +230,9 @@ static struct msi_wmi_platform_quirk quirk_gen1 = {
- 	.charge_threshold = true,
- 	.dual_fans = true,
- 	.restore_curves = true,
--	.pl_min = 8,
-+	.pl1_min = 8,
- 	.pl1_max = 43,
-+	.pl2_min = 9,
- 	.pl2_max = 45
- };
- static struct msi_wmi_platform_quirk quirk_gen2 = {
-@@ -238,14 +240,15 @@ static struct msi_wmi_platform_quirk quirk_gen2 = {
- 	.charge_threshold = true,
- 	.dual_fans = true,
- 	.restore_curves = true,
--	.pl_min = 8,
-+	.pl1_min = 8,
- 	.pl1_max = 30,
-+	.pl2_min = 9,
- 	.pl2_max = 37
- };
- 
- static const struct dmi_system_id msi_quirks[] = {
- 	{
--		.ident = "MSI Claw (gen 1)",
-+		.ident = "MSI Claw A1M",
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "Micro-Star International Co., Ltd."),
- 			DMI_MATCH(DMI_BOARD_NAME, "MS-1T41"),
-@@ -253,7 +256,7 @@ static const struct dmi_system_id msi_quirks[] = {
- 		.driver_data = &quirk_gen1,
- 	},
- 	{
--		.ident = "MSI Claw AI+ 7",
-+		.ident = "MSI Claw 7 AI+ A2VM",
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "Micro-Star International Co., Ltd."),
- 			DMI_MATCH(DMI_BOARD_NAME, "MS-1T42"),
-@@ -261,7 +264,7 @@ static const struct dmi_system_id msi_quirks[] = {
+@@ -268,6 +268,7 @@ static const struct dmi_system_id msi_quirks[] = {
+ 		},
  		.driver_data = &quirk_gen2,
  	},
- 	{
--		.ident = "MSI Claw AI+ 8",
-+		.ident = "MSI Claw 8 AI+ A2VM",
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "Micro-Star International Co., Ltd."),
- 			DMI_MATCH(DMI_BOARD_NAME, "MS-1T52"),
-@@ -1131,7 +1134,7 @@ static int msi_wmi_fw_attrs_init(struct msi_wmi_platform_data *data)
++	{ }
+ };
  
- 	if (data->quirks->pl1_max) {
- 		err = msi_fw_attr_init(data, MSI_ATTR_PPT_PL1_SPL,
--					&fw_attr_type_int, data->quirks->pl_min,
-+					&fw_attr_type_int, data->quirks->pl1_min,
- 					data->quirks->pl1_max, &data_get_value,
- 					&data_set_value);
- 		if (err)
-@@ -1140,7 +1143,7 @@ static int msi_wmi_fw_attrs_init(struct msi_wmi_platform_data *data)
- 
- 	if (data->quirks->pl2_max) {
- 		err = msi_fw_attr_init(data, MSI_ATTR_PPT_PL2_SPPT,
--				       &fw_attr_type_int, data->quirks->pl_min,
-+				       &fw_attr_type_int, data->quirks->pl2_min,
- 				       data->quirks->pl2_max, &data_get_value,
- 				       &data_set_value);
- 		if (err)
-@@ -1259,6 +1262,7 @@ static ssize_t msi_wmi_platform_debugfs_write(struct file *fp, const char __user
- 		return ret;
- 
- 	down_write(&data->buffer_lock);
-+	memcpy(data->buffer, payload, data->length);
- 	ret = msi_wmi_platform_query(data->data, data->method, data->buffer,
- 				     data->length);
- 	up_write(&data->buffer_lock);
-@@ -1266,10 +1270,6 @@ static ssize_t msi_wmi_platform_debugfs_write(struct file *fp, const char __user
- 	if (ret < 0)
- 		return ret;
- 
--	down_write(&data->buffer_lock);
--	memcpy(data->buffer, payload, data->length);
--	up_write(&data->buffer_lock);
--
- 	return length;
- }
- 
+ static int msi_wmi_platform_parse_buffer(union acpi_object *obj, u8 *output, size_t length)
 -- 
 2.55.0
 
