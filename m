@@ -1,110 +1,196 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D4393E5A22
-	for <linux-hwmon@vger.kernel.org>; Tue,  4 Aug 2026 08:21:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB99132AADB
+	for <linux-hwmon@vger.kernel.org>; Tue,  4 Aug 2026 08:44:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785831705; cv=none; b=uWzAPwQvgcrXG/3WtTI1CvV8qet4837YU8B0QBI3/DwB/weyqmkgdQWHUeG7l7ELOuv7ecZ/AIEzHCVy0Y2NXR6UXybRKGp6JFlb9v0TAPeaR8nMjEI4fES97iWDgX1ff9ey9TXfOUsuvOgCHzZRUFY2R0b5TOkpsGkW6KY7EKk=
+	t=1785833088; cv=none; b=OgBgP/my7lutQZYqOM/rmGb4jZltzYRVig4DYRTtXPXZMds5SWS3oVdVl3SCJgTYjmOsB8xUSDkdV0UTnm4c5mFH0ny3fHTfzHcGMpl3QW5/EKQ5B4Pyu7fkmNzB/ktzk240C77QHfY1fniLptDEoEProEsyKsdpSgvVgT6HI7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785831705; c=relaxed/simple;
-	bh=rynJP5Q9/fruumERr7SF+n64O6hP3TboMKRPx2fHtbw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=HFDBIB1o/pM35w5ejOmP4yvvRtcqUOQk/BcCwgysuJD78rLX71JepqBVuBJ3zfW5qfeoUlm47/a5mb7V1mSGWUMmW9IA0TZZHos92yHYHPlAcqC6OrN8U6cR1ps3JTIDvGzNKtg/BNg4K4pedHyNaySNsccI6elD8oGfGp6rVq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Q3uYDZTk; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1785833088; c=relaxed/simple;
+	bh=TLXXvYxG4dSrfuZtqjgizIZxNe/7R+iSXeA7PWcwcFU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kpta+KFQ0UCACawm4lfyC6DX5u1Y8/EYCxbWCA3S/zcEZr/bkOfO8IjgZca3ZbnFME0/89L1BunIK/iPwtcyCXBurBHlfHzkmADwxyK5HbApdyEpXxCocoKNbsxz5XKhEXo06UlDhxyx6rvqPuBko/QIdK/uWiOh1NsH4x8HjPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GoLxfmit; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Q3uYDZTk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=rynJP5Q9/fruumERr7SF+n64O6hP3TboMKRPx2fHtbw=; b=Q
-	3uYDZTkB2nrmcTXOHuNjsQ/4DrYNzafib0VnpC0Y7xKEsT7p3Pr5QKwrWdubb6U5
-	U3pmjQ+137ZDQYH9txbnbvX39LOL+Wf9wzmEqXfrU7aSFOm1mS251+6D1ZocG4Wk
-	+06+NQpT2iV5pm6l3peIl7g5+ykkX5et/BLHhbyeyw=
-Received: from fuqingshuang$kylinos.cn ( [116.128.244.169] ) by
- ajax-webmail-wmsvr-40-106 (Coremail) ; Tue, 4 Aug 2026 16:21:25 +0800 (CST)
-Date: Tue, 4 Aug 2026 16:21:25 +0800 (CST)
-From: "Qingshuang Fu" <fuqingshuang@kylinos.cn>
-To: sashiko-reviews@lists.linux.dev
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re:Re: [PATCH] hwmon: (nzxt-smart2) Check return value of
- init_device() in probe
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
- 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
-Sender: fffsqian@163.com
-In-Reply-To: <20260804080002.570A61F000E9@smtp.kernel.org>
-References: <20260804074842.505923-1-fffsqian@163.com>
- <20260804080002.570A61F000E9@smtp.kernel.org>
-X-NTES-SC: AL_Qu2TB/SYvk4j4yedYOkckk4Vhu49Xcq2vvQv34Fec+EEpR3p2QEQXGNkG1TJ/dOLNwWKoTa9bDNx5ftocKBEhOa1MEKeNLoKKYmfS1lEdg==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GoLxfmit"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4954f5e8020so14522425e9.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 04 Aug 2026 01:44:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785833085; x=1786437885; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=3lTgO1wd2ybz6X0zk/HA/GHdvFXht7sq/xTVbmfBJFQ=;
+        b=GoLxfmit04U0r+EE1hTeGrvQho3mNOz0hroL34zxp3scXo3ax7rhziQ7yi+YACpjW9
+         R6pVOc3H0rSFQkxR5htFl7BV8nbfpJHbP15ZBlCu9wr+q6HikUX8Qhh89pggcPvEx57y
+         1Rgzbv5QS7ukif2v/TQeYX+dbpwyFqpjrm3s7KjOGLnGZv6/DjoqxSbGzitRRUxoWlwW
+         LF4ivtzaom8Ml+XmztjQaG88dOG2sAIzEcrdHa2BK5f9ncrsGQ465qC4Qw1pxu6GRxP2
+         buMbaDOCN/yy7X9Gd3fkUOcffyyj8SFHYqeNPvbJspO+BCq7qhmByQQBPR3dqJqIqeBJ
+         CdPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785833085; x=1786437885;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=3lTgO1wd2ybz6X0zk/HA/GHdvFXht7sq/xTVbmfBJFQ=;
+        b=ETGe81Uik7iNdtsRGaLuBnt36VismzTavCXbjYIKZcNnqqqqiaSXMfiRL6fHmNPgc5
+         42IRNsWk3HNCas6/fXQO1RpGZj4KTWXgZIECNLyGBn5Z0sQuWie+l5YUxlJjjSKgVWwH
+         sXvQPtjTh8L2Q3dxYm5OTKkEx5ODzpLds29twBY8qwT1jjHg6SXn+nqHc5R/g89e1Xee
+         vuvpJ+/uWtuXX5EISnv47va+4Gkv2SMI+pb9+XICShcIMBN1eLihH32cQt02n+Bjw3wQ
+         avuHfcFdTs/AUtC1EWXCmOEvZ4BTZ3BgLiyXhvHqZ0sKWasTRvL4ZzunmVysp6nLxnSE
+         bwEw==
+X-Gm-Message-State: AOJu0YzQQVdkVTc9ZLivqn2sn9QhasJCbqLmSiEnN4rZ5iGAZjsaBTph
+	waJBWFIFcFfNyxdBPRxzfuNiTDBrN2XW9rzqPYI8txadrY1kMnIPpwYd
+X-Gm-Gg: AR+sD113GWbPBOlyDV9PayDgMJJF16PJxOUUtWvMHE8Y1WAH8t14aFgSLf3Tj1wYflT
+	0wOuPkG6yQwZt+LUm2EaorSl9ScdlawehcNiLXKl+8hHKotKxxvEI85QKkEkQCir7HzEVCJf3cm
+	Jngpez/swRRy9dhK6dWWkN+Lh5Nv5SjAKHO4jVfaUTanZ4bO3/fvxJE4J43Eb4fCBSgNdXoEYun
+	OEJvPJRC+4YnsOQylGqyrtfUy55pRqacXeKU7vSJTlX1WmxWsivKRbLgTrAgVTlLb7Eq4UoQXZt
+	lODo/CnVNB8BH1rRWLPH/IWCt86d/6W/y19Q3YJWIbZJj6OKDgA5W5yGCqMMvGNk9DqJxZS5ZWJ
+	ELYxuehgZFwMoAI/poVaLZIU4euKzOJktaexSfScerP/BNrF6WSvvdQLJbuBA1D7ciWmryFoUOl
+	dvicW3Mpm88w+TFh404FlPmpfF8u6mxRldP65NoF3RxcgS6hObVIOr9lO3xViMIq8=
+X-Received: by 2002:a05:600c:46ce:b0:498:ee7:e403 with SMTP id 5b1f17b1804b1-4980ee7e7dfmr246344365e9.19.1785833084487;
+        Tue, 04 Aug 2026 01:44:44 -0700 (PDT)
+Received: from nsa ([148.63.225.166])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49949fd12a5sm62094645e9.6.2026.08.04.01.44.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Aug 2026 01:44:44 -0700 (PDT)
+Date: Tue, 4 Aug 2026 09:45:55 +0100
+From: Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, 
+	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>, Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>
+Subject: Re: [PATCH 1/5] hwmon: (pmbus/core) Introduce
+ pmbus_read_smbus_i2c_block_data()
+Message-ID: <anGlg2E-tcp_6Qkn@nsa>
+References: <20260803193535.2286578-1-linux@roeck-us.net>
+ <20260803193535.2286578-2-linux@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <7a006d3b.66ca.19fcbdcfe83.Coremail.fuqingshuang@kylinos.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:aigvCgD331YGoXFqKY4rAA--.363W
-X-CM-SenderInfo: 5iii21xldqqiywtou0bp/xtbC6gZgK2pxoQbFdwAA3p
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260803193535.2286578-2-linux@roeck-us.net>
 
-CkF0IDIwMjYtMDgtMDQgMTY6MDA6MDEsIHNhc2hpa28tYm90QGtlcm5lbC5vcmcgd3JvdGU6Cj5U
-aGFuayB5b3UgZm9yIHlvdXIgY29udHJpYnV0aW9uISBTYXNoaWtvIEFJIHJldmlldyBmb3VuZCAx
-IHBvdGVudGlhbCBpc3N1ZShzKSB0byBjb25zaWRlcjoKPgo+UHJlLWV4aXN0aW5nIGlzc3VlczoK
-Pi0gW0hpZ2hdIFN5c2ZzIHJlYWQgYW5kIHdyaXRlIGhhbmRsZXJzIHdhaXQgaW5kZWZpbml0ZWx5
-IGZvciBoYXJkd2FyZSByZXBvcnRzIHdpdGhvdXQgcHJvdmlkaW5nIGEgbWVjaGFuaXNtIHRvIGJy
-ZWFrIHRoZSB3YWl0IG9uIGRldmljZSBkaXNjb25uZWN0LCBjYXVzaW5nIHRoZSBkZXZpY2UgdW5i
-aW5kIHRocmVhZCB0byBkZWFkbG9jay4KPi0tCj4KPi0tLSBQYXRjaCBbMV06IFtQQVRDSF0gaHdt
-b246IChuenh0LXNtYXJ0MikgQ2hlY2sgcmV0dXJuIHZhbHVlIG9mIGluaXRfZGV2aWNlKCkgaW4g
-cHJvYmUgLS0tCj5jb21taXQgMTg0MzUwNTBiYjA0MDhiZTBhYTFlNTcwYzdhMjk3NmE0NjhkNTJj
-MAo+QXV0aG9yOiBRaW5nc2h1YW5nIEZ1IDxmdXFpbmdzaHVhbmdAa3lsaW5vcy5jbj4KPgo+aHdt
-b246IChuenh0LXNtYXJ0MikgQ2hlY2sgcmV0dXJuIHZhbHVlIG9mIGluaXRfZGV2aWNlKCkgaW4g
-cHJvYmUKPgo+VGhpcyBjb21taXQgdXBkYXRlcyB0aGUgbnp4dC1zbWFydDIgZHJpdmVyIHRvIGNo
-ZWNrIHRoZSByZXR1cm4gdmFsdWUgb2YKPmluaXRfZGV2aWNlKCkgZHVyaW5nIHByb2JlLiBJZiB0
-aGUgaGFyZHdhcmUgaXMgdW5yZXNwb25zaXZlIGFuZCBpbml0aWFsaXphdGlvbgo+ZmFpbHMsIHRo
-ZSBkcml2ZXIgbm93IGNvcnJlY3RseSBhYm9ydHMgcmF0aGVyIHRoYW4gcmVnaXN0ZXJpbmcgdGhl
-IGh3bW9uCj5kZXZpY2UgaW4gYW4gaW5jb25zaXN0ZW50IHN0YXRlLiBUaGlzIHNhZmVseSB1dGls
-aXplcyBhbiBlYXJsaWVyIGZpeCB0aGF0Cj5zdG9wcyBkZXZpY2UgSU8gYmVmb3JlIGNsb3Npbmcg
-dGhlIGhhcmR3YXJlLgo+Cj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL256eHQtc21hcnQy
-LmMgYi9kcml2ZXJzL2h3bW9uL256eHQtc21hcnQyLmMKPj4gaW5kZXggZmYwYzBiZWUwZTgzOS4u
-ZWZjNzhhOGY1OGM4OCAxMDA2NDQKPj4gLS0tIGEvZHJpdmVycy9od21vbi9uenh0LXNtYXJ0Mi5j
-Cj4+ICsrKyBiL2RyaXZlcnMvaHdtb24vbnp4dC1zbWFydDIuYwo+PiBAQCAtNzU0LDcgKzc1NCwx
-MSBAQCBzdGF0aWMgaW50IG56eHRfc21hcnQyX2hpZF9wcm9iZShzdHJ1Y3QgaGlkX2RldmljZSAq
-aGRldiwKPj4gIAo+PiAgCWhpZF9kZXZpY2VfaW9fc3RhcnQoaGRldik7Cj4+ICAKPj4gLQlpbml0
-X2RldmljZShkcnZkYXRhLCBVUERBVEVfSU5URVJWQUxfREVGQVVMVF9NUyk7Cj4+ICsJcmV0ID0g
-aW5pdF9kZXZpY2UoZHJ2ZGF0YSwgVVBEQVRFX0lOVEVSVkFMX0RFRkFVTFRfTVMpOwo+PiArCWlm
-IChyZXQpIHsKPj4gKwkJZGV2X2VycigmaGRldi0+ZGV2LCAiaW5pdF9kZXZpY2UgZmFpbGVkOiAl
-ZFxuIiwgcmV0KTsKPj4gKwkJZ290byBvdXRfaHdfY2xvc2U7Cj4+ICsJfQo+PiAgCj4+ICAJZHJ2
-ZGF0YS0+aHdtb24gPQo+PiAgCQlod21vbl9kZXZpY2VfcmVnaXN0ZXJfd2l0aF9pbmZvKCZoZGV2
-LT5kZXYsICJuenh0c21hcnQyIiwgZHJ2ZGF0YSwKPgo+W1NldmVyaXR5OiBIaWdoXQo+VGhpcyBp
-cyBhIHByZS1leGlzdGluZyBpc3N1ZSwgYnV0IGRvZXMgdGhlIGRyaXZlciBoYW5kbGUgZGV2aWNl
-IGRpc2Nvbm5lY3RzCj5zYWZlbHkgd2hpbGUgYmxvY2tlZCBpbiBzeXNmcyByZWFkcz8KPgo+SWYg
-YSB1c2Vyc3BhY2UgcHJvZ3JhbSBpcyByZWFkaW5nIGEgc3lzZnMgYXR0cmlidXRlIChsaWtlIHB3
-bTFfZW5hYmxlKSBhbmQKPmJsb2NrcyBpbiBuenh0X3NtYXJ0Ml9od21vbl9yZWFkKCkgYmVjYXVz
-ZSB0aGUgZGV2aWNlIGhhc24ndCBzZW50IHRoZQo+cmVxdWlyZWQgcmVwb3J0Ogo+Cj5kcml2ZXJz
-L2h3bW9uL256eHQtc21hcnQyLmM6bnp4dF9zbWFydDJfaHdtb25fcmVhZCgpIHsKPiAgICAuLi4K
-PiAgICByZXMgPSB3YWl0X2V2ZW50X2ludGVycnVwdGlibGVfbG9ja2VkX2lycShkcnZkYXRhLT53
-cSwKPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBkcnZkYXRh
-LT5mYW5fY29uZmlnX3JlY2VpdmVkKTsKPiAgICAuLi4KPn0KPgo+SWYgdGhlIGRldmljZSBpcyBz
-dWRkZW5seSBkaXNjb25uZWN0ZWQsIG56eHRfc21hcnQyX2hpZF9yZW1vdmUoKSBjYWxscwo+aHdt
-b25fZGV2aWNlX3VucmVnaXN0ZXIoKSB3aXRob3V0IHdha2luZyB1cCB0aGUgd2FpdCBxdWV1ZSBv
-ciBzaWduYWxpbmcgYQo+ZGlzY29ubmVjdC4gV2lsbCB0aGlzIGNhdXNlIGEgZGVhZGxvY2sgaW4g
-a2VybmZzX2RyYWluIHNpbmNlIHRoZSBzeXNmcwo+dGhyZWFkIG5ldmVyIHdha2VzIHVwIHRvIGZp
-bmlzaCBpdHMgcmVhZD8KPgo+LS0gCj5TYXNoaWtvIEFJIHJldmlldyChpCBodHRwczovL3Nhc2hp
-a28uZGV2LyMvcGF0Y2hzZXQvMjAyNjA4MDQwNzQ4NDIuNTA1OTIzLTEtZmZmc3FpYW5AMTYzLmNv
-bT9wYXJ0PTEKClRoYW5rcyBmb3IgdGhlIGF1dG9tYXRlZCByZXZpZXcuCgpUaGUgZGVhZGxvY2sg
-c2NlbmFyaW8geW91IG5vdGVkIGlzIGEgcHJlLWV4aXN0aW5nIGlzc3VlIHdpdGhpbiB0aGUgZHJp
-dmVyIGFuZCBmYWxscyBvdXRzaWRlIHRoZSBzY29wZSBvZiB0aGlzIHBhdGNoLgpUaGlzIGNoYW5n
-ZSBhZGRyZXNzZXMgZmFpbHVyZXMgb2NjdXJyaW5nIGR1cmluZyBlYXJseSBwcm9iZS4gSWYgaW5p
-dF9kZXZpY2UoKSByZXR1cm5zIGFuIGVycm9yLCB0aGUgcHJvYmUgYWJvcnRzIGJlZm9yZSBod21v
-bl9kZXZpY2VfcmVnaXN0ZXJfd2l0aF9pbmZvKCkgaXMgY2FsbGVkLiBTaW5jZSBubyBzeXNmcyBh
-dHRyaWJ1dGVzIGFyZSBjcmVhdGVkIGluIHRoaXMgZXJyb3IgcGF0aCwgdGhlcmUgaXMgbm8gb3Bw
-b3J0dW5pdHkgZm9yIHVzZXJzcGFjZSByZWFkZXJzIHRvIGJsb2NrIG9uIHdhaXRfZXZlbnQuCgpJ
-IHdvdWxkIGxpa2UgdG8ga2VlcCB0aGlzIHBhdGNoIG5hcnJvd2x5IGZvY3VzZWQgb24gcHJldmVu
-dGluZyByZWdpc3RyYXRpb24gb2YgYW4gaW5jb21wbGV0ZWx5IGluaXRpYWxpemVkIGh3bW9uIGRl
-dmljZSwgYW5kIG5vdCBleHBhbmQgaXQgdG8gY292ZXIgb3RoZXIgdW5yZWxhdGVkIGV4aXN0aW5n
-IHByb2JsZW1zLgoKUWluZ3NodWFuZyBGdQo=
+On Mon, Aug 03, 2026 at 12:35:31PM -0700, Guenter Roeck wrote:
+> PMBus drivers need support for reading SMBus block data. Unfortunately,
+> not all i2C controllers support this command.
+> 
+> Implement pmbus_read_smbus_i2c_block_data() which first tries to use
+> i2c_smbus_read_block_data(). If not supported, try to emulate it by calling
+> i2c_smbus_read_i2c_block_data(). Export the new function for use in PMBus
+> drivers.
+> 
+> Cc: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+> Cc: Nuno Sá <nuno.sa@analog.com>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+>  drivers/hwmon/pmbus/pmbus.h      |   1 +
+>  drivers/hwmon/pmbus/pmbus_core.c | 102 ++++++++++++++++++++++++++++---
+>  2 files changed, 95 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+> index 5fe2c415eada..2cd3216b3cd9 100644
+> --- a/drivers/hwmon/pmbus/pmbus.h
+> +++ b/drivers/hwmon/pmbus/pmbus.h
+> @@ -561,6 +561,7 @@ void pmbus_set_update(struct i2c_client *client, u8 reg, bool update);
+>  void pmbus_wait(struct i2c_client *client);
+>  void pmbus_update_ts(struct i2c_client *client, int op);
+>  int pmbus_set_page(struct i2c_client *client, int page, int phase);
+> +int pmbus_read_smbus_i2c_block_data(struct i2c_client *client, u8 reg, char *data_buf);
+>  int pmbus_read_word_data(struct i2c_client *client, int page, int phase,
+>  			 u8 reg);
+
+...
+
+> +int pmbus_read_smbus_i2c_block_data(struct i2c_client *client, u8 reg, char *data_buf)
+> +{
+> +	u8 buf[I2C_SMBUS_BLOCK_MAX];
+> +	int blen, len, ret;
+> +
+> +	if (i2c_check_functionality(client->adapter,
+> +				    I2C_FUNC_SMBUS_READ_BLOCK_DATA)) {
+> +		pmbus_wait(client);
+> +		ret = i2c_smbus_read_block_data(client, reg, data_buf);
+> +		pmbus_update_ts(client, 0);
+> +		return ret;
+> +	}
+> +
+> +	if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_READ_I2C_BLOCK)) {
+> +		dev_err_once(&client->dev, "I2C adapter does not support I2C_FUNC_SMBUS_READ_I2C_BLOCK\n");
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	/*
+> +	 * If the returned data is valid SMBus block data, the first byte
+> +	 * must be the data length.
+> +	 *
+> +	 * i2c_smbus_read_i2c_block_data() may return an error if the chip
+> +	 * sends NACK before the number of requested bytes is received.
+> +	 * Handle this by reading the data length first, then reading the
+> +	 * entire message up to I2C_SMBUS_BLOCK_MAX bytes. This ensures
+> +	 * that requested number of bytes never exceeds the number of
+> +	 * bytes sent by the chip.
+> +	 */
+> +	pmbus_wait(client);
+> +	ret = i2c_smbus_read_i2c_block_data(client, reg, 1, buf);
+> +	pmbus_update_ts(client, 0);
+> +	if (ret < 0)
+> +		return ret;
+> +	if (ret != 1)
+> +		return -EIO;
+> +
+
+I think the above is ret != -1 is not really necessary (same for the
+below check. i2c_smbus_read_i2c_block_data() always returns the length passed to it.
+The only case where it doesn't is if we pass something >
+I2C_SMBUS_BLOCK_MAX which would always fail anyways.
+
+- Nuno Sá
+
+> +	len = buf[0];
+> +	if (len == 0)
+> +		return 0;
+> +	blen = len;
+> +	if (len >= I2C_SMBUS_BLOCK_MAX)
+> +		len = I2C_SMBUS_BLOCK_MAX - 1;
+> +	pmbus_wait(client);
+> +	ret = i2c_smbus_read_i2c_block_data(client, reg, len + 1, buf);
+> +	pmbus_update_ts(client, 0);
+> +	if (ret < 0)
+> +		return ret;
+> +	if (ret != len + 1)
+> +		return -EIO;
+> +	if (buf[0] != blen)
+> +		return -EIO;
+> +	memcpy(data_buf, buf + 1, len);
+> +	return len;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(pmbus_read_smbus_i2c_block_data, "PMBUS");
+> +
+>  static int pmbus_read_block_data(struct i2c_client *client, int page, u8 reg,
+>  				 char *data_buf)
+>  {
+> @@ -527,11 +617,7 @@ static int pmbus_read_block_data(struct i2c_client *client, int page, u8 reg,
+>  	if (rv < 0)
+>  		return rv;
+>  
+> -	pmbus_wait(client);
+> -	rv = i2c_smbus_read_block_data(client, reg, data_buf);
+> -	pmbus_update_ts(client, 0);
+> -
+> -	return rv;
+> +	return pmbus_read_smbus_i2c_block_data(client, reg, data_buf);
+>  }
+>  
+>  static struct pmbus_sensor *pmbus_find_sensor(struct pmbus_data *data, int page,
+> -- 
+> 2.45.2
+> 
