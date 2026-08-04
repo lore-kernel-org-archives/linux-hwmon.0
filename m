@@ -1,111 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E768B42A170
-	for <linux-hwmon@vger.kernel.org>; Tue,  4 Aug 2026 08:00:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D4393E5A22
+	for <linux-hwmon@vger.kernel.org>; Tue,  4 Aug 2026 08:21:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785830404; cv=none; b=YJkGUUgxmmeNRow2p8j7WcBT9kI17TjqqZIaKYI3oLOjdIlxT2C+zlBac1cDdigl99EIBsS1W1WSyiYptxQ/vGCKcxamgC/fqmefFV5dTl79a0Qli2PBiOd8+XGKvM2L04rGc2v6oqjR8LXaydXV7tDKB5ipd5Ba+tgFcbU66q4=
+	t=1785831705; cv=none; b=uWzAPwQvgcrXG/3WtTI1CvV8qet4837YU8B0QBI3/DwB/weyqmkgdQWHUeG7l7ELOuv7ecZ/AIEzHCVy0Y2NXR6UXybRKGp6JFlb9v0TAPeaR8nMjEI4fES97iWDgX1ff9ey9TXfOUsuvOgCHzZRUFY2R0b5TOkpsGkW6KY7EKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785830404; c=relaxed/simple;
-	bh=zNSDyELmF04J6wF8CJ4XujBlic3aK9PAdDjPVBT/Pns=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=OQ8pt7xtFPhaUH6u77eV32pfwWWMXAXWnt52oU8j+/f5M1Fgb1jVrxZNP57JEbyNnC6AtfzCZcxeeI6yDzkYhzZKUHCvVKcQJeB311jVG5XebiINQpKtDdZeUMGK471SzcQkkVApFzMsRnIU6L2TYKFzvXbT3IC4aIcf8yCB+nA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VfKL3rc2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785831705; c=relaxed/simple;
+	bh=rynJP5Q9/fruumERr7SF+n64O6hP3TboMKRPx2fHtbw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=HFDBIB1o/pM35w5ejOmP4yvvRtcqUOQk/BcCwgysuJD78rLX71JepqBVuBJ3zfW5qfeoUlm47/a5mb7V1mSGWUMmW9IA0TZZHos92yHYHPlAcqC6OrN8U6cR1ps3JTIDvGzNKtg/BNg4K4pedHyNaySNsccI6elD8oGfGp6rVq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Q3uYDZTk; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VfKL3rc2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 570A61F000E9;
-	Tue,  4 Aug 2026 08:00:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785830402;
-	bh=4ubmjwzFpoK/6w4SqrxzA8RaEu/P1PfMaI2YcuYtbbE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=VfKL3rc2O3D5y5xrJu6ip+gbXYWljwzryJySgU++RpS1zhmRNX2y9VcfaPRd+/l9u
-	 velpWEHiLCPKyvaI2wl+iEcOlU5dfnxA0Lyf//5BN1VtE0mW/bZVlAw5lQI9nD0O1J
-	 8bf9JbVHIqFLBg0V2YPGS0eafxPMkRnr0OH8+F/khVuCrujweLzewMTORAA3ye7dqR
-	 qYnoDs2ZPn5zLXHsrnJkmphuxBhwRE5TodggTrHKnu7Pm3cv7DnEOkPOQGHB02CZsV
-	 GPR5Wt1F/1/CEwc+9W2PS7ByikwOlW3Nu0dte0whVnBmo50UVcZBCiiX4tZD3QgPjM
-	 UQrqoFqPA5awA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (nzxt-smart2) Check return value of
- init_device() in probe
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Qingshuang Fu" <fffsqian@163.com>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Q3uYDZTk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=rynJP5Q9/fruumERr7SF+n64O6hP3TboMKRPx2fHtbw=; b=Q
+	3uYDZTkB2nrmcTXOHuNjsQ/4DrYNzafib0VnpC0Y7xKEsT7p3Pr5QKwrWdubb6U5
+	U3pmjQ+137ZDQYH9txbnbvX39LOL+Wf9wzmEqXfrU7aSFOm1mS251+6D1ZocG4Wk
+	+06+NQpT2iV5pm6l3peIl7g5+ykkX5et/BLHhbyeyw=
+Received: from fuqingshuang$kylinos.cn ( [116.128.244.169] ) by
+ ajax-webmail-wmsvr-40-106 (Coremail) ; Tue, 4 Aug 2026 16:21:25 +0800 (CST)
+Date: Tue, 4 Aug 2026 16:21:25 +0800 (CST)
+From: "Qingshuang Fu" <fuqingshuang@kylinos.cn>
+To: sashiko-reviews@lists.linux.dev
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260804074842.505923-1-fffsqian@163.com>
+Subject: Re:Re: [PATCH] hwmon: (nzxt-smart2) Check return value of
+ init_device() in probe
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
+ 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
+Sender: fffsqian@163.com
+In-Reply-To: <20260804080002.570A61F000E9@smtp.kernel.org>
 References: <20260804074842.505923-1-fffsqian@163.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 04 Aug 2026 08:00:01 +0000
-Message-Id: <20260804080002.570A61F000E9@smtp.kernel.org>
+ <20260804080002.570A61F000E9@smtp.kernel.org>
+X-NTES-SC: AL_Qu2TB/SYvk4j4yedYOkckk4Vhu49Xcq2vvQv34Fec+EEpR3p2QEQXGNkG1TJ/dOLNwWKoTa9bDNx5ftocKBEhOa1MEKeNLoKKYmfS1lEdg==
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-ID: <7a006d3b.66ca.19fcbdcfe83.Coremail.fuqingshuang@kylinos.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:aigvCgD331YGoXFqKY4rAA--.363W
+X-CM-SenderInfo: 5iii21xldqqiywtou0bp/xtbC6gZgK2pxoQbFdwAA3p
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-
-Pre-existing issues:
-- [High] Sysfs read and write handlers wait indefinitely for hardware repor=
-ts without providing a mechanism to break the wait on device disconnect, ca=
-using the device unbind thread to deadlock.
---
-
---- Patch [1]: [PATCH] hwmon: (nzxt-smart2) Check return value of init_devi=
-ce() in probe ---
-commit 18435050bb0408be0aa1e570c7a2976a468d52c0
-Author: Qingshuang Fu <fuqingshuang@kylinos.cn>
-
-hwmon: (nzxt-smart2) Check return value of init_device() in probe
-
-This commit updates the nzxt-smart2 driver to check the return value of
-init_device() during probe. If the hardware is unresponsive and initializat=
-ion
-fails, the driver now correctly aborts rather than registering the hwmon
-device in an inconsistent state. This safely utilizes an earlier fix that
-stops device IO before closing the hardware.
-
-> diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
-> index ff0c0bee0e839..efc78a8f58c88 100644
-> --- a/drivers/hwmon/nzxt-smart2.c
-> +++ b/drivers/hwmon/nzxt-smart2.c
-> @@ -754,7 +754,11 @@ static int nzxt_smart2_hid_probe(struct hid_device *=
-hdev,
-> =20
->  	hid_device_io_start(hdev);
-> =20
-> -	init_device(drvdata, UPDATE_INTERVAL_DEFAULT_MS);
-> +	ret =3D init_device(drvdata, UPDATE_INTERVAL_DEFAULT_MS);
-> +	if (ret) {
-> +		dev_err(&hdev->dev, "init_device failed: %d\n", ret);
-> +		goto out_hw_close;
-> +	}
-> =20
->  	drvdata->hwmon =3D
->  		hwmon_device_register_with_info(&hdev->dev, "nzxtsmart2", drvdata,
-
-[Severity: High]
-This is a pre-existing issue, but does the driver handle device disconnects
-safely while blocked in sysfs reads?
-
-If a userspace program is reading a sysfs attribute (like pwm1_enable) and
-blocks in nzxt_smart2_hwmon_read() because the device hasn't sent the
-required report:
-
-drivers/hwmon/nzxt-smart2.c:nzxt_smart2_hwmon_read() {
-    ...
-    res =3D wait_event_interruptible_locked_irq(drvdata->wq,
-                                              drvdata->fan_config_received);
-    ...
-}
-
-If the device is suddenly disconnected, nzxt_smart2_hid_remove() calls
-hwmon_device_unregister() without waking up the wait queue or signaling a
-disconnect. Will this cause a deadlock in kernfs_drain since the sysfs
-thread never wakes up to finish its read?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260804074842.5059=
-23-1-fffsqian@163.com?part=3D1
+CkF0IDIwMjYtMDgtMDQgMTY6MDA6MDEsIHNhc2hpa28tYm90QGtlcm5lbC5vcmcgd3JvdGU6Cj5U
+aGFuayB5b3UgZm9yIHlvdXIgY29udHJpYnV0aW9uISBTYXNoaWtvIEFJIHJldmlldyBmb3VuZCAx
+IHBvdGVudGlhbCBpc3N1ZShzKSB0byBjb25zaWRlcjoKPgo+UHJlLWV4aXN0aW5nIGlzc3VlczoK
+Pi0gW0hpZ2hdIFN5c2ZzIHJlYWQgYW5kIHdyaXRlIGhhbmRsZXJzIHdhaXQgaW5kZWZpbml0ZWx5
+IGZvciBoYXJkd2FyZSByZXBvcnRzIHdpdGhvdXQgcHJvdmlkaW5nIGEgbWVjaGFuaXNtIHRvIGJy
+ZWFrIHRoZSB3YWl0IG9uIGRldmljZSBkaXNjb25uZWN0LCBjYXVzaW5nIHRoZSBkZXZpY2UgdW5i
+aW5kIHRocmVhZCB0byBkZWFkbG9jay4KPi0tCj4KPi0tLSBQYXRjaCBbMV06IFtQQVRDSF0gaHdt
+b246IChuenh0LXNtYXJ0MikgQ2hlY2sgcmV0dXJuIHZhbHVlIG9mIGluaXRfZGV2aWNlKCkgaW4g
+cHJvYmUgLS0tCj5jb21taXQgMTg0MzUwNTBiYjA0MDhiZTBhYTFlNTcwYzdhMjk3NmE0NjhkNTJj
+MAo+QXV0aG9yOiBRaW5nc2h1YW5nIEZ1IDxmdXFpbmdzaHVhbmdAa3lsaW5vcy5jbj4KPgo+aHdt
+b246IChuenh0LXNtYXJ0MikgQ2hlY2sgcmV0dXJuIHZhbHVlIG9mIGluaXRfZGV2aWNlKCkgaW4g
+cHJvYmUKPgo+VGhpcyBjb21taXQgdXBkYXRlcyB0aGUgbnp4dC1zbWFydDIgZHJpdmVyIHRvIGNo
+ZWNrIHRoZSByZXR1cm4gdmFsdWUgb2YKPmluaXRfZGV2aWNlKCkgZHVyaW5nIHByb2JlLiBJZiB0
+aGUgaGFyZHdhcmUgaXMgdW5yZXNwb25zaXZlIGFuZCBpbml0aWFsaXphdGlvbgo+ZmFpbHMsIHRo
+ZSBkcml2ZXIgbm93IGNvcnJlY3RseSBhYm9ydHMgcmF0aGVyIHRoYW4gcmVnaXN0ZXJpbmcgdGhl
+IGh3bW9uCj5kZXZpY2UgaW4gYW4gaW5jb25zaXN0ZW50IHN0YXRlLiBUaGlzIHNhZmVseSB1dGls
+aXplcyBhbiBlYXJsaWVyIGZpeCB0aGF0Cj5zdG9wcyBkZXZpY2UgSU8gYmVmb3JlIGNsb3Npbmcg
+dGhlIGhhcmR3YXJlLgo+Cj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL256eHQtc21hcnQy
+LmMgYi9kcml2ZXJzL2h3bW9uL256eHQtc21hcnQyLmMKPj4gaW5kZXggZmYwYzBiZWUwZTgzOS4u
+ZWZjNzhhOGY1OGM4OCAxMDA2NDQKPj4gLS0tIGEvZHJpdmVycy9od21vbi9uenh0LXNtYXJ0Mi5j
+Cj4+ICsrKyBiL2RyaXZlcnMvaHdtb24vbnp4dC1zbWFydDIuYwo+PiBAQCAtNzU0LDcgKzc1NCwx
+MSBAQCBzdGF0aWMgaW50IG56eHRfc21hcnQyX2hpZF9wcm9iZShzdHJ1Y3QgaGlkX2RldmljZSAq
+aGRldiwKPj4gIAo+PiAgCWhpZF9kZXZpY2VfaW9fc3RhcnQoaGRldik7Cj4+ICAKPj4gLQlpbml0
+X2RldmljZShkcnZkYXRhLCBVUERBVEVfSU5URVJWQUxfREVGQVVMVF9NUyk7Cj4+ICsJcmV0ID0g
+aW5pdF9kZXZpY2UoZHJ2ZGF0YSwgVVBEQVRFX0lOVEVSVkFMX0RFRkFVTFRfTVMpOwo+PiArCWlm
+IChyZXQpIHsKPj4gKwkJZGV2X2VycigmaGRldi0+ZGV2LCAiaW5pdF9kZXZpY2UgZmFpbGVkOiAl
+ZFxuIiwgcmV0KTsKPj4gKwkJZ290byBvdXRfaHdfY2xvc2U7Cj4+ICsJfQo+PiAgCj4+ICAJZHJ2
+ZGF0YS0+aHdtb24gPQo+PiAgCQlod21vbl9kZXZpY2VfcmVnaXN0ZXJfd2l0aF9pbmZvKCZoZGV2
+LT5kZXYsICJuenh0c21hcnQyIiwgZHJ2ZGF0YSwKPgo+W1NldmVyaXR5OiBIaWdoXQo+VGhpcyBp
+cyBhIHByZS1leGlzdGluZyBpc3N1ZSwgYnV0IGRvZXMgdGhlIGRyaXZlciBoYW5kbGUgZGV2aWNl
+IGRpc2Nvbm5lY3RzCj5zYWZlbHkgd2hpbGUgYmxvY2tlZCBpbiBzeXNmcyByZWFkcz8KPgo+SWYg
+YSB1c2Vyc3BhY2UgcHJvZ3JhbSBpcyByZWFkaW5nIGEgc3lzZnMgYXR0cmlidXRlIChsaWtlIHB3
+bTFfZW5hYmxlKSBhbmQKPmJsb2NrcyBpbiBuenh0X3NtYXJ0Ml9od21vbl9yZWFkKCkgYmVjYXVz
+ZSB0aGUgZGV2aWNlIGhhc24ndCBzZW50IHRoZQo+cmVxdWlyZWQgcmVwb3J0Ogo+Cj5kcml2ZXJz
+L2h3bW9uL256eHQtc21hcnQyLmM6bnp4dF9zbWFydDJfaHdtb25fcmVhZCgpIHsKPiAgICAuLi4K
+PiAgICByZXMgPSB3YWl0X2V2ZW50X2ludGVycnVwdGlibGVfbG9ja2VkX2lycShkcnZkYXRhLT53
+cSwKPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBkcnZkYXRh
+LT5mYW5fY29uZmlnX3JlY2VpdmVkKTsKPiAgICAuLi4KPn0KPgo+SWYgdGhlIGRldmljZSBpcyBz
+dWRkZW5seSBkaXNjb25uZWN0ZWQsIG56eHRfc21hcnQyX2hpZF9yZW1vdmUoKSBjYWxscwo+aHdt
+b25fZGV2aWNlX3VucmVnaXN0ZXIoKSB3aXRob3V0IHdha2luZyB1cCB0aGUgd2FpdCBxdWV1ZSBv
+ciBzaWduYWxpbmcgYQo+ZGlzY29ubmVjdC4gV2lsbCB0aGlzIGNhdXNlIGEgZGVhZGxvY2sgaW4g
+a2VybmZzX2RyYWluIHNpbmNlIHRoZSBzeXNmcwo+dGhyZWFkIG5ldmVyIHdha2VzIHVwIHRvIGZp
+bmlzaCBpdHMgcmVhZD8KPgo+LS0gCj5TYXNoaWtvIEFJIHJldmlldyChpCBodHRwczovL3Nhc2hp
+a28uZGV2LyMvcGF0Y2hzZXQvMjAyNjA4MDQwNzQ4NDIuNTA1OTIzLTEtZmZmc3FpYW5AMTYzLmNv
+bT9wYXJ0PTEKClRoYW5rcyBmb3IgdGhlIGF1dG9tYXRlZCByZXZpZXcuCgpUaGUgZGVhZGxvY2sg
+c2NlbmFyaW8geW91IG5vdGVkIGlzIGEgcHJlLWV4aXN0aW5nIGlzc3VlIHdpdGhpbiB0aGUgZHJp
+dmVyIGFuZCBmYWxscyBvdXRzaWRlIHRoZSBzY29wZSBvZiB0aGlzIHBhdGNoLgpUaGlzIGNoYW5n
+ZSBhZGRyZXNzZXMgZmFpbHVyZXMgb2NjdXJyaW5nIGR1cmluZyBlYXJseSBwcm9iZS4gSWYgaW5p
+dF9kZXZpY2UoKSByZXR1cm5zIGFuIGVycm9yLCB0aGUgcHJvYmUgYWJvcnRzIGJlZm9yZSBod21v
+bl9kZXZpY2VfcmVnaXN0ZXJfd2l0aF9pbmZvKCkgaXMgY2FsbGVkLiBTaW5jZSBubyBzeXNmcyBh
+dHRyaWJ1dGVzIGFyZSBjcmVhdGVkIGluIHRoaXMgZXJyb3IgcGF0aCwgdGhlcmUgaXMgbm8gb3Bw
+b3J0dW5pdHkgZm9yIHVzZXJzcGFjZSByZWFkZXJzIHRvIGJsb2NrIG9uIHdhaXRfZXZlbnQuCgpJ
+IHdvdWxkIGxpa2UgdG8ga2VlcCB0aGlzIHBhdGNoIG5hcnJvd2x5IGZvY3VzZWQgb24gcHJldmVu
+dGluZyByZWdpc3RyYXRpb24gb2YgYW4gaW5jb21wbGV0ZWx5IGluaXRpYWxpemVkIGh3bW9uIGRl
+dmljZSwgYW5kIG5vdCBleHBhbmQgaXQgdG8gY292ZXIgb3RoZXIgdW5yZWxhdGVkIGV4aXN0aW5n
+IHByb2JsZW1zLgoKUWluZ3NodWFuZyBGdQo=
