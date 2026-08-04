@@ -1,75 +1,112 @@
-Received: from sender-of-o58.zoho.eu (sender-of-o58.zoho.eu [136.143.169.58])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E28846C4AA;
-	Tue,  4 Aug 2026 10:07:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.169.58
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785838039; cv=pass; b=ED2+AVm/I3PQkObkQqpsfPtO+jy7CTVTmOqCuLJ0VGxDBiFRXqUZ4rwgIl/BBVx++zm2mLQq49BvQ6HvbhnoHzfdl1Pkx57XwO6Ru1qfLJOnBoqlAV9YFiyvaieH53QlLqb+hAsaPCYP8hlL/K/hB47tRWeixTSG0mwCJA2C5PI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785838039; c=relaxed/simple;
-	bh=zqqfuD5S0/5z/+0oKI1UspVl0qPF4xMvXMyvA7fV9GU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dEqlBGCw04sjsjXWzCaovRAY5j6jvg69xDdNv/LwHhzrXOqo+pvZ6t3UT5l/vly2TT4QS9fHYnsk7r2V6kOIPCb9S9GRZ/jcqJ9AQUHVt50cmOnvkLmaLGwhLNqswUc0NvzQ9G7Pf0NYLYDauBG/r7RdZn4IE6Lh+XfIOOm/d3o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iusegentoo.com; spf=pass smtp.mailfrom=iusegentoo.com; dkim=pass (1024-bit key) header.d=iusegentoo.com header.i=ali@iusegentoo.com header.b=Ik94oOCl; arc=pass smtp.client-ip=136.143.169.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iusegentoo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iusegentoo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B52E346F495
+	for <linux-hwmon@vger.kernel.org>; Tue,  4 Aug 2026 10:14:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785838500; cv=none; b=YNwPzqRoddlqGTRuXYERJ5eIPalBEwf+cPvEf9GvH1ho/ETKCGWxuO2HJwbQP8Vi109Xs9SfKifie1uxgnp4izyzzC3usVnZA0RZMPk71GTLhu8Hs92Ib98aYL5R6OE6H9tPd0wOc5WTp4GtUZWULHJ306/j8wBcMMVc/axxOx0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785838500; c=relaxed/simple;
+	bh=+XnjuTvdfAj9boKb+hGctEMZRa5tIA5vFS9T9RCWUew=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=FWzDJ15Hu0NFH9XzSsNHTsti8ExvgpagBlZPTuEPapW/wgtH0rGYAoJZRZw46CuswgxKyNl4af/l27srwIDpyvJhtlBFqzvnq2aZoP2WaG6EDflTaC0o2FCSLoBQWKxt1Zpg17j6CpMTpmwY5o5vDEVPtd+vWU43pIULQ+UwHTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=da8wkJfb; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iusegentoo.com header.i=ali@iusegentoo.com header.b="Ik94oOCl"
-ARC-Seal: i=1; a=rsa-sha256; t=1785838018; cv=none; 
-	d=zohomail.eu; s=zohoarc; 
-	b=iR6hW1TKgQJsg/sOUYS/GambA0XZ6kATxnOqAMxtcUBv9Ns+ozQpxt6gUaUBaw443RnUiY2tVljnqa5MtqWQ6IS7Mb13hae1nOEE3cSJtbbNYf3ukxPRxpAyiGL3d8vRHLK4PqEaj+1X3Ub2hA56eSVuhqgDqE1l7nOjtx1AJac=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
-	t=1785838018; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=zqqfuD5S0/5z/+0oKI1UspVl0qPF4xMvXMyvA7fV9GU=; 
-	b=SwpJ+tpNAvnhBii9KV4WXiqZqAL1AnNQv4DbyWnEodk/SfyEda/X5mfLretDZfL3yfVelzH/WTeH6PDacDhtFaEKJrwjy4rUgvSM92l0x7/BAL3YM/eyuwcA9BBXKDNrHlDZkLKeYIrHvMx4wWwwG/CKnOo9+siMRkln0TAjCKQ=
-ARC-Authentication-Results: i=1; mx.zohomail.eu;
-	dkim=pass  header.i=iusegentoo.com;
-	spf=pass  smtp.mailfrom=ali@iusegentoo.com;
-	dmarc=pass header.from=<ali@iusegentoo.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1785838018;
-	s=zmail; d=iusegentoo.com; i=ali@iusegentoo.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=zqqfuD5S0/5z/+0oKI1UspVl0qPF4xMvXMyvA7fV9GU=;
-	b=Ik94oOCln4pQF3qXLNDS+4mhiWFEptlBOtqpGqXcVeBAvb55m7Zes55lIUSwMMZx
-	UEB5wrlqawL6oLiug5lZFWo6jqyUihNMcYDInezjQqjyrt8bzZzQf9Ha4wEk0Dz8H0O
-	ssQzKk/LoVh6ZwqMtwvUTPorBLf+jnHoHGcYIWGo=
-Received: by mx.zoho.eu with SMTPS id 1785838016161376.4593959656481;
-	Tue, 4 Aug 2026 12:06:56 +0200 (CEST)
-From: Ali Ahmet Memis <ali@iusegentoo.com>
-To: Wilken Gottwalt <wilken.gottwalt@posteo.net>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (corsair-psu) serialize debugfs access against hwmon
-Date: Tue,  4 Aug 2026 10:06:45 +0000
-Message-ID: <20260804100645.233305-1-ali@iusegentoo.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260804094753.230500-1-ali@iusegentoo.com>
-References: <20260802123653.19532-1-ali@iusegentoo.com> <20260804061110.575adfc2@posteo.net> <20260804094753.230500-1-ali@iusegentoo.com>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="da8wkJfb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=+XnjuTvdfAj9boKb+hGctEMZRa5tIA5vFS9T9RCWUew=; b=d
+	a8wkJfbH/8IgbsL4Yo5NOOgwlmv7rJ8QhApZbPe5mmpmp6QCe85aLyk8FJm1ObLF
+	6UIccgh+LIrOlrJ3j7c6Zlietf91MgN9leZmH/4es/Pq3dnw1jZqaTROGPkI1Tjm
+	9QM1cN8aejPURwfdKTJVWQ+gooh3by8JuqWLg5JGzc=
+Received: from fuqingshuang$kylinos.cn ( [116.128.244.169] ) by
+ ajax-webmail-wmsvr-40-106 (Coremail) ; Tue, 4 Aug 2026 18:14:41 +0800 (CST)
+Date: Tue, 4 Aug 2026 18:14:41 +0800 (CST)
+From: "Qingshuang Fu" <fuqingshuang@kylinos.cn>
+To: sashiko-reviews@lists.linux.dev
+Cc: linux-hwmon@vger.kernel.org
+Subject: Re:Re: [PATCH] hwmon: (ads7828) Check return value of regmap_read()
+ in probe
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
+ 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
+Sender: fffsqian@163.com
+In-Reply-To: <20260804092412.59EE91F000E9@smtp.kernel.org>
+References: <20260804091719.651479-1-fffsqian@163.com>
+ <20260804092412.59EE91F000E9@smtp.kernel.org>
+X-NTES-SC: AL_Qu2TB/SYt0wj5yabYOkckk4Vhu49Xcq2vvQv34Fec+EEpR3p2QEQXGNkG1TJ/dOLNwWKoTa9bDNx5ftocKBEnq613dKz781edhallV/g8A==
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+Message-ID: <48933be.818f.19fcc44b0e9.Coremail.fuqingshuang@kylinos.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:aigvCgD3_1SRu3Fqc7IrAA--.829W
+X-CM-SenderInfo: 5iii21xldqqiywtou0bp/xtbCwhEK1Gpxu5HcUQAA3x
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-> the next command's reinit_completion() re-arms the guard at the top of
-> raw_event, and that stale reply is taken as the answer to the new command
-
-Correcting myself on the mechanism, since it changes what a fix has to do.
-
-reinit_completion() is not what defeats that guard. completion_done() is
-just x->done != 0, and x->done is zero in every state between commands: a
-successful wait_for_completion_timeout() decrements it back to zero, and a
-timeout leaves it at zero because it was never set. So the check at the top
-of raw_event practically never rejects anything, and reinit_completion() on
-the next command writes zero over a value that is already zero.
-
-The outcome I described is the same, a late reply still lands in cmd_buffer
-and completes the next waiter with the previous command's data. But that
-check is not a "command in flight" flag and cannot be turned into one by
-moving it around, so whatever fixes this needs a way to tell which command a
-reply actually belongs to.
+CkF0IDIwMjYtMDgtMDQgMTc6MjQ6MTEsIHNhc2hpa28tYm90QGtlcm5lbC5vcmcgd3JvdGU6Cj5U
+aGFuayB5b3UgZm9yIHlvdXIgY29udHJpYnV0aW9uISBTYXNoaWtvIEFJIHJldmlldyBmb3VuZCAx
+IHBvdGVudGlhbCBpc3N1ZShzKSB0byBjb25zaWRlcjoKPgo+UHJlLWV4aXN0aW5nIGlzc3VlczoK
+Pi0gW0hpZ2hdIFRoZSBkcml2ZXIgaWdub3JlcyBgLUVQUk9CRV9ERUZFUmAgYW5kIG90aGVyIGVy
+cm9ycyBmcm9tIGBkZXZtX3JlZ3VsYXRvcl9nZXRfb3B0aW9uYWwoKWAsIGltcHJvcGVybHkgZmFs
+bGluZyBiYWNrIHRvIHRoZSBpbnRlcm5hbCBWUkVGLgo+LS0KPgo+LS0tIFBhdGNoIFsxXTogW1BB
+VENIXSBod21vbjogKGFkczc4MjgpIENoZWNrIHJldHVybiB2YWx1ZSBvZiByZWdtYXBfcmVhZCgp
+IGluIHByb2JlIC0tLQo+Y29tbWl0IDJhNzM3Nzk5MmFmNzE3YmI2ZDI1MTEwOWQyOGJhZjAyNmJj
+NGE2NjUKPkF1dGhvcjogUWluZ3NodWFuZyBGdSA8ZnVxaW5nc2h1YW5nQGt5bGlub3MuY24+Cj5T
+dWJqZWN0OiBod21vbjogKGFkczc4MjgpIENoZWNrIHJldHVybiB2YWx1ZSBvZiByZWdtYXBfcmVh
+ZCgpIGluIHByb2JlCj4KPlRoaXMgcGF0Y2ggY2hlY2tzIHRoZSByZXR1cm4gdmFsdWUgb2YgYSBk
+dW1teSByZWdtYXBfcmVhZCgpIHVzZWQgdG8gZW5hYmxlCj50aGUgaW50ZXJuYWwgcmVmZXJlbmNl
+IHZvbHRhZ2UgaW4gYWRzNzgyOF9wcm9iZSgpLiBJZiB0aGUgcmVhZCBmYWlscywgaXQKPmxvZ3Mg
+YW4gZXJyb3IgYW5kIGFib3J0cyB0aGUgcHJvYmUgaW5zdGVhZCBvZiBzaWxlbnRseSBmYWlsaW5n
+IGFuZAo+cmVnaXN0ZXJpbmcgYSBub24tZnVuY3Rpb25hbCBkZXZpY2UuCj4KPj4gZGlmZiAtLWdp
+dCBhL2RyaXZlcnMvaHdtb24vYWRzNzgyOC5jIGIvZHJpdmVycy9od21vbi9hZHM3ODI4LmMKPj4g
+aW5kZXggMTQ5Y2ZjZWM3OGRjYy4uOTFlZjBjNGEwOGM0ZSAxMDA2NDQKPj4gLS0tIGEvZHJpdmVy
+cy9od21vbi9hZHM3ODI4LmMKPj4gKysrIGIvZHJpdmVycy9od21vbi9hZHM3ODI4LmMKPj4gQEAg
+LTExMiw2ICsxMTIsNyBAQCBzdGF0aWMgaW50IGFkczc4MjhfcHJvYmUoc3RydWN0IGkyY19jbGll
+bnQgKmNsaWVudCkKPj4gIAl1bnNpZ25lZCBpbnQgcmVndmFsOwo+PiAgCWVudW0gYWRzNzgyOF9j
+aGlwcyBjaGlwOwo+PiAgCXN0cnVjdCByZWd1bGF0b3IgKnJlZzsKPj4gKwlpbnQgcmV0Owo+PiAg
+Cj4+ICAJZGF0YSA9IGRldm1fa3phbGxvYyhkZXYsIHNpemVvZihzdHJ1Y3QgYWRzNzgyOF9kYXRh
+KSwgR0ZQX0tFUk5FTCk7Cj4+ICAJaWYgKCFkYXRhKQo+Cj5bU2V2ZXJpdHk6IEhpZ2hdCj5UaGlz
+IGlzIGEgcHJlLWV4aXN0aW5nIGlzc3VlLCBidXQgZG9lcyB0aGUgZHJpdmVyIG1pc2hhbmRsZSBl
+cnJvcnMgbGlrZQo+LUVQUk9CRV9ERUZFUiBmcm9tIGRldm1fcmVndWxhdG9yX2dldF9vcHRpb25h
+bCgpPwo+Cj5Mb29raW5nIHNsaWdodGx5IGZ1cnRoZXIgZG93biBpbiBhZHM3ODI4X3Byb2JlKCkg
+aW4gZHJpdmVycy9od21vbi9hZHM3ODI4LmM6Cj4KPiAgICB9IGVsc2UgaWYgKGRldi0+b2Zfbm9k
+ZSkgewo+ICAgICAgICBkaWZmX2lucHV0ID0gb2ZfcHJvcGVydHlfcmVhZF9ib29sKGRldi0+b2Zf
+bm9kZSwKPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAidGksZGlm
+ZmVyZW50aWFsLWlucHV0Iik7Cj4gICAgICAgIHJlZyA9IGRldm1fcmVndWxhdG9yX2dldF9vcHRp
+b25hbChkZXYsICJ2cmVmIik7Cj4gICAgICAgIGlmICghSVNfRVJSKHJlZykpIHsKPiAgICAgICAg
+ICAgIHZyZWZfdXYgPSByZWd1bGF0b3JfZ2V0X3ZvbHRhZ2UocmVnKTsKPgo+SWYgZGV2bV9yZWd1
+bGF0b3JfZ2V0X29wdGlvbmFsKCkgcmV0dXJucyAtRVBST0JFX0RFRkVSIGJlY2F1c2UgdGhlCj5y
+ZWd1bGF0b3IgZHJpdmVyIGhhcyBub3QgeWV0IGNvbXBsZXRlZCBwcm9iaW5nLCB0aGUgZHJpdmVy
+IGlnbm9yZXMgdGhlCj5lcnJvci4gSXQgcHJvY2VlZHMgYXMgaWYgdGhlcmUgaXMgbm8gZXh0ZXJu
+YWwgcmVmZXJlbmNlIGFuZCBpbmNvcnJlY3RseQo+ZmFsbHMgYmFjayB0byBlbmFibGluZyB0aGUg
+aW50ZXJuYWwgcmVmZXJlbmNlLgo+Cj5JZiBhbiBleHRlcm5hbCB2b2x0YWdlIHJlZmVyZW5jZSBp
+cyBwaHlzaWNhbGx5IGNvbm5lY3RlZCBhbmQgc3BlY2lmaWVkIGluCj50aGUgZGV2aWNlIHRyZWUs
+IGNvdWxkIGRyaXZpbmcgdGhlIGludGVybmFsIHJlZmVyZW5jZSBvbnRvIHRoZSBzYW1lIHBpbgo+
+cmVzdWx0IGluIGluY29ycmVjdCBBREMgcmVhZGluZ3Mgb3IgcG90ZW50aWFsbHkgaGFyZHdhcmUg
+ZGFtYWdlIGR1ZSB0byBhbgo+ZWxlY3RyaWNhbCBjb25mbGljdD8KPgo+WyAuLi4gXQo+Cj4+IEBA
+IC0xNjYsOCArMTY3LDEzIEBAIHN0YXRpYyBpbnQgYWRzNzgyOF9wcm9iZShzdHJ1Y3QgaTJjX2Ns
+aWVudCAqY2xpZW50KQo+PiAgCSAqIHZvbHRhZ2UgbmVlZHMgdG8gc2V0dGxlIGJlZm9yZSBnZXR0
+aW5nIHZhbGlkIEFEQyBkYXRhLiBTbyBwZXJmb3JtIGEKPj4gIAkgKiBkdW1teSByZWFkIHRvIGVu
+YWJsZSB0aGUgaW50ZXJuYWwgcmVmZXJlbmNlIHZvbHRhZ2UuCj4+ICAJICovCj4+IC0JaWYgKCFl
+eHRfdnJlZikKPj4gLQkJcmVnbWFwX3JlYWQoZGF0YS0+cmVnbWFwLCBkYXRhLT5jbWRfYnl0ZSwg
+JnJlZ3ZhbCk7Cj4+ICsJaWYgKCFleHRfdnJlZikgewo+PiArCQlyZXQgPSByZWdtYXBfcmVhZChk
+YXRhLT5yZWdtYXAsIGRhdGEtPmNtZF9ieXRlLCAmcmVndmFsKTsKPj4gKwkJaWYgKHJldCkgewo+
+PiArCQkJZGV2X2VycihkZXYsICJkdW1teSByZWFkIGZhaWxlZCB0byBlbmFibGUgaW50ZXJuYWwg
+VlJFRjogJWRcbiIsIHJldCk7Cj4+ICsJCQlyZXR1cm4gcmV0Owo+PiArCQl9Cj4+ICsJfQo+PiAg
+Cj4+ICAJaHdtb25fZGV2ID0gZGV2bV9od21vbl9kZXZpY2VfcmVnaXN0ZXJfd2l0aF9ncm91cHMo
+ZGV2LCBjbGllbnQtPm5hbWUsCj4+ICAJCQkJCQkJICAgZGF0YSwKPgo+LS0gCj5TYXNoaWtvIEFJ
+IHJldmlldyChpCBodHRwczovL3Nhc2hpa28uZGV2LyMvcGF0Y2hzZXQvMjAyNjA4MDQwOTE3MTku
+NjUxNDc5LTEtZmZmc3FpYW5AMTYzLmNvbT9wYXJ0PTEKCgpUaGFua3MgZm9yIHRoZSByZXZpZXcu
+CgpUaGUgbWlzaGFuZGxpbmcgb2YgLUVQUk9CRV9ERUZFUiBmcm9tIGRldm1fcmVndWxhdG9yX2dl
+dF9vcHRpb25hbCgpIGlzIGEgcHJlLWV4aXN0aW5nIGlzc3VlIGFuZCBpcyBub3QgYWRkcmVzc2Vk
+IGJ5IHRoaXMgcGF0Y2guIFRoaXMgY2hhbmdlIG9ubHkgYWRkcyBlcnJvciBjaGVja2luZyBmb3Ig
+dGhlIGR1bW15IHJlZ21hcF9yZWFkKCkgY2FsbC4KClFpbmdzaHVhbmcgRnUKCgo=
