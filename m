@@ -1,112 +1,192 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B52E346F495
-	for <linux-hwmon@vger.kernel.org>; Tue,  4 Aug 2026 10:14:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0709B469843
+	for <linux-hwmon@vger.kernel.org>; Tue,  4 Aug 2026 13:58:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785838500; cv=none; b=YNwPzqRoddlqGTRuXYERJ5eIPalBEwf+cPvEf9GvH1ho/ETKCGWxuO2HJwbQP8Vi109Xs9SfKifie1uxgnp4izyzzC3usVnZA0RZMPk71GTLhu8Hs92Ib98aYL5R6OE6H9tPd0wOc5WTp4GtUZWULHJ306/j8wBcMMVc/axxOx0=
+	t=1785851940; cv=none; b=H2OeP5D331oxbFH1ilQO1/CPldCT/Gwh3sOVBhmYABzLeSeympKc3K9Syq+kkUH2weqiqb2Slqz6BnkseEPydgcyQ/sBJsTHClbX7L25laG+Do5SFUHOHf9JVgP07TkIa5Kj2agIU2NgmR8LPjiOK+yr3S9mpR+nHy2wh3rUE0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785838500; c=relaxed/simple;
-	bh=+XnjuTvdfAj9boKb+hGctEMZRa5tIA5vFS9T9RCWUew=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=FWzDJ15Hu0NFH9XzSsNHTsti8ExvgpagBlZPTuEPapW/wgtH0rGYAoJZRZw46CuswgxKyNl4af/l27srwIDpyvJhtlBFqzvnq2aZoP2WaG6EDflTaC0o2FCSLoBQWKxt1Zpg17j6CpMTpmwY5o5vDEVPtd+vWU43pIULQ+UwHTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=da8wkJfb; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1785851940; c=relaxed/simple;
+	bh=1OQBoAhCWQ27z4TbCoxEkZMbX/0Vwt1ZYg8nnzYUxtI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kVHzMYCqbG1IOtXytLb1kFgoW/x1f1ivq3VUeXLifi1p/A1gP62efTQplsKzad4UoAywBpZpg3NyOHOzVMPqxzdBscYQ/u7ohAs73BTGQZZh7rv2K4hTKqX3zdz3teOSZHqV1PnpBi4MC1DzTXklgCqj36Bb8e77SxZHZM+DZAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XF8K7ppF; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="da8wkJfb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=+XnjuTvdfAj9boKb+hGctEMZRa5tIA5vFS9T9RCWUew=; b=d
-	a8wkJfbH/8IgbsL4Yo5NOOgwlmv7rJ8QhApZbPe5mmpmp6QCe85aLyk8FJm1ObLF
-	6UIccgh+LIrOlrJ3j7c6Zlietf91MgN9leZmH/4es/Pq3dnw1jZqaTROGPkI1Tjm
-	9QM1cN8aejPURwfdKTJVWQ+gooh3by8JuqWLg5JGzc=
-Received: from fuqingshuang$kylinos.cn ( [116.128.244.169] ) by
- ajax-webmail-wmsvr-40-106 (Coremail) ; Tue, 4 Aug 2026 18:14:41 +0800 (CST)
-Date: Tue, 4 Aug 2026 18:14:41 +0800 (CST)
-From: "Qingshuang Fu" <fuqingshuang@kylinos.cn>
-To: sashiko-reviews@lists.linux.dev
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re:Re: [PATCH] hwmon: (ads7828) Check return value of regmap_read()
- in probe
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
- 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
-Sender: fffsqian@163.com
-In-Reply-To: <20260804092412.59EE91F000E9@smtp.kernel.org>
-References: <20260804091719.651479-1-fffsqian@163.com>
- <20260804092412.59EE91F000E9@smtp.kernel.org>
-X-NTES-SC: AL_Qu2TB/SYt0wj5yabYOkckk4Vhu49Xcq2vvQv34Fec+EEpR3p2QEQXGNkG1TJ/dOLNwWKoTa9bDNx5ftocKBEnq613dKz781edhallV/g8A==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XF8K7ppF"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2caf228a910so34613045ad.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 04 Aug 2026 06:58:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785851936; x=1786456736; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=zkuISwW42BAC8zrLAFu0d6zrzkKDpQ7MpBwlJbTNguI=;
+        b=XF8K7ppFOMZTNDhPNkw6C1vRJgK0CsZR27UlF/zEQ1tLwXyXh05N+vwPdLjBjOHwB7
+         LgXBrM9wAVrVYlEnHx49Y9uXSBEcOBVW2I9kN707aQomZN4VV6JnUC7/JjIYDpvAYFVB
+         Bt+LgcVQ8evqoIxxNP7F0mr49oHgDW7dv1o2ox20TFdopTJ9zU8fFhI7EAj4z/7Ubnfh
+         WlfzlpzsZ+NnaJ3UAIBymPs3X1nZ2DkRdQKbnARcn5OuVVbQMZADKCqKM6Q1ZyGRtcXQ
+         bne1GtllhyqhXuKbRONCE/TS7KhwJ/lzGTuvTrX8m1L91F30UM+8yxGAKo5dLMEdIgPA
+         7cRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785851936; x=1786456736;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=zkuISwW42BAC8zrLAFu0d6zrzkKDpQ7MpBwlJbTNguI=;
+        b=P3msI1unIFGK/iEzxuE0DSageLGdeg64rSIp4DLXv4ipzmKeA+VpQIQ3rLEiE3GL1Y
+         IIt/VS0X6VoPi8QUo2A7HjL9Yh2ulaHV+F8xYfq7QfzxSX8aETjXjy9MXHyHAdDeJI5C
+         GM67S+gc2lWhl8eh42gyrPrkYWJyPcyHd2Eve+q5JN27rp6thyElTbk9ozruIMluSxLQ
+         g9YIoqKBmzBAbZiNVZ8DIBh/mxjp8HWGsy3JmRYkB8bpIm/bHGtKilFSNN64y3Ak8B6F
+         6m6pNVD2yqgsG6ZjA7jB4Nn4clsNSwyzFJp0GwsVBbpxiR/m3NaLwCjh8M9GbyAiLW+S
+         rJxw==
+X-Gm-Message-State: AOJu0YwJupjNlysX1WWqROxzfZFRwM8Jlk4VklBuxrijKxF+g4hlR/2S
+	xSKA30Lg4KHaZ/r+F+SBDlS5uvT7zK9Exy8nDv+Y5zQBU2g0RAE/24or
+X-Gm-Gg: AR+sD13/Pz+N+MQdachL1kf9K/LRcwPZK4BaT+c/qo2StyrY73ug7P2lbiZCR6vBAHn
+	FstXsUCfIUHarJvkbX+6wVH3EnOZ/gIY2oPbeqzzbBqieJPN2tO1/UVUCjmE8ERu91kpVdOKq65
+	OQsNgT6XuJ2B22I8/aJ6gAwyXIxWHA2jf+o9ro41KFbwdcfurL8FVPt6LyF4z2zkRU82Hay//IB
+	4Am0ib9Zxd9yt6EWGzeaaOSB2nytn94iwH3y6FA6gU7D+zgP/vwXBjau2G7KMhv06KLPFB4mOlG
+	h8kxcLwQeYkd5VajpYodyNQlvzgM2jDS9AiuNnPoUCuPHRg1MImlUs1sgECvZ00zaW7QhCWTuR7
+	g8nJGUVBxPr2huvRqZS3c/uTU0rlictwMGWg2uwVAOHUz6ACZiJdi9ev/Dycpjli93X1XWJbClC
+	AAQHvh0mABdmz2e+OmyjGGxiYP0aw7XHbiwdeU+vKWEf6KdNjHpClNHynPCD4BTwX3f9bNthagD
+	aWXJwvjD5xx254Rc3dEcmmMc1qNd1CwhpQHww==
+X-Received: by 2002:a17:903:2d1:b0:2cc:6817:d9bc with SMTP id d9443c01a7336-2d0523e6ee5mr149437475ad.38.1785851936086;
+        Tue, 04 Aug 2026 06:58:56 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31586402e53sm8194292eec.11.2026.08.04.06.58.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Aug 2026 06:58:55 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <2a49b3d2-a69d-445b-b478-edf0f3b763ea@roeck-us.net>
+Date: Tue, 4 Aug 2026 06:58:54 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <48933be.818f.19fcc44b0e9.Coremail.fuqingshuang@kylinos.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:aigvCgD3_1SRu3Fqc7IrAA--.829W
-X-CM-SenderInfo: 5iii21xldqqiywtou0bp/xtbCwhEK1Gpxu5HcUQAA3x
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: (ads7828) Check return value of regmap_read() in
+ probe
+To: Qingshuang Fu <fffsqian@163.com>, Akshay Bhat <akshay.bhat@timesys.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Qingshuang Fu <fuqingshuang@kylinos.cn>
+References: <20260804091719.651479-1-fffsqian@163.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260804091719.651479-1-fffsqian@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-CkF0IDIwMjYtMDgtMDQgMTc6MjQ6MTEsIHNhc2hpa28tYm90QGtlcm5lbC5vcmcgd3JvdGU6Cj5U
-aGFuayB5b3UgZm9yIHlvdXIgY29udHJpYnV0aW9uISBTYXNoaWtvIEFJIHJldmlldyBmb3VuZCAx
-IHBvdGVudGlhbCBpc3N1ZShzKSB0byBjb25zaWRlcjoKPgo+UHJlLWV4aXN0aW5nIGlzc3VlczoK
-Pi0gW0hpZ2hdIFRoZSBkcml2ZXIgaWdub3JlcyBgLUVQUk9CRV9ERUZFUmAgYW5kIG90aGVyIGVy
-cm9ycyBmcm9tIGBkZXZtX3JlZ3VsYXRvcl9nZXRfb3B0aW9uYWwoKWAsIGltcHJvcGVybHkgZmFs
-bGluZyBiYWNrIHRvIHRoZSBpbnRlcm5hbCBWUkVGLgo+LS0KPgo+LS0tIFBhdGNoIFsxXTogW1BB
-VENIXSBod21vbjogKGFkczc4MjgpIENoZWNrIHJldHVybiB2YWx1ZSBvZiByZWdtYXBfcmVhZCgp
-IGluIHByb2JlIC0tLQo+Y29tbWl0IDJhNzM3Nzk5MmFmNzE3YmI2ZDI1MTEwOWQyOGJhZjAyNmJj
-NGE2NjUKPkF1dGhvcjogUWluZ3NodWFuZyBGdSA8ZnVxaW5nc2h1YW5nQGt5bGlub3MuY24+Cj5T
-dWJqZWN0OiBod21vbjogKGFkczc4MjgpIENoZWNrIHJldHVybiB2YWx1ZSBvZiByZWdtYXBfcmVh
-ZCgpIGluIHByb2JlCj4KPlRoaXMgcGF0Y2ggY2hlY2tzIHRoZSByZXR1cm4gdmFsdWUgb2YgYSBk
-dW1teSByZWdtYXBfcmVhZCgpIHVzZWQgdG8gZW5hYmxlCj50aGUgaW50ZXJuYWwgcmVmZXJlbmNl
-IHZvbHRhZ2UgaW4gYWRzNzgyOF9wcm9iZSgpLiBJZiB0aGUgcmVhZCBmYWlscywgaXQKPmxvZ3Mg
-YW4gZXJyb3IgYW5kIGFib3J0cyB0aGUgcHJvYmUgaW5zdGVhZCBvZiBzaWxlbnRseSBmYWlsaW5n
-IGFuZAo+cmVnaXN0ZXJpbmcgYSBub24tZnVuY3Rpb25hbCBkZXZpY2UuCj4KPj4gZGlmZiAtLWdp
-dCBhL2RyaXZlcnMvaHdtb24vYWRzNzgyOC5jIGIvZHJpdmVycy9od21vbi9hZHM3ODI4LmMKPj4g
-aW5kZXggMTQ5Y2ZjZWM3OGRjYy4uOTFlZjBjNGEwOGM0ZSAxMDA2NDQKPj4gLS0tIGEvZHJpdmVy
-cy9od21vbi9hZHM3ODI4LmMKPj4gKysrIGIvZHJpdmVycy9od21vbi9hZHM3ODI4LmMKPj4gQEAg
-LTExMiw2ICsxMTIsNyBAQCBzdGF0aWMgaW50IGFkczc4MjhfcHJvYmUoc3RydWN0IGkyY19jbGll
-bnQgKmNsaWVudCkKPj4gIAl1bnNpZ25lZCBpbnQgcmVndmFsOwo+PiAgCWVudW0gYWRzNzgyOF9j
-aGlwcyBjaGlwOwo+PiAgCXN0cnVjdCByZWd1bGF0b3IgKnJlZzsKPj4gKwlpbnQgcmV0Owo+PiAg
-Cj4+ICAJZGF0YSA9IGRldm1fa3phbGxvYyhkZXYsIHNpemVvZihzdHJ1Y3QgYWRzNzgyOF9kYXRh
-KSwgR0ZQX0tFUk5FTCk7Cj4+ICAJaWYgKCFkYXRhKQo+Cj5bU2V2ZXJpdHk6IEhpZ2hdCj5UaGlz
-IGlzIGEgcHJlLWV4aXN0aW5nIGlzc3VlLCBidXQgZG9lcyB0aGUgZHJpdmVyIG1pc2hhbmRsZSBl
-cnJvcnMgbGlrZQo+LUVQUk9CRV9ERUZFUiBmcm9tIGRldm1fcmVndWxhdG9yX2dldF9vcHRpb25h
-bCgpPwo+Cj5Mb29raW5nIHNsaWdodGx5IGZ1cnRoZXIgZG93biBpbiBhZHM3ODI4X3Byb2JlKCkg
-aW4gZHJpdmVycy9od21vbi9hZHM3ODI4LmM6Cj4KPiAgICB9IGVsc2UgaWYgKGRldi0+b2Zfbm9k
-ZSkgewo+ICAgICAgICBkaWZmX2lucHV0ID0gb2ZfcHJvcGVydHlfcmVhZF9ib29sKGRldi0+b2Zf
-bm9kZSwKPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAidGksZGlm
-ZmVyZW50aWFsLWlucHV0Iik7Cj4gICAgICAgIHJlZyA9IGRldm1fcmVndWxhdG9yX2dldF9vcHRp
-b25hbChkZXYsICJ2cmVmIik7Cj4gICAgICAgIGlmICghSVNfRVJSKHJlZykpIHsKPiAgICAgICAg
-ICAgIHZyZWZfdXYgPSByZWd1bGF0b3JfZ2V0X3ZvbHRhZ2UocmVnKTsKPgo+SWYgZGV2bV9yZWd1
-bGF0b3JfZ2V0X29wdGlvbmFsKCkgcmV0dXJucyAtRVBST0JFX0RFRkVSIGJlY2F1c2UgdGhlCj5y
-ZWd1bGF0b3IgZHJpdmVyIGhhcyBub3QgeWV0IGNvbXBsZXRlZCBwcm9iaW5nLCB0aGUgZHJpdmVy
-IGlnbm9yZXMgdGhlCj5lcnJvci4gSXQgcHJvY2VlZHMgYXMgaWYgdGhlcmUgaXMgbm8gZXh0ZXJu
-YWwgcmVmZXJlbmNlIGFuZCBpbmNvcnJlY3RseQo+ZmFsbHMgYmFjayB0byBlbmFibGluZyB0aGUg
-aW50ZXJuYWwgcmVmZXJlbmNlLgo+Cj5JZiBhbiBleHRlcm5hbCB2b2x0YWdlIHJlZmVyZW5jZSBp
-cyBwaHlzaWNhbGx5IGNvbm5lY3RlZCBhbmQgc3BlY2lmaWVkIGluCj50aGUgZGV2aWNlIHRyZWUs
-IGNvdWxkIGRyaXZpbmcgdGhlIGludGVybmFsIHJlZmVyZW5jZSBvbnRvIHRoZSBzYW1lIHBpbgo+
-cmVzdWx0IGluIGluY29ycmVjdCBBREMgcmVhZGluZ3Mgb3IgcG90ZW50aWFsbHkgaGFyZHdhcmUg
-ZGFtYWdlIGR1ZSB0byBhbgo+ZWxlY3RyaWNhbCBjb25mbGljdD8KPgo+WyAuLi4gXQo+Cj4+IEBA
-IC0xNjYsOCArMTY3LDEzIEBAIHN0YXRpYyBpbnQgYWRzNzgyOF9wcm9iZShzdHJ1Y3QgaTJjX2Ns
-aWVudCAqY2xpZW50KQo+PiAgCSAqIHZvbHRhZ2UgbmVlZHMgdG8gc2V0dGxlIGJlZm9yZSBnZXR0
-aW5nIHZhbGlkIEFEQyBkYXRhLiBTbyBwZXJmb3JtIGEKPj4gIAkgKiBkdW1teSByZWFkIHRvIGVu
-YWJsZSB0aGUgaW50ZXJuYWwgcmVmZXJlbmNlIHZvbHRhZ2UuCj4+ICAJICovCj4+IC0JaWYgKCFl
-eHRfdnJlZikKPj4gLQkJcmVnbWFwX3JlYWQoZGF0YS0+cmVnbWFwLCBkYXRhLT5jbWRfYnl0ZSwg
-JnJlZ3ZhbCk7Cj4+ICsJaWYgKCFleHRfdnJlZikgewo+PiArCQlyZXQgPSByZWdtYXBfcmVhZChk
-YXRhLT5yZWdtYXAsIGRhdGEtPmNtZF9ieXRlLCAmcmVndmFsKTsKPj4gKwkJaWYgKHJldCkgewo+
-PiArCQkJZGV2X2VycihkZXYsICJkdW1teSByZWFkIGZhaWxlZCB0byBlbmFibGUgaW50ZXJuYWwg
-VlJFRjogJWRcbiIsIHJldCk7Cj4+ICsJCQlyZXR1cm4gcmV0Owo+PiArCQl9Cj4+ICsJfQo+PiAg
-Cj4+ICAJaHdtb25fZGV2ID0gZGV2bV9od21vbl9kZXZpY2VfcmVnaXN0ZXJfd2l0aF9ncm91cHMo
-ZGV2LCBjbGllbnQtPm5hbWUsCj4+ICAJCQkJCQkJICAgZGF0YSwKPgo+LS0gCj5TYXNoaWtvIEFJ
-IHJldmlldyChpCBodHRwczovL3Nhc2hpa28uZGV2LyMvcGF0Y2hzZXQvMjAyNjA4MDQwOTE3MTku
-NjUxNDc5LTEtZmZmc3FpYW5AMTYzLmNvbT9wYXJ0PTEKCgpUaGFua3MgZm9yIHRoZSByZXZpZXcu
-CgpUaGUgbWlzaGFuZGxpbmcgb2YgLUVQUk9CRV9ERUZFUiBmcm9tIGRldm1fcmVndWxhdG9yX2dl
-dF9vcHRpb25hbCgpIGlzIGEgcHJlLWV4aXN0aW5nIGlzc3VlIGFuZCBpcyBub3QgYWRkcmVzc2Vk
-IGJ5IHRoaXMgcGF0Y2guIFRoaXMgY2hhbmdlIG9ubHkgYWRkcyBlcnJvciBjaGVja2luZyBmb3Ig
-dGhlIGR1bW15IHJlZ21hcF9yZWFkKCkgY2FsbC4KClFpbmdzaHVhbmcgRnUKCgo=
+On 8/4/26 02:17, Qingshuang Fu wrote:
+> From: Qingshuang Fu <fuqingshuang@kylinos.cn>
+> 
+> ads7828_probe() issues a dummy regmap_read() to enable the internal
+> reference voltage when ext_vref is false. The original code ignores the
+> return value of regmap_read().
+> 
+> If the I2C read fails, the internal reference voltage will not be enabled,
+> and subsequent ADC readings return incorrect values without any error
+> indication.
+> 
+
+This only applies to ADS7830, and the command does not have to succeed for
+this to work; the chip only needs to see a start/stop sequence.
+Worst case, the next command would enable it.
+
+Given that, I do not think this is a real problem (much less one requiring a stable
+backport), and I am not going to apply this patch.
+
+> Check the return value of regmap_read(), log an error message, and abort
+> probe on failure. This prevents registering a non-functional hwmon device.
+> 
+
+FWIW, that logic would apply to every single driver which doesn't access the
+chip as part of the probe function. I don't even want to get there.
+
+Guenter
+
+> Fixes: 7a18afe80977 ("hwmon: (ads7828) Enable internal reference")
+> Signed-off-by: Qingshuang Fu <fuqingshuang@kylinos.cn>
+> ---
+>   drivers/hwmon/ads7828.c | 10 ++++++++--
+>   1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/ads7828.c b/drivers/hwmon/ads7828.c
+> index 149cfcec78dc..91ef0c4a08c4 100644
+> --- a/drivers/hwmon/ads7828.c
+> +++ b/drivers/hwmon/ads7828.c
+> @@ -112,6 +112,7 @@ static int ads7828_probe(struct i2c_client *client)
+>   	unsigned int regval;
+>   	enum ads7828_chips chip;
+>   	struct regulator *reg;
+> +	int ret;
+>   
+>   	data = devm_kzalloc(dev, sizeof(struct ads7828_data), GFP_KERNEL);
+>   	if (!data)
+> @@ -166,8 +167,13 @@ static int ads7828_probe(struct i2c_client *client)
+>   	 * voltage needs to settle before getting valid ADC data. So perform a
+>   	 * dummy read to enable the internal reference voltage.
+>   	 */
+> -	if (!ext_vref)
+> -		regmap_read(data->regmap, data->cmd_byte, &regval);
+> +	if (!ext_vref) {
+> +		ret = regmap_read(data->regmap, data->cmd_byte, &regval);
+> +		if (ret) {
+> +			dev_err(dev, "dummy read failed to enable internal VREF: %d\n", ret);
+> +			return ret;
+> +		}
+> +	}
+>   
+>   	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
+>   							   data,
+> 
+> base-commit: 848acc8ffe1b7cd5f1bf427b93069becfebc2c9d
+
