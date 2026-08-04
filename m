@@ -1,138 +1,111 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47C342AF9B;
-	Tue,  4 Aug 2026 07:59:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E768B42A170
+	for <linux-hwmon@vger.kernel.org>; Tue,  4 Aug 2026 08:00:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785830379; cv=none; b=uvksBT3OIAUE0JAiZUumlh3K1vCbuz6xc0DVA27u7toZm1SkLG10kkDWF98/g9N7kYrfd+PQHSLewdWKKM5Jzrk6/tAIjVF9ExGaR89Fd4Qtgt/l1U5lx8hV1rlJHFYLwbJ5GwgKtvsdZt6TfvWr43fzZZo0HQtT/niqPcB7k0k=
+	t=1785830404; cv=none; b=YJkGUUgxmmeNRow2p8j7WcBT9kI17TjqqZIaKYI3oLOjdIlxT2C+zlBac1cDdigl99EIBsS1W1WSyiYptxQ/vGCKcxamgC/fqmefFV5dTl79a0Qli2PBiOd8+XGKvM2L04rGc2v6oqjR8LXaydXV7tDKB5ipd5Ba+tgFcbU66q4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785830379; c=relaxed/simple;
-	bh=lK1ZK2GRa7WC0bkFhaqPUlD5cPjnjg+/fPoqXINt0I4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TdegffBDp7O+PSLCzzrFpE24gJA1iQMCdXw8oJZ0MewceBouZEF8Vwvd/aOhDrw90rQmbBOOeCzjE1b6v3p7sBkvJd6XPkDsTZIELxnrHevbZXfQP5Cd8b3lLofwZlamN4sZp0RSMNilWMjRL6GzJOO2vAyfrg1tTGVQ03B7QDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VQN19yCr; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785830404; c=relaxed/simple;
+	bh=zNSDyELmF04J6wF8CJ4XujBlic3aK9PAdDjPVBT/Pns=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=OQ8pt7xtFPhaUH6u77eV32pfwWWMXAXWnt52oU8j+/f5M1Fgb1jVrxZNP57JEbyNnC6AtfzCZcxeeI6yDzkYhzZKUHCvVKcQJeB311jVG5XebiINQpKtDdZeUMGK471SzcQkkVApFzMsRnIU6L2TYKFzvXbT3IC4aIcf8yCB+nA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VfKL3rc2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VQN19yCr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 495B31F000E9;
-	Tue,  4 Aug 2026 07:59:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VfKL3rc2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 570A61F000E9;
+	Tue,  4 Aug 2026 08:00:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785830378;
-	bh=kOSCFR2WTsjcqPxRbG8blSMJ7zfgy9ZmjtfaUgRKJSI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=VQN19yCrDNDico2QdOomHo+PU/EESHLGcWtnBaG/dZT3l8bIIjLAkaAZ6HzzZh6SL
-	 oBqJPjILtY6Gr7LC5mXhasI+jYJLug9XmPcr8BasC2GOQnNjeYIwMd/xHa/wJmVm1x
-	 nt+lVJJghsl7ZkSNTPTgK7zzAhZ4+5FsDRbrP3JXiqG73xuUo0++JMAC97pYWf0Mr7
-	 KZ2eSLIiBFUCR/aq/SjKT3qxogZF6esJeM1fU+Q/uWq1ckiRk5xDyn/2fAMz7RVhv1
-	 oA1aH7kN/DNnC+T4TQp7pyWMqmx7fvoA3j290ytEwXUQXaXpfXD3RPnrTzSAuEpKiZ
-	 UH3/CO1/CnMAA==
-Date: Tue, 4 Aug 2026 09:59:34 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Bruno Thomsen <bruno.thomsen@gmail.com>
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ti,tmp401: Add label property
-Message-ID: <20260804-rapid-heavenly-tench-4fbbbb@quoll>
-References: <20260730133058.14731-1-bruno.thomsen@gmail.com>
+	s=k20260515; t=1785830402;
+	bh=4ubmjwzFpoK/6w4SqrxzA8RaEu/P1PfMaI2YcuYtbbE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=VfKL3rc2O3D5y5xrJu6ip+gbXYWljwzryJySgU++RpS1zhmRNX2y9VcfaPRd+/l9u
+	 velpWEHiLCPKyvaI2wl+iEcOlU5dfnxA0Lyf//5BN1VtE0mW/bZVlAw5lQI9nD0O1J
+	 8bf9JbVHIqFLBg0V2YPGS0eafxPMkRnr0OH8+F/khVuCrujweLzewMTORAA3ye7dqR
+	 qYnoDs2ZPn5zLXHsrnJkmphuxBhwRE5TodggTrHKnu7Pm3cv7DnEOkPOQGHB02CZsV
+	 GPR5Wt1F/1/CEwc+9W2PS7ByikwOlW3Nu0dte0whVnBmo50UVcZBCiiX4tZD3QgPjM
+	 UQrqoFqPA5awA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] hwmon: (nzxt-smart2) Check return value of
+ init_device() in probe
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Qingshuang Fu" <fffsqian@163.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260804074842.505923-1-fffsqian@163.com>
+References: <20260804074842.505923-1-fffsqian@163.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 04 Aug 2026 08:00:01 +0000
+Message-Id: <20260804080002.570A61F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260730133058.14731-1-bruno.thomsen@gmail.com>
 
-On Thu, Jul 30, 2026 at 03:30:57PM +0200, Bruno Thomsen wrote:
-> Add support for an optional channel label property similar to other
-> hwmon devices.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-No, you need to provide reasons. Other bindings need properties per
-channel, but yours do not, so you do not have a valid case.
+Pre-existing issues:
+- [High] Sysfs read and write handlers wait indefinitely for hardware repor=
+ts without providing a mechanism to break the wait on device disconnect, ca=
+using the device unbind thread to deadlock.
+--
 
-> 
-> Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
-> ---
->  .../devicetree/bindings/hwmon/ti,tmp401.yaml  | 58 +++++++++++++++++++
->  1 file changed, 58 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
-> index 0e8ddf0ad789..345ab6203a54 100644
-> --- a/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
-> @@ -30,6 +30,12 @@ properties:
->    reg:
->      maxItems: 1
->  
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
+--- Patch [1]: [PATCH] hwmon: (nzxt-smart2) Check return value of init_devi=
+ce() in probe ---
+commit 18435050bb0408be0aa1e570c7a2976a468d52c0
+Author: Qingshuang Fu <fuqingshuang@kylinos.cn>
 
-Use consistent quotes.
+hwmon: (nzxt-smart2) Check return value of init_device() in probe
 
-> +    const: 0
-> +
->    ti,extended-range-enable:
->      description:
->        When set, this sensor measures over extended temperature range.
-> @@ -50,6 +56,26 @@ properties:
->      minimum: 0
->      maximum: 15
->  
-> +patternProperties:
-> +  "^channel@([0-2])$":
-> +    type: object
-> +    description: Represents channels of the device and their specific configuration.
-> +
-> +    properties:
-> +      reg:
-> +        description: The channel number. 0 is local channel, 1-2 are remote channels.
-> +        items:
-> +          minimum: 0
-> +          maximum: 2
-> +
-> +      label:
-> +        description: A descriptive name for this channel, like "ambient" or "psu".
-> +
-> +    required:
-> +      - reg
-> +
-> +    additionalProperties: false
-> +
->  allOf:
->    - if:
->        properties:
-> @@ -72,6 +98,16 @@ allOf:
->        properties:
->          ti,beta-compensation: false
->  
-> +  - if:
-> +      not:
-> +        properties:
-> +          compatible:
-> +            contains:
-> +              const: ti,tmp432
-> +    then:
-> +      properties:
-> +        channel@2: false
-> +
->  required:
->    - compatible
->    - reg
-> @@ -102,3 +138,25 @@ examples:
->          ti,beta-compensation = <0x7>;
->        };
->      };
-> +  - |
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
+This commit updates the nzxt-smart2 driver to check the return value of
+init_device() during probe. If the hardware is unresponsive and initializat=
+ion
+fails, the driver now correctly aborts rather than registering the hwmon
+device in an inconsistent state. This safely utilizes an earlier fix that
+stops device IO before closing the hardware.
 
-No need for new example, just grow existing.
+> diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
+> index ff0c0bee0e839..efc78a8f58c88 100644
+> --- a/drivers/hwmon/nzxt-smart2.c
+> +++ b/drivers/hwmon/nzxt-smart2.c
+> @@ -754,7 +754,11 @@ static int nzxt_smart2_hid_probe(struct hid_device *=
+hdev,
+> =20
+>  	hid_device_io_start(hdev);
+> =20
+> -	init_device(drvdata, UPDATE_INTERVAL_DEFAULT_MS);
+> +	ret =3D init_device(drvdata, UPDATE_INTERVAL_DEFAULT_MS);
+> +	if (ret) {
+> +		dev_err(&hdev->dev, "init_device failed: %d\n", ret);
+> +		goto out_hw_close;
+> +	}
+> =20
+>  	drvdata->hwmon =3D
+>  		hwmon_device_register_with_info(&hdev->dev, "nzxtsmart2", drvdata,
 
-Best regards,
-Krzysztof
+[Severity: High]
+This is a pre-existing issue, but does the driver handle device disconnects
+safely while blocked in sysfs reads?
 
+If a userspace program is reading a sysfs attribute (like pwm1_enable) and
+blocks in nzxt_smart2_hwmon_read() because the device hasn't sent the
+required report:
+
+drivers/hwmon/nzxt-smart2.c:nzxt_smart2_hwmon_read() {
+    ...
+    res =3D wait_event_interruptible_locked_irq(drvdata->wq,
+                                              drvdata->fan_config_received);
+    ...
+}
+
+If the device is suddenly disconnected, nzxt_smart2_hid_remove() calls
+hwmon_device_unregister() without waking up the wait queue or signaling a
+disconnect. Will this cause a deadlock in kernfs_drain since the sysfs
+thread never wakes up to finish its read?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260804074842.5059=
+23-1-fffsqian@163.com?part=3D1
