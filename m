@@ -1,68 +1,68 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0709B469843
-	for <linux-hwmon@vger.kernel.org>; Tue,  4 Aug 2026 13:58:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E9846A60C
+	for <linux-hwmon@vger.kernel.org>; Tue,  4 Aug 2026 13:59:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785851940; cv=none; b=H2OeP5D331oxbFH1ilQO1/CPldCT/Gwh3sOVBhmYABzLeSeympKc3K9Syq+kkUH2weqiqb2Slqz6BnkseEPydgcyQ/sBJsTHClbX7L25laG+Do5SFUHOHf9JVgP07TkIa5Kj2agIU2NgmR8LPjiOK+yr3S9mpR+nHy2wh3rUE0c=
+	t=1785851989; cv=none; b=gYnJmgBOpVklXBfmgtXNOZfDNiw9UZREPUDlDF38CwvioPvkoKxqLcKZAHZb6GCw6wdokT3+PZ22QIC1fHXLgy4AjuchcXnwgxIC7LC+28jNJ9LzF/4sOpfwkAEBRz2YdtkST5G8mEfiRdgXWDcPhfJNOUggDbM7nV06CPAFDFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785851940; c=relaxed/simple;
-	bh=1OQBoAhCWQ27z4TbCoxEkZMbX/0Vwt1ZYg8nnzYUxtI=;
+	s=arc-20240116; t=1785851989; c=relaxed/simple;
+	bh=EH09jQFTeWoHs309HdbutoKTeCUYz35kcR8BLAhCyAQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kVHzMYCqbG1IOtXytLb1kFgoW/x1f1ivq3VUeXLifi1p/A1gP62efTQplsKzad4UoAywBpZpg3NyOHOzVMPqxzdBscYQ/u7ohAs73BTGQZZh7rv2K4hTKqX3zdz3teOSZHqV1PnpBi4MC1DzTXklgCqj36Bb8e77SxZHZM+DZAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XF8K7ppF; arc=none smtp.client-ip=209.85.214.175
+	 In-Reply-To:Content-Type; b=SN69KFxUGIlH1lmXIcqwrFx3aG1mNYkP7MYS8v3izG9+gUZlDmkEhSc0AeinyV8aMpW/u+YxPfCedChBLY+hftQ9f1rkonzA3rx5nTSiRoKebEPtfLjpWImy7Z8EjrTqluWAOyVikiLrrJfIO4LqHUqRbbbK3ySuI1HQquh7Sr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OxKStaqu; arc=none smtp.client-ip=209.85.215.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XF8K7ppF"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2caf228a910so34613045ad.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 04 Aug 2026 06:58:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OxKStaqu"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c981c2c37cbso3511290a12.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 04 Aug 2026 06:59:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785851936; x=1786456736; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785851986; x=1786456786; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=zkuISwW42BAC8zrLAFu0d6zrzkKDpQ7MpBwlJbTNguI=;
-        b=XF8K7ppFOMZTNDhPNkw6C1vRJgK0CsZR27UlF/zEQ1tLwXyXh05N+vwPdLjBjOHwB7
-         LgXBrM9wAVrVYlEnHx49Y9uXSBEcOBVW2I9kN707aQomZN4VV6JnUC7/JjIYDpvAYFVB
-         Bt+LgcVQ8evqoIxxNP7F0mr49oHgDW7dv1o2ox20TFdopTJ9zU8fFhI7EAj4z/7Ubnfh
-         WlfzlpzsZ+NnaJ3UAIBymPs3X1nZ2DkRdQKbnARcn5OuVVbQMZADKCqKM6Q1ZyGRtcXQ
-         bne1GtllhyqhXuKbRONCE/TS7KhwJ/lzGTuvTrX8m1L91F30UM+8yxGAKo5dLMEdIgPA
-         7cRA==
+        bh=937XXt70UD99/sTdtME9pl+I5/+mWs4NA437Z4HSSMg=;
+        b=OxKStaquxsQ9syb44CuTviWXXxXLljUonv9yZE5l8s9F9IpAIAmhHIpSchv/7ASmXL
+         JDN2aHTKPicacxNtbuCslGBry5m91GgZ0F50z5aKbGOOwnjiCTGKxDqVxMmHHnO5n3me
+         3KCj/oZ49IG8n827VLNk9JtCnE8TC6J2gK4Wfm9ms7Wzv7b7TFTSL66a+AubVUikuyop
+         /mWwtfea/9oqBXfHtwNEbzfWLgI7AqDYkIUavs8zZHOwRwAC4BdIdPpb0aA9Rof0dsJu
+         8AKwd1/gYnN0+gONKWqXxlBbDN4LEUzjS5HWH85Mts50FBfTcSuNNiQizqT/7a4c7/Co
+         Muww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785851936; x=1786456736;
+        d=1e100.net; s=20251104; t=1785851986; x=1786456786;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=zkuISwW42BAC8zrLAFu0d6zrzkKDpQ7MpBwlJbTNguI=;
-        b=P3msI1unIFGK/iEzxuE0DSageLGdeg64rSIp4DLXv4ipzmKeA+VpQIQ3rLEiE3GL1Y
-         IIt/VS0X6VoPi8QUo2A7HjL9Yh2ulaHV+F8xYfq7QfzxSX8aETjXjy9MXHyHAdDeJI5C
-         GM67S+gc2lWhl8eh42gyrPrkYWJyPcyHd2Eve+q5JN27rp6thyElTbk9ozruIMluSxLQ
-         g9YIoqKBmzBAbZiNVZ8DIBh/mxjp8HWGsy3JmRYkB8bpIm/bHGtKilFSNN64y3Ak8B6F
-         6m6pNVD2yqgsG6ZjA7jB4Nn4clsNSwyzFJp0GwsVBbpxiR/m3NaLwCjh8M9GbyAiLW+S
-         rJxw==
-X-Gm-Message-State: AOJu0YwJupjNlysX1WWqROxzfZFRwM8Jlk4VklBuxrijKxF+g4hlR/2S
-	xSKA30Lg4KHaZ/r+F+SBDlS5uvT7zK9Exy8nDv+Y5zQBU2g0RAE/24or
-X-Gm-Gg: AR+sD13/Pz+N+MQdachL1kf9K/LRcwPZK4BaT+c/qo2StyrY73ug7P2lbiZCR6vBAHn
-	FstXsUCfIUHarJvkbX+6wVH3EnOZ/gIY2oPbeqzzbBqieJPN2tO1/UVUCjmE8ERu91kpVdOKq65
-	OQsNgT6XuJ2B22I8/aJ6gAwyXIxWHA2jf+o9ro41KFbwdcfurL8FVPt6LyF4z2zkRU82Hay//IB
-	4Am0ib9Zxd9yt6EWGzeaaOSB2nytn94iwH3y6FA6gU7D+zgP/vwXBjau2G7KMhv06KLPFB4mOlG
-	h8kxcLwQeYkd5VajpYodyNQlvzgM2jDS9AiuNnPoUCuPHRg1MImlUs1sgECvZ00zaW7QhCWTuR7
-	g8nJGUVBxPr2huvRqZS3c/uTU0rlictwMGWg2uwVAOHUz6ACZiJdi9ev/Dycpjli93X1XWJbClC
-	AAQHvh0mABdmz2e+OmyjGGxiYP0aw7XHbiwdeU+vKWEf6KdNjHpClNHynPCD4BTwX3f9bNthagD
-	aWXJwvjD5xx254Rc3dEcmmMc1qNd1CwhpQHww==
-X-Received: by 2002:a17:903:2d1:b0:2cc:6817:d9bc with SMTP id d9443c01a7336-2d0523e6ee5mr149437475ad.38.1785851936086;
-        Tue, 04 Aug 2026 06:58:56 -0700 (PDT)
+        bh=937XXt70UD99/sTdtME9pl+I5/+mWs4NA437Z4HSSMg=;
+        b=igsySgkkVIN6Dr3UqZ+FoWXDvwZyLo1i9s5JOzPZfdLA3gPuv1JXFEXkEDf301xnzs
+         asrNFXyBJoC/sNyK9l4JN4XYwRZFWgt8tjKX1jNhM3rwjGYPRyxW1KZS0Fwi9uFdPCW7
+         tVmHIzKh8n91OxfrgVCzH5sIeGQnujy4fxdlFw3YqbOuC5og+FRcChXyXZKMCxUIlUj2
+         PgRZ33nIU1KH527vOIdrVeL3V4TussYqPH6zxXNqsl1jA+W+plSW+VwDSAZLu2vAp9uK
+         00KSbWpV0Xgib32YcsazCaJYcmws/BeBbNUlVLQnRVSyr6KGk24XvXgG/dfU7rIEmr+E
+         nETg==
+X-Gm-Message-State: AOJu0YwJ7F20+2skFhHsgkXl1+3C22srG6wAiB64eIvyqlRkRXKAfRJo
+	iOeh6bZqgpda1+p3ghoLVCw7wxkDyHte24ZzGNKF0apJS+mNtQa9lC6u
+X-Gm-Gg: AR+sD10mZdh1mSrSODX4oACR5zwqB5TIW0QSXZhlSKWrHcgXOYB+z+44HFM3VBeR2s4
+	l4p2pT5fKYHlLQb282vnIoaOx3DKKgk6YjBbflLp9jRSLffCgAFejodCzY/WHsgFVmQcfu/p5Yh
+	aTiKfI4Ef916hVgBi0rVwqTaZS9k9AFmnI4MOX4oCKjd6YmV2Ji2EFytWUj0v3KEWFhXuC7Nj6H
+	tjd9M2/NH8KpGOJYh9su3sWbEB4EKrEfcfj3HKVWnhQR2tpHBvb/XUw/FxKQQTsaf95vtFJFrJ+
+	Vr/7cMSNJK/GETXJ+euL1CCg9du3r/dMNDRsYCNVOJnc3EA596JFTX91Dt6ELPpGEi0kuKa+UE3
+	3yAqa+AT/Wow06GCn3I+YKduE8yhkjHgDldkI7UOuuKjZh5sCPWF5pxm4lFZvo3o3Qvw1rD04tG
+	PVYl4Hkky5po7CD531CbonpdnYA8i8bdvKQFi04F6g4Wu81aMm0DlcIGShCHGQOF29QIawnqfLX
+	CdB4Tr3Hz/shiCwPjXDEJ+Uz2jaAjlH3ydKaUaewFT7X+cn
+X-Received: by 2002:a05:6a21:398e:b0:3bf:63af:855 with SMTP id adf61e73a8af0-3c92a4d6fd0mr15013628637.1.1785851985934;
+        Tue, 04 Aug 2026 06:59:45 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31586402e53sm8194292eec.11.2026.08.04.06.58.55
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31586402e53sm8207973eec.11.2026.08.04.06.59.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Aug 2026 06:58:55 -0700 (PDT)
+        Tue, 04 Aug 2026 06:59:45 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2a49b3d2-a69d-445b-b478-edf0f3b763ea@roeck-us.net>
-Date: Tue, 4 Aug 2026 06:58:54 -0700
+Message-ID: <5b9ab157-faef-41d3-83a4-62fcae83a524@roeck-us.net>
+Date: Tue, 4 Aug 2026 06:59:44 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -72,10 +72,11 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] hwmon: (ads7828) Check return value of regmap_read() in
  probe
-To: Qingshuang Fu <fffsqian@163.com>, Akshay Bhat <akshay.bhat@timesys.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- Qingshuang Fu <fuqingshuang@kylinos.cn>
+To: Qingshuang Fu <fuqingshuang@kylinos.cn>, sashiko-reviews@lists.linux.dev
+Cc: linux-hwmon@vger.kernel.org
 References: <20260804091719.651479-1-fffsqian@163.com>
+ <20260804092412.59EE91F000E9@smtp.kernel.org>
+ <48933be.818f.19fcc44b0e9.Coremail.fuqingshuang@kylinos.cn>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,72 +122,94 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260804091719.651479-1-fffsqian@163.com>
+In-Reply-To: <48933be.818f.19fcc44b0e9.Coremail.fuqingshuang@kylinos.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 8/4/26 02:17, Qingshuang Fu wrote:
-> From: Qingshuang Fu <fuqingshuang@kylinos.cn>
+On 8/4/26 03:14, Qingshuang Fu wrote:
 > 
-> ads7828_probe() issues a dummy regmap_read() to enable the internal
-> reference voltage when ext_vref is false. The original code ignores the
-> return value of regmap_read().
+> At 2026-08-04 17:24:11, sashiko-bot@kernel.org wrote:
+>> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+>>
+>> Pre-existing issues:
+>> - [High] The driver ignores `-EPROBE_DEFER` and other errors from `devm_regulator_get_optional()`, improperly falling back to the internal VREF.
+>> --
+>>
+>> --- Patch [1]: [PATCH] hwmon: (ads7828) Check return value of regmap_read() in probe ---
+>> commit 2a7377992af717bb6d251109d28baf026bc4a665
+>> Author: Qingshuang Fu <fuqingshuang@kylinos.cn>
+>> Subject: hwmon: (ads7828) Check return value of regmap_read() in probe
+>>
+>> This patch checks the return value of a dummy regmap_read() used to enable
+>> the internal reference voltage in ads7828_probe(). If the read fails, it
+>> logs an error and aborts the probe instead of silently failing and
+>> registering a non-functional device.
+>>
+>>> diff --git a/drivers/hwmon/ads7828.c b/drivers/hwmon/ads7828.c
+>>> index 149cfcec78dcc..91ef0c4a08c4e 100644
+>>> --- a/drivers/hwmon/ads7828.c
+>>> +++ b/drivers/hwmon/ads7828.c
+>>> @@ -112,6 +112,7 @@ static int ads7828_probe(struct i2c_client *client)
+>>>   	unsigned int regval;
+>>>   	enum ads7828_chips chip;
+>>>   	struct regulator *reg;
+>>> +	int ret;
+>>>   
+>>>   	data = devm_kzalloc(dev, sizeof(struct ads7828_data), GFP_KERNEL);
+>>>   	if (!data)
+>>
+>> [Severity: High]
+>> This is a pre-existing issue, but does the driver mishandle errors like
+>> -EPROBE_DEFER from devm_regulator_get_optional()?
+>>
+>> Looking slightly further down in ads7828_probe() in drivers/hwmon/ads7828.c:
+>>
+>>     } else if (dev->of_node) {
+>>         diff_input = of_property_read_bool(dev->of_node,
+>>                                            "ti,differential-input");
+>>         reg = devm_regulator_get_optional(dev, "vref");
+>>         if (!IS_ERR(reg)) {
+>>             vref_uv = regulator_get_voltage(reg);
+>>
+>> If devm_regulator_get_optional() returns -EPROBE_DEFER because the
+>> regulator driver has not yet completed probing, the driver ignores the
+>> error. It proceeds as if there is no external reference and incorrectly
+>> falls back to enabling the internal reference.
+>>
+>> If an external voltage reference is physically connected and specified in
+>> the device tree, could driving the internal reference onto the same pin
+>> result in incorrect ADC readings or potentially hardware damage due to an
+>> electrical conflict?
+>>
+>> [ ... ]
+>>
+>>> @@ -166,8 +167,13 @@ static int ads7828_probe(struct i2c_client *client)
+>>>   	 * voltage needs to settle before getting valid ADC data. So perform a
+>>>   	 * dummy read to enable the internal reference voltage.
+>>>   	 */
+>>> -	if (!ext_vref)
+>>> -		regmap_read(data->regmap, data->cmd_byte, &regval);
+>>> +	if (!ext_vref) {
+>>> +		ret = regmap_read(data->regmap, data->cmd_byte, &regval);
+>>> +		if (ret) {
+>>> +			dev_err(dev, "dummy read failed to enable internal VREF: %d\n", ret);
+>>> +			return ret;
+>>> +		}
+>>> +	}
+>>>   
+>>>   	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
+>>>   							   data,
+>>
+>> -- 
+>> Sashiko AI review · https://sashiko.dev/#/patchset/20260804091719.651479-1-fffsqian@163.com?part=1
 > 
-> If the I2C read fails, the internal reference voltage will not be enabled,
-> and subsequent ADC readings return incorrect values without any error
-> indication.
+> 
+> Thanks for the review.
+> 
+> The mishandling of -EPROBE_DEFER from devm_regulator_get_optional() is a pre-existing issue and is not addressed by this patch. This change only adds error checking for the dummy regmap_read() call.
 > 
 
-This only applies to ADS7830, and the command does not have to succeed for
-this to work; the chip only needs to see a start/stop sequence.
-Worst case, the next command would enable it.
-
-Given that, I do not think this is a real problem (much less one requiring a stable
-backport), and I am not going to apply this patch.
-
-> Check the return value of regmap_read(), log an error message, and abort
-> probe on failure. This prevents registering a non-functional hwmon device.
-> 
-
-FWIW, that logic would apply to every single driver which doesn't access the
-chip as part of the probe function. I don't even want to get there.
+In other words, it fixes a non-problem while ignoring the real one.
 
 Guenter
-
-> Fixes: 7a18afe80977 ("hwmon: (ads7828) Enable internal reference")
-> Signed-off-by: Qingshuang Fu <fuqingshuang@kylinos.cn>
-> ---
->   drivers/hwmon/ads7828.c | 10 ++++++++--
->   1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/ads7828.c b/drivers/hwmon/ads7828.c
-> index 149cfcec78dc..91ef0c4a08c4 100644
-> --- a/drivers/hwmon/ads7828.c
-> +++ b/drivers/hwmon/ads7828.c
-> @@ -112,6 +112,7 @@ static int ads7828_probe(struct i2c_client *client)
->   	unsigned int regval;
->   	enum ads7828_chips chip;
->   	struct regulator *reg;
-> +	int ret;
->   
->   	data = devm_kzalloc(dev, sizeof(struct ads7828_data), GFP_KERNEL);
->   	if (!data)
-> @@ -166,8 +167,13 @@ static int ads7828_probe(struct i2c_client *client)
->   	 * voltage needs to settle before getting valid ADC data. So perform a
->   	 * dummy read to enable the internal reference voltage.
->   	 */
-> -	if (!ext_vref)
-> -		regmap_read(data->regmap, data->cmd_byte, &regval);
-> +	if (!ext_vref) {
-> +		ret = regmap_read(data->regmap, data->cmd_byte, &regval);
-> +		if (ret) {
-> +			dev_err(dev, "dummy read failed to enable internal VREF: %d\n", ret);
-> +			return ret;
-> +		}
-> +	}
->   
->   	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
->   							   data,
-> 
-> base-commit: 848acc8ffe1b7cd5f1bf427b93069becfebc2c9d
 
