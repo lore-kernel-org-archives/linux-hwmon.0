@@ -1,137 +1,137 @@
 Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E526444717
-	for <linux-hwmon@vger.kernel.org>; Tue,  4 Aug 2026 21:08:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03B1040C5AE
+	for <linux-hwmon@vger.kernel.org>; Tue,  4 Aug 2026 21:36:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785877699; cv=none; b=TLo4W0OQLgiKcrm/0/wz+JJKobcYEJm5ZBXrwlgW0uBenDMOgu6sfh2DPNWJLrwiBeItOuYXVHAvtrJdaEWaWmpwFsIxPqgmDcmXdgWOLhWzCC5Vxb38wX7FLKMOx+SrHY5BGH3pkCKcOIemiBhuUWok42hBl/NK5bRDuXf9kio=
+	t=1785879391; cv=none; b=XJHRswFDXsqLx7F37HVr4kXDVBj56a3G/JWV8sNxSmboEcic+gKPOHHLVuNfCx5bplQG6LSueZb2pGpdCk6aDz4U7htt3Cn2Jc4ZinG8iFJacfLsZnxnM54ckyeX5MQbtBMsotGpmZyDH/4lo6naA9FCxCyUjP9c7xlzNtRCtsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785877699; c=relaxed/simple;
-	bh=GzRN9Lkuog3ErMohJcR0XxF255K84xRwMvry3prLwjc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bCl9hM/pbyLtzcSeN+b4aktXftAhqSfog7g6NR7qlobHzE0dUDFpudZ3UEiM5LbPoJlGEgUxKP4R7QNui8kbuSlQfdGGW/JUwneyb8wWA3zh5HdDuWYEhTw9AKMKLCqpf9RWw+EvWHZhlL48ZLAGDrlCN+/GhyTyqHGTlSeMIBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S/eBv85Z; arc=none smtp.client-ip=209.85.216.47
+	s=arc-20240116; t=1785879391; c=relaxed/simple;
+	bh=/ffgo7l9DAfFAj2pKbEZg4UfVKgGs61WLQgDMg0UJJY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jtEAeev2bs7/0bX9EMph1HNNbQXCCLvTqq9p+nKMZinwZUJOialZBz7OHgRIcrfIfu8ylMvGSJx0/dLkmWwYLLAhv1gDa/8adjBszlDEw9hdY4QmfVaCWgdeW98JkHDbHu55wKthP/i2sbyunUMbC2YDnUVsFRPo/8Nkku3mG+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m2Pu9q3k; arc=none smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S/eBv85Z"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-38e347638adso282665a91.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 04 Aug 2026 14:08:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m2Pu9q3k"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-38d489b6b71so289777a91.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 04 Aug 2026 14:36:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785877697; x=1786482497; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=lbnB6/2CfdYmMgjgs7OcH9+rJcQl6sCJH0syanX8ZwA=;
-        b=S/eBv85ZgtBv2LvjSK8tku6N1NhGL4h2eiTCmrB7ebf9yAF7xNEkuIrs86PKMlDyhY
-         Kh5cBxJmLECaMDNFxqsf/ZAW1a2ciITVbvZZue6I0aQzjiC73ZRRJwXXBag903FuLK4x
-         XwmXMnR/W5ZYuRVg2+E5PwXrgt1DFDhJDmnKi1HwueRZGGz1fBUCLVl4+KrXN5awTxcf
-         4jr5jukvXgsmmlIdlDXibHiC3Sv8JVu8JW40a1JqVOvweqdMEC2mU0iXEzDlxL1r9vHQ
-         HSxhic6/shWiIke0w6/ccN6qdQNCnBZY0kajD3+bFAfcTTbaNngLJN80Lu4Ztd5ZyYdi
-         kL3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785877697; x=1786482497;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1785879389; x=1786484189; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=lbnB6/2CfdYmMgjgs7OcH9+rJcQl6sCJH0syanX8ZwA=;
-        b=fnYq/d7OOLpFuzhNpsLpbwj1/xeAVLICTk6Z5tV7/AzYzs3Zb0EpgAIwnm5koTloaj
-         SQ89YDgusGps95HGgXXaq15EqDGXdtXlLSUyyx5skCDbB+zZYTo1FmD48r5lWksWyI6V
-         0cvd0qriOVEV5TZkMfEBvQpabLHG46urFw+CB+3IytghTf+IwbwJVw2Ivsx+6Pv7nqqp
-         ejCsSM5CFvoLNewOZX9Mg7zBLP0N2tIyEK5clRjKnP01qtbHdVPd86m6XrQfKtOwNu0l
-         PZFXJeZRVAcE7aTiTZ1BrrvuQG1JsRLFx9tXcEwIkibgS2etT+BIq4QKn3jIU6X2WkxT
-         Yk6w==
-X-Forwarded-Encrypted: i=1; AHgh+RprSd1pSpIZpUEe6CSIXAUkV7ubSnjvXAbcwb3740IGEPPtqiYhNoZjhtO+z91yscxrqqFCqSEe8Xu6dQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXMf7KehrHSfSwPvHt2TefuLPfKTaLBoI9jLMOhqxi4bK9jLjv
-	EJkPurrgCSiV7CFJgYftaB8VrL29RMlL20xAP4X01LznIv99ryP2++rP
-X-Gm-Gg: AR+sD13ZPtNhSaSskkDtz8K0bUxE1ywHlRWK0NYImCRPkdl50Swi8LQMjIYU+ym4TcY
-	hSg6wOw3c9GC4hOBBnPGBp+tNze/5AdMAq8YKA58djhJKMXMLbay7KfHU2lTOjE81JTBel0SNZj
-	Etp85Lby3vA8KN3J5zetGOAu1ET5zmTnPnUmwKLcRFbPx7rWoOnsSJ3YKjMudCcy5LM5g1GSMY3
-	ho+R07KYnz79jaBkoiB08808XDF/eeKeuKKcN9UjD9E9Qa6ifA1BzOHLGvy94wS8WkT0Sn365KQ
-	iEzJ2b6yM1zRgXhAutYtGpjIFgC5tE0XMllS6/iYW2e7dX4Qx2decx+s6xxglHgHJKGKX9Ld924
-	GWOKoLxRipGZWusiHrejnTQxDEvnigVkA6uapZHVY1X9qFVPqpGjGBxvVLrWcspjCoQCT9nfxCw
-	lq0sYAMa3wzem6Uy2btE0tjorROD2MdDvxHpr8VFTn3Zro2deFPicmOIgyv1NwO0vTeyz8Nyo3S
+        bh=gKrNxiC7XW8YCLy/rfgvAzRcGrofB3mIcwpSBJE2qzA=;
+        b=m2Pu9q3k7XKds2cdtwjd6LIVhZ6hUKks7wXR+RlwdYRbren0HdTVDq1c62jJ+14nCw
+         /IzIn8dm2S5qd/DXSQwIqEXt3i1GxrlBjCapMs+VBAm2VYz8+V6tjDZxX4mwOc84doqY
+         UdfRj6MIow9abDalevPdw03nYtBgY13DQ4QMY3ajbbXHK2X0hV1urH2napiON1T7Jl+r
+         pdwE7WRZDRr/9AQFEwHI9qWhRf3A6x9N9IMrx4nGni9bR59y+5gSpJysPYWeD+uBf6/S
+         jS18UVtpjAGgHrhrBjoPS91nIAsvK1nnUjZx5qjaDz+ab7ESNa8VZFhaXreM+9pdHpl6
+         N5LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785879389; x=1786484189;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=gKrNxiC7XW8YCLy/rfgvAzRcGrofB3mIcwpSBJE2qzA=;
+        b=h+WmkO/rRxp1TL4o8WFKBaIW8ZLgL6lkTELcnUHQUUb5602ZIQneS2hrdtygbZ493r
+         /T4t+cItfzxqDjBgCDZx0caYsz/nGMvpVMM+O5UTEqw1FcWzRED/OH+zN8Cf9h2gqjg1
+         aEQzX9hykfKYrXGDecPPZvTegtsaFIqIfWL0wpzb3EO6ednH0ylbaWbu1BYA/cCPd/VC
+         ON+mPV6aEeqWZvsxY2Tw97iuLiZLjzoE+DZfi1Oju3U9MvbtjF9AO7sb6Vh8/I+28bvy
+         5r0CqupYfMvPm1G7/nkuPqpaYqq2CcBwHmFwrbjA6vqn6sezPkNb8P7of7vdJ5Qr/yxY
+         dGMw==
+X-Gm-Message-State: AOJu0YyOm6cL7Hv6d7DCMJKQECl7cmrHv6/wbC3UWr3aEWYf3sF5ZQzM
+	JoMz14/yWStxgEJwaAmmh6M0d7uVAeEa+V1xnaRGp7mxJ0NNWXtw6Bdvdk3q+w==
+X-Gm-Gg: AR+sD13Cxlhpa2rNvApIF1wnRqAd0yws4+xE6c5qbKmWlFrpaDdyr5xoW767U8Vb3uI
+	nw5tOnXgwDp39vxav1Xy4Emyp+CZ2LpPdUdaqe7FooFSGPYefur1EaJ1JRwi0RsFjIlOTKgX4Zj
+	KLUd5QdJrPDamHh7kuClZZooWIZOsIrzGKxmPvFJ6z4BOlGcWJilMNmD5AEiYZCBUus4KfOVqxN
+	ut2DAESS6K0XRQdDeHXjqKf2/TGH2rioNesj6HhhVb7ndLBcrcyhSofXS5L2XhjJ9OWT6Sy9Lq8
+	hkggwUREQsP5Fj4piULRfeEN1304rUhyqGPTiGUI/DOH7O65Kk5hreprWAdw6DZmXZ/BPR4BRTM
+	vbWWthCTcWtP0gjRGLrfafqflFFcGvxQlUvx9tPt+GDr51brndeIvQ7Wxudib9Z+NruKpJ1s4x0
+	kq4P52k/UqTL/gIeVLl1oI7ZBFMFZWKFUMJmAjT4TxhLBTKfNzeuKGGkho2tt3prNAaQxvA0tni
 	A==
-X-Received: by 2002:a17:90b:2d50:b0:380:f34a:6ff1 with SMTP id 98e67ed59e1d1-3903c5e0213mr1542063a91.17.1785877696824;
-        Tue, 04 Aug 2026 14:08:16 -0700 (PDT)
+X-Received: by 2002:a17:90b:4d8c:b0:381:6c5:3f63 with SMTP id 98e67ed59e1d1-3903c544f17mr1468140a91.6.1785879389177;
+        Tue, 04 Aug 2026 14:36:29 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3903f5e21c7sm113014a91.3.2026.08.04.14.08.15
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-390392aee23sm551480a91.15.2026.08.04.14.36.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Aug 2026 14:08:15 -0700 (PDT)
+        Tue, 04 Aug 2026 14:36:28 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 4 Aug 2026 14:08:14 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Qingshuang Fu <fffsqian@163.com>
-Cc: Aleksandr Mezin <mezin.alexander@gmail.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Qingshuang Fu <fuqingshuang@kylinos.cn>
-Subject: Re: [PATCH] hwmon: (nzxt-smart2) Check return value of init_device()
- in probe
-Message-ID: <a45b0d55-4112-4c63-b855-11e9a507836e@roeck-us.net>
-References: <20260804074842.505923-1-fffsqian@163.com>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Sashiko <sashiko-bot@kernel.org>
+Subject: [PATCH] hwmon: (pmbus/lm25066) Fix PMBus coefficient calculations
+Date: Tue,  4 Aug 2026 14:36:27 -0700
+Message-ID: <20260804213627.1522664-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260804074842.505923-1-fffsqian@163.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 04, 2026 at 03:48:42PM +0800, Qingshuang Fu wrote:
-> From: Qingshuang Fu <fuqingshuang@kylinos.cn>
-> 
-> The init_device() call in nzxt_smart2_hid_probe() can fail because it
-> sends HID output reports to the hardware to detect fans and set the
-> update interval.  If the hardware is not responding or the HID reports
-> fail, init_device() returns a negative error code.
-> 
-> However, the return value was ignored, causing the probe to continue
-> and register an hwmon device even though the device was never properly
-> initialized.  This leads to an inconsistent state where the driver
-> reports stale data or blocks on wait queues that will never be woken.
-> 
-> The same function's return value is already checked in the
-> reset_resume() handler, confirming the author's intent that errors
-> should be propagated.
-> 
-> Note that this fix was not possible before commit 59d104b54b0b
-> ("hwmon: (nzxt-smart2) Stop device IO before calling hid_hw_stop")
-> because the out_hw_close error path was missing hid_device_io_stop(),
-> which would have opened a use-after-free risk window.
-> 
-> Fixes: 53e68c20aeb1 ("hwmon: add driver for NZXT RGB&Fan Controller/Smart Device v2.")
-> Signed-off-by: Qingshuang Fu <fuqingshuang@kylinos.cn>
+In lm25066_probe(), the PMBus coefficients for current and power are
+scaled based on the shunt resistor value. The calculation evaluates the
+multiplication using 32-bit arithmetic because info->m is an int and
+shunt is a u32:
 
-Applied.
+static int lm25066_probe(struct i2c_client *client) {
+    ...
+    info->m[PSC_CURRENT_IN] = info->m[PSC_CURRENT_IN] * shunt / 1000;
+    info->m[PSC_POWER] = info->m[PSC_POWER] * shunt / 1000;
+    ...
+}
 
-Thanks,
-Guenter
+For large coefficients like 26882 (LM25056) or 15076 (LM5066i), a device
+tree shunt-resistor-micro-ohms value exceeding approximately 159,000
+(159 mOhm, which is physically valid for low-current applications) causes
+the intermediate product to exceed UINT_MAX (4,294,967,295). This results
+in a silent wraparound before the division by 1000.
 
-> ---
->  drivers/hwmon/nzxt-smart2.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> 
-> base-commit: 848acc8ffe1b7cd5f1bf427b93069becfebc2c9d
-> 
-> diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
-> index ff0c0bee0e83..efc78a8f58c8 100644
-> --- a/drivers/hwmon/nzxt-smart2.c
-> +++ b/drivers/hwmon/nzxt-smart2.c
-> @@ -754,7 +754,11 @@ static int nzxt_smart2_hid_probe(struct hid_device *hdev,
->  
->  	hid_device_io_start(hdev);
->  
-> -	init_device(drvdata, UPDATE_INTERVAL_DEFAULT_MS);
-> +	ret = init_device(drvdata, UPDATE_INTERVAL_DEFAULT_MS);
-> +	if (ret) {
-> +		dev_err(&hdev->dev, "init_device failed: %d\n", ret);
-> +		goto out_hw_close;
-> +	}
->  
->  	drvdata->hwmon =
->  		hwmon_device_register_with_info(&hdev->dev, "nzxtsmart2", drvdata,
+Furthermore, if the wrapped value has the most significant bit set,
+converting it back to the signed int info->m results in negative
+coefficients. This logic error leads to drastically corrupted current and
+power readings, which can cause erratic thermal or power management
+behavior in the system.
+
+Fix the problem by using 64-bit operations for the multiply/divide
+operations. This can still overflow, but only for unreasonably large
+shunt resistor values.
+
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Fixes: 94ee5fcc240fe ("hwmon: (pmbus/lm25066) Support configurable sense resistor values")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/pmbus/lm25066.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
+index f20991001727..497802c646e9 100644
+--- a/drivers/hwmon/pmbus/lm25066.c
++++ b/drivers/hwmon/pmbus/lm25066.c
+@@ -14,6 +14,7 @@
+ #include <linux/slab.h>
+ #include <linux/i2c.h>
+ #include <linux/log2.h>
++#include <linux/math.h>
+ #include <linux/of.h>
+ #include "pmbus.h"
+ 
+@@ -579,8 +580,8 @@ static int lm25066_probe(struct i2c_client *client)
+ 	if (of_property_read_u32(client->dev.of_node, "shunt-resistor-micro-ohms", &shunt))
+ 		shunt = 1000;
+ 
+-	info->m[PSC_CURRENT_IN] = info->m[PSC_CURRENT_IN] * shunt / 1000;
+-	info->m[PSC_POWER] = info->m[PSC_POWER] * shunt / 1000;
++	info->m[PSC_CURRENT_IN] = DIV_ROUND_CLOSEST_ULL((u64)info->m[PSC_CURRENT_IN] * shunt, 1000);
++	info->m[PSC_POWER] = DIV_ROUND_CLOSEST_ULL((u64)info->m[PSC_POWER] * shunt, 1000);
+ 
+ #if IS_ENABLED(CONFIG_SENSORS_LM25066_REGULATOR)
+ 	/* LM25056 doesn't support OPERATION */
+-- 
+2.45.2
+
