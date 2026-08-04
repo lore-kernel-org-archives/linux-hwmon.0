@@ -1,180 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32DE142B756
-	for <linux-hwmon@vger.kernel.org>; Tue,  4 Aug 2026 20:24:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E526444717
+	for <linux-hwmon@vger.kernel.org>; Tue,  4 Aug 2026 21:08:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785875097; cv=none; b=ebAofgDxheOFulv0y3cDu5AGmMedEOXdpF35YaUX21+JtENun32G+uC9BBrZEOP/P96JDEdSvYhKkx7RRfItz3MQtwQpNgaLqbmUzUv/l2vEOX43vZ7X3aa/tMYURlY4QFBDRh4QFCAU+GLQZBjaV7v8ODKcxRPUdRH4Lz8ocx8=
+	t=1785877699; cv=none; b=TLo4W0OQLgiKcrm/0/wz+JJKobcYEJm5ZBXrwlgW0uBenDMOgu6sfh2DPNWJLrwiBeItOuYXVHAvtrJdaEWaWmpwFsIxPqgmDcmXdgWOLhWzCC5Vxb38wX7FLKMOx+SrHY5BGH3pkCKcOIemiBhuUWok42hBl/NK5bRDuXf9kio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785875097; c=relaxed/simple;
-	bh=z/uykjnAVuc1t/c90RAcJUJY4zoUr69cKbcnsRs2nEM=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=TAAC+Hwn+Iymyw5QV4sDEEJmdiY6EFGLDJQJTH3L4AOtnAAalLM6YBgAIXzAP7nxYDJkuED7sQpOAtKRV4117nJs4wLYVjm/n1ENipdzjfcypCvvn2CseUyPck9/dDFE7u368pGknDroD+ZOvkxdydwEnrjKeCG4B6oGZJEzyks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FB5tebUW; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785877699; c=relaxed/simple;
+	bh=GzRN9Lkuog3ErMohJcR0XxF255K84xRwMvry3prLwjc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bCl9hM/pbyLtzcSeN+b4aktXftAhqSfog7g6NR7qlobHzE0dUDFpudZ3UEiM5LbPoJlGEgUxKP4R7QNui8kbuSlQfdGGW/JUwneyb8wWA3zh5HdDuWYEhTw9AKMKLCqpf9RWw+EvWHZhlL48ZLAGDrlCN+/GhyTyqHGTlSeMIBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S/eBv85Z; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FB5tebUW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 359C21F000E9;
-	Tue,  4 Aug 2026 20:24:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785875092;
-	bh=ZtRNYmPSO51YKz2J7fH+W5taqJuxS1UFpSVoan0nveE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=FB5tebUW59tPJFMEP0444gsxbIjYR4Q4SIIKGHLbvRN3E9VIR6qUjY4+ogLtmjwC+
-	 j4+0Lst+Ncln7r/hQORQWQh8wj8QxYfM59Ni8FGTHu98v2vtXXQwb4T6uYdhm487lA
-	 q+18pwbFyyWZLOtEwijnVt/16x626KBTtYZgrfHVjHzbg2CmoCnR615NrdxdoKDH2R
-	 dd6rVZMcCE51naZKTpre1BxPg1Uk48owlfk6jMuIaF9WoXcHq2ITeTk3PKOW+vLGzb
-	 TSNk1i6hxJR62tSJsmzrJ57HjGI6ePlVOiESbqmsDo5zRV2dtDSanyeEjlIPwR9ULY
-	 SQLIZPpYtDsMg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 1/2] Revert "thermal/drivers/hwmon: Cleanup coding
- style a bit"
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <5123895.31r3eYUQgx@rafael.j.wysocki>
-References: <12947893.O9o76ZdvQC@rafael.j.wysocki>
- <5123895.31r3eYUQgx@rafael.j.wysocki>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 04 Aug 2026 20:24:51 +0000
-Message-Id: <20260804202452.359C21F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S/eBv85Z"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-38e347638adso282665a91.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 04 Aug 2026 14:08:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785877697; x=1786482497; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=lbnB6/2CfdYmMgjgs7OcH9+rJcQl6sCJH0syanX8ZwA=;
+        b=S/eBv85ZgtBv2LvjSK8tku6N1NhGL4h2eiTCmrB7ebf9yAF7xNEkuIrs86PKMlDyhY
+         Kh5cBxJmLECaMDNFxqsf/ZAW1a2ciITVbvZZue6I0aQzjiC73ZRRJwXXBag903FuLK4x
+         XwmXMnR/W5ZYuRVg2+E5PwXrgt1DFDhJDmnKi1HwueRZGGz1fBUCLVl4+KrXN5awTxcf
+         4jr5jukvXgsmmlIdlDXibHiC3Sv8JVu8JW40a1JqVOvweqdMEC2mU0iXEzDlxL1r9vHQ
+         HSxhic6/shWiIke0w6/ccN6qdQNCnBZY0kajD3+bFAfcTTbaNngLJN80Lu4Ztd5ZyYdi
+         kL3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785877697; x=1786482497;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lbnB6/2CfdYmMgjgs7OcH9+rJcQl6sCJH0syanX8ZwA=;
+        b=fnYq/d7OOLpFuzhNpsLpbwj1/xeAVLICTk6Z5tV7/AzYzs3Zb0EpgAIwnm5koTloaj
+         SQ89YDgusGps95HGgXXaq15EqDGXdtXlLSUyyx5skCDbB+zZYTo1FmD48r5lWksWyI6V
+         0cvd0qriOVEV5TZkMfEBvQpabLHG46urFw+CB+3IytghTf+IwbwJVw2Ivsx+6Pv7nqqp
+         ejCsSM5CFvoLNewOZX9Mg7zBLP0N2tIyEK5clRjKnP01qtbHdVPd86m6XrQfKtOwNu0l
+         PZFXJeZRVAcE7aTiTZ1BrrvuQG1JsRLFx9tXcEwIkibgS2etT+BIq4QKn3jIU6X2WkxT
+         Yk6w==
+X-Forwarded-Encrypted: i=1; AHgh+RprSd1pSpIZpUEe6CSIXAUkV7ubSnjvXAbcwb3740IGEPPtqiYhNoZjhtO+z91yscxrqqFCqSEe8Xu6dQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXMf7KehrHSfSwPvHt2TefuLPfKTaLBoI9jLMOhqxi4bK9jLjv
+	EJkPurrgCSiV7CFJgYftaB8VrL29RMlL20xAP4X01LznIv99ryP2++rP
+X-Gm-Gg: AR+sD13ZPtNhSaSskkDtz8K0bUxE1ywHlRWK0NYImCRPkdl50Swi8LQMjIYU+ym4TcY
+	hSg6wOw3c9GC4hOBBnPGBp+tNze/5AdMAq8YKA58djhJKMXMLbay7KfHU2lTOjE81JTBel0SNZj
+	Etp85Lby3vA8KN3J5zetGOAu1ET5zmTnPnUmwKLcRFbPx7rWoOnsSJ3YKjMudCcy5LM5g1GSMY3
+	ho+R07KYnz79jaBkoiB08808XDF/eeKeuKKcN9UjD9E9Qa6ifA1BzOHLGvy94wS8WkT0Sn365KQ
+	iEzJ2b6yM1zRgXhAutYtGpjIFgC5tE0XMllS6/iYW2e7dX4Qx2decx+s6xxglHgHJKGKX9Ld924
+	GWOKoLxRipGZWusiHrejnTQxDEvnigVkA6uapZHVY1X9qFVPqpGjGBxvVLrWcspjCoQCT9nfxCw
+	lq0sYAMa3wzem6Uy2btE0tjorROD2MdDvxHpr8VFTn3Zro2deFPicmOIgyv1NwO0vTeyz8Nyo3S
+	A==
+X-Received: by 2002:a17:90b:2d50:b0:380:f34a:6ff1 with SMTP id 98e67ed59e1d1-3903c5e0213mr1542063a91.17.1785877696824;
+        Tue, 04 Aug 2026 14:08:16 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3903f5e21c7sm113014a91.3.2026.08.04.14.08.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Aug 2026 14:08:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 4 Aug 2026 14:08:14 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Qingshuang Fu <fffsqian@163.com>
+Cc: Aleksandr Mezin <mezin.alexander@gmail.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Qingshuang Fu <fuqingshuang@kylinos.cn>
+Subject: Re: [PATCH] hwmon: (nzxt-smart2) Check return value of init_device()
+ in probe
+Message-ID: <a45b0d55-4112-4c63-b855-11e9a507836e@roeck-us.net>
+References: <20260804074842.505923-1-fffsqian@163.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260804074842.505923-1-fffsqian@163.com>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+On Tue, Aug 04, 2026 at 03:48:42PM +0800, Qingshuang Fu wrote:
+> From: Qingshuang Fu <fuqingshuang@kylinos.cn>
+> 
+> The init_device() call in nzxt_smart2_hid_probe() can fail because it
+> sends HID output reports to the hardware to detect fans and set the
+> update interval.  If the hardware is not responding or the HID reports
+> fail, init_device() returns a negative error code.
+> 
+> However, the return value was ignored, causing the probe to continue
+> and register an hwmon device even though the device was never properly
+> initialized.  This leads to an inconsistent state where the driver
+> reports stale data or blocks on wait queues that will never be woken.
+> 
+> The same function's return value is already checked in the
+> reset_resume() handler, confirming the author's intent that errors
+> should be propagated.
+> 
+> Note that this fix was not possible before commit 59d104b54b0b
+> ("hwmon: (nzxt-smart2) Stop device IO before calling hid_hw_stop")
+> because the out_hw_close error path was missing hid_device_io_stop(),
+> which would have opened a use-after-free risk window.
+> 
+> Fixes: 53e68c20aeb1 ("hwmon: add driver for NZXT RGB&Fan Controller/Smart Device v2.")
+> Signed-off-by: Qingshuang Fu <fuqingshuang@kylinos.cn>
 
-Pre-existing issues:
-- [High] Lack of synchronization during hwmon device lookup and creation re=
-sults in Use-After-Free of `hwmon` and Time-of-Check to Time-of-Use (TOCTOU=
-) list duplication.
-- [High] The hwmon sysfs attribute callbacks do not use `hwmon_lock()` as r=
-equired by the subsystem guidelines.
---
+Applied.
 
---- Patch [1]: [PATCH v2 1/2] Revert "thermal/drivers/hwmon: Cleanup coding=
- style a bit" ---
-commit 85ae4605921a40cd95c1000cfc56b0df8bf8c9f1
-Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Subject: Revert "thermal/drivers/hwmon: Cleanup coding style a bit"
+Thanks,
+Guenter
 
-Reverts a commit that introduced a use-after-free in the error path of
-thermal_add_hwmon_sysfs() by removing a valid check.
-
-Link: https://lore.kernel.org/linux-hwmon/20260803183915.4ED7D1F000E9@smtp.=
-kernel.org/
-
-> diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hw=
-mon.c
-> index 597c33c8a5550..ec73d03a1e60a 100644
-> --- a/drivers/thermal/thermal_hwmon.c
-> +++ b/drivers/thermal/thermal_hwmon.c
-> @@ -212,7 +212,8 @@ int thermal_add_hwmon_sysfs(struct thermal_zone_devic=
-e *tz)
->  	if (new_hwmon_device)
->  		hwmon_device_unregister(hwmon->device);
->   free_mem:
-> -	kfree(hwmon);
-> +	if (new_hwmon_device)
-> +		kfree(hwmon);
-> =20
->  	return result;
->  }
-
-[Severity: High]
-This is a pre-existing issue, but is there a use-after-free and TOCTOU race
-when looking up and adding a new hwmon device?
-
-If one thread calls thermal_add_hwmon_sysfs() and looks up the hwmon device
-via thermal_hwmon_lookup_by_type(), the list lock is dropped and an
-unrefcounted pointer is returned:
-
-drivers/thermal/thermal_hwmon.c:thermal_hwmon_lookup_by_type() {
-    ...
-		if (!strcmp(hwmon->type, type)) {
-			mutex_unlock(&thermal_hwmon_list_lock);
-			return hwmon;
-		}
-    ...
-}
-
-Concurrently, another thread could call thermal_remove_hwmon_sysfs() for the
-last thermal zone sharing that hwmon device. It removes the last entry,
-drops the list lock, unregisters the device, and frees the hwmon pointer
-without synchronizing with active readers:
-
-drivers/thermal/thermal_hwmon.c:thermal_remove_hwmon_sysfs() {
-    ...
-	if (!list_empty(&hwmon->tz_list)) {
-		mutex_unlock(&thermal_hwmon_list_lock);
-		return;
-	}
-	list_del(&hwmon->node);
-	mutex_unlock(&thermal_hwmon_list_lock);
-
-	hwmon_device_unregister(hwmon->device);
-	kfree(hwmon);
-}
-
-The first thread could then resume in thermal_add_hwmon_sysfs() and
-dereference the freed pointer when incrementing the count:
-
-drivers/thermal/thermal_hwmon.c:thermal_add_hwmon_sysfs() {
-    ...
- register_sys_interface:
-	temp =3D kzalloc_obj(*temp);
-	if (!temp) {
-		result =3D -ENOMEM;
-		goto unregister_name;
-	}
-
-	temp->tz =3D tz;
-	hwmon->count++;
-    ...
-}
-
-Could this lead to memory corruption during concurrent device probing or
-unbinding?
-
-[Severity: High]
-This is a pre-existing issue, but do the hwmon sysfs attribute callbacks
-need to use hwmon_lock() and hwmon_unlock() wrappers?
-
-The hwmon subsystem guidelines require drivers to implement locking for
-attributes registered by other means than hwmon_device_register_with_info().
-
-The temp_input_show() and temp_crit_show() callbacks read attributes direct=
-ly
-without the required lock:
-
-drivers/thermal/thermal_hwmon.c:temp_input_show() {
-    ...
-	struct thermal_zone_device *tz =3D temp->tz;
-
-	ret =3D thermal_zone_get_temp(tz, &temperature);
-    ...
-}
-
-drivers/thermal/thermal_hwmon.c:temp_crit_show() {
-    ...
-	struct thermal_zone_device *tz =3D temp->tz;
-	int temperature;
-	int ret;
-
-	guard(thermal_zone)(tz);
-
-	ret =3D tz->ops.get_crit_temp(tz, &temperature);
-    ...
-}
-
-Could this result in a race condition with interrupt handlers or driver
-unregistration since it bypasses the core kernel locking rules for the hwmon
-subsystem?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/12947893.O9o76ZdvQC=
-@rafael.j.wysocki?part=3D1
+> ---
+>  drivers/hwmon/nzxt-smart2.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> 
+> base-commit: 848acc8ffe1b7cd5f1bf427b93069becfebc2c9d
+> 
+> diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
+> index ff0c0bee0e83..efc78a8f58c8 100644
+> --- a/drivers/hwmon/nzxt-smart2.c
+> +++ b/drivers/hwmon/nzxt-smart2.c
+> @@ -754,7 +754,11 @@ static int nzxt_smart2_hid_probe(struct hid_device *hdev,
+>  
+>  	hid_device_io_start(hdev);
+>  
+> -	init_device(drvdata, UPDATE_INTERVAL_DEFAULT_MS);
+> +	ret = init_device(drvdata, UPDATE_INTERVAL_DEFAULT_MS);
+> +	if (ret) {
+> +		dev_err(&hdev->dev, "init_device failed: %d\n", ret);
+> +		goto out_hw_close;
+> +	}
+>  
+>  	drvdata->hwmon =
+>  		hwmon_device_register_with_info(&hdev->dev, "nzxtsmart2", drvdata,
