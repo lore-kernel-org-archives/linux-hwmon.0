@@ -1,68 +1,69 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E9846A60C
-	for <linux-hwmon@vger.kernel.org>; Tue,  4 Aug 2026 13:59:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888AF35675A
+	for <linux-hwmon@vger.kernel.org>; Tue,  4 Aug 2026 14:16:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785851989; cv=none; b=gYnJmgBOpVklXBfmgtXNOZfDNiw9UZREPUDlDF38CwvioPvkoKxqLcKZAHZb6GCw6wdokT3+PZ22QIC1fHXLgy4AjuchcXnwgxIC7LC+28jNJ9LzF/4sOpfwkAEBRz2YdtkST5G8mEfiRdgXWDcPhfJNOUggDbM7nV06CPAFDFU=
+	t=1785853024; cv=none; b=LJKaG861+TpvKsAjdjXJZwBpRn9i65+qrDMeTDZoeCDZsXkzcmKHvCegTZSLNPI60Xem6ssbHSylEpXfb8oXpolmSOTQJei25Q0gmkGO/7h0vFuigZ9+DxQ7x4KiuBRMDWxs0nqWb8yA2A8dm6Zt0Jf9SpMs0K9ZOhWMeN74hxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785851989; c=relaxed/simple;
-	bh=EH09jQFTeWoHs309HdbutoKTeCUYz35kcR8BLAhCyAQ=;
+	s=arc-20240116; t=1785853024; c=relaxed/simple;
+	bh=CF4JQYiT6iPab8GS3Ok3zSKpq1ydxi01BblBMZFc7Vo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SN69KFxUGIlH1lmXIcqwrFx3aG1mNYkP7MYS8v3izG9+gUZlDmkEhSc0AeinyV8aMpW/u+YxPfCedChBLY+hftQ9f1rkonzA3rx5nTSiRoKebEPtfLjpWImy7Z8EjrTqluWAOyVikiLrrJfIO4LqHUqRbbbK3ySuI1HQquh7Sr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OxKStaqu; arc=none smtp.client-ip=209.85.215.176
+	 In-Reply-To:Content-Type; b=uQuoY0vsvZRopXpqk+M3O85N7fHCnB9M3y59aQ8skk8gn/VcFsgqoSqdav4kXmHHcVVR+xzACXWoj81twdPn4L+3ZLKxltyXVh86ftVgmdb+2XHIQCFFSZ7/nhBVu52uqoNsFLGkifRQgRzQ2A6JUeSi9irH2U+PfG4AQdhyVoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tMG/JKhv; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OxKStaqu"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c981c2c37cbso3511290a12.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 04 Aug 2026 06:59:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tMG/JKhv"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3856d6fbcb3so3167485a91.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 04 Aug 2026 07:16:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785851986; x=1786456786; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785853014; x=1786457814; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=937XXt70UD99/sTdtME9pl+I5/+mWs4NA437Z4HSSMg=;
-        b=OxKStaquxsQ9syb44CuTviWXXxXLljUonv9yZE5l8s9F9IpAIAmhHIpSchv/7ASmXL
-         JDN2aHTKPicacxNtbuCslGBry5m91GgZ0F50z5aKbGOOwnjiCTGKxDqVxMmHHnO5n3me
-         3KCj/oZ49IG8n827VLNk9JtCnE8TC6J2gK4Wfm9ms7Wzv7b7TFTSL66a+AubVUikuyop
-         /mWwtfea/9oqBXfHtwNEbzfWLgI7AqDYkIUavs8zZHOwRwAC4BdIdPpb0aA9Rof0dsJu
-         8AKwd1/gYnN0+gONKWqXxlBbDN4LEUzjS5HWH85Mts50FBfTcSuNNiQizqT/7a4c7/Co
-         Muww==
+        bh=QAwaOU6zpTEosTow2YJoyoo65T4Qo1mttVUneF6unqI=;
+        b=tMG/JKhvAlwOXy0kPp6CAQ2DWdUDMmvJdH1h0JJBJOcu2tZCIXJhwdTXlnI2jIvpjC
+         20WvZ2qCq87RRKChqaHad8XQjayXowILCgFxFCbDyfZSQYPZKol8Itr48lerROso11pv
+         xwuUiFfl49hgLGXiz1ZSwnjtw6JzH3AqJzlujejow70miIaR7DtLFDjLJ5vvWSB5kbca
+         Hc7jnnvPANYmk6sCBJCN02URNq4P1neAwrRBdX8wlvEK+DO9So8JXRdOvXXdj+KY/Lxa
+         v9TIcXM67F+SLRc2r9A8/AgXnVE5lzUsYlmdahh+ZXH/Cy4hvOTujLJOTEcPK453l7xb
+         DtPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785851986; x=1786456786;
+        d=1e100.net; s=20251104; t=1785853014; x=1786457814;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=937XXt70UD99/sTdtME9pl+I5/+mWs4NA437Z4HSSMg=;
-        b=igsySgkkVIN6Dr3UqZ+FoWXDvwZyLo1i9s5JOzPZfdLA3gPuv1JXFEXkEDf301xnzs
-         asrNFXyBJoC/sNyK9l4JN4XYwRZFWgt8tjKX1jNhM3rwjGYPRyxW1KZS0Fwi9uFdPCW7
-         tVmHIzKh8n91OxfrgVCzH5sIeGQnujy4fxdlFw3YqbOuC5og+FRcChXyXZKMCxUIlUj2
-         PgRZ33nIU1KH527vOIdrVeL3V4TussYqPH6zxXNqsl1jA+W+plSW+VwDSAZLu2vAp9uK
-         00KSbWpV0Xgib32YcsazCaJYcmws/BeBbNUlVLQnRVSyr6KGk24XvXgG/dfU7rIEmr+E
-         nETg==
-X-Gm-Message-State: AOJu0YwJ7F20+2skFhHsgkXl1+3C22srG6wAiB64eIvyqlRkRXKAfRJo
-	iOeh6bZqgpda1+p3ghoLVCw7wxkDyHte24ZzGNKF0apJS+mNtQa9lC6u
-X-Gm-Gg: AR+sD10mZdh1mSrSODX4oACR5zwqB5TIW0QSXZhlSKWrHcgXOYB+z+44HFM3VBeR2s4
-	l4p2pT5fKYHlLQb282vnIoaOx3DKKgk6YjBbflLp9jRSLffCgAFejodCzY/WHsgFVmQcfu/p5Yh
-	aTiKfI4Ef916hVgBi0rVwqTaZS9k9AFmnI4MOX4oCKjd6YmV2Ji2EFytWUj0v3KEWFhXuC7Nj6H
-	tjd9M2/NH8KpGOJYh9su3sWbEB4EKrEfcfj3HKVWnhQR2tpHBvb/XUw/FxKQQTsaf95vtFJFrJ+
-	Vr/7cMSNJK/GETXJ+euL1CCg9du3r/dMNDRsYCNVOJnc3EA596JFTX91Dt6ELPpGEi0kuKa+UE3
-	3yAqa+AT/Wow06GCn3I+YKduE8yhkjHgDldkI7UOuuKjZh5sCPWF5pxm4lFZvo3o3Qvw1rD04tG
-	PVYl4Hkky5po7CD531CbonpdnYA8i8bdvKQFi04F6g4Wu81aMm0DlcIGShCHGQOF29QIawnqfLX
-	CdB4Tr3Hz/shiCwPjXDEJ+Uz2jaAjlH3ydKaUaewFT7X+cn
-X-Received: by 2002:a05:6a21:398e:b0:3bf:63af:855 with SMTP id adf61e73a8af0-3c92a4d6fd0mr15013628637.1.1785851985934;
-        Tue, 04 Aug 2026 06:59:45 -0700 (PDT)
+        bh=QAwaOU6zpTEosTow2YJoyoo65T4Qo1mttVUneF6unqI=;
+        b=hn4EHOTx9xcizHCxEls9vwoeFeRQreHo9iEUxID6DTwLxScFGU4O98iU4ggwu5MviK
+         lCUK+eQfkMfkbbg6wLEqma2AcLelYPY4szTiXsqo55GqEpe3V/KVAUUpSB7jkgy1DBTH
+         ExhtEv3HWi0Bai/WgVYl4MyFJC4TIZHDt1t/69tnTxN9q5fZpXAj9G0Ojr2uT+7Ja4EL
+         UE29l/sc8aRldtWhimDQGKc71jE3cWMwHxnCWv+1Fd04ZB48YigrRfSnDlnhuG80CClp
+         FHpH6jg+i8EDuUg/jMIL1cupOyN1sXTONQHnSDw2IrthrAPKgs5zYih5gMpMrYz4gl/a
+         AOnA==
+X-Forwarded-Encrypted: i=1; AHgh+RpU6pKO12Ah/SOGgIoDNJMqpaPE19S9uY5Ge4dQyIfUOWVN/46l/uB5hD+zy0xm+YKbEDi6BcbtGTssIw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8LN1945bW517gnv9PL8Ibi8iVbkyhJCUWgkI+xU7rDyZZtkbk
+	8b0byR5wutbFEsc+eq6Wu8BbFgNVaanN2u7n+vbtw417Riw5bLiV320m
+X-Gm-Gg: AR+sD10v0g01wukLWj9hdXxYXDc3L6REEKACvPFB6Yb2H3Q02i5qBU7b7N/l8nRc64U
+	to+iyWCF8ZJURuncNJ9qAdkA/8pbssMk9zmHkvoVXX3ptG9eziQDXm/lmrx/3hnTf9uCwO/GU7Y
+	/TxY/mSMTTzi6esazrpkm5L/8BbOpjj0IgTRxknKxKg+TXD5kNSv0TA0KLcDqNqPe+1Wc4aZZhm
+	NjeQfTV5ezHfPRBTsnPaMUwopGcv5AjIu6C0+wB6MqXvnuy99mvIa++xdqGuLj+hS1YbQ0SWIer
+	F893lvo0gXlV1tWv82J+MxAFoV5nk1mj+nRGaglmcOL3shoHAvjX7h0AKeEuf3SMZit8mZIOmdp
+	TRiTy2PRpjDONbtjxjm3x2gGqpnhsCiHe47v2KFyrOtgMZZ7FBr2jtpbcKFQhjZO0Fre+7Eqyci
+	jkJ30czVop1nSq0COLvB/xTeAp5zMhS2TV1JdJ9RfIRe75sNrB3Y7C1dZwiW71RsU83/V1PHuUy
+	cKGrEDbhvvG6VoCYuF6EvDi7kMN83uGr32kMTIjrAj7V6yF
+X-Received: by 2002:a17:90b:58a3:b0:38f:efed:5445 with SMTP id 98e67ed59e1d1-38fefed5911mr2268839a91.4.1785853014260;
+        Tue, 04 Aug 2026 07:16:54 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31586402e53sm8207973eec.11.2026.08.04.06.59.45
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3158678ec37sm5144048eec.23.2026.08.04.07.16.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Aug 2026 06:59:45 -0700 (PDT)
+        Tue, 04 Aug 2026 07:16:53 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5b9ab157-faef-41d3-83a4-62fcae83a524@roeck-us.net>
-Date: Tue, 4 Aug 2026 06:59:44 -0700
+Message-ID: <58dfd8a9-1502-46d7-a32e-d7b9b9c1ce81@roeck-us.net>
+Date: Tue, 4 Aug 2026 07:16:51 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,13 +71,16 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (ads7828) Check return value of regmap_read() in
- probe
-To: Qingshuang Fu <fuqingshuang@kylinos.cn>, sashiko-reviews@lists.linux.dev
-Cc: linux-hwmon@vger.kernel.org
-References: <20260804091719.651479-1-fffsqian@163.com>
- <20260804092412.59EE91F000E9@smtp.kernel.org>
- <48933be.818f.19fcc44b0e9.Coremail.fuqingshuang@kylinos.cn>
+Subject: Re: [PATCH 3/5] hwmon: (pmbus/core) Add mapping function to
+ pmbus_read_block_data()
+To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>
+Cc: sashiko-reviews@lists.linux.dev, =?UTF-8?Q?Nuno_S=C3=A1?=
+ <nuno.sa@analog.com>, conor+dt@kernel.org, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, robh@kernel.org
+References: <20260728-hwmon-max20826-support-v1-0-224766e0acd1@analog.com>
+ <20260728-hwmon-max20826-support-v1-3-224766e0acd1@analog.com>
+ <20260728162749.A42051F000E9@smtp.kernel.org>
+ <e8ba1c8a-cf68-421e-9974-f31f31e90e59@roeck-us.net> <anGrNyrEX5GX9lYJ@nsa>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -122,94 +126,65 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <48933be.818f.19fcc44b0e9.Coremail.fuqingshuang@kylinos.cn>
+In-Reply-To: <anGrNyrEX5GX9lYJ@nsa>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 8/4/26 03:14, Qingshuang Fu wrote:
+On 8/4/26 02:05, Nuno Sá wrote:
+> On Tue, Jul 28, 2026 at 11:13:26AM -0700, Guenter Roeck wrote:
+>> On 7/28/26 09:27, sashiko-bot@kernel.org wrote:
+>>> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+>>>
+>>> New issues:
+>>> - [High] Stack buffer overflow in `pmbus_debugfs_block_read` due to unbounded return value from custom `read_block_data` callback.
+>>>
+>>> Pre-existing issues:
+>>> - [High] TOCTOU data race on PMBus hardware page selection during probe.
+>>> --
+>>>
+>>> --- Patch [3]: [PATCH 3/5] hwmon: (pmbus/core) Add mapping function to pmbus_read_block_data() ---
+>>> commit c4bd4d03203a9fd14a7a2bcff69ec842b441fa68
+>>> Author: Nuno Sá <nuno.sa@analog.com>
+>>>
+>>> hwmon: (pmbus/core) Add mapping function to pmbus_read_block_data()
+>>>
+>>> This commit introduces a mapping function to pmbus_read_block_data() in
+>>> preparation for adding support to a device which needs to use its own
+>>> read_block implementation.
+>>>
+>>>> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+>>>> index 3d5586c67f840..d697939ec8921 100644
+>>>> --- a/drivers/hwmon/pmbus/pmbus.h
+>>>> +++ b/drivers/hwmon/pmbus/pmbus.h
+>>>> @@ -459,6 +459,9 @@ struct pmbus_driver_info {
+>>>>    	int (*read_byte_data)(struct i2c_client *client, int page, int reg);
+>>>>    	int (*read_word_data)(struct i2c_client *client, int page, int phase,
+>>>>    			      int reg);
+>>>> +	/* size of data_buf is I2C_SMBUS_BLOCK_MAX + 2 */
+>>>> +	int (*read_block_data)(struct i2c_client *client, int page, u8 reg,
+>>>> +			       char *data_buf);
+>>>
+>>> [Severity: High]
+>>> Does this API need a size limit parameter? The comment specifies the buffer
+>>> size is 34, without providing a limit parameter to the callback, which might
+>>> encourage callbacks to return values up to 34.
+>>>
+>>
+>> The maximum amount of data returned must be 32 bytes, not 34. Callers define
+>> a larger buffer size to be able to append, for example, '\n\0'. The function
+>> itself, however, must not return more than 32 bytes of data, plus the data
+>> length in the first byte.
 > 
-> At 2026-08-04 17:24:11, sashiko-bot@kernel.org wrote:
->> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
->>
->> Pre-existing issues:
->> - [High] The driver ignores `-EPROBE_DEFER` and other errors from `devm_regulator_get_optional()`, improperly falling back to the internal VREF.
->> --
->>
->> --- Patch [1]: [PATCH] hwmon: (ads7828) Check return value of regmap_read() in probe ---
->> commit 2a7377992af717bb6d251109d28baf026bc4a665
->> Author: Qingshuang Fu <fuqingshuang@kylinos.cn>
->> Subject: hwmon: (ads7828) Check return value of regmap_read() in probe
->>
->> This patch checks the return value of a dummy regmap_read() used to enable
->> the internal reference voltage in ads7828_probe(). If the read fails, it
->> logs an error and aborts the probe instead of silently failing and
->> registering a non-functional device.
->>
->>> diff --git a/drivers/hwmon/ads7828.c b/drivers/hwmon/ads7828.c
->>> index 149cfcec78dcc..91ef0c4a08c4e 100644
->>> --- a/drivers/hwmon/ads7828.c
->>> +++ b/drivers/hwmon/ads7828.c
->>> @@ -112,6 +112,7 @@ static int ads7828_probe(struct i2c_client *client)
->>>   	unsigned int regval;
->>>   	enum ads7828_chips chip;
->>>   	struct regulator *reg;
->>> +	int ret;
->>>   
->>>   	data = devm_kzalloc(dev, sizeof(struct ads7828_data), GFP_KERNEL);
->>>   	if (!data)
->>
->> [Severity: High]
->> This is a pre-existing issue, but does the driver mishandle errors like
->> -EPROBE_DEFER from devm_regulator_get_optional()?
->>
->> Looking slightly further down in ads7828_probe() in drivers/hwmon/ads7828.c:
->>
->>     } else if (dev->of_node) {
->>         diff_input = of_property_read_bool(dev->of_node,
->>                                            "ti,differential-input");
->>         reg = devm_regulator_get_optional(dev, "vref");
->>         if (!IS_ERR(reg)) {
->>             vref_uv = regulator_get_voltage(reg);
->>
->> If devm_regulator_get_optional() returns -EPROBE_DEFER because the
->> regulator driver has not yet completed probing, the driver ignores the
->> error. It proceeds as if there is no external reference and incorrectly
->> falls back to enabling the internal reference.
->>
->> If an external voltage reference is physically connected and specified in
->> the device tree, could driving the internal reference onto the same pin
->> result in incorrect ADC readings or potentially hardware damage due to an
->> electrical conflict?
->>
->> [ ... ]
->>
->>> @@ -166,8 +167,13 @@ static int ads7828_probe(struct i2c_client *client)
->>>   	 * voltage needs to settle before getting valid ADC data. So perform a
->>>   	 * dummy read to enable the internal reference voltage.
->>>   	 */
->>> -	if (!ext_vref)
->>> -		regmap_read(data->regmap, data->cmd_byte, &regval);
->>> +	if (!ext_vref) {
->>> +		ret = regmap_read(data->regmap, data->cmd_byte, &regval);
->>> +		if (ret) {
->>> +			dev_err(dev, "dummy read failed to enable internal VREF: %d\n", ret);
->>> +			return ret;
->>> +		}
->>> +	}
->>>   
->>>   	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
->>>   							   data,
->>
->> -- 
->> Sashiko AI review · https://sashiko.dev/#/patchset/20260804091719.651479-1-fffsqian@163.com?part=1
-> 
-> 
-> Thanks for the review.
-> 
-> The mishandling of -EPROBE_DEFER from devm_regulator_get_optional() is a pre-existing issue and is not addressed by this patch. This change only adds error checking for the dummy regmap_read() call.
+> Curious, do you want me to drop the comment or your reply is also about
+> giving AI context so it does not come up again with the comment?
 > 
 
-In other words, it fixes a non-problem while ignoring the real one.
+Point was that the comment isn't accurate. The data buffer length must be at least
+I2C_SMBUS_BLOCK_MAX, not I2C_SMBUS_BLOCK_MAX + 2, and the function must never return
+more than I2C_SMBUS_BLOCK_MAX bytes of data (and the number of bytes as return value).
 
+Having a comment is fine, only it must reflect the actual API.
+
+Thanks,
 Guenter
 
