@@ -1,190 +1,272 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888AF35675A
-	for <linux-hwmon@vger.kernel.org>; Tue,  4 Aug 2026 14:16:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A971477994
+	for <linux-hwmon@vger.kernel.org>; Tue,  4 Aug 2026 16:34:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785853024; cv=none; b=LJKaG861+TpvKsAjdjXJZwBpRn9i65+qrDMeTDZoeCDZsXkzcmKHvCegTZSLNPI60Xem6ssbHSylEpXfb8oXpolmSOTQJei25Q0gmkGO/7h0vFuigZ9+DxQ7x4KiuBRMDWxs0nqWb8yA2A8dm6Zt0Jf9SpMs0K9ZOhWMeN74hxM=
+	t=1785861289; cv=none; b=jGEOfvAava+sC9S3f0xAiRHkOPyJXqy6SpUJiRF9odgU31pBGG72uZytCnKx7j555FRy8mjBYxPzKUG/qnVTJ6OPBkfBRFPTXwRKN32Tk8bItxFclqepjb51si9MBjQ4gegrNvBh11dwM6ufbB6zkRqYRb8qnjR09YMG9VHKmwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785853024; c=relaxed/simple;
-	bh=CF4JQYiT6iPab8GS3Ok3zSKpq1ydxi01BblBMZFc7Vo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uQuoY0vsvZRopXpqk+M3O85N7fHCnB9M3y59aQ8skk8gn/VcFsgqoSqdav4kXmHHcVVR+xzACXWoj81twdPn4L+3ZLKxltyXVh86ftVgmdb+2XHIQCFFSZ7/nhBVu52uqoNsFLGkifRQgRzQ2A6JUeSi9irH2U+PfG4AQdhyVoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tMG/JKhv; arc=none smtp.client-ip=209.85.216.52
+	s=arc-20240116; t=1785861289; c=relaxed/simple;
+	bh=pyIMj0iBihV6PTPjbJZ14WgYbw8OeizE5Dsp3ZuWL0g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uEM44brHPaufo1orSGMkNziLEtuRaeHJy1Of04IS01emssHtBj+/4Rh/FeL4rQQqTqXIwU1DZECJ6GWNmWXbtMdVmb4DC3WZW1x63hunpz36jQ0FqLIlSigRPjnaps0kdgfCEq5u7oDa94vExhg2LZpXQbtdFwzPIuvzF4a/j5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GZts7X0R; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tMG/JKhv"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3856d6fbcb3so3167485a91.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 04 Aug 2026 07:16:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GZts7X0R"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2caced6038eso1420955ad.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 04 Aug 2026 09:34:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785853014; x=1786457814; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=QAwaOU6zpTEosTow2YJoyoo65T4Qo1mttVUneF6unqI=;
-        b=tMG/JKhvAlwOXy0kPp6CAQ2DWdUDMmvJdH1h0JJBJOcu2tZCIXJhwdTXlnI2jIvpjC
-         20WvZ2qCq87RRKChqaHad8XQjayXowILCgFxFCbDyfZSQYPZKol8Itr48lerROso11pv
-         xwuUiFfl49hgLGXiz1ZSwnjtw6JzH3AqJzlujejow70miIaR7DtLFDjLJ5vvWSB5kbca
-         Hc7jnnvPANYmk6sCBJCN02URNq4P1neAwrRBdX8wlvEK+DO9So8JXRdOvXXdj+KY/Lxa
-         v9TIcXM67F+SLRc2r9A8/AgXnVE5lzUsYlmdahh+ZXH/Cy4hvOTujLJOTEcPK453l7xb
-         DtPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785853014; x=1786457814;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+        d=gmail.com; s=20251104; t=1785861280; x=1786466080; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=QAwaOU6zpTEosTow2YJoyoo65T4Qo1mttVUneF6unqI=;
-        b=hn4EHOTx9xcizHCxEls9vwoeFeRQreHo9iEUxID6DTwLxScFGU4O98iU4ggwu5MviK
-         lCUK+eQfkMfkbbg6wLEqma2AcLelYPY4szTiXsqo55GqEpe3V/KVAUUpSB7jkgy1DBTH
-         ExhtEv3HWi0Bai/WgVYl4MyFJC4TIZHDt1t/69tnTxN9q5fZpXAj9G0Ojr2uT+7Ja4EL
-         UE29l/sc8aRldtWhimDQGKc71jE3cWMwHxnCWv+1Fd04ZB48YigrRfSnDlnhuG80CClp
-         FHpH6jg+i8EDuUg/jMIL1cupOyN1sXTONQHnSDw2IrthrAPKgs5zYih5gMpMrYz4gl/a
-         AOnA==
-X-Forwarded-Encrypted: i=1; AHgh+RpU6pKO12Ah/SOGgIoDNJMqpaPE19S9uY5Ge4dQyIfUOWVN/46l/uB5hD+zy0xm+YKbEDi6BcbtGTssIw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8LN1945bW517gnv9PL8Ibi8iVbkyhJCUWgkI+xU7rDyZZtkbk
-	8b0byR5wutbFEsc+eq6Wu8BbFgNVaanN2u7n+vbtw417Riw5bLiV320m
-X-Gm-Gg: AR+sD10v0g01wukLWj9hdXxYXDc3L6REEKACvPFB6Yb2H3Q02i5qBU7b7N/l8nRc64U
-	to+iyWCF8ZJURuncNJ9qAdkA/8pbssMk9zmHkvoVXX3ptG9eziQDXm/lmrx/3hnTf9uCwO/GU7Y
-	/TxY/mSMTTzi6esazrpkm5L/8BbOpjj0IgTRxknKxKg+TXD5kNSv0TA0KLcDqNqPe+1Wc4aZZhm
-	NjeQfTV5ezHfPRBTsnPaMUwopGcv5AjIu6C0+wB6MqXvnuy99mvIa++xdqGuLj+hS1YbQ0SWIer
-	F893lvo0gXlV1tWv82J+MxAFoV5nk1mj+nRGaglmcOL3shoHAvjX7h0AKeEuf3SMZit8mZIOmdp
-	TRiTy2PRpjDONbtjxjm3x2gGqpnhsCiHe47v2KFyrOtgMZZ7FBr2jtpbcKFQhjZO0Fre+7Eqyci
-	jkJ30czVop1nSq0COLvB/xTeAp5zMhS2TV1JdJ9RfIRe75sNrB3Y7C1dZwiW71RsU83/V1PHuUy
-	cKGrEDbhvvG6VoCYuF6EvDi7kMN83uGr32kMTIjrAj7V6yF
-X-Received: by 2002:a17:90b:58a3:b0:38f:efed:5445 with SMTP id 98e67ed59e1d1-38fefed5911mr2268839a91.4.1785853014260;
-        Tue, 04 Aug 2026 07:16:54 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3158678ec37sm5144048eec.23.2026.08.04.07.16.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Aug 2026 07:16:53 -0700 (PDT)
+        bh=/t6tgjAf5ln0cWY41aGVkzi3qJWXNqseaffOZElwunw=;
+        b=GZts7X0R4OT1pUUjk5ecLnEQyIdOcJbwJ+7lI3k1cwtn0Fkj+DiDraTx9HlrJlLi2v
+         /UJygYHAth3pNFI09c+dos9htzUxmi9JuPnKVnxIol2WvCHioRYaOdbvqy6Vcq6D0dxE
+         csvlfPKpXYfJM5l8lazNUJ0V4nNiXdjyCppFXsvdkGoY5OFUZKb4g5mM1H8yD6V7/UFu
+         XrGu65fDa7LNHsg87t+p+jOGSroAlpjuTBTkhqo3X8AgCxFEZsKDaU7g7wafM1ajGZdV
+         spQD1rcjaZ/4E7MpEkT/x0rXN+AQfu2/Gi97k0MOvVJbg8nmxyYs0Rz+g7ZwMd34RU9p
+         vRqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785861280; x=1786466080;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=/t6tgjAf5ln0cWY41aGVkzi3qJWXNqseaffOZElwunw=;
+        b=eO03fomUG/hM+fN9sNEfiLdjUgq4fWy7RAhx75ChypNZXvCiEI0x0iC4EvPQ93vBrK
+         nGf7meVWxitQAUIfhUwJxU7dJoiOAPeDXaSwCLa3myv7N4/KNfFZXiiXcpiaYPS5tpqg
+         LH7HM4e0Gt7ZY6jSjU4DCQ0OvurEs/b5e/rEG6xZnqp4TF5xmcCImPIjNbRwq/C653Qu
+         xhwdaiT7JSo4jWVl7gAe0TD0LTzyK3lUtcQ4P4HQ1KufCYc7/BEk/WavKHesL8njAMll
+         vGhWF2hsPsEmOiFU0Y9Q1rxs7njfR8YXmo0688kSHk/+P32RSe2l97C4tPI4jgEhazwP
+         TBYg==
+X-Forwarded-Encrypted: i=1; AHgh+Rpt2ZmSXlLrBi67ZY2x526qNrjwRHX8HP83U31ZZejPLAs874TZsK6uwa5EYQqS4O8RVm/C8rPL1tsdHg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyet0lFAk5z2l/Y7q0Ne1Hgm64xUaIi0EwkvAYsfbQpNrFUOZuX
+	UZlieMDzFiq73/EvZBEToc9BSXTbAcDOuqA1Mtkl/z+Hdvk2tTYvtcLG5b6yFA==
+X-Gm-Gg: AR+sD10yXyoq0AwnYPThiroBad/L7VlOhqrwbO/77GpgKAyZIK2DjGkK9Hiwf6KmDZ3
+	ofAhVsGUtF9PzoQaZwlMC9NX8M1YOzxuIsThw4xiO1OBueKH8nqq5MC+H6drXg+CKrz8ZBGppmY
+	/yZwTiSi9B0sZ+6Z3cujPNYTQaFtkIulyfGN4H2s+pjiz7mWK3GjTBCQR08NRKP9ILZlFGsoNwL
+	91SBEpdtmuzNb1Z/x86NeUX1Dv4CQZN72Jytov+pTIsVSP/OmOUxOrBGdEgys0CokAHAXaeL4l4
+	pmomYQhCJ2mjp72whxFqpc/rP1LzIXZ/tj8C/Y5lzEFi/tVn/hrb1OC+EkcU/25o97AHVX/4sIj
+	Y+jHAFPlayncwSM4kz017PEagDPBnZTa6zB5fm62uaco/x6h/YYV/Db/GkQLbgh4TyTyrHe3jdH
+	3qyQZNCL16iREfRhOGSrOEe4OuBAqxe2a8d6kxjV5uj0/Uy+RS+uSGL6xiZfOliHfPcjr/GqNIb
+	9Tk6BbWG6Gx
+X-Received: by 2002:a17:902:e849:b0:2cc:10c1:352e with SMTP id d9443c01a7336-2d08ab8bacamr42825455ad.21.1785861279930;
+        Tue, 04 Aug 2026 09:34:39 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d0aa013dafsm10460345ad.35.2026.08.04.09.34.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Aug 2026 09:34:39 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <58dfd8a9-1502-46d7-a32e-d7b9b9c1ce81@roeck-us.net>
-Date: Tue, 4 Aug 2026 07:16:51 -0700
+Date: Tue, 4 Aug 2026 09:34:38 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+Cc: Ali Ahmet Memis <ali@iusegentoo.com>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (corsair-psu) serialize debugfs access against
+ hwmon
+Message-ID: <0a50dbe2-4df8-4952-8090-cd97ece2a6c9@roeck-us.net>
+References: <20260802123653.19532-1-ali@iusegentoo.com>
+ <20260802145745.6f444fc2@posteo.net>
+ <85f8ccd7-0d2a-43db-8690-cf220bd76e32@roeck-us.net>
+ <20260804001347.164873-1-ali@iusegentoo.com>
+ <ec30f5bb-48bc-485a-a7a6-953af65a66f5@roeck-us.net>
+ <20260804061110.575adfc2@posteo.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/5] hwmon: (pmbus/core) Add mapping function to
- pmbus_read_block_data()
-To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>
-Cc: sashiko-reviews@lists.linux.dev, =?UTF-8?Q?Nuno_S=C3=A1?=
- <nuno.sa@analog.com>, conor+dt@kernel.org, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, robh@kernel.org
-References: <20260728-hwmon-max20826-support-v1-0-224766e0acd1@analog.com>
- <20260728-hwmon-max20826-support-v1-3-224766e0acd1@analog.com>
- <20260728162749.A42051F000E9@smtp.kernel.org>
- <e8ba1c8a-cf68-421e-9974-f31f31e90e59@roeck-us.net> <anGrNyrEX5GX9lYJ@nsa>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <anGrNyrEX5GX9lYJ@nsa>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260804061110.575adfc2@posteo.net>
 
-On 8/4/26 02:05, Nuno Sá wrote:
-> On Tue, Jul 28, 2026 at 11:13:26AM -0700, Guenter Roeck wrote:
->> On 7/28/26 09:27, sashiko-bot@kernel.org wrote:
->>> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
->>>
->>> New issues:
->>> - [High] Stack buffer overflow in `pmbus_debugfs_block_read` due to unbounded return value from custom `read_block_data` callback.
->>>
->>> Pre-existing issues:
->>> - [High] TOCTOU data race on PMBus hardware page selection during probe.
->>> --
->>>
->>> --- Patch [3]: [PATCH 3/5] hwmon: (pmbus/core) Add mapping function to pmbus_read_block_data() ---
->>> commit c4bd4d03203a9fd14a7a2bcff69ec842b441fa68
->>> Author: Nuno Sá <nuno.sa@analog.com>
->>>
->>> hwmon: (pmbus/core) Add mapping function to pmbus_read_block_data()
->>>
->>> This commit introduces a mapping function to pmbus_read_block_data() in
->>> preparation for adding support to a device which needs to use its own
->>> read_block implementation.
->>>
->>>> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
->>>> index 3d5586c67f840..d697939ec8921 100644
->>>> --- a/drivers/hwmon/pmbus/pmbus.h
->>>> +++ b/drivers/hwmon/pmbus/pmbus.h
->>>> @@ -459,6 +459,9 @@ struct pmbus_driver_info {
->>>>    	int (*read_byte_data)(struct i2c_client *client, int page, int reg);
->>>>    	int (*read_word_data)(struct i2c_client *client, int page, int phase,
->>>>    			      int reg);
->>>> +	/* size of data_buf is I2C_SMBUS_BLOCK_MAX + 2 */
->>>> +	int (*read_block_data)(struct i2c_client *client, int page, u8 reg,
->>>> +			       char *data_buf);
->>>
->>> [Severity: High]
->>> Does this API need a size limit parameter? The comment specifies the buffer
->>> size is 34, without providing a limit parameter to the callback, which might
->>> encourage callbacks to return values up to 34.
->>>
->>
->> The maximum amount of data returned must be 32 bytes, not 34. Callers define
->> a larger buffer size to be able to append, for example, '\n\0'. The function
->> itself, however, must not return more than 32 bytes of data, plus the data
->> length in the first byte.
+On Tue, Aug 04, 2026 at 04:11:11AM +0000, Wilken Gottwalt wrote:
+> > 
+> > Gemini tells me that fixing the raw event problem will require a spinlock to
+> > protect the completion and a separate receive buffer. No idea if it is correct,
+> > but other drivers do the same, so it may have a point. Either case, this is a
+> > bit too much to do without hardware to test, and I'd rather prefer to leave this
+> > up to Wilken.
 > 
-> Curious, do you want me to drop the comment or your reply is also about
-> giving AI context so it does not come up again with the comment?
+> I was working at that one, too, because I saw Claude Opus hinting on that one.
+> But it drove me crazy, because every AI is saying something slighty different. I
+> can not really pin down which one is actually the real solution. I tried to read
+> through the subsystems code and other drivers, but, argh, I don't know. I was
+> playing with the idea to (1) remove the raw HID mode completely or (2) make the
+> driver switchable, raw HID or normal HID, but not both at the same time. On the
+> other hand, in my Github repo where I develop the driver, I also have a tool
+> which demonstrates how to access the PSU completely in userspace via libhidpi.
+> There is actually no need to provide the raw HID access.
 > 
 
-Point was that the comment isn't accurate. The data buffer length must be at least
-I2C_SMBUS_BLOCK_MAX, not I2C_SMBUS_BLOCK_MAX + 2, and the function must never return
-more than I2C_SMBUS_BLOCK_MAX bytes of data (and the number of bytes as return value).
+Have a look at the patch below. It is part AI (Gemini) generated and part me.
+Sashiko is happy with it, but of course that doesn't mean it is perfect or
+even correct. It does look good to me, though.
 
-Having a comment is fine, only it must reflect the actual API.
+Making Sashiko happy required all core elements of the patch:
+- the spinlock
+- the separate receive buffer
+- the rcv_pending boolean
+- the size check in corsairpsu_raw_event()
 
-Thanks,
+Sashiko reports race conditions if I drop just one of those elements.
+
 Guenter
+
+---
+From 50fae138603a9a6b1929cbe9a644310495688eea Mon Sep 17 00:00:00 2001
+From: Guenter Roeck <groeck@google.com>
+Date: Mon, 3 Aug 2026 17:39:21 -0700
+Subject: [PATCH] hwmon: (corsair-psu) Separate request/response buffers and
+ validate reply echo
+
+In corsairpsu_usb_cmd(), a single shared buffer (priv->cmd_buffer) is used
+both for transmitting command reports via hid_hw_output_report() and for
+receiving device responses in corsairpsu_raw_event().
+
+If a command sent via corsairpsu_usb_cmd() times out, the caller stops
+waiting, but the hardware may still process the command and send a delayed
+response later. If a subsequent command is being prepared or transmitted
+when this delayed response arrives, corsairpsu_raw_event() blindly copies
+the incoming report into priv->cmd_buffer and completes wait_completion:
+
+corsairpsu_raw_event()
+    if (completion_done(&priv->wait_completion))
+        return 0;
+
+    memcpy(priv->cmd_buffer, data, min(CMD_BUFFER_SIZE, size));
+    complete(&priv->wait_completion);
+
+This causes a data race where priv->cmd_buffer can be overwritten with
+the old delayed response while hid_hw_output_report() is transmitting the
+new command, potentially causing the PSU to receive invalid parameters or
+shut down. In addition, the caller of the subsequent command will wake up
+early and either consume stale data or fail unexpectedly.
+
+Fix the problem by:
+- Allocating a separate response buffer (priv->res_buffer) so that
+  corsairpsu_raw_event() never modifies priv->cmd_buffer during outgoing
+  transfers.
+- Validating incoming reports in corsairpsu_raw_event() to ensure that the
+  echoed length and command opcode match the pending command in
+  priv->cmd_buffer (or indicate an unsupported command opcode with 0).
+- Protecting buffer initialization, reinit_completion(), and report
+  validation/completion with a spinlock (wait_completion_lock).
+- Adding a boolean flag indicating that the code is waiting for a response,
+  and only copying the reply into the receive buffer if that is the case.
+
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Signed-off-by: Guenter Roeck <groeck@google.com>
+---
+ drivers/hwmon/corsair-psu.c | 33 +++++++++++++++++++++++++++------
+ 1 file changed, 27 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+index 5592b927e9d4..3eebf8494ed8 100644
+--- a/drivers/hwmon/corsair-psu.c
++++ b/drivers/hwmon/corsair-psu.c
+@@ -13,6 +13,7 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/slab.h>
++#include <linux/spinlock.h>
+ #include <linux/types.h>
+ 
+ /*
+@@ -122,7 +123,10 @@ struct corsairpsu_data {
+ 	struct device *hwmon_dev;
+ 	struct dentry *debugfs;
+ 	struct completion wait_completion;
++	spinlock_t completion_lock;	/* locks wait_completion, cmd_buffer, and res_buffer */
+ 	u8 *cmd_buffer;
++	u8 *res_buffer;
++	bool rcv_pending;
+ 	char vendor[REPLY_SIZE];
+ 	char product[REPLY_SIZE];
+ 	long temp_crit[TEMP_COUNT];
+@@ -158,15 +162,19 @@ static int corsairpsu_dutycycle_to_pwm(const long dutycycle)
+ 
+ static int corsairpsu_usb_cmd(struct corsairpsu_data *priv, u8 p0, u8 p1, u8 p2, void *data)
+ {
++	unsigned long flags;
+ 	unsigned long time;
+ 	int ret;
+ 
++	spin_lock_irqsave(&priv->completion_lock, flags);
+ 	memset(priv->cmd_buffer, 0, CMD_BUFFER_SIZE);
++	memset(priv->res_buffer, 0, CMD_BUFFER_SIZE);
+ 	priv->cmd_buffer[0] = p0;
+ 	priv->cmd_buffer[1] = p1;
+ 	priv->cmd_buffer[2] = p2;
+-
+ 	reinit_completion(&priv->wait_completion);
++	priv->rcv_pending = true;
++	spin_unlock_irqrestore(&priv->completion_lock, flags);
+ 
+ 	ret = hid_hw_output_report(priv->hdev, priv->cmd_buffer, CMD_BUFFER_SIZE);
+ 	if (ret < 0)
+@@ -182,11 +190,11 @@ static int corsairpsu_usb_cmd(struct corsairpsu_data *priv, u8 p0, u8 p1, u8 p2,
+ 	 * was send, not every command is supported on every device class, if a command is not
+ 	 * supported, the length value in the reply is okay, but the command value is set to 0
+ 	 */
+-	if (p0 != priv->cmd_buffer[0] || p1 != priv->cmd_buffer[1])
++	if (p0 != priv->res_buffer[0] || p1 != priv->res_buffer[1])
+ 		return -EOPNOTSUPP;
+ 
+ 	if (data)
+-		memcpy(data, priv->cmd_buffer + 2, REPLY_SIZE);
++		memcpy(data, priv->res_buffer + 2, REPLY_SIZE);
+ 
+ 	return 0;
+ }
+@@ -781,6 +789,10 @@ static int corsairpsu_probe(struct hid_device *hdev, const struct hid_device_id
+ 	if (!priv->cmd_buffer)
+ 		return -ENOMEM;
+ 
++	priv->res_buffer = devm_kmalloc(&hdev->dev, CMD_BUFFER_SIZE, GFP_KERNEL);
++	if (!priv->res_buffer)
++		return -ENOMEM;
++
+ 	ret = hid_parse(hdev);
+ 	if (ret)
+ 		return ret;
+@@ -795,6 +807,7 @@ static int corsairpsu_probe(struct hid_device *hdev, const struct hid_device_id
+ 
+ 	priv->hdev = hdev;
+ 	hid_set_drvdata(hdev, priv);
++	spin_lock_init(&priv->completion_lock);
+ 	init_completion(&priv->wait_completion);
+ 
+ 	hid_device_io_start(hdev);
+@@ -848,12 +861,20 @@ static int corsairpsu_raw_event(struct hid_device *hdev, struct hid_report *repo
+ 				int size)
+ {
+ 	struct corsairpsu_data *priv = hid_get_drvdata(hdev);
++	unsigned long flags;
+ 
+-	if (completion_done(&priv->wait_completion))
++	if (size < 2)
+ 		return 0;
+ 
+-	memcpy(priv->cmd_buffer, data, min(CMD_BUFFER_SIZE, size));
+-	complete(&priv->wait_completion);
++	spin_lock_irqsave(&priv->completion_lock, flags);
++	if (priv->rcv_pending && !completion_done(&priv->wait_completion) &&
++	    data[0] == priv->cmd_buffer[0] &&
++	    (data[1] == priv->cmd_buffer[1] || data[1] == 0)) {
++		memcpy(priv->res_buffer, data, min(CMD_BUFFER_SIZE, size));
++		complete(&priv->wait_completion);
++		priv->rcv_pending = false;
++	}
++	spin_unlock_irqrestore(&priv->completion_lock, flags);
+ 
+ 	return 0;
+ }
+-- 
+2.55.0
 
