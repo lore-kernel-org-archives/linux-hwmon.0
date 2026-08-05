@@ -1,159 +1,111 @@
-Received: from relay15.grserver.gr (relay15.grserver.gr [46.62.234.254])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4193932DB
-	for <linux-hwmon@vger.kernel.org>; Wed,  5 Aug 2026 17:41:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.62.234.254
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C8A73DB328;
+	Wed,  5 Aug 2026 19:04:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785951722; cv=none; b=PaaYmDEhmPrG3CJkxQeNy56sa+d4uh7AhwveWfEovyUWooeG9/05zCmgjeNKe75dyyIgpdLFc4GV9HsKg/RbsfamCbA3uWT7foviuvzz5ixxTWT1xvZkI9P7Ygpr0RD6DXry+JyQT/kPTHgzcpDPSY6ii1p7cU9edX08DCUB2V0=
+	t=1785956678; cv=none; b=OFygB5rVoENv1UZrSLh7fgwhCxaXYBLYZkW12iVl5U+jy95jNwXCiGq5Qvrb7SegNTkwsgwvpaGj89y2XXZtmHouza/8FNHhQj29ZNMFl/etBWYUfjtZKtBcp+/jhOgNchkUk6EVLe5UiCv58i6+komOdDWyVrN9hhsHYisaH6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785951722; c=relaxed/simple;
-	bh=DZkacl0LYj3A25+z1d7Cuy+PCvVB8P5B8rNSW1GpetI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VwTVUHKN8IGPEs3GrWk7RZdJHcM+OYlFiWN5lsKKe7Wr0fPKT0sP9TJB9gJ2mzDVRarub8fRPcTf3qFsLwN8uAyywa9mdqXRSceJDdN5UVnZXZGiNBU/ILAT+BCuW9502BxrQ/8NR8JpkK5m6adA1fK4WdSAV1fxP38/dDS7kFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (2048-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=IDluv7OJ; arc=none smtp.client-ip=46.62.234.254
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
+	s=arc-20240116; t=1785956678; c=relaxed/simple;
+	bh=rCxRUSaMWLbQLn6N+pcEVJwlZ0QBqb1hNTJLsJijcLU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=N93ayJnIV3jbkH5je1VBq9VedUvd9L6qqiJLZAMMBiMPg01vxhKrAJBSULEtP4ANfAyN3HAwIX2bWF3fBgB1l2yP8y6AzVqeyRT0glQMAiBvHgvSk5GD6n1IKuaBlcRPesOKf3t/C4wo9brb6tkrRk0IZwd95IoSj4OnElqcQys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=FcIuDDLz; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="IDluv7OJ"
-Received: from relay15 (localhost [127.0.0.1])
-	by relay15.grserver.gr (Proxmox) with ESMTP id 533683FF0E
-	for <linux-hwmon@vger.kernel.org>; Wed,  5 Aug 2026 17:41:51 +0000 (UTC)
-Received: from linux3247.grserver.gr (linux3247.grserver.gr [213.158.90.240])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by relay15.grserver.gr (Proxmox) with ESMTPS id 418243FA75
-	for <linux-hwmon@vger.kernel.org>; Wed,  5 Aug 2026 17:41:50 +0000 (UTC)
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	by linux3247.grserver.gr (Postfix) with ESMTPSA id 1E97C1FD77B
-	for <linux-hwmon@vger.kernel.org>; Wed,  5 Aug 2026 20:41:48 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1785951709;
-	bh=vj/5gBDVK0oBuvLw+3g3cE7T59jtDMK52gvvyGpaH5A=;
-	h=Received:From:Subject:To;
-	b=IDluv7OJ6kXxKzX+FOz0ewoPC6JlWKEQijr+ZxFFE+cd+JGitGy7yw6INbSCHCGvN
-	 PbSZumHOGvKOfPAzYRWhbIkE2coHCWZeLf6mD5Mpw6yFLLDHbjroP6HtqBjPdAC9Ga
-	 IgkUedoJP0ollpRdodqpdWfMAEIuot8CSjCyJ8m7JDRWBX6HZYSqtoUys+/OkGClcr
-	 O/RvGjsY2oPg5mqCnIYiiEBv1r6JIPD7pYXu4+88ArMRPwsF+zEOHMXy8Lp7uC5DuW
-	 QH57XlMeeYrVJLPt6NuscMSpSySt9vhSPhAdZCdVciPly2oMN/AAa17G7i/ZdKZy8t
-	 nQnJC0Cl4A3+A==
-Authentication-Results: linux3247.grserver.gr;
-        spf=pass (sender IP is 209.85.214.179) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-pl1-f179.google.com
-Received-SPF: pass (linux3247.grserver.gr: connection is authenticated)
-Received: by mail-pl1-f179.google.com with SMTP id
- d9443c01a7336-2d02b4c3601so15864825ad.3
-        for <linux-hwmon@vger.kernel.org>;
- Wed, 05 Aug 2026 10:41:48 -0700 (PDT)
-X-Forwarded-Encrypted: i=1;
- AHgh+Roml4v7WRKo8O6XSyqIhfiaXk87/1Xhg07Xb6PNAc8wMsskW2CiZtZTRoC6Ca9eN9PGIdtl06rSlKoLDA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtcoH57Zlikku+yXyRHMujqCIrAgtxW5CHrk8fRWESOfa1wCrn
-	3lOHE1u+cbSggXx2POCWw1vQfM9bMTtcHOJcxalNaRi2IY7pynbpQoyidHZStCWPfiBNntvhTIy
-	oOHlpZrtUEUK6rkuNQCy81RBNiuWadgE=
-X-Received: by 2002:a17:902:e88f:b0:2ce:b7b7:30e3 with SMTP id
- d9443c01a7336-2d0ca9904femr93820805ad.17.1785951707537; Wed, 05 Aug 2026
- 10:41:47 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="FcIuDDLz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1785956664;
+	bh=rCxRUSaMWLbQLn6N+pcEVJwlZ0QBqb1hNTJLsJijcLU=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=FcIuDDLzMnMIPXvH2ZFrICPNZh7d0dzJqmtWoJHHm7oa9Nb+ATT4w9zpDguCtjslX
+	 pZwN+ldWuE8HHL1MjYQxW1n40saGhI9w1Iz+gDNaCuyQSsGJJryD1AHlaCHHWxq9Az
+	 7aBsp8QQ9CRQvLOaFoXPuYHfPc6NI1p6fbP9Q7SA=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date: Wed, 05 Aug 2026 21:04:19 +0200
+Subject: [PATCH 1/3] hwmon: (core) Constify device attributes
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250511204427.327558-1-lkml@antheas.dev>
- <20260803221614.59324-1-derekjohn.clark@gmail.com>
-In-Reply-To: <20260803221614.59324-1-derekjohn.clark@gmail.com>
-From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Wed, 5 Aug 2026 19:41:36 +0200
-X-Gmail-Original-Message-ID: 
- <CAGwozwF0JBxHSw8=aiFnxgZs-C_0HhsCdfRXsuvoz9MqJJvtoA@mail.gmail.com>
-X-Gm-Features: AUfX_myFrIlrgkMgfNSrYbVrvXa1nImqzA89CKFbt3dMEk0RnDyE2R_oYdnqERk
-Message-ID: 
- <CAGwozwF0JBxHSw8=aiFnxgZs-C_0HhsCdfRXsuvoz9MqJJvtoA@mail.gmail.com>
-Subject: Re: [PATCH 0/6] Re: [PATCH v1 00/10] platform/x86: msi-wmi-platform:
- Add fan curves/platform profile/tdp/battery limiting
-To: "Derek J. Clark" <derekjohn.clark@gmail.com>
-Cc: W_Armin@gmx.de, corbet@lwn.net, hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com, jdelvare@suse.com, kuurtb@gmail.com,
-	linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-PPP-Message-ID: 
- <178595170954.3026395.4290865263123340283@linux3247.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 1.4.5 at linux3247.grserver.gr
-X-Virus-Status: Clean
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260805-sysfs-const-attr-hwmon-v1-1-4c0cb2b290a1@weissschuh.net>
+References: <20260805-sysfs-const-attr-hwmon-v1-0-4c0cb2b290a1@weissschuh.net>
+In-Reply-To: <20260805-sysfs-const-attr-hwmon-v1-0-4c0cb2b290a1@weissschuh.net>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1785956663; l=1906;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=rCxRUSaMWLbQLn6N+pcEVJwlZ0QBqb1hNTJLsJijcLU=;
+ b=igc69XbCqosSuLK7Dcbn4ea3/6jDhzaXYtJOIaS1vrv0hBIR2kkndM41XTtPs2uD6OYMmkpjS
+ PpUG+gt2FuWAsmkl60HnXJ9o2y8q72g6q25tY5Me3kd6Nj6HrcQpZTh
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-On Tue, 4 Aug 2026 at 00:16, Derek J. Clark <derekjohn.clark@gmail.com> wrote:
->
-> While tesing this series, multiple issues were found that cause crashes
-> or compilation warnings. Additionally, since this was first posted, two
-> new models have been added that each have a unique feature that must be
-> managed before TDP control will be used. Given that Antheas indicated he
-> still plans on sending a v2, I'm posting these so they can be
-> incorporated in the next version, and so that distro's packaing this out
-> of tree can get the fixes and additional functionality in the meantime.
->
-> A summary of the changes are as follows:
->
-> - Patch 1 detangles a guard with a switch case that violates cleanup
->   rules.
-> - Patch 2 removes an unused err variable.
-> - Patch 3 teminates the quirk table with a null entry to prevent
->   unquirked platforms from crashing when the driver is loaded.
-> - Patch 4 cleans up the device quirk names, fixes a bug with when buffer
->   data is copied as a payload, and adds separate PLx limits as indicated
->   by the windows DLL, if pl1 and pl2 are set to the same minumum it can
->   cause instability.
-> - Patch 5 adds support for gen 3, the AMD Strixx version. In order for
->   manual TDP control to funciton the STAPM flag must be toggled off.
-> - Patch 6 adds support for the 8 EX Ai+. This device uses a new shift
->   mode, called "manual", to enable TDP adjustment. Since this could
->   conflict with the existing "user" mode, use the quirk table to
->   specifiy which mode is "custom". As a consequence, "custom" must be
->   checked outside of the switch case as it could be one of multiple
->   values.
->
-> If you incorporate any of these changes in v2, please add the
-> appropriate attribution.
->
-> Thanks,
-> Derek
+Mark the attribute structures as const, as they are never modified.
 
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ drivers/hwmon/hwmon.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-Hi,
-of course. Its good to have this chain series for anyone that needs it.
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index 55a9a3ddd4aa..84108a16ef60 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -71,27 +71,27 @@ struct hwmon_thermal_data {
+ };
+ 
+ static ssize_t
+-name_show(struct device *dev, struct device_attribute *attr, char *buf)
++name_show(struct device *dev, const struct device_attribute *attr, char *buf)
+ {
+ 	return sysfs_emit(buf, "%s\n", to_hwmon_device(dev)->name);
+ }
+-static DEVICE_ATTR_RO(name);
++static const DEVICE_ATTR_RO(name);
+ 
+ static ssize_t
+-label_show(struct device *dev, struct device_attribute *attr, char *buf)
++label_show(struct device *dev, const struct device_attribute *attr, char *buf)
+ {
+ 	return sysfs_emit(buf, "%s\n", to_hwmon_device(dev)->label);
+ }
+-static DEVICE_ATTR_RO(label);
++static const DEVICE_ATTR_RO(label);
+ 
+-static struct attribute *hwmon_dev_attrs[] = {
++static const struct attribute *const hwmon_dev_attrs[] = {
+ 	&dev_attr_name.attr,
+ 	&dev_attr_label.attr,
+ 	NULL
+ };
+ 
+ static umode_t hwmon_dev_attr_is_visible(struct kobject *kobj,
+-					 struct attribute *attr, int n)
++					 const struct attribute *attr, int n)
+ {
+ 	struct device *dev = kobj_to_dev(kobj);
+ 	struct hwmon_device *hdev = to_hwmon_device(dev);
+@@ -106,8 +106,8 @@ static umode_t hwmon_dev_attr_is_visible(struct kobject *kobj,
+ }
+ 
+ static const struct attribute_group hwmon_dev_attr_group = {
+-	.attrs		= hwmon_dev_attrs,
+-	.is_visible	= hwmon_dev_attr_is_visible,
++	.attrs_const		= hwmon_dev_attrs,
++	.is_visible_const	= hwmon_dev_attr_is_visible,
+ };
+ 
+ static const struct attribute_group *hwmon_dev_attr_groups[] = {
 
-I will note that for patch 1 and the missing {} I am aware of those
-fixes and implemented them myself to the downstream patch I was
-carrying. I never resent a V2 because I did not address Armin's
-comments. The missing {} was exposed when Armin fixed the
-autodetection. So I cannot attribute those to you. Patch 2 is a review
-nit, so after I fix it you can add Reviewed-by. I will make sure for
-the last two patches especially to attribute those to you and if
-possible keep you as the main author / not add myself if they require
-no changes.
-
-I do not have access to my Claw until the middle of August. Once I
-have access to it I will have a closer look.
-
-Antheas
-
-> Derek J. Clark (5):
->   platform/x86: msi-wmi-platform: Move guard out of switch in
->     platform_write()
->   platform/x86: msi-wmi-platform: fix: Remove unused err
->   platform/x86: msi-wmi-platform: Clean up devices
->   platform/x86: wmi-msi-platform: Add MSI Claw A8 support
->   platform-x86: msi-wmi-platform: Add Gen 4 device
->
-> Matthew Schwartz (1):
->   platform/x86: msi-wmi-platform: terminate msi_quirks DMI table
->
->  drivers/platform/x86/msi-wmi-platform.c | 151 ++++++++++++++++++++----
->  1 file changed, 127 insertions(+), 24 deletions(-)
->
-> --
-> 2.55.0
->
->
+-- 
+2.55.0
 
