@@ -1,73 +1,73 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D5E422A7F6
-	for <linux-hwmon@vger.kernel.org>; Wed,  5 Aug 2026 00:57:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2546A233924
+	for <linux-hwmon@vger.kernel.org>; Wed,  5 Aug 2026 00:57:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785891450; cv=none; b=gM2zap/2V57p1orZoJAo6a/U4jMa/7Y4ScZP3zJMSkA+IVVVCJBAYNAIMKUGeotIbcek19AMTR3JfpWaOl2Sn3czviWith9ti9VmTMin/MqkDd7b73I5QrVv4xC0cyip3WXzyDDV6btk6EPKCsN89vXK5wrvmrKkcEzJ2ktzv0E=
+	t=1785891451; cv=none; b=FneHksS602vZ2lb5yHp5t6jtZJ0f1BS0vnOtWch9d7gVMDAVEliKUOHiTZAOW/RQZRPPNSd8YqEbAlGU7zxRUksUk+my1q/GeQTSdnpkut3YxyogNC4Md4Mnt/8Eu0DUMajyNoxsjbafMs7OLwplusjXGdx3U7GLad7quF7AT9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785891450; c=relaxed/simple;
-	bh=bFVGDweZUNmyxeeDKHjcTj5ZmdhHG7bgBeguhkgp+ic=;
+	s=arc-20240116; t=1785891451; c=relaxed/simple;
+	bh=Quh2PrlOEhOfiE6AWOooNP3mVszfenGH1kVkU4VUWVo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cuI1YUuq564KXYMprEYE178wkPLycS0QuVyJqsneA4/oIx3WqmPfJCXQ75MxO/F5DBOL+6A6GJtyw9EX3K/Ot10VSTtj5UslBuXHfrPpnV7rYlpXX303LQrG0QxCFeboLscczNGYh9rN2akXm3IBjK17zvdYFf6ViTAPqSRHWHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sws4xf7M; arc=none smtp.client-ip=209.85.215.181
+	 MIME-Version; b=AX3FeytonHVRnZ5iZqnlByuLEbWB6Piasx89N8HlVduMJrci/jsW+oyQeY7jojugufWd7Er3p/y2MhR9h5jPbU/NSBE/yCppuTodZ9htZL5UwzzomXxNQpKK5CSxdhFLektgp6sH31+6OY/BcNhm3Mva07C9UKrgQa7n+3KOBkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QFoM2JR8; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sws4xf7M"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c99eaa1f020so377166a12.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 04 Aug 2026 17:57:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QFoM2JR8"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c9ef3e1337fso274964a12.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 04 Aug 2026 17:57:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785891448; x=1786496248; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785891449; x=1786496249; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=l4Qv2VipMlZcYtQS7PTvLD7WNtqxtO1c3wiCwXDw1Ec=;
-        b=Sws4xf7MrdPSC64syvT6MEMHekzMuIUupBx1MS0BigSH7/GIVVGTeFZektlYWMZZog
-         /prWibPPrXLS2bSrOe3JP5ffsLMuyyB5ic9MzYezy1bspFyH30i2G0AhP8SoKsQsnJ6W
-         FYtlaYuERwJc9KUAthzbb/MTYLEg4lJeCQ/T9Gw+ry42z58O7LnGBVqXmhV1vcqo9Ibq
-         ZZ6m3RXbVbPxE/h3mbK1o8Ts3jQNvVv7pueOv6kZ8kXR7ZRVsuJ6zaxj5CPxP02St87v
-         iaxD9qAONfLwrT4tImoJ8OAZKlr8oXNGyWzutzwGCagu5TWvJro/905dljX+ulCzvT/e
-         HUfA==
+        bh=UL71KglVlSv4L0guw4KmKAa9BKK3sLHuCwvWbQXlCL0=;
+        b=QFoM2JR8vyP6Am+COKjq6ZHnNBmTGB0WMwGqlJP9xsXh3A+Bab1n6EsHCGrBlNttep
+         5xCMad9TVZSmmoKnkeInm3m9dVQRaI/dT1EACj9UZKxyjNxy2eSDiy49vaM4rFzqzSAi
+         h1vJ3HVUNvIpo99xq3FepGqCUehhx0JIUy0nnjpY7EJXhboXsHiCkDDkVUbNFSSpCnBe
+         DWRel5BEt1MdCTwEjT1ayIocmFoR9+ZgNDMl6HEzolLc6TQl8iXbk1as22OSUrPoucCs
+         Oqbx77562m103pEjXH6mkEeAfpHGqCTHh0jguDvO5ILID6ubS+BVvhxojEgCoKs/Kjf1
+         d5kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785891448; x=1786496248;
+        d=1e100.net; s=20251104; t=1785891449; x=1786496249;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=l4Qv2VipMlZcYtQS7PTvLD7WNtqxtO1c3wiCwXDw1Ec=;
-        b=a8fvjWpu/OypVpHrYyVCRtGaQjbKkiyn3rJxV2ImnFIWj04rDa32NyzFFGKcySzJXY
-         EW8x1Pd0P42FSyfJQOFLcZSF/1ivrekVVFQB8q5LbjDxPBpCt3TgoDNfLdcuQelN7Z/2
-         qapnHHeKbI6gmnaNmbK0DTDAPpGZ7mL4G8qtpDq9BQdHh43FSDk+zETvm9/vhMaCgbqF
-         dN2tMwCrtM+uq1iQpv3x0xKlmlduBIchq25t0mtEhNMg9zjuCF9jHw7ftS994rakfD1P
-         U374f8HbhDk4jhmMSZ2dbxQnVji2FIL4P1eeR3V1QPk3OxZqP4ks++tcuey2HhRS6zNh
-         p7Aw==
-X-Gm-Message-State: AOJu0Yx6tFQYyLlV28gqDmIQOPmG80GsmP97dAa+D0U4uk0oSMWGq3Tr
-	gBpIbu2GXJQMcDcSKoP5Z5vZISwwfLOO4xc6T4Ld2sIR0ikhfkkWXAEuNzRgEg==
-X-Gm-Gg: AR+sD13Tu/Lm6f7RS+hokydZFYUl25uCea6V8/Ol1tnZLFaqKd1QR9bDH2IzHcU9m6k
-	fi9/PGJIz3zpogxZBWcGjkKj24guibcZgdiPEBNQFkky4FP+CgdwHdoiIEs4Zke0u/nrPBcHort
-	mTUeLkny17HQlMooYsfAjQ+1MxQ79rSazAeofpgpB1uuenlil1tA/11e2vq5ldsB6VmUgUtMnms
-	QnALGm5BjIbrBeALRvbO/Bepl8tzHeFcLTGpF4XXuHSIqFFu++aMngFWyK6c3DX6PuQ01xRo0e/
-	zvjJUUFmmY6MJVZHPnRtXtpjhAXMo4wjmwW34IBzawk1TnxoD41H/fiF9WYef/+y05k3f2q78Rh
-	rtuz0/Zhb+py3tk8S+bpuNwPg8tA3XKBLKz6dRwYfJe6UAlEMBqrXon6VkwZoWbPfrzj6ulq757
-	/LoVtb0ZwY58voN+FByQJajZUMap0vw7ttLzeyouea8EynlK3via8oq8Do9k6lbwXDulQcxaH5/
-	Q==
-X-Received: by 2002:a05:6a21:46c9:b0:3c3:6528:c87 with SMTP id adf61e73a8af0-3cb85dcc76emr3146218637.1.1785891447736;
-        Tue, 04 Aug 2026 17:57:27 -0700 (PDT)
+        bh=UL71KglVlSv4L0guw4KmKAa9BKK3sLHuCwvWbQXlCL0=;
+        b=FrjTybasytGXVXmNFJMBAR+/OTj/9kHwrL56WHqr2LtNAatz5JGAOVOWzZDYi9xuS1
+         FUbRb1bCtc+Yc+ifrsjV3SspZsY3UWWD5HbYMNxA3fKR6t2Nn6+XU6uRTLBir+4K6OXx
+         3U/ib7fgrg/dr8FaSFDsv1DMUFWv8JEZ8+5yGF54bPo6f77e9uKUPfTWCcxa0Jef95Z2
+         lYRpC9svFpEpWXY9jqReBfGXwMqMtMWLO529H6vAT7cEAeo0IKL/8nzi4SKq272ZSIuc
+         ZhOpWi5rKvnv6eGvjrfnEzNWfW+t3yhUA34ByfKxU/fmPZaPdFy+3HzNd03RMupkXSAa
+         OuuA==
+X-Gm-Message-State: AOJu0YxPIxGouIo3nwNd0VRBMleO68VJ1vXv/GW95bIrlyRSpOl8QGAa
+	qBL8zOhcrNhA3e03hP4Gkxhn3U0uNhKx0PyRm6zeHhqKRB8+u0SYpBsYyllAqQ==
+X-Gm-Gg: AR+sD11np7ayLAM7OJ7WPd8kQRJgFGI6KdDwXVcjaxWwWB67DEAdNHW5tY7WNyHRPUB
+	/+8dqiRY5MFVK4zoANlf6A/CgUNR4P0OQHixP60XAnzM3GPSG7tselCYJYsB4mHosQkZMIlOgxZ
+	zAFb7br7sq40BXb1NxVzjB7fZ2QaX3wYVdq9PbfR9ZDcu2AEnElfed21yu5qTa6mrR1+MtAtw9g
+	549cq83Oi2pWIJBOsk3AgypWiLcEepT1XMUDhNgCF3xqsqWwQxBevqsTelPA+gBMi4OYtr1aCUL
+	2p9xPNHnTBr+6TvLcIB8wIFfbGnftBNUecoAtHX29b9+OW/0UVY1RMC+CH1wTSoO3MBkCvdcj6b
+	n0qWgQR/jGAZ3nQc++1F9TuvQXbPL8cegfq0HXGFbf8fOFjcAMP//8we55n2ftwCEQDUEy2y5bR
+	cRjHjCqIYILyJjFFsdh2tYVtIhH1gjMwu5bQOl/rAktm6WlXo8ybbcmSdgYTcsFN9y8ectqjPgF
+	g==
+X-Received: by 2002:a05:6a20:1441:b0:3b3:1c7b:ffb with SMTP id adf61e73a8af0-3cb85f4e1b0mr3352749637.34.1785891449557;
+        Tue, 04 Aug 2026 17:57:29 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31586777bcfsm14291046eec.21.2026.08.04.17.57.27
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3158644a195sm8855403eec.13.2026.08.04.17.57.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Aug 2026 17:57:27 -0700 (PDT)
+        Tue, 04 Aug 2026 17:57:28 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Nuno Sa <nuno.sa@analog.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Sashiko <sashiko-bot@kernel.org>
-Subject: [PATCH 2/3] hwmon: (ltc4282) Clamp negative current limits
-Date: Tue,  4 Aug 2026 17:57:20 -0700
-Message-ID: <20260805005721.1566034-3-linux@roeck-us.net>
+Subject: [PATCH 3/3] hwmon: (ltc4282) Fix parsing adi,current-limit-sense-microvolt
+Date: Tue,  4 Aug 2026 17:57:21 -0700
+Message-ID: <20260805005721.1566034-4-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20260805005721.1566034-1-linux@roeck-us.net>
 References: <20260805005721.1566034-1-linux@roeck-us.net>
@@ -79,58 +79,57 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When a negative value is passed to ltc4282_write_curr(), the signed long
-val is cast directly to u64:
+ltc4282_parse_dt() evaluates the wrong variable when parsing the current
+limit.
 
-drivers/hwmon/ltc4282.c:ltc4282_write_curr() {
-        /* need to pass it in millivolt */
-        u32 in = DIV_ROUND_CLOSEST_ULL((u64)val * st->rsense, DECA * MICRO);
-        ...
+When the adi,current-limit-sense-microvolt property is parsed into
+st->vsense_max, the subsequent switch statement evaluates the unrelated
+val variable instead of st->vsense_max:
+
+drivers/hwmon/ltc4282.c:ltc4282_parse_dt() {
+    ...
+        ret = device_property_read_u32(dev, "adi,current-limit-sense-microvolt",
+                                       &st->vsense_max);
+        if (!ret) {
+                int reg_val;
+
+                switch (val) {
+                case 12500:
+                        reg_val = 0;
+                        break;
+    ...
 }
 
-This cast converts negative inputs into large positive values. The
-subsequent division result overflows the u32 in variable, truncating
-to a pseudo-random positive value. When this is passed to
-ltc4282_write_voltage_byte(), it is clamped to the maximum limit instead
-of zero.
+Because val holds a small integer representing vin_mode (from 0 to 3), it
+never matches any of the valid current limit cases.
 
-Clamp val to 0 and to the maximum supported upper limit before the cast
-and assign the result to a 64-bit temporary variable before the division
-to avoid the underflow and an also possible overflow.
+This causes it to always fall through to the default error case, return
+-EINVAL, and aborts probe initialization for any device tree using this
+property.
+
+Validate st->vsense_max instead to fix the problem.
 
 Reported-by: Sashiko <sashiko-bot@kernel.org>
 Fixes: cbc29538dbf7d ("hwmon: Add driver for LTC4282")
 Cc: Nuno Sa <nuno.sa@analog.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/ltc4282.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/hwmon/ltc4282.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/ltc4282.c b/drivers/hwmon/ltc4282.c
-index bb7f6727c44d..bb1bcb369016 100644
+index bb1bcb369016..b1675dc5b3c7 100644
 --- a/drivers/hwmon/ltc4282.c
 +++ b/drivers/hwmon/ltc4282.c
-@@ -14,6 +14,7 @@
- #include <linux/hwmon.h>
- #include <linux/i2c.h>
- #include <linux/math.h>
-+#include <linux/math64.h>
- #include <linux/minmax.h>
- #include <linux/module.h>
- #include <linux/regmap.h>
-@@ -929,8 +930,11 @@ static int ltc4282_curr_reset_hist(struct ltc4282_state *st)
- static int ltc4282_write_curr(struct ltc4282_state *st, u32 attr,
- 			      long val)
- {
-+	s32 ulimit = min_t(u64, INT_MAX,
-+			   div_u64((u64)INT_MAX * DECA * MICRO, st->rsense));
-+	u64 val64 = clamp(val, 0, ulimit);
- 	/* need to pass it in millivolt */
--	u32 in = DIV_ROUND_CLOSEST_ULL((u64)val * st->rsense, DECA * MICRO);
-+	u32 in = DIV_ROUND_CLOSEST_ULL(val64 * st->rsense, DECA * MICRO);
+@@ -1394,7 +1394,7 @@ static int ltc4282_setup(struct ltc4282_state *st, struct device *dev)
+ 	if (!ret) {
+ 		int reg_val;
  
- 	switch (attr) {
- 	case hwmon_curr_max:
+-		switch (val) {
++		switch (st->vsense_max) {
+ 		case 12500:
+ 			reg_val = 0;
+ 			break;
 -- 
 2.45.2
 
