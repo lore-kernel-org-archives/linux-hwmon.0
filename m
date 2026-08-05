@@ -1,67 +1,67 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 050A6395AF6
-	for <linux-hwmon@vger.kernel.org>; Wed,  5 Aug 2026 14:57:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E48360ECF
+	for <linux-hwmon@vger.kernel.org>; Wed,  5 Aug 2026 14:58:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785941869; cv=none; b=M4rc7vCCqP5khAp6bLTY9KDFbsC2q4rNEa2rudjIjoilw/CQ6Q+e3wusQsytaOub23DqunYpAnTw+Jj3tnrAmWsJbYuP/UmnhlJW8vetiwgoifji2qAl9ULYnAu2enLLlFfNI5vLg80PC0PSDxjYCIi9vReNhz7UPDy6U9ZaNJ4=
+	t=1785941893; cv=none; b=vGsuEns5TJ4Npkzz1Po5lU4BcsnkLii00NmPH2gkJbqKylEjZyjGHWttLsHHHsqoAalmnciTMQvJM2OOHUJJKz3/ec33FYywL1Brbcjq9wg8G4jOCcpW5MHAuKiouF+oSe2YBSjwjIc87/Gzg/YcY8mPKwUHFOZ3YWFs0DQ7Okw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785941869; c=relaxed/simple;
-	bh=auUdmdF5BPs6K3sasWXSTlqxTXnk6OB3PFSBU6ek2kI=;
+	s=arc-20240116; t=1785941893; c=relaxed/simple;
+	bh=9S/faSZXw85fr7ERVeNcmiX7A2STfXPOz+vsocu6na4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gw3E9gXJ27UWtETn6+jo/MgHphCZ+nTpOcnpN7HpumXiEqtcS3jrZwPrcfqN9+Sr5GRyenI4yZRiWSU2pF9fnU9b1Te45AjTwgazvMQmWORA8ZuxfQ/cV0MxeN9o0xzEUMjN+DJP6a5HkpPynt9hHnIMOtKJbHZk32tA6bW6000=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lFBG9s3v; arc=none smtp.client-ip=209.85.215.181
+	 Content-Type:Content-Disposition:In-Reply-To; b=tyE3YXg5cnBnK9is8srrd+lE7JMtDGpWS9KDD1fMr2ic9KzRridhpr9tCv9djWAbsIhQkYQhI7Nho0I/s5CyIPUOS6ya/4g/eG61uwSLfll2QEyJ8J0Oao5NVHqI24mEEDlYAw5X4SFeYlgGETcV0x8rTIGoJoIav8AUIxxEmik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZA3v6CJ8; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lFBG9s3v"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-ca7bea5e5b3so883639a12.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 05 Aug 2026 07:57:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZA3v6CJ8"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-38fdeaed181so1287279a91.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 05 Aug 2026 07:58:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785941867; x=1786546667; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785941892; x=1786546692; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=J4cCWm9J7oW4ALooS0cfmzE8SO2jTvYvrPbMn1sZeYQ=;
-        b=lFBG9s3vLYhuGQ1nFEHICVO6l+7rBSUHtF8bLGWCA94qLxTpFBeh1R91HOJJhnc/a+
-         ClbUax7XohkZm0bBLOodmCLM13+TOmTbDNbe02t4ryxVuB6LAlnlawd81dxD5KGuFecW
-         oOa1T5TLt/YAu+/iKstYKSHfAlPGVYwSBcwNVA+MeMwkfcT6RO49hFphvt5aun3R2TQ8
-         vsZOGFCgxKzNwx571LSi0swiekiPIa8PlYT70dZkZeVxb8ed+YrRToPubzvliF4nIRvf
-         y7O91t+DDTtgTrA1zTcKeH8Z1wk+oQSk0aMvM5D3xc4PhbOfnUJfaNeu54dFxRYplKWF
-         WQTg==
+        bh=qoe2BAtQzV2Z/pr4B+d9y9nLNSXO+lcdy6rhWuxxDJo=;
+        b=ZA3v6CJ8WbCrpq5kc4HNlWpTgSpNPnvhmavRSWGxkc87ofa6r+7LFxX7nr1e8DJvkg
+         0N8BIUWK5O45niwHEffpF/zMr8smQo2pmFD4Ocmod70jpAMzlE4Hx5gsu7oj6Fm+jfS2
+         ezKWXZMyW5lf1Exd4Ocfffrsc8YRK8tg6S2/ev35oURVGAVSfbEqZ2VSf0JujWkFbICk
+         jFguACUJVfDXq3YGk50xP3GD4e9+xXK4hV7xKw9ev8wQLZK5x++L5mjkYl80T7NBXwr2
+         fNUYpV3kwfImsDfVDQfGs0XXFMl3ImwUi1V6KbaHpUOOkaJL1+RgkHa89Hfk0H3EKPWG
+         W6xA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785941867; x=1786546667;
+        d=1e100.net; s=20251104; t=1785941892; x=1786546692;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=J4cCWm9J7oW4ALooS0cfmzE8SO2jTvYvrPbMn1sZeYQ=;
-        b=hgDf6Llu07pU4bJdYfDfuZIXddK8Rul5AMfLJKxydNcdEj6Y9WeYyRjlqjZn1wNlOd
-         msoezFjA2Pq2N6kuYN7idDy7l90I/htJfXcES84QJampQPxyPp2Il4Ifa2fBjPiwoKw+
-         Z9ya9WFmkIFjXGIcUHbQ1UrqoskHWLxjKYGywiZf1tQkqxPU2HDAyRyWV2cij8dpj/E0
-         xzYzpC6dixivN3hoecKH+2F/s8IKSaxBjquFUsLYRfk/5oZKiTdn2UxAEcKHFJAPoMzl
-         qPk3GVlEYKUVsvJSav6dSpKv7t9zPNlfqhlOYnGAWc/Yj4jNVBA+smc8fsRz1UQPiwMV
-         AMBQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqRh9R7UFApRwd5//MGGMuA9vW3eylMy3CB1d6ocUgZsQMyXcT2IrquNv+pjBMeop/i99S+4QcQaugLAw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yww/hi/1msFQsAZ5K2s4U/djHyUrqBq8pn/fg4Te0atD9YALiWM
-	Wc34KhDrVl5+N7wae3nenSeUGj1lWjAFxp+gg9TQB5KSqSfZPbUYCrwoXH635A==
-X-Gm-Gg: AR+sD10f+EGxc7GjrV3qlen6G3DswySFoIQVG2mavt8RmFmvRa2GlgFuHOQ3AI4RAqE
-	NROxchzickfzPLS+qxsR7xVs9z9W+RjVCTW46Ss/P1tZu1PCc8OtPV7BvpuyRGAFkCKOiNxpLD3
-	rHr5C7pp9So7glZUeesAw/qUXW1khucr9RtCpzqrN5ICgADu5CLQMylUrQj7HYiRmwDQeJj8yDH
-	MVTZDVd/QnuBtnUsjsjPW4ih/YU7IKiTcjJx9DIq8haihd5YFG6UDzz5Noh4z8EdG6M/cd5CNx8
-	fYdntff8yNeWEZjdTj+mCTs+oBh+goU7gDkreO4maw8BMxp8RdQCQdE4fW0y3R9YUSYRep4cVZY
-	CUgOHHU30KuC9GYMVouVbb80nbDbI4eA5ugMcHOBugi6EjFD92wLpleL3yUxDpXE7GNBl/lwAzL
-	Nx+TxQ3XtSV1TmA5fOO3mIZvekYQMunrP1uR9TO7zAwqpvdH/fghNHzAwi1OgLKtxIdVCB+F8KD
+        bh=qoe2BAtQzV2Z/pr4B+d9y9nLNSXO+lcdy6rhWuxxDJo=;
+        b=h3B9zw8+HvMbMtzXjq/Sm7mjYBjosjCx1k9lrt4Fp8Z/XYyrQIkIC0e5rdtlSR7QNb
+         eWocXiq6t1cQVvvos3LUFR5fJyiOIw8OUq7pN5ot2Uo4BCYqKsFnrAN1fviS9jg56zLN
+         vGfeY5ZnFcfKCNxoLb7LfeSJma+4qhZFmh+75tsGn98mLQI3PXw2pIH9z+ZtnhS7FQZX
+         s3lpNltqXA25Yzb+S0WqwkujQ2PoIrhBQzItLedL4F3i9UwjQJ5SyUQtmsBbXPKrz7Nx
+         PJGXSIOfbacNZGSU8BvQr0IuqhlfRQbTdVuzb4AMwibkA+IeK8+ZuIbZhk/UhrC9lY40
+         uoqA==
+X-Forwarded-Encrypted: i=1; AHgh+RohhKWLz/rRcTNMuty/UCDgxZ2hBlEhY70yFS0T80DTd6GokWA442eqGh/mywfSkamRsB1/A1J1TOhYSQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4A7UJiYN1Yi0Tmr2JYucTKqfuv1rZz20QhWb45fQ4GxRfRp3W
+	3wNx2xKIO29suaAcXC4j09uwQi7wQ0ROMK5Ihxe55s2b9GDQ5TznrkD5
+X-Gm-Gg: AR+sD10WNdiZ1AqCB/wqRU9DOUq8tpS897/9Cy2JI4Cj+xbmilh1bH1XEX0C+QKihYI
+	WYLk0hDzJrUVzqFe8dG267nvFHeaJxBx+flctvWhG3ykqQAb2XwtEv+J68bul12SJ4tf08DrRmp
+	hDWfcNPpHgCjSPTG4ZR0HBsmpOUZME+D6oOO80q8seX7O4bRybIiBNY8RLTTeAQcsQAO9dPW0ie
+	4X3jDH87q9G9+UHlCFet59xPwUFd9v9z+aA5PCggrGrIqaGB9loojULcM6hpmm3sjZcOdyKdr1L
+	72xOMeT/Ez82OvinNpmbWiIWKgBJjlgBwCS/6SwdPnGueinG6MREcwmdo/57KBhV2Og72XRubkz
+	se6Tc4ZujMoPivKVruhVRmL0S02r6AOHrV2wZ0vepMjgfhMYlWXCWI9PwqkfuivyJoOKDf0HN88
+	ibB6Qfvx2rP4GBdC05LHJnTOzkDpEqJci3kRKV8km2hZ/0X0o+HdpQUsK5n8r/LILO+Iv1QdrPy
 	g==
-X-Received: by 2002:a05:6a20:7f99:b0:3bf:49c8:f7b with SMTP id adf61e73a8af0-3cb85e2ae72mr8403324637.13.1785941866629;
-        Wed, 05 Aug 2026 07:57:46 -0700 (PDT)
+X-Received: by 2002:a17:90b:280d:b0:38e:1497:af5b with SMTP id 98e67ed59e1d1-3903c54fbebmr8588690a91.1.1785941891593;
+        Wed, 05 Aug 2026 07:58:11 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13fca6576b7sm13556187c88.7.2026.08.05.07.57.45
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13fca8df88csm13204639c88.11.2026.08.05.07.58.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Aug 2026 07:57:45 -0700 (PDT)
+        Wed, 05 Aug 2026 07:58:11 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 5 Aug 2026 07:57:45 -0700
+Date: Wed, 5 Aug 2026 07:58:10 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Luiz Angelo Daros de Luca <luizluca@gmail.com>
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -71,12 +71,12 @@ Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	"Darrick J. Wong" <djwong@us.ibm.com>,
 	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
 	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Subject: Re: [hwmon-next PATCH v6 1/4] dt-bindings: hwmon: add adi,adt7470
-Message-ID: <d4d9b9f3-960c-4680-9779-74fdfa3f0355@roeck-us.net>
+	linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
+Subject: Re: [hwmon-next PATCH v6 2/4] hwmon: (adt7470) Add ADT7470_PWM_MAX
+ macro
+Message-ID: <f6ecb967-b77a-4983-ac2c-3b33822480c5@roeck-us.net>
 References: <20260805-adt7470_thermalzone-v6-0-5605a5f95467@gmail.com>
- <20260805-adt7470_thermalzone-v6-1-5605a5f95467@gmail.com>
+ <20260805-adt7470_thermalzone-v6-2-5605a5f95467@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -85,19 +85,11 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260805-adt7470_thermalzone-v6-1-5605a5f95467@gmail.com>
+In-Reply-To: <20260805-adt7470_thermalzone-v6-2-5605a5f95467@gmail.com>
 
-On Wed, Aug 05, 2026 at 10:15:17AM -0300, Luiz Angelo Daros de Luca wrote:
-> The Analog Devices ADT7470 is a multichannel temperature sensor and
-> PWM fan controller. It supports monitoring up to 10 external
-> temperature sensors and controlling up to 4 fans.
+On Wed, Aug 05, 2026 at 10:15:18AM -0300, Luiz Angelo Daros de Luca wrote:
+> Instead of a magic 255, use a macro to refer to it.
 > 
-> Add the device tree binding documentation for it. This includes
-> support for the thermal framework by defining the "#thermal-sensor-cells"
-> property, and models the fan control lines as PWM channels by
-> defining the "#pwm-cells" property.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 > Signed-off-by: Luiz Angelo Daros de Luca <luizluca@gmail.com>
 
 Applied.
