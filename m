@@ -1,90 +1,110 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B9733043CF;
-	Wed,  5 Aug 2026 02:05:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064E439B49D
+	for <linux-hwmon@vger.kernel.org>; Wed,  5 Aug 2026 02:11:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785895559; cv=none; b=fWPFXgZG8KjJAdGzDcj6hNVo1bvVVr9uL++Lxe0xuhmm4UrtL4UZ4o7UPM2t2lOjy/VuA41+8JVlmlOln4gEcT2pxJ9kCuC9p9kpQh09r3mHAeQRhQfr9elnxA8R5JKuoQBJOrsDVf+kV+tEh54nN6kcR9tr2KugY2nFrJBu654=
+	t=1785895920; cv=none; b=QSvag+1TNU7iQ5zdUgk0MvMHunqyANu5XH7XVVVNRUvheqQy8jNulBSapyDbbXGINnpw20GEOyik8zQBmcnDgZJdc+NYdhW1bYNy3Z4dnT6yZQsrll23u4n4CsV0BoPCbRim4kBPzfrq+1DpIZIzNk5ndyBsdL2RkZ2xgQDNI+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785895559; c=relaxed/simple;
-	bh=NZuSmd4eyh+yw/nRQXpm9y3lIAFZhYvw6Oe0MKc4ypM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=k6xZrxvbJ044mC0pRAyLiYDFeiVpyG9cBcstwHZI0fN2RkG9IH6jmOF3FvMNdFlZAev13W/HIBL6H+mVD7ZC7WqbD52lRra8MPkdn0CzXb55bdtLstWfho1UOaB4aP/3J7OfLcyuL6+6vq9hTcfib7v0u7nX9ny+oIJufLngB/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=TwqAeKVK; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1785895920; c=relaxed/simple;
+	bh=CB9LIOYKHhyae84sDg7NKQcXZGMnW2qVYY/y82v1H9Y=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=BaBRfhOs19FJeC+HcXHgxk8RPXNY6quCGN736VUpOza8WJkC/Wr2FZeR5VBPc5J6mhlaIqefZWLVMKSCvmhkgBB/uCCBoGBf10TfSLJalGdeVf0MAgOXHBTswuprG6kT7LMxSjrsCiby0Y/VbYJbBfHb0RkaBiIPk0kX96qvRw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e/oSPgmv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="TwqAeKVK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=+L
-	onZLi2huiBawDam5KLgmJ0teXSn4XMl3CsfYsPxEE=; b=TwqAeKVKwrme6iftNG
-	t8KRmFgY6IeV5wwG/lH2gWfTQFnasQ5fLmUbfbyvCO/ZA5vfQgGONyQ5UlficRl7
-	2QOmcSKvQpRp3xTUzmR4JtwHb7NJvvfoMdZlwk3BqXolEQz825CNdE6ODtnWdtuJ
-	Hc+RSATyI3SnlJqaQr6gqKPcs=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgD3P_5VmnJqNll1Jw--.15541S2;
-	Wed, 05 Aug 2026 10:05:10 +0800 (CST)
-From: Qingshuang Fu <fffsqian@163.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Sam Povilus <kernel.development@povil.us>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Qingshuang Fu <fuqingshuang@kylinos.cn>,
-	Qingshuang Fu <fffsqian@163.com>
-Subject: [PATCH] hwmon: (ads7828) Properly handle -EPROBE_DEFER from devm_regulator_get_optional()
-Date: Wed,  5 Aug 2026 10:05:06 +0800
-Message-Id: <20260805020506.958722-1-fffsqian@163.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e/oSPgmv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79FC71F000E9;
+	Wed,  5 Aug 2026 02:11:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785895918;
+	bh=U4UL4jd3KUcGmNLA6mig0AY5KB6fpztFbWcsf2sVS2s=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=e/oSPgmvQrObeufSoXFIMp/VM+e0i64IOuAk6nCw/JfE1cRnwmqPFVZVYn0Dt1Lqo
+	 u9s3OmCEk93f96AJEZ1t1V3omRULirEi/EQ40GVb+iKxvgmB8/aRxuMJxmspxKgQTG
+	 PT+BqSuS5WQyXP89rLdBAZ2UtjINj+Yu+uv5DipfeEISSZffADuriy7cZTmtdxqpDZ
+	 P5mn8ndG7OlzioLEY1tBBwTvu/O2BKEUbvBzkQEGwyQwsLdOyoAes5SMSALYsFyBDU
+	 5skWhJRwZuLw7UkFHcpiipXUJa6yGOMsy6DxDgfyP5MJs0qM32VxehK1WbaoKjQ1Iw
+	 JV7ovqaporz+g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] hwmon: (ads7828) Properly handle -EPROBE_DEFER from
+ devm_regulator_get_optional()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Qingshuang Fu" <fffsqian@163.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260805020506.958722-1-fffsqian@163.com>
+References: <20260805020506.958722-1-fffsqian@163.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 05 Aug 2026 02:11:58 +0000
+Message-Id: <20260805021158.79FC71F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PSgvCgD3P_5VmnJqNll1Jw--.15541S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWrtry7ZryfZw47uFWDKr1rJFb_yoW8Jr15pr
-	4kGas09rn8tr47XF48Aa4Fv3WSv3WqyFWfGFW5C3s0gF15Jr93Zry7KFyjgF12y3yfWw12
-	qFWkJayUGa47AFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRvfOOUUUUU=
-X-CM-SenderInfo: 5iii21xldqqiywtou0bp/xtbC6hbyvWpymlYToQAA3V
 
-From: Qingshuang Fu <fuqingshuang@kylinos.cn>
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-When devm_regulator_get_optional() returns -EPROBE_DEFER, the driver
-currently ignores the error and incorrectly falls back to internal VREF,
-even if an external vref is defined in device tree.
+Pre-existing issues:
+- [High] The driver masks genuine errors from `devm_regulator_get_optional(=
+)` by explicitly only checking for `-EPROBE_DEFER`.
+- [High] The driver fetches an optional external VREF regulator but never c=
+alls `regulator_enable()` to turn it on.
+--
 
-This could lead to conflicting voltage sources on the VREF pin and
-inaccurate ADC readings.
+--- Patch [1]: [PATCH] hwmon: (ads7828) Properly handle -EPROBE_DEFER from =
+devm_regulator_get_optional() ---
+commit 78230277b5f05df9416cedbd8b4b4816183523e1
+Author: Qingshuang Fu <fuqingshuang@kylinos.cn>
 
-Check for -EPROBE_DEFER explicitly and return it to trigger probe deferral.
-Treat other errors (such as -ENODEV) as "no external vref" and use internal
-reference.
+hwmon: (ads7828) Properly handle -EPROBE_DEFER from devm_regulator_get_opti=
+onal()
 
-Fixes: a8ddfea09566 ("hwmon: (ads7828) Accept optional parameters from device tree")
-Signed-off-by: Qingshuang Fu <fuqingshuang@kylinos.cn>
----
- drivers/hwmon/ads7828.c | 2 ++
- 1 file changed, 2 insertions(+)
+This commit explicitly checks for -EPROBE_DEFER when calling
+devm_regulator_get_optional() in ads7828_probe(). It ensures the error is
+propagated to trigger probe deferral, rather than incorrectly falling back
+to the internal VREF.
 
-diff --git a/drivers/hwmon/ads7828.c b/drivers/hwmon/ads7828.c
-index 149cfcec78dc..1c4a04cb023c 100644
---- a/drivers/hwmon/ads7828.c
-+++ b/drivers/hwmon/ads7828.c
-@@ -133,6 +133,8 @@ static int ads7828_probe(struct i2c_client *client)
- 			    vref_mv > ADS7828_EXT_VREF_MV_MAX)
- 				return -EINVAL;
- 			ext_vref = true;
-+		} else if (PTR_ERR(reg) == -EPROBE_DEFER) {
-+			return PTR_ERR(reg);
- 		}
- 	}
- 
+> diff --git a/drivers/hwmon/ads7828.c b/drivers/hwmon/ads7828.c
+> index 149cfcec78dcc..1c4a04cb023c0 100644
+> --- a/drivers/hwmon/ads7828.c
+> +++ b/drivers/hwmon/ads7828.c
+> @@ -133,6 +133,8 @@ static int ads7828_probe(struct i2c_client *client)
+>  			    vref_mv > ADS7828_EXT_VREF_MV_MAX)
+>  				return -EINVAL;
+>  			ext_vref =3D true;
 
-base-commit: c21bb4193868a8de71fc4693fa741e195fdf5d86
--- 
-2.25.1
+[Severity: High]
+This is a pre-existing issue, but does this code need to enable the external
+regulator?
 
+After retrieving the optional regulator, the driver queries its voltage but
+never calls regulator_enable() to turn it on. If the external regulator is
+not configured as 'always-on' in the device tree, the VREF pin will remain
+unpowered, causing the ADC to return zero or floating conversion results.
+
+> +		} else if (PTR_ERR(reg) =3D=3D -EPROBE_DEFER) {
+> +			return PTR_ERR(reg);
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does this error handling mask
+genuine failures from the regulator core?
+
+By only propagating -EPROBE_DEFER, legitimate errors from
+devm_regulator_get_optional() like -ENOMEM or -EINVAL are treated as if no
+regulator exists (-ENODEV). This causes the driver to incorrectly fall back
+to the internal VREF.
+
+If the pin is physically connected to an external regulator, driving it
+internally could create a voltage conflict and lead to hardware damage.
+Should we check for -ENODEV to decide whether to fall back, and propagate
+all other errors?
+
+>  		}
+>  	}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260805020506.9587=
+22-1-fffsqian@163.com?part=3D1
