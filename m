@@ -1,108 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D343CF20C
-	for <linux-hwmon@vger.kernel.org>; Wed,  5 Aug 2026 03:10:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC7635C1B2;
+	Wed,  5 Aug 2026 04:21:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785899414; cv=none; b=exbiGOeq+NMffSzP9PkBGXBZsbjrhr6LrxdDlpUywhK8l0zhmir0UNHndFsw6dbFtFDCqEh9WIaWicFikk0Epj7Q03EF9xBnZhfxLP2yGHDe3mZKeiKMT976GPvUyRSqmMLAokaaLRd1OV4NoB/S0pD+cvUmq+l9UUXybbTjXus=
+	t=1785903703; cv=none; b=YNjvy2d+4SZEobg2MAx6a9g5lDcDb0tVVfgEnbMHyni/XNNZk39vP0Zv98xesPWV2KrpEd0/LKsDG+yba5FAR3aZ4DzPtAdgCIsIniW4y8a+VdsSjqWkaiZqBsSG5dhJJlze2y+Cf9AIxbwaFIRmHBL2jTMKv3lpWa7UtZ8hdGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785899414; c=relaxed/simple;
-	bh=Qpr/TxQYH5DNohvgkUtPFZaSBS0tLbmBvSJunegjw+o=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Yg8Wbp1RGwzb0OLln0qUhgUqgQG9ENfHSoPtCxWAB6O+vrWvAbt1x0CaFoP28IWe5W4kPsbNSxB8k1+XAoZv/kVOEt5JK7nX6XWwRR8g6rqj4iSWCHWaSFyU04PKbYQLX3X+kYSU0T80C2138uOcytUS8P5BHMmEN+ZJt4iiXlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cyhn4cmE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785903703; c=relaxed/simple;
+	bh=uyWM9F2Ppzv3iqWbAKAZ3qbOulaTOy59EgLcnwbnDu4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=alugYeAfJaTCry2dWTF/zUKjWvhd0hQoJLxFXUk7PWgyNAmyFg4kyys+Ov1W74Db6aKy7bP6b2+LJDsIVh+9udsXIJ3q2SEk5xK6ZWjTxjQnj8HbPiNcVHABdoUKKMKUqaORtFXHi44aDAj84rdWdx6A911AJPJYlyB83AHDYaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=JEfRbQbe; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cyhn4cmE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07F421F000E9;
-	Wed,  5 Aug 2026 03:10:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785899412;
-	bh=anLaiHa9zYGRmYMM4rpVBT0Z/euxKkoOfBrjis7O4MI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Cyhn4cmEAYoRhs2dmteAbt1NM+uqovwXXYtmj1HpbLLh6yDow9GWZVSkhS1g15uEz
-	 x+e1ZEyA4BrtMRMtgGhO61FOeIIJHsWwcHA6ZFVwtn/AmbXvmteX03is0YgbS69VGH
-	 7p6Vb/wf6N5UMoILoWv6KwJc1k50FT7IbYTtfJFFqOaT+FU/cClL3rx9s3lKjIQAU6
-	 1qg5drrrHPP49Qh7/BOmCJ1ENnqjVuvZDGW4IVELLveoTSk94MFGCR0bQToZX/CLxM
-	 XL1HcQyYZ72yMntUQkKufdwlVp6eh1ErvuMTMSA1cxoVdCuezqPWCJQnEWk9tXz721
-	 xTf5PrrKWiQOg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] hwmon: (ads7828) Don't ignore errors from
- devm_regulator_get_optional()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Qingshuang Fu" <fffsqian@163.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260805030056.1082745-1-fffsqian@163.com>
-References: <20260805030056.1082745-1-fffsqian@163.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 05 Aug 2026 03:10:11 +0000
-Message-Id: <20260805031012.07F421F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="JEfRbQbe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=26
+	+BITxc8faSH64lvl90iAfZnnuBC+bdnjrcWAxUo7c=; b=JEfRbQbeRINrlijDLw
+	ZRDQNl9pR9BSv3jOf/zQQqEv7/de959MZ4RDu06klDAHyj/Nz2LJ/lm51XSRqsgS
+	WgLXA4S/DAvYUqbzfTXgGuAXeA1O92C6fL33mXIA/SRuVpXzcZaYafbB8DuWnC3L
+	fMfmEMB2WetEBWnKb+RPLwCNc=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp4 (Coremail) with SMTP id PygvCgAHRiIuunJq+tMjKw--.10646S2;
+	Wed, 05 Aug 2026 12:21:03 +0800 (CST)
+From: Qingshuang Fu <fffsqian@163.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Sam Povilus <kernel.development@povil.us>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Qingshuang Fu <fuqingshuang@kylinos.cn>,
+	Qingshuang Fu <fffsqian@163.com>
+Subject: [PATCH v3] hwmon: (ads7828) Fix external VREF regulator handling
+Date: Wed,  5 Aug 2026 12:21:01 +0800
+Message-Id: <20260805042101.1177736-1-fffsqian@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PygvCgAHRiIuunJq+tMjKw--.10646S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxZFy8CrW3trWfCry3Gw4UJwb_yoW5XFykpr
+	WkGFZrZr48AFyxurW8ZFWIq3WFqw18Jws5CFykKw1av3Z8JFyfXr90kFyYyF1xC3yku3W2
+	vryqyay0ga9rJFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRvdgdUUUUU=
+X-CM-SenderInfo: 5iii21xldqqiywtou0bp/xtbC6g-wu2pyui-WewAA3O
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+From: Qingshuang Fu <fuqingshuang@kylinos.cn>
 
-Pre-existing issues:
-- [High] The driver acquires the external 'vref' regulator and reads its vo=
-ltage but never enables it.
---
+The driver currently has two issues with the external VREF regulator
+handling in ads7828_probe():
 
---- Patch [1]: [PATCH v2] hwmon: (ads7828) Don't ignore errors from devm_re=
-gulator_get_optional() ---
-commit 49f8d154ff184810c29b27c75b5602ac3ecd4f65
-Author: Qingshuang Fu <fuqingshuang@kylinos.cn>
-Subject: hwmon: (ads7828) Don't ignore errors from devm_regulator_get_optio=
-nal()
+1. All errors from devm_regulator_get_optional() are ignored, causing the
+   driver to incorrectly fall back to internal VREF even for transient
+   errors like -EPROBE_DEFER or genuine failures like -ENOMEM.
 
-The driver currently ignores all errors from devm_regulator_get_optional()
-and falls back to using the internal VREF. This commit changes the driver
-to propagate genuine errors other than -ENODEV to the caller instead of
-silently ignoring them.
+2. The external regulator is never enabled. The driver calls
+   regulator_get_voltage() without first calling regulator_enable(),
+   so the VREF pin may remain unpowered if the regulator is not
+   configured as always-on.
 
-> diff --git a/drivers/hwmon/ads7828.c b/drivers/hwmon/ads7828.c
-> index 149cfcec78dcc..1c3a8ce8afb5b 100644
-> --- a/drivers/hwmon/ads7828.c
-> +++ b/drivers/hwmon/ads7828.c
-> @@ -133,6 +133,8 @@ static int ads7828_probe(struct i2c_client *client)
->  			    vref_mv > ADS7828_EXT_VREF_MV_MAX)
->  				return -EINVAL;
->  			ext_vref =3D true;
-> +		} else if (PTR_ERR(reg) !=3D -ENODEV) {
-> +			return PTR_ERR(reg);
->  		}
+Fix both issues by switching to devm_regulator_get_enable_read_voltage(),
+which handles regulator get, enable, and voltage read in one call.
+Only -ENODEV (no regulator specified in device tree) should trigger the
+fallback to internal VREF. All other errors are propagated to the caller.
 
-[Severity: High]
-This is a pre-existing issue, but looking at ads7828_probe(), the driver
-acquires the external vref regulator and reads its voltage but never actual=
-ly
-enables it:
+Fixes: a8ddfea09566 ("hwmon: (ads7828) Accept optional parameters from device tree")
+Signed-off-by: Qingshuang Fu <fuqingshuang@kylinos.cn>
+---
+Changes in v3:
+- Switch to devm_regulator_get_enable_read_voltage() to also enable the
+  external regulator, as suggested by Guenter Roeck.
+Changes in v2:
+- Broaden the error check to handle all errors except -ENODEV, instead of
+  only checking for -EPROBE_DEFER. This addresses the Sashiko AI review
+  concern about masking genuine errors like -ENOMEM and -EINVAL.
 
-	reg =3D devm_regulator_get_optional(dev, "vref");
-	if (!IS_ERR(reg)) {
-		vref_uv =3D regulator_get_voltage(reg);
-		vref_mv =3D DIV_ROUND_CLOSEST(vref_uv, 1000);
-		...
+ drivers/hwmon/ads7828.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-If the external vref regulator is not marked as regulator-always-on in the
-device tree, won't the regulator subsystem disable it during the late initc=
-all
-unused-regulator cleanup?
+diff --git a/drivers/hwmon/ads7828.c b/drivers/hwmon/ads7828.c
+index 149cfcec78dc..172da6f6549d 100644
+--- a/drivers/hwmon/ads7828.c
++++ b/drivers/hwmon/ads7828.c
+@@ -106,12 +106,11 @@ static int ads7828_probe(struct i2c_client *client)
+ 	struct ads7828_data *data;
+ 	struct device *hwmon_dev;
+ 	unsigned int vref_mv = ADS7828_INT_VREF_MV;
+-	unsigned int vref_uv;
++	int vref_uv;
+ 	bool diff_input = false;
+ 	bool ext_vref = false;
+ 	unsigned int regval;
+ 	enum ads7828_chips chip;
+-	struct regulator *reg;
+ 
+ 	data = devm_kzalloc(dev, sizeof(struct ads7828_data), GFP_KERNEL);
+ 	if (!data)
+@@ -125,14 +124,15 @@ static int ads7828_probe(struct i2c_client *client)
+ 	} else if (dev->of_node) {
+ 		diff_input = of_property_read_bool(dev->of_node,
+ 						   "ti,differential-input");
+-		reg = devm_regulator_get_optional(dev, "vref");
+-		if (!IS_ERR(reg)) {
+-			vref_uv = regulator_get_voltage(reg);
++		vref_uv = devm_regulator_get_enable_read_voltage(dev, "vref");
++		if (vref_uv >= 0) {
+ 			vref_mv = DIV_ROUND_CLOSEST(vref_uv, 1000);
+ 			if (vref_mv < ADS7828_EXT_VREF_MV_MIN ||
+ 			    vref_mv > ADS7828_EXT_VREF_MV_MAX)
+ 				return -EINVAL;
+ 			ext_vref = true;
++		} else if (vref_uv != -ENODEV) {
++			return vref_uv;
+ 		}
+ 	}
+ 
+-- 
+2.25.1
 
-Could this cut the reference voltage to the ADC and cause it to return zero=
-ed
-or completely incorrect sensor readings?
-
-Should the driver call regulator_enable() or perhaps use
-devm_regulator_get_enable_read_voltage() instead?
-
->  	}
->
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260805030056.1082=
-745-1-fffsqian@163.com?part=3D1
