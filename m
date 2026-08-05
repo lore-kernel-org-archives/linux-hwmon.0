@@ -1,68 +1,68 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2025138C2D0
-	for <linux-hwmon@vger.kernel.org>; Wed,  5 Aug 2026 15:28:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A784734EC
+	for <linux-hwmon@vger.kernel.org>; Wed,  5 Aug 2026 15:41:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785943727; cv=none; b=KyD3P8mhbBkkPv7pG7sgS+prMVSgkuBPAUBURg0ue1QXcAWlQqqe3lxOJ0TmQ8fbGQ4b2rOJGzUpfP1xwSIKgb3ZaYcYF+M1gOQ8c7q6TF8uinyxwGiTZeTN5Z0XtGnaSGOpDCarSHboX9RfDLEUT6Vim/VmR0YGqr3+SDjfDRY=
+	t=1785944497; cv=none; b=UYpNeJv6j93wWwcT/xJpjzJbQ3dZV19kUZcWUev4vtto3+viQ/3G7z/2ewlEtReQp6yc69Pl8+jDOY9DvyyxThQScTCoH42axK79ivj1ZikdGiVU48WlqbCR+r2r2lbnKIW5KIj7s4rZwXgyqpEHyxTcKdfJ2GmlMy/rSLAIb4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785943727; c=relaxed/simple;
-	bh=oH2c8xWhA5Y/hqX4HJqULRl3t01Uj0jNPXPaDNXdyuQ=;
+	s=arc-20240116; t=1785944497; c=relaxed/simple;
+	bh=yQ9ls3fenTTruvujb0qcol6BTl2G7vXT2O670i+f8Z8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YdZhE0Usqto2qPfy9HWl9oOqwM1UFyUCCMkObV3YoSC9zTfpKby0oIJXV6GqhUoVVEd8lqmIem2hDLxeJU4Xn+w7sDRyJcQNmDaDLYPTUD+/ozFd/GwnJFC8dXFKO+zTr/KXqSXzuIY8z0Vn5kZrc2iGN1fQOZnJi9NOOSSZVCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LZfdeFy6; arc=none smtp.client-ip=209.85.216.43
+	 In-Reply-To:Content-Type; b=S3X6Ni4n5jNcZ46FZUd2io5K51ekUGNSonA2hyFxjt4ZTBHgoea7BKxdoEQblDD/AnFJUV/kwrZdtGlcxhk9REdamwWDwyEFKkIz26Y3K6vy1br0QcBdSbXQNcTYGPD0VF7vrd8ZkIRhD7zxwoNQTs3CTzq8YS16r2Mgj00dOwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lcqqosk2; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LZfdeFy6"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-382ef647e20so1244098a91.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 05 Aug 2026 08:28:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lcqqosk2"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2ce7d2adef4so17691125ad.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 05 Aug 2026 08:41:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785943718; x=1786548518; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785944492; x=1786549292; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=euAjj5v9spvVbU87SbKkRLVKZRVH/7mzRMaCk1Nylks=;
-        b=LZfdeFy6e9ND3qJKbIIkYw0YGvae7xSh4uVjpBGp0vFfxWV/KEXZ+iztIuEwbhBwf/
-         4FFSnY3P8dj9fOyhMQV6NCHLX/dD6j+MZqpX5vt33cIkFYMVtBuckg3FJW8U268pzRnl
-         JuymIi2QykgTao4hza5orlEu1GN09MdM4RAhSXdxVkxJQwqwPeAd9AO6T4SvfVHPYPFj
-         jmEAnD5uAy0NDF2sd5Z1Aq9+LKSKMCXuNBH5PQfE3AZlbTaq58ar0W+hTfFNLOiSoMH0
-         XvLUL3VJQXR+PQVFuSvCa3/aS/3t1uSzf+xz75a5nv3+Ze7VHWnmTlaSLGdWxjQUXG0+
-         Wbfg==
+        bh=1LUdZfMnBrPjlY/RBS0sFvirY5cDVo97fG2tCiWJ45Q=;
+        b=Lcqqosk2IBmGJKIKqlYTDxERJ4LpGXUJyXDgFUnfIiF9o+VD6MM7jVsJc+YzFtx9Fb
+         JBrED1nafpPiWlcPtfMzmqypWDa1cuM4vr8IrkZIA11QY1pP1OqenMrPmd036GkaX9zm
+         V69+G9Js39VYkYbvJvJOAgJm9LeHkoMt52UIk4a8TD+5/gp5JlmbKXpYWZX8UGZGm91K
+         vy/3RCH2uHSLhVN1dT3SNCcMhVa3LGZmbT7QTc8xd1YRWJ4YwjtW4HDbdyZ/KcLLGXBA
+         xaFT3ODjvzQ/QlCqDoFu6devCvosMll/Mlqy7QEk8iMrZ3pWQk5LNPbMpW6BtskKY7S/
+         /Ojw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785943718; x=1786548518;
+        d=1e100.net; s=20251104; t=1785944492; x=1786549292;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=euAjj5v9spvVbU87SbKkRLVKZRVH/7mzRMaCk1Nylks=;
-        b=fXOtaBipdUmFlRhSEuljObq79+/6jzdQPdBYr1VgmJbyB840WNJ9la0lFkYWPJPOfM
-         rh9OBHEDClOsPcPspRQEgV9dWlXrXTSCPejjlTfkeeRpGe8PpoQrrelXxHvnWHxqBztE
-         VtX06VBGtwC1N4arYYzSbNWGSNnMtGJ7ZQsG3vcSnecYHvYPyq1q/YZatzcCzVgYWsOk
-         cfKRuGoCjmPuecK5XAZ4HzAsTXihvfZvfNaieVQ5xjPX3f/Feg91V4Ue6tKM2lvIQL4K
-         Yf7XK9homfmnUSi0w4GPaBsATx+uazz9aPMynQmkGXcFgUEvUM+eMACkxA9zTcGKwIa5
-         TKbQ==
-X-Gm-Message-State: AOJu0YwxmrwonsQ0CdY/CQpOTp8//gwEnkXPhV5CAL1i+uX7f6HHJwUm
-	60JsUi0xQqmFGeIYqsFxrqGMwHFUTbsVGhy/+6TIeCRuXStIiOcOUX2o
-X-Gm-Gg: AR+sD13L/im6T0rcx3ppdLjLXxwbzAWSY95oWnMVFCWI9oUpglZzDAp3YO+rJd2T0R2
-	Ng8Y8PJ6bOCV28u5MBz7YZ+P8ToFfqxNtivZ7RngriqVD+u5iBv/Ocs1+pgCSXwQC+LlrKZ63Wy
-	fLqob+vQi+m/MDRir6nzSSPRrxnwMfLFoMIORC8qHS/xrCKlAcZ1E645Ld4NmUQVR2y6IyzKlb+
-	ivh22mWPV0cNjtgWJ5/76+S71G+VENChn0Lczec9sKyGsma2jZ2YB7UTvTPdu5h7fvCeTCBv5+D
-	LRxtVTrwn/OoWh90+Yie/ZwNqhnZwPATP8uvY+EpBrUnbM6aaSo1T33P3qHkj1h+oOqmltwhf0c
-	Oh3dF5hSMUqBmT6JLFc1y2bWtIhxNq90acCv8buKJHUwqL0/YD/OM9dEt/XXnUKbf9U8et2kUlR
-	2D5rBuoQ056aL8CJgWb4DGRLlK7ePTOouNCkaieJ1hMHfvA2HyTYqha8Ddwdjl+HRtvRsvA2V1v
-	yB9qXFUj1+n7qNzeczR0NLAV9ZLAmZJG1Oq6Q==
-X-Received: by 2002:a17:90b:274d:b0:38e:fea2:df53 with SMTP id 98e67ed59e1d1-3903c534d46mr9263643a91.4.1785943717871;
-        Wed, 05 Aug 2026 08:28:37 -0700 (PDT)
+        bh=1LUdZfMnBrPjlY/RBS0sFvirY5cDVo97fG2tCiWJ45Q=;
+        b=p5E+0PL285JNgUp2HyyUaxCA9pm5boaX8MXWHed/7dPjVO6DNmUzfLB+HeeIRBqha9
+         WzYrzK+Ixp/FSPoMNckQBDrDa5uEVwY0a9YxRMXSHKMNCReXqXamP02Usq2omm00y2Xn
+         xTJBa6YpHXJSbFnYmV/D9u8fkHMvd2hoDZgpSn+L1dlvd6lRan29SdDR55SP66gzCxFs
+         vcGx+457yPF+aARaIJ7Koh7fpfvcYIk9usH6LMj2HlFxgjrdclrvEKbgKsXzWK1bcwMT
+         x7Cne6JF4Rkulu1IPDuskh9hb6IJD1yiHeYj/ACfz6tE8M7riPx+8F9ANjQuRySUWhVJ
+         gTYA==
+X-Gm-Message-State: AOJu0YzbIo5NRoolEQg+YBhxNcU/Goe8H0RV3JskyrplwdRbW7JcuZzu
+	iImnpr1xv9Wd8gMoCOhnp4PCSN2cA95W8ZCQTBplQFgLsQzBL7gE9G5j
+X-Gm-Gg: AR+sD11KEVB6vvqWRymscG6P+nGJ+5vVD3fLEwzuBNjVjxdlX8xu6Ipd9cM+/A/Yz6/
+	PE43RraBtOrypX6mxckqe9ZOj0FjhT1K/GsgPZvR36Q/MDRdIUKs/3Kx9dLET5Z6RXKcVsTWcR8
+	3ipnZXaSPFyLdRCEeKR+Ib7sCPhlLvCgCKPx1PM8A8SNPOlAuN1hMEznI/8TI10aloP6cWe++TW
+	j5h1/kX2ZWjNOFmKKxrP1EYmDrEz22lxcqLDuqh1NaMDmKhx0hGxjKrkuwN3AavjzQ5/Avu51lu
+	DNjr/0QRC0D88p2vt562kQou8ar6rN6tJmV2iYk41D5HhkWDXbRO5Rt9rtzlNkgbDwF8mvi6Lx2
+	bTpypVlAvvzyqjaRGEfOr0cuy8ojf7Mw8mBqD5f5Z0XNZBTHfKyZtHfvKS4duiotMAreyi+kHfN
+	ERn3VMjGMS0TA21spM8n7f5V+1vekCSyQGHz2NAy0DN8xCyTEd5phbR9Xl38eCq4SRkdhNuhfWj
+	nVhJGu4qV53K3FjYfQCx+i8PcfBJrmSSLtOVg==
+X-Received: by 2002:a17:902:ce0b:b0:2d0:cc92:f7ae with SMTP id d9443c01a7336-2d0cc930319mr95161125ad.3.1785944492105;
+        Wed, 05 Aug 2026 08:41:32 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3903f5ab7a4sm2000388a91.2.2026.08.05.08.28.37
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d0aa012bdfsm18581105ad.33.2026.08.05.08.41.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Aug 2026 08:28:37 -0700 (PDT)
+        Wed, 05 Aug 2026 08:41:31 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <23453025-34e6-4e8e-804a-7e0a36a32abd@roeck-us.net>
-Date: Wed, 5 Aug 2026 08:28:36 -0700
+Message-ID: <b1aec4f9-020d-451b-ab5b-af48ab2671bb@roeck-us.net>
+Date: Wed, 5 Aug 2026 08:41:30 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,13 +70,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 3/3] hwmon: (pmbus/tps25990): Add TPS1689 support
-To: sashiko-reviews@lists.linux.dev, Stoyan Bogdanov <sbogdanov@baylibre.com>
-Cc: linux-hwmon@vger.kernel.org, robh@kernel.org, devicetree@vger.kernel.org,
- conor+dt@kernel.org
-References: <20260805090400.2059006-1-sbogdanov@baylibre.com>
- <20260805090400.2059006-4-sbogdanov@baylibre.com>
- <20260805092026.A43961F000E9@smtp.kernel.org>
+Subject: Re: [PATCH 2/3] hwmon: (ltc4282) Clamp negative current limits
+To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>
+Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>,
+ Nuno Sa <nuno.sa@analog.com>, Sashiko <sashiko-bot@kernel.org>
+References: <20260805005721.1566034-1-linux@roeck-us.net>
+ <20260805005721.1566034-3-linux@roeck-us.net> <anMAcWIbE7_wOjIv@nsa>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -122,21 +121,70 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260805092026.A43961F000E9@smtp.kernel.org>
+In-Reply-To: <anMAcWIbE7_wOjIv@nsa>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 8/5/26 02:20, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 5 potential issue(s) to consider:
+On 8/5/26 02:22, Nuno Sá wrote:
+> On Tue, Aug 04, 2026 at 05:57:20PM -0700, Guenter Roeck wrote:
+>> When a negative value is passed to ltc4282_write_curr(), the signed long
+>> val is cast directly to u64:
+>>
+>> drivers/hwmon/ltc4282.c:ltc4282_write_curr() {
+>>          /* need to pass it in millivolt */
+>>          u32 in = DIV_ROUND_CLOSEST_ULL((u64)val * st->rsense, DECA * MICRO);
+>>          ...
+>> }
+>>
+>> This cast converts negative inputs into large positive values. The
+>> subsequent division result overflows the u32 in variable, truncating
+>> to a pseudo-random positive value. When this is passed to
+>> ltc4282_write_voltage_byte(), it is clamped to the maximum limit instead
+>> of zero.
+>>
+>> Clamp val to 0 and to the maximum supported upper limit before the cast
+>> and assign the result to a 64-bit temporary variable before the division
+>> to avoid the underflow and an also possible overflow.
+>>
+>> Reported-by: Sashiko <sashiko-bot@kernel.org>
+>> Fixes: cbc29538dbf7d ("hwmon: Add driver for LTC4282")
+>> Cc: Nuno Sa <nuno.sa@analog.com>
+>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>> ---
+>>   drivers/hwmon/ltc4282.c | 6 +++++-
+>>   1 file changed, 5 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/hwmon/ltc4282.c b/drivers/hwmon/ltc4282.c
+>> index bb7f6727c44d..bb1bcb369016 100644
+>> --- a/drivers/hwmon/ltc4282.c
+>> +++ b/drivers/hwmon/ltc4282.c
+>> @@ -14,6 +14,7 @@
+>>   #include <linux/hwmon.h>
+>>   #include <linux/i2c.h>
+>>   #include <linux/math.h>
+>> +#include <linux/math64.h>
+>>   #include <linux/minmax.h>
+>>   #include <linux/module.h>
+>>   #include <linux/regmap.h>
+>> @@ -929,8 +930,11 @@ static int ltc4282_curr_reset_hist(struct ltc4282_state *st)
+>>   static int ltc4282_write_curr(struct ltc4282_state *st, u32 attr,
+>>   			      long val)
+>>   {
+>> +	s32 ulimit = min_t(u64, INT_MAX,
+>> +			   div_u64((u64)INT_MAX * DECA * MICRO, st->rsense));
 > 
-> New issues:
-> - [High] Incorrect scaling, missing boundary clamping, and unsigned wrap-around for TPS1689 PMBUS_VIN_OV_FAULT_LIMIT cause severely corrupted limits and bitfield overflows.
-> - [High] The shared 8-bit warning limit write paths treat PMBus direct values as unsigned, breaking all warning limits for TPS1689.
-> - [Medium] Missing scale adaptation for PSC_CURRENT_OUT in tps25990_probe leads to output current readings being off by a factor of 1000.
-> - [Low] The intermediate expression in the read path for PMBUS_VIN_OV_FAULT_LIMIT unconditionally underflows in unsigned arithmetic, violating subsystem guidelines.
+> I guess we can do the same as in ltc4283 instead of just assuming
+> INT_MAX:
+> 
+> https://elixir.bootlin.com/linux/v7.2-rc5/source/drivers/hwmon/ltc4283.c#L765
+> 
+> And so we just account for isense_max
 > 
 
-Please address these issues.
+Sashiko isn't happy with it. It suggests the multiplier in the limit calculation
+should use MILLI, not MICRO, and that a 32-bit operation could overflow.
+With that, I'd rather keep it as is, or drop that patch and let you handle it.
+Please let me know what you prefer.
 
 Thanks,
 Guenter
