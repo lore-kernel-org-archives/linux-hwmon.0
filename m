@@ -1,68 +1,69 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C4351F419A
-	for <linux-hwmon@vger.kernel.org>; Wed,  5 Aug 2026 02:51:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA8FA2EA732
+	for <linux-hwmon@vger.kernel.org>; Wed,  5 Aug 2026 03:00:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785898281; cv=none; b=Cg6aluxflRqxBTCJ0Lj3lOdPFw2J8HmDpPeOsg3MpqtYgCclNCODDg2LjkbAeRp14hiIfImo9FXA2n/WZPkgeR50U5z3IoQzkTa+9+l8YCkmPva84Aia4nAeQGDt7moUT5Fa75YR2pjN+ZCLTg/3uFuDAP1LYKV8NDxCDkK9WuI=
+	t=1785898842; cv=none; b=AajtvlX3oaw+l044ABBMZ1HTjyqTvU0ON13GE3zh3ldW3NNbZVhM9xe3+WBum2u03Abzjp7HHEScjOja87xEkAG9k+APOBuNZ4FPRYZH+9ZbiN2aO+g8Y/oGi5Nv6q6XjZMeCMbvHvMFBP81rP14B0DN8/9HLvaSI1sFsjeKO+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785898281; c=relaxed/simple;
-	bh=7/2LB3Av9kHtvKKEFbTym3NGe/DZzLMld9p2wFxgLOk=;
+	s=arc-20240116; t=1785898842; c=relaxed/simple;
+	bh=+VuQhcSer8nWg4SZeZ0n/RjT/bBZXVsj/z9GVDtu0dw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EDG5AyGwCaU/b95epyOHN3JzaR4dABnii0E/z8Fr0e5QqhesdaCkxaWc8LN6ymIiAa7DMf15VjFL7z0hMXpAAQvf4gLjS6RQY/F9yJEahgofPg8cO+ON9ZgFvAouS+nNfshx8TpYBXtFzv0Bea4c44MsoJOYS4AgtrS4c0WdvY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hatkqWcy; arc=none smtp.client-ip=209.85.216.42
+	 In-Reply-To:Content-Type; b=mDmbZ2cDthEp0Vog+2+ED9xa0AjW3RFjcwzYNBJsK+V4eOkgXsUppSjPf78LSXpxXSmJPuycRj8dby5k/aY13ic9Lo9QGEkjJ950rVzDagSLHBijrgg1sijOPl5fvgdCxckPha8PT3CZBcW+upSXkGqvycyteiimvLkmrwa6L/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UMJ2fwjg; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hatkqWcy"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-38e88b60121so377163a91.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 04 Aug 2026 19:51:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UMJ2fwjg"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2d02b4c3601so6067255ad.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 04 Aug 2026 20:00:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785898279; x=1786503079; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785898841; x=1786503641; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Hb7cpiF1haPDfic8xNq1MIp0OroCt8boGG/yMAW7dr4=;
-        b=hatkqWcyd6RBL28OxWPrXIlyrcwAZYgGpt1o7DYULuxZwo/UtDQ/UcQQ/5HJppzdr7
-         MPoNYEswEjt5X7aC2I5uncgJ0inmiZI0nsyYQDM5EWLBv0xxHDoHvRz/KkMKxI38Rrna
-         TpPdMhnKcGZY5fkfaEn0aUy2sszO2bXr8iqQxoBmM1jMhB2EEv4w3pkH3wyBKyffW4KQ
-         RJfJiSbhgAjChFLkPY7U6PyHRBwEFKvKS92uE2Bl28a8oM4zFCYJP4kwWwDBzKpZ967X
-         bEjOy5NG5Zx/h61vsGxqtIswDhnwqzrMwprf8fgLCKMdNNrfYX/X7Eac2p1Nx4nRvFKj
-         0PJw==
+        bh=n4040ksGrhA9/cRKrc6XpBcuZBsxi1FmWIRVWqRAOF0=;
+        b=UMJ2fwjgtmWnvOdjMjlDxlfIuSnCsQ2cpGEEK5vn9fwWaiW55U/6YYtu4h1jguoSCb
+         tKO69slaIIgx3WwBFXlktFTetqeFsERtjR7TlCd3BL/sTiwbZDJ9XquPaWtxc/GS9Oj2
+         ERuvBri8AVIXDAMQVXwbGd3pgX/WIL95fd1VFrAuJd7aAzeOhvZk828waWnYA1yGh//S
+         B5MtVJ+gB0bfOQseBfV7yN8mqOdVVxk2TCMfnyhblB3jbOk/A51v+uNvIRdEbn6CUFaH
+         Mp62UyfEBs88LuASicsKMgkYbdk8KllVTHMjpSkmFnhaqR4eWWRA4Yh7XIkijPh92URE
+         WJ/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785898279; x=1786503079;
+        d=1e100.net; s=20251104; t=1785898841; x=1786503641;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=Hb7cpiF1haPDfic8xNq1MIp0OroCt8boGG/yMAW7dr4=;
-        b=Wywn4ayaqMaWL0R6uKPy7B5SXdHRgQDZh657By2QjFKuc9SOVRbffKyGfMa7u70sFn
-         tK9s+ukM4+EpD5QGsPeSsMK7bwcxNLEtUlyU1S8wIM3PrA6nJnWHkCzsZQA0ueRbGMbE
-         gufjgBbEB+/BP+HtwU6yExCFENfDm+Swh16LCnwSNYBCpUizfykjYBdTWcTRp2Z2iUIP
-         YSK42Ew9pN6wXMFLH/A4EOBScGIlgpi1RpO8F3JGuhghJs+Wo+m3EnnYakRORajQH1nu
-         96Z+8q9wVB3zknfuLBXYnauGCfH8ouV46ZwEPlu8XMTjqRvxNZ4jgWTI9LeYRrLFjA1Z
-         jqcQ==
-X-Gm-Message-State: AOJu0YzmlBzxDNMtPhP7RTajrQ85Y6Udtr7FtfW/LIrFG4oQAerXxRzz
-	03TYSK8eebtvXXDCbdiPLsJlB9zC8+excX0uvV+XMfRxMWXiMtme5cMK
-X-Gm-Gg: AR+sD11R8xCX5lacfWUO0kJZSduXDKyv8iY86GTULmyUAQLKxgFLotKyl40A0nAiVAR
-	6DM5P+qkTCpQgJP/y101kPwrvrMDGlQLDLahMgE7JHFM0O4fGTtj7A7z7bls9CljsyL3gjCOn6g
-	MhvOqQig3eJ0QeZa5LkB6ZzuBMMTASz37xw5fiPbBvHRApLmZMFt7PRjHXElEotfkaaf3wNVgz4
-	uNhieOtFTPtqMXUO8rXtb64FZ4SwobbSXXKFpqFx6tnTmfRA7hpfIixCy0DbXhV4crj/fKfNkf1
-	vO6W5xB0mJixtIq5rFAUmnkESrUDy9ks0YXb4Arzouv4jUS2e3+8D6YtcnWPnGA2uAclV793peP
-	jcGyZYYy+FL882m21mUQ0fnDnMnrk0UIlIlOlAtYDTPRyEdqMpxQEB28Ov1exX38pibEM6yMiZM
-	geg5SeISnvd7ffVmXFoSQKOBRb4t7qL8+ZKTbFcBaJYp4ISgq2Rb7LHpXsZ0X5naGI41aeYjCEy
-	TACNxqEzcnZhwEGMmwM+9w76SLtGXZUkYpA9Q==
-X-Received: by 2002:a17:90b:2747:b0:37f:eafd:3505 with SMTP id 98e67ed59e1d1-3903c5588d4mr3503110a91.6.1785898279305;
-        Tue, 04 Aug 2026 19:51:19 -0700 (PDT)
+        bh=n4040ksGrhA9/cRKrc6XpBcuZBsxi1FmWIRVWqRAOF0=;
+        b=ZB+6Zo2l+492Y5N6ofd1rmYIWgMs8E0M6xJ98DpzxizD79PojP0Y1DRE0iWQGwiihH
+         hhMleEv6MUhjSUhp1tBvvv1hez/vcsEsu1VqVgWWR3MAAsgkssarTdHgEGnZYlzQP3e+
+         bqvxJk0zLnDKi5DBYWB9NWMC6K9keuIwKdp6MzmF5R0VUhtNGJiZALbcKYGwFWDaxVX6
+         TNAjNLPxUuVL7d6/HVfqkeR8CfWQQadRzGUmGA1SpkQf2floxvAvcJyDZYYs1x3LjBkR
+         rxI/Kd9pfDMDy+HGfaWQfs+nEbvFs8z6bIKMD8SHPfPHJgHkcI9o7vm2cQd16x5YtaYF
+         tT1Q==
+X-Forwarded-Encrypted: i=1; AHgh+RpezOi/hToaNARCb2MxH+Rqf/sTVRmnA7UcF3ZT524seBzC3i7+sW+VT6brxyh7Fo6OWS8UxsDI5DGXaQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFnREkiL/sEIXBbxrw+J9KvhQTQ+/2K42HjWYhOvYIQX1HofEG
+	HCqBJuzchKp1tGBI6H6oYwiAtIKIG7yyqFu4IXCjiv7Ho2LlyCHL18jE
+X-Gm-Gg: AR+sD11hk7tu1MKKQhzw84qrgPANGjxjZki5MSguZb5HMMv0ZSZ7k4Q0AnUphvbMfFP
+	v18Aa+OY6qQx+eyyewqmATDkM3MAoqzY9HKIqRdjnhEjAqMuyJuuh1SHCgl4oZL37nxiIgqa+zE
+	Gd3HPHFfeoM1lTZFwET4WEDwnxyM8v/JQfTcf6YsMntrNnhPsEbpfPnRP5Irffw7wTkQkq9SCJ7
+	nwbXz88qjvsBZVFNiYdNGqsLutyxUZEh1wFCGuRokNn4svxE+xnh1gfVCXPFOpps2z844NkPPup
+	GbBSOcPkT+B4ELyM3pdQFQC27S2g/iPG+rbc3aHmZy/muzxBEHQidkO8pMVGJ8tnJ2h9gyv8W/V
+	IhQHS41PPaQ/uh+0h8/GFffL21i/cwXYEZrZiN02ue7cJ7GyMnUk+lQGq73g6tPRJyPppBWCx5/
+	MYKTlz7kI3NnjW2AWBD/swzUAzrhouSS24dBZfz6Pfk0AhJ9Q+leiKJQ/QS3V5sSsSYk9x/fTqP
+	3c5vyPpzT/MxREpju0QoiqRhf/d3FHPe5xGLw==
+X-Received: by 2002:a17:90b:264c:b0:37f:e326:6557 with SMTP id 98e67ed59e1d1-3903c598e8amr3509484a91.4.1785898840828;
+        Tue, 04 Aug 2026 20:00:40 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38febffb2ecsm2792333a91.8.2026.08.04.19.51.18
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38feda512fesm2887722a91.9.2026.08.04.20.00.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Aug 2026 19:51:18 -0700 (PDT)
+        Tue, 04 Aug 2026 20:00:40 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <19d0921a-b09f-4af4-8e21-a4d31f09fa07@roeck-us.net>
-Date: Tue, 4 Aug 2026 19:51:17 -0700
+Message-ID: <04a58bd8-df9e-4c66-ae19-8473d6ab9c41@roeck-us.net>
+Date: Tue, 4 Aug 2026 20:00:39 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,12 +71,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (ads7828) Properly handle -EPROBE_DEFER from
- devm_regulator_get_optional()
-To: sashiko-reviews@lists.linux.dev, Qingshuang Fu <fffsqian@163.com>
-Cc: linux-hwmon@vger.kernel.org
-References: <20260805020506.958722-1-fffsqian@163.com>
- <20260805021158.79FC71F000E9@smtp.kernel.org>
+Subject: Re: [PATCH] mfd: wm8350: propagate ADC read timeout instead of
+ returning 0
+To: Ivy Lopez <skunkolee@gmail.com>, lee@kernel.org, sre@kernel.org
+Cc: patches@opensource.cirrus.com, mfd@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+References: <20260805014221.16412-1-skunkolee@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,69 +123,29 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260805021158.79FC71F000E9@smtp.kernel.org>
+In-Reply-To: <20260805014221.16412-1-skunkolee@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 8/4/26 19:11, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+On 8/4/26 18:42, Ivy Lopez wrote:
+> wm8350_read_auxadc() logs an error via dev_err() when the AUX ADC
+> read times out, but then falls through to return the masked value
+> of `result`, which was left at its initial value of 0. Callers have
+> no way to distinguish a genuine 0V reading from a failed read.
 > 
-> Pre-existing issues:
-> - [High] The driver masks genuine errors from `devm_regulator_get_optional()` by explicitly only checking for `-EPROBE_DEFER`.
-> - [High] The driver fetches an optional external VREF regulator but never calls `regulator_enable()` to turn it on.
-> --
-> 
-> --- Patch [1]: [PATCH] hwmon: (ads7828) Properly handle -EPROBE_DEFER from devm_regulator_get_optional() ---
-> commit 78230277b5f05df9416cedbd8b4b4816183523e1
-> Author: Qingshuang Fu <fuqingshuang@kylinos.cn>
-> 
-> hwmon: (ads7828) Properly handle -EPROBE_DEFER from devm_regulator_get_optional()
-> 
-> This commit explicitly checks for -EPROBE_DEFER when calling
-> devm_regulator_get_optional() in ads7828_probe(). It ensures the error is
-> propagated to trigger probe deferral, rather than incorrectly falling back
-> to the internal VREF.
-> 
->> diff --git a/drivers/hwmon/ads7828.c b/drivers/hwmon/ads7828.c
->> index 149cfcec78dcc..1c4a04cb023c0 100644
->> --- a/drivers/hwmon/ads7828.c
->> +++ b/drivers/hwmon/ads7828.c
->> @@ -133,6 +133,8 @@ static int ads7828_probe(struct i2c_client *client)
->>   			    vref_mv > ADS7828_EXT_VREF_MV_MAX)
->>   				return -EINVAL;
->>   			ext_vref = true;
-> 
-> [Severity: High]
-> This is a pre-existing issue, but does this code need to enable the external
-> regulator?
-> 
-> After retrieving the optional regulator, the driver queries its voltage but
-> never calls regulator_enable() to turn it on. If the external regulator is
-> not configured as 'always-on' in the device tree, the VREF pin will remain
-> unpowered, causing the ADC to return zero or floating conversion results.
+> Return -ETIMEDOUT on timeout instead, and update the wm8350 hwmon
+> and power_supply drivers, which call this function directly, to
+> check for a negative return and propagate the error rather than
+> using it as a voltage value.
 > 
 
-This should probably call devm_regulator_get_enable_optional().
+I am not sure if this warrants fixing in a 17+ year old driver,
+unless it is observed to be a real problem. It appears to me that the
+error handling was likely not implemented on purpose.
 
->> +		} else if (PTR_ERR(reg) == -EPROBE_DEFER) {
->> +			return PTR_ERR(reg);
-> 
-> [Severity: High]
-> This isn't a bug introduced by this patch, but does this error handling mask
-> genuine failures from the regulator core?
-> 
-> By only propagating -EPROBE_DEFER, legitimate errors from
-> devm_regulator_get_optional() like -ENOMEM or -EINVAL are treated as if no
-> regulator exists (-ENODEV). This causes the driver to incorrectly fall back
-> to the internal VREF.
-> 
-> If the pin is physically connected to an external regulator, driving it
-> internally could create a voltage conflict and lead to hardware damage.
-> Should we check for -ENODEV to decide whether to fall back, and propagate
-> all other errors?
-> 
-
-My point from the other reply.
+On top of that, as is seen a lot lately, this fixes a rare issue
+that is likely never going to be seen in the real world while not
+addressing the many real problems in the driver (as reported by Sashiko).
 
 Guenter
 
