@@ -1,260 +1,230 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97E237204A
-	for <linux-hwmon@vger.kernel.org>; Wed,  5 Aug 2026 01:42:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF883AC0C3;
+	Wed,  5 Aug 2026 01:54:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785894165; cv=none; b=Y73TF3GWueQl23iIsriUwp4pQ594j9bJYveUDAFM1g6iy+de2DnoF7sWztUGesud8pZ/4NZjRko/AhiSbJIco9CCcUB1/h/olfSun/JOuOYvB02fwaPUcTqDvoo2sGtGRha243JaXgKWVtc5hRDFMW/ddxATc28UrYIqGNG0pw4=
+	t=1785894886; cv=none; b=X9o0xy6Q3gJO9bNjCLlIJFxIZQHZb83IYUt7GUW3N0occeCPY76Sn+gAkwtR4TxvRVFWhxqM95gpXi7onxLDNtp5u3mW+CIWKwRZA2A6d4RpDD4lCB212gtTIiKHr+n/CMzlRoPv0e+zTvHiMPcOKzD8Aw1inOFbJ8uAEfbw8rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785894165; c=relaxed/simple;
-	bh=ekYyjbGDCMIjKTojcaxhwQ+AMRhdvTKOaGTvjM0ayMw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=euiGjPxeCrXlFfNSParlLfjXyn98UiJDnp4+/rR+wiwxkfT5fX3t3xtOSMamSZ6HjTy+ukRAYC7JaJPka2q8J9cf9a2DssjXcrwgzqAiEdFY6IKoISfFR5JOpu2SQ99Y0Up1166YphX+7ao1aXkssyLEtDbUAM70rw0nIE0aVc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZWb4GEdq; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785894886; c=relaxed/simple;
+	bh=RH/0HXmrddyruFd6Vy0PnXTnrHiaivftlKKQ9qaO0fo=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=QIfsyAB4pmEUr73eD4UtgfIPIoMDhOOMOgkM6z0CNW6A13LuVLiz6dx2415y3NjwkxSEZW/Tp+5onvzcmL7GAz5r8U9yszZ9U1Ot/3ncpckv4ayZ9NL2nDOwpwruIiKjYv+/3ZhyevYJV/+UHzHqkgPFELW1fMoiIhI8eYN0+b4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BuMAYWNw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZWb4GEdq"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-ca00f126b7eso273479a12.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 04 Aug 2026 18:42:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785894160; x=1786498960; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=WtsicDUzlvcscfC5dX4W8BMmJ9vs/CpiKg/Y+8Yj9KE=;
-        b=ZWb4GEdqrrrlv0oCe5ue9ABZJ+TAXWSJ6Fkvrv6mi/rdkZ2TDVVqzNJ+aIckx1iPX9
-         f6HiZXK4tDl1qCmsbQAZY1oTP2sc44yCN3OYM0HULT5VQYFkBsPUt1PvO6zOCo0HvexS
-         cPnJsvzxnGlbFyDKKFEMA0Ew31wU+P7lcFan6PIjxkcgzZ7QqYhyYTupn8eNHAoWfxFf
-         796t5fQzxwbMBn8tDuhgHkBGX9EkToxTVQntw88dzh7BvdUZom89DBF1qtWwOVnbKLzA
-         2phMf/CBYQ3pNO9TXxcD9XaYOOycNPSryUC1+JxjRowmD6uZUEITqyqqcT8zMDfm9Mur
-         G7hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785894160; x=1786498960;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=WtsicDUzlvcscfC5dX4W8BMmJ9vs/CpiKg/Y+8Yj9KE=;
-        b=fD2uBgujkwfCC/l8tHcHJFdrLHFDNtV83I1kalIkwSoW0czq5x1u1rhC2CotG+CCWG
-         f6doWeQhDftgMJtbfgxieIq2DexFIqeFMR/krR2fVavZb+wmp9Z/K2qX15XG3uXPiUsO
-         h5vEGaHR7V/uw6hAb9Pxp641z02ukB2ESK+txGaPHPf8gm4MCqpugN03cb/F4sRfWn3C
-         GM5hZVHeFjp/sM46PEXtEe5WleX6pfCe9gpeBn4BDD8L/0DfaeSsNPjbfiKz9kbLqJd1
-         SUf/j1Sp2Y+qJ8cXx9LVOn9TKETzmatdG/C8nZ+/4VDTF+Wf+spMn6+nAcV/p9JUm/ke
-         fFWQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrpJWJl3slOUo5mvr5EIRiTyXi44ln+oCuCir7enlPDJmPrCdDBOP1NHQcoovYVDYaWZSRldEs49Rud/g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTcEgO7ZcPTlkumAN8206xy/30dehteQPttSPEFu4aw0ZbIva+
-	xj095nDzWhFTHkHnPrOU1wJzhcpzQLdkVGUpY1tiYs0D35+R1qY+6HpZ
-X-Gm-Gg: AR+sD13XS4ttlaByNtE6hFweB9sh6MvL2xcMIp0PoHgWXdidTd3MHBQ1tJXFAHfeL0N
-	dVF9oDgggpkY5P3yeiLsBGVy7096DVXC/Xo5IkKZgWOBT9i8/sxAK82JFODDUC2PcE65e8CSR/7
-	cgTL0DC/x5y+hRejj5oqh4rdHA74y++y70+yphACKsoyAxodDn8p+bj9DX7HlDr5TIfT9nG5nGN
-	JdN9Xh1aIEQfXdj2MJesfQVfWnnMxIytzmq04PKcffE11NtPpj7YWS9EaIQS9OXMOJRiKu5lcmT
-	WgL5Y0gVFg6ZvgMK+irgjTrF8Bw+6QDB2UxcqiezHdAhR60e5pn/qG7hDH32g7Iw2yvPaTBp5mp
-	YJnIj6Ni14CtQcF1bJf6JvrHzZZhStcLGx1iOpFpRPw2hbKuq/+Fl7X0DEhJ8D+EWSwdTEA9UHd
-	ZICSr31v8N/kTXDQFar/hJwSTQU0dzhqc85vftIlKVOp1XdUvs7a2Ll2tcWobjWaBHIjo07lY1o
-	1q4FcMkpV9jKt/7EGyyxZh+iugAm4zwb4vbzkDzM1hGa9ZA3yN3ioPv/xVU
-X-Received: by 2002:a05:6a00:6c95:b0:847:8449:2bb6 with SMTP id d2e1a72fcca58-84f2e022798mr3333888b3a.4.1785894160046;
-        Tue, 04 Aug 2026 18:42:40 -0700 (PDT)
-Received: from bloom.localdomain ([2604:3d09:178e:e100::6868])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84f2e507c38sm333744b3a.43.2026.08.04.18.42.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Aug 2026 18:42:39 -0700 (PDT)
-From: Ivy Lopez <skunkolee@gmail.com>
-To: lee@kernel.org,
-	sre@kernel.org,
-	linux@roeck-us.net
-Cc: patches@opensource.cirrus.com,
-	mfd@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	Ivy Lopez <skunkolee@gmail.com>
-Subject: [PATCH] mfd: wm8350: propagate ADC read timeout instead of returning 0
-Date: Tue,  4 Aug 2026 19:42:21 -0600
-Message-ID: <20260805014221.16412-1-skunkolee@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BuMAYWNw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B1D11F000E9;
+	Wed,  5 Aug 2026 01:54:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785894876;
+	bh=O+wTl6oKFQKzUCUyig9liyowzaff9AYxPzClAQLelh8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=BuMAYWNwbDPUtUnYZXn2fFb28ZT4niTlec0Yf3T0MRVKaK2dz9aOq0dL67doxsgXt
+	 wDtSG1aSGeRv1Fx+RmUdbiv9OC5W4rnzBhAaf7QpAZloJgDDyaMnThZNewBVr//v6L
+	 0aEzsE/Sa/fUl50AOw+KTyf632PbClBra5yJu5ULGxd8HOIC3d66srZqgERg0aQe5f
+	 Jd+6xe6PSajW7p5V3Y9Eev+Ymob41Ib+OVVdPG/WXrlF1pbPVuqvf+fqqCYykYGlA7
+	 MkaDPzT9LdDNsLHq0/VXEi97p8WNsefDRXxQPyGfOpVlocfk/nm//mWhxG3q6w5vRN
+	 /reH7FTdaR4tQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] mfd: wm8350: propagate ADC read timeout instead of
+ returning 0
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ivy Lopez" <skunkolee@gmail.com>
+Cc: mfd@lists.linux.dev, lee@kernel.org, linux-hwmon@vger.kernel.org
+In-Reply-To: <20260805014221.16412-1-skunkolee@gmail.com>
+References: <20260805014221.16412-1-skunkolee@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 05 Aug 2026 01:54:35 +0000
+Message-Id: <20260805015436.8B1D11F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-wm8350_read_auxadc() logs an error via dev_err() when the AUX ADC
-read times out, but then falls through to return the masked value
-of `result`, which was left at its initial value of 0. Callers have
-no way to distinguish a genuine 0V reading from a failed read.
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+s) to consider:
 
-Return -ETIMEDOUT on timeout instead, and update the wm8350 hwmon
-and power_supply drivers, which call this function directly, to
-check for a negative return and propagate the error rather than
-using it as a voltage value.
+New issues:
+- [High] power_supply get_property callbacks return a positive voltage inst=
+ead of 0 on success.
+- [Low] The commit message description starts with a lowercase letter, viol=
+ating MFD subsystem guidelines.
 
-Signed-off-by: Ivy Lopez <skunkolee@gmail.com>
----
- drivers/hwmon/wm8350-hwmon.c        |  9 ++++--
- drivers/mfd/wm8350-core.c           | 14 ++++++---
- drivers/power/supply/wm8350_power.c | 45 ++++++++++++++++++++++-------
- 3 files changed, 51 insertions(+), 17 deletions(-)
+Pre-existing issues:
+- [High] wm8350_reg_read() returns uninitialized stack memory on I/O error.
+- [Medium] The MFD probe function fails to unwind registered devices or ret=
+urn an error if child registration fails.
+--
 
-diff --git a/drivers/hwmon/wm8350-hwmon.c b/drivers/hwmon/wm8350-hwmon.c
-index 10e17bb79895..a455e1c5476c 100644
---- a/drivers/hwmon/wm8350-hwmon.c
-+++ b/drivers/hwmon/wm8350-hwmon.c
-@@ -23,14 +23,17 @@ static const char * const input_names[] = {
- };
- 
- static ssize_t show_voltage(struct device *dev,
--			    struct device_attribute *attr, char *buf)
-+			  struct device_attribute *attr, char *buf)
- {
- 	struct wm8350 *wm8350 = dev_get_drvdata(dev);
- 	int channel = to_sensor_dev_attr(attr)->index;
- 	int val;
- 
--	val = wm8350_read_auxadc(wm8350, channel, 0, 0) * WM8350_AUX_COEFF;
--	val = DIV_ROUND_CLOSEST(val, 1000);
-+	val = wm8350_read_auxadc(wm8350, channel, 0, 0);
-+	if (val < 0)
-+		return val;
-+
-+	val = DIV_ROUND_CLOSEST(val * WM8350_AUX_COEFF, 1000);
- 
- 	return sprintf(buf, "%d\n", val);
- }
-diff --git a/drivers/mfd/wm8350-core.c b/drivers/mfd/wm8350-core.c
-index fbc77b218215..3120c6b8fa3f 100644
---- a/drivers/mfd/wm8350-core.c
-+++ b/drivers/mfd/wm8350-core.c
-@@ -188,6 +188,7 @@ EXPORT_SYMBOL_GPL(wm8350_reg_unlock);
- int wm8350_read_auxadc(struct wm8350 *wm8350, int channel, int scale, int vref)
- {
- 	u16 reg, result = 0;
-+	int ret = 0;
- 
- 	if (channel < WM8350_AUXADC_AUX1 || channel > WM8350_AUXADC_TEMP)
- 		return -EINVAL;
-@@ -221,19 +222,24 @@ int wm8350_read_auxadc(struct wm8350 *wm8350, int channel, int scale, int vref)
- 	wait_for_completion_timeout(&wm8350->auxadc_done, msecs_to_jiffies(5));
- 
- 	reg = wm8350_reg_read(wm8350, WM8350_DIGITISER_CONTROL_1);
--	if (reg & WM8350_AUXADC_POLL)
-+	if (reg & WM8350_AUXADC_POLL) {
- 		dev_err(wm8350->dev, "adc chn %d read timeout\n", channel);
--	else
-+		ret = -ETIMEDOUT;
-+	} else {
- 		result = wm8350_reg_read(wm8350,
--					 WM8350_AUX1_READBACK + channel);
-+					WM8350_AUX1_READBACK + channel);
-+	}
- 
- 	/* Turn off the ADC */
- 	reg = wm8350_reg_read(wm8350, WM8350_POWER_MGMT_5);
- 	wm8350_reg_write(wm8350, WM8350_POWER_MGMT_5,
--			 reg & ~WM8350_AUXADC_ENA);
-+			reg & ~WM8350_AUXADC_ENA);
- 
- 	mutex_unlock(&wm8350->auxadc_mutex);
- 
-+	if (ret)
-+		return ret;
-+
- 	return result & WM8350_AUXADC_DATA1_MASK;
- }
- EXPORT_SYMBOL_GPL(wm8350_read_auxadc);
-diff --git a/drivers/power/supply/wm8350_power.c b/drivers/power/supply/wm8350_power.c
-index b0eb6e0ce8bc..111373027905 100644
---- a/drivers/power/supply/wm8350_power.c
-+++ b/drivers/power/supply/wm8350_power.c
-@@ -19,20 +19,32 @@
- 
- static int wm8350_read_battery_uvolts(struct wm8350 *wm8350)
- {
--	return wm8350_read_auxadc(wm8350, WM8350_AUXADC_BATT, 0, 0)
--		* WM8350_AUX_COEFF;
-+	int val = wm8350_read_auxadc(wm8350, WM8350_AUXADC_BATT, 0, 0);
-+
-+	if (val < 0)
-+		return val;
-+
-+	return val * WM8350_AUX_COEFF;
- }
- 
- static int wm8350_read_line_uvolts(struct wm8350 *wm8350)
- {
--	return wm8350_read_auxadc(wm8350, WM8350_AUXADC_LINE, 0, 0)
--		* WM8350_AUX_COEFF;
-+	int val = wm8350_read_auxadc(wm8350, WM8350_AUXADC_LINE, 0, 0);
-+
-+	if (val < 0)
-+		return val;
-+
-+	return val * WM8350_AUX_COEFF;
- }
- 
- static int wm8350_read_usb_uvolts(struct wm8350 *wm8350)
- {
--	return wm8350_read_auxadc(wm8350, WM8350_AUXADC_USB, 0, 0)
--		* WM8350_AUX_COEFF;
-+	int val = wm8350_read_auxadc(wm8350, WM8350_AUXADC_USB, 0, 0);
-+
-+	if (val < 0)
-+		return val;
-+
-+	return val * WM8350_AUX_COEFF;
- }
- 
- #define WM8350_BATT_SUPPLY	1
-@@ -257,7 +269,10 @@ static int wm8350_ac_get_prop(struct power_supply *psy,
- 				 WM8350_LINE_SUPPLY);
- 		break;
- 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
--		val->intval = wm8350_read_line_uvolts(wm8350);
-+		ret = wm8350_read_line_uvolts(wm8350);
-+		if (ret < 0)
-+			return ret;
-+		val->intval = ret;
- 		break;
- 	default:
- 		ret = -EINVAL;
-@@ -287,7 +302,10 @@ static int wm8350_usb_get_prop(struct power_supply *psy,
- 				 WM8350_USB_SUPPLY);
- 		break;
- 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
--		val->intval = wm8350_read_usb_uvolts(wm8350);
-+		ret = wm8350_read_usb_uvolts(wm8350);
-+		if (ret < 0)
-+			return ret;
-+		val->intval = ret;
- 		break;
- 	default:
- 		ret = -EINVAL;
-@@ -308,8 +326,12 @@ static enum power_supply_property wm8350_usb_props[] = {
- static int wm8350_bat_check_health(struct wm8350 *wm8350)
- {
- 	u16 reg;
-+	int uvolts = wm8350_read_battery_uvolts(wm8350);
-+
-+	if (uvolts < 0)
-+		return POWER_SUPPLY_HEALTH_UNKNOWN;
- 
--	if (wm8350_read_battery_uvolts(wm8350) < 2850000)
-+	if (uvolts < 2850000)
- 		return POWER_SUPPLY_HEALTH_UNSPEC_FAILURE;
- 
- 	reg = wm8350_reg_read(wm8350, WM8350_CHARGER_OVERRIDES);
-@@ -356,7 +378,10 @@ static int wm8350_bat_get_property(struct power_supply *psy,
- 				 WM8350_BATT_SUPPLY);
- 		break;
- 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
--		val->intval = wm8350_read_battery_uvolts(wm8350);
-+		ret = wm8350_read_battery_uvolts(wm8350);
-+		if (ret < 0)
-+			return ret;
-+		val->intval = ret;
- 		break;
- 	case POWER_SUPPLY_PROP_HEALTH:
- 		val->intval = wm8350_bat_check_health(wm8350);
--- 
-2.55.0
+--- Patch [1]: [PATCH] mfd: wm8350: propagate ADC read timeout instead of r=
+eturning 0 ---
+commit 85cc18ec8aa2aed410635585d8d7ebb26d16479c
+Author: Ivy Lopez <skunkolee@gmail.com>
 
+mfd: wm8350: propagate ADC read timeout instead of returning 0
+   =20
+This commit updates wm8350_read_auxadc() to return -ETIMEDOUT when the AUX
+ADC read times out, instead of returning a masked value of 0. It also
+modifies the hwmon and power_supply drivers to propagate this error.
+
+> mfd: wm8350: propagate ADC read timeout instead of returning 0
+
+[Severity: Low]
+This isn't a bug, but the commit message description starts with a lowercase
+letter. Should this be capitalized according to MFD subsystem guidelines?
+
+> diff --git a/drivers/mfd/wm8350-core.c b/drivers/mfd/wm8350-core.c
+> index fbc77b218215c..3120c6b8fa3fb 100644
+> --- a/drivers/mfd/wm8350-core.c
+> +++ b/drivers/mfd/wm8350-core.c
+
+[ ... ]
+
+> @@ -221,19 +222,24 @@ int wm8350_read_auxadc(struct wm8350 *wm8350, int c=
+hannel, int scale, int vref)
+>  	wait_for_completion_timeout(&wm8350->auxadc_done, msecs_to_jiffies(5));
+> =20
+>  	reg =3D wm8350_reg_read(wm8350, WM8350_DIGITISER_CONTROL_1);
+
+[Severity: High]
+This is a pre-existing issue, but does wm8350_reg_read() return uninitializ=
+ed
+stack memory on I/O errors?
+
+Looking at wm8350_reg_read():
+
+u16 wm8350_reg_read(struct wm8350 *wm8350, int reg)
+{
+    unsigned int data;
+    int err;
+
+    err =3D regmap_read(wm8350->regmap, reg, &data);
+    if (err)
+        dev_err(wm8350->dev, "read from reg R%d failed\n", reg);
+
+    return data;
+}
+
+If regmap_read() fails, the uninitialized data variable is returned. Callers
+then blindly use this garbage value to write back to critical hardware
+registers, which can cause power domains to randomly turn on or off.
+
+> -	if (reg & WM8350_AUXADC_POLL)
+> +	if (reg & WM8350_AUXADC_POLL) {
+>  		dev_err(wm8350->dev, "adc chn %d read timeout\n", channel);
+> -	else
+> +		ret =3D -ETIMEDOUT;
+> +	} else {
+>  		result =3D wm8350_reg_read(wm8350,
+> -					 WM8350_AUX1_READBACK + channel);
+> +					WM8350_AUX1_READBACK + channel);
+> +	}
+> =20
+>  	/* Turn off the ADC */
+>  	reg =3D wm8350_reg_read(wm8350, WM8350_POWER_MGMT_5);
+>  	wm8350_reg_write(wm8350, WM8350_POWER_MGMT_5,
+> -			 reg & ~WM8350_AUXADC_ENA);
+> +			reg & ~WM8350_AUXADC_ENA);
+> =20
+>  	mutex_unlock(&wm8350->auxadc_mutex);
+> =20
+> +	if (ret)
+> +		return ret;
+> +
+>  	return result & WM8350_AUXADC_DATA1_MASK;
+>  }
+>  EXPORT_SYMBOL_GPL(wm8350_read_auxadc);
+
+[Severity: Medium]
+This is a pre-existing issue, but does the MFD probe function fail to unwind
+registered devices if a child registration fails?
+
+Looking at wm8350_client_dev_register():
+
+ret =3D platform_device_add(*pdev);
+if (ret !=3D 0) {
+    dev_err(wm8350->dev, "Failed to register %s: %d\n", name, ret);
+    platform_device_put(*pdev);
+    *pdev =3D NULL;
+}
+
+This custom helper drops the error, causing wm8350_device_init() to proceed
+without unwinding previously registered children. This violates the MFD
+subsystem guideline that requires unwinding if a child device fails to
+register.
+
+> diff --git a/drivers/power/supply/wm8350_power.c b/drivers/power/supply/w=
+m8350_power.c
+> index b0eb6e0ce8bcf..1113730279053 100644
+> --- a/drivers/power/supply/wm8350_power.c
+> +++ b/drivers/power/supply/wm8350_power.c
+
+[ ... ]
+
+> @@ -257,7 +269,10 @@ static int wm8350_ac_get_prop(struct power_supply *p=
+sy,
+>  				 WM8350_LINE_SUPPLY);
+>  		break;
+>  	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+> -		val->intval =3D wm8350_read_line_uvolts(wm8350);
+> +		ret =3D wm8350_read_line_uvolts(wm8350);
+> +		if (ret < 0)
+> +			return ret;
+> +		val->intval =3D ret;
+>  		break;
+>  	default:
+>  		ret =3D -EINVAL;
+
+[Severity: High]
+Does this inadvertently return the positive voltage value on success?
+
+By assigning the result of wm8350_read_line_uvolts() to ret in
+wm8350_ac_get_prop(), the power_supply_get_property API will now return a
+large positive voltage (e.g., 5000000) instead of 0 on success.
+
+Many callers within the kernel check if (power_supply_get_property(...))
+and will incorrectly treat the positive return value as a failure, leading
+to broken functionality.
+
+[ ... ]
+
+> @@ -287,7 +302,10 @@ static int wm8350_usb_get_prop(struct power_supply *=
+psy,
+>  				 WM8350_USB_SUPPLY);
+>  		break;
+>  	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+> -		val->intval =3D wm8350_read_usb_uvolts(wm8350);
+> +		ret =3D wm8350_read_usb_uvolts(wm8350);
+> +		if (ret < 0)
+> +			return ret;
+> +		val->intval =3D ret;
+>  		break;
+
+[Severity: High]
+Could this also leak the positive voltage into the return value of
+wm8350_usb_get_prop() instead of returning 0 on success?
+
+[ ... ]
+
+> @@ -356,7 +378,10 @@ static int wm8350_bat_get_property(struct power_supp=
+ly *psy,
+>  				 WM8350_BATT_SUPPLY);
+>  		break;
+>  	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+> -		val->intval =3D wm8350_read_battery_uvolts(wm8350);
+> +		ret =3D wm8350_read_battery_uvolts(wm8350);
+> +		if (ret < 0)
+> +			return ret;
+> +		val->intval =3D ret;
+>  		break;
+
+[Severity: High]
+Is the same regression present here in wm8350_bat_get_property(), where the
+function will return the positive battery voltage rather than 0 on success?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260805014221.1641=
+2-1-skunkolee@gmail.com?part=3D1
