@@ -1,143 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4957233A9F8
-	for <linux-hwmon@vger.kernel.org>; Thu,  6 Aug 2026 14:35:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1105047CC85
+	for <linux-hwmon@vger.kernel.org>; Thu,  6 Aug 2026 15:34:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786026908; cv=none; b=pAM2+st5CpRA8651l55Jihb9wQVhmZZnwuKMFsvT4b6BT8ic1WO2RDjk5yuyx+tnp3N4HwXQrwCBiXGUWmHchtxronFktBXSUlyB+d+g6LpUfLyR4be1ey3zhZTeLZgVrmPrTh/0lWMnX9QD8h+DcjfRV3pRUfFna2LY3ZKTOPA=
+	t=1786030461; cv=none; b=Q5diis7wYxFKSFpmgBlLEtaDlCFsDzD5TI+AGxUZ/ZTTs/xG4XAmepRjkeIfqVJKObsraIRzKbYB651eH4jspxI/LJzNnXkjuR3C6abrGJ22yXeUHFvEETcab0m+rLh/0c8NcyK1euEhIecG7O4QzM4F1lAVQQM7mSKFIhNAmfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786026908; c=relaxed/simple;
-	bh=ED+ya2z8Evs1BEdxjc8XAhtMlf5RbhXlMVchYCoRPug=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ZqkQt4J9DqLnT6m+JdC+Q49psD0OT6MiQLDg6C+W4WLXzLsFEJItlTDD9Sz7ToKB7+jBD/XYqsDRoOVDODE9Vusf3WCa7cI3aqdgzS8oBC9T6Nhkx6dYuEkIsLLNK2x/7UAqXsCdQL6TC/2dikhEXeK2VfonZPqjQ1NI3GuLU2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kC5O9eOO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786030461; c=relaxed/simple;
+	bh=DctdhrZbmFy5lV7PLyZ1Tv8+iZVg0EJMXb5B9QqxMIY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=At5ipzjyaOacrznA/XooqiuiRhqI6OY1Y8ZuNZbDVY4mzSIy0bY2i/gid/ABQPrWFC0pgVJ7g5hhMEPQo7tRhElVt/EZaxUpLggwhxGhTtJ7WTc834qE1xnO1mpJEKcexXHEms/3N+PkuEKTU74o1N0jMNjdQb5R+T/PAy1OXHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=oL0n6ZpA; arc=none smtp.client-ip=185.67.36.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kC5O9eOO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B81821F000E9;
-	Thu,  6 Aug 2026 14:35:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786026906;
-	bh=Gvy3WqI7dXFGq/8zSQLfSoAGFzYFj5Efx4k0OMSDlYk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kC5O9eOOXG12Bc15MCv8McjAFUKXYOFzwf0hgs9QPxDXEDqfk10DkDVjjD2Ff4/EU
-	 TeqWOfl+kYgfqQcm7dLQvW+iD26DqvjneneGcWyN3rhg/dj6U5Bl5bZaFccprKfJQr
-	 f5YynrG271KDLTArXj1IyOXmF6yI+22v6KtcnXFFGaE3dZClsc7uxizKNwR+eKUUXQ
-	 S4UBrqvOpVItz456gjju+BdJ2M9vxPUgKDGbn1rUkpKZYkImzHG3HqojzHOBC0VvjH
-	 elKbANaWIvtZiLdkpHgv33eQsOMNaNAIM95ehLWdYfieXYKrwIYqakRpXQpnoPEkC3
-	 JSp9Frr4XuHwA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] hwmon: (corsair-psu) serialize debugfs access
- against hwmon
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ali Ahmet Memis" <ali@iusegentoo.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260806142139.168611-1-ali@iusegentoo.com>
-References: <20260802123653.19532-1-ali@iusegentoo.com>
- <20260806142139.168611-1-ali@iusegentoo.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 06 Aug 2026 14:35:06 +0000
-Message-Id: <20260806143506.B81821F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="oL0n6ZpA"
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout01.posteo.de (Postfix) with ESMTPS id 58FE0240028
+	for <linux-hwmon@vger.kernel.org>; Thu,  6 Aug 2026 17:34:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteo.net;
+	s=1984.8680eb; t=1786030453;
+	bh=NRTtQz5L6H/2EChLV5jGrgZhOEK56e84RSV9vVVW/Is=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:From;
+	b=oL0n6ZpAnxDH5YsbSVBjOZsjzF1m11xN1ONUHoSjQm4ABMQiadW7+d6vvanngG08c
+	 l+tWOfsMqgUrafX5/E6uvGpuH/pZkRN8EUqUoOfO5tG9UhaFNqrxT4C8o4CtvW+3m9
+	 cqy6d/5jdbrjTkXeyqEQ0Rus+qyRJM7UpcjMcH7XL/nA+ayxRHG9yspRyxLcbYPrVW
+	 FGtRipMxcrd4ZdsJpVQk8A9jTO9t6wgqjn9uM08EtVoFwpnxy0vJI+lfebMdOJAurO
+	 pzLlbwx5o+KX9Npi6CyZ6gF35MXaQ6TQt5XqfqHVNhxiQHQbhdhhcS4OE2MjRR4CET
+	 NvcafWXcOMX2A==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4hGBCS54MXz9rxM;
+	Thu,  6 Aug 2026 17:34:12 +0200 (CEST)
+Date: Thu, 06 Aug 2026 15:34:13 +0000
+From: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>, Sashiko
+ <sashiko-bot@kernel.org>
+Subject: Re: [PATCH v2] hwmon: (corsair-psu) Fix linear11 calculation
+Message-ID: <20260806173411.6be71067@posteo.net>
+In-Reply-To: <20260804034811.2385506-1-linux@roeck-us.net>
+References: <20260804034811.2385506-1-linux@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+On Mon,  3 Aug 2026 20:48:11 -0700
+Guenter Roeck <linux@roeck-us.net> wrote:
 
-Pre-existing issues:
-- [High] Potential data race and buffer corruption on the shared `cmd_buffe=
-r` following a command timeout.
-- [High] Out-of-bounds read and potential information leak in debugfs handl=
-ers for vendor and product strings.
---
-
---- Patch [1]: [PATCH v2] hwmon: (corsair-psu) serialize debugfs access aga=
-inst hwmon ---
-commit 17027f95f57d41549658af1b49c4295c03ed4860
-Author: Ali Ahmet Memis <ali@iusegentoo.com>
-
-hwmon: (corsair-psu) serialize debugfs access against hwmon
-   =20
-This commit adds guard(hwmon_lock) to the debugfs read paths in=20
-print_uptime() and ocpmode_show() to serialize them against the hwmon core.
-This prevents data races and incorrect sensor readings resulting from
-concurrent USB commands interleaving.
-
-Link: https://lore.kernel.org/all/5f0406fa-9692-49f0-bcfe-c013f5fc7b62@roec=
-k-us.net/
-Link: https://lore.kernel.org/all/20260806161028.42218ebd@posteo.net/
-Link: https://lore.kernel.org/all/20260802123653.19532-1-ali@iusegentoo.com/
-
+> In corsairpsu_linear11_to_int(), the mantissa is extracted using bitwise
+> operations and cast to s16 before being shifted left:
+> 
+> static int corsairpsu_linear11_to_int(const u16 val, const int scale)
+> {
+>     ...
+>     const int mant = (((s16)(val & 0x7ff)) << 5) >> 5;
+>     ...
+> }
+> 
+> Due to C integer promotion rules, the masked value (which is always
+> positive) is promoted to a 32-bit integer before the left shift. As a
+> result, the sign bit is never extended to bit 31 of the promoted integer.
+> 
+> When the device hardware reports a negative temperature in Linear11 format
+> (such as an ambient temperature probe reporting sub-zero), the negative
+> mantissa is parsed incorrectly as a massive positive value. For example,
+> -1 becomes 2047, which scales to 2047 degrees Celsius.
+> 
+> Fix the problem by type casting the result of the left shift operation
+> to s16.
+> 
+> Another problem is left-shifting of negative values. In C, the result of
+> left-shifting negative values is undefined. Use a multiplication instead
+> to avoid the problem.
+> 
+> Also use a local s64 variable to store temporary results, change
+> the return value type from int to long, and clamp the final value
+> to LONG_MIN and LONG_MAX to avoid under- and overflow issues while
+> retaining as much information as possible.
+> 
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Cc: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+> v2: Skip handling right-shift of negative values
+>     (since it is widely used in the kernel)
+> 
+>  drivers/hwmon/corsair-psu.c | 23 ++++++++++++++---------
+>  1 file changed, 14 insertions(+), 9 deletions(-)
+> 
 > diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-> index ce958cdaef58a..033166db6bc42 100644
+> index 24100519cd83..c437b469de5c 100644
 > --- a/drivers/hwmon/corsair-psu.c
 > +++ b/drivers/hwmon/corsair-psu.c
-> @@ -664,6 +664,8 @@ static void print_uptime(struct seq_file *seqf, u8 cm=
-d)
->  	long val;
->  	int ret;
-> =20
-> +	guard(hwmon_lock)(priv->hwmon_dev);
+> @@ -137,13 +137,18 @@ struct corsairpsu_data {
+>  };
+>  
+>  /* some values are SMBus LINEAR11 data which need a conversion */
+> -static int corsairpsu_linear11_to_int(const u16 val, const int scale)
+> +static long corsairpsu_linear11_to_long(const u16 val, const int scale)
+>  {
+>  	const int exp = ((s16)val) >> 11;
+> -	const int mant = (((s16)(val & 0x7ff)) << 5) >> 5;
+> -	const int result = mant * scale;
+> +	const int mant = ((s16)((val & 0x7ff) << 5)) >> 5;
+
+
+> +	s64 result = mant * scale;
+
+Uhm, this is a 32bit multiplicaiton, actully a C gotcha I explain the beginners
+in our company. https://godbolt.org/z/eM6TbGG5E
+
+> -	return (exp >= 0) ? (result << exp) : (result >> -exp);
+> +	if (exp >= 0)
+> +		result *= (int)(1UL << exp);
+> +	else
+> +		result >>= -exp;
 > +
->  	ret =3D corsairpsu_get_value(priv, cmd, 0, &val);
+> +	return clamp(result, LONG_MIN, LONG_MAX);
+>  }
+>  
+>  /* the micro-controller uses percentage values to control pwm */
+> @@ -263,13 +268,13 @@ static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8
+> rail, l case PSU_CMD_RAIL_AMPS:
+>  	case PSU_CMD_TEMP0:
+>  	case PSU_CMD_TEMP1:
+> -		*val = corsairpsu_linear11_to_int(tmp & 0xFFFF, 1000);
+> +		*val = corsairpsu_linear11_to_long(tmp & 0xFFFF, 1000);
+>  		break;
+>  	case PSU_CMD_FAN:
+> -		*val = corsairpsu_linear11_to_int(tmp & 0xFFFF, 1);
+> +		*val = corsairpsu_linear11_to_long(tmp & 0xFFFF, 1);
+>  		break;
+>  	case PSU_CMD_FAN_PWM_ENABLE:
+> -		*val = corsairpsu_linear11_to_int(tmp & 0xFFFF, 1);
+> +		*val = corsairpsu_linear11_to_long(tmp & 0xFFFF, 1);
+>  		/*
+>  		 * 0 = automatic mode, means the micro-controller controls the fan using a plan
+>  		 *     which can be modified, but changing this plan is not supported by this
+> @@ -283,12 +288,12 @@ static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8
+> rail, l *val = 2;
+>  		break;
+>  	case PSU_CMD_FAN_PWM:
+> -		*val = corsairpsu_linear11_to_int(tmp & 0xFFFF, 1);
+> +		*val = corsairpsu_linear11_to_long(tmp & 0xFFFF, 1);
+>  		*val = corsairpsu_dutycycle_to_pwm(*val);
+>  		break;
+>  	case PSU_CMD_RAIL_WATTS:
+>  	case PSU_CMD_TOTAL_WATTS:
+> -		*val = corsairpsu_linear11_to_int(tmp & 0xFFFF, 1000000);
+> +		*val = corsairpsu_linear11_to_long(tmp & 0xFFFF, 1000000);
+>  		break;
+>  	case PSU_CMD_TOTAL_UPTIME:
+>  	case PSU_CMD_UPTIME:
 
-[ ... ]
-
-[Severity: High]
-This is a pre-existing issue, but can this sequence lead to a data race or
-buffer corruption on the shared cmd_buffer if a USB command times out?
-
-If wait_for_completion_timeout() times out in corsairpsu_usb_cmd(), the
-completion is left uncompleted. If the hardware later sends a delayed
-response, the asynchronous HID interrupt in corsairpsu_raw_event() will
-blindly copy the data:
-
-drivers/hwmon/corsair-psu.c:corsairpsu_raw_event() {
-    ...
-    memcpy(priv->cmd_buffer, data, min(CMD_BUFFER_SIZE, size));
-    complete(&priv->wait_completion);
-    ...
-}
-
-If a new request is concurrently executing in corsairpsu_usb_cmd(), this
-delayed copy will race with its setup:
-
-drivers/hwmon/corsair-psu.c:corsairpsu_usb_cmd() {
-    ...
-    memset(priv->cmd_buffer, 0, CMD_BUFFER_SIZE);
-    ...
-}
-
-
-[Severity: High]
-This is a pre-existing issue, but does this code potentially cause an
-out-of-bounds read and information leak in the debugfs handlers?
-
-When corsairpsu_fwinfo() fetches the vendor and product information, it
-copies exactly REPLY_SIZE (24) bytes from the untrusted USB device into
-priv->vendor and priv->product:
-
-drivers/hwmon/corsair-psu.c:corsairpsu_usb_cmd() {
-    ...
-    memcpy(data, priv->cmd_buffer + 2, REPLY_SIZE);
-    ...
-}
-
-If a malicious device provides exactly 24 non-null characters, these strings
-will not be null-terminated. When seq_printf() prints them in vendor_show()
-and product_show(), it could read past the array bounds and leak adjacent
-kernel heap memory:
-
-drivers/hwmon/corsair-psu.c:vendor_show() {
-    ...
-    seq_printf(seqf, "%s\n", priv->vendor);
-    ...
-}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260806142139.1686=
-11-1-ali@iusegentoo.com?part=3D1
