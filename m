@@ -1,170 +1,102 @@
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 621C135C6AB
-	for <linux-hwmon@vger.kernel.org>; Thu,  6 Aug 2026 05:23:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E64943AD512;
+	Thu,  6 Aug 2026 06:09:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785993824; cv=none; b=jaD9w8ZhoU/wRnwjFzGfUmJNydem490VgPwkSNEb7aIUrFIC6XAwfq7325CHWosxkZ3QXan9EQMRJEK8bnI9JAglc3fP8iyKwVGUGrW/TCGC5WL5O1hTXxe/eqMLyi3p0WeHQ3KXtRBCwkYzq/oY4QqE1BZ/Fo94TlUuJKDIO2E=
+	t=1785996557; cv=none; b=ugWW/ilNJgObIdg3PwB2sPxoHzYgiOOjLVoM45xfxsC+DaMy++bzqath+eidzU/AONaphUi0Y3888SW9kEVPKhA23cDet336iLIg+1ymN2H/gO6Bs60BnVW4K7TiHwAnmh4YDzy7OSEKGNh566YRpsUEi1hhwLYEYX83MSZvMzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785993824; c=relaxed/simple;
-	bh=XbqsjtGj67DMWugwFQZMgJ8NQ1v8abHFUfJsNZ9iMxw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pfw46r+w4RE/icsufvbYt3CNY/+MVVcGKB8qTefO5T4g+/2LaKZEqCdg+BP11scrmaBcrfBgjDrZ2vyBRJAd83TAZeOSHoj8cQ8tpunbeMw3f8EOuvE6nbl8JXtmlCnz8aNhEpzlEtxeTOSlDj0bpZPWjvRTEdnX6Bz3RzQ5I0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=djr/GwtW; arc=none smtp.client-ip=185.67.36.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
+	s=arc-20240116; t=1785996557; c=relaxed/simple;
+	bh=6xUUJfvoEfXULuBw5XctDVku6yzV5Bm7RvuwwUO/dkQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=XMDhwUKwpVsMVV8Xh5ad8j4W08TwvB8aTREofE1wsM7o8W0Xox7GMwC7beKnLcRXSEp1lWUkxITvpoyjYf83s4CUukiGjvou3U7lskRCrBq/pqY0YbQS+TCKexiUEPtFdZI2A/qTpxkYlwFIe0qnFQoxwS8d56G9aQqaY8sJHyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=OsflkV76; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="djr/GwtW"
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout01.posteo.de (Postfix) with ESMTPS id E3889240028
-	for <linux-hwmon@vger.kernel.org>; Thu,  6 Aug 2026 07:23:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteo.net;
-	s=1984.8680eb; t=1785993818;
-	bh=rypBXhRtpQmTVGev87waIzq+w2KhT5u06v7zI6vDSAQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:From;
-	b=djr/GwtWFy3T4hOugS5dZ9cfGgCXd+vYwz9kxrJHqpvowoynDNjdVluyx0OIMc7g7
-	 use0TBU9qV2Aa0xW71lenxv0eZw9v6eLQonqPJN8cDzIYfEQGTgOtAmdym7xkdMchH
-	 G51KwRs1vHYE6EMzbWeNZAUE/cKJulV3go0ZdBgsBhPhMYdwCstrgiCp/DKsAbJlB/
-	 MrXMAp8Q90EgrbL+kliCugHI5laRJDDNTYvJKisVWyrIorli4ZsVxlGbf4N+VwaC1c
-	 51ZcxTZ5YxS9jfP0HLYdEDE9jL4+qE0976j6V0OyazYXDY0cJqRUgkvzrydpUjyy2I
-	 C4DHkogzwrAFw==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4hFwfy1CSHz6twG;
-	Thu,  6 Aug 2026 07:23:38 +0200 (CEST)
-Date: Thu, 06 Aug 2026 05:23:38 +0000
-From: Wilken Gottwalt <wilken.gottwalt@posteo.net>
-To: Ali Ahmet Memis <ali@iusegentoo.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (corsair-psu) serialize debugfs access against
- hwmon
-Message-ID: <20260806072337.15496c74@posteo.net>
-In-Reply-To: <20260802123653.19532-1-ali@iusegentoo.com>
-References: <20260802123653.19532-1-ali@iusegentoo.com>
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="OsflkV76"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1785996553;
+	bh=6xUUJfvoEfXULuBw5XctDVku6yzV5Bm7RvuwwUO/dkQ=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=OsflkV76TD/v03vVvkq7YE3khEdBq9hx2XgGGtlv2sBtGPTE8wNgUSMJYjKaz31rq
+	 +dlEDcoR15XhC3v60c1v/rVtJNxseKRFiqKFm3MiS3QWYjT1bw0cRYiL7hi/fjD/ZM
+	 ZbMFz4C3a6uurxiTILtVklubU17bpewa9VEhV4PM=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date: Thu, 06 Aug 2026 08:09:13 +0200
+Subject: [PATCH v2 3/3] hwmon: (sysfs) Allow drivers to register const
+ attributes
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260806-sysfs-const-attr-hwmon-v2-3-22fee8b85509@weissschuh.net>
+References: <20260806-sysfs-const-attr-hwmon-v2-0-22fee8b85509@weissschuh.net>
+In-Reply-To: <20260806-sysfs-const-attr-hwmon-v2-0-22fee8b85509@weissschuh.net>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1785996552; l=1879;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=6xUUJfvoEfXULuBw5XctDVku6yzV5Bm7RvuwwUO/dkQ=;
+ b=iX7aj/mnDl/hacYBjnQRq7z2GjVTnua4nuKlrZOYMmoBWRnX7cMymfZSZE7h1eDxUSeY4p7Z0
+ h0yBm9D/TdaA0ElZDTHauL9FyioNRFMa+6Q9zswF+2VQceO2vMwUlhJ
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-On Sun,  2 Aug 2026 12:36:53 +0000
-Ali Ahmet Memis <ali@iusegentoo.com> wrote:
+Switch to the __DEVICE_ATTR() macro which can handle callbacks taking
+both const and non-const attribute structure arguments.
+Allow the step-wise migration of the drivers.
 
-> corsairpsu_request() sends a rail select command and then the actual
-> read as two separate transfers, both going through the single shared
-> cmd_buffer and wait_completion in corsairpsu_usb_cmd(). The hwmon core
-> serializes its own callers, but the debugfs files call
-> corsairpsu_get_value() directly and never take that lock, so a debugfs
-> read can land between another reader's rail select and its value read.
->=20
-> The result is a value from the wrong rail reported as the right one,
-> because corsairpsu_usb_cmd() only checks the command echo and both
-> transfers echo the command it expects. It can also make a caller consume
-> the reply meant for the other one, since raw_event() writes into the
-> shared buffer and completes whoever happens to be waiting.
->=20
-> Locking was dropped in commit 4207069edbf0 ("hwmon: (corsair-psu) Rely
-> on subsystem locking") on the grounds that the subsystem serializes for
-> us, which holds for sysfs but not for these files. Take
-> the same lock in the debugfs paths that issue commands, using the guard
-> added in commit d1e720c7328e ("hwmon: Support guard() and scoped_guard
-> for subsystem locks"), as suggested in [1].
->=20
-> The lock cannot go into corsairpsu_request() itself: the hwmon core
-> already holds it across ->read, so every sysfs read would deadlock.
-> vendor_show() and product_show() only print strings cached during probe
-> and issue no command, and corsairpsu_get_criticals() and
-> corsairpsu_check_cmd_support() run before either interface is
-> registered, so none of them need it.
->=20
-> [1] https://lore.kernel.org/all/5f0406fa-9692-49f0-bcfe-c013f5fc7b62@roec=
-k-us.net/
->=20
-> Fixes: 4207069edbf0 ("hwmon: (corsair-psu) Rely on subsystem locking")
-> Signed-off-by: Ali Ahmet Memis <ali@iusegentoo.com>
-> ---
-> This is the fix Guenter asked for in the May thread, written the way he
-> suggested there. Wilken's patch used a driver private mutex around
-> corsairpsu_request(); that thread stalled and the race is still present.
->=20
-> Wilken, does this cover the chained command case you were worried about?
-> As far as I can tell it does: the whole select-rail plus read sequence
-> now runs under the same lock the hwmon core takes around ->read, so a
-> debugfs reader cannot land in the middle of one. If you had a case in
-> mind that this misses, I would rather hear it than guess.
->=20
-> I have no Corsair PSU, so this is reasoned from the code rather than
-> measured on hardware. What I did check:
->=20
->   - hwmon_lock() takes hwdev->lock, and the hwmon core takes the same
->     mutex around ->read and ->write, so this really does serialize the
->     two entry points
->   - the lock therefore cannot go into corsairpsu_request(), the sysfs
->     path would deadlock on itself
->   - probe registers the hwmon device before creating the debugfs files
->     and remove tears them down in the opposite order, so priv->hwmon_dev
->     is always valid inside a debugfs read
->=20
-> Prior discussion:
->   https://lore.kernel.org/all/agR9YW7hGTJ_l7ms@monster.localdomain/
->=20
->  drivers/hwmon/corsair-psu.c | 4 ++++
->  1 file changed, 4 insertions(+)
->=20
-> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-> index ce958cdaef58..24100519cd83 100644
-> --- a/drivers/hwmon/corsair-psu.c
-> +++ b/drivers/hwmon/corsair-psu.c
-> @@ -664,6 +664,8 @@ static void print_uptime(struct seq_file *seqf, u8 cm=
-d)
->  	long val;
->  	int ret;
-> =20
-> +	guard(hwmon_lock)(priv->hwmon_dev);
-> +
->  	ret =3D corsairpsu_get_value(priv, cmd, 0, &val);
->  	if (ret < 0) {
->  		seq_puts(seqf, "N/A\n");
-> @@ -730,6 +732,8 @@ static int ocpmode_show(struct seq_file *seqf, void *=
-unused)
->  	 * getting of the value itself can also fail during this. Because of th=
-is every other
-> value
->  	 * than OCP_MULTI_RAIL can be considered as "single rail".
->  	 */
-> +	guard(hwmon_lock)(priv->hwmon_dev);
-> +
->  	ret =3D corsairpsu_get_value(priv, PSU_CMD_OCPMODE, 0, &val);
->  	if (ret < 0)
->  		seq_puts(seqf, "N/A\n");
->=20
-> base-commit: 2d2338c93da79b3bfe4b6099a931d9468d539952
+Also use container_of_const() over container_of() to avoid casting away
+the constness accidentally.
 
-That does not even compile on a current 7.1.5/7.1.6 kernel. Though, not sure
-yet, what that is. But I can not risk running a trunk kernel on my workstat=
-ion.
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ include/linux/hwmon-sysfs.h | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-/usr/lib/modules/7.1.5-arch1-2/build/include/linux/cleanup.h:302:9: error: =
-unknown type name =E2=80=98class_hwmon_lock_t=E2=80=99; did you mean =E2=80=
-=98class_task_lock_t=E2=80=99?
-  302 |         class_##_name##_t var __cleanup(class_##_name##_destructor)=
- =3D   \
-      |         ^~~~~~
-/usr/lib/modules/7.1.5-arch1-2/build/include/linux/cleanup.h:422:9: note: i=
-n expansion of macro =E2=80=98CLASS=E2=80=99
-  422 |         CLASS(_name, __UNIQUE_ID(guard))
-      |         ^~~~~
-corsair-psu.c:667:9: note: in expansion of macro =E2=80=98guard=E2=80=99
-  667 |         guard(hwmon_lock)(priv->hwmon_dev);
-      |         ^~~~~
-corsair-psu.c:667:9: error: cleanup argument not a function
-  667 |         guard(hwmon_lock)(priv->hwmon_dev);
-      |         ^~~~~
+diff --git a/include/linux/hwmon-sysfs.h b/include/linux/hwmon-sysfs.h
+index d896713359cd..ee5b33185b2d 100644
+--- a/include/linux/hwmon-sysfs.h
++++ b/include/linux/hwmon-sysfs.h
+@@ -15,10 +15,10 @@ struct sensor_device_attribute{
+ 	int index;
+ };
+ #define to_sensor_dev_attr(_dev_attr) \
+-	container_of(_dev_attr, struct sensor_device_attribute, dev_attr)
++	container_of_const(_dev_attr, struct sensor_device_attribute, dev_attr)
+ 
+-#define SENSOR_ATTR(_name, _mode, _show, _store, _index)	\
+-	{ .dev_attr = __ATTR(_name, _mode, _show, _store),	\
++#define SENSOR_ATTR(_name, _mode, _show, _store, _index)		\
++	{ .dev_attr = __DEVICE_ATTR(_name, _mode, _show, _store),	\
+ 	  .index = _index }
+ 
+ #define SENSOR_ATTR_RO(_name, _func, _index)			\
+@@ -49,11 +49,11 @@ struct sensor_device_attribute_2 {
+ 	u8 nr;
+ };
+ #define to_sensor_dev_attr_2(_dev_attr) \
+-	container_of(_dev_attr, struct sensor_device_attribute_2, dev_attr)
++	container_of_const(_dev_attr, struct sensor_device_attribute_2, dev_attr)
+ 
+-#define SENSOR_ATTR_2(_name, _mode, _show, _store, _nr, _index)	\
+-	{ .dev_attr = __ATTR(_name, _mode, _show, _store),	\
+-	  .index = _index,					\
++#define SENSOR_ATTR_2(_name, _mode, _show, _store, _nr, _index)		\
++	{ .dev_attr = __DEVICE_ATTR(_name, _mode, _show, _store),	\
++	  .index = _index,						\
+ 	  .nr = _nr }
+ 
+ #define SENSOR_ATTR_2_RO(_name, _func, _nr, _index)		\
 
-greetings,
-Wilken
+-- 
+2.55.0
+
