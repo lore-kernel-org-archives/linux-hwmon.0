@@ -1,68 +1,69 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBEFD4C956A
-	for <linux-hwmon@vger.kernel.org>; Thu,  6 Aug 2026 19:15:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E4A394EBA
+	for <linux-hwmon@vger.kernel.org>; Thu,  6 Aug 2026 19:17:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786043707; cv=none; b=Wg3PYvvbb9K84Thhf1L07+KIKciwtS5d20NFg5q24QxYNZetRetDuBFZR7v/1v4EhQHPqN47SVKRRD73iz5ZN0rjgWX5qB+K23BmiMmZXzn43zZu2hgPrYhkPEJuide2tSs2Y7v4UV9O3p9kt0KgQ/MxsBNqWWA4CSe4TP316po=
+	t=1786043856; cv=none; b=io2LusZCS1XkGFTbbkSfgfqotd5evMHNCJch0I0IQe0oJcQA+wlsFqeVGUJHCP2QXj0BGn9EjHOfdr/2rBWhAVMPvT9ezxDyupiyklXmPhnU/EAUieGy5vNKIo8iYJMXfbxABO2uRUYeobof58EFqf1NGCn2wgxtaZptJNKCRjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786043707; c=relaxed/simple;
-	bh=533PHOLn335O4EA2B+kinGO2G4E4tpRwYZ/qB+8MrGw=;
+	s=arc-20240116; t=1786043856; c=relaxed/simple;
+	bh=/EaieSvFrRkr9azTwg0L+lRZYx4M8CIG5/sA9LhQOx4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rVNY9eHQjpvO8x2OBkSo2Fm5t36Kbx7nXpIbluv5blbJR1SlJW8LEIUGDL4lnxJD6kGkl0nAS8rMSrcpFBsukY9yI1RubPEmkM0ekrBC/VW3crEtCxkQA2TUC+6stNEq647Kpp/4lDH7CI2oNh++H/Qi44TgZ+/EE9VNTV54Ic0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mh5UBzfa; arc=none smtp.client-ip=209.85.210.182
+	 In-Reply-To:Content-Type; b=qNohw31mzIz9KdRPZdKXXw7Fio/JpAbb4fTKrjHPgE6JBgGEjFJpLUuFWDOLRzE/cuxoIW527brLktAC7abO/X1kvOdsWK2lfC6oXffKYYR6KNNFBOqqTh5AHGQs2GtIVIpPfbnzsXv1pPnzvbt0u6neJHz3SrnkXOssmHaOSxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EoRGSf50; arc=none smtp.client-ip=209.85.210.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mh5UBzfa"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-8486672f03cso3211504b3a.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 06 Aug 2026 12:15:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EoRGSf50"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-84f10e55beaso928026b3a.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 06 Aug 2026 12:17:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786043702; x=1786648502; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786043855; x=1786648655; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=sU3dRYYFiZApRIOVKW5KzGjLYxyQ5eHsT1TCj73gRnQ=;
-        b=Mh5UBzfaD7z/5l32tZ5qL5v+22oP/8i6MqKQzHz5YBsOBPBvvqG1eVV6DX62IwwlJ0
-         +MFYiMbygsq2qLdsKwNCs1ODIm81OIyvRDJPSTL/o11U/AwGFEK0+wJs62+GCdw5xFrr
-         aLdqnVJjgZTYaFW8S34fIytjuf95VoxCNpB4ouY6EsM8ANtKHKeLNvIq47aJ/+WSyhkN
-         DdiMj5KtdkgugiIpuZdfFnwxoPALLyFHj8RFacz1SmAf1xz2X04FzshkPTYX4HMMNkTd
-         quV1jun1N6pjSCjGmXEGgvoBFqx1Kco7Uh1zImC8UKuU8OM9/hpvPZ9ER19ulMTN86fa
-         HQ6A==
+        bh=PV21MAhcjbCpKEfp7iHgiEKWEs7SXbwWKXnvMBb01xQ=;
+        b=EoRGSf50F9piT25AT6OvDqzB0zm4t1ztxoumZ5r3FXw1Mnp70TmZPRuDvjRjToGe+M
+         bs2ZNTKYEEf+n0Cp5G+q0UCKdgfQK62qAGTDkIyPAgwb27G1t7d3Gp4CqNohPZZnLG/Z
+         BYtxXAqyVUZGbKQCLVuTLLK8puQzHYPtAt29g14OtJJ+E6YFc2/iIXklkT/aZHdzRFIv
+         OhKrEqQBM8224riFA6hMg3YMrUg0EAr5E6/IApBDvzJi7D7JpnozlsCqV2On72ywut+c
+         31ZgiluT11UO2ewu/ZhKYDE2mtPQJpjqKYDgvsMrVXYXUjYBVDKI0wsgdWWOqplvRUqP
+         UHFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786043702; x=1786648502;
+        d=1e100.net; s=20251104; t=1786043855; x=1786648655;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=sU3dRYYFiZApRIOVKW5KzGjLYxyQ5eHsT1TCj73gRnQ=;
-        b=AqsQ78iqyQ72vI+KMkzCMkFdjQFdEVWl/zgBwYTQVOb93RqapLika4GaBAzlJ18/iw
-         00wOd5DGQokKvLLnp/cpm6lrXJPGsono50FN0FnjYm6iGdUP49NqFzg+qBMbCU19pdeA
-         ukLK4OP6X4c3QTDcQB2lAkJxdCojpH6VGkZUJFo1vMgNgoy4QClXMPKWzhKLO7WecWHf
-         Kvnnk5Ust/d5hpTP21qiIso0Zu6x3Xxbf/+w/7zMKKeG/1n2qNh8IM8fEFlT0xtWkchp
-         /GzvUHcxk5Od8lCLWncxEOduoNT92G1ohp7rSt1yqizKJw2TpFFJh0QjO4GjIF8jnMwf
-         rvgA==
-X-Gm-Message-State: AOJu0YxZ1bXmAiTybLNLyDySsU9WffGl4X4+pIUFr+B1CKlD1Q8fuB5f
-	yzD6nm5+PV7p30fzsdxp3vEePz1c/O4byqJWLzpT5mZtKfV1eHBfinovIeiv1Q==
-X-Gm-Gg: AR+sD11t4Dy9ylekMlCpHJNf41d74qyCGqRLtp6RPetzN9SKmop+PsaL2rckInYi2Ob
-	I6BG3C7w5aSTbdEyZNkVrOO2ewlHHdj4QNAoiFrC0wJcKiOHqkWw49J7KHQFccuCuTXa2QICFBG
-	ERYNky/hQ6n/+8N5JHLcg93SrkasNG7wbl9QvJpA8vo73AW+nQPZkg7ph7S1SPc03GHm7nkpaBX
-	ZyPJ5sQHx8T6CeKnOJgw/xDLguoDh/RpopmrsHDHD+cS2dfH4AAtqGPf0cExgiMQ5PzAN64175f
-	823ILUksvHTx4OTlK34JEANJyF8+ar39peIu2PCx/ugX57j5gMj1MBt8hmLyT3rM2jiPwab+8Wx
-	373xZCn5IQmJivZlJLRP0GetGjbvxZKJSdpiEiMlihe6ObSEX+DrNoLFVH81GaQ791NHvHpqFMT
-	6UUkofRbxwXzXEQ3EPH2AD/FWdOgnMbp+LLJdIjwVaKPAZIH3fp/NX0Hv+jg8gD/sWwuLXTK4tH
-	NuhCLb8usMyKs2Qup6385pjZHYdUfG62z8gPQ==
-X-Received: by 2002:a05:6a00:c81:b0:845:cdc1:a803 with SMTP id d2e1a72fcca58-84f2dfc4763mr19157372b3a.11.1786043702350;
-        Thu, 06 Aug 2026 12:15:02 -0700 (PDT)
+        bh=PV21MAhcjbCpKEfp7iHgiEKWEs7SXbwWKXnvMBb01xQ=;
+        b=qWC+2RzRNqR8HfwlSf52qgjeERNkmxi5iUOfeKMQUa938PuYtR7tTkB5cG9lJLCbJU
+         c8UEtX1IdoThe03w8mRkRVcfpzj+MZY21murxKCjpfTmujf7oVMIXSe3w17OHLGBBCkb
+         L87iyZ5MqNT8SeEUYHk3mwaY1b3MYxM6fomvZEYexOIL14nBuxJhpK74Z1HONTrDheYT
+         Y1clvkc3yxA00D5hwg6Uv0hh8OrUESNPkfFXBPHPLgYagOlmgA5M7W6tjc/FCzR8/bE/
+         zqbDqMZCT44Obyz/5rAQqAqvllxBEm6GzoGf/ePCx+0LzyTrSRBcAmfByYwpAcauJ3tm
+         GbtA==
+X-Forwarded-Encrypted: i=1; AHgh+RrB42ieFjjg+VruALJLVfxiADtUeNgQgq3txunceBJdxh6eKv3iHWVGJoBNhaahqSuKfX76PlSgHvkO+w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YybtNYb7EvSU0Ar+I05emrvZyUqnzfvpE9qzcRJLIOqhgmf7sG1
+	b5Ycvzsas2T0dj4jWVXmG/4QnuDzw9sTWQnUYn6I0GW6N32b3SbrZhN2MDbwng==
+X-Gm-Gg: AR+sD12l59aOkhd+WWAEcy68Sb7bnWLbNMsY25CNbEIxuETq7HDR+ij4kM24T2vKNmZ
+	cQ1Qzm15RJQI0rGtGdCKDp3wt87o9SyduEIWFkcF00LAJ4lEhvZ9bkY2a5/dQbThFyGul9ajpJJ
+	T5AwjefK2O4NH+XAr0KbMcCHIcQtlr3XGfiE9utVqc8mvwzt72spmiwHrs+ZvlG2x2oOeGDOJBB
+	wJbAWric9zcFZe7TnpZBGOJYO9+/XCx5K/XdQaGWBQUbb6uRSb2zF27MQMUMyGoOGc3MgSX0EEy
+	EKyUv3GlN0yuiAbh3bj4muz4Chaa3tEfKcJs/g/aao8+70+1yyaypwIGBqBJFPsCeCNLl9TocGX
+	3If+/vTByXKzTeK/23q7ucAuHoBkmm8GeRj/Ix9qPAkJU3tY13SUSWUGwMY71mjdNPOQE6A/Vmw
+	MAOlN4T3N56QoC4vN2RfOQB9eu4vfDWl0JfMEYf2pvb2RbNj9YcHxA0zBRXzDbWD96OfFoT2v4c
+	gpNwq6GDHqXUsYeazGaNsJeYWSHt+rtVrVnLA==
+X-Received: by 2002:a05:6a00:8083:b0:847:8e98:9a4b with SMTP id d2e1a72fcca58-84f2e12db9cmr21283646b3a.34.1786043854516;
+        Thu, 06 Aug 2026 12:17:34 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84f45bca643sm1947290b3a.61.2026.08.06.12.15.01
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84f4538bc10sm1962493b3a.3.2026.08.06.12.17.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Aug 2026 12:15:01 -0700 (PDT)
+        Thu, 06 Aug 2026 12:17:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <722edf04-04d5-4ca6-b4c4-980f81742ae3@roeck-us.net>
-Date: Thu, 6 Aug 2026 12:15:00 -0700
+Message-ID: <4b0305a8-f2a1-428f-85f8-b1b731fc2ae9@roeck-us.net>
+Date: Thu, 6 Aug 2026 12:17:33 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,18 +71,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] hwmon: (corsair-psu) Fix linear11 calculation
-To: Wilken Gottwalt <wilken.gottwalt@posteo.net>
-Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>,
- Sashiko <sashiko-bot@kernel.org>
-References: <20260804034811.2385506-1-linux@roeck-us.net>
- <20260806173411.6be71067@posteo.net>
- <deb3db39-e8da-40d2-af9e-bdaf73b9bf3c@roeck-us.net>
- <20260806175645.5e50b70c@posteo.net>
- <f4077f39-0427-4bb9-8b6c-ddba3f492765@roeck-us.net>
- <20260806184233.44124904@posteo.net>
- <910065e6-8b47-4a40-9c4f-9dc4f41c1825@roeck-us.net>
- <20260806202818.5d919e3b@posteo.net>
+Subject: Re: [PATCH] hwmon: (yogafan) Add support for new Lenovo models
+To: Sergio Melas <sergiomelas@gmail.com>
+Cc: sashiko-reviews@lists.linux.dev, linux-hwmon@vger.kernel.org
+References: <20260806131103.19104-1-sergiomelas@gmail.com>
+ <20260806132452.80AD21F000E9@smtp.kernel.org>
+ <f96884d5-7bb2-4646-9175-1b385789690b@roeck-us.net>
+ <CAP8e=sJbD21FyeU+9w_CVGLOXhxdWmsCwcrS5uNB0Z+9qQ4gLQ@mail.gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -127,80 +123,59 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260806202818.5d919e3b@posteo.net>
+In-Reply-To: <CAP8e=sJbD21FyeU+9w_CVGLOXhxdWmsCwcrS5uNB0Z+9qQ4gLQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 8/6/26 11:28, Wilken Gottwalt wrote:
-> On Thu, 6 Aug 2026 11:04:50 -0700
-> Guenter Roeck <linux@roeck-us.net> wrote:
+On 8/6/26 11:26, Sergio Melas wrote:
+> Hi Guenter,
 > 
->> On 8/6/26 09:42, Wilken Gottwalt wrote:
->>> On Thu, 6 Aug 2026 09:28:34 -0700
->>> Guenter Roeck <linux@roeck-us.net> wrote:
->>>
->>>> On 8/6/26 08:56, Wilken Gottwalt wrote:
->>>> ...
->>>>>>>> +	s64 result = mant * scale;
->>>>>>>
->>>>>>> Uhm, this is a 32bit multiplicaiton, actully a C gotcha I explain the beginners
->>>>>>> in our company. https://godbolt.org/z/eM6TbGG5E
->>>>>>>
->>>>>>
->>>>>> It is, but that is ok and intentional: both mant and exp are guaranteed to be
->>>>>> no larger than s16, meaning the result is never larger than s32 and will never
->>>>>> overflow.
->>>>>>
->>>>>>>> -	return (exp >= 0) ? (result << exp) : (result >> -exp);
->>>>>>>> +	if (exp >= 0)
->>>>>>>> +		result *= (int)(1UL << exp);
->>>>>>
->>>>>> This is the calculation that can overflow, making it necessary for result to be s64.
->>>>>
->>>>> Yeah, it was just funny to see in the wild. It made my day. :D
->>>>>
->>>>
->>>> Guess I lost you there. Do you want me to change it ? I could add a comment, or just
->>>> type cast mant to s64. Please let me know.
->>>
->>> No no, it is fine. I just was surprised to see that famous gotcha. But I guess
->>> some AIs may jump on it, ignoring the context. Changing it maybe would prevent
->>> noise in the future. It is like that famous mathematical "iff" term, which is
->>
->> FWIW, one could argue that it is often misused in the Linux kernel.
+> Confirming that at my knowledge this is a non-issue.
+> However, using the 4-letter machine type code DMI_PRODUCT_NAME could
+> theoretically
+> offer even tighter precision, but up to now, the current matching
+> method has never failed in our
+> testing and field deployment users of my github:
+> https://github.com/sergiomelas/lenovo-linux-drivers/tree/main
 > 
-> I actually don't know. I'm one of the people who considered it a typo. :D
+> Anyway, I am compiling a full database for complete data of Lenovo
+> machines from PSREF:
+> https://psref.lenovo.com/
+> For reference, the complete mapping matrix and DSDT traces can be
+> found in the Yogafan Master Quirk Database.
+> My database on based on this source and others is here:
+> https://github.com/sergiomelas/lenovo-linux-drivers/blob/main/Lenovo_Drivers/Prototype/PSREF/yogafan_v3_quirks_database.ods
+> and
+> https://github.com/sergiomelas/lenovo-linux-drivers/tree/main/Lenovo_Drivers/Prototype/DSDT
 > 
->>> used in some places of the kernel. A lot of non-native English speakers report
->>> that as a typo. Ahh... just ignore my gibberish.
->>>
->>
->> Actually, any reasonable AI should be able to find that this isn't a problem
->> given the constraints. Sashiko didn't flag it, and if it did I'd have submitted
->> a prompt update. Sashiko is explicitly directed to check for over- and underflows
->> in hwmon patches because it happens so often, so I am (reasonably ;-) sure that it
->> would flag it if there was a problem.
-> 
-> Yeah, a reasonable AI... So, I guess we will find out in the future.
-> 
->> If you are ok with the patch, any chance for a Tested-by/Acked-by/Reviewed-by ?
-> 
-> Sorry, I did not test it yet, but I will tomorrow.
-> 
-> Hmm, I really wonder if something will actually change. I never encountered odd
-> values. Well, except for the really obvious ones. Picking every value one by one
-> results in every value being from a different sample. I think internally the MCU
-> samples with about 1000 Hz. But getting that right would be some serious work.
+> I propose to switch to this identification method when we have more
+> machine references.
+> What do yo think?
 > 
 
-You probably won't see a difference. This is about the possibility of encountering
-issues, after all, not about something that is actually seen (unless you can manage
-to run the system in freezing temperatures ...). All we can do here is to ensure that
-there is no subtle regression under normal operation.
+No need from my perspective, if the current code works.
+I'll go ahead and apply your patch.
 
-In the I2C world I have test scripts which can simulate borderline conditions (such
-as negative temperatures), but for USB that would require something more sophisticated
-than the i2c-stub driver.
-
+Thanks,
 Guenter
+
+> Thanks, Sergio
+> 
+> 
+> 
+> On Thu, Aug 6, 2026 at 5:44 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> Sergio,
+>>
+>> On 8/6/26 06:24, sashiko-bot@kernel.org wrote:
+>>> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+>>> - [High] Specific Lenovo model DMI quirks incorrectly use `DMI_PRODUCT_FAMILY` for exact model string matching, causing all specific quirks to fail and fall back to incorrect generic profiles.
+>>> --
+>>
+>> Please confirm that this is a non-issue.
+>>
+>> Thanks,
+>> Guenter
+>>
+> 
 
