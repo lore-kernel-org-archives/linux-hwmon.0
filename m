@@ -1,103 +1,170 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45B6B38B157
-	for <linux-hwmon@vger.kernel.org>; Thu,  6 Aug 2026 01:20:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 621C135C6AB
+	for <linux-hwmon@vger.kernel.org>; Thu,  6 Aug 2026 05:23:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785979212; cv=none; b=EtNPpTBzN7zn+zio/2PEoQileEfXdAnvqc0hmoqgwbdOAhVGgY/mmHtVZzt4W4qrVT5B338mwBxip7rdc2SMdIYN2ARv8038GZGJ1av7NCWgi60ipC3E6907ZMddFUVbNFTDgtt+Swyjc+2F6bmzo5BTgDglnmm0vVybdDd7JcA=
+	t=1785993824; cv=none; b=jaD9w8ZhoU/wRnwjFzGfUmJNydem490VgPwkSNEb7aIUrFIC6XAwfq7325CHWosxkZ3QXan9EQMRJEK8bnI9JAglc3fP8iyKwVGUGrW/TCGC5WL5O1hTXxe/eqMLyi3p0WeHQ3KXtRBCwkYzq/oY4QqE1BZ/Fo94TlUuJKDIO2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785979212; c=relaxed/simple;
-	bh=JbSIdz1Hs55nv8CvNDLovF4817NCnAQbvjf8YGcyOWw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fnTw8P7vn0hgWPocAvZNpk8perZfa+luQDOiuMSSxZx38CwVr2ADAG8xR6jH6/1wYzxJPJ5ZstSjB7cAEu/zG155k09GPrOSZG18zh1qHq50EFAsRb1D0X9oKmf8BjX/prmlAH+WEy0yjyoEXRqdZ3lc48180p0qXn6LcLyKwi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ERNhPKsM; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785993824; c=relaxed/simple;
+	bh=XbqsjtGj67DMWugwFQZMgJ8NQ1v8abHFUfJsNZ9iMxw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pfw46r+w4RE/icsufvbYt3CNY/+MVVcGKB8qTefO5T4g+/2LaKZEqCdg+BP11scrmaBcrfBgjDrZ2vyBRJAd83TAZeOSHoj8cQ8tpunbeMw3f8EOuvE6nbl8JXtmlCnz8aNhEpzlEtxeTOSlDj0bpZPWjvRTEdnX6Bz3RzQ5I0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=djr/GwtW; arc=none smtp.client-ip=185.67.36.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ERNhPKsM"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2caea3f742bso23994245ad.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 05 Aug 2026 18:20:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785979210; x=1786584010; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=JbSIdz1Hs55nv8CvNDLovF4817NCnAQbvjf8YGcyOWw=;
-        b=ERNhPKsM5cbPnWf1n7YOUog8IWSkEA+lRvj3GFrIsvk2geT+nDQwbF21eOe6cbsore
-         pybM/AQeseqXp7jZarspP3IETMKDZvLPtYU8ZgULDrEKiPL9tjfuthSmx6qyBnc7N3Bc
-         +0QRAj8uQmZ4eWqFcsajqqIJNWJtACj46EHDOe2+gP/981YNz3nIu/jBgKw1rIdaQ0M+
-         1hknf1Zz/ArOYOB+Ww8at2eGwalPpXvCz+fQ1qItVniQ/rbqi7EwXX3WJCrsEuObr/sB
-         xa7kFJ3XgxshwQ+sDlVUvF5L/ri9ivbgALbBPF+g3J3Pqx4ZTueVPF2xgc1MzgHmVetN
-         mMSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785979210; x=1786584010;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=JbSIdz1Hs55nv8CvNDLovF4817NCnAQbvjf8YGcyOWw=;
-        b=XvW+pJCRtdlEP9bhlcjzMxRI7hJD1i8HlGsENqeGNcTLPbRL9jbO4QA9AEcncjmNWX
-         j6rhLxspKMCZvfGWMWiTvMrASSIPtCcr+xFLj6OUQDATlat8QtUepuKCZ4bKZp9S2tGk
-         aKwenjq3sfhzjLFEGBkfLcDtf4kmc/747hdqP2YZ42SE0kbM0Tn7HJdQaxKqrglszj6q
-         0mf5VtRhuxx+xl/l7QKO0lsJVevtiWL05dBEvSI1Wq5D1poabF/JB8dyqG5I0tLrE+We
-         o2DPufUksLZdNNkhvVBZ0lwGjEZc6AEzEs7/h4d7DiaE4jueo+hkxkGgnCslTyoUDw6h
-         TJLg==
-X-Forwarded-Encrypted: i=1; AHgh+RoaMtoNPgTKEJziO9pNTovVU/UnvFRn8OcFAfxyG/e3Y33N8GjouLRayHhUoe+fcdE60C9Q5V+VGYcRVA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0l3g5K+u2RfmGg1Lz/H98ZuRe4g9ppyrQHA01LeWCPR853RQF
-	l6WZKEa2EzD9Cc8Ux5tWnHNglY/qsXOPlzZwHAmnZxe4IFnWYedCxWPq
-X-Gm-Gg: AR+sD12F0fvNia1XjcA2lOB9JDh6fc1y+WcFEcA7D6Ro9CBUZg1/WkoH67xx0rOyMr3
-	ywwKnL4wPYyk4rNDWpSorfUcX0WvIRUUWuwHxC8GOfMwTyfxJxPjtP0ouuJgGmGpcyciPdpxW3t
-	Yb+0WNcDKpRXji1dAHEJNRx0CMqo3ZHWY1PtxRRpfn98pAKHJ6GeIT6Is8crMM773YluiLiElg3
-	1HOiGVjp7gPmrm/jVz7aYxvIyGkz9KpK9G/gB7MZj9pEhjjH9BYTxvSxDegb4DVFPqioMDP9k1x
-	IcdO+o7A/yQj09tFR2PdMO6Rs47a5jqMethVcmgXLmHCajLc7y9bHJJdmCy21ITiTGdZjxKmy/W
-	7kLzISsqndfCp+jnopbYZYTjWDD+uw/aEvD4MOvyxe+WS3Rh/i1+EIQkvjIYXQ/ALsWcpE0lOQU
-	Epz2JMooe1IPJbr2RKaAU17a0Y5cVsCobHr03uvAhqg45s5PMqeU6S5pMez7/ohRlZTCnnlsPFp
-	wSV/bbLI9AG5a8OYn1rA8j45kvJSE7zA9ScPqGlI2xzkVsgGIJHnQHqyzk4
-X-Received: by 2002:a17:903:1a10:b0:2cc:f5b8:4c2e with SMTP id d9443c01a7336-2d0ca767b88mr146173255ad.9.1785979210494;
-        Wed, 05 Aug 2026 18:20:10 -0700 (PDT)
-Received: from bloom.localdomain ([2604:3d09:178e:e100::6868])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d0aa0268b3sm22350915ad.37.2026.08.05.18.20.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Aug 2026 18:20:09 -0700 (PDT)
-From: Ivy Lopez <skunkolee@gmail.com>
-To: linux@roeck-us.net
-Cc: lee@kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	mfd@lists.linux.dev,
-	patches@opensource.cirrus.com,
-	sre@kernel.org
-Subject: Re: [PATCH] mfd: wm8350: propagate ADC read timeout instead of returning 0
-Date: Wed,  5 Aug 2026 19:19:50 -0600
-Message-ID: <20260806011950.27428-1-skunkolee@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <04a58bd8-df9e-4c66-ae19-8473d6ab9c41@roeck-us.net>
-References: <04a58bd8-df9e-4c66-ae19-8473d6ab9c41@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="djr/GwtW"
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout01.posteo.de (Postfix) with ESMTPS id E3889240028
+	for <linux-hwmon@vger.kernel.org>; Thu,  6 Aug 2026 07:23:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteo.net;
+	s=1984.8680eb; t=1785993818;
+	bh=rypBXhRtpQmTVGev87waIzq+w2KhT5u06v7zI6vDSAQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:From;
+	b=djr/GwtWFy3T4hOugS5dZ9cfGgCXd+vYwz9kxrJHqpvowoynDNjdVluyx0OIMc7g7
+	 use0TBU9qV2Aa0xW71lenxv0eZw9v6eLQonqPJN8cDzIYfEQGTgOtAmdym7xkdMchH
+	 G51KwRs1vHYE6EMzbWeNZAUE/cKJulV3go0ZdBgsBhPhMYdwCstrgiCp/DKsAbJlB/
+	 MrXMAp8Q90EgrbL+kliCugHI5laRJDDNTYvJKisVWyrIorli4ZsVxlGbf4N+VwaC1c
+	 51ZcxTZ5YxS9jfP0HLYdEDE9jL4+qE0976j6V0OyazYXDY0cJqRUgkvzrydpUjyy2I
+	 C4DHkogzwrAFw==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4hFwfy1CSHz6twG;
+	Thu,  6 Aug 2026 07:23:38 +0200 (CEST)
+Date: Thu, 06 Aug 2026 05:23:38 +0000
+From: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+To: Ali Ahmet Memis <ali@iusegentoo.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (corsair-psu) serialize debugfs access against
+ hwmon
+Message-ID: <20260806072337.15496c74@posteo.net>
+In-Reply-To: <20260802123653.19532-1-ali@iusegentoo.com>
+References: <20260802123653.19532-1-ali@iusegentoo.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On 8/5/26, Guenter Roeck wrote:
-> I am not sure if this warrants fixing in a 17+ year old driver,
-> unless it is observed to be a real problem. It appears to me that the
-> error handling was likely not implemented on purpose.
->
-> On top of that, as is seen a lot lately, this fixes a rare issue
-> that is likely never going to be seen in the real world while not
-> addressing the many real problems in the driver (as reported by Sashiko).
+On Sun,  2 Aug 2026 12:36:53 +0000
+Ali Ahmet Memis <ali@iusegentoo.com> wrote:
 
-That's fair, sure. The automated review also caught a real regression
-in this patch itself: reusing `ret` for the voltage value in the
-power_supply get_property callbacks means a successful read returns
-a nonzero value instead of 0, which breaks the normal
-if (power_supply_get_property(...)) error-checking convention for
-callers which is on my end.. I'll drop this patch rather than resubmit a v2 for an issue
-you've said isn't worth fixing here.
+> corsairpsu_request() sends a rail select command and then the actual
+> read as two separate transfers, both going through the single shared
+> cmd_buffer and wait_completion in corsairpsu_usb_cmd(). The hwmon core
+> serializes its own callers, but the debugfs files call
+> corsairpsu_get_value() directly and never take that lock, so a debugfs
+> read can land between another reader's rail select and its value read.
+>=20
+> The result is a value from the wrong rail reported as the right one,
+> because corsairpsu_usb_cmd() only checks the command echo and both
+> transfers echo the command it expects. It can also make a caller consume
+> the reply meant for the other one, since raw_event() writes into the
+> shared buffer and completes whoever happens to be waiting.
+>=20
+> Locking was dropped in commit 4207069edbf0 ("hwmon: (corsair-psu) Rely
+> on subsystem locking") on the grounds that the subsystem serializes for
+> us, which holds for sysfs but not for these files. Take
+> the same lock in the debugfs paths that issue commands, using the guard
+> added in commit d1e720c7328e ("hwmon: Support guard() and scoped_guard
+> for subsystem locks"), as suggested in [1].
+>=20
+> The lock cannot go into corsairpsu_request() itself: the hwmon core
+> already holds it across ->read, so every sysfs read would deadlock.
+> vendor_show() and product_show() only print strings cached during probe
+> and issue no command, and corsairpsu_get_criticals() and
+> corsairpsu_check_cmd_support() run before either interface is
+> registered, so none of them need it.
+>=20
+> [1] https://lore.kernel.org/all/5f0406fa-9692-49f0-bcfe-c013f5fc7b62@roec=
+k-us.net/
+>=20
+> Fixes: 4207069edbf0 ("hwmon: (corsair-psu) Rely on subsystem locking")
+> Signed-off-by: Ali Ahmet Memis <ali@iusegentoo.com>
+> ---
+> This is the fix Guenter asked for in the May thread, written the way he
+> suggested there. Wilken's patch used a driver private mutex around
+> corsairpsu_request(); that thread stalled and the race is still present.
+>=20
+> Wilken, does this cover the chained command case you were worried about?
+> As far as I can tell it does: the whole select-rail plus read sequence
+> now runs under the same lock the hwmon core takes around ->read, so a
+> debugfs reader cannot land in the middle of one. If you had a case in
+> mind that this misses, I would rather hear it than guess.
+>=20
+> I have no Corsair PSU, so this is reasoned from the code rather than
+> measured on hardware. What I did check:
+>=20
+>   - hwmon_lock() takes hwdev->lock, and the hwmon core takes the same
+>     mutex around ->read and ->write, so this really does serialize the
+>     two entry points
+>   - the lock therefore cannot go into corsairpsu_request(), the sysfs
+>     path would deadlock on itself
+>   - probe registers the hwmon device before creating the debugfs files
+>     and remove tears them down in the opposite order, so priv->hwmon_dev
+>     is always valid inside a debugfs read
+>=20
+> Prior discussion:
+>   https://lore.kernel.org/all/agR9YW7hGTJ_l7ms@monster.localdomain/
+>=20
+>  drivers/hwmon/corsair-psu.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>=20
+> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+> index ce958cdaef58..24100519cd83 100644
+> --- a/drivers/hwmon/corsair-psu.c
+> +++ b/drivers/hwmon/corsair-psu.c
+> @@ -664,6 +664,8 @@ static void print_uptime(struct seq_file *seqf, u8 cm=
+d)
+>  	long val;
+>  	int ret;
+> =20
+> +	guard(hwmon_lock)(priv->hwmon_dev);
+> +
+>  	ret =3D corsairpsu_get_value(priv, cmd, 0, &val);
+>  	if (ret < 0) {
+>  		seq_puts(seqf, "N/A\n");
+> @@ -730,6 +732,8 @@ static int ocpmode_show(struct seq_file *seqf, void *=
+unused)
+>  	 * getting of the value itself can also fail during this. Because of th=
+is every other
+> value
+>  	 * than OCP_MULTI_RAIL can be considered as "single rail".
+>  	 */
+> +	guard(hwmon_lock)(priv->hwmon_dev);
+> +
+>  	ret =3D corsairpsu_get_value(priv, PSU_CMD_OCPMODE, 0, &val);
+>  	if (ret < 0)
+>  		seq_puts(seqf, "N/A\n");
+>=20
+> base-commit: 2d2338c93da79b3bfe4b6099a931d9468d539952
 
-Thanks,
-ivy
+That does not even compile on a current 7.1.5/7.1.6 kernel. Though, not sure
+yet, what that is. But I can not risk running a trunk kernel on my workstat=
+ion.
+
+/usr/lib/modules/7.1.5-arch1-2/build/include/linux/cleanup.h:302:9: error: =
+unknown type name =E2=80=98class_hwmon_lock_t=E2=80=99; did you mean =E2=80=
+=98class_task_lock_t=E2=80=99?
+  302 |         class_##_name##_t var __cleanup(class_##_name##_destructor)=
+ =3D   \
+      |         ^~~~~~
+/usr/lib/modules/7.1.5-arch1-2/build/include/linux/cleanup.h:422:9: note: i=
+n expansion of macro =E2=80=98CLASS=E2=80=99
+  422 |         CLASS(_name, __UNIQUE_ID(guard))
+      |         ^~~~~
+corsair-psu.c:667:9: note: in expansion of macro =E2=80=98guard=E2=80=99
+  667 |         guard(hwmon_lock)(priv->hwmon_dev);
+      |         ^~~~~
+corsair-psu.c:667:9: error: cleanup argument not a function
+  667 |         guard(hwmon_lock)(priv->hwmon_dev);
+      |         ^~~~~
+
+greetings,
+Wilken
