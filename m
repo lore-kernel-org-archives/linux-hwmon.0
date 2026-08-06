@@ -1,68 +1,68 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE8CA47254E
-	for <linux-hwmon@vger.kernel.org>; Thu,  6 Aug 2026 15:44:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D45147FAF7
+	for <linux-hwmon@vger.kernel.org>; Thu,  6 Aug 2026 15:52:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786031068; cv=none; b=OnnrEpfASVd+NsFDy4lm44Aave0CqOE1mXG/J0L/oitoGS0xcypVwQbM/dqz/nHbPhQgv3kKlg0wXIPpxKf4SlPpJIAb6N2/ry2s1X7/m80now1I1UcwIiPRkSd6lvZ9RFY2WF1QXcU7PKzTmS1Ev742vYFsAu2kHRrsQiA0FpY=
+	t=1786031573; cv=none; b=q/a5FTBVFDFylu/dTXB4Y4g9A+BQP2Uds4PH+VzN2XtjzZ6zO+N9HJmOcTWwbS11O8em0KTJlYepltNS7Qkne36a9f/ZMqu7gkvDx1Jm+yVAPp5CghPxvC5eJc4vl/Mt70fLB6+feg0deh5pVSfH2AD4gX10u2gLGeqe4U0sPhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786031068; c=relaxed/simple;
-	bh=O7rkwtXnbLwt2keDlpi9elKWxaB0PjsiSkkruUjKVaE=;
+	s=arc-20240116; t=1786031573; c=relaxed/simple;
+	bh=es/SR4mDG/KTPTsf8DwWFOOOiCZ0TfD848pueS8M0OA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pyfQbJ3l8uOVWj+uGGyAsGTtpdf6PAjeQGM0rfH0tSA3RFTffR+0cOLKGsE54TA1jiWY2qYInh7BwujuQ1CvrA/pP7GWifqn6JlrRO1og68inwFJyedu7ctluLEGJw3ajYz8ed0ws6lc9zSrdxGcZ8fUSFJZWVwqg8XSpPOLhZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rnEeLHRa; arc=none smtp.client-ip=209.85.215.182
+	 In-Reply-To:Content-Type; b=iHZp+wYVD53Cc+yNOBXE4fNKf9xb9p3QBHm+zFcxq4DUflaJy0kWU9llVaAVpsP8VBgifp5h0ltsFupEngwRAUaLAjrcDMgwxAJVVByfRQvvUkOrCavXNNftGfQBqZ8knujg+k1/v3Jn4sz1SFWhOKGVZ1APoaCSYV6KVoHCrHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d/1V2V7o; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rnEeLHRa"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c9e607d81fcso1485063a12.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 06 Aug 2026 08:44:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d/1V2V7o"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-38de840f2f0so1737186a91.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 06 Aug 2026 08:52:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786031066; x=1786635866; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786031563; x=1786636363; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=O7rkwtXnbLwt2keDlpi9elKWxaB0PjsiSkkruUjKVaE=;
-        b=rnEeLHRacsdHC6aHuinXasSiCo5B7niV8No7T5V4RBHPKB6AMUzoMTSoMkxGUlTSdI
-         /OlCzFNsGw/AJa0D4yu7fkArw0cBeEMo2tdo2+38bALXwpe6I0gATISR1bHVlzu+TA6i
-         XxcNRBydWTd8A5dE1W8syQ8mogM7zNpa4YgtNfcGukJ5Bf4TjZi1YSC34jfQI4lJwN9d
-         H/1UwFQf0wAMvqQfoh0fJRedIIMbVtqpcBU9lT0zogAoWqtbGeappydHDJ7uC0BZAv5M
-         5N0gpvaEyHeFsMVjfR5JoO7dm6riX/qvIx5Q/PBhD2oz1K2Gsb8EVB5b5C4Xdkh6vQvS
-         /IvQ==
+        bh=aHB6kc3DsHbZXQt8y5jFpVQxBtNDvo5vkQaoqCMrrjk=;
+        b=d/1V2V7oW15bgca6cnSfY/FhDDAr7IjRjqu47ljOvXr8LGeDtHYYvv/sq6YqP4vYR0
+         23B5By3nDAHq+JMrkYg8G+1esTYDf4nlNQ0r7dLEjGFeYi8W3vCcaInTBo0Aescd8ALS
+         mpQrLPfQej//hO7UYPAEIqLq6mAVI8375gjEuArK8yuZ3Wa7fpBEbURnXIfhtyC/68Up
+         tlmkx/Jw1e7AKhxnWph3wM2p1lV4X1IQtTiZx6bMDjUMJShtU3z59/XiG+9l0f9O0SaH
+         4GH8M7SoN6d0kngYXpPCOBZQOGVuRaYPLdlD7E9GfQP4F6NOy539v9x+idcLMD87GkLe
+         IrbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786031066; x=1786635866;
+        d=1e100.net; s=20251104; t=1786031563; x=1786636363;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=O7rkwtXnbLwt2keDlpi9elKWxaB0PjsiSkkruUjKVaE=;
-        b=p6YxWuwtkqVc1/Zqhaye/o1IubLbcuSJqVO7Q4tGp3UyOmtPCfmEwNxNZ8AAlUHJ6m
-         3toLhe4bJoG0vygTUFpzWroObkU7g4pxoXwXxmhafp0doe3vtCMZaThBhW78J50ZNAyQ
-         ar90usLib0PoL0xIJtKaILZ+zfnFlZspbkRpwvDJlflE7zX4IalhnESv6U2Y+o5xVhUf
-         ufQZ3cn10pscbaDManQ9gz/Q/TuZ3VLrfe08Q/yDGqE0tvK929ZVTG0R//1MgWgBb28l
-         kwsbojqt9khTLG4A3lIbsu6XBzFp8h+Zqsp2uFbQ2twlZf1jXxDB5L61AxwYzUM2eN3+
-         IF3Q==
-X-Gm-Message-State: AOJu0Yw4RZCC1vj0QtzioVTH9QEycy/rmtTQPXTL9UJ633XWegMIoqnc
-	1W/fNPIIqVBn5p7U+pS6LCz5oEk/W7eauTYZEi/k6x11VO9JLOBd7OIK
-X-Gm-Gg: AR+sD137VAjawysdy2twe8LvXWUVKO83qGuZbykKEMiaITSgZ31bmVzrAryeBUr3UH7
-	xwU68+PdDI9Lxj9A/NA8pfki/AKWXLjBCdnSf0sDyfHbvI6+2R1tF9/GoBX0L3M6upBbt3GB1eH
-	CdETdxLoAZuK+GYh/UQtKqjojXZOMEoP1E+0jWSDQfHxvLW7ZzvHVJ3QSEA0w/HdKAU6Ex4K82g
-	k/huGIGzCM3laxEkBtg3Hou8ulSaNcqBib9xGuFxTNQYWg5id1MPe1/wZFORF1f/QFN1u0nkTVy
-	mDjLdFaCSfh3uDDvDSyueVJkJFaxiEBaKGscXgc4tGK4H9WkvCGWKyTdxeIcr+cy7AEL4AOpAia
-	BPshW3aNJpfiLiXScLINmIJye8y9nWo+SptY4I6Cs61cQ+NyIoWWhi57cBVL9Reo9hrAd2pgl83
-	QKe/TzbGOwBrpmZW9h+exq73kBchFJnVe3+McpYV8E3o3Vw509YoMTvWz3OaASlzfWD64bq+Oi5
-	Uem0R0L/z96Z7+je/ABK+dg+WsHBbVSVjS5Dg==
-X-Received: by 2002:a05:6a21:109:b0:39f:a8fb:3354 with SMTP id adf61e73a8af0-3cbadc1497emr3658629637.17.1786031065993;
-        Thu, 06 Aug 2026 08:44:25 -0700 (PDT)
+        bh=aHB6kc3DsHbZXQt8y5jFpVQxBtNDvo5vkQaoqCMrrjk=;
+        b=SNjHqWkJ9nM45lwUHGs1k+rizhlRzeofmZHz7cdJ2AmiagBgWe48GEqVEsbEpxaNpI
+         nbukifWN5xUJX7ltOwoHrZCCId3ZLc3IfkQMGqaX489KkdeTnmIGLlmrfPPBMtkMn74r
+         WCEO4/MuvSjk+GLEBCl8Uo4n9je25rqmCU+V0rPFnrk7AFSp81z97frB359hE2XxIeZi
+         P15dIbbLRiFTAiDk0KOTnS93OPEuTHp/XEZedChTxi0ENxO5hZABVyaYTp+80gqRdOef
+         EVsDXAKaObYP+G2o3lGvTqsf9btYae7iHWvCeyZqGPONiunEn0ixjmNkEt+EMw+ohpK7
+         M65w==
+X-Gm-Message-State: AOJu0YwJkFgp1xQ1Lm/kFysCcytUUuTbZNgI23rhKTTwH6+L9JSNrMR4
+	fFAMN5zS/UE3Tv1wAt2oC9IocPAYuom3uETaOzUzBnyyqZvGf6ZjeRcL
+X-Gm-Gg: AR+sD11f3RPSUsaCvIcCTzuUoFToT4mahBc0LXcY3s+xZ8C/d0gaIgZsluSxknxNQoT
+	uK9X8cVrSKa/Oo0F+w3lei6OgLo7pCDd/zDIt0CQjKIn3xgSOU+dO+3Wf2Vf/dE38/bnr1WY+28
+	xQFfAkN29klSiXA38gMT3k6ANKpNWNFGN/rj/ALDf+qrIZp8KYlrKrZp/iuUUtb859JJwL9qBDv
+	W9BLrsb2TlT32AnvSbi14o3yV83xuYxAS76BUqeIoMF/o3SHNlgxP5engHKyJ8sF1FvCWs30k8f
+	Yd+P5X/2Kk5doKVrFhRqSYFaSfHdNB46WQizqdYi9ziREujTYaZphBImgSJLNBKQJHfu4GGq0jH
+	+0lfmWgvrKc5eubRmfpLoko6tsgLF+Wi7LZeWt0TTS2uGw/ogr+WbLAy26sJ1cxO/ZDtK2JWzoi
+	Q5A/J0HzsoQ8yCNEc2M/HGIjmLp6msUnHIYQHh+NwWc2+gSVWrdFEFZ3Z60S3jSaGjUrTxtNQFA
+	CuWtoPAkAg8Cf36DeO1zqGPQ+ud06uqKGotpQ==
+X-Received: by 2002:a17:90b:51c1:b0:37f:df85:272f with SMTP id 98e67ed59e1d1-3903c5d7c48mr17194088a91.19.1786031563323;
+        Thu, 06 Aug 2026 08:52:43 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13fca92ada6sm25851294c88.15.2026.08.06.08.44.25
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31586447d52sm27674301eec.12.2026.08.06.08.52.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Aug 2026 08:44:25 -0700 (PDT)
+        Thu, 06 Aug 2026 08:52:42 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f96884d5-7bb2-4646-9175-1b385789690b@roeck-us.net>
-Date: Thu, 6 Aug 2026 08:44:24 -0700
+Message-ID: <deb3db39-e8da-40d2-af9e-bdaf73b9bf3c@roeck-us.net>
+Date: Thu, 6 Aug 2026 08:52:41 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,11 +70,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (yogafan) Add support for new Lenovo models
-To: sashiko-reviews@lists.linux.dev, Sergio Melas <sergiomelas@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-References: <20260806131103.19104-1-sergiomelas@gmail.com>
- <20260806132452.80AD21F000E9@smtp.kernel.org>
+Subject: Re: [PATCH v2] hwmon: (corsair-psu) Fix linear11 calculation
+To: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>,
+ Sashiko <sashiko-bot@kernel.org>
+References: <20260804034811.2385506-1-linux@roeck-us.net>
+ <20260806173411.6be71067@posteo.net>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -120,18 +121,87 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260806132452.80AD21F000E9@smtp.kernel.org>
+In-Reply-To: <20260806173411.6be71067@posteo.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Sergio,
+On 8/6/26 08:34, Wilken Gottwalt wrote:
+> On Mon,  3 Aug 2026 20:48:11 -0700
+> Guenter Roeck <linux@roeck-us.net> wrote:
+> 
+>> In corsairpsu_linear11_to_int(), the mantissa is extracted using bitwise
+>> operations and cast to s16 before being shifted left:
+>>
+>> static int corsairpsu_linear11_to_int(const u16 val, const int scale)
+>> {
+>>      ...
+>>      const int mant = (((s16)(val & 0x7ff)) << 5) >> 5;
+>>      ...
+>> }
+>>
+>> Due to C integer promotion rules, the masked value (which is always
+>> positive) is promoted to a 32-bit integer before the left shift. As a
+>> result, the sign bit is never extended to bit 31 of the promoted integer.
+>>
+>> When the device hardware reports a negative temperature in Linear11 format
+>> (such as an ambient temperature probe reporting sub-zero), the negative
+>> mantissa is parsed incorrectly as a massive positive value. For example,
+>> -1 becomes 2047, which scales to 2047 degrees Celsius.
+>>
+>> Fix the problem by type casting the result of the left shift operation
+>> to s16.
+>>
+>> Another problem is left-shifting of negative values. In C, the result of
+>> left-shifting negative values is undefined. Use a multiplication instead
+>> to avoid the problem.
+>>
+>> Also use a local s64 variable to store temporary results, change
+>> the return value type from int to long, and clamp the final value
+>> to LONG_MIN and LONG_MAX to avoid under- and overflow issues while
+>> retaining as much information as possible.
+>>
+>> Reported-by: Sashiko <sashiko-bot@kernel.org>
+>> Cc: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>> ---
+>> v2: Skip handling right-shift of negative values
+>>      (since it is widely used in the kernel)
+>>
+>>   drivers/hwmon/corsair-psu.c | 23 ++++++++++++++---------
+>>   1 file changed, 14 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+>> index 24100519cd83..c437b469de5c 100644
+>> --- a/drivers/hwmon/corsair-psu.c
+>> +++ b/drivers/hwmon/corsair-psu.c
+>> @@ -137,13 +137,18 @@ struct corsairpsu_data {
+>>   };
+>>   
+>>   /* some values are SMBus LINEAR11 data which need a conversion */
+>> -static int corsairpsu_linear11_to_int(const u16 val, const int scale)
+>> +static long corsairpsu_linear11_to_long(const u16 val, const int scale)
+>>   {
+>>   	const int exp = ((s16)val) >> 11;
+>> -	const int mant = (((s16)(val & 0x7ff)) << 5) >> 5;
+>> -	const int result = mant * scale;
+>> +	const int mant = ((s16)((val & 0x7ff) << 5)) >> 5;
+> 
+> 
+>> +	s64 result = mant * scale;
+> 
+> Uhm, this is a 32bit multiplicaiton, actully a C gotcha I explain the beginners
+> in our company. https://godbolt.org/z/eM6TbGG5E
+> 
 
-On 8/6/26 06:24, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] Specific Lenovo model DMI quirks incorrectly use `DMI_PRODUCT_FAMILY` for exact model string matching, causing all specific quirks to fail and fall back to incorrect generic profiles.
-> --
+It is, but that is ok and intentional: both mant and exp are guaranteed to be
+no larger than s16, meaning the result is never larger than s32 and will never
+overflow.
 
-Please confirm that this is a non-issue.
+>> -	return (exp >= 0) ? (result << exp) : (result >> -exp);
+>> +	if (exp >= 0)
+>> +		result *= (int)(1UL << exp);
+
+This is the calculation that can overflow, making it necessary for result to be s64.
 
 Thanks,
 Guenter
