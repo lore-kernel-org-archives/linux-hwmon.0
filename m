@@ -1,129 +1,182 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8499537AA78
-	for <linux-hwmon@vger.kernel.org>; Thu,  6 Aug 2026 13:24:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0AC530568D
+	for <linux-hwmon@vger.kernel.org>; Thu,  6 Aug 2026 14:10:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786022696; cv=none; b=K5eO+uJB43+yiTaIsR4KqNJa4cHFUEWHjdTQ4wtJT+0/nryW0pjVgzB6acrzkTEPe1KJqD3ZxOgD/z9k8HykuUIZYynqWbUoFdVFf6PVm77c/pkoM3QyjQ0VF19yG6ZVpI+LdHq93plgTDTbTB0M2e7JrztsKUDsiGzz7ceUQAw=
+	t=1786025439; cv=none; b=JQbzH7TeXDkVgBuwYl6qbcCiD/vsvyfzcHujYEmCVhrt6Bkj3kqDiEO3CyoMuuzHqrg3l4+YXvPvjzOVgwohapEQqwaAlntH4tUEly66gQdV6N9IX5ufYGCB4qOxQE0rXM48jzpX25+h4JQknR+nt1Ay8t1536TZ411o/ry8Jz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786022696; c=relaxed/simple;
-	bh=Y8L50GS85PoTNL4MhHLQH962HG4GaJteWLHG//qe/Ak=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=WmvWBbSF4IncTLasdgW6nvTaDEgE4B9AuPNhPykk+SJMcfDdD4eXWmx6JtPsEjU9BgSFT2LF7rpbRyKajCJtE5yCCJxUmJ7Fb7CdUDFa3SeE0g4IybhRISqFFxybNY+UwZreERM+HpmrfaAiHhDIi+ALgJUVWpsKdhZdR3JOnA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CpWXzxgv; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786025439; c=relaxed/simple;
+	bh=jljL07B7GOL9S7xGb9ZOHMbXzCmcks26bNoekAvcLh0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PIj5ofwl/t+7ONzyxvn7swX6tjdguZTAYkIDhhIYlNP72+ovTdpNyxZgjfMyRvZ1Dvd2TvEkbaEARpd6pI9vgwPYl9wW5rUbXebjaPAOCl9PtN2Ywgs4on/pB0nPau5kELkogeb4+GGkTFRI3/X1ck/HQs7EuHktANoHO3Bqsxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=TYe89lMw; arc=none smtp.client-ip=185.67.36.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CpWXzxgv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80AD21F000E9;
-	Thu,  6 Aug 2026 13:24:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786022692;
-	bh=9ct7l36DBFvwH65aL0mQRSBCpMnu3rbt/ZZJtRAYxVI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=CpWXzxgvqUr3fYaP8aNlj6J+6bW6qi0mofeMmMCAOiTvqsKc7yilf1ayB+NhbhyK1
-	 5UuBhENAFCQrX0OA2fXb06Xfd6nK4KTz01bdHgL/be7e3WVKNyCNt0kUof4GefVpyA
-	 iqhl7aTxe0Rkpc3TEGIvsYTUtoLfSDF9kzerJVhxL9E1l8X+AcfPMjsfBrxYR/EdC1
-	 22fCPqMFpjM32+evqKuIFvBYbbwCE8CMxw0wOCNCN8aCZ8kDFbv1s0r53HUx5s2bPm
-	 h4/zRb+6c1X+ZewYsxhK4WMbImIVxUoYXavmMko99ieTrjH2BoV0XYvhU69opZxKDV
-	 ghaDDO5bqDuwg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (yogafan) Add support for new Lenovo models
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sergio Melas" <sergiomelas@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260806131103.19104-1-sergiomelas@gmail.com>
-References: <20260806131103.19104-1-sergiomelas@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 06 Aug 2026 13:24:51 +0000
-Message-Id: <20260806132452.80AD21F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="TYe89lMw"
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout02.posteo.de (Postfix) with ESMTPS id C7E5C240101
+	for <linux-hwmon@vger.kernel.org>; Thu,  6 Aug 2026 16:10:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteo.net;
+	s=1984.8680eb; t=1786025431;
+	bh=J6igP1BxYUoVmB8krkGw0DnTzgzlnCKEp83mT6Cp6ag=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:From;
+	b=TYe89lMwNcuXsYfjs1ne1YO2SIPM7ZDa6csqHAO3dItAxYzf80VaNvxYqce4PvDJ7
+	 w/Z3aWPDeOH3S0Dc9ko7cgWlnGMIAKuon8I7mjQqIENJsM9zxMn4x/TRQKW1jFQ8h+
+	 /vH6ZCF/0D88azevHo0TT1EE1V3XeIHCAEwEVAabH1gBhQchs/Z8LQQYL3os7s/PMV
+	 R+3FiVzyD+nILghT2cYgvLUKvS03eyK2xZTMeNMTk2d6tGgXAN24DbaO4zG8ffIkDD
+	 b6Jd/PcQcXB4fyLygM2lWyFjr7cFHi4nsGgxpkZ3MThojce7RldbPz/aoeQU+hu09e
+	 +Bvyli/srmz1Q==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4hG8Ls5jb9z9rxG;
+	Thu,  6 Aug 2026 16:10:29 +0200 (CEST)
+Date: Thu, 06 Aug 2026 14:10:31 +0000
+From: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+To: Ali Ahmet Memis <ali@iusegentoo.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (corsair-psu) serialize debugfs access against
+ hwmon
+Message-ID: <20260806161028.42218ebd@posteo.net>
+In-Reply-To: <20260802123653.19532-1-ali@iusegentoo.com>
+References: <20260802123653.19532-1-ali@iusegentoo.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Specific Lenovo model DMI quirks incorrectly use `DMI_PRODUCT_FAMI=
-LY` for exact model string matching, causing all specific quirks to fail an=
-d fall back to incorrect generic profiles.
---
+On Sun,  2 Aug 2026 12:36:53 +0000
+Ali Ahmet Memis <ali@iusegentoo.com> wrote:
 
---- Patch [1]: [PATCH] hwmon: (yogafan) Add support for new Lenovo models -=
---
-commit ea309cfac96f236f87726dc09f574a3015681685
-Author: Sergio Melas <sergiomelas@gmail.com>
+> corsairpsu_request() sends a rail select command and then the actual
+> read as two separate transfers, both going through the single shared
+> cmd_buffer and wait_completion in corsairpsu_usb_cmd(). The hwmon core
+> serializes its own callers, but the debugfs files call
+> corsairpsu_get_value() directly and never take that lock, so a debugfs
+> read can land between another reader's rail select and its value read.
+> 
+> The result is a value from the wrong rail reported as the right one,
+> because corsairpsu_usb_cmd() only checks the command echo and both
+> transfers echo the command it expects. It can also make a caller consume
+> the reply meant for the other one, since raw_event() writes into the
+> shared buffer and completes whoever happens to be waiting.
+> 
+> Locking was dropped in commit 4207069edbf0 ("hwmon: (corsair-psu) Rely
+> on subsystem locking") on the grounds that the subsystem serializes for
+> us, which holds for sysfs but not for these files. Take
+> the same lock in the debugfs paths that issue commands, using the guard
+> added in commit d1e720c7328e ("hwmon: Support guard() and scoped_guard
+> for subsystem locks"), as suggested in [1].
+> 
+> The lock cannot go into corsairpsu_request() itself: the hwmon core
+> already holds it across ->read, so every sysfs read would deadlock.
+> vendor_show() and product_show() only print strings cached during probe
+> and issue no command, and corsairpsu_get_criticals() and
+> corsairpsu_check_cmd_support() run before either interface is
+> registered, so none of them need it.
+> 
+> [1] https://lore.kernel.org/all/5f0406fa-9692-49f0-bcfe-c013f5fc7b62@roeck-us.net/
+> 
+> Fixes: 4207069edbf0 ("hwmon: (corsair-psu) Rely on subsystem locking")
+> Signed-off-by: Ali Ahmet Memis <ali@iusegentoo.com>
+> ---
+> This is the fix Guenter asked for in the May thread, written the way he
+> suggested there. Wilken's patch used a driver private mutex around
+> corsairpsu_request(); that thread stalled and the race is still present.
+> 
+> Wilken, does this cover the chained command case you were worried about?
+> As far as I can tell it does: the whole select-rail plus read sequence
+> now runs under the same lock the hwmon core takes around ->read, so a
+> debugfs reader cannot land in the middle of one. If you had a case in
+> mind that this misses, I would rather hear it than guess.
+> 
+> I have no Corsair PSU, so this is reasoned from the code rather than
+> measured on hardware. What I did check:
+> 
+>   - hwmon_lock() takes hwdev->lock, and the hwmon core takes the same
+>     mutex around ->read and ->write, so this really does serialize the
+>     two entry points
+>   - the lock therefore cannot go into corsairpsu_request(), the sysfs
+>     path would deadlock on itself
+>   - probe registers the hwmon device before creating the debugfs files
+>     and remove tears them down in the opposite order, so priv->hwmon_dev
+>     is always valid inside a debugfs read
+> 
+> Prior discussion:
+>   https://lore.kernel.org/all/agR9YW7hGTJ_l7ms@monster.localdomain/
+> 
+>  drivers/hwmon/corsair-psu.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+> index ce958cdaef58..24100519cd83 100644
+> --- a/drivers/hwmon/corsair-psu.c
+> +++ b/drivers/hwmon/corsair-psu.c
+> @@ -664,6 +664,8 @@ static void print_uptime(struct seq_file *seqf, u8 cmd)
+>  	long val;
+>  	int ret;
+>  
+> +	guard(hwmon_lock)(priv->hwmon_dev);
+> +
+>  	ret = corsairpsu_get_value(priv, cmd, 0, &val);
+>  	if (ret < 0) {
+>  		seq_puts(seqf, "N/A\n");
+> @@ -730,6 +732,8 @@ static int ocpmode_show(struct seq_file *seqf, void *unused)
+>  	 * getting of the value itself can also fail during this. Because of this every other
+> value
+>  	 * than OCP_MULTI_RAIL can be considered as "single rail".
+>  	 */
+> +	guard(hwmon_lock)(priv->hwmon_dev);
+> +
+>  	ret = corsairpsu_get_value(priv, PSU_CMD_OCPMODE, 0, &val);
+>  	if (ret < 0)
+>  		seq_puts(seqf, "N/A\n");
+> 
+> base-commit: 2d2338c93da79b3bfe4b6099a931d9468d539952
 
-hwmon: (yogafan) Add support for new Lenovo models
+That works so far.
 
-This patch adds DMI quirk entries mapping correct ACPI paths and
-configurations for several additional Lenovo laptop models. It also reorders
-the quirk table to evaluate specific model matches before generic family
-fallbacks to prevent DMI shadowing.
+Running tests without the guard basically end all in variantes similar to this:
+-----
+# cat /sys/class/hwmon/hwmon9/in1_input
+12000
+# cat /sys/kernel/debug/corsair-psu-0003:1B1C:1C1F.0006/uptime
+08:18:30
+# cat /sys/class/hwmon/hwmon9/in1_input &; cat /sys/kernel/debug/corsair-psu-0003:1B1C:1C1F.0006/uptime
+cat: /sys/class/hwmon/hwmon9/in1_input: Operation not supported
+N/A
+-----
+Sometimes, there is only the "N/A" and sometimes there is only the "Operation not
+supported", but most of the time both happen in one try. And very rarely both go
+through without an issue. That hints on two different things that can go wrong.
+"in1_input" is one of the commands with a rail change, aka rail + request.
+The first scenario is that one, where the debugfs exactly goes between the rail
+change and the final request. The second scenario is the one, where the 
+corsairpsu_get_value() is more or less called at the same time. But the change
+fixes both issues.
 
-> diff --git a/drivers/hwmon/yogafan.c b/drivers/hwmon/yogafan.c
-> index 0a41b8672b56e..48fa5148d9e2c 100644
-> --- a/drivers/hwmon/yogafan.c
-> +++ b/drivers/hwmon/yogafan.c
-[ ... ]
-> @@ -176,6 +189,54 @@ static const struct hwmon_chip_info yoga_fan_chip_in=
-fo =3D {
->  };
-> =20
->  static const struct dmi_system_id yogafan_quirks[] =3D {
-[ ... ]
-> +	{
-> +		.ident =3D "Lenovo IdeaPad 3 15ALC6",
-> +		.matches =3D {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> +			DMI_MATCH(DMI_PRODUCT_FAMILY, "IdeaPad 3 15ALC6"),
+Several hundred tests with the guard included always result in this:
+-----
+# cat /sys/class/hwmon/hwmon9/in1_input
+12015
+# cat /sys/kernel/debug/corsair-psu-0003:1B1C:1C1F.0006/uptime
+08:21:48
+cat /sys/class/hwmon/hwmon9/in1_input &; cat /sys/kernel/debug/corsair-psu-0003:1B1C:1C1F.0006/uptime
+12015
+08:21:49
+-----
 
-[Severity: High]
-Does this correctly match the hardware?
+Though, I would like to see the second guard() go before the big comment, beyond
+that, it looks fine to me:
 
-Lenovo firmware typically populates DMI_PRODUCT_FAMILY with short generic
-strings (e.g., "IdeaPad"). Since dmi_first_match() uses strstr() to find the
-quirk string inside the hardware string, searching for a long specific stri=
-ng
-like "IdeaPad 3 15ALC6" inside "IdeaPad" will always fail.
+Tested-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
 
-Should this match against DMI_PRODUCT_VERSION or DMI_PRODUCT_NAME instead?
-
-> +		},
-> +		.driver_data =3D (void *)&ideapad_8bit_fan0_cfg,
-> +	},
-> +	{
-> +		.ident =3D "Lenovo Legion Pro 7 16AFR10H",
-> +		.matches =3D {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> +			DMI_MATCH(DMI_PRODUCT_FAMILY, "Legion Pro 7 16AFR10H"),
-
-[Severity: High]
-If this match fails for the same reason, the hardware would fall back to the
-generic "Legion" quirk at the bottom of the table.
-
-Because the generic profile specifies a multiplier of 1 instead of 100, wou=
-ldn't
-this result in wildly incorrect sensor readings for this hardware?
-
-> +		},
-> +		.driver_data =3D (void *)&xiaoxin_8bit_dual_cfg,
-> +	},
-> +	{
-> +		.ident =3D "Lenovo Yoga Pro 7 14IAH10",
-> +		.matches =3D {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> +			DMI_MATCH(DMI_PRODUCT_FAMILY, "Yoga Pro 7 14IAH10"),
-
-[Severity: High]
-Similarly, if this match fails and falls back to the generic "Yoga" quirk,
-the driver would attempt to use the PCI0.LPC0 ACPI path instead of PC00.LPC=
-B.
-Could this cause the driver to fail to probe on this device?
-
-> +		},
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260806131103.1910=
-4-1-sergiomelas@gmail.com?part=3D1
+greetings,
+Wilken
