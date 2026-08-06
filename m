@@ -1,133 +1,129 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 257F226C385;
-	Thu,  6 Aug 2026 13:16:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8499537AA78
+	for <linux-hwmon@vger.kernel.org>; Thu,  6 Aug 2026 13:24:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786022200; cv=none; b=tm937dy4X1W+zaFvCVo0WcLt3xKnDdecxEDBWVNfc+EJ994G1opxjka22cIbprFyI6l4ms0Abi1EI6Mhyhu3BcxVobxu+LJziHiJz7iy8AD0WMDxsaEi8XVyejzzrqIG2D2Dtg1yExxrkbT0dyO2PEMCqKfuC/fLq64TqnVrru0=
+	t=1786022696; cv=none; b=K5eO+uJB43+yiTaIsR4KqNJa4cHFUEWHjdTQ4wtJT+0/nryW0pjVgzB6acrzkTEPe1KJqD3ZxOgD/z9k8HykuUIZYynqWbUoFdVFf6PVm77c/pkoM3QyjQ0VF19yG6ZVpI+LdHq93plgTDTbTB0M2e7JrztsKUDsiGzz7ceUQAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786022200; c=relaxed/simple;
-	bh=gtYXydAMBAKg593kaElUjKb/G08Lqn4qoJ/UEL29VC8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IixDQ4hf4lgCBVj62ysWrirfLQQSKR9VOBuRUTOLzHCykXZ5zX/k63E1KiNZqysgzJYLParR9CyQo0VEusMxzPy/lAI0co3reZxN8RNl2xAivFkO9vRSHGBonYPS4C+Ini+i6U2QFibNqYbgaH2la/wIM17Y7CXMBEVomDL7Inc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OYTTH2YZ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786022696; c=relaxed/simple;
+	bh=Y8L50GS85PoTNL4MhHLQH962HG4GaJteWLHG//qe/Ak=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=WmvWBbSF4IncTLasdgW6nvTaDEgE4B9AuPNhPykk+SJMcfDdD4eXWmx6JtPsEjU9BgSFT2LF7rpbRyKajCJtE5yCCJxUmJ7Fb7CdUDFa3SeE0g4IybhRISqFFxybNY+UwZreERM+HpmrfaAiHhDIi+ALgJUVWpsKdhZdR3JOnA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CpWXzxgv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OYTTH2YZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54DAA1F000E9;
-	Thu,  6 Aug 2026 13:16:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CpWXzxgv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80AD21F000E9;
+	Thu,  6 Aug 2026 13:24:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786022194;
-	bh=8O3Jm/KCpUxHmdI56AF1wTxRqOJCMDI/5j9/Q6443Ro=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=OYTTH2YZ95hRG04hyNETNtpBAmuqnutIGsr5526ph4/Spdpox8qylIrZLTN2uJeBJ
-	 v6OAiOPKkmABiofnuehJ9uheHaIhy99SVgixWZkBUyUc9/4tmUcXoOIcri5X5/G2YD
-	 zj6/fCqjKXrLbJuL7JOHgFKZZKwN9mbs4H9cfEImkJQC4VjC/HiJAaUYyQ+DNouog6
-	 uevVcXkGTmcu/rmvNKUgidInV3RVrEPw8CD7UN9FMBqSMYCT0ZXfCgP2TxMJhjM8ti
-	 tdzuY4Lmjf5fOxwo6R3fOk3huIa7nmHtCD0tA4V8JEPvXIpYtdGB2Ql7SLIO3UdBpP
-	 MMgcU7pcNIdmA==
-Date: Thu, 6 Aug 2026 08:16:33 -0500
-From: Rob Herring <robh@kernel.org>
-To: Petar Stepanovic <pstepanovic@axiado.com>
-Cc: Akhila Kavi <akavi@axiado.com>,
-	Prasad Bolisetty <pbolisetty@axiado.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Harshit Shah <hshah@axiado.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Tzu-Hao Wei <twei@axiado.com>,
-	Karthikeyan Mitran <kmitran@axiado.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: add Axiado AX3000 and AX3005 PWM
- fan controller
-Message-ID: <20260806131633.GA30560-robh@kernel.org>
-References: <20260806-axiado-ax3000-pwm-fan-v1-0-f6db4cf2166b@axiado.com>
- <20260806-axiado-ax3000-pwm-fan-v1-1-f6db4cf2166b@axiado.com>
+	s=k20260515; t=1786022692;
+	bh=9ct7l36DBFvwH65aL0mQRSBCpMnu3rbt/ZZJtRAYxVI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=CpWXzxgvqUr3fYaP8aNlj6J+6bW6qi0mofeMmMCAOiTvqsKc7yilf1ayB+NhbhyK1
+	 5UuBhENAFCQrX0OA2fXb06Xfd6nK4KTz01bdHgL/be7e3WVKNyCNt0kUof4GefVpyA
+	 iqhl7aTxe0Rkpc3TEGIvsYTUtoLfSDF9kzerJVhxL9E1l8X+AcfPMjsfBrxYR/EdC1
+	 22fCPqMFpjM32+evqKuIFvBYbbwCE8CMxw0wOCNCN8aCZ8kDFbv1s0r53HUx5s2bPm
+	 h4/zRb+6c1X+ZewYsxhK4WMbImIVxUoYXavmMko99ieTrjH2BoV0XYvhU69opZxKDV
+	 ghaDDO5bqDuwg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] hwmon: (yogafan) Add support for new Lenovo models
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Sergio Melas" <sergiomelas@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260806131103.19104-1-sergiomelas@gmail.com>
+References: <20260806131103.19104-1-sergiomelas@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 06 Aug 2026 13:24:51 +0000
+Message-Id: <20260806132452.80AD21F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260806-axiado-ax3000-pwm-fan-v1-1-f6db4cf2166b@axiado.com>
 
-On Thu, Aug 06, 2026 at 02:01:29AM -0700, Petar Stepanovic wrote:
-> Add a Devicetree binding for the PWM fan controller found on the
-> Axiado AX3000 and AX3005 SoCs.
-> 
-> The controller measures fan speed using a hardware tachometer block.
-> Fan speed is controlled through a PWM signal supplied by an external
-> PWM controller.
-> 
-> Add a MAINTAINERS entry for the binding.
-> 
-> Signed-off-by: Petar Stepanovic <pstepanovic@axiado.com>
-> ---
->  .../bindings/hwmon/axiado,ax3000-pwm-fan.yaml      | 68 ++++++++++++++++++++++
->  MAINTAINERS                                        |  8 +++
->  2 files changed, 76 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/axiado,ax3000-pwm-fan.yaml b/Documentation/devicetree/bindings/hwmon/axiado,ax3000-pwm-fan.yaml
-> new file mode 100644
-> index 000000000000..a985f49bbdcd
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/axiado,ax3000-pwm-fan.yaml
-> @@ -0,0 +1,68 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/axiado,ax3000-pwm-fan.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Axiado AX3000 and AX3005 PWM Fan Controller
-> +
-> +maintainers:
-> +  - Petar Stepanovic <pstepanovic@axiado.com>
-> +  - Akhila Kavi <akavi@axiado.com>
-> +  - Prasad Bolisetty <pbolisetty@axiado.com>
-> +
-> +description:
-> +  The Axiado AX3000 and AX3005 fan controllers use a hardware tachometer
-> +  block to measure fan speed. Fan speed is controlled through a PWM signal
-> +  supplied by an external PWM controller.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: axiado,ax3000-pwm-fan
-> +      - items:
-> +          - const: axiado,ax3005-pwm-fan
-> +          - const: axiado,ax3000-pwm-fan
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  pwms:
-> +    maxItems: 1
-> +    description:
-> +      PWM specifier used to control fan speed.
-> +
-> +  pulses-per-revolution:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 1
-> +    default: 2
-> +    description:
-> +      Number of tachometer pulses generated per fan revolution.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Specific Lenovo model DMI quirks incorrectly use `DMI_PRODUCT_FAMI=
+LY` for exact model string matching, causing all specific quirks to fail an=
+d fall back to incorrect generic profiles.
+--
 
-This is a property of a fan, not the fan controller. The fan(s) should 
-be represented as child node(s) under this device. Use the common fan 
-binding, fan-common.yaml. See other bindings using it.
+--- Patch [1]: [PATCH] hwmon: (yogafan) Add support for new Lenovo models -=
+--
+commit ea309cfac96f236f87726dc09f574a3015681685
+Author: Sergio Melas <sergiomelas@gmail.com>
 
-Rob
+hwmon: (yogafan) Add support for new Lenovo models
+
+This patch adds DMI quirk entries mapping correct ACPI paths and
+configurations for several additional Lenovo laptop models. It also reorders
+the quirk table to evaluate specific model matches before generic family
+fallbacks to prevent DMI shadowing.
+
+> diff --git a/drivers/hwmon/yogafan.c b/drivers/hwmon/yogafan.c
+> index 0a41b8672b56e..48fa5148d9e2c 100644
+> --- a/drivers/hwmon/yogafan.c
+> +++ b/drivers/hwmon/yogafan.c
+[ ... ]
+> @@ -176,6 +189,54 @@ static const struct hwmon_chip_info yoga_fan_chip_in=
+fo =3D {
+>  };
+> =20
+>  static const struct dmi_system_id yogafan_quirks[] =3D {
+[ ... ]
+> +	{
+> +		.ident =3D "Lenovo IdeaPad 3 15ALC6",
+> +		.matches =3D {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> +			DMI_MATCH(DMI_PRODUCT_FAMILY, "IdeaPad 3 15ALC6"),
+
+[Severity: High]
+Does this correctly match the hardware?
+
+Lenovo firmware typically populates DMI_PRODUCT_FAMILY with short generic
+strings (e.g., "IdeaPad"). Since dmi_first_match() uses strstr() to find the
+quirk string inside the hardware string, searching for a long specific stri=
+ng
+like "IdeaPad 3 15ALC6" inside "IdeaPad" will always fail.
+
+Should this match against DMI_PRODUCT_VERSION or DMI_PRODUCT_NAME instead?
+
+> +		},
+> +		.driver_data =3D (void *)&ideapad_8bit_fan0_cfg,
+> +	},
+> +	{
+> +		.ident =3D "Lenovo Legion Pro 7 16AFR10H",
+> +		.matches =3D {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> +			DMI_MATCH(DMI_PRODUCT_FAMILY, "Legion Pro 7 16AFR10H"),
+
+[Severity: High]
+If this match fails for the same reason, the hardware would fall back to the
+generic "Legion" quirk at the bottom of the table.
+
+Because the generic profile specifies a multiplier of 1 instead of 100, wou=
+ldn't
+this result in wildly incorrect sensor readings for this hardware?
+
+> +		},
+> +		.driver_data =3D (void *)&xiaoxin_8bit_dual_cfg,
+> +	},
+> +	{
+> +		.ident =3D "Lenovo Yoga Pro 7 14IAH10",
+> +		.matches =3D {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> +			DMI_MATCH(DMI_PRODUCT_FAMILY, "Yoga Pro 7 14IAH10"),
+
+[Severity: High]
+Similarly, if this match fails and falls back to the generic "Yoga" quirk,
+the driver would attempt to use the PCI0.LPC0 ACPI path instead of PC00.LPC=
+B.
+Could this cause the driver to fail to probe on this device?
+
+> +		},
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260806131103.1910=
+4-1-sergiomelas@gmail.com?part=3D1
