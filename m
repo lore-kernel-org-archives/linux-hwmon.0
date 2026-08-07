@@ -1,218 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EDEC14A8B
-	for <linux-hwmon@vger.kernel.org>; Fri,  7 Aug 2026 00:14:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 908C9199FAB
+	for <linux-hwmon@vger.kernel.org>; Fri,  7 Aug 2026 00:39:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786061654; cv=none; b=eoSihQGWPm0sSXamyyLGxtrT09xhlCMHrbx4FyNEue0tw/he2RcL7GJbPAq+wWlOmFQ9oEJpkGlhcr6OGjrDJ9ntv0E0Yw7niq3JNzuaR4H+ikazmibsqs8zwO6WIT+WDAbbTcs+QY8TTTsRUk3PWGd+Ws45FhIGx9m9aktV28U=
+	t=1786063144; cv=none; b=fIgZ90VqRIQdm3dPqW35sgoVB2RG/TtahAjU0R3GfGWJCaxN0deBvusB37J4FRxaRvYaTu0QE9ONrTE7PQy1l6fwQy6glLrRfl65MkwAMh8nW5tOf93Vy8A8L9EeGDcNFBHoEEAnegNj41iN4ygz6uTww9mxdoPh2O0fOR/C6aI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786061654; c=relaxed/simple;
-	bh=BLyblP1qFvuq4gC2hGy+mb6T4ANADfx5Hpe9B8rM4DQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=I5M+woolNcdqhDDCHXfpOB7PNF+E2RqYECXUvhMkb+Zet/7bQN40QQo1AATbfFDfn6s/0Pd+lz7KS6ZHqYNGeHfHMObNYcRAGo84wlwjap9ya8Rm3RPccPINzVjPQVfzk6B2FOv1KYO6EsCrxYCRNAQ5t45uXeQdJpdY4zbotXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CJxssG3U; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786063144; c=relaxed/simple;
+	bh=MU2abmOKDdlqQTDZ0KTwFE0JehlezfHRedBF7Gs8QG0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jhWFkCKG3qKN20kibeWhtkytjY5MnN9o8ivoM4X3U9iLD9WCFcOTfv5B0OzORCZnzGTTs7K57GMsHXoK1Xg1lEvE/FbDl9Z/n9rA1fQU8X3YfCqTF1crBwER61Miu0H/ee90dB0nh1o/CZUMrfR/djSHc8OhDZXmWmYHxznU40w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TrDnonTF; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CJxssG3U"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B61901F000E9;
-	Fri,  7 Aug 2026 00:14:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786061653;
-	bh=YRqp6YR60Mz5EEu3ba2oGXL79DteF8eHu2VwZPBN6yE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=CJxssG3UvLXRucznf3HBkrKYor5urhaeS29Hmeg0Mocow0XOf7RP5cQSCpcVVOfM/
-	 BUgM7vu/HGKDSHgvBRiXVcNNXC4rJJfW7U8FpQXpv7a37rwwTAaGPYbK80OCZJlYxC
-	 HzyB++BO4i0LeeD07eM8L0/q5ijiS4NwZj/uGtrFNh737vx7nIPYAasJoF5ShzSH8J
-	 G+pV6jF66pHpR8Ekpl6Yl9858Y055GPalyU/DZT/n+TNk6hTDQ2Pje3XZ8sEbfSvBL
-	 48sQFJunqxRtwcvMjWCnzjiRLQ9FAJMvXYoSydYhuSO578qS13xIC3NVsH0mjDCvkA
-	 dvojcVx/Uu2kw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/3] hwmon: (asus_rog_ryujin) Add per-device
- configuration
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Arie Miller" <renari@arimil.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260807000107.1786892-2-renari@arimil.com>
-References: <20260807000107.1786892-1-renari@arimil.com>
- <20260807000107.1786892-2-renari@arimil.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 07 Aug 2026 00:14:12 +0000
-Message-Id: <20260807001412.B61901F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TrDnonTF"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2caea3f742bso39013115ad.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 06 Aug 2026 17:39:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786063143; x=1786667943; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=gNNzbkSM7zlulwZfqDEG8YhrkRb79v1YMNRuwUW0gUk=;
+        b=TrDnonTF4VqtD+wlzxQAbD93J2hOCoS37OuetmcwQBMcokD6loIeiaOl+wQaFat+7F
+         8YWvkqexeumsj1wRYGnKpi1WBub0ymROm3OG5xyn7rrEQqCsmwlx8wxpAGSJoMrknde7
+         Yt9DnLR67CrugP8OuQx3orBPOTqfAUnUt5mkyzEGICPD/+NPQE9a18WIIFCm5yjgnmvp
+         Dn80mmbrAQdkFKOh2AmG8CqgKY4r4FGWJCWXBcOnLZ6HN27JBDMWmn7ufwvrvuH/SUmj
+         u1xy0TYEkwfCfX9Q8ZwW0r7rgxTfm/xEz3GeaDfJU8jEehH6KQftLLHBNCBX1hrU9vWD
+         X7rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786063143; x=1786667943;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=gNNzbkSM7zlulwZfqDEG8YhrkRb79v1YMNRuwUW0gUk=;
+        b=XRna4fWKoutfx2d3C6OYMJppTUmCThlXr1iAIUkSvdEGWa5moEhsNRpHAccT4AbXZQ
+         oInl02CjNfRRGiA7F/CxKe1cCxepKFJ7GJyNXYJ97PQwJTzPvLcshuEvxW/RcEI7m8fH
+         4e0GxZ/mGJoLfpKB/DPkSVWRyBo90i/6DVEf09I95/S5m86TdkokkIR9dnK5EGx6q1V0
+         X/a28oAtUQS5UeHmHReycAf1RpROeJTaPrT9RFwaUoducoAxO5LNfX7xdnznHxnG4BdM
+         X1WBqx2SIDHBBwotGsswlDHhAcpwFJrUMtcehV4bQ/iTIdJUZr5NiMJs1u9agT2Q+1Cf
+         dM/w==
+X-Gm-Message-State: AOJu0Yz8S6my0GFe8TAq210P9dmoPci8ccAE7wFTwV27ONEwjxGPvUjN
+	zWIU3iEZaOpJskp33URVuyvFWfM2BIzl6KwQv+XwKTpCO9HiOwdm4js+
+X-Gm-Gg: AR+sD11ApxlgEekQZ5EbEv+eXNQazLt0lhvfZPkYCZU/oLkXWESMib1zmGxLd0QSNzs
+	yv/2wD0Y80RoIEvOELJmgTGLOaniapp5asByl3yCylpN4pM2UO/eHKBMMQQBDl3JU1Qh0PPtKLv
+	WS7fnMo07bZzJRTXl4vMzR3EZcooHyQQ4kOp6C3RBpbZMAo55BYrI2ogfjZvuIqukaqZRrokUMi
+	OE6dLAB3Cvj3eg6kZRF0fa4fKfY/TvH5v2/oFMT/0HD3pkQDhPf2mb2AbHqFUMMzeE6sQsJKrIk
+	VCOo0WF/9N2ow1ktNmGgwVy7AxxpSbN0g3limTngxAxSvDVewAOZsfunJbCbOfQXusvS5rzlE++
+	8Qa6J+L/Ln2NjoT74fbAxBxo3CmhnFRTAb8OJkjRMYWoWTqI1ZaWjX5Y+KrC5BmknJPgRF8ZxdZ
+	GZgtyIPCqUX/mrXR2lll+bATOgiOhOPYWySR5f9Ll9NpW0BdUGSwukxapnnOXL
+X-Received: by 2002:a17:903:384d:b0:2d0:3412:a3f0 with SMTP id d9443c01a7336-2d0ca962498mr227917665ad.19.1786063142739;
+        Thu, 06 Aug 2026 17:39:02 -0700 (PDT)
+Received: from nixos-minipc ([153.67.181.106])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-315bebee8d0sm526189eec.24.2026.08.06.17.39.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Aug 2026 17:39:02 -0700 (PDT)
+From: =?UTF-8?q?Sebasti=C3=A1n=20Peyrott?= <speyrott@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 0/1] hwmon: Add Minisforum UM780 XTX EC monitoring and fan control
+Date: Thu,  6 Aug 2026 21:38:41 -0300
+Message-ID: <20260807003842.249957-1-speyrott@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
-s) to consider:
+This RFC adds a board-specific hwmon driver for the embedded controller in
+the Minisforum UM780 XTX. It exposes two fan-control temperatures, both fan
+tachometers, the two OEM CPU fan profiles, and the configurable system-fan
+transition temperatures.
 
-New issues:
-- [High] Dynamic sysfs IDs (new_id) binding will cause a NULL pointer deref=
-erence because `id->driver_data` is unchecked.
+The controller is an ITE IT5571E, but its observable register layout, OEM
+commands, and fan-control behavior are defined by machine-specific
+firmware. The driver therefore does not attempt to support arbitrary
+IT5571E systems and is limited to the exact board revision and BIOS version
+on which the interface was reverse engineered and tested.
 
-Pre-existing issues:
-- [High] Missing bounds check on HID report size before accessing payload o=
-ffsets in `rog_ryujin_raw_event`, leading to an out-of-bounds read and info=
-rmation leak.
-- [High] The `status_report_request_lock` fails to protect `reinit_completi=
-on()` from concurrent `complete_all()` calls in `rog_ryujin_raw_event`.
-- [High] The device is exposed to HID raw events before its completions and=
- locks are initialized, risking a NULL pointer dereference and kernel crash.
-- [High] The driver allocates a DMA buffer using `devm_kzalloc()`, which br=
-eaks cacheline alignment and causes memory corruption on non-coherent DMA a=
-rchitectures.
---
+The firmware reloads its default fan settings several seconds after s2idle
+resume. The driver performs one delayed check and restores the last
+coherent settings if they changed. It does not poll during normal
+operation.
 
---- Patch [1]: [PATCH 1/3] hwmon: (asus_rog_ryujin) Add per-device configur=
-ation ---
-commit 532faa30887394da7e60da86be21849f6a4f86c4
-Author: Arie Miller <renari@arimil.com>
+The EC does not expose the currently applied duty cycle, so pwm1 and pwm2
+values are not synthesized. Only automatic modes and known curve settings
+are exposed.
 
-hwmon: (asus_rog_ryujin) Add per-device configuration
+A research prototype can also report the seven CPU curve boundaries and
+modify six while retaining the firmware slopes and fixed 93 C safety
+boundary. This is omitted because adjacent bands require paired EC writes
+and the visible values do not fully describe firmware interpolation.
 
-Move model-specific report offsets and capabilities into a device
-information structure. This prepares the driver for coolers which use
-a different report layout or do not include the external fan
-controller, while preserving the existing Ryujin II 360 behavior.
+I would appreciate feedback on:
 
-> diff --git a/drivers/hwmon/asus_rog_ryujin.c b/drivers/hwmon/asus_rog_ryu=
-jin.c
-> index 10a1f5aca988d..b86b87e33615d 100644
-> --- a/drivers/hwmon/asus_rog_ryujin.c
-> +++ b/drivers/hwmon/asus_rog_ryujin.c
-[ ... ]
-> @@ -394,10 +416,12 @@ static int rog_ryujin_raw_event(struct hid_device *=
-hdev, struct hid_report *repo
-> =20
->  	if (data[1] =3D=3D RYUJIN_GET_COOLER_STATUS_CMD_RESPONSE) {
->  		/* Received coolant temp and speeds of pump and internal fan */
-> -		priv->temp_input[0] =3D
-> -		    data[RYUJIN_TEMP_SENSOR_1] * 1000 + data[RYUJIN_TEMP_SENSOR_2] * 1=
-00;
-> -		priv->speed_input[0] =3D get_unaligned_le16(data + RYUJIN_PUMP_SPEED);
-> -		priv->speed_input[1] =3D get_unaligned_le16(data + RYUJIN_INTERNAL_FAN=
-_SPEED);
-> +		priv->temp_input[0] =3D data[priv->info->temp_offset] * 1000 +
-> +			data[priv->info->temp_offset + 1] * 100;
+  1. Whether direct use of the ACPI EC helpers and placement in hwmon are
+     appropriate for this DMI-gated driver.
+  2. Whether pwm1_enable values 2 and 3 appropriately represent the two
+     firmware-controlled CPU profiles.
+  3. Whether the two stepped system-fan transitions are appropriately
+     represented as pwm2 automatic curve points.
+  4. Whether read-only CPU curve boundaries would be useful in a follow-up,
+     and where experimental writes should live.
 
-[Severity: High]
-This is a pre-existing issue, but does this code lack a bounds check on the
-incoming HID report size?
+The driver was tested on the target hardware with concurrent RPM reads,
+profile and curve changes, unload/reload stress, and s2idle resume. The
+patch passes checkpatch.pl --strict and builds against hwmon-next.
 
-If a malicious device sends a truncated report that is smaller than the
-expected payload, the size parameter is ignored. Accessing offsets like
-data[priv->info->temp_offset] could result in an out-of-bounds read.
+OpenAI Codex assisted with review, editing, test orchestration, and patch
+preparation. I reviewed the result and take responsibility for the
+submission.
 
-Can we add a check against the size parameter before accessing the payload?
+Sebastián Peyrott (1):
+  hwmon: Add Minisforum UM780 XTX EC monitoring and fan control
 
-> +		priv->speed_input[0] =3D
-> +			get_unaligned_le16(data + priv->info->pump_speed_offset);
-> +		priv->speed_input[1] =3D
-> +			get_unaligned_le16(data + priv->info->fan_speed_offset);
-> =20
->  		if (!completion_done(&priv->cooler_status_received))
->  			complete_all(&priv->cooler_status_received);
+ Documentation/hwmon/index.rst               |   1 +
+ Documentation/hwmon/minisforum-um780xtx.rst |  79 +++
+ MAINTAINERS                                 |   7 +
+ drivers/hwmon/Kconfig                       |  16 +
+ drivers/hwmon/Makefile                      |   1 +
+ drivers/hwmon/minisforum-um780xtx.c         | 648 ++++++++++++++++++++
+ 6 files changed, 752 insertions(+)
+ create mode 100644 Documentation/hwmon/minisforum-um780xtx.rst
+ create mode 100644 drivers/hwmon/minisforum-um780xtx.c
 
-[Severity: High]
-This is a pre-existing issue, but is there a data race between this
-complete_all() call and reinit_completion()?
 
-In rog_ryujin_execute_cmd(), the status_report_request_lock is used:
-
-spin_lock_bh(&priv->status_report_request_lock);
-reinit_completion(status_completion);
-spin_unlock_bh(&priv->status_report_request_lock);
-
-However, complete_all() is called here in the raw event handler without
-acquiring status_report_request_lock. If the device sends an unsolicited
-report or commands are interleaved, could this lead to corrupted completion
-state or missed wakeups?
-
-[ ... ]
-> @@ -476,6 +500,7 @@ static int rog_ryujin_probe(struct hid_device *hdev, =
-const struct hid_device_id
->  		return -ENOMEM;
-> =20
->  	priv->hdev =3D hdev;
-> +	priv->info =3D (const struct rog_ryujin_device_info *)id->driver_data;
-
-[Severity: High]
-When binding the driver dynamically via the new_id sysfs interface,
-id->driver_data can be NULL if the data field is omitted.=20
-
-If priv->info is assigned NULL here, won't this cause a panic when the hwmon
-core subsequently queries attribute visibility during device registration?
-
-hwmon_device_register_with_info()
-   rog_ryujin_is_visible()
-      if (channel >=3D 2 && !priv->info->has_controller)
-                                 ^^^^
-
-Could we add a check to validate id->driver_data before assignment?
-
->  	hid_set_drvdata(hdev, priv);
-> =20
-[ ... ]
-> 	ret =3D hid_parse(hdev);
-> 	if (ret) {
-> 		hid_err(hdev, "hid parse failed with %d\n", ret);
-> 		return ret;
-> 	}
->=20
-> 	/* Enable hidraw so existing user-space tools can continue to work */
-> 	ret =3D hid_hw_start(hdev, HID_CONNECT_HIDRAW);
-> 	if (ret) {
-> 		hid_err(hdev, "hid hw start failed with %d\n", ret);
-> 		return ret;
-> 	}
->=20
-> 	ret =3D hid_hw_open(hdev);
-
-[Severity: High]
-This is a pre-existing issue, but is the device exposed to HID raw events
-before its completion structures are initialized?
-
-If hid_hw_start() and hid_hw_open() are called before init_completion()
-initializes queues like cooler_status_received, and the device sends an
-immediate interrupt report:
-
-rog_ryujin_raw_event()
-   complete_all(&priv->cooler_status_received)
-
-Could this dereference a NULL pointer since the completions were only just
-allocated with devm_kzalloc() and have not yet been initialized?
-
-> 	if (ret) {
-> 		hid_err(hdev, "hid hw open failed with %d\n", ret);
-> 		goto fail_and_stop;
-> 	}
->=20
-> 	priv->buffer =3D devm_kzalloc(&hdev->dev, MAX_REPORT_LENGTH, GFP_KERNEL);
-
-[Severity: High]
-This is a pre-existing issue, but is it safe to use devm_kzalloc() for a DMA
-buffer?
-
-When this buffer is later passed to hid_hw_output_report() in
-rog_ryujin_write_expanded(), it is inherently mapped for DMA.
-
-Because devm_kzalloc() embeds a devres header, the returned pointer is not
-cacheline aligned. On non-coherent architectures, cache invalidation during
-DMA operations could corrupt the adjacent devres header or preceding memory.
-
-Should this buffer be allocated with a non-devm allocator like kzalloc()
-to guarantee proper alignment?
-
-> 	if (!priv->buffer) {
-> 		ret =3D -ENOMEM;
-> 		goto fail_and_close;
-> 	}
->=20
-> 	spin_lock_init(&priv->status_report_request_lock);
-> 	init_completion(&priv->cooler_status_received);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260807000107.1786=
-892-1-renari@arimil.com?part=3D1
+base-commit: f18a46518561205cd6ff775a488a0c9d9d5edbfb
+-- 
+2.54.0
