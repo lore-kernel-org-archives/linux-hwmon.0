@@ -1,178 +1,124 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E90D3D9041
-	for <linux-hwmon@vger.kernel.org>; Thu,  6 Aug 2026 19:31:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8635413B58C
+	for <linux-hwmon@vger.kernel.org>; Fri,  7 Aug 2026 00:01:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786044663; cv=none; b=MJCWiyrBwIg1Ovvq5mxFq0Xj+1e/PI3AGEJ8tiFn0F5WF9R9RCEc2IGWM7FP8JdTxaubZtTCs+pDfkTiX26tG1qkwg+QOKqvk7kswz67E3J79ceCj420Obk/JanSRT6OTBFh64jsniVUGI++P0aI5pSJNHC8kyFCB0dqPo1Hwfo=
+	t=1786060876; cv=none; b=Tkx4EyITOlw9wwrVPewEsE9335XXy0Oirlzt67y6O2lAJMs/HCmkcqf7oeMP4+rSBvG+s7tNl7XasBpHHn0s5Gu+SUNFJZDbiwd3LUnNa3Gz7tXicNFwdHeKcdoE6lMM93Xj4LaPYVUQGVNfzDGGg0RK7boK8gXkfhNOgBPZM7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786044663; c=relaxed/simple;
-	bh=4tx9NSGNynTF4PHpWC7vIVZqpu7kF9vx/gpj/G0H91k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qyau+BORsuwcu2xxKLMmJEdGqyFJOgDc0QamvEiX8HVvOSDybRd9I4sSF/yWXXgma6LzKPyjIolXVrumLJosEFQ5x1bEevKLHRGQqTwL7+aJK9cybdzvIBy0jAomR4zqy3Bhrqwka8M8gmM2aA7IVSEHPPsrZYAAElyhAZ6BJFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tOc5nwmY; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786060876; c=relaxed/simple;
+	bh=lT4q2t2A+8eI6YcZz2IDgnHOzY1NUlbawOLctsnRNY8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=V+WVBGAZhZatl3nyvQqDN9JjJ1J+VpjqNMc5pVRJ0Pvi6oD9jBiV827fOATxk9VIgyywB9G/FRNmHr6RqSrUwKeZZiMoaUZBqe8OCV3sI4PB5yDU9/ztoPeAW9Y1tw7U1bCRQTaScFw0mtyod7Y/byfShG0jNI1QTi+B0K84cXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arimil.com; spf=pass smtp.mailfrom=arimil.com; dkim=pass (2048-bit key) header.d=arimil.com header.i=@arimil.com header.b=lckGm6Tf; arc=none smtp.client-ip=209.85.222.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arimil.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arimil.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tOc5nwmY"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2ccf2360620so25774205ad.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 06 Aug 2026 12:31:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=arimil.com header.i=@arimil.com header.b="lckGm6Tf"
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-92e7632b193so203605485a.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 06 Aug 2026 17:01:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786044661; x=1786649461; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=96I6v/AKBNTvV/KdjO4chCrzAPiR9Nz0WdXHIejWW6U=;
-        b=tOc5nwmYFCvlGy8dUXREVOPcy7N1vVKdRwITx7q4Bddtof25Dtvh7e73KtAivBa40C
-         qJPmo7jT5oMLIcylajuff3PWOJLYJe+SpB4ZacDKqKmEqjAhf9m3NJghHxNRp6PKkPf5
-         RJxFRVfsq9hTlYyw0UCvCLDySBiSQDLwuRPiizyqWbA+dnllpX/QtwHmREM8FA1VDYpf
-         2fE8mQ9A5esdkJ9Fx2zF9WcAIQUqU47RYjXm595d1Qap87mHPrthFHdK6P+V6yds0O4u
-         LhrclSZs7mKmuQ62k7GKzv5PnVYBCZgvUpe/AOQoREjtLSsEBqvdfsc1s9hgGDUlS8LF
-         Rpwg==
+        d=arimil.com; s=google; t=1786060874; x=1786665674; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=5GQBs3dETS7CDeKjtzGaEmQSXuk8Kh1aMvycfseSn5g=;
+        b=lckGm6Tfdg9zG3CXyWlPWxoGtcXq5cwj4WV1M3Cfa7B4unSAzLwktMG3UyeMYm7gQ2
+         Wk65fItfVLw25OTTSQiJrEBQv1HeQK9SdV2Orv7h+A9wOxX1XIbnVRYzaqURV6+qRDVy
+         eoJh2/T+m+AtUbEkIwbaaBQ3PFhKjlJSt6h2FAzFc6AySobdCwJtVlP6IJqsc3nvxN/j
+         geEUZDflC1bDwpHCU1kfeUdlz71fw0H1vXrCoaVrCmdBMuPsVG9bPay32xttmSAvRCCI
+         FuCjAtY0gW9YyhEsUJ/Vtqh4EbLt4PzaYsL1hstj0N5VAdfmmhgOE8E9xLyQwAwB/Rg8
+         O+xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786044661; x=1786649461;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=96I6v/AKBNTvV/KdjO4chCrzAPiR9Nz0WdXHIejWW6U=;
-        b=FlIjf+TX/cUQi03CEjhyTUF9se+3jaT16cPcGp+K+74dKRfnu2fuTqp//rTUpFpu1R
-         xJj80zgy3T5dEEpw1IZzDovjGFZyBvrz7KwWudltVvpNRNll+fqy/3PY6f0GBVedfpfy
-         HYPlQY5fkC3Iqi3cb/WDE6FDbK3qTSG8mMwaXkkeWkDI79QMzt8BjyqwhId1/8nsYZXV
-         1/0tgcZSGohEAphQ1BpibQEyuiRSXXS0WySPhACIXbcibWQ7MyRUerSwpJ/1m2hhfcvv
-         ZM2jcNNJx9/iplof+jxSRUTbLHehMfCJWPgzDhfy+3ye29HObWWJDw1Qp4j1PaJXrBi1
-         5SLA==
-X-Forwarded-Encrypted: i=1; AHgh+Rr7N1UwIRf3w4pCDLI+9wiWfWwJk1OwdwChTe0zU73wL7HX+oDNNPcVE105j+IM566rBeUZyvh3v1YZ9w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxIbnEFdX26jpp0LVLzwH0Ewp1pyuKx9lBGXeIrnUmICBHsoD9j
-	f5+P2DPjtSsd1Fv3lCb12WcWFO1PKrAf37pUR62edrkyMpVLmz0wGrCb
-X-Gm-Gg: AR+sD10prVbqee9rgNI1fhD759h3IJ1GueO8pobRr9c5/uv5sTEr5Ua0RpR1qSK/hmB
-	g1AMo75+8O5rutVfNbAMoYxf9S+IHDteZPLPIkfB2M9So97fkUeOLU/PPNsCPE8WOEv5V35gK75
-	wdl9CVE+JlKECvZRslsN77RMmSUjGAcZtlOWGPTr2Wyr9MpP4qWhbYlUGSeSyn4qdWt/+RM5RPY
-	cUVGkfbLwvWf4MxL4gOLUl4QMR9mJ3VOSV9LQkoEY+0fC51r9GQP8YV+hF54cIRctIZLuIzSEHJ
-	PSg217iDjglaO+TJwW8FZGd85jPdHUGHmGPDPTm0I6PsRn053yrPkPKBMlUTzwcU8DovIoW0Pav
-	iS81Fm9xAvROUeTcTqF49ueMawaNGYXLgFzjnZ6t3lohmF2N/MLf9s28ZypgFtkbxtBcAiDFdgt
-	k1o8mk90atGKag1wgBwvRrpvCDw2ysb64QsQ84oZiVsI/hL1OB9ePtWLkM7siUQHO0+YWxDwPxm
-	t8=
-X-Received: by 2002:a17:903:1a83:b0:2cc:307c:51fc with SMTP id d9443c01a7336-2d106e81d72mr45720725ad.21.1786044660266;
-        Thu, 06 Aug 2026 12:31:00 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d120c611casm1084905ad.83.2026.08.06.12.30.59
+        d=1e100.net; s=20251104; t=1786060874; x=1786665674;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=5GQBs3dETS7CDeKjtzGaEmQSXuk8Kh1aMvycfseSn5g=;
+        b=kOp75Aqd5ICnszBjGyWIm2to7cd/KvDc0kLGnn8yhE0FJd/+NPHuw5kj04MpDYHOln
+         auCAvkO/fDmg5EelDfBo06C83lxEXfdXJCcYWUwk7emB6QaGKBvCHt1Aie6ngW9BUAEj
+         7TrGiP0EDy24uPjEeGMMS4V/3F0pDQ4nggiICnAx/xqjGaBYUxKp9ExL6uq67hUCKnd8
+         mGnM+eChAI4TtxaEOQxWHauSGgMhsvLu5qpKflGFmG+IBoFhMPBQLoMZg8xcicF/O3ya
+         lwywLsQF6aUqNoutGi4elNZQ9vf+dakON3kZwPf5/oZ7AG1KKcXvv+Zo1c3fqcG1R2wy
+         h3rA==
+X-Forwarded-Encrypted: i=1; AHgh+RroV5ONSIH9YlZTzeFL5PzxCxYV+G2N74e2ydjRgrV7AHNnWWk++q1UE1JNKbkYqnXjAujD7MzLVGjmvw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJ9jpoWoPpNsPKyhlZDJ28+J9ZEZ/us5eq5kApC5eQorCndjh3
+	vp/QMUvuVzIw5nPxJyJRpI/IqKpVSTGXqN4s1KYyCvikLmXt3YmLNf07sK6bVR6Shzc=
+X-Gm-Gg: AR+sD1176WXkKzX1mzx26N9FXc7eH00l9mzRcOHsbdRQDVDVamQOtTS/lx4eNijkP2F
+	vW6p33CxlMyismgJquvzuoRGpzZxmKQH+qxvOM8fd4ybItXgy5rX3lA15BRxR1WORYfb3w5strt
+	MfBk9XACSqn3fIGxdbtKOgubtbyDWIZm2sIkWDbFiepdZYUNqmclUKT+tiwBq1pHs+y3+obG81f
+	55QUJieftI5TYlfpX4kh2D+DeUCrPD3Z9c3Sw8k7TCLhZFks50/d/vf2tEX6sM9KQcpHXSlwXKj
+	J4IUt2c3Rd3KhhFsGvNHMCB8dm5jxtamrg0r7GMJ25Tlzl5vNyE50ZjGWIskzPnKaN4JPTmcbx7
+	7QlwNUFHQd/Dq9BiK+UX6Ox+Rxz88UZuhCS8mjgHNJuPQpakoUnHtwHADgv4PgzRZKAQLa5LCHv
+	9Ex2biPGZ701fxQbwxH4wyE42QDII0IEkBhMkW7e7OCb0doVvapYUyS/jjBpF0o1ccfpUF2H6sM
+	2dVUKCVuZhS+k0EY1Y7V5Ajdwj2RPIdRQ==
+X-Received: by 2002:a05:620a:a408:20b0:92e:57ae:3a53 with SMTP id af79cd13be357-9364909fbdfmr1592520785a.9.1786060874133;
+        Thu, 06 Aug 2026 17:01:14 -0700 (PDT)
+Received: from camelot.arimil.com (24.229.171.193.res-cmts.sm3.ptd.net. [24.229.171.193])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-9366e279f0esm27341485a.38.2026.08.06.17.01.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2026 12:30:59 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 6 Aug 2026 12:30:59 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Troy Mitchell <troy.mitchell@linux.dev>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Yixun Lan <dlan@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
-	linux-doc@vger.kernel.org, Jean Delvare <jdelvare@suse.de>
-Subject: Re: [PATCH v3 4/6] hwmon: (lm63) Add Sensylink CTF2301 support
-Message-ID: <977654fc-d5e1-4d23-8ab3-286acd2dc372@roeck-us.net>
-References: <20260805-ctl2301-v3-0-fd4b8ffb5b0d@linux.dev>
- <20260805-ctl2301-v3-4-b86c75d1c552@linux.dev>
+        Thu, 06 Aug 2026 17:01:13 -0700 (PDT)
+From: Arie Miller <renari@arimil.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Aleksa Savic <savicaleksa83@gmail.com>,
+	Will Smith <github@notthatwillsmith.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Arie Miller <renari@arimil.com>
+Subject: [PATCH 0/3] hwmon: Add ASUS ROG Ryujin III support
+Date: Thu,  6 Aug 2026 20:01:04 -0400
+Message-ID: <20260807000107.1786892-1-renari@arimil.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260805-ctl2301-v3-4-b86c75d1c552@linux.dev>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Aug 05, 2026 at 02:00:54AM -0700, Troy Mitchell wrote:
-> Add Sensylink CTF2301 support to the LM63 driver. CTF2301 follows
-> the LM63-style temperature, tachometer, and PWM register layout,
-> while using a 12-bit local temperature register and requiring the
-> ALERT/TACH pin to be configured for tachometer input.
-> 
-> Register an optional thermal cooling device when the device tree
-> node provides #cooling-cells, allowing thermal zones to control
-> the fan through the existing PWM path without changing behavior
-> for existing LM63-family users.
-> 
-> Signed-off-by: Troy Mitchell <troy.mitchell@linux.dev>
-> ---
->  Documentation/hwmon/lm63.rst |  22 +++
->  drivers/hwmon/Kconfig        |   8 +-
->  drivers/hwmon/lm63.c         | 414 +++++++++++++++++++++++++++++++++++--------
->  3 files changed, 366 insertions(+), 78 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/lm63.rst b/Documentation/hwmon/lm63.rst
-> index 9e27367d7405..c40bd0dfe591 100644
-> --- a/Documentation/hwmon/lm63.rst
-> +++ b/Documentation/hwmon/lm63.rst
-> @@ -33,6 +33,16 @@ Supported chips:
->  
->  	       http://www.national.com/pf/LM/LM96163.html
->  
-> +  * Sensylink CTF2301
-> +
-> +    Prefix: 'ctf2301'
-> +
-> +    Addresses scanned: none
-> +
-> +    Datasheet: https://www.sensylink.com/upload/1/net.sensylink.portal/1689557281035.pdf
-> +
-> +    Register description: https://github.com/TroyMitchell911/ctf2301-datasheet
-> +
->  
->  Author: Jean Delvare <jdelvare@suse.de>
->  
-> @@ -62,6 +72,8 @@ value have to be masked out. The value is still 16 bit in width.
->  
->  All temperature values are given in degrees Celsius. Resolution is 1.0
->  degree for the local temperature, 0.125 degree for the remote temperature.
-> +The CTF2301 local temperature input and limit have a resolution of 0.0625
-> +degree.
->  
->  The fan speed is measured using a tachometer. Contrary to most chips which
->  store the value in an 8-bit register and have a selectable clock divider
-> @@ -93,3 +105,13 @@ support these GPIO lines at present.
->  The LM96163 is an enhanced version of LM63 with improved temperature accuracy
->  and better PWM resolution. For LM96163, the external temperature sensor type is
->  configurable as CPU embedded diode(1) or 3904 transistor(2).
-> +
-> +The CTF2301 is register-compatible with the LM63 family and provides 12 fan
-> +control lookup table entries. It supports 8-bit PWM resolution when configured
-> +for a 22.5 kHz PWM frequency.
-> +
-> +Device tree nodes may declare ``#cooling-cells`` to register the fan controller
-> +with the thermal framework. The cooling state is mapped to the existing
-> +``pwm1`` range from 0 to 255. The driver keeps the current automatic or manual
-> +fan control mode during probe and switches to manual control when the thermal
-> +framework first requests a cooling state.
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 2bfbcc033d59..abb1af8664fb 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1501,10 +1501,10 @@ config SENSORS_LM63
->  	depends on I2C
+Add hardware monitoring support for ASUS ROG Ryujin III coolers.
 
-This seems to be missing the THERMAL dependency as suggested by Sashiko.
+Compared with the Ryujin II, the Ryujin III uses different offsets in
+its status reports and a different cooler-duty channel. It also does not
+expose the Ryujin II's external fan-controller channels. The first patch
+moves those details into per-device configuration, and the second adds
+the Extreme and EVA Edition variants.
 
-...
-> -enum chips { lm63, lm64, lm96163 };
-> +enum chips { lm63, lm64, lm96163, ctf2301 };
+The final patch, authored by Will Smith, adds the White Edition USB ID.
+Will confirmed his authorship sign-off and tested that variant on his
+hardware.
 
-Alphabetic order, please.
+The Ryujin III implementation and White Edition were tested through the
+linked project pull requests. The EVA Edition hardware was tested by me.
 
-> +		if (data->kind == ctf2301) {
-> +			msb = i2c_smbus_read_byte_data(client,
-> +						       LM63_REG_LOCAL_TEMP);
-> +			lsb = i2c_smbus_read_byte_data(client,
-> +						       CTF2301_REG_LOCAL_TEMP_LSB);
-> +			if (msb >= 0 && lsb >= 0) {
-> +				data->temp8[0] = msb;
+Codex using gpt-5.6-sol assisted with porting the changes to the current
+hwmon tree, organizing the patch series, updating documentation and
+commit messages, and running build, checkpatch, Sparse, and Sphinx
+validation. I reviewed and tested the resulting changes on ROG Ryujin
+III EVA Edition hardware.
 
-Why keep the assignments to data->temp8[0] and data->temp8[1] ?
+The series passes checkpatch --strict, builds in-tree with W=1 for both
+built-in and module configurations, and produces no Sparse findings. The
+hwmon HTML documentation also builds successfully.
 
-Thanks,
-Guenter
+
+Arie Miller (2):
+  hwmon: (asus_rog_ryujin) Add per-device configuration
+  hwmon: (asus_rog_ryujin) Add ROG Ryujin III support
+
+Will Smith (1):
+  hwmon: (asus_rog_ryujin) Add ROG Ryujin III White Edition
+
+ Documentation/hwmon/asus_rog_ryujin.rst | 25 ++++---
+ drivers/hwmon/Kconfig                   |  4 +-
+ drivers/hwmon/asus_rog_ryujin.c         | 93 ++++++++++++++++++-------
+ 3 files changed, 84 insertions(+), 38 deletions(-)
+
+
+base-commit: f39a03a64a96902e67fccf0ac796e8529def8e2d
+-- 
+2.55.0
+
