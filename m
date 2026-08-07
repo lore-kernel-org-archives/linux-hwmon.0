@@ -1,149 +1,417 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2F73E3C49
-	for <linux-hwmon@vger.kernel.org>; Fri,  7 Aug 2026 05:40:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90CC3AFB0C;
+	Fri,  7 Aug 2026 08:29:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786081209; cv=none; b=tiuIBYK9ULDPISsGIJIGIeURItDcxt8vdLz8rP1FYaaZIQUvubc7WLaKhKrKr3y4edrZEHz4OR8G1IRJDKOXGSfBvIz92lsMHccyqrGcCCczmTXaBmOgge4P7jGgE78IUrk8ibo6RckSVrmaOt0lTSq7MblQoBx4Fqs6oYjODeU=
+	t=1786091381; cv=none; b=S3i79eOCCAEDgaRC2x08vYxU6ETeTgeTVl2bfLx9AoaA/6YaFCVIKDvok5FSNbDUjCTCrg7OYinQ/A/0XZ2fCXwJTqW5gGujIgRcIwPYm7+GMqPMBIxxUonuOAdN6kRrnssm7jKF4ce9qZKU9uoHk7KPSY4bCS1ejt5sCOVd1Ew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786081209; c=relaxed/simple;
-	bh=d2mhu2t1iiN8BgR2yswVf0GniLT20oro3msP/W4O/cU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gRA/o5dACPwCmbd1XUkolqMZBbXm/UpFQB8SLK1VtilanJjsbOtlb5NVh72KY+Sj72Dp5zpkfu9vmpiPgnI3otD7MeYRsAwNbA1EfiYx4k+P1b+y5L3g3h8LPB+SwenRsHYApG8tW7AHTDLtGWuAjQda5r1cpN5qal79pah24tE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VfpeAuVx; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VfpeAuVx"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c9e30214d8fso2642052a12.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 06 Aug 2026 22:40:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786081208; x=1786686008; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=/2CFve86d8ETlCPW39gaDcgsPAefy2+7l7EsXU0NfEs=;
-        b=VfpeAuVxYHf3tmOdcNwWJIx5qtMIPq9KYuFVzleTO8gYMq10G/eAA7w1IpsKKAih8O
-         OL+wax7DGrlGQdQv/Z6Bfu/ihzEYTrQ8GIPdhzhyXu9BwQa5yrLTz0iGZMB7uhV6vpz9
-         e8YA0TLYfwrSdZFrbzKtx21dnQDnh/20TDJk6x370E3gCaKjb4rO4EaXlS7o3QzM1ojK
-         PLvvbNIxg0AqJZkdVNQ3hTx67AMpNjxa9wAxruOaCvdQ9nZ8Bo1b51cDFG72ibePQ4+C
-         d+i37iSC+6NVhbQRAGhvfKeJs8UhyGTXrKJ4EL2L0afguAePObUKvmfGC/0PS0MNhILw
-         jAdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786081208; x=1786686008;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=/2CFve86d8ETlCPW39gaDcgsPAefy2+7l7EsXU0NfEs=;
-        b=hYPpH9BJgeDyjSRu+KcB+7eq1JJf4RTpnDDzGMTLBjr7bfY3aMlHZfjqx7si5xL+nJ
-         Y6wbX2lXLEnncoF8GOPbdDfbL0hTvfLI5T2oSMGSp3KZ6jxAD4bUz6L+/byC6hVJB5pC
-         DZ9GNww4NLi9g88gSaDoJ5f+RNG7EZCto/P1mHf357D9vtkM4ocJArISIg2d189qbTw5
-         aKkKUNf6+36Ro4BVzK2X5YUR1Myo/3FBsLePA3mIcyI98D8rhUcR2FfGYs0Oyp+MOk8g
-         3ZqOEieUuALC5UAUC945VdqW4YaD7F8+cxzWFsUxwOR2LYG118Xo8ZyyGeIaF6hzucMS
-         FPhQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rq0DC8M0InYQLkyPghTGt7H+DvVCou/qXw7NSEthAZTU1MIYXh0rVZWWE8GM+84lScHfWMTonWFNK2DZA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVTHTyoLvki2DAuYUdOSCcETEQOsiMQcUCnhgkP0lMtULUl9hQ
-	x6JLClnlp2wOM65flePeXjeuEVKf6iGyytb7Dshbf0Q+wtpFCntuNazM
-X-Gm-Gg: AR+sD11Af7xf20IHz7ZLDS3Ypp1qqviKDVEVk8Q6jek58B2xzJsa1HU5B1AwQIgb9WI
-	1FceL4zmbjAN3BZYdg/munsgGjTHkOO6mtN6YI/dsvKiTgzOWvOUI3pTVNNUD5rNAyYFxWz+J/U
-	NU7ThUB2cKi1rrQX6VmL8vOTEYyZGhr4SUhVfVVJpX7nNNKvzZNNDWYplvpnY7DOJtpt1kUiJsP
-	kA0p8+KXBg/BwI2c6BPict0eTbn8/snI+BzFktmLEpokuSmXvd1Y/Srbg9ZdetgA+oGtOFqqj1D
-	X3GpK+ZcDoDrHKT9pCwZce16XtWIj9vis0faAIV7nJ837Eh1SMAYba0iXcHkcpmfbnNy8fKbSGN
-	d++eERfCY2r1tAj1I1ybLNnTep9gdL2V/sBQTAcy1B7w9TXwf2RKyz1y7QAAtoZxUmWgZWuvYbv
-	vx/0v27xex4HyKnHnLytRs3YgaAaXfIOTDGXpbxI4btkz5kS7ODagRVRumVx+X/4IljaygOq4qu
-	oa4WN/MbKDGsQ==
-X-Received: by 2002:a05:6a21:4c0c:b0:3cb:853e:850e with SMTP id adf61e73a8af0-3cb85dbd1f2mr25329840637.13.1786081207762;
-        Thu, 06 Aug 2026 22:40:07 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-315be86d3fcsm3245738eec.4.2026.08.06.22.40.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2026 22:40:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 6 Aug 2026 22:40:06 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Wilken Gottwalt <wilken.gottwalt@posteo.net>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: corsair-psu: update documentation
-Message-ID: <02c32669-9942-4aa8-80e4-66d4c8dffb58@roeck-us.net>
-References: <anVuBd8Bb7T66OUO@monster.localdomain>
+	s=arc-20240116; t=1786091381; c=relaxed/simple;
+	bh=noGE6QGqkNK5BLekT03L2goLhgphH9QldjWjx2WnuwU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=S32TtQZywO+wRn8GEOYBE+JZ5XdcNRm610hb2VcYnpMzSQAwwIXnRnt4Gz1aSfmJy0UOxnMAlR0K5NWMo39hAcM1l+omxaFaNjQUdVh4LrkPwGkNwTtNrq/9BUI4Z80xOMzb/43BYUN2IojcYJOgSuWuYkF4TmsiVfMvdWVN8x0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id CC95D1A003B;
+	Fri,  7 Aug 2026 10:29:36 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 946C91A0008;
+	Fri,  7 Aug 2026 10:29:36 +0200 (CEST)
+Received: from lsv031125.swis.in-blr01.nxp.com (lsv031125.swis.in-blr01.nxp.com [10.12.177.172])
+	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 5DF7718000B5;
+	Fri,  7 Aug 2026 16:29:33 +0800 (+08)
+From: Shiv Prakash Gupta <shivprakash.gupta@nxp.com>
+To: linux-kernel@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	devicetree@vger.kernel.org
+Cc: alexandre.belloni@bootlin.com,
+	krzk+dt@kernel.org,
+	robh@kernel.org,
+	conor+dt@kernel.org,
+	linux@roeck-us.net,
+	wim@linux-watchdog.org,
+	vikash.bansal@nxp.com,
+	priyanka.jain@nxp.com,
+	lakshay.piplani@nxp.com,
+	Shiv Prakash Gupta <shivprakash.gupta@nxp.com>
+Subject: [PATCH 3/4] rtc: pcf8525: Add watchdog support
+Date: Fri,  7 Aug 2026 13:58:54 +0530
+Message-Id: <20260807082855.3762394-4-shivprakash.gupta@nxp.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260807082855.3762394-1-shivprakash.gupta@nxp.com>
+References: <20260807082855.3762394-1-shivprakash.gupta@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <anVuBd8Bb7T66OUO@monster.localdomain>
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: ClamAV using ClamSMTP
 
-On Fri, Aug 07, 2026 at 05:32:54AM +0000, Wilken Gottwalt wrote:
-> Add information about the HX1500i 2025 series and fix the missing
-> HX1500i in Kbuild.
-> 
-> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+Add watchdog support for NXP PCF8525 real time clock(RTC) device
 
-Applied.
+Signed-off-by: Lakshay Piplani <lakshay.piplani@nxp.com>
+Signed-off-by: Shiv Prakash Gupta <shivprakash.gupta@nxp.com>
+---
+ drivers/rtc/Kconfig       |   1 +
+ drivers/rtc/rtc-pcf8525.c | 245 +++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 244 insertions(+), 2 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 3c22c7253aae..6c1c7b3d27b6 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -516,6 +516,7 @@ config RTC_DRV_PCF8523
+ config RTC_DRV_PCF8525
+         tristate "NXP PCF8525"
+         select REGMAP_I2C
++	select WATCHDOG_CORE if WATCHDOG
+         help
+           If you say yes here you get support for the NXP PCF8525 RTC
+           chips.
+diff --git a/drivers/rtc/rtc-pcf8525.c b/drivers/rtc/rtc-pcf8525.c
+index 7dfb4f0f6404..4ef648bdfc5b 100644
+--- a/drivers/rtc/rtc-pcf8525.c
++++ b/drivers/rtc/rtc-pcf8525.c
+@@ -45,6 +45,8 @@
+ #include <linux/slab.h>
+ #include <linux/bitfield.h>
+ #include <linux/uaccess.h>
++#include <linux/kernel.h>
++#include <linux/watchdog.h>
+ 
+ /* Registers */
+ #define PCF8525_REG_CTRL1		0x00
+@@ -94,6 +96,8 @@
+ #define PCF8525_REG_INTB_MASK1		0x2A
+ #define PCF8525_REG_INTB_MASK2		0x2B
+ 
++#define PCF8525_REG_WD_CTL              0x2C
++#define PCF8525_REG_WD_VAL              0x2D
+ #define PCF8525_REG_TEMP		0x2E
+ 
+ /* CTRL1 */
+@@ -104,6 +108,7 @@
+ /* CTRL2 */
+ #define PCF8525_CTRL2_MSF		BIT(7)
+ #define PCF8525_CTRL2_TI_TP		BIT(6)
++#define PCF8525_CTRL2_WDTF              BIT(5)
+ #define PCF8525_CTRL2_AF		BIT(4)
+ #define PCF8525_CTRL2_OSFE_MASK		GENMASK(3, 2)
+ #define PCF8525_CTRL2_AIE		BIT(1)
+@@ -120,6 +125,9 @@
+ #define PCF8525_CTRL5_CL		BIT(1)
+ #define PCF8525_CTRL5_XTL_TYP		BIT(0)
+ 
++/* CLKOUT_ctl */
++#define PCF8525_CLKOUT_CLKOE            BIT(3)
++
+ /* Timestamp control */
+ #define PCF8525_TS_CTL1_TSM             BIT(7)
+ #define PCF8525_TS_CTL1_TSOFF           BIT(6)
+@@ -138,6 +146,7 @@
+ #define PCF8525_RESET_SR_CMD		0x2C /* software reset */
+ 
+ /* Interrupt masks (mask bit = 1 means masked/disabled) - INTA_MASK1 bits */
++#define PCF8525_MASK1_WD_CD            BIT(0)
+ #define PCF8525_MASK1_BIE		BIT(1)
+ #define PCF8525_MASK1_AIE		BIT(2)
+ #define PCF8525_MASK1_OSIE		BIT(3)
+@@ -148,6 +157,14 @@
+ 
+ #define PCF8525_ALM_AE_MONTH		BIT(7)
+ #define PCF8525_ALM_AE_YEAR		BIT(6)
++#define PCF8525_WD_CTL_WD_CD            BIT(7)
++#define PCF8525_WD_CTL_TF0              BIT(0)
++#define PCF8525_WD_CTL_TF1              BIT(1)
++
++#define PCF8525_WD_CLOCK_HZ_X1000       250 /* 1/4 Hz */
++#define PCF8525_WD_MIN_HW_HEARTBEAT_MS  4000
++#define PCF8525_WD_VAL_STOP             0
++#define PCF8525_WD_DEFAULT_TIMEOUT_S    60
+ 
+ #define PCF8525_REG_AGING_OFFSET_HI	0x26
+ #define PCF8525_REG_AGING_OFFSET_LO	0x27
+@@ -163,10 +180,13 @@
+ 
+ struct pcf8525 {
+ 	struct rtc_device *rtc;
++	struct watchdog_device wdd;
+ 	struct regmap *regmap;
+ 	bool irq_enabled;
+ 	time64_t ts[2];
+ 	bool ts_valid[2];
++	int irq_inta;
++	int irq_intb;
+ };
+ 
+ static const struct regmap_config pcf8525_regmap_cfg = {
+@@ -175,6 +195,218 @@ static const struct regmap_config pcf8525_regmap_cfg = {
+ 	.max_register = PCF8525_REG_TEMP,
+ };
+ 
++static unsigned int pcf8525_wdt_timeout_to_val(unsigned int timeout)
++{
++	unsigned int val;
++
++	val = DIV_ROUND_UP(timeout * PCF8525_WD_CLOCK_HZ_X1000, 1000) + 1;
++
++	if (val < 2)
++		return 2;
++	if (val > 255)
++		return 255;
++
++	return val;
++}
++
++static int pcf8525_wdt_ping(struct watchdog_device *wdd)
++{
++	struct pcf8525 *pcf8525 = watchdog_get_drvdata(wdd);
++	unsigned int wd_val;
++
++	wd_val = pcf8525_wdt_timeout_to_val(wdd->timeout);
++
++	return regmap_write(pcf8525->regmap, PCF8525_REG_WD_VAL, wd_val);
++}
++
++static int pcf8525_wdt_active_ping(struct watchdog_device *wdd)
++{
++	if (watchdog_active(wdd))
++		return pcf8525_wdt_ping(wdd);
++
++	return 0;
++}
++
++static int pcf8525_wdt_start(struct watchdog_device *wdd)
++{
++	return pcf8525_wdt_ping(wdd);
++}
++
++static int pcf8525_wdt_stop(struct watchdog_device *wdd)
++{
++	struct pcf8525 *pcf8525 = watchdog_get_drvdata(wdd);
++
++	return regmap_write(pcf8525->regmap, PCF8525_REG_WD_VAL,
++				    PCF8525_WD_VAL_STOP);
++}
++
++static int pcf8525_wdt_set_timeout(struct watchdog_device *wdd,
++				   unsigned int timeout)
++{
++	wdd->timeout = timeout;
++
++	return pcf8525_wdt_active_ping(wdd);
++}
++
++static const struct watchdog_info pcf8525_wdt_info = {
++	.identity = "NXP PCF8525 Watchdog",
++	.options = WDIOF_KEEPALIVEPING | WDIOF_SETTIMEOUT,
++};
++
++static const struct watchdog_ops pcf8525_watchdog_ops = {
++	.owner = THIS_MODULE,
++	.start = pcf8525_wdt_start,
++	.stop = pcf8525_wdt_stop,
++	.ping = pcf8525_wdt_ping,
++	.set_timeout = pcf8525_wdt_set_timeout,
++};
++
++static int pcf8525_watchdog_get_period(int n, int f1000)
++{
++	return (1000 * (n - 1)) / f1000;
++}
++
++static irqreturn_t pcf8525_wdt_irq(int irq, void *data)
++{
++	struct device *dev = data;
++	struct pcf8525 *pcf8525 = dev_get_drvdata(dev);
++	unsigned int ctrl2;
++	int ret;
++
++	ret = regmap_read(pcf8525->regmap, PCF8525_REG_CTRL2, &ctrl2);
++	if (ret)
++		return IRQ_NONE;
++
++	if (!(ctrl2 & PCF8525_CTRL2_WDTF))
++		return IRQ_NONE;
++
++	ret = regmap_update_bits(pcf8525->regmap, PCF8525_REG_CTRL2,
++				 PCF8525_CTRL2_WDTF, 0);
++	if (ret)
++		return IRQ_NONE;
++
++	return IRQ_HANDLED;
++}
++
++static int pcf8525_watchdog_config(struct device *dev,
++				   struct pcf8525 *pcf8525)
++{
++	unsigned int m1, m2;
++	int ret;
++
++	/* Configure nINTB/CLKOUT as nINTB open-drain interrupt output. */
++	ret = regmap_update_bits(pcf8525->regmap, PCF8525_REG_CLKOUT,
++				 PCF8525_CLKOUT_CLKOE, 0);
++	if (ret)
++		return ret;
++
++	/* Enable watchdog interrupt and select 1/4 Hz source: TF[1:0] = 10. */
++	ret = regmap_update_bits(pcf8525->regmap, PCF8525_REG_WD_CTL,
++				 PCF8525_WD_CTL_WD_CD |
++				 PCF8525_WD_CTL_TF1 |
++				 PCF8525_WD_CTL_TF0,
++				 PCF8525_WD_CTL_WD_CD |
++				 PCF8525_WD_CTL_TF1);
++	if (ret)
++		return ret;
++
++	/* Keep watchdog masked on INTA. */
++	ret = regmap_read(pcf8525->regmap, PCF8525_REG_INTA_MASK1, &m1);
++	if (ret)
++		return ret;
++
++	m1 |= PCF8525_MASK1_WD_CD;
++	ret = regmap_write(pcf8525->regmap, PCF8525_REG_INTA_MASK1, m1);
++	if (ret)
++		return ret;
++
++	/* Route watchdog only to INTB, and keep RTC interrupts masked on INTB. */
++	ret = regmap_read(pcf8525->regmap, PCF8525_REG_INTB_MASK1, &m1);
++	if (ret)
++		return ret;
++
++	m1 |= PCF8525_MASK1_BIE |
++	      PCF8525_MASK1_AIE |
++	      PCF8525_MASK1_OSIE |
++	      PCF8525_MASK1_SI |
++	      PCF8525_MASK1_MI;
++	m1 &= ~PCF8525_MASK1_WD_CD;
++
++	ret = regmap_write(pcf8525->regmap, PCF8525_REG_INTB_MASK1, m1);
++	if (ret)
++		return ret;
++
++	ret = regmap_read(pcf8525->regmap, PCF8525_REG_INTB_MASK2, &m2);
++	if (ret)
++		return ret;
++
++	m2 |= PCF8525_MASK2_TSIE;
++
++	return regmap_write(pcf8525->regmap, PCF8525_REG_INTB_MASK2, m2);
++}
++
++static int pcf8525_watchdog_init(struct device *dev,
++				 struct pcf8525 *pcf8525)
++{
++	int ret;
++
++	if (!IS_ENABLED(CONFIG_WATCHDOG_CORE) ||
++	    !device_property_read_bool(dev, "reset-source"))
++		return 0;
++
++	if (pcf8525->irq_intb > 0) {
++		ret = devm_request_threaded_irq(dev, pcf8525->irq_intb,
++						NULL, pcf8525_wdt_irq,
++						IRQF_ONESHOT,
++						"pcf8525-wdt", dev);
++		if (ret)
++			return ret;
++	}
++
++	ret = pcf8525_watchdog_config(dev, pcf8525);
++	if (ret)
++		return ret;
++
++	pcf8525->wdd.parent = dev;
++	pcf8525->wdd.info = &pcf8525_wdt_info;
++	pcf8525->wdd.ops = &pcf8525_watchdog_ops;
++	pcf8525->wdd.min_timeout = pcf8525_watchdog_get_period(2,
++							       PCF8525_WD_CLOCK_HZ_X1000);
++	pcf8525->wdd.max_timeout = pcf8525_watchdog_get_period(255,
++							       PCF8525_WD_CLOCK_HZ_X1000);
++	pcf8525->wdd.timeout = PCF8525_WD_DEFAULT_TIMEOUT_S;
++	watchdog_init_timeout(&pcf8525->wdd, 0, dev);
++	pcf8525->wdd.min_hw_heartbeat_ms = PCF8525_WD_MIN_HW_HEARTBEAT_MS;
++	pcf8525->wdd.status = WATCHDOG_NOWAYOUT_INIT_STATUS;
++
++	watchdog_set_drvdata(&pcf8525->wdd, pcf8525);
++	watchdog_stop_on_reboot(&pcf8525->wdd);
++
++	return devm_watchdog_register_device(dev, &pcf8525->wdd);
++}
++
++static int pcf8525_get_irqs(struct i2c_client *client, struct pcf8525 *pcf8525)
++{
++	struct device *dev = &client->dev;
++	int irq;
++
++	irq = fwnode_irq_get_byname(dev_fwnode(dev), "inta");
++	if (irq == -ENOENT || irq == -EINVAL)
++		irq = client->irq;
++	else if (irq < 0)
++		return irq;
++	pcf8525->irq_inta = irq;
++
++	irq = fwnode_irq_get_byname(dev_fwnode(dev), "intb");
++	if (irq == -ENOENT || irq == -EINVAL)
++		irq = 0;
++	else if (irq < 0)
++		return irq;
++	pcf8525->irq_intb = irq;
++
++	return 0;
++}
++
+ /*
+  * Configure only the crystal fields explicitly provided by firmware.
+  * If a property is absent, preserve the current hardware setting.
+@@ -809,6 +1041,7 @@ static int pcf8525_unmask_irqs_intA(struct pcf8525 *pcf8525)
+ 	if (ret)
+ 		return ret;
+ 
++	m1 |= PCF8525_MASK1_WD_CD;
+ 	m1 &= ~PCF8525_MASK1_AIE;    /* unmask alarm interrupt on INTA */
+ 	m2 &= ~PCF8525_MASK2_TSIE;   /* unmask timestamp interrupt on INTA */
+ 
+@@ -836,6 +1069,10 @@ static int pcf8525_probe(struct i2c_client *client)
+ 
+ 	i2c_set_clientdata(client, pcf8525);
+ 
++	ret = pcf8525_get_irqs(client, pcf8525);
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to get IRQs\n");
++
+ 	pcf8525->rtc = devm_rtc_allocate_device(dev);
+ 	if (IS_ERR(pcf8525->rtc))
+ 		return dev_err_probe(dev, PTR_ERR(pcf8525->rtc),
+@@ -877,8 +1114,8 @@ static int pcf8525_probe(struct i2c_client *client)
+ 		return ret;
+ 
+ 	/* Optional IRQ */
+-	if (client->irq > 0) {
+-		ret = devm_request_threaded_irq(dev, client->irq,
++	if (pcf8525->irq_inta > 0) {
++		ret = devm_request_threaded_irq(dev, pcf8525->irq_inta,
+ 						NULL, pcf8525_irq,
+ 						IRQF_ONESHOT,
+ 						dev_name(dev), dev);
+@@ -902,6 +1139,10 @@ static int pcf8525_probe(struct i2c_client *client)
+ 	if (ret)
+ 		return ret;
+ 
++	ret = pcf8525_watchdog_init(dev, pcf8525);
++	if (ret)
++		return ret;
++
+ 	return 0;
+ }
+ 
+-- 
+2.34.1
 
-> ---
->  Documentation/hwmon/corsair-psu.rst | 6 +++---
->  drivers/hwmon/Kconfig               | 4 ++--
->  drivers/hwmon/corsair-psu.c         | 2 +-
->  3 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
-> index 2e99cfd556a0..8d3636292076 100644
-> --- a/Documentation/hwmon/corsair-psu.rst
-> +++ b/Documentation/hwmon/corsair-psu.rst
-> @@ -19,7 +19,7 @@ Supported devices:
->  
->    Corsair HX1200i (Legacy, Series 2023 and Series 2025)
->  
-> -  Corsair HX1500i (Legacy and Series 2023)
-> +  Corsair HX1500i (Legacy, Series 2023 and Series 2025)
->  
->    Corsair RM550i
->  
-> @@ -93,8 +93,8 @@ Debugfs entries
->  ---------------
->  
->  =======================	========================================================
-> -ocpmode                 Single or multi rail mode of the PCIe power connectors
-> -product                 Product name of the psu
-> +ocpmode			Single or multi rail mode of the PCIe power connectors
-> +product			Product name of the psu
->  uptime			Session uptime of the psu
->  uptime_total		Total uptime of the psu
->  vendor			Vendor name of the psu
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 2bfbcc033d59..3d7cfa429f5d 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -506,8 +506,8 @@ config SENSORS_CORSAIR_PSU
->  	  If you say yes here you get support for Corsair PSUs with a HID
->  	  interface.
->  	  Currently this driver supports the (RM/HX)550i, (RM/HX)650i,
-> -	  (RM/HX)750i, (RM/HX)850i, (RM/HX)1000i and HX1200i power supplies
-> -	  by Corsair.
-> +	  (RM/HX)750i, (RM/HX)850i, (RM/HX)1000i, HX1200i and HX1500i power
-> +	  supplies by Corsair.
->  
->  	  This driver can also be built as a module. If so, the module
->  	  will be called corsair-psu.
-> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-> index ce958cdaef58..3b4cbf696e80 100644
-> --- a/drivers/hwmon/corsair-psu.c
-> +++ b/drivers/hwmon/corsair-psu.c
-> @@ -875,7 +875,7 @@ static const struct hid_device_id corsairpsu_idtable[] = {
->  	{ HID_USB_DEVICE(0x1b1c, 0x1c0c) }, /* Corsair RM850i */
->  	{ HID_USB_DEVICE(0x1b1c, 0x1c0d) }, /* Corsair RM1000i */
->  	{ HID_USB_DEVICE(0x1b1c, 0x1c1e) }, /* Corsair HX1000i Series 2023 */
-> -	{ HID_USB_DEVICE(0x1b1c, 0x1c1f) }, /* Corsair HX1500i Legacy and Series 2023 */
-> +	{ HID_USB_DEVICE(0x1b1c, 0x1c1f) }, /* Corsair HX1500i Legacy, Series 2023 and 2025 */
->  	{ HID_USB_DEVICE(0x1b1c, 0x1c23) }, /* Corsair HX1200i Series 2023 */
->  	{ HID_USB_DEVICE(0x1b1c, 0x1c27) }, /* Corsair HX1200i Series 2025 */
->  	{ },
