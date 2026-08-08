@@ -1,141 +1,154 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 135E4378D70
-	for <linux-hwmon@vger.kernel.org>; Fri,  7 Aug 2026 21:07:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F025013A3ED
+	for <linux-hwmon@vger.kernel.org>; Sat,  8 Aug 2026 00:12:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786136826; cv=none; b=ddXlMisWHGOJNdxYf20gFXIexbrZL04JRISlceTt1we3mDf2A66EJzOpOEuMc9DhXEBpTmdGiEWR9FP+RSjeKUaNzM5TQtdwVzhixmwpx28qCgqWb1qlHvp+PmMipdXt1IKCEvV/9QlDfhGD1AbkkUQav3jgnBbJmmXxpasIGlM=
+	t=1786147925; cv=none; b=IH5Qr2uafxLf0CfFrN2mYuopp69sqvleJAkyfpMaYCJjnbjW8KwG9eKrpatMCwwcrV2MMlHC5I7JvrVWCb6DLCkC9UlcSjOSDXPUTtxxnLvkj4FHV9yIEK9u4/rJspd1mH4C5avRO9OkZZwSExlPUhnBAyEDQVF2ym/0i71iBJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786136826; c=relaxed/simple;
-	bh=qLca5mPrycZt6ozG3WNcrfP3sx0HQ9R6ID2aO9Xm26I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y8j4Tj71nSwlQOkd8iXQBn7cWt8Xv7P25pvc1aL/EuC5s06zVhGNsT4ELxrORDJAMTgBM75d6VcNYloyabNVGrXA0xcJl1dInjWkYyAemdz/LBR/Kd1hzAqAQkaPvj1jD6uX+K9kYWMa0O5BM2+VjB/RyU+pUxSc0XzJ7dTliWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h3a6SxIE; arc=none smtp.client-ip=209.85.215.170
+	s=arc-20240116; t=1786147925; c=relaxed/simple;
+	bh=1hQ8C5Wan49fiN9j28/w0A1xweeWzh3YDmaN0qPUn08=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mgKy1y/kHXjRckxG5iP1LmhPmY0LPsr5IG6ttir4wLP5YosABNdUi2cfeDHo+5PJHlpljlTL9HoRJbF+OwZjEa867JmnFc9q8DO9v15kaPDagTu+mYCE7ojwIM6rXGSwCqljtEruoLShEp1TvQL4gSlzKsR+FMwnKyUj2+28t/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z/wIw81c; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h3a6SxIE"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-c9cf07d2df6so2998841a12.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 07 Aug 2026 14:07:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z/wIw81c"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-84847482584so75035b3a.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 07 Aug 2026 17:12:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786136824; x=1786741624; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:sender:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1786147923; x=1786752723; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=b1OqfWPK4p2/OMAeeeFT0yxrTuq3EwlujpCKP5u7mo4=;
-        b=h3a6SxIENAxoFeWfAIbDvH9rucbH36nHmbAm+hbAEiBGN+QH4604BFZK1y4OP/c/io
-         67Fu02UWacWSmLEvNdCmhqGCUCN2/QFIty/ZHJuILJGbz/QO7lofzNj6SE8sCP2IkFLF
-         90HOMzFQ6uvlgfIRPvSmqmJDJqhi+3f/2OBeGexjI/wgVya+stLIGqSxPtMJvWVkrQlF
-         bPrW+Cd8EEnSYC8cJPOSrxBrs2pDSPsbJ6GhNvXJifOCdF+fXx2pLuIiRy9n7m6bXSkR
-         NSsNi0+srSK8yTwDaOWLVwmB9r+MTwPtBskT+B8HXZTo9gAu4X3oT96RCklea6ct043W
-         LjVg==
+        bh=GQcjaKo8QwdgK1udfFIHOA2aRE7LlkhFRFXhYQ6O08s=;
+        b=Z/wIw81cKNuZLDP6ESa0UbETQBzLN+PD6BsEAqsIEu4Bkd8fseKa5XdCm9Act5RaLV
+         ROBpp4/n9pHyw6otVSrBCN08YkfVYnDOQYzXPg+EeViKTPK4swRikr5HQMsa43wF7Hax
+         Ta4hTHhLdslJlB19hu5QHYInwFj08vNdHyg9aKN0BHcngDUuiyOy44s80A292WDyAxRn
+         uDUyDT2houFEawcEyZr6Ucox/LQjWVrO6NAq1Nfnygcl2bJbxLiFOTok40+/sTOqJkvF
+         irHfELv+NwpN6Tr1uGC5Wq+7F+bIe/CFgXg2GCRfMhy3Htpg4ZqbyMNRdRuPZ8+ozFqb
+         026A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786136824; x=1786741624;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1786147923; x=1786752723;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=b1OqfWPK4p2/OMAeeeFT0yxrTuq3EwlujpCKP5u7mo4=;
-        b=B9Z+Q4Ukh99NI53Qp5GmN9mCv4y4MzYNCS36uahKvuqlCHDxozFHmdXLqXZQxaRU+m
-         FuMXe57zEQ6tL0z8Ow9TZskxMEwXU/d6pZ8/xlgVQtvbXzbbBbRdJuAA0VyrQ9HhDJqm
-         8G5VZNN9gU/TpfVTLE28dZnj/4yQv0W4JYt0JzFcKjxLQEl6Mz1HJqvP80ytFyzp8+kq
-         F44Lb00zd5ZKPn/6POXHAQKYkn9tJ5shcjmG+9EQm+V5SLzkN9Jz6MW1JMI572g/lpKo
-         n3KPK2qMvlLQ5pwYz1+zcIfHJdvEIRvi6HgIbpt0yPtrJ7b/43CZVQnE6t9/FJbJk+eP
-         panQ==
-X-Gm-Message-State: AOJu0Yyd4yerubzDv9pGRrnsG4NVte0at4yZIboy96RZCXiSqOYT8+XF
-	RJhmi1bzk6Kt/Nfov0esRr4lfensDnlEijArVReU0nogGMeGPLshPwn2
-X-Gm-Gg: AR+sD10wYjLgRZ6j8fIVqj7KCNBbpShNA7T9LwOeL3+wa0xb+XNXtG+JJSWuHyeDTQK
-	UkCZ5Y7ijGqiNetejqK43Cw7BlnbImE7i2aO7/6oplMlTkh0esOz/ScsQV9+RtVKlVat7DoO52G
-	2kuoUO8xC9EbH1aJjyZpyytGRrRtUqFlYFKD+6ztN37154gWS/tgjTwnl2hIRuNhfJAvEt8rURd
-	P8h6E+IkVZN2yEu2tRi79jn0X2v697agaCJzFPpricUHwl4fRCIUU1iuSgIHZLM6tuVkaC8ELRH
-	L+Ckstmm32zDOM03CUHYRULmLVsswIpZ41fBfgcAnOfAHnOFrjkasqBYNxetvxSZyXTaMgMnlAI
-	10kx86Sawr7W4N/VteDJA2OYwdWhoNGgeI1Zr0x497jXG0F1sBhWWNMUj/8YBVSQ/W5DT581k0E
-	5tlF7uua72IJludcilnmeqiS2GY2hoGZAwRxTHMzFWTANT4Tg+YkpUtsnSaqRoUVtfCTnVr9uaw
-	MZddrsf81IVvA==
-X-Received: by 2002:a05:6a21:710f:b0:3c3:9c4e:de3a with SMTP id adf61e73a8af0-3cb85df09eemr31815552637.6.1786136824287;
-        Fri, 07 Aug 2026 14:07:04 -0700 (PDT)
+        bh=GQcjaKo8QwdgK1udfFIHOA2aRE7LlkhFRFXhYQ6O08s=;
+        b=g5rHbiZAv4G8rS3Z78VillkNnRGML+1rPf+Z+3CVW+80aM9KGz0kUexKIz6n0yUoGh
+         RRprh9JS0i0yyLLPfKncSofwg6BHXa1VnVo70b99eqqlNDQVJrSJcj9EhM6mAzlG/8F7
+         4r39OPT5LcZ6DUaJUds4JulghnHpGzQWYaf+kuFcGEJL84OW355tD0MMFeEDSFudper/
+         qH9WXmE5TMt1MkqsVhkkPxfX2E8ssEIl1pqzuizUKL9uoHcWASykO0I8Xi/M2uf08GFL
+         jKsSVOGMjhPswguyko06DmhilDa0IMGXZPKnUu4LjEhWcpSuW98ogGEbR97AYgOEcU2k
+         iX6A==
+X-Gm-Message-State: AOJu0YxYut+1hNLAtEhgMR9Ryn9dErvKSIIlXRUjZKEdAsOD+WYjyZiX
+	c/krBfSS74teXO0C9nl8r/kWABTQ4kjncaniReuHVMId3AOZxi//0gLC
+X-Gm-Gg: AR+sD10E06+Kg4z5ve3QZmbUb5fl+Ew95+SFTYyzhBX75QOI++fp7ZAe6os9fyOIYen
+	R1pOKkXzuCEKY9A2ihjPp1X9J9JF8pTQd4fklubi6hWIFv1jD8mdXMU7rrVhJ+MMpCELIJds7nT
+	PP9SYuN4DsbazUJGNu4taOlYOFtHpDQojqzo65I00ddiHA06e/lO8v/KbGPfFKlxVZ1duSBg1sI
+	HovywccRcQyDn8mVgZ3Ef9DW/bGtxeG1EovySUDfhw9BSaBzIybNzjVLCLff75URfFZu0aadD/U
+	Wr5upzcMoDTmaNGEZg1pwNHNUB8xfRnopRfzMcqN/4dWgs2UC4yNVx14i+8eH3JhOWR7sptOlYv
+	crTsRBvGlPdxRLpJKYuiprI1jdiqGPMB7tBzWemNCHbun5OjWZeFxP3ZhXy5dk+jb6K1IRfuwmJ
+	iUHw+kUDEVP2q6PXFyDwai922PLDQ0/DDHMgSbVcP0SjDiWtf9sLVBPOaj+VE+9lIXz8/ggQ/jv
+	A==
+X-Received: by 2002:a05:6a00:450c:b0:84c:241e:9070 with SMTP id d2e1a72fcca58-84f6b84b32fmr2559329b3a.17.1786147923105;
+        Fri, 07 Aug 2026 17:12:03 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-315beb883d9sm10848606eec.15.2026.08.07.14.07.03
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84f5a58e6c4sm1606295b3a.59.2026.08.07.17.12.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2026 14:07:03 -0700 (PDT)
+        Fri, 07 Aug 2026 17:12:02 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 7 Aug 2026 14:07:02 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (core) Constify PEC device attribute
-Message-ID: <8e66abf5-cd2a-4324-a328-6e3baad7199d@roeck-us.net>
-References: <20260807-sysfs-const-attr-hwmon-2-v1-1-d16341379a97@weissschuh.net>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v7.2-rc7
+Date: Fri,  7 Aug 2026 17:12:01 -0700
+Message-ID: <20260808001201.2405051-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260807-sysfs-const-attr-hwmon-2-v1-1-d16341379a97@weissschuh.net>
 
-On Fri, Aug 07, 2026 at 10:06:17PM +0200, Thomas Weiﬂschuh wrote:
-> Mark the attribute structure as const, as it is never modified.
-> 
-> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
-> ---
-> This should have been part of commit 5d27101b6f1c ("hwmon: (core)
-> Constify device attributes"). If you do a rebase anyways, maybe you
-> could fold them together.
+Hi Linus,
 
-I'll do that.
+Please pull hwmon fixes for Linux v7.2-rc7 from signed tag:
 
-Applied.
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v7.2-rc7
 
 Thanks,
 Guenter
+------
 
-> ---
->  drivers/hwmon/hwmon.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> 
-> ---
-> base-commit: 611f4cbac429c09a7db4bb2aebf64e3423109639
-> change-id: 20260807-sysfs-const-attr-hwmon-2-43bd646c0c67
-> 
-> Best regards,
-> --  
-> Thomas Weiﬂschuh <linux@weissschuh.net>
-> 
-> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index 90ceb815f43e..3297ed6daec1 100644
-> --- a/drivers/hwmon/hwmon.c
-> +++ b/drivers/hwmon/hwmon.c
-> @@ -341,7 +341,7 @@ static int hwmon_match_device(struct device *dev, const void *data)
->  	return dev->class == &hwmon_class;
->  }
->  
-> -static ssize_t pec_show(struct device *dev, struct device_attribute *dummy,
-> +static ssize_t pec_show(struct device *dev, const struct device_attribute *dummy,
->  			char *buf)
->  {
->  	struct i2c_client *client = to_i2c_client(dev);
-> @@ -349,7 +349,7 @@ static ssize_t pec_show(struct device *dev, struct device_attribute *dummy,
->  	return sysfs_emit(buf, "%d\n", !!(client->flags & I2C_CLIENT_PEC));
->  }
->  
-> -static ssize_t pec_store(struct device *dev, struct device_attribute *devattr,
-> +static ssize_t pec_store(struct device *dev, const struct device_attribute *devattr,
->  			 const char *buf, size_t count)
->  {
->  	struct i2c_client *client = to_i2c_client(dev);
-> @@ -390,7 +390,7 @@ static ssize_t pec_store(struct device *dev, struct device_attribute *devattr,
->  	return err;
->  }
->  
-> -static DEVICE_ATTR_RW(pec);
-> +static const DEVICE_ATTR_RW(pec);
->  
->  static void hwmon_remove_pec(void *dev)
->  {
+The following changes since commit 075b74841bd0065a3bda3440873c747938e69b68:
+
+  Linux 7.2-rc6 (2026-08-02 16:24:24 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v7.2-rc7
+
+for you to fetch changes up to c6c4234928d2eb4f61fecb61067e612d9bdbd2ff:
+
+  hwmon: (corsair-psu) Fix linear11 calculation (2026-08-06 22:37:45 -0700)
+
+----------------------------------------------------------------
+hwmon fixes for v7.2-rc7
+
+Various fixes, most of them fixing critical or high severity bugs
+reported by Sashiko.
+
+* ads7828
+  - Fix external VREF regulator handling
+
+* corsair-psu
+  - Fix linear11 calculation
+  - Serialize debugfs access against hwmon
+  - Fix possible out-of-bounds access on missing string termination
+
+* ltc4282
+  - Fix parsing adi,current-limit-sense-microvolt
+  - Clamp negative current limits
+  - Avoid overflow in maximum power calculation
+
+* nzxt-smart2
+  - Check return value of init_device() in probe
+
+* PMBus core
+  - Fix type confusion in notification logic
+  - Avoid race condition during probe
+
+* PMBus/lm25066
+  - Fix PMBus coefficient calculations
+
+----------------------------------------------------------------
+Ali Ahmet Memis (1):
+      hwmon: (corsair-psu) serialize debugfs access against hwmon
+
+Guenter Roeck (7):
+      hwmon: (pmbus/core) Avoid race condition during probe
+      hwmon: (pmbus) Fix type confusion in notification logic
+      hwmon: (pmbus/lm25066) Fix PMBus coefficient calculations
+      hwmon: (ltc4282) Avoid overflow in maximum power calculation
+      hwmon: (ltc4282) Clamp negative current limits
+      hwmon: (ltc4282) Fix parsing adi,current-limit-sense-microvolt
+      hwmon: (corsair-psu) Fix linear11 calculation
+
+Qingshuang Fu (2):
+      hwmon: (nzxt-smart2) Check return value of init_device() in probe
+      hwmon: (ads7828) Fix external VREF regulator handling
+
+Wilken Gottwalt (1):
+      hwmon: (corsair-psu) fix possible out-of-bounds access on missing string termination
+
+ drivers/hwmon/ads7828.c          | 11 +++----
+ drivers/hwmon/corsair-psu.c      | 31 ++++++++++++-------
+ drivers/hwmon/ltc4282.c          | 20 ++++++++-----
+ drivers/hwmon/nzxt-smart2.c      |  6 +++-
+ drivers/hwmon/pmbus/lm25066.c    |  5 ++--
+ drivers/hwmon/pmbus/pmbus_core.c | 65 +++++++++++++++++++++++++---------------
+ 6 files changed, 87 insertions(+), 51 deletions(-)
