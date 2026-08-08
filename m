@@ -1,218 +1,226 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A0842E54D1
-	for <linux-hwmon@vger.kernel.org>; Sat,  8 Aug 2026 14:48:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786200538; cv=none; b=fX4feujOHL9nq+YT+75vew+sfgqVSMontGT6T522rjiIfqXCV9Y595VJqhCAR/sKYyNmsvlFWUjcW4EtL8aux4orxXLbmMYqDyxt0wTPECcgI+V3nFg9bC1KUQ2H7Ob0KCn2zaOVf6JSpfiC3En5s7DRitSq4qtsTa87u5+VFLk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786200538; c=relaxed/simple;
-	bh=viL2/S2aHDtjU7pxNmbHbRLH6lZLq8qNSh04QFM3TGg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YOkGwwDyoiJQyU90Ii1sSdAgF8w/8Px86PwZS/RAhJ5RWv+RHEQfXiXObLMce/l3GrcJ7JqeBxyvY/+VY0wh+huKtlVIQ2Or6t+vEseG1munfWsNXP10tDgxjPfyR9O9vSKVRKLYvtlK7/ZhWe86tIPnpg1Cl0xRT/WWIEJKIdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AHjUx6gw; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB39F31714A
+	for <linux-hwmon@vger.kernel.org>; Sat,  8 Aug 2026 15:54:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786204460; cv=pass; b=txHQ3jnJOH/vYzwVcYdugvkz6WR/VDppgLWDhs6uD1PMn4yAz4Agp0QAHzvTgM9woAFjzxnBF8QCJEG0Waix4VecXyQ59/CFmgf4UQ4sdhzoLvOTSKSE6ZExuW6h74um2YuO9OKGUAcf/gJjrqYdwwPjRt4UaS9Ku/vPeof3jao=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786204460; c=relaxed/simple;
+	bh=Z61U2aLKy91dURepvXcUGFLDUw/MTGNq6cUyqZZIUsE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UUFW8pvq3OxJdrc2HJ7gfXFBCVLFJa9KxNJg359sQAJM7BsQg0KkA0w06cZWt6L90j48a2YbR65Fs7AcDWoLgm3stnt7TTIBBfs8YivLMyhVy1hI/xQCZs89FZlXpqdlBY4g/2LctBPt7JRQSS3jiRlSc2gwl5toqn9ONOnGpic=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EFdMwq4G; arc=pass smtp.client-ip=74.125.224.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AHjUx6gw"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-38ec1402b05so298085a91.2
-        for <linux-hwmon@vger.kernel.org>; Sat, 08 Aug 2026 07:48:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EFdMwq4G"
+Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-6685483aad2so753721d50.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 08 Aug 2026 08:54:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786204457; cv=none;
+        d=google.com; s=arc-20260327;
+        b=icsUur15lmpnJvrJNoN6PYEHiECLLmxKUSDfXBpKVwgI5DXBjhw0SZZFbW35iUowRq
+         MdUcFJB/rY9OQiVCU7J7WpiksQsxjVXMzSV6FRpcsT1D0J686G/Tz+d7bapKRDR3fcJq
+         u3UfE9NpHSBynkbBG3PIP+mkpCiOTjStp9t5its4sItUr3QGCtSS7zUmKnsYJTa6S5aL
+         pZv2gi1aHbAddf49shdPq7vIYpENG+m9FezRaJJAfYyszJsZFgJGdgKlr04pR31GIQSi
+         bnO+wGwznO4bBo3dsYJCpNrU1PJDiHjs+bKL2OWuqinDFuva6K6yXZT+DeVNosEq5Qcd
+         KwEA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=tmmozAoFPxbiX7Ml4TbJZLUpZqv+WQt0GmrM3lKqKQs=;
+        fh=Gv1r9EWk2B8ufkf63ExmU4CSHBslejA5yunKD9GzsZk=;
+        b=gNWEMDWludK43xDQ743LJR87tLjneKZgMu3aQaX4/9q0tNlb1LR0oVJ8ubNdolMVf9
+         qFdPYt6ERk+H8K1pj/gLw0cf7eKICfOkngvpDLO69CVK+ZJVSR6quGuIba2Oz0WPYq68
+         fxPUL2kU7puT0mWyqjzzue1IZfKDAM3TkvGevMFuFu2bX3vK+xrfggb4aa7Prg3ebcFB
+         3AO09MZbUxIWGpSNagOya8tZmpQ9fnPVS1urtXOsYv5L5QeuZ884D0qlR+o4cPLZXbIj
+         xdYbtxR7c1Itq7QvDu9ONrwXeindzS7EuSQx/1Skoag97PSPjnNZ1sF/zq/iYUE24UqB
+         eLLw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786200536; x=1786805336; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=CQasgB+Q7GTnDcHKAVsgkMHK+/3jVcRc2dZRnUCKkRc=;
-        b=AHjUx6gwsqzwxxqz2Rm9+NkY3hT8dZi/8XiaZBltajGj+hXP7n9cGutYxvaETzO1rP
-         m4S2ZXJNefuRYNNNUIilYCXd0JQBmHs/lieK756nZDAmGIJB7QZZGzQQs4YydElNr5Vd
-         T2Bm/oOpcjDiVKkiLO88H6oRwqle00bT99mGq5mmpRGTlV1slfqH9kp98sgSOos4zs2y
-         tLuLnnXl96RnULlDz7izv9vFOj8lrE30augFCxrXw8pq7RRllZogC/cf3vjfxz6TzEAF
-         nu5OR+FLoNSbbGbOT4GsN4tzJjOxT7Eb3PtTiThUZbaAT8jsNiZTRi1iitnKDcYDsrGx
-         pacA==
+        d=gmail.com; s=20251104; t=1786204457; x=1786809257; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=tmmozAoFPxbiX7Ml4TbJZLUpZqv+WQt0GmrM3lKqKQs=;
+        b=EFdMwq4G2owA+uvx9zXqHD95l6gDtaRbDm0EvBe73hMALhmC37M4t7auQrMWMDT8d1
+         I0mUtJd5ngyzNeUU0pJgAu10Xwi3Squiw+NyYpA7JP9jRxhBdx1Fhtv98lVlB/Fi94rK
+         NQi6tdKIUZphQ9LWQi1NsOP6Yo9fM2tgoatmR/qZ2iQEXMoAJgfvzUKhXr7adFQ8keAz
+         Z6UYDrVTe4OGkqS6k2BE+XvBckmE60/NSSQc7UdIQVi4ayJsg6es22G2f5zWnGY7jHfx
+         JBmzbpOrsajq0u6C4tDm2Y1UKl0ZulbeEe98yYvU9lCu9OFnk7D6xCZE4sx1WGce/AF0
+         AYmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786200536; x=1786805336;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=CQasgB+Q7GTnDcHKAVsgkMHK+/3jVcRc2dZRnUCKkRc=;
-        b=inTQO5B7NFBtMTeQ1yKJBCLhBOE1I9e4me/D62IiEhkHiJECta8Wq0i661Zldy7pKK
-         s7ciVaRp61frWqZ5w3laVzPVrVVaXA/ajnpefFVZOtOLBrFxPeUCSRUdIqwb5ngYk659
-         0Xw79AP1TgaRsId/sIeesO2BRopByH1d5OlGEW7MgRuR/hIkH7jdLbe1R5D/UwFw0Rmw
-         VRrsjdLjqa1ojF7ofABWujC09PBUfG6txTvCzL5vo3pJR/+hbo7StkMmq57YM/te1iMt
-         txrG8vYqnHWIcpaVGgzs/REefMmWzO3+e6d81QWMo7By2zv/kPMOdsotk/o3T2hTzLlj
-         2e5g==
-X-Gm-Message-State: AOJu0Yw8HJADiTYPpbdth7PB/6F92M5/z2FDrnFnt49+XU/GJgnipcLt
-	0ywDSdytyOYE2zu2LUgt0ZhtB2nkHJsoXs+Ef5zoVN7mI38fvcUQk6R9
-X-Gm-Gg: AR+sD13VrLVl3p0KC0KpAnsQZf3lNCNGSnA47vhVdzp9HMHicBgDbyUguiWeW1RbR2p
-	OB4d6zvjZuHB/Ixh7cByWsk7BkDyDdOf/DGQ7lUfOO3Xyw6iNSESmtZT24rigVOHRDcrWIUc37P
-	jtHgXrPHgNBAqDnUgyxahaWCGl2H8k7wZseSvey8aX+fJoxuuChBiatWZOq0Lf1cEO9IMQa4vC6
-	5wlq5Nh7UqqaXy9JguZGYLAbj0CNycVY+gdw6M+Kli8bc3We5iZyTx3HpaXLD6QZ2+4GI8ljQxN
-	JAU9PYXXEepsC2DEYTO2dn28BL4kwCP5aUlmGFxM4kqw/MDldOULTLSC9iP3pKFn1WncGO2DjMQ
-	4goTmH/1HfDKn/FT1AQAtfSZ4kiTl9buvwtADhykVbC2Vgs5o9yw5IJC6IlOCA6SMwZQbemOqDv
-	kQnURCm5Qf6Y93BA2mbipLH+nHTlv4keEQPeaoQ1fiPP5ilysx2G3p3ZW8jMJQUHiXg6DF/5ByS
-	lE/eJh60M/vUMDB9uMQPrLuiUCwzagbaQ6N/g==
-X-Received: by 2002:a17:90b:2b8e:b0:38e:2e86:ed02 with SMTP id 98e67ed59e1d1-3909d8c5a4emr16622579a91.14.1786200535541;
-        Sat, 08 Aug 2026 07:48:55 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3925fc6c13asm6342088a91.2.2026.08.08.07.48.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Aug 2026 07:48:55 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2651758d-e588-4c2e-aa1d-13772e09874b@roeck-us.net>
-Date: Sat, 8 Aug 2026 07:48:54 -0700
+        d=1e100.net; s=20251104; t=1786204457; x=1786809257;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=tmmozAoFPxbiX7Ml4TbJZLUpZqv+WQt0GmrM3lKqKQs=;
+        b=FEQZD7jf54PFDVGWUQolz9erpJAzB7dYr0F5nBD5HXm5GI3rLirKfSX07U2HEbFajw
+         TIToKyrNugRwtY6LjumX/05RvuHPmAC8SmquRUhsfQaavg/YhevBMKmLt76O5NaMoC1f
+         hWVNEYjVDX9NrfJvLtEmCT7+bZLhyrPMJJMVmaugo3W5esatehMf8sZtnOM7gRA7wpNP
+         UV8uKbY691+mNok34TbewwVbQvBkrzo8VdgtZzzIhpzP5y0q3uMzbmdSlgU1dQPn7Cij
+         W3b3zIAAK1WSmhcTAOLZK32oZYUxr76tCsJYiCRJTn7ZYajJ5BozFi7znFSxWtaH/aOt
+         QFZg==
+X-Forwarded-Encrypted: i=1; AHgh+RrgagZsRNX1qge4EVK6D7ueyGajf4fUFUc0RHGstmUPKR9rOK486k9qGk+YAtU8ShHwSpqtXteUqLoRQw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yygahyr9f6BRWYDUtsbXB14Iz8uafs12v8RvLsiKvl1gm7Ns16F
+	bdqWip7IzLM/wNGfo8JWTvSz49iKAbD6FENPg4XqEnejhR67TBTyp1hmel5T9kHmfpFNVQTmaiF
+	GquHHpUkTNDgCGPBfJyWnOcTtYyYFNUE=
+X-Gm-Gg: AR+sD11hVRhq7OGEAYFoMNNblWvpz/P3JyST0rmPDxM0WELbYP+0lEU5hPE2lha48A6
+	/ZrG8PlO/6ThIUM/68/2hrMUwx3MYpv7Clook1oXAwWqgwr8Tr9c+4GEp88Sz91oNWgd0ES3HE7
+	eLGQzf1Mamo6Scq1HsXwemNNreOYR9fjKerRFBvwygjB4aEhxFVvl0Yf8RJ9j/K9PEaE/4FGgzE
+	p5BJf6295WmTnF/x8n6i608OEpPwtSTCwLsm1brYHLcksOnqGr2wQJX/p/h/fTM2vY8XXpUemDu
+	zUGNpWaFKH5D/7TuuT4AFcj3KPVHqzKyGj7yZawKQg2P
+X-Received: by 2002:a05:690c:d0d:b0:81f:2825:de9 with SMTP id
+ 00721157ae682-82576533d01mr51258327b3.20.1786204456793; Sat, 08 Aug 2026
+ 08:54:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (max6621) fix negative temperature offset and crit
- readings
-To: Cong Nguyen <congnt264@gmail.com>, Vadim Pasternak <vadimp@mellanox.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260808083718.2612205-1-congnt264@gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260808083718.2612205-1-congnt264@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260808083718.2612205-1-congnt264@gmail.com> <2651758d-e588-4c2e-aa1d-13772e09874b@roeck-us.net>
+In-Reply-To: <2651758d-e588-4c2e-aa1d-13772e09874b@roeck-us.net>
+From: =?UTF-8?B?Tmd1eeG7hW4gQ8O0bmc=?= <congnt264@gmail.com>
+Date: Sat, 8 Aug 2026 22:54:05 +0700
+X-Gm-Features: AUfX_mz5GF1q56tS2zYfboRT6ZfTu67C9LkdNH1TD9fQSgIi5XS76GrcwpbKOGs
+Message-ID: <CAJpJ=Gvh=M9_Fq8g7sCCWYz=d+9VS1m4zbwZFbnKJ+-YdQtneQ@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (max6621) fix negative temperature offset and crit readings
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Vadim Pasternak <vadimp@mellanox.com>, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 8/8/26 01:37, Cong Nguyen wrote:
-> max6621_read() reads the temperature input, offset and critical alert
-> registers into a u32 and assigns them to the output without sign
-> extension. The device reports these values in two's complement (the
-> driver comment and the write path, which clamps to
-> MAX6621_TEMP_INPUT_MIN == -127000 and encodes negatives, both rely on
-> this), so negative values are misreported as large positive numbers:
-> 
->    - temp_offset: *val = (regval >> MAX6621_REG_TEMP_SHIFT) * 1000, an
->      unsigned shift, so e.g. a -10 degrees C offset (register 0xfd80)
->      reads back as ~+1014000 millidegrees.
->    - temp_crit: *val = regval * 1000, so a negative critical threshold
->      reads back as a large positive value.
->    - temp_input used an s8 intermediate, which is correct for the
->      -127..127 range but reports the documented +128 degrees C maximum as
->      -128 degrees C.
+On Sat, Aug 8, 2026 at 9:48=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> w=
+rote:
+>
+> On 8/8/26 01:37, Cong Nguyen wrote:
+> > max6621_read() reads the temperature input, offset and critical alert
+> > registers into a u32 and assigns them to the output without sign
+> > extension. The device reports these values in two's complement (the
+> > driver comment and the write path, which clamps to
+> > MAX6621_TEMP_INPUT_MIN =3D=3D -127000 and encodes negatives, both rely =
+on
+> > this), so negative values are misreported as large positive numbers:
+> >
+> >    - temp_offset: *val =3D (regval >> MAX6621_REG_TEMP_SHIFT) * 1000, a=
+n
+> >      unsigned shift, so e.g. a -10 degrees C offset (register 0xfd80)
+> >      reads back as ~+1014000 millidegrees.
+> >    - temp_crit: *val =3D regval * 1000, so a negative critical threshol=
+d
+> >      reads back as a large positive value.
+> >    - temp_input used an s8 intermediate, which is correct for the
+> >      -127..127 range but reports the documented +128 degrees C maximum =
+as
+> >      -128 degrees C.
+> >
+>
+> This problem does not exist. The AI is hallucinating a bit. There is no m=
+ention
+> of +128 degrees C in the datasheet.
+>
+> The problem here is that MAX6621_TEMP_INPUT_MIN (-127) and MAX6621_TEMP_I=
+NPUT_MAX (128)
+> are wrong. That should be -128 and (+)127. I guess the AI doesn't see tha=
+t.
+>
+> > The registers are 16-bit (the driver's own PECI error codes occupy
+> > 0x8000-0x80ff), so sign-extend from bit 15 before scaling. This fixes
+> > all three reads and drops the now-unused s8 intermediate.
+> >
+>
+> The PECI error code reference is just confusing AI slop and completely ir=
+relevant
+> for the patch.
+>
+> > Fixes: 92b64580f14b ("hwmon: (max6621) Add support for Maxim MAX6621 te=
+mperature sensor")
+> > Cc: stable@vger.kernel.org
+> > Assisted-by: Claude:claude-opus-4
+> > Signed-off-by: Cong Nguyen <congnt264@gmail.com>
+> > ---
+> >   drivers/hwmon/max6621.c | 11 +++++------
+> >   1 file changed, 5 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/hwmon/max6621.c b/drivers/hwmon/max6621.c
+> > index a7066f3a0bb4..03ac3eb5a594 100644
+> > --- a/drivers/hwmon/max6621.c
+> > +++ b/drivers/hwmon/max6621.c
+> > @@ -204,7 +204,6 @@ max6621_read(struct device *dev, enum hwmon_sensor_=
+types type, u32 attr,
+> >       struct max6621_data *data =3D dev_get_drvdata(dev);
+> >       u32 regval;
+> >       int reg;
+> > -     s8 temp;
+> >       int ret;
+> >
+> >       switch (type) {
+> > @@ -225,8 +224,8 @@ max6621_read(struct device *dev, enum hwmon_sensor_=
+types type, u32 attr,
+> >                        * The temperature is given in two's complement a=
+nd 8
+> >                        * bits is used for the register conversion.
+> >                        */
+> > -                     temp =3D (regval >> MAX6621_REG_TEMP_SHIFT);
+> > -                     *val =3D temp * 1000L;
+> > +                     *val =3D (sign_extend32(regval, 15) >>
+> > +                             MAX6621_REG_TEMP_SHIFT) * 1000L;
+>
+>                         *val =3D ((s16)regval >> MAX6621_REG_TEMP_SHIFT) =
+* 1000L;
+>
+> However, as mentioned above, this is not a problem in the first place
+> but AI not understanding the code and the real problem..
+>
+> Guenter
+>
+> >
+> >                       break;
+> >               case hwmon_temp_offset:
+> > @@ -239,8 +238,8 @@ max6621_read(struct device *dev, enum hwmon_sensor_=
+types type, u32 attr,
+> >                       if (ret)
+> >                               return ret;
+> >
+> > -                     *val =3D (regval >> MAX6621_REG_TEMP_SHIFT) *
+> > -                            1000L;
+> > +                     *val =3D (sign_extend32(regval, 15) >>
+> > +                             MAX6621_REG_TEMP_SHIFT) * 1000L;
+> >
+> >                       break;
+> >               case hwmon_temp_crit:
+> > @@ -254,7 +253,7 @@ max6621_read(struct device *dev, enum hwmon_sensor_=
+types type, u32 attr,
+> >                       if (ret)
+> >                               return ret;
+> >
+> > -                     *val =3D regval * 1000L;
+> > +                     *val =3D sign_extend32(regval, 15) * 1000L;
+> >
+> >                       break;
+> >               case hwmon_temp_crit_alarm:
 >
 
-This problem does not exist. The AI is hallucinating a bit. There is no mention
-of +128 degrees C in the datasheet.
+You're right - temp_input is fine (the s8 already sign-extends -128..127),
+and the +128/PECI reasoning was wrong. Sorry for the noise.
 
-The problem here is that MAX6621_TEMP_INPUT_MIN (-127) and MAX6621_TEMP_INPUT_MAX (128)
-are wrong. That should be -128 and (+)127. I guess the AI doesn't see that.
+Agreed the real bug is the clamp range: MAX6621_TEMP_INPUT_MIN/MAX should b=
+e
+-128000/127000. Would you like me to send a v2 for that, or would you rathe=
+r
+just fix it directly?
 
-> The registers are 16-bit (the driver's own PECI error codes occupy
-> 0x8000-0x80ff), so sign-extend from bit 15 before scaling. This fixes
-> all three reads and drops the now-unused s8 intermediate.
-> 
+If a v2 is useful: temp_offset/temp_crit also don't use the s8 - they scale=
+ a
+raw u32 - so a negative offset round-trips wrong (write -10 degC -> mc2reg
+0xfd80 -> reads back 1014000). I can fold a (s16) fix for those in too, if =
+you
+agree it's a real issue.
 
-The PECI error code reference is just confusing AI slop and completely irrelevant
-for the patch.
-
-> Fixes: 92b64580f14b ("hwmon: (max6621) Add support for Maxim MAX6621 temperature sensor")
-> Cc: stable@vger.kernel.org
-> Assisted-by: Claude:claude-opus-4
-> Signed-off-by: Cong Nguyen <congnt264@gmail.com>
-> ---
->   drivers/hwmon/max6621.c | 11 +++++------
->   1 file changed, 5 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/hwmon/max6621.c b/drivers/hwmon/max6621.c
-> index a7066f3a0bb4..03ac3eb5a594 100644
-> --- a/drivers/hwmon/max6621.c
-> +++ b/drivers/hwmon/max6621.c
-> @@ -204,7 +204,6 @@ max6621_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
->   	struct max6621_data *data = dev_get_drvdata(dev);
->   	u32 regval;
->   	int reg;
-> -	s8 temp;
->   	int ret;
->   
->   	switch (type) {
-> @@ -225,8 +224,8 @@ max6621_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
->   			 * The temperature is given in two's complement and 8
->   			 * bits is used for the register conversion.
->   			 */
-> -			temp = (regval >> MAX6621_REG_TEMP_SHIFT);
-> -			*val = temp * 1000L;
-> +			*val = (sign_extend32(regval, 15) >>
-> +				MAX6621_REG_TEMP_SHIFT) * 1000L;
-
-			*val = ((s16)regval >> MAX6621_REG_TEMP_SHIFT) * 1000L;
-
-However, as mentioned above, this is not a problem in the first place
-but AI not understanding the code and the real problem..
-
-Guenter
-
->   
->   			break;
->   		case hwmon_temp_offset:
-> @@ -239,8 +238,8 @@ max6621_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
->   			if (ret)
->   				return ret;
->   
-> -			*val = (regval >> MAX6621_REG_TEMP_SHIFT) *
-> -			       1000L;
-> +			*val = (sign_extend32(regval, 15) >>
-> +				MAX6621_REG_TEMP_SHIFT) * 1000L;
->   
->   			break;
->   		case hwmon_temp_crit:
-> @@ -254,7 +253,7 @@ max6621_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
->   			if (ret)
->   				return ret;
->   
-> -			*val = regval * 1000L;
-> +			*val = sign_extend32(regval, 15) * 1000L;
->   
->   			break;
->   		case hwmon_temp_crit_alarm:
-
+Thanks,
+Cong
