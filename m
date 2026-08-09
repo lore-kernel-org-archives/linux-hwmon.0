@@ -1,59 +1,139 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A27A37F8D3
-	for <linux-hwmon@vger.kernel.org>; Sat,  8 Aug 2026 16:42:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6FD41F3BA2
+	for <linux-hwmon@vger.kernel.org>; Sun,  9 Aug 2026 00:15:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786207384; cv=none; b=e6v1BR1GS1EJpCTcHo9W8AuQvJIB88dR+Crpsbw8src7Ip4JkSDwhZg7MiqUmOwzYB2ST85x3xwFgwJBJHRtH8y202xV1QZb8SCCLhdDurRE11r9RCrJiBxmBqUduFuR8DjFYp/HHD5gYt7beKOnk3qvOFaE0u/Q8RPplvrnq7g=
+	t=1786234529; cv=none; b=SecDCRJa81ZlSyzrkRqoQ+xKbjDCFx7sekqFI6aaFXaB16q5maEJ3jXcm35LcM8QKv26xZoTVopaLI+FqkNsUUQSuxS4n1P3ScQ41X4C2d850RmBsUa5SSHFUahihhnxGro3G6yzlfg6+hTH3ZrHjUKod6fEefzO3ZTkcG2gaJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786207384; c=relaxed/simple;
-	bh=XCI+PkPtbZgTta62fL/mdym4iY/oy3X8GH+Tn6qip28=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZhNlRzeICaMPLATVHk7Aol5m6Es11uz26Ej9nrGaZ+L7gH/DNuzit1vx6U8cMrqAHbJ6brcw2KOc6vzOC9w6tpp02CbRcapIBT544agqgCB9ICaqw2pUJk0e0uydTFS1Hj+Jg+mH1OEfMC/2OvPvj6tTFdWrHecUHFM/3IwLgQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Smn6IPuO; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1786234529; c=relaxed/simple;
+	bh=iv1kBTJIFkJxJWPPYB2VJacLhGACxEqKviYbzQRPy+Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VnOYToZtdAd+nHT2MkH7RND40whlELGc6tvmUHMMcA7f2tQ8SikDsonpXG/Y+k3bdIVDS2nQs4B4ewuMSrUAR7vHIm+umfIVJn6xCj+ZApnqReKpuBfFFa+WsYuIrGXE5889OlsSIwaTeSynvxZokPHVMJXQVx1IXcTYG9S4Pjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YnUAJQCs; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Smn6IPuO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=XC
-	I+PkPtbZgTta62fL/mdym4iY/oy3X8GH+Tn6qip28=; b=Smn6IPuOmtmK1fBNrc
-	iFOvzZYh0Zd1QPMMzpAYQhi6mShQh/hO7BfOKrUxRnmjrg2FQHiJWvc+AbSUkHLf
-	TTyPV+N2NCB45LWFisCEUEUPvmV1CtMvydYb0GZt7zLdPWG+f8bNsVoPnJb6/Rte
-	1qx0+rvSvr1JKDtQrHLT16duc=
-Received: from fedora (unknown [])
-	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wCnKSt0XHdqm1dLAg--.24998S2;
-	Sun, 09 Aug 2026 00:42:30 +0800 (CST)
-From: huangjia2hi@163.com
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re: [Question] Upstreaming hwmon driver for Nuvoton NCT5584D (NDA / licensing inquiry)
-Date: Sun,  9 Aug 2026 00:42:20 +0800
-Message-ID: <20260808164220.17986-1-huangjia2hi@163.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <da245e33-a441-418c-9942-9847dc2696da@roeck-us.net>
-References: <da245e33-a441-418c-9942-9847dc2696da@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YnUAJQCs"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-84a2dcede83so996667b3a.3
+        for <linux-hwmon@vger.kernel.org>; Sat, 08 Aug 2026 17:15:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786234525; x=1786839325; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=61FEWohhJCJqyCTi/KvP42I768NUK/dv+tnDvW6J9vc=;
+        b=YnUAJQCsqVrMkwUnTepp8DDIKlYZozasgNc+I6z8Bc7b5JtrqQ4a9xsTZXuyIu6LeR
+         yua0jHO8CB2X9O5yQFNNKw/s8RJrjT9uULKbDeuqKdxeGTorQJ5ejI+R4c6UQ0GPHWvO
+         ovnyJRmz94jYzY2BpGyRHq/lKu+qb6Y966/lG7F9olsMtayuiU9c3I1cydtGPiA33SkU
+         +lmI2lhDqIw7INyNhsnP4YgB/xzkpvMRdr7M9LXRQelMzCag4ZyL/v7g95TDMTAsYyKu
+         3LoZkYeyM4k3nKEOljgB9kmZotN1g+Xf2oXN9qxjNLc7OHuUfSB50KBd4wIwXdF17ZkH
+         RDjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786234525; x=1786839325;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=61FEWohhJCJqyCTi/KvP42I768NUK/dv+tnDvW6J9vc=;
+        b=Zf7n/HHerSkexa+6g8YaiOkaFJng0awN7zDTqMDKLU8DG23xlGUHt6WtSA5mf4Qh/4
+         F5/SzTzHP0pSq7ijh1OPbSE5pXuMT142b84UrvUiQgtF5/7PyEEWCTl8Hin+0y/Y+And
+         WBy+Zs7O5Rnkd6mPCXMeaFswWcndPjBwCxwPTJIPgrRqLl6t9BZEXUiiKCjfezqwbotu
+         Y8V4S9gULJCJylLvbod10TTfWcqkLiDW9ekoQAvfpdwWN06vnwXLxVykRyituS9STV8G
+         XAwF4NjsxOInb343mjn6wTu0s5v1rmhsN6tyzhjMp0qxTBji0O3JMGwv7AHttB/FEC6i
+         OCEg==
+X-Gm-Message-State: AOJu0Ywi75nmGCzYhk9ZSVvQvZkBxMUedMAUf5MzgKkyn/YimRr87SZU
+	bkgMuZSZAiwgINpWmSk4RdDtA9ZcadwZG7NQop+ylxxmEHEirS3/bh0x
+X-Gm-Gg: AR+sD12YrVRNIoy52GpIx0wemcH6I+0nCEM0fsypE84wAop9Y9HSkNO3wD70OWYToJ6
+	vyz1gNRnPc2sDbP+/HO+UrMEMXIg1DyBkg3kCw9k/i7hMDKlpOfk8IoRe0X9u6IbIcb45fORYHU
+	/PGyh9cuGJse5DyrkN4txjbZ42PaEZnGsvbhYrzpNTpq2HVhCxpbGv+aPQDi/CbLL3rw7eZ+TWP
+	Xff4NzQ5zm1oPC/J3wv52zHvl11oAPfsPQRGKbfPZWsyj36VQQNhRql8KzTkOn0YTjAFAwkwxfq
+	w61NZc3YQDM1sXnOGH5MdrFiEZjRQThLyib8n2cAoTdW5XJFdNLM5umLth3r16h1O2Rh3oKvGfT
+	nY0vUbHujcDY3n2X4dpCdGsJwcyyLFydaUDv+otoztjAlIhsg76UEt4xA/SK9m6EvOZs2RGGM39
+	Pn7n4CEfJe/lDHuDryCSvMLydhVrm5ywFvWM1+jfJdyEajBu+7cHFXqWZv8ip81LmQFIMcL5MBf
+	wGw7XHB82HXwH26F3vG/pTDcCdLbAtreqdWPg==
+X-Received: by 2002:a05:6a00:3c81:b0:848:50a5:a70b with SMTP id d2e1a72fcca58-84f5e068579mr14336423b3a.21.1786234524822;
+        Sat, 08 Aug 2026 17:15:24 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84f5a3a20c2sm2438127b3a.6.2026.08.08.17.15.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 08 Aug 2026 17:15:23 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e427059f-40da-4af4-9f56-b939f4bad448@roeck-us.net>
+Date: Sat, 8 Aug 2026 17:15:22 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wCnKSt0XHdqm1dLAg--.24998S2
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvj4RZManDUUUU
-X-CM-SenderInfo: xkxd0whmldjxrl6rljoofrz/xtbCxBas4mp3XHaZ1gAA3k
+User-Agent: Mozilla Thunderbird
+Subject: Re: [Question] Upstreaming hwmon driver for Nuvoton NCT5584D (NDA /
+ licensing inquiry)
+To: huangjia2hi@163.com
+Cc: linux-hwmon@vger.kernel.org
+References: <da245e33-a441-418c-9942-9847dc2696da@roeck-us.net>
+ <20260808164220.17986-1-huangjia2hi@163.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260808164220.17986-1-huangjia2hi@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Guenter,
+On 8/8/26 09:42, huangjia2hi@163.com wrote:
+> Hi Guenter,
+> 
+> Thanks for the clarification.
+> 
+> If my testing on the hardware shows that adding the Chip ID mapping to the existing nct6775 driver works properly for NCT5584D, would a patch like that be acceptable to the community?
+> 
 
-Thanks for the clarification.
+Sure, if the chip is compatible to one of the chips supported by the driver.
 
-If my testing on the hardware shows that adding the Chip ID mapping to the existing nct6775 driver works properly for NCT5584D, would a patch like that be acceptable to the community?
-
-If so, that would neatly avoid any NDA issues while providing functional upstream support.
-
-Best regards,
-Jiazhi Huang
+Guenter
 
