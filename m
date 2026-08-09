@@ -1,160 +1,98 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7AA429C33F
-	for <linux-hwmon@vger.kernel.org>; Sun,  9 Aug 2026 22:03:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786313022; cv=pass; b=EgbZDW8q8Qd2kAVHrQGRivNG6/3t3K+Iy9Kw5GmrZDjwEdeg5BT+koAzjgohgoAsLQxef8WdtztpL8vUL/LNZlhuQ2Mpw7kuvVohFxEUwzUpPFSlXAIuT8m+EUVQ5khmu2Ry5sHMSsQIvpe/4vXn690+e/p88Pto+3CvF4WOYmY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786313022; c=relaxed/simple;
-	bh=CPHfGfkaCSGgjaBSKrUW4qz8yrb9iYWrMlzI0Ob64gU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ie/zX4eGdNsr3QNlU7sZE9a5BqWqCSBHFO01f9me31UiIyeD2tlGl8jqT3e9gAIr9daJ/XggrMGJfZqH8Oqx0NAX33BwKfOTJQojnCvf+opqU7Y3M4LhDE9vbgN7vfHbG5HuJgophtSmzyru54uSXWdKtaTf0eggFtxZP/ngvu0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arimil.com; spf=pass smtp.mailfrom=arimil.com; dkim=pass (2048-bit key) header.d=arimil.com header.i=@arimil.com header.b=DaNiv2pO; arc=pass smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arimil.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arimil.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC1932F0C74
+	for <linux-hwmon@vger.kernel.org>; Sun,  9 Aug 2026 22:47:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786315671; cv=none; b=paVwdECkk2eoHyfsLpLkhBrCTx1zPMf3m/Kzttm0cIiGihFlACgPqmTKIbfmlEH7+RIPFQ+2ry9n7PQCcSttXQA5DcOF76Ciyz+PrZYqnmvJAe9lyIjRjz6746BdQMRoMRlEfk8b73ONwpZEcYy6p01p/aeU6A3Q96uHvrkRApE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786315671; c=relaxed/simple;
+	bh=7eQKbi9H6lwMDW0BuRtpPcHm1ojEdQdv+td/osI0L+g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IdZZimlBpUEYVBaNIzuabB7PU6q84eNtdTkKy6hw/xvsY/bjNho62M3YrCfKvtPIzyKQ7KTw8Wv4vsih5cIXbeImnfuq4ee8JDURjdZN6oiP6yIHr6satrR2lTv/bcxHE2jV1SfzAOqkMLOeMky1fm950y5F+i7/MPHG01rQunA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mkkMWFr2; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arimil.com header.i=@arimil.com header.b="DaNiv2pO"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c1712a04ddaso185450766b.2
-        for <linux-hwmon@vger.kernel.org>; Sun, 09 Aug 2026 15:03:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786313019; cv=none;
-        d=google.com; s=arc-20260327;
-        b=GsEr8KOG63hWg6fFqJ8gioNpm+KVCqUKqF0+IVMB+zzDADC4Ck5BugS0Mzjt83UKcV
-         L5kZ45yQId1SPTbSuTn2htKgNPPO9S44Bho5qTaen9htQigPqxKsfZNOQHk6g4eOeQIQ
-         ZkU6jw8euDygIlgV5rtqFwBhy/UEVzfe0b48HEsxmNh7aXpvO4QKniOsuVgLjXLcOYSY
-         Y2o2FtkG9/C3YwagWoF44WAOI0YT17bZqUP1F+sm/zbqsNbobdCgYpMTRsXLnR+/O4pa
-         fyJ1RXVu9tZIsZxy1HgKxxCq88BLYW28K9KfYtlm7bzPzEFjPB8ObE1N8VQ0YLMqnSXP
-         QkAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=GJZgdGodB9xpTx/XpDx/EqQapI+4V0XVrr+TtqnTcGs=;
-        fh=8ro+NKhduAxQV5juS8sn4bd70BE3K6zFjGfqAcJKGIE=;
-        b=hhtttEwa3X7cgb1yjqQK3anQbMBZ8IL2Q3/AzA6KFod7FV+Ub+vCj11wFPSpKUHQI3
-         RGvbKfWln4tQkLSi4Y/P1dUQC8bYOujcD0HxhfEXywXyqz9LizTiyrLj5k2bfPBVu0X+
-         auzSkCjdVEYqMVJCaeBLmmtH43tZyKnGfa5rPBs2RGRBT3KnyQUrOyqGtUfhSF2Qnecf
-         0KkMCzqUnEDDsbbgwzbxaLIy8IViyTfANZ+RLBG6x0cshwBGt14G5fPrUh+qhJ8QruxH
-         5PRiongU86FT920YdWB+isAdEQm9+2JH2PtxADBayCtEk0B4AcCSupeB9/oawjUL73+1
-         FICQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mkkMWFr2"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-39266382df6so1267812a91.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 09 Aug 2026 15:47:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arimil.com; s=google; t=1786313019; x=1786917819; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=GJZgdGodB9xpTx/XpDx/EqQapI+4V0XVrr+TtqnTcGs=;
-        b=DaNiv2pOzEHESF6DZ1JPyqfw5bpuGllV6YUW0aW+X8Po5yoInRRpp7Vly4LMRn7F7C
-         ju3jY8Ge0fmGYcrLqCzu9ytOO2ycU51DYSZXGPDpFYbjsiJZVG/H6WM25hJSvWreceDc
-         MAWsjLEjYGR0ULckrmqksuSHbqFBAz8LQVYgKq9svMHyAxz2mY3X5hjIS/tTdur2T0QV
-         tHZAXtt7V2F4e5j4+zcCQxGXopq8OA2imtY0Ryya2B7p9qxnK6oxhJnPb45GWNvFp+My
-         KiX4eOhBgyBG1rTeOBWL4ozzpZmhTxWNvdW8vCwCWru3226yU3oCBXYi/jLVgA7ucEg2
-         6X+Q==
+        d=gmail.com; s=20251104; t=1786315669; x=1786920469; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=EHSSOEpvhI+W25FvdjNvlDYK2Y6ftqlzZ6mGw9r4mzk=;
+        b=mkkMWFr2iGr+tvft7jB7+n2FsHDdACGWbUFFmLXneXGNCY227Bh8wK1GPNVuMso5ht
+         XQWk4PSqCVIYGqPFaj+uIh0nD87xmMZ4Q6+qp09kEMeZu9mcaawgjKWbysSwdI/YQ0nG
+         ZUifXcLe/0t3wWDhGLIJpR2s6ryRe2jrceLPdEsVB8rt7bI57mNoug1qwgeezp635LqU
+         OrRbUrc4BJeSR60vqVAw+4tJwkUmXXGaMrjwTB24T1qkX1c7YBgb189ZYtbKwlPYWfmb
+         5gnHGQ2s1Fn/1IOKA8cDqM7fAPzGydI3js52tHJjSz/jZnH95o2xlER1KI/dnXam9D78
+         KGqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786313019; x=1786917819;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1786315669; x=1786920469;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=GJZgdGodB9xpTx/XpDx/EqQapI+4V0XVrr+TtqnTcGs=;
-        b=e13irDXaENBnH0GjJSM+Q9yO1Uji8GnMKw1OCYV8xO1b/zAXXAccpemy6AnTBi4qOz
-         OLpQqEzP0JwA2U6IL8IlCbsa9iWHHCVTJWrbB+5AQD72y+kRV22huESQ4OeJOyBPTs6w
-         usXB7m2/U3XxrtGTV0/JsU/WEN4VF8+TcoO1/8lIVLBk58iEFUl4WpNhYPcWxLjGjFT3
-         LrUKLZ9zgrZFRaJwzaMl1b8OVhjAeZTBZwvBhQ6K7lo8MhvtmWSVSVyGajq4vv05Oo4v
-         2jfLOTT5I54FSE0Jws/l0H0gTHhMklfwnPMqcLOd31VTXARkRVf47lmGhU0jleBtJAGC
-         KDkg==
-X-Forwarded-Encrypted: i=1; AHgh+RofefklYB8RwYzoN5U7Gj7WbkVE505wztalAQnQQEzvGXl3B7+vp8nRxSP6zpn7T86W+lYfGiM33X72kQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwjzwsZFWA6h77spo6HQg6DHyruuLpDPuQq+x/p2AKB4w+xW/z
-	c2s4j5wF1itWDV9LDMU8RPmgQRxQ/jp7qZRx2fck2ocs7eAU6TIIxTL4/5r9EbTUWHnLW/Z+vre
-	Rn06kK8StBGRbYcXHo22Ji78rhTczHH5zKf3OhJWz/rYSl/4XEyTB6/mW8Q==
-X-Gm-Gg: AR+sD12eupJyWzN7lXgdyzYZJbb5WHfO8/QKJb6ZnmseX0FwFoJ+ELFGYEPD9fR9ntz
-	SKy+yK9KNx0/Ycv9iLm7+MPKummLUczjr8pF4l6KSXvZF4EGnhZa3CP3A0L8NkaHB9SWTxmpAIc
-	qZjSitYjP6tKBJgioC5fdta298FYzHWtrLdbm3oK+tJ8heG/44HUM2JneByN+GT42+Q8cMnTemH
-	HBncl3e3c+498RWAWLQhCPNxGtHpo6d+iJHNkN0I1l6b6dEEQzIYFdwSSzExUT5Y1J/qhlEfzRz
-	u1sI0Z5puhLsO18y2xwr3NHb4D/8XOIyXC6JBuHFlL13Hw==
-X-Received: by 2002:a17:907:d20:b0:c1c:257e:4888 with SMTP id
- a640c23a62f3a-c2039cc4dc5mr2009459366b.27.1786313018849; Sun, 09 Aug 2026
- 15:03:38 -0700 (PDT)
+        bh=EHSSOEpvhI+W25FvdjNvlDYK2Y6ftqlzZ6mGw9r4mzk=;
+        b=iOes03pmp9SGFG3OylHh7EOcWpLzrPEnxr2kHmHy2Rr/snPwuIz0jPO0rty8esBrzS
+         7JIsB4h4veS80VSzzPqBHzGKApKMkD7uObYhvxWPJ+p5fpwYzlenKTJXT3LHJWJZCWyL
+         it2BfmQSkeOHTjmCM+y50RlmXI3hn2WSg4XhYNTYVmHcUbaZgiHG2RfvlQcnBpC8auaM
+         2pO1rBdcad8DhDZzmG+bzj20EaWce1jb9hUVYepgeTm9o7cQLfqLE/+/4G0KtNyiI7VK
+         eOskYmedQz8UbZPScmwvXLAO321/UsdIcP5yAkK0PD9bxC7cPwS0gNQyjh9Ub0aJJUwW
+         Oqdw==
+X-Forwarded-Encrypted: i=1; AHgh+RrgJTclH/U6Dk73K1aSQGo/mAJYNfmxnxF2TYgXuThhkz0TcSG15ALVExlVY3sGKdFibKmgsjKDfx1Xcg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4KnINzFWnAdO+zKsO8+Iv/9AlO6iHINJx32v9IzHXo+/FUBNx
+	O/L5GViAGkGeCP2vmGm/90dUGbkXmktSKOTe210SJj+Iqzy5OE8TApl2
+X-Gm-Gg: AR+sD11gbk9jJokBvpAik+bRLMM/bKPl+AsxyZ2RZxZdd7w4EzfCzstDxDtLsskap5M
+	bEWTrOuQ5FNBXzwJFd0gJwYGz1+3fUmQWc76WzASgoHzkePJAJJRk7NkOAA2CPY8D2L7KM1snql
+	jDckUfvWgNDZPimUebteGkqw71M01kdEaRr8DMDTSeyE8SNYkpTTBBaGaDKB52aeuQ6mQXahxQO
+	Av9Ow/qjGiYOF8QIYHFYM43VfZ+0PD6mSE4gUt6w+ikfQX/NNuH4xk3LSSJgDqywfkCJt7uSyBs
+	RoliIcAiKyeoK3DHmyCjgcmqH+XZGRs+jeywntt1cgcOLkh7cBpbDHQa1gAJh5gd5T5HH2g/HVC
+	gS+UhEG+rVqKn1YR4Kz5s3I1yC7zUdGONIkGvItXlowphAupUIrJUBVrbLK2HSzg+BVO/rBiiJX
+	/yGpA6iWPgFHIGUMcF13XQoRSnK/RqGmOCRYOzlzQLCY0OGVQDj6SdKQxOA00EMdVRpTkK1wT63
+	LWmoa6dJhOW
+X-Received: by 2002:a17:90a:ec8b:b0:38f:aab1:5148 with SMTP id 98e67ed59e1d1-3903c5d313bmr40425670a91.13.1786315669157;
+        Sun, 09 Aug 2026 15:47:49 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3925ff24b91sm9681127a91.9.2026.08.09.15.47.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Aug 2026 15:47:48 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sun, 9 Aug 2026 15:47:47 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc: Rodrigo Araujo <araujo.rm@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	"open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add ROG STRIX Z390-E GAMING
+Message-ID: <803dd4d8-9569-4e7a-905d-4dea1a51be4e@roeck-us.net>
+References: <20260809212705.1501382-1-eugene.shalygin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260807000107.1786892-1-renari@arimil.com> <20260807000107.1786892-2-renari@arimil.com>
- <20260807001412.B61901F000E9@smtp.kernel.org> <5a817284-a9f4-48b2-9f0f-802c5dc6963c@roeck-us.net>
- <CADBHdQ3x4bFe518q2PjZvGJ2=qP45+5Cmm8f99J9gRZCJun0aQ@mail.gmail.com> <d7bdb634-6fce-4bfe-a24f-864d20e46d92@roeck-us.net>
-In-Reply-To: <d7bdb634-6fce-4bfe-a24f-864d20e46d92@roeck-us.net>
-From: Arimil <renari@arimil.com>
-Date: Sun, 9 Aug 2026 18:03:28 -0400
-X-Gm-Features: AUfX_mxR7CoQHsKtaqBhqcgOuh5IFOP1HuL442019kU021M_VbRDi23KORuklwM
-Message-ID: <CADBHdQ3LhfunbnwCE2AYmWr5XwqSvJ8WGkQFW1G=GQv4dp=Ndw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] hwmon: (asus_rog_ryujin) Add per-device configuration
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: sashiko-reviews@lists.linux.dev, linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260809212705.1501382-1-eugene.shalygin@gmail.com>
 
-The github mirror that hosts the same code here:
-https://github.com/aleksamagicka/asus_rog_ryujin-hwmon
+On Sun, Aug 09, 2026 at 11:26:53PM +0200, Eugene Shalygin wrote:
+> From: Rodrigo Araujo <araujo.rm@gmail.com>
+> 
+> The ROG STRIX Z390-E GAMING and Z390-F GAMING are essentially the
+> same board apart from the E's onboard WiFi, so they share the same
+> EC sensor layout.
+> 
+> Signed-off-by: Rodrigo Araujo <araujo.rm@gmail.com>
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 
-On Sun, Aug 9, 2026 at 5:23=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> w=
-rote:
->
-> On 8/9/26 13:23, Arimil wrote:
-> > Sounds good, I'm very inexperienced with the kernel workflow (I didn't =
-even know you could e-mail patches directly from git). All of the ids passe=
-d into this should have that data, but a sanity check for an invalid id def=
-initely can't hurt. I'll make a new series and open a PR to the drivers git=
-hub repo with this change sometime this week.
-> >
->
-> What github repo ? The Linux kernel is not hosted at github.
-> It is hosted at git.kernel.org.
->
-> The workflow is described in Documentation/process/submitting-patches.rst
-> I would suggest to look it up.
->
-> Thanks,
-> Guenter
->
-> > On Sun, Aug 9, 2026 at 12:37=E2=80=AFPM Guenter Roeck <linux@roeck-us.n=
-et <mailto:linux@roeck-us.net>> wrote:
-> >
-> >     On 8/6/26 17:14, sashiko-bot@kernel.org <mailto:sashiko-bot@kernel.=
-org> wrote:
-> >      > Thank you for your contribution! Sashiko AI review found 5 poten=
-tial issue(s) to consider:
-> >      >
-> >      > New issues:
-> >      > - [High] Dynamic sysfs IDs (new_id) binding will cause a NULL po=
-inter dereference because `id->driver_data` is unchecked.
-> >      >
-> >
-> >     Looking at other drivers, this seems to be real. See wacom_probe().
-> >     Please add that check.
-> >
-> >      > Pre-existing issues:
-> >      > - [High] Missing bounds check on HID report size before accessin=
-g payload offsets in `rog_ryujin_raw_event`, leading to an out-of-bounds re=
-ad and information leak.
-> >      > - [High] The `status_report_request_lock` fails to protect `rein=
-it_completion()` from concurrent `complete_all()` calls in `rog_ryujin_raw_=
-event`.
-> >      > - [High] The device is exposed to HID raw events before its comp=
-letions and locks are initialized, risking a NULL pointer dereference and k=
-ernel crash.
-> >      > - [High] The driver allocates a DMA buffer using `devm_kzalloc()=
-`, which breaks cacheline alignment and causes memory corruption on non-coh=
-erent DMA architectures.
-> >      > --
-> >      >
-> >
-> >     No need to fix as part of this series, though of course patches wou=
-ld be appreciated.
-> >
-> >     Thanks,
-> >     Guenter
-> >
->
+Applied.
+
+Thanks,
+Guenter
