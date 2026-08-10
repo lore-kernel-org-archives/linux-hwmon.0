@@ -1,109 +1,124 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6972E326923
-	for <linux-hwmon@vger.kernel.org>; Mon, 10 Aug 2026 01:58:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786327095; cv=pass; b=s67gGwftSRyyG2oT+aqeIYhV8gsKMOgPOLBC1LhS7POOuQCoXs/gHZoBswcdhI+l8shupK1JR+GfY4RcLTgvHOmONOXvqRI6xh0+2+UBgVqRZQkUoBJul4VcqEN9TwDUGIsSTrDJjEheKAuYDp2+6mbGw4HVW4txfIY5x3r5yEI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786327095; c=relaxed/simple;
-	bh=mJzYbZhO4Qq1InnLCEPucOEEqNgD3mON0izUL18nAsA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=b4Ge7J6n2MRt/r0+AB4THZ6qE2g+ZwlGGXl69w3qLMcdRnh9NjxukiG7IA1shpAohJOGx0J6ZKegb80ID9kQ1HpDr2qjTxuAQ3fjLveTqZWKJuGFTmSK0F6j57br+RGcXDY2AQFLrZh3Sgj7ZYZyHSdr9EhzdyQzMME2P3jkZ9M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arimil.com; spf=pass smtp.mailfrom=arimil.com; dkim=pass (2048-bit key) header.d=arimil.com header.i=@arimil.com header.b=ErCJi4fW; arc=pass smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arimil.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arimil.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB48379EDA
+	for <linux-hwmon@vger.kernel.org>; Mon, 10 Aug 2026 04:28:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786336085; cv=none; b=al4EQmun5TZH6RNOu/RCrxLLF4n2fIdiu6N4t0toKPTKf0L5joJ3yk9Iv0GoygRCuP6kuO81vji41odWwK0f5T/CYg20CeGbAIroZwE1AsM3RmvPWFQZWoU0SY82HyDI7Q+lHPBKGPkK1gRfyDA40DW3H0p4NPSIh4R9EZFh90E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786336085; c=relaxed/simple;
+	bh=dQPkDTMmuze2BB03YWJVGmQDQp7RRBBNNh3k1shsgcY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=caqXvHSJin16FBF+14EqCilnNjI6gks7994vCKD026PVBAmM2ZuIPjEvtDmQ0OmS1cma/Adei7BXPBm7+q61S2CCIfs8VPi14S7vPo2gdkynyiwybAcc4ex156VLEUOQZkIABHk+dsUxCBZyDRcolw7iUZ85f5IyIhAoC6kTuL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cvonk9WJ; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arimil.com header.i=@arimil.com header.b="ErCJi4fW"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-c1671ec8692so158390766b.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 09 Aug 2026 18:58:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786327093; cv=none;
-        d=google.com; s=arc-20260327;
-        b=FDjDX9yqcqSHoufI4IC2/BquGWMw7pMrePvTor5Z3+EnEPSHc8f31IuOmrrc+YWlFo
-         0M9oqXq+dpDen/hfRKFeEcCJS+59uVO4nRews//WxE3e+o2FdK8Bt5ckvKtWuGMmzjWj
-         LB50nVrI6GfoTyUF2mCycGW9mW9CYDBGMBo5MpaRdfbADpi1m9oS1Vjpi+F1j9bRZHQa
-         7vLdS/EuXcmlDU/KpAM+qQr0ksF37Ozwcz0LiaJSPkUctw3oNW9lSOsTKuNiKkD6aZXK
-         lwEhCm/yJYFTQiNtZDeWFtfreO51U1XB0A4jdrnjPggfxsZbYmCKWAmaSAHChOfx7pRa
-         +QfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=mJzYbZhO4Qq1InnLCEPucOEEqNgD3mON0izUL18nAsA=;
-        fh=pTxiqqA97cKjrnBhz+XdxXG7IZEHQ3SLU6FqRniurgo=;
-        b=gpjgdsTDVQptmdBLDkrvYUM+F25bwQCL1CZUkG4tjqRjNvBOhEnQhN6pNM9mjZrqBY
-         29Lr6psiQ5x1u6BXtKYv8cmvtV/tsx8e21gHCjNFuYmHRAodj1TMF9ZE1zeLIRr4EzRb
-         ltTW8DynaQmOuazj685vhiz/3Q8IrdjBm1IsLWP0yKGAnh77wJB2y9vPHEO9m5GjtQZb
-         r/3NV5WRbAkEl0cM+S+6IHAY2qBPRCfxWso9e9KPrdJVSs4E/87lIiCFJQD0DnXOwzyo
-         8yLzvstKawOx5fzdmTICHPaR13Q+VGecIuyVSf1kTg4c52uKORPkxhGORIiCJs5/esPe
-         TPPQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cvonk9WJ"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2d0407aedd6so15283745ad.0
+        for <linux-hwmon@vger.kernel.org>; Sun, 09 Aug 2026 21:28:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arimil.com; s=google; t=1786327093; x=1786931893; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=mJzYbZhO4Qq1InnLCEPucOEEqNgD3mON0izUL18nAsA=;
-        b=ErCJi4fWqWoyg2tMGce0TXrPjwb7S3JpaH4Qzil6vNJyBeWClaxt0O94MTNIK7LnKL
-         rRs6lYjyspr2L2cKSOVz5xVEXanymTL2ad5W3gRbmLv+i2uNX2GVKKHbGQ12HqDmr1BX
-         iclFDinaju72GpwrgMR5z9prcjlCVgkFyCwzb1p8fLwLuivvzVxVMcwSvZGt0UqW7IMw
-         cX5eX38VmMtmwDxLnFeK4HnAbZ3BpjGXep5eeAMeCR2p0x8vntteviVrg5VRQbYGm93M
-         ONSpLvcATC8KM4OLQ6FXQvBCTM4nsCdbm3aNmrowwcuE9lgOaE2Xxv/RuU2qDUYd3PwU
-         Mp7A==
+        d=gmail.com; s=20251104; t=1786336083; x=1786940883; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=G2+mngqpXFB/BdP3WTYNLW4HV2B5Fpn24ngCal9LsJQ=;
+        b=Cvonk9WJ8EMy8mlSpxKEX/dhsCFKv2cm+8W9qq+xzAVOqd+Sz9CT7ea37/cNFRjiOE
+         8i2aMXkkL2jF3V/+FsdyS7g/gBrpHXdsf/LFTDZbawmEdwjVWdj5MABBXKzn0bbvwmTn
+         m3yuu85AHYx2QuzdnHkQ4qlEj5B4u+KHAfuPtTKyv2zVEgCWTJoKXmMMxrcPYnGYYIE3
+         Q0W2BEwqdp0WLhQIrB6PvtsMckquX0uFI68Q6MC2nXaqrGKy4ExanLwe9tDIwGnVPmLA
+         Ao0teF74S+sYHaCNjStEdbqZS0f2JK034Qvnkg7xySNECPChWwVd7iHi7+1aTXYOIYOY
+         QQ+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786327093; x=1786931893;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=mJzYbZhO4Qq1InnLCEPucOEEqNgD3mON0izUL18nAsA=;
-        b=P7Vl2h5zx0ylMXVZmmDnkf+QxOsfEy7MQUaMR6tifCgY0PN8a2nyq47IJTQYa1/5yf
-         bKsIXuwIx8yaK6SuN1IFTTiTgq4d+7jMHf0/TcQSe3jh1ZDSwmdPZM64WcjtS9ud7cn4
-         OH8Y9/aK9hRZfI+wlKe5QA1CfM9miP5kTSvrLJv1o8CfffbY4nDSDrmu91f+L4PaA0S6
-         YLhSPwsh4A0lg7ETQrFSjxUSrRkpg6bRx/VAJr0yHrhNBRy/F/35IaFbfmQRr0DCARA3
-         vee1RiJrbPZ9pV2NrhuFQZaUjs/2POySEsh0828oZFHdZni8JGMGy/NoJXpWPlL/4V86
-         8sJQ==
-X-Gm-Message-State: AOJu0YydaiYBqS2cCC3VmBdoeX6R5chqLqIODNWqyPZT0hrFObtCNvZJ
-	Rzwbhh/sy+RGteskDO1KCKpLSCwYciebW8FqCrMb666wxKgWJ2B9cr6/KnSwSAwf40xTLInnTeX
-	obuFyO07P8/ReHwj/Mgr4K4xeGavj9LIgjGaKLR6QEt+Z7+BVqNZS9mHacg==
-X-Gm-Gg: AR+sD12zbFA6QV/gPZNVNR+9/262+zxpGIau7JBsOlUe6xhyDdLGElDXYkw4vlyVBq6
-	B+jmKTvEuWPuVKx45vtm1S+gYEdJFqrfhSAMtJSxR0O0iD688gJKYKDAbowr7IHWfKz2iyKb1N9
-	1LclA2BJzZbYSYgEnVsuIxrA6aFUDOFVJE91trmwXekPdBuIjTRcYSRCaLE2JHOPK4AA3yptZw6
-	l8C9cDzlN4KvEXYXvTshn2MFiB8qsF42ryH1AwLkUxCQi2FvQ/ctuF2+24QSZIk2gtQt4TDCx+2
-	OuO60N8lUJmKnT72hLWVH8nlKwxnSQ846hI5BzfzDbCtOw==
-X-Received: by 2002:a17:907:608d:b0:c16:1227:e3d8 with SMTP id
- a640c23a62f3a-c2039b51b3cmr1787309766b.13.1786327091981; Sun, 09 Aug 2026
- 18:58:11 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1786336083; x=1786940883;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=G2+mngqpXFB/BdP3WTYNLW4HV2B5Fpn24ngCal9LsJQ=;
+        b=FnEmMa0Md0Uk54N99sdBqG9xsME1yf18hguLpE4CKZ5A3fs9hJxVpicJc8Bu0aDK33
+         uiRzF3odX1t44rzgE0D+w2zYC3cy+CmWR3o/HeJH5xJlGb83eYHh0M+7cBTSnEcBBEbx
+         spkGnf8wLkPQLnLovYatLUzR5v3ugRRVp6uQFzfqIsYQN7XEI8KXZHe7y1rQ7IL9j1mf
+         yTwT/GGhtZHficjVNLTEUnuf9O93ZT0iBoJefSDlZDopbrfkVJPXTBq1g0xJbuR30FFS
+         xdjIHsOtcNHtwkjoWqG/Rbke5qF9q2ej/kv42cF/w+tPdMBFKQIQwTI3RXe/7qUljj3u
+         tC7w==
+X-Forwarded-Encrypted: i=1; AHgh+Rp/2tWX09I+7zWz6J9IZmVtahpONEGCTDDR3wKd2N758LoEWGCHzvmLcgxva3FowLLzGBHM0/AYM0y99A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxlI5BV9seu7srT3QcO7VAIBN87/knI8bcmpZLeGf1J9gAhtXg6
+	Tf9ARyOIw+EXyEIgNruHb/KfFFEmzn2WKOQ8r5xhHcVNaunLcPK8eJ2XJsoBEQ==
+X-Gm-Gg: AR+sD13ipQu/lbPS8GH6o8uQbIvsltbXHPo98OzNl9XT4Uz/il9rvgy6BRqq+73TJ5S
+	on6uCGNUC+WTNEG/jhvVunaE0N4H0F+iWTE1XavQhTbRVqBP6ICCLRAAXByVLelC93dzNXnC03y
+	RJ3y9/iW26EAJHRuAQ0KXKLo+EqHFPwjxUdG+E4n4lR6pNz5XdCLBuVKUFGv5lIpomorw/j08yO
+	5dy0EJvbepuFtPRWBUB+aZjTqVnpzWtT12pMq0vmgMZfdE8kYSyFEASlJymg8zA+iZ5kSjutL7H
+	HBgscXrUp9iSLL+8A4xPBAKQ0pHtYaH8SBDCPblXK0f453ZZJhkeB9zpQFWKsv4btsNqk9W3ER+
+	8REptm7X+RzLGSQJWivCIMlI05pshzsl9eeyEvLyOuafgfTxeJdE3Z6e2Hg0QaDbrj1DGdO2q5e
+	/9pRx5M+sHkOrYRfG05On8SewSysRcoKXeiLfcWpOczFYDBML/WEYi1BJHX2ZTSvbUOxNj4pcES
+	Yjp4Q==
+X-Received: by 2002:a17:903:3848:b0:2c9:c991:3bf0 with SMTP id d9443c01a7336-2d0ca70da11mr486962195ad.8.1786336083184;
+        Sun, 09 Aug 2026 21:28:03 -0700 (PDT)
+Received: from SGN-LDSENG.tasernet.com ([2405:4800:5cc3:11a:1ac0:4dff:fe8b:4a69])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-315be86e917sm43312312eec.5.2026.08.09.21.28.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Aug 2026 21:28:02 -0700 (PDT)
+From: Cong Nguyen <congnt264@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Vadim Pasternak <vadimp@mellanox.com>,
+	linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Cong Nguyen <congnt264@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH v2 1/2] hwmon: (max6621) fix temperature clamp range
+Date: Mon, 10 Aug 2026 11:27:54 +0700
+Message-Id: <9d3a4f1895a47794bb359a2a32fb1ccd6a15812c.1786334038.git.congnt264@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260807000107.1786892-1-renari@arimil.com> <20260807000107.1786892-2-renari@arimil.com>
- <20260807001412.B61901F000E9@smtp.kernel.org> <5a817284-a9f4-48b2-9f0f-802c5dc6963c@roeck-us.net>
- <CADBHdQ3x4bFe518q2PjZvGJ2=qP45+5Cmm8f99J9gRZCJun0aQ@mail.gmail.com>
- <d7bdb634-6fce-4bfe-a24f-864d20e46d92@roeck-us.net> <CADBHdQ3LhfunbnwCE2AYmWr5XwqSvJ8WGkQFW1G=GQv4dp=Ndw@mail.gmail.com>
- <28fd27da-ced5-4c2d-bbb8-0eda383bf767@roeck-us.net> <CADBHdQ1z5pp6FjdensAVYTEbJ+DqU55uP33LvFVCMh6cpQo9kg@mail.gmail.com>
- <d54a5f1f-b369-43d7-906b-43bf6189cb42@roeck-us.net>
-In-Reply-To: <d54a5f1f-b369-43d7-906b-43bf6189cb42@roeck-us.net>
-From: Arimil <renari@arimil.com>
-Date: Sun, 9 Aug 2026 21:58:01 -0400
-X-Gm-Features: AUfX_mzVVT7xLL1Z9RZGUFnlPJfNbBYaQyq5PCy_MPKTQR2B_PbkhVTzmPh4qzs
-Message-ID: <CADBHdQ0TyQiAke+fMLs0hgOhbE7b0h_FopzZ6Qcmn0L9j0F=dw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] hwmon: (asus_rog_ryujin) Add per-device configuration
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sun, Aug 9, 2026 at 9:19=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> w=
-rote:
-> Please stop top-posting. Then why do you even mention the downstream driv=
-er ?
-> Its existence and/or status is completely irrelevant for the upstream ker=
-nel.
->
+MAX6621_TEMP_INPUT_MIN and MAX6621_TEMP_INPUT_MAX are used to clamp the
+writable offset and critical thresholds. They are defined as -127000 and
+128000.
 
-Sorry for mentioning something not relevant to the kernel or this series.
+The driver decodes the temperature through an s8 and its own comment in
+max6621_read() documents an 8-bit two's complement value, whose range is
+-128 to +127 degrees C. The current limits therefore reject the valid
+-128 degrees C and accept +128 degrees C, which does not fit the 8-bit
+range.
+
+Correct the limits to -128000 and 127000.
+
+Fixes: 92b64580f14b ("hwmon: (max6621) Add support for Maxim MAX6621 temperature sensor")
+Cc: stable@vger.kernel.org
+Assisted-by: Claude:claude-opus-4
+Signed-off-by: Cong Nguyen <congnt264@gmail.com>
+---
+Changes in v2:
+ - Drop the temperature input change; it was not a bug (temp_input already
+   sign-extends correctly via an s8 intermediate).
+ - Drop the incorrect changelog reasoning (no "+128 degC", no PECI/16-bit).
+ - Split into two patches per review: this one fixes the clamp range; 2/2
+   fixes the negative offset/crit reads.
+ - No 1/64 degC precision change (not documented in the datasheet).
+
+ drivers/hwmon/max6621.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/max6621.c b/drivers/hwmon/max6621.c
+index a7066f3a0bb4..ee5898fbe110 100644
+--- a/drivers/hwmon/max6621.c
++++ b/drivers/hwmon/max6621.c
+@@ -17,8 +17,8 @@
+ 
+ #define MAX6621_DRV_NAME		"max6621"
+ #define MAX6621_TEMP_INPUT_REG_NUM	9
+-#define MAX6621_TEMP_INPUT_MIN		-127000
+-#define MAX6621_TEMP_INPUT_MAX		128000
++#define MAX6621_TEMP_INPUT_MIN		-128000
++#define MAX6621_TEMP_INPUT_MAX		127000
+ #define MAX6621_TEMP_ALERT_CHAN_SHIFT	1
+ 
+ #define MAX6621_TEMP_S0D0_REG		0x00
+-- 
+2.25.1
+
