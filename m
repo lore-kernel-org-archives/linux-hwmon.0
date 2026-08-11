@@ -1,76 +1,74 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 814B83BED5C
-	for <linux-hwmon@vger.kernel.org>; Tue, 11 Aug 2026 15:57:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB9E3F58E1
+	for <linux-hwmon@vger.kernel.org>; Tue, 11 Aug 2026 15:58:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786463846; cv=none; b=Sh1ZzMcPT//707Kse/FD6l08X7wLBVg31ih2iLLFW6nBImq2KIhKt5lndNCHyoHEKRqRggEE199DuAoORWxM3bY5vMeM7vsNT/kQijE7RE30Hm1JjpLRBLlhANsenYyazYGm1fRUntjwsR8JVcEu+FIqauDCUtq4+4wEcGNPCRY=
+	t=1786463931; cv=none; b=nxmPUtFuGhVGYk/M8gMjk8KSeg6dBaKpiTptcEzfiAVnpINd0R5eq2AB8va41dtBKx1+MPiajx0WolvzANHNhETKu45S7lnKuevm5iC9emRwE9iGGqUrRp2OzlhjLeKQS38MS4Tazs7k0DFlUz0xOISBwXaoT0kPBzU/64NAwUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786463846; c=relaxed/simple;
-	bh=JDa1npCoxnVz0A/TLLUwyB3cYz5sbB22cXecZ8GRtDw=;
+	s=arc-20240116; t=1786463931; c=relaxed/simple;
+	bh=ocl2N53CRsVdr8KtN6hzGvgHQT1HcPvB9i7w62MO2Hc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MYQcA+AAViiWGJ/L+vVa0Z61EBJdqMUcR5L+gAGzCN84IxQ191UPWezjrvbS39yjK4mtJLLI6syRIU5O9ngHEkd32qKsKjgbLeDSiDkBkRdm9D6ozRdW0O53uVPGwyNcKYyaUr2ZW4kbjGlWJzp9ZbDDqHKYMIXSoVbAROb9w1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UJ7LF8GL; arc=none smtp.client-ip=209.85.214.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=WyjBN6qVxocJzOXtB5ZWQHeRxCx4hPowpsRnifnSYVOl+who3MiZU13aE4Y1Wt58uEtZw7kMeLByB+BsKNrwRGa4JxcEXjunMdCOKGjfe2jgGPufP5ZsAzRU7oZunSMoGDqSfu8r5/0GrkKO4A5V8QbbAFOl4HsRb8me9RzB1yY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IiPZbHAZ; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UJ7LF8GL"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2ce87c7e3bbso1087285ad.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 11 Aug 2026 08:57:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IiPZbHAZ"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ceab75934dso798595ad.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 11 Aug 2026 08:58:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786463845; x=1787068645; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786463928; x=1787068728; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=BR1AwFv5ug2wa1HdUYKEyyrH2huljwL1Xbj+dbpxbVw=;
-        b=UJ7LF8GLwaRX6dpSC8S+sH+1YUJAwgFr43FWAkj8GfdPlFNNDsPO+00cNb3ioW6wmS
-         +lXv6Dd3uVZ5mbGu9ElmQthlVYTEoMCYafDJ+PgkjHVd71DmHkzaaRURgkUlFCxsHuEp
-         fVMWvakW4kIs289onIoZ/PKnlXUX7lJdg7PPfsYq9BUdwQV/MSpXbKrVY3yS0sPJqrQT
-         Me4mkiA7L6vu471fpaCmiDgqrTGs3VQvY60ZmMciUc++xjT5MqySzcar4BiVR9yTMR+Q
-         rI7hJLSgqNHTT2B9hXqMwOZJplkC58MBXVKgWq2z4DrZzpfxDLzeC5bEhDx+YYtunuR1
-         3WZw==
+        bh=qEf+4RrEF3OjN8WAaqb4R/v6hzoKGinf4I5iTtqWIYM=;
+        b=IiPZbHAZboHU8z36YhvvPaA56N07Uoca3E1lr49ZbrnWfCg+LEjtLWhFrtImFY7Bc6
+         hshZlIWvlqJEdujxVrY7sURYI+YcTyiJiRg2V+xpLXv/ywQ0gfNVCTaDrqjIdcg2LSII
+         hRXHD67UeTQa5tpzqNk0Z59+D7sltUeafLg9+cEH9YJLRk2qX91l7zX4UzGo8kkeRbwn
+         MVh/BjHUVjsHLOtIq/WK5sWX3jLFDaDrZTgQOg20B824MQh4HsZl/9GeXJc6lmpnF7Hb
+         KZ9ZYPIXIQ3CeWdN8gi3E4an8dELgf6urVBoepXm9F0N3qSPszw89CjDBgO0YyuZzWVl
+         1nwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786463845; x=1787068645;
+        d=1e100.net; s=20251104; t=1786463928; x=1787068728;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=BR1AwFv5ug2wa1HdUYKEyyrH2huljwL1Xbj+dbpxbVw=;
-        b=U1BqZD3mb9PwDZQiigru2I8wULgI7AHIj/gz9kvnVXcn93+sL6f+ZHwt0o7lpWvR0O
-         84GeTkwh+lsM5MeRoprmlzHeG/jao5rKZjMx1oLIav8uakrAfMh1a2xje+6qJKokIr+J
-         /cKn0xCvcjCkTEeyj0TWgBDdP43WNALgkgUpC8JzonscE/9d8ecsWC2I+UXGhm17gZ9Z
-         yVQOZ72ptvTEepU/9h4eK41Kr2v++s0wLPnu6THmOMmxz84KC9+ock87xBCWff+6YF5/
-         Qx33k3NRv5JE0Y9squ8CUzmmVtTBrsSDIhg/Gdz7F9arKM/kf3Zz4oBInjF35Z6FS1ZI
-         63qg==
-X-Forwarded-Encrypted: i=1; AHgh+RrgNA+D89XvvFNEZvg/wcBaaZWoAfA2cY8ZidxSibLiE+P7EkuCq8EEpAQxlBvJ20LjE0JLVD8EYwBCAQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/Opma5OOYiM1ODxGYaP4oQV8Kh2QUNE1Z42o103Om5WbqjOCw
-	QpQsSkbffdrwI0APLlPp/h0cQI7prI4QFNvDX4EN4JE+9SExFYVWh+hiDh6weQ==
-X-Gm-Gg: AR+sD13nbJNTXHLkD1Xk8ivu3dsBSFv3nXBEGoygs1OluRbcnEKXC3zWTkph9meJbSb
-	ANh7oQPB9AFukTXRqiboPLwCWgqfJJgAbk7jN8/fr6hmh9iq9c/ZfoDTvFsBbPJE3vS8pxpDGPO
-	78ygL8SJhsVsZVUrCzIfhYCSDAWRU/4C36TSWW8jdsqjvnXTd+sfKCng/SsbeBrAcvRxjMnfN09
-	kocoxA6kM9F5DK7aFf8b0KH0ZVOH/AZhysPH10nGsOnLRD544IF/fFspXAgAr0Q+668HEmGKxSP
-	S76bkAyQJVVtCUtqfv7M9TOA4HIDPvzOoQFR8/O4jeCWW1Y4LXzCmA1Sjry1+XcvvoxdtCTT+sb
-	8lvbvOKUnemNg/j/ykuNh89tiIBoQ2TB9WgYw5m5+GIgBalLYLiVFImjuAf0B4xwqn9ORqKOX+E
-	PR1ocm+t57AJkYtf3+Nemfl8iR6mG79nro3LNZQKmgSteXOb84Ko2GAWdh+nM7WivZakGCNG0aI
-	Q==
-X-Received: by 2002:a17:902:fc8e:b0:2b7:975c:dacc with SMTP id d9443c01a7336-2d32bde999fmr22795135ad.1.1786463844615;
-        Tue, 11 Aug 2026 08:57:24 -0700 (PDT)
+        bh=qEf+4RrEF3OjN8WAaqb4R/v6hzoKGinf4I5iTtqWIYM=;
+        b=mQnzT9ZfWYyjkmv1iQMDGwXDY/tTbTUoiRrd8bVaJQBrlloVgm0xJKmilVpMsorphQ
+         neR9zcereA5D88KFHtoxmUEMp6QpO2JpgUEtOSwIp1WWUJbfg9/+wxsJ+Mb9zVtK/qjq
+         WHMxI+6O58VPClAD73Y5uTyrhI6tCiMxmCH3+euyu6o8EjJsS1UHAKjrrO5xHzJC0yB2
+         PEwE9h98LgRQkDZLUgPODUnz94Z04EhWku7La07+q/qkSOlCkXwgyBwbpF4Vqy202BVh
+         CocyZ0IdIiozscmBE9MWJk7nBuaER8wECVU3ggKVgYMcQrxDPUsge6XXDp6KFAsLFYe8
+         jpMA==
+X-Gm-Message-State: AOJu0Yxd4QZQxcWItZPF1mYuf6khr/imVZYs8+NnSXbuM3VZpGOySJVz
+	TjzL8JndyikmD2qEpd+rtAo/FRMpgphUVLR/CgXHoi24gnYw1r1Hoohh
+X-Gm-Gg: AR+sD11uUWpx+m1Sf3n0NpsRK8ceHc1wq9QYUz4Iq+tRDz+gDn9qQAtKuM7OBS+Pppl
+	pqH8Uk0XTQ0F07BOqoRj9QXlBhzj8rfyRIeJI3OjohOrz5yw3QV8dUf7vW6+KavM+vIP7K39j53
+	QKzBag0myFNGDJI+cDhl0Mh9JJ+NYlYI02RgeoCBjfWC52pT1BFkkhECCFahZL+7aNq8DY4HNAA
+	Zs90ffcL6O1/OxOgCrxojpRStRkbg/4Qqm6Jp88UCrGQKzVN7rhsQIRgmQFs4m1NSl9bMZp2Iqw
+	B8II1QTu1iwzJSdgMjHnx3vpAK5wQSJbVMCyRYKR4qWT+bbN0tBbShkPZxTN/ztDUDkavc4Bwid
+	9PDe4mQPYP3ozTQAjt5+U4/BobFtCg2/gaIJhkuZodRvG6sLmDtIA9bpcqt1GTXKBst+G62eq2q
+	C3xhHv5M5UKLJHMeJR6hj/eItgBla4lXviibg1NXRC8fDa8nH70a5NbgR47AKsfGDbrygkyqtD+
+	A==
+X-Received: by 2002:a17:903:4b0c:b0:2c9:c991:3bf0 with SMTP id d9443c01a7336-2d3177c410bmr57534145ad.8.1786463927710;
+        Tue, 11 Aug 2026 08:58:47 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d316233ccesm10216235ad.72.2026.08.11.08.57.23
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d315f2d74csm10297785ad.21.2026.08.11.08.58.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Aug 2026 08:57:24 -0700 (PDT)
+        Tue, 11 Aug 2026 08:58:47 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 11 Aug 2026 08:57:23 -0700
+Date: Tue, 11 Aug 2026 08:58:46 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] hwmon: (emc1403) Add regulator support
-Message-ID: <61aba261-099e-46a5-bd17-fc81bf4c0dcb@roeck-us.net>
-References: <20260731113007.145322-1-clamor95@gmail.com>
- <20260731113007.145322-4-clamor95@gmail.com>
+To: huangjia2hi@163.com
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] hwmon: (nct6775) Add NCT5585D to list of supported
+ chips
+Message-ID: <2d2d1ac7-4f01-43cd-86ad-5178bbbb40c9@roeck-us.net>
+References: <20260811093744.12199-1-huangjia2hi@163.com>
+ <20260811093744.12199-3-huangjia2hi@163.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -79,14 +77,15 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260731113007.145322-4-clamor95@gmail.com>
+In-Reply-To: <20260811093744.12199-3-huangjia2hi@163.com>
 
-On Fri, Jul 31, 2026 at 02:30:07PM +0300, Svyatoslav Ryhel wrote:
-> Add support for VDD power supply for this sensor. It is required on some
-> devices for the sensor to start up and work properly.
+On Tue, Aug 11, 2026 at 05:37:44PM +0800, huangjia2hi@163.com wrote:
+> From: Jiazhi Huang <huangjia2hi@163.com>
 > 
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> NCT5585D uses the same chip ID (0xd428) as NCT6798D and is fully
+> compatible with it. Tested on an ASUS PRIME H610M-D motherboard.
+> 
+> Signed-off-by: Jiazhi Huang <huangjia2hi@163.com>
 
 Applied.
 
