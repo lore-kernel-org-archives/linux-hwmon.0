@@ -1,120 +1,142 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F15E4399F1
-	for <linux-hwmon@vger.kernel.org>; Tue, 11 Aug 2026 23:51:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80195426419
+	for <linux-hwmon@vger.kernel.org>; Tue, 11 Aug 2026 23:52:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786492288; cv=none; b=ANGcxKoD3F9r9vFR1IOws4+02TlSPMAAx9/ZCwCOK7kghAIyY0VwM+31+D5ruq6r9ZCT4oKt5f4REZ+WH9EAr0pZq85AvyKLb5O+GfG4F7feksTLP5NfUJMZhWtGjh5oTbz2yVp9sLWh6Asuxb+BD3rzRqsblJeUAatjvnRoGVA=
+	t=1786492324; cv=none; b=pjc77Bb1II3yMNkAXeWLz32VFTvxlwGwBRIZZTfVPIo5QIs0zJixLuay0Ko2i/V5jIAz1hitJ976t2vJm6rGEB1tB6fv33L8qAjD6KjXuXeLv6RIP7FSNIu/geTKVXx64aeXxFDHlpapiJF4mjDSAtkMJABhQ8g2KdlvlJgJssI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786492288; c=relaxed/simple;
-	bh=lG3FNZljZeeYidnvKYRJ4tl2xavf17JiD/GBKra09oM=;
+	s=arc-20240116; t=1786492324; c=relaxed/simple;
+	bh=JUzNKe/IibhK9kf/cqhMj5OhZlr67+4i2j6tViWimTE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=RxST5s6DfYfuJw65lav8iKp77yYfFXxl+W3osQmRmUaPDvwk3RRI6zNlYiCYuJisW31cHFtsNZhVluyoG9YT2u9xdg0aWBCeTAZiq2gVnpao80rJdHyxCpypUkoCkZFEPnhBjYyqqyQlN9zvombc8YVBQxSxdZJhE9ZmpiCLWpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lQFxTbk4; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=avE3Lv6aWKfZln4t2b7Sin8aK4spZor2WB/IZdmhxZ6Hf2adl7VifkUaZ2YO3YHm5I0b7+pBefFOfUdXMacZSQXlr0/pmUP7r/lXLPEQ/YWVe2lIrTyNjjOqWyRYoKWA2wsL+UE5bjYnxgRqDAbpPwvZE+Tmo3kjbHjOauRl99g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T2zxThQG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lQFxTbk4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A56C1F000E9;
-	Tue, 11 Aug 2026 23:51:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T2zxThQG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B23A1F000E9;
+	Tue, 11 Aug 2026 23:52:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786492287;
-	bh=Ms0liTs8zeFAP9dFwrouGMsAGOlTHuVxxL/9Sdbchv4=;
+	s=k20260515; t=1786492323;
+	bh=wPSC9wQWKnMfrJ+J1LhIRUt8k/Y/vl7S2b+mX7Tfv60=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lQFxTbk4sl0wbrloAYKi0eQujfxWb8iY1d7YS6RnPb0NgAmf5KiGe+neq9I3/09II
-	 pci/JszCirdOGJc3twaewfSxAo0M/TkZa/xWYxAoE8N3vSgY1F92/K9KjQsPEIK1y8
-	 iP9CooYW1y6cjubyilPztDC20ZKmdu9VWkflMQFIi3xQhM96Htn+iDRC+79a0aG5Mi
-	 22iKZRp24P2Gt5CDq1D9yk9zwvvSeXXwhgRgbD5LmxkCq8xAGqw3iG4wonI0jVtYkt
-	 SAHBmsWKY4hkayoFN7JrBkzr9JAqNIQVY/x4xmFEwoteyHbIJxD+Jgfa2LomtueLsb
-	 zLvMko3m7E9Fg==
+	b=T2zxThQGiJ0ukB43BqyxMlYWXBxrBwbgSGE3pbP6vJ2JRrHh9UZojuS6plbbOB8A/
+	 nHrpgkVDJNSCnCVLVR+XGPfQHbX+qIbwlsP0Gh3SFI1MgpxfOSoVTIGhjC3JLrCE7c
+	 UprpeJpHNrx+HAp/aGSq7DWVnl+HRivMnBQHhe8tsfnnlRInqUBz9L0vJHDmBneEbg
+	 GevD7iFJ8y4snnalOvu/b55YiBiN2++Hlc0003AW51v4oHkoLWHUHTnGQr0XrG0ZbW
+	 3sqQ8Ct157/itSdvseO2pKKDudSwli2wWCOuxH8U7tzKk7osN1i/dkaeEodpmX0394
+	 igLnpkz6+GaYQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 3/4] hwmon: (asus_rog_ryujin) Add ROG Ryujin III
- White Edition
+Subject: Re: [PATCH v2 2/4] hwmon: (asus_rog_ryujin) Add ROG Ryujin III
+ support
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Arie Miller" <renari@arimil.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260811233943.319729-4-renari@arimil.com>
+In-Reply-To: <20260811233943.319729-3-renari@arimil.com>
 References: <20260811233943.319729-1-renari@arimil.com>
- <20260811233943.319729-4-renari@arimil.com>
+ <20260811233943.319729-3-renari@arimil.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 11 Aug 2026 23:51:26 +0000
-Message-Id: <20260811235127.3A56C1F000E9@smtp.kernel.org>
+Date: Tue, 11 Aug 2026 23:52:02 +0000
+Message-Id: <20260811235203.3B23A1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Missing bounds check on incoming HID report size in `rog_ryujin_ra=
-w_event` leading to an out-of-bounds heap read.
+- [High] Missing size validation in `rog_ryujin_raw_event` allows out-of-bo=
+unds memory reads.
+- [High] The `status_report_request_lock` spinlock is ignored in `rog_ryuji=
+n_raw_event`, causing data races on completion states.
 --
 
---- Patch [3]: [PATCH v2 3/4] hwmon: (asus_rog_ryujin) Add ROG Ryujin III W=
-hite Edition ---
-commit b585240116bcd8eafe7d693a9003f8ad82dee763
-Author: Will Smith <github@notthatwillsmith.com>
+--- Patch [2]: [PATCH v2 2/4] hwmon: (asus_rog_ryujin) Add ROG Ryujin III s=
+upport ---
+commit b5b4a6af3fd216324c49f933284fb63343c21174
+Author: Arie Miller <renari@arimil.com>
 
-hwmon: (asus_rog_ryujin) Add ROG Ryujin III White Edition
+hwmon: (asus_rog_ryujin) Add ROG Ryujin III support
 
-The ROG Ryujin III White Edition uses the same report layout as the
-other supported Ryujin III variants. Add its USB device ID and list it
-in the driver documentation.
+This commit adds model data, USB IDs, and report offsets for the ROG Ryujin
+III Extreme and EVA Edition variants. It also skips controller commands
+and hides unavailable controller channels for these devices.
 
-Link: https://github.com/aleksamagicka/asus_rog_ryujin-hwmon/pull/10
+Link: https://github.com/aleksamagicka/asus_rog_ryujin-hwmon/pull/9
 
 > diff --git a/drivers/hwmon/asus_rog_ryujin.c b/drivers/hwmon/asus_rog_ryu=
 jin.c
-> index 5bc60c6036de3..9b34c6e06bf78 100644
+> index b86b87e33615d..5bc60c6036de3 100644
 > --- a/drivers/hwmon/asus_rog_ryujin.c
 > +++ b/drivers/hwmon/asus_rog_ryujin.c
-
 [ ... ]
-
-> @@ -587,6 +588,8 @@ static const struct hid_device_id rog_ryujin_table[] =
-=3D {
->  	  .driver_data =3D (kernel_ulong_t)&rog_ryujin_iii_info },
->  	{ HID_USB_DEVICE(USB_VENDOR_ID_ASUS_ROG, USB_PRODUCT_ID_RYUJIN_III_EVA),
->  	  .driver_data =3D (kernel_ulong_t)&rog_ryujin_iii_info },
-> +	{ HID_USB_DEVICE(USB_VENDOR_ID_ASUS_ROG, USB_PRODUCT_ID_RYUJIN_III_WHIT=
-E),
-> +	  .driver_data =3D (kernel_ulong_t)&rog_ryujin_iii_info },
+> @@ -34,6 +36,14 @@ static const struct rog_ryujin_device_info rog_ryujin_=
+ii_360_info =3D {
+>  	.has_controller =3D true,
+>  };
+> =20
+> +static const struct rog_ryujin_device_info rog_ryujin_iii_info =3D {
+> +	.temp_offset =3D 5,
+> +	.pump_speed_offset =3D 7,
+> +	.fan_speed_offset =3D 10,
+> +	.duty_channel =3D 1,
+> +	.has_controller =3D false,
+> +};
+> +
 
 [Severity: High]
-This is a pre-existing issue, but adding this device ID exposes the new
-hardware to a missing bounds check in rog_ryujin_raw_event().
+This is a pre-existing issue, but does rog_ryujin_raw_event() adequately
+validate the report size before using these offsets?
 
-When the driver receives raw HID reports, it fails to validate the incoming
-size parameter against the offsets it accesses:
+If a malicious USB device provides a descriptor with a small max report size
+but sends a valid-looking command prefix, the driver will read offsets up to
+priv->info->fan_speed_offset without checking if the report size is
+sufficient.
+
+Could this cause an out-of-bounds read when accessing the payload fields?
 
 drivers/hwmon/asus_rog_ryujin.c:rog_ryujin_raw_event() {
-	...
-	if (data[0] !=3D RYUJIN_CMD_PREFIX)
-		return 0;
-
-	if (data[1] =3D=3D RYUJIN_GET_COOLER_STATUS_CMD_RESPONSE) {
-		/* Received coolant temp and speeds of pump and internal fan */
-		priv->temp_input[0] =3D data[priv->info->temp_offset] * 1000 +
-			data[priv->info->temp_offset + 1] * 100;
-	...
+    ...
+    priv->temp_input[0] =3D data[priv->info->temp_offset] * 1000 +
+                          data[priv->info->temp_offset + 1] * 100;
+    priv->speed_input[0] =3D
+            get_unaligned_le16(data + priv->info->pump_speed_offset);
+    ...
 }
 
-If a malicious USB device presents a HID descriptor declaring a very small
-report size (e.g., 1 byte) and sends a 1-byte report, the driver
-unconditionally accesses fixed offsets such as data[1] and, depending on the
-device info, up to data[12].
+[Severity: High]
+This is also a pre-existing issue, but is the status_report_request_lock
+effective if it is ignored in rog_ryujin_raw_event()?
 
-Could this allow an out-of-bounds heap read where leaked kernel memory is
-stored in variables like priv->temp_input and priv->speed_input, and then
-exposed to userspace via the hwmon sysfs interface?
+rog_ryujin_execute_cmd() acquires status_report_request_lock to protect
+reinit_completion():
 
->  	{ }
->  };
->
+drivers/hwmon/asus_rog_ryujin.c:rog_ryujin_execute_cmd() {
+    ...
+    spin_lock_bh(&priv->status_report_request_lock);
+    reinit_completion(status_completion);
+    spin_unlock_bh(&priv->status_report_request_lock);
+    ...
+}
+
+However, rog_ryujin_raw_event() ignores this lock when calling complete_all=
+():
+
+drivers/hwmon/asus_rog_ryujin.c:rog_ryujin_raw_event() {
+    ...
+    if (!completion_done(&priv->cooler_status_received))
+        complete_all(&priv->cooler_status_received);
+    ...
+}
+
+Could this lead to data races on the completion states and spurious sysfs
+read/write timeouts when a USB raw event arrives concurrently with a
+driver sysfs command?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260811233943.3197=
-29-1-renari@arimil.com?part=3D3
+29-1-renari@arimil.com?part=3D2
