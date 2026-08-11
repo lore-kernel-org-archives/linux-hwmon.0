@@ -1,38 +1,38 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7646426431;
-	Tue, 11 Aug 2026 09:38:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51EA03876B8;
+	Tue, 11 Aug 2026 09:38:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786441099; cv=none; b=obn/hWN6gHNATkiEkt2RqlaF/dxdFh0eDAho8jumGKbajsASm4MPvdVWY7O+6Nyco46dpv/KR8K+hd2REFVNHKi1P6pa3wI8Wt85XO8CG34SvD+mbL38aLwx6TBMmmDrUh4NQGF993Ttn9hf41WdIoHllYyc2CmRDK114Dp6i40=
+	t=1786441099; cv=none; b=X8ZcUrzVYe69FyQbBJVjCWVQwLFncusPOwEMDeiJxOltkx0ECW7m82SPWJMscXj7HFZeocf4s2Nrt1tUVykuEp7KC8T83UBLd7fhblcAkqodtw3KYddv/hl0wMHhBN4CkkI6wlN7T0MnJhDxRnmZFUAfrE5mVUqigslo3HHZFQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1786441099; c=relaxed/simple;
-	bh=VWBeNoPW2DobQTPyEmfafxOt8jEm+aLZ4VqSUv4TB9s=;
+	bh=BlHTHG+YfYP2OFsviQ5ESAllCWNJ8tPA2esl3b0zJi0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rNUoIo9ezxkYvw56b73pztVPihkPA/4bp0yR+2IwqpA3EBZsXsu7ihsdWzDKa9XMCfRVGIvdHsP6Ah5ZFuatpQEbh6BaEcGG8WMSZtbzVHdA+ozFZL0FZCTgYXnU+yyEc7+QrHiJglgOa2UkyAyWgTiQvWtYt3uA5nTBjigz7Ss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=NH3UD2qt; arc=none smtp.client-ip=220.197.31.5
+	 MIME-Version; b=b629/a2RzVhA3lkWdBn8QuzagTMFLOAPgcxw4cu/b4kpfJw+DJQHxKNE1tl8GgcR9ADcYDsbYuymZg9enPNo3jIbDD9fqzur0M4v4kfwmRx010NnxviHeyks5w6CdmXHAz9COHE3h2fJMpf3CGEVBScsG92TIxC4omqA3FnmTKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=XeS12ETt; arc=none smtp.client-ip=117.135.210.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="NH3UD2qt"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="XeS12ETt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=mR
-	JVcYNlYvPAspGmAIuZli+WZ/rjHS+JtGDYsdxFPng=; b=NH3UD2qtGLwJ8EK9FC
-	TlBoptSYY7418SC8WN1dahhbAvuqCHzoxdTT+T9MJX3IJ+FRqGVIgVXVOvU1HZu0
-	WtC+N4gMER+k7Nr3UMtTgbe9+1CdMCulXbvPL7WszOBKMr39eebtgUvHoqXg/LO5
-	rocg3Y0CiuqUGvObRc6HacusQ=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=uJ
+	nduPDaVg+t/IdUMyYFgOzPrQFL4/xAUq9v2853FDU=; b=XeS12ETtYLVdZVFzh7
+	r++4VjqP8PeG27P7BTMQEUd5C+bn4l7pDhD9Z9KHNXmfINX8ufWULs/zm7R3JoPQ
+	E1NCcJppDZHIZzHQlyXy5SsfP3D4UMyeeSWljZTjHu6KIM9B5m5aTjt4WOtT3P/9
+	uML2w/ZxyenKNPewaGowvgoQc=
 Received: from fedora (unknown [])
-	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wBHysZy7XpqJ77_OQ--.33587S4;
+	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wBHysZy7XpqJ77_OQ--.33587S3;
 	Tue, 11 Aug 2026 17:37:56 +0800 (CST)
 From: huangjia2hi@163.com
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Jiazhi Huang <huangjia2hi@163.com>
-Subject: [PATCH 2/2] hwmon: (nct6775) Add NCT5585D to list of supported chips
-Date: Tue, 11 Aug 2026 17:37:44 +0800
-Message-ID: <20260811093744.12199-3-huangjia2hi@163.com>
+Subject: [PATCH 1/2] Documentation: hwmon: (nct6775) Add missing NCT6797D and NCT6798D
+Date: Tue, 11 Aug 2026 17:37:43 +0800
+Message-ID: <20260811093744.12199-2-huangjia2hi@163.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260811093744.12199-1-huangjia2hi@163.com>
 References: <20260811093744.12199-1-huangjia2hi@163.com>
@@ -43,69 +43,50 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wBHysZy7XpqJ77_OQ--.33587S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJrWkXFWDGrWfuF17Zw13Jwb_yoW8CrWDpa
-	4kJw4fCry5X3ZrXr1UJanxZay3XF1fWrWxCr4qk34YvF1DZF9F9F4fKry5A3ZrtFyrAay3
-	WrykJryrC3WfZ3JanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zEYhFDUUUUU=
-X-CM-SenderInfo: xkxd0whmldjxrl6rljoofrz/xtbCxBTRCGp67XSgXAAA38
+X-CM-TRANSID:_____wBHysZy7XpqJ77_OQ--.33587S3
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZw1UGw47GFWrKF4xAF1rXrb_yoWDArb_ur
+	Z7GFWkJrZ8tF1UGrWUZr9IvF97AFW8uF47W3WkAr9xAr17Xa9xCr1qqr42ya1DZrW7uF15
+	W3y3GFySkr4ayjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRE6pB5UUUUU==
+X-CM-SenderInfo: xkxd0whmldjxrl6rljoofrz/xtbCwxTRCGp67XSSIwAA32
 
 From: Jiazhi Huang <huangjia2hi@163.com>
 
-NCT5585D uses the same chip ID (0xd428) as NCT6798D and is fully
-compatible with it. Tested on an ASUS PRIME H610M-D motherboard.
+The NCT6797D and NCT6798D chips are already supported by the driver
+but were missing from the documentation.
 
 Signed-off-by: Jiazhi Huang <huangjia2hi@163.com>
 ---
- Documentation/hwmon/nct6775.rst  | 8 ++++++++
- drivers/hwmon/nct6775-core.c     | 1 +
- drivers/hwmon/nct6775-platform.c | 2 +-
- 3 files changed, 10 insertions(+), 1 deletion(-)
+ Documentation/hwmon/nct6775.rst | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
 diff --git a/Documentation/hwmon/nct6775.rst b/Documentation/hwmon/nct6775.rst
-index 6725f8ff98e0..41b21bed7e27 100644
+index 9d7a10de61a7..6725f8ff98e0 100644
 --- a/Documentation/hwmon/nct6775.rst
 +++ b/Documentation/hwmon/nct6775.rst
-@@ -96,6 +96,14 @@ Supported chips:
+@@ -80,6 +80,22 @@ Supported chips:
  
      Datasheet: Available from Nuvoton upon request
  
-+  * Nuvoton NCT5585D (compatible to NCT6798D)
++  * Nuvoton NCT6797D
++
++    Prefix: 'nct6797'
++
++    Addresses scanned: ISA address retrieved from Super I/O registers
++
++    Datasheet: Available from Nuvoton upon request
++
++  * Nuvoton NCT6798D
 +
 +    Prefix: 'nct6798'
 +
 +    Addresses scanned: ISA address retrieved from Super I/O registers
 +
-+    Datasheet: Not available
++    Datasheet: Available from Nuvoton upon request
 +
    * Nuvoton NCT6796D-S/NCT6799D-R
  
      Prefix: 'nct6799'
-diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
-index 94482c8092cd..759ea3d1286e 100644
---- a/drivers/hwmon/nct6775-core.c
-+++ b/drivers/hwmon/nct6775-core.c
-@@ -33,6 +33,7 @@
-  *                                           (0xd451)
-  * nct6798d    14      7       7       2+6    0xd428 0xc1    0x5ca3
-  *                                           (0xd429)
-+ * nct5585d    14      7       7       2+6    0xd428 0xc1    0x5ca3
-  * nct6796d-s  18      7       7       6+2    0xd801 0xc1    0x5ca3
-  * nct6799d-r  18      7       7       6+2    0xd802 0xc1    0x5ca3
-  *
-diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-index 1975399ac440..d394376e4306 100644
---- a/drivers/hwmon/nct6775-platform.c
-+++ b/drivers/hwmon/nct6775-platform.c
-@@ -34,7 +34,7 @@ static const char * const nct6775_sio_names[] __initconst = {
- 	[nct6795] = "NCT6795D",
- 	[nct6796] = "NCT6796D",
- 	[nct6797] = "NCT6797D",
--	[nct6798] = "NCT6798D",
-+	[nct6798] = "NCT6798D/NCT5585D",
- 	[nct6799] = "NCT6796D-S/NCT6799D-R",
- };
- 
 -- 
 2.55.0
 
