@@ -1,32 +1,30 @@
 Received: from mx.nabladev.com (mx.nabladev.com [178.251.229.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C993345CC0;
-	Wed, 12 Aug 2026 19:10:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E081366049;
+	Wed, 12 Aug 2026 19:16:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.251.229.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786561839; cv=none; b=l4qSAlS46DbwDtdutDMoE9c6POf6wZjyziAjJOcbBk4ZolmZoRFPm1L98R/X7Upp4IMcwXK+nn/K0ENobaAYPcd6xpjb2tQbMWKk3sdfwaP92bo3YCxdsH+tkKXMopDHzeZeeAPxQWNr8pbzsPaPQvhXwNWDIhg40Kxnjzag/SI=
+	t=1786562186; cv=none; b=k+ZWPeQ01WE5v2Rs+MNbYzQgKVQa+hE6AnCJIZ4AVluWVcD2aX9Iz+6o73NCrnO/41FKGAi9wvL1VyFLLSOqO6rZN/KK5T7MYyQINJT9hv1NvTn916+J1hNXYcqDx+OInQI39bbXNA/H5oau/ZNF2bSfZOMp7jdqhMsrKndUlME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786561839; c=relaxed/simple;
-	bh=rSCou8NH9VLcR0MF4sIBWh7qoFxKcf1htaP1G66cA6g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=m15lul3rMhPEBO6bgC0n/znJgXmds8tq1rb6+UuouVb2HsB+99bY5vFyKzesCkIAl3DU3BVmRJV7AVG/IGfS+tXHOT9wswWiIRtbndivjll/A2aSaXS7d1B7hHoprLQKfh3lc2OA9EqpGmpP0u/zhQtnzBMCTXjt02uWRW2/294=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nabladev.com; spf=pass smtp.mailfrom=nabladev.com; dkim=pass (2048-bit key) header.d=nabladev.com header.i=@nabladev.com header.b=jemnTuDX; arc=none smtp.client-ip=178.251.229.89
+	s=arc-20240116; t=1786562186; c=relaxed/simple;
+	bh=KlIwDRS5hRSSpwRJwAawDjqXwbWcNP0sM/xicFNBMfQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XirsYYkbMTIsE1eXWvV7sZcJNDZkSlvf5FSiUyxizFvdGpxc0i8uMQXRLA5g1hx7c4f881t/qCYaInAcJeBrNeuNDBsxx5jq+nIgBqx2rslU2NAgfz8BjdUBdjVbXFJPjzj7l/dl3PgD7tikcBkM3vFHxnHA7QhhFM7Dam6Tb5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nabladev.com; spf=pass smtp.mailfrom=nabladev.com; dkim=pass (2048-bit key) header.d=nabladev.com header.i=@nabladev.com header.b=iGJbaT4F; arc=none smtp.client-ip=178.251.229.89
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nabladev.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nabladev.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nabladev.com header.i=@nabladev.com header.b="jemnTuDX"
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B07B611BDD5;
-	Wed, 12 Aug 2026 21:10:30 +0200 (CEST)
+	dkim=pass (2048-bit key) header.d=nabladev.com header.i=@nabladev.com header.b="iGJbaT4F"
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 6207611B89B;
+	Wed, 12 Aug 2026 21:10:25 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nabladev.com;
-	s=dkim; t=1786561831; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=3GkE953iVOQ0yb+2rt2C7WyK8bpUX4ZBAxUpH/lRf/s=;
-	b=jemnTuDXOcwk4CB92SrUeMsosd2O7JXsfDvpcrGnBIqpDK3RL+vS9j/qs89CkY3dNXwLcY
-	0N+hzOOY0/xozMbJFZF614eByZjAvBzQV/n2PkQATz3rGzdiXhAr2v6EPBkABsOMPDgyaL
-	DjmWWGUBr+t27sIp3VItDhLzkMly2hbkoh/1N8AYSmnYRg8rXDvxPpoTx48XR0rgQcE774
-	orsPHVkkN0SzP2lV67fGJ+wPtbKO2zJlCfMopUUBXavA/xtJsDB3mPTHVxDHwhC9sMcAIW
-	twoLnPyNztwEvw8GWyP4Anagg2kWIbkmcDiShcYTglIUZXube6As2v1Z7ihsoA==
+	s=dkim; t=1786561826; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding; bh=Xw6BXxHLzXrNZEEI+KrklfgMSK5+e16+iNCzSSFFR78=;
+	b=iGJbaT4FrzQQPrhrhc1ON4RlLRMfS4QqX0ht5+IOh6NcRZSEiP/tq+B39283QHFjP/Aars
+	mUbV5kW23XGRtkkhk1R8MMoxtP6wgKE16xWPNxf/dUCeL3hM7I16w0y3rYotibepVWCWg0
+	nLN+v/jHbSmuVWQU8hcbhGeiv43DD/TyjY53ryVbcnhtoBPpseV4avSLsGleRlWCQspbzU
+	13/YdDpVoJl2TvAsVTesosZPa6BmfWJ3WM5A3crLFtFQo6HfS9j1pj/7fNwCgRPaLnWhHc
+	cmWYbzmOrLBKHuznZzy3Xe2SxAnLH39bWc3BjGV+O8u/gWKTWbYsEB+t0yh+gw==
 From: Marek Vasut <marex@nabladev.com>
 To: linux-hwmon@vger.kernel.org
 Cc: Marek Vasut <marex@nabladev.com>,
@@ -37,12 +35,10 @@ Cc: Marek Vasut <marex@nabladev.com>,
 	Rob Herring <robh@kernel.org>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] hwmon: (tmp102) Add TMP110 device ID
-Date: Wed, 12 Aug 2026 21:09:45 +0200
-Message-ID: <20260812191021.65304-2-marex@nabladev.com>
+Subject: [PATCH 1/2] dt-bindings: hwmon: tmp102: Document TMP110
+Date: Wed, 12 Aug 2026 21:09:44 +0200
+Message-ID: <20260812191021.65304-1-marex@nabladev.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260812191021.65304-1-marex@nabladev.com>
-References: <20260812191021.65304-1-marex@nabladev.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -52,7 +48,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
 
-The TMP110 is register compatible with TMP102, add non-DT I2C device ID.
+The TMP110 is register compatible with TMP102, document it using
+a fallback compatible.
 
 Signed-off-by: Marek Vasut <marex@nabladev.com>
 ---
@@ -65,21 +62,45 @@ Cc: devicetree@vger.kernel.org
 Cc: linux-hwmon@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
- drivers/hwmon/tmp102.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../devicetree/bindings/hwmon/ti,tmp102.yaml         | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hwmon/tmp102.c b/drivers/hwmon/tmp102.c
-index 95fb912a1f7ed..26c461e95175b 100644
---- a/drivers/hwmon/tmp102.c
-+++ b/drivers/hwmon/tmp102.c
-@@ -396,6 +396,7 @@ static DEFINE_SIMPLE_DEV_PM_OPS(tmp102_dev_pm_ops, tmp102_suspend, tmp102_resume
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml
+index 96b2e4969f78a..f0dbe9f07b939 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml
+@@ -4,15 +4,19 @@
+ $id: http://devicetree.org/schemas/hwmon/ti,tmp102.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
  
- static const struct i2c_device_id tmp102_id[] = {
- 	{ .name = "tmp102" },
-+	{ .name = "tmp110" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, tmp102_id);
+-title: TMP102 temperature sensor
++title: TMP102 and TMP110 temperature sensor
+ 
+ maintainers:
+   - Krzysztof Kozlowski <krzk@kernel.org>
+ 
+ properties:
+   compatible:
+-    enum:
+-      - ti,tmp102
++    oneOf:
++      - items:
++          - const: ti,tmp110
++          - const: ti,tmp102
++      - enum:
++          - ti,tmp102
+ 
+   interrupts:
+     maxItems: 1
+@@ -28,7 +32,7 @@ properties:
+     const: 1
+ 
+   vcc-supply:
+-    description: Power supply for tmp102
++    description: Power supply for the sensor
+ 
+ required:
+   - compatible
 -- 
 2.53.0
 
