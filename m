@@ -1,172 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from outbound.ci.icloud.com (ci-2002a-snip4-11.eps.apple.com [57.103.88.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A6830C16F
-	for <linux-hwmon@vger.kernel.org>; Wed, 12 Aug 2026 10:46:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF6964746D7
+	for <linux-hwmon@vger.kernel.org>; Wed, 12 Aug 2026 16:38:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.88.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786531579; cv=none; b=eSNfU/K6nH2QfeRR+kIqOtH1SJTPpBRSJLYtXmMLA/RrjlHSdFte8bWX6e1Tya4CoJ6vOYYOmQU42wNrgrsifsG+GDHD3niqoSArTi+B0PvCCPKI/HQKZmAqUtbYSexsGB7bHF1fhv3xbxJphAnOO2CXGEnfp+b04IasHGcfHlg=
+	t=1786552740; cv=none; b=GV/8Y05er1H5fm8j1wozQkTA4LBkyyT7yc2SsDuEPRSkuwhkz0F3bKNnwcWwE+z8hw3Ly1lW7LaS3jFI4+tGk9UAW6qHr2ib1uv47ScQW1ZkROKbprfJjbANNubfsL8qb3VGCIitzFpy3yvPB/JzRUvVk7JPcbXGmwm5RdnT/fI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786531579; c=relaxed/simple;
-	bh=1z1FsND7JzX4IOGuSl+iNRVUgDv+L66kLZ0i+vhFI/E=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=qo34uJ/ZheIQDwxcr+93D5KWovUMkFm1HKP+yoR2fqQ/tY5zVy+Ezic8Dsx455S6jiewgfuLmytBLccWVMHNLRsnBYOh2x6tYu0V0Q6ib3FmXTaEA7bRX2Q3/2irL+QuZdYo3HneKQfiK1DVex7euibIMLsn0NxMmaZp4wQCjYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M2iTCIVr; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786552740; c=relaxed/simple;
+	bh=3KWM+G9yOMgofh49bmABxH7luKbXpqQaZz2tOb5IqqM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FhXb8ijY165bdA1PUuLnRO1aD/9Th2O4YfPCMtpxed0Ijpd3BYewHsDkSwKlwcddgRMVcupUKAFD6AU7HTDE/xGycVWpI76uU+7iwVJzoUF2s8IzqbWr2Pg9cxq3tqyMLFqOn9aQdsls8YYHG/ABPdNr/kzIfVAqQ5H8TZzhaTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gford.dev; spf=pass smtp.mailfrom=gford.dev; dkim=pass (2048-bit key) header.d=gford.dev header.i=@gford.dev header.b=GXmWoFDW; arc=none smtp.client-ip=57.103.88.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gford.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gford.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M2iTCIVr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 858D01F000E9;
-	Wed, 12 Aug 2026 10:46:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786531577;
-	bh=lfSVfLvmnNavRVJt8OUqYQDI2Y6NjQF2gFbqYFzWm/U=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=M2iTCIVrpcvGiuZsflnh2L+T7Uh3b9mwfR3WA7KhWZ/4v2xRqAJwGyiMqQmL78uiW
-	 EzEJiF9KLMh2XE6KvJ1+ACRCL9U841eM1J9TTmIbNiYmQkHA533gUX5RJYVWT7rxfi
-	 PHwNEB9V2vKI+DHkJaFnnSJvF9rWFB7HaJ0uGi/4bVMdAD7ZVjUvZjMSYkUJmhuw3R
-	 LG9db3B5UYMfY77BHy+/2C3P5QQWqEtm0FWoGvGFd1VpOcQioYVmfR42mVPnQnPARq
-	 E+Y8H9LRGxCoyqZRtrDggfJNN7p/jURCgyUfeZKIjskeb5zBpRS3zsSS8ZP2gpsFlN
-	 L3dn2N92Bc5pw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 2/3] hwmon: (asus_rog_ryujin) Add ROG Ryujin III
- support
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Arie Miller" <renari@arimil.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260812103532.395049-3-renari@arimil.com>
-References: <20260812103532.395049-1-renari@arimil.com>
- <20260812103532.395049-3-renari@arimil.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 12 Aug 2026 10:46:16 +0000
-Message-Id: <20260812104617.858D01F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gford.dev header.i=@gford.dev header.b="GXmWoFDW"
+Received: from outbound.ci.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-central-1k-20-percent-0 (Postfix) with ESMTPS id 642DA1800169;
+	Wed, 12 Aug 2026 16:38:56 +0000 (UTC)
+X-ICL-RepId: 019ff6d7-5a4a-7ff5-bbe9-8babb2ed8b17
+X-ICL-Out-Info: HUtFAUMHWwJACUgBTUQeDx5WFlZNRAJCTQhKCkMFWgdeCE4HQwZSAFBcHA4KVglAGVwUcwpRBEAUFxxWGxcNVk1eHlwfU0VWFU9YQQ4KXhIYXBRcUFgeRhJWDV0JGQhbXlAbXwJCDxwTVhUTHUMZDysISgRDB0UCXgslEwlTVlUWVgpXQ1MORFBUEVdQC1kCQg9IC1wFWgRDAUkBQwVcBEAUSR4KVglAGVwUcwpRBEAUFxxWGwlLRglJHQ4OQhhGH1QnVwJaClse
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gford.dev; s=sig1; t=1786552737; x=1789144737; bh=rscPCEEPD3dboROIl+EaQhjc3YhT99/NZGT5fYF3k4c=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=GXmWoFDWdhJ5C/vQ4QVQN+/Elvfr3ywH7oKDY7c8csapP+yL/I+JUP7gIxjzZLwCpWiGs5xY2SjdD7O7sx7WcrzezJ1AbL2ztRy5e+qVXFftjtYHAy2ERbmkjsK9FQa7j7mk3CNDpp2slw8ZXYq5COa4RghvZr1vq/PIzalj0NhctZE25TGMBc89THHTHt8O4Sy7JrKdGjopsrUU9GWilZaVY20ffyWCb09OoCD5zo8pmIl0SEc5LOCyKW7KKitbk1bfxSKg1BvUh2XHSiT+XM3si+oEwQMvyOxC8xP3EGRTC7Ky4gYMjpSlBwA8mlzU3Jnp40KT4KXu8ofCTHuN5w==
+mail-alias-created-date: 1786411807802
+Received: from n17.. (unknown [17.57.156.36])
+	by p00-icloudmta-asmtp-us-central-1k-20-percent-0 (Postfix) with ESMTPSA id 1A63E180033A;
+	Wed, 12 Aug 2026 16:38:55 +0000 (UTC)
+From: Gabriel Ford <gabriel@gford.dev>
+To: Clemens Ladisch <clemens@ladisch.de>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org (open list:K10TEMP HARDWARE MONITORING DRIVER),
+	linux-kernel@vger.kernel.org (open list)
+Cc: Gabriel Ford <gabriel@gford.dev>
+Subject: [PATCH] hwmon: (k10temp) Add per-CCD temperature monitoring for Zen5 Turin
+Date: Wed, 12 Aug 2026 16:37:58 +0000
+Message-ID: <20260812163812.2760-1-gabriel@gford.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODEyMDEzNSBTYWx0ZWRfX8kyJeT+viCbI
+ jDLWJlkkzdYrntLZjXD2PfwCeWc59B1IQ6beINi/3/7Csa0TH+1bUGsyprpITcL7t45aPBZyeOd
+ MetDJcUNB02LzwZLXc/aC/9W8GB14FYDqjadRgumo9swQgm+sj3QIAE0PMC72OyqILMxToUsHAZ
+ F8IgEBvcpFm3lI+eKRFAKV1pdcRlKENv+VE74wM3IzbyObHv84ocsEgKn5G+r3daDnAtCogfCg+
+ 7T/wA18P26NZOtQi/9+g2snbq88LFKBkZzy5uCBWlHarz4eL+foKIp+342G4bO/Y6QpL6Uo57im
+ ai3E8LhJZb99yZ+LP61JgRkAGvLkFZh6TPCM7Chj2LAi0SA7Ttc45PYnwI4fiY=
+X-Authority-Info-Out: v=2.4 cv=Dt5bOW/+ c=1 sm=1 tr=0 ts=6a7ca1a0
+ cx=c_apl:c_pps:t_out a=2G65uMN5HjSv0sBfM2Yj2w==:117
+ a=2G65uMN5HjSv0sBfM2Yj2w==:17 a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=rEwK2UKs15_HZtBU5IoA:9
+X-Proofpoint-ORIG-GUID: Y7KUfABY_V9Y2oppvRvR8ovstAivjK0d
+X-Proofpoint-GUID: Y7KUfABY_V9Y2oppvRvR8ovstAivjK0d
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
+Add support for per-CCD temperature monitoring on Zen 5 Turin (EPYC 9005)
+CPUs, as they fall in a different model range with a larger number of
+maximum CCDs compared to their desktop counterparts. Tested and working
+on an EPYC 9555P.
 
-Pre-existing issues:
-- [Critical] Hardware transport is started before synchronization primitive=
-s are initialized, leading to a NULL pointer dereference.
-- [High] Missing bounds check on HID report size leads to kernel memory inf=
-ormation leak.
-- [High] Ineffective spinlock usage causes data races and corrupted complet=
-ion state.
---
+Signed-off-by: Gabriel Ford <gabriel@gford.dev>
+---
+ drivers/hwmon/k10temp.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
---- Patch [2]: [PATCH v3 2/3] hwmon: (asus_rog_ryujin) Add ROG Ryujin III s=
-upport ---
-commit 38401fc658552e2aee59237664fe94f5ef49d39c
-Author: Arie Miller <renari@arimil.com>
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index de0760dc597d..b882fe09ac1b 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -207,6 +207,10 @@ static const char *k10temp_temp_label[] = {
+ 	"Tccd10",
+ 	"Tccd11",
+ 	"Tccd12",
++	"Tccd13",
++	"Tccd14",
++	"Tccd15",
++	"Tccd16"
+ };
+ 
+ static int k10temp_read_labels(struct device *dev,
+@@ -515,6 +519,10 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		}
+ 	} else if (boot_cpu_data.x86 == 0x1a) {
+ 		switch (boot_cpu_data.x86_model) {
++		case 0x00 ... 0x2f:	/* Zen5 Turin */
++			data->ccd_offset = 0x1F0;
++			k10temp_get_ccd_support(data, 16);
++			break;
+ 		case 0x40 ... 0x4f:	/* Zen5 Ryzen Desktop */
+ 			data->ccd_offset = 0x308;
+ 			k10temp_get_ccd_support(data, 8);
+-- 
+2.43.0
 
-hwmon: (asus_rog_ryujin) Add ROG Ryujin III support
-
-The ROG Ryujin III uses different report offsets and a different
-cooler-duty channel from the Ryujin II. It also lacks the separate
-external fan controller supplied with the older model.
-
-Link: https://github.com/aleksamagicka/asus_rog_ryujin-hwmon/pull/9
-
-> diff --git a/drivers/hwmon/asus_rog_ryujin.c b/drivers/hwmon/asus_rog_ryu=
-jin.c
-> index 80563ce38519d..79e5b6d6dae0a 100644
-> --- a/drivers/hwmon/asus_rog_ryujin.c
-> +++ b/drivers/hwmon/asus_rog_ryujin.c
-[ ... ]
-> @@ -34,6 +36,14 @@ static const struct rog_ryujin_device_info rog_ryujin_=
-ii_360_info =3D {
->  	.has_controller =3D true,
->  };
-> =20
-> +static const struct rog_ryujin_device_info rog_ryujin_iii_info =3D {
-> +	.temp_offset =3D 5,
-> +	.pump_speed_offset =3D 7,
-> +	.fan_speed_offset =3D 10,
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does this driver check the
-size of the incoming HID report before parsing it?
-
-In rog_ryujin_raw_event(), the driver dynamically accesses payload
-offsets without validating against the received report size:
-
-	priv->speed_input[1] =3D
-		get_unaligned_le16(data + priv->info->fan_speed_offset);
-
-If a malicious or buggy USB device sends a HID report shorter than the
-expected length (e.g., 1 byte), this code would unconditionally access
-memory up to the offset. Since the underlying HID transport buffer is
-dynamically allocated to at least 64 bytes (HID_MIN_BUFFER_SIZE), an
-out-of-bounds page fault wouldn't occur, but uninitialized buffer bytes
-could be parsed as sensor values and exposed to userspace via hwmon
-sysfs attributes.
-
-Could we add a size check at the beginning of rog_ryujin_raw_event()
-to prevent leaking kernel memory information?
-
-> +	.duty_channel =3D 1,
-> +	.has_controller =3D false,
-> +};
-> +
-[ ... ]
-> @@ -605,4 +619,4 @@ module_exit(rog_ryujin_exit);
-> =20
->  MODULE_LICENSE("GPL");
->  MODULE_AUTHOR("Aleksa Savic <savicaleksa83@gmail.com>");
-> -MODULE_DESCRIPTION("Hwmon driver for Asus ROG Ryujin II 360 AIO cooler");
-> +MODULE_DESCRIPTION("Hwmon driver for Asus ROG Ryujin AIO coolers");
-
-[Severity: Critical]
-This is a pre-existing issue, but is the initialization order safe in
-rog_ryujin_probe()?
-
-The hardware transport is enabled and opened before initializing the
-completion structures used in the raw event handler:
-
-	ret =3D hid_hw_start(hdev, HID_CONNECT_HIDRAW);
-	...
-	ret =3D hid_hw_open(hdev);
-	...
-	init_completion(&priv->cooler_status_received);
-
-If a report arrives immediately after hid_hw_open(),
-rog_ryujin_raw_event() can fire and call complete_all() on a zero-allocated
-struct completion.=20
-
-The wait.head list_head inside the completion is uninitialized, which could
-cause __wake_up_locked() to dereference a NULL pointer and trigger a kernel
-panic.
-
-Should init_completion() be moved before the hardware transport is started?
-
-[Severity: High]
-This is a pre-existing issue, but does the spinlock usage correctly seriali=
-ze
-against the raw event handler?
-
-In rog_ryujin_execute_cmd(), the spinlock is acquired to serialize
-against the raw event handler:
-
-	spin_lock_bh(&priv->status_report_request_lock);
-	reinit_completion(status_completion);
-	spin_unlock_bh(&priv->status_report_request_lock);
-
-However, rog_ryujin_raw_event() modifies the completion state concurrently
-without acquiring this protective spinlock:
-
-	if (!completion_done(&priv->cooler_status_received))
-		complete_all(&priv->cooler_status_received);
-
-If a device report arrives on another CPU exactly as execute_cmd() is
-calling reinit_completion() (which sets done =3D 0), this lack of mutual
-exclusion allows reinit_completion() to race with complete_all().
-
-Could this corrupt the completion count and cause the driver to sleep
-until timeout?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260812103532.3950=
-49-1-renari@arimil.com?part=3D2
