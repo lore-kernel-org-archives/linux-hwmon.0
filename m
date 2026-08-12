@@ -1,142 +1,135 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80195426419
-	for <linux-hwmon@vger.kernel.org>; Tue, 11 Aug 2026 23:52:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28672C0F7F
+	for <linux-hwmon@vger.kernel.org>; Wed, 12 Aug 2026 00:32:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786492324; cv=none; b=pjc77Bb1II3yMNkAXeWLz32VFTvxlwGwBRIZZTfVPIo5QIs0zJixLuay0Ko2i/V5jIAz1hitJ976t2vJm6rGEB1tB6fv33L8qAjD6KjXuXeLv6RIP7FSNIu/geTKVXx64aeXxFDHlpapiJF4mjDSAtkMJABhQ8g2KdlvlJgJssI=
+	t=1786494772; cv=none; b=Iw8kb/vXwKCKu4w5vxpcJ4LHznkkn17OdgsLk6gyeAzXKb0SnSmW1ksF3ckrVDJhY0fiaqdexK/CQ6Q7tr3cHXGsHH++UViGZumK7WdV+ni48CqW39rWjiiliI27jqHb1Tx2BPjKuJAj17e8nL43cGRwEPJSi9tKBMzzgIvab4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786492324; c=relaxed/simple;
-	bh=JUzNKe/IibhK9kf/cqhMj5OhZlr67+4i2j6tViWimTE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=avE3Lv6aWKfZln4t2b7Sin8aK4spZor2WB/IZdmhxZ6Hf2adl7VifkUaZ2YO3YHm5I0b7+pBefFOfUdXMacZSQXlr0/pmUP7r/lXLPEQ/YWVe2lIrTyNjjOqWyRYoKWA2wsL+UE5bjYnxgRqDAbpPwvZE+Tmo3kjbHjOauRl99g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T2zxThQG; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786494772; c=relaxed/simple;
+	bh=1svFroBzlnpIoKJ65upMZgogmSp2TnVbtX2Yign+mfY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eBJuPBm2XQIcoiw7DHujBRix7gKVZbKhQt4eM+u4tt4+/gSK3jltAKsjjNnGODn0RfSiM8RSBH4yAb7HlHNL9oMyr5sfCYGBF7c3tfyJXM2zm2IG86MtW9VOgGIti4in3Kkmj3wbd7eei+KFXwDcbFA4Kg1NWze+YTE6NDYf2yk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RiL6BIG2; arc=none smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T2zxThQG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B23A1F000E9;
-	Tue, 11 Aug 2026 23:52:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786492323;
-	bh=wPSC9wQWKnMfrJ+J1LhIRUt8k/Y/vl7S2b+mX7Tfv60=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=T2zxThQGiJ0ukB43BqyxMlYWXBxrBwbgSGE3pbP6vJ2JRrHh9UZojuS6plbbOB8A/
-	 nHrpgkVDJNSCnCVLVR+XGPfQHbX+qIbwlsP0Gh3SFI1MgpxfOSoVTIGhjC3JLrCE7c
-	 UprpeJpHNrx+HAp/aGSq7DWVnl+HRivMnBQHhe8tsfnnlRInqUBz9L0vJHDmBneEbg
-	 GevD7iFJ8y4snnalOvu/b55YiBiN2++Hlc0003AW51v4oHkoLWHUHTnGQr0XrG0ZbW
-	 3sqQ8Ct157/itSdvseO2pKKDudSwli2wWCOuxH8U7tzKk7osN1i/dkaeEodpmX0394
-	 igLnpkz6+GaYQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 2/4] hwmon: (asus_rog_ryujin) Add ROG Ryujin III
- support
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Arie Miller" <renari@arimil.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260811233943.319729-3-renari@arimil.com>
-References: <20260811233943.319729-1-renari@arimil.com>
- <20260811233943.319729-3-renari@arimil.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 11 Aug 2026 23:52:02 +0000
-Message-Id: <20260811235203.3B23A1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RiL6BIG2"
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-81dfdbd86d1so3951767b3.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 11 Aug 2026 17:32:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786494770; x=1787099570; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=7XoZo0qCAmdwl/oyEFbKGWeoRRgH5eHq9HVp5BTzrDw=;
+        b=RiL6BIG2ppGzL7MSDO1FnLwCH7SHrRwEHBUuqSCHAbFRMegYC4uIePAuSeZ89B8PrZ
+         +UNQmqzZnzUn7haLFQfNWPa/FexvikEIW0GHgHRZyanDzH4C+xnwoXsesY+2JULCiGM1
+         Twuq7raSPXFmBD05dulrD0aOkXh5qqaWCqOyOeHYaMFlP+fOdlVvSzEOMtbPU4UBDsXx
+         JPDqeP4chKzX1v/kd/uqFqubLpPT1U7gKM7Eg/oWopkgzHLK837LfOyHdo9/MuvaFrV/
+         M8jIlTm8glIkE77D4lAGfrSzMJpDYIs7Qjzenw06VgMDNMO2hHd6gncieQ4Ha+F2hfin
+         2/YQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786494770; x=1787099570;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=7XoZo0qCAmdwl/oyEFbKGWeoRRgH5eHq9HVp5BTzrDw=;
+        b=GytzIMUxenHhJHB3bykDLp8LYectpRyiwH2Nl9BFuKgf0qL6XAK/WFeGyxud01FiqY
+         i+Q/TllGv6/+/7/gLUQFzWCPHVCk4386TNJ9xxpWlZavZhtGyGW2m6hMnexWny+985fq
+         Lu8bXr9m0m97GeFkhEXkSIsdCNgDd/BZAnNhx7WIqtkfnmjPdmFS1E9TCtazg4HZioq/
+         Rxpt07bg2zkVR3JTM7P6mlgZAULypy8gU2uOs6uzkKjXYAm839XvqmGRdYWFjHro49w4
+         ZgzB6GnHvKYcjNlty0oEAyI3YpxpOmtl3WyM6qeooyGYb4LzoLOp3qxDfEp23GVu7VSu
+         qOTg==
+X-Gm-Message-State: AOJu0Yy/4npUglQe6OqzuhbZzxSSXjQlWvBfvXmWejf/ZNHpu0BwPXIC
+	1JHuzZIqCL+14yr/B0NwXGGXxMueDqIry+m8OAVg0JUPIZqX5Xc1tl69Hd5tdfol
+X-Gm-Gg: AR+sD12vg0E44vJZkh/HShJcpijHvpQAjHtKlXWO46wo1iySU04unyHWjUvBiM8y6BN
+	gwEJ0X6xF0fuDdBSPeP3KKxpg5SGYYuPsk/asHvhFN1B2O36LXL3YPFPyzaufnLr5jkwz+2sEkw
+	1oXQaGU7ceEKDg7hKguRr1nIJpVaPR9GcmHkpuYJ9oYBAgYkFEcg8a86e+Zkf077ewaFFMWJALh
+	mlHsHH8S246vXlbe/H8xEfTaoM4PxIEm80MqSIId9FSdCC6aP9q53GQjCAmhH7qgItI5W31e6zj
+	7A/EnUbH5iAuqXmVTkSmQlNAO2hauhX1u4K87fUSwlgDBK4dIOge28dQcI77cWPLL6V0A/fSVhV
+	1b2X+wjmXYnltjaN+dbQ78WVg0pYKHt4EZ1w00qbILygPw7dWvwiX/LfAkr1CoYWgullsKHcbrE
+	QPyjfbUKnjYjA6E46uVgv0oCjUJZ+pHkHDpi4P4Ei5auZZn5k1xX5o5qhYUM0JhQ==
+X-Received: by 2002:a05:690c:c501:b0:823:2ad3:d392 with SMTP id 00721157ae682-8310c3f452amr7810077b3.31.1786494769644;
+        Tue, 11 Aug 2026 17:32:49 -0700 (PDT)
+Received: from yogaman.home.lan ([24.99.5.57])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-830aa9aec32sm5690927b3.38.2026.08.11.17.32.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Aug 2026 17:32:48 -0700 (PDT)
+From: rahlquist <rahlquist@gmail.com>
+To: linux-hwmon@vger.kernel.org
+Cc: sergiomelas@gmail.com,
+	rahlquist <rahlquist@gmail.com>
+Subject: [PATCH] hwmon: yogafan: add Lenovo Yoga Pro 9 16IMH9
+Date: Tue, 11 Aug 2026 20:32:34 -0400
+Message-ID: <20260812003234.93924-1-rahlquist@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+The Lenovo Yoga Pro 9 16IMH9 (83DN) exposes its fan tachometers at different ACPI paths from the generic Yoga configuration. Add a model-specific two-fan configuration for the PC00.LPCB.EC0 namespace and document the corrected mapping.
 
-Pre-existing issues:
-- [High] Missing size validation in `rog_ryujin_raw_event` allows out-of-bo=
-unds memory reads.
-- [High] The `status_report_request_lock` spinlock is ignored in `rog_ryuji=
-n_raw_event`, causing data races on completion states.
---
+Tested on a Lenovo Yoga Pro 9 16IMH9 (83DN) with BIOS NKCN35WW: the patched module registers fan1_input and fan2_input, both reporting 1800 RPM at idle.
 
---- Patch [2]: [PATCH v2 2/4] hwmon: (asus_rog_ryujin) Add ROG Ryujin III s=
-upport ---
-commit b5b4a6af3fd216324c49f933284fb63343c21174
-Author: Arie Miller <renari@arimil.com>
+Signed-off-by: rahlquist <rahlquist@gmail.com>
+---
+ Documentation/hwmon/yogafan.rst |  3 ++-
+ drivers/hwmon/yogafan.c         | 17 +++++++++++++++++
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
-hwmon: (asus_rog_ryujin) Add ROG Ryujin III support
+diff --git a/Documentation/hwmon/yogafan.rst b/Documentation/hwmon/yogafan.rst
+index 6876194..cd7206b 100644
+--- a/Documentation/hwmon/yogafan.rst
++++ b/Documentation/hwmon/yogafan.rst
+@@ -89,7 +89,8 @@ immediately to ensure the user knows the fan has stopped.
+  ----------------------------------------------------------------------------------------------------
+  82N7           | Yoga 14cACN      | 0x06      | \_SB.PCI0.LPC0.EC0.FANS        |  8-bit | 100
+  80V2 / 81C3    | Yoga 710/720     | 0x06      | \_SB.PCI0.LPC0.EC0.FAN0        |  8-bit | 100
+- 83E2 / 83DN    | Yoga Pro 7/9     | 0xFE      | \_SB.PCI0.LPC0.EC0.FANS        |  8-bit | 100
++ 83E2           | Yoga Pro 7       | 0xFE      | \_SB.PCI0.LPC0.EC0.FANS        |  8-bit | 100
++ 83DN           | Yoga Pro 9 16IMH9 | 0x06/0xFE | \_SB.PC00.LPCB.EC0.FANS/FA2S  |  8-bit | 100
+  82A2 / 82A3    | Yoga Slim 7      | 0x06      | \_SB.PCI0.LPC0.EC0.FANS        |  8-bit | 100
+  81YM / 82FG    | IdeaPad 5        | 0x06      | \_SB.PCI0.LPC0.EC0.FAN0        |  8-bit | 100
+  82JW / 82JU    | Legion 5 (AMD)   | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.FANS (Fan1) | 16-bit | 1
+diff --git a/drivers/hwmon/yogafan.c b/drivers/hwmon/yogafan.c
+index 605cc92..71b5f81 100644
+--- a/drivers/hwmon/yogafan.c
++++ b/drivers/hwmon/yogafan.c
+@@ -71,6 +71,15 @@ static const struct yogafan_config legion_16bit_dual_cfg = {
+ 	.paths = { "\\_SB.PCI0.LPC0.EC0.FANS", "\\_SB.PCI0.LPC0.EC0.FA2S" }
+ };
+ 
++/* Lenovo Yoga Pro 9 16IMH9 (83DN) uses the PC00 namespace and has two
++ * 8-bit fan tachometer fields. */
++static const struct yogafan_config yoga_pro_83dn_cfg = {
++	.multiplier = 100,
++	.fan_count = 2,
++	.paths = { "\\_SB.PC00.LPCB.EC0.FANS",
++		   "\\_SB.PC00.LPCB.EC0.FA2S" }
++};
++
+ static void apply_rllag_filter(struct yoga_fan_data *data, int idx, long raw_rpm)
+ {
+ 	ktime_t now = ktime_get_boottime();
+@@ -170,6 +179,14 @@ static const struct hwmon_chip_info yoga_fan_chip_info = {
+ };
+ 
+ static const struct dmi_system_id yogafan_quirks[] = {
++	{
++		.ident = "Lenovo Yoga Pro 9 16IMH9 (83DN)",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "83DN"),
++		},
++		.driver_data = (void *)&yoga_pro_83dn_cfg,
++	},
+ 	{
+ 		.ident = "Lenovo Yoga",
+ 		.matches = {
+-- 
+2.55.0
 
-This commit adds model data, USB IDs, and report offsets for the ROG Ryujin
-III Extreme and EVA Edition variants. It also skips controller commands
-and hides unavailable controller channels for these devices.
-
-Link: https://github.com/aleksamagicka/asus_rog_ryujin-hwmon/pull/9
-
-> diff --git a/drivers/hwmon/asus_rog_ryujin.c b/drivers/hwmon/asus_rog_ryu=
-jin.c
-> index b86b87e33615d..5bc60c6036de3 100644
-> --- a/drivers/hwmon/asus_rog_ryujin.c
-> +++ b/drivers/hwmon/asus_rog_ryujin.c
-[ ... ]
-> @@ -34,6 +36,14 @@ static const struct rog_ryujin_device_info rog_ryujin_=
-ii_360_info =3D {
->  	.has_controller =3D true,
->  };
-> =20
-> +static const struct rog_ryujin_device_info rog_ryujin_iii_info =3D {
-> +	.temp_offset =3D 5,
-> +	.pump_speed_offset =3D 7,
-> +	.fan_speed_offset =3D 10,
-> +	.duty_channel =3D 1,
-> +	.has_controller =3D false,
-> +};
-> +
-
-[Severity: High]
-This is a pre-existing issue, but does rog_ryujin_raw_event() adequately
-validate the report size before using these offsets?
-
-If a malicious USB device provides a descriptor with a small max report size
-but sends a valid-looking command prefix, the driver will read offsets up to
-priv->info->fan_speed_offset without checking if the report size is
-sufficient.
-
-Could this cause an out-of-bounds read when accessing the payload fields?
-
-drivers/hwmon/asus_rog_ryujin.c:rog_ryujin_raw_event() {
-    ...
-    priv->temp_input[0] =3D data[priv->info->temp_offset] * 1000 +
-                          data[priv->info->temp_offset + 1] * 100;
-    priv->speed_input[0] =3D
-            get_unaligned_le16(data + priv->info->pump_speed_offset);
-    ...
-}
-
-[Severity: High]
-This is also a pre-existing issue, but is the status_report_request_lock
-effective if it is ignored in rog_ryujin_raw_event()?
-
-rog_ryujin_execute_cmd() acquires status_report_request_lock to protect
-reinit_completion():
-
-drivers/hwmon/asus_rog_ryujin.c:rog_ryujin_execute_cmd() {
-    ...
-    spin_lock_bh(&priv->status_report_request_lock);
-    reinit_completion(status_completion);
-    spin_unlock_bh(&priv->status_report_request_lock);
-    ...
-}
-
-However, rog_ryujin_raw_event() ignores this lock when calling complete_all=
-():
-
-drivers/hwmon/asus_rog_ryujin.c:rog_ryujin_raw_event() {
-    ...
-    if (!completion_done(&priv->cooler_status_received))
-        complete_all(&priv->cooler_status_received);
-    ...
-}
-
-Could this lead to data races on the completion states and spurious sysfs
-read/write timeouts when a USB raw event arrives concurrently with a
-driver sysfs command?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260811233943.3197=
-29-1-renari@arimil.com?part=3D2
