@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B256427F94
-	for <linux-hwmon@vger.kernel.org>; Wed, 12 Aug 2026 10:43:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 704A937DEB7
+	for <linux-hwmon@vger.kernel.org>; Wed, 12 Aug 2026 10:45:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786531394; cv=none; b=HioFJ5rwn5rX2+PoEcZcMWkV10MAeEmOuRb0zm1cn2vC8Zd1FV6Sn6PBhGJhCzBpapmlCDtCt9renMYHGhPo/UxhQQvoy7zc81DVe6kjugIzQJeMIMwWSY6MYpoz11ZDEc5sfqCk861UhYoJTr6EmtzWwbObaXpeX8dKAr3KL54=
+	t=1786531532; cv=none; b=FBLVcymL+leh9SG004So7ojvelrGeVZgdzMY0puO7MZCHEwjfPvZsnbaXaphJViFTeSigyilkypwlW9MeZc+w67QUplLSikgrXAJVkVd7JzZ5Fe49HJE9q8BoGXMhdWXNUFNX1660WfGx5oPYX4uQzV7ulH0QLyVATELdmeCaK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786531394; c=relaxed/simple;
-	bh=4bVcXwR7onvnmwK3mH3dkLorkvIw5DvQvMp2jFsofo8=;
+	s=arc-20240116; t=1786531532; c=relaxed/simple;
+	bh=EDp1yG5V2RmIXfs81sn+yBSuq/3XXEUq1oLEhv7sKdU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gKvX5NgpX/E2cTovXOg7qipCFCAVmA+bOvpBYg9TsrARG3zqGJf51sUX1CcSgXxSX7f5sLeu2VJJQ+LUySkcNJQVmfHKTIlZUFmOYShgQap/v8ANv0/6FEl4uVCjf3ku0Nfi/VfOMuJEF357xmyF2upbO8bZUp2qSfxo6R02b10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aXNh05zr; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=TK8GyEn9AfkL+l1Ln3jy8pdm7rDGpr/SdD3v4dtVkzTJmH8lSbtwD+MsC/hAr+GZPUcIIUw7Awy02DTyQvfeKdp/4FEmVh/v5a7ERf0xHcA+OBe8eg9CBV9GONPXT8kAGUAHvqJx6QYxnf2mxK4RiuDs3wMYc3fwdMv3oL5q23k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ivk7n05v; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aXNh05zr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA98D1F00A3A;
-	Wed, 12 Aug 2026 10:43:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ivk7n05v"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2119A1F00A3D;
+	Wed, 12 Aug 2026 10:45:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786531393;
-	bh=xKKVx7nrhftX8WxK5NUUqLPvei5hW9cZBiO3lEjlpls=;
+	s=k20260515; t=1786531531;
+	bh=/c7U363rvrnwUKGwq/osQCLCAEKTYjk8CAxpduBm0D8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=aXNh05zr6ulDh1T1KXTudodn3C/KyNW/hRUueGySXexTjM4raHz1HKhvIQ4sqnfNZ
-	 4mPImnkdTxn3T6NEhWs5ctFyoqw9pRhGCc7biQTZDdq1ZtxWKCV0s7qWc12F8MnJuX
-	 ne7bUCQ67tvw8URVBxW9eGz6nrWPTH+61g98u0sJcgOGTp/g5wU+a8QaATypbt+MO9
-	 tBsC9KxboEd+rMYinZdUEbBcFwF1M0kYj5lIkUc3N0d1eMEookEMv8djDFfDOfMLzY
-	 mjfAIJINufz44YUIr83wHEv536VqsWNI6KX286V3fj/A1tIz0SCPVQhiq4r4ltFM4+
-	 f5cYMsXZL27Zg==
+	b=ivk7n05vjbPvYiLhyehTnWmPKa3rxI65n1fztS/3NiqLlNz/srFFu+sqJLOYbg62Y
+	 lLB0dCg3sOWiAOYSktdmw0w88575yDq+k276pQOO5l0X41aFvdcgjZnl9mBpBt+pAK
+	 7vAzW/Ts4GRYVyODxSO/x8Uwvmct9rGvVTlTqXPIpkuPOMugnICLzxcdUIKWq2olWC
+	 KwpY21m2iLvaF5tBdA25UBSHQOBWY4jXBJXmijx7u2E42wZ3ZVinOkv0cSVFgicTtA
+	 jdYz7MayYkEkH0RoDsZLFDD7WSPZp4/k4QcU3lYjUynSlKH2H+232vvg1oG8FfkSFA
+	 QFIGnijnDXcBQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 3/3] hwmon: (asus_rog_ryujin) Add ROG Ryujin III
- White Edition
+Subject: Re: [PATCH v3 1/3] hwmon: (asus_rog_ryujin) Add per-device
+ configuration
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Arie Miller" <renari@arimil.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260812103532.395049-4-renari@arimil.com>
+In-Reply-To: <20260812103532.395049-2-renari@arimil.com>
 References: <20260812103532.395049-1-renari@arimil.com>
- <20260812103532.395049-4-renari@arimil.com>
+ <20260812103532.395049-2-renari@arimil.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 12 Aug 2026 10:43:12 +0000
-Message-Id: <20260812104312.EA98D1F00A3A@smtp.kernel.org>
+Date: Wed, 12 Aug 2026 10:45:30 +0000
+Message-Id: <20260812104531.2119A1F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -49,62 +49,84 @@ Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Missing bounds check on incoming HID report data in raw_event call=
-back, leading to out-of-bounds read.
+- [High] The HID hardware and input streams are started before driver synch=
+ronization primitives are initialized, creating a race condition that cause=
+s a NULL pointer dereference on device plug.
 --
 
---- Patch [3]: [PATCH v3 3/3] hwmon: (asus_rog_ryujin) Add ROG Ryujin III W=
-hite Edition ---
-commit c24d3645c70fad1763a76ddee1293e1040bce990
-Author: Will Smith <github@notthatwillsmith.com>
-Subject: hwmon: (asus_rog_ryujin) Add ROG Ryujin III White Edition
+--- Patch [1]: [PATCH v3 1/3] hwmon: (asus_rog_ryujin) Add per-device confi=
+guration ---
+commit 5da50001b696b978e4b3741acfab6782c708ed93
+Author: Arie Miller <renari@arimil.com>
 
-This commit adds support for the ROG Ryujin III White Edition cooler by
-adding its USB product ID to the asus_rog_ryujin driver. It utilizes the
-same report layout as the other Ryujin III variants.
+hwmon: (asus_rog_ryujin) Add per-device configuration
 
-Link: https://github.com/aleksamagicka/asus_rog_ryujin-hwmon/pull/10
+Move model-specific report offsets and capabilities into a device
+information structure. This prepares the driver for coolers which use
+a different report layout or do not include the external fan controller.
+
+Link: https://lore.kernel.org/r/5a817284-a9f4-48b2-9f0f-802c5dc6963c@roeck-=
+us.net
 
 > diff --git a/drivers/hwmon/asus_rog_ryujin.c b/drivers/hwmon/asus_rog_ryu=
 jin.c
-> index 79e5b6d6dae0a..702edb8313945 100644
+> index 10a1f5aca988d..80563ce38519d 100644
 > --- a/drivers/hwmon/asus_rog_ryujin.c
 > +++ b/drivers/hwmon/asus_rog_ryujin.c
+
 [ ... ]
-> @@ -590,6 +591,8 @@ static const struct hid_device_id rog_ryujin_table[] =
-=3D {
->  	  .driver_data =3D (kernel_ulong_t)&rog_ryujin_iii_info },
->  	{ HID_USB_DEVICE(USB_VENDOR_ID_ASUS_ROG, USB_PRODUCT_ID_RYUJIN_III_EVA),
->  	  .driver_data =3D (kernel_ulong_t)&rog_ryujin_iii_info },
-> +	{ HID_USB_DEVICE(USB_VENDOR_ID_ASUS_ROG, USB_PRODUCT_ID_RYUJIN_III_WHIT=
-E),
-> +	  .driver_data =3D (kernel_ulong_t)&rog_ryujin_iii_info },
+
+> @@ -471,11 +495,15 @@ static int rog_ryujin_probe(struct hid_device *hdev=
+, const struct hid_device_id
+>  	struct rog_ryujin_data *priv;
+>  	int ret;
+> =20
+> +	if (!id->driver_data)
+> +		return -EINVAL;
+> +
+>  	priv =3D devm_kzalloc(&hdev->dev, sizeof(*priv), GFP_KERNEL);
+>  	if (!priv)
+>  		return -ENOMEM;
+> =20
+>  	priv->hdev =3D hdev;
+> +	priv->info =3D (const struct rog_ryujin_device_info *)id->driver_data;
+>  	hid_set_drvdata(hdev, priv);
 
 [Severity: High]
-This is a pre-existing issue, but does adding this new device expose it to =
-an
-out-of-bounds read in rog_ryujin_raw_event()?
+This is a pre-existing issue, but can the initialization order in this
+probe function cause a race condition leading to a NULL pointer dereference?
 
-If the new device sends a short report or has a short report descriptor,
-rog_ryujin_raw_event() accesses data buffers without checking the size firs=
-t:
+Further down in rog_ryujin_probe(), the driver starts the hardware and opens
+the stream before initializing the completion structures:
+
+        ret =3D hid_hw_start(hdev, HID_CONNECT_HIDRAW);
+        ...
+        ret =3D hid_hw_open(hdev);
+        ...
+        init_completion(&priv->cooler_status_received);
+
+If the device sends a status report immediately after hid_hw_open() is call=
+ed,
+rog_ryujin_raw_event() will be invoked to process it. This triggers an atte=
+mpt
+to use the uninitialized completion structure:
 
 drivers/hwmon/asus_rog_ryujin.c:rog_ryujin_raw_event() {
-	struct rog_ryujin_data *priv =3D hid_get_drvdata(hdev);
-
-	if (data[0] !=3D RYUJIN_CMD_PREFIX)
-		return 0;
-...
+        ...
+        if (!completion_done(&priv->cooler_status_received))
+            complete_all(&priv->cooler_status_received);
+        ...
 }
 
-Would a malicious USB device sending a short report trigger a slab
-out-of-bounds read here, or when reading larger offsets like
-priv->info->fan_speed_offset? Should there be a size validation check
-added to the raw event handler?
+Because the priv structure was allocated with devm_kzalloc(), the
+swait_queue_head inside the completion is initialized to all zeroes.
 
->  	{ }
->  };
+When complete_all() iterates over the zeroed wait queue, its task_list.next
+pointer is NULL, which would cause an immediate kernel panic.
+
+Should the init_completion() calls be moved up before hid_hw_start() to
+ensure they are ready before any reports can arrive?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260812103532.3950=
-49-1-renari@arimil.com?part=3D3
+49-1-renari@arimil.com?part=3D1
