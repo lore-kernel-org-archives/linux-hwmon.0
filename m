@@ -1,389 +1,388 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05339348465;
-	Thu, 13 Aug 2026 21:45:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C71EF3BBA0E;
+	Thu, 13 Aug 2026 21:45:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786657502; cv=none; b=aQ4JZ1DKv1q8RADkH5u6bM86VebiP3IjpCn5QuJLTC8AtnoKiua4oQJ/YdnzrdXq4+aXGk9rm6xkaiM/Jj3SzvJKH2Z49JPF+HDvSHfE77uMBRu4APTZt6fSfHrhRmSJQLuTFzJG2OXtVY5aifLcVeeUD/FmzvJvZ2euX+6lG/o=
+	t=1786657542; cv=none; b=le8bmx0h4fEA0FV2hDadHzgQYkF5+sHNjykvqTuVRbolmZNa+dLkTnWAq+epAXw8niqMoFjloRetf263j067SgZANoKIstSJ/D9vRJ7hrxiZ2zAHS/IumskkuEct+t5D3/AOH+cEi02uZh6ojd5ULzv8fvUwvY1JTxvk+RuiI1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786657502; c=relaxed/simple;
-	bh=b2ZAl0uw1NT3trb3hE8BIRgQwCOXY62QxTZE44ZlkhA=;
+	s=arc-20240116; t=1786657542; c=relaxed/simple;
+	bh=lY/bVn492D3RqqHZ3tPQLdcVgvCJHlazPiruj+HWdis=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=eleU3TOmygzCvCP1Npcr8So43hoEIQk1JqvhiRGoLFcgNcIYcH0+5UqoG2mo8cXJQGoibppycUM4XItSrHLGwPExOgmWSxMXbndtsGilYMelbaEy1ouVYlxykWKdlDR/TQZVmSleluyS/dGOmTXh46KqtmT7tAJfiqtdYJaVOxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G+HGgw8m; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=ttit7GZ3HNZOefZMf9bHrQezx+JFqAWO4tM9gDAuKxabuDHYXoAtSIsjQIHybGhJAUnH2w+vfvYjH6JuRIQI/nxqqPCvwEOsNgon35+u6ceeIPNghhC8XZxOhFKyy0407wgrbIEGfeocQ82Fm2tEwkFydxRtG68btjVLaR7YNos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EfkdSumG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G+HGgw8m"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F2C11F000E9;
-	Thu, 13 Aug 2026 21:45:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EfkdSumG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 255691F00A3A;
+	Thu, 13 Aug 2026 21:45:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786657500;
-	bh=CaXGkDqU+8e/6l7RMHCr0X2fk9dKb0zXwBX6I2W5o0o=;
+	s=k20260515; t=1786657540;
+	bh=s5dMdEhY10KKx3cwEMua/BmTvk8uWImvb7VWa547TlM=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=G+HGgw8miVdRQnQqcMy1zJq2fUxOsZTWRZfLchpFtCTUvLUSdyV1pp2+5FL+rGRVU
-	 BSov82+WUyieeUPcVWzMpkfQ/Ie1qd1R5wamPfljfZPgWl1+NKtvsOLn7OaZF6A3yR
-	 Rj9jLNutyMiuCOwUZfZAzkc0Cw8aDivkn3Zy+WmNhUf3a1stFTcpGl2jT+C4uNVo+P
-	 XKlViqDKtOa3vjCAplmKE3wMaAlF0ulDhyYyG7ETBaGFUCXhK8oYbhf4r8jLWceAA/
-	 EDb+kLI4nL1lwbVq4yLhbLqm2x0HSNsDYo+1uL7olqcL2T4GSdpG+FVJyKpsKjNgUX
-	 abDFxcKASTCrg==
+	b=EfkdSumGQqXfNK/W1lfpIs2cNpFq5UGYJ4TnFk9NyZKpYruMPFs+Bg9YIN5F4JGrQ
+	 r7Mc3mVPCWH2cq4TNFOvWDJYcAPP04UCz9cadv7kxUWamUhZYaih+/D4HRmVampiqL
+	 Xg3spHnSnDKj07ipuoulluRMeS8aNT5TkMHPiVTrPh5+BK2M1RT8gEnh1XT6lLtPhW
+	 7TQwtsQffFfQtjN/a21RQ/5VJqi65GiJpEfZRFoZ2U+m5EqBy75VzP8CzkkIxPyKI2
+	 4H092bStzuAPVhshAnYQ+01rGvsZytb/XJd2OvsN98L235aU/XM38UgxFDsDTgUyE6
+	 JdF9bQMnAMdEA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 2/7] mfd: add NXP MC33978/MC34978 core driver
+Subject: Re: [PATCH v7 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap
+ Controller
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Oleksij Rempel" <o.rempel@pengutronix.de>
-Cc: conor+dt@kernel.org, robh@kernel.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <20260309134920.1918294-3-o.rempel@pengutronix.de>
-References: <20260309134920.1918294-3-o.rempel@pengutronix.de>
+To: =?utf-8?b?TnVubyBTw6EgdmlhIEI0IFJlbGF5?= <devnull+nuno.sa.analog.com@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, conor+dt@kernel.org, robh@kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20260314-ltc4283-support-v7-2-1cda48e93802@analog.com>
+References: <20260314-ltc4283-support-v7-2-1cda48e93802@analog.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 13 Aug 2026 21:44:56 +0000
-Message-Id: <20260813214500.8F2C11F000E9@smtp.kernel.org>
+Date: Thu, 13 Aug 2026 21:45:39 +0000
+Message-Id: <20260813214540.255691F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 13 potential issue=
-(s) to consider:
-- [High] Out-of-bounds stack read and big-endian logic bug due to casting `=
-u32` pointer to `unsigned long *`.
-- [High] Missing check for valid virtual IRQ before calling `handle_nested_=
-irq()` can cause a NULL pointer dereference.
-- [High] Missing `cancel_work_sync()` for `event_work` in the driver cleanu=
-p path leads to a Use-After-Free on unbind or probe failure.
-- [High] An SPI communication failure causes an infinite loop in the event =
-handling thread, leading to a CPU soft lockup.
-- [High] Setting IRQ_DOMAIN_FLAG_HIERARCHY breaks MFD child IRQ resolution,=
- causing the hwmon driver to receive an invalid IRQ.
-- [High] Missing memory barriers in the lockless event scheduling Dekker pa=
-ttern can cause lost events.
-- [High] The background harvesting mechanism races with the IRQ thread, pot=
-entially causing spurious IRQ_NONE returns on a shared interrupt line.
-- [Medium] Passing complex pointers (cell arrays) directly via match table =
-`.data` fields violates MFD subsystem guidelines.
-- [Medium] Using `PLATFORM_DEVID_NONE` instead of `PLATFORM_DEVID_AUTO` bre=
-aks multi-instance support and causes sysfs collisions.
-- [Medium] Data race on IRQ configuration fields between the event processi=
-ng thread and IRQ configuration callbacks.
-- [Medium] Missing bounds check on `hwirq` in `mc33978_irq_domain_alloc` le=
-ads to undefined behavior during bit shifts.
-- [Low] Incorrect naming of the private data structure and instance variabl=
-e.
-- [Low] Non-standard commit message prefix and capitalization.
+Thank you for your contribution! Sashiko AI review found 8 potential issue(=
+s) to consider:
+- [High] The result of `clamp_val()` is ignored, leaving user inputs unclam=
+ped and bypassing bounds checks.
+- [High] The `VPWR`, `ADIO12`, and `ADIO34` channels read from and incorrec=
+tly clear the alarm logs of the unrelated `DRAIN` channel.
+- [High] Fatal logic error in property matching aborts device probe when a =
+valid `adi,overcurrent-retries` or `adi,fet-bad-retries` property is provid=
+ed.
+- [Medium] The logic for disabling the redundant ADC2 channel based on the =
+`adi,vpower-drns-enable` property is swapped, disabling the actively monito=
+red channel instead.
+- [Medium] Calculation of `st->power_max` in `ltc4283_set_max_limits()` ove=
+rflows 32-bit arithmetic for small sense resistors.
+- [Medium] Software read-modify-write on volatile hardware fault and alarm =
+registers can silently drop concurrently asserted hardware events.
+- [Medium] Integer overflow when multiplying user input by `MILLI` prior to=
+ bounds clamping leads to unintended limit inversion.
+- [Low] The `%*ph` format specifier is incorrectly used to print an array o=
+f 32-bit integers, yielding an unintelligible error message.
 --
 
---- Patch [2]: [PATCH v3 2/7] mfd: add NXP MC33978/MC34978 core driver ---
-commit ec976efb2461e1504417bd0ba87b3eb7ebe2cc78
-Author: Oleksij Rempel <o.rempel@pengutronix.de>
+--- Patch [2]: [PATCH v7 2/3] hwmon: ltc4283: Add support for the LTC4283 S=
+wap Controller ---
+commit 636c5e8a9699ab80f86857069a188d6f2e25172d
+Author: Nuno S=C3=A1 <nuno.sa@analog.com>
+Date:   Sat Mar 14 10:52:20 2026 +0000
 
-mfd: add NXP MC33978/MC34978 core driver
+    hwmon: ltc4283: Add support for the LTC4283 Swap Controller
+   =20
+    This commit adds support for the Analog Devices LTC4283 Hot Swap Contro=
+ller.
+    It features an I2C interface and ADC for monitoring board current, volt=
+age,
+    power, energy, and fault status. The driver implements hardware monitor=
+ing
+    interfaces and configures the chip properties based on device tree inpu=
+ts.
 
-This commit adds the core MFD driver for the NXP MC33978 and MC34978
-Multiple Switch Detection Interfaces. It handles SPI communications with
-a custom regmap bus, power sequencing, and interrupt demultiplexing. It
-also implements inline status harvesting from SPI responses to detect
-events.
-
-> mfd: add NXP MC33978/MC34978 core driver
-
-[Severity: Low]
-Does this commit subject follow the subsystem guidelines? The MFD subsystem
-expects the prefix format mfd: <Driver>: <Capitalized description>.
-
-> diff --git a/drivers/mfd/mc33978.c b/drivers/mfd/mc33978.c
+> diff --git a/drivers/hwmon/ltc4283.c b/drivers/hwmon/ltc4283.c
 > new file mode 100644
+> index 0000000000000..2066ff5d568fb
 > --- /dev/null
-> +++ b/drivers/mfd/mc33978.c
+> +++ b/drivers/hwmon/ltc4283.c
 [ ... ]
-> +struct mc33978_mfd_priv {
-> +	struct spi_device *spi;
-> +	struct regmap *map;
-
-[Severity: Low]
-Does this struct name violate the subsystem naming conventions? The subsyst=
-em
-rules state that private data structures should be named after the device,
-avoiding mfd or priv, and the instance variable should be named ddata.
-
-[ ... ]
-> +static int mc33978_irq_domain_alloc(struct irq_domain *domain,
-> +				    unsigned int virq,
-> +				    unsigned int nr_irqs, void *arg)
+> +static int ltc4283_read_alarm(struct ltc4283_hwmon *st, u32 reg,
+> +			      u32 mask, long *val)
 > +{
-> +	struct mc33978_mfd_priv *mc =3D domain->host_data;
-> +	struct irq_fwspec *fwspec =3D arg;
-> +	irq_hw_number_t hwirq;
-> +	int i;
+[ ... ]
+> +	*val =3D !!(alarm & mask);
 > +
-> +	if (fwspec->param_count < 1)
-> +		return -EINVAL;
-> +
-> +	hwirq =3D fwspec->param[0];
-> +
-> +	for (i =3D 0; i < nr_irqs; i++) {
+> +	/* If not status/fault logs, clear the alarm after reading it. */
+> +	if (reg !=3D LTC4283_FAULT_STATUS && reg !=3D LTC4283_FAULT_LOG)
+> +		return regmap_clear_bits(st->map, reg, mask);
 
 [Severity: Medium]
-Could this hwirq value exceed the valid range and cause undefined behavior?
+Does this read-modify-write operation on volatile hardware fault and alarm=
+=20
+registers risk silently dropping concurrently asserted hardware events?
 
-There is no bounds check on hwirq here to ensure it falls within 0 to 22.
-If a malformed device tree supplies an out-of-bounds hwirq, subsequent
-calls to IRQ chip callbacks will execute a bit shift exceeding the variable
-width.
+The regmap_clear_bits function reads the current state and writes it back=20
+with target bits cleared. For Write-0-to-Clear volatile registers, writing =
+a=20
+0 clears the bit. If a new hardware fault occurs between the read and write=
+,=20
+the software will write a 0 to the newly asserted bit, inadvertently cleari=
+ng=20
+it before it is processed. Should a direct write of the inverted mask be=20
+used instead?
 
-[ ... ]
-> +static bool mc33978_handle_pin_changes(struct mc33978_mfd_priv *mc,
-> +				       unsigned int pin_state)
-> +{
-> +	u32 fired_pins =3D 0;
-> +	u32 changed_pins;
-> +	int i;
-> +
-> +	changed_pins =3D pin_state ^ mc->cached_pin_state;
-> +	if (!changed_pins)
-> +		return false;
-> +
-> +	mc->cached_pin_state =3D pin_state;
-> +	changed_pins &=3D mc->cached_pin_mask;
-
-[Severity: Medium]
-Can this read of mc->cached_pin_mask race with concurrent updates?
-
-The fields mc->cached_pin_mask, mc->irq_rise, and mc->irq_fall are written
-inside IRQ chip callbacks while protected by mc->irq_lock.
-
-However, they are read here under mc->event_lock without holding
-irq_lock. Concurrent IRQ configurations on another CPU could cause data
-races, potentially leading the driver to misroute or drop interrupts.
-
-> +
-> +	if (!changed_pins)
-> +		return false;
-> +
-> +	fired_pins |=3D (changed_pins & pin_state) & mc->irq_rise;
-> +	fired_pins |=3D (changed_pins & ~pin_state) & mc->irq_fall;
-> +
-> +	for_each_set_bit(i, (unsigned long *)&fired_pins, MC33978_NUM_PINS) {
-
-[Severity: High]
-Can this cast cause an out-of-bounds stack read and a big-endian logic bug?
-
-The for_each_set_bit() macro expects an 8-byte aligned unsigned long pointe=
-r,
-but it is passed a pointer to a 4-byte u32 stack variable (fired_pins).
-
-On big-endian 64-bit systems, the 4-byte fired_pins becomes the most
-significant 32 bits of the read 64-bit word, while the least significant
-32 bits contain uninitialized stack memory. The loop will exclusively itera=
-te
-over the garbage stack bits instead of the actual fired_pins value.
-
-> +		int virq =3D irq_find_mapping(mc->domain, i);
-> +
-> +		handle_nested_irq(virq);
-
-[Severity: High]
-Does this unconditionally pass a potentially invalid virq to handle_nested_=
-irq()?
-
-Since mc->cached_pin_mask is read locklessly under event_lock, a concurrent
-call to free_irq() can dispose of the mapping right after the bit is checke=
-d.
-irq_find_mapping() will then return 0.
-
-Passing 0 to handle_nested_irq() resolves IRQ 0 to a null irq_desc and
-crashes when acquiring desc->lock. A check for virq > 0 is required here.
-
-> +	}
-> +
-> +	return true;
-> +}
-[ ... ]
-> +static bool mc33978_process_single_event(struct mc33978_mfd_priv *mc)
-> +{
-> +	unsigned int pin_state;
-> +	bool handled =3D false;
-> +	u8 hw_flags;
-> +	int ret;
-> +
-> +	ret =3D regmap_read(mc->map, MC33978_REG_READ_IN, &pin_state);
-> +	if (ret)
-> +		return false;
-
-[Severity: High]
-Will an SPI communication failure cause an infinite loop here?
-
-If regmap_read() fails, the function immediately returns false before
-executing the atomic_xchg(&mc->harvested_flags, 0).
-
-Because harvested_flags is never cleared on this error path, the
-while (atomic_read(&mc->harvested_flags) !=3D 0) condition in
-mc33978_handle_events() remains true endlessly, hanging the thread.
-
-[ ... ]
-> +static bool mc33978_handle_events(struct mc33978_mfd_priv *mc)
-> +{
-> +	bool handled =3D false;
-> +
-> +	guard(mutex)(&mc->event_lock);
-> +
-> +	do {
-> +		atomic_set(&mc->is_handling, 1);
-> +
-> +		if (mc33978_process_single_event(mc))
-> +			handled =3D true;
-> +
-> +		atomic_set(&mc->is_handling, 0);
-> +
-> +	} while (atomic_read(&mc->harvested_flags) !=3D 0);
-
-[Severity: High]
-Are memory barriers needed here to prevent lost events?
-
-The lockless communication between the thread and the SPI status harvester
-relies on a Dekker-like pattern.
-
-Void RMW atomic operations (atomic_or, atomic_set) do not imply full
-memory barriers. Weakly-ordered CPUs can reorder the loads and stores.
-
-The handler might evaluate atomic_read(&mc->harvested_flags) before its wri=
-te
-to is_handling becomes visible, causing both threads to assume the other
-will process the event. smp_mb() or smp_mb__after_atomic() are required.
-
-> +
-> +	return handled;
-> +}
-> +
-> +static irqreturn_t mc33978_irq_thread(int irq, void *data)
-> +{
-> +	return mc33978_handle_events(data) ? IRQ_HANDLED : IRQ_NONE;
-
-[Severity: High]
-Can the background harvesting mechanism race with this IRQ thread?
-
-If an interrupt is physically asserted and the IRQ thread is scheduled, but=
- a
-concurrent SPI transaction runs first, mc33978_harvest_status() will capture
-the event and schedule event_work.
-
-The workqueue processes the event and clears it. When the IRQ thread execut=
-es,
-it finds no events to process and returns IRQ_NONE. Over time, enough
-spurious IRQ_NONE returns on an IRQF_SHARED line will trigger the kernel to
-shut down the IRQ line entirely.
-
-> +}
-> +
-> +static int mc33978_irq_init(struct mc33978_mfd_priv *mc)
-> +{
-> +	struct device *dev =3D &mc->spi->dev;
-> +	int ret;
-> +
-> +	mutex_init(&mc->irq_lock);
-> +
-> +	/*
-> +	 * Create IRQ domain with 23 interrupts:
-> +	 * - hwirq 0-21: Pin change interrupts (22 pins)
-> +	 * - hwirq 22: Fault interrupt (for hwmon driver)
-> +	 */
-> +	mc->domain =3D irq_domain_add_linear(dev->of_node, MC33978_NUM_PINS + 1,
-> +					   &mc33978_irq_domain_ops, mc);
-> +	if (!mc->domain)
-> +		return dev_err_probe(dev, -ENOMEM, "Failed to create IRQ domain\n");
-> +
-> +	mc->domain->flags |=3D IRQ_DOMAIN_FLAG_HIERARCHY;
-
-[Severity: High]
-Does setting this flag break MFD child IRQ resolution?
-
-The MFD core relies on irq_create_mapping() to translate the mfd_cell's
-DEFINE_RES_IRQ(MC33978_HWIRQ_FAULT) resource to a Linux virq.
-
-However, irq_create_mapping() explicitly aborts and returns 0 when called on
-an IRQ domain bearing the IRQ_DOMAIN_FLAG_HIERARCHY flag. As a result, the
-child device is instantiated with IRQ 0 and will never receive fault
-interrupts.
-
-[ ... ]
-> +static void mc33978_harvest_status(struct mc33978_mfd_priv *mc, u8 statu=
-s)
-> +{
-> +	if (!status)
-> +		return;
-> +
-> +	atomic_or(status, &mc->harvested_flags);
-> +
-> +	if (!atomic_read(&mc->is_handling))
-
-[Severity: High]
-Does this Dekker-like pattern require memory barriers?
-
-As mentioned above in mc33978_handle_events(), weakly-ordered CPUs can reor=
-der
-the loads and stores. The harvester might evaluate
-!atomic_read(&mc->is_handling) before its store to harvested_flags becomes
-visible, resulting in lost events.
-
-[ ... ]
-> +static int mc33978_probe(struct spi_device *spi)
-> +{
-> +	const struct mc33978_data *match_data;
-> +	struct device *dev =3D &spi->dev;
-> +	struct mc33978_mfd_priv *mc;
-> +	int ret;
-[ ... ]
-> +	mutex_init(&mc->event_lock);
-> +	INIT_WORK(&mc->event_work, mc33978_event_work);
-
-[Severity: High]
-Is event_work properly cancelled during driver cleanup?
-
-The core driver uses devres to manage the mc struct lifetime but fails to
-register a devres action to cancel mc->event_work.
-
-If a child device triggers a background SPI harvest during its devres teard=
-own
-phase, the workqueue is scheduled. The parent driver's devres teardown then
-completes and frees the mc structure, leading to a use-after-free when the
-workqueue executes.
-
-[ ... ]
-> +	ret =3D devm_mfd_add_devices(dev, PLATFORM_DEVID_NONE,
-> +				   match_data->cells, match_data->num_cells,
-> +				   NULL, 0, mc->domain);
-
-[Severity: Medium]
-Will using PLATFORM_DEVID_NONE break multi-instance support?
-
-MFD guidelines dictate preferring PLATFORM_DEVID_AUTO. Using
-PLATFORM_DEVID_NONE prevents the MFD core from appending instance indices to
-the child device names. This causes identical names on the platform bus for
-multiple parent devices, leading to driver load failures.
-
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to add MFD child devices\n");
 > +
 > +	return 0;
 > +}
 > +
-> +static const struct of_device_id mc33978_of_match[] =3D {
-> +	{ .compatible =3D "nxp,mc33978", .data =3D &mc33978_match_data },
+> +static int ltc4283_read_in_alarm(struct ltc4283_hwmon *st, u32 channel,
+> +				 bool max_alm, long *val)
+> +{
+> +	if (channel =3D=3D LTC4283_VPWR)
+
+[Severity: High]
+Can this result in false alarm readings and silently erased DRAIN fault log=
+s?
+
+This compares the channel ID to a register address macro (LTC4283_VPWR,=20
+which is 0x44) instead of the channel enum LTC4283_CHAN_VPWR, so it will=20
+always fail.
+
+> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_1,
+> +					  BIT(2 + max_alm), val);
+[ ... ]
+> +	if (channel >=3D LTC4283_CHAN_ADIN12 && channel <=3D LTC4283_CHAN_ADIN3=
+4) {
+> +		u32 bit =3D (channel - LTC4283_CHAN_ADIN12) * 2;
+> +
+> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_5,
+> +					  BIT(7 - bit - !max_alm), val);
+> +	}
+
+[Severity: High]
+Does this bounds check omit the LTC4283_CHAN_ADIO12 and LTC4283_CHAN_ADIO34=
+=20
+differential channels?=20
+
+> +
+> +	if (channel =3D=3D LTC4283_CHAN_DRNS)
+> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_4,
+> +					  BIT(6 + max_alm), val);
+> +
+> +	return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_4, BIT(4 + max_alm),
+> +				  val);
+> +}
+
+[Severity: High]
+Due to the above two issues, queries for VPWR, ADIO12, and ADIO34 will=20
+bypass their intended logic and execute this fallback. The fallback targets=
+=20
+and clears LTC4283_ADC_ALM_LOG_4 (the DRAIN alarm log). This logic error=20
+appears to erase critical DRAIN fault logs when reading unrelated channels.
+
+[ ... ]
+> +static int ltc4283_write_power_byte(const struct ltc4283_hwmon *st, u32 =
+reg,
+> +				    long val)
+> +{
+> +	u64 temp =3D (u64)LTC4283_ADC1_FS_uV * LTC4283_ADC2_FS_mV * DECA * MILL=
+I;
+> +	u32 __raw;
+> +
+> +	clamp_val(val, 0, st->power_max);
+
+[Severity: High]
+Is the result of clamp_val ignored here?
+
+The macro evaluates to the clamped value but doesn't modify the argument in=
+=20
+place. Without assigning the return value back to val, out-of-bounds user=20
+inputs will bypass the bounds check. This can cause subsequent arithmetic t=
+o=20
+overflow or produce large values that are silently truncated when written t=
+o=20
+the 8-bit registers.
+
+> +	__raw =3D DIV64_U64_ROUND_CLOSEST(val * BIT_ULL(8) * st->rsense, temp);
+> +
+> +	return regmap_write(st->map, reg, __raw);
+> +}
+[ ... ]
+> +static int ltc4283_reset_power_hist(struct ltc4283_hwmon *st)
+> +{
+[ ... ]
+> +	/* Clear possible power faults. */
+> +	return regmap_clear_bits(st->map, LTC4283_FAULT_LOG,
+> +				 LTC4283_PWR_FAIL_FAULT_MASK | LTC4283_PGI_FAULT_MASK);
+> +}
 
 [Severity: Medium]
-Is passing a complex pointer directly via the match table .data field safe?
+Similar to ltc4283_read_alarm, does this regmap_clear_bits call risk a=20
+read-modify-write operation erasing newly asserted power fault events?
 
-The MFD subsystem guidelines forbid passing complex pointers (such as
-structure wrapping mfd_cell arrays) through the .data field of of_device_id
-or spi_device_id tables.
+[ ... ]
+> +static int ltc4283_reset_in_hist(struct ltc4283_hwmon *st, u32 channel)
+> +{
+[ ... ]
+> +	/*
+> +	 * Make sure to clear possible under/over voltage faults. Otherwise the
+> +	 * chip won't latch on again.
+> +	 */
+> +	if (channel =3D=3D LTC4283_CHAN_VIN)
+> +		return regmap_clear_bits(st->map, LTC4283_FAULT_LOG,
+> +					 LTC4283_OV_FAULT_MASK | LTC4283_UV_FAULT_MASK);
+[ ... ]
+> +	/* Then, let's also clear possible fet faults. Same as above. */
+> +	return regmap_clear_bits(st->map, LTC4283_FAULT_LOG,
+> +				 LTC4283_FET_BAD_FAULT_MASK | LTC4283_FET_SHORT_FAULT_MASK);
+> +}
 
-To avoid memory safety hazards and initialization ordering races, the
-driver should use an enum or integer ID to select the static array in the
-probe function instead.
+[Severity: Medium]
+Are these regmap_clear_bits calls also at risk of erasing newly asserted=20
+voltage or FET fault events via read-modify-write?
 
-> +	{ .compatible =3D "nxp,mc34978", .data =3D &mc34978_match_data },
-> +	{ }
-> +};
+[ ... ]
+> +static int ltc4283_write_minmax(struct ltc4283_hwmon *st, long val,
+> +				u32 channel, bool is_max)
+> +{
+[ ... ]
+> +	if (is_max) {
+> +		reg =3D LTC4283_ADC_2_MAX_TH_DIFF(channel - LTC4283_CHAN_ADIN12);
+> +		return ltc4283_write_in_byte(st, reg, LTC4283_ADC1_FS_uV,
+> +					     val * MILLI);
+> +	}
+> +
+> +	reg =3D LTC4283_ADC_2_MIN_TH_DIFF(channel - LTC4283_CHAN_ADIN12);
+> +	return ltc4283_write_in_byte(st, reg, LTC4283_ADC1_FS_uV, val * MILLI);
+> +}
+
+[Severity: Medium]
+Could this multiplication by MILLI cause a signed 32-bit integer overflow?
+
+If a highly permissive positive threshold is passed, val * MILLI can wrap=20
+around the signed 32-bit integer boundary and become negative. A downstream=
+=20
+clamp_val() will then catch this negative value and clamp it to 0, which=20
+would inadvertently set the threshold to 0 and trigger persistent false=20
+hardware alarms.
+
+[ ... ]
+> +static int ltc4283_write_curr_byte(const struct ltc4283_hwmon *st,
+> +				   u32 reg, long val)
+> +{
+> +	u32 temp =3D LTC4283_ADC1_FS_uV * DECA * MILLI;
+> +	u32 reg_val, isense_max;
+> +
+> +	isense_max =3D DIV_ROUND_CLOSEST(st->vsense_max * MICRO * DECA, st->rse=
+nse);
+> +	clamp_val(val, 0, isense_max);
+
+[Severity: High]
+Like in ltc4283_write_power_byte, the returned value of clamp_val is not=20
+assigned back to val, leaving user inputs unclamped and bypassing bounds=20
+checks.
+
+> +	reg_val =3D DIV_ROUND_CLOSEST_ULL(val * BIT_ULL(8) * st->rsense, temp);
+> +
+> +	return regmap_write(st->map, reg, reg_val);
+> +}
+[ ... ]
+> +static int ltc4283_set_max_limits(struct ltc4283_hwmon *st, struct devic=
+e *dev)
+> +{
+> +	u32 temp =3D st->vsense_max * DECA * MICRO;
+> +	int ret;
+> +
+> +	ret =3D ltc4283_write_in_byte(st, LTC4283_SENSE_MAX_TH, LTC4283_ADC1_FS=
+_uV,
+> +				    st->vsense_max * MILLI);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Power is given by ISENSE * Vout. */
+> +	st->power_max =3D DIV_ROUND_CLOSEST(temp, st->rsense) * LTC4283_ADC2_FS=
+_mV;
+
+[Severity: Medium]
+Does this multiplication overflow a 32-bit unsigned integer before assignme=
+nt?
+
+For typical small shunt values (e.g., 10 uOhm or rsense =3D 100), the produ=
+ct=20
+of the 32-bit values can exceed the 32-bit maximum, resulting in integer=20
+wrap-around. This assigns a massively truncated threshold to st->power_max=
+=20
+and disrupts hardware limit bounds logic.
+
+> +	return ltc4283_write_power_byte(st, LTC4283_POWER_MAX_TH, st->power_max=
+);
+> +}
+> +
+> +static int ltc4283_parse_array_prop(const struct ltc4283_hwmon *st,
+> +				    struct device *dev, const char *prop,
+> +				    const u32 *vals, u32 n_vals)
+> +{
+[ ... ]
+> +	return dev_err_probe(dev, -EINVAL,
+> +			     "Invalid %s property value %u, expected one of: %*ph\n",
+> +			     prop, prop_val, n_vals, vals);
+> +}
+
+[Severity: Low]
+Can this format string yield an unintelligible error message?
+
+The %*ph format specifier expects a u8 * array and prints raw bytes. Using=
+=20
+it for a const u32 * array prints only the first n_vals bytes of the first=
+=20
+integer in memory, creating a mangled message.
+
+[ ... ]
+> +static int ltc4283_setup(struct ltc4283_hwmon *st, struct device *dev)
+> +{
+[ ... ]
+> +	ret =3D device_property_match_property_string(dev, "adi,overcurrent-ret=
+ries",
+> +						    ltc4283_oc_fet_retry,
+> +						    ARRAY_SIZE(ltc4283_oc_fet_retry));
+> +	/* We still want to catch when an invalid string is given. */
+> +	if (ret !=3D -EINVAL)
+> +		return dev_err_probe(dev, ret,
+> +				     "adi,overcurrent-retries invalid value\n");
+
+[Severity: High]
+Does this erroneously trigger an error return on a successful property matc=
+h?
+
+The device_property_match_property_string function returns a non-negative=20
+index on success. Since a valid positive index does not equal -EINVAL, a=20
+successfully parsed property causes the driver to interpret it as an error=
+=20
+and abort the probe.
+
+> +	if (ret >=3D 0) {
+> +		ret =3D regmap_update_bits(st->map, LTC4283_CONTROL_2,
+> +					 LTC4283_OC_RETRY_MASK,
+> +					 FIELD_PREP(LTC4283_OC_RETRY_MASK, ret));
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	ret =3D device_property_match_property_string(dev, "adi,fet-bad-retries=
+",
+> +						    ltc4283_oc_fet_retry,
+> +						    ARRAY_SIZE(ltc4283_oc_fet_retry));
+> +	if (ret !=3D -EINVAL)
+> +		return dev_err_probe(dev, ret,
+> +				     "adi,fet-bad-retries invalid value\n");
+
+[Severity: High]
+Similar to above, this aborts the probe if a valid adi,fet-bad-retries=20
+property is provided.
+
+[ ... ]
+> +	if (device_property_read_bool(dev, "adi,vpower-drns-enable")) {
+> +		__clear_bit(LTC4283_CHAN_DRAIN, &st->ch_enable_mask);
+> +		chan =3D LTC4283_CHAN_DRAIN - LTC4283_CHAN_ADI_1;
+> +		val =3D 1;
+> +	} else {
+> +		__clear_bit(LTC4283_CHAN_DRNS, &st->ch_enable_mask);
+> +		chan =3D LTC4283_CHAN_DRNS - LTC4283_CHAN_ADI_1;
+> +		val =3D 0;
+> +	}
+
+[Severity: Medium]
+Is the logic for disabling the redundant ADC2 channel inverted here?
+
+When adi,vpower-drns-enable is true, VPWR is configured to monitor DRNS,=20
+making the DRNS ADC2 channel redundant, but the driver disables the DRAIN=20
+channel. When false, VPWR monitors DRAIN, making DRAIN redundant, but the=20
+driver disables DRNS. This leaves the redundant channel active while=20
+disabling the actively monitored channel.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260309134920.1918=
-294-1-o.rempel@pengutronix.de?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260314-ltc4283-su=
+pport-v7-0-1cda48e93802@analog.com?part=3D2
