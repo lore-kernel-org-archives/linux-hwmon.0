@@ -1,73 +1,77 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91DEF35975
-	for <linux-hwmon@vger.kernel.org>; Thu, 13 Aug 2026 03:17:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9162345CDA
+	for <linux-hwmon@vger.kernel.org>; Thu, 13 Aug 2026 04:51:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786591065; cv=none; b=qN2UlDTKqr3A8nsdyLPyRccD5/MjI7XpF7YlRR+/1a97iEqZFC+CNWCiP5lqdGGK9Rwx9Ww5eYrB70xvkaN5995+Wp41LVsR6mC7yMDZHbVWFXmLZJNuubk1iYfmFGgn/xwl31daXln3BdJhw5/zebRvK1GtleSpWTRflLqh43c=
+	t=1786596716; cv=none; b=tXUtTW72VcON8crVLGpiR3kRS48qV1HtFliWZgjk1fOb4pP5j81J8X0IEcTVpCuC2MMwI6N5m/7BcVXVGRxugja5TVM9C4JQmYBJY6m8wAaqzLrVCWm/sF1Ew2yNQv4TppJ4RaF3o2u7U9oeZmYTq4dFVwhjI1eXl5mwcYxLKAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786591065; c=relaxed/simple;
-	bh=Ror5ekV6NusMwjV9h6NOZtGl2J7RE5e+U27bAX8AgiU=;
+	s=arc-20240116; t=1786596716; c=relaxed/simple;
+	bh=uKUK1gxkl6uJbUz0Xhrvk0SBk14n4u6sepfNf6fVdGY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=omRSv1BIqU7EWpKVFh9WIs6h7ktUxhmuUpIZqAnPuLjDRHLUa+dsdX9obgDHr1+/kDm8faNPBA2cM98xj3KhzVSCQluHvHDL/KdlJIXQwDUmT/fnhmK/qsDegaJ9lgiODHzPY265GmRakI3crBcGekWqV5mGBa0PSI7kh3ZWcVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pIrd210R; arc=none smtp.client-ip=209.85.216.54
+	 Content-Type:Content-Disposition:In-Reply-To; b=HQJv4aNQUKcJBmdK0seaOeEmmOzMq/zJn7loOXgWw60ugzAaJe3VNgiTP7sdWGv0v8RSyK6fxvAhlzJ6KuZjcgBkklhcFb/+BHRfqIOM0VCimfFgIgTFp0B9p4n1IwQbGW4pX5QFDgdkszZnWm0GSQwu3Rv0OjUnDvS2Fk0J8Y4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vh00akK1; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pIrd210R"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-38d489b6b71so2061564a91.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 12 Aug 2026 20:17:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vh00akK1"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-38e7109321dso1502106a91.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 12 Aug 2026 21:51:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786591063; x=1787195863; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786596714; x=1787201514; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=uP43cjB6XPbux59zlOlPBcrqNlA5Y96LJ1OJ5BALiUA=;
-        b=pIrd210RjH09eyuTzwMwZX2tKqGFhKq8Rs/b/u224uEZvB7/F84629IcYbPVptxe0u
-         rvx2uEabshnBN5t/GkpDwul0PBbUDr1YbDVycYnFUD64t/s20d9Zn/tl0RZJSzP6QSvd
-         vpbdtBQpZA9lLkZgjMtliOgjShQTpgl42Phb5AQwTvw+x/OjH1XjAQBT5Tp5dNe3W07E
-         1P70JFLFDtahbd6Y5f2f6m+cgnviwoazzuees9yf3AvDfBM/UEVytqm2d7W4bp2VxHnB
-         9CvbX+Iz47vVAJKFBPyF2n3FJK5HzLesrV2xOPTulIiG8W4mT9/Hors/kDeFLV28ncQz
-         +qdA==
+        bh=DduBe0z2YUFzR/A1UM6Cy/sXyURXYl8CxNoLveWxT18=;
+        b=Vh00akK1wJZ3CSobH0Y9i7BOeiapUGxskHBv8dyUYPfJIfNjDnCGqWSxPSZsyf3pBn
+         YDp+kBXjLU0DUh9KnOZhbrfaCCndSFOCPMsYJh5HlUBgk0nK0CAXikQKQ9a10r5RF/ro
+         l6QY28bjh8XHBHFUgXGq2FUK5tOdKMmnmKIRG0q3fNpguSBTkKfUewaEBDVeJ/h61/Xp
+         TZOkflv6Q+j198kuNue9wC4uYreKdgxHLudDiR78MqDWpxvu2qpsnIJdY72gcsJJbhHg
+         XpobhJGoB5MHrFgTEB8Kn/Dz6UVv22AQIjqho5iG2G8+Mwg7+DKEDeC0e4bdQx85Nxlq
+         p/ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786591063; x=1787195863;
+        d=1e100.net; s=20251104; t=1786596714; x=1787201514;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=uP43cjB6XPbux59zlOlPBcrqNlA5Y96LJ1OJ5BALiUA=;
-        b=qc0k9RklMTQIihIzdBaUmFAiEJOkqhMwXLNvv4Uy+3wkTDlLcAqfdZyQTA+x9bQj4K
-         xQ2yG8Dmq9xTJuCp9DS8dkiFQ7dnwpZaEJvcNeGKPtjNbE24vEKU9t862mFP3f/k9/yU
-         LNtQkoEJLsSl1LA9BSVyy2Awx6cf/BRSn9BaUzsgfaK2OI7a/CL+iaALFoSNoVfYLOS4
-         4sKroxiiwo1COX314ljNsBsvunXLtXg6HBHi5Qvjkf9RAg0tM/lAFc96CV+t+ngDpMbX
-         My2XuJACuy0a+m9F9Z0562b5fJd67X38xz9cvKgs89PwC8UcnFIT+dx6q+GEufNpgmUW
-         Y5Ew==
-X-Gm-Message-State: AOJu0Yziw10LR8gHkqt7S8NsL0hFCjoVCGqrULhrqtoXZY3kW1qW7LLC
-	Q6HZnDJn3lz6WdaizKr+0uA5zMmZBFTcy19xkiP9Iy7VsKL6K2PhhpKO
-X-Gm-Gg: AR+sD13gOsufggibeFactYARL/XW17+VW734yPYZc7ZPS1Uy4RZ7k2W5Kq0ILWu/xby
-	0i2uyEqJIe+VutZsDvUWyPTwpPpnCqM5kF9yPcIjqdWcTYqHPYwbWmQ3hpB78LF4NcU5dBkdEyh
-	vbTz01XcU/IX7thmUzO8VumQpFIKHVbVT9hiqYaHPv5o0lLngEsLLvkT+iNo9wDRBqluUC7P1mL
-	sH5QZd7Ek+rJ9/awTZP2hkFU2ye9X9DU55ItW7mgYGBOOEIeknF7kUgt3I4jvWJWBJdok9Fiju8
-	aAvKvUwRIFSQMw1V2VAWMS6FhYr3piHqHAbCn0NVuDceqE749RnwpIXLYvGbTVBedEMqhhqP4dy
-	OYfkCLBOikcHeufqBDiJRkgKMYn4tlqfZEgW1PHr7lyCtqgRusv/P3CXvD+6JcFvwcDMCZ+g8f/
-	2JV6iwPwLMI618wJ9eHZ4LHXYsIETxZDpbFyPWh2gxGzMKQzDyCeoTYIogkPsQqVA440u6OlFTX
+        bh=DduBe0z2YUFzR/A1UM6Cy/sXyURXYl8CxNoLveWxT18=;
+        b=Oj4yzEKAQwR9J65obH/WmqfXQu1L9YYNwuF9p4GvBlOeyS6jlHY2QKHfG1BzWIQTgF
+         FdN6pq2KRwxn3qm0BNfPyp7O2OAUR1kW+5nzy3Yps7zcXkpZZMtrdcBahV+c5KFTTwNi
+         KOVfqtQbbJSP0SlzSlciyghFKWg3+uVl++1+yCqiJnQIdfGqP8k9kbN3PZUY3A8tuJDm
+         Z7hAZrIwhrmD6wj6psd+fumAPUqYqm97Ei+T0pIgInRmgFVAHtRwJ0H6tVKHh07YAA9v
+         1amyC78qkOD+f9GsQUJ+4Nzi8QmU5YA/ot7ggKteHLX6IbM7PR9CHBPgraDxynp8QFUq
+         a3Og==
+X-Gm-Message-State: AOJu0YyXQ+484kS/fGqWMvXl8lIDl9VQCi+t7Lg6Qbv4xZ2vQrX3acKK
+	mNEu3BOMRFRGSyaCebO9aXIJYWgQqsfDxUkgbzdaS9jw4ZdEtOFchhDi
+X-Gm-Gg: AR+sD13os8ECc8P9YB4XlamAePsskbkQIwuyOPQFDIhf65bMJD7XQOtX6wpgh1isQ4n
+	cLz8Kh49u/lekC/5KYI0Woa8ejJFQsqrTsLgppOMEWgPqAf9YVkhK7Qvgyyzx1vfyF/Ra1vjWps
+	l89IRJFUMWTkWXELScBYDx2ys1Sz4meifwwPr560uwQ8ClNbX3YSfz6mGbZfweY3fHRAHYegeo9
+	wqgNHH6xlsRvDaPWtpKsneqSv76blDGF9kL0QS//AwjMTl3DGwa+pgZ+EzHfuPVYp80gWSGti10
+	GBvFJqrnJu4QetziXfJu+JxAlVbgqwFkhGruzDJ2jNGLBZoBu1P+Zm7gPHMiWnNf7oVN81WS+ps
+	TlGYB9/T8NF58EoicELLgfY2vbfbKRPBYJb72DBX9L0+4NkdYt9TwMWFT+JvGtsQmMBT+shrP9O
+	19oudR3eluGB6xrbqeXtUTbwSVA4iWbzAIQSisRdFAXxAEEl9gpJfslQm+4iclnkIu2Bd7uvhIs
 	g==
-X-Received: by 2002:a17:90a:c110:b0:392:c868:35af with SMTP id 98e67ed59e1d1-3931e2c17f2mr3834298a91.20.1786591062834;
-        Wed, 12 Aug 2026 20:17:42 -0700 (PDT)
+X-Received: by 2002:a17:90b:35c4:b0:38e:6dd:a9ad with SMTP id 98e67ed59e1d1-3931de34a43mr4190232a91.0.1786596713959;
+        Wed, 12 Aug 2026 21:51:53 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3931cd473f3sm1641735a91.8.2026.08.12.20.17.41
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3931cefea07sm1803421a91.14.2026.08.12.21.51.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Aug 2026 20:17:42 -0700 (PDT)
+        Wed, 12 Aug 2026 21:51:53 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 12 Aug 2026 20:17:40 -0700
+Date: Wed, 12 Aug 2026 21:51:52 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: rahlquist <rahlquist@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, sergiomelas@gmail.com
-Subject: Re: [PATCH v2] hwmon: yogafan: add Lenovo Yoga Pro 9 16IMH9
-Message-ID: <68b8866c-72d5-4ae7-9a41-ba8985d672a2@roeck-us.net>
-References: <0b6f2990-9ad4-4977-9b28-287f6dd65911@roeck-us.net>
- <20260812023114.131005-1-rahlquist@gmail.com>
+To: Marek Vasut <marex@nabladev.com>
+Cc: linux-hwmon@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+	Flaviu Nistor <flaviu.nistor@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] hwmon: (tmp102) Add TMP110 device ID
+Message-ID: <277a7da4-7201-46f6-98ef-b394f18973d2@roeck-us.net>
+References: <20260812191021.65304-1-marex@nabladev.com>
+ <20260812191021.65304-2-marex@nabladev.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -76,87 +80,14 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260812023114.131005-1-rahlquist@gmail.com>
+In-Reply-To: <20260812191021.65304-2-marex@nabladev.com>
 
-On Tue, Aug 11, 2026 at 10:31:14PM -0400, rahlquist wrote:
-> The Lenovo Yoga Pro 9 16IMH9 (83DN) exposes its fan tachometers at
-> ACPI paths different from the generic Yoga configuration. Add a
-> model-specific two-fan configuration for the PC00.LPCB.EC0 namespace
-> and document the corrected mapping.
+On Wed, Aug 12, 2026 at 09:09:45PM +0200, Marek Vasut wrote:
+> The TMP110 is register compatible with TMP102, add non-DT I2C device ID.
 > 
-> Tested on a Lenovo Yoga Pro 9 16IMH9 (83DN) with BIOS NKCN35WW: the
-> patched module registers fan1_input and fan2_input, both reporting 1800
-> RPM at idle.
-> ---
-> 
-> Changes from v1:
-> - Wrap the new comment in kernel block-comment style.
-> - Wrap the commit message to 75 columns.
-> 
-> Signed-off-by: rahlquist <rahlquist@gmail.com>
-> ---
+> Signed-off-by: Marek Vasut <marex@nabladev.com>
 
-Change log goes here, and you are supposed to use your full name.
-
-Anyway, the patch does not apply to the hwmon-next branch. Please rebase
-on top of that branch or wait until after the upcoming commit window has
-closed, rebase on top of v7.3-rc1, and resend.
+Applied.
 
 Thanks,
 Guenter
-
->  Documentation/hwmon/yogafan.rst |  3 ++-
->  drivers/hwmon/yogafan.c         | 19 +++++++++++++++++++
->  2 files changed, 21 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/hwmon/yogafan.rst b/Documentation/hwmon/yogafan.rst
-> index 6876194..cd7206b 100644
-> --- a/Documentation/hwmon/yogafan.rst
-> +++ b/Documentation/hwmon/yogafan.rst
-> @@ -89,7 +89,8 @@ immediately to ensure the user knows the fan has stopped.
->   ----------------------------------------------------------------------------------------------------
->   82N7           | Yoga 14cACN      | 0x06      | \_SB.PCI0.LPC0.EC0.FANS        |  8-bit | 100
->   80V2 / 81C3    | Yoga 710/720     | 0x06      | \_SB.PCI0.LPC0.EC0.FAN0        |  8-bit | 100
-> - 83E2 / 83DN    | Yoga Pro 7/9     | 0xFE      | \_SB.PCI0.LPC0.EC0.FANS        |  8-bit | 100
-> + 83E2           | Yoga Pro 7       | 0xFE      | \_SB.PCI0.LPC0.EC0.FANS        |  8-bit | 100
-> + 83DN           | Yoga Pro 9 16IMH9 | 0x06/0xFE | \_SB.PC00.LPCB.EC0.FANS/FA2S  |  8-bit | 100
->   82A2 / 82A3    | Yoga Slim 7      | 0x06      | \_SB.PCI0.LPC0.EC0.FANS        |  8-bit | 100
->   81YM / 82FG    | IdeaPad 5        | 0x06      | \_SB.PCI0.LPC0.EC0.FAN0        |  8-bit | 100
->   82JW / 82JU    | Legion 5 (AMD)   | 0xFE/0xFF | \_SB.PCI0.LPC0.EC0.FANS (Fan1) | 16-bit | 1
-> diff --git a/drivers/hwmon/yogafan.c b/drivers/hwmon/yogafan.c
-> index 605cc92..6cfbad3 100644
-> --- a/drivers/hwmon/yogafan.c
-> +++ b/drivers/hwmon/yogafan.c
-> @@ -71,6 +71,17 @@ static const struct yogafan_config legion_16bit_dual_cfg = {
->  	.paths = { "\\_SB.PCI0.LPC0.EC0.FANS", "\\_SB.PCI0.LPC0.EC0.FA2S" }
->  };
->  
-> +/*
-> + * Lenovo Yoga Pro 9 16IMH9 (83DN) uses the PC00 namespace and has two
-> + * 8-bit fan tachometer fields.
-> + */
-> +static const struct yogafan_config yoga_pro_83dn_cfg = {
-> +	.multiplier = 100,
-> +	.fan_count = 2,
-> +	.paths = { "\\_SB.PC00.LPCB.EC0.FANS",
-> +		   "\\_SB.PC00.LPCB.EC0.FA2S" }
-> +};
-> +
->  static void apply_rllag_filter(struct yoga_fan_data *data, int idx, long raw_rpm)
->  {
->  	ktime_t now = ktime_get_boottime();
-> @@ -170,6 +181,14 @@ static const struct hwmon_chip_info yoga_fan_chip_info = {
->  };
->  
->  static const struct dmi_system_id yogafan_quirks[] = {
-> +	{
-> +		.ident = "Lenovo Yoga Pro 9 16IMH9 (83DN)",
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "83DN"),
-> +		},
-> +		.driver_data = (void *)&yoga_pro_83dn_cfg,
-> +	},
->  	{
->  		.ident = "Lenovo Yoga",
->  		.matches = {
