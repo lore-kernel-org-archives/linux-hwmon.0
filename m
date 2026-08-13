@@ -1,30 +1,32 @@
 Received: from mx.nabladev.com (mx.nabladev.com [178.251.229.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4BB93E4C72;
-	Thu, 13 Aug 2026 09:05:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 059C5442FB7;
+	Thu, 13 Aug 2026 09:05:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.251.229.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786611914; cv=none; b=h/7/GjurRY1JWSjsMannSePWiZuVt2v/MtO3AfqqRlucRiIRNRBQ5VZyxRfdltJ0fsiAh69+D/fEgazhfPN+y8YTaVlX9BPJKrzCzre2n8f0DzJveun4HaaUrrzUZ00ZBHOfNuFMc+g5R0hUPU9AJ7WiB8aO6EVUcBaZdtew4rc=
+	t=1786611917; cv=none; b=YU8TJRc3B5kZVkpVIcdwFv1wz1vt+vnqpz6xvZc+tIPYVlZGEzWHMNLQRyjPdy1BZsRMFSVCoQGTNhRUjC1f7sAWFlz11X1grjcprOHSeZq0HSZolgxKzbI7NuA1+MwJStM/+aGlAdRjl2psNNS2ShSawoTrgUGA92xLOcotuyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786611914; c=relaxed/simple;
-	bh=OoGw8i+WwL2gvgjlnT1mWOK+VD5Vr9o/9Eg6MClKit0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DNN+0gERVpkS6ZM5VQk3oGPPmaGPsAEUGDgLsKR92oUQs/PtlVxX1ktkN8fPpqJLfkthlCfV0/nPKiWJESWB2pY0bbTHV6stkbID+pg0f+NyHifIOoyoIcAyqnqEstcU5Qw5vfUtYNUBIb2irZLBBfyP8WZJeEDrI61AenNs+TA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nabladev.com; spf=pass smtp.mailfrom=nabladev.com; dkim=pass (2048-bit key) header.d=nabladev.com header.i=@nabladev.com header.b=DSJjDsrD; arc=none smtp.client-ip=178.251.229.89
+	s=arc-20240116; t=1786611917; c=relaxed/simple;
+	bh=Vaj3OZdk9rbiYChIyKhUtI+yViGYWOFSLcG0SzBwWzs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=DuonbdfpPJBSxlCsVZ+RydGGilSCnbtovc2h2Ybu02RUrfxLVFzk8kPKKBM5ndQND5X/Wn4kjIxvu2AznTnQOqjXvxQcNyIV3lb5UaUvdgag6rp4AiQ9k1wy03ymrWZ7go9qg4EACm/j8SlZa2xptpRkrsxe2un0iEeY7PW6Qeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nabladev.com; spf=pass smtp.mailfrom=nabladev.com; dkim=pass (2048-bit key) header.d=nabladev.com header.i=@nabladev.com header.b=DcUoh9MS; arc=none smtp.client-ip=178.251.229.89
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nabladev.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nabladev.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nabladev.com header.i=@nabladev.com header.b="DSJjDsrD"
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CF67211A81C;
-	Thu, 13 Aug 2026 11:05:02 +0200 (CEST)
+	dkim=pass (2048-bit key) header.d=nabladev.com header.i=@nabladev.com header.b="DcUoh9MS"
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2D9AA11A88F;
+	Thu, 13 Aug 2026 11:05:08 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nabladev.com;
-	s=dkim; t=1786611903; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding; bh=GEQachEo7ZduE/FB09ZoDcNTg9U7Po/QV8snFmxMEVw=;
-	b=DSJjDsrDiE32sOeQlTBa0HvmZRwbg6gJaOrLtXjEC6wPQ6bSvVpiTCAuQGiFgIxkIM7WLF
-	pXl003ZpmN/9T7hwFdLKSgfJRnLf7BzdpoKZPtdbalxP9kVgVw4eecXZDMpBpV/XD5GRke
-	bl8Mh7c2okFtFKuKvTXQHOkwDT5qXEnaTCzLwwRn8enQydbH/H0r8RohbM/hIdy46I31jh
-	iwYbBWy0o+4E7YeqBe5sAonNlHn+G//JGds2DoV1HiP2+/X8SsxPKKxcuyu7re8D4ahc/h
-	8QDseXu24zymUChGrZect/T6YPZZZqOAr0LwxG8fMMlPqen0uf7UVVFYdLN70A==
+	s=dkim; t=1786611908; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=2yfSyig1+Stx6J9lMMKr+kfpNKisNOdQPMRM+gImrrI=;
+	b=DcUoh9MSSbgBIxDumKQzPhFHrHeiIR0QU9RSu2woCNCCecd9bgmADOXcU3dgunCCKwfBN8
+	n6ZT01b3j3UayNvEoiFUYg9kMnJFHm7Lsy2ye1WcEoar37UlrhSquWdVhKeGcxqIlidUNS
+	McUklEj8NATxQIIGPMpk6l3nvnpeWpSHCu4M4xJXkyqGpBqtlxZNdELL7icqMh3TNDRXD1
+	mujjpS5wXEPe+pIu6iWS0joOICrEohkVsMdgLEwTxgzKYZ6WX4aWK7y4A0mUVsFmyHj2rq
+	8A1tQp46gnsiXgBBKwPxF+ZqJFe+HOe1dukshkBcJqt4vTh9KDsVmQ5dmoE93g==
 From: Marek Vasut <marex@nabladev.com>
 To: linux-hwmon@vger.kernel.org
 Cc: Marek Vasut <marex@nabladev.com>,
@@ -35,10 +37,12 @@ Cc: Marek Vasut <marex@nabladev.com>,
 	Rob Herring <robh@kernel.org>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] dt-bindings: hwmon: tmp102: Document TMP113
-Date: Thu, 13 Aug 2026 11:04:23 +0200
-Message-ID: <20260813090456.70816-1-marex@nabladev.com>
+Subject: [PATCH 2/2] hwmon: (tmp102) Add TMP113 device ID
+Date: Thu, 13 Aug 2026 11:04:24 +0200
+Message-ID: <20260813090456.70816-2-marex@nabladev.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260813090456.70816-1-marex@nabladev.com>
+References: <20260813090456.70816-1-marex@nabladev.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -49,9 +53,8 @@ Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
 
 The TMP113 temperature sensor part is register compatible with TMP102,
-document it using a fallback compatible. Unlike TMP102 and TMP110, the
-TMP113 does have additional unique ID registers, it is up to the driver
-to handle those.
+add non-DT I2C device ID. Unlike TMP102 and TMP110, the TMP113 does
+have additional unique ID registers, those are currently unused.
 
 Signed-off-by: Marek Vasut <marex@nabladev.com>
 ---
@@ -64,33 +67,21 @@ Cc: devicetree@vger.kernel.org
 Cc: linux-hwmon@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
- Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/hwmon/tmp102.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml
-index f0dbe9f07b939..6bc10c73d2e2b 100644
---- a/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/hwmon/ti,tmp102.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: TMP102 and TMP110 temperature sensor
-+title: TMP102, TMP110 and TMP113 temperature sensor
- 
- maintainers:
-   - Krzysztof Kozlowski <krzk@kernel.org>
-@@ -13,7 +13,9 @@ properties:
-   compatible:
-     oneOf:
-       - items:
--          - const: ti,tmp110
-+          - enum:
-+              - ti,tmp110
-+              - ti,tmp113
-           - const: ti,tmp102
-       - enum:
-           - ti,tmp102
+diff --git a/drivers/hwmon/tmp102.c b/drivers/hwmon/tmp102.c
+index 26c461e95175b..50a8b050d8da1 100644
+--- a/drivers/hwmon/tmp102.c
++++ b/drivers/hwmon/tmp102.c
+@@ -397,6 +397,7 @@ static DEFINE_SIMPLE_DEV_PM_OPS(tmp102_dev_pm_ops, tmp102_suspend, tmp102_resume
+ static const struct i2c_device_id tmp102_id[] = {
+ 	{ .name = "tmp102" },
+ 	{ .name = "tmp110" },
++	{ .name = "tmp113" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, tmp102_id);
 -- 
 2.53.0
 
