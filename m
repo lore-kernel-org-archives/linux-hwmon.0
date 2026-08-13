@@ -1,240 +1,367 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5AD43D4E0;
-	Thu, 13 Aug 2026 21:55:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 779783D47CF;
+	Thu, 13 Aug 2026 22:19:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786658124; cv=none; b=Tn7ej7bnZ+QmP8TG6G90DI8XHv9JqCVNnrfXN2G5VjTPKqlaHLE/qhWcXsoH8RkPQNcSN7dhNKhi4Kzg+z6gY6zbvUFMJXIpyekspPbEs7yDUU8G21CBoTv+5z4wupKK74NkLTt7pv7Qgbvxv7i+0Ks/dTPteorpR78I7Id+7pY=
+	t=1786659594; cv=none; b=q+BXFy32+tGnehABf52/BIiRnScj8SWJ2ICjoLG4WfEz7/WNTIajCrO5dUIT91aKPW4FfXl1grLWG4ivfor3YgFBJWatWCrYBp7ZEG97fp44W0pzsemAs9kauQJmTl3Fvt5sZsDKLOvEsIskxTzPWrRMHbB4qcXHSoxqVR3T328=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786658124; c=relaxed/simple;
-	bh=TtFs51I5I7rIb6XKWy6/962FHgxltW+z2FlM/2/OCno=;
+	s=arc-20240116; t=1786659594; c=relaxed/simple;
+	bh=uXx/DtGoNN5UreV5uZHCShp+Wkcc8FG0icq0kj88TOk=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=R8DvYgF4PfkcwC+w1ZPGeO9QYCXmXeLsMtGpRw2nkkLQkdvSRjOmRdhFMSg9ZL6wNPp2qYtDt79FT6DS/qItnueHG5r6UzBurArU5dchoQ+yG0LSwkrL4soFAf8X1hk7vSb5e3WViWwB87jSEfF06U+qnpxlFS5oGpSoXZQsiYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OIwXas/Y; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=LdzZFZcjx24ormtrWsKAk+CnRYcsI1CpZMYMnXg/J5Jd2KMasVsoq0iyDcTUB1Qc0Bb1hsyYwKBlQ1c3lXG7BQOGt8vFnCIs292XTdkFTiVq5M8N7Poz+O4MB+PtqPmBrEV1WiLn14B1lQfBlMQQVJOZ/KmrTWRO3xg/7B1puEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=leZw4yMC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OIwXas/Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C81C71F000E9;
-	Thu, 13 Aug 2026 21:55:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="leZw4yMC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7E9F1F00A3A;
+	Thu, 13 Aug 2026 22:19:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786658123;
-	bh=k1VoxBDolacLupToiSemv+XxDYo3RcqTpbXRm9oiC9k=;
+	s=k20260515; t=1786659593;
+	bh=krjlTRbkhrWV7A3gvuwmcD0kFvGRk66HCuPDB5XVQcY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=OIwXas/YZxq0ZOd04x5a0fH64iNcfmyLnX7RmGnEVJ4y/P009JhuG9hH60uQZc5RM
-	 AXEbdxTTFeIpdyWy/ns4RHNx58aPjM0GGs22j8mvGDmiZk4EA/+L/dQSIRsoy/+PZP
-	 snbb3D145gufndQsNfext57/0sPxiggD55vB4Fq3/f83jXPD2Oqxxak5+lZ8CYuiRc
-	 N6oSM8ga8fhpVFLutwxkh9yqMFmXGFeUa5on/Ne9GW78rt+eeeyFeKw3TMx9OX6m63
-	 lmTvcOLK6hqBk4e+hXyFLxvrg+7IRw06aGlzDE8xjaOYTGFiWZr2HmUzjpzKwrph3+
-	 dUe8Hj0J1lS8Q==
+	b=leZw4yMCUNieoZt29/MjT6BUOPuIxj16RQK5tsz5FTzqM6gM3qezryESD4jNceG2c
+	 7G2IV38xlYhNL+8jcGyOBqWjRgm3D2V40vg+x8HGmD7puyKnas2r/0XOSXFPSxWOeo
+	 DKODtDmTbXvzwu2w5qk4+TNzPnMRilLR8zJyVISBhh1sshKpixzGZ5YJEljodoEvRr
+	 +2xz8aQC5b6Ejy1HvmpBQ+tVGmFrSTX5QycEaafyi3OJo2uO2DCsPPVSdt66HfrS1F
+	 OpKqU1YgAJhqftp9JSBMqnyQlgsljSkvmeJ6SU8ySNqPYEBm1igX6g7CAC0SlkjXY1
+	 hLR04uieKztUA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 5/7] pinctrl: add NXP MC33978/MC34978 pinctrl driver
+Subject: Re: [PATCH v6 2/7] mfd: add NXP MC33978/MC34978 core driver
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Oleksij Rempel" <o.rempel@pengutronix.de>
-Cc: devicetree@vger.kernel.org, robh@kernel.org, linux-hwmon@vger.kernel.org, conor+dt@kernel.org
-In-Reply-To: <20260316140514.1406588-6-o.rempel@pengutronix.de>
-References: <20260316140514.1406588-6-o.rempel@pengutronix.de>
+Cc: conor+dt@kernel.org, robh@kernel.org, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20260321065146.3918882-3-o.rempel@pengutronix.de>
+References: <20260321065146.3918882-3-o.rempel@pengutronix.de>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 13 Aug 2026 21:55:22 +0000
-Message-Id: <20260813215522.C81C71F000E9@smtp.kernel.org>
+Date: Thu, 13 Aug 2026 22:19:52 +0000
+Message-Id: <20260813221952.D7E9F1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
-s) to consider:
-- [High] Output emulation and open-drain semantics are broken for Programma=
-ble (SP) pins due to logic flaws in `mc33978_set()` and `mc33978_set_multip=
-le()`.
-- [High] `mc33978_set_multiple()` can return an uninitialized variable and =
-silently masks regmap error codes.
-- [Medium] Missing `mpc->lock` acquisition in `mc33978_pinconf_get()` and `=
-mc33978_pinconf_set()` breaks hardware sequence atomicity.
-- [Medium] Silent omission of SPI read failures in `mc33978_get()` leads to=
- incorrect physical state interpretation.
-- [Medium] Unconditional invocation of optional parent irq_chip callbacks `=
-irq_bus_lock` and `irq_bus_sync_unlock`.
+Thank you for your contribution! Sashiko AI review found 12 potential issue=
+(s) to consider:
+- [Critical] Incompatible use of hierarchical IRQ domains with MFD core cau=
+ses a NULL pointer dereference in the `.alloc` callback during probe.
+- [High] The dynamically scheduled `event_work` is never canceled upon driv=
+er removal or probe failure, leading to a use-after-free.
+- [High] A SPI bus error during event processing causes an infinite loop in=
+ the event handling thread, stalling the CPU.
+- [High] The result of `irq_find_mapping()` is passed directly to `handle_n=
+ested_irq()` without checking if it is non-zero.
+- [High] Missing memory barriers between lockless accesses to `is_handling`=
+ and `harvested_flags` creates a race condition that permanently drops even=
+ts.
+- [High] Casting a `u32` pointer to `unsigned long *` for `for_each_set_bit=
+` causes out-of-bounds stack reads and logical failures on 64-bit Big Endia=
+n systems.
+- [High] The `MC33978_REG_WET_SG1` register is missing from the `mc33978_rx=
+_decode` status exclusion switch.
+- [Medium] Platform data (`mfd_cell` arrays) is passed directly via the `.d=
+ata` field of device match tables.
+- [Medium] Using `PLATFORM_DEVID_NONE` for MFD cell indexing prevents multi=
+ple device instances and causes sysfs collisions.
+- [Medium] The driver fails to validate `hwirq` in `mc33978_irq_domain_allo=
+c`, allowing out-of-bounds interrupt mappings that lead to undefined behavi=
+or.
+- [Medium] Missing stabilization delay after enabling power supplies before=
+ initiating the first SPI transaction.
+- [Low] The driver violates MFD commit prefix rules and data structure nami=
+ng conventions.
 --
 
---- Patch [5]: [PATCH v5 5/7] pinctrl: add NXP MC33978/MC34978 pinctrl driv=
-er ---
-commit 98645888889b3328cc6079ef5439da9e7d2a7837
-Author: David Jander <david@protonic.nl>
+--- Patch [2]: [PATCH v6 2/7] mfd: add NXP MC33978/MC34978 core driver ---
+commit 573144fde701ff82da9c6492a0c0004903d3501c
+Author: Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: mfd: add NXP MC33978/MC34978 core driver
 
-pinctrl: add NXP MC33978/MC34978 pinctrl driver
+This commit adds the core Multi-Function Device (MFD) driver for the NXP
+MC33978 and MC34978 Multiple Switch Detection Interfaces (MSDI). It handles
+SPI communications, power sequencing, and interrupt routing, and
+instantiates child devices for pinctrl, hwmon, and amux.
 
-Add pin control and GPIO driver for the NXP MC33978/MC34978 Multiple
-Switch Detection Interface (MSDI) devices.
-
-> diff --git a/drivers/pinctrl/pinctrl-mc33978.c b/drivers/pinctrl/pinctrl-=
-mc33978.c
+> diff --git a/drivers/mfd/mc33978.c b/drivers/mfd/mc33978.c
 > new file mode 100644
-> index 0000000000000..31065d6333173
 > --- /dev/null
-> +++ b/drivers/pinctrl/pinctrl-mc33978.c
+> +++ b/drivers/mfd/mc33978.c
 
 [ ... ]
 
-> +static int mc33978_pinconf_get(struct pinctrl_dev *pctldev, unsigned int=
- pin,
-> +			       unsigned long *config)
-> +{
-> +	struct mc33978_pinctrl *mpc =3D pinctrl_dev_get_drvdata(pctldev);
-> +	enum pin_config_param param =3D pinconf_to_config_param(*config);
-> +	unsigned int data, status;
-> +	int ret;
+> +struct mc33978_data {
+> +	const struct mfd_cell *cells;
+> +	int num_cells;
+> +};
 > +
-> +	switch (param) {
-> +	case PIN_CONFIG_BIAS_PULL_UP:
-> +		ret =3D mc33978_get_pull(mpc, pin, &data);
+> +struct mc33978_mfd_priv {
+
+[Severity: Low]
+Is this naming convention intentional? Following MFD subsystem rules,
+structures are typically named after the device (e.g. struct mc33978)
+rather than including mfd_priv.
+
+> +	struct spi_device *spi;
+> +	struct regmap *map;
+
+[ ... ]
+
+> +static int mc33978_irq_domain_alloc(struct irq_domain *domain,
+> +				    unsigned int virq,
+> +				    unsigned int nr_irqs, void *arg)
+> +{
+> +	struct mc33978_mfd_priv *mc =3D domain->host_data;
+> +	struct irq_fwspec *fwspec =3D arg;
+> +	irq_hw_number_t hwirq;
+> +	int i;
+> +
+> +	if (fwspec->param_count < 1)
+
+[Severity: Critical]
+Could arg be NULL here?
+
+When the hwmon child is instantiated via mfd_add_devices(), the IRQ core
+calls irq_domain_alloc_irqs_hierarchy() passing NULL for arg. Unconditional=
+ly
+casting and dereferencing fwspec->param_count could lead to a NULL pointer
+dereference during probe.
+
+> +		return -EINVAL;
+> +
+> +	hwirq =3D fwspec->param[0];
 
 [Severity: Medium]
-The mpc->lock is documented as protecting atomic reads and multi-register
-hardware sequences. Does the lack of this lock in mc33978_pinconf_get() and
-mc33978_pinconf_set() expose the hardware state reads and updates to race
-conditions with concurrent GPIO operations?
+Should we validate hwirq against MC33978_NUM_PINS + 1 here?
 
-[ ... ]
+A malformed device tree could provide an out-of-bounds hwirq, which might
+later be used in mc33978_irq_set_type() where BIT(hwirq) could overflow
+and cause undefined behavior.
 
-> +static int mc33978_get(struct gpio_chip *chip, unsigned int offset)
-> +{
-
-[ ... ]
-
-> +	/* Determine current topology for SP pins */
-> +	if (mc33978_is_sp(offset)) {
-> +		int config_reg;
 > +
-> +		ret =3D mc33978_read(mpc, MC33978_REG_CONFIG, &config_reg);
-> +		if (ret =3D=3D 0) {
-> +			/* CONFIG: 0 =3D Switch-to-Ground (PU), 1 =3D Switch-to-Battery (PD) =
-*/
-> +			if (config_reg & MC33978_PINMASK(offset))
-> +				is_switch_to_ground =3D false;
-> +		}
-> +	}
-
-[Severity: Medium]
-If the SPI read in mc33978_read() fails, the code ignores the error code in
-ret and proceeds with is_switch_to_ground remaining true.=20
-
-Should the error code in ret be propagated back to the caller instead of
-falling back to a default topology guess that might misinterpret the physic=
-al
-state?
+> +	for (i =3D 0; i < nr_irqs; i++) {
+> +		irq_domain_set_hwirq_and_chip(domain, virq + i, hwirq + i,
+> +					      &mc33978_irq_chip, mc);
 
 [ ... ]
 
-> +static int mc33978_set(struct gpio_chip *chip, unsigned int offset, int =
-value)
+> +static bool mc33978_handle_pin_changes(struct mc33978_mfd_priv *mc,
+> +				       unsigned int pin_state)
 > +{
-> +	struct mc33978_pinctrl *mpc =3D gpiochip_get_data(chip);
-> +	int pull;
-> +	int ret;
+> +	u32 fired_pins =3D 0;
+> +	u32 changed_pins;
+> +	u32 rise, fall;
+> +	int i;
 > +
-> +	/*
-> +	 * We emulate open-drain/-source outputs by routing or isolating the
-> +	 * active wetting current sources.
-> +	 * To drive the line, we apply the current source.
-> +	 * To turn the line OFF (achieve High-Impedance), we MUST use the
-> +	 * hardware TRI_SP / TRI_SG tri-state registers to physically isolate
-> +	 * it.
-> +	 */
-> +	if (mc33978_is_sp(offset)) {
-> +		pull =3D value ? MC33978_PU : MC33978_PD;
-> +		value =3D 1;
-> +	} else {
-> +		pull =3D MC33978_PU;
-> +	}
+> +	changed_pins =3D pin_state ^ mc->cached_pin_state;
+
+[ ... ]
+
+> +	for_each_set_bit(i, (unsigned long *)&fired_pins, MC33978_NUM_PINS) {
 
 [Severity: High]
-For SP pins, value is unconditionally forced to 1. Will this prevent the=20
-turn OFF branch (value =3D=3D 0) below from ever being executed for these p=
-ins?
+Does casting a u32 pointer to unsigned long * here cause issues on 64-bit
+systems?
 
-> +
-> +	guard(mutex)(&mpc->lock);
-> +
-> +	/*
-> +	 * Break-before-make sequencing to prevent hardware glitches (spikes).
-> +	 * Since SPI transfers take time, writing the pull and tri-state
-> +	 * registers in the wrong order causes a brief moment where current
-> +	 * flows to the pin before it is masked, causing a visible LED flash.
-> +	 */
-> +	if (value) {
-> +		/*
-> +		 * Turn ON: Configure the underlying current source (pull) first,
-> +		 * then route it to the pin by disabling tri-state.
-> +		 */
-> +		ret =3D mc33978_set_pull(mpc, offset, pull);
+On 64-bit architectures, unsigned long is 8 bytes, which might lead to
+a 4-byte out-of-bounds stack memory read. Furthermore, on 64-bit Big Endian
+systems, the 32 bits might be placed in the upper half of the 64-bit word,
+meaning the bit iterator reads uninitialized stack memory from the lower
+32 bits.
 
-[ ... ]
-
-> +static int mc33978_set_multiple(struct gpio_chip *chip,
-> +				unsigned long *mask, unsigned long *bits)
-> +{
-> +	unsigned int sgmask =3D (*mask & MC33978_SG_MASK) >> MC33978_SG_SHIFT;
-> +	unsigned int sgbits =3D (*bits & MC33978_SG_MASK) >> MC33978_SG_SHIFT;
-> +	unsigned int spmask =3D (*mask & MC33978_SP_MASK) >> MC33978_SP_SHIFT;
-> +	unsigned int spbits =3D (*bits & MC33978_SP_MASK) >> MC33978_SP_SHIFT;
-> +	struct mc33978_pinctrl *mpc =3D gpiochip_get_data(chip);
-> +	int ret;
+> +		int virq =3D irq_find_mapping(mc->domain, i);
 > +
-> +	guard(mutex)(&mpc->lock);
-> +	if (spmask)
-> +		ret =3D mc33978_update_bits(mpc, MC33978_REG_TRI_SP, spmask,
-> +					  ~spbits);
+> +		handle_nested_irq(virq);
 
 [Severity: High]
-Does this direct update to MC33978_REG_TRI_SP contradict the expected state
-setup in mc33978_set(), since the required pull direction is not being
-configured here?
+Should virq be checked before calling handle_nested_irq()?
 
-Also, if both spmask and sgmask evaluate to zero, will this function return
-an uninitialized ret?
+If the IRQ mapping was disposed or never created, irq_find_mapping()
+could return 0. Passing 0 to handle_nested_irq() attempts to look up
+and dereference the descriptor for IRQ 0, which could lead to a NULL
+pointer dereference.
 
-If both spmask and sgmask are non-zero, will the second call to
-mc33978_update_bits() silently overwrite an error code returned by the first
-call?
-
-> +	if (sgmask)
-> +		ret =3D mc33978_update_bits(mpc, MC33978_REG_TRI_SG, sgmask,
-> +					  ~sgbits);
+> +	}
 > +
-> +	return ret;
+> +	return true;
 > +}
 
 [ ... ]
 
-> +static void mc33978_gpio_irq_bus_lock(struct irq_data *data)
+> +static bool mc33978_process_single_event(struct mc33978_mfd_priv *mc)
 > +{
-> +	struct irq_data *parent =3D data->parent_data;
+> +	unsigned int pin_state;
+> +	bool handled =3D false;
+> +	u8 hw_flags;
+> +	int ret;
 > +
-> +	parent->chip->irq_bus_lock(parent);
+> +	ret =3D regmap_read(mc->map, MC33978_REG_READ_IN, &pin_state);
+> +	if (ret)
+> +		return false;
+
+[Severity: High]
+Can an early return here lead to an infinite loop?
+
+If regmap_read() fails, the function returns early without clearing
+harvested_flags via atomic_xchg(). Back in mc33978_handle_events(),
+the loop condition atomic_read(&mc->harvested_flags) !=3D 0 will remain
+perpetually true, causing the worker thread to spin indefinitely.
+
+> +
+> +	/*
+> +	 * harvested_flags will be set by regmap_read() above if the FAULT_STAT
+> +	 * or INT_flg bits were detected in the response
+> +	 */
+> +	hw_flags =3D atomic_xchg(&mc->harvested_flags, 0);
+
+[ ... ]
+
+> +static bool mc33978_handle_events(struct mc33978_mfd_priv *mc)
+> +{
+> +	bool handled =3D false;
+> +
+> +	guard(mutex)(&mc->event_lock);
+> +
+> +	do {
+> +		atomic_set(&mc->is_handling, 1);
+> +
+> +		if (mc33978_process_single_event(mc))
+> +			handled =3D true;
+> +
+> +		atomic_set(&mc->is_handling, 0);
+
+[Severity: High]
+Are memory barriers needed between accesses to is_handling and
+harvested_flags here and in mc33978_harvest_status()?
+
+Because atomic_set(), atomic_read(), and atomic_or() do not imply barriers
+on weakly ordered architectures like ARM, the loads and stores can be
+reordered by the CPU.
+
+If they are reordered, both threads might assume the other is handling
+the event, which could result in dropped hardware interrupts.
+
+> +
+> +	} while (atomic_read(&mc->harvested_flags) !=3D 0);
+> +
+> +	return handled;
 > +}
 
-[Severity: Medium]
-Since irq_bus_lock is an optional callback in struct irq_chip, is it possib=
-le
-for parent->chip->irq_bus_lock to be NULL here?
+[ ... ]
 
-Could this cause a NULL pointer dereference panic if the parent domain does
-not implement it?
-
-> +
-> +static void mc33978_gpio_irq_bus_sync_unlock(struct irq_data *data)
+> +static u8 mc33978_rx_decode(const u8 *rx_frame, u8 *val_buf)
 > +{
-> +	struct irq_data *parent =3D data->parent_data;
+> +	u8 cmd =3D rx_frame[MC33978_FRAME_CMD] & ~MC33978_CMD_BYTE_WRITE;
+> +	bool has_status;
+> +	u8 status =3D 0;
 > +
-> +	parent->chip->irq_bus_sync_unlock(parent);
-> +}
+> +	switch (cmd) {
+> +	case MC33978_REG_CHECK:
+> +	case MC33978_REG_WET_SP:
+> +	case MC33978_REG_WET_SG0:
+
+[Severity: High]
+Should MC33978_REG_WET_SG1 be included in this exclusion list?
+
+Since WET_SP and WET_SG0 are excluded from status harvesting, reading
+the sibling register WET_SG1 (0x0c) might cause its payload to fall through
+to the default case. This could incorrectly interpret the data as FAULT_STAT
+and INT_flg bits, triggering false interrupt events.
+
+> +		has_status =3D false;
+> +		break;
+> +	default:
+> +		has_status =3D true;
+> +		break;
+> +	}
+
+[ ... ]
+
+> +static int mc33978_probe(struct spi_device *spi)
+> +{
+> +	const struct mc33978_data *match_data;
+
+[ ... ]
+
+> +	ret =3D mc33978_power_on(mc);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret =3D devm_add_action_or_reset(dev, mc33978_power_off, mc);
+> +	if (ret)
+> +		return ret;
+> +
+> +	mutex_init(&mc->event_lock);
+> +	INIT_WORK(&mc->event_work, mc33978_event_work);
+
+[Severity: High]
+Does this dynamically scheduled work need a cancellation action?
+
+If the driver is removed or probe fails after the work is scheduled,
+the allocated mc context is freed. Without devm_work_autocancel() or
+a manual cancellation action, the workqueue could execute later and
+dereference freed memory.
+
+> +
+> +	atomic_set(&mc->harvested_flags, 0);
+> +	atomic_set(&mc->is_handling, 0);
+> +
+> +	mc33978_prepare_messages(mc);
+> +
+> +	mc->map =3D devm_regmap_init(dev, &mc33978_regmap_bus, mc,
+> +				   &mc33978_regmap_config);
+> +	if (IS_ERR(mc->map))
+> +		return dev_err_probe(dev, PTR_ERR(mc->map), "can't init regmap\n");
+> +
+> +	ret =3D mc33978_check_device(mc);
 
 [Severity: Medium]
-Similarly, could parent->chip->irq_bus_sync_unlock be NULL and lead to a=20
-NULL pointer dereference?
+Is a stabilization delay required after enabling regulators before the
+first SPI communication?
+
+Without a delay, the hardware Power-On Reset (POR) circuit might not
+have finished ramping up, which could cause mc33978_check_device() to fail.
+
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "can't use SPI bus\n");
+
+[ ... ]
+
+> +	ret =3D devm_mfd_add_devices(dev, PLATFORM_DEVID_NONE,
+
+[Severity: Medium]
+Does using PLATFORM_DEVID_NONE prevent multiple instances of this driver?
+
+If multiple MC33978 devices exist on the same board, the core will
+attempt to register identically named child devices (like mc33978-pinctrl),
+causing sysfs collisions. The MFD subsystem typically requires
+PLATFORM_DEVID_AUTO for this.
+
+> +				   match_data->cells, match_data->num_cells,
+> +				   NULL, 0, mc->domain);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "failed to add MFD child devices\n");
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id mc33978_of_match[] =3D {
+> +	{ .compatible =3D "nxp,mc33978", .data =3D &mc33978_match_data },
+
+[Severity: Medium]
+Is it safe to pass platform data pointers directly via the match data field?
+
+According to MFD subsystem guidelines, passing complex pointers through
+match data tables can cause initialization ordering races. The standard
+approach is to pass an enum or integer ID in the match table, and use a
+switch statement in the probe function to select the correct mfd_cell array.
+
+> +	{ .compatible =3D "nxp,mc34978", .data =3D &mc34978_match_data },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, mc33978_of_match);
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260316140514.1406=
-588-1-o.rempel@pengutronix.de?part=3D5
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260321065146.3918=
+882-1-o.rempel@pengutronix.de?part=3D2
