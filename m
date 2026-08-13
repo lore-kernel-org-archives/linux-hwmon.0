@@ -1,71 +1,70 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD4394322E9
-	for <linux-hwmon@vger.kernel.org>; Thu, 13 Aug 2026 21:14:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0F435F172
+	for <linux-hwmon@vger.kernel.org>; Thu, 13 Aug 2026 21:20:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786655679; cv=none; b=DSZZgt1ZIGAFyGU9u0uzldNrvag4WjqNmZkYpuQDAZEGoi2I4n5Gq1SXt4bAxSQBSian1lrZyRP2ZhSqgERyBzaA2dvevtVHY0Ex3oPDh+/Bv7yI3kkcuNLR2ZzM5yy3LO6z934/wR1NWywgHxW1fX57RgwH24YdeeAlRTAvmMY=
+	t=1786656036; cv=none; b=YMZVF4IpRHKcWhPIhseT/Z2QvzR1pylIFayPrbPrcU5xiSeNKwxijW+lV6AnUKA5bOXOucdLC6imV9ieOGYs6sT//JiHJgZMWsqHWjvHCQVG+hJCbPSpUanqvs9lgpmUtmhAgdP5c8Lx/A5370PTnQucXsL8fz7id7FPxu9sElA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786655679; c=relaxed/simple;
-	bh=nG0r8SfmkjqqfsSkXsaglTK0jqmD3LLNfncdSwGO0cc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Rhbr8t1t2E8xDSwi0UhhWJh/baWggq12eivZZ+UfhvJWrc72ovMmBW0937BfpLdFlEV/AzKqrFTI+RfcjlY37GoMPGOu8K3mdCPouYYVCvy/OX466kMDIZE92AgmIxdbDSBi514Z+u2ogy5rn7KFdD48TLYWT9JsgaAJjCUxyjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GdOeD/Q7; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1786656036; c=relaxed/simple;
+	bh=CybgFQe+3LKwO+ojdV6IbLmwtUs6c1R2LVZh9Nd58to=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oJ4j/Y/2gGERl6ZR9kaS375hIKb07quoDiuy4Jv19c+hUbTGZ9zR2aOf10Idh+c/1Sm34mj8mV5f7A1W2xZMOMlE0ClTTVQrBN72dM9OKU0MsDVxUuy55kKjoeb/nPkuQFc56lCYPRSiGPoDJyz00W6j8vl4al7/tKNt9YaiMy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aFXZdZEv; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GdOeD/Q7"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2caea3f742bso6963515ad.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 13 Aug 2026 14:14:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aFXZdZEv"
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-6983d3dae7aso2291198a12.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 13 Aug 2026 14:20:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786655677; x=1787260477; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786656029; x=1787260829; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Z7FAPGtYVLZ3QFJMRUoEV7czvEAQdnLLLL063XrMk1w=;
-        b=GdOeD/Q7dtxhMlvp7TeKgvTBNzwgjjxI+AQnQzMFPV8X6wTXV0m0N26malarA/i8fz
-         N4ao6oQ/A8RKUeOJE6G1t8kHNlpKidBggvorIxtMI4Lruup1mNjZ0B4X/HKa3I4MfjrX
-         StJJ5fjNLGW3htZcEM7YyNKvRiK1G4iqTM8/yXBk3AtWBZ7T4gKdpsFrAoXshLBccNY6
-         KVUoWWia7rpgg1LI80W6UGt9nAnxhZd2/LknkYUIQPxketUSROcuaJPMBBp4MY4rnnn7
-         DgVWfw+Ac8OJ8Y0Ia22PX/XkY5bBwwRWsX5DTSg3uBOXw917PYo/FM1qBa/WJMABg/Lo
-         W4DA==
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=BIkgaHZoj6aDIeZUHMoRey9Gqj9yPB6NQRSWVTdMP0o=;
+        b=aFXZdZEvvV9wyXrubcdwanrf2ks/Ko2yNIDlZ18UarLNFfDUkqntuCCKo8ni/LEnyY
+         AFw3lPircDG9c3EqlhPvprrzwjAx+vrMBtO69kC1PGfaDLbthwZsxbp9fdgETm0EaNr8
+         KI1VvCRXUWAUMiixE7LVPAZ48cSaOMtJbw8NIulkOdpj262dmv2w2b7Tp9HowtZStQV4
+         9ib+ERRCbbL/O9Jj76i46NXyGnJbWtrO+tFwBP7rLpZ+oJzB7PCstzWEz98HOlcGuhK0
+         /NpZYC7Y4FrAqMBJc3JP3Bqt+jZCpxDksGt0ADqArM+ykkdCzk9LSs/agniUGJnp4Y5J
+         oRAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786655677; x=1787260477;
+        d=1e100.net; s=20251104; t=1786656029; x=1787260829;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Z7FAPGtYVLZ3QFJMRUoEV7czvEAQdnLLLL063XrMk1w=;
-        b=J3+71pGLXSMWlYuMphBIASLdm6CtxHQ6weww40vbaVCOCf6hi/RYs8IREDl1qSIE5c
-         Z2WcCJOoMAK/W2e2QFvNdWg96UX0xL3uaapWlswygvvZbEPavMIzDIaJZZqSFBy+sYoc
-         M7YWiHT6L0F7eZkpAGTNpeEAf1Va3/k3jxXZpGq3I/bVp9HeCXzV6cTePMOKC2AuGw+1
-         eZDRwEQW+RfDZmYAwTlqTz65+EuV+J4x+6Qo/5aDIqxzUDfXr+XB2DHDY01Fj7zsukKK
-         Fp+9N62mDMSBmv3GGuEHzzz7I2wNzypZGGv94WSG3TBczCnmRo7BDwGXEdNMrxNKVM05
-         Y30w==
-X-Gm-Message-State: AOJu0YzlGlQwcCWij7eQgu0GJY02FYY/2pB9E5T8U7WtWp5jfOW6yPB5
-	I5O6zpQMLPBt0DunW3WMd4EIT2Hp3FmHJLRHQGVxqv5W3alFtDNlr/0rC7Ff0g==
-X-Gm-Gg: AR+sD13dVmg5+UXiQd4JBz26ctNaLAE0oV6l7+yudkFrqDrOi84ywChvF254K2yOjoi
-	UkAd2mf6IImoUe4v3JL1+DjU/1TG4+f/CBY1tjQho44GIYgtfX/gpkEexCvzTNiWvrLlWNLx01l
-	YA2FprLTYE5PabfHRIUyRBYHpfsY4rClhaFNW8hz1aHXeU2ctmvGh/E2avldC3MKDMI/g2sSvO6
-	P0xQVkCTr2Wz/02lo5SpPoCJSP7i9cpAb7jwYLt5KZEBTia17Lo08+iLvHFfXeVtJtvQBxZZkvS
-	vWmwT8DaUmVbv9Ky4lpxGssMHX1NI3S3mVemT33I85KjWOssvgLTudWfKszXR7/mk86gyDaWwJ0
-	NA8nksrXIiv3acJHNW+Zl9taf55YCvh9XQFk6MH4rnAc2gf97IpWDlcFww9sxU3yDOPm1ZeRR+K
-	XypRdapXWwPvMdLNo4IMhYPjqPMo9Y/uvT7waO8ZF9iq9erUjUSfXfoIyxCeULpeOqCAYhrin5y
-	g==
-X-Received: by 2002:a05:6a20:93a0:b0:3b4:8f18:33a with SMTP id adf61e73a8af0-3cc71ac3815mr885192637.1.1786655676868;
-        Thu, 13 Aug 2026 14:14:36 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31ec0228793sm12075074eec.26.2026.08.13.14.14.36
+        bh=BIkgaHZoj6aDIeZUHMoRey9Gqj9yPB6NQRSWVTdMP0o=;
+        b=ME4IxEuKswuDwhB1SF/NQHrfmwjFDYlG2fDTt8vlKe4SDsLiyYtzNfDMoaHNzSdL0/
+         yvUMSDlahlcbdRxpld5FDUkPvdnC3lqrQqmEWT/WMEdXyInwxjAf6ZslfX0kdxFmaIvh
+         koy7oA0oHRBNvPTr/BLatKOJmwiH6KZrYx2OlzvSTiFQnKt2vZPgTFSz6n46sDfRaV0v
+         JQ7P+Rq/63BWVxmUmrtq2EgsbcfckBuBwf1NQiejwXmmDPdEU4ytNCYpz5usJEhgcZVV
+         uQWlDgchBVDp0zeMAUK1dif0Wdq0clEQH6uPfxSmgS7u5NPNx4x7n1WUm0xtR4zp3xEe
+         /ZhQ==
+X-Gm-Message-State: AOJu0YwSunGZ58BskDoQ9f4nCTHsbZHQEuHCYbU3fVpXrayjfsR8dK6S
+	6w+DD/95P1SI2Blbgrje5opRWOpKM4fL07opnkTdqjRjno3yDBLA4cO0lZnKuVXHF5Wf
+X-Gm-Gg: AR+sD13nvdpnWa387/HUfRq9HBLwIsOCn+OcKN51uTrsbSXnfxBt/FcpcWNJcc3f4AN
+	5O8tR4cByNT30xBGRMy1RG++9+bacOQN3ASDDhRIu4gM3KxDkNGhlxhRGRK43MihcxagCva6oVD
+	p/nI+qxdOIz6VvMxWNUC4XeM421w6J5Ri7jYQhFJo4XL6zA5/XxRVWf2uMSU8efF7EqO/PQNiGt
+	7MQuMouqseYP62GmUivTmIH6HGurx8hJUiB6280ftboBY8DfuiO2Ttt1f67ycAWTH1otkK8xmOJ
+	M9kt5gmYcd+wVgT6jkG2/nZfSXhXZkqTz3BGT85rO9o3+O0n4XO1MZrcHNMEGvbH0XLXhzdNr0d
+	UaAq5mksqbhVZ3hQVkpw1YvH+bBzCvunbrIuwKxlgnDHc4r1edsz72szi3UcuVcAMOcaEVGEeUp
+	7ZC3ggeaqQpMOvIe9NcpkuMKFkPpJgko+niteNDiZrTuT8dwITZ/zn01uOrTkDxo6i/hJ9cHGH/
+	b2rKYUyXRXIP0AmwL5V9YdPHRJMWK3n0QDUww==
+X-Received: by 2002:a17:906:ef01:b0:c0d:7c31:26a9 with SMTP id a640c23a62f3a-c212a22bfcfmr50240866b.2.1786656029024;
+        Thu, 13 Aug 2026 14:20:29 -0700 (PDT)
+Received: from arch.tail2fcf52.ts.net (223-143-146-85.ftth.glasoperator.nl. [85.146.143.223])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c21233a12e6sm32475466b.12.2026.08.13.14.20.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Aug 2026 14:14:36 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
-Subject: [PATCH v2] hwmon: Add support for currX_emergency and inX_[l]emergency attributes
-Date: Thu, 13 Aug 2026 14:14:33 -0700
-Message-ID: <20260813211433.879638-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+        Thu, 13 Aug 2026 14:20:28 -0700 (PDT)
+From: Mark Sercombe <sercombe.joel.mark@gmail.com>
+To: linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Mark Sercombe <sercombe.joel.mark@gmail.com>
+Subject: [PATCH] hwmon: (w83627hf) fix out of bounds read of PWM register array
+Date: Thu, 13 Aug 2026 23:19:50 +0200
+Message-ID: <20260813211950.535148-1-sercombe.joel.mark@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -74,243 +73,52 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Some hardware monitoring chips support three alarm levels for current and
-voltage high limits, and three alarm levels for voltage low limits.
-Add support for currX_emergency, inX_emergency, and inX_lemergency
-attributes together with the appropriate alarm attributes to support such
-chips.
+w83627hf_update_device() reads PWM registers in a loop bounded by a
+hard coded "i <= 2", i.e. three iterations, for every chip type. For
+the W83627HF, W836X7HF_REG_PWM() indexes regpwm_627hf[], which only has
+two entries. The third iteration therefore reads regpwm_627hf[2], one
+element past the end of the array, and issues a read of a non existent
+PWM register.
 
-Cc: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+The W83627HF has only two PWM outputs (datasheet registers CR5A and
+CR5B, corresponding to W83627HF_REG_PWM1/PWM2) it has no third PWM
+register, and the driver correctly does not expose pwm3 for this chip.
+The function already computes num_pwms for this purpose, but the
+loop did not use it, and num_pwms itself did not account for the
+W83627HF having two PWMs.
+
+Include the W83627HF in the two PWM case and bound the loop by num_pwms
+so each chip only reads the PWM registers it actually has.
+
+Found by smatch. Compile tested only, I do not have the hardware.
+
+Signed-off-by: Mark Sercombe <sercombe.joel.mark@gmail.com>
 ---
-v2: Also support inX_lemergency for voltage low emergency limits.
+ drivers/hwmon/w83627hf.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- Documentation/ABI/testing/sysfs-class-hwmon | 36 +++++++++++++++++++++
- Documentation/hwmon/sysfs-interface.rst     | 12 +++++++
- drivers/hwmon/hwmon.c                       |  6 ++++
- include/linux/hwmon.h                       | 12 +++++++
- 4 files changed, 66 insertions(+)
-
-diff --git a/Documentation/ABI/testing/sysfs-class-hwmon b/Documentation/ABI/testing/sysfs-class-hwmon
-index b185bdfc7186..34df6d7bd5f8 100644
---- a/Documentation/ABI/testing/sysfs-class-hwmon
-+++ b/Documentation/ABI/testing/sysfs-class-hwmon
-@@ -61,6 +61,18 @@ Description:
- 		take drastic action such as power down or reset. At the very
- 		least, it should report a fault.
+diff --git a/drivers/hwmon/w83627hf.c b/drivers/hwmon/w83627hf.c
+index bb993bb09f40..e2cb7e8aeae3 100644
+--- a/drivers/hwmon/w83627hf.c
++++ b/drivers/hwmon/w83627hf.c
+@@ -478,7 +478,7 @@ static struct w83627hf_data *w83627hf_update_device(struct device *dev)
+ {
+ 	struct w83627hf_data *data = dev_get_drvdata(dev);
+ 	int i, num_temps = (data->type == w83697hf) ? 2 : 3;
+-	int num_pwms = (data->type == w83697hf) ? 2 : 3;
++	int num_pwms = (data->type == w83627hf || data->type == w83697hf) ? 2 : 3;
  
-+What:		/sys/class/hwmon/hwmonX/inY_lemergency
-+Description:
-+		Voltage emergency min value.
-+
-+		Unit: millivolt
-+
-+		RW
-+
-+		If voltage drops to or below this limit, the system is
-+		expected to take drastic action such as immediate power
-+		down or reset. At the very least, it should report a fault.
-+
- What:		/sys/class/hwmon/hwmonX/inY_max
- Description:
- 		Voltage max value.
-@@ -81,6 +93,18 @@ Description:
- 		take drastic action such as power down or reset. At the very
- 		least, it should report a fault.
+ 	mutex_lock(&data->update_lock);
  
-+What:		/sys/class/hwmon/hwmonX/inY_emergency
-+Description:
-+		Voltage emergency max value.
-+
-+		Unit: millivolt
-+
-+		RW
-+
-+		If voltage reaches or exceeds this limit, the system is expected
-+		to take drastic action such as immediate power down or reset.
-+		At the very least, it should report a fault.
-+
- What:		/sys/class/hwmon/hwmonX/inY_input
- Description:
- 		Voltage input value.
-@@ -647,6 +671,18 @@ Description:
- 
- 		RW
- 
-+What:		/sys/class/hwmon/hwmonX/currY_emergency
-+Description:
-+		Current emergency high value.
-+
-+		Unit: milliampere
-+
-+		RW
-+
-+		If a current reaches or exceeds this limit, the system is
-+		expected to take drastic action such as immediate power down
-+		or reset. At the very least, it should report a fault.
-+
- What:		/sys/class/hwmon/hwmonX/currY_input
- Description:
- 		Current input value
-diff --git a/Documentation/hwmon/sysfs-interface.rst b/Documentation/hwmon/sysfs-interface.rst
-index 94e1bbce172a..f7ab5d5c4d3a 100644
---- a/Documentation/hwmon/sysfs-interface.rst
-+++ b/Documentation/hwmon/sysfs-interface.rst
-@@ -121,12 +121,18 @@ Voltages
- `in[0-*]_lcrit`
- 		Voltage critical min value.
- 
-+`in[0-*]_lemergency`
-+		Voltage emergency min value.
-+
- `in[0-*]_max`
- 		Voltage max value.
- 
- `in[0-*]_crit`
- 		Voltage critical max value.
- 
-+`in[0-*]_emergency`
-+		Voltage emergency max value.
-+
- `in[0-*]_input`
- 		Voltage input value.
- 
-@@ -332,6 +338,9 @@ Currents
- `curr[1-*]_crit`
- 		Current critical high value.
- 
-+`curr[1-*]_emergency`
-+		Current emergency high value.
-+
- `curr[1-*]_input`
- 		Current input value.
- 
-@@ -527,12 +536,15 @@ implementation.
- +-------------------------------+-----------------------+
- | **`in[0-*]_min_alarm`,	| Limit alarm		|
- | `in[0-*]_max_alarm`,		|			|
-+| `in[0-*]_lemergency_alarm`,	|			|
- | `in[0-*]_lcrit_alarm`,	|   - 0: no alarm	|
- | `in[0-*]_crit_alarm`,		|   - 1: alarm		|
-+| `in[0-*]_emergency_alarm`,	|			|
- | `curr[1-*]_min_alarm`,	|			|
- | `curr[1-*]_max_alarm`,	| RO			|
- | `curr[1-*]_lcrit_alarm`,	|			|
- | `curr[1-*]_crit_alarm`,	|			|
-+| `curr[1-*]_emergency_alarm`,	|			|
- | `power[1-*]_cap_alarm`,	|			|
- | `power[1-*]_max_alarm`,	|			|
- | `power[1-*]_crit_alarm`,	|			|
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 55a9a3ddd4aa..776ebb26c9c1 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -621,6 +621,8 @@ static const char * const hwmon_in_attr_templates[] = {
- 	[hwmon_in_max] = "in%d_max",
- 	[hwmon_in_lcrit] = "in%d_lcrit",
- 	[hwmon_in_crit] = "in%d_crit",
-+	[hwmon_in_lemergency] = "in%d_lemergency",
-+	[hwmon_in_emergency] = "in%d_emergency",
- 	[hwmon_in_average] = "in%d_average",
- 	[hwmon_in_lowest] = "in%d_lowest",
- 	[hwmon_in_highest] = "in%d_highest",
-@@ -631,6 +633,8 @@ static const char * const hwmon_in_attr_templates[] = {
- 	[hwmon_in_max_alarm] = "in%d_max_alarm",
- 	[hwmon_in_lcrit_alarm] = "in%d_lcrit_alarm",
- 	[hwmon_in_crit_alarm] = "in%d_crit_alarm",
-+	[hwmon_in_lemergency_alarm] = "in%d_lemergency_alarm",
-+	[hwmon_in_emergency_alarm] = "in%d_emergency_alarm",
- 	[hwmon_in_rated_min] = "in%d_rated_min",
- 	[hwmon_in_rated_max] = "in%d_rated_max",
- 	[hwmon_in_beep] = "in%d_beep",
-@@ -644,6 +648,7 @@ static const char * const hwmon_curr_attr_templates[] = {
- 	[hwmon_curr_max] = "curr%d_max",
- 	[hwmon_curr_lcrit] = "curr%d_lcrit",
- 	[hwmon_curr_crit] = "curr%d_crit",
-+	[hwmon_curr_emergency] = "curr%d_emergency",
- 	[hwmon_curr_average] = "curr%d_average",
- 	[hwmon_curr_lowest] = "curr%d_lowest",
- 	[hwmon_curr_highest] = "curr%d_highest",
-@@ -654,6 +659,7 @@ static const char * const hwmon_curr_attr_templates[] = {
- 	[hwmon_curr_max_alarm] = "curr%d_max_alarm",
- 	[hwmon_curr_lcrit_alarm] = "curr%d_lcrit_alarm",
- 	[hwmon_curr_crit_alarm] = "curr%d_crit_alarm",
-+	[hwmon_curr_emergency_alarm] = "curr%d_emergency_alarm",
- 	[hwmon_curr_rated_min] = "curr%d_rated_min",
- 	[hwmon_curr_rated_max] = "curr%d_rated_max",
- 	[hwmon_curr_beep] = "curr%d_beep",
-diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-index 77a6f2bffcba..3a9d4446c6e0 100644
---- a/include/linux/hwmon.h
-+++ b/include/linux/hwmon.h
-@@ -134,6 +134,8 @@ enum hwmon_in_attributes {
- 	hwmon_in_max,
- 	hwmon_in_lcrit,
- 	hwmon_in_crit,
-+	hwmon_in_lemergency,
-+	hwmon_in_emergency,
- 	hwmon_in_average,
- 	hwmon_in_lowest,
- 	hwmon_in_highest,
-@@ -144,6 +146,8 @@ enum hwmon_in_attributes {
- 	hwmon_in_max_alarm,
- 	hwmon_in_lcrit_alarm,
- 	hwmon_in_crit_alarm,
-+	hwmon_in_lemergency_alarm,
-+	hwmon_in_emergency_alarm,
- 	hwmon_in_rated_min,
- 	hwmon_in_rated_max,
- 	hwmon_in_beep,
-@@ -156,6 +160,8 @@ enum hwmon_in_attributes {
- #define HWMON_I_MAX		BIT(hwmon_in_max)
- #define HWMON_I_LCRIT		BIT(hwmon_in_lcrit)
- #define HWMON_I_CRIT		BIT(hwmon_in_crit)
-+#define HWMON_I_LEMERGENCY	BIT(hwmon_in_lemergency)
-+#define HWMON_I_EMERGENCY	BIT(hwmon_in_emergency)
- #define HWMON_I_AVERAGE		BIT(hwmon_in_average)
- #define HWMON_I_LOWEST		BIT(hwmon_in_lowest)
- #define HWMON_I_HIGHEST		BIT(hwmon_in_highest)
-@@ -166,6 +172,8 @@ enum hwmon_in_attributes {
- #define HWMON_I_MAX_ALARM	BIT(hwmon_in_max_alarm)
- #define HWMON_I_LCRIT_ALARM	BIT(hwmon_in_lcrit_alarm)
- #define HWMON_I_CRIT_ALARM	BIT(hwmon_in_crit_alarm)
-+#define HWMON_I_LEMERGENCY_ALARM BIT(hwmon_in_lemergency_alarm)
-+#define HWMON_I_EMERGENCY_ALARM	BIT(hwmon_in_emergency_alarm)
- #define HWMON_I_RATED_MIN	BIT(hwmon_in_rated_min)
- #define HWMON_I_RATED_MAX	BIT(hwmon_in_rated_max)
- #define HWMON_I_BEEP		BIT(hwmon_in_beep)
-@@ -178,6 +186,7 @@ enum hwmon_curr_attributes {
- 	hwmon_curr_max,
- 	hwmon_curr_lcrit,
- 	hwmon_curr_crit,
-+	hwmon_curr_emergency,
- 	hwmon_curr_average,
- 	hwmon_curr_lowest,
- 	hwmon_curr_highest,
-@@ -188,6 +197,7 @@ enum hwmon_curr_attributes {
- 	hwmon_curr_max_alarm,
- 	hwmon_curr_lcrit_alarm,
- 	hwmon_curr_crit_alarm,
-+	hwmon_curr_emergency_alarm,
- 	hwmon_curr_rated_min,
- 	hwmon_curr_rated_max,
- 	hwmon_curr_beep,
-@@ -199,6 +209,7 @@ enum hwmon_curr_attributes {
- #define HWMON_C_MAX		BIT(hwmon_curr_max)
- #define HWMON_C_LCRIT		BIT(hwmon_curr_lcrit)
- #define HWMON_C_CRIT		BIT(hwmon_curr_crit)
-+#define HWMON_C_EMERGENCY	BIT(hwmon_curr_emergency)
- #define HWMON_C_AVERAGE		BIT(hwmon_curr_average)
- #define HWMON_C_LOWEST		BIT(hwmon_curr_lowest)
- #define HWMON_C_HIGHEST		BIT(hwmon_curr_highest)
-@@ -209,6 +220,7 @@ enum hwmon_curr_attributes {
- #define HWMON_C_MAX_ALARM	BIT(hwmon_curr_max_alarm)
- #define HWMON_C_LCRIT_ALARM	BIT(hwmon_curr_lcrit_alarm)
- #define HWMON_C_CRIT_ALARM	BIT(hwmon_curr_crit_alarm)
-+#define HWMON_C_EMERGENCY_ALARM	BIT(hwmon_curr_emergency_alarm)
- #define HWMON_C_RATED_MIN	BIT(hwmon_curr_rated_min)
- #define HWMON_C_RATED_MAX	BIT(hwmon_curr_rated_max)
- #define HWMON_C_BEEP		BIT(hwmon_curr_beep)
+@@ -506,7 +506,7 @@ static struct w83627hf_data *w83627hf_update_device(struct device *dev)
+ 			    w83627hf_read_value(data,
+ 					       W83627HF_REG_FAN_MIN(i));
+ 		}
+-		for (i = 0; i <= 2; i++) {
++		for (i = 0; i < num_pwms; i++) {
+ 			u8 tmp = w83627hf_read_value(data,
+ 				W836X7HF_REG_PWM(data->type, i));
+ 			/* bits 0-3 are reserved  in 627THF */
 -- 
-2.45.2
+2.55.0
 
