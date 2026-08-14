@@ -1,101 +1,184 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C9618D636
-	for <linux-hwmon@vger.kernel.org>; Fri, 14 Aug 2026 01:21:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD66038B125
+	for <linux-hwmon@vger.kernel.org>; Fri, 14 Aug 2026 01:55:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786670461; cv=none; b=jgyTs9qbXa49bwNLPyJQjmjR0reTC2MsUrtnQsxt8pbkiSRcBtzUfFD2lXYyRMW+5oUgx7e4xJjZvIbS5SRb9z2Hdcn2X5B1Z0gM+nzsgWSaZHOH13c/n029UY3JG2ogkmM8RTXxEDG5gUqomGg3SZHx8W4IsZWordu0KK1GgLk=
+	t=1786672503; cv=none; b=Ofw/Ya5d8UbcFBr1JatUIaT4przr7Mu8oiL60eYcgG/LRt+MPWgOmzjBesXhpi6CGipaJc+jmwoIMt+Y/evXURi8a7GMbcP/e/j5djFooLHKYYCqotnAFCWPfOyKnM2PJeb0U5Zu4piwKbLIjhTczfne4agxAjfi8z6rFDZDkj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786670461; c=relaxed/simple;
-	bh=ClMv62YAfJ/EqAeflEZYI3PYWSuMUIujNwkWecER5Xc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=tiIS49rLspSL+57Wkb+/tsAAopqeudt3u3rMd2hK08KsBEJnJq6VLrYrR1ujkJ0upBfCYp+YqH3jLOueKkn/54+4FON9O3dxjg4HwllBDjM8l2vASAekEiF3wWj/va/tUjlDk0tKl19962uNj0Irvf2bLtGNckzgWApV0szWJcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H1XXJCLK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786672503; c=relaxed/simple;
+	bh=j85EFgrf1Y46rKhF3b/FocaS4pizP+Cr+46Pn/4H/Xs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aw04F2/pGRT8Woaqkz4mHGgGPmaP+4kgkOh74X7O4AfP+d334cFZ61qIxaF2xcFiz/iZy6uC70kRr5Mio9epAthF6g0RWXUlAMQLiXn+AnAHvmdwhJXTEIR02GSDXjaCFNG4FyRK9EJEyqeDTOWv5DA0PAWtyFm1xte9KemEqCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X9w9k4ah; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H1XXJCLK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFC2F1F000E9;
-	Fri, 14 Aug 2026 01:20:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786670459;
-	bh=YyFrLTm1JcMqHVOTy6KK4fTJad1YRPxre1r2Wv7ZawI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=H1XXJCLKWNmL6ZBTzHVlDaHSyrxgj/emEBbqeX5qxTJjXV0/B18dmzvoegjba1TE5
-	 Uloo99sVnLt69Uai3VUkrgC8P8KPQdHvq+YYFblsKAp+cmW/BMcHsFbWvczRBk3S/d
-	 gj6/PJn14LXDCDJx+5wiAp5Moz+4ca4q/4cGPz9ZNwgU8h3ljJp4uPDZtTeuCtRX0h
-	 8TgZChVPzjbSiWt4I4uHO7XHCTtzM3vVwp6lcqCUBe5PbgEiYaX15Jk6dt/NRvG42U
-	 RVrzOi71NYIWJ9Xxtl0SX/jRJMSpORvK7u8FlrRWTAMAinGUDH27T/WRAXDYpwx4tm
-	 Qv9Ons6wsRLGg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] hwmon: Add support for currX_emergency and
- inX_[l]emergency attributes
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Guenter Roeck" <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260813211433.879638-1-linux@roeck-us.net>
-References: <20260813211433.879638-1-linux@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 14 Aug 2026 01:20:59 +0000
-Message-Id: <20260814012059.CFC2F1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X9w9k4ah"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2d032846c95so7992425ad.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 13 Aug 2026 18:55:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786672501; x=1787277301; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=bPbhXj68DFow4KobHedvhSuUYttTMn8QptH13rBUSKk=;
+        b=X9w9k4ahnQXmmA4LqZYjZVrsqzpypyMJ0vErjG4adWFlRjALpziOvwTIUcVHa9Vero
+         lNE1nMme77iu2URJZLLJtFUfDAKhFUOTmhf/3EpOhXfHOGFRxadeT/vlzNFkk6uiogks
+         1eP5wOpo8bSxXnmH+k+PLnoh9A6V4xLko3RsrxVrwQEKmim/f4+zDaaNLFosZjViOTsp
+         R4d8pZE04+VNxaLHoBD9CyfrvcR9fmCfsjsN/yk2IvbVmRCNyFTb0UHnR+su+A9TiYVi
+         tUhsaKjzRw2kvipW4ctyHFvNv+mE720K4Am/rcmdkCH5w83/EoOY5bjK8j/Fk7JMjE8I
+         y7iA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786672501; x=1787277301;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=bPbhXj68DFow4KobHedvhSuUYttTMn8QptH13rBUSKk=;
+        b=McR1NkCmBhKBIiULEQQ0vIPJjQgYhs2q//qlpqZoRUkfImJHQ6nbfFm3267yALeVWM
+         nXo/utlodk0iu9cFDEaiTw8YfU/23HteBZb7vc5e4kDy6skhseSUbGVX57pPLP7wxOL3
+         IEKS4fQhuaq9yPF/wXAWUIFT3QLvgSTw3gQ9DCFbPkrhWmakXzIlATtAkLLviDRsB827
+         KtSNPR7Hx/HgKr7gLdfsr849dQe8U1UKAu4L3LSPQzA+k+zJ8wHXoJ+Hd5rPjJSk/dm8
+         c77Bs9XfS8vbBGEgZv7DgjOscPX9h1Bp8fQVE2Xdp8ELCVgnyU4ivXjkOHCsXKwdYG1K
+         lqWg==
+X-Gm-Message-State: AOJu0YwmDSibUcnkzTZZ53ZGpq8iQwV8kML4ZFG9b+2KOc1nLwZndloc
+	bX3AOWCnk6REdJ8UYXVRt69v/5vTQFN9PLNEdflGE6H1+BusHGt8+xy7
+X-Gm-Gg: AR+sD13isehVpzLKrGldui2v/1b6Vjn/522q1Q4I4U1OfDuzUIqApjUEP8qeFjwOPzH
+	2AVkwO90J2cuqHQyavslSeFm/FUM8wp3obOMhHlyiy8BHYRk9WorVMx+TBdgR0A39vBg83VsbPS
+	Q1BVBW2h2EQBJcTW4FWbgdI9aQ2AdtAKNx3a7Blmw3F3QKtViQoXIX2P9I0THvAsY9YBv7jnpms
+	59cJt8/4UlWFXl/Ow2OBRe05QDxT5s9KuYpk48lU+ms4CZvDwaukmfaV9E+ZeiCP5R1Tglrd9Ac
+	nXtvFjl772fb1hSCU8GfL556Wf7TxrWkLK/i2hZiCZWN5Un8mWAo72BmJ94OxkFO8W+gdA8/ylH
+	j96X9lSgTKT7PgQ2kfasAdPONaZlWGzLsIQhsnJVTe9IcdOjHOm/kHGWNJUg0bDfxsHxUBkVCsu
+	o4Tghdyxb8Z7VGGgF9+QFNUofSKuP/TXr9Z75iOMMf1uYEy6ETrVHxQJCXpKBhAX0nfacJYIKVQ
+	lRZ2FrM2T8RDB2ZVI2XOMqgyLUhSdExwElrKg==
+X-Received: by 2002:a17:903:2384:b0:2cf:c543:2c7e with SMTP id d9443c01a7336-2d3b088651dmr29467465ad.10.1786672501014;
+        Thu, 13 Aug 2026 18:55:01 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31ebc75d8casm14375368eec.3.2026.08.13.18.54.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Aug 2026 18:55:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e76206e7-5c8c-47e8-b630-97343570d4ae@roeck-us.net>
+Date: Thu, 13 Aug 2026 18:54:59 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] hwmon: Add support for currX_emergency and
+ inX_[l]emergency attributes
+To: sashiko-reviews@lists.linux.dev
+Cc: linux-hwmon@vger.kernel.org, Koby Elbaz <koby.elbaz@intel.com>,
+ Konstantin Sinyuk <konstantin.sinyuk@intel.com>,
+ Oded Gabbay <ogabbay@kernel.org>,
+ DRI mailing list <dri-devel@lists.freedesktop.org>
+References: <20260813211433.879638-1-linux@roeck-us.net>
+ <20260814012059.CFC2F1F000E9@smtp.kernel.org>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260814012059.CFC2F1F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Internal ABI breakage in the habanalabs driver caused by inserting=
- values into hwmon enums.
---
+On 8/13/26 18:20, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [High] Internal ABI breakage in the habanalabs driver caused by inserting values into hwmon enums.
+> --
+> 
+> --- Patch [1]: [PATCH v2] hwmon: Add support for currX_emergency and inX_[l]emergency attributes ---
+> commit 618b70e656b029d918a4d90557dfadbd253324dd
+> Author: Guenter Roeck <linux@roeck-us.net>
+> 
+> hwmon: Add support for currX_emergency and inX_[l]emergency attributes
+> 
+> This commit adds new emergency limit attributes for current and voltage to
+> the hardware monitoring subsystem. It updates the hwmon core code, the
+> enumerations, and the sysfs ABI documentation to support the new alarms.
+> 
+>> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+>> index dd713e193d0c3..a3a7d27f3b5ff 100644
+>> --- a/include/linux/hwmon.h
+>> +++ b/include/linux/hwmon.h
+>> @@ -134,6 +134,8 @@ enum hwmon_in_attributes {
+>>   	hwmon_in_max,
+>>   	hwmon_in_lcrit,
+>>   	hwmon_in_crit,
+>> +	hwmon_in_lemergency,
+>> +	hwmon_in_emergency,
+> 
+> [Severity: High]
+> Does inserting these elements here break downstream drivers that rely on the
+> historical integer mapping?
+> 
+> For example, in drivers/accel/habanalabs/common/hwmon.c:adjust_hwmon_flags(),
+> the driver performs a hardcoded bitwise shift assuming the Linux hwmon enum
+> values perfectly match the firmware API shifted by 1:
+> 
+>      flags = (cpucp_flags << 1) | HWMON_I_ENABLE;
+> 
+> By inserting elements into the middle of this enum, all subsequent values
+> (like hwmon_in_average) shift by 2. This causes the habanalabs driver to
+> incorrectly map firmware sensors to Linux hwmon attributes. For instance,
+> inX_highest will map to inX_average, and reading from these incorrectly
+> mapped attributes via sysfs will fail with -EINVAL.
+> 
+> Can these new enum values be added to the end of the enum instead, or does
+> habanalabs need to be updated to decouple it from the hwmon enum ordering?
+> 
 
---- Patch [1]: [PATCH v2] hwmon: Add support for currX_emergency and inX_[l=
-]emergency attributes ---
-commit 618b70e656b029d918a4d90557dfadbd253324dd
-Author: Guenter Roeck <linux@roeck-us.net>
+There is no guarantee of a specific ordering of those flags. They can and will change
+position and/or ordering as new flags are added. The hwmon subsystem must not be held
+hostage by some driver making up their own rules. FWIW, I don't even understand
+what the habanalabs driver is doing and what assumptions it is making about the position
+and ordering of the flags.
 
-hwmon: Add support for currX_emergency and inX_[l]emergency attributes
+Guenter
 
-This commit adds new emergency limit attributes for current and voltage to
-the hardware monitoring subsystem. It updates the hwmon core code, the
-enumerations, and the sysfs ABI documentation to support the new alarms.
-
-> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-> index dd713e193d0c3..a3a7d27f3b5ff 100644
-> --- a/include/linux/hwmon.h
-> +++ b/include/linux/hwmon.h
-> @@ -134,6 +134,8 @@ enum hwmon_in_attributes {
->  	hwmon_in_max,
->  	hwmon_in_lcrit,
->  	hwmon_in_crit,
-> +	hwmon_in_lemergency,
-> +	hwmon_in_emergency,
-
-[Severity: High]
-Does inserting these elements here break downstream drivers that rely on the
-historical integer mapping?
-
-For example, in drivers/accel/habanalabs/common/hwmon.c:adjust_hwmon_flags(=
-),
-the driver performs a hardcoded bitwise shift assuming the Linux hwmon enum
-values perfectly match the firmware API shifted by 1:
-
-    flags =3D (cpucp_flags << 1) | HWMON_I_ENABLE;
-
-By inserting elements into the middle of this enum, all subsequent values
-(like hwmon_in_average) shift by 2. This causes the habanalabs driver to
-incorrectly map firmware sensors to Linux hwmon attributes. For instance,
-inX_highest will map to inX_average, and reading from these incorrectly
-mapped attributes via sysfs will fail with -EINVAL.
-
-Can these new enum values be added to the end of the enum instead, or does
-habanalabs need to be updated to decouple it from the hwmon enum ordering?
-
->  	hwmon_in_average,
->  	hwmon_in_lowest,
->  	hwmon_in_highest,
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260813211433.8796=
-38-1-linux@roeck-us.net?part=3D1
