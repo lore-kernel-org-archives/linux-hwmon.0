@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7061F419A
-	for <linux-hwmon@vger.kernel.org>; Fri, 14 Aug 2026 01:19:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C9618D636
+	for <linux-hwmon@vger.kernel.org>; Fri, 14 Aug 2026 01:21:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786670376; cv=none; b=ofNq4KJpWJmG7F5WqvyutxUrOD3or+6i+2FI5N9yfRlx1Pm/9+YWoEig2B5LNSKWbX4M8gNxBQcJcH3bb1pibGTgPTHyE6elnIrI27+uRG3jMsaHjj4mYkD9qvF+hzAHSRw8hA0Po0gG/xXA3iOTUYYEwWWWKN2E8EakBiXmDIA=
+	t=1786670461; cv=none; b=jgyTs9qbXa49bwNLPyJQjmjR0reTC2MsUrtnQsxt8pbkiSRcBtzUfFD2lXYyRMW+5oUgx7e4xJjZvIbS5SRb9z2Hdcn2X5B1Z0gM+nzsgWSaZHOH13c/n029UY3JG2ogkmM8RTXxEDG5gUqomGg3SZHx8W4IsZWordu0KK1GgLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786670376; c=relaxed/simple;
-	bh=8ZFPHijIrkU9g4fjVe3T0rJF1XeMbRlqy22/+K5+i8o=;
+	s=arc-20240116; t=1786670461; c=relaxed/simple;
+	bh=ClMv62YAfJ/EqAeflEZYI3PYWSuMUIujNwkWecER5Xc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=j0jhxW/+/PdYD45A2lFec4btoygLTFON6K3IKV29q0LNn36xoiLYuGbEvivxrmaLYbX7EpjxYm0rFMWYYTRePqrXGahLSLkscGcanFMnnFYHvaGaj+i9nTSG3a1kEjsewxkIMcNcmHsTLgpChUqe9qk1lXU7LWl3VP7Ib94RaT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YboriuId; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=tiIS49rLspSL+57Wkb+/tsAAopqeudt3u3rMd2hK08KsBEJnJq6VLrYrR1ujkJ0upBfCYp+YqH3jLOueKkn/54+4FON9O3dxjg4HwllBDjM8l2vASAekEiF3wWj/va/tUjlDk0tKl19962uNj0Irvf2bLtGNckzgWApV0szWJcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H1XXJCLK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YboriuId"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6B271F000E9;
-	Fri, 14 Aug 2026 01:19:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H1XXJCLK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFC2F1F000E9;
+	Fri, 14 Aug 2026 01:20:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786670375;
-	bh=PENXvGfLy5k1KJqy9K/VgxeIAHINUzx4OmCnGetoHA8=;
+	s=k20260515; t=1786670459;
+	bh=YyFrLTm1JcMqHVOTy6KK4fTJad1YRPxre1r2Wv7ZawI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=YboriuIdFEl1rhPn4iHfwu8UtsBz9KQEogfxceru45EGeUdY3fwhi91Adxjko92Cw
-	 1lzsblrDJECGsOcM4kAECw0OacchUhK3WUhx+hhj9YN/cazKqLA6Va+iVwa+0KmigO
-	 xylmz4hkbHLxMLN865XE/JCRlq5D0LvnPje6XcmHNlOe+gZ3m6OmEH1l8gcr9PBUAz
-	 3iNmZ4vvzeHyZT85bkUXAU5zwZxj7C+sPsllR4x7Ewh1FZPsfhKjtYE0INrAvrCaOU
-	 Qb8kvhnPVtC7TK37KeUnmGwBaS4jv/N4MnRbXM5XUfhmNxl48zmjfHaDfs5natCuyM
-	 RGKEADKODwDeA==
+	b=H1XXJCLKWNmL6ZBTzHVlDaHSyrxgj/emEBbqeX5qxTJjXV0/B18dmzvoegjba1TE5
+	 Uloo99sVnLt69Uai3VUkrgC8P8KPQdHvq+YYFblsKAp+cmW/BMcHsFbWvczRBk3S/d
+	 gj6/PJn14LXDCDJx+5wiAp5Moz+4ca4q/4cGPz9ZNwgU8h3ljJp4uPDZtTeuCtRX0h
+	 8TgZChVPzjbSiWt4I4uHO7XHCTtzM3vVwp6lcqCUBe5PbgEiYaX15Jk6dt/NRvG42U
+	 RVrzOi71NYIWJ9Xxtl0SX/jRJMSpORvK7u8FlrRWTAMAinGUDH27T/WRAXDYpwx4tm
+	 Qv9Ons6wsRLGg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] hwmon: (w83627hf) fix out of bounds read of PWM
- register array
+Subject: Re: [PATCH v2] hwmon: Add support for currX_emergency and
+ inX_[l]emergency attributes
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Mark Sercombe" <sercombe.joel.mark@gmail.com>
+To: "Guenter Roeck" <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260813211950.535148-1-sercombe.joel.mark@gmail.com>
-References: <20260813211950.535148-1-sercombe.joel.mark@gmail.com>
+In-Reply-To: <20260813211433.879638-1-linux@roeck-us.net>
+References: <20260813211433.879638-1-linux@roeck-us.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 14 Aug 2026 01:19:34 +0000
-Message-Id: <20260814011934.E6B271F000E9@smtp.kernel.org>
+Date: Fri, 14 Aug 2026 01:20:59 +0000
+Message-Id: <20260814012059.CFC2F1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -46,59 +46,56 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The commit message inaccurately claims to fix a runtime out-of-b=
-ounds array access and hardware register read, but this vulnerability is a =
-static analyzer false positive and did not actually exist at runtime.
+- [High] Internal ABI breakage in the habanalabs driver caused by inserting=
+ values into hwmon enums.
 --
 
---- Patch [1]: [PATCH] hwmon: (w83627hf) fix out of bounds read of PWM regi=
-ster array ---
-commit 541d179df68e1d4e07bc936b67920fc0623c9326
-Author: Mark Sercombe <sercombe.joel.mark@gmail.com>
+--- Patch [1]: [PATCH v2] hwmon: Add support for currX_emergency and inX_[l=
+]emergency attributes ---
+commit 618b70e656b029d918a4d90557dfadbd253324dd
+Author: Guenter Roeck <linux@roeck-us.net>
 
-hwmon: (w83627hf) fix out of bounds read of PWM register array
+hwmon: Add support for currX_emergency and inX_[l]emergency attributes
 
-This commit replaces a hardcoded loop bound with num_pwms in
-w83627hf_update_device() to prevent an out-of-bounds array access reported
-by a static analyzer. It also updates num_pwms to correctly account for the
-W83627HF having two PWMs.
+This commit adds new emergency limit attributes for current and voltage to
+the hardware monitoring subsystem. It updates the hwmon core code, the
+enumerations, and the sysfs ABI documentation to support the new alarms.
 
-> w83627hf_update_device() reads PWM registers in a loop bounded by a
-> hard coded "i <=3D 2", i.e. three iterations, for every chip type. For
-> the W83627HF, W836X7HF_REG_PWM() indexes regpwm_627hf[], which only has
-> two entries. The third iteration therefore reads regpwm_627hf[2], one
-> element past the end of the array, and issues a read of a non existent
-> PWM register.
+> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+> index dd713e193d0c3..a3a7d27f3b5ff 100644
+> --- a/include/linux/hwmon.h
+> +++ b/include/linux/hwmon.h
+> @@ -134,6 +134,8 @@ enum hwmon_in_attributes {
+>  	hwmon_in_max,
+>  	hwmon_in_lcrit,
+>  	hwmon_in_crit,
+> +	hwmon_in_lemergency,
+> +	hwmon_in_emergency,
 
-[Severity: Medium]
-Does the loop actually ever reach the third iteration for W83627HF at runti=
-me?
+[Severity: High]
+Does inserting these elements here break downstream drivers that rely on the
+historical integer mapping?
 
-Looking at the loop body in w83627hf_update_device():
+For example, in drivers/accel/habanalabs/common/hwmon.c:adjust_hwmon_flags(=
+),
+the driver performs a hardcoded bitwise shift assuming the Linux hwmon enum
+values perfectly match the firmware API shifted by 1:
 
-drivers/hwmon/w83627hf.c:w83627hf_update_device() {
-...
-		for (i =3D 0; i <=3D 2; i++) {
-			u8 tmp =3D w83627hf_read_value(data,
-				W836X7HF_REG_PWM(data->type, i));
-			/* bits 0-3 are reserved  in 627THF */
-			if (data->type =3D=3D w83627thf)
-				tmp &=3D 0xf0;
-			data->pwm[i] =3D tmp;
-			if (i =3D=3D 1 &&
-			    (data->type =3D=3D w83627hf || data->type =3D=3D w83697hf))
-				break;
-		}
-...
-}
+    flags =3D (cpucp_flags << 1) | HWMON_I_ENABLE;
 
-It appears there is already a conditional break that stops the loop when i =
-is 1,
-meaning the loop never proceeds to a third iteration where i would be 2.
+By inserting elements into the middle of this enum, all subsequent values
+(like hwmon_in_average) shift by 2. This causes the habanalabs driver to
+incorrectly map firmware sensors to Linux hwmon attributes. For instance,
+inX_highest will map to inX_average, and reading from these incorrectly
+mapped attributes via sysfs will fail with -EINVAL.
 
-Could the commit message be more precise that this is addressing a static
-analyzer false positive rather than an actual runtime bug?
+Can these new enum values be added to the end of the enum instead, or does
+habanalabs need to be updated to decouple it from the hwmon enum ordering?
+
+>  	hwmon_in_average,
+>  	hwmon_in_lowest,
+>  	hwmon_in_highest,
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260813211950.5351=
-48-1-sercombe.joel.mark@gmail.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260813211433.8796=
+38-1-linux@roeck-us.net?part=3D1
