@@ -1,77 +1,78 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE99823ED5E
-	for <linux-hwmon@vger.kernel.org>; Tue, 18 Aug 2026 23:36:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 600FD37C924
+	for <linux-hwmon@vger.kernel.org>; Tue, 18 Aug 2026 23:37:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787096198; cv=none; b=gHexeum4/fpaOekaHti9p5dNj74WirunR5WmIyJ60xEXB1u918GWwhJCIQCE4qjqPSINYV2m2BoehIyQjTJYB+ORXMvnxJ6WvHE0dirTaMAhVtcUUZNRcjY4S60YPD+8Ym7sIQ7s24by2wmbpX6YbFhG/66ZoBtnmiDi/TKtiWM=
+	t=1787096233; cv=none; b=grXD552X6YuvSP7vIcW+1oH1CoSfBHWcjmZPB1EKHC0bR3ZCOkQCco7snPD1emWPLqAzvuQQjsOWr5uo5G0U1cH+/y+YUp3p42XWiv22Vg0wY+NZ+grtGZYKie3H9UfQ5FIHRIdpWHtRKR4uoimBx63L2ArSEjn8Pg69Qf/rolA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787096198; c=relaxed/simple;
-	bh=04/k0HG1eRbygsQ7nkV1skRD84HVvidkF82cWdZsu4Q=;
+	s=arc-20240116; t=1787096233; c=relaxed/simple;
+	bh=zO5mT6oWpqELdaeWSbBSQLyWiB2W8y/nhFWMCKOQKHg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PBlRlpWbPgRpi+RSJzy/idj5Nh28u1AWxDJgTqZCrrF/IW5MiEeXI2cE0Y/yThSFm9ZSE7pDtZYyRFeY+qnxYJ6c2OglwPSZGADp45+YreQotObY05gZAg9c+KT8M8TnBhEKqH6AFaeaypY+qPR5Olr4ed3IIyHUI1kIDEWcllw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JLvtGhuB; arc=none smtp.client-ip=209.85.216.52
+	 Content-Type:Content-Disposition:In-Reply-To; b=YYjCfSbl1vMFFoaI0JvaoUBAUdi46gTaKR0a7mwWzSLiUGZJDvuznibtxf8811S35b8GiRoZVV4HL10orxxaP2BsJckg0OaF/IfivunYglqZl9n28Vu3QkyP3hCzJpMYxx1uIpB4CxZfJZYDoaSn1K7DmCGrEcU27udjkSAV6a8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TcM2pwmc; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JLvtGhuB"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-38ea87caafeso427941a91.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 18 Aug 2026 16:36:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TcM2pwmc"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-38e42560ebcso478538a91.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 18 Aug 2026 16:37:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787096196; x=1787700996; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787096232; x=1787701032; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=1EGd/77iz2abHF5y4GuEtLKn0yrAYtLez+CqQGXBQpE=;
-        b=JLvtGhuBRA8o08zhZ33nqqkHKpVSRHxwOyA+30Hj8MiWwnyI6DI7jKKNw2uv9XGuJ+
-         L5nDjYkyg2SC6Z5f0tLsvLxiMv7rpP6KJKDjKP/KNgmBxL/hEhLq2xp2q4SwOeSedjLf
-         /TtujYxbWNebHkP4M43Hj3yXgVxoS/wjbgP1/fhLA4pIH4rg3rNE3sLDULptdz3sN9kt
-         Uelfo7lWhbufai/YStfqHWpkvM1RXP9tlOrEI2TS0JwbgTpXfg2HTbxHxnPL87YUuo1G
-         4WG1L02oiPh0NXrbnbGi/rkZUVykKxb8hMyIBtVf2QBaxBIloCxOqvirG3uuo97r918q
-         p9rQ==
+        bh=spsLyqllbdv8uoHDIT8SHj6pVVShs8FwTfZLnA7RIu8=;
+        b=TcM2pwmcrxOn/kVAafraZhHLAiM3wJR9QthSqMhHTB5xikRxzJYkIeHCGlr93aZ/om
+         bqunCi/QtUnkxJDGkS9vCGCZdrjiOTrY12XW1T+fi9zwbnQ7Sm58uT/JOkl8Nfi7ok/I
+         e5iAsm3YJrPoZtYk1cAwpEkg1zGvcR9w5Q9pbZDD5TbqG6iiYvVh0lArqi/AFGrvIZNF
+         zEeoO9XCDkUWy6ZWIDPsn4XS6RHRXE2ZZbuE5JOoZwHM/l/fRNYyuJjHl/z8qpgshaLp
+         yZ4MLN0cmwcUMg/TmQZb9bjIA2gg8V3rcEpK40GWRBTSPDUjuBaCEQor747KleMfy+d/
+         zPug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787096196; x=1787700996;
+        d=1e100.net; s=20251104; t=1787096232; x=1787701032;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=1EGd/77iz2abHF5y4GuEtLKn0yrAYtLez+CqQGXBQpE=;
-        b=XkIAga3NTtQdWqKSkd2SdlY82ugQMiI+7/Asjwm/x8MnkKwhjYYL5P5mp8bgLS6JXA
-         +qawWTBRtGb+fHPVzR7PxPn72CHj6aWXzeTmKOnuH4RlLRLYdtzOJOM54wE13OAEkc7x
-         m+vKTnkVxHq7wlg4gGvtBV6HamvE6B86CubX3hYI0oni2X/9w6M5Bw5mKm64ki3PpkOm
-         9P2x9z9qtE5xLBI+MHqHdGclorC+65IFOv0KgtJrfspNRWa73WwJSuK03hLbF12WqaGz
-         fDF4T37b/pA5Uu7UWpdVY8z3ThfHQY7BvDE6nLxJAiv49l91bM+qKDqoJW3Caike+UK1
-         VxBw==
-X-Gm-Message-State: AOJu0YwrMxGKEQmyAieHrrq2la7Y0nHxBR7B1ftCvzQaoeClqVdcrHa1
-	QHsfS8khk9MTbhV3gEnFpRzT1dICOzCdeYV4IYh5lHM+OE9n8yEdVSKW
-X-Gm-Gg: AR+sD100SRuBJ9UdrHZKq6HvhKTyILQhVLUE9Np8fq4qiVGpZCM4jBBpBl67E72xdaH
-	2rPxNlw9OEHd4CplvTGDlRVY4z8XAFvZ014fie8Csm7kKUNvDIXemUsoisfo8fUc/dsBmSqFu5n
-	ZRgcSu4obFSiGPlVSXr11Wma30eTGoYgGUj78Gp7ZRkJoezOPIKTuL/ZoU03B/+hVl6hnJMJNbb
-	Hzm7Jp83PynqYrwopNpCLOCguAsMRhHoHjHsCcQttuwgcvaKWwu/6jUfODlZcCT2aOwgLc5THEb
-	8gT5exoHjOLgs63fPU4UOm8bmp6cw4GkY3VrJIavvmnc+PZawgrKlUziAwZ/IBouX571doaIZDi
-	D3OFv+bkzsoaModNaQ2R+yTJLw+iLeMAcu8okqDKamQ/IGjxSUb1HNVLwELFELLZ82BasM/2A1v
-	mOf55pNnCy0mOUNjwe55TEpVNEJM557Zo7ODm+dtsVuyak5GN8nDp4N9wb++mEEG5ux9EOyzRhG
-	A==
-X-Received: by 2002:a17:90b:5484:b0:380:f389:447b with SMTP id 98e67ed59e1d1-395810840ccmr900386a91.11.1787096196075;
-        Tue, 18 Aug 2026 16:36:36 -0700 (PDT)
+        bh=spsLyqllbdv8uoHDIT8SHj6pVVShs8FwTfZLnA7RIu8=;
+        b=Az1VEJlOK8ZCAUneH5fnnVkJ4VTT+Ajgls0OfK/4Y8q/+7NfzIaWYzyxCEWOzms30y
+         YtQ5epLNMPQm3Pzy3lCS6DNwf5FfXQBy3vRVhGCaMqVSJLFGkXgbVqodOBX6gKyGPCSf
+         dOtWNwssoFN33nPzJz1EDfcaCip0ALjZVrS7O/Kh+PG3i/r90b0e9Ph/+lygBP0MfxYT
+         kwJrQmox90Vj/I3KA01fpRspEj6/5e2Vy7ihGRI0nBvCv+gaILrd2gXbJiOllIhVVPcQ
+         DukWrf7Gl/gXtP6VTcvXN8AxaDcjxz9M+izapZ1Dz2wh2tBXL7694V1J90x4Okl11eOp
+         cttw==
+X-Forwarded-Encrypted: i=1; AHgh+RoYFjNFh0LVHiAuFzXrPyg2Uk/pVal0zW8ffni+ddPP8fXh9M0Qd3NnKYOs564oMTehqjlAZCm0Rz0f8g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwL6OSuBZJKfsbhX8nhWqCkb0fP+XEFkSBU14P68RT71oY6gaqD
+	hhywdspv15pIWR1DY8YdmjQvVCRsY+k82JnmRL0W/zL2ySXrxY7jxhsm
+X-Gm-Gg: AR+sD12KHYQO/6/FIt7s06gNQ4b+D6e4+EIcDafjFWnYMFxLZ45ICmxhdAY84kyIR7D
+	/FexNjcuQ89bnO5Hn2NSN82f6KuC4a8LWJ2qZFFn/hKsvjJNANB5/gfW68Brme7sKX4M6lZ6wqc
+	B+LqcuIph5py4dWFTH8AziYASikLQs44r7LTLQQ7Axmn0Kx/xuCb0NYD+PqNWAVdEAuq58OHrn1
+	mklWySwbz8i5qOgVKblUHX+d+HBiizd/Xa54yK/Q4fU11Gl0xRs4oZUM2tVdqyppuBKmq+93o+E
+	fLgd57w46MmcSm0+Z86WHYfQGWoHH2QOK5+GyGyMo8AByDJ0VhiJE4ZaJIAavWJdkZlabcwbzNM
+	6Mo+4q3z8abv6ZzkkfsX5RxvzBaHg5l1RTsKpQPCte+r43LdGHDccnZC4v8mQzRYgfF+K0RTlio
+	PFwUANnjBRWx79DJGSICXZeDjyjfVu526QHJk7GrcsPQ3mpAXHDAktA7lu5pYg09Q7x9nwdsJFR
+	HV0BxElR6fq
+X-Received: by 2002:a17:90b:4ac5:b0:38f:efed:5445 with SMTP id 98e67ed59e1d1-3958125aff5mr697147a91.4.1787096231751;
+        Tue, 18 Aug 2026 16:37:11 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327bf10a94dsm558957eec.15.2026.08.18.16.36.35
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327bef77bfcsm541284eec.9.2026.08.18.16.37.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2026 16:36:35 -0700 (PDT)
+        Tue, 18 Aug 2026 16:37:10 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 18 Aug 2026 16:36:34 -0700
+Date: Tue, 18 Aug 2026 16:37:10 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Nikita Dubrovskih <testname142@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, hansg@kernel.org,
-	ilpo.jarvinen@linux.intel.com, platform-driver-x86@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] hwmon: Add fan monitoring support for HONOR FMI-XX
-Message-ID: <facb9524-b665-459f-b522-ded46d5bb57c@roeck-us.net>
-References: <20260812192242.859307-1-testname142@gmail.com>
- <20260813091411.1186193-1-testname142@gmail.com>
- <20260815232405.2107574-1-testname142@gmail.com>
- <20260815234041.2262291-1-testname142@gmail.com>
+To: Stoyan Bogdanov <sbogdanov@baylibre.com>
+Cc: jbrunet@baylibre.com, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, corbet@lwn.net, skhan@linuxfoundation.org,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 1/3] hwmon: (pmbus/tps25990): Rework driver for
+ multi-device support
+Message-ID: <01704145-51aa-4d4b-81ec-990bc0da31bd@roeck-us.net>
+References: <20260817101455.3526260-1-sbogdanov@baylibre.com>
+ <20260817101455.3526260-2-sbogdanov@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -80,22 +81,18 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260815234041.2262291-1-testname142@gmail.com>
+In-Reply-To: <20260817101455.3526260-2-sbogdanov@baylibre.com>
 
-On Sun, Aug 16, 2026 at 02:40:41AM +0300, Nikita Dubrovskih wrote:
-> The HONOR FMI-XX firmware exposes a serialized \\GFNS ACPI method.
-> It returns a status byte and a 16-bit fan speed in RPM for either of two
-> firmware channels.
+On Mon, Aug 17, 2026 at 01:14:43PM +0300, Stoyan Bogdanov wrote:
+> Rework existing implementation to allow adding support for new
+> devices to the existing driver. chip_id is used to identify the
+> current device and differentiate logic where needed.
 > 
-> Add a DMI-restricted, read-only hwmon driver using that firmware
-> interface. The driver deliberately exposes no fan control or direct
-> Embedded Controller access.
+> Changes include:
+>  - Add an enum listing supported chips
+>  - Add a structure to hold per-device m, b, R coefficients
 > 
-> The interface was validated on firmware 1.09 with fan channel 0
-> reporting approximately 2500-2800 RPM. Channel 1 is readable and
-> remained at 0 RPM during idle and a short CPU load.
-> 
-> Signed-off-by: Nikita Dubrovskih <testname142@gmail.com>
+> Signed-off-by: Stoyan Bogdanov <sbogdanov@baylibre.com>
 
 Queued for 7.4.
 
