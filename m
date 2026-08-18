@@ -1,172 +1,126 @@
-Received: from relay11.grserver.gr (relay11.grserver.gr [78.46.171.57])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 499471F16B
-	for <linux-hwmon@vger.kernel.org>; Tue, 18 Aug 2026 15:36:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.46.171.57
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77DBE4854F9
+	for <linux-hwmon@vger.kernel.org>; Tue, 18 Aug 2026 18:14:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787067399; cv=none; b=mr4HsE2Cih4M1snD4iJYergN8ldQhUbYZn9bv/WJXlc5e6W55AwvH4vliqNDKinm0g1KrOaxxoOzfgdmuCum9j2+zLvcduF19yGG97Nmm8JJ8AW8scy6erb1TrTsYsME33ysKolsDukIcmvI06ZypwB39uMd/1rw+mz5bnrP8j0=
+	t=1787076849; cv=none; b=oBh7HtDEOAi918D+p/peymsSoP4hUYWHkqPgClv2czDMasCewbMdt/NwbtHYhn4e65ibxztHoxrKrNAZduRTcwcQKqnx7rhnwCgSTezZsn8eLbnvIRGyTE3x+0ABv8DI4U1EnLJBzMcZv2dD36bUWN9ZEjIDD3mKtVK6SN/ct8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787067399; c=relaxed/simple;
-	bh=6HnqJVNnO8fbVCbtUOQtItNQMwwlBtU8Xk8AKwaY/R8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bGn0h0O6FI4BuoxHm/En5hFojguBYwyyKmMvlMLNy9zsvYepPiA/FmlUizCOBLBUaePyhPnJ2drThUTvHdSCn4s0EIO2VWvf6Ei9bicwpLXskOJa4Uptyt5YbZF7lZWzPaYIxEb3h3N1AB+SJI498nV7Br9RM0EJ5ggxG9xn45s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (2048-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=SXyb8BBC; arc=none smtp.client-ip=78.46.171.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
+	s=arc-20240116; t=1787076849; c=relaxed/simple;
+	bh=+zdtyruVipHBzua3Z+iP7K8R48j4pg2v8WT6MJyggmo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VA5VuakwDERC0N7vlVvJ2SzNlKwvi43lf8TT9syIC4h24VWwz8r81NXbu36um/mKevtL3xUU3GT7Oyx7VZvyptxeLUr4sF+AVMjPplOZODY9K3eoJ2nT8SAAZxeEXpTJNPA4JnlQgwUqxQfFTVWxB+rUawooOKcQUAYPPacgTUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kCRQ4afQ; arc=none smtp.client-ip=209.85.222.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="SXyb8BBC"
-Received: from relay11 (localhost.localdomain [127.0.0.1])
-	by relay11.grserver.gr (Proxmox) with ESMTP id 6F244C2A85
-	for <linux-hwmon@vger.kernel.org>; Tue, 18 Aug 2026 18:26:44 +0300 (EEST)
-Received: from linux3247.grserver.gr (linux3247.grserver.gr [213.158.90.240])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by relay11.grserver.gr (Proxmox) with ESMTPS id E1F62C2A8A
-	for <linux-hwmon@vger.kernel.org>; Tue, 18 Aug 2026 18:26:43 +0300 (EEST)
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	by linux3247.grserver.gr (Postfix) with ESMTPSA id 086CD1FFBBE
-	for <linux-hwmon@vger.kernel.org>; Tue, 18 Aug 2026 18:26:42 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1787066803;
-	bh=aOuj/+W84x2+rIHLSDGB0H4BsSYWB02IXh4muXkVl4o=;
-	h=Received:From:Subject:To;
-	b=SXyb8BBCrhD7opkpdVLZKcGEoZziOf90Jrd013EvYcyNSIn2eelZov1bQ/xSS2iM+
-	 zfdQmIdGt6GlcETQMrtYysTTJj60fcRPhAJ8xAnUBbGILo9+vJT+9EAiZT2fW8/a1F
-	 599fgDgUEuUpwirNRRNcpoxodJhJJkvrO/tVZcWvGrGfTLqzKIYmxZAcSMXsT5KV1E
-	 pqfRZLwQV8LB5Oc3kvVlaIreVTRZtOdTjwpYA/oSXGzzQEbdjzcHU4pl/cBa5GlWwX
-	 THFPVdWJQpJouQI6nEDx7ePC8na6MmgRjKnQzgVaxOL0nqb5SKmdZaQmm+7DhbwJao
-	 b2+PReLPi6ySw==
-Authentication-Results: linux3247.grserver.gr;
-        spf=pass (sender IP is 209.85.210.169) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-pf1-f169.google.com
-Received-SPF: pass (linux3247.grserver.gr: connection is authenticated)
-Received: by mail-pf1-f169.google.com with SMTP id
- d2e1a72fcca58-84a2dcede83so66960b3a.3
-        for <linux-hwmon@vger.kernel.org>;
- Tue, 18 Aug 2026 08:26:42 -0700 (PDT)
-X-Forwarded-Encrypted: i=1;
- AHgh+Rp0qaXvZIAhqfhAoMA4v5rIrBxnqe4adrgRWp1Cd9qDWbEayK3bEY1kI0KS7vixMGXTqlOdIJoS6bD1Ag==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlSn1tcqyqXR6PZIczKklvr8i1mOEEgx2CxKpYcnP7xZUBR7yE
-	kzBg6GnhY3DSWn6PkBDtvtmEp1YHVtX1odISWTxXF+ssc39ss0v8THZjX/8kDyyRheEnQ9l60+o
-	vuzsKVW7w79OixtZ+P0IYdL9pDnXQQdc=
-X-Received: by 2002:a05:6a21:2d4b:b0:3b2:a809:ffe with SMTP id
- adf61e73a8af0-3cc71a2d522mr45452060637.14.1787066801283; Tue, 18 Aug 2026
- 08:26:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kCRQ4afQ"
+Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-97bf91c815bso44287241.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 18 Aug 2026 11:14:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787076845; x=1787681645; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=dI0skn1hMaNhZ7ScecWggo3zzn2ZDLJPo30AHcpisVQ=;
+        b=kCRQ4afQY/O7bXt37iD5KZKUrIAhO+Oc9zWEKPXxk2dBVNcOFUML8aio6cpMy3nDA/
+         gPRhpu1id2bD5zoZ9Gb0SNk3/a8Hj56wjfCgYwcieE1RcyukCAbiMR/Bm9rnZuWeVc6e
+         rpgZo5WQDpUDQTu+E9IouTHEm5c2sbqwbcKstA1BQRWAdoIkgAdro3x8HNJ23O85Rrr2
+         KGv3yHrD5O+iz/AFnRA4WLWbOM5nlf1+J5aZp7+BLYt+DupI9PhLLynuj72KZ8fh6IA2
+         ZjsDXQ09l2653JWbJqV1qCyIyxjbPEGg5gbqTPce0l/3vHLfvle+aByXqogNjbhZZEmW
+         TfpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787076845; x=1787681645;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=dI0skn1hMaNhZ7ScecWggo3zzn2ZDLJPo30AHcpisVQ=;
+        b=FNcziCcnY9AIGa/k60BQyu2VO4hxPqBA2qzmAukrfg6MSUfqwknNs/VgXPCpJ6MmMr
+         GbWDVMbaKzttQOzxHcD4Rx+G33lPMLR7CfklsGNl6t3/49eemAOMroaQJL+BXs627UZr
+         nUxVzUQwc92/PBOy3K8zRhTVQjHomY+L02BbtlZuoo/mNoc9YhKCWl5YuIzuOWP6JMUf
+         SwfhpoTLcY5Pwe7ou83Iym1ziKOdJf7wp80sbKCkawjERWmmA/4669G7K1Deg9kLsqMd
+         2VU2B7TDDpkUxTx61rS20PlxoK35qMYwNHTfzOXvxUtwxIA9Taf0otqUM3LAteqWT0Sr
+         Vj9g==
+X-Gm-Message-State: AOJu0YxIsSxCkIvLiqU4bXj+pugPXDEP9LtnBSWwvB8K1HiMuHFgz+2F
+	n8xpckTPYi6L2HBKmU0thuYQVkpgFXncyEhQcD/DwrYXMkL7AgpDmAF7YBFyqbmEMu8=
+X-Gm-Gg: AR+sD10RAt0zpnujust0t7wFcm+i9jRYXHpsabhTq3pJZooHYmJpnsQ+Wk1zg82nN7s
+	eYoDjKwK2X8fe1X7qlNfrr+ST7TgnGcInwGRIONThb/S/tTVNZ7Bcfl7pncA94rePzj/4Iak4lw
+	ct2ic9ipmhoUqgDLoZX8tGIQafkeWXajQOFjY0WEHdvNlDo6lsLCazmcWv6NFf5fxb29WLRNZEf
+	fRsUZAF2LwvDLNRyr1ajzAQ4NhfAFxQ2T2yH506VYGOeoX4nmFQ7GvL8ww8BmXPiSktHv+k48vs
+	jE6Z9XNa/OdHhkiyGts9UJPNrtyZDiRQtRN7pa9i2bk+fHPhzKpJHSgSl7Vvpwgyqun5aWg8eMq
+	/Se4cJLARnYwcFfXXpqn4qR+2KpkjnDMIyIcAgNNsxxEDCKOg8p1XkguYupUnh8b1h+sgYZBc0N
+	mUIia2gvH7Rvx1osAFuMMMiEhZ0hxy0KNbFPTzLczwOiy+JhZy7W/ueH7p1Fwf7uGX
+X-Received: by 2002:a05:6122:6c15:b0:5c5:a01f:aeff with SMTP id 71dfb90a1353d-5c5a01fdb13mr8760102e0c.9.1787076844361;
+        Tue, 18 Aug 2026 11:14:04 -0700 (PDT)
+Received: from nixos-minipc ([2803:9810:b675:f600:6f62:ea1f:22cc:4407])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-97c4533ef8dsm1496530241.1.2026.08.18.11.14.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Aug 2026 11:14:03 -0700 (PDT)
+From: =?UTF-8?q?Sebasti=C3=A1n=20Peyrott?= <speyrott@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/1] hwmon: Add Minisforum UM780 XTX EC monitoring and fan control
+Date: Tue, 18 Aug 2026 15:13:44 -0300
+Message-ID: <20260818181345.203295-1-speyrott@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250511204427.327558-1-lkml@antheas.dev>
- <20260803221614.59324-1-derekjohn.clark@gmail.com>
- <20260803221614.59324-2-derekjohn.clark@gmail.com>
- <f8b2c85a-2800-c9a3-4e56-7af4c53823e5@linux.intel.com>
- <58a9c644-98c2-47ee-b083-0d5b19fa5053@roeck-us.net>
-In-Reply-To: <58a9c644-98c2-47ee-b083-0d5b19fa5053@roeck-us.net>
-From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Tue, 18 Aug 2026 17:26:29 +0200
-X-Gmail-Original-Message-ID: 
- <CAGwozwGdwhE6Sm6oa2uxx_sHfFNQ6fHYnAhYHkEPQcp_Yb=Z6w@mail.gmail.com>
-X-Gm-Features: AcwNN1UhVCaNOkZFdVfL73RRF7zncaDflReojJs4T1XIHAhKKPfu3HJk5Tqo7yM
-Message-ID: 
- <CAGwozwGdwhE6Sm6oa2uxx_sHfFNQ6fHYnAhYHkEPQcp_Yb=Z6w@mail.gmail.com>
-Subject: Re: [PATCH 1/6] platform/x86: msi-wmi-platform: Move guard out of
- switch in platform_write()
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	"Derek J. Clark" <derekjohn.clark@gmail.com>, W_Armin@gmx.de, corbet@lwn.net,
-	hdegoede@redhat.com, jdelvare@suse.com, kuurtb@gmail.com,
-	linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>, platform-driver-x86@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-PPP-Message-ID: 
- <178706680343.724260.8894526516633899977@linux3247.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 1.4.6 at linux3247.grserver.gr
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, 18 Aug 2026 at 16:42, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 8/18/26 07:12, Ilpo J=C3=A4rvinen wrote:
-> > On Mon, 3 Aug 2026, Derek J. Clark wrote:
-> >
-> >> The ML patch set uses a guard within a switch case that violates clean=
-up
-> >> rules. Move the guard outside the switch so all return paths are cover=
-ed.
-> >>
-> >> Signed-off-by: Derek J. Clark <derekjohn.clark@gmail.com>
-> >> ---
-> >>   drivers/platform/x86/msi-wmi-platform.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/platform/x86/msi-wmi-platform.c b/drivers/platfor=
-m/x86/msi-wmi-platform.c
-> >> index dfb65ac8fbf6..33acd448f674 100644
-> >> --- a/drivers/platform/x86/msi-wmi-platform.c
-> >> +++ b/drivers/platform/x86/msi-wmi-platform.c
-> >> @@ -675,11 +675,11 @@ static int msi_wmi_platform_write(struct device =
-*dev, enum hwmon_sensor_types ty
-> >>      u8 buffer[32] =3D { };
-> >>      int ret;
-> >>
-> >> +    guard(mutex)(&data->wmi_lock);
-> >>      switch (type) {
-> >>      case hwmon_pwm:
-> >>              switch (attr) {
-> >>              case hwmon_pwm_enable:
-> >> -                    guard(mutex)(&data->wmi_lock);
-> >
-> > While I cannot see the code easily, one could also add braces to inside
-> > the case to avoid this problem.
-> >
->
-> I don't see the code either, but wouldn't this be a use case for
-> scoped_guard() ?
+Add a DMI-gated hwmon driver for both fans on the Minisforum UM780 XTX. The
+EC is an ITE IT5571E, but its register layout and OEM commands are defined
+by machine-specific firmware, so the driver only binds to the exact board
+revision and BIOS version on which it was tested.
 
-Hi, not explicitly stated in the cover letter, but this is essentially
-a series on top of the series I sent last year but I did not clean up
-due to a variety of issues with MSI firmware that would have made the
-driver unsuitable for upstreaming (to my standards at least). These
-issues span Intel driver problems, HID controller instability, and
-varying WMI implementations esp. in regards to PLx setting between AMD
-/ Intel variants, shift mode behavior not acting correctly, and fan
-curve application / resetting being weird (the fan curve on off bit
-does not seem to change whether an automatic curve is used but how
-close the device alings to the set curve? requiring us to back up and
-restore the original curve? half of the devices keep the curve during
-sleep and half don't? but if the fan curve is so finicky do we really
-want a resume handler for it? Perhaps we can kick the timing quirks to
-userspace)
+The driver exposes both fan-control temperatures and tachometers, two OEM
+automatic CPU fan profiles, and two writable system-fan transition
+temperatures. It preserves the selected settings across s2idle.
 
-For this reason, I focused on other manufacturers such as Ayaneo and
-OneXPlayer. I will revisit this series per request from Derek as he
-seems to want this for steamos and hid-msi is already queued for 7.3?
-Although, to be honest, compared to the controller firmware issues,
-the WMI implementation is pristine.
+Tested on the target system with concurrent RPM reads, OEM profile changes,
+system-fan threshold changes, unload/reload stress, and s2idle resume. The
+settings were correct from the first userspace sample after resume and
+remained stable for 15 seconds.
 
-So I will need to go through these issues 1 by 1 and see which can be
-fixed and either drop certain features in the beginning.
+OpenAI Codex assisted with reverse-engineering review, code editing, test
+orchestration, and patch and email preparation across a long interactive
+session. I reviewed every change, ran the live tests on the target
+hardware, and take responsibility for the submission.
 
-Particularly for the fan curves, if we say that resume handlers are
-required to be in the kernel moving forward, I do not know how
-realistic it is to make those reliable for this WMI device family.
+Link: https://lore.kernel.org/r/20260807003842.249957-1-speyrott@gmail.com
 
-Best,
-Antheas
+Sebastián Peyrott (1):
+  hwmon: Add Minisforum UM780 XTX EC monitoring and fan control
+
+---
+Changes in v2:
+- use standard hwmon callbacks for pwm1_enable and the hwmon lock for extra
+  attributes and PM operations;
+- remove constant pwm2 attributes;
+- align CPU/SYS temperature and fan channels and simplify their labels;
+- round and clamp system-fan threshold writes, and cache the fixed limit;
+- replace delayed work with suspend/save and synchronous resume/restore;
+- simplify callback dispatch and error handling.
+
+ Documentation/hwmon/index.rst               |   1 +
+ Documentation/hwmon/minisforum-um780xtx.rst |  68 +++
+ MAINTAINERS                                 |   7 +
+ drivers/hwmon/Kconfig                       |  16 +
+ drivers/hwmon/Makefile                      |   1 +
+ drivers/hwmon/minisforum-um780xtx.c         | 509 ++++++++++++++++++++
+ 6 files changed, 602 insertions(+)
+ create mode 100644 Documentation/hwmon/minisforum-um780xtx.rst
+ create mode 100644 drivers/hwmon/minisforum-um780xtx.c
 
 
-> Guenter
->
-> >>
-> >>                      buffer[0] =3D MSI_PLATFORM_AP_SUBFEATURE_FAN_MODE=
-;
-> >>                      ret =3D msi_wmi_platform_query_unlocked(
-> >>
-> >
->
->
-
+base-commit: 75f2c0b3690702c90863c2e138cb5520670845ea
+-- 
+2.54.0
