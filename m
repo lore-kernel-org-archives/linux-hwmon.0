@@ -1,76 +1,73 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 397D72EEE7E
-	for <linux-hwmon@vger.kernel.org>; Tue, 18 Aug 2026 23:33:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AD192EEE7E
+	for <linux-hwmon@vger.kernel.org>; Tue, 18 Aug 2026 23:35:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787096030; cv=none; b=U2ukcqeta7wGvJyrEMoFBZqnDhO8mI5+Fenn559Ffa5s9qShXEs8ZPL7JDx3STZQj3lHgF7PrKGZYuy8wDU8QTYFjncQlS51f3EXOo6KAKYH/ErDuMataRKSeGJRS1Q7KRd9dfM8jEGw6ka+68zUy4WVEEyqXyBBJXoKpExC3Io=
+	t=1787096138; cv=none; b=EzSg6v+2lsFPAgOAgVHY2lvGDQh9vOp+zIPfJBpsyU7VkXkLEpMevZnEcr8MqTrJ7qcPK2vbp3On6tQEE6883xuQSunpipn7uee3fPJWM7kUn55zPb3lomi+so97/+UxWbQJOvfTgdbsY9jWFN8ThXk3UEbNfRS2HcDbWQPZXyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787096030; c=relaxed/simple;
-	bh=roxqCTEq/hPDgk4p2gdXrVVPTVJ17NcfFhZ8xPVXvhs=;
+	s=arc-20240116; t=1787096138; c=relaxed/simple;
+	bh=Lo5Ern/y80gahHtbvftl6+RO/JxxG2MKaw94H8fl0qc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sHkW4rzQoKdr5bs5Z47G1VqU28DUgf9aitNl8vAiyjKwJrOFmZCWie3Rt00SO2JZtECZi1u09vkFCmLekbc9JkjECjUy9FTmLAKKcTMYFgMI+4aCGHI2GCEfxGXMhybWdfqoNvBHQSeSIiv8MvJpGiZIAi9kWZ8h20/LHGJRsWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OF2cygpV; arc=none smtp.client-ip=209.85.215.177
+	 Content-Type:Content-Disposition:In-Reply-To; b=elgpYJcAvXEvKQKtpvpQ+vh1dpcrrQ7TdkNM+7aExtEshHssVbEHY6Kjj370Pn/okjsc1XrFW7HmHkwIzYh/CcK9nThsYfcZQIc0AgE6diqNfD3qTzOYUXSZ7ezKMiO9KDGPD3G5VYXV+yxfgK+H7oD5hmMS6x+Z2fUSRW5o+nU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H+i5auv8; arc=none smtp.client-ip=209.85.215.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OF2cygpV"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-cc11a30a259so327651a12.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 18 Aug 2026 16:33:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H+i5auv8"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-ca12086c06eso273773a12.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 18 Aug 2026 16:35:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787096028; x=1787700828; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787096137; x=1787700937; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=/xAnLP55G7btHdAtc8T6aDOwJEHunlOw2Qgw8CJjJCE=;
-        b=OF2cygpV8Nmizikdn6wIPkx+CrvZptWSgxFQNmxVsr6zdzysUF88f997turcoNfPw6
-         NNAIzJmGh9gYEOMBCQF1B3PwSjbzjBXD+jA5ZFOMAu/wyxUjJDhRFYV87KMJVejXjpi/
-         qYs6wDD15Biw9F1ZCTotQ4Y7LmQp4MX0+LNvTeM883wDEZQLOJvw3ubUZwDpJmBMWhbd
-         wnjlYGMM3ufX9YZrpcIdPeR0LuChzkiC/NC8fWpwMDxsUS6k4nHYQOe1leU3h+7i6Mts
-         Ad/XyG70artUw8Rx88hcZu1ELpQv6kC6j14nm2ILiUCJzmW1iBlEFtaI7XvfBVeQwUUS
-         +rgQ==
+        bh=hOd73QypYG/lDkiROZtsSJXo64G6ueTd+G4+cxdnqr4=;
+        b=H+i5auv8ZTJQ8cDBqQsTBTwvwbWyxw0a7VRqoIY8hmOlQikoLd2EKmZ63fbrBOJE6S
+         nmwlqllaC42P5I1N3ltvbm5almafuxTHBKC4mnILpRVJ7YuA4x3Bwm+JUKC4JMxdJLXW
+         hXTMC7/N3287rEx5H7c+GZYSEurrbsSaAFHKqRXs8kwpQT/DSHj75Hv5BL8nBb93wecI
+         /o+7Y6QjFk61R+MJ1xOmw0kP0nKDlHxyVEJL2FL/BHD3e86PZZAIqhnyx5Lrukf0Fsjz
+         k+7KXQNWRf5hB6mxQ8n6tKX0jBUuGGPm6wGvGLXw+Znr5fQPHq7utHdO8HSX9OF9bxV9
+         V/gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787096028; x=1787700828;
+        d=1e100.net; s=20251104; t=1787096137; x=1787700937;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=/xAnLP55G7btHdAtc8T6aDOwJEHunlOw2Qgw8CJjJCE=;
-        b=pRTzmeuh1Uqs8RoAByM6TBV6ILSu77SgFTGZMzBlS6l91om6KEHDvwozXPi9OIVZ8e
-         5l5grwdo6X4clcStqyCrmL45P7dGkHiB5UuDyaBbxzXlWgQ/Wp+TgivoJPI4EBPB9nVv
-         MzYVl7dAfgjZkm0SLbPB9YbopsdPMzepZQW4ik9Ll3sVJqjBwubTkAEl/QRekS5y6K86
-         fTKl9fIXwvcJ0rCCLmRDFB0aCYka7e7hE+0dU+kkBk9yy61eLDkaJLrJNAyxZWzjdylV
-         4aklrud8W0v0l1KghQRwpUF8+VfIEWeIcXNZ9s3X2RqGMAbrvvYNwA6TD0N46ZoaQLK0
-         jBfA==
-X-Gm-Message-State: AOJu0YwZhkC2hc+rw32SwCvyVmxfSRJjtBFPtjIVkqNEqicjgX6l/DVa
-	qMQyalpGTl5uSoHzIIk2S5WmgDJu4JL1M4UlPZ8jtuGH6QxVTw8cEucYBsL+og==
-X-Gm-Gg: AR+sD11zxQrYHjGnhH9whAiS8Bz2Jo3T5Ls1UH1YatBOoz5DvgqcMHoSfL5mToTwapD
-	oBVdKLyRZAymwPWsjwlz8tevScDJGiqSadDgim2018BnrAzRqtXAteeTCfqlPMWXc6BBvQ8eWTk
-	+HfbJPVBgYQ5L82iXv5O+AaE7abgztZT1zjtrUZ1x+ZksOTegSWRDeS0VCFv55W9Z7kVl9WF6gX
-	AN+CV0xeSKmSCOY4e5ETgSQAOSvhodYk7Wm9V0XxCsEFOxeLcSwEryen4IF/vOEylKv2Iz8Yl2I
-	VfGeYdbUuqxVssEsIvxHuOxBr5GY+hSq3CvvTWrrr8/CutDgGhhxfow1Q7LMvX/RMH57EcKzBka
-	tPM907PwgordnjaG1glHRRPGVkj/Nf/GnaglOx2vHiHgMsycN22FgO1czssfvNQjfpT0EKbvTBN
-	8kBSFgL6EhXfUynniAuFAQ0NMGFNwSL1u3FU4t4SwEcfihHtRrb0q4j9gtpdGB2O5KkfJc0TTKO
-	w==
-X-Received: by 2002:a05:6a20:6a20:b0:3c3:875d:c546 with SMTP id adf61e73a8af0-3cd0108943cmr1073515637.7.1787096028317;
-        Tue, 18 Aug 2026 16:33:48 -0700 (PDT)
+        bh=hOd73QypYG/lDkiROZtsSJXo64G6ueTd+G4+cxdnqr4=;
+        b=dm1NQcNa1chdGd4rFgxZFB6cDBGoF6zG1WXQq4pZOZb0gP+/gNjC7/S43MUeIlGFY9
+         R5mrP80WJqpaqYvt/UDBBAqKNiNRGccB5fQta00UZ4sVZnvCA6KoTgnvHEyqKw49Gp4W
+         NhJMv/xNmTl+w1fyM58YKsYJPX6C/m2lHQQ/elheHCOZPMBlpMcAPPYVkdW+E+9ZM7wU
+         TiBMhpdvRfrxTM9HQIrQ+UMMLYCBU0r8CeabQkkhgxkMUM3Kes3fiY/maDf9QvJ9bwH3
+         I2QajxxuHMyPEIdT7VtL0dSoXSiFaymHAbczFY/oyLjtKpbmaOcJJPyI1ErVMw8U7yGU
+         EehA==
+X-Gm-Message-State: AOJu0YzDLVmW50D65Q23nulSZvcf3/2c3otQPq6CTi933eZUVCuSSlZJ
+	e962UDPnEM9MrCT8UEFe7pj0iW5TD6X3OXFn2rpGd94XhVe16usvoGIaVMopXA==
+X-Gm-Gg: AR+sD13YWEARnLVYHs8XHsTVV+V39r7Wdq9/AZRGuSC5pNaJpqxB84SBAZSL4vJfcFf
+	4jIxGOpk2ombcFLLTwAV7FdjOvu6Wh3l9OZEaQRzw5NED4pRvtSCrO5a+rYEFwEbMLZpo6N+bCD
+	X7iRv3VVLN8AUlVcRCNFRMys87qEksqMZvaffxh4r0bs/ydBPBFdQt/U8AX8zcwUR7XygWeREeP
+	hrk1DOWQA5GMZJJDs8k18lEubdrLRCu0+nHMwjNuZMeSvWdCnMaBiXkauH/kLXo1jvEGwWIq41o
+	BqiQJtQQSUcg0gyLyVtUlHEprunejl993t3Y+OnxjglwZ37hugJAs0r/p4buYox+i6R2gQYnAVY
+	bUSIjGZiS/lojRAkdkHwd0+qYMYUlITn2rhw01YN8aNZ6gQm0gOwX5I2iHTpKKuaaTy89Zu8b33
+	IAH7acKNMNMOPblT9t9zaBUZjbkJU3bY93EndB1E50vrIvepJzA+4D5KnscGLmmfi8OI/Ylnl/z
+	4e2+waCEtQm
+X-Received: by 2002:a17:90b:5903:b0:38e:659b:f366 with SMTP id 98e67ed59e1d1-395804b57e0mr1049850a91.0.1787096136658;
+        Tue, 18 Aug 2026 16:35:36 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327bef77be3sm566727eec.10.2026.08.18.16.33.47
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327bef79243sm568221eec.11.2026.08.18.16.35.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2026 16:33:47 -0700 (PDT)
+        Tue, 18 Aug 2026 16:35:35 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 18 Aug 2026 16:33:46 -0700
+Date: Tue, 18 Aug 2026 16:35:35 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Marek Vasut <marex@nabladev.com>
-Cc: linux-hwmon@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-	Flaviu Nistor <flaviu.nistor@gmail.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: tmp102: Document TMP110
-Message-ID: <464814ad-b4dd-4afc-b680-9b59aeed22e0@roeck-us.net>
-References: <20260812191021.65304-1-marex@nabladev.com>
+To: rahlquist <rahlquist@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, sergiomelas@gmail.com
+Subject: Re: [PATCH] hwmon: yogafan: add Lenovo Yoga Pro 9 16IMH9
+Message-ID: <bbaf17c2-6224-44ff-9a2b-af1656214379@roeck-us.net>
+References: <68b8866c-72d5-4ae7-9a41-ba8985d672a2@roeck-us.net>
+ <20260813164746.105154-1-rahlquist@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -79,14 +76,19 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260812191021.65304-1-marex@nabladev.com>
+In-Reply-To: <20260813164746.105154-1-rahlquist@gmail.com>
 
-On Wed, Aug 12, 2026 at 09:09:44PM +0200, Marek Vasut wrote:
-> The TMP110 is register compatible with TMP102, document it using
-> a fallback compatible.
+On Thu, Aug 13, 2026 at 12:47:46PM -0400, rahlquist wrote:
+> The Lenovo Yoga Pro 9 16IMH9 (83DN) exposes its fan tachometers at
+> ACPI paths different from the generic Yoga configuration. Add a
+> model-specific two-fan configuration for the PC00.LPCB.EC0 namespace
+> and document the corrected mapping.
 > 
-> Signed-off-by: Marek Vasut <marex@nabladev.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+> Tested on a Lenovo Yoga Pro 9 16IMH9 (83DN) with BIOS NKCN35WW: the
+> patched module registers fan1_input and fan2_input, both reporting 1800
+> RPM at idle.
+> 
+> Signed-off-by: Richard Ahlquist <rahlquist@gmail.com>
 
 Queued for 7.4.
 
