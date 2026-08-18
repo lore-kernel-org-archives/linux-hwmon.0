@@ -1,94 +1,99 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062FA33BBCC
-	for <linux-hwmon@vger.kernel.org>; Tue, 18 Aug 2026 23:38:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBE1C2EEE7E
+	for <linux-hwmon@vger.kernel.org>; Tue, 18 Aug 2026 23:39:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787096298; cv=none; b=a5yLQ9fAUqHnVy53uvnXr/Yc9aHJPkTr8A9Lm7SluQ159DoWIc90OP+2Uo6xNwxxshg3gxY4N6Xc39viIMDLExIYYZwv6p9LDMT7wG4FZLoU4NPWx0LA80M7GJIh1qsicsq0H8Tw214G1vWsFukJ9jzsTMy+G4shf9dLUavT6RM=
+	t=1787096356; cv=none; b=u2YKccuUZFi/EUcrUxMqFDLmFVma3hDdPWj17gjSLmIpPyUAtTgDJz1K2TQ1fLuGCa5xsQ5MAqJPGemCCzDcxGYzhApu4EQnVgSC4FtarZBH6YUhG1ptGDEIOQKDwvrbxxqy3sTtOC7p1DvAzaHjh5UW/Y0KgSbTmOHEzUnDKCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787096298; c=relaxed/simple;
-	bh=JvVGIAW5ni3Xc1kJeyoHi4C0Xeo9QBavCmEIrdZjNk0=;
+	s=arc-20240116; t=1787096356; c=relaxed/simple;
+	bh=IlNVBIx4H6PkgD7zXgoekELCW5mFwid6ryMfcRReOq8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E/MNV50aE/x/oYuS9Ppt3Ar390i+PG079VEMT3459rOlaEGA/cVfpOM2sqAoX5Ly/fV8nGvillmVaC8R0K+/dwSTr3O/aCBTSt3nj/PNMWtqL9O2jTzBZw2Y0QGTvPT+TXBamme7FYfWbK2cRFRg2/WryPnBtOzgrP5HkeURA+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GULZNdFi; arc=none smtp.client-ip=209.85.215.178
+	 Content-Type:Content-Disposition:In-Reply-To; b=j+pEZx64ZxxgSPz+vO1lS2VpDtI9hkPnb+Cfpemlb1Hl0i/mXPWRGi+pqyhw663n4yaGZG0UPaeu+DEez3BWhuzA556neXzmfFPfjSdhvqANkoUIjlWEWFuPAsMQk145s6+5DTA3rfjUaiJ1Uh4LODr8TelhnQACCJspQNAkv0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aXZgnG2o; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GULZNdFi"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-c9e607d81fcso190637a12.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 18 Aug 2026 16:38:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aXZgnG2o"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-cbedd5aece4so1174998a12.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 18 Aug 2026 16:39:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787096296; x=1787701096; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=PQRDXp2z74RjQBsbJ19hTerd/5ta04pnNNJl+vajzDE=;
-        b=GULZNdFiGSIKs0BywXdM5DR8k686vtGmH/hc1tgAEjr6ICz3GlUG0qaGLoINevP/nV
-         g/mhSsCm0mhH79vCd2pwst80XgHohS3kP8BuCl8SwZUnTvwePgkuAWfICWQqk0bGgNTk
-         HaYjhXcniDLPTe7Yt0aRQDY2t8g0nm9qebqN38PVFO8ZrJXSbh/znADTK2IwsrvCgzPo
-         zslYh4TJU2rMty/AxN1yJbcmg2p9COGIf2kcX7q7pK6DYMS6tkP22Lo1h3IrGb4hasro
-         sPfeZ1QZhpl7/Hf+BuyikMUGL/EwywWKUb64hhl7VGiODgLi9q2SOwoEoO4tX8SuUOur
-         R0Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787096296; x=1787701096;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1787096355; x=1787701155; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=PQRDXp2z74RjQBsbJ19hTerd/5ta04pnNNJl+vajzDE=;
-        b=Pv2A+5jcOj5y6Hsnh3hcJOBCCn4MO25vRwwksKU5knYWT4jO/b6dGY9dIa3/CVIxb4
-         xdZr4pZRm95DySINLrbNLz8vmQyPVlyAkT3zh6Wc92+FGvAh9jBHrt6g3Rm37eT3/Qph
-         bn+ZO+wyRpmhkcMAOh4ew2bEI0pKPbVvHHKFAVrcKFSam3yVtUcYu2Xe7tUJ13++PPo4
-         K4H5cwrhnHGul1q8ShE3ggvW0Pm6TJqGKTdCq4Hs9NiyUxNKfW+lySuj+b9MAC0mQa0a
-         Apkmgb+HrInG651necKo6RufR/crBMPn2qoTWmxHWx+CQ10uG3UMA1t4VJzFWh2EfC27
-         D4tQ==
-X-Forwarded-Encrypted: i=1; AHgh+RohX+4PWfJz1Ah2n83o6QG/ogTkNt0fd5EJZHjd7Iw9hFofN9ZYK7w8+s2TM1D2LLI1qHOAKKMcq01EiA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwS8AXb8iY2DCDwxNv+Q6Rc2j5Abx0t67B59EeVc1mFaLK/N/ZT
-	NoG1hrTtguI1taO4BqtWuVJa6pZipr3GVlnmY6eA09R0q13xuo6sAFKs
-X-Gm-Gg: AR+sD12ROeHjOU+9EUU0+IfC0K6RUxZUuh6tFKAXZTF+esQLSmIlq2cXjFHwa+ryHdU
-	fs39K3yBPqszdj+INam9v1I99RElM7RWSik79OzxiduzceYQFwjWlY5yHq/8yo8C+OmIjddsp+b
-	NsLsCI5hSMQieC/Y2Q6VvthNnjLf1n5SN3OFmFxpt7t7YbF1fgQJajaxRu0kXr1SWUQYy7MIeco
-	B2goTgtahLQ7QLj8roH7hCH5YJlemoYzs9VRceIOcrOMHMuU0Le4gtBS2Nhun/9n14b7Vz/u6Jc
-	ryX3rAa1iDz0tdawfZA30+t2xVc5DYTIwENNN3326/SEwQrrsbayObiN8G2aWNOOGX2FfrTPQ59
-	kBlgoJtVUAlXVG/hWcUHxbsPVBa/GBMSXr1Vof4NRx3yt8nuUoHNLy9OeSiccXw2wJgB/U5oMIA
-	8I+g775jZoUWdOM8NC4chxvjWPMtc4z4ufIHZ8BhguJWPFsHYV7zA6KcTgvHUUPypWx65qaSPPM
-	Q==
-X-Received: by 2002:a05:6a20:72a3:b0:3cc:eea9:f757 with SMTP id adf61e73a8af0-3cd011a39famr1020421637.16.1787096296030;
-        Tue, 18 Aug 2026 16:38:16 -0700 (PDT)
+        bh=aXe+DqGRO+U+o5USvhMVUyhu9ixk5r/8S43UJAXzTP4=;
+        b=aXZgnG2oQoemKz9kr0peXnlUtIm4Q+VKAvh9z5/e+HvtjA6DmAH2BUfk/T2UUrl02B
+         9v3s7VAeG43Jy1A4UDN2OpCr4tIa8t4U6vk3Obn6sH54SyZJyMDYlt35puR8pmT/0K8s
+         5xrX0CpeIykOAFv36xu48kMFXkJeFah/qnf0ZzNFzpBTY5FR5BqVHrty25POZnQELt79
+         PDP+Zm1dIfmuHt/hX2TW5oa1Ro2fgBdxaahVcvgvmQlmD/4A0PnxRHjLj6uMkSoiENaj
+         mM/BqGEekdcG4yXjdxoce8n3ykQCNAnJnBF3MYDFVDq4ov2LRPlTEc4GY0pEX0hqnfY6
+         IeUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787096355; x=1787701155;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=aXe+DqGRO+U+o5USvhMVUyhu9ixk5r/8S43UJAXzTP4=;
+        b=Ea7VH27tqoJoHiivqDfG+b7WAyU/VwiO+y4U7JRfy7raBBCJJ7uXVSmiGoTZaI99y3
+         U1TFY1SRWx7oDLSeqTWpjXiqGdGHPl3Zy3AE+Ls69JXsED6P1S4x5aJ7CIL+AJcirAK9
+         3JnIfVyggXhvPjZGA+GtObE7PzUPcnp5sGmU2wDbKyQhbBywPZVgyhAKuxW7zyYpdfmT
+         YEstIOmGC8jYKnBphEX6+GniK8WkQflYCPpiuECKFcS7DLno3AxvYUxiYUE4BqOWT/4M
+         yE16DtSSS7U/jtIxPSYH/g05UInfCijmGv+Z8+3wKzy32yu+2uj5rJDfN+pWks0pfFKP
+         q0zw==
+X-Forwarded-Encrypted: i=1; AHgh+RpRQnEPBQ3oGA0OFx027z1m3ywRkci4wB+5BRw4lBNMklNT1WRi1TgtVmW8+2OHPe/CTnfvCkNKzzw96Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVS/w1m9P+WN3dgQ7LNMT9O1MNsFUDbPel/INLdvJnpJ68Zgoo
+	WsfFD5DUXeUTEM6XKsdXAEpKcThsvXYwuI0jQeWrXe3eLUJ3DO9D0X4r
+X-Gm-Gg: AR+sD13NkhBrdtDzRuzS/5bSR/AYSG2H9pKJ5abellDsNTXaXdeXGtTrpZrotDZU12H
+	GiOgPxvrQb1IAmP5D+E/oqv/yVuriK32zWI1buuaPBbrig4DiX9YEPCsNknMtW5YDFCpnULLu9O
+	XPh05c9DTwZZ71YG/vXbUlpzYL9UYeyI6Am1M7YGV55rRO8CNgGoAvtYOHlr4gj3r8mvizCtmi1
+	LPaDP5Ui5OjX439m/EjGMgqfpozFw8iBSYDG0mKIV2E78bhNN/c98gj7wO8fg309bqjd4ieJdoC
+	kI1bGkGfMunjkzcxqrfaaapeCyx3iP+QlrAQSRd6MFx5A38aUC7ObMGIAYh/AHO1Y6GC4U3Ip6Z
+	5mJ8FErmVX3AU8wUXwtqkZFQfQL6dkysdEoSj5m9I7NleT7e839T5rIjazRUFTHRwEuRHZeE/+M
+	tKMM8/dHgDSUC4eOv7uOYuLw+qRCY1poG8hzjnFDwIlvuRJXLqDIs2jQhqYTCYSV5DtNY2HWb83
+	6BllmHEAN3ULA==
+X-Received: by 2002:a17:90b:37d0:b0:36b:de66:92c3 with SMTP id 98e67ed59e1d1-3957f989f59mr1093695a91.10.1787096355080;
+        Tue, 18 Aug 2026 16:39:15 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327bf15ff5dsm522227eec.25.2026.08.18.16.38.15
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327bf10ca5csm552871eec.17.2026.08.18.16.39.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2026 16:38:15 -0700 (PDT)
+        Tue, 18 Aug 2026 16:39:14 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 18 Aug 2026 16:38:14 -0700
+Date: Tue, 18 Aug 2026 16:39:13 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Stoyan Bogdanov <sbogdanov@baylibre.com>
-Cc: jbrunet@baylibre.com, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, corbet@lwn.net, skhan@linuxfoundation.org,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 3/3] hwmon: (pmbus/tps25990): Add TPS1689 support
-Message-ID: <5095200a-51a1-4e68-9e78-36e8165cd29a@roeck-us.net>
-References: <20260817101455.3526260-1-sbogdanov@baylibre.com>
- <20260817101455.3526260-4-sbogdanov@baylibre.com>
+To: Antonin Godard <antonin.godard@bootlin.com>
+Cc: Cryolitia PukNgae <cryolitia@uniontech.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] Documentation: hwmon: replace full-width colon by a
+ standard ASCII colon
+Message-ID: <075ee43e-633f-4bd0-b752-58f2fc7ab862@roeck-us.net>
+References: <20260818-doc-hwmon-remove-confusable-v2-1-c1dff1ec01cd@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260817101455.3526260-4-sbogdanov@baylibre.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260818-doc-hwmon-remove-confusable-v2-1-c1dff1ec01cd@bootlin.com>
 
-On Mon, Aug 17, 2026 at 01:14:45PM +0300, Stoyan Bogdanov wrote:
-> Extend the existing TPS25990 driver to support the TPS1689 eFuse,
-> as both devices share the same command interface and functionality.
+On Tue, Aug 18, 2026 at 10:08:40AM +0200, Antonin Godard wrote:
+> It prevented the pdfdocs target to complete, prompting the following
+> error:
 > 
-> Update the documentation to include TPS1689 support.
+>   Latexmk: ====Problematic refs and citations with line #s in .tex file:
+>   Missing character: There is no ： (U+FF1A) in font DejaVu Serif/OT:script=latn;l
 > 
-> Signed-off-by: Stoyan Bogdanov <sbogdanov@baylibre.com>
+> Signed-off-by: Antonin Godard <antonin.godard@bootlin.com>
 
 Queued for 7.4.
 
