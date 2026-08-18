@@ -1,69 +1,40 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40B8C37B41B
-	for <linux-hwmon@vger.kernel.org>; Tue, 18 Aug 2026 04:05:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF5F3AD52E;
+	Tue, 18 Aug 2026 05:00:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787025946; cv=none; b=tBpEKlAP5KdIu/YAZ/B2ztyPfJQWuhrhojzoblTGAESLFMpC49LexcGEhskVLD/IbpAkvjy3ENTWeMGLQb4jvixW/0rCME/Q7LVBprS6UZslR7CeLeA4lC7nI5/EpM7ehQBVH3ZoKJzpkSe99HwnjO+AontXMQAfC4ZzBsXd+Oc=
+	t=1787029228; cv=none; b=nBX1Q07+A0Du0MriSk4pb1e2fAUzhkrjkr0tLxx8+gLRd7KHZ9X/bRTXcfrfesYmvhHyIEyJUzpwT3fLR3gYXvl6TLl0MWOOB+GXu94thZoRUwlI7Hwsv1zLpfMJxGJpXCVil0UbRqogShuWR/4AX0hKjKh6ZKGouLbTTMQNdi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787025946; c=relaxed/simple;
-	bh=UMheiGJ+IYh6NeNqTWKDS0tzUKZuqqqno6XxNoZMMtg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dWOGzFAQyHsN9WI9bvIN0GX9Vu2AhlLq07MEwFBuYtzWOOmnvorcqms82a5R2BHbOJ8a6w78Gt/GYIo79onKB8N/Tjvd7WaWyh3PYt3XvJVQl8UaPBbTpi55Lwn/BmIUpeIB6kD/huJzQnHj5STEHiU15i7k/vsiQEH2VhjvSQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TzY2X0V6; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787029228; c=relaxed/simple;
+	bh=0eHpiokWB38B2qcORBHyZAHFEgW3x0PusYrSxnunfmM=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=otD2DXY0hB6mIQ6JYvEiIGjTC7ByMwl7I0pZ75hCAXS7365LhY4txet7ws3g3Edr9DttjA6f7E+Dhayrbna04U7HWeiNgWCtt1+hgFmrpGQqkT4AKBIIdZyV2iOobeBa7iqo1IitDI88bcoWph00zwMES4m5bK7NyKjEDsCyUwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=bas1FqGK; arc=none smtp.client-ip=212.227.17.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TzY2X0V6"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3810c5d691bso3007098a91.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 17 Aug 2026 21:05:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787025944; x=1787630744; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=H0y6x/DIGt+ql5yub96W044u5GeXxY/ACqN4aUzyUNk=;
-        b=TzY2X0V68KxhTVnwpRf2xs/q9k8jyZ6t/ZxDVEhJ8IKYbVUnhzksDGXLGJi3RDscVW
-         3JtU1y/jIgtrMpF+oDxt3795AdCZ8zeW+rrsiT0yLdXisO5vp9jAwPZUm74oe+DtQ/uT
-         8G3jxTAWvl/nWvawqyRYEMZaArHzENl9tVk+bbz47dfjojqwNLqHPgURZJp55z1kYU7Z
-         JcMasM2pFOBn/iFZzt72LcCKqX0Zsi6H2C5AVpZLik9Y1fbiKQPYfWVr17eXYWl4TZdD
-         Md9+6YIVGqW3X04X4J/Hqg1vFgN247NG7Vi3qeSHQxFmA3WYhx6I5MkVfWyfX1/HLMX1
-         8/Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787025944; x=1787630744;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=H0y6x/DIGt+ql5yub96W044u5GeXxY/ACqN4aUzyUNk=;
-        b=Z73napt09sQkQ56Nbt7HhXN3oV89MTB7orheNESkjfK8IkMU+S0oMBygo2uAFG2rH3
-         ybJsROnN0faqc3K3fH+O9i7UqrFqzFyCiUcfTs1J0x5LAC8wE8fffi5dGgTbuNgS3plB
-         EgJ3NClECgmOo/STmmx7F1XQCB+LzL5fU50BWm6jmYAgylkLXuKaDi+2VkX2TGV25jBR
-         GqL85o7z6NNA2yOvtz8hN083vchycevKCeSQLDQOBzTQ7t1B0o4GqwQPjGdR17A5K4zj
-         2dS7630EyUnBOoG3LGetYYyLZo7CVV2FYRhlelMcxZ1Jv8ZYS9unUr43IM64ekx3FmuX
-         fC2g==
-X-Forwarded-Encrypted: i=1; AHgh+RprDjDptKIdyNN1YzDo3y1YtO7wKJp1gPnVUnEw0x+a9Y92Gv4R1XRpeSJ+gwXSH2YN5TP4MSm7pd1Hdg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywu4i9PUS5rxg2T2lszveI+nj5ZZ/5KxSvS+0z8eXMey7eB7dI6
-	5VPKOqVMq+IY3k3F2q2sBjuWBw3/BmlIbiHUN+tkwB7WFeASvZNBFC+EbpUgcQ==
-X-Gm-Gg: AR+sD10vQ7sL3SesMNoP845yG1whh6g95UHiT6jmQjiW94KLvPXQ9HmiALOvkmfQ+Fy
-	smfzrWMSAdAw/gQbr8nlrkYivRdogQlIjybub+zdV0c5y+iDu4OmCeOiCPGeLsjdzb/Ej9bpXXb
-	J4odL/gYPrIdNRSYMYhjzYYGwjOxZloUnq3PF/BZHKYWnKUUJVsKWXYuMcZ+7KegwkJ7gzH3ZNd
-	9cYdD7RBuKD1owsm9BDniwpTO1tCzsn0YDvWwRydvlf9mR9q7kGjpokDQX3NIJ46HOdo6LYrZ0u
-	S0RnjR4IhTthdrF+Jz4vvlrk46FeEXXDRY2nPeGrjolJ2DOSNkoTJXGW4MDprl3A4jg68OUJg2Z
-	5s/ICgnM4OWfzSkyGwJyfLC5DOgAeYut4USgp3H1oPeRRR+Unn9jbfCo2my5m/4Q/GVD76TEYUz
-	nckD+s3ubUnkk6KatAH3bqVpAxyGxIrEHskn4tlqT2Ab28GzRwjfNQMvNKGn7Es1PUeQ3o+IzDH
-	jsCPL5KCkBha4yp3pNi5SietCQo6UY6m6iYIw==
-X-Received: by 2002:a17:90b:3912:b0:393:194d:5366 with SMTP id 98e67ed59e1d1-3955a783987mr4766753a91.10.1787025944281;
-        Mon, 17 Aug 2026 21:05:44 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3954d3b40basm4470814a91.14.2026.08.17.21.05.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Aug 2026 21:05:43 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d85945c9-41e2-4cf1-8058-f73a355f165f@roeck-us.net>
-Date: Mon, 17 Aug 2026 21:05:42 -0700
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="bas1FqGK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1787029224; x=1787634024; i=w_armin@gmx.de;
+	bh=0eHpiokWB38B2qcORBHyZAHFEgW3x0PusYrSxnunfmM=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:From:To:
+	 Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=bas1FqGKYDGXmo986SdO8weKz1K0JEyv/QkzIb4sBNJOj51e92pE22foUdHP5Sds
+	 /2bKX4gALXRXgfLDXAgaXSBYRHF41rlaY+HaYL7+7vgoD8E0EwPtk44Ub/cYkgghp
+	 traLVe2MPxqBj0Rw50u2W3wiiUOr1+VXd6f/FjZSPJikwxA/uBmdCGbWm+0tUtFLY
+	 Agx1fzVC19t7d3gfKmi/qcrpo7JMgsZDRyzdX6rSZAjoi3nS8Z+GITHqerqqBs7G2
+	 sfXMJ3az48x/HYJTkjgi1eR+l7mM+IW520hN4z7wjAqxLh31fhhTSmPiI87SMq0GH
+	 30Rlk994nz+PuffS+Q==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MsHnm-1wg2ew0BVS-014rUm; Tue, 18
+ Aug 2026 07:00:24 +0200
+Message-ID: <005e108a-a337-4c50-bc2e-aa7d933b7e2a@gmx.de>
+Date: Tue, 18 Aug 2026 07:00:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,102 +42,224 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Documentation: hwmon: replace a confusable
-To: Antonin Godard <antonin.godard@bootlin.com>,
- Cryolitia PukNgae <cryolitia@uniontech.com>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260817-doc-hwmon-remove-confusable-v1-1-dbfbaa8e952e@bootlin.com>
+Subject: Re: [BUG] hwmon: (spd5118) resume fails -ENXIO on write protected
+ hubs
+From: Armin Wolf <W_Armin@gmx.de>
+To: Guenter Roeck <linux@roeck-us.net>, GG <ggirouard@bungeetaco.com>
+Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <-r61PJXRNuWsDjnDETHSh2v7ASrtpweJe8hLjf7CbNH8-rQMiDXscPp7F_K2wLsYg0gvrl9gt7M5vyV-rPLIPSuHIKjIUr4ipRD_2jeCsmI=@bungeetaco.com>
+ <vPlYOTmuxKCPw1cRvxIWJfqFl7p8endHIMWS9DZwINEUCPql8VLF7GBkmEBMokDKtHop6K5TAPUAlk-17CFWlA8extBUV7XGnuVx1KJK3iU=@bungeetaco.com>
+ <1050e9b0-ef6a-4bdb-9510-572c2a93b485@roeck-us.net>
+ <jjJPzuDEBRVJ3kZwlt43bdlePFCpQRMREjsEVngkNZLaCQDi9wBEEZb4U-2nvZ67qskaP8WSEbux8AmWenQGHT0WIvFQ6ZU2G4zQl3Lb4Vw=@bungeetaco.com>
+ <ebcb1afb-26db-46f6-8e9d-30218190870b@gmx.de>
+ <e1d6f669-b48b-4009-980f-a9defe273569@roeck-us.net>
+ <d6d4148c-dfd2-499e-a068-85dfa68c2db2@gmx.de>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260817-doc-hwmon-remove-confusable-v1-1-dbfbaa8e952e@bootlin.com>
+In-Reply-To: <d6d4148c-dfd2-499e-a068-85dfa68c2db2@gmx.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:ngQHPQ44nAP3b+BkMYNyM1lzeKNiw5NuGNcN49AwUqTKuaGBNxU
+ Juo20icc8JjMZ10oD5P9CRxKnHJZFpSXyZUZ4cNoxbgqXCv6Exi78oVpiJO36uHUePkDxSB
+ fomHp4m66C/qQ1WMximYWtkBLbDnIrlxKbSii7L2svYhHLLKdbBnovxBxHmXn8p0XeyXc+9
+ 9GKqbbcORQbjjuLvR3ucQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:lpCc/csXjts=;GTaIyfNeT50Cxxph0elnV6kP50G
+ 6U8pJBONtKTVKGNNVw1dNhdJVGgl4L5ArxMh2si6G4OVgjA+qaaYJi/IdWOWsxddGVHx4QChk
+ E8O+hNaEvi07XkuB/xav4Dp2T7QPq8SS9JqEMcHtcBJrchTgt+T0s79qPWDLz7cDGFf6RjNhy
+ 5qNx/2RIjbN+6/2bw1xWnnHrhVZUPbWqOvQW/tHDlhMqJ9N5UYMmZ2keciZMi3n5PRKe8n7xL
+ Ch4zJcyxjReHB/G8oWdd/qOtnnB6CJvvJTQNEVBNV3XukRCslUE33MgBatn0P5JJTkaatBMoQ
+ hzcWWkI5Zhz2yTBVTBTvvclcEpeWhzCvpoKXuu0wGLCQCCtN3elDpS+PmuWjnLUXkDW7J4ek6
+ 9Gw2n7go2kFyOrHFGwUs/C1SUjBhPiO2l6goezCkBdMgeoXXjIsvy9Wr2k7dAuqQcav9MDWV9
+ Yg+M5dD+DLgGfIh5NQ2m/93MZl+vMhrxOJ/PMY6WmLpXvEJ1k7TAeii+l+OM/pyqzuRnlAoFx
+ d+m7bs+RbPH+R1kiR/0eU7rNwsdlfe062oYJAetVMeZ0t81t84lI3DIz8hUO3sReR420pfDoG
+ 05VRw/Rw9cLrqE/LtxusebaJ+viOPznrKMfJcZGrRr9vAcFNXgfFbxZveddV6I897p1aze+4i
+ XAJJpyQX3+7byXePvrb2x5OMBpTdxDmd3ssmdzn3lLW+tlgUYmxZbaYs6+aALhiR22Q63QBFr
+ p8TiJV+nBfxUPgNCmIcge9dYCmK81iZqYQobBHe9Q4CdDHB79bM9Yow5xItdDesgOc7O6ISki
+ 5xgBgEWbqRKy3VrgqetZkdaTDCbO4wDeRdDcOO06nLQ/FJAXYPnICpB42hkQlLcFo57ixk7td
+ XXVatMEF4BEnihKi5yfLQV824+AW17vYF+wrHAfeM0C+RoKo4/8R2gPHTbgtAbT6KBJ0D1pr2
+ 0Y4iXwCOE9pq87m+5mh5b4EzTj8KDjGtOan4iR6/5w4t2rCSjcTbsT31Pz0RoOjoux1tnvxtz
+ XS9HMbe+8l3GMWLBauZNd397irPuR7mJL3+aEu9TBbqLbCo2XXy70Ku1QbBqcsuZFj/BnDEG4
+ CKgags35x7wHqQO2orrRbuHiEOH6/HqtXUm6ga3oZ6P81F2scXKlFCaQBb1m7bvhpWskznqlN
+ Dtm91P8GX12c5pcQ/Ryz7HTlgLr3ZRSigggCfYqPmbZsy7M4SLn5snKvDUBM/PKz9/bYWUDfQ
+ 76TkLXLNKLEEwDUJGwQ3WjWn5esfYY8hwUsdrmtHQixks25auE1IgFMqjNNaMJ3uiEmn/GcnO
+ rLDLXjGKGdB25jlC9f1LmTSSGZms5nq+IUIrfoKEzjSdpz2xCyJX1y1MM2YnWS/YWmzklpvW7
+ 4iDqek4I8+8y0QxFfHb7qL2542afCtfoShtsfdHW0Fuod/MY4GWVmrLWNHVsL5hmfgqNc+EFt
+ JmVBNkM7bWPtpth/aqHWSYFbcMqgI+VZoYuOE6F0XamyzOHu6Z5KwbeYEunUzWZiECF7wHC+4
+ 4bW3Q8qOv87efl5aFuxr/9W+0d6UoWh0xIc0zAqg5KjCgWuhfD648aFzMdQ2HHzfqLr4q252w
+ TkSCeCsbXASAP9hvwmz8xtnKn4lqBiOrKZRcc4EMijPf6wEZEtWvUC50WyFQLQ+3B3GOpuQZp
+ ZVSi9Ry0pBXOz+17Z3WgIPAo6WEexTF80a9VLKSM8JJ6nPilAab+bf45saDEiTVyS7dSoMM4J
+ QV9x95/UcbWvKJNvXoSY8Awl/6qXK4g8N62K24ZaRp/0dKqiE/G4foYSy467gthUof5KpLSRe
+ C+nu/XF1aI0zA5i9NZ7vVbGtiQjlqSy8gXEBe/ocyTPQdnTrQgVi1colbUGDSA5nW1OwUi1+w
+ cvFJeZh8DRaQP3PYaGN1UYrFme1izuS4VPAF6tJmWvciQqk3286mhVPuvL2hdDg4IEgdo7WM4
+ t9hBp3NDOjaUG6TV8PhmD9rAUfGUORLXefVjr23+FaTOT8JGYQcZedfuBtwrMls1yyyPfMAIb
+ PlVs66uMlzmdKQ1aarpB5YDEYJ1LKdgY1q5a3HG62ZkJi8bFBqaMnRI3PgsbIE4bkhCkaIoQf
+ MMH6O6OuGuzlIj9NGz31r0rG1k23p44JDGW56S9zU4TbZX2mzmD2yfIJdXv3oXg5zNi1bqGov
+ ulMrQ9jNhWGQJkiurjLgtgc7B3+/m2yBS7lgehWXa9OL1gzNwa4nul93bhZHTygHpy6MKbcZ1
+ TdKLUmin3UN29NLRYGEcpePH+e0RyETzE9s7MpttwDLWiJI6iqDWj52zp5A8i0l/tMBNExg0Z
+ E9I/g1OR5uOBnqyNLsqywTVuUMGaEVq5uaPREru9JeRCzeG2VUhgBQ7BG4d/9kq8bv2UMC2rK
+ 3NAjKJSSZKj8R2AjStG7VbxVh98B/s+MMq1FRDgVA58BYN7sw1T9YcavCB/4+MuEjqW+zQOrq
+ lVqKQFsIsQBsfC35W5dghYx99yOk+4O47rec4ota8k+z26FSAQDSYyYmiVtfZk+ls3s+Sk7di
+ JnnmTXUQwoB1dOtgGHZYytGaUXtE9uS1teeXtZ7MgCgnOTlW8noJ+W9/u0I0Wabk7Uh0rRKFa
+ bWuGcU1/dqJFBt/qJJPs2NN8xFJJuODcpIMdxxsSeNkTCFTDVUkeDs8dUi1qhKoyhsNBDgBlm
+ MmuYOoXNDZgY5GIonLmAkIKrVSqzDvUO4tZhCYFFnIZWI0S09fz97ZHSuUwZWMa6tzDPOKrqI
+ 9fM/diz26URayWW3RprNsqYVBpltTCrshDwMx1sYS3rAr2JQElUHGuoiStEZXQUuj8nnPOT2I
+ /A90ZdHy1p6ETFWDasAdqnablQURYSuB+0jaL0xyZqJMwQNnQa2R4yT+hrw1IVVRcVdyioQSB
+ eI/NJbxMQBJV545RI4lc0YHu7KF4uVQSJvOLF/0qgLA9JI74P4/QWCqsG7coMBs78VX9uL+6g
+ LHunesc766fteaJlB1IYXCEn7D1420vame1qUuiyrAqJVj7xmeqeH58QHY2/undhmfEtneXJU
+ drfg6Sf3sTaQDujDDDggGMP3+s561pnPWTJGy5/lG1QzgemedleGQQ7n1cX2SX585JAhec5bh
+ 8b1UOI1ckc7A4+rdQS0xeU+3wKc7+jdUaPBiDm+OG7QVF46bLzqRDYuiANALnVHSXAzsn5IIH
+ dXjR1g0YdVAsQRDkKQUl5spEWqsBWVaqmYykDmK8U6pcSNgHUNRAGTxEAbJ0hqqok3gFDnTOy
+ 8+F+XT78nDC7Fef5BePKDz0IxGPJZxgEEDFVzYUyq653BsZCYzGercUnW88SqrK5dnsDtEjmf
+ tXsFWQk3zKIxy5MMQe1W7xMFBmrUl3XQfZwUZoZRflSZyofA3yx0bOPA3hQ+flCCWBNP9rfQP
+ AiY+1EWHXh7d45tTZWY4A4+cgoLUlPo5WkSX2kgJaF2uVP89SaWdVownrZoq3xdr6uF3/YlmS
+ hs2elZKMcMR88uAZHBX3nuv2+FTFUo3Pb0PN5nmbsms9WKjLQVIGdu+Q+AhpMghwBepDNP6UC
+ y2v1umzJDm2MBIlwrkXNMUpgdNluym9cbLR+pMULcdZe7PyaVrQtqZaNYuhTZ5J9+//+VhyQv
+ zv6xMOuDFa4oonKnVzj6uLF+gUuPzO9PQ9oTSzdotmKJj8WQIwoqE83HdF4xBZ8FxNHV5hXw3
+ 4wPsTJPdxdy9SD6pJYupdNv07BvxI6rlOcjvsYXjxbKDCCV6Ntm4ATOvQxyN9WfLbtkYco8po
+ hlaZivO+bskIRbCjYH8cYMKbjfQI6GOEE17F/HsPWETVQKuEUVepoCMjgzTFsed5IsIsGskUn
+ 9vkpyC/Kz6T/iDl0qxWfoeAtbIQakzhHJlp2QCka+3yg4ZQEh0P3gXtpKQ6Db0k8TG/DI6Bnw
+ 2I1unAZJ6kuc4vKT/MqfPF9ccWVeuXRzVcx4xMSkCCWeJn23YF0l0F57WBwE8NWjMAXHon/KN
+ TEnNk37e8xKQwHZXrMg3cZTN4Pzubdj3+xj9b/435FA0FzGThaQYZpytAR0lbphI+I8h3LJCA
+ +zv7xAmbuo9+ePQO+1n2oAWC9JuVjJQEGNsu+WwFLRStRavVfGeNLriLcJnhEv/D0Ml9nH+xv
+ 4cCTQvSEro7OzRHtRbZEx43yX7ZogdrxTKTy6W5NO8etF1EPwswYszlErqvPPJrQqukztb1Ka
+ vwJ9SRca8PUy0wbRZMEC+YwgrbWiLv242LVo/IZklCZEaGW+K+mYcSqzQN6PxpaAJxTvJk8vp
+ ZP+lZ4dO8gPm7Qi5EHLjJ3k+c5b94nalrVDlgzSHs5VFrVMnM4AR5DkhrrN+k0qv+Nj81LXUL
+ zOaJssJJ+xzoVLVeobRsWiTMFfDhqUkubdhpq1Om9TNL6ObvnJEaPkGAAxaqzqKRZHH+SYFb9
+ FfkG5Iay6fGLQ034WQ3sqvNFwt8ZusbNgfRYJDelBd2n8TQVJAphTPx4RWDOf7z7LaisVdj90
+ sx55cAmzXAU+O8yuGbytwehe7b4I7MpYb2GcpNM24sXQ4IVBTdo+AXW7iFf9CE3+4pEQ1NXBa
+ Mf5MwiTuoOzO3pZCT8AG+hDLca8KqwMDf08DDadfX5KzCEeGKMAEjUwk5hU+rkqNDKhu+qDE5
+ 93k58GGaqt3dKNiUKCYDnKhbsecfHth+kHk1FTFYKuXDlHVi6tVvfFhBVtGOdjSFnI6ac7shi
+ EnhqsLWWl1syFpO+1e6ar8HXi/3Fjea7aovdVFcS1Nd8izA02YIfJJ4slRxdIbSfIB73W8Erb
+ cJeGp4+eQTLOaKp/HvcSEAJW/8diTSA0MHjp4cr9rd4lz9F4hwOtVe1jtNF/W17cQ6KELUoF9
+ RE4siMGMtz/I2w5BY843o6FrHHlq65dsvL7SgbrYhej+3w3NEtg8GRRq0N3SMZin7UsXCZC2H
+ CWHMfg8JMqkUxbnRVc1WI2ectxNfn0DncAWIk1QNBiv4GQEQwGgzCYUSP2rUsMf3cqMR+v/l4
+ nVgVHxI+wFf1UU0WEWVEB5SVb7S4J8+FUc1MOuuVfRlnHn6U+9+2XypQvao10DX4Pvs742RIb
+ QLa+3dAB1XUseLVGOFpiKNMEw+M4t66g7+VIM46YwkEGxiYoi/bMv6CvkG2o0ilyPSVUmZZpv
+ me1byoQKqDDHWcSHQsB0wgWidqE22azSgNISl8FmHNBFOf8G73jHOhadqeZ0Jcp27S/q1OSvp
+ j0rWJw5SQOlHsWMUv6TreR/Hgs2f1MRO/IP74mgydysD4G856vlP7Jfv/rQuhuAUpHF2aqEMl
+ NJnexVjSwxsfpFzQu6DdxFmK3PW1S+g4UdDssjqcA9P+rfNsOMvvMkOWGznMtds6CDzNQJdvh
+ +K1p3xJ4Tn7dNXquaIoHBKRBZxIH9czxDZY3sRmtGeMBB1lidWx3++BN2Kp/MaNItxmkrx8lh
+ cGRAU0lORZVNBuaQkTmg+8VMOtnUhGoDlNqdsawRF3ZKpom5xl+CkIyLzkK0bhjy2ef7UBKTU
+ KxzAuoMLolmxGgIrGgpK3xTcjNLSWIrgJOeKEjXY9mQKLRtZ9Pz64ZeWKWpAyL2Jk1Oh8vx60
+ eA3KAW5DItZU4VXxGXf5JNy6YVjLK/EMSauCT/TztqKCrkjQiiw0t/WOXklOblOnCLQqxJ+Hd
+ MokczC0fmN89otDruNqCJ0CAEshk3cutdbO4do4Hc5pr3ockScONmDxPZtVB52S9XR5luNs4b
+ /VgjZqS714jK3IvAvuRtznSLxjACBrKMUvUyUxiC++bUkeXgT8ENrNqKi3x5XwBxiFvNtMwIx
+ kkpe/XmIAayYoejkMBhtYqr1DeAdHQtqdSkWCqvqCAiaUSSFCsrLMUUphAIlCy/9cOvaJKQOk
+ hNMaEDTgwnq0MkfuRjAaULrJchFRJrYaiPkfEw05kwqerY9nlSDNhNHT/DZrs9mWaVSAC+158
+ hr85prbAkhe2qFYmE+TSzy0pLPo2pBxkiKUs1busNbVrboYq9qVXr3ToIZqUptfuqiWm/4r/h
+ ophS/n1DDZdavp2XJyMzJcDwHK/U9KY4Kh58whhwv44Sc/T7KfY3/0hMEP28yk+BtRyK9S7Y+
+ hE+Vu2YbfW9RAtVk3jwDA/aIxZtU=
 
-On 8/17/26 02:46, Antonin Godard wrote:
-> Remove a confusable that prevented the pdfdocs target to complete,
-> prompting the following error:
-> 
+Am 18.08.26 um 05:50 schrieb Armin Wolf:
 
-The term "confusable" is confusing. The patch is replacing a "Fullwidth Colon"
-with a standard ASCII colon.
+> Am 18.08.26 um 02:11 schrieb Guenter Roeck:
+>
+>> On 8/17/26 16:02, Armin Wolf wrote:
+>>> Am 17.08.26 um 19:03 schrieb GG:
+>>>
+>>>> Understood - thanks for explaining the page selection part, that=20
+>>>> makes sense. I'll blacklist it for now.
+>>>>
+>>>> Appreciate you taking the time to get back to me on this!
+>>>>
+>>>> Gabriel G
+>>>>
+>>>> On Monday, August 17th, 2026 at 12:58 PM, Guenter Roeck=20
+>>>> <linux@roeck-us.net> wrote:
+>>>>
+>>>>> On 8/17/26 09:42, GG wrote:
+>>>>>> Sorry - I should have searched the archives before sending my=20
+>>>>>> last email. I've since
+>>>>>> found this from February, which is the same problem:
+>>>>>>
+>>>>>> https://lore.kernel.org/linux-hwmon/20260205102942.28745-1-tinsaeta=
+desse2015@gmail.com/=20
+>>>>>>
+>>>>>>
+>>>>>> And I missed the obvious clue sitting in my own boot log:
+>>>>>>
+>>>>>> =C2=A0=C2=A0=C2=A0 i801_smbus 0000:00:1f.4: SPD Write Disable is se=
+t
+>>>>>>
+>>>>>> So my kernel already knew. Apologies for the noise.
+>>>>>>
+>>>>> Unfortunately that knowledge is not passed on to the spd5118 driver.
+>>>
+>>> Yes, sadly the patch series adding support for this was abandoned :/
+>>>
+>>
+>> If I recall correctly, the important part (a=20
+>> I2C_AQ_SPD_WRITE_DISABLED flag
+>> or similar provided by the I2C controller) was rejected.=20
+>
+> What? I seemed to have missed that important info. How frustrating.
+>
+>>>>>> One thing I'll mention in case it's useful: that series above has=
+=20
+>>>>>> spd5118 refuse to
+>>>>>> probe when writes are disabled. On my machine that would lose me=20
+>>>>>> two working
+>>>>>> temperature sensors. Reads are completely fine here, I get=20
+>>>>>> correct temps,
+>>>>>> and my temperature limits read back properly. It's only writing=20
+>>>>>> that fails.
+>>>>>>
+>>>>>> Happy to test anything on my hardware if it would help.
+>>>>>>
+>>>>> That can not be done, as I mentioned in my other e-mail.
+>>>>>
+>>>>> Problem is that accessing temperature sensor data on spd5118=20
+>>>>> compatible chips
+>>>>> requires a write to select the correct chip page. If writes are=20
+>>>>> disabled, and
+>>>>> the BIOS selected a page other than page 0, temperature sensor=20
+>>>>> data is not
+>>>>> accessible. Since the BIOS can do whatever it wants and may have=20
+>>>>> selected a
+>>>>> different page after a suspend/resume sequence, one simply can not=
+=20
+>>>>> trust
+>>>>> the status when the driver is loaded initially.
+>>>>>
+>>>>> Guenter
+>>>
+>>> Would it be enough if we always select page 0 inside=20
+>>> spd5118_i2c_init(), thereby
+>>> preventing the driver from probing on hardware that does not allow=20
+>>> us to write
+>>> the page select register?
+>>>
+>>
+>> Looking into the code, it seems like the device may have been=20
+>> instantiated
+>> through the detect path. That makes me wonder which distribution enable=
+s
+>> CONFIG_SENSORS_SPD5118_DETECT because it should _not_ be enabled by=20
+>> default.
+>>
+>> Anyway, I guess I'll have to implement a dummy write operation in
+>> spd5118_i2c_init() to check if writes are possible and bail out on=20
+>> error.
+>> That is less than perfect but the best we can do without a flag from th=
+e
+>> I2C controller.
+>>
+>> I'll look into that after the commit window closes.
+>>
+>> Thanks,
+>> Guenter
+>
+> I already have prepared two patches for that, i will test them on my=20
+> machine as soon as possible.
+>
+> Thanks,
+> Armin Wolf=20
 
-Please either resend with updated subject and description, or I'll
-fix it up while applying.
+Both patches seems to work, but i do not have an DDR5-based Intel system a=
+nd hand. Still, do you want
+me to send those patches when the new merge window opens?
 
 Thanks,
-Guenter
-
->    Latexmk: ====Problematic refs and citations with line #s in .tex file:
->    Missing character: There is no ： (U+FF1A) in font DejaVu Serif/OT:script=latn;l
-> 
-> Signed-off-by: Antonin Godard <antonin.godard@bootlin.com>
-> ---
->   Documentation/hwmon/gpd-fan.rst | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/hwmon/gpd-fan.rst b/Documentation/hwmon/gpd-fan.rst
-> index 29527a77fe88..b27657d33056 100644
-> --- a/Documentation/hwmon/gpd-fan.rst
-> +++ b/Documentation/hwmon/gpd-fan.rst
-> @@ -67,7 +67,7 @@ pwm1_enable
->     at full speed. Write "1" to set to manual, write "2" to let the EC control
->     decide fan speed. Read this attribute to see current status.
->   
-> -  NB：In consideration of the safety of the device, when setting to manual mode,
-> +  NB: In consideration of the safety of the device, when setting to manual mode,
->     the pwm speed will be set to the maximum value (255) by default. You can set
->     a different value by writing pwm1 later.
->   
-> 
-> ---
-> base-commit: 248951ddc14de84de3910f9b13f51491a8cd91df
-> change-id: 20260812-doc-hwmon-remove-confusable-de457420ec02
-> 
-> 
+Armin Wolf
 
