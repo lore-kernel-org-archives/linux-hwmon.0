@@ -1,71 +1,101 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5623C37C0F8;
-	Wed, 19 Aug 2026 19:12:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DC464078F2;
+	Wed, 19 Aug 2026 19:13:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787166727; cv=none; b=icS5/IRdDTS/gpLeaZEim71oocp6ubnywAm5nbYlmMop0nvaGcACNvwzGanAgfEHxSTZfC7RYUy48N+OpTma+6+j6YKvfyp1pg+ElzOueHRRanbBBeWDwVe2Rug8LyReL3ping1IwZIQO6daDWkutV0EOblY92TKjLjoFFmqk30=
+	t=1787166799; cv=none; b=rNvhjURl1W1v0I5aS4LIA+1eR5PkzF5QMNyBU4vah4B+PIHp1YGTokKwXQLAz+OPqw77+sALgNtvBxSsvtaSRLvD4zR88H1aHNFJm1vE+0cJnSj6P+mXYBT/I9X85sJAFeriuQW9UQWbi/nROewxy+Z3yizNnvoc7/IvX0UXx7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787166727; c=relaxed/simple;
-	bh=vuv/py9bpzeVQlwLyPt4mhdUXZYkeJTupWG+x3si3kQ=;
+	s=arc-20240116; t=1787166799; c=relaxed/simple;
+	bh=MqmqIfzNmkuth/E+kk7+72FX2PfWhxL55bDSfc2zD0k=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=PFpZASMqYFJrbczt0Zjr0Adw+xZg0ckfgR2pHMrMzi9oehphoobq1+sQZn7DglP4pLvs7qzWq0CjATf/7X/7bLJkY1emHyeli+grp6oCfts76SVgeywLnRO2RjutNs1XPVTUgQLAap71KWhJBlZ6k698SwedSsYDwJefxv079is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FnAFG3Q8; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=PCVSLG7BNKtuAoBctFHAYmt3pxqND79ydmA2JtTPiHXVFl0wXAifXrrVWlu4dI1LYWmqJ8ij5MIhcvcQlnArGKEY1KuCury9RuJmT5zP5nKaLJC0jCBMrrd9prqqWspkHlZ/kP0PCKZlND5JaP+xZT+92aVWcpkLEdedn7AhfkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=avFL27vf; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FnAFG3Q8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0F201F000E9;
-	Wed, 19 Aug 2026 19:12:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="avFL27vf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F2F21F000E9;
+	Wed, 19 Aug 2026 19:13:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787166726;
-	bh=9TgllrluCeYu/YAyEp+bbwM4z721z1J3oqvcCNmbno8=;
+	s=k20260515; t=1787166796;
+	bh=7QPB8xntRosfEaEsyywjE8Y9e9e7wAx1p25F0kiuc9I=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=FnAFG3Q8gnBWrOVlbnvfWskJ2x3+R22O2ZmAac4ynGOGROH3heWJ3g8iSGh0rwKmG
-	 G3tRZeKKXiU9KAAPv441aX591NJxL6KzWLmqoR9ljcQbPivlVtH5lbiR+aVd4tmTvo
-	 aFXr26clmuXxbyHW6746WXf6tm8e617P50NmYD0D/mPH72C2ULCOEQVKhYP5O6vWjZ
-	 P01NcKRQM0uWJnOG9yygIaOykD4/v8EBLIdO54V61dtp79xY5TwNmDj2orJAoUTJli
-	 hFx+QukYIfRTZAt2P97p/gtYFEwQN/gzNFA11RVsfhH1Q9NJRe/JRboIYqGpblHc6A
-	 moHoLCu/+fZkg==
+	b=avFL27vf7uiDuhOHLuxB/2oCnPMbgPs124dXFVRT5tHaeRQQCP2+ZifxIXNr163q2
+	 0WmOepLH205z65+O10bAs3Vs3o9P+7gMNQJSoER6EPsgVcLrdvg9AhHM25vpQD4TBn
+	 D7zzhY7iNTS25TLnTyPGlM0Z4ugnBZLe/UkucPfZmSjQD/DjwXn/VGH6WULFwtEIqd
+	 EFe19QZUf3E8F9SDthfUMIVl4MrNFn1LFrQWoxUh1S95SvS5g3u+Zl9n2ksOSMqwqs
+	 sL+XArbeCt8QqsqbIfzmhN/qwKpv/2F7M5AtiFK/Vj7pwf0IXIJozlH7biGZyhTfLL
+	 pmeSDzXiC4yUQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH treewide 3/5] hwmon: (ltc4282) Make sure clk_init_data
- is fully initialized
+Subject: Re: [PATCH treewide 4/5] iio: frequency: adf4377: Make sure
+ clk_init_data is fully initialized
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Geert Uytterhoeven" <geert+renesas@glider.be>
-Cc: linux-clk@vger.kernel.org, neil.armstrong@linaro.org, linux-amlogic@lists.infradead.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <8ec3c5cbd2df675a938f090470f5da5f22008517.1787165329.git.geert+renesas@glider.be>
+Cc: linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org, neil.armstrong@linaro.org, linux-hwmon@vger.kernel.org
+In-Reply-To: <302584628c4c0699239a0218376fe1c11cdc8944.1787165329.git.geert+renesas@glider.be>
 References: <cover.1787165329.git.geert+renesas@glider.be>
- <8ec3c5cbd2df675a938f090470f5da5f22008517.1787165329.git.geert+renesas@glider.be>
+ <302584628c4c0699239a0218376fe1c11cdc8944.1787165329.git.geert+renesas@glider.be>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 19 Aug 2026 19:12:05 +0000
-Message-Id: <20260819191205.D0F201F000E9@smtp.kernel.org>
+Date: Wed, 19 Aug 2026 19:13:16 +0000
+Message-Id: <20260819191316.8F2F21F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-> The clk_init_data structure contains several mutually-exclusive members
-> for different methods to specify the possible parents of a clock,
-> prompting drivers to initialize only the members they need.  However,
-> not initializing all members may cause subtle issues, which are only
-> exposed when CONFIG_INIT_STACK_ALL_PATTERN or CONFIG_INIT_STACK_NONE is
-> enabled.
->=20
-> ltc428_clk_provider_setup() does not fill in any parent clocks, and
-> assumes that init.num_parents is NULL.  However, the latter in
-> uninitialized, and thus may cause a crash.
->=20
-> Make sure all members are fully initialized, to fix such bugs, and to
-> avoid future breakage when converting drivers to a different method for
-> specifying the parents.
->=20
-> Fixes: cbc29538dbf7d740 ("hwmon: Add driver for LTC4282")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-Sashiko has reviewed this patch and found no issues. It looks great!
+Pre-existing issues:
+- [High] Incomplete fix for uninitialized stack variables: `struct clk_pare=
+nt_data parent_data` remains uninitialized on the stack, leading to a kerne=
+l crash during clock registration.
+--
+
+--- Patch [4]: [PATCH treewide 4/5] iio: frequency: adf4377: Make sure clk_=
+init_data is fully initialized ---
+commit 99e024a77f5bce5921d3c6b46054263aa450610d
+Author: Geert Uytterhoeven <geert+renesas@glider.be>
+
+iio: frequency: adf4377: Make sure clk_init_data is fully initialized
+
+This commit initializes the clk_init_data structure in
+adf4377_clk_register() to zero. This prevents crashes caused by
+uninitialized fields like parent_names when CONFIG_INIT_STACK_ALL_PATTERN
+or CONFIG_INIT_STACK_NONE is enabled.
+
+> diff --git a/drivers/iio/frequency/adf4377.c b/drivers/iio/frequency/adf4=
+377.c
+> --- a/drivers/iio/frequency/adf4377.c
+> +++ b/drivers/iio/frequency/adf4377.c
+> @@ -999,7 +999,7 @@ static int adf4377_clk_register(struct adf4377_state =
+*st)
+>  {
+>  	struct spi_device *spi =3D st->spi;
+>  	struct device *dev =3D &spi->dev;
+> -	struct clk_init_data init;
+> +	struct clk_init_data init =3D {};
+>  	struct clk_parent_data parent_data;
+
+[Severity: High]
+This is a pre-existing issue, but does this struct clk_parent_data also
+need to be zero-initialized?
+
+Only fw_name is explicitly assigned below, leaving name, hw, and index
+populated with stack garbage. When adf4377_clk_register() passes this to
+the clock framework, clk_core_populate_parent_map() will read
+parent_data.name and pass it to clk_cpy_name(), which ultimately calls
+strlen() and can cause a page fault during probe.
+
+[ ... ]
+
+>  	parent_data.fw_name =3D "ref_in";
+> =20
+>  	init.ops =3D &adf4377_clk_ops;
+>  	init.parent_data =3D &parent_data;
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1787165329.gi=
-t.geert+renesas@glider.be?part=3D3
-
+t.geert+renesas@glider.be?part=3D4
