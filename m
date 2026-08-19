@@ -1,152 +1,109 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3C244B8DF0;
-	Wed, 19 Aug 2026 19:13:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 066C0499F04;
+	Wed, 19 Aug 2026 19:14:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787166837; cv=none; b=VNqL2baUdqXi/38fjh3XvZEwXOJnpoZLcljko1IXx+ytI+BphwCP2HkvNwrd4jcFzxCjsdSFJRnapdXb2eL28/aQ9dIrg42jAniSbU26M2ZOhNN/RPQVggEw4dJ6CjOmBN9qKjx/Jjr+c6mrZ0MFxmyrO/lkUwsA72aHlZAFajs=
+	t=1787166893; cv=none; b=AHV40rt0295InR16B0fL0q3p0nyZXTvqeR+1dFrb4FEQM8Qr18xa0OhvF+EbdE5SgESX2ZL6sf5dnzA+yzXqdJ6d+N7Wk3uEexV/w34jsUf6Jr1yGzVuwkv49noZVcFBBhGn9qr2O5GK2ddKW4kvursxVEKJAT9VATnK7WlhxTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787166837; c=relaxed/simple;
-	bh=EP12BeSUzJbLFY9oS4uFKQrRP76fUxEv3k+4S3SBSzA=;
+	s=arc-20240116; t=1787166893; c=relaxed/simple;
+	bh=LbH7kn88/xKq8MnEbDSrscOZlbpSyREdZR1tJGJWQFk=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=SpAKEK/ycCCKLwdf8VgbvDstOsufgUNS0voYhiEjpdnyiKx/OlSeEw8kE7T8Xch7RCaBKaeab0QNPmBTGJl52bRUBP1Ldb6vlbXdlzulFWJNL1Ry9tdxoRH6bCyyGy6bc2aIi/tnZ/gHPISq61JbGpcjBRgYXUenKT8SpjYHgjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OwAauSMP; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=PTpAWTMuyxLF/2rYT8aoFw6KMjyvtfJR9EiXbJbT6tBMk+0JG1G2qpnRinQh15+rllOsEnqLgtkJJzHBedkC24K1sYMVRC0jVuNjMNka7vFby02kd1Cn62u3I036h0UcJxYzxFNPL7C578FXrsFSwfxswpG2pkFulUdDCGFTYvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M+03ggsc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OwAauSMP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3FD21F000E9;
-	Wed, 19 Aug 2026 19:13:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M+03ggsc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C8A91F000E9;
+	Wed, 19 Aug 2026 19:14:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787166833;
-	bh=LzBigPmBT6t0JrLHKjptvLNyTJEc7gOLNoyrVB2bYTQ=;
+	s=k20260515; t=1787166889;
+	bh=5gWeIj/0e14fYOrOsZrZtjZfZ/2+j7qPQ9iKAH6by/E=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=OwAauSMPXFF09E2bzZg/NyyiWCiqojM5uuTHtXjnDIkJxxIg62w1+JSbOnMpmc4NW
-	 r88E+afUDFikSP/pIx5ES/fpLSJ92SbW7/3a0VcRXnridhpW5y8QJIKrVxL0xOvEhM
-	 U3MHjDXV+VhAUFjj8USU6qH6+4nCVuUkQ18oibHV1e/tmJfLiApRT/4NcSWUasOHBY
-	 HsF/0NI0djFExrZhkDsl8vwbKW7KGHRBJPtma0Q+0ChtipMwxL3cYWez4uxOxlgNw/
-	 lpkFwa5eke4paS+lOH7FgqmSA3dZ+ZXL513qCwEfidNFREf014ydCRiiJmGKHIpI2S
-	 KDxch3hathf7Q==
+	b=M+03ggscnWlxK0ufvE1a+wvl8PkAOVwc2hh8bjdqTn2R1lSOhSH3HPiCvySV1SOZ6
+	 TW6Y/F4S+IANZ2VhvqWLiKUYVnn455S5igLwYYuzxgB5sXvcDeq8a66Qb9Ij9t+6OK
+	 tM6z013lM/XkOl8HEsbPnpkoFGukUDfi1bSQ3s99pIGbmJ9Kg3VHw9zbA4MbtWkNJ5
+	 HOSHeLWMS2S+8Euy6RWUSOldARL+qUKQsrYNZ0HpaJorTN79on7ElHrssdU9g+AXPG
+	 aF2zymTEHPBn2TgWmj7udETh9grFMC4gINesa/vSuDOF3VI12atfl1ft+nkhCQzCSo
+	 ko/3GWR+P6Tuw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH treewide 5/5] spi: amlogic-spisg: Make sure
- clk_init_data is fully initialized
+Subject: Re: [PATCH treewide 2/5] clk: visconti: Make sure clk_init_data is
+ fully initialized
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Geert Uytterhoeven" <geert+renesas@glider.be>
-Cc: linux-clk@vger.kernel.org, neil.armstrong@linaro.org, linux-hwmon@vger.kernel.org, linux-amlogic@lists.infradead.org
-In-Reply-To: <9fb35ae0aedb7a6db0db6c78a8193c7602dd9d44.1787165329.git.geert+renesas@glider.be>
+Cc: linux-clk@vger.kernel.org, neil.armstrong@linaro.org, linux-amlogic@lists.infradead.org, linux-hwmon@vger.kernel.org
+In-Reply-To: <42dd7be99acbbea1343e2fcc0ba4ffb91f8517ca.1787165329.git.geert+renesas@glider.be>
 References: <cover.1787165329.git.geert+renesas@glider.be>
- <9fb35ae0aedb7a6db0db6c78a8193c7602dd9d44.1787165329.git.geert+renesas@glider.be>
+ <42dd7be99acbbea1343e2fcc0ba4ffb91f8517ca.1787165329.git.geert+renesas@glider.be>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 19 Aug 2026 19:13:52 +0000
-Message-Id: <20260819191352.F3FD21F000E9@smtp.kernel.org>
+Date: Wed, 19 Aug 2026 19:14:48 +0000
+Message-Id: <20260819191449.3C8A91F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Severe imbalance in clock prepare/enable counts for `pclk` and `co=
-re` clocks, leading to negative enable counts and warnings during driver pr=
-obe failure or removal.
-- [High] Missing cleanup for runtime PM and `sclk` clock on the probe error=
- path and module removal.
+- [High] visconti_reset_status() incorrectly uses the bit index directly in=
+stead of a bitmask, resulting in corrupted status checks.
 --
 
---- Patch [5]: [PATCH treewide 5/5] spi: amlogic-spisg: Make sure clk_init_=
-data is fully initialized ---
-commit aa4fc6e665f6f8293335c8edd96584e8cdda40c6
+--- Patch [2]: [PATCH treewide 2/5] clk: visconti: Make sure clk_init_data =
+is fully initialized ---
+commit 61772ea3c610a3b3ebf435b199e400c1c5aaee4c
 Author: Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: spi: amlogic-spisg: Make sure clk_init_data is fully initialized
 
-The clk_init_data structure contains several mutually-exclusive members
-for different methods to specify the possible parents of a clock,
-prompting drivers to initialize only the members they need. However,
-not initializing all members may cause subtle issues.
+clk: visconti: Make sure clk_init_data is fully initialized
 
-Fixes: cef9991e04aed330 ("spi: Add Amlogic SPISG driver")
+The clk_init_data structure contains several mutually-exclusive members for
+different methods to specify the possible parents of a clock. Not
+initializing all members may cause subtle issues when uninitialized members
+are unexpectedly accessed. This commit ensures all members are fully
+initialized to zero.
 
-> diff --git a/drivers/spi/spi-amlogic-spisg.c b/drivers/spi/spi-amlogic-sp=
-isg.c
-> index afc8af04638d3..9049a87e9d0f2 100644
-> --- a/drivers/spi/spi-amlogic-spisg.c
-> +++ b/drivers/spi/spi-amlogic-spisg.c
-> @@ -636,7 +636,7 @@ static int aml_spisg_target_abort(struct spi_controll=
-er *ctlr)
->  static int aml_spisg_clk_init(struct spisg_device *spisg, void __iomem *=
-base)
+> diff --git a/drivers/clk/visconti/clkc.c b/drivers/clk/visconti/clkc.c
+> index d0b193b5d0b35..4018d1298880d 100644
+> --- a/drivers/clk/visconti/clkc.c
+> +++ b/drivers/clk/visconti/clkc.c
+> @@ -81,9 +81,9 @@ static struct clk_hw *visconti_clk_register_gate(struct=
+ device *dev,
+>  						 u8	rs_idx,
+>  						 spinlock_t *lock)
 >  {
->  	struct device *dev =3D &spisg->pdev->dev;
-> -	struct clk_init_data init;
 > +	struct clk_init_data init =3D {};
->  	struct clk_divider *div;
->  	struct clk_div_table *tbl;
->  	char name[32];
+>  	struct visconti_clk_gate *gate;
+>  	struct clk_parent_data *pdata;
+> -	struct clk_init_data init;
+>  	struct clk_hw *hw;
+>  	int ret;
+> =20
 
 [Severity: High]
-This is a pre-existing issue, but I noticed a severe imbalance in clock
-prepare/enable counts for the pclk and core clocks.
+This is a pre-existing issue, but while reviewing the visconti clock and
+reset driver changes, I noticed a potential problem with how rs_idx is used.
 
-In aml_spisg_clk_init(), pclk is acquired with devm_clk_get_enabled():
+In drivers/clk/visconti/reset.c:visconti_reset_status():
 
-	spisg->pclk =3D devm_clk_get_enabled(dev, "pclk");
+	spin_lock_irqsave(reset->lock, flags);
+	ret =3D regmap_read(reset->regmap, data->rson_offset, &reg);
+	spin_unlock_irqrestore(reset->lock, flags);
+	if (ret)
+		return ret;
 
-But later in the same function, it is manually disabled:
+	return !(reg & data->rs_idx);
 
-	clk_disable_unprepare(spisg->pclk);
+Is this reset status check operating as intended? Since rs_idx is a raw bit
+index (0-31), would it be more accurate to mask the register with
+BIT(data->rs_idx) rather than the raw index value?
 
-Since pclk is managed by devres, won't this manual disable unbalance the
-clock enable count right from the start?=20
-
-This pattern is also repeated in the probe error path and remove functions:
-
-drivers/spi/spi-amlogic-spisg.c:aml_spisg_probe() {
-...
-out_clk:
-	if (spisg->core)
-		clk_disable_unprepare(spisg->core);
-	clk_disable_unprepare(spisg->pclk);
-
-	return ret;
-}
-
-Does this cause double-disables and negative enable counts when the
-devres cleanup runs?
-
-[Severity: High]
-This is also a pre-existing issue, but I noticed missing cleanup for
-runtime PM and the sclk clock.
-
-In aml_spisg_clk_init(), sclk is manually enabled:
-
-	clk_prepare_enable(spisg->sclk);
-
-And in aml_spisg_probe(), runtime PM is enabled:
-
-	pm_runtime_enable(&spisg->pdev->dev);
-
-However, if devm_request_irq() or spi_register_controller() fails, the
-out_clk error path simply returns:
-
-drivers/spi/spi-amlogic-spisg.c:aml_spisg_probe() {
-...
-out_clk:
-	if (spisg->core)
-		clk_disable_unprepare(spisg->core);
-	clk_disable_unprepare(spisg->pclk);
-
-	return ret;
-}
-
-Doesn't this leak the sclk enable count and leave runtime PM enabled?
-
-Additionally, aml_spisg_remove() also lacks a pm_runtime_disable() call
-and skips disabling sclk if the device is not runtime suspended. Should
-there be explicit teardowns for these in the error and removal paths?
+Masking with the raw index seems like it could produce incorrect status
+returns. For example, if rs_idx is 0, the mask would always evaluate to 0.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1787165329.gi=
-t.geert+renesas@glider.be?part=3D5
+t.geert+renesas@glider.be?part=3D2
