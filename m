@@ -1,103 +1,137 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAE7336C9D0
-	for <linux-hwmon@vger.kernel.org>; Wed, 19 Aug 2026 20:35:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DDA82DF12F
+	for <linux-hwmon@vger.kernel.org>; Wed, 19 Aug 2026 20:43:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787171737; cv=none; b=I9t/kt6tZLxB0NSQ6fQSYhdKdAKY9gp7selwrI9BUyUs6YGu3NXsOIADJCaESzR/3KE/SuLCuhjOm/Zn0gsJsD4M4qn6+c7RQtO4ca8sOA/3lWpdhXfjfjTsDqGuhem4aHZqcW9plzAG/Skqx5c3cEQlCAEj6qYgdlX6AmfNEII=
+	t=1787172184; cv=none; b=AzEWRBKsG/pTAqkrJnImcff/GAGcgBSQBNfcS6E993IJ5k7XYwZ+xffMp7rB7OG0+lCpihPeqdnvTOHq81L1dPSPBnO+hqqBp27QBhsCypf9qu7SKD0++jHol1HCQHwCCHmGwvnFsurR/hB1BHtWghEIpoqbbyXH5bVBq+f0Tg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787171737; c=relaxed/simple;
-	bh=gWZIWSn+QfY9cjjDsXtojf0eY4HoNp4FjP4izH32dsU=;
+	s=arc-20240116; t=1787172184; c=relaxed/simple;
+	bh=lsmXjePorRAzUjJL6ORGR+bUFBHa1eeaFQXiJVML7fk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nfuq9YVFHkpXv6+zxCStQ9zmpWdFmVN1EmZLuFIX7BCevQwUlFLwLzAuG+REK/IQ9k6gLxvjaBGzcumO/vupI4WLbrpeT9ExhygcCoXZshuy/1WlzYwAwHrhlhjZt+NawgTN4hT6r7eIwxeoz4eTuMMTmUGwrh6V7VGSRrkDbYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nsDErefp; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=M75i8aoI+w5Ida+uNIkRaI+/z9RYVrvVkSzB428cPX5ojXKsG4i7JSwynIEuiXw8XNRXSA449AFXk5vTKK/cwDKYcWCTSXUedNKVhiz0rTh7gfav80Vbhtblhl78jVW1f4YUVuii/L/VAABTTRCieCawCZQni0YTAa2xx5U0ImM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TvNIf6ho; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=H2HijPKC; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nsDErefp"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-38125cebfdaso2360845a91.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 19 Aug 2026 13:35:34 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TvNIf6ho";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="H2HijPKC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1787172182;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HhcnPKvnBcdmIG5Q5TzyCZUomoVpouA/md8ztmVdXeM=;
+	b=TvNIf6ho/3ILZZ96r+MOqrV8xYNxvSQmo5OmVZbTl0JP3seSRF3/al2DBp9O4aaJakyiy4
+	ToqKhIlE0GPcHUOCM7mevaMLilAGBnphKiUNaAwaNUwOscCppEmWCSbdTpxZYygTmz2kl6
+	4K23x4StBXEWmv1xSSmPXcnBzSdRW4U=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-659-TSjouoSMOuWimqOffJKFRA-1; Wed, 19 Aug 2026 16:42:55 -0400
+X-MC-Unique: TSjouoSMOuWimqOffJKFRA-1
+X-Mimecast-MFC-AGG-ID: TSjouoSMOuWimqOffJKFRA_1787172175
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-90a91f4c6f1so11247056d6.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 19 Aug 2026 13:42:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787171734; x=1787776534; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=llCHg1ZM3NUt07Qz1SWo3LquYpu8FhSL3xCEUZRGbuQ=;
-        b=nsDErefp0/+GF7B245+qnFQmJfXQAkCLxcc021eHtMO8kBKMELcczm/Kvs7ZyfOPYW
-         AtZiFe0/LV/3e8bovP/RDc0o6soskAr+d23phW1Ense61lJZw1MvcNQkoVFfqA+UmmuO
-         4/UnXaMhnEJvvFzjNIoSMTsbuOmE180qfUSGqCfLnAV97xV/GC7zNRXBl3iKKG37J+Ow
-         ZQsXUFKgxssABBLqgatHZh5OsouuUSNzEFy6Ds50JWQ1OMM9kwy6gvdj+L+tAJuDeZ5h
-         EynoFW2TX3iSdB4iAO3B7FFu+JaK5FAy+15pzQvE+N+NG573xYjuR8DgSH6PwkaS1yb0
-         smtw==
+        d=redhat.com; s=google; t=1787172175; x=1787776975; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=HhcnPKvnBcdmIG5Q5TzyCZUomoVpouA/md8ztmVdXeM=;
+        b=H2HijPKCxznkuk+UOCT6ypMDN9GEhwnkFh1DITuo77/aWsuSkb/F93+zkcB1c0AdmO
+         yU9sT4m9HuGSkqf1nUoSk+zS1kd1JLOOQJIaUMEIINWk6xcWI8gMep3hFBwm+ST/T3n9
+         ByVa8Lu6ll1FXf1Eh/HeUNfCZV6HOXeXdHdonYg3k6MYSMbI5s+Sbkd0fjfBfQJtU6J5
+         uaMNZUWVZ2WonDOu7/Iwc5f7egnnPboxvPTG5rHny8WGT2BVI9cQbMXJMeyUd0jCutl0
+         ulu606crKehwfo0ynSS8UQb26bAL6umIrtWDrKRuUPv6hnRBd18Wh4dmwSuHECS4BAiw
+         mTtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787171734; x=1787776534;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=llCHg1ZM3NUt07Qz1SWo3LquYpu8FhSL3xCEUZRGbuQ=;
-        b=jO7ziAvuLfy34NA6hHyEEQeaANHv6xwRBkxDUfmHT7IrzmL9snFmfIlvAai7y+euaP
-         yLVSG66TKJKR5m1VLY7+GPfsnLe9KQe1ynKu9TlhTujln8p+eJMAuJtiSnpJWXZqYG9r
-         Sf+geAu2arCLBMxmzsNv/ved3GQnnLt9U+35/sIx+ho0GzaOKJrKTVIhF0pdAodMrG2P
-         9TWa/rNaUsVUGxylOlLFwFqwg9fJpuBUEQ7eKCwfKKxSVzufZparS9uRn93u+Qp63dun
-         c++v13IVatvRvjSH6bi0gwsdBJOjFJRHbikgvd8TiqLYXAQpSk875LIpFceTYIazVDWV
-         p/WQ==
-X-Gm-Message-State: AFuF++l6YEy8ahXnw7dLHUIJQQLQtVq++4oPf0FftCLEWLK7Qb+EPYxK
-	ZMiLLbinHVf8LnStBICgEkPsrDBbhB0NSgVI7NFTohHJNl+0Fqh8zTNJ
-X-Gm-Gg: AR+sD10F1lc9sa6aTPiURkVyTLGrLiFqZ0b21SiXnIg8Ajbba2rhTwl0VxMaQ0QamkE
-	zs4t29oCFZZD9ZeL+9a2A6cyfDDZfn12+LKbj8UfCYRSTagPSWRNqqEPLJ8M6Uvp6I5+lUiVmT2
-	hMR5seXFbUYYoaAZKKCpxWUU/sLgWgGLHYP0w/Uf05GxW30lxVkMGzzplGiClrxEZl4Bsbe4+yt
-	q/7L3rzp3cxPCJHlvbjrKyQalllSwl06flP4GnGxWrW6o/hnAmw6pzaB0acIY4oW1KXXniGYEnv
-	Onjzexh8nlfT/lH8DM00L+I+zyJ63tFfFQUG4s2OrUwVrt8DBySBO/OTplAZ4vrhNm2RyEkq4uu
-	8QfxvjPOuHl4Yak84z2+lL7QRj0fSrqx5PFisERcTZh7wVofaN5SRkLHD52bMrcERpQTaBPkshW
-	xhjIa9RmKd+x0Zrilm1lOe+GbKtArLS3vN/om4xvR4ubSvjpORI4zt9nMv7wic+zeLFD3k7kI60
-	A==
-X-Received: by 2002:a17:90b:1e49:b0:38d:ef48:b04 with SMTP id 98e67ed59e1d1-39580f6c037mr12721775a91.10.1787171734135;
-        Wed, 19 Aug 2026 13:35:34 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327c3fc6675sm13265576eec.13.2026.08.19.13.35.33
+        d=1e100.net; s=20251104; t=1787172175; x=1787776975;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=HhcnPKvnBcdmIG5Q5TzyCZUomoVpouA/md8ztmVdXeM=;
+        b=SZgiSoI2C0FGoHod++VZqMkIC22vb9PvAd84Zkl09bRy8MDYuLlIZKKeeFraGgbIIy
+         htXPX4AWPGmHPfveGzoDv1rixHRJKhgSLId3HTnUNF7N29MMwFYhkA8vEhk6+PSbBvk9
+         JbmU0eY1+QtOXf47xRX7RQ4ywhNmFJffXhel+qkDLooRnYilZ7uyyFGU67uc1Vh0YmK0
+         slMfIEHqlsY226W7Q0A4HvFUDQjCD2TbmGbwfukIouwDD6PLst8QLLX3rvYJkMJcnmVE
+         BRxBsDm+4sKbR9f2+jvWME3TXWusotFiPJDLIVYff4jH0U/rg7jAprA60BA6RA+Op3uq
+         xQcA==
+X-Gm-Message-State: AFuF++mvsSfIRelmoRy6/jfBLoYMEesyFs9QALK6qI8Q7K1yhzATjtme
+	L+iEkT+wVY5/M7ANtxe9e4e6h+4Glt/Lz/ozFcWb+gi9AkV3OzmhtV/WNH4Qxml5cXt9V5/CQG4
+	r2pYLnC/Fb27iQNPDH+Fa46/IkZAdb+4hedyEAFyVYMTgmlgl1UZrNZ68PmtYg5aZ3mto9VR4
+X-Gm-Gg: AR+sD13kry/nJIuR91s/Et4sEQCN0E8vU8M22dTG/VViDEev5N8ppOf+tbhapeMXRxf
+	WCsvwKADczQ71ag5mQE7cqLSk9smmd8s6iTe7SME7jevt1numVFLT4LLyNJZwie9vODLKzKyT/E
+	KW64exP4HrI+qUzW2ID5QpHCGVyvy6I9R2YXCacmkaG1Oj2Yx90hCvSDJOjyxOZJJX7nnoMTorX
+	MP+AX3C5RAnsg6xMgAj2RVi5le0t5eCa34oWOuHyC9tjS27k3RLUvrU+eo3b5GCg/s0AhQz4eBO
+	sfhtlAQMn6RhNebwhKKrHPMhRG5kPtbjcAlTHEDK8kBjov5+dNZTJv7uj+mMjVq0UNxQ0rgCL+I
+	Tcn+MRkhVgQ==
+X-Received: by 2002:a05:6214:2122:b0:90a:807d:31bf with SMTP id 6a1803df08f44-90c5eab90ffmr71349316d6.24.1787172175302;
+        Wed, 19 Aug 2026 13:42:55 -0700 (PDT)
+X-Received: by 2002:a05:6214:2122:b0:90a:807d:31bf with SMTP id 6a1803df08f44-90c5eab90ffmr71348866d6.24.1787172174902;
+        Wed, 19 Aug 2026 13:42:54 -0700 (PDT)
+Received: from rh-jkangas-kernel ([2601:1c2:4480:2110:932e:45ef:6b6c:ddd0])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-90c5edb4fa2sm22921116d6.10.2026.08.19.13.42.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Aug 2026 13:35:33 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 19 Aug 2026 13:35:32 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Fan Wu <fanwu01@zju.edu.cn>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (gpio-fan) fix use-after-free in alarm work
-Message-ID: <634aec56-669e-41e6-9086-cb0fd8729242@roeck-us.net>
-References: <20260819033317.446191-1-fanwu01@zju.edu.cn>
+        Wed, 19 Aug 2026 13:42:54 -0700 (PDT)
+Date: Wed, 19 Aug 2026 13:42:51 -0700
+From: Jared Kangas <jkangas@redhat.com>
+To: sashiko-reviews@lists.linux.dev
+Cc: linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/4] hwmon: (ina2xx) Replace regmap in
+ ina226_alert_read() with ina2xx_data
+Message-ID: <aoYVS8htMnz8vLQb@rh-jkangas-kernel>
+References: <20260729-upstream-ina2xx-in0-curr1-alarms-v1-0-349f7b2f1df8@redhat.com>
+ <20260729-upstream-ina2xx-in0-curr1-alarms-v1-1-349f7b2f1df8@redhat.com>
+ <20260729155254.2C9261F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20260819033317.446191-1-fanwu01@zju.edu.cn>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260729155254.2C9261F000E9@smtp.kernel.org>
 
-On Wed, Aug 19, 2026 at 03:33:17AM +0000, Fan Wu wrote:
-> fan_alarm_irq_handler() queues fan_data->alarm_work, but nothing
-> cancels it.  fan_alarm_notify() dereferences fan_data and its hwmon
-> device.  On unbind, devres frees the interrupt, which only waits for
-> the handler itself, and then releases the hwmon device and fan_data,
-> so a pending fan_alarm_notify() can run after those frees.
+On Wed, Jul 29, 2026 at 03:52:53PM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
 > 
-> Replace INIT_WORK() with devm_work_autocancel(), registered before
-> devm_request_irq().  The devres cleanup then frees the interrupt
-> first, so no new work can be queued, and cancels the work while
-> fan_data and the hwmon device are still alive.
+> [snip]
 > 
-> This issue was found by an in-house static analysis tool.
+> > -static int ina226_alert_read(struct regmap *regmap, u32 mask, long *val)
+> > +static int ina226_alert_read(struct ina2xx_data *data, u32 mask, long *val)
+> >  {
+> >  	unsigned int regval;
+> >  	int ret;
+> >  
+> > -	ret = regmap_read_bypassed(regmap, INA226_MASK_ENABLE, &regval);
+> > +	ret = regmap_read_bypassed(data->regmap, INA226_MASK_ENABLE, &regval);
 > 
-> Fixes: d6fe1360f42e ("hwmon: add generic GPIO fan driver")
-> Cc: stable@vger.kernel.org
-> Assisted-by: Codex:gpt-5.6
-> Signed-off-by: Fan Wu <fanwu01@zju.edu.cn>
+> [Severity: High]
+> This is a pre-existing issue, but I have a question about how the hardware
+> alert state is managed here in ina226_alert_read().
+> 
+> Since the INA226_MASK_ENABLE register clears the Alert Function Flag when
+> read, does this bypassed hardware read clear the alert flag unintentionally
+> if an inactive alarm attribute is polled?
+> 
+> For example, if userspace utilities sequentially read sysfs alarm attributes,
+> could checking an inactive alarm trigger this clear-on-read behavior before
+> the actually active alarm is polled? It seems this sequence would cause the
+> active alarm to falsely report as inactive (0).
+> 
+> >  	if (ret)
+> >  		return ret;
 
-Applied.
+Yes, the current behavior of the driver is to clear alerts even when an
+inactive alarm is polled. This is addressed in patch 4/4.
 
-Thanks,
-Guenter
+> 
+> -- 
+> Sashiko AI review · https://sashiko.dev/#/patchset/20260729-upstream-ina2xx-in0-curr1-alarms-v1-0-349f7b2f1df8@redhat.com?part=1
+
