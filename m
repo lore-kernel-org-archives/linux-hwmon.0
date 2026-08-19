@@ -1,199 +1,140 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ED2D2C237E
-	for <linux-hwmon@vger.kernel.org>; Wed, 19 Aug 2026 21:20:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAADE39AD33
+	for <linux-hwmon@vger.kernel.org>; Wed, 19 Aug 2026 21:21:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787174461; cv=none; b=GCIaM/yMrRmJFoZypevznf1QjLSztRBnuEGwn9a4AqkrffB9KjUlRoPcpVglQax1K7VgZbwRMHXAmyZ5ehG/NWOLg1ikZ02+QDpHEQ1cEDmKU4kLv3Dj9kFIPByZzKsrwkDfv1sy8AsUaoHk9Zf867S/k/BFBnQRbYwHBfUaFh4=
+	t=1787174479; cv=none; b=RXKIc4qsFTSKwvdBUoELapk/LomMO6c2Zw1afssmEU0I3a1gxbfFf/Sy3CLOK9XkgWC/27oapM6LiEq9hXCDtdjj0itrNIO5PLVUXVUiaqZLmj0srrPr+1GGhKywRuwooxg8a06RzEj76W3FXdl711hGGM+/X8M/51bEM03x4U0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787174461; c=relaxed/simple;
-	bh=Ddh9IgjMjq3cGS2HNFSQsJGjI77Bxv1Us66zVXCN2Ms=;
+	s=arc-20240116; t=1787174479; c=relaxed/simple;
+	bh=1sm5DJvN9JZq6zFJ3rudO9ha47L7zEKKAdXSC02I0m4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OhgzNnDM7RxcmyAqVqvS2oagG7Xk1/VuYrl8Mp6HnUl1bCal8R+atR1j3effxWzl+n6pjWYNs16U5nne2X47OLo/4cW3ZlfbVwtGKA8aVPIg967uxEjuoV0Rpio/9J7COMI8kh/rezJnbqp5p01R5XVeMzCNlH8RnbWa9vUyVmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AnErrFCy; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=eLXVDdag; arc=none smtp.client-ip=170.10.133.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=uEYQQoZaUzApa0M1ORGLgv67CzfDD8MOsZX3XbFphnx0eq4Ir7PmpqK1lqsmkIFrIvjuJm3ye7fNsptWsCS5IDRgYLJ0Z/DYT1VPmWYuiIMvJ5Ob7AhADhPvGclxEdac3YSinLI6rYMYgDD1psP9zxZtas7oKFP0c8UaSF6t42k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gNDEQ7Yj; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=hZbf4DBG; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AnErrFCy";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="eLXVDdag"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gNDEQ7Yj";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="hZbf4DBG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1787174459;
+	s=mimecast20190719; t=1787174476;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=CDM5tZFR6oDBBuGDX9cX1nR3t+twNZ0fmFRjBRaqkNA=;
-	b=AnErrFCyQIpc4qhiz3aIy7WsQBBhApquNstP5HIwTm+wgO4loTT7+EO7exzUfozPq45gNj
-	QdeT7F3Cp7BiRqCGEfN3QAWon4xiy1DSULwpG5d5jk2ezNU4o4oCvzQ6uR9b0ds41pGl3U
-	x+/a5aDOfqF/RFhRsRCBIWaDzYsp2Rc=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=CqgpeVGn0RSIV25AilpufRbxuFATmlWL+zdwTTPB/B0=;
+	b=gNDEQ7Yj7uPQ54t5/YSnKU7vgJwKAHpBXumRH1iQZseluqtnzlzCLtu64c6Gi3enIHvEV1
+	ymfY+tGbZzsyTrv0CbiJKGboMlUxQUaZbTEsyq3u7M6gcbbT/j4awdTZC5UBoninSuImsy
+	Va4d+9j0CYSrGldwqsjkI0+2ULIKTAM=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-252-H8WHuuDCPVyFFfeDxBGfEw-1; Wed, 19 Aug 2026 17:20:57 -0400
-X-MC-Unique: H8WHuuDCPVyFFfeDxBGfEw-1
-X-Mimecast-MFC-AGG-ID: H8WHuuDCPVyFFfeDxBGfEw_1787174457
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-8e934385db1so20136546d6.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 19 Aug 2026 14:20:57 -0700 (PDT)
+ us-mta-580-xUEzoQYHOMyi7Nc6GL2SJA-1; Wed, 19 Aug 2026 17:21:14 -0400
+X-MC-Unique: xUEzoQYHOMyi7Nc6GL2SJA-1
+X-Mimecast-MFC-AGG-ID: xUEzoQYHOMyi7Nc6GL2SJA_1787174474
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-9309af14fd7so176157785a.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 19 Aug 2026 14:21:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1787174457; x=1787779257; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=CDM5tZFR6oDBBuGDX9cX1nR3t+twNZ0fmFRjBRaqkNA=;
-        b=eLXVDdagJF16ZpxUlJOFlEk4jK3o+cdQE8pa/3gGJeiD4SVbIGH/d+LCrxsRBvITu4
-         2/YXegBpM/YtoZvVrrVl/8PqTWfwCAAF8hgD6pSyJY4l2RnglnnecFi0PIxtTJIVeT92
-         eNStf/nJH5NHe27gf7W/r00iqUXvy6ZzsqTqfQNdVjYOMk+5ZBZWYnvuUx7p1vHWwBmi
-         nxMDWxNU3SapV3Ii+cmKf1AKSuQTcqdIVk/VPyMt6gm9RrKRd5aAxUv33blzQRcoffGZ
-         yrEGBW9u3Tv6uOjt1NBhVzVJLEiZukH8ORfTjtjF9R5sgw7mgYPnLg7nChDwc0wg1OHX
-         aYJA==
+        d=redhat.com; s=google; t=1787174474; x=1787779274; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:content-type
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=CqgpeVGn0RSIV25AilpufRbxuFATmlWL+zdwTTPB/B0=;
+        b=hZbf4DBGYedr+3yZZYyeMRt3r5Aaohe8avIvv5fmQ/okL4NbmjAzqXyI3UPyiI2CbJ
+         v+15mmfBBBPt0fXT1H2uXW1ZtxATaPVt8SznQ6ih7SIPJL7cZWHSyLXCCupwXXTnI1mx
+         RZ3NwUlLrDOEgJkjf7BbqC3pG7FFsTFPZ09S1o3vgN3J7EQ6/oCDTPU/HtHPVoVrrHFs
+         DMYXx9lThQeDV35VFqOtDtW8jg4FlxB24rcTaPD5/52zESGuVsT9nXNbPmSC0KGk5Njt
+         HxbDuWhlNHOd4329n9s70c6AQzjQWq+XPUatwIOT4ydNkZpMRP2OH2Xnfjq8LIVkaP4u
+         +wvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787174457; x=1787779257;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=CDM5tZFR6oDBBuGDX9cX1nR3t+twNZ0fmFRjBRaqkNA=;
-        b=Un1cJa+aXjMJnXK3uAY/cnpYGV1fp1NNuME8GlXDS7v8u3IRjC6WdOMAmRX8Vo7jHp
-         FxKOYl0iiD0ShTN68U7iQoBs5N0sGJnNcJodIlIbQNlSENYxEzDis7RKw0pkSHPxr2Xf
-         PqXXCQvhNC1RhPjbZRh8P0TxBGa+uq0g1IwE5Ua2jAn1KCcjrs3NEraB5mbYwcNq4dFN
-         AN280PiVo6YegdBEgpyvjS6xaCMOBfFZ23SWeORoT1LSDKNaFwrIl+pJvAqyrqQTtea0
-         sxBbFGvdkF2s8S0CYgn6bkvoMccUAaGTh26DbRgq88KW7/rNDDmm0VIlehmSPBTcZ4Nw
-         GjtQ==
-X-Gm-Message-State: AFuF++lWoRYHIwH8V9honJdcRMkwTNydZQ8AoSXJ7qWDhg1UgCbaHQnW
-	HBUs/31PloBtlZjhBxOL3QRZm6ZQcgtY8bPo5K3hOE2Rk4qenFY7nA0Z4xVOqigHKE7XH26mZCi
-	Hh2i8AeBl+LvVtuavV7jxxSIKqw0n8RfXYmbbkkf/a9AqLbUFUUHXjt9FGabU/Bck
-X-Gm-Gg: AR+sD11s3PCUWS7fMZAcilbluGpz4wEjk3NnD2MOU9NN8pNlgCnXw/AG0prBzCQs5PC
-	jpxPgPnGcv1vi4kdtvUhpkkSKhSgHqRbqzfJ51QFVt8i8+tOp6A6NHZxfqWWlh1uhOsp5Vcbh4J
-	mj7Weoi7szomcTjMw8naEIzy6tPpc+Nv0fjwCdGM6osGa5P+NhBxsv+S49rY45KcWFqDF7YSwH4
-	0R/p+9lRAZ7peYutPSEU/GoCtkd94BkpktaTLQ9XIy5aYhiT/eLORiM06a0w5t8fKTTTbA9Zqdr
-	oQC9Lw/agaJeg8CjDMHYEpiMSoOoyVQ+ui5aLEJ04Zm8RONs4qk9gx8k+x5JTCU5ydpq8JVlTOw
-	3nD0Zf3mIcQ==
-X-Received: by 2002:a05:6214:5091:b0:8df:10fd:93f with SMTP id 6a1803df08f44-90c5e72dfc5mr72345436d6.12.1787174457133;
-        Wed, 19 Aug 2026 14:20:57 -0700 (PDT)
-X-Received: by 2002:a05:6214:5091:b0:8df:10fd:93f with SMTP id 6a1803df08f44-90c5e72dfc5mr72344966d6.12.1787174456700;
-        Wed, 19 Aug 2026 14:20:56 -0700 (PDT)
-Received: from rh-jkangas-kernel ([2601:1c2:4480:2110:932e:45ef:6b6c:ddd0])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-90c5f2a366esm23549196d6.39.2026.08.19.14.20.55
+        d=1e100.net; s=20251104; t=1787174474; x=1787779274;
+        h=user-agent:in-reply-to:content-disposition:content-type
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=CqgpeVGn0RSIV25AilpufRbxuFATmlWL+zdwTTPB/B0=;
+        b=l4bch+zDppbVxKSVyAkQLkGKkMdj4KbBjWLNcAsE1p7fOp/+j4ZhJyRxe6i1aA1qXr
+         ZTQqjkFdTpyR/78g7978avI6Gt0fbq3Sg7JPocAQeyDeTTSmGqplXcMfJon2Q5zF1bDs
+         lNWY3zB8/k/b+JydnWy+UltNzv8eMF8yFo7R5G153NJtq6qPdnEP+FAfQKiCmSGod0Wk
+         wKFuFlaIyA25x7ndTyKbBRl/NI0nEoFAnOWQfoD6hOhNUDGQLXbg4bTpodsq+lFWdxbw
+         pV/2H/3DD57AgOQZNGWIVP7wRFiaVwDv93uYFIcPfrYObOkhH5rgeMTN36n2lc/PCrVO
+         Rfwg==
+X-Forwarded-Encrypted: i=1; AHgh+RpqDbga1jAPchiNNMX7rW4qSVC9SCNVNKC4wvb50kQtWVmBNGp5V8VfjLPSLh0/RVkIXa2jYn/kJhJxFQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeDOwtTwM2MOqxE+pzIsgz2a34+6UKC95RJpCDcQjwAsGoSFsY
+	i/6xq4hWwFLCgg8zB7bRWNSN9gC/poCVvyoKNNrIWVdgiYge+DMDcIsnsVGeHDEXXhQTCoZ4n4a
+	gmmDuE7FwLjEQK1ZUSxEh0DvHnGyFhuOW9oYWaiaDOvLRYks9TnBrMTXoLsYfkVcc
+X-Gm-Gg: AR+sD13vVL75ohstBbuMu+QQGDtzf4whqoY60wDCNSRBWhDcAzMaLI9fyQv9ohSj/z+
+	cQKbG5XSG0PZ5L0mOq6UrEx6tHYFI5XA5PMEaMpwMpPN2JYbTK7eGAEP1grOkX/3AUG3xxAh1ML
+	bb64KWAoSw+QtPZp04EkyseI2glz2eHIlewNL4/5pOcVLHGz1hDjfzM/DIHA/dxbzcjbvYVhXL2
+	qshkyDo6kDk7SAjN4GHmMbeYmm2c8bjQHQcc2aFsi1xbwi6ysv834nCrzO0bbVp6SlpzY+dxdh/
+	8TopUs7YNOh7LIjcqHodQt6KHvFbAIz3ED6cO3qAkg74HvrATfHqMzFzdeI9SGSOmTnPQG8b10o
+	wfpHshLbsn2UfP+XIrFbdiRqGPkObxYPgMfU=
+X-Received: by 2002:a05:620a:6010:b0:937:139d:592c with SMTP id af79cd13be357-9371e67ddfemr822213385a.38.1787174473994;
+        Wed, 19 Aug 2026 14:21:13 -0700 (PDT)
+X-Received: by 2002:a05:620a:6010:b0:937:139d:592c with SMTP id af79cd13be357-9371e67ddfemr822206085a.38.1787174473413;
+        Wed, 19 Aug 2026 14:21:13 -0700 (PDT)
+Received: from redhat.com (c-73-183-53-213.hsd1.pa.comcast.net. [73.183.53.213])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93720582980sm222991885a.33.2026.08.19.14.21.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Aug 2026 14:20:56 -0700 (PDT)
-Date: Wed, 19 Aug 2026 14:20:53 -0700
-From: Jared Kangas <jkangas@redhat.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 4/4] hwmon: (ina2xx) Return 0 on inactive alarm/limit
- reads
-Message-ID: <aoYeNed4r3yLVhJD@rh-jkangas-kernel>
-References: <20260729-upstream-ina2xx-in0-curr1-alarms-v1-0-349f7b2f1df8@redhat.com>
- <20260729-upstream-ina2xx-in0-curr1-alarms-v1-4-349f7b2f1df8@redhat.com>
- <20260729162836.89BDF1F00A3A@smtp.kernel.org>
+        Wed, 19 Aug 2026 14:21:12 -0700 (PDT)
+Date: Wed, 19 Aug 2026 17:21:10 -0400
+From: Brian Masney <bmasney@redhat.com>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Tero Kristo <kristo@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+	Brian Masney <bmasney+clk@redhat.com>,
+	Jerome Brunet <jbrunet+clk@baylibre.com>,
+	Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>,
+	Nuno Sa <nuno.sa@analog.com>, Guenter Roeck <linux@roeck-us.net>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Antoniu Miclaus <antoniu.miclaus@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Sunny Luo <sunny.luo@amlogic.com>,
+	Xianwei Zhao <xianwei.zhao@amlogic.com>,
+	Mark Brown <broonie@kernel.org>, Kees Cook <kees@kernel.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Mathieu Dubois-Briand <mathieu.dubois-briand@bootlin.com>,
+	linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-hwmon@vger.kernel.org, linux@analog.com,
+	linux-iio@vger.kernel.org, linux-amlogic@lists.infradead.org,
+	linux-spi@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH treewide 1/5] clk: ti: Make sure clk_init_data is fully
+ initialized
+Message-ID: <aoYeRqwY3SSZ2xDX@redhat.com>
+References: <cover.1787165329.git.geert+renesas@glider.be>
+ <e6f52b34163c8e708c1100107b437af0b3b049a6.1787165329.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260729162836.89BDF1F00A3A@smtp.kernel.org>
+In-Reply-To: <e6f52b34163c8e708c1100107b437af0b3b049a6.1787165329.git.geert+renesas@glider.be>
+User-Agent: Mutt/2.4.0 (2026-06-19)
 
-On Wed, Jul 29, 2026 at 04:28:36PM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 5 potential issue(s) to consider:
+On Wed, Aug 19, 2026 at 09:05:15PM +0200, Geert Uytterhoeven wrote:
+> The clk_init_data structure contains several mutually-exclusive members
+> for different methods to specify the possible parents of a clock,
+> prompting drivers to initialize only the members they need.  However,
+> not initializing all members may cause subtle issues, which are only
+> exposed when CONFIG_INIT_STACK_ALL_PATTERN or CONFIG_INIT_STACK_NONE is
+> enabled.
 > 
-> [snip]
+> _register_mux() fills in init.parent_data, and assumes that
+> init.parent_names is NULL.  However, the latter in uninitialized, and
+> thus may cause a crash.
 > 
-> [Severity: High]
-> This isn't a bug introduced by this patch, but since we are fixing the
-> read path for inactive alerts here, what happens on the write path?
+> Make sure all members are fully initialized, to fix such bugs, and to
+> avoid future breakage when converting drivers to a different method for
+> specifying the parents.
 > 
-> If a user or monitoring daemon reads an inactive alert attribute (which
-> now correctly returns 0) and subsequently writes 0 back to it, will
-> ina226_alert_limit_write() unconditionally wipe the active alert?
-> 
-> Looking at ina226_alert_limit_write():
-> 
-> 	ret = regmap_update_bits(regmap, INA226_MASK_ENABLE,
-> 				 INA226_ALERT_CONFIG_MASK, 0);
-> 	...
-> 	data->active_alert = val ? alert : INA2XX_ALERT_NONE;
-> 
-> Does this inadvertently destroy the configuration of the currently active
-> alert of a different type without checking if the disable operation applies
-> to it?
+> Fixes: 667f420c09f1417c ("clk: ti: mux: resolve parent clocks by DT index, not by name")
+> Closes: https://lore.kernel.org/CAMuHMdU3yVqoyHC4eNF2NuYo8wy+6ODLoYat4R71X99Mxc_=kw@mail.gmail.com
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-As with [1] and [2], this clearing is documented in
-Documentation/hwmon/ina2xx.rst.
-
-[1]: https://lore.kernel.org/all/aoYYxM63yFRgrxFD@rh-jkangas-kernel/
-[2]: https://lore.kernel.org/all/aoYasBdVYNYa1OBB@rh-jkangas-kernel/
-
-> 
-> [ ... ]
-> 
-> [Severity: High]
-> This is a pre-existing issue, but I noticed a potential overflow when
-> calculating power values.
-> 
-> In ina2xx_get_value() for INA2XX_POWER:
-> 
-> 	case INA2XX_POWER:
-> 		val = regval * data->power_lsb_uW;
-> 		break;
-> 
-> [snip]
-> 
-> [Severity: High]
-> This is a pre-existing issue, but could we run into an overflow on 32-bit
-> architectures when setting shunt voltage limits?
-> 
-> In ina226_alert_to_reg():
-> 
-> 	case INA2XX_SHUNT_VOLTAGE:
-> 		val = clamp_val(val, 0, SHRT_MAX * data->config->shunt_div);
-> 		val *= data->config->shunt_div;
-> 
-> [snip]
-> 
-> [Severity: High]
-> This is a pre-existing issue, but setting power limits on 32-bit systems
-> seems to always evaluate to 0.
-> 
-> In ina226_alert_to_reg():
-> 
-> 	case INA2XX_POWER:
-> 		val = clamp_val(val, 0, UINT_MAX - data->power_lsb_uW);
-
-These are addressed in e6c80061ca23 ("hwmon: (ina2xx) Fix various
-overflow issues").
-
-> [snip]
-> 
-> [Severity: Medium]
-> This is a pre-existing issue, but there appears to be a locking violation
-> when reading the shunt resistor.
-> 
-> The hwmon subsystem guidelines require drivers to use hwmon_lock() for
-> attributes registered outside the core info parameter. 
-> 
-> Looking at shunt_resistor_show():
-> 
-> static ssize_t shunt_resistor_show(struct device *dev,
-> 				   struct device_attribute *da, char *buf)
-> {
-> 	struct ina2xx_data *data = dev_get_drvdata(dev);
-> 
-> 	return sysfs_emit(buf, "%li\n", data->rshunt);
-> }
-> 
-> Since shunt_resistor_store() modifies data->rshunt, does this show
-> function need to acquire the hwmon_lock to prevent unprotected concurrent
-> accesses?
-
-This seems accurate. It's not very related to the series but an easy
-fix, so I'll put it in v2 since it was reported here.
-
-> 
-> -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20260729-upstream-ina2xx-in0-curr1-alarms-v1-0-349f7b2f1df8@redhat.com?part=4
+Reviewed-by: Brian Masney <bmasney@redhat.com>
 
