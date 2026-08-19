@@ -1,101 +1,152 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DC464078F2;
-	Wed, 19 Aug 2026 19:13:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3C244B8DF0;
+	Wed, 19 Aug 2026 19:13:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787166799; cv=none; b=rNvhjURl1W1v0I5aS4LIA+1eR5PkzF5QMNyBU4vah4B+PIHp1YGTokKwXQLAz+OPqw77+sALgNtvBxSsvtaSRLvD4zR88H1aHNFJm1vE+0cJnSj6P+mXYBT/I9X85sJAFeriuQW9UQWbi/nROewxy+Z3yizNnvoc7/IvX0UXx7Q=
+	t=1787166837; cv=none; b=VNqL2baUdqXi/38fjh3XvZEwXOJnpoZLcljko1IXx+ytI+BphwCP2HkvNwrd4jcFzxCjsdSFJRnapdXb2eL28/aQ9dIrg42jAniSbU26M2ZOhNN/RPQVggEw4dJ6CjOmBN9qKjx/Jjr+c6mrZ0MFxmyrO/lkUwsA72aHlZAFajs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787166799; c=relaxed/simple;
-	bh=MqmqIfzNmkuth/E+kk7+72FX2PfWhxL55bDSfc2zD0k=;
+	s=arc-20240116; t=1787166837; c=relaxed/simple;
+	bh=EP12BeSUzJbLFY9oS4uFKQrRP76fUxEv3k+4S3SBSzA=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=PCVSLG7BNKtuAoBctFHAYmt3pxqND79ydmA2JtTPiHXVFl0wXAifXrrVWlu4dI1LYWmqJ8ij5MIhcvcQlnArGKEY1KuCury9RuJmT5zP5nKaLJC0jCBMrrd9prqqWspkHlZ/kP0PCKZlND5JaP+xZT+92aVWcpkLEdedn7AhfkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=avFL27vf; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=SpAKEK/ycCCKLwdf8VgbvDstOsufgUNS0voYhiEjpdnyiKx/OlSeEw8kE7T8Xch7RCaBKaeab0QNPmBTGJl52bRUBP1Ldb6vlbXdlzulFWJNL1Ry9tdxoRH6bCyyGy6bc2aIi/tnZ/gHPISq61JbGpcjBRgYXUenKT8SpjYHgjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OwAauSMP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="avFL27vf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F2F21F000E9;
-	Wed, 19 Aug 2026 19:13:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OwAauSMP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3FD21F000E9;
+	Wed, 19 Aug 2026 19:13:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787166796;
-	bh=7QPB8xntRosfEaEsyywjE8Y9e9e7wAx1p25F0kiuc9I=;
+	s=k20260515; t=1787166833;
+	bh=LzBigPmBT6t0JrLHKjptvLNyTJEc7gOLNoyrVB2bYTQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=avFL27vf7uiDuhOHLuxB/2oCnPMbgPs124dXFVRT5tHaeRQQCP2+ZifxIXNr163q2
-	 0WmOepLH205z65+O10bAs3Vs3o9P+7gMNQJSoER6EPsgVcLrdvg9AhHM25vpQD4TBn
-	 D7zzhY7iNTS25TLnTyPGlM0Z4ugnBZLe/UkucPfZmSjQD/DjwXn/VGH6WULFwtEIqd
-	 EFe19QZUf3E8F9SDthfUMIVl4MrNFn1LFrQWoxUh1S95SvS5g3u+Zl9n2ksOSMqwqs
-	 sL+XArbeCt8QqsqbIfzmhN/qwKpv/2F7M5AtiFK/Vj7pwf0IXIJozlH7biGZyhTfLL
-	 pmeSDzXiC4yUQ==
+	b=OwAauSMPXFF09E2bzZg/NyyiWCiqojM5uuTHtXjnDIkJxxIg62w1+JSbOnMpmc4NW
+	 r88E+afUDFikSP/pIx5ES/fpLSJ92SbW7/3a0VcRXnridhpW5y8QJIKrVxL0xOvEhM
+	 U3MHjDXV+VhAUFjj8USU6qH6+4nCVuUkQ18oibHV1e/tmJfLiApRT/4NcSWUasOHBY
+	 HsF/0NI0djFExrZhkDsl8vwbKW7KGHRBJPtma0Q+0ChtipMwxL3cYWez4uxOxlgNw/
+	 lpkFwa5eke4paS+lOH7FgqmSA3dZ+ZXL513qCwEfidNFREf014ydCRiiJmGKHIpI2S
+	 KDxch3hathf7Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH treewide 4/5] iio: frequency: adf4377: Make sure
+Subject: Re: [PATCH treewide 5/5] spi: amlogic-spisg: Make sure
  clk_init_data is fully initialized
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Geert Uytterhoeven" <geert+renesas@glider.be>
-Cc: linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org, neil.armstrong@linaro.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <302584628c4c0699239a0218376fe1c11cdc8944.1787165329.git.geert+renesas@glider.be>
+Cc: linux-clk@vger.kernel.org, neil.armstrong@linaro.org, linux-hwmon@vger.kernel.org, linux-amlogic@lists.infradead.org
+In-Reply-To: <9fb35ae0aedb7a6db0db6c78a8193c7602dd9d44.1787165329.git.geert+renesas@glider.be>
 References: <cover.1787165329.git.geert+renesas@glider.be>
- <302584628c4c0699239a0218376fe1c11cdc8944.1787165329.git.geert+renesas@glider.be>
+ <9fb35ae0aedb7a6db0db6c78a8193c7602dd9d44.1787165329.git.geert+renesas@glider.be>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 19 Aug 2026 19:13:16 +0000
-Message-Id: <20260819191316.8F2F21F000E9@smtp.kernel.org>
+Date: Wed, 19 Aug 2026 19:13:52 +0000
+Message-Id: <20260819191352.F3FD21F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Incomplete fix for uninitialized stack variables: `struct clk_pare=
-nt_data parent_data` remains uninitialized on the stack, leading to a kerne=
-l crash during clock registration.
+- [High] Severe imbalance in clock prepare/enable counts for `pclk` and `co=
+re` clocks, leading to negative enable counts and warnings during driver pr=
+obe failure or removal.
+- [High] Missing cleanup for runtime PM and `sclk` clock on the probe error=
+ path and module removal.
 --
 
---- Patch [4]: [PATCH treewide 4/5] iio: frequency: adf4377: Make sure clk_=
-init_data is fully initialized ---
-commit 99e024a77f5bce5921d3c6b46054263aa450610d
+--- Patch [5]: [PATCH treewide 5/5] spi: amlogic-spisg: Make sure clk_init_=
+data is fully initialized ---
+commit aa4fc6e665f6f8293335c8edd96584e8cdda40c6
 Author: Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: spi: amlogic-spisg: Make sure clk_init_data is fully initialized
 
-iio: frequency: adf4377: Make sure clk_init_data is fully initialized
+The clk_init_data structure contains several mutually-exclusive members
+for different methods to specify the possible parents of a clock,
+prompting drivers to initialize only the members they need. However,
+not initializing all members may cause subtle issues.
 
-This commit initializes the clk_init_data structure in
-adf4377_clk_register() to zero. This prevents crashes caused by
-uninitialized fields like parent_names when CONFIG_INIT_STACK_ALL_PATTERN
-or CONFIG_INIT_STACK_NONE is enabled.
+Fixes: cef9991e04aed330 ("spi: Add Amlogic SPISG driver")
 
-> diff --git a/drivers/iio/frequency/adf4377.c b/drivers/iio/frequency/adf4=
-377.c
-> --- a/drivers/iio/frequency/adf4377.c
-> +++ b/drivers/iio/frequency/adf4377.c
-> @@ -999,7 +999,7 @@ static int adf4377_clk_register(struct adf4377_state =
-*st)
+> diff --git a/drivers/spi/spi-amlogic-spisg.c b/drivers/spi/spi-amlogic-sp=
+isg.c
+> index afc8af04638d3..9049a87e9d0f2 100644
+> --- a/drivers/spi/spi-amlogic-spisg.c
+> +++ b/drivers/spi/spi-amlogic-spisg.c
+> @@ -636,7 +636,7 @@ static int aml_spisg_target_abort(struct spi_controll=
+er *ctlr)
+>  static int aml_spisg_clk_init(struct spisg_device *spisg, void __iomem *=
+base)
 >  {
->  	struct spi_device *spi =3D st->spi;
->  	struct device *dev =3D &spi->dev;
+>  	struct device *dev =3D &spisg->pdev->dev;
 > -	struct clk_init_data init;
 > +	struct clk_init_data init =3D {};
->  	struct clk_parent_data parent_data;
+>  	struct clk_divider *div;
+>  	struct clk_div_table *tbl;
+>  	char name[32];
 
 [Severity: High]
-This is a pre-existing issue, but does this struct clk_parent_data also
-need to be zero-initialized?
+This is a pre-existing issue, but I noticed a severe imbalance in clock
+prepare/enable counts for the pclk and core clocks.
 
-Only fw_name is explicitly assigned below, leaving name, hw, and index
-populated with stack garbage. When adf4377_clk_register() passes this to
-the clock framework, clk_core_populate_parent_map() will read
-parent_data.name and pass it to clk_cpy_name(), which ultimately calls
-strlen() and can cause a page fault during probe.
+In aml_spisg_clk_init(), pclk is acquired with devm_clk_get_enabled():
 
-[ ... ]
+	spisg->pclk =3D devm_clk_get_enabled(dev, "pclk");
 
->  	parent_data.fw_name =3D "ref_in";
-> =20
->  	init.ops =3D &adf4377_clk_ops;
->  	init.parent_data =3D &parent_data;
+But later in the same function, it is manually disabled:
+
+	clk_disable_unprepare(spisg->pclk);
+
+Since pclk is managed by devres, won't this manual disable unbalance the
+clock enable count right from the start?=20
+
+This pattern is also repeated in the probe error path and remove functions:
+
+drivers/spi/spi-amlogic-spisg.c:aml_spisg_probe() {
+...
+out_clk:
+	if (spisg->core)
+		clk_disable_unprepare(spisg->core);
+	clk_disable_unprepare(spisg->pclk);
+
+	return ret;
+}
+
+Does this cause double-disables and negative enable counts when the
+devres cleanup runs?
+
+[Severity: High]
+This is also a pre-existing issue, but I noticed missing cleanup for
+runtime PM and the sclk clock.
+
+In aml_spisg_clk_init(), sclk is manually enabled:
+
+	clk_prepare_enable(spisg->sclk);
+
+And in aml_spisg_probe(), runtime PM is enabled:
+
+	pm_runtime_enable(&spisg->pdev->dev);
+
+However, if devm_request_irq() or spi_register_controller() fails, the
+out_clk error path simply returns:
+
+drivers/spi/spi-amlogic-spisg.c:aml_spisg_probe() {
+...
+out_clk:
+	if (spisg->core)
+		clk_disable_unprepare(spisg->core);
+	clk_disable_unprepare(spisg->pclk);
+
+	return ret;
+}
+
+Doesn't this leak the sclk enable count and leave runtime PM enabled?
+
+Additionally, aml_spisg_remove() also lacks a pm_runtime_disable() call
+and skips disabling sclk if the device is not runtime suspended. Should
+there be explicit teardowns for these in the error and removal paths?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1787165329.gi=
-t.geert+renesas@glider.be?part=3D4
+t.geert+renesas@glider.be?part=3D5
