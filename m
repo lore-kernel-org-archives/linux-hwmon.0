@@ -1,233 +1,179 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEE3022F767
-	for <linux-hwmon@vger.kernel.org>; Wed, 19 Aug 2026 13:51:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C8B53E0B;
+	Wed, 19 Aug 2026 14:40:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787147512; cv=none; b=XEY+dHpkxaldMfVClKwe0fAjnPs9xO/axkz+uVb5GLdPbjOnSTBKzrTplGY0KbL15+ou/rGIngFBp2XKNFe1XA0rs/RqH77eS//usu6RIptpzVSGQq+1J9czNvb2JWJXBr4PFs/jmFmzKuQ8E0b38ZzUTbtyGJjRfDa2uO8E/28=
+	t=1787150418; cv=none; b=eHgs3ujsxTtNTSyCrdEn/DBasPjbY7zR+XvIhwd1yjKOJlsJvhhgIfzu5fDwJv6jQsivPq4K/73mHsAeA+ne0WWuTk7WiwtXAArzFx+t1uFf5AlNZJdkBqU+KDTQ8r81Ng9NhqFcxvKdvlG6gAr2sG67tgtJLAfevpXnXWEHxk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787147512; c=relaxed/simple;
-	bh=u2gJmM0G/6xxEV1DL/fVJjkWs4C4pBncp41uUECxkxk=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=u66oZ8owt2/6tI+QuCh//V6s67qk3xpIB4mTIttfYrw0MCgd4tbwKSdpNjN84TE99nN5NkpoZUnMRiJlh7O9i0DdfZtWIysJ7tUSUi5QOcWHQeTaGlWLL3e552uKc/VLJ1t9/V3tqdJ17LoKFUnVyva+JZvrcIhgTTx0gv/Pgpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GnQ0XnwU; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787150418; c=relaxed/simple;
+	bh=vymarJZh4YqC2L7NKmpGaLSs+LwWBnjm4Ga1t8pq/Yg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ExQ/KyznIg4qaaj+JvaTOS0N8T5Uhfx1AurFCPH1PxVj+Plvlv7/B45hEPK0cyeMR8q6uACakqYSLRykLpUK1cYPNku4EJB/peVg0yPWF4XTI2DF01TC0YMePr4j8Dq9NGcCkFbtsSv1hiWShtr8xzz3jT7OaMzcN9jtVFTP+VM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BqxIIF1N; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GnQ0XnwU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 312F31F000E9;
-	Wed, 19 Aug 2026 13:51:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787147510;
-	bh=chapzUnhxXjE7G3xJwu6gf9t6VHOnInEtvPTv/icJOA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=GnQ0XnwUFWZtKyV4cL4/YHxBZzwZXTzUj/fFnpvSF8t76sFVqRQg47umsX7pc3y/a
-	 E0BYd6Fr36HiTMtg6WicJvIC28acFOzrAjVRk/2Pwy7cerasVJhWXkc9y84dAksCo5
-	 /lV0LnNSjkn67RyGCTE8Vd63HTVVnLmk9ALzHOVBvL7ZknQNJ6WTQG7Shl/pvtvNgD
-	 Rzv9YPTZRLSpEWKKLaiCOjkabJ130PkoSSoGU6nozw70abUmxyvksuGYYHVjFB7Ac8
-	 uKb4RyN7O0rfwIdTFQKboDLQjGWE3Hnbl8FmmTIRm2uzZSZGSibgl83PY9CSwK/CP5
-	 gsPgipBmObxGg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC] hwmon: Add Support for PMIC5000 Power Management
- ICs
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Stephen Horvath" <linux@stevetech.au>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260819-pmic5000-v1-1-e5e0ddcf0863@stevetech.au>
-References: <20260819-pmic5000-v1-1-e5e0ddcf0863@stevetech.au>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 19 Aug 2026 13:51:49 +0000
-Message-Id: <20260819135150.312F31F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BqxIIF1N"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1787150416; x=1818686416;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vymarJZh4YqC2L7NKmpGaLSs+LwWBnjm4Ga1t8pq/Yg=;
+  b=BqxIIF1N7ZEtZI/U81G4LAHZ8TlBuQw8ktsi3zd56DDXMEmOd+rSh+XG
+   5erVVRW8MmGrwhW0X7cHZ9bV+LF2ysIN6PQbH3YNDKLN3KPyRjmKck/MU
+   7OTy64lYkYdZVVx8VftOPO8556H2RpjtGzt9GgnZUgLo/YBpXtxWR2Evu
+   nRrKSJB4skJHmBD53viN0TyK4pd8z/oGGaFAuk66v2KtPEqjse5jbrmNI
+   tB2NiBT+b4mARkx9oWHzRZxbVkyc/0ek52YGcqllxKUj+FhmnVW9CF4wn
+   RlCJeKTGzLIpS1a4mG7XcpmDgadYfjSE6RNoaqMSGUgmsJy8SHxDhr5b2
+   g==;
+X-CSE-ConnectionGUID: RRqddFy+R6uhUWWJmwNQvw==
+X-CSE-MsgGUID: 4A1WBr72TNeX7PQ3c89Ieg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11880"; a="86787556"
+X-IronPort-AV: E=Sophos;i="6.25,231,1779174000"; 
+   d="scan'208";a="86787556"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2026 07:40:14 -0700
+X-CSE-ConnectionGUID: DLD05uXOSQS3eQ3eQ3POPA==
+X-CSE-MsgGUID: nBdVyMTXSn+BXYA1OEkKQA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,231,1779174000"; 
+   d="scan'208";a="261366363"
+Received: from bradocaj-mobl.ger.corp.intel.com (HELO [10.125.111.233]) ([10.125.111.233])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2026 07:40:10 -0700
+Message-ID: <bd9e5b6e-07f2-459d-bca6-e290585060aa@intel.com>
+Date: Wed, 19 Aug 2026 07:40:09 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 00/13] x86/msr: Drop 32-bit MSR interfaces
+To: Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+ x86@kernel.org, virtualization@lists.linux.dev, linux-ide@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+ linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ kvm@vger.kernel.org, linux-edac@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-coco@lists.linux.dev,
+ linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-mtd@lists.infradead.org, platform-driver-x86@vger.kernel.org
+Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Ajay Kaher <ajay.kaher@broadcom.com>,
+ Alexey Makhalov <alexey.makhalov@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Damien Le Moal
+ <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
+ David Airlie <airlied@redhat.com>, Helge Deller <deller@gmx.de>,
+ linux-geode@lists.infradead.org, Olivia Mackall <olivia@selenic.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, Linus Walleij <linusw@kernel.org>,
+ Bartosz Golaszewski <brgl@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, James Clark
+ <james.clark@linaro.org>, "K. Y. Srinivasan" <kys@microsoft.com>,
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+ Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
+ Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, Pu Wen <puwen@hygon.cn>,
+ Tony Luck <tony.luck@intel.com>, Reinette Chatre
+ <reinette.chatre@intel.com>, Dave Martin <Dave.Martin@arm.com>,
+ James Morse <james.morse@arm.com>, Babu Moger <babu.moger@amd.com>,
+ Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
+ Vitaly Kuznetsov <vkuznets@redhat.com>, Andy Lutomirski <luto@kernel.org>,
+ Bjorn Helgaas <bhelgaas@google.com>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>,
+ Kiryl Shutsemau <kas@kernel.org>, Rick Edgecombe
+ <rick.p.edgecombe@intel.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+ Len Brown <lenb@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ Huang Rui <ray.huang@amd.com>, Mario Limonciello
+ <mario.limonciello@amd.com>, Perry Yuan <perry.yuan@amd.com>,
+ K Prateek Nayak <kprateek.nayak@amd.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Yazen Ghannam <yazen.ghannam@amd.com>, Guenter Roeck <linux@roeck-us.net>,
+ Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+ Artem Bityutskiy <dedekind1@gmail.com>,
+ Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Ashok Raj <ashok.raj.linux@gmail.com>, Hans de Goede <hansg@kernel.org>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+ David E Box <david.e.box@intel.com>,
+ Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, xen-devel@lists.xenproject.org
+References: <20260819102314.1499258-1-jgross@suse.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
+ oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
+ 2UnKuZuSBu7lgOE193+7Uks3416N2hTkyKUSNkduyoZ9F5twiBhxPJwPtn/wnch6n5RsoXsb
+ ygOEDxLEsSk/7eyFycjE+btUtAWZtx+HseyaGfqkZK0Z9bT1lsaHecmB203xShwCPT49Blxz
+ VOab8668QpaEOdLGhtvrVYVK7x4skyT3nGWcgDCl5/Vp3TWA4K+IofwvXzX2ON/Mj7aQwf5W
+ iC+3nWC7q0uxKwwsddJ0Nu+dpA/UORQWa1NiAftEoSpk5+nUUi0WE+5DRm0H+TXKBWMGNCFn
+ c6+EKg5zQaa8KqymHcOrSXNPmzJuXvDQ8uj2J8XuzCZfK4uy1+YdIr0yyEMI7mdh4KX50LO1
+ pmowEqDh7dLShTOif/7UtQYrzYq9cPnjU2ZW4qd5Qz2joSGTG9eCXLz5PRe5SqHxv6ljk8mb
+ ApNuY7bOXO/A7T2j5RwXIlcmssqIjBcxsRRoIbpCwWWGjkYjzYCjgsNFL6rt4OL11OUF37wL
+ QcTl7fbCGv53KfKPdYD5hcbguLKi/aCccJK18ZwNjFhqr4MliQARAQABzUVEYXZpZCBDaHJp
+ c3RvcGhlciBIYW5zZW4gKEludGVsIFdvcmsgQWRkcmVzcykgPGRhdmUuaGFuc2VuQGludGVs
+ LmNvbT7CwXgEEwECACIFAlQ+9J0CGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEGg1
+ lTBwyZKwLZUP/0dnbhDc229u2u6WtK1s1cSd9WsflGXGagkR6liJ4um3XCfYWDHvIdkHYC1t
+ MNcVHFBwmQkawxsYvgO8kXT3SaFZe4ISfB4K4CL2qp4JO+nJdlFUbZI7cz/Td9z8nHjMcWYF
+ IQuTsWOLs/LBMTs+ANumibtw6UkiGVD3dfHJAOPNApjVr+M0P/lVmTeP8w0uVcd2syiaU5jB
+ aht9CYATn+ytFGWZnBEEQFnqcibIaOrmoBLu2b3fKJEd8Jp7NHDSIdrvrMjYynmc6sZKUqH2
+ I1qOevaa8jUg7wlLJAWGfIqnu85kkqrVOkbNbk4TPub7VOqA6qG5GCNEIv6ZY7HLYd/vAkVY
+ E8Plzq/NwLAuOWxvGrOl7OPuwVeR4hBDfcrNb990MFPpjGgACzAZyjdmYoMu8j3/MAEW4P0z
+ F5+EYJAOZ+z212y1pchNNauehORXgjrNKsZwxwKpPY9qb84E3O9KYpwfATsqOoQ6tTgr+1BR
+ CCwP712H+E9U5HJ0iibN/CDZFVPL1bRerHziuwuQuvE0qWg0+0SChFe9oq0KAwEkVs6ZDMB2
+ P16MieEEQ6StQRlvy2YBv80L1TMl3T90Bo1UUn6ARXEpcbFE0/aORH/jEXcRteb+vuik5UGY
+ 5TsyLYdPur3TXm7XDBdmmyQVJjnJKYK9AQxj95KlXLVO38lczsFNBFRjzmoBEACyAxbvUEhd
+ GDGNg0JhDdezyTdN8C9BFsdxyTLnSH31NRiyp1QtuxvcqGZjb2trDVuCbIzRrgMZLVgo3upr
+ MIOx1CXEgmn23Zhh0EpdVHM8IKx9Z7V0r+rrpRWFE8/wQZngKYVi49PGoZj50ZEifEJ5qn/H
+ Nsp2+Y+bTUjDdgWMATg9DiFMyv8fvoqgNsNyrrZTnSgoLzdxr89FGHZCoSoAK8gfgFHuO54B
+ lI8QOfPDG9WDPJ66HCodjTlBEr/Cwq6GruxS5i2Y33YVqxvFvDa1tUtl+iJ2SWKS9kCai2DR
+ 3BwVONJEYSDQaven/EHMlY1q8Vln3lGPsS11vSUK3QcNJjmrgYxH5KsVsf6PNRj9mp8Z1kIG
+ qjRx08+nnyStWC0gZH6NrYyS9rpqH3j+hA2WcI7De51L4Rv9pFwzp161mvtc6eC/GxaiUGuH
+ BNAVP0PY0fqvIC68p3rLIAW3f97uv4ce2RSQ7LbsPsimOeCo/5vgS6YQsj83E+AipPr09Caj
+ 0hloj+hFoqiticNpmsxdWKoOsV0PftcQvBCCYuhKbZV9s5hjt9qn8CE86A5g5KqDf83Fxqm/
+ vXKgHNFHE5zgXGZnrmaf6resQzbvJHO0Fb0CcIohzrpPaL3YepcLDoCCgElGMGQjdCcSQ+Ci
+ FCRl0Bvyj1YZUql+ZkptgGjikQARAQABwsFfBBgBAgAJBQJUY85qAhsMAAoJEGg1lTBwyZKw
+ l4IQAIKHs/9po4spZDFyfDjunimEhVHqlUt7ggR1Hsl/tkvTSze8pI1P6dGp2XW6AnH1iayn
+ yRcoyT0ZJ+Zmm4xAH1zqKjWplzqdb/dO28qk0bPso8+1oPO8oDhLm1+tY+cOvufXkBTm+whm
+ +AyNTjaCRt6aSMnA/QHVGSJ8grrTJCoACVNhnXg/R0g90g8iV8Q+IBZyDkG0tBThaDdw1B2l
+ asInUTeb9EiVfL/Zjdg5VWiF9LL7iS+9hTeVdR09vThQ/DhVbCNxVk+DtyBHsjOKifrVsYep
+ WpRGBIAu3bK8eXtyvrw1igWTNs2wazJ71+0z2jMzbclKAyRHKU9JdN6Hkkgr2nPb561yjcB8
+ sIq1pFXKyO+nKy6SZYxOvHxCcjk2fkw6UmPU6/j/nQlj2lfOAgNVKuDLothIxzi8pndB8Jju
+ KktE5HJqUUMXePkAYIxEQ0mMc8Po7tuXdejgPMwgP7x65xtfEqI0RuzbUioFltsp1jUaRwQZ
+ MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
+ hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
+ vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
+In-Reply-To: <20260819102314.1499258-1-jgross@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
-s) to consider:
-- [Medium] Race condition: sysfs registration before hardware initialization
-- [Medium] Incorrect error code for out-of-range values
-- [Medium] hwmon update_interval attribute violates ABI units (returns raw =
-values instead of milliseconds)
-- [Medium] Architectural layering violation: PMIC directly registered as hw=
-mon I2C driver
-- [Low] C11 syntax error due to declaration directly after a label
---
+Hey Juergen,
 
---- Patch [1]: [PATCH RFC] hwmon: Add Support for PMIC5000 Power Management=
- ICs ---
-commit 4dd6cacf5a9ff70a4083c91afc8539b2aae42832
-Author: Stephen Horvath <linux@stevetech.au>
+These look great. Thanks for doing it!
 
-hwmon: Add Support for PMIC5000 Power Management ICs
+The only wonky thing is how we're going to actually merge it. We
+obviously can't do patches 10-11 until all the "stop using" patches have
+been applied.
 
-Add support for sensors present on PMIC5000 (JEDEC JESD301) compliant
-power management ICs. These chips are commonly found on DDR5 memory
-modules.
+I obviously 100% realize that it's during the merge window, but any acks
+that the maintainers of 5-9 provide in the next few weeks would be super
+helpful. Or, if any of those maintainers want to cherry pick their
+subsystem's stuff out of this series and apply it, that would be great too.
 
-> diff --git a/drivers/hwmon/pmic5000.c b/drivers/hwmon/pmic5000.c
-> index 0000000000000..d3f3126dd9c80
-> --- /dev/null
-> +++ b/drivers/hwmon/pmic5000.c
-
-[ ... ]
-
-> +static int pmic5000_read_temp(struct regmap *regmap, u32 attr, int chann=
-el,
-> +			      long *val)
-> +{
-> +	int err;
-> +	u32 regval;
-> +
-> +	if (channel !=3D 0)
-> +		return -EOPNOTSUPP;
-> +
-> +	switch (attr) {
-> +	case hwmon_temp_input: {
-> +		err =3D regmap_read(regmap, PMIC5000_REG_TEMPERATURE, &regval);
-> +		if (err)
-> +			return err;
-> +		regval >>=3D 5;
-> +		/* Below 85=C2=B0C */
-> +		if (regval =3D=3D 0)
-> +			return -EOPNOTSUPP;
-
-[Severity: Medium]
-Since returning -EOPNOTSUPP causes userspace tools to treat the attribute=20
-as permanently unsupported by the chip, should this return -ENODATA instead=
-=20
-when the temperature is temporarily out of range?
-
-> +		/* 0b001 =3D 85=C2=B0C, 0b010 =3D 95=C2=B0C, etc. */
-> +		*val =3D (75 + regval * 10) * MILLIDEGREE_PER_DEGREE;
-> +		return 0;
-> +	}
-
-[ ... ]
-
-> +static int pmic5000_read_volt_thresholds(struct regmap *regmap, u32 attr,
-> +					 int channel, long *val)
-> +{
-
-[ ... ]
-
-> +	volt_set =3D range_regval & range_bit ? base_volts[1] : base_volts[0];
-> +	volt_set +=3D (set_regval >> 1) * 5;
-> +
-> +	switch (attr) {
-> +	case hwmon_in_min:
-> +		/* 10%, 12.5%, Reserved, Reserved */
-> +		const int min_permilles[4] =3D { 100, 125, PERMILLE, PERMILLE };
-
-[Severity: Low]
-Can declaring a variable immediately following a case label cause a build=20
-failure? The C11 standard expects a statement after a label, rather than=20
-a declaration. Would wrapping the contents of this case block in braces=20
-resolve this syntax error?
-
-> +		*val =3D volt_set - (min_permilles[(thresh_regval >> 2) & 0x03] *
-> +				   volt_set / PERMILLE);
-> +		return 0;
-> +	case hwmon_in_max:
-> +		/* 7.5%, 10%, 12.5%, Reserved */
-> +		const int max_permilles[4] =3D { 75, 100, 125, PERMILLE };
-> +		*val =3D volt_set + (max_permilles[(thresh_regval >> 4) & 0x03] *
-> +				   volt_set / PERMILLE);
-> +		return 0;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-
-[ ... ]
-
-> +static int pmic5000_read_interval(struct regmap *regmap, u32 attr, long =
-*val)
-> +{
-> +	unsigned int regval;
-> +	int err;
-> +
-> +	if (attr !=3D hwmon_chip_update_interval)
-> +		return -EOPNOTSUPP;
-> +
-> +	err =3D regmap_read(regmap, PMIC5000_REG_ADC_CONFIG, &regval);
-> +	if (err < 0)
-> +		return err;
-> +	*val =3D 1 << (regval & 0x03);
-> +	return 0;
-> +}
-
-[Severity: Medium]
-Is this exposing raw values like 1, 2, 4, or 8 instead of milliseconds?=20
-The hwmon ABI specifies that update_interval should be reported and set=20
-in milliseconds. Do these values need to be translated to match the ABI=20
-requirements?
-
-[ ... ]
-
-> +static int pmic5000_common_probe(struct device *dev, struct regmap *regm=
-ap)
-> +{
-> +	unsigned int revision, vendor, bank;
-> +	struct pmic5000_data *data;
-> +	struct device *hwmon_dev;
-> +	int err;
-
-[ ... ]
-
-> +	hwmon_dev =3D devm_hwmon_device_register_with_info(
-> +		dev, "pmic5000", data, &pmic5000_chip_info, NULL);
-> +	if (IS_ERR(hwmon_dev))
-> +		return PTR_ERR(hwmon_dev);
-> +
-> +	dev_info(dev, "DDR5 PMIC sensor: vendor 0x%02x:0x%02x revision %d.%d\n",
-> +		 bank & 0x7f, vendor, ((revision >> 4) & 0x03) + 1,
-> +		 ((revision >> 1) & 0x07) + 1);
-> +
-> +	/* Enable individual measurements and enable ADC */
-> +	err =3D regmap_update_bits(regmap, PMIC5000_REG_OUTPUT_SELECT,
-> +				 PMIC5000_OUTPUT_SELECT,
-> +				 PMIC5000_OUTPUT_SELECT);
-> +	if (err)
-> +		return err;
-> +	err =3D regmap_update_bits(regmap, PMIC5000_REG_ADC_CONFIG,
-> +				 PMIC5000_ADC_ENABLE, PMIC5000_ADC_ENABLE);
-
-[Severity: Medium]
-Does this expose the sysfs files before the ADC is actually enabled? If=20
-userspace polling tools access the sysfs attributes right after=20
-devm_hwmon_device_register_with_info() completes, could it trigger reads on=
-=20
-uninitialized hardware? Should the hardware initialization happen before=20
-registration?
-
-[ ... ]
-
-> +static struct i2c_driver pmic5000_i2c_driver =3D {
-> +	.class		=3D I2C_CLASS_HWMON,
-> +	.driver =3D {
-> +		.name	=3D "pmic5000",
-> +		.of_match_table =3D pmic5000_of_ids,
-> +		.pm =3D pm_sleep_ptr(&pmic5000_pm_ops),
-> +	},
-> +	.probe		=3D pmic5000_i2c_probe,
-> +	.id_table	=3D pmic5000_i2c_id,
-> +};
-> +
-> +module_i2c_driver(pmic5000_i2c_driver);
-
-[Severity: Medium]
-Is this driver placed in the correct subsystem? For PMIC chips where hardwa=
-re=20
-monitoring isn't the primary function, the hwmon subsystem guidelines state=
-=20
-the core driver should reside in drivers/mfd or drivers/regulator, and=20
-instantiate the hwmon functionality as an auxiliary device. Does binding=20
-directly to the I2C device here prevent regulator drivers from attaching to=
-=20
-this PMIC later?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260819-pmic5000-v=
-1-1-e5e0ddcf0863@stevetech.au?part=3D1
+But, the last time we did some MSR function munging, the tip tree
+carried most of the patches. I would expect we'll have a repeat of that
+here too. I'll pencil in the idea of just merging the lot around -rc1 time.
