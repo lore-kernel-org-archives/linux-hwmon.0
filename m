@@ -1,86 +1,85 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E098543C7C8
-	for <linux-hwmon@vger.kernel.org>; Thu, 20 Aug 2026 13:10:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A762844471A
+	for <linux-hwmon@vger.kernel.org>; Thu, 20 Aug 2026 13:10:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787231410; cv=none; b=c7wqBsFQHZJ9feFj6uAXqTu++odzbJlwcbOenj8GUXCLGOUs1LB0csl+2sxeqUj9hqeRVm6umEVhwL+yBzcJlkySCCkRbQgOJ03pgEhltMT7/nUEP8ImjXxZp2iF49kkYok0o3t+PolMEamhzmde1/LibLxkAiUOUB+3yPbUIoU=
+	t=1787231410; cv=none; b=T4b3OZFaJdN9FEiqkK2VH2dhC1nYwqcxOawvY61WVVdedSXTw0677rOjbBFQGLfbycLdI0TNXt/i1TVSu0g8VnzDP252ACBHPvfALLxVLS2EioiHcf5Ub2aTpBSuWkZqYrlOulDgcTlKLTLcN5O3NcbfcngWlOKfCg4twQnPrPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1787231410; c=relaxed/simple;
-	bh=Qw0OCF/A3/1KKsA18JpyAkWi2gHh2HovZ6Y84Ie5Uy4=;
+	bh=vgQfvi+yC13NqVyawNzNE70kFPEC4ei33oSh78KY4r8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=U9gHSdC/kwGg05lJfUchulqOQ5l1QKSJJE7E8sKIT5Au6nmDcKP6Jg+Ug7tXkPrgB7rntm6KecMKClQA8YeJsRLxZY2PGKZiOL2CEx5QirCm5So7y+ilgU8QzVNwymPmSe7yAhqyEhGqsAGnKscbCgo75TZqNBLyS1k84oIgMuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=d7FuusW4; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=FsMxMt+c; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:To:Cc; b=k4BlwnGN9kTV/pW+UtrvcS/YFwNz4tV6YTUGsr61PQSzMJXyqt6rkdmyIEX4lsgL1M768ZgIw10V1Fcia250amS/qzHKUOA3BtCyPHNLkiyFerqO3ewTmSDLB6yD67lxlU0xIV4Zc6HegG9ADWS6X7KanjfgVDfbOgfzYILWy1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NHXu+L8p; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=YFOKkunZ; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="d7FuusW4";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="FsMxMt+c"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NHXu+L8p";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="YFOKkunZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1787231405;
+	s=mimecast20190719; t=1787231407;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xCvjgT2AUAkiOr3ryVhwGHHtYFMb13hihrneybz56Ow=;
-	b=d7FuusW4v+dBnRMK6fyUME7WK35HZnx7E5ghr/A1GUcfxMA9YFHWtViqG/VJK4eVtqua/t
-	tmyiepvKrwgDiVSYEh+2dTqjwCJQiV/fbLxSvnQJ0YDmiIWHKY9MDXmskihOHK/jKzmn5P
-	FCnPyPksjIsRxEMOniNL2nFc5LwBvbE=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=lINEEJ3xppDZS4I+PwwVsfMXDswly1pvwvp6jcZunJ0=;
+	b=NHXu+L8pxdQIun+bNTuwMnefMDQWJszOs4f0oI95JFuICl1kIm8twHFGCqcjqCO1yOQqWM
+	0VlefgdIHtEEU7u6p2+tHQ7v77qMvD6LXUhjKUCCx/1GdalE/HZXhEYwW1OdBnJHhhPSwN
+	WE4SNnR05UZSixQuX6QLKt5RH9hIx2o=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-192-ssurXfCAMhy66g7LbO9fRA-1; Thu, 20 Aug 2026 09:10:04 -0400
-X-MC-Unique: ssurXfCAMhy66g7LbO9fRA-1
-X-Mimecast-MFC-AGG-ID: ssurXfCAMhy66g7LbO9fRA_1787231403
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-930edb4362dso231806485a.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 20 Aug 2026 06:10:04 -0700 (PDT)
+ us-mta-67-HG3q3t2NPN6X_905slPqsg-1; Thu, 20 Aug 2026 09:10:05 -0400
+X-MC-Unique: HG3q3t2NPN6X_905slPqsg-1
+X-Mimecast-MFC-AGG-ID: HG3q3t2NPN6X_905slPqsg_1787231405
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-936d067836eso266128485a.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 20 Aug 2026 06:10:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1787231403; x=1787836203; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1787231405; x=1787836205; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=xCvjgT2AUAkiOr3ryVhwGHHtYFMb13hihrneybz56Ow=;
-        b=FsMxMt+c7Nd5EWHC1Af0CGmoQ/5YWq/sINx8A08luZuK4Ql1RM8+B/q8N1lXLmalbX
-         ebLnUGMVgva/qt48FLCLb2oARrHsoD9YiHAkIQkb9AYtGWZ7jKQ7+/LpPNR2HSsT8JlS
-         E4Sb3cMJyDt9EOyYuXiapI5Bvwu5dygkH7qYb1o64XWklLohLxQdfL8PL1IduwriChjG
-         ZJlTIuhMfT3F6IT3T3yI+EUA1zpmo9qU8qItmey9AuWLu2BY+cD8wIIi+e5IqQQIVW+C
-         Yin63FIMSelozRAtz/12dLUZYnGcYIjpLDaTJtvRgu1qH+NqblJIpDGOJW4TeKmL24ur
-         RsMg==
+        bh=lINEEJ3xppDZS4I+PwwVsfMXDswly1pvwvp6jcZunJ0=;
+        b=YFOKkunZEecQt4yJKEdusdieGlHqvHir3fUvHQAGIUjmjviNgzrhkFilQS/scq46CX
+         68e736XB5e20vYc1qLCX5Tm9kDvk/IkMp1HtLZ+DQhB0k9XWmRgxVsBZUPDZKCh4GG94
+         l51HySjgFXiHvD8pyi1M80aAFB1/IaQRJ/2hmHwrsPRQweyn9f+4zPkXwKYPt54p3aRf
+         nL6y4a9tMlZ53WD8ZUVi+lZbYZB000N1d8nSSAdZFRSSX1/9bqj4S4qqdQt64ImbZBfU
+         sPs4PqPUF1uXjYzv1ginMSTHTr+k1cCYlfJBWuPQi6erPvRCvmGD8D0uvuazfKEVh+d8
+         a6Eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787231403; x=1787836203;
+        d=1e100.net; s=20251104; t=1787231405; x=1787836205;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=xCvjgT2AUAkiOr3ryVhwGHHtYFMb13hihrneybz56Ow=;
-        b=eLRNdklENnDdSHMeQTp1W21swYlLdSZKeZG4WhD7SacKiPefjdwLD5P0l42uW9ab2B
-         A+SrS1N0di1d9zPqL/GDfyqNbFO6TDsscWAWFMAhF8a3C8MV497Wgt+7Xu4LdIbW2WfP
-         vKttoPv3pvWBCr4c6hw4APgi8nLocdYoKCBmoZir6OxbYuXjBSp2MqYN/Edo6s4giv5y
-         hSM16qPs6r277XJUqlQ4PIFPC6+wVB9Bu9bdGkPnZTJuwHAAcMoQW9q+k51SR3nogrow
-         Iwh4DFYRANxsDA7nYfJNmEeyLHVewBzcOdEiNBO7FxfxqhsB6wHMBFZf9fFXNqUq7Y2Q
-         NQjw==
-X-Gm-Message-State: AOJu0Yw3JTKNVYXpiNG7O4YaTqB8ehHMdOJgjup9FeuowMt5biRq6iqw
-	WQhx8RNNrmjLfMMS5LHX3rZR60MssLXXQiyyjDIOIxMqi1Yxjc9HOVzj+0kR9CH/3maS/jAWr/x
-	oNsyzvGDfn2DtjA9p/OrZffxj/nl9ETpPO3eXRsUwjzQUSFimpFEukFW7n+ZnqDY2
-X-Gm-Gg: AR+sD10R2GT491XObSHMqlLFTbh4TyMHa9rHDbDh5X38HygPmr5g8uEdWQOGrGmNqPV
-	XlNqEPdFKxMLo+EuEMaME5wKMrvKlnrmkUzI+zqxBBGH1lZyJzqWUAB8CAND38Uhp10rSf5IZJk
-	yupR5DAYPeYyRAsV6UsVB8GTU1LHq1WyjpFJbgdYcaxBcyg9YOjDi0sw3Rd3Uegr9Idi2H7dv3N
-	11DeunZ9qhxZ7koP1THshccS0iUM4w36pZAkC/IL2CXOsRUgjzMAYxov33wS2iFyU95Sr4qQIO0
-	UN4MYRJfFdCJTeP6z9wA896q6t8ThD/567o9H9Bnmk5zCFoQloMk171zT2SxiCQo4ZWgn/Y8li+
-	MeAoFywCE6cJuzh7XregsTgxS98QT9E7z
-X-Received: by 2002:a05:620a:4107:b0:936:a5c3:512f with SMTP id af79cd13be357-9371e3147b6mr948841985a.34.1787231403542;
-        Thu, 20 Aug 2026 06:10:03 -0700 (PDT)
-X-Received: by 2002:a05:620a:4107:b0:936:a5c3:512f with SMTP id af79cd13be357-9371e3147b6mr948832985a.34.1787231402868;
-        Thu, 20 Aug 2026 06:10:02 -0700 (PDT)
+        bh=lINEEJ3xppDZS4I+PwwVsfMXDswly1pvwvp6jcZunJ0=;
+        b=nroqlZYOuiruDHEyhzQgkWcKWkbh9V5merUdxIfFofubtgrNAR9CxuOplSZ90zKl6J
+         EmDzcfVXZLqpZ81TpRN4vTEHmzMr8kHo4mBsGxnpEsdlu5Xfi9x17WFalhexTKC9RQDc
+         Ci9lAQGEsskiG05i3qjAz38tOLl4Kru/iECug23pZWApuSuiXZT7adL49AMwVul4MA/5
+         cwTuyuQ4YcnslL4VePLveN1zBEAmWPVcJQkR8HZvC+Ai3ZobAnDTo/xLc7wleAwrDwK2
+         tXjQVMCVAXh1Lt3VSglPl7aSqR0zaO72SkYwWQ9vZ38f35gWDUGqyIaWwxph3FwOjIac
+         /2qA==
+X-Gm-Message-State: AOJu0YyEQHg/Zg2jLA/pYhcT1dlmcf8s+aCiMrLiQBRDSpc5srEX9v9B
+	lBlI4/zAFz310cCakrtmsM9RgQEmcQvtemmF+Kfyq+1H1Wf8mQiJzJsOnbcbqhey/J6A8FsukCc
+	BNN2RY5PRLHz7nkk4sruyI6q/IblccsLS4cDc4ik1BINupOBBYignhdcxd5foNggT
+X-Gm-Gg: AR+sD12G1UznRfClc4xxNoVWBF0E5aLCEjfDA+KCUjNXyIfHVy9KOPAOukHKmfJHLIq
+	LtqvtFqxxVM6ADU94rYolyZ80DN1dM1Ut/aKJYkt6isAb/+fkVY91fUf1aE8JtzpXLMUUkilfUw
+	S9VbsbSKi8x/Qy5XJHjIwg6kGnueYM0xQq5Ab+oeW/AdPZf/y798HJgDCBD0EZMYl+Zm/o24khv
+	M6keUcDpWzJA/6k6+wBiiODSeO9mWOMo5M8Z7cGnuyDTX1pdy8gNYmC8sOWqxd+1d6VStZTa5sK
+	8pLMskirswBqh2U3W1f1wB5B/6zfqc6pxfbfwYV3mqoMNe/3EUewytQRuzI1FlHSf9rcz7pS8XN
+	PGDs5QsS3fQT/W/07jkovV89Vo6uuaJat
+X-Received: by 2002:a05:620a:28d3:b0:92e:4bc9:6ea9 with SMTP id af79cd13be357-9371e11093bmr1084088485a.0.1787231404982;
+        Thu, 20 Aug 2026 06:10:04 -0700 (PDT)
+X-Received: by 2002:a05:620a:28d3:b0:92e:4bc9:6ea9 with SMTP id af79cd13be357-9371e11093bmr1084077685a.0.1787231404459;
+        Thu, 20 Aug 2026 06:10:04 -0700 (PDT)
 Received: from jkangas-thinkpadp1gen3.rmtuswa.csb ([2601:1c2:4480:2110:932e:45ef:6b6c:ddd0])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-937204ba087sm364217985a.21.2026.08.20.06.10.01
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-937204ba087sm364217985a.21.2026.08.20.06.10.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Aug 2026 06:10:02 -0700 (PDT)
+        Thu, 20 Aug 2026 06:10:04 -0700 (PDT)
 From: Jared Kangas <jkangas@redhat.com>
-Date: Thu, 20 Aug 2026 06:09:23 -0700
-Subject: [PATCH v2 3/4] hwmon: (ina2xx) Replace masks with enum in alert
- functions
+Date: Thu, 20 Aug 2026 06:09:24 -0700
+Subject: [PATCH v2 4/4] hwmon: (ina2xx) Decouple in0 and curr1 alarms
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -89,7 +88,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260820-upstream-ina2xx-in0-curr1-alarms-v2-3-fdce35abc41e@redhat.com>
+Message-Id: <20260820-upstream-ina2xx-in0-curr1-alarms-v2-4-fdce35abc41e@redhat.com>
 References: <20260820-upstream-ina2xx-in0-curr1-alarms-v2-0-fdce35abc41e@redhat.com>
 In-Reply-To: <20260820-upstream-ina2xx-in0-curr1-alarms-v2-0-fdce35abc41e@redhat.com>
 To: Guenter Roeck <linux@roeck-us.net>, Tzung-Bi Shih <tzungbi@kernel.org>, 
@@ -97,242 +96,225 @@ To: Guenter Roeck <linux@roeck-us.net>, Tzung-Bi Shih <tzungbi@kernel.org>,
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Jared Kangas <jkangas@redhat.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1787231395; l=8705;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1787231395; l=6599;
  i=jkangas@redhat.com; s=20251111; h=from:subject:message-id;
- bh=Qw0OCF/A3/1KKsA18JpyAkWi2gHh2HovZ6Y84Ie5Uy4=;
- b=gY9Jlx/sztiPgE0PYZQzwyGhp5SkDswfQRZJmf6g5gg6DN0HM5hjIXuH22vj2858rdqdRqqb/
- QjXytk8quLcCsCQtoYiI4ykIaFCX0wls072bBzJcqw8mTqtg9ClRwPf
+ bh=vgQfvi+yC13NqVyawNzNE70kFPEC4ei33oSh78KY4r8=;
+ b=vjhFRJgs5WRVjw6P7wcx/TldbJCkzsiNByLYu6BKRt6JKlqANd0OIY2M30a8U6yx3HuprgsHp
+ +N/LbC3udRPAq9onzuhRXZqzn7QAMQI7rbl1PIdgyIoF7aVgZqpX3LM
 X-Developer-Key: i=jkangas@redhat.com; a=ed25519;
  pk=eFM2Mqcfarb4qox390655bUATO0fG9gwgaw7kGmOEZQ=
 
-Instead of passing an explicit mask to alert/limit functions like
-ina226_alert_read(), introduce an enum ina2xx_alert_type that can be
-converted to a mask internally. This semantically separates current from
-shunt voltage in helpers that use function masks, which previously saw
-the same mask for the two functions.
+INA2XX current limits are converted into shunt voltage limits internally
+using the shunt resistor value. Once a current limit's corresponding
+voltage limit is written to the hardware, shunt voltage and current
+alarms are indistinguishable from each other.
 
+This causes two issues:
+
+1. in0/curr1 alarms may be unintentionally cleared by reading from the
+   opposite input's alarm.
+
+2. When a limit for either in0 (shunt voltage) or curr1 (current) is
+   set, both of their alarms are triggered, and both of their limits
+   read nonzero.
+
+An example of this behavior on an INA231:
+
+        # cd /sys/class/hwmon/hwmon0
+        # head {curr1,in0}_input
+        ==> curr1_input <==
+        1713
+
+        ==> in0_input <==
+        2
+        # echo 1800 >curr1_lcrit
+        # head {curr1,in0}_lcrit_alarm
+        ==> curr1_lcrit_alarm <==
+        1
+
+        ==> in0_lcrit_alarm <==
+        0
+        # head {in0,curr1}_lcrit_alarm
+        ==> in0_lcrit_alarm <==
+        1
+
+        ==> curr1_lcrit_alarm <==
+        0
+        # head {in0,curr1}_lcrit_alarm
+        ==> in0_lcrit_alarm <==
+        1
+
+        ==> curr1_lcrit_alarm <==
+        1
+
+This is because curr1 uses the same underlying masks
+(INA226_SHUNT_*_VOLTAGE_MASK) as in0 on the hardware. As a result,
+ina2xx_{curr,in}_read() both read the shunt voltage alarms/limits
+without considering whether the voltage or current is currently set.
+
+To fix this, track the active alarm type in ina2xx_data and guard
+alarm/limit reads with a check that returns zero if the active alarm is
+for a different type. The new field is initialized based on the
+MASK_ENABLE register's set function, assuming voltage instead of current
+when the shunt voltage mask is set.
+
+After this fix, the alarms only read back 1 if their corresponding limit
+is set:
+
+        # echo 0 >curr1_lcrit
+        # head {curr1,in0}_lcrit_alarm
+        ==> curr1_lcrit_alarm <==
+        0
+
+        ==> in0_lcrit_alarm <==
+        0
+        # echo 9999 >curr1_lcrit
+        # head {curr1,in0}_lcrit_alarm
+        ==> curr1_lcrit_alarm <==
+        1
+
+        ==> in0_lcrit_alarm <==
+        0
+        # echo 9999 >in0_lcrit
+        # head {curr1,in0}_lcrit_alarm
+        ==> curr1_lcrit_alarm <==
+        0
+
+        ==> in0_lcrit_alarm <==
+        1
+
+Fixes: 4d5c2d986757 ("hwmon: (ina2xx) Add support for current limits")
 Signed-off-by: Jared Kangas <jkangas@redhat.com>
 ---
- drivers/hwmon/ina2xx.c | 90 +++++++++++++++++++++++++++++++++++++-------------
- 1 file changed, 67 insertions(+), 23 deletions(-)
+ drivers/hwmon/ina2xx.c | 65 ++++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 63 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
-index c56e42432673f..74c4e3795ac4d 100644
+index 74c4e3795ac4d..7e5b412ff47f2 100644
 --- a/drivers/hwmon/ina2xx.c
 +++ b/drivers/hwmon/ina2xx.c
-@@ -127,6 +127,17 @@ enum ina2xx_ids {
- 	sy24655
- };
+@@ -8,6 +8,7 @@
+  */
  
-+enum ina2xx_alert_type {
-+	INA2XX_ALERT_NONE,
-+	INA2XX_ALERT_CURRENT_LOW,
-+	INA2XX_ALERT_CURRENT_HIGH,
-+	INA2XX_ALERT_POWER_HIGH,
-+	INA2XX_ALERT_BUS_VOLTAGE_LOW,
-+	INA2XX_ALERT_BUS_VOLTAGE_HIGH,
-+	INA2XX_ALERT_SHUNT_VOLTAGE_LOW,
-+	INA2XX_ALERT_SHUNT_VOLTAGE_HIGH,
-+};
-+
- struct ina2xx_config {
- 	u16 config_default;
- 	bool has_alerts;	/* chip supports alerts and limits */
-@@ -406,16 +417,43 @@ static u16 ina226_alert_to_reg(struct ina2xx_data *data, int reg, long val)
+ #include <linux/bitfield.h>
++#include <linux/bitops.h>
+ #include <linux/bits.h>
+ #include <linux/delay.h>
+ #include <linux/device.h>
+@@ -157,6 +158,7 @@ struct ina2xx_data {
+ 	const struct ina2xx_config *config;
+ 	enum ina2xx_ids chip;
+ 
++	enum ina2xx_alert_type active_alert;
+ 	long rshunt;
+ 	long current_lsb_uA;
+ 	long power_lsb_uW;
+@@ -441,6 +443,35 @@ static u32 ina2xx_alert_type_to_mask(enum ina2xx_alert_type alert)
  	}
  }
  
--static int ina226_alert_limit_read(struct ina2xx_data *data, u32 mask, int reg, long *val)
-+static u32 ina2xx_alert_type_to_mask(enum ina2xx_alert_type alert)
++static enum ina2xx_alert_type ina2xx_mask_to_alert_type(u32 mask)
 +{
-+	switch (alert) {
-+	case INA2XX_ALERT_CURRENT_LOW:
-+	case INA2XX_ALERT_SHUNT_VOLTAGE_LOW:
-+		return INA226_SHUNT_UNDER_VOLTAGE_MASK;
-+	case INA2XX_ALERT_CURRENT_HIGH:
-+	case INA2XX_ALERT_SHUNT_VOLTAGE_HIGH:
-+		return INA226_SHUNT_OVER_VOLTAGE_MASK;
-+	case INA2XX_ALERT_BUS_VOLTAGE_LOW:
-+		return INA226_BUS_UNDER_VOLTAGE_MASK;
-+	case INA2XX_ALERT_BUS_VOLTAGE_HIGH:
-+		return INA226_BUS_OVER_VOLTAGE_MASK;
-+	case INA2XX_ALERT_POWER_HIGH:
-+		return INA226_POWER_OVER_LIMIT_MASK;
-+	case INA2XX_ALERT_NONE:
-+		return 0;
++	int top_bit = fls(mask & INA226_ALERT_CONFIG_MASK);
++
++	if (!top_bit)
++		return INA2XX_ALERT_NONE;
++
++	/*
++	 * Multiple bits may be set, with the highest-set function taking
++	 * precedence according to the datasheet. Shunt voltage masks are
++	 * assumed to map to voltage monitoring rather than current monitoring,
++	 * since the latter isn't directly implemented in the hardware.
++	 */
++	switch (BIT(top_bit - 1)) {
++	case INA226_SHUNT_OVER_VOLTAGE_MASK:
++		return INA2XX_ALERT_SHUNT_VOLTAGE_HIGH;
++	case INA226_SHUNT_UNDER_VOLTAGE_MASK:
++		return INA2XX_ALERT_SHUNT_VOLTAGE_LOW;
++	case INA226_BUS_OVER_VOLTAGE_MASK:
++		return INA2XX_ALERT_BUS_VOLTAGE_HIGH;
++	case INA226_BUS_UNDER_VOLTAGE_MASK:
++		return INA2XX_ALERT_BUS_VOLTAGE_LOW;
++	case INA226_POWER_OVER_LIMIT_MASK:
++		return INA2XX_ALERT_POWER_HIGH;
 +	default:
-+		/* programmer error */
-+		WARN_ON_ONCE(1);
-+		return 0;
++		return INA2XX_ALERT_NONE;
 +	}
 +}
 +
-+static int ina226_alert_limit_read(struct ina2xx_data *data, enum ina2xx_alert_type alert,
-+				   int reg, long *val)
+ static int ina226_alert_limit_read(struct ina2xx_data *data, enum ina2xx_alert_type alert,
+ 				   int reg, long *val)
  {
- 	struct regmap *regmap = data->regmap;
- 	int regval;
-+	u32 mask;
+@@ -449,6 +480,12 @@ static int ina226_alert_limit_read(struct ina2xx_data *data, enum ina2xx_alert_t
+ 	u32 mask;
  	int ret;
  
++	/* Avoid nonzero reads from inactive alerts caused by shared limit register */
++	if (data->active_alert != alert) {
++		*val = 0;
++		return 0;
++	}
++
  	ret = regmap_read(regmap, INA226_MASK_ENABLE, &regval);
  	if (ret)
  		return ret;
- 
-+	mask = ina2xx_alert_type_to_mask(alert);
- 	if (regval & mask) {
- 		ret = regmap_read(regmap, INA226_ALERT_LIMIT, &regval);
- 		if (ret)
-@@ -427,9 +465,11 @@ static int ina226_alert_limit_read(struct ina2xx_data *data, u32 mask, int reg,
- 	return 0;
- }
- 
--static int ina226_alert_limit_write(struct ina2xx_data *data, u32 mask, int reg, long val)
-+static int ina226_alert_limit_write(struct ina2xx_data *data, enum ina2xx_alert_type alert,
-+				    int reg, long val)
- {
- 	struct regmap *regmap = data->regmap;
-+	u32 mask;
- 	int ret;
- 
- 	if (val < 0)
-@@ -450,9 +490,11 @@ static int ina226_alert_limit_write(struct ina2xx_data *data, u32 mask, int reg,
+@@ -484,6 +521,7 @@ static int ina226_alert_limit_write(struct ina2xx_data *data, enum ina2xx_alert_
+ 				 INA226_ALERT_CONFIG_MASK, 0);
  	if (ret < 0)
  		return ret;
++	data->active_alert = INA2XX_ALERT_NONE;
  
--	if (val)
-+	if (val) {
-+		mask = ina2xx_alert_type_to_mask(alert);
- 		return regmap_update_bits(regmap, INA226_MASK_ENABLE,
- 					  INA226_ALERT_CONFIG_MASK, mask);
-+	}
+ 	ret = regmap_write(regmap, INA226_ALERT_LIMIT,
+ 			   ina226_alert_to_reg(data, reg, val));
+@@ -492,9 +530,13 @@ static int ina226_alert_limit_write(struct ina2xx_data *data, enum ina2xx_alert_
+ 
+ 	if (val) {
+ 		mask = ina2xx_alert_type_to_mask(alert);
+-		return regmap_update_bits(regmap, INA226_MASK_ENABLE,
+-					  INA226_ALERT_CONFIG_MASK, mask);
++		ret = regmap_update_bits(regmap, INA226_MASK_ENABLE,
++					 INA226_ALERT_CONFIG_MASK, mask);
++		if (ret < 0)
++			return ret;
++		data->active_alert = alert;
+ 	}
++
  	return 0;
  }
  
-@@ -476,15 +518,17 @@ static int ina2xx_chip_read(struct device *dev, u32 attr, long *val)
- 	return 0;
- }
- 
--static int ina226_alert_read(struct ina2xx_data *data, u32 mask, long *val)
-+static int ina226_alert_read(struct ina2xx_data *data, enum ina2xx_alert_type alert, long *val)
- {
- 	unsigned int regval;
-+	u32 mask;
+@@ -524,6 +566,15 @@ static int ina226_alert_read(struct ina2xx_data *data, enum ina2xx_alert_type al
+ 	u32 mask;
  	int ret;
  
++	/*
++	 * With alert latching, reading alerts from hardware also clears the
++	 * alert, so return early if the alert is inactive.
++	 */
++	if (data->active_alert != alert) {
++		*val = 0;
++		return 0;
++	}
++
  	ret = regmap_read_bypassed(data->regmap, INA226_MASK_ENABLE, &regval);
  	if (ret)
  		return ret;
+@@ -964,6 +1015,16 @@ static int ina2xx_init(struct device *dev, struct ina2xx_data *data)
  
-+	mask = ina2xx_alert_type_to_mask(alert);
- 	*val = (regval & mask) && (regval & INA226_ALERT_FUNCTION_FLAG);
+ 	if (data->config->has_alerts) {
+ 		bool active_high = device_property_read_bool(dev, "ti,alert-polarity-active-high");
++		unsigned int mask_enable;
++
++		/*
++		 * Infer active alert from MASK_ENABLE in case it's already
++		 * configured (e.g., by a past probe or firmware)
++		 */
++		ret = regmap_read(regmap, INA226_MASK_ENABLE, &mask_enable);
++		if (ret < 0)
++			return ret;
++		data->active_alert = ina2xx_mask_to_alert_type(mask_enable);
  
- 	return 0;
-@@ -493,10 +537,10 @@ static int ina226_alert_read(struct ina2xx_data *data, u32 mask, long *val)
- static int ina2xx_in_read(struct device *dev, u32 attr, int channel, long *val)
- {
- 	int voltage_reg = channel ? INA2XX_BUS_VOLTAGE : INA2XX_SHUNT_VOLTAGE;
--	u32 under_voltage_mask = channel ? INA226_BUS_UNDER_VOLTAGE_MASK
--					 : INA226_SHUNT_UNDER_VOLTAGE_MASK;
--	u32 over_voltage_mask = channel ? INA226_BUS_OVER_VOLTAGE_MASK
--					: INA226_SHUNT_OVER_VOLTAGE_MASK;
-+	enum ina2xx_alert_type under_voltage_alert = channel ? INA2XX_ALERT_BUS_VOLTAGE_LOW
-+							     : INA2XX_ALERT_SHUNT_VOLTAGE_LOW;
-+	enum ina2xx_alert_type over_voltage_alert = channel ? INA2XX_ALERT_BUS_VOLTAGE_HIGH
-+							    : INA2XX_ALERT_SHUNT_VOLTAGE_HIGH;
- 	struct ina2xx_data *data = dev_get_drvdata(dev);
- 	struct regmap *regmap = data->regmap;
- 	unsigned int regval;
-@@ -510,15 +554,15 @@ static int ina2xx_in_read(struct device *dev, u32 attr, int channel, long *val)
- 		*val = ina2xx_get_value(data, voltage_reg, regval);
- 		break;
- 	case hwmon_in_lcrit:
--		return ina226_alert_limit_read(data, under_voltage_mask,
-+		return ina226_alert_limit_read(data, under_voltage_alert,
- 					       voltage_reg, val);
- 	case hwmon_in_crit:
--		return ina226_alert_limit_read(data, over_voltage_mask,
-+		return ina226_alert_limit_read(data, over_voltage_alert,
- 					       voltage_reg, val);
- 	case hwmon_in_lcrit_alarm:
--		return ina226_alert_read(data, under_voltage_mask, val);
-+		return ina226_alert_read(data, under_voltage_alert, val);
- 	case hwmon_in_crit_alarm:
--		return ina226_alert_read(data, over_voltage_mask, val);
-+		return ina226_alert_read(data, over_voltage_alert, val);
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -570,10 +614,10 @@ static int ina2xx_power_read(struct device *dev, u32 attr, long *val)
- 	case hwmon_power_average:
- 		return sy24655_average_power_read(data, SY24655_EIN, val);
- 	case hwmon_power_crit:
--		return ina226_alert_limit_read(data, INA226_POWER_OVER_LIMIT_MASK,
-+		return ina226_alert_limit_read(data, INA2XX_ALERT_POWER_HIGH,
- 					       INA2XX_POWER, val);
- 	case hwmon_power_crit_alarm:
--		return ina226_alert_read(data, INA226_POWER_OVER_LIMIT_MASK, val);
-+		return ina226_alert_read(data, INA2XX_ALERT_POWER_HIGH, val);
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -609,15 +653,15 @@ static int ina2xx_curr_read(struct device *dev, u32 attr, long *val)
- 		*val = ina2xx_get_value(data, INA2XX_CURRENT, regval);
- 		return 0;
- 	case hwmon_curr_lcrit:
--		return ina226_alert_limit_read(data, INA226_SHUNT_UNDER_VOLTAGE_MASK,
-+		return ina226_alert_limit_read(data, INA2XX_ALERT_CURRENT_LOW,
- 					       INA2XX_CURRENT, val);
- 	case hwmon_curr_crit:
--		return ina226_alert_limit_read(data, INA226_SHUNT_OVER_VOLTAGE_MASK,
-+		return ina226_alert_limit_read(data, INA2XX_ALERT_CURRENT_HIGH,
- 					       INA2XX_CURRENT, val);
- 	case hwmon_curr_lcrit_alarm:
--		return ina226_alert_read(data, INA226_SHUNT_UNDER_VOLTAGE_MASK, val);
-+		return ina226_alert_read(data, INA2XX_ALERT_CURRENT_LOW, val);
- 	case hwmon_curr_crit_alarm:
--		return ina226_alert_read(data, INA226_SHUNT_OVER_VOLTAGE_MASK, val);
-+		return ina226_alert_read(data, INA2XX_ALERT_CURRENT_HIGH, val);
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -661,12 +705,12 @@ static int ina2xx_in_write(struct device *dev, u32 attr, int channel, long val)
- 	switch (attr) {
- 	case hwmon_in_lcrit:
- 		return ina226_alert_limit_write(data,
--			channel ? INA226_BUS_UNDER_VOLTAGE_MASK : INA226_SHUNT_UNDER_VOLTAGE_MASK,
-+			channel ? INA2XX_ALERT_BUS_VOLTAGE_LOW : INA2XX_ALERT_SHUNT_VOLTAGE_LOW,
- 			channel ? INA2XX_BUS_VOLTAGE : INA2XX_SHUNT_VOLTAGE,
- 			val);
- 	case hwmon_in_crit:
- 		return ina226_alert_limit_write(data,
--			channel ? INA226_BUS_OVER_VOLTAGE_MASK : INA226_SHUNT_OVER_VOLTAGE_MASK,
-+			channel ? INA2XX_ALERT_BUS_VOLTAGE_HIGH : INA2XX_ALERT_SHUNT_VOLTAGE_HIGH,
- 			channel ? INA2XX_BUS_VOLTAGE : INA2XX_SHUNT_VOLTAGE,
- 			val);
- 	default:
-@@ -681,7 +725,7 @@ static int ina2xx_power_write(struct device *dev, u32 attr, long val)
- 
- 	switch (attr) {
- 	case hwmon_power_crit:
--		return ina226_alert_limit_write(data, INA226_POWER_OVER_LIMIT_MASK,
-+		return ina226_alert_limit_write(data, INA2XX_ALERT_POWER_HIGH,
- 						INA2XX_POWER, val);
- 	default:
- 		return -EOPNOTSUPP;
-@@ -695,10 +739,10 @@ static int ina2xx_curr_write(struct device *dev, u32 attr, long val)
- 
- 	switch (attr) {
- 	case hwmon_curr_lcrit:
--		return ina226_alert_limit_write(data, INA226_SHUNT_UNDER_VOLTAGE_MASK,
-+		return ina226_alert_limit_write(data, INA2XX_ALERT_CURRENT_LOW,
- 						INA2XX_CURRENT, val);
- 	case hwmon_curr_crit:
--		return ina226_alert_limit_write(data, INA226_SHUNT_OVER_VOLTAGE_MASK,
-+		return ina226_alert_limit_write(data, INA2XX_ALERT_CURRENT_HIGH,
- 						INA2XX_CURRENT, val);
- 	default:
- 		return -EOPNOTSUPP;
+ 		regmap_update_bits(regmap, INA226_MASK_ENABLE,
+ 				   INA226_ALERT_LATCH_ENABLE | INA226_ALERT_POLARITY,
 
 -- 
 2.55.0
