@@ -1,32 +1,33 @@
-Received: from mta-64-226.siemens.flowmailer.net (mta-64-226.siemens.flowmailer.net [185.136.64.226])
+Received: from mta-64-227.siemens.flowmailer.net (mta-64-227.siemens.flowmailer.net [185.136.64.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 413DC37BE9C
-	for <linux-hwmon@vger.kernel.org>; Thu, 20 Aug 2026 15:00:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.64.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C1ED37C927
+	for <linux-hwmon@vger.kernel.org>; Thu, 20 Aug 2026 15:00:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.64.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787238012; cv=none; b=dUKKnTwXp9Ijh8MEZ1rKiNfLjVeB8h8j4FVf9+dAEiNrnjsGIgY+F9TZIZLoqgMc+lFWoawPQuUu3XpMdKLe9L/NLi6OdxRFqZHgk09qYdlws9Uhr1wNgKLMTgTKXlk6SQM9KcBIkXzhbfLuN4eJ/MdXO/uuj9LJA0G3KvE1Fj4=
+	t=1787238014; cv=none; b=OoHnJcfflT9pX/Ug2sjo4FJ2qe2vtZ5esRivWSWXlIkAHh9Ewl8QgSppI8S3U9KJ2/FnGYxyXmRePIALQpuc5HpcscUE38/Z41O/DlHRykEnLRxz1Tkmm7JOSXYehgY/iJwADJ5KA+1+xZiQVKC2m6DHcgmXO32VCSpplJxFOS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787238012; c=relaxed/simple;
-	bh=fFt5H/vWiCtTQAYyQ96ZY4dZJbxj1cRaOyYCVfaS3d0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ceUvHGrd38KxUlFx8c0w5E7Ci3nw4CyeaGGntRY32fORTTKy4SMtM64iS2B/70P47yNXOvVyd7r2iCqzSkf5mj9xSh0WyWLiNdbuj9fjM7WMgniqq5uIn5Nw20ilXDbGawABXTqudM4yEvk+ASBdXUFhpZT4Hfz9q4AJJWdFar0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=alessandro.zini@siemens.com header.b=JpbaEGSN; arc=none smtp.client-ip=185.136.64.226
+	s=arc-20240116; t=1787238014; c=relaxed/simple;
+	bh=5vIYhEQdk4WuaWZX1t7/eUhpj4hJF1D1x4/NhXcICyk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lZko4tSD5Zd1naK8fa6UiPYFqO36e1f0hRrYoLokWQvO/psBFPtYnR+88l0DF15MItM/f/EVdAl8HYEAirl+hMT+dT9OBix9zL4tWwrJS595Ui/wGBq8wNhflz6hDRp8XN1w4D0uMC8+CHelMwu/S2zmESkpaJPoPAlm1F3Lqfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=alessandro.zini@siemens.com header.b=IrSShM3i; arc=none smtp.client-ip=185.136.64.227
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=siemens.com header.i=alessandro.zini@siemens.com header.b="JpbaEGSN"
-Received: by mta-64-226.siemens.flowmailer.net with ESMTPSA id 202608201459570ef97dd3ae00020768
+	dkim=pass (2048-bit key) header.d=siemens.com header.i=alessandro.zini@siemens.com header.b="IrSShM3i"
+Received: by mta-64-227.siemens.flowmailer.net with ESMTPSA id 202608201500000a5100d339000207f1
         for <linux-hwmon@vger.kernel.org>;
-        Thu, 20 Aug 2026 16:59:58 +0200
+        Thu, 20 Aug 2026 17:00:01 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm2;
  d=siemens.com; i=alessandro.zini@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
- bh=ei2eh9mRhWE0wThFaoRZu+a1n8eCN+REJC5RtmCgjY8=;
- b=JpbaEGSNaKqQxSGyqOUI+/UZkVQPKFwPjbH9K63t0F7NDyna8zlrgVZKaDGYlwbywLksIl
- bOQofCX5cYtI934X8AB37P0NTXHVHMrVqIojldQGtcaZz0Qo3U39RBrLL1SGA9UpxJcG9fEG
- tG5A2R3NYuWjts7VE4XnkO1rjPKaPlCIao20XUjyZ09Za5kaBFSSk3TDsmG3FngFWfZEz2PX
- tly2MjWnXb/8GNTeEQmmVm5DCqKvUJP4SO8Kyt8YkTJw9sy+augc7cdKNYs2QOSZvNpCUIHU
- XD/8h/cJltdF6LWpEQb4PGem+/UkgEWuYl/FAlSS7BDiUMmAErB+T27g==;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
+ bh=nUUcTpLwNwAc6wleFo9//VPjl5RSye7e9Hj9sFJuo7Y=;
+ b=IrSShM3ibd/Ut6Wt6uiJSvsTLtgKkZcriu39f7DFGeuJfH/Z/yj+p/C7MM7HvUctrUz3SC
+ 3O3gSYiER0pmTnlBtCvQ/BO1zlbz8/fW5ibYyCxLyJ6nSr+HrKEEtG3YsjwM9IK5V7QueJc+
+ YyxNSkY/KQjXMVq84A3ur831cscylYwW0P1V/mmgrBvFSxLCHdarpdL0E3MkoevhnySR2MzF
+ T4lPni/uAiqAlD44bhKusoKKMau6vQ3enIc1RG6ega83i8v4vFIBKG6J6K67iVZbYwm2eLvr
+ Ow5Jn5Dfnk8DNy/Y5GyEOyZ7NaxBlXD0N8ssSvWGDCZ+RoPc4bk/csIQ==;
 From: Alessandro Zini <alessandro.zini@siemens.com>
 To: Guenter Roeck <linux@roeck-us.net>,
 	Rob Herring <robh@kernel.org>,
@@ -37,9 +38,11 @@ Cc: linux-hwmon@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Alessandro Zini <alessandro.zini@siemens.com>
-Subject: [PATCH 0/2] hwmon: Add Sensirion STS4x temperature sensor support
-Date: Thu, 20 Aug 2026 16:59:44 +0200
-Message-ID: <20260820145946.35468-1-alessandro.zini@siemens.com>
+Subject: [PATCH 2/2] hwmon: (sht4x): Add support for Sensirion STS4x temperature sensors
+Date: Thu, 20 Aug 2026 16:59:46 +0200
+Message-ID: <20260820145946.35468-3-alessandro.zini@siemens.com>
+In-Reply-To: <20260820145946.35468-1-alessandro.zini@siemens.com>
+References: <20260820145946.35468-1-alessandro.zini@siemens.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -50,24 +53,213 @@ Content-Transfer-Encoding: 8bit
 X-Flowmailer-Platform: Siemens
 Feedback-ID: 519:519-1327013:519-21489:flowmailer
 
-This patch series adds support for the Sensirion STS4x family of digital
-temperature sensors by extending the existing sht4x driver and adding
-the "sensirion,sts40" compatible string to trivial-devices.
+The Sensirion STS4x series is the temperature-only variant of the
+SHT4x family. It shares the same I2C command set, conversion formulas,
+CRC checksum, and timing with the SHT4x, but only returns temperature
+data (3 bytes: 2 data bytes + 1 CRC byte).
 
-The STS4x series shares the same I2C commands, conversion formulas,
-CRC-8 checksum, and measurement timings with the SHT4x humidity and
-temperature sensors, but returns 3 bytes of temperature data instead
-of 6 bytes.
+Add support for the STS4x series by dynamically adjusting the read
+response length, suppressing humidity channel attributes when probed
+as STS4x, and omitting heater sysfs attributes.
 
-Alessandro Zini (2):
-  dt-bindings: trivial-devices: Add Sensirion STS4x series
-  hwmon: (sht4x): Add support for Sensirion STS4x temperature sensors
+Link: https://sensirion.com/resource/datasheet/sts4x
+Signed-off-by: Alessandro Zini <alessandro.zini@siemens.com>
+---
+ Documentation/hwmon/sht4x.rst | 17 +++++++++--
+ drivers/hwmon/sht4x.c         | 56 +++++++++++++++++++++++++----------
+ 2 files changed, 55 insertions(+), 18 deletions(-)
 
- .../devicetree/bindings/trivial-devices.yaml  |  2 +
- Documentation/hwmon/sht4x.rst                 | 17 +++++-
- drivers/hwmon/sht4x.c                         | 56 ++++++++++++++-----
- 3 files changed, 57 insertions(+), 18 deletions(-)
-
+diff --git a/Documentation/hwmon/sht4x.rst b/Documentation/hwmon/sht4x.rst
+index ba094ad0e2816..b9564632a1be2 100644
+--- a/Documentation/hwmon/sht4x.rst
++++ b/Documentation/hwmon/sht4x.rst
+@@ -15,6 +15,16 @@ Supported Chips:
+ 
+       English: https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/2_Humidity_Sensors/Datasheets/Sensirion_Humidity_Sensors_SHT4x_Datasheet.pdf
+ 
++  * Sensirion STS4X
++
++    Prefix: 'sts4x'
++
++    Addresses scanned: None
++
++    Datasheet:
++
++      English: https://sensirion.com/resource/datasheet/sts4x
++
+ Author: Navin Sankar Velliangiri <navin@linumiz.com>
+ 
+ 
+@@ -22,9 +32,10 @@ Description
+ -----------
+ 
+ This driver implements support for the Sensirion SHT4x chip, a humidity
+-and temperature sensor. Temperature is measured in degree celsius, relative
+-humidity is expressed as a percentage. In sysfs interface, all values are
+-scaled by 1000, i.e. the value for 31.5 degrees celsius is 31500.
++and temperature sensor, and the Sensirion STS4x chip, a temperature sensor.
++Temperature is measured in degree celsius, relative humidity is expressed as a
++percentage (on SHT4x only). In sysfs interface, all values are scaled by 1000,
++i.e. the value for 31.5 degrees celsius is 31500.
+ 
+ Usage Notes
+ -----------
+diff --git a/drivers/hwmon/sht4x.c b/drivers/hwmon/sht4x.c
+index 9cace0e8acdab..d2b0d79bb7fe0 100644
+--- a/drivers/hwmon/sht4x.c
++++ b/drivers/hwmon/sht4x.c
+@@ -43,6 +43,7 @@
+ #define SHT4X_CRC8_LEN		1
+ #define SHT4X_WORD_LEN		2
+ #define SHT4X_RESPONSE_LENGTH	6
++#define STS4X_RESPONSE_LENGTH	3
+ #define SHT4X_CRC8_POLYNOMIAL	0x31
+ #define SHT4X_CRC8_INIT		0xff
+ #define SHT4X_MIN_TEMPERATURE	-45000
+@@ -52,9 +53,15 @@
+ 
+ DECLARE_CRC8_TABLE(sht4x_crc8_table);
+ 
++enum sht4x_chips {
++	sht4x,
++	sts4x,
++};
++
+ /**
+  * struct sht4x_data - All the data required to operate an SHT4X chip
+  * @client: the i2c client associated with the SHT4X
++ * @chip_id: the chip type (sht4x or sts4x)
+  * @heating_complete: the time that the last heating finished
+  * @data_pending: true if and only if there are measurements to retrieve after heating
+  * @heater_power: the power at which the heater will be started
+@@ -67,6 +74,7 @@ DECLARE_CRC8_TABLE(sht4x_crc8_table);
+  */
+ struct sht4x_data {
+ 	struct i2c_client	*client;
++	enum sht4x_chips	chip_id;
+ 	unsigned long		heating_complete;	/* in jiffies */
+ 	bool			data_pending;
+ 	u32			heater_power;	/* in milli-watts */
+@@ -92,6 +100,8 @@ static int sht4x_read_values(struct sht4x_data *data)
+ 	u8 crc;
+ 	u8 cmd[SHT4X_CMD_LEN] = {SHT4X_CMD_MEASURE_HPM};
+ 	u8 raw_data[SHT4X_RESPONSE_LENGTH];
++	size_t response_length = data->chip_id == sts4x ?
++				 STS4X_RESPONSE_LENGTH : SHT4X_RESPONSE_LENGTH;
+ 	unsigned long curr_jiffies;
+ 
+ 	curr_jiffies = jiffies;
+@@ -115,15 +125,14 @@ static int sht4x_read_values(struct sht4x_data *data)
+ 		usleep_range(SHT4X_MEAS_DELAY_HPM, SHT4X_MEAS_DELAY_HPM + SHT4X_DELAY_EXTRA);
+ 	}
+ 
+-	ret = i2c_master_recv(client, raw_data, SHT4X_RESPONSE_LENGTH);
+-	if (ret != SHT4X_RESPONSE_LENGTH) {
++	ret = i2c_master_recv(client, raw_data, response_length);
++	if (ret != response_length) {
+ 		if (ret >= 0)
+ 			ret = -ENODATA;
+ 		return ret;
+ 	}
+ 
+ 	t_ticks = raw_data[0] << 8 | raw_data[1];
+-	rh_ticks = raw_data[3] << 8 | raw_data[4];
+ 
+ 	crc = crc8(sht4x_crc8_table, &raw_data[0], SHT4X_WORD_LEN, CRC8_INIT_VALUE);
+ 	if (crc != raw_data[2]) {
+@@ -131,14 +140,19 @@ static int sht4x_read_values(struct sht4x_data *data)
+ 		return -EIO;
+ 	}
+ 
+-	crc = crc8(sht4x_crc8_table, &raw_data[3], SHT4X_WORD_LEN, CRC8_INIT_VALUE);
+-	if (crc != raw_data[5]) {
+-		dev_err(&client->dev, "data integrity check failed\n");
+-		return -EIO;
++	data->temperature = ((21875 * (int32_t)t_ticks) >> 13) - 45000;
++
++	if (data->chip_id != sts4x) {
++		rh_ticks = raw_data[3] << 8 | raw_data[4];
++		crc = crc8(sht4x_crc8_table, &raw_data[3], SHT4X_WORD_LEN, CRC8_INIT_VALUE);
++		if (crc != raw_data[5]) {
++			dev_err(&client->dev, "data integrity check failed\n");
++			return -EIO;
++		}
++
++		data->humidity = ((15625 * (int32_t)rh_ticks) >> 13) - 6000;
+ 	}
+ 
+-	data->temperature = ((21875 * (int32_t)t_ticks) >> 13) - 45000;
+-	data->humidity = ((15625 * (int32_t)rh_ticks) >> 13) - 6000;
+ 	data->last_updated = jiffies;
+ 	data->valid = true;
+ 	return 0;
+@@ -190,9 +204,14 @@ static umode_t sht4x_hwmon_visible(const void *data,
+ 				   enum hwmon_sensor_types type,
+ 				   u32 attr, int channel)
+ {
++	const struct sht4x_data *chip_data = data;
++
+ 	switch (type) {
+ 	case hwmon_temp:
++		return 0444;
+ 	case hwmon_humidity:
++		if (chip_data->chip_id == sts4x)
++			return 0;
+ 		return 0444;
+ 	case hwmon_chip:
+ 		return 0644;
+@@ -382,6 +401,7 @@ static const struct hwmon_chip_info sht4x_chip_info = {
+ 
+ static int sht4x_probe(struct i2c_client *client)
+ {
++	const struct attribute_group **groups = NULL;
+ 	struct device *device = &client->dev;
+ 	struct device *hwmon_dev;
+ 	struct sht4x_data *data;
+@@ -400,11 +420,15 @@ static int sht4x_probe(struct i2c_client *client)
+ 	if (!data)
+ 		return -ENOMEM;
+ 
++	data->chip_id = (uintptr_t)i2c_get_match_data(client);
+ 	data->update_interval = SHT4X_MIN_POLL_INTERVAL;
+ 	data->client = client;
+-	data->heater_power = 200;
+-	data->heater_time = 1000;
+-	data->heating_complete = jiffies;
++	if (data->chip_id != sts4x) {
++		data->heater_power = 200;
++		data->heater_time = 1000;
++		data->heating_complete = jiffies;
++		groups = sht4x_groups;
++	}
+ 
+ 	crc8_populate_msb(sht4x_crc8_table, SHT4X_CRC8_POLYNOMIAL);
+ 
+@@ -418,19 +442,21 @@ static int sht4x_probe(struct i2c_client *client)
+ 							 client->name,
+ 							 data,
+ 							 &sht4x_chip_info,
+-							 sht4x_groups);
++							 groups);
+ 
+ 	return PTR_ERR_OR_ZERO(hwmon_dev);
+ }
+ 
+ static const struct i2c_device_id sht4x_id[] = {
+-	{ .name = "sht4x" },
++	{ .name = "sht4x", .driver_data = sht4x },
++	{ .name = "sts4x", .driver_data = sts4x },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, sht4x_id);
+ 
+ static const struct of_device_id sht4x_of_match[] = {
+-	{ .compatible = "sensirion,sht4x" },
++	{ .compatible = "sensirion,sht4x", .data = (void *)sht4x },
++	{ .compatible = "sensirion,sts40", .data = (void *)sts4x },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, sht4x_of_match);
 -- 
 2.55.0
 
