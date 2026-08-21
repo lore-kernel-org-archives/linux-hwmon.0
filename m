@@ -1,68 +1,68 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C27391828
-	for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2026 13:53:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 248F043CECB
+	for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2026 13:59:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787320421; cv=none; b=AWT1COoZk7TM+/99NGs5Q8SSYQxlUGn4a6biZ/EXqiWiHel8PlNjOSmnBOdw7pGczByAcI2YDguWUkCYK8jpkZH6SdMglLIDm9p6BVlCtX/CiREMui1vbeFuuSkIC+coTpZPGt+eCNHoyVs8wWyolsh3oxhoGrxledxvfVInJKc=
+	t=1787320765; cv=none; b=BJhNLRGrV2cWnmPwbs5dxwTEXfZuMAAqybR6Gh/0KODbU6g6MndR7q8BaVfSQM8vR3paYNKu/vifVf++KbzeSDSkeTUQvzQgVEfGRWrkx4BLu7ZgNbk/8yEIeWQpvfEIbkFzYKY8PlU7WWCJBXERq0LUQ0Y+oZQ5xcmMKpWxjEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787320421; c=relaxed/simple;
-	bh=HfQpx+Yp4X0Ul6ISCVhuvlYVFaERcwwSVwlFA6Wtbxk=;
+	s=arc-20240116; t=1787320765; c=relaxed/simple;
+	bh=qtr5M9kRcMlxIU39pBaXTYFjjWSfbfDa9Yp8m/Ek44g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sjlH/9oozd9EMFMCnnOTaXLM039nO85UO1reoPz6d+emaprikMDr4Z2o7ubTSY1y2lCRSwOIC9bDANDqw/quK9o+Tj/5JKwuAQd+URCxPseQwt5a4BoMqutKAFkeJe/RmWilCU+EmJEL86qb8JXsJap6FkKXRUmGnWnFqPnYmbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UVmg/jnj; arc=none smtp.client-ip=209.85.216.52
+	 In-Reply-To:Content-Type; b=bCcR87fgRj0AX1PxSnM9SgrICTO8Sr40Fvojg31ndgUsdpCWOxCCsagHAoqJQs6m6n72Cq+axn/CIDFdu4lFjXlRkfgBhNdIi6XcQQfd9MBZgWsUfYPFuNSb6ecRK2pN6vYaYge8IGMMyqmjBWGtK1CRPu8IXh1iS8vpiZdK1iA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IVzuxtT6; arc=none smtp.client-ip=209.85.210.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UVmg/jnj"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-382ef647e20so981483a91.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2026 06:53:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IVzuxtT6"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-84e507b079dso556377b3a.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2026 06:59:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787320418; x=1787925218; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787320763; x=1787925563; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=lWf5A9nKdhTbA9HjSWPkQSCWNCzvt11rK7T8WYgG60U=;
-        b=UVmg/jnjeQRsLAU56IMngDsEOQ1D4wtNFAgBt2UlHIsqUCasku/YuiJ1v8mYTIoP+p
-         8fQsOCkOtQPkWZk1xMBfIRCa8BPVvvWQNQ4TMgmTpuU6H38E6CgoAoeyqreMBVtnUk3V
-         mMBi6VVxBI1ie0glW4sPmL062cwmHmP88XZva4t+8Jr1tpzOhQgoVqdaQSgp6jUprmt+
-         6o903aYiIE7uRRKra3kBNYrLV0DsY8SqKE/JTYt+hrzz9uvx89l3P0rGjbI1jSF/owo/
-         5aDqix4pf9xCRvFYUs9Bf0plliTm/0jpP7r9MBmLKz8oSMBFhXEsk6rLSXlsvIUF7/CS
-         zgtA==
+        bh=kp+PiTgHyCi6WI6FjAvRbpzQuRf58nwxWK7WgL8b6UE=;
+        b=IVzuxtT6PrLe3K90ab7XeNtWn4Eh8ecy/oQYM87LIr7yWGNCyAG/xY5s0q8v2PF7Zu
+         zz/pBX+IOuJY0MnyhexifVxWjaAqzXV5WBCVd4BFRRCmI3c8Inilp5wze7Ni2FHGr/Cz
+         Mu4NkBMYHTZtyqcR/hrT8ruHGyNPge5YoAVpxo5QVcOytlPr5WqR5TVftS4yL5L/yATU
+         T/baZcf0/ZCqUhpHAv7274a5nMwB/Rd5iUsxiV6kBzIaBma3szIo/HvW+FDouTlsBczj
+         N1ouO8Dqz4iOKpeeHgFzD0uQqoUse6AXFLkEKvJNLSNopt3zPugJnu3KWR9+syluccLy
+         UOTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787320418; x=1787925218;
+        d=1e100.net; s=20251104; t=1787320763; x=1787925563;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=lWf5A9nKdhTbA9HjSWPkQSCWNCzvt11rK7T8WYgG60U=;
-        b=LPek6e+t6COeJ+f14QOAHt2b5Ba0xOatiufxnU06mgijwcij7HRaFKGYSG90lxeRDV
-         DKBZs+Hr7sEQUqb2/NtN0FFgzBCktfNsBFi2gDw1+pYv7sOhoVV5nfmwEnSBBGtrV1xt
-         bgDzWB27Zihp4Y41vtum2Q2alVxVObhxvzTVizL1+XBEsbAYRsr/zHA4Z245phOttq+E
-         6Agm9T30L1ysjf/SyN0U3fckRo3sAhuCS66aaph4SvtNNAAJ9k+lwVVfWlv4Tm5qGHN6
-         pkENKAvvF1ZJEdmiaSev3/Rd7jWsPVnRUtKV17yaev1kiO+AAFgTjdy/zLpC0oxjBfxz
-         TzSQ==
-X-Gm-Message-State: AFuF++mP8Hhk4lValwcliKDW8o0vYoqhUWEcGXcSOP7kRmNH02XSpvcI
-	QuUf2VOAwSFkEObJP96tpt7PBOBcxw7eKRaYiLWaQS1Rr/xWrlJFArs1/K0W/A==
-X-Gm-Gg: AR+sD106Jt3UrbxCDtkWfLz3ug6oGlm9S3hz3uusCIANurOj/KRQkQVTT3pA602T2VB
-	6a+dBlGql/DHIspKrRQfQXeeeeYwy/R0AWgfgBB8dY2TVwjNgr8jVVYCTyZpzTeRUBFPvZR5nQ0
-	+rD6etdtljcObx9xqQMMvfsSLJeCUSRa8zMIaQPzWNyGN1HPlyYBzofGGaxfkajneyMmKaEqqpJ
-	D8fyNHShRWsvEw/5/D1qLUyH+afjAMz+WETSM/Xyxygt5VXtKma07lVxDNDE+o9dmsOqhZQ4hLn
-	7Q7c9HA6XnQ5scSZr1aD3GVCwt8IKHh+LX+ra8bfl9O/a6uhxPaM21Vexghlw2HKdoydKcLo6Je
-	z8KuLHdkS4FxL4Jh2fkJD7nRntn/p7MYR5dW5FXsNXmNFtKBM0pwqi2r7MgLJSbs3VCd/wl+gAS
-	R7zVP5dGDpxQb+GQk97EZwth67cePBaz2wX7qkTYHvto82GESNKUcLlzR7iJ61IC3B9+AXTUZKE
-	/as7Sd3aEPC5Eu+83DRivA1LPdrp5pT17UtsQ==
-X-Received: by 2002:a17:90b:134c:b0:38f:5801:dc0e with SMTP id 98e67ed59e1d1-395c385aea2mr13502305a91.15.1787320417970;
-        Fri, 21 Aug 2026 06:53:37 -0700 (PDT)
+        bh=kp+PiTgHyCi6WI6FjAvRbpzQuRf58nwxWK7WgL8b6UE=;
+        b=bDqlwF/Djfx9R9bXa/zapAdpI7KC0MUCrJjer1FQF5Wb2pfaaZMj6uSdZCn9m2a6p1
+         uv4nFMhGQHNNyOrMjKFBkRXVNVOvtCiMfrsjoR+M43vCkHyhCaXoabjm/l97+UgJzJuf
+         BIoeiLIgu0Jl44NL99buYhRCTjapfvHTlBPPW6Q8UpXIkNDN7+0mPdKFi3znJyXnq2gt
+         fv7xXXtgwrkaLQhswyaD1v0mP5Zqd6m0IAf6CVn7Cdlotvns9y3r+o7LSWbM8kiOaHyw
+         juvs7EqO+E9nc4FcttPk7mCcIJKbXBsI0pQS1XppeedkxYgbQOhCG5dgpsaiVr2NQHOe
+         t9pQ==
+X-Gm-Message-State: AFuF++ngm3Ep2h5LPlkwYlaNo9Z1xLuSCRSjeHV1WfJ+7T57rAggbO2Q
+	Il7C6Oula4mamozM2N/lIxzQ3gh7msGy3p00HuQVe5Tbh3Plmdbs1Ru3
+X-Gm-Gg: AR+sD10ocvQrxTNsBcoq4jNwTH4tD1iAedskDOdUwPNu2AF7O0xdUMHE81olBTXlltC
+	ZPmGnudfWQABS7vIEQ5qSOyeJzqXzNWTWGTEft3/36WSBYNEZLktIRBBeE9wjaPvUeYMcAlKZwQ
+	CmHjDAyNR18M1fnCiTXGqwd/VHqtCEDPfPlzG/AsU+wFAYUxRO5y+OD74m/Y5NlpMDB7HFJBQuo
+	v+HiAnwOhcQE/k230P64hw9YEd0V4/vhsTB3Y+2ddn59oupB2eL9Xc/gVmC7AI296WzKgjwdjsr
+	9ePmLb+6AFzjV13GvnsC8l7g3vQgqeAEHs0IidottTX9/Ut+ws0Q0sLNytmkyesRrj9XJcwKgFm
+	J1/z0Fi1EIOeFx58BG80Ip0tumUtDaqzSlpJqHs6FecGVnSMtqTm1mcK/X0m/FAJGiySPh6dRyz
+	w39BdvN8q6lDt0SY74T7dJTcj0V08lNJ7TrZyJWs05RxZXbUmgUzVkw8MqNAdxWDIcXJarAJ5Kh
+	/hhQrpadgbcRGV8sEiZazPFTuNDLyCxGvOL3w==
+X-Received: by 2002:a05:6a00:4106:b0:84e:216d:7e52 with SMTP id d2e1a72fcca58-851f9fd44b2mr11427077b3a.14.1787320763354;
+        Fri, 21 Aug 2026 06:59:23 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-395c467980bsm3312461a91.5.2026.08.21.06.53.36
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-851d3392a96sm2912683b3a.20.2026.08.21.06.59.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Aug 2026 06:53:37 -0700 (PDT)
+        Fri, 21 Aug 2026 06:59:22 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a0253a91-d8e2-41a6-8e54-3f564a757833@roeck-us.net>
-Date: Fri, 21 Aug 2026 06:53:36 -0700
+Message-ID: <00ee05d9-1a7c-47b3-8961-e1b63f7bf3fa@roeck-us.net>
+Date: Fri, 21 Aug 2026 06:59:20 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,14 +70,10 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: chipcap2: serialize access to low/high_alarm
- indicators
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
- sashiko-reviews@lists.linux.dev
-Cc: linux-hwmon@vger.kernel.org
-References: <20260821-chipcap2_locks-v1-1-1d8ccabfc1b2@gmail.com>
- <20260821093706.D1EB11F000E9@smtp.kernel.org>
- <DKUJLMZSZJWP.UTXGLF6UTJ2N@gmail.com>
+Subject: Re: [PATCH] hwmon: (pmbus/ibm-cffps) fix format-truncation warning
+To: hanzhijian <hanzhijian1991@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260821115703.2017414-1-hanzhijian1991@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -123,107 +119,52 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <DKUJLMZSZJWP.UTXGLF6UTJ2N@gmail.com>
+In-Reply-To: <20260821115703.2017414-1-hanzhijian1991@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 8/21/26 03:16, Javier Carrasco wrote:
-> Some extra homework, but the issues are real and I am open to tackle
-> them all.
+On 8/21/26 04:57, hanzhijian wrote:
+> snprintf() with "%02X" and "%04X" specifiers on an int argument
+> triggers -Wformat-truncation (and thus a build failure with
+> CONFIG_WERROR) because GCC assumes the int can hold a value wider
+> than the destination buffer.
 > 
-> On Fri Aug 21, 2026 at 11:37 AM CEST, sashiko-bot wrote:
->> Thank you for your contribution! Sashiko AI review found 4 potential issue(s) to consider:
->>
->> New issues:
->> - [Low] The driver implements custom locks for interrupt synchronization instead of using the hwmon subsystem's mandated locking API.
->>
->> Pre-existing issues:
->> - [High] The threaded interrupt handlers pass the wrong channel index to hwmon_notify_event(), causing the sysfs notification to fail silently.
->> - [High] Threaded IRQs are requested before the hwmon device is fully registered, leading to a Use-After-Free (UAF) during driver teardown.
->> - [High] The driver permanently times out on all measurements if the regulator is already enabled at boot or if a previous disable failed.
->> --
->>
->> --- Patch [1]: [PATCH] hwmon: chipcap2: serialize access to low/high_alarm indicators ---
->> commit f294324394a3b551fc4139386f0f74282d1fdb24
->> Author: Javier Carrasco <javier.carrasco.cruz@gmail.com>
->>
->> hwmon: chipcap2: serialize access to low/high_alarm indicators
->>
->> This patch adds per-interrupt mutexes to protect low_alarm and high_alarm
->> accesses from threaded interrupt handlers and sysfs, fixing a potential race
->> condition that could lead to missed events.
->>
->> Link: https://lore.kernel.org/linux-hwmon/20260625162114.417EA1F000E9@smtp.kernel.org/
->>
->> Note: This review is provided in a free-form summary format without direct
->> inline patch quoting due to recitation restrictions.
->>
->> [Severity: Low]
->> Is it correct to introduce custom per-alarm mutexes for interrupt
->> synchronization here? Looking at the hwmon subsystem guidelines, drivers
->> should use the mandated locking API via hwmon_lock(dev) and hwmon_unlock(dev)
->> instead of defining and using custom locks like low_alarm_lock and
->> high_alarm_lock in struct cc2_rh_alarm_info and cc2_low_interrupt().
->>
-> 
-> I used two mutexes to decouple the alarms as they are independent, so
-> actions taken for any of them is not delayed by the other. On the other
-> hand, that delay will be very short, so I am open to use hwmon_lock(dev)
-> if it is preferred in this case too.
+> The value comes from i2c_smbus_read_byte_data() and
+> i2c_smbus_read_word_data(), which return at most 8 and 16 bits
+> respectively, so mask the value to make that explicit and silence
+> the warning.
 > 
 
-Please do. Introducing separate locks for low frequency events such as this one
-is overkill.
-
->> [Severity: High]
->> This isn't a bug introduced by this patch, but does the threaded interrupt
->> handler pass the correct channel index to hwmon_notify_event()?
->>
->> In cc2_low_interrupt(), hwmon_notify_event() receives CC2_CHAN_HUMIDITY
->> (which is 1). The hwmon core adds this to the humidity base index (1),
->> looking for humidity2_min_alarm.
->>
->> However, the driver only registers one humidity channel (index 0), which is
->> created as humidity1_min_alarm. Will this cause the sysfs notification to
->> fail silently when an alarm fires?
->>
-> 
-> This is a real issue. I will remove the enum with the channel definition
-> because it is only used here and pass 0 instead (there is only one
-> humidity channel).
-> 
->> [Severity: High]
->> This is a pre-existing issue, but is there a teardown ordering problem with
->> devres in cc2_probe()?
->>
->> The threaded IRQs are requested via cc2_request_ready_irq() before
->> devm_hwmon_device_register_with_info() is called. During devres unbind,
->> resources are released in LIFO order, meaning the hwmon device is
->> unregistered and freed while the IRQs are still active.
->>
->> Concurrent sysfs reads during unbind could re-enable process_irqs. If an
->> interrupt fires during this window, could it dereference the freed
->> cc2->hwmon pointer, resulting in a use-after-free?
->>
-> 
-> I will analyze this in more detail and get back with the results.
-> 
->> [Severity: High]
->> This isn't a bug introduced by this patch, but does the driver permanently
->> time out on measurements if the regulator is already enabled?
->>
->> In cc2_enable(), if regulator_is_enabled() returns true (e.g., for an
->> always-on DT regulator), the function returns 0 immediately without setting
->> data->process_irqs = true.
->>
->> As a result, cc2_ready_interrupt() will ignore all interrupts, and the
->> measurement wait will unconditionally time out. Should data->process_irqs
->> be set even if the regulator is already enabled?
-> 
-> 
-> I will analyze this in more detail and get back with the results.
-> 
-Thanks!
+So the perceived overflow never happens, and the patch would be
+purely to make the compiler happy. I am not going to apply such patches.
 
 Guenter
+
+> Signed-off-by: hanzhijian <hanzhijian1991@gmail.com>
+> ---
+>   drivers/hwmon/pmbus/ibm-cffps.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
+> index aad94bcb9..dd7ff3a19 100644
+> --- a/drivers/hwmon/pmbus/ibm-cffps.c
+> +++ b/drivers/hwmon/pmbus/ibm-cffps.c
+> @@ -166,7 +166,7 @@ static ssize_t ibm_cffps_debugfs_read(struct file *file, char __user *buf,
+>   				if (rc < 0)
+>   					goto unlock;
+>   
+> -				snprintf(&data[i * 2], 3, "%02X", rc);
+> +				snprintf(&data[i * 2], 3, "%02X", rc & 0xff);
+>   			}
+>   
+>   			rc = i * 2;
+> @@ -177,7 +177,7 @@ static ssize_t ibm_cffps_debugfs_read(struct file *file, char __user *buf,
+>   				if (rc < 0)
+>   					goto unlock;
+>   
+> -				snprintf(&data[i * 4], 5, "%04X", rc);
+> +				snprintf(&data[i * 4], 5, "%04X", rc & 0xffff);
+>   			}
+>   
+>   			rc = i * 4;
 
