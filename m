@@ -1,196 +1,151 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E949373BE8
-	for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2026 16:58:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6502B38D
+	for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2026 18:09:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787331502; cv=none; b=g1gYEec7F1ZG/1NcPKv3xn4yYFWFFTurku66PTzUt8p5FZ2PsmrUwud12IKAbAwLWhlDwaKyGcElvLdfMUPGFd/zsRFkl00lsDlxk0HEodzR6Yz6btqq1GGnllZgmA8hETj472PZ+p7NGltjMs+1WKxL924cm6QrB8P2R0DO5to=
+	t=1787335762; cv=none; b=k33xdUOmyMR8u7FsHF/mVL+C4tdFhMzseEzFw7osvyimfDTltItH/7DzpBFMtMSGzuyPNJrVsmiAZyejzBfLmrtxtUlKFeUjZfVfVINWx/bhSAySyTU2AWvuV1hQIlN/aOIJRv+Bama88dHA4H/fgfLIkq/1AUePmRedcyzAaBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787331502; c=relaxed/simple;
-	bh=oF7hJRfKcsBhrzRG5UopmiXACltxf5cm0GPOSDldZBI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q1KWrk1r7ii7sdKbZqiJacyKtjWwBO2L23Q3LNH0AYExdpq2mpMSFpasGWwv+vv4+sl46kw3493S8Vb7sPA6YfdIdt/AcewvD/eiDYygGEX2Hy09bUlCaNi8EKCrpyUVzPhiQy0yPq7XjYaqIYsOSdaUWgP1Bzogsi8DFUkel9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=akFSH1UP; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787335762; c=relaxed/simple;
+	bh=fRzzRtBhBuT3AN+u+UFCcOVfzEwr+BQb00hG+K7UXqU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kS3X3lhEEHhGzO0G7ae7f9xHV9FYMteKV8Dea1WfwEQ93RcxrV1cCKyKMVFW1Dgbw+1evAmj8uQQs/9qsUwWqTWvQDPl9Qg6vPt8HleH/gM/uJJzoRhmxiVhVsi20sA9dTecFqBwn9B+JwMvp3YtP6KXqaG6UWZwlcfA/3U5Lik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AigGJ+kO; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=jNB3lqOm; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="akFSH1UP"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-84e3007a2b7so1026560b3a.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2026 09:58:18 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AigGJ+kO";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="jNB3lqOm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1787335760;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NGNHCG2S90dL1ilUQqiDCnuACxnKluxw/vvCoZVLc+k=;
+	b=AigGJ+kObiuJdDxX2xZrXShM5n5CD9PzEKKiEwQgPn8qAfq7J75LWE0BWBdbciHcAKCeB1
+	Q/lAhR/8J1S1wKla0VRMc9+yDTZShEey4e/HwjkSEAbkHMT1iOCmoesv2PvW8z3HEwLe0w
+	Yppd4ZI/yfmHr9Tx7rRuN+qohhnyJPc=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-45-6FeqoplcMO2vbgZcPLToqw-1; Fri, 21 Aug 2026 14:09:18 -0400
+X-MC-Unique: 6FeqoplcMO2vbgZcPLToqw-1
+X-Mimecast-MFC-AGG-ID: 6FeqoplcMO2vbgZcPLToqw_1787335758
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-51c1d7886cdso24724271cf.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2026 11:09:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787331497; x=1787936297; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Sw/cVXcD5z/4y+bl6d3DM5h/euK53M2j/RQeTGK7GPY=;
-        b=akFSH1UPk0vH2rEiixWgv6RwlnmpX3P5+qzfBVuX3KasW6aDn8HJwXp8/GNWpM8wKY
-         a0hBxRnBuec8Fvnzi8efr/Iwdg7otW3bs3dh/8bxyi427l9ivOOg6sCDVDYEtRS8ro0p
-         yjOd6wiLr5ymtD4BCvGm5opxCJecVjWZiOUp9kGpXGnYwKLQjPxuWNqqXPiAYGFatfBx
-         YLkYIz4qGtMKV1PdbLh5ZK8jokqGXnC94AHg3Ac4peHayzmX1q4oacm26Efd3ybMAY39
-         xog0r0gTaHPWsYNztOV2W0Y3e9jz/jJZrv2ov28IZUDEFzHG/zsQO5d0l/vOu4rJsIpG
-         YNnw==
+        d=redhat.com; s=google; t=1787335758; x=1787940558; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=NGNHCG2S90dL1ilUQqiDCnuACxnKluxw/vvCoZVLc+k=;
+        b=jNB3lqOmJH643tJ/gwOfOEItsLh7l+nf1KboFzB1ErbSPLWQHaF9ynI8gptyi3koH6
+         KYXSwREUdRW1+3Gt3fDoYrjNfDKXuWXIlDNYAF04nnJyEUO6YY48qblDm5Hb2m3fxdJf
+         jcfAlDzEU0614UWBp1w2RYB6kISh8zUD54oby2AVxilGHPw5be0VzPAc0aisD+hEDhdO
+         0Ks2SVmaf4zJF3OCs6FeM8daX4s3ktQDPGuPOxyPkYoa5l4OaW2eeMQ6ywd8FlYtaiMO
+         2gXrQfEr5/dG+cUhrCW6iy5dyMqSv9xAeI8XbtHCz41sj93lGYl7nvZF0oEkBglExgsL
+         IXMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787331497; x=1787936297;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Sw/cVXcD5z/4y+bl6d3DM5h/euK53M2j/RQeTGK7GPY=;
-        b=m6T26P+k3ow5QxbODdqB6y4VYSRBzYoZei1hBix8vKi4H8EhGM597dsgXmiNnDkEf2
-         NmF/lax1CDSBmkkHUJwizpa6md5lAw0FmrQG6iVe76UFBsgHdyaLfEEyk4TfIo08glZi
-         V8XMk4gL/ZcYLEOpm9UNgXuKY7jSFaWImZhYEgD2igRIQYywDP2gO63GVRQbKOZSxfj6
-         3ZSLiHwVQFrA3GfQRFsm5ZHgAz0cKemNLkiWsHn+Jsp1CH73p3qCbKpQ4FDQqtKVWUtQ
-         gbwgB9bLcEU/6s+hHTju4mQ3iZe8RcH0vZ+C6RDrMnnCHljOeMyWlhvR34Tq4dFQOa9D
-         8zZg==
-X-Gm-Message-State: AFuF++mlecXCPgygDxmtqvZst0cXVkX+GdowYMNpnqyOQ548QI2u55nK
-	I0Pta+Au77VNwesAsu+4ClVNme4S2uGGCZg1Egt7iva6UFztbaSGtUn9
-X-Gm-Gg: AR+sD11Sxsf+cZ6XGHqAFKYm11jYoNkcz0hrnKuabREQj1g44q3/IIU498UyMValr9o
-	tLK80KEXZWCXTcpySCnb2hGBFVUJp3ldPDTakRL0AhRciPlkmHoVjdfpxbV3RSh9A628GnAc1Mg
-	OKbB3wBHh2odhI9bynNVp1VImtgNETJYhnIKJu5MvfmtEJNeO/+FhbA9GKnDFj5eu7ghEtMMTVD
-	DR9XllzdDvv5mxm+nWjM5aM8++aJ9DNr5iLaGps4vNBNWSpQJjeCbxf3eKYYytYuXF1kGrPgB3J
-	avg/EjAoeJD0cYpV74denKaoNUiqloI/Q8PCr/b2QM4aWNoTxONIxFtyMWT0zZjXBl26ZTdrT99
-	zCzf6ac50JcvyZ85SgR40IAAOx42Y3AHXTF+vD3urch1+vb9tAQY8u2o7N+5QqIuck0YdQgiEOw
-	m4awiWOwtihRqR+nYsmOSQBpOyPuD2EWAhg7tgyPy0xmjVbwaAgDXC6CHwvCF0/+FvJULLZgoGi
-	Mtw/Ibih8WSKCYD3gZEzMA546jZ44ESbWZ/8A==
-X-Received: by 2002:a05:6a00:138c:b0:851:b007:2fe0 with SMTP id d2e1a72fcca58-8520b9c6d39mr67083b3a.1.1787331497279;
-        Fri, 21 Aug 2026 09:58:17 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-851d3640dd4sm3076215b3a.41.2026.08.21.09.58.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Aug 2026 09:58:15 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d1b91675-7675-4b6c-821b-464e8f113144@roeck-us.net>
-Date: Fri, 21 Aug 2026 09:58:14 -0700
+        d=1e100.net; s=20251104; t=1787335758; x=1787940558;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=NGNHCG2S90dL1ilUQqiDCnuACxnKluxw/vvCoZVLc+k=;
+        b=JoNohYzfYWKB7Kk8DH7DvehL31r7RvhXnAFfCUEEwUglNPklT2sVSJhzpVt61lFIX4
+         6iVYkP9BwatxDezkJ3C+J8o0fu8X+mJzTDox1i9DeOOkrJ9sTv5iPNuPI0IffJG2EY8E
+         oQeTrsOq66GBBEaktXzMymMFqIFBOOzAdL+iXAM+5nEAkshuegDQuaCos3mmB0+34HR2
+         ww0Mpr3i8cL3iAc168b+5V4nJ5LRuzV+oUj6IpE3aC8gMVIlsY4yjhJDWotQmuYWdvrG
+         TX+WAzFd8fAeV10nX8UCzwdb/7Bz1wwPwgMnwRD0q1lCGXBndqDDeqNqirNSMPkRFmLT
+         kz4g==
+X-Forwarded-Encrypted: i=1; AHgh+RoAvmR7gY18Wtk2lrO3ARXLbdRPGkXrlbQtxW4/VR+0VAvb2YkFC2idq679L8lYl4lQnbANFFrTEI1ZYg==@vger.kernel.org
+X-Gm-Message-State: AFuF++kj8eZJPrfO97irD6Toq1vHgJd7sMnSwf+LPHMGsCQIj/FCVF9V
+	F55Xz7D1FfQuvMudntB/JXe+aGbsymFyj0jCnNXgJq7WJWMi/9IL08cuosp/K1o+ozQLB1NFPkp
+	Zg8mQ+t1LnLeq6hiUkCfyd/K1D5HfjoXF9nkFDAaD3do4nTL9FBtaKGjoxpSTnqnhY7Eldbib
+X-Gm-Gg: AR+sD10YK9hIxA9ISpI7KNLtwNW3TYVllR2lGMaRVNdMX63FiL1ZHP88LZBvKTD1IGz
+	C7WHlcluYjctTvHfN0zXT6PG4VxDcesPodGZS7STiGYDLd+OXGJSzsMHbB+4gEeZJsIFNAHLO7r
+	VZcXEbqUGqRuQAhAUA6Fgl26wl1CWmfhMTModoGEyPA6JYVlxntkejnBQ86hsQTo4O+kQdFaosP
+	6yijjQqDlFsrdX1Ai+5QGMstY8VjzVDWdaFbHl4ELnKK8ctiDHcVvGMmrTVH0kT38WHjSPNHtcu
+	CQ+4OubKlw/MXJmLPfwDZcCijdp5/QQppb68U6vVdKAnYNHCaWiYCrrhS9bw0HDOUGaK1qSsYpF
+	Pp5yFoyULQg==
+X-Received: by 2002:ac8:598a:0:b0:517:9f43:4732 with SMTP id d75a77b69052e-52df5732c7amr77456041cf.11.1787335758159;
+        Fri, 21 Aug 2026 11:09:18 -0700 (PDT)
+X-Received: by 2002:ac8:598a:0:b0:517:9f43:4732 with SMTP id d75a77b69052e-52df5732c7amr77455561cf.11.1787335757792;
+        Fri, 21 Aug 2026 11:09:17 -0700 (PDT)
+Received: from rh-jkangas-kernel ([2601:1c2:4480:2110:932e:45ef:6b6c:ddd0])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-52e09aad030sm97951cf.15.2026.08.21.11.09.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Aug 2026 11:09:16 -0700 (PDT)
+Date: Fri, 21 Aug 2026 11:09:13 -0700
+From: Jared Kangas <jkangas@redhat.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: sashiko-reviews@lists.linux.dev, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] hwmon: (ina2xx) Decouple in0 and curr1 alarms
+Message-ID: <aoiUSeZNmbeuWnol@rh-jkangas-kernel>
+References: <20260820-upstream-ina2xx-in0-curr1-alarms-v2-0-fdce35abc41e@redhat.com>
+ <20260820-upstream-ina2xx-in0-curr1-alarms-v2-4-fdce35abc41e@redhat.com>
+ <20260820132304.2B1BA1F00A3A@smtp.kernel.org>
+ <d1b91675-7675-4b6c-821b-464e8f113144@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/4] hwmon: (ina2xx) Decouple in0 and curr1 alarms
-To: sashiko-reviews@lists.linux.dev, Jared Kangas <jkangas@redhat.com>
-Cc: linux-hwmon@vger.kernel.org
-References: <20260820-upstream-ina2xx-in0-curr1-alarms-v2-0-fdce35abc41e@redhat.com>
- <20260820-upstream-ina2xx-in0-curr1-alarms-v2-4-fdce35abc41e@redhat.com>
- <20260820132304.2B1BA1F00A3A@smtp.kernel.org>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260820132304.2B1BA1F00A3A@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d1b91675-7675-4b6c-821b-464e8f113144@roeck-us.net>
 
-Jared,
+Hi Guenter,
 
-On 8/20/26 06:23, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] Writing 0 to an inactive alert limit unintentionally clears the currently active alert, breaking the newly introduced alarm decoupling.
-> --
+On Fri, Aug 21, 2026 at 09:58:14AM -0700, Guenter Roeck wrote:
+> Jared,
 > 
-> --- Patch [4]: [PATCH v2 4/4] hwmon: (ina2xx) Decouple in0 and curr1 alarms ---
-> commit 0eea1308d1961d2cb0471626855b002f45901d56
-> Author: Jared Kangas <jkangas@redhat.com>
-> 
-> hwmon: (ina2xx) Decouple in0 and curr1 alarms
-> 
-> This commit attempts to decouple shunt voltage and current limit alarms by
-> tracking the active alert type and returning zero during reads if the active
-> alarm is for a different type.
-> 
->> diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
->> --- a/drivers/hwmon/ina2xx.c
->> +++ b/drivers/hwmon/ina2xx.c
-> [ ... ]
->> @@ -484,6 +521,7 @@ static int ina226_alert_limit_write(struct ina2xx_data *data, enum ina2xx_alert_
->>   				 INA226_ALERT_CONFIG_MASK, 0);
->>   	if (ret < 0)
->>   		return ret;
->> +	data->active_alert = INA2XX_ALERT_NONE;
->>   
->>   	ret = regmap_write(regmap, INA226_ALERT_LIMIT,
->>   			   ina226_alert_to_reg(data, reg, val));
->> @@ -492,9 +530,13 @@ static int ina226_alert_limit_write(struct ina2xx_data *data, enum ina2xx_alert_
->>   
->>   	if (val) {
->>   		mask = ina2xx_alert_type_to_mask(alert);
->> -		return regmap_update_bits(regmap, INA226_MASK_ENABLE,
->> -					  INA226_ALERT_CONFIG_MASK, mask);
->> +		ret = regmap_update_bits(regmap, INA226_MASK_ENABLE,
->> +					 INA226_ALERT_CONFIG_MASK, mask);
->> +		if (ret < 0)
->> +			return ret;
->> +		data->active_alert = alert;
->>   	}
->> +
->>   	return 0;
->>   }
-> 
-> [Severity: High]
-> Will this unintentionally disable active alerts if a 0 is written to an
-> inactive alert?
-> 
-> Because the read side was updated in this patch to return 0 for inactive
-> alerts, state restoration tools might now read 0 for an inactive alert and
-> subsequently write 0 back to it during initialization.
-> 
-> When ina226_alert_limit_write() is called with val == 0 for that inactive
-> alert, the code just before this hunk unconditionally clears the hardware
-> mask and the newly added line sets data->active_alert = INA2XX_ALERT_NONE.
-> 
-> Since val is 0, the if (val) block is bypassed, leaving all alerts
-> disabled. This seems to allow writes to an inactive alert to silently
-> disable the currently active alert.
-> 
-> Does this function need an early return or guard to ignore writes of 0
-> if the alert being written to is already inactive?
-> 
-Is that a valid concern ?
+> On 8/20/26 06:23, sashiko-bot@kernel.org wrote:
+> > Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> > - [High] Writing 0 to an inactive alert limit unintentionally clears the currently active alert, breaking the newly introduced alarm decoupling.
+> > [snip]
+> > 
+> > [Severity: High]
+> > Will this unintentionally disable active alerts if a 0 is written to an
+> > inactive alert?
+> > 
+> > Because the read side was updated in this patch to return 0 for inactive
+> > alerts, state restoration tools might now read 0 for an inactive alert and
+> > subsequently write 0 back to it during initialization.
+> > 
+> > When ina226_alert_limit_write() is called with val == 0 for that inactive
+> > alert, the code just before this hunk unconditionally clears the hardware
+> > mask and the newly added line sets data->active_alert = INA2XX_ALERT_NONE.
+> > 
+> > Since val is 0, the if (val) block is bypassed, leaving all alerts
+> > disabled. This seems to allow writes to an inactive alert to silently
+> > disable the currently active alert.
+> > 
+> > Does this function need an early return or guard to ignore writes of 0
+> > if the alert being written to is already inactive?
+> > 
+> Is that a valid concern ?
 
-Thanks,
-Guenter
+I don't believe so; this is documented behavior in
+Documentation/hwmon/ina2xx.rst:
+
+    Writing 0 to any `*crit` setting clears all `*crit` settings and
+    alarms.
+
+I might be gazing into the AI crystal ball a bit too deeply, but I think
+a secondary concern suggested in the report is that a tool could read
+all limits and later write them back in a way that ends with a zero
+write, which would disable an active alert. This is pre-existing
+behavior though, and I think that would be more of a script bug due to
+the current documentation.
+
+Best,
+Jared
+
+> 
+> Thanks,
+> Guenter
+> 
 
