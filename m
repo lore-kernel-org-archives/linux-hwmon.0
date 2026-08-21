@@ -1,78 +1,78 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CA73471D07
-	for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2026 14:21:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 901B731A555
+	for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2026 14:23:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787322083; cv=none; b=TGVFtQSafvm2MedSxFr8qZdq9vGwpsq4HGuTtXAD4olZlmH0KPesxSI0FrnL+ESEAJCtD7uYXE5NX7BzzygDr1BYIYnHdeUcx756yu9bpwXXMgyDlULe5nK99eEGqJUMolAV6cE1O9z6xf0cD8XKqj30eyQWq94dJ1BGUQD45pI=
+	t=1787322211; cv=none; b=dUVWgqaSvlNbI/Kumh0PoHwKN2DLYUNX+jjqzqjOh+ylFRiCd9gVw/QYTpL+iyr+5XlrHj1ugZkJXSQo7ISRl/EQ59nKVT6Ck2pW6dRxt+SjzRGTvqRZligtBskGDhUu5TX4OQgagFhAdZWU3rVpBaT/XCxLtUWL+bW6SsB75eg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787322083; c=relaxed/simple;
-	bh=95x6UgUlxaPm1d5NvFDzpq+9kEJ6eR0ufqiyyvmCgUU=;
+	s=arc-20240116; t=1787322211; c=relaxed/simple;
+	bh=iJ5zjD2EWw2yDJ5z4MSpVjmW6V+stFF2dP8kSOQKY70=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Wc6RUMKOekxlvBXdu3/IDN2ln0OT/urvQDGw0ZoOflE0BPWhh1jd4r84jcGC+MUbi1uOPQLDq92vyUViC6DvtyqN7IQm59amOszVe0j1ihXmxDF0u5kZkQXCByDbqbyBlV3ZRm7t7mgrzU/a7zx+7iTsduGEuNzj4atN1RSJVuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QwXwGv8V; arc=none smtp.client-ip=209.85.216.51
+	 Content-Type:Content-Disposition:In-Reply-To; b=DJY2wqXdOGyN0y0rNr8JcjMW3NzN/B5Rph9WBbFOHON8DYvRpffx+15vcCBrFGuVJlgYx9rjhrNtmjIVvigYbO6vb5iZ6CMQjUxCCFNaOPb3OrGn6DsP+pDSrpW3+d55oNKxFHPAvldIQ8CuwGe8Tv+CUZDqY8eok6p+Og6rAKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yier4Xh9; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QwXwGv8V"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-38de840f2f0so814888a91.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2026 07:21:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yier4Xh9"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-384930ca5e2so1051555a91.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2026 07:23:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787322081; x=1787926881; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787322207; x=1787927007; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=SXdfnuXNDne6hnaasWxjsMSIZ0AuRi/ByGqammioC48=;
-        b=QwXwGv8VaecsvkG9Bkk/Vgdl8mq+eoXEN6wIjEaf+F7d5E49nhmpxSJrSwmj2yIR6b
-         D9jWXuNsNVN7YuJ3SFMm+MXcdnAgZWcJ8TKaH9zZC8Q9hV7XmJtPOvS5EZAoT236cyQQ
-         sSpOW6mQrq/heFVS+beEwJnidir+8uBogtRijQchFhEFfVkFkGkVGy/wxbMzwWkNlMGL
-         ODR9t04B9zUD0NydHTek4xeJyRxOUSuIVrVtr/6w+4Ux2y9CMYMqDuTXkP3CJlqUxnMq
-         chG9hlEmicsxLcpLLFj0DxQj9vYjMVnBh9SPfzR9fyCuDp5haW60Bgg+glnBnhqX0kHH
-         9IcA==
+        bh=QEFJejdXEP132PW639xF3lV8S0Gso+8wMOBeJk4UlZM=;
+        b=Yier4Xh9iCsVEqGjmTOw6EdbngSngoMSzx7lKN8F37EN659bLub3ys3S91kbPbPOiX
+         Yu2g97TOmN4I9inCUBHfwYtrPJqcKFp0O8qUNg+TA62unGw9VJHUKWqZPqRdnjfbfslF
+         qDSIMOBiMaWuXCSf2RIwHuBIZwmEc5Oi3RrJm+fM6yZWo/nzTjnOyuX7a5qpkxyLwx1C
+         qLbtHtvsBdMkgc5kJhU7g+l+SCaMcM5wkXgX1vFhWC75NP9m8ht5oZXobfktWUfric65
+         ohmKUXGBVEJ68gn0ajCYm3x1SKFs7af4juAPH+pcCcnJEtxOVmYyOVccWBqhAqhGeBD8
+         0mTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787322081; x=1787926881;
+        d=1e100.net; s=20251104; t=1787322207; x=1787927007;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=SXdfnuXNDne6hnaasWxjsMSIZ0AuRi/ByGqammioC48=;
-        b=UgqYVIql5oJqh3Hih7BHXJlAP/bMb0XA3wTCcYTFlZ7NYjJQqAlK21YQrJXH6uEuJm
-         7+Hy6x2cwdNbIZPsMHKrq18W3KRZ5/ZbszlVnPyKl5jkQ4Syh/5hvtDc/JCW/Aha/L/I
-         as9/0SDGhUUAvIT5KjC2R3AEva8uKxt5gZQAYh2acRjBkG/6Iwm/u9dzKyCYiwtBWtPB
-         ek3dT8b0h1G2x0cVKcOn431gq/3DbjoKIpHmIdqwwPs3BT/L0oK4dsh4DAOKN8dO5D8w
-         t1xWMWJFSKgCNnqA136KycV7US4XWClrrIfQnKGFqFciTfdju2yw8R0BUMH0gPxyl5Lu
-         8x8w==
-X-Forwarded-Encrypted: i=1; AHgh+Rq88DMktZRHoE8G1nmPlAqOJyEvUMufn1y63qIU+Wc3v0otyn7aiWXdbuUzS+eGGYg7s2wJY1GgKJU98w==@vger.kernel.org
-X-Gm-Message-State: AFuF++mupJsONC1OPUt122pIV5NjmnN7QfB45law/hXskgtRNrHP8uv5
-	ig9WvkM3Pp1dqqJCJlUh4MjVi3ZAibcdSfKIglj39B5rKh8N5yzfs6n+
-X-Gm-Gg: AR+sD10Y8lydmiyzLSR41cNsThenmeASgDz2tiZbfQQNhY07dC8thZo2Wn9vVkGg76x
-	PeGv31j9yVPa/lzJmRp1FTc2FOG+2TCTEfpkpHNCMBxgZlM5Idm+NoMvQzCtYAvRWuH7IHtsrpi
-	/6MVuZYWK0HravJt87DLoHfVkKkXvBKwsna9q2+LLjogCAtJ/5z/a8mml4lvSZ2GSbZhfouAoGS
-	XIiyO26a6IMjWus7D0MSFidZ2JZP7+4GZoBm7ttL6DDaQAuR2lyNZCw9ndAKYFA9GfFgi8eelJD
-	OOfNasTskiz0DGRbTL+ephB2Q5kOqFWVPWpD344rwO9ZakIQTIj2PJ2w+F6rDRHBK9vFScIcCM8
-	zGR66aV7+LYfEYxkeZHByG+jRELxr9J498mU+QLxuvAo35oODjFXxu3r6cUvGPygmxnGhUfn9ig
-	NEtTDdIKCVaXhrJ2W+9x9Tb71roNVihgw=
-X-Received: by 2002:a17:90b:5303:b0:38e:5ac1:9517 with SMTP id 98e67ed59e1d1-395c354cbffmr12802197a91.3.1787322081476;
-        Fri, 21 Aug 2026 07:21:21 -0700 (PDT)
+        bh=QEFJejdXEP132PW639xF3lV8S0Gso+8wMOBeJk4UlZM=;
+        b=fPDrHmyL0ix8Pyf6OkkSVueoSSw7ve9Bx1FnUKK9rnMfFpXfV0UwFsxuB4CtEhRTGX
+         qrAJDDb9YMcsUNNT6Zg0eHz58WsE43/0AEmutpuzLCY+s8VwJQN0CWeRiTZAq0DmTzOd
+         yawDV7q3Mdb2Tk8MBVcoADYJv9JY3aoi5Ta5ZbnFXhYxvHYMq/3cyXNzIZ+5pUBvW1Uc
+         TDZbhUVhJ8QtgoyXdM8e4vxWNojwWap1tSKLShnC8MokYKPY20qTAEXthcekC+zxLmIz
+         0DSH62ucdg/1gQdVX1bL681fPIwg+NNLkfJxb6b+Ad2PFW3AFRkxqJV2OfUzcRO2JhYu
+         t2Uw==
+X-Forwarded-Encrypted: i=1; AHgh+Ro4BAtUXXr/og6QnxfH0KU5cdsYdGUEdFZJarHi1zNYghnnJgR+f5A5kz3bGwrReJMkyfT7cBXmv/47yw==@vger.kernel.org
+X-Gm-Message-State: AFuF++n3eCNaGNCFrKByPItSbEMswJeunwfzu74MB9sL59SRnkjf2MLx
+	5e6YTQYUKPURSVsmdCJMEhsHCQXKoijXgTNMicZmbvVOPirr02UKp81B
+X-Gm-Gg: AR+sD110ePvkrWOBmfpFQoASB685RwB48wbwNhYIzJcpxs33ndPghK65CtbTJJKr+Ve
+	WJnu/cJFTjXRHibl1CWUrRnN5kQ1KzYH6kyTPUVN1JnHRRr0/gdq/jQz6kU1JvYIwndPp6IuM5l
+	6beoFq8vpz37HI0KhvyTc2zphF1HBnAUA+SAzYa/x7W71dIX2kPN3U1T4lVduNMQY8A7bZ1otFR
+	M9xY777l1LQVEDBpXT7bAQB9sTtEcVP3d4uzWvqFR0sZKYRW2ts232P/BbEW5FzBe0bBN448uzs
+	zPnmANSCe1whGUfsxlL52XGGZoIncJQgtiiF1ubVZ6a+uPKYqmWe1tarQ6NYUFC+wSjDLcbR0F7
+	pxgXxnSJkQuvGt1WgBhlFrjzSsP4jpDJtSJsOzol70k7JWXBd2MLT6n9qtEiQlOtKnTpxrO2PUJ
+	PLFxZwYjUTzyw4HWk5T9+e776vKPdZsmbwfSXfhwic6jEHVBFsS++uEg8+bGnsBt0p8sug6vxw1
+	g==
+X-Received: by 2002:a17:90b:394b:b0:381:9028:5945 with SMTP id 98e67ed59e1d1-395c384d95bmr12901407a91.14.1787322207392;
+        Fri, 21 Aug 2026 07:23:27 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327bf10d475sm30707004eec.18.2026.08.21.07.21.18
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1416aea2429sm25714380c88.15.2026.08.21.07.23.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2026 07:21:19 -0700 (PDT)
+        Fri, 21 Aug 2026 07:23:26 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 21 Aug 2026 07:21:17 -0700
+Date: Fri, 21 Aug 2026 07:23:25 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Alessandro Zini <alessandro.zini@siemens.com>
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: trivial-devices: Add Sensirion STS4x
- series
-Message-ID: <0319921d-dbcc-4150-8c59-de3cd4f299c8@roeck-us.net>
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] hwmon: (sht4x): Add support for Sensirion STS4x
+ temperature sensors
+Message-ID: <e081c728-92e5-493b-ac28-9473eade7e82@roeck-us.net>
 References: <20260821091924.18975-1-alessandro.zini@siemens.com>
- <20260821091924.18975-2-alessandro.zini@siemens.com>
+ <20260821091924.18975-3-alessandro.zini@siemens.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -81,35 +81,23 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260821091924.18975-2-alessandro.zini@siemens.com>
+In-Reply-To: <20260821091924.18975-3-alessandro.zini@siemens.com>
 
-On Fri, Aug 21, 2026 at 11:19:23AM +0200, Alessandro Zini wrote:
-> Add "sensirion,sts40" as compatible for the Sensirion STS4x/STS4xA
-> series of digital temperature sensors.
+On Fri, Aug 21, 2026 at 11:19:24AM +0200, Alessandro Zini wrote:
+> The Sensirion STS4x series is the temperature-only variant of the
+> SHT4x family. It shares the same I2C command set, conversion formulas,
+> CRC checksum, and timing with the SHT4x, but only returns temperature
+> data (3 bytes: 2 data bytes + 1 CRC byte).
+> 
+> Add support for the STS4x series by dynamically adjusting the read
+> response length, suppressing humidity channel attributes when probed
+> as STS4x, and omitting heater sysfs attributes.
 > 
 > Link: https://sensirion.com/resource/datasheet/sts4x
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 > Signed-off-by: Alessandro Zini <alessandro.zini@siemens.com>
 
-Applied.
+Applied. I'll send patches fixing the pre-existing issues reported by
+Sashiko later today.
 
 Thanks,
 Guenter
-
-> ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> index 435c4baab4365..48ded1b746723 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -423,6 +423,8 @@ properties:
->            - sensirion,sht21
->            - sensirion,sht25
->            - sensirion,sht4x
-> +            # Sensirion temperature sensor with I2C interface
-> +          - sensirion,sts40
->              # Sensortek 3 axis accelerometer
->            - sensortek,stk8312
->              # Sensortek 3 axis accelerometer
