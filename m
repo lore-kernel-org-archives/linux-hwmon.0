@@ -1,213 +1,282 @@
-Received: from omta-ad1-fd1-2101-ap-sydney-1.aib29aea255.vm.email.ap-sydney-1.oci.oraclecloud.com (aib29aea255.vm.email.ap-sydney-1.oci.oraclecloud.com [192.29.151.255])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA0130568B
-	for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2026 03:27:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.29.151.255
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE1F3783C5
+	for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2026 03:35:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787282852; cv=none; b=dO/3HNLqwu+TjbpTr1cGy3XSPkaNcmqACxX69b9ppU8NuihSQZux74ETDf40a8W9fZKwOz/x6SvEwSbA03td9HmnMf/76WA3+UMWpqX7b/b7+gHae5BMwtexKrWYs4gWpXjCF+q4Eyn152PPSEJTK1RQ6G1RNeqgUoUiPwQcz0o=
+	t=1787283330; cv=none; b=jUxr7m7ZybvuvoHD+mWEjiQ66mlfkco0r4r/aN09pL8maP2Kay+jKpNTx6NufTHblAEDNXv4Y7jzX9xzr59t0Fgq+8H1oEG48fvFIxqKII/7Pg2ty2Oa8OOzo6aHyAvF8b4LvFO3/nHDRrQrKiEhHI0JhGzq9BASJ83Ke2zvvcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787282852; c=relaxed/simple;
-	bh=h7Ve+n7gLalVN/hamq+9sOt/wIp9NFoxX09l0/unmsU=;
-	h=Message-id:Date:MIME-version:Subject:To:Cc:References:From:
-	 In-reply-to:Content-type; b=o47PytrO+KD6gNezdFhGxX0Tgi7FGEi8a4GJkz+4e4LFToIaimDNTpaMXD4lY6mF44px7DJJVvxvn6NqICbcG8oEVL1QGinHnW+MKsJX37pDqLvFY9aRnYZs44rO2iJN3y+LJG6H7nWU2GAOICl84H1/SzYm2TO1w0LrHABrYc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=stevetech.au; spf=pass smtp.mailfrom=syd1.rp.oracleemaildelivery.com; dkim=pass (2048-bit key) header.d=stevetech.au header.i=@stevetech.au header.b=T/uhddmt; dkim=pass (2048-bit key) header.d=syd1.rp.oracleemaildelivery.com header.i=@syd1.rp.oracleemaildelivery.com header.b=NG1M6rp5; arc=none smtp.client-ip=192.29.151.255
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=stevetech.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=syd1.rp.oracleemaildelivery.com
+	s=arc-20240116; t=1787283330; c=relaxed/simple;
+	bh=B1ouq7zNk3OffF9x05iRPTwxZeo6B5tYmbwVJug955A=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=mZII340wXzhWPmnX7gl+PspM88G1xCIE0C1ZcJvC5opcrpokeALikxBNYT/ZNLv1cCcfy5gKleKaiYawaaweUU2XZLVSzn+/OtaiTTnseAMWHmXed4JDskH82Pf6fEdnpBhXSLyuGsU6wCAM+WxqHgaFJS1+FY5lThCO6f1eNqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VnrhaUv2; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=stevetech.au header.i=@stevetech.au header.b="T/uhddmt";
-	dkim=pass (2048-bit key) header.d=syd1.rp.oracleemaildelivery.com header.i=@syd1.rp.oracleemaildelivery.com header.b="NG1M6rp5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=oracle-2026;
- d=stevetech.au;
- h=Date:To:From:Subject:Message-Id:MIME-Version:Sender:List-Unsubscribe:List-Unsubscribe-Post;
- bh=L66ir+PivH58IHajuTfLolp/B5mG7kVirbvlAHl33II=;
- b=T/uhddmtiSJQsIdDtw/nihZR76dG+SW/oxiQ97az6qo4myfzLlAfYsLYt6qfROdtAGblq8g/EFEQ
-   bhZNarafucik5CmiP4739mrFiI4q0VKLHVO3Z6O9DKc0FI8qPTdY7hs4ZRJeNsFbiV/sjFjX6BtW
-   lOojW00stekTsdIPInZbDlqcGEwlXBwHabdtyzF/pgMe1MPMOE6VRSwpGeGa2XmZpDc/e+iqi/H0
-   kv5uTfIVzqZyPv98pHDiJnkw0W5+FVJVeDflYcd0aOLXZ6EYK+YAn/LeqPFSKW9PKDzcaIE6+3gs
-   t/8Dx4r4/uWnEjwuszMs4lYSaUhj51FrHUI7qA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=prod-syd-20200122;
- d=syd1.rp.oracleemaildelivery.com;
- h=Date:To:From:Subject:Message-Id:MIME-Version:Sender:List-Unsubscribe:List-Unsubscribe-Post;
- bh=L66ir+PivH58IHajuTfLolp/B5mG7kVirbvlAHl33II=;
- b=NG1M6rp58lLliR9W8Qhke4IPIjDw6phLNsggQhW6wuruxTnsigQNDP5XUbKyIh/PZ6k6ZEwfLljj
-   trncZFqN9OQUAvN9V/Om+KfjP9HTcCmOuKkEjvr7u1FWiRYkxLkVgeYzheCiwRev3eug5z+2zCn8
-   0LaZiRMj87OqOtifal6w7YY8mXlVyrmbBzSvP1n12XYK3/vF5yCC7Hep69QskOf55DnBaWR6Tinu
-   JuaHvv1PmPxIQrp0FYOQGFfzK0LsBQ6vKUHfnTk7w9UMEfNk7Gj8V6uZ3BQE2F2K182I6PiZH9zB
-   ZBOatJRhRK9Y0S8QUVLeaIiMb32jjoLMGR2XtA==
-Received: by omta-ad1-fd1-2101-ap-sydney-1.mnat.vcndpsyd.oraclevcn.com
- (Oracle Communications Messaging Server 8.1.0.1.20260722 64bit (built Jul 22
- 2026))
- with ESMTPS id <0TK31OT2MO9S9F70@omta-ad1-fd1-2101-ap-sydney-1.mnat.vcndpsyd.oraclevcn.com> for
- linux-hwmon@vger.kernel.org; Fri, 21 Aug 2026 03:27:29 +0000 (GMT)
-List-Unsubscribe-Post: List-Unsubscribe=One-Click
-Message-id: <7fac8b19-af18-4365-94d6-a6bd18076abb@stevetech.au>
-Date: Fri, 21 Aug 2026 13:27:28 +1000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VnrhaUv2"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-848761b5897so194853b3a.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 20 Aug 2026 20:35:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787283327; x=1787888127; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=OlQ97Apv2CPkVoHg6S8Gou0Qv9jKg/Qt6XZBOTaFmHE=;
+        b=VnrhaUv2dYCrSiZGhJIvCZ8tV7LnOpm60K2LIMMZzCw3FFjMuT8C23WKtg6yl1fowv
+         W5Gq4KwK7y/M29WzGPX73wNw3JgxNFkyny25CZgqnicLG8hki6jRIpcVeE2WGMXz55sJ
+         0TJSG5KKG/u3W8orCNz/nFQMDrOLV39Lp2np5I/T6rGhTfpOKMBJWT5lvGRpbgrSnBqG
+         IHK1GtHuMOR+xspbJ4sIKQg6xECz6Wh3pU5Im6LU9C8TMK9YamK5ZmrrgAaPhNaJggzD
+         2CcZiSauWJAymUfd7ZnbKzdTJRDdicXFiobBfjzv3j8CJb1uPjq4VQjs4Nzih+E57HKa
+         cnGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787283327; x=1787888127;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=OlQ97Apv2CPkVoHg6S8Gou0Qv9jKg/Qt6XZBOTaFmHE=;
+        b=YB1WeOzAq6eIeiA9B8bDF2llOAhZxRIy4UegG3UvV+YOkauBXo1DFdC26/PCr7lbBv
+         0R5/CPIPz8wCCSHbz4N39sfiqzhEr8knRmpomLPns/CdQPhR313cYT1bbT2K9L3oRD9Q
+         C9bleTYWrItdnBq44tDoFufeYkK1nSbaUJh2OSrsn7n9d8JOvC5yW53XhAi/xVdxKPjg
+         CKlo/8PyVuSIfT24QGI5i1aj6b9dkse+TA/lGh9067aCtcaEPFqxt0VRejTf+ObsFg07
+         2BpAVX18fbtCIc/465mToxvmB6I1MnP7aujfsij0ndoH7QM3q0qxMy8W0yk/RU0Go+ef
+         /qaQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rq5N2PBOvOMATBe/Va3KaWOrKM1sh7eGOAEFF06aJYh3f165gOdB8GYXsSlEhgnQCqs30PXsWMsYPVWLQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9pfpWpjLfhAZ+dA/r7I0wq3jp/Ba29QUYjq9w5Vy9KVxM2Ydm
+	9usGbNKgHPOMFdfUodsWR1s4xp/3z4clbfX9gh1grNkysJENQecFw//1
+X-Gm-Gg: AR+sD10FDl450PwhzrOF3ZC1I/oFy0osSWrcBrLa4nBIhJeL6en4ykvMTWze/EUdT9Y
+	N9dMsTQB/BmUBRG50yTlwfad0NirYxCaaJI3tsazXYGDifG3kGqwu9SE5V4WS3I0N5dD9ZiSgoI
+	msdSTODrpjIavwQGagNS8BeQS5nlX6NTnYa4P/ZraQ0YUw4BoOFTJWBEZBuzsS3QGnr1Jnpi0Un
+	9+rHrn4YGVIK+uQZYvv7xVqTkQ7ImlZqfA6MCSa5FY+bU0JFYpR9FgnuzlhewQbx2iYAscWba5S
+	hbVBSzZ9mA3ayVvSjs/6YyUKJULz9xM4YxDbmcPFG0hEpYOwxZvlF1xsjW2eq7vWAgTrOpvWikK
+	hr7aHrNNHr9eQ7wlMs6L/EhUfG60URy4XIRwsVYMJedUuGdxcwwk1CtV3lWvEMh3y5O/nhFfb3M
+	FUhtHVLTiPla9fyeoBpTQ22o/JRT7Y+s3GzACjdg2CYnVJZbIc+P2cwGqgZI24vf1cbUTm1Sqpk
+	EBLq6ZiJRzbflzC3nS4WHSGhFCqjDilzqieMaFgKg==
+X-Received: by 2002:a05:6a21:3a46:b0:3bf:63af:855 with SMTP id adf61e73a8af0-3cd2fddf03emr6085839637.1.1787283327385;
+        Thu, 20 Aug 2026 20:35:27 -0700 (PDT)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc15891a04csm2204271a12.15.2026.08.20.20.35.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Aug 2026 20:35:27 -0700 (PDT)
+From: a0282524688@gmail.com
+To: lee@kernel.org,
+	Ming Yu <tmyu0@nuvoton.com>,
+	Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: linux-kernel@vger.kernel.org,
+	Ming Yu <a0282524688@gmail.com>,
+	linux-gpio@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	mfd@lists.linux.dev
+Subject: [PATCH v7 01/10] mfd: nct6694: Move module type macros to shared header
+Date: Fri, 21 Aug 2026 11:34:56 +0800
+Message-Id: <20260821033505.4017901-2-a0282524688@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260821033505.4017901-1-a0282524688@gmail.com>
+References: <20260821033505.4017901-1-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC] hwmon: Add Support for PMIC5000 Power Management ICs
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Andi Shyti <andi.shyti@kernel.org>, linux-hwmon@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
- Stephen Horvath <s.horvath@outlook.com.au>
-References: <20260819-pmic5000-v1-1-e5e0ddcf0863@stevetech.au>
- <6b8bf838-011f-46b9-a2a8-379de9cceddf@roeck-us.net>
-From: Stephen Horvath <linux@stevetech.au>
-Content-language: en-AU, en-US, en-GB
-In-reply-to: <6b8bf838-011f-46b9-a2a8-379de9cceddf@roeck-us.net>
-Content-type: text/plain; charset=UTF-8
-Content-transfer-encoding: 7bit
-Reporting-Meta:
- AAE0CRPkDXUCCkglQobUipg4J5mxfCGMKIbvqKb9veEutptuF/BYXQOZL+n+BC+g
- 9F/l1G9fNqweZphNlPpYqUMlvd2LjJ6v1MwDv7F4RQiViDg+xjKN8Dfpva+L5iMV
- J2fLjUw8MsPOlNpUHaKVqQ7Ff6K1DHCuv0lTeJ3U4oFisDg3CuxbHMNKV9jHgGEx
- 0kQA4rkw6KTmiwi6St1GXY5OZYVsf4gZsh8MUUY6UlTkM15lVkkgjjuWBUQJIDVA
- KYGiZZvcX7wcytJnMq5V3axVqGdhJQmiM1tdJpKAO/trW11wOFTQKjqnDNjeCYol
- sM+7txYLLOafe1rM8EBwyCcaMTiPE1JCpcz8S4EhSi5bo+uPa7tX4Dm4MF3M4Ofw
- mOWl+zWuzUCtyzJ5pcrgirVxpzVN42bQiMnsS6DC1hCR/pD9oxUDw/vv8cLfOw==
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi Guenter,
+From: Ming Yu <a0282524688@gmail.com>
 
-Thanks for your review!
+Move NCT6694_XXX_MOD macro definitions from individual sub-device
+drivers into the shared header include/linux/mfd/nct6694.h.
 
-On 21/8/26 01:34, Guenter Roeck wrote:
->> - Does this belong in HWMON, or should it be part of the regulator
->> 	subsystem?
-> 
-> It depends on its functionality. Is this just for monitoring, or are the voltages
-> controllable ?
+This is a prerequisite for supporting multiple transport interfaces
+(USB, HIF) without duplicating these definitions.
 
-This driver is just for monitoring. They could be controllable, but I
-haven't implemented that as changing the voltage of active RAM modules
-doesn't seem safe (without retraining and so on).
+No functional change.
 
->> +in0_enable		Whether SWA is enabled (RO)
-> 
-> Does that enable the voltage or its monitoriong ? The enable attribute is
-> only to enable monitoring, not to enable the voltage. If this is a
-> controllable voltage, the driver should be a regulator driver, as Sashiko
-> suggested.
+Signed-off-by: Ming Yu <a0282524688@gmail.com>
+---
+Changes in v7:
 
-It just queries whether that output is enabled. I'll remove it though as
-the disabled channels are hidden by is_visible anyway.
+Changes in v6:
 
->> +/* PMIC5000 registers. */
->> +// clang-format off
-> 
-> No way. Are you serious ?
+Changes in v5:
+- Split from the monolithic v4 patch to follow the single logical change
+  principle.
 
-clang-format would break the alignment of the #defines; and there's a
-few other drivers with "// clang-format" in them, so I assumed it would
-be okay (though none are hwmon). I'll remove it next revision.
+ drivers/gpio/gpio-nct6694.c         |  7 -------
+ drivers/hwmon/nct6694-hwmon.c       | 21 ---------------------
+ drivers/i2c/busses/i2c-nct6694.c    |  7 -------
+ drivers/net/can/usb/nct6694_canfd.c |  6 ------
+ drivers/rtc/rtc-nct6694.c           |  7 -------
+ drivers/watchdog/nct6694_wdt.c      |  7 -------
+ include/linux/mfd/nct6694.h         |  9 +++++++++
+ 7 files changed, 9 insertions(+), 55 deletions(-)
 
->> +
->> +
-> 
-> Please run checkpatch --strict on your patches and fix what it reports.
+diff --git a/drivers/gpio/gpio-nct6694.c b/drivers/gpio/gpio-nct6694.c
+index a8607f0d9915..53bfc5983648 100644
+--- a/drivers/gpio/gpio-nct6694.c
++++ b/drivers/gpio/gpio-nct6694.c
+@@ -13,13 +13,6 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ 
+-/*
+- * USB command module type for NCT6694 GPIO controller.
+- * This defines the module type used for communication with the NCT6694
+- * GPIO controller over the USB interface.
+- */
+-#define NCT6694_GPIO_MOD	0xFF
+-
+ #define NCT6694_GPIO_VER	0x90
+ #define NCT6694_GPIO_VALID	0x110
+ #define NCT6694_GPI_DATA	0x120
+diff --git a/drivers/hwmon/nct6694-hwmon.c b/drivers/hwmon/nct6694-hwmon.c
+index 6dcf22ca5018..581451875f2c 100644
+--- a/drivers/hwmon/nct6694-hwmon.c
++++ b/drivers/hwmon/nct6694-hwmon.c
+@@ -15,13 +15,6 @@
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ 
+-/*
+- * USB command module type for NCT6694 report channel
+- * This defines the module type used for communication with the NCT6694
+- * report channel over the USB interface.
+- */
+-#define NCT6694_RPT_MOD			0xFF
+-
+ /* Report channel */
+ /*
+  * The report channel is used to report the status of the hardware monitor
+@@ -38,13 +31,6 @@
+ #define NCT6694_TIN_STS(x)		(0x6A + (x))
+ #define NCT6694_FIN_STS(x)		(0x6E + (x))
+ 
+-/*
+- * USB command module type for NCT6694 HWMON controller.
+- * This defines the module type used for communication with the NCT6694
+- * HWMON controller over the USB interface.
+- */
+-#define NCT6694_HWMON_MOD		0x00
+-
+ /* Command 00h - Hardware Monitor Control */
+ #define NCT6694_HWMON_CONTROL		0x00
+ #define NCT6694_HWMON_CONTROL_SEL	0x00
+@@ -53,13 +39,6 @@
+ #define NCT6694_HWMON_ALARM		0x02
+ #define NCT6694_HWMON_ALARM_SEL		0x00
+ 
+-/*
+- * USB command module type for NCT6694 PWM controller.
+- * This defines the module type used for communication with the NCT6694
+- * PWM controller over the USB interface.
+- */
+-#define NCT6694_PWM_MOD			0x01
+-
+ /* PWM Command - Manual Control */
+ #define NCT6694_PWM_CONTROL		0x01
+ #define NCT6694_PWM_CONTROL_SEL		0x00
+diff --git a/drivers/i2c/busses/i2c-nct6694.c b/drivers/i2c/busses/i2c-nct6694.c
+index 1413ab6f9462..ef3329f34246 100644
+--- a/drivers/i2c/busses/i2c-nct6694.c
++++ b/drivers/i2c/busses/i2c-nct6694.c
+@@ -12,13 +12,6 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ 
+-/*
+- * USB command module type for NCT6694 I2C controller.
+- * This defines the module type used for communication with the NCT6694
+- * I2C controller over the USB interface.
+- */
+-#define NCT6694_I2C_MOD			0x03
+-
+ /* Command 00h - I2C Deliver */
+ #define NCT6694_I2C_DELIVER		0x00
+ #define NCT6694_I2C_DELIVER_SEL		0x00
+diff --git a/drivers/net/can/usb/nct6694_canfd.c b/drivers/net/can/usb/nct6694_canfd.c
+index e5f7f8849a73..262b4c26c9d4 100644
+--- a/drivers/net/can/usb/nct6694_canfd.c
++++ b/drivers/net/can/usb/nct6694_canfd.c
+@@ -18,12 +18,6 @@
+ 
+ #define DEVICE_NAME "nct6694-canfd"
+ 
+-/* USB command module type for NCT6694 CANfd controller.
+- * This defines the module type used for communication with the NCT6694
+- * CANfd controller over the USB interface.
+- */
+-#define NCT6694_CANFD_MOD			0x05
+-
+ /* Command 00h - CAN Setting and Initialization */
+ #define NCT6694_CANFD_SETTING			0x00
+ #define NCT6694_CANFD_SETTING_ACTIVE_CTRL1	BIT(0)
+diff --git a/drivers/rtc/rtc-nct6694.c b/drivers/rtc/rtc-nct6694.c
+index 35401a0d9cf5..c06902f150c9 100644
+--- a/drivers/rtc/rtc-nct6694.c
++++ b/drivers/rtc/rtc-nct6694.c
+@@ -14,13 +14,6 @@
+ #include <linux/rtc.h>
+ #include <linux/slab.h>
+ 
+-/*
+- * USB command module type for NCT6694 RTC controller.
+- * This defines the module type used for communication with the NCT6694
+- * RTC controller over the USB interface.
+- */
+-#define NCT6694_RTC_MOD		0x08
+-
+ /* Command 00h - RTC Time */
+ #define NCT6694_RTC_TIME	0x0000
+ #define NCT6694_RTC_TIME_SEL	0x00
+diff --git a/drivers/watchdog/nct6694_wdt.c b/drivers/watchdog/nct6694_wdt.c
+index bc3689bd4b6b..4c06ac105562 100644
+--- a/drivers/watchdog/nct6694_wdt.c
++++ b/drivers/watchdog/nct6694_wdt.c
+@@ -20,13 +20,6 @@
+ 
+ #define NCT6694_WDT_MAX_DEVS		2
+ 
+-/*
+- * USB command module type for NCT6694 WDT controller.
+- * This defines the module type used for communication with the NCT6694
+- * WDT controller over the USB interface.
+- */
+-#define NCT6694_WDT_MOD			0x07
+-
+ /* Command 00h - WDT Setup */
+ #define NCT6694_WDT_SETUP		0x00
+ #define NCT6694_WDT_SETUP_SEL(idx)	(idx ? 0x01 : 0x00)
+diff --git a/include/linux/mfd/nct6694.h b/include/linux/mfd/nct6694.h
+index 6eb9be2cd4a0..3c683e317aa3 100644
+--- a/include/linux/mfd/nct6694.h
++++ b/include/linux/mfd/nct6694.h
+@@ -8,6 +8,15 @@
+ #ifndef __MFD_NCT6694_H
+ #define __MFD_NCT6694_H
+ 
++#define NCT6694_HWMON_MOD	0x00
++#define NCT6694_PWM_MOD		0x01
++#define NCT6694_I2C_MOD		0x03
++#define NCT6694_CANFD_MOD	0x05
++#define NCT6694_WDT_MOD		0x07
++#define NCT6694_RTC_MOD		0x08
++#define NCT6694_RPT_MOD		0xFF
++#define NCT6694_GPIO_MOD	NCT6694_RPT_MOD
++
+ #define NCT6694_VENDOR_ID	0x0416
+ #define NCT6694_PRODUCT_ID	0x200B
+ #define NCT6694_INT_IN_EP	0x81
+-- 
+2.34.1
 
-Will do!
-
->> +struct pmic5000_data {
->> +	struct regmap *regmap;
->> +	struct mutex mode_lock;
->> +	struct mutex adc_lock;
-> 
-> Explain why those are needed on top of the hwmon subsystem lock.
-
-I didn't know the subsystem lock existed, I'll remove them.
-
->> +	if (channel != 0)
->> +		return -EOPNOTSUPP;
-> 
-> Unnecessary check.
-
-Sure.
-
-> 
-> Unnecessary channel checks (at least if the is_visible function does its job
-> and the info data is correct).
-> 
-
-Okay.
-
->> +	case 6: {
-> 
-> Why "{" ?
-
-No reason, I'll remove it. I had previously declared something there.
-
->> +	if (channel >= 0 && channel <= 3) {
-> 
-> channel is always >= 0.
-I wasn't too sure, thanks for that!
-
->> +	/*
->> +	 * The host shall wait minimum of 9 ms delay after the input selection
->> +	 * for ADC readout and the actual readout
->> +	 *
->> +	 * msleep may sleep for up to 20ms, which is fine.
-> 
-> No, it isn't fine.
-
-Fair enough, I'll change it to fsleep.
-
-> Also, why wait if the channel was not changed ?
-
-Good point.
-
->> +	*val = 1 << (regval & 0x03);
-> 
-> 		BIT()
-
-Thanks!
-
->> +static int pmic5000_write_interval(struct pmic5000_data *data, long val)
->> +{
->> +	struct regmap *regmap = data->regmap;
->> +	u32 regval;
->> +	int err;
->> +
->> +	switch (val) {
->> +	case 1:
->> +		regval = 0;
->> +		break;
->> +	case 2:
->> +		regval = 1;
->> +		break;
->> +	case 4:
->> +		regval = 2;
->> +		break;
->> +	case 8:
->> +		regval = 3;
->> +		break;
->> +	default:
->> +		return -EINVAL;
->> +	}
-> 
-> find_closest() would be more appropriate here. We don't usually expect users to know valid
-> update intervals.
-
-Thanks!
-
->> +static int pmic5000_common_probe(struct device *dev, struct regmap *regmap)
-> 
-> Why pmic5000_common_probe() ? There is only one caller.
-
-Good point, I'll move it.
-
->> +static const struct of_device_id pmic5000_of_ids[] = {
->> +	{
->> +		.compatible = "jedec,pmic5000",
-> 
-> jedec,pmic5000 is not documented.
-
-Is there some centralised database for device tree identifiers, or does
-it just need to be added to trivial-devices.yaml or something?
-
-Thanks again for your review!
-Steve
