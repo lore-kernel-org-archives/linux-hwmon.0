@@ -1,77 +1,77 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5190E19D89E
-	for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2026 19:47:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 483F335E1A4
+	for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2026 19:47:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787341640; cv=none; b=bh4Ptje6WP6kA9VXZ0Wb9SBdQ97vTXZfeQW9DYeJh8P3AtU1w3jMj0LVnugo9CliH5+ygkuCdTt5sUi5ph+j/pQqDoaQsMrp+ce8KhJ4YLmJpX3khRABG5Fd4KJ2sjd6Ja722ZVkd79Su/jrQFkxnjEwoMe8NLLouRQaUKdwJow=
+	t=1787341670; cv=none; b=bZbWirMB46A3A4htN9LdMPWT2vTwbVZPNfxrpQUwsfClMwYLGDjNiuR8RjRGIc8dy907hKzIX2oQM1l6l/4Qeu9OtSMDlfjLBrO7akUx9+xfPI0ivbnBPVVouoNtZ38BJw6ptwR8mHciJCkkVlfx4IMoyFJDjexZ6I3Dqzbh7gA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787341640; c=relaxed/simple;
-	bh=OtsP4QBJo/QQfeijQpHyFypjTXEdBkC/ol+rLalK8OE=;
+	s=arc-20240116; t=1787341670; c=relaxed/simple;
+	bh=bRWIazV+ymv8+U20yknxenaLSaulwdS+5GKnd7FTiNk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=byqMaYIk9bIFveoBej+KDD98NYTlAo9VKAm/dWeo811lnQgGO+BSsrBAktgrGuoB7Ik3lbUBmRcu7DJD8iYp9fq/zz3xg+6DUmMr6qbPrdDCo0lhz21QoTDx1q7l8e0emJlzUD+kMZt1v7TB1QRzYrpSJAqTvAPaXzkxu78iJhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rBzCgbAR; arc=none smtp.client-ip=209.85.210.176
+	 Content-Type:Content-Disposition:In-Reply-To; b=YV4Mox40A74QIuup1sMviGabI+bd0h5qNxG8cMejLxRsih1Y8p22W/9u208Bv+KjKdZMmrQyvRchbhSVEM0sIYvBd8MEwVHjpIcO9uXFbidlyX2rn0gKnNkn5kkXNsYQ676Pchp5PuE16Xvt42RNA+SmDHWddm5Fa8ERbIuZjUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mx2cd7EH; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rBzCgbAR"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-84830c774a0so1520084b3a.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2026 12:47:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mx2cd7EH"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2ceaf8a1265so16246855ad.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2026 12:47:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787341638; x=1787946438; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787341668; x=1787946468; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=1QIGS9D8gpK9URduGL5oVTCiJC6QwFkwaFqcuNIH2Bo=;
-        b=rBzCgbARNOaHz+NdCRXjXMJCS0VwrI6GVHWKjT6KAShwNR7liNLkEfx3wFhEhiB+aC
-         pVucSa8/RSaddda8W1yyiWB78GoA1gGaT2HcBYihHW1tqdV/22DGYP9BMLePoJJLrAt0
-         acxaw72xXiIh51kJI52kJBm8Md86Qtd5xjuo3XMO7Le4gA0EdnOhAdaUuoHsmGEegRB1
-         QIrxR5QISNijSkJyaXVpywPSpr9Sx1iIDAzcOf+BD+wFeFXZ4c9IUJhTBf3QEy9EacDG
-         cEbD5x1hEZ7cy1AAPcXANyQ8dD+t1B5l3Xl1pCWNwojqv7cIjFIqrcanC7zH7RbKeCoW
-         0eZQ==
+        bh=gLN5uxM7nwtRltN6fOsWcMDmnEMUIMPWUARQx4rNMtY=;
+        b=mx2cd7EHjwxp5t920xwZPm91HWWRCnM50B9zSVTPz3HMFLT3tmtHOI93sGKYSMEE/Y
+         MAQx9aOtOnkbXtxLxAJLk685cB8ppFQevsmZOdBwj+jAvZyEnJaiXWsnSpe0NWJ21X+d
+         frJ3UVhcKIfkE8XNwyzoDcU2xY+AXhix7kKcv4nekDUfIbvLNu6BQ/9LXglNCYKkOAAr
+         OmJ9WrXCJx2qLjLDhNBwtqzEvVEptQVK7/MN/s6pezDRlLXsEPn3YkwCa4mXoF2+Z2MJ
+         x2kyd5Hyx01wwlpc8SvBM/FxC3oUuNWsCL+4YhmaBaPezEUiRYWIAwN+A0cgONfBDfsr
+         JFmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787341638; x=1787946438;
+        d=1e100.net; s=20251104; t=1787341668; x=1787946468;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=1QIGS9D8gpK9URduGL5oVTCiJC6QwFkwaFqcuNIH2Bo=;
-        b=OoUDXySLDnuGk2ZcAF1/jWCo2QeP07JlHxFpJe8CXKZtmVBxz3woaqOv/Kl5WtKKbU
-         qh01r/L/mF1MZgC7BEJMQa2avJmc2z4hGaZ1POmaHg56vd7OhiNSsYzUWXstzg8g1SVB
-         g0azfkBI1kJvKGjtYlFj4nmDLp0k/4yuasK2RE8ObvEu1R7888K4F8nBw3IJ3qeFCZix
-         +RScUVVdN1yIKvuZVm1jC7SSevJy+lXPf8YJvY0DRjzn9G/fFyCg3OoT7ZxQhE8IBaKE
-         XsR2Dg9SLqD3yEXoV9BmiMXJ46EIUmNIRm5QMmzT/kae0oOJQXm28PNw4h+980OtG4Ix
-         dIkQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rp3uQNZOYr2yAzEO7M/GA3Z/y77qc0VUgqInyQJhmp2UlT7wzvqNcAqsM1HLsYc9r0l4a1tPsgHNuqavw==@vger.kernel.org
-X-Gm-Message-State: AFuF++l1NlTsN8t07Oco0qVYpTUpDUWcgpHJt/oQDo22K3dJAiEO7U1M
-	aI2JDYjC2/FWHJuR5pyMR65MuHPQJoxiIxA2WoO7RdMk/p6+pfsyoBffPTeMmQ==
-X-Gm-Gg: AR+sD115znRUKXq1QwgyUPciWbs8wTaGUSvn8NkFD3FtrP8SjW6LAGzuwJxbXPNCdhp
-	hiqWyRSoG6O8mvcRwCbB0rXYVVFKO2kRl2sJFVU8S1WYE0Y6/oXQu+aS1t2TA3vG9xK/AEEizpG
-	+5P8cvGuVJmhfGsFsRz6oODfnOqLnijd4oUM2FrRj9wP3tO5xS4rozGpjCvIf5oHhn/+Xm+RWOt
-	EHa157iYsDvTOgXnKFr8X6SElFKxUUzVYwDiQ1lXpFtciH6LOc7F7KNR0qMt67BR/1oRtvekimO
-	qIYvQzG78POtfkQGSfvvnbLc8rT8U8JmwNBXXXUCtUIWJ59n0H3SLZ04JjzxrAlD7ojpR6ehpch
-	oZIgv3HPmKRbP9Oyxbamjj/og6znUPY+PTqLGXptZ+kyPHLnX8bcSMOe7LRBgLTm01Ar28P5RrC
-	Ac7jRB9UvKvQGeArImUoqXUvDeM1NIyq9iAM2BR/i277J/fre9rZZ4E9M7kN646n/kfrwzg6w44
-	T+8dWkvnjex
-X-Received: by 2002:a05:6a20:c78e:b0:3cd:f6c:6cdd with SMTP id adf61e73a8af0-3cd30139176mr19309732637.16.1787341638486;
-        Fri, 21 Aug 2026 12:47:18 -0700 (PDT)
+        bh=gLN5uxM7nwtRltN6fOsWcMDmnEMUIMPWUARQx4rNMtY=;
+        b=epanrgN7D1cLJfuClfWIuyUCt0qLxvemUg0Dk/i6E3mprCCjgnBJYItt+8R/cz7XkT
+         Fcm4YdWJmxSzWq0X8dXgyesY6YzO7oOLvDBo5+NZIhcw+DNjCbr+16aCztnEWd264W+n
+         oPBtNKKTIgZgLY/S3OUXEwMYUCWaq3nvnwG6IjkP7CRdrTYYau3dCLzy/6XdAPpdcEfW
+         yp3WX/XwB0uVwzPYQqLPmTw+VFltYg4zND8Nd5AUdnsQR6u13Md7Wc2goWub3a97+CvM
+         j7WoJw0qd1blAjXoZuGCuFeFQwWPHZUDNlfFnNxT4XASoqaOAI6YnwPpeIvkea3SNUfC
+         rMkQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rqeac+6wgUXFiTWJVlio03HIAsj7uZOiNFJz8ThoM5LT04A7c1lIuJfjk8jaDLeVTMBMwLLC8TEC91LwQ==@vger.kernel.org
+X-Gm-Message-State: AFuF++leskqE7fwNWzynu6hNkTl+UTD8nmAsqo7we6T8z1a8syYXqibI
+	IdC0CNcfyD5/bdyblczQ5vH8uUecOBdfhGIE2y66JYIM0SV2dCro7etQ
+X-Gm-Gg: AR+sD13Z4vAyK6AWYfd6lbfzs/3GxtA8n1MtIMvqB5nbd37RsXoYkhWRGc2ZX39NweU
+	dU4ex61xDNEki5Y7TyahMSZs/YN+l4rPLZuYuVm/HDAwBgGA39HgGoj3OxJsJiA3eX6lZlnGcR1
+	A7cHqkzVhTe+UnxYrbOdvJyODNAQtF5B9SW9a2OC9xB0OfRNUCY4GgOTN3Rdg4n4vUJ2eoGtg0D
+	rXYBxe7a+dHc/FW6EgHHIMb8FlamA6JuxYflf7R5zXXrGQ9mNZRwG7lGGW2KEjr0VjnbCrwkv7e
+	gvXj+jaGXme8MMw+bNmrVxcYzmiLVoWmGkOr+ZaKGfHL3jAuzfzqgr/jgx30lgdTNL97qly9zCe
+	nz2bYURgPiOFMqBZF+n1mFQGsHeMkPUer9OXIpSyjDmISPSqYfKOJI3YezsuwJW3st6g7d/9i8Q
+	HbttkNMgmvtqRMvqpFQa18F84xY+j+nuI62N8HVgrAJ5xSYDhuCTep2CtL7eCChcv3D6xc1Yt2s
+	g==
+X-Received: by 2002:a17:902:e949:b0:2d6:3c2f:6a5 with SMTP id d9443c01a7336-2d64b1d68bemr181943065ad.14.1787341668589;
+        Fri, 21 Aug 2026 12:47:48 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327bf15ff5dsm29097058eec.25.2026.08.21.12.47.17
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327bef3bb46sm26595453eec.3.2026.08.21.12.47.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2026 12:47:17 -0700 (PDT)
+        Fri, 21 Aug 2026 12:47:48 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 21 Aug 2026 12:47:16 -0700
+Date: Fri, 21 Aug 2026 12:47:47 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Jared Kangas <jkangas@redhat.com>
 Cc: Tzung-Bi Shih <tzungbi@kernel.org>,
 	Lothar Felten <lothar.felten@gmail.com>,
 	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] hwmon: (ina2xx) Parameterize ina2xx_data in
- ina226_alert_read()
-Message-ID: <5a9cbee1-1bf6-4a26-abac-1ddbcd46f888@roeck-us.net>
+Subject: Re: [PATCH v2 3/4] hwmon: (ina2xx) Replace masks with enum in alert
+ functions
+Message-ID: <10808f27-9074-4378-82df-7f3578618506@roeck-us.net>
 References: <20260820-upstream-ina2xx-in0-curr1-alarms-v2-0-fdce35abc41e@redhat.com>
- <20260820-upstream-ina2xx-in0-curr1-alarms-v2-2-fdce35abc41e@redhat.com>
+ <20260820-upstream-ina2xx-in0-curr1-alarms-v2-3-fdce35abc41e@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -80,11 +80,14 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260820-upstream-ina2xx-in0-curr1-alarms-v2-2-fdce35abc41e@redhat.com>
+In-Reply-To: <20260820-upstream-ina2xx-in0-curr1-alarms-v2-3-fdce35abc41e@redhat.com>
 
-On Thu, Aug 20, 2026 at 06:09:22AM -0700, Jared Kangas wrote:
-> Mirror ina226_alert_limit_read/write and use struct ina2xx_data instead
-> of struct regmap in ina226_alert_read's parameters.
+On Thu, Aug 20, 2026 at 06:09:23AM -0700, Jared Kangas wrote:
+> Instead of passing an explicit mask to alert/limit functions like
+> ina226_alert_read(), introduce an enum ina2xx_alert_type that can be
+> converted to a mask internally. This semantically separates current from
+> shunt voltage in helpers that use function masks, which previously saw
+> the same mask for the two functions.
 > 
 > Signed-off-by: Jared Kangas <jkangas@redhat.com>
 
