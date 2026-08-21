@@ -1,113 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D56F13612ED;
-	Fri, 21 Aug 2026 03:45:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AFC232F764
+	for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2026 03:52:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787283952; cv=none; b=m8rqfh0OmAvmoD+1wEvZ2w5f8hF02E7XLEy22Oiy/jeKee88m/XcOuikswh6qeG6Y9yL/tm7C+rLxgF/F+FmL7QNlUxBqnaF9GEbCuxkSudCtmC22+KYdxRpZNfLKZl6qkNdHXxbIyqiaYUqnHKmPVVjzMXhlWCPcMJdqhNxANM=
+	t=1787284343; cv=none; b=BdCDDoC2QkElq7rRScXIXL7JVp+OHRygh929mhgtYS/ypM0zwVu6VSKAlJA+GSUwkaYp0RbKOmQfPPewLZpGDvjUhTAtKg8ogAF1YYdaxeMlk6fMvrPMn/LxrvEcr4PGJftAe0kEfHs/GACCFe+mF8aN9zxfNdxdUe7lIq+z3C4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787283952; c=relaxed/simple;
-	bh=0Vydrt3ssMF7WVBka/76aNk8/QWPspNQVrPsn9wKnUA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=HmaOvGWgxs+LizGo/NZyyZO/74BMnCsOjCOzrfm5hELn7H8YGYVDZQb6ZfKVazzIZYmTTATLnlDJLKbrcykPjaetvtPC6PwWniiet3seFUzieGBMNd7niEEh+lopBZ5lhVzWMVdGVd1I+8T421KmvJXfZKeYhfx70qpOs2ktAWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P+ektRG3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787284343; c=relaxed/simple;
+	bh=H7cx3dxLR5ZkSrjHPDYzzT5hHYj0NJRb9zQhF2jRXMM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H5aw3M8bSj2w7At5+KM01u7NdPLwuHDcjaUTJKOYMyk/eqVfRI888mx/JLgWmBbFgj2RamfHNJF4HqADMqAhtndQ+sIz6oOPV03yFq0sYDy5gnsb7WFFIqcTpYWpcdBwEAYPFRqMFr14PVRrcJSfZWAGwXPfmoMu2KElgDEGTjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GXk/6Pil; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P+ektRG3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9FDD1F00A3A;
-	Fri, 21 Aug 2026 03:45:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787283951;
-	bh=pnHNL/K5OV3I+LBVvnHcJhb+X7M7xDnIDuy7LRzAooQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=P+ektRG3HRUo/AtCh5nFdXi9yhlhJzqOHapzTPIb7UZ0KNDtmeZ2XznSS1YLV0UQI
-	 jvEAuu93yP3hwxvPGDSnRp+lMBpfP54VHhdouNSYkDREh05sKW/Po1A23AlsIC+FBj
-	 FhEk0gRNonRd9V61YXUMaX4nY0sbND9xe00A6luxDageDmoxGsl5iJH/nQBYAIaAqg
-	 l3NTSZhVrPBFHi5tchJ+BPqL5H4ao9cfDjU0ezSYAJIPgE5nPwv3+CZknbT1G8qNQ3
-	 RCWNDTgMHEQLBKtSVbICk4Q5U8Pt6crXdXMjOQekJN5UGqUGxD6R8ytf4oqixBzlaB
-	 IQU7anY6cFhUw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v7 01/10] mfd: nct6694: Move module type macros to
- shared header
-Reply-To: sashiko-reviews@lists.linux.dev
-To: a0282524688@gmail.com
-Cc: linux-watchdog@vger.kernel.org, lee@kernel.org, linux-hwmon@vger.kernel.org, linux-can@vger.kernel.org, linux-rtc@vger.kernel.org, "Vincent
- Mailhol" <mailhol@kernel.org>, "Marc Kleine-Budde" <mkl@pengutronix.de>, mfd@lists.linux.dev, "Oleksij
- Rempel" <o.rempel@pengutronix.de>, "Alexandre Belloni" <alexandre.belloni@bootlin.com>, "Oliver
- Hartkopp" <socketcan@hartkopp.net>
-In-Reply-To: <20260821033505.4017901-2-a0282524688@gmail.com>
-References: <20260821033505.4017901-1-a0282524688@gmail.com>
- <20260821033505.4017901-2-a0282524688@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 21 Aug 2026 03:45:50 +0000
-Message-Id: <20260821034550.D9FDD1F00A3A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GXk/6Pil"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-851cbd64814so67745b3a.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 20 Aug 2026 20:52:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787284342; x=1787889142; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=bdUpRbJOePqwuGtI7k86e6iXxcPA/KBD5j3OTF6Xnr0=;
+        b=GXk/6PilwyR7gpb93GlGIvFfWrG3341YE0CdjAJO3VFfYLlgmEKBZP0wj3hUbcKIR1
+         xJ6xENHscy7/npwM5AfSmIJbQFnlV/e3t6Ks6xbIXhvcNA9BCOK40UpiVgrd1L/Gc/F8
+         FPZ2aVhprxfmA5Rgl/DeCFOhapDa96tY2oH89hd3ItqZUXev7zkBsSVTQMrawgZcYSTM
+         qjtTlhF4CcMkS6tNqukn8bIvfOCkEQrLYA5enE+wPYnm+QBhldonewbTCU6ZHKEO+Tlj
+         ZRl/+JTkUZk0DqtD6GvB5GGOpDHNBzmY1WCQrMEeB0cRnllwZQtpXwyrrHblRo/k1KCt
+         5ZRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787284342; x=1787889142;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=bdUpRbJOePqwuGtI7k86e6iXxcPA/KBD5j3OTF6Xnr0=;
+        b=WGlqwLhbXE/a/vI9q5zCMANj71eVaNig3RP3F/ANUtH96Jaa08Mjpb9FvHmoT6F9r8
+         YagYpzwUVZ0hFH5ZcgI36u3luGdq4wFWQEVyCu+lUnui2SEY64V8zhSDce9TDdD2bJYf
+         hoXBcH3MQfbhlPLtMbXAIvZ1QudpEAOt7b5VLjv83e4iL6L0YFHpftVKwnARNWjfUkUe
+         oar6tq60A3AsbACilmSuiK3/YuEqmuRM8V3w6cyIuZJDzmWINx5qzbPL7dd4eDtffZ5Z
+         KRJ+6JcacCEe2wmcmRNQG3+MvbK9sPYReFDvFuHXXXaFvmeujdQzvXAYu4tyJXIvXZZH
+         aH3A==
+X-Forwarded-Encrypted: i=1; AHgh+RostOwXQl3QmEBLkIaQcYqcWoD/Pffw7RXaVyNYOuAgxVRdi4x60Z5dBlbMpMf+m5274IzX61F3CBWV5A==@vger.kernel.org
+X-Gm-Message-State: AFuF++mgSwr/Sd4kZ9OeNZGl6lawXtXyCTNiEEXslcUOGxbRB5g3dYPL
+	iIqLGkgE05db/s4VIPA8CQFowrOAML7X1k8fPmAp9wzdcji7urrtESHM
+X-Gm-Gg: AR+sD13XRAf2lj58108KKZgskg47tUSKXaSgehCxZki95Eqx7lUMyc56PgfBdFDBuWn
+	3cADmg4JJBzFOKPeb61zLVy8u92lO5DQ8pPJ3tuCJ49Hgbx7IlETQh0dUCxOPXhdLLcy/iheal5
+	2Nl2fCEHHjNwVV7Co0it13ECvWXI10s+HHiqbpJrYNVRdVTp/KuIY5Uj2Lit7AuVUod6jPuiu+/
+	oDJ9/CaaexXgbUT1pb35sTdhMVjvuuc0F/s/UOwMtxSsQhj/k47Vdquu491wpx19yQ9PL4YaSBQ
+	pDzRpd/8/qLYcdbHOFsjxwrHHSnkPaZeV9HVMHBVLqG/cDZ88pURn8PVED2+VYkN57xfU4EdFY7
+	/wjSw/BoHtbzy9wYUJYwqlBGz4xQIpYQVRhSWNUVAzyLyK+m1dosMP1BKflN7O4nCVbPwahF0mF
+	N9iOuzGH5HU/A/YXMZ6yRwKmyHyCXz+27JX6I53RlOywHDf8VE5kJF5N5+7yXNhJLlQI0MF1t2f
+	LTHwLg4Vm6N0zDir6AFWB3hdqrbTjh53cn4dg==
+X-Received: by 2002:a05:6a00:2191:b0:842:5b66:3c7f with SMTP id d2e1a72fcca58-851f96af150mr4980697b3a.0.1787284341813;
+        Thu, 20 Aug 2026 20:52:21 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-851d3668b06sm2269920b3a.47.2026.08.20.20.52.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Aug 2026 20:52:20 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4efefd25-9115-44ac-ad03-6dc1ea0fb2a9@roeck-us.net>
+Date: Thu, 20 Aug 2026 20:52:19 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC] hwmon: Add Support for PMIC5000 Power Management ICs
+To: Stephen Horvath <linux@stevetech.au>
+Cc: Andi Shyti <andi.shyti@kernel.org>, linux-hwmon@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Stephen Horvath <s.horvath@outlook.com.au>
+References: <20260819-pmic5000-v1-1-e5e0ddcf0863@stevetech.au>
+ <6b8bf838-011f-46b9-a2a8-379de9cceddf@roeck-us.net>
+ <7fac8b19-af18-4365-94d6-a6bd18076abb@stevetech.au>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <7fac8b19-af18-4365-94d6-a6bd18076abb@stevetech.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Moving driver-specific macros into a global header that facilita=
-tes bespoke parent-child accessors.
---
+On 8/20/26 20:27, Stephen Horvath wrote:
+...
 
---- Patch [1]: [PATCH v7 01/10] mfd: nct6694: Move module type macros to sh=
-ared header ---
-commit ddd165427cd793b4dafe2d040a37ea0bf7d0d5fc
-Author: Ming Yu <a0282524688@gmail.com>
+>>> +static const struct of_device_id pmic5000_of_ids[] = {
+>>> +	{
+>>> +		.compatible = "jedec,pmic5000",
+>>
+>> jedec,pmic5000 is not documented.
+> 
+> Is there some centralised database for device tree identifiers, or does
+> it just need to be added to trivial-devices.yaml or something?
 
-mfd: nct6694: Move module type macros to shared header
+You'll need a separate patch adding the property to trivial-devices.yaml.
 
-This commit moves module type macros from individual sub-device drivers int=
-o the
-global MFD header include/linux/mfd/nct6694.h. The commit message states th=
-is
-is a prerequisite for supporting multiple transport interfaces without
-duplicating these definitions.
+Guenter
 
-> This is a prerequisite for supporting multiple transport interfaces
-> (USB, HIF) without duplicating these definitions.
-
-[Severity: Medium]
-Is it accurate that multiple transport interfaces use these definitions?
-
-Since these module ID macros appear to be used exclusively by their respect=
-ive
-child drivers, shouldn't they remain local to those drivers rather than bei=
-ng
-centralized to prevent duplicated definitions?
-
-[ ... ]
-
-> diff --git a/include/linux/mfd/nct6694.h b/include/linux/mfd/nct6694.h
-> index 6eb9be2cd4a01..3c683e317aa32 100644
-> --- a/include/linux/mfd/nct6694.h
-> +++ b/include/linux/mfd/nct6694.h
-> @@ -8,6 +8,15 @@
->  #ifndef __MFD_NCT6694_H
->  #define __MFD_NCT6694_H
-> =20
-> +#define NCT6694_HWMON_MOD	0x00
-> +#define NCT6694_PWM_MOD		0x01
-> +#define NCT6694_I2C_MOD		0x03
-> +#define NCT6694_CANFD_MOD	0x05
-> +#define NCT6694_WDT_MOD		0x07
-> +#define NCT6694_RTC_MOD		0x08
-> +#define NCT6694_RPT_MOD		0xFF
-> +#define NCT6694_GPIO_MOD	NCT6694_RPT_MOD
-
-[Severity: Medium]
-Does centralizing these macros here violate the MFD subsystem guidelines?
-
-The guidelines state that driver-specific definitions should not be placed =
-in
-the global include/linux/mfd/ directory if they are only used by the parent
-and its immediate children. Keeping them local to drivers/mfd/ or the
-individual sub-devices is preferred.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260821033505.4017=
-901-1-a0282524688@gmail.com?part=3D1
