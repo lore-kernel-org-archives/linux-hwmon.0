@@ -1,169 +1,169 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98856397B02
-	for <linux-hwmon@vger.kernel.org>; Sat, 22 Aug 2026 14:26:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787408786; cv=none; b=jpEnJZk3sJV/v1MWUSdiZR2scLXgmpwgtt9vqSVhFQJxglDaXCQ+sXA/K3mRkeOcbKnsVclN9+Mm0S0s478wY2xTMVaq0iJNnySSBkNVYaUDiXCg8PMCtc/q1bGoW3SHicBE0ingvImIQT3OSXKZrs1o6/PFTaywpvts3XBTvpc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787408786; c=relaxed/simple;
-	bh=D9P13HZLz2tXpulE4iL5mbSlf5R4Da4cdrXGawoW90o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Oo8piqigawsgf9YtudwzlRyjlF8Q2YSkg14RHyZSa/SJX+5oojuEyTznBjyDWk8xb00DZQXluX8hik6IrFCyCV9ub6qdl2r0Z7uJMlzS2YfKOKBuCNuCZstePrp5c4C20ZxBmDUa42K+wPEb7jb43AVJvdeiQFmrDzhnCdj4yS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W4KWgXFI; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D148362152
+	for <linux-hwmon@vger.kernel.org>; Sat, 22 Aug 2026 18:33:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787423602; cv=pass; b=aSZBR1nGfRMEzD6YOFmmQybT33knUpeiBquKywZmykPnfP7i8me6PoWsVHqOJcgW5nGK5/QvrCa0pCqB2Q87UVgGfdoFlyAOBqBdYZYsFKP6+Di+MlVWEXitDvUHO1brxn3wXJNWMh1OZD9pFEdfiV/w9MroEhBVp9MVy8R6brI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787423602; c=relaxed/simple;
+	bh=R9FV2HxucpilWHyhzkBkCHkgZ1FDOT/C59w828bmyvw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Mc1lkagTpQOOGuD7bqEKRjzmaDQ0DXKUoI4PSS4iSowMvoS8HBUmNLIiyZ9gViaCQBAtMytRGTqaRT8Eh7IV/2NQPNYwWbBGR920NxHg2Kl7K6JmCKcgV+BV4PA0h6S0r5K38N77WQ2/8D3jQoIp1efaKYqdut9ycVCst0B2R34=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bIFWdCkh; arc=pass smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W4KWgXFI"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cc11a30a259so2011211a12.3
-        for <linux-hwmon@vger.kernel.org>; Sat, 22 Aug 2026 07:26:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bIFWdCkh"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2ce87c7e3bbso23442475ad.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 22 Aug 2026 11:33:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787423598; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Pjkaw7dg0ravIelg5s6Xh7aB+9GTY8fZq7TIhFd/DXUpVKBgn4E/h++MQvFQA2qZ9D
+         STNphbHugDxrZ6VNgEr+3LXD2TjiO4XESM4RgwejVkgwli6FtAjMq3CiH8RFWnd7UWfy
+         HpRBDWHM5GOjCFXr/02+vKVbWGXGOZ7zOagDlUw07AxPIIEZLP23TwrbB+pa8grtewsX
+         SML0oPnuumQYo4wsiTflNookm761H7iNYfyGLYhFBOkHG7u8UYQXfH3+BBH0E2jq3/ur
+         aioBNYfPbx1j02GLsAEl2tD0jr09vwojgR/cvAqQbsIRJJbC+rbeTfrAdtXVhASrjyF2
+         IfPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=xLeowlHbnVdnW8myVY1gYicbBcUAa0KA4FLMPva2FLw=;
+        fh=UBXBfkVFQ4z13qyGsVgXwrTEmd19JmTiIaEFhohMwNk=;
+        b=qCZlrD1CS9V1C8Jsm/z3c5NSB7o/c2n51+sOIvLLktc8C7iJt7DpV0R7grUhFry0EL
+         NCFfhl8CsXVD2P4MThu9+myEiC7chlJMTWD+rXjjGZNnV6j36iC92+8TnU95nHulNaXf
+         bK7P09qPfoySGuqJYmaqKhHsN0YFQSg+CjMJYc+ftdToA5q04Oq22zCGqhI5XyCtNzOH
+         VKl0hldUfDEE7+htRCgyneNp2C8zH5JP8fH5XV9PcVjMRgnS2B7Ktg/UAFSplbaCMMq/
+         ZJyEorgpd6NzVY4zPb2nrxDnz2N6/5jRosM5TNujuvn65glLPSf4fL+FPEd1h5fHF2yf
+         c97w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787408758; x=1788013558; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1787423598; x=1788028398; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=lyWb3rtx8eCSA0XJUKHW0Z9SW4v0CMFCGQPdVFOD9AE=;
-        b=W4KWgXFIN+Vw/vpC3AZuZYPfepGGmnt3EOhR6PbpBisFylHN21uqTjcQN4GsHgy4Tf
-         Ssj71PgK1MAVzPKb6bS+FhHohXSX41zdzM8D4Uijl7PXJV/duA3liCAtUp7tvlazJnCu
-         NkrQS+Vv78RZXvu+bQvwSs5lz95MqzFoSC5y3bD3JCz7fVtaAG0g9rZhCSVgjAN+4TpD
-         Ub5IlM3boLHYM52cmx+Mkqsypj234vl8VeQ5Qau/jTibWpmgn1az2GsDS2HM6m0ay5iR
-         ClbpOdKZDi89m0c4D+M9Z6tYFOZO6V5aVvslNevSb7T0gPzuk/H6TKxXta/yoWYtKk4i
-         4LMA==
+        bh=xLeowlHbnVdnW8myVY1gYicbBcUAa0KA4FLMPva2FLw=;
+        b=bIFWdCkh7vqUMhnBrmm/V4n1Qk6U6u4Dy+0wpsb6ATkO6IeL9i+7mV7MOH6rIeioXs
+         rZUfSp7clDfVa2qCSKxkYkxLj2sVq8R0JhJ7JT+dAOHry2NFqQs9+PckamqyZibOl2wr
+         nZXx1P6QoxM7vJvRKNaIoZQ1FO20H4CXusbMM6rR/BOU2xVOIsFv+0qNCXsnZsJWSln/
+         +IS34de7sbf3WcjczTJ17t6CIjBM7FO/JPy+PzW/UHgNEJ/DmKlNyodEDJ2zVed/TKMy
+         Wv5tqI2BozmpEYTJlWSVy7aSSUghnSlZYkJyoC1JgMyMId8zAekw07koDpnVsSryzdvn
+         o71g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787408758; x=1788013558;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20251104; t=1787423598; x=1788028398;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=lyWb3rtx8eCSA0XJUKHW0Z9SW4v0CMFCGQPdVFOD9AE=;
-        b=Rx7kD+yW3PfjBBHeu99tnNd0p6jfmcxzXekVZ6B2MS4q2MMEA77PDrlHKmRTRoHDKJ
-         ISs83bXs48Q+RXVGlOBwtBKMz8qKNCE9Pk9QgB034YzYmhIpw0NeCbPjt+x5moj2p/iu
-         Rvh4rAXHgegptG40+cs9oZdwVwSJ4wX8pNTvYpkFvPx1eHVxBIXvuOjIxEDeToiWNdDN
-         WrTRF3UAWjVKI1jBLXviIED7/dQ72dBmFErV+4dzWSQTTfGxEhsVUqXzwbAzJQabG7Kc
-         9MzS29N8NpCv0LuZRW1KPbw4hIJOakqZbGpzORPFlaiePtWjvQhIG50pQ6uketFGV023
-         DU7w==
-X-Forwarded-Encrypted: i=1; AHgh+Ros0JhxZsqxzVZZqfXG/FGlJ+f3nj/udDA/s/KU18vK4w+iLAGJO7vKm6bmHHyDOVajFU+2icGlMoQ3yg==@vger.kernel.org
-X-Gm-Message-State: AFuF++knUmowSk9GPGXQNQkQGVdWkbB+Z6jd9TBcSRDwNxJ98culi0zG
-	qMbXM93Nq6UUF8xgd44kh68mCSYdAVhgzNtS6fuEsWOhPnigrALtxwtf
-X-Gm-Gg: AR+sD12S+j54gES5AD3jer9Qj14IBY9aFlRbK0vpL5HBZoyPasw3sy87I7W8A6jWtLz
-	aZC7OsWvmqShQhTgtoGDfAQrYGZpu1RNfThyi4+psdDsYQUqKZbJm0roMar2yLnk/dIEYyRo9E8
-	OiiFB578BJ0W0Y2zFypNlFwmfYAEg1ye9o4dGDljIgk1W5crpJvjRTj/hYKt51ijRtAlj3a80Yk
-	rlVtT0pJbmVhk+0ySCZf2QJddHzb4hEpIGTMF3O2tFZWRsxFKacoQxVZnFclNq7LYl2E+I3z7uL
-	2Q5kYDxjUJoSB9cjlJakdd3tBIpM3PNifDV6GUwZYc5C2p7f3d5/gkiO7qrRomyzDWwjlxdeI1z
-	y2Xwd5LTMNvLIEA3ScC5uMt9nG3Akfb4/uzvhtNWF/FkMzIh2zB6mUQ86Ztj1PXyfrKnbB8JN/o
-	S6amlICKrKU6NcHcb0/urNnI0dnlCL7rU5LbDosUryJuVksDm0sWi92udiCLQsnVzYhrMpPHz/6
-	iCiV6nQhQtgOYvGd+hHt5CJya9FJ2HP1F0Xhg==
-X-Received: by 2002:a05:6a21:8cc9:b0:3c3:a3f4:5485 with SMTP id adf61e73a8af0-3cd4ba0d216mr12137711637.6.1787408758156;
-        Sat, 22 Aug 2026 07:25:58 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327f909adc8sm7995795eec.2.2026.08.22.07.25.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Aug 2026 07:25:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <cfd8fe7e-77a3-477c-852d-de59fb5bb40c@roeck-us.net>
-Date: Sat, 22 Aug 2026 07:25:55 -0700
+        bh=xLeowlHbnVdnW8myVY1gYicbBcUAa0KA4FLMPva2FLw=;
+        b=gXEAM40ZfIf3LLmq31NpcPe8AxGMnTYgHTBf/UYBmSiMqsNTjqo+hGQ7qmvgga58/P
+         EeBlGoKqvAbMCb/6HuZD2imQpgaN9X5JmFJctU2OxHrVxNDxq25h8rPhFKgS+79mHhTt
+         8jWnIlGQ8e1thGvBZUItVE5lbWVod+lGmeM9Y/Ow8/BreCeybOHh9Wew4x3dBkEGtGxV
+         kQUkNCRr123GaE4zw8p1gHARnwYAeIEoiZ9BrGuU9IK3sayFesHeUrK1Lr6k710SoF4n
+         3h9P/IXskIfLGth2KUXn+HSkNDhCALuaHOJhVehHWeH1ZsK4eMMjbygBNuwg6ZHRNEAK
+         YWXA==
+X-Forwarded-Encrypted: i=1; AHgh+Rq1Ni3q1ZsSTBn+8I5BWIxMzA5JbY/KJ0jWpzPh4dFrza7Tk3W0TWOUFp+rfVo0e/qEiWnq2ZTjeLAOBw==@vger.kernel.org
+X-Gm-Message-State: AFuF++mKPpmqdvC8e4Ktft+RkXiO5C4p6PUlRy+tuZXcjwRBpMuU+euV
+	jw9zlJWi7Eo4ou08wrHr1VxHVkcyOeDXjtrRJO1UoB6MgwGToJHGd3N5nw1m4m3mZEZxVBUg0iu
+	ss+UeR1GamFZzqQjDTe/NQe77WP5v9so=
+X-Gm-Gg: AR+sD112hf7kP2UuXa5SloFBEWom4dxQeaQ6oopMTWA0s0r9YEOOlfG00sskMeR2aAJ
+	d7V2k82B1Xx9SkKu5tKLUE9rFqdNw13SYD5srDnWUsMC+EVBpFCrgbAR7uuaDabwPm7xTB2sKe+
+	HRBMLPPaM2yQtuWhtgC1YaxNq1H2W0eT6uveMrpFAumHwSNTPLav4IOnzjSGxzz5uOgP9EmcdLP
+	p9ZYQJoXE1MtCOEu2VE1P2xsjRSRHHCqR39ImO85Pz/cA8jYyCYFXYVk3BoeTUIqypqncIXIdGC
+	OI8Wb2DbUhI04Grkjn/cuQf+aO9v1IrYGRyhTr8PnXOaxANRlgcGwM1frOZMuZKh+aTzcUYGjCz
+	2ITAo5II8gUgQ06YIkf+hSX0tf64jrkrfumXOjtDXX1PDAy+b/2/H4UdFtiIvjGTIU+1Dd0Kmdk
+	ADVQhLKLylcVY=
+X-Received: by 2002:a17:903:2bcb:b0:2ca:e5c:7fcf with SMTP id
+ d9443c01a7336-2d64adaa1a2mr290285015ad.3.1787423598054; Sat, 22 Aug 2026
+ 11:33:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5] hwmon: (aquacomputer_d5next) valid the data size
- before reading the sensor data
-To: Edward Adam Davis <eadavis@qq.com>
-Cc: gregkh@linuxfoundation.org, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- sashiko-bot@kernel.org, sashiko-reviews@lists.linux.dev, me@jackdoan.com,
- savicaleksa83@gmail.com, syzkaller-bugs@googlegroups.com
-References: <tencent_6A66F77626CA5371C36D2968E3AEC4409705@qq.com>
- <tencent_5F7DC370E96643AEA458177FB76E86C8F305@qq.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <tencent_5F7DC370E96643AEA458177FB76E86C8F305@qq.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260821214728.87773-1-mradityadash@gmail.com>
+In-Reply-To: <20260821214728.87773-1-mradityadash@gmail.com>
+From: Antheas Kapenekakis <kapenekakis@gmail.com>
+Date: Sat, 22 Aug 2026 20:33:06 +0200
+X-Gm-Features: AcwNN1VvGTJYj-FylegLqCK5oqlHT-UH52VShrmWTvXb4QcYz5Oy3GWhPKG-uaU
+Message-ID: <CAGwozwFxiKjWAwOo6CjeAPKozDo80Jj6yNBv6Q=-ouBdWc0+ew@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/3] platform/x86: lenovo: Add Legion Go fan controls
+To: Aditya Dash <mradityadash@gmail.com>
+Cc: "Derek J. Clark" <derekjohn.clark@gmail.com>, 
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Armin Wolf <W_Armin@gmx.de>, Hans de Goede <hansg@kernel.org>, 
+	Mark Pearson <mpearson-lenovo@squebb.ca>, Guenter Roeck <linux@roeck-us.net>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 8/22/26 07:05, Edward Adam Davis wrote:
-> The user-forged sensor data is only 65 bytes long; however, aqc_raw_event()
-> fails to handle cases where the sensor data length is too small when reading
-> the data, resulting in [1] during the read process.
-> 
-> Add a data size check, if the size is less than that required for the
-> specific data item(includes: Physical/Virtual temperature sensor, Flow
-> sensor, Fan speed and related, etc.) to be read, abort the sensor data
-> read operation.
-> 
-> [1]
-> BUG: KASAN: slab-out-of-bounds in aqc_raw_event+0x213e/0x25d0 drivers/hwmon/aquacomputer_d5next.c:1327
-> Read of size 2 at addr ffff888108aba257 by task swapper/1/0
-> Call Trace:
->   get_unaligned_be16 include/linux/unaligned.h:48 [inline]
->   aqc_raw_event drivers/hwmon/aquacomputer_d5next.c:1345 [inline]
->   aqc_raw_event+0x213e/0x25d0 drivers/hwmon/aquacomputer_d5next.c:1327
->   __hid_input_report.constprop.0+0x319/0x470 drivers/hid/hid-core.c:2168
->   hid_irq_in+0x55d/0x710 drivers/hid/usbhid/hid-core.c:287
->   __usb_hcd_giveback_urb+0x38d/0x610 drivers/usb/core/hcd.c:1657
->   usb_hcd_giveback_urb+0x3ca/0x4a0 drivers/usb/core/hcd.c:1741
-> 
-> Fixes: 0e35f63f7f4e ("hwmon: add driver for Aquacomputer D5 Next")
-> Reported-by: syzbot+9ee5f5dc18673d6b2f37@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=9ee5f5dc18673d6b2f37
-> Tested-by: syzbot+9ee5f5dc18673d6b2f37@syzkaller.appspotmail.com
-> Signed-off-by: Edward Adam Davis <eadavis@qq.com>
-> ---
-> v1 -> v2: change to check the data item and update comments
-> v2 -> v3: check all sub items and update subject
-> v3 -> v4: add speed and flow check
-> v4 -> v5: remove dbg msg and update comments
-> 
+On Fri, 21 Aug 2026 at 23:47, Aditya Dash <mradityadash@gmail.com> wrote:
+>
+> Capability Data does not cover all fan controls on the Legion Go. Full
+> Speed uses a separate Other Mode feature, some firmware exposes an RPM
+> reading that Capability Data does not advertise, and the custom fan table
+> uses a separate Fan Method WMI interface.
+>
+> Patches 1 and 2 add Full Speed and the RPM fallback to the existing HWMON
+> device. Patch 3 adds a Fan Method driver and attaches the ten curve points
+> to that device when both WMI interfaces belong to the same provider. Other
+> Mode continues to work without Fan Method.
+>
+> The open question is how the firmware control range should map to HWMON.
+> On the tested Legion Go 8APU1, values from 0 through 115 produce the
+> observable fan response and correspond to Lenovo's 0 through 115 percent
+> range. Lenovo software shows 0 through 100 percent to the user, and 115
+> reaches the RPM observed in Full Speed mode. Firmware accepts values
+> through 255, but no RPM increase was observed above 115.
+>
+> This series keeps the native values unchanged and exposes the fixed
+> temperatures as read-only automatic points. Should the driver map the
+> effective 0 through 115 range to the standard HWMON 0 through 255 scale,
+> or keep the native firmware values unchanged?
 
-Your code was and remains way too complicated.
+Hi Aditya,
+I actually wrote a similar driver for my downstream use that I do not
+have time to upstream over the next two to three months, so it's fine
+by me to pass the torch to you. I will leave some comments on your RFC
+because in some ways it is overly complicated, and we can streamline
+things so this merges quicker. You do do something I did not, which is
+implement RPM speed. The device I tested had the bug you noticed and
+fix on your second patch, so I skipped it for brevity.
 
-Guenter
+As far as the series goes, I'd rather you do a standard 100->255 map,
+and clip values on the way back from 115 to 100 and then scale to 255
+(ie do not emit an error). Yes, technically the legion go can go up to
+115, but this is undocumented behavior and will look weird on a UI
+(100% will be 115% in Windows), and because of the extra quirk
+handling that will have to be done to cover that. Since a full fan
+speed button exists, this is recoverable functionality anyway.
 
+IMO from V2 onwards, it's ok to drop the RFC marker, your current
+series does not propose something too extraordinary.
+
+Antheas
+
+> Aditya Dash (3):
+>   platform/x86: lenovo-wmi-other: Add Legion Go Full Speed control
+>   platform/x86: lenovo-wmi-other: Add Legion Go fan RPM fallback
+>   platform/x86: lenovo: Add Legion Go Fan Method curve driver
+>
+>  .../wmi/devices/lenovo-wmi-fan-method.rst     |  34 ++
+>  .../wmi/devices/lenovo-wmi-other.rst          |  14 +
+>  MAINTAINERS                                   |   1 +
+>  drivers/platform/x86/lenovo/Kconfig           |  11 +
+>  drivers/platform/x86/lenovo/Makefile          |   1 +
+>  drivers/platform/x86/lenovo/wmi-fan-method.c  | 380 ++++++++++++++++++
+>  drivers/platform/x86/lenovo/wmi-other.c       | 215 +++++++++-
+>  7 files changed, 649 insertions(+), 7 deletions(-)
+>  create mode 100644 Documentation/wmi/devices/lenovo-wmi-fan-method.rst
+>  create mode 100644 drivers/platform/x86/lenovo/wmi-fan-method.c
+>
+>
+> base-commit: aca39607c1734ed976fdd65deb75b3555a5a0326
+> --
+> 2.55.0
+>
