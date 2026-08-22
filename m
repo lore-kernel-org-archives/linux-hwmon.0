@@ -1,183 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E365333A9D1
-	for <linux-hwmon@vger.kernel.org>; Sat, 22 Aug 2026 07:57:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83F6825B083
+	for <linux-hwmon@vger.kernel.org>; Sat, 22 Aug 2026 08:07:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787385443; cv=none; b=uozBt5ZVPf8JXbN5pCjnYrtvXibhBeIOXj7VtY5rVfnx1pDq4WqBvqUvDeEzrzVmDKQpP3kPyLYonboTVv1b4ohmMZrifefOduYOt3H8ArFxOmXKi/Rw3Mf2XmgHDDYV+E6j7fz8QaDY9fxEMrFNqNRLhcDQlyn+CyuJnAzHp2A=
+	t=1787386045; cv=none; b=O90SouFiqte4qO+6GXfxfoSYOjoy/UUqGpASJQsW1X4VYGtYUbQjV8tJOsyYNwDmcjnthV4Hdkew1l9DiVeYsLrI/AvQgB+AXMMjrp38/jg7BXaQmKiMMguqWSizEEBAM4qNDbMNdaUTBUF66UF752xG9lTPn837xtN5F0QJHDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787385443; c=relaxed/simple;
-	bh=rOXFjpv9g21k09TZQM3GutgjixoweiA5Xve+8+hAYaY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=sfG+Lv+U+C9a9AI3dPwIrWjdimJeWHjOc0UgVZM6tgdclb+3oZTC01TQ8MZQqCwn6dAZ+tnoPeCLAq88cwEy6iwdm2DoaUk88Xd+87v6FiJnyj9kQcXuulnfTpR20KDB61UIy5aME9TnirzGNt3RSAkI3hjkLSuEakzzOH1A6gw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SDg6Twb8; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787386045; c=relaxed/simple;
+	bh=YHCQPbeVa/qsJYN1kGy1DK69Sy793FGSalaVd1bq4a8=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:References:
+	 In-Reply-To:Content-Type; b=JS7hV12/lc2pqtpSzb+jCgmH3zuMmQL9KboIIQ04sTTqEmVvwJkqyT6QO6lilMNVhpfZENeHDqigOdbraLhlNR7lW6g1yDC1A3YpQ/69ax6RjxohO8V1CjqlxNZReR766sEjlSmc/5VCI/JnfcjWJS273AsEYvOGaK4XprwsqNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oz2Z8KMH; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SDg6Twb8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9C4B1F000E9;
-	Sat, 22 Aug 2026 07:57:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787385437;
-	bh=Y5e3T7Pi7KBaTcO4D1DYfxV5+wiP9z0RCBlZN/vimgk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=SDg6Twb8OA3tMKHp3YIfubglg1OJcf2jUwiLRDKFBlfVuILStJmfp86UQ67tR6Mx6
-	 fWtssX8dlIvYVT0Wg2W8gLISfAZdmGFPYSrmlEoV8MhtIKNSKGsxupEZqTiEfcXCWK
-	 QQ+2AzQDaYlzt1pYn8hEJIT+OPl7Av7frp5F20XyqMURESsJiYwt2zwlN2hYInT50M
-	 042nwYh6vXSf6knhPH0Ycx5EJdtDEhjq8iz2j7o+ZKgDNWENueoKSgRPxHPfi6AdkD
-	 GJv31hAU8UfE2uVXmYBcaNhKA1XWC3O+PVRm6pM/62zGKXs7SFrI4f11dNaSfd/nJN
-	 s7GQy1xcR2xqg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] hwmon: valid the data size before reading the sensor
- data
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Edward Adam Davis" <eadavis@qq.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <tencent_D74E75F577C166FC3CBB36B6966836D44A09@qq.com>
-References: <20260822054428.D55F71F000E9@smtp.kernel.org>
- <tencent_D74E75F577C166FC3CBB36B6966836D44A09@qq.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 22 Aug 2026 07:57:16 +0000
-Message-Id: <20260822075716.D9C4B1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oz2Z8KMH"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-698ae09e356so2785885a12.2
+        for <linux-hwmon@vger.kernel.org>; Sat, 22 Aug 2026 01:07:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787386042; x=1787990842; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :references:to:subject:from:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=IiLtBWKTPWNJSp/wkwtBEljpdTSGgD9pmHCNo8TEl9s=;
+        b=Oz2Z8KMHTLx5soduir4uU7OZK1iLDas0Gtz0zFRBCSUm3r1k8cOqF5qAZBQAzZMeUs
+         ZivmJsKK0v3rLVZTu42/EmpELB+NMNJ1MNJlDJUOZPV1gBG0mJLtOfMY2w53oXcxXYwH
+         hoRemuFWfhHqV0FXKxSQShSgmj23SpQXTJjFjqnj5aD8YUQs02mXe6CocjbUZiaceZJm
+         QGkyTSeNHH7FTA2Id5FPTHHSx65vw67p41w6N0uxtY4AIfSzhLa6e8WzS1sh4b9QKiep
+         4hs9k+tDFSsJ1GXoyRgj5T7+r+i6Jre+1M0AiBQQxHhaHiOaKLrwL9puEUkOJWdiRghz
+         MasA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787386042; x=1787990842;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :references:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=IiLtBWKTPWNJSp/wkwtBEljpdTSGgD9pmHCNo8TEl9s=;
+        b=Xg2777bgb6V9YZEU4HbOIhMoPg0dk3ozu3dZOPcTISKAzIfXpOmlV8tv8ym/+ca2ic
+         gX1CpnLOhJacO4MoNgiVGgNtFzhb0mjhZQHfaD+92kiA9smViXP3O7anTJvslxlVsMcT
+         3fw6zyUz2PlPxdZdLlsIStF+rLjde3SqUvxr+NNB/NQqNRlOFZQD92JgPM2IGbyp8DyV
+         /wNgD9fH5xY7y2C+ATN8k5u6hWAX3LeyP/aGRo2Ux97LMNjj9GWgB1pTrT09QG8jVhwq
+         NEzD07Sn8eWYW+oI6P+nH7zuSaQFtsX8Xm+VUavm23kJ7IgWCxpWESkFV4BIcFfb5Um8
+         2G5w==
+X-Forwarded-Encrypted: i=1; AHgh+RpMZPUlluJrdMbwrKFZDVcvpmpHU9K6Q2jl9HPlm+ZUIs0lXvoZk4p7fV57vEJzOsq58+lzE8s755Ve9w==@vger.kernel.org
+X-Gm-Message-State: AFuF++kX9kVjakGTsXNyEL0jmJ+FxiBq+fLqd/G7mCaeyjIWS/37LXCp
+	gdAdF41uIeQO+rIALq87cPoGc/LPhAfETnd+RHmhJ78i/GVoA3p9EpHX
+X-Gm-Gg: AR+sD11WWakzaN3C+hyzUhH1Ihpr8bSEcdfyUGFYvnzgpVP3asH2CwNzKBeiTsaJ8Pc
+	t2gXVPl6YkaJnMK39D/XB8OOuy2zYzKunM+dqnJ7cS+B2azYmHh7nnu8WdCCXkmx4Hmg8O6H3gA
+	JiF9MFJzUoME9Lex/asnjU8zxeu8QEYsyOeOhS44ZUxAr71iIBvdS+hCmxPYFqms5LMVYG1RnzQ
+	1RSTP6MAKixDKg5zXAvuuf4xUZAuXflR+TX5khEHa6JGF3arIwT8wOqrCANpyI/UrBa4Wd3E0Ce
+	KzRAWtFMoHZZ0zOXzXfjxQaUQ+Jx/I9k17GWiY4iPxosUCMpaEyOI1w4M0WGP9DpJdAJy1RybWT
+	E+aorxGgEeuKYy+AeuichVpurDpAWNluB1si7gtU0XJZFwo342tDTneCNlHRbi3m7xZc9DmrVbM
+	6rlw8fyBzE2h4CtkvK8ILX0vxvE8P1iMl7zsRujBXJ0InygxW5VjpLxLMCg9sFmCg3VXEdDmQ8A
+	l20wECbxpzEBP17U4ie8A70HLJQLBk2HneB2DgcxAYn
+X-Received: by 2002:a05:6402:4348:b0:6a4:21c6:1d14 with SMTP id 4fb4d7f45d1cf-6a42eeb21b4mr15003960a12.0.1787386041628;
+        Sat, 22 Aug 2026 01:07:21 -0700 (PDT)
+Received: from [192.168.0.32] (cable-178-148-247-5.dynamic.sbb.rs. [178.148.247.5])
+        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-6a3ff178289sm10950928a12.30.2026.08.22.01.07.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 22 Aug 2026 01:07:21 -0700 (PDT)
+Message-ID: <2aabcaaa-f6b6-4375-a773-690305b1979f@gmail.com>
+Date: Sat, 22 Aug 2026 10:07:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: Aleksa Savic <savicaleksa83@gmail.com>
+Subject: Re: [syzbot] [hwmon?] KASAN: slab-out-of-bounds Read in aqc_raw_event
+To: Guenter Roeck <linux@roeck-us.net>,
+ syzbot <syzbot+9ee5f5dc18673d6b2f37@syzkaller.appspotmail.com>,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, me@jackdoan.com, syzkaller-bugs@googlegroups.com
+References: <6a891232.91706f20.16b6e3.02b0.GAE@google.com>
+ <1506eaff-db5e-407a-a09c-d7a6b070c9cb@roeck-us.net>
+Content-Language: en-US
+In-Reply-To: <1506eaff-db5e-407a-a09c-d7a6b070c9cb@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
+On 8/22/26 6:02 AM, Guenter Roeck wrote:
+> Aleksa,
+> 
+> On 8/21/26 20:06, syzbot wrote:
+>> Hello,
+>>
+>> syzbot found the following issue on:
+>>
+>> HEAD commit:    e1e6e541c5c9 Merge tag 'thunderbolt-for-v7.3-rc1' of 
+>> ssh:/..
+>> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/ 
+>> gregkh/usb.git usb-testing
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=16086e79580000
+>> kernel config:  https://syzkaller.appspot.com/x/.config? 
+>> x=8bdeea7ee6735f91
+>> dashboard link: https://syzkaller.appspot.com/bug? 
+>> extid=9ee5f5dc18673d6b2f37
+>> compiler:       gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils 
+>> for Debian) 2.44
+>> syz repro:      https://syzkaller.appspot.com/x/repro.syz? 
+>> x=14737679580000
+>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15a22549580000
+>>
+>> Downloadable assets:
+>> disk image: https://storage.googleapis.com/syzbot-assets/3b0a1f8e6a1f/ 
+>> disk-e1e6e541.raw.xz
+>> vmlinux: https://storage.googleapis.com/syzbot-assets/f98d855e85e8/ 
+>> vmlinux-e1e6e541.xz
+>> kernel image: https://storage.googleapis.com/syzbot-assets/ 
+>> db2c3a41df6d/bzImage-e1e6e541.xz
+>>
+>> IMPORTANT: if you fix the issue, please add the following tag to the 
+>> commit:
+>> Reported-by: syzbot+9ee5f5dc18673d6b2f37@syzkaller.appspotmail.com
+>>
+>> ==================================================================
+>> BUG: KASAN: slab-out-of-bounds in get_unaligned_be16 include/linux/ 
+>> unaligned.h:48 [inline]
+>> BUG: KASAN: slab-out-of-bounds in aqc_raw_event drivers/hwmon/ 
+>> aquacomputer_d5next.c:1345 [inline]
+>> BUG: KASAN: slab-out-of-bounds in aqc_raw_event+0x213e/0x25d0 drivers/ 
+>> hwmon/aquacomputer_d5next.c:1327
+> 
+> The problem is that syzkaller sends a bad (short) report.
+> aqc_raw_event() needs to validate the report size and bail out
+> if it is short. The fix should be straightforard if it is known
+> what the minimum report size is. D5NEXT_CTRL_REPORT_SIZE ?
+> 
+> Thanks,
+> Guenter
 
-New issues:
-- [High] The bounds checking logic in `aqc_raw_data_valid` uses an incorrec=
-t comparison, resulting in off-by-one errors that allow 1-byte out-of-bound=
-s reads.
-- [High] `aqc_raw_data_valid` incorrectly assumes `fan_sensor_offsets` is s=
-orted in ascending order, failing to validate larger offsets at lower array=
- indices.
+We do know sizes of control (setting) reports since we send them through 
+priv->buffer, but aqc_raw_event() gets sensor reports and their length 
+can vary per device. I don't have an exact list for all devices since I 
+don't have them all myself. We'll need to verify that what we receive in 
+aqc_raw_event() is >= the minimum offset we want to read sensor values from.
 
-Pre-existing issues:
-- [High] `aqc_raw_data_valid` completely omits bounds checks for several of=
-fsets that are subsequently read in `aqc_raw_event`, leaving the driver vul=
-nerable to out-of-bounds reads.
-- [High] Processing a crafted report for legacy devices like `aquastreamxt`=
- triggers a NULL pointer dereference on `priv->fan_structure`.
---
-
---- Patch [1]: [PATCH v2] hwmon: valid the data size before reading the sen=
-sor data ---
-commit a13b90e2804a6e0d888f292535c33b47d5d8f7fb
-Author: Edward Adam Davis <eadavis@qq.com>
-
-hwmon: valid the data size before reading the sensor data
-
-The user-forged sensor data is only 65 bytes long; however, aqc_raw_event()
-fails to handle cases where the sensor data length is too small when reading
-the data, resulting in [1] during the read process.
-
-Add a data size check, if the size is less than that required for the
-specific data item to be read, abort the sensor data read operation.
-
-Reported-by: syzbot+9ee5f5dc18673d6b2f37@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=3D9ee5f5dc18673d6b2f37
-Tested-by: syzbot+9ee5f5dc18673d6b2f37@syzkaller.appspotmail.com
-
-> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomp=
-uter_d5next.c
-> index 1ca70e7262988..c6fe36abfe569 100644
-> --- a/drivers/hwmon/aquacomputer_d5next.c
-> +++ b/drivers/hwmon/aquacomputer_d5next.c
-
-[ ... ]
-
-> @@ -1324,6 +1324,76 @@ static const struct hwmon_chip_info aqc_chip_info =
-=3D {
->  	.info =3D aqc_info,
->  };
-> =20
-> +static bool aqc_raw_data_valid(struct aqc_data *priv, int size)
-> +{
-> +	int off;
-> +	char *msg;
-> +
-> +	if (!priv)
-> +		return false;
-> +
-> +	off =3D priv->serial_number_start_offset + SERIAL_PART_OFFSET;
-> +	if (off >=3D size) {
-
-[Severity: High]
-Does this bounds check adequately protect against multi-byte reads?
-
-The condition if (off >=3D size) evaluates to false when size =3D=3D off + =
-1.
-However, aqc_raw_event() uses get_unaligned_be16(), which reads 2 bytes.
-
-If the device sends a report with a size exactly equal to off + 1, won't
-reading 2 bytes at offset size - 1 access one byte beyond the buffer?
-
-[ ... ]
-
-> +	/* Fan speed and related readings data size check */
-> +	if (priv->num_fans > 0) {
-> +		int fan_off =3D priv->fan_sensor_offsets[priv->num_fans - 1];
-
-[Severity: High]
-Does this code assume that the fan_sensor_offsets array is always sorted in
-ascending order?
-
-For devices like d5next, the array is initialized as:
-{ D5NEXT_PUMP_OFFSET (108), D5NEXT_FAN_OFFSET (95) }
-
-The check uses the last index (95) for bounds validation. This would pass a
-report of size 104, but aqc_raw_event() will subsequently access index 0
-(108), resulting in an out-of-bounds read.
-
-> +
-> +		off =3D fan_off + priv->fan_structure->power;
-
-[Severity: High]
-This isn't a bug introduced by this patch, but can priv->fan_structure be
-NULL here?
-
-For legacy devices like aquastreamxt, priv->num_fans is set to 2 during
-probe, but priv->fan_structure is never assigned and remains NULL. While
-this NULL dereference already existed in aqc_raw_event(), this patch adds
-another immediate dereference here.
-
-> +		if (off >=3D size) {
-> +			msg =3D "fan power offset";
-> +			goto invalid;
-> +		}
-> +
-> +		off =3D fan_off + priv->fan_structure->voltage;
-> +		if (off >=3D size) {
-> +			msg =3D "fan voltage offset";
-> +			goto invalid;
-> +		}
-> +
-> +		off =3D fan_off + priv->fan_structure->curr;
-> +		if (off >=3D size) {
-
-[Severity: High]
-This is a pre-existing issue, but does this adequately cover all fields
-accessed in aqc_raw_event()?
-
-This validation omits checks for several offsets, such as:
-- priv->fan_structure->speed
-- priv->flow_sensors_start_offset
-- priv->power_cycle_count_offset
-- Device-specific offsets inside the switch (priv->kind) block (e.g.,
-  HIGHFLOWNEXT_POWER).
-
-Since aqc_raw_event() unconditionally reads these fields, an out-of-bounds
-read could still occur for truncated reports.
-
-> +			msg =3D "fan curr offset";
-> +			goto invalid;
-> +		}
-> +	}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/tencent_D74E75F577C=
-166FC3CBB36B6966836D44A09@qq.com?part=3D1
+Thanks,
+Aleksa
