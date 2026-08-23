@@ -1,62 +1,63 @@
 Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8E239021F;
-	Sun, 23 Aug 2026 20:30:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB9373AD529;
+	Sun, 23 Aug 2026 20:32:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787517006; cv=pass; b=cc22d9QByud9lMK/B4JB0mywrD/NkKJD3TfVARLW1PYV1DXHYv9xaA9pHiTChtWy357xRJyGfcf/oXf3k0U6hqwG1Icfk77gmO3narBIy9gRqgVs12uNQSSfexkhOb0lSHqBeRBfQlieZAdX3YGR26vOGYUoACa09JCTXNS7DlE=
+	t=1787517167; cv=pass; b=I5mo13TJ0rpcOvy45uY88RzfYaFzv3kVxULkyRyo2GiaV79GSQMcNEN3FUgvMZv6PjV5RmzXKkRjaRi2stZAqRZIiP9B2JobDltZqwGghwLBQ9v1Hd8UhRLFm4x27KmTJptJqBsPfnhTxaRl65jvvO9yfrVbv5TyD7s3gaNct9A=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787517006; c=relaxed/simple;
-	bh=mPAXQb5cLxEQWiywYFh0+YwWkdUa7UQs8BcynNTz/eQ=;
+	s=arc-20240116; t=1787517167; c=relaxed/simple;
+	bh=vWv/9uqbdhsVPqC1VYl7vWT5qJFJqk7rQoyrOQh3ha4=;
 	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=QuqRouaO1aNGrGnksWFLFAIHHtEmk0F0XGbsAy2+IpFVsYueH2jUrXIz73aog2v8DdbK6rmGhbEleKvy0fKwgDVvu8eHaRXSQ3Ayb4Au8DXZYeLDLpk0M4vlvPexGaLwTcW/Vq/Xpv2/iwkjw+4X6OdhLPzmISDf8qd3Zx+cIhM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rong.moe; spf=pass smtp.mailfrom=rong.moe; dkim=pass (2048-bit key) header.d=rong.moe header.i=i@rong.moe header.b=Pp+WMdSV; arc=pass smtp.client-ip=136.143.188.15
+	 Date:MIME-Version; b=iJAB9PgeyhYqIYtf3flJCyVQuk+EmnEdHOwzeOZbpobfSQdHexIK014v4v6yaFy7rToqRUr3Dvl7aUsPIGO1FVQEmt8DINrNKC8KE5ZY4cPCB/2uyu6d8EJ7jw17bLWwqBNjAqdtAjIorb+el+PAIZuCFfNLN0H8yGD/HWMDVEg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rong.moe; spf=pass smtp.mailfrom=rong.moe; dkim=pass (2048-bit key) header.d=rong.moe header.i=i@rong.moe header.b=JG2ihnbL; arc=pass smtp.client-ip=136.143.188.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rong.moe
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rong.moe
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rong.moe header.i=i@rong.moe header.b="Pp+WMdSV"
-ARC-Seal: i=1; a=rsa-sha256; t=1787516982; cv=none; 
+	dkim=pass (2048-bit key) header.d=rong.moe header.i=i@rong.moe header.b="JG2ihnbL"
+ARC-Seal: i=1; a=rsa-sha256; t=1787517142; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=S9M/0kvRQYVphSFpyWhdwWczYeGAMpJjSJXdcbo6QY5Dy61VR867EpeU1OTxCk//61usDHX+N+ybCH2MZ2SMvLFcMlOSCqy/ZvnNR7uyWHhnmD7eTsnFGulv9CAyCRS8ExgaYMwkFElYDpsHYQLMmM2GxnGNv0c+GoxGmuIIX4s=
+	b=ct7DWFB5zi8v+8x6l43mkMXLCxv32DWtj5IlekMDjCm1cCX0yDAs1y2SDzosS6CHcIbDOny86l6c0Q0/D0sIo97/tNotZvGnsp44fMCs8wjW2M3IpPwTOL+K9wF9R7aw1YocAmWDUJm1aTPMA/I4l0vahcZ1cvFmLWo7VeKL/+0=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1787516982; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=z8WhSxGKsUDe8vqMKRZ0/F6e2d4Nok4EuhTZfJNqbxk=; 
-	b=SJdUYHioCKvc5G5TBuxQvN3g/udPCr8f4XVM6UjVc9mNr542z3RUmfK8a22aCSRs82a6sJmSyFdQ2AUiShOT9xTOA8pdehlXNM37YFWq2ZFzrT3lJo+Lo4of81CYuv20cx7tBckaI+FzAY/N55cd+NkVLCJOoBmezvvE/gEijzw=
+	t=1787517142; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=kMaKoY0hAHBYSpuaxTpAu4dg90Ux5TNajhWOudihe3c=; 
+	b=YXRA8keGehxTkQHqPp2F32bjiR96HYx46j51Bbv9dL6ilySiulkGD1njL6WFa5jxsW3f2eITI2eZeeEs16eMwp3VlyOTn2ZmvNt5obBVZINpLS/4ib5mB2xlNjqppTKPTji4MdripEQrQdXACcQXcNeblTbzhsHHBb22561iJi4=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=rong.moe;
 	spf=pass  smtp.mailfrom=i@rong.moe;
 	dmarc=pass header.from=<i@rong.moe>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1787516982;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1787517142;
 	s=zmail2048; d=rong.moe; i=i@rong.moe;
 	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:In-Reply-To:Content-Type:Content-Transfer-Encoding:Date:Date:MIME-Version:Message-Id:Reply-To;
-	bh=z8WhSxGKsUDe8vqMKRZ0/F6e2d4Nok4EuhTZfJNqbxk=;
-	b=Pp+WMdSViY5P9F44Ga78va8TjIbdGyVF86DrLykHoeizk/l8ivEJS2SgB2BoWzcu
-	NtJQSEi3p3CPtpg71duyHPqnsQtuIzwPfIv4yfVTfr60j3hA8lXP/0o7kAld0Fxkl8O
-	w5MDEYYXTvOWfr7qN0cPdPuIjJaq954DLdXE+Wry5UQm8hrO6QFYcEfyQXBiqaCqg5C
-	diBU47UsC4NY9APk8MFrGZzHJtdOS2bixVjHdVJQB3gK5bFF8tap7v4mQnQ0tgLf1Vq
-	mcrx2ZCQHCBAsQIhqo/uDc4Vpb3jbG2xCRFxLEHlSnWaVBss5fMGMhUFVC/yw0z+f4Y
-	A4BMbG3W7g==
-Received: by mx.zohomail.com with SMTPS id 1787516979716711.5612850224984;
-	Sun, 23 Aug 2026 13:29:39 -0700 (PDT)
-Message-ID: <04855f0232f530ae2b051bda9e5f07a58f8a4a4a.camel@rong.moe>
-Subject: Re: [RFC PATCH 2/3] platform/x86: lenovo-wmi-other: Add Legion Go
- fan RPM fallback
+	bh=kMaKoY0hAHBYSpuaxTpAu4dg90Ux5TNajhWOudihe3c=;
+	b=JG2ihnbLpOqxRWbjoPQ40Nhz+DhKuel6cQR6q7vhMGTqexUE7aPo+ptVZ2ztzL/v
+	Aiul8e3P677DSw+E+l35FULg1gdael8/8WIldtnJl9q3sRgfMP062IyoX5T1br89o22
+	RfUOcT7R/JllDju5sWw4cJF43nVFu+V2BRwvFha0NoH4uxroVUM9XcwPVIC0JUEoYVG
+	dMfAp5sE7ilzCJ8uSG4rT64++Qw6Ouj+aIVcxO1aIsKG4pWgPW6GWTzgsObDaV6bZrt
+	nrZKXpoIL8/tg6BsLAFnym79DGnUMEoNCMUEVR3ds41r0ai4pvVscDtngVC+IagI4XZ
+	iXTHL5FHXA==
+Received: by mx.zohomail.com with SMTPS id 1787517140531745.8616595742548;
+	Sun, 23 Aug 2026 13:32:20 -0700 (PDT)
+Message-ID: <6c510749d917c284f2b78a3757727391df150eba.camel@rong.moe>
+Subject: Re: [RFC PATCH 0/3] platform/x86: lenovo: Add Legion Go fan
+ controls
 From: Rong Zhang <i@rong.moe>
-To: Aditya Dash <mradityadash@gmail.com>, "Derek J. Clark"	
- <derekjohn.clark@gmail.com>, Ilpo =?ISO-8859-1?Q?J=E4rvinen?=	
+To: "Derek J. Clark" <derekjohn.clark@gmail.com>, Aditya Dash	
+ <mradityadash@gmail.com>, Ilpo =?ISO-8859-1?Q?J=E4rvinen?=	
  <ilpo.jarvinen@linux.intel.com>, Armin Wolf <W_Armin@gmx.de>, Hans de Goede
 	 <hansg@kernel.org>, Mark Pearson <mpearson-lenovo@squebb.ca>
 Cc: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
  Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
  linux-hwmon@vger.kernel.org, 	linux-kernel@vger.kernel.org,
  platform-driver-x86@vger.kernel.org
-In-Reply-To: <20260821214728.87773-3-mradityadash@gmail.com>
+In-Reply-To: <782FE636-A06A-4E12-9563-786374805947@gmail.com>
 References: <20260821214728.87773-1-mradityadash@gmail.com>
-	 <20260821214728.87773-3-mradityadash@gmail.com>
+		 <3dca1e1efa285d8644b8ac681a5fb41742ce06a6.camel@rong.moe>
+		 <782FE636-A06A-4E12-9563-786374805947@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 24 Aug 2026 04:23:40 +0800
+Date: Mon, 24 Aug 2026 04:24:35 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -66,156 +67,113 @@ MIME-Version: 1.0
 User-Agent: Evolution 3.56.2-10+b1 
 X-ZohoMailClient: External
 
-Hi Aditya,
+Hi Derek,
 
-On Sat, 2026-08-22 at 03:17 +0530, Aditya Dash wrote:
-> Some Legion Go firmware does not mark fan 1 RPM as readable in Capability
-> Data, although Other Mode feature 0x04030001 returns the current RPM. As =
-a
-> result, lenovo-wmi-other hides fan1_input.
+On Sun, 2026-08-23 at 13:08 -0700, Derek J. Clark wrote:
+> On August 23, 2026 12:32:02 PM PDT, Rong Zhang <i@rong.moe> wrote:
+> > Hi Aditya,
+> >=20
+> > On Sat, 2026-08-22 at 03:17 +0530, Aditya Dash wrote:
+> > > Capability Data does not cover all fan controls on the Legion Go. Ful=
+l
+> > > Speed uses a separate Other Mode feature, some firmware exposes an RP=
+M
+> > > reading that Capability Data does not advertise,=C2=A0
+> > >=20
+> >=20
+> > "does not advertise"
+> >=20
+> > Really? Please dump capdata via debugfs and attach it.
+> >=20
+> > > and the custom fan table
+> > > uses a separate Fan Method WMI interface.
+> > >=20
+> >=20
+> > The hwmon part of lenovo-wmi-other was done by me. Please CC me in your
+> > next revision.
+> >=20
+> Hi Rong,
 >=20
-> When the normal VALID and GET flags are missing on a supported product,
-> try one read from the Other Mode feature. Expose fan1_input as read-only
-> if the read succeeds and does not return 0xffffffff. Treat a later
-> 0xffffffff reply as an unavailable reading.
+> I'd ack if you wanted to add yourself as a maintainer of the Lenovo drive=
+rs so you get picked up by the kernel scripts. Otherwise people won't know =
+to Cc you.
 
-U32_MAX
+Thanks for that. I will do so the next time I post patch series for
+Lenovo drivers :-P
 
->=20
-> Assisted-by: Pi:gpt-5.6-sol
-> Signed-off-by: Aditya Dash <mradityadash@gmail.com>
-> ---
->  Documentation/wmi/devices/lenovo-wmi-other.rst |  4 ++++
->  drivers/platform/x86/lenovo/wmi-other.c        | 14 +++++++++++++-
->  2 files changed, 17 insertions(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/wmi/devices/lenovo-wmi-other.rst b/Documentati=
-on/wmi/devices/lenovo-wmi-other.rst
-> index 75f2deaaef16..c93e9e6f3fd0 100644
-> --- a/Documentation/wmi/devices/lenovo-wmi-other.rst
-> +++ b/Documentation/wmi/devices/lenovo-wmi-other.rst
-> @@ -56,6 +56,10 @@ On supported Legion Go models, Other Mode feature ``0x=
-04020000`` controls
->  Full Speed mode in firmware. The driver exposes it as ``pwm1_enable``. V=
-alue 0
->  enables Full Speed, and value 2 returns fan control to firmware.
-> =20
-> +Some Legion Go firmware does not advertise fan 1 RPM through Capability
-> +Data. In that case, the driver reads Other Mode feature ``0x04030001`` f=
-or
-> +``fan1_input``. Value ``0xffffffff`` means that RPM is unavailable.
-> +
-
-The documentation does not mean to record the implementation details.
-Drop the paragraph and tell your LLM not to ramble.
-
->  LENOVO_CAPABILITY_DATA_01
->  -------------------------
-> =20
-> diff --git a/drivers/platform/x86/lenovo/wmi-other.c b/drivers/platform/x=
-86/lenovo/wmi-other.c
-> index c180933e1d18..b4be7739b243 100644
-> --- a/drivers/platform/x86/lenovo/wmi-other.c
-> +++ b/drivers/platform/x86/lenovo/wmi-other.c
-> @@ -98,6 +98,7 @@ enum lwmi_feature_id_psu {
->  #define LWMI_FAN_ID(x) ((x) + LWMI_FAN_ID_BASE)
-> =20
->  #define LWMI_FAN_DIV 100
-> +#define LWMI_FAN_RPM_NORMAL_SUPPORT (LWMI_SUPP_VALID | LWMI_SUPP_GET)
-
-Inline it.
-
-> =20
->  #define LWMI_CHARGE_BEHAVIOR_DISCHARGE	0x00
->  #define LWMI_CHARGE_BEHAVIOR_AUTO	0x01
-> @@ -195,6 +196,7 @@ struct lwmi_om_priv {
-> =20
->  	struct lwmi_fan_info fan_info[LWMI_FAN_NR];
->  	bool fullspeed_supported;
-> +	bool fan0_input_fallback;
-
-You LLM was over-engineering things. Shouldn't overriding fan_info being
-enough?
-
-   priv->fan_info[0].supported |=3D (LWMI_SUPP_VALID | LWMI_SUPP_GET);
-
-> =20
->  	struct {
->  		bool capdata00_collected : 1;
-> @@ -343,6 +345,8 @@ static umode_t lwmi_om_hwmon_is_visible(const void *d=
-rvdata, enum hwmon_sensor_t
->  		return 0644;
-> =20
->  	if (type =3D=3D hwmon_fan) {
-> +		if (channel =3D=3D 0 && priv->fan0_input_fallback && attr =3D=3D hwmon=
-_fan_input)
-> +			return 0444;
->  		if (!(priv->fan_info[channel].supported & LWMI_SUPP_VALID))
->  			return 0;
-> =20
-> @@ -419,6 +423,8 @@ static int lwmi_om_hwmon_read(struct device *dev, enu=
-m hwmon_sensor_types type,
->  			err =3D lwmi_om_fan_get_set(priv, channel, &retval, false);
->  			if (err)
->  				return err;
-> +			if (channel =3D=3D 0 && priv->fan0_input_fallback && retval =3D=3D U3=
-2_MAX)
-> +				return -EIO;
-
-Don't over-engineer it. You can safely interpret U32_MAX as -EIO in any
-cases.
-
-Therefore, please move the check into lwmi_om_fan_get_set().
-
-> =20
->  			*val =3D retval;
->  			return 0;
-> @@ -542,6 +548,7 @@ static const struct hwmon_chip_info lwmi_om_hwmon_chi=
-p_info =3D {
->   */
->  static void lwmi_om_hwmon_add(struct lwmi_om_priv *priv)
->  {
-> +	u32 rpm;
->  	long enable;
->  	int i, valid;
-> =20
-> @@ -563,6 +570,11 @@ static void lwmi_om_hwmon_add(struct lwmi_om_priv *p=
-riv)
-> =20
->  	priv->fullspeed_supported =3D
->  		lwmi_fan_supported() && !lwmi_om_fullspeed_get(priv, &enable);
-> +	priv->fan0_input_fallback =3D
-> +		lwmi_fan_supported() &&
-
-???
-
-Don't call it again. Simply consult priv->fullspeed_supported.
-
-> +		(priv->fan_info[0].supported & LWMI_FAN_RPM_NORMAL_SUPPORT) !=3D
-> +		LWMI_FAN_RPM_NORMAL_SUPPORT &&
-
-!(priv->fan_info[0].supported & LWMI_SUPP_VALID) ||
-!(priv->fan_info[0].supported & LWMI_SUPP_GET)
-
-> +		!lwmi_om_fan_get_set(priv, 0, &rpm, false) && rpm !=3D U32_MAX;
-
-And that's why moving the check into lwmi_om_fan_get_set() makes things
-easier.
-
-Thanks,
+Cheers,
 Rong
 
-> =20
->  	valid =3D 0;
->  	for (i =3D 0; i < LWMI_FAN_NR; i++) {
-> @@ -580,7 +592,7 @@ static void lwmi_om_hwmon_add(struct lwmi_om_priv *pr=
-iv)
->  		}
->  	}
-> =20
-> -	if (valid =3D=3D 0 && !priv->fullspeed_supported) {
-> +	if (valid =3D=3D 0 && !priv->fullspeed_supported && !priv->fan0_input_f=
-allback) {
->  		dev_warn(&priv->wdev->dev,
->  			 "fan reporting/tuning is unsupported on this device\n");
->  		return;
+>=20
+> > > Patches 1 and 2 add Full Speed and the RPM fallback to the existing H=
+WMON
+> > > device. Patch 3 adds a Fan Method driver and attaches the ten curve p=
+oints
+> > > to that device when both WMI interfaces belong to the same provider. =
+Other
+> > > Mode continues to work without Fan Method.
+> > >=20
+> > > The open question is how the firmware control range should map to HWM=
+ON.
+> > > On the tested Legion Go 8APU1, values from 0 through 115 produce the
+> > > observable fan response and correspond to Lenovo's 0 through 115 perc=
+ent
+> > > range. Lenovo software shows 0 through 100 percent to the user, and 1=
+15
+> > > reaches the RPM observed in Full Speed mode. Firmware accepts values
+> > > through 255, but no RPM increase was observed above 115.
+> >=20
+> > This is what we've observed in Fan Test Data. We chose to enforce
+> > constraints according to it and relax it when users set an module
+> > parameter.
+> >=20
+> > >=20
+> > > This series keeps the native values unchanged and exposes the fixed
+> > > temperatures as read-only automatic points. Should the driver map the
+> > > effective 0 through 115 range to the standard HWMON 0 through 255 sca=
+le,
+> > > or keep the native firmware values unchanged?
+> >=20
+> > In your case, if there is no range data to query, I'd prefer enforcing =
+0-
+> > 100 by default and relaxing it=C2=A0when appropriate range data is prov=
+ided by
+> > module parameters or DMI table.
+> >=20
+> > The range should always map to hwmon pwm 0-255.
+>=20
+> Concur on both counts.
+>=20
+> > As far as I can recall, Derek once said that he planed to introduce fan
+> > curve support for Legion Go, so I think he has some helpful ideas.
+>=20
+> I'll post a full review once I've had time to test and review the documen=
+tation again.
+>=20
+> Cheers,
+> Derek
+>=20
+> > Thanks,
+> > Rong
+> >=20
+> > >=20
+> > > Aditya Dash (3):
+> > >   platform/x86: lenovo-wmi-other: Add Legion Go Full Speed control
+> > >   platform/x86: lenovo-wmi-other: Add Legion Go fan RPM fallback
+> > >   platform/x86: lenovo: Add Legion Go Fan Method curve driver
+> > >=20
+> > >  .../wmi/devices/lenovo-wmi-fan-method.rst     |  34 ++
+> > >  .../wmi/devices/lenovo-wmi-other.rst          |  14 +
+> > >  MAINTAINERS                                   |   1 +
+> > >  drivers/platform/x86/lenovo/Kconfig           |  11 +
+> > >  drivers/platform/x86/lenovo/Makefile          |   1 +
+> > >  drivers/platform/x86/lenovo/wmi-fan-method.c  | 380 ++++++++++++++++=
+++
+> > >  drivers/platform/x86/lenovo/wmi-other.c       | 215 +++++++++-
+> > >  7 files changed, 649 insertions(+), 7 deletions(-)
+> > >  create mode 100644 Documentation/wmi/devices/lenovo-wmi-fan-method.r=
+st
+> > >  create mode 100644 drivers/platform/x86/lenovo/wmi-fan-method.c
+> > >=20
+> > >=20
+> > > base-commit: aca39607c1734ed976fdd65deb75b3555a5a0326
