@@ -1,109 +1,166 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC7D8353A69
-	for <linux-hwmon@vger.kernel.org>; Sun, 23 Aug 2026 18:12:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1C853033EC
+	for <linux-hwmon@vger.kernel.org>; Sun, 23 Aug 2026 18:16:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787508781; cv=none; b=JhutGcF4g9y1kdpjr0XCkh7VWi3XlAdBDoQEnUTwrCep99ausjHeUbKPlQaXqbHagBdmTQSw4SuLTmfyYsstPdteBkOwoVkoPs4qHI/dKls9PeRiAeiXmUiftqDZWdqAjOJyuO/h5GPNINXJlVvUj/nZjTsk62CQ5HQUIB39Z9o=
+	t=1787508991; cv=none; b=lpqPYPzaKn4WrjlVvoJc/GLu56VlS/Tz6ADXpVKJZdbVrRmrDO+6BZVgpZOXMpcVfIGSeOm5jn3OubUkL7Jbkzgam9hAlZSKs1PqQlkGjaGHNw9NBVHz2CdbwApiKJKTA1b5gOjLySF6i9e7z2HLSPDtx9ie3aodIO3Gll5yNcg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787508781; c=relaxed/simple;
-	bh=vPj7uuZOU6QPTRZJw0900n49PUUdAx9Nnu2q4bcaUkQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=HaHsvZJ9m9EQny00G8X7f4vtr8UtzmcDlAd9N78pe/SG7nFoKauVAMwgwVyGU/hrYhVp9YvbZThyqlo3mll9dj+riI7GbFLvi+XRkmW2lRq7jq5nEG1TH6Rh8tPm5YvPCnP0itXzVnakBvH8jtF62IuLPmtL7id4fLSdXJT7x6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C73vY7e7; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787508991; c=relaxed/simple;
+	bh=LpxMiqBeM9DqdWGKvg6p3ohK3X1JMmpAnTcT9fKnb1Q=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
+	 References:In-Reply-To; b=Qp1b7eIUPP51CM5fxwOVh3exmsKHBZy6DqIaWLOshnOVTE2oOnxH1PYgVJ+3x2mkBDCMm/R7/9BKmOpFntYdQG0Mzi2RqA5KfYEDrIuQZoCcw62k7B1EnMVmb/m5AbC/oKXQWpN7sasoMkqc7BbvdxNTPv3IuDw1mmDMjK/jyfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TlndrSAK; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C73vY7e7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA12B1F000E9;
-	Sun, 23 Aug 2026 18:12:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787508779;
-	bh=vPj7uuZOU6QPTRZJw0900n49PUUdAx9Nnu2q4bcaUkQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=C73vY7e7oEvXtddYypQ1NJLxGMhJ2rAsTMrsMY+9+429+14JSLxTo+yvVTr4/EjgP
-	 s95LdOXT7fDa7xDLs7/eoWcSmX1y7wolrr/PcTbjC7ehIAhp/NoL0LTYAhZ1AeKi5u
-	 sVwV0iNwcv0SKBc/5Yv4k56se03NbxdERrMrH3LUHNyKMo8+JOuCG2qLtWzA8OBTE3
-	 TA+ahuyKBDxKDl/r5aX2lwI444LhlIL/Ud6dzJmIT3XsQu1lhuM6JgbQEjeTCsi85m
-	 CBxGdZSGBsrDjCx3xOTPm+Z+IrWjUttbJMrLToiIxdaUcN9Pl6X1zgLzRz6WCHemG4
-	 xA+y1b9n/vdWw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 2/4] hwmon: chipcap2: fix IRQ teardown ordering
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Javier Carrasco" <javier.carrasco.cruz@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260823-chipcap2_locks-v2-2-6a26c8e9e2fc@gmail.com>
-References: <20260823-chipcap2_locks-v2-0-6a26c8e9e2fc@gmail.com>
- <20260823-chipcap2_locks-v2-2-6a26c8e9e2fc@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 23 Aug 2026 18:12:59 +0000
-Message-Id: <20260823181259.AA12B1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TlndrSAK"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c16794450aeso389887666b.2
+        for <linux-hwmon@vger.kernel.org>; Sun, 23 Aug 2026 11:16:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787508988; x=1788113788; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:subject:from:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=isdF4JSpsa/RqqbLXwBpHx2medr6i9gKnOCHIoCrxLE=;
+        b=TlndrSAK6pgH0K+EDAC01KV2RlKc3YGqEbUNlUgSWBUp43enh77hDtc01MFzu5KfHI
+         uSZr1r2pPC3qZEwbdAN5MvEBXIj8OmDYqn/Vj/3hchAwn3y6PPlGGpRbd8bm3gUqUu+G
+         xpjRlAjifNpYazj+3D/rY5jkH3o4ygJbAzhpQkD51KXLXUX0jYAKWIlUhR7H1+Hx03qU
+         OsezXRKXEJIawX0byfm22s8/8e7YoFhfphB8dRpoIceHO5Ng4Qdfp0LW9eriLVKMHnW/
+         n1ydJXGt4KC6i3SMtA8QKtWOk5XGEYEn8wjuoZRLjEn2XxB1RBARe1WcQ2Kv8AO28o2A
+         S5cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787508988; x=1788113788;
+        h=in-reply-to:references:cc:subject:from:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=isdF4JSpsa/RqqbLXwBpHx2medr6i9gKnOCHIoCrxLE=;
+        b=Q8nS0KTzoBSoz4sdxL0JgN9lS2OOGq7eeBPbylCr6xInRYwPt6mqc9867h7tiSDeoe
+         H1LDNN9UsACd0z0N6Xr2Aw627XQimJfuSVYrVsnHOmaynXuVHSdJpVPLEvHR6SmiYibM
+         HJ/p+NFucEiKyIx5JN4kdUAxmK1UTqjiVP0ste07ujHvySHvsXnFtItTy2abdWDsnKZd
+         4H1XyNyQu+pC09gdXJGHm2PM5tAPjFgMhkyq+0nI4++v82ZGiB1wCmYZa69LmPfIHcci
+         So8RxPLPhMymr8P/Hfc50ZrzsZMQoGUK2ea34G5sPT3YiIeqt924DFkknKMWuRLmwiOP
+         fdgA==
+X-Gm-Message-State: AFuF++nLrf6jdY4Ta0szqp0Z4zwMXV8aH1nM5PJyR+0wRQ0V5yeUsKSy
+	LG6LSsTUeKaL+SHC5ogq/CNQHcjTeuiNRSpHZDF2pcuyNTNwF7znTtSM
+X-Gm-Gg: AR+sD10zoPjzwYTBmbOylOaCX/WDCvTk7z4PNpqdAhymOZYrquN6meJWyW2Vz8beKLO
+	jW8eZ0FTqi1lUlRH9FvZDzYEoi3o4YKRgJOeLg6gLic1vDil/TsP7hqn1M9sNHHShNJF6QZA21v
+	e0XzmNvUe7O7gSETUJLjt4bUXiXVZUY5MWgCO9SPeK5rTRrgCi6/g+mxDT1XEWZz0XG7WGSUEY1
+	0f1rfZYJJxlK9OS/u4g5MBf5cgh/fKYDNqvw0B0IHG1YJCLXfHI0Mo66MAvgaXjTNzsEMsKIxPG
+	E3U9fh01E6PYY099qxN+0RfwDxqOJ7J+MxQ/X+IBo2F7tWBcQyD4jKB3yegFE4iaze2S0b2bP9u
+	fh4WEcrDcEG+CkC4LF3vYVkiVdaFo4kVLn+oWzsGb13Fe+3/XSB+oclmnlu3bxtm1XfBTib3ymf
+	bxj+uMdpARSIAKSndoqaoExF+oLt/r8oC+w8nOwHIiUP9f7ezLO91omXqrwqMjs8dsIH5r8Zabu
+	Q==
+X-Received: by 2002:a17:906:100a:20b0:c16:8799:fcb4 with SMTP id a640c23a62f3a-c246a6a93fbmr1663128166b.19.1787508987743;
+        Sun, 23 Aug 2026 11:16:27 -0700 (PDT)
+Received: from localhost ([2001:4bb8:148:9afb:9d58:e892:a563:60d])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2496734bfcsm877491966b.43.2026.08.23.11.16.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 23 Aug 2026 11:16:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 23 Aug 2026 20:16:25 +0200
+Message-Id: <DKWJ1VMYAVW6.21J53768947YI@gmail.com>
+To: <sashiko-reviews@lists.linux.dev>, "Javier Carrasco"
+ <javier.carrasco.cruz@gmail.com>, "Guenter Roeck" <linux@roeck-us.net>
+From: "Javier Carrasco" <javier.carrasco.cruz@gmail.com>
+Subject: Re: [PATCH v2 4/4] hwmon: chipcap2: serialize access to
+ low/high_alarm indicators
+Cc: <linux-hwmon@vger.kernel.org>
+X-Mailer: aerc 0.21.0-143-g2f3a2e260c09
+References: <20260823-chipcap2_locks-v2-0-6a26c8e9e2fc@gmail.com>
+ <20260823-chipcap2_locks-v2-4-6a26c8e9e2fc@gmail.com>
+ <20260823180616.1D53D1F000E9@smtp.kernel.org>
+In-Reply-To: <20260823180616.1D53D1F000E9@smtp.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
+On Sun Aug 23, 2026 at 8:06 PM CEST, sashiko-bot wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [High] The `scoped_guard` macro is improperly terminated with a trailin=
+g semicolon, resulting in an empty critical section that leaves the alarm s=
+tate updates unprotected.
+> --
+>
+> --- Patch [4]: [PATCH v2 4/4] hwmon: chipcap2: serialize access to low/hi=
+gh_alarm indicators ---
+> commit a0d28bd8208a1d69e597290c8ebb0fdf0731e68b
+> Author: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+>
+> hwmon: chipcap2: serialize access to low/high_alarm indicators
+>
+> This commit attempts to serialize concurrent access to the hardware monit=
+oring
+> alarm indicators. It introduces scoped_guard usage within the threaded
+> interrupt handlers to protect the low and high alarm state updates.
+>
+>> diff --git a/drivers/hwmon/chipcap2.c b/drivers/hwmon/chipcap2.c
+>> index 57d22d65612c2..0a56c55e93942 100644
+>> --- a/drivers/hwmon/chipcap2.c
+>> +++ b/drivers/hwmon/chipcap2.c
+> [ ... ]
+>> @@ -495,9 +495,11 @@ static irqreturn_t cc2_low_interrupt(int irq, void =
+*data)
+>>  	struct cc2_data *cc2 =3D data;
+>>
+>>  	if (cc2->process_irqs) {
+>> +		scoped_guard(hwmon_lock, cc2->hwmon);
+>
+> [Severity: High]
+> Does this trailing semicolon create an empty critical section?
+>
+> Because scoped_guard expands to a for loop, placing a semicolon immediate=
+ly
+> after it makes the loop body empty. This means the lock is acquired and
+> immediately released.
+>
+> The subsequent assignment to cc2->rh_alarm.low_alarm executes entirely ou=
+tside
+> the lock, leaving the data race unmitigated. Should the assignment be wra=
+pped
+> in a compound block without the trailing semicolon?
+>
 
-New issues:
-- [Medium] Registering the hwmon device before requesting IRQs exposes the =
-device to userspace before its resources are fully initialized, introducing=
- a probe race.
+This feedback is correct. The trailing semicolon is for guard() and not
+scoped_guard(). I will fix that for V3.
 
-Pre-existing issues:
-- [High] Incorrect endianness conversion on big-endian hosts for SMBus word=
- writes results in writing LSB first instead of MSB first.
-- [High] Dereferencing a potentially unaligned byte array pointer using `be=
-16_to_cpup()` can cause kernel panics on architectures with strict memory a=
-lignment requirements.
---
+>> +			cc2->rh_alarm.low_alarm =3D true;
+>> +
+>>  		hwmon_notify_event(cc2->hwmon, hwmon_humidity,
+>>  				   hwmon_humidity_min_alarm, 0);
+>> -		cc2->rh_alarm.low_alarm =3D true;
+>>  	}
+>>
+>>  	return IRQ_HANDLED;
+>> @@ -508,9 +510,11 @@ static irqreturn_t cc2_high_interrupt(int irq, void=
+ *data)
+>>  	struct cc2_data *cc2 =3D data;
+>>
+>>  	if (cc2->process_irqs) {
+>> +		scoped_guard(hwmon_lock, cc2->hwmon);
+>
+> [Severity: High]
+> Does the same empty critical section issue apply here for the high_alarm
+> update?
+>
 
---- Patch [2]: [PATCH v2 2/4] hwmon: chipcap2: fix IRQ teardown ordering ---
-Note: The standard review format has been altered and direct code quotes om=
-itted to comply with recitation restrictions.
+Same here.
 
-commit 28a819427451e0b54e63443c10cc5e1979c146bb
-Author: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-hwmon: chipcap2: fix IRQ teardown ordering
+>> +			cc2->rh_alarm.high_alarm =3D true;
+>> +
+>>  		hwmon_notify_event(cc2->hwmon, hwmon_humidity,
+>>  				   hwmon_humidity_max_alarm, 0);
+>> -		cc2->rh_alarm.high_alarm =3D true;
+>>  	}
+>>
+>>  	return IRQ_HANDLED;
 
-This commit separates IRQ discovery from IRQ registration in the chipcap2
-driver. It ensures IRQs are requested after the hwmon device is registered =
-to
-fix devres teardown ordering issues.
-
-[Severity: Medium]
-In cc2_probe(), the hwmon device is now registered using
-devm_hwmon_device_register_with_info() before cc2_request_irqs() is called.
-Does exposing the sysfs attributes before the IRQs are requested create a p=
-robe
-race?
-
-If userspace applications interact with the sysfs interface immediately aft=
-er
-registration, could the read fail with a -ETIMEDOUT error because the device
-is waiting for an IRQ handler that has not yet been registered?
-
-[Severity: High]
-This is a pre-existing issue, but looking at cc2_write_reg(), the code calls
-cpu_to_be16s() on the value before passing it to i2c_smbus_write_word_data(=
-).
-Since the SMBus API internally expects a host-endian value and always trans=
-mits
-the least significant byte first, does this logic cause big-endian hosts to
-transmit the bytes backwards instead of most significant byte first?
-
-[Severity: High]
-This isn't a bug introduced by this patch, but in cc2_read_reg() and
-cc2_data_fetch(), byte array pointers at odd offsets such as &buf[1] or sta=
-ck
-arrays are directly cast to __be16 * and passed to be16_to_cpup().=20
-
-Can these unaligned dereferences trigger kernel panics on CPU architectures
-with strict memory alignment requirements? Would it be safer to use
-get_unaligned_be16() to read these values?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260823-chipcap2_l=
-ocks-v2-0-6a26c8e9e2fc@gmail.com?part=3D2
+Best regards,
+Javier
