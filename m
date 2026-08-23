@@ -1,67 +1,68 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423A5368D71
-	for <linux-hwmon@vger.kernel.org>; Sun, 23 Aug 2026 17:59:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0115C38758C
+	for <linux-hwmon@vger.kernel.org>; Sun, 23 Aug 2026 17:59:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787507955; cv=none; b=Tu7VmiO2p2RSJU9lM5QFZs8/dyFN1UdClWhTUaz+rXiayHIP3Zq0/C9V8z5q6vfYurL+wGgPVlzEu1mEpMBE3rNESuzSamn/jEGmNbSr1jIWNALhncrMJ2o4j1pKcNtrHCqo02/oTIJKVmyGyfUqSicD84Un95WjxEi+p49Kbzg=
+	t=1787507958; cv=none; b=AKM4JI3RF7CzkXqjNHCBnnmTg6ztsZqUh6I8w503qBz/LBWUkFcFCLTvDh1MQFiqHWkCHjwDr7v475pANexUpPrHeCyyUwsmm8qm3kOUgssKOUJSLXE0cudCyPrGYx0slQcXhA7TYLindV3c+/8Kn1nak1LjK14bapUdP73XSQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787507955; c=relaxed/simple;
-	bh=NDfDF//cYaOMQlKuyN0eF+WouZ/qTNtQvy32KQUCa/I=;
+	s=arc-20240116; t=1787507958; c=relaxed/simple;
+	bh=jbfRCvEVo3PuhpBjVfzgqvGIah0vGZmzLa1w2pHljmU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nbaJ83TqP0wwkaq2VS0C/PcBKpiveJzTvpGNXxpOjQebuLhPm4Ifigd0hmVHfBcHzEuwS2cFqUzSObvWSoYwe4cUgJTMbEoLhhEZtYXGGvMxdXyN+1AIlxh6NsiZZrAXCoNf+UEnhbcUk55aB6UFRQnro7hbVaU9TUVMPOpes9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RiV36WvO; arc=none smtp.client-ip=209.85.208.41
+	 In-Reply-To:To:Cc; b=ZoX1afHlSDwHJ1XjqUQpszBtB9EePl3tmf48CYV1mdPn9jqOgU7M1n2Q2KlwnIeUK5T6AapGfPsbVb41ds8v+7f+6Yw7Z4uVR1ehU0DG9gBOQVl8/kr4aurADwb+e2SQ9abMB0WN4TBKTS/lGoytcBGh06nVeJLrr0J2RXRcKvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ToSssXnG; arc=none smtp.client-ip=209.85.208.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RiV36WvO"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-6a3819e8be8so5766503a12.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 23 Aug 2026 10:59:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ToSssXnG"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-6983d3dae7aso6137634a12.0
+        for <linux-hwmon@vger.kernel.org>; Sun, 23 Aug 2026 10:59:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787507950; x=1788112750; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787507953; x=1788112753; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=vgFoHaAGCDAcXCaglR6rN0UVDpopjrCPNpzvvDuKgdo=;
-        b=RiV36WvOz995tLol0ZfUU+Iqmqte8eQqnhvRrvm5l61FVle0XlN5BEnWVxxYjZkW8L
-         H0vs1WzR/XTvgEoCJyNHfDiVKnMoe7Cm8L8MWg8MNVN4DZoB/BzVlEO2WAHsbvfp0+FB
-         rB2q/01tq/ytE05DdD/dR3mB3UxOHxM51P3cdLgSu9EYNW/RcKqURcXEJ1pTm2lVtuWX
-         WJ99VoghSqOwbmcS8wPXVx6jwFxRN6ZDx3wkAaiPu6tz9IhgJQEbuZNXx6rcr1NZDJZB
-         bQ+VZohTQmJVYO52yRk19xmyNgeHZQUclZWhnazxouMTUfYSHfls/5n5gyEpPOM0W8wp
-         +GIQ==
+        bh=XaxU4abLJpeHOJBbZvBLa6ziYwQVZqgnY4S91187WoU=;
+        b=ToSssXnG0mCLd+DAZaIjQ7mA1+ADwbshb61Y2uZNZ++SPJ2hee56NmYUGbezaAaiWL
+         dJ6nakiZiBeUuTzTUENt5BZSQKYkXetqoiz6+wsYsUPrbwUCHQUI5KpJ1cFXQdMuFBVK
+         gcjZTHH1YR6BEiC9L98+lxhQa7VbHNyIdsuzlQms+g4GBCuwUfwxdgqn3dOwJE7nVIT0
+         sichXPr4YJ/+RUep35To4YcZJl6tekPPDVvet4TYy8yL6RPp1qjvs8BaGPCpei7jD/uL
+         t4goqf6EQNDaQiFP2iTo7gZ3Iwf0cHNQB0fKlPE7GVbEgZyoFm4Bo1ZkpIJsrmFn2dl0
+         RXRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787507950; x=1788112750;
+        d=1e100.net; s=20251104; t=1787507953; x=1788112753;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=vgFoHaAGCDAcXCaglR6rN0UVDpopjrCPNpzvvDuKgdo=;
-        b=c/9rbXG+qUFB5BwYWDpsHNgqm3k11VTkDxLcz7KHxH72itcGGaOcA5LMpu5RtQUXoc
-         rFYV29kHRykxPmJ98bjHKCtLS87cO1zbWapK5fzAU8vpCazQb/jdyRI473NRO8PCfvNY
-         nDN2Xb735AWnZeUOxN3Ddd1K60qyCvXZPZ8ddD/oT+eMvC4QQQ/GG5P8pCSly9qv1QbY
-         zvPDi9/4IxnT9LUkG0SPYGZs37NIdp+RPolVT1GOyR+IrYP6CYUg/bNbZRu0ra14dbgn
-         sbYLPqYb5py6arHPyBV1giGTKoL9/S9GIjIYO0w462wprEGfkTBNg8zLNRYSKxloD8ie
-         +B1A==
-X-Gm-Message-State: AFuF++nfRQPc3ruBk4b9wCJ2vDCIy0wqbUr4BjrBSjIGwdmCTxugMxpY
-	iOd1xODAA+Hh0e1+Lumv77B8y1l4F56eelJwlfelhYU86xDuvzXPAPCt
-X-Gm-Gg: AR+sD10zyohISI/j7BNN5g3kyoNFxF7MI2zRHYDKOZd1ehTfAeJ294SuwYnyaYPQ+Sk
-	veCEyZNF9479tcqeaORryI4hANQIaP908dv7EusGHA6uZymN2o5g7S+8DXysPDh3DlXvKRwel1Q
-	9nkj0Ba6Y/oUrgYjj1hgDp8U5ksqeU+bF7LjstYWlJdUas+qBDoMXYPEcpEULzTldzA5Whj0kPU
-	UYCjaRbjtI5wb7Ak9yWSJhZhpR48FpCMbwEx89EzEeRahHaZavF3sZbTgScNXB2nc7NMpkUJYsH
-	Q4p0Ov1Sx5UXFGoVxvehWzXaWLOBlmM5KzYN/W5l4d4Wj1nnwjvlMrLPZM9hbqgDBiVOTwz4XGD
-	UmkiWRpKcefSjnDSZ+CFBsJ0FVmE9wYbHPGtdckVq/gDDhKYTOd3F7hWLMutGFt0bK0jg/8Q39S
-	edHg3i8utUltTR07dRUZiZ5M0P+YAqqw+WZuK5C3uMDY86R27+BLqGDN1UcDH8U74kPxsZXy76I
-	zxWcQ==
-X-Received: by 2002:a05:6402:380f:b0:698:a9fe:2eb3 with SMTP id 4fb4d7f45d1cf-6a41145a43bmr26058292a12.9.1787507949986;
-        Sun, 23 Aug 2026 10:59:09 -0700 (PDT)
+        bh=XaxU4abLJpeHOJBbZvBLa6ziYwQVZqgnY4S91187WoU=;
+        b=HdYJRn3PuJNciQ4xijI233j50bNzzWKSrwgeGucoX+pT8pywlASXX0n8NU/d+zogwe
+         bWiwHrbkctNkSZe2kqhbL+8pYEMDUvzoQN3YLaCwvC6J0B/iHUAbHKawG65VR9yTOM1C
+         kKE/NdrmLBu11blGk5Sn96sO3EXPaJac14Pc6I6ZtlNjhcqzkDx/eEdoE3EtpIjx3q1+
+         4LObNbPn3/jXOPKw8CDMRveD3mUXtPr6t1e+007oxHJmHB639hKIl9UPKRs8kI+GJm+a
+         Hv5yYatlJwmyPy3flKszxXtevwMXRvM1EWmTDMJM2c8Kt+KNt99bCLN1kPDYBOETLB9k
+         Jj0w==
+X-Gm-Message-State: AFuF++lKS1mECW9/tEjj8KN463psMQckwZyem3nEsNDb9nwDupokDs9v
+	5TgNA3IuGWzifDT/dhCRiOZ+lvQtGgQKoBLYfIm6vzYIKVureAl9gGhC
+X-Gm-Gg: AR+sD1221AxBcjcUFRIHcdyTgyoo/RlGdsAeOT4TouJh4C2jh5i7AmSY2/I2UicTV2z
+	4Pp0CYPQBGFZFcV+lgE+0Xv/bYKBOlLryal0mYpJdInrGLZr45xBpWvsUqXZub8oxOFFEwBIlXJ
+	0KuxV2G49sLmjqhgtp0rBvQ7kNdTTJgo9o0gYKJHF3yDG82xN4Uy9gUPo63ShHv9g39OtWivK8Y
+	Qynt087YlM/3Yjn9k4TJg7ABowiU2uH3eOMA4C0uSJWz01J6QTKe5Qte042BFCfy4EWzFaTMxJW
+	5JnxvmtvNHYdLXG4Tjqc/FpI63NB3D6Jpu4t3TwdRrQHq+xBEqdzNwSc8sASUPu/LDTcyoXrT74
+	15tmu5VjXHzQ+wx/nb2Hfh8603W8f/SfRhjC2NJ5JN7P14I2AizH/xG1H05JaAZED9CyFHbpPBM
+	ykVkBV0iCESruER2gP0/QOViHKx1JcM/NssbzLl4nONlQNjfjzC+NtbH+7xHBQXdkyMOTnbl5Ma
+	c8Amv02BgMYxyED
+X-Received: by 2002:a05:6402:321b:b0:69f:c929:b88 with SMTP id 4fb4d7f45d1cf-6a430debb60mr20778691a12.5.1787507952817;
+        Sun, 23 Aug 2026 10:59:12 -0700 (PDT)
 Received: from [127.0.1.1] ([2001:4bb8:148:9afb:38d7:b606:f380:289e])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a59e199cb8sm4153933a12.16.2026.08.23.10.59.08
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a59e199cb8sm4153933a12.16.2026.08.23.10.59.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Aug 2026 10:59:09 -0700 (PDT)
+        Sun, 23 Aug 2026 10:59:11 -0700 (PDT)
 From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Sun, 23 Aug 2026 19:59:02 +0200
-Subject: [PATCH v2 2/4] hwmon: chipcap2: fix IRQ teardown ordering
+Date: Sun, 23 Aug 2026 19:59:03 +0200
+Subject: [PATCH v2 3/4] hwmon: chipcap2: enable IRQ processing when
+ regulator is already enabled
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,156 +71,55 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260823-chipcap2_locks-v2-2-6a26c8e9e2fc@gmail.com>
+Message-Id: <20260823-chipcap2_locks-v2-3-6a26c8e9e2fc@gmail.com>
 References: <20260823-chipcap2_locks-v2-0-6a26c8e9e2fc@gmail.com>
 In-Reply-To: <20260823-chipcap2_locks-v2-0-6a26c8e9e2fc@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Javier Carrasco <javier.carrasco.cruz@gmail.com>, stable@vger.kernel.org
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1787507945; l=4560;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1787507945; l=1283;
  i=javier.carrasco.cruz@gmail.com; s=20260111; h=from:subject:message-id;
- bh=NDfDF//cYaOMQlKuyN0eF+WouZ/qTNtQvy32KQUCa/I=;
- b=r6no+mQoz1iJ5MY7rtmCfcAP0SDldZgM+T8J8TvEGIN6rE6UoDmq0txzvhLIC6Z0wvHzDBB8C
- azoZDHF22wGBf4pmF5CWoItbrVVcBgAV/0qoQ7Rz0h/bdL4Ylv39LiM
+ bh=jbfRCvEVo3PuhpBjVfzgqvGIah0vGZmzLa1w2pHljmU=;
+ b=kwvqnY0uG0GB80exLrAofUbi7prlQZmWnSwEK59YHfIqnudHlnvBDtNFttK/K2rgEvp1vUqjj
+ 8Vfg7za3iyuCxZ4rwuKc4797TshpHKEyMmCTfORZwH1Jg7EMC/yJzQq
 X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
  pk=Lge8w8xidNSf/INy7JAIbAW+Hezkp3nsBh2OjKL7lLU=
 
-The threaded IRQs are currently requested before the hwmon device is
-registered. Since devres releases resources in reverse order, the hwmon
-device is unregistered before the IRQs are freed during driver teardown.
+cc2_enable() returns early when the regulator is already enabled.
+This can happen if a previous regulator_disable() failed or if the
+regulator was configured as always-on.
 
-An IRQ may therefore still run after the hwmon device has been released
-and access the stale data->hwmon pointer.
+In this case, process_irqs remains false, causing the ready interrupt
+to be ignored. Subsequent operations waiting for the ready completion
+then time out.
 
-Separate IRQ discovery from IRQ registration so that the IRQ numbers and
-alarm visibility flags are initialized before registering the hwmon
-device, while the IRQ handlers are requested afterwards. This ensures
-that the IRQs are released before the hwmon device during devres cleanup.
+Set process_irqs before returning when the regulator is already
+enabled, so that the driver continues to process ready interrupts.
 
 Fixes: 3af350929e75 ("hwmon: Add support for Amphenol ChipCap 2")
 Cc: stable@vger.kernel.org
 Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 ---
- drivers/hwmon/chipcap2.c | 55 ++++++++++++++++++++++++------------------------
- 1 file changed, 27 insertions(+), 28 deletions(-)
+ drivers/hwmon/chipcap2.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/chipcap2.c b/drivers/hwmon/chipcap2.c
-index 9bef767b589e..15630d1dd90a 100644
+index 15630d1dd90a..57d22d65612c 100644
 --- a/drivers/hwmon/chipcap2.c
 +++ b/drivers/hwmon/chipcap2.c
-@@ -631,28 +631,37 @@ static int cc2_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 	}
- }
+@@ -119,8 +119,10 @@ static int cc2_enable(struct cc2_data *data)
+ 	int ret;
  
--static int cc2_request_ready_irq(struct cc2_data *data, struct device *dev)
-+static void cc2_get_irqs(struct cc2_data *data, struct device *dev)
- {
--	int ret = 0;
+ 	/* exclusive regulator, check in case a disable failed */
+-	if (regulator_is_enabled(data->regulator))
++	if (regulator_is_enabled(data->regulator)) {
++		data->process_irqs = true;
+ 		return 0;
++	}
  
- 	data->irq_ready = fwnode_irq_get_byname(dev_fwnode(dev), "ready");
--	if (data->irq_ready > 0) {
-+	if (data->irq_ready > 0)
- 		init_completion(&data->complete);
-+
-+	data->irq_low = fwnode_irq_get_byname(dev_fwnode(dev), "low");
-+	if (data->irq_low > 0)
-+		data->rh_alarm.low_alarm_visible = true;
-+
-+	data->irq_high = fwnode_irq_get_byname(dev_fwnode(dev), "high");
-+	if (data->irq_high > 0)
-+		data->rh_alarm.high_alarm_visible = true;
-+}
-+
-+static int cc2_request_irqs(struct cc2_data *data, struct device *dev)
-+{
-+	int ret;
-+
-+	if (data->irq_ready > 0) {
- 		ret = devm_request_threaded_irq(dev, data->irq_ready, NULL,
- 						cc2_ready_interrupt,
- 						IRQF_ONESHOT |
- 						IRQF_TRIGGER_RISING,
- 						dev_name(dev), data);
-+		if (ret)
-+			return dev_err_probe(dev, ret,
-+					     "Failed to request ready irq\n");
- 	}
- 
--	return ret;
--}
--
--static int cc2_request_alarm_irqs(struct cc2_data *data, struct device *dev)
--{
--	int ret = 0;
--
--	data->irq_low = fwnode_irq_get_byname(dev_fwnode(dev), "low");
- 	if (data->irq_low > 0) {
- 		ret = devm_request_threaded_irq(dev, data->irq_low, NULL,
- 						cc2_low_interrupt,
-@@ -660,12 +669,10 @@ static int cc2_request_alarm_irqs(struct cc2_data *data, struct device *dev)
- 						IRQF_TRIGGER_RISING,
- 						dev_name(dev), data);
- 		if (ret)
--			return ret;
--
--		data->rh_alarm.low_alarm_visible = true;
-+			return dev_err_probe(dev, ret,
-+					     "Failed to request low alarm irq\n");
- 	}
- 
--	data->irq_high = fwnode_irq_get_byname(dev_fwnode(dev), "high");
- 	if (data->irq_high > 0) {
- 		ret = devm_request_threaded_irq(dev, data->irq_high, NULL,
- 						cc2_high_interrupt,
-@@ -673,12 +680,11 @@ static int cc2_request_alarm_irqs(struct cc2_data *data, struct device *dev)
- 						IRQF_TRIGGER_RISING,
- 						dev_name(dev), data);
- 		if (ret)
--			return ret;
--
--		data->rh_alarm.high_alarm_visible = true;
-+			return dev_err_probe(dev, ret,
-+					     "Failed to request high alarm irq\n");
- 	}
- 
--	return ret;
-+	return 0;
- }
- 
- static const struct hwmon_channel_info *cc2_info[] = {
-@@ -706,7 +712,6 @@ static int cc2_probe(struct i2c_client *client)
- {
- 	struct cc2_data *data;
- 	struct device *dev = &client->dev;
--	int ret;
- 
- 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
- 		return -EOPNOTSUPP;
-@@ -726,13 +731,7 @@ static int cc2_probe(struct i2c_client *client)
- 
- 	device_property_read_string(dev, "label", &data->label);
- 
--	ret = cc2_request_ready_irq(data, dev);
--	if (ret)
--		return dev_err_probe(dev, ret, "Failed to request ready irq\n");
--
--	ret = cc2_request_alarm_irqs(data, dev);
--	if (ret)
--		return dev_err_probe(dev, ret, "Failed to request alarm irqs\n");
-+	cc2_get_irqs(data, dev);
- 
- 	data->hwmon = devm_hwmon_device_register_with_info(dev, client->name,
- 							   data, &cc2_chip_info,
-@@ -741,7 +740,7 @@ static int cc2_probe(struct i2c_client *client)
- 		return dev_err_probe(dev, PTR_ERR(data->hwmon),
- 				     "Failed to register hwmon device\n");
- 
--	return 0;
-+	return cc2_request_irqs(data, dev);
- }
- 
- static void cc2_remove(struct i2c_client *client)
+ 	/* clear any pending completion */
+ 	try_wait_for_completion(&data->complete);
 
 -- 
 2.43.0
