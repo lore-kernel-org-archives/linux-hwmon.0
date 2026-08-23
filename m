@@ -1,68 +1,67 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D57383306
-	for <linux-hwmon@vger.kernel.org>; Sun, 23 Aug 2026 17:59:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423A5368D71
+	for <linux-hwmon@vger.kernel.org>; Sun, 23 Aug 2026 17:59:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787507953; cv=none; b=DBhzVEzWMKxzZ0Al8yZ7RUVOTaS31duWpjps5ML1bgItypkZWK7muhtIXFtjmfkB5FC3hr1PQuY8uyHFRA70ZccWKcf906GFwmxSa/LbNEDXMx/24x+XFR6sj/BczyalXBXUYVA24pNUcsr+AcISd0NH8jGZ3agKKBOoR7IC82k=
+	t=1787507955; cv=none; b=Tu7VmiO2p2RSJU9lM5QFZs8/dyFN1UdClWhTUaz+rXiayHIP3Zq0/C9V8z5q6vfYurL+wGgPVlzEu1mEpMBE3rNESuzSamn/jEGmNbSr1jIWNALhncrMJ2o4j1pKcNtrHCqo02/oTIJKVmyGyfUqSicD84Un95WjxEi+p49Kbzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787507953; c=relaxed/simple;
-	bh=fLQQ4JIzzuT4Vt7XQPvCoVjlsMWHJ7PoqIP957VnMqs=;
+	s=arc-20240116; t=1787507955; c=relaxed/simple;
+	bh=NDfDF//cYaOMQlKuyN0eF+WouZ/qTNtQvy32KQUCa/I=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NmVLLNdNHSMmRbn9mmKtFVHWeI6rtKoTDOwn2iDKIOjvHoANHGsY3rYqrnElGkcFyHZhrJVPTH2WV/+EmHO3VYDr/OMKraujxI6cCCvPxs6dw+FrsKIptvvPr0fhjccSEYFz9t2sqfRVfMEcKJH7H2Tw+uVUHJ3DKNuInIBRJTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=inNZalsl; arc=none smtp.client-ip=209.85.208.48
+	 In-Reply-To:To:Cc; b=nbaJ83TqP0wwkaq2VS0C/PcBKpiveJzTvpGNXxpOjQebuLhPm4Ifigd0hmVHfBcHzEuwS2cFqUzSObvWSoYwe4cUgJTMbEoLhhEZtYXGGvMxdXyN+1AIlxh6NsiZZrAXCoNf+UEnhbcUk55aB6UFRQnro7hbVaU9TUVMPOpes9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RiV36WvO; arc=none smtp.client-ip=209.85.208.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="inNZalsl"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6a173ad7cf4so5052519a12.3
-        for <linux-hwmon@vger.kernel.org>; Sun, 23 Aug 2026 10:59:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RiV36WvO"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-6a3819e8be8so5766503a12.0
+        for <linux-hwmon@vger.kernel.org>; Sun, 23 Aug 2026 10:59:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787507949; x=1788112749; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787507950; x=1788112750; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=I19+PjIQNnODooxQ97qMirgzt/rnck5BIrQXPDznt18=;
-        b=inNZalsl0ANHa0i+w0ICoAxv26GI6qIZPMzA6KRbd3R3jgUMQuYdi0CGDsSiJ0SLek
-         nyZOfRfhBNZCFJradEUCw3c+UCBPiqhpy1yJeUSNac6VlwfLEZoRad4aPfOIrMSg84oV
-         9Si0OT6kIpP2jee34x/Gfj984q6L70wnvKk2O5tuRNz6u2p7ektcOkgMwbszSEg6a8Yq
-         46IbboLnDni+S3ciQic8n7Tp2alKQpzb8xQGcndO1yiqZlFQbhlDKqFcKfJXebVprt8O
-         Me5evxPyY18InEREs+FrM6Fq7IWYixJTlL4ovBnSYDNJX/0nOqbJ5+MOBq17re0CLfsA
-         azFg==
+        bh=vgFoHaAGCDAcXCaglR6rN0UVDpopjrCPNpzvvDuKgdo=;
+        b=RiV36WvOz995tLol0ZfUU+Iqmqte8eQqnhvRrvm5l61FVle0XlN5BEnWVxxYjZkW8L
+         H0vs1WzR/XTvgEoCJyNHfDiVKnMoe7Cm8L8MWg8MNVN4DZoB/BzVlEO2WAHsbvfp0+FB
+         rB2q/01tq/ytE05DdD/dR3mB3UxOHxM51P3cdLgSu9EYNW/RcKqURcXEJ1pTm2lVtuWX
+         WJ99VoghSqOwbmcS8wPXVx6jwFxRN6ZDx3wkAaiPu6tz9IhgJQEbuZNXx6rcr1NZDJZB
+         bQ+VZohTQmJVYO52yRk19xmyNgeHZQUclZWhnazxouMTUfYSHfls/5n5gyEpPOM0W8wp
+         +GIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787507949; x=1788112749;
+        d=1e100.net; s=20251104; t=1787507950; x=1788112750;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=I19+PjIQNnODooxQ97qMirgzt/rnck5BIrQXPDznt18=;
-        b=LHK9Dg5Zshof98UdCQSV4LKLLHL1T90Fm+CbvLNgzUVAA9x3Uy/eBUo9JacBFN/Ng+
-         dz6g8tZAJZo1DpyuAMa52OXqSyHZJ11go5gKFJvJ63U7HBzH1CV8Ht+m6HLamq7gxQgf
-         YZaN4+mUcGaWYwEoanu5HJwmb5fZarHVwqPejgoNf26VZJkDHcPgTtgui9mkUV+SJDNm
-         gy9Gw0cw4yqyEKJQD888iQKntlx0KvOw9jW4t/s9M4EVDq8UFdQ0wJ9Eip1NfBr5nx1b
-         WtXke8wenUvVjCt2bPp3AsjxOntX49bRuuh70FdQCbVX+JhKY661m7ScUZy+avb6cd7Y
-         Ls0Q==
-X-Gm-Message-State: AFuF++mciaYscrQk60Pf2uIk7F7h1z5wN24jEeRXYs1R26jeIywkRnED
-	dnya/bfw6NtvkZZu0hQX2FCd5kMZBM9lqqTn/CIJG8RV0znw5N6McR8+
-X-Gm-Gg: AR+sD10bZxRWfO6RM1g5D0Z9Y/Up/yjJ7UEdniHMyi9Y/z2gx/GM6nxdkLS+t+bvxPG
-	1UuVawD7+/OUOqZR1u3+9be2HvxPpvXgv5y3otvbi84Z7Kz5irPl8w1ZZOxJ1QJyznILj+71xy7
-	1/Le8cH2Xlfj9I9x4rsrtV+ocmxB/LTmrXvm7/40euJ6VSrmkL4NW4+bOdqwxVBooKZIMDbnkul
-	L2bu1w59fmjZajSfMViqENZu5dbiB0whIScQou7JH6cvRJpjbrEBIPHEjO92nc+7N7KE3rcKzb0
-	dk/w3E09toU7RbFbLCiLKPL84bZWgfSNobQhAnEASEu/rnNiJJv+O4BUTIHnQh8K9bzzmPz9g+J
-	UZrNBt1EA9pd4jlLdgx3QQuwwaH/2dJ33kI5BQGD16x38Tfw9LTAXgShD45aqZ711GhMmKqxLOo
-	AzDuJOuuC4LVQ/LHq1wrcmDVHt32H5Npzdy83xwBxBxYJP0l0zREB3+iN5aEDM9SzuAOfd+u1kf
-	KCE2w==
-X-Received: by 2002:a05:6402:50c8:b0:6a3:87b7:b516 with SMTP id 4fb4d7f45d1cf-6a582b25777mr12416486a12.6.1787507948478;
-        Sun, 23 Aug 2026 10:59:08 -0700 (PDT)
+        bh=vgFoHaAGCDAcXCaglR6rN0UVDpopjrCPNpzvvDuKgdo=;
+        b=c/9rbXG+qUFB5BwYWDpsHNgqm3k11VTkDxLcz7KHxH72itcGGaOcA5LMpu5RtQUXoc
+         rFYV29kHRykxPmJ98bjHKCtLS87cO1zbWapK5fzAU8vpCazQb/jdyRI473NRO8PCfvNY
+         nDN2Xb735AWnZeUOxN3Ddd1K60qyCvXZPZ8ddD/oT+eMvC4QQQ/GG5P8pCSly9qv1QbY
+         zvPDi9/4IxnT9LUkG0SPYGZs37NIdp+RPolVT1GOyR+IrYP6CYUg/bNbZRu0ra14dbgn
+         sbYLPqYb5py6arHPyBV1giGTKoL9/S9GIjIYO0w462wprEGfkTBNg8zLNRYSKxloD8ie
+         +B1A==
+X-Gm-Message-State: AFuF++nfRQPc3ruBk4b9wCJ2vDCIy0wqbUr4BjrBSjIGwdmCTxugMxpY
+	iOd1xODAA+Hh0e1+Lumv77B8y1l4F56eelJwlfelhYU86xDuvzXPAPCt
+X-Gm-Gg: AR+sD10zyohISI/j7BNN5g3kyoNFxF7MI2zRHYDKOZd1ehTfAeJ294SuwYnyaYPQ+Sk
+	veCEyZNF9479tcqeaORryI4hANQIaP908dv7EusGHA6uZymN2o5g7S+8DXysPDh3DlXvKRwel1Q
+	9nkj0Ba6Y/oUrgYjj1hgDp8U5ksqeU+bF7LjstYWlJdUas+qBDoMXYPEcpEULzTldzA5Whj0kPU
+	UYCjaRbjtI5wb7Ak9yWSJhZhpR48FpCMbwEx89EzEeRahHaZavF3sZbTgScNXB2nc7NMpkUJYsH
+	Q4p0Ov1Sx5UXFGoVxvehWzXaWLOBlmM5KzYN/W5l4d4Wj1nnwjvlMrLPZM9hbqgDBiVOTwz4XGD
+	UmkiWRpKcefSjnDSZ+CFBsJ0FVmE9wYbHPGtdckVq/gDDhKYTOd3F7hWLMutGFt0bK0jg/8Q39S
+	edHg3i8utUltTR07dRUZiZ5M0P+YAqqw+WZuK5C3uMDY86R27+BLqGDN1UcDH8U74kPxsZXy76I
+	zxWcQ==
+X-Received: by 2002:a05:6402:380f:b0:698:a9fe:2eb3 with SMTP id 4fb4d7f45d1cf-6a41145a43bmr26058292a12.9.1787507949986;
+        Sun, 23 Aug 2026 10:59:09 -0700 (PDT)
 Received: from [127.0.1.1] ([2001:4bb8:148:9afb:38d7:b606:f380:289e])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a59e199cb8sm4153933a12.16.2026.08.23.10.59.07
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a59e199cb8sm4153933a12.16.2026.08.23.10.59.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Aug 2026 10:59:07 -0700 (PDT)
+        Sun, 23 Aug 2026 10:59:09 -0700 (PDT)
 From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Sun, 23 Aug 2026 19:59:01 +0200
-Subject: [PATCH v2 1/4] hwmon: chipcap2: fix channels in humidity alarm
- notifications
+Date: Sun, 23 Aug 2026 19:59:02 +0200
+Subject: [PATCH v2 2/4] hwmon: chipcap2: fix IRQ teardown ordering
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,72 +70,156 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260823-chipcap2_locks-v2-1-6a26c8e9e2fc@gmail.com>
+Message-Id: <20260823-chipcap2_locks-v2-2-6a26c8e9e2fc@gmail.com>
 References: <20260823-chipcap2_locks-v2-0-6a26c8e9e2fc@gmail.com>
 In-Reply-To: <20260823-chipcap2_locks-v2-0-6a26c8e9e2fc@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Javier Carrasco <javier.carrasco.cruz@gmail.com>, stable@vger.kernel.org
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1787507945; l=1798;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1787507945; l=4560;
  i=javier.carrasco.cruz@gmail.com; s=20260111; h=from:subject:message-id;
- bh=fLQQ4JIzzuT4Vt7XQPvCoVjlsMWHJ7PoqIP957VnMqs=;
- b=9DUBcEZ9MfS/ltCluXensv7cQ6cP7LfZorGh88txRsFUX+EwvMAMqF2RGAFz/vH3vAEqb42Zd
- RGRLru7TivxAIWPl1JUrYOhqOOpzQoBtyAkat3Mxk0WO0XMFGsXdH3/
+ bh=NDfDF//cYaOMQlKuyN0eF+WouZ/qTNtQvy32KQUCa/I=;
+ b=r6no+mQoz1iJ5MY7rtmCfcAP0SDldZgM+T8J8TvEGIN6rE6UoDmq0txzvhLIC6Z0wvHzDBB8C
+ azoZDHF22wGBf4pmF5CWoItbrVVcBgAV/0qoQ7Rz0h/bdL4Ylv39LiM
 X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
  pk=Lge8w8xidNSf/INy7JAIbAW+Hezkp3nsBh2OjKL7lLU=
 
-hwmon_notify_event() expects the channel number as its last argument,
-taken into account with the type parameter that it is a humidity sensor
-type. Given that this device only provides one humidity channel, 0 must
-be passed. The custom construct to enumerate the channels makes wrong
-assumptions by listing all types together (temperature and humidity).
+The threaded IRQs are currently requested before the hwmon device is
+registered. Since devres releases resources in reverse order, the hwmon
+device is unregistered before the IRQs are freed during driver teardown.
 
-Remove the custom channel enumeration and pass the right channel to
-hwmon_notify_event() for hwmon_humidity_min_alarm and
-hwmon_humidity_max_alarm.
+An IRQ may therefore still run after the hwmon device has been released
+and access the stale data->hwmon pointer.
+
+Separate IRQ discovery from IRQ registration so that the IRQ numbers and
+alarm visibility flags are initialized before registering the hwmon
+device, while the IRQ handlers are requested afterwards. This ensures
+that the IRQs are released before the hwmon device during devres cleanup.
 
 Fixes: 3af350929e75 ("hwmon: Add support for Amphenol ChipCap 2")
 Cc: stable@vger.kernel.org
 Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 ---
- drivers/hwmon/chipcap2.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ drivers/hwmon/chipcap2.c | 55 ++++++++++++++++++++++++------------------------
+ 1 file changed, 27 insertions(+), 28 deletions(-)
 
 diff --git a/drivers/hwmon/chipcap2.c b/drivers/hwmon/chipcap2.c
-index 086571d556b7..9bef767b589e 100644
+index 9bef767b589e..15630d1dd90a 100644
 --- a/drivers/hwmon/chipcap2.c
 +++ b/drivers/hwmon/chipcap2.c
-@@ -92,11 +92,6 @@ struct cc2_data {
- 	bool process_irqs;
- };
+@@ -631,28 +631,37 @@ static int cc2_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 	}
+ }
  
--enum cc2_chan_addr {
--	CC2_CHAN_TEMP = 0,
--	CC2_CHAN_HUMIDITY,
--};
--
- /* %RH as a per cent mille from a register value */
- static long cc2_rh_convert(u16 data)
+-static int cc2_request_ready_irq(struct cc2_data *data, struct device *dev)
++static void cc2_get_irqs(struct cc2_data *data, struct device *dev)
  {
-@@ -499,7 +494,7 @@ static irqreturn_t cc2_low_interrupt(int irq, void *data)
+-	int ret = 0;
  
- 	if (cc2->process_irqs) {
- 		hwmon_notify_event(cc2->hwmon, hwmon_humidity,
--				   hwmon_humidity_min_alarm, CC2_CHAN_HUMIDITY);
-+				   hwmon_humidity_min_alarm, 0);
- 		cc2->rh_alarm.low_alarm = true;
+ 	data->irq_ready = fwnode_irq_get_byname(dev_fwnode(dev), "ready");
+-	if (data->irq_ready > 0) {
++	if (data->irq_ready > 0)
+ 		init_completion(&data->complete);
++
++	data->irq_low = fwnode_irq_get_byname(dev_fwnode(dev), "low");
++	if (data->irq_low > 0)
++		data->rh_alarm.low_alarm_visible = true;
++
++	data->irq_high = fwnode_irq_get_byname(dev_fwnode(dev), "high");
++	if (data->irq_high > 0)
++		data->rh_alarm.high_alarm_visible = true;
++}
++
++static int cc2_request_irqs(struct cc2_data *data, struct device *dev)
++{
++	int ret;
++
++	if (data->irq_ready > 0) {
+ 		ret = devm_request_threaded_irq(dev, data->irq_ready, NULL,
+ 						cc2_ready_interrupt,
+ 						IRQF_ONESHOT |
+ 						IRQF_TRIGGER_RISING,
+ 						dev_name(dev), data);
++		if (ret)
++			return dev_err_probe(dev, ret,
++					     "Failed to request ready irq\n");
  	}
  
-@@ -512,7 +507,7 @@ static irqreturn_t cc2_high_interrupt(int irq, void *data)
- 
- 	if (cc2->process_irqs) {
- 		hwmon_notify_event(cc2->hwmon, hwmon_humidity,
--				   hwmon_humidity_max_alarm, CC2_CHAN_HUMIDITY);
-+				   hwmon_humidity_max_alarm, 0);
- 		cc2->rh_alarm.high_alarm = true;
+-	return ret;
+-}
+-
+-static int cc2_request_alarm_irqs(struct cc2_data *data, struct device *dev)
+-{
+-	int ret = 0;
+-
+-	data->irq_low = fwnode_irq_get_byname(dev_fwnode(dev), "low");
+ 	if (data->irq_low > 0) {
+ 		ret = devm_request_threaded_irq(dev, data->irq_low, NULL,
+ 						cc2_low_interrupt,
+@@ -660,12 +669,10 @@ static int cc2_request_alarm_irqs(struct cc2_data *data, struct device *dev)
+ 						IRQF_TRIGGER_RISING,
+ 						dev_name(dev), data);
+ 		if (ret)
+-			return ret;
+-
+-		data->rh_alarm.low_alarm_visible = true;
++			return dev_err_probe(dev, ret,
++					     "Failed to request low alarm irq\n");
  	}
  
+-	data->irq_high = fwnode_irq_get_byname(dev_fwnode(dev), "high");
+ 	if (data->irq_high > 0) {
+ 		ret = devm_request_threaded_irq(dev, data->irq_high, NULL,
+ 						cc2_high_interrupt,
+@@ -673,12 +680,11 @@ static int cc2_request_alarm_irqs(struct cc2_data *data, struct device *dev)
+ 						IRQF_TRIGGER_RISING,
+ 						dev_name(dev), data);
+ 		if (ret)
+-			return ret;
+-
+-		data->rh_alarm.high_alarm_visible = true;
++			return dev_err_probe(dev, ret,
++					     "Failed to request high alarm irq\n");
+ 	}
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ static const struct hwmon_channel_info *cc2_info[] = {
+@@ -706,7 +712,6 @@ static int cc2_probe(struct i2c_client *client)
+ {
+ 	struct cc2_data *data;
+ 	struct device *dev = &client->dev;
+-	int ret;
+ 
+ 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+ 		return -EOPNOTSUPP;
+@@ -726,13 +731,7 @@ static int cc2_probe(struct i2c_client *client)
+ 
+ 	device_property_read_string(dev, "label", &data->label);
+ 
+-	ret = cc2_request_ready_irq(data, dev);
+-	if (ret)
+-		return dev_err_probe(dev, ret, "Failed to request ready irq\n");
+-
+-	ret = cc2_request_alarm_irqs(data, dev);
+-	if (ret)
+-		return dev_err_probe(dev, ret, "Failed to request alarm irqs\n");
++	cc2_get_irqs(data, dev);
+ 
+ 	data->hwmon = devm_hwmon_device_register_with_info(dev, client->name,
+ 							   data, &cc2_chip_info,
+@@ -741,7 +740,7 @@ static int cc2_probe(struct i2c_client *client)
+ 		return dev_err_probe(dev, PTR_ERR(data->hwmon),
+ 				     "Failed to register hwmon device\n");
+ 
+-	return 0;
++	return cc2_request_irqs(data, dev);
+ }
+ 
+ static void cc2_remove(struct i2c_client *client)
 
 -- 
 2.43.0
