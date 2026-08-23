@@ -1,173 +1,172 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C581D2BCF4C
-	for <linux-hwmon@vger.kernel.org>; Sun, 23 Aug 2026 18:11:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B65F234973
+	for <linux-hwmon@vger.kernel.org>; Sun, 23 Aug 2026 18:11:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787508669; cv=none; b=Mz9wFRCbZTRiZBBgkl8VrPOhiDoczYrb1Hk+N6/6HnvQD6Gt8EPF8nc2Ju45dozqarkd1bgniTf4g35EBeC1UCKoMT7bLZOHYwwrQIvXBoff284UEyzrsUxbKC/BLwXHhNpROHnTMf/ZjYczEvBok7Dz0HOZFqUqo5oNCx+iqZ8=
+	t=1787508705; cv=none; b=bGPVAeeXNEOyiavPDK3XDPdveuIS2crXEpcwzKosjTzpUor+ZN6brbS0xHMRhEqIWIrzZi6JEZaj3UGNK+HSIc3uIBrczJCmWXG/y453Xlo2tWK3wT3wRzdhoWd/VLTMHD6+0WHin0YioiH2/lniL0NJR8qc/iZZefYnHB7Y45w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787508669; c=relaxed/simple;
-	bh=JPMBHmWNkHgpIw6oX4ck0Js3VGzh70l5gtzQeJLKTHY=;
+	s=arc-20240116; t=1787508705; c=relaxed/simple;
+	bh=PyoKseSvTJ2MifvNV5C2OvzMiG2uJZEGnuq9p1ed6lU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=iklO36MI7eyzidqPMqWBNHMRp9W10O8UhEvscympFRfCP2HwQh5PDSyvNjTtTw457Wjcl1SEaV33kpjD0scs9Cm6L/Hfzu0d1gareI48Px8LjxzOrScaawO8l3fEWZQNj0gHdX4dlvNHfdKqdRMUfmVvvompaQ163bL4AQPbsk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A+e+E8Xc; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Qf31gHOsFPq0PTymLuK2go1c3H2Hcpiy65bGuOTL/EEAvT7ZgkM0KfIi4dAyC04mTxTYNO2kW5Tl/KfEnOe/WtNZR7czMNPPf9SwHjFnllpR8bPbjypfcIaKh+hS/VaqRpU/Ppi7Izh7ljM0SBiwcqzXfZhPPXdgR6jUM1efskg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TbfD8oZh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A+e+E8Xc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 476DA1F000E9;
-	Sun, 23 Aug 2026 18:11:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TbfD8oZh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F32B11F000E9;
+	Sun, 23 Aug 2026 18:11:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787508668;
-	bh=L4Oakzj7WG2qm0NkxGsXbkYoh1+FT2Cux8KGrLIPgHE=;
+	s=k20260515; t=1787508704;
+	bh=+LzF+nrI1Q7iWkVB1af0nrztFsLaDZwBpImWcVdyxiU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=A+e+E8XcO+3a6t9tc9SUUwm7dzrQKlqvtKsLEZxVVO3eQb4csMn0sisSdQqhnqEjj
-	 /ZbZ72aGBwM4EUAc5Xnj4yXpvdsv6gd3AR+VN1fMev4IzFc3hNSX0ofX+6EQ8Ugp9P
-	 yGW7aauTbPUaq3BOHOuD9W4fCxhcTqg/FUWwnSHu73R5DV/jwQE50HbDO6OvIulEG6
-	 bh1Y48+sWscJsrL64S8Hprc++jaFDCL1RO0zmfb0Tkecq9tjeh0vZUYtuuOBKQA6Ks
-	 zvMrPIgdYhavliBwYEYCAU8J6vA4pNAuxc+PiiDxcc7k0GGcm4v5KpFsYdUv0QSiCu
-	 D2c0eThrzZCYA==
+	b=TbfD8oZhdZmg1juNTMF+TWJh0RAJmt55LqGRfh6EG4KQW/l9Wti4PhVDPaJhsiUi+
+	 Z3OBoqKL0aIbobelmUkuMRX6jhnb/hzOKF8xEjrDmRoK1/aQexL+wLiVUM5kKEyNcb
+	 V+oA7f/XbzV2L6wkLBxmJYEoQqHTRlvnLZecGp8q+fcrFVnVlQGSfXMi0IHY4rM5ST
+	 hAyz8TfCSo7Y5FQGC+tevOOMW1iLclG09hvIz4smwH2A0NbxTTXrldNe4yTQncSaRN
+	 /Uan5l38g73D2ySKcTXT2exbuEucnP8qs++wI/A3VRhDZnDHMljzAHfWjS98zPtbFB
+	 FBdtLkPsRvnuQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 1/4] hwmon: chipcap2: fix channels in humidity alarm
- notifications
+Subject: Re: [PATCH v2 3/4] hwmon: chipcap2: enable IRQ processing when
+ regulator is already enabled
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Javier Carrasco" <javier.carrasco.cruz@gmail.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260823-chipcap2_locks-v2-1-6a26c8e9e2fc@gmail.com>
+In-Reply-To: <20260823-chipcap2_locks-v2-3-6a26c8e9e2fc@gmail.com>
 References: <20260823-chipcap2_locks-v2-0-6a26c8e9e2fc@gmail.com>
- <20260823-chipcap2_locks-v2-1-6a26c8e9e2fc@gmail.com>
+ <20260823-chipcap2_locks-v2-3-6a26c8e9e2fc@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 23 Aug 2026 18:11:07 +0000
-Message-Id: <20260823181108.476DA1F000E9@smtp.kernel.org>
+Date: Sun, 23 Aug 2026 18:11:43 +0000
+Message-Id: <20260823181143.F32B11F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 6 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Unaligned memory access when casting byte arrays to `__be16 *`
-- [High] Incorrect endianness conversion for SMBus word write breaks on Big=
--Endian architectures
+- [High] Bypassing `regulator_enable()` but calling `regulator_disable()` l=
+eads to unbalanced operations and kernel WARNs.
+- [High] Incorrect endianness conversion for I2C SMBus word write corrupts =
+data on Big Endian architectures.
+- [Medium] `regulator_is_enabled()` can return negative error codes, which =
+are improperly evaluated as true.
+- [Medium] The early return path skips clearing pending completions, potent=
+ially causing stale reads.
+- [Medium] Alarm configuration (command mode) fails unconditionally with ti=
+meouts if the regulator is always-on.
+- [Low] `try_wait_for_completion()` is improperly used to reset the complet=
+ion structure.
 --
 
---- Patch [1]: [PATCH v2 1/4] hwmon: chipcap2: fix channels in humidity ala=
-rm notifications ---
-commit e05e5dc803c6cf895cd85ba5388bb75fbd791d04
+--- Patch [3]: [PATCH v2 3/4] hwmon: chipcap2: enable IRQ processing when r=
+egulator is already enabled ---
+commit d7e6228cb08396bc9407928fe3b3e28aa4aaf084
 Author: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
-hwmon: chipcap2: fix channels in humidity alarm notifications
+hwmon: chipcap2: enable IRQ processing when regulator is already enabled
 
-hwmon_notify_event() expects the channel number as its last argument,
-taken into account with the type parameter that it is a humidity sensor
-type. Given that this device only provides one humidity channel, 0 must
-be passed. The custom construct to enumerate the channels makes wrong
-assumptions by listing all types together (temperature and humidity).
-
-Remove the custom channel enumeration and pass the right channel to
-hwmon_notify_event() for hwmon_humidity_min_alarm and
-hwmon_humidity_max_alarm.
+cc2_enable() returns early when the regulator is already enabled.
+This can happen if a previous regulator_disable() failed or if the
+regulator was configured as always-on.
 
 > diff --git a/drivers/hwmon/chipcap2.c b/drivers/hwmon/chipcap2.c
-> index 086571d556b7e..9bef767b589ee 100644
 > --- a/drivers/hwmon/chipcap2.c
 > +++ b/drivers/hwmon/chipcap2.c
-> @@ -92,11 +92,6 @@ struct cc2_data {
->  	bool process_irqs;
->  };
+> @@ -119,8 +119,10 @@ static int cc2_enable(struct cc2_data *data)
+>  	int ret;
 > =20
-> -enum cc2_chan_addr {
-> -	CC2_CHAN_TEMP =3D 0,
-> -	CC2_CHAN_HUMIDITY,
-> -};
-> -
->  /* %RH as a per cent mille from a register value */
->  static long cc2_rh_convert(u16 data)
->  {
+>  	/* exclusive regulator, check in case a disable failed */
+> -	if (regulator_is_enabled(data->regulator))
+> +	if (regulator_is_enabled(data->regulator)) {
+
+[Severity: Medium]
+This is a pre-existing issue, but regulator_is_enabled() can return negative
+error codes. Does this condition in cc2_enable() evaluate to true for negat=
+ive
+error codes like -EINVAL, incorrectly bypassing the enable sequence?
+
+Similarly, in cc2_disable(), this check incorrectly tries to disable the
+regulator if its state check failed.
+
+[Severity: High]
+This is a pre-existing issue, but returning early here bypasses taking a
+software reference via regulator_enable() if the regulator is physically
+enabled.
+
+If the regulator is physically always-on (e.g., fixed-regulator),
+regulator_is_enabled() returns 1, and cc2_enable() skips regulator_enable().
+Then cc2_disable() calls regulator_disable() without a matching enable,
+triggering a kernel WARN because the consumer's enable_count is 0.
+
+Should this code ensure regulator_enable() is always called to maintain
+balance?
+
+[Severity: Medium]
+This is a pre-existing issue, but does the command mode retry logic in
+cc2_command_mode_start() fundamentally assume regulator_disable() guarantee=
+s a
+physical power cycle?
+
+cc2_command_mode_start() calls cc2_disable() followed by an msleep() to pow=
+er
+cycle the device. If the regulator is always-on, power is never physically
+removed, the 10ms startup window is permanently missed, and the START_CM
+command is ignored, causing alarm configuration to fail with -ETIMEDOUT.
+
+> +		data->process_irqs =3D true;
+>  		return 0;
+
+[Severity: Medium]
+This is a pre-existing issue, but does this early return skip clearing the
+pending completion?
+
+If a late interrupt from a prior timeout leaves data->complete.done > 0, and
+the regulator is already enabled, the early return in cc2_enable() bypasses
+the reset.
+
+Subsequently, the wait in cc2_read_measurement():
+
+ret =3D wait_for_completion_timeout(&data->complete, timeout);
+
+will succeed immediately, potentially fetching stale data prematurely before
+the sensor finishes its measurement, returning -EBUSY.
+
+> +	}
+> =20
+>  	/* clear any pending completion */
+>  	try_wait_for_completion(&data->complete);
+
+[Severity: Low]
+This is a pre-existing issue, but is try_wait_for_completion() improperly u=
+sed
+to reset the completion structure?
+
+try_wait_for_completion() only decrements the done counter by 1. If multiple
+interrupts occurred, done might be > 1, so the next wait could succeed
+immediately.
+
+Should this use reinit_completion() instead?
+
 [ ... ]
-> @@ -499,7 +494,7 @@ static irqreturn_t cc2_low_interrupt(int irq, void *d=
-ata)
-> =20
->  	if (cc2->process_irqs) {
->  		hwmon_notify_event(cc2->hwmon, hwmon_humidity,
-> -				   hwmon_humidity_min_alarm, CC2_CHAN_HUMIDITY);
-> +				   hwmon_humidity_min_alarm, 0);
->  		cc2->rh_alarm.low_alarm =3D true;
->  	}
-> =20
-> @@ -512,7 +507,7 @@ static irqreturn_t cc2_high_interrupt(int irq, void *=
-data)
-> =20
->  	if (cc2->process_irqs) {
->  		hwmon_notify_event(cc2->hwmon, hwmon_humidity,
-> -				   hwmon_humidity_max_alarm, CC2_CHAN_HUMIDITY);
-> +				   hwmon_humidity_max_alarm, 0);
->  		cc2->rh_alarm.high_alarm =3D true;
->  	}
-
-While reviewing this patch, I noticed a couple of pre-existing issues in
-drivers/hwmon/chipcap2.c that you might want to look into.
-
-drivers/hwmon/chipcap2.c:cc2_write_reg() {
-...
-	cpu_to_be16s(&val);
-	ret =3D i2c_smbus_write_word_data(data->client, reg, val);
-...
-}
 
 [Severity: High]
-This isn't a bug introduced by this patch, but does this endianness convers=
-ion
-work correctly on Big-Endian architectures?
+This is a pre-existing issue, but does the combination of cpu_to_be16s() and
+i2c_smbus_write_word_data() in cc2_write_reg() write swapped byte sequences=
+ on
+Big Endian platforms?
 
-The SMBus protocol always transmits the least-significant byte first.
-On a Little-Endian CPU, cpu_to_be16s() correctly swaps the bytes in memory,
-causing SMBus to send the high byte first, matching the Big-Endian device's
-expectations.
-
-However, on a Big-Endian CPU, cpu_to_be16s() is a no-op, so the SMBus core
-extracts the actual least-significant byte and sends it first, resulting in
-Little-Endian transmission over the wire. Should this use
-i2c_smbus_write_word_swapped() instead to ensure writes to device
-configuration aren't corrupted?
-
-
-drivers/hwmon/chipcap2.c:cc2_read_reg() {
-...
-	ret =3D i2c_master_recv(data->client, buf, CC2_EEPROM_DATA_LEN);
-	if (ret !=3D CC2_EEPROM_DATA_LEN)
-		return ret < 0 ? ret : -EIO;
-
-	*val =3D be16_to_cpup((__be16 *)&buf[1]);
-...
-}
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does casting the unaligned
-address &buf[1] to a 16-bit pointer cause an unaligned memory dereference?
-
-Dereferencing an unaligned pointer using be16_to_cpup() can cause an
-alignment fault and kernel oops on architectures that strictly enforce
-memory alignment (e.g., SPARC or older ARM). This also happens in
-cc2_data_fetch() when casting &data[2] to a 16-bit pointer:
-
-drivers/hwmon/chipcap2.c:cc2_data_fetch() {
-...
-	switch (type) {
-	case hwmon_humidity:
-		*val =3D cc2_rh_convert(be16_to_cpup((__be16 *)&data[0]));
-		break;
-	case hwmon_temp:
-		*val =3D cc2_temp_convert(be16_to_cpup((__be16 *)&data[2]));
-...
-}
-
-Is there a safer way to parse these bytes without casting potentially
-unaligned byte array addresses?
+On Big Endian systems, cpu_to_be16s() is a no-op. i2c_smbus_write_word_data=
+()
+mathematically sends the least significant 8 bits first. Thus, on Big Endia=
+n,
+the original LSB is sent first, whereas the sensor expects MSB first,
+which corrupts the alarm threshold configuration.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260823-chipcap2_l=
-ocks-v2-0-6a26c8e9e2fc@gmail.com?part=3D1
+ocks-v2-0-6a26c8e9e2fc@gmail.com?part=3D3
