@@ -1,164 +1,134 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBE803128DF
-	for <linux-hwmon@vger.kernel.org>; Sun, 23 Aug 2026 04:26:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 383E0381AEC
+	for <linux-hwmon@vger.kernel.org>; Sun, 23 Aug 2026 17:59:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787459213; cv=none; b=Hh/mf3irhCbzjtgqMzVeXsoY4Njgv2Jz4SShoIJbAQjskfUUipgpCt3qiJGtdqX4HzOPBP7ZxwPvK0xbsWG9+HfjCLFRxZCDSKHwbg5orCgiHIYV5A189V7kALT59tyYt/uOUSiv8w0bE1yPpCVFmnTBtqUpSgE6qYmaVVmh//8=
+	t=1787507951; cv=none; b=crkGO14oXuBzT+4obMsNS5HUlWZMN4qNSZgzaBssyIniPJpVsFfQOxBf1kFEITrN22aVY920l3FlriGR/0lt40Sg7xHOHWCv2af1iGxsHmn3qMtzj/SoVnCxLR0YqSqZEziFDTCBf7wFCM+pjt0NNcnZUKlExu/GcLSaSh6s+28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787459213; c=relaxed/simple;
-	bh=h1E6CEqKHoDsBx3lNc+efN5br6wQWifNLjXXBpPwweI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p8P3aybS+V5ZKFMAsB4I/XuMWyDHffeyXefoFsQWdkITtKoInFlbslD/m+mq7Zev8as93uBK/ezqhgBI0+0YkKaXw50qZYpTYYZtpzxWBoJNv++zGs5N8+CqmzDF4Ynclstuh5Fy6H+C6CSlbVrnztYMfs8qF5poblvjoDZrcN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bCzHVv4a; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1787507951; c=relaxed/simple;
+	bh=3TgrgwT+3TQqyh+mokvZkeL6QOBygWorjWWJ1gx7cXM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fXUZREHXVIe/oPwq7m0ze5TYot0x9GekqYGqxAgj84nzxUDO7G9ZhtocnwN0Cbw2sKQ+IGk22J9jEQeZI9Y4FmuzZ5nAMTeXuylGiAcxI0e+FTvha2EbkpAg+DrI+3e0IrvDOFxM/1QTF4W56c6yJH62UzdZwapSXnKAiwj+WB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DQV8WgpI; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bCzHVv4a"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2d53197d8b5so23673835ad.3
-        for <linux-hwmon@vger.kernel.org>; Sat, 22 Aug 2026 21:26:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DQV8WgpI"
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-6a082b3671fso4379424a12.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 23 Aug 2026 10:59:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787459211; x=1788064011; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=SGQY/BKdvVO3mikQxDJmzgu9H2nS1ohzOfMoYUukN40=;
-        b=bCzHVv4aMnFNCEjrzv28/CflM/UAkCMcJRylNaAO+OwjuRh1vcmcbZLvQZnWXAZGUU
-         OOD7xTmAgpjMD7kcAe+MYSpt39L8n3mbHWZtE6XQv4sXcLuyFxr9AJcOupt3w2DM0zBq
-         3XZDbxSdC9XPH9rUm/yxdyxonSn1vnV81UR683XU4IyNIjjdIqKxkpfFc27Kh0uJUcMx
-         EDyP4mVPGgRPMPKaJxUJ2mpPQATdaDtqXaQIREmbXJjfHB4q+h/vG64xzgqIUh7jJAFd
-         LlLIVgcQdCNq3a3oHzngXMkuKAEW6VKg3JBDaW5aKFXJPoDMwv0kgq0+c6agqjd/nID+
-         4OHg==
+        d=gmail.com; s=20251104; t=1787507947; x=1788112747; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=Sjq/3IUGZ/SVynU7JLmiVVao524iN6L5MfR/udlZ7+k=;
+        b=DQV8WgpIUutXFj8D2pDLixvkMyjEjXAtL1P6M3sdYHwbJYj4gCKAcOze7yKHX3gEKT
+         +u2YwDPFzvtIadX6hKC/iZYbyMyWC7RScJwuKSfhKLNVS6VR7bhKINd4b8WZ8HasN1EO
+         4p0VYQh02kKLf/yhqlaVwEyB8N8/M8IHnGqFk9dPmO9ZRgpbzEOgV446/COhalYDNSAn
+         5Vz5j7CFAjlUzXXrGMcrow6os8K09WzqV/hD8+atFpREHuddPwNmwTJxL6yYrpgYDNxr
+         inv/ir8rulc3v45r0pX8fNBqiHG9SXiU4FvYko6e1+ii2KO2dzQ1nPhIcrmM1sa/QzZ1
+         vY4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787459211; x=1788064011;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20251104; t=1787507947; x=1788112747;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=SGQY/BKdvVO3mikQxDJmzgu9H2nS1ohzOfMoYUukN40=;
-        b=ZFVd0hrJnt1gQmlJSKJgurrlLgUDyiv3eahmTogR5XCT4tpR2TWdzZIALV5VjW5yBQ
-         9tUEDH27NgcQm2YJGfAMIvLNEaSf0chDh6LrsEu0wE+8EypSomrDK1wqMyY1Y2mnGdH+
-         mP+maefsmfJ6LXYj7w39bvhRcsH/3vwXiFSc1lKvsck092cK8Sa9ATzDKs78UaLNd8MJ
-         NXHyHz9VSLfuRZkReSmP1NQEIjLewyVLkJ4X1Rq3idIfY8hk24ZUs8kAhfDQ4KTVGXJa
-         tCurRU7vywso/SjfAgVekRNuPI7dqwVmxLQ3dxA9EB+jJhGsmUmo/C4C5PkSBfVqYF1I
-         099A==
-X-Gm-Message-State: AFuF++kk19eYS5lCKr8pj/Cn7UUs6y1d8Jt6U6/9G/Slqgjwi+l13bpV
-	t9In8JBAZ0mxYNL3NiuGaKJSEnR1FNCAmh/AF/slhd3oT2HNSKU/nbs/
-X-Gm-Gg: AR+sD11DWebQ4151ltnW+9NFXEDDsTBLUcGLYcCa3lcP74iBIY8LaqCPBTS4aHSaaAP
-	vylNDN4z78bEw28X+torFACljERyO4UVnZsh366a+KkdaNJfkCnT3KLe2ZFWVmNijuU+q93CQA4
-	PNKMHNrFy6CNiZS0L6LpOhy002LMsG6/3JVMtnsp0U7GCuBUoD0D1c3PG+bHj3OeG3AMYu7fAdb
-	gvJj4LAWkIJJZnVPccAF1Dw8mIJcHdVArDyeTX6z1wHQK8fpXdbfWNZkmnSrNuWp9L4cwwJV3bC
-	382gpKAodm3V+lcF1aQ+w0ZjuI9C4ovzt29BS3SUnA9i+m6DpTZ66Ks9zB3mkLPWkpMYw3Ebt1W
-	vhlcbK+VcNB4FgSn6pH/ukX60RP71InxD+JdgJgg/WLzcgd61v6wwWaTWcjAicBU6oAEJQNarFI
-	shBsIqAfAowoliVRV2IsrvliXhYqaWkQqGoI4mj95coUzbk+xmj+qmNgq734FsrVcnWKavOgZs5
-	+u3eq3waULpk1y/Ot5kJufjCI5CDNdqaaSfMQ==
-X-Received: by 2002:a17:903:354b:b0:2d3:2e86:647a with SMTP id d9443c01a7336-2d64af6f896mr336483915ad.5.1787459211153;
-        Sat, 22 Aug 2026 21:26:51 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d67678c417sm7524385ad.20.2026.08.22.21.26.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Aug 2026 21:26:48 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <21b29db0-06c0-4881-9750-d38b3bc931c3@roeck-us.net>
-Date: Sat, 22 Aug 2026 21:26:46 -0700
+        bh=Sjq/3IUGZ/SVynU7JLmiVVao524iN6L5MfR/udlZ7+k=;
+        b=ePEtcAaGRifx56k5Zu8E+DMeJbeNcjBjkhizBo6drjNQCvP8neqYAn5bFGJ8egxtXy
+         oneY6uD9DdVkYrIBbHcklaU+jW07NNSwgulfwmNloFJHcBOv8S29VVLK4AeU+xwgbV0s
+         hApOa/55PKhnpo7QNVxrQ1Dq4/hXr4WCzRso0qMPnA2Wyz+/MByqxEM84cph5LOXGt9R
+         thQGuVRfncKq/UhwzIcykY/UPGYNdm89cGnlZOJ9jL8/h0tcneAc+1PJR7pBo/0g831h
+         AQ5BsNV4dqkSOL5PwqVsGMGnHq2ceGDoas/aW14gV3rBoJ4kXxypdyf8RD+QwZhBcCoC
+         GU2w==
+X-Gm-Message-State: AFuF++l3jjGi72IfbQ/jHUzVvWEDS5WJJOie9s3LaWVfFGx3Og/JEWsA
+	4xcUxZ0x/fivcl52W0m9Id4DwpoKFPb7teZaAuou4IWvyZD4Y+T4yJFOQMPnfg==
+X-Gm-Gg: AR+sD1321V5GwmHLJS6ct/I4gBK13QjGKe0p9eInY4kgG86j8gLiKCLf3aZ8HSGfdzz
+	l9q5gdWnw8oS24ByIN3wr4FVyoVS3LkbURT7oiTpnv5RxRvAnaAxNEqFmUTVWuMI/rUhIamdv1Q
+	mQkL72E5oEI8JvRMZuUxvWrUyIj65m4Ir2DMjFBsmykUp45gyy+KmRbQpHWwYc5fNTUxBeSOSsy
+	8O+H7uldzMikQn9kuONs8fwT0oprIxYLHHGuFGRCXMW555CoG2Ud3Ty95GQuO21tTmMER/wbRDm
+	5Glc0q/R8Tzdf7eHcgDrZWGfAERQ/tE4yUMsn/htb1bA8+97Q/3O6JYvO9GBHHD5wpaZmhSRO4i
+	nvwMxzPWGgApGYuyExa1QW30NhwSnXerbSlw198BCkeDpWmaIbpVfYfE9CairRMvhFJrJIV5gvJ
+	zLL+4S316PEHJwAx6qLitNuUJgbKatE2jBiaYwEJfG7mCDolcLYL2FWwlmXQ+qQCqMEzIdN0gG+
+	bXjxQ==
+X-Received: by 2002:a05:6402:321a:b0:6a3:f3dc:d7f3 with SMTP id 4fb4d7f45d1cf-6a42f216053mr25270642a12.16.1787507946853;
+        Sun, 23 Aug 2026 10:59:06 -0700 (PDT)
+Received: from [127.0.1.1] ([2001:4bb8:148:9afb:38d7:b606:f380:289e])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a59e199cb8sm4153933a12.16.2026.08.23.10.59.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Aug 2026 10:59:06 -0700 (PDT)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: [PATCH v2 0/4] hwmon: chipcap2: various bug fixes
+Date: Sun, 23 Aug 2026 19:59:00 +0200
+Message-Id: <20260823-chipcap2_locks-v2-0-6a26c8e9e2fc@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] hwmon: (yogafan) fix non-kernel-doc comment
-To: hanzhijian <hanzhijian1991@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260821115720.2017516-1-hanzhijian1991@gmail.com>
- <20260823013841.2884472-1-hanzhijian1991@gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260823013841.2884472-1-hanzhijian1991@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOU0i2oC/13MwQrCMAzG8VcZOVtpo8jw5HvIkCzrtuC2lnYUZ
+ fTdrQMvktM/8P02iDaIjXCtNgg2SRS3lMBDBTzSMlglXWlAjRddo1Y8imfy+JgcP6NibbQ5EZ5
+ JM5SRD7aX1w7em9KjxNWF9+4n8/3+KPNPJaPKdTUztT2bFm/DTDId2c3Q5Jw/EOXfl6wAAAA=
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>, stable@vger.kernel.org
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1787507945; l=1997;
+ i=javier.carrasco.cruz@gmail.com; s=20260111; h=from:subject:message-id;
+ bh=3TgrgwT+3TQqyh+mokvZkeL6QOBygWorjWWJ1gx7cXM=;
+ b=v35qConihnxbkJFI9UxHBD/4b0tniOfkuY1qF5kSgsZf29DXLkxUzuJFir5ip/dcNME8F5ppn
+ Fj87w4pVmTPDd6974UKZ/s0QvnFlMwfbdd0uFEjXMC0S67OzcRpP5pz
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=Lge8w8xidNSf/INy7JAIbAW+Hezkp3nsBh2OjKL7lLU=
 
-On 8/22/26 18:38, hanzhijian wrote:
-> The file description comment starts with "/**", which is reserved for
-> kernel-doc comments.  scripts/kernel-doc then warns when building the
-> documentation:
-> 
->    Warning: drivers/hwmon/yogafan.c:2 This comment starts with '/**',
->    but isn't a kernel-doc comment. Refer to
->    Documentation/doc-guide/kernel-doc.rst
-> 
-> Change it to a plain "/*" comment since it does not document any
-> function or struct.
-> 
-> Signed-off-by: hanzhijian <hanzhijian1991@gmail.com>
+The original issue (race condition for the alarms) was found by Sashiko[1]
+when an unrelated patch affected chipcap2.c. The issue is real as the
+access to the variables is not protected by any locking mechanism
+although 2 different sources (threaded interrupts and sysfs) could
+modify them.
 
-No change log, no change other than the commit message, that change
-does not add any value, and I already applied this patch and sent
-out a note that I did.
+After sending the fix, Sashiko found new issues[2] that have been added to
+the series:
+- Wrong channel number in hwmon_notify_event(): pass 0 as the channel
+  number.
+- IRQ teardown ordering: split the current implementation to provide the
+  available interrupts before registering the hwmon device, and register
+  the IRQs after the hwmon device has been registered.
+- Enable IRQ processing when the regulator is already enabled.
 
-Are you playing with me ? I am inclined to drop this patch.
+The fixes have been validated on real hardware with an Amphenol
+ChipCap 2 CC2D23S sensor.
 
-Guenter
+[1] Link: https://lore.kernel.org/linux-hwmon/20260625162114.417EA1F000E9@smtp.kernel.org/
+[2] Link: https://lore.kernel.org/linux-hwmon/20260821093706.D1EB11F000E9@smtp.kernel.org/
 
-> ---
->   drivers/hwmon/yogafan.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/yogafan.c b/drivers/hwmon/yogafan.c
-> index 48fa5148d..278cb089b 100644
-> --- a/drivers/hwmon/yogafan.c
-> +++ b/drivers/hwmon/yogafan.c
-> @@ -1,5 +1,5 @@
->   // SPDX-License-Identifier: GPL-2.0-only
-> -/**
-> +/*
->    * yoga_fan.c - Lenovo Yoga/Legion Fan Hardware Monitoring Driver
->    *
->    * Provides fan speed monitoring for Lenovo Yoga, Legion, and IdeaPad
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+
+Changes in v2:
+- Add fixes to the new issues reported by Sashiko.
+- Use hwmon subsystem lock.
+- Link to v1: https://lore.kernel.org/r/20260821-chipcap2_locks-v1-1-1d8ccabfc1b2@gmail.com
+
+---
+Javier Carrasco (4):
+      hwmon: chipcap2: fix channels in humidity alarm notifications
+      hwmon: chipcap2: fix IRQ teardown ordering
+      hwmon: chipcap2: enable IRQ processing when regulator is already enabled
+      hwmon: chipcap2: serialize access to low/high_alarm indicators
+
+ drivers/hwmon/chipcap2.c | 76 ++++++++++++++++++++++++------------------------
+ 1 file changed, 38 insertions(+), 38 deletions(-)
+---
+base-commit: 388b607d107c07aaade04c7f22f344cab6bdccd3
+change-id: 20260820-chipcap2_locks-c01013a24a0c
+
+Best regards,
+-- 
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
