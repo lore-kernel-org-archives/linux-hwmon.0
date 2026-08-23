@@ -1,122 +1,173 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C10AB234973
-	for <linux-hwmon@vger.kernel.org>; Sun, 23 Aug 2026 18:06:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C581D2BCF4C
+	for <linux-hwmon@vger.kernel.org>; Sun, 23 Aug 2026 18:11:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787508377; cv=none; b=HWtWbvGgeKwUCYmrFt1RKL3VzSFDlSfqYjC4vHkH3EOBtoXT5ksadUKCZse0keDipPjwJpLMbMLSzIW/AhMXlMpAQwNc/DJ3ksAteYAGbMkDV2/1lIRPAncjAhP0IsrqraJOPvceOCHNYDnw3Ca78T9u+z6Tg+Bb4n1WOCb7Qwo=
+	t=1787508669; cv=none; b=Mz9wFRCbZTRiZBBgkl8VrPOhiDoczYrb1Hk+N6/6HnvQD6Gt8EPF8nc2Ju45dozqarkd1bgniTf4g35EBeC1UCKoMT7bLZOHYwwrQIvXBoff284UEyzrsUxbKC/BLwXHhNpROHnTMf/ZjYczEvBok7Dz0HOZFqUqo5oNCx+iqZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787508377; c=relaxed/simple;
-	bh=opWzfTEFHwu+2PUSkUlCsF0FrsgGrwm22Ujui5M35/4=;
+	s=arc-20240116; t=1787508669; c=relaxed/simple;
+	bh=JPMBHmWNkHgpIw6oX4ck0Js3VGzh70l5gtzQeJLKTHY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=lc4/Mlz1lp3O4fW7AKlx50vQnRg44ZjGS0ArIesui6MLRK+tLdkz1BCw5A1R2Is3w7aWvnxGzL1lLRbVqe9MuricwDbICVgSWBxh6T4/a9bOvQ0KhvyrWREL4mjGj8OWZHWw06VLQZ695VcRco/pJZuh8YGWsavdeXTN0VLCXd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KJFPbEaE; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=iklO36MI7eyzidqPMqWBNHMRp9W10O8UhEvscympFRfCP2HwQh5PDSyvNjTtTw457Wjcl1SEaV33kpjD0scs9Cm6L/Hfzu0d1gareI48Px8LjxzOrScaawO8l3fEWZQNj0gHdX4dlvNHfdKqdRMUfmVvvompaQ163bL4AQPbsk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A+e+E8Xc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KJFPbEaE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D53D1F000E9;
-	Sun, 23 Aug 2026 18:06:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A+e+E8Xc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 476DA1F000E9;
+	Sun, 23 Aug 2026 18:11:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787508376;
-	bh=0jWA7gbITwxVCWS3pEgFHf1GjuQkGhDdI408N2q8sSg=;
+	s=k20260515; t=1787508668;
+	bh=L4Oakzj7WG2qm0NkxGsXbkYoh1+FT2Cux8KGrLIPgHE=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=KJFPbEaE/eDX/vVvsadPj7GbyhPe0eWB0GyzOm9yme0C2QiXrcXJtF0FjGrys4AAA
-	 6A9FgRAaE1fgUuq8u2nAefegWyfrZsVr22OrOxWJXBlwleLVZUDZxmYGrwIIBgDVTW
-	 KMOMWPEZ43XteleLyt7V1ktNoHK3bqta3ZoVXBO98bB+ATo4JcR9+7fJJEST1vXTLz
-	 8ysd6NwOKHb7WepbIMo0qMbOi5GpqVH1EAnD3h4mCODuVC93Fq20O37N9jt3wIC5dX
-	 7inn9MeSDgCPjvZcT9EOztYZdG9eGSXEWaCVVP1wfPpE9Mjg/EKm2rTAwunLWeK0HD
-	 STqc20WfYfwKw==
+	b=A+e+E8XcO+3a6t9tc9SUUwm7dzrQKlqvtKsLEZxVVO3eQb4csMn0sisSdQqhnqEjj
+	 /ZbZ72aGBwM4EUAc5Xnj4yXpvdsv6gd3AR+VN1fMev4IzFc3hNSX0ofX+6EQ8Ugp9P
+	 yGW7aauTbPUaq3BOHOuD9W4fCxhcTqg/FUWwnSHu73R5DV/jwQE50HbDO6OvIulEG6
+	 bh1Y48+sWscJsrL64S8Hprc++jaFDCL1RO0zmfb0Tkecq9tjeh0vZUYtuuOBKQA6Ks
+	 zvMrPIgdYhavliBwYEYCAU8J6vA4pNAuxc+PiiDxcc7k0GGcm4v5KpFsYdUv0QSiCu
+	 D2c0eThrzZCYA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 4/4] hwmon: chipcap2: serialize access to
- low/high_alarm indicators
+Subject: Re: [PATCH v2 1/4] hwmon: chipcap2: fix channels in humidity alarm
+ notifications
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Javier Carrasco" <javier.carrasco.cruz@gmail.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260823-chipcap2_locks-v2-4-6a26c8e9e2fc@gmail.com>
+In-Reply-To: <20260823-chipcap2_locks-v2-1-6a26c8e9e2fc@gmail.com>
 References: <20260823-chipcap2_locks-v2-0-6a26c8e9e2fc@gmail.com>
- <20260823-chipcap2_locks-v2-4-6a26c8e9e2fc@gmail.com>
+ <20260823-chipcap2_locks-v2-1-6a26c8e9e2fc@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 23 Aug 2026 18:06:15 +0000
-Message-Id: <20260823180616.1D53D1F000E9@smtp.kernel.org>
+Date: Sun, 23 Aug 2026 18:11:07 +0000
+Message-Id: <20260823181108.476DA1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] The `scoped_guard` macro is improperly terminated with a trailing =
-semicolon, resulting in an empty critical section that leaves the alarm sta=
-te updates unprotected.
+
+Pre-existing issues:
+- [High] Unaligned memory access when casting byte arrays to `__be16 *`
+- [High] Incorrect endianness conversion for SMBus word write breaks on Big=
+-Endian architectures
 --
 
---- Patch [4]: [PATCH v2 4/4] hwmon: chipcap2: serialize access to low/high=
-_alarm indicators ---
-commit a0d28bd8208a1d69e597290c8ebb0fdf0731e68b
+--- Patch [1]: [PATCH v2 1/4] hwmon: chipcap2: fix channels in humidity ala=
+rm notifications ---
+commit e05e5dc803c6cf895cd85ba5388bb75fbd791d04
 Author: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
-hwmon: chipcap2: serialize access to low/high_alarm indicators
+hwmon: chipcap2: fix channels in humidity alarm notifications
 
-This commit attempts to serialize concurrent access to the hardware monitor=
-ing
-alarm indicators. It introduces scoped_guard usage within the threaded
-interrupt handlers to protect the low and high alarm state updates.
+hwmon_notify_event() expects the channel number as its last argument,
+taken into account with the type parameter that it is a humidity sensor
+type. Given that this device only provides one humidity channel, 0 must
+be passed. The custom construct to enumerate the channels makes wrong
+assumptions by listing all types together (temperature and humidity).
+
+Remove the custom channel enumeration and pass the right channel to
+hwmon_notify_event() for hwmon_humidity_min_alarm and
+hwmon_humidity_max_alarm.
 
 > diff --git a/drivers/hwmon/chipcap2.c b/drivers/hwmon/chipcap2.c
-> index 57d22d65612c2..0a56c55e93942 100644
+> index 086571d556b7e..9bef767b589ee 100644
 > --- a/drivers/hwmon/chipcap2.c
 > +++ b/drivers/hwmon/chipcap2.c
+> @@ -92,11 +92,6 @@ struct cc2_data {
+>  	bool process_irqs;
+>  };
+> =20
+> -enum cc2_chan_addr {
+> -	CC2_CHAN_TEMP =3D 0,
+> -	CC2_CHAN_HUMIDITY,
+> -};
+> -
+>  /* %RH as a per cent mille from a register value */
+>  static long cc2_rh_convert(u16 data)
+>  {
 [ ... ]
-> @@ -495,9 +495,11 @@ static irqreturn_t cc2_low_interrupt(int irq, void *=
+> @@ -499,7 +494,7 @@ static irqreturn_t cc2_low_interrupt(int irq, void *d=
+ata)
+> =20
+>  	if (cc2->process_irqs) {
+>  		hwmon_notify_event(cc2->hwmon, hwmon_humidity,
+> -				   hwmon_humidity_min_alarm, CC2_CHAN_HUMIDITY);
+> +				   hwmon_humidity_min_alarm, 0);
+>  		cc2->rh_alarm.low_alarm =3D true;
+>  	}
+> =20
+> @@ -512,7 +507,7 @@ static irqreturn_t cc2_high_interrupt(int irq, void *=
 data)
->  	struct cc2_data *cc2 =3D data;
 > =20
 >  	if (cc2->process_irqs) {
-> +		scoped_guard(hwmon_lock, cc2->hwmon);
+>  		hwmon_notify_event(cc2->hwmon, hwmon_humidity,
+> -				   hwmon_humidity_max_alarm, CC2_CHAN_HUMIDITY);
+> +				   hwmon_humidity_max_alarm, 0);
+>  		cc2->rh_alarm.high_alarm =3D true;
+>  	}
+
+While reviewing this patch, I noticed a couple of pre-existing issues in
+drivers/hwmon/chipcap2.c that you might want to look into.
+
+drivers/hwmon/chipcap2.c:cc2_write_reg() {
+...
+	cpu_to_be16s(&val);
+	ret =3D i2c_smbus_write_word_data(data->client, reg, val);
+...
+}
 
 [Severity: High]
-Does this trailing semicolon create an empty critical section?
+This isn't a bug introduced by this patch, but does this endianness convers=
+ion
+work correctly on Big-Endian architectures?
 
-Because scoped_guard expands to a for loop, placing a semicolon immediately
-after it makes the loop body empty. This means the lock is acquired and
-immediately released.
+The SMBus protocol always transmits the least-significant byte first.
+On a Little-Endian CPU, cpu_to_be16s() correctly swaps the bytes in memory,
+causing SMBus to send the high byte first, matching the Big-Endian device's
+expectations.
 
-The subsequent assignment to cc2->rh_alarm.low_alarm executes entirely outs=
-ide
-the lock, leaving the data race unmitigated. Should the assignment be wrapp=
-ed
-in a compound block without the trailing semicolon?
+However, on a Big-Endian CPU, cpu_to_be16s() is a no-op, so the SMBus core
+extracts the actual least-significant byte and sends it first, resulting in
+Little-Endian transmission over the wire. Should this use
+i2c_smbus_write_word_swapped() instead to ensure writes to device
+configuration aren't corrupted?
 
-> +			cc2->rh_alarm.low_alarm =3D true;
-> +
->  		hwmon_notify_event(cc2->hwmon, hwmon_humidity,
->  				   hwmon_humidity_min_alarm, 0);
-> -		cc2->rh_alarm.low_alarm =3D true;
->  	}
-> =20
->  	return IRQ_HANDLED;
-> @@ -508,9 +510,11 @@ static irqreturn_t cc2_high_interrupt(int irq, void =
-*data)
->  	struct cc2_data *cc2 =3D data;
-> =20
->  	if (cc2->process_irqs) {
-> +		scoped_guard(hwmon_lock, cc2->hwmon);
+
+drivers/hwmon/chipcap2.c:cc2_read_reg() {
+...
+	ret =3D i2c_master_recv(data->client, buf, CC2_EEPROM_DATA_LEN);
+	if (ret !=3D CC2_EEPROM_DATA_LEN)
+		return ret < 0 ? ret : -EIO;
+
+	*val =3D be16_to_cpup((__be16 *)&buf[1]);
+...
+}
 
 [Severity: High]
-Does the same empty critical section issue apply here for the high_alarm
-update?
+This isn't a bug introduced by this patch, but does casting the unaligned
+address &buf[1] to a 16-bit pointer cause an unaligned memory dereference?
 
-> +			cc2->rh_alarm.high_alarm =3D true;
-> +
->  		hwmon_notify_event(cc2->hwmon, hwmon_humidity,
->  				   hwmon_humidity_max_alarm, 0);
-> -		cc2->rh_alarm.high_alarm =3D true;
->  	}
-> =20
->  	return IRQ_HANDLED;
+Dereferencing an unaligned pointer using be16_to_cpup() can cause an
+alignment fault and kernel oops on architectures that strictly enforce
+memory alignment (e.g., SPARC or older ARM). This also happens in
+cc2_data_fetch() when casting &data[2] to a 16-bit pointer:
+
+drivers/hwmon/chipcap2.c:cc2_data_fetch() {
+...
+	switch (type) {
+	case hwmon_humidity:
+		*val =3D cc2_rh_convert(be16_to_cpup((__be16 *)&data[0]));
+		break;
+	case hwmon_temp:
+		*val =3D cc2_temp_convert(be16_to_cpup((__be16 *)&data[2]));
+...
+}
+
+Is there a safer way to parse these bytes without casting potentially
+unaligned byte array addresses?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260823-chipcap2_l=
-ocks-v2-0-6a26c8e9e2fc@gmail.com?part=3D4
+ocks-v2-0-6a26c8e9e2fc@gmail.com?part=3D1
