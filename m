@@ -1,89 +1,121 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C0241F5ED
-	for <linux-hwmon@vger.kernel.org>; Mon, 24 Aug 2026 12:56:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33BA13FFFA8;
+	Mon, 24 Aug 2026 15:43:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787576171; cv=none; b=EIUvHbrZpUncS1IBB82ogWB7oh09QPv8RqGATX3F45jn+6Og7t0jw+NAjOatvSfwOQwS29rG6VtY0iQr4yiXUUJCvIZRVj+ftAI31GuqFBeZ2fJqIfjB5CZIyXs3Z667t8Cjl9DXnt2j5hBfJLbXHstEKgpelt+nxAWiHNHBB/M=
+	t=1787586192; cv=none; b=hbL9ku/hhDSDI4SbDqKxP2e6f76w3YAY89Y/KrH9e8ylow20DMvab17K9P1mW+oGxAnjvdTpx/FHFAYb1N6klxq0fQX/TqxJzoIaQPkmQPk5Ri9ronwbAJZ/WiDxQ+0vYpicsZAeDGz+9CU3vSJI2rzfPFEzYUN+31rz9JUZSFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787576171; c=relaxed/simple;
-	bh=aAkUmUWkJjkogdiY/Lr5ftOnod7lse4jtWkhmBZtULA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=W3i9f30AWVsMqSqV5vYseB8bulEo7DG54JGTtRuI9v2vTH14VVw3/qfMSfV3nc1ASiyITwWA0dILkY5WhG6cLXIMnYwEgpitCEo7Jb7YaGWIwOOJxgz8hTiYarKgsncX7lHSzy0hbdgNFhyqruwDBj8s5YUeWQkz2d6mjb16tO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eJXyZ3t6; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787586192; c=relaxed/simple;
+	bh=qKmyUFw8Q9BZVbJDN104O2PJEqzLFIDcYKL0jxDSmMg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=C29XKn76YjCyhK7PUnM0POH1s7FZ61kCEwjcD2hsOl6yzpp+KPc8+178+jL+tE/f5K+PEu9QltyQVt89pmi1ifHl6hS2ZNWqPBDfPce57LweHqVXO6LR3YXsFcWJE6MWUUtoW5gjPI0WVKRNaXrEGuJZHJBLS/nPqK1Upm/9r24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gZ1dzsnL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eJXyZ3t6"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2d53197d8b5so33206315ad.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 24 Aug 2026 05:56:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787576170; x=1788180970; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:content-type:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=qrOeCrMQEmHYylUm4A3w4i35ISZfmuGKPCvdC4iGLxM=;
-        b=eJXyZ3t61lJNq1rT5N/8klvOM9bOjcFwIApBDO0YMWW8PBsirudaZVAxutxJS96/ew
-         tYG6h3Y5PKbCuQ2sYwgHgqvQaSRXE82Z5FdNYkVNOsNef1URVHVSq8MhoqgtgrHurXpR
-         7jiQQ3ilR7UicoBwBb1adTkm8u8/fidxgNPvhxdjnrXtFF/Vt2mfxgfQQlrFmQzXmVYR
-         GH/KyM/sL78axzY71gjmeDkOUzLiY3Y8ONkiXlSez5v+4FqHZ2HS+rgOqobIXJpy9zno
-         J7K07F3h/HmURWhmmiY5ypniy6jsVOOmEuMXk6HAkinADyuwJNXKKLolbRg4EU2QUzW5
-         Recg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787576170; x=1788180970;
-        h=mime-version:content-transfer-encoding:content-type:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=qrOeCrMQEmHYylUm4A3w4i35ISZfmuGKPCvdC4iGLxM=;
-        b=BTtMFfRR37kcehY19XjSD6M3J04WbjVo3rPl6Oxwk54m0Vb0DIdbnF5Z+MP46H3XFz
-         3hbsoS9m9lRfRsdmBISASoUI0dQ7ckizKWNWB2yrZqVmUjrLE48yNX2cHE73J+FJcaTL
-         0doylAz/0QMMVJKtHb6NS36B5c7Ay+KLTf5toXIkvfNmJRxx1KT7LIn6bgsMEv2SnnUX
-         z4vCop38+l6zmDbdbwvK8uP/EMMuASlp6WC1o7nnbiPArUmotj/6N23vqPICDClWKrFm
-         roenXL3UHixFEG5FbsvtcadXfLBotTPppFfUMuF2FT/Rwh/pt/9jtyBJ/EMUyVM5ZC1b
-         FHmg==
-X-Gm-Message-State: AFuF++ncE8RmhqGGjKE/FX2Sb4mCi6HCWo5Xu36IekjyWCokiTAv9o2W
-	/TqM1aolnPJU1LQdH2e6hsodmVSudTUZCP0WL5iodx5YXhVnEegASjs7+abjt54oh4c=
-X-Gm-Gg: AR+sD11P/p699xIq48nEJcTctgKARhrSlyxYCxs27tTaiGGkdiajjur1l9tXrWnkHt0
-	J4W7SegwyMHQgf9pg5DhAvcEAUjUYJEXuRD97jOT9fDDzeDxBFu9tYghyWP4HUcV3NvjqUfXqZO
-	n8epJWDtGOG8fHSaS9k8+wsVe2oNiNbcWIDpim/2OA6dCjYKVNQwCyzbxvBjW+dnMaQB3ELDsXA
-	vAht+SBoGWbA+nCmAd4hfnA/6M1+iSKSKG6gBA3RHDlTDMG7+q/MTHoRFvvE9AoywgRTQbV+hpz
-	v0Jx87blWW8TKQW3I/vKBCtW7GhjeEunhlRF2MOSCGwKFF0XNu2r/Et3lAg6K3BcZjwV6ICdHER
-	qOqSSosot3PeO/BAYhet+n6gMUdRzlNlNp8qN60HYFWAlHMjsaeaRlhTPu2U1Otvb7ZPAFBDlCC
-	oFN4rg3wyAp3SH5c5Of+TP9aEFYy8f6XRLtnnWla2dUEGbPQiNQ+hQbdylbBkDRsg50gWCX7IfP
-	DPJUjIQKhaLXWE6lCOzuG3AaI5r8Cytftx1n2VpqpIcRFZsa/nzsw==
-X-Received: by 2002:a17:903:2407:b0:2d1:1d3d:97b2 with SMTP id d9443c01a7336-2d64b1464dbmr523091015ad.11.1787576169643;
-        Mon, 24 Aug 2026 05:56:09 -0700 (PDT)
-Received: from [127.0.1.1] (ec2-99-79-140-187.ca-central-1.compute.amazonaws.com. [99.79.140.187])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d6768d9004sm18007095ad.70.2026.08.24.05.56.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2026 05:56:09 -0700 (PDT)
-From: hanzhijian <hanzhijian1991@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (yogafan) fix non-kernel-doc comment
-Date: Mon, 24 Aug 2026 20:55:54 +0800
-Message-ID: <178757615495.3469601.16079621663116422312@hanzhijian1991>
-In-Reply-To: <21b29db0-06c0-4881-9750-d38b3bc931c3@roeck-us.net>
-References: <20260821115720.2017516-1-hanzhijian1991@gmail.com>
- <20260823013841.2884472-1-hanzhijian1991@gmail.com>
- <21b29db0-06c0-4881-9750-d38b3bc931c3@roeck-us.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gZ1dzsnL"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 67AA1C19425;
+	Mon, 24 Aug 2026 15:43:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1787586190;
+	bh=qKmyUFw8Q9BZVbJDN104O2PJEqzLFIDcYKL0jxDSmMg=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=gZ1dzsnLCxqi/PhGkaRrewjwsUd+j2nOywmqLfCCqQ0c7/7z2QnTj2uIFr46uqOmS
+	 xRewIPSOVp6qGI2O+fo2h1hiDT2McsU4aRB5+EBSvhjjlB6Er8EqVgw4aYa/AjKi9I
+	 uIldmcDDqrYzrtP7QNxZ0CM6FrKPcKLfNBhRnUmNPEserxWU2ThvW5PKVamTHJepZ4
+	 UbXVPPt7i7Z1ISnJ0RMwEaenoLXxoGjuCzrzu12eKf/D6AgiTBSaYxrY5U/Ac7/scW
+	 oydFX1Qhec0Zbo1qknh6N4z+qixrWyT3662ZpUJCF3g1Aj0AwK77ffkCkB4OrxHv8A
+	 Ir3ngQVE3C5Dw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43562C5DF9C;
+	Mon, 24 Aug 2026 15:43:10 +0000 (UTC)
+From: Vincent Jardin via B4 Relay <devnull+vjardin.free.fr@kernel.org>
+Date: Mon, 24 Aug 2026 17:42:59 +0200
+Subject: [PATCH] dt-bindings: hwmon: microchip,emc2305: add vcc-supply and
+ #cooling-cells
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260824-for-upstream-dt-emc2305-vcc-cooling-v1-1-cd3b53dfb5d4@free.fr>
+X-B4-Tracking: v=1; b=H4sIAIJmjGoC/x3NwQqDMAyA4VeRnA3UbBXdq8gOElMNzFZSJwPx3
+ Vc8fpf/PyGLqWR4VSeYHJo1xYKmroCXMc6COhUDOWpdR08MyfC75d1kXHHaUVamh/N4MCOn9NE
+ 4I/mm9Z77XkIHpbSZBP3dl+F9XX/VYcEJdQAAAA==
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Michael Shych <michaelsh@nvidia.com>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Vincent Jardin <vjardin@free.fr>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1787586189; l=1919;
+ i=vjardin@free.fr; s=20260525; h=from:subject:message-id;
+ bh=OmD5dPXn6kP0dHQvQO+WQZsrUb0dqokp2zQV0VNm5M8=;
+ b=4G02U1j9qsh/7z1101Y2ZOFcREgjfyaxV5RyC576UKmi5xTmFKqlPMRltcsjvqNE3CO7zTbt9
+ o7k55ogWrPUAH4Eq0kVDsG0QOUVT7sfq80KsoDK0+MM+LeE9a6hHvKx
+X-Developer-Key: i=vjardin@free.fr; a=ed25519;
+ pk=hppgLeFpGpKOi7LNwGEZ4jOYofJCoGd4Jf1ltAabiLw=
+X-Endpoint-Received: by B4 Relay for vjardin@free.fr/20260525 with
+ auth_id=871
+X-Original-From: Vincent Jardin <vjardin@free.fr>
+Reply-To: vjardin@free.fr
 
-My apologies, Guenter.  You are right, and I'm sorry for the noise.
+From: Vincent Jardin <vjardin@free.fr>
 
-I sent the "please drop" note by mistake, then over-corrected by
-resending it as v2 with no code change.  That was the wrong way to
-handle it.
+Both properties are missing, so a board that supplies either fails with
+dtbs_check:
 
-Please drop the patch entirely.  Sorry for wasting your time.
+  fan-controller@2c (microchip,emc2305): '#cooling-cells', 'vcc-supply'
+  do not match any of the regexes: '^fan@[0-4]$', '^pinctrl-[0-9]+$'
 
-hanzhijian
+The #cooling-cells property belongs to the controller node, which is
+where the driver actually registers.
+
+Two cells is what that registration needs: a cooling-maps entry
+references the fan as <&emc2305 min max>.
+
+Two cells also documents what the driver supports today. The
+pwm-separate path registers one cooling device per PWM against the same
+node, and they all get cdev_id 0, so no cell count can tell them apart.
+That is a driver issue, noted here but not addressed.
+
+The examples in this binding put that property on the fan@N subnodes
+instead, which does not match what the driver does: they are left alone
+here rather than changed blind.
+
+vcc-supply describes the chip's own rail, which matters on boards where
+the sensor sits behind a switched supply.
+
+Signed-off-by: Vincent Jardin <vjardin@free.fr>
+---
+ Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+index 8c2548539d7fd..47640214de100 100644
+--- a/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
++++ b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+@@ -44,6 +44,11 @@ properties:
+            - 0 (Open-Drain)
+            - 1 (Push-Pull)
+ 
++  vcc-supply: true
++
++  "#cooling-cells":
++    const: 2
++
+ patternProperties:
+   '^fan@[0-4]$':
+     $ref: fan-common.yaml#
+
+---
+base-commit: 0a0d1d55dad570724bf8c7ea83409639cfb4be9b
+change-id: 20260824-for-upstream-dt-emc2305-vcc-cooling-251655c99ef8
+
+Best regards,
+-- 
+Vincent Jardin <vjardin@free.fr>
+
+
