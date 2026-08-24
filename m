@@ -1,223 +1,313 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 194613B38B8;
-	Mon, 24 Aug 2026 07:09:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3A0A3A1A35;
+	Mon, 24 Aug 2026 07:47:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787555345; cv=none; b=EYlcPaupW/ZjllYgcA1+NWRFhVTX1S1Lawz9BsEkgsBwklDlgZqnqA0szV6SYFlXbiaE1SIjoR6+tfjFs3eqz89MUixIMdi03dJ7OC9LMQ2nekCONrs1clgyBUwj/LkAG+LnWKOzfvbcKd0Y0HaubIYs9FBr30TrUPVx6EZ1yBM=
+	t=1787557631; cv=none; b=T9Mj6ELwdCKzSCzYJL3OcC7OMntK14I8hvXO0+nsucYjcEuLDtbtw0FL72levNBq2x/qbWbGVY02950JqY18dfa/NFLUtvft3iLUIwjyETepq8v+OhoR5uuddT2N1ub05w7+S5MRQ3sB04z/7WhgWHPSu1XHRhHjq7Yev7deEN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787555345; c=relaxed/simple;
-	bh=Y82996GUghOrVqOsTcxJKrpSHnpuxn5rs9GT/EHQiWU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=dc2XuBTgiyWmna3SM1J9yfO+P1UoFFoYRuJb1kgLdoPDTS8L7FrZCgUL4Ad5kIriGcTAIPu9qdEf6xgNcbqV8GY6zmZ2cSIgH6l1FxZAWVfVN0G2Wv77sld2gx9TtWH4G9Pkwr0h5dY/KEynT5sLGkq5OalpZkDb0a8rgdJ7bqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=anhaRWJc; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787557631; c=relaxed/simple;
+	bh=zAnEUKVB34mMup/RU9EYVC8wcKmIE7yWVP+ZgqdZ34k=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=M0wn8UAzUosJwF6Y3I3L7k8pIEcIW+T0o1195BqLmJe7cw6V6Vue5sUWw/0JsYkm4lwjSCYi7fjudUV/wFzK0z3Q+tzDIipo77kdhsXL7swdAT6IaaUQ8G6nDpdm3ONDkFHjs6cK4h9QvrM6vM/98njS9zOghG42rV7Y/YFR5Zw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F04JbzlG; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="anhaRWJc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD6E51F000E9;
-	Mon, 24 Aug 2026 07:09:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787555342;
-	bh=MuqXsN2Lbqhc9HF1rAT/JgKdjXIpLysNHrM0e02YjgU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=anhaRWJc7/AdWpbilVzA/7wZb4RBHHw1sBOCZGj2q0TUnKDxVDOMkX1+ksvv7CSyA
-	 hQF33eAee65dWooxlUksJYPjwDvW92I0/Nea89bTipywhd6KXi2qWzDxzfvxQyNMRd
-	 DfhRwgt9A2WsogzjCwuMxarKGmZUC6wWw7a7DzveDZKwvmc/O4wdq4IQM3QCoK6jKf
-	 98Db5NJcFU3U4tqfuclqk0xvSRHD7e4jJdIjk+M2DFYTPLiegzTSeUhuqgka24MTNC
-	 SCLBbSy7ccJSmetnysMmIJOwa7y5LlYxZyL8L/FV4Qiv0YPvyVdCLN/OJpjWNgzT9B
-	 +bP4ObNJlvZtA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 3/4] rtc: pcf8525: Add watchdog support
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Shiv Prakash Gupta" <shivprakash.gupta@nxp.com>
-Cc: linux-rtc@vger.kernel.org, "Alexandre Belloni" <alexandre.belloni@bootlin.com>, robh@kernel.org, linux-watchdog@vger.kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
-In-Reply-To: <20260824065531.693701-4-shivprakash.gupta@nxp.com>
-References: <20260824065531.693701-1-shivprakash.gupta@nxp.com>
- <20260824065531.693701-4-shivprakash.gupta@nxp.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 24 Aug 2026 07:09:01 +0000
-Message-Id: <20260824070901.BD6E51F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F04JbzlG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1787557630; x=1819093630;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=zAnEUKVB34mMup/RU9EYVC8wcKmIE7yWVP+ZgqdZ34k=;
+  b=F04JbzlGRv9vjyOOI5rfs8I0x6ezQfNUZBTKNO7nae0130qmJDbY10We
+   IQYi96SI1VTuCyPHxST9KukEX37fzWewQE4jd9EQYhVpg4VNK47lkVL4g
+   1pBy2e5smY43hjW/SeSwWnyx8ZmUFa/lmODcyhjHpS6/5V2gN7w/uxxoo
+   t6w9ZyLXAGExJ4mv5PM50xgyCum0bYvjnnkfdl6KuPr6UUTFRD3BAapbm
+   01iG7cehNxEu/1t65H7ob4vNF8nbbMhEzAT5OVHXQV57fd33hKzdZe7al
+   2RWvKgWJ4rNEstcTO8LoLPWjwVCngi3qMRcyDh/zVso1FltpLV9xdXJgT
+   w==;
+X-CSE-ConnectionGUID: 0dCAqp1BR76FrFMbSTpFbA==
+X-CSE-MsgGUID: OUSQmRV/T0u63cwQaVEliA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11884"; a="105536202"
+X-IronPort-AV: E=Sophos;i="6.25,240,1779174000"; 
+   d="scan'208";a="105536202"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2026 00:47:08 -0700
+X-CSE-ConnectionGUID: P2Mte9LhQQKN8KP3SJbmSQ==
+X-CSE-MsgGUID: 7n+VuqRwQgyDgrE+ljDm1Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,240,1779174000"; 
+   d="scan'208";a="265156799"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.154])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2026 00:47:04 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 24 Aug 2026 10:46:59 +0300 (EEST)
+To: Aditya Dash <mradityadash@gmail.com>
+cc: "Derek J. Clark" <derekjohn.clark@gmail.com>, Armin Wolf <W_Armin@gmx.de>, 
+    Hans de Goede <hansg@kernel.org>, Mark Pearson <mpearson-lenovo@squebb.ca>, 
+    Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
+    Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org, 
+    linux-hwmon@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    platform-driver-x86@vger.kernel.org
+Subject: Re: [RFC PATCH 1/3] platform/x86: lenovo-wmi-other: Add Legion Go
+ Full Speed control
+In-Reply-To: <20260821214728.87773-2-mradityadash@gmail.com>
+Message-ID: <a3c62239-6c58-0da2-110a-91002a6866e8@linux.intel.com>
+References: <20260821214728.87773-1-mradityadash@gmail.com> <20260821214728.87773-2-mradityadash@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
-s) to consider:
+On Sat, 22 Aug 2026, Aditya Dash wrote:
 
-New issues:
-- [High] devm_request_threaded_irq is called before the hardware is configu=
-red, risking an interrupt storm.
-- [High] The watchdog is not stopped or paused during system suspend, leadi=
-ng to unintended system resets.
-- [Medium] Missing WDIOF_PRETIMEOUT flag prevents the pretimeout feature fr=
-om functioning.
-
-Pre-existing issues:
-- [High] Read-modify-write race condition on Write-0-to-Clear (W0C) bits in=
- the CTRL2 register.
-- [High] Hardware interrupts are left unmasked on driver unbind and probe e=
-rror paths.
---
-
---- Patch [3]: [PATCH v2 3/4] rtc: pcf8525: Add watchdog support ---
-commit a10f54adc977106a229d75b8d56bf77bb2ae1d33
-Author: Shiv Prakash Gupta <shivprakash.gupta@nxp.com>
-
-rtc: pcf8525: Add watchdog support
-
-This commit adds watchdog support for the NXP PCF8525 real time clock devic=
-e.
-It adds support for setting timeouts and handling pretimeout notifications
-using the INTB interrupt.
-
-> diff --git a/drivers/rtc/rtc-pcf8525.c b/drivers/rtc/rtc-pcf8525.c
-> index 843d4bb266847..415615ea0a406 100644
-> --- a/drivers/rtc/rtc-pcf8525.c
-> +++ b/drivers/rtc/rtc-pcf8525.c
-[ ... ]
-> @@ -249,6 +249,11 @@ static int pcf8525_wdt_set_timeout(struct watchdog_d=
-evice *wdd,
-> +static const struct watchdog_info pcf8525_wdt_info =3D {
-> +	.identity =3D "NXP PCF8525 Watchdog",
-> +	.options =3D WDIOF_KEEPALIVEPING | WDIOF_SETTIMEOUT,
-
-[Severity: Medium]
-Is the WDIOF_PRETIMEOUT flag missing here? Without this flag,
-watchdog_have_pretimeout() returns false, which prevents the watchdog
-core from attaching a pretimeout governor. When the hardware interrupt fire=
-s,
-watchdog_notify_pretimeout() might just return without taking action.
-
+> Selected Legion Go firmware exposes Full Speed as Other Mode feature
+> 0x04020000. Capability Data does not describe this feature, so
+> lenovo-wmi-other currently ignores it.
+> 
+> Probe the feature during HWMON setup on those products. If the read
+> succeeds and returns a Boolean value, expose it as pwm1_enable. Value 0
+> selects Full Speed, and value 2 returns fan control to firmware automatic
+> mode. Reject all other values.
+> 
+> Assisted-by: Pi:gpt-5.6-sol
+> Signed-off-by: Aditya Dash <mradityadash@gmail.com>
+> ---
+>  .../wmi/devices/lenovo-wmi-other.rst          |   7 ++
+>  drivers/platform/x86/lenovo/wmi-other.c       | 108 +++++++++++++++++-
+>  2 files changed, 114 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/wmi/devices/lenovo-wmi-other.rst b/Documentation/wmi/devices/lenovo-wmi-other.rst
+> index 011054d64eac..75f2deaaef16 100644
+> --- a/Documentation/wmi/devices/lenovo-wmi-other.rst
+> +++ b/Documentation/wmi/devices/lenovo-wmi-other.rst
+> @@ -49,6 +49,13 @@ The following HWMON attributes are implemented:
+>  Due to the internal RPM divisor, the current/target RPMs are rounded down to
+>  its nearest multiple. The divisor itself is not necessary to be a power of two.
+>  
+> +Legion Go fan controls
+> +----------------------
+> +
+> +On supported Legion Go models, Other Mode feature ``0x04020000`` controls
+> +Full Speed mode in firmware. The driver exposes it as ``pwm1_enable``. Value 0
+> +enables Full Speed, and value 2 returns fan control to firmware.
+> +
+>  LENOVO_CAPABILITY_DATA_01
+>  -------------------------
+>  
+> diff --git a/drivers/platform/x86/lenovo/wmi-other.c b/drivers/platform/x86/lenovo/wmi-other.c
+> index fbb32bf404f2..c180933e1d18 100644
+> --- a/drivers/platform/x86/lenovo/wmi-other.c
+> +++ b/drivers/platform/x86/lenovo/wmi-other.c
+> @@ -32,6 +32,7 @@
+>  #include <linux/component.h>
+>  #include <linux/container_of.h>
+>  #include <linux/device.h>
+> +#include <linux/dmi.h>
+>  #include <linux/export.h>
+>  #include <linux/gfp_types.h>
+>  #include <linux/hwmon.h>
+> @@ -83,6 +84,7 @@ enum lwmi_feature_id_psu {
+>  	LWMI_FEATURE_ID_PSU_CHARGE_BEHAVIOUR =	0x02,
+>  };
+>  
+> +#define LWMI_FEATURE_ID_FAN_FULLSPEED 0x02
+>  #define LWMI_FEATURE_ID_FAN_RPM 0x03
+>  
+>  #define LWMI_TYPE_ID_CROSSLOAD	0x01
+> @@ -102,6 +104,10 @@ enum lwmi_feature_id_psu {
+>  #define LWMI_CHARGE_TYPE_STANDARD	0x00
+>  #define LWMI_CHARGE_TYPE_LONGLIFE	0x01
+>  
+> +#define LWMI_ATTR_ID_FAN_FULLSPEED					\
+> +	lwmi_attr_id(LWMI_DEVICE_ID_FAN, LWMI_FEATURE_ID_FAN_FULLSPEED, \
+> +		     LWMI_GZ_THERMAL_MODE_NONE, LWMI_TYPE_ID_NONE)
+> +
+>  #define LWMI_ATTR_ID_FAN_RPM(x)                                   \
+>  	lwmi_attr_id(LWMI_DEVICE_ID_FAN, LWMI_FEATURE_ID_FAN_RPM, \
+>  		     LWMI_GZ_THERMAL_MODE_NONE, LWMI_FAN_ID(x))
+> @@ -115,6 +121,50 @@ enum lwmi_feature_id_psu {
+>  
+>  static DEFINE_IDA(lwmi_om_ida);
+>  
+> +static const struct dmi_system_id lwmi_fan_dmi_table[] = {
+> +	{
+> +		.ident = "Lenovo Legion Go 8APU1",
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> +			DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "Legion Go 8APU1"),
+> +		},
+> +	},
+> +	{
+> +		.ident = "Lenovo Legion Go S 8APU1",
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> +			DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "Legion Go S 8APU1"),
+> +		},
+> +	},
+> +	{
+> +		.ident = "Lenovo Legion Go S 8ARP1",
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> +			DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "Legion Go S 8ARP1"),
+> +		},
+> +	},
+> +	{
+> +		.ident = "Lenovo Legion Go 8ASP2",
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> +			DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "Legion Go 8ASP2"),
+> +		},
+> +	},
+> +	{
+> +		.ident = "Lenovo Legion Go 8AHP2",
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> +			DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "Legion Go 8AHP2"),
+> +		},
+> +	},
+> +	{}
 > +};
-[ ... ]
-> @@ -267,6 +272,31 @@ static int pcf8525_watchdog_get_period(int n, int f1=
-000)
-> +static irqreturn_t pcf8525_wdt_irq(int irq, void *data)
+> +
+> +static bool lwmi_fan_supported(void)
 > +{
-[ ... ]
-> +	if (!(ctrl2 & PCF8525_CTRL2_WDTF))
-> +		return IRQ_NONE;
-> +
-> +	ret =3D regmap_update_bits(pcf8525->regmap, PCF8525_REG_CTRL2,
-> +				 PCF8525_CTRL2_WDTF, 0);
-
-[Severity: High]
-This is a pre-existing issue, but does using regmap_update_bits() here
-and in pcf8525_watchdog_config() introduce a race condition?
-
-The PCF8525 CTRL2 register contains multiple Write-0-to-Clear flags.
-Since regmap_update_bits() performs a read-modify-write cycle, if a hardware
-event like an alarm asserts the AF flag between the read and the write,
-won't writing back the read value of 0 silently wipe out the new interrupt
-flag? This also applies to the pre-existing regmap_update_bits() usage in
-pcf8525_irq() clearing PCF8525_CTRL2_AF.
-
-> +	if (ret)
-> +		return IRQ_NONE;
-> +
-> +	watchdog_notify_pretimeout(&pcf8525->wdd);
-> +	return IRQ_HANDLED;
+> +	return dmi_check_system(lwmi_fan_dmi_table);
 > +}
 > +
-> +static int pcf8525_watchdog_config(struct device *dev,
-> +				   struct pcf8525 *pcf8525)
+>  enum attribute_property {
+>  	DEFAULT_VAL,
+>  	MAX_VAL,
+> @@ -144,6 +194,7 @@ struct lwmi_om_priv {
+>  	int ida_id;
+>  
+>  	struct lwmi_fan_info fan_info[LWMI_FAN_NR];
+> +	bool fullspeed_supported;
+>  
+>  	struct {
+>  		bool capdata00_collected : 1;
+> @@ -237,6 +288,38 @@ static int lwmi_om_fan_get_set(struct lwmi_om_priv *priv, int channel, u32 *val,
+>  	return (retval == 0 || retval == 1) ? 0 : -EIO;
+>  }
+>  
+> +static int lwmi_om_fullspeed_get(struct lwmi_om_priv *priv, long *enable)
 > +{
-[ ... ]
-> +	/* Route watchdog only to INTB, and keep RTC interrupts masked on INTB.=
- */
-> +	ret =3D regmap_read(pcf8525->regmap, PCF8525_REG_INTB_MASK1, &m1);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/*
-> +	 * Clear any stale WDTF before unmasking the watchdog on INTB.
-> +	 * With battery backup the flag survives a power cycle and would
-> +	 * assert INTB immediately on the next boot, causing an infinite
-> +	 * reset loop if INTB is wired to a hardware reset line.
-> +	 */
-> +	ret =3D regmap_update_bits(pcf8525->regmap, PCF8525_REG_CTRL2,
-> +				 PCF8525_CTRL2_WDTF, 0);
-> +	if (ret)
-> +		return ret;
-> +
-> +	m1 |=3D PCF8525_MASK1_BIE |
-> +	      PCF8525_MASK1_AIE |
-> +	      PCF8525_MASK1_OSIE |
-> +	      PCF8525_MASK1_SI |
-> +	      PCF8525_MASK1_MI;
-> +	m1 &=3D ~PCF8525_MASK1_WD_CD;
-> +
-> +	ret =3D regmap_write(pcf8525->regmap, PCF8525_REG_INTB_MASK1, m1);
-
-[Severity: High]
-This is a pre-existing issue, but are hardware interrupts left unmasked on
-driver unbind and probe error paths?
-
-The driver unmasks hardware interrupts here and in pcf8525_unmask_irqs_intA=
-().
-It relies on devm to free the IRQ handler, but lacks an i2c_driver.remove
-function or a devm_add_action callback to explicitly mask these interrupts =
-in
-the device registers on teardown. If the driver is unbound, could the exter=
-nal
-device actively assert the open-drain interrupt lines and cause an unhandled
-interrupt storm?
-
-> +	if (ret)
-> +		return ret;
-> +
-[ ... ]
-> +static int pcf8525_watchdog_init(struct device *dev,
-> +				 struct pcf8525 *pcf8525)
-> +{
+> +	struct wmi_method_args_32 args = {
+> +		.arg0 = LWMI_ATTR_ID_FAN_FULLSPEED,
+> +	};
+> +	u32 value;
 > +	int ret;
 > +
-> +	if (!IS_ENABLED(CONFIG_WATCHDOG_CORE) ||
-> +	    !device_property_read_bool(dev, "reset-source"))
-> +		return 0;
-> +
-> +	if (pcf8525->irq_intb > 0) {
-> +		ret =3D devm_request_threaded_irq(dev, pcf8525->irq_intb,
-> +						NULL, pcf8525_wdt_irq,
-> +						IRQF_ONESHOT,
-> +						"pcf8525-wdt", dev);
-
-[Severity: High]
-Should the IRQ be requested after the hardware is configured?
-
-In pcf8525_watchdog_config(), the INTB/CLKOUT pin defaults to a clock output
-(CLKOE=3D1). Requesting the IRQ here before pcf8525_watchdog_config() disab=
-les
-CLKOE could flood the CPU with interrupts. The IRQ handler will read WDTF as
-0 and return IRQ_NONE repeatedly, which might cause the spurious interrupt
-detector to permanently disable the IRQ line.
-
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	ret =3D pcf8525_watchdog_config(dev, pcf8525);
+> +	ret = lwmi_dev_evaluate_int(priv->wdev, 0, LWMI_FEATURE_VALUE_GET,
+> +				    (u8 *)&args, sizeof(args), &value);
 > +	if (ret)
 > +		return ret;
 > +
-[ ... ]
-> +	pcf8525->wdd.status =3D WATCHDOG_NOWAYOUT_INIT_STATUS;
+> +	if (value > 1)
+> +		return -ERANGE;
 > +
-> +	watchdog_set_drvdata(&pcf8525->wdd, pcf8525);
-> +	watchdog_stop_on_reboot(&pcf8525->wdd);
+> +	*enable = value ? 0 : 2;
 
-[Severity: High]
-Does the watchdog continue running during system suspend?
+Label these literals with defines?
 
-The driver lacks dev_pm_ops suspend/resume callbacks to manually stop or
-pause the watchdog. Since the PCF8525 is an external RTC that continues
-ticking independently from the host CPU, could the hardware watchdog count
-down and assert a reset signal (via the reset-source property) while the
-system is asleep, causing an unintended hard reset?
+--
+ i.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260824065531.6937=
-01-1-shivprakash.gupta@nxp.com?part=3D3
+> +	return 0;
+> +}
+> +
+> +static int lwmi_om_fullspeed_set(struct lwmi_om_priv *priv, bool fullspeed)
+> +{
+> +	struct wmi_method_args_32 args = {
+> +		.arg0 = LWMI_ATTR_ID_FAN_FULLSPEED,
+> +		.arg1 = fullspeed,
+> +	};
+> +
+> +	/* The WMI method has no return value. */
+> +	return lwmi_dev_evaluate_int(priv->wdev, 0, LWMI_FEATURE_VALUE_SET,
+> +				     (u8 *)&args, sizeof(args), NULL);
+> +}
+> +
+>  /**
+>   * lwmi_om_hwmon_is_visible() - Determine visibility of HWMON attributes
+>   * @drvdata: Driver private data
+> @@ -255,6 +338,10 @@ static umode_t lwmi_om_hwmon_is_visible(const void *drvdata, enum hwmon_sensor_t
+>  	struct lwmi_om_priv *priv = (struct lwmi_om_priv *)drvdata;
+>  	bool visible = false;
+>  
+> +	if (type == hwmon_pwm && priv->fullspeed_supported && channel == 0 &&
+> +	    attr == hwmon_pwm_enable)
+> +		return 0644;
+> +
+>  	if (type == hwmon_fan) {
+>  		if (!(priv->fan_info[channel].supported & LWMI_SUPP_VALID))
+>  			return 0;
+> @@ -311,6 +398,9 @@ static int lwmi_om_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+>  	u32 retval = 0;
+>  	int err;
+>  
+> +	if (type == hwmon_pwm && attr == hwmon_pwm_enable && channel == 0)
+> +		return lwmi_om_fullspeed_get(priv, val);
+> +
+>  	if (type == hwmon_fan) {
+>  		switch (attr) {
+>  		/*
+> @@ -366,6 +456,17 @@ static int lwmi_om_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
+>  	u32 raw, min_rpm, max_rpm;
+>  	int err;
+>  
+> +	if (type == hwmon_pwm && attr == hwmon_pwm_enable && channel == 0) {
+> +		switch (val) {
+> +		case 0:
+> +			return lwmi_om_fullspeed_set(priv, true);
+> +		case 2:
+> +			return lwmi_om_fullspeed_set(priv, false);
+> +		default:
+> +			return -EINVAL;
+> +		}
+> +	}
+> +
+>  	if (type == hwmon_fan) {
+>  		switch (attr) {
+>  		case hwmon_fan_target:
+> @@ -420,6 +521,7 @@ static const struct hwmon_channel_info * const lwmi_om_hwmon_info[] = {
+>  			   HWMON_F_MIN | HWMON_F_MAX,
+>  			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_DIV |
+>  			   HWMON_F_MIN | HWMON_F_MAX),
+> +	HWMON_CHANNEL_INFO(pwm, HWMON_PWM_ENABLE),
+>  	NULL
+>  };
+>  
+> @@ -440,6 +542,7 @@ static const struct hwmon_chip_info lwmi_om_hwmon_chip_info = {
+>   */
+>  static void lwmi_om_hwmon_add(struct lwmi_om_priv *priv)
+>  {
+> +	long enable;
+>  	int i, valid;
+>  
+>  	if (WARN_ON(priv->hwmon_dev))
+> @@ -458,6 +561,9 @@ static void lwmi_om_hwmon_add(struct lwmi_om_priv *priv)
+>  	if (relax_fan_constraint)
+>  		dev_warn(&priv->wdev->dev, "fan RPM constraint relaxed. Use with caution\n");
+>  
+> +	priv->fullspeed_supported =
+> +		lwmi_fan_supported() && !lwmi_om_fullspeed_get(priv, &enable);
+> +
+>  	valid = 0;
+>  	for (i = 0; i < LWMI_FAN_NR; i++) {
+>  		if (!(priv->fan_info[i].supported & LWMI_SUPP_VALID))
+> @@ -474,7 +580,7 @@ static void lwmi_om_hwmon_add(struct lwmi_om_priv *priv)
+>  		}
+>  	}
+>  
+> -	if (valid == 0) {
+> +	if (valid == 0 && !priv->fullspeed_supported) {
+>  		dev_warn(&priv->wdev->dev,
+>  			 "fan reporting/tuning is unsupported on this device\n");
+>  		return;
+> 
