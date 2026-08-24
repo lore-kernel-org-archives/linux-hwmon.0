@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F7FA360EC3;
-	Mon, 24 Aug 2026 18:49:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E8833859DF;
+	Mon, 24 Aug 2026 18:50:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787597377; cv=none; b=l+u7MNbqLPlB8Xt091ijnmufLd8VTsz9H0Azt5AXB0WKLjKBuYSvk0iZ/xcIstQNG0uRkKxv2qpjwbOt9kXOaEg+kZF8NEIyvSRK54eym2/TgUbgH2A7ZI6tnKADOalY+SZTLsSVug05h0daDvR3JuPqnnbfej12WIhWdwQTbBE=
+	t=1787597418; cv=none; b=ESOvK+S/p/oNNkZEcTPSTOE/v4VYWEFEEVMnrx2cep+3eLfMViTKTCzUDbOFN+tVdGIMILthlxr3BMHoUJOLthJexNQfb2WA5yCq5Q0oHLkUOAhxu/pgynbgblpmwQMc4tbqBN6UkeBHPmWdpFZ15mERWiLZ3iMD9bgU2TxRxFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787597377; c=relaxed/simple;
-	bh=qSIYCXdd4YkX+cw5IzGPvA/5MS5JpUvrgS88qrijbos=;
+	s=arc-20240116; t=1787597418; c=relaxed/simple;
+	bh=kteYizVa0NhEB1/u76aL61O6seX1deWa8kud/Ose5v8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=h2NZmIz5rSYVKgbGXHn3el1RE92TDaqXTCcuvV1YE9XyGEj2sD+UJsRy9wmJkuj/0K5gRugJ5T5246t1+wK6vuR0sMgcLP8/x8Q8DHy1y8xp3Kg4sTr+FiKNnSjEDm8PfMI4uI3asImonfhFwXOkbdGkV/3fCHcYPj6VU/UYra8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lTrdVyKU; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=i2b+EUMbbNUH6U7QLnd7Lwp/Vgta/6vjuBdK10V/xVbRoSszMMhnIfsgzLObgHfDbNDqTgeBTre9rvfexgv4DBsy9W2HXHAGSRTb09p8tAyrLnRscUmtJ93n7YHrXmHtNm7yzbiASo/+0hbL+CD1GcTFKTKN5dfQsou8bFwUML8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O8KlB8v5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lTrdVyKU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 482AA1F000E9;
-	Mon, 24 Aug 2026 18:49:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O8KlB8v5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 541E51F000E9;
+	Mon, 24 Aug 2026 18:50:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787597375;
-	bh=l02lZTEg8V/1CYt5fClPRUD/jLWlP2QFX6cbobChipI=;
+	s=k20260515; t=1787597416;
+	bh=JLLa0V7ArszBwHQZirdy5sjsLynh1NI1QtQiMIxweLA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lTrdVyKU0bmLjB3UlujXrN6kIl8u5Ik8UHklrGiGHqKFfPLP5BimshW3nfUJ8bnKK
-	 sS5O73PtRLT5FobPTrsNVhGsQqyLr11cSzatXUq+vrDElxBdWSk0uVmezrFXiAK52w
-	 kq1KAmhkTNfWk+mgTDlaD6RuM+ABfdE0p6b3lBcrCLmid1TTqFYRGa3+dICESzPjXx
-	 smsfrCy/YGBqDrLPFlRZzHGq9UyulpalZthWupdf0YZySfjDUCUvNhq/DAL/R/BnPb
-	 vEpaDykzoJLiDdLQljreLoiE+xFag89yFvzUXvlBlWfWRbDceRE5DCVcXZ5kWKaYjd
-	 k4R6OfHlvAYZw==
+	b=O8KlB8v5ULk7kyWndBwmsPc6pqIfJKZjl85QQ7VfO6HDfm0SpOcwL3JfegTkz8wFV
+	 sl6pQ0fpAnjfZwhtEPs3UaTiF5fUuWrBHsbnGsMuI//qbmsnPvuM8oBMbytfU9akAI
+	 JqbeIJR/3cTK5fxCBw285H176yMVP3TkaYWS4UmSm80Vb/Cd5THPXlXuubqWCYuW37
+	 ueAhCwWLpVRPS1v+8BmG8Et/89RTKmSSjNfPyL4Yl/H71K+ZwRZNyRUr1wcS9cqtu+
+	 i/7gqo1DJeeLJDqKdaxPtXhfoohVDxi5VyOuo6jPbBR3FLNMc5/Ce4xrEcL2oTgHj2
+	 n2eh1OkjM558A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: national,lm90: Fix channel
- constraints for temperature offset
+Subject: Re: [PATCH 2/2] hwmon: (lm90) Reject channel 2 on chips with only
+ one remote sensor
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Flaviu Nistor" <flaviu.nistor@gmail.com>
 Cc: robh@kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
-In-Reply-To: <20260824183900.8983-2-flaviu.nistor@gmail.com>
+In-Reply-To: <20260824183900.8983-3-flaviu.nistor@gmail.com>
 References: <20260824183900.8983-1-flaviu.nistor@gmail.com>
- <20260824183900.8983-2-flaviu.nistor@gmail.com>
+ <20260824183900.8983-3-flaviu.nistor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 24 Aug 2026 18:49:34 +0000
-Message-Id: <20260824184935.482AA1F000E9@smtp.kernel.org>
+Date: Mon, 24 Aug 2026 18:50:15 +0000
+Message-Id: <20260824185016.541E51F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -47,69 +47,72 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] Unanchored regular expressions in `patternProperties` violate dt-bi=
-ndings conventions by matching substrings instead of exact node names.
+
+Pre-existing issues:
+- [High] Setting the temperature offset for channel 2 during probe clobbers=
+ the device's hardware configuration register because `data->config` is use=
+d before it is initialized.
 --
 
---- Patch [1]: [PATCH 1/2] dt-bindings: hwmon: national,lm90: Fix channel c=
-onstraints for temperature offset ---
-commit 9782538dd0bd62fc7f4323e17bb521a9d2fa819b
+--- Patch [2]: [PATCH 2/2] hwmon: (lm90) Reject channel 2 on chips with onl=
+y one remote sensor ---
+commit dbe7fc3f39616fac014beb08a22b533d36d4c54b
 Author: Flaviu Nistor <flaviu.nistor@gmail.com>
+Subject: hwmon: (lm90) Reject channel 2 on chips with only one remote sensor
 
-dt-bindings: hwmon: national,lm90: Fix channel constraints for temperature =
-offset
+This patch validates firmware channel definitions against chip capabilities
+and returns -EINVAL when channel 2 is configured on devices with 1 remote
+channel.
 
-This commit limits the temperature-offset-millicelsius property to remote
-channels only, as it doesn't apply to the local channel 0. It also rejects
-channel 2 for devices that do not support a second remote channel.
-
-> diff --git a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml b=
-/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-> index 164068ba069d7..a7f82b202b861 100644
-> --- a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-[ ... ]
-> @@ -113,6 +113,29 @@ allOf:
->        properties:
->          ti,extended-range-enable: false
+> diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+> index 1c603272538aa..3faeb2c6ab01b 100644
+> --- a/drivers/hwmon/lm90.c
+> +++ b/drivers/hwmon/lm90.c
+> @@ -2712,6 +2712,11 @@ static int lm90_probe_channel(struct i2c_client *c=
+lient,
+>  		return -EINVAL;
+>  	}
 > =20
-> +  - patternProperties:
-> +      "channel@0":
-
-[Severity: Low]
-Should this regular expression be anchored as "^channel@0$"?
-
-Without anchors, this matches any child node containing "channel@0" as a
-substring (such as "mychannel@0"), causing incorrect schema validation rules
-to be applied during dt_binding_check execution.
-
-> +        type: object
-> +        properties:
-> +          temperature-offset-millicelsius: false
+> +	if (id =3D=3D 2 && !(data->flags & LM90_HAVE_TEMP3)) {
+> +		dev_err(dev, "channel %d is not supported for this chip in %pfw\n", id=
+, child);
+> +		return -EINVAL;
+> +	}
 > +
-> +  - if:
-> +      not:
-> +        properties:
-> +          compatible:
-> +            contains:
-> +              enum:
-> +                - adi,adt7481
-> +                - dallas,max6695
-> +                - dallas,max6696
-> +    then:
-> +      patternProperties:
-> +        "^channel@[0-1]$":
-> +          properties:
-> +            reg:
-> +              enum: [0, 1]
-> +        "channel@2": false
+[Severity: High]
+This is a pre-existing issue, but I noticed a potential problem when channe=
+l 2
+is valid and has a temperature offset configured.
 
-[Severity: Low]
-Does this pattern also need to be anchored as "^channel@2$"?
+In lm90_probe(), lm90_parse_channel_info() is called before
+lm90_init_client(). If the device tree specifies the property
+temperature-offset-millicelsius for channel 2, it invokes
+lm90_set_temp_offset() further down in lm90_probe_channel().
 
-As written, it behaves as a substring match and might inadvertently reject
-node names containing it as a substring.
+For channel 2, lm90_set_temp_offset() calls lm90_select_remote_channel():
+
+drivers/hwmon/lm90.c:lm90_set_temp_offset() {
+        ...
+        /* For ADT7481 we can use the same registers for remote channel 1 a=
+nd 2 */
+        if (channel > 1)
+                lm90_select_remote_channel(data, true);
+        ...
+}
+
+Because lm90_init_client() hasn't executed yet, data->config is still 0 from
+its initial allocation. This causes the driver to write 0 directly to the
+hardware configuration register, which might clobber the original
+BIOS/bootloader configuration before it is ever read and saved.
+
+Could this silently overwrite the chip's thermal alert masks or run states
+during device probe on systems providing the offset property?
+
+>  	err =3D fwnode_property_read_string(child, "label", &data->channel_labe=
+l[id]);
+>  	if (err =3D=3D -ENODATA || err =3D=3D -EILSEQ) {
+>  		dev_err(dev, "invalid label property in %pfw\n", child);
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260824183900.8983=
--1-flaviu.nistor@gmail.com?part=3D1
+-1-flaviu.nistor@gmail.com?part=3D2
