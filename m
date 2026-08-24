@@ -1,62 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80309350A05;
-	Mon, 24 Aug 2026 22:17:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D9B8350A05;
+	Mon, 24 Aug 2026 22:19:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.27.42.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787609862; cv=none; b=kB0CzGD3m08ms2OcFd/vSqWPezHqyLO8qBc6D/mfTckyEzXYqIt8Vsb0Uj8sR+f3IYFobtUEYhUYNzDiWAZ9wfhdl1OUcz2/bvQanPdJSgC7zcp3ZKaVC/hfEH2IkVghddfhIoBDO3zIJwKhH82469T4F3/uMDFstEmA/I15OXE=
+	t=1787609961; cv=none; b=WK9ZgU6/ZgiOqa0sz4C/Xw3DL/2PEi1NEGgP3vdo4EtrAazNJPadvVdk/k9cBUq3oz2viAtAMhc23iDG/z9fyVciGfePlvyzSjqgwOjUstOxO8jfKBDRMg8e0B1oRaqpNa5iNekNowmq9b3yE9GHlYKxA3DZfW7K8M4BdFx7CLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787609862; c=relaxed/simple;
-	bh=oiKA4Iv5jE48394zc10Q9LdjZPcHPdfXCNEZBnZSdpk=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=btGYfoAXci2mrqcuLU9Gl+4qKMnm/r46WvHJBXBO3+cQAFGHcdCuK5bKSbc3FAlxd6dNz7gdBmW5Uva60kSvgP5I9F/y8ESuEPbu3ett0F9WPisnHVgnJrZOAUfls05CIOFqXt9x3wFe/07AHfgfU5UAzg9eGHyYm+viiXnOqyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bk1/ve7f; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787609961; c=relaxed/simple;
+	bh=TOJB9LaRF3sGVMeoZ49vUrIJyKXA/bFQzH0vrUrRKQE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=owPjAB6eLjksqHTbLWNZe0DSbpZxwzXr6BmIyPWuILzjrXZAIBZEC2l6Ljwic6OSNhg08zQK90uC/6d5OpSqBLGtIicOxQYH0fRGMGIdZBjDKiN1NdQ3ca8h4+S2VPdGk1DUspVguHb07u9utpzn8qVMCwMjn2D1x8ejaTHeRuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=free.fr; spf=pass smtp.mailfrom=free.fr; dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b=IKT/0I6S; arc=none smtp.client-ip=212.27.42.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=free.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=free.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bk1/ve7f"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B08161F000E9;
-	Mon, 24 Aug 2026 22:17:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787609861;
-	bh=nnVzNDRQP36j5OEY66NP5xqug6Pk8zZOX9NrgHspxD4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Bk1/ve7fgBj0mxKKf3URN3qAXOtQbIDi58mwl8KpnlfqYqdHzxdUnII2RsopTRK5k
-	 Rt6xMwyjiPq6BTiDVaptvjKcIrvD3/a0V0TKCRXzfIgi6U82j+eWVzitgjxJ2INopI
-	 H1vpeREARaYVWMReoNANUZIDKxHDUFIj/TA0e6t+gnCbfwdC688aPzS0FY30+ts/+l
-	 iEDmLM0Z8dliFowozMndjhyTH2+wW4REJV6fTgLWLHZe7pariQoADwhJ9zYzMXH2k6
-	 F//Dz00BrSLmaP/SxEFXNHPOQlCseNwdkQYyAFx2vs4JrFB6ZwGvNUjcF/DcQC5BrH
-	 1n5Vk4acjr5ZA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] dt-bindings: hwmon: ti,tmp401: add
- #thermal-sensor-cells
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Vincent Jardin" <vjardin@free.fr>
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org, conor+dt@kernel.org
-In-Reply-To: <20260825-for-upstream-dt-tmp401-vcc-tsc-v2-1-cbc360ec51d9@free.fr>
-References: <20260825-for-upstream-dt-tmp401-vcc-tsc-v2-1-cbc360ec51d9@free.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 24 Aug 2026 22:17:40 +0000
-Message-Id: <20260824221740.B08161F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b="IKT/0I6S"
+Received: from L30177.local (unknown [IPv6:2a01:e0a:ac2:22b0:9a6:acd5:d8dc:dcdb])
+	(Authenticated sender: vjardin@free.fr)
+	by smtp2-g21.free.fr (Postfix) with ESMTPSA id E9D412003A4;
+	Tue, 25 Aug 2026 00:19:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+	s=smtp-20201208; t=1787609958;
+	bh=TOJB9LaRF3sGVMeoZ49vUrIJyKXA/bFQzH0vrUrRKQE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IKT/0I6SKBCNMYN/KZqYZfqhcP8gRklr7ujjVeO4vevqGBqvqRvtg/RWjc7ZFtwRH
+	 g1xN1pe8V0li1OhIeVVWVcLalB1thlc8uz3IvqRHTSHvYFqS5wr+CHLEBqjtvqshbs
+	 4FZ1rby4dwyoDklzL8IDigy/v2xBudeftVOSvo1IKEkP0WLm40/Khfc7HqKcBFVNPk
+	 0rGo+0QnMVbSIor8gEmlato/Q9Elv7THnBciUvxU5StSOvWNveucsmFzqNKaEhOJ2P
+	 HfJTT4Ef/g4EYU6p8vMUeCpGFsmNnk6X2yzrz0+v9wGIkTDY75dDfk3Uj4ctgF87TR
+	 bCiXn9Ywgassg==
+Date: Tue, 25 Aug 2026 00:19:08 +0200
+From: Vincent Jardin <vjardin@free.fr>
+To: Conor Dooley <conor@kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Shych <michaelsh@nvidia.com>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: hwmon: microchip,emc2305: add vcc-supply
+ and #cooling-cells
+Message-ID: <aozDXIdUKwr4Tt29@L30177.local>
+References: <20260824-for-upstream-dt-emc2305-vcc-cooling-v1-1-cd3b53dfb5d4@free.fr>
+ <20260824-flashcard-renewably-badc0e011949@spud>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260824-flashcard-renewably-badc0e011949@spud>
 
-> From: Vincent Jardin <vjardin@free.fr>
->=20
-> The property is missing, so a board that uses it with a thermal zone fails
-> with dtbs_check:
->=20
->   tmp411@4c (ti,tmp411): '#thermal-sensor-cells' does not match any of the
->   regexes: '^pinctrl-[0-9]+$'
->=20
-> Signed-off-by: Vincent Jardin <vjardin@free.fr>
+Hi Conor,
 
-Sashiko has reviewed this patch and found no issues. It looks great!
+> That seems correct though and putting it in the device node when there's 4
+> fans that could interact with different zones seems wrong. Shouldn't the
+> driver be fixed instead?
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260825-for-upstre=
-am-dt-tmp401-vcc-tsc-v2-1-cbc360ec51d9@free.fr?part=3D1
+Hmm, I did re-read again the code and I am wrong.
 
+I withdraw the patch instead of sending a v2.
+
+Sorry for the noise,
+  Vincent
