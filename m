@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33BA13FFFA8;
-	Mon, 24 Aug 2026 15:43:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD4544D693;
+	Mon, 24 Aug 2026 15:46:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787586192; cv=none; b=hbL9ku/hhDSDI4SbDqKxP2e6f76w3YAY89Y/KrH9e8ylow20DMvab17K9P1mW+oGxAnjvdTpx/FHFAYb1N6klxq0fQX/TqxJzoIaQPkmQPk5Ri9ronwbAJZ/WiDxQ+0vYpicsZAeDGz+9CU3vSJI2rzfPFEzYUN+31rz9JUZSFo=
+	t=1787586400; cv=none; b=no6h8wk8Yjtvv7+0Nxjfxh/+GCLvSZZPQ+0+0tXchUluy9nxuPNCzNSuvwzuiaX8nFIH/P9ADslQz62jQ6G9i3WrxHypOI+sPIs9Axtx6ufeDe25/Ps0R6oYlBXKEid0L0X3Ix8xVnZrCm4GFJyBmTpNxJ+gwb0Hkb+P3kWs+SM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787586192; c=relaxed/simple;
-	bh=qKmyUFw8Q9BZVbJDN104O2PJEqzLFIDcYKL0jxDSmMg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=C29XKn76YjCyhK7PUnM0POH1s7FZ61kCEwjcD2hsOl6yzpp+KPc8+178+jL+tE/f5K+PEu9QltyQVt89pmi1ifHl6hS2ZNWqPBDfPce57LweHqVXO6LR3YXsFcWJE6MWUUtoW5gjPI0WVKRNaXrEGuJZHJBLS/nPqK1Upm/9r24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gZ1dzsnL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1787586400; c=relaxed/simple;
+	bh=uK79qjAHQ3AeX/ICLt1IK3Zc2rMOVt3EIxkbNN6yzcA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=EpQpcwTuzAAV7yl/ih7rYQJ/U++C6biHPUYvjKmx02LQ72qe2JbwG9Os50ViS8/RXCcJzaD4lnr2gC20g+LuQEhwder/mCSTipG+xX1/WHSlaOTpZQDFtxTuI2ydVliGnft60z3GmCRYB0Y2lBZfby3KnPJL05Ft1wd1cQRUEv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oKdqsc2g; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gZ1dzsnL"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 67AA1C19425;
-	Mon, 24 Aug 2026 15:43:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oKdqsc2g"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 18E53C19425;
+	Mon, 24 Aug 2026 15:46:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1787586190;
-	bh=qKmyUFw8Q9BZVbJDN104O2PJEqzLFIDcYKL0jxDSmMg=;
+	s=k20201202; t=1787586399;
+	bh=uK79qjAHQ3AeX/ICLt1IK3Zc2rMOVt3EIxkbNN6yzcA=;
 	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=gZ1dzsnLCxqi/PhGkaRrewjwsUd+j2nOywmqLfCCqQ0c7/7z2QnTj2uIFr46uqOmS
-	 xRewIPSOVp6qGI2O+fo2h1hiDT2McsU4aRB5+EBSvhjjlB6Er8EqVgw4aYa/AjKi9I
-	 uIldmcDDqrYzrtP7QNxZ0CM6FrKPcKLfNBhRnUmNPEserxWU2ThvW5PKVamTHJepZ4
-	 UbXVPPt7i7Z1ISnJ0RMwEaenoLXxoGjuCzrzu12eKf/D6AgiTBSaYxrY5U/Ac7/scW
-	 oydFX1Qhec0Zbo1qknh6N4z+qixrWyT3662ZpUJCF3g1Aj0AwK77ffkCkB4OrxHv8A
-	 Ir3ngQVE3C5Dw==
+	b=oKdqsc2g5hSpUKr7v9UuVXoPwaZE8E6wEkEHW2jFd/xn++HvYMe55h7H6ujd3OXj0
+	 LDhWTbcwnZ5o1dMnDyHn6Y0OyvyakC7Vg/XpDxnvIGkLjBB7oGdzemtUR39FrbDjiI
+	 sH/dwG6QOLEtLah8Fcp2p5VHdxIpwOjfxONvYRB9HnkEwsU/HtzIg3D9+ogsDvtQ73
+	 KpTwsTky+QmxHRXzguNQQFcnWc+ioZdNPx3R6V1lSrRcNoazN9+Pg255qEU8LwysyP
+	 +YYob+1tFHp9duFUsTeDEadSptI7GZG1WzHh5oNHWON7f8mRqWG9Vowj3rlqclXXGk
+	 a5We6Vpyy18Zw==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43562C5DF9C;
-	Mon, 24 Aug 2026 15:43:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9E19C5DF94;
+	Mon, 24 Aug 2026 15:46:38 +0000 (UTC)
 From: Vincent Jardin via B4 Relay <devnull+vjardin.free.fr@kernel.org>
-Date: Mon, 24 Aug 2026 17:42:59 +0200
-Subject: [PATCH] dt-bindings: hwmon: microchip,emc2305: add vcc-supply and
- #cooling-cells
+Date: Mon, 24 Aug 2026 17:46:36 +0200
+Subject: [PATCH] dt-bindings: hwmon: ti,tmp401: add vcc-supply and
+ #thermal-sensor-cells
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -40,21 +40,21 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260824-for-upstream-dt-emc2305-vcc-cooling-v1-1-cd3b53dfb5d4@free.fr>
-X-B4-Tracking: v=1; b=H4sIAIJmjGoC/x3NwQqDMAyA4VeRnA3UbBXdq8gOElMNzFZSJwPx3
- Vc8fpf/PyGLqWR4VSeYHJo1xYKmroCXMc6COhUDOWpdR08MyfC75d1kXHHaUVamh/N4MCOn9NE
- 4I/mm9Z77XkIHpbSZBP3dl+F9XX/VYcEJdQAAAA==
+Message-Id: <20260824-for-upstream-dt-tmp401-vcc-tsc-v1-1-ecb5ef7898bd@free.fr>
+X-B4-Tracking: v=1; b=H4sIAFtnjGoC/x3NwQqDMAyA4VeRnBdou07EV5EdaoxbDmpJqgjiu
+ 6/s+F3+/wJjFTbomwuUDzHZ1gr/aIC+af0wylQNwYXWdSHivCnu2YpyWnAqWJYcnceDCIsRJt+
+ OTN3zFThCjWTlWc7/YHjf9w+FU6QHcAAAAA==
 To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Michael Shych <michaelsh@nvidia.com>
+ Conor Dooley <conor+dt@kernel.org>
 Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Vincent Jardin <vjardin@free.fr>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1787586189; l=1919;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1787586398; l=1364;
  i=vjardin@free.fr; s=20260525; h=from:subject:message-id;
- bh=OmD5dPXn6kP0dHQvQO+WQZsrUb0dqokp2zQV0VNm5M8=;
- b=4G02U1j9qsh/7z1101Y2ZOFcREgjfyaxV5RyC576UKmi5xTmFKqlPMRltcsjvqNE3CO7zTbt9
- o7k55ogWrPUAH4Eq0kVDsG0QOUVT7sfq80KsoDK0+MM+LeE9a6hHvKx
+ bh=P+vvtVa9Xt5cHsZaKRS93Aih5rhUVfFYRpn5jmhnpxM=;
+ b=tyqh1tD1gWbAy0YYrloa/Zvko1FEsMvJGZPig0Y/hhR72qRY3lPu+U5Y750Qap2yS7PRxopyL
+ C4Cmwnwe4M1DBtU9GERurozcJpLm4wnr/e1mcojtfHCg4rkRugJwSh9
 X-Developer-Key: i=vjardin@free.fr; a=ed25519;
  pk=hppgLeFpGpKOi7LNwGEZ4jOYofJCoGd4Jf1ltAabiLw=
 X-Endpoint-Received: by B4 Relay for vjardin@free.fr/20260525 with
@@ -64,55 +64,46 @@ Reply-To: vjardin@free.fr
 
 From: Vincent Jardin <vjardin@free.fr>
 
-Both properties are missing, so a board that supplies either fails with
-dtbs_check:
+Both properties are used by the driver that backs this binding, and
+neither is described, so a board that supplies either fails dtbs_check:
 
-  fan-controller@2c (microchip,emc2305): '#cooling-cells', 'vcc-supply'
-  do not match any of the regexes: '^fan@[0-4]$', '^pinctrl-[0-9]+$'
+  tmp411@4c (ti,tmp411): '#thermal-sensor-cells', 'vcc-supply' do not
+  match any of the regexes: '^pinctrl-[0-9]+$'
 
-The #cooling-cells property belongs to the controller node, which is
-where the driver actually registers.
+vcc-supply is fetched in lm90_probe():
 
-Two cells is what that registration needs: a cooling-maps entry
-references the fan as <&emc2305 min max>.
+  drivers/hwmon/lm90.c:2777
+        err = devm_regulator_get_enable(dev, "vcc");
 
-Two cells also documents what the driver supports today. The
-pwm-separate path registers one cooling device per PWM against the same
-node, and they all get cdev_id 0, so no cell count can tell them apart.
-That is a driver issue, noted here but not addressed.
-
-The examples in this binding put that property on the fan@N subnodes
-instead, which does not match what the driver does: they are left alone
-here rather than changed blind.
-
-vcc-supply describes the chip's own rail, which matters on boards where
-the sensor sits behind a switched supply.
+so a board with the sensor behind a switched rail has no other way to
+describe it, and omitting it means the chip is probed with its supply
+possibly off.
 
 Signed-off-by: Vincent Jardin <vjardin@free.fr>
 ---
- Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml | 5 +++++
+ Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
-index 8c2548539d7fd..47640214de100 100644
---- a/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
-@@ -44,6 +44,11 @@ properties:
-            - 0 (Open-Drain)
-            - 1 (Push-Pull)
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
+index 0e8ddf0ad7890..69f77aec01a33 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
+@@ -50,6 +50,11 @@ properties:
+     minimum: 0
+     maximum: 15
  
 +  vcc-supply: true
 +
-+  "#cooling-cells":
-+    const: 2
++  "#thermal-sensor-cells":
++    const: 1
 +
- patternProperties:
-   '^fan@[0-4]$':
-     $ref: fan-common.yaml#
+ allOf:
+   - if:
+       properties:
 
 ---
 base-commit: 0a0d1d55dad570724bf8c7ea83409639cfb4be9b
-change-id: 20260824-for-upstream-dt-emc2305-vcc-cooling-251655c99ef8
+change-id: 20260824-for-upstream-dt-tmp401-vcc-tsc-a16bec8352e4
 
 Best regards,
 -- 
