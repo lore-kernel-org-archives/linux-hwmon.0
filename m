@@ -1,126 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3058442B0B
-	for <linux-hwmon@vger.kernel.org>; Tue, 25 Aug 2026 17:51:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76C5737DABE
+	for <linux-hwmon@vger.kernel.org>; Tue, 25 Aug 2026 18:41:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787680288; cv=none; b=khyGG3NXfVo19repICbUhM8aWmaeVA2d3Mgi63MM8hPqVaeMsNt4Bv7fHa+Amd5tDdOITmT97m5+BHuRA5d3DEPRTGmdZaTbYNHQQmCZwwtcMAITWUbaXHF1ODP0h2VVg3kxyhVJMOd1kstfVEZPIvDLADSVGeHUfAah5zqLdvE=
+	t=1787683286; cv=none; b=XD0c+SFS6SIdjUn0RaXYfUu509GGwItXQp1nnYpVuYUy7117aw0/4GR8KzwvCX8+vpUjOzz2OEADLRVlm+5gTKiFJscqJHxx53NhQUbsfVim6iXB9kVQGYYxE8D5KYzF4f4QYVq7vndHMahu6bmU+eBQD08C8P8F/sIG8IAfOng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787680288; c=relaxed/simple;
-	bh=XRsXR/W+oXnkgvhb3Pq2abEJoYWMZ3WJ6spJ8yf7BD0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=BpgPBq3xVF2N03pRKd6jUUcK288rInaZDlyAyj+QNAGyMUs0sfkvkCAdOEkT47ZQyhinUZR2BoN389xaAtnn3OMcZ/yl2USie2YWMubepDVolZsenWkxOaoRonVezC9gL6J5Bp2EdKkA6dAYvFqD3nkmXMKWEq3vH4RKZTR03oo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N1M+xtea; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787683286; c=relaxed/simple;
+	bh=Tb16IgVakmc+CdnVzLzlZmsZXBKmafpDroRRtjeKCcE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GVupXBEy1nIUOXVPOkI0hJmmERMr2s+w0qB8/hS+XgTfCg56ZuF5dNF2u1XPXtFLjNJ0oNqAdwH1YF/s16LobSY7HpPQxxJ7b25jT3yPF+P6ambTE85mC0TPsalW28jGrOJE/BhbwpWibMS1wHudvHBtaZCue180QLCR78rM3uw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sSjBagxz; arc=none smtp.client-ip=209.85.222.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N1M+xtea"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B0591F00A3D;
-	Tue, 25 Aug 2026 17:51:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787680286;
-	bh=9jsCzFERuy0giXvP7rCKzEfCHVWJoO1K4zrEvM8gPPQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=N1M+xteawQPuWroElHvgX5MrDsViLHeziDcb/izVBAktHNkQQ0Ifo8bGXl6agrYnb
-	 S3zzGJmhYIpWPxASCakqCGDxNOt1tN2fpHdsqzfTFJYNg7OPAuOrZM1E6zwUDd+ktB
-	 wMI+TeiQ+5DQ9TdVHt8bmQlGTaTIZDSh1wxiL6QAbXG3jNfVa2DWYC+0scwTuAccxV
-	 CJ3mTbi+pilKhVhDBHkKGgDGTcqK6zE1dvf4kxd6lwl7v5+x/UbGpmDgrcA63UvdTs
-	 3gvG4s0yT8VToKf7Tnf1Y3kFBN8B4usXnSS5MRPMpl4Bf7X228vL/Pj6lksTxjXxvi
-	 YebjvI6nCcJow==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v2 3/6] eth: fbnic: cache hwmon sensor readings
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Zinc Lim" <limzhineng2@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260824175059.2485048-4-limzhineng2@gmail.com>
-References: <20260824175059.2485048-1-limzhineng2@gmail.com>
- <20260824175059.2485048-4-limzhineng2@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 25 Aug 2026 17:51:26 +0000
-Message-Id: <20260825175126.9B0591F00A3D@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sSjBagxz"
+Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-966e7380109so56728241.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 25 Aug 2026 11:41:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787683284; x=1788288084; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=p3QyZWg1WsZH3UzmNsJ7DFfIwK6PjCgdZzJDtgoRKH0=;
+        b=sSjBagxzymuaE686txZ0W7Wx2HEQ2IeJrmCy++blG5CcADv+jJhYC4WhXB2KBjd9xU
+         ZvpTwdFKl4xd7gZi9jEc2/P+nppnd93HfZp/MQDKS+z2UblPAH25uRHT4+hnBeKERMun
+         kgInfIlfVhmtL6nNde5E0PgGmMimibS0XofHAxaMkC6aMd04Md6yrJQvQatFFsSQfB/m
+         o97QwdcfLQiX3OxI+83CrRPLRyhMj/8QD9OIMpFQABJOz5/WV8FqXWWxCvvK8ftphbaQ
+         4GbWiK9Q3Fpc1vdk7ie//bUK8NhvZDKhLCqmCGW2IhgsqY00J0+upB6zYxfktPNIb/Lx
+         Q7bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787683284; x=1788288084;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=p3QyZWg1WsZH3UzmNsJ7DFfIwK6PjCgdZzJDtgoRKH0=;
+        b=ghCiZLm+xsONsDQoVX9+0+oLj5QcuzUyQka5mlgVulAGYIS8x3HvQk3pgZ1307TPlp
+         OFQCCOpgmyg/KpoPuLBk8ZepyrYKrzEieabXC1eOOUhM+u1fy7ukKAz9Aci0dKbNCIdr
+         g1V5KsBlAxw5UtHgbTwEkjE+p8x1cFxGBUrtJqUjrUqRDKdp+t5mQgIFCC4eWKz2cOB8
+         /Mk1gYuD0uw/jUnj1OdD0rdQdD43p9cXX4JR8uXqtVV57C4cklJt16F2CKbF2/a6/C2s
+         yF30FBPj8/h/Sz0XJT7LsDpgQgnlOpZYC2YA1DQYXEPqijrilx8Ofeeb2AxO83cxIsoJ
+         6WYw==
+X-Gm-Message-State: AFuF++nYGb8Uz6xmpU8GODGgljocdtswE2z6HR30EoozwYm7gPWa7MLw
+	woKx3xNDb09VjZ3a223p59l7TL7f1TALnhGSPqgo0+48jgHE3rZ15bbd
+X-Gm-Gg: AR+sD13KHQCUN/vrQaRRZI2ybiEyfK5MFQagZ3Ql4M7SUC9zsDb0i8LGrFkrh4hJnIj
+	DaCvGh+pGoFhewQGUmLkSjPTdM8cjI/Zvaa+my4gAwAjh7OoSJbXK1rPeK9mHVlZvMVOdm7vL/d
+	tvoGDOWSaLblSIVc8L3zebKGXkrfp+JFuqbslDCqG3Km5tWNFeQJ0RwvHOYs3mevZqwWJc/XUBV
+	yYY1iP4JXz9sE4YutE7dS/mYXezmXjzIkslIQWm3P5+afgnke5gUUYegwQTAOUlCBdfnhgTBHXt
+	WO3jAuzLR317mxj8/+7KzNyvPyQdtOv41nvfOms4+hdj0BFmM7wm1CpnAwwiBFbqSBQYicva0fp
+	L+Q9HXSpRC0jmC8M4rXqY1f8eRUw7BZNbKq4p99SkXqfjkphqUTZqkoq0RL+sDHbBQuHnpRmMzj
+	T6OM9LHcu3RBZw7YNtzjdWR4d8U5lAFQwA5UqZ7RVmKdsiJHnNK3+EdwTS5FzkyfF7
+X-Received: by 2002:a05:6102:1628:b0:74c:7fd8:73f5 with SMTP id ada2fe7eead31-782c07ff7a7mr381538137.6.1787683284313;
+        Tue, 25 Aug 2026 11:41:24 -0700 (PDT)
+Received: from nixos-minipc ([2803:9810:b675:f600:452e:e094:2a4f:7300])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-97cbb258a00sm381605241.2.2026.08.25.11.41.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Aug 2026 11:41:23 -0700 (PDT)
+From: =?UTF-8?q?Sebasti=C3=A1n=20Peyrott?= <speyrott@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/1] hwmon: Add Minisforum UM780 XTX EC monitoring and fan control
+Date: Tue, 25 Aug 2026 15:41:06 -0300
+Message-ID: <20260825184107.355980-1-speyrott@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Signed subtraction wrap-around in `time_is_after_eq_jiffies()` cau=
-ses hwmon sensor readings to freeze for 24.8 days on 32-bit architectures.
---
+Add a DMI-gated hwmon driver for both fans on the Minisforum UM780 XTX. The
+EC is an ITE IT5571E, but its register layout and OEM commands are defined
+by machine-specific firmware, so the driver only binds to the exact board
+revision and BIOS version on which it was tested.
 
---- Patch [3]: [PATCH net-next v2 3/6] eth: fbnic: cache hwmon sensor readi=
-ngs ---
-commit 976f9fc351b80235f704002eae4e7012534c286d
-Author: Zinc Lim <limzhineng2@gmail.com>
+The driver exposes both fan-control temperatures and tachometers, two OEM
+automatic CPU fan profiles, and two writable system-fan transition
+temperatures. It preserves settings selected through its interface across
+s2idle.
 
-eth: fbnic: cache hwmon sensor readings
+Tested on the target system with concurrent RPM reads, OEM profile changes,
+system-fan threshold changes, unload/reload stress, and s2idle resume. The
+settings were correct from the first userspace sample after resume and
+remained stable for 15 seconds.
 
-This commit introduces caching for hardware monitoring sensor readings in t=
-he
-fbnic driver. It caches the temperature and voltage for the remainder of the
-current jiffy to prevent flooding the firmware mailbox during rapid polling.
+OpenAI Codex assisted with reverse-engineering review, code editing, test
+orchestration, and patch and email preparation across a long interactive
+session. I reviewed every change, ran the live tests on the target
+hardware, and take responsibility for the submission.
 
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c b/drivers/net/=
-ethernet/meta/fbnic/fbnic_hwmon.c
-> index 38bb26cb8e6cb..f35cb00650937 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
-[ ... ]
-> @@ -25,26 +26,32 @@ static umode_t fbnic_hwmon_is_visible(const void *drv=
-data,
-> =20
->  static int fbnic_hwmon_sensor_read(struct fbnic_dev *fbd, int id, long *=
-val)
->  {
-> +	struct fbnic_hwmon_cache *cache =3D &fbd->hwmon_cache;
->  	struct fbnic_fw_completion *fw_cmpl;
->  	int err =3D 0;
-> -	s32 *sensor;
-> -
-> -	fw_cmpl =3D fbnic_fw_alloc_cmpl(FBNIC_TLV_MSG_ID_TSENE_READ_RESP);
-> -	if (!fw_cmpl)
-> -		return -ENOMEM;
-> +	s32 *cached;
-> =20
->  	switch (id) {
->  	case FBNIC_SENSOR_TEMP:
-> -		sensor =3D &fw_cmpl->u.tsene.millidegrees;
-> +		cached =3D &cache->temp_mdeg;
->  		break;
->  	case FBNIC_SENSOR_VOLTAGE:
-> -		sensor =3D &fw_cmpl->u.tsene.millivolts;
-> +		cached =3D &cache->volt_mv;
->  		break;
->  	default:
-> -		err =3D -EINVAL;
-> -		goto exit_free;
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (*cached !=3D FBNIC_SENSOR_NO_DATA &&
-> +	    time_is_after_eq_jiffies(cache->last_read)) {
+Link: https://lore.kernel.org/r/20260818181345.203295-1-speyrott@gmail.com
 
-[Severity: High]
-On 32-bit architectures, if the sensor isn't read for over 24.8 days, will
-time_is_after_eq_jiffies() evaluate the wrapped signed subtraction as a
-false cache hit?
+Sebastián Peyrott (1):
+  hwmon: Add Minisforum UM780 XTX EC monitoring and fan control
 
-If this condition evaluates to true under those circumstances, the function
-returns early without updating cache->last_read. Does this mean the sensor
-readings will continue to falsely hit the cache, causing the temperature
-and voltage values to remain frozen for the next 24.8 days?
+---
+Changes in v3:
+- return -EIO after bounded RPM coherence retries and -ENODATA for an
+  unknown CPU profile;
+- seed saved settings at probe, update them only after successful hwmon
+  writes, and restore them at resume without reading the EC at suspend;
+- clarify saved-state naming, live threshold validation, and resume
+  documentation.
 
-> +		*val =3D *cached;
-> +		return 0;
->  	}
-> =20
-> +	fw_cmpl =3D fbnic_fw_alloc_cmpl(FBNIC_TLV_MSG_ID_TSENE_READ_RESP);
-> +	if (!fw_cmpl)
-> +		return -ENOMEM;
-> +
+ Documentation/hwmon/index.rst               |   1 +
+ Documentation/hwmon/minisforum-um780xtx.rst |  68 +++
+ MAINTAINERS                                 |   7 +
+ drivers/hwmon/Kconfig                       |  16 +
+ drivers/hwmon/Makefile                      |   1 +
+ drivers/hwmon/minisforum-um780xtx.c         | 501 ++++++++++++++++++++
+ 6 files changed, 594 insertions(+)
+ create mode 100644 Documentation/hwmon/minisforum-um780xtx.rst
+ create mode 100644 drivers/hwmon/minisforum-um780xtx.c
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260824175059.2485=
-048-1-limzhineng2@gmail.com?part=3D3
+
+base-commit: 75f2c0b3690702c90863c2e138cb5520670845ea
+-- 
+2.54.0
