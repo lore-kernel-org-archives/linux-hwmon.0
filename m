@@ -1,72 +1,72 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 656903EDAA3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 233B73EEAEB
 	for <linux-hwmon@vger.kernel.org>; Tue, 25 Aug 2026 09:25:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787649961; cv=none; b=F26RaUXY8RaPYVoBw1sre9MzoSkiTEShcezVSJU5vNqLI37PG+X1CmEArA5JEGEY7EDy/2cRFtQ60FQcQqkThwNkNWxyjAv3bgjbER2YS7BWwd5rIQVJNApXIPhDpuoA19vEedxHirjmeBNi3axlPYnpk25oMs0+2chu5VhRxPA=
+	t=1787649962; cv=none; b=Eg8goGtyhKaQdEeCVfxgQGUPWUYsWp+vUzRHdzXj9RpRHERDH3HBYIVdrzsgloedXUqGr6ZCqReNls1BUPvd0PmI4xetyELgBnWN4rnJuptTjGpVBHcRDR9ytG5wT0M4yJ2yaJXODV1i2vP80aiwdwVLJ7jetYtkx3m3jwcCA5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787649961; c=relaxed/simple;
-	bh=2anvQFVPfCyDPhPtMpfhIbGCje2Q1JFv4wsSV1RIuZc=;
+	s=arc-20240116; t=1787649962; c=relaxed/simple;
+	bh=VYkgLWCJeyiEauXzcozuHqKvw+ZR7o179+bK3zgGtWA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mFDS0WthmwSSk2HOoN6fW87p7CA7l6rI/PQ9tV2+e9ZaxKRFyGY6LYhV4dplqrhtlnjpVCNnzjP+WLeP24gMfck7iUrE4Xyc5gRmgxdPaAG+a3g3EpYgRJqAP3R8g8z2tlKHQutBUmQC9VQ06wQwtHCuH3JPDQYcx3Y/lVk4nKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gO8/Ha2f; arc=none smtp.client-ip=209.85.218.41
+	 MIME-Version; b=cSCrngFh1kr1WWmNPd9aqP28Vcf4tNvqcQ0pPvMiWpciZJ5Hl1KOw7bSPBscMJtkIXljaUye/JWM1NyVdWIjlC5ntaw794q/qS+nq268N2O+pKc0xp/VaA5zRmo5Nee8v0996gXdThstwluwTOwyIQ2gMSYWX595lNLxAW+kl2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k6Ajig3x; arc=none smtp.client-ip=209.85.208.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gO8/Ha2f"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-c214e625259so680570166b.2
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k6Ajig3x"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-6a0a4a28cbdso7975886a12.3
         for <linux-hwmon@vger.kernel.org>; Tue, 25 Aug 2026 02:25:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787649957; x=1788254757; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787649958; x=1788254758; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=A94qe2JMzOXhdD0NYjSSk1XRZc3aGtD4hUgwzwZIA0U=;
-        b=gO8/Ha2fkHHtn4P65jMFZoMsgPmTZ4q9CeBBj9vzqzxHyM4OkSWqYeOSeXiH3P0Rdz
-         MJFsm8N0p9DG5TcMteWg7lZdAnmRJ8XAkIy5ozqVXdE5QvpkgKI5FrY+AsFYo7ALiNLq
-         G1lJDa2IFtj9JX0ZndYDfHT6fDdKF6tAMywW3eCVV7R+FgLoP3hMfFe83Mv4x5vHaKiL
-         O9+TdnN6h4S7/DW8of+904QmMQ5Ry3Mt2zVFBfB3v6JH/jUjFfZjWknoAYAeiwDH0J8o
-         UeFkPtZ7mY4sDgVENh07fW/SurCrkIHBYLYxCnoIVYY8ZOMGAqZyj5JJhqWaeB8tZ9tv
-         nyOw==
+        bh=dFXySYEtb7Jp90OKqpFBc5Jr23ETazFykOiMX2/lKCk=;
+        b=k6Ajig3xYw+3nqKdjMcaFu3ApIojc7JYmyYV4mLvog4umM7OdYbt9deju5+0nkXLYe
+         NCXghhXo0TIkqqIjM3yTGhmZccDwUCo7+68LWohfc9S9k3UiApkz+R+BXHEMOz04f3XO
+         WGGUYH2g3VX1qXlE12T5gVNO10C/M1r9iQSMJM1X/xPzjgfKGsfYK9wyfrEXQVrCz2Jk
+         O9JLZaH/laTXdLm/JVtD/cLOrWANDQj0GU9ygfb9Oup6nrcJtvWdtFtLh3D/mKLNHZke
+         1p7nMyY6cpRuBDRAEwrfTO4Hn0I/mRQrmYP++AfPQ0I1KlhNIB3svlUXjhy8dvl7TuKi
+         4lbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787649957; x=1788254757;
+        d=1e100.net; s=20251104; t=1787649958; x=1788254758;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=A94qe2JMzOXhdD0NYjSSk1XRZc3aGtD4hUgwzwZIA0U=;
-        b=pO/wcMSjTtmMpOe0Jz8M3BeoTjQO7/cLV6zaXiEjseklLPy9q0DItqH804Mau001nl
-         qwBTCSDvHW0OjuMYFmZKD6z4a5017UuT1C1vXlVws5zG9ySAwU49GDFgE/kPfNwYAPNV
-         bCsdxuE5FtLAiWWDFFV6ptuTB4m9HyY1Wgm77/SU19NnX8sG3+MuQ2hMaFzy56JO3I8I
-         e5BDeQHh52RhRnQSYltyfUS7UXorOlqG/HovngZb8fWFp0gJFrO/i5qzKnl45588978M
-         E6prhd9Ge3B4U3/WGwCdfJRPxKaC5hX3x480eaYivRrUDojtguyurKDrU3XQb8zXFbO1
-         d7wQ==
-X-Gm-Message-State: AFuF++nWLwwYeUIGSGNruHI1vgheYJODxqa26mv5InJgZzoree9x7sjg
-	pMOcv2YuueVBgvR/VAekNoRPTB/ICizBLR6pIrtfWoWAbwXbD3jmbTNF
-X-Gm-Gg: AR+sD109HF/yd1DSEGLOU45VwHNDQjVIdTj9cxte0RwABfxYSmBSewfauT6ukRqqVsq
-	aa/jhkyq9apI+IK21O50EmOwt5K35NwqE+yx5AnmG2JfqweR8JxQOu894GoTdenod33UQnoGKst
-	pzmLNjcEN6Lp1ndIwH5PV8W6Dxv7NnxvKzJUjD5KPMOk+/094Dbh7/WfTn0OWPdI82fAxsQYYjl
-	YTlbeF9cAyPQXH3x17UNtrVgtp9I3LnVxvIy6hckyUClKIUe7oplzrU/Em60G+XiGn6w/ys9vPd
-	8Wso/qRTX2/9u4uWYmKsvog5mphZGppS1C4quXjQiG4FejMby56mqJUz5hSk+n5/Yj6P1dz7zZi
-	MNhHuEp0iD64mwx3XFiJMiPuWT8/KKs4iv3ipy1SmwOjlysOVPOyphKNyP1Aj4skOGEHRaMC9xH
-	x8xgKpcp1/9uoXttz1XtvI6bPx+tfheqEb4qUbnaxwXgLWtiBGpbyCGSMCQjOCBg0AgiPpwpKpA
-	3NZ73MftPFMZJtjrSl0RC7Ls+ir/UDBwwq+IAU7bf9gZQkIUUtq5LPF6C1QMfPg/hWCjTuYKBQb
-	yeqfR7n1Sm8WXBds/E4ZBCs=
-X-Received: by 2002:a17:907:1ca7:b0:c20:33db:41d3 with SMTP id a640c23a62f3a-c24e5ade69dmr575868666b.11.1787649957161;
+        bh=dFXySYEtb7Jp90OKqpFBc5Jr23ETazFykOiMX2/lKCk=;
+        b=pZBacNYOtNZjmWVIxxnn7ofvDBrpGozU/wFwTay8zOmqwYMmmhXHY8qyObHM/NpMkQ
+         y4MC7Jg0fyA6dfVzoITNaes1gXMQ0fyIZzZmkHr16CRJF5Ov+C0XPZ9iv3apveq7mMbq
+         ewm6RMFMj86aaNf2j60iA7to4rAPHuXUSNK/oTkFkBhTWeRIPGTShjEgBHlujOmsncRh
+         VVddPvdaOvVZXmh7XlbLCPtD17VeAVGBafsq4GY3YwWgGvvGLOnHwnqQkpa5sC/iwjBc
+         eQGLsKbx98zIfegHsNnjq6JQGJJZmBLBLalhyt0UWB7o8DAFvq7igGi2EfuTFs4opvcU
+         dRIA==
+X-Gm-Message-State: AFuF++kpgCqYL5IW/t+yLvMQvbNyzAJidmgCvTlaR6g8FtaYrnXrSCrn
+	JD1uxrmt6mBEF4Re/8/PJSyYS5WvEhdSNeNxU0VMARe0ke6mSRoGweqTBFrnUg==
+X-Gm-Gg: AR+sD100q+pgbDdocbSk02frngyS253f8xnr7sPYXRA8wdHoRBehaWkV7dDRjxMRvkS
+	L50iyI1t+G3uu/kQYSt4cL48kCawIXP1ZqjW1P8OR2u9/CvIZ19tiJmlkZRnEJ3scYULHaiyh/7
+	1MVQ/h03wz+JkREVOQvtKzpJPvwI5oSP9X+Yv6Ev1mRtkXpTmS71W1FoUwBVnonN3ifvzJn+8SR
+	GLrZcQ4TdK33rjQe4ayhxAZITayvC1VznWE2B/kkS5J1X68R0zf098QDa3qyun/0tbFndJV2Y3W
+	f/tbwMqjobu0p1YfXWsg7TQJ5n4KxcxRIygdaIlhH5ehmaF6XCAa/nx3f0MlqmJJBLonw98q1Jc
+	UmpP/XWSGrUfgPdX8V+1zeBtP19/Cx7Rb3b33nYw3wQPnzNUgZtcko5oxt0Ne28HpZUnw9M8gSD
+	pCqXi1WYPKVZQ/SDvkbIHiCw+azbVR5IlBzFZQ/wicOGH0qLvQ8u+ha0fWWJW4d6MXIgIQckEvu
+	iOHMEMPA/EOLwU+LVfixIvsZTj8lIXqDaPQjpERiU5JWDaioEpxo7pbQpo8f11fS5DbYLnVHixd
+	OeNm06N5KXY/IvCU/u5wyO4eRcCt
+X-Received: by 2002:a17:906:f59b:b0:c20:7cb1:9046 with SMTP id a640c23a62f3a-c24924b7508mr2666855366b.8.1787649957973;
         Tue, 25 Aug 2026 02:25:57 -0700 (PDT)
 Received: from fractal.tuxedo-gray.ts.net (c-78-82-25-228.bbcust.telenor.se. [78.82.25.228])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c249606bd05sm1612570866b.2.2026.08.25.02.25.56
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c249606bd05sm1612570866b.2.2026.08.25.02.25.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Aug 2026 02:25:56 -0700 (PDT)
+        Tue, 25 Aug 2026 02:25:57 -0700 (PDT)
 From: Johan Dahlin <jdahlin@gmail.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Johan Dahlin <jdahlin@gmail.com>
-Subject: [PATCH 3/5] hwmon: (nct6683) Add pwm[1-8]_enable
-Date: Tue, 25 Aug 2026 11:25:44 +0200
-Message-ID: <20260825092546.669450-4-jdahlin@gmail.com>
+Subject: [PATCH 4/5] hwmon: (nct6683) Restore fan control mode on driver removal
+Date: Tue, 25 Aug 2026 11:25:45 +0200
+Message-ID: <20260825092546.669450-5-jdahlin@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260825092546.669450-1-jdahlin@gmail.com>
 References: <20260825092546.669450-1-jdahlin@gmail.com>
@@ -78,157 +78,78 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-NCT668x keeps a per-fan manual-control bitmap in register 0xa00. While a
-fan's bit is clear the EC runs its own control loop and ignores the pwm
-registers, so a pwm write succeeds and then has no effect on the fan.
+A fan switched to manual mode stays there when the driver is unloaded,
+leaving it pinned at whatever pwm value was last written with nothing left
+to update it.
 
-Expose the bitmap as pwm[1-8]_enable following the hwmon ABI, with 1 for
-manual control and 2 for the EC's automatic control. The attribute group
-now has two attributes per channel, so is_visible derives the channel from
-the attribute index.
+Record the fan control mode register during probe and put it back with a
+devres action, so the EC resumes control of the fans the driver took over
+while anything the firmware had already set is left alone. The action is
+registered before the hwmon device, so it runs after the attributes are
+gone and cannot race with a pwm write, and it is a no-op if probe fails
+before the driver touches the register.
 
-Intel boards run a firmware variant that Nuvoton confirms uses different
-register addresses, so 0xa00 cannot be assumed to mean the same thing
-there. Only expose the attribute where fan control has been verified.
+Boards where the driver does not manage the register do not register it.
 
-The register was derived from the out-of-tree nct6687d driver, which
-documents it from LibreHardwareMonitor's reverse engineering.
-
-Link: https://github.com/Fred78290/nct6687d
-Link: https://github.com/LibreHardwareMonitor/LibreHardwareMonitor
 Signed-off-by: Johan Dahlin <jdahlin@gmail.com>
 ---
- Documentation/hwmon/nct6683.rst |  6 +++
- drivers/hwmon/nct6683.c         | 77 +++++++++++++++++++++++++++++++--
- 2 files changed, 79 insertions(+), 4 deletions(-)
+ drivers/hwmon/nct6683.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/Documentation/hwmon/nct6683.rst b/Documentation/hwmon/nct6683.rst
-index 908c0b10c642..ff5edb34c5c5 100644
---- a/Documentation/hwmon/nct6683.rst
-+++ b/Documentation/hwmon/nct6683.rst
-@@ -49,6 +49,12 @@ The driver has only been tested with the Intel firmware, and by default
- only instantiates on Intel boards. To enable it on non-Intel boards,
- set the 'force' module parameter to 1.
- 
-+Fan control is likewise restricted. The EC runs its own control loop unless
-+a fan is switched to manual mode by writing 1 to its pwm[1-8]_enable
-+attribute, and pwm values are only writable on boards where this has been
-+verified to work. On all other boards the pwm attributes are read-only and
-+the fan curve must be configured from the BIOS.
-+
- Tested Boards and Firmware Versions
- -----------------------------------
- 
 diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
-index b43e915f9d0f..0324ace707a5 100644
+index 0324ace707a5..6825e6c3af34 100644
 --- a/drivers/hwmon/nct6683.c
 +++ b/drivers/hwmon/nct6683.c
-@@ -165,6 +165,7 @@ superio_exit(int ioreg)
+@@ -344,6 +344,7 @@ struct nct6683_data {
+ 	u16 have_fan;			/* some fan inputs can be disabled */
  
- #define NCT6683_REG_FAN_MIN(x)		(0x3b8 + (x) * 2)	/* 16 bit */
+ 	u8 have_pwm;
++	u8 initial_fan_ctrl_mode;
+ 	u8 pwm[NCT6683_NUM_REG_PWM];
  
-+#define NCT6683_REG_FAN_CTRL_MODE	0xa00
- #define NCT6683_REG_FAN_CFG_CTRL	0xa01
- #define NCT6683_FAN_CFG_REQ		0x80
- #define NCT6683_FAN_CFG_DONE		0x40
-@@ -962,25 +963,93 @@ store_pwm(struct device *dev, struct device_attribute *attr, const char *buf,
- 
- SENSOR_TEMPLATE(pwm, "pwm%d", S_IRUGO, show_pwm, store_pwm, 0);
- 
-+/*
-+ * Fan control has only been verified on the boards listed here. Intel boards
-+ * in particular run a firmware variant that Nuvoton confirms uses different
-+ * register addresses, so 0xa00 cannot be assumed to mean the same thing
-+ * there. Leave the fans to the EC everywhere else.
-+ */
-+static bool nct6683_has_fan_control(struct nct6683_data *data)
-+{
-+	return data->customer_id == NCT6683_CUSTOMER_ID_MITAC;
-+}
-+
-+/*
-+ * NCT668x keeps a per-fan manual-control bitmap. While a fan's bit is clear
-+ * the EC runs its own control loop and ignores the pwm registers, so pwm
-+ * writes only take effect once the fan has been switched to manual mode.
-+ */
-+static ssize_t
-+show_pwm_enable(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-+	struct nct6683_data *data = dev_get_drvdata(dev);
-+	u8 mode;
-+
-+	mutex_lock(&data->update_lock);
-+	mode = nct6683_read(data, NCT6683_REG_FAN_CTRL_MODE);
-+	mutex_unlock(&data->update_lock);
-+
-+	return sysfs_emit(buf, "%d\n", (mode & BIT(sattr->index)) ? 1 : 2);
-+}
-+
-+static ssize_t
-+store_pwm_enable(struct device *dev, struct device_attribute *attr,
-+		 const char *buf, size_t count)
-+{
-+	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-+	struct nct6683_data *data = dev_get_drvdata(dev);
-+	u8 bit = BIT(sattr->index);
-+	unsigned long val;
-+	bool manual;
-+	int err = 0;
-+	u8 mode;
-+
-+	if (kstrtoul(buf, 10, &val) || (val != 1 && val != 2))
-+		return -EINVAL;
-+
-+	manual = val == 1;
-+
-+	mutex_lock(&data->update_lock);
-+	mode = nct6683_read(data, NCT6683_REG_FAN_CTRL_MODE);
-+	if (manual)
-+		mode |= bit;
-+	else
-+		mode &= ~bit;
-+	nct6683_write(data, NCT6683_REG_FAN_CTRL_MODE, mode);
-+
-+	if (!!(nct6683_read(data, NCT6683_REG_FAN_CTRL_MODE) & bit) != manual)
-+		err = -EIO;
-+	mutex_unlock(&data->update_lock);
-+
-+	return err ? err : count;
-+}
-+
-+SENSOR_TEMPLATE(pwm_enable, "pwm%d_enable", 0444, show_pwm_enable,
-+		store_pwm_enable, 0);
-+
- static umode_t nct6683_pwm_is_visible(struct kobject *kobj,
- 				      struct attribute *attr, int index)
- {
- 	struct device *dev = kobj_to_dev(kobj);
- 	struct nct6683_data *data = dev_get_drvdata(dev);
--	int pwm = index;	/* pwm index */
-+	int pwm = index / 2;	/* pwm index */
-+	int nr = index % 2;	/* attribute index */
- 
- 	if (!(data->have_pwm & (1 << pwm)))
- 		return 0;
- 
--	/* Only update pwm values for Mitac boards */
--	if (data->customer_id == NCT6683_CUSTOMER_ID_MITAC)
-+	/* Only touch fan control on boards where it has been verified */
-+	if (nct6683_has_fan_control(data))
- 		return attr->mode | S_IWUSR;
- 
--	return attr->mode;
-+	/* Elsewhere hide pwm_enable and keep pwm read-only */
-+	return nr ? 0 : attr->mode;
+ #ifdef CONFIG_PM
+@@ -1275,6 +1276,17 @@ static void nct6683_setup_sensors(struct nct6683_data *data)
+ 	}
  }
  
- static struct sensor_device_template *nct6683_attributes_pwm_template[] = {
- 	&sensor_dev_template_pwm,
-+	&sensor_dev_template_pwm_enable,
- 	NULL
- };
++/* Put the fan control mode register back the way probe found it. */
++static void nct6683_restore_fan_control(void *_data)
++{
++	struct nct6683_data *data = _data;
++
++	mutex_lock(&data->update_lock);
++	nct6683_write(data, NCT6683_REG_FAN_CTRL_MODE,
++		      data->initial_fan_ctrl_mode);
++	mutex_unlock(&data->update_lock);
++}
++
+ static int nct6683_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -1284,6 +1296,7 @@ static int nct6683_probe(struct platform_device *pdev)
+ 	struct device *hwmon_dev;
+ 	struct resource *res;
+ 	int groups = 0;
++	int err;
+ 	char build[16];
  
+ 	res = platform_get_resource(pdev, IORESOURCE_IO, 0);
+@@ -1401,6 +1414,15 @@ static int nct6683_probe(struct platform_device *pdev)
+ 		 nct6683_read(data, NCT6683_REG_VERSION_LO),
+ 		 build);
+ 
++	if (nct6683_has_fan_control(data)) {
++		data->initial_fan_ctrl_mode =
++			nct6683_read(data, NCT6683_REG_FAN_CTRL_MODE);
++		err = devm_add_action_or_reset(dev, nct6683_restore_fan_control,
++					       data);
++		if (err)
++			return err;
++	}
++
+ 	hwmon_dev = devm_hwmon_device_register_with_groups(dev,
+ 			nct6683_device_names[data->kind], data, data->groups);
+ 	return PTR_ERR_OR_ZERO(hwmon_dev);
 -- 
 2.53.0
 
