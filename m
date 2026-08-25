@@ -1,95 +1,124 @@
-Received: from out203-205-221-202.mail.qq.com (out203-205-221-202.mail.qq.com [203.205.221.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C9C238E5E9;
-	Tue, 25 Aug 2026 09:07:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C13C3F0765
+	for <linux-hwmon@vger.kernel.org>; Tue, 25 Aug 2026 09:25:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787648845; cv=none; b=EE04d0GvgzZVy6MSGPb3mFqVU5f8KuKQFylYoXu57ZTPCgBu98rQzP0D6es8ZERKPTTG1RbPBzEwlzF6L1s3GvuaXCovOEwS+gZIEISAMA2xCtQ8hqRE/M8j+kVSE39cuu3xI/xZ+y3z3M/RZKqdqhqrRh+BdvEJ+JRzHbSyXxA=
+	t=1787649958; cv=none; b=pvWWDpnWhwzrgZT6xH+L79XEgOjGGYhgbThWbdfZ58bPiAcOYV6GLtBHkLUiK6OEcDVWvTfY+0XBj1EkA9kKERvVrvTfE1Gs84Aq+MgmrmTmvIvWeLYQrNh2XYDqVh2Cp7kFmZSJvx85E/4wFPY6gZhqjf3SADCW467GJktZ8mE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787648845; c=relaxed/simple;
-	bh=QqInqnDLj6zgWGxVzPElOnxkPt6RYvijvLHyI8fNSZo=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=rWzifFVWFXgQi7v4L6GZFRKQ4vbgrvKaX/GLIVILK98JHDkVW5U0fRTYZCU6R6MjWaoWioHcrJUZpNhj7sDA96iidJafKIhCMs+OJOfo3A4pDzpXsSU+hPkgcvJ3zzIOVlsz2VWJgAYXQLBw5boezpghe70dNu3ANd+7imlPf8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=aJF0AqOV; arc=none smtp.client-ip=203.205.221.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+	s=arc-20240116; t=1787649958; c=relaxed/simple;
+	bh=gNbMxqUlA6wa4NuZncaIpEqWzCwySUvzyrK2sISa1Ng=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YbdOFToWMqpShLuAhx/XepB3XDX8bQaFWFmqpLjhEJJkVoNEvAMPZHgvcXvpkccW63ZrL/l8l+Jv3nzuoL4aROCo9UzjOmbCgMlkZsWhKSElF91SdJx4d+E98vMvGhYBau6TDrTHNQKNE++4Rzmqv4vwEUj26UsLR5/w1m2ePdg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UqlKnHX1; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="aJF0AqOV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1787648834; bh=QqInqnDLj6zgWGxVzPElOnxkPt6RYvijvLHyI8fNSZo=;
-	h=Date:To:Cc:From:Subject;
-	b=aJF0AqOVdX+3z1gBVquVow3OUAQPeTA6MgwVpsSXyr1v8TI3BHXDtIFK2BE3TPCUp
-	 DOEdNKwB9Bw4K+5Ic3iKGnw+L5o7iwFR/xIDYkaO2haqVVn73lOb3prTHi7WZ4OuA9
-	 8jv+nhVz8gQA+eMm4BzNKZb9HUr1cDzMXy8MZTeQ=
-Received: from [192.168.255.10] ([111.206.145.19])
-	by newxmesmtplogicsvrsza63-0.qq.com (NewEsmtp) with SMTP
-	id 1CC93C63; Tue, 25 Aug 2026 17:07:12 +0800
-X-QQ-mid: xmsmtpt1787648832t28o64uhj
-Message-ID: <tencent_AAC779A9883986227B9F9C29CDF4A4AA660A@qq.com>
-X-QQ-XMAILINFO: MCMeKXle1ehRVFFirHZ9kIx7SkUe2rmfrSbjcigE9heo0xeeGdFWD25VhAJZw3
-	 XSDbFbRCgA2+yFg4A+ewzVVPMAfbg6I0qwJ+8u6cVyfCq6/zLHMy3sHbJvhi8UQaMqFCAxV8dqg4
-	 rtnSX9b0TUcjwpOxC0/b6CRYGVda5VkcYhA3QjeUmwccmOmsulANaRjoi5a2QP1WmunGAH1Ws3vq
-	 nRbp/p6QN+jHL6l8HM5SW9CdOAdJEuqLEsMIb2SNTj/Y/SNbZfeFVkqo3iIXYC4x6Uqq84N4d4Tj
-	 S3eKrV9S+QG18NTpdUSYn0ywrjQCNsmILKCyK87h3/CSxGfmGjxve9QRmEFvKZ+zMLrzp1cG/GRN
-	 Qdzfvjw7sAnPa5PvuPhUcCEkSslN6GrTEuIABjiCz4+1V0VJ0ArN7d+n7cmlb2IqLt1lTRnSLe0H
-	 QU2Kc1NX89ZunTreGOXS217KzEABZv/oIQGW2wcTy64IRCZ2G4zHV9QQ5HkwC2i5t86WbZsvj2r0
-	 iwpYZzMy4HG1LnpuoZ8R/29Z9LKUbnjZBs8ThWF1+olKnhgk4lX5qJFKTxi30QjVHUqE2fNJr5mO
-	 N/7/LKX+QFlArGCDs9Jpg+P7qMh3qDMXsA6R0vfkiNzml20XEBzL5H7cAw9zBrXDcPn3wLAGqV/t
-	 ra/dZDEge3QQ+I5AxUCOy4cPf1tFOonBk7yBY3VivtaKBd43y1IihllF1TWHFrzMSMqKU/EVcCaT
-	 i8xvdaWbW2++QtfIarE2osFTGCuPXB2z1933t+lXgvzOIGAs/cN1xTNsQLc9xptCsQ6PHO2yslzZ
-	 a1rW+TTZDeQ4Ni6eznLpUK0t1bZazs6hfTdKOjOcnUTPHpm9gO/284mrYea0KPY7EO3fMb6/xG86
-	 wKsHRIbmYf2fAJDCMhUZsI9JbysU+Ub+HVzuQfdgDraBhTJxvhQX7eK0u0036eMox+dnxjBwdty9
-	 +91szDTyWsDyg3Dz13n5otJH77b+N6wQgsMBzRpxIyh23Jm2cczCrbeq+PFptDM23PcxqhPsPf5c
-	 h0NMuhQts2E0jQY3mCHbQVrFXjOVhQSqF7/yKmFnFhrjYSgxvKoa1DL/Gnxj0pIuRBxfnq39cMw6
-	 ug1rxsXJtDWxscyH0=
-X-QQ-XMRINFO: OWPUhxQsoeAVwkVaQIEGSKwwgKCxK/fD5g==
-X-OQ-MSGID: <d5defeb7-bd84-43cf-82a3-98f55df7c769@qq.com>
-Date: Tue, 25 Aug 2026 17:07:11 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UqlKnHX1"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c160420289bso653769366b.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 25 Aug 2026 02:25:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787649955; x=1788254755; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=j2rSGrpetz4sib6pgIqVxIKVNTVPOp3P2Cb6kEKa91o=;
+        b=UqlKnHX1wSj25cS5angTIDbbehrqU22GyODjgeQyvc7pkKXFnOqPGhsVQIhPparGME
+         +YW0JZwzvfTfKGcwgIdCZjdtn22gNm5PNuhDPToBE+YrvURsegUYRWZyc/Qpp20HIjMl
+         83iGeu0Tm7gOkRcpwg4GUx0rQPI78UKv8RKrBlYiJWQx/OmghIpSYaL1Q6vQz4BnYRb7
+         fbSzghmzS2pe1kWG4Q3UI9vKS4E+lSFyf1E9EPeYX3looAf9KPluSod409oonmEPMm24
+         zaplVCFMj8Yu4WQ9reWt5id3WHP2kARGB+3XNXdnZ2qbWRfrduAy2OERr/T0aUAkST6/
+         Wh7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787649955; x=1788254755;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=j2rSGrpetz4sib6pgIqVxIKVNTVPOp3P2Cb6kEKa91o=;
+        b=jBKeORvE2F2UUO1QU7t2kksvFtFs0zSLmLiCqeMS1bBwk2Rgo9i7G8pmRfMuBBT0Hu
+         0wTLP1nKx67lqj5nq5vdqBHx1kupu/GZnnxzm6l9xkuEghvKcnVbWveBlZk5FTSKTPqO
+         0BnLeSbeaV7h3PhTp3TbR81nzDvkpX8FfJ+Ilq1rCf4fNFxWs0E7lq0uBGagCbq7pJ+o
+         giHaEu+qyk21dQgDTMWdnUIEzhTvfiUZUXZM4b/OZbHlMbBAYXR3GNZH2CMwU35ET0L1
+         S1TB8QlitQCU1r6hkzEaKJkR+Eh2bpBqhOCPJ7uVJBUjrT415J64BWoFVPhJm5U63sdv
+         9UnA==
+X-Gm-Message-State: AFuF++nTd+k51JwrYJtHZKBDDSxXs2Ru/iO1u4odapRX0Em/VJcH2izx
+	cvXHHqRHiktSRZxjRfEmNct8SH6sqDmHhoSIJJrWqjteR0+/GtisYpzJ
+X-Gm-Gg: AR+sD11so3M+6EHjp9wwI1eIQHOagDO57wqFhr54tCvavdP3Kni1gxNVBXODSwpWmx5
+	mcDDYLltwzY/HQHtL7N/mzPloxbGc4CxbVXfyjFREyenP+QoOPXD0F+sR3fiS7kB+LlkENe4Ice
+	IdD7x/7TnYJd57mqWD9BVlz5BAVlULhXVoBksXHSftoqZKdfhya5Ifu+iBCGswGHxss6ka3Fitu
+	hyQ6YZoaxJn0SRwU7yZ7sQI0Pbn8RS5vvru+0pKbhMFkF8cX2GKAXiGxmoZ2x3bvV3tNlVZO3oA
+	Upvp0u7mxggJ4jB5TO5UzV5b03rg4ElFzM6jaHRX+lsgg5ikQ917MStB7BvUOfQBE6HAxIHjnT3
+	2Z/dmuk/ym0aF0176SUwyvznMBCNYFU0+hWRzb2p2SJOCLA38bv6OU2Zuforp5P0JdousZCxMsA
+	IV/zvIjyeJTRxB8mNRtjx3eZrPC9cZtHBxRzUerPXhB0N8y4ZaMRfWhcW8bWzi7fD8ItwzzDQjY
+	vLONN47mThSRCpT/C5SoDKHFKGFChpI8AdasW4vENLhygf/0B18aILEnhayIH10zlvfC6gdjuNI
+	BEAGR2eza9BJNFVa3aAWIPQcVU69XHUMVw==
+X-Received: by 2002:a17:907:934d:b0:c20:9447:bd5e with SMTP id a640c23a62f3a-c246a5f6d65mr3680207766b.9.1787649954768;
+        Tue, 25 Aug 2026 02:25:54 -0700 (PDT)
+Received: from fractal.tuxedo-gray.ts.net (c-78-82-25-228.bbcust.telenor.se. [78.82.25.228])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c249606bd05sm1612570866b.2.2026.08.25.02.25.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Aug 2026 02:25:54 -0700 (PDT)
+From: Johan Dahlin <jdahlin@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Johan Dahlin <jdahlin@gmail.com>
+Subject: [PATCH 0/5] hwmon: (nct6683) Fan control for ASRock B850 Steel Legend WiFi
+Date: Tue, 25 Aug 2026 11:25:41 +0200
+Message-ID: <20260825092546.669450-1-jdahlin@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: wenswang@yeah.net, linux@roeck-us.net, linux-hwmon@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-From: Yang Zi <2959243019@qq.com>
-Subject: [PATCH] hwmon: (pmbus/mp29502) fix potential division by zero
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The vout_bottom_div and ovp_div divider values are read back from the
-device during identify and later used as divisors in several
-DIV_ROUND_CLOSEST() calls. If the device reports a zero divider, these
-divisions trigger a divide-by-zero error.
+Fan control does not work on an ASRock B850 Steel Legend WiFi (NCT6686D,
+EC firmware 1.0 build 10/29/24). The driver does not recognise the board's
+customer ID, so it only probes with force=1. Its pwm attributes are then
+read-only, and even once writable the EC ignores them until the fan is put
+in manual mode through register 0xa00, which the driver does not expose.
+Writes that do get through are sometimes silently discarded, because the
+settling delay in store_pwm() is too short on this firmware.
 
-Validate the divider values as soon as they are read and return -EINVAL
-if they are zero, so the driver fails probe instead of crashing later.
+This series fixes those one at a time. Patch 1 stands on its own: a write
+that succeeds on the first attempt issues the same register sequence as
+today, so boards that work now are unaffected. The fan control changes are
+exposed on verified boards only.
 
-Signed-off-by: Yang Zi <2959243019@qq.com>
----
-diff --git a/drivers/hwmon/pmbus/mp29502.c b/drivers/hwmon/pmbus/mp29502.c
-index afc5e8c07e25..d606fef82b35 100644
---- a/drivers/hwmon/pmbus/mp29502.c
-+++ b/drivers/hwmon/pmbus/mp29502.c
-@@ -134,6 +134,8 @@ mp29502_identify_vout_divider(struct i2c_client *client, struct pmbus_driver_inf
-         return ret;
- 
-     data->vout_bottom_div = FIELD_GET(GENMASK(11, 0), ret);
-+    if (!data->vout_bottom_div)
-+        return -EINVAL;
- 
-     ret = i2c_smbus_read_word_data(client, MFR_VOUT_PROT2);
-     if (ret < 0)
-@@ -160,6 +162,8 @@ mp29502_identify_ovp_divider(struct i2c_client *client, struct pmbus_driver_info
-         return ret;
- 
-     data->ovp_div = FIELD_GET(GENMASK(9, 0), ret);
-+    if (!data->ovp_div)
-+        return -EINVAL;
- 
-     return 0;
- }
+With the whole series applied, all six fans report and pwm[1-6]_enable read
+2 after probe:
 
+  fan1: 815 RPM   fan2: 631 RPM   fan5: 386 RPM   fan6: 354 RPM
+
+With pwm5 in manual mode:
+
+  written   applied   fan5
+  60        60        337 RPM
+  100       100       443 RPM
+  150       150       627 RPM
+  200       200       794 RPM
+  255       255       933 RPM
+
+Writing 2 back returns the fan to the EC, as does unloading the driver.
+Without patch 1, two of six writes were lost and the fan kept following its
+previous value.
+
+Each patch was also built individually. I have no access to Mitac, MSI or
+Intel hardware.
+
+Johan Dahlin (5):
+  hwmon: (nct6683) Retry pwm writes until they take effect
+  hwmon: (nct6683) Add customer ID for ASRock B850 Steel Legend WiFi
+  hwmon: (nct6683) Add pwm[1-8]_enable
+  hwmon: (nct6683) Restore fan control mode on driver removal
+  hwmon: (nct6683) Enable pwm control on ASRock B850 Steel Legend WiFi
+
+ Documentation/hwmon/nct6683.rst |   7 ++
+ drivers/hwmon/nct6683.c         | 124 +++++++++++++++++++++++++++++---
+ 2 files changed, 122 insertions(+), 9 deletions(-)
+
+-- 
+2.53.0
 
