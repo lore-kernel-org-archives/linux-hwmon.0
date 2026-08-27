@@ -1,114 +1,164 @@
-Received: from mta1.migadu.com (out-41.mta1.migadu.com [95.215.58.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E9F43644BE
-	for <linux-hwmon@vger.kernel.org>; Thu, 27 Aug 2026 06:40:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABBF041D628;
+	Thu, 27 Aug 2026 17:01:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787812805; cv=none; b=bQLC19OnMSf3FkxpWnGTeSh+JevQLzF9WExCiZvlRZd8WV1i52Li4+4nQIvVzC+yOY4irF0/f/FFW5xhgxJdla+PlQA2hZqEx2HHnSzc5TVFRjBMLBLTygBo92l7EyTTx5q8mY4CozmJqzUgvoKRL84YQ+hgXezN9wvxZJYf1Po=
+	t=1787850097; cv=none; b=rHvn7zfNT2t90y7KY/MYRokY6nMfO6von4T5ZSE4z/TIypj32N+ujS2fbppca88A4RvURktAdMxb8uaMxoaQwG1jl034ovV2VIM25x4Ivjo6R+BuWUrbAu0RD9LNAEg7yBY0H3cSe7i8QIcn9qCWfwxwS8tU7nCaZ9DMyxJSHTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787812805; c=relaxed/simple;
-	bh=m3EBblnKDAGIdH9tcjTA1Ngw0Wg21uv1CZPG3SHJxuA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 In-Reply-To:References; b=D+VS1tt7fuz0djo5ANP6nYKWKkgbH/8Tv58WIG+Cf84HdRhZxIEejbkIramfK8N1SZzwHBK4yvMAZ7pIGkdhCowhQmHO9DFDIBTYmUgHJdqsZL6Dpg0eCIwjtkN/02tSUtTva/E4oW6iBDe/UyXqfj4oLkQwITbaqmLAR1571VM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uMNycoz5; arc=none smtp.client-ip=95.215.58.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787850097; c=relaxed/simple;
+	bh=nP1BAOK13Iaaxhmj8/SQpfYfixH2N8GcCObbunsd9TY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rnlVZIFRA2RAzhM40LR1L4z54aKe+h3WPUKAtAYvKZSO67F/fMcjEYS0ZKEAgfWsLKvwDwY03/j+ThLNakOPF1dn7aeeVswqjO77/zFtXrT7L/TPUKESMbd6jGAUVHnGasBBAJ4SmgimwKTs6uTIdJ06pvrqYVnGCmsf7KoIGLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kz8vGjN0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uMNycoz5"
-X-Envelope-To: linux-hwmon@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=m3EBblnKDAGIdH9tcjTA1Ngw0Wg21uv1CZPG3SHJxuA=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787812801; v=1; x=1788417601;
- b=uMNycoz5nqVOQ9i8+cdDP+jjzmN9IhQLfPDokmNhzeXuUnPueUqSwQHBERR0Ep2XtYX15VGR
- M7ANjiZvBbclQhVluxV9f7r8zeVFhNZpqt0LuTVNJef1RksQ2R2MrVWylo22q8PXn5pHRc6/pP5
- xJjNyxYk8KUkPEFAkbwHPvGU=
-X-Envelope-To: linux-hwmon@vger.kernel.org
-Received: from localhost (8.211.180.184)
-	by mta10.migadu.com with ESMTPS id 5cc20cb2f0893b0a;
-	Thu, 27 Aug 2026 06:39:59 +0000
-X-Mizu-Trace-ID: 5cc20cb2f0893b0a
-X-Migadu-Flow: FLOW_OUT
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kz8vGjN0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 320471F000E9;
+	Thu, 27 Aug 2026 17:01:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787850092;
+	bh=QrfCtURGKGftDusM3epVvUzOHv7Dl/l68YZYJ7kvjZA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=kz8vGjN0NHssLGxSJP1T6MKmU4hBkdcx/UEcB3xQCgo14Is2rRk0BQGllrux9wEd3
+	 zsS/bZebEegjmwHOVitF6gZ2b05volv0cqP7jiGNGvhh/aRGYhqpqW6ac0mkpbvdLn
+	 AyMX/mZIAjYK8HjvmepJ9RdWv7ySptLUXjdbD/seFFVg5zohO1uVcyClSvQrngu15e
+	 hDy3OXQ277PZgs/DJ2zBqw72S7oBm/6MxfGZpisKDQbcbEKdDbW1a4F5Jaxdj4OgTh
+	 h3C16DkTB9CNhMJsxJ8TvV+YrzcpBXgtOo9Ij4TkPRG+D7T1m2S9YdmkSZ4uWNqKJx
+	 Aj/jokslwgUnQ==
+Date: Thu, 27 Aug 2026 18:01:28 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Flaviu Nistor <flaviu.nistor@gmail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: national,lm90: Fix channel
+ constraints for temperature offset
+Message-ID: <20260827-stooge-polish-b23739e44224@spud>
+References: <20260826184750.4798-1-flaviu.nistor@gmail.com>
+ <20260826184750.4798-2-flaviu.nistor@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: multipart/signed;
- boundary=f6f49b862d884bb785fffb47c78ded9bdb2222b8f0b517953386ece06d64;
- micalg=pgp-sha512; protocol="application/pgp-signature"
-Date: Thu, 27 Aug 2026 14:39:49 +0800
-Message-Id: <DKZIQPBOE02W.2DFMAOQGYO442@linux.dev>
-Cc: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-hwmon@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
- <spacemit@lists.linux.dev>, <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v3 6/6] riscv: dts: spacemit: Add CTF2301 on K3 CoM260
-From: "Troy Mitchell" <troy.mitchell@linux.dev>
-To: "Troy Mitchell" <troy.mitchell@linux.dev>, "Rob Herring"
- <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Conor
- Dooley" <conor+dt@kernel.org>, "Guenter Roeck" <linux@roeck-us.net>, "Paul
- Walmsley" <pjw@kernel.org>, "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert
- Ou" <aou@eecs.berkeley.edu>, "Alexandre Ghiti" <alex@ghiti.fr>, "Yixun Lan"
- <dlan@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan"
- <skhan@linuxfoundation.org>
-In-Reply-To: <DKL487DPH7KA.3GNYMRSBR1JY3@linux.dev>
-References: <20260805-ctl2301-v3-0-fd4b8ffb5b0d@linux.dev>
-	<20260805-ctl2301-v3-6-b86c75d1c552@linux.dev>
-	<20260805134119-GKJ77474@kernel.org>
-	<DKL487DPH7KA.3GNYMRSBR1JY3@linux.dev>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="FcJi8mongErY1AVh"
+Content-Disposition: inline
+In-Reply-To: <20260826184750.4798-2-flaviu.nistor@gmail.com>
 
---f6f49b862d884bb785fffb47c78ded9bdb2222b8f0b517953386ece06d64
+--FcJi8mongErY1AVh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
 
-On Mon, Aug 10, 2026 at 04:20:05PM +0800, Troy Mitchell wrote:
-> My intention here was to keep all board-specific pin configuration
-> overrides under a single &pinctrl block, so that they can be found and
-> maintained in one place. Using a separate top-level reference for each pi=
-n
-> group would tend to scatter those overrides throughout the board DTS as
-> more groups are customized. The &pinctrl block is also placed immediately
-> before the &i2c6 consumer.
->
-> Would keeping the current structure be acceptable for that reason? If you
-> still prefer the direct reference, I will change it to &i2c6_1_cfg in the
-> next revision.
+On Wed, Aug 26, 2026 at 09:47:48PM +0300, Flaviu Nistor wrote:
+> Limit temperature-offset-millicelsius to remote channels only, since
+> channel 0 is local and this property does not apply to it.
+> Channel 2 is only valid on devices with two remote sensors, so reject
+> channel 2 for compatibles that do not support a second remote channel.
+>=20
+> Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
+> ---
+> Changes in v2:
+> - Use else statement in if/then block as suggested by Conor Dooley.=20
+> - Link to v1: https://lore.kernel.org/all/20260824183900.8983-2-flaviu.ni=
+stor@gmail.com/
+>=20
+>  .../bindings/hwmon/national,lm90.yaml         | 28 +++++++++++++++++--
+>  1 file changed, 25 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml b=
+/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
+> index 164068ba069d..a8b2a24501b3 100644
+> --- a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
+> @@ -113,6 +113,23 @@ allOf:
+>        properties:
+>          ti,extended-range-enable: false
+> =20
+> +  - if:
+> +      not:
+> +        properties:
+> +          compatible:
+> +            contains:
+> +              enum:
+> +                - adi,adt7481
+> +                - dallas,max6695
+> +                - dallas,max6696
+> +    then:
 
-I withdraw my earlier suggestion to keep all board-specific pin
-configuration overrides under a single &pinctrl block.
+> +      patternProperties:
+> +        "^channel@[0-1]$":
+> +          properties:
+> +            reg:
+> +              enum: [0, 1]
 
-After checking existing board DTS files, I found that the direct-reference
-style is already in use. For example:
+Is this needed? If channel@2 is false, then you won't be able to get to
+this point to begin with, right?
 
-  arch/arm64/boot/dts/allwinner/sun50i-a64-bananapi-m64.dts
+Conor.
 
-adds the board-specific bias-pull-up setting directly through &i2c1_pins.
-Likewise:
+> +        "channel@2": false
+> +
+>    - if:
+>        properties:
+>          compatible:
+> @@ -134,6 +151,11 @@ allOf:
+>          "^channel@([0-2])$":
+>            properties:
+>              temperature-offset-millicelsius: false
+> +    else:
+> +      patternProperties:
+> +        "channel@0":
+> +          properties:
+> +            temperature-offset-millicelsius: false
+> =20
+>    - if:
+>        properties:
+> @@ -149,7 +171,7 @@ allOf:
+>                - onnn,nct1008
+>      then:
+>        patternProperties:
+> -        "^channel@([0-2])$":
+> +        "^channel@([1-2])$":
+>            properties:
+>              temperature-offset-millicelsius:
+>                maximum: 127750
+> @@ -172,7 +194,7 @@ allOf:
+>                - winbond,w83l771
+>      then:
+>        patternProperties:
+> -        "^channel@([0-2])$":
+> +        "^channel@([1-2])$":
+>            properties:
+>              temperature-offset-millicelsius:
+>                maximum: 127875
+> @@ -186,7 +208,7 @@ allOf:
+>                - ti,tmp461
+>      then:
+>        patternProperties:
+> -        "^channel@([0-2])$":
+> +        "^channel@([1-2])$":
+>            properties:
+>              temperature-offset-millicelsius:
+>                maximum: 127937
+> --=20
+> 2.34.1
+>=20
 
-  arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-
-extends &mmc0_pins directly.
-
-Both forms produce the same node override, but since the reference-based
-form is already used in the tree, we should follow it instead of introducin=
-g
-a different structure here. I will change the board-level override to
-&i2c6_1_cfg in the next version.
-
-                                            - Troy
-
---f6f49b862d884bb785fffb47c78ded9bdb2222b8f0b517953386ece06d64
-Content-Type: application/pgp-signature; name="signature.asc"
+--FcJi8mongErY1AVh
+Content-Type: application/pgp-signature; name=signature.asc
 
 -----BEGIN PGP SIGNATURE-----
 
-iJcEABYKAD8WIQSL4Ay2cExaPXAQcU2YCe+A+TM0LwUCao/btSEcdHJveS5taXRj
-aGVsbEBsaW51eC5zcGFjZW1pdC5jb20ACgkQmAnvgPkzNC/6QAEA8dCtfup87U2o
-snvjwoIwNCa2Z99Am38hnnyreNWzGecA/03n71wIE+T3csVbRbAT21+VwQ2RuK80
-7pZ57h/HWuEH
-=bLKp
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCapBtaAAKCRB4tDGHoIJi
+0on2AQCfdtHpo59/qQNwC0Z9FJI7YX0IrI2xHnVnyJoEDRRDagD/elBK22Uzi5ST
+cpY5dNU3Go8pF6ewbeb/Rjo/VMB2SgU=
+=COuj
 -----END PGP SIGNATURE-----
 
---f6f49b862d884bb785fffb47c78ded9bdb2222b8f0b517953386ece06d64--
+--FcJi8mongErY1AVh--
