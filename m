@@ -1,69 +1,68 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 162B4374A0C
-	for <linux-hwmon@vger.kernel.org>; Fri, 28 Aug 2026 16:13:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12646348C4C
+	for <linux-hwmon@vger.kernel.org>; Fri, 28 Aug 2026 16:17:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787933623; cv=none; b=o4cfFyTbPCYlt4CLjmnjobYJxbshIME1IIigFoWYTbfUBD+0AbaYW+3wiOY9neE5EvooW2xHSBuA1pXOeCbG/bCrt879A5XQGasMKHLEFy8SUUU6YYnEc43OjP6ByK/6HAo/tutEGEkQ+osetrmSioD2jWKwlJjhgdPa/Ets6PQ=
+	t=1787933847; cv=none; b=Cr3TXM/k+GIK3oii4KU0kx9hqCQ0dow3yzRyFPtyg5rbHeYZ6CixrkRkxHgx+thIHC0w44GdldV0vAfstqDg2L9yHaecqDaytPznh6Z63mzHIM2aAQpojXuUDZp2PmKUKTgoHHmN0Tm1/HbvLoFh3mtAKGHIOY3+50EOcN+YKkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787933623; c=relaxed/simple;
-	bh=G0s42t5nQ8kHD3g1ShaWMV+krS9UeiaR/0CiKyAWd50=;
+	s=arc-20240116; t=1787933847; c=relaxed/simple;
+	bh=qmn6C5At/XvU+fYiCZ+/ZwUU2PH+msJobqIWY++3OmY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PSTanfs3WKYV+oXEOijTvBa7eLSubiBDbtySltk/wSlQasfiEZj+B6c2Op3iLW9NHNbzdyWXBw394OGqxi9qw6I/5IYgeXh0M/9tmAEYhycCojXZIuBN4OFMpfNqafo/s3tqlO1k4AHsZZgKporcMR/BRl5G2YHjCZprY3av3UA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IDTaicV2; arc=none smtp.client-ip=209.85.216.46
+	 In-Reply-To:Content-Type; b=Q/9Xsg3sYHzyoPaAG0gTkYcL1WkExmsP9If4JZRAHyI/FEgcH2H9COVL8lfUuztsexpB43ElKS1hbseh06k4uYEZsZNZrozSDLdLaMtv1yzI1LbMzpLad/w6wHu+okGhH+YRwaRYzCf7t4STUrhsx3aP50nR1mIQPeKxb/CRSjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qDS/DYSP; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IDTaicV2"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3964dfb5b9aso1166503a91.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 28 Aug 2026 09:13:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qDS/DYSP"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2d58efc7356so11889515ad.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 28 Aug 2026 09:17:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787933621; x=1788538421; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787933845; x=1788538645; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=876wq0iLRJuIP8eFu38VO90/obuQPYSDuoCJYLsRS+c=;
-        b=IDTaicV2Dfm3CK95QVpooOkfzk5AJt+GW12ElIcCoHHuagU54SmlCmonbZBX5XyWYl
-         83CtVdZDB5/Y1DUklim1J5Kt2SBkPf1geVAamzTLiE07JV38zNhMRXQexxTtd0cQys7e
-         ke4Qea6CidBEHQ3drum+dY+IZ/3wcKObfb1P5gqWpzEkPH/Br9eGCq9HWoJoX2M9Ii5U
-         PGPrDjcH3un61lyxZfavmuoKnbi96DtxVxcmRrbiU5eJXYK4kNVylIq6j32Onp8m6jfn
-         A1ISEHFrv+T2JNZ9MizAl/q9rqvSaP/4DH0GSf3d83U3ZnV2C3DT2+Cn62AP5Mdc0LX7
-         6orw==
+        bh=PCz7PmgI80ZKCd5ensb+gqUeVoQsl5zpnesQh9e6pXw=;
+        b=qDS/DYSPzQp3Dd3QcinHAD8qPODHB3P3lm0i+UzyDiwf++bv28YqkRdoi1v5v3Wouj
+         ZeSTOYIOzTgImZ5l8ps3mqCEBnegEBDaXX7sXvTVXLtHkrrqcuM5RjwZ8akMc6EmD5q1
+         VA40eNwWB6Y0pwnmLQEQa7TPPGuuN55sNLAuBJUXmHfCQryXcKL7TXruzu2m1FxYhUHx
+         QmStJiq9Rp1mqpy3U8P4AbfKAqHtaIxl8qgkbHSlQWKT+wQodZtYImp96AurqmbdDGlZ
+         FEOEvQS7Oq74arzLV4LcBmwfX5fk2WfvBky/ihBoCkaju+f6JLCp6wHs0khvDmfE7aby
+         7arA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787933621; x=1788538421;
+        d=1e100.net; s=20251104; t=1787933845; x=1788538645;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=876wq0iLRJuIP8eFu38VO90/obuQPYSDuoCJYLsRS+c=;
-        b=T5rtLLjiW/2cey93C+vP3udWR2juS5kVNWF1W72yfiQhIiSbYZJOaw+6faaReKm38o
-         +zhcaI8O1P5rC9TKjEXwZzS+WJ5IqPaRd8xMHWuSlOfNYnMrW2xRcfj+COHNdoLUhGNI
-         qdzsIbspQKKaIvZrKAyj2OPMwwaVMPc/o9blSTiFiNmEofNWRuQ77klZNw86ZpF/GJWj
-         LMHNSDzG5Feqjh5KeweHEjmXMXQt5pp4xc998EySbJcsigo4aclmTrCFhXCu+wIV9Whd
-         5QoEgXgl/ch+p2/gEs3BnvxPVAhAFy4KzCj4w7a6ExVXKRL5uF9rYQggZJ6ibg7wbbsb
-         Cagw==
-X-Forwarded-Encrypted: i=1; AHgh+RrQfhMdAFjcErdxTYsOJTRTzn5lr+FwVpnTNMthXcmdnJAmSHYVXJlNCjbkYW2GmVFCb+J8RgEFC/la+Q==@vger.kernel.org
-X-Gm-Message-State: AFuF++l1m7jpHJsB9ODwv9nJ4iT9n+Uoj0D1BIwkg/mmE6KhMwRvBoQ9
-	mgrMu23B2U033LCWpwxEn08ip/JJPFQVcVMkbsjRoFmJAnZraa2o8Tf2nBggwA==
-X-Gm-Gg: AR+sD10+/iO1O05aLSOCSgea4FD96D1JIhtUPm8B0B0dL1qfLwVqSfwIFn3GW8HYBiB
-	EmLvPdDFPL9iZWGNi1sPN9DQosFPGFJerWHxKfx5VajcNLACtRxCOdSRdUMZfa7RiqFWDBgafET
-	h8dTzjM3WflSprY3fj8rm7e0vxSWbu7h6J+8H1KPz3P6TJt5a6gJiGbYfhPGn1OXxbi70G8LW4i
-	nlJH1fPvJIOxzJfV6gU4UQL0siqiiMPBCfOG0rvgT417TqvUjfHpss8UNLTYhMnF3PWdrEtPFyZ
-	32QJyqrS3ZOXWGQamROAE9PmED7o3czPY9iYEkI/6kNH8r7MWUe6UfAL7AaQCJ3cgTkytaQbExT
-	iPfwOLwATWn9h66hG0AqSToSG3BLPw2r8WgUCOPE7ihZ/L9wGDKkHBSbW0rMGw/2Rml3yp5+Xgq
-	UPQEf3VIZZFxaxUv57xKn55aNR4SiUgrIspLNkdiYtiExN7QRwWzrKIgqQmHkam427FRpHNYZJz
-	XX0kLej3UAajk5JDDiOQmzJCVrWeTEjVMyQudK3BWdN4m9C
-X-Received: by 2002:a17:90a:14f:b0:398:9c00:29f0 with SMTP id 98e67ed59e1d1-3989c003c60mr786146a91.24.1787933621257;
-        Fri, 28 Aug 2026 09:13:41 -0700 (PDT)
+        bh=PCz7PmgI80ZKCd5ensb+gqUeVoQsl5zpnesQh9e6pXw=;
+        b=nEoyOcf5oI6k59Z8Xh42bvzHro9fuEUt6W+jgBx2Q7F2ehiD9fkzqV4UdCWMGAHGgx
+         Ygke6hIy5I8+BcZbM2nHoenORoE6fnDMhXWFB3q9w46RucKa6p9389jL3WDF28qXcsHu
+         5qS2udGpt+wvpQgEKXjlEqqknnVYS5nYwIrqkuS/CWDixKDi1Jh1bLOgqWE0QHdrwuoz
+         6Msq//gQ/SoOY9wDpWgJBHys+DT2YK7r/pNJhMJKp1eOhzHShG0yzN1RUmhccvpvR36F
+         DuGjyrctlGmGua9KqNJkFu6hfPf/mDw8CYOZMlWYcgIDyWyQcArN2ocWjah6I+iLurFE
+         rttQ==
+X-Gm-Message-State: AFuF++k/NDyKC6oK+74SEo4UxuATeiwq7eC1j9c7NKMG5Hioz60aq+nx
+	aYfw6QtetxnB2Rts+97n6VDKr0nGPqb6VqETCgSKfqaLPkuVDmvgAUgJ
+X-Gm-Gg: AR+sD10vFtqre2pmOSiPCtbu5bnr6xEe7Y+7cm7dQ3hN043tYmmCbUrVUQHBAAF3wCE
+	KVWIkSbuTQt1hBQB8An1/RSP2aFjZy9kaFTEQj/t9KfuySd3FaAgHPcNFWMGpTs5ANWHdX7TDoV
+	TnoIZsptY7I885vpLC21rAbbAejqkiKDrrFY2a85qJKMjFPcM/U3UWaWsJ/wjyRULqEmxLUY809
+	b7np4shhFgzJczgkX0zvcsKTvg7IRgEIHL8MJrpT/w5kJfoG2uqBt7frxN+q5+9MV/ZexPDykMt
+	bWyvBiJudv2uqCKV6zUQ7W9y87OIjTFkvAYtrrXJP7KsLObt0BwjD2NWPaZc3WPW5hXuznouiZH
+	gDPTFI8sLNKiXIcKrotFG0ETgjSv4qPztVYfBSkQJUHJ/BUdcpj5//bmZabopkZilemv1iM/8t0
+	qAs0ObGvE6V37V1GrMw5ZlH77qv2AFZHenE1OnntFiG2DJ3IZfsHVrUHiq80UlhNJ4jH+bxxS55
+	jiqw7w//XY2w19+lunh5u2kc0TB3c7cHeUddA==
+X-Received: by 2002:a17:902:f78b:b0:2c9:df1b:e948 with SMTP id d9443c01a7336-2d74dc78debmr158990145ad.4.1787933845333;
+        Fri, 28 Aug 2026 09:17:25 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-396d22eacbfsm1458584a91.0.2026.08.28.09.13.40
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3286f956658sm7303038eec.19.2026.08.28.09.17.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Aug 2026 09:13:40 -0700 (PDT)
+        Fri, 28 Aug 2026 09:17:24 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <61d21976-2c48-4d58-8582-2009e36a20ef@roeck-us.net>
-Date: Fri, 28 Aug 2026 09:13:39 -0700
+Message-ID: <57665923-dba8-4619-878f-8ed76a0e5c6c@roeck-us.net>
+Date: Fri, 28 Aug 2026 09:17:23 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,11 +70,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (pmbus/mp29502) fix potential division by zero
-To: Yang Zi <2959243019@qq.com>, wenswang@yeah.net,
- linux-hwmon@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-References: <tencent_AAC779A9883986227B9F9C29CDF4A4AA660A@qq.com>
+Subject: Re: [PATCH 3/5] hwmon: (nct6683) Add pwm[1-8]_enable
+To: sashiko-reviews@lists.linux.dev, Johan Dahlin <jdahlin@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+References: <20260825092546.669450-1-jdahlin@gmail.com>
+ <20260825092546.669450-4-jdahlin@gmail.com>
+ <20260825094401.0E4391F000E9@smtp.kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,52 +121,82 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <tencent_AAC779A9883986227B9F9C29CDF4A4AA660A@qq.com>
+In-Reply-To: <20260825094401.0E4391F000E9@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 8/25/26 02:07, Yang Zi wrote:
-> The vout_bottom_div and ovp_div divider values are read back from the
-> device during identify and later used as divisors in several
-> DIV_ROUND_CLOSEST() calls. If the device reports a zero divider, these
-> divisions trigger a divide-by-zero error.
-> 
-> Validate the divider values as soon as they are read and return -EINVAL
-> if they are zero, so the driver fails probe instead of crashing later.
-> 
-> Signed-off-by: Yang Zi <2959243019@qq.com>
-> ---
-> diff --git a/drivers/hwmon/pmbus/mp29502.c b/drivers/hwmon/pmbus/mp29502.c
-> index afc5e8c07e25..d606fef82b35 100644
-> --- a/drivers/hwmon/pmbus/mp29502.c
-> +++ b/drivers/hwmon/pmbus/mp29502.c
-> @@ -134,6 +134,8 @@ mp29502_identify_vout_divider(struct i2c_client *client, struct pmbus_driver_inf
->           return ret;
->   
->       data->vout_bottom_div = FIELD_GET(GENMASK(11, 0), ret);
-> +    if (!data->vout_bottom_div)
-> +        return -EINVAL;
->   
->       ret = i2c_smbus_read_word_data(client, MFR_VOUT_PROT2);
->       if (ret < 0)
-> @@ -160,6 +162,8 @@ mp29502_identify_ovp_divider(struct i2c_client *client, struct pmbus_driver_info
->           return ret;
->   
->       data->ovp_div = FIELD_GET(GENMASK(9, 0), ret);
-> +    if (!data->ovp_div)
-> +        return -EINVAL;
->   
+On 8/25/26 02:44, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] The sysfs callbacks `show_pwm_enable()` and `store_pwm_enable()` incorrectly cast their attribute argument to `struct sensor_device_attribute_2 *`, leading to type confusion with `struct sensor_device_attribute` and causing failures on Big-Endian architectures.
 
-The question here is: What does the chip do if this ever happens ?
-Was this observed, or was it reported by some analysis software
-as potential problem ?
-
-The datasheet is not public, so you'll have to provide that information.
-Either the returned values need to be adjusted based on the chip behavior
-if any of the values is 0, or some other error code needs to be returned.
-Note that -EINVAL (Invalid Argument) is wrong. Please use either -ENXIO
-or -ENODEV.
+Yes. Please fix.
 
 Thanks,
 Guenter
+
+> --
+> 
+> --- Patch [3]: [PATCH 3/5] hwmon: (nct6683) Add pwm[1-8]_enable ---
+> commit ae1360636538f417a87b23c1e1c204ef9329c018
+> Author: Johan Dahlin <jdahlin@gmail.com>
+> 
+> hwmon: (nct6683) Add pwm[1-8]_enable
+> 
+> This commit exposes the manual-control bitmap as pwm[1-8]_enable for fan
+> control on supported boards, falling back to read-only hardware control
+> on unsupported variants.
+> 
+> Link: https://github.com/Fred78290/nct6687d
+> Link: https://github.com/LibreHardwareMonitor/LibreHardwareMonitor
+> 
+>> diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
+>> index b43e915f9d0fb..0324ace707a53 100644
+>> --- a/drivers/hwmon/nct6683.c
+>> +++ b/drivers/hwmon/nct6683.c
+> [ ... ]
+>> @@ -962,25 +963,93 @@ store_pwm(struct device *dev, struct device_attribute *attr, const char *buf,
+> [ ... ]
+>> +static ssize_t
+>> +show_pwm_enable(struct device *dev, struct device_attribute *attr, char *buf)
+>> +{
+>> +	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
+> 
+> [Severity: Medium]
+> Does this cast cause type confusion with struct sensor_device_attribute?
+> 
+> The template initializes the attribute as a struct sensor_device_attribute,
+> which uses an int for the index field, but it is cast here to a struct
+> sensor_device_attribute_2, which uses a u8 for the index.
+> 
+> On Big-Endian architectures, reading a u8 from an int field aliases the MSB.
+> Would this result in an index of 0, effectively mapping all manual fan
+> control operations to channel 0 and breaking functionality for fans 1-7?
+> 
+>> +	struct nct6683_data *data = dev_get_drvdata(dev);
+>> +	u8 mode;
+>> +
+>> +	mutex_lock(&data->update_lock);
+>> +	mode = nct6683_read(data, NCT6683_REG_FAN_CTRL_MODE);
+>> +	mutex_unlock(&data->update_lock);
+>> +
+>> +	return sysfs_emit(buf, "%d\n", (mode & BIT(sattr->index)) ? 1 : 2);
+>> +}
+>> +
+>> +static ssize_t
+>> +store_pwm_enable(struct device *dev, struct device_attribute *attr,
+>> +		 const char *buf, size_t count)
+>> +{
+>> +	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
+> 
+> [Severity: Medium]
+> Is there a similar type confusion issue on the store path?
+> 
+> Casting to struct sensor_device_attribute_2 and reading the u8 index might
+> similarly fail on Big-Endian systems during store operations, causing writes
+> to unintended channels.
+> 
+>> +	struct nct6683_data *data = dev_get_drvdata(dev);
+>> +	u8 bit = BIT(sattr->index);
+> [ ... ]
+> 
 
