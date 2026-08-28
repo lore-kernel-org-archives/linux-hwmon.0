@@ -1,69 +1,69 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC37D380FFD
-	for <linux-hwmon@vger.kernel.org>; Fri, 28 Aug 2026 10:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82F523CB2E0
+	for <linux-hwmon@vger.kernel.org>; Fri, 28 Aug 2026 10:56:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787914345; cv=none; b=Z1ixM/0kamMt52E0S7Rm/1GkaxbvIdRG0qri8UEZj9zpDcbtvquZ5p92c2qcQhR/QdOMmZuy2+twACf2746LqRUBCMhML2VpISSx7NRHnhctFJmn7lHXiY7V403p37BWRNMrSa8NSsiftRRAEF0GYgfYnyPGlnFvsc3UEdno4RE=
+	t=1787914579; cv=none; b=j4DQWT2XZOmJDmJGjiyQwJBcwnIJN0+2KgMduKwqPVbWUOpR5zE3Blofoa1wCVkp/vzrcz5AnJ4rkIjWkqQ5/nxp+F3j7IQcXTCMw9a5HaKItPn2Zoh50GLd0dmOTQPYH6P4MaYReRhyp1SfC1mK6KVxRJE86APFXEYQhL14Z7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787914345; c=relaxed/simple;
-	bh=pG1VnjiqgntQGI0qK/is14GUuCFDGLN/BKAmijvarkg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=acI2owA3P9VL1Ba4LfgdQrSO84VbhJeoFWxzB3qgaliV2n1ty3GCzdW11UvHqU5WhLu5VvrJrNheB0klGtR5yGjo7JzVEHU84fLqI6WoZy9SJpPMvL15s7pKpgwdHSQoB1o6/1YwCFgSPurEvWzS37LYCmVlRvEVfJKAa3sByUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AC8u1rC0; arc=none smtp.client-ip=209.85.216.45
+	s=arc-20240116; t=1787914579; c=relaxed/simple;
+	bh=HolFjc1GFhcieQW3rZ3e6LIfMf9VWISSiWMAcCwB6WY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=QFrlLQ5LtmTyKz4ncvGe7qWHW50+28Lf9RQfzbB6o4iwLShNdJVL+fv2bdOhwA/0xDdx3kOQbP/PPd5Jk9xnsWx3EnNVMO4knSUpfVioYYfghiQLf09BrH/vFWg8ksfxeV7IGeqOfFBR3kQhU/oyuvIJQLgUYz1bhbROB81X69g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oWgcuBqI; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AC8u1rC0"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-382ef647e20so806479a91.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 28 Aug 2026 03:52:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oWgcuBqI"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-38dfe910e9dso1060869a91.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 28 Aug 2026 03:56:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787914343; x=1788519143; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787914578; x=1788519378; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=iB6uEQEth2jXEYgRwt8eutJkoVjS6z8bcTn8n0MIRls=;
-        b=AC8u1rC03Buk2Vf/vP9iYZwX1SE/fzF/KU0cEYVn5hnQEMMWcqjPNRRRCspDXENKhV
-         52TFk/FZCptFEz45xZSWuxXGbUnPHiZx2cRka+srkY3GmNbMu/MsoHVvxoHcpwBmIHfU
-         bbeATpNwHb8qHdUOcinDcTu1yq2rOk30dFOYCK5rDnTiZJnkKHRYr4ZhWdcHxaAy6g8C
-         WlYbrA/j/pCPDjmZldxXSy1lQFoZ5L5FmY3MN+ghwisYFAgWH9RUAvuQbCfNW/gkoUY/
-         /1AQkfdUhK40C9i2qJOGhFpWrPHM0OtgWS8iIwjCfXbFiv1gF5XGqoaKksit6Qb0qtIU
-         FTLA==
+        bh=tJKbqcLHnVm7Iv7oflxgTuIfOvA058unjZa7ApUbWEU=;
+        b=oWgcuBqIuTcDFeITtNcRJB3EHg6JObhDFCVsLu/2S4EBvt4AIXP0r6LNX5Lx8nMHlS
+         W49DEe1KdohJdM0EL/zw8CRnvPiPfieuw0+RLz5tg21EvPt22rXseI/cvcNtn+35DYVp
+         u9GysJ3CAeRvmJZn8CR100xkaD9oR8TrHUoCrdMXKFHMfJjow5q1jkZGvpPgvKb5zY3y
+         WhQWLPnRpZwkCkQawmb+Z7Z69fahyNslE9SjInm70u8AFLgVh6UFghkISpGYhSxKeZvD
+         6NuLwIdPmUezn9Z6FDIXyrIfaKaicST0XdqqIIr+Yi+ZZM/4wOR6oIHCYr2Eps0vWqa2
+         wnTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787914343; x=1788519143;
+        d=1e100.net; s=20251104; t=1787914578; x=1788519378;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=iB6uEQEth2jXEYgRwt8eutJkoVjS6z8bcTn8n0MIRls=;
-        b=EOJb1jGLgLdh5nvpIfmJ37FOAoJkTdq+1BIuo9US0jLO+XpH92b1IIthk0dRdTLhKJ
-         cUQec04FPnx3Rjbv8dxjB5d4wAMjRzZunhCjqVhUwJaavw6todRKBrcJIx4emQ7e/wfg
-         oL9Y1I3rp2x2gV42SJ1pexTHRhb2Y0FzVL46182Vc/FGRSAkZl2nD7tTVS3SRpfAKLKZ
-         Wi7iQN6ibIPYjYSNaD7T1GaCrLbF1bn+CCUgD22er82jSg+hPPvVoUgm2Ibfhl+yMk3B
-         eJb4aHUUq+xw32OLO3i7DinIEODaiE+LY8FMiSNyeAw8mheJnXQsjryImbzECsRD8No1
-         HCfA==
-X-Gm-Message-State: AFuF++lpgLd10Ei+xAaGg2JorrPLduJbUFIU7EJtCdOSxxf+k/sn9axG
-	h49wUKL/KtL+IBen0D2KV37FU9UicrYA7/gm4FdEB8/j/jC04cLYDNyGznl12Q==
-X-Gm-Gg: AR+sD11/UBkuvijXHruCQxtP8NAOmAuKB4ZCfncgElhxdx4T8DM3rLnpCD2BDDa4Oea
-	fdqble//tZFYQ8IB2vaAo+bxrMATRBgDN74dtyFLrFN86Eh0UasdEBUSCvJ4FM44+eeWocBE653
-	J+1RZ8lRKRBFsshUKZh4bo3TSGFsw8IqUYRN2yAXEumJ3BpPJSxCSJvsajWnLuAt4EwY+n0aaru
-	oUyOi7eIipJGsUk+djryOQ+BKv2uPc96MPIz3k34iDpi9ij8srBdQmUWc3ThHczl1mVQBTj/AOD
-	0FfU7GrSLQbzMMIvMe8spLyK69ZFL1k2XKrZKR3Z0m4ouZmJLkh1WE5nG9sJaPX/il9s4s6iuTh
-	lHutVVhpfziNLX1VKjkogfBaHYK9b27PULI2rg4Dzq6a7hMLelP6lBaSMl4qCGZpTK0664XK8zR
-	psdyatd9SjlGPb2wO/cWnn6e3ISRcL6G4VEDUJ2gO7jX4J9g+jSF/aJRTh8HsahVhM8KfAOdvdj
-	g==
-X-Received: by 2002:a17:90b:5405:b0:38e:67e1:15b with SMTP id 98e67ed59e1d1-396d0de4c19mr12284740a91.6.1787914343069;
-        Fri, 28 Aug 2026 03:52:23 -0700 (PDT)
+        bh=tJKbqcLHnVm7Iv7oflxgTuIfOvA058unjZa7ApUbWEU=;
+        b=B/T0Jgyb3e9cLTaA46SNo16BY050aeojTj0o8h6RzmVlNwbi69ZtXMFvcnc0J7HCFN
+         cp7+OdxErKruTewHbDCqtFXBXAceAecKMf4hdOXTCX4Lkbsr5BfC7jO/hjNDWkUcRjEu
+         oxjdXEUVp+/sfrq44SJ7PoyEUjXjLduRrhiOCo7XJ7p7/aAJkJKyHGlqCPTRvWFdjsyU
+         QEBP5Td5ItRq7nzaOAm5M1wH2J6uMxOCW6PX0PwzuNFwMqRFEzM3aHv4WxDXs0wm37Zc
+         LWzVx+GXhXL6xSbHjW7xqJR9+tMhZafDZFLzSeY9a5rfUxlZKVwraoRlNEpHO0VAWN6z
+         blFw==
+X-Gm-Message-State: AFuF++k7PYSrIXl0hvUw7veqkDFnH+6DvG/O1EwBF+VDkPlEwvuQy6Yi
+	j9L0dgaAJqIGaN4MdAgt8Te3TW/CaNScJDDi1hvff/Tm4D7TRiuo/2z4ncEFSA==
+X-Gm-Gg: AR+sD10AqcAEYpe2RQka0VPOZCtCbrJi0qIjYWtZp3go9x3gMdvG3PHZ1hEfgCJv2e3
+	ch/mgvpjUD9JYkKlrp4ckm1Zgg5D13/ZhV6UC5Yn4n3BYpXoMQKGjMnaa/AGTPQvd4cTUv7Y6A7
+	+I8AOZSq23DoVbuyz914mL8cTEvfEdf+mIBdnQBpRZ1m/MqQayvgTZp04TyqxMbt1fManNzwLtB
+	Q5KyPd+dP5Q/RMIfQhppJ+cMu6hnTmIQHNasMgZS2VZlUkFcTdqGIUVKehD/7HN+NxaTIew0/K4
+	U4cUwX+9MO1/LObScuIPIWVCAEa5CFBVnegkrCJaZtZFHj/GfmU2AqE4jajWdBtDkaYlnGDwPPE
+	xdCv+LB8r5H2wtWiakQ9tPLRGz02mQYkU+xkBm1X0NBU8W/pJBKQToMuno6+VJFU/0POgZlzexo
+	nOO2Y60JX/9fO9/9aIpgxzAB+tdCoohxYvKxrAaeXca4bRH+8UhUEHRXSeJceOEMBB87Ro376SE
+	A==
+X-Received: by 2002:a17:90b:3c05:b0:380:9f17:6df3 with SMTP id 98e67ed59e1d1-396d0e8325cmr13049209a91.4.1787914577812;
+        Fri, 28 Aug 2026 03:56:17 -0700 (PDT)
 Received: from SGN-LDSENG.tasernet.com ([42.116.29.172])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-396ddc08266sm2063274a91.11.2026.08.28.03.52.21
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-396dda368e6sm2067288a91.4.2026.08.28.03.56.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Aug 2026 03:52:22 -0700 (PDT)
+        Fri, 28 Aug 2026 03:56:17 -0700 (PDT)
 From: Cong Nguyen <congnt264@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Alexander Stein <alexander.stein@ew.tq-group.com>
+To: Henrik Rydberg <rydberg@bitmath.org>,
+	Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (gpio-fan) fix pm_runtime imbalance for alarm-only fans
-Date: Fri, 28 Aug 2026 17:50:18 +0700
-Message-Id: <20260828105018.2392383-1-congnt264@gmail.com>
+Subject: [PATCH] hwmon: (applesmc) fix key backlight workqueue leak on register failure
+Date: Fri, 28 Aug 2026 17:54:13 +0700
+Message-Id: <20260828105413.2401385-1-congnt264@gmail.com>
 X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -73,47 +73,46 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-pm_runtime_enable() runs unconditionally at the end of probe, but the
-devm action that calls pm_runtime_disable() is registered only when
-control GPIOs are present. An alarm-only fan (no control GPIOs, alarm
-GPIO optional) is a valid DT configuration; on unbind the runtime PM
-core warns about the missing disable.
+applesmc_create_key_backlight() allocates applesmc_led_wq before calling
+led_classdev_register(). When register fails, the error is returned to
+applesmc_init(), which jumps to out_light_sysfs and skips
+applesmc_release_key_backlight(), leaking the workqueue.
 
-Use devm_pm_runtime_enable() so disable is automatic on device release,
-and drop the redundant pm_runtime_disable() from gpio_fan_stop().
+Destroy the workqueue on the register failure path. The bug was introduced
+when the inline init block was refactored into a helper that returns errors
+directly, dropping the old out_light_wq unwind label.
 
-Fixes: 0d01110e6356 ("hwmon: (gpio-fan) Add regulator support")
+Fixes: 0b0b5dff8967 ("hwmon: (applesmc) Simplify feature sysfs handling")
 Cc: stable@vger.kernel.org
 Assisted-by: Claude:claude-opus-4
 Signed-off-by: Cong Nguyen <congnt264@gmail.com>
 ---
- drivers/hwmon/gpio-fan.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/hwmon/applesmc.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
-index 084828e1e281..0bd5561b7a40 100644
---- a/drivers/hwmon/gpio-fan.c
-+++ b/drivers/hwmon/gpio-fan.c
-@@ -524,8 +524,6 @@ static void gpio_fan_stop(void *data)
- 	mutex_lock(&fan_data->lock);
- 	set_fan_speed(data, 0);
- 	mutex_unlock(&fan_data->lock);
--
--	pm_runtime_disable(fan_data->dev);
+diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
+index 90a14a7f2c4c..bfe9c5b0c4f1 100644
+--- a/drivers/hwmon/applesmc.c
++++ b/drivers/hwmon/applesmc.c
+@@ -1249,12 +1249,17 @@ static void applesmc_release_light_sensor(void)
+ 
+ static int applesmc_create_key_backlight(void)
+ {
++	int ret;
++
+ 	if (!smcreg.has_key_backlight)
+ 		return 0;
+ 	applesmc_led_wq = create_singlethread_workqueue("applesmc-led");
+ 	if (!applesmc_led_wq)
+ 		return -ENOMEM;
+-	return led_classdev_register(&pdev->dev, &applesmc_backlight);
++	ret = led_classdev_register(&pdev->dev, &applesmc_backlight);
++	if (ret)
++		destroy_workqueue(applesmc_led_wq);
++	return ret;
  }
  
- static int gpio_fan_probe(struct platform_device *pdev)
-@@ -581,7 +579,9 @@ static int gpio_fan_probe(struct platform_device *pdev)
- 	}
- 
- 	pm_runtime_set_suspended(&pdev->dev);
--	pm_runtime_enable(&pdev->dev);
-+	err = devm_pm_runtime_enable(&pdev->dev);
-+	if (err)
-+		return err;
- 	/* If current GPIO state is active, mark RPM as active as well */
- 	if (fan_data->speed_index > 0) {
- 		int ret;
+ static void applesmc_release_key_backlight(void)
 -- 
 2.25.1
 
