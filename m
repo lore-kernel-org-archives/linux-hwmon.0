@@ -1,68 +1,68 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B48F33515C5
-	for <linux-hwmon@vger.kernel.org>; Fri, 28 Aug 2026 16:01:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695F53783C3
+	for <linux-hwmon@vger.kernel.org>; Fri, 28 Aug 2026 16:02:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787932887; cv=none; b=c5oQIgO86YAKYoL8us/P5+stWzGzIf/aL1pACcFD6sTUDzJdgRVZ2ZOGaRIR4a5zc496nO5joKh7kaiXCsCX0O/fFIzBldiLAXK5rYBphfUxvIqxGMEDvMvODDzUpanEZ/FvEJ19Pdvb8MwpL8ayTrRNiiq7N7X2XCTDOiEOzFI=
+	t=1787932953; cv=none; b=EkSgmzhz1+rDJausM+rSnfYHDDwNT/DnEeqfYg3/KQ1AwGYli/onQ6Aui2C5uhioWEFc1MgMX8K44SdGkQ/nOWmGvFxuoBhgTwSunK1koX5glQ3GwgMMrnBh4kwv6h0mR4x8XBDls9fuXcrIDA29xGvkXMIMLbCiHZiuh21BNLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787932887; c=relaxed/simple;
-	bh=oQqNEQbcnXBTfUIv5IgxbO7DhuJL8CYmkSWZxLpRWX0=;
+	s=arc-20240116; t=1787932953; c=relaxed/simple;
+	bh=8qNLw56B9TLSQptSGJHh3rd1tE5g1AfjbOjTAkxyS4Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UkAqQ37w+Wpb2RkRP4zqER2XRnTHtJQgiN9kcZbYnhQ3WYgF9lT3Ad7vknrtDyw45OKskuVHbZa5Jm8ttLBX72rrjycq9M8sF1blfqiNHuOXFO5t8qb1703qVoqLu0GES9fylaNyjCBe1WU4YGC6y8xdI3bTR/W20nvalGHiBv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AAol8pGk; arc=none smtp.client-ip=209.85.216.52
+	 In-Reply-To:Content-Type; b=Ou6KBTX+CQ3vjAmAbQRdsLu79drob01LypJSnePRQyD17v5gWwGgarUtrH6M8Az+S+KEp4O/nH9cdxJ9Snfl0UBjqn7MMqEXvmxHhWJ0xmRjvD5kWfUHgUfVDV1FH8M+ZlARHMmZH6HOsEMyAXOKuIb0I3bqeaSgf7mNgOTHCaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WkmEmDqf; arc=none smtp.client-ip=209.85.215.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AAol8pGk"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3964e76d0f4so1103416a91.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 28 Aug 2026 09:01:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WkmEmDqf"
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-cbe6295f05bso1820999a12.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 28 Aug 2026 09:02:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787932886; x=1788537686; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787932952; x=1788537752; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Il4EamAEW7KbExBmjcSAYVqBQdsFVVnM7I2Ys4LmgiQ=;
-        b=AAol8pGkbBiMVKHRDeIgjuRS0IR85mMNNKN4BAfCdl0EV3cvTAKuxo93b7Syn9k+bA
-         z20ewJr0yqn4Vzrncb8Xx9nF3mhwxZeHf63NwcZujW1fU8+OCOpcaNkxWdKR0oCGpfJQ
-         2Vf/Es2lYS7FPplcc7RnIQIcLSA0u5A0NUSNvr6zAuOI0az8hLcyOTdMLljRxwYZva5W
-         f6/eYWPDQz4tq1V4fj23PBhsdur7asCwzlop5pYuGYR8/USQTw6Zur+LJNi0GVJVj9cs
-         hLn9hoj1XaBv3vpBb8NE20MdH8W4iqRVnTdGYDqD3EreOGF1ZaENfzkcAQM1Ah05nLCZ
-         zNNw==
+        bh=2AFRIUFJKCO3T6nN8VW+Ys+Hp+I2sL0vNH/Psf88O/M=;
+        b=WkmEmDqfrrWf3MLYSU7s/hlpIInLnyCW7RRytHfa5WLexsvbRjGuGbUht8Eqvd7PXs
+         TeKfJGxbGdaeRY8WH3KWxwYTqnhyi8ZZ/Fj+EBOtwHdY88M87NmsHt9djLfi/Lwnps1p
+         GG8ImKlwDe4puPh6KodxSj5iJIoST/VFeUu+38Q7jrhgE+ZgBQmfULysq4d5AaHLKWfC
+         tm63EOBWR8AMePKKvyGKqueWjBheOY07pMXCcYITykZpg1qQeN8kvveuTz/iAaMqssEL
+         upHSiqQyP7SbvWb9lAIc737W1anwxK2QQqfBdAqryfL7Wf0zpTIdjtsMs6oi+5jk5hqf
+         pmrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787932886; x=1788537686;
+        d=1e100.net; s=20251104; t=1787932952; x=1788537752;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=Il4EamAEW7KbExBmjcSAYVqBQdsFVVnM7I2Ys4LmgiQ=;
-        b=LmLJP1+1nQAH4U+ba9XjLZ7nDuaV64SMZvyTDFRMdMtxZDsuYYeyx4R72+q0TOuMTA
-         viSqy/5r/i5hKPggaMXRByYD/zYicuASd3FoyTlOd5f+o7Y2oBg1jaIQQYYctv5/3ucV
-         MM6TMSwksTJfYd0+ZuIknvB2qL29Y3dK+4rPxAn/3/nRLq19HX38krn/GHY1h8aW3+Aa
-         G0CBpYvSHrBSZS79op1Mt3sw+Pq0MizGoDa8OPCfMRs7WJ1kQNEUrJzu83tNcghXTOUT
-         unPJ1Eh3H+Aa3Q+roJK+52wQIfoJw/Sc5if+wMn1lLLBYKeKlSv2/pE3z0Ge1tmYUE9t
-         /JLA==
-X-Gm-Message-State: AFuF++mNq9WBTnLoyKfInjzKJ0b1x5IvojGnZTLJTsXGqwshf4Dwu7HS
-	bTJBOUUxOxkDSvvdSr0Z7V6chO/vPz/atqAfYH3Vt/TxiFyC0fFKv/bX
-X-Gm-Gg: AR+sD1268FtmW2Y7Tb8Se9ytDt7DoDjjQvAkzs8oUK3sbX1Gy98nBtlPbRbDkgVR4Us
-	AN5tsLk/3QDBc6A5IuFI2xL4S61i+Ie7nwb9453QVgV5bYsr2DKJgymYAP5zGZfn4IrO3iCqqzl
-	1ROaxXjk5REACTw1WLANcTHhGdD6nDlsVzFfDazisB/1kSo8O6LY/pOvE1MjnrdYdrMUMXknYSu
-	5eMSZ8NQ9Gd+qGUoC7oVI27Hg90NKOaSC5tD1NQdtWCy7idkM+cVVkFDoUxdZnAsNcKkh8b2vct
-	/TL2Q/jfaSZM6SujNSf986pIxt25OSn1fNLLaqcdxz82RURRX3vXz14c2BZw9oMHVrme8yk4GgG
-	YRmNmJRdQ+8LB2Ho5IRIUZHaDUqkDe75n9H7SvCwoNZZHVuysoCBoK64feb/fRJIUWjknTV73kq
-	m2Yp7ys77CnAnIj8kWz3mXGxdkjZRzYiHGOaH1PZhLvF68nrHbvMcwnIwBmCjGOnYPRPg5GMLgq
-	vmY23xgDnhtbdUKu2DDT50Zaof/Pc1xNNEWLw==
-X-Received: by 2002:a17:90b:4a06:b0:38e:9045:bac0 with SMTP id 98e67ed59e1d1-396d0ea50b4mr14347664a91.5.1787932885607;
-        Fri, 28 Aug 2026 09:01:25 -0700 (PDT)
+        bh=2AFRIUFJKCO3T6nN8VW+Ys+Hp+I2sL0vNH/Psf88O/M=;
+        b=Ne9ozLWeTENoMe667TByCMGwBOgM9g1O9+LMIIgp3dSkF/XbATchySO7Ey97jpvx+n
+         bLInVQ3cO8nnbSQdMkrSDjRolMLvIlemZO9f6a8+GHcFP44d2sgXQI8vc7Mmfzxz9ZqP
+         MnMFXUCC7nf+Amh2c0xrD6ubkMJYYPh25DfmIHSpuenUJQjP9+iupCAE8rJ2epnsfFPr
+         wmVWFg2o/IL5INNvOnvZX2FZ52bCqioG8gEX4I0DDvTUGSIiH8Zdm86IFF8fkH1Pu66e
+         2uhKUAP+tgrMwC4CPc7iwPOvuad6bIoSglH7OY++zjjzhvg0c88wLX3i2BebFoTP2OrK
+         nuhQ==
+X-Gm-Message-State: AFuF++nOgkb+9EZevtDItXQpUoObM5DqXK6DWRLOn0fVJazoaB7MS484
+	jKqhzrVHwEed5Us8mM95E4MXK/xfz19OnbjYaX3qbeQR6/dlpIGE6h43jpzPMQ==
+X-Gm-Gg: AR+sD113LrmmWo89kB4z86ACKQCL85oKHK1deDYlad/XZgEoyAPQnG0uQX5WSsR44qi
+	+dGBafGqCn0kxL7AC0XSega0zoHWG7JvXh475JK5T90DiDmaxN1pfPnWEZKlV7H9DzWqRoGFxS2
+	WZXr7Ik8DcH2M4+IyWgg6WZPb+5qzLL250ZsUDT+KX9vY/fpVJVCu1C7DdEx8UkJu3mGEhQXIHe
+	3ZKwblmGKGAxmF824vjJyeymujz/Kq85CGqAGLftc6LPzjNuCMvN5/gNlY9Whg5R/Y+Ko6sl8op
+	Oh8wOgFEj+0hcZ/mpCGw7N1rWksZV5QyrjYnl5KvRHzCcNbzddIa1LFshjjB+vaLG9V4ozynNwr
+	L6U0oqRi1bnlO0VSXt6QVL1KfGw7vCf7XY2vbenixcmNjvW4zQLlxcPSt1AROKmkDQ8BujRe3Og
+	58b0/++Iug7hlrC4HZWYTmhXuk6uGl2LtHMZGtJvrSPmq2GsDFzCw0WylSk16vFVadOc1q1lYoh
+	ET4Nyrbc8VTyOCz8GI48CuOZOSjPu6Nb7ic3f8GkvlpficG
+X-Received: by 2002:a17:90b:37d0:b0:385:3ab:fecb with SMTP id 98e67ed59e1d1-3989b565671mr1045102a91.4.1787932951484;
+        Fri, 28 Aug 2026 09:02:31 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-398a14d3e83sm79670a91.10.2026.08.28.09.01.24
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-396dda36ed6sm3116562a91.2.2026.08.28.09.02.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Aug 2026 09:01:24 -0700 (PDT)
+        Fri, 28 Aug 2026 09:02:30 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0ad5b673-d800-4ea1-8239-223404eb88f8@roeck-us.net>
-Date: Fri, 28 Aug 2026 09:01:23 -0700
+Message-ID: <4da32bd6-5b54-4765-b5ad-82bac2bbaaa2@roeck-us.net>
+Date: Fri, 28 Aug 2026 09:02:29 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,14 +70,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/1] hwmon: Add Minisforum UM780 XTX EC monitoring and
+Subject: Re: [PATCH v3 0/1] hwmon: Add Minisforum UM780 XTX EC monitoring and
  fan control
-To: sashiko-reviews@lists.linux.dev, =?UTF-8?Q?Sebasti=C3=A1n_Peyrott?=
- <speyrott@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
+To: =?UTF-8?Q?Sebasti=C3=A1n_Peyrott?= <speyrott@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 References: <20260825184107.355980-1-speyrott@gmail.com>
- <20260825184107.355980-2-speyrott@gmail.com>
- <20260825185125.A82D51F000E9@smtp.kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -123,47 +122,61 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260825185125.A82D51F000E9@smtp.kernel.org>
+In-Reply-To: <20260825184107.355980-1-speyrott@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 8/25/26 11:51, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Low] Missing Kconfig dependency on ACPI_EC leads to undefined reference errors at link time.
-> --
+On 8/25/26 11:41, Sebastián Peyrott wrote:
+> Add a DMI-gated hwmon driver for both fans on the Minisforum UM780 XTX. The
+> EC is an ITE IT5571E, but its register layout and OEM commands are defined
+> by machine-specific firmware, so the driver only binds to the exact board
+> revision and BIOS version on which it was tested.
 > 
-> commit 95c2944ab1799dbc9f42157b5a4c6a9050da57ae
-> Author: Sebastián Peyrott <speyrott@gmail.com>
+> The driver exposes both fan-control temperatures and tachometers, two OEM
+> automatic CPU fan profiles, and two writable system-fan transition
+> temperatures. It preserves settings selected through its interface across
+> s2idle.
 > 
-> hwmon: Add Minisforum UM780 XTX EC monitoring and fan control
+> Tested on the target system with concurrent RPM reads, OEM profile changes,
+> system-fan threshold changes, unload/reload stress, and s2idle resume. The
+> settings were correct from the first userspace sample after resume and
+> remained stable for 15 seconds.
 > 
-> This commit adds a DMI-gated hardware monitoring driver for the embedded
-> controller used by the Minisforum UM780 XTX. It exposes CPU and system fan
-> control temperatures and tachometers, utilizing the ACPI EC transport.
+> OpenAI Codex assisted with reverse-engineering review, code editing, test
+> orchestration, and patch and email preparation across a long interactive
+> session. I reviewed every change, ran the live tests on the target
+> hardware, and take responsibility for the submission.
 > 
->> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->> index 81a9a1d40eec8..45ac04c89b23d 100644
->> --- a/drivers/hwmon/Kconfig
->> +++ b/drivers/hwmon/Kconfig
-> [ ... ]
->> @@ -1490,6 +1490,22 @@ config SENSORS_MENF21BMC_HWMON
->>   	  This driver can also be built as a module. If so the module
->>   	  will be called menf21bmc_hwmon.
->>   
->> +config SENSORS_MINISFORUM_UM780XTX
->> +	tristate "Minisforum UM780 XTX EC hardware monitoring"
->> +	depends on ACPI && DMI && X86
+> Link: https://lore.kernel.org/r/20260818181345.203295-1-speyrott@gmail.com
 > 
-> [Severity: Low]
-> Does this also need to depend on ACPI_EC?
+> Sebastián Peyrott (1):
+>    hwmon: Add Minisforum UM780 XTX EC monitoring and fan control
 > 
-Yes, it does, which also explains the build error reported by 0-day.
 
-Thanks,
+Note: For a single patch, an introduction patch is unnecessary and just adds
+work for the maintainer.
+
 Guenter
 
-> If a user configures the kernel with CONFIG_ACPI enabled but leaves
-> CONFIG_ACPI_EC unselected, will this driver fail to build? It appears this
-> would lead to undefined references to ec_read, ec_write, ec_transaction,
-> and ec_get_handle at link time.
+> ---
+> Changes in v3:
+> - return -EIO after bounded RPM coherence retries and -ENODATA for an
+>    unknown CPU profile;
+> - seed saved settings at probe, update them only after successful hwmon
+>    writes, and restore them at resume without reading the EC at suspend;
+> - clarify saved-state naming, live threshold validation, and resume
+>    documentation.
 > 
+>   Documentation/hwmon/index.rst               |   1 +
+>   Documentation/hwmon/minisforum-um780xtx.rst |  68 +++
+>   MAINTAINERS                                 |   7 +
+>   drivers/hwmon/Kconfig                       |  16 +
+>   drivers/hwmon/Makefile                      |   1 +
+>   drivers/hwmon/minisforum-um780xtx.c         | 501 ++++++++++++++++++++
+>   6 files changed, 594 insertions(+)
+>   create mode 100644 Documentation/hwmon/minisforum-um780xtx.rst
+>   create mode 100644 drivers/hwmon/minisforum-um780xtx.c
+> 
+> 
+> base-commit: 75f2c0b3690702c90863c2e138cb5520670845ea
+
