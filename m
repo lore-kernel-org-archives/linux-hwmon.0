@@ -1,68 +1,69 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695F53783C3
-	for <linux-hwmon@vger.kernel.org>; Fri, 28 Aug 2026 16:02:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 162B4374A0C
+	for <linux-hwmon@vger.kernel.org>; Fri, 28 Aug 2026 16:13:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787932953; cv=none; b=EkSgmzhz1+rDJausM+rSnfYHDDwNT/DnEeqfYg3/KQ1AwGYli/onQ6Aui2C5uhioWEFc1MgMX8K44SdGkQ/nOWmGvFxuoBhgTwSunK1koX5glQ3GwgMMrnBh4kwv6h0mR4x8XBDls9fuXcrIDA29xGvkXMIMLbCiHZiuh21BNLg=
+	t=1787933623; cv=none; b=o4cfFyTbPCYlt4CLjmnjobYJxbshIME1IIigFoWYTbfUBD+0AbaYW+3wiOY9neE5EvooW2xHSBuA1pXOeCbG/bCrt879A5XQGasMKHLEFy8SUUU6YYnEc43OjP6ByK/6HAo/tutEGEkQ+osetrmSioD2jWKwlJjhgdPa/Ets6PQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787932953; c=relaxed/simple;
-	bh=8qNLw56B9TLSQptSGJHh3rd1tE5g1AfjbOjTAkxyS4Y=;
+	s=arc-20240116; t=1787933623; c=relaxed/simple;
+	bh=G0s42t5nQ8kHD3g1ShaWMV+krS9UeiaR/0CiKyAWd50=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ou6KBTX+CQ3vjAmAbQRdsLu79drob01LypJSnePRQyD17v5gWwGgarUtrH6M8Az+S+KEp4O/nH9cdxJ9Snfl0UBjqn7MMqEXvmxHhWJ0xmRjvD5kWfUHgUfVDV1FH8M+ZlARHMmZH6HOsEMyAXOKuIb0I3bqeaSgf7mNgOTHCaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WkmEmDqf; arc=none smtp.client-ip=209.85.215.173
+	 In-Reply-To:Content-Type; b=PSTanfs3WKYV+oXEOijTvBa7eLSubiBDbtySltk/wSlQasfiEZj+B6c2Op3iLW9NHNbzdyWXBw394OGqxi9qw6I/5IYgeXh0M/9tmAEYhycCojXZIuBN4OFMpfNqafo/s3tqlO1k4AHsZZgKporcMR/BRl5G2YHjCZprY3av3UA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IDTaicV2; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WkmEmDqf"
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-cbe6295f05bso1820999a12.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 28 Aug 2026 09:02:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IDTaicV2"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3964dfb5b9aso1166503a91.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 28 Aug 2026 09:13:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787932952; x=1788537752; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787933621; x=1788538421; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=2AFRIUFJKCO3T6nN8VW+Ys+Hp+I2sL0vNH/Psf88O/M=;
-        b=WkmEmDqfrrWf3MLYSU7s/hlpIInLnyCW7RRytHfa5WLexsvbRjGuGbUht8Eqvd7PXs
-         TeKfJGxbGdaeRY8WH3KWxwYTqnhyi8ZZ/Fj+EBOtwHdY88M87NmsHt9djLfi/Lwnps1p
-         GG8ImKlwDe4puPh6KodxSj5iJIoST/VFeUu+38Q7jrhgE+ZgBQmfULysq4d5AaHLKWfC
-         tm63EOBWR8AMePKKvyGKqueWjBheOY07pMXCcYITykZpg1qQeN8kvveuTz/iAaMqssEL
-         upHSiqQyP7SbvWb9lAIc737W1anwxK2QQqfBdAqryfL7Wf0zpTIdjtsMs6oi+5jk5hqf
-         pmrQ==
+        bh=876wq0iLRJuIP8eFu38VO90/obuQPYSDuoCJYLsRS+c=;
+        b=IDTaicV2Dfm3CK95QVpooOkfzk5AJt+GW12ElIcCoHHuagU54SmlCmonbZBX5XyWYl
+         83CtVdZDB5/Y1DUklim1J5Kt2SBkPf1geVAamzTLiE07JV38zNhMRXQexxTtd0cQys7e
+         ke4Qea6CidBEHQ3drum+dY+IZ/3wcKObfb1P5gqWpzEkPH/Br9eGCq9HWoJoX2M9Ii5U
+         PGPrDjcH3un61lyxZfavmuoKnbi96DtxVxcmRrbiU5eJXYK4kNVylIq6j32Onp8m6jfn
+         A1ISEHFrv+T2JNZ9MizAl/q9rqvSaP/4DH0GSf3d83U3ZnV2C3DT2+Cn62AP5Mdc0LX7
+         6orw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787932952; x=1788537752;
+        d=1e100.net; s=20251104; t=1787933621; x=1788538421;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=2AFRIUFJKCO3T6nN8VW+Ys+Hp+I2sL0vNH/Psf88O/M=;
-        b=Ne9ozLWeTENoMe667TByCMGwBOgM9g1O9+LMIIgp3dSkF/XbATchySO7Ey97jpvx+n
-         bLInVQ3cO8nnbSQdMkrSDjRolMLvIlemZO9f6a8+GHcFP44d2sgXQI8vc7Mmfzxz9ZqP
-         MnMFXUCC7nf+Amh2c0xrD6ubkMJYYPh25DfmIHSpuenUJQjP9+iupCAE8rJ2epnsfFPr
-         wmVWFg2o/IL5INNvOnvZX2FZ52bCqioG8gEX4I0DDvTUGSIiH8Zdm86IFF8fkH1Pu66e
-         2uhKUAP+tgrMwC4CPc7iwPOvuad6bIoSglH7OY++zjjzhvg0c88wLX3i2BebFoTP2OrK
-         nuhQ==
-X-Gm-Message-State: AFuF++nOgkb+9EZevtDItXQpUoObM5DqXK6DWRLOn0fVJazoaB7MS484
-	jKqhzrVHwEed5Us8mM95E4MXK/xfz19OnbjYaX3qbeQR6/dlpIGE6h43jpzPMQ==
-X-Gm-Gg: AR+sD113LrmmWo89kB4z86ACKQCL85oKHK1deDYlad/XZgEoyAPQnG0uQX5WSsR44qi
-	+dGBafGqCn0kxL7AC0XSega0zoHWG7JvXh475JK5T90DiDmaxN1pfPnWEZKlV7H9DzWqRoGFxS2
-	WZXr7Ik8DcH2M4+IyWgg6WZPb+5qzLL250ZsUDT+KX9vY/fpVJVCu1C7DdEx8UkJu3mGEhQXIHe
-	3ZKwblmGKGAxmF824vjJyeymujz/Kq85CGqAGLftc6LPzjNuCMvN5/gNlY9Whg5R/Y+Ko6sl8op
-	Oh8wOgFEj+0hcZ/mpCGw7N1rWksZV5QyrjYnl5KvRHzCcNbzddIa1LFshjjB+vaLG9V4ozynNwr
-	L6U0oqRi1bnlO0VSXt6QVL1KfGw7vCf7XY2vbenixcmNjvW4zQLlxcPSt1AROKmkDQ8BujRe3Og
-	58b0/++Iug7hlrC4HZWYTmhXuk6uGl2LtHMZGtJvrSPmq2GsDFzCw0WylSk16vFVadOc1q1lYoh
-	ET4Nyrbc8VTyOCz8GI48CuOZOSjPu6Nb7ic3f8GkvlpficG
-X-Received: by 2002:a17:90b:37d0:b0:385:3ab:fecb with SMTP id 98e67ed59e1d1-3989b565671mr1045102a91.4.1787932951484;
-        Fri, 28 Aug 2026 09:02:31 -0700 (PDT)
+        bh=876wq0iLRJuIP8eFu38VO90/obuQPYSDuoCJYLsRS+c=;
+        b=T5rtLLjiW/2cey93C+vP3udWR2juS5kVNWF1W72yfiQhIiSbYZJOaw+6faaReKm38o
+         +zhcaI8O1P5rC9TKjEXwZzS+WJ5IqPaRd8xMHWuSlOfNYnMrW2xRcfj+COHNdoLUhGNI
+         qdzsIbspQKKaIvZrKAyj2OPMwwaVMPc/o9blSTiFiNmEofNWRuQ77klZNw86ZpF/GJWj
+         LMHNSDzG5Feqjh5KeweHEjmXMXQt5pp4xc998EySbJcsigo4aclmTrCFhXCu+wIV9Whd
+         5QoEgXgl/ch+p2/gEs3BnvxPVAhAFy4KzCj4w7a6ExVXKRL5uF9rYQggZJ6ibg7wbbsb
+         Cagw==
+X-Forwarded-Encrypted: i=1; AHgh+RrQfhMdAFjcErdxTYsOJTRTzn5lr+FwVpnTNMthXcmdnJAmSHYVXJlNCjbkYW2GmVFCb+J8RgEFC/la+Q==@vger.kernel.org
+X-Gm-Message-State: AFuF++l1m7jpHJsB9ODwv9nJ4iT9n+Uoj0D1BIwkg/mmE6KhMwRvBoQ9
+	mgrMu23B2U033LCWpwxEn08ip/JJPFQVcVMkbsjRoFmJAnZraa2o8Tf2nBggwA==
+X-Gm-Gg: AR+sD10+/iO1O05aLSOCSgea4FD96D1JIhtUPm8B0B0dL1qfLwVqSfwIFn3GW8HYBiB
+	EmLvPdDFPL9iZWGNi1sPN9DQosFPGFJerWHxKfx5VajcNLACtRxCOdSRdUMZfa7RiqFWDBgafET
+	h8dTzjM3WflSprY3fj8rm7e0vxSWbu7h6J+8H1KPz3P6TJt5a6gJiGbYfhPGn1OXxbi70G8LW4i
+	nlJH1fPvJIOxzJfV6gU4UQL0siqiiMPBCfOG0rvgT417TqvUjfHpss8UNLTYhMnF3PWdrEtPFyZ
+	32QJyqrS3ZOXWGQamROAE9PmED7o3czPY9iYEkI/6kNH8r7MWUe6UfAL7AaQCJ3cgTkytaQbExT
+	iPfwOLwATWn9h66hG0AqSToSG3BLPw2r8WgUCOPE7ihZ/L9wGDKkHBSbW0rMGw/2Rml3yp5+Xgq
+	UPQEf3VIZZFxaxUv57xKn55aNR4SiUgrIspLNkdiYtiExN7QRwWzrKIgqQmHkam427FRpHNYZJz
+	XX0kLej3UAajk5JDDiOQmzJCVrWeTEjVMyQudK3BWdN4m9C
+X-Received: by 2002:a17:90a:14f:b0:398:9c00:29f0 with SMTP id 98e67ed59e1d1-3989c003c60mr786146a91.24.1787933621257;
+        Fri, 28 Aug 2026 09:13:41 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-396dda36ed6sm3116562a91.2.2026.08.28.09.02.30
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-396d22eacbfsm1458584a91.0.2026.08.28.09.13.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Aug 2026 09:02:30 -0700 (PDT)
+        Fri, 28 Aug 2026 09:13:40 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4da32bd6-5b54-4765-b5ad-82bac2bbaaa2@roeck-us.net>
-Date: Fri, 28 Aug 2026 09:02:29 -0700
+Message-ID: <61d21976-2c48-4d58-8582-2009e36a20ef@roeck-us.net>
+Date: Fri, 28 Aug 2026 09:13:39 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,13 +71,11 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/1] hwmon: Add Minisforum UM780 XTX EC monitoring and
- fan control
-To: =?UTF-8?Q?Sebasti=C3=A1n_Peyrott?= <speyrott@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260825184107.355980-1-speyrott@gmail.com>
+Subject: Re: [PATCH] hwmon: (pmbus/mp29502) fix potential division by zero
+To: Yang Zi <2959243019@qq.com>, wenswang@yeah.net,
+ linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+References: <tencent_AAC779A9883986227B9F9C29CDF4A4AA660A@qq.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -122,61 +121,52 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260825184107.355980-1-speyrott@gmail.com>
+In-Reply-To: <tencent_AAC779A9883986227B9F9C29CDF4A4AA660A@qq.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 8/25/26 11:41, Sebastián Peyrott wrote:
-> Add a DMI-gated hwmon driver for both fans on the Minisforum UM780 XTX. The
-> EC is an ITE IT5571E, but its register layout and OEM commands are defined
-> by machine-specific firmware, so the driver only binds to the exact board
-> revision and BIOS version on which it was tested.
+On 8/25/26 02:07, Yang Zi wrote:
+> The vout_bottom_div and ovp_div divider values are read back from the
+> device during identify and later used as divisors in several
+> DIV_ROUND_CLOSEST() calls. If the device reports a zero divider, these
+> divisions trigger a divide-by-zero error.
 > 
-> The driver exposes both fan-control temperatures and tachometers, two OEM
-> automatic CPU fan profiles, and two writable system-fan transition
-> temperatures. It preserves settings selected through its interface across
-> s2idle.
+> Validate the divider values as soon as they are read and return -EINVAL
+> if they are zero, so the driver fails probe instead of crashing later.
 > 
-> Tested on the target system with concurrent RPM reads, OEM profile changes,
-> system-fan threshold changes, unload/reload stress, and s2idle resume. The
-> settings were correct from the first userspace sample after resume and
-> remained stable for 15 seconds.
-> 
-> OpenAI Codex assisted with reverse-engineering review, code editing, test
-> orchestration, and patch and email preparation across a long interactive
-> session. I reviewed every change, ran the live tests on the target
-> hardware, and take responsibility for the submission.
-> 
-> Link: https://lore.kernel.org/r/20260818181345.203295-1-speyrott@gmail.com
-> 
-> Sebastián Peyrott (1):
->    hwmon: Add Minisforum UM780 XTX EC monitoring and fan control
-> 
-
-Note: For a single patch, an introduction patch is unnecessary and just adds
-work for the maintainer.
-
-Guenter
-
+> Signed-off-by: Yang Zi <2959243019@qq.com>
 > ---
-> Changes in v3:
-> - return -EIO after bounded RPM coherence retries and -ENODATA for an
->    unknown CPU profile;
-> - seed saved settings at probe, update them only after successful hwmon
->    writes, and restore them at resume without reading the EC at suspend;
-> - clarify saved-state naming, live threshold validation, and resume
->    documentation.
-> 
->   Documentation/hwmon/index.rst               |   1 +
->   Documentation/hwmon/minisforum-um780xtx.rst |  68 +++
->   MAINTAINERS                                 |   7 +
->   drivers/hwmon/Kconfig                       |  16 +
->   drivers/hwmon/Makefile                      |   1 +
->   drivers/hwmon/minisforum-um780xtx.c         | 501 ++++++++++++++++++++
->   6 files changed, 594 insertions(+)
->   create mode 100644 Documentation/hwmon/minisforum-um780xtx.rst
->   create mode 100644 drivers/hwmon/minisforum-um780xtx.c
-> 
-> 
-> base-commit: 75f2c0b3690702c90863c2e138cb5520670845ea
+> diff --git a/drivers/hwmon/pmbus/mp29502.c b/drivers/hwmon/pmbus/mp29502.c
+> index afc5e8c07e25..d606fef82b35 100644
+> --- a/drivers/hwmon/pmbus/mp29502.c
+> +++ b/drivers/hwmon/pmbus/mp29502.c
+> @@ -134,6 +134,8 @@ mp29502_identify_vout_divider(struct i2c_client *client, struct pmbus_driver_inf
+>           return ret;
+>   
+>       data->vout_bottom_div = FIELD_GET(GENMASK(11, 0), ret);
+> +    if (!data->vout_bottom_div)
+> +        return -EINVAL;
+>   
+>       ret = i2c_smbus_read_word_data(client, MFR_VOUT_PROT2);
+>       if (ret < 0)
+> @@ -160,6 +162,8 @@ mp29502_identify_ovp_divider(struct i2c_client *client, struct pmbus_driver_info
+>           return ret;
+>   
+>       data->ovp_div = FIELD_GET(GENMASK(9, 0), ret);
+> +    if (!data->ovp_div)
+> +        return -EINVAL;
+>   
+
+The question here is: What does the chip do if this ever happens ?
+Was this observed, or was it reported by some analysis software
+as potential problem ?
+
+The datasheet is not public, so you'll have to provide that information.
+Either the returned values need to be adjusted based on the chip behavior
+if any of the values is 0, or some other error code needs to be returned.
+Note that -EINVAL (Invalid Argument) is wrong. Please use either -ENXIO
+or -ENODEV.
+
+Thanks,
+Guenter
 
