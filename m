@@ -1,175 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D94044ADD8C;
-	Thu, 27 Aug 2026 17:22:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBE761DD525;
+	Fri, 28 Aug 2026 06:20:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787851332; cv=none; b=swkGHuiwaW6SW8jpirYK98ovNllmaFxKSwBdEv2e0wK19swd0juVnHwxGFS5PB+XCzFtofQ1cS9iz3aQsEp4zV6hUGjOQwxTgGmZkNSk3BRZrePHh1Qil4M1oDSKANhgji+V2mvLCLinQKWXQaE4RSsEvcmmYFTfEWctv4qwhM8=
+	t=1787898003; cv=none; b=KD5K4ytH4AX7KX0ex+6J1bjGR2QLQ3iwhOUAJMBn/GgHbb9T1SHgVpPGcZeG+7hSKZmXhwH0/Ql2CYjfZg7dAFkJ42oJJLZx2myl71G8D5mRTIzcsJIzsKRrvU5X9dFMeCtb/NNrR9CiGhYH962T4ArmiPOMJoXj7DZ3VCiVsLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787851332; c=relaxed/simple;
-	bh=QqFF7mb7V201nLy+PFI3x27Ars0zx68gF74x7OZ6DNg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SSpi5LBn2oBU7OgUzRGNcCLo08PIbSIpFq+XaWAQO4ThDdFNo3aCWgc8uTtmgV1bxBlOKi85C8ZOUL5AhcY0CTz6jLu7BFW6gnw2Ub4GmgPfZZ60y7rOiULafnj1GcbVAQfi9KHBTGrI5cAyS6k9cLSgT9GQZCeCvUc9u9/fWs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kv4MURIE; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kv4MURIE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A3271F00A3D;
-	Thu, 27 Aug 2026 17:22:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787851330;
-	bh=7u7ZPuPJHj2UUGNORw/yyq7QMmQ0D8n5FCO1KV6e29A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Kv4MURIEUbwcaQYcS3GNHaXJCeEMTpNooG1L5DM+jZwJp0O0Immd8omZOGWgWwqoG
-	 8vTCqeBUvpID3XZ2iItl9jpIywvp8wzlkZ2+T9vwnFMfrxgd9SFl2Fm0I/Yrx5ZdMv
-	 ws8DcW8T07jx9xXexnUoLO6+ySc4gCKNDEuUvdJD30njO9rvf2z0S0TNxGhKnmm0Zx
-	 iMrUOvG033Ktyv4az383Eym/fvKZpkhOocvkd1LbYR+YDrENqgzZ1AjeZ3yTXS3YRZ
-	 n+kdUq+S0MqdR6SOcWIJJufD805sWQeKkrOUYQ7CugKbaCgLcyWQDezSHXExXotCNa
-	 8nm5cpHQJ+qrA==
-Date: Thu, 27 Aug 2026 18:22:06 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Flaviu Nistor <flaviu.nistor@gmail.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: national,lm90: Fix channel
- constraints for temperature offset
-Message-ID: <20260827-cried-dynasty-21bbba968593@spud>
-References: <20260826184750.4798-1-flaviu.nistor@gmail.com>
- <20260826184750.4798-2-flaviu.nistor@gmail.com>
- <20260827-stooge-polish-b23739e44224@spud>
+	s=arc-20240116; t=1787898003; c=relaxed/simple;
+	bh=U57/6HxdLKbO73Zgh0fPUForuH9k2X5IT2+0bwdt9Vw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pFlTyacs0PcAo7CZSTfoXTjlNH/za/c8bkT3CVet7J50K4Fq3mkjmIqXIbLloANPdeurDG2vxa0owkBLGl9laV9Y6KeaMyh63y5blAIkWiJIL2Q0QnQ3EpBi6RFeyPBBntXCyijvDVkrDsd4xoKSwC3Jsxvxz8WLrkiHC8/fSjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 7b81dc42a2a811f19a56ed5b684f684d-20260828
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.19,REQID:20eac171-d0f7-4460-a2e8-b1b0b40bf22e,IP:0,U
+	RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:-25
+X-CID-META: VersionHash:7db8b62,CLOUDID:dfbfa6586f803bbc87e82d7a94c1e2a9,BulkI
+	D:nil,BulkQuantity:0,SF:102|850|865|898|915,TC:nil,Content:0|15|50,EDM:-3,
+	IP:nil,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
+	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 7b81dc42a2a811f19a56ed5b684f684d-20260828
+X-User: lilinmao@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <lilinmao@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 757687888; Fri, 28 Aug 2026 14:19:53 +0800
+From: Linmao Li <lilinmao@kylinos.cn>
+To: Marius Zachmann <mail@mariuszachmann.de>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Linmao Li <lilinmao@kylinos.cn>,
+	Sashiko <sashiko-bot@kernel.org>
+Subject: [PATCH] hwmon: (corsair-cpro) Remove debugfs entries when probe fails
+Date: Fri, 28 Aug 2026 14:19:49 +0800
+Message-Id: <20260828061949.3151191-1-lilinmao@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ZPAKDB6h9A5N0y/W"
-Content-Disposition: inline
-In-Reply-To: <20260827-stooge-polish-b23739e44224@spud>
+Content-Transfer-Encoding: 8bit
 
---ZPAKDB6h9A5N0y/W
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+ccp_debugfs_init() registers debugfs files whose private data is the devm
+allocated ccp.  If hwmon_device_register_with_info() fails right after it,
+ccp_probe() returns without removing them: the HID core then frees ccp,
+and ccp_remove() is not called for a failed probe, so the files stay
+behind.  Reading one of them dereferences the freed pointer.
 
-On Thu, Aug 27, 2026 at 06:01:28PM +0100, Conor Dooley wrote:
-> On Wed, Aug 26, 2026 at 09:47:48PM +0300, Flaviu Nistor wrote:
-> > Limit temperature-offset-millicelsius to remote channels only, since
-> > channel 0 is local and this property does not apply to it.
-> > Channel 2 is only valid on devices with two remote sensors, so reject
-> > channel 2 for compatibles that do not support a second remote channel.
-> >=20
-> > Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
-> > ---
-> > Changes in v2:
-> > - Use else statement in if/then block as suggested by Conor Dooley.=20
-> > - Link to v1: https://lore.kernel.org/all/20260824183900.8983-2-flaviu.=
-nistor@gmail.com/
-> >=20
-> >  .../bindings/hwmon/national,lm90.yaml         | 28 +++++++++++++++++--
-> >  1 file changed, 25 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml=
- b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-> > index 164068ba069d..a8b2a24501b3 100644
-> > --- a/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-> > +++ b/Documentation/devicetree/bindings/hwmon/national,lm90.yaml
-> > @@ -113,6 +113,23 @@ allOf:
-> >        properties:
-> >          ti,extended-range-enable: false
-> > =20
-> > +  - if:
-> > +      not:
-> > +        properties:
-> > +          compatible:
-> > +            contains:
-> > +              enum:
-> > +                - adi,adt7481
-> > +                - dallas,max6695
-> > +                - dallas,max6696
-> > +    then:
->=20
-> > +      patternProperties:
-> > +        "^channel@[0-1]$":
-> > +          properties:
-> > +            reg:
-> > +              enum: [0, 1]
->=20
-> Is this needed? If channel@2 is false, then you won't be able to get to
-> this point to begin with, right?
+Remove the debugfs entries on that error path.  debugfs_remove_recursive()
+waits for readers already inside the show callbacks, so ccp is no longer
+reachable through debugfs by the time probe returns.
 
-Hmm, actually keep it. It'd fail dtbs_check but I don't think
-dt_binding_check fails for channel@0 + reg =3D <2>
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Closes: https://lore.kernel.org/linux-hwmon/20260708031612.BD7E61F000E9@smtp.kernel.org/
+Fixes: 5997eb60f896 ("hwmon: (corsair-cpro) Add firmware and bootloader information")
+Signed-off-by: Linmao Li <lilinmao@kylinos.cn>
+---
+ drivers/hwmon/corsair-cpro.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-pw-bot: not-applicable
+diff --git a/drivers/hwmon/corsair-cpro.c b/drivers/hwmon/corsair-cpro.c
+index 8354a002f4c5..30fe5d8e724c 100644
+--- a/drivers/hwmon/corsair-cpro.c
++++ b/drivers/hwmon/corsair-cpro.c
+@@ -638,11 +638,13 @@ static int ccp_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 							 ccp, &ccp_chip_info, NULL);
+ 	if (IS_ERR(ccp->hwmon_dev)) {
+ 		ret = PTR_ERR(ccp->hwmon_dev);
+-		goto out_hw_close;
++		goto out_debugfs_remove;
+ 	}
+ 
+ 	return 0;
+ 
++out_debugfs_remove:
++	debugfs_remove_recursive(ccp->debugfs);
+ out_hw_close:
+ 	hid_hw_close(hdev);
+ 	hid_device_io_stop(hdev);
 
->=20
-> Conor.
->=20
-> > +        "channel@2": false
-> > +
-> >    - if:
-> >        properties:
-> >          compatible:
-> > @@ -134,6 +151,11 @@ allOf:
-> >          "^channel@([0-2])$":
-> >            properties:
-> >              temperature-offset-millicelsius: false
-> > +    else:
-> > +      patternProperties:
-> > +        "channel@0":
-> > +          properties:
-> > +            temperature-offset-millicelsius: false
-> > =20
-> >    - if:
-> >        properties:
-> > @@ -149,7 +171,7 @@ allOf:
-> >                - onnn,nct1008
-> >      then:
-> >        patternProperties:
-> > -        "^channel@([0-2])$":
-> > +        "^channel@([1-2])$":
-> >            properties:
-> >              temperature-offset-millicelsius:
-> >                maximum: 127750
-> > @@ -172,7 +194,7 @@ allOf:
-> >                - winbond,w83l771
-> >      then:
-> >        patternProperties:
-> > -        "^channel@([0-2])$":
-> > +        "^channel@([1-2])$":
-> >            properties:
-> >              temperature-offset-millicelsius:
-> >                maximum: 127875
-> > @@ -186,7 +208,7 @@ allOf:
-> >                - ti,tmp461
-> >      then:
-> >        patternProperties:
-> > -        "^channel@([0-2])$":
-> > +        "^channel@([1-2])$":
-> >            properties:
-> >              temperature-offset-millicelsius:
-> >                maximum: 127937
-> > --=20
-> > 2.34.1
-> >=20
+base-commit: 8d3ae59288f1e7d58d76558a6ee96d533bc5019f
+-- 
+2.25.1
 
-
-
---ZPAKDB6h9A5N0y/W
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCapByPgAKCRB4tDGHoIJi
-0rl3AP9QB081e1m5BuSfHhwxsiNUylOcUyIMEFoR6Ah6kmW6qAD9EUWwSEbJYuPd
-ZYwB5OeQpxKqIuK3NECoLb2XUaR0nAQ=
-=h+vh
------END PGP SIGNATURE-----
-
---ZPAKDB6h9A5N0y/W--
