@@ -1,95 +1,134 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBE761DD525;
-	Fri, 28 Aug 2026 06:20:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8D5437AA83
+	for <linux-hwmon@vger.kernel.org>; Fri, 28 Aug 2026 06:31:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787898003; cv=none; b=KD5K4ytH4AX7KX0ex+6J1bjGR2QLQ3iwhOUAJMBn/GgHbb9T1SHgVpPGcZeG+7hSKZmXhwH0/Ql2CYjfZg7dAFkJ42oJJLZx2myl71G8D5mRTIzcsJIzsKRrvU5X9dFMeCtb/NNrR9CiGhYH962T4ArmiPOMJoXj7DZ3VCiVsLw=
+	t=1787898712; cv=none; b=B0yJM/z5oIyBaTP9qGOa3JGLkLrnXK/lRII0x/fABjWuwitOdJkZ+KLJ7rdaaOIBYVad23wMt3ftGAEPwTbPNbsY1MWhuMSm05Qf69EioR0yXlhgU3RMN+WA9O4lpYSdBmHBVsadmmxGCazO+LJmr/mw+W6F/fFbzi9CCsN8jxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787898003; c=relaxed/simple;
-	bh=U57/6HxdLKbO73Zgh0fPUForuH9k2X5IT2+0bwdt9Vw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pFlTyacs0PcAo7CZSTfoXTjlNH/za/c8bkT3CVet7J50K4Fq3mkjmIqXIbLloANPdeurDG2vxa0owkBLGl9laV9Y6KeaMyh63y5blAIkWiJIL2Q0QnQ3EpBi6RFeyPBBntXCyijvDVkrDsd4xoKSwC3Jsxvxz8WLrkiHC8/fSjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 7b81dc42a2a811f19a56ed5b684f684d-20260828
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:20eac171-d0f7-4460-a2e8-b1b0b40bf22e,IP:0,U
-	RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-25
-X-CID-META: VersionHash:7db8b62,CLOUDID:dfbfa6586f803bbc87e82d7a94c1e2a9,BulkI
-	D:nil,BulkQuantity:0,SF:102|850|865|898|915,TC:nil,Content:0|15|50,EDM:-3,
-	IP:nil,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 7b81dc42a2a811f19a56ed5b684f684d-20260828
-X-User: lilinmao@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <lilinmao@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 757687888; Fri, 28 Aug 2026 14:19:53 +0800
-From: Linmao Li <lilinmao@kylinos.cn>
-To: Marius Zachmann <mail@mariuszachmann.de>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Linmao Li <lilinmao@kylinos.cn>,
-	Sashiko <sashiko-bot@kernel.org>
-Subject: [PATCH] hwmon: (corsair-cpro) Remove debugfs entries when probe fails
-Date: Fri, 28 Aug 2026 14:19:49 +0800
-Message-Id: <20260828061949.3151191-1-lilinmao@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1787898712; c=relaxed/simple;
+	bh=h8+SAwEYrFn9Ethz3oBwAYbt03cOWmvT6nOZ63jESVY=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ihclFT9t2LLxfuDzoFskMcJgY39bTSEsqkc3rVyF9o4PaAzPXX6xb2ToR3mlTN5zmdf95ZVr2E5WoRxzuJebqzqrRfkGBI2R5Z0/zsxYrP4O/+0r3bP0EZ/RkZhAkQCUIBqlyx5UNErQgnyIv9z0Q8Of6CbygM0jGQZELJW/gyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hcq8mJlz; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hcq8mJlz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C62B1F000E9;
+	Fri, 28 Aug 2026 06:31:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787898710;
+	bh=SzKKgNejd9LhS5CzCk7YQQBxqfDz474O0WX3EdKAhf8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=hcq8mJlzaaMWrs+JsrJdiye8FLpG8GC43WPyXkEAq4z97U6RJOVijnPfOsQbV1iLP
+	 TrNY7ydeMZ8QnD1U9qUtgAefF8vk35JtOr6ebMy4AeHUBvC9dgkxdXkW7BjVK9Wepy
+	 /CuXsWH+BrnwWW+td6cmvRPswnVNCPeUbEUS/BewvlC5dksgDuZEUmQ6G8A9bCL9RN
+	 sNLPpOhxCtzsDySoV9P5uY8O6FHCIK2KvjOicI31vOHaNyiPprQ90NE/YiOG9Xj/++
+	 732ufZtliJpf4kpGlz+qMi1ZwY1dwskmopiE7lXmExDpOsVIvaZOqBv1qJ4ttWoaKG
+	 Y5Ya9mn+5gQfw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] hwmon: (corsair-cpro) Remove debugfs entries when probe
+ fails
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Linmao Li" <lilinmao@kylinos.cn>
+Cc: linux-hwmon@vger.kernel.org
+In-Reply-To: <20260828061949.3151191-1-lilinmao@kylinos.cn>
+References: <20260828061949.3151191-1-lilinmao@kylinos.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 28 Aug 2026 06:31:50 +0000
+Message-Id: <20260828063150.6C62B1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-ccp_debugfs_init() registers debugfs files whose private data is the devm
-allocated ccp.  If hwmon_device_register_with_info() fails right after it,
-ccp_probe() returns without removing them: the HID core then frees ccp,
-and ccp_remove() is not called for a failed probe, so the files stay
-behind.  Reading one of them dereferences the freed pointer.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-Remove the debugfs entries on that error path.  debugfs_remove_recursive()
-waits for readers already inside the show callbacks, so ccp is no longer
-reachable through debugfs by the time probe returns.
+Pre-existing issues:
+- [High] Late USB responses to timed-out commands complete newly initialize=
+d completions, causing subsequent commands to read stale data.
+--
 
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Closes: https://lore.kernel.org/linux-hwmon/20260708031612.BD7E61F000E9@smtp.kernel.org/
-Fixes: 5997eb60f896 ("hwmon: (corsair-cpro) Add firmware and bootloader information")
-Signed-off-by: Linmao Li <lilinmao@kylinos.cn>
----
- drivers/hwmon/corsair-cpro.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+commit d32f451c210791b2b9c123593fe5a6e2e781620f
+Author: Linmao Li <lilinmao@kylinos.cn>
 
-diff --git a/drivers/hwmon/corsair-cpro.c b/drivers/hwmon/corsair-cpro.c
-index 8354a002f4c5..30fe5d8e724c 100644
---- a/drivers/hwmon/corsair-cpro.c
-+++ b/drivers/hwmon/corsair-cpro.c
-@@ -638,11 +638,13 @@ static int ccp_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 							 ccp, &ccp_chip_info, NULL);
- 	if (IS_ERR(ccp->hwmon_dev)) {
- 		ret = PTR_ERR(ccp->hwmon_dev);
--		goto out_hw_close;
-+		goto out_debugfs_remove;
- 	}
- 
- 	return 0;
- 
-+out_debugfs_remove:
-+	debugfs_remove_recursive(ccp->debugfs);
- out_hw_close:
- 	hid_hw_close(hdev);
- 	hid_device_io_stop(hdev);
+hwmon: (corsair-cpro) Remove debugfs entries when probe fails
 
-base-commit: 8d3ae59288f1e7d58d76558a6ee96d533bc5019f
--- 
-2.25.1
+This commit fixes a use-after-free issue in the corsair-cpro driver. It
+ensures that debugfs entries are properly removed if hwmon device
+registration fails during probe, preventing dangling pointers when the
+debugfs files are later accessed.
 
+Closes: https://lore.kernel.org/linux-hwmon/20260708031612.BD7E61F000E9@smt=
+p.kernel.org/
+
+> diff --git a/drivers/hwmon/corsair-cpro.c b/drivers/hwmon/corsair-cpro.c
+> index 8354a002f4c5e..30fe5d8e724c6 100644
+> --- a/drivers/hwmon/corsair-cpro.c
+> +++ b/drivers/hwmon/corsair-cpro.c
+> @@ -638,11 +638,13 @@ static int ccp_probe(struct hid_device *hdev, const=
+ struct hid_device_id *id)
+>  							 ccp, &ccp_chip_info, NULL);
+>  	if (IS_ERR(ccp->hwmon_dev)) {
+>  		ret =3D PTR_ERR(ccp->hwmon_dev);
+> -		goto out_hw_close;
+> +		goto out_debugfs_remove;
+>  	}
+> =20
+>  	return 0;
+> =20
+> +out_debugfs_remove:
+> +	debugfs_remove_recursive(ccp->debugfs);
+>  out_hw_close:
+>  	hid_hw_close(hdev);
+>  	hid_device_io_stop(hdev);
+
+[Severity: High]
+This is a pre-existing issue, but while reviewing the driver I noticed a
+potential synchronization problem between commands and responses.
+
+Can late USB responses to timed-out commands complete newly initialized
+completions, causing subsequent commands to read stale data?
+
+For example, when a command is sent:
+
+drivers/hwmon/corsair-cpro.c:send_usb_cmd() {
+	...
+	spin_lock_bh(&ccp->wait_input_report_lock);
+	reinit_completion(&ccp->wait_input_report);
+	spin_unlock_bh(&ccp->wait_input_report_lock);
+	...
+}
+
+And when a response arrives:
+
+drivers/hwmon/corsair-cpro.c:ccp_raw_event() {
+	...
+	spin_lock(&ccp->wait_input_report_lock);
+	if (!completion_done(&ccp->wait_input_report)) {
+		memcpy(ccp->buffer, data, min(IN_BUFFER_SIZE, size));
+		ccp->buffer_recv_size =3D size;
+		complete_all(&ccp->wait_input_report);
+	}
+	spin_unlock(&ccp->wait_input_report_lock);
+	...
+}
+
+If a USB command is sent but the device is slow, the completion wait
+might time out. If a subsequent command is then sent, reinit_completion()
+is called. This opens a window where a late response from the first
+command will be accepted.
+
+Because the protocol lacks sequence IDs, the late response would complete
+the newly initialized wait and copy its stale data to ccp->buffer. The new
+command would then immediately read this stale data. This could lead to
+permanent desynchronization of the command/response queue, resulting in
+incorrect sensor readings (such as reading the wrong channel's temperature
+or returning garbage data).
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260828061949.3151=
+191-1-lilinmao@kylinos.cn?part=3D1
