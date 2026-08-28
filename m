@@ -1,69 +1,68 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1266D35200A
-	for <linux-hwmon@vger.kernel.org>; Fri, 28 Aug 2026 15:50:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB8853515C5
+	for <linux-hwmon@vger.kernel.org>; Fri, 28 Aug 2026 15:58:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787932234; cv=none; b=OHZsE7JabfOi5ZVCE/bTU6FK1swtQQveQWOm/8cLqf1TouoCPYQ98OXLUo5UXWJxnMt1LumN6BjRfMcjmG1jhk/c9KDuf/87ENcdCMLFp8AuJcNJ9jjCq4PuZAR7l5fzsOGtkcKio6TAwO2uQXBDZwgLPi+JXyVY3uWwqBptcAM=
+	t=1787932723; cv=none; b=escKYxABh/BY9QvX4SHKgRseHiSCwHhX++CyiahNTaPlO17CGFmcZxgdhiq0H/UVEG904Wy7l7CfcsuqoPupxjawTm3dbddL6SE9EF28ZXWf/ARpRq87CeWZl1JlyikQzRfSUDWK06w2JHLwEsLi9RrPwJVvSSqJeYvd/xM7SOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787932234; c=relaxed/simple;
-	bh=QdY4j0bcS6bUVNBs+K2z0QQgC0HfMd3g7K9lfvE4hRg=;
+	s=arc-20240116; t=1787932723; c=relaxed/simple;
+	bh=QjDYzM+B84BbFBFY2XiRrMaalijI6ccJ60p4UBFt1qU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kOG4em3mKTcCBMfo1Y+FTvAxll/JrrBuOTTL3IzuPRzIKvcSKIIIO9tbsAQrwbpjJWDsyTd0ghQbvrnZnPzkmCVhug3Ec7lUVlyvuPIqle3PxKDBmHKoDoxwLouRuW7/sREDw4Gh/PUCtxjoGReguJQkMPICxSpZQz7vNf9Np2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AC5boXD2; arc=none smtp.client-ip=209.85.216.51
+	 In-Reply-To:Content-Type; b=BKbCfPTCsx8lvzLlNNthWm/VdmcW0XnJbNHQRZy9dtzhcKbp2Ue5cojFWxLML7OJtnSNg78NDkIjtr0qBoyE/iDxksq4JxLaOh2Sa54h6zOFlvY+GMPqHygEcaOEMPVjbGOHO8VH/wYYe8M/uiJTvaUogjJNu/JRdsTU+5ZuOe4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oA7IAWwX; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AC5boXD2"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-38dfe910e9dso1352130a91.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 28 Aug 2026 08:50:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oA7IAWwX"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3968e063f84so943697a91.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 28 Aug 2026 08:58:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787932230; x=1788537030; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787932721; x=1788537521; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=aR6XDpizZXhDYq7w3TTuPH2kKr6kffoaME60+AXzTS4=;
-        b=AC5boXD2uO7VehsemrdzOBUO1O8b1OBnG7eoCVtKSDWMiVJqcWKNuS1c0bSeNpce/1
-         /ih1JkhhyeQ9xGfK5AdL3NYSTh7cFtMwqEvlyOGcjiat+vBKCNp10DhRcwZ/JwIev5Jy
-         RUCXjS/vpSehPxOLh3E2D2/0/Qslt8CIgBtfPoKMM6XgFmFBvwxQYlwVm0VnifQYyGaL
-         IBU7oQJaoiJPMfco/XyCD06L/iKR/bCITNNHXsl5hpt+NfLL5QfA2n/AtXSoTljimdy8
-         PpPAZ95pQqDQtzokIU8B1xhIAigNzEJUb3aloZHOECy3sAfhFs1AzOuJGAJwM4sns4ir
-         4BDQ==
+        bh=J5wUVUOJ+BNRj/aLvsZKiuH7D96YZP/aRZ4u0ysxDiw=;
+        b=oA7IAWwXs4EfmtZ+GtkkVWgeuOImFdXooYtTvOXVFcYQV/NUIyucFzwxtCNZT2v5nM
+         nxZJrj7qmrG3o1fk0YwAG9WbX5A6AklMxzefPqBDpgmvAP1jyXJQbwjl9e2H6KY48DiD
+         Qsym5H45qBobXHWploM61GBwipD4zTZuuTBIsR7cIeBng936LVTTbkhcWhPz8HcPvloQ
+         KUIEqWzW6nGv03/X8AedZ70ourbXO6G8bf/0jq6mNDgi9+H6q2ZoIaXkBQVIkMc+YJWN
+         csmy4VWYuwNqOqvCriP+fClcZMB3UgV55bx8thJmk5D3p+A0+JQegH/EGrE4L6CTvkoT
+         J70Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787932230; x=1788537030;
+        d=1e100.net; s=20251104; t=1787932721; x=1788537521;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=aR6XDpizZXhDYq7w3TTuPH2kKr6kffoaME60+AXzTS4=;
-        b=Qf0b8Ll0JbgtxREWKE6JVcELa7YzKUQkiAmwLfO4lilntcjzCyX70epgv987ubZJ1T
-         j5q8z52RleOFiXa8KWWMnO12WlSBGQaqsLLo6xyeKr8vjlQPUDT3uQAWT0CXYxEOmBm9
-         DQMLnU2FCTrK/54/+W/u3/0vCF0yx1pF+9QTL2RoueiDAYW2ZD5NX2d2NceBtb2Ob5KQ
-         Xj7FQ579VbVikYm+vJZ+s6v+znYJAWJDrwQDilAfrEJKpHE4gt5LCax0FmDtPG8SY9Lz
-         Ybi+nESfJKcFej4d2xl+Ri/PWX6qcq25zl0PazE65Xg44kcyR1DI0oNhuwc26IN+I/Y6
-         F9nQ==
-X-Forwarded-Encrypted: i=1; AHgh+RriOwtnUCOMD/m8fL7tCg8aGIJI8dnEwP7lVeue61ZkYUTpgxgg8KbLIBPEH5EKWYMrAaIqYnWhhi4new==@vger.kernel.org
-X-Gm-Message-State: AFuF++mUCCeawZHhp014YUqfDUC3HWFQvcmf4WwqDpQEl06x8M3x3jaW
-	pGkc9/BxCv8/4b5MKxZFrafePwIXz4CbISPtrSB5EHfjR5XgzTLEf6Om
-X-Gm-Gg: AR+sD11Ebcgit3uNa514lIURpwNuvUvDTQ9hXbkR9BGj+5kOsz/o3aDwwmXzLopFYHQ
-	UkkF2lteKY1v8qv1HIIbznDGnLAi6XG1pz9iBTH3FxcB/PiL92qgeg6EtexE+jO/PjT3gg4EqnG
-	ziTcIzIaBlD+WWy8y5bc7uSErGrOllVa701VZTYMspsioO/J9QZbCjTvwDr0kjOxmHVZNa7n2Hz
-	WOAtqcpXNM3UKWttVaXT2fVadh0LmSb+VMLKBwBlmdSR23OhRFotdHtbx4VG2zEwodMN3uyjSQw
-	DrBXCbGaSghBQEsgXrMV2k9J8pT9nuKJE5wl8PJo2fBXWxOoztgLH/vPuowGGgEYfuE7xeqHwz/
-	nhZMWZnKGJ9PfeVCaPAY+KVoxQzSO2JQMqSNLt1CS8e9Hq+W6ke4iFE7whBmA3ITxNvrh2uzy38
-	RVBJY7LQgL5rqy8vnpKKWzMvKGNyBkKD3be7gUlRQ4PvyRVFskeW7HDYKuI+HB/mMxXW4KFAlxl
-	PD27TOvboln7IM8HiFc8dJlgenIVZt5PBkt2FA=
-X-Received: by 2002:a17:90b:17c2:b0:396:b918:c2a with SMTP id 98e67ed59e1d1-396d0faa459mr14401709a91.12.1787932230181;
-        Fri, 28 Aug 2026 08:50:30 -0700 (PDT)
+        bh=J5wUVUOJ+BNRj/aLvsZKiuH7D96YZP/aRZ4u0ysxDiw=;
+        b=Ro+lYG/RpvOz6+dC9i1wUPAHztuwqvYFYKkEyLYbmOTAc7/3UCsT01mvmHhbjixy6X
+         UsKKnZHKBaBptBrHtB47N0PIKVCm2VxjxMom00Mp+nFrpY5+RqnadyhyZS+weCG/cXeU
+         IQaTZCto/A5VJtjmbDeKtZ3LbxzpyboQA0luwSILoT+ZZ2gkuqs8h7GXG2zXSd7gbtuZ
+         m1htXpboHspoA8NNc/8nhoNjRAqoirOl3sLf7Xxm24CMIaiBHSw4hr9JJyaDqRDa6iB1
+         VUTONjFcSzxmdfjYtAt2Nu4M4FIeeID+EYdKqFWpKYzU+PgmvhyzDLB/MA9REFYqEp+J
+         SoBA==
+X-Gm-Message-State: AFuF++luSqJ8qIcH+bR5TcZSPfj5hoeDQuDDInDVYmfE5cfQHVgfftbC
+	cQETybv3oeKOlu9oyy+b6Jzoey3iw6RvKU/pa3NxMv152nk3gORHWdjC
+X-Gm-Gg: AR+sD11yL+NbDx0PnPkXvkjGj0Ejld3zniLtDx9/wwJcVgE44qEfPowm/Flde9wjQER
+	xiqzD4fvXcSVjTkWRFfS1bZXNL6bLQCQD+zeXpot4pQOf4TW5tfyGL2phuvaS0aW1Qi8nL/gbMY
+	W/ojYKCuU5j7VxgjoAnz+zwMn380VDAWWQjHjNd9focK4PbcMsLa4qKxYRf9ZfzmwqX9CG55CpE
+	9urXYLTQKkVg88Crqgk6E1NXQcTgCj9NwjxGJKB9PyQO8h7u8OWE6bfrEvTS1bSoXzIeQCxsSdq
+	h7tjKv+EOcM+77dGKZuAmsfKtdleXG0f45aKffwn17txk5+OSA4smK+MGZc1pkrWF2N0b2m5oe2
+	J7iGNgYk6hScY9SdvZPQrSZ7EcCldE3cyCGO9E3RnLNJX1K/i6QSateb7nohGnod7Cn56ck7hHA
+	hRh1GEDC4GQGqFf5HrbjVYpr3QZIvc+z5LiPsmZ+7CHEv+793L6QcstSSINm3ZhSnWadytebZgl
+	NSa8hMVHsORn3DWQMjJd60YfiKtcK39er2nAQ==
+X-Received: by 2002:a17:90b:1f87:b0:395:5f43:4ec4 with SMTP id 98e67ed59e1d1-396d0a6589dmr17223817a91.0.1787932721178;
+        Fri, 28 Aug 2026 08:58:41 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-396d6925e92sm1202960a91.2.2026.08.28.08.50.28
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-396b0ea7fa9sm7912829a91.4.2026.08.28.08.58.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Aug 2026 08:50:29 -0700 (PDT)
+        Fri, 28 Aug 2026 08:58:40 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <cdcb9768-70f3-413c-baf4-02ca58e37337@roeck-us.net>
-Date: Fri, 28 Aug 2026 08:50:28 -0700
+Message-ID: <b9792be3-fcd6-468c-9149-7e33640ee167@roeck-us.net>
+Date: Fri, 28 Aug 2026 08:58:39 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,13 +70,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] hwmon: (nct6775) Ignore 0xffff TSI temperature
- readings
-To: =?UTF-8?B?6JShIOW+t+W9nQ==?= <Spector.Tsai@outlook.com>
-Cc: Zev Weiss <zev@bewilderbeest.net>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20260824184443.81887-1-Spector.Tsai@outlook.com>
+Subject: Re: [PATCH] hwmon: (gpio-fan) fix pm_runtime imbalance for alarm-only
+ fans
+To: sashiko-reviews@lists.linux.dev, Cong Nguyen <congnt264@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+References: <20260828105018.2392383-1-congnt264@gmail.com>
+ <20260828110142.725E61F000E9@smtp.kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -123,51 +121,70 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260824184443.81887-1-Spector.Tsai@outlook.com>
+In-Reply-To: <20260828110142.725E61F000E9@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 8/24/26 11:44, 蔡 德彝 wrote:
-> On an NCT6793D, unused TSI temperature channels can return 0xffff.
+On 8/28/26 04:01, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [High] Converting to `devm_pm_runtime_enable()` and placing it at the end of `probe()` incorrectly reverses the teardown order, causing PM runtime to be disabled too early. This leads to a regulator enable count leak and exposes a sysfs race condition on driver unbind.
+> --
 > 
-> The driver currently treats every non-zero TSI register value as an
-> active channel. This causes unused TSI channels to be exposed through
-> hwmon and results in bogus temperature readings of 3892313987
-> millidegrees Celsius.
+> commit 728a875c515df8244bd554b338f4f008d88b3b9e
+> Author: Cong Nguyen <congnt264@gmail.com>
 > 
-> Treat 0xffff as an inactive TSI channel.
+> hwmon: (gpio-fan) fix pm_runtime imbalance for alarm-only fans
 > 
-> With this change, the unused TSI channels are no longer exposed, while
-> TSI0 continues to report normally.
+> This commit changes the driver to use devm_pm_runtime_enable() during probe
+> and removes the manual pm_runtime_disable() from gpio_fan_stop(). This ensures
+> PM runtime is automatically disabled on unbind, fixing an imbalance for
+> alarm-only fans.
 > 
-
-As pointed out by Sashiko, the fix is incomplete. The tsi_temp array should
-be declared as u16. Also, at runtime, show_tsi_temp() should check if
-data->tsi_temp[sattr->index] == 0xffff and return -ENODATA if that is the case.
+>> diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
+>> index 084828e1e2817..0bd5561b7a405 100644
+>> --- a/drivers/hwmon/gpio-fan.c
+>> +++ b/drivers/hwmon/gpio-fan.c
+>> @@ -524,8 +524,6 @@ static void gpio_fan_stop(void *data)
+>>   	mutex_lock(&fan_data->lock);
+>>   	set_fan_speed(data, 0);
+>>   	mutex_unlock(&fan_data->lock);
+>> -
+>> -	pm_runtime_disable(fan_data->dev);
+>>   }
+>>   
+>>   static int gpio_fan_probe(struct platform_device *pdev)
+>> @@ -581,7 +579,9 @@ static int gpio_fan_probe(struct platform_device *pdev)
+>>   	}
+>>   
+>>   	pm_runtime_set_suspended(&pdev->dev);
+>> -	pm_runtime_enable(&pdev->dev);
+>> +	err = devm_pm_runtime_enable(&pdev->dev);
+>> +	if (err)
+>> +		return err;
+> 
+> [Severity: High]
+> Does moving the pm_runtime_disable() action to the end of probe reverse the
+> teardown order in a way that breaks unbind?
+> 
+> Because devm unwinds in LIFO order, registering devm_pm_runtime_enable() at
+> the end of gpio_fan_probe() means pm_runtime_disable() will execute first
+> during unbind. The cleanup action for gpio_fan_stop() is registered
+> earlier in probe via devm_add_action_or_reset(), so it will execute after
+> PM runtime has already been disabled.
+> 
+> When gpio_fan_stop() calls set_fan_speed(..., 0), it invokes
+> pm_runtime_put_sync(). Since PM runtime is already disabled, this will
+> fail with -EACCES. This bypasses the runtime suspend callback, leaving the
+> hardware regulator permanently enabled and causing a regulator enable count
+> leak.
+> 
+Seems to me that this will need a more comprehensive fix.
 
 Thanks,
 Guenter
 
-> Tested on an ASRock A320M-HDV R4.0 with an NCT6793D.
+>>   	/* If current GPIO state is active, mark RPM as active as well */
+>>   	if (fan_data->speed_index > 0) {
+>>   		int ret;
 > 
-> Fixes: b68437ace4b8 ("hwmon: (nct6775) add support for TSI temperature registers")
-> Assisted-by: ChatGPT:GPT-5.6-Sol
-> Signed-off-by: Spector Tsai <Spector.Tsai@outlook.com>
-> ---
->   drivers/hwmon/nct6775-core.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
-> index 759ea3d1286e..34e6a01aa4e4 100644
-> --- a/drivers/hwmon/nct6775-core.c
-> +++ b/drivers/hwmon/nct6775-core.c
-> @@ -4339,7 +4339,7 @@ int nct6775_probe(struct device *dev, struct nct6775_data *data,
->   		err = nct6775_read_value(data, data->REG_TSI_TEMP[i], &tmp);
->   		if (err)
->   			return err;
-> -		if (tmp)
-> +		if (tmp && tmp != 0xffff)
->   			data->have_tsi_temp |= BIT(i);
->   	}
->   
 
