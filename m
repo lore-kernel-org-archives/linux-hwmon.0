@@ -1,61 +1,63 @@
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2003F3260
-	for <linux-hwmon@vger.kernel.org>; Sat, 29 Aug 2026 17:05:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CEC0416CF4
+	for <linux-hwmon@vger.kernel.org>; Sat, 29 Aug 2026 17:05:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788023157; cv=none; b=LjNYOi/omcuCewxe55lxl7iLeE4MpOYEEmXVsxvKJq8y1Dmug5/Y2cyfAO/5kyj0mlvei9onbxKucj0/wDTxERu/aImD1cWo9N1upSwFenWbNSsNUlrXKYWJSHVZuaCM87k6hkTC0niIavFd1xcZSHtQhi+ej7Tz/1AjT1O5umw=
+	t=1788023158; cv=none; b=QpjNBmxVqsUEKA0TgwJZxwwK71FGd/YxpxpyhiVQFtRBubOk0bEmloUVP04Ug/uJAv93SWnSx+V5b/6H+m4grUMA7DZqcvJJXok7CxSBVRfrPVmvMg2/rG4z5IqJWdGDuNO8dUFE48ERlfIDEdRwtfKH61rRbXwxWTVyS0xruGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788023157; c=relaxed/simple;
-	bh=lcaIH443j7ZbU7odPFlIb8oOMxT3qKpiCDIOgGlK1EI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f+u+F+NBLTd33j3Kt1NSwPrwWbVBwm7QA/K4hHXxwMRSrN6J00GxNbw9fvygtF/ixLNy8L9moLijHH/FqF9Gk6CAVS6OOxCsTAQbleVSkiQlMSLvDxWiffEvVavDWUaQZapypYMIUAZrLRZKYj/L6VpwsuwkhyhzjkeKHtJt5AU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jbP8k790; arc=none smtp.client-ip=209.85.218.52
+	s=arc-20240116; t=1788023158; c=relaxed/simple;
+	bh=EwN2Ufrk3JZ1LOcr39JKvze/sQpqpgu7i1kuyfgBogA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sTxicxPT54FfEIAHtqFLzYP+kvKrxKF9rGscwgQKKYPovybwvXYx23bUYMxC/t/LWyQll8gCTkfvbQiP/ZlMWD637Cq/ZnLy7sG4inV6uoxsotnSUl7qQ3pB4EEifNR8St0DbVGbos0/GZTJTTuPCBtIVL6dh+iZ6ieRsZ6QyeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IAYjA0Lu; arc=none smtp.client-ip=209.85.218.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jbP8k790"
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-c2529b3139fso252468466b.3
-        for <linux-hwmon@vger.kernel.org>; Sat, 29 Aug 2026 10:05:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IAYjA0Lu"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c2544ff970dso318623266b.2
+        for <linux-hwmon@vger.kernel.org>; Sat, 29 Aug 2026 10:05:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788023150; x=1788627950; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=nObHJJxKYbL0QP8ldGFvAbA9nLk/23W+3s2f++7bPgg=;
-        b=jbP8k790cbyT80UtGw9/Gze+x8eerHeIhzUiztrr6FauVnfrpl5HfXNozmG9Emivpz
-         iAQIHoqynqIfllfQ3Ap/VgPuXwVJCfCjI0SbBxf6dQ7nH+otDrPSx89mSG+rNdaaQbaj
-         p3IC4ApAyuerZ+oARZbi2oWy/7e/5fz9bp8UkaImnBA9OLM+2m2BR0dpII80N6qCnE86
-         WAT3zKPNPXq2JApjQgxA+qMox/7t9Rd8rN8yqb1JElJsPO8WfOaeOurRcMthgFn+GTb2
-         FXoNXcBeoRd1lH1RZEi0TxK82G+gR5GVa2iQZPv56L9b2j/spjJQAjPyhOjmrDFnfHU3
-         hPbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788023150; x=1788627950;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1788023152; x=1788627952; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=nObHJJxKYbL0QP8ldGFvAbA9nLk/23W+3s2f++7bPgg=;
-        b=LB3ipJoklrfI1wZBsOw0DL6B419x4en8NILWjN9R+jVhKWsMiwKxtc5OXJ2Oe1JSHR
-         XqQiu4fU1hD+oktkQ/jOljV1Ua59ySpgEN6vxcz6S5jU7PYKARGy9yb05mFvD+AcxqYC
-         GGRWtysV6l4hCUbqJ60W0plaqzU0Y3x7C2X///RzztHCjrBmCcXXEJX5HJF/fArtK8Zp
-         2E0w35+k3U0Gs+B5S2Jyttf3SLyu0gqCxIynJWV1Bi4W3vVVrj12Hlh81MSPzasU6bjW
-         4VPC9IYXhMjRPvLqXkVKRVRUTBDQKAd6PCR34T+rSEblgPHw8Ibv84z2fTJgIeiwCdC4
-         uv9Q==
-X-Gm-Message-State: AFuF++mHk7AiTVyZXPq+alCuCe/AQoti5Cw+MDCyqo2HpnHceTZT6Isk
-	sUv+t+xphT1xfRlBVRJxsOJrwwIXWuYs6gbi/js2YcF7zpfM+zLAsRXU
-X-Gm-Gg: AR+sD10DHBwb9Yg0YELSDS0SDKVWgsY/MEbA08KrUXtTx1SrCY0fuMotD8xGzt2Cw0F
-	w6ZdQ0qvqHWXB74e1Dc7RQAaae7KgLSJSYpBm5sWtrc0OAwpP0kck13Kb6qG5COJGYIu3tNYTAT
-	5QGb80CLftKddX0u59d5EdZ9bN3A+SocAV9BpfAe4zMnwhs0IBK0GiT6XV3PTv1qdSuF+bSIRx+
-	ufAJot/D0NSR+AbQQnGCbeHZI0G4BJLhM5rLUDJyTGmpymMqPBL6Skvd/roGExznjMXBsvZxZqf
-	9OOMjitiYvEiZs3YBwiuKVIKZW4wFtY880h9u0Fgxxzdd6qmwcA1HBRmzzZOYPW10mT711VyOfE
-	4Gjbe9HehMNHI2MtQThfVd9aElr/nNC8ahzbBQgvM/KVzB8CbOCof+Krim4YjDpeepWe0+ZE02b
-	4K23NoJNLLKE2jqOcjU64lAAfGPOPKfEc6xbFd/uNW5BpYlXAqsulmOBkmpR2vsCoguDjhUhvGK
-	helolm2/3LPnRM=
-X-Received: by 2002:a17:907:9612:b0:c16:4e5:944a with SMTP id a640c23a62f3a-c25574341c1mr937184966b.21.1788023149479;
-        Sat, 29 Aug 2026 10:05:49 -0700 (PDT)
-Received: from localhost ([2603:5004:20a0:100c:4701:1ac4:1c21:4a1])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c255ee288afsm213287266b.23.2026.08.29.10.05.47
+        bh=W+xOVsFk+EtrsGYFgTGdtYSvPsI3GoZT83F/GKM9fnU=;
+        b=IAYjA0Luub0LcHKgk7TP/vrW9Vxz3HDMFu9CHhnhyO/WMFVWLAriNt3Gljqc8Qq6R+
+         E4mBkWbl/zea+FA37ZVPKZctWAUrsXTGrO++/zWGTsKtGw2O+XXh8pOMQa7aD6lIbhFf
+         NJ4Wg19igUzLlVPbgTV77mkLAx1PAUEe7RCuvy8UmjcsY+wffomUD9FyFet7JkJJzsfR
+         8oMZeyxBG5amkF3aJF6iYAA7zoWCXuXIzN3aCHiMB/+jiogYohT8fLL6Fgky0M1jg64k
+         OhgWlC9v3Xwv8l2C295ZbPzdsCMP+nif/QUkdK3Yr4oAcIn2iK1xb2UbR7gY7T2HOpqW
+         demA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788023152; x=1788627952;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=W+xOVsFk+EtrsGYFgTGdtYSvPsI3GoZT83F/GKM9fnU=;
+        b=ePHIe3dHrhPtEUI1O0zucwG2QBOSCWDT21AkyU1X0YzfpjDwxuyecufacNC+XlrUkW
+         VNr1nvm58QhjR4b6IhXrhscIKq0WbTwr7aeuYtJ3wJ0kHsz9L2rQVqs64CDAVCvZUV2V
+         a23KjtvMRDSBgnJRhgiG2hz03WC5r7T07Nct22ikU3ygbon4p9MrOWPuthJgeYR/n4EY
+         sC6aa23pasAdUf0eGtsR8gv/k7aaAWOUhgskHi1ggrV2dkhHyWqOXVpWgMSJMGooHtCZ
+         tv7c1xB37mfJvSm6sjXHSWgH3+iDUeDZulf3Nel/q4L9hzhx5uEka9fOQxQLK1YbLvQ9
+         DdBw==
+X-Gm-Message-State: AFuF++kdYujB5IMb1+hg8LXmk3mzIlTFqkfQunFqobru+GFlUEJpnwFu
+	0Q2d0MA2qaxJMcf+lKifjxn5/whOoxVSr2ZVaBYIt91Rkp3skzu60gho
+X-Gm-Gg: AR+sD12GDybRufoVedUO23Yjs9rGJDlIYfq9lyG+wmV/65M+LQr+69nC9chU7JZoEOc
+	fO+5KQrN5l6cV7xALiqFcOKYp4JUZg9GuoyMdzXtAcHJEDv+AG6eIYMY5HVXXis8WMP3xd2xv3v
+	V5S1H/04Y+5+UWtXS8k6bpK8gshmcqJ0VBWqmH+3CaVTPiUqvRCLwBM3uyyrE3/Lhy8yaVxjbub
+	KjiepNnXgp6LN4GfsrIj/IRdIIi7SrT5qF6xj6UfLZU7wuIx8FxLmWbs194As2OtHXqTsmFbolf
+	iVotIkeMv+jCT0mz0D4tWLJlzXjjF3BbM8ZFIvlu6upanEYS+yzM6TDO/X73PYTIhiM+eu0tbyS
+	HrGxmQdkj9QDnwr/L07N/xp7du3PScuxr2NJ5EJTklwjAhr+7ARNgv2Ma9QEH8NAPOf4+4wD/gK
+	ftAmEU1CScY7fImKXhQfAitBwuibL/sZ3hl1br7oXcZiU9hRPfCEjETM9qObTPjqMdVij9/WiKh
+	3/yJ/03cn471xx7
+X-Received: by 2002:a17:907:e1c4:20b0:c25:33db:939e with SMTP id a640c23a62f3a-c2556be4184mr773861266b.4.1788023151911;
+        Sat, 29 Aug 2026 10:05:51 -0700 (PDT)
+Received: from localhost ([2603:5004:20a0:100c:cf7b:6b6c:bc26:7dfa])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c255f29a9dfsm222290266b.63.2026.08.29.10.05.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Aug 2026 10:05:48 -0700 (PDT)
+        Sat, 29 Aug 2026 10:05:51 -0700 (PDT)
 From: Jerome Tollet <jerome.tollet@gmail.com>
 To: Jean Delvare <jdelvare@suse.de>,
 	Guenter Roeck <linux@roeck-us.net>
@@ -67,10 +69,12 @@ Cc: linux-hwmon@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Jerome Tollet <jerome.tollet@gmail.com>
-Subject: [PATCH v5 0/4] hwmon: it87: add IT8613E support
-Date: Sat, 29 Aug 2026 19:05:41 +0200
-Message-ID: <20260829170545.33401-1-jerome.tollet@gmail.com>
+Subject: [PATCH v5 1/4] hwmon: it87: describe per-chip temperature resources
+Date: Sat, 29 Aug 2026 19:05:42 +0200
+Message-ID: <20260829170545.33401-2-jerome.tollet@gmail.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260829170545.33401-1-jerome.tollet@gmail.com>
+References: <20260829170545.33401-1-jerome.tollet@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -79,60 +83,455 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This is a respin of Benoit Masson's v4 series, with his permission.
-It replaces my fan-input-only RFC with the complete support requested
-in review.
+From: "benoit.masson" <yahoo@perenite.com>
 
-The v4 series was dropped after a NULL pointer dereference was reported.
-The IT8613E device entry did not initialize reg_pwm, while the probe path
-unconditionally dereferences it. It also advertised six temperature
-offsets but the register table contained only three entries.
+Add per-chip temp limit/offset/map counts and wire the driver
+to use them.
 
-Changes in v5:
-- Use the IT8665-style PWM register map for IT8613E, matching the
-  out-of-tree driver.
-- Extend the temperature offset register table with the three IT8613E
-  registers used by the out-of-tree driver.
-- Preserve the existing IT8689 behavior when introducing the per-chip
-  resource and PWM metadata now required by the series.
-- Combine IT8613E identification and configuration so no intermediate
-  patch binds to the device with an incomplete configuration.
-- Use octal permissions for the new sysfs attributes.
+This keeps existing chips on the previous defaults while allowing newer
+chips to advertise larger resources.
 
-Tested on an IT8613E at 0xa30, revision 12. Each patch builds as an
-external module with W=1, and the complete series passes checkpatch
---strict with no warnings or errors.
+Signed-off-by: benoit.masson <yahoo@perenite.com>
+Signed-off-by: Jerome Tollet <jerome.tollet@gmail.com>
+---
+ drivers/hwmon/it87.c | 151 ++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 114 insertions(+), 37 deletions(-)
 
-The final module loads without errors and exposes the same voltage,
-temperature, fan, temperature-offset, and PWM register values as the
-out-of-tree driver. On this system it exposes fan2_input and PWM2, PWM4,
-and PWM5. The value of pwm2_auto_channels_temp is 4 instead of the
-out-of-tree driver's 3 because the upstream ABI reports a channel bitmask
-(BIT(2)) rather than a one-based channel number.
-
-The PWM2 write path was tested by switching from automatic control to
-manual full duty (255). Fan2 increased from about 2100 RPM to 4687 RPM.
-The original duty (65), automatic mode, and temperature mapping were then
-restored.
-
-An S3 suspend/resume cycle with an RTC wakeup completed successfully.
-The PWM configuration and sensor readings were preserved, with no it87 or
-hwmon warnings in the kernel log.
-
-Link: https://lore.kernel.org/linux-hwmon/20260114221210.98071-1-yahoo@perenite.com/
-Link: https://lore.kernel.org/linux-hwmon/20260829113011.51290-1-jerome.tollet@gmail.com/
-
-benoit.masson (4):
-  hwmon: it87: describe per-chip temperature resources
-  hwmon: it87: prepare for extended PWM temp maps
-  hwmon: it87: expose additional temperature limits
-  hwmon: it87: add IT8613E support
-
- Documentation/hwmon/it87.rst |   8 +
- drivers/hwmon/it87.c         | 456 ++++++++++++++++++++++++++++-------
- 2 files changed, 383 insertions(+), 81 deletions(-)
-
-
-base-commit: 75f2c0b3690702c90863c2e138cb5520670845ea
+diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+index 87edb1b60..1c77f6c97 100644
+--- a/drivers/hwmon/it87.c
++++ b/drivers/hwmon/it87.c
+@@ -247,7 +247,7 @@ static const u8 IT87_REG_FAN[]         = { 0x0d, 0x0e, 0x0f, 0x80, 0x82, 0x4c };
+ static const u8 IT87_REG_FAN_MIN[]     = { 0x10, 0x11, 0x12, 0x84, 0x86, 0x4e };
+ static const u8 IT87_REG_FANX[]        = { 0x18, 0x19, 0x1a, 0x81, 0x83, 0x4d };
+ static const u8 IT87_REG_FANX_MIN[]    = { 0x1b, 0x1c, 0x1d, 0x85, 0x87, 0x4f };
+-static const u8 IT87_REG_TEMP_OFFSET[] = { 0x56, 0x57, 0x59 };
++static const u8 IT87_REG_TEMP_OFFSET[] = { 0x56, 0x57, 0x59, 0x5a, 0x90, 0x91 };
+ 
+ #define IT87_REG_FAN_MAIN_CTRL 0x13
+ #define IT87_REG_FAN_CTL       0x14
+@@ -282,7 +282,6 @@ static const u8 IT87_REG_AUTO_BASE[] = { 0x60, 0x68, 0x70, 0x78, 0xa0, 0xa8 };
+ #define NUM_VIN_LIMIT		8
+ #define NUM_TEMP		6
+ #define NUM_TEMP_OFFSET		ARRAY_SIZE(IT87_REG_TEMP_OFFSET)
+-#define NUM_TEMP_LIMIT		3
+ #define NUM_FAN			ARRAY_SIZE(IT87_REG_FAN)
+ #define NUM_FAN_DIV		3
+ #define NUM_PWM			ARRAY_SIZE(IT87_REG_PWM)
+@@ -292,6 +291,9 @@ struct it87_devices {
+ 	const char *name;
+ 	const char * const model;
+ 	u32 features;
++	u8 num_temp_limit;
++	u8 num_temp_offset;
++	u8 num_temp_map;
+ 	u8 peci_mask;
+ 	u8 old_peci_mask;
+ 	u8 smbus_bitmap;	/* SMBus enable bits in extra config register */
+@@ -302,7 +304,6 @@ struct it87_devices {
+ #define FEAT_NEWER_AUTOPWM	BIT(1)
+ #define FEAT_OLD_AUTOPWM	BIT(2)
+ #define FEAT_16BIT_FANS		BIT(3)
+-#define FEAT_TEMP_OFFSET	BIT(4)
+ #define FEAT_TEMP_PECI		BIT(5)
+ #define FEAT_TEMP_OLD_PECI	BIT(6)
+ #define FEAT_FAN16_CONFIG	BIT(7)	/* Need to enable 16-bit fans */
+@@ -335,43 +336,61 @@ static const struct it87_devices it87_devices[] = {
+ 		.model = "IT87F",
+ 		.features = FEAT_OLD_AUTOPWM | FEAT_FANCTL_ONOFF,
+ 		/* may need to overwrite */
++		.num_temp_limit = 3,
++		.num_temp_offset = 0,
++		.num_temp_map = 3,
+ 	},
+ 	[it8712] = {
+ 		.name = "it8712",
+ 		.model = "IT8712F",
+ 		.features = FEAT_OLD_AUTOPWM | FEAT_VID | FEAT_FANCTL_ONOFF,
+ 		/* may need to overwrite */
++		.num_temp_limit = 3,
++		.num_temp_offset = 0,
++		.num_temp_map = 3,
+ 	},
+ 	[it8716] = {
+ 		.name = "it8716",
+ 		.model = "IT8716F",
+-		.features = FEAT_16BIT_FANS | FEAT_TEMP_OFFSET | FEAT_VID
++		.features = FEAT_16BIT_FANS | FEAT_VID
+ 		  | FEAT_FAN16_CONFIG | FEAT_FIVE_FANS | FEAT_PWM_FREQ2
+ 		  | FEAT_FANCTL_ONOFF,
++		.num_temp_limit = 3,
++		.num_temp_offset = 3,
++		.num_temp_map = 3,
+ 	},
+ 	[it8718] = {
+ 		.name = "it8718",
+ 		.model = "IT8718F",
+-		.features = FEAT_16BIT_FANS | FEAT_TEMP_OFFSET | FEAT_VID
++		.features = FEAT_16BIT_FANS | FEAT_VID
+ 		  | FEAT_TEMP_OLD_PECI | FEAT_FAN16_CONFIG | FEAT_FIVE_FANS
+ 		  | FEAT_PWM_FREQ2 | FEAT_FANCTL_ONOFF,
++		.num_temp_limit = 3,
++		.num_temp_offset = 3,
++		.num_temp_map = 3,
+ 		.old_peci_mask = 0x4,
+ 	},
+ 	[it8720] = {
+ 		.name = "it8720",
+ 		.model = "IT8720F",
+-		.features = FEAT_16BIT_FANS | FEAT_TEMP_OFFSET | FEAT_VID
++		.features = FEAT_16BIT_FANS | FEAT_VID
+ 		  | FEAT_TEMP_OLD_PECI | FEAT_FAN16_CONFIG | FEAT_FIVE_FANS
+ 		  | FEAT_PWM_FREQ2 | FEAT_FANCTL_ONOFF,
++		.num_temp_limit = 3,
++		.num_temp_offset = 3,
++		.num_temp_map = 3,
+ 		.old_peci_mask = 0x4,
+ 	},
+ 	[it8721] = {
+ 		.name = "it8721",
+ 		.model = "IT8721F",
+ 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
+-		  | FEAT_TEMP_OFFSET | FEAT_TEMP_OLD_PECI | FEAT_TEMP_PECI
++		  | FEAT_TEMP_OLD_PECI | FEAT_TEMP_PECI
+ 		  | FEAT_FAN16_CONFIG | FEAT_FIVE_FANS | FEAT_IN7_INTERNAL
+ 		  | FEAT_PWM_FREQ2 | FEAT_FANCTL_ONOFF,
++		.num_temp_limit = 3,
++		.num_temp_offset = 3,
++		.num_temp_map = 3,
+ 		.peci_mask = 0x05,
+ 		.old_peci_mask = 0x02,	/* Actually reports PCH */
+ 	},
+@@ -379,18 +398,24 @@ static const struct it87_devices it87_devices[] = {
+ 		.name = "it8728",
+ 		.model = "IT8728F",
+ 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
+-		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_FIVE_FANS
++		  | FEAT_TEMP_PECI | FEAT_FIVE_FANS
+ 		  | FEAT_IN7_INTERNAL | FEAT_PWM_FREQ2
+ 		  | FEAT_FANCTL_ONOFF,
++		.num_temp_limit = 6,
++		.num_temp_offset = 3,
++		.num_temp_map = 3,
+ 		.peci_mask = 0x07,
+ 	},
+ 	[it8732] = {
+ 		.name = "it8732",
+ 		.model = "IT8732F",
+ 		.features = FEAT_NEWER_AUTOPWM | FEAT_16BIT_FANS
+-		  | FEAT_TEMP_OFFSET | FEAT_TEMP_OLD_PECI | FEAT_TEMP_PECI
++		  | FEAT_TEMP_OLD_PECI | FEAT_TEMP_PECI
+ 		  | FEAT_10_9MV_ADC | FEAT_IN7_INTERNAL | FEAT_FOUR_FANS
+ 		  | FEAT_FOUR_PWM | FEAT_FANCTL_ONOFF,
++		.num_temp_limit = 3,
++		.num_temp_offset = 3,
++		.num_temp_map = 3,
+ 		.peci_mask = 0x07,
+ 		.old_peci_mask = 0x02,	/* Actually reports PCH */
+ 	},
+@@ -398,73 +423,97 @@ static const struct it87_devices it87_devices[] = {
+ 		.name = "it8771",
+ 		.model = "IT8771E",
+ 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
+-		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_IN7_INTERNAL
++		  | FEAT_TEMP_PECI | FEAT_IN7_INTERNAL
+ 		  | FEAT_PWM_FREQ2 | FEAT_FANCTL_ONOFF,
+ 				/* PECI: guesswork */
+ 				/* 12mV ADC (OHM) */
+ 				/* 16 bit fans (OHM) */
+ 				/* three fans, always 16 bit (guesswork) */
++		.num_temp_limit = 3,
++		.num_temp_offset = 3,
++		.num_temp_map = 3,
+ 		.peci_mask = 0x07,
+ 	},
+ 	[it8772] = {
+ 		.name = "it8772",
+ 		.model = "IT8772E",
+ 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
+-		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_IN7_INTERNAL
++		  | FEAT_TEMP_PECI | FEAT_IN7_INTERNAL
+ 		  | FEAT_PWM_FREQ2 | FEAT_FANCTL_ONOFF,
+ 				/* PECI (coreboot) */
+ 				/* 12mV ADC (HWSensors4, OHM) */
+ 				/* 16 bit fans (HWSensors4, OHM) */
+ 				/* three fans, always 16 bit (datasheet) */
++		.num_temp_limit = 3,
++		.num_temp_offset = 3,
++		.num_temp_map = 3,
+ 		.peci_mask = 0x07,
+ 	},
+ 	[it8781] = {
+ 		.name = "it8781",
+ 		.model = "IT8781F",
+-		.features = FEAT_16BIT_FANS | FEAT_TEMP_OFFSET
++		.features = FEAT_16BIT_FANS
+ 		  | FEAT_TEMP_OLD_PECI | FEAT_FAN16_CONFIG | FEAT_PWM_FREQ2
+ 		  | FEAT_FANCTL_ONOFF,
++		.num_temp_limit = 3,
++		.num_temp_offset = 3,
++		.num_temp_map = 3,
+ 		.old_peci_mask = 0x4,
+ 	},
+ 	[it8782] = {
+ 		.name = "it8782",
+ 		.model = "IT8782F",
+-		.features = FEAT_16BIT_FANS | FEAT_TEMP_OFFSET
++		.features = FEAT_16BIT_FANS
+ 		  | FEAT_TEMP_OLD_PECI | FEAT_FAN16_CONFIG | FEAT_PWM_FREQ2
+ 		  | FEAT_FANCTL_ONOFF,
++		.num_temp_limit = 3,
++		.num_temp_offset = 3,
++		.num_temp_map = 3,
+ 		.old_peci_mask = 0x4,
+ 	},
+ 	[it8783] = {
+ 		.name = "it8783",
+ 		.model = "IT8783E/F",
+-		.features = FEAT_16BIT_FANS | FEAT_TEMP_OFFSET
++		.features = FEAT_16BIT_FANS
+ 		  | FEAT_TEMP_OLD_PECI | FEAT_FAN16_CONFIG | FEAT_PWM_FREQ2
+ 		  | FEAT_FANCTL_ONOFF,
++		.num_temp_limit = 3,
++		.num_temp_offset = 3,
++		.num_temp_map = 3,
+ 		.old_peci_mask = 0x4,
+ 	},
+ 	[it8786] = {
+ 		.name = "it8786",
+ 		.model = "IT8786E",
+ 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
+-		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_IN7_INTERNAL
++		  | FEAT_TEMP_PECI | FEAT_IN7_INTERNAL
+ 		  | FEAT_PWM_FREQ2 | FEAT_FANCTL_ONOFF,
++		.num_temp_limit = 3,
++		.num_temp_offset = 3,
++		.num_temp_map = 3,
+ 		.peci_mask = 0x07,
+ 	},
+ 	[it8790] = {
+ 		.name = "it8790",
+ 		.model = "IT8790E",
+ 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
+-		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_IN7_INTERNAL
++		  | FEAT_TEMP_PECI | FEAT_IN7_INTERNAL
+ 		  | FEAT_PWM_FREQ2 | FEAT_FANCTL_ONOFF | FEAT_NOCONF,
++		.num_temp_limit = 3,
++		.num_temp_offset = 3,
++		.num_temp_map = 3,
+ 		.peci_mask = 0x07,
+ 	},
+ 	[it8792] = {
+ 		.name = "it8792",
+ 		.model = "IT8792E/IT8795E",
+ 		.features = FEAT_NEWER_AUTOPWM | FEAT_16BIT_FANS
+-		  | FEAT_TEMP_OFFSET | FEAT_TEMP_OLD_PECI | FEAT_TEMP_PECI
++		  | FEAT_TEMP_OLD_PECI | FEAT_TEMP_PECI
+ 		  | FEAT_10_9MV_ADC | FEAT_IN7_INTERNAL | FEAT_FANCTL_ONOFF
+ 		  | FEAT_NOCONF,
++		.num_temp_limit = 3,
++		.num_temp_offset = 3,
++		.num_temp_map = 3,
+ 		.peci_mask = 0x07,
+ 		.old_peci_mask = 0x02,	/* Actually reports PCH */
+ 	},
+@@ -472,54 +521,72 @@ static const struct it87_devices it87_devices[] = {
+ 		.name = "it8603",
+ 		.model = "IT8603E",
+ 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
+-		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_IN7_INTERNAL
++		  | FEAT_TEMP_PECI | FEAT_IN7_INTERNAL
+ 		  | FEAT_AVCC3 | FEAT_PWM_FREQ2,
++		.num_temp_limit = 3,
++		.num_temp_offset = 3,
++		.num_temp_map = 4,
+ 		.peci_mask = 0x07,
+ 	},
+ 	[it8620] = {
+ 		.name = "it8620",
+ 		.model = "IT8620E",
+ 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
+-		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_SIX_FANS
++		  | FEAT_TEMP_PECI | FEAT_SIX_FANS
+ 		  | FEAT_IN7_INTERNAL | FEAT_SIX_PWM | FEAT_PWM_FREQ2
+ 		  | FEAT_SIX_TEMP | FEAT_VIN3_5V | FEAT_FANCTL_ONOFF,
++		.num_temp_limit = 3,
++		.num_temp_offset = 3,
++		.num_temp_map = 3,
+ 		.peci_mask = 0x07,
+ 	},
+ 	[it8622] = {
+ 		.name = "it8622",
+ 		.model = "IT8622E",
+ 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
+-		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_FIVE_FANS
++		  | FEAT_TEMP_PECI | FEAT_FIVE_FANS
+ 		  | FEAT_FIVE_PWM | FEAT_IN7_INTERNAL | FEAT_PWM_FREQ2
+ 		  | FEAT_AVCC3 | FEAT_VIN3_5V | FEAT_FOUR_TEMP,
+-		.peci_mask = 0x07,
++		.num_temp_limit = 3,
++		.num_temp_offset = 3,
++		.num_temp_map = 4,
++		.peci_mask = 0x0f,
+ 		.smbus_bitmap = BIT(1) | BIT(2),
+ 	},
+ 	[it8628] = {
+ 		.name = "it8628",
+ 		.model = "IT8628E",
+ 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
+-		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_SIX_FANS
++		  | FEAT_TEMP_PECI | FEAT_SIX_FANS
+ 		  | FEAT_IN7_INTERNAL | FEAT_SIX_PWM | FEAT_PWM_FREQ2
+ 		  | FEAT_SIX_TEMP | FEAT_VIN3_5V | FEAT_FANCTL_ONOFF,
++		.num_temp_limit = 6,
++		.num_temp_offset = 3,
++		.num_temp_map = 3,
+ 		.peci_mask = 0x07,
+ 	},
+ 	[it8689] = {
+ 		.name = "it8689",
+ 		.model = "IT8689E",
+ 		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
+-		  | FEAT_TEMP_OFFSET | FEAT_SIX_FANS | FEAT_IN7_INTERNAL
++		  | FEAT_SIX_FANS | FEAT_IN7_INTERNAL
+ 		  | FEAT_SIX_PWM | FEAT_PWM_FREQ2 | FEAT_SIX_TEMP | FEAT_AVCC3
+ 		  | FEAT_FANCTL_ONOFF,
++		.num_temp_limit = 3,
++		.num_temp_offset = 3,
++		.num_temp_map = 3,
+ 		.smbus_bitmap = BIT(1) | BIT(2),
+ 	},
+ 	[it87952] = {
+ 		.name = "it87952",
+ 		.model = "IT87952E",
+ 		.features = FEAT_NEWER_AUTOPWM | FEAT_16BIT_FANS
+-		  | FEAT_TEMP_OFFSET | FEAT_TEMP_OLD_PECI | FEAT_TEMP_PECI
++		  | FEAT_TEMP_OLD_PECI | FEAT_TEMP_PECI
+ 		  | FEAT_10_9MV_ADC | FEAT_IN7_INTERNAL | FEAT_FANCTL_ONOFF
+ 		  | FEAT_NOCONF,
++		.num_temp_limit = 3,
++		.num_temp_offset = 3,
++		.num_temp_map = 3,
+ 		.peci_mask = 0x07,
+ 		.old_peci_mask = 0x02,	/* Actually reports PCH */
+ 	},
+@@ -530,7 +597,6 @@ static const struct it87_devices it87_devices[] = {
+ #define has_10_9mv_adc(data)	((data)->features & FEAT_10_9MV_ADC)
+ #define has_newer_autopwm(data)	((data)->features & FEAT_NEWER_AUTOPWM)
+ #define has_old_autopwm(data)	((data)->features & FEAT_OLD_AUTOPWM)
+-#define has_temp_offset(data)	((data)->features & FEAT_TEMP_OFFSET)
+ #define has_temp_peci(data, nr)	(((data)->features & FEAT_TEMP_PECI) && \
+ 				 ((data)->peci_mask & BIT(nr)))
+ #define has_temp_old_peci(data, nr) \
+@@ -589,6 +655,9 @@ struct it87_data {
+ 	int sioaddr;
+ 	enum chips type;
+ 	u32 features;
++	u8 num_temp_limit;
++	u8 num_temp_offset;
++	u8 num_temp_map;
+ 	u8 peci_mask;
+ 	u8 old_peci_mask;
+ 
+@@ -937,12 +1006,12 @@ static struct it87_data *it87_update_device(struct device *dev)
+ 			data->temp[i][0] =
+ 				it87_read_value(data, IT87_REG_TEMP(i));
+ 
+-			if (has_temp_offset(data) && i < NUM_TEMP_OFFSET)
++			if (i < data->num_temp_offset)
+ 				data->temp[i][3] =
+ 				  it87_read_value(data,
+ 						  IT87_REG_TEMP_OFFSET[i]);
+ 
+-			if (i >= NUM_TEMP_LIMIT)
++			if (i >= data->num_temp_limit)
+ 				continue;
+ 
+ 			data->temp[i][1] =
+@@ -1693,16 +1762,18 @@ static ssize_t show_pwm_temp_map(struct device *dev,
+ 	struct sensor_device_attribute *sensor_attr = to_sensor_dev_attr(attr);
+ 	struct it87_data *data = it87_update_device(dev);
+ 	int nr = sensor_attr->index;
++	u8 num_map;
+ 	int map;
+ 
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
+ 
++	num_map = data->num_temp_map;
+ 	map = data->pwm_temp_map[nr];
+-	if (map >= 3)
++	if (map >= num_map)
+ 		map = 0;	/* Should never happen */
+-	if (nr >= 3)		/* pwm channels 3..6 map to temp4..6 */
+-		map += 3;
++	if (nr >= num_map)	/* pwm channels 3..6 map to temp4..6 */
++		map += num_map;
+ 
+ 	return sprintf(buf, "%d\n", (int)BIT(map));
+ }
+@@ -1714,6 +1785,7 @@ static ssize_t set_pwm_temp_map(struct device *dev,
+ 	struct sensor_device_attribute *sensor_attr = to_sensor_dev_attr(attr);
+ 	struct it87_data *data = dev_get_drvdata(dev);
+ 	int nr = sensor_attr->index;
++	u8 num_map = data->num_temp_map;
+ 	long val;
+ 	int err;
+ 	u8 reg;
+@@ -1721,8 +1793,8 @@ static ssize_t set_pwm_temp_map(struct device *dev,
+ 	if (kstrtol(buf, 10, &val) < 0)
+ 		return -EINVAL;
+ 
+-	if (nr >= 3)
+-		val -= 3;
++	if (nr >= num_map)
++		val -= num_map;
+ 
+ 	switch (val) {
+ 	case BIT(0):
+@@ -2376,7 +2448,7 @@ static umode_t it87_temp_is_visible(struct kobject *kobj,
+ 		return attr->mode;
+ 	}
+ 
+-	if (a == 5 && !has_temp_offset(data))
++	if (a == 5 && i >= data->num_temp_offset)
+ 		return 0;
+ 
+ 	if (a == 6 && !data->has_beep)
+@@ -3268,7 +3340,7 @@ static void it87_check_limit_regs(struct it87_data *data)
+ 		if (reg == 0xff)
+ 			it87_write_value(data, IT87_REG_VIN_MIN(i), 0);
+ 	}
+-	for (i = 0; i < NUM_TEMP_LIMIT; i++) {
++	for (i = 0; i < data->num_temp_limit; i++) {
+ 		reg = it87_read_value(data, IT87_REG_TEMP_HIGH(i));
+ 		if (reg == 0xff)
+ 			it87_write_value(data, IT87_REG_TEMP_HIGH(i), 127);
+@@ -3461,6 +3533,7 @@ static int it87_probe(struct platform_device *pdev)
+ 	struct resource *res;
+ 	struct device *dev = &pdev->dev;
+ 	struct it87_sio_data *sio_data = dev_get_platdata(dev);
++	const struct it87_devices *chip;
+ 	int enable_pwm_interface;
+ 	struct device *hwmon_dev;
+ 	int err;
+@@ -3483,9 +3556,13 @@ static int it87_probe(struct platform_device *pdev)
+ 	data->type = sio_data->type;
+ 	data->smbus_bitmap = sio_data->smbus_bitmap;
+ 	data->ec_special_config = sio_data->ec_special_config;
+-	data->features = it87_devices[sio_data->type].features;
+-	data->peci_mask = it87_devices[sio_data->type].peci_mask;
+-	data->old_peci_mask = it87_devices[sio_data->type].old_peci_mask;
++	chip = &it87_devices[sio_data->type];
++	data->features = chip->features;
++	data->peci_mask = chip->peci_mask;
++	data->old_peci_mask = chip->old_peci_mask;
++	data->num_temp_limit = chip->num_temp_limit;
++	data->num_temp_offset = chip->num_temp_offset;
++	data->num_temp_map = chip->num_temp_map;
+ 	/*
+ 	 * IT8705F Datasheet 0.4.1, 3h == Version G.
+ 	 * IT8712F Datasheet 0.9.1, section 8.3.5 indicates 8h == Version J.
 -- 
 2.55.0
+
