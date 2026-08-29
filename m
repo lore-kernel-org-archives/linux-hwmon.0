@@ -1,159 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF62A36B931
-	for <linux-hwmon@vger.kernel.org>; Sat, 29 Aug 2026 17:23:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 451543C3C06
+	for <linux-hwmon@vger.kernel.org>; Sat, 29 Aug 2026 21:00:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788024214; cv=none; b=N8WGuZup1kPujnBoGexDO7Xn6y/kB8TuExjoTroTX07iwwJ/sINwf2Hx8nn7VlwAZ6pwAe9QH5YuIBTx9ihRIdhAV1ciPvQHsjFrHJsf5uLl+jymAEkDxOCgHwzkA0u454b4A6NcCZVdDcFTOiY7mTzMMLzVE3rNaa1TenpmMqs=
+	t=1788037244; cv=none; b=L4lTIQs2sgxIbPyx6vpx5wTEuGz/aTCB506C2LqZFRDjFu+3X2C/XsrzNZ9zu+apv4/l8PuqaqP0aax+LwX9fVvT0qa9Y+s5RxKrGOhhCW5lc+8J94m5dv5G10CZsJAC6dnXDuIsHkzUSzrpwyckRA4qbkfFiNohmDlGyJ4WMBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788024214; c=relaxed/simple;
-	bh=inm2ht2aYTQwjmYxhPSlrEk4tSvS/jUCLhPsVIFWc8Y=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=dUqmgCtuTr7K6PWcYS2NL12eckflmQeeBsbiDA42/PWRt1Ga+P66tvIkL0DYONppzLO+OdYfhdqJuG8OcQ9/K/2eXeUER33Eo6iHidZGNBcEyNLeVpLcPfkLPBL7ivHEvv2o2xzk8JOnP65b079G/7wqoPWYMj6hNZnkI5s8+bc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dW9HgHaz; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788037244; c=relaxed/simple;
+	bh=VTI8z/cMQEmKslo6nOMXCt0POymUAvI8kLKanHr/sxs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=I9AMIFaTY5nmFRCIq1NhX8YpfFHt07QHpHLaik0zTPvLptLpra2HwDPHUB5D77vkd5WYltBS3UleNa/H/QycKzocIIASfbprdZmt1Tff6MZ9/0JjlwAQiULORwwdxZOlotN0RSSd87SgVAhZ8x8oHJFkAIXaPLbtVK1ymmcxy+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MCj4g9S5; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dW9HgHaz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51D631F000E9;
-	Sat, 29 Aug 2026 17:23:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788024212;
-	bh=QF0pcX/UZLTMZlnuku4oO+KkEDPqzp6LzG5JGfLD/yI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=dW9HgHazytm2q4ZlbY87wM7s5iIS1rCxH1WGLv8s9Ndl2y39/+D/RDyBJgxqQTTpF
-	 B8nsVaWeUW/JChz6VnAp6/TgA6vbIrdYYRvsWeLmSpAwGeb3s/T+IMw79haT2Lz1wP
-	 ZMYqNafoiWN3NQYxPaRYkgG0LkexgdXhlRF+MDkbZjTfWTEhjHXIn6NUlxVRl0kNRf
-	 xM6hahwl4+hNgruxNASK4aVJ1u/pcWYlQOhm/z+PULUQCDfw2ZDpZ1LEpI8vUvpMsI
-	 eC5Xt3UGVLBBS9iXNiBzSLCzhV04O6QXSY2hcIJVqi5737zS0ZnyIcMif6ccWxF+ca
-	 ONLPXg/+qjN9A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 4/4] hwmon: it87: add IT8613E support
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jerome Tollet" <jerome.tollet@gmail.com>
-Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260829170545.33401-5-jerome.tollet@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MCj4g9S5"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-c20ce3c118aso421716866b.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 29 Aug 2026 14:00:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788037241; x=1788642041; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=FTtEAN1g/uFwJWiLGZyekTtzG0cryeadf7Yv8zUZKqc=;
+        b=MCj4g9S5thBZiUTlxKdeuXgZOQfJgG+L2UM++yjVBp5Vtxf5h+fbw7MOLkGX3Qqd0/
+         wbMx0g1RiVvkOO+O7ySSLYcr4mvsRXXQYJt4zo6smz4T+KoRbB01779foeWv1pPJoyta
+         gb5AHLBuX9pcrt3YygJvHK1f2GokiH5OW6sW8/VlYsYjM3+Bi3xrH1hfh2EsFRJDmJzu
+         +oK9W/rkPhdyMlbZ8i3xnrwVC0liHMJmNPTH32uwRFJBr9k/7I0K38iH1oteDGLx9KVw
+         m4P0VjZm7oso9dgzCWBZJeH1Ztrw8K8liE6X5CTljOS2TrKv2SzxeKPkGgC/bl1FRifa
+         qQ+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788037241; x=1788642041;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=FTtEAN1g/uFwJWiLGZyekTtzG0cryeadf7Yv8zUZKqc=;
+        b=eR26lul7wSQI/8YA9UpJxg1xNDaSr3/l4RPQmrdnmxoZT2H2xt+K8R6C2bdJ6C8gh0
+         xW4z99vnsA7Pw+kPw6GXQpu5ZzdvcuEeAJqE6DAXioI8vL4/kBg+1cfQd3zLszmMpUGG
+         SiMRWE78vBJjPpG8OelHFaE2+SfyXNrMzN21kNCSecsnpXSHKtXSicCgkidlpheQez1S
+         ZiNqIMJD2OZJijxrCTu5IEO2kqZXBT6V1LFQ24rzeyOTJMq06+N75PMhO/BOxKpTINO5
+         WSa/j6554I4E1YiiRb859hLwu4Ui6ueDWxJvmT3nG8x26Cg2FLpyJN7q8YA3z3xj58oj
+         dneA==
+X-Gm-Message-State: AFuF++kBrweaZNl4owaXyLVh9RPy52rRdOd9h/1qm5Lh/YQOLJRrWz/e
+	+bjA5/ZU0WX+HZbJ13osCyy720t0sgyFkRFz8TpVaM7lj8ZHOigNm+t2
+X-Gm-Gg: AR+sD113k0LQG/rNDLR34+rm3PaKS8X4l+cdbM9fv6WJsCkUQuPM/ZoE5SR6rYa14Sx
+	zszkFAQN/7PgRYrMyNVMQUOaUOCAbrMo6tTbR7pGnFKX1f+hu22N91bAl/rBiKTq+uQ4LHlC9Nk
+	MYR745mB3xksOlMtfMG8DNLcHdIcvqYcdgMKhvvmVvc4v6AQJbuJJzcRtM6xmYxcdDMjk6Sc9A/
+	agaa6TQgsezDhkW+Bjjznr6GBfhiNOTBSBZ+UYDfXo0z31rQEH5pGpL9im4chOq00eIpfLxuJPk
+	ucS3SBivlwsW03ROm1xjertuIkLE8YwnBrL90wNR1/6k6z/3CUgkPAvn6Hepfl5Zx/qU1CAnZn2
+	Mt8yQNHQHb1J7MnjL5MUunNSB/86opKmfgqrRHDa8HtjNDzgzod5frwTWHmeOPMmGAbGNhKmR2K
+	bFHG6xYwnWm7usD5i9whhIornpGv6vO/f/iwA9K6c+62T23Hs/YqabvYmoqWx4pcwuWFiK55h0q
+	74sDpUQjGPNi76i
+X-Received: by 2002:a17:907:1b0a:b0:c24:6382:2648 with SMTP id a640c23a62f3a-c256dbefa05mr548729666b.5.1788037241115;
+        Sat, 29 Aug 2026 14:00:41 -0700 (PDT)
+Received: from localhost ([2603:5004:20a0:100c:4701:1ac4:1c21:4a1])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c255ee2822esm230003666b.17.2026.08.29.14.00.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Aug 2026 14:00:39 -0700 (PDT)
+From: Jerome Tollet <jerome.tollet@gmail.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	Benoit Masson <yahoo@perenite.com>,
+	Jerome Tollet <jerome.tollet@gmail.com>
+Subject: [PATCH v6 0/3] hwmon: it87: add IT8613E support
+Date: Sat, 29 Aug 2026 23:00:33 +0200
+Message-ID: <20260829210036.61136-1-jerome.tollet@gmail.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260829170545.33401-1-jerome.tollet@gmail.com>
 References: <20260829170545.33401-1-jerome.tollet@gmail.com>
- <20260829170545.33401-5-jerome.tollet@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 29 Aug 2026 17:23:31 +0000
-Message-Id: <20260829172332.51D631F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+This is a respin of Benoit Masson's v4 series, with his permission.
+It replaces my fan-input-only RFC with the broader hardware monitoring
+support requested in review.
 
-New issues:
-- [Medium] The IT8613E configuration specifies support for 6 temperature se=
-nsors (num_temp_limit =3D 6), but omits the FEAT_SIX_TEMP feature flag, sil=
-ently disabling sensors 4-6.
+The v4 series was dropped after a NULL pointer dereference was reported.
+The IT8613E device entry did not initialize reg_pwm, while the probe path
+unconditionally dereferences it. It also advertised six temperature
+offsets but the register table contained only three entries.
 
-Pre-existing issues:
-- [High] set_temp_type and get_temp_type corrupt and misinterpret IT87_REG_=
-TEMP_ENABLE for temperature sensors 4, 5, and 6 due to incorrect bit-shifts=
- exceeding the intended sensor bounds (0-2).
---
+Changes in v6:
+- Drop the patch exposing additional temperature attributes. The existing
+  type register handling only describes temperature inputs 1 to 3, so
+  exposing temp4_type through temp6_type would not be safe.
+- Remove the unused NUM_TEMP_OFFSET macro.
+- Retain the legacy two groups of three temperature sources where
+  appropriate, and honor the four global sources on IT8603E and IT8622E.
+- Fix the legacy automatic/manual PWM control flow so the manual duty
+  cache is not overwritten in automatic mode.
+- Do not refresh PWM control state while changing modes. On newer
+  controllers, write temperature mappings in both manual and automatic
+  modes because the duty cycle uses a separate register. This keeps a
+  mapping across cache refreshes and mode changes.
+- Clarify that only three IT8613E temperature inputs are currently known.
+  The six limit, offset, and PWM map resources do not imply six inputs,
+  so FEAT_SIX_TEMP is intentionally not set.
 
-commit 62e828013c359cc9aa023fe24c4b5b0736549b6b
-Author: benoit.masson <yahoo@perenite.com>
+Tested on an IT8613E at 0xa30, revision 12. The complete series builds as
+an external module with W=1 and passes checkpatch --strict with no
+warnings or errors.
 
-hwmon: it87: add IT8613E support
-   =20
-Teach the Super I/O probe path to recognize IT8613E and add its complete
-hardware monitoring configuration. Add feature flags, temperature resource
-counts, 11 mV ADC scaling, the IT8665-style PWM register map, and GPIO
-pin-mux checks. Document the chip in the hwmon guide.
+The module exposes fan2_input and PWM2, PWM4, and PWM5 on this system.
+The deferred temperature mapping path was tested by switching PWM2 to
+manual mode, changing pwm2_auto_channels_temp from 4 to 1, waiting for a
+cache refresh, and switching back to automatic mode. The value remained
+1 after both the refresh and mode change. The original mapping, duty, and
+automatic mode were then restored.
 
-> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-> index e44ec65c76f03..67a94761d1c89 100644
-> --- a/drivers/hwmon/it87.c
-> +++ b/drivers/hwmon/it87.c
-[ ... ]
-> @@ -549,6 +552,19 @@ static const struct it87_devices it87_devices[] =3D {
->  		.num_temp_map =3D 4,
->  		.peci_mask =3D 0x07,
->  	},
-> +	[it8613] =3D {
-> +		.name =3D "it8613",
-> +		.model =3D "IT8613E",
-> +		.features =3D FEAT_NEWER_AUTOPWM | FEAT_11MV_ADC | FEAT_16BIT_FANS
-> +		  | FEAT_TEMP_PECI | FEAT_FIVE_FANS
-> +		  | FEAT_FIVE_PWM | FEAT_IN7_INTERNAL | FEAT_PWM_FREQ2
-> +		  | FEAT_AVCC3 | FEAT_NEW_TEMPMAP,
+The PWM2 write path was tested by switching from automatic control to
+manual full duty (255). Fan2 increased from 2789 RPM to 4821 RPM. The
+original duty (65), automatic mode, and temperature mapping were then
+restored.
 
-[Severity: Medium]
-Does this missing feature flag permanently disable sensors 4-6?
+An S3 suspend/resume cycle with an RTC wakeup completed successfully.
+The PWM configuration and sensor readings were preserved, with no it87 or
+hwmon warnings in the kernel log.
 
-The IT8613E configuration specifies support for 6 temperature sensors with
-num_temp_limit =3D 6, but the FEAT_SIX_TEMP feature flag is omitted here.
-Without FEAT_SIX_TEMP, the probe logic in it87_probe() will not enable
-the extra temperature sensors, leaving sensors 4-6 completely inaccessible
-in sysfs:
+Link: https://lore.kernel.org/linux-hwmon/20260114221210.98071-1-yahoo@perenite.com/
+Link: https://lore.kernel.org/linux-hwmon/20260829170545.33401-1-jerome.tollet@gmail.com/
 
-drivers/hwmon/it87.c:it87_probe() {
-    ...
-	} else if (has_six_temp(data)) {
-		u8 reg =3D it87_read_value(data, IT87_REG_TEMP456_ENABLE);
+benoit.masson (3):
+  hwmon: it87: describe per-chip temperature resources
+  hwmon: it87: prepare for extended PWM temp maps
+  hwmon: it87: add IT8613E support
 
-		/* Check for additional temperature sensors */
-		if ((reg & 0x03) >=3D 0x02)
-			data->has_temp |=3D BIT(3);
-    ...
-}
+ Documentation/hwmon/it87.rst |   8 +
+ drivers/hwmon/it87.c         | 418 ++++++++++++++++++++++++++++-------
+ 2 files changed, 342 insertions(+), 84 deletions(-)
 
-> +		.reg_pwm =3D IT87_REG_PWM_8665,
-> +		.num_temp_limit =3D 6,
 
-[Severity: High]
-This is a pre-existing issue, but configuring 6 temperature sensors exposes
-an out-of-bounds bitwise shift bug in get_temp_type() and set_temp_type().
-
-When querying or setting types for sensors 4-6 (indices 3-5), get_temp_type=
-()
-misinterprets the configuration by reading bits 3-8 of IT87_REG_TEMP_ENABLE,
-which belong to sensors 1-3:
-
-drivers/hwmon/it87.c:get_temp_type() {
-    ...
-	else if (reg & BIT(index))
-		type =3D 3;	/* thermal diode */
-	else if (reg & BIT(index + 3))
-		type =3D 4;	/* thermistor */
-    ...
-}
-
-If those attributes become visible, set_temp_type() will apply out-of-bounds
-bitwise shifts to IT87_REG_TEMP_ENABLE:
-
-drivers/hwmon/it87.c:set_temp_type() {
-    ...
-	reg =3D it87_read_value(data, IT87_REG_TEMP_ENABLE);
-	reg &=3D ~(1 << nr);
-	reg &=3D ~(8 << nr);
-	...
-	if (val =3D=3D 3)
-		reg |=3D 1 << nr;
-	else if (val =3D=3D 4)
-		reg |=3D 8 << nr;
-    ...
-}
-
-Can this corrupt the chip configuration? Using unbounded nr indices (3-5)
-will overwrite unrelated sensor configuration bits instead of targeting the
-correct register, severely breaking thermal monitoring configuration for the
-primary sensors and potentially leading to dangerous misbehavior in automat=
-ed
-fan control.
-
-> +		.num_temp_offset =3D 6,
-> +		.num_temp_map =3D 6,
-> +		.peci_mask =3D 0x07,
-> +	},
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260829170545.3340=
-1-1-jerome.tollet@gmail.com?part=3D4
+base-commit: 75f2c0b3690702c90863c2e138cb5520670845ea
+-- 
+2.55.0
