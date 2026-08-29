@@ -1,68 +1,69 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1CD63CA4A0
-	for <linux-hwmon@vger.kernel.org>; Sat, 29 Aug 2026 15:58:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63D603D88E1
+	for <linux-hwmon@vger.kernel.org>; Sat, 29 Aug 2026 17:05:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788019111; cv=none; b=NcnPo85ECj1Sm6YIKCbFjc5X/Qmnvqt6W24HIeqVCn+2O8mrC7jigUBLzPQhLxZsnVcbZAqtK5PLEPmCy5dENx4cAQfXR9yN3meOdGA7qKt4VDD5EvtIiU3/JcSiLz3sGYgZIUe4soCiAq2fQvxBnT2RsU8c4dVfooHo4onfLc0=
+	t=1788023118; cv=none; b=WxnqcHwJPwbImklYjHO4l9NloJD5ZNgjly8AG6agff9eQn5O44D1Wfe7PYF1aD5XSrCxyMwaIFHjBJ75R1k9pIsVgWMwJOc5Ma6VyeTKY+8MnqfkOdAolS5DWGhdiXmy6yj7EjJta7ARzFFhsbY/JBZ0t7j/3zObMlV4daMoNXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788019111; c=relaxed/simple;
-	bh=BJmpszAVUgMa2fCtYXv8n0YghEBIN+j6vj6SGyKCCkU=;
+	s=arc-20240116; t=1788023118; c=relaxed/simple;
+	bh=awt/n+oNORYB2YhDK5rTQcAxY6y1IVVts1XEDrCgSzc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MOd+Zk9B6VVaswLoBwy2djeVe6Cr0I6mFRiIi0Tz0FSHb2WXa9shnuyv5+b3+MkRjV578fW81UjL3zffq58FaPrX7yIBt6ZAXvEVtKLRBdJRM/HI7q44RdGX+VA10f209DhD2aqJMvNg4faxpWo61PQHIGZfEWvIHMJs+AwG1ZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IebLFYJk; arc=none smtp.client-ip=209.85.215.181
+	 In-Reply-To:Content-Type; b=mMGPGkzt1nIvG8gomOSK8eoHlQnaIB2qOjq4mJ6EKv6Bw6GWtLmZSKiwnbedtspWCwRboL1nIzSCsv2w94tGCthr/rm8wc6ArBa+jSocr6h89oppbPS5vIz+/z24zVvKliLxFBdJNTnV2mgMzOmjo1yDAQOy6+BKNxk7KVnJZEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=STYysfgl; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IebLFYJk"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cb5b8572b70so2157020a12.2
-        for <linux-hwmon@vger.kernel.org>; Sat, 29 Aug 2026 08:58:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="STYysfgl"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2d71ae3455aso31349685ad.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 29 Aug 2026 10:05:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788019091; x=1788623891; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788023117; x=1788627917; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Nf6G640r6g2kWcuN1r9tsGekDWw+N72hsYzercLFMd8=;
-        b=IebLFYJkfNsgrWEfiYgyQN8OLUHJP1+LK382EEbYX0emAXATZk0ziB4RBlH2WLRFs1
-         eRkQplTFE2nLwBaiZMckXFvm+QxR/P8aBCAntLRywgN3mZzC63sx177qsee9xyjxsR0X
-         iuhOQ8jXhUGQmEtkvQQkbfmK4dgUqhovrxibwpjcsI6Uoeuafrgvw4gMSlsE7BZB4Wky
-         eMGacMmMe7I/bhJlRn0N/tqvxt9LjjHMwD335W0pp9DOe1oObeFEUk9AGo+kh2ec5Pjj
-         QbuiMpvAARVdwtBJAXuOc+UcLm9d7TM1BVkO4+OUjR4tVoudZPv+I4TlWx87vp+aAEFe
-         Txyw==
+        bh=Ln2KbbtEjRGd/LI6Li0KRF+ySsS1VE0IamdH6+rdBvI=;
+        b=STYysfgl/OOy37S3XS5JkKuWIWM05EP6PzrVWz+xqrfRFVta+bOCcA/FUgGjmA7OgZ
+         JYXt1Ht5kma7EYTDabLqi6u2JeBL8ytzeHuWskUbKvg7FYqH9+e0mXKZ9m4oYE+06H8H
+         nBIR8lXBXMCtPHTcq6VEonFFwOvlYMsjRweIBaPePgexMkKFlO6xiIECvCOV7sXwulgj
+         TJKalVbRDMBsPhkffXE0mjO/poIa2ylrFeuTZlhPtOZoB58UEu9slqXOuewsEvM02Fs+
+         GvMvm7F7ghFx7WN4RRa8ftukFPGMxF+LDp9gePziiKLHSV+Mi6jECbkCQ/LolRoJNJ82
+         ICNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788019091; x=1788623891;
+        d=1e100.net; s=20251104; t=1788023117; x=1788627917;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=Nf6G640r6g2kWcuN1r9tsGekDWw+N72hsYzercLFMd8=;
-        b=EsXV6W3bOJNAJnQrV4XASmfVhPFVb58bVgx2ejcI5ckErurqCiN79yhnZilFjApa1U
-         ohIe1jyi3nYwKjss2H8Tpc7aY444AanTGeT5fZufF70gfKOy4D+oV7CpveZwdxlPUTEc
-         bWqJ0IalJGYWrfDQbVCULiNUULSyGii5XfS0AvNNQdbuQ7o3HAN4H1/mDEMVfyg6HjxM
-         5YcZuV3mKYtZKZHQZCctmxWcXo9PVCz8zZFvEBzgF8LIrwxtmwRVKoxykD4iIPKDdWAo
-         8Rtl/p41miia1xztXzBNHCMtRzUh5D+97e+g9X7j7LhsCydoeWcL/+0Gu5lCI+34wvQZ
-         61AA==
-X-Gm-Message-State: AFuF++mRLOo9D8HpC4I4vQdnpWDeftw++eg73mccjPnrD1gsTepfdn/q
-	2FLkJkhpDctMBJnhh1h7IMrytJCZKLGIow9MWJL4ymPsQLdQF0FdAvVn
-X-Gm-Gg: AYBFou0BufrPf2OfqjaYcMrDsK6NDdcBbqqe1Pw7JM3Ry/hQIHHQXKCfaiu1PBclF0L
-	2GOfrwc0CGvCI3vQTm7mlPfroKG4Gutji2JODeEmJdLUs0KwqhlA+U9dKn40Ha9NE8GZ4s9M98J
-	tvIPjMWPqr0N+p4Up1d5xKjHJQl6/IA+cibq1AZl9VCOZhzEpbwvglf+bIQ0PP8QmhAAPLljhen
-	7kbAACioNKStL0YclRzE1w8j++xs+oWVk0dXBVbpvY/J2fnMBZoi1iGTL8xkLxRSY/sgpE7XZpu
-	9y6fIHtof1vBnjuYujIqGBKceVtltxHhpc8t550oaiSFlapjyNe+8pQr8sZqXt8UasJEifZLYzo
-	5jXR/99+kX3Ur4Re8FvcDfWjzyTO2PkNIQ5v3TfrFZtIjf463Oebby0fUm1IJYkN1/pJEftU9eR
-	+CzrejKX/Vy6LlI1X+I1FX2iT+ZnawfNvfloZ+T3pRV87vFbOyTMMuC+A/uczV1WSiDx/8shtLD
-	1zkvgxoK29IZtHauH1Ogpi4RBl4GaR2xRCzWw==
-X-Received: by 2002:a17:90b:5905:b0:381:a766:efcb with SMTP id 98e67ed59e1d1-396d0d7b94bmr26730626a91.4.1788019091222;
-        Sat, 29 Aug 2026 08:58:11 -0700 (PDT)
+        bh=Ln2KbbtEjRGd/LI6Li0KRF+ySsS1VE0IamdH6+rdBvI=;
+        b=AeOJ+1GPN03JlYlv+VgKT5ZZYYaiEqCkcYyauHrY6uDl6daIIni1Ag44kwvvBXqEh6
+         0RD0u5p5R+NmnW8/DVczHe66ILz8JRfs5JS6K08nb9qdU4RtEj0X54pwWcRttrPdIa4X
+         bkdFi5I+8qIDaYuxtcPBgF0c3qLkBiZmaSFFKf7m0K52ckJrYrxjh+ypM9inwJC7sUYC
+         coO5jcheYRTB16n4pkwTzm5QoNfdGQu0X8KRUvHjehNWxOrmiWPxATfOe1g03LfXfaIY
+         wRehSnTlILTqNwcMeuwU0+ZHgeIsbbBcjsLIDg2lONMbhC6hi6FIJOo2tJaGtsK84iDT
+         0pqg==
+X-Forwarded-Encrypted: i=1; AKwUvBz+yguk8mYU2T8s0d5flFdvWbxa9PEr8HxIiSxVbRo5zip2FJfd3j82lsM+EzxxsExwizvMl+0ZkV6/xQ==@vger.kernel.org
+X-Gm-Message-State: AFuF++lbV/l66D1VuAqhXKHjxt1Qftuzbqvc7KaG4L/QVSdTh+mkjZ+o
+	ecOMF5n6oPJDi9e0Ws1Tt0TxWEYfBlz0jCfsiDOX14PVYdpi1b4fpja0Qh+uvA==
+X-Gm-Gg: AYBFou0aQBYFfhITTitbDH80dnsEaa75ylFzJksWnyRgsQAdfWmEs/FH8PPBLERJDjM
+	pBSpGpVYhAaRBEvPlJvjpCMr6cFWa3+qqOdlJz2q0ZprN/r+kb3SuaskGPGgTQjbEDPjmUy8jZS
+	WMHNDSbRfBf8hlyu0++zbC90e+CI88jAc7S9Sddg2vkWapiUPdANtcZ5YHQSRQRCfn6kHv2VyAr
+	nawyD5Q+o+aRkZyWDGi4p6DrhDFWXlCA4Ny7xn+DXna7lp+30+nILNzins9k7cmggwhFu3eZUQS
+	UGthQqkJUS3BZHY+TkmSO99wWWAHgvgLWUcVtkkKmcTFG3GL2AgJqvnPk64a0nOdwymPJaXVTir
+	eIjYoLjMf9bZsCOVFjGihpP/q6MOUnvyVqmHiK1d6YXT4jA/FbN3b6iJTyA0iHZOBQNuPC4y3v+
+	fcF+Kcnw2pZhiLP1WoZFgAEEeRhq1VtTO9aKgXaaQbcye/g1LNho8+AlpyoukQsjZ0tNrLnoNAQ
+	tXqssXgF/tZsEBTXEqEGB4Ixg8XXS8YdM4k2g==
+X-Received: by 2002:a17:903:8d0:b0:2d7:4cd4:5a7f with SMTP id d9443c01a7336-2d74def6351mr288967185ad.12.1788023116608;
+        Sat, 29 Aug 2026 10:05:16 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-142e0dc898dsm15761053c88.9.2026.08.29.08.58.09
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3286f7be607sm17361289eec.10.2026.08.29.10.05.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Aug 2026 08:58:10 -0700 (PDT)
+        Sat, 29 Aug 2026 10:05:15 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <fac7741f-5bd6-428d-91f9-6dbd71343f76@roeck-us.net>
-Date: Sat, 29 Aug 2026 08:58:08 -0700
+Message-ID: <89971e52-a88c-49bd-a0a6-17e48820974d@roeck-us.net>
+Date: Sat, 29 Aug 2026 10:05:13 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,14 +71,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2] hwmon: it87: Add basic IT8613E fan monitoring
- support
-To: Jerome Tollet <jerome.tollet@gmail.com>, Jean Delvare <jdelvare@suse.com>
-Cc: linux-hwmon@vger.kernel.org, Benoit Masson <yahoo@perenite.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260829113011.51290-1-jerome.tollet@gmail.com>
+Subject: Re: [PATCH v3 2/2] hwmon: (starfive-fan-tach) Add fan tach driver for
+ StarFive JHB100
+To: sashiko-reviews@lists.linux.dev,
+ Changhuang Liang <changhuang.liang@starfivetech.com>
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, robh@kernel.org,
+ conor+dt@kernel.org
+References: <20260824030234.9321-1-changhuang.liang@starfivetech.com>
+ <20260824030234.9321-3-changhuang.liang@starfivetech.com>
+ <20260824032750.0749D1F000E9@smtp.kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -123,249 +125,73 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260829113011.51290-1-jerome.tollet@gmail.com>
+In-Reply-To: <20260824032750.0749D1F000E9@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 8/29/26 04:30, Jerome Tollet wrote:
-> The IT8613E is not recognized by the in-tree it87 driver. Full
-> support was proposed previously but withdrawn after problems were found
-> in the temperature and PWM paths.
+On 8/23/26 20:27, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] Missing explicit initialization of interrupt and channel enable registers during probe
+> --
 > 
+> --- Patch [2]: [PATCH v3 2/2] hwmon: (starfive-fan-tach) Add fan tach driver for StarFive JHB100 ---
+> commit ea266a681c03cda9faa04f08b171c20f1e003841
+> Author: Changhuang Liang <changhuang.liang@starfivetech.com>
+> 
+> hwmon: (starfive-fan-tach) Add fan tach driver for StarFive JHB100
+> 
+> This commit adds a new driver for the fan tachometer controller found on the
+> StarFive JHB100 SoC. It provides support for up to 16 independent fan
+> tachometer inputs and reports fan speed in RPM through the hwmon sysfs
+> interface.
+> 
+>> diff --git a/drivers/hwmon/starfive-fan-tach.c b/drivers/hwmon/starfive-fan-tach.c
+>> new file mode 100644
+>> index 0000000000000..7f56ecc87c1c8
+>> --- /dev/null
+>> +++ b/drivers/hwmon/starfive-fan-tach.c
+> [ ... ]
+>> +static int starfive_fan_tach_probe(struct platform_device *pdev)
+>> +{
+> [ ... ]
+>> +	ret = reset_control_deassert(priv->rst);
+>> +	if (ret) {
+>> +		clk_disable_unprepare(priv->clk);
+>> +		return dev_err_probe(dev, ret, "Failed to deassert reset\n");
+>> +	}
+>> +
+>> +	ret = devm_add_action_or_reset(dev, starfive_fan_tach_disable, priv);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	writel(STARFIVE_FAN_TACH_STALL_INT_MASK | STARFIVE_FAN_TACH_SLOW_INT_MASK,
+>> +	       priv->regs + STARFIVE_FAN_TACH_STATUS);
+>> +	writel(priv->clk_rate / STARFIVE_FAN_DEFAULT_MEASURE_RATIO,
+>> +	       priv->regs + STARFIVE_FAN_TACH_MEASURE_TIME);
+> 
+> [Severity: Medium]
+> Could this code be susceptible to an interrupt storm if the bootloader leaves
+> the FAN-TACH controller enabled with unmasked interrupts?
+> 
+> Since the driver only deasserts the reset line during probe (and does not
+> assert it first), the hardware state might be retained from before the kernel
+> booted. Any read-modify-write operations on STARFIVE_FAN_TACH_INT_EN and
+> STARFIVE_FAN_TACH_CH_EN later in the driver would then preserve these stray
+> bits.
+> 
+> Once devm_request_irq() is called, any unexpected unmasked interrupts will
+> trigger. If the interrupt condition is continuous (e.g., a disconnected or
+> stalled fan), the ISR will clear the STATUS bit, but the hardware will
+> immediately re-assert it. Because the driver's ISR does not mask unexpected
+> interrupts in INT_EN (it only signals completions if armed_stall or
+> armed_slow are set), wouldn't this lead to an interrupt storm?
+> 
+> Should the interrupt and channel enable registers be explicitly initialized
+> to 0 before requesting the IRQ to ensure a known safe hardware state?
+> 
+Please either implement as suggested or explain why it is not needed.
+In that case, please add a comment into the code explaining the reason.
 
-Those problems should be fixed instead. Given the feedback in the link
-that should not be too difficult.
-
+Thanks,
 Guenter
-
-> Add conservative support limited to fan input monitoring. Detect device
-> ID 0x8613, check the fan pin muxes, use the existing 16-bit tachometer
-> layout, and expose enabled fan inputs read-only. Do not expose voltage,
-> temperature, PWM, limit, beep, or alarm interfaces.
-> 
-> The device ID and fan pin-mux checks follow the earlier v4 proposal by
-> Benoit Masson.
-> 
-> Tested on a system with an IT8613E at 0xa30, revision 12. Only
-> fan2_input was exposed, with stable readings between 1268 and 1320 RPM.
-> In a back-to-back comparison, the in-tree driver with force_id=0x8622
-> reported 1483 RPM and the out-of-tree driver reported 1442 RPM.
-> 
-> Link: https://lore.kernel.org/linux-hwmon/20260114221210.98071-1-yahoo@perenite.com/
-> Signed-off-by: Jerome Tollet <jerome.tollet@gmail.com>
-> ---
-> Changes in v2:
-> - Skip PWM, limit, and voltage configuration for fan-input-only chips
->    in the resume path.
-> - Link to v1: https://lore.kernel.org/linux-hwmon/20260829110829.34269-1-jerome.tollet@gmail.com/
-> 
->   Documentation/hwmon/it87.rst | 10 +++++
->   drivers/hwmon/it87.c         | 73 +++++++++++++++++++++++++++++++-----
->   2 files changed, 73 insertions(+), 10 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/it87.rst b/Documentation/hwmon/it87.rst
-> index fc1c90b02..d00238e7e 100644
-> --- a/Documentation/hwmon/it87.rst
-> +++ b/Documentation/hwmon/it87.rst
-> @@ -11,6 +11,16 @@ Supported chips:
->   
->       Datasheet: Not publicly available
->   
-> +  * IT8613E
-> +
-> +    Prefix: 'it8613'
-> +
-> +    Addresses scanned: from Super I/O config space (8 I/O ports)
-> +
-> +    Datasheet: Not publicly available
-> +
-> +    Only fan input monitoring is currently supported.
-> +
->     * IT8620E
->   
->       Prefix: 'it8620'
-> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-> index 87edb1b60..a60a68b62 100644
-> --- a/drivers/hwmon/it87.c
-> +++ b/drivers/hwmon/it87.c
-> @@ -12,6 +12,7 @@
->    *  similar parts.  The other devices are supported by different drivers.
->    *
->    *  Supports: IT8603E  Super I/O chip w/LPC interface
-> + *            IT8613E  Super I/O chip w/LPC interface (fan inputs only)
->    *            IT8620E  Super I/O chip w/LPC interface
->    *            IT8622E  Super I/O chip w/LPC interface
->    *            IT8623E  Super I/O chip w/LPC interface
-> @@ -65,7 +66,7 @@
->   
->   enum chips { it87, it8712, it8716, it8718, it8720, it8721, it8728, it8732,
->   	     it8771, it8772, it8781, it8782, it8783, it8786, it8790,
-> -	     it8792, it8603, it8620, it8622, it8628, it8689, it87952 };
-> +	     it8792, it8603, it8613, it8620, it8622, it8628, it8689, it87952 };
->   
->   static struct platform_device *it87_pdev[2];
->   
-> @@ -159,6 +160,7 @@ static inline void superio_exit(int ioreg, bool noexit)
->   #define IT8786E_DEVID 0x8786
->   #define IT8790E_DEVID 0x8790
->   #define IT8603E_DEVID 0x8603
-> +#define IT8613E_DEVID 0x8613
->   #define IT8620E_DEVID 0x8620
->   #define IT8622E_DEVID 0x8622
->   #define IT8623E_DEVID 0x8623
-> @@ -328,6 +330,7 @@ struct it87_devices {
->   #define FEAT_FOUR_PWM		BIT(21)	/* Supports four fan controls */
->   #define FEAT_FOUR_TEMP		BIT(22)
->   #define FEAT_FANCTL_ONOFF	BIT(23)	/* chip has FAN_CTL ON/OFF */
-> +#define FEAT_FAN_INPUT_ONLY	BIT(24)	/* only fan inputs are supported */
->   
->   static const struct it87_devices it87_devices[] = {
->   	[it87] = {
-> @@ -476,6 +479,12 @@ static const struct it87_devices it87_devices[] = {
->   		  | FEAT_AVCC3 | FEAT_PWM_FREQ2,
->   		.peci_mask = 0x07,
->   	},
-> +	[it8613] = {
-> +		.name = "it8613",
-> +		.model = "IT8613E",
-> +		.features = FEAT_16BIT_FANS | FEAT_FIVE_FANS
-> +		  | FEAT_FAN_INPUT_ONLY,
-> +	},
->   	[it8620] = {
->   		.name = "it8620",
->   		.model = "IT8620E",
-> @@ -560,6 +569,7 @@ static const struct it87_devices it87_devices[] = {
->   #define has_scaling(data)	((data)->features & (FEAT_12MV_ADC | \
->   						     FEAT_10_9MV_ADC))
->   #define has_fanctl_onoff(data)	((data)->features & FEAT_FANCTL_ONOFF)
-> +#define has_fan_input_only(data)	((data)->features & FEAT_FAN_INPUT_ONLY)
->   
->   struct it87_sio_data {
->   	int sioaddr;
-> @@ -2427,6 +2437,9 @@ static umode_t it87_is_visible(struct kobject *kobj,
->   	struct device *dev = kobj_to_dev(kobj);
->   	struct it87_data *data = dev_get_drvdata(dev);
->   
-> +	if (has_fan_input_only(data))
-> +		return 0;
-> +
->   	if ((index == 2 || index == 3) && !data->has_vid)
->   		return 0;
->   
-> @@ -2469,6 +2482,9 @@ static umode_t it87_fan_is_visible(struct kobject *kobj,
->   	if (!(data->has_fan & BIT(i)))
->   		return 0;
->   
-> +	if (has_fan_input_only(data) && a != 0)
-> +		return 0;
-> +
->   	if (a == 3) {				/* beep */
->   		if (!data->has_beep)
->   			return 0;
-> @@ -2790,6 +2806,9 @@ static int __init it87_find(int sioaddr, unsigned short *address,
->   	case IT8623E_DEVID:
->   		sio_data->type = it8603;
->   		break;
-> +	case IT8613E_DEVID:
-> +		sio_data->type = it8613;
-> +		break;
->   	case IT8620E_DEVID:
->   		sio_data->type = it8620;
->   		break;
-> @@ -2944,6 +2963,28 @@ static int __init it87_find(int sioaddr, unsigned short *address,
->   
->   		sio_data->beep_pin = superio_inb(sioaddr,
->   						 IT87_SIO_BEEP_PIN_REG) & 0x3f;
-> +	} else if (sio_data->type == it8613) {
-> +		int reg27, reg29, reg2a;
-> +
-> +		superio_select(sioaddr, GPIO);
-> +
-> +		reg27 = superio_inb(sioaddr, IT87_SIO_GPIO3_REG);
-> +		reg29 = superio_inb(sioaddr, IT87_SIO_GPIO5_REG);
-> +		reg2a = superio_inb(sioaddr, IT87_SIO_PINX1_REG);
-> +
-> +		/* fan1 is not available on IT8613E. */
-> +		sio_data->skip_fan |= BIT(0);
-> +		if (reg29 & BIT(2))
-> +			sio_data->skip_fan |= BIT(1);
-> +		if (reg27 & BIT(7))
-> +			sio_data->skip_fan |= BIT(2);
-> +		if (!(reg2a & BIT(0)) || (reg29 & BIT(7)))
-> +			sio_data->skip_fan |= BIT(3);
-> +		if (!(reg27 & BIT(1)))
-> +			sio_data->skip_fan |= BIT(4);
-> +
-> +		/* PWM control is not yet supported. */
-> +		sio_data->skip_pwm |= GENMASK(5, 0);
->   	} else if (sio_data->type == it8603) {
->   		int reg27, reg29;
->   
-> @@ -3355,7 +3396,8 @@ static void it87_init_device(struct platform_device *pdev)
->   		data->auto_pwm[i][3] = 0x7f;	/* Full speed, hard-coded */
->   	}
->   
-> -	it87_check_limit_regs(data);
-> +	if (!has_fan_input_only(data))
-> +		it87_check_limit_regs(data);
->   
->   	/*
->   	 * Temperature channels are not forcibly enabled, as they can be
-> @@ -3364,7 +3406,8 @@ static void it87_init_device(struct platform_device *pdev)
->   	 * run-time through the temp{1-3}_type sysfs accessors if needed.
->   	 */
->   
-> -	it87_check_voltage_monitors_reset(data);
-> +	if (!has_fan_input_only(data))
-> +		it87_check_voltage_monitors_reset(data);
->   
->   	it87_check_tachometers_reset(pdev);
->   
-> @@ -3525,10 +3568,14 @@ static int it87_probe(struct platform_device *pdev)
->   	}
->   
->   	/* Check PWM configuration */
-> -	enable_pwm_interface = it87_check_pwm(dev);
-> -	if (!enable_pwm_interface)
-> -		dev_info(dev,
-> -			 "Detected broken BIOS defaults, disabling PWM interface\n");
-> +	if (has_fan_input_only(data)) {
-> +		enable_pwm_interface = 0;
-> +	} else {
-> +		enable_pwm_interface = it87_check_pwm(dev);
-> +		if (!enable_pwm_interface)
-> +			dev_info(dev,
-> +				 "Detected broken BIOS defaults, disabling PWM interface\n");
-> +	}
->   
->   	/* Starting with IT8721F, we handle scaling of internal voltages */
->   	if (has_scaling(data)) {
-> @@ -3580,6 +3627,10 @@ static int it87_probe(struct platform_device *pdev)
->   		if (((reg >> 4) & 0x03) == 0x01)
->   			data->has_in |= BIT(12);
->   	}
-> +	if (has_fan_input_only(data)) {
-> +		data->has_in = 0;
-> +		data->has_temp = 0;
-> +	}
->   
->   	data->has_beep = !!sio_data->beep_pin;
->   
-> @@ -3660,9 +3711,11 @@ static int it87_resume(struct device *dev)
->   	if (err)
->   		return err;
->   
-> -	it87_check_pwm(dev);
-> -	it87_check_limit_regs(data);
-> -	it87_check_voltage_monitors_reset(data);
-> +	if (!has_fan_input_only(data)) {
-> +		it87_check_pwm(dev);
-> +		it87_check_limit_regs(data);
-> +		it87_check_voltage_monitors_reset(data);
-> +	}
->   	it87_check_tachometers_reset(pdev);
->   	it87_check_tachometers_16bit_mode(pdev);
->   
-> 
-> base-commit: 75f2c0b3690702c90863c2e138cb5520670845ea
 
