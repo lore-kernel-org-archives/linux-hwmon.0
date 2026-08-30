@@ -1,77 +1,93 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A389B3806BD;
-	Sun, 30 Aug 2026 09:53:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F3F43B0599;
+	Sun, 30 Aug 2026 12:51:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788083626; cv=none; b=L8IuCAoUCy0z5L4xurJrsCC+fnswaNSDhykVpeDggymsaTjykc23s7iWhhMFufa1Yabr+V6AOESuEvqQOdAauDhkvZRlrWpGzisRVjq/Ki9jT2VSsk2z5T7W1kWpSYCViv0LXHMFXUggl/eawIAhcTFX0uRPkq50sryXSNkEOh8=
+	t=1788094265; cv=none; b=MT/nbuCmIwnwB0z06orP5uIm/E6KHM1KIriY6sOKy100fqa06N6BP/J5+vC0AS5wUxjv6rORYUFwu5JhXHOZhpMSXwEdC433HyeIfcuB4F3p7Jz4ObZ55oAT784j9vXXuWcOMYEmdYHbYVGGMdZv1FRsNPz0xHl3RWI0G/XaHXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788083626; c=relaxed/simple;
-	bh=ZchydP8QjD4yV+Zk9hB5b2DfbGXCpkqqoaj3x6dvggM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LQR+EZSP9hNkuxpkd5mxnO9EG9dQwT8LVZbysSfGjFJ39ULMYJMLMdqgiQ6bwbeWaQKv5VVmz4yLP+s//FxGO59cyJH6gNoh/roqGjiaezuDEyU441fv4xSnKVVt1Fexv07wosu56W+XrtuutnMw8hxeH2BZf9RjoPurisz9lG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O8PdxOQw; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O8PdxOQw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A341F000E9;
-	Sun, 30 Aug 2026 09:53:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788083623;
-	bh=V7GiyyeYtymPDpp0Kz+/T1xEheO8ntFtb7p/uSGB400=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=O8PdxOQwutK/bpxrGU7cZckHsp/V/h1BkecByM1NCrRxDGKB3sRBgST0Gzdv6KZXI
-	 zSeFOszM4/xWqgQTiO3Tirwl71iQEZYFzI7UE7q2zmLTYSGNaT8q/M3qV1XWc1G2tq
-	 KMSNIDrWB6o3KbOwclQIt0tcxe6SYR6i0aldSZlvkh2answ/KqSxCBgSHKMSeD4kA2
-	 8aJ3Y2/3abeqRtt6FP1WDAstgrJiSaD//h7cML1pjM5AAsc4a+rg8nyXKZ2+xxQMGt
-	 HcxTJHKRbkriFcNht8KCRPTHNGPLFOYzru4MBdlZmdhl9UHKjn8nH/Y3C7yGiAwRr9
-	 F9jsBwkILRGSw==
-Date: Sun, 30 Aug 2026 11:53:38 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Frank.Li@oss.nxp.com
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Frank Li <Frank.Li@nxp.com>, 
-	Wensheng Wang <wenswang@yeah.net>, Cosmo Chou <chou.cosmo@gmail.com>, 
-	Colin Huang <u8813345@gmail.com>, Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>, 
-	Dixit Parmar <dixitparmar19@gmail.com>, Antoni Pokusinski <apokusinski01@gmail.com>, 
-	Eddie James <eajames@linux.ibm.com>, Thorsten Blum <thorsten.blum@linux.dev>, 
-	"open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
-Subject: Re: [PATCH 1/1] dt-bindings: hwmon: tmp102: move ti,tmp103 out of
- trivial-devices.yaml
-Message-ID: <20260830-alluring-goldfish-of-cubism-eef6db@quoll>
-References: <20260826211422.3299728-1-Frank.Li@oss.nxp.com>
+	s=arc-20240116; t=1788094265; c=relaxed/simple;
+	bh=H8bityHP/ZFd+dcS6S/8dsm4yXn3yyl2EEAPOGOufmM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FZEI3Cs7RX0tCkOQk/ociKWGmFXoukEtrwgbBaV27jFdD6aRPk7kQ49CT8dV67f9fmJc0mncwtR0TOgoP5aG0/7KH6JZWM34v6eyxD2rpPtO5RCc7A4lqoU7lhO4SCg8y+iUMQG8SRKEISlRsSGOcSlWcNGA4ntC/sDbEi1FmGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost.localdomain (unknown [111.196.241.250])
+	by APP-03 (Coremail) with SMTP id rQCowAAXGzkmJ5Rq8aKaBg--.26750S2;
+	Sun, 30 Aug 2026 20:50:47 +0800 (CST)
+From: Pengpeng Hou <pengpeng@iscas.ac.cn>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Pengpeng Hou <pengpeng@iscas.ac.cn>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Ryan Chen <ryan_chen@aspeedtech.com>,
+	Billy Tsai <billy_tsai@aspeedtech.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	linux-hwmon@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: aspeed-pwm-tacho: propagate reset deassert errors
+Date: Sun, 30 Aug 2026 20:50:44 +0800
+Message-ID: <20260830125044.97718-1-pengpeng@iscas.ac.cn>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260826211422.3299728-1-Frank.Li@oss.nxp.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:rQCowAAXGzkmJ5Rq8aKaBg--.26750S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Jw4kur43JF18KF47WFyxAFb_yoWkCwcE9r
+	48WF9rXrW3GrZ8ur1qyrWfZFWY9F9xu3ZY9rn0qwsxJF9Ivr98ur1vkrn8ZF1UG3sIqFy3
+	uF4DZrWfAw13ujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUb3kFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+	Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJV
+	W0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+	n2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+	kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+	67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8Jw
+	CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1x
+	MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
+	VFxhVjvjDU0xZFpf9x0JUL0edUUUUU=
+X-CM-SenderInfo: pshqw1xhqjqxpvfd2hldfou0/
 
-On Wed, Aug 26, 2026 at 05:14:19PM -0400, Frank.Li@oss.nxp.com wrote:
-> From: Frank Li <Frank.Li@nxp.com>
-> 
-> Move ti,tmp103 binding from trivial-devices.yaml to ti,tmp102.yaml. Both
-> devices are single temperature sensors and update "#thermal-sensor-cells"
-> property to accept values 0 and 1 (passing no argument is equivalent to
-> passing 0 as the first argument)
+aspeed_pwm_tacho_probe() installs its reset cleanup action and configures
+the
+controller after an unchecked reset deassertion.
 
-Why updating the property? If there are single sensors, then what is the
-cell for?
+Stop probing when the reset controller rejects the transition, before the
+hwmon device becomes visible.
 
-> 
-> Fix below CHECK_DTBS warnings:
-> arch/arm/boot/dts/nxp/imx/imx6dl-plym2m.dtb: temperature-sensor@70 (ti,tmp103): '#thermal-sensor-cells' does not match any of the regexes: '^pinctrl-[0-9]+$'
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
->  Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml | 5 +++--
->  Documentation/devicetree/bindings/trivial-devices.yaml | 2 --
->  2 files changed, 3 insertions(+), 4 deletions(-)
+Fixes: 18c514cc0e02 ("hwmon: (aspeed-pwm-tacho) Deassert reset in probe")
+Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
+---
+ drivers/hwmon/aspeed-pwm-tacho.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
+index 1c5945d4ba377..bfce589c3fb1f 100644
+--- a/drivers/hwmon/aspeed-pwm-tacho.c
++++ b/drivers/hwmon/aspeed-pwm-tacho.c
+@@ -934,7 +934,9 @@ static int aspeed_pwm_tacho_probe(struct platform_device *pdev)
+ 			"missing or invalid reset controller device tree entry");
+ 		return PTR_ERR(priv->rst);
+ 	}
+-	reset_control_deassert(priv->rst);
++	ret = reset_control_deassert(priv->rst);
++	if (ret)
++		return ret;
+ 
+ 	ret = devm_add_action_or_reset(dev, aspeed_pwm_tacho_remove, priv);
+ 	if (ret)
+
+base-commit: 08dbfad3f5040f5bdb6c529da20d6d4e81fefd72
+-- 
+2.50.1
 
