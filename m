@@ -1,68 +1,69 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6A8F3A1E7B
-	for <linux-hwmon@vger.kernel.org>; Sun, 30 Aug 2026 15:22:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCC473B27D4
+	for <linux-hwmon@vger.kernel.org>; Sun, 30 Aug 2026 15:38:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788103334; cv=none; b=OkVdUg0tPCvintAZXEkjq1yOwARaQiUACiP76yuwuM/uxr3WvpNdF7Uc1K4UdMW+eAIFOPWhlx+tEijfeY6gVTTrl1b2Q/o2F1Q08SbKti50s4EpHLH+rgmnmNbyId5zrysICEx8l+VHeyGsTHZ/kc2dA6SGh4HPw7LLH5cyzmo=
+	t=1788104294; cv=none; b=Yf16kv0vHsKepOA5yfBuTVKFM4LikxNcGQ/MoXMr6Jsn9e9SS2hkr9OcNAK4ufDgEkAZ52Yfdk7WZsM0U7mfyWK1xlBOi4abmnCyGRUT7aF8FCJfl5ttJiF9EIWG9w5vmKD/clzJorry7/B6aDLLvgAg74l7iy7xkfNjcsehHZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788103334; c=relaxed/simple;
-	bh=B0zu/DDp0h8HdNP2kfSYHLE9QT16HtxltiewzlBQgbw=;
+	s=arc-20240116; t=1788104294; c=relaxed/simple;
+	bh=42a7FeYTUqyvHIggrb14edhLBGxKxj9yK2RL3MdOSbw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QB6iPA6W0PTXUd8C8It2ZC6vumH35hLnucH+klvzEpIGWTqSrLd9snlLWYsJm6YfUUEKbybPPn7FsX+dXJyNci2nJHEqVD5PLkH+d1ZMXFPZqXY9by4xbyeHKA0irP9Jy0O96HKl3z9fxRCmf+IH9D08HkKe/KVn32Hfoo5wES4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AFhj5nBP; arc=none smtp.client-ip=209.85.214.182
+	 In-Reply-To:Content-Type; b=ELWeRVrZz3Zb/Xd8leyKFzfV0TIb1eGoL/dQhVTGY/Sc/AzkG2G4j+crfMNylAnYd1GkOICXvkV7rgShs3h8gXOGHaqU80GFx2QAWorTaQDHyn3VbkpDXGZQmA+mW/FTzu+HQ8/dKsXU9P/61W08y8oJlkxq2BuGdaRRbK6lSCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=muvk5iVW; arc=none smtp.client-ip=209.85.215.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AFhj5nBP"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2d8fd3b729dso6475375ad.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 30 Aug 2026 08:22:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="muvk5iVW"
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-cc1e1ff659bso2273528a12.0
+        for <linux-hwmon@vger.kernel.org>; Sun, 30 Aug 2026 08:38:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788103332; x=1788708132; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788104292; x=1788709092; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ioMgOLq7N+5LIk8vLZHLXDRGgolXWbwydGuFkQ+7aT0=;
-        b=AFhj5nBPRluOGmdnjXcNTt9jw3MwkPe5yVANJzTfMHZxJ967Db6APOuxsI9zzd8W9b
-         VKaGwT66YBw3RL+Mpzu/OKiSTxktRMO54tceOw7H6gT8xACmKBMhUVtl17wOjEdJXWk8
-         kZiLmg56y82vFqZDRB2tBjowsgn/y1qZHebYAMvNPCdKQc+UVEcKjQzX3KKXMTb+KokJ
-         J7bSFg8FMZ/z6CpqMqCQM1Fd1KAoivbxsyt+z0nHJoZoY8wHYOyCObtYIhxkttF2cJUv
-         Nbaox6Y6fQlgVka0YHUUjmwgadOlcYUVJfDckdVsibrspHBK+1JicrJL+rmWONyJ+078
-         APTw==
+        bh=ciRQvpR+Sh+544fgrHeR8zv7MW8fKoH4Hb2ESodOcd4=;
+        b=muvk5iVWSOPy9xp/zAWa1xVqYPWzkWblqEAhR3RWKJ7VIGsxgYOvepb61JnRTfYpJw
+         r153OEWp+HGEjaB9cgpvFAcl5Ro5kxeexJJdi6e8CQ5tHpryHlp+Q27eOEwPjbot/KbF
+         +PzjUH3Acfnr0XPQtRc446yMTTv4LEeG1XESJAfw+UIyOHTFK1G0I5orWO/32LZf+29z
+         nhhl8fR5SGsDx6xKujmohXbxp1sOg4RQf22xSP+OKgIVW487MyaYLcr9Xqv6CF9LjzBM
+         Ixo1pCRV9vFtja1ylmsdz38DZaM9zkdNzPcJD6rYWPMgxzWfDG0SVMDOfCaSbofVMjYH
+         iAzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788103332; x=1788708132;
+        d=1e100.net; s=20251104; t=1788104292; x=1788709092;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=ioMgOLq7N+5LIk8vLZHLXDRGgolXWbwydGuFkQ+7aT0=;
-        b=tSbIaq2XkxGyZvIkEHvHDC4JHNh5tIU2N8QWbk/PEOUVkfiXXbXOP+gpx/9FlIt0Fu
-         Ku/Tf8oOKQ4jNWWSti4v2OpE/seOWY7BvGk1X03BIVC4B/5JOf8JiDHkzfsarOp+koQh
-         +aVyCFRlNZXx5xo6+SGKeKYL+IDdttcKNQ9odochBFLKl+hbl0Kd9R+KV7H5xgM0BxxX
-         jrxywAig39qFQK81HN4wgbptKD/gVnL87TMxJmEjG2uofqjGsGv0aT26tdOn90lqWbLO
-         xfgZORhvZoTgILbKIhiPmqfaCFSpgBp60R2xEJPeb9G4bZ+3Bee4w+LtLIrIdIyqf47U
-         ZI0g==
-X-Gm-Message-State: AFuF++no9ejBk+VwswRxsquH2xDx2ci27VgFQR/wokIur9BkFl2nmBdN
-	izKd34LutBBOInqq5c8lna+g4WqjuxIMbVb7l47zegxhsJnBYXE6YcDl
-X-Gm-Gg: AYBFou0mGg11ZWF9eOWBHx0G6fPQDndkCjPJGZKrwLjbwSfaKTQIRgdYZYwAaQFvH4a
-	7euJZZXzEuysgtAU8mr4CcgbsXwg6Y69hLgyqTFbOm6ONxXbwU4iBZyC2pLRLG/O9HoUh+0RlTl
-	qcSh8w3G/tedvufoD4WENYJYjiPw24FLSlQNLkUOuhYYEpeBheOF4lj/4vVvw4T02FsDkqm207v
-	xFDs0Jq4CzznTyS8o4zYchp2j5ko0T4OcCBrdNkPeJ3JgjKzhyxuLrKJqpST3spKyzJ5gQ0398Q
-	mCp6CJ25tyu78Za+wQdGxYy3DOg3qA/P0TOhJE4boXsrkj/u7QDe/2/HkMQyovUPk8oONZg55dI
-	mY65gZexZ4ZX2YS8xNwvHVadMM3bLZTojOYH5pGOL4AJIKT++Bafl5NBEHwRLmwzRGcZMAH+2rk
-	Lb3IouYEqdu31yoAGukXeZBqz0tcyk9gqwoRFHVCnWmxjXZEXdLdFwJe8ozLyAvnJmLH28NhRUv
-	TT0kseWUT7aB9n1icoNfc+AluZ5NiYQkYGE/A==
-X-Received: by 2002:a17:902:d98b:b0:2ca:9d5a:8b6c with SMTP id d9443c01a7336-2d74dc6dc7emr337710335ad.5.1788103331921;
-        Sun, 30 Aug 2026 08:22:11 -0700 (PDT)
+        bh=ciRQvpR+Sh+544fgrHeR8zv7MW8fKoH4Hb2ESodOcd4=;
+        b=IjrZnobMCf6NSCaRdKqjaAdWSp/96D6Yjq/WrCtuFpnQoe0cphNnelxHX6n3eoNiMR
+         xZhrv9JsRjshX8juSlRpjJglt2jPTfkl5eKa3uJhTs0DlBBANLYnXUk8dBsZKoBZPC/A
+         73ta0vLhdzdOqpgzuZLsOhBoOfbxIboc/pcNDM7TyCmu7nw8Ck2V5d69MOYkVZBW6o7P
+         k+JYsjx40DgiPUjLn+/fcDK5FZsqJH6BDCHIp1KlGcrIIwbNyp6LTyfOCCkGbtYCeaMf
+         38aTwLKncY5eLJBGVPPpV5W8xVUZeZkeZyzztUW8cHnT1jFpiTOhYbqa0QglhT+BAaDP
+         iCoQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rpp7XsF1KUnM+jmLV/gai1zPZdysqXlF7aDaGG4FrRDNP7kebJ/R4+ndzzFtgSI5cY00IHRkZwfxW4beA==@vger.kernel.org
+X-Gm-Message-State: AFuF++nbmkKVKyKbasva83BkD8Bgf7ySSv0LMIIDI2BZbKvcTzBnyrxx
+	6S9fxE6S0fkhEje6RanLO3bEK7ZBJAHlITAIt9z9aedcTiTL8gqtX9gj
+X-Gm-Gg: AR+sD115K/j6BpMHAKiL93NAohX3VMxUT6AtEXMwVYBL8PMTOzrxuSL+h3f2nHXHNgT
+	Sxgwk7NdxFljJIBMm23QldCc7p/Cpcl9S1pAFqec3aPWn3MY5CRnbeLflQ09Fs2crRYeBkbGB/4
+	m1ghAQkTds/2Kjrm7GqMcIPvVqNsDPW0oRBoKJGkI3BVA/emYmEP+i62FFStkcg2d4CkMt0gI6O
+	vpTH0B4cvNNTWc5md9nrzDVFkWnW3oBjjlZrXzfvCWv685pSKsZR7cwG8SneDg4NTCl0OkqtTkb
+	zXrW+dCmnshMEjpYnskiSXDM7usvZCrzRZr3mgpWpkCif1hNQ+0F4Uz4l5wnb0qMOLWcgdnVdpC
+	5T1kwkcYSA88jbpWbTa9kwSobVIVGpQMqX1HqnoS6PzHsX+8rWXcwWX6U4lSLJTODspEe8Yjuo6
+	32SkJ/+5vcT8uzte3WxOUnL9j8ZFgQggZeCJEetMOjJXEWQeLDtlvEKP3f0pwzcLUGStApyCSeX
+	Fz9PylaAzpBhEeJ8tmLQ46+/d8WinWnZD5CiLIE0FPk7NdU
+X-Received: by 2002:a05:6a20:7345:b0:3d1:60d3:99f8 with SMTP id adf61e73a8af0-3d266ebc963mr30705222637.5.1788104292060;
+        Sun, 30 Aug 2026 08:38:12 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d8fdf635e1sm10369625ad.28.2026.08.30.08.22.10
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc1f36ae4ccsm3055626a12.19.2026.08.30.08.38.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Aug 2026 08:22:11 -0700 (PDT)
+        Sun, 30 Aug 2026 08:38:11 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4242501b-82b2-4ced-82e8-ef4022aa7175@roeck-us.net>
-Date: Sun, 30 Aug 2026 08:22:10 -0700
+Message-ID: <77319f64-75d1-48d6-954d-7e1891362b08@roeck-us.net>
+Date: Sun, 30 Aug 2026 08:38:10 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,13 +71,23 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] hwmon: (gpio-fan) fix pm_runtime imbalance for
- alarm-only fans
-To: Cong Nguyen <congnt264@gmail.com>,
- Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260828105018.2392383-1-congnt264@gmail.com>
- <20260830150508.1475105-1-congnt264@gmail.com>
+Subject: Re: [PATCH 1/1] dt-bindings: hwmon: tmp102: move ti,tmp103 out of
+ trivial-devices.yaml
+To: Krzysztof Kozlowski <krzk@kernel.org>, Frank.Li@oss.nxp.com
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Frank Li <Frank.Li@nxp.com>,
+ Wensheng Wang <wenswang@yeah.net>, Cosmo Chou <chou.cosmo@gmail.com>,
+ Colin Huang <u8813345@gmail.com>, =?UTF-8?Q?Nuno_S=C3=A1?=
+ <nuno.sa@analog.com>, Dixit Parmar <dixitparmar19@gmail.com>,
+ Antoni Pokusinski <apokusinski01@gmail.com>,
+ Eddie James <eajames@linux.ibm.com>, Thorsten Blum
+ <thorsten.blum@linux.dev>,
+ "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
+ "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
+ <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+ imx@lists.linux.dev
+References: <20260826211422.3299728-1-Frank.Li@oss.nxp.com>
+ <20260830-alluring-goldfish-of-cubism-eef6db@quoll>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -122,38 +133,43 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260830150508.1475105-1-congnt264@gmail.com>
+In-Reply-To: <20260830-alluring-goldfish-of-cubism-eef6db@quoll>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 8/30/26 08:05, Cong Nguyen wrote:
-> pm_runtime_enable() runs unconditionally in probe, but the devm cleanup
-> that calls pm_runtime_disable() is only registered when control GPIOs
-> are present. Alarm-only fans never get it, so unbind warns about the
-> missing disable.
+On 8/30/26 02:53, Krzysztof Kozlowski wrote:
+> On Wed, Aug 26, 2026 at 05:14:19PM -0400, Frank.Li@oss.nxp.com wrote:
+>> From: Frank Li <Frank.Li@nxp.com>
+>>
+>> Move ti,tmp103 binding from trivial-devices.yaml to ti,tmp102.yaml. Both
+>> devices are single temperature sensors and update "#thermal-sensor-cells"
+>> property to accept values 0 and 1 (passing no argument is equivalent to
+>> passing 0 as the first argument)
 > 
-> Switch to devm_pm_runtime_enable(), registered before gpio_fan_stop()'s
-> devm action so LIFO teardown runs gpio_fan_stop() first. gpio_fan_stop()
-> calls set_fan_speed(0) -> pm_runtime_put_sync(), which needs PM still
-> enabled to reach gpio_fan_runtime_suspend() and turn the regulator off;
-> registering enable after gpio_fan_stop() (as v1 did) reverses that order
-> and leaves the regulator on.
+> Why updating the property? If there are single sensors, then what is the
+> cell for?
 > 
-> Fixes: 0d01110e6356 ("hwmon: (gpio-fan) Add regulator support")
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Link: https://lore.kernel.org/r/b9792be3-fcd6-468c-9149-7e33640ee167@roeck-us.net
-> Cc: stable@vger.kernel.org
-> Assisted-by: Claude:claude-opus-4
-> Signed-off-by: Cong Nguyen <congnt264@gmail.com>
-> ---
 
-Another instance of a new patch version sent as reply to a previous
-version.
-
-It is against guidance in Documentation/process/submitting-patches.rst,
-yet it proliferates, and more and more people send new patch revisions
-this way. Where is this suggested ?
+It registers as temperature sensor with the thermal subsystem. The documentation
+of #thermal-sensor-cells states that the property is mandatory and "... Will be
+0 on sensor nodes with only a single sensor". I don't claim to understand how
+this is supposed to work, but the thermal subsystem code looking for it does
+seem to suggest that the property is mandatory, even if there is only a single
+sensor.
 
 Thanks,
 Guenter
+
+>>
+>> Fix below CHECK_DTBS warnings:
+>> arch/arm/boot/dts/nxp/imx/imx6dl-plym2m.dtb: temperature-sensor@70 (ti,tmp103): '#thermal-sensor-cells' does not match any of the regexes: '^pinctrl-[0-9]+$'
+>>
+>> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+>> ---
+>>   Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml | 5 +++--
+>>   Documentation/devicetree/bindings/trivial-devices.yaml | 2 --
+>>   2 files changed, 3 insertions(+), 4 deletions(-)
+> 
+> Best regards,
+> Krzysztof
 
