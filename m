@@ -1,205 +1,120 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B7F449CF46;
-	Mon, 31 Aug 2026 16:32:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D8A249CF5D;
+	Mon, 31 Aug 2026 16:32:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788193965; cv=none; b=mxjCax65xn9KHiqqB271uJqfVfkvu8AYf+niL6GLzYEENgOrYdp2NpgtGRYh2I8nYByIBgzv7a7YhmNna67bvWib+oB9bxc2EcwANHDaC1Gbqg4ebQJQ2qeAGkchk0ZtejN5GoUJAXh5D17ewhKxKbiAs+5jDfd/BDJ8oxNQ0HY=
+	t=1788193978; cv=none; b=cu8d9sJ9ntC7KoTEq48TqZ3w+fzQJbuBE27H86rWi6M6lsu1ARDr5eI/W1UzcNZDVtlaLqVdIZWbQnGsbjb4eBQex3s3vr1Mlkk0pgsbAmIkc+DThvlAvaKghMdw64GlR3neuD9MXxH2kPDXwOuTAoxKTJhcZndN0BeYrgkeahU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788193965; c=relaxed/simple;
-	bh=3SeeWB2J9QJfMtK7ieEMZIHW0SOZB1ghPyE/Zx0ncCQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eCyDwXXY0NMZudgJ6X05xxnWIPh0n1t/B0nVPzSL4uukRns36vxFm5M5K3AIjMfBmP/pr8N4J0HafaGP1rMx94lDTjAFGGkOCYUb6kV2sQu2plkvjl8ykKNCyDaGE4qXor9P7VguuNZUcI2L4OxNscNXnw36R/wPXjytdnMCWDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d1M8rhwa; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788193978; c=relaxed/simple;
+	bh=BNNX1ajrBO8EKZzIPFBjbSzjORauQbhS3/GWcciEIFk=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=jG2lTQHHTDTqqlcTt/JgNoQFVgJygyTmbp/qjEnIicnlIhC9VvjIdGs0OoMLryLviXcqPvLfjpwtvc/KE86iR8/5kBU+HUSba08Eiflq+V050vz0/kpQ6hppy0TpB2iCawquQod8Q3fwaA6/budUcaI86QPPwfOeb0Kx2/0cB1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mFRAqnqF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d1M8rhwa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99D211F000E9;
-	Mon, 31 Aug 2026 16:32:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mFRAqnqF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 784771F000E9;
+	Mon, 31 Aug 2026 16:32:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788193964;
-	bh=4EHPpunVWCfvSsl9XR/vLgJXnGfu3RbcnjxL2uwJevM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=d1M8rhwah8JEEByU1jPvUfpA/uRIt207m5rvobtM0FQqYSLkRUbUeBOf5Dr+01pdK
-	 xt2J9Y9U0qD9P9XVLUa63yK8j2xKxQwASOWx0QWBE/CBEVscNDa3k6waHOKuQIQLdL
-	 XG2pwRcne/Jr0zngV3XX42HHYsF2KDEsGAN5jTc86dIKZKbwBpiIgIqfcCZGCsSiza
-	 PzTcdLqY7kiq4zkOl9OiW200hLvMB9OlN4u323NgaSUK/ORzce5JKFyivapQI2N3tj
-	 m5XOnMvIgP/nna5eUxsYBtmoCMN+eiu6A15euz24yhFfRNBCDlT9FNF1F9nbORstJj
-	 exUg4VtY4+umg==
-Date: Mon, 31 Aug 2026 17:32:40 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Changhuang Liang <changhuang.liang@starfivetech.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: Add starfive,jhb100-fan-tach
-Message-ID: <20260831-dominion-data-c8b6f691dd5b@spud>
-References: <20260830011941.40199-1-changhuang.liang@starfivetech.com>
- <20260830011941.40199-2-changhuang.liang@starfivetech.com>
+	s=k20260515; t=1788193977;
+	bh=gE4DXtoO/m+u5zlqRBb3rtMzg0ZuzjzaJRXzc/vjykI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=mFRAqnqF+9cIQxp2eGf8rsbnxupMcm5osRvzRtKpXwQrt5GPTpyPGIXjiwJkRqasV
+	 aIaNJ6NiMEtZKpSq6QTxPRQQ+PlPWznbNYrvCySKy22psIYmc941p/Ttd9rpnpQ/Hh
+	 Sls3Z3gmvKIRnP77kU7gou27j/7bSmtZZTCECNS+4FKhSKUCt4REDzs71/J0vv2nD/
+	 6OHeBUuQyP6mD+TTR8nxQKVFFTQt2aymxN1iv6W4I18bW6ckP1YcO2kF9atmNTIamD
+	 sZ3lKCFqmBsftqb44s+58MAKMaTumD/71nPngO9OWBU78h6rNzowNscvOvXxSytDYs
+	 AdiOp5t369sYw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v4 4/6] hwmon: (lm63) Add Sensylink CTF2301 support
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Troy Mitchell" <troy.mitchell@linux.dev>
+Cc: conor+dt@kernel.org, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, robh@kernel.org
+In-Reply-To: <20260831-ctl2301-v4-4-b335d52a0570@linux.dev>
+References: <20260831-ctl2301-v4-0-b335d52a0570@linux.dev>
+ <20260831-ctl2301-v4-4-b335d52a0570@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 31 Aug 2026 16:32:56 +0000
+Message-Id: <20260831163256.784771F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="uatR7M6gSft/ZZlk"
-Content-Disposition: inline
-In-Reply-To: <20260830011941.40199-2-changhuang.liang@starfivetech.com>
 
---uatR7M6gSft/ZZlk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] TEMP12_TO_REG and software caching logic fail to align with 12-b=
+it hardware truncation, causing sysfs cache inconsistency.
+--
 
-On Sat, Aug 29, 2026 at 06:19:40PM -0700, Changhuang Liang wrote:
-> Add compatible "starfive,jhb100-fan-tach" for StarFive JHB100 Fan-Tach
-> controller.
->=20
-> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
-> ---
->  .../hwmon/starfive,jhb100-fan-tach.yaml       | 93 +++++++++++++++++++
->  1 file changed, 93 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/starfive,jhb1=
-00-fan-tach.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/starfive,jhb100-fan-=
-tach.yaml b/Documentation/devicetree/bindings/hwmon/starfive,jhb100-fan-tac=
-h.yaml
-> new file mode 100644
-> index 000000000000..1dcd4932768f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/starfive,jhb100-fan-tach.ya=
-ml
-> @@ -0,0 +1,93 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/starfive,jhb100-fan-tach.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: StarFive JHB100 Fan-Tach controller
-> +
-> +maintainers:
-> +  - Changhuang Liang <changhuang.liang@starfivetech.com>
-> +
-> +description:
-> +  The StarFive Fan-Tach controller can support up to 16 fan tach input.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - starfive,jhb100-fan-tach
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +patternProperties:
-> +  "^fan@[0-9a-f]+$":
-> +    $ref: fan-common.yaml#
-> +    unevaluatedProperties: false
-> +
-> +    properties:
-> +      reg:
-> +        description:
-> +          PWM channel index. The driver allows two fans to share the same
-> +          PWM channel, or each fan to use a dedicated channel.
+commit c4469f3bd5935eebd0d31fe1d782461f5b52c354
+Author: Troy Mitchell <troy.mitchell@linux.dev>
 
-Doesn't matter what the driver can do, the description should describe
-what the hardware supports.
-pw-bot: changes-requested
+hwmon: (lm63) Add Sensylink CTF2301 support
 
-Does this fan-tach controller provide the PWMs?
-If so (although Guenter may correct me), I think the fan-tach controller
-needs to be.
+This commit adds support for the Sensylink CTF2301 to the LM63 driver. It
+registers an optional thermal cooling device when the device tree node
+provides #cooling-cells and implements the specific temperature scaling for
+the CTF2301 chip.
 
-If you don't do that, I think you're going to run into problems with
-having multiple nodes with the same unit address when two fans share a
-pwm?
+> diff --git a/drivers/hwmon/lm63.c b/drivers/hwmon/lm63.c
+> --- a/drivers/hwmon/lm63.c
+> +++ b/drivers/hwmon/lm63.c
+[ ... ]
+> @@ -121,6 +126,9 @@ static const unsigned short normal_i2c[] =3D { 0x18, =
+0x4c, 0x4e, I2C_CLIENT_END };
+>  							    127000), 1000)
+>  #define TEMP8U_TO_REG(val)	DIV_ROUND_CLOSEST(clamp_val((val), 0, \
+>  							    255000), 1000)
+> +#define TEMP12_FROM_REG(reg)	DIV_ROUND_CLOSEST((s16)(reg) * 1000, 256)
+> +#define TEMP12_TO_REG(val)	DIV_ROUND_CLOSEST(clamp_val((val), -128000, \
+> +							     127937) * 256, 1000)
+>  #define TEMP11_FROM_REG(reg)	((reg) / 32 * 125)
+>  #define TEMP11_TO_REG(val)	(DIV_ROUND_CLOSEST(clamp_val((val), -128000, \
+>  							     127875), 125) * 32)
+[ ... ]
+> @@ -594,6 +692,21 @@ static ssize_t set_temp8(struct device *dev, struct =
+device_attribute *devattr,
+>  		return err;
+> =20
+>  	mutex_lock(&data->update_lock);
+> +	if (data->kind =3D=3D ctf2301 && nr =3D=3D 1) {
+> +		temp =3D TEMP12_TO_REG(val);
+> +		err =3D i2c_smbus_write_byte_data(client, LM63_REG_LOCAL_HIGH,
+> +						temp >> 8);
+> +		if (!err)
+> +			err =3D i2c_smbus_write_byte_data(client,
+> +							CTF2301_REG_LOCAL_HIGH_LSB,
+> +							temp & 0xf0);
+> +		if (!err)
+> +			data->temp1_max =3D temp;
 
-I think what you're supposed to do is drop "reg" and replace it with
-"pwms", but once again Guenter may correct me there.
-e.g. aspeed,g6-pwm-tach.yaml
+[Severity: Medium]
+Does this sequence cause the sysfs cache to become inconsistent with the
+hardware state?
 
-Cheers,
-Conor.
+The TEMP12_TO_REG macro scales the value but does not align or quantize it
+to a 12-bit hardware boundary, leaving fractional bits present in the lowest
+4 bits. Here in set_temp8, those lowest 4 bits of temp are masked out with
+0xf0 when writing to the hardware register, but the unmasked temp is saved =
+in
+data->temp1_max.
 
-> +        maximum: 15
+If a user writes a temperature limit that is not a perfect multiple of 0.06=
+25
+degrees Celsius, will this cause the sysfs interface to return the
+un-truncated value immediately after the write, but later shift to the
+truncated value upon the next device poll?
+
+> +		mutex_unlock(&data->update_lock);
 > +
-> +      tach-ch:
-> +        description:
-> +          The tachometer channel(s) wired to the fan(s) driven by this P=
-WM
-> +          channel. Integer values in the range 0-15.
-> +        minItems: 1
-> +        maxItems: 2
-> +        items:
-> +          maximum: 15
+> +		return err ? err : count;
+> +	}
 > +
-> +    required:
-> +      - reg
-> +      - tach-ch
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - resets
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    fan-controller@11be0000 {
-> +        compatible =3D "starfive,jhb100-fan-tach";
-> +        reg =3D <0x11be0000 0x400>;
-> +        interrupts =3D <128>;
-> +        clocks =3D <&per2crg 33>;
-> +        resets =3D <&per2crg 5>;
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +
-> +        fan@0 {
-> +            reg =3D <0x0>;
-> +            tach-ch =3D /bits/ 8 <0x0 0x8>;
-> +            pulses-per-revolution =3D <2>;
-> +        };
-> +        fan@1 {
-> +            reg =3D <0x1>;
-> +            tach-ch =3D /bits/ 8 <0x1>;
-> +            pulses-per-revolution =3D <2>;
-> +        };
-> +    };
-> --=20
-> 2.25.1
->=20
 
---uatR7M6gSft/ZZlk
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCapWsqAAKCRB4tDGHoIJi
-0sZSAP9cKHl0zdIlOjfBnMN5epXZo6x8A8vqSqvMKJwzPsUZ+wEAlA0F0f+TnzOa
-adsoEcX6fjQuNjiqs3leujt+2M/dUAk=
-=orlK
------END PGP SIGNATURE-----
-
---uatR7M6gSft/ZZlk--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260831-ctl2301-v4=
+-0-b335d52a0570@linux.dev?part=3D4
