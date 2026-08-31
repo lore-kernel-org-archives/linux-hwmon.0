@@ -1,116 +1,131 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32CF437F31C
-	for <linux-hwmon@vger.kernel.org>; Mon, 31 Aug 2026 19:54:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11C4F36F8EE
+	for <linux-hwmon@vger.kernel.org>; Mon, 31 Aug 2026 21:22:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788206087; cv=none; b=Vx8aQ31ikQ4i6azQVLZJs69qx14hWpUDqwkNPL64bCdaaDyy0joeuJ3F9IB6oVCtemn/1KOKwS9wND4oqjBESMfzxo4U9P/BqMMFVyh+OToxxhE6FCq9tOIIH3l5Bz8dNobk0l8l0mitpt2EllVTPyzryCsFY0ZYioVH/g5f/u0=
+	t=1788211361; cv=none; b=T0EWRXED4dpIccIQtcpOASJXMGWiF7weuj48tXnpxGu+zXy9P0PYhXBQQoRAJnaCkcKh4hjyNm6zD8Hx/Hl2AiTEV3A4aAA7TFalH76Vnpggob0IfV8SPKr26MXkb+St9HjzS0AiYN9CnWJ/HtRum95dq/CUvRQ87gwYQXmgU5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788206087; c=relaxed/simple;
-	bh=15a0LTGeYo8zOBmJgo/ZnXR18G1ReDCB7rXXZZCKKl0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EyD4QQs6Mctj+uM1wLMh6HT8Bxkx2VxiFoq+2pAEk8xlqCcJ+TFxtA2fGjRXWkDuq5YDpkVVKYdV5vhCzDgscv5IOohdrNt8uOZ350bN24efvsCumUmA463vNOfXYwSYz+FZ20Thv2OagCUql5Gi0KiUz/w/F0+M4UeSoi2qxZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b5mdG8+/; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1788211361; c=relaxed/simple;
+	bh=j+4P5I1w7yupkjtI1aHIdS2EV8F3BTV+hCLwZ4e00/Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YIramzJbbWzEis9Nw7N9yl4LDbEg7dxeRsvayrgitVFi1U3vTPfm+LhKg/rT1zektEULPwsHl1CXdk0QQJGR5cgkbxYZpANty9N6SPKc0FYP0SyH3BfcZY4pTRbOfJDRotLXTEsUyLWl7JAhXr5ivttNUM3n3SWNXIBg7Z9+Q74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mqaRKwV7; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b5mdG8+/"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-38a0c7e841fso254627a91.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 31 Aug 2026 12:54:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mqaRKwV7"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-398e9698a70so281370a91.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 31 Aug 2026 14:22:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788206085; x=1788810885; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=qskMQe4LjjXVBmevlEbg5fLbtpZ04tZedzGfc/8LuW0=;
-        b=b5mdG8+/v3oM6Xkq6J7oJifckucns9gZJtWFI6tXignqoauDA+DcBWQ0QgWMYSwXEQ
-         cWKHd463q8yEIlmdhSUTtO1VHeAY3JsZeGR6kyxnOKQmNjQ0jT839h0eN/YL0UU0TUxW
-         gTwYFKybf0Q1crr11KG7SPWptMuo82CLXUN6NP4jLzuhunaaUUIJSiQpBjLlDfEN+4ew
-         GNAERpJ1ngrKgr5PCb/XTbjmv1e2u6RSy43m/DXoNNT9obNVF/UeZSXdLXgfasB6VA0/
-         q1s4lAISNZqYOba0GH7abpGZhbvKv1i1plU0/+psKP1ceHSKXlYsnIGmyfBx3dMVymqh
-         4PWQ==
+        d=gmail.com; s=20251104; t=1788211359; x=1788816159; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=tAf9E7CenHe6l5YzESk+eJosOnuoeSazKjhyH+9ql1Q=;
+        b=mqaRKwV7gzP3vr0Gb29m9Q6UjUcqfOmdhGLENM3ypRBGi1cIaU42yiz+8+OE8YVqmP
+         y3J+3HJ34+CZSBPDyf5v27g2z8D+S9llW+g2udUGRnCmi1gz00Z5yjOME3g4JJCjExf+
+         crxYmIeDDEKN6cb9tEEEisSB8RRlzlNmyMqpJ5CnaNvQokJbZ6wDmt8TW0k3jBfZuyeN
+         CjKttedYveaNoX2nh06YxKdfMLXURfLB9w54N8a73s3Mu/nqBQgrvb4xJz08giZZSWrk
+         59P0Ya/GWsf/84WKACPpaKtJyeGY3Kd8IfQPtDykRK06rUViYPKC/csfJnAYEl3Y/Grm
+         LiTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788206085; x=1788810885;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=qskMQe4LjjXVBmevlEbg5fLbtpZ04tZedzGfc/8LuW0=;
-        b=gSKC/WnzAn4jn1OsjeZj7P1MjDunhfqRBzCjiHzzJL+pHlHT3SIkYm2Zm62dKLLtH4
-         nKvoT8zdYFRqG5/xZ3lF9nZvsMdWfmQ++ZMnbRCULCr9gB+ORBGS+N06PQ0Mn0M9UfGD
-         +w2Cxwfl3/sQzmZbwrdUyvEQJqoLhpeTsFBlpNS7ekw68lpJyVkSasbuT7/szNNCHtGb
-         IglzFeC7q8SEFURA8Ujeugk5v0TtRuvGKpDtvNgE/PwW4Ujy1UCYAsnEKaaPIRyD1/yS
-         EV9JMJWMB54ehzGwaBfBnvfGferXgH+Jk0sw+bgcres/GaTFTNCA6LoLkxut0jr7zWP+
-         jfdQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwWhtX37B9dl7JulQP3LHZFJZE9kFj4GalBRkOE35EMvDooxaCpEvNXL7W+gl9sPvb4xkszTh1GgctF8g==@vger.kernel.org
-X-Gm-Message-State: AFuF++nLYUODrPvvfYALvq3ZkNnlHynVoqRQuQZaslu4jbb//w53Lvva
-	Tmwtc54V34LR47xodkd1y0giRTeUWzfOqr4HARAohdpzqQUADocBEmqg
-X-Gm-Gg: AYBFou3YjbpFIoWpWw56ul7bYhQ2Zr8PdnDFu5QMKn5glY7yyiBrfWZVWrm12OK3B9Z
-	ECmT3F7yWwYhLIcnUYU77EkkCWsqFIHHfqgH/Qt+rlfzvH7eMPFFXAZ+t6BpTktv+kFOmAtYoJc
-	sNMprkF9Rjti8QSSSYGB9p/hRYK7EP4FBRFCgz7t/OIgEtRbNCCAf6d6eDzaaNUu2yBNiBHiuun
-	gsf6kQ96spJCKCvTTFRP4PQPD0XG3mqSJq8cy/1zoU4sMiyDE0x3yBNS5btYKunq8CPGcRXjxKX
-	+DdrHZT0nYesmXjEO9fHIXka+WlmoQvuxbaT/A6wXUEuyszE1krItrNZh4nau//3wdP2I8nyg6Z
-	BSJmSwZvsV0f/zV/vtrhkxZnM2OBXVOGh2+EgM3QhjDdmqrYSTag4skyHQw1JVR1ctpagdiYLy9
-	HKUrjCjqvvWIFn0eryzANVSTmRFd5nuqvWhQIenb7QIIdqXkziUbtU5rqEBkZUYcZxjC1AtxlPA
-	cmnsJMzUYAn
-X-Received: by 2002:a17:90b:39ae:b0:398:deed:6e1d with SMTP id 98e67ed59e1d1-398deeda0cbmr13260559a91.5.1788206085513;
-        Mon, 31 Aug 2026 12:54:45 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-142e0d40ac7sm29241613c88.7.2026.08.31.12.54.44
+        d=1e100.net; s=20251104; t=1788211359; x=1788816159;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=tAf9E7CenHe6l5YzESk+eJosOnuoeSazKjhyH+9ql1Q=;
+        b=QDi0wtXzkALmGLr5ongBvBZVuXZCFi3s8giRh+rvOAh6gaHEmSJfbe6wo8+pcJhwFI
+         yaOu5CwD2obgGDoL7nE7hlZ0dRqH0uTkpkplCrdg+xaZhzh2dGgr2LzLstLf2JFlNaP0
+         q3GADyRiV0dMMJq+YO7A7HvaD64EiEo+w42GfudknNOAgWOyQ6ucptz3fIJcGFMEYTas
+         yqtdJ2tKeWLX/faqU74tOKgp71EJ7jyrd3kUjL4+ajjNOoxUKW5D2SYq4SLBk+DAtFPW
+         EvoeroggVbad76oDsP6nVjZgVTAvMs9cwK5Fv3CtV7xbhAvtl5KQwpU/+YT5ikAhCsaO
+         S2kA==
+X-Forwarded-Encrypted: i=1; AKwUvBx3OYKkRe9rwF7TspKmzb9QpJHQpL8dB+wLGLh2sQIyiilFHOcmiSfxy3JXywzcqnWsCgGUwxk8Z3amnQ==@vger.kernel.org
+X-Gm-Message-State: AFuF++nr+eYm97+u4wtQ7JxdUiM7SkUzbh+Scnpn9uEw0w/Wb7tWj+d3
+	ELXAgeV/yRjIR6+6rIxN4aANF323ia6XrVtlaDLG098XOsPOBv3inC0X
+X-Gm-Gg: AYBFou0HWTNZq4h/RajqLe3DRijLSTn/pw70WmjT56/8mZfcGfce8kXxRu9q6tpdZMV
+	LTT3rCyCFDatpePuZjGTUjQTpcFYhwQ0JkTtXJH/VM5QnsBx3EiYkfuFX710an8eP0cwz+OEIRH
+	6WoIrnzZ18JdT0FKz7J1ZVaC7nJPRMR5WjWs/AqNqwUe5tuvSCZvLhpA3xHQa11p0C5HAlW8OqK
+	j6WAp94USjM+mEaK9S9c2+lh1EUIqB8icewSG4PrtvP/19c+s0bYbPNlbJcYcNsn35X3quLQAZ1
+	yLJF71J0BgjaaBMxRk+6vYfEW3Gi1nnEzTsm5ywjk6NeWZN3zon/fqH5Uwt/ofnAUcS2f6hi1gp
+	DrcAYgl3k19E2LxN66wHSkcyWB7FPOnjvLXdakI91MLn3foDrcucJOEIrdxe00Su+yaaKcbBt4E
+	MfsmbQxhoGJzRkdsqL4lwJZ7Tk95qM5NWXGZP2Jwjc/src4u//ggViyGHBTMTyqCpHxCVn42+zt
+	qKZHQ==
+X-Received: by 2002:a17:90b:588f:b0:398:bf7e:b267 with SMTP id 98e67ed59e1d1-398bf7eb378mr22481809a91.2.1788211359423;
+        Mon, 31 Aug 2026 14:22:39 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:500::6:bac7])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-142e0bf8a13sm45871957c88.0.2026.08.31.14.22.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2026 12:54:45 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 31 Aug 2026 12:54:43 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Asai Neko <sugar@sne.moe>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Eugene Shalygin <eugene.shalygin@gmail.com>,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v2] hwmon: (asus-ec-sensors) add ROG STRIX X670E-A GAMING
- WIFI
-Message-ID: <ef7a4a5d-33b7-4e9f-87f2-2bc1111ca4bf@roeck-us.net>
-References: <20260901-asus-x670e-a-hwmon-fix-v2-1-759406c2a61a@sne.moe>
+        Mon, 31 Aug 2026 14:22:38 -0700 (PDT)
+From: Zinc Lim <limzhineng2@gmail.com>
+To: alexanderduyck@fb.com,
+	kuba@kernel.org,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	linux@roeck-us.net,
+	horms@kernel.org,
+	mohsin.bashr@gmail.com
+Cc: kernel-team@meta.com,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	zinclim@meta.com,
+	limzhineng2@gmail.com
+Subject: [PATCH net-next v2 0/6] eth: fbnic: expand hwmon sensor support
+Date: Mon, 31 Aug 2026 14:22:28 -0700
+Message-ID: <20260831212234.1212971-1-limzhineng2@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260901-asus-x670e-a-hwmon-fix-v2-1-759406c2a61a@sne.moe>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 01, 2026 at 12:18:24AM +0800, Asai Neko wrote:
-> From: Asai Neko <sugar@sne.moe>
-> 
-> The ROG STRIX X670E-A GAMING WIFI is missing from the driver's DMI
-> table. Consequently, the board lookup fails with -ENODEV,
-> asus_ec_sensors does not load, and no asusec hwmon device or EC
-> temperature readings are available.
-> 
-> The board uses the same EC sensors, access mutex, and AMD 600-series
-> register layout as the ROG STRIX X670E-E GAMING WIFI. Add its DMI entry
-> using the existing X670E-E board information and document the board as
-> supported.
-> 
-> Before the change, there was no asusec device under /sys/class/hwmon and
-> there were no EC readings. After the change, the driver registered four
-> sensors with representative readings of 57-61 C for CPU, 68-71 C for
-> CPU package, 43-44 C for motherboard, and 49-52 C for VRM.
-> 
-> The readings correlated with nct6775 and k10temp. Repeated polling with
-> both hwmon drivers loaded produced no EC access, bank-switch, concurrent
-> access, or locking errors.
-> 
-> Tested on an ASUS ROG STRIX X670E-A GAMING WIFI with BIOS 2704.
-> 
-> Signed-off-by: Asai Neko <sugar@sne.moe>
-> Reviewed-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+fbnic currently exposes only the raw temperature and voltage readings
+(temp1_input, in0_input) via hwmon. This series builds that out into a
+complete sensor interface and hardens the read path.
 
-Applied.
+The firmware capability response already carries per-board sensor
+thresholds, and the firmware can asynchronously report when a sensor
+crosses one of them. This series surfaces both to userspace and cleans
+up the supporting plumbing:
 
-Thanks,
-Guenter
+ - Move the sensor read logic out of fbnic_mac, closer to its only
+   caller in the hwmon code, and drop the now-unused get_sensor op.
+ - Expose all hwmon attributes unconditionally as read-only (0444).
+ - Cache the temperature and voltage readings for the current jiffy so
+   a burst of attribute reads issues a single firmware round-trip.
+ - Parse and expose the temperature (min/max/crit) and voltage
+   (min/max) thresholds. Thresholds the firmware did not populate read
+   back as -ENODATA.
+ - Add the corresponding alarm attributes, computed by comparing a live
+   reading against the stored thresholds.
+ - Translate the firmware's sensor-threshold-exceeded message into an
+   hwmon event so userspace is notified on the relevant attribute.
+
+Changes from v1:
+ - Addressed Jakub's patch 6 feedback on including a
+   if (!IS_REACHABLE(CONFIG_HWMON)) return; guard.
+
+Zinc Lim (6):
+  eth: fbnic: move sensor read logic out of fbnic_mac
+  eth: fbnic: expose all hwmon attributes unconditionally as read-only
+  eth: fbnic: cache hwmon sensor readings
+  eth: fbnic: report temperature and voltage thresholds via hwmon
+  eth: fbnic: report temperature and voltage alarms via hwmon
+  eth: fbnic: firmware notifies hwmon on sensor threshold events
+
+ drivers/net/ethernet/meta/fbnic/fbnic.h       |   8 +
+ drivers/net/ethernet/meta/fbnic/fbnic_fw.c    |  75 +++++
+ drivers/net/ethernet/meta/fbnic/fbnic_fw.h    |  30 ++
+ drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c | 263 ++++++++++++++++--
+ drivers/net/ethernet/meta/fbnic/fbnic_mac.c   |  55 ----
+ drivers/net/ethernet/meta/fbnic/fbnic_mac.h   |   2 -
+ 6 files changed, 349 insertions(+), 84 deletions(-)
+
+--
+2.53.0-Meta
