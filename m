@@ -1,162 +1,77 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D372330C617
-	for <linux-hwmon@vger.kernel.org>; Mon, 31 Aug 2026 18:26:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 665C839A07B
+	for <linux-hwmon@vger.kernel.org>; Mon, 31 Aug 2026 18:58:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788200804; cv=none; b=NF+NVsWU/5yzKAcsJYzuFgFOmdl2qYOwfTyQ1Wmgdk7+EOtDZ8luGtOJD4y7lHCNoAmkfOAYucS1dQdmD9jyXdWbZlt6DlHfTsH7kb6inQv8LHk1sJlyJtj8iyASLel+HBDc4cvOrFGvepl1zXhYQ6j1yZGcydBxhO/lL6JHZbY=
+	t=1788202695; cv=none; b=HkhdJ/VIrmyUsrV17oHb5X92wp4MA6f4ymT3dKBdxbBLcs9uf6zGzdJCm8t2mALDyJ9XVGe2xBCu2ue2GvDW6GQTYYx2VFEFb9vBljCofyUyXgFUxh8UDiD6jxJ5v4i1DtMe5ttTsj5fMK4xY2BiuqXDVLB+svFgPTU7ll1Lx4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788200804; c=relaxed/simple;
-	bh=vECsEzikcbH08LUl4XlfL8JZJMjnXksS/qqkjvEVzA8=;
+	s=arc-20240116; t=1788202695; c=relaxed/simple;
+	bh=pA/0CDy3jz1jw+Ub19/BXY7eMzyyme3nF9TyELeiaU4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=h1KHsge+2SlsFR/4urjyO7zfnmZsNQt32oLkhviwK/RdJvxoSCT9/socWTrGIUgCzpPznZT6u9sMQf/SJySDtkxujF1YJojEw9enBE1YGw9kAyKWYy5mftirOdrwy4WcKuFFQ/QrgdeHGUyJzPcK4QfoHdPKg+/tirlRasuVdYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VjBzLJRM; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=UKWslAqRkHEI5TbRRlLUT9q4+u8M4p3ii8s4/pbTCLPpfppPI4lshWCPmahka4BZ/lkp/M3tOBukLvuSY+knT5S+AM9gXzCj51J86XcT/qON4MKo7JUj9XpVSc5kux8m7oOrp1qEjAuKYxmU/7r7Hr9Yogu13Uz3LSbVq1c5Uw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fdzB5tnE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VjBzLJRM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56BD91F000E9;
-	Mon, 31 Aug 2026 18:26:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fdzB5tnE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF93D1F000E9;
+	Mon, 31 Aug 2026 18:58:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788200802;
-	bh=oxhmVwh/Eq5ujK9gWqhbNUezfr8HxKXbzZvvLqOjxC4=;
+	s=k20260515; t=1788202693;
+	bh=pA/0CDy3jz1jw+Ub19/BXY7eMzyyme3nF9TyELeiaU4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=VjBzLJRM3JBdoEmHjmAhD4adO27L/9wwjBZksfDJ7YUsoJc3k0V4+kQ6R9fdGW1Ng
-	 remPCj3/VbzjND83U0JHANVv/dHGXW1k0iwzLDHLJlgUbQNc5WJufusGev/m7KJ7rc
-	 gTzRRMcpY5LM5wZbuXZ9EU5TdXO8gNnj9d8MtVo4m9Ivbao27ecHHJOskWClxm7/up
-	 NaQyY89QFruXP7Z5W5AkKWQWvYiLB4eL4JSs8iYLCIc3eZ4hi67//vcCPJemhrJoL+
-	 fSnvoehCfsPLlEBwtNxsJykXLw0DJCOMiVIZSwIZbpVprQxYF+uovAotAsh5eWLwRl
-	 BeyuoWCnlbGrw==
+	b=fdzB5tnEEw+8AhMwTbsWrwze/p8u8k1u4ImOIk8NYd/lBbtwu8e+gvY23LoTaauHy
+	 ZoNCKqEQ+AKIIk8JIEUaCdtjLkn/5MpdxW9Cq0n6tVixKojCXkwO9o7k94ZYoUf17b
+	 H3rsUhcGcjFagOkDCcylROfZUn4PaKHZAd4qVZw2soYaNAPRxMghCPmXXmAVM5Lz0p
+	 DEgafPUWVuX4zZhxCy0lzMhOrnO0NCJLD+H5VhqEXjIFIEW/HiBP1fkPFhQs1jhB+e
+	 kaYpiv6wbHlBruz/aEoz7CLSj3KhfnFrg++lG7XIUOvva11Ea6VZ5AW5ARCJ06M+xb
+	 Q1SvnErajprbA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/2] platform: arm64: radxa-svc: Add hwmon sensors
+Subject: Re: [PATCH v2] hwmon: (asus-ec-sensors) add ROG STRIX X670E-A
+ GAMING WIFI
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Xilin Wu" <sophon@radxa.com>
+To: "Asai Neko" <sugar@sne.moe>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260831-radxa-svc-v1-2-7c028de6a387@radxa.com>
-References: <20260831-radxa-svc-v1-0-7c028de6a387@radxa.com>
- <20260831-radxa-svc-v1-2-7c028de6a387@radxa.com>
+In-Reply-To: <20260901-asus-x670e-a-hwmon-fix-v2-1-759406c2a61a@sne.moe>
+References: <20260901-asus-x670e-a-hwmon-fix-v2-1-759406c2a61a@sne.moe>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 31 Aug 2026 18:26:41 +0000
-Message-Id: <20260831182642.56BD91F000E9@smtp.kernel.org>
+Date: Mon, 31 Aug 2026 18:58:13 +0000
+Message-Id: <20260831185813.AF93D1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Medium] The driver registers hardware monitoring devices directly from t=
-he `drivers/platform/arm64/` directory, violating the HWMON subsystem layer=
-ing guidelines.
-- [Medium] The driver incorrectly registers a separate hwmon device for eac=
-h individual sensor instead of grouping them under a single hwmon device.
-- [Medium] Strict validation of firmware response lengths and bitmasks brea=
-ks forward compatibility with newer firmware versions.
---
+> From: Asai Neko <sugar@sne.moe>
+>=20
+> The ROG STRIX X670E-A GAMING WIFI is missing from the driver's DMI
+> table. Consequently, the board lookup fails with -ENODEV,
+> asus_ec_sensors does not load, and no asusec hwmon device or EC
+> temperature readings are available.
+>=20
+> The board uses the same EC sensors, access mutex, and AMD 600-series
+> register layout as the ROG STRIX X670E-E GAMING WIFI. Add its DMI entry
+> using the existing X670E-E board information and document the board as
+> supported.
+>=20
+> Before the change, there was no asusec device under /sys/class/hwmon and
+> there were no EC readings. After the change, the driver registered four
+> sensors with representative readings of 57-61 C for CPU, 68-71 C for
+> CPU package, 43-44 C for motherboard, and 49-52 C for VRM.
+>=20
+> The readings correlated with nct6775 and k10temp. Repeated polling with
+> both hwmon drivers loaded produced no EC access, bank-switch, concurrent
+> access, or locking errors.
+>=20
+> Tested on an ASUS ROG STRIX X670E-A GAMING WIFI with BIOS 2704.
+>=20
+> Signed-off-by: Asai Neko <sugar@sne.moe>
 
-commit 4fb96e4e2a24b97521dad5da3953d3fd473daf20
-Author: Xilin Wu <sophon@radxa.com>
-
-platform: arm64: radxa-svc: Add hwmon sensors
-
-Add support for the optional sensor discovery and sampling operations.
-Expose firmware temperature, voltage, current, and combined sensors as
-read-only hwmon devices.
-
-> diff --git a/drivers/platform/arm64/radxa_svc_glink.c b/drivers/platform/=
-arm64/radxa_svc_glink.c
-> index 1c91bfabcd126..b2a4f0c5317ac 100644
-> --- a/drivers/platform/arm64/radxa_svc_glink.c
-> +++ b/drivers/platform/arm64/radxa_svc_glink.c
-[ ... ]
-> @@ -428,6 +496,403 @@ static int radxa_svc_rpmsg_callback(struct rpmsg_de=
-vice *rpdev, void *data,
->  	return 0;
->  }
-> =20
-> +static u32 radxa_svc_sensor_expected_mask(u32 sensor_type)
-[ ... ]
-> +static int radxa_svc_sensor_update(struct radxa_svc_sensor *sensor)
-> +{
-> +	struct radxa_svc_sensor_read_req req;
-> +	struct radxa_svc_sensor_read_resp resp =3D {};
-> +	unsigned long cache_expires;
-> +	u32 expected_mask;
-> +	u32 valid_mask;
-> +	size_t len =3D sizeof(resp);
-> +	int ret;
-[ ... ]
-> +	req.sensor_id =3D cpu_to_le32(sensor->sensor_id);
-> +	ret =3D radxa_svc_request(sensor->svc, RADXA_SVC_OP_SENSOR_READ,
-> +				&req, sizeof(req), &resp, &len);
-> +	if (ret)
-> +		goto out_unlock;
-> +
-> +	if (len !=3D sizeof(resp) ||
-> +	    le32_to_cpu(resp.sensor_id) !=3D sensor->sensor_id) {
-> +		ret =3D -EPROTO;
-> +		goto out_unlock;
-> +	}
-> +
-> +	valid_mask =3D le32_to_cpu(resp.valid_mask);
-> +	expected_mask =3D radxa_svc_sensor_expected_mask(sensor->sensor_type);
-> +	if ((valid_mask & RADXA_SVC_SENSOR_VALID_MASK) !=3D expected_mask ||
-> +	    valid_mask & ~RADXA_SVC_SENSOR_VALID_MASK) {
-> +		ret =3D -EPROTO;
-> +		goto out_unlock;
-> +	}
-
-[Severity: Medium]
-Does this strict validation of firmware response lengths and bitmasks break
-forward compatibility with newer firmware versions?
-
-If a newer firmware version adds additional capability bits or appends extra
-data to the response, the checks valid_mask & ~RADXA_SVC_SENSOR_VALID_MASK
-and len !=3D sizeof(resp) will trigger an -EPROTO error, completely failing
-to read sensors.
-
-> +
-> +	sensor->temp_millic =3D (s32)le32_to_cpu(resp.temp_millic);
-> +	sensor->voltage_mv =3D (s32)le32_to_cpu(resp.voltage_mv);
-[ ... ]
-> +static int radxa_svc_sensor_hwmon_init(struct radxa_svc_glink *svc)
-> +{
-> +	struct radxa_svc_sensor_list_resp *resp;
-> +	struct radxa_svc_sensor_list_req req;
-> +	const struct hwmon_chip_info *chip_info;
-[ ... ]
-> +	svc->num_sensors =3D total;
-> +	for (i =3D 0; i < svc->num_sensors; i++) {
-> +		struct radxa_svc_sensor *sensor =3D &svc->sensors[i];
-> +
-> +		chip_info =3D radxa_svc_sensor_chip_info(sensor->sensor_type);
-> +		hwmon_name =3D devm_hwmon_sanitize_name(svc->dev, sensor->name);
-> +		if (IS_ERR(hwmon_name)) {
-> +			ret =3D PTR_ERR(hwmon_name);
-> +			goto out_free;
-> +		}
-> +
-> +		sensor->hwmon_dev =3D
-> +			devm_hwmon_device_register_with_info(svc->dev, hwmon_name,
-> +							     sensor, chip_info, NULL);
-
-[Severity: Medium]
-Does this loop incorrectly register a separate hwmon device for each indivi=
-dual
-sensor instead of grouping them under a single multi-channel hwmon device?
-
-This clutters the /sys/class/hwmon/ namespace with up to 64 separate hwmon
-devices.
-
-[Severity: Medium]
-Is it appropriate to register hardware monitoring devices directly from a
-driver in the drivers/platform/arm64/ directory?
-
-This bypasses maintainer review and increases driver complexity outside of
-the hwmon subsystem, violating standard hwmon architecture layering guideli=
-nes.
+Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260831-radxa-svc-=
-v1-0-7c028de6a387@radxa.com?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260901-asus-x670e=
+-a-hwmon-fix-v2-1-759406c2a61a@sne.moe?part=3D1
+
