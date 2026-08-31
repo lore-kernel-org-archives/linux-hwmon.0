@@ -1,185 +1,221 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2978A44AB81
-	for <linux-hwmon@vger.kernel.org>; Mon, 31 Aug 2026 14:26:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 073BB52B1E5
+	for <linux-hwmon@vger.kernel.org>; Mon, 31 Aug 2026 15:08:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788186407; cv=none; b=N+ugsz163lboSlWRy9CunVVhrT//984ka0lpPGh9sGmXtWPLkRxFB3GJsDPVIdbWdqb26sSduBo+Pa+WdjpT1+781s1DqaABhuVE7C1lt0chPMLaUN8ryudimzQ1nz+Xvk01QOX9cxE5Sa5aN63pL4JnpEGY/kMKjmHjKj2Djv8=
+	t=1788188915; cv=none; b=N+J5XKsYwY09Ifi8FbAkZQWQB0gfZpOOVhUl2P+3zVbUfaGhIZ4v9TMpOg5IglfEwK6RSt3gBnTX2LPD/quBvHVdCREtOPFSLz+kLDZzjXWFyatjwEGxOBPli2OpKSt92N+B2rTV/XueP3zfSHU72ljdF7vs+jy5J6cMFdeJ7K8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788186407; c=relaxed/simple;
-	bh=wsKRpLlsmgcTbJ1BWZgMNeanaZZBwWDLeXmduYOOh3g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IlsQCNA8Ahhe6wCLChYunrRrV5XBrVpYZizLcApyhLE7nfv1OiIIRpaAmQG/j1DqLvQGAxu7pVIw9haRP2tgEJn+wJqQUjoH+0+/BSsOxcGiSsYX/Ap/0H+lICAugU92cxVk3yymTZ7aBGkP1qH1PbsnsTeytkhPAstR20NQLc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BXV4a/66; arc=none smtp.client-ip=209.85.214.176
+	s=arc-20240116; t=1788188915; c=relaxed/simple;
+	bh=aa0jBTsW/JXDtcKMDtqMSHuvl+U9c2RkzktfkdnVFdU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=L9P8+5EHffcKmqOtm6HJpTwM4g9okzG3+AcT4O+Cfl+yfvZK1mrRQ2svMFzp0ajfnaIkaDNI352hIKRBcl5rft8M3+XngnD4+KWUN1Ifs3kVwoysWzE+YOCWbDAJz2EVTzxgB8i+SwfhUjLGojz6K3D9L8OSxczmgjACY1J5Kzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xq0x8r1c; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BXV4a/66"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2d6efd73032so38119395ad.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 31 Aug 2026 07:26:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xq0x8r1c"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-853c401326eso2026727b3a.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 31 Aug 2026 08:08:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788186405; x=1788791205; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=WluRCjkia+1tPs9bNfIuaxHPsKCaiBiYVNlOY7m4ry8=;
-        b=BXV4a/662qnUodISD1RawZ9cxj2ePdlBGePPXXYmwFUwHsEExvcC2fg82/JXOg73Ox
-         7YGkDmHGICUS31mbKJWYjpLrqVfUNlLhYlRg+df/JXn2EFm6ceOfOaaY476EF981/ww2
-         oLs9M4F4IIfw0EB/nCtPon8pR8tluQ+syG1P8MkBGCQYiOByM6mSqhwsBlJzjUBohbiv
-         2LRnCbLaDBWVEKdJeOhT+wl+Xf/A1YAsHrK5a2ribSUsfWm90IP8NuQ0M9dSFQpxEh+T
-         8GeT+uCWuNX+ZCJ0yxs2syCAqDOjYGEMTSMRyV7b+v63792p19j2P5z0SZBMb6hgpLtE
-         bZ6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788186405; x=1788791205;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1788188913; x=1788793713; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=WluRCjkia+1tPs9bNfIuaxHPsKCaiBiYVNlOY7m4ry8=;
-        b=hJkjxjHZAV72DsCp1nokcCIeD2AU1qqgcwc1rQQqKV7mH11jzX1fcE4T77DOzRX3BN
-         evZOThF9ffLJ53+kSf+ee8OM5E/OfOu8uJYDQjB72SGBkjEb3s3OpT+JEuwehNOOJ794
-         bsNn1b2QLtGFRRtgmgeyEFH9MUdVEHdl0FaFUgNiAGbs4YrEdafAGC16rI+B5P3K9V0j
-         ydtHd+d9invzTlPu6bxEoTDkdrkW6/ceuyCEW/KaLBzyMFURsjiYjCQgphly/9oHzmsX
-         te+Oslim2ayDTn2WDK1xsay3/mXSvNzaGScDSxxvm7DfpriGSAUYovuqdzfw01UsZDHQ
-         t/Xg==
-X-Forwarded-Encrypted: i=1; AHgh+Roh5CdlQloKzCMr241bym9yOldCEIZWBktSomr1OgdL/MQOxKRLL9Zuyea08LrcjgMPqOb4wrWfdUhlFw==@vger.kernel.org
-X-Gm-Message-State: AFuF++mNO0yIk+/8IAKnTzcMpNoc2OohomFODf6ADJh3obKSX+RW/uZ1
-	cfljJ9ZG7hQ0T51kkK/wdhUSCHcdU5rQ1td5snf7thENnstX7snMBk2R
-X-Gm-Gg: AYBFou2sTIpyMGFt8AvHZYYmx4EDXnVRNTnufoSVAQrJTPGu6Ta7CqfqqO4c6ua1Slx
-	SNJi9SxSrJb/vPVRtJcS1MjDk0PYE1JArrQnMuPgngFHbgj7l8BbxK/zMpaa1qjCecGyAXkADLK
-	iOtZ/3swG5n52izh80+21W075qu4rqxHxTZqaA9WWeet2U+ZmSh2VnTgn9p2XtSevuQNqHAnAi2
-	cXcqjIwrtDAjehg/iyPkWhPkqhwfziEhFqQYQHjmRcOe+airSI+vG9s25AEaO/w2nKNhI3OYaoS
-	x+QFuoOHK0NXmljdw4Oa337jU/LWBNTUblOWLkFvJaFhdaLGboye6ZqCQef3bopfC7j9y/JU1jl
-	1q8UbmseTd+JtTJz/FJZAwuAaMI95Mp8RnmAu33j26iWzI7a1fiCZfURdxWM3wj7big61A0cA/0
-	czvSU50q5589+8UkITGi38xOGYMwQJ5GNdU8ZvwdX/AmW8ghisX14ifQnwfmnk0MXlHPc6XBX/a
-	CRBurOCMQ+S
-X-Received: by 2002:a17:903:2b04:b0:2c9:d277:2cdb with SMTP id d9443c01a7336-2d91b002e3fmr73563805ad.9.1788186405287;
-        Mon, 31 Aug 2026 07:26:45 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d8750057e5sm33541385ad.66.2026.08.31.07.26.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2026 07:26:44 -0700 (PDT)
+        bh=TGZsE5pPPeNtqINqn2XOWd3ygllW4wLJTLRsuLko6xI=;
+        b=Xq0x8r1cOkgAvSm3ZIa/VKWlJ0LzcPUc+omOpTeflZxywJIylDZbDqwxRMpM/0cpwv
+         vCqvrTu2Ed3264GuUnVRfFK2EmpooVsp5c6/D6T0jzdicr4NvOSMkMnyQ0yIgXignHxG
+         4U6MCM7IkSRz3Gaadw7o8OY78gZA2HTvN/fMJNowHCC9TXHZjxhk53pI1YcQzQ41Ol1W
+         RoNIOx/uA+VB3nYy96qYLUrec6GriJEVb7mX9SB0iFjF/xh9dYMDkMz0hsL8PTl0lQDi
+         J7cR+JWfmm4PFxNGOhQr/O7Xxz0MvWXawGSyzXNH6hzmXCs/BixV+MeiJrNOLo3e+/dF
+         riCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788188913; x=1788793713;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=TGZsE5pPPeNtqINqn2XOWd3ygllW4wLJTLRsuLko6xI=;
+        b=TQVARUTNTuIB93IuaMH4+/lpPxDmesrv9c5EHDzMgJXMFi1grBe991AqYo5amU0fPp
+         OcEEwGj8tiqNORKzpl2o86XJr5okFcCbqDchgfaDQaoSFLhB7+nmTu7aWA2nwixMbGpS
+         FJvxHeQasYFdHxAVNIGp4IYfuphf23RGFtshLw4N+RnkaDRtA30N+HjfcsLR86CjeeK+
+         vCUBCfQ5EJfLK6ChLu1V7/93wAng7A3mqbn1C54ADcmv7MmBhdMxWeI00kULMVNG8Plk
+         tcYwPlRht5xg0hRBOL9XTro1DfGSJ4/UdgmG/zLKOTgjWDBRpFSs+9wB9AiQGkbPfux0
+         shIQ==
+X-Gm-Message-State: AFuF++kmf7Z5ZfWQUcyTjA4LB9zVtE9qIxAYDlBiWU0F9wCFrt/9ENNy
+	7XYP7KZa6EM8QNfZ/CqQYkYHLa9Zy6Dp6EJArKGh7/6GfgKzO8wVNQ6Q
+X-Gm-Gg: AR+sD100lOL0+tAXSo0W3uCnMB5U5/duTig0megLjRuPo2Hv0dN97+LYCzyMhzO824s
+	i/p3o0BrvdxpAwQk06aCCC3oBw5asiT0OpMxIU+KDwWQDxlnohcmbeRGcIvsV6FtxZySNefm6cg
+	WTz50ml/uX3Yjrq0SqE5DGLI2ScqcfXnBIQ02zqCfRQ10ww679KtjK6z0jEZWIizXARF18Kfmnq
+	19Xb2Mjy6aMGOrqsUQiRJqyrpUh/Lij9fbCQJXO+MtWYPfBMVhAaDCZ5jpBlo+e0658zBy9JAn8
+	IeEahioxiCZNJC2CxcPQi8dF0Upa+KMquu8jHVe69532v6l8bpMkBYCjzLyHjY4adUNz0icFSmF
+	DCYeDH8A2cgUINxsamPNjblj9BloxfK/NplnDKOcCdbONnk9EGusbxMtc4YFZqIqLkWcd+O9Nqz
+	3ovrMLrhDD4M3VS3J+3jiAU4rHLA7m64dTg83PuF8TjrAWd6S/xpgm9qYvAzWLVnEpDntiGA3Ui
+	yTIUf3HWOFlKUtXGX5dSbRaijZ8qS8xU9u6Kw==
+X-Received: by 2002:a05:6a00:aa85:b0:857:7384:b5fd with SMTP id d2e1a72fcca58-85b5c4d0ebamr2583437b3a.25.1788188913160;
+        Mon, 31 Aug 2026 08:08:33 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc1f301f166sm4561693a12.0.2026.08.31.08.08.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Aug 2026 08:08:32 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 31 Aug 2026 07:26:43 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linmao Li <lilinmao@kylinos.cn>
-Cc: Marius Zachmann <mail@mariuszachmann.de>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Sashiko <sashiko-bot@kernel.org>
-Subject: Re: [PATCH v2] hwmon: (corsair-cpro) Create debugfs entries after
- hwmon registration
-Message-ID: <a3bfd099-c81e-4a0c-9796-6afd1502a8f0@roeck-us.net>
-References: <20260831014509.3352442-1-lilinmao@kylinos.cn>
+Message-ID: <b2636e28-4c54-40f4-b129-08ded94dd9e5@roeck-us.net>
+Date: Mon, 31 Aug 2026 08:08:31 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260831014509.3352442-1-lilinmao@kylinos.cn>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] hwmon: (spd5118) Select page 0 unconditionally during
+ probe
+To: Armin Wolf <W_Armin@gmx.de>, sashiko-reviews@lists.linux.dev
+Cc: linux-hwmon@vger.kernel.org
+References: <20260830233009.322206-1-W_Armin@gmx.de>
+ <20260830234131.498F71F000E9@smtp.kernel.org>
+ <b5c0b655-e158-430b-b663-70913a99ce9e@gmx.de>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <b5c0b655-e158-430b-b663-70913a99ce9e@gmx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Aug 31, 2026 at 09:45:09AM +0800, Linmao Li wrote:
-> ccp_debugfs_init() registers debugfs files whose private data is the devm
-> allocated ccp.  It runs before hwmon_device_register_with_info(), so when
-> that registration fails, ccp_probe() returns with the files still in
-> place.  The HID core then frees ccp, and ccp_remove() is not called for a
-> failed probe, so nothing removes them later either.  Reading one of the
-> files dereferences the freed pointer.
-> 
-> Create the debugfs entries only after the hwmon device has been
-> registered, so no failing path can leave them behind.
-> 
-> The two version queries stay where they are.  They send USB commands
-> without holding ccp->mutex, which is only safe as long as nothing else
-> can call send_usb_cmd(); once the hwmon device is registered its
-> callbacks can do so concurrently.  Only the debugfs creation moves, and
-> it is told which queries succeeded.
-> 
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Closes: https://lore.kernel.org/linux-hwmon/20260708031612.BD7E61F000E9@smtp.kernel.org/
-> Suggested-by: Guenter Roeck <linux@roeck-us.net>
-> Fixes: 5997eb60f896 ("hwmon: (corsair-cpro) Add firmware and bootloader information")
-> Signed-off-by: Linmao Li <lilinmao@kylinos.cn>
+Hi Armin,
 
-Applied.
+On 8/30/26 16:48, Armin Wolf wrote:
+> Am 31.08.26 um 01:41 schrieb sashiko-bot@kernel.org:
+> 
+>> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+>> - [High] Unconditional I2C write in `probe()` before verifying device identity can cause permanent data corruption on mismatched devices.
+>> - [Medium] Failing probe on read-only buses entirely drops temperature monitoring capabilities.
+>> -- 
+>>
+>> commit 83cea797ff679bd0608e7bc406325588975c70cb
+>> Author: Armin Wolf <W_Armin@gmx.de>
+>>
+>> hwmon: (spd5118) Select page 0 unconditionally during probe
+>>
+>> This commit makes the driver write to the legacy mode register
+>> unconditionally during probe to select page 0. This intentional write
+>> fails on controllers where the BIOS blocks writes to the SPD device,
+>> thereby avoiding issues on such controllers by refusing to probe.
+>>
+>>> diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
+>>> index 9724cf70b61d4..95b7cbd2f111c 100644
+>>> --- a/drivers/hwmon/spd5118.c
+>>> +++ b/drivers/hwmon/spd5118.c
+>> [ ... ]
+>>> @@ -637,45 +638,32 @@ static int spd5118_i2c_init(struct i2c_client *client)
+>>>                        I2C_FUNC_SMBUS_WORD_DATA))
+>>>           return -ENODEV;
+>>> -    regval = i2c_smbus_read_word_swapped(client, SPD5118_REG_TYPE);
+>>> -    if (regval < 0 || (regval && regval != 0x5118))
+>>> -        return -ENODEV;
+>>> -
+>> [ ... ]
+>>> +    mode = i2c_smbus_read_byte_data(client, SPD5118_REG_I2C_LEGACY_MODE);
+>>> +    if (mode < 0)
+>>> +        return mode;
+>>> +
+>>> +    FIELD_MODIFY(SPD5118_LEGACY_PAGE_MASK, &mode, 0);
+>>> +    err = i2c_smbus_write_byte_data(client, SPD5118_REG_I2C_LEGACY_MODE, mode);
+>> [Severity: High]
+>> Does this unconditional I2C write in spd5118_i2c_init() risk permanent data
+>> corruption if the driver is bound to a mismatched device?
+>>
+>> Because the device identity check reading SPD5118_REG_TYPE has been moved
+>> until after this write, any device mistakenly probed (via sysfs or incorrect
+>> firmware tables) in the 0x50-0x57 address range will have its byte at offset
+>> 0x0B overwritten.
+>>
+>> For an ordinary EEPROM, this clears bits 0-2 permanently before the
+>> subsequent type check fails and aborts the probe.
+> 
+> The detection code is unchanged, and we need that write in order to read registers.
+> 
+
+The device could have been instantiated manually with a write to new_device,
+which would bypass detection. It doesn't hurt to write the old mode back if
+the write succeeded and this turns out to not be a spd5118 device, so
+let's do that if the code below bails out.
 
 Thanks,
 Guenter
 
-> ---
+>>> +    if (err < 0)
+>>> +        return err;
+>> [Severity: Medium]
+>> Will failing the probe completely on read-only buses deprive users of all
+>> temperature monitoring capabilities?
+>>
+>> If spd5118_i2c_init() returns an error here when probed on an Intel
+>> controller that rejects writes, the driver completely drops support for that
+>> device.
+>>
+>> Previously, the probe would succeed and at least allow reading the memory
+>> temperature. Could this degrade gracefully instead, perhaps by marking the
+>> regmap as read-only and disabling suspend/resume writes, rather than totally
+>> preventing hardware monitoring?
 > 
-> Notes (v2changelog):
->     v2: Create the debugfs entries after hwmon registration instead of
->         removing them on the error path, as suggested by Guenter Roeck.  The
->         version queries stay before the registration.
->     Link: https://lore.kernel.org/linux-hwmon/20260828061949.3151191-1-lilinmao@kylinos.cn/
+> No, because the driver will then block suspend/resume on those devices.
 > 
->  drivers/hwmon/corsair-cpro.c | 20 +++++++++++++-------
->  1 file changed, 13 insertions(+), 7 deletions(-)
+> Thanks,
+> Armin Wolf
 > 
+>>> +
+>>> +    regval = i2c_smbus_read_word_swapped(client, SPD5118_REG_TYPE);
+>>> +    if (regval < 0)
+>>> +        return regval;
+>>> +
+>>> +    if (regval != 0x5118)
+>>> +        return -ENODEV;
+>>>       /* We are reasonably sure that this is really a SPD5118 hub controller */
+>>>       return 0;
 > 
-> base-commit: 8d3ae59288f1e7d58d76558a6ee96d533bc5019f
-> 
-> diff --git a/drivers/hwmon/corsair-cpro.c b/drivers/hwmon/corsair-cpro.c
-> index 8354a002f4c5..56de0fe0f544 100644
-> --- a/drivers/hwmon/corsair-cpro.c
-> +++ b/drivers/hwmon/corsair-cpro.c
-> @@ -566,21 +566,18 @@ static int bootloader_show(struct seq_file *seqf, void *unused)
->  }
->  DEFINE_SHOW_ATTRIBUTE(bootloader);
->  
-> -static void ccp_debugfs_init(struct ccp_device *ccp)
-> +static void ccp_debugfs_init(struct ccp_device *ccp, bool fw_valid, bool bl_valid)
->  {
->  	char name[32];
-> -	int ret;
->  
->  	scnprintf(name, sizeof(name), "corsaircpro-%s", dev_name(&ccp->hdev->dev));
->  	ccp->debugfs = debugfs_create_dir(name, NULL);
->  
-> -	ret = get_fw_version(ccp);
-> -	if (!ret)
-> +	if (fw_valid)
->  		debugfs_create_file("firmware_version", 0444,
->  				    ccp->debugfs, ccp, &firmware_fops);
->  
-> -	ret = get_bl_version(ccp);
-> -	if (!ret)
-> +	if (bl_valid)
->  		debugfs_create_file("bootloader_version", 0444,
->  				    ccp->debugfs, ccp, &bootloader_fops);
->  }
-> @@ -588,6 +585,7 @@ static void ccp_debugfs_init(struct ccp_device *ccp)
->  static int ccp_probe(struct hid_device *hdev, const struct hid_device_id *id)
->  {
->  	struct ccp_device *ccp;
-> +	bool fw_valid, bl_valid;
->  	int ret;
->  
->  	ccp = devm_kzalloc(&hdev->dev, sizeof(*ccp), GFP_KERNEL);
-> @@ -632,7 +630,13 @@ static int ccp_probe(struct hid_device *hdev, const struct hid_device_id *id)
->  	if (ret)
->  		goto out_hw_close;
->  
-> -	ccp_debugfs_init(ccp);
-> +	/*
-> +	 * Query the versions before registering the hwmon device: they send
-> +	 * USB commands without holding ccp->mutex, which is only safe while
-> +	 * nothing else can call send_usb_cmd().
-> +	 */
-> +	fw_valid = !get_fw_version(ccp);
-> +	bl_valid = !get_bl_version(ccp);
->  
->  	ccp->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "corsaircpro",
->  							 ccp, &ccp_chip_info, NULL);
-> @@ -641,6 +645,8 @@ static int ccp_probe(struct hid_device *hdev, const struct hid_device_id *id)
->  		goto out_hw_close;
->  	}
->  
-> +	ccp_debugfs_init(ccp, fw_valid, bl_valid);
-> +
->  	return 0;
->  
->  out_hw_close:
+
