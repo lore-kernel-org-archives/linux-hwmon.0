@@ -1,241 +1,162 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B7E3A9871
-	for <linux-hwmon@vger.kernel.org>; Mon, 31 Aug 2026 18:17:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D372330C617
+	for <linux-hwmon@vger.kernel.org>; Mon, 31 Aug 2026 18:26:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788200256; cv=none; b=uHN92TaSu+Ni1MA4rDp51OyG8aXIE+oGCpP8oH4F3jsXs1l+5awIDHnVsKHmHgd86LqnQHtr3O/7gwn5alY0DFZ90om7lvLaNubIlFiFXdrZZUE5me6IlFJO6YKzZFq1msgdkpxdmbEDCL3oGxTxjFX97tlhxZXBtAIEDUpkWmQ=
+	t=1788200804; cv=none; b=NF+NVsWU/5yzKAcsJYzuFgFOmdl2qYOwfTyQ1Wmgdk7+EOtDZ8luGtOJD4y7lHCNoAmkfOAYucS1dQdmD9jyXdWbZlt6DlHfTsH7kb6inQv8LHk1sJlyJtj8iyASLel+HBDc4cvOrFGvepl1zXhYQ6j1yZGcydBxhO/lL6JHZbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788200256; c=relaxed/simple;
-	bh=mZVkrlK7Wbii84A3g2AiWskKNBFAWa+5iuce69K3aLY=;
+	s=arc-20240116; t=1788200804; c=relaxed/simple;
+	bh=vECsEzikcbH08LUl4XlfL8JZJMjnXksS/qqkjvEVzA8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=P8YHLdJ/EbGEFReeH2nPLuEbN9tHydekUdSTJL1OdVXOjwNuvRCJDDD1xcAzNqD+fgTyYRI8JOdKZnIghL3BhqrvaHb3W6GwH2aPwCzWNEk/zf6RVePqjsemcjke9RnXmMIr7dHI1cFCCQ9DMI2DzP7ccI+b7/rL4JfjBZLGQmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KVd0pyCP; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=h1KHsge+2SlsFR/4urjyO7zfnmZsNQt32oLkhviwK/RdJvxoSCT9/socWTrGIUgCzpPznZT6u9sMQf/SJySDtkxujF1YJojEw9enBE1YGw9kAyKWYy5mftirOdrwy4WcKuFFQ/QrgdeHGUyJzPcK4QfoHdPKg+/tirlRasuVdYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VjBzLJRM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KVd0pyCP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AD551F00A3D;
-	Mon, 31 Aug 2026 18:17:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VjBzLJRM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56BD91F000E9;
+	Mon, 31 Aug 2026 18:26:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788200255;
-	bh=lAiAHMuER91FIyUrsw2TBZA2hAZKadUkMp1FkjliJS8=;
+	s=k20260515; t=1788200802;
+	bh=oxhmVwh/Eq5ujK9gWqhbNUezfr8HxKXbzZvvLqOjxC4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=KVd0pyCPQ3WZv2sxh+2MvqgY8NUglfRLGBYvTnByYRpyc+TTZhXSt6YlI8q31xMby
-	 hMIY5GIAhEN5Nn98SS/lJSy5O30vOEARQ0V0nNtqcZsUHbPrqdTU95zsCOOwRjsmXv
-	 0AtzLe08DvUehwU8QWSUCs8hYcD1wDPVWqyj1xK88d5eCUgeLYzw7VtK4rF9fasi9T
-	 KtYuFrHorxeC5RK2c/qsJ3FTlW1jbTbyqcYQhUG+qukBZs/xHUF1dgvkpVUd45pFYi
-	 I1HUaY80HPTobJEAE3OYjFdWXU09NDd5rg0L8Hg7l+ag0poa8q3kooAcZh4kbblO0w
-	 q2hs7Yk7Ed+xA==
+	b=VjBzLJRM3JBdoEmHjmAhD4adO27L/9wwjBZksfDJ7YUsoJc3k0V4+kQ6R9fdGW1Ng
+	 remPCj3/VbzjND83U0JHANVv/dHGXW1k0iwzLDHLJlgUbQNc5WJufusGev/m7KJ7rc
+	 gTzRRMcpY5LM5wZbuXZ9EU5TdXO8gNnj9d8MtVo4m9Ivbao27ecHHJOskWClxm7/up
+	 NaQyY89QFruXP7Z5W5AkKWQWvYiLB4eL4JSs8iYLCIc3eZ4hi67//vcCPJemhrJoL+
+	 fSnvoehCfsPLlEBwtNxsJykXLw0DJCOMiVIZSwIZbpVprQxYF+uovAotAsh5eWLwRl
+	 BeyuoWCnlbGrw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/2] platform: arm64: Add Radxa SVC GLINK driver
+Subject: Re: [PATCH 2/2] platform: arm64: radxa-svc: Add hwmon sensors
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Xilin Wu" <sophon@radxa.com>
 Cc: linux-hwmon@vger.kernel.org
-In-Reply-To: <20260831-radxa-svc-v1-1-7c028de6a387@radxa.com>
+In-Reply-To: <20260831-radxa-svc-v1-2-7c028de6a387@radxa.com>
 References: <20260831-radxa-svc-v1-0-7c028de6a387@radxa.com>
- <20260831-radxa-svc-v1-1-7c028de6a387@radxa.com>
+ <20260831-radxa-svc-v1-2-7c028de6a387@radxa.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 31 Aug 2026 18:17:34 +0000
-Message-Id: <20260831181735.0AD551F00A3D@smtp.kernel.org>
+Date: Mon, 31 Aug 2026 18:26:41 +0000
+Message-Id: <20260831182642.56BD91F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [High] The rpmsg callback can be invoked before driver probe initializes =
-data, leading to a NULL pointer dereference.
-- [Medium] A spurious completion from a timed-out request can incorrectly f=
-ulfill a subsequent request due to `complete()` being called outside `rsp_l=
-ock`.
-- [Medium] Strict response size checking rejects valid larger responses fro=
-m newer firmware, breaking forward compatibility.
-- [Low] The driver is placed in `drivers/platform/arm64/` instead of `drive=
-rs/hwmon/` despite its primary function being hardware monitoring.
-- [Low] Redundant custom locking used for hwmon sysfs attributes.
+- [Medium] The driver registers hardware monitoring devices directly from t=
+he `drivers/platform/arm64/` directory, violating the HWMON subsystem layer=
+ing guidelines.
+- [Medium] The driver incorrectly registers a separate hwmon device for eac=
+h individual sensor instead of grouping them under a single hwmon device.
+- [Medium] Strict validation of firmware response lengths and bitmasks brea=
+ks forward compatibility with newer firmware versions.
 --
 
-commit 5b64da1a0118d30a0e8b618d6109d99215fbbd93
+commit 4fb96e4e2a24b97521dad5da3953d3fd473daf20
 Author: Xilin Wu <sophon@radxa.com>
 
-platform: arm64: Add Radxa SVC GLINK driver
+platform: arm64: radxa-svc: Add hwmon sensors
 
-This commit adds an rpmsg client driver for the RADXA_SVC_ADSP_APPS firmwar=
-e=20
-service on Radxa boards with Qualcomm SoCs. It exposes fan control=20
-functionality via the standard hwmon interface.
+Add support for the optional sensor discovery and sampling operations.
+Expose firmware temperature, voltage, current, and combined sensors as
+read-only hwmon devices.
 
-> diff --git a/drivers/platform/arm64/Kconfig b/drivers/platform/arm64/Kcon=
-fig
-> index e32e01b2a9bdd..60c1e541fe899 100644
-> --- a/drivers/platform/arm64/Kconfig
-> +++ b/drivers/platform/arm64/Kconfig
-[ ... ]
-> +config RADXA_SVC_GLINK
-> +	tristate "Radxa SVC GLINK driver"
-> +	depends on ARCH_QCOM || COMPILE_TEST
-
-[Severity: Low]
-Should this driver be located in drivers/hwmon/ instead? HWMON guidelines
-mandate that drivers whose primary functionality is hardware monitoring must
-reside in drivers/hwmon/. Placing it in the platform directory bypasses
-proper maintainer review and violates subsystem layering, given that this
-driver exclusively registers a hardware monitoring device for fan control.
-
-> +	depends on RPMSG
-> +	depends on HWMON
-
-[ ... ]
 > diff --git a/drivers/platform/arm64/radxa_svc_glink.c b/drivers/platform/=
 arm64/radxa_svc_glink.c
-> new file mode 100644
-> index 0000000000000..1c91bfabcd126
-> --- /dev/null
+> index 1c91bfabcd126..b2a4f0c5317ac 100644
+> --- a/drivers/platform/arm64/radxa_svc_glink.c
 > +++ b/drivers/platform/arm64/radxa_svc_glink.c
 [ ... ]
-> +static int radxa_svc_request(struct radxa_svc_glink *svc, u32 opcode,
-> +			     const void *req_payload, size_t req_len,
-> +			     void *rsp_payload, size_t *rsp_len)
+> @@ -428,6 +496,403 @@ static int radxa_svc_rpmsg_callback(struct rpmsg_de=
+vice *rpdev, void *data,
+>  	return 0;
+>  }
+> =20
+> +static u32 radxa_svc_sensor_expected_mask(u32 sensor_type)
+[ ... ]
+> +static int radxa_svc_sensor_update(struct radxa_svc_sensor *sensor)
 > +{
-[ ... ]
-> +	if (req_len)
-> +		memcpy(tx_buf + sizeof(*hdr), req_payload, req_len);
-> +
-> +	reinit_completion(&svc->rsp);
-> +
-> +	spin_lock_irqsave(&svc->rsp_lock, flags);
-
-[Severity: Medium]
-Can this reinit_completion() race with a delayed completion from a previous
-timed-out request? If a request times out, radxa_svc_request() cleans up and
-returns, but if the rpmsg callback thread had already set do_complete =3D t=
-rue
-under lock and got preempted before calling complete(), that delayed comple=
-te()
-will execute shortly after. When a new request starts and calls
-reinit_completion(), the delayed complete() from the previous transaction
-would incorrectly fulfill this new request with stale payload data.
-
-> +	if (svc->shutting_down) {
-> +		spin_unlock_irqrestore(&svc->rsp_lock, flags);
-[ ... ]
-> +	spin_lock_irqsave(&svc->rsp_lock, flags);
-> +	if (svc->shutting_down) {
-> +		ret =3D -ENODEV;
-> +	} else if (svc->rsp_opcode !=3D opcode) {
-> +		ret =3D -EIO;
-> +	} else {
-> +		ret =3D svc->rsp_status;
-> +		if (rsp_payload && rsp_len) {
-> +			size_t copy_len =3D min(*rsp_len, svc->rsp_len);
-> +
-> +			memcpy(rsp_payload, svc->rsp_payload, copy_len);
-> +			if (*rsp_len < svc->rsp_len && !ret)
-> +				ret =3D -EMSGSIZE;
-
-[Severity: Medium]
-Will this strict size check break forward compatibility? If a newer firmware
-version appends additional fields to the response, svc->rsp_len will be
-greater than *rsp_len. Changing ret to -EMSGSIZE here will cause the driver
-to fail rather than safely ignoring the trailing unknown bytes.
-
-> +			*rsp_len =3D svc->rsp_len;
-> +		}
-> +	}
-> +	spin_unlock_irqrestore(&svc->rsp_lock, flags);
-[ ... ]
-> +static int radxa_svc_rpmsg_callback(struct rpmsg_device *rpdev, void *da=
-ta,
-> +				    int len, void *priv, u32 addr)
-> +{
-> +	struct radxa_svc_glink *svc =3D dev_get_drvdata(&rpdev->dev);
-> +	const struct radxa_svc_hdr *hdr =3D data;
-> +	unsigned long flags;
-[ ... ]
-> +	seq =3D le32_to_cpu(hdr->seq);
-> +
-> +	spin_lock_irqsave(&svc->rsp_lock, flags);
-
-[Severity: High]
-Could this result in a NULL pointer dereference during early initialization?
-Because radxa_svc_rpmsg_driver sets the callback in its definition, the rpm=
-sg
-core can activate the endpoint and invoke this callback before the driver's
-probe function completes. If an unsolicited firmware message arrives before
-dev_set_drvdata() is executed in radxa_svc_rpmsg_probe(), dev_get_drvdata()
-will return NULL here, causing a crash when dereferencing svc->rsp_lock.
-
-> +	if (svc->pending && seq =3D=3D svc->pending_seq) {
-> +		svc->rsp_opcode =3D le32_to_cpu(hdr->opcode);
-> +		svc->rsp_status =3D (s32)le32_to_cpu(hdr->status);
-> +		svc->rsp_len =3D payload_len;
-> +		memcpy(svc->rsp_payload, data + header_size, payload_len);
-> +		svc->pending =3D false;
-> +		do_complete =3D true;
-> +	}
-> +	spin_unlock_irqrestore(&svc->rsp_lock, flags);
-> +
-> +	if (do_complete)
-> +		complete(&svc->rsp);
-
-[Severity: Medium]
-This isn't a bug in this exact location, but calling complete() outside the
-spinlock here allows it to race with the reinit_completion() of a subsequent
-request as detailed above.
-
-> +
-> +	return 0;
-[ ... ]
-> +static int radxa_svc_hwmon_read(struct device *dev,
-> +				enum hwmon_sensor_types type, u32 attr,
-> +				int channel, long *val)
-> +{
-> +	struct radxa_svc_glink *svc =3D dev_get_drvdata(dev);
-> +	struct radxa_svc_fan_state_resp state =3D {};
-[ ... ]
-> +	case hwmon_pwm_enable:
-> +		mutex_lock(&svc->fan_lock);
-
-[Severity: Low]
-Is this custom locking redundant? The hardware monitoring subsystem core
-automatically serializes sysfs operations for attributes registered via the
-info parameter of hwmon_device_register_with_info(). Relying on the hwmon c=
-ore
-for serialization avoids API layering violations.
-
-> +		ret =3D radxa_svc_fan_get_pwm_mode(svc, val);
-> +		mutex_unlock(&svc->fan_lock);
-> +
-> +		return ret;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static int radxa_svc_hwmon_write(struct device *dev,
-> +				 enum hwmon_sensor_types type, u32 attr,
-> +				 int channel, long val)
-> +{
-> +	struct radxa_svc_glink *svc =3D dev_get_drvdata(dev);
-> +	struct radxa_svc_fan_control_resp control =3D {};
+> +	struct radxa_svc_sensor_read_req req;
+> +	struct radxa_svc_sensor_read_resp resp =3D {};
+> +	unsigned long cache_expires;
+> +	u32 expected_mask;
+> +	u32 valid_mask;
+> +	size_t len =3D sizeof(resp);
 > +	int ret;
-> +
-> +	if (type !=3D hwmon_pwm || channel)
-> +		return -EOPNOTSUPP;
-> +
-> +	mutex_lock(&svc->fan_lock);
-
-[Severity: Low]
-Like above, this custom fan_lock is likely redundant since the hwmon core
-already serializes sysfs writes.
-
-> +
-> +	switch (attr) {
 [ ... ]
+> +	req.sensor_id =3D cpu_to_le32(sensor->sensor_id);
+> +	ret =3D radxa_svc_request(sensor->svc, RADXA_SVC_OP_SENSOR_READ,
+> +				&req, sizeof(req), &resp, &len);
+> +	if (ret)
+> +		goto out_unlock;
+> +
+> +	if (len !=3D sizeof(resp) ||
+> +	    le32_to_cpu(resp.sensor_id) !=3D sensor->sensor_id) {
+> +		ret =3D -EPROTO;
+> +		goto out_unlock;
+> +	}
+> +
+> +	valid_mask =3D le32_to_cpu(resp.valid_mask);
+> +	expected_mask =3D radxa_svc_sensor_expected_mask(sensor->sensor_type);
+> +	if ((valid_mask & RADXA_SVC_SENSOR_VALID_MASK) !=3D expected_mask ||
+> +	    valid_mask & ~RADXA_SVC_SENSOR_VALID_MASK) {
+> +		ret =3D -EPROTO;
+> +		goto out_unlock;
+> +	}
+
+[Severity: Medium]
+Does this strict validation of firmware response lengths and bitmasks break
+forward compatibility with newer firmware versions?
+
+If a newer firmware version adds additional capability bits or appends extra
+data to the response, the checks valid_mask & ~RADXA_SVC_SENSOR_VALID_MASK
+and len !=3D sizeof(resp) will trigger an -EPROTO error, completely failing
+to read sensors.
+
+> +
+> +	sensor->temp_millic =3D (s32)le32_to_cpu(resp.temp_millic);
+> +	sensor->voltage_mv =3D (s32)le32_to_cpu(resp.voltage_mv);
+[ ... ]
+> +static int radxa_svc_sensor_hwmon_init(struct radxa_svc_glink *svc)
+> +{
+> +	struct radxa_svc_sensor_list_resp *resp;
+> +	struct radxa_svc_sensor_list_req req;
+> +	const struct hwmon_chip_info *chip_info;
+[ ... ]
+> +	svc->num_sensors =3D total;
+> +	for (i =3D 0; i < svc->num_sensors; i++) {
+> +		struct radxa_svc_sensor *sensor =3D &svc->sensors[i];
+> +
+> +		chip_info =3D radxa_svc_sensor_chip_info(sensor->sensor_type);
+> +		hwmon_name =3D devm_hwmon_sanitize_name(svc->dev, sensor->name);
+> +		if (IS_ERR(hwmon_name)) {
+> +			ret =3D PTR_ERR(hwmon_name);
+> +			goto out_free;
+> +		}
+> +
+> +		sensor->hwmon_dev =3D
+> +			devm_hwmon_device_register_with_info(svc->dev, hwmon_name,
+> +							     sensor, chip_info, NULL);
+
+[Severity: Medium]
+Does this loop incorrectly register a separate hwmon device for each indivi=
+dual
+sensor instead of grouping them under a single multi-channel hwmon device?
+
+This clutters the /sys/class/hwmon/ namespace with up to 64 separate hwmon
+devices.
+
+[Severity: Medium]
+Is it appropriate to register hardware monitoring devices directly from a
+driver in the drivers/platform/arm64/ directory?
+
+This bypasses maintainer review and increases driver complexity outside of
+the hwmon subsystem, violating standard hwmon architecture layering guideli=
+nes.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260831-radxa-svc-=
-v1-0-7c028de6a387@radxa.com?part=3D1
+v1-0-7c028de6a387@radxa.com?part=3D2
