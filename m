@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 014FD46DFF4;
-	Mon, 31 Aug 2026 13:35:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 921E24A3D4A;
+	Mon, 31 Aug 2026 13:42:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788183302; cv=none; b=Q2SkfSpHu9fKxYNYLHhP/n4z7VgfFoAitdNtUm9NQvGdKahdsD9ve/NkcQwjEOQOi4tz0Jgmb+DFMRpDx2Htxlr1R/QGK/rk+nDYwTn6bxq2OSDxpB3Xwk03pQ9o+8iMbMbrgw2XcGKC2SdubEzIBYS0OA/Kqevm5Z1BzBmiep4=
+	t=1788183762; cv=none; b=oN7rwICV+5kkU/jY24uaww3db//Kvp7yE3rmAvCaeITA3uVOwOimyYIB8U8lFdWNB7m6rAMhlKLhKEp4/m/tKTSrxaz5qGAjL0ZRQBJZwkAfexX4tn3Vek7QF4EAKFv8h5az+J56MFHGRCMzMwos8ygJ24dklte7QxNkb5U9j74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788183302; c=relaxed/simple;
-	bh=1xDt4C7KhNf7kVp/+VSVtbC7O7z4obXhQ+RE6SH4Vfo=;
+	s=arc-20240116; t=1788183762; c=relaxed/simple;
+	bh=3iGBA8GPAyEAcjrSEst6g140fbLvyvhiHxE/6wa8oXs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OodMFHdfKjiU8xmuvHt9N+znsPKI2+TljDWNv9ZvM4/4eeTQTKPLg140txg8812t2NPjVhGC2LY6OeAx2zCXi59fVzU8wsCWL9jKRCD8TQ7XSY3ETAtj41rtzgemMwG3/XInV9zwuMqdP6kS/IvTMX3u+A07s0XEHL7lOTLCB+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OQ1B9cYa; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=R1EcJzyE4tYjziFD8PK5bUamLjZxGLT4PMvJozoFvmphCgWytPps6Mhqjj90OcNMoPIb/2OQrQ+K9JNt+94cUUD6BJOR79TYT4YeEYpim670NWo38ExQLL6ptd8aBOB1MFNsqRcw6gr8UYieMy/pqsRtDTnPsun6YMAj0RZw1iw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lvaoBYoc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OQ1B9cYa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A3BA1F00A3D;
-	Mon, 31 Aug 2026 13:34:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lvaoBYoc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CB501F000E9;
+	Mon, 31 Aug 2026 13:42:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788183299;
-	bh=y1preF5+Nm7sJx/6vhxIdSvAsjE3Sh4FPm3KwOWx5nA=;
+	s=k20260515; t=1788183759;
+	bh=zz/5QezpqgGOOoE/n7i7SwncuG4gpF25aapWSTCVBqw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=OQ1B9cYaONWodq5EeYE26AZdKdJw6BfXk/uViTMzCk7rz9I+oKSDUQTIWeokjEbr4
-	 Ac8Oq1SsFyPMLKYXFUcjZ7pPR3erW+Xr2NLIoaPovkDU0NVaxRf7LDdth1i39F9spT
-	 BlLqrs+7rMzLKyZa3YOdn13OdXaMy7rQF2mpiSbfcUeHprKcOnbipMC91hF/KWBSBC
-	 QfVOUrFt3jyVw6NEFLw7fe4EIJPtZfBGOKxgb/mm8nkgD0suipbXXJ13AW7kcotB+s
-	 7CBir4mMKwcEjzgrLMiM5UT8hQ/9XrbVpJNx93r1QOzQPYQ5zQzfXC3uYHlEnTj7+m
-	 2Y9R1ZHO2rYOg==
+	b=lvaoBYocZlNbT1XB7fjauyiqWRS0RGGC8kGI1YDn31up3AlbXN5v237o/sVfeB/8t
+	 2Uuf5uXpsfMJOCrFmKdxcQ1lkMODIpvefO1Ht8Glqb8rkdu9JeR23YPgpTqKQp01Fs
+	 1hyTHuUUuUfzWHPJsPwLS4nFcFWlK/E4ozsu+MJvTdFti64JOBP+bv31zXhy9j6KML
+	 7NLfo/Pps/MhKBxSA+SFM5SQ1wzPpnvI5qNGoChrm+p/Em/KlFIxedTy4XGRHPhdYs
+	 Zjg/3zRa5ZBOm02Cc57R1OnJVfIVPJ9y4TDk9JReIx/zl7mSWbvhoZvFY2FGvdOuP/
+	 dbBkTC7X3p/Rw==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Armin Wolf <W_Armin@gmx.de>,
-	=?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Sashiko <sashiko-bot@kernel.org>,
+	Wilken Gottwalt <wilken.gottwalt@posteo.net>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.18-6.12] hwmon: (dell-smm) Add Dell Latitude 7530 to fan control whitelist
-Date: Mon, 31 Aug 2026 09:21:34 -0400
-Message-ID: <20260831133314.4125787-66-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.18-6.6] hwmon: (corsair-psu) Fix linear11 calculation
+Date: Mon, 31 Aug 2026 09:25:15 -0400
+Message-ID: <20260831133314.4125787-287-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260831133314.4125787-1-sashal@kernel.org>
 References: <20260831133314.4125787-1-sashal@kernel.org>
@@ -47,398 +47,506 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.18.48
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Armin Wolf <W_Armin@gmx.de>
+From: Guenter Roeck <linux@roeck-us.net>
 
-[ Upstream commit 5a1aba28f6c79f4bbb7a5361063225030ecd36f3 ]
+[ Upstream commit c6c4234928d2eb4f61fecb61067e612d9bdbd2ff ]
 
-A user reported that the Dell Latitude 7530 needs to be whitelisted
-for the special SMM calls necessary for globally enabling/disabling
-BIOS fan control.
+In corsairpsu_linear11_to_int(), the mantissa is extracted using bitwise
+operations and cast to s16 before being shifted left:
 
-Closes: https://github.com/Wer-Wolf/i8kutils/issues/17
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-Acked-by: Pali Rohár <pali@kernel.org>
-Link: https://lore.kernel.org/r/20260610180141.311503-1-W_Armin@gmx.de
+static int corsairpsu_linear11_to_int(const u16 val, const int scale)
+{
+    ...
+    const int mant = (((s16)(val & 0x7ff)) << 5) >> 5;
+    ...
+}
+
+Due to C integer promotion rules, the masked value (which is always
+positive) is promoted to a 32-bit integer before the left shift. As a
+result, the sign bit is never extended to bit 31 of the promoted integer.
+
+When the device hardware reports a negative temperature in Linear11 format
+(such as an ambient temperature probe reporting sub-zero), the negative
+mantissa is parsed incorrectly as a massive positive value. For example,
+-1 becomes 2047, which scales to 2047 degrees Celsius.
+
+Fix the problem by type casting the result of the left shift operation
+to s16.
+
+Another problem is left-shifting of negative values. In C, the result of
+left-shifting negative values is undefined. Use a multiplication instead
+to avoid the problem.
+
+Also use a local s64 variable to store temporary results, change
+the return value type from int to long, and clamp the final value
+to LONG_MIN and LONG_MAX to avoid under- and overflow issues while
+retaining as much information as possible.
+
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Cc: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Tested-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+Link: https://lore.kernel.org/r/20260804034811.2385506-1-linux@roeck-us.net
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
-# Stable Backport Analysis: `hwmon: (dell-smm) Add Dell Latitude 7530 to
-fan control whitelist`
+# Stable Backport Analysis: `hwmon: (corsair-psu) Fix linear11
+calculation`
 
-**Local tree:** `v6.18.44` (stable/linux-6.18.y)
-**Mainline commit:** `5a1aba28f6c79` (merged via `hwmon-for-v7.2`, not
-yet in this 6.18.y checkout)
+**Local tree:** `v6.18.44` (linux-6.18.y, `VERSION = 6`, `PATCHLEVEL =
+18`, `SUBLEVEL = 44`)
+**Upstream fix commit:** `c6c4234928d2e` (on `master`, not yet in this
+tree)
 
 ---
 
 ## PHASE 1: COMMIT MESSAGE FORENSICS
 
-### Step 1.1: PARSE THE SUBJECT LINE
-**Record:** `[hwmon: (dell-smm)]` `[Add]` — Add Dell Latitude 7530 to
-the existing fan-control DMI whitelist.
+### Step 1.1: Parse the Subject Line
+**Record:** `[hwmon: (corsair-psu)] [fix] [correct LINEAR11 mantissa
+sign-extension and exponent handling in sensor value conversion]`
 
-### Step 1.2: PARSE ALL COMMIT MESSAGE TAGS
+### Step 1.2: Parse All Commit Message Tags
 **Record:**
-- **Closes:** https://github.com/Wer-Wolf/i8kutils/issues/17
-- **Signed-off-by:** Armin Wolf \<W_Armin@gmx.de\>
-- **Acked-by:** Pali Rohár \<pali@kernel.org\> (dell-smm co-developer /
-  whitelist maintainer)
-- **Link:**
-  https://lore.kernel.org/r/20260610180141.311503-1-W_Armin@gmx.de
-- **Signed-off-by:** Guenter Roeck \<linux@roeck-us.net\> (hwmon
-  maintainer)
-- No `Fixes:`, `Reported-by:`, `Cc: stable@vger.kernel.org`, `Tested-
-  by:`, or syzbot tags.
+| Tag | Value |
+|-----|-------|
+| Reported-by | Sashiko \<sashiko-bot@kernel.org\> (AI code review bot,
+not a user crash report) |
+| Cc | Wilken Gottwalt \<wilken.gottwalt@posteo.net\> (driver author) |
+| Signed-off-by | Guenter Roeck \<linux@roeck-us.net\> (hwmon subsystem
+maintainer) |
+| Tested-by | Wilken Gottwalt \<wilken.gottwalt@posteo.net\> |
+| Link | https://lore.kernel.org/r/20260804034811.2385506-1-linux@roeck-
+us.net |
+| Fixes: | **Absent** (expected for manual review) |
+| Cc: stable | **Absent** (expected) |
 
-Notable: maintainer ack from Pali Rohár; user bug report via GitHub
-issue.
+**Notable patterns:** Maintainer-authored fix with hardware-expert
+Tested-by. Reported-by is an automated AI reviewer, not syzbot or a user
+bug report.
 
-### Step 1.3: ANALYZE THE COMMIT BODY TEXT
+### Step 1.3: Analyze Commit Body
 **Record:**
-- **Bug:** Dell Latitude 7530 is missing from
-  `i8k_whitelist_fan_control`, so the driver never sets the correct SMM
-  codes (`manual_fan`/`auto_fan`) for toggling BIOS automatic fan
-  control.
-- **Symptom:** Manual fan control via hwmon `pwmX_enable` / i8kutils
-  does not work; user saw fan speed capped (~3500 RPM) without the
-  whitelist entry vs ~4000 RPM with it.
-- **Root cause:** SMM fan-control codes differ per Dell model; only
-  whitelisted models get the correct codes at init via
-  `dell_smm_init_dmi()`.
-- No kernel version range stated in the commit message.
+- **Bug description:** `corsairpsu_linear11_to_int()` incorrectly
+  extracts the signed 11-bit LINEAR11 mantissa. Casting `(val & 0x7ff)`
+  to `s16` before left-shift fails because the masked value is always
+  non-negative and gets promoted to a 32-bit int without sign extension.
+- **Symptom:** Negative temperatures (e.g., sub-zero ambient probe)
+  parse as huge positive values. Example: -1°C → 2047°C.
+- **Secondary issues:** Left-shifting negative values is undefined
+  behavior in C; exponent scaling can overflow `int`.
+- **Root cause:** Integer promotion rules + incorrect cast order in
+  mantissa extraction (introduced in 2021 refactor).
+- **Version info:** None explicit; bug has existed since Feb 2021.
 
-### Step 1.4: DETECT HIDDEN BUG FIXES
-**Record:** Not disguised cleanup — this is an explicit hardware-
-enablement / quirk entry. Functionally fixes broken manual fan control
-on one laptop model.
+### Step 1.4: Detect Hidden Bug Fixes
+**Record:** Not disguised — explicitly labeled and described as a fix.
+The overflow/clamp and UB avoidance are genuine correctness improvements
+bundled with the sign-extension fix.
 
 ---
 
 ## PHASE 2: DIFF ANALYSIS
 
-### Step 2.1: INVENTORY THE CHANGES
+### Step 2.1: Inventory the Changes
 **Record:**
-- **Files:** `drivers/hwmon/dell-smm-hwmon.c` (+8 lines, 0 removed)
-- **Functions touched:** data in `i8k_whitelist_fan_control[]` (used by
-  `dell_smm_init_dmi()`)
-- **Scope:** Single-file, surgical DMI table addition.
+- **File:** `drivers/hwmon/corsair-psu.c` — +14 / -9 lines (23 lines
+  total with context)
+- **Functions modified:** `corsairpsu_linear11_to_int()` → renamed
+  `corsairpsu_linear11_to_long()`; call sites in
+  `corsairpsu_get_value()`
+- **Scope:** Single-file surgical fix
 
-### Step 2.2: UNDERSTAND THE CODE FLOW CHANGE
+### Step 2.2: Code Flow Change (per hunk)
+
+**Hunk 1 — `corsairpsu_linear11_to_long()`:**
+- **Before:** Mantissa `(((s16)(val & 0x7ff)) << 5) >> 5` — sign never
+  propagated for negative mantissas; exponent applied via bit-shift on
+  `int`; returns `int`.
+- **After:** Mantissa `((s16)((val & 0x7ff) << 5)) >> 5` — sign
+  extension works; exponent via multiplication/division on `s64`; result
+  clamped to `LONG_MIN`/`LONG_MAX`; returns `long`.
+
+**Hunk 2 — `corsairpsu_get_value()` call sites:**
+- **Before:** Calls `corsairpsu_linear11_to_int()` for temps, fan, PWM,
+  watts.
+- **After:** Calls `corsairpsu_linear11_to_long()` — same call paths,
+  corrected return type.
+
+### Step 2.3: Bug Mechanism
 **Record:**
-- **Before:** On Latitude 7530,
-  `dmi_first_match(i8k_whitelist_fan_control)` returns NULL →
-  `manual_fan`/`auto_fan` stay 0 → `pwmX_enable` sysfs attribute is not
-  exposed (`auto_fan` check at line 864 fails) and
-  `i8k_enable_fan_auto_mode()` is never used with correct SMM codes.
-- **After:** Latitude 7530 matches → `manual_fan=0x30a3`,
-  `auto_fan=0x31a3` (same as Latitude 7320) → fan auto/manual SMM
-  control is enabled for this machine.
-- **Path affected:** `__init` DMI setup at boot (`dell_smm_init_dmi()` →
-  `i8k_init()`).
+- **Category:** Logic/correctness fix (type promotion bug) +
+  initialization/overflow hardening
+- **Mechanism:** For LINEAR11 value `0xFFFF` (mantissa -1): `val &
+  0x7ff` = `0x7FF` (2047). Old code: `(s16)2047 << 5 >> 5` = 2047. Fixed
+  code: `(s16)(2047 << 5) >> 5` = `(s16)0xFFE0 >> 5` = -1. Affects all
+  LINEAR11 conversions; primary real-world impact is temperature sysfs
+  readings at sub-zero ambient.
 
-### Step 2.3: IDENTIFY THE BUG MECHANISM
-**Record:** **Category (h): Hardware workaround / DMI quirk.** Missing
-DMI whitelist entry prevents correct per-model SMM codes from being
-configured. Same mechanism as the existing Latitude 7320 entry
-(`b4be51302d687`).
-
-### Step 2.4: ASSESS THE FIX QUALITY
+### Step 2.4: Fix Quality Assessment
 **Record:**
-- Obviously correct: copies the proven Latitude 7320 pattern
-  (`I8K_FAN_30A3_31A3`), user-tested on GitHub.
-- Minimal, no unrelated changes.
-- Regression risk very low: only affects systems matching
-  `DMI_PRODUCT_NAME == "Latitude 7530"`. The original 2019 whitelist
-  commit notes incorrect SMM codes can be dangerous, but this uses the
-  same validated codes as the sibling 7320 model after maintainer/user
-  testing.
+- Fix is obviously correct by inspection; matches standard LINEAR11
+  sign-extension pattern.
+- Minimal, self-contained; no API changes visible to userspace (still
+  `long` hwmon values).
+- **Regression risk:** Very low. Positive values unchanged; only
+  negative mantissa paths and overflow edge cases differ.
 
 ---
 
 ## PHASE 3: GIT HISTORY INVESTIGATION
 
-### Step 3.1: BLAME THE CHANGED LINES
-**Record:** Insertion point is after Latitude 7320 entry
-(`b4be51302d687`, Jul 2024). Whitelist infrastructure introduced in
-`afe45277ade62` (Nov 2019). `I8K_FAN_30A3_31A3` enum value present since
-at least `8debe3c1295ef`. All prerequisites are long-established in
-6.18.y.
+### Step 3.1: Blame the Changed Lines
+**Record:**
+- Buggy mantissa line introduced by **918f22104d64d** (Wilken Gottwalt,
+  2021-02-27): `hwmon: (corsair-psu) Update calculation of LINEAR11
+  values`
+- Function shell from **d115b51e0e5671** (2020-10-27): original driver
+  introduction
+- Bug present since kernel ~5.12 era; definitely present in this 6.18.y
+  tree
 
-### Step 3.2: FOLLOW THE FIXES: TAG
-**Record:** N/A — no `Fixes:` tag.
+### Step 3.2: Follow Fixes: Tag
+**Record:** No `Fixes:` tag present. Bug introduced by 918f22104d64d,
+which is an ancestor of HEAD — confirmed with `git merge-base --is-
+ancestor`.
 
-### Step 3.3: CHECK FILE HISTORY FOR RELATED CHANGES
-**Record:** Multiple prior whitelist additions already in 6.18.y:
-- `b4be51302d687` — Latitude 7320 (same author, same pattern, same
-  `I8K_FAN_30A3_31A3`)
-- `f8611a7981cd0` — G15 5510
-- `fa0bc8f297b29` — G15 5511
-- etc.
+### Step 3.3: File History for Related Changes
+**Record:** Recent corsair-psu changes in this tree include UAF fix
+(`ec477af3a7e8d`), probe error handling, device ID additions. On master
+after v6.18.44: additional corsair-psu fixes (debugfs serialization,
+string termination, this linear11 fix). **Standalone** — no series
+dependency.
 
-Standalone single-patch series (v1 only). No series dependencies.
+### Step 3.4: Author's Other Commits
+**Record:** Guenter Roeck is hwmon subsystem maintainer. Wilken Gottwalt
+is the primary corsair-psu driver author (multiple commits in this
+file). High subsystem expertise.
 
-### Step 3.4: CHECK THE AUTHOR'S OTHER COMMITS
-**Record:** Armin Wolf is a regular dell-smm contributor in this tree
-(7320 whitelist, OptiPlex DMI entries, fan mode support). Not the
-subsystem maintainer, but established contributor with maintainer ack on
-this patch.
-
-### Step 3.5: CHECK FOR DEPENDENT/PREREQUISITE COMMITS
-**Record:** No dependencies. Requires only existing
-`i8k_whitelist_fan_control`, `i8k_fan_control_data[]`, and
-`I8K_FAN_30A3_31A3` — all present in 6.18.44. `git apply --check` on the
-mainline patch succeeds cleanly.
+### Step 3.5: Prerequisites
+**Record:** No dependencies. Patch applies cleanly to current tree (`git
+apply --check` → `APPLIES_CLEANLY`). Fix commit `c6c4234928d2e` is NOT
+an ancestor of HEAD (`fix_NOT_in_tree`).
 
 ---
 
 ## PHASE 4: MAILING LIST AND EXTERNAL RESEARCH
 
-### Step 4.1: FIND THE ORIGINAL PATCH DISCUSSION
+### Step 4.1: Original Patch Discussion
 **Record:**
-- **b4 dig URL:**
-  https://patch.msgid.link/20260610180141.311503-1-W_Armin@gmx.de
-- **Series:** v1 only (committed version is latest)
-- **Reviewer feedback:** Acked-by Pali Rohár; Guenter Roeck applied. No
-  NAKs, no stable nomination in thread.
+- **URL:**
+  https://patch.msgid.link/20260804034811.2385506-1-linux@roeck-us.net
+- **Series:** v1 (RESEND, 2026-08-03) → v2 (2026-08-03, applied
+  version). v2 change: "Skip handling right-shift of negative values"
+- **Reviewer feedback:** Sashiko AI bot: "found no issues." Wilken
+  Gottwalt: "Don't see any anomalies," gave Tested-by; noted he cannot
+  simulate negative temps but PSU operating range is 0–50°C.
+- **Stable nominations:** None found in thread.
+- **NAKs:** None.
 
-### Step 4.2: CHECK WHO REVIEWED THE PATCH
-**Record:** CC'd: `pali@kernel.org`, `linux@roeck-us.net`, `linux-
-hwmon@vger.kernel.org`. Pali Rohár (co-developer of whitelist mechanism)
-acked.
+### Step 4.2: Who Reviewed
+**Record:** CC'd to `linux-hwmon@vger.kernel.org`, Sashiko bot, Wilken
+Gottwalt (driver author). Maintainer self-submitted.
 
-### Step 4.3: SEARCH FOR THE BUG REPORT
-**Record:** GitHub issue #17 (piotr152):
-- User confirmed without `driver_data`: fan capped at 3500 RPM
-- With `I8K_FAN_30A3_31A3`: works, ~4000 RPM
-- Same treatment needed as Latitude 7320 (issue #8)
-- Severity from user perspective: functional fan-control failure, not
-  kernel crash
+### Step 4.3: Bug Report
+**Record:** No user bug report, syzbot, or KASAN report. Found via code
+review (Sashiko AI). Concrete failure example provided in commit message
+(-1 → 2047°C).
 
-### Step 4.4: CHECK FOR RELATED PATCHES AND SERIES
-**Record:** Standalone patch. Related prior fix: `b4be51302d687`
-(Latitude 7320) — already in 6.18.y.
+### Step 4.4: Related Patches
+**Record:** Standalone 1-patch series. No other patches required.
 
-### Step 4.5: CHECK STABLE MAILING LIST HISTORY
-**Record:** No stable-list discussion found for this specific patch. Not
-a negative signal per instructions.
+### Step 4.5: Stable Mailing List History
+**Record:** Not searched separately; no stable nomination in the patch
+thread.
 
 ---
 
 ## PHASE 5: CODE SEMANTIC ANALYSIS
 
-### Step 5.1: IDENTIFY KEY FUNCTIONS IN THE DIFF
-**Record:** `dell_smm_init_dmi()` (consumer of whitelist),
-`i8k_enable_fan_auto_mode()` (uses `manual_fan`/`auto_fan`),
-`dell_smm_is_visible()` (exposes `hwmon_pwm_enable` when `auto_fan` is
-set).
+### Step 5.1: Key Functions
+**Record:** `corsairpsu_linear11_to_long()` (was `_to_int`), called from
+`corsairpsu_get_value()`.
 
-### Step 5.2: TRACE CALLERS
-**Record:** `dell_smm_init_dmi()` called from `i8k_init()` at module
-init (`__init`). Affects all subsequent hwmon sysfs read/write on
-matched Dell laptops. Not interrupt context; init-time configuration.
+### Step 5.2: Trace Callers
+**Record:** `corsairpsu_get_value()` called from:
+- `corsairpsu_get_criticals()` — critical threshold reads at probe
+- `corsairpsu_hwmon_temp_read()` — **TEMP0/TEMP1** (primary bug impact)
+- `corsairpsu_hwmon_fan_read()`, `corsairpsu_hwmon_power_read()`,
+  `corsairpsu_hwmon_in_read()`, `corsairpsu_hwmon_curr_read()`
+- debugfs read paths
 
-### Step 5.3: TRACE CALLEES
-**Record:** `dmi_first_match()` → sets globals `manual_fan`/`auto_fan` →
-used later by `i8k_enable_fan_auto_mode()` → `dell_smm_call()` (SMM BIOS
-call).
+All ultimately reachable from userspace via sysfs hwmon reads
+(`corsairpsu_hwmon_ops_read`).
 
-### Step 5.4: FOLLOW THE CALL CHAIN
-**Record:** Boot-time DMI match → userspace writes `pwm1_enable` via
-hwmon sysfs (root typically required) → `i8k_enable_fan_auto_mode()`.
-Reachable from userspace on affected hardware; not a security crash
-vector.
+### Step 5.3: Key Callees
+**Record:** `corsairpsu_request()` (USB HID I/O), `clamp()` macro. No
+locking changes.
 
-### Step 5.5: SEARCH FOR SIMILAR PATTERNS
-**Record:** Identical pattern used for 12+ models in
-`i8k_whitelist_fan_control[]` in this tree, including Latitude 7320 with
-the same `I8K_FAN_30A3_31A3` codes.
+### Step 5.4: Call Chain / Reachability
+**Record:** Userspace reads `/sys/class/hwmon/hwmonN/tempN_input` →
+`corsairpsu_hwmon_ops_read()` → `corsairpsu_hwmon_temp_read()` →
+`corsairpsu_get_value()` → `corsairpsu_linear11_to_long()`. **Reachable
+from userspace** on systems with `CONFIG_SENSORS_CORSAIR_PSU` enabled
+and a supported Corsair PSU connected.
+
+### Step 5.5: Similar Patterns
+**Record:** Other hwmon drivers in this tree have had LINEAR11 fixes
+backported (e.g., `pmbus/fsp-3y` non-compliant linear11 vout encoding).
+Same class of sensor-parsing correctness bug.
 
 ---
 
-## PHASE 6: CROSS-REFERENCING AGAINST THE LOCAL TREE
+## PHASE 6: CROSS-REFERENCING AGAINST LOCAL TREE
 
-### Step 6.1: DOES THE BUGGY CODE EXIST IN THIS TREE?
-**Record:** **YES.** The whitelist table exists but lacks Latitude 7530.
-`grep "Latitude 7530"` returns no matches in 6.18.44. The omission (not
-a regression) means 7530 owners on 6.18.y lack fan-control enablement
-that sibling models (7320) already have.
+### Step 6.1: Does Buggy Code Exist?
+**Record:** **YES.** Current tree at lines 143–149 has the exact buggy
+code:
 
-### Step 6.2: CHECK FOR BACKPORT COMPLICATIONS
-**Record:** **Clean apply expected.** Verified with `git apply --check`.
-Insertion point (after 7320, before E6440) matches current file layout
-exactly.
+```143:149:drivers/hwmon/corsair-psu.c
+static int corsairpsu_linear11_to_int(const u16 val, const int scale)
+{
+        const int exp = ((s16)val) >> 11;
+        const int mant = (((s16)(val & 0x7ff)) << 5) >> 5;
+        const int result = mant * scale;
 
-### Step 6.3: CHECK IF RELATED FIXES ARE ALREADY HERE
-**Record:** Latitude 7320 whitelist (`b4be51302d687`) is present.
-Latitude 7530 fix is not. No duplicate fix.
+        return (exp >= 0) ? (result << exp) : (result >> -exp);
+```
+
+Driver present since driver intro commit `d115b51e0e5671`; buggy
+mantissa since `918f22104d64d`.
+
+### Step 6.2: Backport Complications
+**Record:** **Clean apply** — verified with `git apply --check`. No
+conflicting changes in the affected region.
+
+### Step 6.3: Related Fixes Already Present?
+**Record:** Other corsair-psu fixes are present (UAF fix
+`ec477af3a7e8d`, probe fixes), but this linear11 fix is **not** yet in
+v6.18.44.
 
 ---
 
 ## PHASE 7: SUBSYSTEM AND MAINTAINER CONTEXT
 
-### Step 7.1: IDENTIFY THE SUBSYSTEM AND ITS CRITICALITY
-**Record:** **hwmon / dell-smm driver.** **IMPORTANT** for Dell laptop
-users relying on fan control; **PERIPHERAL** from a whole-kernel
-perspective (DMI-gated, one laptop model).
+### Step 7.1: Subsystem Criticality
+**Record:** `drivers/hwmon/` — **PERIPHERAL** (optional tristate module
+`CONFIG_SENSORS_CORSAIR_PSU`, Corsair PSU HID hardware only).
 
-### Step 7.2: ASSESS SUBSYSTEM ACTIVITY
-**Record:** hwmon is actively maintained in 6.18.y; dell-smm receives
-regular DMI whitelist updates (7320, G15 5510/5511, XPS entries, etc.).
+### Step 7.2: Subsystem Activity
+**Record:** Actively maintained. Recent 6.18.y stable queue includes
+multiple hwmon sensor-correctness and crash fixes (adt7470, ina2xx,
+ltc4282, sht3x).
 
 ---
 
 ## PHASE 8: IMPACT AND RISK ASSESSMENT
 
-### Step 8.1: DETERMINE WHO IS AFFECTED
-**Record:** **Driver-specific / platform-specific** — Dell Latitude 7530
-owners using `dell-smm` hwmon fan control (i8kutils, manual thermal
-management).
+### Step 8.1: Who Is Affected
+**Record:** **Driver-specific** — users with supported Corsair PSUs
+(RM/HX series with HID interface) who have `CONFIG_SENSORS_CORSAIR_PSU`
+built-in or loaded as module.
 
-### Step 8.2: DETERMINE THE TRIGGER CONDITIONS
-**Record:** Every boot on Latitude 7530 with `dell-smm` loaded. Common
-for affected hardware owners. Requires root for sysfs writes; not an
-unprivileged attack vector.
+### Step 8.2: Trigger Conditions
+**Record:** PSU firmware reports a negative LINEAR11 mantissa, most
+plausibly on temperature sensors in sub-zero ambient conditions.
+Unprivileged users can trigger sysfs reads but cannot inject the
+hardware value. **Uncommon** but realistic in cold environments; driver
+author notes PSU spec is 0–50°C continuous.
 
-### Step 8.3: DETERMINE THE FAILURE MODE SEVERITY
-**Record:** **Functional failure** — manual BIOS fan-control toggle via
-SMM does not work; fan speed may be capped below what manual control
-allows. **Severity: LOW–MEDIUM** (thermal management inconvenience, not
-kernel oops/corruption). Could matter under heavy workloads if BIOS auto
-mode is inadequate.
-
-### Step 8.4: CALCULATE RISK-BENEFIT RATIO
+### Step 8.3: Failure Mode Severity
 **Record:**
-- **Benefit:** Enables fan control on a real, shipping laptop for 6.18.y
-  users; direct precedent already accepted in this tree (7320).
-- **Risk:** Very low — 8 lines, DMI-gated, maintainer-acked, user-tested
-  codes.
-- **Ratio:** Favorable for backport under the hardware-quirk exception.
+- **Failure mode:** Incorrect sysfs sensor readings (e.g., 2047°C
+  instead of -1°C); could cause false monitoring alerts or fan-control
+  script misfires if tied to PSU temps.
+- **NOT:** kernel crash, oops, hang, deadlock, data corruption, or
+  security issue.
+- **Severity: MEDIUM** — real user-visible incorrect data, but no kernel
+  instability.
+
+### Step 8.4: Risk-Benefit Ratio
+**Record:**
+- **Benefit:** Correct temperature/voltage/power readings for affected
+  hardware; eliminates absurd 2047°C values.
+- **Risk:** Very low — 23-line change, maintainer-authored, tested,
+  clean apply.
+- **Ratio:** Moderate benefit, very low risk. Appropriate for 6.18.y
+  where the driver and bug both exist.
 
 ---
 
 ## PHASE 9: FINAL SYNTHESIS
 
-### Step 9.1: COMPILE THE EVIDENCE
+### Step 9.1: Evidence Summary
 
 **FOR backport:**
-- Hardware quirk / DMI whitelist exception (explicitly allowed for
-  stable)
-- Real user-reported issue with on-hardware testing
-- Acked-by subsystem co-developer (Pali Rohár)
-- Identical precedent already in 6.18.y (Latitude 7320, same SMM codes)
-- 8-line patch, applies cleanly, no dependencies
-- Driver and infrastructure fully present in 6.18.44
+- Real, reproducible parsing bug with concrete example (-1 → 2047°C)
+- Bug present in this tree since 2021
+- Fix from hwmon maintainer (Guenter Roeck), Tested-by from driver
+  author
+- Small (23 lines), single file, applies cleanly
+- Precedent: similar hwmon sensor-reading correctness fixes already in
+  6.18.y stable queue
+- Fixes undefined behavior (left-shift of negative values)
 
 **AGAINST backport:**
-- Not a crash, security, deadlock, or data-corruption fix
-- Strict reading of "important issue" criterion is borderline
-- Fan-control SMM calls carry inherent risk if codes are wrong
-  (mitigated by 7320 precedent and user testing)
+- Niche optional driver; small user population
+- No crash/corruption/security impact
+- Trigger requires sub-zero ambient (edge case per driver author)
+- Reported-by is AI review bot, not a user bug report
+- Does not meet the strongest stable signals (oops, UAF, syzbot)
 
-**UNRESOLVED:** None material to the decision.
+**Unresolved:** No independent user reports of the 2047°C symptom found.
 
-### Step 9.2: STABLE RULES CHECKLIST
-1. Obviously correct and tested? **PASS** — mirrors 7320 entry; user-
-   tested on GitHub; maintainer acked.
-2. Fixes a real bug affecting users? **PASS** — manual fan control non-
-   functional on Latitude 7530.
-3. Important issue? **PASS (via quirk exception)** — not crash-level,
-   but real hardware functionality for laptop thermal management; fits
-   hardware-quirk stable exception.
-4. Small and contained? **PASS** — 8 lines, one file.
-5. No new features or APIs? **PASS** — DMI table entry only; no new
-   sysfs/API surface.
-6. Can apply to local tree? **PASS** — verified clean apply to 6.18.44.
+### Step 9.2: Stable Rules Checklist
+| Criterion | Result |
+|-----------|--------|
+| 1. Obviously correct and tested? | **PASS** — clear C promotion fix;
+Tested-by from driver author |
+| 2. Fixes a real bug affecting users? | **PASS** — wrong sysfs sensor
+values for Corsair PSU users |
+| 3. Important issue? | **PASS (borderline)** — "oh, that's not good"
+per stable-kernel-rules.rst; not crash-level but clearly wrong
+monitoring data |
+| 4. Small and contained? | **PASS** — 23 lines, 1 file |
+| 5. No new features/APIs? | **PASS** — bug fix only |
+| 6. Can apply to local tree? | **PASS** — verified clean apply |
 
-### Step 9.3: CHECK FOR EXCEPTION CATEGORIES
-**Record:** **Hardware quirk / DMI whitelist workaround** — same
-category as Latitude 7320, XPS 9315, G15 5510 entries already in 6.18.y.
+### Step 9.3: Exception Categories
+**Record:** None (not device ID, quirk, DT, build fix, or docs fix).
+Qualifies as a hardware-monitoring correctness bug fix.
 
-### Step 9.4: DECISION RATIONALE
+### Step 9.4: Decision Rationale
 
-This commit should be backported to **6.18.y**. The dell-smm fan-control
-whitelist is an established, conservative mechanism for per-model SMM
-code selection. Adding Latitude 7530 with the same `I8K_FAN_30A3_31A3`
-codes as the already-backported Latitude 7320 is low risk and fixes a
-confirmed user-facing hardware issue. It is not a kernel-stability crash
-fix, but it squarely matches the stable-tree exception for hardware-
-specific quirks that enable existing driver functionality on real
-devices.
+For **linux-6.18.y at v6.18.44**: the corsair-psu driver and the buggy
+LINEAR11 code are both present. The fix is maintainer-quality, tested,
+minimal, and applies cleanly. While the impact is limited to a niche
+driver and cold-ambient edge cases (wrong sysfs readings, not kernel
+crashes), stable-kernel-rules explicitly include fixes for real bugs
+that bother users and "oh, that's not good" issues. This tree already
+backports similar hwmon sensor-correctness fixes. The risk of regression
+is negligible.
 
 ---
 
 ## Verification
 
-- **[Phase 1]** `git show 5a1aba28f6c79`: parsed subject, tags, body
-- **[Phase 1]** GitHub issue #17 fetched: user testing confirms
-  `I8K_FAN_30A3_31A3` works; without entry fan capped at 3500 RPM
-- **[Phase 2]** Read `dell-smm-hwmon.c` lines 432-441, 863-878,
-  1059-1084, 1530-1777: confirmed whitelist → `auto_fan`/`manual_fan` →
-  sysfs and SMM path
-- **[Phase 2]** `git show 5a1aba28f6c79 --stat`: 1 file, +8 lines
-- **[Phase 3]** `git describe HEAD` / `make kernelversion`: tree is
-  v6.18.44
-- **[Phase 3]** `git blame -L 1560,1567`: Latitude 7320 entry from
-  `b4be51302d687`
-- **[Phase 3]** `git log -S i8k_whitelist_fan_control`: whitelist
-  introduced `afe45277ade62` (2019)
-- **[Phase 3]** `git log --grep="fan control whitelist" HEAD`: multiple
-  whitelist commits already in 6.18.y including 7320
-- **[Phase 3]** `git apply --check` on mainline patch: applies cleanly
-  to 6.18.44
-- **[Phase 4]** `b4 dig -c 5a1aba28f6c79`: lore thread found
-- **[Phase 4]** `b4 dig -c 5a1aba28f6c79 -w`: Pali Rohár and Guenter
-  Roeck CC'd
-- **[Phase 4]** `b4 dig -c 5a1aba28f6c79 -a`: v1 only, no later
-  revisions
-- **[Phase 4]** `b4 dig -m /tmp/latitude7530.mbox`: thread downloaded;
-  Acked-by Pali Rohár; no stable Cc
-- **[Phase 5]** `grep dell_smm_init_dmi`: called from `i8k_init()` at
-  line 1808
-- **[Phase 6]** `grep "Latitude 7530"`: not present in 6.18.44 (fix
-  needed)
-- **[Phase 6]** `grep "Latitude 7320"`: present at line 1561 (insertion
-  point confirmed)
-- **[Phase 6]** `I8K_FAN_30A3_31A3` enum and data present at lines
-  1536-1544
-- **[Phase 7]** `git log --oneline -20 -- drivers/hwmon/`: active hwmon
-  maintenance in tree
-- **[Phase 8]** Failure mode assessed as functional/thermal, not crash —
-  severity LOW-MEDIUM
+- **[Phase 1]** Parsed commit message tags from `git show c6c4234928d2e`
+- **[Phase 2]** Diff analysis: 23 lines changed in
+  `drivers/hwmon/corsair-psu.c`; verified buggy mantissa at lines
+  143–149
+- **[Phase 3]** `git blame`: buggy line from 918f22104d64d (2021-02-27);
+  driver from d115b51e0e5671 (2020-10-27)
+- **[Phase 3]** `git merge-base --is-ancestor`: driver and buggy code
+  both in tree; fix commit NOT in tree
+- **[Phase 3]** `git log --oneline -20 -- drivers/hwmon/corsair-psu.c`:
+  history reviewed
+- **[Phase 4]** `b4 dig -c c6c4234928d2e`: found v1→v2 series at lore
+  URL above
+- **[Phase 4]** `b4 dig -c c6c4234928d2e -w`: CC'd linux-hwmon, Sashiko,
+  Wilken Gottwalt
+- **[Phase 4]** `b4 dig -m /tmp/corsair_linear11.mbox`: read thread;
+  Tested-by from Wilken; no stable nomination; no NAKs
+- **[Phase 5]** `grep corsairpsu_get_value`: traced callers to hwmon
+  sysfs read path
+- **[Phase 6]** `git describe HEAD`: v6.18.44
+- **[Phase 6]** `git apply --check`: patch applies cleanly
+- **[Phase 6]** Read current `corsairpsu_linear11_to_int()` — buggy code
+  confirmed present
+- **[Phase 7]** `CONFIG_SENSORS_CORSAIR_PSU` in `drivers/hwmon/Kconfig`
+  — tristate optional module
+- **[Phase 8]** Assessed severity as MEDIUM (wrong sysfs data, no kernel
+  crash)
 
-**YES**
+---
 
- drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+**YES**The background lookups are done and match what the analysis
+already used:
 
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-index 768690a597f4d..9f102589f240c 100644
---- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -1565,6 +1565,14 @@ static const struct dmi_system_id i8k_whitelist_fan_control[] __initconst = {
- 		},
- 		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_30A3_31A3],
- 	},
-+	{
-+		.ident = "Dell Latitude 7530",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-+			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Latitude 7530"),
-+		},
-+		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_30A3_31A3],
-+	},
- 	{
- 		.ident = "Dell Latitude E6440",
- 		.matches = {
+- **b4 dig** found the patch thread: [PATCH v2] hwmon: (corsair-psu) Fix
+  linear11 calculation (v1 → v2, Tested-by from Wilken Gottwalt).
+- **`git log --grep="Fix linear11"`** hung and was stopped; the fix was
+  already located on `master` as `c6c4234928d2e`.
+- **`git log --grep="linear11"`** returned unrelated hwmon LINEAR11
+  commits in other drivers (pmbus/fsp-3y, etc.), not this corsair-psu
+  fix.
+
+Nothing else is needed from those tasks. The backport recommendation for
+**linux-6.18.y (v6.18.44)** remains **YES** — small maintainer fix for
+wrong sub-zero temperature readings, applies cleanly, and the buggy code
+is present in this tree.
+
+ drivers/hwmon/corsair-psu.c | 23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+index 4681af6843596..d56a6cd76ff26 100644
+--- a/drivers/hwmon/corsair-psu.c
++++ b/drivers/hwmon/corsair-psu.c
+@@ -140,13 +140,18 @@ struct corsairpsu_data {
+ };
+ 
+ /* some values are SMBus LINEAR11 data which need a conversion */
+-static int corsairpsu_linear11_to_int(const u16 val, const int scale)
++static long corsairpsu_linear11_to_long(const u16 val, const int scale)
+ {
+ 	const int exp = ((s16)val) >> 11;
+-	const int mant = (((s16)(val & 0x7ff)) << 5) >> 5;
+-	const int result = mant * scale;
++	const int mant = ((s16)((val & 0x7ff) << 5)) >> 5;
++	s64 result = mant * scale;
+ 
+-	return (exp >= 0) ? (result << exp) : (result >> -exp);
++	if (exp >= 0)
++		result *= (int)(1UL << exp);
++	else
++		result >>= -exp;
++
++	return clamp(result, LONG_MIN, LONG_MAX);
+ }
+ 
+ /* the micro-controller uses percentage values to control pwm */
+@@ -271,13 +276,13 @@ static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8 rail, l
+ 	case PSU_CMD_RAIL_AMPS:
+ 	case PSU_CMD_TEMP0:
+ 	case PSU_CMD_TEMP1:
+-		*val = corsairpsu_linear11_to_int(tmp & 0xFFFF, 1000);
++		*val = corsairpsu_linear11_to_long(tmp & 0xFFFF, 1000);
+ 		break;
+ 	case PSU_CMD_FAN:
+-		*val = corsairpsu_linear11_to_int(tmp & 0xFFFF, 1);
++		*val = corsairpsu_linear11_to_long(tmp & 0xFFFF, 1);
+ 		break;
+ 	case PSU_CMD_FAN_PWM_ENABLE:
+-		*val = corsairpsu_linear11_to_int(tmp & 0xFFFF, 1);
++		*val = corsairpsu_linear11_to_long(tmp & 0xFFFF, 1);
+ 		/*
+ 		 * 0 = automatic mode, means the micro-controller controls the fan using a plan
+ 		 *     which can be modified, but changing this plan is not supported by this
+@@ -291,12 +296,12 @@ static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8 rail, l
+ 			*val = 2;
+ 		break;
+ 	case PSU_CMD_FAN_PWM:
+-		*val = corsairpsu_linear11_to_int(tmp & 0xFFFF, 1);
++		*val = corsairpsu_linear11_to_long(tmp & 0xFFFF, 1);
+ 		*val = corsairpsu_dutycycle_to_pwm(*val);
+ 		break;
+ 	case PSU_CMD_RAIL_WATTS:
+ 	case PSU_CMD_TOTAL_WATTS:
+-		*val = corsairpsu_linear11_to_int(tmp & 0xFFFF, 1000000);
++		*val = corsairpsu_linear11_to_long(tmp & 0xFFFF, 1000000);
+ 		break;
+ 	case PSU_CMD_TOTAL_UPTIME:
+ 	case PSU_CMD_UPTIME:
 -- 
 2.53.0
 
