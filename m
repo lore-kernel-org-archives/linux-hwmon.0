@@ -1,41 +1,68 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED6AC484235;
-	Tue,  1 Sep 2026 16:52:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8228437455
+	for <linux-hwmon@vger.kernel.org>; Tue,  1 Sep 2026 17:04:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788281568; cv=none; b=sHmYARI66ut0hZjFHEYG6EtfKBiUNn4Tr+oGgvkqDywG84Pt6Q7jDqqDg+tS/+2XawxrjOPSQs43WnURAUTVWHxpKo3WUGkSbNvBA7UGoPu/Q9Oc+3jlpmngubawaY8f/x3Qdqyvs4gOaPWiwAa0DLc1sfkaUvilwsEmy36VFH4=
+	t=1788282290; cv=none; b=u06eITVnexaloMy7meUcjqFInDgDYgBNDqudcdwAxnxevcYE4gB2oyHge/7aMp8stsTpTEHVrYIhwJx8Dq9iU3FsKLc4xg910giLhs2XdsFd+jxw7EXk124+56UAiMbPSHTlwIXZxa4JRvITNY+h3ewWjh3C3U0ZfnPdlVb0eok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788281568; c=relaxed/simple;
-	bh=a+8Z+oZ2h5Q9KDIsJc7SrJv3B5OfBCKA4xy7xdVqixI=;
+	s=arc-20240116; t=1788282290; c=relaxed/simple;
+	bh=sCpWrPyDgUHrOQNFUMCarIYxnoz7IFzUXJsBXRnhj6w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mljZ1qMMC0dWXlxEfsIu/X+e+tbek2xgjVpfYt0w9sHfMlGgB7LX6w8s7QJwtPN1kOWbITUvnvK87Vja3RGeEfG3+3rMi3+K1zKe3Q45tqnzrHNS4DYjbeKpXdM7KsD8r2iyznBMlaceiwEDms5Hsfn/VM+CDzllXxApVhIdppo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=JjB9JhQ2; arc=none smtp.client-ip=212.227.17.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	 In-Reply-To:Content-Type; b=oL0M0lTEQZ+ZwaQXqybNXjRyHUlVqwGh5OMX9aUaJ55bfwNTOCDoE9642+DbM4e6iPxg5+OAiZGc7pjxmkVb+1JOZlI9ZnTuissBG5e/vprcoC+SP/yitwIJebqqAPVpH6ThfSe3KBPVLZDKlvZxIvLdTPd4PeEoeKncx4gpdhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A/3fR6z1; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="JjB9JhQ2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1788281560; x=1788886360; i=w_armin@gmx.de;
-	bh=a+8Z+oZ2h5Q9KDIsJc7SrJv3B5OfBCKA4xy7xdVqixI=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=JjB9JhQ2C0fy7tIbZFe1Lau5VCReHbV5KQkPFRTJ1F4jgxdrSuO41bwXz/+LrfMf
-	 ROIoXlH6f7g7S4z2sYTKvLQGYXIcfQPrRQVXAzkOY6NSRhwhTUBuzZpUPqfGrugPj
-	 GWdJO99LMmu5GUZblh7WT1HHDcjIYHWM5dUTQV2nbg7Jk72n/stPwwTQWrdgKt282
-	 ebCKeF4B4+Z54c7P+3jm97FFvKU1ch/xIQcOgTqhEj/Iep3p/TC5Le8T09uNT2/0x
-	 D84iWlQ+VTVohW16HdLtC49X+uHL+J05xoeVQ2tmOb248c/jx0+sq5vrmDDRabfZn
-	 MBtPOqubOeuOi/hFvQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M8hZJ-1wwn1K3wHZ-0041mh; Tue, 01
- Sep 2026 18:52:40 +0200
-Message-ID: <659b67ad-a2d7-43e1-b0d8-6e326901ba91@gmx.de>
-Date: Tue, 1 Sep 2026 18:52:39 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A/3fR6z1"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-84eb992a881so59557b3a.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 01 Sep 2026 10:04:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788282288; x=1788887088; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=imFY8trppO3hIGZZKMCrA2RTQJSgFofoaspMJZY20Kc=;
+        b=A/3fR6z1sKuSVIP0sobezMBbK3FVsDhh/KVVEslUH9YCMxNPNHexs5dI+AWBJv8DTi
+         p9KCEsyGrCLBMqbH0CUM/XPrVZ/cIKRyK7y7AlM/KaLv4aXA3iggyoO8/3gwAG6OvHX5
+         vN3/6Y5QvJtpUTaV0ckFILmhbmAe9vYixm5oOsF4Mcc1EdDv+OX6YAKv4fslHCEkFO7p
+         T0B1H5nCAH0T0kGpTGnZCvP6f5bss0P7IWK2g2tXWoDdfo90pRMXKnnVUIyV3XrhMo10
+         Bev1coBZpE4/KkGPfAfvRDPu4UXX6CjiZCwhm5PjvzUTnGXxK7mSPN3DWv0CuaRH0pPE
+         uw9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788282288; x=1788887088;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=imFY8trppO3hIGZZKMCrA2RTQJSgFofoaspMJZY20Kc=;
+        b=SZArP75KTDN14fq0ASTMwwp7ODdSOf1oAVNBXYPopg7DAxdUa88hPZ4fNcWTH2516T
+         aJ86fp1cZaP/AYkOtx+oDgNXJKXGHrQVXpDF50Mg8hvPCPS7FpI1PjnKrN1aSuZZytIJ
+         1PXsv8SPAKIE/0LQmNAdvKzHJq1e5xZymo1W9pgdn3DhJML9TQWbTv43VSP4lTJ16wSm
+         XQ/+unn57A+tPRBhA/gH18zyWPcQZDTYIQy883/kErUVtgwAU58jewGmwtaOiniEY9GI
+         z6cScIu15QC6Yl+xk3vQZlcQAEGzZa3WBy9vZJub140rxfEQ7qJd7LnyRf16WoDiejF9
+         UV1Q==
+X-Gm-Message-State: AFuF++mnBt9nhdP35LZfFbT3CaXlwmIb5CDIr/jvO5SWT0A399tY5zRl
+	ZVEI5BPrdXk3N2ciwyxqEZjvlbI4W5MGy95c6gs5peL6z5nKoGyXEjjeQAepOw==
+X-Gm-Gg: AR+sD119BzhA0Pm5PGub8v5eXoKzJcpM0VMtEwHcmYr8I8JPhNqh3m5w6Of6k/jdsyL
+	Qhhi2X3psIasaAkYNCXFApyzYb+R8fW+DqmRUgP97bJ7dAA0QXNfC9v1JWc80bQdDIda8WyVMHN
+	NwDOlfK3IAR/zIt6lBARvWqBakP/aGbJ1OvMt0HkYKX5zG8rUGWPkFxDGa5/IPNSLcPvnuqNLho
+	PzdvV7akrMAhFzL/rY2y6+K6ylZr8Ts97NW3zJWlWWY7MzCWrIOOsa7eDcS0z6tSFlrLcV2Y404
+	yvcmgxUe2sQmhogiGAZeUcoZooi4/i4oqu3VVjVoDPyOsiMTmsg4eGzCOdv7bdx3ndF6UTf9uq4
+	/uKDT5vSPUcWLHZ7nfpOxWM/c/17ryKRKaG6hGPur3zauV7pPDGJ5bAYkL90UfpA8J/kA0BDnUU
+	thrpw/wPGtlGwfOQQ3E4G8YABx7PUkQBM+CgadYd8MUxXNFS6J77dQmyZLvkEb6xh8wJCwds9c1
+	wpBQTFaPdotcbui5Nrw1LRC3GObjDDjs8j7bQ==
+X-Received: by 2002:a05:6a00:c90:b0:85c:e16c:a1f6 with SMTP id d2e1a72fcca58-85ce16ca283mr2208698b3a.24.1788282288254;
+        Tue, 01 Sep 2026 10:04:48 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-85dc003af05sm187109b3a.37.2026.09.01.10.04.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Sep 2026 10:04:47 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <5c17ea39-c479-4f88-adc6-9a86f3dfb96a@roeck-us.net>
+Date: Tue, 1 Sep 2026 10:04:46 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -43,314 +70,89 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] hwmon: (spd5118) Select page 0 unconditionally during
- probe
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- ggirouard@bungeetaco.com
-References: <20260831193424.95135-1-W_Armin@gmx.de>
- <555c7300-c742-4b91-a67e-5a4aa144bebe@roeck-us.net>
- <0c6c5e65-a781-4607-a43a-3aa25d794144@gmx.de>
- <497d1e4f-a1c2-4d2f-9874-187da23dd8f9@roeck-us.net>
+Subject: Re: [BUG] SPD5118 Intermittent MR11 Corruption During Suspend/Resume
+To: Matthew Bettencourt <matthew.bettencourt@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1a8ea9da-1ac1-4312-a8ca-ea4a9f35093f@gmail.com>
+ <ee284272-0da0-45b6-a3be-c76822e5d54f@roeck-us.net>
+ <014b9438-e9b7-4be1-b816-002e83a068a0@roeck-us.net>
+ <37132c40-aa82-4df1-b5ce-337601f3c085@gmail.com>
+ <3c4e9f59-5272-48cf-a4a0-eeefcba955a9@roeck-us.net>
+ <763a8b30-8548-4ff0-a1e9-8e74bbfe9b02@gmail.com>
+ <6e8761aa-67ef-4624-834d-4b9d0ce729d6@roeck-us.net>
+ <9753ed80-5666-42a6-b04c-99b9ef9326fe@gmail.com>
 Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <497d1e4f-a1c2-4d2f-9874-187da23dd8f9@roeck-us.net>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <9753ed80-5666-42a6-b04c-99b9ef9326fe@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:RfYYJ///VoTPKpQZxW7sm0qzuBqRXHJ2+0iCeL37ThB7A1Xo4d5
- RyiXgKaExaH1wmCyoqq9jbgEExjYwOLD5mcJm6m+lrDU2MWBXD8/bXmtrctetGDIFi7/0sb
- ptWDNVVdemUmqG/WhyygbNtIpkHeJ2Amt9RdYXcTXGwmzxTXKJujxPCtwKfKVbqQzydjS7e
- JtLC0Nq12o9SIuQhVsNgg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:qNqXk74SDNQ=;50axDX92bgiODE7x1IKxgPRIPE0
- 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
+Content-Transfer-Encoding: 7bit
 
-Am 01.09.26 um 18:35 schrieb Guenter Roeck:
+Hi Matthew,
 
-> On 9/1/26 09:09, Armin Wolf wrote:
->> Am 01.09.26 um 00:22 schrieb Guenter Roeck:
->>
->>> On 8/31/26 12:34, Armin Wolf wrote:
->>>> Some Intel i2c controllers can be configured by the BIOS to reject
->>>> writes to the SPD device. This often causes problems when the registe=
-r
->>>> page needs to be changed, usually during resume.
->>>>
->>>> Avoid probing on affected devices by unconditionally selecting page 0
->>>> by writing the SPD5118_REG_I2C_LEGACY_MODE register during probe.
->>>> This will fail on affected controllers and thus prevent the driver
->>>> from probing.
->>>>
->>>> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
->>>> ---
->>>> Changes since v2:
->>>> - restore original register content if i2c init fails
->>>>
->>>> Changes since v1:
->>>> - Avoid zeroing reserved bits inside SPD5118_REG_I2C_LEGACY_MODE
->>>> ---
->>>> =C2=A0 drivers/hwmon/spd5118.c | 55=20
->>>> ++++++++++++++++-------------------------
->>>> =C2=A0 1 file changed, 21 insertions(+), 34 deletions(-)
->>>>
->>>> diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
->>>> index 9724cf70b61d..038d9e6e6a73 100644
->>>> --- a/drivers/hwmon/spd5118.c
->>>> +++ b/drivers/hwmon/spd5118.c
->>>> @@ -637,44 +637,31 @@ static int spd5118_i2c_init(struct i2c_client=
-=20
->>>> *client)
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 I2C_FUNC_S=
-MBUS_WORD_DATA))
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -ENODEV=
-;
->>>> =C2=A0 -=C2=A0=C2=A0=C2=A0 regval =3D i2c_smbus_read_word_swapped(cli=
-ent, SPD5118_REG_TYPE);
->>>> -=C2=A0=C2=A0=C2=A0 if (regval < 0 || (regval && regval !=3D 0x5118))
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -ENODEV;
->>>> -
->>>
->>> Thinking about it, Sashiko has a point here. I think we should keep
->>> the above code to have an early exit point.
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0 * If the device type registers return 0, it=
- is possible that=20
->>>> the chip
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0 * has a non-zero page selected and takes th=
-e specification=20
->>>> literally,
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * We must first select page 0 to ensure tha=
-t we can reliably=20
->>>> read
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * the volatile registers on chips that take=
- the specification=20
->>>> literally,
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * i.e. disables access to volati=
-le registers besides the=20
->>>> page register
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * if the page is not 0. The Rene=
-sas/ITD SPD5118 Hub=20
->>>> Controller is known
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0 * to show this behavior. Try to identify su=
-ch chips.
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * to show this behavior.
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0 *
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * We must also perform an unconditional reg=
-ister write to=20
->>>> detect if
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * the i2c controller blocks write accesses =
-to the SPD device.=20
->>>> Some Intel
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * controllers might be configured by the BI=
-OS to do this.
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
->>>> -=C2=A0=C2=A0=C2=A0 if (!regval) {
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Vendor ID registers mu=
-st also be 0 */
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 regval =3D i2c_smbus_read=
-_word_data(client,=20
->>>> SPD5118_REG_VENDOR);
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (regval)
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-eturn -ENODEV;
->>>> -
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* The selected page in M=
-R11 must not be 0 */
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mode =3D i2c_smbus_read_b=
-yte_data(client,=20
->>>> SPD5118_REG_I2C_LEGACY_MODE);
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (mode < 0 || (mode & ~=
-SPD5118_LEGACY_MODE_MASK) ||
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 !=
-(mode & SPD5118_LEGACY_PAGE_MASK))
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-eturn -ENODEV;
->>>> -
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 err =3D i2c_smbus_write_b=
-yte_data(client,=20
->>>> SPD5118_REG_I2C_LEGACY_MODE,
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 m=
-ode & SPD5118_LEGACY_MODE_ADDR);
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (err)
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-eturn -ENODEV;
->>>> -
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * If the device typ=
-e registers are still bad after selecting
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * page 0, this is n=
-ot a SPD5118 device. Restore original
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * legacy mode regis=
-ter value and abort.
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 regval =3D i2c_smbus_read=
-_word_swapped(client,=20
->>>> SPD5118_REG_TYPE);
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (regval !=3D 0x5118) {
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 i=
-2c_smbus_write_byte_data(client,=20
->>>> SPD5118_REG_I2C_LEGACY_MODE, mode);
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-eturn -ENODEV;
->>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->>>> +=C2=A0=C2=A0=C2=A0 mode =3D i2c_smbus_read_byte_data(client,=20
->>>> SPD5118_REG_I2C_LEGACY_MODE);
->>>> +=C2=A0=C2=A0=C2=A0 if (mode < 0)
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return mode;
->>>> +
->>>
->>> I also wonder if we should strengthen this and bail out if any of=20
->>> bit 3..7 is
->>> set. 2-byte addressing is known not to work in the first place, and=20
->>> bit 4..7
->>> are reserved in the supported version of the standard and should=20
->>> always be 0.
->>>
->> This would prevent the driver from being forward-compatible to newer=20
->> standard revisions.
->>
-> Good point.
->
->>> Also, if we keep above check, we should only only get here if the=20
->>> page is !=3D 0.
->>> That means the register value has to be 0x01..0x07. So we could bail=
-=20
->>> out with
->>>
->>> =C2=A0=C2=A0=C2=A0=C2=A0if (!mode || (mode & ~SPD5118_LEGACY_PAGE_MASK=
-))
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -ENODEV;
->>> followed by
->>> =C2=A0=C2=A0=C2=A0=C2=A0err =3D i2c_smbus_write_byte_data(client,=20
->>> SPD5118_REG_I2C_LEGACY_MODE, 0);
->>>
->>> Thoughts ?
->>
->> Honestly i think that users should rely on the detection feature if=20
->> they are not sure
->> if a given device is really a spd5118 device. Manually instantiating=20
->> a spd5118 device
->> on a given bus address tells the kernel that there _is_ a valid=20
->> spd5118 device at this
->> address.
->>
->> Otherwise we would basically duplicate parts of the detect callback=20
->> inside spd5118_i2c_init().
->>
->
-> This _is_ the detect callback inside spd5118_i2c_init(). Problem is=20
-> that the device
-> currently instantiates if bit 3 of MR11 is set, even though it is=20
-> known not to work.
-> Prior to commit 7bf5a11dde2c ("hwmon: spd5118: Remove 16-bit=20
-> addressing") it would
-> at least bail out if the controller does not support I2C_FUNC_I2C.=20
-> That means we'll
-> at least need to check for bit 3 (SPD5118_LEGACY_MODE_ADDR) and bail=20
-> out if the bit
-> is set.
->
-> Thanks,
-> Guenter=20
+On 9/1/26 09:31, Matthew Bettencourt wrote:
+> Hello Guenter,
+> 
+> I added additional logging into the piix4_transaction(). I will put the function call on the bottom. But as you guessed we are seeing not just MR11 corruption but also can trigger on other addresses as well. I was running the suspend/resume cycle and caught on both MR11 issue and else where. Here is the dmesg log output.
+> 
+> --- Other PIIX4 transation ---
+...
+> [29287.881787] [ T204580] i2c i2c-12: [PIIX4 REGISTER MUTATION DETECTED] Pre: (CMD=0x1a, ADD=0xa3) -> Post: (CMD=0x01, ADD=0x45) | DAT0=0xff
+...
+> [29312.945873] [ T204570] i2c i2c-12: [PIIX4 REGISTER MUTATION DETECTED] Pre: (CMD=0x0b, ADD=0xa7) -> Post: (CMD=0x01, ADD=0x45) | DAT0=0xff
 
-Good point, we can indeed check for that. But the early exit point suggest=
-ed by Sashiko
-is a bit overblown IMHO.
+It may be a coincidence, but the two failed accesses are exactly 25 seconds apart.
+
+Would it be possible to drop the messages except for the failures and run long-term
+accesses (for example by reading the temperatures and/or the nvmem continuously) ?
+You should find the nvmem at /sys/bus/nvmem/devices/0-005[13]/nvmem.
+
+It might be useful to know if this only happens during suspend/resume cycles
+or if it happens all the time, if it happens randomly or in specific intervals,
+and if the failure pattern is always the same.
 
 Thanks,
-Armin Wolf
+Guenter
 
