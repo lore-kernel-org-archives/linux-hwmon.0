@@ -1,248 +1,155 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57F5547669A;
-	Tue,  1 Sep 2026 10:17:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19E0A2EDD40
+	for <linux-hwmon@vger.kernel.org>; Tue,  1 Sep 2026 11:19:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788257870; cv=none; b=RC1EluW7Ca7zzM2bbSxFeKaDCjSKtmFbdNBIbEhUhBK6w9YtoXhu/NYrvLk9h8uYUoYK8mIFboHHDjZb+oxt8lbKjwUrh08Y6XW7maMhON0e9RT3Ak5/XjvyrRH6nHitQdHwVpUD4xgI6d83Zab7VoyBeSPDlVn1GLfNRyWs8uw=
+	t=1788261551; cv=none; b=ukwkLOcDksNVjQeCR+43dektFu4xWoThEMi+IreBQzkdKvNSxSBswQowBVFdohiStjJrl3ft+kDW187LYvq2yqnbZ3ldXuGmN7GydhA6kKZrO2Ip222Svl+Qz1U8wrUpDuVGYxu7U7egQWKc9D8fz/U8Rn0WdG8oKjw67tZNGqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788257870; c=relaxed/simple;
-	bh=b5nF/rkMUtpaOMm853YhrTWPu8MRNN+GraOtoNwSRoQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q4DAhHr7gVc8lL6N9mt5r7vscUK8X0xN+qPy5X4+5ug6HwI45z/OLC8iNdA7+hFvIghNfTc1mO3aQxy4jRVjVadkwryR3JwI7v1QM5EjGdQshhNSHBK/Id31UbYrD5c6TMq5y/+mjLgg44sNq0Mj0iQnox9OUdwstz0cGWIe1qA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ACutFyiY; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788261551; c=relaxed/simple;
+	bh=lliJBxWPVpTyAyADuND4uizRjwTZjzpBszsInexQ9xk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Ult3bLiP1GBSzi228E8lqRfD9CRflR3mlxGNj4ORkoFh9ZjDLTBNMNFLMtlqBODLUwfKWSEXIdRZ1yEuJUMsrOP2SvlhjBcNX2S1W7pXRp+8nrNvq0r6iChg5Isl//fhS9MTgUimOHYOrasxg74iMkPDGxawgO/ANqBd9tMi5oU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MgjbI/x6; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ACutFyiY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50AB31F00A3D;
-	Tue,  1 Sep 2026 10:17:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788257869;
-	bh=bD+NO1g8IcJci8fvIzJFemXzIyBE1S8uBHtu51YLBF0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ACutFyiY8cBL8pUEITCpBSusdAAbThw3ByP8SxszmZRUwdllDgLVVhD1FQrsGDy9L
-	 DO95/RErUhBoER1ZrmyczpdHgFoqpGiLuT4ueF2SIGxZfrH1+K1ILboFOWsYvglMSW
-	 pMxgNyddQtnZCgelaeXVn1t/ZHF3jb5YgCsckx9gZsUQzb9qC6qIDEaZ9zBqY1EtYE
-	 a1nZqam8j3aURnydgbAjLqicbx9Xcp06BtI0WDagtlzLhAQCSSibmz5l1LqSefhGft
-	 xfXuoCBsG0/n2yUzhkdKs/IzxmrvE9ZvKkLfh9WrVmMLolLxkXl0ay8+v1US8X9i6/
-	 SalC+3IKnHMHg==
-Date: Tue, 1 Sep 2026 11:17:45 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Changhuang Liang <changhuang.liang@starfivetech.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: Add starfive,jhb100-fan-tach
-Message-ID: <20260901-rascal-accompany-019414202877@spud>
-References: <20260830011941.40199-1-changhuang.liang@starfivetech.com>
- <20260830011941.40199-2-changhuang.liang@starfivetech.com>
- <20260831-dominion-data-c8b6f691dd5b@spud>
- <9f4e99f4-5135-4db8-8534-46c91bf4f7d2@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MgjbI/x6"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2d9201076b3so24887935ad.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 01 Sep 2026 04:19:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788261549; x=1788866349; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=yKCwP/Pbd6Ew8Fb5KHjt4jiEpKf9mj8Tkki/SHF5sis=;
+        b=MgjbI/x6M+XBwg1NyuTTDO5gBDl1nxrMe/ImMnkGeLYCJIpH8t7VYpTqbFw5gIrNsv
+         zDbV7p0F6XRr9epQSrCms9PDde8fWHInsrSBK1zlmirOgLXS0Y7IvKBfqXfv16zhvylb
+         UiK8uN92AwkTHnTtABNwnHV3NippblsVVg/50wlhnk3PAiaN0KqyjtfFAO8hS3unqxal
+         7hNQ05r8tQYlNJo/XBXTQXpuBWcg5Ra7eSy5FK2plTNuCPWs2huv8e/Yacry0fYdBwBT
+         O+Z6rm35iowhiKST0dslZSe/ImAanMfj3V9tQu5mgDfA+XhHx6QHd6ysnYZaxHMNzShs
+         nLKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788261549; x=1788866349;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=yKCwP/Pbd6Ew8Fb5KHjt4jiEpKf9mj8Tkki/SHF5sis=;
+        b=gdKFykOovgraMjqro+YJUYEN8kpdXJjg4q8YjfngL/o1j8yuf1zjLZ7pqwdtcPqbeP
+         uqErF4rcs9qSRo/rdyO3mGyQJkt+fDGs99OBRU+VRk2nVmvYDsd11t16F3EDLEzENQsu
+         XLhIC9ho3+a69MfqTw6h/6ZDCpcRB0QnF7DPG9N52EziyAmj3T4Gd8PqZmF92cICPVLA
+         2WFoO85yFav/Dbl16ZqfP35ZZp8lSTdvytadnoyv2+cV7Nmncar7P6F5VBokeEw0Jf2B
+         3MUU3dHoV+Ztcs1K+lOgG50tKNfKXsHkaL0G+RBH1y/jUr0oNGV+HlwFabLMKikJo6vU
+         RdUQ==
+X-Gm-Message-State: AFuF++kQ/K3A9HpsFmiR4ol/kK0p3MguRVlAo9U5CwYT4H/clh6HD8VY
+	Mjn+EDy4VF3VZ6vUsUxAlQeXmWAn9LFQYxbFag0xFTVd21bJgYZE3oG7fOWWDg==
+X-Gm-Gg: AYBFou29HAMADQhhvGU+Mz7GS13Ms/OjWrsJOLaPrO2G2jF+p1fLoQzRuzNf29RYgby
+	8rAUf9pqMqGg1p2515GBEXOb1ISvt725TGM43DUcgKrkNfBjs3Lv346F/6Gldfi021owLlgR823
+	NIPR+Ll1JmZVVSGALp03f9LAAP+bk8CD8TNwKuakyUthNJ+Fud9Un0oyTlRoFBoyCe5gzhloU7f
+	m9rLVqFl9EEWupGOdR/naTX5fuyWonTS+QY+rUyqDQTp7KrVRrxyMSql0kpt8M9PuOosaWHvsld
+	plrcKzYQfTiqXjLnAVnE915Ff2qKslDzo2wXOdxxfAHOHP/6hk2xYzM3K5uFrGt93M+UARs0Cr5
+	sun8SCIZ6ALv+FijGitqtnKzeSxSeqlidK1oW/QfCOyydY2rBtzpuOFV54OAakuigA/NuB7X92r
+	b5nwtp4vsZN4rSiN7BpmRX8OMeqt6M9ABbRGznrlPvRZ/DwIXwDX7mHVKIbjmwv2EkdAADweeiu
+	lt65A==
+X-Received: by 2002:a17:902:d4c7:b0:2d9:2fc9:5706 with SMTP id d9443c01a7336-2d94a75c161mr95526035ad.2.1788261549334;
+        Tue, 01 Sep 2026 04:19:09 -0700 (PDT)
+Received: from SGN-LDSENG.tasernet.com ([2405:4800:5cc3:11a:1ac0:4dff:fe8b:4a69])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d7598c1cb4sm50333625ad.81.2026.09.01.04.19.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2026 04:19:08 -0700 (PDT)
+From: Cong Nguyen <congnt264@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3] hwmon: (gpio-fan) fix pm_runtime imbalance for alarm-only fans
+Date: Tue,  1 Sep 2026 18:19:03 +0700
+Message-Id: <20260901111903.660681-1-congnt264@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="OllR8tuWijpArDcA"
-Content-Disposition: inline
-In-Reply-To: <9f4e99f4-5135-4db8-8534-46c91bf4f7d2@roeck-us.net>
+Content-Transfer-Encoding: 8bit
 
---OllR8tuWijpArDcA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+pm_runtime_enable() runs unconditionally in probe, but the devm cleanup
+that calls pm_runtime_disable() is only registered when control GPIOs
+are present. Alarm-only fans never get it, so unbind warns about the
+missing disable.
 
-On Mon, Aug 31, 2026 at 10:54:32AM -0700, Guenter Roeck wrote:
-> On 8/31/26 09:32, Conor Dooley wrote:
-> > On Sat, Aug 29, 2026 at 06:19:40PM -0700, Changhuang Liang wrote:
-> > > Add compatible "starfive,jhb100-fan-tach" for StarFive JHB100 Fan-Tach
-> > > controller.
-> > >=20
-> > > Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
-> > > ---
-> > >   .../hwmon/starfive,jhb100-fan-tach.yaml       | 93 ++++++++++++++++=
-+++
-> > >   1 file changed, 93 insertions(+)
-> > >   create mode 100644 Documentation/devicetree/bindings/hwmon/starfive=
-,jhb100-fan-tach.yaml
-> > >=20
-> > > diff --git a/Documentation/devicetree/bindings/hwmon/starfive,jhb100-=
-fan-tach.yaml b/Documentation/devicetree/bindings/hwmon/starfive,jhb100-fan=
--tach.yaml
-> > > new file mode 100644
-> > > index 000000000000..1dcd4932768f
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/hwmon/starfive,jhb100-fan-tac=
-h.yaml
-> > > @@ -0,0 +1,93 @@
-> > > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/hwmon/starfive,jhb100-fan-tach.ya=
-ml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: StarFive JHB100 Fan-Tach controller
-> > > +
-> > > +maintainers:
-> > > +  - Changhuang Liang <changhuang.liang@starfivetech.com>
-> > > +
-> > > +description:
-> > > +  The StarFive Fan-Tach controller can support up to 16 fan tach inp=
-ut.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    enum:
-> > > +      - starfive,jhb100-fan-tach
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  clocks:
-> > > +    maxItems: 1
-> > > +
-> > > +  resets:
-> > > +    maxItems: 1
-> > > +
-> > > +  interrupts:
-> > > +    maxItems: 1
-> > > +
-> > > +  "#address-cells":
-> > > +    const: 1
-> > > +
-> > > +  "#size-cells":
-> > > +    const: 0
-> > > +
-> > > +patternProperties:
-> > > +  "^fan@[0-9a-f]+$":
-> > > +    $ref: fan-common.yaml#
-> > > +    unevaluatedProperties: false
-> > > +
-> > > +    properties:
-> > > +      reg:
-> > > +        description:
-> > > +          PWM channel index. The driver allows two fans to share the=
- same
-> > > +          PWM channel, or each fan to use a dedicated channel.
-> >=20
-> > Doesn't matter what the driver can do, the description should describe
-> > what the hardware supports.
-> > pw-bot: changes-requested
-> >=20
-> > Does this fan-tach controller provide the PWMs?
-> > If so (although Guenter may correct me), I think the fan-tach controller
-> > needs to be.
-> >=20
-> > If you don't do that, I think you're going to run into problems with
-> > having multiple nodes with the same unit address when two fans share a
-> > pwm?
-> >=20
->=20
-> Depends on how the controller works. Normally fan controllers have a feed=
-back
-> mechanism which can be either temperature -> pwm output or fan speed -> p=
-wm output.
-> I don't know how this controller works, specifically if the fan speed inp=
-uts are
-> internally associated with pwm outputs or if they are completely independ=
-ent
-> of each other. If it is the latter, aspeed,g6-pwm-tach.yaml would probably
-> be a good baseline.
+v2 fixed this by switching to devm_pm_runtime_enable() and moving it
+before gpio_fan_stop()'s devm registration, so LIFO teardown runs
+gpio_fan_stop() first. Sashiko/Guenter correctly flagged that moving
+the actual pm_runtime_enable() call earlier opens a new race: hwmon
+sysfs (pwm1, fan1_target) is now exposed while PM is already enabled,
+so a concurrent sysfs write transitioning speed 0->nonzero can call
+pm_runtime_resume_and_get() successfully, and probe's own final
+speed_index check does it again -- a double-increment that permanently
+blocks runtime suspend. In the original code this same race just fails
+cleanly with -EACCES, since PM isn't enabled yet at that point.
 
-Judging from the other reply, it probably isn't a good baseline because
-this is not a pwm provider.
+Fix this properly: reserve the devm cleanup slot early (a small
+gpio_fan_pm_runtime_disable() wrapper, registered right after the
+regulator is acquired, before gpio_fan_stop()'s registration) without
+touching when pm_runtime_enable() itself actually runs. The enable call
+stays at its original position, after hwmon registration and alarm
+init, so the race window is identical to the pristine driver -- only
+the devm teardown order changes, restoring gpio_fan_stop() running
+before the PM disable on unbind, exactly as v2 intended.
 
-> > I think what you're supposed to do is drop "reg" and replace it with
-> > "pwms", but once again Guenter may correct me there.
-> > e.g. aspeed,g6-pwm-tach.yaml
-> >=20
->=20
-> Sorry, when it comes to devicetree properties, I am completely clueless.
-> Usually the devicetree and pwm maintainers insist that all fan controllers
-> are modeled as pwm controllers because they have pwm outputs. My approach
-> is "use whatever bindings are acceptable by DT maintainers".
+Fixes: 0d01110e6356 ("hwmon: (gpio-fan) Add regulator support")
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/r/20260830152150.27F5F1F000E9@smtp.kernel.org
+Cc: stable@vger.kernel.org
+Assisted-by: Claude:claude-opus-4
+Signed-off-by: Cong Nguyen <congnt264@gmail.com>
+---
+Changes in v3:
+- v2 moved the actual pm_runtime_enable() call earlier, which fixed the
+  LIFO ordering but opened a new race (Sashiko/Guenter): sysfs exposed
+  while PM already enabled. v3 only moves the devm cleanup registration
+  early, leaving pm_runtime_enable() at its original position -- no
+  behavior change to the race window, only teardown order changes.
 
-Would you mind taking a look at my question in the other reply about how
-the feedback path works (or doesn't) in that case? My lack of
-familiarity with the subsystem has me scratching my head about how the
-tach would be used to adjust the pwm duty cycle with the dt setup
-described there!
+ drivers/hwmon/gpio-fan.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-Thanks,
-Conor.
+diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
+index 084828e1e281..8b28f0d58c63 100644
+--- a/drivers/hwmon/gpio-fan.c
++++ b/drivers/hwmon/gpio-fan.c
+@@ -524,8 +524,11 @@ static void gpio_fan_stop(void *data)
+ 	mutex_lock(&fan_data->lock);
+ 	set_fan_speed(data, 0);
+ 	mutex_unlock(&fan_data->lock);
++}
+ 
+-	pm_runtime_disable(fan_data->dev);
++static void gpio_fan_pm_runtime_disable(void *data)
++{
++	pm_runtime_disable(data);
+ }
+ 
+ static int gpio_fan_probe(struct platform_device *pdev)
+@@ -553,6 +556,17 @@ static int gpio_fan_probe(struct platform_device *pdev)
+ 		return dev_err_probe(dev, PTR_ERR(fan_data->supply),
+ 				     "Failed to get fan-supply");
+ 
++	/*
++	 * Reserve this devm slot before gpio_fan_stop()'s so LIFO teardown
++	 * runs gpio_fan_stop() (needs PM enabled to disable the regulator)
++	 * first. pm_runtime_enable() itself still happens at its original
++	 * position below, so this doesn't change when PM actually becomes
++	 * enabled -- only where its eventual disable is queued.
++	 */
++	err = devm_add_action_or_reset(dev, gpio_fan_pm_runtime_disable, dev);
++	if (err)
++		return err;
++
+ 	/* Configure control GPIOs if available. */
+ 	if (fan_data->gpios && fan_data->num_gpios > 0) {
+ 		if (!fan_data->speed || fan_data->num_speed <= 1)
+-- 
+2.25.1
 
->=20
-> Guenter
->=20
-> > Cheers,
-> > Conor.
-> >=20
-> > > +        maximum: 15
-> > > +
-> > > +      tach-ch:
-> > > +        description:
-> > > +          The tachometer channel(s) wired to the fan(s) driven by th=
-is PWM
-> > > +          channel. Integer values in the range 0-15.
-> > > +        minItems: 1
-> > > +        maxItems: 2
-> > > +        items:
-> > > +          maximum: 15
-> > > +
-> > > +    required:
-> > > +      - reg
-> > > +      - tach-ch
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - reg
-> > > +  - clocks
-> > > +  - resets
-> > > +  - interrupts
-> > > +
-> > > +additionalProperties: false
-> > > +
-> > > +examples:
-> > > +  - |
-> > > +    fan-controller@11be0000 {
-> > > +        compatible =3D "starfive,jhb100-fan-tach";
-> > > +        reg =3D <0x11be0000 0x400>;
-> > > +        interrupts =3D <128>;
-> > > +        clocks =3D <&per2crg 33>;
-> > > +        resets =3D <&per2crg 5>;
-> > > +        #address-cells =3D <1>;
-> > > +        #size-cells =3D <0>;
-> > > +
-> > > +        fan@0 {
-> > > +            reg =3D <0x0>;
-> > > +            tach-ch =3D /bits/ 8 <0x0 0x8>;
-> > > +            pulses-per-revolution =3D <2>;
-> > > +        };
-> > > +        fan@1 {
-> > > +            reg =3D <0x1>;
-> > > +            tach-ch =3D /bits/ 8 <0x1>;
-> > > +            pulses-per-revolution =3D <2>;
-> > > +        };
-> > > +    };
-> > > --=20
-> > > 2.25.1
-> > >=20
->=20
-
---OllR8tuWijpArDcA
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCapamSQAKCRB4tDGHoIJi
-0pcFAP9NvhtVArULnG8/TcoZuMv9hLMI3fMdLauAVZ1kqkpcwgD/dvDa1Dh0dbVn
-wntMkz3OdcbTVJykj8hjq6a8pHhDngQ=
-=X4B+
------END PGP SIGNATURE-----
-
---OllR8tuWijpArDcA--
