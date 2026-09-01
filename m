@@ -1,391 +1,207 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE42D481238
-	for <linux-hwmon@vger.kernel.org>; Tue,  1 Sep 2026 20:53:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788296016; cv=none; b=Iky/RZs6l8ZOQrAXYuh0OfIwJxURyYhKBSdMHltTJM+E04ljW7/dp7TNNdyd1Tp/dKqMP7J9kbn7L/xEVTwFBAWxAbVMfOhamE+d3mgN0VNu555FH0blaYs+WN5oNBPLHNEF49Bo2nzlp5Fd3KxzKGki4cK5Jxgv38QbRSqqy/c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788296016; c=relaxed/simple;
-	bh=aKpvjxQE2cxbYVwFCB9w3ipI1Mgcj0HFiHSiP5oXTgc=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=LLZIn8yq4+MvYDx/iMbmekExaWjk8O2X9PnCszd2VaSGe/2V43uDRK8oqadgu/cn08yFAyT6ZqZn20pvbkBBdJp7FadbZBJxrmsq1A/fHHyU/W6JkIJMqunVIcCLe4zrasrckFP3ohORbSSC9Jg6bOYt06/hSiPFYGTIVFw+1og=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bNpwQQJe; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1509A1E51E0;
+	Tue,  1 Sep 2026 21:12:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.143.35
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788297140; cv=fail; b=Bzo+bjQcLPogHxh8Cyf+3x3YrL4bDVt+ubVj5/H3q8xvzUfa5sDDIY/njYwhtw6cDogIQ16n+OdeDw4ZMTogBE5Z0m9liUCauDqqkemZWBNMd60uJUKRmXNi+IIgxzPvEZLfdO2uyBqmUSoUdiNCC8PKnYAhz6+VEW2w1nH8lEw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788297140; c=relaxed/simple;
+	bh=lAF+pJo0ujibXJNi5UdFu90/I7dBNiLX9Lc3CC9xptk=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=fvTIEuNzQr/kMh2VJkEmdLPtBG2VHK62YFjkbCDZi0AR+f6815fph21/Tou5vvO0b6Y87dCxqTXSzTeHITIFNDl1HsSzcXfKuXkJRINYifMHvQsNHZxxihsl5nYxBmk3LAfdJrje9zDr0e1XsXAbeqlzxUjyzjp58U4vaY2+CKc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=NADDGxl7; arc=fail smtp.client-ip=148.163.143.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bNpwQQJe"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-853c947bfefso269746b3a.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 01 Sep 2026 13:53:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788296014; x=1788900814; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :references:cc:to:subject:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=z2yY3VWtNVXknR2xq/RckxnGM2GupuGqlN2wgAte6Tc=;
-        b=bNpwQQJe2CY3xRKkhcLk7TKaZ8hT0zQqT0YwXGdZvSd7PtRpP7GJlfNDZ6zkPH7e6c
-         kIhmats3vCfafJaViDU83PadNylsANB3snWeLkK212UT8n4QnVrBUh1C1Thw2lqgn4aw
-         HkpqsT096owDSW3eQjibC6AYEJ3TbrRnLk+ihzzLkqF5jpkePjYuR6mmi2whjg62D5jo
-         wsMhQe66MbIwyVoXjX7kJKatWjdwav8nkwKTwGG/oap/6Zl2Ceq5ARggdBxh1n3b1Fdz
-         ML1j0VO4DXjz9ebJYB6Qo93kwRkSeyfZUBCjpSDIuk6X94KW3hbHWLlZM2976fbmUIU4
-         brzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788296014; x=1788900814;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :references:cc:to:subject:from:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=z2yY3VWtNVXknR2xq/RckxnGM2GupuGqlN2wgAte6Tc=;
-        b=P9JIQEFKKdTvKOrCaZLkbh123+YPL6TOxzZnMYQdoKM2GUfRH1nyP0WSNY9uMmaPMy
-         8MTUxEgIDRQbLa5OPEhL8+MxbcFb7tNwQcCDlxP3IMVx8Fg3pYXeUTg5c2w2R6e/QUfO
-         Nq8ZXI0yjH858uIq0W8YLKNXDMCefrtg2C3WA6ZdxePMPrOd9us8wANbJ6VINHFQ7ZkB
-         B97jk8+S2tNAvgffIFlQwQyhwXbqdtVbE4OWYy0rnKjlN+FO29bBczepeKue6G55wCbs
-         6GgqvDkTg3cWHuwYCjy275aklUU2R1VZYQkS8znUu1ZH/EugpQiLwb4OmCV0ui95D+91
-         KjLA==
-X-Gm-Message-State: AFuF++niM8ku3araM/0P0r3pOtwXT4kgV42xXDDMRL0/XK1rosQoWNmx
-	hiT+zuSZp1zTO0sq06VkEmYKhPLenlTwPojiCTJMDEKYgOg/7X1WIGFmJ+v7zQYV
-X-Gm-Gg: AR+sD10cg/xxHBnD8ng1fr5Br/GBUzGLzkad5alckAcWKHUpATYcEMCIksWXo8F1ykh
-	2ewDw6goCkOEnxy8i4tVQXwOPS/m+a2EcaXvBBU08bGUuOQS+8P30f3rBl8nRY2lHuYpLJv0wFb
-	61vFPLF/p/wEivldkg3hcV1ccXJ3RBEi9y6EN03D94sTWrEmwdaK0irHxvlZ4b2EShypGEYxdDd
-	+8RIHVFks5lRPP7i+Io670b9giWAKWAznFphuqxxKvk9UD6pSGh4KlkKMmZ1lW2GZT84LWeNNUD
-	OuEMEgDWjN02oub1ezOU7A2QAdvJ03Qt/ZE3UsqPJOC4QRUqJy8IWD+h5OHiMeJ0pfZ9Xo8bEed
-	3k91nMfD0Lpq725Zwqo6kJZbZ8b1drE+n1TEWEmdx+2PiuKfWV0riWt4QRT/t/Iqfz7INHt/7AO
-	5p7EMvllgrmMXqh4XStyvwn5ImXD4q1bOAl8CV2ANj7s/iNQkJpVDbKH+hJddsdg7DOHWgbEchG
-	TieB6hUptCRuyITVuoVuOCuPKxWynwqrEBaRYdjvqTDEKsdKWgvGYKw2CRK
-X-Received: by 2002:a05:6a00:1827:b0:857:72f8:dca6 with SMTP id d2e1a72fcca58-85bcacec80cmr6616693b3a.12.1788296013640;
-        Tue, 01 Sep 2026 13:53:33 -0700 (PDT)
-Received: from [10.21.0.95] (wnpgmb0592w-ds02-161-177-131.dynamic.bellmts.net. [207.161.177.131])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-85db30c5097sm375860b3a.26.2026.09.01.13.53.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Sep 2026 13:53:33 -0700 (PDT)
-Message-ID: <d80cf68e-a6cb-4b0b-807e-313be29ca8ae@gmail.com>
-Date: Tue, 1 Sep 2026 15:53:31 -0500
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="NADDGxl7"
+Received: from pps.filterd (m0150245.ppops.net [127.0.0.1])
+	by mx0b-002e3701.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 681KVqf22556317;
+	Tue, 1 Sep 2026 21:11:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pps0720; bh=lAF+pJo0ujibXJNi5UdFu90/
+	I7dBNiLX9Lc3CC9xptk=; b=NADDGxl7G5xs1Fdl878vQzsaQkWZQm0wf+3xWqtE
+	pSyRAc0JY9GD5YuW66BqpSmbU8SwWQjPdXfDBFpOMTqOtyzAb7i59SuCyr30ddW4
+	jCjF44MN5zNJDh4h4GLck3bZx7XwM26WhSL2OLcCoc2Xi2dHX9Hm++5ov5a56h9J
+	qBr8cpqIRjBMwH1qmzgKegY2qfoZCFDJgfYxf4MadX6hephTTtOBSeikJjgI8177
+	g76gfmc+YanfLZ6cF2nnPWOQ04LdPHjHVOChyFne/OTF4rJoAZmv5DP2YZ9KWU0k
+	3WlWRURL+EhpyEL2y0sWMUOd0TUprg1vw8PMVCduzmS+Yw==
+Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
+	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 4ge10mmutd-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Tue, 01 Sep 2026 21:11:50 +0000 (GMT)
+Received: from p1wg14923.americas.hpqcorp.net (unknown [10.119.18.111])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 35A7A806B2C;
+	Tue,  1 Sep 2026 21:11:49 +0000 (UTC)
+Received: from p1wg14925.americas.hpqcorp.net (10.119.18.114) by
+ p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.43; Tue, 1 Sep 2026 09:11:45 -1200
+Received: from p1wg14921.americas.hpqcorp.net (16.230.19.124) by
+ p1wg14925.americas.hpqcorp.net (10.119.18.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.43 via Frontend Transport; Tue, 1 Sep 2026 09:11:45 -1200
+Received: from PH0PR07CU006.outbound.protection.outlook.com (192.58.206.38) by
+ edge.it.hpe.com (16.230.19.124) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.43; Tue, 1 Sep
+ 2026 09:11:44 -1200
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=zUPNLCfkfyXJastKCuq2AtfHGO+bRRMfm6dLPUy8FP/kOZyK70ZpK78LznvSUdNIxqh3+Q4o8JQXBT/APCnSLkGNtMFxJuG7/scHSNR3gImKG8jtUdf6qi9syStrmWjw0eZIzgTJhmj/76zMINs5miC6BVrA7Ky69TXfUOkgm2eqOatAR/F3MMKDQbI0howfTnAY7dZgG34I8G+pcS6NPTiSjrz5Dr7jKCBLk+NfFVuSV2GozEOM4qIsJ6WIMYh9CI5W0LeEtyJdpjFIzYgD1au0OVlDVasmKe2/xiO4Mw5RbTTYTFb6bl1fUCMRAoNB92XL7lrn82RFjmPGjjQ7FQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lAF+pJo0ujibXJNi5UdFu90/I7dBNiLX9Lc3CC9xptk=;
+ b=SqSoU2bqZN3X/JhNkHc4VF1UgJqmxjDoWzt+QNo0HPPRUAnWI/xXyjPGvw8ZBYi4DDNKdo6SUVcCFz/jEWwR76VejZNn1NYafha4yqS8r7z9DEAO14qI9MZNM0faR7mPd7yU0Lvf26JErKeifUZAwoAbpJkpY+cz5zHkr5igkoW7qgXn6rK6HiehNJx+bb6b9Z25H853zmf/mYaSFAuYHDVuq2djwAjp6cAsoBwdXfMIAeHoT66vYwqTCmv5DXNdG1S+NP/0l8shLgkUJbfXZV/10ViIHCDnCD7t2EdXDFWUKKkNF4h/TN1kBLrg7RzfG/93gcxMRKBnTZW2KErVEQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:610:1cc::7)
+ by DM4PR84MB1664.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:4b::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.13; Tue, 1 Sep
+ 2026 21:11:43 +0000
+Received: from CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::2c54:3534:122f:e74f]) by CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::2c54:3534:122f:e74f%5]) with mapi id 15.21.0360.008; Tue, 1 Sep 2026
+ 21:11:42 +0000
+From: "Pradhan, Sanman" <sanman.pradhan@hpe.com>
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+CC: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sanman Pradhan
+	<psanman@juniper.net>
+Subject: [PATCH 0/2] hwmon: (pmbus/tps53679) Add TPS53622 and TPS53659
+Thread-Topic: [PATCH 0/2] hwmon: (pmbus/tps53679) Add TPS53622 and TPS53659
+Thread-Index: AQHdOlZ84EgHOs+Cs0C1ri/ni/4OFQ==
+Date: Tue, 1 Sep 2026 21:11:42 +0000
+Message-ID: <20260901211129.360792-1-sanman.pradhan@hpe.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH3PR84MB3523:EE_|DM4PR84MB1664:EE_
+x-ms-office365-filtering-correlation-id: f9c41ac6-7c18-45c4-5aab-08df086d9f63
+x-ld-processed: 105b2061-b669-4b31-92ac-24d304d195dc,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014|23010399003|38070700021|10067099003|56012099006|18002099003;
+x-microsoft-antispam-message-info: 9D+G2itsii1doltplfhLRnrOk86/H9UM0esffBsgvAB8FLYh2sKiNzYkoJ2aoJT0nyy6+Lm3QD+dVhhB04r11Nzj3LisPbHcknRHiP7raoYkshQ9wd1dxVJkcjyw5s43//6TTUH96yUeBh7YXCW4Y7m8Leo4JKimiXYFC6eq2ipTbAJahl63S0zaZE1DaUDXNlC4QAY10f7yddjAz701vLENb36+ywRj/Te0lZQoLQRmGUHOGsE04jXwxfVXgLLTXjOeiQefWJxsp33zB8QwTbtP63cXJvPgzLqvs4wfBODEMJsqDqffWcZDUKT1qdRNU9hzPxYw1sYFXcbTOuF+31Gz5Ky1fABQV62kroYRHvhS2r9i1hG+Wq8HZIOhg8ANKLTHNZSI9aad7yZgX07uPxOx9k9ZChQIYlLit7pX5YxxypSdch2+L66GaTb070mz2z5oOwN27SST25fb+iTxinzyGAyz00YH5KV/n+rtbCF3zJjZquIwEcfl/kK8j1K+yJjakOrWjqdhoaKNgSW1mdV6OIypTGiXbQ7Hrs2k0LN0U9tvGyFtNNFpL2Pn0B1dH+PiffdMGwxhfeYKqgiuTxfVCc9E1noZpmIc5MviS+Hc+oDdGmWmwYUf/M+xqzWjd0qqF+G3xiGettbCIFlxq9uuaXZHRlizp80koJTyu64bo9RY5gm2RaUUFCrrhxbX3Bu1MWDT9c4WxibBU9d2UfPm9cJcxEENXgJZZlLGtOQ=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(23010399003)(38070700021)(10067099003)(56012099006)(18002099003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?REpxeTBTOEJhZWpDckZvWEpBdS8xdDVqTm1pRlBlcytQRVp2ZkE3MWJBRTVB?=
+ =?utf-8?B?Yk9FTTNldEVURkdZWFROVVY1bGp0akloeWtJQWFGWU85SWVOWUFodTVrWlMz?=
+ =?utf-8?B?WTEvZEdqbzdzdFJEOUFMNUlobmZuaUZUZlp3TkJRdThRT0pMd1FnUytyWWNO?=
+ =?utf-8?B?dlkzOGdMTXkwYkNhTERocVJ0eXF3eUhrd2JrNTFKNFN0ZWVXdkFZdGtvYTc2?=
+ =?utf-8?B?RnNVR2VhNU1WbGZabWphY3lFV0R3N1VXT2JOb0V0MXBKL09kaURJdG51YmpI?=
+ =?utf-8?B?NzQ2cE9IaHRyanVjNzBLR012Um1Bdm9JN3ZDTXQxeFdxTEhNdkZlQ1RQQmwx?=
+ =?utf-8?B?eVliK2NvektMY2JKS1FJeDFMd1ZEeEZQSk1Ld3hZNDRmL2NqT2hhclFwTXg4?=
+ =?utf-8?B?U3Y0QVVaWVFvWDZyVmN4aXlyTHo5Q0RFYktZSE5GdXdHZTZqR1BpdHhkTE1F?=
+ =?utf-8?B?SFpQUUpJQTVMc242djZmNHpnRjFMbjExbmo2R0J1WnFRc3BIQkVxRGRIQzEx?=
+ =?utf-8?B?V1JSeXRRWGJJUW0yZmNwV29COVJFaFZWWlZ6SXl1ZHRuTFV1ZmZIbUpjVFBB?=
+ =?utf-8?B?S2xhUVZoL2hsZHlDOFd0Ymp2dTJlQXJBMkIwN0F2amJ4ejhYYlEzUnI2U3BC?=
+ =?utf-8?B?T01keS9NcFpBV0ZYb0VKTWJ4ZW1ERGQzUmNuc2dHaWZnVEFNSjZPdlhQRGxa?=
+ =?utf-8?B?RjB4MllpSlZrQVBxRGxyaEpmVmZ5SnppaWNvTnZUNnJTVnp4RkExTjY3OG9V?=
+ =?utf-8?B?aHRTWisrYVlFVFJJdjhmdUpQNS9XMHdIUzBIbjZ5eHlZd29Qb2xNaS80RFMz?=
+ =?utf-8?B?cWFXemVkb1pSNGtYYW4zbnlENXJRTk5XWmN5b0J6a3l0Q0ZMbU5rQ01LQUl4?=
+ =?utf-8?B?YVlhbW1CcnBMeFBiY2VTclNIamYveWR4SEQ0MW9VNG1iSnhYZTNYdW9kQWNY?=
+ =?utf-8?B?L3RBc2ZaVXdnOHpGeGRUQjJyWkZVcThmaWlvTXVKdjVmc21TQnFqY2lYUnhF?=
+ =?utf-8?B?Vm41TFFTalJpNFlraUVKSDI3N0JlUmhSZlFqOWZrTXN4K2ttdjN5dnhVelJv?=
+ =?utf-8?B?WjNiUjloZTBuM2g2bFRoTXRIakpHelJzRFNvWWRwRUY3UllSNzFlUDZzRndO?=
+ =?utf-8?B?RWhPTmRzcUp6VFA3cEFWRS9HTVdnSmF0dHRKQ2RoNzNBaFRkV0RYL1JVaTVr?=
+ =?utf-8?B?QlQ3T21PZVlQVFBRSFcrTGo5WUZpdmJPZTZMTUZGdjRDWlZmTFRlblp0S2Jv?=
+ =?utf-8?B?aUNQMDNzM08wc2NDdmhIeTh2c0RtS0E1U2ZKWGRtVjRkRmEyUTRWTVg5dkJB?=
+ =?utf-8?B?b3lvZzV0dEdxNXFHUkhHK0dtOXgyZThtYUtOb3oxaDhZaVh2MG9TeUtwL0Zp?=
+ =?utf-8?B?K1VTTnRxbnl3eWg5Z0pibm4zQ3FCZ09NSjNzYWNoS09yQXRnWHJZTWt2d0dE?=
+ =?utf-8?B?WHA0N0ZNUVFka1NPaFYxbXJ5RXREb1BNdGU3QkhpQnI1aWt2SlA0aERSdzNM?=
+ =?utf-8?B?dlJra1k0V0lKMWxpYXljVC9xenRCaXdGNmZGV3JiWC8wSUxqUFpOdXNHa25U?=
+ =?utf-8?B?VkhqOThpYVJMQ3l1d0RYZGRlNjcrTGZBVFMvMFNEUThEM0dkOU9TMy9hNjBF?=
+ =?utf-8?B?SGhtT2gyOHRGZXVQUFpIQzZ0bHNYZGhGWEwvUTJVeGdzdVhwOVVybEpmQnh3?=
+ =?utf-8?B?clFpZFVTZTFyc2RweXM5RmZ3NUVLK0hCTE9vb2pQckt5WlZWVWM4YmxsTGc5?=
+ =?utf-8?B?ek9qNGtXSk1FWWhEZ3gzWWxEKzVraW1oVW4yZGJTdXpldVI4RlFndllwREZh?=
+ =?utf-8?B?TW9NTUQ0SjhxbGZWaGNqY3FydUh0QzJiK05nWUdML0hIUmdtRk56c24vZi8v?=
+ =?utf-8?B?cTdabGZQYWZNSzFYU28vUUk2Rnl0OThKaEtjem8yVDlsWHh6ZUlzTis3YUU3?=
+ =?utf-8?B?bzV6NzJreXU1aGpOSnpuVU1TMm5Zb2dFN1pOdlF1S0JDTlhzVm5qR0RRanEr?=
+ =?utf-8?B?Z1FqbVo1Tzk5U2pHRnZCV1V5OEx3RkM5d3FvNktyR0QvV0dLeHB5dEE1OTFu?=
+ =?utf-8?B?Q1VrZkVCRC8rNmdXTTJERzNkUjduZU5XRm5qaHFMWlpieFJMN3VUVThrTG5L?=
+ =?utf-8?B?VEZ1OXMrb1UxZ24vZ0lCSGZYYmQvT0JtYTFteGJrbit3MGVrZk1kSlp4NHIr?=
+ =?utf-8?B?bEUzKzNUZ3F1eGc1blk1U3pVcTNtK2h2YS9YK09leUgyRzJ6Z3lwVW15RW5a?=
+ =?utf-8?B?OGV6dCtleCtMWTJzMXJmcVd0TThqaXV6VU9UTkkzZEpVMEN6TTljRUFMU3R2?=
+ =?utf-8?B?cmU2ekZuUEJjS1JhbW1Pclg0U0ZLdWdyNlJ6cUdUenRHSGZyYUFtQT09?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Betterbird (Linux)
-From: Matthew Bettencourt <matthew.bettencourt@gmail.com>
-Subject: Re: [BUG] SPD5118 Intermittent MR11 Corruption During Suspend/Resume
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1a8ea9da-1ac1-4312-a8ca-ea4a9f35093f@gmail.com>
- <ee284272-0da0-45b6-a3be-c76822e5d54f@roeck-us.net>
- <014b9438-e9b7-4be1-b816-002e83a068a0@roeck-us.net>
- <37132c40-aa82-4df1-b5ce-337601f3c085@gmail.com>
- <3c4e9f59-5272-48cf-a4a0-eeefcba955a9@roeck-us.net>
- <763a8b30-8548-4ff0-a1e9-8e74bbfe9b02@gmail.com>
- <6e8761aa-67ef-4624-834d-4b9d0ce729d6@roeck-us.net>
- <9753ed80-5666-42a6-b04c-99b9ef9326fe@gmail.com>
- <5c17ea39-c479-4f88-adc6-9a86f3dfb96a@roeck-us.net>
-Content-Language: en-US
-In-Reply-To: <5c17ea39-c479-4f88-adc6-9a86f3dfb96a@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Exchange-RoutingPolicyChecked: 1gfs2MXqzGbtMY0gdTRAZNgosYCnbIRaNgoyG4R/tCA7jclZYmr40Qqzt8d1kM2SMJkNid+mI727m8LLvO1nhLnwl2eNJss1RG1BPytnPh7WJiFfTXN5qiFe7sVknw60xclCBPWcB1WSiJa374JoKARUIfpVqxnoPN6FzCrkNgATF9mkf1PDL/AVVNl1KN1I4HUi4QzxgzqULtXE5gFEEZ4w74gWY7jDZKX4W25yAvMdU2pf3gpIzRgyhf17g9bPdCQ35zuqoqgBVfd6rfA63HwjUzW+Ct2TNjTDxI/zvyhLiSZt/yCmp4dsM4NkGYSxCTGBY7hcHh7HCre3y+Mzyg==
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR84MB3523.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: f9c41ac6-7c18-45c4-5aab-08df086d9f63
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Sep 2026 21:11:42.8322
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: AT2Bemap09/mIERyRunDZmF6fWzyQnh1NXEUNMi4ECbzz9AaGGUm/L/vBHHQcEFQQsyKrT8RJvVRuy0ia5R2gA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR84MB1664
+X-OriginatorOrg: hpe.com
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTAxMDE4NiBTYWx0ZWRfXyBxvytcQs4d6
+ 0thmelSKiDDb0MaXjwUjGDnIMflNj5quK6LkMSkpaEsPPv64vclbo5KTQYK7R65TTQenevjmgRh
+ LLQ9eeJYNgd88F06DXXbwJndJRmHeV2Ui05zE5UJxMnKGv/7gT7voVZDUw8BgtR84vKpvtxuj9e
+ 2iGN1zVISFBuue2s02OG2El6Dw3oaPlb4pfeBEOFYdYR8WFjLEmJpvdGn++ijVH9Yoq2PVB7/y/
+ so2zkEo3FZNQrBUIpk5158E7IPFu+0i9v+0ALE4ZPVFNufeulSEE/8Xuz7k3inaltuqMS8sRYia
+ IyeHKqaqeRwf79KJAEUFVgSiEBbOCOyR77jFiySlBHWNJ4wym4IZjsPs/ptXtaj0UPflsltgz2M
+ TRxqdLaHaY2CRKtqPKnxXRv3Sqi+mIAzlvDVQMClqqn/M70YhIZkUI/GnXdJ9WEvfIrFTphcuDq
+ YL/FkTFBkBSwZQmLFOQ==
+X-Proofpoint-GUID: eUiYdEIfs_9pJDNW1iuRi7AQ1M28WliP
+X-Authority-Analysis: v=2.4 cv=GKI41ONK c=1 sm=1 tr=0 ts=6a973f96 cx=c_pps
+ a=FAnPgvRYq/vnBSvlTDCQOQ==:117 a=FAnPgvRYq/vnBSvlTDCQOQ==:17
+ a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
+ a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=gQcMVamqm3wCPoSYhaRC:22 a=6XKncaru_qjgLvANlS_8:22
+ a=OUXY8nFuAAAA:8 a=NFYajKSO5jdy0drRDyoA:9 a=QEXdDO2ut3YA:10
+ a=cAcMbU7R10T-QSRYIcO_:22
+X-Proofpoint-ORIG-GUID: H7MQCTWu2gWjeGgHJNfL_7yf09oL4XMO
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTAxMDE4NiBTYWx0ZWRfXzs4xVsS/Jr67
+ wpZ5rq7vGWD7qQbb28j62IVkw252P23U15M5g69D9vbTi0AR2aixbtWWeJrsunWfYkvCuB5MRgc
+ P2KjL7AjvJ7iXkNhiFMOoMGo4OjPW/0=
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-01_06,2026-09-01_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 adultscore=0 suspectscore=0 malwarescore=0 phishscore=0
+ clxscore=1015 lowpriorityscore=0 spamscore=0 impostorscore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2609010186
 
-Hello Guenter,
-
-I updated the piix4_transaction() (code below) to only print when there 
-are failures. I then left the computer idle (~30 mins) while reading i2c 
-info and SPD temps and I never saw any failures.
-
-I then did some sleep and resume with cycles with spd5118 driver enabled 
-and that is when I started to see the error messages again in dmesg.It 
-appears like there is always a failure but not every failure causes 
-corruption in MR11. From what I observed it seems like any `CMD=1a` 
-cause failures but no corruption while whenever there is a `CMD=0b` 
-there is failure and corruption. Not sure what that might mean be but it 
-is something I observed.
-
-I then ran sleep and resume cycles with spd5118 disabled but still 
-polling i2c devices and could not produce any errors, however this was 
-just done via my desktop gui console so the script might be getting 
-suspended before whatever it is in the sleep cycle that is causing this 
-issue to occur.
-
-
---- sleep/resume #1 ---
-[  179.066004] [   T3736] spd5118 12-0053: PRE BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x00
-[  179.066616] [   T3713] spd5118 12-0051: PRE BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x00
-[  179.068576] [   T3736] i2c i2c-12: [PIIX4 ERROR TRACE TRIGGERED] result=0
-             STEP 1 (PRE-START)    : CNT=08, CMD=1a, ADD=a7, DAT0=00, 
-DAT1=18
-             STEP 2 (START BIT SET): CNT=08, CMD=1a, ADD=a7, DAT0=00, 
-DAT1=18
-             STEP 3 (POST-WAIT)    : STS=00, CNT=08, CMD=1a, ADD=a7, 
-DAT0=00, DAT1=18
-             STEP 4 (POST-CLEANUP) : CNT=08, CMD=01, ADD=45, DAT0=00, 
-DAT1=18
-[  179.068814] [   T3713] spd5118 12-0051: POST BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x00
-[  179.068888] [   T3736] spd5118 12-0053: POST BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x00
-
---- sleep/resume #2 ---
-[  235.947153] [   T3700] spd5118 12-0053: PRE BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x00
-[  235.947827] [   T3699] spd5118 12-0051: PRE BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x00
-[  235.951600] [   T3700] i2c i2c-12: [PIIX4 ERROR TRACE TRIGGERED] result=0
-             STEP 1 (PRE-START)    : CNT=08, CMD=0b, ADD=a7, DAT0=00, 
-DAT1=00
-             STEP 2 (START BIT SET): CNT=08, CMD=0b, ADD=a7, DAT0=00, 
-DAT1=00
-             STEP 3 (POST-WAIT)    : STS=00, CNT=08, CMD=01, ADD=45, 
-DAT0=ff, DAT1=00
-             STEP 4 (POST-CLEANUP) : CNT=08, CMD=01, ADD=45, DAT0=ff, 
-DAT1=00
-[  235.955119] [   T3699] spd5118 12-0051: POST BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x00
-[  235.955778] [   T3700] spd5118 12-0053: POST BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x08
-
---- sleep/resume #3 ---
-[  298.628115] [   T3703] spd5118 12-0053: PRE BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x00
-[  298.629121] [   T3730] spd5118 12-0051: PRE BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x00
-[  298.631589] [   T3730] i2c i2c-12: [PIIX4 ERROR TRACE TRIGGERED] result=0
-             STEP 1 (PRE-START)    : CNT=08, CMD=0b, ADD=a3, DAT0=00, 
-DAT1=18
-             STEP 2 (START BIT SET): CNT=08, CMD=0b, ADD=a3, DAT0=00, 
-DAT1=18
-             STEP 3 (POST-WAIT)    : STS=00, CNT=08, CMD=01, ADD=45, 
-DAT0=ff, DAT1=18
-             STEP 4 (POST-CLEANUP) : CNT=08, CMD=01, ADD=45, DAT0=ff, 
-DAT1=18
-[  298.636234] [   T3703] spd5118 12-0053: POST BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x00
-[  298.637812] [   T3730] spd5118 12-0051: POST BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x08
-
---- sleep/resume #4 ---
-[  631.979533] [   T3021] spd5118 12-0053: PRE BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x00
-[  631.980193] [   T3017] spd5118 12-0051: PRE BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x00
-[  631.983008] [   T3021] i2c i2c-12: [PIIX4 ERROR TRACE TRIGGERED] result=0
-             STEP 1 (PRE-START)    : CNT=08, CMD=1a, ADD=a7, DAT0=00, 
-DAT1=18
-             STEP 2 (START BIT SET): CNT=08, CMD=1a, ADD=a7, DAT0=00, 
-DAT1=18
-             STEP 3 (POST-WAIT)    : STS=00, CNT=08, CMD=01, ADD=45, 
-DAT0=ff, DAT1=18
-             STEP 4 (POST-CLEANUP) : CNT=08, CMD=01, ADD=45, DAT0=ff, 
-DAT1=18
-[  631.985028] [   T3021] spd5118 12-0053: POST BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x00
-[  631.987201] [   T3017] spd5118 12-0051: POST BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x00
-
---- sleep/resume #5 ---
-[ 1288.503455] [  T10850] spd5118 12-0053: PRE BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x00
-[ 1288.504462] [  T10813] spd5118 12-0051: PRE BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x00
-[ 1288.505927] [  T10850] i2c i2c-12: [PIIX4 ERROR TRACE TRIGGERED] result=0
-             STEP 1 (PRE-START)    : CNT=08, CMD=0b, ADD=a7, DAT0=00, 
-DAT1=18
-             STEP 2 (START BIT SET): CNT=08, CMD=0b, ADD=a7, DAT0=00, 
-DAT1=18
-             STEP 3 (POST-WAIT)    : STS=00, CNT=08, CMD=01, ADD=45, 
-DAT0=ff, DAT1=18
-             STEP 4 (POST-CLEANUP) : CNT=08, CMD=01, ADD=45, DAT0=ff, 
-DAT1=18
-[ 1288.511883] [  T10813] spd5118 12-0051: POST BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x00
-[ 1288.512541] [  T10850] spd5118 12-0053: POST BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x08
-
-
---- sleep/resume #6 ---
-[ 1339.566042] [  T10863] spd5118 12-0053: PRE BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x00
-[ 1339.566679] [  T10887] spd5118 12-0051: PRE BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x00
-[ 1339.570157] [  T10887] i2c i2c-12: [PIIX4 ERROR TRACE TRIGGERED] result=0
-             STEP 1 (PRE-START)    : CNT=08, CMD=1a, ADD=a3, DAT0=00, 
-DAT1=18
-             STEP 2 (START BIT SET): CNT=08, CMD=1a, ADD=a3, DAT0=00, 
-DAT1=18
-             STEP 3 (POST-WAIT)    : STS=00, CNT=08, CMD=01, ADD=45, 
-DAT0=ff, DAT1=18
-             STEP 4 (POST-CLEANUP) : CNT=08, CMD=01, ADD=45, DAT0=ff, 
-DAT1=18
-[ 1339.572182] [  T10887] spd5118 12-0051: POST BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x00
-[ 1339.573363] [  T10863] spd5118 12-0053: POST BIT UPDATE: SUSPEND MR11 
-(0x0B) -> Cache: 0x00 | Bus: 0x00
-
---- piix4 transaction function ---
-int piix4_transaction(struct i2c_adapter *piix4_adapter, unsigned short 
-piix4_smba)
-{
-     int temp;
-     int result = 0;
-     int timeout = 0;
-
-     dev_dbg(&piix4_adapter->dev, "Transaction (pre): CNT=%02x, CMD=%02x, "
-     "ADD=%02x, DAT0=%02x, DAT1=%02x\n", inb_p(SMBHSTCNT),
-             inb_p(SMBHSTCMD), inb_p(SMBHSTADD), inb_p(SMBHSTDAT0),
-             inb_p(SMBHSTDAT1));
-
-     /* Register snapshot variables */
-     u8 pre_cnt, pre_cmd, pre_add, pre_dat0, pre_dat1;
-     u8 start_cnt, start_cmd, start_add, start_dat0, start_dat1;
-     u8 postwait_sts, postwait_cnt, postwait_cmd, postwait_add, 
-postwait_dat0, postwait_dat1;
-     u8 post_cnt, post_cmd, post_add, post_dat0, post_dat1;
-
-     /* Step 1: Read initial register state before starting */
-     pre_cnt  = inb_p(SMBHSTCNT);
-     pre_cmd  = inb_p(SMBHSTCMD);
-     pre_add  = inb_p(SMBHSTADD);
-     pre_dat0 = inb_p(SMBHSTDAT0);
-     pre_dat1 = inb_p(SMBHSTDAT1);
-
-     /* Make sure the SMBus host is ready to start transmitting */
-     if ((temp = inb_p(SMBHSTSTS)) != 0x00) {
-         dev_dbg(&piix4_adapter->dev, "SMBus busy (%02x). 
-Resetting...\n", temp);
-         outb_p(temp, SMBHSTSTS);
-         if ((temp = inb_p(SMBHSTSTS)) != 0x00) {
-             dev_err(&piix4_adapter->dev, "Failed! (%02x)\n", temp);
-             return -EBUSY;
-         }
-     }
-
-     /* Start the transaction by setting bit 6 */
-     outb_p(inb(SMBHSTCNT) | 0x040, SMBHSTCNT);
-
-     /* Step 2: Snapshot immediately after set start bit */
-     start_cnt  = inb_p(SMBHSTCNT);
-     start_cmd  = inb_p(SMBHSTCMD);
-     start_add  = inb_p(SMBHSTADD);
-     start_dat0 = inb_p(SMBHSTDAT0);
-     start_dat1 = inb_p(SMBHSTDAT1);
-
-     /* Wait for transaction completion */
-     if (srvrworks_csb5_delay)
-         usleep_range(2000, 2100);
-     else
-         usleep_range(250, 500);
-
-     while ((++timeout < MAX_TIMEOUT) &&
-         ((temp = inb_p(SMBHSTSTS)) & 0x01))
-         usleep_range(250, 500);
-
-     /* Step 3: Snapshot right after wait loop */
-     postwait_sts  = temp;
-     postwait_cnt  = inb_p(SMBHSTCNT);
-     postwait_cmd  = inb_p(SMBHSTCMD);
-     postwait_add  = inb_p(SMBHSTADD);
-     postwait_dat0 = inb_p(SMBHSTDAT0);
-     postwait_dat1 = inb_p(SMBHSTDAT1);
-
-     if (timeout == MAX_TIMEOUT)
-         result = -ETIMEDOUT;
-     if (temp & 0x10)
-         result = -EIO;
-     if (temp & 0x08)
-         result = -EIO;
-     if (temp & 0x04)
-         result = -ENXIO;
-
-     if (inb_p(SMBHSTSTS) != 0x00)
-         outb_p(inb(SMBHSTSTS), SMBHSTSTS);
-
-     /* Step 4: Final snapshot */
-     post_cnt  = inb_p(SMBHSTCNT);
-     post_cmd  = inb_p(SMBHSTCMD);
-     post_add  = inb_p(SMBHSTADD);
-     post_dat0 = inb_p(SMBHSTDAT0);
-     post_dat1 = inb_p(SMBHSTDAT1);
-
-     /*
-      * Dump full diagnostic trace ONLY if:
-      * 1. Hardware registers were mutated (pre vs post mismatch on CMD 
-or ADD)
-      * 2. The bus operation returned an error code
-      */
-     if (pre_cmd != post_cmd || pre_add != post_add || result != 0) {
-         dev_err(&piix4_adapter->dev,
-                 "[PIIX4 ERROR TRACE TRIGGERED] result=%d\n"
-                 "  STEP 1 (PRE-START)    : CNT=%02x, CMD=%02x, 
-ADD=%02x, DAT0=%02x, DAT1=%02x\n"
-                 "  STEP 2 (START BIT SET): CNT=%02x, CMD=%02x, 
-ADD=%02x, DAT0=%02x, DAT1=%02x\n"
-                 "  STEP 3 (POST-WAIT)    : STS=%02x, CNT=%02x, 
-CMD=%02x, ADD=%02x, DAT0=%02x, DAT1=%02x\n"
-                 "  STEP 4 (POST-CLEANUP) : CNT=%02x, CMD=%02x, 
-ADD=%02x, DAT0=%02x, DAT1=%02x\n",
-                 result,
-                 pre_cnt, pre_cmd, pre_add, pre_dat0, pre_dat1,
-                 start_cnt, start_cmd, start_add, start_dat0, start_dat1,
-                 postwait_sts, postwait_cnt, postwait_cmd, postwait_add, 
-postwait_dat0, postwait_dat1,
-                 post_cnt, post_cmd, post_add, post_dat0, post_dat1);
-     }
-
-     if ((temp = inb_p(SMBHSTSTS)) != 0x00) {
-         dev_err(&piix4_adapter->dev, "Failed reset at end of "
-         "transaction (%02x)\n", temp);
-     }
-     dev_dbg(&piix4_adapter->dev, "Transaction (post): CNT=%02x, CMD=%02x, "
-     "ADD=%02x, DAT0=%02x, DAT1=%02x\n", inb_p(SMBHSTCNT),
-             inb_p(SMBHSTCMD), inb_p(SMBHSTADD), inb_p(SMBHSTDAT0),
-             inb_p(SMBHSTDAT1));
-
-     return result;
-}
-
-
-Thanks,
-Matthew
-
-On 9/1/26 12:04 PM, Guenter Roeck wrote:
-> Hi Matthew,
-> 
-> On 9/1/26 09:31, Matthew Bettencourt wrote:
->> Hello Guenter,
->>
->> I added additional logging into the piix4_transaction(). I will put 
->> the function call on the bottom. But as you guessed we are seeing not 
->> just MR11 corruption but also can trigger on other addresses as well. 
->> I was running the suspend/resume cycle and caught on both MR11 issue 
->> and else where. Here is the dmesg log output.
->>
->> --- Other PIIX4 transation ---
-> ...
->> [29287.881787] [ T204580] i2c i2c-12: [PIIX4 REGISTER MUTATION 
->> DETECTED] Pre: (CMD=0x1a, ADD=0xa3) -> Post: (CMD=0x01, ADD=0x45) | 
->> DAT0=0xff
-> ...
->> [29312.945873] [ T204570] i2c i2c-12: [PIIX4 REGISTER MUTATION 
->> DETECTED] Pre: (CMD=0x0b, ADD=0xa7) -> Post: (CMD=0x01, ADD=0x45) | 
->> DAT0=0xff
-> 
-> It may be a coincidence, but the two failed accesses are exactly 25 
-> seconds apart.
-> 
-> Would it be possible to drop the messages except for the failures and 
-> run long-term
-> accesses (for example by reading the temperatures and/or the nvmem 
-> continuously) ?
-> You should find the nvmem at /sys/bus/nvmem/devices/0-005[13]/nvmem.
-> 
-> It might be useful to know if this only happens during suspend/resume 
-> cycles
-> or if it happens all the time, if it happens randomly or in specific 
-> intervals,
-> and if the failure pattern is always the same.
-> 
-> Thanks,
-> Guenter
-> 
-
+RnJvbTogU2FubWFuIFByYWRoYW4gPHBzYW5tYW5AanVuaXBlci5uZXQ+CgpUUFM1MzYyMiBhbmQg
+VFBTNTM2NTkgYXJlIFRJIGR1YWwtY2hhbm5lbCBELUNBUCsgc3RlcC1kb3duIGNvbnRyb2xsZXJz
+CnRoYXQgdXNlIHRoZSBWSUQgVk9VVCBmb3JtYXQgYW5kIFZPVVRfTU9ERSBpZGVudGlmaWNhdGlv
+biBsaWtlIHRoZQphbHJlYWR5LXN1cHBvcnRlZCBUUFM1MzY3OS9UUFM1MzY4OCwgc28gdGhleSBy
+ZXVzZSB0cHM1MzY3OV9pZGVudGlmeSgpLgoKUGF0Y2ggMSBhZGRzIHRoZSBjb21wYXRpYmxlIHN0
+cmluZ3M7IHBhdGNoIDIgYWRkcyB0aGUgY2hpcCBJRHMsIHNob3J0ZW5zCnRoZSBLY29uZmlnIHBy
+b21wdCB0byB0aGUgZmFtaWx5IG5hbWUgKGFuZCBsaXN0cyB0aGUgYWxyZWFkeS1zdXBwb3J0ZWQK
+VFBTNTM2ODUsIHByZXZpb3VzbHkgbWlzc2luZyBmcm9tIGl0KSwgdXBkYXRlcyB0aGUgZHJpdmVy
+IGRvY3VtZW50YXRpb24KYW5kIGZpeGVzIGFuIGV4aXN0aW5nICJUUFM1MzU4OCIgdHlwbyBpbiB0
+aGUgYXR0cmlidXRlIHRhYmxlcy4KClRlc3RlZCBvbiBKdW5pcGVyIGhhcmR3YXJlLgoKU2FubWFu
+IFByYWRoYW4gKDIpOgogIGR0LWJpbmRpbmdzOiB0cml2aWFsLWRldmljZXM6IEFkZCBUSSBUUFM1
+MzYyMiBhbmQgVFBTNTM2NTkKICBod21vbjogKHBtYnVzL3RwczUzNjc5KSBBZGQgc3VwcG9ydCBm
+b3IgVFBTNTM2MjIgYW5kIFRQUzUzNjU5CgogLi4uL2RldmljZXRyZWUvYmluZGluZ3MvdHJpdmlh
+bC1kZXZpY2VzLnlhbWwgIHwgIDQgKysrKwogRG9jdW1lbnRhdGlvbi9od21vbi90cHM1MzY3OS5y
+c3QgICAgICAgICAgICAgIHwgMjQgKysrKysrKysrKysrKysrLS0tLQogZHJpdmVycy9od21vbi9w
+bWJ1cy9LY29uZmlnICAgICAgICAgICAgICAgICAgIHwgIDUgKystLQogZHJpdmVycy9od21vbi9w
+bWJ1cy90cHM1MzY3OS5jICAgICAgICAgICAgICAgIHwgIDkgKysrKysrLQogNCBmaWxlcyBjaGFu
+Z2VkLCAzNSBpbnNlcnRpb25zKCspLCA3IGRlbGV0aW9ucygtKQoKCmJhc2UtY29tbWl0OiA0MGM5
+ZjAxMzQ3YWQ5NGExZjkzNDYzMTMyMjZkNzg4YWZjZjEzNjZiCi0tIAoyLjM0LjEKCg==
