@@ -1,144 +1,141 @@
-Received: from mta1.migadu.com (out-210.mta1.migadu.com [95.215.58.210])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC219369D43
-	for <linux-hwmon@vger.kernel.org>; Tue,  1 Sep 2026 06:23:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.210
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788243831; cv=none; b=MuZTB8/ccJQ4Hq3+b30xIyr+cjngwyeVwVSeZ3QohC2ghe5GymB5m0SY4PeJYTrLPxk8rLZqtIzJwndjtXNDQlh4bd5FP73gwWLZRu0Qm2RmBhCH2jG1lU5j2/x5OOoY9DuEcA3e4x0Rq19hQ7xlfLHgZwrygAlV04QQqh2497Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788243831; c=relaxed/simple;
-	bh=JYWgi8laE2xRmYqAktJ5/SY0SxkpUmzm3vsS4saBqCs=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 In-Reply-To:References; b=uvzKyp38O50s6CBEoMbRgqR/DiT37lMg8NnCdY63ZFl4/3T6gi1sN8hV8EgfDRvZy2QAH4L4EDhv9SnQeT40itvBYVdF5FBkHpnJnV01QrJlJMJ4FgVhZITLhE/aGZ/Q0B4IlOuYt6n/4WWMk7uh3QkXvUU0+LiEbEY7bf909J4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tvZJo/lO; arc=none smtp.client-ip=95.215.58.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 014E13A8743
+	for <linux-hwmon@vger.kernel.org>; Tue,  1 Sep 2026 09:50:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.182
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788256227; cv=pass; b=lVzlsGKOJYkSOEB3lValV7H0gH+EaXrqH9qYomNIpH6XcVZGKSW/d+RSNhWxXHq+B8CJx4QvbPfo7I5uiduKD7suikXhOvL7bbI545QoGs7sMIP/QY4lDk5vuvw+fLrb5ji+1Hy+oUcfnB6fheD6tQ88kRjZWeZaWyF8dNygNLs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788256227; c=relaxed/simple;
+	bh=GjvQEqG4mjQskhvnJnnScQWukkkGA2Zuecy1m5TWvhE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JuI6FcD6QPum7HX6tZzwQdZkbMHjRmeTTJy+AnMBsW+e/yblBVNoOekWpfEPY0aSKQJX10Dz2DIWNiZUfw5MBSivAHuPShDJNDcK861G9cmDKz0Lzcnr59uARTQEvBhnE+f8KD6FbnMB3VADpzCWaYlgrWZHTzX2g9RfHXDYtco=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QCO0uy8d; arc=pass smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tvZJo/lO"
-X-Envelope-To: linux-hwmon@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=JYWgi8laE2xRmYqAktJ5/SY0SxkpUmzm3vsS4saBqCs=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788243827; v=1; x=1788848627;
- b=tvZJo/lONEGG33RxIAI2uh4WeJpN8rDLDnOe1iyzX6NjrztypfMyq0QXvRzmk1xta8zfPdaz
- BOVmEewBVrrKENqDk0K0EKH+4jRl86fvdem/AV7JFLL2hKgh8uw3W9cGGs2OH/JoRkAN7cJC+So
- biHGz89sN9qpjOcvNDQn/elA=
-X-Envelope-To: linux-hwmon@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id 8f859e5041177fe5;
-	Tue, 01 Sep 2026 06:23:47 +0000
-X-Mizu-Trace-ID: 8f859e5041177fe5
-X-Migadu-Flow: FLOW_OUT
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QCO0uy8d"
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-7dbcb505578so6915747b3.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 01 Sep 2026 02:50:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788256225; cv=none;
+        d=google.com; s=arc-20260327;
+        b=hjGSQNNDmMfrA0NNDN0zjJCnymn10q5i4Gwoqj39FRTKCvu++o1eFmXP1uoK7Ks7ZV
+         XowqRn92zQ33RaTUqNY3oCI8l7iaKrdVvH02CP/5rvZnmpSmPQ3OTTfnduPzhELnlsYW
+         O9v6tWMhv44go4wYZZ6fFD5dNDDbA8zSCU0Tq8Qwhnkj4LIBqkDDULBBv7LKd8mTEn8E
+         egwpQQtm/vbM0Xwg207G6Ydy9Y3pwWjTsHKAstIoeWAWwFrmkhbvzfB6V/J/X4g7QShG
+         y7bp7Lv7/LBzb9KTAnwnbVIpQKUqcw94Uhp4ZgacNcJ/lGIPUAMuCLoyJSnSy0qHtnDZ
+         qKAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=GjvQEqG4mjQskhvnJnnScQWukkkGA2Zuecy1m5TWvhE=;
+        fh=vK5Gyj/TdOGeHTLq/IA96SSsOXI0WPtiDfAn4z2Mm7Q=;
+        b=VbSHWYPCFvRWgy8lfpz+lsdPAS2oOLMHLMYQEaamE6H0s9xJI2ixsvkORJt1ILlq1d
+         DEgmQde9RtLTx4JxJjdUOpCr5g/0dDAyKDLj1F5qJ3rS/rKBSfubFqenTeYqBseZP88a
+         d3Q7BT+s6AYCF3cn4mRALrjnIYQhvzHSSyVlnplsyBhMednfoDZmpeTUVW7Ui3kuICeN
+         owMJyeZolOmJgbj9IEPNAp4ndRABP6DeZ/fOGgU04NuCKD+fZX/4kAFcKaa1fXUdKYob
+         P9CeNbnhSzRWM24SZIl+OZlQIx2MEYzB2CIXXLF8jYe7Mq+SypuE9kwyztGygOD5zhuZ
+         wl4g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788256225; x=1788861025; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=GjvQEqG4mjQskhvnJnnScQWukkkGA2Zuecy1m5TWvhE=;
+        b=QCO0uy8dBA3WaR0ZWi1yB/gk8l9ZbWC3mz2CFsWJ/CxrTmgfUPCwZ7XA0gTjWyBjvk
+         2CYbS6ZmC8b+Ba+8owXRGxHFFfP06LHNGxmtlvttPDB5Rlvrextb5VFAsKLoyO/y9EQN
+         KMgk7ZnOLA3weKAeJl7lTU4ZIw35JJ7mNSHtQ/wrNaLoeGvrwf2F7aeVDA84AFfgSIAk
+         HQQfdLsomAt0ITrXMAlaYm+pNk2IlxZ5t33+AClAgt83FN8rz4nYV0blRgQ+eJWe62eT
+         3258X5wK99lJ3No2+kdcNzVy6ldcE6US1MrI6cM2cB2ZBfy7SoQvZehfycv6dI3ejKvt
+         wdUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788256225; x=1788861025;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=GjvQEqG4mjQskhvnJnnScQWukkkGA2Zuecy1m5TWvhE=;
+        b=mao73Zdfbf3SERA2ekOjPXZIL9b0yz5zlRfu4SiW9cAGwfDcOY7idwUP3jrTfQ+rmY
+         P8kUuR8NK+NBNU+3ZGkqtxxls5d3+ZwvYWUoeEI9cKSPNThLJgqgkhVz4Dx3K3RcntoQ
+         pAko3nvWyh7jPYgtltDVqmMm0DO/XRfF1mNAQQY6sucx01HS1gCYEkySQmOwo0ktV29l
+         G8pshf66+pFLXrcXUjhFQxMhUTTzybMYMh0MnaOnNm9bPxliTGZpMSEIXYPyTe+D0FCo
+         0b7ivBDIZFXmgJZw0cM6C+NJ7hWjtziHGmjVUERdUqq1JUCh+G4caL0VZEPBi/uI8ugy
+         8N9g==
+X-Forwarded-Encrypted: i=1; AKwUvBwDTZjRIhxihXw+rHfkx1VUgY9iXHz9fY28dESw3eVaivP0Ul63DR2B+CRrf7b9gAsp+bOSPkbVH3BQpg==@vger.kernel.org
+X-Gm-Message-State: AFuF++nGgh6kxy31pgzE/ZoOkELA4mVXo3Vbqc3t8+WEWKpBCJWilRw7
+	yH4j0PkSJT9vS3x15z27l9b5CmNjra4f1rsTf72MTuvOozVSY4vCXiSAJISR4mnUx3LRjwDvoC+
+	aK+6TzLz+pnCOXJ/aBVnhDsvzQ4dTyz5Z/4PL
+X-Gm-Gg: AYBFou1EQKNT3tdvAMMjbZ36/9jMtvIdgezhlocJIv4Tqqtet00Cl52oLMf4IWcTFZr
+	eh05Dq4rmeni1vNB3QpKt+75Dd8xsiVy0bMf9TzkLWxrHs1UNZww8hFudIq6jaTjXraezZ/uDOq
+	uEGmFN9bu1jtn8xLjASMBp0yRpIywstwjG7tRnupho3BAqyi6l2lO5AGWuwXK835GHphVX1A7oI
+	ac/y2gHN1zDuFhr2D1DBw0F/39YY3zHQc+N8sjiGxhP9Hbucz1LWB9yvGSm4IwzdXgAdbQQiCpE
+	KSzaxyXi61TgGfoLWpKvTdhVIOUkTNuBaybP61XLaoQ=
+X-Received: by 2002:a05:690c:e0c6:20b0:851:5445:ad5b with SMTP id
+ 00721157ae682-85d68a8eb63mr94625947b3.1.1788256224722; Tue, 01 Sep 2026
+ 02:50:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: multipart/signed;
- boundary=f5ad3a7a520e0675d3a1ee0e96ded0c415497e37ee75d1d57e33fbe0b954;
- micalg=pgp-sha512; protocol="application/pgp-signature"
-Date: Tue, 01 Sep 2026 14:23:42 +0800
-Message-Id: <DL3RJ2VF605G.2L1HBQB1CUEGA@linux.dev>
-Cc: "Troy Mitchell" <troy.mitchell@linux.dev>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
- <linux-riscv@lists.infradead.org>, <spacemit@lists.linux.dev>,
- <linux-doc@vger.kernel.org>, "Jean Delvare" <jdelvare@suse.de>
-Subject: Re: [PATCH v4 4/6] hwmon: (lm63) Add Sensylink CTF2301 support
-From: "Troy Mitchell" <troy.mitchell@linux.dev>
-To: <sashiko-reviews@lists.linux.dev>, "Rob Herring" <robh@kernel.org>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Conor Dooley"
- <conor+dt@kernel.org>, "Guenter Roeck" <linux@roeck-us.net>, "Paul
- Walmsley" <pjw@kernel.org>, "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert
- Ou" <aou@eecs.berkeley.edu>, "Alexandre Ghiti" <alex@ghiti.fr>, "Yixun Lan"
- <dlan@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan"
- <skhan@linuxfoundation.org>, "Randy Dunlap" <rdunlap@infradead.org>
-In-Reply-To: <20260831163256.784771F000E9@smtp.kernel.org>
-References: <20260831-ctl2301-v4-0-b335d52a0570@linux.dev>
-	<20260831-ctl2301-v4-4-b335d52a0570@linux.dev>
-	<20260831163256.784771F000E9@smtp.kernel.org>
-
---f5ad3a7a520e0675d3a1ee0e96ded0c415497e37ee75d1d57e33fbe0b954
+MIME-Version: 1.0
+References: <20260828105018.2392383-1-congnt264@gmail.com> <20260830150508.1475105-1-congnt264@gmail.com>
+ <4242501b-82b2-4ced-82e8-ef4022aa7175@roeck-us.net>
+In-Reply-To: <4242501b-82b2-4ced-82e8-ef4022aa7175@roeck-us.net>
+From: =?UTF-8?B?Tmd1eeG7hW4gQ8O0bmc=?= <congnt264@gmail.com>
+Date: Tue, 1 Sep 2026 16:50:13 +0700
+X-Gm-Features: AcwNN1VbEABi07UQC48N4BYIyXzERVS7AP_hVPbnQhjzgZZzvI7mv7_9sPq3u2Q
+Message-ID: <CAJpJ=Gv8rnzDEpkp1X6jHojDQeQr1TEdbApJqdQzcz4SyN=QWQ@mail.gmail.com>
+Subject: Re: [PATCH v2] hwmon: (gpio-fan) fix pm_runtime imbalance for
+ alarm-only fans
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Alexander Stein <alexander.stein@ew.tq-group.com>, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
 
-On Mon, Aug 31, 2026 at 04:32:56PM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue(s) to consider:
-> - [Medium] TEMP12_TO_REG and software caching logic fail to align with
-> 12-bit hardware truncation, causing sysfs cache inconsistency.
+On Sun, Aug 30, 2026 at 10:22=E2=80=AFPM Guenter Roeck <linux@roeck-us.net>=
+ wrote:
 >
-> [...]
+> On 8/30/26 08:05, Cong Nguyen wrote:
+> > pm_runtime_enable() runs unconditionally in probe, but the devm cleanup
+> > that calls pm_runtime_disable() is only registered when control GPIOs
+> > are present. Alarm-only fans never get it, so unbind warns about the
+> > missing disable.
+> >
+> > Switch to devm_pm_runtime_enable(), registered before gpio_fan_stop()'s
+> > devm action so LIFO teardown runs gpio_fan_stop() first. gpio_fan_stop(=
+)
+> > calls set_fan_speed(0) -> pm_runtime_put_sync(), which needs PM still
+> > enabled to reach gpio_fan_runtime_suspend() and turn the regulator off;
+> > registering enable after gpio_fan_stop() (as v1 did) reverses that orde=
+r
+> > and leaves the regulator on.
+> >
+> > Fixes: 0d01110e6356 ("hwmon: (gpio-fan) Add regulator support")
+> > Reported-by: Guenter Roeck <linux@roeck-us.net>
+> > Link: https://lore.kernel.org/r/b9792be3-fcd6-468c-9149-7e33640ee167@ro=
+eck-us.net
+> > Cc: stable@vger.kernel.org
+> > Assisted-by: Claude:claude-opus-4
+> > Signed-off-by: Cong Nguyen <congnt264@gmail.com>
+> > ---
 >
-> @@ -121,6 +126,9 @@ static const unsigned short normal_i2c[] =3D { 0x18, =
-0x4c, 0x4e, I2C_CLIENT_END };
->  							    127000), 1000)
->  #define TEMP8U_TO_REG(val)	DIV_ROUND_CLOSEST(clamp_val((val), 0, \
->  							    255000), 1000)
-> +#define TEMP12_FROM_REG(reg)	DIV_ROUND_CLOSEST((s16)(reg) * 1000, 256)
-> +#define TEMP12_TO_REG(val)	DIV_ROUND_CLOSEST(clamp_val((val), -128000, \
-> +							     127937) * 256, 1000)
->  #define TEMP11_FROM_REG(reg)	((reg) / 32 * 125)
->  #define TEMP11_TO_REG(val)	(DIV_ROUND_CLOSEST(clamp_val((val), -128000, =
-\
->  							     127875), 125) * 32)
+> Another instance of a new patch version sent as reply to a previous
+> version.
 >
-> [...]
+> It is against guidance in Documentation/process/submitting-patches.rst,
+> yet it proliferates, and more and more people send new patch revisions
+> this way. Where is this suggested ?
+
+Fair, this was my mistake -- won't thread rerolls under the previous versio=
+n
+again. v3 just sent standalone.
+
 >
-> @@ -594,6 +692,21 @@ static ssize_t set_temp8(struct device *dev, struct =
-device_attribute *devattr,
->  		return err;
-> =20
->  	mutex_lock(&data->update_lock);
-> +	if (data->kind =3D=3D ctf2301 && nr =3D=3D 1) {
-> +		temp =3D TEMP12_TO_REG(val);
-> +		err =3D i2c_smbus_write_byte_data(client, LM63_REG_LOCAL_HIGH,
-> +						temp >> 8);
-> +		if (!err)
-> +			err =3D i2c_smbus_write_byte_data(client,
-> +							CTF2301_REG_LOCAL_HIGH_LSB,
-> +							temp & 0xf0);
-> +		if (!err)
-> +			data->temp1_max =3D temp;
+> Thanks,
+> Guenter
 >
-> [Severity: Medium]
-> Does this sequence cause the sysfs cache to become inconsistent with the
-> hardware state?
->
-> The TEMP12_TO_REG macro scales the value but does not align or quantize i=
-t
-> to a 12-bit hardware boundary, leaving fractional bits present in the
-> lowest 4 bits. Here in set_temp8, those lowest 4 bits of temp are masked
-> out with 0xf0 when writing to the hardware register, but the unmasked tem=
-p
-> is saved in data->temp1_max.
->
-> If a user writes a temperature limit that is not a perfect multiple of
-> 0.0625 degrees Celsius, will this cause the sysfs interface to return the
-> un-truncated value immediately after the write, but later shift to the
-> truncated value upon the next device poll?
-
-This is a bug. TEMP12_TO_REG() currently produces an unaligned 8.8
-fixed-point value. The register write discards bits 3:0, while the cache
-retains them, so an immediate sysfs read can differ from the value read
-back from the device after the next update.
-
-I will fix this in the next version by quantizing the converted value to
-the CTF2301's 0.0625 degree C resolution before using it for both the
-register writes and the cache update.
-
-                                            - Troy
-
---f5ad3a7a520e0675d3a1ee0e96ded0c415497e37ee75d1d57e33fbe0b954
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJcEABYKAD8WIQSL4Ay2cExaPXAQcU2YCe+A+TM0LwUCapZvbiEcdHJveS5taXRj
-aGVsbEBsaW51eC5zcGFjZW1pdC5jb20ACgkQmAnvgPkzNC/UBQD/Y06tRaTFNMju
-NM/etVWC7V4lTIYgMiT04x1oaUoz20cA+gOu2r4waOeMxc0picDYJZruXgDd4WEC
-8kbzz6TfWb8A
-=zcf8
------END PGP SIGNATURE-----
-
---f5ad3a7a520e0675d3a1ee0e96ded0c415497e37ee75d1d57e33fbe0b954--
