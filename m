@@ -1,371 +1,393 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CHN02-SH0-obe.outbound.protection.partner.outlook.cn (mail-sh0chn02on2123.outbound.protection.partner.outlook.cn [139.219.146.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 916A02F25F3
-	for <linux-hwmon@vger.kernel.org>; Tue,  1 Sep 2026 00:16:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788221785; cv=none; b=R7rWT1CFNw5gZWdneuRSm0ct6hHm62hfFzqS2Q+rkq5NrfXNW0xMIgtR7i5eUDfrU4npxk1L+QA6BOO8LbVFsOKkNK4m7ttD9ls1QHayZTdMLEllwVxWnFer0IrCf+uh/5+rOt2BzzF/RTkbjypH14XEk8mS8MglCeSAzdxLLr0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788221785; c=relaxed/simple;
-	bh=wWd6FpJoBAUfxzqnHYWFxP6viUHJty1h+MngnoYm7jo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-	 In-Reply-To:Content-Type; b=BlF/Cw/Fm5YA0dX5dnlAt9IR0EEhKvwPe3mCMPcEGkdr+iPdL5ikQN1pzx/LNPdlGm94azwWuGMBs+JatmdEFFJQIBziFl8bShia2IHUBsuiRbCAbJe6MPBP9ku3MywraHJRRp+rvK9kYjdHhohCB+Q4JUTe8UcGVO02NBPZrKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TLaI5ma6; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TLaI5ma6"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-cc1cbb64a1fso4029850a12.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 31 Aug 2026 17:16:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788221783; x=1788826583; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from:cc
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=/NH7GQnLQc0hjyaM40uObrrRPPN00SH54u5Q+Jsz9iY=;
-        b=TLaI5ma6U7WgtzyFq4OFiT29OQ+wF+awwaaAIe97dEfhJsRx9LRRWYFyODsd5ejQWk
-         OeGV6Qjv42msV0T6YCCQpVh7QkvogEWg8KXwzJjcS+a9ADTyibMml4/gGVNkhyKDpgyR
-         yJegyplGWAf9uO2JnMPTNOVSf8s63ZNVDTDB9HocML6/sizGlju/c+pxAGUNvsc1VdYx
-         y2ouV787/g7bzS5dRuyHLuB4Ccxzu8+4q+wpP1ejGIxSRdSyQt27QnhoQSDv6BnmOoaa
-         4gqTtiW5iK6ZIoZ54gQsx9jB2YOpKENqvNULgl8+TJ6re1ajagvKvsClV9gHDhFW+VAO
-         i7Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788221783; x=1788826583;
-        h=content-transfer-encoding:content-type:in-reply-to:from:cc
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=/NH7GQnLQc0hjyaM40uObrrRPPN00SH54u5Q+Jsz9iY=;
-        b=PhL4h6TeCiCiyMs7R5y0Bnn0VyznkHHXYeUx1Q8H8grwBuuTbgd3jPWMgsw60FKq9t
-         l9FgJPhf1lzbPIj9a3lMwLkMgt4c3xKjwpFqVBJ8qX2BTs1HeTC80rgugXcRlxVBY+Ec
-         8cnWzIhz+kyr0/CO/9mWl2XXHso2mWGNDTRN5QsGxuPAL2f7+z8gjKs9FWzux26qppI9
-         b/L4R+sEx9MmgcJmBHgKLefpePWomizCQM48f1FEsAgiqYRxOH4HbOjGmvntDio4ghse
-         RkZIxUrZDvohaH1/kQGQQOMOfHCd1d9LYVeaVRwXqZCZNBLdMtw51/6B+t+ki2Ex+yXO
-         YHYQ==
-X-Gm-Message-State: AFuF++mJ2bXxqq1fbBhUkzp+OHg9OB9GGEMVreqlT9DkB5E1IRwHLl6d
-	8yOmyXpseJkfUEJY+A3SuluY77bJe3onR2YPHPlt9vrNUw2HAXpyrDer
-X-Gm-Gg: AYBFou2T73ZS9LtCNLjPWKr4SJVrBQ75IGjTnrtHpITa76IsYo8L/GgJ0EuDGmbGvwX
-	i6PTY0cNEXzQA6V00D37Tu/XjtSjyPijjWdgnZlESnRLPcD3HtKJeEufKPsW8CMn9TNRPOBGsfQ
-	lK/MiXC2Uyh7LDsM84MpYnwEkKX1VVzFLK/AESFuFblpy7qlExKle3oJBUOH1N0RD+IkewvhO8r
-	E+YxeOSFVKOuC75TqCREXZaIhbhAzKp6M+svqDRE28NavtlWNghJhMUKHMYaDGuPRPOO0xMvXbE
-	lh1qwkQvzJ5i3/4cjTn/KTlwDiMPbPZ5Y6cadl++CwsUYsrRYzsGifGzeHnHmpi0tJm7OB5bYTY
-	z0s3CrPlpVCDKmG3JZu1+9orpy0KFcwkMhbX/BvkRHJTk08t82BJljD5zuiRE54yMinhwKUGe8B
-	7K4HQ0bvp+OwPTB1H9yHKzDFocan/YqZZ24Muh2sadxD3NQQR1vrFjkS8vLSE8ZL2XIHCnOzSqy
-	Xw3JPO+unQp7o721dh1t+ueG0jqPVIwYBLIRIaTRZKGu5zQGPMZwzO97xB8
-X-Received: by 2002:a17:90b:530c:b0:381:1c96:829b with SMTP id 98e67ed59e1d1-396d0d4c43amr46601349a91.3.1788221780530;
-        Mon, 31 Aug 2026 17:16:20 -0700 (PDT)
-Received: from [10.21.0.95] (wnpgmb0592w-ds02-161-177-131.dynamic.bellmts.net. [207.161.177.131])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39914b4ea7asm1056747a91.13.2026.08.31.17.16.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Aug 2026 17:16:19 -0700 (PDT)
-Message-ID: <763a8b30-8548-4ff0-a1e9-8e74bbfe9b02@gmail.com>
-Date: Mon, 31 Aug 2026 19:16:17 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F13A938D415;
+	Tue,  1 Sep 2026 01:40:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.146.123
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788226809; cv=fail; b=AtyCe0e9diUo4R7YXQr/di33shTgAUoDf1aPLSZrIRkm3EgoNJr3mlRy1SJXD+wx13BWAZxVGqnDhACqzvtpVdmsyrR1lC25Ljq9dE5Y9AQCgHH7z1vpEdAXz/8JXFzISCSKtaZGry3uZZ1A/17YbpRTo1EvBu+p/ip6GxPOZqM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788226809; c=relaxed/simple;
+	bh=h+XjJ905WMBUjqRl+v6TdAmsDcMPu80TlHLgt0FaKcA=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=k4B0FrPYs0M6Oo+OpXjkgO2W7RCir9zMwQkXlHRDD9TrXNLgasbdBiY9JVv45YeHvmT/aFrXDNFrkTRJzSAMSjRcsB8b7WkHGS+l0Ug/BQsDECHRck5zb00NrAu4QUjrAQFxDSTlJ3x7sKafF39SuTbPLowZLfQ0RY+Oie2sEfQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.146.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=starfivetech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XC4VuBVGemf9Bt0zOrd/LQh/uBBR7iSBCfxX1k55ASeEVm6AalQWLDDTv4LuQXHLWud6o3w50nff/+tAXeAPmZ6Nq1boUzhkSzN+idEZoOlCz2H28XV2DPgRi5cRRuDEsAK8lLdpLPVEHsBBZYa/4NT8hMfJWlhjNlFkPDZDQi1sEnxPqdhekYyOchiS79rxNSLjEyhjWTDhodMyrvY6TT8IMXTpRYdGm/Mul9sCBwU9FCjwSc07HDCDQB4roV5AruxtoDT+Or3Qk8sxK0imbHMLMFRfQhvSKjPrbMkEE7PiDGQvWZKinjfwHKH2ezqsqYt/cZAONwmjU5C8wSj7KQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=u81phPugYgBZZiK1OTKXbAX+K9ZVtk/izIY5170VMPA=;
+ b=KGI4tM6zKla96w+nGSzn0pvUOSmuhHFZRTNQL60maFueSQLtligpsnppgEIJA/X6M1WLXgByW7aLh47MGxhG41Kj08EemGxKXElK45Ew/n3Y/riElYFoAIhyqejCPpVUHPqcfk0GIEmmK80G1Zv0A9S8LV5u6w/0LcVRbjBIpyod19/EvmHanjYC2eAM2zv+s+nZ0FNpKJTX9nthTHGv9IRSoDqEoddjOCaVZryt3BxyMRLaKIvZz+xwdQrPod4gifY3wFC5rp4gFaN+fCD7UxHgC6Qpr+EZJPe4gDjdgfZ6VRnujjJ2mScckMF9+nQYBhLhB5A9dgFEaM9kBwPfuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=starfivetech.com; dmarc=pass action=none
+ header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
+Received: from ZQ4PR01MB1202.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:17::6) by ZQ4PR01MB1137.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:13::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.25; Tue, 1 Sep
+ 2026 01:24:40 +0000
+Received: from ZQ4PR01MB1202.CHNPR01.prod.partner.outlook.cn
+ ([fe80::e7d4:256c:b066:850d]) by
+ ZQ4PR01MB1202.CHNPR01.prod.partner.outlook.cn ([fe80::e7d4:256c:b066:850d%4])
+ with mapi id 15.21.0315.011; Tue, 1 Sep 2026 01:24:39 +0000
+From: Changhuang Liang <changhuang.liang@starfivetech.com>
+To: Conor Dooley <conor@kernel.org>
+CC: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: Add starfive,jhb100-fan-tach
+Thread-Topic: [PATCH v4 1/2] dt-bindings: hwmon: Add starfive,jhb100-fan-tach
+Thread-Index: AQHdOB2pWGWmLpoNUE2Go4xzfaaD97a4XHIAgACUoYA=
+Date: Tue, 1 Sep 2026 01:24:39 +0000
+Message-ID:
+ <ZQ4PR01MB12023835F6083F45484E1ED3F2A82@ZQ4PR01MB1202.CHNPR01.prod.partner.outlook.cn>
+References: <20260830011941.40199-1-changhuang.liang@starfivetech.com>
+ <20260830011941.40199-2-changhuang.liang@starfivetech.com>
+ <20260831-dominion-data-c8b6f691dd5b@spud>
+In-Reply-To: <20260831-dominion-data-c8b6f691dd5b@spud>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=starfivetech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: ZQ4PR01MB1202:EE_|ZQ4PR01MB1137:EE_
+x-ms-office365-filtering-correlation-id: 7c5f382d-1888-4a39-d0be-08df07c7cb1f
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|23010399003|1800799024|376014|38070700021|10067099003|4143699003|56012099006|22082099003|18002099003|3023799007;
+x-microsoft-antispam-message-info:
+ 19GapsRZS1+PeD0RaWb6hGzeyq7/dLiD0Kxarhidc9jt83fZgEa4Pq3+r0mFjPjfWCuuhQld6ySh1+wwfTS9GD77RJXJXc+pdSe+NFAqD14+WD5ea+eLiMp903efQzHe9U7YQyUCCwje8Utpw5Tu/b26zwhtSa/2XV9C8rQ7fPAhjojS/DAGGQr1hZkqBUvyL8j67y6jGN1EtlAkqA3XfwN0O9xDTvETaQft9/0L8pG7rmch+Iya1m3asvjzLmhnMZr8/wRA5bovnHyjgCSFccS6G88Gthlbq7rxzksCQkv81gRNNnRyEYA4+8c4lIm2lCguwcTwfj+nnOWP9yvf1SIW8iti7eUL97lgY9bBIVkxOZijmGtjP3Yv/bywrh7Wx6zFWqVdCenXEHg32HOuZzvKrNFkXdcP9o+uog2c/skXTGKNQzkR2P1cmLbeKnkoRiHpO2ScNOCld2jijfycuWYN3Q7Tcgp5PeMCQ9X/CrYTPY50ZnQGZxoHuLdSf4uCHtFheHEeWA1tUOI8X9X5G3QwnwdBSLnG+SixNbo2jovbZeX4gMYvejm7RCCnSRN6
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZQ4PR01MB1202.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(1800799024)(376014)(38070700021)(10067099003)(4143699003)(56012099006)(22082099003)(18002099003)(3023799007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?7VnDxJ33CfLm1YJQa+ryskBx/pQqqyUDXXEbK7+GqVmPKGAvQ1R6EJNnM6A/?=
+ =?us-ascii?Q?OFAccCINNJ4YtAOjLIOTMYAA5KUaMjakv1y8blyBNzOoAgBpZZhv0Z7eUByF?=
+ =?us-ascii?Q?TsTynWtbK9DRHq3+p8c3VVDn2XcB+2XQcWSA8XZDM6rJhU24kguQAmUmBBu8?=
+ =?us-ascii?Q?4tDq4S5gJivBRpZ6Ds4gtxoaUT0sscBxbmhrQA664voVxjwaSpTDDbiMXBmc?=
+ =?us-ascii?Q?cvroCsXIwJk5HjvDimSVRbyoY6xjzSBxp5GBEJCm9JM86gtEfP+j8JrjDEjH?=
+ =?us-ascii?Q?BroveTDULX9i61RSgkX30ixGI8jqvj53ZesHPFnxFv0+et1mulByrL6j5dl6?=
+ =?us-ascii?Q?tkJ+3m6Xqb09qVxkl0c7VGqVKQQuRMqLcbDB7q6979p49xA/9gVAJpHvw4RH?=
+ =?us-ascii?Q?rE9J7NpSURbOfB/hXrF2jgDmi8CeSQ/6vMsB9P/iAgdOCdIqH4gHZ/uHKLZ6?=
+ =?us-ascii?Q?j7KtAoiSOV9xopKBkOoLT98NFFvyw76Tohi9+TdViNtoO70tkD6LPMP4Vhwl?=
+ =?us-ascii?Q?VXzSj630168ZME3NOpU+uSdLDf1m8Vr1CgilDq3ctlIfbfIHtoi5ZST5vSX1?=
+ =?us-ascii?Q?4yJ80K8sojWS7nHE1EE3W75+X6RAtOi+JJcu+wYIk/zJdSwYEKoveeHwUkTG?=
+ =?us-ascii?Q?z7g7aD1OzYOH2CUb2iTTp6D/fBcn+YozDmCNFpbys1FgN57sstEJ+c6ZbPQN?=
+ =?us-ascii?Q?yplV4O7qkd1G8AhHiGDljHkkjWZiO88uMrQA6WWuDfAGCf0VYWJ8/kGgVHWJ?=
+ =?us-ascii?Q?shBbmrCnB50/1m9MdNKlbFbHRfe58lzZlqaMuQYMpgsoeXihvf+PE61UEdOZ?=
+ =?us-ascii?Q?BIU8c8mp8aCJbjNJTjpZuklix3dV7eINLRzFMlQe+9nsg8rXeGE4u7KE4/E6?=
+ =?us-ascii?Q?3zYvElNLmAT2GOYBGt2vES3i6FRQawXwem/ms6znqvbCsLxH2Z/OB0SlTzje?=
+ =?us-ascii?Q?3b+b6F/CliZZEKTNjZA5l5KxsebOwF3CHNVlvaFPC/RuSOlBXJR7A32+DeXd?=
+ =?us-ascii?Q?tKmDtMtojxmdZE7uaQ+cLg3BLRY5Edt4TQQxifns6D/Oqu4upIq6CH6hSnPa?=
+ =?us-ascii?Q?lxPCEgXScXFpDecyOcwonIFlBbuFYjZ2lUbwgvBZ5G8rCAe4QXRQm2JVOrQw?=
+ =?us-ascii?Q?UAfb6Yvmj0Q9vjPrHc8nXPbQvd51yMksztiNn7rLjQe7Zgps9e1DJ4awt0CI?=
+ =?us-ascii?Q?duIGGbJwym0gLWtQQ5l2H2ErrIa5kf0OxpEBPhnWRPnRdbfKrxbi35Dlz9bh?=
+ =?us-ascii?Q?xbGkzpAQltF/zMohHOv8ZEQqg5hQI81V4ZacjtDokoCWDtfvcjEJzVglSSxw?=
+ =?us-ascii?Q?AcqqrU2AtXKb7j1EWX8e+9bPCgRZ5AdcIWgE1vba+miXYT/6znvXOTl2O48b?=
+ =?us-ascii?Q?VPcpTcxjlqTo4ahKQMlN8NULd3VJ/X4ricKxlJ7y5KxE/aQCOZ1vx/+YX5j7?=
+ =?us-ascii?Q?/QSXCvYsa9vMPDzptz4b1uXS/cTAzZI+3YtcPuXvxj+iTRjHvfp+KCE95HTy?=
+ =?us-ascii?Q?DReEaTdO25C6FDmc3CgS6qZN5Y0/mR2hkILsbV5W4alnQ2XG0wLDOvFPahFJ?=
+ =?us-ascii?Q?SP3SyiPraCcwLwyvxlnN++vbwqATyui6YLWN7Tr0fbItzfxM4+fexZyB4Zze?=
+ =?us-ascii?Q?TFrVTMkw3TMGrP8qqqoW6L8aiywMtfnEGf4GJ21LPzF0c79JnHp2ScFLvw4e?=
+ =?us-ascii?Q?Yp8a7FZpTOKTAuSAMTjgIkszoFE663B6732ag0tMAQGDaFrouqK9qA4DZO2a?=
+ =?us-ascii?Q?D4Z8NwQ8J86JXA17D56Rus1mYlT2RX8=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Betterbird (Linux)
-Subject: Re: [BUG] SPD5118 Intermittent MR11 Corruption During Suspend/Resume
-To: Guenter Roeck <linux@roeck-us.net>
-References: <1a8ea9da-1ac1-4312-a8ca-ea4a9f35093f@gmail.com>
- <ee284272-0da0-45b6-a3be-c76822e5d54f@roeck-us.net>
- <014b9438-e9b7-4be1-b816-002e83a068a0@roeck-us.net>
- <37132c40-aa82-4df1-b5ce-337601f3c085@gmail.com>
- <3c4e9f59-5272-48cf-a4a0-eeefcba955a9@roeck-us.net>
-Content-Language: en-US
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-From: Matthew Bettencourt <matthew.bettencourt@gmail.com>
-In-Reply-To: <3c4e9f59-5272-48cf-a4a0-eeefcba955a9@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: starfivetech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: ZQ4PR01MB1202.CHNPR01.prod.partner.outlook.cn
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c5f382d-1888-4a39-d0be-08df07c7cb1f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Sep 2026 01:24:39.7604
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Gx+WIxpjRqV2PdFvmiD4aOD1aU9ZPuELJsSVY4OZ26RPCy4BupT82ZvpfeT/Eb1avX7dxULdGsGE852i1QXWu21orAXT17iEfhcIrLwU35c54rSPCdUPp9yttbQy+ZKv
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZQ4PR01MB1137
 
-Hello Guenter,
+Hi, Conor
 
-Here is the list of i2c devices on my machine
+Thanks for the review.
 
-grep . /sys/class/i2c-dev/*/name
-/sys/class/i2c-dev/i2c-0/name:Synopsys DesignWare I2C adapter
-/sys/class/i2c-dev/i2c-10/name:AMDGPU DM aux hw bus 1
-/sys/class/i2c-dev/i2c-11/name:AMDGPU DM aux hw bus 2
-/sys/class/i2c-dev/i2c-12/name:SMBus PIIX4 adapter port 0 at 0b00
-/sys/class/i2c-dev/i2c-13/name:SMBus PIIX4 adapter port 2 at 0b00
-/sys/class/i2c-dev/i2c-14/name:SMBus PIIX4 adapter port 1 at 0b20
-/sys/class/i2c-dev/i2c-1/name:Synopsys DesignWare I2C adapter
-/sys/class/i2c-dev/i2c-2/name:AMDGPU SMU 0
-/sys/class/i2c-dev/i2c-3/name:AMDGPU SMU 1
-/sys/class/i2c-dev/i2c-4/name:AMDGPU DM i2c hw bus 0
-/sys/class/i2c-dev/i2c-5/name:AMDGPU DM i2c hw bus 1
-/sys/class/i2c-dev/i2c-6/name:AMDGPU DM i2c hw bus 2
-/sys/class/i2c-dev/i2c-7/name:AMDGPU DM i2c hw bus 3
-/sys/class/i2c-dev/i2c-8/name:AMDGPU DM i2c OEM bus
-/sys/class/i2c-dev/i2c-9/name:AMDGPU DM aux hw bus 0
+> On Sat, Aug 29, 2026 at 06:19:40PM -0700, Changhuang Liang wrote:
+> > Add compatible "starfive,jhb100-fan-tach" for StarFive JHB100 Fan-Tach
+> > controller.
+> >
+> > Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+> > ---
+> >  .../hwmon/starfive,jhb100-fan-tach.yaml       | 93
+> +++++++++++++++++++
+> >  1 file changed, 93 insertions(+)
+> >  create mode 100644
+> > Documentation/devicetree/bindings/hwmon/starfive,jhb100-fan-tach.yaml
+> >
+> > diff --git
+> >
+> a/Documentation/devicetree/bindings/hwmon/starfive,jhb100-fan-tach.yam
+> > l
+> >
+> b/Documentation/devicetree/bindings/hwmon/starfive,jhb100-fan-tach.yam
+> > l
+> > new file mode 100644
+> > index 000000000000..1dcd4932768f
+> > --- /dev/null
+> > +++
+> b/Documentation/devicetree/bindings/hwmon/starfive,jhb100-fan-tach
+> > +++ .yaml
+> > @@ -0,0 +1,93 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause %YAML 1.2
+> > +---
+> > +$id:
+> > +http://devicetree.org/schemas/hwmon/starfive,jhb100-fan-tach.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: StarFive JHB100 Fan-Tach controller
+> > +
+> > +maintainers:
+> > +  - Changhuang Liang <changhuang.liang@starfivetech.com>
+> > +
+> > +description:
+> > +  The StarFive Fan-Tach controller can support up to 16 fan tach input=
+.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - starfive,jhb100-fan-tach
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +  resets:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  "#address-cells":
+> > +    const: 1
+> > +
+> > +  "#size-cells":
+> > +    const: 0
+> > +
+> > +patternProperties:
+> > +  "^fan@[0-9a-f]+$":
+> > +    $ref: fan-common.yaml#
+> > +    unevaluatedProperties: false
+> > +
+> > +    properties:
+> > +      reg:
+> > +        description:
+> > +          PWM channel index. The driver allows two fans to share the
+> same
+> > +          PWM channel, or each fan to use a dedicated channel.
+>=20
+> Doesn't matter what the driver can do, the description should describe wh=
+at
+> the hardware supports.
+> pw-bot: changes-requested
+> Does this fan-tach controller provide the PWMs?
+> If so (although Guenter may correct me), I think the fan-tach controller =
+needs
+> to be.
+>=20
+> If you don't do that, I think you're going to run into problems with havi=
+ng
+> multiple nodes with the same unit address when two fans share a pwm?
+>=20
+> I think what you're supposed to do is drop "reg" and replace it with "pwm=
+s",
+> but once again Guenter may correct me there.
+> e.g. aspeed,g6-pwm-tach.yaml
+>=20
 
-The dmesg output I provided was captured with i2c debugging enabled. 
-When the issue occurred those are the only i2c transitions I saw.
+Perhaps I can refer to aspeed,g6-pwm-tach.yaml and change "^fan@[0-9a-f]+$"=
+ to=20
+"^fan-[0-9]+$", which would remove the reg property. In fact, the driver do=
+es not=20
+use reg either.
 
-I will try and add some additional logging and checks the controller 
-driver and see if there are any other i2c transactions with the same 
-symptoms.
+Our fan-tach controller does not include PWM. The JHB100 SoC will have a se=
+parate=20
+PWM controller. (This controller uses the same IP as the JH7110 SoC, but th=
+ere are=20
+some differences in driver implementation.)
 
- >  The only ideas I have is that somehow an access to another I2C bus
- > messes up controller registers, or that there is a real hardware problem.
+The JHB100 has 8 PWM channels and 16 fan tach channels.
 
-I am not against the determination that there might hardware issue, 
-however I got down this rabbit hole after I read a forum post on 
-level1techs where someone else had the exact issue with the same memory 
-kit. I have posted in that forum as well but have not gotten a reply. 
-The original post sounds very similar to this issue but the user never 
-reports on the actual SPD5118 registers so it is hard to know for sure.
+So currently we expect the Device Tree to be configured like this:
 
-https://forum.level1techs.com/t/msi-x870e-carbon-9950x-2x48gb-ram-bizzare-issues/222454/23
+	pwm0: pwm {
+		compatible =3D "starfive,jhb100-pwm";
+	};
+=09
+	pwm1: pwm {
+		compatible =3D "starfive,jhb100-pwm";
+	};
+=09
+	pwm2: pwm {
+		compatible =3D "starfive,jhb100-pwm";
+	};
+=09
+	pwm3: pwm {
+		compatible =3D "starfive,jhb100-pwm";
+	};
+=09
+	pwm4: pwm {
+		compatible =3D "starfive,jhb100-pwm";
+	};
+=09
+	pwm5: pwm {
+		compatible =3D "starfive,jhb100-pwm";
+	};
+=09
+	pwm6: pwm {
+		compatible =3D "starfive,jhb100-pwm";
+	};
+=09
+	pwm7: pwm {
+		compatible =3D "starfive,jhb100-pwm";
+	};
 
-Thanks,
-Matthew
+	fan0: pwm-fan0 {
+		compatible =3D "pwm-fan";
+		pwms =3D <&pwm0 0 40000 0>;
+	};
 
-On 8/31/26 6:38 PM, Guenter Roeck wrote:
-> On 8/31/26 16:10, Matthew Bettencourt wrote:
->> Hi Guenter,
->>
->> I checked the i2c bus and there is nothing at address 0x22:
->>
->> # i2cdetect -y 12
->>       0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
->> 00:                         -- -- -- -- -- -- -- --
->> 10: -- -- -- -- -- 15 -- -- -- -- -- -- -- -- -- --
->> 20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->> 30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->> 40: -- -- -- -- -- -- -- -- -- 49 -- 4b -- -- -- --
->> 50: -- 51 -- 53 -- -- -- -- -- -- -- -- -- -- -- --
->> 60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
->> 70: -- 71 -- 73 -- -- --
->>
-> 
-> That means that
-> 
->>>>> [  277.574130] [   T3293] i2c i2c-12: Transaction (pre): CNT=08, 
->>>>> CMD=0b, ADD=a3, DAT0=00, DAT1=18
->>>>> [  277.575552] [   T3293] i2c i2c-12: Transaction (post): CNT=08, 
->>>>> CMD=01, ADD=45, DAT0=ff, DAT1=18
->>>                                                                           ^^      ^^       ^^
->>> This is unexpected. It was supposed to read MR11 from 0x51, but the 
->>> returned data is 0xff,
->>> and the CMD and ADD register values are changed. 0xff is returned to 
->>> the calling code as MR11.
->>>
-> 
-> this is a real problem. I don't really know what to suggest here. You could
-> add some debugging code into the controller driver and check if / how often
-> CMD or ADD changes its value between pre and post, and generate a log 
-> message
-> if that happens. The value should never change. If it happens when 
-> reading MR11
-> I suspect that it happens with other accesses as well.
-> 
-> What I2C controllers do you have in your system ? "grep . /sys/class/ 
-> i2c-dev/*/name"
-> should tell. Also, do you see any other I2C transactions on other I2C
-> busses ? The only ideas I have is that somehow an access to another I2C bus
-> messes up controller registers, or that there is a real hardware problem.
-> 
-> Thanks,
-> Guenter
-> 
->>>>> [  277.575617] [    T113] i2c i2c-12: Transaction (pre): CNT=08, 
->>>>> CMD=1a, ADD=a7, DAT0=ff, DAT1=18
->>>>> [  277.576169] [    T113] i2c i2c-12: Transaction (post): CNT=08, 
->>>>> CMD=1a, ADD=a7, DAT0=00, DAT1=18
->>>
->>> Read MR26 of 0x53 (=0x00, enabled)
->>>
->>>>> [  277.576237] [   T3293] i2c i2c-12: Transaction (pre): CNT=08, 
->>>>> CMD=0b, ADD=a2, DAT0=f8, DAT1=18
->>>>> [  277.577061] [   T3293] i2c i2c-12: Transaction (post): CNT=08, 
->>>>> CMD=0b, ADD=a2, DAT0=f8, DAT1=18
->>>
->>> Write 0xf8 into MR11 of 0x51. This is where things go wrong. The call 
->>> originates
->>> from regmap, which tries to configure page 0 (lower 3 bit) while 
->>> leaving the upper
->>> bits alone (which were 0xff from above corrupted read).
->>>
->>>>> [  277.577121] [    T113] i2c i2c-12: Transaction (pre): CNT=08, 
->>>>> CMD=0b, ADD=a7, DAT0=f8, DAT1=18
->>>>> [  277.578063] [    T113] i2c i2c-12: Transaction (post): CNT=08, 
->>>>> CMD=0b, ADD=a7, DAT0=00, DAT1=18
->>>
->>> Read MR11 of 0x53 (=0x00)
->>>
->>>>> [  277.578127] [   T3293] i2c i2c-12: Transaction (pre): CNT=08, 
->>>>> CMD=1a, ADD=a3, DAT0=00, DAT1=18
->>>>> [  277.579062] [   T3293] i2c i2c-12: Transaction (post): CNT=08, 
->>>>> CMD=1a, ADD=a3, DAT0=00, DAT1=18
->>>
->>> Read MR26 of 0x51 (0x00 -> enabled)
->>>
->>>>> [  277.579131] [    T113] i2c i2c-12: Transaction (pre): CNT=08, 
->>>>> CMD=1a, ADD=a6, DAT0=01, DAT1=18
->>>>> [  277.579560] [    T113] i2c i2c-12: Transaction (post): CNT=08, 
->>>>> CMD=1a, ADD=a6, DAT0=01, DAT1=18
->>>
->>> Disable temperature sensor support on 0x53 (MR26 := 0x01)
->>>
->>>>> [  277.579620] [   T3293] i2c i2c-12: Transaction (pre): CNT=08, 
->>>>> CMD=0b, ADD=a3, DAT0=01, DAT1=18
->>>>> [  277.580170] [   T3293] i2c i2c-12: Transaction (post): CNT=08, 
->>>>> CMD=0b, ADD=a3, DAT0=08, DAT1=18
->>>
->>> Read MR11 of 0x51. Since 0xf8 was written above, 0x08 is "as expected".
->>>
->>>>> [  277.580234] [    T113] i2c i2c-12: Transaction (pre): CNT=08, 
->>>>> CMD=0b, ADD=a7, DAT0=08, DAT1=18
->>>>> [  277.581061] [    T113] i2c i2c-12: Transaction (post): CNT=08, 
->>>>> CMD=0b, ADD=a7, DAT0=00, DAT1=18
->>>
->>> Read MR11 of 0x53 (0x00 -> page 0)
->>>
->>>>> [  277.581072] [    T113] spd5118 12-0053: POST BIT UPDATE: SUSPEND 
->>>>> MR11 (0x0B) -> Cache: 0x00 | Bus: 0x00
->>>>> [  277.581128] [   T3293] i2c i2c-12: Transaction (pre): CNT=08, 
->>>>> CMD=1a, ADD=a2, DAT0=01, DAT1=18
->>>>> [  277.581559] [   T3293] i2c i2c-12: Transaction (post): CNT=08, 
->>>>> CMD=1a, ADD=a2, DAT0=01, DAT1=18
->>>
->>> Disable temperature sensor support on 0x51 (MR26 := 0x01)
->>>
->>>>> [  277.581626] [   T3293] i2c i2c-12: Transaction (pre): CNT=08, 
->>>>> CMD=0b, ADD=a3, DAT0=01, DAT1=18
->>>>> [  277.582236] [   T3293] i2c i2c-12: Transaction (post): CNT=08, 
->>>>> CMD=0b, ADD=a3, DAT0=08, DAT1=18
->>>
->>> Read MR11 from 0x51, wrong as before
->>>
->>>>> [  277.582250] [   T3293] spd5118 12-0051: POST BIT UPDATE: SUSPEND 
->>>>> MR11 (0x0B) -> Cache: 0x00 | Bus: 0x08
->>>>>
->>>>>
->>>>> --- The logs that are of interest ---
->>>>> [  277.573085] [   T3293] spd5118 12-0051: PRE BIT UPDATE: SUSPEND 
->>>>> MR11 (0x0B) -> Cache: 0x00 | Bus: 0x00
->>>>> …
->>>>> …
->>>>> …
->>>>> [  277.582250] [   T3293] spd5118 12-0051: POST BIT UPDATE: SUSPEND 
->>>>> MR11 (0x0B) -> Cache: 0x00 | Bus: 0x08
->>>>>
->>>>> I enabled i2c debugging as well in case it helps. The lines I 
->>>>> focusing on are “PRE BIT UPDATE…” and “POST BIT UPDATE…”, 
->>>>> immediately after regmap_update_bits() the physical bus value for 
->>>>> MR11 shifts to 0x08 while the regmap cache remains 0x00.
->>>>>
->>>>> I looked through the history of spd5118 patches and bugs and 
->>>>> noticed there has been some issues around suspend and sleep cycles. 
->>>>> This might be a deeper issue than just the spd5118 driver.
->>>>>
->>>
->>> Those problems are related to I2C controllers on some Intel boards, 
->>> which disable
->>> write operations. That does not affect AMD systems.
->>>
->>> The problem is that one of the MR11 read operations fails or, rather, 
->>> returns
->>> bad data. This bad data then corrupts the register when written back.
->>> This by itself is odd. There should be at least a debug log message 
->>> if there is
->>> an error in piix4_transaction(). Is there anything on address 0x22 on 
->>> that I2C bus ?
->>> It almost appears as if there is a parallel access to the I2C 
->>> controller (for
->>> example from ACPI) which would corrupt the data for the spd5118 access.
->>>
->>>>> Additional Notes:
->>>>> - Intermittent Nature: The issue is intermittent and typically 
->>>>> reproduces within ~10 sleep/resume cycles.
->>>>>
->>>>> - Single DIMM Testing: I was unable to reproduce the issue with 
->>>>> only 1 DIMM installed after running over 30 sleep/resume cycles, 
->>>>> though the intermittent nature makes it hard to rule out entirely.
->>>>>
->>>
->>> Both is not surprising, given that we are dealing with corrupted data 
->>> when
->>> reading from MR11. I have no idea how that corruption can happen. The 
->>> above
->>> is a wild guess: If there is indeed ACPI access to the I2C 
->>> controller, the
->>> only remedy I can think of would be to black-list the I2C controller 
->>> driver
->>> itself.
->>>
->>> Thanks,
->>> Guenter
->>>
->>>>> - Hardware Health: Memory stability was verified with a varitey of 
->>>>> memory tests with zero errors. Issue occurs with JEDEC and XMP 
->>>>> profiles enabled
->>>>>
->>>>>
->>>>> --- Steps to Reproduce ---
->>>>> 1. Boot system from cold boot. Load the spd5118 driver.
->>>>> 2. Put system to sleep
->>>>> 3. Wake system
->>>>> 4. Check value of MR11, if corrupted warm reboot go to step 7
->>>>> 6. Go to step 2, repeat
->>>>> 7. System now shows corrupted DIMM with a size of 2GB
->>>>>
->>>>> --- My test spd5118_suspend function ---
->>>>> static int spd5118_suspend(struct device *dev)
->>>>> {
->>>>>   struct spd5118_data *data = dev_get_drvdata(dev);
->>>>>   struct regmap *regmap = data->regmap;
->>>>>   u32 cache_val = 0, bus_val = 0;
->>>>>   u32 regval;
->>>>>   int err;
->>>>>
->>>>>   err = regmap_read(regmap, SPD5118_REG_TEMP_CONFIG, &regval);
->>>>>   if (err < 0)
->>>>>   return err;
->>>>>
->>>>>
->>>>>   /* 1. Read cached MR11 value from RAM */
->>>>>   regmap_read(regmap, SPD5118_REG_I2C_LEGACY_MODE, &cache_val);
->>>>>
->>>>>   /* 2. Read physical MR11 value directly from I2C bus */
->>>>>   regcache_cache_bypass(regmap, true);
->>>>>   regmap_read(regmap, SPD5118_REG_I2C_LEGACY_MODE, &bus_val);
->>>>>   regcache_cache_bypass(regmap, false);
->>>>>
->>>>>   /* 3. Output both on the exact same log line */
->>>>>   dev_info(dev, "PRE BIT UPDATE: SUSPEND MR11 (0x0B) -> Cache: 
->>>>> 0x%02x | Bus: 0x%02x\n", cache_val, bus_val);
->>>>>
->>>>>   regcache_cache_bypass(regmap, true);
->>>>>   regmap_update_bits(regmap, SPD5118_REG_TEMP_CONFIG, 
->>>>> SPD5118_TS_DISABLE,
->>>>>   SPD5118_TS_DISABLE);
->>>>>   regcache_cache_bypass(regmap, false);
->>>>>
->>>>>   /* 1. Read cached MR11 value from RAM */
->>>>>   regmap_read(regmap, SPD5118_REG_I2C_LEGACY_MODE, &cache_val);
->>>>>
->>>>>      /* 2. Read physical MR11 value directly from I2C bus */
->>>>>      regcache_cache_bypass(regmap, true);
->>>>>      regmap_read(regmap, SPD5118_REG_I2C_LEGACY_MODE, &bus_val);
->>>>>      regcache_cache_bypass(regmap, false);
->>>>>
->>>>>      /* 3. Output both on the exact same log line */
->>>>>      dev_info(dev, "POST BIT UPDATE: SUSPEND MR11 (0x0B) -> Cache: 
->>>>> 0x%02x | Bus: 0x%02x\n", cache_val, bus_val);
->>>>>
->>>>>      regcache_cache_only(regmap, true);
->>>>>      regcache_mark_dirty(regmap);
->>>>>
->>>>>      return 0;
->>>>> }
->>>>
->>>
->>
-> 
+	fan1: pwm-fan1 {
+		compatible =3D "pwm-fan";
+		pwms =3D <&pwm1 0 40000 0>;
+	};
 
+	fan2: pwm-fan2 {
+		compatible =3D "pwm-fan";
+		pwms =3D <&pwm2 0 40000 0>;
+	};
+
+	fan3: pwm-fan3 {
+		compatible =3D "pwm-fan";
+		pwms =3D <&pwm3 0 40000 0>;
+	};
+
+	fan4: pwm-fan4 {
+		compatible =3D "pwm-fan";
+		pwms =3D <&pwm4 0 40000 0>;
+	};
+
+	fan5: pwm-fan5 {
+		compatible =3D "pwm-fan";
+		pwms =3D <&pwm5 0 40000 0>;
+	};
+
+	fan6: pwm-fan6 {
+		compatible =3D "pwm-fan";
+		pwms =3D <&pwm6 0 40000 0>;
+	};
+
+	fan7: pwm-fan7 {
+		compatible =3D "pwm-fan";
+		pwms =3D <&pwm7 0 40000 0>;
+	};
+
+fan-controller {
+	compatible =3D "starfive,jhb100-fan-tach";
+
+	fan@0 {
+		tach-ch =3D <0x0>, <0x8>;
+	};
+	fan@1 {
+		tach-ch =3D <0x1>, <0x9>;
+	};
+	fan@2 {
+		tach-ch =3D <0x2>, <0xa>;
+	};
+	fan@3 {
+		tach-ch =3D <0x3>, <0xb>;
+	};
+	fan@4 {
+		tach-ch =3D <0x4>, <0xc>;
+	};
+	fan@5 {
+		tach-ch =3D <0x5>, <0xd>;
+	};
+	fan@6 {
+		tach-ch =3D <0x6>, <0xe>;
+	};
+	fan@7 {
+		tach-ch =3D <0x7>, <0xf>;
+	};
+};
+
+
+> Cheers,
+> Conor.
+>=20
+> > +        maximum: 15
+> > +
+> > +      tach-ch:
+> > +        description:
+> > +          The tachometer channel(s) wired to the fan(s) driven by this
+> PWM
+> > +          channel. Integer values in the range 0-15.
+> > +        minItems: 1
+> > +        maxItems: 2
+> > +        items:
+> > +          maximum: 15
+> > +
+> > +    required:
+> > +      - reg
+> > +      - tach-ch
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - clocks
+> > +  - resets
+> > +  - interrupts
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    fan-controller@11be0000 {
+> > +        compatible =3D "starfive,jhb100-fan-tach";
+> > +        reg =3D <0x11be0000 0x400>;
+> > +        interrupts =3D <128>;
+> > +        clocks =3D <&per2crg 33>;
+> > +        resets =3D <&per2crg 5>;
+> > +        #address-cells =3D <1>;
+> > +        #size-cells =3D <0>;
+> > +
+> > +        fan@0 {
+> > +            reg =3D <0x0>;
+> > +            tach-ch =3D /bits/ 8 <0x0 0x8>;
+> > +            pulses-per-revolution =3D <2>;
+> > +        };
+> > +        fan@1 {
+> > +            reg =3D <0x1>;
+> > +            tach-ch =3D /bits/ 8 <0x1>;
+> > +            pulses-per-revolution =3D <2>;
+> > +        };
+> > +    };
+> > --
+> > 2.25.1
+> >
+
+Best Regards,
+Changhuang
