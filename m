@@ -1,68 +1,68 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8228437455
-	for <linux-hwmon@vger.kernel.org>; Tue,  1 Sep 2026 17:04:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AE0B3A75AC
+	for <linux-hwmon@vger.kernel.org>; Tue,  1 Sep 2026 17:11:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788282290; cv=none; b=u06eITVnexaloMy7meUcjqFInDgDYgBNDqudcdwAxnxevcYE4gB2oyHge/7aMp8stsTpTEHVrYIhwJx8Dq9iU3FsKLc4xg910giLhs2XdsFd+jxw7EXk124+56UAiMbPSHTlwIXZxa4JRvITNY+h3ewWjh3C3U0ZfnPdlVb0eok=
+	t=1788282687; cv=none; b=PKEq5L3YVEN5cg42cusU3pOuDUc+nkQ8JcVP1ziOdgfbwxLqcJk9N6qSBJcroIEgeZvv3hN1xzCGi9VcdJcC65nRZPgOXhkqhvqWbarLooJXSoSfK4pZz6pjKAbB9aIqHjIRGNqVQuiFQqBPw6soRVkC51V4PKLz455O4ZYp8Yg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788282290; c=relaxed/simple;
-	bh=sCpWrPyDgUHrOQNFUMCarIYxnoz7IFzUXJsBXRnhj6w=;
+	s=arc-20240116; t=1788282687; c=relaxed/simple;
+	bh=W0jWyZOJ+coR/ntbDVz+SR7yptbILz1V7vIoOK6OuUQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oL0M0lTEQZ+ZwaQXqybNXjRyHUlVqwGh5OMX9aUaJ55bfwNTOCDoE9642+DbM4e6iPxg5+OAiZGc7pjxmkVb+1JOZlI9ZnTuissBG5e/vprcoC+SP/yitwIJebqqAPVpH6ThfSe3KBPVLZDKlvZxIvLdTPd4PeEoeKncx4gpdhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A/3fR6z1; arc=none smtp.client-ip=209.85.210.181
+	 In-Reply-To:Content-Type; b=Aj/mhbCy2qzabDDNb/CJDdKe49WJAEngysw25jLlwIIpxPPe5rHVkis8RUVUkbAX6OE1IrFx0jjxw014T8KJnc4bsls7NlXeICFNC7L/3X/Q2tpsbwoSUaT4t0ooWFP0komfYhOJNdoD7stY309Q1Z8puxjTSfgzKLLXsYwsLj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nAw+htOx; arc=none smtp.client-ip=209.85.215.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A/3fR6z1"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-84eb992a881so59557b3a.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 01 Sep 2026 10:04:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nAw+htOx"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cc1cb472b76so125092a12.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 01 Sep 2026 10:11:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788282288; x=1788887088; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788282684; x=1788887484; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=imFY8trppO3hIGZZKMCrA2RTQJSgFofoaspMJZY20Kc=;
-        b=A/3fR6z1sKuSVIP0sobezMBbK3FVsDhh/KVVEslUH9YCMxNPNHexs5dI+AWBJv8DTi
-         p9KCEsyGrCLBMqbH0CUM/XPrVZ/cIKRyK7y7AlM/KaLv4aXA3iggyoO8/3gwAG6OvHX5
-         vN3/6Y5QvJtpUTaV0ckFILmhbmAe9vYixm5oOsF4Mcc1EdDv+OX6YAKv4fslHCEkFO7p
-         T0B1H5nCAH0T0kGpTGnZCvP6f5bss0P7IWK2g2tXWoDdfo90pRMXKnnVUIyV3XrhMo10
-         Bev1coBZpE4/KkGPfAfvRDPu4UXX6CjiZCwhm5PjvzUTnGXxK7mSPN3DWv0CuaRH0pPE
-         uw9Q==
+        bh=l5UQaN89DnaInyGLUy9f03bP0wbs0K26uM0ikTuEsPM=;
+        b=nAw+htOx77FTvlkVXifGynnz7fGb+gFlcCWbeSs3Df3SAJ4Ij+/nxPI9QeDu+v4WwB
+         exBHH+L9iLYw6ehZ+7t+bbs6mS2ZMujcpI6p0pEzxzMtZLalBf22D3BhwElSgxBG0uZ/
+         hNpTwLoI7zXxBx7tmaCH1PSn253Rith2C7NfFmf74W7NnB3qKP2luPITv5dXl7Bc8zHL
+         f/ILNvoo9D2lC1mISjcVlbRGMZ7s80q8UNhFLHk3if1sAB1TLLVh3bbXEHZM2MxuOccz
+         isj9oDQvJ7c3KVcQiAj27K2UHaWM6PkxsXyP3GqzSls/Wk/BXTwO9T/52pWFQYQKOrn/
+         FbKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788282288; x=1788887088;
+        d=1e100.net; s=20251104; t=1788282684; x=1788887484;
         h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=imFY8trppO3hIGZZKMCrA2RTQJSgFofoaspMJZY20Kc=;
-        b=SZArP75KTDN14fq0ASTMwwp7ODdSOf1oAVNBXYPopg7DAxdUa88hPZ4fNcWTH2516T
-         aJ86fp1cZaP/AYkOtx+oDgNXJKXGHrQVXpDF50Mg8hvPCPS7FpI1PjnKrN1aSuZZytIJ
-         1PXsv8SPAKIE/0LQmNAdvKzHJq1e5xZymo1W9pgdn3DhJML9TQWbTv43VSP4lTJ16wSm
-         XQ/+unn57A+tPRBhA/gH18zyWPcQZDTYIQy883/kErUVtgwAU58jewGmwtaOiniEY9GI
-         z6cScIu15QC6Yl+xk3vQZlcQAEGzZa3WBy9vZJub140rxfEQ7qJd7LnyRf16WoDiejF9
-         UV1Q==
-X-Gm-Message-State: AFuF++mnBt9nhdP35LZfFbT3CaXlwmIb5CDIr/jvO5SWT0A399tY5zRl
-	ZVEI5BPrdXk3N2ciwyxqEZjvlbI4W5MGy95c6gs5peL6z5nKoGyXEjjeQAepOw==
-X-Gm-Gg: AR+sD119BzhA0Pm5PGub8v5eXoKzJcpM0VMtEwHcmYr8I8JPhNqh3m5w6Of6k/jdsyL
-	Qhhi2X3psIasaAkYNCXFApyzYb+R8fW+DqmRUgP97bJ7dAA0QXNfC9v1JWc80bQdDIda8WyVMHN
-	NwDOlfK3IAR/zIt6lBARvWqBakP/aGbJ1OvMt0HkYKX5zG8rUGWPkFxDGa5/IPNSLcPvnuqNLho
-	PzdvV7akrMAhFzL/rY2y6+K6ylZr8Ts97NW3zJWlWWY7MzCWrIOOsa7eDcS0z6tSFlrLcV2Y404
-	yvcmgxUe2sQmhogiGAZeUcoZooi4/i4oqu3VVjVoDPyOsiMTmsg4eGzCOdv7bdx3ndF6UTf9uq4
-	/uKDT5vSPUcWLHZ7nfpOxWM/c/17ryKRKaG6hGPur3zauV7pPDGJ5bAYkL90UfpA8J/kA0BDnUU
-	thrpw/wPGtlGwfOQQ3E4G8YABx7PUkQBM+CgadYd8MUxXNFS6J77dQmyZLvkEb6xh8wJCwds9c1
-	wpBQTFaPdotcbui5Nrw1LRC3GObjDDjs8j7bQ==
-X-Received: by 2002:a05:6a00:c90:b0:85c:e16c:a1f6 with SMTP id d2e1a72fcca58-85ce16ca283mr2208698b3a.24.1788282288254;
-        Tue, 01 Sep 2026 10:04:48 -0700 (PDT)
+        bh=l5UQaN89DnaInyGLUy9f03bP0wbs0K26uM0ikTuEsPM=;
+        b=KjKfcxRUccBVfi4NSaQzKOHDdBQsgiw/8XOgSxxYKynnlwAqYiJ5KQDU1ha0qIUwnW
+         Jwj+YIW04rdRMaAJdWD+G3e3Hg0TNpTrZyOpP0N0nF1xa2Ix2QFhLU7EOxaTI80saNqG
+         xvt4DFMIjfV8p0nVfcFBoXzAescbVEr40IYtaskpwvjunEBe4EiB+i1zF0JCb2uNkFsT
+         bsj57MGv2ASiIiuqB3OZFHFAs9CNo8NnYX5KaI/s5tos4gS5AsgT1Vf2cPKaLknHE1Uh
+         S5+gPyS+aC1ArUQHzSdlts9kGbqWR3kaosagrKnuW/V86WTbVyFAHyoyVvWrwy+IvYTf
+         Zxew==
+X-Gm-Message-State: AFuF++k4wVWYnZEJUD/trV4ArFIhvQrkMn86SAZcJE/zbpAr8r6oezB5
+	zBwduqPD2JLlkf0o6CsNBHno9lLIHU2tUL60D+/iv5pZTfTjolIzY7lv
+X-Gm-Gg: AYBFou01cuOPvDhOTU1Z1fMOzLtIEKK4U+nRCzV3UySgzgjGW8Zngoj96YEhoefS56K
+	CEFtonkZpMZOfU6k5wamHkJ06flNanBpvmrNJAx9rmympz2qSe+U2wh/mHlFXkW7t/OM1f912fn
+	MzPSuLC2TmtIG+3C1QPWAG56Go9Mo3GRSo/Qsj5WPaNkj5nIFBT8Cws4lhSCOiaKBEwP2XyOTxc
+	TvA035K9rVMqXltH0h/4SealU6xBvflZkrgdp7xNPhvAyQ+WiBXS30Pzj20M4WWVx3rcSdUVD1V
+	FAN5CEg5h+FhE0K6OoVd7cFxY17FtDjSMCH6COpkmOEBZ7LTFVI02GVjRegaH6Co01SRm4rsx+V
+	rVSh6WXYZ596kWuUo7H6SAH14JMRYYPbfaWNJhmV9soA/6sDL6XP3znrjKrtN+5rWTwTOjABD9A
+	aqSoIEUFO29O3Yk5KgOKzPTHLHbXJYH5xJiCc3Qm4kn0vypDlUdHOD1twNc0OSdIUD6pMBZvU5l
+	RYaoJi77g6zfzul56JgGdpDB/FJusWMJ4KXYQ==
+X-Received: by 2002:a17:90b:4a8a:b0:399:e97:8d5a with SMTP id 98e67ed59e1d1-3990e97a0a4mr10628693a91.25.1788282684004;
+        Tue, 01 Sep 2026 10:11:24 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-85dc003af05sm187109b3a.37.2026.09.01.10.04.47
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3990d4637a3sm6643488a91.5.2026.09.01.10.11.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Sep 2026 10:04:47 -0700 (PDT)
+        Tue, 01 Sep 2026 10:11:23 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5c17ea39-c479-4f88-adc6-9a86f3dfb96a@roeck-us.net>
-Date: Tue, 1 Sep 2026 10:04:46 -0700
+Message-ID: <61d75c52-267f-489c-b0f4-a1efa1c1e128@roeck-us.net>
+Date: Tue, 1 Sep 2026 10:11:22 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,17 +70,16 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] SPD5118 Intermittent MR11 Corruption During Suspend/Resume
-To: Matthew Bettencourt <matthew.bettencourt@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1a8ea9da-1ac1-4312-a8ca-ea4a9f35093f@gmail.com>
- <ee284272-0da0-45b6-a3be-c76822e5d54f@roeck-us.net>
- <014b9438-e9b7-4be1-b816-002e83a068a0@roeck-us.net>
- <37132c40-aa82-4df1-b5ce-337601f3c085@gmail.com>
- <3c4e9f59-5272-48cf-a4a0-eeefcba955a9@roeck-us.net>
- <763a8b30-8548-4ff0-a1e9-8e74bbfe9b02@gmail.com>
- <6e8761aa-67ef-4624-834d-4b9d0ce729d6@roeck-us.net>
- <9753ed80-5666-42a6-b04c-99b9ef9326fe@gmail.com>
+Subject: Re: [PATCH v3] hwmon: (spd5118) Select page 0 unconditionally during
+ probe
+To: Armin Wolf <W_Armin@gmx.de>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ ggirouard@bungeetaco.com
+References: <20260831193424.95135-1-W_Armin@gmx.de>
+ <555c7300-c742-4b91-a67e-5a4aa144bebe@roeck-us.net>
+ <0c6c5e65-a781-4607-a43a-3aa25d794144@gmx.de>
+ <497d1e4f-a1c2-4d2f-9874-187da23dd8f9@roeck-us.net>
+ <659b67ad-a2d7-43e1-b0d8-6e326901ba91@gmx.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -126,33 +125,144 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <9753ed80-5666-42a6-b04c-99b9ef9326fe@gmail.com>
+In-Reply-To: <659b67ad-a2d7-43e1-b0d8-6e326901ba91@gmx.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Matthew,
-
-On 9/1/26 09:31, Matthew Bettencourt wrote:
-> Hello Guenter,
+On 9/1/26 09:52, Armin Wolf wrote:
+> Am 01.09.26 um 18:35 schrieb Guenter Roeck:
 > 
-> I added additional logging into the piix4_transaction(). I will put the function call on the bottom. But as you guessed we are seeing not just MR11 corruption but also can trigger on other addresses as well. I was running the suspend/resume cycle and caught on both MR11 issue and else where. Here is the dmesg log output.
+>> On 9/1/26 09:09, Armin Wolf wrote:
+>>> Am 01.09.26 um 00:22 schrieb Guenter Roeck:
+>>>
+>>>> On 8/31/26 12:34, Armin Wolf wrote:
+>>>>> Some Intel i2c controllers can be configured by the BIOS to reject
+>>>>> writes to the SPD device. This often causes problems when the register
+>>>>> page needs to be changed, usually during resume.
+>>>>>
+>>>>> Avoid probing on affected devices by unconditionally selecting page 0
+>>>>> by writing the SPD5118_REG_I2C_LEGACY_MODE register during probe.
+>>>>> This will fail on affected controllers and thus prevent the driver
+>>>>> from probing.
+>>>>>
+>>>>> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+>>>>> ---
+>>>>> Changes since v2:
+>>>>> - restore original register content if i2c init fails
+>>>>>
+>>>>> Changes since v1:
+>>>>> - Avoid zeroing reserved bits inside SPD5118_REG_I2C_LEGACY_MODE
+>>>>> ---
+>>>>>   drivers/hwmon/spd5118.c | 55 ++++++++++++++++-------------------------
+>>>>>   1 file changed, 21 insertions(+), 34 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
+>>>>> index 9724cf70b61d..038d9e6e6a73 100644
+>>>>> --- a/drivers/hwmon/spd5118.c
+>>>>> +++ b/drivers/hwmon/spd5118.c
+>>>>> @@ -637,44 +637,31 @@ static int spd5118_i2c_init(struct i2c_client *client)
+>>>>>                        I2C_FUNC_SMBUS_WORD_DATA))
+>>>>>           return -ENODEV;
+>>>>>   -    regval = i2c_smbus_read_word_swapped(client, SPD5118_REG_TYPE);
+>>>>> -    if (regval < 0 || (regval && regval != 0x5118))
+>>>>> -        return -ENODEV;
+>>>>> -
+>>>>
+>>>> Thinking about it, Sashiko has a point here. I think we should keep
+>>>> the above code to have an early exit point.
+>>>>>       /*
+>>>>> -     * If the device type registers return 0, it is possible that the chip
+>>>>> -     * has a non-zero page selected and takes the specification literally,
+>>>>> +     * We must first select page 0 to ensure that we can reliably read
+>>>>> +     * the volatile registers on chips that take the specification literally,
+>>>>>        * i.e. disables access to volatile registers besides the page register
+>>>>>        * if the page is not 0. The Renesas/ITD SPD5118 Hub Controller is known
+>>>>> -     * to show this behavior. Try to identify such chips.
+>>>>> +     * to show this behavior.
+>>>>> +     *
+>>>>> +     * We must also perform an unconditional register write to detect if
+>>>>> +     * the i2c controller blocks write accesses to the SPD device. Some Intel
+>>>>> +     * controllers might be configured by the BIOS to do this.
+>>>>>        */
+>>>>> -    if (!regval) {
+>>>>> -        /* Vendor ID registers must also be 0 */
+>>>>> -        regval = i2c_smbus_read_word_data(client, SPD5118_REG_VENDOR);
+>>>>> -        if (regval)
+>>>>> -            return -ENODEV;
+>>>>> -
+>>>>> -        /* The selected page in MR11 must not be 0 */
+>>>>> -        mode = i2c_smbus_read_byte_data(client, SPD5118_REG_I2C_LEGACY_MODE);
+>>>>> -        if (mode < 0 || (mode & ~SPD5118_LEGACY_MODE_MASK) ||
+>>>>> -            !(mode & SPD5118_LEGACY_PAGE_MASK))
+>>>>> -            return -ENODEV;
+>>>>> -
+>>>>> -        err = i2c_smbus_write_byte_data(client, SPD5118_REG_I2C_LEGACY_MODE,
+>>>>> -                        mode & SPD5118_LEGACY_MODE_ADDR);
+>>>>> -        if (err)
+>>>>> -            return -ENODEV;
+>>>>> -
+>>>>> -        /*
+>>>>> -         * If the device type registers are still bad after selecting
+>>>>> -         * page 0, this is not a SPD5118 device. Restore original
+>>>>> -         * legacy mode register value and abort.
+>>>>> -         */
+>>>>> -        regval = i2c_smbus_read_word_swapped(client, SPD5118_REG_TYPE);
+>>>>> -        if (regval != 0x5118) {
+>>>>> -            i2c_smbus_write_byte_data(client, SPD5118_REG_I2C_LEGACY_MODE, mode);
+>>>>> -            return -ENODEV;
+>>>>> -        }
+>>>>> +    mode = i2c_smbus_read_byte_data(client, SPD5118_REG_I2C_LEGACY_MODE);
+>>>>> +    if (mode < 0)
+>>>>> +        return mode;
+>>>>> +
+>>>>
+>>>> I also wonder if we should strengthen this and bail out if any of bit 3..7 is
+>>>> set. 2-byte addressing is known not to work in the first place, and bit 4..7
+>>>> are reserved in the supported version of the standard and should always be 0.
+>>>>
+>>> This would prevent the driver from being forward-compatible to newer standard revisions.
+>>>
+>> Good point.
+>>
+>>>> Also, if we keep above check, we should only only get here if the page is != 0.
+>>>> That means the register value has to be 0x01..0x07. So we could bail out with
+>>>>
+>>>>     if (!mode || (mode & ~SPD5118_LEGACY_PAGE_MASK))
+>>>>         return -ENODEV;
+>>>> followed by
+>>>>     err = i2c_smbus_write_byte_data(client, SPD5118_REG_I2C_LEGACY_MODE, 0);
+>>>>
+>>>> Thoughts ?
+>>>
+>>> Honestly i think that users should rely on the detection feature if they are not sure
+>>> if a given device is really a spd5118 device. Manually instantiating a spd5118 device
+>>> on a given bus address tells the kernel that there _is_ a valid spd5118 device at this
+>>> address.
+>>>
+>>> Otherwise we would basically duplicate parts of the detect callback inside spd5118_i2c_init().
+>>>
+>>
+>> This _is_ the detect callback inside spd5118_i2c_init(). Problem is that the device
+>> currently instantiates if bit 3 of MR11 is set, even though it is known not to work.
+>> Prior to commit 7bf5a11dde2c ("hwmon: spd5118: Remove 16-bit addressing") it would
+>> at least bail out if the controller does not support I2C_FUNC_I2C. That means we'll
+>> at least need to check for bit 3 (SPD5118_LEGACY_MODE_ADDR) and bail out if the bit
+>> is set.
+>>
+>> Thanks,
+>> Guenter 
 > 
-> --- Other PIIX4 transation ---
-...
-> [29287.881787] [ T204580] i2c i2c-12: [PIIX4 REGISTER MUTATION DETECTED] Pre: (CMD=0x1a, ADD=0xa3) -> Post: (CMD=0x01, ADD=0x45) | DAT0=0xff
-...
-> [29312.945873] [ T204570] i2c i2c-12: [PIIX4 REGISTER MUTATION DETECTED] Pre: (CMD=0x0b, ADD=0xa7) -> Post: (CMD=0x01, ADD=0x45) | DAT0=0xff
+> Good point, we can indeed check for that. But the early exit point suggested by Sashiko
+> is a bit overblown IMHO.
+> 
 
-It may be a coincidence, but the two failed accesses are exactly 25 seconds apart.
-
-Would it be possible to drop the messages except for the failures and run long-term
-accesses (for example by reading the temperatures and/or the nvmem continuously) ?
-You should find the nvmem at /sys/bus/nvmem/devices/0-005[13]/nvmem.
-
-It might be useful to know if this only happens during suspend/resume cycles
-or if it happens all the time, if it happens randomly or in specific intervals,
-and if the failure pattern is always the same.
+I disagree. This is a critical component, and overwriting SPD data would be fatal.
+The additional read may be a nuisance, but does not hurt. One thing we could do though
+is to only read SPD5118_REG_TYPE again if the first read failed.
 
 Thanks,
 Guenter
+
+> Thanks,
+> Armin Wolf
 
