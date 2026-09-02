@@ -1,115 +1,103 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B3CD47DFA8
-	for <linux-hwmon@vger.kernel.org>; Wed,  2 Sep 2026 12:57:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788353880; cv=pass; b=LP0Bu7NqgEbC0NmN7YHw1IM+bS+lpROvVHplk50y6lOqZb2SvP8DjGpZ+kEQGS8e5DdkB4wW4PlCtT9pGj2PmMTZMiWnIRzIZ6UesJl3XBdlTB+jT8C5bNt8Ff9eHZbVIqgiNd1KLL9tgqf1gMZ8IQaLrJUGfnBsl8GCW11MiWY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788353880; c=relaxed/simple;
-	bh=NAg28MCRno7XLRszd9hwdwM65vblpqNWzWbbrUyc6qI=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=pmiV/35JeIqcs6bz1nkDpnxY1icrHAgFDktxJuOEayPePCrTtgNk2kJg4coIRLgKqPWXiJ3BrNC3XjkzFoKX0Hwd7Ipl9T3MuSWot91s3AmHHjJ3j957jHSdw8/9xte6OvrzpSVgVOBAb6vXSDhOpJi9T2BwjQ1ONxO5Xfnl5eA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SVbzrYP6; arc=pass smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30E1347D935
+	for <linux-hwmon@vger.kernel.org>; Wed,  2 Sep 2026 12:59:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788353972; cv=none; b=o1kOIHjZeLAgFgqKMyZxG3cIoIMvV/r9Q2pqrpDtzPoKUr25j3c8gm+xYgtpL1+qMnUve3ivnbfFfxyQVnJ10apDpOSKaixafxIlE3erh5lAMutJ8Z+bJA0eWdwm8XFJqR2RCZSg2Zv+4RDoyneTFV477k+7Ea31nndBzLtT4NU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788353972; c=relaxed/simple;
+	bh=dmJe+J/F+vYCqGcuQ3jcywh4Jc/H3IZgC2ypGBQHfp0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ry8jGsJ6CtrgPTeP8+Hqr0OggfBqIth+03WWaSi3XPVUBWEaLbT+c6iut6xCw2pijRkiBiOQ+pA1/kIH01yadgEBNnAo9qyn0UyG0Fo/200/mVHutDS2TSWLxysIw6sbrhM1vtVPyTyz56V27F5RRybCb89w7QnVtU1cRtUc/BI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pPkUxD/T; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SVbzrYP6"
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c1677c91969so97829166b.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 02 Sep 2026 05:57:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788353876; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Emyd3L2d0s5uLOGIHi7vbTRGN7FVt+OCEsm5ubZO8rnluVAgGjc6XM8rXjGMHTVJw+
-         9jTHTe/Q9HEoSjhwdKxx6dyzqT41KnbECYMiMWR4j69rvyfU4k5I7wf1gO4Bcous4Zvz
-         Pxn7DKfJoG+ceD/gRLabI9MsIvWHWDBL3VUG14X1GVI6kCNg4oxSpZnHZpF4K7G4c3lV
-         IqBnrMV7H8Je/9mK3W2uQBs9fhPi9RjcqTlaoUA/fzodFjFfdRcD43GgpjfLOpuL7S3R
-         4/HCvTLLLeSlHoi27yAoZckteE9//RXowYaAWlmNMeofgPmWkwx81yt8mhXjRYavJFpQ
-         F8xQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=NAg28MCRno7XLRszd9hwdwM65vblpqNWzWbbrUyc6qI=;
-        fh=EjL14kVWvRQY1kKmKFRN4tADTHmmFcJIXF0+QeWqW2A=;
-        b=oskGC4BLbIFmHZrdqR2JFApqw1enffQw/3BP3kLat5NB7+H5rQ6oUlpGSBHBHsqSGu
-         IPjVssx3yUZs7nELTogKOQJGcCJYj6rF7BLAhiAOg5QxylQiX2BIL7a1WJucjo9ACn1v
-         QpsiyYMBpmE3QEaTPxg2JuQ5wNz/yHOKPnNOD0XDcx5DTzDanRJdtW9h+0BinXan0CLG
-         0hfpiZ86v/i5h9p9maRs4Rth+AeY4tL05qybYKTdySFiM5Bw1/XkzwugPxgWes52PZOa
-         IFIGuPManipoB2LZmK+VWy0HsPgSZ5i4VgavvOGkKdh46ozlCukGBI8GZ6VfSXbXb9Up
-         teTA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pPkUxD/T"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2d032846c95so12365345ad.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 02 Sep 2026 05:59:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788353876; x=1788958676; darn=vger.kernel.org;
-        h=content-type:to:subject:message-id:date:from:mime-version:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=NAg28MCRno7XLRszd9hwdwM65vblpqNWzWbbrUyc6qI=;
-        b=SVbzrYP6Y8JUC9qu/DrxklXV+3bbs0IBouPotKumsmsSn22MsoyutocgL1SsOS7KDG
-         pEMaQIgj/B3nydfxhnql7GoqmTs6X7LVsbrOkrgzCkKpQbuNhxvcEXt+Y7TGrzkWG2hJ
-         d63647lT3urL+1A4uDhQrl4XZjSEEOES4aVSc77s4L9QTGt487LpbXmyWZlNu+bgxzHr
-         qs6i8eHAMghFa2qmoRh1AQcSIEiLssUChQFHL/TVS/Vhrjzmwfb0Dcvs24NFtYslp+hP
-         cdkiKBNZ/4GTfrn9Od2i1rX6mPh4tyiJY5ZnCDd7oJN26t7R/dtwwNFwMKAL4dQJaFaG
-         EJ5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788353876; x=1788958676;
-        h=content-type:to:subject:message-id:date:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1788353970; x=1788958770; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:sender:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=NAg28MCRno7XLRszd9hwdwM65vblpqNWzWbbrUyc6qI=;
-        b=MfQaFh5dquSfPVXZUZaZ6HDW0eSwbn9mnoHPjPW1SbnlnZFipbtRaJgXlV8EzEjCY9
-         l124bAlWwiUL5ScH3Pnns38ZwH07HNtB9j4sidKu/h0XEW1GaP1cfPCxcupRHhLcc8cw
-         OiM1h3bU4y2nrMsRsv6I5ZzoQ8UbBG3lcY/CiTJgEDcIsFUTj9YIy2ZsOfXtKFdNuGEu
-         T/AiXigkLIeVZyx2wfFhU55SRsSc8YPzWpc5jTCVPncfuSS8Eg0Wr+72bL37kB4bYUQ0
-         Ec66vlH7QZwFVwHJKHhf3LeZYdnPj3C5c31+VO+U6gDGf5pH/MJ98yZnMWXhIeOGsznw
-         525w==
-X-Forwarded-Encrypted: i=1; AKwUvBxOEIhzv7BqYdK4uTM1kOwir/M+VArh8WYgTDa7DCx8/yQlSzQCIRxBUpBPY719UHVUfluRX/duJUAvcg==@vger.kernel.org
-X-Gm-Message-State: AFuF++k9FdgW2DE5uhZpu5uPaH1dG1R00T+skJfbM8QrTfcS6WaHI+wD
-	QIP1StCYYRT259c8axqyB9hD1bnEt2KdLl+FqS/zwHIttqO2x5zznDwysTE9PfYRxqjCAQwWBqI
-	JdFwVa2p0MHTSNAsLJoIV6dIVaEFQPD+cMPcD
-X-Gm-Gg: AYBFou0TH71y5fSJi+4NGrnqLe1cMZnM7Xj1pRITf7D4qi9Sr5Fcm0VVmE4VWGqGgWD
-	89v7jdp5Zg9XeDx2XHiflP0NXE3sWSzblyg3pHNDpJ/HbIcHXpJRnA4aMcWQ2YpJk/UusRV87zW
-	VjVr8Ye4s724Hw+m7m3dMumeGMM01o8Xr44QHdy1h37tPyPyFdrzm4vYSV6zvc7tN+F9QO/mN0P
-	I+EOGlEwzyAy2aRPUWJ6P7H8kWqgBandxnlpbwocDTk706Yc0WdrPQS7ENrZizhrr9DZWo7PXVn
-	2xvLX73SVK6aEc2sFb9z7hG3qSPI/bmIYrBkk7jdb/W/OA==
-X-Received: by 2002:a17:907:1c1d:b0:c12:6632:e7f0 with SMTP id
- a640c23a62f3a-c25d558e49emr308807666b.24.1788353876311; Wed, 02 Sep 2026
- 05:57:56 -0700 (PDT)
+        bh=SqORnjd6nGMwkHINTVnkwjIgRmlTLFd4wtw4MP5cLxE=;
+        b=pPkUxD/Twrwtl8FSBb3jjo50HqDKJ5Gemks/7vWj7UFSxp15IkP+79KXBQa+Rf/0ff
+         K71gAHKDZiYsH1qwaLX8f2Sxmov+dieOamzQcATPeEyA93+m+CAOSgp49F+c1BmTLQxC
+         4w4UC6HQA8e7NBjdvKcRWNowO/PIazlUvQy+W5TlaPkLeBO+4uf6L62gX+UsMkE5x17v
+         zdCSvV/YvowcVkbMamIPnNYs1zqlsIAm0YSzFh9yN0OJhUyd59LA+VW8I9pOMakRsdmt
+         +MEVrpIRHQ/TJR7mbMILaRjeKdmRVTuppNyo1qd1iDx8vW1uBwRmnh6WcFmQ0gW/KLN8
+         jOVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788353970; x=1788958770;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=SqORnjd6nGMwkHINTVnkwjIgRmlTLFd4wtw4MP5cLxE=;
+        b=KZch0rM1Y5KGu/VLmaTqcTh2h4NH/PHheEBngJmFSh0tqZ85vu0fg0XCnppiyEshQJ
+         SK4yNGr0WgZibgqvfrLTejkD75eaKbOuFtKM311FiMjn/Nss48jEhz99OU6/yhshA4Ai
+         I0Xu9CaWc+4oeUw3iPeaxenF5JRxcd6feZd6P7+QGMG8IxG2+Q2b4mPftHrCz8hHjURI
+         ifpVcB58Ye/Tz+LbeH37fDU2AAnaCHZYxc2NIlgCHERIPNQOSGXo1MZmTi00dX1tQ/3D
+         TxAvKAh+LFWnRbqIlP4lDGOPhwhRoE8y6WMGITmvzgPRbhL5jt1U4jmxmSQG0/FaQ8Fb
+         neMA==
+X-Gm-Message-State: AFuF++nFhcSZxK4xSAxkPQseZaVcZR5PwFRZ9PqHy6wvk1Yll8Gmacmb
+	NhIJCo8x36M1G36Cf4x/cXzTAt2Mc6G7mQcbHaIFw5UqV9WQqDPzoAER
+X-Gm-Gg: AYBFou2TUod2SOPLXr62JJdlSogpRmeSG/rzLdCuoJs9hdCMPYab4tC9lNknu8N2hkN
+	4nYcnWR/KQY4eXlKQM7U2LoSJXP/qHnPYUBxGVDT72ewh5pDgs4neLowjplLePLORltdZrNUrm9
+	wHL+p7Iq1OwVR5pvjAeZ3EyBZDe+FNmrdzDXIETZRBI/khmO4IfJdEtfJXyGyODPy5GhmIv8FZG
+	0AEzkQswMnoDCNcvAbXPO3vaQjgB1yWklhJGDbfTK7cSUjMHIN3hCNhxf4X9cOgymxc0KiU0E6l
+	kAgRbMU5niiW6laxEMiNhoKr/PzVlwb+iDgTzZ8y2YWGm4+XQNkmHTHsDL1XcuXPXcCdK54GijT
+	ytkupGSPIgykLXDHzvBb2mNOM69CvEZiYX0bQnyxtrkh1lKO/fA25ql3A+9Na91z0Nc3L+YfILf
+	ipwpN1dWpoF3FNBtsM1CrAhwDAHwXUbGXKy5NEcZlzLcaiKqD90OQnO88g/cOALWmAQqr1e512W
+	Q==
+X-Received: by 2002:a17:903:22ca:b0:2d6:3c2f:6a5 with SMTP id d9443c01a7336-2daec71f2f5mr60870245ad.14.1788353970437;
+        Wed, 02 Sep 2026 05:59:30 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dadd4a688dsm12228205ad.58.2026.09.02.05.59.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Sep 2026 05:59:29 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 2 Sep 2026 05:59:27 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: =?iso-8859-1?Q?Sebasti=E1n?= Peyrott <speyrott@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] hwmon: Add Minisforum UM780 XTX EC monitoring and fan
+ control
+Message-ID: <7709521d-745d-4d1c-b68f-95337918fa43@roeck-us.net>
+References: <20260902000509.191115-1-speyrott@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Rishub Nagpal <rishub.nagpal@gmail.com>
-Date: Wed, 2 Sep 2026 14:57:44 +0200
-X-Gm-Features: AcwNN1Wxlg2ciUztumNZs08Fv331-ZpBX33uy3hRNZwlmWKFMg2S5hCW9gVuFAQ
-Message-ID: <CALCyNyd=pmL2_RSJAOiwpX3x1ctuaXghpUxzfu77PNxHnUjPVQ@mail.gmail.com>
-Subject: drivetemp: Unable to read SATA drive temperatures from usb enclosure,
- but can read SMART temp
-To: linux@roeck-us.net, linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260902000509.191115-1-speyrott@gmail.com>
 
-Hi,
+On Tue, Sep 01, 2026 at 09:05:09PM -0300, Sebastián Peyrott wrote:
+> Add a DMI-gated hwmon driver for the embedded controller used by the
+> Minisforum UM780 XTX with board revision 1.1 and BIOS 1.06.
+> 
+> Expose the CPU and system fan control temperatures and tachometers. The
+> tachometer protocol returns one byte per OEM command, so serialize
+> transactions and use high-low-high sampling to reject torn values.
+> 
+> Allow selecting either complete OEM CPU fan profile through pwm1_enable and
+> changing the two validated system fan transition temperatures through
+> standard automatic-curve attributes. Cache coherent settings and restore
+> them after the firmware reloads defaults following resume.
+> 
+> Signed-off-by: Sebastián Peyrott <speyrott@gmail.com>
 
-I have a Sabrent HDD enclosure connected through a USB-C bridge. I
-noticed that the drivetemp module cannot read temperature information
-from this enclosure, however I can read temperature information
-through SMART.
-
-Admittedly, I used AI to try and investigate it, and it reports that
-"the bridge does not provide the SCSI ATA Information VPD page (0x89)
-and the drivetemp probe currently appears to require VPD page 0x89
-before attempting SMART/SCT access."
-
-First, is this correct?
-
-Second, since drivetemp supports reading temperatures through SMART,
-would it make sense to add a case for similar devices like this that
-if VPD 0x89 is not present, but is a sata drive, to query with SMART?
-
-I tested this on Kernel 7.1.10-200.fc44.x86_64
-
-I would be happy to submit or test a patch on this hardware or any
-insights on why drivetemp is designed this way, I am not well-versed
-in the kernel.
+Applied.
 
 Thanks,
-Rishub
+Guenter
